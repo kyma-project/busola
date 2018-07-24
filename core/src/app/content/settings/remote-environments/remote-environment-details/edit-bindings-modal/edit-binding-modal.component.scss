@@ -1,0 +1,29 @@
+:host {
+  text-align: left;
+}
+.environment-chooser {
+  .tn-dropdown__menu {
+    top: 100%;
+  }
+}
+
+.unbind {
+  cursor: pointer;
+  color: #df1919;
+}
+
+.filter-input {
+  border: 0;
+  float: left;
+  width: 90%;
+}
+
+.tn-dropdown__menu {
+  overflow: auto;
+  max-height: 300px;
+}
+
+.disabled {
+  outline: none;
+  background-color: transparent;
+}

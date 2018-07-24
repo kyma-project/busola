@@ -1,0 +1,9 @@
+<div class="row upload-file">
+  <div class="col-10 upload-file__name" ngClass="{{fileToUpload ? 'upload-file__name--remove-placeholder' : ''}}">
+    {{ fileName }}
+  </div>
+  <div class="col-2 upload-file__select-button">
+    <button class="col-12 tn-button tn-button--small tn-button--text">Select</button>
+    <input type="file" class="col-12" (change)="selectFile($event)">
+  </div>
+</div>

@@ -1,0 +1,31 @@
+<div class="sf-toolbar">
+  <div class="sf-toolbar__header">{{ title }}</div>
+  <div class="sf-toolbar__right">
+    <div class="sf-toolbar__item">
+      <y-list-search [hidden]="showEmptyPage" [filterState]="filterState" (onFilterChanged)="onFilterChanged($event)"></y-list-search>
+      <y-list-filter [hidden]="showEmptyPage" [filterState]="filterState" (onFilterChanged)="onFilterChanged($event)"></y-list-filter>
+      <a class="tn-button tn-button--small tn-button--text" (click)='goToCreate()'>+ Add Lambda</a>
+    </div>
+  </div>
+</div>
+
+<div class="sf-panel" *ngIf="error">
+    <div class="sf-alert sf-alert-danger">{{ error }}</div>
+</div>
+
+<div class="sf-panel">
+  <y-list-paging [pagingState]="pagingState" (onPageChanged)="onPageChanged($event)"></y-list-paging>
+
+  <y-plain-table [source]="data" [headerRenderer]="lambdasHeaderRenderer" [entryRenderer]="lambdasEntryRenderer" [entryEventHandler]="lambdasEventHandler">
+    <div empty-list-placeholder *ngIf="showEmptyPage" class="sf-section__empty-teaser">
+      <h1>{{ title }}</h1>
+      <p>{{ emptyListText }}</p>
+      <button class="tn-button tn-button--small tn-button--text" (click)="goToCreate()">+ {{ createNewElementText }}
+      </button>
+    </div>
+  </y-plain-table>
+
+  <y-list-paging [pagingState]="pagingState" (onPageChanged)="onPageChanged($event)"></y-list-paging>
+</div>
+
+<app-confirmation-modal #confirmationModal></app-confirmation-modal>

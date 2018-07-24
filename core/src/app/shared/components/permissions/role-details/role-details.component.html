@@ -1,0 +1,77 @@
+<div class="container-fluid sf-content">
+  <div class="sf-toolbar">
+    <div class="sf-toolbar__item sf-toolbar__item--breadcrumb">
+      <a (click)="goBack()">Permissions</a> / {{ roleName }}
+    </div>
+  </div>
+  <p *ngIf="loading">
+    Loading ...
+  </p>
+  <p *ngIf="!loading && errorMessage" class="error-message">
+    {{ errorMessage }}
+  </p>
+  <div *ngIf="roleDetails">
+    <section class="sf-section">
+      <div class="sf-panel">
+      <div class="sf-panel__head">
+        <h2 > Details </h2>
+      </div>
+      <div class="sf-panel__content">
+      <div class="row">
+        <div class="col-sm-4">
+          <label class="tn-form__label">Name</label>
+        </div>
+        <div class="col-sm-8">
+          <span>{{ roleDetails.metadata.name }}</span>
+        </div>
+        <div class="col-sm-4">
+          <label class="tn-form__label">Namespace</label>
+        </div>
+        <div class="col-sm-8">
+          <span>{{ roleDetails.metadata.namespace }}</span>
+        </div>
+        <div class="col-sm-4">
+          <label class="tn-form__label">Creation time</label>
+        </div>
+        <div class="col-sm-8">
+          <span>{{ roleDetails.metadata.creationTimestamp }}</span>
+        </div>
+      </div>
+      </div>
+      </div>
+    </section>
+    <section class="sf-section">
+      <div class="sf-panel">
+      <div class="sf-panel__head">
+        <h2 > Rules </h2>
+      </div>
+        <div class="sf-panel__content">
+      <div class="row" *ngFor="let rule of roleDetails.rules">
+        <div class="col-sm-4">
+          <label class="tn-form__label">API Groups</label>
+        </div>
+        <div class="col-sm-8">
+          <div *ngFor="let apiGroup of rule.apiGroups; let last = last">
+            <span>{{ apiGroup !== '' ? apiGroup : coreGroup }}{{ last ? '': ',' }}</span>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <label class="tn-form__label">Verbs</label>
+        </div>
+        <div class="col-sm-8">
+            <span *ngFor="let verb of rule.verbs; let last = last">{{ verb }}{{ last ? '': ', ' }}</span>
+        </div>
+        <div class="col-sm-4">
+          <label class="tn-form__label">Resources</label>
+        </div>
+        <div class="col-sm-8">
+          <div *ngFor="let resource of rule.resources; let last = last">
+            <span>{{ resource }}{{ last ? '': ',' }}</span>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+    </section>
+  </div>
+</div>

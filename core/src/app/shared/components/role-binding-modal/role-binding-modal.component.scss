@@ -1,0 +1,53 @@
+@import '_variables';
+
+:host {
+  text-align: left;
+}
+
+.tn-dropdown__control--placeholder {
+  color: grey;
+  font-weight: 100;
+  font-style: italic;
+}
+
+.environment-chooser {
+  .tn-dropdown__menu {
+    top: 100%;
+    max-height: 217px;
+    overflow: auto;
+    width: calc(100% - 32px);
+  }
+}
+
+.disabled {
+  outline: none;
+  background-color: transparent;
+}
+
+.filter-input {
+  border: 0;
+  float: left;
+  width: 90%;
+}
+
+.tn-dropdown__menu {
+  overflow: auto;
+  max-height: 300px;
+}
+
+.user-group {
+  margin-bottom: 8px;
+}
+
+.user-group-input {
+  font-size: 14px;
+  width: 100%;
+  text-align: left;
+  border-radius: $sf-border-radius;
+  border: 1px solid $sf-base-color-grey;
+  height: 36px;
+  box-shadow: none !important;
+  line-height: 1;
+  padding-left: 8px;
+  padding-right: 8px;
+}

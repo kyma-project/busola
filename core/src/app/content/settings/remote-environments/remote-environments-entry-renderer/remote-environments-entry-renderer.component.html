@@ -1,0 +1,11 @@
+<div class="row sf-list__body" [ngClass]="{'sf-list__disabled': disabled === true}">
+  <div class="col-1">
+    <span class="sf-indicator" [ngClass]="determineClass(entry)" title="{{prettyPrintStatus(entry.status)}}"></span>
+  </div>
+  <div class="col-3 sf-list__body--primary remoteenv-name" (click)="openRemoteEnvDetails()">{{ entry.name }}</div>
+  <div class="col-3">{{ entry.source.type }}</div>
+  <div class="col-3 col-lg-4" [ngClass]="{'noEnvBound': !listConnectedEnvs(entry)}">{{ listConnectedEnvs(entry)? listConnectedEnvs(entry) : 'none' }}</div>
+  <div class="col-1 actions-icon">
+    <y-list-actions [entry]="entry" [entryEventHandler]="entryEventHandler" [actions]="actions"></y-list-actions>
+  </div>
+</div>

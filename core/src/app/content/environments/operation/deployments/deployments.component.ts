@@ -1,0 +1,101 @@
+import { HttpClient } from '@angular/common/http';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  ViewChild
+} from '@angular/core';
+import { OAuthService } from 'angular-oauth2-oidc';
+import { Subscription } from 'rxjs/Subscription';
+import { Filter } from '@kyma-project/y-generic-list';
+import { AppConfig } from '../../../../app.config';
+import { ComponentCommunicationService } from '../../../../shared/services/component-communication.service';
+import { GraphQLClientService } from '../../../../shared/services/graphql-client-service';
+import { CurrentEnvironmentService } from '../../services/current-environment.service';
+import { AbstractKubernetesElementListComponent } from '../abstract-kubernetes-element-list.component';
+import { GraphQLDataProvider } from '../graphql-data-provider';
+import { DeploymentEntryRendererComponent } from './deployment-entry-renderer/deployment-entry-renderer.component';
+import { DeploymentHeaderRendererComponent } from './deployment-header-renderer/deployment-header-renderer.component';
+
+@Component({
+  selector: 'app-deployments',
+  templateUrl: '../kubernetes-element-list.component.html',
+  host: { class: 'sf-content' }
+})
+export class DeploymentsComponent extends AbstractKubernetesElementListComponent
+  implements OnDestroy {
+  public title = 'Deployments';
+  public emptyListText =
+    'It looks like you don’t have any deployments in your namespace yet.';
+  public createNewElementText = 'Add Deployment';
+  public resourceKind = 'Deployment';
+  private currentEnvironmentId: string;
+  private currentEnvironmentSubscription: Subscription;
+  public hideFilter = false;
+
+  constructor(
+    private http: HttpClient,
+    private oAuthService: OAuthService,
+    private currentEnvironmentService: CurrentEnvironmentService,
+    private commService: ComponentCommunicationService,
+    private graphQLClientService: GraphQLClientService,
+    changeDetector: ChangeDetectorRef
+  ) {
+    super(currentEnvironmentService, changeDetector, http, commService);
+
+    const query = `query Deployments($environment: String!) {
+      deployments(environment: $environment) {
+        name
+        boundServiceInstanceNames
+        labels
+        creationTimestamp
+        status {
+          replicas
+          updatedReplicas
+          readyReplicas
+          availableReplicas
+          conditions {
+            status
+            type
+            lastTransitionTimestamp
+            lastUpdateTimestamp
+            message
+            reason
+          }
+        }
+        containers {
+          name
+          image
+        }
+      }
+    }`;
+
+    this.currentEnvironmentSubscription = this.getCurrentEnvironmentId().subscribe(
+      envId => {
+        this.currentEnvironmentId = envId;
+        this.source = new GraphQLDataProvider(
+          AppConfig.graphqlApiUrl,
+          query,
+          {
+            environment: this.currentEnvironmentId
+          },
+          this.graphQLClientService
+        );
+
+        this.entryRenderer = DeploymentEntryRendererComponent;
+        this.headerRenderer = DeploymentHeaderRendererComponent;
+        this.filterState = { filters: [new Filter('name', '', false)] };
+      }
+    );
+  }
+
+  public ngOnDestroy() {
+    this.currentEnvironmentSubscription.unsubscribe();
+  }
+
+  public getResourceUrl(kind: string, entry: any): string {
+    return `${AppConfig.k8sApiServerUrl_extensions}namespaces/${
+      this.currentEnvironmentId
+    }/deployments/${entry.name}`;
+  }
+}

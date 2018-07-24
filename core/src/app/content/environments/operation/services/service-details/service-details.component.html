@@ -1,0 +1,91 @@
+<div class="sf-content container-fluid">
+  <div class="sf-toolbar">
+    <div class="sf-toolbar__item sf-toolbar__item--breadcrumb">
+      <a (click)="goBack()">Services</a> / {{ serviceName }}
+    </div>
+    <div class="sf-toolbar__right">
+      <app-edit-resource [resourceData]="serviceDetailsToEdit" *ngIf="!serviceDetailsToEditLoading" class="sf-toolbar__item"></app-edit-resource>
+    </div>
+  </div>
+  <p *ngIf="serviceDetailsLoading">
+    Loading ...
+  </p>
+  <p *ngIf="!serviceDetailsLoading && errorMessage" class="error-message">
+    {{ errorMessage }}
+  </p>
+  <div *ngIf="serviceDetails">
+    <section class="sf-section">
+      <div class="sf-panel">
+        <div class="sf-panel__head">
+          <div class="sf-toolbar">
+            <div class="sf-toolbar__header">
+              General informations
+            </div>
+          </div>
+        </div>
+        <div class="sf-panel__content">
+          <div class="row">
+            <div class="col-sm-2">
+              <label class="tn-form__label">Name</label>
+            </div>
+            <div class="col-sm-10">
+              <span>{{ serviceDetails.objectMeta.name }}</span>
+            </div>
+            <div class="col-sm-2">
+              <label class="tn-form__label">Namespace</label>
+            </div>
+            <div class="col-sm-10">
+              <span>{{ serviceDetails.objectMeta.namespace }}</span>
+            </div>
+            <div class="col-sm-2">
+              <label class="tn-form__label">Cluster IP</label>
+            </div>
+            <div class="col-sm-10">
+              <span>{{ serviceDetails.clusterIP }}</span>
+            </div>
+            <div class="col-sm-2">
+              <label class="tn-form__label">Creation date</label>
+            </div>
+            <div class="col-sm-10">
+              <span>{{ serviceDetails.objectMeta.creationTimestamp }}</span>
+            </div>
+            <div class="col-sm-2" *ngIf="serviceDetails.objectMeta.labels">
+              <label class="tn-form__label">Labels</label>
+            </div>
+            <div class="col-sm-10" *ngIf="serviceDetails.objectMeta.labels">
+              <span class="tn-badge tn-badge--pill sf-list__label" *ngFor="let key of objectKeys(serviceDetails.objectMeta.labels)">{{ key }}: {{ serviceDetails.objectMeta.labels[key] }} </span>
+            </div>
+            <div class="col-sm-2">
+              <label class="tn-form__label">Internal endpoints</label>
+            </div>
+            <div class="col-sm-10">
+              <span *ngFor="let port of serviceDetails.internalEndpoint.ports">
+                <span>{{ serviceDetails.internalEndpoint.host }}:{{ port.port }} {{ port.protocol }}</span>
+                <br>
+                <span>{{ serviceDetails.internalEndpoint.host }}:{{ port.nodePort }} {{ port.protocol }}</span>
+                <br>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <section class="sf-section">
+    <div class="sf-panel">
+      <div class="sf-panel__head">
+        <div class="sf-toolbar">
+          <div class="sf-toolbar__header">
+            Exposed APIs
+          </div>
+          <div class="sf-toolbar__right">
+            <button class="tn-button tn-button--small tn-button--text sf-toolbar__item" (click)="openExposeApi()">
+              + Expose API
+            </button>
+          </div>
+        </div>
+      </div>
+      <app-filtered-apis></app-filtered-apis>
+    </div>
+  </section>
+</div>

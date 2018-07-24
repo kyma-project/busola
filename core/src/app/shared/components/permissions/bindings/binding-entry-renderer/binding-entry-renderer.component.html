@@ -1,0 +1,7 @@
+<div class="row sf-list__body" [ngClass]="{'sf-list__disabled': disabled === true}">
+  <div class="col-5">{{ groupName }}</div>
+  <div class="col-5 col-lg-6"><span class="tn-badge tn-badge--pill sf-list__label">{{ entry.roleRef.kind === 'ClusterRole' ? 'CR' : 'R' }}</span>{{ entry.roleRef.name }}</div>
+  <div class="col-1 actions-icon">
+    <y-list-actions [entry]="entry" [entryEventHandler]="entryEventHandler" [actions]="actions"></y-list-actions>
+  </div>
+</div>

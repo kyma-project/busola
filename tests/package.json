@@ -1,0 +1,29 @@
+{
+  "name": "ui-tests",
+  "version": "0.1.3",
+  "description": "UI Integration tests for the Kyma ",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest -i",
+    "test:watch": "jest --watch"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-jest": "^21.2.0",
+    "babel-preset-env": "^1.6.1",
+    "faker": "^4.1.0",
+    "jest": "^23.1.0",
+    "promise-retry": "^1.1.1",
+    "puppeteer": "~1.6.0",
+    "request": "^2.85.0",
+    "requestretry": "^1.13.0"
+  },
+  "jest": {
+    "testRegex": "/tests/(console-basic-test|catalog-ui-test).jsx?$"
+  },
+  "prettier": {
+    "singleQuote": true
+  }
+}

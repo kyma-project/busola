@@ -1,0 +1,33 @@
+<div class="sf-panel__head">
+  <div class="sf-panel__headline-wrap">
+    <h2> Service Instance Bindings </h2>
+    <button class="tn-button tn-button--small tn-button--text" (click)="showBindingCreatorModal()">
+      + Add Service Instance Binding
+    </button>
+  </div>
+</div>
+
+<div class="sf-list" *ngIf="instanceBindingInfoList.length > 0">
+  <div class="row sf-list__head">
+    <div class="col-3">Instance</div>
+    <div class="col-8">Environment Variable Name</div>
+    <div class="col-1"></div>
+  </div>
+  <div class="row sf-list__body" *ngFor="let instanceBinding of instanceBindingInfoList; let i = index">
+    <div class="col-3">
+      {{ instanceBinding.instanceName }}
+    </div>
+    <div class="col-8">
+      <div *ngFor="let envVar of instanceBinding.envVarNames; index as j" [attr.data-index]="j">
+        <div class="col-12 env-var-position">
+          {{ envVar }}
+        </div>
+      </div>
+    </div>
+    <div class="col-1">
+      <button class="tn-icon tn-icon--delete tn-button tn-button--small tn-button--icon tn-button--text" (click)="remove(i)"></button>
+    </div>
+  </div>
+</div>
+
+<app-lambda-instance-binding-creator [alreadyAddedInstances]="instanceBindingInfoList" #bindingCreatorModal (selectedServiceBindingEmitter)="addServiceBinding($event)"></app-lambda-instance-binding-creator>

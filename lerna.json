@@ -1,0 +1,15 @@
+{
+  "lerna": "2.11.0",
+  "packages": [
+    "catalog",
+    "instances",
+    "content",
+    "components/react"
+  ],
+  "version": "0.0.0",
+  "command": {
+    "publish": {
+      "message": "Bump version to %s"
+    }
+  }
+}

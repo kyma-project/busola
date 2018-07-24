@@ -1,0 +1,32 @@
+.tn-modal__title {
+  margin-bottom: 0;
+  line-height: 2;
+}
+
+.info {
+  margin-top: 5px;
+  margin-bottom: 25px;
+  color: grey;
+  font-style: italic;
+}
+
+.copy-text {
+  height: 14em;
+  resize: none;
+  border: none;
+  padding: 0;
+
+  &--border {
+    padding: 5px;
+    border: 1px solid lightgrey;
+    border-radius: 0;
+  }
+}
+
+.copybtn {
+  float: left !important;
+}
+
+.copysuccess {
+  color: #61bf33;
+}

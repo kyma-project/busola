@@ -1,0 +1,125 @@
+<div class="container-fluid sf-content">
+  <div class="sf-toolbar">
+      <div *ngIf="routedFromServiceDetails" class="sf-toolbar__item sf-toolbar__item--breadcrumb">
+        <a (click)="navigateToServicesList()">Services</a> / <a class="service-name" (click)="navigateToServiceDetails()">{{ serviceName }}</a>
+        / {{ apiDefinition ? (  apiName  )  : ('Create API') }}
+      </div>
+      <div *ngIf="!routedFromServiceDetails" class="sf-toolbar__item sf-toolbar__item--breadcrumb">
+        <a (click)="navigateToApiList()"> APIs </a> / {{ apiDefinition ? ( apiName )  : ('Create API' ) }}
+      </div>
+    <div class="sf-toolbar__right">
+      <div class="sf-toolbar__item">
+        <button class="tn-button tn-button--small sf-button--primary" ngClass="{{!isAbleToMakeRequest() ? '' : 'disabled'}}" [disabled]="!isAbleToMakeRequest()" (click)="save()">Save</button>
+      </div>
+    </div>
+  </div>
+  <section class="sf-section">
+    <div class="sf-panel">
+      <div class="sf-panel__head">
+        <div class="sf-toolbar">
+          <div class="sf-toolbar__header">General Information</div>
+        </div>
+      </div>
+      <div class="sf-panel__content">
+        <div class="expose-section">
+          <div class="row expose-section__details">
+
+            <div *ngIf='listOfServices' class="col-sm-12 input-group">
+              <div class="col-sm-6 input-group">
+                <label class="tn-form__label required" for="input-0">Service</label>
+                <div class="tn-dropdown sf-dropdown" (clickOutside)="closeDropDown()"  clickOutsideEvents="click,mousedown" excludeBeforeClick="true">
+                  <button class="tn-dropdown__control"
+                    aria-controls="nNJnB279"
+                    [attr.aria-expanded]="ariaServiceExpanded"
+                    aria-haspopup="true"
+                    (click)="toggleDropDown()">
+                    <input class="filter-input"
+                      type="text"
+                      name="serviceName"
+                      placeholder="Choose service"
+                      [(ngModel)]="serviceName"
+                      (ngModelChange)="filterServices()"
+                      (keydown)="openDropDown($event)"
+                      (click)="openDropDown($event)">
+                  </button>
+                  <ul class="tn-dropdown__menu" [attr.aria-hidden]="ariaServiceHidden" id="nNJnB279">
+                    <li class="tn-dropdown__item" *ngFor="let svc of filteredServices" (click)="toggleDropDown(); selectService(svc); setApiName()">{{ svc.metadata.name }}</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-sm-6 input-group">
+              <label class="tn-form__label required" for="input-2">Host</label>
+              <input type="text" id="input-2" [(ngModel)]="hostname" (ngModelChange)="setApiName(); validateDetails()" (blur)="validateDetails()">
+              <div *ngIf="errorHostname" class="alert alert-danger">{{ errorHostname }}</div>
+            </div>
+            <div class="domain col-sm-2">{{ domain }}</div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-2 input-group">
+              <label class="tn-form__label required" for="input-3">Service Port</label>
+              <input type="text" id="input-3" [(ngModel)]="servicePort" (ngModelChange)="validateDetails()" (blur)="validateDetails()">
+              <div *ngIf="errorPort" class="alert alert-danger">{{ errorPort }}</div>
+            </div>
+
+            <div class="col-sm-12 input-group">
+              <div class="col-sm-6 input-group">
+                <label class="tn-form__label required" for="input-1">Name</label>
+                <input type="text" id="input-1" [disabled]="apiDefinition" [(ngModel)]="apiName" (ngModelChange)="validateDetails()" (blur)="validateDetails()">
+                <div *ngIf="errorApiName" class="alert alert-danger">{{ errorApiName }}</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section  *ngIf="canBeSecured" class="sf-section security-section">
+    <div class="sf-panel">
+      <div class="sf-panel__head">
+        <div class="sf-toolbar">
+          <div class="sf-toolbar__header">Security</div>
+          <div class="sf-toolbar__right">
+            <div *ngIf="secure && canBeSecured && apiDefinition && isDefaultProvider()" class="sf-toolbar__item">
+              <button class="tn-button tn-button--small tn-button--link" (click)="fetchToken()">Fetch token</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="sf-panel__content">
+        <input *ngIf="canBeSecured" type="checkbox" (change)="toggleSecure()" [checked]="secure" id="secure"> <label for="secure">Secure API</label>
+        <div *ngIf="secure" class="expose-section__secured-paths">
+          <div class="row">
+            <div class="col-sm-12 input-group">
+              <h3>Identity Provider</h3>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6 input-group">
+              <label class="tn-form__label required" for="input-4">Issuer</label>
+              <input type="text" id="input-4" [(ngModel)]="issuer" (ngModelChange)="validateDetails()" (blur)="validateDetails()">
+              <div *ngIf="errorIssuer" class="alert alert-danger">{{ errorIssuer }}</div>
+            </div>
+            <div class="col-sm-6 input-group">
+              <label class="tn-form__label required" for="input-5">JWKS URI</label>
+              <input type="text" id="input-5" [(ngModel)]="jwksUri" (ngModelChange)="validateDetails()" (blur)="validateDetails()">
+              <div *ngIf="errorJWKSUri" class="alert alert-danger">{{ errorJWKSUri }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="canBeSecured && secure" class="tn-dropdown" (clickOutside)="autoCloseDropdown()" clickOutsideEvents="click,mousedown">
+        <button  class="tn-button tn-button--small tn-button--link" (click)="loadPreset()">Load Preset</button>
+        <ul class="tn-dropdown__menu tn-contextual-menu actions-menu text-left"
+            [attr.aria-hidden]="ariaHidden">
+          <li class="tn-dropdown__item" *ngFor="let preset of availablePresets">
+            <div (click)="selectPreset(preset)" id="{{preset.label}}">{{ preset.label }}</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</div>
+<app-copy2clipboard-modal #fetchModal></app-copy2clipboard-modal>
+<app-information-modal #infoModal></app-information-modal>

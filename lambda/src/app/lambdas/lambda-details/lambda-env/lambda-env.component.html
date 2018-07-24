@@ -1,0 +1,43 @@
+<div class="sf-panel__head">
+  <h2> Environment Variable </h2>
+  <span class="sf-panel__sub-headline">Define Environment Variables to be used by your Lambda Function.</span>
+</div>
+
+
+<div class="sf-list">
+    <div class="row sf-list__head align-items-center">
+        <div class="col-4">
+            <input [(ngModel)]="envVar.name" class="tn-form__control" type="text" id="input-1" (keyup)="validatesEnvVariableName()" placeholder="VARIABLE_NAME">
+            <div *ngIf="isEnvVariableNameInvalid">
+                <p class="alert">Invalid variable name: must consist of alphanumeric characters or '_' and no spaces (e.g. 'VARIABLE_NAME')</p>
+            </div>
+            <div *ngIf="isEnvVariableDuplicate">
+                <p class="alert">Duplicate entry.</p>
+            </div>
+        </div>
+        <div class="col-1 lambda-align-center">→</div>
+        <div class="col-5">
+            <input [(ngModel)]="envVar.value" class="tn-form__control" type="text" id="input-2" placeholder="Value" (keyup.enter)="addVariable()">
+        </div>
+        <div class="col-2 lambda-align-right">
+            <button class="tn-button tn-button--small tn-button--text" (click)="addVariable()" [disabled]="disableAddVar">
+                + Add Variable
+            </button>
+        </div>
+    </div>
+    <div class="row sf-list__body align-items-center" *ngFor="let env of envs; let i = index">
+        <div class="sf-list__body--primary col-4">{{ env.name }}</div>
+        <div class="col-1 lambda-align-center">→</div>
+        <div *ngIf="editVar!=i" class="col-5">{{ env.value }}</div>
+        <div *ngIf="editVar!=i" class="col-2 lambda-align-right">
+            <button class="tn-icon tn-icon--edit tn-button tn-button--small tn-button--icon tn-button--text" (click)="editVariable(i)"></button>
+            <button class="tn-icon tn-icon--delete tn-button tn-button--small tn-button--icon tn-button--text" (click)="removeVarariable(i)"></button>
+        </div>
+        <div *ngIf="editVar==i" class="col-5">
+                <input [(ngModel)]="env.value" class="tn-form__control" type="text" id="input-3" (keyup.enter)="updateVariable()">
+        </div>
+        <div *ngIf="editVar==i" class="col-2">
+            <button class="tn-icon tn-icon--checked tn-button tn-button--small tn-button--icon tn-button--text" (click)="updateVariable()"></button>
+        </div>
+    </div>
+</div>
