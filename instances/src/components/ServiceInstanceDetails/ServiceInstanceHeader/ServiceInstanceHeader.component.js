@@ -8,7 +8,7 @@ import {
   Breadcrumb,
   Toolbar,
 } from '@kyma-project/react-components';
-import { UpperBarWrapper, ToolbarWrapper } from './styled';
+import { BreadcrumbWrapper, ToolbarWrapper } from './styled';
 
 const ServiceInstanceHeader = ({
   serviceInstance,
@@ -28,9 +28,13 @@ const ServiceInstanceHeader = ({
     }, 100);
   };
 
+  const instanceClass = serviceInstance.clusterServiceClass
+    ? serviceInstance.clusterServiceClass
+    : serviceInstance.serviceClass;
+
   return (
     <ToolbarWrapper>
-      <UpperBarWrapper>
+      <BreadcrumbWrapper>
         <Breadcrumb>
           <Breadcrumb.Item
             name={serviceInstanceConstants.instances}
@@ -39,6 +43,12 @@ const ServiceInstanceHeader = ({
           />
           <Breadcrumb.Item />
         </Breadcrumb>
+      </BreadcrumbWrapper>
+
+      <Toolbar
+        title={serviceInstance.name}
+        description={instanceClass.description}
+      >
         <Modal
           title={serviceInstanceConstants.delete}
           confirmText={serviceInstanceConstants.delete}
@@ -57,8 +67,8 @@ const ServiceInstanceHeader = ({
             serviceInstance.name
           }"?`}
         </Modal>
-      </UpperBarWrapper>
-      <Toolbar title={serviceInstance.name} />
+      </Toolbar>
+
       <ServiceInstanceInfo serviceInstance={serviceInstance} />
     </ToolbarWrapper>
   );
