@@ -8,13 +8,12 @@ import { ActivatedRoute } from '@angular/router';
 
 import { LuigiContextService } from './service/luigi-context.service';
 import { ILogStream } from './data/log-stream';
+import { ISearchResult } from './data/search-result';
 import { IPod, IPodQueryResponse } from './data/pod-query';
 
 import { PodsSubscriptonService } from './service/pods-subscription/pods-subscription.service';
 
-import {
-  REFRESH_INTERVAL,
-} from './shared/constants';
+import { REFRESH_INTERVAL } from './shared/constants';
 
 import { AriaDisabledDirective } from './shared/appAriaDisabled.directive';
 
@@ -30,7 +29,7 @@ export class SearchFormComponent implements OnInit, OnDestroy {
   fromValues = ['5m', '15m', '1h', '12h', '1d', '3d', '7d'];
   toValues = ['now'];
   directions = ['backward', 'forward'];
-  emptySearchResult = {
+  emptySearchResult: ISearchResult = {
     streams: [
       {
         availableLabels: [],
@@ -52,6 +51,7 @@ export class SearchFormComponent implements OnInit, OnDestroy {
     direction: 'backward',
     label: '',
     showOutdatedLogs: false,
+    showHealthChecks: false,
   };
 
   selectedLabels: Map<string, string | string[]> = new Map();
@@ -68,7 +68,7 @@ export class SearchFormComponent implements OnInit, OnDestroy {
     return !this.getSearchQuery().query;
   }
 
-  public isHistoricalDataSwitchVisible = false;
+  public isFunctionLabelPresent = false;
 
   private podsForFunction: IPod[];
   public isSearchButtonTooltipOpen = false;
@@ -104,7 +104,7 @@ export class SearchFormComponent implements OnInit, OnDestroy {
       this.addLabel('function=' + params.function, true);
       this.title = `Logs for function "${params.function}"`;
       this.subscribeToCurrentPodName(params.function);
-      this.isHistoricalDataSwitchVisible = true;
+      this.isFunctionLabelPresent = true;
     }
 
     if (params.pod) {
@@ -151,26 +151,11 @@ export class SearchFormComponent implements OnInit, OnDestroy {
     this.searchService.search(searchQuery).subscribe(
       data => {
         const result = JSON.parse(data);
-        if ('streams' in result) {
-          this.searchResult = result;
-          this.searchResult.streams.forEach(stream => {
-            stream.availableLabels = stream.labels
-              .replace('{', '')
-              .replace('}', '')
-              .split(',');
-          });
-          if (
-            this.isHistoricalDataSwitchVisible &&
-            !this.model.showOutdatedLogs
-          ) {
-            this.searchResult.streams = this.searchResult.streams.filter(
-              (ls: ILogStream) =>
-                this.fiterStreamByInstance(ls, this.getLabelValue),
-            );
-          }
-        } else {
-          this.searchResult = this.emptySearchResult;
-        }
+
+        this.searchResult =
+          'streams' in result
+            ? this.processSearchResult(result)
+            : this.emptySearchResult;
       },
       err => {
         console.error(err);
@@ -179,13 +164,33 @@ export class SearchFormComponent implements OnInit, OnDestroy {
     );
   }
 
+  private processSearchResult(result: ISearchResult): ISearchResult {
+    result.streams.forEach(stream => {
+      stream.availableLabels = stream.labels
+        .replace('{', '')
+        .replace('}', '')
+        .split(',');
+    });
+    if (this.isFunctionLabelPresent && !this.model.showOutdatedLogs) {
+      result.streams = result.streams.filter((ls: ILogStream) =>
+        this.fiterStreamByInstance(ls, this.getLabelValue),
+      );
+    }
+
+    if (!this.model.showHealthChecks) {
+      result.streams = result.streams.map(this.filterHealthchecks);
+    }
+
+    return result;
+  }
+
   private fiterStreamByInstance(
     stream: ILogStream,
     getLabelValueFn: (label: string) => string,
   ): boolean {
     // if a stream has instance="xyz" label, check if "xyz" is in podsForFunction list.
-    const instanceLabel = stream.availableLabels.find((label: string) =>
-      label.includes('instance'),
+    const instanceLabel = stream.availableLabels.find(
+      (label: string) => label.indexOf('instance') > -1,
     );
     if (!instanceLabel || !this.podsForFunction) {
       return false; // this stream doesn't have an 'instance' label or there are no pods to compare
@@ -196,6 +201,13 @@ export class SearchFormComponent implements OnInit, OnDestroy {
         (pod: IPod) => pod.name === instanceValue,
       ); // this stream does have an 'instance' label. Return true if the instance name is in podsForFunction list.
     }
+  }
+
+  private filterHealthchecks(stream: ILogStream): ILogStream {
+    stream.entries = stream.entries.filter(
+      (entry: any) => entry.line.indexOf('GET /healthz') < 0,
+    );
+    return stream;
   }
 
   private getSearchQuery() {
@@ -390,5 +402,15 @@ export class SearchFormComponent implements OnInit, OnDestroy {
     if (!this.isQueryEmpty) {
       this.refreshResults();
     }
+  }
+
+  public isSearchResultEmpty(searchResult: ISearchResult): boolean {
+    return !(
+      searchResult &&
+      searchResult.streams &&
+      searchResult.streams[0] &&
+      !!searchResult.streams[0].entries &&
+      !!searchResult.streams[0].entries.length
+    );
   }
 }
