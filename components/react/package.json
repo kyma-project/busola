@@ -7,6 +7,11 @@
   "directories": {
     "lib": "src"
   },
+  "files": [
+    "/lib",
+    "./README.md",
+    "./LICENSE"
+  ],
   "scripts": {
     "start": "npm run styleguide",
     "start:kyma": "npm run build:watch",
@@ -20,7 +25,8 @@
     "test:watchAll": "jest src/** --watchAll",
     "test:coverage:report": "open ./coverage/lcov-report/index.html",
     "lint-fix": "prettier --config ../../.prettierrc --write \"./src/**/*.{js,jsx,ts,tsx,html,css,json}\"",
-    "lint-check": "prettier --config ../../.prettierrc --check \"./src/**/*.{js,jsx,ts,tsx,html,css,json}\""
+    "lint-check": "prettier --config ../../.prettierrc --check \"./src/**/*.{js,jsx,ts,tsx,html,css,json}\"",
+    "prepare": "npm run build"
   },
   "homepage": "https://kyma-project.github.io/console/react",
   "dependencies": {
