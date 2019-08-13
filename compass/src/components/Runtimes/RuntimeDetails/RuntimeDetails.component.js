@@ -1,17 +1,19 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Panel } from '@kyma-project/react-components';
 
 import RuntimeDetailsHeader from './RuntimeDetailsHeader/RuntimeDetailsHeader.component';
-import RuntimeScenarios from './RuntimeScenarios/RuntimeScenarios.component';
+import RuntimeScenarios from './RuntimeScenarios/RuntimeScenarios.container';
 import ResourceNotFound from '../../Shared/ResourceNotFound.component';
 
-const RuntimeDetails = ({ runtimeQuery, deleteRuntime }) => {
-  const runtime = (runtimeQuery && runtimeQuery.runtime) || {};
-  const loading = runtimeQuery.loading;
-  const error = runtimeQuery.error;
+export const RuntimeQueryContext = React.createContext(null);
 
-  if (!runtimeQuery || !runtimeQuery.runtime) {
-    if (loading) return 'Loading...';
+const RuntimeDetails = ({ runtimeQuery, deleteRuntime }) => {
+  const { runtime, loading, error } = runtimeQuery;
+
+  if (loading) return 'Loading...';
+
+  if (!runtime) {
     if (error)
       return <ResourceNotFound resource="Runtime" breadcrumb="Runtimes" />;
     return '';
@@ -20,23 +22,25 @@ const RuntimeDetails = ({ runtimeQuery, deleteRuntime }) => {
     return `Error! ${error.message}`;
   }
 
-  let scenarios = [];
-  if (runtime.labels && runtime.labels.scenarios) {
-    scenarios = runtime.labels.scenarios.map(scenario => {
-      return { scenario };
-    }); // list requires a list of objects
-  }
+  const labels = runtime.labels;
+  const scenarios = labels && labels.scenarios ? labels.scenarios : [];
+
   return (
-    <>
+    <RuntimeQueryContext.Provider value={runtimeQuery}>
       <RuntimeDetailsHeader runtime={runtime} deleteRuntime={deleteRuntime} />
 
       <section className="fd-section">
         <Panel>
-          <RuntimeScenarios scenarios={scenarios} />
+          <RuntimeScenarios runtimeId={runtime.id} scenarios={scenarios} />
         </Panel>
       </section>
-    </>
+    </RuntimeQueryContext.Provider>
   );
+};
+
+RuntimeDetails.propTypes = {
+  runtimeQuery: PropTypes.object.isRequired,
+  deleteRuntime: PropTypes.func.isRequired,
 };
 
 export default RuntimeDetails;
