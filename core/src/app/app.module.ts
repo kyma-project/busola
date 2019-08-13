@@ -109,6 +109,7 @@ import { ConfigMapsHeaderRendererComponent } from './content/namespaces/operatio
 import { StatusLabelComponent } from './shared/components/status-label/status-label.component';
 import { TooltipComponent } from './shared/components/tooltip/tooltip.component';
 import { LuigiClientCommunicationDirective } from './shared/directives/luigi-client-communication/luigi-client-communication.directive';
+import { FilterAllOnSelectedDirective } from './shared/directives/filter-all-on-selected/filter-all-on-selected.directive';
 
 import { FundamentalNgxModule } from 'fundamental-ngx';
 import { GraphqlMutatorModalComponent } from 'shared/components/json-editor-modal/graphql-mutator-modal.component';
@@ -209,6 +210,7 @@ import { UrlLinkComponent } from 'shared/components/url-link/url-link.component'
     StatusLabelComponent,
     TooltipComponent,
     LuigiClientCommunicationDirective,
+    FilterAllOnSelectedDirective,
     UrlLinkComponent
   ],
   imports: [
