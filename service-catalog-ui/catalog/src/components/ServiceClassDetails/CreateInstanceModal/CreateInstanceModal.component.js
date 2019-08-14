@@ -31,8 +31,6 @@ class CreateInstanceModal extends Component {
     plans.forEach(plan => {
       this.parseDefaultIntegerValues(plan);
     });
-
-    this.state.serviceClass = serviceClass;
   }
 
   parseDefaultIntegerValues = plan => {
@@ -62,7 +60,7 @@ class CreateInstanceModal extends Component {
       instanceCreateParameters: {},
       tooltipData: {},
       errors: [],
-      serviceClass: {},
+      serviceClass: this.props.serviceClass,
     };
   };
 
@@ -70,8 +68,8 @@ class CreateInstanceModal extends Component {
     this.setState(this.getInitialState());
   };
 
-  componentDidMount() {
-    const { serviceClass } = this.state;
+  prepareFormData = () => {
+    const { serviceClass } = this.props;
 
     if (!serviceClass) return;
 
@@ -87,7 +85,7 @@ class CreateInstanceModal extends Component {
         plan: planName,
       },
     });
-  }
+  };
 
   componentDidUpdate(nextProps, nextState) {
     if (nextState && nextState.tooltipData && nextState.tooltipData.show) {
@@ -102,6 +100,7 @@ class CreateInstanceModal extends Component {
   };
 
   onShow = () => {
+    this.prepareFormData();
     LuigiClient.uxManager().addBackdrop();
   };
 
