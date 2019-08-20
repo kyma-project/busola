@@ -1,0 +1,85 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MultiChoiceList Renders empty list with custom caption props 1`] = `
+<section
+  className="multi-choice-list-modal__body"
+>
+  <ul />
+  <div
+    className="fd-dropdown"
+  >
+    <span
+      onFocus={[Function]}
+      onMouseDown={[Function]}
+      onTouchStart={[Function]}
+    >
+      <div
+        className="fd-popper__control fd-popover"
+      >
+        <button
+          className="fd-button fd-dropdown__control"
+          onClick={[Function]}
+        >
+          <span>
+            placeholder value
+          </span>
+        </button>
+      </div>
+    </span>
+  </div>
+</section>
+`;
+
+exports[`MultiChoiceList Renders empty list with default caption props 1`] = `
+<section
+  className="multi-choice-list-modal__body"
+>
+  <ul />
+  <div
+    className="fd-dropdown"
+  >
+    <span
+      onFocus={[Function]}
+      onMouseDown={[Function]}
+      onTouchStart={[Function]}
+    >
+      <div
+        className="fd-popper__control fd-popover"
+      >
+        <button
+          className="fd-button fd-dropdown__control"
+          onClick={[Function]}
+        >
+          <span>
+            Choose items...
+          </span>
+        </button>
+      </div>
+    </span>
+  </div>
+</section>
+`;
+
+exports[`MultiChoiceList Renders two lists of object items 1`] = `
+<section
+  className="multi-choice-list-modal__body"
+>
+  <span
+    className="fd-has-font-style-italic"
+  >
+    No more entries available
+  </span>
+</section>
+`;
+
+exports[`MultiChoiceList Renders two lists of simple items 1`] = `
+<section
+  className="multi-choice-list-modal__body"
+>
+  <span
+    className="fd-has-font-style-italic"
+  >
+    No more entries available
+  </span>
+</section>
+`;
