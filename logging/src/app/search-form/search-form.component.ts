@@ -168,6 +168,11 @@ export class SearchFormComponent implements OnInit, OnDestroy {
       this.getSearchQuery(),
     );
 
+    this.isFunctionLabelPresent =
+      searchQuery &&
+      searchQuery.query &&
+      searchQuery.query.indexOf('function=') > -1;
+
     this.searchService.search(searchQuery).subscribe(
       data => {
         const result = JSON.parse(data);
