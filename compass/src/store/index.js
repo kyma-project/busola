@@ -14,7 +14,9 @@ import defaults from './defaults';
 const COMPASS_GRAPHQL_ENDPOINT = window.clusterConfig.graphqlApiUrl;
 
 export function createApolloClient() {
-  const httpLink = createHttpLink({ uri: COMPASS_GRAPHQL_ENDPOINT });
+  const httpLink = createHttpLink({
+    uri: COMPASS_GRAPHQL_ENDPOINT,
+  });
   const authLink = setContext((_, { headers }) => {
     return {
       headers: {

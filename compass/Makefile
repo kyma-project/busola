@@ -8,7 +8,7 @@ ci-master: resolve prepare validate test build-image push-image
 ci-release: resolve prepare validate test build-image push-image
 
 resolve:
-	npm install
+	npm install --no-optional
 
 pull-licenses:
 ifdef LICENSE_PULLER_PATH

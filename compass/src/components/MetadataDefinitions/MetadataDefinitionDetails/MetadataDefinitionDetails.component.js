@@ -37,12 +37,14 @@ const MetadataDefinitionDetails = ({
   if (!metadataDefinition && !metadataDefinitionQuery.loading) {
     // INITIALIZATION
     const definition = metadataDefinitionQuery.labelDefinition;
-    setMetadataDefinition(definition);
-    setIsEditorShown(!!definition.schema);
+    if (definition) {
+      setMetadataDefinition(definition);
+      setIsEditorShown(!!definition.schema);
 
-    setEditedSchema(definition.schema || defaultSchema);
+      setEditedSchema(definition.schema || defaultSchema);
 
-    LuigiClient.uxManager().setDirtyStatus(false);
+      LuigiClient.uxManager().setDirtyStatus(false);
+    }
   }
 
   const handleSchemaChange = currentSchema => {
@@ -148,6 +150,7 @@ const MetadataDefinitionDetails = ({
               onClick={handleSaveChanges}
               disabled={!isSchemaValid}
               option="emphasized"
+              data-test-id="save"
             >
               Save
             </Button>
