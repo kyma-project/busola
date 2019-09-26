@@ -8,7 +8,8 @@ export default function processNodeForLocalDevelopment(node, spec, config) {
     { startsWith: 'instances', replaceWith: config.serviceInstancesModuleUrl },
     { startsWith: 'catalog', replaceWith: config.serviceCatalogModuleUrl },
     { startsWith: 'addons', replaceWith: config.addOnsModuleUrl },
-    { startsWith: 'log-ui', replaceWith: config.logsModuleUrl }
+    { startsWith: 'log-ui', replaceWith: config.logsModuleUrl },
+    { startsWith: 'core-ui', replaceWith: config.coreModuleUrl },
   ];
 
   const isNodeMicroFrontend = node.viewUrl.startsWith(

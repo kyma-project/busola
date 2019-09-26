@@ -46,6 +46,32 @@ const install = async dir => {
   }
 };
 
+// CI libraries
+libraries.forEach(lib => {
+  gulp.task(`${lib}:ci`, async () => {
+    const packageName = path.resolve(__dirname, `./${lib}`);
+    await ci(packageName);
+  });
+});
+gulp.task('ci:libraries', gulp.parallel(libraries.map(lib => `${lib}:ci`)));
+
+const ci = async dir => {
+  log.info(
+    `Clean installing dependencies of ${clc.magenta(
+      dir.replace(__dirname, ''),
+    )}`,
+  );
+
+  try {
+    await exec(`npm ci`, {
+      cwd: dir,
+    });
+  } catch (err) {
+    log.error(`Failed installing dependencies of ${dir}`);
+    throw err;
+  }
+};
+
 // Building libraries
 libraries.forEach(lib => {
   gulp.task(`${lib}:build`, async () => {

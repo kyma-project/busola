@@ -23,6 +23,7 @@ var config = {
   docsModuleUrl: 'https://docs.' + k8sDomain,
   addOnsModuleUrl: 'https://addons.' + k8sDomain,
   logsModuleUrl: 'https://log-ui.' + k8sDomain,
+  coreModuleUrl: 'https://core-ui.' + k8sDomain,
   graphqlApiUrl: 'https://console-backend.' + k8sDomain + '/graphql',
   disabledNavigationNodes: '',
   systemNamespaces:

@@ -9,6 +9,7 @@
     "content",
     "add-ons",
     "lambda",
-    "logging"
+    "logging",
+    "core-ui"
   ]
 }
