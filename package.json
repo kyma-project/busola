@@ -51,6 +51,7 @@
     "fundamental-styles": "^0.1.0",
     "graphql": "^14.5.4",
     "graphql-tag": "^2.10.1",
+    "lodash.clonedeep": "^4.5.0",
     "moment": "^2.24.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
