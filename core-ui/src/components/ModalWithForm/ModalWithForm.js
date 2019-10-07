@@ -1,17 +1,20 @@
 import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { Modal } from 'fundamental-react/Modal';
-import { Button } from 'fundamental-react/Button';
+import { Modal, Button } from 'fundamental-react';
 import LuigiClient from '@kyma-project/luigi-client';
+
+//TODO: move this component to a shared "place"
 
 const ModalWithForm = ({
   performRefetch,
   sendNotification,
   title,
   button,
-  children,
+  renderForm,
+  ...props
 }) => {
   const [isOpen, setOpen] = useState(false);
+
   const [isValid, setValid] = useState(false);
   const formElementRef = useRef(null);
 
@@ -65,9 +68,10 @@ const ModalWithForm = ({
         {button.text}
       </Button>
       <Modal
+        {...props}
         show={isOpen}
         actions={
-          <React.Fragment>
+          <>
             <Button
               onClick={() => {
                 setOpenStatus(false);
@@ -93,20 +97,19 @@ const ModalWithForm = ({
             >
               Create
             </Button>
-          </React.Fragment>
+          </>
         }
         onClose={() => {
           setOpenStatus(false);
         }}
         title={title}
       >
-        {React.createElement(children.type, {
+        {renderForm({
           formElementRef,
           isValid,
           onChange: handleFormChanged,
           onError: handleFormError,
           onCompleted: handleFormSuccess,
-          ...children.props,
         })}
       </Modal>
     </div>
@@ -121,7 +124,7 @@ ModalWithForm.propTypes = {
     text: PropTypes.string.isRequired,
     glyph: PropTypes.string,
   }).isRequired,
-  children: PropTypes.node.isRequired,
+  renderForm: PropTypes.func.isRequired,
 };
 ModalWithForm.defaultProps = {
   sendNotification: () => {},
