@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { FormLabel } from 'fundamental-react';
-import CustomPropTypes from '../../../../shared/typechecking/CustomPropTypes';
+import { CustomPropTypes } from 'react-shared';
 
 const formProps = {
   formElementRef: CustomPropTypes.elementRef,

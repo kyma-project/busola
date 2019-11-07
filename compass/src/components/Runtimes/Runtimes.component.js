@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 import LuigiClient from '@kyma-project/luigi-client';
 
 import StatusBadge from '../Shared/StatusBadge/StatusBadge';
-import GenericList from '../../shared/components/GenericList/GenericList';
 import { EMPTY_TEXT_PLACEHOLDER } from '../../shared/constants';
-import handleDelete from '../../shared/components/GenericList/actionHandlers/simpleDelete';
+import { handleDelete, GenericList } from 'react-shared';
 import ScenariosDisplay from './../Shared/ScenariosDisplay/ScenariosDisplay';
 
 import ModalWithForm from '../../shared/components/ModalWithForm/ModalWithForm.container';

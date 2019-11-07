@@ -5,9 +5,8 @@ import LuigiClient from '@kyma-project/luigi-client';
 
 import CreateApplicationModal from './CreateApplicationModal/CreateApplicationModal.container';
 import StatusBadge from '../Shared/StatusBadge/StatusBadge';
-import GenericList from '../../shared/components/GenericList/GenericList';
+import { GenericList, handleDelete } from 'react-shared';
 import { EMPTY_TEXT_PLACEHOLDER } from '../../shared/constants';
-import handleDelete from '../../shared/components/GenericList/actionHandlers/simpleDelete';
 import ScenariosDisplay from './../Shared/ScenariosDisplay/ScenariosDisplay';
 
 class Applications extends React.Component {

@@ -9,6 +9,8 @@ import {
   FormSet,
 } from 'fundamental-react';
 
+import { K8sNameInput } from 'react-shared';
+
 import './CreateNamespaceForm.scss';
 import LabelSelectorInput from '../LabelSelectorInput/LabelSelectorInput';
 
@@ -18,8 +20,6 @@ import {
   CREATE_RESOURCE_QUOTA,
 } from '../../gql/mutations';
 import extractGraphQlErrors from '../../shared/graphqlErrorExtractor';
-
-import { K8sNameField } from '../K8sNameInput/K8sNameInput';
 
 const LIMIT_REGEX =
   '^[+]?[0-9]*(.[0-9]*)?(([eE][-+]?[0-9]+(.[0-9]*)?)?|([MGTPE]i?)|Ki|k|m)?$';
@@ -359,7 +359,7 @@ const CreateNamespaceForm = ({
     <form onChange={onChange} ref={formElementRef} onSubmit={handleFormSubmit}>
       <div className="fd-form__set">
         <div className="fd-form__item">
-          <K8sNameField
+          <K8sNameInput
             _ref={formValues.name}
             id="namespace-name"
             kind="Namespace"

@@ -5,9 +5,11 @@ import LuigiClient from '@kyma-project/luigi-client';
 import { ActionBar, Badge } from 'fundamental-react';
 import { Button, Breadcrumb, PanelGrid } from '@kyma-project/react-components';
 
+import { handleDelete } from 'react-shared';
+
 import PanelEntry from '../../../../shared/components/PanelEntry/PanelEntry.component';
 import '../../../../shared/styles/header.scss';
-import handleDelete from '../../../../shared/components/GenericList/actionHandlers/simpleDelete';
+
 import ModalWithForm from './../../../../shared/components/ModalWithForm/ModalWithForm.container';
 import UpdateApplicationForm from './../UpdateApplicationForm/UpdateApplicationForm.container';
 
