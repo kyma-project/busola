@@ -1,13 +1,25 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
+import { mount } from 'enzyme';
 
 import * as mockData from './mockData';
 import MultiChoiceList from '../MultiChoiceList.component';
 
 describe('MultiChoiceList', () => {
-  const originalConsoleError = console.error;
+  // for "Warning: componentWillMount has been renamed"
+  console.error = jest.fn();
+  console.warn = jest.fn();
+
   afterEach(() => {
-    console.error = originalConsoleError;
+    console.error.mockReset();
+    console.warn.mockReset();
+  });
+
+  afterAll(() => {
+    expect(console.error.mock.calls[0][0]).toMatchSnapshot();
+    if (console.warn.mock.calls.length) {
+      expect(console.warn.mock.calls[0][0]).toMatchSnapshot();
+    }
   });
 
   it('Renders empty list with default caption props', () => {
@@ -66,5 +78,52 @@ describe('MultiChoiceList', () => {
     );
 
     expect(component.toJSON()).toMatchSnapshot();
+  });
+
+  it('Calls updateItems when user clicks on selected items list', () => {
+    const updateItems = jest.fn();
+
+    const component = mount(
+      <MultiChoiceList
+        updateItems={updateItems}
+        currentlySelectedItems={['a', 'b']}
+        currentlyNonSelectedItems={[]}
+      />,
+    );
+
+    const removeItemButton = component
+      .find('.multi-choice-list__list-element')
+      .filterWhere(n => n.text() === 'a')
+      .find('button[data-test-id="unselect-button"]');
+
+    removeItemButton.simulate('click');
+
+    expect(updateItems).toHaveBeenCalledWith(['b'], ['a']);
+  });
+
+  it('Calls updateItems when user clicks on non selected items list', () => {
+    const updateItems = jest.fn();
+
+    const component = mount(
+      <MultiChoiceList
+        updateItems={updateItems}
+        currentlySelectedItems={[]}
+        currentlyNonSelectedItems={['b', 'a']}
+      />,
+    );
+
+    // expand list
+    const popoverControl = component.find('.fd-button.fd-dropdown__control');
+    popoverControl.simulate('click');
+
+    component.update();
+
+    const addItemButton = component
+      .find('span[data-test-id="select-button"]')
+      .filterWhere(n => n.text() === 'a');
+
+    addItemButton.simulate('click');
+
+    expect(updateItems).toHaveBeenCalledWith(['a'], ['b']);
   });
 });
