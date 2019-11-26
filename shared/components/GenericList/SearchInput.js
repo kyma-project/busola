@@ -7,12 +7,15 @@ SearchInput.propTypes = {
   searchQuery: PropTypes.string,
   entries: PropTypes.arrayOf(PropTypes.object.isRequired),
   handleQueryChange: PropTypes.func.isRequired,
+  suggestionProperties: PropTypes.arrayOf(PropTypes.string.isRequired)
+    .isRequired,
 };
 
 export default function SearchInput({
   searchQuery,
   filteredEntries,
   handleQueryChange,
+  suggestionProperties,
 }) {
   const [isSearchHidden, setSearchHidden] = React.useState(true);
   const searchInputRef = React.useRef();
@@ -45,10 +48,9 @@ export default function SearchInput({
   const getSearchSuggestions = entries => {
     const suggestions = entries
       .flatMap(entry => {
-        const headers = ['name', 'description'];
-        return headers.map(header => {
-          const entryValue = entry[header];
-          if (entryValue && entryValue.includes(searchQuery)) {
+        return suggestionProperties.map(property => {
+          const entryValue = entry[property];
+          if (entryValue && entryValue.toString().includes(searchQuery)) {
             return entryValue;
           }
           return null;
@@ -65,41 +67,42 @@ export default function SearchInput({
     }
   };
 
+  const showControl = isSearchHidden && !searchQuery;
+
   return (
     <div className="fd-search-input generic-list-search">
       <div className="fd-popover">
         <div className="fd-popover__control">
           <div className="fd-combobox-control">
-            <div className="fd-input-group fd-input-group--after">
-              <input
-                ref={searchInputRef}
-                type="text"
-                className="fd-input"
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={e => handleQueryChange(e.target.value)}
-                onFocus={() => setSearchHidden(false)}
-                onBlur={() => setSearchHidden(true)}
-              />
-              <span className="fd-input-group__addon fd-input-group__addon--after fd-input-group__addon--button">
-                <button
-                  className="fd-button--light sap-icon--search"
-                  onClick={openSearchList}
-                ></button>
-              </span>
-            </div>
+            <input
+              ref={searchInputRef}
+              type="text"
+              className="fd-input"
+              placeholder="Search..."
+              value={searchQuery}
+              onChange={e => handleQueryChange(e.target.value)}
+              onFocus={() => setSearchHidden(false)}
+              onBlur={() => setSearchHidden(true)}
+              className={showControl ? 'control--close' : 'control--open'}
+            />
+            <button
+              className="fd-button--light sap-icon--search"
+              onClick={openSearchList}
+            />
           </div>
         </div>
-        <div
-          className="fd-popover__body fd-popover__body--no-arrow"
-          aria-hidden={isSearchHidden}
-        >
-          <nav className="fd-menu">
-            <ul className="fd-menu__list">
-              {renderSearchList(filteredEntries)}
-            </ul>
-          </nav>
-        </div>
+        {!!searchQuery && (
+          <div
+            className="fd-popover__body fd-popover__body--no-arrow"
+            aria-hidden={isSearchHidden}
+          >
+            <nav className="fd-menu">
+              <ul className="fd-menu__list">
+                {renderSearchList(filteredEntries)}
+              </ul>
+            </nav>
+          </div>
+        )}
       </div>
     </div>
   );

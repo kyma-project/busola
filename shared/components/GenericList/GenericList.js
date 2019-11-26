@@ -2,13 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import SearchInput from './SearchInput';
+import './style.scss';
 
 import { Panel } from 'fundamental-react/Panel';
 
-import {
-  TableWithActionsToolbar,
-  TableWithActionsList,
-} from '@kyma-project/react-components';
+import { TableWithActionsList } from '@kyma-project/react-components';
 
 import { filterEntries } from './helpers';
 import { renderActionElement } from './internalRenderers';
@@ -49,7 +47,11 @@ export class GenericList extends React.Component {
 
   handleQueryChange = searchQuery => {
     this.setState(prevState => ({
-      filteredEntries: filterEntries(prevState.entries, searchQuery),
+      filteredEntries: filterEntries(
+        prevState.entries,
+        searchQuery,
+        this.props.textSearchProperties,
+      ),
       searchQuery,
     }));
   };
@@ -60,6 +62,7 @@ export class GenericList extends React.Component {
         filteredEntries: filterEntries(
           nextProps.entries,
           prevState.searchQuery,
+          nextProps.textSearchProperties,
         ),
         entries: nextProps.entries,
       };
@@ -69,28 +72,33 @@ export class GenericList extends React.Component {
 
   render() {
     const { filteredEntries, searchQuery } = this.state;
-    const { extraHeaderContent, notFoundMessage, showSearchField } = this.props;
+    const {
+      extraHeaderContent,
+      notFoundMessage,
+      showSearchField,
+      textSearchProperties,
+    } = this.props;
 
     const headerActions = (
-      <>
-        {extraHeaderContent}
+      <section>
         {showSearchField && (
           <SearchInput
             searchQuery={searchQuery}
             filteredEntries={filteredEntries}
             handleQueryChange={this.handleQueryChange}
+            suggestionProperties={textSearchProperties}
           />
         )}
-      </>
+        {extraHeaderContent}
+      </section>
     );
 
     return (
-      <Panel className="fd-panel--no-background">
-        <TableWithActionsToolbar
-          title={this.props.title}
-          description={this.props.description}
-          children={headerActions}
-        />
+      <Panel className="fd-has-margin-m generic-list">
+        <Panel.Header className="fd-has-padding-xs">
+          <Panel.Head title={this.props.title} />
+          {headerActions}
+        </Panel.Header>
 
         <Panel.Body>
           <TableWithActionsList
@@ -106,8 +114,7 @@ export class GenericList extends React.Component {
 }
 
 GenericList.propTypes = {
-  title: PropTypes.string.isRequired,
-  description: PropTypes.string,
+  title: PropTypes.string,
   entries: PropTypes.arrayOf(PropTypes.object),
   headerRenderer: PropTypes.func.isRequired,
   rowRenderer: PropTypes.func.isRequired,
@@ -116,8 +123,10 @@ GenericList.propTypes = {
   ),
   extraHeaderContent: PropTypes.node,
   showSearchField: PropTypes.bool,
+  textSearchProperties: PropTypes.arrayOf(PropTypes.string.isRequired),
 };
 
 GenericList.defaultProps = {
   showSearchField: true,
+  textSearchProperties: ['name', 'description'],
 };
