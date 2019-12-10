@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './style.scss';
 import 'core-js/es/array/flat-map';
 
 SearchInput.propTypes = {
@@ -77,11 +76,12 @@ export default function SearchInput({
 
   const showControl = isSearchHidden && !searchQuery;
   return (
-    <section className="generic-list-search">
+    <section className="generic-list-search" role="search">
       <div className="fd-popover">
         <div className="fd-popover__control">
           <div className="fd-combobox-control">
             <input
+              aria-label="search-input"
               ref={searchInputRef}
               type="text"
               value={searchQuery}
@@ -110,6 +110,7 @@ export default function SearchInput({
         <button
           className="fd-button--light sap-icon--search"
           onClick={openSearchList}
+          aria-label="open-search"
         />
       )}
     </section>
