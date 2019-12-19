@@ -1,95 +1,65 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import LuigiClient from '@kyma-project/luigi-client';
+import PropTypes from 'prop-types';
 
 import { Panel, TabGroup, Tab, Button } from 'fundamental-react';
 import EditApiHeader from './../EditApiHeader/EditApiHeader.container';
 import ResourceNotFound from 'components/Shared/ResourceNotFound.component';
-import ApiForm from '../Forms/ApiForm';
-import CredentialsForm from './../Forms/CredentialForms/CredentialsForm';
-import { Dropdown } from 'components/Shared/Dropdown/Dropdown';
-import './EditApi.scss';
-
-import { getRefsValues, useMutationObserver } from 'react-shared';
-import {
-  createApiData,
-  inferCredentialType,
-  verifyApiInput,
-} from './../ApiHelpers';
 import ApiEditorForm from '../Forms/ApiEditorForm';
+import EventApiForm from '../Forms/EventApiForm';
+import { Dropdown } from 'components/Shared/Dropdown/Dropdown';
+import './EditEventApi.scss';
+
+import { getRefsValues } from 'react-shared';
+import { createEventAPIData, verifyEventApiInput } from './../ApiHelpers';
 
 const commonPropTypes = {
-  apiId: PropTypes.string.isRequired,
+  eventApiId: PropTypes.string.isRequired,
   applicationId: PropTypes.string.isRequired, // used in container file
-  updateApiDefinition: PropTypes.func.isRequired,
+  updateEventDefinition: PropTypes.func.isRequired,
   sendNotification: PropTypes.func.isRequired,
 };
 
-EditApi.propTypes = {
-  originalApi: PropTypes.object.isRequired,
+EditEventApi.propTypes = {
+  originalEventApi: PropTypes.object.isRequired,
   applicationName: PropTypes.string.isRequired,
   ...commonPropTypes,
 };
 
-function EditApi({
-  originalApi,
+function EditEventApi({
+  originalEventApi,
   applicationName,
-  apiId,
-  updateApiDefinition,
+  eventApiId,
+  updateEventDefinition,
   sendNotification,
 }) {
   const formRef = React.useRef(null);
   const [formValid, setFormValid] = React.useState(true);
-  const [specProvided, setSpecProvided] = React.useState(!!originalApi.spec);
-  const [format, setFormat] = React.useState(
-    originalApi.spec ? originalApi.spec.format : 'YAML',
+  const [specProvided, setSpecProvided] = React.useState(
+    !!originalEventApi.spec,
   );
-  const [apiType, setApiType] = React.useState(
-    originalApi.spec ? originalApi.spec.type : 'OPEN_API',
+  const [format, setFormat] = React.useState(
+    originalEventApi.spec ? originalEventApi.spec.format : 'YAML',
   );
   const [specText, setSpecText] = React.useState(
-    originalApi.spec ? originalApi.spec.data : '',
-  );
-
-  const [credentialsType, setCredentialsType] = React.useState(
-    inferCredentialType(originalApi.defaultAuth),
+    originalEventApi.spec ? originalEventApi.spec.data : '',
   );
 
   const formValues = {
     name: React.useRef(null),
     description: React.useRef(null),
     group: React.useRef(null),
-    targetURL: React.useRef(null),
-  };
-
-  const credentialRefs = {
-    oAuth: {
-      clientId: React.useRef(null),
-      clientSecret: React.useRef(null),
-      url: React.useRef(null),
-    },
   };
 
   const revalidateForm = () =>
     setFormValid(!!formRef.current && formRef.current.checkValidity());
 
-  useMutationObserver(formRef, revalidateForm);
-
   const saveChanges = async () => {
     const basicData = getRefsValues(formValues);
-    const specData = specProvided
-      ? { data: specText, format, type: apiType }
-      : null;
-    const credentialsData = { oAuth: getRefsValues(credentialRefs.oAuth) };
-    const apiData = createApiData(
-      basicData,
-      specData,
-      credentialsData,
-      credentialsType,
-    );
-
+    const specData = specProvided ? { data: specText, format } : null;
+    const eventApiData = createEventAPIData(basicData, specData);
     try {
-      await updateApiDefinition(apiId, apiData);
+      await updateEventDefinition(eventApiId, eventApiData);
 
       const name = basicData.name;
       sendNotification({
@@ -116,20 +86,16 @@ function EditApi({
     revalidateForm();
   };
 
-  const defaultCredentials = originalApi.defaultAuth
-    ? { oAuth: { ...originalApi.defaultAuth.credential } }
-    : null;
-
   return (
     <>
       <EditApiHeader
-        api={originalApi}
+        api={originalEventApi}
         applicationName={applicationName}
         saveChanges={saveChanges}
         canSaveChanges={formValid}
       />
       <form ref={formRef} onChange={revalidateForm}>
-        <TabGroup className="edit-api-tabs">
+        <TabGroup className="edit-event-api-tabs">
           <Tab
             key="general-information"
             id="general-information"
@@ -140,36 +106,31 @@ function EditApi({
                 <p className="fd-has-type-1">General Information</p>
               </Panel.Header>
               <Panel.Body>
-                <ApiForm
+                <EventApiForm
                   formValues={formValues}
-                  defaultValues={{ ...originalApi }}
+                  defaultValues={{ ...originalEventApi }}
                 />
               </Panel.Body>
             </Panel>
           </Tab>
           <Tab
-            key="api-documentation"
-            id="api-documentation"
-            title="API Documentation"
+            key="event-documentation"
+            id="event-documentation"
+            title="Event Documentation"
           >
             <Panel className="spec-editor-panel">
               <Panel.Header>
-                <p className="fd-has-type-1">API Documentation</p>
+                <p className="fd-has-type-1">Event Documentation</p>
                 <Panel.Actions>
                   {specProvided && (
                     <>
                       <Dropdown
-                        options={{ JSON: 'JSON', YAML: 'YAML', XML: 'XML' }}
+                        options={{ JSON: 'JSON', YAML: 'YAML' }}
                         selectedOption={format}
                         onSelect={setFormat}
+                        disabled={!specProvided}
+                        className="fd-has-margin-right-s"
                         width="90px"
-                      />
-                      <Dropdown
-                        options={{ OPEN_API: 'Open API', ODATA: 'OData' }}
-                        selectedOption={apiType}
-                        onSelect={setApiType}
-                        className="fd-has-margin-x-small"
-                        width="120px"
                       />
                       <Button
                         type="negative"
@@ -192,32 +153,11 @@ function EditApi({
                     specText={specText}
                     setSpecText={updateSpecText}
                     specProvided={specProvided}
-                    apiType={apiType}
                     format={format}
-                    verifyApi={verifyApiInput}
+                    verifyApi={verifyEventApiInput}
                     revalidateForm={revalidateForm}
                   />
                 )}
-              </Panel.Body>
-            </Panel>
-          </Tab>
-          <Tab key="credentials" id="credentials" title="Credentials">
-            <Panel>
-              <Panel.Header>
-                <p className="fd-has-type-1">Credentials</p>
-              </Panel.Header>
-              <Panel.Body>
-                <CredentialsForm
-                  credentialRefs={credentialRefs}
-                  credentialType={credentialsType}
-                  setCredentialType={type => {
-                    setCredentialsType(type);
-                    setTimeout(() => {
-                      revalidateForm();
-                    });
-                  }}
-                  defaultValues={defaultCredentials}
-                />
               </Panel.Body>
             </Panel>
           </Tab>
@@ -227,13 +167,13 @@ function EditApi({
   );
 }
 
-EditApiWrapper.propTypes = {
-  apiDataQuery: PropTypes.object.isRequired,
+EditEventApiWrapper.propTypes = {
+  eventApiDataQuery: PropTypes.object.isRequired,
   ...commonPropTypes,
 };
 
-export default function EditApiWrapper(props) {
-  const dataQuery = props.apiDataQuery;
+export default function EditEventApiWrapper(props) {
+  const dataQuery = props.eventApiDataQuery;
 
   if (dataQuery.loading) {
     return <p>Loading...</p>;
@@ -242,21 +182,21 @@ export default function EditApiWrapper(props) {
     return <p>`Error! ${dataQuery.error.message}`</p>;
   }
 
-  // there's no getApiById query
-  const originalApi = dataQuery.application.apiDefinitions.data.find(
-    api => api.id === props.apiId,
+  // there's no getEventApiById query
+  const originalEventApi = dataQuery.application.eventDefinitions.data.find(
+    eventApi => eventApi.id === props.eventApiId,
   );
 
-  if (!originalApi) {
+  if (!originalEventApi) {
     return (
       <ResourceNotFound resource="Event Definition" breadcrumb="Applications" />
     );
   }
 
   return (
-    <EditApi
+    <EditEventApi
       {...props}
-      originalApi={originalApi}
+      originalEventApi={originalEventApi}
       applicationName={dataQuery.application.name}
     />
   );
