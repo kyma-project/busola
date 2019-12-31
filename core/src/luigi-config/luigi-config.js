@@ -110,20 +110,26 @@ function getNodes(context) {
           pathSegment: 'create',
           label: 'Create API rule',
           viewUrl: config.coreModuleUrl + '/apirules/create',
-          viewGroup: coreUIViewGroupName,
           hideFromNav: true
         },
         {
           pathSegment: 'details',
-          // label: 'Create API rule',
-          viewUrl: config.coreModuleUrl + '/apirules/create',
-          viewGroup: coreUIViewGroupName,
           hideFromNav: true,
           children: [
             {
               pathSegment: ':apiName',
               viewUrl: config.coreModuleUrl + '/apirules/details/:apiName',
-              viewGroup: coreUIViewGroupName,
+              hideFromNav: true
+            }
+          ]
+        },
+        {
+          pathSegment: 'edit',
+          hideFromNav: true,
+          children: [
+            {
+              pathSegment: ':apiName',
+              viewUrl: config.coreModuleUrl + '/apirules/edit/:apiName',
               hideFromNav: true
             }
           ]
