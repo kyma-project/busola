@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { useQuery } from '@apollo/react-hooks';
 import LuigiClient from '@kyma-project/luigi-client';
 import { LayoutGrid, Panel, Button } from 'fundamental-react';
@@ -40,13 +41,8 @@ const ApiRuleDetails = ({ apiName }) => {
               <Panel.Head title="Access strategies" />
             </Panel.Header>
             <Panel.Body aria-label="Access strategies">
-              {data.APIRule.rules.map(rule => {
-                return (
-                  <AccessStrategy
-                    key={rule.path + rule.accessStrategies[0].name}
-                    strategy={rule}
-                  />
-                );
+              {data.APIRule.rules.map((rule, idx) => {
+                return <AccessStrategy strategy={rule} key={idx} />;
               })}
             </Panel.Body>
           </Panel>
@@ -54,6 +50,10 @@ const ApiRuleDetails = ({ apiName }) => {
       </section>
     </>
   );
+};
+
+ApiRuleDetails.propTypes = {
+  apiName: PropTypes.string.isRequired,
 };
 
 export default ApiRuleDetails;
@@ -99,7 +99,7 @@ function ApiRuleDetailsHeader({ data }) {
       breadcrumbItems={breadcrumbItems}
       actions={
         <>
-          <DeleteButton apiRuleName={data.name} />{' '}
+          <DeleteButton apiRuleName={data.name} />
           <EditButton apiRuleName={data.name} />
         </>
       }

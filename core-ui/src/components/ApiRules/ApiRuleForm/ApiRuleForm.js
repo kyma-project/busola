@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import PropTypes from 'prop-types';
 import { useQuery } from '@apollo/react-hooks';
 import LuigiClient from '@kyma-project/luigi-client';
 import { K8sNameInput, InputWithSuffix } from 'react-shared';
@@ -9,17 +10,43 @@ import {
   FormLabel,
   Panel,
   InlineHelp,
+  Button,
 } from 'fundamental-react';
 
 import './ApiRuleForm.scss';
 import ApiRuleFormHeader from './ApiRuleFormHeader/ApiRuleFormHeader';
-import AccessStrategy from '../AccessStrategy/AccessStrategy';
 import { GET_SERVICES } from '../../../gql/queries';
 import { getApiUrl } from '@kyma-project/common';
 import ServicesDropdown from './ServicesDropdown/ServicesDropdown';
+import AccessStrategyForm from './AccessStrategyForm/AccessStrategyForm';
 
-const DEFAULT_GATEWAY = 'kyma-gateway.kyma-system.svc.cluster.local';
+export const DEFAULT_GATEWAY = 'kyma-gateway.kyma-system.svc.cluster.local';
 const DOMAIN = getApiUrl('domain');
+
+const EMPTY_ACCESS_STRATEGY = {
+  path: '',
+  methods: [],
+  accessStrategies: [
+    {
+      name: 'allow',
+      config: {},
+    },
+  ],
+  mutators: [],
+};
+
+ApiRuleForm.propTypes = {
+  apiRule: PropTypes.object.isRequired,
+  mutation: PropTypes.func.isRequired,
+  saveButtonText: PropTypes.string.isRequired,
+  headerTitle: PropTypes.string.isRequired,
+  breadcrumbItems: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      path: PropTypes.string,
+    }),
+  ),
+};
 
 export default function ApiRuleForm({
   apiRule,
@@ -29,7 +56,7 @@ export default function ApiRuleForm({
   breadcrumbItems,
 }) {
   const namespace = LuigiClient.getEventData().environmentId;
-  const [rules /*setrules*/] = useState(apiRule.rules);
+  const [rules, setRules] = useState(apiRule.rules);
 
   const [isValid, setValid] = useState(false);
 
@@ -57,11 +84,8 @@ export default function ApiRuleForm({
     }
 
     // current element validity
-    if (e.target.checkValidity()) {
-      e.target.classList.remove('is-invalid');
-    } else {
-      e.target.classList.add('is-invalid');
-    }
+    const isValid = e.target.checkValidity();
+    e.target.classList.toggle('is-invalid', !isValid);
   }
 
   function save() {
@@ -86,6 +110,11 @@ export default function ApiRuleForm({
     mutation({ variables });
   }
 
+  function addAccessStrategy() {
+    setRules(rules => [...rules, EMPTY_ACCESS_STRATEGY]);
+    setValid(false);
+  }
+
   return (
     <>
       <ApiRuleFormHeader
@@ -96,17 +125,17 @@ export default function ApiRuleForm({
         breadcrumbItems={breadcrumbItems}
       />
       <section className="fd-section api-rule-container">
-        <LayoutGrid cols={1}>
-          <Panel>
-            <Panel.Header>
-              <Panel.Head title="General settings" />
-            </Panel.Header>
-            <Panel.Body>
-              <form
-                onSubmit={e => e.preventDefault()}
-                onChange={e => handleFormChanged(e)}
-                ref={formRef}
-              >
+        <form
+          onSubmit={e => e.preventDefault()}
+          onChange={e => handleFormChanged(e)}
+          ref={formRef}
+        >
+          <LayoutGrid cols={1}>
+            <Panel>
+              <Panel.Header>
+                <Panel.Head title="General settings" />
+              </Panel.Header>
+              <Panel.Body>
                 <FormGroup>
                   <LayoutGrid cols="3">
                     <FormItem>
@@ -114,7 +143,7 @@ export default function ApiRuleForm({
                         _ref={formValues.name}
                         id="apiRuleName"
                         kind="API Rule"
-                        showHelp={true}
+                        showHelp={!apiRule.name}
                         defaultValue={apiRule.name}
                         disabled={!!apiRule.name}
                       />
@@ -148,29 +177,43 @@ export default function ApiRuleForm({
                     />
                   </LayoutGrid>
                 </FormGroup>
-              </form>
-            </Panel.Body>
-          </Panel>
+              </Panel.Body>
+            </Panel>
 
-          <Panel>
-            <Panel.Header>
-              <Panel.Head title="Access strategies" />
-              {/* <Panel.Actions>
-                <Button onClick={addAccessStrategy} glyph="add">Add access strategy</Button>
-              </Panel.Actions> */}
-            </Panel.Header>
-            <Panel.Body>
-              {rules.map(rule => {
-                return (
-                  <AccessStrategy
-                    key={rule.path + rule.accessStrategies[0].name}
-                    strategy={rule}
-                  />
-                );
-              })}
-            </Panel.Body>
-          </Panel>
-        </LayoutGrid>
+            <Panel>
+              <Panel.Header>
+                <Panel.Head title="Access strategies" />
+                <Panel.Actions>
+                  <Button
+                    onClick={addAccessStrategy}
+                    option="light"
+                    glyph="add"
+                    typeAttr="button"
+                  >
+                    Add access strategy
+                  </Button>
+                </Panel.Actions>
+              </Panel.Header>
+              <Panel.Body>
+                {rules.map((rule, idx) => {
+                  return (
+                    <AccessStrategyForm
+                      key={idx}
+                      strategy={rule}
+                      setStrategy={newStrategy =>
+                        setRules(rules => [
+                          ...rules.slice(0, idx),
+                          newStrategy,
+                          ...rules.slice(idx + 1, rules.length),
+                        ])
+                      }
+                    />
+                  );
+                })}
+              </Panel.Body>
+            </Panel>
+          </LayoutGrid>
+        </form>
       </section>
     </>
   );
