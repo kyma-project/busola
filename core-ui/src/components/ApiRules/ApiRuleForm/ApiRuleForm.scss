@@ -7,7 +7,14 @@
   }
 }
 
+.access-strategy--form {
+  display: flex;
+  justify-content: space-around;
+}
+
 .access-strategy {
+  margin-top: 12px;
+
   $row-expand-button-size: 28px;
 
   .fd-fieldset {
@@ -17,6 +24,7 @@
   border-bottom: 1px solid var(--fd-panel-divider-color, #eeeeef);
 
   &:first-child {
+    margin-top: 12px !important; // override fd-panel__body>:first-child
     padding-top: 0;
   }
 
@@ -69,13 +77,8 @@
       display: inline;
       margin-right: 16px;
     }
-
   }
-
-  .content:not(:empty) {
-    padding-top: 12px;
-  }
-
+  
   .inline-radio-group {
     line-height: 2.4;
     .fd-form-item {
