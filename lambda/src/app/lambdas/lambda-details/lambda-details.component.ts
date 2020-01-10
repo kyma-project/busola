@@ -1,3 +1,4 @@
+import { TriggersService } from './../../triggers/triggers.service';
 /* tslint:disable:no-submodule-imports */
 import {
   ChangeDetectorRef,
@@ -58,13 +59,15 @@ import { Subscription } from '../../shared/datamodel/k8s/subscription';
 import { SubscriptionsService } from '../../subscriptions/subscriptions.service';
 import { EventTriggerChooserComponent } from './event-trigger-chooser/event-trigger-chooser.component';
 import { HttpTriggerComponent } from './http-trigger/http-trigger.component';
-import { NotificationComponent } from '../../shared/components/notification/notification.component';
 
 import { has as _has, get as _get, set as _set } from 'lodash';
+import uuid5  from 'uuid/v5';
 
 const DEFAULT_CODE = `module.exports = { main: function (event, context) {
 
 } }`;
+
+const NAMESPACE = '1b671a64-40d5-491e-99b0-da01ff1f3341'
 
 const FUNCTION = 'function';
 
@@ -194,6 +197,7 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
     private serviceBindingUsagesService: ServiceBindingUsagesService,
     private serviceBindingsService: ServiceBindingsService,
     private subscriptionsService: SubscriptionsService,
+    private triggersService: TriggersService,
     private cdr: ChangeDetectorRef,
     protected route: ActivatedRoute,
     private http: HttpClient,
@@ -698,14 +702,38 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
   manageEventTriggers() {
     const createSubscriptionRequests: Array<Observable<Subscription>> = [];
     const deleteSubscriptionRequests: Array<Observable<Subscription>> = [];
+    const createKTriggerRequests: Array<Observable<any>> = [];
+    const deleteKTriggerRequests: Array<Observable<any>> = [];
     this.selectedTriggers.forEach(trigger => {
       if (trigger.eventType !== 'http') {
         if (this.isEventTriggerNew(trigger as EventTrigger)) {
+
+          const triggerName = `lambda-${this.lambda.metadata.name}-${trigger.eventType}-${trigger.version}`.toLowerCase();
+          const triggerUUID = uuid5(triggerName, NAMESPACE);
+
+          const lambdaInternalEndpoint = `http://${this.lambda.metadata.name}.${this.namespace}:8080/`;
+          const kTrigger = this.triggersService.initializeTrigger();
+          kTrigger.metadata['name'] = triggerUUID;
+          kTrigger.metadata['namespace'] = this.namespace;
+          kTrigger.metadata.labels['Function'] = this.lambda.metadata.name;
+          kTrigger.spec.subscriber['uri'] = lambdaInternalEndpoint;
+          kTrigger.spec.filter.attributes['type'] = trigger.eventType;
+          kTrigger.spec.filter.attributes['source'] = trigger.sourceId;
+          kTrigger.spec.filter.attributes['eventtypeversion'] = trigger.version;
+          const triggerReq = this.triggersService
+            .createTrigger(kTrigger, this.token)
+            .pipe(
+              catchError(err => {
+                return observableOf(err);
+              }),
+            );
+          createKTriggerRequests.push(triggerReq);
+
           const sub = this.subscriptionsService.initializeSubscription();
-          sub.metadata.name = `lambda-${this.lambda.metadata.name}-${trigger.eventType}-${trigger.version}`.toLowerCase();
+          sub.metadata.name = triggerName;
           sub.metadata.namespace = this.namespace;
           sub.metadata.labels['Function'] = this.lambda.metadata.name;
-          sub.spec.endpoint = `http://${this.lambda.metadata.name}.${this.namespace}:8080/`;
+          sub.spec.endpoint = lambdaInternalEndpoint;
           sub.spec.event_type = trigger.eventType;
           sub.spec.event_type_version = trigger.version;
           sub.spec.source_id = trigger.sourceId;
@@ -733,16 +761,29 @@ export class LambdaDetailsComponent implements OnInit, OnDestroy {
           }),
         );
       deleteSubscriptionRequests.push(req);
+
+      const removeTriggerReq = this.triggersService
+      .deleteTrigger(
+        uuid5(`lambda-${this.lambda.metadata.name}-${et.eventType}-${et.version}`.toLowerCase(), NAMESPACE),
+        this.namespace,
+        this.token,
+      )
+      .pipe(
+        catchError(err => {
+          return observableOf(err);
+        }),
+      );
+      deleteKTriggerRequests.push(removeTriggerReq);
     });
     this.executeCreateAndDeleteSubscriptionRequests(
-      createSubscriptionRequests,
-      deleteSubscriptionRequests,
+      createSubscriptionRequests.concat(createKTriggerRequests),
+      deleteSubscriptionRequests.concat(deleteKTriggerRequests),
     );
   }
 
   executeCreateAndDeleteSubscriptionRequests(
-    createSubReqs: Array<Observable<Subscription>>,
-    deleteSubReqs: Array<Observable<Subscription>>,
+    createSubReqs: Array<Observable<any>>,
+    deleteSubReqs: Array<Observable<any>>,
   ): void {
     if (createSubReqs.length > 0) {
       forkJoin(createSubReqs).subscribe(responses => {
