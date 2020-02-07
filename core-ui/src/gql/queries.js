@@ -149,6 +149,7 @@ export const GET_APPLICATION_COMPASS = gql`
       id
       name
       providerName
+      description
       apiDefinitions {
         data {
           id

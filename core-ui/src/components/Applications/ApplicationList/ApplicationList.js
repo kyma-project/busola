@@ -18,11 +18,9 @@ import { useNotification } from 'react-shared';
 import ModalWithForm from '../../ModalWithForm/ModalWithForm';
 import RegisterApplicationForm from '../RegisterApplication/RegisterApplicationForm';
 import './ApplicationList.scss';
-
-const STATUSES = {
-  NOT_INSTALLED: 'NOT_INSTALLED',
-  INSTALLED: 'INSTALLED',
-};
+import ApplicationStatus, {
+  STATUSES,
+} from '../ApplicationStatus/ApplicationStatus';
 
 function getSortedApplications(applications) {
   return applications.sort((app1, app2) => {
@@ -124,9 +122,6 @@ export default function ApplicationList() {
   ];
 
   const rowRenderer = item => {
-    const status = item.status || STATUSES.NOT_INSTALLED;
-    const badgeDisabled = status === STATUSES.NOT_INSTALLED;
-
     return [
       <span
         className="link"
@@ -136,9 +131,7 @@ export default function ApplicationList() {
         {item.name}
       </span>,
       item.providerName || EMPTY_TEXT_PLACEHOLDER,
-      <Badge disabled={badgeDisabled} modifier="filled">
-        {status}
-      </Badge>,
+      <ApplicationStatus application={item} />,
       Array.isArray(item.enabledInNamespaces) && item.enabledInNamespaces.length
         ? item.enabledInNamespaces.map(n => (
             <Badge key={n} className="fd-has-margin-right-tiny">
@@ -146,8 +139,8 @@ export default function ApplicationList() {
             </Badge>
           ))
         : EMPTY_TEXT_PLACEHOLDER,
-      <Badge modifier="filled" type="success">
-        Yes
+      <Badge modifier="filled" disabled>
+        No
       </Badge>,
     ];
   };
