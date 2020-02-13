@@ -19,6 +19,7 @@ import { GET_SERVICES, GET_IDP_PRESETS } from '../../../gql/queries';
 import { getApiUrl } from '@kyma-project/common';
 import ServicesDropdown from './ServicesDropdown/ServicesDropdown';
 import AccessStrategyForm from './AccessStrategyForm/AccessStrategyForm';
+import { EXCLUDED_SERVICES_LABELS } from 'components/ApiRules/constants';
 
 export const DEFAULT_GATEWAY = 'kyma-gateway.kyma-system.svc.cluster.local';
 const DOMAIN = getApiUrl('domain');
@@ -57,11 +58,13 @@ export default function ApiRuleForm({
 }) {
   const namespace = LuigiClient.getEventData().environmentId;
   const [rules, setRules] = useState(apiRule.rules);
-
   const [isValid, setValid] = useState(false);
 
   const servicesQueryResult = useQuery(GET_SERVICES, {
-    variables: { namespace },
+    variables: {
+      namespace,
+      excludedLabels: EXCLUDED_SERVICES_LABELS,
+    },
   });
 
   const idpPresetsQuery = useQuery(GET_IDP_PRESETS);
