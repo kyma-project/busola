@@ -12,10 +12,6 @@ import { backendModuleExists } from '../../commons/helpers';
 Modal.MODAL_APP_REF = '#root';
 
 const ServiceDetails = ({ match }) => (
-  <ServiceClassDetails name={match.params.name} />
-);
-
-const ServiceDetailsWithPlan = ({ match }) => (
   <ServiceClassDetails name={match.params.name} plan={match.params.plan} />
 );
 
@@ -35,7 +31,7 @@ export default function App() {
               <Route
                 exact
                 path="/details/:name/plan/:plan"
-                component={ServiceDetailsWithPlan}
+                component={ServiceDetails}
               />
               <Route
                 exact

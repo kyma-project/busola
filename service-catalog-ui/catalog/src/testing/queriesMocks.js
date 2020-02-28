@@ -12,6 +12,7 @@ import {
   serviceClass2,
   serviceClassWithoutPlans,
   serviceClassWithPlans,
+  serviceClassWithAPIrule,
 } from './serviceClassesMocks';
 
 import { filterExtensions } from '../variables';
@@ -106,6 +107,23 @@ export const serviceClassNoPlansQuery = {
     data: {
       clusterServiceClass: null,
       serviceClass: serviceClassWithoutPlans,
+    },
+  },
+};
+
+export const serviceClassAPIruleQuery = {
+  request: {
+    query: getServiceClass,
+    variables: {
+      namespace: mockEnvironmentId,
+      name: serviceClassWithAPIrule.name,
+      fileExtensions: filterExtensions,
+    },
+  },
+  result: {
+    data: {
+      clusterServiceClass: null,
+      serviceClass: serviceClassWithAPIrule,
     },
   },
 };
