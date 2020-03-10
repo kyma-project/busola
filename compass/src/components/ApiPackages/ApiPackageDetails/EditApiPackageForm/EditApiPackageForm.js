@@ -3,39 +3,45 @@ import PropTypes from 'prop-types';
 import { CustomPropTypes } from 'react-shared';
 
 import { FormLabel } from 'fundamental-react';
-import TextFormItem from './../../Shared/TextFormItem';
-import JSONEditor from './../../Shared/JSONEditor';
+import TextFormItem from '../../../Shared/TextFormItem';
+import JSONEditor from '../../../Shared/JSONEditor';
 
 import { useMutation } from '@apollo/react-hooks';
-import { CREATE_API_PACKAGE } from './../gql';
-import { GET_APPLICATION } from 'components/Application/gql';
+import { UPDATE_API_PACKAGE, GET_API_PACKAGE } from './../../gql';
 
-CreateApiPackageForm.propTypes = {
+EditApiPackageForm.propTypes = {
   applicationId: PropTypes.string.isRequired,
+  apiPackage: PropTypes.object.isRequired,
   formElementRef: CustomPropTypes.ref,
-  onChange: PropTypes.func,
-  onError: PropTypes.func,
-  onCompleted: PropTypes.func,
-  setCustomValid: PropTypes.func,
+  onChange: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
+  onCompleted: PropTypes.func.isRequired,
+  setCustomValid: PropTypes.func.isRequired,
 };
 
-export default function CreateApiPackageForm({
+export default function EditApiPackageForm({
   applicationId,
+  apiPackage,
   formElementRef,
   onChange,
   onCompleted,
   onError,
   setCustomValid,
 }) {
-  const [createApiPackage] = useMutation(CREATE_API_PACKAGE, {
+  const [updateApiPackage] = useMutation(UPDATE_API_PACKAGE, {
     refetchQueries: () => [
-      { query: GET_APPLICATION, variables: { id: applicationId } },
+      {
+        query: GET_API_PACKAGE,
+        variables: { applicationId, apiPackageId: apiPackage.id },
+      },
     ],
   });
 
   const name = React.useRef();
   const description = React.useRef();
-  const [requestInputSchema, setRequestInputSchema] = React.useState({});
+  const [requestInputSchema, setRequestInputSchema] = React.useState(
+    JSON.parse(apiPackage.instanceAuthRequestInputSchema || '{}'),
+  );
 
   const handleSchemaChange = schema => {
     try {
@@ -54,16 +60,16 @@ export default function CreateApiPackageForm({
       instanceAuthRequestInputSchema: JSON.stringify(requestInputSchema),
     };
     try {
-      await createApiPackage({
+      await updateApiPackage({
         variables: {
-          applicationId,
+          id: apiPackage.id,
           in: input,
         },
       });
-      onCompleted(apiName, 'Package created successfully');
+      onCompleted(apiName, 'API Package update successfully');
     } catch (error) {
       console.warn(error);
-      onError('Cannot create Package');
+      onError('Cannot update API Package');
     }
   };
 
@@ -73,11 +79,13 @@ export default function CreateApiPackageForm({
         inputKey="name"
         required={true}
         label="Name"
+        defaultValue={apiPackage.name}
         inputRef={name}
       />
       <TextFormItem
         inputKey="description"
         label="Description"
+        defaultValue={apiPackage.description}
         inputRef={description}
       />
       <FormLabel>Request input schema</FormLabel>
