@@ -147,6 +147,9 @@ export const GET_COMPASS_APPLICATIONS = gql`
         id
         providerName
         name
+        packages {
+          totalCount
+        }
       }
     }
   }
@@ -191,40 +194,22 @@ export const GET_APPLICATION_COMPASS = gql`
       name
       providerName
       description
-      apiDefinitions {
+      packages {
         data {
           id
           name
           description
-          targetURL
-          defaultAuth {
+          defaultInstanceAuth {
             credential {
-              ... on OAuthCredentialData {
-                clientId
-                clientSecret
-                url
-              }
+              __typename
             }
           }
-          spec {
-            data
-            format
-            type
+          apiDefinitions {
+            totalCount
           }
-          group
-        }
-      }
-      eventDefinitions {
-        data {
-          id
-          name
-          description
-          spec {
-            data
-            format
-            type
+          eventDefinitions {
+            totalCount
           }
-          group
         }
       }
     }
@@ -241,13 +226,76 @@ export const CHECK_APPLICATION_EXISTS = gql`
   }
 `;
 
-export const GET_APPLICATION_WITH_API_DEFINITIONS = gql`
-  query Application($applicationId: ID!) {
+export const GET_TEMPLATES = gql`
+  query applicationTemplates {
+    applicationTemplates {
+      data {
+        id
+        name
+        applicationInput
+        placeholders {
+          name
+          description
+        }
+      }
+    }
+  }
+`;
+
+export const GET_API_PACKAGE = gql`
+  query Application($applicationId: ID!, $apiPackageId: ID!) {
     application(id: $applicationId) {
       name
       id
-      apiDefinitions {
-        data {
+      package(id: $apiPackageId) {
+        id
+        name
+        description
+        instanceAuthRequestInputSchema
+        instanceAuths {
+          id
+          context
+          inputParams
+          status {
+            condition
+            reason
+            message
+            timestamp
+          }
+        }
+        apiDefinitions {
+          data {
+            id
+            name
+            description
+            targetURL
+          }
+        }
+        eventDefinitions {
+          data {
+            id
+            name
+            description
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const GET_API_DEFININTION = gql`
+  query apiDefinition(
+    $applicationId: ID!
+    $apiPackageId: ID!
+    $apiDefinitionId: ID!
+  ) {
+    application(id: $applicationId) {
+      name
+      id
+      package(id: $apiPackageId) {
+        id
+        name
+        apiDefinition(id: $apiDefinitionId) {
           id
           name
           description
@@ -268,19 +316,24 @@ export const GET_APPLICATION_WITH_API_DEFINITIONS = gql`
           }
           group
         }
-        totalCount
       }
     }
   }
 `;
 
-export const GET_APPLICATION_WITH_EVENT_DEFINITIONS = gql`
-  query Application($applicationId: ID!) {
+export const GET_EVENT_DEFINITION = gql`
+  query eventDefinition(
+    $applicationId: ID!
+    $apiPackageId: ID!
+    $eventDefinitionId: ID!
+  ) {
     application(id: $applicationId) {
       name
       id
-      eventDefinitions {
-        data {
+      package(id: $apiPackageId) {
+        id
+        name
+        eventDefinition(id: $eventDefinitionId) {
           id
           name
           description
@@ -290,23 +343,6 @@ export const GET_APPLICATION_WITH_EVENT_DEFINITIONS = gql`
             type
           }
           group
-        }
-        totalCount
-      }
-    }
-  }
-`;
-
-export const GET_TEMPLATES = gql`
-  query applicationTemplates {
-    applicationTemplates {
-      data {
-        id
-        name
-        applicationInput
-        placeholders {
-          name
-          description
         }
       }
     }

@@ -16,8 +16,7 @@ import { CompassGqlContext } from 'index';
 
 import EntryNotFound from 'components/EntryNotFound/EntryNotFound';
 import BoundNamespacesList from '../BoundNamespacesList/BoundNamespacesList';
-import EventApiList from 'components/Apis/EventApiList/EventApiList';
-import ApiList from 'components/Apis/ApiList/ApiList';
+import ApplicationApiPackages from '../../Apis/ApplicationApiPackages/ApplicationApiPackages';
 import ConnectApplicationModal from '../ConnectApplicationModal/ConnectApplicationModal';
 import './ApplicationDetails.scss';
 import { APPLICATIONS_EVENT_SUBSCRIPTION } from 'gql/subscriptions';
@@ -85,8 +84,6 @@ const ApplicationDetails = ({ appId }) => {
     return <EntryNotFound entryType="Application" entryId={appId} />;
 
   const application = compassQuery.data.application;
-  const apis = application.apiDefinitions.data;
-  const eventApis = application.eventDefinitions.data;
 
   return (
     <article className="application-details">
@@ -97,8 +94,11 @@ const ApplicationDetails = ({ appId }) => {
           appName={app.name}
         />
       )}
-      <ApiList applicationId={appId} apis={apis} />
-      <EventApiList applicationId={appId} eventApis={eventApis} />
+      <ApplicationApiPackages
+        apiPackages={application.packages.data}
+        applicationId={application.id}
+        apiDefinitions={application.apiDefinitions}
+      />
     </article>
   );
 };
