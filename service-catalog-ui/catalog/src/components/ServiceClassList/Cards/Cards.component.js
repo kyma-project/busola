@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import LuigiClient from '@kyma-project/luigi-client';
 
+import { DOCUMENTATION_PER_PLAN_LABEL } from '../../../shared/constants';
 import Card from './Card.component';
 
 import {
@@ -13,8 +14,7 @@ const Cards = ({ items }) => {
   const goToDetails = item => {
     const documentationPerPlan =
       item.labels &&
-      item.labels['documentation-per-plan'] &&
-      isStringValueEqualToTrue(item.labels['documentation-per-plan']);
+      isStringValueEqualToTrue(item.labels[DOCUMENTATION_PER_PLAN_LABEL]);
 
     if (!documentationPerPlan) {
       return LuigiClient.linkManager()
