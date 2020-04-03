@@ -12,7 +12,9 @@ ConnectApplicationModal.propTypes = {
 export default function ConnectApplicationModal(props) {
   return (
     <Modal
-      modalOpeningComponent={<Button option="emphasized">Connect</Button>}
+      modalOpeningComponent={
+        <Button option="emphasized">Connect Application</Button>
+      }
       title="Connect Application"
       confirmText="Close"
     >
