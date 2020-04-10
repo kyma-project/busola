@@ -16,6 +16,7 @@ import { ApiTabHeader } from './helpers/styled';
 import ApiSelector from './helpers/ApiSelector';
 
 import { markdownDefinition } from '../constants';
+import unescape from 'lodash.unescape';
 
 export enum TabsLabels {
   DOCUMENTATION = 'Documentation',
@@ -25,7 +26,8 @@ export enum TabsLabels {
 }
 
 export interface GroupRendererProps extends GroupRendererComponent {
-  currentApiState: [Source, (s: Source) => void];
+  selectedApiState: [Source, (s: Source) => void];
+
   additionalTabs?: TabProps[];
 }
 
@@ -34,51 +36,69 @@ const getNonMarkdown = (allSources: Source[]) =>
     (s: Source) => !markdownDefinition.possibleTypes.includes(s.type),
   );
 
+function sortByType(source1: Source, source2: Source): number {
+  return (
+    source1.type.localeCompare(source2.type) ||
+    (source1.data &&
+      source2.data &&
+      source1.data.displayName &&
+      source1.data.displayName.localeCompare(source2.data.displayName))
+  );
+}
+
 export const GroupRenderer: React.FunctionComponent<GroupRendererProps> = ({
   sources,
   additionalTabs,
-  currentApiState,
+  selectedApiState,
 }) => {
-  const [currentApi, setCurrentApi] = currentApiState;
-
-  const nonMarkdownSources = getNonMarkdown(sources);
+  const [selectedApi, setSelectedApi] = selectedApiState;
+  const sortedSources = sources.sort(sortByType);
+  const nonMarkdownSources = getNonMarkdown(sortedSources);
 
   useEffect(() => {
-    if (currentApi) return;
+    if (selectedApi) return;
+
+    const apiNameFromURL = unescape(luigiClient.getNodeParams().selectedApi);
+    if (apiNameFromURL) {
+      const matchedSource = sortedSources.find(
+        (s: Source) => s.data && s.data.displayName === apiNameFromURL,
+      );
+      if (matchedSource) {
+        setSelectedApi(matchedSource);
+        return;
+      }
+    }
 
     if (nonMarkdownSources.length && nonMarkdownSources[0].type !== 'mock') {
       // a "mock" source is loaded at first, before the real data arrives
-      setCurrentApi(nonMarkdownSources[0]);
+      setSelectedApi(nonMarkdownSources[0]);
     }
-  }, [currentApi, sources]);
+  }, [selectedApi, sortedSources]);
 
-  // useEffect(() => {
-  //   const currentParams = luigiClient.getNodeParams();
-  //   luigiClient
-  //     .linkManager()
-  //     .withParams({ ...currentParams, selectedApi: currentApi.displayName })
-  //     .navigate('');
-  // }, [currentApi]);
-
-  if (
-    (!sources || !sources.length) &&
-    (!additionalTabs || !additionalTabs.length)
-  ) {
-    return null;
-  }
+  useEffect(() => {
+    luigiClient.sendCustomMessage({
+      id: 'console.silentNavigate',
+      newParams: {
+        selectedApi:
+          selectedApi && selectedApi.data
+            ? selectedApi.data.displayName
+            : undefined,
+      },
+    });
+  }, [selectedApi]);
 
   const apiTabHeader = (
     <ApiTabHeader>
-      <span>Displayed API:</span>
+      <span>API</span>
       <ApiSelector
-        onApiSelect={setCurrentApi}
+        onApiSelect={setSelectedApi}
         sources={nonMarkdownSources}
-        selectedApi={currentApi}
+        selectedApi={selectedApi}
       />
     </ApiTabHeader>
   );
 
-  const onChangeTab = (id: string): void => {
+  const handleTabChange = (id: string): void => {
     try {
       luigiClient
         .linkManager()
@@ -89,10 +109,10 @@ export const GroupRenderer: React.FunctionComponent<GroupRendererProps> = ({
     }
   };
 
-  const onInitTabs = (): string =>
+  const handleTabInit = (): string =>
     luigiClient.getNodeParams().selectedTab || '';
 
-  const markdownsExists = sources.some(source =>
+  const markdownsExists = sortedSources.some(source =>
     markdownDefinition.possibleTypes.includes(source.type),
   );
 
@@ -106,9 +126,9 @@ export const GroupRenderer: React.FunctionComponent<GroupRendererProps> = ({
 
   return (
     <Tabs
-      onInit={onInitTabs}
+      onInit={handleTabInit}
       onChangeTab={{
-        func: onChangeTab,
+        func: handleTabChange,
         preventDefault: true,
       }}
     >
@@ -140,7 +160,7 @@ export const GroupRenderer: React.FunctionComponent<GroupRendererProps> = ({
       )}
       {!!nonMarkdownSources.length && (
         <Tab label={apiTabHeader} id="apis">
-          {currentApi && <SingleAPIcontent source={currentApi} />}
+          {selectedApi && <SingleAPIcontent source={selectedApi} />}
         </Tab>
       )}
       {additionalTabsFragment}
