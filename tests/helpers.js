@@ -9,7 +9,7 @@ export const testIf = (condition, testName, testToRun) => {
   }
 };
 
-export const switchToActiveFrame = t => {
+export const findActiveFrame = t => {
   return t.switchToIframe(
     Selector('iframe', { visibilityCheck: true, timeout: 20000 }),
   );
@@ -19,14 +19,14 @@ export const leftNavLinkSelector = text => {
   return Selector('nav.fd-side-nav a').withText(text);
 };
 
-export const retry = async (t, func, n) => {
+export const retry = async (t, n, func) => {
   try {
     await func(t);
     return;
   } catch (err) {
     console.log(`Retries left: ${n - 1}`);
     if (n === 1) throw err;
-    return await retry(t, func, n - 1);
+    return await retry(t, n - 1, func);
   }
 };
 
