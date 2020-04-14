@@ -15,11 +15,14 @@ export class OrganisationComponent implements OnInit {
   public orgName: string;
   public showSystemNamespaces = false;
   public showExperimentalViews = false;
+  public showDeprecatedViews = false;
   public shouldShowNamespacesToggle = true;
 
   constructor(private http: HttpClient) {
     this.showExperimentalViews =
       localStorage.getItem('console.showExperimentalViews') === 'true';
+    this.showDeprecatedViews =
+      localStorage.getItem('console.showDeprecatedViews') === 'true';
   }
 
   public downloadKubeconfig() {
@@ -65,11 +68,16 @@ export class OrganisationComponent implements OnInit {
     );
   }
 
+
+  public toggleDeprecatedViews() {
+    this.toggleViewVisibilityPreference('showDeprecatedViews');
+  }
+
   public toggleExperimentalViews() {
-    localStorage.setItem(
-      'console.showExperimentalViews',
-      this.showExperimentalViews.toString()
-    );
-    LuigiClient.sendCustomMessage({ id: 'console.refreshNavigation' });
+    this.toggleViewVisibilityPreference('showExperimentalViews');
+  }
+
+  private toggleViewVisibilityPreference(key: string) {
+    localStorage.setItem(`console.${key}`, this[key]);
   }
 }
