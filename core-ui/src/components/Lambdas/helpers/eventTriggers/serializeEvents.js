@@ -1,29 +1,26 @@
-export function serializeEvents(events = [], eventTriggers = []) {
+export function serializeEvents({ events = [], eventTriggers = [] }) {
   if (!events.length) {
-    const usedEvents = eventTriggers
-      .map(event => {
-        const filterAttributes = event.filterAttributes;
+    const usedEvents = eventTriggers.map(event => {
+      const filterAttributes = event.filterAttributes;
+      return {
+        ...event,
+        eventType: filterAttributes.type,
+        source: filterAttributes.source,
+        version: filterAttributes.eventtypeversion,
+      };
+    });
 
-        if (!filterAttributes) {
-          return null;
-        }
-
-        return {
-          ...event,
-          eventType: filterAttributes.type,
-          source: filterAttributes.source,
-          version: filterAttributes.eventtypeversion,
-        };
-      })
-      .filter(Boolean);
-
-    return [[], usedEvents];
+    return {
+      availableEvents: [],
+      usedEvents,
+    };
   }
 
   const availableEvents = [];
   const usedEvents = [];
 
-  events.map(event => {
+  events.forEach(event => {
+    let usedEvent = false;
     for (const trigger of eventTriggers) {
       const filterAttributes = trigger.filterAttributes;
 
@@ -36,12 +33,37 @@ export function serializeEvents(events = [], eventTriggers = []) {
           ...event,
           ...trigger,
         });
-        return event;
+        usedEvent = true;
       }
     }
-    availableEvents.push(event);
-    return event;
+
+    if (!usedEvent) {
+      availableEvents.push(event);
+    }
   });
 
-  return [availableEvents, usedEvents];
+  eventTriggers.forEach(trigger => {
+    const filterAttributes = trigger.filterAttributes;
+    const exists = usedEvents.some(
+      e =>
+        e.filterAttributes.type === filterAttributes.type &&
+        e.filterAttributes.source === filterAttributes.source &&
+        e.filterAttributes.eventtypeversion ===
+          filterAttributes.eventtypeversion,
+    );
+
+    if (!exists) {
+      usedEvents.push({
+        ...trigger,
+        eventType: filterAttributes.type,
+        source: filterAttributes.source,
+        version: filterAttributes.eventtypeversion,
+      });
+    }
+  });
+
+  return {
+    availableEvents,
+    usedEvents,
+  };
 }

@@ -1,3 +1,15 @@
+export const BUTTONS = {
+  CANCEL: 'Cancel',
+  DELETE: 'Delete',
+};
+
+export const ERRORS = {
+  SERVER: 'Server error. Contact your cluster admin.',
+  RESOURCES_NOT_FOUND: "This lambda doesn't have any related resources yet.",
+  NOT_MATCHING_SEARCH_QUERY: "Couldn't find resources matching this query.",
+  NOT_MATCHING_FILTERS: "Couldn't find resources matching these filters.",
+};
+
 export const TOOLBAR = {
   TITLE: 'Lambdas',
   DESCRIPTION:
@@ -17,15 +29,20 @@ export const GQL_QUERIES = {
   EVENT_TRIGGERS: {
     ERROR_MESSAGE: `Error while fetching Event Triggers for "{lambdaName}" Lambda: {error}`,
   },
+  SERVICE_INSTANCES: {
+    ERROR_MESSAGE: `Error while fetching Service Instances: {error}`,
+  },
 };
 
 export const GQL_MUTATIONS = {
-  CREATE_MANY_TRIGGERS: {
-    SUCCESS_MESSAGE: `Event Triggers are successfully created`,
-    ERROR_MESSAGE: `Error while creating Event Triggers for "{lambdaName}" Lambda: {error}`,
+  CREATE_TRIGGERS: {
+    SUCCESS_MESSAGE_SINGLE: `Event Trigger created successfully`,
+    SUCCESS_MESSAGE_MANY: `Event Triggers created successfully`,
+    ERROR_MESSAGE_SINGLE: `Error while creating an Event Trigger for "{lambdaName}" Lambda: {error}`,
+    ERROR_MESSAGE_MANY: `Error while creating Event Triggers for "{lambdaName}" Lambda: {error}`,
   },
   DELETE_TRIGGER: {
-    SUCCESS_MESSAGE: `Event Trigger is successfully removed`,
+    SUCCESS_MESSAGE: `Event Trigger was successfully removed`,
     ERROR_MESSAGE: `Error while deleting "{triggerName}" Event Trigger for "{lambdaName}" Lambda: {error}`,
     CONFIRM_MODAL: {
       TITLE: `Remove Event Trigger`,
@@ -41,15 +58,14 @@ export const TRIGGER_SCHEMA = {
   COLUMN_NAMES: ['Name', 'Title', 'Type', 'Format', 'Default', 'Description'],
 };
 
-export const MODALS = {
-  CREATE_BINDING: {
-    CREATE_BUTTON_POPUP_MESSAGE: 'At least one event must be marked.',
-  },
-};
-
 export const EVENT_TRIGGERS_PANEL = {
   LIST: {
     TITLE: 'Event Triggers',
+    ERRORS: {
+      RESOURCES_NOT_FOUND: "This lambda doesn't have any Event Triggers yet.",
+      NOT_MATCHING_SEARCH_QUERY:
+        "Couldn't find Event Triggers matching this query.",
+    },
   },
   ADD_MODAL: {
     OPEN_BUTTON: {
@@ -65,14 +81,32 @@ export const EVENT_TRIGGERS_PANEL = {
   },
 };
 
-export const BUTTONS = {
-  CANCEL: 'Cancel',
-  DELETE: 'Delete',
-};
-
-export const ERRORS = {
-  SERVER: 'Server error. Please contact the admin of the cluster.',
-  RESOURCES_NOT_FOUND: 'Resources not found.',
-  NOT_MATCHING_SEARCH_QUERY: "Couldn't find resources matching this query.",
-  NOT_MATCHING_FILTERS: "Couldn't find resources matching this filters.",
+export const SERVICE_BINDINGS_PANEL = {
+  LIST: {
+    TITLE: 'Service Bindings',
+    ERRORS: {
+      RESOURCES_NOT_FOUND: "This lambda doesn't have any Service Bindings yet.",
+      NOT_MATCHING_SEARCH_QUERY:
+        "Couldn't find Service Bindings matching this query.",
+    },
+  },
+  CREATE_MODAL: {
+    OPEN_BUTTON: {
+      TEXT: 'Create Service Binding',
+      NOT_ENTRIES_POPUP_MESSAGE:
+        'There are no Service Instances available to bind in this Namespace. Create a Service Instance first.',
+    },
+    TITLE: 'Create Service Binding',
+    CONFIRM_BUTTON: {
+      TEXT: 'Create',
+      POPUP_MESSAGES: {
+        NO_SERVICE_INSTANCE_SELECTED: 'You must select a Service Instance.',
+        NO_SECRET_SELECTED: 'You must create or select a Secret.',
+      },
+    },
+  },
+  FORM: {
+    NO_SECRETS_FOUND:
+      'There are no Secrets available. Create a new Secret to bind the Service Instance.',
+  },
 };

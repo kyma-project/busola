@@ -5,11 +5,11 @@ import EventTriggers from './EventTriggers';
 import {
   useEventActivationsQuery,
   useEventTriggersQuery,
-} from '../../../../gql/hooks/queries';
+} from 'components/Lambdas/gql/hooks/queries';
 import {
   serializeEvents,
   createSubscriberRef,
-} from '../../../../helpers/eventTriggers';
+} from 'components/Lambdas/helpers/eventTriggers';
 
 export default function EventTriggersWrapper({ lambda }) {
   const [
@@ -28,7 +28,10 @@ export default function EventTriggersWrapper({ lambda }) {
     lambda,
   });
 
-  const [availableEvents, usedEvents] = serializeEvents(events, eventTriggers);
+  const { availableEvents, usedEvents } = serializeEvents({
+    events,
+    eventTriggers,
+  });
 
   return (
     <EventTriggers
