@@ -37,7 +37,7 @@ export class DocsLoader {
       await this.setSpecification(openApiDefinition.possibleTypes),
       await this.setSpecification(asyncApiDefinition.possibleTypes),
       await this.setSpecification(odataDefinition.possibleTypes),
-    ]);
+    ]).then(r => (this.sources = r.flat()));
   }
 
   getSources(considerAsGroup: boolean = false): Sources {
@@ -53,7 +53,7 @@ export class DocsLoader {
     return sources;
   }
 
-  private async setDocumentation(): Promise<void> {
+  private async setDocumentation(): Promise<SourceWithOptions[]> {
     const markdownFiles = this.extractDocumentation();
 
     if (markdownFiles) {
@@ -64,25 +64,43 @@ export class DocsLoader {
       ) as SourceWithOptions[];
 
       if (sources && sources.length) {
-        this.sources.push(...sources);
+        return sources;
       }
     }
+    return [];
   }
 
   private sortByURL(f1: File, f2: File): number {
     return f1.url.localeCompare(f2.url);
   }
 
-  private async setSpecification(types: string[]): Promise<void> {
+  private async setSpecification(
+    types: string[],
+  ): Promise<SourceWithOptions[]> {
     const specification = this.extractSpecification(types);
 
     const newSources = (await Promise.all(
-      specification
-        .map(async file => this.fetchFile(file, types[0]).then(res => res))
-        .filter(s => s),
+      specification.map(async file =>
+        this.fetchFile(file, types[0]).then(res => res),
+      ),
     )) as SourceWithOptions[];
 
-    this.sources.push(...newSources);
+    return newSources.map((sourceToCheck, index) => {
+      if (
+        sourceToCheck.source.data &&
+        newSources.findIndex(
+          otherSource =>
+            otherSource.source.data &&
+            sourceToCheck.source.data &&
+            otherSource.source.data.displayName ===
+              sourceToCheck.source.data.displayName,
+        ) !== index
+      ) {
+        // there's a source with the same displayName
+        sourceToCheck.source.data.displayName += ` [${index}]`;
+      }
+      return sourceToCheck;
+    });
   }
 
   private async fetchFile(

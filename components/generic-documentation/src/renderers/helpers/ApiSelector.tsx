@@ -8,6 +8,10 @@ import {
 } from '../../constants';
 import { Source } from '@kyma-project/documentation-component';
 
+function getApiNameLength(s: Source) {
+  return s.data && s.data.displayName ? s.data.displayName.length : 0;
+}
+
 const BadgeForType: React.FunctionComponent<{ type: string }> = ({ type }) => {
   let badgeType: 'success' | 'warning' | 'error' | undefined;
 
@@ -37,13 +41,23 @@ const ApiSelector: React.FunctionComponent<{
     (s: Source) =>
       (s.data &&
         s.data.displayName &&
-        s.data.displayName.includes(searchText)) ||
+        s.data.displayName.toUpperCase().includes(searchText.toUpperCase())) ||
       s.type.includes(searchText),
   );
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     setSearchText(e.target.value);
   }
+
+  const maxApiNameLength = filteredSources.length
+    ? getApiNameLength(
+        filteredSources.reduce((prev, current) => {
+          return getApiNameLength(current) > getApiNameLength(prev)
+            ? current
+            : prev;
+        }),
+      )
+    : 0;
 
   return (
     <Combobox
@@ -53,6 +67,7 @@ const ApiSelector: React.FunctionComponent<{
           e.stopPropagation(); // avoid closing the dropdown due to the "opening" click ∞
         }
       }}
+      data-max-list-chars={maxApiNameLength}
       menu={
         <List>
           {filteredSources.map((s: Source, id) => (
@@ -61,7 +76,7 @@ const ApiSelector: React.FunctionComponent<{
               href="#"
               onClick={e => onApiSelect(s)}
               className="fd-menu__item"
-              key={s.rawContent}
+              key={(s.data && s.data.displayName) || s.rawContent}
             >
               <ListItem>
                 <BadgeForType type={s.type} />
