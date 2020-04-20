@@ -19,7 +19,6 @@ export default function LambdaDetails({ lambda }) {
         <Tab key="lambda-code" id="lambda-code" title="Code">
           <CodeTab lambda={lambda} bindingUsages={bindingUsages} />
         </Tab>
-
         <Tab
           key="lambda-configuration"
           id="lambda-configuration"
