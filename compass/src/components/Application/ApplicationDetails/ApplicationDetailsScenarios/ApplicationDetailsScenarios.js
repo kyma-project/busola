@@ -1,24 +1,36 @@
 import React from 'react';
+import { useMutation } from '@apollo/react-hooks';
 import PropTypes from 'prop-types';
 import LuigiClient from '@luigi-project/client';
 import { GenericList } from 'react-shared';
-import ApplicationScenarioModal from './ApplicationScenarioModal.container';
+import AssignScenarioModal from './../../../Shared/AssignScenario/AssignScenarioModal.container';
 import { ApplicationQueryContext } from './../../ApplicationDetails/ApplicationDetails.component';
+import { SEND_NOTIFICATION } from '../../../../gql';
+
+import { SET_APPLICATION_SCENARIOS, DELETE_SCENARIO_LABEL } from '../../gql';
 
 ApplicationDetailsScenarios.propTypes = {
   applicationId: PropTypes.string.isRequired,
   scenarios: PropTypes.arrayOf(PropTypes.string).isRequired,
-  updateScenarios: PropTypes.func.isRequired,
-  sendNotification: PropTypes.func.isRequired,
 };
 
 export default function ApplicationDetailsScenarios({
   applicationId,
   scenarios,
-  updateScenarios,
-  sendNotification,
 }) {
+  const [sendNotification] = useMutation(SEND_NOTIFICATION);
   const applicationQuery = React.useContext(ApplicationQueryContext);
+  const [updateScenarios] = useMutation(SET_APPLICATION_SCENARIOS);
+  const [deleteScenarios] = useMutation(DELETE_SCENARIO_LABEL);
+
+  async function handleScenariosUnassign(applicationId, scenarios) {
+    if (scenarios.length) {
+      return await updateScenarios({
+        variables: { id: applicationId, scenarios: scenarios },
+      });
+    }
+    return await deleteScenarios({ variables: { id: applicationId } });
+  }
 
   async function unassignScenario(entry) {
     const scenarioName = entry.scenario;
@@ -32,7 +44,7 @@ export default function ApplicationDetailsScenarios({
       })
       .then(async () => {
         try {
-          await updateScenarios(
+          await handleScenariosUnassign(
             applicationId,
             scenarios.filter(scenario => scenario !== scenarioName),
           );
@@ -62,23 +74,23 @@ export default function ApplicationDetailsScenarios({
 
   const rowRenderer = label => [label.scenario];
 
-  const actions =
-    scenarios && scenarios.length === 1
-      ? []
-      : [
-          {
-            name: 'Unassign',
-            handler: unassignScenario,
-          },
-        ];
+  const actions = [
+    {
+      name: 'Unassign',
+      handler: unassignScenario,
+    },
+  ];
 
   const extraHeaderContent = (
     <header>
-      <ApplicationScenarioModal
+      <AssignScenarioModal
         entityId={applicationId}
         scenarios={scenarios}
         notSelectedMessage={'Application is not assigned to any scenario.'}
         entityQuery={applicationQuery}
+        updateScenarios={(applicationId, scenarios) =>
+          handleScenariosUnassign(applicationId, scenarios)
+        }
       />
     </header>
   );
