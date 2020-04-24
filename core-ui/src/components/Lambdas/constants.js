@@ -229,7 +229,7 @@ export const RESOURCES_MANAGEMENT_PANEL = {
     CPU:
       'CPU value has to be expressed as a fixed-point number or in milicpu. For example, use 100m, 0.1, or 1.',
     MEMORY:
-      'Memory value has to be a fixed-point number with one of these suffixes: Gi, Mi, or Ki. For example, use 50Mi, 1000.5Ki, or 0.1Gi.',
+      'Memory value has to be a fixed-point number with one of these suffixes: Gi, G, Mi, M, Ki, or K. For example, use 50Mi, 1000.5Ki, or 0.1G.',
     MIN_REPLICAS_TOO_HIGH:
       'Minimum number of replicas has to be equal to or lower than maximum.',
     MIN_REPLICAS_NON_NEGATIVE:
@@ -401,7 +401,7 @@ export const ENVIRONMENT_VARIABLES_PANEL = {
 
 export const FIRST_BREADCRUMB_NODE = 'Functions';
 
-export const FUNCTION_USAGE_KIND = 'function';
+export const FUNCTION_USAGE_KIND = 'knative-service';
 
 export const REFETCH_LAMBDAS_TIMEOUT = 2000;
 
