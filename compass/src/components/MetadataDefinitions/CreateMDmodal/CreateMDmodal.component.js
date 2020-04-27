@@ -14,11 +14,11 @@ import {
   FormLabel,
   Button,
 } from 'fundamental-react';
-import FileInput from './../../Shared/FileInput/FileInput';
+import FileInput from '../../Shared/FileInput/FileInput';
 import { Modal } from 'react-shared';
 import { readFile } from 'components/Api/ApiHelpers';
 
-export default class CreateLabelModal extends React.Component {
+export default class CreateMDmodal extends React.Component {
   state = this.createInitialState();
   inputRef = React.createRef();
 
@@ -45,7 +45,7 @@ export default class CreateLabelModal extends React.Component {
     } else if (!/^[a-zA-Z0-9_]*$/.test(name)) {
       this.setState({
         nameError:
-          'Label name may contain only alphanumeric characters and underscore.',
+          'Metadata definition name may contain only alphanumeric characters and underscore.',
       });
     } else {
       this.setState({ nameError: '' });
@@ -64,7 +64,7 @@ export default class CreateLabelModal extends React.Component {
       labelNamesQuery.refetch();
       sendNotification({
         variables: {
-          content: `Label "${name}" created.`,
+          content: `Metadata definition "${name}" created.`,
           title: `${name}`,
           color: '#359c46',
           icon: 'accept',
@@ -148,7 +148,7 @@ export default class CreateLabelModal extends React.Component {
 
     return (
       <Modal
-        title="Create Label"
+        title="Create metadata definition"
         confirmText="Save"
         cancelText="Cancel"
         type={'emphasized'}
@@ -158,7 +158,7 @@ export default class CreateLabelModal extends React.Component {
         onShow={() => this.setState(this.createInitialState())}
       >
         {this.props.labelNamesQuery.loading ? (
-          <p>Loading existing labels...</p>
+          <p>Loading existing metadata definitions...</p>
         ) : (
           content
         )}
@@ -167,7 +167,7 @@ export default class CreateLabelModal extends React.Component {
   }
 }
 
-CreateLabelModal.propTypes = {
+CreateMDmodal.propTypes = {
   labelNamesQuery: PropTypes.object.isRequired,
   createLabel: PropTypes.func.isRequired,
   sendNotification: PropTypes.func.isRequired,
