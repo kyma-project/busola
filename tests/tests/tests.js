@@ -5,7 +5,6 @@ import {
   findActiveFrame,
   adminUser,
   toBoolean,
-  retry,
   leftNavLinkSelector,
 } from '../helpers';
 import config from '../config';
@@ -15,10 +14,9 @@ fixture`Console UI Smoke tests`;
 test('Luigi navigation is rendered', async t => {
   //GIVEN
   await t.useRole(adminUser);
-  const namespacesLink = leftNavLinkSelector('Namespaces');
-
+  const namespacesLink = await leftNavLinkSelector('Namespaces');
   //THEN
-  await t.expect(namespacesLink.exists).ok();
+  t.expect(namespacesLink.exists).ok();
 });
 
 test('Namespaces view is rendered', async t => {
@@ -26,14 +24,12 @@ test('Namespaces view is rendered', async t => {
   await t.useRole(adminUser);
 
   //THEN
-  await retry(t, 3, findActiveFrame);
-  await retry(t, 3, t => {
-    return t
-      .expect(Selector('.fd-button').withText('Add new namespace').exists)
-      .ok()
-      .expect(Selector('.fd-panel__title').withText('default').exists)
-      .ok();
-  });
+  await findActiveFrame(t);
+  await t
+    .expect(Selector('.fd-button').withText('Add new namespace').exists)
+    .ok()
+    .expect(Selector('.fd-panel__title').withText('default').exists)
+    .ok();
 });
 
 testIf(
@@ -41,7 +37,7 @@ testIf(
   'Applications view is rendered',
   async t => {
     //GIVEN
-    const applicationLink = leftNavLinkSelector('Applications');
+    const applicationLink = await leftNavLinkSelector('Applications');
     await t
       .useRole(adminUser)
 
@@ -49,12 +45,11 @@ testIf(
       .click(applicationLink);
 
     //THEN
-    await retry(t, 3, findActiveFrame);
-    await retry(t, 3, t => {
-      return t
-        .expect(Selector('button').withText(/.*create application.*/i).exists)
-        .ok();
-    });
+    await findActiveFrame(t);
+
+    await t
+      .expect(Selector('button').withText(/.*create application.*/i).exists)
+      .ok();
   },
 );
 
@@ -64,25 +59,23 @@ testIf(
   async t => {
     //GIVEN
     await t.useRole(adminUser);
-    const catalogLink = leftNavLinkSelector('Catalog');
+    const catalogLink = await leftNavLinkSelector('Catalog');
 
     //WHEN
-    await retry(t, 3, findActiveFrame);
-    await retry(t, 3, t => {
-      return t
-        .click(Selector('.fd-panel__title').withText('default'))
-        .switchToMainWindow()
-        .click(catalogLink);
-    });
+    await findActiveFrame(t);
+
+    await t
+      .click(Selector('.fd-panel__title').withText('default'))
+      .switchToMainWindow()
+      .click(catalogLink);
 
     //THEN
-    await retry(t, 3, findActiveFrame);
-    await retry(t, 3, t => {
-      return t
-        .expect(
-          Selector('.fd-action-bar__title').withText('Service Catalog').exists,
-        )
-        .ok();
-    });
+    await findActiveFrame(t);
+
+    await t
+      .expect(
+        Selector('.fd-action-bar__title').withText('Service Catalog').exists,
+      )
+      .ok();
   },
 );
