@@ -1,10 +1,11 @@
 import React, { Fragment } from 'react';
 
-import { Button, Modal, Tooltip } from '@kyma-project/react-components';
+import { Tooltip as StatusTooltip } from '@kyma-project/react-components';
+import { Button } from 'fundamental-react';
+import { Modal, Tooltip } from 'react-shared';
 
 import SchemaData from './SchemaData.component';
 import { bindingVariables } from '../InfoButton/variables';
-import InfoButton from '../InfoButton/InfoButton.component';
 
 import { clearEmptyPropertiesInObject } from 'helpers';
 import LuigiClient from '@kyma-project/luigi-client';
@@ -156,15 +157,9 @@ class CreateCredentialsModal extends React.Component {
       </Fragment>,
     ];
 
-    const createCredentialsButton = (
-      <Button compact option="light" data-e2e-id={id} onClick={this.handleOpen}>
-        + Create Credentials
-      </Button>
-    );
-
     if (serviceInstance.status.type !== 'RUNNING') {
       return (
-        <Tooltip
+        <StatusTooltip
           type="error"
           content={
             <span>
@@ -176,31 +171,36 @@ class CreateCredentialsModal extends React.Component {
           <Button compact option="light" disabled={true}>
             + Create Credentials
           </Button>
-        </Tooltip>
+        </StatusTooltip>
       );
     }
 
     if (!bindingCreateParameterSchemaExists) {
       return (
+        <Tooltip title={bindingVariables.serviceBinding}>
+          <Button
+            compact
+            option="light"
+            data-e2e-id={id}
+            onClick={this.createWithoutOpening}
+          >
+            + Create Credentials
+          </Button>
+        </Tooltip>
+      );
+    }
+
+    const createCredentialsButton = (
+      <Tooltip title={bindingVariables.serviceBinding}>
         <Button
           compact
           option="light"
           data-e2e-id={id}
-          onClick={this.createWithoutOpening}
+          onClick={this.handleOpen}
         >
           + Create Credentials
         </Button>
-      );
-    }
-
-    const title = (
-      <>
-        <span>{'Create Credentials'}</span>
-        <InfoButton
-          content={bindingVariables.serviceBinding}
-          orientation="bottom"
-        />
-      </>
+      </Tooltip>
     );
 
     return (
@@ -209,15 +209,13 @@ class CreateCredentialsModal extends React.Component {
           this.child = modal;
         }}
         key={serviceInstance.name}
-        title={title}
+        title="Create Credentials"
         confirmText="Create"
         onConfirm={this.handleConfirmation}
         modalOpeningComponent={createCredentialsButton}
         disabledConfirm={disabled}
         tooltipData={tooltipData}
         handleClose={this.clearState}
-        onShow={() => LuigiClient.uxManager().addBackdrop()}
-        onHide={() => LuigiClient.uxManager().removeBackdrop()}
       >
         {content}
       </Modal>

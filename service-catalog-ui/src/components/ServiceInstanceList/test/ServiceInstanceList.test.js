@@ -8,20 +8,24 @@ import {
 } from 'testing/instances/queriesMocks';
 import ServiceInstanceTable from '../ServiceInstanceTable/ServiceInstanceTable.component';
 
-import { Button, Spinner, Tab, Search } from '@kyma-project/react-components';
 import ServiceInstancesList from '../ServiceInstanceList';
 import { Link } from '../ServiceInstanceTable/styled.js';
-import { createMockLink } from 'react-shared';
+import { Spinner, createMockLink } from 'react-shared';
 import { componentUpdate, mockTestNamespace } from 'testing';
 import { act } from 'react-dom/test-utils';
-import { Identifier } from 'fundamental-react';
+import { FormInput, Identifier } from 'fundamental-react';
 import {
   serviceInstance1,
   serviceInstance3,
   serviceInstance2,
 } from 'testing/instances/instanceMocks';
 import FilterDropdown from '../ServiceInstanceToolbar/FilterDropdown.component';
-import { FormInput } from '../ServiceInstanceToolbar/styled';
+import toJson from 'enzyme-to-json';
+
+jest.mock('react-shared', () => ({
+  ...jest.requireActual('react-shared'),
+  handleDelete: (_, __, name, callback) => callback(name),
+}));
 
 const mockNavigate = jest.fn();
 const mockAddBackdrop = jest.fn();
@@ -106,7 +110,7 @@ describe('InstancesList UI', () => {
     await componentUpdate(component);
     await componentUpdate(component);
 
-    const table = component.find(ServiceInstanceTable);
+    const table = component.find(ServiceInstanceTable).at(addonsTabIndex);
     expect(table.exists()).toBe(true);
 
     const displayedInstanceLinks = table
@@ -136,6 +140,7 @@ describe('InstancesList UI', () => {
 
     const addInstanceButton = component
       .find('[data-e2e-id="add-instance"]')
+      .at(addonsTabIndex)
       .find('button');
     expect(addInstanceButton.exists()).toBe(true);
 
@@ -179,7 +184,7 @@ describe('InstancesList UI', () => {
     await componentUpdate(component);
     await componentUpdate(component);
 
-    const table = component.find(ServiceInstanceTable);
+    const table = component.find(ServiceInstanceTable).at(servicesTabIndex);
     expect(table.exists()).toBe(true);
     expect(table.prop('data')).toHaveLength(1);
     expectKnownConsoleWarnings();
@@ -196,7 +201,7 @@ describe('InstancesList UI', () => {
     await componentUpdate(component);
     await componentUpdate(component);
 
-    const table = component.find(ServiceInstanceTable);
+    const table = component.find(ServiceInstanceTable).at(addonsTabIndex);
     expect(table.exists()).toBe(true);
     expect(table.prop('data')).toHaveLength(3);
     expectKnownConsoleWarnings();
@@ -208,8 +213,7 @@ describe('InstancesList UI', () => {
       serviceInstanceDeleteMutation,
     ]);
 
-    const deleteButtonSelector =
-      'button[data-e2e-id="modal-confirmation-button"]';
+    const deleteButtonSelector = '[aria-label="Delete Instance"]';
     const component = mountWithModalBg(
       <MockedProvider link={link}>
         <ServiceInstancesList />
@@ -217,19 +221,15 @@ describe('InstancesList UI', () => {
     );
     await componentUpdate(component);
 
-    const table = component.find(ServiceInstanceTable);
+    const table = component.find(ServiceInstanceTable).at(addonsTabIndex);
     expect(table.exists()).toBe(true);
     expect(table.prop('data')).toHaveLength(2);
 
-    const displayedInstanceLinks = table.find('tr').find(Button);
-    expect(displayedInstanceLinks).toHaveLength(2);
-
-    const firstInstanceButton = displayedInstanceLinks.at(0).find('button');
-    expect(firstInstanceButton.exists()).toBe(true);
-
-    firstInstanceButton.simulate('click');
-
-    const deleteButton = component.find(deleteButtonSelector);
+    const deleteButton = component
+      .find('[role="tabpanel"]')
+      .at(addonsTabIndex)
+      .find(deleteButtonSelector)
+      .at(0);
     expect(deleteButton.exists()).toBe(true);
 
     await act(async () => {
@@ -237,7 +237,6 @@ describe('InstancesList UI', () => {
     });
     await componentUpdate(component);
 
-    expect(component.find(deleteButtonSelector).exists()).toBe(false);
     expect(serviceInstanceDeleteMutation.result).toHaveBeenCalled();
     expectKnownConsoleWarnings();
   });
@@ -251,10 +250,15 @@ describe('InstancesList UI', () => {
     );
 
     await componentUpdate(component);
+    await componentUpdate(component);
 
-    let row = component.find('tbody > tr').at(0);
-
+    let row = component
+      .find('[role="tabpanel"]')
+      .at(addonsTabIndex)
+      .find('tbody tr')
+      .at(0);
     const planLink = row.find('[data-e2e-id="service-plan"]').last();
+
     expect(planLink.exists()).toBe(true);
     expect(planLink.text()).toContain(
       serviceInstance1.clusterServicePlan.displayName,
@@ -265,7 +269,11 @@ describe('InstancesList UI', () => {
 
     planLink.simulate('click');
     await componentUpdate(component);
-    row = component.find('tbody > tr').at(0);
+    row = component
+      .find('[role="tabpanel"]')
+      .at(addonsTabIndex)
+      .find('tbody tr')
+      .at(0);
 
     planContent = row.find('code[data-e2e-id="service-plan-content"]');
     expect(planContent.exists()).toBe(true);
@@ -282,8 +290,13 @@ describe('InstancesList UI', () => {
     );
 
     await componentUpdate(component);
+    await componentUpdate(component);
+    const row = component
+      .find('[role="tabpanel"]')
+      .at(addonsTabIndex)
+      .find('tbody tr')
+      .at(1);
 
-    let row = component.find('tbody > tr').at(1);
     const planLink = row.find('[data-e2e-id="service-plan"]');
     expect(planLink.exists()).toBe(true);
     expect(planLink.text()).toEqual(
@@ -292,10 +305,8 @@ describe('InstancesList UI', () => {
 
     let planContent = row.find('code[data-e2e-id="service-plan-content"]');
     expect(planContent.exists()).toBe(false);
-
     planLink.simulate('click');
     await componentUpdate(component);
-    row = component.find('tbody > tr').at(1);
 
     planContent = component.find('code[data-e2e-id="service-plan-content"]');
     expect(planContent.exists()).toBe(false);
@@ -314,10 +325,10 @@ describe('Search instances by name', () => {
   it('Shows all instances initially', async () => {
     await componentUpdate(component);
 
-    const addOnsTab = component.find(Tab).at(addonsTabIndex);
+    const addOnsTab = component.find('[role="tab"]').at(addonsTabIndex);
     expect(addOnsTab.find(Identifier).text()).toEqual('2');
 
-    const servicesTab = component.find(Tab).at(servicesTabIndex);
+    const servicesTab = component.find('[role="tab"]').at(servicesTabIndex);
     expect(servicesTab.find(Identifier).text()).toEqual('1');
 
     expectKnownConsoleWarnings();
@@ -326,23 +337,26 @@ describe('Search instances by name', () => {
   it('Search addon', async () => {
     await componentUpdate(component);
 
-    const search = component.find(Search).find('input');
+    const search = component.find(FormInput).find('input');
     expect(search.exists()).toBe(true);
     search.simulate('change', { target: { value: 'motherly' } });
 
     await componentUpdate(component);
-    const addOnsTab = component.find(Tab).at(addonsTabIndex);
+    const addOnsTab = component.find('[role="tab"]').at(addonsTabIndex);
     expect(addOnsTab.find(Identifier).text()).toEqual('1');
     addOnsTab
       .find('div')
       .first()
       .simulate('click');
     await componentUpdate(component);
-    expect(component.find(ServiceInstanceTable).prop('data')).toEqual([
-      serviceInstance1,
-    ]);
+    expect(
+      component
+        .find(ServiceInstanceTable)
+        .at(addonsTabIndex)
+        .prop('data'),
+    ).toEqual([serviceInstance1]);
 
-    const servicesTab = component.find(Tab).at(servicesTabIndex);
+    const servicesTab = component.find('[role="tab"]').at(servicesTabIndex);
     expect(servicesTab.find(Identifier).text()).toEqual('0');
 
     servicesTab
@@ -350,7 +364,12 @@ describe('Search instances by name', () => {
       .first()
       .simulate('click');
     await componentUpdate(component);
-    expect(component.find(ServiceInstanceTable).prop('data')).toEqual([]);
+    expect(
+      component
+        .find(ServiceInstanceTable)
+        .at(servicesTabIndex)
+        .prop('data'),
+    ).toEqual([]);
 
     expectKnownConsoleWarnings();
   });
@@ -358,21 +377,26 @@ describe('Search instances by name', () => {
   it('Search service', async () => {
     await componentUpdate(component);
 
-    const search = component.find(Search).find('input');
+    const search = component.find(FormInput).find('input');
     expect(search.exists()).toBe(true);
     search.simulate('change', { target: { value: 'fishing' } });
 
     await componentUpdate(component);
-    const addOnsTab = component.find(Tab).at(addonsTabIndex);
+    const addOnsTab = component.find('[role="tab"]').at(addonsTabIndex);
     expect(addOnsTab.find(Identifier).text()).toEqual('0');
     addOnsTab
       .find('div')
       .first()
       .simulate('click');
     await componentUpdate(component);
-    expect(component.find(ServiceInstanceTable).prop('data')).toEqual([]);
+    expect(
+      component
+        .find(ServiceInstanceTable)
+        .at(addonsTabIndex)
+        .prop('data'),
+    ).toEqual([]);
 
-    const servicesTab = component.find(Tab).at(servicesTabIndex);
+    const servicesTab = component.find('[role="tab"]').at(servicesTabIndex);
     expect(servicesTab.find(Identifier).text()).toEqual('1');
 
     servicesTab
@@ -380,9 +404,12 @@ describe('Search instances by name', () => {
       .first()
       .simulate('click');
     await componentUpdate(component);
-    expect(component.find(ServiceInstanceTable).prop('data')).toEqual([
-      serviceInstance3,
-    ]);
+    expect(
+      component
+        .find(ServiceInstanceTable)
+        .at(servicesTabIndex)
+        .prop('data'),
+    ).toEqual([serviceInstance3]);
 
     expectKnownConsoleWarnings();
   });
@@ -432,7 +459,7 @@ describe('filter instances by labels', () => {
       'label1',
     ]);
 
-    const addOnsTab = component.find(Tab).at(addonsTabIndex);
+    const addOnsTab = component.find('[role="tab"]').at(addonsTabIndex);
     expect(addOnsTab.find(Identifier).text()).toEqual('1');
 
     addOnsTab
@@ -440,11 +467,14 @@ describe('filter instances by labels', () => {
       .first()
       .simulate('click');
     await componentUpdate(component);
-    expect(component.find(ServiceInstanceTable).prop('data')).toEqual([
-      serviceInstance1,
-    ]);
+    expect(
+      component
+        .find(ServiceInstanceTable)
+        .at(addonsTabIndex)
+        .prop('data'),
+    ).toEqual([serviceInstance1]);
 
-    const servicesTab = component.find(Tab).at(servicesTabIndex);
+    const servicesTab = component.find('[role="tab"]').at(servicesTabIndex);
     expect(servicesTab.find(Identifier).text()).toEqual('0');
 
     servicesTab
@@ -452,7 +482,12 @@ describe('filter instances by labels', () => {
       .first()
       .simulate('click');
     await componentUpdate(component);
-    expect(component.find(ServiceInstanceTable).prop('data')).toEqual([]);
+    expect(
+      component
+        .find(ServiceInstanceTable)
+        .at(servicesTabIndex)
+        .prop('data'),
+    ).toEqual([]);
 
     expectKnownConsoleWarnings();
   });

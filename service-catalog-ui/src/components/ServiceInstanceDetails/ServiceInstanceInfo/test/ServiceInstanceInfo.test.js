@@ -8,7 +8,8 @@ import {
   PlanModalButton,
   JSONCode,
 } from '../styled';
-import { Label, Modal } from '@kyma-project/react-components';
+import { Label } from '@kyma-project/react-components';
+import { Modal } from 'react-shared';
 
 const mockNavigate = jest.fn();
 const mockAddBackdrop = jest.fn();
@@ -95,7 +96,6 @@ describe('ServiceInstanceInfo', () => {
 
       const button = field.find(PlanModalButton);
       button.simulate('click');
-      expect(mockAddBackdrop).toHaveBeenCalled();
 
       field = component.find('div[data-e2e-id="instance-service-plan"]');
 

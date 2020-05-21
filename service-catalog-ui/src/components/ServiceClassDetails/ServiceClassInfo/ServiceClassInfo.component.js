@@ -2,15 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Moment from 'react-moment';
 
-import {
-  Label,
-  Icon,
-  Tooltip,
-  Tile,
-  TileContent,
-  TileMedia,
-} from '@kyma-project/react-components';
+import { Label } from '@kyma-project/react-components';
+import { Tile, Icon } from 'fundamental-react';
 
+import { Tooltip } from 'react-shared';
 import {
   ServiceClassInfoContentWrapper,
   ExternalLink,
@@ -69,13 +64,6 @@ const ServiceClassInfo = ({
     tag: 'Tag',
   };
 
-  const tooltipWidth = {
-    basic: '80px',
-    'connected-app': '140px',
-    provisionOnlyOnce: '140px',
-    tag: '50px',
-  };
-
   const computeNumberOfColumns = isProvisionedOnlyOnce => {
     const defaultNumberOfColumns = 4;
     return isProvisionedOnlyOnce
@@ -83,25 +71,29 @@ const ServiceClassInfo = ({
       : defaultNumberOfColumns;
   };
 
+  const columnCount = computeNumberOfColumns(isProvisionedOnlyOnce);
+
   return (
     <ServiceClassInfoContentWrapper className="fd-has-padding-top-none">
       <ServiceClassHeaderTileGrid
-        col={computeNumberOfColumns(isProvisionedOnlyOnce)}
+        style={{
+          gridTemplateColumns: `repeat(${columnCount} ,1fr)`,
+        }}
       >
         <Tile>
-          <TileMedia className="fd-has-display-flex">
+          <Tile.Media className="fd-has-display-flex">
             {imageUrl ? (
               <Image size="l" photo={imageUrl} />
             ) : (
               <Icon glyph="crm-service-manager" />
             )}
-          </TileMedia>
-          <TileContent title={serviceClassTileTitles.creator}>
+          </Tile.Media>
+          <Tile.Content title={serviceClassTileTitles.creator}>
             <p>{providerDisplayName}</p>
-          </TileContent>
+          </Tile.Content>
         </Tile>
         <Tile>
-          <TileContent title={serviceClassTileTitles.lastUpdate}>
+          <Tile.Content title={serviceClassTileTitles.lastUpdate}>
             <Moment
               unix
               format="MMM DD, YYYY"
@@ -109,66 +101,65 @@ const ServiceClassInfo = ({
             >
               {creationTimestamp}
             </Moment>
-          </TileContent>
+          </Tile.Content>
         </Tile>
-        <Tile>
-          {documentationUrl && (
-            <TileContent title={serviceClassTileTitles.documentation}>
+        {documentationUrl && (
+          <Tile>
+            <Tile.Content title={serviceClassTileTitles.documentation}>
               <ExternalLink href={documentationUrl} target="_blank">
                 Link
               </ExternalLink>
-            </TileContent>
-          )}
-        </Tile>
-        <Tile>
-          {supportUrl && (
-            <TileContent title={serviceClassTileTitles.support}>
+            </Tile.Content>
+          </Tile>
+        )}
+        {supportUrl && (
+          <Tile>
+            <Tile.Content title={serviceClassTileTitles.support}>
               <ExternalLink href={supportUrl} target="_blank">
                 Link
               </ExternalLink>
-            </TileContent>
-          )}
-        </Tile>
+            </Tile.Content>
+          </Tile>
+        )}
         {isProvisionedOnlyOnce && (
-          <Tile rowSpan={2} className="fd-has-padding-left-none">
+          <Tile
+            className="fd-has-grid-row-span-2 fd-has-padding-left-none"
+            style={{ gridColumn: columnCount }}
+          >
             <ProvisionOnlyOnceInfo />
           </Tile>
         )}
-        <Tile columnSpan={4}>
-          <TileContent title={serviceClassTileTitles.description}>
+        <Tile className="fd-has-grid-column-span-4">
+          <Tile.Content title={serviceClassTileTitles.description}>
             <p data-e2e-id="service-description">{description}</p>
-          </TileContent>
+          </Tile.Content>
         </Tile>
         {modifiedTags && modifiedTags.length > 0 && (
           <Tile
-            columnSpan={
-              computeNumberOfColumns(isProvisionedOnlyOnce) -
-              (planSelector ? 2 : 0)
-            }
+            style={{
+              gridColumn: `span ${columnCount - (planSelector ? 2 : 0)}`,
+            }}
           >
-            <TileContent title={serviceClassTileTitles.tags}>
+            <Tile.Content title={serviceClassTileTitles.tags}>
               <LabelsWrapper data-e2e-id="service-labels">
                 {modifiedTags.sort(sortTags).map(tag => (
                   <LabelWrapper key={`${tag.type}-${tag.name}`}>
-                    <Tooltip
-                      content={tagsDescription[tag.type]}
-                      minWidth={tooltipWidth[tag.type]}
-                    >
+                    <Tooltip title={tagsDescription[tag.type]}>
                       <Label cursorType="help" data-e2e-id="service-label">
-                        {tag.name}
+                        {tag.name}lolo
                       </Label>
                     </Tooltip>
                   </LabelWrapper>
                 ))}
               </LabelsWrapper>
-            </TileContent>
+            </Tile.Content>
           </Tile>
         )}
         {planSelector && (
-          <Tile columnSpan="2">
-            <TileContent title={serviceClassTileTitles.plans}>
+          <Tile className="fd-has-grid-column-span-2">
+            <Tile.Content title={serviceClassTileTitles.plans}>
               {planSelector}
-            </TileContent>
+            </Tile.Content>
           </Tile>
         )}
       </ServiceClassHeaderTileGrid>

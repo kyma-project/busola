@@ -2,13 +2,8 @@ import React, { useState } from 'react';
 import LuigiClient from '@kyma-project/luigi-client';
 import { useQuery } from '@apollo/react-hooks';
 
-import {
-  Spinner,
-  Tab,
-  Tabs,
-  Tooltip,
-  instancesTabUtils,
-} from '@kyma-project/react-components';
+import { instancesTabUtils } from '@kyma-project/react-components';
+import { Tab, Tabs, Spinner, Tooltip } from 'react-shared';
 import { Identifier } from 'fundamental-react';
 
 import { getAllServiceClasses } from './queries';
@@ -32,9 +27,9 @@ const determineSelectedTab = () => {
   return instancesTabUtils.convertTabNameToIndex(selectedTabName);
 };
 
-const handleTabChange = ({ defaultActiveTabIndex }) => {
+const handleTabChange = activeTabIndex => {
   const selectedTabName = instancesTabUtils.convertIndexToTabName(
-    defaultActiveTabIndex,
+    activeTabIndex,
   );
 
   LuigiClient.linkManager()
@@ -96,13 +91,9 @@ export default function ServiceClassList() {
       <Tabs
         defaultActiveTabIndex={determineSelectedTab()}
         callback={handleTabChange}
-        borderType="none"
-        noMargin
-        customStyles
-        hideSeparator
+        className="header-styles"
       >
         <Tab
-          noMargin
           status={status(
             determineDisplayedServiceClasses(
               serviceClasses,
@@ -113,12 +104,7 @@ export default function ServiceClassList() {
             'services-status',
           )}
           title={
-            <Tooltip
-              content={serviceClassConstants.servicesTooltipDescription}
-              minWidth="140px"
-              showTooltipTimeout={750}
-              key="catalog-services-tab-tooltip"
-            >
+            <Tooltip title={serviceClassConstants.servicesTooltipDescription}>
               {serviceClassConstants.services}
             </Tooltip>
           }
@@ -143,7 +129,6 @@ export default function ServiceClassList() {
           </>
         </Tab>
         <Tab
-          noMargin
           status={status(
             determineDisplayedServiceClasses(
               serviceClasses,
@@ -154,12 +139,7 @@ export default function ServiceClassList() {
             'addons-status',
           )}
           title={
-            <Tooltip
-              content={serviceClassConstants.addonsTooltipDescription}
-              minWidth="100px"
-              showTooltipTimeout={750}
-              key="catalog-addons-tab-tooltip"
-            >
+            <Tooltip title={serviceClassConstants.addonsTooltipDescription}>
               {serviceClassConstants.addons}
             </Tooltip>
           }

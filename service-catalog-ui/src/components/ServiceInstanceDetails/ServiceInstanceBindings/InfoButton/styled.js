@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
-export const InfoButtonWrapper = styled.button`
+export const InfoButtonWrapper = styled.span`
+  line-height: initial;
   text-decoration: none;
   cursor: pointer;
   outline: 0;
@@ -13,5 +14,5 @@ export const InfoButtonWrapper = styled.button`
   padding: 0;
   position: relative;
   top: 2px;
-  margin-left: 20px;
+  margin-left: 4px;
 `;

@@ -2,11 +2,10 @@ import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { mount } from 'enzyme';
 import { allServiceClassesQuery } from 'testing/catalog/queriesMocks';
-import { Spinner, Tab } from '@kyma-project/react-components';
+import { Spinner } from 'react-shared';
 import ServiceClassList from '../ServiceClassList';
 import { componentUpdate, mockTestNamespace } from 'testing';
-import { Search } from '@kyma-project/react-components';
-import { Identifier } from 'fundamental-react';
+import { FormInput, Identifier } from 'fundamental-react';
 
 const mockNavigate = jest.fn();
 
@@ -59,7 +58,7 @@ describe('ServiceClassList UI', () => {
   it('Add-Ons tab has proper counter', async () => {
     await componentUpdate(component);
 
-    const addOnsTab = component.find(Tab).at(addonsTabIndex);
+    const addOnsTab = component.find('[role="tab"]').at(addonsTabIndex);
     expect(addOnsTab.find(Identifier).text()).toEqual(
       allServiceClassesQuery.result.data.serviceClasses.length.toString(),
     );
@@ -69,7 +68,7 @@ describe('ServiceClassList UI', () => {
 
   it('Services tab has proper counter', async () => {
     await componentUpdate(component);
-    const servicesTab = component.find(Tab).at(servicesTabIndex);
+    const servicesTab = component.find('[role="tab"]').at(servicesTabIndex);
     expect(servicesTab.find(Identifier).text()).toEqual(
       allServiceClassesQuery.result.data.clusterServiceClasses.length.toString(),
     );
@@ -80,7 +79,10 @@ describe('ServiceClassList UI', () => {
   it('Displays classes with their corresponding names on the add-ons/services list', async () => {
     await componentUpdate(component);
 
-    const addonsCards = component.find('.fd-tile__title');
+    const addonsCards = component
+      .find('[role="tabpanel"]')
+      .at(addonsTabIndex)
+      .find('.fd-tile__title');
 
     expect(addonsCards.exists()).toBe(true);
     expect(addonsCards).toHaveLength(
@@ -94,7 +96,7 @@ describe('ServiceClassList UI', () => {
     );
 
     component
-      .find(Tab)
+      .find('[role="tab"]')
       .at(servicesTabIndex)
       .find('div')
       .first()
@@ -102,7 +104,10 @@ describe('ServiceClassList UI', () => {
 
     await componentUpdate(component);
 
-    const servicesCards = component.find('.fd-tile__title');
+    const servicesCards = component
+      .find('[role="tabpanel"]')
+      .at(servicesTabIndex)
+      .find('.fd-tile__title');
 
     expect(servicesCards.exists()).toBe(true);
     expect(servicesCards).toHaveLength(
@@ -126,6 +131,8 @@ describe('ServiceClassList UI', () => {
     await componentUpdate(component);
 
     const goToDetails = component
+      .find('[role="tabpanel"]')
+      .at(addonsTabIndex)
       .find('[data-e2e-id="go-to-details"]>div')
       .at(0);
 
@@ -151,7 +158,7 @@ describe('Search classes by name', () => {
 
   it('Set search text gives no error', async () => {
     await componentUpdate(component);
-    const search = component.find(Search).find('input');
+    const search = component.find(FormInput).find('input');
     expect(search.exists()).toBe(true);
     search.simulate('change', { target: { value: 'displayName1' } });
 
@@ -169,13 +176,13 @@ describe('Search classes by other attributes', () => {
   it('By provider', async () => {
     const searchedClass = allServiceClassesQuery.result.data.serviceClasses[0];
     await componentUpdate(component);
-    const search = component.find(Search).find('input');
+    const search = component.find(FormInput).find('input');
     search.simulate('change', {
       target: { value: searchedClass.providerDisplayName },
     });
     await componentUpdate(component);
 
-    const addOnsTab = component.find(Tab).at(addonsTabIndex);
+    const addOnsTab = component.find('[role="tab"]').at(addonsTabIndex);
     expect(addOnsTab.find(Identifier).text()).toEqual('1');
 
     expectKnownConsoleWarnings();
@@ -185,11 +192,11 @@ describe('Search classes by other attributes', () => {
     const searchedClass = allServiceClassesQuery.result.data.serviceClasses[0];
 
     await componentUpdate(component);
-    const search = component.find(Search).find('input');
+    const search = component.find(FormInput).find('input');
     search.simulate('change', { target: { value: searchedClass.description } });
     await componentUpdate(component);
 
-    const addOnsTab = component.find(Tab).at(addonsTabIndex);
+    const addOnsTab = component.find('[role="tab"]').at(addonsTabIndex);
     expect(addOnsTab.find(Identifier).text()).toEqual('1');
 
     expectKnownConsoleWarnings();

@@ -4,12 +4,9 @@ import { useMutation, useQuery } from '@apollo/react-hooks';
 import {
   instancesTabUtils,
   NotificationMessage,
-  Spinner,
-  Tab,
-  Tabs,
   ThemeWrapper,
-  Tooltip,
 } from '@kyma-project/react-components';
+import { Tab, Tabs, Spinner, Tooltip } from 'react-shared';
 import { Identifier } from 'fundamental-react';
 
 import { getAllServiceInstances } from 'helpers/instancesGQL/queries';
@@ -38,9 +35,9 @@ const determineSelectedTab = () => {
   return instancesTabUtils.convertTabNameToIndex(selectedTabName);
 };
 
-const handleTabChange = ({ defaultActiveTabIndex }) => {
+const handleTabChange = activeTabIndex => {
   const selectedTabName = instancesTabUtils.convertIndexToTabName(
-    defaultActiveTabIndex,
+    activeTabIndex,
   );
 
   LuigiClient.linkManager()
@@ -161,14 +158,9 @@ export default function ServiceInstancesList() {
       <Tabs
         defaultActiveTabIndex={determineSelectedTab()}
         callback={handleTabChange}
-        borderType="none"
-        noMargin
-        customStyles={`background-color: #fff;
-          padding: 0 15px;`}
-        hideSeparator
+        className="header-styles"
       >
         <Tab
-          noMargin
           status={status(
             determineDisplayedInstances(
               serviceInstances,
@@ -180,10 +172,7 @@ export default function ServiceInstancesList() {
           )}
           title={
             <Tooltip
-              content={serviceInstanceConstants.servicesTooltipDescription}
-              minWidth="140px"
-              showTooltipTimeout={750}
-              key="instances-services-tab-tooltip"
+              title={serviceInstanceConstants.servicesTooltipDescription}
             >
               {serviceInstanceConstants.services}
             </Tooltip>
@@ -203,7 +192,6 @@ export default function ServiceInstancesList() {
           </ServiceInstancesWrapper>
         </Tab>
         <Tab
-          noMargin
           status={status(
             determineDisplayedInstances(
               serviceInstances,
@@ -214,12 +202,7 @@ export default function ServiceInstancesList() {
             'addons-status',
           )}
           title={
-            <Tooltip
-              content={serviceInstanceConstants.addonsTooltipDescription}
-              minWidth="100px"
-              showTooltipTimeout={750}
-              key="instances-addons-tab-tooltip"
-            >
+            <Tooltip title={serviceInstanceConstants.addonsTooltipDescription}>
               {serviceInstanceConstants.addons}
             </Tooltip>
           }
