@@ -195,7 +195,7 @@ export default function ApplicationList() {
 
   return (
     <article className="application-list">
-      <PageHeader title="Applications" />
+      <PageHeader aria-label="title" title="Applications" />
       <GenericList
         actionsStandaloneItems={1}
         actions={actions}

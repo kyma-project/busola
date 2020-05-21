@@ -123,7 +123,7 @@ export default function NamespaceDetailsCard({
       onClick={() => navigateToNamespaceDetails(name)}
     >
       <Panel.Header className="fd-has-color-text-1 fd-has-type-1">
-        <Panel.Head title={name} />
+        <Panel.Head aria-label="namespace-name" title={name} />
         <span>
           {isSystemNamespace && (
             <Badge className="fd-has-margin-left-tiny">System</Badge>

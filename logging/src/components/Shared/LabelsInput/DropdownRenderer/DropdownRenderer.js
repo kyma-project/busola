@@ -131,6 +131,7 @@ function LogLabelsSubList({ logLabel, selectedLabels, chooseLabel }) {
             <span
               className="fd-mega-menu__sublink cursor-pointer"
               onClick={() => chooseLabel(formattedLabel)}
+              aria-label="sublink"
             >
               {name}
               {(isSelected && <Icon glyph="accept" size="m" />) || null}
@@ -157,6 +158,7 @@ function LogLabelCategoriesList({
             aria-controls={l.name}
             aria-haspopup="true"
             onClick={() => switchState(l.name)}
+            aria-label="link"
           >
             {l.name}
           </span>

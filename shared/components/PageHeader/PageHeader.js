@@ -58,7 +58,11 @@ export const PageHeader = ({
           </section>
         ) : null}
 
-        <Panel.Head title={title} description={description} />
+        <Panel.Head
+          title={title}
+          description={description}
+          aria-label="title"
+        />
         <section className="column-wrapper"> {children}</section>
       </section>
 

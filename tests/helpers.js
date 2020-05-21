@@ -1,5 +1,6 @@
 import config from './config';
 import { Selector, Role } from 'testcafe';
+import chalk from 'chalk';
 
 export const testIf = (condition, testName, testToRun) => {
   if (condition) {
@@ -27,9 +28,7 @@ export const findActiveFrame = async t => {
     t,
     3,
     async t => {
-      const iframe = Selector('iframe', {
-        visibilityCheck: true,
-      });
+      const iframe = Selector('iframe').filterVisible();
       await t.switchToIframe(iframe);
       await t.expect(Selector('body')()).ok();
     },
@@ -54,6 +53,17 @@ export const adminUser = Role(
       .typeText('#login', config.login)
       .typeText('#password', config.password)
       .click('#submit-login');
+
+    Selector('#login-error')()
+      .then(element => {
+        console.error(
+          chalk.redBright.bgHex('#bfff00')(
+            `Login failed with message: ${chalk.bold(element.innerText)}`,
+          ),
+        );
+        process.exit(1);
+      })
+      .catch(() => {});
 
     await Selector('#app')();
   },
