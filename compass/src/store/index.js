@@ -6,12 +6,9 @@ import { setContext } from 'apollo-link-context';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { onError } from 'apollo-link-error';
 import { IntrospectionFragmentMatcher } from 'apollo-cache-inmemory';
-import { getConfigValue } from './getConfigValue';
 
 import resolvers from './resolvers';
 import defaults from './defaults';
-
-const COMPASS_GRAPHQL_ENDPOINT = getConfigValue('compassApiUrl');
 
 const fragmentMatcher = new IntrospectionFragmentMatcher({
   introspectionQueryResultData: {
@@ -24,14 +21,14 @@ function handleUnauthorized() {
   window.parent.postMessage('unauthorized', '*');
 }
 
-export function createApolloClient(tenant, token) {
+export function createApolloClient(apiUrl, tenant, token) {
   const httpLink = createHttpLink({
-    uri: COMPASS_GRAPHQL_ENDPOINT,
+    uri: apiUrl,
   });
   const authLink = setContext((_, { headers }) => {
     const headersVal = {
       ...headers,
-      authorization: token,
+      authorization: `Bearer ${token}`,
     };
     if (tenant && tenant !== '') {
       headersVal.tenant = tenant;
@@ -69,7 +66,7 @@ export function createApolloClient(tenant, token) {
   });
 
   const client = new ApolloClient({
-    uri: COMPASS_GRAPHQL_ENDPOINT,
+    uri: apiUrl,
     cache,
     link: ApolloLink.from([stateLink, errorLink, authHttpLink]),
     connectToDevTools: true,

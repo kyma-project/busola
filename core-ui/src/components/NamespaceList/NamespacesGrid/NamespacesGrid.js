@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import NamespaceDetailsCard from './NamespaceDetailsCard/NamespaceDetailsCard';
 import './NamespacesGrid.scss';
 import getPodsCounts from './getPodsCounts';
-import { backendModuleExists } from 'commons/helpers';
+import { useModuleEnabled } from 'react-shared';
 
 NamespacesGrid.propTypes = {
   namespaces: PropTypes.arrayOf(
@@ -21,6 +21,7 @@ NamespacesGrid.propTypes = {
 };
 
 export default function NamespacesGrid({ namespaces }) {
+  const applicationEnabled = useModuleEnabled('application');
   return (
     <ul className="grid-wrapper fd-has-margin-medium">
       {namespaces.map(namespace => {
@@ -41,9 +42,7 @@ export default function NamespacesGrid({ namespaces }) {
               healthyPodsCount={healthyPodsCount}
               status={status}
               isSystemNamespace={isSystemNamespace}
-              applications={
-                backendModuleExists('application') ? applications : null
-              }
+              applications={applicationEnabled ? applications : null}
             />
           </li>
         );

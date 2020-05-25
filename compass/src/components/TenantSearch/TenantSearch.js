@@ -3,7 +3,7 @@ import LuigiClient from '@luigi-project/client';
 
 import fetchTenants from './fetchTenants';
 import { ListGroup, Panel } from 'fundamental-react';
-import { useApplicationContext } from 'react-shared';
+import { useMicrofrontendContext } from 'react-shared';
 import { getAlternativePath } from '../../config/luigi-config/helpers/getAlternativePath';
 import './TenantSearch.scss';
 
@@ -77,7 +77,7 @@ export function TenantSearch({ parentPath, token, _tenants }) {
 }
 
 export default function TenantSearchWrapper() {
-  const { tenants, idToken } = useApplicationContext();
+  const { tenants, idToken } = useMicrofrontendContext();
 
   return (
     <TenantSearch

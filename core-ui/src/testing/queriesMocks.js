@@ -3,13 +3,13 @@ import { DELETE_LAMBDA, CREATE_API_RULE } from '../gql/mutations';
 import { lambda1, lambda2, deletedLambda1 } from './lambdaMocks';
 import { service1, service2 } from './servicesMocks';
 
-import builder from '../commons/builder';
+export const mockNamespace = 'test-namespace';
 
 export const allLambdasQuery = {
   request: {
     query: GET_LAMBDAS,
     variables: {
-      namespace: builder.getCurrentEnvironmentId(),
+      namespace: mockNamespace,
     },
   },
   result: {
@@ -23,7 +23,7 @@ export const deleteLambdaMutation = {
   request: {
     query: DELETE_LAMBDA,
     variables: {
-      namespace: builder.getCurrentEnvironmentId(),
+      namespace: mockNamespace,
       name: 'demo',
     },
   },

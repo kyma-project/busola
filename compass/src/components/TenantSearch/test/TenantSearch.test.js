@@ -19,7 +19,7 @@ jest.mock('@luigi-project/client', () => ({
 }));
 
 jest.mock('react-shared', () => ({
-  useApplicationContext: () => ({ tenants: mockedTenants }),
+  useMicrofrontendContext: () => ({ tenants: mockedTenants }),
 }));
 
 describe('TenantSearch', () => {

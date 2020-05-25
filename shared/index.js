@@ -24,9 +24,11 @@ export { Tab } from './components/Tabs/Tab.js';
 
 export * from './forms';
 export * from './hooks';
-export * from './contexts/ApplicationContext';
-export * from './utils/apollo';
+export * from './contexts/MicrofrontendContext';
+export * from './contexts/ConfigContext';
 export * from './contexts/NotificationContext';
+export * from './contexts/Microfrontend';
+export * from './utils/apollo';
 export * from './components/GenericList/actionHandlers/simpleDelete';
 export * from './components/CredentialForms';
 export * from './constants/constants';

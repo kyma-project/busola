@@ -1,20 +1,19 @@
 import React from 'react';
 import equal from 'deep-equal';
 import PropTypes from 'prop-types';
-import { Modal } from 'react-shared';
+import { Modal, ConfigContext } from 'react-shared';
 import { Input } from '@kyma-project/react-components';
 import LuigiClient from '@luigi-project/client';
 
-import { getConfigValue } from '../../../store/getConfigValue';
 import MultiChoiceList from '../../Shared/MultiChoiceList/MultiChoiceList.component';
 
 const DEFAULT_SCENARIO_LABEL = 'DEFAULT';
-const AUTOMATIC_DEFAULT_SCENARIO =
-  getConfigValue('compassAutomaticDefaultScenario') === 'true';
 
 class CreateApplicationModal extends React.Component {
-  constructor(props) {
-    super(props);
+  static contextType = ConfigContext;
+
+  constructor(props, context) {
+    super(props, context);
     this.timer = null;
     this.state = this.getInitialState();
   }
@@ -29,6 +28,9 @@ class CreateApplicationModal extends React.Component {
   };
 
   getInitialState = () => {
+    const AUTOMATIC_DEFAULT_SCENARIO = this.context.fromConfig(
+      'compassAutomaticDefaultScenario',
+    );
     return {
       formData: {
         name: '',

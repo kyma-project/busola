@@ -10,6 +10,7 @@ import NamespacesGrid from './NamespacesGrid/NamespacesGrid';
 import NamespacesListHeader from './NamespacesListHeader/NamespacesListHeader';
 import * as storage from './storage';
 import { handleNamespaceWsEvent } from './wsHandler';
+import { useMicrofrontendContext } from 'react-shared';
 
 function sortByName(array) {
   array.sort((a, b) => {
@@ -22,6 +23,7 @@ function sortByName(array) {
 export default function NamespaceList() {
   const [searchPhrase, setSearchPhrase] = useState('');
   const [labelFilters, setLabelFilters] = useState([]);
+  const { showSystemNamespaces } = useMicrofrontendContext();
 
   const createFilters = namespaces => {
     const storedFilterLabels = storage.readStoredFilterLabels();
@@ -103,7 +105,7 @@ export default function NamespaceList() {
 
   const { data, error, loading, subscribeToMore } = useQuery(GET_NAMESPACES, {
     variables: {
-      showSystemNamespaces: storage.shouldShowSystemNamespaces(),
+      showSystemNamespaces,
       withInactiveStatus: true,
     },
     fetchPolicy: 'network-only',
@@ -112,7 +114,7 @@ export default function NamespaceList() {
   useEffect(() => {
     return subscribeToMore({
       variables: {
-        showSystemNamespaces: storage.shouldShowSystemNamespaces(),
+        showSystemNamespaces,
         withInactiveStatus: true,
       },
       document: NAMESPACES_EVENT_SUBSCRIPTION,
@@ -127,7 +129,7 @@ export default function NamespaceList() {
         return handleNamespaceWsEvent(namespaceEvent, prev);
       },
     });
-  }, [subscribeToMore]);
+  }, [subscribeToMore, showSystemNamespaces]);
 
   useEffect(() => {
     if (data && data.namespaces) {

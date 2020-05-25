@@ -1,7 +1,4 @@
-import {
-  LOCAL_STORAGE_SHOW_SYSTEM_NAMESPACES,
-  LOCAL_STORAGE_NAMESPACE_FILTERS,
-} from './../../shared/constants';
+import { LOCAL_STORAGE_NAMESPACE_FILTERS } from './../../shared/constants';
 
 export function readStoredFilterLabels() {
   try {
@@ -17,8 +14,4 @@ export function saveStoredFilterLabels(filters) {
     LOCAL_STORAGE_NAMESPACE_FILTERS,
     JSON.stringify(filters),
   );
-}
-
-export function shouldShowSystemNamespaces() {
-  return localStorage.getItem(LOCAL_STORAGE_SHOW_SYSTEM_NAMESPACES) === 'true';
 }

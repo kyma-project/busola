@@ -1,6 +1,11 @@
 import React from 'react';
 import { GET_API_RULE } from 'gql/queries';
-import { render, waitForDomChange, queryByText } from '@testing-library/react';
+import {
+  render,
+  waitForDomChange,
+  queryByText,
+  wait,
+} from '@testing-library/react';
 import ApiRuleDetails from '../ApiRuleDetails';
 import { MockedProvider } from '@apollo/react-testing';
 import { DELETE_API_RULE } from 'gql/mutations';
@@ -228,8 +233,10 @@ describe('ApiRuleDetails', () => {
 
     await waitForDomChange(container);
 
-    expect(mockShowConfirmationModal).toHaveBeenCalled();
-    expect(gqlDeleteRequest.result).toHaveBeenCalled();
-    expect(mockNavigate).toHaveBeenCalledWith('');
+    await wait(() => {
+      expect(mockShowConfirmationModal).toHaveBeenCalled();
+      expect(gqlDeleteRequest.result).toHaveBeenCalled();
+      expect(mockNavigate).toHaveBeenCalledWith('');
+    });
   });
 });

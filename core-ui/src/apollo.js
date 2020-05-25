@@ -6,12 +6,17 @@ import {
 import { onError } from 'apollo-link-error';
 import { ApolloLink } from 'apollo-link';
 import { split } from 'apollo-link';
-import { getMainDefinition } from 'apollo-utilities';
-import { getApiUrl as getURL } from '@kyma-project/common';
-import builder from './commons/builder';
+
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 import { createHttpLink } from 'apollo-link-http';
 import { setContext } from 'apollo-link-context';
+import React, { useEffect, useState } from 'react';
+import { ApolloProvider } from 'react-apollo';
+import {
+  useMicrofrontendContext,
+  isSubscriptionOperation,
+  useConfig,
+} from 'react-shared';
 
 const errorLink = onError(
   ({ operation, response, graphQLErrors, networkError }) => {
@@ -29,7 +34,21 @@ const errorLink = onError(
   },
 );
 
-export function createCompassApolloClient() {
+const modifyHeaders = modifiers =>
+  setContext((_, { oldHeaders }) => ({
+    headers: modifiers.reduce((acc, m) => m(acc), oldHeaders),
+  }));
+
+const setHeader = (header, value) => headers => ({
+  ...headers,
+  [header]: value,
+});
+
+const setAuthorization = token => setHeader('authorization', `bearer ${token}`);
+
+const setTenant = tenant => setHeader('tenant', tenant ? tenant : null);
+
+export function createCompassApolloClient(fromConfig, token) {
   const fragmentMatcher = new IntrospectionFragmentMatcher({
     introspectionQueryResultData: {
       __schema: {
@@ -38,25 +57,14 @@ export function createCompassApolloClient() {
     },
   });
 
-  const graphqlApiUrl = getURL('compassApiUrl');
-  const tenant = getURL('compassDefaultTenant');
+  const graphqlApiUrl = fromConfig('compassApiUrl');
+  const tenant = fromConfig('compassDefaultTenant');
 
   const httpLink = createHttpLink({
     uri: graphqlApiUrl,
   });
 
-  const authLink = setContext((_, { oldHeaders }) => {
-    const newHeaders = {
-      ...oldHeaders,
-      authorization: builder.getBearerToken() || null,
-    };
-    if (tenant && tenant !== '') {
-      newHeaders.tenant = tenant;
-    }
-    return {
-      headers: newHeaders,
-    };
-  });
+  const authLink = modifyHeaders([setAuthorization(token), setTenant(tenant)]);
   const authHttpLink = authLink.concat(httpLink);
 
   return new ApolloClient({
@@ -69,8 +77,8 @@ export function createCompassApolloClient() {
   });
 }
 
-export function createKymaApolloClient() {
-  const graphqlApiUrl = getURL(
+export function createKymaApolloClient(fromConfig, token) {
+  const graphqlApiUrl = fromConfig(
     process.env.REACT_APP_LOCAL_API ? 'graphqlApiUrlLocal' : 'graphqlApiUrl',
   );
 
@@ -78,35 +86,18 @@ export function createKymaApolloClient() {
     uri: graphqlApiUrl,
   });
 
-  const authLink = setContext((_, { oldHeaders }) => {
-    const newHeaders = {
-      ...oldHeaders,
-      authorization: builder.getBearerToken() || null,
-    };
-    return {
-      headers: newHeaders,
-    };
-  });
+  const authLink = modifyHeaders([setAuthorization(token)]);
   const authHttpLink = authLink.concat(httpLink);
 
   const wsLink = new WebSocketLink({
-    uri: getURL('subscriptionsApiUrl'),
+    token,
+    uri: fromConfig('subscriptionsApiUrl'),
     options: {
       reconnect: true,
     },
   });
 
-  const link = split(
-    ({ query }) => {
-      const definition = getMainDefinition(query);
-      return (
-        definition.kind === 'OperationDefinition' &&
-        definition.operation === 'subscription'
-      );
-    },
-    wsLink,
-    authHttpLink,
-  );
+  const link = split(isSubscriptionOperation, wsLink, authHttpLink);
 
   return new ApolloClient({
     uri: graphqlApiUrl,
@@ -117,6 +108,24 @@ export function createKymaApolloClient() {
   });
 }
 
+export const ApolloClientProvider = ({ children, createClient, provider }) => {
+  const context = useMicrofrontendContext();
+  const { fromConfig } = useConfig();
+  const [client, setClient] = useState(null);
+
+  useEffect(() => {
+    if (!context.idToken) {
+      return;
+    }
+    const client = createClient(fromConfig, context.idToken);
+    setClient(client);
+    return () => client.stop();
+  }, [context.idToken, createClient, setClient, fromConfig]);
+
+  const Provider = provider ? provider : ApolloProvider;
+  return client && <Provider client={client}>{children}</Provider>;
+};
+
 class WebSocketLink extends ApolloLink {
   constructor(paramsOrClient) {
     super();
@@ -124,19 +133,11 @@ class WebSocketLink extends ApolloLink {
     if (paramsOrClient instanceof SubscriptionClient) {
       this.subscriptionClient = paramsOrClient;
     } else {
-      const bearerToken = builder.getBearerToken();
-      const protocols = ['graphql-ws'];
-
-      const token = bearerToken ? bearerToken.split(' ')[1] : null;
-      if (token) {
-        protocols.push(token);
-      }
-
       this.subscriptionClient = new SubscriptionClient(
         paramsOrClient.uri,
         paramsOrClient.options,
         null,
-        protocols,
+        ['graphql-ws', paramsOrClient.token],
       );
     }
   }

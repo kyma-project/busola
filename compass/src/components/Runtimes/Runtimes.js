@@ -1,6 +1,6 @@
-import React, { useContext } from 'react';
+import React from 'react';
 
-import { PageHeader, StatusBadge, ApplicationContext } from 'react-shared';
+import { PageHeader, StatusBadge, useMicrofrontendContext } from 'react-shared';
 import ScenariosDisplay from './../Shared/ScenariosDisplay/ScenariosDisplay';
 
 import { GET_RUNTIMES } from './gql';
@@ -36,7 +36,7 @@ const runtimeRowRenderer = r => [
 ];
 
 const Runtimes = () => {
-  const { tenantId } = useContext(ApplicationContext);
+  const { tenantId } = useMicrofrontendContext();
 
   return (
     <>

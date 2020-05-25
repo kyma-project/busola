@@ -1,7 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import { NotificationProvider } from 'react-shared';
 import NamespaceList from '../NamespaceList/NamespaceList';
 import Lambdas from '../Lambdas/Lambdas';
 import LambdaDetailsWrapper from '../Lambdas/LambdaDetails/LambdaDetailsWrapper';
@@ -21,60 +20,58 @@ import ApiPackageDetails from 'components/ApiPackages/ApiPackageDetails/ApiPacka
 
 export default function App() {
   return (
-    <NotificationProvider>
-      <Switch>
-        <Route path="/preload" component={() => null} />
-        <Route path="/namespaces" component={NamespaceList} />
+    <Switch>
+      <Route path="/preload" component={() => null} />
+      <Route path="/namespaces" component={NamespaceList} />
 
-        <Route path="/lambdas" exact component={Lambdas} />
-        <Route path="/lambda/:name" component={RoutedLambdaDetails} />
+      <Route path="/lambdas" exact component={Lambdas} />
+      <Route path="/lambda/:name" component={RoutedLambdaDetails} />
 
-        <Route exact path="/applications" component={ApplicationList} />
-        <Route
-          exact
-          path="/application/:appId"
-          component={RoutedApplicationDetails}
-        />
-        <Route
-          path="/application/:applicationId/apiPackage/:apiPackageId"
-          exact
-          render={RoutedApiPackageDetails}
-        />
-        <Route
-          exact
-          path="/application/:appId/apiPackage/:apiPackageId/api/:apiId"
-          component={RoutedApiDetails}
-        />
-        <Route
-          exact
-          path="/application/:appId/apiPackage/:apiPackageId/api/:apiId/edit"
-          component={RoutedEditApi}
-        />
-        <Route
-          exact
-          path="/application/:appId/apiPackage/:apiPackageId/eventApi/:eventApiId"
-          component={RoutedEventApiDetails}
-        />
-        <Route
-          exact
-          path="/application/:appId/apiPackage/:apiPackageId/eventApi/:eventApiId/edit"
-          component={RoutedEditEventApi}
-        />
+      <Route exact path="/applications" component={ApplicationList} />
+      <Route
+        exact
+        path="/application/:appId"
+        component={RoutedApplicationDetails}
+      />
+      <Route
+        path="/application/:applicationId/apiPackage/:apiPackageId"
+        exact
+        render={RoutedApiPackageDetails}
+      />
+      <Route
+        exact
+        path="/application/:appId/apiPackage/:apiPackageId/api/:apiId"
+        component={RoutedApiDetails}
+      />
+      <Route
+        exact
+        path="/application/:appId/apiPackage/:apiPackageId/api/:apiId/edit"
+        component={RoutedEditApi}
+      />
+      <Route
+        exact
+        path="/application/:appId/apiPackage/:apiPackageId/eventApi/:eventApiId"
+        component={RoutedEventApiDetails}
+      />
+      <Route
+        exact
+        path="/application/:appId/apiPackage/:apiPackageId/eventApi/:eventApiId/edit"
+        component={RoutedEditEventApi}
+      />
 
-        <Route exact path="/apirules" component={ApiRules} />
-        <Route exact path="/apirules/create" component={CreateApiRule} />
-        <Route
-          exact
-          path="/apirules/details/:apiName"
-          component={RoutedApiRuleDetails}
-        />
-        <Route
-          exact
-          path="/apirules/edit/:apiName"
-          component={RoutedEditApiRule}
-        />
-      </Switch>
-    </NotificationProvider>
+      <Route exact path="/apirules" component={ApiRules} />
+      <Route exact path="/apirules/create" component={CreateApiRule} />
+      <Route
+        exact
+        path="/apirules/details/:apiName"
+        component={RoutedApiRuleDetails}
+      />
+      <Route
+        exact
+        path="/apirules/edit/:apiName"
+        component={RoutedEditApiRule}
+      />
+    </Switch>
   );
 }
 

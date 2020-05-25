@@ -2,6 +2,7 @@ import { render, wait } from '@testing-library/react';
 import Applications from './Applications.container';
 import { MockedProvider } from '@apollo/react-testing';
 import React from 'react';
+import { ConfigContext } from 'react-shared';
 import { GET_APPLICATIONS } from './gql';
 
 const mockApplication1 = {
@@ -23,17 +24,15 @@ const mocks = [
   },
 ];
 
-jest.mock('../../store/getConfigValue', () => ({
-  getConfigValue: item => true,
-}));
-
 describe('Applications', () => {
   let component;
   beforeEach(() => {
     component = render(
-      <MockedProvider addTypename={false} mocks={mocks}>
-        <Applications />
-      </MockedProvider>,
+      <ConfigContext.Provider value={{ fromConfig: () => true }}>
+        <MockedProvider addTypename={false} mocks={mocks}>
+          <Applications />
+        </MockedProvider>
+      </ConfigContext.Provider>,
     );
   });
 
