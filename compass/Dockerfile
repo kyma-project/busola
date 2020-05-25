@@ -34,6 +34,7 @@ ARG app_name=compass
 
 COPY ./${app_name}/nginx.conf /etc/nginx/nginx.conf
 COPY --from=builder /app/${app_name}/build var/public
+COPY --from=builder /app/${app_name}/public-luigi var/public-luigi
 COPY --from=builder /app/${app_name}/licenses/ /app/licenses/
 
 RUN touch /var/run/nginx.pid && \
