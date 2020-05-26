@@ -1,7 +1,24 @@
 import { config } from '../config';
+import { getToken } from './navigation-helpers';
+import { saveAs } from 'file-saver';
 
 export const coreUIViewGroupName = '_core_ui_';
 export const consoleViewGroupName = '_console_';
+
+function downloadKubeconfig() {
+  const kubeconfigGeneratorUrl = `https://configurations-generator.${config.domain}/kube-config`;
+  const authHeader = { "Authorization": `Bearer ${getToken()}` };
+
+  fetch(kubeconfigGeneratorUrl, { headers: authHeader })
+    .then(res => res.blob())
+    .then(config => saveAs(config, 'kubeconfig.yml'))
+    .catch(err => {
+      alert('Cannot download kubeconfig.');
+      console.warn(err);
+    });
+
+  return false; // cancel Luigi navigation
+}
 
 export function getStaticChildrenNodesForNamespace(){
   return [
@@ -189,18 +206,23 @@ export function getStaticRootNodes(namespaceChildrenNodesResolver){
       hideFromNav: true
     },
     {
-      pathSegment: 'settings',
+      pathSegment: 'preferences',
       navigationContext: 'settings',
-      label: 'General Settings',
-      category: { label: 'Settings', icon: 'settings' },
-      viewUrl: '/consoleapp.html#/home/settings/organisation',
-      viewGroup: consoleViewGroupName
+      viewUrl: '/consoleapp.html#/home/settings/preferences',
+      viewGroup: consoleViewGroupName,
+      hideFromNav: true,
+    },
+    {
+      pathSegment: 'download-kubeconfig',
+      navigationContext: 'settings',
+      hideFromNav: true,
+      onNodeActivation: downloadKubeconfig,
     },
     {
       pathSegment: 'global-permissions',
       navigationContext: 'global-permissions',
       label: 'Global Permissions',
-      category: 'Settings',
+      category: { label: 'Administration', icon: 'settings' },
       viewUrl: '/consoleapp.html#/home/settings/globalPermissions',
       keepSelectedForChildren: true,
       viewGroup: consoleViewGroupName,
