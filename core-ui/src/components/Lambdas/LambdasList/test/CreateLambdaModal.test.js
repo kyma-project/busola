@@ -72,12 +72,6 @@ describe('CreateLambdaModal + CreateLambdaForm', () => {
       LAMBDAS_LIST.CREATE_MODAL.INPUTS.NAME.ERRORS.INVALID,
       LAMBDAS_LIST.CREATE_MODAL.INPUTS.NAME.ERRORS.DUPLICATED,
     ];
-    for (const error of errors) {
-      const tooltip = document.querySelector(
-        `[data-original-title="${error}"]`,
-      );
-      expect(tooltip).not.toBeInTheDocument();
-    }
 
     button = getByText(createButton);
     expect(button).toBeInTheDocument();
@@ -96,6 +90,9 @@ describe('CreateLambdaModal + CreateLambdaForm', () => {
     fireEvent.input(lambdaName, { target: { value: '' } });
 
     await wait(() => {
+      const error = LAMBDAS_LIST.CREATE_MODAL.INPUTS.NAME.ERRORS.EMPTY;
+      expect(getByText(error)).toBeInTheDocument();
+
       button = getByText(createButton);
       expect(button).toBeInTheDocument();
       expect(button).toBeDisabled();
@@ -114,6 +111,9 @@ describe('CreateLambdaModal + CreateLambdaForm', () => {
     fireEvent.input(lambdaName, { target: { value: '9_invalid_' } });
 
     await wait(() => {
+      const error = LAMBDAS_LIST.CREATE_MODAL.INPUTS.NAME.ERRORS.INVALID;
+      expect(getByText(error)).toBeInTheDocument();
+
       button = getByText(createButton);
       expect(button).toBeInTheDocument();
       expect(button).toBeDisabled();
@@ -136,6 +136,9 @@ describe('CreateLambdaModal + CreateLambdaForm', () => {
     fireEvent.input(lambdaName, { target: { value: 'function' } });
 
     await wait(() => {
+      const error = LAMBDAS_LIST.CREATE_MODAL.INPUTS.NAME.ERRORS.DUPLICATED;
+      expect(getByText(error)).toBeInTheDocument();
+
       button = getByText(createButton);
       expect(button).toBeInTheDocument();
       expect(button).toBeDisabled();
@@ -164,6 +167,9 @@ describe('CreateLambdaModal + CreateLambdaForm', () => {
     });
 
     await wait(() => {
+      const error = LAMBDAS_LIST.CREATE_MODAL.INPUTS.NAME.ERRORS.TOO_LONG;
+      expect(getByText(error)).toBeInTheDocument();
+
       button = getByText(createButton);
       expect(button).toBeInTheDocument();
       expect(button).toBeDisabled();

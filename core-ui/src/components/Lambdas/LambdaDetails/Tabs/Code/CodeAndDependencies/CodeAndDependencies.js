@@ -123,7 +123,7 @@ export default function CodeAndDependencies({ lambda }) {
 
   const saveButton = disabled ? (
     <Tooltip
-      title={popupMessage}
+      content={popupMessage}
       position="top"
       trigger="mouseenter"
       tippyProps={{

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Badge, InlineHelp } from 'fundamental-react';
+import { StatusBadge } from 'react-shared';
 
 export default function ApplicationStatus({ application }) {
   const status = (application && application.status) || STATUSES.NOT_INSTALLED;
@@ -7,21 +7,14 @@ export default function ApplicationStatus({ application }) {
   switch (status) {
     case STATUSES.NOT_INSTALLED:
       return (
-        <p>
-          <Badge disabled modifier="filled">
-            {STATUSES.NOT_INSTALLED}
-          </Badge>
-          <InlineHelp text="This application is not active for your Runtime. You can edit it, but you can't bind it to a Namespace." />
-        </p>
+        <StatusBadge tooltipContent="This application is not active for your Runtime. You can edit it, but you can't bind it to a Namespace.">
+          {status}
+        </StatusBadge>
       );
     case 'SERVING':
-      return (
-        <Badge type="success" modifier="filled">
-          {status}
-        </Badge>
-      );
+      return <StatusBadge type="success">{status}</StatusBadge>;
     default:
-      return <Badge modifier="filled">{status}</Badge>;
+      return <StatusBadge autoResolveType>{status}</StatusBadge>;
   }
 }
 

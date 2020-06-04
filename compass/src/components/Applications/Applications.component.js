@@ -14,6 +14,7 @@ import {
 import CreateApplicationModal from './CreateApplicationModal/CreateApplicationModal.container';
 import CreateApplicationFromTemplateModal from './CreateApplicationFromTemplateModal/CreateApplicationFromTemplateModal';
 import ScenariosDisplay from './../Shared/ScenariosDisplay/ScenariosDisplay';
+import { getBadgeTypeForStatus } from './../Shared/getBadgeTypeForStatus';
 
 class Applications extends React.Component {
   static propTypes = {
@@ -46,14 +47,11 @@ class Applications extends React.Component {
       scenarios={(application.labels && application.labels.scenarios) || []}
     />,
     <Counter>{application.packages.totalCount}</Counter>,
-
-    <StatusBadge
-      status={
-        application.status && application.status.condition
-          ? application.status.condition
-          : 'UNKNOWN'
-      }
-    />,
+    <StatusBadge type={getBadgeTypeForStatus(application.status)}>
+      {application.status && application.status.condition
+        ? application.status.condition
+        : 'UNKNOWN'}
+    </StatusBadge>,
   ];
 
   actions = [

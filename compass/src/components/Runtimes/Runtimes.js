@@ -2,6 +2,7 @@ import React from 'react';
 
 import { PageHeader, StatusBadge, useMicrofrontendContext } from 'react-shared';
 import ScenariosDisplay from './../Shared/ScenariosDisplay/ScenariosDisplay';
+import { getBadgeTypeForStatus } from './../Shared/getBadgeTypeForStatus';
 
 import { GET_RUNTIMES } from './gql';
 import InfiniteList from './InfiniteList';
@@ -29,9 +30,9 @@ const runtimeRowRenderer = r => [
   ['scenarios', <ScenariosDisplay scenarios={r.labels.scenarios || []} />],
   [
     'status',
-    <StatusBadge
-      status={r.status && r.status.condition ? r.status.condition : 'UNKNOWN'}
-    />,
+    <StatusBadge type={getBadgeTypeForStatus(r.status)}>
+      {r.status && r.status.condition ? r.status.condition : 'UNKNOWN'}
+    </StatusBadge>,
   ],
 ];
 

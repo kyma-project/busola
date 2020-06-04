@@ -99,18 +99,6 @@ describe('LambdaVariables + EditVariablesModal + EditVariablesForm', () => {
       );
       expect(userVariables).toHaveLength(2);
 
-      fireEvent.mouseEnter(userVariables[0]);
-      let tooltip = container.querySelector(
-        `[data-original-title="${ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.CUSTOM.TOOLTIP_MESSAGE}"]`,
-      );
-      expect(tooltip).toBeInTheDocument();
-
-      fireEvent.mouseEnter(userVariables[1]);
-      tooltip = container.querySelector(
-        `[data-original-title="${ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.CUSTOM.TOOLTIP_MESSAGE}"]`,
-      );
-      expect(tooltip).toBeInTheDocument();
-
       const serviceBindingVariables = getAllByText(
         ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.BINDING_USAGE.TEXT,
       );
@@ -120,18 +108,6 @@ describe('LambdaVariables + EditVariablesModal + EditVariablesForm', () => {
         ENVIRONMENT_VARIABLES_PANEL.WARNINGS.TEXT,
       );
       expect(rowsWithWarningText).toHaveLength(2);
-
-      fireEvent.mouseEnter(rowsWithWarningText[0]);
-      tooltip = container.querySelector(
-        `[data-original-title="${ENVIRONMENT_VARIABLES_PANEL.WARNINGS.VARIABLE_CAN_OVERRIDE_SBU}"]`,
-      );
-      expect(tooltip).toBeInTheDocument();
-
-      fireEvent.mouseEnter(rowsWithWarningText[1]);
-      tooltip = container.querySelector(
-        `[data-original-title="${ENVIRONMENT_VARIABLES_PANEL.WARNINGS.SBU_CAN_BE_OVERRIDE.BY_CUSTOM_ENV}"]`,
-      );
-      expect(tooltip).toBeInTheDocument();
     },
     timeout,
   );
@@ -179,11 +155,6 @@ describe('LambdaVariables + EditVariablesModal + EditVariablesForm', () => {
       );
       expect(editButton).toBeInTheDocument();
       expect(editButton).toBeDisabled();
-
-      const tooltip = document.querySelector(
-        `[data-original-title="${ENVIRONMENT_VARIABLES_PANEL.EDIT_MODAL.CONFIRM_BUTTON.POPUP_MESSAGES.NO_ENVS_DEFINED}"]`,
-      );
-      expect(tooltip).toBeInTheDocument();
     },
     timeout,
   );
@@ -210,11 +181,6 @@ describe('LambdaVariables + EditVariablesModal + EditVariablesForm', () => {
       );
       expect(editButton).toBeInTheDocument();
       expect(editButton).not.toBeDisabled();
-
-      const tooltip = document.querySelector(
-        `[data-original-title="${ENVIRONMENT_VARIABLES_PANEL.EDIT_MODAL.CONFIRM_BUTTON.POPUP_MESSAGES.NO_ENVS_DEFINED}"]`,
-      );
-      expect(tooltip).not.toBeInTheDocument();
     },
     timeout,
   );
@@ -273,11 +239,6 @@ describe('LambdaVariables + EditVariablesModal + EditVariablesForm', () => {
       );
       expect(editButton).toBeInTheDocument();
       expect(editButton).not.toBeDisabled();
-
-      const tooltip = document.querySelector(
-        `[data-original-title="${ENVIRONMENT_VARIABLES_PANEL.EDIT_MODAL.CONFIRM_BUTTON.POPUP_MESSAGES.NO_ENVS_DEFINED}"]`,
-      );
-      expect(tooltip).not.toBeInTheDocument();
     },
     timeout,
   );
@@ -314,11 +275,6 @@ describe('LambdaVariables + EditVariablesModal + EditVariablesForm', () => {
       );
       expect(editButton).toBeInTheDocument();
       expect(editButton).toBeDisabled();
-
-      const tooltip = document.querySelector(
-        `[data-original-title="${ENVIRONMENT_VARIABLES_PANEL.EDIT_MODAL.CONFIRM_BUTTON.POPUP_MESSAGES.ERROR}"]`,
-      );
-      expect(tooltip).toBeInTheDocument();
     },
     timeout,
   );
@@ -355,11 +311,6 @@ describe('LambdaVariables + EditVariablesModal + EditVariablesForm', () => {
       );
       expect(editButton).toBeInTheDocument();
       expect(editButton).toBeDisabled();
-
-      const tooltip = document.querySelector(
-        `[data-original-title="${ENVIRONMENT_VARIABLES_PANEL.EDIT_MODAL.CONFIRM_BUTTON.POPUP_MESSAGES.ERROR}"]`,
-      );
-      expect(tooltip).toBeInTheDocument();
     },
     timeout,
   );
@@ -367,7 +318,7 @@ describe('LambdaVariables + EditVariablesModal + EditVariablesForm', () => {
   it(
     'should not able to save when user types empty names - case with existing variable',
     async () => {
-      const { getByText, getAllByPlaceholderText, getAllByText } = render(
+      const { getByText, getAllByPlaceholderText } = render(
         <LambdaVariables
           lambda={lambdaMock}
           customVariables={customVariables}
@@ -393,11 +344,6 @@ describe('LambdaVariables + EditVariablesModal + EditVariablesForm', () => {
       );
       expect(editButton).toBeInTheDocument();
       expect(editButton).toBeDisabled();
-
-      const tooltip = document.querySelector(
-        `[data-original-title="${ENVIRONMENT_VARIABLES_PANEL.EDIT_MODAL.CONFIRM_BUTTON.POPUP_MESSAGES.ERROR}"]`,
-      );
-      expect(tooltip).toBeInTheDocument();
     },
     timeout,
   );
@@ -430,19 +376,9 @@ describe('LambdaVariables + EditVariablesModal + EditVariablesForm', () => {
       );
       expect(addButton).toBeInTheDocument();
 
-      let tooltip = document.querySelector(
-        `[data-original-title="${ENVIRONMENT_VARIABLES_PANEL.EDIT_MODAL.CONFIRM_BUTTON.POPUP_MESSAGES.ERROR}"]`,
-      );
-      expect(tooltip).not.toBeInTheDocument();
-
       fireEvent.click(addButton);
 
       expect(editButton).toBeDisabled();
-
-      tooltip = document.querySelector(
-        `[data-original-title="${ENVIRONMENT_VARIABLES_PANEL.EDIT_MODAL.CONFIRM_BUTTON.POPUP_MESSAGES.ERROR}"]`,
-      );
-      expect(tooltip).toBeInTheDocument();
     },
     timeout,
   );
