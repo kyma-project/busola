@@ -1,10 +1,10 @@
-import { TRIGGER_SUBSCRIBER } from '../../constants';
+import { CONFIG } from '../../config';
 
 export function createSubscriberRef(lambda = {}) {
   return {
     ref: {
-      apiVersion: TRIGGER_SUBSCRIBER.SERVING_API_VERSION,
-      kind: TRIGGER_SUBSCRIBER.SERVING_SERVICE,
+      apiVersion: CONFIG.triggerSubscriber.apiVersion,
+      kind: CONFIG.triggerSubscriber.kind,
       name: lambda.name || '',
       namespace: lambda.namespace || '',
     },

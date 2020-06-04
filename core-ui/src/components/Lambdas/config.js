@@ -3,11 +3,18 @@ const defaultCode = `module.exports = {
     return "Hello World!";
   }
 }`;
+
 const defaultDeps = `{ 
   "name": "{lambdaName}",
   "version": "1.0.0",
   "dependencies": {}
 }`;
+
+const defaultTriggerSubscriber = {
+  kind: 'Service',
+  apiVersion: 'v1',
+  broker: 'default',
+};
 
 const defaultConfig = {
   functionUsageKind: 'serverless-function',
@@ -29,6 +36,11 @@ const defaultConfig = {
       cpu: '10m',
     },
   },
+  triggerSubscriber: defaultTriggerSubscriber,
+  logging: {
+    deploymentContainerName: 'lambda',
+    jobContainerName: 'executor',
+  },
   defaultLambdaCode: defaultCode,
   defaultLambdaDeps: defaultDeps,
 };
@@ -49,6 +61,8 @@ function loadConfig() {
     functionUsageKind: getConfigValue('functionUsageKind') || '',
     restrictedVariables: getConfigValue('restrictedVariables') || [],
     resources: getConfigValue('resources') || {},
+    triggerSubscriber: getConfigValue('triggerSubscriber') || {},
+    logging: getConfigValue('logging') || {},
     defaultLambdaCode: getConfigValue('defaultLambdaCode') || '',
     defaultLambdaDeps: getConfigValue('defaultLambdaDeps') || '',
   };

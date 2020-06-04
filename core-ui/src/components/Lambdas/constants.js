@@ -433,9 +433,3 @@ export const FUNCTION_CUSTOM_RESOURCE = {
   KIND: 'Function',
   API_VERSION: 'serverless.kyma-project.io/v1alpha1',
 };
-
-export const TRIGGER_SUBSCRIBER = {
-  SERVING_SERVICE: 'Service',
-  SERVING_API_VERSION: 'serving.knative.dev/v1',
-  BROKER: 'default',
-};
