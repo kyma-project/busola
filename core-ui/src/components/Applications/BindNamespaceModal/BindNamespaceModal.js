@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { Button } from 'fundamental-react';
 import PropTypes from 'prop-types';
-import LuigiClient from '@kyma-project/luigi-client';
+import LuigiClient from '@luigi-project/client';
 
 import { Modal, useNotification, Spinner } from 'react-shared';
 import { GET_NAMESPACES_NAMES, GET_APPLICATION } from 'gql/queries';
