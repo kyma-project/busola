@@ -13,6 +13,7 @@ import {
   basicRefPropTypes,
 } from './BasicCredentialsForm';
 export const CREDENTIAL_TYPE_NONE = 'None';
+export const CREDENTIAL_TYPE_EMPTY = 'Empty';
 
 CredentialsForm.propTypes = {
   credentialType: PropTypes.string.isRequired,
@@ -23,6 +24,7 @@ CredentialsForm.propTypes = {
   }).isRequired,
   defaultValues: PropTypes.shape({
     oAuth: PropTypes.object,
+    basic: PropTypes.object,
   }),
 };
 
@@ -36,18 +38,29 @@ export function CredentialsForm({
     [CREDENTIAL_TYPE_NONE]: CREDENTIAL_TYPE_NONE,
     [CREDENTIAL_TYPE_OAUTH]: CREDENTIAL_TYPE_OAUTH,
     [CREDENTIAL_TYPE_BASIC]: CREDENTIAL_TYPE_BASIC,
+    [CREDENTIAL_TYPE_EMPTY]: CREDENTIAL_TYPE_EMPTY,
+  };
+
+  const credentialsMessage = type => {
+    if (type === CREDENTIAL_TYPE_NONE) {
+      return 'AuthData request from runtime will be blocked until credentials are provided.';
+    } else {
+      return 'This credentials will be copied for every and each AuthData requests from the Runtime.';
+    }
   };
 
   return (
     <section className="credentials-form">
-      <p>Credentials type</p>
+      <p className="fd-has-color-text-3">Credentials type</p>
       <Dropdown
         options={credentialsList}
         selectedOption={credentialType}
         onSelect={setCredentialType}
         width="100%"
       />
-
+      <p className="fd-has-color-text-3 fd-has-margin-bottom-small fd-has-margin-top-tiny">
+        {credentialsMessage(credentialType)}
+      </p>
       {credentialType === CREDENTIAL_TYPE_OAUTH && (
         <OAuthCredentialsForm
           refs={credentialRefs.oAuth}
