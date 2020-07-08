@@ -6,8 +6,7 @@ import { GenericList } from 'react-shared';
 
 import { SchemaComponent } from './Schema/Schema';
 
-import { useDeleteEventTrigger } from '../../../../gql/hooks/mutations';
-import { EVENT_TRIGGERS_PANEL, ERRORS } from '../../../../constants';
+import { EVENT_TRIGGERS_PANEL, ERRORS } from '../../constants';
 
 import CreateEventTriggerModal from './CreateEventTriggerModal';
 
@@ -38,14 +37,14 @@ function EventTriggerSource({ source }) {
 }
 
 export default function EventTriggers({
-  lambda,
   eventTriggers = [],
   availableEvents = [],
   serverDataError,
   serverDataLoading,
+  onTriggersAdd,
+  onTriggerDelete,
+  notFoundMessage = EVENT_TRIGGERS_PANEL.LIST.ERRORS.RESOURCES_NOT_FOUND,
 }) {
-  const deleteEventTrigger = useDeleteEventTrigger({ lambda });
-
   function showCollapseControl(schema) {
     return !!(schema && schema.properties && !schema.anyOf);
   }
@@ -53,9 +52,7 @@ export default function EventTriggers({
   const actions = [
     {
       name: 'Delete',
-      handler: eventTrigger => {
-        deleteEventTrigger(eventTrigger);
-      },
+      handler: onTriggerDelete,
     },
   ];
   const rowRenderer = eventTrigger => ({
@@ -80,7 +77,7 @@ export default function EventTriggers({
 
   const createEventTrigger = (
     <CreateEventTriggerModal
-      lambda={lambda}
+      onSubmit={onTriggersAdd}
       queryError={serverDataError}
       availableEvents={availableEvents}
     />
@@ -100,7 +97,7 @@ export default function EventTriggers({
         rowRenderer={rowRenderer}
         serverDataError={serverDataError}
         serverDataLoading={serverDataLoading}
-        notFoundMessage={EVENT_TRIGGERS_PANEL.LIST.ERRORS.RESOURCES_NOT_FOUND}
+        notFoundMessage={notFoundMessage}
         noSearchResultMessage={
           EVENT_TRIGGERS_PANEL.LIST.ERRORS.NOT_MATCHING_SEARCH_QUERY
         }
@@ -111,9 +108,10 @@ export default function EventTriggers({
 }
 
 EventTriggers.propTypes = {
-  lambda: PropTypes.object.isRequired,
   eventTriggers: PropTypes.array.isRequired,
   availableEvents: PropTypes.array.isRequired,
   serverDataError: PropTypes.any,
   serverDataLoading: PropTypes.bool,
+  onTriggerDelete: PropTypes.func.isRequired,
+  onTriggersAdd: PropTypes.func.isRequired,
 };

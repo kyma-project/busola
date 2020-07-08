@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { GenericList } from 'react-shared';
 
 import Checkbox from 'components/Lambdas/Checkbox/Checkbox';
-import { useCreateManyEventTriggers } from 'components/Lambdas/gql/hooks/mutations';
 
 import { SchemaComponent } from './Schema/Schema';
 
@@ -19,21 +18,21 @@ const headerRenderer = () => [
 const textSearchProperties = ['eventType', 'version', 'source', 'description'];
 
 export default function CreateEventTriggerForm({
-  lambda,
   availableEvents = [],
   formElementRef,
-  setValidity = () => void 0,
+  setCustomValid = () => void 0,
+  onSubmit,
+  onChange,
 }) {
-  const createManyEventTriggers = useCreateManyEventTriggers({ lambda });
   const [checkedEvents, setCheckedEvents] = useState([]);
 
   useEffect(() => {
-    setValidity(false);
-  }, [setValidity]);
+    setCustomValid(false);
+  }, [setCustomValid]);
 
   useEffect(() => {
-    setValidity(!!checkedEvents.length);
-  }, [checkedEvents, setValidity]);
+    setCustomValid(!!checkedEvents.length);
+  }, [checkedEvents, setCustomValid]);
 
   function isChecked(event) {
     return checkedEvents.some(e => event.uniqueID === e.uniqueID);
@@ -78,13 +77,14 @@ export default function CreateEventTriggerForm({
   });
 
   async function handleSubmit() {
-    await createManyEventTriggers(checkedEvents);
+    await onSubmit(checkedEvents);
   }
 
   return (
     <form
       ref={formElementRef}
       onSubmit={handleSubmit}
+      onChange={onChange}
       className="create-event-trigger-form"
     >
       <GenericList

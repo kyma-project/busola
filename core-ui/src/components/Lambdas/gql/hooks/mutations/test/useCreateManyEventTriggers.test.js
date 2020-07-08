@@ -10,10 +10,7 @@ import {
   lambdaMock,
 } from 'components/Lambdas/helpers/testing';
 import { formatMessage } from 'components/Lambdas/helpers/misc';
-import {
-  createSubscriberRef,
-  createOwnerRef,
-} from 'components/Lambdas/helpers/eventTriggers';
+import { createSubscriberRef } from 'components/Lambdas/helpers/eventTriggers';
 import { GQL_MUTATIONS } from 'components/Lambdas/constants';
 import { CONFIG } from 'components/Lambdas/config';
 
@@ -22,10 +19,19 @@ import {
   CREATE_MANY_EVENT_TRIGGERS_ERROR_MOCK,
   CREATE_MANY_EVENT_TRIGGERS_DATA_MOCK,
 } from '../testMocks';
+import { SERVERLESS_API_VERSION } from 'shared/constants';
 
 describe('useCreateManyEventTriggers', () => {
   const hookInput = {
-    lambda: lambdaMock,
+    name: lambdaMock.name,
+    namespace: lambdaMock.namespace,
+    ownerRef: {
+      apiVersion: SERVERLESS_API_VERSION,
+      kind: 'Function',
+      name: lambdaMock.name,
+      UID: lambdaMock.UID,
+    },
+    subscriberRef: createSubscriberRef(lambdaMock),
   };
   const events = [
     {
@@ -48,9 +54,15 @@ describe('useCreateManyEventTriggers', () => {
         subscriber: createSubscriberRef(lambdaMock),
       },
     ],
-    ownerRef: [createOwnerRef(lambdaMock)],
+    ownerRef: [
+      {
+        apiVersion: SERVERLESS_API_VERSION,
+        kind: 'Function',
+        name: lambdaMock.name,
+        UID: lambdaMock.UID,
+      },
+    ],
   };
-
   it('should see notification with error message if there is an error', async () => {
     const mockProvider = withApolloMockProvider({
       component: (

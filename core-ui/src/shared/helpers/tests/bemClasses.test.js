@@ -1,4 +1,4 @@
-import { TRIGGER_SCHEMA } from '../../../constants';
+import { TRIGGER_SCHEMA } from '../../constants';
 import { bemClasses } from '../bemClasses';
 
 const CSS_PREFIX = TRIGGER_SCHEMA.CSS_PREFIX;

@@ -4,23 +4,18 @@ import { useNotification } from 'react-shared';
 import { CREATE_MANY_EVENT_TRIGGERS } from 'components/Lambdas/gql/mutations';
 import extractGraphQlErrors from 'shared/graphqlErrorExtractor';
 
-import {
-  createSubscriberRef,
-  createOwnerRef,
-} from 'components/Lambdas/helpers/eventTriggers';
 import { formatMessage } from 'components/Lambdas/helpers/misc';
 import { GQL_MUTATIONS } from 'components/Lambdas/constants';
 import { CONFIG } from 'components/Lambdas/config';
 
-export const useCreateManyEventTriggers = ({
-  lambda = {
-    name: '',
-    namespace: '',
-  },
-}) => {
+export const useCreateManyEventTriggers = (
+  { name, namespace, subscriberRef, ownerRef },
+  mutationOptions = {},
+) => {
   const notificationManager = useNotification();
   const [createManyEventTriggersMutation] = useMutation(
     CREATE_MANY_EVENT_TRIGGERS,
+    mutationOptions,
   );
 
   function handleError(error, isSingleTrigger) {
@@ -31,7 +26,7 @@ export const useCreateManyEventTriggers = ({
       : GQL_MUTATIONS.CREATE_TRIGGERS.ERROR_MESSAGE_MANY;
 
     const formattedMessage = formatMessage(message, {
-      lambdaName: lambda.name,
+      lambdaName: name,
       error: errorToDisplay,
     });
 
@@ -42,17 +37,15 @@ export const useCreateManyEventTriggers = ({
   }
 
   function prepareEventTriggersInput(events) {
-    const subscriber = createSubscriberRef(lambda);
-
     return events.map(event => {
       const trigger = {
-        namespace: lambda.namespace,
+        namespace,
         broker: CONFIG.triggerSubscriber.broker,
         filterAttributes: {
           type: event.eventType,
           source: event.source,
         },
-        subscriber,
+        subscriber: subscriberRef,
       };
 
       // version doesn't have to be
@@ -65,14 +58,13 @@ export const useCreateManyEventTriggers = ({
   }
 
   async function createManyEventTriggers(events) {
-    const ownerRef = createOwnerRef(lambda);
     const triggers = prepareEventTriggersInput(events);
     const isSingleTrigger = triggers.length === 1;
 
     try {
       const response = await createManyEventTriggersMutation({
         variables: {
-          namespace: lambda.namespace,
+          namespace,
           triggers,
           ownerRef: [ownerRef],
         },
