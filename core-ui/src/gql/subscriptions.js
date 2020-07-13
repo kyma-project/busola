@@ -17,3 +17,36 @@ export const NAMESPACES_EVENT_SUBSCRIPTION = gql`
     }
   }
 `;
+
+export const API_RULE_EVENT_SUBSCRIPTION = gql`
+  subscription apiRuleEvent($namespace: String!, $serviceName: String) {
+    apiRuleEvent(namespace: $namespace, serviceName: $serviceName) {
+      type
+      apiRule {
+        name
+        generation
+        spec {
+          rules {
+            path
+            methods
+            accessStrategies {
+              name
+              config
+            }
+          }
+          service {
+            host
+            name
+            port
+          }
+        }
+        status {
+          apiRuleStatus {
+            code
+            description
+          }
+        }
+      }
+    }
+  }
+`;
