@@ -1,6 +1,6 @@
 import React from 'react';
 import { bootstrap, BackendModules } from '@kyma-project/common';
-import { NotificationContainer } from '@kyma-project/components';
+import * as ReactShared from './react-shared';
 
 import App from './core/App';
 import './index.scss';
@@ -18,6 +18,7 @@ import {
 
 (async () => {
   const services = [
+    ReactShared.Microfrontend,
     LuigiContextProvider,
     QueriesProvider,
     MutationsProvider,
@@ -26,20 +27,15 @@ import {
     LabelsProvider,
     UrlsProvider,
     SubscriptionsProvider,
-  ];
+  ] as any[];
 
   await bootstrap({
-    app: (
-      <>
-        <NotificationContainer />
-        <App />
-      </>
-    ),
+    app: <App />,
     requiredBackendModules: [
       BackendModules.SERVICE_CATALOG,
       BackendModules.SERVICE_CATALOG_ADDONS,
     ],
-    enableNotifications: true,
+    enableNotifications: false,
     enableSubscriptions: true,
     services,
   });

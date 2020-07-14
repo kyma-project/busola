@@ -2,7 +2,6 @@ import { useContext } from 'react';
 import gql from 'graphql-tag';
 import createUseContext from 'constate';
 import { useSubscription } from '@apollo/react-hooks';
-import { NotificationsService } from '@kyma-project/common';
 import { LuigiContext } from './LuigiContext.service';
 
 import { ConfigurationsService } from '../services';
@@ -10,6 +9,8 @@ import { Configuration } from '../types';
 import { NOTIFICATION, CONFIGURATION_VARIABLE } from '../constants';
 import { SubscriptionType } from './types';
 import { ADDONS_CONFIGURATION_FRAGMENT } from './Queries.service';
+
+import * as ReactShared from '../react-shared';
 
 export const CLUSTER_ADDONS_CONFIGURATION_EVENT_SUBSCRIPTION = gql`
   subscription clusterAddonsConfigurationEvent {
@@ -55,12 +56,11 @@ interface AddonsConfigurationSubscriptionVariables {
 const useSubscriptions = () => {
   const { namespaceId: currentNamespace } = useContext(LuigiContext);
   const { setOriginalConfigs } = useContext(ConfigurationsService);
-  const { successNotification, errorNotification } = useContext(
-    NotificationsService,
-  );
+
+  const notificationManager = ReactShared.useNotification();
 
   const onAdd = (item: Configuration) => {
-    successNotification({
+    notificationManager.notifySuccess({
       title: NOTIFICATION.ADD_CONFIGURATION.TITLE,
       content: NOTIFICATION.ADD_CONFIGURATION.CONTENT.replace(
         CONFIGURATION_VARIABLE,
@@ -71,7 +71,7 @@ const useSubscriptions = () => {
   };
 
   const onUpdate = (item: Configuration) => {
-    successNotification({
+    notificationManager.notifySuccess({
       title: NOTIFICATION.UPDATE_CONFIGURATION.TITLE,
       content: NOTIFICATION.UPDATE_CONFIGURATION.CONTENT.replace(
         CONFIGURATION_VARIABLE,
@@ -84,7 +84,7 @@ const useSubscriptions = () => {
   };
 
   const onDelete = (item: Configuration) => {
-    successNotification({
+    notificationManager.notifySuccess({
       title: NOTIFICATION.DELETE_CONFIGURATION.TITLE,
       content: NOTIFICATION.DELETE_CONFIGURATION.CONTENT.replace(
         CONFIGURATION_VARIABLE,
@@ -110,7 +110,7 @@ const useSubscriptions = () => {
 
       if (error) {
         // errorNotification('Error', ERRORS.SERVER);
-        errorNotification({
+        notificationManager.notifyError({
           title: 'Error',
           content: '',
         });
