@@ -123,6 +123,12 @@ export default function ServiceClassPlansList({ name }) {
 
   const serviceClass = queryData.clusterServiceClass || queryData.serviceClass;
 
+  if (!serviceClass) {
+    return (
+      <div className="empty-list"> {serviceClassConstants.noClassText}</div>
+    );
+  }
+
   const breadcrumbItems = [
     {
       name: `${serviceClassConstants.title} - ${
@@ -140,11 +146,6 @@ export default function ServiceClassPlansList({ name }) {
     },
   ];
 
-  if (!serviceClass) {
-    return (
-      <div className="empty-list"> {serviceClassConstants.noClassText}</div>
-    );
-  }
   return (
     <article>
       <PageHeader
