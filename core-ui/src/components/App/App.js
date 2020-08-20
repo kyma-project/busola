@@ -1,5 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
+import { withTitle } from 'react-shared';
 
 import NamespaceDetails from '../NamespaceDetails/NamespaceDetails';
 import NamespaceList from '../NamespaceList/NamespaceList';
@@ -18,49 +19,76 @@ import OAuthClientsList from 'components/OAuthClients/List/OAuthClientsList';
 import CreateOAuthClient from 'components/OAuthClients/Create/CreateOAuthClient';
 import OAuthClientsDetails from 'components/OAuthClients/Details/OAuthClientDetails';
 
+import { FUNCTIONS_WINDOW_TITLE } from 'components/Lambdas/constants';
+import {
+  API_RULES_TITLE,
+  OAUTH_CLIENTS_TITLE,
+  NAMESPACE_DETAILS_TITLE,
+  NAMESPACES_TITLE,
+  SERVICES_TITLE,
+} from 'shared/constants';
+
 export default function App() {
   return (
     <Switch>
       <Route path="/preload" component={() => null} />
       <Route
         path="/home/namespaces/:namespace/details"
-        component={RoutedNamespaceDetails}
+        render={withTitle(NAMESPACE_DETAILS_TITLE, RoutedNamespaceDetails)}
       />
-      <Route path="/namespaces" component={NamespaceList} />
+      <Route
+        path="/namespaces"
+        render={withTitle(NAMESPACES_TITLE, NamespaceList)}
+      />
 
       <Route
         path="/home/namespaces/:namespaceId/services/details/:serviceName"
-        component={RoutedServiceDetails}
+        render={withTitle(SERVICES_TITLE, RoutedServiceDetails)}
+      />
+
+      <Route
+        path="/lambdas"
+        exact
+        render={withTitle(FUNCTIONS_WINDOW_TITLE, Lambdas)}
+      />
+      <Route
+        path="/lambda/:name"
+        render={withTitle(FUNCTIONS_WINDOW_TITLE, LambdaDetails)}
       />
 
       <Route
         exact
         path="/home/namespaces/:namespaceId/oauth-clients"
-        component={RoutedOAuthClientsList}
+        render={withTitle(OAUTH_CLIENTS_TITLE, RoutedOAuthClientsList)}
       />
       <Route
         path="/home/namespaces/:namespaceId/oauth-clients/create"
-        component={RoutedCreateOAuthClients}
+        render={withTitle(OAUTH_CLIENTS_TITLE, RoutedCreateOAuthClients)}
       />
       <Route
         path="/home/namespaces/:namespaceId/oauth-clients/details/:clientName"
-        component={RoutedOAuthClientDetails}
+        render={withTitle(OAUTH_CLIENTS_TITLE, RoutedOAuthClientDetails)}
       />
 
-      <Route path="/lambdas" exact component={Lambdas} />
-      <Route path="/lambda/:name" component={LambdaDetails} />
-
-      <Route exact path="/apirules" component={ApiRules} />
-      <Route exact path="/apirules/create" component={CreateApiRule} />
+      <Route
+        exact
+        path="/apirules"
+        render={withTitle(API_RULES_TITLE, ApiRules)}
+      />
+      <Route
+        exact
+        path="/apirules/create"
+        render={withTitle(API_RULES_TITLE, CreateApiRule)}
+      />
       <Route
         exact
         path="/apirules/details/:apiName"
-        component={RoutedApiRuleDetails}
+        render={withTitle(API_RULES_TITLE, RoutedApiRuleDetails)}
       />
       <Route
         exact
         path="/apirules/edit/:apiName"
-        component={RoutedEditApiRule}
+        render={withTitle(API_RULES_TITLE, RoutedEditApiRule)}
       />
     </Switch>
   );

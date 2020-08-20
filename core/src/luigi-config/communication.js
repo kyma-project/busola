@@ -1,5 +1,6 @@
 import { relogin, getToken } from './navigation/navigation-helpers';
 import { NODE_PARAM_PREFIX } from './luigi-config';
+import { config } from './config';
 
 export const communication = {
   customMessagesListeners: {
@@ -10,6 +11,13 @@ export const communication = {
       } else {
         relogin();
       }
+    },
+    'console.setWindowTitle': ({ title }) => {
+      const prefix = config?.headerTitle || 'Kyma';
+
+      const luigiConfig = Luigi.getConfig();
+      luigiConfig.settings.header.title = `${prefix} - ${title}`;
+      Luigi.configChanged('settings.header');
     },
     'console.silentNavigate': ({ newParams }) => {
       const { search: paramsString, pathname } = new URL(window.location.href);

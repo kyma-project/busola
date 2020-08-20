@@ -7,38 +7,56 @@ import ServiceClassPlansList from '../ServiceClassPlansList/ServiceClassPlansLis
 import ServiceInstancesList from '../ServiceInstanceList/ServiceInstanceList';
 import ServiceInstancesDetails from '../ServiceInstanceDetails/ServiceInstanceDetails';
 import ServiceBrokers from '../ServiceBrokers/ServiceBrokers';
-import { NotificationProvider } from 'react-shared';
+import { NotificationProvider, withTitle } from 'react-shared';
+
+import {
+  CATALOG_TITLE,
+  INSTANCES_TITLE,
+  SERVICE_BROKERS_TITLE,
+} from '../../shared/constants';
 
 const App = () => (
   <NotificationProvider>
     <Switch>
       <Route path="/preload" component={() => null} />
 
-      <Route exact path="/catalog" component={ServiceClassList} />
+      <Route
+        exact
+        path="/catalog"
+        render={withTitle(CATALOG_TITLE, ServiceClassList)}
+      />
+
       <Route
         exact
         path="/catalog/details/:name"
-        component={RoutedCatalogDetails}
+        render={withTitle(CATALOG_TITLE, RoutedCatalogDetails)}
       />
       <Route
         exact
         path="/catalog/details/:name/plan/:plan"
-        component={RoutedCatalogDetails}
+        render={withTitle(CATALOG_TITLE, RoutedCatalogDetails)}
       />
       <Route
         exact
         path="/catalog/details/:name/plans"
-        component={RoutedServicePlanList}
+        render={withTitle(CATALOG_TITLE, RoutedServicePlanList)}
       />
 
-      <Route exact path="/instances" component={ServiceInstancesList} />
+      <Route
+        exact
+        path="/instances"
+        render={withTitle(INSTANCES_TITLE, ServiceInstancesList)}
+      />
       <Route
         exact
         path="/instances/details/:name"
-        component={ServiceInstancesDetails}
+        render={withTitle(INSTANCES_TITLE, ServiceInstancesDetails)}
       />
 
-      <Route path="/brokers" component={ServiceBrokers} />
+      <Route
+        path="/brokers"
+        render={withTitle(SERVICE_BROKERS_TITLE, ServiceBrokers)}
+      />
     </Switch>
   </NotificationProvider>
 );
@@ -47,8 +65,7 @@ const RoutedCatalogDetails = ({ match }) => (
   <ServiceClassDetails name={match.params.name} plan={match.params.plan} />
 );
 
-const RoutedServicePlanList = ({ match }) => (
-  <ServiceClassPlansList name={match.params.name} />
-);
+const RoutedServicePlanList = ({ match }) =>
+  withTitle(CATALOG_TITLE, <ServiceClassPlansList name={match.params.name} />);
 
 export default App;

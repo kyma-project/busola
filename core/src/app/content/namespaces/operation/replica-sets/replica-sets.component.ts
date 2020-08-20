@@ -1,3 +1,4 @@
+import { WindowTitleService } from 'shared/services/window-title.service';
 import { ChangeDetectorRef, Component, OnInit, OnDestroy } from '@angular/core';
 
 import { CurrentNamespaceService } from 'namespaces/services/current-namespace.service';
@@ -26,7 +27,8 @@ export class ReplicaSetsComponent extends AbstractGraphqlElementListComponent
     currentNamespaceService: CurrentNamespaceService,
     commService: ComponentCommunicationService,
     graphQLClientService: GraphQLClientService,
-    changeDetector: ChangeDetectorRef
+    changeDetector: ChangeDetectorRef,
+    titleService: WindowTitleService
   ) {
     super(
       currentNamespaceService,
@@ -34,6 +36,7 @@ export class ReplicaSetsComponent extends AbstractGraphqlElementListComponent
       graphQLClientService,
       changeDetector
     );
+    titleService.set(this.title);
   }
 
   public ngOnInit() {

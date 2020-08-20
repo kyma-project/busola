@@ -1,3 +1,4 @@
+import { WindowTitleService } from 'shared/services/window-title.service';
 import { CurrentNamespaceService } from '../../services/current-namespace.service';
 import { ChangeDetectorRef, Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
@@ -31,9 +32,11 @@ export class SecretsComponent extends AbstractKubernetesElementListComponent
     private http: HttpClient,
     private currentNamespaceService: CurrentNamespaceService,
     private commService: ComponentCommunicationService,
-    changeDetector: ChangeDetectorRef
+    changeDetector: ChangeDetectorRef,
+    titleService: WindowTitleService
   ) {
     super(currentNamespaceService, changeDetector, http, commService);
+    titleService.set(this.title);
     const converter: DataConverter<ISecret, Secret> = {
       convert(entry: ISecret) {
         return new Secret(entry);
