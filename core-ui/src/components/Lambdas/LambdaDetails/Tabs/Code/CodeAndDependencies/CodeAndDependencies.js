@@ -14,6 +14,10 @@ import {
 import { CODE_AND_DEPENDENCIES_PANEL } from 'components/Lambdas/constants';
 
 import './CodeAndDependencies.scss';
+import {
+  runtimeToMonacoEditorLang,
+  checkDepsValidity,
+} from 'components/Lambdas/helpers/runtime';
 
 const DISABLED_CAUSES = {
   VALID: 'VALID',
@@ -58,7 +62,8 @@ export default function CodeAndDependencies({ lambda }) {
     }
 
     const deps = (dependencies || '').trim();
-    if (!(deps.startsWith('{') && deps.endsWith('}'))) {
+
+    if (!checkDepsValidity(lambda.runtime, deps)) {
       setDisabledCause(DISABLED_CAUSES.INVALID_DEPS);
       return;
     }
@@ -115,7 +120,7 @@ export default function CodeAndDependencies({ lambda }) {
   const button = (
     <Button
       glyph="save"
-      option={disabled ? 'light' : 'default'}
+      option={disabled ? 'light' : 'emphasized'}
       typeAttr="button"
       disabled={disabled}
       onClick={handleSave}
@@ -151,6 +156,11 @@ export default function CodeAndDependencies({ lambda }) {
     </>
   );
 
+  const {
+    language: monacoEditorLang,
+    dependencies: monacoEditorDeps,
+  } = runtimeToMonacoEditorLang(lambda.runtime);
+
   const tabsData = [
     {
       id: 'function-code',
@@ -158,7 +168,7 @@ export default function CodeAndDependencies({ lambda }) {
       body: (
         <Editor
           id="lambda-code"
-          language="javascript"
+          language={monacoEditorLang}
           showDiff={showDiff}
           originalValue={lambda.source}
           value={code}
@@ -175,7 +185,7 @@ export default function CodeAndDependencies({ lambda }) {
       body: (
         <Editor
           id="lambda-dependencies"
-          language="json"
+          language={monacoEditorDeps}
           showDiff={showDiff}
           originalValue={lambda.dependencies}
           value={dependencies}

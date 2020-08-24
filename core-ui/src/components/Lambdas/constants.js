@@ -42,6 +42,10 @@ export const LAMBDA_PHASES = {
   ERROR_SUFFIX: 'Error: {error}',
 };
 
+export const PRETTY_RUNTIME_NODEJS12_NAME = 'Node.js 12';
+export const PRETTY_RUNTIME_NODEJS10_NAME = 'Node.js 10';
+export const PRETTY_RUNTIME_PYTHON37_NAME = 'Python 3.7';
+
 export const LAMBDA_ERROR_PHASES = [
   LAMBDA_PHASES.FAILED.TYPE,
   LAMBDA_PHASES.NEW_REVISION_ERROR.TYPE,
@@ -82,6 +86,9 @@ export const LAMBDAS_LIST = {
         LABEL: 'Labels',
         INLINE_HELP: `The key/value pair should be separated by '=', consist of alphanumeric characters, '-', '_' or '.', and must start and end with an alphanumeric character. The key cannot be empty.`,
       },
+      RUNTIME: {
+        NAME: 'Runtime',
+      },
     },
   },
 };
@@ -106,6 +113,9 @@ export const LAMBDA_DETAILS = {
         INVALID_POPUP_MESSAGE: 'Invalid label',
       },
     },
+  },
+  RUNTIME: {
+    TEXT: 'Runtime: ',
   },
   TABS: {
     CODE: {
@@ -329,7 +339,7 @@ export const CODE_AND_DEPENDENCIES_PANEL = {
     TEXT: 'Save',
     POPUP_MESSAGE: {
       EMPTY_SOURCE: 'Source cannot be empty.',
-      INVALID_DEPS: "Dependencies should start with '{' and end with '}'.",
+      INVALID_DEPS: 'Dependencies must be specified in a valid JSON format',
       NO_CHANGES: 'No changes made.',
     },
   },
