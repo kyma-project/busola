@@ -49,6 +49,10 @@ body {
 .link {
   color: var(--fd-color-action-1);
   cursor: pointer;
+  
+  &.no-border {
+    border:none;
+  }
 }
 
 .fd-panel.fd-panel--no-background {
@@ -186,4 +190,8 @@ li {
 
 .fd-hidden {
   visibility: hidden !important;
+}
+
+.fd-checkbox:checked::before, input[type=checkbox]:checked::before {
+  border-color: transparent;
 }
