@@ -49,9 +49,8 @@ export default function EventTriggersWrapper({ lambda }) {
     triggersError,
     triggersLoading,
   ] = useEventTriggersQuery({
-    subscriber: subscriberRef,
     namespace: lambda.namespace,
-    name: lambda.name,
+    serviceName: lambda.name,
   });
 
   const { availableEvents, usedEvents } = serializeEvents({
@@ -61,6 +60,7 @@ export default function EventTriggersWrapper({ lambda }) {
 
   return (
     <EventTriggers
+      isLambda={true}
       onTriggerDelete={deleteEventTrigger}
       onTriggersAdd={createManyEventTriggers}
       eventTriggers={usedEvents || []}

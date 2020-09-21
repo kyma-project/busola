@@ -44,7 +44,7 @@ export const useCreateManyEventTriggers = (
           type: event.eventType,
           source: event.source,
         },
-        subscriber: subscriberRef,
+        subscriber: { ...subscriberRef, port: event.port, path: event.path },
       };
 
       // version doesn't have to be

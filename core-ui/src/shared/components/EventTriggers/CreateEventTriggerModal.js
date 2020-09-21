@@ -9,16 +9,22 @@ import CreateEventTriggerForm from './CreateEventTriggerForm';
 import { EVENT_TRIGGERS_PANEL } from '../../constants';
 
 export default function CreateEventTriggerModal({
+  isLambda = false,
+  servicePorts,
   onSubmit,
   queryError,
   availableEvents = [],
 }) {
   const availableEventsExist = availableEvents.length;
+  const isServiceWithNoPorts = !isLambda && !servicePorts.length;
+
   const button = (
     <Button
       glyph="add"
       option="light"
-      disabled={Boolean(queryError || !availableEventsExist)}
+      disabled={Boolean(
+        queryError || !availableEventsExist || isServiceWithNoPorts,
+      )}
     >
       {EVENT_TRIGGERS_PANEL.ADD_MODAL.OPEN_BUTTON.TEXT}
     </Button>
@@ -31,11 +37,19 @@ export default function CreateEventTriggerModal({
         content={
           EVENT_TRIGGERS_PANEL.ADD_MODAL.OPEN_BUTTON.NOT_ENTRIES_POPUP_MESSAGE
         }
-        position="top"
-        trigger="mouseenter"
         tippyProps={{
           distance: 16,
         }}
+      >
+        {button}
+      </Tooltip>
+    );
+  } else if (isServiceWithNoPorts) {
+    modalOpeningComponent = (
+      <Tooltip
+        content={
+          EVENT_TRIGGERS_PANEL.ADD_MODAL.OPEN_BUTTON.NO_EXPOSED_PORTS_MESSAGE
+        }
       >
         {button}
       </Tooltip>
@@ -55,6 +69,8 @@ export default function CreateEventTriggerModal({
       renderForm={props => (
         <CreateEventTriggerForm
           {...props}
+          isLambda={isLambda}
+          servicePorts={servicePorts}
           onSubmit={onSubmit}
           availableEvents={availableEvents}
         />

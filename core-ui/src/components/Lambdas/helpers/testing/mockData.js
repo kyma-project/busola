@@ -103,6 +103,8 @@ export const eventTriggerMock = {
       eventtypeversion: 'v1',
       type: 'type',
     },
+    port: 80,
+    path: '/',
   },
   status: {
     reason: 'reason',
