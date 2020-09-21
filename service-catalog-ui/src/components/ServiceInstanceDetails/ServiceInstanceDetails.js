@@ -8,7 +8,8 @@ import {
   ThemeWrapper,
 } from '@kyma-project/react-components';
 
-import { Spinner } from 'react-shared';
+import { Spinner, ResourceNotFound } from 'react-shared';
+
 import ServiceInstanceHeader from './ServiceInstanceHeader/ServiceInstanceHeader';
 import ServiceInstanceTabs from './ServiceInstanceTabs/ServiceInstanceTabs.component';
 import ServiceInstanceBindings from './ServiceInstanceBindings/ServiceInstanceBindings.container';
@@ -128,6 +129,17 @@ export default function ServiceInstanceDetails({ match }) {
   const serviceClass =
     serviceInstance &&
     (serviceInstance.serviceClass || serviceInstance.clusterServiceClass);
+
+  if (!serviceInstance || !serviceClass) {
+    return (
+      <ResourceNotFound
+        resource="Service Instance"
+        breadcrumb="Instances"
+        path="/"
+        navigationContext="instances"
+      />
+    );
+  }
 
   return (
     <ThemeWrapper>
