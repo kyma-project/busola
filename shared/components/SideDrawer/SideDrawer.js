@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { ControlledEditor } from '@monaco-editor/react';
 import jsyaml from 'js-yaml';
-import { Button, Icon } from 'fundamental-react';
+import { Icon } from 'fundamental-react';
 
 import './SideDrawer.scss';
 import { CopiableText } from '../CopiableText/CopiableText';
@@ -35,6 +35,13 @@ export const SideDrawer = ({
     );
   }
 
+  useEffect(() => {
+    const listenerId = document.addEventListener('keydown', ({ key }) => {
+      if (key === 'Escape') setOpen(false);
+    });
+    return document.removeEventListener('keydown', listenerId);
+  }, []);
+
   return (
     <div className={classNames('side-drawer', { 'side-drawer--open': isOpen })}>
       {(isOpen || children) && (
@@ -60,11 +67,6 @@ export const SideDrawer = ({
               iconOnly={true}
               buttonText="Copy"
             />
-          )}
-          {!buttonText && (
-            <Button option="emphasized" onClick={() => setOpen(!isOpen)}>
-              Close
-            </Button>
           )}
         </div>
       </section>

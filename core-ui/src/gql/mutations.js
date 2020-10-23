@@ -149,6 +149,26 @@ export const CREATE_LIMIT_RANGE = gql`
   }
 `;
 
+export const UPDATE_LIMIT_RANGE = gql`
+  mutation updateLimitRange($namespace: String!, $name: String!, $json: JSON!) {
+    updateLimitRange(namespace: $namespace, name: $name, json: $json) {
+      name
+    }
+  }
+`;
+
+export const UPDATE_RESOURCE_QUOTA = gql`
+  mutation updateResourceQuota(
+    $namespace: String!
+    $name: String!
+    $json: JSON!
+  ) {
+    updateResourceQuota(namespace: $namespace, name: $name, json: $json) {
+      name
+    }
+  }
+`;
+
 export const CREATE_RESOURCE_QUOTA = gql`
   mutation createResourceQuota(
     $namespace: String!

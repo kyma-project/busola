@@ -18,6 +18,44 @@ export const GET_NAMESPACE = gql`
         }
       }
     }
+
+    resourceQuotas(namespace: $name) {
+      name
+      json
+      spec {
+        hard {
+          limits {
+            memory
+          }
+          requests {
+            memory
+          }
+          pods
+        }
+      }
+    }
+
+    limitRanges(namespace: $name) {
+      name
+      json
+      spec {
+        limits {
+          type
+          max {
+            memory
+            cpu
+          }
+          default {
+            memory
+            cpu
+          }
+          defaultRequest {
+            memory
+            cpu
+          }
+        }
+      }
+    }
   }
 `;
 
