@@ -13,6 +13,19 @@ export default function Editor({
   debouncedCallback = () => void 0,
 }) {
   const subscription = useRef();
+  const editorContainer = useRef();
+  const monacoEditorInstance = useRef();
+
+  const observer =
+    typeof IntersectionObserver !== 'undefined'
+      ? new IntersectionObserver(
+          _ => {
+            if (monacoEditorInstance.current)
+              monacoEditorInstance.current.layout(); // force Monaco redraw once an intersection occured
+          },
+          { root: document.documentElement },
+        )
+      : undefined;
 
   // unsubscribe
   useEffect(() => {
@@ -27,7 +40,19 @@ export default function Editor({
     };
   }, []);
 
+  useEffect(() => {
+    if (observer) {
+      observer.observe(editorContainer.current);
+      // add intersection observer to both versions of the editor
+    } else {
+      console.warn(
+        'Could not apply IntersectionObserver to code editor. Visibility problems may occur.',
+      );
+    } // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showDiff]);
+
   function handleDiffEditorDidMount(_, __, editor) {
+    monacoEditorInstance.current = editor;
     const { modified } = editor.getModel();
 
     subscription.current = modified.onDidChangeContent(_ => {
@@ -44,7 +69,7 @@ export default function Editor({
 
   if (showDiff) {
     return (
-      <div className="diff-editor">
+      <div className="diff-editor" ref={editorContainer}>
         <DiffEditor
           id={id}
           height="30em"
@@ -59,8 +84,11 @@ export default function Editor({
   }
 
   return (
-    <div className="controlled-editor">
+    <div className="controlled-editor" ref={editorContainer}>
       <ControlledEditor
+        editorDidMount={(_, editor) => {
+          monacoEditorInstance.current = editor;
+        }}
         id={id}
         height="30em"
         language={language}
