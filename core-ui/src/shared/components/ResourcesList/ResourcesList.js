@@ -12,11 +12,9 @@ import {
   Labels,
   useYamlEditor,
   useNotification,
-  useGet,
+  useGetList,
   useUpdate,
   useDelete,
-  useSubscription,
-  handlePamelaSubscriptionEvent,
 } from 'react-shared';
 
 ResourcesList.propTypes = {
@@ -56,32 +54,23 @@ function Resources({ resourceObject, namespace }) {
     namespace ? `/namespaces/${namespace}` : ''
   }/${kindPlural}`;
 
-  const [resources, setResources] = React.useState([]);
   const setEditedSpec = useYamlEditor();
   const notification = useNotification();
   const updateResourceMutation = useUpdate(resourceUrl);
   const deleteResourceMutation = useDelete(resourceUrl);
-  const { loading = true, error } = useGet(
-    resourceUrl,
-    setResources,
-    namespace,
-  );
-
-  useSubscription(
-    kindPlural,
-    React.useCallback(handlePamelaSubscriptionEvent(setResources), [namespace]),
-    { namespace },
-  );
+  const {
+    loading = true,
+    error,
+    data: resources,
+    silentRefetch,
+  } = useGetList(resourceUrl, { pollingInterval: 3000 });
 
   const handleSaveClick = resourceData => async newYAML => {
     try {
       const diff = createPatch(resourceData, jsyaml.safeLoad(newYAML));
       const url = resourceUrl + '/' + resourceData.metadata.name;
-      await updateResourceMutation(url, {
-        name: resourceData.metadata.name,
-        namespace,
-        mergeJson: diff,
-      });
+      await updateResourceMutation(url, diff);
+      silentRefetch();
       notification.notifySuccess({ title: 'Succesfully updated Resource' });
     } catch (e) {
       console.error(e);
@@ -115,7 +104,11 @@ function Resources({ resourceObject, namespace }) {
     {
       name: 'Edit',
       handler: resource =>
-        setEditedSpec(resource.json, handleSaveClick(resource.json)),
+        // setEditedSpec(resource.json, handleSaveClick(resource.json)),
+        {
+          const { status, ...otherResourceData } = resource; // remove 'status' property because you can't edit it anyway; TODO: decide if it's good
+          setEditedSpec(otherResourceData, handleSaveClick(otherResourceData));
+        },
     },
     {
       name: 'Delete',
