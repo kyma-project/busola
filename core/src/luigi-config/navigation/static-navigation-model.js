@@ -35,7 +35,7 @@ export function getStaticChildrenNodesForNamespace() {
       },
       pathSegment: '_workloads_category_placeholder_',
       hideFromNav: true
-    }, 
+    },
     {
       category: 'Workloads',
       pathSegment: 'details',
@@ -48,32 +48,84 @@ export function getStaticChildrenNodesForNamespace() {
     {
       category: 'Workloads',
       pathSegment: 'pods',
-      navigationContext: 'pods',
-      label: 'Pods',
+      label: 'Pods (extra column)',
       viewUrl: config.coreModuleUrl + '/home/namespaces/:namespaceId/pods',
       viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+      navigationContext: 'pods',
       context: {
-        resource: { kind: 'Pod', apiVersion: 'v1' }
-      }
+        resourceApiPath: '/api/v1',
+        hasDetailsView: true
+      },
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':podName',
+              viewUrl:
+                config.coreModuleUrl +
+                '/home/namespaces/:namespaceId/pods/:podName'
+            }
+          ]
+        }
+      ]
     },
     {
       category: 'Workloads',
-      pathSegment: 'replica-sets',
-      navigationContext: 'replica-sets',
-      label: 'Replica Sets',
-      viewUrl: '/consoleapp.html#/home/namespaces/:namespaceId/replicaSets',
-      viewGroup: consoleViewGroupName
+      pathSegment: 'replicasets',
+      label: 'Replica Sets (predefined)',
+      viewUrl:
+        config.coreModuleUrl + '/home/namespaces/:namespaceId/replicasets',
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+      context: {
+        hasDetailsView: true,
+        resourceApiPath: '/apis/apps/v1'
+      },
+      navigationContext: 'replicasets',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':replicaSetName',
+              viewUrl:
+                config.coreModuleUrl +
+                '/home/namespaces/:namespaceId/replicasets/:replicaSetName'
+            }
+          ]
+        }
+      ]
     },
+
     {
       category: 'Workloads',
       pathSegment: 'deployments',
-      navigationContext: 'deployments',
+
       label: 'Deployments',
-      viewUrl: config.coreModuleUrl + '/home/namespaces/:namespaceId/deployments',
+      keepSelectedForChildren: true,
+      viewUrl:
+        config.coreModuleUrl + '/home/namespaces/:namespaceId/deployments',
       viewGroup: coreUIViewGroupName,
-      context: { 
-        resource: { kind: 'Deployment', apiVersion: 'apps/v1' } 
-      }
+      context: {
+        resourceApiPath: '/apis/apps/v1',
+        hasDetailsView: true
+      },
+      navigationContext: 'deployments',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':deploymentName',
+              viewUrl:
+                config.coreModuleUrl +
+                '/home/namespaces/:namespaceId/deployments/:deploymentName'
+            }
+          ]
+        }
+      ]
     },
     {
       category: {

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { withTitle, useMicrofrontendContext } from 'react-shared';
+import LuigiClient from '@luigi-project/client';
 
 import NamespaceDetails from '../NamespaceDetails/NamespaceDetails';
 import NamespaceList from '../NamespaceList/NamespaceList';
@@ -28,7 +29,8 @@ import RoleDetails from 'components/Permissions/RoleDetails/RoleDetails';
 import SecretList from 'components/Secrets/Secrets';
 import SecretDetails from 'components/Secrets/Details/SecretDetails';
 
-import ResourcesList from 'shared/components/ResourcesList/ResourcesList';
+import GenericResourceList from 'shared/components/ResourcesList/ResourcesList';
+import GenericResourceDetails from 'shared/components/ResourceDetails/ResourceDetails';
 
 import { FUNCTIONS_WINDOW_TITLE } from 'components/Lambdas/constants';
 import {
@@ -38,9 +40,9 @@ import {
   NAMESPACES_TITLE,
   SERVICES_TITLE,
   SECRETS_TITLE,
-  PODS_TITLE,
-  DEPLOYMENTS_TITLE,
 } from 'shared/constants';
+
+import * as PredefinedRenderers from 'components/Predefined';
 
 export default function App() {
   return (
@@ -57,14 +59,14 @@ export default function App() {
 
       <Route
         exact
-        path="/home/namespaces/:namespaceId/pods"
-        render={withTitle(PODS_TITLE, RoutedResourcesList)}
+        path="/home/namespaces/:namespaceId/:resourceType"
+        component={RoutedResourcesList}
       />
 
       <Route
         exact
-        path="/home/namespaces/:namespaceId/deployments"
-        render={withTitle(DEPLOYMENTS_TITLE, RoutedResourcesList)}
+        path="/home/namespaces/:namespaceId/:resourceType/:resourceName"
+        component={RoutedResourceDetails}
       />
 
       <Route
@@ -156,12 +158,56 @@ export default function App() {
   );
 }
 
+export function getComponentFor(
+  name,
+  params,
+  defaultRenderer = GenericResourceList,
+) {
+  const Renderer = PredefinedRenderers[name]
+    ? PredefinedRenderers[name](defaultRenderer)
+    : defaultRenderer;
+
+  return <Renderer {...params} />;
+}
+
 function RoutedResourcesList({ match }) {
   const context = useMicrofrontendContext();
-  const resource = context?.resource;
-  return (
-    <ResourcesList resource={resource} namespace={match.params.namespaceId} />
-  );
+  const resourceUrl =
+    context?.resourceApiPath + window.location.pathname.replace('/home', ''); //TODO improve it
+
+  const params = {
+    hasDetailsView: context?.hasDetailsView,
+    resourceUrl,
+    resourceType: match.params.resourceType,
+    namespace: match.params.namespaceId,
+  };
+
+  const rendererName =
+    params.resourceType[0].toUpperCase() +
+    params.resourceType.substr(1) +
+    'List';
+
+  return getComponentFor(rendererName, params, GenericResourceList);
+}
+
+function RoutedResourceDetails({ match }) {
+  const context = useMicrofrontendContext();
+  const resourceUrl =
+    context?.resourceApiPath + window.location.pathname.replace('/home', ''); //TODO improve it
+
+  const params = {
+    resourceUrl,
+    resourceType: match.params.resourceType,
+    resourceName: match.params.resourceName,
+    namespace: match.params.namespaceId,
+  };
+
+  const rendererName =
+    params.resourceType[0].toUpperCase() +
+    params.resourceType.substr(1) +
+    'Details';
+
+  return getComponentFor(rendererName, params, GenericResourceDetails);
 }
 
 function RoutedNamespaceDetails({ match }) {

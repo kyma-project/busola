@@ -46,5 +46,6 @@ export * from './constants/constants';
 export * from './components/ModalWithForm/ModalWithForm';
 
 import CustomPropTypes from './typechecking/CustomPropTypes';
+export { customColumnsType } from './typechecking/CustomColumns';
 
 export { CustomPropTypes };

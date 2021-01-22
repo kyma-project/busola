@@ -4,6 +4,7 @@ import jsyaml from 'js-yaml';
 import { Link } from 'fundamental-react';
 import { createPatch } from 'rfc6902';
 import Moment from 'react-moment';
+import LuigiClient from '@luigi-project/client';
 
 import {
   PageHeader,
@@ -15,45 +16,38 @@ import {
   useGetList,
   useUpdate,
   useDelete,
+  customColumnsType,
 } from 'react-shared';
 
 ResourcesList.propTypes = {
-  resource: PropTypes.object,
-  namespace: PropTypes.string.isRequired,
+  customColumns: customColumnsType,
+  resourceUrl: PropTypes.string.isRequired,
+  resourceType: PropTypes.string.isRequired,
+  namespace: PropTypes.string,
+  hasDetailsView: PropTypes.bool,
+  isCompact: PropTypes.bool,
 };
 
-export default function ResourcesList({ resource, namespace }) {
-  if (!resource) {
+ResourcesList.defaultProps = {
+  customColumns: [],
+};
+
+export default function ResourcesList(props) {
+  if (!props.resourceUrl) {
     return <></>; // wait for the context update
   }
 
-  const resourceObject = resource;
-  if (!resource.kindPlural) {
-    const kind = resource.kind?.toLowerCase();
-    resourceObject.kindPlural = resource.kind?.endsWith('s', 'x', 'ch', 'sh')
-      ? `${kind}es`
-      : `${kind}s`;
-  }
-
-  const capitalizeFirstLetter = string => {
-    return string?.charAt(0).toUpperCase() + string?.slice(1);
-  };
-
   return (
     <YamlEditorProvider>
-      <PageHeader title={capitalizeFirstLetter(resourceObject.kindPlural)} />
-      <Resources resourceObject={resourceObject} namespace={namespace} />
+      {!props.isCompact && <PageHeader title={props.resourceType} />}
+      <Resources {...props} />
     </YamlEditorProvider>
   );
 }
 
-function Resources({ resourceObject, namespace }) {
-  const { apiVersion, kindPlural } = resourceObject;
-  const api = apiVersion === 'v1' ? 'api' : 'apis';
-  const resourceUrl = `/${api}/${apiVersion}${
-    namespace ? `/namespaces/${namespace}` : ''
-  }/${kindPlural}`;
+export const ResourcesListProps = ResourcesList.propTypes;
 
+function Resources({ resourceUrl, namespace, customColumns, hasDetailsView }) {
   const setEditedSpec = useYamlEditor();
   const notification = useNotification();
   const updateResourceMutation = useUpdate(resourceUrl);
@@ -103,12 +97,10 @@ function Resources({ resourceObject, namespace }) {
   const actions = [
     {
       name: 'Edit',
-      handler: resource =>
-        // setEditedSpec(resource.json, handleSaveClick(resource.json)),
-        {
-          const { status, ...otherResourceData } = resource; // remove 'status' property because you can't edit it anyway; TODO: decide if it's good
-          setEditedSpec(otherResourceData, handleSaveClick(otherResourceData));
-        },
+      handler: resource => {
+        const { status, ...otherResourceData } = resource; // remove 'status' property because you can't edit it anyway; TODO: decide if it's good
+        setEditedSpec(otherResourceData, handleSaveClick(otherResourceData));
+      },
     },
     {
       name: 'Delete',
@@ -116,17 +108,34 @@ function Resources({ resourceObject, namespace }) {
     },
   ];
 
-  const headerRenderer = () => ['Name', 'Age', 'Labels'];
+  const headerRenderer = () => [
+    'Name',
+    'Age',
+    'Labels',
+    ...customColumns.map(col => col.header),
+  ];
 
   const rowRenderer = entry => [
-    <Link>{entry.metadata.name}</Link>,
-
+    hasDetailsView ? (
+      <Link
+        onClick={_ =>
+          LuigiClient.linkManager()
+            .fromClosestContext()
+            .navigate('/details/' + entry.metadata.name)
+        }
+      >
+        {entry.metadata.name}
+      </Link>
+    ) : (
+      <b>{entry.metadata.name}</b>
+    ),
     <Moment utc fromNow>
       {entry.metadata.creationTimestamp}
     </Moment>,
     <div style={{ maxWidth: '55em' /*TODO*/ }}>
       <Labels labels={entry.metadata.labels} />
     </div>,
+    ...customColumns.map(col => col.value(entry)),
   ];
 
   return (
