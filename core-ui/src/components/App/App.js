@@ -1,10 +1,14 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { withTitle, useMicrofrontendContext } from 'react-shared';
-import LuigiClient from '@luigi-project/client';
+import {
+  withTitle,
+  useMicrofrontendContext,
+  getComponentFor,
+  ResourcesList as GenericResourcesList,
+  ResourceDetails as GenericResourceDetails,
+} from 'react-shared';
 
 import NamespaceDetails from '../NamespaceDetails/NamespaceDetails';
-import NamespaceList from '../NamespaceList/NamespaceList';
 
 import Lambdas from '../Lambdas/Lambdas';
 import LambdaDetails from '../Lambdas/LambdaDetails';
@@ -14,31 +18,13 @@ import ApiRules from 'components/ApiRules/ApiRules';
 import ApiRuleDetails from 'components/ApiRules/ApiRuleDetails/ApiRuleDetails';
 import EditApiRule from 'components/ApiRules/EditApiRule/EditApiRule';
 
-import Services from 'components/Services/Services';
-import ServiceDetails from 'components/Services/ServiceDetails/ServiceDetails';
-
-import OAuthClientsList from 'components/OAuthClients/List/OAuthClientsList';
-import CreateOAuthClient from 'components/OAuthClients/Create/CreateOAuthClient';
-import OAuthClientsDetails from 'components/OAuthClients/Details/OAuthClientDetails';
-
-import GlobalPermissions from 'components/Permissions/PermissionList/GlobalPermissions';
-import ClusterRoleDetails from 'components/Permissions/RoleDetails/ClusterRoleDetails';
-import NamespacePermissions from 'components/Permissions/PermissionList/NamespacePermissions';
-import RoleDetails from 'components/Permissions/RoleDetails/RoleDetails';
-
 import SecretList from 'components/Secrets/Secrets';
 import SecretDetails from 'components/Secrets/Details/SecretDetails';
-
-import GenericResourceList from 'shared/components/ResourcesList/ResourcesList';
-import GenericResourceDetails from 'shared/components/ResourceDetails/ResourceDetails';
 
 import { FUNCTIONS_WINDOW_TITLE } from 'components/Lambdas/constants';
 import {
   API_RULES_TITLE,
-  OAUTH_CLIENTS_TITLE,
   NAMESPACE_DETAILS_TITLE,
-  NAMESPACES_TITLE,
-  SERVICES_TITLE,
   SECRETS_TITLE,
 } from 'shared/constants';
 
@@ -52,52 +38,23 @@ export default function App() {
         path="/home/namespaces/:namespace/details"
         render={withTitle(NAMESPACE_DETAILS_TITLE, RoutedNamespaceDetails)}
       />
-      <Route
-        path="/namespaces"
-        render={withTitle(NAMESPACES_TITLE, NamespaceList)}
-      />
-
-      <Route
-        exact
-        path="/home/namespaces/:namespaceId/:resourceType"
-        component={RoutedResourcesList}
-      />
 
       <Route
         exact
         path="/home/namespaces/:namespaceId/:resourceType/:resourceName"
         component={RoutedResourceDetails}
       />
-
       <Route
         exact
-        path="/home/namespaces/:namespaceId/services"
-        render={withTitle(SERVICES_TITLE, RoutedServicesList)}
+        path="/home/namespaces/:namespaceId/:resourceType"
+        component={RoutedResourcesList}
       />
       <Route
-        path="/home/namespaces/:namespaceId/services/details/:serviceName"
-        render={withTitle(SERVICES_TITLE, RoutedServiceDetails)}
-      />
-
-      <Route
-        path="/home/global-permissions"
         exact
-        render={withTitle('Global Permissions', GlobalPermissions)}
+        path="/home/:resourceType/:resourceName"
+        component={RoutedResourceDetails}
       />
-      <Route
-        path="/home/global-permission/roles/:roleName"
-        render={withTitle('Global Permissions', RoutedClusterRoleDetails)}
-      />
-      <Route
-        path="/home/namespaces/:namespaceId/permissions"
-        exact
-        render={withTitle('Permissions', RoutedNamespacePermissions)}
-      />
-      <Route
-        path="/home/namespaces/:namespaceId/permissions/roles/:roleName"
-        exact
-        render={withTitle('Permissions', RoutedRoleDetails)}
-      />
+      <Route exact path="/home/:resourceType" component={RoutedResourcesList} />
 
       <Route
         path="/lambdas"
@@ -107,20 +64,6 @@ export default function App() {
       <Route
         path="/lambda/:name"
         render={withTitle(FUNCTIONS_WINDOW_TITLE, LambdaDetails)}
-      />
-
-      <Route
-        exact
-        path="/home/namespaces/:namespaceId/oauth-clients"
-        render={withTitle(OAUTH_CLIENTS_TITLE, RoutedOAuthClientsList)}
-      />
-      <Route
-        path="/home/namespaces/:namespaceId/oauth-clients/create"
-        render={withTitle(OAUTH_CLIENTS_TITLE, RoutedCreateOAuthClients)}
-      />
-      <Route
-        path="/home/namespaces/:namespaceId/oauth-clients/details/:clientName"
-        render={withTitle(OAUTH_CLIENTS_TITLE, RoutedOAuthClientDetails)}
       />
 
       <Route
@@ -158,25 +101,24 @@ export default function App() {
   );
 }
 
-export function getComponentFor(
-  name,
-  params,
-  defaultRenderer = GenericResourceList,
-) {
-  const Renderer = PredefinedRenderers[name]
-    ? PredefinedRenderers[name](defaultRenderer)
-    : defaultRenderer;
+export const getComponentForList = getComponentFor(
+  PredefinedRenderers,
+  GenericResourcesList,
+);
 
-  return <Renderer {...params} />;
-}
+export const getComponentForDetails = getComponentFor(
+  PredefinedRenderers,
+  GenericResourceDetails,
+);
 
 function RoutedResourcesList({ match }) {
-  const context = useMicrofrontendContext();
+  const queryParams = new URLSearchParams(window.location.search);
   const resourceUrl =
-    context?.resourceApiPath + window.location.pathname.replace('/home', ''); //TODO improve it
+    queryParams.get('resourceApiPath') +
+    window.location.pathname.replace('/home', ''); //TODO improve it
 
   const params = {
-    hasDetailsView: context?.hasDetailsView,
+    hasDetailsView: queryParams.get('hasDetailsView') === 'true',
     resourceUrl,
     resourceType: match.params.resourceType,
     namespace: match.params.namespaceId,
@@ -187,7 +129,7 @@ function RoutedResourcesList({ match }) {
     params.resourceType.substr(1) +
     'List';
 
-  return getComponentFor(rendererName, params, GenericResourceList);
+  return getComponentForList(rendererName, params);
 }
 
 function RoutedResourceDetails({ match }) {
@@ -207,41 +149,11 @@ function RoutedResourceDetails({ match }) {
     params.resourceType.substr(1) +
     'Details';
 
-  return getComponentFor(rendererName, params, GenericResourceDetails);
+  return getComponentForDetails(rendererName, params);
 }
 
 function RoutedNamespaceDetails({ match }) {
   return <NamespaceDetails name={match.params.namespace} />;
-}
-
-function RoutedOAuthClientsList({ match }) {
-  return <OAuthClientsList namespace={match.params.namespaceId} />;
-}
-
-function RoutedCreateOAuthClients({ match }) {
-  return <CreateOAuthClient namespace={match.params.namespaceId} />;
-}
-
-function RoutedOAuthClientDetails({ match }) {
-  return (
-    <OAuthClientsDetails
-      namespace={match.params.namespaceId}
-      name={match.params.clientName}
-    />
-  );
-}
-
-function RoutedServicesList({ match }) {
-  return <Services namespace={match.params.namespaceId} />;
-}
-
-function RoutedServiceDetails({ match }) {
-  return (
-    <ServiceDetails
-      namespaceId={match.params.namespaceId}
-      serviceName={match.params.serviceName}
-    />
-  );
 }
 
 function RoutedApiRuleDetails({ match }) {
@@ -250,23 +162,6 @@ function RoutedApiRuleDetails({ match }) {
 
 function RoutedEditApiRule({ match }) {
   return <EditApiRule apiName={match.params.apiName} />;
-}
-
-function RoutedNamespacePermissions({ match }) {
-  return <NamespacePermissions namespaceId={match.params.namespaceId} />;
-}
-
-function RoutedRoleDetails({ match }) {
-  return (
-    <RoleDetails
-      roleName={match.params.roleName}
-      namespaceId={match.params.namespaceId}
-    />
-  );
-}
-
-function RoutedClusterRoleDetails({ match }) {
-  return <ClusterRoleDetails roleName={match.params.roleName} />;
 }
 
 function RoutedSecretList({ match }) {

@@ -1,18 +1,19 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { baseUrl, throwHttpError } from './config';
 import { useMicrofrontendContext } from '../../contexts/MicrofrontendContext';
 import { useConfig } from '../../contexts/ConfigContext';
 
 const useGetHook = processDataFn =>
   function(path, { pollingInterval, onDataReceived }) {
+    const isHookMounted = React.useRef(true); // becomes 'false' after the hook is unmounted to avoid performing any async actions afterwards
     const [data, setData] = React.useState(null);
-    const [loading, setLoading] = React.useState(true);
+    const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(null);
     const { idToken } = useMicrofrontendContext();
     const { fromConfig } = useConfig();
 
     const refetch = (isSilent, currentData) => async () => {
-      if (!idToken) return;
+      if (!idToken || !isHookMounted.current) return;
       if (!isSilent) setLoading(true);
 
       function processError(error) {
@@ -25,31 +26,37 @@ const useGetHook = processDataFn =>
         const response = await fetch(urlToFetchFrom, {
           headers: { Authorization: 'Bearer ' + idToken },
         });
-
-        if (!response.ok) processError(await throwHttpError(response));
+        if (!response.ok) throw await throwHttpError(response);
         const payload = await response.json();
 
+        if (!isHookMounted.current) return;
         if (typeof onDataReceived === 'function') onDataReceived(payload.items);
         if (error) setError(null); // bring back the data and clear the error once the connection started working again
-
         processDataFn(payload, currentData, setData);
       } catch (e) {
         processError(e);
       }
 
-      if (!isSilent) setLoading(false);
+      if (!isSilent && isHookMounted.current) setLoading(false);
     };
 
     React.useEffect(() => {
-      if (pollingInterval) {
-        const intervalId = setInterval(refetch(true, data), pollingInterval);
-        return _ => clearInterval(intervalId);
-      }
+      // POLLING
+      if (!pollingInterval) return;
+
+      const intervalId = setInterval(refetch(true, data), pollingInterval);
+      return _ => clearInterval(intervalId);
     }, [path, pollingInterval, data]);
 
     React.useEffect(() => {
-      refetch(false, data)();
-    }, [path]);
+      // INITIAL FETCH
+      isHookMounted.current = true;
+      if (idToken) refetch(false, null)();
+      return _ => {
+        if (loading) setLoading(false);
+        isHookMounted.current = false;
+      };
+    }, [path, idToken]);
 
     return {
       data,
