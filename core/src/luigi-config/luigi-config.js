@@ -1,7 +1,8 @@
 import { saveCurrentLocation, getToken } from './navigation/navigation-helpers';
 import { communication } from './communication';
 import { settings } from './settings';
-import { createAuth } from './auth';
+import { createAuth, saveAuthParamsIfPresent } from './auth/index.js';
+
 import {
   navigation,
   getNavigationData,
@@ -12,6 +13,7 @@ import { onQuotaExceed } from './luigi-event-handlers';
 export const NODE_PARAM_PREFIX = `~`;
 
 (async () => {
+  saveAuthParamsIfPresent(location);
   const luigiConfig = {
     auth: await createAuth(),
     communication,
