@@ -15,6 +15,7 @@ import {
   useUpdate,
   useDelete,
   PageHeader,
+  navigateToDetails,
 } from '../..';
 import CustomPropTypes from '../../typechecking/CustomPropTypes';
 
@@ -25,10 +26,13 @@ ResourcesList.propTypes = {
   namespace: PropTypes.string,
   hasDetailsView: PropTypes.bool,
   isCompact: PropTypes.bool,
+  showTitle: PropTypes.bool,
+  filter: PropTypes.func,
 };
 
 ResourcesList.defaultProps = {
   customColumns: [],
+  showTitle: false,
 };
 
 export function ResourcesList(props) {
@@ -46,17 +50,22 @@ export function ResourcesList(props) {
 
 export const ResourcesListProps = ResourcesList.propTypes;
 
-function Resources({ resourceUrl, namespace, customColumns, hasDetailsView }) {
+function Resources({
+  resourceUrl,
+  resourceType,
+  namespace,
+  customColumns,
+  hasDetailsView,
+  showTitle,
+  filter,
+}) {
   const setEditedSpec = useYamlEditor();
   const notification = useNotification();
   const updateResourceMutation = useUpdate(resourceUrl);
   const deleteResourceMutation = useDelete(resourceUrl);
-  const {
-    loading = true,
-    error,
-    data: resources,
-    silentRefetch,
-  } = useGetList(resourceUrl, { pollingInterval: 3000 });
+  const { loading = true, error, data: resources, silentRefetch } = useGetList(
+    filter,
+  )(resourceUrl, { pollingInterval: 3000 });
 
   const handleSaveClick = resourceData => async newYAML => {
     try {
@@ -78,10 +87,7 @@ function Resources({ resourceUrl, namespace, customColumns, hasDetailsView }) {
   async function handleResourceDelete(resource) {
     const url = resourceUrl + '/' + resource.metadata.name;
     try {
-      await deleteResourceMutation(url, {
-        name: resource.metadata.name,
-        namespace,
-      });
+      await deleteResourceMutation(url);
       notification.notifySuccess({ title: 'Succesfully deleted Resource' });
     } catch (e) {
       console.error(e);
@@ -116,13 +122,7 @@ function Resources({ resourceUrl, namespace, customColumns, hasDetailsView }) {
 
   const rowRenderer = entry => [
     hasDetailsView ? (
-      <Link
-        onClick={_ =>
-          LuigiClient.linkManager()
-            .fromClosestContext()
-            .navigate('/details/' + entry.metadata.name)
-        }
-      >
+      <Link onClick={_ => navigateToDetails(resourceType, entry.metadata.name)}>
         {entry.metadata.name}
       </Link>
     ) : (
@@ -139,6 +139,7 @@ function Resources({ resourceUrl, namespace, customColumns, hasDetailsView }) {
 
   return (
     <GenericList
+      title={showTitle ? resourceType : null}
       textSearchProperties={['metadata.name']}
       actions={actions}
       entries={resources || []}
