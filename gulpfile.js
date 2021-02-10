@@ -103,7 +103,14 @@ gulp.task('watch:libraries', () => {
 });
 
 // APPS
-const apps = ['add-ons', 'core', 'core-ui', 'logging', 'service-catalog-ui'];
+const apps = [
+  'add-ons',
+  'core',
+  'core-ui',
+  'logging',
+  'service-catalog-ui',
+  'pamela',
+];
 
 // Installing apps
 apps.forEach(app => {

@@ -8,6 +8,7 @@
     "add-ons",
     "logging",
     "core-ui",
-    "shared"
+    "shared",
+    "pamela"
   ]
 }

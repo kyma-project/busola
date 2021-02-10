@@ -1,0 +1,40 @@
+{
+  "name": "pamela",
+  "version": "1.0.0",
+  "description": "APIserver proxy for Console",
+  "main": "backend.index.js",
+  "scripts": {
+    "start:kyma": ". ../scripts/load-cluster-config.sh && npm run watch",
+    "watch": "nodemon --exec NODE_TLS_REJECT_UNAUTHORIZED=0 babel-node index.js",
+    "build": "webpack",
+    "start": "NODE_ENV=production node pamela-production.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@kubernetes/client-node": "^0.12.3",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "https": "^1.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "jwks-rsa": "^1.11.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.12.1",
+    "@babel/core": "^7.12.10",
+    "@babel/node": "^7.12.10",
+    "@babel/preset-env": "^7.12.10",
+    "@babel/register": "^7.12.10",
+    "babel-loader": "^8.2.2",
+    "core-js": "^3.8.1",
+    "nodemon": "^2.0.2",
+    "webpack": "^5.10.1",
+    "webpack-cli": "^4.2.0",
+    "webpack-node-externals": "^2.5.2"
+  },
+  "node": {
+    "child_process": false
+  }
+}
