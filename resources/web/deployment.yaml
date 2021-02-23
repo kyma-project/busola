@@ -16,9 +16,15 @@ spec:
     spec:
       containers:
         - name: console
-          image: wawrzyn321/console-19-02
+          image: eu.gcr.io/kyma-project/console:PR-2131
           imagePullPolicy: Always
-          resources: {}
+          resources:
+            limits:
+              cpu: 100m
+              memory: 30Mi
+            requests:
+              cpu: 1m
+              memory: 6m
           livenessProbe:
             httpGet:
               path: /healthz
@@ -28,9 +34,15 @@ spec:
             - containerPort: 6080
             - containerPort: 8080
         - name: core-ui
-          image: wawrzyn321/core-ui-16-02
+          image: eu.gcr.io/kyma-project/core-ui:PR-2131
           imagePullPolicy: Always
-          resources: {}
+          resources:
+            limits:
+              cpu: 100m
+              memory: 30Mi
+            requests:
+              cpu: 1m
+              memory: 6m
           livenessProbe:
             httpGet:
               path: /healthz
