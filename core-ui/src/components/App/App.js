@@ -1,17 +1,17 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { withTitle } from 'react-shared';
 
-import LambdaDetails from '../Lambdas/LambdaDetails';
 import Preferences from 'components/Preferences/Preferences';
 
-import { FUNCTIONS_WINDOW_TITLE } from 'components/Lambdas/constants';
 import { PREFERENCES_TITLE } from '../../shared/constants';
+import { withTitle } from 'react-shared';
+import CreateApiRule from '../ApiRules/CreateApiRule/CreateApiRule';
+import EditApiRule from 'components/ApiRules/EditApiRule/EditApiRule';
 import {
   getComponentForList,
   getComponentForDetails,
 } from 'shared/getComponents';
-
+import { API_RULES_TITLE } from 'shared/constants';
 export default function App() {
   return (
     <Switch>
@@ -19,6 +19,17 @@ export default function App() {
       <Route
         path="/preferences"
         render={withTitle(PREFERENCES_TITLE, Preferences)}
+      />
+      <Route
+        exact
+        path="/apirules/create"
+        render={withTitle(API_RULES_TITLE, CreateApiRule)}
+      />
+
+      <Route
+        exact
+        path="/apirules/edit/:apiName"
+        render={withTitle(API_RULES_TITLE, RoutedEditApiRule)}
       />
       <Route
         exact
@@ -36,13 +47,12 @@ export default function App() {
         component={RoutedResourceDetails}
       />
       <Route exact path="/:resourceType" component={RoutedResourcesList} />
-
-      <Route
-        path="/lambda/:name"
-        render={withTitle(FUNCTIONS_WINDOW_TITLE, LambdaDetails)}
-      />
     </Switch>
   );
+}
+
+function RoutedEditApiRule({ match }) {
+  return <EditApiRule apiName={match.params.apiName} />;
 }
 
 function RoutedResourcesList({ match }) {

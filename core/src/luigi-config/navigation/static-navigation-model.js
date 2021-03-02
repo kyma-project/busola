@@ -157,7 +157,6 @@ export function getStaticChildrenNodesForNamespace() {
       pathSegment: '_discovery_and_network_category_placeholder_',
       hideFromNav: true
     },
-
     {
       category: 'Discovery and Network',
       pathSegment: 'services',
@@ -286,7 +285,7 @@ export function getStaticChildrenNodesForNamespace() {
       navigationContext: 'role-bindings',
       label: 'Role Bindings',
       viewUrl:
-        config.coreModuleUrl +
+        config.coreUIModuleUrl +
         '/namespaces/:namespaceId/rolebindings?' +
         toSearchParamsString({
           resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
@@ -301,7 +300,7 @@ export function getStaticChildrenNodesForNamespace() {
             {
               pathSegment: ':roleBindingName',
               viewUrl:
-                config.coreModuleUrl +
+                config.coreUIModuleUrl +
                 '/namespaces/:namespaceId/roles/:roleBindingName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
@@ -492,7 +491,7 @@ export function getStaticRootNodes(namespaceChildrenNodesResolver) {
         collapsible: true
       },
       viewUrl:
-        config.coreModuleUrl +
+        config.coreUIModuleUrl +
         '/clusterrolebindings?' +
         toSearchParamsString({
           resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
@@ -508,7 +507,7 @@ export function getStaticRootNodes(namespaceChildrenNodesResolver) {
             {
               pathSegment: ':clusterRoleBindingName',
               viewUrl:
-                config.coreModuleUrl +
+                config.coreUIModuleUrl +
                 '/clusterrolebindings/:clusterRoleBindingName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
