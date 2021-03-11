@@ -7,6 +7,7 @@ import { communication } from './communication';
 import { settings } from './settings';
 import { createAuth } from './auth.js';
 import { saveInitParamsIfPresent } from './init-params';
+import { config } from './config';
 
 import {
   navigation,
@@ -20,7 +21,7 @@ export const NODE_PARAM_PREFIX = `~`;
 (async () => {
   await saveInitParamsIfPresent(location);
   const luigiConfig = {
-    auth: await createAuth(),
+    auth: !config.isNpx && (await createAuth()),
     communication,
     navigation,
     routing: {

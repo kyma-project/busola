@@ -11,7 +11,8 @@
     "lint": "prettier -c .",
     "lint-fix": "prettier -w .",
     "buildConfig": "webpack --mode production --config webpack.config.js",
-    "buildConfig:watch": "webpack --config webpack.config.js --watch"
+    "buildConfig:watch": "webpack --config webpack.config.js --watch",
+    "build:npx": "rm -rf ../pamela/core && npm run buildConfig && cp -r src ../pamela/core"
   },
   "private": true,
   "dependencies": {
