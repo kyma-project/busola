@@ -18,17 +18,15 @@ import { supportedMethodsList } from '../accessStrategyTypes';
 
 import './ApiRuleForm.scss';
 import ApiRuleFormHeader from './ApiRuleFormHeader/ApiRuleFormHeader';
-import { getApiUrl } from '@kyma-project/common';
 import ServicesDropdown from './ServicesDropdown/ServicesDropdown';
 import AccessStrategyForm from './AccessStrategyForm/AccessStrategyForm';
 import { EXCLUDED_SERVICES_LABELS } from 'components/ApiRules/constants';
 import { hasValidMethods } from 'components/ApiRules/accessStrategyTypes';
-import { useGetList } from 'react-shared';
+import { useGetList, useMicrofrontendContext } from 'react-shared';
 import { SERVICES_URL, API_RULE_URL } from '../constants';
 import { formatMessage as injectVariables } from 'components/Lambdas/helpers/misc';
 
 export const DEFAULT_GATEWAY = 'kyma-gateway.kyma-system.svc.cluster.local';
-const DOMAIN = getApiUrl('domain');
 
 const EMPTY_ACCESS_STRATEGY = {
   path: '',
@@ -63,6 +61,8 @@ export default function ApiRuleForm({
   headerTitle,
   breadcrumbItems,
 }) {
+  const k8sApiUrl = useMicrofrontendContext().k8sApiUrl;
+  const domain = k8sApiUrl.replace('api.', '');
   const namespace = LuigiClient.getEventData().environmentId;
   const { serviceName, port, openedInModal = false } =
     LuigiClient.getNodeParams() || {};
@@ -90,7 +90,10 @@ export default function ApiRuleForm({
     allServices?.filter(service => {
       let show = true;
       EXCLUDED_SERVICES_LABELS.forEach(excludedLabel => {
-        if (Object.keys(service?.metadata.labels).includes([excludedLabel])) {
+        if (
+          service?.metadata?.labels &&
+          Object.keys(service?.metadata?.labels).includes([excludedLabel])
+        ) {
           show = false;
         }
       });
@@ -143,7 +146,7 @@ export default function ApiRuleForm({
       },
       spec: {
         service: {
-          host: formValues.hostname.current.value + '.' + DOMAIN,
+          host: formValues.hostname.current.value + '.' + domain,
           name: serviceName,
           port: parseInt(servicePort),
         },
@@ -241,11 +244,11 @@ export default function ApiRuleForm({
                       </FormLabel>
                       <InputWithSuffix
                         defaultValue={apiRule.spec.service.host.replace(
-                          `.${DOMAIN}`,
+                          `.${domain}`,
                           '',
                         )}
                         id="hostname"
-                        suffix={DOMAIN}
+                        suffix={domain}
                         placeholder="Enter the hostname"
                         required
                         pattern="^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$"

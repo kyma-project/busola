@@ -24,9 +24,10 @@ const ServicesDropdown = ({
     ? `${defaultValue.name}:${defaultValue.port}`
     : null;
 
-  const services = serviceName
-    ? data.filter(s => s.metadata.name === serviceName)
-    : data;
+  const services =
+    serviceName && serviceName !== 'undefined'
+      ? data.filter(s => s.metadata.name === serviceName)
+      : data;
 
   return (
     <FormItem>
