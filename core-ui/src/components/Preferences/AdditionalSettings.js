@@ -10,7 +10,7 @@ export default function AdditionalSettings() {
 
   const updateApiUrl = () => {
     LuigiClient.sendCustomMessage({
-      id: 'console.updateInitParams',
+      id: 'busola.updateInitParams',
       bebEnabled,
     });
   };

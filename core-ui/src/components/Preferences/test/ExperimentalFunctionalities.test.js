@@ -15,7 +15,7 @@ describe('ExperimentalFunctionalities', () => {
     fireEvent.click(getByLabelText('toggle-experimental'));
 
     expect(spy).toHaveBeenCalledWith({
-      id: 'console.showExperimentalViews',
+      id: 'busola.showExperimentalViews',
       showExperimentalViews: false,
     });
 

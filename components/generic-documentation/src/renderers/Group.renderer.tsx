@@ -20,7 +20,7 @@ import unescape from 'lodash.unescape';
 
 export enum TabsLabels {
   DOCUMENTATION = 'Documentation',
-  CONSOLE = 'Console',
+  BUSOLA = 'Busola',
   EVENTS = 'Events',
   ODATA = 'OData',
 }
@@ -77,7 +77,7 @@ export const GroupRenderer: React.FunctionComponent<GroupRendererProps> = ({
 
   useEffect(() => {
     luigiClient.sendCustomMessage({
-      id: 'console.silentNavigate',
+      id: 'busola.silentNavigate',
       newParams: {
         selectedApi:
           selectedApi && selectedApi.data

@@ -25,7 +25,7 @@ describe('NamespaceSettings', () => {
     fireEvent.click(getByLabelText('toggle-system-namespaces'));
 
     expect(spy).toHaveBeenCalledWith({
-      id: 'console.showSystemNamespaces',
+      id: 'busola.showSystemNamespaces',
       showSystemNamespaces: false,
     });
 

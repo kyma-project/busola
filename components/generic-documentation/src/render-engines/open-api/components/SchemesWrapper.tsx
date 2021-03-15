@@ -71,7 +71,7 @@ export const SchemesWrapperExtended = (
   if (props.className === 'schemes wrapper') {
     return (
       <Wrapper>
-        <Text>API Console</Text>
+        <Text>API Busola</Text>
         <ContentWrapper>
           <Text light={true}>Schemes</Text>
           <Orig {...props} />

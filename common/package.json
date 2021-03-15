@@ -1,6 +1,6 @@
 {
   "name": "@kyma-project/common",
-  "description": "Common for Kyma console",
+  "description": "Common for Kyma busola",
   "private": true,
   "license": "Apache-2.0",
   "scripts": {

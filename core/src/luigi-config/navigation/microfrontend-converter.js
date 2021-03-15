@@ -49,7 +49,7 @@ function buildNode(name, node, spec, config, groups) {
     };
   }
 
-  const isLocalDev = location.hostname.startsWith('console-dev');
+  const isLocalDev = location.hostname.startsWith('busola-dev');
 
   if (isLocalDev && n.viewUrl) {
     n = processNodeForLocalDevelopment(n, spec, config);
@@ -137,7 +137,7 @@ export default function convertToNavigationTree(
     })
     .map((n) => {
       const showExperimentalViews =
-        localStorage.getItem('console.showExperimentalViews') === 'true';
+        localStorage.getItem('busola.showExperimentalViews') === 'true';
       return hideByNodeCategory(n, showExperimentalViews);
     });
 }

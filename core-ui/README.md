@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project contains an application with the Core UI page for the Kyma Console.
+This project contains an application with the Core UI page for the Kyma Busola.
 
 The [create-react-app](https://create-react-app.dev/) project provides the structure for this application. Read the project's [documentation](https://create-react-app.dev/docs/available-scripts) for more information.
 

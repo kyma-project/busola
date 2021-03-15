@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: console-web
+  name: busola-web
   labels:
-    app: console
+    app: busola
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: console
+      app: busola
   template:
     metadata:
       labels:
-        app: console
+        app: busola
     spec:
       containers:
-        - name: console
-          image: eu.gcr.io/kyma-project/console:PR-2157
+        - name: busola
+          image: eu.gcr.io/kyma-project/busola:PR-2157
 
           imagePullPolicy: Always
           resources:

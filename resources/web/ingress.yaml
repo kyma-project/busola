@@ -6,21 +6,21 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /$1
 spec:
   rules:
-    - host: console.%DOMAIN%
+    - host: busola.%DOMAIN%
       http:
         paths:
           - path: /(.*)
             pathType: Prefix
             backend:
               service:
-                name: console-core
+                name: busola-core
                 port:
                   number: 8080
           - path: /backend(?:/|$)(.*)
             pathType: Prefix
             backend:
               service:
-                name: pamela
+                name: backend
                 port:
                   number: 3001
     - host: core-ui.%DOMAIN%
@@ -30,14 +30,14 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: console-core-ui
+                name: busola-core-ui
                 port:
                   number: 8080
           - path: /backend(?:/|$)(.*)
             pathType: Prefix
             backend:
               service:
-                name: pamela
+                name: backend
                 port:
                   number: 3001
     - host: catalog.%DOMAIN%
@@ -54,6 +54,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: pamela
+                name: backend
                 port:
                   number: 3001

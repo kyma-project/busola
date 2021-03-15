@@ -10,7 +10,7 @@ export default function ExperimentalFunctionalities() {
 
   const updateApiUrl = () => {
     LuigiClient.sendCustomMessage({
-      id: 'console.updateInitParams',
+      id: 'busola.updateInitParams',
       k8sApiUrl,
     });
   };

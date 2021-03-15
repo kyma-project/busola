@@ -1,4 +1,4 @@
 node_modules
 .dockerignore
 Dockerfile
-pamela-production.js
+backend-production.js

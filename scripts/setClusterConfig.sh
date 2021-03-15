@@ -37,7 +37,7 @@ else
     fi
 fi
 
-LOCALDOMAIN=console-dev.$DOMAIN
+LOCALDOMAIN=busola-dev.$DOMAIN
 $SCRIPT_DIR/checkClusterAvailability.sh -s $DOMAIN
 
 if [ $? != 0 ]
@@ -74,10 +74,10 @@ if [ $HOST != "kyma.local" ]; then
 fi
 
 # add new cluster->localhost binding to hosts file
-echo "127.0.0.1 console-dev.$DOMAIN console-dev.kyma.local localhost"| sudo tee -a /etc/hosts
+echo "127.0.0.1 busola-dev.$DOMAIN busola-dev.kyma.local localhost"| sudo tee -a /etc/hosts
 
-echo "Added ClusterConfig to Console"
+echo "Added ClusterConfig to Busola"
 echo ""
-echo -e "Please run \033[94mnpm start\033[0m in the root Console folder"
-echo -e "After that you can open \033[93mhttp://console-dev.$DOMAIN:4200\033[0m"
+echo -e "Please run \033[94mnpm start\033[0m in the root Busola folder"
+echo -e "After that you can open \033[93mhttp://busola-dev.$DOMAIN:4200\033[0m"
 exit 0

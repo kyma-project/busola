@@ -38,7 +38,7 @@ initializeApp(app, kubeconfig)
     }
 
     server.listen(port, address, () => {
-      console.log(`👙 PAMELA 👄 server started @ ${port}!`);
+      console.log(`👙 Busola backend 👄 server started @ ${port}!`);
       npx.openBrowser(port);
     });
   })

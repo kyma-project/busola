@@ -10,7 +10,7 @@ export default function ExperimentalFunctionalities() {
 
   const toggleVisibility = () => {
     LuigiClient.sendCustomMessage({
-      id: 'console.showExperimentalViews',
+      id: 'busola.showExperimentalViews',
       showExperimentalViews: !showExperimentalViews,
     });
     setShowExperimentalViews(!showExperimentalViews);

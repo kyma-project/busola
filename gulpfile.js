@@ -109,7 +109,7 @@ const apps = [
   'core-ui',
   'logging',
   'service-catalog-ui',
-  'pamela',
+  'backend',
 ];
 
 // Installing apps

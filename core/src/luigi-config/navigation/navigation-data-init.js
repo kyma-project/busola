@@ -92,7 +92,7 @@ export function getNavigationData(token) {
                 cmf.placement === 'namespace' || cmf.placement === 'environment'
             )
             .map((cmf) => {
-              // console.log(cmf.name, cmf);
+              // busola.log(cmf.name, cmf);
               if (cmf.navigationNodes) {
                 return convertToNavigationTree(
                   cmf.name,
@@ -135,7 +135,7 @@ export function getNavigationData(token) {
               bebEnabled,
               systemNamespaces,
               showSystemNamespaces:
-                localStorage.getItem('console.showSystemNamespaces') === 'true',
+                localStorage.getItem('busola.showSystemNamespaces') === 'true',
               k8sApiUrl,
             },
             children: function () {
@@ -168,7 +168,7 @@ async function getNamespaces() {
     console.error('Error while fetching namespaces', e);
     return [];
   }
-  if (localStorage.getItem('console.showSystemNamespaces') !== 'true') {
+  if (localStorage.getItem('busola.showSystemNamespaces') !== 'true') {
     namespaces = namespaces.filter((ns) => !systemNamespaces.includes(ns.name));
   }
   return createNamespacesList(namespaces);

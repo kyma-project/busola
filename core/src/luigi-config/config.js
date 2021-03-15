@@ -1,6 +1,6 @@
-const domain = location.hostname.replace(/^console(-dev)?\./, '');
+const domain = location.hostname.replace(/^busola(-dev)?\./, '');
 const isNpx = location.origin === 'http://localhost:3001';
-const isLocalDev = location.hostname.startsWith('console-dev');
+const isLocalDev = location.hostname.startsWith('busola-dev');
 
 export let config;
 
@@ -8,7 +8,7 @@ if (isNpx) {
   config = {
     domain,
     isNpx,
-    localDomain: 'console-dev.' + domain,
+    localDomain: 'busola-dev.' + domain,
     serviceCatalogModuleUrl: location.origin + '/catalog',
     addOnsModuleUrl: location.origin + '/addons',
     logsModuleUrl: location.origin + '/logs',
@@ -19,21 +19,21 @@ if (isNpx) {
   config = {
     domain,
     isNpx,
-    localDomain: 'console-dev.' + domain,
+    localDomain: 'busola-dev.' + domain,
     serviceCatalogModuleUrl: isLocalDev
-      ? 'http://console-dev.' + domain + ':8000'
+      ? 'http://busola-dev.' + domain + ':8000'
       : 'https://catalog.' + domain,
     addOnsModuleUrl: isLocalDev
-      ? 'http://console-dev.' + domain + ':8004'
+      ? 'http://busola-dev.' + domain + ':8004'
       : 'https://addons.' + domain,
     logsModuleUrl: isLocalDev
-      ? 'http://console-dev.' + domain + ':8005'
+      ? 'http://busola-dev.' + domain + ':8005'
       : 'https://logs.' + domain,
     coreUIModuleUrl: isLocalDev
-      ? 'http://console-dev.' + domain + ':8889'
+      ? 'http://busola-dev.' + domain + ':8889'
       : 'https://core-ui.' + domain,
     pamelaApiUrl: isLocalDev
       ? 'http://localhost:3001'
-      : 'https://console.' + domain + '/backend',
+      : 'https://busola.' + domain + '/backend',
   };
 }
