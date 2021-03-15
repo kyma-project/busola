@@ -1,5 +1,5 @@
 FROM eu.gcr.io/kyma-project/test-infra/buildpack-node-chromium:v20201023-6c4eabe1 as builder
-ARG app_name=busola-core
+ARG app_name=core
 WORKDIR /app
 
 # Set env variables
@@ -18,7 +18,7 @@ RUN cd /app/${app_name} && \
 ### Main image ###
 FROM eu.gcr.io/kyma-project/incubator/console-nginx:f4976fad
 
-ARG app_name=busola-core
+ARG app_name=core
 
 COPY ./${app_name}/nginx/nginx.conf /etc/nginx/nginx.conf
 COPY --from=builder /app/${app_name}/src /usr/share/nginx/html/
