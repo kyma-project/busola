@@ -21,7 +21,7 @@ function mapMicrofrontends(microFrontendList, config) {
 
 export function fetchConsoleInitData(token) {
   const backendModulesQuery = fetch(
-    `${config.pamelaApiUrl}/apis/ui.kyma-project.io/v1alpha1/backendmodules`,
+    `${config.backendApiUrl}/apis/ui.kyma-project.io/v1alpha1/backendmodules`,
     {
       headers: createHeaders(token),
     }
@@ -31,7 +31,7 @@ export function fetchConsoleInitData(token) {
     .catch(() => ({ backendModules: [] }));
 
   const cmfQuery = fetch(
-    `${config.pamelaApiUrl}/apis/ui.kyma-project.io/v1alpha1/clustermicrofrontends`,
+    `${config.backendApiUrl}/apis/ui.kyma-project.io/v1alpha1/clustermicrofrontends`,
     {
       headers: createHeaders(token),
     }
@@ -54,7 +54,7 @@ export function fetchConsoleInitData(token) {
   };
 
   const ssrrQuery = fetch(
-    `${config.pamelaApiUrl}/apis/authorization.k8s.io/v1/selfsubjectrulesreviews`,
+    `${config.backendApiUrl}/apis/authorization.k8s.io/v1/selfsubjectrulesreviews`,
     {
       method: 'POST',
       body: JSON.stringify(ssrr),
@@ -71,7 +71,7 @@ export function fetchConsoleInitData(token) {
 
 export function fetchMicrofrontends(namespaceName, token) {
   return fetch(
-    `${config.pamelaApiUrl}/apis/ui.kyma-project.io/v1alpha1/namespaces/${namespaceName}/microfrontends`,
+    `${config.backendApiUrl}/apis/ui.kyma-project.io/v1alpha1/namespaces/${namespaceName}/microfrontends`,
     {
       headers: createHeaders(token),
     }
@@ -82,7 +82,7 @@ export function fetchMicrofrontends(namespaceName, token) {
 }
 
 export function fetchNamespaces(token) {
-  return fetch(`${config.pamelaApiUrl}/api/v1/namespaces/`, {
+  return fetch(`${config.backendApiUrl}/api/v1/namespaces/`, {
     headers: createHeaders(token),
   })
     .then((res) => res.json())

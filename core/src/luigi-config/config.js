@@ -13,7 +13,7 @@ if (isNpx) {
     addOnsModuleUrl: location.origin + '/addons',
     logsModuleUrl: location.origin + '/logs',
     coreUIModuleUrl: location.origin + '/core-ui',
-    pamelaApiUrl: location.origin + '/backend',
+    backendApiUrl: location.origin + '/backend',
   };
 } else {
   config = {
@@ -32,7 +32,7 @@ if (isNpx) {
     coreUIModuleUrl: isLocalDev
       ? 'http://busola-dev.' + domain + ':8889'
       : 'https://core-ui.' + domain,
-    pamelaApiUrl: isLocalDev
+    backendApiUrl: isLocalDev
       ? 'http://localhost:3001'
       : 'https://busola.' + domain + '/backend',
   };

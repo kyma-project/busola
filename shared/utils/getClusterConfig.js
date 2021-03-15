@@ -5,7 +5,7 @@ export const getClusterConfig = () => ({
   domain,
   graphqlApiUrl: `https://busola-backend.${domain}/graphql`,
   subscriptionsApiUrl: `wss://busola-backend.${domain}/graphql`,
-  pamelaApiUrl: isLocalDev
+  backendApiUrl: isLocalDev
     ? 'http://localhost:3001'
     : `${location.protocol}//${location.host}/backend`,
 });
