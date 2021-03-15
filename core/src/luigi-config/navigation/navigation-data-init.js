@@ -92,7 +92,7 @@ export function getNavigationData(token) {
                 cmf.placement === 'namespace' || cmf.placement === 'environment'
             )
             .map((cmf) => {
-              // busola.log(cmf.name, cmf);
+              // console.log(cmf.name, cmf);
               if (cmf.navigationNodes) {
                 return convertToNavigationTree(
                   cmf.name,
