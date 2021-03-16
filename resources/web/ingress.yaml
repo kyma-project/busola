@@ -1,7 +1,7 @@
 kind: Ingress
 apiVersion: networking.k8s.io/v1
 metadata:
-  name: ingress-core
+  name: ingress-busola
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /$1
 spec:
@@ -13,7 +13,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: busola-core
+                name: core
                 port:
                   number: 8080
           - path: /backend(?:/|$)(.*)
@@ -30,7 +30,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: busola-core-ui
+                name: core-ui
                 port:
                   number: 8080
           - path: /backend(?:/|$)(.*)

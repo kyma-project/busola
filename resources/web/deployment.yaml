@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: busola-web
+  name: web
   labels:
     app: busola
 spec:
@@ -16,8 +16,7 @@ spec:
     spec:
       containers:
         - name: busola
-          image: eu.gcr.io/kyma-project/busola-core:PR-2157
-
+          image: ddagaa/busola-core:1
           imagePullPolicy: Always
           resources:
             limits:
@@ -35,7 +34,7 @@ spec:
             - containerPort: 6080
             - containerPort: 8080
         - name: core-ui
-          image: eu.gcr.io/kyma-project/busola-core-ui:PR-2157
+          image: ddagaa/busola-core-ui:1
           imagePullPolicy: Always
           resources:
             limits:
