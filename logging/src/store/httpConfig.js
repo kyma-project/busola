@@ -8,8 +8,8 @@ const config = {
   resourceLabels: resource =>
     `https://loki.${domain}/api/prom/label/${resource}/values`,
 
-  // graphqlApiUrl: `https://console-backend.${domain}/graphql`,
-  // subscriptionsApiUrl: `wss://console-backend.${domain}/graphql`,
+  // graphqlApiUrl: `https://busola-backend.${domain}/graphql`,
+  // subscriptionsApiUrl: `wss://busola-backend.${domain}/graphql`,
 };
 
 export default { ...config };

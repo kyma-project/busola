@@ -1,5 +1,5 @@
 {
-  "name": "kyma-console",
+  "name": "kyma-busola",
   "version": "0.6.1",
   "license": "MIT",
   "scripts": {
@@ -12,7 +12,7 @@
     "lint-fix": "prettier -w .",
     "buildConfig": "webpack --mode production --config webpack.config.js",
     "buildConfig:watch": "webpack --config webpack.config.js --watch",
-    "build:npx": "rm -rf ../pamela/core && npm run buildConfig && cp -r src ../pamela/core"
+    "build:npx": "rm -rf ../backend/core && npm run buildConfig && cp -r src ../backend/core"
   },
   "private": true,
   "dependencies": {

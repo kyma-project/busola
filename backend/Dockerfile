@@ -19,7 +19,7 @@ RUN npm run build
 # ---- Serve ----
 FROM base AS release
 WORKDIR /app
-COPY --from=build /app/pamela-production.js ./
+COPY --from=build /app/backend-production.js ./
 COPY package* ./
 RUN npm ci --only=production
 

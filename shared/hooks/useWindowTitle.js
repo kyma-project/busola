@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 
 export function setWindowTitle(title) {
   setImmediate(() =>
-    LuigiClient.sendCustomMessage({ id: 'console.setWindowTitle', title }),
+    LuigiClient.sendCustomMessage({ id: 'busola.setWindowTitle', title }),
   );
 }
 

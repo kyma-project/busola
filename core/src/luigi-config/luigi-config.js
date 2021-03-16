@@ -32,7 +32,7 @@ export const NODE_PARAM_PREFIX = `~`;
     lifecycleHooks: {
       luigiAfterInit: () => {
         const showSystemNamespaces = localStorage.getItem(
-          'console.showSystemNamespaces'
+          'busola.showSystemNamespaces'
         );
 
         if (showSystemNamespaces === 'true') {
@@ -61,7 +61,7 @@ export const NODE_PARAM_PREFIX = `~`;
 })();
 
 window.addEventListener('message', (e) => {
-  if (e.data.msg === 'console.quotaexceeded') {
+  if (e.data.msg === 'busola.quotaexceeded') {
     onQuotaExceed(e.data);
   }
 });

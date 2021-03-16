@@ -1,4 +1,4 @@
-export const baseUrl = getConfigFn => getConfigFn('pamelaApiUrl');
+export const baseUrl = getConfigFn => getConfigFn('backendApiUrl');
 
 export class HttpError extends Error {
   constructor(message, statusCode) {

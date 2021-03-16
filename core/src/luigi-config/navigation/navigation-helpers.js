@@ -36,9 +36,9 @@ export const hideDisabledNodes = (disabledNavNodes, nodes, namespace) => {
 
 export const shouldShowSystemNamespaces = () => {
   let showSystemNamespaces = false;
-  if (localStorage.getItem('console.showSystemNamespaces')) {
+  if (localStorage.getItem('busola.showSystemNamespaces')) {
     showSystemNamespaces =
-      localStorage.getItem('console.showSystemNamespaces') === 'true';
+      localStorage.getItem('busola.showSystemNamespaces') === 'true';
   }
   return showSystemNamespaces;
 };
@@ -47,7 +47,7 @@ export const saveCurrentLocation = () => {
   if (!window.location.hash) {
     const location = window.location.pathname;
     const params = window.location.search;
-    localStorage.setItem('console.location', location + params);
+    localStorage.setItem('busola.location', location + params);
   }
 };
 
@@ -74,9 +74,9 @@ export function getToken() {
 }
 
 export const getPreviousLocation = () => {
-  const prevLocation = localStorage.getItem('console.location');
+  const prevLocation = localStorage.getItem('busola.location');
   if (prevLocation) {
-    localStorage.removeItem('console.location');
+    localStorage.removeItem('busola.location');
   }
   return prevLocation;
 };

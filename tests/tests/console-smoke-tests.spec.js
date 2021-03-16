@@ -2,10 +2,10 @@
 import config from '../config';
 
 const ADDRESS = config.localDev
-  ? `http://console-dev.${config.domain}:4200`
-  : `https://console.${config.domain}`;
+  ? `http://busola-dev.${config.domain}:4200`
+  : `https://busola.${config.domain}`;
 
-context('Console Smoke Tests', () => {
+context('Busola Smoke Tests', () => {
   before(() => {
     cy.clearSessionStorage().clearLocalStorage();
 

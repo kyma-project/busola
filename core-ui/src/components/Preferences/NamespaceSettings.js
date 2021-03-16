@@ -15,7 +15,7 @@ export default function NamespaceSettings() {
 
   const toggleVisibility = () => {
     LuigiClient.sendCustomMessage({
-      id: 'console.showSystemNamespaces',
+      id: 'busola.showSystemNamespaces',
       showSystemNamespaces: !showSystemNamespaces,
     });
     setShowSystemNamespaces(!showSystemNamespaces);
