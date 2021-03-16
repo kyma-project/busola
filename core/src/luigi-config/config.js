@@ -37,7 +37,7 @@ if (isNpx) {
     coreUIModuleUrl: isLocalDev
       ? localDomain + ':8889'
       : 'https://core-ui.' + domain,
-    pamelaApiUrl: isLocalDev
+    backendApiUrl: isLocalDev
       ? 'http://localhost:3001'
       : 'https://busola.' + domain + '/backend',
   };

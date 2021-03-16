@@ -1,7 +1,7 @@
 const domain = location.hostname.replace(/^busola(-dev)?\./, '');
 const isLocalDev = location.hostname.startsWith('busola-dev');
 
-function getPamelaApiUrl() {
+function getbackendApiUrl() {
   if (location.origin === 'http://localhost:3001') {
     return 'http://localhost:3001/backend'; // npx
   } else if (
@@ -19,5 +19,5 @@ export const getClusterConfig = () => ({
   domain,
   graphqlApiUrl: `https://busola-backend.${domain}/graphql`,
   subscriptionsApiUrl: `wss://busola-backend.${domain}/graphql`,
-  backendApiUrl: getPamelaApiUrl(),
+  backendApiUrl: getbackendApiUrl(),
 });

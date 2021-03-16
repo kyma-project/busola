@@ -99,9 +99,9 @@ npm run watch:libraries
 To build and run the Busola for `npx` mode:
 
 - Run `npm run build` in `/shared`.
-- Run `npm run build:npx` in `/core`, `/core-ui` and `/pamela`.
+- Run `npm run build:npx` in `/core`, `/core-ui` and `/backend`.
 - Export a kubeconfig in your terminal.
-- Run `node pamela-npx.js` in `/pamela` to start the app.
+- Run `node backend-npx.js` in `/backend` to start the app.
 
 ## Development
 
