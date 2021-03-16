@@ -8,7 +8,6 @@ import { initializeApp } from './utils/initialization';
 import { requestLogger } from './utils/other';
 
 npx.setupEnv();
-
 const app = express();
 app.use(express.raw({ type: '*/*' }));
 if (process.env.NODE_ENV === 'development') {
