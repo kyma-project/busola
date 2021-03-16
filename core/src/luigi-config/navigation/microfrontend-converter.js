@@ -54,8 +54,8 @@ function buildNode(name, node, spec, config, groups) {
   }
 
   const isLocalDev =
-  location.hostname.startsWith('busola-dev') ||
-  location.hostname.startsWith('localhost');
+    location.hostname.startsWith('busola-dev') ||
+    location.hostname.startsWith('localhost');
 
   if (isLocalDev && n.viewUrl) {
     n = processNodeForLocalDevelopment(n, spec, config);
