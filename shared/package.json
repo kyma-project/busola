@@ -6,7 +6,8 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "build": "webpack --env.production",
-    "start:kyma": "webpack --env.development --watch"
+    "start:kyma": "webpack --env.development --watch",
+    "build:npx": "echo no-op, done during bootstrap"
   },
   "author": "hasselhoff-team@kyma",
   "devDependencies": {
