@@ -88,8 +88,10 @@ resolve:
 
 pull-licenses-local:
 ifdef LICENSE_PULLER_PATH
+	echo 'lolo'+LICENSE_PULLER_PATH
 	bash $(LICENSE_PULLER_PATH) --dirs-to-pulling="../,../common,../components/react,../components/shared,../components/generic-documentation"
 else
+	echo 'lolo2'
 	mkdir -p licenses
 endif
 
