@@ -1,5 +1,5 @@
 import {
-  fetchConsoleInitData,
+  fetchBusolaInitData,
   fetchMicrofrontends,
   fetchNamespaces,
 } from './queries';
@@ -64,7 +64,7 @@ export let navigation = {
 
 export function getNavigationData(token) {
   return new Promise(function (resolve, reject) {
-    fetchConsoleInitData(token)
+    fetchBusolaInitData(token)
       .then(
         (res) => {
           const cmfs = res.clusterMicroFrontends;
@@ -135,7 +135,7 @@ export function getNavigationData(token) {
               bebEnabled,
               systemNamespaces,
               showSystemNamespaces:
-                localStorage.getItem('console.showSystemNamespaces') === 'true',
+                localStorage.getItem('busola.showSystemNamespaces') === 'true',
               k8sApiUrl,
             },
             children: function () {
@@ -168,7 +168,7 @@ async function getNamespaces() {
     console.error('Error while fetching namespaces', e);
     return [];
   }
-  if (localStorage.getItem('console.showSystemNamespaces') !== 'true') {
+  if (localStorage.getItem('busola.showSystemNamespaces') !== 'true') {
     namespaces = namespaces.filter((ns) => !systemNamespaces.includes(ns.name));
   }
   return createNamespacesList(namespaces);

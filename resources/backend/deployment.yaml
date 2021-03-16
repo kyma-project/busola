@@ -1,14 +1,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pamela
+  name: backend
   labels:
-    app: pamela
+    app: backend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: pamela
+      app: backend
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -16,18 +16,18 @@ spec:
   template:
     metadata:
       labels:
-        app: pamela
+        app: backend
     spec:
       containers:
-        - name: pamela
-          image: eu.gcr.io/kyma-project/pamela:PR-2157
+        - name: backend
+          image: ddagaa/busola-backend:1
           imagePullPolicy: Always
           securityContext:
             allowPrivilegeEscalation: false
             privileged: false
           ports:
             - containerPort: 3001
-              name: http-pamela
+              name: http-backend
               protocol: TCP
           resources: {}
           terminationMessagePath: /dev/termination-log

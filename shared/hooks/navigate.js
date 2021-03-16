@@ -20,7 +20,7 @@ function navigateToNamespaceDetails(namespaceName) {
   LuigiClient.linkManager().navigate(
     `/home/namespaces/${namespaceName}/details`,
   );
-  LuigiClient.sendCustomMessage({ id: 'console.refreshNavigation' });
+  LuigiClient.sendCustomMessage({ id: 'busola.refreshNavigation' });
 }
 
 export function navigateToDetails(resourceType, name) {
@@ -52,7 +52,7 @@ function navigateToResourceList() {
 
 function navigateToNamespaceList() {
   LuigiClient.linkManager().navigate('/');
-  LuigiClient.sendCustomMessage({ id: 'console.refreshNavigation' });
+  LuigiClient.sendCustomMessage({ id: 'busola.refreshNavigation' });
 }
 
 export function navigateToList(resourceType) {

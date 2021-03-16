@@ -9,6 +9,6 @@
     "logging",
     "core-ui",
     "shared",
-    "pamela"
+    "backend"
   ]
 }

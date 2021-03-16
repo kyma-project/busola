@@ -24,7 +24,7 @@ export const getDocumentsTypes = (svcClass, docsSortedByType = {}) => {
   let documentsTypes = [];
   if (svcClass) {
     if (docsSortedByType) documentsTypes = Object.keys(docsSortedByType);
-    if (svcClass.openApiSpec) documentsTypes.push('Console');
+    if (svcClass.openApiSpec) documentsTypes.push('Busola');
     if (svcClass.asyncApiSpec) documentsTypes.push('Events');
     if (svcClass.odataSpec) documentsTypes.push('OData');
   }

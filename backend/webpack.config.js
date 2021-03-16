@@ -20,6 +20,6 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, '.'),
-    filename: 'pamela-production.js',
+    filename: 'backend-production.js',
   },
 };

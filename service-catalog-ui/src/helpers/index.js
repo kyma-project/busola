@@ -5,7 +5,7 @@ export const getDocumentsTypes = (items, docsSortedByType) => {
   let documentsTypes = [];
   if (items) {
     if (docsSortedByType) documentsTypes = Object.keys(docsSortedByType);
-    if (items.openApiSpec) documentsTypes.push('Console');
+    if (items.openApiSpec) documentsTypes.push('Busola');
     if (items.asyncApiSpec) documentsTypes.push('Events');
     if (items.odataSpec) documentsTypes.push('OData');
   }

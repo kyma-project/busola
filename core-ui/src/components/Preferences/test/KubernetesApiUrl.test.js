@@ -27,7 +27,7 @@ describe('KubernetesApiUrl', () => {
 
     fireEvent.click(getByText('Update configuration'));
     expect(spy).toHaveBeenCalledWith({
-      id: 'console.updateInitParams',
+      id: 'busola.updateInitParams',
       k8sApiUrl: url,
     });
 

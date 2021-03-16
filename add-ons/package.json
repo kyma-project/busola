@@ -1,11 +1,11 @@
 {
   "name": "@kyma-project/addons-ui",
-  "description": "Addons Configuration UI for Kyma console",
+  "description": "Addons Configuration UI for Kyma busola",
   "private": true,
   "scripts": {
     "start": " PORT=8004 ../node_modules/.bin/react-app-rewired start",
-    "start:kyma": "BROWSER=none HOST=console-dev.kyma.local PORT=8004 ../node_modules/.bin/react-app-rewired start",
-    "start:kyma:api": "REACT_APP_LOCAL_API=true BROWSER=none HOST=console-dev.kyma.local PORT=8004 ../node_modules/.bin/react-app-rewired start",
+    "start:kyma": "BROWSER=none HOST=busola-dev.kyma.local PORT=8004 ../node_modules/.bin/react-app-rewired start",
+    "start:kyma:api": "REACT_APP_LOCAL_API=true BROWSER=none HOST=busola-dev.kyma.local PORT=8004 ../node_modules/.bin/react-app-rewired start",
     "build": "INLINE_RUNTIME_CHUNK=false REACT_APP_ENV=production ../node_modules/.bin/react-app-rewired build",
     "test": "../node_modules/.bin/react-app-rewired test --passWithNoTests --env=jsdom",
     "eject": "../node_modules/.bin/react-app-rewired eject",

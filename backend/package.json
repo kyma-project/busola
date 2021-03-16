@@ -1,15 +1,15 @@
 {
   "name": "@kyma-project/busola",
   "version": "0.0.1-rc.1",
-  "description": "APIserver proxy for Console",
+  "description": "APIserver proxy for Busola",
   "main": "backend.index.js",
-  "bin": "pamela-npx.js",
+  "bin": "backend-npx.js",
   "scripts": {
     "start:kyma": "npm run watch",
     "start:npx": "NODE_ENV=npx nodemon --exec babel-node index.js",
     "watch": "NODE_ENV=development nodemon --exec NODE_TLS_REJECT_UNAUTHORIZED=0 babel-node index.js",
     "build": "webpack",
-    "start": "NODE_ENV=production node pamela-production.js",
+    "start": "NODE_ENV=production node backend-production.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:npx": "webpack -c webpack-npx.config.js"
   },

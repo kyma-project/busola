@@ -17,7 +17,7 @@ describe('AdditionalSettings', () => {
     fireEvent.click(getByText('Update configuration'));
 
     expect(spy).toHaveBeenCalledWith({
-      id: 'console.updateInitParams',
+      id: 'busola.updateInitParams',
       bebEnabled: true,
     });
 

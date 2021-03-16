@@ -1,6 +1,6 @@
 {
   "name": "@kyma-project/components",
-  "description": "React components for Kyma Console",
+  "description": "React components for Kyma Busola",
   "private": true,
   "license": "Apache-2.0",
   "scripts": {

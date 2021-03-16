@@ -1,12 +1,12 @@
-# Console
+# Busola
 
 ## Overview
 
-Console is a web-based UI for managing resources within Kyma. It consists of separate frontend applications. Each project is responsible for providing a user interface for particular resource management.
+Busola is a web-based UI for managing resources within Kyma. It consists of separate frontend applications. Each project is responsible for providing a user interface for particular resource management.
 
 ### Components
 
-The Console project consists of the following UI projects:
+The Busola project consists of the following UI projects:
 
 - [`Core`](./core) - The main frame of Kyma UI
 - [`Service-Catalog-UI`](./service-catalog-ui) - The UI layer for Service Catalog, Instances and Brokers
@@ -14,7 +14,7 @@ The Console project consists of the following UI projects:
 - [`Log UI`](./logging) - The logs view
 - [`Tests`](./tests) - Acceptance and end-to-end tests
 
-The Console also includes React and Angular libraries:
+The Busola also includes React and Angular libraries:
 
 - [`React common`](./common) - common functionalities for React applications
 - [`React components`](./components/react) - components for React applications (it will be replaced by `Shared components`)
@@ -28,9 +28,9 @@ The Console also includes React and Angular libraries:
 
 ## Installation
 
-1. Install [Kyma](https://kyma-project.io/docs/master/root/kyma/#installation-install-kyma-locally) as a backing service for your local instance of Console. Make sure you import certificates into your operating system and mark them as trusted. Otherwise, you cannot access the applications hosted in the `kyma.local` domain.
+1. Install [Kyma](https://kyma-project.io/docs/master/root/kyma/#installation-install-kyma-locally) as a backing service for your local instance of Busola. Make sure you import certificates into your operating system and mark them as trusted. Otherwise, you cannot access the applications hosted in the `kyma.local` domain.
 
-2. Install Console dependencies. To install dependencies for the root and all UI projects, and prepare symlinks for local libraries within this repository, run the following command:
+2. Install Busola dependencies. To install dependencies for the root and all UI projects, and prepare symlinks for local libraries within this repository, run the following command:
 
    ```bash
    npm run bootstrap
@@ -42,14 +42,14 @@ The Console also includes React and Angular libraries:
    > - installs dependencies for the [`React common`](./common), [`React components`](./components/react), [`Shared components`](./components/shared) and [`Generic documentation`](./components/generic-documentation) libraries
    > - builds all the libraries
    > - installs dependencies for all the [components](#components)
-   > - updates your `/etc/hosts` with the `127.0.0.1 console-dev.kyma.local` host
+   > - updates your `/etc/hosts` with the `127.0.0.1 busola-dev.kyma.local` host
    > - creates the `.clusterConfig.gen` file if it doesn't exist, pointing at the `kyma.local` domain
 
 ## Usage
 
 ### Set the cluster (optional)
 
-By default, the Kyma cluster URL with which the Console communicates is set to `kyma.local`. To change the address of the cluster, run:
+By default, the Kyma cluster URL with which the Busola communicates is set to `kyma.local`. To change the address of the cluster, run:
 
 ```bash
 ./scripts/.setClusterConfig {CLUSTER_URL}
@@ -78,13 +78,13 @@ To reset the domain to the default kyma.local setting, run:
 
 ### Start all views
 
-Use the following command to run the Console with the [`core`](./core) and all other views locally:
+Use the following command to run the Busola with the [`core`](./core) and all other views locally:
 
 ```bash
 npm run start
 ```
 
-To get the credentials required to access the local instance of the Kyma Console at `http://console-dev.kyma.local:4200`, follow the instructions from [this](https://kyma-project.io/docs/master/root/kyma#installation-install-kyma-on-a-cluster-access-the-cluster) document.
+To get the credentials required to access the local instance of the Kyma Busola at `http://busola-dev.kyma.local:4200`, follow the instructions from [this](https://kyma-project.io/docs/master/root/kyma#installation-install-kyma-on-a-cluster-access-the-cluster) document.
 
 ### Watch changes in React libraries
 
@@ -96,22 +96,22 @@ npm run watch:libraries
 
 ## Development
 
-Once you start Kyma with Console locally, you can start development. All modules have hot-reload enabled therefore you can edit the code real time and see the changes in your browser.
+Once you start Kyma with Busola locally, you can start development. All modules have hot-reload enabled therefore you can edit the code real time and see the changes in your browser.
 
 The `Core` and other UIs run at the following addresses:
 
-- `Core` - [http://console-dev.kyma.local:4200](http://console-dev.kyma.local:4200)
-- `Log UI` - [http://console-dev.kyma.local:4400](http://console-dev.kyma.local:4400)
-- `Catalog` - [http://console-dev.kyma.local:8000](http://console-dev.kyma.local:8000)
-- `Instances` - [http://console-dev.kyma.local:8001](http://console-dev.kyma.local:8001)
-- `Brokers` - [http://console-dev.kyma.local:8002](http://console-dev.kyma.local:8002)
-- `Addons` - [http://console-dev.kyma.local:8004](http://console-dev.kyma.local:8004)
+- `Core` - [http://busola-dev.kyma.local:4200](http://busola-dev.kyma.local:4200)
+- `Log UI` - [http://busola-dev.kyma.local:4400](http://busola-dev.kyma.local:4400)
+- `Catalog` - [http://busola-dev.kyma.local:8000](http://busola-dev.kyma.local:8000)
+- `Instances` - [http://busola-dev.kyma.local:8001](http://busola-dev.kyma.local:8001)
+- `Brokers` - [http://busola-dev.kyma.local:8002](http://busola-dev.kyma.local:8002)
+- `Addons` - [http://busola-dev.kyma.local:8004](http://busola-dev.kyma.local:8004)
 
 If you want to run only a specific UI, follow the instructions in the appropriate folder.
 
 ### Development with local GraphQL API
 
-By default, the [`core`](./core) view and all other views are connected to the **GraphQL API** running on the cluster at the `https://console-backend.{CLUSTER_DOMAIN}/graphql` address. If you want to use the local **GraphQL API** endpoint, follow the instructions in the **Run a local version** section of [this](https://github.com/kyma-project/kyma/tree/master/components/console-backend-service#run-a-local-version) document and run this command:
+By default, the [`core`](./core) view and all other views are connected to the **GraphQL API** running on the cluster at the `https://busola-backend.{CLUSTER_DOMAIN}/graphql` address. If you want to use the local **GraphQL API** endpoint, follow the instructions in the **Run a local version** section of [this](https://github.com/kyma-project/kyma/tree/master/components/busola-backend-service#run-a-local-version) document and run this command:
 
 ```bash
 npm run start:api
@@ -119,11 +119,11 @@ npm run start:api
 
 ### Security countermeasures
 
-When developing new features in Console UI, adhere to the following rules. This will help you to mitigate any security-related threats.
+When developing new features in Busola UI, adhere to the following rules. This will help you to mitigate any security-related threats.
 
 #### Prevent Cross-site request forgery (XSRF)
 
-- Do not store the authentication token as a cookie. Make sure the token is sent to the Console Backend Service as a bearer token.
+- Do not store the authentication token as a cookie. Make sure the token is sent to the Busola Backend Service as a bearer token.
 - Make sure that state-changing operations (gql mutations) are only triggered upon explicit user interactions such as form submissions.
 - Keep in mind that UI rendering in response to user navigating between views is only allowed to trigger read-only operations (gql queries and subscriptions) without any data mutations.
 
@@ -140,15 +140,15 @@ For the information on how to run tests and configure them, go to the [`tests`](
 
 ## Troubleshooting
 
-> **TIP:** To solve most of the problems with the Console development, clear the browser cache or do a hard refresh of the website.
+> **TIP:** To solve most of the problems with the Busola development, clear the browser cache or do a hard refresh of the website.
 
 ### CI fails on PRs related to staging dependencies
 
 Remove the `node_modules` folder and the `package-lock.json` file in all libraries in the [`components`](./components) folder and on the root. Then rerun the `npm run bootstrap` command in the root context and push all the changes.
 
-### Can't access `console.kyma.local` and `console-dev.kyma.local:4200` after hibernating the Minikube cluster
+### Can't access `busola.kyma.local` and `busola-dev.kyma.local:4200` after hibernating the Minikube cluster
 
-Follow the guidelines from [this](https://kyma-project.io/docs/#troubleshooting-basic-troubleshooting-can-t-log-in-to-the-console-after-hibernating-the-minikube-cluster) document to solve the problem.
+Follow the guidelines from [this](https://kyma-project.io/docs/#troubleshooting-basic-troubleshooting-can-t-log-in-to-the-busola-after-hibernating-the-minikube-cluster) document to solve the problem.
 
 ### Check the availability of a remote cluster
 

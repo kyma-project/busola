@@ -41,7 +41,7 @@ export const serviceClassConstants = {
 };
 
 export const serviceClassTabs = {
-  openApi: 'Console',
+  openApi: 'Busola',
   asyncApi: 'Events',
   odata: 'OData',
 };
@@ -90,7 +90,7 @@ export const serviceInstanceConstants = {
 };
 
 export const serviceInstanceTabs = {
-  openApi: 'Console',
+  openApi: 'Busola',
   asyncApi: 'Events',
   odata: 'OData',
 };

@@ -1,8 +1,8 @@
-const domain = location.hostname.replace(/^console(-dev)?\./, '');
+const domain = location.hostname.replace(/^busola(-dev)?\./, '');
 
 export const getClusterConfig = () =>
   ({
     domain,
-    graphqlApiUrl: `https://console-backend.${domain}/graphql`,
-    subscriptionsApiUrl: `wss://console-backend.${domain}/graphql`,
+    graphqlApiUrl: `https://busola-backend.${domain}/graphql`,
+    subscriptionsApiUrl: `wss://busola-backend.${domain}/graphql`,
   } as any);

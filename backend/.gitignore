@@ -23,10 +23,10 @@ yarn-debug.log*
 yarn-error.log*
 
 
-pamela-production.js
-pamela-production.js.LICENSE*
+backend-production.js
+backend-production.js.LICENSE*
 
 
-pamela-npx.js
+backend-npx.js
 core/
 core-ui/

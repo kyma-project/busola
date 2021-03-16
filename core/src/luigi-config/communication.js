@@ -5,9 +5,9 @@ import { saveInitParams, getInitParams } from './init-params';
 
 export const communication = {
   customMessagesListeners: {
-    'console.showSystemNamespaces': ({ showSystemNamespaces }) => {
+    'busola.showSystemNamespaces': ({ showSystemNamespaces }) => {
       localStorage.setItem(
-        'console.showSystemNamespaces',
+        'busola.showSystemNamespaces',
         showSystemNamespaces
       );
       if (showSystemNamespaces) {
@@ -16,27 +16,27 @@ export const communication = {
         Luigi.featureToggles().unsetFeatureToggle('showSystemNamespaces');
       }
     },
-    'console.showExperimentalViews': ({ showExperimentalViews }) => {
+    'busola.showExperimentalViews': ({ showExperimentalViews }) => {
       localStorage.setItem(
-        'console.showExperimentalViews',
+        'busola.showExperimentalViews',
         showExperimentalViews
       );
     },
-    'console.updateInitParams': (modifiedParams) => {
+    'busola.updateInitParams': (modifiedParams) => {
       const params = getInitParams();
       delete modifiedParams.id;
       saveInitParams({ ...params, ...modifiedParams });
       location.reload();
     },
-    'console.refreshNavigation': () => {
+    'busola.refreshNavigation': () => {
       Luigi.configChanged('navigation.nodes');
     },
-    'console.setWindowTitle': ({ title }) => {
+    'busola.setWindowTitle': ({ title }) => {
       const luigiConfig = Luigi.getConfig();
       luigiConfig.settings.header.title = `Kyma - ${title}`;
       Luigi.configChanged('settings.header');
     },
-    'console.silentNavigate': ({ newParams }) => {
+    'busola.silentNavigate': ({ newParams }) => {
       const { search: paramsString, pathname } = new URL(window.location.href);
       const currentParams = convertToObject(paramsString);
 

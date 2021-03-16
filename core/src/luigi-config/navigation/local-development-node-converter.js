@@ -10,7 +10,7 @@ export default function processNodeForLocalDevelopment(node, spec, config) {
   ];
 
   const isNodeMicroFrontend = node.viewUrl.startsWith(
-    `https://console.${domain}`
+    `https://busola.${domain}`
   );
   let isNodeClusterMicroFrontend = false;
   const nodePreloadUrl =
@@ -55,7 +55,7 @@ export default function processNodeForLocalDevelopment(node, spec, config) {
 }
 
 function adjustMicroFrontendUrlForLocalDevelopment(url) {
-  return url.replace(`https://console.${domain}`, `http://${localDomain}:4200`);
+  return url.replace(`https://busola.${domain}`, `http://${localDomain}:4200`);
 }
 
 function adjustClusterMicroFrontendUrlForLocalDevelopment(url, domainBinding) {

@@ -3,7 +3,7 @@ black-list: ['node_modules']
 timeout: 60
 request-repeats: 5
 files:
-  - path: './console/.github/ISSUE_TEMPLATE/security-vulnerability.md'
+  - path: './busola/.github/ISSUE_TEMPLATE/security-vulnerability.md'
     config:
       white-list-internal: ['{CVSS']
       white-list-external:

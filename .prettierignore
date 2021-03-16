@@ -82,6 +82,6 @@ shared/build
 
 core
 **/public/config/config.js
-pamela/pamela-production.*
+backend/backend-production.*
 
 **/temp/**
