@@ -1,5 +1,5 @@
 import {
-  fetchConsoleInitData,
+  fetchBusolaInitData,
   fetchMicrofrontends,
   fetchNamespaces,
 } from './queries';
@@ -64,7 +64,7 @@ export let navigation = {
 
 export function getNavigationData(token) {
   return new Promise(function (resolve, reject) {
-    fetchConsoleInitData(token)
+    fetchBusolaInitData(token)
       .then(
         (res) => {
           const cmfs = res.clusterMicroFrontends;

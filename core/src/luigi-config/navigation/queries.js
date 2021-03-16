@@ -19,7 +19,7 @@ function mapMicrofrontends(microFrontendList, config) {
   }));
 }
 
-export function fetchConsoleInitData(token) {
+export function fetchBusolaInitData(token) {
   const backendModulesQuery = fetch(
     `${config.backendApiUrl}/apis/ui.kyma-project.io/v1alpha1/backendmodules`,
     {
