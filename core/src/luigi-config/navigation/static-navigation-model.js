@@ -729,6 +729,38 @@ export function getStaticRootNodes(namespaceChildrenNodesResolver) {
       ],
     },
     {
+      pathSegment: 'applications',
+      navigationContext: 'applications',
+      label: 'Applications/Systems',
+      category: 'Integration',
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/applications?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/applicationconnector.kyma-project.io/v1alpha1',
+          hasDetailsView: true,
+        }),
+      keepSelectedForChildren: true,
+      viewGroup: coreUIViewGroupName,
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':name',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/applications/:name?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/applicationconnector.kyma-project.io/v1alpha1',
+                }),
+              viewGroup: coreUIViewGroupName,
+            },
+          ],
+        },
+      ],
+    },
+    {
       category: {
         label: 'Diagnostics',
         icon: 'electrocardiogram',
