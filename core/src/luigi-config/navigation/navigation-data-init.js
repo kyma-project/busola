@@ -1,14 +1,9 @@
-import {
-  fetchBusolaInitData,
-  fetchMicrofrontends,
-  fetchNamespaces,
-} from './queries';
+import { fetchBusolaInitData, fetchNamespaces } from './queries';
 import { config } from '../config';
 import {
   getStaticChildrenNodesForNamespace,
   getStaticRootNodes,
 } from './static-navigation-model';
-import convertToNavigationTree from './microfrontend-converter';
 import navigationPermissionChecker, {
   setInitValues,
   backendModules,
@@ -22,9 +17,6 @@ import {
 } from './navigation-helpers';
 import { groups } from '../auth';
 import { getInitParams } from '../init-params';
-
-let clusterMicrofrontendNodes = [];
-let clusterMicrofrontendNodesForNamespace = [];
 
 export let resolveNavigationNodes;
 export let navigation = {
@@ -66,46 +58,7 @@ export function getNavigationData(token) {
   return new Promise(function (resolve, reject) {
     fetchBusolaInitData(token)
       .then(
-        (res) => {
-          const cmfs = res.clusterMicroFrontends;
-          setInitValues(res.backendModules, res.selfSubjectRules || []);
-
-          clusterMicrofrontendNodes = cmfs
-            .filter((cmf) => cmf.placement === 'cluster')
-            .map((cmf) => {
-              if (cmf.navigationNodes) {
-                var tree = convertToNavigationTree(
-                  cmf.name,
-                  cmf,
-                  config,
-                  navigation,
-                  'cmf-',
-                  groups
-                );
-                return tree;
-              }
-              return [];
-            });
-          clusterMicrofrontendNodesForNamespace = cmfs
-            .filter(
-              (cmf) =>
-                cmf.placement === 'namespace' || cmf.placement === 'environment'
-            )
-            .map((cmf) => {
-              // console.log(cmf.name, cmf);
-              if (cmf.navigationNodes) {
-                return convertToNavigationTree(
-                  cmf.name,
-                  cmf,
-                  config,
-                  navigation,
-                  'cmf-',
-                  groups
-                );
-              }
-              return [];
-            });
-        },
+        (res) => setInitValues(res.backendModules, res.selfSubjectRules || []),
         (err) => {
           if (err === 'access denied') {
             clearToken();
@@ -142,10 +95,8 @@ export function getNavigationData(token) {
               const staticNodes = getStaticRootNodes(
                 getChildrenNodesForNamespace
               );
-              const fetchedNodes = [].concat(...clusterMicrofrontendNodes);
-              const nodeTree = [...staticNodes, ...fetchedNodes];
-              hideDisabledNodes(disabledNavigationNodes, nodeTree, false);
-              return nodeTree;
+              hideDisabledNodes(disabledNavigationNodes, staticNodes, false);
+              return staticNodes;
             },
           },
         ];
@@ -174,80 +125,10 @@ async function getNamespaces() {
   return createNamespacesList(namespaces);
 }
 
-function getChildrenNodesForNamespace(context) {
-  const namespace = context.namespaceId;
-  var staticNodes = getStaticChildrenNodesForNamespace();
+function getChildrenNodesForNamespace() {
+  const { disabledNavigationNodes } = getInitParams();
+  const staticNodes = getStaticChildrenNodesForNamespace();
 
-  return Promise.all([
-    getMicrofrontends(namespace),
-    Promise.resolve(clusterMicrofrontendNodesForNamespace),
-  ])
-    .then(function (values) {
-      const { disabledNavigationNodes } = getInitParams();
-      var nodeTree = [...staticNodes];
-      values.forEach(function (val) {
-        nodeTree = [].concat.apply(nodeTree, val);
-      });
-
-      hideDisabledNodes(disabledNavigationNodes, nodeTree, true);
-      return nodeTree;
-    })
-    .catch((err) => {
-      const errParsed = JSON.parse(err);
-      console.error('Error', errParsed);
-      const settings = {
-        text: `Namespace ${errParsed.details.name} not found.`,
-        type: 'error',
-      };
-      LuigiClient.uxManager().showAlert(settings);
-    });
+  hideDisabledNodes(disabledNavigationNodes, staticNodes, true);
+  return staticNodes;
 }
-
-/**
- * getMicrofrontends
- * @param {string} namespace k8s namespace name
- */
-const getMicrofrontends = async (namespace) => {
-  const segmentPrefix = 'mf-';
-
-  const cacheName = '_console_mf_cache_';
-  if (!window[cacheName]) {
-    window[cacheName] = {};
-  }
-  const cache = window[cacheName];
-  const cacheKey = segmentPrefix + namespace;
-  const fromCache = cache[cacheKey];
-
-  return (
-    fromCache ||
-    fetchMicrofrontends(namespace, getToken())
-      .then((result) => {
-        if (!result.microFrontends || !result.microFrontends.length) {
-          return [];
-        }
-        return result.microFrontends.map(function (item) {
-          if (item.navigationNodes) {
-            return convertToNavigationTree(
-              item.name,
-              item,
-              config,
-              navigation,
-              segmentPrefix,
-              groups
-            );
-          }
-          return [];
-        });
-      })
-      .catch((err) => {
-        console.error(`Error fetching Microfrontend ${name}: ${err}`);
-        return [];
-      })
-      .then((result) => {
-        cache[cacheKey] = new Promise(function (resolve) {
-          resolve(result);
-        });
-        return result;
-      })
-  );
-};
