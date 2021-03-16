@@ -28,7 +28,7 @@ function editApiRuleModal(
   if (!inSubView) {
     LuigiClient.linkManager()
       .fromContext('namespaces')
-      .navigate(`cmf-apirules/edit/${apiRule.metadata.name}`);
+      .navigate(`apirules/edit/${apiRule.metadata.name}`);
     return;
   }
 
@@ -45,7 +45,7 @@ function editApiRuleModal(
       redirectCtx: redirectCtx,
       redirectPath: encodeURIComponent(redirectPath),
     })
-    .openAsModal(`cmf-apirules/edit/${apiRule.metadata.name}`, {
+    .openAsModal(`apirules/edit/${apiRule.metadata.name}`, {
       title: formattedTitle,
     });
 }
@@ -60,7 +60,7 @@ function createApiRuleModal(
   if (!inSubView) {
     LuigiClient.linkManager()
       .fromContext('namespaces')
-      .navigate(`cmf-apirules/create`);
+      .navigate(`apirules/create`);
     return;
   }
 
@@ -73,7 +73,7 @@ function createApiRuleModal(
       redirectCtx: redirectCtx,
       redirectPath: encodeURIComponent(redirectPath),
     })
-    .openAsModal(`cmf-apirules/create`, {
+    .openAsModal(`apirules/create`, {
       title: PANEL.CREATE_MODAL.TITLE,
     });
 }

@@ -125,7 +125,7 @@ describe('ApiRulesListWrapper + ApiRulesList', () => {
 
   //     getByText(apiRuleMock.name).click();
   //     expect(mockNavigate).toHaveBeenCalledWith(
-  //       `cmf-apirules/details/${apiRuleMock.name}`,
+  //       `apirules/details/${apiRuleMock.name}`,
   //     );
   //   });
 
@@ -135,7 +135,7 @@ describe('ApiRulesListWrapper + ApiRulesList', () => {
   //     );
 
   //     getByText(PANEL.CREATE_BUTTON.TEXT).click();
-  //     expect(mockNavigate).toHaveBeenCalledWith('cmf-apirules/create');
+  //     expect(mockNavigate).toHaveBeenCalledWith('apirules/create');
   //   });
 
   //   it('Clicking on "Create" navigate to creation page', async () => {
@@ -144,7 +144,7 @@ describe('ApiRulesListWrapper + ApiRulesList', () => {
   //     );
 
   //     getByText(PANEL.CREATE_BUTTON.TEXT).click();
-  //     expect(mockNavigate).toHaveBeenCalledWith('cmf-apirules/create');
+  //     expect(mockNavigate).toHaveBeenCalledWith('apirules/create');
   //   });
 
   //   it('Clicking on "Edit" navigate to edit page', async () => {
@@ -156,7 +156,7 @@ describe('ApiRulesListWrapper + ApiRulesList', () => {
   //     expect(editButtons).toHaveLength(1);
   //     editButtons[0].click();
   //     expect(mockNavigate).toHaveBeenCalledWith(
-  //       `cmf-apirules/edit/${apiRuleMock.name}`,
+  //       `apirules/edit/${apiRuleMock.name}`,
   //     );
   //   });
 });

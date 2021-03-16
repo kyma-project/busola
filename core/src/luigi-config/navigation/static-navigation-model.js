@@ -472,6 +472,71 @@ export function getStaticChildrenNodesForNamespace() {
       ],
     },
     {
+      category: 'Service Management',
+      pathSegment: 'brokers',
+      navigationContext: 'brokers',
+      label: 'Brokers',
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/servicebrokers?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/servicecatalog.k8s.io/v1beta1',
+          hasDetailsView: false,
+        }),
+      viewGroup: coreUIViewGroupName,
+    },
+    {
+      category: 'Discovery and Network',
+      pathSegment: 'apirules',
+      navigationContext: 'apirules',
+      label: 'API Rules',
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/apirules?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/gateway.kyma-project.io/v1alpha1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':apiName',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/apirules/:apiName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/gateway.kyma-project.io/v1alpha1',
+                }),
+            },
+          ],
+        },
+        {
+          pathSegment: 'create',
+          viewUrl:
+            config.coreUIModuleUrl +
+            '/apirules/create?' +
+            toSearchParamsString({
+              resourceApiPath: '/apis/gateway.kyma-project.io/v1alpha1',
+              hasDetailsView: true,
+            }),
+        },
+        {
+          pathSegment: 'edit/:apiName',
+          viewUrl:
+            config.coreUIModuleUrl +
+            '/apirules/edit/:apiName?' +
+            toSearchParamsString({
+              resourceApiPath: '/apis/gateway.kyma-project.io/v1alpha1',
+              hasDetailsView: true,
+            }),
+        },
+      ],
+    },
+    {
       category: { label: 'Experimental', icon: 'lab', collapsible: true },
       hideFromNav: true,
     },
@@ -534,6 +599,19 @@ export function getStaticRootNodes(namespaceChildrenNodesResolver) {
       onNodeActivation: downloadKubeconfig,
     },
     {
+      category: "Integration",
+      pathSegment: 'cluster-brokers',
+      navigationContext: 'cluster-roles',
+      label: 'Cluster Brokers',
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/clusterservicebrokers?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/servicecatalog.k8s.io/v1beta1',
+          hasDetailsView: true,
+        }),
+      },
+    {
       pathSegment: 'cluster-roles',
       navigationContext: 'cluster-roles',
       label: 'Cluster Roles',
@@ -577,7 +655,6 @@ export function getStaticRootNodes(namespaceChildrenNodesResolver) {
         },
       ],
     },
-
     {
       pathSegment: 'cluster-role-bindings',
       navigationContext: 'cluster-role-bindings',
