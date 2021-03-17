@@ -86,13 +86,12 @@ resolve:
 	cd .. && npm run bootstrap:ci
 	npm ci --no-optional
 
-pull-licenses-local:
+pull-licenses:
 ifdef LICENSE_PULLER_PATH
 	bash $(LICENSE_PULLER_PATH) --dirs-to-pulling="../,../common,../components/react,../components/shared,../components/generic-documentation"
 else
 	mkdir -p licenses
 endif
-
 
 # Targets copying sources to buildpack
 COPY_TARGETS = do-npm-stuff

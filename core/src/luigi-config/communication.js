@@ -6,10 +6,7 @@ import { saveInitParams, getInitParams } from './init-params';
 export const communication = {
   customMessagesListeners: {
     'busola.showSystemNamespaces': ({ showSystemNamespaces }) => {
-      localStorage.setItem(
-        'busola.showSystemNamespaces',
-        showSystemNamespaces
-      );
+      localStorage.setItem('busola.showSystemNamespaces', showSystemNamespaces);
       if (showSystemNamespaces) {
         Luigi.featureToggles().setFeatureToggle('showSystemNamespaces');
       } else {
