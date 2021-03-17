@@ -46,7 +46,7 @@ export default function ConnectApplicationModal({ applicationName }) {
 
     try {
       await deleteTokenRequest(path);
-    } catch (_) { }
+    } catch (_) {}
 
     try {
       postRequest(path, tokenRequest);
