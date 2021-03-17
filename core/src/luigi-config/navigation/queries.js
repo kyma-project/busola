@@ -20,6 +20,12 @@ export function fetchBusolaInitData(token) {
     .then((data) => ({ backendModules: data.items.map((bM) => bM.metadata) }))
     .catch(() => ({ backendModules: [] }));
 
+  const apiGroupsQuery = fetch(config.backendApiUrl, {
+    headers: createHeaders(token),
+  })
+    .then((res) => res.json())
+    .then((data) => ({ apiGroups: data.paths }));
+
   const ssrr = {
     typeMeta: {
       kind: 'SelfSubjectRulesReview',
@@ -39,7 +45,7 @@ export function fetchBusolaInitData(token) {
     .then((res) => res.json())
     .then((res) => ({ selfSubjectRules: res.status.resourceRules }));
 
-  const promises = [backendModulesQuery, ssrrQuery];
+  const promises = [backendModulesQuery, apiGroupsQuery, ssrrQuery];
 
   return Promise.all(promises).then((res) => Object.assign(...res));
 }

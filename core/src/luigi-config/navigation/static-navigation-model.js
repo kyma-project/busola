@@ -23,8 +23,8 @@ function toSearchParamsString(object) {
   return new URLSearchParams(object).toString();
 }
 
-export function getStaticChildrenNodesForNamespace() {
-  return [
+export function getStaticChildrenNodesForNamespace(apiGroups) {
+  const nodes = [
     {
       link: '/home/workspace',
       label: 'Back to Namespaces',
@@ -486,6 +486,62 @@ export function getStaticChildrenNodesForNamespace() {
       viewGroup: coreUIViewGroupName,
     },
     {
+      category: 'Service Management',
+      pathSegment: 'catalog',
+      navigationContext: 'catalog',
+      label: 'Catalog',
+      viewUrl: config.serviceCatalogModuleUrl + '/catalog',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':serviceId',
+              viewUrl:
+                config.serviceCatalogModuleUrl + '/catalog/details/:serviceId',
+              children: [
+                {
+                  pathSegment: 'plans',
+                  viewUrl:
+                    config.serviceCatalogModuleUrl +
+                    '/catalog/details/:serviceId/plans',
+                },
+                {
+                  pathSegment: 'plan',
+                  children: [
+                    {
+                      pathSegment: ':planId',
+                      viewUrl:
+                        config.serviceCatalogModuleUrl +
+                        '/catalog/details/:serviceId/plan/:planId',
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: 'Service Management',
+      pathSegment: 'instances',
+      navigationContext: 'instances',
+      label: 'Instances',
+      viewUrl: config.serviceCatalogModuleUrl + '/instances',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':name',
+              viewUrl: config.serviceCatalogModuleUrl + '/instances/:name?',
+            },
+          ],
+        },
+      ],
+    },
+    {
       category: 'Discovery and Network',
       pathSegment: 'apirules',
       navigationContext: 'apirules',
@@ -541,10 +597,12 @@ export function getStaticChildrenNodesForNamespace() {
       hideFromNav: true,
     },
   ];
+  filterNodesByAvailablePaths(nodes, apiGroups);
+  return nodes;
 }
 
-export function getStaticRootNodes(namespaceChildrenNodesResolver) {
-  return [
+export function getStaticRootNodes(namespaceChildrenNodesResolver, apiGroups) {
+  const nodes = [
     {
       pathSegment: 'workspace',
       label: 'Namespaces',
@@ -570,7 +628,7 @@ export function getStaticRootNodes(namespaceChildrenNodesResolver) {
             namespaceId: ':namespaceId',
             environmentId: ':namespaceId',
           },
-          children: namespaceChildrenNodesResolver,
+          children: () => namespaceChildrenNodesResolver(apiGroups),
           navigationContext: 'namespaces',
           defaultChildNode: 'details',
         },
@@ -599,7 +657,7 @@ export function getStaticRootNodes(namespaceChildrenNodesResolver) {
       onNodeActivation: downloadKubeconfig,
     },
     {
-      category: "Integration",
+      category: 'Integration',
       pathSegment: 'cluster-brokers',
       navigationContext: 'cluster-roles',
       label: 'Cluster Brokers',
@@ -610,7 +668,7 @@ export function getStaticRootNodes(namespaceChildrenNodesResolver) {
           resourceApiPath: '/apis/servicecatalog.k8s.io/v1beta1',
           hasDetailsView: true,
         }),
-      },
+    },
     {
       pathSegment: 'cluster-roles',
       navigationContext: 'cluster-roles',
@@ -737,7 +795,8 @@ export function getStaticRootNodes(namespaceChildrenNodesResolver) {
         config.coreUIModuleUrl +
         '/applications?' +
         toSearchParamsString({
-          resourceApiPath: '/apis/applicationconnector.kyma-project.io/v1alpha1',
+          resourceApiPath:
+            '/apis/applicationconnector.kyma-project.io/v1alpha1',
           hasDetailsView: true,
         }),
       keepSelectedForChildren: true,
@@ -752,7 +811,8 @@ export function getStaticRootNodes(namespaceChildrenNodesResolver) {
                 config.coreUIModuleUrl +
                 '/applications/:name?' +
                 toSearchParamsString({
-                  resourceApiPath: '/apis/applicationconnector.kyma-project.io/v1alpha1',
+                  resourceApiPath:
+                    '/apis/applicationconnector.kyma-project.io/v1alpha1',
                 }),
               viewGroup: coreUIViewGroupName,
             },
@@ -761,21 +821,57 @@ export function getStaticRootNodes(namespaceChildrenNodesResolver) {
       ],
     },
     {
-      pathSegment: 'logs',
-      label: 'Logs',
-      category: 'Diagnostics',
-      viewUrl:
-        config.logsModuleUrl +
-        '/?function={nodeParams.function}&pod={nodeParams.pod}&namespace={nodeParams.namespace}&container_name={nodeParams.container_name}', // todo handle when logs are reintroduced
-        hideFromNav: true,
-    },
-    {
       category: {
         label: 'Diagnostics',
         icon: 'electrocardiogram',
         collapsible: true,
       },
       pathSegment: '_integration_category_placeholder_',
+      hideFromNav: false,
+    },
+    {
+      label: 'Logs',
+      category: 'Diagnostics',
+      viewUrl: '',
+      externalLink: {
+        url:
+          'https://grafana.kyma0.hasselhoff.shoot.canary.k8s-hana.ondemand.com/explore?left=%5B"now-1h","now","Loki",%7B%7D,%7B"mode":"Logs"%7D,%7B"ui":%5Btrue,true,true,"none"%5D%7D%5D',
+      },
+    },
+    {
+      label: 'Metrics',
+      category: 'Diagnostics',
+      viewUrl: '',
+      externalLink: {
+        url:
+          'https://grafana.kyma0.hasselhoff.shoot.canary.k8s-hana.ondemand.com',
+      },
+    },
+    {
+      label: 'Traces',
+      category: 'Diagnostics',
+      viewUrl: '',
+      externalLink: {
+        url:
+          'https://jaeger.kyma0.hasselhoff.shoot.canary.k8s-hana.ondemand.com',
+      },
+    },
+    {
+      label: 'Service Mesh',
+      category: 'Diagnostics',
+      viewUrl: '',
+      externalLink: {
+        url:
+          'https://kiali.kyma0.hasselhoff.shoot.canary.k8s-hana.ondemand.com',
+      },
+    },
+    {
+      pathSegment: 'logs',
+      label: 'Logs',
+      category: 'Diagnostics',
+      viewUrl:
+        config.logsModuleUrl +
+        '/?function={nodeParams.function}&pod={nodeParams.pod}&namespace={nodeParams.namespace}&container_name={nodeParams.container_name}', // todo handle when logs are reintroduced
       hideFromNav: true,
     },
     {
@@ -783,4 +879,22 @@ export function getStaticRootNodes(namespaceChildrenNodesResolver) {
       hideFromNav: true,
     },
   ];
+  filterNodesByAvailablePaths(nodes, apiGroups);
+  return nodes;
+}
+
+function filterNodesByAvailablePaths(nodes, apiGroups) {
+  for (let i = nodes.length - 1; i >= 0; i--) {
+    const node = nodes[i];
+    if (typeof node.children === 'object') {
+      filterNodesByAvailablePaths(node.children, apiGroups);
+    }
+    if (!node.viewUrl) continue;
+    const apiPath = new URL(node.viewUrl).searchParams.get('resourceApiPath');
+    if (!apiPath) continue;
+
+    if (!apiGroups.includes(apiPath)) {
+      nodes.splice(i, 1);
+    }
+  }
 }

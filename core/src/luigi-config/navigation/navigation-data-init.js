@@ -58,7 +58,10 @@ export function getNavigationData(token) {
   return new Promise(function (resolve, reject) {
     fetchBusolaInitData(token)
       .then(
-        (res) => setInitValues(res.backendModules, res.selfSubjectRules || []),
+        (res) => {
+          setInitValues(res.backendModules, res.selfSubjectRules || []);
+          return res;
+        },
         (err) => {
           if (err === 'access denied') {
             clearToken();
@@ -70,7 +73,7 @@ export function getNavigationData(token) {
         }
       )
       // 'Finally' not supported by IE and FIREFOX (if 'finally' is needed, update your .babelrc)
-      .then(() => {
+      .then((res) => {
         const {
           k8sApiUrl,
           bebEnabled,
@@ -93,7 +96,8 @@ export function getNavigationData(token) {
             },
             children: function () {
               const staticNodes = getStaticRootNodes(
-                getChildrenNodesForNamespace
+                getChildrenNodesForNamespace,
+                res.apiGroups
               );
               hideDisabledNodes(disabledNavigationNodes, staticNodes, false);
               return staticNodes;
@@ -125,9 +129,9 @@ async function getNamespaces() {
   return createNamespacesList(namespaces);
 }
 
-function getChildrenNodesForNamespace() {
+function getChildrenNodesForNamespace(apiGroups) {
   const { disabledNavigationNodes } = getInitParams();
-  const staticNodes = getStaticChildrenNodesForNamespace();
+  const staticNodes = getStaticChildrenNodesForNamespace(apiGroups);
 
   hideDisabledNodes(disabledNavigationNodes, staticNodes, true);
   return staticNodes;
