@@ -1,6 +1,6 @@
 import { config } from './../config';
 
-export const hideDisabledNodes = (disabledNavNodes, nodes, namespace) => {
+export const hideDisabledNodes = (disabledNavNodes, nodes, inNamespace) => {
   if (disabledNavNodes !== null && disabledNavNodes !== undefined) {
     const disabledNavNodesArray = disabledNavNodes.split(' ');
     if (disabledNavNodesArray && disabledNavNodesArray.length > 0) {
@@ -12,7 +12,7 @@ export const hideDisabledNodes = (disabledNavNodes, nodes, namespace) => {
             ? node.category.label.split(' ').join('').toLowerCase()
             : node.category.split(' ').join('').toLowerCase()
           : '';
-        const categoryId = namespace
+        const categoryId = inNamespace
           ? nodeCategory
             ? `namespace.${nodeCategory}`
             : 'namespace'

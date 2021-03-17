@@ -52,9 +52,9 @@ export const ApiRulesDetails = DefaultRenderer => ({ ...otherParams }) => {
               port: apirule.spec.service.port,
               openedInModal: true,
               redirectCtx: 'namespaces',
-              redirectPath: encodeURIComponent('cmf-apirules/'),
+              redirectPath: encodeURIComponent('apirules/'),
             })
-            .openAsModal(`cmf-apirules/edit/${apirule.metadata.name}`, {
+            .openAsModal(`apirules/edit/${apirule.metadata.name}`, {
               title: formattedTitle,
             })
         }

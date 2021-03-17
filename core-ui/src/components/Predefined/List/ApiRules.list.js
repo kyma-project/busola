@@ -20,9 +20,9 @@ export const ApiRulesList = DefaultRenderer => ({ ...otherParams }) => {
             port: otherParams.port,
             openedInModal: true,
             redirectCtx: 'namespaces',
-            redirectPath: encodeURIComponent('cmf-apirules/'),
+            redirectPath: encodeURIComponent('apirules/'),
           })
-          .openAsModal(`cmf-apirules/create`, {
+          .openAsModal(`apirules/create`, {
             title: PANEL.CREATE_MODAL.TITLE,
           })
       }
