@@ -157,7 +157,7 @@ Remove the `node_modules` folder and the `package-lock.json` file in all librari
 
 ### Can't access `busola.kyma.local` and `busola-dev.kyma.local:4200` after hibernating the Minikube cluster
 
-Follow the guidelines from [this](https://kyma-project.io/docs/#troubleshooting-basic-troubleshooting-can-t-log-in-to-the-busola-after-hibernating-the-minikube-cluster) document to solve the problem.
+Follow the guidelines from [this](https://kyma-project.io/docs/#troubleshooting-basic-troubleshooting-can-t-log-in-to-the-console-after-hibernating-the-minikube-cluster) document to solve the problem.
 
 ### Check the availability of a remote cluster
 
