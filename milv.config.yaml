@@ -1,4 +1,4 @@
-internal-links-to-ignore: ['localhost', 'kyma.local']
+external-links-to-ignore: ['localhost', 'kyma.local']
 files-to-ignore: ['node_modules']
 timeout: 60
 request-repeats: 5
