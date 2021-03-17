@@ -4,7 +4,7 @@ import LuigiClient from '@luigi-project/client';
 import { CONFIG } from 'components/Lambdas/config';
 import { LOGS_AND_METRICS } from 'components/Lambdas/constants';
 
-const CMF_LOGS_PATH = '/home/cmf-logs';
+const CMF_LOGS_PATH = '/home/logs';
 
 function runFnOnContextUpdate(url, cleanupFn) {
   if (url !== window.location.pathname) {

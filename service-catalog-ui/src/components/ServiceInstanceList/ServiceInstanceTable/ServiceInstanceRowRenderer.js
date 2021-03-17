@@ -17,7 +17,7 @@ import { ServiceInstanceStatus } from './../../../shared/ServiceInstanceStatus.j
 const goToServiceInstanceDetails = name => {
   LuigiClient.linkManager()
     .fromContext('namespaces')
-    .navigate(`cmf-instances/details/${name}`);
+    .navigate(`instances/details/${name}`);
 };
 
 const ServiceInstanceName = ({ instance }) => (
@@ -53,7 +53,7 @@ const ServiceClassName = ({ instance }) => {
             ? () =>
                 LuigiClient.linkManager()
                   .fromContext('namespaces')
-                  .navigate(`cmf-service-catalog/details/${classRef}`)
+                  .navigate(`service-catalog/details/${classRef}`)
             : null
         }
         title={className}

@@ -10,7 +10,7 @@ export class ServiceInstanceTable extends Component {
     LuigiClient.linkManager()
       .fromContext('namespaces')
       .withParams({ selectedTab: this.props.type })
-      .navigate('cmf-service-catalog');
+      .navigate('service-catalog');
   };
 
   render() {

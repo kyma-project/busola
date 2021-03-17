@@ -12,7 +12,7 @@ export function navigateToFixedPathResourceDetails(
   resourceName,
 ) {
   LuigiClient.linkManager().navigate(
-    `/home/namespaces/${namespaceName}/cmf-${resourceType}/details/${resourceName}`,
+    `/home/namespaces/${namespaceName}/${resourceType}/details/${resourceName}`,
   );
 }
 

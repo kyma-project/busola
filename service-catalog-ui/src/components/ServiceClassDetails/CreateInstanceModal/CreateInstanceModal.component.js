@@ -167,7 +167,7 @@ export default function CreateInstanceModal({
 
       LuigiClient.linkManager()
         .fromContext('namespaces')
-        .navigate(`cmf-instances/details/${name}`);
+        .navigate(`instances/details/${name}`);
     } catch (err) {
       notificationManager.notifyError({
         content: `Failed to create a Resource due to: ${err}`,
