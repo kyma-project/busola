@@ -29,7 +29,7 @@ export default function ApiRules({ lambda }) {
   const rowRenderer = apiRule => ({
     cells: [
       <GoToApiRuleDetails apiRule={apiRule} />,
-      <CopiableApiRuleHost apiRule={apiRule} domain={domain}/>,
+      <CopiableApiRuleHost apiRule={apiRule} domain={domain} />,
       <ApiRuleStatus apiRule={apiRule} />,
     ],
     collapseContent: <ApiRuleAccessStrategiesList apiRule={apiRule} />,
