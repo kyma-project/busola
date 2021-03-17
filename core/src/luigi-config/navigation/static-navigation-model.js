@@ -761,6 +761,15 @@ export function getStaticRootNodes(namespaceChildrenNodesResolver) {
       ],
     },
     {
+      pathSegment: 'logs',
+      label: 'Logs',
+      category: 'Diagnostics',
+      viewUrl:
+        config.logsModuleUrl +
+        '/?function={nodeParams.function}&pod={nodeParams.pod}&namespace={nodeParams.namespace}&container_name={nodeParams.container_name}', // todo handle when logs are reintroduced
+        hideFromNav: true,
+    },
+    {
       category: {
         label: 'Diagnostics',
         icon: 'electrocardiogram',
