@@ -4,7 +4,7 @@ import { Panel, LayoutGrid } from 'fundamental-react';
 import './Rules.scss';
 
 export const Rules = resource => (
-  <LayoutGrid cols={3} className="fd-has-margin-m">
+  <LayoutGrid cols={4} className="fd-has-margin-m">
     {resource?.rules?.map((rule, index) => (
       <Panel key={`rule-${index}`}>
         <Panel.Header>
