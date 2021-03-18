@@ -6,3 +6,5 @@ export * from './Function.details';
 export * from './Secret.details';
 export * from './Service.details.js';
 export * from './Application/Application.details.js';
+export * from './Roles/ClusterRole.details.js';
+export * from './Roles/Role.details.js';
