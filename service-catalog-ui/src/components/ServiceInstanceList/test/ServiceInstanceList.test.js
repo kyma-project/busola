@@ -141,7 +141,7 @@ describe('InstancesList UI', () => {
 
     addInstanceButton.simulate('click');
 
-    expect(mockNavigate).toHaveBeenCalledWith('cmf-service-catalog');
+    expect(mockNavigate).toHaveBeenCalledWith('service-catalog');
     expectKnownConsoleWarnings();
   });
 
@@ -163,7 +163,7 @@ describe('InstancesList UI', () => {
     instanceLink.simulate('click');
 
     expect(mockNavigate).toHaveBeenCalledWith(
-      'cmf-instances/details/testing-curly-tax',
+      'instances/details/testing-curly-tax',
     );
     expectKnownConsoleWarnings();
   });

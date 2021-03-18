@@ -67,9 +67,7 @@ export default function ServiceBindings({
       onClick={() =>
         LuigiClient.linkManager()
           .fromContext('namespaces')
-          .navigate(
-            `cmf-instances/details/${serviceBinding.spec.instanceRef.name}`,
-          )
+          .navigate(`instances/details/${serviceBinding.spec.instanceRef.name}`)
       }
     >
       {serviceBinding.spec.instanceRef.name}

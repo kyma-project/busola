@@ -9,16 +9,6 @@ function createHeaders(token) {
   };
 }
 
-function mapMicrofrontends(microFrontendList, config) {
-  return microFrontendList.items.map(({ metadata, spec }) => ({
-    name: metadata.name,
-    category: spec.category,
-    viewBaseUrl:
-      spec.viewBaseUrl || `https://${metadata.name}.${config.domain}`,
-    navigationNodes: spec.navigationNodes,
-  }));
-}
-
 export function fetchBusolaInitData(token) {
   const backendModulesQuery = fetch(
     `${config.backendApiUrl}/apis/ui.kyma-project.io/v1alpha1/backendmodules`,
@@ -30,20 +20,11 @@ export function fetchBusolaInitData(token) {
     .then((data) => ({ backendModules: data.items.map((bM) => bM.metadata) }))
     .catch(() => ({ backendModules: [] }));
 
-  const cmfQuery = fetch(
-    `${config.backendApiUrl}/apis/ui.kyma-project.io/v1alpha1/clustermicrofrontends`,
-    {
-      headers: createHeaders(token),
-    }
-  )
+  const apiGroupsQuery = fetch(config.backendApiUrl, {
+    headers: createHeaders(token),
+  })
     .then((res) => res.json())
-    .then((data) => ({
-      clusterMicroFrontends: data.items.map((cMF) => ({
-        ...cMF.spec,
-        ...cMF.metadata,
-      })),
-    }))
-    .catch(() => ({ clusterMicroFrontends: [] }));
+    .then((data) => ({ apiGroups: data.paths }));
 
   const ssrr = {
     typeMeta: {
@@ -64,21 +45,9 @@ export function fetchBusolaInitData(token) {
     .then((res) => res.json())
     .then((res) => ({ selfSubjectRules: res.status.resourceRules }));
 
-  const promises = [backendModulesQuery, cmfQuery, ssrrQuery];
+  const promises = [backendModulesQuery, apiGroupsQuery, ssrrQuery];
 
   return Promise.all(promises).then((res) => Object.assign(...res));
-}
-
-export function fetchMicrofrontends(namespaceName, token) {
-  return fetch(
-    `${config.backendApiUrl}/apis/ui.kyma-project.io/v1alpha1/namespaces/${namespaceName}/microfrontends`,
-    {
-      headers: createHeaders(token),
-    }
-  )
-    .then((res) => res.json())
-    .then((res) => mapMicrofrontends(res, config))
-    .catch(() => []); // microfrontends may not exist on target cluster
 }
 
 export function fetchNamespaces(token) {

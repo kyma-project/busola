@@ -12,7 +12,7 @@ export class ServiceClassInstancesTable extends Component {
   goToServiceInstanceDetails(instanceName) {
     LuigiClient.linkManager()
       .fromContext('namespaces')
-      .navigate(`cmf-instances/details/${instanceName}`);
+      .navigate(`instances/details/${instanceName}`);
   }
 
   render() {
