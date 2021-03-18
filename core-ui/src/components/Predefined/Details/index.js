@@ -6,3 +6,5 @@ export * from './Function.details';
 export * from './Secret.details';
 export * from './Service.details.js';
 export * from './Application/Application.details.js';
+export * from './RoleBinding/ClusterRoleBinding.details.js';
+export * from './RoleBinding/RoleBinding.details.js';
