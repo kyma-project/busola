@@ -7,7 +7,7 @@ export const FunctionsList = DefaultRenderer => ({ ...otherParams }) => {
   function goToGitRepositories() {
     LuigiClient.linkManager()
       .fromContext('namespaces')
-      .navigate(`cmf-gitrepositories`);
+      .navigate(`gitrepositories`);
   }
   const headerActions = (
     <Button option="light" onClick={goToGitRepositories}>

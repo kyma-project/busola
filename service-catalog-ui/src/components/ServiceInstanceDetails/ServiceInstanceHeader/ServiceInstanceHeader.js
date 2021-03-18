@@ -26,7 +26,7 @@ const ServiceInstanceHeader = ({
       () =>
         LuigiClient.linkManager()
           .fromContext('namespaces')
-          .navigate('cmf-instances'),
+          .navigate('instances'),
     );
 
   const breadcrumbItems = [
