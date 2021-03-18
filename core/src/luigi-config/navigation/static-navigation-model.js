@@ -398,7 +398,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
               pathSegment: ':roleBindingName',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/roles/:roleBindingName?' +
+                '/namespaces/:namespaceId/rolebindings/:roleBindingName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
                 }),
