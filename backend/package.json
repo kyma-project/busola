@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "APIserver proxy for Busola",
   "main": "backend.index.js",
-  "bin": "backend-npx.js",
+  "bin": "index-npx.js",
   "scripts": {
     "start:kyma": "npm run watch",
     "start:npx": "NODE_ENV=npx nodemon --exec babel-node index-npx.js",

@@ -101,7 +101,7 @@ To build and run the Busola for `npx` mode:
 - Run `npm run build` in `/shared`.
 - Run `npm run build:npx` in `/core`, `/core-ui` and `/backend`.
 - Export a kubeconfig in your terminal.
-- Run `node backend-npx.js` in `/backend` to start the app.
+- Run `node index-npx.js` in `/backend` to start the app.
 
 ## Development
 
