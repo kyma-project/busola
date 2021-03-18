@@ -6,9 +6,9 @@ import NamespaceSettings from '../NamespaceSettings';
 let mockGroups = [];
 jest.mock('react-shared', () => ({
   useMicrofrontendContext: () => ({
-    showSystemNamespaces: true,
     groups: mockGroups,
   }),
+  useShowSystemNamespaces: () => true,
 }));
 
 describe('NamespaceSettings', () => {

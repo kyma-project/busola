@@ -5,7 +5,7 @@ import { useShowSystemNamespaces } from 'react-shared';
 
 const FilterNamespaces = namespace => {
   const showSystemNamespaces = useShowSystemNamespaces();
-  const systemNamespaces = LuigiClient.getContext().systemNamespaces; //.includes('showSystemNamespaces');
+  const systemNamespaces = LuigiClient.getContext().systemNamespaces;
 
   return showSystemNamespaces
     ? true
