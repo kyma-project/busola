@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: ddagaa/busola-backend:1
+          image: eu.gcr.io/kyma-project/busola-backend:a346ad53
           imagePullPolicy: Always
           securityContext:
             allowPrivilegeEscalation: false
