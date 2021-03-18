@@ -1,16 +1,13 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
-import { useMicrofrontendContext } from 'react-shared';
+import { useMicrofrontendContext, useShowSystemNamespaces } from 'react-shared';
 import { Panel, Toggle } from 'fundamental-react';
 
 export default function NamespaceSettings() {
-  const {
-    groups,
-    showSystemNamespaces: initialShowSystemNamespaces,
-  } = useMicrofrontendContext();
+  const { groups } = useMicrofrontendContext();
 
   const [showSystemNamespaces, setShowSystemNamespaces] = React.useState(
-    initialShowSystemNamespaces,
+    useShowSystemNamespaces(),
   );
 
   const toggleVisibility = () => {
