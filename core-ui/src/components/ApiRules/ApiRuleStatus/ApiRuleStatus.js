@@ -22,7 +22,7 @@ const resolveAPIRuleStatus = statusCode => {
 };
 
 export default function ApiRuleStatus({ apiRule }) {
-  if (!apiRule.status.APIRuleStatus) {
+  if (!apiRule.status?.APIRuleStatus) {
     return null;
   }
 
