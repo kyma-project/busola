@@ -4,7 +4,12 @@ import { render, fireEvent } from '@testing-library/react';
 import ClusterSettings from '../ClusterSettings';
 
 jest.mock('react-shared', () => ({
-  useMicrofrontendContext: () => ({ k8sApiUrl: 'test-api-url' }),
+  useMicrofrontendContext: () => ({
+    cluster: {
+      server: 'test-api-url',
+      'certificate-authority-data': 'test-ca',
+    },
+  }),
 }));
 
 describe('ClusterSettings', () => {

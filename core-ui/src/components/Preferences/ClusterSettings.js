@@ -37,12 +37,12 @@ export default function ClusterSettings() {
           onChange={e => setServer(e.target.value)}
         />
         <FormLabel className="fd-has-margin-top-s">
-          Certicate authority data
+          Certificate authority data
         </FormLabel>
         <FormInput
           type="url"
           defaultValue={ca}
-          placeholder="Certicate authority data"
+          placeholder="Certificate authority data"
           onChange={e => setCa(e.target.value)}
         />
       </Panel.Body>
