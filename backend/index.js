@@ -4,10 +4,8 @@ const http = require('http');
 const https = require('https');
 import npx from './npx-setup';
 import { initializeKubeconfig } from './utils/kubeconfig';
-import { initializeApp } from './utils/initialization';
 import { requestLogger } from './utils/other';
 
-npx.setupEnv();
 const app = express();
 app.use(express.raw({ type: '*/*' }));
 if (process.env.NODE_ENV === 'development') {
@@ -25,44 +23,28 @@ const port = process.env.PORT || 3001;
 const address = process.env.ADDRESS || 'localhost';
 console.log(`K8s server used: ${k8sUrl}`);
 
-initializeApp(app, kubeconfig)
-  .then(_ => {
-    const httpsAgent = app.get('https_agent');
+const handleRequest = async (req, res) => {
+  const urlHeader = 'x-cluster-url';
+  const caHeader = 'x-cluster-certificate-authority-data';
 
-    const handleBackendRequest = handleRequest(httpsAgent);
-    if (npx.isNpxEnv()) {
-      npx.setupRoutes(app, handleBackendRequest);
-    } else {
-      app.use(handleBackendRequest);
-    }
-
-    server.listen(port, address, () => {
-      console.log(`Busola backend server started @ ${port}!`);
-      npx.openBrowser(port);
-    });
-  })
-  .catch(err => {
-    console.error('PANIC!', err);
-    process.exit(1);
-  });
-
-const handleRequest = httpsAgent => async (req, res) => {
   delete req.headers.host; // remove host in order not to confuse APIServer
 
   const targetApiServer =
-    req.headers['x-api-url'] && req.headers['x-api-url'] !== 'undefined'
-      ? req.headers['x-api-url']
+    req.headers[urlHeader] && req.headers[urlHeader] !== 'undefined'
+      ? req.headers[urlHeader]
       : k8sUrl.hostname;
-  delete req.headers['x-api-url'];
+  delete req.headers[urlHeader];
 
   const options = {
     hostname: targetApiServer,
     path: req.originalUrl.replace(/^\/backend/, ''),
     headers: req.headers,
     body: req.body,
-    agent: httpsAgent,
     method: req.method,
     port: k8sUrl.port || 443,
+    ca: req.headers[caHeader]
+      ? Buffer.from(req.headers[caHeader], 'base64')
+      : null,
   };
   npx.adjustRequestOptions(options, kubeconfig);
 
@@ -85,3 +67,14 @@ const handleRequest = httpsAgent => async (req, res) => {
   k8sRequest.end(Buffer.isBuffer(req.body) ? req.body : undefined);
   req.pipe(k8sRequest);
 };
+
+if (npx.isNpxEnv()) {
+  npx.setupRoutes(app, handleRequest);
+} else {
+  app.use(handleRequest);
+}
+
+server.listen(port, address, () => {
+  console.log(`Busola backend server started @ ${port}!`);
+  npx.openBrowser(port);
+});

@@ -1,10 +1,11 @@
 import { baseUrl, throwHttpError } from './config';
 import { useMicrofrontendContext } from '../../contexts/MicrofrontendContext';
+import { createHeaders } from './createHeaders';
 import { useConfig } from '../../contexts/ConfigContext';
 
 const useMutation = method => {
   return options => {
-    const { idToken, k8sApiUrl } = useMicrofrontendContext();
+    const { idToken, cluster } = useMicrofrontendContext();
     const { fromConfig } = useConfig();
     return async (url, data) => {
       const response = await fetch(baseUrl(fromConfig) + url, {
@@ -12,8 +13,7 @@ const useMutation = method => {
         headers: {
           'Content-Type': 'application/json-patch+json',
           Accept: 'application/json',
-          Authorization: 'Bearer ' + idToken,
-          'X-Api-Url': k8sApiUrl,
+          ...createHeaders(idToken, cluster),
         },
         body: JSON.stringify(data),
       });

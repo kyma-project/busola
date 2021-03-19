@@ -2,10 +2,6 @@ const path = require('path');
 const open = require('open');
 const express = require('express');
 
-function setupEnv() {
-  process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
-}
-
 function setupRoutes(app, handleBackendRequest) {
   app.use('/core-ui', express.static(path.join(__dirname, 'core-ui')));
   app.get('/core-ui/*', (_, res) =>
@@ -41,7 +37,6 @@ function runIfNpx(fn) {
 }
 
 export default {
-  setupEnv: runIfNpx(setupEnv),
   setupRoutes: runIfNpx(setupRoutes),
   openBrowser: runIfNpx(openBrowser),
   adjustRequestOptions: runIfNpx(adjustRequestOptions),
