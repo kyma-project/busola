@@ -6,13 +6,12 @@ import OAuthClientSpecPanel from './OAuthClientSpecPanel';
 import { useGet } from 'react-shared';
 
 function SecretComponent({ namespaceName, secretName }) {
-  const {
-    data: secret,
-    error,
-    loading = true,
-  } = useGet(`/api/v1/namespaces/${namespaceName}/secrets/${secretName}`, {
-    pollingInterval: 5000,
-  });
+  const { data: secret, error, loading = true } = useGet(
+    `/api/v1/namespaces/${namespaceName}/secrets/${secretName}`,
+    {
+      pollingInterval: 5000,
+    },
+  );
 
   if (loading) return 'Loading...';
   if (error) return `Error: ${error.message}`;
