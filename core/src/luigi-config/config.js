@@ -1,11 +1,7 @@
-const domain = location.hostname.replace(/^busola(-dev)?\./, '');
+const domain = location.hostname.replace(/^busola?\./, '');
 const isNpx = location.origin === 'http://localhost:3001';
-const isLocalDev =
-  location.hostname.startsWith('busola-dev') ||
-  location.hostname.startsWith('localhost');
-const localDomain = location.hostname.startsWith('busola-dev')
-  ? 'http://busola-dev.' + domain
-  : 'http://localhost';
+const isLocalDev = location.hostname.startsWith('localhost');
+const localDomain = 'http://localhost';
 
 export let config;
 
@@ -13,7 +9,7 @@ if (isNpx) {
   config = {
     domain,
     isNpx,
-    localDomain: 'busola-dev.' + domain,
+    localDomain,
     serviceCatalogModuleUrl: location.origin + '/catalog',
     addOnsModuleUrl: location.origin + '/addons',
     logsModuleUrl: location.origin + '/logs',

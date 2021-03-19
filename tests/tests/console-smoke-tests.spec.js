@@ -2,7 +2,7 @@
 import config from '../config';
 
 const ADDRESS = config.localDev
-  ? `http://busola-dev.${config.domain}:4200`
+  ? `http://localhost:4200`
   : `https://busola.${config.domain}`;
 
 context('Busola Smoke Tests', () => {

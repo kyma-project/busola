@@ -16,7 +16,12 @@ if (process.env.NODE_ENV === 'development') {
 
 const server = http.createServer(app);
 const kubeconfig = initializeKubeconfig();
-const k8sUrl = new URL(kubeconfig.getCurrentCluster().server);
+
+const k8sUrl = new URL(
+  kubeconfig.getCurrentCluster().server !== 'https://undefined:undefined'
+    ? kubeconfig.getCurrentCluster().server
+    : 'http://doesntexist',
+);
 
 // requestLogger(require("http")); //uncomment this to log the outgoing traffic
 // requestLogger(require("https")); //uncomment this to log the outgoing traffic
@@ -49,10 +54,12 @@ initializeApp(app, kubeconfig)
 const handleRequest = httpsAgent => async (req, res) => {
   delete req.headers.host; // remove host in order not to confuse APIServer
 
-  const targetApiServer =
-    req.headers['x-api-url'] && req.headers['x-api-url'] !== 'undefined'
-      ? req.headers['x-api-url']
-      : k8sUrl.hostname;
+  if (!req.headers['x-api-url'] || req.headers['x-api-url'] == 'undefined') {
+    res.status(400).send("The 'x-api-url` header was not provided");
+    return;
+  }
+
+  const targetApiServer = req.headers['x-api-url'];
   delete req.headers['x-api-url'];
 
   const options = {
