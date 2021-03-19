@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import { Panel, Token, FormItem, FormLabel } from 'fundamental-react';
 import { grantTypes, responseTypes } from './common';
+import './OAuthClientSpecPanel.scss';
 
 OAuthClientSpecPanel.propTypes = { spec: PropTypes.object.isRequired };
 
