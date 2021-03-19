@@ -25,7 +25,7 @@ export async function saveInitParamsIfPresent(location) {
   const params = new URL(location).searchParams.get('init');
   if (params) {
     const decoded = await encoder.decompress(params);
-    const responseParams = getResponseParams(decoded.usePKCE);
+    const responseParams = getResponseParams(decoded.auth.usePKCE);
     const systemNamespaces = createSystemNamespacesList(
       decoded.config.systemNamespaces
     );
