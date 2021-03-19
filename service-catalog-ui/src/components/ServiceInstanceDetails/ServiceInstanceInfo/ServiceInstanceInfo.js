@@ -20,8 +20,8 @@ const ServiceInstanceInfo = ({ serviceInstance }) => {
 
   const goToServiceClassDetails = name => {
     const target = serviceClassDocsPerPlan
-      ? `service-catalog/details/${name}/plans`
-      : `service-catalog/details/${name}`;
+      ? `catalog/details/${name}/plans`
+      : `catalog/details/${name}`;
     LuigiClient.linkManager()
       .fromContext('namespaces')
       .navigate(target);
@@ -30,7 +30,7 @@ const ServiceInstanceInfo = ({ serviceInstance }) => {
   const goToServiceClassDetailsWithPlan = (name, planName) => {
     LuigiClient.linkManager()
       .fromContext('namespaces')
-      .navigate(`service-catalog/details/${name}/plan/${planName}`);
+      .navigate(`catalog/details/${name}/plan/${planName}`);
   };
 
   if (!serviceInstance) {

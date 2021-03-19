@@ -1,6 +1,8 @@
 import { fetchBusolaInitData, fetchNamespaces } from './queries';
 import { config } from '../config';
 import {
+  coreUIViewGroupName,
+  catalogViewGroupName,
   getStaticChildrenNodesForNamespace,
   getStaticRootNodes,
 } from './static-navigation-model';
@@ -21,8 +23,11 @@ import { getInitParams } from '../init-params';
 export let resolveNavigationNodes;
 export let navigation = {
   viewGroupSettings: {
-    _core_ui_: {
+    [coreUIViewGroupName]: {
       preloadUrl: config.coreUIModuleUrl + '/preload',
+    },
+    [catalogViewGroupName]: {
+      preloadUrl: config.serviceCatalogModuleUrl + '/preload',
     },
   },
   nodeAccessibilityResolver: navigationPermissionChecker,

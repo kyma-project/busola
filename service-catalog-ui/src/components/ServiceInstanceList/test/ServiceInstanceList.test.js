@@ -141,7 +141,7 @@ describe('InstancesList UI', () => {
 
     addInstanceButton.simulate('click');
 
-    expect(mockNavigate).toHaveBeenCalledWith('service-catalog');
+    expect(mockNavigate).toHaveBeenCalledWith('catalog');
     expectKnownConsoleWarnings();
   });
 

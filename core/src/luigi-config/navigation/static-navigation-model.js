@@ -3,6 +3,7 @@ import { getToken } from './navigation-helpers';
 import { saveAs } from 'file-saver';
 
 export const coreUIViewGroupName = '_core_ui_';
+export const catalogViewGroupName = '_catalog_';
 
 function downloadKubeconfig() {
   const kubeconfigGeneratorUrl = `https://configurations-generator.${config.domain}/kube-config`;
@@ -491,6 +492,8 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
       navigationContext: 'catalog',
       label: 'Catalog',
       viewUrl: config.serviceCatalogModuleUrl + '/catalog',
+      keepSelectedForChildren: true,
+      viewGroup: catalogViewGroupName,
       children: [
         {
           pathSegment: 'details',
@@ -529,13 +532,17 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
       navigationContext: 'instances',
       label: 'Instances',
       viewUrl: config.serviceCatalogModuleUrl + '/instances',
+      viewGroup: catalogViewGroupName,
+      keepSelectedForChildren: true,
       children: [
         {
           pathSegment: 'details',
           children: [
             {
-              pathSegment: ':name',
-              viewUrl: config.serviceCatalogModuleUrl + '/instances/:name?',
+              pathSegment: ':instanceName',
+              viewUrl:
+                config.serviceCatalogModuleUrl +
+                '/instances/details/:instanceName',
             },
           ],
         },
