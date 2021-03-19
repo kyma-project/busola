@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: eu.gcr.io/kyma-project/busola-backend:a346ad53
+          image: eu.gcr.io/kyma-project/busola-backend:PR-
           imagePullPolicy: Always
           securityContext:
             allowPrivilegeEscalation: false
@@ -35,5 +35,3 @@ spec:
           env:
             - name: ADDRESS
               value: '0.0.0.0'
-            - name: NODE_TLS_REJECT_UNAUTHORIZED
-              value: '0'

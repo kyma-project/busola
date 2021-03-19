@@ -79,12 +79,9 @@ export function getNavigationData(token) {
       )
       // 'Finally' not supported by IE and FIREFOX (if 'finally' is needed, update your .babelrc)
       .then((res) => {
-        const {
-          k8sApiUrl,
-          bebEnabled,
-          systemNamespaces,
-          disabledNavigationNodes,
-        } = getInitParams();
+        const params = getInitParams();
+        const { disabledNavigationNodes, systemNamespaces } = params.config;
+        const { bebEnabled } = params.features;
         const nodes = [
           {
             pathSegment: 'home',
@@ -97,7 +94,7 @@ export function getNavigationData(token) {
               systemNamespaces,
               showSystemNamespaces:
                 localStorage.getItem('busola.showSystemNamespaces') === 'true',
-              k8sApiUrl,
+              cluster: params.cluster,
             },
             children: function () {
               const staticNodes = getStaticRootNodes(

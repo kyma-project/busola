@@ -7,7 +7,6 @@ import { initializeKubeconfig } from './utils/kubeconfig';
 import { initializeApp } from './utils/initialization';
 import { requestLogger } from './utils/other';
 
-npx.setupEnv();
 const app = express();
 app.use(express.raw({ type: '*/*' }));
 if (process.env.NODE_ENV === 'development') {
@@ -47,13 +46,16 @@ initializeApp(app, kubeconfig)
   });
 
 const handleRequest = httpsAgent => async (req, res) => {
+  const urlHeader = 'x-cluster-url';
+  const caHeader = 'x-cluster-certificate-authority-data';
+
   delete req.headers.host; // remove host in order not to confuse APIServer
 
   const targetApiServer =
-    req.headers['x-api-url'] && req.headers['x-api-url'] !== 'undefined'
-      ? req.headers['x-api-url']
+    req.headers[urlHeader] && req.headers[urlHeader] !== 'undefined'
+      ? req.headers[urlHeader]
       : k8sUrl.hostname;
-  delete req.headers['x-api-url'];
+  delete req.headers[urlHeader];
 
   const options = {
     hostname: targetApiServer,
@@ -63,6 +65,9 @@ const handleRequest = httpsAgent => async (req, res) => {
     agent: httpsAgent,
     method: req.method,
     port: k8sUrl.port || 443,
+    ca: req.headers[caHeader]
+      ? Buffer.from(req.headers[caHeader], 'base64')
+      : null,
   };
   npx.adjustRequestOptions(options, kubeconfig);
 
