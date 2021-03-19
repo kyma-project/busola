@@ -44,7 +44,7 @@ describe('ServiceInstanceInfo', () => {
       link.simulate('click');
 
       expect(mockNavigate).toHaveBeenCalledWith(
-        'service-catalog/details/a2257daa-0e26-4c61-a68d-8a7453c1b767',
+        'catalog/details/a2257daa-0e26-4c61-a68d-8a7453c1b767',
       );
     });
 

@@ -53,7 +53,7 @@ const ServiceClassName = ({ instance }) => {
             ? () =>
                 LuigiClient.linkManager()
                   .fromContext('namespaces')
-                  .navigate(`service-catalog/details/${classRef}`)
+                  .navigate(`catalog/details/${classRef}`)
             : null
         }
         title={className}
