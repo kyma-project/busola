@@ -4,7 +4,7 @@
 
 This application is a ReactJS component library for the Kyma, based on the [component-library-starter](https://github.com/alanbsmith/component-library-starter).
 
-You can see the components and their properties on the [Busola](https://kyma-project.github.io/busola) page.
+You can see the components and their properties on the [Busola](https://kyma-project.github.io/console) page.
 
 ## Usage
 
