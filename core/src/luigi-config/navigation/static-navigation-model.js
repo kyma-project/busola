@@ -355,27 +355,10 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
         '/namespaces/:namespaceId/gitrepositories?' +
         toSearchParamsString({
           resourceApiPath: '/apis/serverless.kyma-project.io/v1alpha1',
-          hasDetailsView: true,
+          hasDetailsView: false,
         }),
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':functionName',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/gitrepositories/:functionName?' +
-                toSearchParamsString({
-                  resourceApiPath: '/apis/serverless.kyma-project.io/v1alpha1',
-                }),
-              viewGroup: coreUIViewGroupName,
-            },
-          ],
-        },
-      ],
     },
     {
       category: 'Configuration',
