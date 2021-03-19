@@ -1,14 +1,15 @@
 import { config } from './../config';
 import { getInitParams } from './../init-params';
 
-const cluster = getInitParams().cluster;
+const cluster = getInitParams()?.cluster;
 
 function createHeaders(token) {
   return {
     Authorization: `Bearer ${token}`,
     'Content-Type': 'application/json',
-    'X-Cluster-Url': cluster.server,
-    'X-Cluster-Certificate-Authority-Data': cluster['certificate-authority-data'],
+    'X-Cluster-Url': cluster?.server,
+    'X-Cluster-Certificate-Authority-Data':
+      cluster && cluster['certificate-authority-data'],
   };
 }
 

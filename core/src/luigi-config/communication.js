@@ -19,12 +19,22 @@ export const communication = {
         showExperimentalViews
       );
     },
-    'busola.bebEnabled': ({bebEnabled}) => {
+    'busola.bebEnabled': ({ bebEnabled }) => {
       const params = getInitParams();
-      saveInitParams({ params, features: {
-        ...params.features,
-        bebEnabled
-      } });
+      saveInitParams({
+        ...params,
+        features: {
+          ...params.features,
+          bebEnabled,
+        },
+      });
+      console.log({
+        params,
+        features: {
+          ...params.features,
+          bebEnabled,
+        },
+      });
       location.reload();
     },
     'busola.updateAuthParams': (authParams) => {

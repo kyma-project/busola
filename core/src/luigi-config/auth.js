@@ -26,7 +26,13 @@ export const createAuth = async () => {
     return {};
   }
 
-  const { issuerUrl, clientId, responseType, responseMode, scope } = params.auth;
+  const {
+    issuerUrl,
+    clientId,
+    responseType,
+    responseMode,
+    scope,
+  } = params.auth;
 
   const providerMetadata = await fetchOidcProviderMetadata(issuerUrl);
   const end_session_endpoint =
