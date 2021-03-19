@@ -1,15 +1,15 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { render, fireEvent } from '@testing-library/react';
-import KubernetesApiUrl from '../KubernetesApiUrl';
+import ClusterSettings from '../ClusterSettings';
 
 jest.mock('react-shared', () => ({
   useMicrofrontendContext: () => ({ k8sApiUrl: 'test-api-url' }),
 }));
 
-describe('KubernetesApiUrl', () => {
+describe('ClusterSettings', () => {
   it('Sets input default value', () => {
-    const { getByPlaceholderText } = render(<KubernetesApiUrl />);
+    const { getByPlaceholderText } = render(<ClusterSettings />);
     expect(getByPlaceholderText('Kubernetes API Url')).toHaveValue(
       'test-api-url',
     );
@@ -17,18 +17,23 @@ describe('KubernetesApiUrl', () => {
 
   it('Sends custom message on button click', () => {
     const url = 'api.url';
+    const ca = 'ca';
 
     const spy = jest.spyOn(LuigiClient, 'sendCustomMessage');
-    const { getByPlaceholderText, getByText } = render(<KubernetesApiUrl />);
+    const { getByPlaceholderText, getByText } = render(<ClusterSettings />);
 
     fireEvent.change(getByPlaceholderText('Kubernetes API Url'), {
       target: { value: url },
     });
+    fireEvent.change(getByPlaceholderText('Certificate authority data'), {
+      target: { value: ca },
+    });
 
     fireEvent.click(getByText('Update configuration'));
     expect(spy).toHaveBeenCalledWith({
-      id: 'busola.updateInitParams',
-      k8sApiUrl: url,
+      id: 'busola.updateAuthParams',
+      server: url,
+      'certificate-authority-data': ca,
     });
 
     spy.mockRestore();
