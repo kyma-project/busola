@@ -31,7 +31,7 @@ describe('ClusterSettings', () => {
 
     fireEvent.click(getByText('Update configuration'));
     expect(spy).toHaveBeenCalledWith({
-      id: 'busola.updateAuthParams',
+      id: 'busola.updateClusterParams',
       server: url,
       'certificate-authority-data': ca,
     });

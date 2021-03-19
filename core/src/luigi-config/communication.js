@@ -28,19 +28,12 @@ export const communication = {
           bebEnabled,
         },
       });
-      console.log({
-        params,
-        features: {
-          ...params.features,
-          bebEnabled,
-        },
-      });
       location.reload();
     },
-    'busola.updateAuthParams': (authParams) => {
+    'busola.updateClusterParams': (clusterParams) => {
       const params = getInitParams();
-      delete authParams.id;
-      saveInitParams({ ...params, auth: authParams });
+      delete clusterParams.id;
+      saveInitParams({ ...params, cluster: clusterParams });
       location.reload();
     },
     'busola.refreshNavigation': () => {

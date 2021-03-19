@@ -12,7 +12,7 @@ export default function ClusterSettings() {
 
   const updateApiUrl = () => {
     LuigiClient.sendCustomMessage({
-      id: 'busola.updateAuthParams',
+      id: 'busola.updateClusterParams',
       server,
       'certificate-authority-data': ca,
     });
