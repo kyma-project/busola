@@ -4,3 +4,5 @@ export * from './Function/Functions.list.js';
 export * from './Application/Applications.list.js';
 export * from './GitRepository/GitRepositories.list.js';
 export * from './Namespaces.list.js';
+export * from './Secrets.list.js';
+export * from './RoleBindings.list.js';
