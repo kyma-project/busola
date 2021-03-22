@@ -20,8 +20,6 @@
     "markdownlint": "markdownlint **/*.md",
     "lint-staged": "lint-staged",
     "test-shared-lib": "cd shared && jest",
-    "append-host": "grep -qF '127.0.0.1 busola-dev.kyma.local' '/etc/hosts' || (echo 'append: 127.0.0.1 busola-dev.kyma.local >> /etc/hosts' && echo '127.0.0.1 busola-dev.kyma.local' | sudo tee -a /etc/hosts > /dev/null)",
-    "append-hosts": "npm run append-host",
     "generate-cluster-config": "[ ! -r .clusterConfig.gen ] && ./scripts/setClusterConfig.sh local || :",
     "start:npx": "npm run start:npx --prefix=backend",
     "build:npx": "npm run bootstrap && lerna exec --parallel -- npm run build:npx"
