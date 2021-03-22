@@ -12,3 +12,4 @@ export * from './RoleBindings/ClusterRoleBinding.details.js';
 export * from './RoleBindings/RoleBinding.details.js';
 export * from './OAuth2Clients/OAuth2Clients.details';
 export * from './ConfigMap.details.js';
+export * from './AddonsConfiguration.details';
