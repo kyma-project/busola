@@ -5,3 +5,4 @@ export * from './Application/Applications.list.js';
 export * from './GitRepository/GitRepositories.list.js';
 export * from './Namespaces.list.js';
 export * from './Deployments.list.js';
+export * from './ReplicaSets.list.js';
