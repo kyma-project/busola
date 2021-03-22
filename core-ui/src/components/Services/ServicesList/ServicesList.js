@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import LuigiClient from '@luigi-project/client';
-import Moment from 'react-moment';
+
 import jsyaml from 'js-yaml';
 import { Link } from 'fundamental-react';
 import { useQuery, useMutation } from '@apollo/react-hooks';
@@ -12,6 +12,7 @@ import {
   useNotification,
   EMPTY_TEXT_PLACEHOLDER,
   easyHandleDelete,
+  ReadableCreationTimestamp,
 } from 'react-shared';
 
 import { GET_SERVICES } from 'gql/queries';
@@ -119,9 +120,7 @@ export default function ServicesList({ namespace }) {
     <Link onClick={() => navigateToServiceDetails(entry)}>{entry.name}</Link>,
     <span>{entry.clusterIP || EMPTY_TEXT_PLACEHOLDER}</span>,
     <ul>{listOfEndpoints(entry)}</ul>,
-    <Moment unix fromNow>
-      {entry.creationTimestamp}
-    </Moment>,
+    <ReadableCreationTimestamp timestamp={entry.creationTimestamp} />,
     <Labels labels={entry.labels} />,
   ];
 

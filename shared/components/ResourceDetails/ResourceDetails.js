@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Moment from 'react-moment';
 import jsyaml from 'js-yaml';
 import { Button } from 'fundamental-react';
 
@@ -15,6 +14,7 @@ import {
   useYamlEditor,
   useNotification,
   navigateToList,
+  ReadableCreationTimestamp,
 } from '../..';
 import CustomPropTypes from '../../typechecking/CustomPropTypes';
 import { handleDelete } from '../GenericList/actionHandlers/simpleDelete';
@@ -155,10 +155,10 @@ function Resource({
           <Labels labels={resource.metadata.labels || {}} />
         </PageHeader.Column>
 
-        <PageHeader.Column key="Age" title="Age">
-          <Moment utc fromNow>
-            {resource.metadata.creationTimestamp}
-          </Moment>
+        <PageHeader.Column key="Created" title="Created">
+          <ReadableCreationTimestamp
+            timestamp={resource.metadata.creationTimestamp}
+          />
         </PageHeader.Column>
 
         {customColumns.map(col => (

@@ -1,11 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Moment from 'react-moment';
-
 import { Label } from '@kyma-project/react-components';
 import { Tile, Icon } from 'fundamental-react';
 
-import { Tooltip } from 'react-shared';
+import { Tooltip, ReadableCreationTimestamp } from 'react-shared';
 import {
   ServiceClassInfoContentWrapper,
   ExternalLink,
@@ -85,9 +83,9 @@ const ServiceClassInfo = ({
         </Tile>
         <Tile>
           <Tile.Content title={serviceClassTileTitles.lastUpdate}>
-            <Moment utc format="MMM DD, YYYY" data-e2e-id="service-last-update">
-              {creationTimestamp}
-            </Moment>
+            {/* <Moment utc format="MMM DD, YYYY" data-e2e-id="service-last-update">
+              {creationTimestamp} //TODO: use ReadableCreationTimestamp from react-shared
+            </Moment> */}
           </Tile.Content>
         </Tile>
         {documentationUrl && (
