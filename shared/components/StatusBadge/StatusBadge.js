@@ -12,7 +12,7 @@ const resolveType = status => {
     );
     return undefined;
   }
-
+  console.log(status);
   switch (status.toUpperCase()) {
     case 'INITIAL':
       return 'info';

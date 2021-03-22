@@ -1,0 +1,13 @@
+.addons {
+  &__repository {
+    display: grid;
+    grid-template-columns: auto max-content;
+    place-items: center end;
+
+    &-url {
+      margin-right: 0.5em;
+      cursor: help;
+      white-space: nowrap;
+    }
+  }
+}
