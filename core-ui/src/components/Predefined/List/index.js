@@ -7,3 +7,4 @@ export * from './Namespaces.list.js';
 export * from './Secrets.list.js';
 export * from './RoleBindings.list.js';
 export * from './Deployments.list.js';
+export * from './ReplicaSets.list.js';

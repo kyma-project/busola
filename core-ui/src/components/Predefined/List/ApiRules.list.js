@@ -2,7 +2,10 @@ import React from 'react';
 import { Button } from 'fundamental-react';
 import LuigiClient from '@luigi-project/client';
 import { PANEL } from '../../ApiRules/constants';
-import { CopiableApiRuleHost } from 'components/ApiRules/ApiRulesList/components';
+import {
+  CopiableApiRuleHost,
+  ApiRuleServiceInfo,
+} from 'components/ApiRules/ApiRulesList/components';
 import ApiRuleStatus from 'components/ApiRules/ApiRuleStatus/ApiRuleStatus';
 import { useGetGatewayDomain as getGatewayDomain } from 'components/ApiRules/useGetGatewayDomain/useGetGatewayDomain';
 
@@ -30,12 +33,17 @@ export const ApiRulesList = DefaultRenderer => ({ ...otherParams }) => {
       Create apirules
     </Button>
   );
+
   const customColumns = [
     {
       header: 'Host',
       value: apiRule => (
         <CopiableApiRuleHost apiRule={apiRule} domain={domain} />
       ),
+    },
+    {
+      header: 'Service Name',
+      value: apiRule => <ApiRuleServiceInfo apiRule={apiRule} />,
     },
     {
       header: 'Status',
