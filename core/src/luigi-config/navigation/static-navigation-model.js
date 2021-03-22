@@ -5,21 +5,6 @@ import { saveAs } from 'file-saver';
 export const coreUIViewGroupName = '_core_ui_';
 export const catalogViewGroupName = '_catalog_';
 
-function downloadKubeconfig() {
-  const kubeconfigGeneratorUrl = `https://configurations-generator.${config.domain}/kube-config`;
-  const authHeader = { Authorization: `Bearer ${getToken()}` };
-
-  fetch(kubeconfigGeneratorUrl, { headers: authHeader })
-    .then((res) => res.blob())
-    .then((config) => saveAs(config, 'kubeconfig.yml'))
-    .catch((err) => {
-      alert('Cannot download kubeconfig.');
-      console.warn(err);
-    });
-
-  return false; // cancel Luigi navigation
-}
-
 function toSearchParamsString(object) {
   return new URLSearchParams(object).toString();
 }
@@ -639,12 +624,6 @@ export function getStaticRootNodes(namespaceChildrenNodesResolver, apiGroups) {
       viewUrl: config.coreUIModuleUrl + '/preferences',
       viewGroup: coreUIViewGroupName,
       hideFromNav: true,
-    },
-    {
-      pathSegment: 'download-kubeconfig',
-      navigationContext: 'settings',
-      hideFromNav: true,
-      onNodeActivation: downloadKubeconfig,
     },
     {
       category: 'Integration',
