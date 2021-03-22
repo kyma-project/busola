@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, FormLabel } from 'fundamental-react';
 import {
   K8sNameInput,
@@ -16,6 +16,7 @@ export const AddonsConfigurations = ({
   resourceUrl,
   namespace,
   refetchList,
+  setCustomValid,
 }) => {
   const [name, setName] = useState('');
   const [labels, setLabels] = useState({});
@@ -23,6 +24,8 @@ export const AddonsConfigurations = ({
   const [urls, setUrls] = useState([]);
   const request = usePost();
   const notification = useNotification();
+
+  useEffect(_ => setCustomValid(!!urls.length), [urls, setCustomValid]);
 
   const handleLabelsChanged = newLabels => {
     setLabels(newLabels);
@@ -38,9 +41,7 @@ export const AddonsConfigurations = ({
   };
 
   const handleUrlAdded = () => {
-    const allUrls = urls;
-    allUrls.push(newUrl);
-    setUrls(allUrls);
+    setUrls([...urls, newUrl]);
     setNewUrl('');
   };
 
@@ -50,8 +51,9 @@ export const AddonsConfigurations = ({
 
   const handleFormSubmit = async e => {
     e.preventDefault();
+
     const repositories = urls.map(url => ({ url }));
-    const kind = resourceType.slice(0, -1);
+    const kind = resourceType.slice(0, -1); // "remove 's' from the end
     const resourceData = {
       kind,
       apiVersion: 'addons.kyma-project.io/v1alpha1',
@@ -67,7 +69,9 @@ export const AddonsConfigurations = ({
 
     try {
       await request(resourceUrl, resourceData);
-      notification.notifySuccess({ title: 'Succesfully created Resource' });
+      notification.notifySuccess({
+        title: 'Succesfully created Resource',
+      });
       refetchList();
     } catch (e) {
       notification.notifyError({
