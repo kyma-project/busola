@@ -47,11 +47,6 @@ export let navigation = {
         label: 'Preferences',
         link: '/home/preferences',
       },
-      {
-        icon: 'download',
-        label: 'Get Kubeconfig',
-        link: '/home/download-kubeconfig',
-      },
     ],
   },
   nodes: new Promise((res) => {
