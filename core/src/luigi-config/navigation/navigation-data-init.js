@@ -46,7 +46,7 @@ export let navigation = {
         icon: 'settings',
         label: 'Preferences',
         link: '/home/preferences',
-      }
+      },
     ],
   },
   nodes: new Promise((res) => {

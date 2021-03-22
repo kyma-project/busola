@@ -9,7 +9,7 @@
     "build": "npm run buildConfig",
     "test": "../node_modules/.bin/jest",
     "lint": "prettier -c .",
-    "lint-fix": "prettier -w .",
+    "lint-fix": "prettier --write .",
     "buildConfig": "webpack --mode production --config webpack.config.js",
     "buildConfig:watch": "webpack --config webpack.config.js --watch",
     "build:npx": "rm -rf ../backend/core && npm run buildConfig && cp -r src ../backend/core"
