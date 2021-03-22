@@ -1,5 +1,4 @@
 const domain = location.hostname.replace(/^busola?\./, '');
-// const isLocalDev = location.hostname.startsWith('busola-dev');
 
 function getbackendApiUrl() {
   if (location.origin === 'http://localhost:3001') {

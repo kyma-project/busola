@@ -4,7 +4,6 @@ export function initializeKubeconfig() {
   const kubeconfigLocation = process.env.KUBECONFIG;
   const kubeconfig = new KubeConfig();
 
-  console.log(kubeconfigLocation);
   if (kubeconfigLocation) kubeconfig.loadFromFile(kubeconfigLocation);
   else {
     try {
