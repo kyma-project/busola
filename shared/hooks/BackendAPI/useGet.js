@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { baseUrl, throwHttpError } from './config';
+import { createHeaders } from './createHeaders';
 import { useMicrofrontendContext } from '../../contexts/MicrofrontendContext';
 import { useConfig } from '../../contexts/ConfigContext';
 
@@ -9,7 +10,7 @@ const useGetHook = processDataFn =>
     const [data, setData] = React.useState(null);
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(null);
-    const { idToken, k8sApiUrl } = useMicrofrontendContext();
+    const { idToken, cluster } = useMicrofrontendContext();
     const { fromConfig } = useConfig();
 
     const refetch = (isSilent, currentData) => async () => {
@@ -25,10 +26,7 @@ const useGetHook = processDataFn =>
       try {
         const urlToFetchFrom = baseUrl(fromConfig) + path;
         const response = await fetch(urlToFetchFrom, {
-          headers: {
-            Authorization: 'Bearer ' + idToken,
-            'X-Api-Url': k8sApiUrl,
-          },
+          headers: createHeaders(idToken, cluster),
         });
         if (!response.ok) throw await throwHttpError(response);
         const payload = await response.json();

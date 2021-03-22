@@ -19,10 +19,21 @@ export const communication = {
         showExperimentalViews
       );
     },
-    'busola.updateInitParams': (modifiedParams) => {
+    'busola.bebEnabled': ({ bebEnabled }) => {
       const params = getInitParams();
-      delete modifiedParams.id;
-      saveInitParams({ ...params, ...modifiedParams });
+      saveInitParams({
+        ...params,
+        features: {
+          ...params.features,
+          bebEnabled,
+        },
+      });
+      location.reload();
+    },
+    'busola.updateClusterParams': (clusterParams) => {
+      const params = getInitParams();
+      delete clusterParams.id;
+      saveInitParams({ ...params, cluster: clusterParams });
       location.reload();
     },
     'busola.refreshNavigation': () => {

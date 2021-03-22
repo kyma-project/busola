@@ -25,11 +25,21 @@ export async function saveInitParamsIfPresent(location) {
   const params = new URL(location).searchParams.get('init');
   if (params) {
     const decoded = await encoder.decompress(params);
-    const responseParams = getResponseParams(decoded.usePKCE);
+    const responseParams = getResponseParams(decoded.auth.usePKCE);
     const systemNamespaces = createSystemNamespacesList(
-      decoded.systemNamespaces
+      decoded.config.systemNamespaces
     );
-    saveInitParams({ ...decoded, ...responseParams, systemNamespaces });
+    saveInitParams({
+      ...decoded,
+      auth: {
+        ...decoded.auth,
+        ...responseParams,
+      },
+      config: {
+        ...decoded.config,
+        systemNamespaces,
+      },
+    });
   }
 }
 
@@ -40,7 +50,7 @@ export function saveInitParams(params) {
 
 export function getInitParams() {
   if (config.isNpx) {
-    return { systemNamespaces: '' };
+    return { config: { systemNamespaces: '' } };
   }
   return JSON.parse(localStorage.getItem(PARAMS_KEY) || 'null');
 }

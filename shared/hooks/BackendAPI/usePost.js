@@ -1,9 +1,10 @@
 import { baseUrl, throwHttpError } from './config';
 import { useMicrofrontendContext } from '../../contexts/MicrofrontendContext';
+import { createHeaders } from './createHeaders';
 import { useConfig } from '../../contexts/ConfigContext';
 
 export const usePost = () => {
-  const { idToken, k8sApiUrl } = useMicrofrontendContext();
+  const { idToken, cluster } = useMicrofrontendContext();
   const { fromConfig } = useConfig();
   return async (url, data, options) => {
     const response = await fetch(baseUrl(fromConfig) + url, {
@@ -11,8 +12,7 @@ export const usePost = () => {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
-        Authorization: 'Bearer ' + idToken,
-        'X-Api-Url': k8sApiUrl,
+        ...createHeaders(idToken, cluster),
       },
       body: JSON.stringify(data),
     });
