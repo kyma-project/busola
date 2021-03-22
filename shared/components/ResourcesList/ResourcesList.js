@@ -84,7 +84,7 @@ function Resources({
     filter,
   )(resourceUrl, { pollingInterval: 3000 });
 
-  const handleSaveClick = (resourceData) => async (newYAML) => {
+  const handleSaveClick = resourceData => async newYAML => {
     try {
       const diff = createPatch(resourceData, jsyaml.safeLoad(newYAML));
       const url = resourceUrl + '/' + resourceData.metadata.name;
@@ -119,7 +119,7 @@ function Resources({
   const actions = [
     {
       name: 'Edit',
-      handler: (resource) => {
+      handler: resource => {
         const { status, ...otherResourceData } = resource; // remove 'status' property because you can't edit it anyway; TODO: decide if it's good
         setEditedSpec(otherResourceData, handleSaveClick(otherResourceData));
       },
@@ -134,13 +134,13 @@ function Resources({
     'Name',
     'Created',
     'Labels',
-    ...customColumns.map((col) => col.header),
+    ...customColumns.map(col => col.header),
   ];
 
-  const rowRenderer = (entry) => [
+  const rowRenderer = entry => [
     hasDetailsView ? (
       <Link
-        onClick={(_) =>
+        onClick={_ =>
           fixedPath
             ? navigateToFixedPathResourceDetails(
                 namespace,
@@ -159,7 +159,7 @@ function Resources({
     <div style={{ maxWidth: '55em' /*TODO*/ }}>
       <Labels labels={entry.metadata.labels} />
     </div>,
-    ...customColumns.map((col) => col.value(entry)),
+    ...customColumns.map(col => col.value(entry)),
   ];
 
   const extraHeaderContent =
@@ -175,7 +175,7 @@ function Resources({
         confirmText="Create"
         id={`add-${resourceType}-modal`}
         className="fd-modal--xl-size"
-        renderForm={(props) => (
+        renderForm={props => (
           <CreateResourceForm
             resourceType={resourceType}
             resourceUrl={resourceUrl}

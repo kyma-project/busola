@@ -25,17 +25,17 @@ export const AddonsConfigurations = ({
   const request = usePost();
   const notification = useNotification();
 
-  useEffect((_) => setCustomValid(!!urls.length), [urls, setCustomValid]);
+  useEffect(_ => setCustomValid(!!urls.length), [urls, setCustomValid]);
 
-  const handleLabelsChanged = (newLabels) => {
+  const handleLabelsChanged = newLabels => {
     setLabels(newLabels);
   };
 
-  const handleNameChanged = (event) => {
+  const handleNameChanged = event => {
     setName(event.target.value);
   };
 
-  const handleUrlChanged = (event) => {
+  const handleUrlChanged = event => {
     const url = event.target.value;
     setNewUrl(url);
   };
@@ -45,14 +45,14 @@ export const AddonsConfigurations = ({
     setNewUrl('');
   };
 
-  const handleUrlRemoved = (url) => {
-    setUrls((urls) => urls.filter((u) => u !== url));
+  const handleUrlRemoved = url => {
+    setUrls(urls => urls.filter(u => u !== url));
   };
 
-  const handleFormSubmit = async (e) => {
+  const handleFormSubmit = async e => {
     e.preventDefault();
 
-    const repositories = urls.map((url) => ({ url }));
+    const repositories = urls.map(url => ({ url }));
     const kind = resourceType.slice(0, -1); // "remove 's' from the end
     const resourceData = {
       kind,
@@ -83,7 +83,7 @@ export const AddonsConfigurations = ({
 
   const UrlsAdded = () => {
     if (urls.length > 0) {
-      return urls.map((url) => (
+      return urls.map(url => (
         <section className="addons-urls-list" key={url}>
           <p>{url}</p>
           <Button
