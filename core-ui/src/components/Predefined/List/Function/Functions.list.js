@@ -32,7 +32,7 @@ export const FunctionsList = DefaultRenderer => ({ ...otherParams }) => {
       },
     },
     {
-      header: 'Source',
+      header: 'Source Type',
       value: func => {
         return prettySourceType(func.spec.type);
       },
