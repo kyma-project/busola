@@ -5,7 +5,6 @@
   "packages": [
     "core",
     "service-catalog-ui",
-    "add-ons",
     "logging",
     "core-ui",
     "shared",
