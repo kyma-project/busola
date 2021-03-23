@@ -9,9 +9,7 @@ import { SECRET_EVENT_SUBSCRIPTION_LIST } from 'gql/subscriptions';
 const namespace = 'test-namespace';
 
 const currentDate = Date.now();
-const msInMinute = 60000;
-const creationDate = currentDate - msInMinute;
-const creationDateFormat = creationDate / 1000;
+const creationDateFormat = new Date(currentDate - 60 * 1000).toISOString();
 
 export const secretsSubscriptionMock = (
   variables,
@@ -103,7 +101,7 @@ describe('SecretList', () => {
         <SecretList namespace={namespace} />
       </MockedProvider>,
     );
-    expect(await findAllByText('a minute ago'));
+    expect(await findAllByText('1 minute ago'));
   });
 });
 

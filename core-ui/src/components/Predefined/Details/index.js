@@ -10,3 +10,4 @@ export * from './Roles/Roles.details.js';
 export * from './RoleBindings/RoleBindings.details.js';
 export * from './OAuth2Clients/OAuth2Clients.details';
 export * from './ConfigMap.details.js';
+export * from './AddonsConfiguration.details';

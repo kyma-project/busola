@@ -1,7 +1,7 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import PropTypes from 'prop-types';
-import Moment from 'react-moment';
+
 import jsyaml from 'js-yaml';
 import {
   GenericList,
@@ -10,6 +10,7 @@ import {
   handleSubscriptionArrayEvent,
   Labels,
   useYamlEditor,
+  ReadableCreationTimestamp,
 } from 'react-shared';
 import { Link } from 'fundamental-react';
 
@@ -82,9 +83,7 @@ export default function SecretList({ namespace }) {
       {secret.name}
     </Link>,
     secret.type,
-    <Moment unix fromNow>
-      {secret.creationTime}
-    </Moment>,
+    <ReadableCreationTimestamp timestamp={secret.creationTime} />,
     <Labels labels={secret.labels} />,
   ];
 
