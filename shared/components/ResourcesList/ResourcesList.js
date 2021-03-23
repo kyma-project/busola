@@ -19,6 +19,7 @@ import {
 } from '../..';
 import CustomPropTypes from '../../typechecking/CustomPropTypes';
 import { ModalWithForm } from '../ModalWithForm/ModalWithForm';
+import { prettifyNameSingular, prettifyNamePlural } from './helpers';
 
 ResourcesList.propTypes = {
   customColumns: CustomPropTypes.customColumnsType,
@@ -26,6 +27,7 @@ ResourcesList.propTypes = {
   customHeaderActions: PropTypes.node,
   resourceUrl: PropTypes.string.isRequired,
   resourceType: PropTypes.string.isRequired,
+  resourceName: PropTypes.string,
   namespace: PropTypes.string,
   hasDetailsView: PropTypes.bool,
   fixedPath: PropTypes.bool,
@@ -53,7 +55,7 @@ export function ResourcesList(props) {
     <YamlEditorProvider>
       {!props.isCompact && (
         <PageHeader
-          title={props.resourceType}
+          title={prettifyNamePlural(props.resourceName, props.resourceType)}
           actions={props.customHeaderActions}
           description={props.description}
         />
@@ -68,6 +70,7 @@ export const ResourcesListProps = ResourcesList.propTypes;
 function Resources({
   resourceUrl,
   resourceType,
+  resourceName,
   namespace,
   customColumns,
   createResourceForm: CreateResourceForm,
@@ -166,14 +169,18 @@ function Resources({
     ...customColumns.map(col => col.value(entry)),
   ];
 
+  const prettifiedResourceName = prettifyNameSingular(
+    resourceName,
+    resourceType,
+  );
   const extraHeaderContent =
     listHeaderActions ||
     (CreateResourceForm && (
       <ModalWithForm
-        title={`Create ${resourceType}`}
+        title={`Create ${prettifiedResourceName}`}
         modalOpeningComponent={
           <Button glyph="add" option="light">
-            Create {resourceType}
+            Create {prettifiedResourceName}
           </Button>
         }
         confirmText="Create"

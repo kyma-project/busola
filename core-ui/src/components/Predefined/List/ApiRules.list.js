@@ -55,6 +55,7 @@ export const ApiRulesList = DefaultRenderer => ({ ...otherParams }) => {
     <DefaultRenderer
       customColumns={customColumns}
       listHeaderActions={createApiRule}
+      resourceName="API Rules"
       {...otherParams}
     />
   );
