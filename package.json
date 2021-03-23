@@ -4,7 +4,7 @@
   "name": "@kyma-project/busola",
   "version": "0.0.1-rc.4",
   "scripts": {
-    "bootstrap": "npm install && npm run install:libraries && npm run build:libraries && npm run install:apps && npm run append-hosts && npm run generate-cluster-config",
+    "bootstrap": "npm install && npm run install:libraries && npm run build:libraries && npm run install:apps",
     "bootstrap:ci": "npm ci && npm run ci:libraries && npm run build:libraries",
     "bootstrap:prod": "npm ci && npm run ci:libraries && npm run build:libraries",
     "install:libraries": "gulp install:libraries",
@@ -20,7 +20,6 @@
     "markdownlint": "markdownlint **/*.md",
     "lint-staged": "lint-staged",
     "test-shared-lib": "cd shared && jest",
-    "generate-cluster-config": "[ ! -r .clusterConfig.gen ] && ./scripts/setClusterConfig.sh local || :",
     "start:npx": "npm run start:npx --prefix=backend",
     "build:npx": "npm run bootstrap && lerna exec --parallel -- npm run build:npx"
   },

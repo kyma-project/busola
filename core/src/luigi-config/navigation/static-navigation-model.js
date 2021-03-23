@@ -45,7 +45,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
       label: 'Pods',
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/pods?' +
+        '/namespaces/:namespaceId/Pods?' +
         toSearchParamsString({
           resourceApiPath: '/api/v1',
           hasDetailsView: true,
@@ -61,7 +61,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
               pathSegment: ':podName',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/pods/:podName?' +
+                '/namespaces/:namespaceId/Pods/:podName?' +
                 toSearchParamsString({
                   resourceApiPath: '/api/v1',
                 }),
@@ -76,7 +76,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
       label: 'Replica Sets',
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/replicasets?' +
+        '/namespaces/:namespaceId/ReplicaSets?' +
         toSearchParamsString({
           resourceApiPath: '/apis/apps/v1',
           hasDetailsView: true,
@@ -93,7 +93,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
               pathSegment: ':replicaSetName',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/replicasets/:replicaSetName?' +
+                '/namespaces/:namespaceId/ReplicaSets/:replicaSetName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/apps/v1',
                 }),
@@ -111,7 +111,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
       keepSelectedForChildren: true,
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/deployments?' +
+        '/namespaces/:namespaceId/Deployments?' +
         toSearchParamsString({
           resourceApiPath: '/apis/apps/v1',
           hasDetailsView: true,
@@ -126,7 +126,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
               pathSegment: ':deploymentName',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/deployments/:deploymentName?' +
+                '/namespaces/:namespaceId/Deployments/:deploymentName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/apps/v1',
                 }),
@@ -151,7 +151,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
       label: 'Services',
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/services?' +
+        '/namespaces/:namespaceId/Services?' +
         toSearchParamsString({
           resourceApiPath: '/api/v1',
           hasDetailsView: true,
@@ -167,7 +167,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
               pathSegment: ':serviceName',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/services/:serviceName?' +
+                '/namespaces/:namespaceId/Services/:serviceName?' +
                 toSearchParamsString({
                   resourceApiPath: '/api/v1',
                 }),
@@ -202,7 +202,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
       label: 'OAuth Clients',
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/oauth2clients?' +
+        '/namespaces/:namespaceId/Oauth2Clients?' +
         toSearchParamsString({
           resourceApiPath: '/apis/hydra.ory.sh/v1alpha1',
           hasDetailsView: true,
@@ -224,7 +224,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
               pathSegment: ':clientName',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/oauth2clients/:clientName?' +
+                '/namespaces/:namespaceId/Oauth2Clients/:clientName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/hydra.ory.sh/v1alpha1',
                 }),
@@ -273,7 +273,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
       label: 'Roles',
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/roles?' +
+        '/namespaces/:namespaceId/Roles?' +
         toSearchParamsString({
           resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
           hasDetailsView: true,
@@ -288,7 +288,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
               pathSegment: ':roleName',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/roles/:roleName?' +
+                '/namespaces/:namespaceId/Roles/:roleName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
                 }),
@@ -305,7 +305,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
       label: 'Functions',
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/functions?' +
+        '/namespaces/:namespaceId/Functions?' +
         toSearchParamsString({
           resourceApiPath: '/apis/serverless.kyma-project.io/v1alpha1',
           hasDetailsView: true,
@@ -320,7 +320,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
               pathSegment: ':functionName',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/functions/:functionName?' +
+                '/namespaces/:namespaceId/Functions/:functionName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/serverless.kyma-project.io/v1alpha1',
                 }),
@@ -337,7 +337,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
       label: 'Git Repositories',
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/gitrepositories?' +
+        '/namespaces/:namespaceId/GitRepositories?' +
         toSearchParamsString({
           resourceApiPath: '/apis/serverless.kyma-project.io/v1alpha1',
           hasDetailsView: false,
@@ -352,7 +352,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
       label: 'Role Bindings',
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/rolebindings?' +
+        '/namespaces/:namespaceId/RoleBindings?' +
         toSearchParamsString({
           resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
           hasDetailsView: true,
@@ -367,7 +367,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
               pathSegment: ':roleBindingName',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/rolebindings/:roleBindingName?' +
+                '/namespaces/:namespaceId/RoleBindings/:roleBindingName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
                 }),
@@ -384,7 +384,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
       label: 'Secrets',
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/secrets?' +
+        '/namespaces/:namespaceId/Secrets?' +
         toSearchParamsString({
           resourceApiPath: '/api/v1',
           hasDetailsView: true,
@@ -399,7 +399,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
               pathSegment: ':name',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/secrets/:name?' +
+                '/namespaces/:namespaceId/Secrets/:name?' +
                 toSearchParamsString({
                   resourceApiPath: '/api/v1',
                 }),
@@ -416,7 +416,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
       label: 'Config Maps',
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/configmaps?' +
+        '/namespaces/:namespaceId/ConfigMaps?' +
         toSearchParamsString({
           resourceApiPath: '/api/v1',
           hasDetailsView: true,
@@ -431,7 +431,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
               pathSegment: ':name',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/configmaps/:name?' +
+                '/namespaces/:namespaceId/ConfigMaps/:name?' +
                 toSearchParamsString({
                   resourceApiPath: '/api/v1',
                 }),
@@ -447,7 +447,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
       label: 'Brokers',
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/servicebrokers?' +
+        '/namespaces/:namespaceId/ServiceBrokers?' +
         toSearchParamsString({
           resourceApiPath: '/apis/servicecatalog.k8s.io/v1beta1',
           hasDetailsView: false,
@@ -523,7 +523,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
       label: 'API Rules',
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/apirules?' +
+        '/namespaces/:namespaceId/ApiRules?' +
         toSearchParamsString({
           resourceApiPath: '/apis/gateway.kyma-project.io/v1alpha1',
           hasDetailsView: true,
@@ -538,7 +538,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
               pathSegment: ':apiName',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/apirules/:apiName?' +
+                '/namespaces/:namespaceId/ApiRules/:apiName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/gateway.kyma-project.io/v1alpha1',
                 }),
@@ -549,7 +549,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
           pathSegment: 'create',
           viewUrl:
             config.coreUIModuleUrl +
-            '/apirules/create?' +
+            '/ApiRules/create?' +
             toSearchParamsString({
               resourceApiPath: '/apis/gateway.kyma-project.io/v1alpha1',
               hasDetailsView: true,
@@ -559,7 +559,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
           pathSegment: 'edit/:apiName',
           viewUrl:
             config.coreUIModuleUrl +
-            '/apirules/edit/:apiName?' +
+            '/ApiRules/edit/:apiName?' +
             toSearchParamsString({
               resourceApiPath: '/apis/gateway.kyma-project.io/v1alpha1',
               hasDetailsView: true,
@@ -583,7 +583,7 @@ export function getStaticRootNodes(namespaceChildrenNodesResolver, apiGroups) {
       label: 'Namespaces',
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces?' +
+        '/Namespaces?' +
         toSearchParamsString({
           resourceApiPath: '/api/v1',
           hasDetailsView: true,
@@ -593,7 +593,7 @@ export function getStaticRootNodes(namespaceChildrenNodesResolver, apiGroups) {
     },
     {
       pathSegment: 'namespaces',
-      viewUrl: config.coreUIModuleUrl + '/namespaces',
+      viewUrl: config.coreUIModuleUrl + '/Namespaces',
       hideFromNav: true,
       viewGroup: coreUIViewGroupName,
       children: [
@@ -632,7 +632,7 @@ export function getStaticRootNodes(namespaceChildrenNodesResolver, apiGroups) {
       label: 'Cluster Brokers',
       viewUrl:
         config.coreUIModuleUrl +
-        '/clusterservicebrokers?' +
+        '/ClusterServiceBrokers?' +
         toSearchParamsString({
           resourceApiPath: '/apis/servicecatalog.k8s.io/v1beta1',
           hasDetailsView: true,
@@ -649,7 +649,7 @@ export function getStaticRootNodes(namespaceChildrenNodesResolver, apiGroups) {
       },
       viewUrl:
         config.coreUIModuleUrl +
-        '/clusterroles?' +
+        '/ClusterRoles?' +
         toSearchParamsString({
           resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
           hasDetailsView: true,
@@ -665,7 +665,7 @@ export function getStaticRootNodes(namespaceChildrenNodesResolver, apiGroups) {
               pathSegment: ':roleName',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/clusterroles/:roleName?' +
+                '/ClusterRoles/:roleName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
                 }),
@@ -693,7 +693,7 @@ export function getStaticRootNodes(namespaceChildrenNodesResolver, apiGroups) {
       },
       viewUrl:
         config.coreUIModuleUrl +
-        '/clusterrolebindings?' +
+        '/ClusterRoleBindings?' +
         toSearchParamsString({
           resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
           hasDetailsView: true,
@@ -709,7 +709,7 @@ export function getStaticRootNodes(namespaceChildrenNodesResolver, apiGroups) {
               pathSegment: ':clusterRoleBindingName',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/clusterrolebindings/:clusterRoleBindingName?' +
+                '/ClusterRoleBindings/:clusterRoleBindingName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
                 }),
@@ -762,7 +762,7 @@ export function getStaticRootNodes(namespaceChildrenNodesResolver, apiGroups) {
       category: 'Integration',
       viewUrl:
         config.coreUIModuleUrl +
-        '/applications?' +
+        '/Applications?' +
         toSearchParamsString({
           resourceApiPath:
             '/apis/applicationconnector.kyma-project.io/v1alpha1',
@@ -778,7 +778,7 @@ export function getStaticRootNodes(namespaceChildrenNodesResolver, apiGroups) {
               pathSegment: ':name',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/applications/:name?' +
+                '/Applications/:name?' +
                 toSearchParamsString({
                   resourceApiPath:
                     '/apis/applicationconnector.kyma-project.io/v1alpha1',
