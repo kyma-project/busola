@@ -1,6 +1,12 @@
 import React from 'react';
 
-import { useGetList, usePost, StringInput, K8sNameInput } from 'react-shared';
+import {
+  useGetList,
+  usePost,
+  StringInput,
+  K8sNameInput,
+  useNotification,
+} from 'react-shared';
 
 import { FormItem, FormLabel } from 'fundamental-react';
 import CheckboxFormControl from './CheckboxFormControl';
@@ -11,8 +17,6 @@ export const OAuth2ClientsCreate = ({
   namespace,
   formElementRef,
   onChange,
-  onCompleted,
-  onError,
   resourceUrl,
   refetchList,
   setCustomValid,
@@ -20,6 +24,7 @@ export const OAuth2ClientsCreate = ({
   const postRequest = usePost();
   const [spec, setSpec] = React.useState(emptySpec);
   const [useCustomSecret, setUseCustomSecret] = React.useState(false);
+  const notification = useNotification();
 
   const { data } = useGetList()(`/api/v1/namespaces/${namespace}/secrets/`, {
     pollingInterval: 3000,
@@ -41,10 +46,14 @@ export const OAuth2ClientsCreate = ({
     try {
       await postRequest(resourceUrl, input);
       refetchList();
-      onCompleted(spec.name, `Client created`);
+      notification.notifySuccess({
+        title: 'Succesfully created Resource',
+      });
     } catch (e) {
-      console.warn(e);
-      onError(`The client could not be created:`, e.message);
+      notification.notifyError({
+        title: 'Failed to create the Resource',
+        content: e.message,
+      });
     }
   }
 
