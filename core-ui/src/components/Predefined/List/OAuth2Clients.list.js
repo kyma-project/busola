@@ -49,6 +49,7 @@ export const OAuth2ClientsList = DefaultRenderer => ({ ...otherParams }) => {
     <DefaultRenderer
       description={description}
       customColumns={customColumns}
+      resourceName="OAuth2 Clients"
       {...otherParams}
     />
   );
