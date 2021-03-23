@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Label } from '@kyma-project/react-components';
 import { Tile, Icon } from 'fundamental-react';
 
-import { Tooltip, ReadableCreationTimestamp } from 'react-shared';
+import { Tooltip } from 'react-shared';
 import {
   ServiceClassInfoContentWrapper,
   ExternalLink,
