@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import jsyaml from 'js-yaml';
 import { Link, Button } from 'fundamental-react';
 import { createPatch } from 'rfc6902';
-import Moment from 'react-moment';
 import {
   YamlEditorProvider,
   GenericList,
@@ -19,6 +18,7 @@ import {
 } from '../..';
 import CustomPropTypes from '../../typechecking/CustomPropTypes';
 import { ModalWithForm } from '../ModalWithForm/ModalWithForm';
+import { ReadableCreationTimestamp } from '../ReadableCreationTimestamp/ReadableCreationTimestamp';
 import { prettifyNameSingular, prettifyNamePlural } from './helpers';
 
 ResourcesList.propTypes = {
@@ -137,7 +137,7 @@ function Resources({
 
   const headerRenderer = () => [
     'Name',
-    'Age',
+    'Created',
     'Labels',
     ...customColumns.map(col => col.header),
   ];
@@ -160,9 +160,7 @@ function Resources({
     ) : (
       <b>{entry.metadata.name}</b>
     ),
-    <Moment utc fromNow>
-      {entry.metadata.creationTimestamp}
-    </Moment>,
+    <ReadableCreationTimestamp timestamp={entry.metadata.creationTimestamp} />,
     <div style={{ maxWidth: '55em' /*TODO*/ }}>
       <Labels labels={entry.metadata.labels} />
     </div>,
