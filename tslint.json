@@ -33,7 +33,6 @@
   "linterOptions": {
     "exclude": [
       "*/node_modules/**/*",
-      "*/add-ons/**",
       "*/components/react/**/*",
       "*/core/**/*",
       "*/core-ui/**/*",
