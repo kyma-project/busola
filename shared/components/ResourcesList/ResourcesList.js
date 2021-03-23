@@ -33,6 +33,7 @@ ResourcesList.propTypes = {
   showTitle: PropTypes.bool,
   filter: PropTypes.func,
   listHeaderActions: PropTypes.node,
+  description: PropTypes.node,
 };
 
 ResourcesList.defaultProps = {
@@ -54,6 +55,7 @@ export function ResourcesList(props) {
         <PageHeader
           title={props.resourceType}
           actions={props.customHeaderActions}
+          description={props.description}
         />
       )}
       <Resources {...props} />
