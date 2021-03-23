@@ -10,7 +10,6 @@ The Busola project consists of the following UI projects:
 
 - [`Core`](./core) - The main frame of Kyma UI
 - [`Service-Catalog-UI`](./service-catalog-ui) - The UI layer for Service Catalog, Instances and Brokers
-- [`Addons`](./add-ons) - The view for displaying Namespace-scoped and cluster-wide Addons
 - [`Log UI`](./logging) - The logs view
 - [`Tests`](./tests) - Acceptance and end-to-end tests
 
