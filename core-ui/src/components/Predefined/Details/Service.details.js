@@ -2,27 +2,17 @@ import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { getComponentForList } from 'shared/getComponents';
 import { Button } from 'fundamental-react';
-import CreateApiRule from 'components/ApiRules/CreateApiRule/CreateApiRule.js';
 
 export const ServicesDetails = DefaultRenderer => ({ ...otherParams }) => {
-  function createApiRuleModal(
-    service,
-
-    redirectPath,
-    redirectCtx,
-    portForCreate,
-  ) {
+  function openCreateApiRuleModal() {
     LuigiClient.linkManager()
       .fromContext('namespaces')
       .withParams({
-        serviceName: 'service.metadata.name',
-        port: 'portForCreate',
+        serviceName: otherParams.resourceName,
         openedInModal: true,
-        redirectCtx: null,
-        redirectPath: encodeURIComponent('redirectPath'),
       })
       .openAsModal(`apirules/create`, {
-        title: 'PANEL.CREATE_MODAL.TITLE',
+        title: `Create API Rule for the ${otherParams.resourceName} service`,
       });
   }
 
@@ -30,10 +20,10 @@ export const ServicesDetails = DefaultRenderer => ({ ...otherParams }) => {
     <Button
       glyph="add"
       option="light"
-      onClick={() => createApiRuleModal()}
-      // disabled={disableExposeButton || !!(serverDataLoading || serverDataError)}
+      onClick={openCreateApiRuleModal}
+      disabled={!otherParams.resourceName}
     >
-      Expose
+      Add API Rule for this service
     </Button>
   );
 
