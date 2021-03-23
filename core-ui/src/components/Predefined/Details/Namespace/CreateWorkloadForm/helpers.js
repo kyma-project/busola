@@ -35,26 +35,15 @@ export function formatDeployment(deployment) {
 }
 
 export function formatService(deployment, deploymentUID) {
-  if (!deployment.labels.app) {
-    deployment.labels.app = deployment.name;
-  }
-
   const service = {
     apiVersion: 'v1',
     kind: 'Service',
     metadata: {
       name: deployment.name,
       namespace: deployment.namespace,
-      ownerReferences: [
-        {
-          kind: 'Deployment',
-          apiVersion: 'apps/v1',
-          name: deployment.name,
-          uid: deploymentUID,
-        },
-      ],
     },
     spec: {
+      selector: { app: deployment.name },
       type: 'ClusterIP',
       ports: [
         {
