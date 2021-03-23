@@ -6,7 +6,7 @@ const URL_SUMMARY_DIGIT = 23;
 
 const RepositoryUrlList = ({ addonStatus }) => (
   <div className="addons__repository">
-    {addonStatus.repositories.map(r => (
+    {(addonStatus.repositories || []).map(r => (
       <>
         <span
           className="addons__repository-url"
@@ -20,7 +20,7 @@ const RepositoryUrlList = ({ addonStatus }) => (
         <StatusBadge
           key={r.url + 'status'}
           tooltipContent={r.message}
-          autoResolveType={true}
+          autoResolveType
         >
           {r.status}
         </StatusBadge>
@@ -40,9 +40,4 @@ export const AddonsConfigurationsList = DefaultRenderer => ({
   return <DefaultRenderer customColumns={customColumns} {...otherParams} />;
 };
 
-export const ClusterAddonsConfigurationsList = DefaultRenderer => ({
-  ...otherParams
-}) => {
-  const customColumns = [repositoryUrlsColumn];
-  return <DefaultRenderer customColumns={customColumns} {...otherParams} />;
-};
+export const ClusterAddonsConfigurationsList = AddonsConfigurationsList;
