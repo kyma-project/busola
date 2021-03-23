@@ -2,6 +2,19 @@ import React from 'react';
 import { StatusBadge } from 'react-shared';
 
 export const OAuth2ClientsList = DefaultRenderer => ({ ...otherParams }) => {
+  const description = (
+    <span>
+      {'See the "Expose and secure a service" section in the '}
+      <a
+        target="_blank"
+        href="https://kyma-project.io/docs/components/api-gateway#tutorials-expose-and-secure-a-service"
+      >
+        documentation
+      </a>
+      {' to find out more.'}
+    </span>
+  );
+
   const getOAuthClientStatus = client => {
     const error = client.spec.reconciliationError;
     if (!error) {
@@ -31,5 +44,11 @@ export const OAuth2ClientsList = DefaultRenderer => ({ ...otherParams }) => {
     },
   ];
 
-  return <DefaultRenderer customColumns={customColumns} {...otherParams} />;
+  return (
+    <DefaultRenderer
+      description={description}
+      customColumns={customColumns}
+      {...otherParams}
+    />
+  );
 };
