@@ -1,22 +1,14 @@
 import React from 'react';
 import { GenericList, StatusBadge } from 'react-shared';
 
-const URLstatus = ({ repository }) => {
-  const badge = <StatusBadge autoResolveType>{repository.status}</StatusBadge>;
-
-  return repository.message ? (
-    <details className="repository-url">
-      <summary style={{ cursor: 'pointer' }}>{badge}</summary>
-      <p className="fd-alert fd-alert--dismissible">{repository.message}</p>
-    </details>
-  ) : (
-    badge
-  );
-};
-
 const RepositoryUrls = addon => {
   const headerRenderer = _ => ['URL', 'Status'];
-  const rowRenderer = repo => [repo.url, <URLstatus repository={repo} />];
+  const rowRenderer = repo => [
+    repo.url,
+    <StatusBadge tooltipContent={repo.message} autoResolveType>
+      {repo.status}
+    </StatusBadge>,
+  ];
 
   return (
     <GenericList
