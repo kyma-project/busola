@@ -5,7 +5,7 @@ export default function PodRestarts({ statuses }) {
   const restartCount = statuses.reduce((acc, c) => acc + c.restartCount, 0);
   const type = restartCount ? 'warning' : 'success';
 
-  const tooltipContent = (() => {
+  const getTooltipContent = () => {
     if (!restartCount) return null;
     return (
       <ul style={{ textAlign: 'left' }}>
@@ -14,10 +14,10 @@ export default function PodRestarts({ statuses }) {
         ))}
       </ul>
     );
-  })();
+  };
 
   return (
-    <StatusBadge type={type} tooltipContent={tooltipContent}>
+    <StatusBadge type={type} tooltipContent={getTooltipContent()}>
       {restartCount}
     </StatusBadge>
   );
