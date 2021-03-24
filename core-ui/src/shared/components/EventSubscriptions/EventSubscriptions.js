@@ -1,25 +1,75 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { GenericList } from 'react-shared';
+import { GenericList, usePost, useNotification, useDelete } from 'react-shared';
 import { EVENT_TRIGGERS_PANEL, ERRORS } from '../../constants';
 import CreateEventSubscriptionModal from './CreateEventSubscriptionModal';
+import { randomNamesGenerator } from '@kyma-project/common';
+import { createSubscriptionInput } from './createSubscriptionInput';
 
 const textSearchProperties = ['metadata.name', 'spec.protocol']; //TODO add filtering by eventType
 
 export default function EventSubscriptions({
   subscriptions = [],
+  subscriptionsUrl,
+  silentRefetch = function() {},
+  ownerRef,
+  namespace,
   isLambda = false,
   serverDataError,
   serverDataLoading,
-  onSubscriptionAdd,
-  onSubscriptionDelete,
   notFoundMessage = EVENT_TRIGGERS_PANEL.LIST.ERRORS.RESOURCES_NOT_FOUND,
 }) {
+  const notificationManager = useNotification();
+  const postRequest = usePost();
+  const deleteRequest = useDelete();
+
+  async function handleSubscriptionAdded(eventType) {
+    const name = `${ownerRef.name}-${randomNamesGenerator()}`;
+    const sink = `http://${ownerRef.name}.${namespace}.svc.cluster.local`;
+    const subscriptionInput = createSubscriptionInput(
+      name,
+      namespace,
+      ownerRef,
+      sink,
+      eventType,
+    );
+
+    try {
+      await postRequest(`${subscriptionsUrl}/${name}`, subscriptionInput);
+      silentRefetch();
+      notificationManager.notifySuccess({
+        content: 'Subscription created succesfully',
+      });
+    } catch (err) {
+      console.error(err);
+      notificationManager.notifyError({
+        content: err.message,
+        autoClose: false,
+      });
+    }
+  }
+
+  async function handleSubscriptionDelete(s) {
+    try {
+      await deleteRequest(`${subscriptionsUrl}/${s.metadata.name}`); //TODO use selfLink which is not there; why?
+      silentRefetch();
+      notificationManager.notifySuccess({
+        content: 'Subscription removed succesfully',
+      });
+    } catch (err) {
+      console.error(err);
+      notificationManager.notifyError({
+        content: err.message,
+        autoClose: false,
+      });
+    }
+  }
+
   const actions = [
     {
       name: 'Delete',
-      handler: onSubscriptionDelete,
+      handler: handleSubscriptionDelete,
     },
   ];
 
@@ -33,7 +83,7 @@ export default function EventSubscriptions({
   const createModal = (
     <CreateEventSubscriptionModal
       isLambda={isLambda}
-      onSubmit={onSubscriptionAdd}
+      onSubmit={handleSubscriptionAdded}
     />
   );
 
@@ -65,6 +115,15 @@ EventSubscriptions.propTypes = {
   subscriptions: PropTypes.array.isRequired,
   serverDataError: PropTypes.any,
   serverDataLoading: PropTypes.bool,
-  onSubscriptionAdd: PropTypes.func.isRequired,
-  onSubscriptionDelete: PropTypes.func.isRequired,
+  subscriptionsUrl: PropTypes.string.isRequired,
+  silentRefetch: PropTypes.func,
+  ownerRef: PropTypes.shape({
+    name: PropTypes.string,
+    kind: PropTypes.string,
+    apiVersion: PropTypes.string,
+    uid: PropTypes.string,
+  }).isRequired,
+  namespace: PropTypes.string.isRequired,
+  isLambda: PropTypes.bool,
+  notFoundMessage: PropTypes.string,
 };
