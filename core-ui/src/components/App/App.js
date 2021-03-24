@@ -65,6 +65,7 @@ function RoutedResourcesList({ match }) {
 
   const params = {
     hasDetailsView: queryParams.get('hasDetailsView') === 'true',
+    readonly: queryParams.get('readonly') === 'true',
     resourceUrl,
     resourceType: match.params.resourceType,
     namespace: match.params.namespaceId,

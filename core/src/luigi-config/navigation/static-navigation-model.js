@@ -344,6 +344,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
         '/namespaces/:namespaceId/ServiceBrokers?' +
         toSearchParamsString({
           resourceApiPath: '/apis/servicecatalog.k8s.io/v1beta1',
+          readonly: true,
           hasDetailsView: false,
         }),
       viewGroup: coreUIViewGroupName,
@@ -660,6 +661,19 @@ export function getStaticRootNodes(namespaceChildrenNodesResolver, apiGroups) {
           ],
         },
       ],
+    },
+    {
+      pathSegment: 'cluster-brokers',
+      navigationContext: 'cluster-roles',
+      label: 'Cluster Brokers',
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/ClusterServiceBrokers?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/servicecatalog.k8s.io/v1beta1',
+          readonly: true,
+          hasDetailsView: false,
+        }),
     },
     {
       pathSegment: 'preferences',
