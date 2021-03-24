@@ -1,6 +1,6 @@
 import React from 'react';
 
-import SecretData from 'components/Secrets/Details/Secret/SecretData';
+import SecretData from 'shared/components/Secret/SecretData';
 import OAuthClientSpecPanel from './OAuthClientSpecPanel';
 import { OAuth2ClientStatus } from 'shared/components/OAuth2ClientStatus/OAuth2ClientStatus';
 
@@ -23,12 +23,13 @@ function SecretComponent({ namespaceName, secretName }) {
 export const OAuth2ClientsDetails = DefaultRenderer => ({ ...otherParams }) => {
   const Secret = resource => (
     <SecretComponent
+      key="secret"
       namespaceName={resource.metadata.namespace}
       secretName={resource.spec.secretName}
     />
   );
   const Configuration = resource => (
-    <OAuthClientSpecPanel spec={resource.spec} />
+    <OAuthClientSpecPanel key="configuration" spec={resource.spec} />
   );
 
   const statusColumn = {
