@@ -82,7 +82,7 @@ export const ServicesDetails = DefaultRenderer => ({ ...otherParams }) => {
       customComponents={[EventSubscriptionsWrapper]}
       {...otherParams}
     >
-      {/* {ApiRuleList} */}
+      {ApiRuleList}
     </DefaultRenderer>
   );
 };
