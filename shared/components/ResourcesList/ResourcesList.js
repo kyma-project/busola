@@ -20,6 +20,7 @@ import CustomPropTypes from '../../typechecking/CustomPropTypes';
 import { ModalWithForm } from '../ModalWithForm/ModalWithForm';
 import { ReadableCreationTimestamp } from '../ReadableCreationTimestamp/ReadableCreationTimestamp';
 import { prettifyNameSingular, prettifyNamePlural } from './helpers';
+import { useWindowTitle } from '../../hooks';
 
 ResourcesList.propTypes = {
   customColumns: CustomPropTypes.customColumnsType,
@@ -79,8 +80,10 @@ function Resources({
   showTitle,
   filter,
   listHeaderActions,
+  windowTitle,
   ...params
 }) {
+  useWindowTitle(windowTitle || prettifyNamePlural(null, resourceType));
   const setEditedSpec = useYamlEditor();
   const notification = useNotification();
   const updateResourceMutation = useUpdate(resourceUrl);

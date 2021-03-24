@@ -48,6 +48,7 @@ export const NamespacesDetails = DefaultRenderer => ({ ...otherParams }) => {
   return (
     <DefaultRenderer
       {...otherParams}
+      windowTitle="Overview"
       customColumns={customColumns}
       headerActions={headerActions}
     >

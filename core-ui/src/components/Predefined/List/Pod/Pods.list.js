@@ -1,5 +1,6 @@
 import React from 'react';
 import { StatusBadge } from 'react-shared';
+import PodRestarts from './PodRestarts';
 
 const calculatePodState = pod => {
   const containerStatuses = pod?.status?.containerStatuses;
@@ -56,6 +57,10 @@ export const PodsList = DefaultRenderer => ({ ...otherParams }) => {
           </StatusBadge>
         );
       },
+    },
+    {
+      header: 'Restarts',
+      value: pod => <PodRestarts statuses={pod.status.containerStatuses} />,
     },
   ];
 

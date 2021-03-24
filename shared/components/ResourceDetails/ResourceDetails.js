@@ -18,6 +18,8 @@ import {
 } from '../..';
 import CustomPropTypes from '../../typechecking/CustomPropTypes';
 import { handleDelete } from '../GenericList/actionHandlers/simpleDelete';
+import { useWindowTitle } from '../../hooks';
+import { prettifyNamePlural } from '../ResourcesList/helpers';
 
 ResourceDetails.propTypes = {
   customColumns: CustomPropTypes.customColumnsType,
@@ -86,7 +88,9 @@ function Resource({
   filter,
   headerActions,
   resourceHeaderActions,
+  windowTitle,
 }) {
+  useWindowTitle(windowTitle || prettifyNamePlural(null, resourceType));
   const setEditedSpec = useYamlEditor();
   const notification = useNotification();
 
