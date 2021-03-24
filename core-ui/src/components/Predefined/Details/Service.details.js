@@ -5,8 +5,6 @@ import EventSubscriptions from 'shared/components/EventSubscriptions/EventSubscr
 
 function EventSubscriptionsWrapper(service) {
   const subscriptionsUrl = `/apis/eventing.kyma-project.io/v1alpha1/namespaces/${service.metadata.namespace}/subscriptions`;
-  console.log(service);
-
   const ownerRef = {
     apiVersion: service.apiVersion,
     kind: service.kind,
@@ -28,10 +26,11 @@ function EventSubscriptionsWrapper(service) {
     pollingInterval: 3000,
   });
 
-  if (!subscriptions) return <Spinner key="subscriptions-spinner" />;
+  if (!subscriptions) return <Spinner key="event-subscriptions" />;
 
   return (
     <EventSubscriptions
+      key="event-subscriptions"
       isLambda={false}
       ownerRef={ownerRef}
       namespace={service.metadata.namespace}
@@ -83,7 +82,7 @@ export const ServicesDetails = DefaultRenderer => ({ ...otherParams }) => {
       customComponents={[EventSubscriptionsWrapper]}
       {...otherParams}
     >
-      {ApiRuleList}
+      {/* {ApiRuleList} */}
     </DefaultRenderer>
   );
 };

@@ -88,26 +88,24 @@ export default function EventSubscriptions({
   );
 
   return (
-    <div>
-      <GenericList
-        title={EVENT_TRIGGERS_PANEL.LIST.TITLE}
-        showSearchField={true}
-        textSearchProperties={textSearchProperties}
-        showSearchSuggestion={false}
-        extraHeaderContent={createModal}
-        actions={actions}
-        entries={subscriptions}
-        headerRenderer={headerRenderer}
-        rowRenderer={rowRenderer}
-        serverDataError={serverDataError}
-        serverDataLoading={serverDataLoading}
-        notFoundMessage={notFoundMessage}
-        noSearchResultMessage={
-          EVENT_TRIGGERS_PANEL.LIST.ERRORS.NOT_MATCHING_SEARCH_QUERY
-        }
-        serverErrorMessage={ERRORS.SERVER}
-      />
-    </div>
+    <GenericList
+      title={EVENT_TRIGGERS_PANEL.LIST.TITLE}
+      showSearchField={true}
+      textSearchProperties={textSearchProperties}
+      showSearchSuggestion={false}
+      extraHeaderContent={createModal}
+      actions={actions}
+      entries={subscriptions}
+      headerRenderer={headerRenderer}
+      rowRenderer={rowRenderer}
+      serverDataError={serverDataError}
+      serverDataLoading={serverDataLoading}
+      notFoundMessage={notFoundMessage}
+      noSearchResultMessage={
+        EVENT_TRIGGERS_PANEL.LIST.ERRORS.NOT_MATCHING_SEARCH_QUERY
+      }
+      serverErrorMessage={ERRORS.SERVER}
+    />
   );
 }
 
