@@ -57,6 +57,14 @@ Object {
   "metadata": Object {
     "name": "test-name",
     "namespace": "test-namespace",
+    "ownerReferences": Array [
+      Object {
+        "apiVersion": "apps/v1",
+        "kind": "Deployment",
+        "name": "test-name",
+        "uid": "test-id",
+      },
+    ],
   },
   "spec": Object {
     "ports": Array [
