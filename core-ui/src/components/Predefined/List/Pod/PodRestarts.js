@@ -1,24 +1,24 @@
 import React from 'react';
-import { StatusBadge, Tooltip } from 'react-shared';
+import { StatusBadge } from 'react-shared';
 
 export default function PodRestarts({ statuses }) {
   const restartCount = statuses.reduce((acc, c) => acc + c.restartCount, 0);
+  const type = restartCount ? 'warning' : 'success';
 
-  if (restartCount) {
-    const tooltipContent = (
+  const tooltipContent = (() => {
+    if (!restartCount) return null;
+    return (
       <ul style={{ textAlign: 'left' }}>
         {statuses.map(s => (
           <li key={s.name}>{`${s.name}: ${s.restartCount}`}</li>
         ))}
       </ul>
     );
+  })();
 
-    return (
-      <Tooltip content={tooltipContent}>
-        <StatusBadge type="warning">{restartCount}</StatusBadge>
-      </Tooltip>
-    );
-  } else {
-    return <StatusBadge type="success">{restartCount}</StatusBadge>;
-  }
+  return (
+    <StatusBadge type={type} tooltipContent={tooltipContent}>
+      {restartCount}
+    </StatusBadge>
+  );
 }
