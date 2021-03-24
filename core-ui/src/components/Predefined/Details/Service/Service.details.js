@@ -56,7 +56,10 @@ export const ServicesDetails = DefaultRenderer => ({ ...otherParams }) => {
       value: resource => (
         <>
           {resource.spec.ports?.map(p => (
-            <span className="fd-token y-fd-token y-fd-token--no-button service__port-container">
+            <span
+              key={p.name + p.targetPort}
+              className="fd-token y-fd-token y-fd-token--no-button service__port-container"
+            >
               <span className="name">{p.name}</span>
               <Counter>{p.port}</Counter>
               <Icon glyph="arrow-right" />
