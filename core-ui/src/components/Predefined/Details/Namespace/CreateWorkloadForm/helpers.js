@@ -41,6 +41,14 @@ export function formatService(deployment, deploymentUID) {
     metadata: {
       name: deployment.name,
       namespace: deployment.namespace,
+      ownerReferences: [
+        {
+          kind: 'Deployment',
+          apiVersion: 'apps/v1',
+          name: deployment.name,
+          uid: deploymentUID,
+        },
+      ],
     },
     spec: {
       selector: { app: deployment.name },

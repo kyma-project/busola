@@ -13,17 +13,17 @@ export const ERRORS = {
 
 export const EVENT_TRIGGERS_PANEL = {
   LIST: {
-    TITLE: 'Event Triggers',
+    TITLE: 'Event Subscriptions',
     ERRORS: {
-      RESOURCES_NOT_FOUND: 'There are no Event Triggers yet.',
+      RESOURCES_NOT_FOUND: 'There are no Event Subscriptions yet.',
       NOT_MATCHING_SEARCH_QUERY:
-        "Couldn't find Event Triggers matching this query.",
+        "Couldn't find Event Subscriptions matching this query.",
     },
   },
   ADD_MODAL: {
     TITLE: 'Add Event Subscription',
     OPEN_BUTTON: {
-      TEXT: 'Add Event Trigger',
+      TEXT: 'Add Event Subscription',
       NOT_ENTRIES_POPUP_MESSAGE:
         'No Events available to connect in this Namespace.',
       NO_EXPOSED_PORTS_MESSAGE: 'This service has no exposed ports.',

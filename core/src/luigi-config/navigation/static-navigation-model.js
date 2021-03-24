@@ -17,6 +17,20 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
       icon: 'nav-back',
     },
     {
+      pathSegment: 'details',
+      label: 'Overview',
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId?' +
+        toSearchParamsString({
+          resourceApiPath: '/api/v1',
+        }),
+      icon: 'product',
+      viewGroup: coreUIViewGroupName,
+    },
+
+    //WORKLOADS CATEGORY
+    {
       category: {
         label: 'Workloads',
         icon: 'source-code',
@@ -27,17 +41,35 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
     },
     {
       category: 'Workloads',
-      pathSegment: 'details',
-      label: 'Overview',
-      order: -1,
+      pathSegment: 'functions',
+      navigationContext: 'functions',
+      label: 'Functions',
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId?' +
+        '/namespaces/:namespaceId/Functions?' +
         toSearchParamsString({
-          resourceApiPath: '/api/v1',
+          resourceApiPath: '/apis/serverless.kyma-project.io/v1alpha1',
+          hasDetailsView: true,
         }),
-      icon: 'product',
+      keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':functionName',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/Functions/:functionName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/serverless.kyma-project.io/v1alpha1',
+                }),
+              viewGroup: coreUIViewGroupName,
+            },
+          ],
+        },
+      ],
     },
     {
       category: 'Workloads',
@@ -64,6 +96,38 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
                 '/namespaces/:namespaceId/Pods/:podName?' +
                 toSearchParamsString({
                   resourceApiPath: '/api/v1',
+                }),
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: 'Workloads',
+      pathSegment: 'deployments',
+
+      label: 'Deployments',
+      keepSelectedForChildren: true,
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/Deployments?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/apps/v1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      navigationContext: 'deployments',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':deploymentName',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/Deployments/:deploymentName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/apps/v1',
                 }),
             },
           ],
@@ -103,38 +167,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
       ],
     },
 
-    {
-      category: 'Workloads',
-      pathSegment: 'deployments',
-
-      label: 'Deployments',
-      keepSelectedForChildren: true,
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/Deployments?' +
-        toSearchParamsString({
-          resourceApiPath: '/apis/apps/v1',
-          hasDetailsView: true,
-        }),
-      viewGroup: coreUIViewGroupName,
-      navigationContext: 'deployments',
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':deploymentName',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/Deployments/:deploymentName?' +
-                toSearchParamsString({
-                  resourceApiPath: '/apis/apps/v1',
-                }),
-            },
-          ],
-        },
-      ],
-    },
+    //DISCOVERY AND NETWORK CATEGORY
     {
       category: {
         label: 'Discovery and Network',
@@ -143,6 +176,57 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
       },
       pathSegment: '_discovery_and_network_category_placeholder_',
       hideFromNav: true,
+    },
+    {
+      category: 'Discovery and Network',
+      pathSegment: 'apirules',
+      navigationContext: 'apirules',
+      label: 'API Rules',
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/ApiRules?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/gateway.kyma-project.io/v1alpha1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':apiName',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/ApiRules/:apiName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/gateway.kyma-project.io/v1alpha1',
+                }),
+            },
+          ],
+        },
+        {
+          pathSegment: 'create',
+          viewUrl:
+            config.coreUIModuleUrl +
+            '/ApiRules/create?' +
+            toSearchParamsString({
+              resourceApiPath: '/apis/gateway.kyma-project.io/v1alpha1',
+              hasDetailsView: true,
+            }),
+        },
+        {
+          pathSegment: 'edit/:apiName',
+          viewUrl:
+            config.coreUIModuleUrl +
+            '/ApiRules/edit/:apiName?' +
+            toSearchParamsString({
+              resourceApiPath: '/apis/gateway.kyma-project.io/v1alpha1',
+              hasDetailsView: true,
+            }),
+        },
+      ],
     },
     {
       category: 'Discovery and Network',
@@ -177,6 +261,8 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
         },
       ],
     },
+
+    //SERVICE MANAGEMENT CATEGORY
     {
       category: {
         label: 'Service Management',
@@ -185,274 +271,6 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
       },
       pathSegment: '_service_management_category_placeholder_',
       hideFromNav: true,
-    },
-    {
-      category: {
-        label: 'Configuration',
-        icon: 'key-user-settings',
-        collapsible: true,
-      },
-      pathSegment: '_configuration_category_placeholder_',
-      hideFromNav: true,
-    },
-    {
-      category: 'Configuration',
-      pathSegment: 'oauth2clients',
-      navigationContext: 'oauth2clients',
-      label: 'OAuth Clients',
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/Oauth2Clients?' +
-        toSearchParamsString({
-          resourceApiPath: '/apis/hydra.ory.sh/v1alpha1',
-          hasDetailsView: true,
-        }),
-      viewGroup: coreUIViewGroupName,
-      keepSelectedForChildren: true,
-      children: [
-        {
-          pathSegment: 'create',
-          viewUrl:
-            config.coreUIModuleUrl +
-            '/home/namespaces/:namespaceId/oauth-clients/create',
-          viewGroup: coreUIViewGroupName,
-        },
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':clientName',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/Oauth2Clients/:clientName?' +
-                toSearchParamsString({
-                  resourceApiPath: '/apis/hydra.ory.sh/v1alpha1',
-                }),
-              viewGroup: coreUIViewGroupName,
-            },
-          ],
-        },
-      ],
-    },
-    {
-      category: 'Configuration',
-      pathSegment: 'addons',
-      navigationContext: 'addons',
-      label: 'Addons',
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/AddonsConfigurations?' +
-        toSearchParamsString({
-          resourceApiPath: '/apis/addons.kyma-project.io/v1alpha1',
-          hasDetailsView: true,
-        }),
-      viewGroup: coreUIViewGroupName,
-      keepSelectedForChildren: true,
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':addonName',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/AddonsConfigurations/:addonName?' +
-                toSearchParamsString({
-                  resourceApiPath: '/apis/addons.kyma-project.io/v1alpha1',
-                }),
-              viewGroup: coreUIViewGroupName,
-            },
-          ],
-        },
-      ],
-    },
-    {
-      category: 'Configuration',
-      pathSegment: 'roles',
-      navigationContext: 'roles',
-      label: 'Roles',
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/Roles?' +
-        toSearchParamsString({
-          resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
-          hasDetailsView: true,
-        }),
-      keepSelectedForChildren: true,
-      viewGroup: coreUIViewGroupName,
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':roleName',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/Roles/:roleName?' +
-                toSearchParamsString({
-                  resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
-                }),
-              viewGroup: coreUIViewGroupName,
-            },
-          ],
-        },
-      ],
-    },
-    {
-      category: 'Workloads',
-      pathSegment: 'functions',
-      navigationContext: 'functions',
-      label: 'Functions',
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/Functions?' +
-        toSearchParamsString({
-          resourceApiPath: '/apis/serverless.kyma-project.io/v1alpha1',
-          hasDetailsView: true,
-        }),
-      keepSelectedForChildren: true,
-      viewGroup: coreUIViewGroupName,
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':functionName',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/Functions/:functionName?' +
-                toSearchParamsString({
-                  resourceApiPath: '/apis/serverless.kyma-project.io/v1alpha1',
-                }),
-              viewGroup: coreUIViewGroupName,
-            },
-          ],
-        },
-      ],
-    },
-    {
-      category: 'Configuration',
-      pathSegment: 'gitrepositories',
-      navigationContext: 'gitrepositories',
-      label: 'Git Repositories',
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/GitRepositories?' +
-        toSearchParamsString({
-          resourceApiPath: '/apis/serverless.kyma-project.io/v1alpha1',
-          hasDetailsView: false,
-        }),
-      keepSelectedForChildren: true,
-      viewGroup: coreUIViewGroupName,
-    },
-    {
-      category: 'Configuration',
-      pathSegment: 'role-bindings',
-      navigationContext: 'role-bindings',
-      label: 'Role Bindings',
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/RoleBindings?' +
-        toSearchParamsString({
-          resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
-          hasDetailsView: true,
-        }),
-      keepSelectedForChildren: true,
-      viewGroup: coreUIViewGroupName,
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':roleBindingName',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/RoleBindings/:roleBindingName?' +
-                toSearchParamsString({
-                  resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
-                }),
-              viewGroup: coreUIViewGroupName,
-            },
-          ],
-        },
-      ],
-    },
-    {
-      category: 'Configuration',
-      pathSegment: 'secrets',
-      navigationContext: 'secrets',
-      label: 'Secrets',
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/Secrets?' +
-        toSearchParamsString({
-          resourceApiPath: '/api/v1',
-          hasDetailsView: true,
-        }),
-      viewGroup: coreUIViewGroupName,
-      keepSelectedForChildren: true,
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':name',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/Secrets/:name?' +
-                toSearchParamsString({
-                  resourceApiPath: '/api/v1',
-                }),
-              viewGroup: coreUIViewGroupName,
-            },
-          ],
-        },
-      ],
-    },
-    {
-      category: 'Configuration',
-      pathSegment: 'config-maps',
-      navigationContext: 'config-maps',
-      label: 'Config Maps',
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/ConfigMaps?' +
-        toSearchParamsString({
-          resourceApiPath: '/api/v1',
-          hasDetailsView: true,
-        }),
-      viewGroup: coreUIViewGroupName,
-      keepSelectedForChildren: true,
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':name',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/ConfigMaps/:name?' +
-                toSearchParamsString({
-                  resourceApiPath: '/api/v1',
-                }),
-            },
-          ],
-        },
-      ],
-    },
-    {
-      category: 'Service Management',
-      pathSegment: 'brokers',
-      navigationContext: 'brokers',
-      label: 'Brokers',
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/ServiceBrokers?' +
-        toSearchParamsString({
-          resourceApiPath: '/apis/servicecatalog.k8s.io/v1beta1',
-          hasDetailsView: false,
-        }),
-      viewGroup: coreUIViewGroupName,
     },
     {
       category: 'Service Management',
@@ -517,15 +335,40 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
       ],
     },
     {
-      category: 'Discovery and Network',
-      pathSegment: 'apirules',
-      navigationContext: 'apirules',
-      label: 'API Rules',
+      category: 'Service Management',
+      pathSegment: 'brokers',
+      navigationContext: 'brokers',
+      label: 'Brokers',
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/ApiRules?' +
+        '/namespaces/:namespaceId/ServiceBrokers?' +
         toSearchParamsString({
-          resourceApiPath: '/apis/gateway.kyma-project.io/v1alpha1',
+          resourceApiPath: '/apis/servicecatalog.k8s.io/v1beta1',
+          hasDetailsView: false,
+        }),
+      viewGroup: coreUIViewGroupName,
+    },
+
+    //CONFIGURATION CATEGORY
+    {
+      category: {
+        label: 'Configuration',
+        icon: 'key-user-settings',
+        collapsible: true,
+      },
+      pathSegment: '_configuration_category_placeholder_',
+      hideFromNav: true,
+    },
+    {
+      category: 'Configuration',
+      pathSegment: 'addons',
+      navigationContext: 'addons',
+      label: 'Addons',
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/AddonsConfigurations?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/addons.kyma-project.io/v1alpha1',
           hasDetailsView: true,
         }),
       viewGroup: coreUIViewGroupName,
@@ -535,38 +378,202 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
           pathSegment: 'details',
           children: [
             {
-              pathSegment: ':apiName',
+              pathSegment: ':addonName',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/ApiRules/:apiName?' +
+                '/namespaces/:namespaceId/AddonsConfigurations/:addonName?' +
                 toSearchParamsString({
-                  resourceApiPath: '/apis/gateway.kyma-project.io/v1alpha1',
+                  resourceApiPath: '/apis/addons.kyma-project.io/v1alpha1',
+                }),
+              viewGroup: coreUIViewGroupName,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: 'Configuration',
+      pathSegment: 'config-maps',
+      navigationContext: 'config-maps',
+      label: 'Config Maps',
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/ConfigMaps?' +
+        toSearchParamsString({
+          resourceApiPath: '/api/v1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':name',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/ConfigMaps/:name?' +
+                toSearchParamsString({
+                  resourceApiPath: '/api/v1',
                 }),
             },
           ],
         },
+      ],
+    },
+    {
+      category: 'Configuration',
+      pathSegment: 'secrets',
+      navigationContext: 'secrets',
+      label: 'Secrets',
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/Secrets?' +
+        toSearchParamsString({
+          resourceApiPath: '/api/v1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':name',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/Secrets/:name?' +
+                toSearchParamsString({
+                  resourceApiPath: '/api/v1',
+                }),
+              viewGroup: coreUIViewGroupName,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: 'Configuration',
+      pathSegment: 'roles',
+      navigationContext: 'roles',
+      label: 'Roles',
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/Roles?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
+          hasDetailsView: true,
+        }),
+      keepSelectedForChildren: true,
+      viewGroup: coreUIViewGroupName,
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':roleName',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/Roles/:roleName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
+                }),
+              viewGroup: coreUIViewGroupName,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: 'Configuration',
+      pathSegment: 'role-bindings',
+      navigationContext: 'role-bindings',
+      label: 'Role Bindings',
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/RoleBindings?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
+          hasDetailsView: true,
+        }),
+      keepSelectedForChildren: true,
+      viewGroup: coreUIViewGroupName,
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':roleBindingName',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/RoleBindings/:roleBindingName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
+                }),
+              viewGroup: coreUIViewGroupName,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: 'Configuration',
+      pathSegment: 'oauth2clients',
+      navigationContext: 'oauth2clients',
+      label: 'OAuth Clients',
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/Oauth2Clients?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/hydra.ory.sh/v1alpha1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+      children: [
         {
           pathSegment: 'create',
           viewUrl:
             config.coreUIModuleUrl +
-            '/ApiRules/create?' +
-            toSearchParamsString({
-              resourceApiPath: '/apis/gateway.kyma-project.io/v1alpha1',
-              hasDetailsView: true,
-            }),
+            '/home/namespaces/:namespaceId/oauth-clients/create',
+          viewGroup: coreUIViewGroupName,
         },
         {
-          pathSegment: 'edit/:apiName',
-          viewUrl:
-            config.coreUIModuleUrl +
-            '/ApiRules/edit/:apiName?' +
-            toSearchParamsString({
-              resourceApiPath: '/apis/gateway.kyma-project.io/v1alpha1',
-              hasDetailsView: true,
-            }),
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':clientName',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/Oauth2Clients/:clientName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/hydra.ory.sh/v1alpha1',
+                }),
+              viewGroup: coreUIViewGroupName,
+            },
+          ],
         },
       ],
     },
+    {
+      category: 'Configuration',
+      pathSegment: 'gitrepositories',
+      navigationContext: 'gitrepositories',
+      label: 'Git Repositories',
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/GitRepositories?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/serverless.kyma-project.io/v1alpha1',
+          hasDetailsView: false,
+        }),
+      keepSelectedForChildren: true,
+      viewGroup: coreUIViewGroupName,
+    },
+
+    //EXPERIMENTAL CATEGORY (NAMESPACE)
     {
       category: { label: 'Experimental', icon: 'lab', collapsible: true },
       hideFromNav: true,
@@ -609,6 +616,8 @@ export function getStaticRootNodes(namespaceChildrenNodesResolver, apiGroups) {
         },
       ],
     },
+
+    //INTEGRATION CATEGORY
     {
       category: {
         label: 'Integration',
@@ -619,6 +628,40 @@ export function getStaticRootNodes(namespaceChildrenNodesResolver, apiGroups) {
       hideFromNav: true,
     },
     {
+      pathSegment: 'applications',
+      navigationContext: 'applications',
+      label: 'Applications/Systems',
+      category: 'Integration',
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/Applications?' +
+        toSearchParamsString({
+          resourceApiPath:
+            '/apis/applicationconnector.kyma-project.io/v1alpha1',
+          hasDetailsView: true,
+        }),
+      keepSelectedForChildren: true,
+      viewGroup: coreUIViewGroupName,
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':name',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/Applications/:name?' +
+                toSearchParamsString({
+                  resourceApiPath:
+                    '/apis/applicationconnector.kyma-project.io/v1alpha1',
+                }),
+              viewGroup: coreUIViewGroupName,
+            },
+          ],
+        },
+      ],
+    },
+    {
       pathSegment: 'preferences',
       navigationContext: 'settings',
       viewUrl: config.coreUIModuleUrl + '/preferences',
@@ -626,18 +669,43 @@ export function getStaticRootNodes(namespaceChildrenNodesResolver, apiGroups) {
       hideFromNav: true,
     },
     {
-      category: 'Integration',
-      pathSegment: 'cluster-brokers',
-      navigationContext: 'cluster-roles',
-      label: 'Cluster Brokers',
+      pathSegment: 'addons-config',
+      navigationContext: 'addons-config',
+      label: 'Cluster Addons',
+      category: {
+        label: 'Integration',
+        icon: 'settings',
+        collapsible: true,
+      },
       viewUrl:
         config.coreUIModuleUrl +
-        '/ClusterServiceBrokers?' +
+        '/ClusterAddonsConfigurations?' +
         toSearchParamsString({
-          resourceApiPath: '/apis/servicecatalog.k8s.io/v1beta1',
+          resourceApiPath: '/apis/addons.kyma-project.io/v1alpha1',
           hasDetailsView: true,
         }),
+      keepSelectedForChildren: true,
+      viewGroup: coreUIViewGroupName,
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':addonName',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/ClusterAddonsConfigurations/:addonName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/addons.kyma-project.io/v1alpha1',
+                }),
+              viewGroup: coreUIViewGroupName,
+            },
+          ],
+        },
+      ],
     },
+
+    //ADMINISTRATION CATEGORY
     {
       pathSegment: 'cluster-roles',
       navigationContext: 'cluster-roles',
@@ -719,76 +787,8 @@ export function getStaticRootNodes(namespaceChildrenNodesResolver, apiGroups) {
         },
       ],
     },
-    {
-      pathSegment: 'addons-config',
-      navigationContext: 'addons-config',
-      label: 'Cluster Addons',
-      category: {
-        label: 'Integration',
-        icon: 'settings',
-        collapsible: true,
-      },
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/ClusterAddonsConfigurations?' +
-        toSearchParamsString({
-          resourceApiPath: '/apis/addons.kyma-project.io/v1alpha1',
-          hasDetailsView: true,
-        }),
-      keepSelectedForChildren: true,
-      viewGroup: coreUIViewGroupName,
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':addonName',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/ClusterAddonsConfigurations/:addonName?' +
-                toSearchParamsString({
-                  resourceApiPath: '/apis/addons.kyma-project.io/v1alpha1',
-                }),
-              viewGroup: coreUIViewGroupName,
-            },
-          ],
-        },
-      ],
-    },
-    {
-      pathSegment: 'applications',
-      navigationContext: 'applications',
-      label: 'Applications/Systems',
-      category: 'Integration',
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/Applications?' +
-        toSearchParamsString({
-          resourceApiPath:
-            '/apis/applicationconnector.kyma-project.io/v1alpha1',
-          hasDetailsView: true,
-        }),
-      keepSelectedForChildren: true,
-      viewGroup: coreUIViewGroupName,
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':name',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/Applications/:name?' +
-                toSearchParamsString({
-                  resourceApiPath:
-                    '/apis/applicationconnector.kyma-project.io/v1alpha1',
-                }),
-              viewGroup: coreUIViewGroupName,
-            },
-          ],
-        },
-      ],
-    },
+
+    //DIAGNOSTICS CATEGORY
     {
       category: {
         label: 'Diagnostics',
@@ -843,6 +843,8 @@ export function getStaticRootNodes(namespaceChildrenNodesResolver, apiGroups) {
         '/?function={nodeParams.function}&pod={nodeParams.pod}&namespace={nodeParams.namespace}&container_name={nodeParams.container_name}', // todo handle when logs are reintroduced
       hideFromNav: true,
     },
+
+    //CATEGORY EXPERIMENTAL (CLUSTER)
     {
       category: { label: 'Experimental', icon: 'lab', collapsible: true },
       hideFromNav: true,

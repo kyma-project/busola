@@ -5,7 +5,7 @@ export * from './Replicaset.details';
 export * from './Namespace/Namespace.details';
 export * from './Function.details';
 export * from './Secret.details';
-export * from './Service.details.js';
+export * from './Service/Service.details.js';
 export * from './Application/Application.details.js';
 export * from './Roles/Roles.details.js';
 export * from './RoleBindings/RoleBindings.details.js';

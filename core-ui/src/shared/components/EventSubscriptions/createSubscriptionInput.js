@@ -1,6 +1,6 @@
 export function createSubscriptionInput(
   name,
-  lambda,
+  namespace,
   ownerRef,
   sink,
   eventType,
@@ -10,7 +10,7 @@ export function createSubscriptionInput(
     kind: 'Subscription',
     metadata: {
       name,
-      namespace: lambda.metadata.namespace,
+      namespace,
       ownerReferences: [ownerRef],
     },
     spec: {

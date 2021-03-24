@@ -42,7 +42,6 @@ export const ApiRulesDetails = DefaultRenderer => ({ ...otherParams }) => {
     });
     return (
       <Button
-        glyph="add"
         option="light"
         onClick={() =>
           LuigiClient.linkManager()
@@ -59,7 +58,7 @@ export const ApiRulesDetails = DefaultRenderer => ({ ...otherParams }) => {
             })
         }
       >
-        Edit apirules
+        Edit apirule
       </Button>
     );
   };
