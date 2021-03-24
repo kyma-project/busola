@@ -1,5 +1,6 @@
 export * from './ApiRules.details';
 export * from './Deployment.details';
+export * from './Pod/Pod.details';
 export * from './Replicaset.details';
 export * from './Namespace/Namespace.details';
 export * from './Function.details';
