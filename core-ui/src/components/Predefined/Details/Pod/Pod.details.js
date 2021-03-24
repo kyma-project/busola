@@ -2,6 +2,7 @@ import React from 'react';
 import { GenericList } from 'react-shared';
 
 import { PodStatus } from './PodStatus';
+import ContainersData from './ContainersData';
 import LuigiClient from '@luigi-project/client';
 import { Link } from 'fundamental-react';
 
@@ -27,6 +28,10 @@ function goToSecretDetails(resourceKind, name) {
 
 export const PodsDetails = DefaultRenderer => ({ ...otherParams }) => {
   const customColumns = [
+    {
+      header: 'Pod IP',
+      value: pod => pod.status.podIP,
+    },
     {
       header: 'Status',
       value: pod => <PodStatus pod={pod} />,
@@ -61,9 +66,19 @@ export const PodsDetails = DefaultRenderer => ({ ...otherParams }) => {
     );
   };
 
+  const Containers = resource => (
+    <ContainersData type="Containers" containers={resource.spec.containers} />
+  );
+  const InitContainers = resource => (
+    <ContainersData
+      type="Init containers"
+      containers={resource.spec.initContainers}
+    />
+  );
+
   return (
     <DefaultRenderer
-      customComponents={[VolumesList]}
+      customComponents={[VolumesList, Containers, InitContainers]}
       customColumns={customColumns}
       {...otherParams}
     ></DefaultRenderer>
