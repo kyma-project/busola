@@ -1,5 +1,48 @@
 import React from 'react';
 import { getComponentForList } from 'shared/getComponents';
+import { Spinner, useGetList } from 'react-shared';
+import EventSubscriptions from 'shared/components/EventSubscriptions/EventSubscriptions';
+
+function EventSubscriptionsWrapper(service) {
+  const subscriptionsUrl = `/apis/eventing.kyma-project.io/v1alpha1/namespaces/${service.metadata.namespace}/subscriptions`;
+  console.log(service);
+
+  const ownerRef = {
+    apiVersion: service.apiVersion,
+    kind: service.kind,
+    name: service.metadata.name,
+    uid: service.metadata.uid,
+  };
+
+  const filterByOwnerRef = ({ metadata }) =>
+    metadata.ownerReferences?.find(
+      ref => ref.kind === 'Service' && ref.name === service.metadata.name,
+    );
+
+  const {
+    data: subscriptions = [],
+    error,
+    loading,
+    silentRefetch,
+  } = useGetList(filterByOwnerRef)(subscriptionsUrl, {
+    pollingInterval: 3000,
+  });
+
+  if (!subscriptions) return <Spinner key="subscriptions-spinner" />;
+
+  return (
+    <EventSubscriptions
+      isLambda={false}
+      ownerRef={ownerRef}
+      namespace={service.metadata.namespace}
+      silentRefetch={silentRefetch}
+      subscriptions={subscriptions || []}
+      subscriptionsUrl={subscriptionsUrl}
+      serverDataError={error || false}
+      serverDataLoading={loading || false}
+    />
+  );
+}
 
 export const ServicesDetails = DefaultRenderer => ({ ...otherParams }) => {
   const customColumns = [
@@ -35,7 +78,11 @@ export const ServicesDetails = DefaultRenderer => ({ ...otherParams }) => {
     },
   });
   return (
-    <DefaultRenderer customColumns={customColumns} {...otherParams}>
+    <DefaultRenderer
+      customColumns={customColumns}
+      customComponents={[EventSubscriptionsWrapper]}
+      {...otherParams}
+    >
       {ApiRuleList}
     </DefaultRenderer>
   );
