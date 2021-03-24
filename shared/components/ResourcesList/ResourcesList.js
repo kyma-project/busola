@@ -37,6 +37,7 @@ ResourcesList.propTypes = {
   filter: PropTypes.func,
   listHeaderActions: PropTypes.node,
   description: PropTypes.node,
+  readonly: PropTypes.bool,
 };
 
 ResourcesList.defaultProps = {
@@ -45,6 +46,7 @@ ResourcesList.defaultProps = {
   createResourceForm: null,
   showTitle: false,
   listHeaderActions: null,
+  readonly: false,
 };
 
 export function ResourcesList(props) {
@@ -81,7 +83,7 @@ function Resources({
   filter,
   listHeaderActions,
   windowTitle,
-  ...params
+  readonly,
 }) {
   useWindowTitle(windowTitle || prettifyNamePlural(null, resourceType));
   const setEditedSpec = useYamlEditor();
@@ -124,19 +126,24 @@ function Resources({
     }
   }
 
-  const actions = [
-    {
-      name: 'Edit',
-      handler: resource => {
-        const { status, ...otherResourceData } = resource; // remove 'status' property because you can't edit it anyway; TODO: decide if it's good
-        setEditedSpec(otherResourceData, handleSaveClick(otherResourceData));
-      },
-    },
-    {
-      name: 'Delete',
-      handler: handleResourceDelete,
-    },
-  ];
+  const actions = readonly
+    ? []
+    : [
+        {
+          name: 'Edit',
+          handler: resource => {
+            const { status, ...otherResourceData } = resource; // remove 'status' property because you can't edit it anyway; TODO: decide if it's good
+            setEditedSpec(
+              otherResourceData,
+              handleSaveClick(otherResourceData),
+            );
+          },
+        },
+        {
+          name: 'Delete',
+          handler: handleResourceDelete,
+        },
+      ];
 
   const headerRenderer = () => [
     'Name',

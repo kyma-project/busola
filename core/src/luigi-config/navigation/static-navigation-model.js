@@ -450,6 +450,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
         '/namespaces/:namespaceId/ServiceBrokers?' +
         toSearchParamsString({
           resourceApiPath: '/apis/servicecatalog.k8s.io/v1beta1',
+          readonly: true,
           hasDetailsView: false,
         }),
       viewGroup: coreUIViewGroupName,
@@ -635,7 +636,8 @@ export function getStaticRootNodes(namespaceChildrenNodesResolver, apiGroups) {
         '/ClusterServiceBrokers?' +
         toSearchParamsString({
           resourceApiPath: '/apis/servicecatalog.k8s.io/v1beta1',
-          hasDetailsView: true,
+          readonly: true,
+          hasDetailsView: false,
         }),
     },
     {
