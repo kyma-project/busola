@@ -573,7 +573,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
       viewGroup: coreUIViewGroupName,
     },
 
-    //EXPERIMENTAL CATEGORY
+    //EXPERIMENTAL CATEGORY (NAMESPACE)
     {
       category: { label: 'Experimental', icon: 'lab', collapsible: true },
       hideFromNav: true,
@@ -616,6 +616,8 @@ export function getStaticRootNodes(namespaceChildrenNodesResolver, apiGroups) {
         },
       ],
     },
+
+    //INTEGRATION CATEGORY
     {
       category: {
         label: 'Integration',
@@ -626,6 +628,40 @@ export function getStaticRootNodes(namespaceChildrenNodesResolver, apiGroups) {
       hideFromNav: true,
     },
     {
+      pathSegment: 'applications',
+      navigationContext: 'applications',
+      label: 'Applications/Systems',
+      category: 'Integration',
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/Applications?' +
+        toSearchParamsString({
+          resourceApiPath:
+            '/apis/applicationconnector.kyma-project.io/v1alpha1',
+          hasDetailsView: true,
+        }),
+      keepSelectedForChildren: true,
+      viewGroup: coreUIViewGroupName,
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':name',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/Applications/:name?' +
+                toSearchParamsString({
+                  resourceApiPath:
+                    '/apis/applicationconnector.kyma-project.io/v1alpha1',
+                }),
+              viewGroup: coreUIViewGroupName,
+            },
+          ],
+        },
+      ],
+    },
+    {
       pathSegment: 'preferences',
       navigationContext: 'settings',
       viewUrl: config.coreUIModuleUrl + '/preferences',
@@ -633,18 +669,43 @@ export function getStaticRootNodes(namespaceChildrenNodesResolver, apiGroups) {
       hideFromNav: true,
     },
     {
-      category: 'Integration',
-      pathSegment: 'cluster-brokers',
-      navigationContext: 'cluster-roles',
-      label: 'Cluster Brokers',
+      pathSegment: 'addons-config',
+      navigationContext: 'addons-config',
+      label: 'Cluster Addons',
+      category: {
+        label: 'Integration',
+        icon: 'settings',
+        collapsible: true,
+      },
       viewUrl:
         config.coreUIModuleUrl +
-        '/ClusterServiceBrokers?' +
+        '/ClusterAddonsConfigurations?' +
         toSearchParamsString({
-          resourceApiPath: '/apis/servicecatalog.k8s.io/v1beta1',
+          resourceApiPath: '/apis/addons.kyma-project.io/v1alpha1',
           hasDetailsView: true,
         }),
+      keepSelectedForChildren: true,
+      viewGroup: coreUIViewGroupName,
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':addonName',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/ClusterAddonsConfigurations/:addonName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/addons.kyma-project.io/v1alpha1',
+                }),
+              viewGroup: coreUIViewGroupName,
+            },
+          ],
+        },
+      ],
     },
+
+    //ADMINISTRATION CATEGORY
     {
       pathSegment: 'cluster-roles',
       navigationContext: 'cluster-roles',
@@ -726,76 +787,8 @@ export function getStaticRootNodes(namespaceChildrenNodesResolver, apiGroups) {
         },
       ],
     },
-    {
-      pathSegment: 'addons-config',
-      navigationContext: 'addons-config',
-      label: 'Cluster Addons',
-      category: {
-        label: 'Integration',
-        icon: 'settings',
-        collapsible: true,
-      },
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/ClusterAddonsConfigurations?' +
-        toSearchParamsString({
-          resourceApiPath: '/apis/addons.kyma-project.io/v1alpha1',
-          hasDetailsView: true,
-        }),
-      keepSelectedForChildren: true,
-      viewGroup: coreUIViewGroupName,
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':addonName',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/ClusterAddonsConfigurations/:addonName?' +
-                toSearchParamsString({
-                  resourceApiPath: '/apis/addons.kyma-project.io/v1alpha1',
-                }),
-              viewGroup: coreUIViewGroupName,
-            },
-          ],
-        },
-      ],
-    },
-    {
-      pathSegment: 'applications',
-      navigationContext: 'applications',
-      label: 'Applications/Systems',
-      category: 'Integration',
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/Applications?' +
-        toSearchParamsString({
-          resourceApiPath:
-            '/apis/applicationconnector.kyma-project.io/v1alpha1',
-          hasDetailsView: true,
-        }),
-      keepSelectedForChildren: true,
-      viewGroup: coreUIViewGroupName,
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':name',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/Applications/:name?' +
-                toSearchParamsString({
-                  resourceApiPath:
-                    '/apis/applicationconnector.kyma-project.io/v1alpha1',
-                }),
-              viewGroup: coreUIViewGroupName,
-            },
-          ],
-        },
-      ],
-    },
+
+    //DIAGNOSTICS CATEGORY
     {
       category: {
         label: 'Diagnostics',
@@ -850,6 +843,8 @@ export function getStaticRootNodes(namespaceChildrenNodesResolver, apiGroups) {
         '/?function={nodeParams.function}&pod={nodeParams.pod}&namespace={nodeParams.namespace}&container_name={nodeParams.container_name}', // todo handle when logs are reintroduced
       hideFromNav: true,
     },
+
+    //CATEGORY EXPERIMENTAL (CLUSTER)
     {
       category: { label: 'Experimental', icon: 'lab', collapsible: true },
       hideFromNav: true,
