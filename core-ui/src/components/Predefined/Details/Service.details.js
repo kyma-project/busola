@@ -54,7 +54,7 @@ export const ServicesDetails = DefaultRenderer => ({ ...otherParams }) => {
       value: resource => (
         <>
           {resource.spec.ports?.map(p => (
-            <span className="fd-counter" key={p.port}>
+            <span className="fd-counter fd-has-margin-right-tiny" key={p.port}>
               {p.port}
             </span>
           ))}
