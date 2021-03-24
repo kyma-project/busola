@@ -14,7 +14,7 @@ const SecretComponent = ({ name, value, showEncoded, isCollapsed }) => (
 );
 
 SecretData.propTypes = {
-  secret: PropTypes.object.isRequired,
+  secret: PropTypes.object,
 };
 
 export default function SecretData({ secret }) {
