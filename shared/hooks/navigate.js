@@ -26,7 +26,7 @@ function navigateToNamespaceDetails(namespaceName) {
 export function navigateToDetails(resourceType, name) {
   const encodedName = encodeURIComponent(name);
   switch (resourceType) {
-    case 'namespaces':
+    case 'Namespaces':
       navigateToNamespaceDetails(encodedName);
       break;
     default:
@@ -36,7 +36,7 @@ export function navigateToDetails(resourceType, name) {
 export function navigateFromDetailsToDetails(resourceType, name) {
   const encodedName = encodeURIComponent(name);
   switch (resourceType) {
-    case 'namespaces':
+    case 'Namespaces':
       navigateToNamespaceDetails(encodedName);
       break;
     default:
@@ -57,7 +57,7 @@ function navigateToNamespaceList() {
 
 export function navigateToList(resourceType) {
   switch (resourceType) {
-    case 'namespaces':
+    case 'Namespaces':
       navigateToNamespaceList();
       break;
     default:
