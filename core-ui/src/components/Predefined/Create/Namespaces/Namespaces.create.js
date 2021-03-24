@@ -1,5 +1,4 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { useMutation } from '@apollo/react-hooks';
 import PropTypes from 'prop-types';
 import {
   InlineHelp,
@@ -9,16 +8,10 @@ import {
   FormSet,
 } from 'fundamental-react';
 
-import { K8sNameInput, LabelSelectorInput } from 'react-shared';
+import { K8sNameInput, LabelSelectorInput, usePost } from 'react-shared';
 
-import './CreateNamespaceForm.scss';
-
-import {
-  CREATE_LIMIT_RANGE,
-  CREATE_NAMESPACE,
-  CREATE_RESOURCE_QUOTA,
-} from '../../gql/mutations';
-import extractGraphQlErrors from '../../shared/graphqlErrorExtractor';
+import './CreateNamespace.scss';
+import { formatNamespace, formatLimits, formatMemoryQuotas } from './helpers';
 
 const LIMIT_REGEX =
   '^[+]?[0-9]*(.[0-9]*)?(([eE][-+]?[0-9]+(.[0-9]*)?)?|([MGTPE]i?)|Ki|k|m)?$';
@@ -198,37 +191,16 @@ const ContainerLimitSection = ({ maxRef, defaultRef, requestRef }) => (
   </FormSet>
 );
 
-function getResourceQuotaMutationVars(memoryQuotas, namespaceName) {
-  return memoryQuotas
-    ? {
-        variables: {
-          ...memoryQuotas,
-          namespace: namespaceName,
-          name: `${namespaceName}-initial-quota`,
-        },
-      }
-    : null;
-}
-
-function getLimitRangeMutationVars(containerLimits, namespaceName) {
-  return containerLimits
-    ? {
-        variables: {
-          ...containerLimits,
-          namespace: namespaceName,
-          name: `${namespaceName}-initial-limit`,
-        },
-      }
-    : null;
-}
-
-const CreateNamespaceForm = ({
+export const NamespacesCreate = ({
   formElementRef,
   onChange,
   onCompleted,
   onError,
   performManualSubmit,
+  resourceUrl,
+  refetchList,
 }) => {
+  const postRequest = usePost();
   const [labels, setLabels] = useState({});
   const [readonlyLabels, setReadonlyLabels] = useState({});
 
@@ -252,10 +224,6 @@ const CreateNamespaceForm = ({
       if (element && typeof element.focus === 'function') element.focus();
     });
   }, [formValues.name]);
-
-  const [createNamespaceMutation] = useMutation(CREATE_NAMESPACE);
-  const [createLimitRangeMutation] = useMutation(CREATE_LIMIT_RANGE);
-  const [createResourceQuotaMutation] = useMutation(CREATE_RESOURCE_QUOTA);
 
   function handleLabelsChanged(newLabels) {
     setLabels(newLabels);
@@ -281,85 +249,65 @@ const CreateNamespaceForm = ({
   async function handleFormSubmit(e) {
     e.preventDefault();
 
-    const k8sLabels = { ...labels, ...readonlyLabels };
-    const namespaceData = {
-      name: formValues.name.current.value,
-      labels: k8sLabels,
+    const namespaceName = formValues.name.current.value;
+    const limits = formValues.containerLimits.enableContainerLimits.current
+      .checked && {
+      namespace: namespaceName,
+      max: formValues.containerLimits.max.current.value,
+      default: formValues.containerLimits.default.current.value,
+      defaultRequest: formValues.containerLimits.defaultRequest.current.value,
+    };
+    const quotas = formValues.memoryQuotas.enableMemoryQuotas.current
+      .checked && {
+      namespace: namespaceName,
+      limits: formValues.memoryQuotas.memoryLimit.current.value,
+      requests: formValues.memoryQuotas.memoryRequests.current.value,
     };
 
-    const memoryQuotas = formValues.memoryQuotas.enableMemoryQuotas.current
-      .checked
-      ? {
-          resourceQuota: {
-            limits: {
-              memory: formValues.memoryQuotas.memoryLimit.current.value,
-            },
-            requests: {
-              memory: formValues.memoryQuotas.memoryRequests.current.value,
-            },
-          },
-        }
-      : null;
-
-    const containerLimits = formValues.containerLimits.enableContainerLimits
-      .current.checked
-      ? {
-          limitRange: {
-            max: {
-              memory: formValues.containerLimits.max.current.value,
-            },
-            default: {
-              memory: formValues.containerLimits.default.current.value,
-            },
-            defaultRequest: {
-              memory: formValues.containerLimits.defaultRequest.current.value,
-            },
-            type: 'Container',
-          },
-        }
-      : null;
+    const namespaceData = formatNamespace({
+      name: namespaceName,
+      labels: { ...labels, ...readonlyLabels },
+    });
 
     try {
-      await createNamespaceMutation({ variables: namespaceData });
-
-      const additionalRequests = [];
-      if (memoryQuotas) {
-        additionalRequests.push(
-          createResourceQuotaMutation(
-            getResourceQuotaMutationVars(memoryQuotas, namespaceData.name),
-          ),
-        );
-      }
-
-      if (containerLimits) {
-        additionalRequests.push(
-          createLimitRangeMutation(
-            getLimitRangeMutationVars(containerLimits, namespaceData.name),
-          ),
-        );
-      }
-
-      const additionalResults = await Promise.allSettled(additionalRequests);
-      const rejectedRequest = additionalResults.find(
-        result => result.status === 'rejected',
-      );
-      if (rejectedRequest) {
-        const err = new Error(extractGraphQlErrors(rejectedRequest.reason));
-        err.additionalRequestFailed = true;
-        throw err;
-      }
-      onCompleted(namespaceData.name);
+      await postRequest(resourceUrl, namespaceData);
+      refetchList();
     } catch (e) {
-      if (e.additionalRequestFailed) {
-        onError(
-          'Warning',
-          `Your namespace ${namespaceData.name} was created successfully, however, Limit Range and/or Resource Quota creation failed. You have to create them manually later: ${e}`,
-          true,
-        );
-      } else {
-        const errorToDisplay = extractGraphQlErrors(e);
-        onError('ERROR', `Error while creating namespace: ${errorToDisplay}`);
-      }
+      console.warn(e);
+      onError('ERROR', `Error while creating namespace: ${e}`);
+      return;
+    }
+
+    const additionalRequests = [];
+    if (limits) {
+      additionalRequests.push(
+        postRequest(
+          `/api/v1/namespaces/${namespaceName}/limitranges`,
+          formatLimits(limits),
+        ),
+      );
+    }
+    if (quotas) {
+      additionalRequests.push(
+        postRequest(
+          `/api/v1/namespaces/${namespaceName}/resourcequotas`,
+          formatMemoryQuotas(quotas),
+        ),
+      );
+    }
+
+    const additionalResults = await Promise.allSettled(additionalRequests);
+    const rejectedRequest = additionalResults.find(
+      result => result.status === 'rejected',
+    );
+    if (!rejectedRequest) {
+      onCompleted(`Namespace ${namespaceName} created.`);
+    } else {
+      onError(
+        'Warning',
+        `Your namespace ${namespaceName} was created successfully, however, Limit Range and/or Resource Quota creation failed. You have to create them manually later: ${rejectedRequest.reason}`,
+        true,
+      );
     }
   }
 
@@ -420,13 +368,12 @@ const CreateNamespaceForm = ({
   );
 };
 
-CreateNamespaceForm.propTypes = {
+NamespacesCreate.propTypes = {
   formElementRef: PropTypes.shape({ current: PropTypes.any }).isRequired, // used to store <form> element reference
   isValid: PropTypes.bool,
   onChange: PropTypes.func,
   onError: PropTypes.func, // args: title(string), message(string)
   onCompleted: PropTypes.func, // args: namespaceName(string)
   performManualSubmit: PropTypes.func, // no args
+  resourceUrl: PropTypes.string.isRequired,
 };
-
-export default CreateNamespaceForm;
