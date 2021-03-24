@@ -349,7 +349,6 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
       viewGroup: coreUIViewGroupName,
     },
 
-
     //CONFIGURATION CATEGORY
     {
       category: {
