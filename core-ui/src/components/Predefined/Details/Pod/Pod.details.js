@@ -9,7 +9,7 @@ function toSnakeCase(inputString) {
   return inputString
     .split('')
     .map(character => {
-      if (character == character.toUpperCase()) {
+      if (character === character.toUpperCase()) {
         return '-' + character.toLowerCase();
       } else {
         return character;
