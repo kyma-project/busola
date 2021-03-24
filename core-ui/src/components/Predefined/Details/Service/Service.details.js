@@ -1,7 +1,9 @@
 import React from 'react';
+import { Counter, Icon } from 'fundamental-react';
 import { getComponentForList } from 'shared/getComponents';
 import { Spinner, useGetList } from 'react-shared';
 import EventSubscriptions from 'shared/components/EventSubscriptions/EventSubscriptions';
+import './Service.details.scss';
 
 function EventSubscriptionsWrapper(service) {
   const subscriptionsUrl = `/apis/eventing.kyma-project.io/v1alpha1/namespaces/${service.metadata.namespace}/subscriptions`;
@@ -54,8 +56,11 @@ export const ServicesDetails = DefaultRenderer => ({ ...otherParams }) => {
       value: resource => (
         <>
           {resource.spec.ports?.map(p => (
-            <span className="fd-counter fd-has-margin-right-tiny" key={p.port}>
-              {p.port}
+            <span className="fd-token y-fd-token y-fd-token--no-button service__port-container">
+              <span className="name">{p.name}</span>
+              <Counter>{p.port}</Counter>
+              <Icon glyph="arrow-right" />
+              <Counter>{p.targetPort}</Counter>
             </span>
           ))}
         </>
