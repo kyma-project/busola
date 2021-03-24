@@ -57,7 +57,8 @@ export const ReplicasetsDetails = DefaultRenderer => ({ ...otherParams }) => {
   const PodsList = getComponentForList({
     name: 'podsList',
     params: {
-      hasDetailsView: false,
+      hasDetailsView: true,
+      fixedPath: true,
       resourceUrl: `/api/v1/namespaces/${otherParams.namespace}/pods`,
       resourceType: 'pods',
       namespace: otherParams.namespace,
