@@ -23,7 +23,8 @@ export default function NamespaceBindings(application) {
   });
 
   const headerRenderer = () => ['Name', 'Service & event bindings'];
-  const totalBindingsCount = spec.services.flatMap(s => s.entries).length;
+  const totalBindingsCount = (spec.services || []).flatMap(s => s.entries)
+    .length;
   const alreadyBoundNamespaces = data?.map(aM => aM.metadata.namespace) || [];
   const rowRenderer = binding => [
     <ServicesBoundModal binding={binding} />,
