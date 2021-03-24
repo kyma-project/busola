@@ -41,23 +41,14 @@ const badgeType = status => {
   }
 };
 
-export const PodsList = DefaultRenderer => ({ ...otherParams }) => {
-  const customColumns = [
-    {
-      header: 'Status',
-      value: pod => {
-        const podState = calculatePodState(pod);
-        return (
-          <StatusBadge
-            tooltipContent={podState.message}
-            type={badgeType(podState.status)}
-          >
-            {podState.status}
-          </StatusBadge>
-        );
-      },
-    },
-  ];
-
-  return <DefaultRenderer customColumns={customColumns} {...otherParams} />;
-};
+export function PodStatus({ pod }) {
+  const podState = calculatePodState(pod);
+  return (
+    <StatusBadge
+      tooltipContent={podState.message}
+      type={badgeType(podState.status)}
+    >
+      {podState.status}
+    </StatusBadge>
+  );
+}
