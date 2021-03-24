@@ -20,7 +20,7 @@ export const ServicesList = DefaultRenderer => ({ ...otherParams }) => {
       },
     },
     {
-      header: 'Endpoints',
+      header: 'Internal Endpoints',
       value: service => {
         return getEndpoints(service);
       },
