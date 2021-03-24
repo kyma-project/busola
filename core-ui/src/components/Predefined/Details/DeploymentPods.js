@@ -27,7 +27,8 @@ export function DeploymentPods({ namespace, deploymentName }) {
   // we can't use ?labelSelector=app%3D${otherParams.resourceName}, as some
   // pods (like function ones) don't have this label
   const podListParams = {
-    hasDetailsView: false,
+    hasDetailsView: true,
+    fixedPath: true,
     resourceUrl: `/api/v1/namespaces/${namespace}/pods`,
     resourceType: 'pods',
     namespace,
