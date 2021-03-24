@@ -1,5 +1,5 @@
 import React from 'react';
-import { StatusBadge } from 'react-shared';
+import { OAuth2ClientStatus } from 'shared/components/OAuth2ClientStatus/OAuth2ClientStatus';
 
 export const OAuth2ClientsList = DefaultRenderer => ({ ...otherParams }) => {
   const description = (
@@ -16,20 +16,6 @@ export const OAuth2ClientsList = DefaultRenderer => ({ ...otherParams }) => {
     </span>
   );
 
-  const getOAuthClientStatus = client => {
-    const error = client.spec.reconciliationError;
-    if (!error) {
-      return <StatusBadge type="success">OK</StatusBadge>;
-    }
-
-    const { code, description } = error;
-    return (
-      <StatusBadge type="error" tooltipContent={description}>
-        {code}
-      </StatusBadge>
-    );
-  };
-
   const customColumns = [
     {
       header: 'Secret',
@@ -39,9 +25,7 @@ export const OAuth2ClientsList = DefaultRenderer => ({ ...otherParams }) => {
     },
     {
       header: 'Status',
-      value: client => {
-        return getOAuthClientStatus(client);
-      },
+      value: client => <OAuth2ClientStatus client={client} />,
     },
   ];
 

@@ -2,6 +2,7 @@ import React from 'react';
 
 import SecretData from 'components/Secrets/Details/Secret/SecretData';
 import OAuthClientSpecPanel from './OAuthClientSpecPanel';
+import { OAuth2ClientStatus } from 'shared/components/OAuth2ClientStatus/OAuth2ClientStatus';
 
 import { useGet } from 'react-shared';
 
@@ -30,8 +31,14 @@ export const OAuth2ClientsDetails = DefaultRenderer => ({ ...otherParams }) => {
     <OAuthClientSpecPanel spec={resource.spec} />
   );
 
+  const statusColumn = {
+    header: 'Status',
+    value: client => <OAuth2ClientStatus client={client} />,
+  };
+
   return (
     <DefaultRenderer
+      customColumns={[statusColumn]}
       customComponents={[Configuration, Secret]}
       {...otherParams}
     />
