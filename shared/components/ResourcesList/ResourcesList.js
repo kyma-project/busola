@@ -37,7 +37,7 @@ ResourcesList.propTypes = {
   filter: PropTypes.func,
   listHeaderActions: PropTypes.node,
   description: PropTypes.node,
-  readonly: PropTypes.bool,
+  readOnly: PropTypes.bool,
 };
 
 ResourcesList.defaultProps = {
@@ -46,7 +46,7 @@ ResourcesList.defaultProps = {
   createResourceForm: null,
   showTitle: false,
   listHeaderActions: null,
-  readonly: false,
+  readOnly: false,
 };
 
 export function ResourcesList(props) {
@@ -83,7 +83,7 @@ function Resources({
   filter,
   listHeaderActions,
   windowTitle,
-  readonly,
+  readOnly,
 }) {
   useWindowTitle(windowTitle || prettifyNamePlural(null, resourceType));
   const setEditedSpec = useYamlEditor();
@@ -126,7 +126,7 @@ function Resources({
     }
   }
 
-  const actions = readonly
+  const actions = readOnly
     ? []
     : [
         {
