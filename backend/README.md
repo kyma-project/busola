@@ -11,13 +11,20 @@ This is a REST proxy for the Busola
 
 ## Installation
 
-To install backend together with the Busola, run the `npm run bootstrap` command in the root directory.
+To install backend together with the Busola, run the `npm run bootstrap:ci` command in the root directory.
+
+You can also install dependencies just for this app via the `npm ci` command.
 
 ## Usage
 
-Run the `npm run watch` or `npm start` command to use the backend locally. To do so, you must provide the KUBECONFIG environment variable. You can also use the `docker build` command to use backend as an image of a Kubernetes Pod.
+The primary usage of this component is to run it together with the Busola (via the `npm start` command in the root directory). However, you can run it separately if needed.
+
+To start the Busola Backend without the hot-reload feature, simply run the `npm start`.
+
+Another way to start the Busola Backend uses the **hot-reload** feature (useful for the development process) - see the [Develompent](#Development) section.
+
+You can also use the `docker build` command to use backend as an image of a Kubernetes Pod.
 
 ## Development
 
-Use `npm run watch` command to run backend in the unsafe mode (no TLS certificate) and with the _watch_ mode on.
-To do so, the KUBECONFIG environment variable **must be provided**.
+Use `npm run watch` command to run backend in the unsafe mode (no TLS certificate) and with the _hot-reload_ feature.
