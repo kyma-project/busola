@@ -21,7 +21,7 @@ The primary usage of this component is to run it together with the Busola (via t
 
 To start the Busola Backend without the hot-reload feature, simply run the `npm start`.
 
-Another way to start the Busola Backend uses the **hot-reload** feature (useful for the development process) - see the [Develompent](#Development) section.
+Another way to start the Busola Backend uses the **hot-reload** feature (useful for the development process) - see the [Develompent](#development) section.
 
 You can also use the `docker build` command to use backend as an image of a Kubernetes Pod.
 
