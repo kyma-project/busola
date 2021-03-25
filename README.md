@@ -43,9 +43,8 @@ npm run bootstrap:ci
 > **NOTE:** The `npm run bootstrap:ci` command:
 >
 > - installs root dependencies provided in the [package.json](./package.json) file
-> - installs dependencies for [the libraries](#Components)
-> - builds all [the libraries](#Components)
-> - installs dependencies for all [the components](#Components)
+> - installs dependencies for [the libraries](###Components)
+> - builds all [the libraries](###Components)
 
 ## Development
 
