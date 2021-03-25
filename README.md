@@ -11,6 +11,7 @@ The Busola project consists of the following UI projects:
 - [`Core`](./core) - The main frame
 - [`Service-Catalog-UI`](./service-catalog-ui) - The UI layer for Service Catalog, Instances and Brokers
 - [`Log UI`](./logging) - The logs view
+- [`Backend`](./backend) - A kind of proxy between the Busola and the Kubernetes cluster
 - [`Tests`](./tests) - Acceptance and end-to-end tests
 
 The Busola also includes React libraries:
@@ -60,11 +61,12 @@ After a while open the [http://localhost:4200](http://localhost:4200) address in
 
 Once you started the Busola locally, you can start development. All modules have hot-reload enabled therefore you can edit the code real time and see the changes in your browser.
 
-The `Core` and other UIs run at the following addresses:
+The apps you just started run at the following addresses:
 
 - `Core` - [http://localhost:4200](http://localhost:4200)
 - `Log UI` - [http://localhost:4400](http://localhost:4400)
 - `Service-Catalog-UI` - [http://localhost:8000](http://localhost:8000)
+- `Backend` - [http://localhost:3001](http://localhost:3001)
 
 ### Build the `NPX` Busola
 
