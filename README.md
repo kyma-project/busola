@@ -30,7 +30,7 @@ The Busola also includes React libraries:
 
 This mode has no hot-reload feature so it's not designed for the development. Hovewer, it gives you the ability to run the Busola in a few seconds without installing any dependencies.
 
-To run the Busola in the `npx` mode from the latest relase type `npx @kyma-project/busola@latest` in your terminal. That's it, your default browser should open the Busola within a few seconds.
+To run the Busola in the `npx` mode from the latest relase you have to provide `KUBECONFIG` environment variable pointing to a valid KUBECONFIG file, then type `npx @kyma-project/busola@latest` in your terminal. That's it, your default browser should open the Busola within a few seconds.
 
 ## Installation
 
