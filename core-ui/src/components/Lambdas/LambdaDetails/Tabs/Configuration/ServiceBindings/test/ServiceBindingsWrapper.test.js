@@ -10,7 +10,7 @@
 // import {
 //   GET_SERVICE_BINDING_USAGES_DATA_MOCK,
 //   SERVICE_BINDING_USAGE_EVENT_SUBSCRIPTION_MOCK,
-// } from 'components/Lambdas/gql/hooks/queries/testMocks';
+// } from 'components/Lambdas/hooks/queries/testMocks';
 
 // import ServiceBindingsWrapper from '../ServiceBindingsWrapper';
 

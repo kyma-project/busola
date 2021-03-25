@@ -10,7 +10,7 @@ import {
 import ApiRulesListWrapper from 'components/ApiRules/ApiRulesList/ApiRulesListWrapper';
 
 import { LAMBDA_PHASES } from 'components/Lambdas/constants';
-import { useGetGatewayDomain } from 'components/ApiRules/useGetGatewayDomain/useGetGatewayDomain';
+import { useGetGatewayDomain } from 'components/ApiRules/hooks/useGetGatewayDomain';
 import { getLambdaStatus } from 'components/Lambdas/helpers/lambdas/getLambdaStatus';
 
 const headerRenderer = () => ['', 'Name', 'Host', 'Status'];

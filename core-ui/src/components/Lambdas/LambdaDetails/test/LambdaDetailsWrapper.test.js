@@ -5,7 +5,7 @@
 //   withApolloMockProvider,
 //   lambdaMock,
 // } from 'components/Lambdas/helpers/testing';
-// import { LAMBDA_EVENT_SUBSCRIPTION_MOCK } from 'components/Lambdas/gql/hooks/queries/testMocks';
+// import { LAMBDA_EVENT_SUBSCRIPTION_MOCK } from 'components/Lambdas/hooks/queries/testMocks';
 
 // import LambdaDetailsWrapper from '../LambdaDetailsWrapper';
 

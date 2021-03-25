@@ -7,7 +7,7 @@ import { FormInput } from 'components/Lambdas/components';
 import {
   useUpdateLambda,
   UPDATE_TYPE,
-} from 'components/Lambdas/gql/hooks/mutations/useUpdateLambda';
+} from 'components/Lambdas/hooks/mutations/useUpdateLambda';
 import { BUTTONS, REPOSITORY_CONFIG_PANEL } from 'components/Lambdas/constants';
 
 import './RepositoryConfig.scss';

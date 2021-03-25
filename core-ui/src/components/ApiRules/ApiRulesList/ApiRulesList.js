@@ -7,7 +7,7 @@ import { Button } from 'fundamental-react';
 import { formatMessage } from 'components/Lambdas/helpers/misc';
 import { ERRORS } from 'components/Lambdas/constants';
 
-import { useDeleteApiRule } from '../gql/useDeleteApiRule';
+import { useDeleteApiRule } from '../hooks/useDeleteApiRule';
 
 import { PANEL } from '../constants';
 
