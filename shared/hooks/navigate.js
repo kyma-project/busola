@@ -25,7 +25,6 @@ function navigateToNamespaceDetails(namespaceName) {
 
 export function navigateToDetails(resourceType, name) {
   const encodedName = encodeURIComponent(name);
-  console.log('resourceType', resourceType);
   switch (resourceType) {
     case 'Namespaces':
       navigateToNamespaceDetails(encodedName);

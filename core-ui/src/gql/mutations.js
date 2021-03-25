@@ -116,35 +116,11 @@ export const DELETE_SERVICE_BINDING_USAGES = gql`
   }
 `;
 
-export const CREATE_NAMESPACE = gql`
-  mutation createNamespace($name: String!, $labels: Labels) {
-    createNamespace(name: $name, labels: $labels) {
-      name
-    }
-  }
-`;
-
 export const UPDATE_NAMESPACE = gql`
   mutation UpdateNamespace($name: String!, $labels: Labels!) {
     updateNamespace(name: $name, labels: $labels) {
       name
       labels
-    }
-  }
-`;
-
-export const CREATE_LIMIT_RANGE = gql`
-  mutation createLimitRange(
-    $namespace: String!
-    $name: String!
-    $limitRange: LimitRangeInput!
-  ) {
-    createLimitRange(
-      namespace: $namespace
-      name: $name
-      limitRange: $limitRange
-    ) {
-      name
     }
   }
 `;
@@ -164,22 +140,6 @@ export const UPDATE_RESOURCE_QUOTA = gql`
     $json: JSON!
   ) {
     updateResourceQuota(namespace: $namespace, name: $name, json: $json) {
-      name
-    }
-  }
-`;
-
-export const CREATE_RESOURCE_QUOTA = gql`
-  mutation createResourceQuota(
-    $namespace: String!
-    $name: String!
-    $resourceQuota: ResourceQuotaInput!
-  ) {
-    createResourceQuota(
-      namespace: $namespace
-      name: $name
-      resourceQuota: $resourceQuota
-    ) {
       name
     }
   }
