@@ -30,7 +30,7 @@ The Busola also includes React libraries:
 
 This mode has no hot-reload feature so it's not designed for the development. Hovewer, it gives you the ability to run the Busola in a few seconds without installing any dependencies.
 
-To run the Busola in the `npx` mode from the latest relase you have to provide `KUBECONFIG` environment variable pointing to a valid KUBECONFIG file, then type `npx @kyma-project/busola@latest` in your terminal. That's it, your default browser should open the Busola within a few seconds.
+To run the Busola in the `npx` mode from the latest release you have to provide `KUBECONFIG` environment variable pointing to a valid KUBECONFIG file, then type `npx @kyma-project/busola@latest` in your terminal. That's it, your default browser should open the Busola within a few seconds.
 
 ## Installation
 
@@ -43,8 +43,8 @@ npm run bootstrap:ci
 > **NOTE:** The `npm run bootstrap:ci` command:
 >
 > - installs root dependencies provided in the [package.json](./package.json) file
-> - installs dependencies for [the libraries](###Components)
-> - builds all [the libraries](###Components)
+> - installs dependencies for [the libraries](#components)
+> - builds all [the libraries](#components)
 
 ## Development
 
