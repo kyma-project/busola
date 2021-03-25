@@ -1,7 +1,7 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
 
-import { usePost } from 'react-shared';
+import { usePost, useNotification } from 'react-shared';
 
 import './CreateWorkloadForm.scss';
 import BasicData from './BasicData';
@@ -17,13 +17,12 @@ export default function CreateWorkloadForm({
   namespaceId,
   formElementRef,
   onChange,
-  onCompleted,
-  onError,
 }) {
   const postRequest = usePost();
   const [deployment, setDeployment] = React.useState(
     createDeploymentTemplate(namespaceId),
   );
+  const notification = useNotification();
 
   const handleFormSubmit = async () => {
     let createdResource = null;
@@ -33,8 +32,11 @@ export default function CreateWorkloadForm({
         formatDeployment(deployment),
       );
     } catch (e) {
-      console.log(e);
-      onError('Cannot create deployment', e.message);
+      console.error(e);
+      notification.notifyError({
+        title: 'Failed to create the Deployment',
+        content: e.message,
+      });
       return;
     }
     const createdResourceUID = createdResource?.metadata?.uid;
@@ -46,12 +48,16 @@ export default function CreateWorkloadForm({
           formatService(deployment, createdResourceUID),
         );
       }
-      onCompleted(deployment.name, 'Deployment created');
+      notification.notifySuccess({ title: 'Succesfully created Deployment' });
       LuigiClient.linkManager()
         .fromContext('namespaces')
         .navigate('/deployments');
     } catch (e) {
-      onError('Deployment created, could not create service', e.message, true);
+      console.error(e);
+      notification.notifyError({
+        title: 'Succesfully created Deployment, failed to create the Service',
+        content: e.message,
+      });
     }
   };
 
