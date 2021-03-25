@@ -1,27 +1,21 @@
-# Service-catalog-UI
+# Busola Service-Catalog-UI
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Overview
 
-## Available Scripts
+This is the application responsible for serving most of the views for the Busola. It's based on the [ReactJS](https://reactjs.org/) library.
 
-In the project directory, you can run:
+## Installation
 
-### `npm start`
+To install Service-Catalog-UI together with the Busola, run the `npm run bootstrap:ci` command in the root directory.
 
-Runs the app in the development mode.
+You can also install dependencies just for this app via the `npm ci` command.
 
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Usage
 
-The page will reload if you make edits.
+Run the `npm start` command in the root folder (../) to start Core along with other apps (which forms the Busola altogether).
 
-You will also see any lint errors in the console.
+You can also start this app individually by performing `npm start` command. The app will be available at the [http://localhost:8000](http://localhost:8000) address.
 
-### `npm test`
+### Code style
 
-Launches the test runner in the interactive watch mode.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.
-
-The build is minified and the filenames include the hashes.
+Your contributions must match the style guide used in Busola. Busola uses [Prettier](https://prettier.io) for code formatting. For convenience, [husky](https://github.com/typicode/husky) installs the Git pre-commit hook, so you do not need to perform any additional work. Remember to run `npm ci` in the root folder (../) of this repository, to install both tools.
