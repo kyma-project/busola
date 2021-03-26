@@ -53,7 +53,7 @@ export const RoleBindings = ({
       refetchList();
     } catch (err) {
       console.warn(err);
-      onError('Failed to create the Role Binding', err.message);
+      onError('Cannot create Role Binding', `Error: ${err.message}`);
     }
   };
 

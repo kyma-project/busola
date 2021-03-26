@@ -43,7 +43,7 @@ export const OAuth2ClientsCreate = ({
       refetchList();
       onCompleted(`OAuth Client ${spec.name} created`);
     } catch (e) {
-      onError('Failed to create the OAuth client', e.message);
+      onError('Cannot create OAuth Client', `Error: ${e.message}`);
     }
   }
 

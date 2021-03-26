@@ -29,7 +29,7 @@ export function DeploymentsCreate({
       refetchList();
       onCompleted(`Deployment ${deployment.name} created`);
     } catch (e) {
-      onError(`Cannot create Deployment: ${e}`);
+      onError('Cannot create Deployment', `Error: ${e.message}`);
     }
   }
 

@@ -68,7 +68,7 @@ export const AddonsConfigurations = ({
       onCompleted(`Addons Configuration ${name} created`);
       refetchList();
     } catch (e) {
-      onError('Failed to create the Addons Configuration', e.message);
+      onError('Cannot create Addons Configuration', `Error: ${e.message}`);
     }
   };
 

@@ -274,7 +274,7 @@ export const NamespacesCreate = ({
       refetchList();
     } catch (e) {
       console.warn(e);
-      onError('Failed to create the Namespace', e.message);
+      onError('Cannot create Namespace', `Error: ${e.message}`);
       return;
     }
 
