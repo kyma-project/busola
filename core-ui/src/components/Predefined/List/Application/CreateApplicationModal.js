@@ -44,10 +44,10 @@ export function CreateApplicationForm({
         '/apis/applicationconnector.kyma-project.io/v1alpha1/applications',
         applicationInput,
       );
-      onCompleted(application.name, `Application created succesfully`);
+      onCompleted(`Application ${application.name} created`);
     } catch (e) {
       console.warn(e);
-      onError('Cannot create application', e.message);
+      onError('Cannot create application', `Error: ${e.message}`);
     }
   }
 
