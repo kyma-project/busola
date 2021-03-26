@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Panel, Pagination } from 'fundamental-react';
+import { Panel } from 'fundamental-react';
 
 import SearchInput from './SearchInput';
+import { Pagination } from './Pagination/Pagination';
 import ListActions from '../ListActions/ListActions';
 import { Spinner } from '../Spinner/Spinner';
 import { HeaderRenderer, RowRenderer, BodyFallback } from './components';
@@ -165,9 +166,9 @@ export const GenericList = ({
           <Panel.Footer>
             <Pagination
               itemsTotal={filteredEntries.length}
-              initialPage={currentPage}
+              currentPage={currentPage}
               itemsPerPage={pagination.itemsPerPage}
-              onClick={setCurrentPage}
+              onChangePage={setCurrentPage}
             />
           </Panel.Footer>
         )}
