@@ -45,7 +45,7 @@ export default function EditApiRule({ apiName }) {
   return (
     <ApiRuleForm
       apiRule={data}
-      call={updateApiRule}
+      sendRequest={updateApiRule}
       saveButtonText="Save"
       headerTitle={`Edit ${apiName}`}
       breadcrumbItems={breadcrumbItems}

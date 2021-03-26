@@ -41,8 +41,8 @@ export default function CreateApiRule() {
   return (
     <ApiRuleForm
       apiRule={emptyApiRule}
-      call={createApiRule}
-      callType="create"
+      sendRequest={createApiRule}
+      requestType="create"
       saveButtonText="Create"
       headerTitle="Create API Rule"
       breadcrumbItems={breadcrumbItems}

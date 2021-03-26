@@ -42,8 +42,8 @@ const EMPTY_ACCESS_STRATEGY = {
 
 ApiRuleForm.propTypes = {
   apiRule: PropTypes.object.isRequired,
-  call: PropTypes.func.isRequired,
-  callType: PropTypes.string,
+  sendRequest: PropTypes.func.isRequired,
+  requestType: PropTypes.string,
   saveButtonText: PropTypes.string.isRequired,
   headerTitle: PropTypes.string.isRequired,
   breadcrumbItems: PropTypes.arrayOf(
@@ -56,8 +56,8 @@ ApiRuleForm.propTypes = {
 
 export default function ApiRuleForm({
   apiRule,
-  call,
-  callType,
+  sendRequest,
+  requestType,
   saveButtonText,
   headerTitle,
   breadcrumbItems,
@@ -175,9 +175,9 @@ export default function ApiRuleForm({
       },
     };
     const data =
-      callType === 'create' ? newApiRule : createPatch(apiRule, newApiRule);
+      requestType === 'create' ? newApiRule : createPatch(apiRule, newApiRule);
 
-    await call(
+    await sendRequest(
       injectVariables(API_RULE_URL, {
         name: formValues.name.current.value,
         namespace: namespace,
