@@ -31,6 +31,7 @@ ResourceDetails.propTypes = {
   namespace: PropTypes.string,
   headerActions: PropTypes.node,
   resourceHeaderActions: PropTypes.arrayOf(PropTypes.func),
+  readOnly: PropTypes.bool,
 };
 
 ResourceDetails.defaultProps = {
@@ -38,6 +39,7 @@ ResourceDetails.defaultProps = {
   customComponents: [],
   headerActions: null,
   resourceHeaderActions: [],
+  readOnly: false,
 };
 
 export function ResourceDetails(props) {
@@ -90,6 +92,7 @@ function Resource({
   headerActions,
   resourceHeaderActions,
   windowTitle,
+  readOnly,
 }) {
   useWindowTitle(windowTitle || prettifyNamePlural(null, resourceType));
   const setEditedSpec = useYamlEditor();
@@ -103,7 +106,7 @@ function Resource({
     },
     { name: '' },
   ];
-  const actions = (
+  const actions = readOnly ? null : (
     <>
       {headerActions}
 
