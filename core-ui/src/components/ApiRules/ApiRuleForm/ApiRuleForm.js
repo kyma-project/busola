@@ -25,7 +25,7 @@ import { hasValidMethods } from 'components/ApiRules/accessStrategyTypes';
 import { useGetList } from 'react-shared';
 import { SERVICES_URL, API_RULE_URL } from '../constants';
 import { formatMessage as injectVariables } from 'components/Lambdas/helpers/misc';
-import { useGetGatewayDomain } from '../useGetGatewayDomain/useGetGatewayDomain';
+import { useGetGatewayDomain } from '../hooks/useGetGatewayDomain';
 
 export const DEFAULT_GATEWAY = 'kyma-gateway.kyma-system.svc.cluster.local';
 

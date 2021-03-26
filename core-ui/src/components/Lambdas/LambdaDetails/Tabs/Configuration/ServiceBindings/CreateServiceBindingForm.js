@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FormItem, FormLabel, FormInput, Alert } from 'fundamental-react';
 
 import Checkbox from 'components/Lambdas/Checkbox/Checkbox';
-import { useCreateServiceBindingUsage } from 'components/Lambdas/gql/hooks/mutations';
+import { useCreateServiceBindingUsage } from 'components/Lambdas/hooks/mutations';
 import { SERVICE_BINDINGS_PANEL } from 'components/Lambdas/constants';
 
 const checkBoxInputProps = {

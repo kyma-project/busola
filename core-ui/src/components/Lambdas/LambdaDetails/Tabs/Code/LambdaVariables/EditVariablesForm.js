@@ -5,7 +5,7 @@ import { GenericList } from 'react-shared';
 
 import SingleVariableInput from './SingleVariableInput';
 
-import { useUpdateLambda, UPDATE_TYPE } from 'components/Lambdas/gql/hooks';
+import { useUpdateLambda, UPDATE_TYPE } from 'components/Lambdas/hooks';
 import {
   newVariableModel,
   VARIABLE_TYPE,

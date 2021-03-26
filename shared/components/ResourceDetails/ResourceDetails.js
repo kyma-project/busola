@@ -64,6 +64,7 @@ export function ResourceDetails(props) {
     <YamlEditorProvider>
       {resource && (
         <Resource
+          key={resource.metadata.name}
           deleteResourceMutation={deleteResourceMutation}
           updateResourceMutation={updateResourceMutation}
           silentRefetch={silentRefetch}

@@ -1,7 +1,7 @@
 // import React from 'react';
 // import { render, wait } from '@testing-library/react';
 
-// import { EVENT_TRIGGER_EVENT_SUBSCRIPTION_MOCK } from 'components/Lambdas/gql/hooks/queries/testMocks';
+// import { EVENT_TRIGGER_EVENT_SUBSCRIPTION_MOCK } from 'components/Lambdas/hooks/queries/testMocks';
 // import {
 //   withApolloMockProvider,
 //   lambdaMock,
