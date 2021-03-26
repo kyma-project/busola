@@ -19,7 +19,7 @@ function toSnakeCase(inputString) {
     .join('');
 }
 function goToSecretDetails(resourceKind, name) {
-  let preperedResourceKind = toSnakeCase(resourceKind);
+  const preperedResourceKind = toSnakeCase(resourceKind);
 
   LuigiClient.linkManager()
     .fromContext('namespaces')
@@ -39,7 +39,6 @@ export const PodsDetails = DefaultRenderer => ({ ...otherParams }) => {
   ];
 
   const VolumesList = resource => {
-    console.log('volumes', resource.spec.volumes);
     const headerRenderer = _ => ['Volume Name', 'Type', 'Name'];
     const rowRenderer = volume => {
       const volumeType = Object.keys(volume).find(key => key !== 'name');

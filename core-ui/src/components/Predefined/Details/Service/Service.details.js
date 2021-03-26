@@ -1,9 +1,9 @@
 import React from 'react';
 import { Counter, Icon } from 'fundamental-react';
-import { getComponentForList } from 'shared/getComponents';
 import { Spinner, useGetList } from 'react-shared';
 import EventSubscriptions from 'shared/components/EventSubscriptions/EventSubscriptions';
 import './Service.details.scss';
+import { ServiceApiRules } from 'components/Lambdas/LambdaDetails/Tabs/Configuration/ApiRules/ApiRules';
 
 function EventSubscriptionsWrapper(service) {
   const subscriptionsUrl = `/apis/eventing.kyma-project.io/v1alpha1/namespaces/${service.metadata.namespace}/subscriptions`;
@@ -45,6 +45,10 @@ function EventSubscriptionsWrapper(service) {
   );
 }
 
+function ApiRules(service) {
+  return <ServiceApiRules key="api-rules" service={service} />;
+}
+
 export const ServicesDetails = DefaultRenderer => ({ ...otherParams }) => {
   const customColumns = [
     {
@@ -71,26 +75,11 @@ export const ServicesDetails = DefaultRenderer => ({ ...otherParams }) => {
     },
   ];
 
-  const ApiRuleList = getComponentForList({
-    name: 'apiruleList',
-    params: {
-      hasDetailsView: true,
-      fixedPath: true,
-      resourceUrl: `/apis/gateway.kyma-project.io/v1alpha1/namespaces/${otherParams.namespace}/apirules`,
-      resourceType: 'apirules',
-      namespace: otherParams.namespace,
-      isCompact: true,
-      showTitle: true,
-      filter: apirule => apirule.spec.service.name === otherParams.resourceName,
-    },
-  });
   return (
     <DefaultRenderer
       customColumns={customColumns}
-      customComponents={[EventSubscriptionsWrapper]}
+      customComponents={[EventSubscriptionsWrapper, ApiRules]}
       {...otherParams}
-    >
-      {ApiRuleList}
-    </DefaultRenderer>
+    />
   );
 };
