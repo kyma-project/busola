@@ -274,7 +274,7 @@ export const NamespacesCreate = ({
       refetchList();
     } catch (e) {
       console.warn(e);
-      onError('ERROR', `Error while creating namespace: ${e}`);
+      onError('Failed to create the Namespace', e.message);
       return;
     }
 
@@ -301,7 +301,7 @@ export const NamespacesCreate = ({
       result => result.status === 'rejected',
     );
     if (!rejectedRequest) {
-      onCompleted(`Namespace ${namespaceName} created.`);
+      onCompleted(`Namespace ${namespaceName} created`);
     } else {
       onError(
         'Warning',

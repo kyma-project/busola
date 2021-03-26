@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Button, FormLabel } from 'fundamental-react';
-import {
-  K8sNameInput,
-  LabelSelectorInput,
-  usePost,
-  useNotification,
-} from 'react-shared';
+import { K8sNameInput, LabelSelectorInput, usePost } from 'react-shared';
 
 import './AddonsConfigurations.scss';
 
 export const AddonsConfigurations = ({
   formElementRef,
   onChange,
+  onCompleted,
+  onError,
   resourceType,
   resourceUrl,
   namespace,
@@ -23,7 +20,6 @@ export const AddonsConfigurations = ({
   const [newUrl, setNewUrl] = useState('');
   const [urls, setUrls] = useState([]);
   const request = usePost();
-  const notification = useNotification();
 
   useEffect(_ => setCustomValid(!!urls.length), [urls, setCustomValid]);
 
@@ -69,15 +65,10 @@ export const AddonsConfigurations = ({
 
     try {
       await request(resourceUrl, resourceData);
-      notification.notifySuccess({
-        title: 'Succesfully created Resource',
-      });
+      onCompleted(`Addons Configuration ${name} created`);
       refetchList();
     } catch (e) {
-      notification.notifyError({
-        title: 'Failed to create the Resource',
-        content: e.message,
-      });
+      onError('Failed to create the Addons Configuration', e.message);
     }
   };
 
