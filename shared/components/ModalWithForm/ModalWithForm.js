@@ -102,6 +102,7 @@ export const ModalWithForm = ({
       color: '#107E3E',
       icon: 'accept',
       autoClose: true,
+      type: 'success',
     });
 
     performRefetch();

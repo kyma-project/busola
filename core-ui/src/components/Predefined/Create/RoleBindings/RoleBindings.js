@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { usePost, useNotification } from 'react-shared';
+import { usePost } from 'react-shared';
 import {
   FormRadioGroup,
   FormRadioItem,
@@ -14,6 +14,8 @@ import { RoleCombobox } from './RoleCombobox.js';
 export const RoleBindings = ({
   formElementRef,
   onChange,
+  onCompleted,
+  onError,
   namespace,
   resourceUrl,
   refetchList,
@@ -24,36 +26,34 @@ export const RoleBindings = ({
   const [roleKind, setRoleKind] = useState('');
 
   const request = usePost();
-  const notification = useNotification();
 
   const handleFormSubmit = async e => {
     e.preventDefault();
-    try {
-      const params = {
-        kind: namespace ? 'RoleBinding' : 'ClusterRoleBinding',
-        metadata: {
-          name: `${subject}-${role}`,
+    const name = `${subject}-${role}`;
+    const params = {
+      kind: namespace ? 'RoleBinding' : 'ClusterRoleBinding',
+      metadata: {
+        name,
+      },
+      roleRef: {
+        kind: roleKind,
+        name: role,
+      },
+      subjects: [
+        {
+          kind: isGroup ? 'Group' : 'User',
+          name: subject,
         },
-        roleRef: {
-          kind: roleKind,
-          name: role,
-        },
-        subjects: [
-          {
-            kind: isGroup ? 'Group' : 'User',
-            name: subject,
-          },
-        ],
-      };
+      ],
+    };
 
+    try {
       await request(resourceUrl, params);
-      notification.notifySuccess({ title: 'Succesfully created Resource' });
+      onCompleted(`Role Binding ${name} created`);
       refetchList();
     } catch (err) {
       console.warn(err);
-      notification.notifyError({
-        content: `Could not create the Role Binding: ${err.message}`,
-      });
+      onError('Cannot create Role Binding', `Error: ${err.message}`);
     }
   };
 
