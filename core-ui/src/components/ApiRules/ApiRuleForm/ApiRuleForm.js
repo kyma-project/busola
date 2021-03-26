@@ -42,8 +42,8 @@ const EMPTY_ACCESS_STRATEGY = {
 
 ApiRuleForm.propTypes = {
   apiRule: PropTypes.object.isRequired,
-  mutation: PropTypes.func.isRequired,
-  mutationType: PropTypes.string,
+  call: PropTypes.func.isRequired,
+  callType: PropTypes.string,
   saveButtonText: PropTypes.string.isRequired,
   headerTitle: PropTypes.string.isRequired,
   breadcrumbItems: PropTypes.arrayOf(
@@ -56,8 +56,8 @@ ApiRuleForm.propTypes = {
 
 export default function ApiRuleForm({
   apiRule,
-  mutation,
-  mutationType,
+  call,
+  callType,
   saveButtonText,
   headerTitle,
   breadcrumbItems,
@@ -174,15 +174,15 @@ export default function ApiRuleForm({
         ...variables.spec,
       },
     };
-    const mutationData =
-      mutationType === 'create' ? newApiRule : createPatch(apiRule, newApiRule);
+    const data =
+      callType === 'create' ? newApiRule : createPatch(apiRule, newApiRule);
 
-    await mutation(
+    await call(
       injectVariables(API_RULE_URL, {
         name: formValues.name.current.value,
         namespace: namespace,
       }),
-      mutationData,
+      data,
     );
 
     LuigiClient.uxManager().closeCurrentModal();

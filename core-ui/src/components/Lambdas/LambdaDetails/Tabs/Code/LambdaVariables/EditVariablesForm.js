@@ -86,7 +86,7 @@ export default function EditVariablesForm({
     setVariables(newVariables);
   }
 
-  function prepareVariablesMutationInput() {
+  function prepareVariablesInput() {
     return variables.map(variable => ({
       name: variable.name,
       value: variable.value,
@@ -94,7 +94,7 @@ export default function EditVariablesForm({
   }
 
   function handleFormSubmit() {
-    const preparedVariable = prepareVariablesMutationInput();
+    const preparedVariable = prepareVariablesInput();
     updateLambdaVariables({
       spec: {
         ...lambda.spec,

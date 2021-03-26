@@ -4,7 +4,7 @@ import extractErrors from 'shared/errorExtractor';
 
 import { formatMessage } from 'components/Lambdas/helpers/misc';
 
-import { GQL_MUTATIONS } from 'components/Lambdas/constants';
+import { LAMBDAS_MESSAGES } from 'components/Lambdas/constants';
 
 export const useCreateRepository = () => {
   const notificationManager = useNotification();
@@ -14,7 +14,7 @@ export const useCreateRepository = () => {
     const errorToDisplay = extractErrors(error);
 
     const message = formatMessage(
-      GQL_MUTATIONS.CREATE_REPOSITORY.ERROR_MESSAGE,
+      LAMBDAS_MESSAGES.CREATE_REPOSITORY.ERROR_MESSAGE,
       {
         repositoryName: name,
         error: errorToDisplay,
@@ -43,7 +43,7 @@ export const useCreateRepository = () => {
       );
 
       const message = formatMessage(
-        GQL_MUTATIONS.CREATE_REPOSITORY.SUCCESS_MESSAGE,
+        LAMBDAS_MESSAGES.CREATE_REPOSITORY.SUCCESS_MESSAGE,
         {
           repositoryName: name,
         },

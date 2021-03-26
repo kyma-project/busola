@@ -4,10 +4,7 @@ import { Panel, Button, LayoutGrid } from 'fundamental-react';
 import { Tooltip } from 'react-shared';
 import { FormInput } from 'components/Lambdas/components';
 
-import {
-  useUpdateLambda,
-  UPDATE_TYPE,
-} from 'components/Lambdas/hooks/mutations/useUpdateLambda';
+import { useUpdateLambda, UPDATE_TYPE } from 'components/Lambdas/hooks';
 import { BUTTONS, REPOSITORY_CONFIG_PANEL } from 'components/Lambdas/constants';
 
 import './RepositoryConfig.scss';

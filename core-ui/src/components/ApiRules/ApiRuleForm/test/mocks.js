@@ -1,6 +1,4 @@
-import { service1, service2 } from 'testing/servicesMocks';
-import { GET_SERVICES } from 'gql/queries';
-import { EXCLUDED_SERVICES_LABELS } from 'components/ApiRules/constants';
+import { service1 } from 'testing/servicesMocks';
 import { DEFAULT_GATEWAY } from '../ApiRuleForm';
 
 export const apiRuleName = 'test-123';
@@ -38,18 +36,3 @@ export const apiRule = () => ({
     ],
   },
 });
-
-export const servicesQuery = {
-  request: {
-    query: GET_SERVICES,
-    variables: {
-      namespace: mockNamespace,
-      excludedLabels: EXCLUDED_SERVICES_LABELS,
-    },
-  },
-  result: {
-    data: {
-      services: [service1, service2],
-    },
-  },
-};

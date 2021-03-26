@@ -1,6 +1,4 @@
-import { GET_API_RULE, GET_SERVICES } from 'gql/queries';
 import { service1, service2 } from 'testing/servicesMocks';
-import { UPDATE_API_RULE } from 'gql/mutations';
 import { EXCLUDED_SERVICES_LABELS } from 'components/ApiRules/constants';
 
 export const mockNamespace = 'test';
@@ -29,59 +27,4 @@ export const apiRule = {
       },
     ],
   },
-};
-
-export const getApiRuleQuery = {
-  request: {
-    query: GET_API_RULE,
-    variables: {
-      name: apiRule.name,
-      namespace: mockNamespace,
-    },
-  },
-  result: {
-    data: {
-      APIRule: apiRule,
-    },
-  },
-};
-
-export const servicesQuery = {
-  request: {
-    query: GET_SERVICES,
-    variables: {
-      namespace: mockNamespace,
-      excludedLabels: EXCLUDED_SERVICES_LABELS,
-    },
-  },
-  result: {
-    data: {
-      services: [service1, service2],
-    },
-  },
-};
-
-export const updateApiRuleMutation = {
-  request: {
-    query: UPDATE_API_RULE,
-    variables: {
-      name: apiRule.name,
-      namespace: mockNamespace,
-      params: {
-        service: {
-          ...apiRule.spec.service,
-          host: `${newHostname}.kyma.local`,
-        },
-        gateway: apiRule.spec.gateway,
-        rules: apiRule.spec.rules,
-      },
-    },
-  },
-  result: jest.fn().mockReturnValue({
-    data: {
-      updateAPIRule: {
-        name: apiRule.name,
-      },
-    },
-  }),
 };

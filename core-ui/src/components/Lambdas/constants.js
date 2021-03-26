@@ -285,34 +285,7 @@ export const LOGS_AND_METRICS = {
 };
 export const SERVICE_URL = `/api/v1/namespaces/{namespace}/services/{name}`;
 
-export const GQL_QUERIES = {
-  LAMBDA: {
-    ERROR_MESSAGE: `Couldn't fetch Function "{lambdaName}" due to this error: {error}`,
-  },
-  LAMBDAS: {
-    ERROR_MESSAGE: `Couldn't fetch Functions from Namespace "{namespace}" due to this error: {error}`,
-  },
-  EVENT_ACTIVATIONS: {
-    ERROR_MESSAGE: `Couldn't fetch available Events from Namespace "{namespace}" due to this error: {error}`,
-  },
-  EVENT_TRIGGERS: {
-    ERROR_MESSAGE: `Couldn't fetch Event Triggers for Function "{lambdaName}" due to this error: {error}`,
-  },
-  SERVICE_BINDING_USAGES: {
-    ERROR_MESSAGE: `Couldn't fetch Service Binding Usages injected in Function "{lambdaName}" due to this error: {error}`,
-  },
-  SERVICE_INSTANCES: {
-    ERROR_MESSAGE: `Couldn't fetch Service Instances due to this error: {error}`,
-  },
-  CONFIG_MAP: {
-    ERROR_MESSAGE: `Couldn't fetch ConfigMap "{configMapName}" due to this error: {error}`,
-  },
-  SERVICE: {
-    ERROR_MESSAGE: `Couldn't fetch Service "{serviceName}" due to this error: {error}`,
-  },
-};
-
-export const GQL_MUTATIONS = {
+export const LAMBDAS_MESSAGES = {
   CREATE_LAMBDA: {
     SUCCESS_MESSAGE: `Function "{lambdaName}" was created.`,
     ERROR_MESSAGE: `Couldn't create Function "{lambdaName}" due to this error: {error}.`,
