@@ -11,7 +11,7 @@ import {
 import ApiRuleStatus from 'components/ApiRules/ApiRuleStatus/ApiRuleStatus';
 import AccessStrategies from 'components/ApiRules/AccessStrategies/AccessStrategies';
 import { formatMessage } from 'components/Lambdas/helpers/misc';
-import { useGetGatewayDomain as getGatewayDomain } from 'components/ApiRules/useGetGatewayDomain/useGetGatewayDomain';
+import { useGetGatewayDomain as getGatewayDomain } from 'components/ApiRules/hooks/useGetGatewayDomain';
 
 export const ApiRulesDetails = DefaultRenderer => ({ ...otherParams }) => {
   const { domain } = getGatewayDomain();

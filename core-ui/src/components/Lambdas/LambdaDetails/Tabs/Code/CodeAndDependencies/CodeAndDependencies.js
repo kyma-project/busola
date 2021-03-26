@@ -10,7 +10,7 @@ import Editor from './Editor';
 import {
   useUpdateLambda,
   UPDATE_TYPE,
-} from 'components/Lambdas/gql/hooks/mutations/useUpdateLambda';
+} from 'components/Lambdas/hooks/mutations/useUpdateLambda';
 import { CODE_AND_DEPENDENCIES_PANEL } from 'components/Lambdas/constants';
 
 import './CodeAndDependencies.scss';

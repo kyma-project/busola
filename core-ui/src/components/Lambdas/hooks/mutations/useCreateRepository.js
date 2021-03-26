@@ -1,6 +1,6 @@
 import { useNotification, usePost } from 'react-shared';
 
-import extractGraphQlErrors from 'shared/graphqlErrorExtractor';
+import extractErrors from 'shared/errorExtractor';
 
 import { formatMessage } from 'components/Lambdas/helpers/misc';
 
@@ -11,7 +11,7 @@ export const useCreateRepository = () => {
   const postRequest = usePost();
 
   function handleError(name, error) {
-    const errorToDisplay = extractGraphQlErrors(error);
+    const errorToDisplay = extractErrors(error);
 
     const message = formatMessage(
       GQL_MUTATIONS.CREATE_REPOSITORY.ERROR_MESSAGE,

@@ -9,7 +9,7 @@
 
 // import CreateServiceBindingModal from '../CreateServiceBindingModal';
 
-// import { GET_SERVICE_INSTANCES_DATA_MOCK } from 'components/Lambdas/gql/hooks/queries/testMocks';
+// import { GET_SERVICE_INSTANCES_DATA_MOCK } from 'components/Lambdas/hooks/queries/testMocks';
 
 // jest.mock('@luigi-project/client', () => {
 //   return {

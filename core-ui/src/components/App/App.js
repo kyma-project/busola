@@ -65,7 +65,7 @@ function RoutedResourcesList({ match }) {
 
   const params = {
     hasDetailsView: queryParams.get('hasDetailsView') === 'true',
-    readonly: queryParams.get('readonly') === 'true',
+    readOnly: queryParams.get('readOnly') === 'true',
     resourceUrl,
     resourceType: match.params.resourceType,
     namespace: match.params.namespaceId,
@@ -95,6 +95,7 @@ function RoutedResourceDetails({ match }) {
     resourceType: match.params.resourceType,
     resourceName: decodedResourceName,
     namespace: match.params.namespaceId,
+    readOnly: queryParams.get('readOnly') === 'true',
   };
 
   const rendererName = params.resourceType + 'Details';

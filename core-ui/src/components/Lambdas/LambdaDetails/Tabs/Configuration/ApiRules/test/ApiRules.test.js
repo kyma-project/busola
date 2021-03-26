@@ -8,7 +8,7 @@
 // } from 'components/Lambdas/helpers/testing';
 
 // import { API_RULE_EVENT_SUBSCRIPTION_MOCK } from 'components/ApiRules/gql/mocks/useApiRulesQuery';
-// import { GET_SERVICE_DATA_MOCK } from 'components/Lambdas/gql/hooks/queries/testMocks';
+// import { GET_SERVICE_DATA_MOCK } from 'components/Lambdas/hooks/queries/testMocks';
 
 // import ApiRules from '../ApiRules';
 

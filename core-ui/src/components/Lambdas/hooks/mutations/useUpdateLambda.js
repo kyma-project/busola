@@ -2,7 +2,7 @@ import { useNotification, useUpdate } from 'react-shared';
 
 import { createPatch } from 'rfc6902';
 
-import extractGraphQlErrors from 'shared/graphqlErrorExtractor';
+import extractErrors from 'shared/errorExtractor';
 
 import { formatMessage } from 'components/Lambdas/helpers/misc';
 import { GQL_MUTATIONS } from 'components/Lambdas/constants';
@@ -23,7 +23,7 @@ export const useUpdateLambda = ({
   const updateLambdaMutation = useUpdate();
 
   function handleError(error) {
-    const errorToDisplay = extractGraphQlErrors(error);
+    const errorToDisplay = extractErrors(error);
 
     const message = formatMessage(
       GQL_MUTATIONS.UPDATE_LAMBDA[type].ERROR_MESSAGE,

@@ -7,7 +7,7 @@ import {
   ApiRuleServiceInfo,
 } from 'components/ApiRules/ApiRulesList/components';
 import ApiRuleStatus from 'components/ApiRules/ApiRuleStatus/ApiRuleStatus';
-import { useGetGatewayDomain as getGatewayDomain } from 'components/ApiRules/useGetGatewayDomain/useGetGatewayDomain';
+import { useGetGatewayDomain as getGatewayDomain } from 'components/ApiRules/hooks/useGetGatewayDomain';
 
 export const ApiRulesList = DefaultRenderer => ({ ...otherParams }) => {
   const { domain } = getGatewayDomain();
