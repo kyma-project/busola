@@ -28,7 +28,7 @@ The Busola also includes React libraries:
 
 ## Usage with NPX
 
-This mode has no hot-reload feature so it's not designed for the development. Hovewer, it gives you the ability to run the Busola in a few seconds without installing any dependencies.
+This mode has no hot-reload feature so it's not designed for the development. Hovewer, it gives you the ability to run the Busola in a few seconds with one command.
 
 To run the Busola in the `npx` mode from the latest release you have to provide `KUBECONFIG` environment variable pointing to a valid KUBECONFIG file, then type `npx @kyma-project/busola@latest` in your terminal. That's it, your default browser should open the Busola within a few seconds.
 
@@ -56,9 +56,9 @@ Use the following command to run the Busola with the [`core`](./core) and all ot
 npm run start
 ```
 
-After a while open the [http://localhost:4200](http://localhost:4200) address in your browser, then add your **init params** to the address to make it look like `http://localhost:4200?init=yourInitParams`.
+After a while open the [http://localhost:4200](http://localhost:4200) address in your browser, then add your **init params** to the address to make it look like `http://localhost:4200?init=yourInitParams`. You can generate the params with [this generator](http://enkode.surge.sh/).
 
-Once you started the Busola locally, you can start development. All modules have hot-reload enabled therefore you can edit the code real time and see the changes in your browser.
+Once you started the Busola locally, you can begin the development. All modules have the hot-reload feature enabled therefore you can edit the code real time and see the changes in your browser.
 
 The apps you just started run at the following addresses:
 
