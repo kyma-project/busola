@@ -81,7 +81,7 @@ To build and run the Busola for the `npx` mode:
 
 When developing new features in Busola UI, adhere to the following rules. This will help you to mitigate any security-related threats.
 
-#### Prevent Cross-site request forgery (XSRF)
+1. Prevent cross-site request forgery (XSRF).
 
 - Do not store the authentication token as a cookie. Make sure the token is sent to the Busola Backend as a bearer token.
 - Make sure that state-changing operations (_POST_, _PUT_, _DELETE_ and _UPDATE_ requests) are only triggered upon explicit user interactions such as form submissions.
