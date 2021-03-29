@@ -11,7 +11,7 @@ This is a REST proxy for the Busola
 
 ## Installation
 
-To install backend together with the Busola, run the `npm run bootstrap:ci` command in the root directory.
+To install the backend together with Busola, run the `npm run bootstrap:ci` command in the root directory.
 
 You can also install dependencies just for this app via the `npm ci` command.
 
