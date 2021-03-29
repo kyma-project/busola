@@ -19,7 +19,7 @@ You can also install dependencies just for this app using the `npm ci` command.
 
 The primary usage of this component is to run it together with Busola using the `npm start` command in the root directory. However, you can run it separately if needed.
 
-To start the Busola Backend without the hot-reload feature, simply run the `npm start`.
+To start the Busola backend without the hot-reload feature, run `npm start`.
 
 Another way to start the Busola Backend uses the **hot-reload** feature (useful for the development process) - see the [Develompent](#development) section.
 
