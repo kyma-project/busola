@@ -6,15 +6,15 @@ Busola is a web-based UI for managing resources within Kyma or any Kubernetes cl
 
 ### Components
 
-The Busola project consists of the following UI projects:
+Busola project consists of the following UI projects:
 
 - [`Core`](./core) - The main frame
 - [`Service-Catalog-UI`](./service-catalog-ui) - The UI layer for Service Catalog, Instances and Brokers
 - [`Log UI`](./logging) - The logs view
-- [`Backend`](./backend) - A kind of a proxy between the Busola and the Kubernetes cluster
+- [`Backend`](./backend) - A kind of a proxy between Busola and the Kubernetes cluster
 - [`Tests`](./tests) - Acceptance and end-to-end tests
 
-The Busola also includes React libraries:
+Busola also includes React libraries:
 
 - [`React common`](./common) - common functionalities for React applications
 - [`React components`](./components/react) - components for React applications (it will be replaced by `Shared components`)
@@ -28,9 +28,9 @@ The Busola also includes React libraries:
 
 ## Usage with NPX
 
-This mode has no hot-reload feature so it's not designed for the development. Hovewer, it gives you the ability to run the Busola in a few seconds with one command.
+This mode has no hot-reload feature so it's not designed for the development. Hovewer, it gives you the ability to run Busola in a few seconds with one command.
 
-To run the Busola in the `npx` mode from the latest release you have to provide `KUBECONFIG` environment variable pointing to a valid KUBECONFIG file, then type `npx @kyma-project/busola@latest` in your terminal. That's it, your default browser should open the Busola within a few seconds.
+To run Busola in the `npx` mode from the latest release you have to provide `KUBECONFIG` environment variable pointing to a valid KUBECONFIG file, then type `npx @kyma-project/busola@latest` in your terminal. That's it, your default browser should open Busola within a few seconds.
 
 ## Installation
 
@@ -50,7 +50,7 @@ npm run bootstrap:ci
 
 ### Start all views
 
-Use the following command to run the Busola with the [`core`](./core) and all other views locally:
+Use the following command to run Busola with the [`core`](./core) and all other views locally:
 
 ```bash
 npm run start
@@ -58,7 +58,7 @@ npm run start
 
 After a while open the [http://localhost:4200](http://localhost:4200) address in your browser, then add your **init params** to the address to make it look like `http://localhost:4200?init=yourInitParams`. You can generate the params with [this generator](http://enkode.surge.sh/).
 
-Once you started the Busola locally, you can begin the development. All modules have the hot-reload feature enabled therefore you can edit the code real time and see the changes in your browser.
+Once you started Busola locally, you can begin the development. All modules have the hot-reload feature enabled therefore you can edit the code real time and see the changes in your browser.
 
 The apps you just started run at the following addresses:
 
@@ -70,7 +70,7 @@ The apps you just started run at the following addresses:
 
 ### Build the `NPX` Busola
 
-To build and run the Busola for the `npx` mode:
+To build and run Busola for the `npx` mode:
 
 - Run `npm run build` in `/shared`.
 - Run `npm run build:npx` in `/core`, `/core-ui` and `/backend`.
@@ -83,7 +83,7 @@ When developing new features in Busola UI, adhere to the following rules. This w
 
 #### Prevent Cross-site request forgery (XSRF)
 
-- Do not store the authentication token as a cookie. Make sure the token is sent to the Busola Backend as a bearer token.
+- Do not store the authentication token as a cookie. Make sure the token is sent to Busola Backend as a bearer token.
 - Make sure that state-changing operations (_POST_, _PUT_, _DELETE_ and _UPDATE_ requests) are only triggered upon explicit user interactions such as form submissions.
 - Keep in mind that UI rendering in response to user navigating between views is only allowed to trigger read-only operations (_GET_ requests) without any data mutations.
 
@@ -100,7 +100,7 @@ For the information on how to run tests and configure them, go to the [`tests`](
 
 ## Troubleshooting
 
-> **TIP:** To solve most of the problems with the Busola development, clear the browser cache or do a hard refresh of the website.
+> **TIP:** To solve most of the problems with Busola development, clear the browser cache or do a hard refresh of the website.
 
 ### CI fails on PRs related to staging dependencies
 

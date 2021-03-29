@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is a REST proxy for the Busola
+This is a REST proxy for Busola
 
 ## Prerequisites
 
@@ -11,17 +11,17 @@ This is a REST proxy for the Busola
 
 ## Installation
 
-To install backend together with the Busola, run the `npm run bootstrap:ci` command in the root directory.
+To install backend together with Busola, run the `npm run bootstrap:ci` command in the root directory.
 
 You can also install dependencies just for this app via the `npm ci` command.
 
 ## Usage
 
-The primary usage of this component is to run it together with the Busola (via the `npm start` command in the root directory). However, you can run it separately if needed.
+The primary usage of this component is to run it together with Busola (via the `npm start` command in the root directory). However, you can run it separately if needed.
 
-To start the Busola Backend without the hot-reload feature, simply run the `npm start`.
+To start Busola Backend without the hot-reload feature, simply run the `npm start`.
 
-Another way to start the Busola Backend uses the **hot-reload** feature (useful for the development process) - see the [Develompent](#development) section.
+Another way to start Busola Backend uses the **hot-reload** feature (useful for the development process) - see the [Develompent](#development) section.
 
 You can also use the `docker build` command to use backend as an image of a Kubernetes Pod.
 
