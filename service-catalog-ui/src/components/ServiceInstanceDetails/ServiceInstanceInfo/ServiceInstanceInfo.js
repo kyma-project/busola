@@ -47,19 +47,20 @@ const ServiceInstanceInfo = ({
     </button>
   );
 
-  const hasLabels = Object.keys(
-    serviceClass.spec.externalMetadata?.labels || [],
-  ).length;
+  //TODO: decide what to do with those labels.
+  // const hasLabels = Object.keys(
+  //   serviceClass.spec.externalMetadata?.labels || [],
+  // ).length;
 
-  const labels = (
-    <ul className="no-dismiss-tokens labels-list" data-e2e-id="instance-labels">
-      {Object.keys(serviceClass.spec.externalMetadata?.labels || []).map(
-        key => (
-          <Token key={key}>{key}</Token>
-        ),
-      )}
-    </ul>
-  );
+  // const labels = (
+  //   <ul className="no-dismiss-tokens labels-list" data-e2e-id="instance-labels">
+  //     {Object.keys(serviceClass.spec.externalMetadata?.labels || []).map(
+  //       key => (
+  //         <Token key={key}>{key}</Token>
+  //       ),
+  //     )}
+  //   </ul>
+  // );
 
   const documentationLink = serviceClass.spec.externalMetadata
     ?.documentationUrl && (
@@ -107,9 +108,9 @@ const ServiceInstanceInfo = ({
           {supportLink}
         </Column>
       )}
-      {hasLabels && (
+      {/* {hasLabels && (
         <Column title={serviceInstanceConstants.labelsHeader}>{labels}</Column>
-      )}
+      )} */}
     </>
   );
 };

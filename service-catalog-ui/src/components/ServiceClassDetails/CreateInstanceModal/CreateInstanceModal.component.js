@@ -215,7 +215,7 @@ export default function CreateInstanceModal({
     const isClusterServiceClass = item.kind === 'ClusterServiceClass';
 
     const specSC = {
-      labels,
+      labels, //TODO: this is ignored because such field cannot be added to the spec. Should we store it in metadata.annotations or remove it?
       serviceClassExternalName: item.spec.externalName,
       serviceClassRef: {
         name: item.metadata.name,
@@ -228,7 +228,7 @@ export default function CreateInstanceModal({
     };
 
     const specCSC = {
-      labels,
+      labels, //TODO: this is ignored because such field cannot be added to the spec. Should we store it in metadata.annotations or remove it?
       clusterServiceClassExternalName: item.spec.externalName,
       clusterServiceClassRef: {
         name: item.metadata.name,
