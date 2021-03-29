@@ -45,10 +45,6 @@ const ServiceInstanceHeader = ({
     },
   ];
 
-  const description = false //TODO
-    ? serviceClass.description
-    : serviceInstanceConstants.noDescription;
-
   const actions = (
     <Button type="negative" option="light" onClick={_ => {}}>
       {serviceInstanceConstants.delete}
@@ -60,7 +56,7 @@ const ServiceInstanceHeader = ({
       breadcrumbItems={breadcrumbItems}
       title={serviceInstance.metadata.name}
       actions={actions}
-      description={description}
+      description={null} //TODO do we need it?
     >
       <ServiceserviceClassInfo
         serviceClass={serviceClass}

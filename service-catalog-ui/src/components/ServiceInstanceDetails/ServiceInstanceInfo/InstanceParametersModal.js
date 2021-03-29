@@ -2,12 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Modal } from 'react-shared';
-import { getResourceDisplayName } from 'helpers';
 import { serviceInstanceConstants } from 'helpers/constants';
 
 InstanceParametersModal.propTypes = {
-  serviceInstance: PropTypes.object.isRequired,
-  instancePlan: PropTypes.object.isRequired,
+  parameters: PropTypes.object.isRequired,
+  servicePlan: PropTypes.shape({ externalName: PropTypes.string }).isRequired,
 };
 
 export default function InstanceParametersModal({ parameters, servicePlan }) {
