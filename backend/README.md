@@ -23,7 +23,7 @@ To start Busola backend without the hot-reload feature, run `npm start`.
 
 Another way to start Busola backend is by using the hot-reload feature that is useful for the development process. See the [Development](#development) section for details.
 
-You can also use the `docker build` command to use backend as an image of a Kubernetes Pod.
+You can also use the `docker build` command to use the backend as an image of a Kubernetes Pod.
 
 ## Development
 
