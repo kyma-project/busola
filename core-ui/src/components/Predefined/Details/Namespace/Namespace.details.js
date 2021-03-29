@@ -2,6 +2,7 @@ import React from 'react';
 import { getComponentForList } from 'shared/getComponents';
 import DeployNewWorkload from './DeployNewWorkload';
 import { NamespaceStatus } from './NamespaceStatus';
+import { NamespaceWorkloads } from './NamespaceWorkloads/NamespaceWorkloads';
 
 export const NamespacesDetails = DefaultRenderer => ({ ...otherParams }) => {
   const limitRangesParams = {
@@ -52,6 +53,7 @@ export const NamespacesDetails = DefaultRenderer => ({ ...otherParams }) => {
       customColumns={customColumns}
       headerActions={headerActions}
     >
+      <NamespaceWorkloads namespace={otherParams.resourceName} />
       {LimitrangesList}
       {ResourceQuotasList}
     </DefaultRenderer>
