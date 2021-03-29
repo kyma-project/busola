@@ -13,7 +13,11 @@ import './ServiceInstanceInfo.scss';
 import { ServiceInstanceStatus } from '../../../shared/ServiceInstanceStatus.js';
 import InstanceParametersModal from './InstanceParametersModal';
 
-const ServiceInstanceInfo = ({ serviceInstance, serviceClass }) => {
+const ServiceInstanceInfo = ({
+  serviceInstance,
+  serviceClass,
+  servicePlan,
+}) => {
   // const serviceClassDocsPerPlan =
   //   serviceInstance?.serviceClass?.labels[DOCUMENTATION_PER_PLAN_LABEL] ===
   //   'true';
@@ -39,9 +43,6 @@ const ServiceInstanceInfo = ({ serviceInstance, serviceClass }) => {
   if (!serviceInstance) {
     return null;
   }
-
-  const instancePlan =
-    serviceInstance.clusterServicePlan || serviceInstance.servicePlan;
 
   const classContent = serviceClass.ref ? (
     <button
@@ -87,12 +88,7 @@ const ServiceInstanceInfo = ({ serviceInstance, serviceClass }) => {
       typeof serviceInstance.planSpec === 'object' &&
       Object.keys(serviceInstance.planSpec).length
     ) {
-      return (
-        <InstanceParametersModal
-          instancePlan={instancePlan}
-          serviceInstance={serviceInstance}
-        />
-      );
+      return null;
     }
   })();
 
@@ -109,7 +105,14 @@ const ServiceInstanceInfo = ({ serviceInstance, serviceClass }) => {
         <Column title={serviceInstanceConstants.labelsHeader}>{labels}</Column>
       )}
       <Column title={serviceInstanceConstants.planHeader}>
-        <div data-e2e-id="instance-service-plan">{plan}</div>
+        <div data-e2e-id="instance-service-plan">
+          {
+            <InstanceParametersModal
+              servicePlan={servicePlan}
+              parameters={serviceInstance.spec.parameters}
+            />
+          }
+        </div>
       </Column>
       {documentationLink && (
         <Column title={serviceInstanceConstants.documentationHeader}>

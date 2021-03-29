@@ -74,6 +74,16 @@ export default function ServiceInstanceDetails({ match }) {
     isClusterWide: !!serviceInstance.spec.clusterServiceClassExternalName,
   };
 
+  const servicePlan = serviceInstance && {
+    ref:
+      serviceInstance.spec.servicePlanRef?.name ||
+      serviceInstance.spec.clusterServicePlanRef?.name,
+    externalName:
+      serviceInstance.spec.servicePlanExternalName ||
+      serviceInstance.spec.clusterServicePlanExternalName,
+    isClusterWide: !!serviceInstance.spec.clusterServicePlanExternalName,
+  };
+
   console.log(serviceInstance);
 
   if (!serviceInstance || !serviceClass) {
@@ -92,6 +102,7 @@ export default function ServiceInstanceDetails({ match }) {
       <ServiceInstanceHeader
         serviceInstance={serviceInstance}
         serviceClass={serviceClass}
+        servicePlan={servicePlan}
         // deleteServiceInstance={deleteServiceInstanceMutation}
         history={history}
       />

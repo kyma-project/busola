@@ -9,6 +9,7 @@ import ServiceserviceClassInfo from '../ServiceInstanceInfo/ServiceInstanceInfo'
 const ServiceInstanceHeader = ({
   serviceInstance,
   serviceClass,
+  servicePlan,
   deleteServiceInstance,
 }) => {
   // const deleteHandler = () =>
@@ -64,6 +65,7 @@ const ServiceInstanceHeader = ({
       <ServiceserviceClassInfo
         serviceClass={serviceClass}
         serviceInstance={serviceInstance}
+        servicePlan={servicePlan}
       />
     </PageHeader>
   );

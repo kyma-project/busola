@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Modal, JSONEditor } from 'react-shared';
+import { Modal } from 'react-shared';
 import { getResourceDisplayName } from 'helpers';
 import { serviceInstanceConstants } from 'helpers/constants';
 
@@ -10,15 +10,12 @@ InstanceParametersModal.propTypes = {
   instancePlan: PropTypes.object.isRequired,
 };
 
-export default function InstanceParametersModal({
-  serviceInstance,
-  instancePlan,
-}) {
-  const formattedPlan = JSON.stringify(serviceInstance.planSpec, null, 2);
+export default function InstanceParametersModal({ parameters, servicePlan }) {
+  const formattedPlan = JSON.stringify(parameters, null, 2);
 
   const modalOpeningComponent = (
     <button className="link has-padding-0" option="light">
-      {getResourceDisplayName(instancePlan)}
+      {servicePlan.externalName}
     </button>
   );
 
@@ -28,7 +25,7 @@ export default function InstanceParametersModal({
       title={serviceInstanceConstants.instanceParameters}
       confirmText="Close"
     >
-      <JSONEditor readonly={true} text={formattedPlan} />
+      <pre>{formattedPlan}</pre>
     </Modal>
   );
 }
