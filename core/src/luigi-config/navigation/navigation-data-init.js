@@ -75,7 +75,8 @@ export function getNavigationData(token) {
       // 'Finally' not supported by IE and FIREFOX (if 'finally' is needed, update your .babelrc)
       .then((res) => {
         const params = getInitParams();
-        const { disabledNavigationNodes, systemNamespaces } = params?.config || {};
+        const { disabledNavigationNodes, systemNamespaces } =
+          params?.config || {};
         const { bebEnabled } = params?.features || {};
         const nodes = [
           {
