@@ -12,7 +12,7 @@ You can also install dependencies just for this app via the `npm ci` command.
 
 ## Usage
 
-Run the `npm start` command in the root folder (../) to start Core along with other apps (which forms the Busola altogether).
+Run the `npm start` command in the root folder (../) to start Core along with other apps (which altogether form Busola).
 
 You can also start this app individually by performing `npm start` command. The app will be available at the [http://localhost:4200](http://localhost:4200) address.
 
