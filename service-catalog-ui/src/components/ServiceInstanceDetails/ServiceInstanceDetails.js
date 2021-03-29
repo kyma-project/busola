@@ -39,7 +39,6 @@ import {
 import { deleteServiceInstance } from 'helpers/instancesGQL/mutations';
 
 export default function ServiceInstanceDetails({ match }) {
-  const history = createBrowserHistory();
   const { namespaceId } = useMicrofrontendContext();
   const { data: serviceInstance, loading = true, error } = useGet(
     `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${namespaceId}/serviceinstances/${match.params.name}`,
@@ -48,7 +47,6 @@ export default function ServiceInstanceDetails({ match }) {
     },
   );
 
-  // const [deleteServiceInstanceMutation] = useMutation(deleteServiceInstance);
   if (error)
     return (
       <EmptyList>
@@ -85,22 +83,20 @@ export default function ServiceInstanceDetails({ match }) {
     isClusterWide: !!serviceInstance.spec.clusterServicePlanExternalName,
   };
 
-  // console.log(serviceInstance);
-
   return (
     <ThemeWrapper>
       <ServiceInstanceHeader
         serviceInstance={serviceInstance}
         servicePlan={servicePlan}
         // deleteServiceInstance={deleteServiceInstanceMutation}
-        history={history}
       />
       <ServiceInstanceWrapper>
-        {/* <ServiceInstanceBindings
-          defaultActiveTabIndex={serviceInstanceConstants.addonsIndex}
-          serviceInstance={serviceInstance}
-        />
-        {serviceClass && backendModuleExists('rafter') && (
+        {/* // <ServiceInstanceBindings
+          //   defaultActiveTabIndex={serviceInstanceConstants.addonsIndex}
+          //   serviceInstance={serviceInstance}
+          // /> */}
+
+        {/* {serviceClass && backendModuleExists('rafter') && ( // this was used to display the documentation
           <ServiceInstanceTabs
             serviceClass={serviceClass}
             currentPlan={serviceInstance.servicePlan}

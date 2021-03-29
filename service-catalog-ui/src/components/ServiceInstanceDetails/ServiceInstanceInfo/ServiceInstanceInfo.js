@@ -33,12 +33,6 @@ const ServiceInstanceInfo = ({
       .navigate(target);
   };
 
-  const goToServiceClassDetailsWithPlan = (name, planName) => {
-    LuigiClient.linkManager()
-      .fromContext('namespaces')
-      .navigate(`catalog/details/${name}/plan/${planName}`);
-  };
-
   if (!serviceInstance) {
     return null;
   }
@@ -53,15 +47,19 @@ const ServiceInstanceInfo = ({
     </button>
   );
 
-  const hasLabels = serviceInstance.labels && serviceInstance.labels.length > 0;
-  const labels = null; //todo
-  // const labels = (
-  //   <ul className="no-dismiss-tokens labels-list" data-e2e-id="instance-labels">
-  //     {serviceInstance.metadata.labels?.map((label, index) => (
-  //       <Token key={`${label}-${index}`}>{label}</Token>
-  //     ))}
-  //   </ul>
-  // );
+  const hasLabels = Object.keys(
+    serviceClass.spec.externalMetadata?.labels || [],
+  ).length;
+
+  const labels = (
+    <ul className="no-dismiss-tokens labels-list" data-e2e-id="instance-labels">
+      {Object.keys(serviceClass.spec.externalMetadata?.labels || []).map(
+        key => (
+          <Token key={key}>{key}</Token>
+        ),
+      )}
+    </ul>
+  );
 
   const documentationLink = serviceClass.spec.externalMetadata
     ?.documentationUrl && (
@@ -80,16 +78,6 @@ const ServiceInstanceInfo = ({
     />
   );
 
-  const plan = (() => {
-    if (
-      serviceInstance.planSpec !== null &&
-      typeof serviceInstance.planSpec === 'object' &&
-      Object.keys(serviceInstance.planSpec).length
-    ) {
-      return null;
-    }
-  })();
-
   const Column = PageHeader.Column;
   return (
     <>
@@ -99,9 +87,6 @@ const ServiceInstanceInfo = ({
       <Column title={serviceInstanceConstants.classHeader}>
         {classContent}
       </Column>
-      {hasLabels && (
-        <Column title={serviceInstanceConstants.labelsHeader}>{labels}</Column>
-      )}
       <Column title={serviceInstanceConstants.planHeader}>
         <div data-e2e-id="instance-service-plan">
           {
@@ -121,6 +106,9 @@ const ServiceInstanceInfo = ({
         <Column title={serviceInstanceConstants.supportHeader}>
           {supportLink}
         </Column>
+      )}
+      {hasLabels && (
+        <Column title={serviceInstanceConstants.labelsHeader}>{labels}</Column>
       )}
     </>
   );

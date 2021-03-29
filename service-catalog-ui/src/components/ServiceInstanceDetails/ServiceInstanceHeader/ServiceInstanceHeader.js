@@ -2,33 +2,20 @@ import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { serviceInstanceConstants } from 'helpers/constants';
 import { Button } from 'fundamental-react';
-import { PageHeader, handleDelete, useGet, Spinner } from 'react-shared';
+import {
+  PageHeader,
+  handleDelete,
+  useGet,
+  Spinner,
+  useDelete,
+  useNotification,
+} from 'react-shared';
 import { isService } from 'helpers';
 import ServiceserviceClassInfo from '../ServiceInstanceInfo/ServiceInstanceInfo';
 
-const ServiceInstanceHeader = ({
-  serviceInstance,
-
-  servicePlan,
-  deleteServiceInstance,
-}) => {
-  // const deleteHandler = () =>
-  //   handleDelete(
-  //     'Service Instance',
-  //     serviceInstance.name,
-  //     serviceInstance.name,
-  //     () =>
-  //       deleteServiceInstance({
-  //         variables: {
-  //           name: serviceInstance.name,
-  //           namespace: serviceInstance.namespace,
-  //         },
-  //       }),
-  //     () =>
-  //       LuigiClient.linkManager()
-  //         .fromContext('namespaces')
-  //         .navigate('instances'),
-  //   );
+const ServiceInstanceHeader = ({ serviceInstance, servicePlan }) => {
+  const deleteRequest = useDelete();
+  const notificationManager = useNotification();
 
   const classRef =
     serviceInstance.spec.serviceClassRef?.name ||
@@ -45,13 +32,43 @@ const ServiceInstanceHeader = ({
   );
   if (!serviceClass) return <Spinner />;
 
+  const preselectTabOnList = isService(
+    serviceClass.spec.externalMetadata?.labels,
+  )
+    ? 'services'
+    : 'addons';
+
+  async function handleSubscriptionDelete(s) {
+    try {
+      await deleteRequest(serviceInstance.metadata.selfLink);
+      notificationManager.notifySuccess({
+        content: 'ServiceInstance removed succesfully',
+      });
+
+      LuigiClient.linkManager()
+        .fromContext('namespaces')
+        .withParams({
+          selectedTab: preselectTabOnList,
+        })
+        .navigate('instances');
+    } catch (err) {
+      console.error(err);
+      notificationManager.notifyError({
+        content: err.message,
+        autoClose: false,
+      });
+    }
+  }
+
   const breadcrumbItems = [
     {
       name: `${serviceInstanceConstants.instances} - ${
-        isService(serviceInstance) ? 'Services' : 'Addons'
+        isService(serviceClass.spec.externalMetadata?.labels)
+          ? 'Services'
+          : 'Addons'
       }`,
       params: {
-        selectedTab: isService(serviceInstance) ? 'services' : 'addons',
+        selectedTab: preselectTabOnList,
       },
       path: '/',
     },
@@ -61,7 +78,7 @@ const ServiceInstanceHeader = ({
   ];
 
   const actions = (
-    <Button type="negative" option="light" onClick={_ => {}}>
+    <Button type="negative" option="light" onClick={handleSubscriptionDelete}>
       {serviceInstanceConstants.delete}
     </Button>
   );
