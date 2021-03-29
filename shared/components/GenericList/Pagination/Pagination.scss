@@ -1,0 +1,15 @@
+.nav-link {
+    border: none;
+    background: none;
+    color: var(--fd-color-shell-5);
+
+    &.current {
+        font-weight: bolder;
+    }
+
+    &.interactable {
+        text-decoration: underline;
+        color: var(--fd-color-action-1);
+        cursor: pointer;
+    }
+}
