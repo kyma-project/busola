@@ -20,19 +20,21 @@ const textSearchProperties = [
   'status.apiRuleStatus.code',
 ];
 
+const apiRuleRowRenderer = domain => apiRule => ({
+  cells: [
+    <GoToApiRuleDetails apiRule={apiRule} />,
+    <CopiableApiRuleHost apiRule={apiRule} domain={domain} />,
+    <ApiRuleStatus apiRule={apiRule} />,
+  ],
+  collapseContent: <ApiRuleAccessStrategiesList apiRule={apiRule} />,
+  showCollapseControl: !!apiRule.spec.rules,
+  withCollapseControl: true,
+});
+
 export default function ApiRules({ lambda }) {
   const { domain } = useGetGatewayDomain();
 
-  const rowRenderer = apiRule => ({
-    cells: [
-      <GoToApiRuleDetails apiRule={apiRule} />,
-      <CopiableApiRuleHost apiRule={apiRule} domain={domain} />,
-      <ApiRuleStatus apiRule={apiRule} />,
-    ],
-    collapseContent: <ApiRuleAccessStrategiesList apiRule={apiRule} />,
-    showCollapseControl: !!apiRule.spec.rules,
-    withCollapseControl: true,
-  });
+  const rowRenderer = apiRuleRowRenderer(domain);
 
   const disableExposeButton =
     getLambdaStatus(lambda.status).phase !== LAMBDA_PHASES.RUNNING.TYPE;
@@ -49,6 +51,23 @@ export default function ApiRules({ lambda }) {
       rowRenderer={rowRenderer}
       textSearchProperties={textSearchProperties}
       disableExposeButton={disableExposeButton}
+    />
+  );
+}
+
+export function ServiceApiRules({ service }) {
+  const { domain } = useGetGatewayDomain();
+
+  const rowRenderer = apiRuleRowRenderer(domain);
+
+  return (
+    <ApiRulesListWrapper
+      service={service}
+      resourceType="Service"
+      inSubView={true}
+      headerRenderer={headerRenderer}
+      rowRenderer={rowRenderer}
+      textSearchProperties={textSearchProperties}
     />
   );
 }
