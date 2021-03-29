@@ -44,13 +44,12 @@ const ResourceCircle = ({ data, loading, error, title, color }) => {
 };
 
 const PodsCircle = ({ namespace }) => {
-  const {
-    data,
-    error,
-    loading = true,
-  } = useGetList()(`/api/v1/namespaces/${namespace}/pods`, {
-    pollingInterval: 3100,
-  });
+  const { data, error, loading = true } = useGetList()(
+    `/api/v1/namespaces/${namespace}/pods`,
+    {
+      pollingInterval: 3100,
+    },
+  );
   return (
     <ResourceCircle
       data={data}
@@ -63,13 +62,12 @@ const PodsCircle = ({ namespace }) => {
 };
 
 const DeploymentsCircle = ({ namespace }) => {
-  const {
-    data,
-    error,
-    loading = true,
-  } = useGetList()(`/apis/apps/v1/namespaces/${namespace}/deployments`, {
-    pollingInterval: 3200,
-  });
+  const { data, error, loading = true } = useGetList()(
+    `/apis/apps/v1/namespaces/${namespace}/deployments`,
+    {
+      pollingInterval: 3200,
+    },
+  );
   return (
     <ResourceCircle
       data={data}
@@ -82,13 +80,12 @@ const DeploymentsCircle = ({ namespace }) => {
 };
 
 const ReplicaSetsCircle = ({ namespace }) => {
-  const {
-    data,
-    error,
-    loading = true,
-  } = useGetList()(`/apis/apps/v1/namespaces/${namespace}/replicasets`, {
-    pollingInterval: 3300,
-  });
+  const { data, error, loading = true } = useGetList()(
+    `/apis/apps/v1/namespaces/${namespace}/replicasets`,
+    {
+      pollingInterval: 3300,
+    },
+  );
   return (
     <ResourceCircle
       data={data}
