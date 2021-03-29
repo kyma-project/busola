@@ -14,7 +14,7 @@ You can also install dependencies just for this app using the `npm ci` command.
 
 Run the `npm start` command in the root folder (../) to start Core-UI along with other apps (which altogether form Busola).
 
-You can also start this app individually by performing `npm start` command. The app will be available at the [http://localhost:8889](http://localhost:8889) address.
+You can also start this app individually by performing the `npm start` command. The app will be available at the [http://localhost:8889](http://localhost:8889) address.
 
 ### Code style
 
