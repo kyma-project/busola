@@ -147,7 +147,7 @@ export default function CreateInstanceModal({
       kind: 'ServiceInstance',
       metadata: {
         annotations: {
-          tags: labels,
+          // tags: labels, TODO
         },
         name,
         namespace,

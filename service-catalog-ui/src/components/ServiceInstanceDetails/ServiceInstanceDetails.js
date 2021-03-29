@@ -8,7 +8,15 @@ import {
   ThemeWrapper,
 } from '@kyma-project/react-components';
 
-import { Spinner, ResourceNotFound } from 'react-shared';
+import {
+  Tooltip,
+  Spinner,
+  ModalWithForm,
+  useGetList,
+  useGet,
+  useMicrofrontendContext,
+  ResourceNotFound,
+} from 'react-shared';
 
 import ServiceInstanceHeader from './ServiceInstanceHeader/ServiceInstanceHeader';
 import ServiceInstanceTabs from './ServiceInstanceTabs/ServiceInstanceTabs.component';
@@ -32,83 +40,14 @@ import { deleteServiceInstance } from 'helpers/instancesGQL/mutations';
 
 export default function ServiceInstanceDetails({ match }) {
   const history = createBrowserHistory();
-  const { loading, error, data, subscribeToMore } = useQuery(
-    getServiceInstanceDetails,
+  const { data: serviceInstance, loading = true, error } = useGet(
+    `/apis/servicecatalog.k8s.io/v1beta1/namespaces/orders-service/serviceinstances/${match.params.name}`,
     {
-      variables: {
-        namespace: LuigiClient.getContext().namespaceId,
-        name: match.params.name,
-      },
+      pollingInterval: 3000,
     },
   );
 
-  useEffect(() => {
-    return subscribeToMore({
-      variables: {
-        namespace: LuigiClient.getContext().namespaceId,
-      },
-      document: SERVICE_BINDING_EVENT_SUBSCRIPTION,
-      updateQuery: (prev, { subscriptionData }) => {
-        if (
-          !subscriptionData.data ||
-          !subscriptionData.data.serviceBindingEvent
-        ) {
-          return prev;
-        }
-
-        return handleServiceBindingEvent(
-          prev,
-          subscriptionData.data.serviceBindingEvent,
-        );
-      },
-    });
-  }, [subscribeToMore]);
-
-  useEffect(() => {
-    return subscribeToMore({
-      variables: {
-        namespace: LuigiClient.getContext().namespaceId,
-      },
-      document: SERVICE_BINDING_USAGE_EVENT_SUBSCRIPTION,
-      updateQuery: (prev, { subscriptionData }) => {
-        if (
-          !subscriptionData.data ||
-          !subscriptionData.data.serviceBindingUsageEvent
-        ) {
-          return prev;
-        }
-
-        return handleServiceBindingUsageEvent(
-          prev,
-          subscriptionData.data.serviceBindingUsageEvent,
-        );
-      },
-    });
-  }, [subscribeToMore]);
-
-  useEffect(() => {
-    return subscribeToMore({
-      variables: {
-        namespace: LuigiClient.getContext().namespaceId,
-      },
-      document: SERVICE_INSTANCE_EVENT_SUBSCRIPTION,
-      updateQuery: (prev, { subscriptionData }) => {
-        if (
-          !subscriptionData.data ||
-          !subscriptionData.data.serviceInstanceEvent
-        ) {
-          return prev;
-        }
-
-        return handleInstanceEventOnDetails(
-          prev,
-          subscriptionData.data.serviceInstanceEvent,
-        );
-      },
-    });
-  }, [subscribeToMore]);
-
-  const [deleteServiceInstanceMutation] = useMutation(deleteServiceInstance);
+  // const [deleteServiceInstanceMutation] = useMutation(deleteServiceInstance);
 
   if (error)
     return (
@@ -124,11 +63,12 @@ export default function ServiceInstanceDetails({ match }) {
       </EmptyList>
     );
   }
+  console.log(serviceInstance);
 
-  const { serviceInstance } = data;
   const serviceClass =
     serviceInstance &&
-    (serviceInstance.serviceClass || serviceInstance.clusterServiceClass);
+    (serviceInstance.spec.serviceClassRef?.name ||
+      serviceInstance.spec.clusterServiceClassRef?.name);
 
   if (!serviceInstance || !serviceClass) {
     return (
@@ -146,11 +86,11 @@ export default function ServiceInstanceDetails({ match }) {
       <ServiceInstanceHeader
         serviceInstance={serviceInstance}
         instanceClass={serviceClass}
-        deleteServiceInstance={deleteServiceInstanceMutation}
+        // deleteServiceInstance={deleteServiceInstanceMutation}
         history={history}
       />
       <ServiceInstanceWrapper>
-        <ServiceInstanceBindings
+        {/* <ServiceInstanceBindings
           defaultActiveTabIndex={serviceInstanceConstants.addonsIndex}
           serviceInstance={serviceInstance}
         />
@@ -159,7 +99,7 @@ export default function ServiceInstanceDetails({ match }) {
             serviceClass={serviceClass}
             currentPlan={serviceInstance.servicePlan}
           />
-        )}
+        )} */}
       </ServiceInstanceWrapper>
       <NotificationMessage
         type="error"

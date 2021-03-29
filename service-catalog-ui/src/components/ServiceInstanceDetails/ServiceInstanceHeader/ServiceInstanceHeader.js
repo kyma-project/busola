@@ -11,23 +11,23 @@ const ServiceInstanceHeader = ({
   instanceClass,
   deleteServiceInstance,
 }) => {
-  const deleteHandler = () =>
-    handleDelete(
-      'Service Instance',
-      serviceInstance.name,
-      serviceInstance.name,
-      () =>
-        deleteServiceInstance({
-          variables: {
-            name: serviceInstance.name,
-            namespace: serviceInstance.namespace,
-          },
-        }),
-      () =>
-        LuigiClient.linkManager()
-          .fromContext('namespaces')
-          .navigate('instances'),
-    );
+  // const deleteHandler = () =>
+  //   handleDelete(
+  //     'Service Instance',
+  //     serviceInstance.name,
+  //     serviceInstance.name,
+  //     () =>
+  //       deleteServiceInstance({
+  //         variables: {
+  //           name: serviceInstance.name,
+  //           namespace: serviceInstance.namespace,
+  //         },
+  //       }),
+  //     () =>
+  //       LuigiClient.linkManager()
+  //         .fromContext('namespaces')
+  //         .navigate('instances'),
+  //   );
 
   const breadcrumbItems = [
     {
@@ -44,12 +44,12 @@ const ServiceInstanceHeader = ({
     },
   ];
 
-  const description = instanceClass
+  const description = false //TODO
     ? instanceClass.description
     : serviceInstanceConstants.noDescription;
 
   const actions = (
-    <Button type="negative" option="light" onClick={deleteHandler}>
+    <Button type="negative" option="light" onClick={_ => {}}>
       {serviceInstanceConstants.delete}
     </Button>
   );
@@ -57,11 +57,14 @@ const ServiceInstanceHeader = ({
   return (
     <PageHeader
       breadcrumbItems={breadcrumbItems}
-      title={serviceInstance.name}
+      title={serviceInstance.metadata.name}
       actions={actions}
       description={description}
     >
-      <ServiceInstanceClassInfo serviceInstance={serviceInstance} />
+      <ServiceInstanceClassInfo
+        instanceClass={instanceClass}
+        serviceInstance={serviceInstance}
+      />
     </PageHeader>
   );
 };
