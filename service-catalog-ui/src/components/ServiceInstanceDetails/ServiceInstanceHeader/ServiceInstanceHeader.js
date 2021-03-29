@@ -4,11 +4,11 @@ import { serviceInstanceConstants } from 'helpers/constants';
 import { Button } from 'fundamental-react';
 import { PageHeader, handleDelete } from 'react-shared';
 import { isService } from 'helpers';
-import ServiceInstanceClassInfo from '../ServiceInstanceInfo/ServiceInstanceInfo';
+import ServiceserviceClassInfo from '../ServiceInstanceInfo/ServiceInstanceInfo';
 
 const ServiceInstanceHeader = ({
   serviceInstance,
-  instanceClass,
+  serviceClass,
   deleteServiceInstance,
 }) => {
   // const deleteHandler = () =>
@@ -45,7 +45,7 @@ const ServiceInstanceHeader = ({
   ];
 
   const description = false //TODO
-    ? instanceClass.description
+    ? serviceClass.description
     : serviceInstanceConstants.noDescription;
 
   const actions = (
@@ -61,8 +61,8 @@ const ServiceInstanceHeader = ({
       actions={actions}
       description={description}
     >
-      <ServiceInstanceClassInfo
-        instanceClass={instanceClass}
+      <ServiceserviceClassInfo
+        serviceClass={serviceClass}
         serviceInstance={serviceInstance}
       />
     </PageHeader>

@@ -63,12 +63,18 @@ export default function ServiceInstanceDetails({ match }) {
       </EmptyList>
     );
   }
-  console.log(serviceInstance);
 
-  const serviceClass =
-    serviceInstance &&
-    (serviceInstance.spec.serviceClassRef?.name ||
-      serviceInstance.spec.clusterServiceClassRef?.name);
+  const serviceClass = serviceInstance && {
+    ref:
+      serviceInstance.spec.serviceClassRef?.name ||
+      serviceInstance.spec.clusterServiceClassRef?.name,
+    externalName:
+      serviceInstance.spec.serviceClassExternalName ||
+      serviceInstance.spec.clusterServiceClassExternalName,
+    isClusterWide: !!serviceInstance.spec.clusterServiceClassExternalName,
+  };
+
+  console.log(serviceInstance);
 
   if (!serviceInstance || !serviceClass) {
     return (
@@ -85,7 +91,7 @@ export default function ServiceInstanceDetails({ match }) {
     <ThemeWrapper>
       <ServiceInstanceHeader
         serviceInstance={serviceInstance}
-        instanceClass={serviceClass}
+        serviceClass={serviceClass}
         // deleteServiceInstance={deleteServiceInstanceMutation}
         history={history}
       />

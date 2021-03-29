@@ -13,17 +13,20 @@ import './ServiceInstanceInfo.scss';
 import { ServiceInstanceStatus } from '../../../shared/ServiceInstanceStatus.js';
 import InstanceParametersModal from './InstanceParametersModal';
 
-const ServiceInstanceInfo = ({ serviceInstance, instanceClass }) => {
-  const serviceClassDocsPerPlan =
-    serviceInstance?.serviceClass?.labels[DOCUMENTATION_PER_PLAN_LABEL] ===
-    'true';
+const ServiceInstanceInfo = ({ serviceInstance, serviceClass }) => {
+  // const serviceClassDocsPerPlan =
+  //   serviceInstance?.serviceClass?.labels[DOCUMENTATION_PER_PLAN_LABEL] ===
+  //   'true';
 
-  const goToServiceClassDetails = name => {
-    const target = serviceClassDocsPerPlan
-      ? `catalog/details/${name}/plans`
-      : `catalog/details/${name}`;
+  const goToServiceClassDetails = ref => {
+    const target = `catalog/details/${ref}`;
     LuigiClient.linkManager()
       .fromContext('namespaces')
+      .withParams({
+        resourceType: serviceClass.isClusterWide
+          ? 'ClusterServiceClass'
+          : 'ServiceClass',
+      })
       .navigate(target);
   };
 
@@ -40,13 +43,13 @@ const ServiceInstanceInfo = ({ serviceInstance, instanceClass }) => {
   const instancePlan =
     serviceInstance.clusterServicePlan || serviceInstance.servicePlan;
 
-  const classContent = instanceClass.name ? (
+  const classContent = serviceClass.ref ? (
     <button
       className="link has-padding-0 fd-has-type-0"
       data-e2e-id="instance-service-class"
-      onClick={() => goToServiceClassDetails(instanceClass)}
+      onClick={() => goToServiceClassDetails(serviceClass.ref)}
     >
-      {/* {getResourceDisplayName(instanceClass)} */}
+      {serviceClass.externalName}
     </button>
   ) : (
     '-'
@@ -62,17 +65,17 @@ const ServiceInstanceInfo = ({ serviceInstance, instanceClass }) => {
   //   </ul>
   // );
 
-  const documentationLink = instanceClass.documentationUrl && (
+  const documentationLink = serviceClass.documentationUrl && (
     <Link
-      url={instanceClass.documentationUrl}
+      url={serviceClass.documentationUrl}
       text={serviceInstanceConstants.link}
       data-e2e-id="instance-service-documentation-link"
     />
   );
 
-  const supportLink = instanceClass.supportUrl && (
+  const supportLink = serviceClass.supportUrl && (
     <Link
-      url={instanceClass.supportUrl}
+      url={serviceClass.supportUrl}
       text={serviceInstanceConstants.link}
       data-e2e-id="instance-service-support-link"
     />
@@ -90,22 +93,6 @@ const ServiceInstanceInfo = ({ serviceInstance, instanceClass }) => {
           serviceInstance={serviceInstance}
         />
       );
-    } else if (serviceClassDocsPerPlan) {
-      return (
-        <button
-          className="link has-padding-0 fd-has-type-0"
-          onClick={() =>
-            goToServiceClassDetailsWithPlan(
-              instanceClass.name,
-              instancePlan.name,
-            )
-          }
-        >
-          {getResourceDisplayName(instancePlan)}
-        </button>
-      );
-    } else {
-      return `${getResourceDisplayName(instancePlan) || '-'}`;
     }
   })();
 
