@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is the application responsible for hosting all the views inside the [Luigi](https://luigi-project.io/) main frame. It provides the configuration to the [Luigi-Core](https://github.com/SAP/luigi/tree/master/core) which combines static configuration with the data from the cluster (e.g. _Microfrontends_).
+This is the application responsible for hosting all the views inside the [Luigi](https://luigi-project.io/) main frame. It provides the configuration for [Luigi-Core](https://github.com/SAP/luigi/tree/master/core) which combines static configuration with the data from the cluster (e.g. `Microfrontends`).
 
 ## Installation
 
