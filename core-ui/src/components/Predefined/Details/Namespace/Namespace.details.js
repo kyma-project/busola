@@ -8,7 +8,7 @@ export const NamespacesDetails = DefaultRenderer => ({ ...otherParams }) => {
   const limitRangesParams = {
     hasDetailsView: false,
     resourceUrl: `/api/v1/namespaces/${otherParams.resourceName}/limitranges`,
-    resourceType: 'limitranges',
+    resourceType: 'LimitRanges',
     namespace: otherParams.resourceName,
     isCompact: true,
     showTitle: true,
@@ -22,7 +22,7 @@ export const NamespacesDetails = DefaultRenderer => ({ ...otherParams }) => {
   const resourceQuotasParams = {
     hasDetailsView: false,
     resourceUrl: `/api/v1/namespaces/${otherParams.resourceName}/resourcequotas`,
-    resourceType: 'resourcequotas',
+    resourceType: 'ResourceQuotas',
     namespace: otherParams.resourceName,
     isCompact: true,
     showTitle: true,
@@ -31,6 +31,20 @@ export const NamespacesDetails = DefaultRenderer => ({ ...otherParams }) => {
   const ResourceQuotasList = getComponentForList({
     name: 'resourcequotaslist',
     params: resourceQuotasParams,
+  });
+
+  const applicationMappingsParams = {
+    hasDetailsView: false,
+    resourceUrl: `/apis/applicationconnector.kyma-project.io/v1alpha1/namespaces/${otherParams.resourceName}/applicationmappings`,
+    resourceType: 'ApplicationMappings',
+    namespace: otherParams.resourceName,
+    isCompact: true,
+    showTitle: true,
+  };
+
+  const ApplicationMappings = getComponentForList({
+    name: 'applicationMappingsList',
+    params: applicationMappingsParams,
   });
 
   const headerActions = (
@@ -56,6 +70,7 @@ export const NamespacesDetails = DefaultRenderer => ({ ...otherParams }) => {
       <NamespaceWorkloads namespace={otherParams.resourceName} />
       {LimitrangesList}
       {ResourceQuotasList}
+      {ApplicationMappings}
     </DefaultRenderer>
   );
 };
