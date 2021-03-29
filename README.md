@@ -87,7 +87,7 @@ When developing new features in Busola UI, adhere to the following rules. This w
 - Make sure that state-changing operations (_POST_, _PUT_, _DELETE_ and _UPDATE_ requests) are only triggered upon explicit user interactions such as form submissions.
 - Keep in mind that UI rendering in response to user navigating between views is only allowed to trigger read-only operations (_GET_ requests) without any data mutations.
 
-#### Protect against Cross-site scripting (XSS)
+2. Protect against cross-site scripting (XSS).
 
 - It is recommended to use JS frameworks that have built-in XSS prevention mechanisms, such as [ReactJS](https://reactjs.org/docs/introducing-jsx.html#jsx-prevents-injection-attacks), [vue.js](https://vuejs.org/v2/guide/security.html#What-Vue-Does-to-Protect-You) or [angular](https://angular.io/guide/security#angulars-cross-site-scripting-security-model).
 - As a rule of thumb, you cannot perceive user input to be 100% safe. Get familiar with prevention mechanisms included in the framework of your choice. Make sure the user input is sanitized before it is embedded in the DOM tree.
