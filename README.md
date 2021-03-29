@@ -76,7 +76,7 @@ The apps you started run at the following addresses:
 - `Service-Catalog-UI` - [http://localhost:8000](http://localhost:8000)
 - `Backend` - [http://localhost:3001](http://localhost:3001)
 
-### Build the `NPX` Busola
+### Build the NPX package of Busola
 
 To build and run the Busola for the `npx` mode:
 
