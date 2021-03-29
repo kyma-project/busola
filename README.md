@@ -34,7 +34,7 @@ To run the Busola in the `npx` mode from the latest release you have to provide 
 
 ## Installation
 
-To install dependencies for the root and all UI projects, and prepare symlinks for local libraries within this repository, run the following command:
+To install dependencies for the root and all UI projects, and to prepare symlinks for local libraries within this repository, run the following command:
 
 ```bash
 npm run bootstrap:ci
