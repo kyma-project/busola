@@ -2,11 +2,11 @@
 
 ## Overview
 
-This is the application responsible for serving most of the views for the Busola. It's based on the [ReactJS](https://reactjs.org/) library.
+This is the application responsible for serving most of the views for Busola. It's based on the [ReactJS](https://reactjs.org/) library.
 
 ## Installation
 
-To install Core-UI together with the Busola, run the `npm run bootstrap:ci` command in the root directory.
+To install Core-UI together with Busola, run the `npm run bootstrap:ci` command in the root directory.
 
 You can also install dependencies just for this app using the `npm ci` command.
 
