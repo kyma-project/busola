@@ -7,7 +7,7 @@ NAME=$(jq -r '.name' ../package.json)
 VERSION=$(jq -r '.version' ../package.json)
 echo $(jq ". |= . + {\"version\": \"$VERSION\", \"name\": \"$NAME\"}" ../backend/package.json) > ../backend/package.json
 
-npm publish ../backend
+npx benny-hill npm publish ../backend
 
 # restore backend package.json
 mv ../backend/package-org.json ../backend/package.json
