@@ -27,4 +27,4 @@ You can also use the `docker build` command to use backend as an image of a Kube
 
 ## Development
 
-Use `npm run watch` command to run backend in the unsafe mode (no TLS certificate) and with the _hot-reload_ feature.
+Use the `npm run watch` command to run the backend in the unsafe mode (no TLS certificate) and with the hot-reload feature.
