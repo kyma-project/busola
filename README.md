@@ -60,7 +60,7 @@ After a while, open the [http://localhost:4200](http://localhost:4200) address i
 
 Once you started Busola locally, you can begin the development. All modules have the hot-reload feature enabled, therefore, you can edit the code in real-time and see the changes in your browser.
 
-The apps you just started run at the following addresses:
+The apps you started run at the following addresses:
 
 - `Core` - [http://localhost:4200](http://localhost:4200)
 - `Core-UI` - [http://localhost:8889](http://localhost:8889)
