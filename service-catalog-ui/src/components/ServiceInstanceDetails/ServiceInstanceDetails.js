@@ -40,15 +40,15 @@ import { deleteServiceInstance } from 'helpers/instancesGQL/mutations';
 
 export default function ServiceInstanceDetails({ match }) {
   const history = createBrowserHistory();
+  const { namespaceId } = useMicrofrontendContext();
   const { data: serviceInstance, loading = true, error } = useGet(
-    `/apis/servicecatalog.k8s.io/v1beta1/namespaces/orders-service/serviceinstances/${match.params.name}`,
+    `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${namespaceId}/serviceinstances/${match.params.name}`,
     {
       pollingInterval: 3000,
     },
   );
 
   // const [deleteServiceInstanceMutation] = useMutation(deleteServiceInstance);
-
   if (error)
     return (
       <EmptyList>
@@ -56,7 +56,7 @@ export default function ServiceInstanceDetails({ match }) {
       </EmptyList>
     );
 
-  if (loading) {
+  if (loading || !serviceInstance) {
     return (
       <EmptyList>
         <Spinner />
@@ -64,29 +64,7 @@ export default function ServiceInstanceDetails({ match }) {
     );
   }
 
-  const serviceClass = serviceInstance && {
-    ref:
-      serviceInstance.spec.serviceClassRef?.name ||
-      serviceInstance.spec.clusterServiceClassRef?.name,
-    externalName:
-      serviceInstance.spec.serviceClassExternalName ||
-      serviceInstance.spec.clusterServiceClassExternalName,
-    isClusterWide: !!serviceInstance.spec.clusterServiceClassExternalName,
-  };
-
-  const servicePlan = serviceInstance && {
-    ref:
-      serviceInstance.spec.servicePlanRef?.name ||
-      serviceInstance.spec.clusterServicePlanRef?.name,
-    externalName:
-      serviceInstance.spec.servicePlanExternalName ||
-      serviceInstance.spec.clusterServicePlanExternalName,
-    isClusterWide: !!serviceInstance.spec.clusterServicePlanExternalName,
-  };
-
-  console.log(serviceInstance);
-
-  if (!serviceInstance || !serviceClass) {
+  if (!serviceInstance) {
     return (
       <ResourceNotFound
         resource="Service Instance"
@@ -96,12 +74,23 @@ export default function ServiceInstanceDetails({ match }) {
       />
     );
   }
+  console.log('instance', serviceInstance);
+  const servicePlan = {
+    ref:
+      serviceInstance.spec.servicePlanRef?.name ||
+      serviceInstance.spec.clusterServicePlanRef?.name,
+    externalName:
+      serviceInstance.spec.servicePlanExternalName ||
+      serviceInstance.spec.clusterServicePlanExternalName,
+    isClusterWide: !!serviceInstance.spec.clusterServicePlanExternalName,
+  };
+
+  // console.log(serviceInstance);
 
   return (
     <ThemeWrapper>
       <ServiceInstanceHeader
         serviceInstance={serviceInstance}
-        serviceClass={serviceClass}
         servicePlan={servicePlan}
         // deleteServiceInstance={deleteServiceInstanceMutation}
         history={history}

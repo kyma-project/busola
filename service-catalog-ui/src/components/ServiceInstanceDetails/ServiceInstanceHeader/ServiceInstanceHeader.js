@@ -2,13 +2,13 @@ import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { serviceInstanceConstants } from 'helpers/constants';
 import { Button } from 'fundamental-react';
-import { PageHeader, handleDelete } from 'react-shared';
+import { PageHeader, handleDelete, useGet, Spinner } from 'react-shared';
 import { isService } from 'helpers';
 import ServiceserviceClassInfo from '../ServiceInstanceInfo/ServiceInstanceInfo';
 
 const ServiceInstanceHeader = ({
   serviceInstance,
-  serviceClass,
+
   servicePlan,
   deleteServiceInstance,
 }) => {
@@ -29,6 +29,21 @@ const ServiceInstanceHeader = ({
   //         .fromContext('namespaces')
   //         .navigate('instances'),
   //   );
+
+  const classRef =
+    serviceInstance.spec.serviceClassRef?.name ||
+    serviceInstance.spec.clusterServiceClassRef?.name;
+
+  const serviceClassUrlFragment = serviceInstance.spec
+    .clusterServiceClassExternalName
+    ? `clusterserviceclasses`
+    : `namespaces/${serviceInstance.metadata.namespace}/serviceclasses`;
+
+  const { data: serviceClass } = useGet(
+    `/apis/servicecatalog.k8s.io/v1beta1/${serviceClassUrlFragment}/${classRef}`,
+    {},
+  );
+  if (!serviceClass) return <Spinner />;
 
   const breadcrumbItems = [
     {

@@ -21,15 +21,14 @@ const ServiceInstanceInfo = ({
   // const serviceClassDocsPerPlan =
   //   serviceInstance?.serviceClass?.labels[DOCUMENTATION_PER_PLAN_LABEL] ===
   //   'true';
+  console.log(serviceClass);
 
-  const goToServiceClassDetails = ref => {
-    const target = `catalog/details/${ref}`;
+  const goToServiceClassDetails = name => {
+    const target = `catalog/details/${name}`;
     LuigiClient.linkManager()
       .fromContext('namespaces')
       .withParams({
-        resourceType: serviceClass.isClusterWide
-          ? 'ClusterServiceClass'
-          : 'ServiceClass',
+        resourceType: serviceClass.kind,
       })
       .navigate(target);
   };
@@ -44,16 +43,14 @@ const ServiceInstanceInfo = ({
     return null;
   }
 
-  const classContent = serviceClass.ref ? (
+  const classContent = (
     <button
       className="link has-padding-0 fd-has-type-0"
       data-e2e-id="instance-service-class"
-      onClick={() => goToServiceClassDetails(serviceClass.ref)}
+      onClick={() => goToServiceClassDetails(serviceClass.metadata.name)}
     >
-      {serviceClass.externalName}
+      {getResourceDisplayName(serviceClass)}
     </button>
-  ) : (
-    '-'
   );
 
   const hasLabels = serviceInstance.labels && serviceInstance.labels.length > 0;
