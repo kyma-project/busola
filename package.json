@@ -6,7 +6,6 @@
   "scripts": {
     "bootstrap": "npm install && npm run install:libraries && npm run build:libraries && npm run install:apps",
     "bootstrap:ci": "npm ci && npm run ci:libraries && npm run build:libraries",
-    "bootstrap:prod": "npm ci && npm run ci:libraries && npm run build:libraries",
     "install:libraries": "gulp install:libraries",
     "ci:libraries": "gulp ci:libraries",
     "build:libraries": "gulp build:libraries",
