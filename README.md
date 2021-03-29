@@ -26,13 +26,9 @@ The Busola also includes React libraries:
 - [`npm`](https://www.npmjs.com/): >= 6.4.0
 - [`node`](https://nodejs.org/en/): >= 12.0.0
 
-## Usage with NPX
-
-This mode has no hot-reload feature so it's not designed for the development. Hovewer, it gives you the ability to run the Busola in a few seconds with one command.
-
-To run the Busola in the `npx` mode from the latest release you have to provide `KUBECONFIG` environment variable pointing to a valid KUBECONFIG file, then type `npx @kyma-project/busola@latest` in your terminal. That's it, your default browser should open the Busola within a few seconds.
-
 ## Installation
+
+> **CAUTION:** You don't have to perform any manual installation steps to use Busola in the NPX mode. See the [Usage](#usage) section for details.
 
 To install dependencies for the root and all UI projects, and to prepare symlinks for local libraries within this repository, run the following command:
 
@@ -45,6 +41,18 @@ npm run bootstrap:ci
 > - Installs root dependencies provided in the [`package.json`](./package.json) file.
 > - Installs dependencies for the [libraries](#components).
 > - Builds all the [libraries](#components).
+
+## Usage
+
+### Usage with NPX
+
+This mode has no hot-reload feature so it's not designed for the development. Hovewer, it gives you the ability to run the Busola in a few seconds with one command.
+
+To run the Busola in the `npx` mode from the latest release you have to provide `KUBECONFIG` environment variable pointing to a valid KUBECONFIG file, then type `npx @kyma-project/busola@latest` in your terminal. That's it, your default browser should open the Busola within a few seconds.
+
+### Usage without NPX
+
+See the [Development](#development) section.
 
 ## Development
 
