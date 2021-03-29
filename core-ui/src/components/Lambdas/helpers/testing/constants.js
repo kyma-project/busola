@@ -4,5 +4,3 @@ export const TESTING_STATE = {
   DATA: 'Data!',
   EMPTY_DATA: 'Empty data!',
 };
-
-export const BUTTON_TEST_ID = 'mutation-button';

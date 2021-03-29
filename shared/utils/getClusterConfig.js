@@ -13,7 +13,5 @@ function getbackendApiUrl() {
 }
 export const getClusterConfig = () => ({
   domain,
-  graphqlApiUrl: `https://busola-backend.${domain}/graphql`,
-  subscriptionsApiUrl: `wss://busola-backend.${domain}/graphql`,
   backendApiUrl: getbackendApiUrl(),
 });

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { Button } from 'fundamental-react';
 
-import { useCreateRepository } from 'components/Lambdas/hooks/mutations';
+import { useCreateRepository } from 'components/Lambdas/hooks';
 
 import ModalWithForm from 'components/ModalWithForm/ModalWithForm';
 import RepositoryForm, { FORM_TYPE } from './RepositoryForm';

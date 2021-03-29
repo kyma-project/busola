@@ -6,7 +6,7 @@ import { createLambdaInput } from './createLambdaInput';
 import { formatMessage } from 'components/Lambdas/helpers/misc';
 import { getDefaultDependencies } from 'components/Lambdas/helpers/runtime';
 
-import { GQL_MUTATIONS } from 'components/Lambdas/constants';
+import { LAMBDAS_MESSAGES } from 'components/Lambdas/constants';
 import { CONFIG } from 'components/Lambdas/config';
 
 export const useCreateLambda = ({ redirect = true }) => {
@@ -14,10 +14,13 @@ export const useCreateLambda = ({ redirect = true }) => {
   const postRequest = usePost();
 
   function handleError(name, error) {
-    const message = formatMessage(GQL_MUTATIONS.CREATE_LAMBDA.ERROR_MESSAGE, {
-      lambdaName: name,
-      error,
-    });
+    const message = formatMessage(
+      LAMBDAS_MESSAGES.CREATE_LAMBDA.ERROR_MESSAGE,
+      {
+        lambdaName: name,
+        error,
+      },
+    );
 
     notificationManager.notifyError({
       content: message,
@@ -34,7 +37,7 @@ export const useCreateLambda = ({ redirect = true }) => {
       );
 
       const message = formatMessage(
-        GQL_MUTATIONS.CREATE_LAMBDA.SUCCESS_MESSAGE,
+        LAMBDAS_MESSAGES.CREATE_LAMBDA.SUCCESS_MESSAGE,
         {
           lambdaName: name,
         },

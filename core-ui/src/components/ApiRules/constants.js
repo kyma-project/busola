@@ -41,23 +41,6 @@ export const ACCESS_STRATEGIES_PANEL = {
   },
 };
 
-export const GQL_QUERIES = {
-  API_RULES: {
-    ERROR_MESSAGE: `Couldn't fetch API Rule due to this error: {error}`,
-  },
-};
-
-export const GQL_MUTATIONS = {
-  DELETE_API_RULE: {
-    SUCCESS_MESSAGE: `API Rule was successfully deleted`,
-    ERROR_MESSAGE: `Couldn't delete the API Rule due to this error: {error}`,
-    CONFIRM_MODAL: {
-      TITLE: `Delete API Rule`,
-      MESSAGE: `Are you sure you want to delete API Rule "{apiRuleName}"?`,
-    },
-  },
-};
-
 export const API_RULES_URL = `/apis/gateway.kyma-project.io/v1alpha1/namespaces/{namespace}/apirules`;
 export const API_RULE_URL = `/apis/gateway.kyma-project.io/v1alpha1/namespaces/{namespace}/apirules/{name}`;
 export const SERVICES_URL = `/api/v1/namespaces/{namespace}/services`;

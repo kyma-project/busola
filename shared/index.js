@@ -41,7 +41,6 @@ export * from './contexts/Microfrontend';
 export * from './contexts/YamlEditorContext';
 export * from './utils/apollo';
 export * from './utils/handleSubscriptionArrayEvent';
-export * from './utils/handleSubscriptionEvent';
 export * from './utils/getComponentForResource';
 export * from './components/GenericList/actionHandlers/simpleDelete';
 export * from './constants/constants';
