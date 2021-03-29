@@ -5,11 +5,13 @@ import { Modal } from 'react-shared';
 import { serviceInstanceConstants } from 'helpers/constants';
 
 InstanceParametersModal.propTypes = {
-  parameters: PropTypes.object.isRequired,
+  parameters: PropTypes.object,
   servicePlan: PropTypes.shape({ externalName: PropTypes.string }).isRequired,
 };
 
 export default function InstanceParametersModal({ parameters, servicePlan }) {
+  if (!parameters) return servicePlan.externalName;
+
   const formattedPlan = JSON.stringify(parameters, null, 2);
 
   const modalOpeningComponent = (
