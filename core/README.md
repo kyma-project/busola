@@ -8,7 +8,7 @@ This is the application responsible for hosting all the views inside the [Luigi]
 
 To install Core together with Busola, run the `npm run bootstrap:ci` command in the root directory.
 
-You can also install dependencies just for this app via the `npm ci` command.
+You can also install dependencies just for this app using the `npm ci` command.
 
 ## Usage
 
