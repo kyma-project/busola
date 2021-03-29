@@ -1,7 +1,6 @@
 export * from './backendModulesExist';
 export * from './constants';
 export * from './formatMessage';
-export * from './handleSubscriptionEvent';
 export * from './randomNameGenerator';
 export * from './renderMarkdown';
 export * from './useConfigData';
