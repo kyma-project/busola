@@ -58,7 +58,7 @@ npm run start
 
 After a while, open the [http://localhost:4200](http://localhost:4200) address in your browser, and add your **init params** to the address to make it look like `http://localhost:4200?init=yourInitParams`. You can generate the params with [this generator](http://enkode.surge.sh/).
 
-Once you started the Busola locally, you can begin the development. All modules have the hot-reload feature enabled therefore you can edit the code real time and see the changes in your browser.
+Once you started Busola locally, you can begin the development. All modules have the hot-reload feature enabled, therefore, you can edit the code in real-time and see the changes in your browser.
 
 The apps you just started run at the following addresses:
 
