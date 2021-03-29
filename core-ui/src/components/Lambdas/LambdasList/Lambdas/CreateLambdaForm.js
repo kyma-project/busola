@@ -10,7 +10,7 @@ import {
   FormInput,
 } from 'components/Lambdas/components';
 
-import { useCreateLambda } from 'components/Lambdas/hooks/mutations';
+import { useCreateLambda } from 'components/Lambdas/hooks';
 
 import {
   randomNameGenerator,

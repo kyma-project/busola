@@ -1,7 +1,3 @@
-import { service1, service2 } from 'testing/servicesMocks';
-import { GET_SERVICES } from 'gql/queries';
-import { CREATE_API_RULE } from 'gql/mutations';
-import { EXCLUDED_SERVICES_LABELS } from 'components/ApiRules/constants';
 import { supportedMethodsList } from 'components/ApiRules/accessStrategyTypes';
 
 export const apiRuleName = 'test-123';
@@ -34,32 +30,5 @@ export const sampleAPIRule = {
         ],
       },
     ],
-  },
-};
-
-export const createApiRuleMutation = {
-  request: {
-    query: CREATE_API_RULE,
-    variables: sampleAPIRule,
-  },
-  result: jest.fn().mockReturnValue({
-    data: {
-      createAPIRule: createdAPIRule,
-    },
-  }),
-};
-
-export const servicesQuery = {
-  request: {
-    query: GET_SERVICES,
-    variables: {
-      namespace: mockNamespace,
-      excludedLabels: EXCLUDED_SERVICES_LABELS,
-    },
-  },
-  result: {
-    data: {
-      services: [service1, service2],
-    },
   },
 };

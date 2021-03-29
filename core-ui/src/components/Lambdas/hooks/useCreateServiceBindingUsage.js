@@ -4,7 +4,7 @@ import {
   formatMessage,
   randomNameGenerator,
 } from 'components/Lambdas/helpers/misc';
-import { GQL_MUTATIONS } from 'components/Lambdas/constants';
+import { LAMBDAS_MESSAGES } from 'components/Lambdas/constants';
 import { CONFIG } from 'components/Lambdas/config';
 
 export const useCreateServiceBindingUsage = () => {
@@ -14,7 +14,7 @@ export const useCreateServiceBindingUsage = () => {
   function handleError(serviceInstanceName, error) {
     console.error(error);
     const message = formatMessage(
-      GQL_MUTATIONS.CREATE_BINDING_USAGE.ERROR_MESSAGE,
+      LAMBDAS_MESSAGES.CREATE_BINDING_USAGE.ERROR_MESSAGE,
       { serviceInstanceName },
     );
 
@@ -102,7 +102,7 @@ export const useCreateServiceBindingUsage = () => {
     }
 
     const message = formatMessage(
-      GQL_MUTATIONS.CREATE_BINDING_USAGE.SUCCESS_MESSAGE,
+      LAMBDAS_MESSAGES.CREATE_BINDING_USAGE.SUCCESS_MESSAGE,
       { serviceInstanceName },
     );
 

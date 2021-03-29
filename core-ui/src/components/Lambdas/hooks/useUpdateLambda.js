@@ -5,7 +5,7 @@ import { createPatch } from 'rfc6902';
 import extractErrors from 'shared/errorExtractor';
 
 import { formatMessage } from 'components/Lambdas/helpers/misc';
-import { GQL_MUTATIONS } from 'components/Lambdas/constants';
+import { LAMBDAS_MESSAGES } from 'components/Lambdas/constants';
 
 export const UPDATE_TYPE = {
   GENERAL_CONFIGURATION: 'GENERAL_CONFIGURATION',
@@ -20,13 +20,13 @@ export const useUpdateLambda = ({
   type = UPDATE_TYPE.GENERAL_CONFIGURATION,
 }) => {
   const notificationManager = useNotification();
-  const updateLambdaMutation = useUpdate();
+  const updateLambda = useUpdate();
 
   function handleError(error) {
     const errorToDisplay = extractErrors(error);
 
     const message = formatMessage(
-      GQL_MUTATIONS.UPDATE_LAMBDA[type].ERROR_MESSAGE,
+      LAMBDAS_MESSAGES.UPDATE_LAMBDA[type].ERROR_MESSAGE,
       {
         lambdaName: lambda.metadata.name,
         error: errorToDisplay,
@@ -39,7 +39,7 @@ export const useUpdateLambda = ({
     });
   }
 
-  async function updateLambda(updatedData, userCallback = () => {}) {
+  async function handleUpdateLambda(updatedData, userCallback = () => {}) {
     try {
       const newLambda = {
         ...lambda,
@@ -48,10 +48,7 @@ export const useUpdateLambda = ({
 
       const diff = createPatch(lambda, newLambda);
 
-      const response = await updateLambdaMutation(
-        lambda.metadata.selfLink,
-        diff,
-      );
+      const response = await updateLambda(lambda.metadata.selfLink, diff);
 
       if (response.error) {
         handleError(response.error);
@@ -59,7 +56,7 @@ export const useUpdateLambda = ({
       }
 
       const message = formatMessage(
-        GQL_MUTATIONS.UPDATE_LAMBDA[type].SUCCESS_MESSAGE,
+        LAMBDAS_MESSAGES.UPDATE_LAMBDA[type].SUCCESS_MESSAGE,
         {
           lambdaName: lambda.metadata.name,
         },
@@ -75,5 +72,5 @@ export const useUpdateLambda = ({
     }
   }
 
-  return updateLambda;
+  return handleUpdateLambda;
 };

@@ -13,7 +13,7 @@ EditApiRule.propTypes = {
 };
 
 export default function EditApiRule({ apiName }) {
-  const updateApiRuleMutation = useUpdate();
+  const updateApiRule = useUpdate();
   const { namespaceId: namespace } = useMicrofrontendContext();
 
   const { data, error, loading = true } = useGet(
@@ -45,7 +45,7 @@ export default function EditApiRule({ apiName }) {
   return (
     <ApiRuleForm
       apiRule={data}
-      mutation={updateApiRuleMutation}
+      sendRequest={updateApiRule}
       saveButtonText="Save"
       headerTitle={`Edit ${apiName}`}
       breadcrumbItems={breadcrumbItems}
