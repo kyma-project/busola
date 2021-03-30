@@ -19,12 +19,12 @@ spec:
           image: eu.gcr.io/kyma-project/busola-core:PR-52
           imagePullPolicy: Always
           resources:
-            limits:
-              cpu: 100m
-              memory: 30Mi
+            # limits:
+            #   cpu: 100m
+            #   memory: 21Mi
             requests:
-              cpu: 1m
-              memory: 6m
+              cpu: 100m
+              memory: 21Mi
           livenessProbe:
             httpGet:
               path: /healthz
@@ -34,20 +34,20 @@ spec:
             - containerPort: 6080
             - containerPort: 8080
         - name: core-ui
-          image: eu.gcr.io/kyma-project/busola-core-ui:PR-62
+          image: eu.gcr.io/kyma-project/busola-core-ui:PR-63
           imagePullPolicy: Always
           resources:
-            limits:
-              cpu: 100m
-              memory: 30Mi
+            # limits:
+            #   cpu: 100m
+            #   memory: 21Mi
             requests:
-              cpu: 1m
-              memory: 6m
+              cpu: 100m
+              memory: 21Mi
           livenessProbe:
             httpGet:
               path: /healthz
-              port: 6081
+              port: 6080
             initialDelaySeconds: 10
           ports:
-            - containerPort: 6081
+            - containerPort: 6080
             - containerPort: 80

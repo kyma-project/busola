@@ -22,6 +22,13 @@ spec:
         - name: backend
           image: eu.gcr.io/kyma-project/busola-backend:PR-21
           imagePullPolicy: Always
+          resources:
+            limits:
+              cpu: 100m
+              memory: 105M
+            requests:
+              cpu: 100m
+              memory: 105M
           securityContext:
             allowPrivilegeEscalation: false
             privileged: false
@@ -29,7 +36,6 @@ spec:
             - containerPort: 3001
               name: http-backend
               protocol: TCP
-          resources: {}
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           env:

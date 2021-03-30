@@ -1,37 +1,21 @@
-# Core UI
+# Busola Core-UI
 
 ## Overview
 
-This project contains an application with the Core UI page for the Kyma Busola.
-
-The [create-react-app](https://create-react-app.dev/) project provides the structure for this application. Read the project's [documentation](https://create-react-app.dev/docs/available-scripts) for more information.
+This is the application responsible for serving most of the views for Busola. It's based on the [ReactJS](https://reactjs.org/) library.
 
 ## Installation
 
-To install dependencies, run the `npm install` command.
+To install Core-UI together with Busola, run the `npm run bootstrap:ci` command in the root directory.
+
+You can also install dependencies just for this app using the `npm ci` command.
 
 ## Usage
 
-Use the following command to build the application in the production environment, in the `build` folder:
+Run the `npm start` command in the root folder (../) to start Core-UI along with other apps (which altogether form Busola).
 
-```bash
-npm run build
-```
+You can also start this app individually by performing the `npm start` command. The app will be available at the [http://localhost:8889](http://localhost:8889) address.
 
-The command allows you to correctly bundle React in the production mode, and optimize the build for the best performance.
+### Code style
 
-The build is minified and the filenames include hashes.
-
-## Development
-
-Run the `npm start` command to start the application in the development mode.
-Open the [`http://localhost:8004`](http://localhost:8004) link to view it in the browser.
-
-The page reloads if you make edits.
-If lint errors appear, the console displays them.
-
-### Test the application
-
-Run the `npm test` command to launch the test runner in the interactive watch mode.
-
-See the **npm test** section in the Create React App [documentation](https://create-react-app.dev/docs/available-scripts#npm-test) for more information.
+Your contributions must match the style guide used in Busola. Busola uses [Prettier](https://prettier.io) for code formatting. For convenience, [husky](https://github.com/typicode/husky) installs the Git pre-commit hook, so you do not need to perform any additional work. Remember to run `npm ci` in the root folder (../) of this repository to install both tools.
