@@ -87,7 +87,7 @@ const ServiceInstanceHeader = ({ serviceInstance, servicePlan }) => {
       breadcrumbItems={breadcrumbItems}
       title={serviceInstance.metadata.name}
       actions={actions}
-      description={null} //TODO do we need it?
+      description={serviceClass.spec.description}
     >
       <ServiceserviceClassInfo
         serviceClass={serviceClass}

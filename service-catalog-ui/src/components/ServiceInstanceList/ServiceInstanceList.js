@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import LuigiClient from '@luigi-project/client';
 import {
   instancesTabUtils,
-  NotificationMessage,
   ThemeWrapper,
 } from '@kyma-project/react-components';
 import {
@@ -106,12 +105,6 @@ export default function ServiceInstancesList() {
         searchQuery={searchQuery}
         searchFn={setSearchQuery}
         serviceInstancesExists={serviceInstances.length > 0}
-      />
-
-      <NotificationMessage
-        type="error"
-        title="Error"
-        message={null} //TODO
       />
 
       <Tabs

@@ -13,15 +13,16 @@ import {
 
 import './ServiceClassDetails.scss';
 import { getResourceDisplayName, isStringValueEqualToTrue } from 'helpers';
-import { createInstanceConstants } from 'helpers/constants';
+import {
+  createInstanceConstants,
+  DOCUMENTATION_PER_PLAN_LABEL,
+} from 'helpers/constants';
 import CreateInstanceForm from './CreateInstanceForm/CreateInstanceForm';
 import ServiceClassDetailsHeader from './ServiceClassDetailsHeader/ServiceClassDetailsHeader';
 import ServiceClassInstancesTable from './ServiceClassInstancesTable/ServiceClassInstancesTable';
 import ServiceClassPlansList from 'components/ServiceClassPlansList/ServiceClassPlansList';
 import { sortByDisplayName } from 'helpers/sorting';
 import PlanSelector from './PlanSelector/PlanSelector';
-
-const DOCUMENTATION_PER_PLAN_LABEL = 'local'; //todo temp
 
 export default function ServiceClassDetails({ name }) {
   const { namespaceId } = useMicrofrontendContext();
@@ -107,7 +108,10 @@ export default function ServiceClassDetails({ name }) {
   const serviceClassDisplayName = getResourceDisplayName(serviceClass);
   const isActivated = serviceInstances?.length > 0;
   const isAPIpackage =
-    serviceClass.spec.externalMetadata?.labels[DOCUMENTATION_PER_PLAN_LABEL];
+    serviceClass.spec.externalMetadata?.labels &&
+    isStringValueEqualToTrue(
+      serviceClass.spec.externalMetadata.labels[DOCUMENTATION_PER_PLAN_LABEL],
+    );
   const isProvisionedOnlyOnce =
     serviceClass.spec.externalMetadata?.labels &&
     isStringValueEqualToTrue(

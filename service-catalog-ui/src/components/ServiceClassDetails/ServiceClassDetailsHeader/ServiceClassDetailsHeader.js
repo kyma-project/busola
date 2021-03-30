@@ -51,7 +51,9 @@ const ServiceClassDetailsHeader = ({
       <ServiceClassToolbarWrapper>
         <ServiceClassToolbar
           serviceClassDisplayName={getResourceDisplayName(serviceClass)}
-          // providerDisplayName={serviceClass.} //TODO
+          providerDisplayName={
+            serviceClass.spec.externalMetadata?.providerDisplayName
+          }
         >
           {children}
         </ServiceClassToolbar>
