@@ -27,6 +27,7 @@ export { Tab } from './components/Tabs/Tab.js';
 export { HeaderLabelsEditor } from './components/HeaderLabelsEditor/HeaderLabelsEditor';
 export { LabelSelectorInput } from './components/LabelSelectorInput/LabelSelectorInput';
 export { LogsLink } from './components/LogsLink/LogsLink';
+export { CircleProgress } from './components/CircleProgress/CircleProgress';
 export * from './components/SideDrawer/SideDrawer';
 export * from './components/ResourcesList/ResourcesList';
 export * from './components/ResourceDetails/ResourceDetails';

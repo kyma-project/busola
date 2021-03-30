@@ -3,7 +3,13 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import './CircleProgress.scss';
 
-const CircleProgress = ({ value, max, color = 'blue', onClick, children }) => {
+export const CircleProgress = ({
+  value,
+  max,
+  color = 'blue',
+  onClick,
+  title,
+}) => {
   const circleClasses = classNames(`circle--${color}`, {
     'cursor-pointer': onClick,
   });
@@ -11,6 +17,7 @@ const CircleProgress = ({ value, max, color = 'blue', onClick, children }) => {
   const percent = max ? Math.round((value * 100) / max) : 0;
   return (
     <div className="circle-progress" onClick={onClick}>
+      <span className="cursor-pointer">{title}</span>
       <div className={circleClasses}>
         <div className="progress-bar">
           <div className={`mask--dynamic fill--${percent}`}></div>
@@ -22,7 +29,6 @@ const CircleProgress = ({ value, max, color = 'blue', onClick, children }) => {
           </div>
         </div>
       </div>
-      {children}
     </div>
   );
 };
@@ -32,7 +38,5 @@ CircleProgress.propTypes = {
   value: PropTypes.number.isRequired,
   max: PropTypes.number.isRequired,
   onClick: PropTypes.func,
-  children: PropTypes.node,
+  title: PropTypes.string,
 };
-
-export default CircleProgress;
