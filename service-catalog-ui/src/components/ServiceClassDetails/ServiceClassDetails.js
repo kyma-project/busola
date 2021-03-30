@@ -22,12 +22,16 @@ import { createInstanceConstants } from 'helpers/constants';
 import CreateInstanceForm from './CreateInstanceForm/CreateInstanceForm';
 import ServiceClassDetailsHeader from './ServiceClassDetailsHeader/ServiceClassDetailsHeader';
 import ServiceClassInstancesTable from './ServiceClassInstancesTable/ServiceClassInstancesTable';
+import ServiceClassPlansList from 'components/ServiceClassPlansList/ServiceClassPlansList';
+
+const DOCUMENTATION_PER_PLAN_LABEL = 'local'; //todo temp
 
 export default function ServiceClassDetails({ name }) {
   // TODO This still need to be tuned up and tested out after switching to busola
 
   const { namespaceId } = useMicrofrontendContext();
   const { resourceType } = LuigiClient.getNodeParams();
+  const { planId } = LuigiClient.getPathParams();
 
   const serviceClassUrl = `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${namespaceId}/serviceclasses/${name}`;
   const clusterServiceClassUrl = `/apis/servicecatalog.k8s.io/v1beta1/clusterserviceclasses/${name}`;
@@ -79,6 +83,17 @@ export default function ServiceClassDetails({ name }) {
 
   if (loading || !serviceClass) {
     return <Spinner />;
+  }
+
+  console.log(serviceClass);
+  const documentationPerPlan =
+    serviceClass.spec.externalMetadata?.labels &&
+    isStringValueEqualToTrue(
+      serviceClass.spec.externalMetadata?.labels[DOCUMENTATION_PER_PLAN_LABEL],
+    );
+
+  if (!planId && documentationPerPlan) {
+    return <ServiceClassPlansList plans={servicePlans} />;
   }
 
   const serviceClassDisplayName = getResourceDisplayName(serviceClass);
