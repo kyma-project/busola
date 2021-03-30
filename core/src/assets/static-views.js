@@ -22,9 +22,9 @@ if (error) {
   document.getElementById('message').innerText = error;
 }
 
+localStorage.removeItem('busola.init-params');
 switch (reason) {
   case 'tokenExpired':
-    sessionStorage.removeItem('luigi.auth');
     document.getElementById('headline').innerText = 'Your session has expired.';
     break;
   case 'loginError':

@@ -5,7 +5,7 @@ export let groups;
 async function fetchOidcProviderMetadata(issuerUrl) {
   try {
     const response = await fetch(
-      `${issuerUrl}.well-known/openid-configuration`
+      `${issuerUrl}/.well-known/openid-configuration`
     );
     return await response.json();
   } catch (e) {
@@ -17,18 +17,12 @@ async function fetchOidcProviderMetadata(issuerUrl) {
 }
 
 export const createAuth = async (authParams) => {
-  const {
-    issuerUrl,
-    clientId,
-    responseType,
-    responseMode,
-    scope,
-  } = authParams;
+  const { issuerUrl, clientId, responseType, responseMode, scope } = authParams;
 
   const providerMetadata = await fetchOidcProviderMetadata(issuerUrl);
   const end_session_endpoint =
     providerMetadata.end_session_endpoint ||
-    `${issuerUrl}v2/logout?returnTo=${encodeURI(
+    `${issuerUrl}/v2/logout?returnTo=${encodeURI(
       `${location.origin}/logout.html`
     )}&client_id=${clientId}&`;
 

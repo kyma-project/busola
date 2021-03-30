@@ -1,4 +1,4 @@
-import { config } from "../config";
+import { config } from '../config';
 
 const loginNode = {
   hideSideNav: true,
@@ -7,6 +7,13 @@ const loginNode = {
   viewUrl: `${config.coreUIModuleUrl}/login`,
 };
 
+const redirectNode = {
+  hideFromNav: true,
+  pathSegment: '*',
+  label: '',
+  onNodeActivation: console.log,
+}
+
 export const navigation = {
-  nodes: [loginNode],
+  nodes: [loginNode, redirectNode],
 };

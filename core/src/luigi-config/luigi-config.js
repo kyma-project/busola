@@ -17,7 +17,7 @@ import {
 } from './navigation/navigation-data-init';
 import { onQuotaExceed } from './luigi-event-handlers';
 
-import * as preAuth from './pre-auth';
+import preAuthConfig from './pre-auth';
 
 export const NODE_PARAM_PREFIX = `~`;
 
@@ -27,21 +27,17 @@ export const NODE_PARAM_PREFIX = `~`;
   const params = getInitParams();
 
   if (!params && !config.isNpx) {
-    const luigiConfig = {
-      navigation: preAuth.navigation,
-      settings,
-    lifecycleHooks: {
-      luigiAfterInit: () => {
-        Luigi.ux().hideAppLoadingIndicator();
-      }}
-    };
-    console.log(luigiConfig);
-    Luigi.setConfig(luigiConfig);
+    Luigi.setConfig(preAuthConfig);
     return;
   }
 
+  const shouldCreateAuth = !config.isNpx && !params.token;
+  if (params.token) {
+    Luigi.auth().store.setAuthData({ idToken: params.token });
+  }
+
   const luigiConfig = {
-    auth: !config.isNpx && (await createAuth(params.auth)),
+    auth: shouldCreateAuth && (await createAuth(params.auth)),
     communication,
     navigation,
     routing: {
