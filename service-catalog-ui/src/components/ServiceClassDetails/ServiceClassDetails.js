@@ -23,12 +23,12 @@ import CreateInstanceForm from './CreateInstanceForm/CreateInstanceForm';
 import ServiceClassDetailsHeader from './ServiceClassDetailsHeader/ServiceClassDetailsHeader';
 import ServiceClassInstancesTable from './ServiceClassInstancesTable/ServiceClassInstancesTable';
 import ServiceClassPlansList from 'components/ServiceClassPlansList/ServiceClassPlansList';
+import { sortByDisplayName } from 'helpers/sorting';
 
 const DOCUMENTATION_PER_PLAN_LABEL = 'local'; //todo temp
 
 export default function ServiceClassDetails({ name }) {
   // TODO This still need to be tuned up and tested out after switching to busola
-
   const { namespaceId } = useMicrofrontendContext();
   const { resourceType } = LuigiClient.getNodeParams();
   const { planId } = LuigiClient.getPathParams();
@@ -62,7 +62,7 @@ export default function ServiceClassDetails({ name }) {
     resourceType === 'ClusterServiceClass'
       ? clusterServicePlansUrl
       : servicePlansUrl;
-  const { data: servicePlans } = useGetList()(plansUrl, {
+  const servicePlansRequest = useGetList()(plansUrl, {
     pollingInterval: 3500,
   });
 
@@ -85,6 +85,8 @@ export default function ServiceClassDetails({ name }) {
     return <Spinner />;
   }
 
+  const servicePlans = servicePlansRequest.data?.sort(sortByDisplayName);
+
   console.log(serviceClass);
   const documentationPerPlan =
     serviceClass.spec.externalMetadata?.labels &&
@@ -93,7 +95,9 @@ export default function ServiceClassDetails({ name }) {
     );
 
   if (!planId && documentationPerPlan) {
-    return <ServiceClassPlansList plans={servicePlans} />;
+    return (
+      <ServiceClassPlansList plans={servicePlans} serviceClass={serviceClass} />
+    );
   }
 
   const serviceClassDisplayName = getResourceDisplayName(serviceClass);
