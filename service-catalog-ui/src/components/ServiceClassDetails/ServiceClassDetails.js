@@ -165,6 +165,7 @@ export default function ServiceClassDetails({ name }) {
               documentationUrl={
                 serviceClass.spec.externalMetadata?.documentationUrl
               }
+              preselectedPlanName={isAPIpackage && planId}
             />
           )}
         />

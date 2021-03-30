@@ -60,28 +60,28 @@ const PlanColumnContent = ({
   onPlanChange,
   dropdownRef,
   allPlans,
-}) => {
-  return (
-    <>
-      <FormLabel required htmlFor="plan">
-        Plan
-      </FormLabel>
-      <select
-        id="plan"
-        aria-label="plan-selector"
-        ref={dropdownRef}
-        defaultValue={defaultPlan}
-        onChange={onPlanChange}
-      >
-        {allPlans.map((p, i) => (
-          <option key={['plan', i].join('_')} value={p.name}>
-            {getResourceDisplayName(p)}
-          </option>
-        ))}
-      </select>
-    </>
-  );
-};
+  isDisabled = false,
+}) => (
+  <>
+    <FormLabel required htmlFor="plan">
+      Plan
+    </FormLabel>
+    <select
+      disabled={isDisabled}
+      id="plan"
+      aria-label="plan-selector"
+      ref={dropdownRef}
+      defaultValue={defaultPlan}
+      onChange={onPlanChange}
+    >
+      {allPlans.map((p, i) => (
+        <option key={['plan', i].join('_')} value={p.metadata.name}>
+          {getResourceDisplayName(p)}
+        </option>
+      ))}
+    </select>
+  </>
+);
 
 PlanColumnContent.proTypes = {
   defaultPlan: SERVICE_PLAN_SHAPE,
@@ -102,6 +102,7 @@ export default function CreateInstanceForm({
   item,
   documentationUrl,
   plans,
+  preselectedPlanName,
 }) {
   // TODO This still need to be tuned up and tested out after switching to busola
   const notificationManager = useNotification();
@@ -121,7 +122,7 @@ export default function CreateInstanceForm({
   plans.forEach(plan => {
     parseDefaultIntegerValues(plan);
   });
-  const plan = plans[0]?.metadata.name;
+  const plan = preselectedPlanName || plans[0]?.metadata.name;
   const [
     instanceCreateParameterSchema,
     setInstanceCreateParameterSchema,
@@ -278,10 +279,11 @@ export default function CreateInstanceForm({
             </div>
             <div className="column">
               <PlanColumnContent
-                defaultPlan={plan}
+                defaultPlan={preselectedPlanName || plan}
                 onPlanChange={handlePlanChange}
                 dropdownRef={formValues.plan}
                 allPlans={plans}
+                isDisabled={!!preselectedPlanName}
               />
             </div>
           </div>
