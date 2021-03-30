@@ -14,8 +14,6 @@ import { isStringValueEqualToTrue } from 'helpers';
 import { Token } from 'fundamental-react/Token';
 
 const ServiceClassInfo = ({ serviceClass, labels, planSelector }) => {
-  console.log(serviceClass);
-
   const extData = serviceClass.spec.externalMetadata || {};
 
   const extractLabels = () => {

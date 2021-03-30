@@ -49,7 +49,7 @@ export default function ServiceInstanceDetails({ match }) {
       />
     );
   }
-  console.log('instance', serviceInstance);
+
   const servicePlan = {
     ref:
       serviceInstance.spec.servicePlanRef?.name ||
