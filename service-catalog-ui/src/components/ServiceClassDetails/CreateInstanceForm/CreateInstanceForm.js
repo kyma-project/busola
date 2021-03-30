@@ -103,7 +103,6 @@ export default function CreateInstanceForm({
   plans,
   preselectedPlanName,
 }) {
-  // TODO This still need to be tuned up and tested out after switching to busola
   const notificationManager = useNotification();
   const postRequest = usePost();
   const [customParametersProvided, setCustomParametersProvided] = useState(
@@ -132,7 +131,6 @@ export default function CreateInstanceForm({
   const formValues = {
     name: useRef(null),
     plan: useRef(plan),
-    labels: useRef(null),
   };
 
   const defaultName =
@@ -144,14 +142,11 @@ export default function CreateInstanceForm({
     (instanceCreateParameterSchema.$ref ||
       instanceCreateParameterSchema.properties);
 
-  async function createInstance({ name, namespace, labels, inputData }) {
+  async function createInstance({ name, namespace, inputData }) {
     const input = {
       apiVersion: 'servicecatalog.k8s.io/v1beta1',
       kind: 'ServiceInstance',
       metadata: {
-        annotations: {
-          // tags: labels, TODO
-        },
         name,
         namespace,
       },
@@ -211,14 +206,10 @@ export default function CreateInstanceForm({
           e.spec.externalMetadata.displayName === formValues.plan.current.value,
       ) ||
       (plans?.length && plans[0]);
-    const labels =
-      formValues.labels.current.value === ''
-        ? []
-        : formValues.labels.current.value.replace(/\s+/g, '').toLowerCase();
+
     const isClusterServiceClass = item.kind === 'ClusterServiceClass';
 
     const specSC = {
-      labels, //TODO: this is ignored because such field cannot be added to the spec. Should we store it in metadata.annotations or remove it?
       serviceClassExternalName: item.spec.externalName,
       serviceClassRef: {
         name: item.metadata.name,
@@ -231,7 +222,6 @@ export default function CreateInstanceForm({
     };
 
     const specCSC = {
-      labels, //TODO: this is ignored because such field cannot be added to the spec. Should we store it in metadata.annotations or remove it?
       clusterServiceClassExternalName: item.spec.externalName,
       clusterServiceClassRef: {
         name: item.metadata.name,
@@ -247,7 +237,6 @@ export default function CreateInstanceForm({
     await createInstance({
       name: formValues.name.current.value,
       namespace: LuigiClient.getContext().namespaceId,
-      labels,
       inputData: isClusterServiceClass ? specCSC : specSC,
     });
   }
@@ -289,27 +278,6 @@ export default function CreateInstanceForm({
               />
             </div>
           </div>
-        </FormItem>
-        <FormItem>
-          <FormLabel htmlFor="labels">
-            Filter labels
-            <InlineHelp
-              placement="bottom-right"
-              text="
-              The filter label must consist of lower case alphanumeric characters. Separate labels with comma.
-              "
-              className="fd-has-margin-left-tiny"
-            />
-          </FormLabel>
-          <input
-            className="fd-form__control"
-            ref={formValues.labels}
-            type="text"
-            id="labels"
-            placeholder={'Separate labels with comma'}
-            aria-required="false"
-            pattern="^[a-z0-9]([a-z0-9]*)?(,\s?[a-z0-9]+)*$"
-          />
         </FormItem>
       </form>
       <div className="instance-schema-panel__separator" />
