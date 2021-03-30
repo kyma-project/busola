@@ -4,7 +4,7 @@ import { StatusBadge } from 'react-shared';
 const statusColumn = {
   header: 'Status',
   value: addon => (
-    <StatusBadge autoResolveType>{addon.status.phase}</StatusBadge>
+    <StatusBadge autoResolveType>{addon.status?.phase}</StatusBadge>
   ),
 };
 
