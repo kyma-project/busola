@@ -4,7 +4,6 @@ import { serviceInstanceConstants } from 'helpers/constants';
 import { Button } from 'fundamental-react';
 import {
   PageHeader,
-  handleDelete,
   useGet,
   Spinner,
   useDelete,

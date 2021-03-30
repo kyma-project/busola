@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import LuigiClient from '@luigi-project/client';
 import { Breadcrumb } from 'fundamental-react';
-import ServiceClassToolbar from '../ServiceClassToolbar/ServiceClassToolbar.component';
+import ServiceClassToolbar from '../ServiceClassToolbar/ServiceClassToolbar';
 import ServiceClassInfo from '../ServiceClassInfo/ServiceClassInfo';
 
 import {
@@ -12,24 +12,8 @@ import {
 } from './styled';
 
 import { serviceClassConstants } from 'helpers/constants';
-import {
-  isService,
-  isStringValueEqualToTrue,
-  getResourceDisplayName,
-} from 'helpers';
-//  serviceClassDisplayName={serviceClassDisplayName}
-//         providerDisplayName={
-//           serviceClass.spec.externalMetadata?.providerDisplayName
-//         }
-//         creationTimestamp={serviceClass.metadata.creationTimestamp}
-//         documentationUrl={documentationUrl}
-//         supportUrl={supportUrl}
-//         imageUrl={imageUrl}
-//         tags={serviceClass.spec.tags}
-//         labels={labels}
-//         description={getDescription(serviceClass)}
-//         isProvisionedOnlyOnce={isProvisionedOnlyOnce}
-//         serviceClassName={name}
+import { isService, getResourceDisplayName } from 'helpers';
+
 const ServiceClassDetailsHeader = ({
   serviceClass,
   children,
@@ -67,7 +51,7 @@ const ServiceClassDetailsHeader = ({
       <ServiceClassToolbarWrapper>
         <ServiceClassToolbar
           serviceClassDisplayName={getResourceDisplayName(serviceClass)}
-          // providerDisplayName={providerDisplayName} TODO
+          // providerDisplayName={serviceClass.} //TODO
         >
           {children}
         </ServiceClassToolbar>
@@ -82,18 +66,7 @@ const ServiceClassDetailsHeader = ({
 };
 
 ServiceClassDetailsHeader.propTypes = {
-  creationTimestamp: PropTypes.string.isRequired,
-  description: PropTypes.string,
-  serviceClassDisplayName: PropTypes.string.isRequired,
-  providerDisplayName: PropTypes.string,
-  children: PropTypes.node,
-  labels: PropTypes.object,
-  tags: PropTypes.array,
-  documentationUrl: PropTypes.string,
-  imageUrl: PropTypes.string,
-  supportUrl: PropTypes.string,
-  serviceClassName: PropTypes.string,
-  isAPIpackage: PropTypes.bool,
+  serviceClass: PropTypes.object.isRequired,
   planSelector: PropTypes.node,
 };
 

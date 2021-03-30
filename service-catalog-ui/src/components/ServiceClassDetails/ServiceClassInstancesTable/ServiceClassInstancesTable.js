@@ -1,10 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 import LuigiClient from '@luigi-project/client';
-import { GenericList, StatusBadge, Spinner } from 'react-shared';
+import { GenericList, Spinner } from 'react-shared';
 
 import { serviceClassConstants } from 'helpers/constants';
-import { getBadgeTypeForStatus } from 'helpers/getBadgeTypeForStatus';
 import { ServiceInstanceStatus } from '../../../shared/ServiceInstanceStatus';
 
 import { Link, LinkButton } from './styled';

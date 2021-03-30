@@ -37,14 +37,3 @@ export const ExternalLink = styled.a`
     text-decoration: underline;
   }
 `;
-
-export const LabelsWrapper = styled.div`
-  margin-top: 12px;
-  width: 100%;
-  height: auto;
-`;
-
-export const LabelWrapper = styled.div`
-  display: inline-block;
-  margin: 0 10px 10px 0;
-`;

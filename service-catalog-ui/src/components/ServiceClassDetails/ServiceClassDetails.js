@@ -1,7 +1,6 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { Button } from 'fundamental-react';
-
 import {
   Tooltip,
   Spinner,
@@ -13,11 +12,7 @@ import {
 } from 'react-shared';
 
 import './ServiceClassDetails.scss';
-import {
-  getResourceDisplayName,
-  getDescription,
-  isStringValueEqualToTrue,
-} from 'helpers';
+import { getResourceDisplayName, isStringValueEqualToTrue } from 'helpers';
 import { createInstanceConstants } from 'helpers/constants';
 import CreateInstanceForm from './CreateInstanceForm/CreateInstanceForm';
 import ServiceClassDetailsHeader from './ServiceClassDetailsHeader/ServiceClassDetailsHeader';
@@ -29,7 +24,6 @@ import PlanSelector from './PlanSelector/PlanSelector';
 const DOCUMENTATION_PER_PLAN_LABEL = 'local'; //todo temp
 
 export default function ServiceClassDetails({ name }) {
-  // TODO This still need to be tuned up and tested out after switching to busola
   const { namespaceId } = useMicrofrontendContext();
   const { resourceType } = LuigiClient.getNodeParams();
   const { planId } = LuigiClient.getPathParams();
@@ -111,7 +105,7 @@ export default function ServiceClassDetails({ name }) {
   }
 
   const serviceClassDisplayName = getResourceDisplayName(serviceClass);
-  const isActivated = serviceInstances?.items?.length > 0;
+  const isActivated = serviceInstances?.length > 0;
   const isAPIpackage =
     serviceClass.spec.externalMetadata?.labels[DOCUMENTATION_PER_PLAN_LABEL];
   const isProvisionedOnlyOnce =

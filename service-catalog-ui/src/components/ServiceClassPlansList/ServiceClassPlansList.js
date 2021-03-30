@@ -3,11 +3,10 @@ import React from 'react';
 import LuigiClient from '@luigi-project/client';
 
 import { serviceClassConstants } from 'helpers/constants';
-import PropTypes from 'prop-types';
-import { Spinner, PageHeader, GenericList, Tooltip } from 'react-shared';
+import { Spinner, PageHeader, GenericList } from 'react-shared';
 import { getResourceDisplayName, isService } from 'helpers';
 
-import { Badge, Link } from 'fundamental-react';
+import { Link } from 'fundamental-react';
 import './ServiceClassPlansList.scss';
 
 const goToDetails = (planName, serviceClassName, serviceClassKind) => {
@@ -21,9 +20,8 @@ const goToDetails = (planName, serviceClassName, serviceClassKind) => {
 
 export default function ServiceClassPlansList({ serviceClass, plans }) {
   if (!plans) return <Spinner />;
-  console.log(plans);
-  const headerRenderer = () => [''];
 
+  const headerRenderer = () => [''];
   const rowRenderer = plan => [
     <div>
       <Link

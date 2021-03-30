@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { FormItem, FormLabel, Icon, InlineHelp, Link } from 'fundamental-react';
+import { FormItem, FormLabel, Icon, Link } from 'fundamental-react';
 import * as LuigiClient from '@luigi-project/client';
 
 import SchemaData from './SchemaData';
@@ -126,6 +126,20 @@ export default function CreateInstanceForm({
     setInstanceCreateParameterSchema,
   ] = useState({});
 
+  const handlePlanChange = planName => {
+    const newParametersSchema = getInstanceCreateParameterSchema(
+      plans,
+      planName,
+    );
+
+    setInstanceCreateParameterSchema(newParametersSchema);
+    setInstanceCreateParameters({});
+    if (!newParametersSchema || !newParametersSchema.length) {
+      jsonSchemaFormRef.current = null;
+    }
+  };
+
+  // eslint-disable-next-line
   useEffect(_ => handlePlanChange(plan), [preselectedPlanName, plans, plan]);
 
   const formValues = {
@@ -172,19 +186,6 @@ export default function CreateInstanceForm({
       });
     }
   }
-
-  const handlePlanChange = planName => {
-    const newParametersSchema = getInstanceCreateParameterSchema(
-      plans,
-      planName,
-    );
-
-    setInstanceCreateParameterSchema(newParametersSchema);
-    setInstanceCreateParameters({});
-    if (!newParametersSchema || !newParametersSchema.length) {
-      jsonSchemaFormRef.current = null;
-    }
-  };
 
   const handleCustomParametersChange = input => {
     try {

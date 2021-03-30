@@ -1,21 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Label } from '@kyma-project/react-components';
 import { Tile, Icon } from 'fundamental-react';
-
 import { ReadableCreationTimestamp } from 'react-shared';
 import {
   ServiceClassInfoContentWrapper,
   ExternalLink,
   Image,
-  LabelsWrapper,
-  LabelWrapper,
   ServiceClassHeaderTileGrid,
 } from './styled';
 
 import { serviceClassTileTitles } from 'helpers/constants';
 import { isStringValueEqualToTrue } from 'helpers';
 import { Token } from 'fundamental-react/Token';
+
 const ServiceClassInfo = ({ serviceClass, labels, planSelector }) => {
   console.log(serviceClass);
 
@@ -128,12 +125,9 @@ const ServiceClassInfo = ({ serviceClass, labels, planSelector }) => {
 };
 
 ServiceClassInfo.propTypes = {
-  creationTimestamp: PropTypes.string.isRequired,
-  documentationUrl: PropTypes.string,
-  imageUrl: PropTypes.string,
-  tags: PropTypes.arrayOf(PropTypes.string),
+  serviceClass: PropTypes.object.isRequired,
   labels: PropTypes.object,
-  description: PropTypes.string,
+  planSelector: PropTypes.node,
 };
 
 export default ServiceClassInfo;
