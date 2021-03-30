@@ -16,20 +16,10 @@ import {
 import { serviceClassTileTitles } from 'helpers/constants';
 import { isStringValueEqualToTrue } from 'helpers';
 import { Token } from 'fundamental-react/Token';
-const ServiceClassInfo = ({
-  creationTimestamp,
-  documentationUrl,
-  supportUrl,
-  imageUrl,
-  tags,
-  labels,
-  description,
-  providerDisplayName,
-  planSelector,
-}) => {
-  function sortTags(tag1, tag2) {
-    return tag1.length > 8 && tag2.length < 15;
-  }
+const ServiceClassInfo = ({ serviceClass, labels, planSelector }) => {
+  console.log(serviceClass);
+
+  const extData = serviceClass.spec.externalMetadata || {};
 
   const extractLabels = () => {
     const extractedLabels = [];
@@ -44,47 +34,40 @@ const ServiceClassInfo = ({
     return extractedLabels;
   };
 
-  console.log('modified tags', tags, extractLabels());
-  const tagsCombined = [...tags, ...extractLabels()];
-
-  const tagsDescription = {
-    basic: 'Basic filter',
-    'connected-app': 'Connected application',
-    provisionOnlyOnce: 'Provision only once',
-    tag: 'Tag',
-  };
-
-  const columnCount = 4;
+  const tagsCombined = [...serviceClass.spec.tags, ...extractLabels()];
+  const COLUMN_COUNT = 4;
 
   return (
     <ServiceClassInfoContentWrapper className="fd-has-padding-top-none">
       <ServiceClassHeaderTileGrid
         style={{
-          gridTemplateColumns: `repeat(${columnCount} ,1fr)`,
+          gridTemplateColumns: `repeat(${COLUMN_COUNT} ,1fr)`,
         }}
       >
         <Tile>
           <Tile.Media className="fd-has-display-flex">
-            {imageUrl ? (
-              <Image size="l" photo={imageUrl} />
+            {extData.imageUrl ? (
+              <Image size="l" photo={extData.imageUrl} />
             ) : (
               <Icon glyph="crm-service-manager" />
             )}
           </Tile.Media>
           <Tile.Content title={serviceClassTileTitles.creator}>
-            <p>{providerDisplayName}</p>
+            <p>{extData.providerDisplayName}</p>
           </Tile.Content>
         </Tile>
         <Tile>
           <Tile.Content title={serviceClassTileTitles.lastUpdate}>
-            <ReadableCreationTimestamp timestamp={creationTimestamp} />
+            <ReadableCreationTimestamp
+              timestamp={serviceClass.metadata.creationTimestamp}
+            />
           </Tile.Content>
         </Tile>
-        {documentationUrl && (
+        {extData.documentationUrl && (
           <Tile>
             <Tile.Content title={serviceClassTileTitles.documentation}>
               <ExternalLink
-                href={documentationUrl}
+                href={extData.documentationUrl}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -93,11 +76,11 @@ const ServiceClassInfo = ({
             </Tile.Content>
           </Tile>
         )}
-        {supportUrl && (
+        {extData.supportUrl && (
           <Tile>
             <Tile.Content title={serviceClassTileTitles.support}>
               <ExternalLink
-                href={supportUrl}
+                href={extData.supportUrl}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -108,13 +91,15 @@ const ServiceClassInfo = ({
         )}
         <Tile className="fd-has-grid-column-span-4">
           <Tile.Content title={serviceClassTileTitles.description}>
-            <p data-e2e-id="service-description">{description}</p>
+            <p data-e2e-id="service-description">
+              {serviceClass.spec.description}
+            </p>
           </Tile.Content>
         </Tile>
         {tagsCombined && tagsCombined.length > 0 && (
           <Tile
             style={{
-              gridColumn: `span ${columnCount - (planSelector ? 2 : 0)}`,
+              gridColumn: `span ${COLUMN_COUNT - (planSelector ? 2 : 0)}`,
             }}
           >
             <Tile.Content title={serviceClassTileTitles.tags}>

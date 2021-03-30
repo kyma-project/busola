@@ -65,10 +65,7 @@ export default function ServiceClassDetails({ name }) {
   const servicePlansRequest = useGetList()(plansUrl, {
     pollingInterval: 3500,
   });
-
-  // notificationManager.notifyError({
-  //   content: `Failed to get a list of instances due to: ${err}`,
-  // });
+  const servicePlans = servicePlansRequest.data?.sort(sortByDisplayName);
 
   if (error) {
     return (
@@ -85,49 +82,49 @@ export default function ServiceClassDetails({ name }) {
     return <Spinner />;
   }
 
-  const servicePlans = servicePlansRequest.data?.sort(sortByDisplayName);
-
-  console.log(serviceClass);
   const documentationPerPlan =
     serviceClass.spec.externalMetadata?.labels &&
     isStringValueEqualToTrue(
       serviceClass.spec.externalMetadata?.labels[DOCUMENTATION_PER_PLAN_LABEL],
     );
 
-  if (!planId && documentationPerPlan) {
-    return (
-      <ServiceClassPlansList plans={servicePlans} serviceClass={serviceClass} />
-    );
+  if (!planId && documentationPerPlan && servicePlans && servicePlans.length) {
+    if (servicePlans.length > 1)
+      return (
+        <ServiceClassPlansList
+          plans={servicePlans}
+          serviceClass={serviceClass}
+        />
+      );
+    else {
+      LuigiClient.linkManager()
+        .fromClosestContext()
+        .withParams({
+          resourceType,
+        })
+        .navigate(
+          `details/${serviceClass.metadata.name}/plan/${servicePlans[0].metadata.name}`,
+        );
+      return null;
+    }
   }
 
   const serviceClassDisplayName = getResourceDisplayName(serviceClass);
-  const serviceClassDescription = getDescription(serviceClass);
-
-  const tags = serviceClass.spec.tags;
-  const externalLabels = serviceClass.spec.externalMetadata?.labels;
-  const internalLabels = serviceClass.metadata.labels;
-  const labels = { ...externalLabels, ...internalLabels };
-  const providerDisplayName =
-    serviceClass.spec.externalMetadata?.providerDisplayName;
-  const creationTimestamp = serviceClass.metadata.creationTimestamp;
-  const documentationUrl = serviceClass.spec.externalMetadata?.documentationUrl;
-  const supportUrl = serviceClass.spec.externalMetadata?.supportUrl;
-  const imageUrl = serviceClass.spec.externalMetadata?.imageUrl;
-  const isProvisionedOnlyOnce = isStringValueEqualToTrue(
-    labels?.provisionOnlyOnce,
-  );
   const isActivated = serviceInstances?.items?.length > 0;
-
-  const buttonText = isProvisionedOnlyOnce
-    ? isActivated
-      ? createInstanceConstants.buttonText.provisionOnlyOnceActive
-      : createInstanceConstants.buttonText.provisionOnlyOnce
-    : createInstanceConstants.buttonText.standard;
+  const isProvisionedOnlyOnce =
+    serviceClass.spec.externalMetadata?.labels &&
+    isStringValueEqualToTrue(
+      serviceClass.spec.externalMetadata.labels.provisionOnlyOnce,
+    );
 
   const modalOpeningComponent = (
     <Tooltip content={createInstanceConstants.provisionOnlyOnceInfo}>
       <Button disabled={isProvisionedOnlyOnce && isActivated} glyph="add">
-        {buttonText}
+        {isProvisionedOnlyOnce
+          ? isActivated
+            ? createInstanceConstants.buttonText.provisionOnlyOnceActive
+            : createInstanceConstants.buttonText.provisionOnlyOnce
+          : createInstanceConstants.buttonText.standard}
       </Button>
     </Tooltip>
   );
@@ -135,17 +132,8 @@ export default function ServiceClassDetails({ name }) {
   return (
     <>
       <ServiceClassDetailsHeader
-        serviceClassDisplayName={serviceClassDisplayName}
-        providerDisplayName={providerDisplayName}
-        creationTimestamp={creationTimestamp}
-        documentationUrl={documentationUrl}
-        supportUrl={supportUrl}
-        imageUrl={imageUrl}
-        tags={tags}
-        labels={labels}
-        description={serviceClassDescription}
-        isProvisionedOnlyOnce={isProvisionedOnlyOnce}
-        serviceClassName={name}
+        serviceClass={serviceClass}
+        // planSelector={}
       >
         <ModalWithForm
           title={`Provision the ${serviceClassDisplayName}${' '}
@@ -162,7 +150,9 @@ export default function ServiceClassDetails({ name }) {
             <CreateInstanceForm
               {...props}
               plans={servicePlans || []}
-              documentationUrl={documentationUrl}
+              documentationUrl={
+                serviceClass.spec.externalMetadata?.documentationUrl
+              }
             />
           )}
         />

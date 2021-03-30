@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import LuigiClient from '@luigi-project/client';
 import { Breadcrumb } from 'fundamental-react';
 import ServiceClassToolbar from '../ServiceClassToolbar/ServiceClassToolbar.component';
-import ServiceClassInfo from '../ServiceClassInfo/ServiceClassInfo.component';
+import ServiceClassInfo from '../ServiceClassInfo/ServiceClassInfo';
 
 import {
   BreadcrumbWrapper,
@@ -12,25 +12,34 @@ import {
 } from './styled';
 
 import { serviceClassConstants } from 'helpers/constants';
-import { isService } from 'helpers';
-
+import {
+  isService,
+  isStringValueEqualToTrue,
+  getResourceDisplayName,
+} from 'helpers';
+//  serviceClassDisplayName={serviceClassDisplayName}
+//         providerDisplayName={
+//           serviceClass.spec.externalMetadata?.providerDisplayName
+//         }
+//         creationTimestamp={serviceClass.metadata.creationTimestamp}
+//         documentationUrl={documentationUrl}
+//         supportUrl={supportUrl}
+//         imageUrl={imageUrl}
+//         tags={serviceClass.spec.tags}
+//         labels={labels}
+//         description={getDescription(serviceClass)}
+//         isProvisionedOnlyOnce={isProvisionedOnlyOnce}
+//         serviceClassName={name}
 const ServiceClassDetailsHeader = ({
-  creationTimestamp,
-  description,
-  documentationUrl,
-  imageUrl,
-  isProvisionedOnlyOnce,
-  labels,
-  providerDisplayName,
-  serviceClassDisplayName,
-  supportUrl,
-  tags,
+  serviceClass,
   children,
-  serviceClassName,
-  isAPIpackage,
   planSelector,
-  plansCount,
 }) => {
+  const labels = {
+    ...(serviceClass.spec.externalMetadata?.labels || []),
+    ...(serviceClass.metadata.labels || []),
+  };
+
   const goToList = () => {
     LuigiClient.linkManager()
       .fromClosestContext()
@@ -38,11 +47,6 @@ const ServiceClassDetailsHeader = ({
         selectedTab: isService({ labels }) ? 'services' : 'addons',
       })
       .navigate('/');
-  };
-  const goToPlansList = serviceClassName => {
-    return LuigiClient.linkManager()
-      .fromClosestContext()
-      .navigate(`details/${serviceClassName}/plans`);
   };
 
   return (
@@ -56,34 +60,21 @@ const ServiceClassDetailsHeader = ({
             url="#"
             onClick={goToList}
           />
-          {isAPIpackage && serviceClassName && plansCount > 1 && (
-            <Breadcrumb.Item
-              name={`${serviceClassDisplayName} - Plans list`}
-              url="#"
-              onClick={() => goToPlansList(serviceClassName)}
-            />
-          )}
+
           <Breadcrumb.Item />
         </Breadcrumb>
       </BreadcrumbWrapper>
       <ServiceClassToolbarWrapper>
         <ServiceClassToolbar
-          serviceClassDisplayName={serviceClassDisplayName}
-          providerDisplayName={providerDisplayName}
+          serviceClassDisplayName={getResourceDisplayName(serviceClass)}
+          // providerDisplayName={providerDisplayName} TODO
         >
           {children}
         </ServiceClassToolbar>
       </ServiceClassToolbarWrapper>
       <ServiceClassInfo
-        creationTimestamp={creationTimestamp}
-        description={description}
-        documentationUrl={documentationUrl}
-        imageUrl={imageUrl}
-        isProvisionedOnlyOnce={isProvisionedOnlyOnce}
+        serviceClass={serviceClass}
         labels={labels}
-        providerDisplayName={providerDisplayName}
-        supportUrl={supportUrl}
-        tags={tags}
         planSelector={planSelector}
       />
     </HeaderWrapper>
