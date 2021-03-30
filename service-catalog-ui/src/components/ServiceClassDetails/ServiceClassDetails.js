@@ -24,6 +24,7 @@ import ServiceClassDetailsHeader from './ServiceClassDetailsHeader/ServiceClassD
 import ServiceClassInstancesTable from './ServiceClassInstancesTable/ServiceClassInstancesTable';
 import ServiceClassPlansList from 'components/ServiceClassPlansList/ServiceClassPlansList';
 import { sortByDisplayName } from 'helpers/sorting';
+import PlanSelector from './PlanSelector/PlanSelector';
 
 const DOCUMENTATION_PER_PLAN_LABEL = 'local'; //todo temp
 
@@ -111,6 +112,8 @@ export default function ServiceClassDetails({ name }) {
 
   const serviceClassDisplayName = getResourceDisplayName(serviceClass);
   const isActivated = serviceInstances?.items?.length > 0;
+  const isAPIpackage =
+    serviceClass.spec.externalMetadata?.labels[DOCUMENTATION_PER_PLAN_LABEL];
   const isProvisionedOnlyOnce =
     serviceClass.spec.externalMetadata?.labels &&
     isStringValueEqualToTrue(
@@ -133,7 +136,16 @@ export default function ServiceClassDetails({ name }) {
     <>
       <ServiceClassDetailsHeader
         serviceClass={serviceClass}
-        // planSelector={}
+        planSelector={
+          isAPIpackage && (
+            <PlanSelector
+              allPlans={servicePlans}
+              serviceClassName={serviceClass.metadata.name}
+              serviceClassKind={serviceClass.kind}
+              currentlySelected={planId}
+            />
+          )
+        }
       >
         <ModalWithForm
           title={`Provision the ${serviceClassDisplayName}${' '}
