@@ -21,6 +21,7 @@ import {
 import { createInstanceConstants } from 'helpers/constants';
 import CreateInstanceModal from './CreateInstanceModal/CreateInstanceModal.component';
 import ServiceClassDetailsHeader from './ServiceClassDetailsHeader/ServiceClassDetailsHeader.component';
+import ServiceClassInstancesTable from './ServiceClassInstancesTable/ServiceClassInstancesTable.component';
 
 export default function ServiceClassDetails({ name }) {
   // TODO This still need to be tuned up and tested out after switching to busola
@@ -113,38 +114,41 @@ export default function ServiceClassDetails({ name }) {
   );
 
   return (
-    <ServiceClassDetailsHeader
-      serviceClassDisplayName={serviceClassDisplayName}
-      providerDisplayName={providerDisplayName}
-      creationTimestamp={creationTimestamp}
-      documentationUrl={documentationUrl}
-      supportUrl={supportUrl}
-      imageUrl={imageUrl}
-      tags={tags}
-      labels={labels}
-      description={serviceClassDescription}
-      isProvisionedOnlyOnce={isProvisionedOnlyOnce}
-      serviceClassName={name}
-    >
-      <ModalWithForm
-        title={`Provision the ${serviceClassDisplayName}${' '}
+    <>
+      <ServiceClassDetailsHeader
+        serviceClassDisplayName={serviceClassDisplayName}
+        providerDisplayName={providerDisplayName}
+        creationTimestamp={creationTimestamp}
+        documentationUrl={documentationUrl}
+        supportUrl={supportUrl}
+        imageUrl={imageUrl}
+        tags={tags}
+        labels={labels}
+        description={serviceClassDescription}
+        isProvisionedOnlyOnce={isProvisionedOnlyOnce}
+        serviceClassName={name}
+      >
+        <ModalWithForm
+          title={`Provision the ${serviceClassDisplayName}${' '}
                   ${
                     resourceType === 'ClusterServiceClass'
                       ? 'Cluster Service Class'
                       : 'Service Class'
                   }${' '}
                   in the ${namespaceId} Namespace`}
-        modalOpeningComponent={modalOpeningComponent}
-        id="add-instance-modal"
-        item={serviceClass}
-        renderForm={props => (
-          <CreateInstanceModal
-            {...props}
-            plans={servicePlans || []}
-            documentationUrl={documentationUrl}
-          />
-        )}
-      />
-    </ServiceClassDetailsHeader>
+          modalOpeningComponent={modalOpeningComponent}
+          id="add-instance-modal"
+          item={serviceClass}
+          renderForm={props => (
+            <CreateInstanceModal
+              {...props}
+              plans={servicePlans || []}
+              documentationUrl={documentationUrl}
+            />
+          )}
+        />
+      </ServiceClassDetailsHeader>
+      <ServiceClassInstancesTable instanceList={serviceInstances} />
+    </>
   );
 }

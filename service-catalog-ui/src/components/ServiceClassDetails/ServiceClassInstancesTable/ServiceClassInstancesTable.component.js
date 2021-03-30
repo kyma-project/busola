@@ -1,52 +1,49 @@
 import React, { Component } from 'react';
 
 import LuigiClient from '@luigi-project/client';
-import { GenericList, StatusBadge } from 'react-shared';
+import { GenericList, StatusBadge, Spinner } from 'react-shared';
 
 import { serviceClassConstants } from 'helpers/constants';
 import { getBadgeTypeForStatus } from 'helpers/getBadgeTypeForStatus';
+import { ServiceInstanceStatus } from '../../../shared/ServiceInstanceStatus';
 
 import { Link, LinkButton } from './styled';
 
-export class ServiceClassInstancesTable extends Component {
-  goToServiceInstanceDetails(instanceName) {
+const ServiceClassInstancesTable = ({ instanceList }) => {
+  if (!instanceList) return <Spinner />;
+
+  function goToServiceInstanceDetails(instanceName) {
     LuigiClient.linkManager()
       .fromContext('namespaces')
       .navigate(`instances/details/${instanceName}`);
   }
 
-  render() {
-    const headerRenderer = () => [
-      serviceClassConstants.tableHeaderInstance,
-      serviceClassConstants.tableHeaderStatus,
-    ];
+  const headerRenderer = () => [
+    serviceClassConstants.tableHeaderInstance,
+    serviceClassConstants.tableHeaderStatus,
+  ];
 
-    const rowRenderer = instance => [
-      <LinkButton>
-        <Link
-          onClick={() => this.goToServiceInstanceDetails(instance.name)}
-          title={instance.name}
-        >
-          {instance.name}
-        </Link>
-      </LinkButton>,
-      <StatusBadge
-        tooltipContent={instance.status.message}
-        type={getBadgeTypeForStatus(instance.status.type)}
+  const rowRenderer = instance => [
+    <LinkButton>
+      <Link
+        onClick={() => goToServiceInstanceDetails(instance.metadata.name)}
+        title={instance.metadata.name}
       >
-        {instance.status.type}
-      </StatusBadge>,
-    ];
+        {instance.metadata.name}
+      </Link>
+    </LinkButton>,
+    <ServiceInstanceStatus instance={instance} />,
+  ];
 
-    return (
-      <GenericList
-        headerRenderer={headerRenderer}
-        rowRenderer={rowRenderer}
-        entries={this.props.tableData}
-        notFoundMessage={serviceClassConstants.emptyInstancesListMessage}
-        showRootHeader={false}
-        hasExternalMargin={false}
-      />
-    );
-  }
-}
+  return (
+    <GenericList
+      textSearchProperties={['metadata.name']}
+      headerRenderer={headerRenderer}
+      rowRenderer={rowRenderer}
+      entries={instanceList}
+      notFoundMessage={serviceClassConstants.emptyInstancesListMessage}
+      title="Service Instances"
+    />
+  );
+};
+export default ServiceClassInstancesTable;
