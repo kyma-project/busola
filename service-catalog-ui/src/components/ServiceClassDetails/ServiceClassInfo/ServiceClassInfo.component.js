@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Label } from '@kyma-project/react-components';
 import { Tile, Icon } from 'fundamental-react';
 
-import { Tooltip } from 'react-shared';
+import { ReadableCreationTimestamp } from 'react-shared';
 import {
   ServiceClassInfoContentWrapper,
   ExternalLink,
@@ -15,7 +15,7 @@ import {
 
 import { serviceClassTileTitles } from 'helpers/constants';
 import { isStringValueEqualToTrue } from 'helpers';
-
+import { Token } from 'fundamental-react/Token';
 const ServiceClassInfo = ({
   creationTimestamp,
   documentationUrl,
@@ -35,23 +35,17 @@ const ServiceClassInfo = ({
     const extractedLabels = [];
     if (labels) {
       if (labels['connected-app'])
-        extractedLabels.push({
-          name: labels['connected-app'],
-          type: 'connected-app',
-        });
-      if (isStringValueEqualToTrue(labels.local))
-        extractedLabels.push({ name: 'local', type: 'basic' });
+        extractedLabels.push(labels['connected-app']);
+      if (isStringValueEqualToTrue(labels.local)) extractedLabels.push('local');
       if (isStringValueEqualToTrue(labels.showcase))
-        extractedLabels.push({ name: 'showcase', type: 'basic' });
+        extractedLabels.push('showcase');
     }
 
     return extractedLabels;
   };
 
-  const modifiedTags = [
-    ...tags.map(tag => ({ name: tag, type: 'tag' })),
-    ...extractLabels(),
-  ];
+  console.log('modified tags', tags, extractLabels());
+  const tagsCombined = [...tags, ...extractLabels()];
 
   const tagsDescription = {
     basic: 'Basic filter',
@@ -83,9 +77,7 @@ const ServiceClassInfo = ({
         </Tile>
         <Tile>
           <Tile.Content title={serviceClassTileTitles.lastUpdate}>
-            {/* <Moment utc format="MMM DD, YYYY" data-e2e-id="service-last-update">
-              {creationTimestamp} //TODO: use ReadableCreationTimestamp from react-shared
-            </Moment> */}
+            <ReadableCreationTimestamp timestamp={creationTimestamp} />
           </Tile.Content>
         </Tile>
         {documentationUrl && (
@@ -119,24 +111,22 @@ const ServiceClassInfo = ({
             <p data-e2e-id="service-description">{description}</p>
           </Tile.Content>
         </Tile>
-        {modifiedTags && modifiedTags.length > 0 && (
+        {tagsCombined && tagsCombined.length > 0 && (
           <Tile
             style={{
               gridColumn: `span ${columnCount - (planSelector ? 2 : 0)}`,
             }}
           >
             <Tile.Content title={serviceClassTileTitles.tags}>
-              <LabelsWrapper data-e2e-id="service-labels">
-                {modifiedTags.sort(sortTags).map(tag => (
-                  <LabelWrapper key={`${tag.type}-${tag.name}`}>
-                    <Tooltip content={tagsDescription[tag.type]}>
-                      <Label cursorType="help" data-e2e-id="service-label">
-                        {tag.name}
-                      </Label>
-                    </Tooltip>
-                  </LabelWrapper>
-                ))}
-              </LabelsWrapper>
+              {tagsCombined.map(t => (
+                <Token
+                  style={{ marginTop: '4px', marginBottom: '4px' }}
+                  className="y-fd-token y-fd-token--no-button y-fd-token--gap"
+                  key={t}
+                >
+                  {t}
+                </Token>
+              ))}
             </Tile.Content>
           </Tile>
         )}
