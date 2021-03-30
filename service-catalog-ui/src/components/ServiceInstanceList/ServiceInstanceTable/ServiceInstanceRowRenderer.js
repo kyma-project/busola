@@ -43,6 +43,10 @@ const ServiceClassName = ({ instance }) => {
     instance.spec.serviceClassRef?.name ||
     instance.spec.clusterServiceClassRef?.name;
 
+  const resourceType = instance.spec.serviceClassRef
+    ? 'ServiceClass'
+    : 'ClusterServiceClass';
+
   if (!className) return '-';
 
   return (
@@ -53,6 +57,9 @@ const ServiceClassName = ({ instance }) => {
             ? () =>
                 LuigiClient.linkManager()
                   .fromContext('namespaces')
+                  .withParams({
+                    resourceType,
+                  })
                   .navigate(`catalog/details/${classRef}`)
             : null
         }
