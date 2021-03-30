@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { FormItem, FormLabel, Icon, InlineHelp, Link } from 'fundamental-react';
 import * as LuigiClient from '@luigi-project/client';
 
-import SchemaData from './SchemaData.component';
+import SchemaData from './SchemaData';
 
-import './CreateInstanceModal.scss';
+import './CreateInstanceForm.scss';
 import { getResourceDisplayName, randomNameGenerator } from 'helpers';
 import { usePost, useNotification } from 'react-shared';
 
@@ -21,7 +21,7 @@ const SERVICE_PLAN_SHAPE = PropTypes.shape({
   displayName: PropTypes.string.isRequired,
 });
 
-CreateInstanceModal.propTypes = {
+CreateInstanceForm.propTypes = {
   onChange: PropTypes.func.isRequired,
   onCompleted: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
@@ -92,7 +92,7 @@ PlanColumnContent.proTypes = {
 
 const isNonNullObject = o => typeof o === 'object' && !!o;
 
-export default function CreateInstanceModal({
+export default function CreateInstanceForm({
   // onCompleted,
   onChange,
   // onError,

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Status, StatusWrapper } from '@kyma-project/react-components';
 import { GenericDocumentation } from '@kyma-project/generic-documentation';
 
-import { ServiceClassInstancesTable } from '../ServiceClassInstancesTable/ServiceClassInstancesTable.component';
+import { ServiceClassInstancesTable } from '../ServiceClassInstancesTable/ServiceClassInstancesTable';
 import { serviceClassConstants } from 'helpers/constants';
 
 function getTabElementsIndicator(instancesCount) {

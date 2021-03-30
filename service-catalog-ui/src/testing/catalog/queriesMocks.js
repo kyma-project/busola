@@ -1,7 +1,7 @@
 import { getAllServiceClasses } from 'components/ServiceClassList/queries';
 import { getServiceClass } from 'components/ServiceClassDetails/queries';
 import { getServiceClassPlans } from 'components/ServiceClassPlansList/queries';
-import { createServiceInstance } from 'components/ServiceClassDetails/CreateInstanceModal/mutations';
+import { createServiceInstance } from 'components/ServiceClassDetails/CreateInstanceForm/mutations';
 import {
   mockServiceClass,
   mockPlan,

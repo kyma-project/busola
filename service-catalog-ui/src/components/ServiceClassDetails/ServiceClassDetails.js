@@ -19,9 +19,9 @@ import {
   isStringValueEqualToTrue,
 } from 'helpers';
 import { createInstanceConstants } from 'helpers/constants';
-import CreateInstanceModal from './CreateInstanceModal/CreateInstanceModal.component';
-import ServiceClassDetailsHeader from './ServiceClassDetailsHeader/ServiceClassDetailsHeader.component';
-import ServiceClassInstancesTable from './ServiceClassInstancesTable/ServiceClassInstancesTable.component';
+import CreateInstanceForm from './CreateInstanceForm/CreateInstanceForm';
+import ServiceClassDetailsHeader from './ServiceClassDetailsHeader/ServiceClassDetailsHeader';
+import ServiceClassInstancesTable from './ServiceClassInstancesTable/ServiceClassInstancesTable';
 
 export default function ServiceClassDetails({ name }) {
   // TODO This still need to be tuned up and tested out after switching to busola
@@ -140,7 +140,7 @@ export default function ServiceClassDetails({ name }) {
           id="add-instance-modal"
           item={serviceClass}
           renderForm={props => (
-            <CreateInstanceModal
+            <CreateInstanceForm
               {...props}
               plans={servicePlans || []}
               documentationUrl={documentationUrl}
