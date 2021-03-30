@@ -1,5 +1,4 @@
 import OpenIdConnect from '@luigi-project/plugin-auth-oidc';
-import { getInitParams } from './init-params';
 
 export let groups;
 
@@ -17,22 +16,14 @@ async function fetchOidcProviderMetadata(issuerUrl) {
   }
 }
 
-export const createAuth = async () => {
-  const params = getInitParams();
-  if (!params) {
-    alert(
-      "No auth params provided! In future you'll get to login with your service account."
-    );
-    return {};
-  }
-
+export const createAuth = async (authParams) => {
   const {
     issuerUrl,
     clientId,
     responseType,
     responseMode,
     scope,
-  } = params.auth;
+  } = authParams;
 
   const providerMetadata = await fetchOidcProviderMetadata(issuerUrl);
   const end_session_endpoint =

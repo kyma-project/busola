@@ -2,8 +2,9 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 import Preferences from 'components/Preferences/Preferences';
+import Login from 'components/Login/Login';
 
-import { PREFERENCES_TITLE } from '../../shared/constants';
+import { PREFERENCES_TITLE, LOGIN_TITLE } from '../../shared/constants';
 import { withTitle } from 'react-shared';
 import CreateApiRule from '../ApiRules/CreateApiRule/CreateApiRule';
 import EditApiRule from 'components/ApiRules/EditApiRule/EditApiRule';
@@ -16,6 +17,7 @@ export default function App() {
   return (
     <Switch>
       <Route path="/preload" component={() => null} />
+      <Route path="/login" render={withTitle(LOGIN_TITLE, Login)} />
       <Route
         path="/preferences"
         render={withTitle(PREFERENCES_TITLE, Preferences)}
