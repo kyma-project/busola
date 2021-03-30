@@ -72,7 +72,7 @@ const PlanColumnContent = ({
       aria-label="plan-selector"
       ref={dropdownRef}
       defaultValue={defaultPlan}
-      onChange={onPlanChange}
+      onChange={e => onPlanChange(e.target.value)}
     >
       {allPlans.map((p, i) => (
         <option key={['plan', i].join('_')} value={p.metadata.name}>
@@ -88,14 +88,13 @@ PlanColumnContent.proTypes = {
   onPlanChange: PropTypes.func.isRequired,
   dropdownRef: CustomPropTypes.ref.isRequired,
   allPlans: PropTypes.arrayOf(SERVICE_PLAN_SHAPE),
+  isDisabled: PropTypes.bool,
 };
 
 const isNonNullObject = o => typeof o === 'object' && !!o;
 
 export default function CreateInstanceForm({
-  // onCompleted,
   onChange,
-  // onError,
   setCustomValid,
   formElementRef,
   jsonSchemaFormRef,
@@ -126,7 +125,10 @@ export default function CreateInstanceForm({
   const [
     instanceCreateParameterSchema,
     setInstanceCreateParameterSchema,
-  ] = useState(getInstanceCreateParameterSchema(plans, plan));
+  ] = useState({});
+
+  useEffect(_ => handlePlanChange(plan), [preselectedPlanName, plans, plan]);
+
   const formValues = {
     name: useRef(null),
     plan: useRef(plan),
@@ -176,10 +178,10 @@ export default function CreateInstanceForm({
     }
   }
 
-  const handlePlanChange = e => {
+  const handlePlanChange = planName => {
     const newParametersSchema = getInstanceCreateParameterSchema(
       plans,
-      e.target.value,
+      planName,
     );
 
     setInstanceCreateParameterSchema(newParametersSchema);
