@@ -15,8 +15,9 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 const server = http.createServer(app);
-const kubeconfig = initializeKubeconfig();
-
+const kubeconfig = initializeKubeconfig(
+  process.env.KUBECONFIG || npx.getKubeconfigPath(),
+);
 const k8sUrl = new URL(
   kubeconfig.getCurrentCluster().server !== 'https://undefined:undefined'
     ? kubeconfig.getCurrentCluster().server
@@ -30,20 +31,30 @@ const port = process.env.PORT || 3001;
 const address = process.env.ADDRESS || 'localhost';
 console.log(`K8s server used: ${k8sUrl}`);
 
+const isHeaderNotDefined = (headers, headerName) => {
+  return (
+    !headers[headerName] === undefined || headers[headerName] === 'undefined'
+  );
+};
+
 const handleRequest = async (req, res) => {
   const urlHeader = 'x-cluster-url';
   const caHeader = 'x-cluster-certificate-authority-data';
 
   delete req.headers.host; // remove host in order not to confuse APIServer
 
-  if (!req.headers[urlHeader] || req.headers[urlHeader] == 'undefined') {
-    res.status(400).send(`The ${urlHeader} header was not provided`);
-    return;
-  }
+  const targetApiServer = isHeaderNotDefined(req.headers, urlHeader)
+    ? k8sUrl.hostname
+    : req.headers[urlHeader];
+  const ca = isHeaderNotDefined(req.headers, caHeader)
+    ? null
+    : Buffer.from(req.headers[caHeader], 'base64');
+
   const targetApiServer = url.parse(req.headers[urlHeader]);
+
   delete req.headers[urlHeader];
-  console.log(targetApiServer.hostname);
-  console.log(targetApiServer.port);
+  delete req.headers[caHeader];
+
   const options = {
     hostname: targetApiServer.hostname,
     path: req.originalUrl.replace(/^\/backend/, ''),
@@ -51,9 +62,6 @@ const handleRequest = async (req, res) => {
     body: req.body,
     method: req.method,
     port: targetApiServer.port || 443,
-    ca: req.headers[caHeader]
-      ? Buffer.from(req.headers[caHeader], 'base64')
-      : null,
   };
   npx.adjustRequestOptions(options, kubeconfig);
 

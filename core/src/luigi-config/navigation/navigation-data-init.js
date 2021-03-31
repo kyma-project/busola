@@ -21,10 +21,12 @@ import { groups } from '../auth';
 import { getInitParams, clearInitParams } from '../init-params';
 
 const params = getInitParams();
-const customLogoutFn = !!params?.auth || (() => {
-  clearInitParams();
-  window.location = '/logout.html';
-});
+const customLogoutFn =
+  !!params?.auth ||
+  (() => {
+    clearInitParams();
+    window.location = '/logout.html';
+  });
 
 export let resolveNavigationNodes;
 export let navigation = {
@@ -35,6 +37,7 @@ export let navigation = {
     [catalogViewGroupName]: {
       preloadUrl: config.serviceCatalogModuleUrl + '/preload',
     },
+    preloadViewGroups: false,
   },
   nodeAccessibilityResolver: navigationPermissionChecker,
   contextSwitcher: {
@@ -82,8 +85,9 @@ export function getNavigationData(authData) {
       // 'Finally' not supported by IE and FIREFOX (if 'finally' is needed, update your .babelrc)
       .then((res) => {
         const params = getInitParams();
-        const { disabledNavigationNodes, systemNamespaces } = params.config;
-        const { bebEnabled } = params.features;
+        const { disabledNavigationNodes = '', systemNamespaces = '' } =
+          params?.config || {};
+        const { bebEnabled = false } = params?.features || {};
         const nodes = [
           {
             pathSegment: 'home',
@@ -96,7 +100,7 @@ export function getNavigationData(authData) {
               systemNamespaces,
               showSystemNamespaces:
                 localStorage.getItem('busola.showSystemNamespaces') === 'true',
-              cluster: params.cluster,
+              cluster: params?.cluster || '',
             },
             children: function () {
               const staticNodes = getStaticRootNodes(

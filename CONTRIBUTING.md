@@ -6,7 +6,7 @@ To contribute to this project, follow the rules from the general [CONTRIBUTING.m
 
 ### General information
 
-UI developed within the Busola should be compliant with [Fiori Design Guidelines](https://experience.sap.com/fiori-design-web/).
+UI developed within Busola should be compliant with [Fiori Design Guidelines](https://experience.sap.com/fiori-design-web/).
 
 ### Additional guidelines for modals
 

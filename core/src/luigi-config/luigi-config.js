@@ -27,7 +27,7 @@ export const NODE_PARAM_PREFIX = `~`;
   if (!params && !config.isNpx) {
     window.location = '/login.html';
   }
-  
+
   const shouldCreateAuth = !config.isNpx && !params.rawAuth;
   if (params.rawAuth) {
     Luigi.auth().store.setAuthData(params.rawAuth);

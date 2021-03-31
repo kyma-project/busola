@@ -5,14 +5,14 @@ const cluster = getInitParams()?.cluster;
 
 function createAuthHeaders(auth) {
   if (auth.idToken) {
-    return {Authorization: `Bearer ${auth.idToken}`};
+    return { Authorization: `Bearer ${auth.idToken}` };
   } else if (auth['client-certificate-data'] && auth['client-key-data']) {
     return {
-      "X-Client-Certificate-Data": auth['client-certificate-data'],
-      "X_Client-Key-Data": auth['client-key-data'],
-    }
+      'X-Client-Certificate-Data': auth['client-certificate-data'],
+      'X_Client-Key-Data': auth['client-key-data'],
+    };
   } else {
-    throw Error("No available data to authenticate the request.");
+    throw Error('No available data to authenticate the request.');
   }
 }
 

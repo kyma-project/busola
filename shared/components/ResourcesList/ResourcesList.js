@@ -85,7 +85,7 @@ function Resources({
   windowTitle,
   readOnly,
 }) {
-  useWindowTitle(windowTitle || prettifyNamePlural(null, resourceType));
+  useWindowTitle(windowTitle || prettifyNamePlural(resourceName, resourceType));
   const setEditedSpec = useYamlEditor();
   const notification = useNotification();
   const updateResourceMutation = useUpdate(resourceUrl);
@@ -208,7 +208,7 @@ function Resources({
 
   return (
     <GenericList
-      title={showTitle ? resourceType : null}
+      title={showTitle ? prettifyNamePlural(resourceName, resourceType) : null}
       textSearchProperties={['metadata.name']}
       actions={actions}
       entries={resources || []}
