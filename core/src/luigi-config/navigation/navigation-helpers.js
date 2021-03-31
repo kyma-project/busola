@@ -53,24 +53,19 @@ export const saveCurrentLocation = () => {
 
 export function relogin() {
   saveCurrentLocation();
-  clearToken();
+  clearAuthData();
   location.reload();
 }
 
-export function clearToken() {
+export function clearAuthData() {
   Luigi.auth().store.removeAuthData();
 }
 
 export function getToken() {
   if (config.isNpx) {
-    return 'fake-npx-token';
+    return {idToken: 'fake-npx-token'};
   }
-  let token;
-  const authData = Luigi.auth().store.getAuthData();
-  if (authData) {
-    token = authData.idToken;
-  }
-  return token;
+  return Luigi.auth().store.getAuthData();
 }
 
 export const getPreviousLocation = () => {

@@ -8,7 +8,7 @@ window.addEventListener('load', (_) => {
 });
 
 function login() {
-  window.location.href = window.location.origin;
+  window.location = '/login.html';
 }
 
 function getUrlParameter(name) {

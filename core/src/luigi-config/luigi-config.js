@@ -27,13 +27,12 @@ export const NODE_PARAM_PREFIX = `~`;
   const params = getInitParams();
 
   if (!params && !config.isNpx) {
-    Luigi.setConfig(preAuthConfig);
-    return;
+    window.location = '/login.html';
   }
-
-  const shouldCreateAuth = !config.isNpx && !params.token;
-  if (params.token) {
-    Luigi.auth().store.setAuthData({ idToken: params.token });
+  
+  const shouldCreateAuth = !config.isNpx && !params.rawAuth;
+  if (params.rawAuth) {
+    Luigi.auth().store.setAuthData(params.rawAuth);
   }
 
   const luigiConfig = {
@@ -56,9 +55,9 @@ export const NODE_PARAM_PREFIX = `~`;
         } else {
           Luigi.featureToggles().unsetFeatureToggle('showSystemNamespaces');
         }
-        const token = getToken();
-        if (token) {
-          getNavigationData(token).then((response) => {
+        const auth = getToken();
+        if (auth) {
+          getNavigationData(auth).then((response) => {
             resolveNavigationNodes(response);
             Luigi.ux().hideAppLoadingIndicator();
 

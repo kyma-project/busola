@@ -7,13 +7,6 @@ const loginNode = {
   viewUrl: `${config.coreUIModuleUrl}/login`,
 };
 
-const redirectNode = {
-  hideFromNav: true,
-  pathSegment: '*',
-  label: '',
-  onNodeActivation: console.log,
-}
-
 export const navigation = {
-  nodes: [loginNode, redirectNode],
+  nodes: [loginNode],
 };

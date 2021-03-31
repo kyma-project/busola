@@ -6,6 +6,9 @@ export default {
   navigation,
   communication,
   settings,
+  routing: {
+    pageNotFoundHandler: () => ({ redirectTo: '/login' }),
+  },
   lifecycleHooks: {
     luigiAfterInit: Luigi.ux().hideAppLoadingIndicator,
   },

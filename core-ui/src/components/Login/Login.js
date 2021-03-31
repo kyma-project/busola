@@ -1,5 +1,6 @@
 import React from 'react';
-import { FileInput } from 'react-shared';
+import { FileInput, PageHeader } from 'react-shared';
+import { Panel, Alert } from 'fundamental-react';
 
 import { AuthForm } from './AuthForm';
 import { readKubeconfigFile } from './helpers';
@@ -17,13 +18,23 @@ export default function Login() {
     readKubeconfigFile(file)
       .then(kk => {
         const cluster = {
-          server: kk.clusters[0].cluster.server.replace('https://', ''),
+          server: kk.clusters[0].cluster.server,
           'certificate-authority-data':
             kk.clusters[0].cluster['certificate-authority-data'],
         };
-        const token = kk.users[0].user.token;
-        if (token) {
-          saveInitParams({ cluster, token });
+        const user = kk.users[0].user;
+        const token = user.token;
+        const clientCA = user['client-certificate-data'];
+        const clientKeyData = user['client-key-data'];
+        if (token || (clientCA && clientKeyData)) {
+          saveInitParams({
+            cluster,
+            rawAuth: {
+              idToken: token,
+              'client-certificate-data': clientCA,
+              'client-key-data': clientKeyData,
+            },
+          });
         } else {
           setCluster(cluster);
           setRequireForm(true);
@@ -37,15 +48,25 @@ export default function Login() {
 
   return (
     <>
-      <FileInput
-        fileInputChanged={onFileChange}
-        acceptedFileFormats=".yml,.yaml"
-        required={true}
+      <PageHeader
+        title="Login to Busola"
+        description="Login with your kubeconfig file"
       />
-      {error && <p>{error}</p>}
-      {requireForm && (
-        <AuthForm onSubmit={auth => saveInitParams({ cluster, auth })} />
-      )}
+      <Panel className="fd-has-margin-m fd-has-padding-s">
+        <FileInput
+          fileInputChanged={onFileChange}
+          acceptedFileFormats=".yml,.yaml"
+          required={true}
+        />
+        {error && (
+          <Alert className="fd-has-margin-top-s" type="error">
+            {error}
+          </Alert>
+        )}
+        {requireForm && (
+          <AuthForm onSubmit={auth => saveInitParams({ cluster, auth })} />
+        )}
+      </Panel>
     </>
   );
 }

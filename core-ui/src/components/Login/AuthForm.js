@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { Button } from 'fundamental-react';
+import { Alert, Button } from 'fundamental-react';
 import { TextFormItem } from 'react-shared';
 
-export default function AuthForm({ onSubmit }) {
+export function AuthForm({ onSubmit }) {
   const [auth, setAuth] = React.useState({
     issuerUrl: '',
     clientId: '',
@@ -17,8 +17,13 @@ export default function AuthForm({ onSubmit }) {
   };
 
   return (
-    <form onSubmit={onFormSubmit}>
+    <form onSubmit={onFormSubmit} className="fd-has-margin-top-s">
+      <Alert type="warning">
+        It looks like your kubeconfig is incomplete. Please fill two additional
+        fields.
+      </Alert>
       <TextFormItem
+        className="fd-has-margin-top-s"
         inputKey="issuer-url"
         required
         label="Issuer URL"
@@ -26,13 +31,20 @@ export default function AuthForm({ onSubmit }) {
         onChange={e => setAuth({ ...auth, issuerUrl: e.target.value })}
       />
       <TextFormItem
+        className="fd-has-margin-top-s"
         inputKey="client-id"
         required
         label="Client ID"
         placeholder="Enter client ID"
         onChange={e => setAuth({ ...auth, clientId: e.target.value })}
       />
-      <Button disabled={!auth.issuerUrl || !auth.clientId}>Connect</Button>
+      <Button
+        className="fd-has-margin-top-s"
+        option="emphasized"
+        disabled={!auth.issuerUrl || !auth.clientId}
+      >
+        Connect
+      </Button>
     </form>
   );
 }

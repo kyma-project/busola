@@ -1,6 +1,7 @@
-export function createHeaders(idToken, cluster) {
+export function createHeaders(token, cluster) {
+  return 'xd';
   return {
-    Authorization: 'Bearer ' + idToken,
+    Authorization: 'Bearer ' + token,
     'X-Cluster-Url': cluster.server,
     'X-Cluster-Certificate-Authority-Data':
       cluster['certificate-authority-data'],

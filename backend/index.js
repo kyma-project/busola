@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const http = require('http');
 const https = require('https');
+const url = require('url');
+
 import npx from './npx-setup';
 import { initializeKubeconfig } from './utils/kubeconfig';
 import { requestLogger } from './utils/other';
@@ -38,16 +40,17 @@ const handleRequest = async (req, res) => {
     res.status(400).send(`The ${urlHeader} header was not provided`);
     return;
   }
-  const targetApiServer = req.headers[urlHeader];
+  const targetApiServer = url.parse(req.headers[urlHeader]);
   delete req.headers[urlHeader];
-
+  console.log(targetApiServer.hostname);
+  console.log(targetApiServer.port);
   const options = {
-    hostname: targetApiServer,
+    hostname: targetApiServer.hostname,
     path: req.originalUrl.replace(/^\/backend/, ''),
     headers: req.headers,
     body: req.body,
     method: req.method,
-    port: k8sUrl.port || 443,
+    port: targetApiServer.port || 443,
     ca: req.headers[caHeader]
       ? Buffer.from(req.headers[caHeader], 'base64')
       : null,

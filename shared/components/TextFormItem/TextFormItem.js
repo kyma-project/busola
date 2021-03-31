@@ -11,6 +11,7 @@ TextFormItem.propTypes = {
   onChange: PropTypes.func,
   defaultValue: PropTypes.any,
   inputRef: CustomPropTypes.ref,
+  className: PropTypes.string,
 };
 
 TextFormItem.defaultProps = {
@@ -26,9 +27,10 @@ export function TextFormItem({
   defaultValue,
   inputRef,
   inputProps,
+  className,
 }) {
   return (
-    <FormItem key={inputKey}>
+    <FormItem key={inputKey} className={className}>
       <FormLabel htmlFor={inputKey} required={required}>
         {label}
       </FormLabel>

@@ -54,3 +54,7 @@ export function getInitParams() {
   }
   return JSON.parse(localStorage.getItem(PARAMS_KEY) || 'null');
 }
+
+export function clearInitParams() {
+  localStorage.removeItem(PARAMS_KEY);
+}
