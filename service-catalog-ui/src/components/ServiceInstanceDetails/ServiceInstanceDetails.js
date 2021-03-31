@@ -10,8 +10,8 @@ import {
 } from 'react-shared';
 
 import ServiceInstanceHeader from './ServiceInstanceHeader/ServiceInstanceHeader';
-// import ServiceInstanceBindings from './ServiceInstanceBindings/ServiceInstanceBindings.container';
-// import { serviceInstanceConstants } from 'helpers/constants';
+import ServiceInstanceBindings from './ServiceInstanceBindings/ServiceInstanceBindings.component';
+import { serviceInstanceConstants } from 'helpers/constants';
 
 import { ServiceInstanceWrapper, EmptyList } from './styled';
 
@@ -68,17 +68,10 @@ export default function ServiceInstanceDetails({ match }) {
         // deleteServiceInstance={deleteServiceInstanceMutation}
       />
       <ServiceInstanceWrapper>
-        {/* // <ServiceInstanceBindings
-          //   defaultActiveTabIndex={serviceInstanceConstants.addonsIndex}
-          //   serviceInstance={serviceInstance}
-          // /> */}
-
-        {/* {serviceClass && backendModuleExists('rafter') && ( // this was used to display the documentation
-          <ServiceInstanceTabs
-            serviceClass={serviceClass}
-            currentPlan={serviceInstance.servicePlan}
-          />
-        )} */}
+        <ServiceInstanceBindings
+          defaultActiveTabIndex={serviceInstanceConstants.addonsIndex}
+          serviceInstance={serviceInstance}
+        />
       </ServiceInstanceWrapper>
     </ThemeWrapper>
   );

@@ -12,6 +12,7 @@ import ParametersDataModal from './ParametersDataModal/ParametersDataModal.compo
 import DeleteBindingModal from './DeleteBindingModal/DeleteBindingModal.component';
 import StatusIndicator from './StatusIndicator/StatusIndicator.component';
 
+import { Spinner, useGetList } from 'react-shared';
 import {
   ServiceInstanceBindingsWrapper,
   SecretModalButton,
@@ -22,320 +23,228 @@ import { TextOverflowWrapper } from '../../ServiceInstanceList/ServiceInstanceTa
 
 import { backendModuleExists } from 'helpers';
 
-class ServiceInstanceBindings extends React.Component {
-  capitalize = str => {
+const ServiceInstanceBindings = ({
+  serviceInstance,
+  defaultActiveTabIndex,
+}) => {
+  const bindingsRequest = useGetList()(
+    `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${serviceInstance?.metadata.namespace}/servicebindings`,
+    {},
+  );
+
+  const bindingUsagesRequest = useGetList()(
+    `/apis/servicecatalog.kyma-project.io/v1alpha1/namespaces/${serviceInstance?.metadata.namespace}/servicebindingusages`,
+    {
+      // pollingInterval: 2900,
+    },
+  );
+
+  const secretsRequest = useGetList()(
+    `/api/v1/namespaces/${serviceInstance?.metadata.namespace}/secrets`,
+    {
+      // pollingInterval: 3300,
+    },
+  );
+
+  if (
+    !bindingsRequest.data ||
+    !bindingUsagesRequest.data ||
+    !secretsRequest.data
+  )
+    return <Spinner />; //TODO
+
+  const getBindingCombinedData = binding => {
+    const usage = bindingUsagesRequest.data.find(
+      u => binding.metadata.name === u.spec.serviceBindingRef.name,
+    );
+    return {
+      serviceBinding: binding,
+      serviceBindingUsage: usage,
+      secret: binding
+        ? secretsRequest.data.find(
+            s => s.metadata.name === binding.spec.secretName,
+          )
+        : undefined,
+    };
+  };
+
+  const serviceBindingsCombined = bindingsRequest.data.map(
+    getBindingCombinedData,
+  );
+
+  const error = !!(
+    bindingsRequest.error ||
+    bindingUsagesRequest.error ||
+    secretsRequest.error
+  );
+  const loading = !!(
+    bindingsRequest.loading ||
+    bindingUsagesRequest.loading ||
+    secretsRequest.loading
+  );
+  console.log(serviceBindingsCombined);
+
+  const capitalize = str => {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   };
 
-  countBindingUsage = usage => {
-    if (
-      !this.props.serviceInstance ||
-      !this.props.serviceInstance.serviceBindingUsages
-    ) {
-      return 0;
-    }
+  // const relatedBindingUsage = bindingName => {
+  //   if (!this.props.serviceInstance.serviceBindingUsages) return null;
 
-    return this.props.serviceInstance.serviceBindingUsages.filter(item => {
-      if (!item.serviceBinding || !usage.serviceBinding) {
-        return false;
-      }
-      return item.serviceBinding.name === usage.serviceBinding.name;
-    }).length;
-  };
+  //   return this.props.serviceInstance.serviceBindingUsages.filter(item => {
+  //     if (!item.serviceBinding) {
+  //       return null;
+  //     }
+  //     return item.serviceBinding.name === bindingName;
+  //   });
+  // };
 
-  relatedBindingUsage = bindingName => {
-    if (!this.props.serviceInstance.serviceBindingUsages) return null;
+  // const { createBinding, createBindingUsage, serviceInstance } = this.props;
+  console.log('serviceInstance', serviceInstance);
+  // TODO take bindable from plan or service class
+  // if (!serviceInstance.bindable) {
+  //   return (
+  //     <h4 className="fd-has-text-align-center">
+  //       ServiceInstance not bindable. Binding panel not available.
+  //     </h4>
+  //   );
+  // }
 
-    return this.props.serviceInstance.serviceBindingUsages.filter(item => {
-      if (!item.serviceBinding) {
-        return null;
-      }
-      return item.serviceBinding.name === bindingName;
-    });
-  };
+  // const bindApplication = (
+  //   <BindApplicationModal
+  //     createBinding={createBinding}
+  //     createBindingUsage={createBindingUsage}
+  //     serviceInstance={serviceInstance}
+  //     id={`create-service-binding`}
+  //   />
+  // );
 
-  getStatusType = statusType => {
-    let type;
-    switch (statusType) {
-      case 'READY':
-        type = 'success';
-        break;
-      case 'FAILED':
-        type = 'error';
-        break;
-      default:
-        type = 'warning';
-    }
-    return type;
-  };
+  // const boundApplicationContent = (
+  //   <>
+  //     <ActionsWrapper>{bindApplication}</ActionsWrapper>
+  //   </>
+  // );
 
-  status = (data, id) => {
-    return <StatusIndicator testId={id} data={data} key={id} />;
-  };
+  // const createCredentials = (
+  //   <CreateCredentialsModal
+  //     createBinding={createBinding}
+  //     createBindingUsage={createBindingUsage}
+  //     serviceInstance={serviceInstance}
+  //     id={`create-credentials`}
+  //   />
+  // );
+  // const createCredentialsContent = (
+  //   <>
+  //     <ActionsWrapper>{createCredentials}</ActionsWrapper>
+  //   </>
+  // );
 
-  render() {
-    const { createBinding, createBindingUsage, serviceInstance } = this.props;
+  const serviceCatalogAddonsBackendModuleExists = backendModuleExists(
+    'servicecatalogaddons',
+  );
 
-    if (!serviceInstance.bindable) {
-      return (
-        <h4 className="fd-has-text-align-center">
-          ServiceInstance not bindable. Binding panel not available.
-        </h4>
-      );
-    }
-
-    const bindApplication = (
-      <BindApplicationModal
-        createBinding={createBinding}
-        createBindingUsage={createBindingUsage}
-        serviceInstance={serviceInstance}
-        id={`create-service-binding`}
-      />
-    );
-
-    const boundApplicationContent = (
-      <>
-        <ActionsWrapper>{bindApplication}</ActionsWrapper>
-      </>
-    );
-
-    const createCredentials = (
-      <CreateCredentialsModal
-        createBinding={createBinding}
-        createBindingUsage={createBindingUsage}
-        serviceInstance={serviceInstance}
-        id={`create-credentials`}
-      />
-    );
-    const createCredentialsContent = (
-      <>
-        <ActionsWrapper>{createCredentials}</ActionsWrapper>
-      </>
-    );
-
-    const serviceCatalogAddonsBackendModuleExists = backendModuleExists(
-      'servicecatalogaddons',
-    );
-
-    const bindingUsagesHeaderRenderer = () => [
-      'Service Binding Usage',
-      'Bound Applications',
-      'Service Binding',
-      'Secret',
-      'Status',
-      '',
-    ];
-    const bindingUsagesRowRenderer = bindingUsage => [
-      <TextOverflowWrapper>
-        <span data-e2e-id="binding-name" title={bindingUsage.name}>
-          {bindingUsage.name}
-        </span>
-      </TextOverflowWrapper>,
-      (_ => {
-        const text = `${bindingUsage.usedBy.name} (${this.capitalize(
-          bindingUsage.usedBy.kind,
-        )})`;
-
-        return (
-          <TextOverflowWrapper>
-            <span title={text}>{text}</span>
-          </TextOverflowWrapper>
-        );
-      })(),
-      (_ => {
-        return (
-          bindingUsage.serviceBinding && (
-            <TextOverflowWrapper>
-              <span title={bindingUsage.serviceBinding.name}>
-                {bindingUsage.serviceBinding.name}
-              </span>
-            </TextOverflowWrapper>
-          )
-        );
-      })(),
-      (_ => {
-        const prefix =
-          bindingUsage.parameters &&
-          bindingUsage.parameters.envPrefix &&
-          bindingUsage.parameters.envPrefix.name;
-        const secret =
-          bindingUsage.serviceBinding && bindingUsage.serviceBinding.secret;
-
-        return secret && Object.keys(secret).length ? (
-          <TextOverflowWrapper>
-            <SecretDataModal
-              title={`Secret ${secret.name}`}
-              modalOpeningComponent={
-                <SecretModalButton data-e2e-id="secret-button">
-                  {secret.name}
-                </SecretModalButton>
-              }
-              data={secret.data}
-              prefix={prefix}
-            />
-          </TextOverflowWrapper>
-        ) : (
-          '-'
-        );
-      })(),
-      <StatusTooltip
-        type={this.getStatusType(bindingUsage.status.type)}
-        content={bindingUsage.status.message}
-        minWidth="250px"
+  const bindingUsagesHeaderRenderer = () => [
+    'Service Binding Usage',
+    'Bound Applications',
+    'Service Binding',
+    'Secret',
+    'Status',
+    '',
+  ];
+  const bindingUsagesRowRenderer = ({
+    serviceBinding,
+    serviceBindingUsage,
+    secret,
+  }) => [
+    <TextOverflowWrapper>
+      <span
+        data-e2e-id="binding-name"
+        title={serviceBindingUsage.metadata.name}
       >
-        <span
-          style={{
-            color: instanceStatusColor(bindingUsage.status.type),
-            cursor: `${bindingUsage.status.message ? 'help' : 'default'}`,
-          }}
-          title={bindingUsage.status.type}
-        >
-          {bindingUsage.status.type}
-        </span>
-      </StatusTooltip>,
-      <div className="list-actions">
-        <DeleteBindingModal
+        {serviceBindingUsage.metadata.name}
+      </span>
+    </TextOverflowWrapper>,
+    (_ => {
+      const text = `${serviceBindingUsage.spec.usedBy?.name} (${capitalize(
+        serviceBindingUsage.spec.usedBy?.kind,
+      )})`;
+
+      return (
+        <TextOverflowWrapper>
+          <span title={text}>{text}</span>
+        </TextOverflowWrapper>
+      );
+    })(),
+    (_ => {
+      return (
+        serviceBinding && (
+          <TextOverflowWrapper>
+            <span title={serviceBinding.metadata.name}>
+              {serviceBinding.metadata.name}
+            </span>
+          </TextOverflowWrapper>
+        )
+      );
+    })(),
+    (_ => {
+      const prefix = serviceBindingUsage.spec.parameters?.envPrefix?.name;
+
+      return secret && Object.keys(secret).length ? (
+        <TextOverflowWrapper>
+          <SecretDataModal
+            title={`Secret ${secret.metadata.name}`}
+            modalOpeningComponent={
+              <SecretModalButton data-e2e-id="secret-button">
+                {secret.metadata.name}
+              </SecretModalButton>
+            }
+            data={secret.data}
+            prefix={prefix}
+          />
+        </TextOverflowWrapper>
+      ) : (
+        '-'
+      );
+    })(),
+    // <StatusTooltip
+    //   type={this.getStatusType(bindingUsage.status.type)}
+    //   content={bindingUsage.status.message}
+    //   minWidth="250px"
+    // >
+    //   <span
+    //     style={{
+    //       color: instanceStatusColor(bindingUsage.status.type),
+    //       cursor: `${bindingUsage.status.message ? 'help' : 'default'}`,
+    //     }}
+    //     title={bindingUsage.status.type}
+    //   >
+    //     {bindingUsage.status.type}
+    //   </span>
+    // </StatusTooltip>,
+    <div className="list-actions">
+      {/* <DeleteBindingModal
           deleteBindingUsage={this.props.deleteBindingUsage}
           bindingUsageName={bindingUsage.name}
           bindingUsageCount={this.countBindingUsage(bindingUsage)}
           id={`service-binding-delete-${bindingUsage.name}`}
-        />
-      </div>,
-    ];
+        /> */}
+    </div>,
+  ];
 
-    const bindingsHeaderRenderer = () => ['Bindings', 'Secret', 'Status', ''];
-    const bindingsRowRenderer = binding => [
-      <TextOverflowWrapper>
-        <span data-e2e-id="credential-name" title={binding.name}>
-          {binding.name}
-        </span>
-      </TextOverflowWrapper>,
-      (_ => {
-        const secret = binding && binding.secret;
-        return secret && Object.keys(secret).length ? (
-          <TextOverflowWrapper>
-            <SecretDataModal
-              title={`Secret ${secret.name}`}
-              modalOpeningComponent={
-                <SecretModalButton data-e2e-id="secret-button">
-                  {secret.name}
-                </SecretModalButton>
-              }
-              data={secret.data}
-            />
-          </TextOverflowWrapper>
-        ) : (
-          '-'
-        );
-      })(),
-      <StatusTooltip
-        type={this.getStatusType(binding.status.type)}
-        content={binding.status.message}
-        minWidth="250px"
-        wrapperStyles="max-width: 100%;"
-      >
-        <span
-          style={{
-            color: instanceStatusColor(binding.status.type),
-            cursor: `${binding.status.message ? 'help' : 'default'}`,
-          }}
-          title={binding.status.type}
-        >
-          {binding.status.type}
-        </span>
-      </StatusTooltip>,
-      (_ => {
-        const parameters = binding && binding.parameters;
-        return (
-          <div className="list-actions">
-            {parameters && Object.keys(parameters).length > 0 && (
-              <Tooltip content={'Parameters'}>
-                <span
-                  style={{
-                    cursor: 'help',
-                  }}
-                >
-                  <ParametersDataModal
-                    title={`Parameters for ${binding.name}`}
-                    data={parameters}
-                  />
-                </span>
-              </Tooltip>
-            )}
-
-            <DeleteBindingModal
-              deleteBinding={this.props.deleteBinding}
-              bindingName={binding.name || null}
-              bindingExists={Boolean(binding)}
-              bindingUsageCount={this.countBindingUsage({
-                serviceBinding: binding,
-              })}
-              relatedBindingUsage={this.relatedBindingUsage(binding.name)}
-              id={`service-binding-delete-${binding.name}`}
-            />
-          </div>
-        );
-      })(),
-    ];
-
-    return (
-      <ServiceInstanceBindingsWrapper>
-        <Tabs
-          className="table-styles"
-          defaultActiveTabIndex={this.props.defaultActiveTabIndex}
-        >
-          {serviceCatalogAddonsBackendModuleExists ? (
-            <Tab
-              title={
-                <Tooltip content="ServiceBindingUsage is a Kyma custom resource that allows the ServiceBindingUsage controller to inject Secrets into a given application.">
-                  <span data-e2e-id="service-binding-usage-tab">
-                    Bound Applications
-                  </span>
-                </Tooltip>
-              }
-              addHeaderContent={boundApplicationContent}
-              status={this.status(
-                serviceInstance.serviceBindingUsages,
-                'status-service-binding-usage',
-              )}
-            >
-              <GenericList
-                key="binding-usages-list"
-                headerRenderer={bindingUsagesHeaderRenderer}
-                entries={serviceInstance.serviceBindingUsages}
-                rowRenderer={bindingUsagesRowRenderer}
-                notFoundMessage="No applications found"
-                showRootHeader={false}
-                hasExternalMargin={false}
-              />
-            </Tab>
-          ) : null}
-          <Tab
-            title={
-              <Tooltip content="ServiceBinding is a link between a ServiceInstance and an application that cluster users create to obtain access credentials for their applications.">
-                <span data-e2e-id="service-binding-tab">Credentials</span>
-              </Tooltip>
-            }
-            addHeaderContent={createCredentialsContent}
-            status={this.status(
-              serviceInstance.serviceBindings.items,
-              'status-service-binding',
-            )}
-          >
-            <GenericList
-              key="bindings-list"
-              headerRenderer={bindingsHeaderRenderer}
-              entries={serviceInstance.serviceBindings.items}
-              rowRenderer={bindingsRowRenderer}
-              notFoundMessage="No credentials found"
-              showRootHeader={false}
-              hasExternalMargin={false}
-            />
-          </Tab>
-        </Tabs>
-      </ServiceInstanceBindingsWrapper>
-    );
-  }
-}
+  return (
+    <ServiceInstanceBindingsWrapper>
+      <GenericList
+        key="binding-usages-list"
+        title="Bound Applications"
+        headerRenderer={bindingUsagesHeaderRenderer}
+        entries={serviceBindingsCombined}
+        rowRenderer={bindingUsagesRowRenderer}
+        notFoundMessage="No applications found"
+        showRootHeader={false}
+        hasExternalMargin={false}
+      />
+    </ServiceInstanceBindingsWrapper>
+  );
+};
 
 export default ServiceInstanceBindings;
