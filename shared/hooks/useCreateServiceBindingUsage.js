@@ -1,22 +1,18 @@
-import { useNotification, usePost } from 'react-shared';
+import { useNotification } from '../contexts/NotificationContext';
+import { usePost } from './BackendAPI/usePost';
+import { formatMessage, randomNameGenerator } from '../utils/helpers';
 
-import {
-  formatMessage,
-  randomNameGenerator,
-} from 'components/Lambdas/helpers/misc';
-import { LAMBDAS_MESSAGES } from 'components/Lambdas/constants';
-import { CONFIG } from 'components/Lambdas/config';
-
-export const useCreateServiceBindingUsage = () => {
+export const useCreateServiceBindingUsage = ({
+  successMessage,
+  errorMessage,
+  usageKind,
+}) => {
   const postRequest = usePost();
   const notificationManager = useNotification();
 
   function handleError(serviceInstanceName, error) {
     console.error(error);
-    const message = formatMessage(
-      LAMBDAS_MESSAGES.CREATE_BINDING_USAGE.ERROR_MESSAGE,
-      { serviceInstanceName },
-    );
+    const message = formatMessage(errorMessage, { serviceInstanceName });
 
     notificationManager.notifyError({
       content: message,
@@ -64,7 +60,7 @@ export const useCreateServiceBindingUsage = () => {
           },
           usedBy: {
             name: lambdaName,
-            kind: CONFIG.functionUsageKind,
+            kind: usageKind,
           },
           parameters,
         },
@@ -101,10 +97,7 @@ export const useCreateServiceBindingUsage = () => {
       return;
     }
 
-    const message = formatMessage(
-      LAMBDAS_MESSAGES.CREATE_BINDING_USAGE.SUCCESS_MESSAGE,
-      { serviceInstanceName },
-    );
+    const message = formatMessage(successMessage, { serviceInstanceName });
 
     notificationManager.notifySuccess({
       content: message,

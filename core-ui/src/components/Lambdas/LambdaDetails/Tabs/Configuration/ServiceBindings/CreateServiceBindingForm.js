@@ -3,8 +3,12 @@ import PropTypes from 'prop-types';
 import { FormItem, FormLabel, FormInput, Alert } from 'fundamental-react';
 
 import Checkbox from 'components/Lambdas/Checkbox/Checkbox';
-import { useCreateServiceBindingUsage } from 'components/Lambdas/hooks';
-import { SERVICE_BINDINGS_PANEL } from 'components/Lambdas/constants';
+import { useCreateServiceBindingUsage } from 'react-shared';
+import {
+  SERVICE_BINDINGS_PANEL,
+  LAMBDAS_MESSAGES,
+} from 'components/Lambdas/constants';
+import { CONFIG } from 'components/Lambdas/config';
 
 const checkBoxInputProps = {
   style: {
@@ -23,7 +27,11 @@ export default function CreateServiceBindingForm({
   setValidity = () => void 0,
   isOpen = false,
 }) {
-  const createServiceBindingUsageSet = useCreateServiceBindingUsage();
+  const createServiceBindingUsageSet = useCreateServiceBindingUsage({
+    successMessage: LAMBDAS_MESSAGES.CREATE_BINDING_USAGE.SUCCESS_MESSAGE,
+    errorMessage: LAMBDAS_MESSAGES.CREATE_BINDING_USAGE.ERROR_MESSAGE,
+    usageKind: CONFIG.functionUsageKind,
+  });
 
   const [selectedServiceInstance, setSelectedServiceInstance] = useState('');
   const [envPrefix, setEnvPrefix] = useState('');

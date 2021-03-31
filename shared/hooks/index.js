@@ -6,3 +6,4 @@ export * from './useSideDrawer.js';
 export * from './useShowSystemNamespaces';
 export * from './navigate';
 export * from './BackendAPI/index';
+export * from './useCreateServiceBindingUsage';
