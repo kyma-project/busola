@@ -1,7 +1,6 @@
 import { KubeConfig } from '@kubernetes/client-node';
 
-export function initializeKubeconfig() {
-  const kubeconfigLocation = process.env.KUBECONFIG;
+export function initializeKubeconfig(kubeconfigLocation) {
   const kubeconfig = new KubeConfig();
 
   console.log(kubeconfigLocation);

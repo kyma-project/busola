@@ -2,6 +2,10 @@ const path = require('path');
 const open = require('open');
 const express = require('express');
 
+function getKubeconfigPath() {
+  return `${process.env.HOME}/.kube/config`;
+}
+
 function setupRoutes(app, handleBackendRequest) {
   app.use('/core-ui', express.static(path.join(__dirname, 'core-ui')));
   app.get('/core-ui/*', (_, res) =>
@@ -31,12 +35,13 @@ function isNpxEnv() {
 function runIfNpx(fn) {
   return (...args) => {
     if (isNpxEnv()) {
-      fn(...args);
+      return fn(...args);
     }
   };
 }
 
 export default {
+  getKubeconfigPath: runIfNpx(getKubeconfigPath),
   setupRoutes: runIfNpx(setupRoutes),
   openBrowser: runIfNpx(openBrowser),
   adjustRequestOptions: runIfNpx(adjustRequestOptions),
