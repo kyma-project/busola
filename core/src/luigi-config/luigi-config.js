@@ -17,8 +17,6 @@ import {
 } from './navigation/navigation-data-init';
 import { onQuotaExceed } from './luigi-event-handlers';
 
-import preAuthConfig from './pre-auth';
-
 export const NODE_PARAM_PREFIX = `~`;
 
 (async () => {
