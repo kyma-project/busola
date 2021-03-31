@@ -1,15 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Checkbox,
-  FormItem,
-  FormLabel,
-  FormInput,
-  Alert,
-} from 'fundamental-react';
+import { FormItem, FormLabel, FormInput, Alert } from 'fundamental-react';
+import { Checkbox } from 'react-shared';
 
-// import Checkbox from '../../../../../../core-ui/src/components/Lambdas/Checkbox/Checkbox';
-// import { useCreateServiceBindingUsage } from '../../../../../../core-ui/src/components/Lambdas/hooks';
 import { SERVICE_BINDINGS_PANEL } from './constants';
 
 const checkBoxInputProps = {
@@ -19,48 +12,37 @@ const checkBoxInputProps = {
 };
 
 export default function CreateServiceBindingForm({
-  lambda,
-  availableServiceInstances = [],
+  serviceInstance,
+  usageKinds = [],
   serviceBindings,
+  secrets,
   setPopupModalMessage = () => void 0,
-  refetchServiceInstances = () => void 0,
   onChange,
   formElementRef,
   setValidity = () => void 0,
   isOpen = false,
 }) {
   // const createServiceBindingUsageSet = useCreateServiceBindingUsage();
-
+  console.log(secrets);
   const [selectedServiceInstance, setSelectedServiceInstance] = useState('');
   const [envPrefix, setEnvPrefix] = useState('');
 
   const [createCredentials, setCreateCredentials] = useState(true);
   const [existingCredentials, setExistingCredentials] = useState('');
-  const [secrets, setSecrets] = useState([]);
 
   useEffect(() => {
     setValidity(false);
   }, [setValidity]);
 
   useEffect(() => {
-    if (isOpen) {
-      refetchServiceInstances();
-    }
-  }, [isOpen, refetchServiceInstances]);
-
-  useEffect(() => {
     if (!selectedServiceInstance) {
       setEnvPrefix('');
       setCreateCredentials(true);
-      setSecrets([]);
       return;
     }
-    const bindingsForThisInstance = serviceBindings.filter(
-      b => b.spec.instanceRef.name === selectedServiceInstance,
-    );
-    setSecrets(bindingsForThisInstance.map(b => b.spec.secretName));
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedServiceInstance, availableServiceInstances]);
+  }, [selectedServiceInstance]);
 
   useEffect(() => {
     if (!selectedServiceInstance) {
@@ -91,14 +73,15 @@ export default function CreateServiceBindingForm({
   ]);
 
   useEffect(() => {
+    console.log('create credentials changed', createCredentials);
     setExistingCredentials('');
   }, [selectedServiceInstance, createCredentials]);
 
   async function handleFormSubmit(e) {
     e.preventDefault();
     const parameters = {
-      lambdaName: lambda.metadata.name,
-      namespace: lambda.metadata.namespace,
+      // lambdaName: lambda.metadata.name,
+      // namespace: lambda.metadata.namespace,
       serviceInstanceName: selectedServiceInstance,
       serviceBindingUsageParameters: envPrefix
         ? {
@@ -114,13 +97,11 @@ export default function CreateServiceBindingForm({
     // await createServiceBindingUsageSet(parameters);
   }
 
-  const serviceInstancesNames = availableServiceInstances.map(
-    ({ metadata }) => (
-      <option value={metadata.name} key={metadata.name}>
-        {metadata.name}
-      </option>
-    ),
-  );
+  const serviceInstancesNames = serviceBindings.map(({ metadata }) => (
+    <option value={metadata.name} key={metadata.name}>
+      {metadata.name}
+    </option>
+  ));
 
   const noSecretsFound = (
     <Alert dismissible={false} type="information">
@@ -170,7 +151,7 @@ export default function CreateServiceBindingForm({
               onChange={(_, value) => setCreateCredentials(value)}
             />
           </FormItem>
-
+          {console.log(createCredentials, secrets.length)}
           {!createCredentials && secrets.length ? (
             <FormItem key="existingCredentials">
               <FormLabel htmlFor="existingCredentials">Secrets</FormLabel>
@@ -182,8 +163,8 @@ export default function CreateServiceBindingForm({
               >
                 <option value=""></option>
                 {secrets.map(s => (
-                  <option value={s} key={s}>
-                    {s}
+                  <option value={s.metadata.name} key={s.metadata.uid}>
+                    {s.metadata.name}
                   </option>
                 ))}
               </select>
