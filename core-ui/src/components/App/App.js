@@ -7,6 +7,7 @@ import { PREFERENCES_TITLE } from '../../shared/constants';
 import { withTitle } from 'react-shared';
 import CreateApiRule from '../ApiRules/CreateApiRule/CreateApiRule';
 import EditApiRule from 'components/ApiRules/EditApiRule/EditApiRule';
+import { ContainersLogs } from 'components/Predefined/Details/Pod/ContainersLogs';
 import {
   getComponentForList,
   getComponentForDetails,
@@ -31,6 +32,13 @@ export default function App() {
         path="/apirules/edit/:apiName"
         render={withTitle(API_RULES_TITLE, RoutedEditApiRule)}
       />
+
+      <Route
+        exact
+        path="/namespaces/:namespaceId/pods/:podName/containers/:containerName"
+        component={withTitle('Logs', RoutedContainerDetails)}
+      />
+
       <Route
         exact
         path="/namespaces/:namespaceId/:resourceType/:resourceName"
@@ -46,6 +54,7 @@ export default function App() {
         path="/:resourceType/:resourceName"
         component={RoutedResourceDetails}
       />
+
       <Route exact path="/:resourceType" component={RoutedResourcesList} />
     </Switch>
   );
@@ -53,6 +62,19 @@ export default function App() {
 
 function RoutedEditApiRule({ match }) {
   return <EditApiRule apiName={match.params.apiName} />;
+}
+
+function RoutedContainerDetails({ match }) {
+  const decodedPodName = decodeURIComponent(match.params.podName);
+  const decodedContainerName = decodeURIComponent(match.params.containerName);
+
+  const params = {
+    podName: decodedPodName,
+    containerName: decodedContainerName,
+    namespace: match.params.namespaceId,
+  };
+
+  return <ContainersLogs params={params} />;
 }
 
 function RoutedResourcesList({ match }) {

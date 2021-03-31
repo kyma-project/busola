@@ -97,6 +97,27 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
                 toSearchParamsString({
                   resourceApiPath: '/api/v1',
                 }),
+              children: [{
+                pathSegment: 'containers',
+                children: [
+                  {
+                    pathSegment: ':containerName',
+                    viewUrl:
+                      config.coreUIModuleUrl +
+                      '/namespaces/:namespaceId/Pods/:podName/Containers/:containerName',
+                  },
+                ]
+              }, {
+                pathSegment: 'initContainers',
+                children: [
+                  {
+                    pathSegment: ':containerName',
+                    viewUrl:
+                      config.coreUIModuleUrl +
+                      '/namespaces/:namespaceId/Pods/:podName/InitContainers/:containerName',
+                  },
+                ]
+              }],
             },
           ],
         },

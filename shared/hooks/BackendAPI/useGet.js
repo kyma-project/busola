@@ -69,8 +69,84 @@ const useGetHook = processDataFn =>
     };
   };
 
+const useGetStreamHook = processDataFn =>
+  function(path) {
+    const isHookMounted = React.useRef(true); // becomes 'false' after the hook is unmounted to avoid performing any async actions afterwards
+    const [data, setData] = React.useState([]);
+    const [loading, setLoading] = React.useState(false);
+    const [error, setError] = React.useState(null);
+    const { idToken, cluster } = useMicrofrontendContext();
+    const { fromConfig } = useConfig();
+
+    const refetch = (isSilent, currentData) => async () => {
+      if (!idToken || !isHookMounted.current) return;
+      setLoading(true);
+
+      function processError(error) {
+        console.error(error);
+        setError(error);
+      }
+
+      try {
+        const urlToFetchFrom = baseUrl(fromConfig) + path;
+        fetch(urlToFetchFrom, {
+          headers: createHeaders(idToken, cluster),
+        })
+          .then(response => response.body)
+          .then(rb => {
+            const reader = rb.getReader();
+
+            return new ReadableStream({
+              start(controller) {
+                // The following function handles each data chunk
+                function push() {
+                  // "done" is a Boolean and value a "Uint8Array"
+                  reader.read().then(({ done, value }) => {
+                    // If there is no more data to read
+                    if (done) {
+                      controller.close();
+                      return;
+                    }
+                    // Get the data and send it to the browser via the controller
+                    controller.enqueue(value);
+                    // Check chunks by logging to the console
+                    var string = new TextDecoder().decode(value);
+                    setData(previousData => [...previousData, string]);
+                    push();
+                  });
+                }
+
+                push();
+              },
+            });
+          });
+        return data;
+      } catch (e) {
+        processError(e);
+      }
+      return data;
+    };
+
+    React.useEffect(() => {
+      // INITIAL FETCH
+      isHookMounted.current = true;
+      if (idToken) refetch(false, null)();
+      return _ => {
+        if (loading) setLoading(false);
+        isHookMounted.current = false;
+      };
+    }, [path, idToken]);
+
+    return {
+      data,
+      loading,
+      error,
+    };
+  };
+
 export const useGetList = filter => useGetHook(handleListDataReceived(filter));
 export const useGet = useGetHook(handleSingleDataReceived);
+export const useGetStream = useGetStreamHook();
 
 function handleListDataReceived(filter) {
   return (newData, oldData, setDataFn) => {
@@ -103,8 +179,10 @@ function handleSingleDataReceived(newData, oldData, setDataFn) {
 export const useSingleGet = () => {
   const { idToken, cluster } = useMicrofrontendContext();
   const { fromConfig } = useConfig();
-  return url =>
-    fetch(baseUrl(fromConfig) + url, {
+  return url => {
+    console.log(url);
+    return fetch(baseUrl(fromConfig) + url, {
       headers: createHeaders(idToken, cluster),
     });
+  };
 };
