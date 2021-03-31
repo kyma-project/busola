@@ -51,7 +51,6 @@ export const NODE_PARAM_PREFIX = `~`;
           Luigi.featureToggles().unsetFeatureToggle('showSystemNamespaces');
         }
         const auth = getAuthData();
-        console.log('after init, auth', auth);
         if (auth) {
           getNavigationData(auth).then((response) => {
             resolveNavigationNodes(response);

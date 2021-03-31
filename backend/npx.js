@@ -2,32 +2,19 @@ const path = require('path');
 const open = require('open');
 const fs = require('fs');
 const express = require('express');
+const http = require('http');
+
 import createEncoder from 'json-url';
 import jsyaml from 'js-yaml';
-let kubeconfig;
+import { handleRequest } from './common';
 
-function setupNpx() {
+function tryLoadKubeconfig() {
   const location = process.env.KUBECONFIG || `${process.env.HOME}/.kube/config`;
   try {
     const data = fs.readFileSync(location, 'utf8');
-    kubeconfig = jsyaml.load(data);
-  } catch (e) {
-    console.log(e);
-  }
-}
-
-function setupRoutes(app, handleBackendRequest) {
-  app.use('/core-ui', express.static(path.join(__dirname, 'core-ui')));
-  app.get('/core-ui/*', (_, res) =>
-    res.sendFile(path.join(__dirname + '/core-ui/index.html')),
-  );
-
-  app.use('/backend', handleBackendRequest);
-
-  app.use('/', express.static(path.join(__dirname, 'core')));
-  app.get('/*', (_, res) =>
-    res.sendFile(path.join(__dirname + '/core/index.html')),
-  );
+    return jsyaml.load(data);
+  } catch (_) {}
+  return null;
 }
 
 function openBrowser(port) {
@@ -61,21 +48,26 @@ function openBrowser(port) {
   }
 }
 
-function isNpxEnv() {
-  return true || process.env.NODE_ENV === 'npx';
-}
+const app = express();
+app.use(express.raw({ type: '*/*' }));
 
-function runIfNpx(fn) {
-  return (...args) => {
-    if (isNpxEnv()) {
-      return fn(...args);
-    }
-  };
-}
+const kubeconfig = tryLoadKubeconfig();
+const server = http.createServer(app);
+const port = process.env.PORT || 3001;
 
-export default {
-  setup: runIfNpx(setupNpx),
-  setupRoutes: runIfNpx(setupRoutes),
-  openBrowser: runIfNpx(openBrowser),
-  isNpxEnv,
-};
+app.use('/core-ui', express.static(path.join(__dirname, 'core-ui')));
+app.get('/core-ui/*', (_, res) =>
+  res.sendFile(path.join(__dirname + '/core-ui/index.html')),
+);
+
+app.use('/backend', handleRequest);
+
+app.use('/', express.static(path.join(__dirname, 'core')));
+app.get('/*', (_, res) =>
+  res.sendFile(path.join(__dirname + '/core/index.html')),
+);
+
+server.listen(port, 'localhost', () => {
+  console.log(`Busola backend server started @ ${port}!`);
+  openBrowser(port);
+});
