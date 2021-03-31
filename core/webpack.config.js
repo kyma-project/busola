@@ -25,8 +25,4 @@ module.exports = {
       { from: './node_modules/@luigi-project/core', to: 'luigi-core' },
     ]),
   ],
-  watchOptions: {
-    aggregateTimeout: 100,
-    poll: 200,
-  },
 };

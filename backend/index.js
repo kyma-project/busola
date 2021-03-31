@@ -31,28 +31,28 @@ const port = process.env.PORT || 3001;
 const address = process.env.ADDRESS || 'localhost';
 console.log(`K8s server used: ${k8sUrl}`);
 
-const isHeaderNotDefined = headerValue => {
-  return headerValue === undefined || headerValue === 'undefined';
+const isHeaderDefined = headerValue => {
+  return headerValue !== undefined && headerValue !== 'undefined';
 };
 
 const decodeHeaderToBuffer = headerValue => {
-  return isHeaderNotDefined(headerValue)
-    ? null
-    : Buffer.from(headerValue, 'base64');
+  return isHeaderDefined(headerValue)
+    ? Buffer.from(headerValue, 'base64')
+    : null;
 };
 
 const handleRequest = async (req, res) => {
   const urlHeader = 'x-cluster-url';
   const caHeader = 'x-cluster-certificate-authority-data';
   const clientCAHeader = 'x-client-certificate-data';
-  const clientKeyDataHeader = 'x_client-key-data';
+  const clientKeyDataHeader = 'x-client-key-data';
 
   delete req.headers.host; // remove host in order not to confuse APIServer
 
   const targetApiServer = url.parse(
-    isHeaderNotDefined(req.headers[urlHeader])
-      ? k8sUrl.hostname
-      : req.headers[urlHeader],
+    isHeaderDefined(req.headers[urlHeader])
+      ? req.headers[urlHeader]
+      : k8sUrl.hostname,
   );
   const ca = decodeHeaderToBuffer(req.headers[caHeader]);
   const cert = decodeHeaderToBuffer(req.headers[clientCAHeader]);

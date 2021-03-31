@@ -27,6 +27,7 @@ const customLogoutFn =
     clearInitParams();
     window.location = '/logout.html';
   });
+console.log(customLogoutFn);
 
 export let resolveNavigationNodes;
 export let navigation = {
