@@ -49,11 +49,10 @@ const handleRequest = async (req, res) => {
 
   delete req.headers.host; // remove host in order not to confuse APIServer
 
-  const targetApiServer = url.parse(
-    isHeaderDefined(req.headers[urlHeader])
-      ? req.headers[urlHeader]
-      : k8sUrl.hostname,
-  );
+  const targetApiServer = isHeaderDefined(req.headers[urlHeader])
+    ? url.parse(req.headers[urlHeader])
+    : k8sUrl;
+
   const ca = decodeHeaderToBuffer(req.headers[caHeader]);
   const cert = decodeHeaderToBuffer(req.headers[clientCAHeader]);
   const key = decodeHeaderToBuffer(req.headers[clientKeyDataHeader]);

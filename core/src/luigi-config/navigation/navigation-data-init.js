@@ -27,7 +27,6 @@ const customLogoutFn =
     clearInitParams();
     window.location = '/logout.html';
   });
-console.log(customLogoutFn);
 
 export let resolveNavigationNodes;
 export let navigation = {
@@ -38,8 +37,8 @@ export let navigation = {
     [catalogViewGroupName]: {
       preloadUrl: config.serviceCatalogModuleUrl + '/preload',
     },
-    preloadViewGroups: false,
   },
+  preloadViewGroups: false,
   nodeAccessibilityResolver: navigationPermissionChecker,
   contextSwitcher: {
     defaultLabel: 'Select Namespace ...',
