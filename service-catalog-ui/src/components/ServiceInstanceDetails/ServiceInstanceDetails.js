@@ -67,12 +67,10 @@ export default function ServiceInstanceDetails({ match }) {
         servicePlan={servicePlan}
         // deleteServiceInstance={deleteServiceInstanceMutation}
       />
-      <ServiceInstanceWrapper>
-        <ServiceInstanceBindings
-          defaultActiveTabIndex={serviceInstanceConstants.addonsIndex}
-          serviceInstance={serviceInstance}
-        />
-      </ServiceInstanceWrapper>
+      <ServiceInstanceBindings
+        defaultActiveTabIndex={serviceInstanceConstants.addonsIndex}
+        serviceInstance={serviceInstance}
+      />
     </ThemeWrapper>
   );
 }

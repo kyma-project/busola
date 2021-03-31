@@ -12,7 +12,7 @@ import ParametersDataModal from './ParametersDataModal/ParametersDataModal.compo
 import DeleteBindingModal from './DeleteBindingModal/DeleteBindingModal.component';
 import StatusIndicator from './StatusIndicator/StatusIndicator.component';
 
-import { Spinner, useGetList } from 'react-shared';
+import { Spinner, StatusBadge, useGetList } from 'react-shared';
 import {
   ServiceInstanceBindingsWrapper,
   SecretModalButton,
@@ -149,7 +149,6 @@ const ServiceInstanceBindings = ({
     'Service Binding',
     'Secret',
     'Status',
-    '',
   ];
   const bindingUsagesRowRenderer = ({
     serviceBinding,
@@ -206,44 +205,31 @@ const ServiceInstanceBindings = ({
         '-'
       );
     })(),
-    // <StatusTooltip
-    //   type={this.getStatusType(bindingUsage.status.type)}
-    //   content={bindingUsage.status.message}
-    //   minWidth="250px"
-    // >
-    //   <span
-    //     style={{
-    //       color: instanceStatusColor(bindingUsage.status.type),
-    //       cursor: `${bindingUsage.status.message ? 'help' : 'default'}`,
-    //     }}
-    //     title={bindingUsage.status.type}
-    //   >
-    //     {bindingUsage.status.type}
-    //   </span>
-    // </StatusTooltip>,
-    <div className="list-actions">
-      {/* <DeleteBindingModal
-          deleteBindingUsage={this.props.deleteBindingUsage}
-          bindingUsageName={bindingUsage.name}
-          bindingUsageCount={this.countBindingUsage(bindingUsage)}
-          id={`service-binding-delete-${bindingUsage.name}`}
-        /> */}
-    </div>,
+    <StatusBadge
+      autoResolveType
+      tooltipContent={serviceBindingUsage.status?.conditions[0].message}
+    >
+      {serviceBindingUsage.status?.conditions[0].reason || 'ready'}
+    </StatusBadge>, //TODO enhance
+    // <div className="list-actions">
+    //   <DeleteBindingModal
+    //       deleteBindingUsage={this.props.deleteBindingUsage}
+    //       bindingUsageName={bindingUsage.name}
+    //       bindingUsageCount={this.countBindingUsage(bindingUsage)}
+    //       id={`service-binding-delete-${bindingUsage.name}`}
+    //     />
+    // </div>,
   ];
 
   return (
-    <ServiceInstanceBindingsWrapper>
-      <GenericList
-        key="binding-usages-list"
-        title="Bound Applications"
-        headerRenderer={bindingUsagesHeaderRenderer}
-        entries={serviceBindingsCombined}
-        rowRenderer={bindingUsagesRowRenderer}
-        notFoundMessage="No applications found"
-        showRootHeader={false}
-        hasExternalMargin={false}
-      />
-    </ServiceInstanceBindingsWrapper>
+    <GenericList
+      key="binding-usages-list"
+      title="Bound Applications"
+      headerRenderer={bindingUsagesHeaderRenderer}
+      entries={serviceBindingsCombined}
+      rowRenderer={bindingUsagesRowRenderer}
+      notFoundMessage="No applications found"
+    />
   );
 };
 
