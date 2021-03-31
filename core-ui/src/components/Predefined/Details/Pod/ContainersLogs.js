@@ -1,5 +1,5 @@
 import React from 'react';
-import { useGetStream, useWindowTitle } from 'react-shared';
+import { useGetStream, useWindowTitle, GenericList } from 'react-shared';
 
 export const ContainersLogs = ({ params }) => {
   return <Logs params={params} />;
@@ -11,6 +11,21 @@ function Logs({ params }) {
   const url = `/api/v1/namespaces/${params.namespace}/pods/${params.podName}/log?container=${params.containerName}&follow=true&pretty=true `;
   const { loading = true, error, data } = useGetStream(url);
 
-  console.log(data);
-  return <p>test</p>;
+  const logs = data?.reverse();
+
+  const headerRenderer = () => [];
+  const rowRenderer = entry => [<p>{entry}</p>];
+
+  return (
+    <GenericList
+      title="Logs"
+      entries={logs || []}
+      headerRenderer={headerRenderer}
+      rowRenderer={rowRenderer}
+      serverDataError={error}
+      serverErrorMessage={error?.message}
+      serverDataLoading={loading}
+      pagination={{ itemsPerPage: 40, autoHide: true }}
+    />
+  );
 }

@@ -69,7 +69,7 @@ const useGetHook = processDataFn =>
     };
   };
 
-const useGetStreamHook = processDataFn =>
+const useGetStreamHook = _ =>
   function(path) {
     const isHookMounted = React.useRef(true); // becomes 'false' after the hook is unmounted to avoid performing any async actions afterwards
     const [data, setData] = React.useState([]);
@@ -78,7 +78,7 @@ const useGetStreamHook = processDataFn =>
     const { idToken, cluster } = useMicrofrontendContext();
     const { fromConfig } = useConfig();
 
-    const refetch = (isSilent, currentData) => async () => {
+    const refetch = async () => {
       if (!idToken || !isHookMounted.current) return;
       setLoading(true);
 
@@ -110,8 +110,10 @@ const useGetStreamHook = processDataFn =>
                     // Get the data and send it to the browser via the controller
                     controller.enqueue(value);
                     // Check chunks by logging to the console
-                    var string = new TextDecoder().decode(value);
-                    setData(previousData => [...previousData, string]);
+                    const string = new TextDecoder().decode(value);
+                    const streamLines = string?.split('\n');
+
+                    setData(previousData => [...previousData, ...streamLines]);
                     push();
                   });
                 }
@@ -124,15 +126,14 @@ const useGetStreamHook = processDataFn =>
       } catch (e) {
         processError(e);
       }
-      return data;
     };
 
     React.useEffect(() => {
       // INITIAL FETCH
       isHookMounted.current = true;
-      if (idToken) refetch(false, null)();
+      if (idToken) refetch();
+      setLoading(false);
       return _ => {
-        if (loading) setLoading(false);
         isHookMounted.current = false;
       };
     }, [path, idToken]);
