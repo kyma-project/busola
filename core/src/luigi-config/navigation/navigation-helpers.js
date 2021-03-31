@@ -61,7 +61,7 @@ export function clearAuthData() {
   Luigi.auth().store.removeAuthData();
 }
 
-export function getToken() {
+export function getAuthData() {
   if (config.isNpx) {
     return { idToken: 'fake-npx-token' };
   }

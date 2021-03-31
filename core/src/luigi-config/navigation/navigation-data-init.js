@@ -15,7 +15,7 @@ import {
   hideDisabledNodes,
   createNamespacesList,
   clearAuthData,
-  getToken,
+  getAuthData,
 } from './navigation-helpers';
 import { groups } from '../auth';
 import { getInitParams, clearInitParams } from '../init-params';
@@ -126,7 +126,7 @@ async function getNamespaces() {
   const { systemNamespaces } = getInitParams().config;
   let namespaces;
   try {
-    namespaces = await fetchNamespaces(getToken());
+    namespaces = await fetchNamespaces(getAuthData());
   } catch (e) {
     console.error('Error while fetching namespaces', e);
     return [];

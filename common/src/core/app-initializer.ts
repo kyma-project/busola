@@ -19,7 +19,7 @@ class AppInitializer {
       }, 1000);
 
       luigiClient.addInitListener((context: luigiClient.Context) => {
-        this.token = context.token;
+        this.token = context.idToken;
 
         clearTimeout(timeout);
         resolve({

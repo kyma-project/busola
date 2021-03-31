@@ -1,6 +1,6 @@
 import {
   saveCurrentLocation,
-  getToken,
+  getAuthData,
   getPreviousLocation,
 } from './navigation/navigation-helpers';
 import { communication } from './communication';
@@ -53,7 +53,7 @@ export const NODE_PARAM_PREFIX = `~`;
         } else {
           Luigi.featureToggles().unsetFeatureToggle('showSystemNamespaces');
         }
-        const auth = getToken();
+        const auth = getAuthData();
         if (auth) {
           getNavigationData(auth).then((response) => {
             resolveNavigationNodes(response);

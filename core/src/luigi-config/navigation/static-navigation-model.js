@@ -1,5 +1,5 @@
 import { config } from '../config';
-import { getToken } from './navigation-helpers';
+import { getAuthData } from './navigation-helpers';
 import { saveAs } from 'file-saver';
 
 export const coreUIViewGroupName = '_core_ui_';
