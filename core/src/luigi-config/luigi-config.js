@@ -28,6 +28,7 @@ export const NODE_PARAM_PREFIX = `~`;
     window.location = '/login.html';
   }
 
+  // don't do OIDC flow on npx or if token/CA is already there
   const shouldCreateAuth = !config.isNpx && !params.rawAuth;
 
   const luigiConfig = {

@@ -71,7 +71,6 @@ async function onKubeconfigUploaded(e) {
 
 function onOidcFormSubmit(e) {
   e.preventDefault();
-  debugger;
   const auth = {
     issuerUrl: document.querySelector('#issuer-url').value,
     clientId: document.querySelector('#client-id').value,
