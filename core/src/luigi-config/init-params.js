@@ -1,5 +1,4 @@
 import createEncoder from 'json-url';
-import { config } from './config';
 
 const PARAMS_KEY = 'busola.init-params';
 const encoder = createEncoder('lzstring');
@@ -20,38 +19,34 @@ function createSystemNamespacesList(namespaces) {
 }
 
 export async function saveInitParamsIfPresent(location) {
-  if (config.isNpx) return;
-
-  const params = new URL(location).searchParams.get('init');
-  if (params) {
-    const decoded = await encoder.decompress(params);
-    const responseParams = getResponseParams(decoded.auth.usePKCE);
+  const initParams = new URL(location).searchParams.get('init');
+  if (initParams) {
+    const decoded = await encoder.decompress(initParams);
     const systemNamespaces = createSystemNamespacesList(
-      decoded.config.systemNamespaces
+      decoded.config?.systemNamespaces
     );
-    saveInitParams({
+    const params = {
       ...decoded,
-      auth: {
-        ...decoded.auth,
-        ...responseParams,
-      },
       config: {
         ...decoded.config,
         systemNamespaces,
       },
-    });
+    };
+    if (decoded.auth) {
+      params.auth = {
+        ...decoded.auth,
+        ...getResponseParams(decoded.auth.usePKCE),
+      };
+    }
+    saveInitParams(params);
   }
 }
 
 export function saveInitParams(params) {
-  if (config.isNpx) return;
   localStorage.setItem(PARAMS_KEY, JSON.stringify(params));
 }
 
 export function getInitParams() {
-  if (config.isNpx) {
-    return { config: { systemNamespaces: '' } };
-  }
   return JSON.parse(localStorage.getItem(PARAMS_KEY) || 'null');
 }
 

@@ -5,8 +5,9 @@ const https = require('https');
 const url = require('url');
 
 import npx from './npx-setup';
-import { initializeKubeconfig } from './utils/kubeconfig';
 import { requestLogger } from './utils/other';
+
+npx.setup();
 
 const app = express();
 app.use(express.raw({ type: '*/*' }));
@@ -15,21 +16,11 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 const server = http.createServer(app);
-const kubeconfig = initializeKubeconfig(
-  process.env.KUBECONFIG || npx.getKubeconfigPath(),
-);
-const k8sUrl = new URL(
-  kubeconfig.getCurrentCluster().server !== 'https://undefined:undefined'
-    ? kubeconfig.getCurrentCluster().server
-    : 'http://doesntexist',
-);
-
 // requestLogger(require("http")); //uncomment this to log the outgoing traffic
 // requestLogger(require("https")); //uncomment this to log the outgoing traffic
 
 const port = process.env.PORT || 3001;
 const address = process.env.ADDRESS || 'localhost';
-console.log(`K8s server used: ${k8sUrl}`);
 
 const isHeaderDefined = headerValue => {
   return headerValue !== undefined && headerValue !== 'undefined';
@@ -49,9 +40,7 @@ const handleRequest = async (req, res) => {
 
   delete req.headers.host; // remove host in order not to confuse APIServer
 
-  const targetApiServer = isHeaderDefined(req.headers[urlHeader])
-    ? url.parse(req.headers[urlHeader])
-    : k8sUrl;
+  const targetApiServer = url.parse(req.headers[urlHeader]);
 
   const ca = decodeHeaderToBuffer(req.headers[caHeader]);
   const cert = decodeHeaderToBuffer(req.headers[clientCAHeader]);
@@ -73,7 +62,6 @@ const handleRequest = async (req, res) => {
     cert,
     key,
   };
-  npx.adjustRequestOptions(options, kubeconfig);
 
   const k8sRequest = https
     .request(options, function(k8sResponse) {

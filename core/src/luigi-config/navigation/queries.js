@@ -1,8 +1,6 @@
 import { config } from './../config';
 import { getInitParams } from './../init-params';
 
-const cluster = getInitParams()?.cluster;
-
 function createAuthHeaders(auth) {
   if (auth.idToken) {
     return { Authorization: `Bearer ${auth.idToken}` };
@@ -17,6 +15,7 @@ function createAuthHeaders(auth) {
 }
 
 function createHeaders(auth) {
+  const cluster = getInitParams().cluster;
   return {
     ...createAuthHeaders(auth),
     'Content-Type': 'application/json',

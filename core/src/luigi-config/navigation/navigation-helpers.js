@@ -1,5 +1,3 @@
-import { config } from './../config';
-
 export const hideDisabledNodes = (disabledNavNodes, nodes, inNamespace) => {
   if (disabledNavNodes !== null && disabledNavNodes !== undefined) {
     const disabledNavNodesArray = disabledNavNodes.split(' ');
@@ -62,9 +60,6 @@ export function clearAuthData() {
 }
 
 export function getAuthData() {
-  if (config.isNpx) {
-    return { idToken: 'fake-npx-token' };
-  }
   return Luigi.auth().store.getAuthData();
 }
 

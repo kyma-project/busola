@@ -1,9 +1,19 @@
 const path = require('path');
 const open = require('open');
+const fs = require('fs');
 const express = require('express');
+import createEncoder from 'json-url';
+import jsyaml from 'js-yaml';
+let kubeconfig;
 
-function getKubeconfigPath() {
-  return `${process.env.HOME}/.kube/config`;
+function setupNpx() {
+  const location = process.env.KUBECONFIG || `${process.env.HOME}/.kube/config`;
+  try {
+    const data = fs.readFileSync(location, 'utf8');
+    kubeconfig = jsyaml.load(data);
+  } catch (e) {
+    console.log(e);
+  }
 }
 
 function setupRoutes(app, handleBackendRequest) {
@@ -21,15 +31,38 @@ function setupRoutes(app, handleBackendRequest) {
 }
 
 function openBrowser(port) {
-  open(`http://localhost:${port}/`);
-}
-
-function adjustRequestOptions(options, kubeconfig) {
-  kubeconfig.applyToRequest(options);
+  try {
+    const cluster = kubeconfig.clusters[0].cluster;
+    const user = kubeconfig.users[0].user;
+    const params = {
+      cluster: {
+        server: cluster.server,
+        'certificate-authority-data': cluster['certificate-authority-data'],
+      },
+      rawAuth: {
+        token: user.token,
+        'client-certificate-data': user['client-certificate-data'],
+        'client-key-data': user['client-key-data'],
+      },
+      config: {
+        disabledNavigationNodes: '',
+        systemNamespaces:
+          'istio-system knative-eventing knative-serving kube-public kube-system kyma-backup kyma-installer kyma-integration kyma-system natss kube-node-lease kubernetes-dashboard serverless-system',
+      },
+      features: {
+        bebEnabled: false,
+      },
+    };
+    createEncoder('lzstring')
+      .compress(params)
+      .then(p => open(`http://localhost:${port}/home/?init=${p}`));
+  } catch (_) {
+    open(`http://localhost:${port}/login.html`);
+  }
 }
 
 function isNpxEnv() {
-  return process.env.NODE_ENV === 'npx';
+  return true || process.env.NODE_ENV === 'npx';
 }
 
 function runIfNpx(fn) {
@@ -41,9 +74,8 @@ function runIfNpx(fn) {
 }
 
 export default {
-  getKubeconfigPath: runIfNpx(getKubeconfigPath),
+  setup: runIfNpx(setupNpx),
   setupRoutes: runIfNpx(setupRoutes),
   openBrowser: runIfNpx(openBrowser),
-  adjustRequestOptions: runIfNpx(adjustRequestOptions),
   isNpxEnv,
 };

@@ -23,16 +23,12 @@ export const NODE_PARAM_PREFIX = `~`;
   await saveInitParamsIfPresent(location);
 
   const params = getInitParams();
-
-  if (!params && !config.isNpx) {
+  if (!params) {
     window.location = '/login.html';
   }
 
-  // don't do OIDC flow on npx or if token/CA is already there
-  const shouldCreateAuth = !config.isNpx && !params.rawAuth;
-
   const luigiConfig = {
-    auth: shouldCreateAuth && (await createAuth(params.auth)),
+    auth: !params.rawAuth && (await createAuth(params.auth)),
     communication,
     navigation,
     routing: {
@@ -55,6 +51,7 @@ export const NODE_PARAM_PREFIX = `~`;
           Luigi.featureToggles().unsetFeatureToggle('showSystemNamespaces');
         }
         const auth = getAuthData();
+        console.log('after init, auth', auth);
         if (auth) {
           getNavigationData(auth).then((response) => {
             resolveNavigationNodes(response);
