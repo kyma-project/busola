@@ -45,8 +45,8 @@ const handleRequest = async (req, res) => {
     ? k8sUrl.hostname
     : req.headers[urlHeader];
   const ca = isHeaderNotDefined(req.headers, caHeader)
-    ? Buffer.from(req.headers[caHeader], 'base64')
-    : null;
+    ? null
+    : Buffer.from(req.headers[caHeader], 'base64');
   delete req.headers[urlHeader];
   delete req.headers[caHeader];
 
