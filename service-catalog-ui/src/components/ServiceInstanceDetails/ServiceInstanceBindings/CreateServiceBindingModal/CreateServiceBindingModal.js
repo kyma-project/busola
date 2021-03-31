@@ -7,18 +7,6 @@ import { Spinner, Tooltip, useGetList, ModalWithForm } from 'react-shared';
 import CreateServiceBindingForm from './CreateServiceBindingForm';
 import { SERVICE_BINDINGS_PANEL } from './constants';
 
-const ResourceKindOptgroup = ({ kindResource, namespace }) => {
-  const { data } = useGetList()(
-    `/apis/${kindResource.group}/${kindResource.version}/namespaces/${namespace}/${kindResource.kind}s`,
-    {},
-  );
-  return (
-    <optgroup label={kindResource.kind}>
-      {data && data.map(res => <option>{res.metadata.name}</option>)}
-    </optgroup>
-  );
-};
-
 export default function CreateServiceBindingModal({
   serviceInstance,
   serviceBindingsCombined,
@@ -42,17 +30,6 @@ export default function CreateServiceBindingModal({
     '/apis/servicecatalog.kyma-project.io/v1alpha1/usagekinds',
     {},
   );
-
-  // return usageKinds ? (
-  //   <select>
-  //     {usageKinds.map(u => (
-  //       <ResourceKindOptgroup
-  //         kindResource={u.spec.resource}
-  //         namespace={serviceInstance.metadata.namespace}
-  //       />
-  //     ))}
-  //   </select>
-  // ) : null;
 
   const button = (
     <Button glyph="add" option="light" disabled={!usageKinds}>
@@ -82,7 +59,7 @@ export default function CreateServiceBindingModal({
       <CreateServiceBindingForm
         {...props}
         serviceInstance={serviceInstance}
-        // availableServiceInstances={usageKinds}
+        usageKinds={usageKinds}
         // setPopupModalMessage={setPopupModalMessage}
         serviceBindings={serviceBindingsCombined.map(
           ({ serviceBinding }) => serviceBinding,
