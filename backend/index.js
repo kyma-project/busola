@@ -59,7 +59,6 @@ const handleRequest = async (req, res) => {
     port: k8sUrl.port || 443,
     ca,
   };
-
   npx.adjustRequestOptions(options, kubeconfig);
 
   const k8sRequest = https
