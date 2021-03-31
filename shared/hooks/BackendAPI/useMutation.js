@@ -5,7 +5,7 @@ import { useConfig } from '../../contexts/ConfigContext';
 
 const useMutation = method => {
   return options => {
-    const { token, cluster } = useMicrofrontendContext();
+    const { authData, cluster } = useMicrofrontendContext();
     const { fromConfig } = useConfig();
     return async (url, data) => {
       const response = await fetch(baseUrl(fromConfig) + url, {
@@ -13,7 +13,7 @@ const useMutation = method => {
         headers: {
           'Content-Type': 'application/json-patch+json',
           Accept: 'application/json',
-          ...createHeaders(token, cluster),
+          ...createHeaders(authData, cluster),
         },
         body: JSON.stringify(data),
       });

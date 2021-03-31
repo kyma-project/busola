@@ -4,7 +4,7 @@ import { createHeaders } from './createHeaders';
 import { useConfig } from '../../contexts/ConfigContext';
 
 export const usePost = () => {
-  const { token, cluster } = useMicrofrontendContext();
+  const { authData, cluster } = useMicrofrontendContext();
   const { fromConfig } = useConfig();
   return async (url, data, options) => {
     const response = await fetch(baseUrl(fromConfig) + url, {
@@ -12,7 +12,7 @@ export const usePost = () => {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
-        ...createHeaders(token, cluster),
+        ...createHeaders(authData, cluster),
       },
       body: JSON.stringify(data),
     });

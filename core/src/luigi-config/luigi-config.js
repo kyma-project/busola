@@ -29,9 +29,6 @@ export const NODE_PARAM_PREFIX = `~`;
   }
 
   const shouldCreateAuth = !config.isNpx && !params.rawAuth;
-  if (params.rawAuth) {
-    Luigi.auth().store.setAuthData(params.rawAuth);
-  }
 
   const luigiConfig = {
     auth: shouldCreateAuth && (await createAuth(params.auth)),
@@ -44,6 +41,9 @@ export const NODE_PARAM_PREFIX = `~`;
     settings,
     lifecycleHooks: {
       luigiAfterInit: () => {
+        if (params.rawAuth) {
+          Luigi.auth().store.setAuthData(params.rawAuth);
+        }
         const showSystemNamespaces = localStorage.getItem(
           'busola.showSystemNamespaces'
         );

@@ -2,7 +2,6 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 import Preferences from 'components/Preferences/Preferences';
-import Login from 'components/Login/Login';
 
 import { PREFERENCES_TITLE } from '../../shared/constants';
 import { withTitle } from 'react-shared';
