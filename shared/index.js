@@ -16,6 +16,7 @@ export { CopiableLink } from './components/Link/CopiableLink';
 export { DetailsError } from './components/DetailsError/DetailsError';
 export { Modal } from './components/Modal/Modal';
 export { Labels } from './components/Labels/Labels';
+export { Checkbox } from './components/Checkbox/Checkbox';
 export { Dropdown } from './components/Dropdown/Dropdown';
 export { FileInput } from './components/FileInput/FileInput';
 export { ResourceNotFound } from './components/ResourceNotFound/ResourceNotFound';

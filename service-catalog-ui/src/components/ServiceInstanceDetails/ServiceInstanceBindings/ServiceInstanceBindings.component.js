@@ -5,8 +5,8 @@ import {
   Tooltip as StatusTooltip,
 } from '@kyma-project/react-components';
 import { Tabs, Tab, Tooltip, GenericList } from 'react-shared';
-import BindApplicationModal from './BindApplicationModal/BindApplicationModal.container';
-import CreateCredentialsModal from './CreateCredentialsModal/CreateCredentialsModal.component';
+// import BindApplicationModal from './BindApplicationModal/BindApplicationModal.container';
+import CreateServiceBindingModal from './CreateServiceBindingModal/CreateServiceBindingModal';
 import SecretDataModal from './SecretDataModal/SecretDataModal.component';
 import ParametersDataModal from './ParametersDataModal/ParametersDataModal.component';
 import DeleteBindingModal from './DeleteBindingModal/DeleteBindingModal.component';
@@ -118,6 +118,12 @@ const ServiceInstanceBindings = ({
   //     id={`create-service-binding`}
   //   />
   // );
+  const createServiceBindingModal = (
+    <CreateServiceBindingModal
+      serviceInstance={serviceInstance}
+      serviceBindingsCombined={serviceBindingsCombined}
+    />
+  );
 
   // const boundApplicationContent = (
   //   <>
@@ -226,6 +232,7 @@ const ServiceInstanceBindings = ({
       key="binding-usages-list"
       title="Bound Applications"
       headerRenderer={bindingUsagesHeaderRenderer}
+      extraHeaderContent={createServiceBindingModal}
       entries={serviceBindingsCombined}
       rowRenderer={bindingUsagesRowRenderer}
       notFoundMessage="No applications found"
