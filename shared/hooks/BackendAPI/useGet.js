@@ -182,7 +182,6 @@ export const useSingleGet = () => {
   const { idToken, cluster } = useMicrofrontendContext();
   const { fromConfig } = useConfig();
   return url => {
-    console.log(url);
     return fetch(baseUrl(fromConfig) + url, {
       headers: createHeaders(idToken, cluster),
     });
