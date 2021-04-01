@@ -8,10 +8,9 @@ export const ContainersLogs = ({ params }) => {
 function Logs({ params }) {
   useWindowTitle('Logs');
 
-  const url = `/api/v1/namespaces/${params.namespace}/pods/${params.podName}/log?container=${params.containerName}&follow=true&pretty=true `;
+  const url = `/api/v1/namespaces/${params.namespace}/pods/${params.podName}/log?container=${params.containerName}&follow=true`;
   const { loading = true, error, data } = useGetStream(url);
-
-  const logs = data?.reverse();
+  const logs = [...data]?.reverse();
 
   const headerRenderer = () => [];
   const rowRenderer = entry => [<p>{entry}</p>];
@@ -25,7 +24,7 @@ function Logs({ params }) {
       serverDataError={error}
       serverErrorMessage={error?.message}
       serverDataLoading={loading}
-      pagination={{ itemsPerPage: 40, autoHide: true }}
+      pagination={{ itemsPerPage: 50, autoHide: true }}
     />
   );
 }

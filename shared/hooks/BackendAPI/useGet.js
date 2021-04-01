@@ -109,11 +109,12 @@ const useGetStreamHook = _ =>
                     }
                     // Get the data and send it to the browser via the controller
                     controller.enqueue(value);
-                    // Check chunks by logging to the console
                     const string = new TextDecoder().decode(value);
-                    const streamLines = string?.split('\n');
+                    const streams = string
+                      ?.split('\n')
+                      .filter(stream => stream !== '');
 
-                    setData(previousData => [...previousData, ...streamLines]);
+                    setData(previousData => [...previousData, ...streams]);
                     push();
                   });
                 }
