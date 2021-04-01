@@ -45,7 +45,7 @@ function openBrowser(port) {
   try {
     const kubeconfig = tryLoadKubeconfig();
     const params = buildInitParams(kubeconfig);
-    createEncoder('lzstring')
+    createEncoder('lzma')
       .compress(params)
       .then(p => open(`http://localhost:${port}/home/?init=${p}`));
   } catch (_) {
