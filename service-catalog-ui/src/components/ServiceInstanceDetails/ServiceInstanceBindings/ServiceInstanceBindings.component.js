@@ -53,25 +53,6 @@ const ServiceInstanceBindings = ({
   )
     return <Spinner />; //TODO
 
-  const getBindingCombinedData = binding => {
-    const usage = bindingUsagesRequest.data.find(
-      u => binding.metadata.name === u.spec.serviceBindingRef.name,
-    );
-    return {
-      serviceBinding: binding,
-      serviceBindingUsage: usage,
-      secret: binding
-        ? secretsRequest.data.find(
-            s => s.metadata.name === binding.spec.secretName,
-          )
-        : undefined,
-    };
-  };
-
-  const serviceBindingsCombined = bindingsRequest.data.map(
-    getBindingCombinedData,
-  );
-
   const error = !!(
     bindingsRequest.error ||
     bindingUsagesRequest.error ||
@@ -82,6 +63,25 @@ const ServiceInstanceBindings = ({
     bindingUsagesRequest.loading ||
     secretsRequest.loading
   );
+
+  const getBindingCombinedData = bindingUsage => {
+    const binding = bindingsRequest.data.find(
+      b => b.metadata.name === bindingUsage.spec.serviceBindingRef.name,
+    );
+    return {
+      serviceBinding: binding,
+      serviceBindingUsage: bindingUsage,
+      secret: binding
+        ? secretsRequest.data.find(
+            s => s.metadata.name === binding.spec.secretName,
+          )
+        : undefined,
+    };
+  };
+  const serviceBindingsCombined = bindingUsagesRequest.data.map(
+    getBindingCombinedData,
+  );
+
   console.log(serviceBindingsCombined);
 
   const capitalize = str => {
@@ -100,7 +100,7 @@ const ServiceInstanceBindings = ({
   // };
 
   // const { createBinding, createBindingUsage, serviceInstance } = this.props;
-  console.log('serviceInstance', serviceInstance);
+  // console.log('serviceBindingscombined', serviceInstance);
   // TODO take bindable from plan or service class
   // if (!serviceInstance.bindable) {
   //   return (
