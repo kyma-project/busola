@@ -14,11 +14,7 @@ import {
 import { serviceClassConstants } from 'helpers/constants';
 import { isService, getResourceDisplayName } from 'helpers';
 
-const ServiceClassDetailsHeader = ({
-  serviceClass,
-  children,
-  planSelector,
-}) => {
+const ServiceClassDetailsHeader = ({ serviceClass, children }) => {
   const labels = {
     ...(serviceClass.spec.externalMetadata?.labels || []),
     ...(serviceClass.metadata.labels || []),
@@ -58,18 +54,13 @@ const ServiceClassDetailsHeader = ({
           {children}
         </ServiceClassToolbar>
       </ServiceClassToolbarWrapper>
-      <ServiceClassInfo
-        serviceClass={serviceClass}
-        labels={labels}
-        planSelector={planSelector}
-      />
+      <ServiceClassInfo serviceClass={serviceClass} labels={labels} />
     </HeaderWrapper>
   );
 };
 
 ServiceClassDetailsHeader.propTypes = {
   serviceClass: PropTypes.object.isRequired,
-  planSelector: PropTypes.node,
 };
 
 export default ServiceClassDetailsHeader;

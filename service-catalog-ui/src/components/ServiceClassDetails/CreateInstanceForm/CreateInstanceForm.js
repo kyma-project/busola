@@ -55,23 +55,15 @@ const getInstanceCreateParameterSchema = (plans, currentPlan) => {
   return schema?.spec.instanceCreateParameterSchema || {};
 };
 
-const PlanColumnContent = ({
-  defaultPlan,
-  onPlanChange,
-  dropdownRef,
-  allPlans,
-  isDisabled = false,
-}) => (
+const PlanColumnContent = ({ onPlanChange, dropdownRef, allPlans }) => (
   <>
     <FormLabel required htmlFor="plan">
       Plan
     </FormLabel>
     <select
-      disabled={isDisabled}
       id="plan"
       aria-label="plan-selector"
       ref={dropdownRef}
-      defaultValue={defaultPlan}
       onChange={e => onPlanChange(e.target.value)}
     >
       {allPlans.map((p, i) => (
@@ -84,11 +76,9 @@ const PlanColumnContent = ({
 );
 
 PlanColumnContent.proTypes = {
-  defaultPlan: SERVICE_PLAN_SHAPE,
   onPlanChange: PropTypes.func.isRequired,
   dropdownRef: CustomPropTypes.ref.isRequired,
   allPlans: PropTypes.arrayOf(SERVICE_PLAN_SHAPE),
-  isDisabled: PropTypes.bool,
 };
 
 const isNonNullObject = o => typeof o === 'object' && !!o;
@@ -101,7 +91,6 @@ export default function CreateInstanceForm({
   item,
   documentationUrl,
   plans,
-  preselectedPlanName,
 }) {
   const notificationManager = useNotification();
   const postRequest = usePost();
@@ -120,7 +109,7 @@ export default function CreateInstanceForm({
   plans.forEach(plan => {
     parseDefaultIntegerValues(plan);
   });
-  const plan = preselectedPlanName || plans[0]?.metadata.name;
+  const plan = plans[0]?.metadata.name;
   const [
     instanceCreateParameterSchema,
     setInstanceCreateParameterSchema,
@@ -140,7 +129,7 @@ export default function CreateInstanceForm({
   };
 
   // eslint-disable-next-line
-  useEffect(_ => handlePlanChange(plan), [preselectedPlanName, plans, plan]);
+  useEffect(_ => handlePlanChange(plan), [plans, plan]);
 
   const formValues = {
     name: useRef(null),
@@ -271,11 +260,9 @@ export default function CreateInstanceForm({
             </div>
             <div className="column">
               <PlanColumnContent
-                defaultPlan={preselectedPlanName || plan}
                 onPlanChange={handlePlanChange}
                 dropdownRef={formValues.plan}
                 allPlans={plans}
-                isDisabled={!!preselectedPlanName}
               />
             </div>
           </div>
