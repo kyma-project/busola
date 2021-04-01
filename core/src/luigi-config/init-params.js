@@ -1,7 +1,7 @@
 import createEncoder from 'json-url';
 
 const PARAMS_KEY = 'busola.init-params';
-const encoder = createEncoder('lzstring');
+const encoder = createEncoder('lzma');
 
 function getResponseParams(usePKCE = true) {
   if (usePKCE) {
