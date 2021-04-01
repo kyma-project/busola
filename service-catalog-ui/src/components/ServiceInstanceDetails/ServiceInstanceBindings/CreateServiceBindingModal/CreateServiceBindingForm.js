@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { FormItem, FormLabel, FormInput, Alert } from 'fundamental-react';
-import { Checkbox, useGetList } from 'react-shared';
+import {
+  Checkbox,
+  useGetList,
+  useCreateServiceBindingUsage,
+} from 'react-shared';
 
 import { SERVICE_BINDINGS_PANEL } from './constants';
 
@@ -20,7 +24,15 @@ const ResourceKindOptgroup = ({ kindResource, namespace }) => {
     <optgroup label={kindResource.kind}>
       {data &&
         data.map(res => (
-          <option key={res.metadata.uid}>{res.metadata.name}</option>
+          <option
+            value={JSON.stringify({
+              kind: kindResource.kind,
+              name: res.metadata.name,
+            })}
+            key={res.metadata.uid}
+          >
+            {res.metadata.name}
+          </option>
         ))}
     </optgroup>
   );
@@ -29,18 +41,22 @@ const ResourceKindOptgroup = ({ kindResource, namespace }) => {
 export default function CreateServiceBindingForm({
   serviceInstance,
   usageKinds = [],
-  serviceBindings,
-  secrets,
+  serviceBindings = [],
   setPopupModalMessage = () => void 0,
   onChange,
   formElementRef,
   setValidity = () => void 0,
 }) {
-  const [selectedApplication, setSelectedApplication] = useState('');
+  const createServiceBindingUsageSet = useCreateServiceBindingUsage({
+    successMessage: SERVICE_BINDINGS_PANEL.CREATE_BINDING_USAGE.SUCCESS_MESSAGE,
+    errorMessage: SERVICE_BINDINGS_PANEL.CREATE_BINDING_USAGE.ERROR_MESSAGE,
+  });
+
+  const [selectedApplication, setSelectedApplication] = useState(null);
   const [envPrefix, setEnvPrefix] = useState('');
 
   const [createCredentials, setCreateCredentials] = useState(true);
-  const [existingCredentials, setExistingCredentials] = useState('');
+  const [existingBindings, setExistingBindings] = useState('');
 
   useEffect(() => {
     setValidity(false);
@@ -52,7 +68,6 @@ export default function CreateServiceBindingForm({
       setCreateCredentials(true);
       return;
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedApplication]);
 
@@ -60,31 +75,30 @@ export default function CreateServiceBindingForm({
     if (!selectedApplication) {
       setPopupModalMessage(
         SERVICE_BINDINGS_PANEL.CREATE_MODAL.CONFIRM_BUTTON.POPUP_MESSAGES
-          .NO_SERVICE_INSTANCE_SELECTED,
+          .NO_APP_SELECTED,
       );
       setValidity(false);
       return;
     }
 
-    if (!createCredentials && !existingCredentials) {
+    if (!createCredentials && !existingBindings) {
       setPopupModalMessage(
         SERVICE_BINDINGS_PANEL.CREATE_MODAL.CONFIRM_BUTTON.POPUP_MESSAGES
-          .NO_SECRET_SELECTED,
+          .NO_BINDING_SELECTED,
       );
       setValidity(false);
       return;
     }
-
     setValidity(true);
   }, [
     selectedApplication,
     createCredentials,
-    existingCredentials,
+    existingBindings,
     setValidity,
     setPopupModalMessage,
   ]);
 
-  useEffect(() => setExistingCredentials(''), [
+  useEffect(() => setExistingBindings(''), [
     selectedApplication,
     createCredentials,
   ]);
@@ -92,9 +106,8 @@ export default function CreateServiceBindingForm({
   async function handleFormSubmit(e) {
     e.preventDefault();
     const parameters = {
-      // lambdaName: lambda.metadata.name,
-      // namespace: lambda.metadata.namespace,
-      serviceInstanceName: selectedApplication,
+      namespace: serviceInstance.metadata.namespace,
+      serviceInstanceName: serviceInstance.metadata.name,
       serviceBindingUsageParameters: envPrefix
         ? {
             envPrefix: {
@@ -102,21 +115,23 @@ export default function CreateServiceBindingForm({
             },
           }
         : undefined,
-      createCredentials: createCredentials,
-      existingCredentials: existingCredentials || undefined,
+      usedBy: {
+        name: selectedApplication.name,
+        kind: selectedApplication.kind,
+      },
+      existingCredentials: existingBindings || undefined,
     };
 
-    // await createServiceBindingUsageSet(parameters);
+    await createServiceBindingUsageSet(parameters);
   }
 
   const applicationsDropdown = (
     <select
       id="applicationName"
-      value={selectedApplication}
-      onChange={e => setSelectedApplication(e.target.value)}
+      value={JSON.stringify(selectedApplication)}
+      onChange={e => setSelectedApplication(JSON.parse(e.target.value))}
       required
     >
-      <option value=""></option>
       {usageKinds.map(u => (
         <ResourceKindOptgroup
           key={u.metadata.uid}
@@ -127,9 +142,9 @@ export default function CreateServiceBindingForm({
     </select>
   );
 
-  const noSecretsFound = (
+  const noserviceBindingsFound = (
     <Alert dismissible={false} type="information">
-      {SERVICE_BINDINGS_PANEL.FORM.NO_SECRETS_FOUND}
+      {SERVICE_BINDINGS_PANEL.FORM.NO_BINDINGS_FOUND}
     </Alert>
   );
 
@@ -167,17 +182,17 @@ export default function CreateServiceBindingForm({
               onChange={(_, value) => setCreateCredentials(value)}
             />
           </FormItem>
-          {!createCredentials && secrets.length ? (
-            <FormItem key="existingCredentials">
-              <FormLabel htmlFor="existingCredentials">Secrets</FormLabel>
+          {!createCredentials && serviceBindings.length ? (
+            <FormItem key="existingBindings">
+              <FormLabel htmlFor="existingBindings">Service Bindings</FormLabel>
               <select
-                id="existingCredentials"
-                value={existingCredentials}
-                onChange={e => setExistingCredentials(e.target.value)}
+                id="existingBindings"
+                value={existingBindings}
+                onChange={e => setExistingBindings(e.target.value)}
                 required
               >
                 <option value=""></option>
-                {secrets.map(s => (
+                {serviceBindings.map(s => (
                   <option value={s.metadata.name} key={s.metadata.uid}>
                     {s.metadata.name}
                   </option>
@@ -185,7 +200,9 @@ export default function CreateServiceBindingForm({
               </select>
             </FormItem>
           ) : null}
-          {!createCredentials && !secrets.length ? noSecretsFound : null}
+          {!createCredentials && !serviceBindings.length
+            ? noserviceBindingsFound
+            : null}
         </>
       )}
     </form>

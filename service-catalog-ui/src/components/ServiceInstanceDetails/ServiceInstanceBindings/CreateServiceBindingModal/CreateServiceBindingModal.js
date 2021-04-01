@@ -9,7 +9,7 @@ import { SERVICE_BINDINGS_PANEL } from './constants';
 
 export default function CreateServiceBindingModal({
   serviceInstance,
-  serviceBindingsCombined,
+  serviceBindings,
 }) {
   // const [popupModalMessage, setPopupModalMessage] = useState('');
 
@@ -61,12 +61,8 @@ export default function CreateServiceBindingModal({
         serviceInstance={serviceInstance}
         usageKinds={usageKinds}
         // setPopupModalMessage={setPopupModalMessage}
-        serviceBindings={serviceBindingsCombined.map(
-          ({ serviceBinding }) => serviceBinding,
-        )}
-        secrets={serviceBindingsCombined
-          .map(({ secret }) => secret)
-          .filter(s => s)}
+        serviceBindings={serviceBindings}
+
         // refetchServiceInstances={refetchUsageKinds}
       />
     </div>

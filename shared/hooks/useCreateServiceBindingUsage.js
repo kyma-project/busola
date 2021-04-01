@@ -5,7 +5,6 @@ import { formatMessage, randomNameGenerator } from '../utils/helpers';
 export const useCreateServiceBindingUsage = ({
   successMessage,
   errorMessage,
-  usedBy,
 }) => {
   const postRequest = usePost();
   const notificationManager = useNotification();
@@ -44,6 +43,7 @@ export const useCreateServiceBindingUsage = ({
     namespace,
     serviceBindingName,
     parameters,
+    usedBy,
   ) {
     return await postRequest(
       `/apis/servicecatalog.kyma-project.io/v1alpha1/namespaces/${namespace}/servicebindingusages/${name}`,
@@ -69,6 +69,7 @@ export const useCreateServiceBindingUsage = ({
     serviceInstanceName,
     serviceBindingUsageParameters,
     existingCredentials = undefined,
+    usedBy,
   }) {
     try {
       let serviceBindingName = existingCredentials || randomNameGenerator();
@@ -85,6 +86,7 @@ export const useCreateServiceBindingUsage = ({
         namespace,
         serviceBindingName,
         serviceBindingUsageParameters,
+        usedBy,
       );
     } catch (err) {
       handleError(serviceInstanceName, err);

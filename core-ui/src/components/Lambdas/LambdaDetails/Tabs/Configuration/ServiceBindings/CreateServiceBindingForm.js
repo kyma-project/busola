@@ -30,7 +30,6 @@ export default function CreateServiceBindingForm({
   const createServiceBindingUsageSet = useCreateServiceBindingUsage({
     successMessage: LAMBDAS_MESSAGES.CREATE_BINDING_USAGE.SUCCESS_MESSAGE,
     errorMessage: LAMBDAS_MESSAGES.CREATE_BINDING_USAGE.ERROR_MESSAGE,
-    usedBy: { name: lambda.metadata.name, kind: CONFIG.functionUsageKind },
   });
 
   const [selectedServiceInstance, setSelectedServiceInstance] = useState('');
@@ -108,7 +107,7 @@ export default function CreateServiceBindingForm({
             },
           }
         : undefined,
-      // createCredentials: createCredentials,
+      usedBy: { name: lambda.metadata.name, kind: CONFIG.functionUsageKind },
       existingCredentials: existingCredentials || undefined,
     };
 

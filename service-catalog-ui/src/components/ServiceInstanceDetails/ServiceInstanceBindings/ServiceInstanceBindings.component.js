@@ -118,10 +118,11 @@ const ServiceInstanceBindings = ({
   //     id={`create-service-binding`}
   //   />
   // );
+
   const createServiceBindingModal = (
     <CreateServiceBindingModal
       serviceInstance={serviceInstance}
-      serviceBindingsCombined={serviceBindingsCombined}
+      serviceBindings={bindingsRequest.data}
     />
   );
 
