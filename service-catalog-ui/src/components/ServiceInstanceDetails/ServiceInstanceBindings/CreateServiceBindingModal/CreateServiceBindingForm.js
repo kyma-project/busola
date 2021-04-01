@@ -20,22 +20,21 @@ const ResourceKindOptgroup = ({ kindResource, namespace }) => {
     `/apis/${kindResource.group}/${kindResource.version}/namespaces/${namespace}/${kindResource.kind}s`,
     {},
   );
-  return (
+  return data && data.length ? (
     <optgroup label={kindResource.kind}>
-      {data &&
-        data.map(res => (
-          <option
-            value={JSON.stringify({
-              kind: kindResource.kind,
-              name: res.metadata.name,
-            })}
-            key={res.metadata.uid}
-          >
-            {res.metadata.name}
-          </option>
-        ))}
+      {data.map(res => (
+        <option
+          value={JSON.stringify({
+            kind: kindResource.kind,
+            name: res.metadata.name,
+          })}
+          key={res.metadata.uid}
+        >
+          {res.metadata.name}
+        </option>
+      ))}
     </optgroup>
-  );
+  ) : null;
 };
 
 export default function CreateServiceBindingForm({
