@@ -5,7 +5,7 @@ import { formatMessage, randomNameGenerator } from '../utils/helpers';
 export const useCreateServiceBindingUsage = ({
   successMessage,
   errorMessage,
-  usageKind,
+  usedBy,
 }) => {
   const postRequest = usePost();
   const notificationManager = useNotification();
@@ -43,7 +43,6 @@ export const useCreateServiceBindingUsage = ({
     name,
     namespace,
     serviceBindingName,
-    lambdaName,
     parameters,
   ) {
     return await postRequest(
@@ -58,10 +57,7 @@ export const useCreateServiceBindingUsage = ({
           serviceBindingRef: {
             name: serviceBindingName,
           },
-          usedBy: {
-            name: lambdaName,
-            kind: usageKind,
-          },
+          usedBy,
           parameters,
         },
       },
@@ -71,7 +67,6 @@ export const useCreateServiceBindingUsage = ({
   async function createServiceBindingUsageSet({
     namespace,
     serviceInstanceName,
-    lambdaName,
     serviceBindingUsageParameters,
     existingCredentials = undefined,
   }) {
@@ -89,7 +84,6 @@ export const useCreateServiceBindingUsage = ({
         randomNameGenerator(),
         namespace,
         serviceBindingName,
-        lambdaName,
         serviceBindingUsageParameters,
       );
     } catch (err) {

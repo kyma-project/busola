@@ -30,7 +30,7 @@ export default function CreateServiceBindingForm({
   const createServiceBindingUsageSet = useCreateServiceBindingUsage({
     successMessage: LAMBDAS_MESSAGES.CREATE_BINDING_USAGE.SUCCESS_MESSAGE,
     errorMessage: LAMBDAS_MESSAGES.CREATE_BINDING_USAGE.ERROR_MESSAGE,
-    usageKind: CONFIG.functionUsageKind,
+    usedBy: { name: lambda.metadata.name, kind: CONFIG.functionUsageKind },
   });
 
   const [selectedServiceInstance, setSelectedServiceInstance] = useState('');
@@ -99,7 +99,6 @@ export default function CreateServiceBindingForm({
   async function handleFormSubmit(e) {
     e.preventDefault();
     const parameters = {
-      lambdaName: lambda.metadata.name,
       namespace: lambda.metadata.namespace,
       serviceInstanceName: selectedServiceInstance,
       serviceBindingUsageParameters: envPrefix
@@ -109,7 +108,7 @@ export default function CreateServiceBindingForm({
             },
           }
         : undefined,
-      createCredentials: createCredentials,
+      // createCredentials: createCredentials,
       existingCredentials: existingCredentials || undefined,
     };
 
@@ -172,7 +171,7 @@ export default function CreateServiceBindingForm({
               onChange={(_, value) => setCreateCredentials(value)}
             />
           </FormItem>
-
+          {console.log(secrets)}
           {!createCredentials && secrets.length ? (
             <FormItem key="existingCredentials">
               <FormLabel htmlFor="existingCredentials">Secrets</FormLabel>
