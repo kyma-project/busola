@@ -14,19 +14,23 @@ export default function CreateServiceBindingModal({
     '/apis/servicecatalog.kyma-project.io/v1alpha1/usagekinds',
     {},
   );
+  const shouldButtonBeDisabled =
+    !usageKinds || serviceInstance.status.lastConditionState !== 'Ready';
 
   const button = (
-    <Button glyph="add" option="light" disabled={!usageKinds}>
+    <Button glyph="add" option="light" disabled={shouldButtonBeDisabled}>
       {SERVICE_BINDINGS_PANEL.CREATE_MODAL.OPEN_BUTTON.TEXT}
     </Button>
   );
-  const modalOpeningComponent = usageKinds ? (
-    button
-  ) : (
+
+  const modalOpeningComponent = shouldButtonBeDisabled ? (
     <Tooltip
       content={
-        SERVICE_BINDINGS_PANEL.CREATE_MODAL.OPEN_BUTTON
-          .NOT_ENTRIES_POPUP_MESSAGE
+        !usageKinds
+          ? SERVICE_BINDINGS_PANEL.CREATE_MODAL.OPEN_BUTTON
+              .NO_ENTRIES_POPUP_MESSAGE
+          : SERVICE_BINDINGS_PANEL.CREATE_MODAL.OPEN_BUTTON
+              .NOT_READY_POPUP_MESSAGE
       }
       position="top"
       trigger="mouseenter"
@@ -36,6 +40,8 @@ export default function CreateServiceBindingModal({
     >
       {button}
     </Tooltip>
+  ) : (
+    button
   );
 
   const renderForm = props => (

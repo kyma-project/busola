@@ -18,21 +18,23 @@ const ServiceInstanceBindings = ({ serviceInstance }) => {
     binding?.spec.instanceRef?.name === serviceInstance.metadata.name;
   const notification = useNotification();
   const sendDeleteRequest = useDelete();
-  const bindingsRequest = useGetList(filterBindingsForInstance)(
+  const bindingsRequest = useGetList(
+    filterBindingsForInstance,
+  )(
     `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${serviceInstance?.metadata.namespace}/servicebindings`,
-    {},
+    { pollingInterval: 3000 },
   );
 
   const bindingUsagesRequest = useGetList()(
     `/apis/servicecatalog.kyma-project.io/v1alpha1/namespaces/${serviceInstance?.metadata.namespace}/servicebindingusages`,
     {
-      pollingInterval: 3000,
+      pollingInterval: 3200,
     },
   );
 
   const secretsRequest = useGetList()(
     `/api/v1/namespaces/${serviceInstance?.metadata.namespace}/secrets`,
-    {},
+    { pollingInterval: 5000 },
   );
 
   const error = !!(

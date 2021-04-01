@@ -9,6 +9,23 @@ import {
 import ServiceInstanceHeader from './ServiceInstanceHeader/ServiceInstanceHeader';
 import ServiceInstanceBindings from './ServiceInstanceBindings/ServiceInstanceBindings';
 import { EmptyList } from './styled';
+import { SERVICE_BINDINGS_PANEL } from './ServiceInstanceBindings/constants';
+
+const ServiceInstanceBindingsWrapper = ({
+  serviceInstance,
+  servicePlanRef,
+}) => {
+  const planUrl = servicePlanRef?.isClusterWide
+    ? `/apis/servicecatalog.k8s.io/v1beta1/clusterserviceplans/${servicePlanRef.ref}`
+    : `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${serviceInstance.metadata.namespace}/serviceplans/${servicePlanRef.ref}`;
+
+  const { data: servicePlan } = useGet(planUrl, {});
+  return servicePlan?.spec.bindable ? (
+    <ServiceInstanceBindings serviceInstance={serviceInstance} />
+  ) : (
+    <EmptyList>{SERVICE_BINDINGS_PANEL.NOT_BINDABLE}</EmptyList>
+  );
+};
 
 export default function ServiceInstanceDetails({ match }) {
   const { namespaceId } = useMicrofrontendContext();
@@ -39,7 +56,7 @@ export default function ServiceInstanceDetails({ match }) {
     );
   }
 
-  const servicePlan = {
+  const servicePlanRef = {
     ref:
       serviceInstance.spec.servicePlanRef?.name ||
       serviceInstance.spec.clusterServicePlanRef?.name,
@@ -53,9 +70,12 @@ export default function ServiceInstanceDetails({ match }) {
     <ThemeWrapper>
       <ServiceInstanceHeader
         serviceInstance={serviceInstance}
-        servicePlan={servicePlan}
+        servicePlan={servicePlanRef}
       />
-      <ServiceInstanceBindings serviceInstance={serviceInstance} />
+      <ServiceInstanceBindingsWrapper
+        serviceInstance={serviceInstance}
+        servicePlanRef={servicePlanRef}
+      />
     </ThemeWrapper>
   );
 }

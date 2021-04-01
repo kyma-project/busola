@@ -2,8 +2,10 @@ export const SERVICE_BINDINGS_PANEL = {
   CREATE_MODAL: {
     OPEN_BUTTON: {
       TEXT: 'Create Service Binding Usage',
-      NOT_ENTRIES_POPUP_MESSAGE:
+      NO_ENTRIES_POPUP_MESSAGE:
         'There are no Applications available to bind in this Namespace. Create an Application first.',
+      NOT_READY_POPUP_MESSAGE:
+        'The Service Instance must be in a running state.',
     },
     TITLE: 'Create Service Binding Usage',
     CONFIRM_BUTTON: {
@@ -25,4 +27,5 @@ export const SERVICE_BINDINGS_PANEL = {
   CREATE_BINDING_USAGE: {
     SUCCESS_MESSAGE: `Service Binding Usage was created.`,
   },
+  NOT_BINDABLE: 'Service Instance not bindable. Binding panel not available.',
 };
