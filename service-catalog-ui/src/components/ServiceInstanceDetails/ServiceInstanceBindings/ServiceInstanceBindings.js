@@ -5,7 +5,6 @@ import SecretDataModal from './SecretDataModal/SecretDataModal.component';
 import { SERVICE_BINDINGS_PANEL } from './constants';
 import { Link } from 'fundamental-react';
 import {
-  Spinner,
   StatusBadge,
   useGetList,
   useNotification,
@@ -13,12 +12,13 @@ import {
 } from 'react-shared';
 
 import { TextOverflowWrapper } from '../../ServiceInstanceList/ServiceInstanceTable/styled';
-import { backendModuleExists } from 'helpers';
 
 const ServiceInstanceBindings = ({ serviceInstance }) => {
+  const filterBindingsForInstance = binding =>
+    binding?.spec.instanceRef?.name === serviceInstance.metadata.name;
   const notification = useNotification();
   const sendDeleteRequest = useDelete();
-  const bindingsRequest = useGetList()(
+  const bindingsRequest = useGetList(filterBindingsForInstance)(
     `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${serviceInstance?.metadata.namespace}/servicebindings`,
     {},
   );
@@ -35,17 +35,13 @@ const ServiceInstanceBindings = ({ serviceInstance }) => {
     {},
   );
 
-  if (
-    !bindingsRequest.data ||
-    !bindingUsagesRequest.data ||
-    !secretsRequest.data
-  )
-    return <Spinner />; //TODO
-
   const error = !!(
     bindingsRequest.error ||
     bindingUsagesRequest.error ||
-    secretsRequest.error
+    secretsRequest.error ||
+    !bindingsRequest.data ||
+    !bindingUsagesRequest.data ||
+    !secretsRequest.data
   );
   const loading = !!(
     bindingsRequest.loading ||
@@ -53,23 +49,25 @@ const ServiceInstanceBindings = ({ serviceInstance }) => {
     secretsRequest.loading
   );
 
-  const getBindingCombinedData = bindingUsage => {
-    const binding = bindingsRequest.data.find(
-      b => b.metadata.name === bindingUsage.spec.serviceBindingRef.name,
+  const getBindingCombinedData = binding => {
+    const bindingUsage = (bindingUsagesRequest.data || []).find(
+      u => binding.metadata.name === u.spec.serviceBindingRef.name,
     );
-    return {
-      serviceBinding: binding,
-      serviceBindingUsage: bindingUsage,
-      secret: binding
-        ? secretsRequest.data.find(
-            s => s.metadata.name === binding.spec.secretName,
-          )
-        : undefined,
-    };
+    return bindingUsage
+      ? {
+          serviceBinding: binding,
+          serviceBindingUsage: bindingUsage,
+          secret: binding
+            ? (secretsRequest.data || []).find(
+                s => s.metadata.name === binding.spec.secretName,
+              )
+            : undefined,
+        }
+      : null;
   };
-  const serviceBindingsCombined = bindingUsagesRequest.data.map(
-    getBindingCombinedData,
-  );
+  const serviceBindingsCombined = (bindingsRequest.data || [])
+    .map(getBindingCombinedData)
+    .filter(d => d);
 
   const capitalize = str => {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
@@ -102,10 +100,6 @@ const ServiceInstanceBindings = ({ serviceInstance }) => {
       serviceInstance={serviceInstance}
       serviceBindings={bindingsRequest.data}
     />
-  );
-
-  const serviceCatalogAddonsBackendModuleExists = backendModuleExists(
-    'servicecatalogaddons',
   );
 
   const bindingUsagesHeaderRenderer = () => [
@@ -170,8 +164,17 @@ const ServiceInstanceBindings = ({ serviceInstance }) => {
         '-'
       );
     })(),
+    //TODO
     <StatusBadge
-      autoResolveType
+      type={
+        serviceBindingUsage.status?.conditions[0].reason
+          ? serviceBindingUsage.status?.conditions[0].reason
+              .toUpperCase()
+              .includes('ERROR')
+            ? 'error'
+            : 'info'
+          : 'success'
+      }
       tooltipContent={serviceBindingUsage.status?.conditions[0].message}
     >
       {serviceBindingUsage.status?.conditions[0].reason || 'ready'}
@@ -188,6 +191,8 @@ const ServiceInstanceBindings = ({ serviceInstance }) => {
       rowRenderer={bindingUsagesRowRenderer}
       notFoundMessage="No applications found"
       actions={actions}
+      serverDataError={error}
+      serverDataLoading={loading}
     />
   );
 };
