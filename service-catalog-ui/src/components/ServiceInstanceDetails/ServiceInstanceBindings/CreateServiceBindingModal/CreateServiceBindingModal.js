@@ -5,7 +5,7 @@ import { Spinner, Tooltip, useGetList, ModalWithForm } from 'react-shared';
 
 // import ModalWithForm from 'react-shared';
 import CreateServiceBindingForm from './CreateServiceBindingForm';
-import { SERVICE_BINDINGS_PANEL } from './constants';
+import { SERVICE_BINDINGS_PANEL } from '../constants';
 
 export default function CreateServiceBindingModal({
   serviceInstance,

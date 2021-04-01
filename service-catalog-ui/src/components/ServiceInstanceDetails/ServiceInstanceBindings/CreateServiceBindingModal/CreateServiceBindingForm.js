@@ -7,7 +7,7 @@ import {
   useCreateServiceBindingUsage,
 } from 'react-shared';
 
-import { SERVICE_BINDINGS_PANEL } from './constants';
+import { SERVICE_BINDINGS_PANEL } from '../constants';
 
 const checkBoxInputProps = {
   style: {

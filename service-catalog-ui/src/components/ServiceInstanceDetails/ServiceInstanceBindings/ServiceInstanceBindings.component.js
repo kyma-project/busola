@@ -4,15 +4,21 @@ import {
   instanceStatusColor,
   Tooltip as StatusTooltip,
 } from '@kyma-project/react-components';
-import { Tabs, Tab, Tooltip, GenericList } from 'react-shared';
+import { Tabs, Tab, Tooltip, GenericList, handleDelete } from 'react-shared';
 // import BindApplicationModal from './BindApplicationModal/BindApplicationModal.container';
 import CreateServiceBindingModal from './CreateServiceBindingModal/CreateServiceBindingModal';
 import SecretDataModal from './SecretDataModal/SecretDataModal.component';
 import ParametersDataModal from './ParametersDataModal/ParametersDataModal.component';
 import DeleteBindingModal from './DeleteBindingModal/DeleteBindingModal.component';
 import StatusIndicator from './StatusIndicator/StatusIndicator.component';
-
-import { Spinner, StatusBadge, useGetList } from 'react-shared';
+import { SERVICE_BINDINGS_PANEL } from './constants';
+import {
+  Spinner,
+  StatusBadge,
+  useGetList,
+  useNotification,
+  useDelete,
+} from 'react-shared';
 import {
   ServiceInstanceBindingsWrapper,
   SecretModalButton,
@@ -27,6 +33,8 @@ const ServiceInstanceBindings = ({
   serviceInstance,
   defaultActiveTabIndex,
 }) => {
+  const notification = useNotification();
+  const sendDeleteRequest = useDelete();
   const bindingsRequest = useGetList()(
     `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${serviceInstance?.metadata.namespace}/servicebindings`,
     {},
@@ -35,7 +43,7 @@ const ServiceInstanceBindings = ({
   const bindingUsagesRequest = useGetList()(
     `/apis/servicecatalog.kyma-project.io/v1alpha1/namespaces/${serviceInstance?.metadata.namespace}/servicebindingusages`,
     {
-      // pollingInterval: 2900,
+      pollingInterval: 3000,
     },
   );
 
@@ -82,8 +90,6 @@ const ServiceInstanceBindings = ({
     getBindingCombinedData,
   );
 
-  console.log(serviceBindingsCombined);
-
   const capitalize = str => {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   };
@@ -118,6 +124,28 @@ const ServiceInstanceBindings = ({
   //     id={`create-service-binding`}
   //   />
   // );
+
+  async function handleResourceDelete({ serviceBindingUsage }) {
+    console.log('deleting', serviceBindingUsage);
+    return await handleDelete(
+      serviceBindingUsage.kind,
+      null,
+      serviceBindingUsage.metadata.name,
+      () => sendDeleteRequest(serviceBindingUsage.metadata.selfLink),
+      () => {
+        bindingUsagesRequest.silentRefetch();
+        notification.notifySuccess({
+          content: SERVICE_BINDINGS_PANEL.DELETE_BINDING_USAGE.SUCCESS_MESSAGE,
+        });
+      },
+    );
+  }
+  const actions = [
+    {
+      name: 'Delete',
+      handler: handleResourceDelete,
+    },
+  ];
 
   const createServiceBindingModal = (
     <CreateServiceBindingModal
@@ -237,6 +265,7 @@ const ServiceInstanceBindings = ({
       entries={serviceBindingsCombined}
       rowRenderer={bindingUsagesRowRenderer}
       notFoundMessage="No applications found"
+      actions={actions}
     />
   );
 };
