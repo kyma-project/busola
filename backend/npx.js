@@ -17,29 +17,34 @@ function tryLoadKubeconfig() {
   return null;
 }
 
+function buildInitParams(kubeconfig) {
+  const cluster = kubeconfig.clusters[0].cluster;
+  const user = kubeconfig.users[0].user;
+  return {
+    cluster: {
+      server: cluster.server,
+      'certificate-authority-data': cluster['certificate-authority-data'],
+    },
+    rawAuth: {
+      token: user.token,
+      'client-certificate-data': user['client-certificate-data'],
+      'client-key-data': user['client-key-data'],
+    },
+    config: {
+      disabledNavigationNodes: '',
+      systemNamespaces:
+        'istio-system knative-eventing knative-serving kube-public kube-system kyma-backup kyma-installer kyma-integration kyma-system natss kube-node-lease kubernetes-dashboard serverless-system',
+    },
+    features: {
+      bebEnabled: false,
+    },
+  };
+}
+
 function openBrowser(port) {
   try {
-    const cluster = kubeconfig.clusters[0].cluster;
-    const user = kubeconfig.users[0].user;
-    const params = {
-      cluster: {
-        server: cluster.server,
-        'certificate-authority-data': cluster['certificate-authority-data'],
-      },
-      rawAuth: {
-        token: user.token,
-        'client-certificate-data': user['client-certificate-data'],
-        'client-key-data': user['client-key-data'],
-      },
-      config: {
-        disabledNavigationNodes: '',
-        systemNamespaces:
-          'istio-system knative-eventing knative-serving kube-public kube-system kyma-backup kyma-installer kyma-integration kyma-system natss kube-node-lease kubernetes-dashboard serverless-system',
-      },
-      features: {
-        bebEnabled: false,
-      },
-    };
+    const kubeconfig = tryLoadKubeconfig();
+    const params = buildInitParams(kubeconfig);
     createEncoder('lzstring')
       .compress(params)
       .then(p => open(`http://localhost:${port}/home/?init=${p}`));
@@ -51,7 +56,6 @@ function openBrowser(port) {
 const app = express();
 app.use(express.raw({ type: '*/*' }));
 
-const kubeconfig = tryLoadKubeconfig();
 const server = http.createServer(app);
 const port = process.env.PORT || 3001;
 
