@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import { Button, Alert } from 'fundamental-react';
-import { Spinner, Tooltip, useGetList, ModalWithForm } from 'react-shared';
+import { Button } from 'fundamental-react';
+import { Tooltip, useGetList, ModalWithForm } from 'react-shared';
 
-// import ModalWithForm from 'react-shared';
 import CreateServiceBindingForm from './CreateServiceBindingForm';
 import { SERVICE_BINDINGS_PANEL } from '../constants';
 
@@ -11,22 +10,7 @@ export default function CreateServiceBindingModal({
   serviceInstance,
   serviceBindings,
 }) {
-  // const [popupModalMessage, setPopupModalMessage] = useState('');
-
-  // const serviceInstancesAlreadyUsed = serviceBindingsCombined.map(
-  //   ({ serviceBinding, serviceBindingUsage }) =>
-  //     serviceBindingUsage && serviceBinding?.spec.instanceRef.name,
-  // );
-
-  // const isNotAlreadyUsed = serviceInstance =>
-  //   !serviceInstancesAlreadyUsed.includes(serviceInstance.metadata.name);
-
-  const {
-    loading = true,
-    error,
-    data: usageKinds,
-    silentRefetch: refetchUsageKinds,
-  } = useGetList()(
+  const { data: usageKinds } = useGetList()(
     '/apis/servicecatalog.kyma-project.io/v1alpha1/usagekinds',
     {},
   );
@@ -60,10 +44,7 @@ export default function CreateServiceBindingModal({
         {...props}
         serviceInstance={serviceInstance}
         usageKinds={usageKinds}
-        // setPopupModalMessage={setPopupModalMessage}
         serviceBindings={serviceBindings}
-
-        // refetchServiceInstances={refetchUsageKinds}
       />
     </div>
   );
@@ -73,7 +54,6 @@ export default function CreateServiceBindingModal({
       title={SERVICE_BINDINGS_PANEL.CREATE_MODAL.TITLE}
       modalOpeningComponent={modalOpeningComponent}
       confirmText={SERVICE_BINDINGS_PANEL.CREATE_MODAL.CONFIRM_BUTTON.TEXT}
-      // invalidPopupMessage={popupModalMessage}
       id="create-service-binding-modal"
       renderForm={renderForm}
     />

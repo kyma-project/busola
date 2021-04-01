@@ -1,17 +1,9 @@
 import React from 'react';
-
-import {
-  instanceStatusColor,
-  Tooltip as StatusTooltip,
-} from '@kyma-project/react-components';
-import { Tabs, Tab, Tooltip, GenericList, handleDelete } from 'react-shared';
-// import BindApplicationModal from './BindApplicationModal/BindApplicationModal.container';
+import { GenericList, handleDelete } from 'react-shared';
 import CreateServiceBindingModal from './CreateServiceBindingModal/CreateServiceBindingModal';
 import SecretDataModal from './SecretDataModal/SecretDataModal.component';
-import ParametersDataModal from './ParametersDataModal/ParametersDataModal.component';
-import DeleteBindingModal from './DeleteBindingModal/DeleteBindingModal.component';
-import StatusIndicator from './StatusIndicator/StatusIndicator.component';
 import { SERVICE_BINDINGS_PANEL } from './constants';
+import { Link } from 'fundamental-react';
 import {
   Spinner,
   StatusBadge,
@@ -19,20 +11,11 @@ import {
   useNotification,
   useDelete,
 } from 'react-shared';
-import {
-  ServiceInstanceBindingsWrapper,
-  SecretModalButton,
-  ActionsWrapper,
-} from './styled';
 
 import { TextOverflowWrapper } from '../../ServiceInstanceList/ServiceInstanceTable/styled';
-
 import { backendModuleExists } from 'helpers';
 
-const ServiceInstanceBindings = ({
-  serviceInstance,
-  defaultActiveTabIndex,
-}) => {
+const ServiceInstanceBindings = ({ serviceInstance }) => {
   const notification = useNotification();
   const sendDeleteRequest = useDelete();
   const bindingsRequest = useGetList()(
@@ -228,9 +211,9 @@ const ServiceInstanceBindings = ({
           <SecretDataModal
             title={`Secret ${secret.metadata.name}`}
             modalOpeningComponent={
-              <SecretModalButton data-e2e-id="secret-button">
+              <Link className="link" data-e2e-id="secret-button">
                 {secret.metadata.name}
-              </SecretModalButton>
+              </Link>
             }
             data={secret.data}
             prefix={prefix}
@@ -246,14 +229,6 @@ const ServiceInstanceBindings = ({
     >
       {serviceBindingUsage.status?.conditions[0].reason || 'ready'}
     </StatusBadge>, //TODO enhance
-    // <div className="list-actions">
-    //   <DeleteBindingModal
-    //       deleteBindingUsage={this.props.deleteBindingUsage}
-    //       bindingUsageName={bindingUsage.name}
-    //       bindingUsageCount={this.countBindingUsage(bindingUsage)}
-    //       id={`service-binding-delete-${bindingUsage.name}`}
-    //     />
-    // </div>,
   ];
 
   return (

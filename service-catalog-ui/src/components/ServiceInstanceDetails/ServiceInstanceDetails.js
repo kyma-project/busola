@@ -1,19 +1,15 @@
 import React from 'react';
-
 import { ThemeWrapper } from '@kyma-project/react-components';
-
 import {
   Spinner,
   useGet,
   useMicrofrontendContext,
   ResourceNotFound,
 } from 'react-shared';
-
 import ServiceInstanceHeader from './ServiceInstanceHeader/ServiceInstanceHeader';
 import ServiceInstanceBindings from './ServiceInstanceBindings/ServiceInstanceBindings.component';
 import { serviceInstanceConstants } from 'helpers/constants';
-
-import { ServiceInstanceWrapper, EmptyList } from './styled';
+import { EmptyList } from './styled';
 
 export default function ServiceInstanceDetails({ match }) {
   const { namespaceId } = useMicrofrontendContext();
@@ -65,12 +61,8 @@ export default function ServiceInstanceDetails({ match }) {
       <ServiceInstanceHeader
         serviceInstance={serviceInstance}
         servicePlan={servicePlan}
-        // deleteServiceInstance={deleteServiceInstanceMutation}
       />
-      <ServiceInstanceBindings
-        defaultActiveTabIndex={serviceInstanceConstants.addonsIndex}
-        serviceInstance={serviceInstance}
-      />
+      <ServiceInstanceBindings serviceInstance={serviceInstance} />
     </ThemeWrapper>
   );
 }
