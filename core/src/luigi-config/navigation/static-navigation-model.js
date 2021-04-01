@@ -107,8 +107,9 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
                         config.coreUIModuleUrl +
                         '/namespaces/:namespaceId/Pods/:podName/Containers/:containerName',
                     },
-                  ]
-                }, {
+                  ],
+                },
+                {
                   pathSegment: 'initContainers',
                   children: [
                     {
