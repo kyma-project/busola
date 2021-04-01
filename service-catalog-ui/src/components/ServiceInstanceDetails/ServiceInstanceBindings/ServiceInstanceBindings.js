@@ -32,9 +32,7 @@ const ServiceInstanceBindings = ({ serviceInstance }) => {
 
   const secretsRequest = useGetList()(
     `/api/v1/namespaces/${serviceInstance?.metadata.namespace}/secrets`,
-    {
-      // pollingInterval: 3300,
-    },
+    {},
   );
 
   if (
@@ -77,37 +75,6 @@ const ServiceInstanceBindings = ({ serviceInstance }) => {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   };
 
-  // const relatedBindingUsage = bindingName => {
-  //   if (!this.props.serviceInstance.serviceBindingUsages) return null;
-
-  //   return this.props.serviceInstance.serviceBindingUsages.filter(item => {
-  //     if (!item.serviceBinding) {
-  //       return null;
-  //     }
-  //     return item.serviceBinding.name === bindingName;
-  //   });
-  // };
-
-  // const { createBinding, createBindingUsage, serviceInstance } = this.props;
-  // console.log('serviceBindingscombined', serviceInstance);
-  // TODO take bindable from plan or service class
-  // if (!serviceInstance.bindable) {
-  //   return (
-  //     <h4 className="fd-has-text-align-center">
-  //       ServiceInstance not bindable. Binding panel not available.
-  //     </h4>
-  //   );
-  // }
-
-  // const bindApplication = (
-  //   <BindApplicationModal
-  //     createBinding={createBinding}
-  //     createBindingUsage={createBindingUsage}
-  //     serviceInstance={serviceInstance}
-  //     id={`create-service-binding`}
-  //   />
-  // );
-
   async function handleResourceDelete({ serviceBindingUsage }) {
     console.log('deleting', serviceBindingUsage);
     return await handleDelete(
@@ -136,26 +103,6 @@ const ServiceInstanceBindings = ({ serviceInstance }) => {
       serviceBindings={bindingsRequest.data}
     />
   );
-
-  // const boundApplicationContent = (
-  //   <>
-  //     <ActionsWrapper>{bindApplication}</ActionsWrapper>
-  //   </>
-  // );
-
-  // const createCredentials = (
-  //   <CreateCredentialsModal
-  //     createBinding={createBinding}
-  //     createBindingUsage={createBindingUsage}
-  //     serviceInstance={serviceInstance}
-  //     id={`create-credentials`}
-  //   />
-  // );
-  // const createCredentialsContent = (
-  //   <>
-  //     <ActionsWrapper>{createCredentials}</ActionsWrapper>
-  //   </>
-  // );
 
   const serviceCatalogAddonsBackendModuleExists = backendModuleExists(
     'servicecatalogaddons',

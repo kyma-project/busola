@@ -7,8 +7,7 @@ import {
   ResourceNotFound,
 } from 'react-shared';
 import ServiceInstanceHeader from './ServiceInstanceHeader/ServiceInstanceHeader';
-import ServiceInstanceBindings from './ServiceInstanceBindings/ServiceInstanceBindings.component';
-import { serviceInstanceConstants } from 'helpers/constants';
+import ServiceInstanceBindings from './ServiceInstanceBindings/ServiceInstanceBindings';
 import { EmptyList } from './styled';
 
 export default function ServiceInstanceDetails({ match }) {
@@ -27,13 +26,7 @@ export default function ServiceInstanceDetails({ match }) {
       </EmptyList>
     );
 
-  if (loading || !serviceInstance) {
-    return (
-      <EmptyList>
-        <Spinner />
-      </EmptyList>
-    );
-  }
+  if (loading || !serviceInstance) return <Spinner />;
 
   if (!serviceInstance) {
     return (

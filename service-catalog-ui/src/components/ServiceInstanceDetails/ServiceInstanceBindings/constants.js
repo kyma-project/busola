@@ -1,13 +1,4 @@
 export const SERVICE_BINDINGS_PANEL = {
-  LIST: {
-    TITLE: 'Service Bindings Usages',
-    ERRORS: {
-      RESOURCES_NOT_FOUND:
-        "This Function doesn't have any Service Bindings Usages yet.",
-      NOT_MATCHING_SEARCH_QUERY:
-        "Couldn't find Service Bindings Usages matching this query.",
-    },
-  },
   CREATE_MODAL: {
     OPEN_BUTTON: {
       TEXT: 'Create Service Binding Usage',
@@ -32,7 +23,6 @@ export const SERVICE_BINDINGS_PANEL = {
     ERROR_MESSAGE: 'Failed to delete the Service Binding Usage',
   },
   CREATE_BINDING_USAGE: {
-    SUCCESS_MESSAGE: `Service Binding Usage was created.`, //TODO
-    ERROR_MESSAGE: `Couldn't create the Service Binding Usage.`,
+    SUCCESS_MESSAGE: `Service Binding Usage was created.`,
   },
 };
