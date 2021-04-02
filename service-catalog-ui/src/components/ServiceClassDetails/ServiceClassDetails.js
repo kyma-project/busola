@@ -58,9 +58,7 @@ export default function ServiceClassDetails({ name }) {
     resourceType === 'ClusterServiceClass'
       ? clusterServicePlansUrl
       : servicePlansUrl;
-  const servicePlansRequest = useGetList()(plansUrl, {
-    pollingInterval: 3500,
-  });
+  const servicePlansRequest = useGetList()(plansUrl, {});
   const servicePlans = servicePlansRequest.data?.sort(sortByDisplayName);
 
   if (error) {
