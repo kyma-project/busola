@@ -13,7 +13,7 @@ import { serviceClassTileTitles } from 'helpers/constants';
 import { isStringValueEqualToTrue } from 'helpers';
 import { Token } from 'fundamental-react/Token';
 
-const ServiceClassInfo = ({ serviceClass, labels }) => {
+const ServiceClassInfo = ({ serviceClass, labels, planSelector }) => {
   const extData = serviceClass.spec.externalMetadata || {};
 
   const extractLabels = () => {
@@ -94,7 +94,7 @@ const ServiceClassInfo = ({ serviceClass, labels }) => {
         {tagsCombined && tagsCombined.length > 0 && (
           <Tile
             style={{
-              gridColumn: `span ${COLUMN_COUNT}}`,
+              gridColumn: `span ${COLUMN_COUNT - (planSelector ? 2 : 0)}`,
             }}
           >
             <Tile.Content title={serviceClassTileTitles.tags}>
@@ -110,6 +110,13 @@ const ServiceClassInfo = ({ serviceClass, labels }) => {
             </Tile.Content>
           </Tile>
         )}
+        {planSelector && (
+          <Tile className="fd-has-grid-column-span-2">
+            <Tile.Content title={serviceClassTileTitles.plans}>
+              {planSelector}
+            </Tile.Content>
+          </Tile>
+        )}
       </ServiceClassHeaderTileGrid>
     </ServiceClassInfoContentWrapper>
   );
@@ -118,6 +125,7 @@ const ServiceClassInfo = ({ serviceClass, labels }) => {
 ServiceClassInfo.propTypes = {
   serviceClass: PropTypes.object.isRequired,
   labels: PropTypes.object,
+  planSelector: PropTypes.node,
 };
 
 export default ServiceClassInfo;

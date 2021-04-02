@@ -14,3 +14,4 @@ export * from './OAuth2Clients.list.js';
 export * from './ServiceBrokers.list.js';
 export * from './LimitRanges.list';
 export * from './ResourceQuotas.list';
+export * from './Events.list';

@@ -47,6 +47,15 @@ export const NamespacesDetails = DefaultRenderer => ({ ...otherParams }) => {
     params: applicationMappingsParams,
   });
 
+  const eventsParams = {
+    namespace: otherParams.resourceName,
+  };
+
+  const Events = getComponentForList({
+    name: 'eventsList',
+    params: eventsParams,
+  });
+
   const headerActions = (
     <DeployNewWorkload namespaceName={otherParams.resourceName} />
   );
@@ -71,6 +80,7 @@ export const NamespacesDetails = DefaultRenderer => ({ ...otherParams }) => {
       {LimitrangesList}
       {ResourceQuotasList}
       {ApplicationMappings}
+      {Events}
     </DefaultRenderer>
   );
 };
