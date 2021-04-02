@@ -194,6 +194,11 @@ const ServiceInstanceBindings = ({ serviceInstance }) => {
       actions={actions}
       serverDataError={error}
       serverDataLoading={loading}
+      textSearchProperties={[
+        'serviceBindingUsage.metadata.name',
+        'serviceBinding.metadata.name',
+        'serviceBindingUsage.spec.usedBy.name',
+      ]}
     />
   );
 };
