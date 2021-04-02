@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { FormItem, FormLabel, FormInput, Alert } from 'fundamental-react';
 import {
@@ -20,6 +20,7 @@ const ResourceKindOptgroup = ({ kindResource, namespace }) => {
     `/apis/${kindResource.group}/${kindResource.version}/namespaces/${namespace}/${kindResource.kind}s`,
     {},
   );
+
   return data && data.length ? (
     <optgroup label={kindResource.kind}>
       {data.map(res => (
@@ -44,7 +45,8 @@ export default function CreateServiceBindingForm({
   setPopupModalMessage = () => void 0,
   onChange,
   formElementRef,
-  setValidity = () => void 0,
+  // setValidity = () => void 0,
+  setCustomValid = () => void 0,
 }) {
   const createServiceBindingUsageSet = useCreateServiceBindingUsage({
     successMessage: SERVICE_BINDINGS_PANEL.CREATE_BINDING_USAGE.SUCCESS_MESSAGE,
@@ -54,52 +56,55 @@ export default function CreateServiceBindingForm({
   const [selectedApplication, setSelectedApplication] = useState(null);
   const [envPrefix, setEnvPrefix] = useState('');
 
-  const [createCredentials, setCreateCredentials] = useState(true);
+  const [createBinding, setCreateBinding] = useState(true);
   const [existingBindings, setExistingBindings] = useState('');
 
   useEffect(() => {
-    setValidity(false);
-  }, [setValidity]);
+    setCustomValid(false);
+  }, [setCustomValid]);
 
   useEffect(() => {
     if (!selectedApplication) {
       setEnvPrefix('');
-      setCreateCredentials(true);
+      setCreateBinding(true);
       return;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedApplication]);
 
   useEffect(() => {
+    console.log(selectedApplication);
     if (!selectedApplication) {
+      console.log('!selectedApplication');
       setPopupModalMessage(
         SERVICE_BINDINGS_PANEL.CREATE_MODAL.CONFIRM_BUTTON.POPUP_MESSAGES
           .NO_APP_SELECTED,
       );
-      setValidity(false);
+      setCustomValid(false);
       return;
     }
 
-    if (!createCredentials && !existingBindings) {
+    if (!createBinding && !existingBindings) {
+      console.log('!createBinding && !existingBindings');
       setPopupModalMessage(
         SERVICE_BINDINGS_PANEL.CREATE_MODAL.CONFIRM_BUTTON.POPUP_MESSAGES
           .NO_BINDING_SELECTED,
       );
-      setValidity(false);
+      setCustomValid(false);
       return;
     }
-    setValidity(true);
+    setCustomValid(true);
   }, [
     selectedApplication,
-    createCredentials,
+    createBinding,
     existingBindings,
-    setValidity,
+    setCustomValid,
     setPopupModalMessage,
   ]);
 
   useEffect(() => setExistingBindings(''), [
     selectedApplication,
-    createCredentials,
+    createBinding,
   ]);
 
   async function handleFormSubmit(e) {
@@ -128,10 +133,14 @@ export default function CreateServiceBindingForm({
     <select
       id="applicationName"
       value={JSON.stringify(selectedApplication)}
-      onChange={e => setSelectedApplication(JSON.parse(e.target.value))}
+      onChange={e => {
+        console.log('dropdown onchange', JSON.parse(e.target.value));
+        setSelectedApplication(JSON.parse(e.target.value));
+      }}
       required
     >
-      {usageKinds.map(u => (
+      <option value="" />
+      {usageKinds.map((u, index) => (
         <ResourceKindOptgroup
           key={u.metadata.uid}
           kindResource={u.spec.resource}
@@ -141,7 +150,7 @@ export default function CreateServiceBindingForm({
     </select>
   );
 
-  const noserviceBindingsFound = (
+  const noServiceBindingsFound = (
     <Alert dismissible={false} type="information">
       {SERVICE_BINDINGS_PANEL.FORM.NO_BINDINGS_FOUND}
     </Alert>
@@ -172,16 +181,16 @@ export default function CreateServiceBindingForm({
 
       {selectedApplication && (
         <>
-          <FormItem key="createCredentials">
+          <FormItem key="createBinding">
             <Checkbox
-              name="createCredentials"
-              value="Create new Secret"
+              name="createBinding"
+              value="Create new Service Binding"
               inputProps={checkBoxInputProps}
               initialChecked={true}
-              onChange={(_, value) => setCreateCredentials(value)}
+              onChange={(_, value) => setCreateBinding(value)}
             />
           </FormItem>
-          {!createCredentials && serviceBindings.length ? (
+          {!createBinding && serviceBindings.length ? (
             <FormItem key="existingBindings">
               <FormLabel htmlFor="existingBindings">Service Bindings</FormLabel>
               <select
@@ -191,16 +200,16 @@ export default function CreateServiceBindingForm({
                 required
               >
                 <option value=""></option>
-                {serviceBindings.map(s => (
-                  <option value={s.metadata.name} key={s.metadata.uid}>
-                    {s.metadata.name}
+                {serviceBindings.map(b => (
+                  <option value={b.metadata.name} key={b.metadata.uid}>
+                    {b.metadata.name}
                   </option>
                 ))}
               </select>
             </FormItem>
           ) : null}
-          {!createCredentials && !serviceBindings.length
-            ? noserviceBindingsFound
+          {!createBinding && !serviceBindings.length
+            ? noServiceBindingsFound
             : null}
         </>
       )}
