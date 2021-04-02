@@ -1,6 +1,3 @@
-import React from 'react';
-import { isAfter, isSameDay, formatDate, parseISO, subDays } from 'date-fns';
-
 function getDayDifference(time1, time2) {
   return (time1 - time2) / (24 * 60 * 60 * 1000);
 }

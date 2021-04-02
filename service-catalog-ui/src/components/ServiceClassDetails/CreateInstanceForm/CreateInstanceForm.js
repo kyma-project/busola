@@ -1,11 +1,11 @@
 import React, { useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { FormItem, FormLabel, Icon, InlineHelp, Link } from 'fundamental-react';
+import { FormItem, FormLabel, Icon, Link } from 'fundamental-react';
 import * as LuigiClient from '@luigi-project/client';
 
-import SchemaData from './SchemaData.component';
+import SchemaData from './SchemaData';
 
-import './CreateInstanceModal.scss';
+import './CreateInstanceForm.scss';
 import { getResourceDisplayName, randomNameGenerator } from 'helpers';
 import { usePost, useNotification } from 'react-shared';
 
@@ -21,7 +21,7 @@ const SERVICE_PLAN_SHAPE = PropTypes.shape({
   displayName: PropTypes.string.isRequired,
 });
 
-CreateInstanceModal.propTypes = {
+CreateInstanceForm.propTypes = {
   onChange: PropTypes.func.isRequired,
   onCompleted: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
@@ -60,50 +60,49 @@ const PlanColumnContent = ({
   onPlanChange,
   dropdownRef,
   allPlans,
-}) => {
-  return (
-    <>
-      <FormLabel required htmlFor="plan">
-        Plan
-      </FormLabel>
-      <select
-        id="plan"
-        aria-label="plan-selector"
-        ref={dropdownRef}
-        defaultValue={defaultPlan}
-        onChange={onPlanChange}
-      >
-        {allPlans.map((p, i) => (
-          <option key={['plan', i].join('_')} value={p.name}>
-            {getResourceDisplayName(p)}
-          </option>
-        ))}
-      </select>
-    </>
-  );
-};
+  isDisabled = false,
+}) => (
+  <>
+    <FormLabel required htmlFor="plan">
+      Plan
+    </FormLabel>
+    <select
+      disabled={isDisabled}
+      id="plan"
+      aria-label="plan-selector"
+      ref={dropdownRef}
+      defaultValue={defaultPlan}
+      onChange={e => onPlanChange(e.target.value)}
+    >
+      {allPlans.map((p, i) => (
+        <option key={['plan', i].join('_')} value={p.metadata.name}>
+          {getResourceDisplayName(p)}
+        </option>
+      ))}
+    </select>
+  </>
+);
 
 PlanColumnContent.proTypes = {
   defaultPlan: SERVICE_PLAN_SHAPE,
   onPlanChange: PropTypes.func.isRequired,
   dropdownRef: CustomPropTypes.ref.isRequired,
   allPlans: PropTypes.arrayOf(SERVICE_PLAN_SHAPE),
+  isDisabled: PropTypes.bool,
 };
 
 const isNonNullObject = o => typeof o === 'object' && !!o;
 
-export default function CreateInstanceModal({
-  // onCompleted,
+export default function CreateInstanceForm({
   onChange,
-  // onError,
   setCustomValid,
   formElementRef,
   jsonSchemaFormRef,
   item,
   documentationUrl,
   plans,
+  preselectedPlanName,
 }) {
-  // TODO This still need to be tuned up and tested out after switching to busola
   const notificationManager = useNotification();
   const postRequest = usePost();
   const [customParametersProvided, setCustomParametersProvided] = useState(
@@ -121,15 +120,31 @@ export default function CreateInstanceModal({
   plans.forEach(plan => {
     parseDefaultIntegerValues(plan);
   });
-  const plan = plans[0]?.metadata.name;
+  const plan = preselectedPlanName || plans[0]?.metadata.name;
   const [
     instanceCreateParameterSchema,
     setInstanceCreateParameterSchema,
-  ] = useState(getInstanceCreateParameterSchema(plans, plan));
+  ] = useState({});
+
+  const handlePlanChange = planName => {
+    const newParametersSchema = getInstanceCreateParameterSchema(
+      plans,
+      planName,
+    );
+
+    setInstanceCreateParameterSchema(newParametersSchema);
+    setInstanceCreateParameters({});
+    if (!newParametersSchema || !newParametersSchema.length) {
+      jsonSchemaFormRef.current = null;
+    }
+  };
+
+  // eslint-disable-next-line
+  useEffect(_ => handlePlanChange(plan), [preselectedPlanName, plans, plan]);
+
   const formValues = {
     name: useRef(null),
     plan: useRef(plan),
-    labels: useRef(null),
   };
 
   const defaultName =
@@ -141,14 +156,11 @@ export default function CreateInstanceModal({
     (instanceCreateParameterSchema.$ref ||
       instanceCreateParameterSchema.properties);
 
-  async function createInstance({ name, namespace, labels, inputData }) {
+  async function createInstance({ name, namespace, inputData }) {
     const input = {
       apiVersion: 'servicecatalog.k8s.io/v1beta1',
       kind: 'ServiceInstance',
       metadata: {
-        annotations: {
-          tags: labels,
-        },
         name,
         namespace,
       },
@@ -175,19 +187,6 @@ export default function CreateInstanceModal({
     }
   }
 
-  const handlePlanChange = e => {
-    const newParametersSchema = getInstanceCreateParameterSchema(
-      plans,
-      e.target.value,
-    );
-
-    setInstanceCreateParameterSchema(newParametersSchema);
-    setInstanceCreateParameters({});
-    if (!newParametersSchema || !newParametersSchema.length) {
-      jsonSchemaFormRef.current = null;
-    }
-  };
-
   const handleCustomParametersChange = input => {
     try {
       const parsedInput = JSON.parse(input);
@@ -202,20 +201,13 @@ export default function CreateInstanceModal({
 
   async function handleFormSubmit(e) {
     e.preventDefault();
-    const currentPlan =
-      plans?.find(
-        e =>
-          e.spec.externalMetadata.displayName === formValues.plan.current.value,
-      ) ||
-      (plans?.length && plans[0]);
-    const labels =
-      formValues.labels.current.value === ''
-        ? []
-        : formValues.labels.current.value.replace(/\s+/g, '').toLowerCase();
+    const currentPlan = plans.find(
+      p => p.metadata.name === formValues.plan.current.value,
+    );
+
     const isClusterServiceClass = item.kind === 'ClusterServiceClass';
 
     const specSC = {
-      labels,
       serviceClassExternalName: item.spec.externalName,
       serviceClassRef: {
         name: item.metadata.name,
@@ -228,7 +220,6 @@ export default function CreateInstanceModal({
     };
 
     const specCSC = {
-      labels,
       clusterServiceClassExternalName: item.spec.externalName,
       clusterServiceClassRef: {
         name: item.metadata.name,
@@ -244,7 +235,6 @@ export default function CreateInstanceModal({
     await createInstance({
       name: formValues.name.current.value,
       namespace: LuigiClient.getContext().namespaceId,
-      labels,
       inputData: isClusterServiceClass ? specCSC : specSC,
     });
   }
@@ -278,34 +268,14 @@ export default function CreateInstanceModal({
             </div>
             <div className="column">
               <PlanColumnContent
-                defaultPlan={plan}
+                defaultPlan={preselectedPlanName || plan}
                 onPlanChange={handlePlanChange}
                 dropdownRef={formValues.plan}
                 allPlans={plans}
+                isDisabled={!!preselectedPlanName}
               />
             </div>
           </div>
-        </FormItem>
-        <FormItem>
-          <FormLabel htmlFor="labels">
-            Filter labels
-            <InlineHelp
-              placement="bottom-right"
-              text="
-              The filter label must consist of lower case alphanumeric characters. Separate labels with comma.
-              "
-              className="fd-has-margin-left-tiny"
-            />
-          </FormLabel>
-          <input
-            className="fd-form__control"
-            ref={formValues.labels}
-            type="text"
-            id="labels"
-            placeholder={'Separate labels with comma'}
-            aria-required="false"
-            pattern="^[a-z0-9]([a-z0-9]*)?(,\s?[a-z0-9]+)*$"
-          />
         </FormItem>
       </form>
       <div className="instance-schema-panel__separator" />

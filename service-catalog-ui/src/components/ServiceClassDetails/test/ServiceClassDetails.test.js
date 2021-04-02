@@ -9,7 +9,7 @@ import {
 import ServiceClassDetails, { PlanSelector } from '../ServiceClassDetails';
 import { Spinner } from 'react-shared';
 import { componentUpdate, mockTestNamespace } from 'testing';
-import ServiceClassDetailsHeader from '../ServiceClassDetailsHeader/ServiceClassDetailsHeader.component';
+import ServiceClassDetailsHeader from '../ServiceClassDetailsHeader/ServiceClassDetailsHeader';
 import { mockPlan } from 'testing/catalog/serviceClassesMocks';
 
 const mockNavigate = jest.fn();

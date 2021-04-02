@@ -3,11 +3,10 @@ import {
   Panel,
   PanelHeader,
   PanelBody,
-  Tile,
-  TileMedia,
-  TileContent,
   Image,
 } from '@kyma-project/react-components';
+
+import { Tile } from 'fundamental-react';
 
 export const CardWrapper = styled.div`
   box-sizing: border-box;
@@ -46,7 +45,7 @@ export const CardTop = styled(PanelHeader)`
   }
 `;
 
-export const CardThumbnail = styled(TileMedia)`
+export const CardThumbnail = styled(Tile.Media)`
   && {
     position: relative;
     width: 45px;
@@ -77,13 +76,7 @@ export const CardImage = styled(Image)`
   }
 `;
 
-export const CardHeader = styled(Tile)`
-  && {
-    width: 100%;
-  }
-`;
-
-export const CardHeaderContent = styled(TileContent)`
+export const CardHeaderContent = styled(Tile.Content)`
   && {
     padding: 0;
     margin-left: 20px;

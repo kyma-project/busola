@@ -1,3 +1,6 @@
 export function sortByDisplayName(planA, planB) {
-  return planA.displayName > planB.displayName ? 1 : -1;
+  return planA.spec.externalMetadata?.displayName >
+    planB.spec.externalMetadata?.displayName
+    ? 1
+    : -1;
 }
