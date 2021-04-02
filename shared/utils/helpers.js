@@ -1,4 +1,4 @@
-import { randomNamesGenerator } from '@kyma-project/common';
+import { randomNamesGenerator } from './randomNamesGenerator/randomNamesGenerator';
 
 export function formatMessage(message = '', variables = {}) {
   const serializedVariables = {};
