@@ -52,23 +52,24 @@ const ServiceInstanceBindings = ({ serviceInstance }) => {
   );
 
   const getBindingCombinedData = binding => {
-    const bindingUsage = (bindingUsagesRequest.data || []).find(
+    const bindingUsages = (bindingUsagesRequest.data || []).filter(
       u => binding.metadata.name === u.spec.serviceBindingRef.name,
     );
-    return bindingUsage
-      ? {
-          serviceBinding: binding,
-          serviceBindingUsage: bindingUsage,
-          secret: binding
-            ? (secretsRequest.data || []).find(
-                s => s.metadata.name === binding.spec.secretName,
-              )
-            : undefined,
-        }
-      : null;
+    const secret = (secretsRequest.data || []).find(
+      s => s.metadata.name === binding.spec.secretName,
+    );
+
+    if (bindingUsages.length)
+      return bindingUsages.map(usage => ({
+        serviceBinding: binding,
+        serviceBindingUsage: usage,
+        secret,
+      }));
+
+    return null;
   };
   const serviceBindingsCombined = (bindingsRequest.data || [])
-    .map(getBindingCombinedData)
+    .flatMap(getBindingCombinedData)
     .filter(d => d);
 
   const capitalize = str => {
@@ -165,7 +166,6 @@ const ServiceInstanceBindings = ({ serviceInstance }) => {
         '-'
       );
     })(),
-    //TODO
     <StatusBadge
       type={
         serviceBindingUsage.status?.conditions[0].reason
@@ -179,7 +179,7 @@ const ServiceInstanceBindings = ({ serviceInstance }) => {
       tooltipContent={serviceBindingUsage.status?.conditions[0].message}
     >
       {serviceBindingUsage.status?.conditions[0].reason || 'ready'}
-    </StatusBadge>, //TODO enhance
+    </StatusBadge>,
   ];
 
   return (
