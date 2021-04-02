@@ -72,9 +72,7 @@ export default function CreateServiceBindingForm({
   }, [selectedApplication]);
 
   useEffect(() => {
-    console.log(selectedApplication);
     if (!selectedApplication) {
-      console.log('!selectedApplication');
       setPopupModalMessage(
         SERVICE_BINDINGS_PANEL.CREATE_MODAL.CONFIRM_BUTTON.POPUP_MESSAGES
           .NO_APP_SELECTED,
@@ -84,7 +82,6 @@ export default function CreateServiceBindingForm({
     }
 
     if (!createBinding && !existingBindings) {
-      console.log('!createBinding && !existingBindings');
       setPopupModalMessage(
         SERVICE_BINDINGS_PANEL.CREATE_MODAL.CONFIRM_BUTTON.POPUP_MESSAGES
           .NO_BINDING_SELECTED,

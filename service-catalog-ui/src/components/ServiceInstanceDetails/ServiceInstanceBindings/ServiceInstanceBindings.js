@@ -76,7 +76,6 @@ const ServiceInstanceBindings = ({ serviceInstance }) => {
   };
 
   async function handleResourceDelete({ serviceBindingUsage }) {
-    console.log('deleting', serviceBindingUsage);
     return await handleDelete(
       serviceBindingUsage.kind,
       null,
