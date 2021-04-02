@@ -45,7 +45,6 @@ export default function CreateServiceBindingForm({
   setPopupModalMessage = () => void 0,
   onChange,
   formElementRef,
-  // setValidity = () => void 0,
   setCustomValid = () => void 0,
 }) {
   const createServiceBindingUsageSet = useCreateServiceBindingUsage({
@@ -107,6 +106,14 @@ export default function CreateServiceBindingForm({
     createBinding,
   ]);
 
+  function handleApplicationChange(e) {
+    let value = null;
+    try {
+      value = JSON.parse(e.target.value);
+    } catch (e) {}
+    setSelectedApplication(value);
+  }
+
   async function handleFormSubmit(e) {
     e.preventDefault();
     const parameters = {
@@ -133,14 +140,11 @@ export default function CreateServiceBindingForm({
     <select
       id="applicationName"
       value={JSON.stringify(selectedApplication)}
-      onChange={e => {
-        console.log('dropdown onchange', JSON.parse(e.target.value));
-        setSelectedApplication(JSON.parse(e.target.value));
-      }}
+      onChange={handleApplicationChange}
       required
     >
       <option value="" />
-      {usageKinds.map((u, index) => (
+      {usageKinds.map(u => (
         <ResourceKindOptgroup
           key={u.metadata.uid}
           kindResource={u.spec.resource}
@@ -221,5 +225,6 @@ CreateServiceBindingForm.propTypes = {
   onChange: PropTypes.func,
   onCompleted: PropTypes.func,
   onError: PropTypes.func,
+  setCustomValid: PropTypes.func,
   formElementRef: PropTypes.shape({ current: PropTypes.any }).isRequired,
 };

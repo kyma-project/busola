@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Button } from 'fundamental-react';
 import { Tooltip, useGetList, ModalWithForm } from 'react-shared';
@@ -10,6 +10,7 @@ export default function CreateServiceBindingModal({
   serviceInstance,
   serviceBindings,
 }) {
+  const [popupModalMessage, setPopupModalMessage] = useState(null);
   const { data: usageKinds } = useGetList()(
     '/apis/servicecatalog.kyma-project.io/v1alpha1/usagekinds',
     {},
@@ -51,6 +52,7 @@ export default function CreateServiceBindingModal({
         serviceInstance={serviceInstance}
         usageKinds={usageKinds}
         serviceBindings={serviceBindings}
+        setPopupModalMessage={setPopupModalMessage}
       />
     </div>
   );
@@ -62,6 +64,7 @@ export default function CreateServiceBindingModal({
       confirmText={SERVICE_BINDINGS_PANEL.CREATE_MODAL.CONFIRM_BUTTON.TEXT}
       id="create-service-binding-modal"
       renderForm={renderForm}
+      invalidPopupMessage={popupModalMessage}
     />
   );
 }
