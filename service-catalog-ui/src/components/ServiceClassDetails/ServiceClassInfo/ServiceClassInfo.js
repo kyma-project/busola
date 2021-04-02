@@ -28,8 +28,8 @@ const ServiceClassInfo = ({ serviceClass, labels, planSelector }) => {
 
     return extractedLabels;
   };
-
-  const tagsCombined = [...serviceClass.spec.tags, ...extractLabels()];
+  console.log(serviceClass);
+  const tagsCombined = [...(serviceClass.spec.tags || []), ...extractLabels()];
   const COLUMN_COUNT = 4;
 
   return (
