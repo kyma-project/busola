@@ -28,7 +28,7 @@ const ServiceClassInfo = ({ serviceClass, labels, planSelector }) => {
 
     return extractedLabels;
   };
-  console.log(serviceClass);
+
   const tagsCombined = [...(serviceClass.spec.tags || []), ...extractLabels()];
   const COLUMN_COUNT = 4;
 
