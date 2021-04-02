@@ -29,7 +29,7 @@ const ServiceClassInfo = ({ serviceClass, labels }) => {
     return extractedLabels;
   };
 
-  const tagsCombined = [...serviceClass.spec.tags, ...extractLabels()];
+  const tagsCombined = [...(serviceClass.spec.tags || []), ...extractLabels()];
   const COLUMN_COUNT = 4;
 
   return (

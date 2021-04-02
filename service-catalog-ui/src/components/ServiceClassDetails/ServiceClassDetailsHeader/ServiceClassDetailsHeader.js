@@ -24,7 +24,7 @@ const ServiceClassDetailsHeader = ({ serviceClass, children }) => {
     LuigiClient.linkManager()
       .fromClosestContext()
       .withParams({
-        selectedTab: isService({ labels }) ? 'services' : 'addons',
+        selectedTab: isService(labels) ? 'services' : 'addons',
       })
       .navigate('/');
   };
