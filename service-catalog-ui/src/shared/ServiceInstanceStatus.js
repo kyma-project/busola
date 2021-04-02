@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { StatusBadge } from 'react-shared';
-import { getBadgeTypeForStatus } from 'helpers/getBadgeTypeForStatus';
 
 export const ServiceInstanceStatus = ({ instance }) => {
   let type = 'info';
