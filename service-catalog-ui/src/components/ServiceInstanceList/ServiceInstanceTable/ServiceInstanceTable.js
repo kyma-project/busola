@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { Button } from 'fundamental-react';
 import { GenericList, handleDelete } from 'react-shared';
