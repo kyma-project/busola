@@ -48,6 +48,9 @@
       #error {
         margin-top: 16px;
       }
+      .fd-object-status {
+        margin-bottom: 8px;
+      }
     </style>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.0.0/js-yaml.js"
@@ -80,31 +83,31 @@
                 class="fd-object-status__icon sap-icon--message-error"
                 role="presentation"
               ></i>
-              <span class="fd-object-status__text"
-                >Error reading kubeconfig.</span
-              >
+              <span class="fd-object-status__text">
+                Error reading kubeconfig.
+              </span>
             </div>
             <form id="oidc-form" style="display: none">
-              <span class="fd-object-status fd-object-status--critical">
+              <div class="fd-object-status fd-object-status--critical">
                 <i
                   class="fd-object-status__icon sap-icon--message-warning"
                   role="presentation"
                 ></i>
-                <span class="fd-object-status__text"
-                  >It looks like your kubeconfig is incomplete. Please fill the
-                  additional fields.</span
-                >
-              </span>
+                <span class="fd-object-status__text">
+                  It looks like your kubeconfig is incomplete. Please fill the
+                  additional fields.
+                </span>
+              </div>
               <div class="fd-has-text-align-center">
                 <div class="fd-form-item">
-                  <label class="fd-form-label" for="issuer-url"
-                    >Issuer URL</label
-                  >
+                  <label class="fd-form-label" for="issuer-url">
+                    Issuer URL
+                  </label>
                   <input
                     class="fd-input"
                     type="text"
                     id="issuer-url"
-                    placeholder="Enter issuer URl"
+                    placeholder="Enter issuer URL"
                   />
                 </div>
                 <div class="fd-form-item">
