@@ -19,8 +19,9 @@ const ServiceInstanceBindingsWrapper = ({
     ? `/apis/servicecatalog.k8s.io/v1beta1/clusterserviceplans/${servicePlanRef.ref}`
     : `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${serviceInstance.metadata.namespace}/serviceplans/${servicePlanRef.ref}`;
 
-  const { data: servicePlan } = useGet(planUrl, {});
-  return servicePlan?.spec.bindable ? (
+  const { data: servicePlan, loading = true } = useGet(planUrl, {});
+  if (!servicePlan) return null;
+  return servicePlan.spec.bindable ? (
     <ServiceInstanceBindings serviceInstance={serviceInstance} />
   ) : (
     <EmptyList>{SERVICE_BINDINGS_PANEL.NOT_BINDABLE}</EmptyList>
@@ -72,10 +73,12 @@ export default function ServiceInstanceDetails({ match }) {
         serviceInstance={serviceInstance}
         servicePlan={servicePlanRef}
       />
-      <ServiceInstanceBindingsWrapper
-        serviceInstance={serviceInstance}
-        servicePlanRef={servicePlanRef}
-      />
+      {serviceInstance && servicePlanRef && (
+        <ServiceInstanceBindingsWrapper
+          serviceInstance={serviceInstance}
+          servicePlanRef={servicePlanRef}
+        />
+      )}
     </ThemeWrapper>
   );
 }
