@@ -1,22 +1,17 @@
-import { useNotification, usePost } from 'react-shared';
+import { useNotification } from '../contexts/NotificationContext';
+import { usePost } from './BackendAPI/usePost';
+import { formatMessage, randomNameGenerator } from '../utils/helpers';
 
-import {
-  formatMessage,
-  randomNameGenerator,
-} from 'components/Lambdas/helpers/misc';
-import { LAMBDAS_MESSAGES } from 'components/Lambdas/constants';
-import { CONFIG } from 'components/Lambdas/config';
-
-export const useCreateServiceBindingUsage = () => {
+export const useCreateServiceBindingUsage = ({
+  successMessage,
+  errorMessage,
+}) => {
   const postRequest = usePost();
   const notificationManager = useNotification();
 
   function handleError(serviceInstanceName, error) {
     console.error(error);
-    const message = formatMessage(
-      LAMBDAS_MESSAGES.CREATE_BINDING_USAGE.ERROR_MESSAGE,
-      { serviceInstanceName },
-    );
+    const message = formatMessage(errorMessage, { serviceInstanceName });
 
     notificationManager.notifyError({
       content: message,
@@ -47,8 +42,8 @@ export const useCreateServiceBindingUsage = () => {
     name,
     namespace,
     serviceBindingName,
-    lambdaName,
     parameters,
+    usedBy,
   ) {
     return await postRequest(
       `/apis/servicecatalog.kyma-project.io/v1alpha1/namespaces/${namespace}/servicebindingusages/${name}`,
@@ -62,10 +57,7 @@ export const useCreateServiceBindingUsage = () => {
           serviceBindingRef: {
             name: serviceBindingName,
           },
-          usedBy: {
-            name: lambdaName,
-            kind: CONFIG.functionUsageKind,
-          },
+          usedBy,
           parameters,
         },
       },
@@ -75,9 +67,9 @@ export const useCreateServiceBindingUsage = () => {
   async function createServiceBindingUsageSet({
     namespace,
     serviceInstanceName,
-    lambdaName,
     serviceBindingUsageParameters,
     existingCredentials = undefined,
+    usedBy,
   }) {
     try {
       let serviceBindingName = existingCredentials || randomNameGenerator();
@@ -93,18 +85,15 @@ export const useCreateServiceBindingUsage = () => {
         randomNameGenerator(),
         namespace,
         serviceBindingName,
-        lambdaName,
         serviceBindingUsageParameters,
+        usedBy,
       );
     } catch (err) {
       handleError(serviceInstanceName, err);
       return;
     }
 
-    const message = formatMessage(
-      LAMBDAS_MESSAGES.CREATE_BINDING_USAGE.SUCCESS_MESSAGE,
-      { serviceInstanceName },
-    );
+    const message = formatMessage(successMessage, { serviceInstanceName });
 
     notificationManager.notifySuccess({
       content: message,

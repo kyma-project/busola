@@ -18,11 +18,11 @@
 .link {
   color: var(--fd-color-action-1);
   border: none;
+  text-decoration: none;
   background: none;
   cursor: pointer;
   &--bold {
     font-weight: 700;
-    text-decoration: none;
   }
 }
 

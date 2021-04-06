@@ -3,7 +3,6 @@ import { Route, Switch } from 'react-router-dom';
 
 import ServiceClassList from '../ServiceClassList/ServiceClassList';
 import ServiceClassDetails from '../ServiceClassDetails/ServiceClassDetails';
-import ServiceClassPlansList from '../ServiceClassPlansList/ServiceClassPlansList';
 import ServiceInstancesList from '../ServiceInstanceList/ServiceInstanceList';
 import ServiceInstancesDetails from '../ServiceInstanceDetails/ServiceInstanceDetails';
 import { NotificationProvider, withTitle } from 'react-shared';
@@ -26,16 +25,6 @@ const App = () => (
         path="/catalog/details/:name"
         render={withTitle(CATALOG_TITLE, RoutedCatalogDetails)}
       />
-      <Route
-        exact
-        path="/catalog/details/:name/plan/:plan"
-        render={withTitle(CATALOG_TITLE, RoutedCatalogDetails)}
-      />
-      <Route
-        exact
-        path="/catalog/details/:name/plans"
-        render={withTitle(CATALOG_TITLE, RoutedServicePlanList)}
-      />
 
       <Route
         exact
@@ -53,10 +42,6 @@ const App = () => (
 
 const RoutedCatalogDetails = ({ match }) => (
   <ServiceClassDetails name={match.params.name} />
-);
-
-const RoutedServicePlanList = ({ match }) => (
-  <ServiceClassPlansList name={match.params.name} />
 );
 
 export default App;
