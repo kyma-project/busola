@@ -8,12 +8,12 @@ export const CircleProgress = ({
   valueText = value,
   max,
   maxText = max,
-  color = 'blue',
+  color = 'var(--fd-color-action-1)',
   onClick,
   title,
 }) => {
-  const circleClasses = classNames(`circle--${color}`, {
-    'cursor-pointer': onClick,
+  const circleClasses = classNames(`circle__container`, {
+    'cursor-pointer': !!onClick,
   });
 
   const percent = max ? Math.round((value * 100) / max) : 0;
@@ -21,7 +21,7 @@ export const CircleProgress = ({
     <div className="circle-progress" onClick={onClick}>
       <span className="cursor-pointer">{title}</span>
       <div className={circleClasses}>
-        <div className="progress-bar">
+        <div className="progress-bar" style={{ backgroundColor: color }}>
           <div className={`mask--dynamic fill--${percent}`}></div>
           <div className={`mask--permanent`}></div>
         </div>
@@ -36,11 +36,11 @@ export const CircleProgress = ({
 };
 
 CircleProgress.propTypes = {
-  color: PropTypes.oneOf(['purple', 'green', 'blue', 'teal']),
+  color: PropTypes.string, // a valid CSS color value (e.g. "blue", "#acdc66" or "var(--some-css-var)")
   value: PropTypes.number.isRequired,
-  valueText: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  valueText: PropTypes.string,
   max: PropTypes.number.isRequired,
-  maxText: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  maxText: PropTypes.string,
   onClick: PropTypes.func,
   title: PropTypes.string,
 };

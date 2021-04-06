@@ -30,64 +30,58 @@ $scale-compensation: 1.01; // enlarge masks a little bit to remove an unwanted "
   transform: rotate(0.5turn) scale($scale-compensation);
 }
 
-@mixin circle($circle-color: map-get($map: $colors, $key: 'blue')) {
-  width: $circle-size;
-  height: $circle-size;
-  @extend %flex-center;
-  margin: $circle-size/12;
-
-  .progress-bar {
-    @include circle-shape($circle-size);
-    position: absolute;
-    background-color: $circle-color;
-    z-index: 5;
-
-    .mask--dynamic {
-      @extend %mask;
-      z-index: 5;
-      @for $i from 0 through 50 {
-        // it is a mask for the left half of the circle
-        &.fill--#{$i} {
-          transform: rotate(calc(#{$i} / -50 * 0.5turn))
-            scale($scale-compensation);
-        }
-      }
-
-      @for $i from 51 through 100 {
-        // it becomes the right half of the circle
-        &.fill--#{$i} {
-          background-color: $circle-color;
-          transform: rotate(calc((-#{$i} / 50 + 1) * 0.5turn));
-        }
-      }
-    }
-    .mask--permanent {
-      @extend %mask;
-      background-color: $circle-background;
-    }
-  }
-
-  .inner-area {
-    @include circle-shape($circle-size/1.4);
-    @extend %flex-center;
-    background-color: $circle-background;
-    position: absolute;
-    z-index: 8;
-    color: var(--fd-color-text-3);
-
-    .percentage {
-      @include circle-shape($circle-size/1.6);
-      @extend %flex-center;
-      border: 1px solid var(--fd-color-text-3);
-      font-size: $circle-size/5;
-    }
-  }
-}
-
 .circle-progress {
-  @each $name, $value in $colors {
-    .circle--#{$name} {
-      @include circle($value);
+  .circle__container {
+    width: $circle-size;
+    height: $circle-size;
+    @extend %flex-center;
+    margin: $circle-size/12;
+
+    .progress-bar {
+      @include circle-shape($circle-size);
+      position: absolute;
+      // background-color: $circle-color;
+      z-index: 5;
+
+      .mask--dynamic {
+        @extend %mask;
+        z-index: 5;
+        @for $i from 0 through 50 {
+          // it is a mask for the left half of the circle
+          &.fill--#{$i} {
+            transform: rotate(calc(#{$i} / -50 * 0.5turn))
+              scale($scale-compensation);
+          }
+        }
+
+        @for $i from 51 through 100 {
+          // it becomes the right half of the circle
+          &.fill--#{$i} {
+            background-color: inherit;
+            transform: rotate(calc((-#{$i} / 50 + 1) * 0.5turn));
+          }
+        }
+      }
+      .mask--permanent {
+        @extend %mask;
+        background-color: $circle-background;
+      }
+    }
+
+    .inner-area {
+      @include circle-shape($circle-size/1.4);
+      @extend %flex-center;
+      background-color: $circle-background;
+      position: absolute;
+      z-index: 8;
+      color: var(--fd-color-text-3);
+
+      .percentage {
+        @include circle-shape($circle-size/1.6);
+        @extend %flex-center;
+        border: 1px solid var(--fd-color-text-3);
+        font-size: $circle-size/5;
+      }
     }
   }
 
