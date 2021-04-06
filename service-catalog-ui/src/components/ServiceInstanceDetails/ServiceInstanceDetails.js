@@ -19,7 +19,7 @@ const ServiceInstanceBindingsWrapper = ({
     ? `/apis/servicecatalog.k8s.io/v1beta1/clusterserviceplans/${servicePlanRef.ref}`
     : `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${serviceInstance.metadata.namespace}/serviceplans/${servicePlanRef.ref}`;
 
-  const { data: servicePlan, loading = true } = useGet(planUrl, {});
+  const { data: servicePlan } = useGet(planUrl, {});
   if (!servicePlan) return null;
   return servicePlan.spec.bindable ? (
     <ServiceInstanceBindings serviceInstance={serviceInstance} />
