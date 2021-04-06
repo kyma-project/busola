@@ -26,7 +26,7 @@ function buildInitParams(kubeconfig) {
       'certificate-authority-data': cluster['certificate-authority-data'],
     },
     rawAuth: {
-      token: user.token,
+      idToken: user.token,
       'client-certificate-data': user['client-certificate-data'],
       'client-key-data': user['client-key-data'],
     },
