@@ -49,13 +49,19 @@ export const MemoryUsageCircle = ({ namespace }) => {
     (sum, quota) => sum + getBytes(quota.status.hard['limits.memory']),
     0,
   );
+
+  const totalUsage = data.reduce(
+    (sum, quota) => sum + getBytes(quota.status.used['limits.memory']),
+    0,
+  );
+
   console.log(totalLimits);
   // getBytes('543463Mi');
   return (
     <CircleProgress
       color={'teal'}
-      // value={getBytes(data)}
-      max={6}
+      value={totalUsage}
+      max={totalLimits}
       title="Memory consumption"
     />
   );
