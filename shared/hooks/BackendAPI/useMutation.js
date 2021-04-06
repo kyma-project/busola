@@ -2,12 +2,14 @@ import { baseUrl, throwHttpError } from './config';
 import { useMicrofrontendContext } from '../../contexts/MicrofrontendContext';
 import { createHeaders } from './createHeaders';
 import { useConfig } from '../../contexts/ConfigContext';
+import { checkForTokenExpiration } from './tokenExpirationGuard';
 
 const useMutation = method => {
   return options => {
     const { idToken, cluster } = useMicrofrontendContext();
     const { fromConfig } = useConfig();
     return async (url, data) => {
+      checkForTokenExpiration(idToken);
       const response = await fetch(baseUrl(fromConfig) + url, {
         method,
         headers: {

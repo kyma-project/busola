@@ -3,6 +3,7 @@ import { baseUrl, throwHttpError } from './config';
 import { createHeaders } from './createHeaders';
 import { useMicrofrontendContext } from '../../contexts/MicrofrontendContext';
 import { useConfig } from '../../contexts/ConfigContext';
+import { checkForTokenExpiration } from './tokenExpirationGuard';
 
 const useGetHook = processDataFn =>
   function(path, { pollingInterval, onDataReceived, skip }) {
@@ -17,6 +18,8 @@ const useGetHook = processDataFn =>
       if (skip) return;
       if (!idToken || !isHookMounted.current) return;
       if (!isSilent) setLoading(true);
+
+      checkForTokenExpiration(idToken);
 
       function processError(error) {
         console.error(error);
@@ -103,8 +106,10 @@ function handleSingleDataReceived(newData, oldData, setDataFn) {
 export const useSingleGet = () => {
   const { idToken, cluster } = useMicrofrontendContext();
   const { fromConfig } = useConfig();
-  return url =>
-    fetch(baseUrl(fromConfig) + url, {
+  return url => {
+    checkForTokenExpiration(idToken);
+    return fetch(baseUrl(fromConfig) + url, {
       headers: createHeaders(idToken, cluster),
     });
+  };
 };

@@ -2,11 +2,13 @@ import { baseUrl, throwHttpError } from './config';
 import { useMicrofrontendContext } from '../../contexts/MicrofrontendContext';
 import { createHeaders } from './createHeaders';
 import { useConfig } from '../../contexts/ConfigContext';
+import { checkForTokenExpiration } from './tokenExpirationGuard';
 
 export const usePost = () => {
   const { idToken, cluster } = useMicrofrontendContext();
   const { fromConfig } = useConfig();
   return async (url, data, options) => {
+    checkForTokenExpiration(idToken);
     const response = await fetch(baseUrl(fromConfig) + url, {
       method: 'POST',
       headers: {
