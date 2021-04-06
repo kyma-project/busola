@@ -105,11 +105,11 @@ export function NamespaceWorkloads({ namespace }) {
         <Panel.Head title="Healthy Resources" />
       </Panel.Header>
       <Panel.Body className="namespace-workloads__body">
-        <LayoutGrid cols={3}>
+        <LayoutGrid cols={4}>
           <PodsCircle namespace={namespace} />
           <DeploymentsCircle namespace={namespace} />
           <ReplicaSetsCircle namespace={namespace} />
-          <MemoryUsageCircle />
+          <MemoryUsageCircle namespace={namespace} />
         </LayoutGrid>
       </Panel.Body>
     </Panel>

@@ -33,18 +33,17 @@ function getBytes(memoryString) {
 
 function bytesToHumanReadable(bytesNumber) {
   let output = bytesNumber;
-  Object.entries(MEMORY_SUFFIX_POWER)
-    .reverse()
-    .forEach(([suffix, power]) => {
-      console.log(suffix, power);
-    });
+  Object.entries(MEMORY_SUFFIX_POWER).forEach(([suffix, power]) => {
+    const value = bytesNumber / 2 ** power;
+    if (value >= 1) output = value + suffix; //TODO to camelcase
+  });
 
   return output;
 }
 
 export const MemoryUsageCircle = ({ namespace }) => {
   const { data, error, loading = true } = useGetList()(
-    '/api/v1/namespaces/resource-haver/resourcequotas',
+    `/api/v1/namespaces/${namespace}/resourcequotas`,
     {
       pollingInterval: 3300,
     },
@@ -67,17 +66,13 @@ export const MemoryUsageCircle = ({ namespace }) => {
     0,
   );
 
-  // → 988M
-
-  console.log(totalLimits);
-  // getBytes('543463Mi');
   return (
     <CircleProgress
       color={'teal'}
       value={totalUsage}
       valueText={bytesToHumanReadable(totalUsage)}
       max={totalLimits}
-      // maxText={bytesToHumanReadable(totalLimits)}
+      maxText={bytesToHumanReadable(totalLimits)}
       title="Memory consumption"
     />
   );

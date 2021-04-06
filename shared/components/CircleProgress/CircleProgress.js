@@ -38,9 +38,9 @@ export const CircleProgress = ({
 CircleProgress.propTypes = {
   color: PropTypes.oneOf(['purple', 'green', 'blue', 'teal']),
   value: PropTypes.number.isRequired,
-  valueText: PropTypes.string,
+  valueText: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   max: PropTypes.number.isRequired,
-  maxText: PropTypes.string,
+  maxText: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   onClick: PropTypes.func,
   title: PropTypes.string,
 };
