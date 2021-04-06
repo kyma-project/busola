@@ -177,15 +177,22 @@ export default function ApiRuleForm({
     const data =
       requestType === 'create' ? newApiRule : createPatch(apiRule, newApiRule);
 
-    await sendRequest(
-      injectVariables(API_RULE_URL, {
-        name: formValues.name.current.value,
-        namespace: namespace,
-      }),
-      data,
-    );
-
-    LuigiClient.uxManager().closeCurrentModal();
+    try {
+      await sendRequest(
+        injectVariables(API_RULE_URL, {
+          name: formValues.name.current.value,
+          namespace: namespace,
+        }),
+        data,
+      );
+      LuigiClient.uxManager().closeCurrentModal();
+    } catch (e) {
+      LuigiClient.uxManager().showAlert({
+        text: `Cannot create API Rule: ${e.message}`,
+        type: 'error',
+        closeAfter: 10000,
+      });
+    }
   }
 
   function addAccessStrategy() {
