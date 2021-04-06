@@ -170,7 +170,6 @@ export default function CreateServiceBindingForm({
               onChange={(_, value) => setCreateCredentials(value)}
             />
           </FormItem>
-          {console.log(secrets)}
           {!createCredentials && secrets.length ? (
             <FormItem key="existingCredentials">
               <FormLabel htmlFor="existingCredentials">Secrets</FormLabel>
