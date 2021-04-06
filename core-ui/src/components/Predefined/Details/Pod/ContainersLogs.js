@@ -13,9 +13,8 @@ export const ContainersLogs = ({ params }) => {
 function Logs({ params }) {
   useWindowTitle('Logs');
 
-  const url = `/api/v1/namespaces/${params.namespace}/pods/${params.podName}/log?container=${params.containerName}&follow=true`;
+  const url = `/api/v1/namespaces/${params.namespace}/pods/${params.podName}/log?container=${params.containerName}&follow=true&tailLines=1000`;
   const { loading = true, error, data } = useGetStream(url);
-  const logs = [...data]?.reverse();
 
   const breadcrumbs = [
     {
@@ -42,13 +41,12 @@ function Logs({ params }) {
       ></PageHeader>
       <GenericList
         title="Logs"
-        entries={logs || []}
+        entries={data || []}
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
         serverDataError={error}
         serverErrorMessage={error?.message}
         serverDataLoading={loading}
-        pagination={{ itemsPerPage: 50, autoHide: true }}
       />
     </>
   );
