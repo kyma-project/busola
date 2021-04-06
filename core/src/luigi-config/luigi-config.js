@@ -1,6 +1,6 @@
 import {
   saveCurrentLocation,
-  getToken,
+  getAuthData,
   getPreviousLocation,
 } from './navigation/navigation-helpers';
 import { communication } from './communication';
@@ -8,6 +8,7 @@ import { settings } from './settings';
 import { createAuth } from './auth.js';
 import { saveInitParamsIfPresent } from './init-params';
 import { config } from './config';
+import { getInitParams } from './init-params';
 
 import {
   navigation,
@@ -20,8 +21,14 @@ export const NODE_PARAM_PREFIX = `~`;
 
 (async () => {
   await saveInitParamsIfPresent(location);
+
+  const params = getInitParams();
+  if (!params) {
+    window.location = '/login.html';
+  }
+
   const luigiConfig = {
-    auth: !config.isNpx && (await createAuth()),
+    auth: !params.rawAuth && (await createAuth(params.auth)),
     communication,
     navigation,
     routing: {
@@ -31,6 +38,9 @@ export const NODE_PARAM_PREFIX = `~`;
     settings,
     lifecycleHooks: {
       luigiAfterInit: () => {
+        if (params.rawAuth) {
+          Luigi.auth().store.setAuthData(params.rawAuth);
+        }
         const showSystemNamespaces = localStorage.getItem(
           'busola.showSystemNamespaces'
         );
@@ -40,9 +50,9 @@ export const NODE_PARAM_PREFIX = `~`;
         } else {
           Luigi.featureToggles().unsetFeatureToggle('showSystemNamespaces');
         }
-        const token = getToken();
-        if (token) {
-          getNavigationData(token).then((response) => {
+        const auth = getAuthData();
+        if (auth) {
+          getNavigationData(auth).then((response) => {
             resolveNavigationNodes(response);
             Luigi.ux().hideAppLoadingIndicator();
 
