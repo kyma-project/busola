@@ -1,114 +1,41 @@
-import React, { useEffect } from 'react';
-import LuigiClient from '@luigi-project/client';
-import { useQuery, useMutation } from '@apollo/react-hooks';
-import { createBrowserHistory } from 'history';
-
+import React from 'react';
+import { ThemeWrapper } from '@kyma-project/react-components';
 import {
-  NotificationMessage,
-  ThemeWrapper,
-} from '@kyma-project/react-components';
-
-import { Spinner, ResourceNotFound } from 'react-shared';
-
+  Spinner,
+  useGet,
+  useMicrofrontendContext,
+  ResourceNotFound,
+} from 'react-shared';
 import ServiceInstanceHeader from './ServiceInstanceHeader/ServiceInstanceHeader';
-import ServiceInstanceTabs from './ServiceInstanceTabs/ServiceInstanceTabs.component';
-import ServiceInstanceBindings from './ServiceInstanceBindings/ServiceInstanceBindings.container';
-import { serviceInstanceConstants } from 'helpers/constants';
+import ServiceInstanceBindings from './ServiceInstanceBindings/ServiceInstanceBindings';
+import { EmptyList } from './styled';
+import { SERVICE_BINDINGS_PANEL } from './ServiceInstanceBindings/constants';
 
-import { ServiceInstanceWrapper, EmptyList } from './styled';
-import { backendModuleExists } from 'helpers';
-import { getServiceInstanceDetails } from 'helpers/instancesGQL/queries';
-import {
-  SERVICE_BINDING_EVENT_SUBSCRIPTION,
-  SERVICE_BINDING_USAGE_EVENT_SUBSCRIPTION,
-  SERVICE_INSTANCE_EVENT_SUBSCRIPTION,
-} from 'helpers/instancesGQL/subscriptions';
-import {
-  handleInstanceEventOnDetails,
-  handleServiceBindingEvent,
-  handleServiceBindingUsageEvent,
-} from 'helpers/instancesGQL/events';
-import { deleteServiceInstance } from 'helpers/instancesGQL/mutations';
+const ServiceInstanceBindingsWrapper = ({
+  serviceInstance,
+  servicePlanRef,
+}) => {
+  const planUrl = servicePlanRef?.isClusterWide
+    ? `/apis/servicecatalog.k8s.io/v1beta1/clusterserviceplans/${servicePlanRef.ref}`
+    : `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${serviceInstance.metadata.namespace}/serviceplans/${servicePlanRef.ref}`;
+
+  const { data: servicePlan } = useGet(planUrl, {});
+  if (!servicePlan) return null;
+  return servicePlan.spec.bindable ? (
+    <ServiceInstanceBindings serviceInstance={serviceInstance} />
+  ) : (
+    <EmptyList>{SERVICE_BINDINGS_PANEL.NOT_BINDABLE}</EmptyList>
+  );
+};
 
 export default function ServiceInstanceDetails({ match }) {
-  const history = createBrowserHistory();
-  const { loading, error, data, subscribeToMore } = useQuery(
-    getServiceInstanceDetails,
+  const { namespaceId } = useMicrofrontendContext();
+  const { data: serviceInstance, loading = true, error } = useGet(
+    `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${namespaceId}/serviceinstances/${match.params.name}`,
     {
-      variables: {
-        namespace: LuigiClient.getContext().namespaceId,
-        name: match.params.name,
-      },
+      pollingInterval: 3000,
     },
   );
-
-  useEffect(() => {
-    return subscribeToMore({
-      variables: {
-        namespace: LuigiClient.getContext().namespaceId,
-      },
-      document: SERVICE_BINDING_EVENT_SUBSCRIPTION,
-      updateQuery: (prev, { subscriptionData }) => {
-        if (
-          !subscriptionData.data ||
-          !subscriptionData.data.serviceBindingEvent
-        ) {
-          return prev;
-        }
-
-        return handleServiceBindingEvent(
-          prev,
-          subscriptionData.data.serviceBindingEvent,
-        );
-      },
-    });
-  }, [subscribeToMore]);
-
-  useEffect(() => {
-    return subscribeToMore({
-      variables: {
-        namespace: LuigiClient.getContext().namespaceId,
-      },
-      document: SERVICE_BINDING_USAGE_EVENT_SUBSCRIPTION,
-      updateQuery: (prev, { subscriptionData }) => {
-        if (
-          !subscriptionData.data ||
-          !subscriptionData.data.serviceBindingUsageEvent
-        ) {
-          return prev;
-        }
-
-        return handleServiceBindingUsageEvent(
-          prev,
-          subscriptionData.data.serviceBindingUsageEvent,
-        );
-      },
-    });
-  }, [subscribeToMore]);
-
-  useEffect(() => {
-    return subscribeToMore({
-      variables: {
-        namespace: LuigiClient.getContext().namespaceId,
-      },
-      document: SERVICE_INSTANCE_EVENT_SUBSCRIPTION,
-      updateQuery: (prev, { subscriptionData }) => {
-        if (
-          !subscriptionData.data ||
-          !subscriptionData.data.serviceInstanceEvent
-        ) {
-          return prev;
-        }
-
-        return handleInstanceEventOnDetails(
-          prev,
-          subscriptionData.data.serviceInstanceEvent,
-        );
-      },
-    });
-  }, [subscribeToMore]);
-
-  const [deleteServiceInstanceMutation] = useMutation(deleteServiceInstance);
 
   if (error)
     return (
@@ -117,20 +44,9 @@ export default function ServiceInstanceDetails({ match }) {
       </EmptyList>
     );
 
-  if (loading) {
-    return (
-      <EmptyList>
-        <Spinner />
-      </EmptyList>
-    );
-  }
+  if (loading || !serviceInstance) return <Spinner />;
 
-  const { serviceInstance } = data;
-  const serviceClass =
-    serviceInstance &&
-    (serviceInstance.serviceClass || serviceInstance.clusterServiceClass);
-
-  if (!serviceInstance || !serviceClass) {
+  if (!serviceInstance) {
     return (
       <ResourceNotFound
         resource="Service Instance"
@@ -141,31 +57,28 @@ export default function ServiceInstanceDetails({ match }) {
     );
   }
 
+  const servicePlanRef = {
+    ref:
+      serviceInstance.spec.servicePlanRef?.name ||
+      serviceInstance.spec.clusterServicePlanRef?.name,
+    externalName:
+      serviceInstance.spec.servicePlanExternalName ||
+      serviceInstance.spec.clusterServicePlanExternalName,
+    isClusterWide: !!serviceInstance.spec.clusterServicePlanExternalName,
+  };
+
   return (
     <ThemeWrapper>
       <ServiceInstanceHeader
         serviceInstance={serviceInstance}
-        instanceClass={serviceClass}
-        deleteServiceInstance={deleteServiceInstanceMutation}
-        history={history}
+        servicePlan={servicePlanRef}
       />
-      <ServiceInstanceWrapper>
-        <ServiceInstanceBindings
-          defaultActiveTabIndex={serviceInstanceConstants.addonsIndex}
+      {serviceInstance && servicePlanRef && (
+        <ServiceInstanceBindingsWrapper
           serviceInstance={serviceInstance}
+          servicePlanRef={servicePlanRef}
         />
-        {serviceClass && backendModuleExists('rafter') && (
-          <ServiceInstanceTabs
-            serviceClass={serviceClass}
-            currentPlan={serviceInstance.servicePlan}
-          />
-        )}
-      </ServiceInstanceWrapper>
-      <NotificationMessage
-        type="error"
-        title={serviceInstanceConstants.error}
-        message={error && error.message}
-      />
+      )}
     </ThemeWrapper>
   );
 }

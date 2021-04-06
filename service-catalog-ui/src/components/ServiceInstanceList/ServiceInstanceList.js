@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import LuigiClient from '@luigi-project/client';
 import {
   instancesTabUtils,
-  NotificationMessage,
   ThemeWrapper,
 } from '@kyma-project/react-components';
 import {
@@ -20,8 +19,8 @@ import { Identifier } from 'fundamental-react';
 import { serviceInstanceConstants } from 'helpers/constants';
 import { determineDisplayedInstances } from 'helpers/search';
 
-import ServiceInstanceTable from './ServiceInstanceTable/ServiceInstanceTable.component';
-import ServiceInstanceToolbar from './ServiceInstanceToolbar/ServiceInstanceToolbar.component';
+import ServiceInstanceTable from './ServiceInstanceTable/ServiceInstanceTable';
+import ServiceInstanceToolbar from './ServiceInstanceToolbar/ServiceInstanceToolbar';
 
 import {
   EmptyList,
@@ -106,12 +105,6 @@ export default function ServiceInstancesList() {
         searchQuery={searchQuery}
         searchFn={setSearchQuery}
         serviceInstancesExists={serviceInstances.length > 0}
-      />
-
-      <NotificationMessage
-        type="error"
-        title="Error"
-        message={null} //TODO
       />
 
       <Tabs

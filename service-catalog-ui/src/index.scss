@@ -18,11 +18,11 @@
 .link {
   color: var(--fd-color-action-1);
   border: none;
+  text-decoration: none;
   background: none;
   cursor: pointer;
   &--bold {
     font-weight: 700;
-    text-decoration: none;
   }
 }
 
@@ -38,14 +38,33 @@
 
 .no-dismiss-tokens {
   .fd-token {
-    cursor: default
+    cursor: default;
   }
 
-  .fd-token::after, &.fd-token::after {
+  .fd-token::after,
+  &.fd-token::after {
     content: none !important;
   }
 }
 
 .has-padding-0 {
   padding: 0;
+}
+
+.y-fd-token {
+  &.y-fd-token {
+    border: 1px solid var(--fd-color-neutral-3);
+
+    &--no-button {
+      cursor: default;
+    }
+
+    &--no-button:after {
+      all: unset;
+    }
+
+    &--gap:not(:last-of-type) {
+      margin-right: 8px;
+    }
+  }
 }

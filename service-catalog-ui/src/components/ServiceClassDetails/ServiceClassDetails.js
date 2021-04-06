@@ -1,7 +1,6 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { Button } from 'fundamental-react';
-
 import {
   Tooltip,
   Spinner,
@@ -13,18 +12,14 @@ import {
 } from 'react-shared';
 
 import './ServiceClassDetails.scss';
-import {
-  getResourceDisplayName,
-  getDescription,
-  isStringValueEqualToTrue,
-} from 'helpers';
+import { getResourceDisplayName, isStringValueEqualToTrue } from 'helpers';
 import { createInstanceConstants } from 'helpers/constants';
-import CreateInstanceModal from './CreateInstanceModal/CreateInstanceModal.component';
-import ServiceClassDetailsHeader from './ServiceClassDetailsHeader/ServiceClassDetailsHeader.component';
+import CreateInstanceForm from './CreateInstanceForm/CreateInstanceForm';
+import ServiceClassDetailsHeader from './ServiceClassDetailsHeader/ServiceClassDetailsHeader';
+import ServiceClassInstancesTable from './ServiceClassInstancesTable/ServiceClassInstancesTable';
+import { sortByDisplayName } from 'helpers/sorting';
 
 export default function ServiceClassDetails({ name }) {
-  // TODO This still need to be tuned up and tested out after switching to busola
-
   const { namespaceId } = useMicrofrontendContext();
   const { resourceType } = LuigiClient.getNodeParams();
 
@@ -57,13 +52,10 @@ export default function ServiceClassDetails({ name }) {
     resourceType === 'ClusterServiceClass'
       ? clusterServicePlansUrl
       : servicePlansUrl;
-  const { data: servicePlans } = useGetList()(plansUrl, {
+  const servicePlansRequest = useGetList()(plansUrl, {
     pollingInterval: 3500,
   });
-
-  // notificationManager.notifyError({
-  //   content: `Failed to get a list of instances due to: ${err}`,
-  // });
+  const servicePlans = servicePlansRequest.data?.sort(sortByDisplayName);
 
   if (error) {
     return (
@@ -81,70 +73,52 @@ export default function ServiceClassDetails({ name }) {
   }
 
   const serviceClassDisplayName = getResourceDisplayName(serviceClass);
-  const serviceClassDescription = getDescription(serviceClass);
+  const isActivated = serviceInstances?.length > 0;
 
-  const tags = serviceClass.spec.tags;
-  const externalLabels = serviceClass.spec.externalMetadata?.labels;
-  const internalLabels = serviceClass.metadata.labels;
-  const labels = { ...externalLabels, ...internalLabels };
-  const providerDisplayName =
-    serviceClass.spec.externalMetadata?.providerDisplayName;
-  const creationTimestamp = serviceClass.metadata.creationTimestamp;
-  const documentationUrl = serviceClass.spec.externalMetadata?.documentationUrl;
-  const supportUrl = serviceClass.spec.externalMetadata?.supportUrl;
-  const imageUrl = serviceClass.spec.externalMetadata?.imageUrl;
-  const isProvisionedOnlyOnce = isStringValueEqualToTrue(
-    labels?.provisionOnlyOnce,
-  );
-  const isActivated = serviceInstances?.items?.length > 0;
-
-  const buttonText = isProvisionedOnlyOnce
-    ? isActivated
-      ? createInstanceConstants.buttonText.provisionOnlyOnceActive
-      : createInstanceConstants.buttonText.provisionOnlyOnce
-    : createInstanceConstants.buttonText.standard;
+  const isProvisionedOnlyOnce =
+    serviceClass.spec.externalMetadata?.labels &&
+    isStringValueEqualToTrue(
+      serviceClass.spec.externalMetadata.labels.provisionOnlyOnce,
+    );
 
   const modalOpeningComponent = (
     <Tooltip content={createInstanceConstants.provisionOnlyOnceInfo}>
       <Button disabled={isProvisionedOnlyOnce && isActivated} glyph="add">
-        {buttonText}
+        {isProvisionedOnlyOnce
+          ? isActivated
+            ? createInstanceConstants.buttonText.provisionOnlyOnceActive
+            : createInstanceConstants.buttonText.provisionOnlyOnce
+          : createInstanceConstants.buttonText.standard}
       </Button>
     </Tooltip>
   );
 
   return (
-    <ServiceClassDetailsHeader
-      serviceClassDisplayName={serviceClassDisplayName}
-      providerDisplayName={providerDisplayName}
-      creationTimestamp={creationTimestamp}
-      documentationUrl={documentationUrl}
-      supportUrl={supportUrl}
-      imageUrl={imageUrl}
-      tags={tags}
-      labels={labels}
-      description={serviceClassDescription}
-      isProvisionedOnlyOnce={isProvisionedOnlyOnce}
-      serviceClassName={name}
-    >
-      <ModalWithForm
-        title={`Provision the ${serviceClassDisplayName}${' '}
+    <>
+      <ServiceClassDetailsHeader serviceClass={serviceClass}>
+        <ModalWithForm
+          title={`Provision the ${serviceClassDisplayName}${' '}
                   ${
                     resourceType === 'ClusterServiceClass'
                       ? 'Cluster Service Class'
                       : 'Service Class'
                   }${' '}
                   in the ${namespaceId} Namespace`}
-        modalOpeningComponent={modalOpeningComponent}
-        id="add-instance-modal"
-        item={serviceClass}
-        renderForm={props => (
-          <CreateInstanceModal
-            {...props}
-            plans={servicePlans || []}
-            documentationUrl={documentationUrl}
-          />
-        )}
-      />
-    </ServiceClassDetailsHeader>
+          modalOpeningComponent={modalOpeningComponent}
+          id="add-instance-modal"
+          item={serviceClass}
+          renderForm={props => (
+            <CreateInstanceForm
+              {...props}
+              plans={servicePlans || []}
+              documentationUrl={
+                serviceClass.spec.externalMetadata?.documentationUrl
+              }
+            />
+          )}
+        />
+      </ServiceClassDetailsHeader>
+      <ServiceClassInstancesTable instanceList={serviceInstances} />
+    </>
   );
 }

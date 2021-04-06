@@ -2,15 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './Card.scss';
 import { Tooltip } from 'react-shared';
-import { Icon } from 'fundamental-react';
+import { Icon, Panel } from 'fundamental-react';
 import { InstancesIndicator } from './InstancesIndicator';
 import { Labels } from './Labels';
-import { PanelActions } from '@kyma-project/react-components';
 import {
   CardWrapper,
   CardContent,
   CardTop,
-  CardHeader,
   CardHeaderContent,
   CardThumbnail,
   CardImage,
@@ -33,7 +31,7 @@ const Card = ({
   <CardWrapper data-e2e-id="card" className="card">
     <CardContent onClick={onClick} data-e2e-id={`go-to-details`}>
       <CardTop>
-        <CardHeader className="card__header">
+        <div className="card__header fd-tile">
           <CardThumbnail>
             {imageUrl ? (
               <CardImage size="s" photo={imageUrl} />
@@ -49,7 +47,7 @@ const Card = ({
           >
             <span data-e2e-id="card-company">{company}</span>
           </CardHeaderContent>
-          <PanelActions>
+          <Panel.Actions>
             {labels && labels[DOCUMENTATION_PER_PLAN_LABEL] === 'true' && (
               <div aria-label="has-API-packages-indicator" className="icon">
                 <Tooltip content={DOCUMENTATION_PER_PLAN_DESCRIPTION}>
@@ -61,8 +59,8 @@ const Card = ({
               numberOfInstances={numberOfInstances}
               labels={labels}
             />
-          </PanelActions>
-        </CardHeader>
+          </Panel.Actions>
+        </div>
       </CardTop>
 
       <CardDescription>{description}</CardDescription>

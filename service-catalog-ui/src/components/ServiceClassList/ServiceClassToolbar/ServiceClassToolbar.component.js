@@ -1,9 +1,8 @@
 import React from 'react';
 
+import { FormInput } from 'fundamental-react';
 import { serviceClassConstants } from 'helpers/constants';
 import { Toolbar } from '@kyma-project/react-components';
-
-import SearchDropdown from '../../../shared/SearchDropdown.component';
 
 const ServiceClassToolbar = ({
   searchFn,
@@ -17,9 +16,12 @@ const ServiceClassToolbar = ({
       aria-label="title"
     >
       {serviceClassesExists && (
-        <SearchDropdown
-          searchQuery={searchQuery}
+        <FormInput
+          value={searchQuery}
+          type="text"
+          placeholder="Search"
           onChange={e => searchFn(e.target.value)}
+          data-e2e-id="search"
         />
       )}
     </Toolbar>

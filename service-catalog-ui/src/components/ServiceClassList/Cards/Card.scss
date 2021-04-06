@@ -1,5 +1,6 @@
 .card {
   &__header {
+    width: 100%;
     .icon {
       $verticalOffset: -4px;
       background-color: var(--fd-color-neutral-2);

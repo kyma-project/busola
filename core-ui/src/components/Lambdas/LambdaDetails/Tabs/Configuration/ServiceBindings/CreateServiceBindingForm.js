@@ -3,8 +3,12 @@ import PropTypes from 'prop-types';
 import { FormItem, FormLabel, FormInput, Alert } from 'fundamental-react';
 
 import Checkbox from 'components/Lambdas/Checkbox/Checkbox';
-import { useCreateServiceBindingUsage } from 'components/Lambdas/hooks';
-import { SERVICE_BINDINGS_PANEL } from 'components/Lambdas/constants';
+import { useCreateServiceBindingUsage } from 'react-shared';
+import {
+  SERVICE_BINDINGS_PANEL,
+  LAMBDAS_MESSAGES,
+} from 'components/Lambdas/constants';
+import { CONFIG } from 'components/Lambdas/config';
 
 const checkBoxInputProps = {
   style: {
@@ -23,7 +27,10 @@ export default function CreateServiceBindingForm({
   setValidity = () => void 0,
   isOpen = false,
 }) {
-  const createServiceBindingUsageSet = useCreateServiceBindingUsage();
+  const createServiceBindingUsageSet = useCreateServiceBindingUsage({
+    successMessage: LAMBDAS_MESSAGES.CREATE_BINDING_USAGE.SUCCESS_MESSAGE,
+    errorMessage: LAMBDAS_MESSAGES.CREATE_BINDING_USAGE.ERROR_MESSAGE,
+  });
 
   const [selectedServiceInstance, setSelectedServiceInstance] = useState('');
   const [envPrefix, setEnvPrefix] = useState('');
@@ -91,7 +98,6 @@ export default function CreateServiceBindingForm({
   async function handleFormSubmit(e) {
     e.preventDefault();
     const parameters = {
-      lambdaName: lambda.metadata.name,
       namespace: lambda.metadata.namespace,
       serviceInstanceName: selectedServiceInstance,
       serviceBindingUsageParameters: envPrefix
@@ -101,7 +107,7 @@ export default function CreateServiceBindingForm({
             },
           }
         : undefined,
-      createCredentials: createCredentials,
+      usedBy: { name: lambda.metadata.name, kind: CONFIG.functionUsageKind },
       existingCredentials: existingCredentials || undefined,
     };
 
@@ -164,7 +170,6 @@ export default function CreateServiceBindingForm({
               onChange={(_, value) => setCreateCredentials(value)}
             />
           </FormItem>
-
           {!createCredentials && secrets.length ? (
             <FormItem key="existingCredentials">
               <FormLabel htmlFor="existingCredentials">Secrets</FormLabel>

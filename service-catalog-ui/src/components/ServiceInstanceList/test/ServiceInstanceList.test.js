@@ -6,7 +6,7 @@ import {
   allServiceInstancesQuery,
   serviceInstancesSubscription,
 } from 'testing/instances/queriesMocks';
-import ServiceInstanceTable from '../ServiceInstanceTable/ServiceInstanceTable.component';
+import ServiceInstanceTable from '../ServiceInstanceTable/ServiceInstanceTable';
 
 import ServiceInstancesList from '../ServiceInstanceList';
 import { Link } from '../ServiceInstanceTable/styled.js';
