@@ -1,9 +1,7 @@
-import React, { useState, useRef } from 'react';
-import { baseUrl, throwHttpError } from './config';
-import { createHeaders } from './createHeaders';
+import React from 'react';
 import { useMicrofrontendContext } from '../../contexts/MicrofrontendContext';
-import { useConfig } from '../../contexts/ConfigContext';
-import { checkForTokenExpiration } from './tokenExpirationGuard';
+
+import { useFetch } from './useFetch';
 
 const useGetHook = processDataFn =>
   function(path, { pollingInterval, onDataReceived, skip }) {
@@ -11,15 +9,13 @@ const useGetHook = processDataFn =>
     const [data, setData] = React.useState(null);
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(null);
-    const { idToken, cluster } = useMicrofrontendContext();
-    const { fromConfig } = useConfig();
+    const { idToken } = useMicrofrontendContext();
+    const fetch = useFetch();
 
     const refetch = (isSilent, currentData) => async () => {
       if (skip) return;
       if (!idToken || !isHookMounted.current) return;
       if (!isSilent) setLoading(true);
-
-      checkForTokenExpiration(idToken);
 
       function processError(error) {
         console.error(error);
@@ -27,11 +23,7 @@ const useGetHook = processDataFn =>
       }
 
       try {
-        const urlToFetchFrom = baseUrl(fromConfig) + path;
-        const response = await fetch(urlToFetchFrom, {
-          headers: createHeaders(idToken, cluster),
-        });
-        if (!response.ok) throw await throwHttpError(response);
+        const response = await fetch(path);
         const payload = await response.json();
 
         if (!isHookMounted.current) return;
@@ -104,12 +96,6 @@ function handleSingleDataReceived(newData, oldData, setDataFn) {
 }
 
 export const useSingleGet = () => {
-  const { idToken, cluster } = useMicrofrontendContext();
-  const { fromConfig } = useConfig();
-  return url => {
-    checkForTokenExpiration(idToken);
-    return fetch(baseUrl(fromConfig) + url, {
-      headers: createHeaders(idToken, cluster),
-    });
-  };
+  const fetch = useFetch();
+  return url => fetch(url);
 };

@@ -1,26 +1,18 @@
-import { baseUrl, throwHttpError } from './config';
-import { useMicrofrontendContext } from '../../contexts/MicrofrontendContext';
-import { createHeaders } from './createHeaders';
-import { useConfig } from '../../contexts/ConfigContext';
-import { checkForTokenExpiration } from './tokenExpirationGuard';
+import { useFetch } from './useFetch';
 
 const useMutation = method => {
   return options => {
-    const { idToken, cluster } = useMicrofrontendContext();
-    const { fromConfig } = useConfig();
-    return async (url, data) => {
-      checkForTokenExpiration(idToken);
-      const response = await fetch(baseUrl(fromConfig) + url, {
+    const fetch = useFetch();
+
+    return async (relativeUrl, data) => {
+      const response = await fetch(relativeUrl, {
         method,
         headers: {
           'Content-Type': 'application/json-patch+json',
           Accept: 'application/json',
-          ...createHeaders(idToken, cluster),
         },
         body: JSON.stringify(data),
       });
-
-      if (!response.ok) throw await throwHttpError(response);
 
       if (typeof options?.refetch === 'function') options.refetch();
       return await response.json();
