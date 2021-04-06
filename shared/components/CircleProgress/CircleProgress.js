@@ -17,6 +17,10 @@ export const CircleProgress = ({
   });
 
   const percent = max ? Math.round((value * 100) / max) : 0;
+
+  const text = valueText + '/' + maxText;
+  const textSize = text.length > 4 ? 110 / text.length + 'px' : '1.8em'; // scale the text dynamically only if it's longer than 4 characters to avoid making it too big
+
   return (
     <div className="circle-progress" onClick={onClick}>
       <span className="cursor-pointer">{title}</span>
@@ -26,8 +30,8 @@ export const CircleProgress = ({
           <div className={`mask--permanent`}></div>
         </div>
         <div className="inner-area">
-          <div className="percentage">
-            {valueText}/{maxText}
+          <div className="percentage" style={{ fontSize: textSize }}>
+            {text}
           </div>
         </div>
       </div>
