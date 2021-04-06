@@ -9,6 +9,7 @@ const MEMORY_SUFFIX_POWER = {
   KI: 10,
   MI: 20,
   GI: 30,
+  TI: 40,
 };
 
 function getBytes(memoryString) {
@@ -28,6 +29,17 @@ function getBytes(memoryString) {
   }
 
   return number * 2 ** suffixPower;
+}
+
+function bytesToHumanReadable(bytesNumber) {
+  let output = bytesNumber;
+  Object.entries(MEMORY_SUFFIX_POWER)
+    .reverse()
+    .forEach(([suffix, power]) => {
+      console.log(suffix, power);
+    });
+
+  return output;
 }
 
 export const MemoryUsageCircle = ({ namespace }) => {
@@ -55,13 +67,17 @@ export const MemoryUsageCircle = ({ namespace }) => {
     0,
   );
 
+  // → 988M
+
   console.log(totalLimits);
   // getBytes('543463Mi');
   return (
     <CircleProgress
       color={'teal'}
       value={totalUsage}
+      valueText={bytesToHumanReadable(totalUsage)}
       max={totalLimits}
+      // maxText={bytesToHumanReadable(totalLimits)}
       title="Memory consumption"
     />
   );

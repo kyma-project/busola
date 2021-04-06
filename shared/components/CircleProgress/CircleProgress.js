@@ -5,7 +5,9 @@ import './CircleProgress.scss';
 
 export const CircleProgress = ({
   value,
+  valueText = value,
   max,
+  maxText = max,
   color = 'blue',
   onClick,
   title,
@@ -25,7 +27,7 @@ export const CircleProgress = ({
         </div>
         <div className="inner-area">
           <div className="percentage">
-            {value}/{max}
+            {valueText}/{maxText}
           </div>
         </div>
       </div>
@@ -36,7 +38,9 @@ export const CircleProgress = ({
 CircleProgress.propTypes = {
   color: PropTypes.oneOf(['purple', 'green', 'blue', 'teal']),
   value: PropTypes.number.isRequired,
+  valueText: PropTypes.string,
   max: PropTypes.number.isRequired,
+  maxText: PropTypes.string,
   onClick: PropTypes.func,
   title: PropTypes.string,
 };
