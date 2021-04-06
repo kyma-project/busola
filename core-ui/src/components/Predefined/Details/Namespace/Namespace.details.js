@@ -1,4 +1,5 @@
 import React from 'react';
+import { useGet } from 'react-shared';
 import { getComponentForList } from 'shared/getComponents';
 import DeployNewWorkload from './DeployNewWorkload';
 import { NamespaceStatus } from './NamespaceStatus';

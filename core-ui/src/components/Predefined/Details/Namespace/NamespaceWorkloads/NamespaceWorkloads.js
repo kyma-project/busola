@@ -3,12 +3,13 @@ import LuigiClient from '@luigi-project/client';
 import PropTypes from 'prop-types';
 
 import { Panel, LayoutGrid } from 'fundamental-react';
-import { useGetList, Spinner, CircleProgress } from 'react-shared';
+import { useGetList, Spinner, CircleProgress, useGet } from 'react-shared';
 
 import {
   getHealthyStatusesCount,
   getHealthyReplicasCount,
 } from './NamespaceWorkloadsHelpers';
+import { MemoryUsageCircle } from './ResourcesUsage';
 
 NamespaceWorkloads.propTypes = { namespace: PropTypes.string.isRequired };
 
@@ -108,6 +109,7 @@ export function NamespaceWorkloads({ namespace }) {
           <PodsCircle namespace={namespace} />
           <DeploymentsCircle namespace={namespace} />
           <ReplicaSetsCircle namespace={namespace} />
+          <MemoryUsageCircle />
         </LayoutGrid>
       </Panel.Body>
     </Panel>
