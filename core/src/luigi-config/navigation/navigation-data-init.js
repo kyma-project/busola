@@ -68,7 +68,10 @@ export function getNavigationData(token) {
             clearToken();
             window.location.pathname = '/nopermissions.html';
           } else {
-            alert('Config init error, see console for more details');
+            Luigi.ux().showAlert({
+              text: `Config init error: ${err}`,
+              type: 'error',
+            });
             console.warn(err);
           }
         }
@@ -119,7 +122,10 @@ async function getNamespaces() {
   try {
     namespaces = await fetchNamespaces(getToken());
   } catch (e) {
-    console.error('Error while fetching namespaces', e);
+    Luigi.ux().showAlert({
+      text: `Cannot fetch namespaces: ${e}`,
+      type: 'error',
+    });
     return [];
   }
   if (localStorage.getItem('busola.showSystemNamespaces') !== 'true') {
