@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import './CircleProgress.scss';
 
 export const CircleProgress = ({
+  size = 110,
   value,
   valueText = value,
   max,
@@ -19,10 +20,12 @@ export const CircleProgress = ({
   const percent = max ? Math.round((value * 100) / max) : 0;
 
   const text = valueText + '/' + maxText;
-  const textSize = text.length > 4 ? 110 / text.length + 'px' : '1.8em'; // scale the text dynamically only if it's longer than 4 characters to avoid making it too big
+  const textSize = (1.18 / Math.max(4, text.length)) * size + 'px'; // scale the text dynamically basing on a kind of 'magic number' which makes it look good for any size and text
 
   const containerStyle = {
     background: `conic-gradient(transparent ${100 - percent}%, ${color} 0)`, // we have to prepare it here to avoid using styledComponents
+    width: size + 'px',
+    height: size + 'px',
   };
 
   return (

@@ -1,12 +1,5 @@
-$circle-size: 100px; // must be set in px to save proportions
 $transition-length: 2s;
 $neutral-background: var(--fd-color-background-2, #fff);
-
-@mixin circle-shape($size) {
-  border-radius: 50%;
-  width: $size;
-  height: $size;
-}
 
 %flex-center {
   display: flex;
@@ -14,16 +7,20 @@ $neutral-background: var(--fd-color-background-2, #fff);
   justify-content: center;
 }
 
+@mixin circle-shape($size) {
+  border-radius: 50%;
+  width: $size;
+  height: $size;
+}
+
 .circle-progress {
   .circle__container {
-    width: $circle-size;
-    height: $circle-size;
+    position: relative;
     @extend %flex-center;
-    margin: $circle-size/12;
     border-radius: 50%;
 
     .inner-area {
-      @include circle-shape($circle-size/1.4);
+      @include circle-shape(73%);
       @extend %flex-center;
       background-color: $neutral-background;
       position: absolute;
@@ -31,10 +28,9 @@ $neutral-background: var(--fd-color-background-2, #fff);
       color: var(--fd-color-text-3);
 
       .percentage {
-        @include circle-shape($circle-size/1.6);
+        @include circle-shape(calc(100% - 0.2em));
         @extend %flex-center;
         border: 1px solid var(--fd-color-text-3);
-        font-size: $circle-size/5;
       }
     }
   }
@@ -43,7 +39,7 @@ $neutral-background: var(--fd-color-background-2, #fff);
   grid-template-columns: 1;
   justify-items: center;
   justify-content: center;
-  grid-gap: 1em;
+  grid-gap: 3%;
   color: var(--fd-color-text-3);
   font-size: 1.2em;
 }
