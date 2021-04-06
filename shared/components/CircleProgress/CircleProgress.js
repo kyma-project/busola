@@ -21,14 +21,14 @@ export const CircleProgress = ({
   const text = valueText + '/' + maxText;
   const textSize = text.length > 4 ? 110 / text.length + 'px' : '1.8em'; // scale the text dynamically only if it's longer than 4 characters to avoid making it too big
 
+  const containerStyle = {
+    background: `conic-gradient(transparent ${100 - percent}%, ${color} 0)`, // we have to prepare it here to avoid using styledComponents
+  };
+
   return (
     <div className="circle-progress" onClick={onClick}>
       <span className="cursor-pointer">{title}</span>
-      <div className={circleClasses}>
-        <div className="progress-bar" style={{ backgroundColor: color }}>
-          <div className={`mask--dynamic fill--${percent}`}></div>
-          <div className={`mask--permanent`}></div>
-        </div>
+      <div className={circleClasses} style={containerStyle}>
         <div className="inner-area">
           <div className="percentage" style={{ fontSize: textSize }}>
             {text}
