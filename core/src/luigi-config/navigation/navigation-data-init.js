@@ -14,11 +14,19 @@ import navigationPermissionChecker, {
 import {
   hideDisabledNodes,
   createNamespacesList,
-  clearToken,
-  getToken,
+  clearAuthData,
+  getAuthData,
 } from './navigation-helpers';
 import { groups } from '../auth';
-import { getInitParams } from '../init-params';
+import { getInitParams, clearInitParams } from '../init-params';
+
+const params = getInitParams();
+const customLogoutFn =
+  !!params?.auth ||
+  (() => {
+    clearInitParams();
+    window.location = '/logout.html';
+  });
 
 export let resolveNavigationNodes;
 export let navigation = {
@@ -29,8 +37,8 @@ export let navigation = {
     [catalogViewGroupName]: {
       preloadUrl: config.serviceCatalogModuleUrl + '/preload',
     },
-    preloadViewGroups: false,
   },
+  preloadViewGroups: false,
   nodeAccessibilityResolver: navigationPermissionChecker,
   contextSwitcher: {
     defaultLabel: 'Select Namespace ...',
@@ -41,6 +49,7 @@ export let navigation = {
   profile: {
     logout: {
       label: 'Logout',
+      customLogoutFn,
     },
     items: [
       {
@@ -55,9 +64,9 @@ export let navigation = {
   }),
 };
 
-export function getNavigationData(token) {
+export function getNavigationData(authData) {
   return new Promise(function (resolve, reject) {
-    fetchBusolaInitData(token)
+    fetchBusolaInitData(authData)
       .then(
         (res) => {
           setInitValues(res.backendModules, res.selfSubjectRules || []);
@@ -65,7 +74,7 @@ export function getNavigationData(token) {
         },
         (err) => {
           if (err === 'access denied') {
-            clearToken();
+            clearAuthData();
             window.location.pathname = '/nopermissions.html';
           } else {
             Luigi.ux().showAlert({
@@ -87,7 +96,7 @@ export function getNavigationData(token) {
             pathSegment: 'home',
             hideFromNav: true,
             context: {
-              idToken: token,
+              authData,
               groups,
               backendModules,
               bebEnabled,
@@ -120,7 +129,7 @@ async function getNamespaces() {
   const { systemNamespaces } = getInitParams().config;
   let namespaces;
   try {
-    namespaces = await fetchNamespaces(getToken());
+    namespaces = await fetchNamespaces(getAuthData());
   } catch (e) {
     Luigi.ux().showAlert({
       text: `Cannot fetch namespaces: ${e}`,

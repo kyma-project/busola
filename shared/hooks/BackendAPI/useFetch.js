@@ -5,17 +5,19 @@ import { baseUrl, throwHttpError } from './config';
 import { useConfig } from '../../contexts/ConfigContext';
 
 export const useFetch = () => {
-  const { idToken, cluster } = useMicrofrontendContext();
+  const { authData, cluster } = useMicrofrontendContext();
   const { fromConfig } = useConfig();
 
+  if (!authData) return () => {};
+
   return async (relativeUrl, init) => {
-    checkForTokenExpiration(idToken);
+    checkForTokenExpiration(authData?.idToken);
 
     init = {
       ...init,
       headers: {
         ...(init?.headers || {}),
-        ...createHeaders(idToken, cluster),
+        ...createHeaders(authData, cluster),
       },
     };
 

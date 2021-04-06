@@ -1,12 +1,24 @@
 import { config } from './../config';
 import { getInitParams } from './../init-params';
 
-const cluster = getInitParams()?.cluster;
+export async function failFastFetch(input, auth, init = {}) {
+  function createAuthHeaders(auth) {
+    if (auth.idToken) {
+      return { Authorization: `Bearer ${auth.idToken}` };
+    } else if (auth['client-certificate-data'] && auth['client-key-data']) {
+      return {
+        'X-Client-Certificate-Data': auth['client-certificate-data'],
+        'X-Client-Key-Data': auth['client-key-data'],
+      };
+    } else {
+      throw Error('No available data to authenticate the request.');
+    }
+  }
 
-export async function failFastFetch(input, token, init = {}) {
-  function createHeaders(token) {
+  function createHeaders(auth) {
+    const cluster = getInitParams().cluster;
     return {
-      Authorization: `Bearer ${token}`,
+      ...createAuthHeaders(auth),
       'Content-Type': 'application/json',
       'X-Cluster-Url': cluster?.server,
       'X-Cluster-Certificate-Authority-Data':
@@ -14,7 +26,8 @@ export async function failFastFetch(input, token, init = {}) {
     };
   }
 
-  init.headers = createHeaders(token);
+  init.headers = createHeaders(auth);
+
   const response = await fetch(input, init);
   if (response.ok) {
     return response;
@@ -23,14 +36,14 @@ export async function failFastFetch(input, token, init = {}) {
   }
 }
 
-export function fetchBusolaInitData(token) {
+export function fetchBusolaInitData(auth) {
   const backendModulesUrl = `${config.backendApiUrl}/apis/ui.kyma-project.io/v1alpha1/backendmodules`;
-  const backendModulesQuery = failFastFetch(backendModulesUrl, token)
+  const backendModulesQuery = failFastFetch(backendModulesUrl, auth)
     .then((res) => res.json())
     .then((data) => ({ backendModules: data.items.map((bM) => bM.metadata) }))
     .catch(() => ({ backendModules: [] }));
 
-  const apiGroupsQuery = failFastFetch(config.backendApiUrl, token)
+  const apiGroupsQuery = failFastFetch(config.backendApiUrl, auth)
     .then((res) => res.json())
     .then((data) => ({ apiGroups: data.paths }));
 
@@ -43,7 +56,7 @@ export function fetchBusolaInitData(token) {
   };
 
   const ssrUrl = `${config.backendApiUrl}/apis/authorization.k8s.io/v1/selfsubjectrulesreviews`;
-  const ssrrQuery = failFastFetch(ssrUrl, token, {
+  const ssrrQuery = failFastFetch(ssrUrl, auth, {
     method: 'POST',
     body: JSON.stringify(ssrr),
   })
@@ -55,7 +68,7 @@ export function fetchBusolaInitData(token) {
   return Promise.all(promises).then((res) => Object.assign(...res));
 }
 
-export function fetchNamespaces(token) {
+export function fetchNamespaces(auth) {
   return failFastFetch(`${config.backendApiUrl}/api/v1/namespaces/`, token)
     .then((res) => res.json())
     .then((list) => list.items.map((ns) => ns.metadata));

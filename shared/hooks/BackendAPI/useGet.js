@@ -9,12 +9,12 @@ const useGetHook = processDataFn =>
     const [data, setData] = React.useState(null);
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(null);
-    const { idToken } = useMicrofrontendContext();
+    const { authData } = useMicrofrontendContext();
     const fetch = useFetch();
 
     const refetch = (isSilent, currentData) => async () => {
       if (skip) return;
-      if (!idToken || !isHookMounted.current) return;
+      if (!isHookMounted.current) return;
       if (!isSilent) setLoading(true);
 
       function processError(error) {
@@ -48,12 +48,12 @@ const useGetHook = processDataFn =>
     React.useEffect(() => {
       // INITIAL FETCH
       isHookMounted.current = true;
-      if (idToken) refetch(false, null)();
+      if (authData) refetch(false, null)();
       return _ => {
         if (loading) setLoading(false);
         isHookMounted.current = false;
       };
-    }, [path, idToken]);
+    }, [path, authData]);
 
     return {
       data,
