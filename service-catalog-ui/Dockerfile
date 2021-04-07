@@ -28,7 +28,7 @@ ENV CI true
 RUN cd /app/${app_name} && make build
 
 ### Main image ###
-FROM eu.gcr.io/kyma-project/incubator/console-nginx:f4976fad
+FROM eu.gcr.io/kyma-project/tpi/console-nginx:1de56388
 
 ARG app_name=service-catalog-ui
 
