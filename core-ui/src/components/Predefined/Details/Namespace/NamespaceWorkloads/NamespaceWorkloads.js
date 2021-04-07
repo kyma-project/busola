@@ -9,7 +9,6 @@ import {
   getHealthyStatusesCount,
   getHealthyReplicasCount,
 } from './NamespaceWorkloadsHelpers';
-import { MemoryUsageCircle } from './ResourcesUsage';
 
 NamespaceWorkloads.propTypes = { namespace: PropTypes.string.isRequired };
 
@@ -105,11 +104,10 @@ export function NamespaceWorkloads({ namespace }) {
         <Panel.Head title="Healthy Resources" />
       </Panel.Header>
       <Panel.Body className="namespace-workloads__body">
-        <LayoutGrid cols={4}>
+        <LayoutGrid cols={3}>
           <PodsCircle namespace={namespace} />
           <DeploymentsCircle namespace={namespace} />
           <ReplicaSetsCircle namespace={namespace} />
-          <MemoryUsageCircle namespace={namespace} />
         </LayoutGrid>
       </Panel.Body>
     </Panel>

@@ -1,9 +1,11 @@
 import React from 'react';
-import { useGet } from 'react-shared';
+
+import { Panel, LayoutGrid } from 'fundamental-react';
 import { getComponentForList } from 'shared/getComponents';
 import DeployNewWorkload from './DeployNewWorkload';
 import { NamespaceStatus } from './NamespaceStatus';
 import { NamespaceWorkloads } from './NamespaceWorkloads/NamespaceWorkloads';
+import { MemoryUsageCircle } from './ResourcesUsage';
 
 export const NamespacesDetails = DefaultRenderer => ({ ...otherParams }) => {
   const limitRangesParams = {
@@ -78,6 +80,16 @@ export const NamespacesDetails = DefaultRenderer => ({ ...otherParams }) => {
       headerActions={headerActions}
     >
       <NamespaceWorkloads namespace={otherParams.resourceName} />
+      <Panel className="fd-has-margin-m">
+        <Panel.Header>
+          <Panel.Head title="Resource consumption" />
+        </Panel.Header>
+        <Panel.Body className="namespace-workloads__body">
+          <LayoutGrid cols={2}>
+            <MemoryUsageCircle namespace={otherParams.resourceName} />
+          </LayoutGrid>
+        </Panel.Body>
+      </Panel>
       {LimitrangesList}
       {ResourceQuotasList}
       {ApplicationMappings}

@@ -1,6 +1,7 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import PropTypes from 'prop-types';
+import { camelCase } from 'lodash';
 
 import { Panel, LayoutGrid } from 'fundamental-react';
 import { useGetList, Spinner, CircleProgress } from 'react-shared';
@@ -31,11 +32,16 @@ function getBytes(memoryString) {
   return number * 2 ** suffixPower;
 }
 
+function unitToPascalCase(str) {
+  const firstLetter = str[0];
+  return firstLetter.toUpperCase() + str.toLowerCase().slice(1);
+}
+
 function bytesToHumanReadable(bytesNumber) {
   let output = bytesNumber;
   Object.entries(MEMORY_SUFFIX_POWER).forEach(([suffix, power]) => {
     const value = bytesNumber / 2 ** power;
-    if (value >= 1) output = value + suffix; //TODO to camelcase
+    if (value >= 1) output = value + unitToPascalCase(suffix); //TODO to camelcase
   });
 
   return output;
@@ -73,7 +79,7 @@ export const MemoryUsageCircle = ({ namespace }) => {
       valueText={bytesToHumanReadable(totalUsage)}
       max={totalLimits}
       maxText={bytesToHumanReadable(totalLimits)}
-      title="Memory consumption"
+      title="Memory"
     />
   );
 };
