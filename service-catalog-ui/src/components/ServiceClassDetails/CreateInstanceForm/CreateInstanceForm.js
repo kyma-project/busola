@@ -198,26 +198,14 @@ export default function CreateInstanceForm({
 
     const specSC = {
       serviceClassExternalName: item.spec.externalName,
-      serviceClassRef: {
-        name: item.metadata.name,
-      },
       servicePlanExternalName: currentPlan && currentPlan.spec.externalName,
-      servicePlanRef: {
-        name: currentPlan.metadata.name,
-      },
       parameters: instanceCreateParameters,
     };
 
     const specCSC = {
       clusterServiceClassExternalName: item.spec.externalName,
-      clusterServiceClassRef: {
-        name: item.metadata.name,
-      },
       clusterServicePlanExternalName:
         currentPlan && currentPlan.spec.externalName,
-      clusterServicePlanRef: {
-        name: currentPlan.metadata.name,
-      },
       parameters: instanceCreateParameters,
     };
 
