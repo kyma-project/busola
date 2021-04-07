@@ -49,14 +49,18 @@ export default function CreateServiceBindingModal({
   const getInstancesWithBindableData = instance => {
     const planRefFieldName = instance.spec.clusterServicePlanRef
       ? 'clusterServicePlanRef'
-      : 'servicePlanRef';
+      : instance.spec.servicePlanRef
+      ? 'servicePlanRef'
+      : null;
     const plans = instance.spec.clusterServicePlanRef
       ? clusterServicePlans
       : servicePlans;
 
     const plan =
-      plans?.find(
-        p => p.metadata.name === instance.spec[planRefFieldName].name,
+      plans?.find(p =>
+        planRefFieldName
+          ? p.metadata.name === instance.spec[planRefFieldName].name
+          : false,
       ) || {};
 
     return {
