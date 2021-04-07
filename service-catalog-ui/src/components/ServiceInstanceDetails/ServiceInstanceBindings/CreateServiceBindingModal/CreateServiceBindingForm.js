@@ -15,18 +15,22 @@ const checkBoxInputProps = {
   },
 };
 
-const ResourceKindOptgroup = ({ kindResource, namespace }) => {
+const ResourceKindOptgroup = ({
+  kindResource,
+  kindResourceName,
+  namespace,
+}) => {
   const { data } = useGetList()(
     `/apis/${kindResource.group}/${kindResource.version}/namespaces/${namespace}/${kindResource.kind}s`,
     {},
   );
 
   return data && data.length ? (
-    <optgroup label={kindResource.kind}>
+    <optgroup label={kindResourceName}>
       {data.map(res => (
         <option
           value={JSON.stringify({
-            kind: kindResource.kind,
+            kind: kindResourceName,
             name: res.metadata.name,
           })}
           key={res.metadata.uid}
@@ -145,6 +149,7 @@ export default function CreateServiceBindingForm({
         <ResourceKindOptgroup
           key={u.metadata.uid}
           kindResource={u.spec.resource}
+          kindResourceName={u.metadata.name}
           namespace={serviceInstance.metadata.namespace}
         />
       ))}
