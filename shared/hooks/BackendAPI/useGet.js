@@ -75,11 +75,11 @@ const useGetStreamHook = _ =>
     const [data, setData] = React.useState([]);
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(null);
-    const { idToken, cluster } = useMicrofrontendContext();
+    const { authData, cluster } = useMicrofrontendContext();
     const { fromConfig } = useConfig();
 
     const refetch = async () => {
-      if (!idToken || !isHookMounted.current) return;
+      if (!authData || !isHookMounted.current) return;
       setLoading(true);
 
       function processError(error) {
@@ -90,7 +90,7 @@ const useGetStreamHook = _ =>
       try {
         const urlToFetchFrom = baseUrl(fromConfig) + path;
         fetch(urlToFetchFrom, {
-          headers: createHeaders(idToken, cluster),
+          headers: createHeaders(authData, cluster),
         })
           .then(response => response.body)
           .then(rb => {
@@ -132,12 +132,12 @@ const useGetStreamHook = _ =>
     React.useEffect(() => {
       // INITIAL FETCH
       isHookMounted.current = true;
-      if (idToken) refetch();
+      if (authData) refetch();
       setLoading(false);
       return _ => {
         isHookMounted.current = false;
       };
-    }, [path, idToken]);
+    }, [path, authData]);
 
     return {
       data,
@@ -184,5 +184,5 @@ export const useSingleGet = () => {
   return url =>
     fetch(baseUrl(fromConfig) + url, {
       headers: createHeaders(authData, cluster),
-  });
+    });
 };
