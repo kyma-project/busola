@@ -26,7 +26,7 @@ export default function ServiceBindings({
   );
 
   const renderEnvs = (secret, prefix = '') => {
-    if (!secret) return 'Loading...'; // the secret is being created and will appear in a moment
+    if (!secret) return ''; // don't display if secret not present
     return (
       <>
         {Object.keys(secret.data).map(k => (
