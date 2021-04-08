@@ -5,6 +5,7 @@ import {
   GenericList,
   PageHeader,
 } from 'react-shared';
+import './ContainersLogs.scss';
 
 export const ContainersLogs = ({ params }) => {
   return <Logs params={params} />;
@@ -12,9 +13,6 @@ export const ContainersLogs = ({ params }) => {
 
 function Logs({ params }) {
   useWindowTitle('Logs');
-
-  const url = `/api/v1/namespaces/${params.namespace}/pods/${params.podName}/log?container=${params.containerName}&follow=true&tailLines=1000`;
-  const { loading = true, error, data } = useGetStream(url);
 
   const breadcrumbs = [
     {
@@ -30,8 +28,8 @@ function Logs({ params }) {
     { name: '' },
   ];
 
-  const headerRenderer = () => [];
-  const rowRenderer = entry => [entry];
+  const url = `/api/v1/namespaces/${params.namespace}/pods/${params.podName}/log?container=${params.containerName}&follow=true&tailLines=1000&timestamps=true`;
+  const { loading = true, error, data } = useGetStream(url);
 
   return (
     <>
@@ -39,15 +37,9 @@ function Logs({ params }) {
         title={params.containerName}
         breadcrumbItems={breadcrumbs}
       ></PageHeader>
-      <GenericList
-        title="Logs"
-        entries={data || []}
-        headerRenderer={headerRenderer}
-        rowRenderer={rowRenderer}
-        serverDataError={error}
-        serverErrorMessage={error?.message}
-        serverDataLoading={loading}
-      />
+      {data?.map(arr => (
+        <div className="logs">{arr}</div>
+      ))}
     </>
   );
 }
