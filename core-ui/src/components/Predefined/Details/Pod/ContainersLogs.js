@@ -2,8 +2,8 @@ import React from 'react';
 import {
   useGetStream,
   useWindowTitle,
-  GenericList,
   PageHeader,
+  Spinner,
 } from 'react-shared';
 import './ContainersLogs.scss';
 
@@ -29,17 +29,25 @@ function Logs({ params }) {
   ];
 
   const url = `/api/v1/namespaces/${params.namespace}/pods/${params.podName}/log?container=${params.containerName}&follow=true&tailLines=1000&timestamps=true`;
-  const { loading = true, error, data } = useGetStream(url);
+  const streamData = useGetStream(url);
 
+  const Logs = ({ streamData }) => {
+    const { loading, error, data } = streamData;
+    if (error) return error.message;
+    if (loading) return <Spinner />;
+    return data?.map((arr, idx) => (
+      <div className="logs" key={idx}>
+        {arr}
+      </div>
+    ));
+  };
   return (
     <>
       <PageHeader
         title={params.containerName}
         breadcrumbItems={breadcrumbs}
       ></PageHeader>
-      {data?.map(arr => (
-        <div className="logs">{arr}</div>
-      ))}
+      <Logs streamData={streamData} />
     </>
   );
 }
