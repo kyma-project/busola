@@ -10,12 +10,12 @@ const useGetHook = processDataFn =>
     const [data, setData] = React.useState(null);
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(null);
-    const { idToken, cluster } = useMicrofrontendContext();
+    const { authData, cluster } = useMicrofrontendContext();
     const { fromConfig } = useConfig();
 
     const refetch = (isSilent, currentData) => async () => {
       if (skip) return;
-      if (!idToken || !isHookMounted.current) return;
+      if (!authData || !isHookMounted.current) return;
       if (!isSilent) setLoading(true);
 
       function processError(error) {
@@ -26,7 +26,7 @@ const useGetHook = processDataFn =>
       try {
         const urlToFetchFrom = baseUrl(fromConfig) + path;
         const response = await fetch(urlToFetchFrom, {
-          headers: createHeaders(idToken, cluster),
+          headers: createHeaders(authData, cluster),
         });
         if (!response.ok) throw await throwHttpError(response);
         const payload = await response.json();
@@ -53,12 +53,12 @@ const useGetHook = processDataFn =>
     React.useEffect(() => {
       // INITIAL FETCH
       isHookMounted.current = true;
-      if (idToken) refetch(false, null)();
+      if (authData) refetch(false, null)();
       return _ => {
         if (loading) setLoading(false);
         isHookMounted.current = false;
       };
-    }, [path, idToken]);
+    }, [path, authData]);
 
     return {
       data,
@@ -179,11 +179,10 @@ function handleSingleDataReceived(newData, oldData, setDataFn) {
 }
 
 export const useSingleGet = () => {
-  const { idToken, cluster } = useMicrofrontendContext();
+  const { authData, cluster } = useMicrofrontendContext();
   const { fromConfig } = useConfig();
-  return url => {
-    return fetch(baseUrl(fromConfig) + url, {
-      headers: createHeaders(idToken, cluster),
-    });
-  };
+  return url =>
+    fetch(baseUrl(fromConfig) + url, {
+      headers: createHeaders(authData, cluster),
+  });
 };

@@ -7,7 +7,7 @@
 
     <title>Not enough permissions</title>
 
-    <link rel="stylesheet" href="/luigi-core/luigi.css" />
+    <link rel="stylesheet" href="/assets/luigi-core/luigi.css" />
 
     <style type="text/css">
       .fd-page {
@@ -36,9 +36,10 @@
         color: #6f7275;
         padding-bottom: 30px;
       }
-      .sap-icon--locked:before {
+      .icon {
+        font-size: 2.5em;
         color: #b00;
-        font-size: 50px;
+        font-style: normal;
       }
     </style>
   </head>
@@ -48,7 +49,8 @@
         <div class="fd-page__content">
           <section class="fd-section">
             <div class="fd-has-text-align-center">
-              <span class="sap-icon--locked sap-icon--xl"></span>
+              <i class="icon sap-icon--locked" role="presentation"></i>
+
               <div class="info">Not enough permissions</div>
               <div class="hint">
                 <p class="fd-has-margin-tiny">
