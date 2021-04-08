@@ -8,7 +8,7 @@ const SecretComponent = ({ name, value, showEncoded, isCollapsed }) => (
   <FormItem className="item-wrapper">
     <FormLabel>{name}</FormLabel>
     <div className={isCollapsed ? 'show-more-expand' : 'show-more-collapse'}>
-      {showEncoded ? btoa(value) : value}
+      {showEncoded ? value : atob(value)}
     </div>
   </FormItem>
 );

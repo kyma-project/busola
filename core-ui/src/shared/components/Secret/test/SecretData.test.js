@@ -4,25 +4,25 @@ import SecretData from '../SecretData';
 
 export const secret = {
   data: {
-    client_id: 'client-id',
-    client_secret: 'client-secret',
+    client_id: btoa('client-id'),
+    client_secret: btoa('client-secret'),
   },
 };
 
 export const empty_secret = {};
 
 describe('SecretData', () => {
-  const expectEncodedState = async ({ findByText, queryByText }) => {
-    expect(await findByText(btoa(secret.data.client_id))).toBeInTheDocument();
+  const expectDecodedState = async ({ findByText, queryByText }) => {
+    expect(await findByText(atob(secret.data.client_id))).toBeInTheDocument();
     expect(
-      await findByText(btoa(secret.data.client_secret)),
+      await findByText(atob(secret.data.client_secret)),
     ).toBeInTheDocument();
 
     expect(queryByText(secret.data.client_id)).not.toBeInTheDocument();
     expect(queryByText(secret.data.client_secret)).not.toBeInTheDocument();
   };
 
-  const expectDecodedState = async ({ findByText, queryByText }) => {
+  const expectEncodedState = async ({ findByText, queryByText }) => {
     expect(await findByText(secret.data.client_id)).toBeInTheDocument();
     expect(await findByText(secret.data.client_secret)).toBeInTheDocument();
 
