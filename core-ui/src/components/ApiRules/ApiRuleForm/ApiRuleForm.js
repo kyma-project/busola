@@ -22,7 +22,7 @@ import ServicesDropdown from './ServicesDropdown/ServicesDropdown';
 import AccessStrategyForm from './AccessStrategyForm/AccessStrategyForm';
 import { EXCLUDED_SERVICES_LABELS } from 'components/ApiRules/constants';
 import { hasValidMethods } from 'components/ApiRules/accessStrategyTypes';
-import { useGetList } from 'react-shared';
+import { useGetList, useNotification } from 'react-shared';
 import { SERVICES_URL, API_RULE_URL } from '../constants';
 import { formatMessage as injectVariables } from 'components/Lambdas/helpers/misc';
 import { useGetGatewayDomain } from '../hooks/useGetGatewayDomain';
@@ -68,6 +68,7 @@ export default function ApiRuleForm({
     loading: domainLoading,
   } = useGetGatewayDomain();
   const namespace = LuigiClient.getEventData().environmentId;
+  const notification = useNotification();
   const { serviceName, port, openedInModal = false } =
     LuigiClient.getNodeParams() || {};
   const openedInModalBool = openedInModal.toString().toLowerCase() === 'true';
@@ -177,15 +178,20 @@ export default function ApiRuleForm({
     const data =
       requestType === 'create' ? newApiRule : createPatch(apiRule, newApiRule);
 
-    await sendRequest(
-      injectVariables(API_RULE_URL, {
-        name: formValues.name.current.value,
-        namespace: namespace,
-      }),
-      data,
-    );
-
-    LuigiClient.uxManager().closeCurrentModal();
+    try {
+      await sendRequest(
+        injectVariables(API_RULE_URL, {
+          name: formValues.name.current.value,
+          namespace: namespace,
+        }),
+        data,
+      );
+      LuigiClient.uxManager().closeCurrentModal();
+    } catch (e) {
+      notification.notifyError({
+        content: `Cannot create API Rule: ${e.message}`,
+      });
+    }
   }
 
   function addAccessStrategy() {

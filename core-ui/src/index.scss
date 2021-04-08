@@ -183,3 +183,8 @@ li {
   clear: both;
   display: table;
 }
+
+// override fd-styles for Safari
+input[type=checkbox] {
+  -webkit-appearance: checkbox !important;
+}
