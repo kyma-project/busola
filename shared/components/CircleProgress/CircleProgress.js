@@ -23,15 +23,38 @@ export const CircleProgress = ({
   const textSize = (1.18 / Math.max(4, text.length)) * size + 'px'; // scale the text dynamically basing on a kind of 'magic number' which makes it look good for any size and text
 
   const containerStyle = {
-    background: `conic-gradient(transparent ${100 - percent}%, ${color} 0)`, // we have to prepare it here to avoid using styledComponents
     width: size + 'px',
     height: size + 'px',
+  };
+
+  const valueIndicatorStyle = {
+    background: `conic-gradient(transparent ${100 - percent}%, ${color} 0)`, // we have to prepare it here to avoid using styledComponents
+  };
+
+  const gradientSize = size / 12;
+
+  const backgroundStyle = {
+    backgroundImage: `radial-gradient(
+          circle at center center,
+          ${color},
+          transparent
+        ),
+        repeating-radial-gradient(
+          circle at center center,
+          ${color},
+          ${color},
+          ${gradientSize}px,
+          transparent ${gradientSize * 2}px,
+          transparent ${gradientSize}px
+        )`,
   };
 
   return (
     <div className="circle-progress" onClick={onClick}>
       <span className="cursor-pointer">{title}</span>
       <div className={circleClasses} style={containerStyle}>
+        <div className="background" style={backgroundStyle}></div>
+        <div className="value-indicator" style={valueIndicatorStyle}></div>
         <div className="inner-area">
           <div className="percentage" style={{ fontSize: textSize }}>
             {text}
