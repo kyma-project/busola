@@ -28,7 +28,8 @@ export const CircleProgress = ({
   };
 
   const valueIndicatorStyle = {
-    background: `conic-gradient(transparent ${100 - percent}%, ${color} 0)`, // we have to prepare it here to avoid using styledComponents
+    backgroundImage: `conic-gradient(transparent ${100 -
+      percent}%, ${color} 0)`, // we have to prepare it here to avoid using styledComponents
   };
 
   const gradientSize = size / 12;

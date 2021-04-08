@@ -29,6 +29,7 @@ $neutral-background: var(--fd-color-background-2, #fff);
 
     .value-indicator {
       @include circle-shape(100%);
+      animation: fadeNrotate 2s ease-out;
       position: absolute;
     }
 
@@ -55,4 +56,15 @@ $neutral-background: var(--fd-color-background-2, #fff);
   grid-gap: 3%;
   color: var(--fd-color-text-3);
   font-size: 1.2em;
+
+  @keyframes fadeNrotate {
+    from {
+      opacity: 0;
+      transform: rotate(360deg);
+    }
+    to {
+      opacity: initial;
+      transform: none;
+    }
+  }
 }
