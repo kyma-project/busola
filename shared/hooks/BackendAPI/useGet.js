@@ -78,7 +78,7 @@ const useGetStreamHook = _ =>
     const { authData, cluster } = useMicrofrontendContext();
     const { fromConfig } = useConfig();
 
-    const refetch = async () => {
+    const fetchData = async () => {
       if (!authData || !isHookMounted.current) return;
       setLoading(true);
 
@@ -130,9 +130,8 @@ const useGetStreamHook = _ =>
     };
 
     React.useEffect(() => {
-      // INITIAL FETCH
       isHookMounted.current = true;
-      if (authData) refetch();
+      if (authData) fetchData();
       setLoading(false);
       return _ => {
         isHookMounted.current = false;

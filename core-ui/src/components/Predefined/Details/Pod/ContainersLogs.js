@@ -1,4 +1,5 @@
 import React from 'react';
+import { Panel } from 'fundamental-react';
 import {
   useGetStream,
   useWindowTitle,
@@ -47,7 +48,14 @@ function Logs({ params }) {
         title={params.containerName}
         breadcrumbItems={breadcrumbs}
       ></PageHeader>
-      <Logs streamData={streamData} />
+      <Panel className="fd-has-margin-m">
+        <Panel.Header>
+          <Panel.Head title="Logs" />
+        </Panel.Header>
+        <Panel.Body>
+          <Logs streamData={streamData} />
+        </Panel.Body>
+      </Panel>
     </>
   );
 }
