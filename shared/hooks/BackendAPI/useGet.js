@@ -71,7 +71,6 @@ const useGetHook = processDataFn =>
 
 const useGetStreamHook = _ =>
   function(path) {
-    const isHookMounted = React.useRef(true); // becomes 'false' after the hook is unmounted to avoid performing any async actions afterwards
     const [data, setData] = React.useState([]);
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(null);
@@ -79,13 +78,7 @@ const useGetStreamHook = _ =>
     const { fromConfig } = useConfig();
 
     const fetchData = async () => {
-      if (!authData || !isHookMounted.current) return;
       setLoading(true);
-
-      function processError(error) {
-        console.error(error);
-        setError(error);
-      }
 
       try {
         const urlToFetchFrom = baseUrl(fromConfig) + path;
@@ -93,8 +86,8 @@ const useGetStreamHook = _ =>
           headers: createHeaders(authData, cluster),
         })
           .then(response => response.body)
-          .then(rb => {
-            const reader = rb.getReader();
+          .then(body => {
+            const reader = body.getReader();
 
             return new ReadableStream({
               start(controller) {
@@ -115,7 +108,7 @@ const useGetStreamHook = _ =>
                       .filter(stream => stream !== '');
 
                     setData(previousData => [...previousData, ...streams]);
-                    push();
+                    return push();
                   });
                 }
 
@@ -123,18 +116,18 @@ const useGetStreamHook = _ =>
               },
             });
           });
-        return data;
+        setLoading(false);
       } catch (e) {
-        processError(e);
+        console.error(error);
+        setError(error);
       }
     };
 
     React.useEffect(() => {
-      isHookMounted.current = true;
-      if (authData) fetchData();
-      setLoading(false);
+      let isHookMounted = true;
+      if (authData && isHookMounted) fetchData();
       return _ => {
-        isHookMounted.current = false;
+        isHookMounted = false;
       };
     }, [path, authData]);
 
