@@ -69,7 +69,7 @@ export function fetchBusolaInitData(auth) {
 }
 
 export function fetchNamespaces(auth) {
-  return failFastFetch(`${config.backendApiUrl}/api/v1/namespaces/`, token)
+  return failFastFetch(`${config.backendApiUrl}/api/v1/namespaces/`, auth)
     .then((res) => res.json())
     .then((list) => list.items.map((ns) => ns.metadata));
 }
