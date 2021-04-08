@@ -56,7 +56,7 @@ const PodsCircle = ({ namespace }) => {
       loading={loading}
       error={error}
       title="Pods"
-      color="blue"
+      color="var(--fd-color-accent-3)"
     />
   );
 };
@@ -74,7 +74,7 @@ const DeploymentsCircle = ({ namespace }) => {
       loading={loading}
       error={error}
       title="Deployments"
-      color="green"
+      color="var(--fd-color-accent-4)"
     />
   );
 };
@@ -92,7 +92,7 @@ const ReplicaSetsCircle = ({ namespace }) => {
       loading={loading}
       error={error}
       title="Replica Sets"
-      color="purple"
+      color="var(--fd-color-accent-5)"
     />
   );
 };
