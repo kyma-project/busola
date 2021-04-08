@@ -32,8 +32,51 @@ export default function CreateServiceBindingModal({
       pollingInterval: 3000,
     },
   );
+  const { data: servicePlans } = useGetList()(
+    `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${lambda.metadata.namespace}/serviceplans`,
+    {
+      pollingInterval: 3000,
+    },
+  );
 
-  const instancesNotBound = serviceInstances?.filter(isNotAlreadyUsed) || [];
+  const { data: clusterServicePlans } = useGetList()(
+    `/apis/servicecatalog.k8s.io/v1beta1/clusterserviceplans`,
+    {
+      pollingInterval: 3000,
+    },
+  );
+
+  const getInstancesWithBindableData = instance => {
+    const planRefFieldName = instance.spec.clusterServicePlanRef
+      ? 'clusterServicePlanRef'
+      : instance.spec.servicePlanRef
+      ? 'servicePlanRef'
+      : null;
+    const plans = instance.spec.clusterServicePlanRef
+      ? clusterServicePlans
+      : servicePlans;
+
+    const plan =
+      plans?.find(p =>
+        planRefFieldName
+          ? p.metadata.name === instance.spec[planRefFieldName].name
+          : false,
+      ) || {};
+
+    return {
+      ...instance,
+      isBindable: plan?.spec?.bindable || false,
+    };
+  };
+
+  const instancesWithBindableData =
+    serviceInstances?.map(getInstancesWithBindableData) || [];
+
+  const instancesBindable =
+    instancesWithBindableData.filter(
+      serviceInstance => serviceInstance.isBindable,
+    ) || [];
+  const instancesNotBound = instancesBindable?.filter(isNotAlreadyUsed) || [];
   const hasAnyInstances = !!instancesNotBound.length;
 
   let fallbackContent = null;
