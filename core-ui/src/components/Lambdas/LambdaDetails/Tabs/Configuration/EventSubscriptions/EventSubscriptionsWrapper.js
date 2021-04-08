@@ -9,7 +9,7 @@ import {
 
 export default function EventSubscriptionsWrapper({ lambda }) {
   const subscriptionsUrl = `/apis/eventing.kyma-project.io/v1alpha1/namespaces/${lambda.metadata.namespace}/subscriptions`;
-  console.log('subscription wrapper');
+
   const ownerRef = {
     apiVersion: SERVERLESS_API_VERSION,
     kind: SERVERLESS_RESOURCE_KIND,

@@ -8,6 +8,7 @@ import { randomNamesGenerator } from '@kyma-project/common';
 import { createSubscriptionInput } from './createSubscriptionInput';
 
 const textSearchProperties = ['metadata.name', 'spec.protocol']; //TODO add filtering by eventType
+const EVENT_TYPE_PREFIX = 'sap.kyma.custom.';
 
 export default function EventSubscriptions({
   subscriptions = [],
@@ -32,7 +33,7 @@ export default function EventSubscriptions({
       namespace,
       ownerRef,
       sink,
-      eventType,
+      EVENT_TYPE_PREFIX + eventType,
     );
 
     try {
