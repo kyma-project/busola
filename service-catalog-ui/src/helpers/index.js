@@ -47,7 +47,6 @@ export function isAddon(labels) {
 }
 
 export function isService(labels) {
-  console.log('labels', labels, !labels || labels.local !== 'true');
   return !labels || labels.local !== 'true';
 }
 
