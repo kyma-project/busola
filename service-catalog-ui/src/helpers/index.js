@@ -50,24 +50,10 @@ export function isService(labels) {
   return !labels || labels.local !== 'true';
 }
 
-function getServiceClass(instance) {
-  return instance.serviceClass
-    ? instance.serviceClass
-    : instance.clusterServiceClass;
-}
-
 export function isAddonInstance(instance) {
-  const serviceClass = getServiceClass(instance);
-  if (!serviceClass) {
-    return true;
-  }
-  return serviceClass.labels && serviceClass.labels.local === 'true';
+  return isAddon(instance.metadata.labels);
 }
 
 export function isServiceInstance(instance) {
-  const serviceClass = getServiceClass(instance);
-  if (!serviceClass) {
-    return false;
-  }
-  return !serviceClass.labels || serviceClass.labels.local !== 'true';
+  return isService(instance.metadata.labels);
 }
