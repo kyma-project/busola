@@ -7,6 +7,10 @@ export const ServiceInstanceStatus = ({ instance }) => {
   const lastCondition =
     instance.status?.conditions[instance.status?.conditions.length - 1];
 
+  if (!lastCondition) {
+    return null;
+  }
+
   if (
     instance.status?.lastConditionState === 'Ready' &&
     instance.status?.provisionStatus === 'Provisioned'

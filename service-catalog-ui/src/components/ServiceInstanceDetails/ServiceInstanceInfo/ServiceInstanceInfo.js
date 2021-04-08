@@ -1,11 +1,9 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
+import { Link, PageHeader } from 'react-shared';
+
 import { getResourceDisplayName } from 'helpers';
 import { serviceInstanceConstants } from 'helpers/constants';
-
-import { Link, PageHeader } from 'react-shared';
-import './ServiceInstanceInfo.scss';
-
 import { ServiceInstanceStatus } from '../../../shared/ServiceInstanceStatus.js';
 import InstanceParametersModal from './InstanceParametersModal';
 

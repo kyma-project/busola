@@ -1,19 +1,32 @@
 import React from 'react';
-
 import { ThemeWrapper } from '@kyma-project/react-components';
-
 import {
   Spinner,
   useGet,
   useMicrofrontendContext,
   ResourceNotFound,
 } from 'react-shared';
-
 import ServiceInstanceHeader from './ServiceInstanceHeader/ServiceInstanceHeader';
-// import ServiceInstanceBindings from './ServiceInstanceBindings/ServiceInstanceBindings.container';
-// import { serviceInstanceConstants } from 'helpers/constants';
+import ServiceInstanceBindings from './ServiceInstanceBindings/ServiceInstanceBindings';
+import { EmptyList } from './styled';
+import { SERVICE_BINDINGS_PANEL } from './ServiceInstanceBindings/constants';
 
-import { ServiceInstanceWrapper, EmptyList } from './styled';
+const ServiceInstanceBindingsWrapper = ({
+  serviceInstance,
+  servicePlanRef,
+}) => {
+  const planUrl = servicePlanRef?.isClusterWide
+    ? `/apis/servicecatalog.k8s.io/v1beta1/clusterserviceplans/${servicePlanRef.ref}`
+    : `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${serviceInstance.metadata.namespace}/serviceplans/${servicePlanRef.ref}`;
+
+  const { data: servicePlan } = useGet(planUrl, { skip: !servicePlanRef.ref });
+  if (!servicePlan) return null;
+  return servicePlan.spec.bindable ? (
+    <ServiceInstanceBindings serviceInstance={serviceInstance} />
+  ) : (
+    <EmptyList>{SERVICE_BINDINGS_PANEL.NOT_BINDABLE}</EmptyList>
+  );
+};
 
 export default function ServiceInstanceDetails({ match }) {
   const { namespaceId } = useMicrofrontendContext();
@@ -31,13 +44,7 @@ export default function ServiceInstanceDetails({ match }) {
       </EmptyList>
     );
 
-  if (loading || !serviceInstance) {
-    return (
-      <EmptyList>
-        <Spinner />
-      </EmptyList>
-    );
-  }
+  if (loading || !serviceInstance) return <Spinner />;
 
   if (!serviceInstance) {
     return (
@@ -50,7 +57,7 @@ export default function ServiceInstanceDetails({ match }) {
     );
   }
 
-  const servicePlan = {
+  const servicePlanRef = {
     ref:
       serviceInstance.spec.servicePlanRef?.name ||
       serviceInstance.spec.clusterServicePlanRef?.name,
@@ -64,22 +71,14 @@ export default function ServiceInstanceDetails({ match }) {
     <ThemeWrapper>
       <ServiceInstanceHeader
         serviceInstance={serviceInstance}
-        servicePlan={servicePlan}
-        // deleteServiceInstance={deleteServiceInstanceMutation}
+        servicePlan={servicePlanRef}
       />
-      <ServiceInstanceWrapper>
-        {/* // <ServiceInstanceBindings
-          //   defaultActiveTabIndex={serviceInstanceConstants.addonsIndex}
-          //   serviceInstance={serviceInstance}
-          // /> */}
-
-        {/* {serviceClass && backendModuleExists('rafter') && ( // this was used to display the documentation
-          <ServiceInstanceTabs
-            serviceClass={serviceClass}
-            currentPlan={serviceInstance.servicePlan}
-          />
-        )} */}
-      </ServiceInstanceWrapper>
+      {serviceInstance && servicePlanRef && (
+        <ServiceInstanceBindingsWrapper
+          serviceInstance={serviceInstance}
+          servicePlanRef={servicePlanRef}
+        />
+      )}
     </ThemeWrapper>
   );
 }

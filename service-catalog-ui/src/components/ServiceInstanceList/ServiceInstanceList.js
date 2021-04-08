@@ -19,8 +19,8 @@ import { Identifier } from 'fundamental-react';
 import { serviceInstanceConstants } from 'helpers/constants';
 import { determineDisplayedInstances } from 'helpers/search';
 
-import ServiceInstanceTable from './ServiceInstanceTable/ServiceInstanceTable.component';
-import ServiceInstanceToolbar from './ServiceInstanceToolbar/ServiceInstanceToolbar.component';
+import ServiceInstanceTable from './ServiceInstanceTable/ServiceInstanceTable';
+import ServiceInstanceToolbar from './ServiceInstanceToolbar/ServiceInstanceToolbar';
 
 import {
   EmptyList,
