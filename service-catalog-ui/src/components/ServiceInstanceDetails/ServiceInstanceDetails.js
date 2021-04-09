@@ -14,14 +14,22 @@ import { SERVICE_BINDINGS_PANEL } from './ServiceInstanceBindings/constants';
 const ServiceInstanceBindingsWrapper = ({
   serviceInstance,
   servicePlanRef,
+  serviceClassRef,
 }) => {
   const planUrl = servicePlanRef?.isClusterWide
     ? `/apis/servicecatalog.k8s.io/v1beta1/clusterserviceplans/${servicePlanRef.ref}`
     : `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${serviceInstance.metadata.namespace}/serviceplans/${servicePlanRef.ref}`;
 
   const { data: servicePlan } = useGet(planUrl, { skip: !servicePlanRef.ref });
-  if (!servicePlan) return null;
-  return servicePlan.spec.bindable ? (
+  const classUrl = servicePlanRef?.isClusterWide
+    ? `/apis/servicecatalog.k8s.io/v1beta1/clusterserviceclasses/${serviceClassRef.ref}`
+    : `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${serviceInstance.metadata.namespace}/serviceclasses/${serviceClassRef.ref}`;
+  const { data: serviceClass } = useGet(classUrl, {
+    skip: !serviceClassRef.ref,
+  });
+
+  if (!servicePlan || !serviceClass) return null;
+  return servicePlan.spec.bindable || serviceClass.spec.bindable ? (
     <ServiceInstanceBindings serviceInstance={serviceInstance} />
   ) : (
     <EmptyList>{SERVICE_BINDINGS_PANEL.NOT_BINDABLE}</EmptyList>
@@ -67,6 +75,15 @@ export default function ServiceInstanceDetails({ match }) {
     isClusterWide: !!serviceInstance.spec.clusterServicePlanExternalName,
   };
 
+  const serviceClassRef = {
+    ref:
+      serviceInstance.spec.serviceClassRef?.name ||
+      serviceInstance.spec.clusterServiceClassRef?.name,
+    externalName:
+      serviceInstance.spec.serviceClassExternalName ||
+      serviceInstance.spec.clusterServiceClassExternalName,
+  };
+
   return (
     <ThemeWrapper>
       <ServiceInstanceHeader
@@ -77,6 +94,7 @@ export default function ServiceInstanceDetails({ match }) {
         <ServiceInstanceBindingsWrapper
           serviceInstance={serviceInstance}
           servicePlanRef={servicePlanRef}
+          serviceClassRef={serviceClassRef}
         />
       )}
     </ThemeWrapper>
