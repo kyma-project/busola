@@ -67,7 +67,8 @@ export const communication = {
     },
     'busola.showTokenExpirationWarning': () => {
       Luigi.ux().showAlert({
-        text: 'Your session is about to expire. Save your work and refresh the page to extend your session.',
+        text:
+          'Your session is about to expire. Save your work and refresh the page to extend your session.',
         type: 'warning',
       });
     },
