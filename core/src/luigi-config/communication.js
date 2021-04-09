@@ -1,6 +1,4 @@
-import { relogin, getToken } from './navigation/navigation-helpers';
 import { NODE_PARAM_PREFIX } from './luigi-config';
-import { config } from './config';
 import { saveInitParams, getInitParams } from './init-params';
 
 export const communication = {
@@ -66,6 +64,20 @@ export const communication = {
         window.document.title,
         pathname + newParamsString
       );
+    },
+    'busola.showTokenExpirationWarning': () => {
+      const settings = {
+        header: 'Your session is about to expire in 2 minutes',
+        body: 'Save your work and refresh the page to extend your session.',
+        buttonConfirm: 'Refresh now',
+        buttonDismiss: 'Cancel',
+      };
+      Luigi.ux()
+        .showConfirmationModal(settings)
+        .then(() => {
+          location.reload();
+        })
+        .catch(() => {}); // cancel
     },
   },
 };
