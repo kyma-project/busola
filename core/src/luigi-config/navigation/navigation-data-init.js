@@ -78,7 +78,7 @@ export function getNavigationData(authData) {
             window.location.pathname = '/nopermissions.html';
           } else {
             Luigi.ux().showAlert({
-              text: `Config init error: ${err}`,
+              text: `Could not load initial configuration: ${err.message}`,
               type: 'error',
             });
             console.warn(err);
@@ -132,7 +132,7 @@ async function getNamespaces() {
     namespaces = await fetchNamespaces(getAuthData());
   } catch (e) {
     Luigi.ux().showAlert({
-      text: `Cannot fetch namespaces: ${e}`,
+      text: `Cannot fetch namespaces: ${e.message}`,
       type: 'error',
     });
     return [];
