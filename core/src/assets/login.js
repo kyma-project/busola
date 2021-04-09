@@ -36,11 +36,12 @@ function toggleError(isVisible) {
   document.querySelector('#error').style.display = isVisible ? 'block' : 'none';
 }
 
-async function onKubeconfigUploaded(e) {
+async function onKubeconfigUploaded(file) {
+  document.querySelector('#file-name').textContent = file.name;
   toggleError(false);
   toggleOIDCForm(false);
   try {
-    const kk = jsyaml.load(await readFile(e.target.files[0]));
+    const kk = jsyaml.load(await readFile(file));
     cluster = {
       server: kk.clusters[0].cluster.server,
       'certificate-authority-data':
@@ -81,7 +82,26 @@ function onOidcFormSubmit(e) {
 
 document
   .querySelector('#upload-kubeconfig')
-  .addEventListener('change', onKubeconfigUploaded);
+  .addEventListener('change', (e) => onKubeconfigUploaded(e.target.files[0]));
 document
   .querySelector('#oidc-form')
   .addEventListener('submit', onOidcFormSubmit);
+
+const dropArea = document.querySelector('#file-input');
+const dragOverClass = 'file-input-drag-over';
+dropArea.addEventListener('dragenter', () =>
+  dropArea.classList.add(dragOverClass)
+);
+dropArea.addEventListener('dragleave', () =>
+  dropArea.classList.remove(dragOverClass)
+);
+dropArea.addEventListener('dragover', (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+});
+dropArea.addEventListener('drop', (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  dropArea.classList.remove(dragOverClass);
+  onKubeconfigUploaded(e.dataTransfer.files[0]);
+});
