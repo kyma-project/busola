@@ -46,7 +46,6 @@ function bytesToHumanReadable(bytesNumber) {
   let output = bytesNumber;
   Object.entries(MEMORY_SUFFIX_POWER).forEach(([suffix, power]) => {
     const value = bytesNumber / power;
-    // console.log(power, value);
     if (value >= 1)
       output =
         Math.round((value + Number.EPSILON) * 100) / 100 +
@@ -63,7 +62,7 @@ const MemoryRequestsCircle = ({ resourceQuotas, isLoading }) => {
     return <Spinner />;
   }
 
-  const totalLimits = resourceQuotas.reduce(
+  const totalRequests = resourceQuotas.reduce(
     (sum, quota) => sum + getBytes(quota.status.hard['requests.memory']), //should we sum it or take the max number?
     0,
   );
@@ -72,15 +71,13 @@ const MemoryRequestsCircle = ({ resourceQuotas, isLoading }) => {
     0,
   );
 
-  console.log(resourceQuotas);
-
   return (
     <CircleProgress
       color="var(--fd-color-accent-1)"
       value={totalUsage}
       valueText={bytesToHumanReadable(totalUsage)}
-      max={totalLimits}
-      maxText={bytesToHumanReadable(totalLimits)}
+      max={totalRequests}
+      maxText={bytesToHumanReadable(totalRequests)}
       title="Memory requests"
     />
   );
@@ -121,9 +118,6 @@ export const ResourcesUsage = ({ namespace }) => {
       pollingInterval: 3300,
     },
   );
-
-  const { data } = useGet('/apis/metrics.k8s.io/');
-  console.log('data');
 
   return (
     <Panel className="fd-has-margin-m">
