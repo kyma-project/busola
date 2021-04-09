@@ -86,10 +86,10 @@
         width: 300px;
         height: 80px;
         border-radius: 8px;
-        margin: 16px auto;
+        margin: 0 auto;
         border: 1px dashed #89919a;
         color: #0a6ed1;
-        font-size: small;
+        cursor: pointer;
       }
 
       .file-input i {
@@ -102,6 +102,7 @@
 
       #file-name {
         margin: 0;
+        font-size: small;
       }
     </style>
     <script
@@ -126,7 +127,7 @@
             </div>
 
             <div class="fd-form-item">
-              <div id="file-input" class="file-input">
+              <label id="file-input" class="file-input" for="upload-kubeconfig">
                 <i
                   class="fd-object-status__icon sap-icon--upload"
                   role="presentation"
@@ -134,13 +135,8 @@
                 </i>
                 Drag file here
                 <p id="file-name"></p>
-              </div>
+              </label>
               <input type="file" id="upload-kubeconfig" class="input--hidden" />
-              <label
-                class="fd-button fd-button--emphasized"
-                for="upload-kubeconfig"
-                >Choose a file</label
-              >
             </div>
             <div class="fd-form-item fd-has-text-align-center">
               <div class="info" id="headline"></div>
