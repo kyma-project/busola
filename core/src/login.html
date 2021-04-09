@@ -1,135 +1,155 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Login to Busola</title>
-    <meta name="description" content="" />
-    <meta name="keywords" content="logout" />
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <link rel="stylesheet" href="/assets/luigi-core/luigi.css" />
-    <style type="text/css">
-      .fd-page {
-        height: 100vh;
-      }
-      .fd-page__content {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 100vh;
-      }
-      .fd-has-text-align-center {
-        text-align: center;
-      }
-      .info,
-      .hint {
-        text-align: center;
-        margin: 0;
-      }
-      .info {
-        padding-top: 30px;
-        font-size: 36px;
-      }
-      .hint {
-        font-size: 18px;
-        color: #6f7275;
-        padding-bottom: 30px;
-      }
-      .icon {
-        font-size: 2.5em;
-        color: #0b74de;
-      }
-      i {
-        font-style: normal;
-      }
-      #oidc-form,
-      #error {
-        margin-top: 16px;
-      }
-      .fd-object-status {
-        margin-bottom: 8px;
-      }
-    </style>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.0.0/js-yaml.js"
-      integrity="sha512-LcHBP6wEG9wiB9l6Ok0oHj/OiepnKTPKSIlIy9I21LPhfNFAQzEJVeEJ2sXYFK8p4V/UR+1/pTHo4Cw1yPK7NA=="
-      crossorigin="anonymous"
-      defer
-    ></script>
-  </head>
-  <body>
-    <div class="fd-ui fd-ui--fundamental">
-      <div class="fd-page">
-        <div class="fd-page__content">
-          <section class="fd-section">
-            <div class="fd-has-text-align-center">
-              <i class="icon sap-icon--account" role="presentation"></i>
-              <div class="info" id="headline">Login to Busola</div>
-              <div class="hint" id="message">
-                Upload your kubeconfig file to login
-              </div>
+  <title>Login to Busola</title>
+  <meta name="description" content="" />
+  <meta name="keywords" content="logout" />
+
+  <link rel="stylesheet" href="/assets/luigi-core/luigi.css" />
+  <style type="text/css">
+    .fd-page {
+      height: 100vh;
+    }
+
+    .fd-page__content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .fd-has-text-align-center {
+      text-align: center;
+    }
+
+    .fd-has-margin-top-xxs {
+      margin-top: 8px !important
+    }
+
+    .fd-has-height-large {
+      height: 48px !important
+    }
+
+    .info,
+    .hint {
+      text-align: center;
+      margin: 0;
+    }
+
+    .info {
+      padding-top: 30px;
+      font-size: 36px;
+    }
+
+    .hint {
+      font-size: 18px;
+      color: #6f7275;
+      padding-bottom: 30px;
+    }
+
+    .icon {
+      font-size: 2.5em;
+      color: #0b74de;
+    }
+
+    i {
+      font-style: normal;
+    }
+
+    #oidc-form,
+    #error {
+      margin-top: 16px;
+    }
+
+    .fd-object-status {
+      margin-bottom: 8px;
+    }
+
+    .input--hidden {
+      width: 0.1px;
+      height: 0.1px;
+      opacity: 0;
+      overflow: hidden;
+      position: absolute;
+      z-index: -1;
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.0.0/js-yaml.js"
+    integrity="sha512-LcHBP6wEG9wiB9l6Ok0oHj/OiepnKTPKSIlIy9I21LPhfNFAQzEJVeEJ2sXYFK8p4V/UR+1/pTHo4Cw1yPK7NA=="
+    crossorigin="anonymous" defer></script>
+</head>
+
+<body>
+  <div class="fd-ui fd-ui--fundamental">
+    <div class="fd-page">
+      <div class="fd-page__content">
+        <section class="fd-section">
+          <div class="fd-has-text-align-center">
+            <i class="icon sap-icon--account" role="presentation"></i>
+            <div class="info" id="headline">Login to Busola</div>
+            <div class="hint" id="message">
+              Upload your kubeconfig file to login
             </div>
-            <div class="fd-form-item">
-              <input type="file" id="upload-kubeconfig" />
+          </div>
+
+          <div class="fd-form-item">
+            <input type="file" id="upload-kubeconfig" class="input--hidden" />
+            <label class="fd-button fd-button--emphasized" for="upload-kubeconfig">Choose a file</label>
+          </div>
+          <div class="fd-form-item fd-has-text-align-center">
+            <div class="info" id="headline"></div>
+            <div class="hint" id="message">or</div>
+
+          </div>
+          <div class="fd-form-item">
+            <div class="fd-input-group">
+              <textarea type="file" id="paste-kubeconfig"
+                class="fd-textarea fd-input-group__input fd-has-height-large"></textarea>
             </div>
-            <div
-              id="error"
-              style="display: none"
-              class="fd-object-status fd-object-status--critical"
-            >
-              <i
-                class="fd-object-status__icon sap-icon--message-error"
-                role="presentation"
-              ></i>
+
+            <button type="button" id="paste-kubeconfig"
+              class="fd-button fd-button--emphasized fd-has-margin-top-xxs">Apply
+              kubeconfig</button>
+          </div>
+
+          <div id="error" style="display: none" class="fd-object-status fd-object-status--critical">
+            <i class="fd-object-status__icon sap-icon--message-error" role="presentation"></i>
+            <span class="fd-object-status__text">
+              Error reading kubeconfig.
+            </span>
+          </div>
+          <form id="oidc-form" style="display: none">
+            <div class="fd-object-status fd-object-status--critical">
+              <i class="fd-object-status__icon sap-icon--message-warning" role="presentation"></i>
               <span class="fd-object-status__text">
-                Error reading kubeconfig.
+                It looks like your kubeconfig is incomplete. Please fill the
+                additional fields.
               </span>
             </div>
-            <form id="oidc-form" style="display: none">
-              <div class="fd-object-status fd-object-status--critical">
-                <i
-                  class="fd-object-status__icon sap-icon--message-warning"
-                  role="presentation"
-                ></i>
-                <span class="fd-object-status__text">
-                  It looks like your kubeconfig is incomplete. Please fill the
-                  additional fields.
-                </span>
+            <div class="fd-has-text-align-center">
+              <div class="fd-form-item">
+                <label class="fd-form-label" for="issuer-url">
+                  Issuer URL
+                </label>
+                <input class="fd-input" type="text" id="issuer-url" placeholder="Enter issuer URL" />
               </div>
-              <div class="fd-has-text-align-center">
-                <div class="fd-form-item">
-                  <label class="fd-form-label" for="issuer-url">
-                    Issuer URL
-                  </label>
-                  <input
-                    class="fd-input"
-                    type="text"
-                    id="issuer-url"
-                    placeholder="Enter issuer URL"
-                  />
-                </div>
-                <div class="fd-form-item">
-                  <label class="fd-form-label" for="client-id">Client ID</label>
-                  <input
-                    class="fd-input"
-                    type="text"
-                    id="client-id"
-                    placeholder="Enter client ID"
-                  />
-                </div>
-                <button class="fd-button--emphasized">Connect</button>
+              <div class="fd-form-item">
+                <label class="fd-form-label" for="client-id">Client ID</label>
+                <input class="fd-input" type="text" id="client-id" placeholder="Enter client ID" />
               </div>
-            </form>
-          </section>
-        </div>
+              <button class="fd-button--emphasized">Connect</button>
+            </div>
+          </form>
+        </section>
       </div>
     </div>
-    <script
-      type="text/javascript"
-      charset="utf-8"
-      src="assets/login.js"
-    ></script>
-  </body>
+  </div>
+  <script type="text/javascript" charset="utf-8" src="assets/login.js"></script>
+</body>
+
 </html>
