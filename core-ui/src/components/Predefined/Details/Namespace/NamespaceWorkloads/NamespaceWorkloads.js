@@ -3,7 +3,7 @@ import LuigiClient from '@luigi-project/client';
 import PropTypes from 'prop-types';
 
 import { Panel, LayoutGrid, Icon } from 'fundamental-react';
-import { useGetList, Spinner, CircleProgress, useGet } from 'react-shared';
+import { useGetList, Spinner, CircleProgress } from 'react-shared';
 
 import {
   getHealthyStatusesCount,

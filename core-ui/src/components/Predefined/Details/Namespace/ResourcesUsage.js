@@ -1,13 +1,10 @@
 import React from 'react';
-import LuigiClient from '@luigi-project/client';
-import PropTypes from 'prop-types';
-import { camelCase } from 'lodash';
 
 import { Panel, LayoutGrid, Icon } from 'fundamental-react';
-import { useGetList, useGet, Spinner, CircleProgress } from 'react-shared';
+import { useGetList, Spinner, CircleProgress } from 'react-shared';
 
 const MEMORY_SUFFIX_POWER = {
-  // must be sorted from the smallest to the largest
+  // must be sorted from the smallest to the largest; it is case sensitive; more info: https://medium.com/swlh/understanding-kubernetes-resource-cpu-and-memory-units-30284b3cc866
   m: 1e-3,
   K: 1e3,
   Ki: 2 ** 10,
@@ -112,7 +109,7 @@ const MemoryLimitsCircle = ({ resourceQuotas, isLoading }) => {
 };
 
 export const ResourcesUsage = ({ namespace }) => {
-  const { data: resourceQuotas, error, loading = true } = useGetList()(
+  const { data: resourceQuotas, loading = true } = useGetList()(
     `/api/v1/namespaces/${namespace}/resourcequotas`,
     {
       pollingInterval: 3300,

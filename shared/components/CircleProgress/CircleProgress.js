@@ -16,7 +16,6 @@ export const CircleProgress = ({
   const containerClasses = classNames(`circle__container`, {
     'cursor-pointer': !!onClick,
   });
-
   const percent = max ? Math.round((value * 100) / max) : 0;
 
   const text = valueText + '/' + maxText;
@@ -26,7 +25,6 @@ export const CircleProgress = ({
     width: size + 'px',
     height: size + 'px',
   };
-
   const valueIndicatorStyle = {
     backgroundImage: `conic-gradient(transparent ${100 -
       percent}%, ${color} 0)`, // we have to prepare it here to avoid using styledComponents
