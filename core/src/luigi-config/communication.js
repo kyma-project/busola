@@ -66,11 +66,18 @@ export const communication = {
       );
     },
     'busola.showTokenExpirationWarning': () => {
-      Luigi.ux().showAlert({
-        text:
-          'Your session is about to expire. Save your work and refresh the page to extend your session.',
-        type: 'warning',
-      });
+      const settings = {
+        header: 'Your session is about to expire in 2 minutes',
+        body: 'Save your work and refresh the page to extend your session.',
+        buttonConfirm: 'Refresh now',
+        buttonDismiss: 'Cancel',
+      };
+      Luigi.ux()
+        .showConfirmationModal(settings)
+        .then(() => {
+          location.reload();
+        })
+        .catch(() => {}); // cancel
     },
     'busola.refreshMainFrame': () => {
       location.reload();
