@@ -3,7 +3,7 @@ import LuigiClient from '@luigi-project/client';
 import PropTypes from 'prop-types';
 import { camelCase } from 'lodash';
 
-import { Panel, LayoutGrid } from 'fundamental-react';
+import { Panel, LayoutGrid, Icon } from 'fundamental-react';
 import { useGetList, useGet, Spinner, CircleProgress } from 'react-shared';
 
 const MEMORY_SUFFIX_POWER = {
@@ -73,7 +73,7 @@ const MemoryRequestsCircle = ({ resourceQuotas, isLoading }) => {
 
   return (
     <CircleProgress
-      color="var(--fd-color-accent-1)"
+      color="var(--fd-color-accent-2)"
       value={totalUsage}
       valueText={bytesToHumanReadable(totalUsage)}
       max={totalRequests}
@@ -101,7 +101,7 @@ const MemoryLimitsCircle = ({ resourceQuotas, isLoading }) => {
 
   return (
     <CircleProgress
-      color="var(--fd-color-accent-2)"
+      color="var(--fd-color-accent-1)"
       value={totalUsage}
       valueText={bytesToHumanReadable(totalUsage)}
       max={totalLimits}
@@ -120,8 +120,9 @@ export const ResourcesUsage = ({ namespace }) => {
   );
 
   return (
-    <Panel className="fd-has-margin-m">
+    <Panel>
       <Panel.Header>
+        <Icon size="m" className="fd-has-margin-right-small" glyph="it-host" />
         <Panel.Head title="Resource consumption" />
       </Panel.Header>
       <Panel.Body className="namespace-workloads__body">

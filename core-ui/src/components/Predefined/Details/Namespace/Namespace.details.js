@@ -1,11 +1,10 @@
 import React from 'react';
-
-import { Panel, LayoutGrid } from 'fundamental-react';
 import { getComponentForList } from 'shared/getComponents';
 import DeployNewWorkload from './DeployNewWorkload';
 import { NamespaceStatus } from './NamespaceStatus';
 import { NamespaceWorkloads } from './NamespaceWorkloads/NamespaceWorkloads';
 import { ResourcesUsage } from './ResourcesUsage';
+import './Namespace.details.scss';
 
 export const NamespacesDetails = DefaultRenderer => ({ ...otherParams }) => {
   const limitRangesParams = {
@@ -79,8 +78,10 @@ export const NamespacesDetails = DefaultRenderer => ({ ...otherParams }) => {
       customColumns={customColumns}
       headerActions={headerActions}
     >
-      <NamespaceWorkloads namespace={otherParams.resourceName} />
-      <ResourcesUsage namespace={otherParams.resourceName} />
+      <div className="panel-grid">
+        <NamespaceWorkloads namespace={otherParams.resourceName} />
+        <ResourcesUsage namespace={otherParams.resourceName} />
+      </div>
       {LimitrangesList}
       {ResourceQuotasList}
       {ApplicationMappings}

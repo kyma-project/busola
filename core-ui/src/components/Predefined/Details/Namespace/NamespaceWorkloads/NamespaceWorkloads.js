@@ -2,7 +2,7 @@ import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import PropTypes from 'prop-types';
 
-import { Panel, LayoutGrid } from 'fundamental-react';
+import { Panel, LayoutGrid, Icon } from 'fundamental-react';
 import { useGetList, Spinner, CircleProgress, useGet } from 'react-shared';
 
 import {
@@ -56,7 +56,7 @@ const PodsCircle = ({ namespace }) => {
       loading={loading}
       error={error}
       title="Pods"
-      color="var(--fd-color-accent-3)"
+      color="var(--fd-color-accent-5)"
     />
   );
 };
@@ -92,15 +92,20 @@ const ReplicaSetsCircle = ({ namespace }) => {
       loading={loading}
       error={error}
       title="Replica Sets"
-      color="var(--fd-color-accent-5)"
+      color="var(--fd-color-accent-3)"
     />
   );
 };
 
 export function NamespaceWorkloads({ namespace }) {
   return (
-    <Panel className="fd-has-margin-m">
+    <Panel>
       <Panel.Header>
+        <Icon
+          size="m"
+          className="fd-has-margin-right-small"
+          glyph="stethoscope"
+        />
         <Panel.Head title="Healthy Resources" />
       </Panel.Header>
       <Panel.Body className="namespace-workloads__body">
