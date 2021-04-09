@@ -79,9 +79,6 @@ export const communication = {
         })
         .catch(() => {}); // cancel
     },
-    'busola.refreshMainFrame': () => {
-      location.reload();
-    },
   },
 };
 

@@ -15,9 +15,6 @@ export function checkForTokenExpiration(idToken) {
       LuigiClient.sendCustomMessage({
         id: 'busola.showTokenExpirationWarning',
       });
-    } else if (secondsLeft < 0) {
-      // we cannot run parent.location.reload() here
-      LuigiClient.sendCustomMessage({ id: 'busola.refreshMainFrame' });
     }
   } catch (_) {} // ignore errors from non-JWT tokens
 }
