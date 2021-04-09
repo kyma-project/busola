@@ -132,7 +132,10 @@
 
             <div class="fd-form-item">
               <label id="file-input" class="file-input" for="upload-kubeconfig">
-                <i class="fd-object-status__icon sap-icon--upload" role="presentation">
+                <i
+                  class="fd-object-status__icon sap-icon--upload"
+                  role="presentation"
+                >
                 </i>
                 Drag file here
                 <p id="file-name"></p>
@@ -147,24 +150,41 @@
               </div>
               <div class="fd-form-item">
                 <div class="fd-input-group">
-                  <textarea type="file" id="textarea-kubeconfig" class="fd-textarea fd-input-group__input"></textarea>
+                  <textarea
+                    type="file"
+                    id="textarea-kubeconfig"
+                    class="fd-textarea fd-input-group__input"
+                  ></textarea>
                 </div>
 
-                <button id="apply-kubeconfig" class="fd-button fd-button--emphasized fd-has-margin-top-s">
+                <button
+                  id="apply-kubeconfig"
+                  class="fd-button fd-button--emphasized fd-has-margin-top-s"
+                >
                   Apply kubeconfig
                 </button>
               </div>
             </form>
 
-            <div id="error" style="display: none" class="fd-object-status fd-object-status--critical">
-              <i class="fd-object-status__icon sap-icon--message-error" role="presentation"></i>
+            <div
+              id="error"
+              style="display: none"
+              class="fd-object-status fd-object-status--critical"
+            >
+              <i
+                class="fd-object-status__icon sap-icon--message-error"
+                role="presentation"
+              ></i>
               <span class="fd-object-status__text">
                 Error reading kubeconfig.
               </span>
             </div>
             <form id="oidc-form" style="display: none">
               <div class="fd-object-status fd-object-status--critical">
-                <i class="fd-object-status__icon sap-icon--message-warning" role="presentation"></i>
+                <i
+                  class="fd-object-status__icon sap-icon--message-warning"
+                  role="presentation"
+                ></i>
                 <span class="fd-object-status__text">
                   It looks like your kubeconfig is incomplete. Please fill the
                   additional fields.
@@ -175,14 +195,28 @@
                   <label class="fd-form-label" for="issuer-url">
                     Issuer URL
                   </label>
-                  <input class="fd-input" type="text" id="issuer-url" placeholder="Enter issuer URL" />
+                  <input
+                    class="fd-input"
+                    type="text"
+                    id="issuer-url"
+                    placeholder="Enter issuer URL"
+                  />
                 </div>
                 <div class="fd-form-item">
                   <label class="fd-form-label" for="client-id">Client ID</label>
-                  <input class="fd-input" type="text" id="client-id" placeholder="Enter client ID" />
+                  <input
+                    class="fd-input"
+                    type="text"
+                    id="client-id"
+                    placeholder="Enter client ID"
+                  />
                 </div>
                 <div class="fd-form-item">
-                  <button class="fd-button fd-button--emphasized fd-has-margin-top-s">Connect</button>
+                  <button
+                    class="fd-button fd-button--emphasized fd-has-margin-top-s"
+                  >
+                    Connect
+                  </button>
                 </div>
               </div>
             </form>
@@ -190,6 +224,10 @@
         </div>
       </div>
     </div>
-    <script type="text/javascript" charset="utf-8" src="assets/login.js"></script>
+    <script
+      type="text/javascript"
+      charset="utf-8"
+      src="assets/login.js"
+    ></script>
   </body>
 </html>

@@ -85,7 +85,7 @@ function handleKubeconfig(kubeconfig, type) {
     toggleError(true);
     console.warn(e);
   }
-};
+}
 
 async function onKubeconfigPasted(kubeconfig, type) {
   toggleError(false);
@@ -130,7 +130,7 @@ function onOidcFormSubmit(e) {
 function onTextareaFormSubmit(e) {
   e.preventDefault();
   const kubeconfig = document.querySelector('#textarea-kubeconfig').value;
-  onKubeconfigPasted(kubeconfig, true)
+  onKubeconfigPasted(kubeconfig, true);
 }
 
 document
