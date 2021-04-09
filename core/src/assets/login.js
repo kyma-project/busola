@@ -32,22 +32,35 @@ function toggleOIDCForm(isVisible) {
     : 'none';
 }
 
+function toggleTextAreaForm(isVisible) {
+  document.querySelector('#textarea-form').style.display = isVisible
+    ? 'block'
+    : 'none';
+}
+function toggleFileInput(isVisible) {
+  document.querySelector('#file-input').style.display = isVisible
+    ? 'block'
+    : 'none';
+}
+
+function toggleOrText(isVisible) {
+  document.querySelector('#or-text').style.display = isVisible
+    ? 'block'
+    : 'none';
+}
+
 function toggleError(isVisible) {
   document.querySelector('#error').style.display = isVisible ? 'block' : 'none';
 }
 
-async function onKubeconfigUploaded(file) {
-  document.querySelector('#file-name').textContent = file.name;
-  toggleError(false);
-  toggleOIDCForm(false);
+function handleKubeconfig(kubeconfig, type) {
   try {
-    const kk = jsyaml.load(await readFile(file));
     cluster = {
-      server: kk.clusters[0].cluster.server,
+      server: kubeconfig.clusters[0].cluster.server,
       'certificate-authority-data':
-        kk.clusters[0].cluster['certificate-authority-data'],
+        kubeconfig.clusters[0].cluster['certificate-authority-data'],
     };
-    const user = kk.users[0].user;
+    const user = kubeconfig.users[0].user;
     const token = user.token;
     const clientCA = user['client-certificate-data'];
     const clientKeyData = user['client-key-data'];
@@ -62,7 +75,41 @@ async function onKubeconfigUploaded(file) {
       });
     } else {
       toggleOIDCForm(true);
+      if (type != 'textarea') toggleTextAreaForm(false);
+      if (type != 'file') {
+        toggleFileInput(false);
+        toggleOrText(false);
+      }
     }
+  } catch (e) {
+    toggleError(true);
+    console.warn(e);
+  }
+};
+
+async function onKubeconfigPasted(kubeconfig, type) {
+  toggleError(false);
+  toggleOIDCForm(false);
+  toggleTextAreaForm(true);
+  toggleOrText(true);
+  try {
+    const kk = jsyaml.load(kubeconfig);
+    handleKubeconfig(kk, 'textarea');
+  } catch (e) {
+    toggleError(true);
+    console.warn(e);
+  }
+}
+
+async function onKubeconfigUploaded(file) {
+  document.querySelector('#file-name').textContent = file.name;
+  toggleError(false);
+  toggleOIDCForm(false);
+  toggleTextAreaForm(true);
+  toggleOrText(true);
+  try {
+    const kk = jsyaml.load(await readFile(file));
+    handleKubeconfig(kk, 'file');
   } catch (e) {
     toggleError(true);
     console.warn(e);
@@ -80,12 +127,21 @@ function onOidcFormSubmit(e) {
   saveInitParams({ cluster, auth });
 }
 
+function onTextareaFormSubmit(e) {
+  e.preventDefault();
+  const kubeconfig = document.querySelector('#textarea-kubeconfig').value;
+  onKubeconfigPasted(kubeconfig, true)
+}
+
 document
   .querySelector('#upload-kubeconfig')
   .addEventListener('change', (e) => onKubeconfigUploaded(e.target.files[0]));
 document
   .querySelector('#oidc-form')
   .addEventListener('submit', onOidcFormSubmit);
+document
+  .querySelector('#textarea-form')
+  .addEventListener('submit', onTextareaFormSubmit);
 
 const dropArea = document.querySelector('#file-input');
 const dragOverClass = 'file-input-drag-over';
