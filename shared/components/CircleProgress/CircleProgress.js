@@ -13,14 +13,14 @@ export const CircleProgress = ({
   onClick,
   title,
 }) => {
-  const containerClasses = classNames(`circle__container`, {
-    'cursor-pointer': !!onClick,
-  });
   const percent = max ? Math.round((value * 100) / max) : 0;
 
   const text = valueText + '/' + maxText;
   const textSize = (1.18 / Math.max(4, text.length)) * size + 'px'; // scale the text dynamically basing on a magic number which makes it look good
 
+  const circleProgressClasses = classNames(`circle-progress`, {
+    'cursor-pointer': !!onClick,
+  });
   const containerStyle = {
     width: size + 'px',
     height: size + 'px',
@@ -47,9 +47,9 @@ export const CircleProgress = ({
   };
 
   return (
-    <div className="circle-progress" onClick={onClick}>
-      <span className="cursor-pointer">{title}</span>
-      <div className={containerClasses} style={containerStyle}>
+    <div className={circleProgressClasses} onClick={onClick}>
+      <span>{title}</span>
+      <div className="circle__container" style={containerStyle}>
         <div className="background" style={backgroundStyle}></div>
         <div className="value-indicator" style={valueIndicatorStyle}></div>
         <div className="inner-area">
