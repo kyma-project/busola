@@ -35,14 +35,28 @@ export default function CreateServiceBindingModal({
   const { data: servicePlans } = useGetList()(
     `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${lambda.metadata.namespace}/serviceplans`,
     {
-      pollingInterval: 3000,
+      pollingInterval: 6000,
     },
   );
 
   const { data: clusterServicePlans } = useGetList()(
     `/apis/servicecatalog.k8s.io/v1beta1/clusterserviceplans`,
     {
-      pollingInterval: 3000,
+      pollingInterval: 6000,
+    },
+  );
+
+  const { data: serviceClasses } = useGetList()(
+    `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${lambda.metadata.namespace}/serviceclasses`,
+    {
+      pollingInterval: 6000,
+    },
+  );
+
+  const { data: clusterServiceclasses } = useGetList()(
+    `/apis/servicecatalog.k8s.io/v1beta1/clusterserviceclasses`,
+    {
+      pollingInterval: 6000,
     },
   );
 
@@ -63,9 +77,25 @@ export default function CreateServiceBindingModal({
           : false,
       ) || {};
 
+    const classRefFieldName = instance.spec.clusterServiceClassRef
+      ? 'clusterServiceClassRef'
+      : instance.spec.serviceClassRef
+      ? 'serviceClassRef'
+      : null;
+    const classes = instance.spec.clusterServiceClassRef
+      ? clusterServiceclasses
+      : serviceClasses;
+
+    const serviceClass =
+      classes?.find(p =>
+        classRefFieldName
+          ? p.metadata.name === instance.spec[classRefFieldName].name
+          : false,
+      ) || {};
+
     return {
       ...instance,
-      isBindable: plan?.spec?.bindable || false,
+      isBindable: plan?.spec?.bindable || serviceClass?.spec?.bindable || false,
     };
   };
 
