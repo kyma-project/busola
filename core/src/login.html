@@ -68,6 +68,15 @@
       .fd-object-status {
         margin-bottom: 8px;
       }
+      .fd-object-status--error,
+      .fd-object-status--error i {
+        color: #b00;
+      }
+
+      .fd-object-status--warning,
+      .fd-object-status--warning i {
+        color: #e9730c;
+      }
 
       .input--hidden {
         width: 0.1px;
@@ -86,6 +95,7 @@
         width: 300px;
         height: 80px;
         border-radius: 8px;
+        background: #ffffff;
         margin: 0 auto;
         border: 1px dashed #89919a;
         color: #0a6ed1;
@@ -108,6 +118,10 @@
       #textarea-kubeconfig {
         min-height: 150px;
       }
+
+      #back-button i {
+        color: #0854a0;
+      }
     </style>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.0.0/js-yaml.js"
@@ -129,7 +143,19 @@
                 Upload your kubeconfig file to login
               </div>
             </div>
-
+            <div>
+              <button
+                id="back-button"
+                style="display: none"
+                class="fd-button fd-button--transparent"
+              >
+                <i
+                  class="fd-object-status__icon sap-icon--arrow-left"
+                  role="presentation"
+                ></i>
+                Back
+              </button>
+            </div>
             <div class="fd-form-item">
               <label id="file-input" class="file-input" for="upload-kubeconfig">
                 <i
@@ -144,7 +170,7 @@
             </div>
 
             <form id="textarea-form">
-              <div id="or-text" class="fd-form-item fd-has-text-align-center">
+              <div class="fd-form-item fd-has-text-align-center">
                 <div class="info" id="headline"></div>
                 <div class="hint" id="message">or</div>
               </div>
@@ -153,6 +179,7 @@
                   <textarea
                     type="file"
                     id="textarea-kubeconfig"
+                    placeholder="Paste your config"
                     class="fd-textarea fd-input-group__input"
                   ></textarea>
                 </div>
@@ -169,7 +196,7 @@
             <div
               id="error"
               style="display: none"
-              class="fd-object-status fd-object-status--critical"
+              class="fd-object-status fd-object-status--error"
             >
               <i
                 class="fd-object-status__icon sap-icon--message-error"
@@ -180,7 +207,7 @@
               </span>
             </div>
             <form id="oidc-form" style="display: none">
-              <div class="fd-object-status fd-object-status--critical">
+              <div class="fd-object-status fd-object-status--warning">
                 <i
                   class="fd-object-status__icon sap-icon--message-warning"
                   role="presentation"

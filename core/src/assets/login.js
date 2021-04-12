@@ -32,19 +32,17 @@ function toggleOIDCForm(isVisible) {
     : 'none';
 }
 
-function toggleTextAreaForm(isVisible) {
+function toggleConfigForm(isVisible) {
   document.querySelector('#textarea-form').style.display = isVisible
     ? 'block'
     : 'none';
-}
-function toggleFileInput(isVisible) {
   document.querySelector('#file-input').style.display = isVisible
-    ? 'block'
+    ? 'flex'
     : 'none';
 }
 
-function toggleOrText(isVisible) {
-  document.querySelector('#or-text').style.display = isVisible
+function toggleBackButton(isVisible) {
+  document.querySelector('#back-button').style.display = isVisible
     ? 'block'
     : 'none';
 }
@@ -53,6 +51,12 @@ function toggleError(isVisible) {
   document.querySelector('#error').style.display = isVisible ? 'block' : 'none';
 }
 
+function displayInitialView() {
+  toggleError(false);
+  toggleOIDCForm(false);
+  toggleConfigForm(true);
+  toggleBackButton(false);
+}
 function handleKubeconfig(kubeconfig, type) {
   try {
     cluster = {
@@ -75,11 +79,8 @@ function handleKubeconfig(kubeconfig, type) {
       });
     } else {
       toggleOIDCForm(true);
-      if (type != 'textarea') toggleTextAreaForm(false);
-      if (type != 'file') {
-        toggleFileInput(false);
-        toggleOrText(false);
-      }
+      toggleConfigForm(false);
+      toggleBackButton(true);
     }
   } catch (e) {
     toggleError(true);
@@ -88,10 +89,7 @@ function handleKubeconfig(kubeconfig, type) {
 }
 
 async function onKubeconfigPasted(kubeconfig, type) {
-  toggleError(false);
-  toggleOIDCForm(false);
-  toggleTextAreaForm(true);
-  toggleOrText(true);
+  displayInitialView();
   try {
     const kk = jsyaml.load(kubeconfig);
     handleKubeconfig(kk, 'textarea');
@@ -103,10 +101,7 @@ async function onKubeconfigPasted(kubeconfig, type) {
 
 async function onKubeconfigUploaded(file) {
   document.querySelector('#file-name').textContent = file.name;
-  toggleError(false);
-  toggleOIDCForm(false);
-  toggleTextAreaForm(true);
-  toggleOrText(true);
+  displayInitialView();
   try {
     const kk = jsyaml.load(await readFile(file));
     handleKubeconfig(kk, 'file');
@@ -132,6 +127,10 @@ function onTextareaFormSubmit(e) {
   const kubeconfig = document.querySelector('#textarea-kubeconfig').value;
   onKubeconfigPasted(kubeconfig, true);
 }
+function onGoBack(e) {
+  e.preventDefault();
+  displayInitialView();
+}
 
 document
   .querySelector('#upload-kubeconfig')
@@ -142,6 +141,7 @@ document
 document
   .querySelector('#textarea-form')
   .addEventListener('submit', onTextareaFormSubmit);
+document.querySelector('#back-button').addEventListener('click', onGoBack);
 
 const dropArea = document.querySelector('#file-input');
 const dragOverClass = 'file-input-drag-over';
