@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Panel, Breadcrumb } from 'fundamental-react';
+import { Panel, Breadcrumb, Link } from 'fundamental-react';
 import './PageHeader.scss';
 import LuigiClient from '@luigi-project/client';
 
@@ -50,14 +50,16 @@ export const PageHeader = ({
             <Breadcrumb>
               {breadcrumbItems.map(item => {
                 return (
-                  <Breadcrumb.Item
+                  <span
+                    className="link"
                     aria-label="breadcrumb-item"
                     key={item.name}
-                    name={item.name}
-                    url="#"
                     onClick={() => performOnClick(item)}
-                  />
+                  >
+                    {item.name}
+                  </span>
                 );
+                //todo: add slash
               })}
             </Breadcrumb>
           </section>
