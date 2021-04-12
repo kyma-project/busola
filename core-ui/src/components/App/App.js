@@ -1,25 +1,14 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 import Preferences from 'components/Preferences/Preferences';
-
 import { PREFERENCES_TITLE } from '../../shared/constants';
-import {
-  withTitle,
-  ComponentFor,
-  ResourcesList,
-  ResourceDetails,
-} from 'react-shared';
+import { withTitle } from 'react-shared';
 import CreateApiRule from '../ApiRules/CreateApiRule/CreateApiRule';
 import EditApiRule from 'components/ApiRules/EditApiRule/EditApiRule';
-// import {
-//   getComponentForList,
-//   getComponentForDetails,
-// } from 'shared/getComponents';
-
-import * as PredefinedRenderers from 'components/Predefined';
-
+import { ComponentForList, ComponentForDetails } from 'shared/getComponents';
 import { API_RULES_TITLE } from 'shared/constants';
+
 export default function App() {
   return (
     <Switch>
@@ -70,7 +59,7 @@ function RoutedResourcesList({ match }) {
     setQueryParams(new URLSearchParams(window.location.search));
   }, [window.location.search]);
 
-  if (!queryParams) return null;
+  if (!queryParams) return null; //query params not initialized yet, waiting for the useEffect hook to kick in
 
   // replace for npx routing
   const resourceUrl =
@@ -89,13 +78,11 @@ function RoutedResourcesList({ match }) {
   const rendererNameForCreate = params.resourceType + 'Create';
 
   return (
-    <ComponentFor
-      PredefinedRenderersCollection={PredefinedRenderers}
-      GenericRenderer={ResourcesList}
+    <ComponentForList
       name={rendererName}
       params={params}
       nameForCreate={rendererNameForCreate}
-    ></ComponentFor>
+    />
   );
 }
 
@@ -104,11 +91,14 @@ function RoutedResourceDetails({ match }) {
   useEffect(() => {
     setQueryParams(new URLSearchParams(window.location.search));
   }, [window.location.search]);
-  if (!queryParams) return null;
+
+  if (!queryParams) return null; //query params not initialized yet, waiting for the useEffect hook to kick in
+
   // replace for npx routing
   const resourceUrl =
     queryParams.get('resourceApiPath') +
     window.location.pathname.toLocaleLowerCase().replace(/^\/core-ui/, '');
+
   const decodedResourceUrl = decodeURIComponent(resourceUrl);
   const decodedResourceName = decodeURIComponent(match.params.resourceName);
 
@@ -122,12 +112,5 @@ function RoutedResourceDetails({ match }) {
 
   const rendererName = params.resourceType + 'Details';
 
-  return (
-    <ComponentFor
-      PredefinedRenderersCollection={PredefinedRenderers}
-      GenericRenderer={ResourceDetails}
-      name={rendererName}
-      params={params}
-    ></ComponentFor>
-  );
+  return <ComponentForDetails name={rendererName} params={params} />;
 }

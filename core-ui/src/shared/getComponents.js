@@ -1,12 +1,20 @@
-// import { getComponentFor, ResourcesList, ResourceDetails } from 'react-shared';
-// import * as PredefinedRenderers from 'components/Predefined';
+import React from 'react';
 
-// export const getComponentForList = getComponentFor(
-//   PredefinedRenderers,
-//   ResourcesList,
-// );
+import { ComponentFor, ResourcesList, ResourceDetails } from 'react-shared';
+import * as PredefinedRenderers from 'components/Predefined';
 
-// export const getComponentForDetails = getComponentFor(
-//   PredefinedRenderers,
-//   ResourceDetails,
-// );
+export const ComponentForList = props => (
+  <ComponentFor
+    PredefinedRenderersCollection={PredefinedRenderers}
+    GenericRenderer={ResourcesList}
+    {...props}
+  />
+);
+
+export const ComponentForDetails = props => (
+  <ComponentFor
+    PredefinedRenderersCollection={PredefinedRenderers}
+    GenericRenderer={ResourceDetails}
+    {...props}
+  />
+);
