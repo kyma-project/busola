@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 function findByName(object, propertyName) {
   return object[
@@ -8,21 +8,23 @@ function findByName(object, propertyName) {
   ];
 }
 
-export const getComponentFor = (
+export const ComponentFor = ({
   PredefinedRenderersCollection,
   GenericRenderer,
-) =>
-  function renderComponent({
+  ...componentProps
+}) => {
+  const {
     name,
     params,
     nameForCreate,
     defaultRenderer = GenericRenderer,
-  }) {
-    const predefined = findByName(PredefinedRenderersCollection, name);
-    const Renderer = predefined ? predefined(defaultRenderer) : defaultRenderer;
-    const CreateFormRenderer = nameForCreate
-      ? findByName(PredefinedRenderersCollection, nameForCreate) || null
-      : null;
+  } = componentProps;
 
-    return <Renderer createResourceForm={CreateFormRenderer} {...params} />;
-  };
+  const predefined = findByName(PredefinedRenderersCollection, name);
+  const Renderer = predefined ? predefined(defaultRenderer) : defaultRenderer;
+  const CreateFormRenderer = nameForCreate
+    ? findByName(PredefinedRenderersCollection, nameForCreate) || null
+    : null;
+
+  return <Renderer createResourceForm={CreateFormRenderer} {...params} />;
+};
