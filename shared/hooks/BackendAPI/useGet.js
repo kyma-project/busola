@@ -42,23 +42,29 @@ const useGetHook = processDataFn =>
       if (!isSilent && isHookMounted.current) setLoading(false);
     };
 
-    React.useEffect(() => {
-      // POLLING
-      if (!pollingInterval) return;
+    // React.useEffect(() => {
+    //   // POLLING
+    //   if (!pollingInterval) return;
 
-      const intervalId = setInterval(refetch(true, data), pollingInterval);
-      return _ => clearInterval(intervalId);
-    }, [path, pollingInterval, data]);
+    //   const intervalId = setInterval(refetch(true, data), pollingInterval);
+    //   return _ => clearInterval(intervalId);
+    // }, [path, pollingInterval, data]);
 
     React.useEffect(() => {
       // INITIAL FETCH
-      isHookMounted.current = true;
       if (authData) refetch(false, null)();
+
       return _ => {
         if (loading) setLoading(false);
-        isHookMounted.current = false;
       };
     }, [path, authData]);
+
+    React.useEffect(() => {
+      isHookMounted.current = true;
+      return _ => {
+        isHookMounted.current = false;
+      };
+    }, []);
 
     return {
       data,
