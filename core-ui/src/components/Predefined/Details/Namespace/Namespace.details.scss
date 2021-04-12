@@ -6,4 +6,8 @@
   .fd-panel {
     margin: 0;
   }
+
+  @media screen and (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
 }

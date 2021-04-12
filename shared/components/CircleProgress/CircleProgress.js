@@ -48,7 +48,7 @@ export const CircleProgress = ({
 
   return (
     <div className={circleProgressClasses} onClick={onClick}>
-      <span>{title}</span>
+      <span className="title">{title}</span>
       <div className="circle__container" style={containerStyle}>
         <div className="background" style={backgroundStyle}></div>
         <div className="value-indicator" style={valueIndicatorStyle}></div>
