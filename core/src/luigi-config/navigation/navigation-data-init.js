@@ -74,15 +74,14 @@ export function getNavigationData(authData) {
         },
         (err) => {
           if (err.json) {
-          err.json().then( errorResponse => {
-
+            err.json().then( errorResponse => {
             if (errorResponse.code === 403) {
-                clearAuthData();
-                window.location = `/nopermissions.html?error=${errorResponse.message}`;
+              clearAuthData();
+              window.location = `/nopermissions.html?error=${errorResponse.message}`;
             } else {
-               let errorNotification = "Could not load initial configuration";
-               if(errorResponse.reason) errorNotification += `: ${errorResponse.reason}`;
-               if(errorResponse.code) errorNotification += ` (${errorResponse.code})`;
+              let errorNotification = "Could not load initial configuration";
+              if (errorResponse.reason) errorNotification += `: ${errorResponse.reason}`;
+              if (errorResponse.code) errorNotification += ` (${errorResponse.code})`;
               errorResponse.code
                 Luigi.ux().showAlert({
                   text: errorNotification,
