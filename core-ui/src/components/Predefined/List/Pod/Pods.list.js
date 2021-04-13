@@ -1,10 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { PodStatus } from '../../Details/Pod/PodStatus';
 import PodRestarts from './PodRestarts';
-import { ResourcesList } from 'react-shared';
 
-export const PodsList = ({ ...otherParams }) => {
-  // console.log('PodList render');
+export const PodsList = DefaultRenderer => ({ ...otherParams }) => {
   const customColumns = [
     {
       header: 'Status',
@@ -16,5 +14,5 @@ export const PodsList = ({ ...otherParams }) => {
     },
   ];
 
-  return <ResourcesList customColumns={customColumns} {...otherParams} />;
+  return <DefaultRenderer customColumns={customColumns} {...otherParams} />;
 };

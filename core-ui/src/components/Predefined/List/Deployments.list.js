@@ -1,6 +1,5 @@
 import React from 'react';
 import { StatusBadge } from 'react-shared';
-import { ResourcesList } from 'react-shared';
 
 const getImages = deployment => {
   const images =
@@ -28,7 +27,7 @@ const getPodsCount = deployment => {
   }`;
 };
 
-export const DeploymentsList = ({ ...otherParams }) => {
+export const DeploymentsList = DefaultRenderer => ({ ...otherParams }) => {
   const customColumns = [
     {
       header: 'Images',
@@ -56,5 +55,5 @@ export const DeploymentsList = ({ ...otherParams }) => {
     },
   ];
 
-  return <ResourcesList customColumns={customColumns} {...otherParams} />;
+  return <DefaultRenderer customColumns={customColumns} {...otherParams} />;
 };

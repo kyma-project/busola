@@ -1,6 +1,4 @@
-import React, { useEffect, useRef } from 'react';
-// import { ResourcesList } from 'react-shared';
-import { useGet } from '../hooks';
+import React from 'react';
 
 function findByName(object, propertyName) {
   return object[
@@ -15,7 +13,6 @@ export const ComponentFor = ({
   GenericRenderer,
   ...componentProps
 }) => {
-  const lastPredefined = useRef(null);
   const {
     name,
     params,
@@ -23,18 +20,11 @@ export const ComponentFor = ({
     defaultRenderer = GenericRenderer,
   } = componentProps;
 
-  const Predefined = findByName(PredefinedRenderersCollection, name);
-  // console.log(
-  //   'is PRedefined equal to last ref',
-  //   Predefined === lastPredefined.current,
-  // );
-
-  lastPredefined.current = Predefined;
-
-  // const Renderer = predefined || defaultRenderer;
+  const predefined = findByName(PredefinedRenderersCollection, name);
+  const Renderer = predefined ? predefined(defaultRenderer) : defaultRenderer;
   const CreateFormRenderer = nameForCreate
     ? findByName(PredefinedRenderersCollection, nameForCreate) || null
     : null;
 
-  return <Predefined {...params} />;
+  return <Renderer createResourceForm={CreateFormRenderer} {...params} />;
 };
