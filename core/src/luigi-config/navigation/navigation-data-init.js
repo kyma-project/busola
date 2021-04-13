@@ -73,16 +73,18 @@ export function getNavigationData(authData) {
           return res;
         },
         (err) => {
-          if (err === 'access denied') {
-            clearAuthData();
-            window.location.pathname = '/nopermissions.html';
-          } else {
-            Luigi.ux().showAlert({
-              text: `Could not load initial configuration: ${err.message}`,
-              type: 'error',
-            });
-            console.warn(err);
-          }
+          err.json().then( errorResponse => {
+            if (errorResponse.code === 403) {
+                clearAuthData();
+                window.location = `/nopermissions.html?error=${errorResponse.message}`;
+            } else {
+                Luigi.ux().showAlert({
+                  text: `Could not load initial configuration: ${errorResponse.reason} (${errorResponse.code})`,
+                  type: 'error',
+                });
+                console.warn(errorResponse.message);
+            }
+          })
         }
       )
       // 'Finally' not supported by IE and FIREFOX (if 'finally' is needed, update your .babelrc)
