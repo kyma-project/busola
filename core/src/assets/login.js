@@ -57,7 +57,7 @@ function displayInitialView() {
   toggleConfigForm(true);
   toggleBackButton(false);
 }
-function handleKubeconfig(kubeconfig, type) {
+function handleKubeconfigAdded(kubeconfig, type) {
   try {
     cluster = {
       server: kubeconfig.clusters[0].cluster.server,
@@ -91,8 +91,8 @@ function handleKubeconfig(kubeconfig, type) {
 async function onKubeconfigPasted(kubeconfig, type) {
   displayInitialView();
   try {
-    const kk = jsyaml.load(kubeconfig);
-    handleKubeconfig(kk, 'textarea');
+    const kubeconfigParsed = jsyaml.load(kubeconfig);
+    handleKubeconfigAdded(kubeconfigParsed, 'textarea');
   } catch (e) {
     toggleError(true);
     console.warn(e);
@@ -103,8 +103,8 @@ async function onKubeconfigUploaded(file) {
   document.querySelector('#file-name').textContent = file.name;
   displayInitialView();
   try {
-    const kk = jsyaml.load(await readFile(file));
-    handleKubeconfig(kk, 'file');
+    const kubeconfigParsed = jsyaml.load(await readFile(file));
+    handleKubeconfigAdded(kubeconfigParsed, 'file');
   } catch (e) {
     toggleError(true);
     console.warn(e);
