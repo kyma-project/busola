@@ -12,7 +12,6 @@ import { API_RULES_TITLE } from 'shared/constants';
 export default function App() {
   return (
     <Switch>
-      <Route path="/preload" component={() => null} />
       <Route
         path="/preferences"
         render={withTitle(PREFERENCES_TITLE, Preferences)}
@@ -36,7 +35,6 @@ export default function App() {
       <Route
         exact
         path="/namespaces/:namespaceId/:resourceType"
-        // component={RoutedResourcesList}
         component={RoutedResourcesList}
       />
       <Route
@@ -49,17 +47,20 @@ export default function App() {
   );
 }
 
+const A = ({ match }) => {
+  useEffect(() => {
+    console.log('A mounted');
+    return () => console.log('A unmounted');
+  }, []);
+  return 'abc';
+};
+
 function RoutedEditApiRule({ match }) {
   return <EditApiRule apiName={match.params.apiName} />;
 }
 
-function RoutedResourcesList({ match }) {
-  const [queryParams, setQueryParams] = useState(null);
-  useEffect(() => {
-    setQueryParams(new URLSearchParams(window.location.search));
-  }, [window.location.search]);
-
-  if (!queryParams) return null; //query params not initialized yet, waiting for the useEffect hook to kick in
+const RoutedResourcesList = ({ match }) => {
+  const queryParams = new URLSearchParams(window.location.search);
 
   // replace for npx routing
   const resourceUrl =
@@ -84,15 +85,10 @@ function RoutedResourcesList({ match }) {
       nameForCreate={rendererNameForCreate}
     />
   );
-}
+};
 
 function RoutedResourceDetails({ match }) {
-  const [queryParams, setQueryParams] = useState(null);
-  useEffect(() => {
-    setQueryParams(new URLSearchParams(window.location.search));
-  }, [window.location.search]);
-
-  if (!queryParams) return null; //query params not initialized yet, waiting for the useEffect hook to kick in
+  const queryParams = new URLSearchParams(window.location.search);
 
   // replace for npx routing
   const resourceUrl =
