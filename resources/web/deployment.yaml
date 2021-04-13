@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: busola
-          image: eu.gcr.io/kyma-project/busola-core:3276c41e
+          image: eu.gcr.io/kyma-project/busola-core:PR-86
           imagePullPolicy: Always
           resources:
             # limits:
