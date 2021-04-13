@@ -140,7 +140,8 @@ export default function CreateLambdaForm({
     removeError(ERRORS.BASE_DIR);
   }
 
-  async function handleSubmit() {
+  async function handleSubmit(e) {
+    e.preventDefault();
     let inputData = {
       labels,
       runtime,

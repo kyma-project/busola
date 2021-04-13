@@ -24,7 +24,8 @@ export default function CreateWorkloadForm({
   );
   const notification = useNotification();
 
-  const handleFormSubmit = async () => {
+  const handleFormSubmit = async e => {
+    e.preventDefault();
     let createdResource = null;
     try {
       createdResource = await postRequest(
