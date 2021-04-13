@@ -52,16 +52,17 @@ const useGetHook = processDataFn =>
 
     React.useEffect(() => {
       // INITIAL FETCH
-      if (authData) refetch(false, null)();
-
+      refetch(false, null)();
       return _ => {
         if (loading) setLoading(false);
       };
-    }, [path, authData]);
+    }, [path]);
 
     React.useEffect(() => {
+      console.log('useGet is mounted');
       isHookMounted.current = true;
       return _ => {
+        console.log('useGet is dismounted');
         isHookMounted.current = false;
       };
     }, []);
