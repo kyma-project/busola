@@ -74,24 +74,25 @@ export function getNavigationData(authData) {
         },
         (err) => {
           if (err.json) {
-            err.json().then( errorResponse => {
-            if (errorResponse.code === 403) {
-              clearAuthData();
-              window.location = `/nopermissions.html?error=${errorResponse.message}`;
-            } else {
-              let errorNotification = "Could not load initial configuration";
-              if (errorResponse.reason) errorNotification += `: ${errorResponse.reason}`;
-              if (errorResponse.code) errorNotification += ` (${errorResponse.code})`;
-              errorResponse.code
+            err.json().then(errorResponse => {
+              if (errorResponse.code === 403) {
+                clearAuthData();
+                window.location = `/nopermissions.html?error=${errorResponse.message}`;
+              } else {
+                let errorNotification = 'Could not load initial configuration';
+                if (errorResponse.reason)
+                  errorNotification += `: ${errorResponse.reason}`;
+                if (errorResponse.code)
+                  errorNotification += ` (${errorResponse.code})`;
                 Luigi.ux().showAlert({
                   text: errorNotification,
                   type: 'error',
                 });
                 console.warn(errorResponse.message);
-            }
-          })
-        }
-        }
+              }
+            });
+          }
+        },
       )
       // 'Finally' not supported by IE and FIREFOX (if 'finally' is needed, update your .babelrc)
       .then((res) => {

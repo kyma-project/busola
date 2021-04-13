@@ -32,7 +32,7 @@ export async function failFastFetch(input, auth, init = {}) {
   if (response.ok) {
     return response;
   } else {
-    throw response
+    throw response;
   }
 }
 
