@@ -51,7 +51,7 @@ function RoutedEditApiRule({ match }) {
   return <EditApiRule apiName={match.params.apiName} />;
 }
 
-const RoutedResourcesList = ({ match }) => {
+function RoutedResourcesList({ match }) {
   const queryParams = new URLSearchParams(window.location.search);
 
   // replace for npx routing
@@ -77,7 +77,7 @@ const RoutedResourcesList = ({ match }) => {
       nameForCreate={rendererNameForCreate}
     />
   );
-};
+}
 
 function RoutedResourceDetails({ match }) {
   const queryParams = new URLSearchParams(window.location.search);
