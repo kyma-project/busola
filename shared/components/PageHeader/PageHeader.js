@@ -45,11 +45,11 @@ export const PageHeader = ({
   <Panel className="page-header">
     <Panel.Header>
       <section className="header-wrapper">
-        {breadcrumbItems.length ? (
-          <section className="fd-has-margin-bottom-s">
+        {breadcrumbItems.length && (
+          <section>
             <Breadcrumb>
-              {breadcrumbItems.map(item => {
-                return (
+              {breadcrumbItems.map((item, index) =>
+                item.name ? (
                   <span
                     className="link"
                     aria-label="breadcrumb-item"
@@ -58,13 +58,18 @@ export const PageHeader = ({
                   >
                     {item.name}
                   </span>
-                );
-                //todo: add slash
-              })}
+                ) : (
+                  <span
+                    key={index}
+                    className="fd-has-margin-left-tiny fd-has-margin-right-tiny"
+                  >
+                    /
+                  </span>
+                ),
+              )}
             </Breadcrumb>
           </section>
-        ) : null}
-
+        )}
         <Panel.Head title={title} aria-label="title" />
         {/* don't use Panel.Head's description, as it accepts only strings */}
         {description && <p className="description">{description}</p>}
