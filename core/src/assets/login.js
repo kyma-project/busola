@@ -122,7 +122,7 @@ function onOidcFormSubmit(e) {
   const auth = {
     issuerUrl,
     clientId: document.querySelector('#client-id').value,
-    scope: 'openid',
+    scope: document.querySelector('#scopes').value,
     responseType: 'id_token',
   };
   saveInitParams({ cluster, auth });
