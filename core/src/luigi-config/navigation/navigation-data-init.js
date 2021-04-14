@@ -20,7 +20,7 @@ import {
 import { groups } from '../auth';
 import { getInitParams, clearInitParams } from '../init-params';
 
-const customLogoutFn =() => {
+const customLogoutFn = () => {
   clearInitParams();
   window.location = '/logout.html';
 };

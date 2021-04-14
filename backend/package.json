@@ -17,6 +17,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@babel/runtime": "^7.13.10",
     "@kubernetes/client-node": "^0.12.3",
     "cors": "^2.8.5",
     "express": "^4.17.1",
