@@ -52,9 +52,7 @@ const useGetHook = processDataFn =>
 
     React.useEffect(() => {
       // INITIAL FETCH
-
-      if (lastAuthData.current) refetch(false, null)();
-
+      if (lastAuthData.current && path) refetch(false, null)();
       return _ => {
         if (loading) setLoading(false);
       };
