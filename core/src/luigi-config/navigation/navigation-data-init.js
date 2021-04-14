@@ -74,7 +74,7 @@ export function getNavigationData(authData) {
         },
         (err) => {
           if (err.json) {
-            err.json().then(errorResponse => {
+            err.json().then((errorResponse) => {
               if (errorResponse.code === 403) {
                 clearAuthData();
                 window.location = `/nopermissions.html?error=${errorResponse.message}`;
@@ -92,7 +92,7 @@ export function getNavigationData(authData) {
               }
             });
           }
-        },
+        }
       )
       // 'Finally' not supported by IE and FIREFOX (if 'finally' is needed, update your .babelrc)
       .then((res) => {
