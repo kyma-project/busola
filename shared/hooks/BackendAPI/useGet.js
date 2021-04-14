@@ -6,6 +6,7 @@ import { useFetch } from './useFetch';
 const useGetHook = processDataFn =>
   function(path, { pollingInterval, onDataReceived, skip } = {}) {
     const isHookMounted = React.useRef(true); // becomes 'false' after the hook is unmounted to avoid performing any async actions afterwards
+    const lastAuthData = React.useRef(null);
     const [data, setData] = React.useState(null);
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(null);
@@ -13,8 +14,7 @@ const useGetHook = processDataFn =>
     const fetch = useFetch();
 
     const refetch = (isSilent, currentData) => async () => {
-      if (skip) return;
-      if (!isHookMounted.current) return;
+      if (skip || !authData || !isHookMounted.current) return;
       if (!isSilent) setLoading(true);
 
       function processError(error) {
@@ -40,20 +40,33 @@ const useGetHook = processDataFn =>
     React.useEffect(() => {
       // POLLING
       if (!pollingInterval) return;
-
       const intervalId = setInterval(refetch(true, data), pollingInterval);
       return _ => clearInterval(intervalId);
     }, [path, pollingInterval, data]);
 
     React.useEffect(() => {
       // INITIAL FETCH
-      isHookMounted.current = true;
-      if (authData) refetch(false, null)();
+      if (lastAuthData.current && path) refetch(false, null)();
       return _ => {
         if (loading) setLoading(false);
+      };
+    }, [path]);
+
+    React.useEffect(() => {
+      if (JSON.stringify(lastAuthData.current) != JSON.stringify(authData)) {
+        // authData reference is updated multiple times during the route change but the value stays the same (see MicrofrontendContext).
+        // To avoid unnecessary refetch(), we 'cache' the last value and do the refetch only if there was an actual change
+        lastAuthData.current = authData;
+        refetch(false, null)();
+      }
+    }, [authData]);
+
+    React.useEffect(() => {
+      isHookMounted.current = true;
+      return _ => {
         isHookMounted.current = false;
       };
-    }, [path, authData]);
+    }, []);
 
     return {
       data,
