@@ -70,7 +70,7 @@ const MemoryRequestsCircle = ({ resourceQuotas, isLoading }) => {
 
   return (
     <CircleProgress
-      color="var(--fd-color-accent-2)"
+      color="var(--fd-color-accent-4)"
       value={totalUsage}
       valueText={bytesToHumanReadable(totalUsage)}
       max={totalRequests}
@@ -99,7 +99,7 @@ const MemoryLimitsCircle = ({ resourceQuotas, isLoading }) => {
 
   return (
     <CircleProgress
-      color="var(--fd-color-accent-1)"
+      color="var(--fd-color-accent-3)"
       value={totalUsage}
       valueText={bytesToHumanReadable(totalUsage)}
       max={totalLimits}
