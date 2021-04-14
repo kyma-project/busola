@@ -145,13 +145,14 @@ export default function CreateInstanceForm({
     (instanceCreateParameterSchema.$ref ||
       instanceCreateParameterSchema.properties);
 
-  async function createInstance({ name, namespace, inputData }) {
+  async function createInstance({ name, namespace, labels, inputData }) {
     const input = {
       apiVersion: 'servicecatalog.k8s.io/v1beta1',
       kind: 'ServiceInstance',
       metadata: {
         name,
         namespace,
+        labels,
       },
       spec: inputData,
     };
@@ -212,6 +213,7 @@ export default function CreateInstanceForm({
     await createInstance({
       name: formValues.name.current.value,
       namespace: LuigiClient.getContext().namespaceId,
+      labels: item.spec.externalMetadata?.labels,
       inputData: isClusterServiceClass ? specCSC : specSC,
     });
   }

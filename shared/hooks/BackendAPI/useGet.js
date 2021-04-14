@@ -1,8 +1,7 @@
-import React, { useState, useRef } from 'react';
-import { baseUrl, throwHttpError } from './config';
-import { createHeaders } from './createHeaders';
+import React from 'react';
 import { useMicrofrontendContext } from '../../contexts/MicrofrontendContext';
-import { useConfig } from '../../contexts/ConfigContext';
+
+import { useFetch } from './useFetch';
 
 const useGetHook = processDataFn =>
   function(path, { pollingInterval, onDataReceived, skip } = {}) {
@@ -11,8 +10,8 @@ const useGetHook = processDataFn =>
     const [data, setData] = React.useState(null);
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(null);
-    const { authData, cluster } = useMicrofrontendContext();
-    const { fromConfig } = useConfig();
+    const { authData } = useMicrofrontendContext();
+    const fetch = useFetch();
 
     const refetch = (isSilent, currentData) => async () => {
       if (skip || !authData || !isHookMounted.current) return;
@@ -24,11 +23,7 @@ const useGetHook = processDataFn =>
       }
 
       try {
-        const urlToFetchFrom = baseUrl(fromConfig) + path;
-        const response = await fetch(urlToFetchFrom, {
-          headers: createHeaders(authData, cluster),
-        });
-        if (!response.ok) throw await throwHttpError(response);
+        const response = await fetch(path);
         const payload = await response.json();
 
         if (!isHookMounted.current) return;
@@ -114,10 +109,6 @@ function handleSingleDataReceived(newData, oldData, setDataFn) {
 }
 
 export const useSingleGet = () => {
-  const { authData, cluster } = useMicrofrontendContext();
-  const { fromConfig } = useConfig();
-  return url =>
-    fetch(baseUrl(fromConfig) + url, {
-      headers: createHeaders(authData, cluster),
-    });
+  const fetch = useFetch();
+  return url => fetch(url);
 };

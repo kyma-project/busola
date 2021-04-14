@@ -14,42 +14,113 @@
       .fd-page {
         height: 100vh;
       }
+
       .fd-page__content {
         display: flex;
         align-items: center;
         justify-content: center;
         height: 100vh;
       }
+
       .fd-has-text-align-center {
         text-align: center;
       }
+
+      .fd-has-margin-top-s {
+        margin-top: 16px !important;
+      }
+
+      .fd-has-height-large {
+        height: 48px !important;
+      }
+
       .info,
       .hint {
         text-align: center;
         margin: 0;
       }
+
       .info {
         padding-top: 30px;
         font-size: 36px;
       }
+
       .hint {
         font-size: 18px;
         color: #6f7275;
         padding-bottom: 30px;
       }
+
       .icon {
         font-size: 2.5em;
         color: #0b74de;
       }
+
       i {
         font-style: normal;
       }
+
       #oidc-form,
       #error {
         margin-top: 16px;
       }
+
       .fd-object-status {
         margin-bottom: 8px;
+      }
+      .fd-object-status--error,
+      .fd-object-status--error i {
+        color: #b00;
+      }
+
+      .fd-object-status--warning,
+      .fd-object-status--warning i {
+        color: #e9730c;
+      }
+
+      .input--hidden {
+        width: 0.1px;
+        height: 0.1px;
+        opacity: 0;
+        overflow: hidden;
+        position: absolute;
+        z-index: -1;
+      }
+
+      .file-input {
+        display: flex;
+        flex-direction: column;
+        place-content: center;
+        place-items: center;
+        width: 300px;
+        height: 80px;
+        border-radius: 8px;
+        background: #ffffff;
+        margin: 0 auto;
+        border: 1px dashed #89919a;
+        color: #0a6ed1;
+        cursor: pointer;
+      }
+
+      .file-input i {
+        color: #0a6ed1;
+      }
+
+      .file-input-drag-over {
+        border: 1px solid #0a6ed1;
+      }
+
+      #file-name {
+        margin: 0;
+        font-size: small;
+      }
+
+      #textarea-kubeconfig {
+        min-height: 150px;
+      }
+
+      #back-button i {
+        color: #0854a0;
       }
     </style>
     <script
@@ -59,6 +130,7 @@
       defer
     ></script>
   </head>
+
   <body>
     <div class="fd-ui fd-ui--fundamental">
       <div class="fd-page">
@@ -71,13 +143,60 @@
                 Upload your kubeconfig file to login
               </div>
             </div>
-            <div class="fd-form-item">
-              <input type="file" id="upload-kubeconfig" />
+            <div>
+              <button
+                id="back-button"
+                style="display: none"
+                class="fd-button fd-button--transparent"
+              >
+                <i
+                  class="fd-object-status__icon sap-icon--arrow-left"
+                  role="presentation"
+                ></i>
+                Back
+              </button>
             </div>
+            <div class="fd-form-item">
+              <label id="file-input" class="file-input" for="upload-kubeconfig">
+                <i
+                  class="fd-object-status__icon sap-icon--upload"
+                  role="presentation"
+                >
+                </i>
+                Drag file here
+                <p id="file-name"></p>
+              </label>
+              <input type="file" id="upload-kubeconfig" class="input--hidden" />
+            </div>
+
+            <form id="textarea-form">
+              <div class="fd-form-item fd-has-text-align-center">
+                <div class="info" id="headline"></div>
+                <div class="hint" id="message">or</div>
+              </div>
+              <div class="fd-form-item">
+                <div class="fd-input-group">
+                  <textarea
+                    type="file"
+                    id="textarea-kubeconfig"
+                    placeholder="Paste your config"
+                    class="fd-textarea fd-input-group__input"
+                  ></textarea>
+                </div>
+
+                <button
+                  id="apply-kubeconfig"
+                  class="fd-button fd-button--emphasized fd-has-margin-top-s"
+                >
+                  Apply kubeconfig
+                </button>
+              </div>
+            </form>
+
             <div
               id="error"
               style="display: none"
-              class="fd-object-status fd-object-status--critical"
+              class="fd-object-status fd-object-status--error"
             >
               <i
                 class="fd-object-status__icon sap-icon--message-error"
@@ -88,7 +207,7 @@
               </span>
             </div>
             <form id="oidc-form" style="display: none">
-              <div class="fd-object-status fd-object-status--critical">
+              <div class="fd-object-status fd-object-status--warning">
                 <i
                   class="fd-object-status__icon sap-icon--message-warning"
                   role="presentation"
@@ -119,7 +238,13 @@
                     placeholder="Enter client ID"
                   />
                 </div>
-                <button class="fd-button--emphasized">Connect</button>
+                <div class="fd-form-item">
+                  <button
+                    class="fd-button fd-button--emphasized fd-has-margin-top-s"
+                  >
+                    Connect
+                  </button>
+                </div>
               </div>
             </form>
           </section>
