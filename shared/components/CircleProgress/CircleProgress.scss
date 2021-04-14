@@ -23,11 +23,11 @@ $neutral-background: var(--fd-color-background-2, #fff);
       @include circle-shape(100%);
       position: absolute;
       background-color: transparent;
-      opacity: 0.15;
-      background-blend-mode: color-burn;
+      opacity: 0.1;
     }
 
     .value-indicator {
+      opacity: 0.75;
       @include circle-shape(100%);
       animation: fadeNrotate 2s ease-out;
       position: absolute;
@@ -67,7 +67,7 @@ $neutral-background: var(--fd-color-background-2, #fff);
       transform: rotate(360deg);
     }
     to {
-      opacity: initial;
+      opacity: 0.75;
       transform: none;
     }
   }

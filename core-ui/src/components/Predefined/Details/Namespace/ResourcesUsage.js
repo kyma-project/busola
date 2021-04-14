@@ -76,6 +76,7 @@ const MemoryRequestsCircle = ({ resourceQuotas, isLoading }) => {
       max={totalRequests}
       maxText={bytesToHumanReadable(totalRequests)}
       title="Memory requests"
+      reversed={true}
     />
   );
 };
@@ -104,6 +105,7 @@ const MemoryLimitsCircle = ({ resourceQuotas, isLoading }) => {
       max={totalLimits}
       maxText={bytesToHumanReadable(totalLimits)}
       title="Memory limits"
+      reversed={true}
     />
   );
 };
