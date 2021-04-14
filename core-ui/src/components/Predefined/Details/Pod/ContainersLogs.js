@@ -32,10 +32,17 @@ function Logs({ params }) {
   const url = `/api/v1/namespaces/${params.namespace}/pods/${params.podName}/log?container=${params.containerName}&follow=true&tailLines=1000`;
   const streamData = useGetStream(url);
 
-  const Logs = ({ streamData }) => {
+  const Logs = ({ streamData, containerName }) => {
     const { loading, error, data } = streamData;
     if (error) return error.message;
     if (loading) return <Spinner />;
+    if (data?.length === 0)
+      return (
+        <div className="empty-logs">
+          No logs avaliable for the '{containerName}' container.
+        </div>
+      );
+
     return data?.map((arr, idx) => (
       <div className="logs" key={idx}>
         {arr}
@@ -53,7 +60,7 @@ function Logs({ params }) {
           <Panel.Head title="Logs" />
         </Panel.Header>
         <Panel.Body>
-          <Logs streamData={streamData} />
+          <Logs streamData={streamData} containerName={params.containerName} />
         </Panel.Body>
       </Panel>
     </>
