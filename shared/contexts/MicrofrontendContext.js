@@ -8,7 +8,10 @@ export function MicrofrontendContextProvider({ children }) {
 
   useEffect(() => {
     const initHandle = LuigiClient.addInitListener(setContext);
-    const updateHandle = LuigiClient.addContextUpdateListener(setContext);
+    const updateHandle = LuigiClient.addContextUpdateListener(e => {
+      console.log(e);
+      setContext(e);
+    });
 
     return () => {
       LuigiClient.removeContextUpdateListener(updateHandle);

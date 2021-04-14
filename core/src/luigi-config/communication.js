@@ -1,5 +1,6 @@
 import { NODE_PARAM_PREFIX } from './luigi-config';
 import { saveInitParams, getInitParams } from './init-params';
+import { refreshAuth } from './auth';
 
 export const communication = {
   customMessagesListeners: {
@@ -66,18 +67,19 @@ export const communication = {
       );
     },
     'busola.showTokenExpirationWarning': () => {
-      const settings = {
-        header: 'Your session is about to expire in 2 minutes',
-        body: 'Save your work and refresh the page to extend your session.',
-        buttonConfirm: 'Refresh now',
-        buttonDismiss: 'Cancel',
-      };
-      Luigi.ux()
-        .showConfirmationModal(settings)
-        .then(() => {
-          location.reload();
-        })
-        .catch(() => {}); // cancel
+      refreshAuth();
+      // const settings = {
+      //   header: 'Your session is about to expire in 2 minutes',
+      //   body: 'Save your work and refresh the page to extend your session.',
+      //   buttonConfirm: 'Refresh now',
+      //   buttonDismiss: 'Cancel',
+      // };
+      // Luigi.ux()
+      //   .showConfirmationModal(settings)
+      //   .then(() => {
+      //     location.reload();
+      //   })
+      //   .catch(() => {}); // cancel
     },
   },
 };

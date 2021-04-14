@@ -1,7 +1,33 @@
 import OpenIdConnect from '@luigi-project/plugin-auth-oidc';
-import { clearInitParams } from './init-params';
+import { getInitParams, clearInitParams } from './init-params';
+import { Auth0Client } from '@auth0/auth0-spa-js';
 
 export let groups;
+
+export async function refreshAuth() {
+  const {
+    auth: { issuerUrl, clientId },
+  } = getInitParams();
+  console.log({
+    domain: issuerUrl.replace(/^https:\/\//, ''),
+    client_id: clientId,
+  });
+  const auth0 = new Auth0Client({
+    domain: issuerUrl.replace(/^https:\/\//, ''),
+    client_id: clientId,
+  });
+  console.log(auth0);
+  const token = await auth0.getTokenSilently();
+  console.log(token);
+  const claims = await auth0.getIdTokenClaims();
+  const id_token = claims.__raw;
+  console.log(claims);
+  console.log(id_token);
+
+  const auth = Luigi.auth().store.getAuthData();
+  Luigi.auth().store.setAuthData({ ...auth, idToken: id_token });
+  Luigi.configChanged('navigation.nodes');
+}
 
 async function fetchOidcProviderMetadata(issuerUrl) {
   try {

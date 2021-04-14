@@ -16,6 +16,7 @@
   },
   "private": true,
   "dependencies": {
+    "@auth0/auth0-spa-js": "^1.14.0",
     "@luigi-project/core": "^1.7.1",
     "@luigi-project/plugin-auth-oidc": "1.8.1",
     "copy-webpack-plugin": "^5.0.0",

@@ -9,7 +9,7 @@ export function checkForTokenExpiration(idToken) {
   try {
     const expirationTimestamp = parseJWT(idToken).exp;
     const secondsLeft = new Date(expirationTimestamp) - Date.now() / 1000;
-
+    console.log(secondsLeft);
     if (secondsLeft < warningTime && !hasShowExpirationWarning) {
       hasShowExpirationWarning = true;
       LuigiClient.sendCustomMessage({
