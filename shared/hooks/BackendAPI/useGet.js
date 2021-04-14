@@ -100,25 +100,24 @@ const useGetStreamHook = _ =>
         return new ReadableStream({
           start(controller) {
             // The following function handles each data chunk
-            function push() {
+            const push = async () => {
               // "done" is a Boolean and value a "Uint8Array"
-              reader.read().then(({ done, value }) => {
-                // If there is no more data to read
-                if (done) {
-                  controller.close();
-                  return;
-                }
-                // Get the data and send it to the browser via the controller
-                controller.enqueue(value);
-                const string = new TextDecoder().decode(value);
-                const streams = string
-                  ?.split('\n')
-                  .filter(stream => stream !== '');
+              const { done, value } = await reader.read();
+              // If there is no more data to read
+              if (done) {
+                controller.close();
+                return;
+              }
+              // Get the data and send it to the browser via the controller
+              controller.enqueue(value);
+              const string = new TextDecoder().decode(value);
+              const streams = string
+                ?.split('\n')
+                .filter(stream => stream !== '');
 
-                setData(previousData => [...previousData, ...streams]);
-                return push();
-              });
-            }
+              setData(previousData => [...previousData, ...streams]);
+              return push();
+            };
             setLoading(false);
             push();
           },
@@ -131,7 +130,6 @@ const useGetStreamHook = _ =>
     };
 
     React.useEffect(() => {
-      // INITIAL FETCH
       if (lastAuthData.current && path) fetchData();
       return _ => {
         if (loading) setLoading(false);
@@ -140,8 +138,6 @@ const useGetStreamHook = _ =>
 
     React.useEffect(() => {
       if (JSON.stringify(lastAuthData.current) != JSON.stringify(authData)) {
-        // authData reference is updated multiple times during the route change but the value stays the same (see MicrofrontendContext).
-        // To avoid unnecessary fetchData(), we 'cache' the last value and do the fetchData only if there was an actual change
         lastAuthData.current = authData;
         fetchData();
       }

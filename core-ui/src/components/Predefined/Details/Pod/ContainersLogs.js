@@ -29,7 +29,7 @@ function Logs({ params }) {
     { name: '' },
   ];
 
-  const url = `/api/v1/namespaces/${params.namespace}/pods/${params.podName}/log?container=${params.containerName}&follow=true&tailLines=1000&timestamps=true`;
+  const url = `/api/v1/namespaces/${params.namespace}/pods/${params.podName}/log?container=${params.containerName}&follow=true&tailLines=1000`;
   const streamData = useGetStream(url);
 
   const Logs = ({ streamData }) => {
