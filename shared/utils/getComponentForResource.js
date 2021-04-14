@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 function findByName(object, propertyName) {
   return object[
@@ -21,7 +21,9 @@ export const ComponentFor = ({
   } = componentProps;
 
   const predefined = findByName(PredefinedRenderersCollection, name);
-  const Renderer = predefined ? predefined(defaultRenderer) : defaultRenderer;
+  const Renderer = predefined
+    ? useMemo(() => predefined(defaultRenderer), [predefined, defaultRenderer])
+    : defaultRenderer;
   const CreateFormRenderer = nameForCreate
     ? findByName(PredefinedRenderersCollection, nameForCreate) || null
     : null;
