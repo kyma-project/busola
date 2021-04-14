@@ -7,3 +7,4 @@ export * from './useShowSystemNamespaces';
 export * from './navigate';
 export * from './BackendAPI/index';
 export * from './useCreateServiceBindingUsage';
+export * from './useOnBeforeUnload';

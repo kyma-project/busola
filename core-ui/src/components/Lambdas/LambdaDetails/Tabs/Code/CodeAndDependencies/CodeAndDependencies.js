@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import LuigiClient from '@luigi-project/client';
 import { Button, Toggle } from 'fundamental-react';
 import { useDebouncedCallback } from 'use-debounce';
 
-import { Tooltip } from 'react-shared';
+import { Tooltip, useOnBeforeUnload } from 'react-shared';
 import { TabsWithActions } from 'components/Lambdas/components';
 
 import Editor from './Editor';
@@ -41,10 +42,17 @@ export default function CodeAndDependencies({ lambda }) {
   const [controllerDependencies, setControlledDependencies] = useState(
     lambda.spec.deps,
   );
+  const showMessageBeforeUnload = useOnBeforeUnload(false);
 
   const [debouncedCallback] = useDebouncedCallback(() => {
     checkValidity();
   }, 150);
+
+  useEffect(() => {
+    const hasCodeChanged = disabledCause !== DISABLED_CAUSES.NO_CHANGES;
+    LuigiClient.uxManager().setDirtyStatus(hasCodeChanged); // for Luigi navigation
+    showMessageBeforeUnload(hasCodeChanged); // for browser navigation
+  }, [disabledCause]);
 
   useEffect(() => {
     checkValidity();
