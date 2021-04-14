@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 import Preferences from 'components/Preferences/Preferences';
@@ -46,14 +46,6 @@ export default function App() {
     </Switch>
   );
 }
-
-const A = ({ match }) => {
-  useEffect(() => {
-    console.log('A mounted');
-    return () => console.log('A unmounted');
-  }, []);
-  return 'abc';
-};
 
 function RoutedEditApiRule({ match }) {
   return <EditApiRule apiName={match.params.apiName} />;
