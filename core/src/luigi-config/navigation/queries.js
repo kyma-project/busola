@@ -1,5 +1,6 @@
 import { config } from './../config';
 import { getInitParams } from './../init-params';
+import { HttpError } from '../../../../shared/hooks/BackendAPI/config';
 
 export async function failFastFetch(input, auth, init = {}) {
   function createAuthHeaders(auth) {
@@ -32,7 +33,17 @@ export async function failFastFetch(input, auth, init = {}) {
   if (response.ok) {
     return response;
   } else {
-    throw response;
+    if (response.json) {
+      const errorResponse = await response.json();
+      throw new HttpError(
+        errorResponse.message && typeof errorResponse.message === 'string'
+          ? errorResponse.message
+          : response.statusText,
+        errorResponse.code ? errorResponse.code : response.status
+      );
+    } else {
+      throw new Error(response);
+    }
   }
 }
 

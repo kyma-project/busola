@@ -73,24 +73,22 @@ export function getNavigationData(authData) {
           return res;
         },
         (err) => {
-          if (err.json) {
-            err.json().then((errorResponse) => {
-              if (errorResponse.code === 403) {
-                clearAuthData();
-                window.location = `/nopermissions.html?error=${errorResponse.message}`;
-              } else {
-                let errorNotification = 'Could not load initial configuration';
-                if (errorResponse.reason)
-                  errorNotification += `: ${errorResponse.reason}`;
-                if (errorResponse.code)
-                  errorNotification += ` (${errorResponse.code})`;
-                Luigi.ux().showAlert({
-                  text: errorNotification,
-                  type: 'error',
-                });
-                console.warn(errorResponse.message);
-              }
+          if (err.code === 403) {
+            clearAuthData();
+            window.location = `/nopermissions.html?error=${err.originalMessage}`;
+          } else {
+            let errorNotification = 'Could not load initial configuration';
+            if (err.code && err.message)
+              errorNotification += `: ${err.message} (${err.code}${
+                err.originalMessage && err.message !== err.originalMessage
+                  ? ':' + err.originalMessage
+                  : ''
+              })`;
+            Luigi.ux().showAlert({
+              text: errorNotification,
+              type: 'error',
             });
+            console.warn(err);
           }
         }
       )
