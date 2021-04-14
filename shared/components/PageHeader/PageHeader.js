@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Panel, Breadcrumb, Link } from 'fundamental-react';
+import { Panel, Breadcrumb } from 'fundamental-react';
 import './PageHeader.scss';
 import LuigiClient from '@luigi-project/client';
 
@@ -45,31 +45,23 @@ export const PageHeader = ({
   <Panel className="page-header">
     <Panel.Header>
       <section className="header-wrapper">
-        {breadcrumbItems.length && (
+        {breadcrumbItems.length ? (
           <section>
             <Breadcrumb>
-              {breadcrumbItems.map((item, index) =>
-                item.name ? (
-                  <span
-                    className="link"
+              {breadcrumbItems.map(item => {
+                return (
+                  <Breadcrumb.Item
                     aria-label="breadcrumb-item"
                     key={item.name}
+                    name={item.name}
+                    url="#"
                     onClick={() => performOnClick(item)}
-                  >
-                    {item.name}
-                  </span>
-                ) : (
-                  <span
-                    key={index}
-                    className="fd-has-margin-left-tiny fd-has-margin-right-tiny"
-                  >
-                    /
-                  </span>
-                ),
-              )}
+                  />
+                );
+              })}
             </Breadcrumb>
           </section>
-        )}
+        ) : null}
         <Panel.Head title={title} aria-label="title" />
         {/* don't use Panel.Head's description, as it accepts only strings */}
         {description && <p className="description">{description}</p>}
