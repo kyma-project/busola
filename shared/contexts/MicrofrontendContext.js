@@ -25,6 +25,7 @@ export function MicrofrontendContextProvider({ children }) {
   }, [context]);
 
   function handleContextChanged(newContext) {
+    // Luigi fires the initListener multiple times with the same value (but different reference) for some reason
     if (JSON.stringify(lastContext.current) !== JSON.stringify(newContext)) {
       lastContext.current = newContext;
       setContext(newContext);

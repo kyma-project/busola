@@ -45,7 +45,6 @@ const useGetHook = processDataFn =>
     React.useEffect(() => {
       // POLLING
       if (!pollingInterval) return;
-
       const intervalId = setInterval(refetch(true, data), pollingInterval);
       return _ => clearInterval(intervalId);
     }, [path, pollingInterval, data]);
@@ -60,16 +59,16 @@ const useGetHook = processDataFn =>
 
     React.useEffect(() => {
       if (JSON.stringify(lastAuthData.current) != JSON.stringify(authData)) {
+        // authData reference is updated multiple times during the route change but the value stays the same (see MicrofrontendContext).
+        // To avoid unnecessary refetch(), we 'cache' the last value and do the refetch only if there was an actual change
         lastAuthData.current = authData;
         refetch(false, null)();
       }
     }, [authData]);
 
     React.useEffect(() => {
-      console.log('useGet is mounted');
       isHookMounted.current = true;
       return _ => {
-        console.log('useGet is dismounted');
         isHookMounted.current = false;
       };
     }, []);
