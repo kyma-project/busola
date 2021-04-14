@@ -7,6 +7,7 @@ import { useConfig } from '../../contexts/ConfigContext';
 const useGetHook = processDataFn =>
   function(path, { pollingInterval, onDataReceived, skip } = {}) {
     const isHookMounted = React.useRef(true); // becomes 'false' after the hook is unmounted to avoid performing any async actions afterwards
+    const lastAuthData = React.useRef(null);
     const [data, setData] = React.useState(null);
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(null);
@@ -14,8 +15,7 @@ const useGetHook = processDataFn =>
     const { fromConfig } = useConfig();
 
     const refetch = (isSilent, currentData) => async () => {
-      if (skip) return;
-      if (!authData || !isHookMounted.current) return;
+      if (skip || !authData || !isHookMounted.current) return;
       if (!isSilent) setLoading(true);
 
       function processError(error) {
@@ -52,11 +52,20 @@ const useGetHook = processDataFn =>
 
     React.useEffect(() => {
       // INITIAL FETCH
-      refetch(false, null)();
+
+      if (lastAuthData.current) refetch(false, null)();
+
       return _ => {
         if (loading) setLoading(false);
       };
     }, [path]);
+
+    React.useEffect(() => {
+      if (JSON.stringify(lastAuthData.current) != JSON.stringify(authData)) {
+        lastAuthData.current = authData;
+        refetch(false, null)();
+      }
+    }, [authData]);
 
     React.useEffect(() => {
       console.log('useGet is mounted');
