@@ -25,9 +25,11 @@ const ServiceInstanceHeader = ({ serviceInstance, servicePlan }) => {
     ? `clusterserviceclasses`
     : `namespaces/${serviceInstance.metadata.namespace}/serviceclasses`;
 
-  const { data: serviceClass } = useGet(
+  const {
+    data: serviceClass,
+  } = useGet(
     `/apis/servicecatalog.k8s.io/v1beta1/${serviceClassUrlFragment}/${classRef}`,
-    {},
+    { skip: !classRef },
   );
   if (!serviceClass) return <Spinner />;
 

@@ -13,7 +13,7 @@ export class HttpError extends Error {
 }
 
 export async function throwHttpError(response) {
-  if (response.headers.get('content-type').includes('json')) {
+  if (response.headers.get('content-type').includes('application/json')) {
     try {
       const parsed = await response.json();
       return new HttpError(parsed.message || 'Unknown error', parsed.status);

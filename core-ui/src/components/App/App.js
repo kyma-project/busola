@@ -2,21 +2,17 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 import Preferences from 'components/Preferences/Preferences';
-
 import { PREFERENCES_TITLE } from '../../shared/constants';
 import { withTitle } from 'react-shared';
 import CreateApiRule from '../ApiRules/CreateApiRule/CreateApiRule';
 import EditApiRule from 'components/ApiRules/EditApiRule/EditApiRule';
 import { ContainersLogs } from 'components/Predefined/Details/Pod/ContainersLogs';
-import {
-  getComponentForList,
-  getComponentForDetails,
-} from 'shared/getComponents';
+import { ComponentForList, ComponentForDetails } from 'shared/getComponents';
 import { API_RULES_TITLE } from 'shared/constants';
+
 export default function App() {
   return (
     <Switch>
-      <Route path="/preload" component={() => null} />
       <Route
         path="/preferences"
         render={withTitle(PREFERENCES_TITLE, Preferences)}
@@ -96,19 +92,23 @@ function RoutedResourcesList({ match }) {
   const rendererName = params.resourceType + 'List';
   const rendererNameForCreate = params.resourceType + 'Create';
 
-  return getComponentForList({
-    name: rendererName,
-    params,
-    nameForCreate: rendererNameForCreate,
-  });
+  return (
+    <ComponentForList
+      name={rendererName}
+      params={params}
+      nameForCreate={rendererNameForCreate}
+    />
+  );
 }
 
 function RoutedResourceDetails({ match }) {
   const queryParams = new URLSearchParams(window.location.search);
+
   // replace for npx routing
   const resourceUrl =
     queryParams.get('resourceApiPath') +
     window.location.pathname.toLocaleLowerCase().replace(/^\/core-ui/, '');
+
   const decodedResourceUrl = decodeURIComponent(resourceUrl);
   const decodedResourceName = decodeURIComponent(match.params.resourceName);
 
@@ -122,5 +122,5 @@ function RoutedResourceDetails({ match }) {
 
   const rendererName = params.resourceType + 'Details';
 
-  return getComponentForDetails({ name: rendererName, params });
+  return <ComponentForDetails name={rendererName} params={params} />;
 }
