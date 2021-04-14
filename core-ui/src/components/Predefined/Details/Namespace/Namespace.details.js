@@ -1,5 +1,5 @@
 import React from 'react';
-import { getComponentForList } from 'shared/getComponents';
+import { ComponentForList } from 'shared/getComponents';
 import DeployNewWorkload from './DeployNewWorkload';
 import { NamespaceStatus } from './NamespaceStatus';
 import { NamespaceWorkloads } from './NamespaceWorkloads/NamespaceWorkloads';
@@ -16,10 +16,9 @@ export const NamespacesDetails = DefaultRenderer => ({ ...otherParams }) => {
     showTitle: true,
   };
 
-  const LimitrangesList = getComponentForList({
-    name: 'limitrangesList',
-    params: limitRangesParams,
-  });
+  const LimitrangesList = (
+    <ComponentForList name="limitrangesList" params={limitRangesParams} />
+  );
 
   const resourceQuotasParams = {
     hasDetailsView: false,
@@ -30,10 +29,9 @@ export const NamespacesDetails = DefaultRenderer => ({ ...otherParams }) => {
     showTitle: true,
   };
 
-  const ResourceQuotasList = getComponentForList({
-    name: 'resourcequotaslist',
-    params: resourceQuotasParams,
-  });
+  const ResourceQuotasList = (
+    <ComponentForList name="resourcequotaslist" params={resourceQuotasParams} />
+  );
 
   const applicationMappingsParams = {
     hasDetailsView: false,
@@ -44,19 +42,18 @@ export const NamespacesDetails = DefaultRenderer => ({ ...otherParams }) => {
     showTitle: true,
   };
 
-  const ApplicationMappings = getComponentForList({
-    name: 'applicationMappingsList',
-    params: applicationMappingsParams,
-  });
+  const ApplicationMappings = (
+    <ComponentForList
+      name="applicationMappingsList"
+      params={applicationMappingsParams}
+    />
+  );
 
   const eventsParams = {
     namespace: otherParams.resourceName,
   };
 
-  const Events = getComponentForList({
-    name: 'eventsList',
-    params: eventsParams,
-  });
+  const Events = <ComponentForList name="eventsList" params={eventsParams} />;
 
   const headerActions = (
     <DeployNewWorkload namespaceName={otherParams.resourceName} />

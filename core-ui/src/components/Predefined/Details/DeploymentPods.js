@@ -1,5 +1,5 @@
 import React from 'react';
-import { getComponentForList } from 'shared/getComponents';
+import { ComponentForList } from 'shared/getComponents';
 import { useGetList } from 'react-shared';
 
 export function DeploymentPods({ namespace, deploymentName }) {
@@ -41,5 +41,5 @@ export function DeploymentPods({ namespace, deploymentName }) {
     },
   };
 
-  return getComponentForList({ name: 'podsList', params: podListParams });
+  return <ComponentForList name="podsList" params={podListParams} />;
 }

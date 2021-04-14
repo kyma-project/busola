@@ -52,7 +52,7 @@ export default function CodeAndDependencies({ lambda }) {
     const hasCodeChanged = disabledCause !== DISABLED_CAUSES.NO_CHANGES;
     LuigiClient.uxManager().setDirtyStatus(hasCodeChanged); // for Luigi navigation
     showMessageBeforeUnload(hasCodeChanged); // for browser navigation
-  }, [disabledCause]);
+  }, [disabledCause, showMessageBeforeUnload]);
 
   useEffect(() => {
     checkValidity();

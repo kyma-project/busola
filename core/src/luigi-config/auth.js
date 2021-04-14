@@ -82,6 +82,7 @@ export const createAuth = async (authParams) => {
 
     events: {
       onLogout: () => {
+        clearInitParams();
         console.log('onLogout');
       },
       onAuthExpired: () => {
