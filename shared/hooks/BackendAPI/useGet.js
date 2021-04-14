@@ -79,65 +79,80 @@ const useGetHook = processDataFn =>
 
 const useGetStreamHook = _ =>
   function(path) {
+    const isHookMounted = React.useRef(true); // becomes 'false' after the hook is unmounted to avoid performing any async actions afterwards
+    const lastAuthData = React.useRef(null);
     const [data, setData] = React.useState([]);
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(null);
-    const { authData, cluster } = useMicrofrontendContext();
-    const { fromConfig } = useConfig();
+    const { authData } = useMicrofrontendContext();
+    const fetch = useFetch();
 
     const fetchData = async () => {
+      if (!authData || !isHookMounted.current) return;
       setLoading(true);
 
       try {
-        const urlToFetchFrom = baseUrl(fromConfig) + path;
-        fetch(urlToFetchFrom, {
-          headers: createHeaders(authData, cluster),
-        })
-          .then(response => response.body)
-          .then(body => {
-            const reader = body.getReader();
+        const response = await fetch(path);
+        if (!authData || !isHookMounted.current) return;
+        const payload = await response.body;
+        const reader = payload.getReader();
 
-            return new ReadableStream({
-              start(controller) {
-                // The following function handles each data chunk
-                function push() {
-                  // "done" is a Boolean and value a "Uint8Array"
-                  reader.read().then(({ done, value }) => {
-                    // If there is no more data to read
-                    if (done) {
-                      controller.close();
-                      return;
-                    }
-                    // Get the data and send it to the browser via the controller
-                    controller.enqueue(value);
-                    const string = new TextDecoder().decode(value);
-                    const streams = string
-                      ?.split('\n')
-                      .filter(stream => stream !== '');
-
-                    setData(previousData => [...previousData, ...streams]);
-                    return push();
-                  });
+        return new ReadableStream({
+          start(controller) {
+            // The following function handles each data chunk
+            function push() {
+              // "done" is a Boolean and value a "Uint8Array"
+              reader.read().then(({ done, value }) => {
+                // If there is no more data to read
+                if (done) {
+                  controller.close();
+                  return;
                 }
+                // Get the data and send it to the browser via the controller
+                controller.enqueue(value);
+                const string = new TextDecoder().decode(value);
+                const streams = string
+                  ?.split('\n')
+                  .filter(stream => stream !== '');
 
-                push();
-              },
-            });
-          });
-        setLoading(false);
+                setData(previousData => [...previousData, ...streams]);
+                return push();
+              });
+            }
+            setLoading(false);
+            push();
+          },
+        });
       } catch (e) {
         console.error(error);
         setError(error);
       }
+      setLoading(false);
     };
 
     React.useEffect(() => {
-      let isHookMounted = true;
-      if (authData && isHookMounted) fetchData();
+      // INITIAL FETCH
+      if (lastAuthData.current && path) fetchData();
       return _ => {
-        isHookMounted = false;
+        if (loading) setLoading(false);
       };
-    }, [path, authData]);
+    }, [path]);
+
+    React.useEffect(() => {
+      if (JSON.stringify(lastAuthData.current) != JSON.stringify(authData)) {
+        // authData reference is updated multiple times during the route change but the value stays the same (see MicrofrontendContext).
+        // To avoid unnecessary fetchData(), we 'cache' the last value and do the fetchData only if there was an actual change
+        lastAuthData.current = authData;
+        fetchData();
+      }
+    }, [authData]);
+
+    React.useEffect(() => {
+      isHookMounted.current = true;
+      return _ => {
+        isHookMounted.current = false;
+      };
+    }, []);
 
     return {
       data,
