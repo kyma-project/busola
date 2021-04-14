@@ -38,10 +38,10 @@ $neutral-background: var(--fd-color-background-2, #fff);
         @extend %flex-center;
         border: 1px solid var(--fd-color-text-3);
 
-      &.is-error {
-        color: var(--fd-color-status-3);
-        border-color: var(--fd-color-status-3);
-      }
+        &.is-error {
+          color: var(--fd-color-status-3);
+          border-color: var(--fd-color-status-3);
+        }
       }
     }
   }

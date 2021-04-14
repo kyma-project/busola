@@ -1,14 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Icon } from 'fundamental-react';
 import classNames from 'classnames';
 import './CircleProgress.scss';
 
-const isInErrorState = (percent, reversed) => {
+const isInErrorState = (percent, max, reversed) => {
   if (reversed) {
     percent = 100 - percent;
   }
 
-  return percent < 33;
+  return max > 0 && percent < 33;
 };
 
 export const CircleProgress = ({
@@ -32,8 +33,9 @@ export const CircleProgress = ({
   });
 
   const circleInnerClasses = classNames(`percentage`, {
-    'is-error': max > 0 && isInErrorState(percent, reversed),
+    'is-error': isInErrorState(percent, max, reversed),
   });
+
   const containerStyle = {
     width: size + 'px',
     height: size + 'px',
@@ -47,10 +49,18 @@ export const CircleProgress = ({
   const innerStyle = {
     fontSize: textSize,
   };
+  const titleStyle = {
+    color: isInErrorState(percent, max, reversed) ? color : 'initial',
+  };
 
   return (
     <div className={circleProgressClasses} onClick={onClick}>
-      <span className="title">{title}</span>
+      <span className="title" style={titleStyle}>
+        {isInErrorState(percent, max, reversed) && (
+          <Icon size="s" className="fd-has-margin-right-xxs" glyph="error" />
+        )}
+        {title}
+      </span>
       <div className="circle__container" style={containerStyle}>
         <div className="value-indicator" style={valueIndicatorStyle}></div>
         <div className="inner-area">
