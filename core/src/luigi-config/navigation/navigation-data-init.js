@@ -20,13 +20,10 @@ import {
 import { groups } from '../auth';
 import { getInitParams, clearInitParams } from '../init-params';
 
-const params = getInitParams();
-const customLogoutFn =
-  !!params?.auth ||
-  (() => {
-    clearInitParams();
-    window.location = '/logout.html';
-  });
+const customLogoutFn = () => {
+  clearInitParams();
+  window.location = '/logout.html';
+};
 
 export let resolveNavigationNodes;
 export let navigation = {
