@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Icon, Badge } from 'fundamental-react';
+import { Icon, InfoLabel } from 'fundamental-react';
 import { GenericList, Tooltip } from 'react-shared';
 
 import EditVariablesModal from './EditVariablesModal';
@@ -81,7 +81,7 @@ function VariableType({ variable }) {
 
   return (
     <Tooltip content={tooltipTitle}>
-      <Badge>{message.TEXT}</Badge>
+      <InfoLabel>{message.TEXT}</InfoLabel>
     </Tooltip>
   );
 }

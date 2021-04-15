@@ -1,4 +1,4 @@
-@import '~fundamental-styles/dist/root.css';
+@import '~fundamental-styles/dist/fundamental-styles.css';
 html {
   font-size: 10px;
 }
@@ -14,8 +14,8 @@ body {
   top: 0 !important;
 }
 
-.fd-overlay.fd-overlay--modal {	
-  --fd-overlay-background-color: rgba(0, 0, 0, 0.6);	
+.fd-overlay.fd-overlay--modal {
+  --fd-overlay-background-color: rgba(0, 0, 0, 0.6);
 }
 
 .cursor-pointer {
@@ -25,9 +25,9 @@ body {
 .link {
   color: var(--fd-color-action-1);
   cursor: pointer;
-  
+
   &.no-border {
-    border:none;
+    border: none;
   }
 }
 
@@ -168,23 +168,25 @@ li {
   visibility: hidden !important;
 }
 
-.fd-checkbox:checked::before, input[type=checkbox]:checked::before {
+.fd-checkbox:checked::before,
+input[type='checkbox']:checked::before {
   border-color: transparent;
 }
 
 .no-dismiss-tokens {
-  .fd-token::after, &.fd-token::after {
+  .fd-token::after,
+  &.fd-token::after {
     content: none !important;
   }
 }
 
 .clearfix::after {
-  content: "";
+  content: '';
   clear: both;
   display: table;
 }
 
 // override fd-styles for Safari
-input[type=checkbox] {
+input[type='checkbox'] {
   -webkit-appearance: checkbox !important;
 }

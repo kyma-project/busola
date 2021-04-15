@@ -1,28 +1,28 @@
 import React from 'react';
-import { Badge } from 'fundamental-react/Badge';
+import { InfoBadge } from 'fundamental-react';
 
 const LambdaStatusBadge = ({ status }) => {
-  let type;
+  let color;
 
   switch (status) {
     case 'Building':
     case 'Deploying':
     case 'Updating':
-      return <Badge>{status}</Badge>;
+      return <InfoBadge>{status}</InfoBadge>;
     case 'Running':
-      type = 'success';
+      color = 8;
       break;
     case 'Unknown':
-      type = 'warning';
+      color = 1;
       break;
     case 'Error':
-      type = 'error';
+      color = 2;
       break;
     default:
-      type = 'warning';
+      color = 1;
   }
 
-  return <Badge type={type}>{status}</Badge>;
+  return <InfoBadge color={color}>{status}</InfoBadge>;
 };
 
 export default LambdaStatusBadge;

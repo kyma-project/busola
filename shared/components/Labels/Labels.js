@@ -1,5 +1,5 @@
 import React from 'react';
-import { Token } from 'fundamental-react/Token';
+import { Token } from 'fundamental-react';
 import { EMPTY_TEXT_PLACEHOLDER } from '../../constants/constants';
 
 export const Labels = labels => {

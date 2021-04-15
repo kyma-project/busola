@@ -11,7 +11,7 @@ import {
 
 import { serviceClassTileTitles } from 'helpers/constants';
 import { isStringValueEqualToTrue } from 'helpers';
-import { Token } from 'fundamental-react/Token';
+import { Token } from 'fundamental-react';
 
 const ServiceClassInfo = ({ serviceClass, labels, planSelector }) => {
   const extData = serviceClass.spec.externalMetadata || {};

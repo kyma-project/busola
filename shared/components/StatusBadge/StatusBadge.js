@@ -1,5 +1,5 @@
 import React from 'react';
-import { Badge } from 'fundamental-react/Badge';
+import { InfoLabel } from 'fundamental-react';
 import PropTypes from 'prop-types';
 import './StatusBadge.scss';
 import classNames from 'classnames';
@@ -57,9 +57,9 @@ export const StatusBadge = ({
   );
 
   const badgeElement = (
-    <Badge role="status" modifier="filled" className={classes}>
+    <InfoLabel role="status" className={classes}>
       {value}
-    </Badge>
+    </InfoLabel>
   );
 
   return tooltipContent ? (
