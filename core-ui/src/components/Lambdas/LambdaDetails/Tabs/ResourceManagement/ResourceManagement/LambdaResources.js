@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { LayoutGrid, Panel } from 'fundamental-react';
+import { LayoutGrid, LayoutPanel } from 'fundamental-react';
 import { Input } from './TableElements/Input';
 import { Row } from './TableElements/Row';
 import { DropdownInput } from 'components/Lambdas/components';
@@ -69,12 +69,12 @@ export default function LambdaResources({
   return (
     <>
       <LayoutGrid cols={1}>
-        <Panel
+        <LayoutPanel
           className={`has-box-shadow-none presets${
             isHidden ? ' has-no-margin-bottom' : ''
           }`}
         >
-          <Panel.Body className="has-padding-none">
+          <LayoutPanel.Body className="has-padding-none">
             <Row
               action={
                 <DropdownInput
@@ -88,18 +88,18 @@ export default function LambdaResources({
                 />
               }
             />
-          </Panel.Body>
-        </Panel>
+          </LayoutPanel.Body>
+        </LayoutPanel>
       </LayoutGrid>
       <LayoutGrid cols={2} className={isHidden ? 'hidden-panel' : ''}>
-        <Panel className="has-box-shadow-none">
-          <Panel.Header className="has-padding-none has-none-border-bottom">
-            <Panel.Head
+        <LayoutPanel className="has-box-shadow-none">
+          <LayoutPanel.Header className="has-padding-none has-none-border-bottom">
+            <LayoutPanel.Head
               title={resourcesMode.REQUESTS.TITLE}
               description={resourcesMode.REQUESTS.DESCRIPTION}
             />
-          </Panel.Header>
-          <Panel.Body className="has-padding-none">
+          </LayoutPanel.Header>
+          <LayoutPanel.Body className="has-padding-none">
             <Row
               title={resourcesMode.MEMORY.TITLE}
               action={
@@ -144,16 +144,16 @@ export default function LambdaResources({
                 </>
               }
             />
-          </Panel.Body>
-        </Panel>
-        <Panel className="has-box-shadow-none">
-          <Panel.Header className="has-padding-none has-none-border-bottom">
-            <Panel.Head
+          </LayoutPanel.Body>
+        </LayoutPanel>
+        <LayoutPanel className="has-box-shadow-none">
+          <LayoutPanel.Header className="has-padding-none has-none-border-bottom">
+            <LayoutPanel.Head
               title={resourcesMode.LIMITS.TITLE}
               description={resourcesMode.LIMITS.DESCRIPTION}
             />
-          </Panel.Header>
-          <Panel.Body className="has-padding-none">
+          </LayoutPanel.Header>
+          <LayoutPanel.Body className="has-padding-none">
             <Row
               title={resourcesMode.MEMORY.TITLE}
               action={
@@ -195,8 +195,8 @@ export default function LambdaResources({
                 </>
               }
             />
-          </Panel.Body>
-        </Panel>
+          </LayoutPanel.Body>
+        </LayoutPanel>
       </LayoutGrid>
     </>
   );

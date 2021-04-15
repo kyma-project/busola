@@ -1,7 +1,7 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { useMicrofrontendContext, useShowSystemNamespaces } from 'react-shared';
-import { Panel, Toggle } from 'fundamental-react';
+import { LayoutPanel, Toggle } from 'fundamental-react';
 
 export default function NamespaceSettings() {
   const { groups } = useMicrofrontendContext();
@@ -27,10 +27,10 @@ export default function NamespaceSettings() {
 
   return (
     shouldShowNamespaceSettings() && (
-      <Panel className="fd-has-margin-tiny fd-has-margin-top-medium">
-        <Panel.Header>
-          <Panel.Head title="Namespace settings" />
-          <Panel.Actions>
+      <LayoutPanel className="fd-has-margin-tiny fd-has-margin-top-medium">
+        <LayoutPanel.Header>
+          <LayoutPanel.Head title="Namespace settings" />
+          <LayoutPanel.Actions>
             Show System Namespaces
             <Toggle
               inputProps={{ 'aria-label': 'toggle-system-namespaces' }}
@@ -38,9 +38,9 @@ export default function NamespaceSettings() {
               checked={showSystemNamespaces}
               onChange={toggleVisibility}
             />
-          </Panel.Actions>
-        </Panel.Header>
-      </Panel>
+          </LayoutPanel.Actions>
+        </LayoutPanel.Header>
+      </LayoutPanel>
     )
   );
 }

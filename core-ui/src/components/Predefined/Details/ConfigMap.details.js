@@ -1,6 +1,6 @@
 import React from 'react';
 import Editor from '@monaco-editor/react';
-import { Panel } from 'fundamental-react';
+import { LayoutPanel } from 'fundamental-react';
 
 export const ConfigMapsDetails = DefaultRenderer => ({ ...otherParams }) => {
   const options = {
@@ -13,11 +13,11 @@ export const ConfigMapsDetails = DefaultRenderer => ({ ...otherParams }) => {
   const ConfigMapEditor = resource => {
     const { data } = resource;
     return Object.keys(data).map(key => (
-      <Panel className="fd-has-margin-m">
-        <Panel.Header>
-          <Panel.Head title={key} />
-        </Panel.Header>
-        <Panel.Body>
+      <LayoutPanel className="fd-has-margin-m">
+        <LayoutPanel.Header>
+          <LayoutPanel.Head title={key} />
+        </LayoutPanel.Header>
+        <LayoutPanel.Body>
           <Editor
             key={`editor-${key}`}
             theme="vs-light"
@@ -25,8 +25,8 @@ export const ConfigMapsDetails = DefaultRenderer => ({ ...otherParams }) => {
             value={data[key]}
             options={options}
           />
-        </Panel.Body>
-      </Panel>
+        </LayoutPanel.Body>
+      </LayoutPanel>
     ));
   };
 

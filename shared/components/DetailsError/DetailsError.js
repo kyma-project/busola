@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Panel } from 'fundamental-react';
+import { LayoutPanel } from 'fundamental-react';
 
 import { PageHeader } from '../PageHeader/PageHeader';
 
@@ -8,9 +8,9 @@ export const DetailsError = ({ breadcrumbs, message }) => {
   return (
     <>
       <PageHeader title="" breadcrumbItems={breadcrumbs} />
-      <Panel className="fd-has-padding-regular fd-has-margin-regular">
+      <LayoutPanel className="fd-has-padding-regular fd-has-margin-regular">
         {message}
-      </Panel>
+      </LayoutPanel>
     </>
   );
 };

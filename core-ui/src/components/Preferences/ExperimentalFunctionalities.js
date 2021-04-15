@@ -1,7 +1,7 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { useMicrofrontendContext } from 'react-shared';
-import { Panel, Toggle } from 'fundamental-react';
+import { LayoutPanel, Toggle } from 'fundamental-react';
 
 export default function ExperimentalFunctionalities() {
   const [showExperimentalViews, setShowExperimentalViews] = React.useState(
@@ -17,10 +17,10 @@ export default function ExperimentalFunctionalities() {
   };
 
   return (
-    <Panel className="fd-has-margin-tiny fd-has-margin-top-small">
-      <Panel.Header>
-        <Panel.Head title="Experimental functionalities" />
-        <Panel.Actions>
+    <LayoutPanel className="fd-has-margin-tiny fd-has-margin-top-small">
+      <LayoutPanel.Header>
+        <LayoutPanel.Head title="Experimental functionalities" />
+        <LayoutPanel.Actions>
           Enable all
           <Toggle
             inputProps={{ 'aria-label': 'toggle-experimental' }}
@@ -28,13 +28,13 @@ export default function ExperimentalFunctionalities() {
             checked={showExperimentalViews}
             onChange={toggleVisibility}
           />
-        </Panel.Actions>
-      </Panel.Header>
-      <Panel.Body>
+        </LayoutPanel.Actions>
+      </LayoutPanel.Header>
+      <LayoutPanel.Body>
         Enables all views which expose experimental features in the UI. Refresh
         the page after enabling this option to see additional navigation nodes
         in the <strong>Experimental</strong> category of the left navigation.
-      </Panel.Body>
-    </Panel>
+      </LayoutPanel.Body>
+    </LayoutPanel>
   );
 }

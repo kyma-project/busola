@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-import { Panel, Button, LayoutGrid } from 'fundamental-react';
+import { LayoutPanel, Button, LayoutGrid } from 'fundamental-react';
 import { Tooltip } from 'react-shared';
 import { FormInput } from 'components/Lambdas/components';
 
@@ -164,26 +164,26 @@ export default function RepositoryConfig({ lambda }) {
   }
 
   return (
-    <Panel className="fd-has-margin-m lambda-repository-config">
-      <Panel.Header className="fd-has-padding-xs">
-        <Panel.Head title={REPOSITORY_CONFIG_PANEL.TITLE} />
-        <Panel.Actions>
+    <LayoutPanel className="fd-has-margin-m lambda-repository-config">
+      <LayoutPanel.Header className="fd-has-padding-xs">
+        <LayoutPanel.Head title={REPOSITORY_CONFIG_PANEL.TITLE} />
+        <LayoutPanel.Actions>
           {renderCancelButton()}
           {renderConfirmButton()}
-        </Panel.Actions>
-      </Panel.Header>
-      <Panel.Body className="fd-has-padding-xs">
+        </LayoutPanel.Actions>
+      </LayoutPanel.Header>
+      <LayoutPanel.Body className="fd-has-padding-xs">
         <LayoutGrid cols={2}>
-          <Panel className="has-box-shadow-none">
-            <Panel.Header className="has-padding-none has-none-border-bottom">
-              <Panel.Head
+          <LayoutPanel className="has-box-shadow-none">
+            <LayoutPanel.Header className="has-padding-none has-none-border-bottom">
+              <LayoutPanel.Head
                 title={REPOSITORY_CONFIG_PANEL.INPUTS.REFERENCE.LABEL}
                 description={
                   REPOSITORY_CONFIG_PANEL.INPUTS.REFERENCE.INLINE_HELP
                 }
               />
-            </Panel.Header>
-            <Panel.Body className="has-padding-none">
+            </LayoutPanel.Header>
+            <LayoutPanel.Body className="has-padding-none">
               <FormInput
                 ref={referenceCompRef}
                 _ref={referenceRef}
@@ -196,19 +196,19 @@ export default function RepositoryConfig({ lambda }) {
                 validate={validateReference}
                 firstValue={lambda.spec.reference}
               />
-            </Panel.Body>
-          </Panel>
+            </LayoutPanel.Body>
+          </LayoutPanel>
 
-          <Panel className="has-box-shadow-none">
-            <Panel.Header className="has-padding-none has-none-border-bottom">
-              <Panel.Head
+          <LayoutPanel className="has-box-shadow-none">
+            <LayoutPanel.Header className="has-padding-none has-none-border-bottom">
+              <LayoutPanel.Head
                 title={REPOSITORY_CONFIG_PANEL.INPUTS.BASE_DIR.LABEL}
                 description={
                   REPOSITORY_CONFIG_PANEL.INPUTS.BASE_DIR.INLINE_HELP
                 }
               />
-            </Panel.Header>
-            <Panel.Body className="has-padding-none">
+            </LayoutPanel.Header>
+            <LayoutPanel.Body className="has-padding-none">
               <FormInput
                 ref={baseDirCompRef}
                 _ref={baseDirRef}
@@ -221,10 +221,10 @@ export default function RepositoryConfig({ lambda }) {
                 validate={validateBaseDir}
                 firstValue={lambda.spec.baseDir}
               />
-            </Panel.Body>
-          </Panel>
+            </LayoutPanel.Body>
+          </LayoutPanel>
         </LayoutGrid>
-      </Panel.Body>
-    </Panel>
+      </LayoutPanel.Body>
+    </LayoutPanel>
   );
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Panel, Breadcrumb } from 'fundamental-react';
+import { LayoutPanel, Breadcrumb } from 'fundamental-react';
 import './PageHeader.scss';
 import LuigiClient from '@luigi-project/client';
 
@@ -42,8 +42,8 @@ export const PageHeader = ({
   children,
   columnWrapperClassName,
 }) => (
-  <Panel className="page-header">
-    <Panel.Header>
+  <LayoutPanel className="page-header">
+    <LayoutPanel.Header>
       <section className="header-wrapper">
         {breadcrumbItems.length ? (
           <section className="fd-has-margin-bottom-s">
@@ -63,7 +63,7 @@ export const PageHeader = ({
           </section>
         ) : null}
 
-        <Panel.Head title={title} aria-label="title" />
+        <LayoutPanel.Head title={title} aria-label="title" />
         {/* don't use Panel.Head's description, as it accepts only strings */}
         {description && <p className="description">{description}</p>}
         <section className={`column-wrapper ${columnWrapperClassName}`}>
@@ -73,12 +73,12 @@ export const PageHeader = ({
       </section>
 
       {actions && (
-        <Panel.Actions className="fd-has-margin-left-s">
+        <LayoutPanel.Actions className="fd-has-margin-left-s">
           {actions}
-        </Panel.Actions>
+        </LayoutPanel.Actions>
       )}
-    </Panel.Header>
-  </Panel>
+    </LayoutPanel.Header>
+  </LayoutPanel>
 );
 PageHeader.Column = Column;
 

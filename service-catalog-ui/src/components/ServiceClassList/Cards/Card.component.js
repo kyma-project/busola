@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './Card.scss';
 import { Tooltip } from 'react-shared';
-import { Icon, Panel } from 'fundamental-react';
+import { Icon, LayoutPanel } from 'fundamental-react';
 import { InstancesIndicator } from './InstancesIndicator';
 import { Labels } from './Labels';
 import {
@@ -47,7 +47,7 @@ const Card = ({
           >
             <span data-e2e-id="card-company">{company}</span>
           </CardHeaderContent>
-          <Panel.Actions>
+          <LayoutPanel.Actions>
             {labels && labels[DOCUMENTATION_PER_PLAN_LABEL] === 'true' && (
               <div aria-label="has-API-packages-indicator" className="icon">
                 <Tooltip content={DOCUMENTATION_PER_PLAN_DESCRIPTION}>
@@ -59,7 +59,7 @@ const Card = ({
               numberOfInstances={numberOfInstances}
               labels={labels}
             />
-          </Panel.Actions>
+          </LayoutPanel.Actions>
         </div>
       </CardTop>
 

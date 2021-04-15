@@ -10,7 +10,7 @@ import {
   FormGroup,
   FormItem,
   FormLabel,
-  Panel,
+  LayoutPanel,
   InlineHelp,
   Button,
 } from 'fundamental-react';
@@ -229,11 +229,11 @@ export default function ApiRuleForm({
           ref={formRef}
         >
           <LayoutGrid cols={1}>
-            <Panel>
-              <Panel.Header>
-                <Panel.Head title="General settings" />
-              </Panel.Header>
-              <Panel.Body>
+            <LayoutPanel>
+              <LayoutPanel.Header>
+                <LayoutPanel.Head title="General settings" />
+              </LayoutPanel.Header>
+              <LayoutPanel.Body>
                 <FormGroup>
                   <LayoutGrid cols="3">
                     <FormItem>
@@ -282,13 +282,13 @@ export default function ApiRuleForm({
                     />
                   </LayoutGrid>
                 </FormGroup>
-              </Panel.Body>
-            </Panel>
+              </LayoutPanel.Body>
+            </LayoutPanel>
 
-            <Panel>
-              <Panel.Header>
-                <Panel.Head title="Access strategies" />
-                <Panel.Actions>
+            <LayoutPanel>
+              <LayoutPanel.Header>
+                <LayoutPanel.Head title="Access strategies" />
+                <LayoutPanel.Actions>
                   <Button
                     onClick={addAccessStrategy}
                     option="light"
@@ -297,10 +297,10 @@ export default function ApiRuleForm({
                   >
                     Add access strategy
                   </Button>
-                </Panel.Actions>
-              </Panel.Header>
+                </LayoutPanel.Actions>
+              </LayoutPanel.Header>
               {!!rules.length && (
-                <Panel.Body>
+                <LayoutPanel.Body>
                   {rules.map((rule, idx) => {
                     return (
                       <AccessStrategyForm
@@ -321,9 +321,9 @@ export default function ApiRuleForm({
                       />
                     );
                   })}
-                </Panel.Body>
+                </LayoutPanel.Body>
               )}
-            </Panel>
+            </LayoutPanel>
           </LayoutGrid>
         </form>
       </section>

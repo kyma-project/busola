@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Panel, Token, FormItem, FormLabel } from 'fundamental-react';
+import { LayoutPanel, Token, FormItem, FormLabel } from 'fundamental-react';
 import { grantTypes, responseTypes } from './common';
 import './OAuthClientSpecPanel.scss';
 
@@ -23,10 +23,10 @@ const Tokens = ({ tokens }) => (
 
 export default function OAuthClientSpecPanel({ spec }) {
   return (
-    <Panel className="fd-has-margin-m oauth-client-panel">
-      <Panel.Header>
-        <Panel.Head title="Configuration" />
-      </Panel.Header>
+    <LayoutPanel className="fd-has-margin-m oauth-client-panel">
+      <LayoutPanel.Header>
+        <LayoutPanel.Head title="Configuration" />
+      </LayoutPanel.Header>
       <FormItem>
         <FormLabel>Response types</FormLabel>
         <Tokens tokens={spec.responseTypes.map(v => responseTypes[v])} />
@@ -39,6 +39,6 @@ export default function OAuthClientSpecPanel({ spec }) {
         <FormLabel>Scope</FormLabel>
         <Tokens tokens={spec.scope.split(' ').filter(scope => scope)} />
       </FormItem>
-    </Panel>
+    </LayoutPanel>
   );
 }

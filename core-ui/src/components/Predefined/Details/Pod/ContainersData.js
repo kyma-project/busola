@@ -1,7 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Panel, FormItem, FormLabel, LayoutGrid } from 'fundamental-react';
+import {
+  LayoutPanel,
+  FormItem,
+  FormLabel,
+  LayoutGrid,
+} from 'fundamental-react';
 import './ContainersData.scss';
 
 const SecretComponent = ({ name, value }) => (
@@ -28,10 +33,10 @@ const getPorts = ports => {
 
 const ContainerComponent = ({ container }) => (
   <>
-    <Panel.Filters>
-      <Panel.Head title={container.name} />
-    </Panel.Filters>
-    <Panel.Body>
+    <LayoutPanel.Filters>
+      <LayoutPanel.Head title={container.name} />
+    </LayoutPanel.Filters>
+    <LayoutPanel.Body>
       <SecretComponent name="Name" value={container.name} />
       {container.image && (
         <SecretComponent name="Image" value={container.image} />
@@ -45,7 +50,7 @@ const ContainerComponent = ({ container }) => (
       {container.ports && (
         <SecretComponent name="Ports" value={getPorts(container.ports)} />
       )}
-    </Panel.Body>
+    </LayoutPanel.Body>
   </>
 );
 
@@ -63,14 +68,14 @@ export default function ContainersData({ type, containers }) {
   }
 
   return (
-    <Panel className="fd-has-margin-m container-panel">
-      <Panel.Header className="fd-has-padding-xs">
-        <Panel.Head title={type} />
-      </Panel.Header>
+    <LayoutPanel className="fd-has-margin-m container-panel">
+      <LayoutPanel.Header className="fd-has-padding-xs">
+        <LayoutPanel.Head title={type} />
+      </LayoutPanel.Header>
 
       {containers.map(container => (
         <ContainerComponent key={container.name} container={container} />
       ))}
-    </Panel>
+    </LayoutPanel>
   );
 }
