@@ -46,7 +46,7 @@ export const PageHeader = ({
     <Panel.Header>
       <section className="header-wrapper">
         {breadcrumbItems.length ? (
-          <section className="fd-has-margin-bottom-s">
+          <section>
             <Breadcrumb>
               {breadcrumbItems.map(item => {
                 return (
@@ -62,7 +62,6 @@ export const PageHeader = ({
             </Breadcrumb>
           </section>
         ) : null}
-
         <Panel.Head title={title} aria-label="title" />
         {/* don't use Panel.Head's description, as it accepts only strings */}
         {description && <p className="description">{description}</p>}
