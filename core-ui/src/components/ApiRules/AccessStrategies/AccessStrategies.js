@@ -18,6 +18,7 @@ const rowRenderer = strategy => {
     <span>{strategy.path}</span>,
     <InfoLabel modifier="filled">
       <Icon
+        ariaLabel={accessStrategyTypes[selectedType].displayName}
         glyph={
           selectedType === accessStrategyTypes.noop.value ||
           selectedType === accessStrategyTypes.allow.value

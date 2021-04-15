@@ -134,7 +134,10 @@ function LogLabelsSubList({ logLabel, selectedLabels, chooseLabel }) {
               aria-label="sublink"
             >
               {name}
-              {(isSelected && <Icon glyph="accept" size="m" />) || null}
+              {(isSelected && (
+                <Icon glyph="accept" size="m" ariaLabel="Choose label" />
+              )) ||
+                null}
             </span>
           </li>
         );

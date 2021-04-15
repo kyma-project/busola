@@ -32,6 +32,7 @@ function VariableStatus({ validation }) {
         {ENVIRONMENT_VARIABLES_PANEL.WARNINGS.TEXT}
       </span>
       <Icon
+        ariaLabel="Warning"
         glyph="message-warning"
         size="s"
         className={`${statusClassName} fd-has-margin-left-tiny`}

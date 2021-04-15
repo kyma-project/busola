@@ -105,6 +105,7 @@ export function NamespaceWorkloads({ namespace }) {
           size="m"
           className="fd-has-margin-right-small"
           glyph="stethoscope"
+          ariaLabel="Health icon"
         />
         <LayoutPanel.Head title="Healthy Resources" />
       </LayoutPanel.Header>

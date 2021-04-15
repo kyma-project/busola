@@ -66,7 +66,7 @@ export const ServicesDetails = DefaultRenderer => ({ ...otherParams }) => {
             >
               <span className="name">{p.name}</span>
               <Counter>{p.port}</Counter>
-              <Icon glyph="arrow-right" />
+              <Icon glyph="arrow-right" ariaLabel="Port refers to" />
               <Counter>{p.targetPort}</Counter>
             </span>
           ))}

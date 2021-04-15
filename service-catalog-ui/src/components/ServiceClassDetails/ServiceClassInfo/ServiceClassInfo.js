@@ -44,7 +44,7 @@ const ServiceClassInfo = ({ serviceClass, labels, planSelector }) => {
             {extData.imageUrl ? (
               <Image size="l" photo={extData.imageUrl} />
             ) : (
-              <Icon glyph="crm-service-manager" />
+              <Icon glyph="crm-service-manager" ariaLabel="ServiceClass icon" />
             )}
           </Tile.Media>
           <Tile.Content title={serviceClassTileTitles.creator}>

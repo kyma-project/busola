@@ -119,7 +119,12 @@ export const ResourcesUsage = ({ namespace }) => {
   return (
     <LayoutPanel>
       <LayoutPanel.Header>
-        <Icon size="m" className="fd-has-margin-right-small" glyph="it-host" />
+        <Icon
+          size="m"
+          className="fd-has-margin-right-small"
+          glyph="it-host"
+          ariaLabel="Resource icon"
+        />
         <LayoutPanel.Head title="Resource consumption" />
       </LayoutPanel.Header>
       <LayoutPanel.Body className="namespace-workloads__body">

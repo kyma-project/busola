@@ -52,6 +52,7 @@ export const SideDrawer = ({
           <Icon
             glyph={isOpen ? 'open-command-field' : 'close-command-field'}
             size="l"
+            ariaLabel="Open/close the drawer"
           />
           {buttonText}
         </button>

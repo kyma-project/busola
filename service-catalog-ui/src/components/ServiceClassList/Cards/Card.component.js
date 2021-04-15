@@ -36,7 +36,11 @@ const Card = ({
             {imageUrl ? (
               <CardImage size="s" photo={imageUrl} />
             ) : (
-              <Icon glyph="crm-service-manager" style={{ color: '#515559' }} />
+              <Icon
+                glyph="crm-service-manager"
+                ariaLabel="ServiceClass icon"
+                style={{ color: '#515559' }}
+              />
             )}
           </CardThumbnail>
 
@@ -51,7 +55,11 @@ const Card = ({
             {labels && labels[DOCUMENTATION_PER_PLAN_LABEL] === 'true' && (
               <div aria-label="has-API-packages-indicator" className="icon">
                 <Tooltip content={DOCUMENTATION_PER_PLAN_DESCRIPTION}>
-                  <Icon glyph="sap-box" size="l" />
+                  <Icon
+                    glyph="sap-box"
+                    size="l"
+                    ariaLabel="Documentation per plan"
+                  />
                 </Tooltip>
               </div>
             )}

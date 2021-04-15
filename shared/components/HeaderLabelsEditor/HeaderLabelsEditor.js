@@ -59,7 +59,7 @@ export function HeaderLabelsEditor({
         <Tooltip content="Edit labels" position="top">
           <Icon
             glyph="edit"
-            aria-label="Edit labels"
+            ariaLabel="Edit labels"
             onClick={() => setEditing(true)}
           />
         </Tooltip>

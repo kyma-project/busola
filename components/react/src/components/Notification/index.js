@@ -29,7 +29,11 @@ const Notification = ({
     <NotificationHeader>
       <NotificationTitleWrapper>{title}</NotificationTitleWrapper>
       <NotificationIconWrapper>
-        <Icon style={{ color: color }} glyph={icon} />
+        <Icon
+          style={{ color: color }}
+          glyph={icon}
+          ariaLabel="Notification icon"
+        />
       </NotificationIconWrapper>
     </NotificationHeader>
     {content && (

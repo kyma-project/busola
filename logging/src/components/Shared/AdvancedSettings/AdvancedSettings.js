@@ -98,7 +98,7 @@ export default function AdvancedSettings({ hideSettings }) {
           glyph="decline"
           size="s"
           className="cursor-pointer"
-          aria-label="hide advanced settings"
+          ariaLabel="hide advanced settings"
           onClick={hideSettings}
         />
       </h2>
