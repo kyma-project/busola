@@ -89,6 +89,13 @@ const useGetStreamHook = _ =>
     const fetchData = async abortController => {
       if (!authData || !isHookMounted.current) return;
 
+      const processError = error => {
+        if (!abortController.signal.aborted) {
+          console.error(error);
+          setError(error);
+        }
+      };
+
       try {
         const response = await fetch({ relativeUrl: path, abortController });
         if (!authData || !isHookMounted.current) return;
@@ -97,33 +104,32 @@ const useGetStreamHook = _ =>
 
         return new ReadableStream({
           start(controller) {
-            // The following function handles each data chunk
             const push = async () => {
-              // "done" is a Boolean and value a "Uint8Array"
-              const { done, value } = await reader.read();
-              // If there is no more data to read
-              if (done) {
-                controller.close();
-                return;
-              }
-              // Get the data and send it to the browser via the controller
-              controller.enqueue(value);
-              const string = new TextDecoder().decode(value);
-              const streams = string
-                ?.split('\n')
-                .filter(stream => stream !== '');
+              try {
+                const { done, value } = await reader.read();
+                // If there is no more data to read
+                if (done) {
+                  controller.close();
+                  return;
+                }
+                // Get the data and send it to the browser via the controller
+                controller.enqueue(value);
+                const string = new TextDecoder().decode(value);
+                const streams = string
+                  ?.split('\n')
+                  .filter(stream => stream !== '');
 
-              setData(previousData => [...previousData, ...streams]);
-              return push();
+                setData(previousData => [...previousData, ...streams]);
+                return push();
+              } catch (e) {
+                processError(e);
+              }
             };
             push();
           },
         });
       } catch (e) {
-        if (!abortController.signal.aborted) {
-          console.error(e);
-          setError(e);
-        }
+        processError(e);
       }
     };
 
