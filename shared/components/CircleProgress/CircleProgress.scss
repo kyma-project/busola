@@ -19,14 +19,6 @@ $neutral-background: var(--fd-color-background-2, #fff);
     @extend %flex-center;
     border-radius: 50%;
 
-    .background {
-      @include circle-shape(100%);
-      position: absolute;
-      background-color: transparent;
-      opacity: 0.15;
-      background-blend-mode: color-burn;
-    }
-
     .value-indicator {
       @include circle-shape(100%);
       animation: fadeNrotate 2s ease-out;
@@ -45,6 +37,11 @@ $neutral-background: var(--fd-color-background-2, #fff);
         @include circle-shape(calc(100% - 6px));
         @extend %flex-center;
         border: 1px solid var(--fd-color-text-3);
+
+        &.is-error {
+          color: var(--fd-color-status-3);
+          border-color: var(--fd-color-status-3);
+        }
       }
     }
   }

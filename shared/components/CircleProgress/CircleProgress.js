@@ -1,7 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Icon } from 'fundamental-react';
 import classNames from 'classnames';
 import './CircleProgress.scss';
+
+const isInErrorState = (percent, max, reversed) => {
+  if (reversed) {
+    percent = 100 - percent;
+  }
+
+  return max > 0 && percent < 33;
+};
 
 export const CircleProgress = ({
   size = 110,
@@ -12,6 +21,7 @@ export const CircleProgress = ({
   color = 'var(--fd-color-action-1)',
   onClick,
   title,
+  reversed = false,
 }) => {
   const percent = max ? Math.round((value * 100) / max) : 0;
 
@@ -21,39 +31,40 @@ export const CircleProgress = ({
   const circleProgressClasses = classNames(`circle-progress`, {
     'cursor-pointer': !!onClick,
   });
+
+  const circleInnerClasses = classNames(`percentage`, {
+    'is-error': isInErrorState(percent, max, reversed),
+  });
+
   const containerStyle = {
     width: size + 'px',
     height: size + 'px',
   };
   const valueIndicatorStyle = {
+    backgroundColor: `#f0f0f0`,
     backgroundImage: `conic-gradient(transparent ${100 -
       percent}%, ${color} 0)`, // we have to prepare it here to avoid using styledComponents
   };
-  const gradientSize = size / 12;
-  const backgroundStyle = {
-    backgroundImage: `radial-gradient(
-          circle at center center,
-          ${color},
-          transparent
-        ),
-        repeating-radial-gradient(
-          circle at center center,
-          ${color},
-          ${color},
-          ${gradientSize}px,
-          transparent ${gradientSize * 2}px,
-          transparent ${gradientSize}px
-        )`,
+
+  const innerStyle = {
+    fontSize: textSize,
+  };
+  const titleStyle = {
+    color: isInErrorState(percent, max, reversed) ? color : 'initial',
   };
 
   return (
     <div className={circleProgressClasses} onClick={onClick}>
-      <span className="title">{title}</span>
+      <span className="title" style={titleStyle}>
+        {isInErrorState(percent, max, reversed) && (
+          <Icon size="s" className="fd-has-margin-right-xxs" glyph="error" />
+        )}
+        {title}
+      </span>
       <div className="circle__container" style={containerStyle}>
-        <div className="background" style={backgroundStyle}></div>
         <div className="value-indicator" style={valueIndicatorStyle}></div>
         <div className="inner-area">
-          <div className="percentage" style={{ fontSize: textSize }}>
+          <div className={circleInnerClasses} style={innerStyle}>
             {text}
           </div>
         </div>
@@ -71,4 +82,5 @@ CircleProgress.propTypes = {
   maxText: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   onClick: PropTypes.func,
   title: PropTypes.string,
+  reversed: PropTypes.bool,
 };
