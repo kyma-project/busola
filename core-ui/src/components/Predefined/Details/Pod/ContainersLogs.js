@@ -1,11 +1,6 @@
 import React from 'react';
 import { Panel } from 'fundamental-react';
-import {
-  useGetStream,
-  useWindowTitle,
-  PageHeader,
-  Spinner,
-} from 'react-shared';
+import { useGetStream, useWindowTitle, PageHeader } from 'react-shared';
 import './ContainersLogs.scss';
 
 export const ContainersLogs = ({ params }) => {

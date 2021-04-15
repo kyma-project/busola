@@ -120,8 +120,10 @@ const useGetStreamHook = _ =>
           },
         });
       } catch (e) {
-        console.error(error);
-        setError(error);
+        if (!abortController.signal.aborted) {
+          console.error(e);
+          setError(e);
+        }
       }
     };
 
