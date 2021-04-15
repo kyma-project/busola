@@ -33,9 +33,8 @@ function Logs({ params }) {
   const streamData = useGetStream(url);
 
   const LogsPanel = ({ streamData, containerName }) => {
-    const { loading, error, data } = streamData;
+    const { error, data } = streamData;
     if (error) return error.message;
-    if (loading) return <Spinner />;
     if (data?.length === 0)
       return (
         <div className="empty-logs">

@@ -82,14 +82,12 @@ const useGetStreamHook = _ =>
     const isHookMounted = React.useRef(true); // becomes 'false' after the hook is unmounted to avoid performing any async actions afterwards
     const lastAuthData = React.useRef(null);
     const [data, setData] = React.useState([]);
-    const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(null);
     const { authData } = useMicrofrontendContext();
     const fetch = useFetch();
 
     const fetchData = async abortController => {
       if (!authData || !isHookMounted.current) return;
-      setLoading(true);
 
       try {
         const response = await fetch({ relativeUrl: path, abortController });
@@ -118,7 +116,6 @@ const useGetStreamHook = _ =>
               setData(previousData => [...previousData, ...streams]);
               return push();
             };
-            setLoading(false);
             push();
           },
         });
@@ -126,14 +123,12 @@ const useGetStreamHook = _ =>
         console.error(error);
         setError(error);
       }
-      setLoading(false);
     };
 
     React.useEffect(() => {
       const abortController = new AbortController();
       if (lastAuthData.current && path) fetchData(abortController);
       return _ => {
-        if (loading) setLoading(false);
         abortController.abort();
       };
     }, [path]);
@@ -145,7 +140,6 @@ const useGetStreamHook = _ =>
         fetchData(abortController);
       }
       return _ => {
-        if (loading) setLoading(false);
         abortController.abort();
       };
     }, [authData]);
@@ -159,7 +153,6 @@ const useGetStreamHook = _ =>
 
     return {
       data,
-      loading,
       error,
     };
   };
