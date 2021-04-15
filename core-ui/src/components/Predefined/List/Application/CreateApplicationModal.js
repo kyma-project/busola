@@ -37,7 +37,8 @@ export function CreateApplicationForm({
 
   const postRequest = usePost();
 
-  async function handleFormSubmit() {
+  async function handleFormSubmit(e) {
+    e.preventDefault();
     try {
       const applicationInput = createApplicationInput(application);
       await postRequest(

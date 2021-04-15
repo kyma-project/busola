@@ -144,7 +144,8 @@ export default function RepositoryForm({
     setShowSecretName(event.target.value !== '');
   }
 
-  async function handleSubmit() {
+  async function handleSubmit(e) {
+    e.preventDefault();
     const spec = {
       url: urlRef.current.value.trim(),
       auth: null,
