@@ -20,13 +20,10 @@ import {
 import { groups } from '../auth';
 import { getInitParams, clearInitParams } from '../init-params';
 
-const params = getInitParams();
-const customLogoutFn =
-  !!params?.auth ||
-  (() => {
-    clearInitParams();
-    window.location = '/logout.html';
-  });
+const customLogoutFn = () => {
+  clearInitParams();
+  window.location = '/logout.html';
+};
 
 export let resolveNavigationNodes;
 export let navigation = {
@@ -73,12 +70,19 @@ export function getNavigationData(authData) {
           return res;
         },
         (err) => {
-          if (err === 'access denied') {
+          if (err.code === 403) {
             clearAuthData();
-            window.location.pathname = '/nopermissions.html';
+            window.location = `/nopermissions.html?error=${err.originalMessage}`;
           } else {
+            let errorNotification = 'Could not load initial configuration';
+            if (err.code && err.message)
+              errorNotification += `: ${err.message} (${err.code}${
+                err.originalMessage && err.message !== err.originalMessage
+                  ? ':' + err.originalMessage
+                  : ''
+              })`;
             Luigi.ux().showAlert({
-              text: `Could not load initial configuration: ${err.message}`,
+              text: errorNotification,
               type: 'error',
             });
             console.warn(err);
