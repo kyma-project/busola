@@ -114,10 +114,7 @@ async function onKubeconfigUploaded(file) {
 function onOidcFormSubmit(e) {
   e.preventDefault();
   const issuerUrlValue = document.querySelector('#issuer-url').value;
-  const issuerUrl =
-    issuerUrlValue.substring(issuerUrlValue.length - 1) == '/'
-      ? issuerUrlValue.substring(0, issuerUrlValue.length - 1)
-      : issuerUrlValue;
+   const issuerUrl = issuerUrlValue.replace(/\/$/, '');
 
   const auth = {
     issuerUrl,
