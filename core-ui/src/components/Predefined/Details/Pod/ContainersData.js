@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import LuigiClient from '@luigi-project/client';
 
 import {
+  Button,
   Panel,
   FormItem,
   FormLabel,
   LayoutGrid,
-  Link,
 } from 'fundamental-react';
 import './ContainersData.scss';
 
@@ -35,16 +35,18 @@ const getPorts = ports => {
 
 const ContainerComponent = ({ container }) => (
   <>
-    <Panel.Filters>
-      <Link
-        className="link"
-        onClick={() =>
-          LuigiClient.linkManager().navigate(`containers/${container.name}`)
-        }
-      >
-        <Panel.Head title={container.name} />
-      </Link>
-    </Panel.Filters>
+    <Panel.Header>
+      <Panel.Head title={container.name} />
+      <Panel.Actions>
+        <Button
+          onClick={() =>
+            LuigiClient.linkManager().navigate(`containers/${container.name}`)
+          }
+        >
+          View Logs
+        </Button>
+      </Panel.Actions>
+    </Panel.Header>
     <Panel.Body>
       <SecretComponent name="Name" value={container.name} />
       {container.image && (
