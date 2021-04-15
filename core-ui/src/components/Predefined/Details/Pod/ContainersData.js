@@ -14,7 +14,7 @@ import './ContainersData.scss';
 const SecretComponent = ({ name, value }) => (
   <FormItem className="item-wrapper">
     <LayoutGrid cols="2">
-      <FormLabel>{name}:</FormLabel>
+      <FormLabel className="form-label">{name}:</FormLabel>
       <div>{value}</div>
     </LayoutGrid>
   </FormItem>
