@@ -32,7 +32,7 @@ export default function App() {
       <Route
         exact
         path="/namespaces/:namespaceId/pods/:podName/containers/:containerName"
-        component={withTitle('Logs', RoutedContainerDetails)}
+        component={RoutedContainerDetails}
       />
 
       <Route
