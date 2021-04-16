@@ -1,5 +1,4 @@
 import React from 'react';
-import { Token } from 'fundamental-react';
 import { EMPTY_TEXT_PLACEHOLDER } from '../../constants/constants';
 
 export const Labels = labels => {
@@ -15,13 +14,13 @@ export const Labels = labels => {
 
   /* eslint-enable no-unused-vars */
   return separatedLabels.map((label, id) => (
-    <Token
-      buttonLabel=""
+    <span
+      aria-label={label}
+      className="fd-token fd-token--readonly"
       key={id}
-      style={{ marginTop: '4px', marginBottom: '4px' }}
-      className="y-fd-token y-fd-token--no-button y-fd-token--gap"
+      style={{ marginBottom: '4px', marginRight: '4px' }}
     >
-      {label}
-    </Token>
+      <span className="fd-token__text">{label}</span>
+    </span>
   ));
 };
