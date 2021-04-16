@@ -66,21 +66,7 @@ export const communication = {
         pathname + newParamsString
       );
     },
-    'busola.showTokenExpirationWarning': () => {
-      refreshAuth();
-      // const settings = {
-      //   header: 'Your session is about to expire in 2 minutes',
-      //   body: 'Save your work and refresh the page to extend your session.',
-      //   buttonConfirm: 'Refresh now',
-      //   buttonDismiss: 'Cancel',
-      // };
-      // Luigi.ux()
-      //   .showConfirmationModal(settings)
-      //   .then(() => {
-      //     location.reload();
-      //   })
-      //   .catch(() => {}); // cancel
-    },
+    'busola.refreshIdToken': refreshAuth,
   },
 };
 

@@ -16,12 +16,12 @@
   },
   "private": true,
   "dependencies": {
-    "@auth0/auth0-spa-js": "^1.14.0",
     "@luigi-project/core": "^1.7.1",
     "@luigi-project/plugin-auth-oidc": "1.8.1",
     "copy-webpack-plugin": "^5.0.0",
     "file-saver": "2.0.2",
     "json-url": "^2.6.0",
+    "oidc-client": "^1.11.5",
     "prettier": "^2.2.1"
   },
   "devDependencies": {

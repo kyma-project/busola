@@ -1,31 +1,23 @@
 import OpenIdConnect from '@luigi-project/plugin-auth-oidc';
-import { getInitParams, clearInitParams } from './init-params';
-import { Auth0Client } from '@auth0/auth0-spa-js';
+import { clearInitParams } from './init-params';
+import { UserManager, Log } from 'oidc-client';
+
+Log.logger = console;
+
+let userManager;
 
 export let groups;
 
 export async function refreshAuth() {
-  const {
-    auth: { issuerUrl, clientId },
-  } = getInitParams();
-  console.log({
-    domain: issuerUrl.replace(/^https:\/\//, ''),
-    client_id: clientId,
-  });
-  const auth0 = new Auth0Client({
-    domain: issuerUrl.replace(/^https:\/\//, ''),
-    client_id: clientId,
-  });
-  console.log(auth0);
-  const token = await auth0.getTokenSilently();
-  console.log(token);
-  const claims = await auth0.getIdTokenClaims();
-  const id_token = claims.__raw;
-  console.log(claims);
-  console.log(id_token);
+  await userManager.signinSilent();
+  const { id_token } = await userManager.getUser();
 
   const auth = Luigi.auth().store.getAuthData();
   Luigi.auth().store.setAuthData({ ...auth, idToken: id_token });
+
+  const navigation = await Luigi.getConfigValue('navigation.nodes');
+  const context = navigation[0].context;
+  context.authData.idToken = id_token;
   Luigi.configChanged('navigation.nodes');
 }
 
@@ -54,6 +46,15 @@ export const createAuth = async (authParams) => {
     `${issuerUrl}/v2/logout?returnTo=${encodeURI(
       `${location.origin}/logout.html`
     )}&client_id=${clientId}&`;
+
+  userManager = new UserManager({
+    authority: issuerUrl,
+    metadata: providerMetadata,
+    client_id: clientId,
+    response_type: 'id_token',
+    scope,
+    silent_redirect_uri: window.location.origin + '/silentCallback.html',
+  });
 
   return {
     use: 'openIdConnect',
