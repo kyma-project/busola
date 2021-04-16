@@ -67,8 +67,14 @@ export const StatusBadge = ({
   );
 
   const badgeElement = (
-    <ObjectStatus role="status" inverted status={type} className={classes}>
-      {value.toString()}
+    <ObjectStatus
+      role="status"
+      inverted
+      status={type}
+      className={classes}
+      style={{ whiteSpace: 'nowrap' }}
+    >
+      {value.toString().toUpperCase()}
     </ObjectStatus>
   );
 
