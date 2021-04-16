@@ -46,3 +46,5 @@ licenses
 **/licenses
 
 scripts/clusterRegistry.txt
+
+tests/fixtures/kubeconfig.yaml

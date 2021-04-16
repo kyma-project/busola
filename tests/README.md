@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project contains UI smoke tests for Kyma.
+This project contains UI smoke tests for Busola.
 
 ## Installation
 

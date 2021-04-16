@@ -1,83 +1,13 @@
-Cypress.Commands.add(
-  'getIframeBody',
-  (getIframeOpts = {}, index = 0, containerSelector = '.iframeContainer') => {
-    return cy
-      .get(`${containerSelector} iframe`, getIframeOpts)
-      .eq(index)
-      .wait(1000)
-      .iframe();
-  },
-);
+Cypress.Commands.add('getIframeBody', () => {
+  // get the iframe > document > body
+  // and retry until the body element is not empty
+  //cy.log('getIframeBody')
 
-Cypress.Commands.add('iframe', { prevSubject: 'element' }, $iframe => {
-  Cypress.log({
-    name: 'iframe',
-    consoleProps() {
-      return {
-        iframe: $iframe,
-      };
-    },
-  });
-  return new Cypress.Promise(resolve => {
-    onIframeReady(
-      $iframe,
-      () => {
-        resolve($iframe.contents().find('body'));
-      },
-      () => {
-        $iframe.on('load', () => {
-          resolve($iframe.contents().find('body'));
-        });
-      },
-    );
-  });
-});
-
-function onIframeReady($iframe, successFn, errorFn) {
-  try {
-    const iCon = $iframe.first()[0].contentWindow,
-      bl = 'about:blank',
-      compl = 'complete';
-    const callCallback = () => {
-      try {
-        const $con = $iframe.contents();
-        if ($con.length === 0) {
-          // https://git.io/vV8yU
-          throw new Error('iframe inaccessible');
-        }
-        successFn($con);
-      } catch (e) {
-        // accessing contents failed
-        errorFn();
-      }
-    };
-    const observeOnload = () => {
-      $iframe.on('load.jqueryMark', () => {
-        try {
-          const src = $iframe.attr('src').trim(),
-            href = iCon.location.href;
-          if (href !== bl || src === bl || src === '') {
-            $iframe.off('load.jqueryMark');
-            callCallback();
-          }
-        } catch (e) {
-          errorFn();
-        }
-      });
-    };
-    if (iCon.document.readyState === compl) {
-      const src = $iframe.attr('src').trim(),
-        href = iCon.location.href;
-      if (href === bl && src !== bl && src !== '') {
-        observeOnload();
-      } else {
-        callCallback();
-      }
-    } else {
-      observeOnload();
-    }
-  } catch (e) {
-    // accessing contentWindow failed
-    errorFn();
-  }
-}
+  return cy
+  .get('.iframeContainer iframe', { log: false })
+  .its('0.contentDocument.body', { log: false }).should('not.be.empty')
+  // wraps "body" DOM element to allow
+  // chaining more Cypress commands, like ".find(...)"
+  // https://on.cypress.io/wrap
+  .then((body) => cy.wrap(body, { log: false }))
+})
