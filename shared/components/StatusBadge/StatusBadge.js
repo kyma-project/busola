@@ -1,5 +1,5 @@
 import React from 'react';
-import { InfoLabel } from 'fundamental-react';
+import { ObjectStatus } from 'fundamental-react';
 import PropTypes from 'prop-types';
 import './StatusBadge.scss';
 import classNames from 'classnames';
@@ -15,28 +15,34 @@ const resolveType = status => {
 
   switch (status.toUpperCase()) {
     case 'INITIAL':
-      return 'info';
+      return 'informative';
 
     case 'READY':
     case 'RUNNING':
     case 'SUCCESS':
     case 'SUCCEEDED':
-      return 'success';
+      return 'positive';
 
     case 'UNKNOWN':
     case 'WARNING':
-      return 'warning';
+      return 'critical';
 
     case 'FAILED':
     case 'ERROR':
     case 'FAILURE':
-      return 'error';
+      return 'negative';
 
     default:
       return undefined;
   }
 };
 
+const TYPE_FALLBACK = new Map([
+  ['success', 'positive'],
+  ['warging', 'critical'],
+  ['error', 'negative'],
+  ['info', 'informative'],
+]);
 export const StatusBadge = ({
   tooltipContent,
   type,
@@ -46,6 +52,10 @@ export const StatusBadge = ({
   className,
 }) => {
   if (autoResolveType) type = resolveType(value);
+  else
+    for (const key of TYPE_FALLBACK.keys()) {
+      if (type === key) type = TYPE_FALLBACK.get(key);
+    }
 
   const classes = classNames(
     'status-badge',
@@ -57,9 +67,9 @@ export const StatusBadge = ({
   );
 
   const badgeElement = (
-    <InfoLabel role="status" className={classes}>
-      {value}
-    </InfoLabel>
+    <ObjectStatus role="status" inverted status={type} className={classes}>
+      {value.toString()}
+    </ObjectStatus>
   );
 
   return tooltipContent ? (
@@ -73,7 +83,16 @@ export const StatusBadge = ({
 
 StatusBadge.propTypes = {
   tooltipContent: PropTypes.node,
-  type: PropTypes.oneOf(['success', 'warning', 'error', 'info']),
+  type: PropTypes.oneOf([
+    'positive',
+    'negative',
+    'critical',
+    'informative',
+    'success',
+    'error',
+    'warning',
+    'info',
+  ]),
   autoResolveType: PropTypes.bool,
   tooltipProps: PropTypes.object,
   className: PropTypes.string,

@@ -16,6 +16,7 @@ export const Labels = labels => {
   /* eslint-enable no-unused-vars */
   return separatedLabels.map((label, id) => (
     <Token
+      buttonLabel=""
       key={id}
       style={{ marginTop: '4px', marginBottom: '4px' }}
       className="y-fd-token y-fd-token--no-button y-fd-token--gap"
