@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { BindableServicesList } from './BindableServicesList';
-import { Button, FormSet } from 'fundamental-react';
+import { Button, FormFieldset } from 'fundamental-react';
 import { Modal, useUpdate } from 'react-shared';
 import { createPatch } from 'rfc6902';
 
@@ -38,13 +38,13 @@ export default function EditNamespaceBinding({ application, binding }) {
       onConfirm={updateBinding}
       onShow={() => setServicesToBind(binding.spec.services)}
     >
-      <FormSet>
+      <FormFieldset>
         <BindableServicesList
           availableServices={application.spec.services}
           services={servicesToBind}
           setServices={setServicesToBind}
         />
-      </FormSet>
+      </FormFieldset>
     </Modal>
   );
 }

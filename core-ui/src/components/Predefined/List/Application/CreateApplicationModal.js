@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, FormSet } from 'fundamental-react';
+import { Button, FormFieldset } from 'fundamental-react';
 import {
   ModalWithForm,
   TextFormItem,
@@ -53,7 +53,7 @@ export function CreateApplicationForm({
 
   return (
     <form onChange={onChange} ref={formElementRef} onSubmit={handleFormSubmit}>
-      <FormSet>
+      <FormFieldset>
         <TextFormItem
           inputKey="name"
           required
@@ -76,7 +76,7 @@ export function CreateApplicationForm({
           labels={application.labels || {}}
           onChange={labels => setApplication({ ...application, labels })}
         />
-      </FormSet>
+      </FormFieldset>
     </form>
   );
 }

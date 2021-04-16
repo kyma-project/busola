@@ -57,7 +57,7 @@ import {
   FormInput,
   FormLabel,
   FormSelect,
-  FormSet,
+  FormFieldset,
 } from 'fundamental-react';
 import { Counter } from 'fundamental-react';
 
@@ -123,7 +123,7 @@ module.exports = {
   FormLabel,
   Panel,
   PanelBody,
-  FormSet,
+  FormFieldset,
   Modal,
   Counter,
 };

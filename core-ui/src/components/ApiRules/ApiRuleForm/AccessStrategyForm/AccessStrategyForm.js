@@ -187,7 +187,9 @@ function MethodsForm({ methods, setMethods, isRelevant }) {
             value={m}
             defaultChecked={methods.includes(m)}
             onChange={e => toggleMethod(m, e.target.checked)}
-          />
+          >
+            {m}
+          </Checkbox>
         ))}
       </FormRadioGroup>
     </FormFieldset>

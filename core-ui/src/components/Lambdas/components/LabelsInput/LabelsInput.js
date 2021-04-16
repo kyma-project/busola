@@ -12,7 +12,11 @@ export function LabelsInput({ ...otherProps }) {
     <div className="resource-labels-input">
       <FormLabel className="resource-labels-input__label">
         {FORMS.LABELS.LABEL}
-        <InlineHelp placement="bottom-right" text={FORMS.LABELS.INLINE_HELP} />
+        <InlineHelp
+          buttonLabel="help"
+          placement="right-end"
+          text={FORMS.LABELS.INLINE_HELP}
+        />
       </FormLabel>
       <LabelSelectorInput {...otherProps} />
     </div>

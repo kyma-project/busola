@@ -5,7 +5,6 @@ import {
   FormFieldset,
   FormItem,
   FormLabel,
-  FormSet,
 } from 'fundamental-react';
 
 import { K8sNameInput, LabelSelectorInput, usePost } from 'react-shared';
@@ -35,7 +34,8 @@ const DisableSidecarField = ({ onChange }) => {
         >
           Disable side-car injection
           <InlineHelp
-            placement="bottom-right"
+            buttonLabel="help"
+            placement="right-end"
             text="
                 Select this option to disable istio to mediate all
                   communication between the pods in your namespace.
@@ -66,7 +66,8 @@ const MemoryQuotasCheckbox = ({ checkboxRef, children }) => {
         >
           Apply Total Memory Quotas
           <InlineHelp
-            placement="bottom-right"
+            buttonLabel="help"
+            placement="right-end"
             text="
                   Define constraints that limit total memory consumption in your
                   namespace. 
@@ -106,7 +107,7 @@ const SectionRow = ({
 );
 
 const MemoryQuotasSection = ({ limitsRef, requestsRef }) => (
-  <FormSet className="input-fields" data-test-id="memory-quotas-section">
+  <FormFieldset className="input-fields" data-test-id="memory-quotas-section">
     <SectionRow
       id="memory-limit"
       reference={limitsRef}
@@ -124,7 +125,7 @@ const MemoryQuotasSection = ({ limitsRef, requestsRef }) => (
       reference={requestsRef}
       description="Memory requests *"
     />
-  </FormSet>
+  </FormFieldset>
 );
 
 const ContainerLimitsCheckbox = ({ checkboxRef, children }) => {
@@ -145,7 +146,8 @@ const ContainerLimitsCheckbox = ({ checkboxRef, children }) => {
         >
           Apply limits per container
           <InlineHelp
-            placement="bottom-right"
+            buttonLabel="help"
+            placement="right-end"
             text="
                   Define memory constraints for individual containers in your
                   namespace. Use plain value in bytes, or suffix
@@ -160,7 +162,10 @@ const ContainerLimitsCheckbox = ({ checkboxRef, children }) => {
 };
 
 const ContainerLimitSection = ({ maxRef, defaultRef, requestRef }) => (
-  <FormSet className="input-fields" data-test-id="container-limits-section">
+  <FormFieldset
+    className="input-fields"
+    data-test-id="container-limits-section"
+  >
     <SectionRow
       id="container-max"
       placeholder="Max"
@@ -188,7 +193,7 @@ const ContainerLimitSection = ({ maxRef, defaultRef, requestRef }) => (
       reference={requestRef}
       description="Default request *"
     />
-  </FormSet>
+  </FormFieldset>
 );
 
 export const NamespacesCreate = ({

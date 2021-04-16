@@ -27,6 +27,7 @@ export const ResultLimitInput = ({ state, actions }) => (
         Result limit
         <span className="small-inline-help-wrapper">
           <InlineHelp
+            buttonLabel="help"
             placement="right"
             text="Return only limited number of most recent log lines."
           />

@@ -68,7 +68,11 @@ export const FormInput = forwardRef(
           >
             {label}
             {inlineHelp && (
-              <InlineHelp placement="bottom-right" text={inlineHelp} />
+              <InlineHelp
+                buttonLabel="help"
+                placement="right-end"
+                text={inlineHelp}
+              />
             )}
           </FormLabel>
         )}

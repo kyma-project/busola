@@ -253,7 +253,9 @@ export default function ApiRuleForm({
                     <FormLabel htmlFor="hostname" required>
                       Hostname
                       <InlineHelp
-                        placement="bottom-right"
+                        buttonLabel="help"
+                        buttonLabel="help"
+                        placement="right-end"
                         text="The hostname must consist of alphanumeric characters, dots or dashes, 
                           and must start and end with an alphanumeric character (e.g. 'my-name1')."
                       />

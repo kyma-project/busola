@@ -37,7 +37,9 @@ export default function CheckboxFormControl({
             value={displayName}
             defaultChecked={values.includes(value)}
             onChange={e => updateValues(value, e.target.checked)}
-          />
+          >
+            {displayName}
+          </Checkbox>
         ))}
       </FormRadioGroup>
     </>

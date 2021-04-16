@@ -24,7 +24,8 @@ export const K8sNameInput = ({
       {label}
       {showHelp && (
         <InlineHelp
-          placement="bottom-right"
+          buttonLabel="help"
+          placement="right-end"
           text="
               The name must consist of lower case alphanumeric characters or dashes, 
               and must start and end with an alphanumeric character (e.g. 'my-name1').
