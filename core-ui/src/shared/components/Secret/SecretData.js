@@ -76,7 +76,7 @@ export default function SecretData({ secret }) {
         <Panel.Actions>
           {showExpandButton && (
             <Button
-              option="light"
+              option="transparent"
               glyph={isCollapsed ? 'show' : 'hide'}
               disabled={!secret?.data}
               onClick={() => setCollapsed(!isCollapsed)}
@@ -85,7 +85,7 @@ export default function SecretData({ secret }) {
             </Button>
           )}
           <Button
-            option="light"
+            option="transparent"
             glyph={isEncoded ? 'show' : 'hide'}
             disabled={!secret?.data}
             onClick={() => {

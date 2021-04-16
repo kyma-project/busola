@@ -39,7 +39,7 @@ export default function ResultOptionsDropdown() {
         control={
           <Button
             glyph="action-settings"
-            option="light"
+            option="transparent"
             className="fd-has-margin-right-tiny"
             size="xs"
           ></Button>

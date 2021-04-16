@@ -9,7 +9,9 @@ export default function EditNamespaceBinding({ application, binding }) {
   const namespace = binding.metadata.namespace;
   const [servicesToBind, setServicesToBind] = React.useState([]);
   const patchRequest = useUpdate();
-  const modalOpeningComponent = <Button compact option="light" glyph="edit" />;
+  const modalOpeningComponent = (
+    <Button compact option="transparent" glyph="edit" />
+  );
 
   async function updateBinding() {
     const newBinding = JSON.parse(JSON.stringify(binding));

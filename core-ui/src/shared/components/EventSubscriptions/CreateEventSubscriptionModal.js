@@ -12,7 +12,7 @@ export default function CreateEventSubscriptionModal({
   onSubmit,
 }) {
   const button = (
-    <Button glyph="add" option="light">
+    <Button glyph="add" option="transparent">
       {EVENT_TRIGGERS_PANEL.ADD_MODAL.OPEN_BUTTON.TEXT}
     </Button>
   );

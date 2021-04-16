@@ -122,7 +122,7 @@ export default function CreateServiceBindingModal({
   }
 
   const button = (
-    <Button glyph="add" option="light" disabled={!hasAnyInstances}>
+    <Button glyph="add" option="transparent" disabled={!hasAnyInstances}>
       {SERVICE_BINDINGS_PANEL.CREATE_MODAL.OPEN_BUTTON.TEXT}
     </Button>
   );

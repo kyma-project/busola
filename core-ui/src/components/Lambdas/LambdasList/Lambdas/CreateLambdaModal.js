@@ -19,7 +19,7 @@ export default function CreateLambdaModal({
   const defaultModalOpeningComponent = (
     <Button
       glyph="add"
-      option="light"
+      option="transparent"
       disabled={Boolean(serverDataError || serverDataLoading)}
     >
       {LAMBDAS_LIST.CREATE_MODAL.OPEN_BUTTON.TEXT}

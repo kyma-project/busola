@@ -187,7 +187,7 @@ function Resources({
       <ModalWithForm
         title={`Create ${prettifiedResourceName}`}
         modalOpeningComponent={
-          <Button glyph="add" option="light">
+          <Button glyph="add" option="transparent">
             Create {prettifiedResourceName}
           </Button>
         }

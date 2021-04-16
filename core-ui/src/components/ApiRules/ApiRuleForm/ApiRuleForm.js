@@ -291,7 +291,7 @@ export default function ApiRuleForm({
                 <LayoutPanel.Actions>
                   <Button
                     onClick={addAccessStrategy}
-                    option="light"
+                    option="transparent"
                     glyph="add"
                     typeAttr="button"
                   >

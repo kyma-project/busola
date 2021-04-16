@@ -17,7 +17,7 @@ export default function EditVariablesModal({
   const [invalidModalPopupMessage, setInvalidModalPopupMessage] = useState('');
 
   const modalOpeningComponent = (
-    <Button glyph="edit" option="light">
+    <Button glyph="edit" option="transparent">
       {ENVIRONMENT_VARIABLES_PANEL.EDIT_MODAL.OPEN_BUTTON.TEXT}
     </Button>
   );

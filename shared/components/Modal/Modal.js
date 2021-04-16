@@ -3,7 +3,7 @@ import LuigiClient from '@luigi-project/client';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import './Modal.scss';
-import { Modal as FdModal, Button } from 'fundamental-react';
+import { Dialog as FdModal, Button } from 'fundamental-react';
 import { Tooltip } from '../Tooltip/Tooltip';
 import { Spinner } from '../Spinner/Spinner';
 
@@ -101,7 +101,7 @@ export function Modal({
         {cancelText && (
           <Button
             style={{ marginRight: '12px' }}
-            option="light"
+            option="transparent"
             onClick={onClose}
           >
             {cancelText}

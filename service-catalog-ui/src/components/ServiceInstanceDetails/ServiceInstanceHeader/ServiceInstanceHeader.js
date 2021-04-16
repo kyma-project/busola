@@ -79,7 +79,11 @@ const ServiceInstanceHeader = ({ serviceInstance, servicePlan }) => {
   ];
 
   const actions = (
-    <Button type="negative" option="light" onClick={handleSubscriptionDelete}>
+    <Button
+      type="negative"
+      option="transparent"
+      onClick={handleSubscriptionDelete}
+    >
       {serviceInstanceConstants.delete}
     </Button>
   );

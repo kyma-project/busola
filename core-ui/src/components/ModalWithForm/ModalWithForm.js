@@ -153,7 +153,7 @@ const ModalWithForm = ({
               onClick={() => {
                 setOpenStatus(false);
               }}
-              option="light"
+              option="transparent"
             >
               Cancel
             </Button>
