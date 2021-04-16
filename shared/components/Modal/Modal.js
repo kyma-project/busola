@@ -96,30 +96,32 @@ export function Modal({
         {confirmMessage}
       </Button>
     );
-    return (
-      <>
-        {cancelText && (
-          <Button
-            style={{ marginRight: '12px' }}
-            option="transparent"
-            onClick={onClose}
-          >
-            {cancelText}
-          </Button>
-        )}
+    let output = [
+      tooltipData ? (
+        <Tooltip
+          {...tooltipData}
+          minWidth={tooltipData.minWidth ? tooltipData.minWidth : '191px'}
+        >
+          {confirmButton}
+        </Tooltip>
+      ) : (
+        confirmButton
+      ),
+    ];
 
-        {tooltipData ? (
-          <Tooltip
-            {...tooltipData}
-            minWidth={tooltipData.minWidth ? tooltipData.minWidth : '191px'}
-          >
-            {confirmButton}
-          </Tooltip>
-        ) : (
-          confirmButton
-        )}
-      </>
-    );
+    if (cancelText) {
+      output.unshiift(
+        <Button
+          style={{ marginRight: '12px' }}
+          option="transparent"
+          onClick={onClose}
+        >
+          {cancelText}
+        </Button>,
+      );
+    }
+
+    return output;
   };
 
   const modalActions = () => {

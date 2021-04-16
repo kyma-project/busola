@@ -63,7 +63,7 @@ export const PageHeader = ({
           </section>
         ) : null}
 
-        <LayoutPanel.Head title={title} aria-label="title" />
+        <LayoutPanel.Head title={title} ariaLabel="title" />
         {/* don't use Panel.Head's description, as it accepts only strings */}
         {description && <p className="description">{description}</p>}
         <section className={`column-wrapper ${columnWrapperClassName}`}>

@@ -14,7 +14,7 @@ import {
   useDelete,
   useNotification,
 } from 'react-shared';
-import { Identifier } from 'fundamental-react';
+import { InfoLabel } from 'fundamental-react';
 
 import { serviceInstanceConstants } from 'helpers/constants';
 import { determineDisplayedInstances } from 'helpers/search';
@@ -48,9 +48,7 @@ const status = (data, id) => {
   return (
     <StatusesList key={id}>
       <StatusWrapper>
-        <Identifier size="xxs" data-e2e-id={id}>
-          {data}
-        </Identifier>
+        <InfoLabel data-e2e-id={id}>{data}</InfoLabel>
       </StatusWrapper>
     </StatusesList>
   );

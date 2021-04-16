@@ -144,7 +144,7 @@ export const GenericList = ({
         </LayoutPanel.Header>
       )}
 
-      <LayoutPanel.Body>
+      <LayoutPanel.Body className="fd-has-padding-none">
         <table className={tableClassNames}>
           {showHeader && (
             <thead>
