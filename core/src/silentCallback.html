@@ -1,6 +1,8 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/oidc-client/1.11.5/oidc-client.min.js"
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/oidc-client/1.11.5/oidc-client.min.js"
   integrity="sha512-pGtU1n/6GJ8fu6bjYVGIOT9Dphaw5IWPwVlqkpvVgqBxFkvdNbytUh0H8AP15NYF777P4D3XEeA/uDWFCpSQ1g=="
-  crossorigin="anonymous"></script>
+  crossorigin="anonymous"
+></script>
 <script>
   var mgr = new Oidc.UserManager();
   mgr.signinSilentCallback().catch((error) => {

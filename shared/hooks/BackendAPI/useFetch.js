@@ -12,7 +12,7 @@ export const useFetch = () => {
   if (!authData) return () => {};
 
   return async (relativeUrl, init) => {
-    checkToken(authData?.idToken);
+    checkToken(authData?.idTokenExpiration);
     init = {
       ...init,
       headers: {

@@ -1,5 +1,4 @@
 import { useRef } from 'react';
-import parseJWT from 'jwt-decode';
 import LuigiClient from '@luigi-project/client';
 
 const warningTime = 2 * 60; // 2 mins
@@ -7,12 +6,11 @@ const warningTime = 2 * 60; // 2 mins
 export function useTokenExpirationGuard() {
   const waitingForNewToken = useRef(false);
 
-  const checkToken = idToken => {
+  const checkToken = idTokenExpiration => {
     try {
-      const expirationTimestamp = parseJWT(idToken).exp;
-      if (!expirationTimestamp) return;
+      if (!idTokenExpiration) return;
 
-      const secondsLeft = expirationTimestamp - Date.now() / 1000;
+      const secondsLeft = (idTokenExpiration - Date.now()) / 1000;
       if (secondsLeft > warningTime && waitingForNewToken.current) {
         waitingForNewToken.current = false;
       }

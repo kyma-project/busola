@@ -1,8 +1,7 @@
 import OpenIdConnect from '@luigi-project/plugin-auth-oidc';
 import { clearInitParams } from './init-params';
-import { UserManager, Log } from 'oidc-client';
-
-Log.logger = console;
+import { UserManager } from 'oidc-client';
+import parseJWT from 'jwt-decode';
 
 let userManager;
 
@@ -13,11 +12,17 @@ export async function refreshAuth() {
   const { id_token } = await userManager.getUser();
 
   const auth = Luigi.auth().store.getAuthData();
-  Luigi.auth().store.setAuthData({ ...auth, idToken: id_token });
+  const idTokenExpiration = parseJWT(id_token).exp * 1000;
+  Luigi.auth().store.setAuthData({
+    ...auth,
+    idToken: id_token,
+    idTokenExpiration,
+  });
 
   const navigation = await Luigi.getConfigValue('navigation.nodes');
   const context = navigation[0].context;
   context.authData.idToken = id_token;
+  context.authData.idTokenExpiration = idTokenExpiration;
   Luigi.configChanged('navigation.nodes');
 }
 
@@ -35,6 +40,15 @@ async function fetchOidcProviderMetadata(issuerUrl) {
     clearInitParams();
     window.location = '/login.html';
   }
+}
+
+function addIdTokenExpirationToAuth() {
+  const authData = Luigi.auth().store.getAuthData();
+  const idTokenExpiration = parseJWT(authData.idToken).exp * 1000;
+  Luigi.auth().store.setAuthData({
+    ...authData,
+    idTokenExpiration,
+  });
 }
 
 export const createAuth = async (authParams) => {
@@ -73,6 +87,8 @@ export const createAuth = async (authParams) => {
         end_session_endpoint,
       },
       userInfoFn: (_, authData) => {
+        addIdTokenExpirationToAuth();
+
         groups = authData.profile['http://k8s/groups'];
         return Promise.resolve({
           name: authData.profile.name,
