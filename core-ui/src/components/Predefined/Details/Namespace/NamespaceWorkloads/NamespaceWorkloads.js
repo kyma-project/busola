@@ -56,7 +56,7 @@ const PodsCircle = ({ namespace }) => {
       loading={loading}
       error={error}
       title="Pods"
-      color="var(--fd-color-accent-5)"
+      color="var(--fd-color-accent-6)"
     />
   );
 };
@@ -74,25 +74,7 @@ const DeploymentsCircle = ({ namespace }) => {
       loading={loading}
       error={error}
       title="Deployments"
-      color="var(--fd-color-accent-4)"
-    />
-  );
-};
-
-const ReplicaSetsCircle = ({ namespace }) => {
-  const { data, error, loading = true } = useGetList()(
-    `/apis/apps/v1/namespaces/${namespace}/replicasets`,
-    {
-      pollingInterval: 3300,
-    },
-  );
-  return (
-    <ResourceCircle
-      data={data}
-      loading={loading}
-      error={error}
-      title="Replica Sets"
-      color="var(--fd-color-accent-3)"
+      color="var(--fd-color-accent-5)"
     />
   );
 };
@@ -109,10 +91,9 @@ export function NamespaceWorkloads({ namespace }) {
         <Panel.Head title="Healthy Resources" />
       </Panel.Header>
       <Panel.Body className="namespace-workloads__body">
-        <LayoutGrid cols={3}>
+        <LayoutGrid cols={2}>
           <PodsCircle namespace={namespace} />
           <DeploymentsCircle namespace={namespace} />
-          <ReplicaSetsCircle namespace={namespace} />
         </LayoutGrid>
       </Panel.Body>
     </Panel>

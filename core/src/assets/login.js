@@ -113,10 +113,13 @@ async function onKubeconfigUploaded(file) {
 
 function onOidcFormSubmit(e) {
   e.preventDefault();
+  const issuerUrlValue = document.querySelector('#issuer-url').value;
+  const issuerUrl = issuerUrlValue.replace(/\/$/, '');
+
   const auth = {
-    issuerUrl: document.querySelector('#issuer-url').value,
+    issuerUrl,
     clientId: document.querySelector('#client-id').value,
-    scope: 'openid',
+    scope: document.querySelector('#scopes').value,
     responseType: 'id_token',
   };
   saveInitParams({ cluster, auth });
