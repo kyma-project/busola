@@ -13,7 +13,6 @@ export const useFetch = () => {
 
   return async ({ relativeUrl, abortController, init }) => {
     checkToken(authData?.idTokenExpiration);
-    checkForTokenExpiration(authData?.idToken);
 
     init = {
       ...init,

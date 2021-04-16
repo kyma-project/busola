@@ -3,9 +3,4 @@
   integrity="sha512-pGtU1n/6GJ8fu6bjYVGIOT9Dphaw5IWPwVlqkpvVgqBxFkvdNbytUh0H8AP15NYF777P4D3XEeA/uDWFCpSQ1g=="
   crossorigin="anonymous"
 ></script>
-<script>
-  var mgr = new Oidc.UserManager();
-  mgr.signinSilentCallback().catch((error) => {
-    console.error(error);
-  });
-</script>
+<script src="assets/silent-callback.js"></script>
