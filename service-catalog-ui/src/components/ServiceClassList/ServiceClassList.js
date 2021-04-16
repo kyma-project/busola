@@ -46,7 +46,9 @@ const status = (data, id) => {
   return (
     <StatusesList key={id}>
       <StatusWrapper>
-        <InfoLabel data-e2e-id={id}>{data}</InfoLabel>
+        <InfoLabel className="fd-has-font-size-large" numeric data-e2e-id={id}>
+          {data}
+        </InfoLabel>
       </StatusWrapper>
     </StatusesList>
   );

@@ -31,4 +31,8 @@
       transform: translateY($verticalOffset);
     }
   }
+
+  &__description {
+    color: var(--fd-color-text-1);
+  }
 }
