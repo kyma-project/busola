@@ -1,4 +1,3 @@
 <svg>
   <script>alert(1)</script>
-  <rect width="10" height="10" />
 </svg>
