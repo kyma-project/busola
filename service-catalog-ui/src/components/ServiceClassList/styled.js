@@ -13,8 +13,9 @@ export const ServiceClassListWrapper = styled.div`
 
 export const CardsWrapper = styled.div`
   box-sizing: border-box;
-  display: flex;
-  flex-flow: row wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(26rem, auto));
+  grid-gap: 1rem;
   width: 100%;
   padding: 0 20px 30px 20px;
 `;

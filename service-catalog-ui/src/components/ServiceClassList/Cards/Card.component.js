@@ -2,18 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './Card.scss';
 import { Tooltip } from 'react-shared';
-import { Icon, LayoutPanel } from 'fundamental-react';
+import { Icon, LayoutPanel, Tile, Title } from 'fundamental-react';
 import { InstancesIndicator } from './InstancesIndicator';
 import { Labels } from './Labels';
-import {
-  CardWrapper,
-  CardContent,
-  CardTop,
-  CardHeaderContent,
-  CardThumbnail,
-  CardImage,
-  CardDescription,
-} from './styled';
+import { CardThumbnail, CardImage } from './styled';
 import {
   DOCUMENTATION_PER_PLAN_LABEL,
   DOCUMENTATION_PER_PLAN_DESCRIPTION,
@@ -28,53 +20,53 @@ const Card = ({
   labels,
   onClick,
 }) => (
-  <CardWrapper data-e2e-id="card" className="card">
-    <CardContent onClick={onClick} data-e2e-id={`go-to-details`}>
-      <CardTop>
-        <div className="card__header fd-tile">
-          <CardThumbnail>
-            {imageUrl ? (
-              <CardImage size="s" photo={imageUrl} />
-            ) : (
+  <Tile data-e2e-id="card" onClick={onClick} className="card">
+    <div className="card__header ">
+      <CardThumbnail>
+        {imageUrl ? (
+          <CardImage size="s" photo={imageUrl} />
+        ) : (
+          <Icon
+            glyph="crm-service-manager"
+            ariaLabel="ServiceClass icon"
+            style={{ color: '#515559' }}
+          />
+        )}
+      </CardThumbnail>
+
+      <div>
+        <Title
+          className="title"
+          level={3}
+          aria-label={`go to service class ${title} link`}
+          data-e2e-id="card-title"
+        >
+          {title}
+        </Title>
+        <span data-e2e-id="card-company">{company}</span>
+      </div>
+      <LayoutPanel.Actions>
+        {labels && labels[DOCUMENTATION_PER_PLAN_LABEL] === 'true' && (
+          <div aria-label="has-API-packages-indicator" className="icon">
+            <Tooltip content={DOCUMENTATION_PER_PLAN_DESCRIPTION}>
               <Icon
-                glyph="crm-service-manager"
-                ariaLabel="ServiceClass icon"
-                style={{ color: '#515559' }}
+                glyph="sap-box"
+                size="l"
+                ariaLabel="Documentation per plan"
               />
-            )}
-          </CardThumbnail>
+            </Tooltip>
+          </div>
+        )}
+        <InstancesIndicator
+          numberOfInstances={numberOfInstances}
+          labels={labels}
+        />
+      </LayoutPanel.Actions>
+    </div>
 
-          <CardHeaderContent
-            aria-label={`go to service class ${title} link`}
-            data-e2e-id="card-title"
-            title={title}
-          >
-            <span data-e2e-id="card-company">{company}</span>
-          </CardHeaderContent>
-          <LayoutPanel.Actions>
-            {labels && labels[DOCUMENTATION_PER_PLAN_LABEL] === 'true' && (
-              <div aria-label="has-API-packages-indicator" className="icon">
-                <Tooltip content={DOCUMENTATION_PER_PLAN_DESCRIPTION}>
-                  <Icon
-                    glyph="sap-box"
-                    size="l"
-                    ariaLabel="Documentation per plan"
-                  />
-                </Tooltip>
-              </div>
-            )}
-            <InstancesIndicator
-              numberOfInstances={numberOfInstances}
-              labels={labels}
-            />
-          </LayoutPanel.Actions>
-        </div>
-      </CardTop>
-
-      <CardDescription>{description}</CardDescription>
-      <Labels labels={labels} ignoredLabels={[DOCUMENTATION_PER_PLAN_LABEL]} />
-    </CardContent>
-  </CardWrapper>
+    <p className="card__description">{description}</p>
+    <Labels labels={labels} ignśoredLabels={[DOCUMENTATION_PER_PLAN_LABEL]} />
+  </Tile>
 );
 
 Card.propTypes = {

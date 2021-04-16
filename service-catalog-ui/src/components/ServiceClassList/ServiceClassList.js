@@ -10,7 +10,7 @@ import {
   useGetList,
   useMicrofrontendContext,
 } from 'react-shared';
-import { Identifier } from 'fundamental-react';
+import { InfoLabel } from 'fundamental-react';
 
 import { serviceClassConstants } from 'helpers/constants';
 import { determineDisplayedItems } from 'helpers/search';
@@ -46,9 +46,7 @@ const status = (data, id) => {
   return (
     <StatusesList key={id}>
       <StatusWrapper>
-        <Identifier size="xxs" data-e2e-id={id}>
-          {data}
-        </Identifier>
+        <InfoLabel data-e2e-id={id}>{data}</InfoLabel>
       </StatusWrapper>
     </StatusesList>
   );
