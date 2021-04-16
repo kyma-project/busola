@@ -7,12 +7,12 @@ import { useConfig } from '../../contexts/ConfigContext';
 export const useFetch = () => {
   const { authData, cluster } = useMicrofrontendContext();
   const { fromConfig } = useConfig();
-  const checkToken = useTokenExpirationGuard();
+  const checkTokenExpiration = useTokenExpirationGuard();
 
   if (!authData) return () => {};
 
   return async ({ relativeUrl, abortController, init }) => {
-    checkToken(authData?.idTokenExpiration);
+    checkTokenExpiration(authData?.idTokenExpiration);
 
     init = {
       ...init,

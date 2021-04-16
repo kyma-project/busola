@@ -10,9 +10,9 @@ export let groups;
 export async function refreshAuth() {
   await userManager.signinSilent();
   const { id_token } = await userManager.getUser();
+  const idTokenExpiration = parseJWT(id_token).exp * 1000;
 
   const auth = Luigi.auth().store.getAuthData();
-  const idTokenExpiration = parseJWT(id_token).exp * 1000;
   Luigi.auth().store.setAuthData({
     ...auth,
     idToken: id_token,
@@ -24,6 +24,15 @@ export async function refreshAuth() {
   context.authData.idToken = id_token;
   context.authData.idTokenExpiration = idTokenExpiration;
   Luigi.configChanged('navigation.nodes');
+}
+
+function addIdTokenExpirationToAuth() {
+  const authData = Luigi.auth().store.getAuthData();
+  const idTokenExpiration = parseJWT(authData.idToken).exp * 1000;
+  Luigi.auth().store.setAuthData({
+    ...authData,
+    idTokenExpiration,
+  });
 }
 
 async function fetchOidcProviderMetadata(issuerUrl) {
@@ -40,15 +49,6 @@ async function fetchOidcProviderMetadata(issuerUrl) {
     clearInitParams();
     window.location = '/login.html';
   }
-}
-
-function addIdTokenExpirationToAuth() {
-  const authData = Luigi.auth().store.getAuthData();
-  const idTokenExpiration = parseJWT(authData.idToken).exp * 1000;
-  Luigi.auth().store.setAuthData({
-    ...authData,
-    idTokenExpiration,
-  });
 }
 
 export const createAuth = async (authParams) => {

@@ -66,7 +66,7 @@ export const communication = {
         pathname + newParamsString
       );
     },
-    'busola.refreshIdToken': refreshAuth,
+    'busola.refreshAuth': refreshAuth,
   },
 };
 

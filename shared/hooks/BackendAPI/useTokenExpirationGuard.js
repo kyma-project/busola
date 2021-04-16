@@ -6,23 +6,21 @@ const warningTime = 2 * 60; // 2 mins
 export function useTokenExpirationGuard() {
   const waitingForNewToken = useRef(false);
 
-  const checkToken = idTokenExpiration => {
-    try {
-      if (!idTokenExpiration) return;
+  const checkTokenExpiration = idTokenExpiration => {
+    if (!idTokenExpiration) return;
 
-      const secondsLeft = (idTokenExpiration - Date.now()) / 1000;
-      if (secondsLeft > warningTime && waitingForNewToken.current) {
-        waitingForNewToken.current = false;
-      }
+    const secondsLeft = (idTokenExpiration - Date.now()) / 1000;
+    if (secondsLeft > warningTime && waitingForNewToken.current) {
+      waitingForNewToken.current = false;
+    }
 
-      if (secondsLeft < warningTime && !waitingForNewToken.current) {
-        waitingForNewToken.current = true;
-        LuigiClient.sendCustomMessage({
-          id: 'busola.refreshIdToken',
-        });
-      }
-    } catch (_) {} // ignore errors from non-JWT tokens
+    if (secondsLeft < warningTime && !waitingForNewToken.current) {
+      waitingForNewToken.current = true;
+      LuigiClient.sendCustomMessage({
+        id: 'busola.refreshAuth',
+      });
+    }
   };
 
-  return checkToken;
+  return checkTokenExpiration;
 }
