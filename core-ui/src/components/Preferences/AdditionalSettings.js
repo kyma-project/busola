@@ -1,7 +1,7 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { useMicrofrontendContext } from 'react-shared';
-import { LayoutPanel, Toggle, Button } from 'fundamental-react';
+import { LayoutPanel, Switch, Button } from 'fundamental-react';
 
 export default function AdditionalSettings() {
   const [bebEnabled, setBebEnabled] = React.useState(
@@ -31,7 +31,7 @@ export default function AdditionalSettings() {
           style={{ justifyContent: 'space-between' }}
         >
           BEB integration enabled
-          <Toggle
+          <Switch
             inputProps={{ 'aria-label': 'beb-enabled' }}
             checked={bebEnabled}
             onChange={() => setBebEnabled(!bebEnabled)}

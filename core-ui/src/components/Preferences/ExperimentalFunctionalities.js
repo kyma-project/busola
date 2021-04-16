@@ -1,7 +1,7 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { useMicrofrontendContext } from 'react-shared';
-import { LayoutPanel, Toggle } from 'fundamental-react';
+import { LayoutPanel, Switch } from 'fundamental-react';
 
 export default function ExperimentalFunctionalities() {
   const [showExperimentalViews, setShowExperimentalViews] = React.useState(
@@ -22,7 +22,7 @@ export default function ExperimentalFunctionalities() {
         <LayoutPanel.Head title="Experimental functionalities" />
         <LayoutPanel.Actions>
           Enable all
-          <Toggle
+          <Switch
             inputProps={{ 'aria-label': 'toggle-experimental' }}
             className="fd-has-display-inline-block fd-has-margin-left-tiny"
             checked={showExperimentalViews}
