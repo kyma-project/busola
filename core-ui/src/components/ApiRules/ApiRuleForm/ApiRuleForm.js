@@ -6,7 +6,6 @@ import LuigiClient from '@luigi-project/client';
 import classNames from 'classnames';
 import { K8sNameInput, InputWithSuffix } from 'react-shared';
 import {
-  LayoutGrid,
   FormGroup,
   FormItem,
   FormLabel,
@@ -228,103 +227,106 @@ export default function ApiRuleForm({
           onChange={e => handleFormChanged(e)}
           ref={formRef}
         >
-          <LayoutGrid cols={1}>
-            <LayoutPanel>
-              <LayoutPanel.Header>
-                <LayoutPanel.Head title="General settings" />
-              </LayoutPanel.Header>
-              <LayoutPanel.Body>
-                <FormGroup>
-                  <LayoutGrid cols="3">
-                    <FormItem>
-                      <K8sNameInput
-                        _ref={formValues.name}
-                        id="apiRuleName"
-                        kind="API Rule"
-                        showHelp={!apiRule?.metadata.name}
-                        defaultValue={apiRule?.metadata.name}
-                        disabled={!!apiRule?.metadata.name}
-                      />
-                    </FormItem>
-                    <FormItem>
-                      <FormLabel htmlFor="hostname" required>
-                        Hostname
-                        <InlineHelp
-                          placement="bottom-right"
-                          text="The hostname must consist of alphanumeric characters, dots or dashes, 
-                          and must start and end with an alphanumeric character (e.g. 'my-name1')."
-                        />
-                      </FormLabel>
-                      {domainLoading ? (
-                        'Loading...'
-                      ) : (
-                        <InputWithSuffix
-                          defaultValue={apiRule.spec.service.host.replace(
-                            `.${domain}`,
-                            '',
-                          )}
-                          id="hostname"
-                          suffix={domain}
-                          placeholder="Enter the hostname"
-                          required
-                          pattern="^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$"
-                          _ref={formValues.hostname}
-                        />
-                      )}
-                    </FormItem>
-                    <ServicesDropdown
-                      _ref={formValues.service}
-                      defaultValue={apiRule.spec.service}
-                      serviceName={serviceName}
-                      data={services}
-                      error={error}
-                      loading={loading}
+          <LayoutPanel>
+            <LayoutPanel.Header>
+              <LayoutPanel.Head title="General settings" />
+            </LayoutPanel.Header>
+            <LayoutPanel.Body>
+              <FormGroup>
+                <div
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: '1fr 1fr 1fr',
+                  }}
+                >
+                  <FormItem>
+                    <K8sNameInput
+                      _ref={formValues.name}
+                      id="apiRuleName"
+                      kind="API Rule"
+                      showHelp={!apiRule?.metadata.name}
+                      defaultValue={apiRule?.metadata.name}
+                      disabled={!!apiRule?.metadata.name}
                     />
-                  </LayoutGrid>
-                </FormGroup>
-              </LayoutPanel.Body>
-            </LayoutPanel>
-
-            <LayoutPanel>
-              <LayoutPanel.Header>
-                <LayoutPanel.Head title="Access strategies" />
-                <LayoutPanel.Actions>
-                  <Button
-                    onClick={addAccessStrategy}
-                    option="transparent"
-                    glyph="add"
-                    typeAttr="button"
-                  >
-                    Add access strategy
-                  </Button>
-                </LayoutPanel.Actions>
-              </LayoutPanel.Header>
-              {!!rules.length && (
-                <LayoutPanel.Body>
-                  {rules.map((rule, idx) => {
-                    return (
-                      <AccessStrategyForm
-                        key={rule.renderKey}
-                        strategy={rule}
-                        setStrategy={newStrategy => {
-                          setRules(rules => [
-                            ...rules.slice(0, idx),
-                            newStrategy,
-                            ...rules.slice(idx + 1, rules.length),
-                          ]);
-                          setValid(false);
-                          handleFormChanged();
-                        }}
-                        removeStrategy={() => removeAccessStrategy(idx)}
-                        canDelete={rules.length > 1}
-                        handleFormChanged={() => setTimeout(handleFormChanged)}
+                  </FormItem>
+                  <FormItem>
+                    <FormLabel htmlFor="hostname" required>
+                      Hostname
+                      <InlineHelp
+                        placement="bottom-right"
+                        text="The hostname must consist of alphanumeric characters, dots or dashes, 
+                          and must start and end with an alphanumeric character (e.g. 'my-name1')."
                       />
-                    );
-                  })}
-                </LayoutPanel.Body>
-              )}
-            </LayoutPanel>
-          </LayoutGrid>
+                    </FormLabel>
+                    {domainLoading ? (
+                      'Loading...'
+                    ) : (
+                      <InputWithSuffix
+                        defaultValue={apiRule.spec.service.host.replace(
+                          `.${domain}`,
+                          '',
+                        )}
+                        id="hostname"
+                        suffix={domain}
+                        placeholder="Enter the hostname"
+                        required
+                        pattern="^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$"
+                        _ref={formValues.hostname}
+                      />
+                    )}
+                  </FormItem>
+                  <ServicesDropdown
+                    _ref={formValues.service}
+                    defaultValue={apiRule.spec.service}
+                    serviceName={serviceName}
+                    data={services}
+                    error={error}
+                    loading={loading}
+                  />
+                </div>
+              </FormGroup>
+            </LayoutPanel.Body>
+          </LayoutPanel>
+
+          <LayoutPanel>
+            <LayoutPanel.Header>
+              <LayoutPanel.Head title="Access strategies" />
+              <LayoutPanel.Actions>
+                <Button
+                  onClick={addAccessStrategy}
+                  option="transparent"
+                  glyph="add"
+                  typeAttr="button"
+                >
+                  Add access strategy
+                </Button>
+              </LayoutPanel.Actions>
+            </LayoutPanel.Header>
+            {!!rules.length && (
+              <LayoutPanel.Body>
+                {rules.map((rule, idx) => {
+                  return (
+                    <AccessStrategyForm
+                      key={rule.renderKey}
+                      strategy={rule}
+                      setStrategy={newStrategy => {
+                        setRules(rules => [
+                          ...rules.slice(0, idx),
+                          newStrategy,
+                          ...rules.slice(idx + 1, rules.length),
+                        ]);
+                        setValid(false);
+                        handleFormChanged();
+                      }}
+                      removeStrategy={() => removeAccessStrategy(idx)}
+                      canDelete={rules.length > 1}
+                      handleFormChanged={() => setTimeout(handleFormChanged)}
+                    />
+                  );
+                })}
+              </LayoutPanel.Body>
+            )}
+          </LayoutPanel>
         </form>
       </section>
     </div>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-import { LayoutPanel, Button, LayoutGrid } from 'fundamental-react';
+import { LayoutPanel, Button } from 'fundamental-react';
 import { Tooltip } from 'react-shared';
 import { FormInput } from 'components/Lambdas/components';
 
@@ -173,7 +173,7 @@ export default function RepositoryConfig({ lambda }) {
         </LayoutPanel.Actions>
       </LayoutPanel.Header>
       <LayoutPanel.Body className="fd-has-padding-xs">
-        <LayoutGrid cols={2}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr ' }}>
           <LayoutPanel className="has-box-shadow-none">
             <LayoutPanel.Header className="has-padding-none has-none-border-bottom">
               <LayoutPanel.Head
@@ -223,7 +223,7 @@ export default function RepositoryConfig({ lambda }) {
               />
             </LayoutPanel.Body>
           </LayoutPanel>
-        </LayoutGrid>
+        </div>
       </LayoutPanel.Body>
     </LayoutPanel>
   );

@@ -2,7 +2,7 @@ import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import PropTypes from 'prop-types';
 
-import { LayoutPanel, LayoutGrid, Icon } from 'fundamental-react';
+import { LayoutPanel, Container, Icon } from 'fundamental-react';
 import { useGetList, Spinner, CircleProgress } from 'react-shared';
 
 import {
@@ -110,11 +110,9 @@ export function NamespaceWorkloads({ namespace }) {
         <LayoutPanel.Head title="Healthy Resources" />
       </LayoutPanel.Header>
       <LayoutPanel.Body className="namespace-workloads__body">
-        <LayoutGrid cols={3}>
-          <PodsCircle namespace={namespace} />
-          <DeploymentsCircle namespace={namespace} />
-          <ReplicaSetsCircle namespace={namespace} />
-        </LayoutGrid>
+        <PodsCircle namespace={namespace} />
+        <DeploymentsCircle namespace={namespace} />
+        <ReplicaSetsCircle namespace={namespace} />
       </LayoutPanel.Body>
     </LayoutPanel>
   );

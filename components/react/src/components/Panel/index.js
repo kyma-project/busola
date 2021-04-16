@@ -1,10 +1,10 @@
-import { Panel, LayoutGrid } from 'fundamental-react';
+import { Panel } from 'fundamental-react';
 
 const { Footer, Body, Header, Head, Actions, Filters } = Panel;
 
 export {
   Panel,
-  LayoutGrid as PanelGrid,
+  div as PanelGrid,
   Body as PanelBody,
   Header as PanelHeader,
   Head as PanelHead,

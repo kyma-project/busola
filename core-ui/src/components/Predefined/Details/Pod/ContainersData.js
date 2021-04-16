@@ -1,20 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import {
-  LayoutPanel,
-  FormItem,
-  FormLabel,
-  LayoutGrid,
-} from 'fundamental-react';
+import { LayoutPanel, FormItem, FormLabel } from 'fundamental-react';
 import './ContainersData.scss';
 
 const SecretComponent = ({ name, value }) => (
   <FormItem className="item-wrapper">
-    <LayoutGrid cols="2">
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
       <FormLabel>{name}:</FormLabel>
       <div>{value}</div>
-    </LayoutGrid>
+    </div>
   </FormItem>
 );
 

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { LayoutPanel, LayoutGrid, Icon } from 'fundamental-react';
+import { LayoutPanel, Icon } from 'fundamental-react';
 import { useGetList, Spinner, CircleProgress } from 'react-shared';
 
 const MEMORY_SUFFIX_POWER = {
@@ -127,17 +127,15 @@ export const ResourcesUsage = ({ namespace }) => {
         />
         <LayoutPanel.Head title="Resource consumption" />
       </LayoutPanel.Header>
-      <LayoutPanel.Body className="namespace-workloads__body">
-        <LayoutGrid cols={2}>
-          <MemoryRequestsCircle
-            resourceQuotas={resourceQuotas}
-            isLoading={loading}
-          />
-          <MemoryLimitsCircle
-            resourceQuotas={resourceQuotas}
-            isLoading={loading}
-          />
-        </LayoutGrid>
+      <LayoutPanel.Body className="resources-usage__body">
+        <MemoryRequestsCircle
+          resourceQuotas={resourceQuotas}
+          isLoading={loading}
+        />
+        <MemoryLimitsCircle
+          resourceQuotas={resourceQuotas}
+          isLoading={loading}
+        />
       </LayoutPanel.Body>
     </LayoutPanel>
   );

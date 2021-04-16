@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { LayoutGrid, LayoutPanel } from 'fundamental-react';
+import { LayoutPanel } from 'fundamental-react';
 import { Input } from './TableElements/Input';
 import { Row } from './TableElements/Row';
 import { DropdownInput } from 'components/Lambdas/components';
@@ -68,30 +68,32 @@ export default function LambdaResources({
 
   return (
     <>
-      <LayoutGrid cols={1}>
-        <LayoutPanel
-          className={`has-box-shadow-none presets${
-            isHidden ? ' has-no-margin-bottom' : ''
-          }`}
-        >
-          <LayoutPanel.Body className="has-padding-none">
-            <Row
-              action={
-                <DropdownInput
-                  disabled={disabledForm}
-                  options={presetOptions}
-                  defaultValue={defaultPreset}
-                  _ref={register}
-                  id={inputNames.preset}
-                  name={inputNames.preset}
-                  onChange={onChangePreset}
-                />
-              }
-            />
-          </LayoutPanel.Body>
-        </LayoutPanel>
-      </LayoutGrid>
-      <LayoutGrid cols={2} className={isHidden ? 'hidden-panel' : ''}>
+      <LayoutPanel
+        className={`has-box-shadow-none presets${
+          isHidden ? ' has-no-margin-bottom' : ''
+        }`}
+      >
+        <LayoutPanel.Body className="has-padding-none">
+          <Row
+            action={
+              <DropdownInput
+                disabled={disabledForm}
+                options={presetOptions}
+                defaultValue={defaultPreset}
+                _ref={register}
+                id={inputNames.preset}
+                name={inputNames.preset}
+                onChange={onChangePreset}
+              />
+            }
+          />
+        </LayoutPanel.Body>
+      </LayoutPanel>
+
+      <div
+        style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}
+        className={isHidden ? 'hidden-panel' : ''}
+      >
         <LayoutPanel className="has-box-shadow-none">
           <LayoutPanel.Header className="has-padding-none has-none-border-bottom">
             <LayoutPanel.Head
@@ -197,7 +199,7 @@ export default function LambdaResources({
             />
           </LayoutPanel.Body>
         </LayoutPanel>
-      </LayoutGrid>
+      </div>
     </>
   );
 }

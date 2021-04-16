@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   Button,
-  LayoutGrid,
   FormGroup,
   FormInput,
   FormItem,
@@ -46,7 +45,9 @@ export default function AccessStrategyForm({
       <div className="access-strategy access-strategy--form">
         <div className="content">
           <FormGroup>
-            <LayoutGrid cols={3}>
+            <div
+              style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr' }}
+            >
               <FormItem>
                 <FormInput
                   placeholder="Enter the path"
@@ -98,7 +99,7 @@ export default function AccessStrategyForm({
                 setMethods={methods => setStrategy({ ...strategy, methods })}
                 isRelevant={usesMethods(selectedType)}
               ></MethodsForm>
-            </LayoutGrid>
+            </div>
           </FormGroup>
 
           <Details
