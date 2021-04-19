@@ -23,7 +23,9 @@ export const Label = ({ text, onClick }) => (
 );
 
 export const NonRemovableLabel = ({ text }) => (
-  <Token className="label-selector__label--non-removable">{text}</Token>
+  <Token readOnly className="label-selector__label">
+    {text}
+  </Token>
 );
 
 export const LabelSelectorInput = ({
@@ -93,11 +95,9 @@ export const LabelSelectorInput = ({
       <FormLabel>
         Labels
         <Tooltip
-          className="fd-has-margin-left-tiny"
+          isInlineHelp
           content="A key and value should be separated by a '=', a key cannot be empty, a key/value consists of alphanumeric characters, '-', '_' or '.', and must start and end with an alphanumeric character."
-        >
-          <span className="fd-inline-help"></span>
-        </Tooltip>
+        />
       </FormLabel>
 
       <div className="fd-form__set">

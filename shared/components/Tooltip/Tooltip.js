@@ -12,6 +12,7 @@ export const Tooltip = ({
   trigger,
   tippyProps,
   className,
+  isInlineHelp = false,
 }) => {
   return (
     <TippyTooltip
@@ -21,6 +22,7 @@ export const Tooltip = ({
       trigger={trigger}
       {...tippyProps}
     >
+      {isInlineHelp && <span className="fd-inline-help"></span>}
       {children}
     </TippyTooltip>
   );
@@ -31,6 +33,7 @@ Tooltip.propTypes = {
   position: PropTypes.oneOf(['top', 'bottom', 'left', 'right']),
   trigger: PropTypes.oneOf(['mouseenter', 'focus', 'click', 'manual']),
   children: PropTypes.node.isRequired,
+  isInlineHelp: PropTypes.bool,
 };
 
 Tooltip.defaultProps = {

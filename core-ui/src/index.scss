@@ -35,14 +35,26 @@ body {
   background-color: transparent;
 }
 
-.fd-token--readonly {
-  &::after {
-    content: none;
-  }
+.fd-checkbox:focus + .fd-checkbox__label {
+  outline: none; // disable a weird outline on clicked checkbox
+}
 
-  &:hover {
-    background-color: initial;
-    border-color: initial;
+.fd-token {
+  font-size: 0.75rem;
+  flex: none;
+
+  &--readonly {
+    .fd-token__close {
+      display: none;
+    }
+    &::after {
+      content: none;
+    }
+
+    &:hover {
+      background-color: initial;
+      border-color: initial;
+    }
   }
 }
 
