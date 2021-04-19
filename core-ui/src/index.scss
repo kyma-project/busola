@@ -46,7 +46,7 @@ body {
   }
 }
 
-.fd-modal,
+.fd-dialog,
 .fd-panel,
 .fd-action-bar {
   &__actions {
@@ -56,26 +56,30 @@ body {
   }
 }
 
-.fd-modal {
-  .fd-modal__footer {
+.fd-dialog {
+  .fd-dialog__footer {
     button {
       margin-left: 6px;
     }
   }
 }
 
-.fd-modal--xl-size {
+.fd-dialog::before {
+  content: none; //remove double backdrop
+}
+
+.fd-dialog--xl-size {
   .modal-demo-bg {
     min-width: 1036px;
   }
 
-  .fd-modal,
-  .fd-modal__content,
-  .fd-modal__body {
+  .fd-dialog,
+  .fd-dialog__content,
+  .fd-dialog__body {
     min-width: 1036px;
   }
 
-  .fd-modal__body {
+  .fd-dialog__body {
     max-height: calc(100vh - 184px);
   }
 
@@ -85,9 +89,9 @@ body {
       padding: 0 32px;
     }
 
-    .fd-modal,
-    .fd-modal__content,
-    .fd-modal__body {
+    .fd-dialog,
+    .fd-dialog__content,
+    .fd-dialog__body {
       min-width: 100%;
     }
   }
