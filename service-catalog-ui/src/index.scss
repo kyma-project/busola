@@ -26,25 +26,33 @@
   }
 }
 
-.fd-badge {
-  .fd-counter--notification {
-    transform: translate(10%, -50%);
+.fd-token {
+  font-size: 0.75rem;
+  flex: none;
+  line-height: unset !important;
+  border-color: var(--sapButton_TokenBorderColor, #c2c2c2) !important;
+
+  &__text {
+    line-height: inherit;
+  }
+
+  &--readonly {
+    .fd-token__close {
+      display: none;
+    }
+    &::after {
+      content: none !important;
+    }
+
+    &:hover {
+      background-color: initial;
+      border-color: initial;
+    }
   }
 }
 
 .clear-underline {
   text-decoration: none !important;
-}
-
-.no-dismiss-tokens {
-  .fd-token {
-    cursor: default;
-  }
-
-  .fd-token::after,
-  &.fd-token::after {
-    content: none !important;
-  }
 }
 
 .has-padding-0 {

@@ -32,13 +32,24 @@
 }
 .page-header__column {
   display: inline-block;
+
   .title,
   .content {
     display: block;
-    font-size: 0.85rem;
+    font-size: 1rem;
+  }
+
+  .image {
+    display: inline-block;
+    margin-right: 0.5rem;
+  }
+
+  .content-container {
+    display: inline-block;
   }
 
   .title {
     color: var(--fd-color-text-4);
+    margin-bottom: 4px;
   }
 }
