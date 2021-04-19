@@ -35,8 +35,21 @@ body {
   background-color: transparent;
 }
 
-.fd-checkbox:focus + .fd-checkbox__label {
+.fd-checkbox:focus + .fd-checkbox__label,
+.fd-radio:focus + .fd-radio__label {
   outline: none; // disable a weird outline on clicked checkbox
+}
+
+.fd-radio__label:after {
+  top: 6px;
+}
+
+.fd-checkbox__text {
+  margin-left: 0.1rem;
+}
+
+.fd-checkbox__label:before {
+  margin-right: 0.2rem;
 }
 
 .fd-token {

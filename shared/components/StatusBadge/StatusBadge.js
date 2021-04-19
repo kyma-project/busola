@@ -46,7 +46,7 @@ const TYPE_FALLBACK = new Map([
 export const StatusBadge = ({
   tooltipContent,
   type,
-  children: value,
+  children: value = '',
   autoResolveType = false,
   tooltipProps = {},
   className,
