@@ -59,6 +59,15 @@
   padding: 0;
 }
 
+.fd-dialog {
+  .fd-bar--footer {
+    height: auto;
+    .fd-bar__right {
+      padding: 0;
+    }
+  }
+}
+
 .y-fd-token {
   &.y-fd-token {
     border: 1px solid var(--fd-color-neutral-3);

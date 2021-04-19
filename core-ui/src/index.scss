@@ -73,6 +73,14 @@ body {
     button {
       margin-left: 6px;
     }
+
+    padding-right: unset;
+    padding-left: unset;
+    padding: 0.5rem 1rem;
+    height: auto;
+    .fd-bar__right {
+      padding: 0;
+    }
   }
 }
 
