@@ -9,10 +9,14 @@ import { SideDrawer } from '../components/SideDrawer/SideDrawer';
 import { Tooltip } from '../components/Tooltip/Tooltip';
 import { Button } from 'fundamental-react';
 import jsyaml from 'js-yaml';
-import { ControlledEditor } from '@monaco-editor/react';
+import { ControlledEditor, monaco } from '@monaco-editor/react';
 import LuigiClient from '@luigi-project/client';
 import copyToCliboard from 'copy-to-clipboard';
 import { saveAs } from 'file-saver';
+
+monaco.config({
+  paths: { vs: '/vs' },
+});
 
 export const YamlEditorContext = createContext({
   setEditedJson: _ => {},

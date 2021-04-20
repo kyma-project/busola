@@ -5,12 +5,9 @@ import { ControlledEditor, monaco } from '@monaco-editor/react';
 import jsyaml from 'js-yaml';
 import { Icon } from 'fundamental-react';
 
-// monaco.config({
-//   urls: {
-//     monacoLoader: '/vs/loader.js',
-//     monacoBase: '/vs',
-//   },
-// });
+monaco.config({
+  paths: { vs: '/vs' },
+});
 
 import './SideDrawer.scss';
 import { CopiableText } from '../CopiableText/CopiableText';
