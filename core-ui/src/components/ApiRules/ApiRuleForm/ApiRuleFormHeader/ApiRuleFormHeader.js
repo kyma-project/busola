@@ -38,6 +38,7 @@ const ApiRuleFormHeader = ({
         breadcrumbItems={openedInModalBool ? [] : breadcrumbItems}
         actions={[
           <Button
+            key="submit"
             onClick={handleSave}
             disabled={!isValid}
             option="emphasized"

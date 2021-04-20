@@ -46,7 +46,11 @@ export default function AccessStrategyForm({
         <div className="content">
           <FormGroup>
             <div
-              style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr' }}
+              style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr 1fr',
+                gridGap: '0.5rem',
+              }}
             >
               <FormItem>
                 <FormInput
@@ -64,6 +68,7 @@ export default function AccessStrategyForm({
               </FormItem>
               <FormItem>
                 <FormSelect
+                  style={{ marginTop: '0.25rem' }}
                   defaultValue={selectedType}
                   aria-label="Access strategy type"
                   id="select-1"

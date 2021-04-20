@@ -6,7 +6,6 @@ import LuigiClient from '@luigi-project/client';
 import classNames from 'classnames';
 import { K8sNameInput, InputWithSuffix } from 'react-shared';
 import {
-  FormGroup,
   FormItem,
   FormLabel,
   LayoutPanel,
@@ -227,66 +226,59 @@ export default function ApiRuleForm({
           onChange={e => handleFormChanged(e)}
           ref={formRef}
         >
-          <LayoutPanel>
+          <LayoutPanel className="fd-has-margin-bottom-small">
             <LayoutPanel.Header>
               <LayoutPanel.Head title="General settings" />
             </LayoutPanel.Header>
             <LayoutPanel.Body>
-              <FormGroup>
-                <div
-                  style={{
-                    display: 'grid',
-                    gridTemplateColumns: '1fr 1fr 1fr',
-                  }}
-                >
-                  <FormItem>
-                    <K8sNameInput
-                      _ref={formValues.name}
-                      id="apiRuleName"
-                      kind="API Rule"
-                      showHelp={!apiRule?.metadata.name}
-                      defaultValue={apiRule?.metadata.name}
-                      disabled={!!apiRule?.metadata.name}
-                    />
-                  </FormItem>
-                  <FormItem>
-                    <FormLabel htmlFor="hostname" required>
-                      Hostname
-                      <InlineHelp
-                        buttonLabel="help"
-                        buttonLabel="help"
-                        placement="right-end"
-                        text="The hostname must consist of alphanumeric characters, dots or dashes, 
-                          and must start and end with an alphanumeric character (e.g. 'my-name1')."
-                      />
-                    </FormLabel>
-                    {domainLoading ? (
-                      'Loading...'
-                    ) : (
-                      <InputWithSuffix
-                        defaultValue={apiRule.spec.service.host.replace(
-                          `.${domain}`,
-                          '',
-                        )}
-                        id="hostname"
-                        suffix={domain}
-                        placeholder="Enter the hostname"
-                        required
-                        pattern="^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$"
-                        _ref={formValues.hostname}
-                      />
-                    )}
-                  </FormItem>
-                  <ServicesDropdown
-                    _ref={formValues.service}
-                    defaultValue={apiRule.spec.service}
-                    serviceName={serviceName}
-                    data={services}
-                    error={error}
-                    loading={loading}
+              <div className="api-rule-form__input-group">
+                <FormItem>
+                  <K8sNameInput
+                    _ref={formValues.name}
+                    id="apiRuleName"
+                    kind="API Rule"
+                    showHelp={!apiRule?.metadata.name}
+                    defaultValue={apiRule?.metadata.name}
+                    disabled={!!apiRule?.metadata.name}
                   />
-                </div>
-              </FormGroup>
+                </FormItem>
+                <FormItem>
+                  <FormLabel htmlFor="hostname" required>
+                    Hostname
+                    <InlineHelp
+                      buttonLabel="help"
+                      buttonLabel="help"
+                      placement="right-end"
+                      text="The hostname must consist of alphanumeric characters, dots or dashes, 
+                          and must start and end with an alphanumeric character (e.g. 'my-name1')."
+                    />
+                  </FormLabel>
+                  {domainLoading ? (
+                    'Loading...'
+                  ) : (
+                    <InputWithSuffix
+                      defaultValue={apiRule.spec.service.host.replace(
+                        `.${domain}`,
+                        '',
+                      )}
+                      id="hostname"
+                      suffix={'.' + domain}
+                      placeholder="Enter the hostname"
+                      required
+                      pattern="^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$"
+                      _ref={formValues.hostname}
+                    />
+                  )}
+                </FormItem>
+                <ServicesDropdown
+                  _ref={formValues.service}
+                  defaultValue={apiRule.spec.service}
+                  serviceName={serviceName}
+                  data={services}
+                  error={error}
+                  loading={loading}
+                />
+              </div>
             </LayoutPanel.Body>
           </LayoutPanel>
 
