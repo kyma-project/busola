@@ -29,7 +29,7 @@ export function LambdaStatusBadge({ status }) {
     });
     tooltipText = `${texts.MESSAGE} ${formattedError}`;
   }
-  console.log('lambda status');
+
   return (
     <StatusBadge tooltipContent={tooltipText} type={badgeType}>
       {texts.TITLE}
