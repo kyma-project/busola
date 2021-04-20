@@ -1,7 +1,7 @@
 Cypress.Commands.overwrite('log', (_, message) => cy.task('log', message));
 
 Cypress.Commands.add('clearSessionStorage', () =>
-  cy.window().then(win => win.sessionStorage.clear()),
+  cy.window().then(win => win.sessionStorage.clear())
 );
 
 Cypress.Commands.add('handleInvalidLoginData', () => {
@@ -13,10 +13,10 @@ Cypress.Commands.add('handleInvalidLoginData', () => {
 });
 
 Cypress.Commands.add(
-  "shouldHaveTrimmedText",
+  'shouldHaveTrimmedText',
   { prevSubject: true },
   (subject, equalTo) => {
-      expect(subject.text().trim()).to.eq(equalTo);
-      return subject;
-  },
+    expect(subject.text().trim()).to.eq(equalTo);
+    return subject;
+  }
 );

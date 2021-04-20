@@ -7,6 +7,6 @@ module.exports = on => {
     log(message) {
       console.log(message);
       return null;
-    },
+    }
   });
 };
