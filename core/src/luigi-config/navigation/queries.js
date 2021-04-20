@@ -6,7 +6,11 @@ export async function failFastFetch(input, auth, init = {}) {
   function createAuthHeaders(auth) {
     if (auth?.idToken) {
       return { Authorization: `Bearer ${auth.idToken}` };
-    } else if (auth && auth['client-certificate-data'] && auth['client-key-data']) {
+    } else if (
+      auth &&
+      auth['client-certificate-data'] &&
+      auth['client-key-data']
+    ) {
       return {
         'X-Client-Certificate-Data': auth['client-certificate-data'],
         'X-Client-Key-Data': auth['client-key-data'],

@@ -7,7 +7,7 @@ const ADDRESS = config.localDev
   : `https://busola.${config.domain}`;
 
 const random = Math.floor(
-  Math.random() * 10 + Math.random() * 100 + Math.random() * 1000,
+  Math.random() * 10 + Math.random() * 100 + Math.random() * 1000
 );
 const NAMESPACE_NAME = `orders-service-${random}`;
 
@@ -30,13 +30,9 @@ context('Busola Smoke Tests', () => {
     });
   });
 
-  //TODO: Check if namespace already exists
   it('Create a new namespace', () => {
     cy.contains('Namespaces')
       .click()
-      .getIframeBody()
-      .contains('tr', config.DEFAULT_NAMESPACE_NAME)
-      .should('be.visible')
       .getIframeBody()
       .contains('Create Namespace')
       .should('be.visible')
@@ -50,12 +46,10 @@ context('Busola Smoke Tests', () => {
       .should('be.visible')
       .click()
       .getIframeBody()
-      .contains('tr', NAMESPACE_NAME)
+      .contains('a', NAMESPACE_NAME)
       .should('be.visible')
-      .click(); // doesn't work - Could not lazy-load children for node TypeError: Cannot read property 'config' of null
+      .click();
   });
-
-  // TODO: 'Integration' (not always visible)
 
   // Administration
   it('Check Administration tab', () => {

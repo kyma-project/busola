@@ -3,10 +3,18 @@
   "description": "Smoke tests for Busola",
   "scripts": {
     "test:cluster": "$(npm bin)/cypress run --browser chrome --headless",
-    "start": "$(npm bin)/cypress open"
+    "start": "$(npm bin)/cypress open",
+    "lint": "prettier -c .",
+    "lint-fix": "prettier --write ."
+  },
+  "dependencies": {
+    "prettier": "^2.2.1"
   },
   "devDependencies": {
     "cypress": "^7.1.0",
     "cypress-file-upload": "^5.0.6"
+  },
+  "prettier": {
+    "singleQuote": true
   }
 }
