@@ -37,7 +37,7 @@ export default function CheckboxFormControl({
             key={value}
             value={displayName}
             defaultChecked={values.includes(value)}
-            onChange={e => console.log('calling onchange')}
+            onChange={e => updateValues(value, e.target.checked)}
           >
             {displayName}
           </Checkbox>
