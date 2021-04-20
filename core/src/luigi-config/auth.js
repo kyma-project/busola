@@ -7,8 +7,12 @@ let userManager;
 
 export let groups;
 
+let isFetchingNewToken = false;
 export async function refreshAuth() {
+  if (isFetchingNewToken) return;
+  isFetchingNewToken = true;
   await userManager.signinSilent();
+
   const { id_token } = await userManager.getUser();
   const idTokenExpiration = parseJWT(id_token).exp * 1000;
 
@@ -24,6 +28,8 @@ export async function refreshAuth() {
   context.authData.idToken = id_token;
   context.authData.idTokenExpiration = idTokenExpiration;
   Luigi.configChanged('navigation.nodes');
+
+  isFetchingNewToken = false;
 }
 
 function addIdTokenExpirationToAuth() {

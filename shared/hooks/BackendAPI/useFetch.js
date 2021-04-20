@@ -1,4 +1,4 @@
-import { useTokenExpirationGuard } from './useTokenExpirationGuard';
+import { checkTokenExpiration } from './checkTokenExpiration';
 import { createHeaders } from './createHeaders';
 import { useMicrofrontendContext } from '../../contexts/MicrofrontendContext';
 import { baseUrl, throwHttpError } from './config';
@@ -7,7 +7,6 @@ import { useConfig } from '../../contexts/ConfigContext';
 export const useFetch = () => {
   const { authData, cluster } = useMicrofrontendContext();
   const { fromConfig } = useConfig();
-  const checkTokenExpiration = useTokenExpirationGuard();
 
   if (!authData) return () => {};
 
