@@ -35,7 +35,7 @@ export enum ModalType {
 }
 
 export interface ModalProps {
-  title: React.ReactNode;
+  title: string;
   confirmText?: React.ReactNode;
   closeText?: React.ReactNode;
   openingComponent: React.ReactNode;
@@ -43,7 +43,7 @@ export interface ModalProps {
   onOpen?: () => void;
   onClose?: () => void;
   onConfirm?: () => void;
-  actions?: React.ReactNode;
+  actions?: [React.ReactNode];
   tooltipData?: TooltipProps;
   disabledConfirm?: boolean;
   waiting?: boolean;
@@ -91,7 +91,7 @@ export const Modal: React.FunctionComponent<ModalProps> = ({
     closeModal();
   };
 
-  const actionsFactory = (): React.ReactNode => {
+  const actionsFactory = (): React.ReactNode[] => {
     const confirmMessage = waiting ? (
       <div style={{ width: '97px', height: '16px' }}>
         <Spinner />
@@ -122,18 +122,16 @@ export const Modal: React.FunctionComponent<ModalProps> = ({
       confirmButton
     );
 
-    return (
-      <>
-        <Button
-          style={{ marginRight: '12px' }}
-          option="light"
-          onClick={closeModal}
-        >
-          {closeText}
-        </Button>
-        {confirmButton}
-      </>
-    );
+    return [
+      <Button
+        style={{ marginRight: '12px' }}
+        option="transparent"
+        onClick={closeModal}
+      >
+        {closeText}
+      </Button>,
+      confirmButton,
+    ];
   };
 
   return (

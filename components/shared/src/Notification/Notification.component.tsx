@@ -9,11 +9,12 @@ import {
   NotificationBody,
   NotificationSeparator,
 } from './styled';
+import { IconGlyph } from 'fundamental-react/lib/Icon/Icon';
 
 export interface NotificationProps {
   title: string;
   color?: string;
-  icon?: string;
+  icon?: IconGlyph;
   content: React.ReactNode;
   visible: boolean;
   onClick: () => void;

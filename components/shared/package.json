@@ -8,5 +8,8 @@
     "type-check": "../../node_modules/.bin/tsc --noEmit"
   },
   "main": "dist/index.js",
-  "types": "dist/index.d.ts"
+  "types": "dist/index.d.ts",
+  "devDependencies": {
+    "@types/fundamental-react": "^0.13.7"
+  }
 }
