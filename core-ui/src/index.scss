@@ -58,10 +58,10 @@ body {
 
   &--readonly {
     .fd-token__close {
-      display: none;
+      display: none !important;
     }
     &::after {
-      content: none;
+      content: none !important;
     }
 
     &:hover {

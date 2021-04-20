@@ -32,21 +32,39 @@ function toggleOIDCForm(isVisible) {
     : 'none';
 }
 
+function toggleConfigForm(isVisible) {
+  document.querySelector('#textarea-form').style.display = isVisible
+    ? 'block'
+    : 'none';
+  document.querySelector('#file-input').style.display = isVisible
+    ? 'flex'
+    : 'none';
+}
+
+function toggleBackButton(isVisible) {
+  document.querySelector('#back-button').style.display = isVisible
+    ? 'block'
+    : 'none';
+}
+
 function toggleError(isVisible) {
   document.querySelector('#error').style.display = isVisible ? 'block' : 'none';
 }
 
-async function onKubeconfigUploaded(e) {
+function displayInitialView() {
   toggleError(false);
   toggleOIDCForm(false);
+  toggleConfigForm(true);
+  toggleBackButton(false);
+}
+function handleKubeconfigAdded(kubeconfig, type) {
   try {
-    const kk = jsyaml.load(await readFile(e.target.files[0]));
     cluster = {
-      server: kk.clusters[0].cluster.server,
+      server: kubeconfig.clusters[0].cluster.server,
       'certificate-authority-data':
-        kk.clusters[0].cluster['certificate-authority-data'],
+        kubeconfig.clusters[0].cluster['certificate-authority-data'],
     };
-    const user = kk.users[0].user;
+    const user = kubeconfig.users[0].user;
     const token = user.token;
     const clientCA = user['client-certificate-data'];
     const clientKeyData = user['client-key-data'];
@@ -61,7 +79,32 @@ async function onKubeconfigUploaded(e) {
       });
     } else {
       toggleOIDCForm(true);
+      toggleConfigForm(false);
+      toggleBackButton(true);
     }
+  } catch (e) {
+    toggleError(true);
+    console.warn(e);
+  }
+}
+
+async function onKubeconfigPasted(kubeconfig, type) {
+  displayInitialView();
+  try {
+    const kubeconfigParsed = jsyaml.load(kubeconfig);
+    handleKubeconfigAdded(kubeconfigParsed, 'textarea');
+  } catch (e) {
+    toggleError(true);
+    console.warn(e);
+  }
+}
+
+async function onKubeconfigUploaded(file) {
+  document.querySelector('#file-name').textContent = file.name;
+  displayInitialView();
+  try {
+    const kubeconfigParsed = jsyaml.load(await readFile(file));
+    handleKubeconfigAdded(kubeconfigParsed, 'file');
   } catch (e) {
     toggleError(true);
     console.warn(e);
@@ -70,18 +113,54 @@ async function onKubeconfigUploaded(e) {
 
 function onOidcFormSubmit(e) {
   e.preventDefault();
+  const issuerUrlValue = document.querySelector('#issuer-url').value;
+  const issuerUrl = issuerUrlValue.replace(/\/$/, '');
+
   const auth = {
-    issuerUrl: document.querySelector('#issuer-url').value,
+    issuerUrl,
     clientId: document.querySelector('#client-id').value,
-    scope: 'openid',
+    scope: document.querySelector('#scopes').value,
     responseType: 'id_token',
   };
   saveInitParams({ cluster, auth });
 }
 
+function onTextareaFormSubmit(e) {
+  e.preventDefault();
+  const kubeconfig = document.querySelector('#textarea-kubeconfig').value;
+  onKubeconfigPasted(kubeconfig, true);
+}
+function onGoBack(e) {
+  e.preventDefault();
+  displayInitialView();
+}
+
 document
   .querySelector('#upload-kubeconfig')
-  .addEventListener('change', onKubeconfigUploaded);
+  .addEventListener('change', (e) => onKubeconfigUploaded(e.target.files[0]));
 document
   .querySelector('#oidc-form')
   .addEventListener('submit', onOidcFormSubmit);
+document
+  .querySelector('#textarea-form')
+  .addEventListener('submit', onTextareaFormSubmit);
+document.querySelector('#back-button').addEventListener('click', onGoBack);
+
+const dropArea = document.querySelector('#file-input');
+const dragOverClass = 'file-input-drag-over';
+dropArea.addEventListener('dragenter', () =>
+  dropArea.classList.add(dragOverClass)
+);
+dropArea.addEventListener('dragleave', () =>
+  dropArea.classList.remove(dragOverClass)
+);
+dropArea.addEventListener('dragover', (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+});
+dropArea.addEventListener('drop', (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  dropArea.classList.remove(dragOverClass);
+  onKubeconfigUploaded(e.dataTransfer.files[0]);
+});

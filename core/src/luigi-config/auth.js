@@ -1,4 +1,5 @@
 import OpenIdConnect from '@luigi-project/plugin-auth-oidc';
+import { clearInitParams } from './init-params';
 
 export let groups;
 
@@ -13,6 +14,8 @@ async function fetchOidcProviderMetadata(issuerUrl) {
       'Cannot fetch oidc provider metadata, see log console for more details'
     );
     console.error('cannot fetch OIDC metadata', e);
+    clearInitParams();
+    window.location = '/login.html';
   }
 }
 
@@ -53,6 +56,7 @@ export const createAuth = async (authParams) => {
 
     events: {
       onLogout: () => {
+        clearInitParams();
         console.log('onLogout');
       },
       onAuthExpired: () => {

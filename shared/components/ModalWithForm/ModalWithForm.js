@@ -112,7 +112,9 @@ export const ModalWithForm = ({
     const _isEveryFormValid =
       isFormValid(formElementRef) && isJsonSchemaFormValid(jsonSchemaFormRef);
     if (_isEveryFormValid) {
-      formElementRef.current.dispatchEvent(new Event('submit'));
+      formElementRef.current.dispatchEvent(
+        new Event('submit', { cancelable: true }),
+      );
       setTimeout(() => setOpenStatus(false));
     }
   }

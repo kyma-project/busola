@@ -1,6 +1,6 @@
 .panel-grid {
   display: grid;
-  grid-template-columns: 3fr 2fr;
+  grid-template-columns: 2fr 2fr;
   margin: 32px;
   grid-gap: 32px;
   .fd-panel {
@@ -14,7 +14,7 @@
 
 .namespace-workloads__body {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
 }
 
 .resources-usage__body {

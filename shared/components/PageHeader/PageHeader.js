@@ -47,7 +47,7 @@ export const PageHeader = ({
     <LayoutPanel.Header>
       <section className="header-wrapper">
         {breadcrumbItems.length ? (
-          <section className="fd-has-margin-bottom-s">
+          <section>
             <Breadcrumb>
               {breadcrumbItems.map(item => {
                 return (

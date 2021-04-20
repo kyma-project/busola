@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import LuigiClient from '@luigi-project/client';
 
-import { LayoutPanel, FormItem, FormLabel } from 'fundamental-react';
+import { LayoutPanel, FormItem, FormLabel, Button } from 'fundamental-react';
 import './ContainersData.scss';
 
 const SecretComponent = ({ name, value }) => (
   <FormItem className="item-wrapper">
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
-      <FormLabel>{name}:</FormLabel>
+      <FormLabel className="form-label">{name}:</FormLabel>
       <div>{value}</div>
     </div>
   </FormItem>
@@ -28,9 +29,18 @@ const getPorts = ports => {
 
 const ContainerComponent = ({ container }) => (
   <>
-    <LayoutPanel.Filters>
+    <LayoutPanel.Header>
       <LayoutPanel.Head title={container.name} />
-    </LayoutPanel.Filters>
+      <LayoutPanel.Actions>
+        <Button
+          onClick={() =>
+            LuigiClient.linkManager().navigate(`containers/${container.name}`)
+          }
+        >
+          View Logs
+        </Button>
+      </LayoutPanel.Actions>
+    </LayoutPanel.Header>
     <LayoutPanel.Body>
       <SecretComponent name="Name" value={container.name} />
       {container.image && (

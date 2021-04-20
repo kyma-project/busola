@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: eu.gcr.io/kyma-project/busola-backend:166fb4ee
+          image: eu.gcr.io/kyma-project/busola-backend:1a6c6cf1
           imagePullPolicy: Always
           resources:
             limits:

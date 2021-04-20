@@ -24,7 +24,8 @@ export default function CreateEventSubscriptionForm({
 
   const eventTypeFinalInput = useRef();
 
-  async function handleSubmit() {
+  async function handleSubmit(e) {
+    e.preventDefault();
     onSubmit(EVENT_TYPE_PREFIX + eventTypeFinalInput.current.value);
   }
 
