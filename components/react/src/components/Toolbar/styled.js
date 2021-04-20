@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { ActionBar as AB } from 'fundamental-react/ActionBar';
+import { ActionBar as AB } from 'fundamental-react';
 import { sizes } from '../../commons';
 
 const ABBack = AB.Back;

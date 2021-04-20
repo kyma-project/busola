@@ -56,8 +56,6 @@ import {
   FormItem,
   FormInput,
   FormLabel,
-  FormSelect,
-  FormFieldset,
 } from 'fundamental-react';
 import { Counter } from 'fundamental-react';
 
