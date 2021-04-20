@@ -39,7 +39,7 @@ export const Pagination = ({
         onClick={() => onChangePage(currentPage - 1)}
         aria-label="Previous page"
       >
-        <Icon glyph="navigation-left-arrow" ariaLabel="Previous page" />
+        <Icon glyph="navigation-left-arrow" />
       </Link>
 
       {[...Array(pagesCount)].map((_, i) => (
@@ -58,7 +58,7 @@ export const Pagination = ({
         onClick={() => onChangePage(currentPage + 1)}
         aria-label="Next page"
       >
-        <Icon glyph="navigation-right-arrow" ariaLabel="next page" />
+        <Icon glyph="navigation-right-arrow" />
       </Link>
     </div>
   );
