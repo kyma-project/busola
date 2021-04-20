@@ -9,14 +9,14 @@ import {
   Tooltip,
   useGetList,
   useMicrofrontendContext,
+  PageHeader,
 } from 'react-shared';
-import { InfoLabel } from 'fundamental-react';
+import { InfoLabel, FormInput } from 'fundamental-react';
 
 import { serviceClassConstants } from 'helpers/constants';
 import { determineDisplayedItems } from 'helpers/search';
 
 import Cards from './Cards/Cards.component';
-import ServiceClassToolbar from './ServiceClassToolbar/ServiceClassToolbar.component';
 
 import {
   ServiceClassListWrapper,
@@ -107,10 +107,20 @@ export default function ServiceClassList() {
 
   return (
     <>
-      <ServiceClassToolbar
-        searchQuery={searchQuery}
-        searchFn={setSearchQuery}
-        serviceClassesExists={allServiceClasses.length > 0}
+      <PageHeader
+        title={serviceClassConstants.title}
+        actions={
+          allServiceClasses.length && (
+            <FormInput
+              style={{ width: '20rem' }}
+              value={searchQuery}
+              type="text"
+              placeholder="Search"
+              onChange={e => setSearchQuery(e.target.value)}
+              data-e2e-id="search"
+            />
+          )
+        }
       />
 
       <Tabs

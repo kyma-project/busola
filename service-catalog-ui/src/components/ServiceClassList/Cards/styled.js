@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { Image } from '@kyma-project/react-components';
 
 export const CardThumbnail = styled.div`
   && {
@@ -19,7 +18,7 @@ export const CardThumbnail = styled.div`
   }
 `;
 
-export const CardImage = styled(Image)`
+export const CardImage = styled.img`
   && {
     max-width: 27px;
     max-height: 27px;

@@ -65,7 +65,7 @@ const Card = ({
     </div>
 
     <p className="card__description">{description}</p>
-    <Labels labels={labels} ignśoredLabels={[DOCUMENTATION_PER_PLAN_LABEL]} />
+    <Labels labels={labels} ignoredLabels={[DOCUMENTATION_PER_PLAN_LABEL]} />
   </Tile>
 );
 

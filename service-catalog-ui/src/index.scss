@@ -6,6 +6,13 @@
   word-break: keep-all;
 }
 
+.fd-layout-panel__actions {
+  .fd-button__text {
+    font-size: 0.875rem !important;
+  }
+  font-size: 0.875rem !important;
+}
+
 .empty-list {
   width: 100%;
   font-family: '72';
