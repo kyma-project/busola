@@ -1,12 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import {
-  InlineHelp,
-  FormFieldset,
-  FormItem,
-  FormLabel,
-  Checkbox,
-} from 'fundamental-react';
+import { FormFieldset, FormItem, FormLabel, Checkbox } from 'fundamental-react';
 
 import {
   K8sNameInput,

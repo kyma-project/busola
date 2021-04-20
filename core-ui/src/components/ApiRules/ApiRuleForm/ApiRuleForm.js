@@ -4,14 +4,7 @@ import { v4 as uuid } from 'uuid';
 import { createPatch } from 'rfc6902';
 import LuigiClient from '@luigi-project/client';
 import classNames from 'classnames';
-import { K8sNameInput, InputWithSuffix } from 'react-shared';
-import {
-  FormItem,
-  FormLabel,
-  LayoutPanel,
-  InlineHelp,
-  Button,
-} from 'fundamental-react';
+import { FormItem, FormLabel, LayoutPanel, Button } from 'fundamental-react';
 import { supportedMethodsList } from '../accessStrategyTypes';
 
 import './ApiRuleForm.scss';
@@ -20,7 +13,13 @@ import ServicesDropdown from './ServicesDropdown/ServicesDropdown';
 import AccessStrategyForm from './AccessStrategyForm/AccessStrategyForm';
 import { EXCLUDED_SERVICES_LABELS } from 'components/ApiRules/constants';
 import { hasValidMethods } from 'components/ApiRules/accessStrategyTypes';
-import { useGetList, useNotification } from 'react-shared';
+import {
+  useGetList,
+  useNotification,
+  K8sNameInput,
+  InputWithSuffix,
+  Tooltip,
+} from 'react-shared';
 import { SERVICES_URL, API_RULE_URL } from '../constants';
 import { formatMessage as injectVariables } from 'components/Lambdas/helpers/misc';
 import { useGetGatewayDomain } from '../hooks/useGetGatewayDomain';
@@ -245,11 +244,9 @@ export default function ApiRuleForm({
                 <FormItem>
                   <FormLabel htmlFor="hostname" required>
                     Hostname
-                    <InlineHelp
-                      buttonLabel="help"
-                      buttonLabel="help"
-                      placement="right-end"
-                      text="The hostname must consist of alphanumeric characters, dots or dashes, 
+                    <Tooltip
+                      isInlineHelp
+                      content="The hostname must consist of alphanumeric characters, dots or dashes, 
                           and must start and end with an alphanumeric character (e.g. 'my-name1')."
                     />
                   </FormLabel>

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Tile, Icon } from 'fundamental-react';
+import { Icon } from 'fundamental-react';
 import { ReadableCreationTimestamp, PageHeader } from 'react-shared';
 import { ExternalLink, Image } from './styled';
 
@@ -99,8 +99,6 @@ const ServiceClassInfo = ({ serviceClass, labels, planSelector }) => {
       )}
     </>
   );
-  {
-  }
 };
 
 ServiceClassInfo.propTypes = {

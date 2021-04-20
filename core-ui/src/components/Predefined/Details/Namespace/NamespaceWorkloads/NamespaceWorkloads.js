@@ -2,7 +2,7 @@ import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import PropTypes from 'prop-types';
 
-import { LayoutPanel, Container, Icon } from 'fundamental-react';
+import { LayoutPanel, Icon } from 'fundamental-react';
 import { useGetList, Spinner, CircleProgress } from 'react-shared';
 
 import {
