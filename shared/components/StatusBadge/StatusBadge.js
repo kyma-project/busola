@@ -39,7 +39,7 @@ const resolveType = status => {
 
 const TYPE_FALLBACK = new Map([
   ['success', 'positive'],
-  ['warging', 'critical'],
+  ['warning', 'critical'],
   ['error', 'negative'],
   ['info', 'informative'],
 ]);
