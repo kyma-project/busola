@@ -17,6 +17,7 @@ export const Label = ({ text, onClick }) => (
     title="Click to remove"
     className="label-selector__label"
     onClick={onClick}
+    buttonLabel="Remove this label"
   >
     {text}
   </Token>

@@ -54,7 +54,7 @@ body {
 
 .fd-token {
   font-size: 0.75rem;
-  flex: none;
+  flex: none !important;
   padding: 0 8px !important;
 
   &--readonly {
@@ -69,6 +69,11 @@ body {
       background-color: initial;
       border-color: initial;
     }
+  }
+
+  .fd-token__close {
+    padding-right: 0;
+    display: inline;
   }
 }
 
