@@ -31,7 +31,7 @@ export default function EntryNotFound({ entryType, entryId, navigate }) {
               />
               <Breadcrumb.Item />
             </Breadcrumb>
-            <ActionBar.Header title={entryId || 'Loading name...'} />
+            <ActionBar title={entryId || 'Loading name...'} />
           </section>
         </section>
       </header>
