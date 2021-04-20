@@ -110,7 +110,7 @@ export function Modal({
     ];
 
     if (cancelText) {
-      output.unshiift(
+      output.unshift(
         <Button
           style={{ marginRight: '12px' }}
           option="transparent"
