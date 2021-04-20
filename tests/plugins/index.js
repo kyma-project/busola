@@ -2,11 +2,11 @@
 /**
  * @type {Cypress.PluginConfig}
  */
-module.exports = on => {
+module.exports = (on) => {
   on('task', {
     log(message) {
       console.log(message);
       return null;
-    }
+    },
   });
 };

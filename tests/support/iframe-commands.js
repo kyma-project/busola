@@ -11,6 +11,6 @@ Cypress.Commands.add('getIframeBody', () => {
       // wraps "body" DOM element to allow
       // chaining more Cypress commands, like ".find(...)"
       // https://on.cypress.io/wrap
-      .then(body => cy.wrap(body, { log: false }))
+      .then((body) => cy.wrap(body, { log: false }))
   );
 });

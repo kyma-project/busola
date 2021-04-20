@@ -25,7 +25,7 @@ context('Busola Smoke Tests', () => {
   });
 
   it('Renders navigation nodes', () => {
-    ['Namespaces', 'Administration', 'Diagnostics'].forEach(node => {
+    ['Namespaces', 'Administration', 'Diagnostics'].forEach((node) => {
       cy.contains(node).should('exist');
     });
   });
