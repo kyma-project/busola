@@ -6,20 +6,22 @@ const ADDRESS = config.localDev
   ? `http://localhost:4200`
   : `https://busola.${config.domain}`;
 
-const NAMESPACE_NAME = 'orders-service';
+const random = Math.floor(
+  Math.random() * 10 + Math.random() * 100 + Math.random() * 1000,
+);
+const NAMESPACE_NAME = `orders-service-${random}`;
 
 Cypress.on('uncaught:exception', (err, runnable) => {
   // returning false here prevents Cypress from failing the test
-  debugger
-  return false
-})
+  debugger;
+  return false;
+});
 
 context('Busola Smoke Tests', () => {
   before(() => {
-    cy.clearSessionStorage().clearLocalStorage();
-
     cy.visit(ADDRESS)
-      .get('#file-input').attachFile('kubeconfig.yaml', { subjectType: 'drag-n-drop' })
+      .get('#file-input')
+      .attachFile('kubeconfig.yaml', { subjectType: 'drag-n-drop' });
   });
 
   it('Renders navigation nodes', () => {

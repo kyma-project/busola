@@ -4,7 +4,7 @@ import { useMicrofrontendContext } from 'react-shared';
 import { Panel, FormInput, FormLabel, Button } from 'fundamental-react';
 
 export default function ClusterSettings() {
-  const clusterSettings = useMicrofrontendContext().cluster;
+  const clusterSettings = useMicrofrontendContext()?.cluster;
   const [server, setServer] = React.useState(clusterSettings?.server);
   const [ca, setCa] = React.useState(
     clusterSettings['certificate-authority-data'],
