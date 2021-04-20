@@ -1,4 +1,4 @@
 import { Tile } from 'fundamental-react';
 const TileMedia = Tile.Media;
 const TileContent = Tile.Content;
-export { Tile, TileContent, div as TileGrid, TileMedia };
+export { Tile, TileContent, TileMedia };

@@ -24,7 +24,6 @@ import Notification from './Notification';
 import NotificationMessage from './NotificationMessage';
 import {
   Panel,
-  PanelGrid,
   PanelBody,
   PanelHeader,
   PanelHead,
@@ -45,7 +44,7 @@ import TableWithActionsToolbar from './TableWithActions/TableWithActionsToolbar'
 import TableWithActionsList from './TableWithActions/TableWithActionsList';
 import Text from './Text';
 import ThemeWrapper from './ThemeWrapper';
-import { Tile, TileMedia, TileContent, TileGrid } from './Tile';
+import { Tile, TileMedia, TileContent } from './Tile';
 import Token from './Token';
 import Toolbar from './Toolbar';
 import Tooltip from './Tooltip';
@@ -85,7 +84,7 @@ module.exports = {
   Notification,
   NotificationMessage,
   Panel,
-  PanelGrid,
+
   PanelBody,
   PanelHeader,
   PanelHead,
@@ -108,7 +107,7 @@ module.exports = {
   Tile,
   TileMedia,
   TileContent,
-  TileGrid,
+
   Token,
   Toolbar,
   Tooltip,

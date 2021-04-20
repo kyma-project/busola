@@ -2,10 +2,6 @@ import styled from 'styled-components';
 import { ActionBar as AB } from 'fundamental-react';
 import { sizes } from '../../commons';
 
-const ABBack = AB.Back;
-const ABHeader = AB.Header;
-const ABActions = AB.Actions;
-
 export const ActionBar = styled(AB)`
   && {
     padding: 30px 30px 0 30px;
@@ -13,7 +9,7 @@ export const ActionBar = styled(AB)`
   }
 `;
 
-export const ActionBarBack = styled(ABBack)`
+export const ActionBarBack = styled.div`
   && {
     @media (min-width: 320px) {
       display: block !important;
@@ -21,7 +17,7 @@ export const ActionBarBack = styled(ABBack)`
   }
 `;
 
-export const ActionBarHeader = styled(ABHeader)`
+export const ActionBarHeader = styled.div`
   && {
     padding: 0;
     text-align: left;
@@ -31,7 +27,7 @@ export const ActionBarHeader = styled(ABHeader)`
   }
 `;
 
-export const ActionBarActions = styled(ABActions)`
+export const ActionBarActions = styled.div`
   && {
     align-items: flex-end;
     justify-content: flex-end;
