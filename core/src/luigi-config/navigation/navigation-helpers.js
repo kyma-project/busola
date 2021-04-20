@@ -124,5 +124,8 @@ function getCorrespondingNamespaceLocation(namespaceName) {
   if (!addressTokens[4]) {
     return null;
   }
-  return namespaceName + '/' + addressTokens.slice(4).join('/');
+  const fullPath = addressTokens.slice(4).join('/');
+  // navigate to the list view from the details
+  const path = fullPath === 'details' ? fullPath : fullPath.split('/details')[0];
+  return `${namespaceName}/${path}`;
 }
