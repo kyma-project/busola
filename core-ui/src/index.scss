@@ -55,6 +55,7 @@ body {
 .fd-token {
   font-size: 0.75rem;
   flex: none;
+  padding: 0 8px !important;
 
   &--readonly {
     .fd-token__close {
