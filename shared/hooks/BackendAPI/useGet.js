@@ -8,7 +8,7 @@ const useGetHook = processDataFn =>
     const isHookMounted = React.useRef(true); // becomes 'false' after the hook is unmounted to avoid performing any async actions afterwards
     const lastAuthData = React.useRef(null);
     const [data, setData] = React.useState(null);
-    const [loading, setLoading] = React.useState(false);
+    const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState(null);
     const { authData } = useMicrofrontendContext();
     const fetch = useFetch();
@@ -34,7 +34,7 @@ const useGetHook = processDataFn =>
         processError(e);
       }
 
-      if (!isSilent && isHookMounted.current) setLoading(false);
+      if (isHookMounted.current) setLoading(false);
     };
 
     React.useEffect(() => {
@@ -57,7 +57,7 @@ const useGetHook = processDataFn =>
         // authData reference is updated multiple times during the route change but the value stays the same (see MicrofrontendContext).
         // To avoid unnecessary refetch(), we 'cache' the last value and do the refetch only if there was an actual change
         lastAuthData.current = authData;
-        refetch(false, null)();
+        refetch(true, null)();
       }
     }, [authData]);
 
