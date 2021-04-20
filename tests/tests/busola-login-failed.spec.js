@@ -14,12 +14,15 @@ Cypress.on('uncaught:exception', (err, runnable) => {
 context('Busola Login Failed', () => {
     before(() => {
         cy.clearSessionStorage().clearLocalStorage();
+    });
 
+    it('Use wrong kubeconfig', () => {
         cy.visit(ADDRESS)
             .get('#textarea-kubeconfig')
-            .type('abc')
+            .type('wrong_kubeconfig')
             .get('#apply-kubeconfig')
             .click()
-            .handleInvalidLoginData();
+            .get('#error')
+            .shouldHaveTrimmedText('Error reading kubeconfig.');
     });
 });

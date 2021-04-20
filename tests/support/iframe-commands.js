@@ -1,7 +1,7 @@
 Cypress.Commands.add('getIframeBody', () => {
   // get the iframe > document > body
   // and retry until the body element is not empty
-  //cy.log('getIframeBody')
+  cy.log('getIframeBody')
 
   return cy
   .get('.iframeContainer iframe', { log: false })
