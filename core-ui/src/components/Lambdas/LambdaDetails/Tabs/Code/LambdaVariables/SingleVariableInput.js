@@ -115,7 +115,7 @@ export default function SingleVariableInput({
 
     return (
       <td colSpan="3">
-        <FormMessage type={type}>{message}</FormMessage>
+        <span className="fd-has-color-status-3">{message}</span> {/* TODO */}
       </td>
     );
   }

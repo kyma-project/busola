@@ -9,7 +9,7 @@ import {
   FormFieldset,
   FormSelect,
   FormRadioGroup,
-  Alert,
+  MessageStrip,
 } from 'fundamental-react';
 import StringListInput from './StringListInput';
 import { Tooltip } from 'react-shared';
@@ -131,9 +131,9 @@ export default function AccessStrategyForm({
         )}
       </div>
       {!hasValidMethods(strategy) && (
-        <Alert type="warning" className="fd-has-margin-bottom-m">
+        <MessageStrip type="warning" className="fd-has-margin-bottom-m">
           This access strategy requires at least one method.
-        </Alert>
+        </MessageStrip>
       )}
     </div>
   );

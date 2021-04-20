@@ -65,7 +65,7 @@ export const StatusBadge = ({
     },
     className,
   );
-  console.log(value);
+
   const badgeElement = (
     <ObjectStatus
       role="status"
