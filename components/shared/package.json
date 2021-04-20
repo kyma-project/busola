@@ -9,7 +9,5 @@
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "devDependencies": {
-    "@types/fundamental-react": "^0.13.7"
-  }
+  "devDependencies": {}
 }
