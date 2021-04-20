@@ -1,9 +1,16 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { ControlledEditor } from '@monaco-editor/react';
+import { ControlledEditor, monaco } from '@monaco-editor/react';
 import jsyaml from 'js-yaml';
 import { Icon } from 'fundamental-react';
+
+// monaco.config({
+//   urls: {
+//     monacoLoader: '/vs/loader.js',
+//     monacoBase: '/vs',
+//   },
+// });
 
 import './SideDrawer.scss';
 import { CopiableText } from '../CopiableText/CopiableText';
