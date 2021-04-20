@@ -17,9 +17,9 @@ const mockAddBackdrop = jest.fn();
 const mockRemoveBackdrop = jest.fn();
 const mockShowAlert = jest.fn();
 
-jest.mock('@kyma-project/generic-documentation', () => {
-  return <div>GENERIC DOCUMENTATION COMPONENT</div>;
-});
+// jest.mock('@kyma-project/generic-documentation', () => {
+//   return <div>GENERIC DOCUMENTATION COMPONENT</div>;
+// });
 
 jest.mock('@luigi-project/client', () => ({
   getContext: () => ({

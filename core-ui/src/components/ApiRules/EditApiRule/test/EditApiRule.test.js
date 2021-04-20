@@ -20,10 +20,6 @@
 
 // const mockNavigate = jest.fn();
 
-// jest.mock('@kyma-project/common', () => ({
-//   getApiUrl: () => 'kyma.local',
-// }));
-
 // jest.mock('@luigi-project/client', () => ({
 //   getEventData: () => ({
 //     environmentId: mockNamespace,

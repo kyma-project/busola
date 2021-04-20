@@ -5,6 +5,7 @@ import { BrowserRouter } from 'react-router-dom';
 import './index.scss';
 import App from './components/App/App';
 import { Microfrontend } from 'react-shared';
+import 'fiori-fundamentals/dist/fiori-fundamentals.min.css';
 
 const isNpx = window.location.origin === 'http://localhost:3001';
 

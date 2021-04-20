@@ -12,10 +12,9 @@ import {
 
 import { useCreateLambda } from 'components/Lambdas/hooks';
 
-import {
-  randomNameGenerator,
-  validateResourceName,
-} from 'components/Lambdas/helpers/misc';
+import { validateResourceName } from 'components/Lambdas/helpers/misc';
+import { randomNameGenerator } from 'react-shared';
+
 import {
   functionAvailableLanguages,
   nodejs12,
