@@ -126,6 +126,7 @@ function getCorrespondingNamespaceLocation(namespaceName) {
   }
   const fullPath = addressTokens.slice(4).join('/');
   // navigate to the list view from the details
-  const path = fullPath === 'details' ? fullPath : fullPath.split('/details')[0];
+  const path =
+    fullPath === 'details' ? fullPath : fullPath.split('/details')[0];
   return `${namespaceName}/${path}`;
 }
