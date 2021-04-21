@@ -1,9 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { ControlledEditor, DiffEditor, monaco } from '@monaco-editor/react';
-
-monaco.config({
-  paths: { vs: '/vs' },
-});
+import { ControlledEditor, DiffEditor } from '@monaco-editor/react';
 
 export default function Editor({
   id,

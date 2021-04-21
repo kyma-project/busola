@@ -1,10 +1,6 @@
 import React from 'react';
-import Editor, { monaco } from '@monaco-editor/react';
+import Editor from '@monaco-editor/react';
 import { LayoutPanel } from 'fundamental-react';
-
-monaco.config({
-  paths: { vs: '/vs' },
-});
 
 export const ConfigMapsDetails = DefaultRenderer => ({ ...otherParams }) => {
   const options = {
