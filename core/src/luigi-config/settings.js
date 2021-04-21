@@ -5,7 +5,7 @@ export const settings = {
   sideNavFooterText: '',
   header: {
     logo: 'assets/logo.svg',
-    title: 'Kyma',
+    title: '',
     favicon: 'favicon.ico',
   },
   appLoadingIndicator: {

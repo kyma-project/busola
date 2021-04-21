@@ -1,5 +1,6 @@
 import { NODE_PARAM_PREFIX } from './luigi-config';
 import { saveInitParams, getInitParams } from './init-params';
+import { config } from './config';
 
 export const communication = {
   customMessagesListeners: {
@@ -39,7 +40,7 @@ export const communication = {
     },
     'busola.setWindowTitle': ({ title }) => {
       const luigiConfig = Luigi.getConfig();
-      luigiConfig.settings.header.title = `Kyma - ${title}`;
+      luigiConfig.settings.header.title = `${config.domain} | ${title}`;
       Luigi.configChanged('settings.header');
     },
     'busola.silentNavigate': ({ newParams }) => {
