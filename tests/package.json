@@ -4,8 +4,8 @@
   "scripts": {
     "test:cluster": "$(npm bin)/cypress run --browser chrome --headless",
     "start": "$(npm bin)/cypress open",
-    "lint": "prettier -c .",
-    "lint-fix": "prettier --write ."
+    "lint-check": "prettier --config ../.prettierrc --ignore-path ../.prettierignore -c .",
+    "lint-fix": "prettier --config ../.prettierrc --ignore-path ../.prettierignore --write ."
   },
   "dependencies": {
     "prettier": "^2.2.1"
