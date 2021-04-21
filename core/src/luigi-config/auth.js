@@ -15,13 +15,10 @@ export async function refreshAuth() {
     isFetchingNewToken = true;
     await userManager.signinSilent();
 
-    const res = await userManager.getUser();
-    console.log(res);
-    const { id_token, access_token } = res;
+    const { id_token } = await userManager.getUser();
     const idTokenExpiration = parseJWT(id_token).exp * 1000;
 
     const secondsLeft = (idTokenExpiration - Date.now()) / 1000;
-    console.log('secondsLeft', secondsLeft)
 
     const auth = Luigi.auth().store.getAuthData();
     Luigi.auth().store.setAuthData({
@@ -34,8 +31,6 @@ export async function refreshAuth() {
     const context = navigation[0].context;
     context.authData.idToken = id_token;
     context.authData.idTokenExpiration = idTokenExpiration;
-    context.authData.accessTokenExpiration = idTokenExpiration;
-    context.authData.accessTokenExpirationDate = idTokenExpiration;
     Luigi.configChanged('navigation.nodes');
   } catch (e) {
     console.warn(e);
