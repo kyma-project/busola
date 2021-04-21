@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 import {
-  FormSet,
+  FormFieldset,
   FormItem,
   FormLabel,
   FormInput,
   FormMessage,
 } from 'fundamental-react';
 
-const FormSetWrapper = styled.div`
+const FormFieldsetWrapper = styled.div`
   padding-top: ${props => props.marginTop || '0'}px;
 `;
 
@@ -136,8 +136,8 @@ class Input extends React.Component {
 
     const randomId = `input-${(Math.random() + 1).toString(36).substring(7)}`;
     return (
-      <FormSetWrapper marginTop={marginTop}>
-        <FormSet>
+      <FormFieldsetWrapper marginTop={marginTop}>
+        <FormFieldset>
           <FormItem>
             {label && (
               <FormLabel htmlFor={randomId} required={required}>
@@ -164,8 +164,8 @@ class Input extends React.Component {
               </FormMessage>
             )}
           </FormItem>
-        </FormSet>
-      </FormSetWrapper>
+        </FormFieldset>
+      </FormFieldsetWrapper>
     );
   }
 }

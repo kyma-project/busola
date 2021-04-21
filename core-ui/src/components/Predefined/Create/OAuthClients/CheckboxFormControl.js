@@ -22,6 +22,7 @@ export default function CheckboxFormControl({
     } else {
       values = values.filter(v => v !== value);
     }
+
     onChange(values);
   };
 
@@ -37,7 +38,9 @@ export default function CheckboxFormControl({
             value={displayName}
             defaultChecked={values.includes(value)}
             onChange={e => updateValues(value, e.target.checked)}
-          />
+          >
+            {displayName}
+          </Checkbox>
         ))}
       </FormRadioGroup>
     </>

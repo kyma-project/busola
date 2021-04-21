@@ -1,5 +1,5 @@
 import React from 'react';
-import { Panel } from 'fundamental-react';
+import { LayoutPanel } from 'fundamental-react';
 import { useGetStream, useWindowTitle, PageHeader } from 'react-shared';
 import './ContainersLogs.scss';
 
@@ -50,17 +50,17 @@ function Logs({ params }) {
         title={params.containerName}
         breadcrumbItems={breadcrumbs}
       ></PageHeader>
-      <Panel className="fd-has-margin-m">
-        <Panel.Header>
-          <Panel.Head title="Logs" />
-        </Panel.Header>
-        <Panel.Body>
+      <LayoutPanel className="fd-has-margin-m">
+        <LayoutPanel.Header>
+          <LayoutPanel.Head title="Logs" />
+        </LayoutPanel.Header>
+        <LayoutPanel.Body>
           <LogsPanel
             streamData={streamData}
             containerName={params.containerName}
           />
-        </Panel.Body>
-      </Panel>
+        </LayoutPanel.Body>
+      </LayoutPanel>
     </>
   );
 }

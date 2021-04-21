@@ -20,7 +20,7 @@ export function CreateRepositoryModal({
   const modalOpeningComponent = (
     <Button
       glyph="add"
-      option="light"
+      option="transparent"
       disabled={Boolean(serverDataError || serverDataLoading)}
     >
       {REPOSITORIES_LIST.CREATE_MODAL.OPEN_BUTTON.TEXT}

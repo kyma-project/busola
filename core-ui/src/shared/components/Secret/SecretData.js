@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Button, Panel, FormItem, FormLabel } from 'fundamental-react';
+import { Button, LayoutPanel, FormItem, FormLabel } from 'fundamental-react';
 import './SecretData.scss';
 
 const SecretComponent = ({ name, value, showEncoded, isCollapsed }) => (
@@ -70,13 +70,13 @@ export default function SecretData({ secret }) {
   };
 
   return (
-    <Panel className="fd-has-margin-m secret-panel">
-      <Panel.Header>
-        <Panel.Head title={'Data'} />
-        <Panel.Actions>
+    <LayoutPanel className="fd-has-margin-m secret-panel">
+      <LayoutPanel.Header>
+        <LayoutPanel.Head title={'Data'} />
+        <LayoutPanel.Actions>
           {showExpandButton && (
             <Button
-              option="light"
+              option="transparent"
               glyph={isCollapsed ? 'show' : 'hide'}
               disabled={!secret?.data}
               onClick={() => setCollapsed(!isCollapsed)}
@@ -85,7 +85,7 @@ export default function SecretData({ secret }) {
             </Button>
           )}
           <Button
-            option="light"
+            option="transparent"
             glyph={isEncoded ? 'show' : 'hide'}
             disabled={!secret?.data}
             onClick={() => {
@@ -94,9 +94,9 @@ export default function SecretData({ secret }) {
           >
             {isEncoded ? 'Decode' : 'Encode'}
           </Button>
-        </Panel.Actions>
-      </Panel.Header>
+        </LayoutPanel.Actions>
+      </LayoutPanel.Header>
       {body()}
-    </Panel>
+    </LayoutPanel>
   );
 }

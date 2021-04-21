@@ -1,15 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import LuigiClient from '@luigi-project/client';
-import { Breadcrumb } from 'fundamental-react';
-import ServiceClassToolbar from '../ServiceClassToolbar/ServiceClassToolbar';
 import ServiceClassInfo from '../ServiceClassInfo/ServiceClassInfo';
-
-import {
-  BreadcrumbWrapper,
-  ServiceClassToolbarWrapper,
-  HeaderWrapper,
-} from './styled';
+import { PageHeader } from 'react-shared';
 
 import { serviceClassConstants } from 'helpers/constants';
 import { isService, getResourceDisplayName } from 'helpers';
@@ -30,32 +23,23 @@ const ServiceClassDetailsHeader = ({ serviceClass, children }) => {
   };
 
   return (
-    <HeaderWrapper>
-      <BreadcrumbWrapper>
-        <Breadcrumb>
-          <Breadcrumb.Item
-            name={`${serviceClassConstants.title} - ${
-              isService(labels) ? 'Services' : 'Add-Ons'
-            }`}
-            url="#"
-            onClick={goToList}
-          />
-
-          <Breadcrumb.Item />
-        </Breadcrumb>
-      </BreadcrumbWrapper>
-      <ServiceClassToolbarWrapper>
-        <ServiceClassToolbar
-          serviceClassDisplayName={getResourceDisplayName(serviceClass)}
-          providerDisplayName={
-            serviceClass.spec.externalMetadata?.providerDisplayName
-          }
-        >
-          {children}
-        </ServiceClassToolbar>
-      </ServiceClassToolbarWrapper>
+    <PageHeader
+      title={getResourceDisplayName(serviceClass)}
+      description={serviceClass.spec.externalMetadata?.providerDisplayName}
+      breadcrumbItems={[
+        {
+          name: `${serviceClassConstants.title} - ${
+            isService(labels) ? 'Services' : 'Add-Ons'
+          }`,
+          path: '/',
+          onClick: goToList,
+        },
+        { name: '' },
+      ]}
+      actions={[children]}
+    >
       <ServiceClassInfo serviceClass={serviceClass} labels={labels} />
-    </HeaderWrapper>
+    </PageHeader>
   );
 };
 

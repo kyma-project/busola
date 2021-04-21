@@ -1,14 +1,14 @@
 import React from 'react';
 
-import { Panel } from 'fundamental-react';
+import { LayoutPanel } from 'fundamental-react';
 
 import { Wrapper } from './styled';
 
 const BackendModuleDisabled = ({ mod }) => (
   <Wrapper>
-    <Panel>
-      <Panel.Body>{`${mod} backend module is disabled.`}</Panel.Body>
-    </Panel>
+    <LayoutPanel>
+      <LayoutPanel.Body>{`${mod} backend module is disabled.`}</LayoutPanel.Body>
+    </LayoutPanel>
   </Wrapper>
 );
 

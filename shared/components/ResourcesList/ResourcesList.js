@@ -187,13 +187,13 @@ function Resources({
       <ModalWithForm
         title={`Create ${prettifiedResourceName}`}
         modalOpeningComponent={
-          <Button glyph="add" option="light">
+          <Button glyph="add" option="transparent">
             Create {prettifiedResourceName}
           </Button>
         }
         confirmText="Create"
         id={`add-${resourceType}-modal`}
-        className="fd-modal--xl-size"
+        className="fd-dialog--xl-size"
         renderForm={props => (
           <CreateResourceForm
             resourceType={resourceType}

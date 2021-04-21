@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import {
-  FormSet,
+  FormFieldset,
   FormItem,
   FormLabel,
   FormSelect,
@@ -56,7 +56,7 @@ const Select = ({
   );
 
   return (
-    <FormSet>
+    <FormFieldset>
       <FormItem>
         <FormLabel htmlFor={randomId} required={required}>
           {label}
@@ -67,7 +67,7 @@ const Select = ({
           <FormMessage type={error}>{message}</FormMessage>
         )}
       </FormItem>
-    </FormSet>
+    </FormFieldset>
   );
 };
 

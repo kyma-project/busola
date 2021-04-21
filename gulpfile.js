@@ -16,7 +16,7 @@ const libraries = [
   'common',
   'components/shared',
   'components/react',
-  'components/generic-documentation',
+  // 'components/generic-documentation',
   'shared',
 ];
 

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { BindableServicesList } from './BindableServicesList';
-import { Button, FormSet } from 'fundamental-react';
+import { Button, FormFieldset } from 'fundamental-react';
 import { Modal, useUpdate } from 'react-shared';
 import { createPatch } from 'rfc6902';
 
@@ -9,7 +9,9 @@ export default function EditNamespaceBinding({ application, binding }) {
   const namespace = binding.metadata.namespace;
   const [servicesToBind, setServicesToBind] = React.useState([]);
   const patchRequest = useUpdate();
-  const modalOpeningComponent = <Button compact option="light" glyph="edit" />;
+  const modalOpeningComponent = (
+    <Button compact option="transparent" glyph="edit" />
+  );
 
   async function updateBinding() {
     const newBinding = JSON.parse(JSON.stringify(binding));
@@ -36,13 +38,13 @@ export default function EditNamespaceBinding({ application, binding }) {
       onConfirm={updateBinding}
       onShow={() => setServicesToBind(binding.spec.services)}
     >
-      <FormSet>
+      <FormFieldset>
         <BindableServicesList
           availableServices={application.spec.services}
           services={servicesToBind}
           setServices={setServicesToBind}
         />
-      </FormSet>
+      </FormFieldset>
     </Modal>
   );
 }

@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { LayoutGrid } from 'fundamental-react';
 import { Input } from './TableElements/Input';
 import { Row } from './TableElements/Row';
 
@@ -62,17 +61,15 @@ export default function LambdaReplicas({
   ];
 
   return (
-    <>
-      <LayoutGrid cols={panels.length}>
-        {panels.map(panel => (
-          <Row
-            key={panel.title}
-            title={panel.title}
-            description={panel.description}
-            action={panel.action}
-          ></Row>
-        ))}
-      </LayoutGrid>
-    </>
+    <div style={{ display: 'grid', gridAutoColumns: '1fr' }}>
+      {panels.map(panel => (
+        <Row
+          key={panel.title}
+          title={panel.title}
+          description={panel.description}
+          action={panel.action}
+        ></Row>
+      ))}
+    </div>
   );
 }

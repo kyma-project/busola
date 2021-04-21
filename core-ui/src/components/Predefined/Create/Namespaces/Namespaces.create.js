@@ -1,14 +1,13 @@
 import React, { useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import {
-  InlineHelp,
-  FormFieldset,
-  FormItem,
-  FormLabel,
-  FormSet,
-} from 'fundamental-react';
+import { FormFieldset, FormItem, FormLabel, Checkbox } from 'fundamental-react';
 
-import { K8sNameInput, LabelSelectorInput, usePost } from 'react-shared';
+import {
+  K8sNameInput,
+  LabelSelectorInput,
+  usePost,
+  Tooltip,
+} from 'react-shared';
 
 import './CreateNamespace.scss';
 import { formatNamespace, formatLimits, formatMemoryQuotas } from './helpers';
@@ -22,26 +21,16 @@ const DisableSidecarField = ({ onChange }) => {
   return (
     <FormFieldset>
       <FormItem>
-        <input
-          className="fd-form__control"
-          type="checkbox"
-          id="disable-istio"
-          placeholder="disable side-car"
-          onChange={e => onChange(e.target.checked)}
-        />
-        <FormLabel
-          htmlFor="disable-istio"
-          className="fd-display-l-inline fd-has-margin-left-tiny"
-        >
+        <Checkbox id="disable-istio" onChange={e => onChange(e.target.checked)}>
           Disable side-car injection
-          <InlineHelp
-            placement="bottom-right"
-            text="
+          <Tooltip
+            isInlineHelp
+            content="
                 Select this option to disable istio to mediate all
                   communication between the pods in your namespace.
                 "
           />
-        </FormLabel>
+        </Checkbox>
       </FormItem>
     </FormFieldset>
   );
@@ -52,29 +41,24 @@ const MemoryQuotasCheckbox = ({ checkboxRef, children }) => {
   return (
     <FormFieldset>
       <FormItem>
-        <input
-          className="fd-form__control"
+        <Checkbox
           ref={checkboxRef}
-          type="checkbox"
           id="memory-quotas"
           onChange={e => setIsExpanded(e.target.checked)}
           aria-label="memory-quotas"
-        />
-        <FormLabel
-          htmlFor="memory-quotas"
-          className="fd-display-l-inline fd-has-margin-left-tiny"
         >
           Apply Total Memory Quotas
-          <InlineHelp
-            placement="bottom-right"
-            text="
+          <Tooltip
+            isInlineHelp
+            content="
                   Define constraints that limit total memory consumption in your
                   namespace. 
                   Use plain value in bytes, or suffix equivalents. For example:
                   128974848, 129e6, 129M, 123Mi.
                 "
           />
-        </FormLabel>
+        </Checkbox>
+
         {isExpanded && children}
       </FormItem>
     </FormFieldset>
@@ -106,7 +90,7 @@ const SectionRow = ({
 );
 
 const MemoryQuotasSection = ({ limitsRef, requestsRef }) => (
-  <FormSet className="input-fields" data-test-id="memory-quotas-section">
+  <FormFieldset className="input-fields" data-test-id="memory-quotas-section">
     <SectionRow
       id="memory-limit"
       reference={limitsRef}
@@ -124,7 +108,7 @@ const MemoryQuotasSection = ({ limitsRef, requestsRef }) => (
       reference={requestsRef}
       description="Memory requests *"
     />
-  </FormSet>
+  </FormFieldset>
 );
 
 const ContainerLimitsCheckbox = ({ checkboxRef, children }) => {
@@ -132,27 +116,22 @@ const ContainerLimitsCheckbox = ({ checkboxRef, children }) => {
   return (
     <FormFieldset>
       <FormItem>
-        <input
-          className="fd-form__control"
+        <Checkbox
           ref={checkboxRef}
-          type="checkbox"
           id="container-limits"
           onChange={e => setIsExpanded(e.target.checked)}
-        />
-        <FormLabel
-          htmlFor="container-limits"
-          className="fd-display-l-inline fd-has-margin-left-tiny"
         >
           Apply limits per container
-          <InlineHelp
-            placement="bottom-right"
-            text="
+          <Tooltip
+            isInlineHelp
+            className="fd-has-margin-left-tiny"
+            content="
                   Define memory constraints for individual containers in your
                   namespace. Use plain value in bytes, or suffix
                   equivalents. For example: 128974848, 129e6, 129M, 123Mi.
                 "
           />
-        </FormLabel>
+        </Checkbox>
         {isExpanded && children}
       </FormItem>
     </FormFieldset>
@@ -160,7 +139,10 @@ const ContainerLimitsCheckbox = ({ checkboxRef, children }) => {
 };
 
 const ContainerLimitSection = ({ maxRef, defaultRef, requestRef }) => (
-  <FormSet className="input-fields" data-test-id="container-limits-section">
+  <FormFieldset
+    className="input-fields"
+    data-test-id="container-limits-section"
+  >
     <SectionRow
       id="container-max"
       placeholder="Max"
@@ -188,7 +170,7 @@ const ContainerLimitSection = ({ maxRef, defaultRef, requestRef }) => (
       reference={requestRef}
       description="Default request *"
     />
-  </FormSet>
+  </FormFieldset>
 );
 
 export const NamespacesCreate = ({

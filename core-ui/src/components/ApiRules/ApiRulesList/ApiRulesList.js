@@ -125,7 +125,7 @@ export default function ApiRules({
   const exposeServiceButton = (
     <Button
       glyph="add"
-      option="light"
+      option="transparent"
       onClick={() =>
         createApiRuleModal(
           service,

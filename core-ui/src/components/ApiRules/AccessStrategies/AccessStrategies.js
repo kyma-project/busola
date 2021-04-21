@@ -2,7 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 
 import { GenericList } from 'react-shared';
-import { Badge, Icon } from 'fundamental-react';
+import { InfoLabel, Icon } from 'fundamental-react';
 
 import accessStrategyTypes, { usesMethods } from '../accessStrategyTypes';
 
@@ -16,8 +16,9 @@ const rowRenderer = strategy => {
   const selectedType = strategy.accessStrategies[0].handler;
   return [
     <span>{strategy.path}</span>,
-    <Badge modifier="filled">
+    <InfoLabel modifier="filled">
       <Icon
+        ariaLabel={accessStrategyTypes[selectedType].displayName}
         glyph={
           selectedType === accessStrategyTypes.noop.value ||
           selectedType === accessStrategyTypes.allow.value
@@ -27,7 +28,7 @@ const rowRenderer = strategy => {
         size="s"
       />
       {accessStrategyTypes[selectedType].displayName}
-    </Badge>,
+    </InfoLabel>,
     <ul
       className={classNames('methods', {
         'fd-hidden': !usesMethods(selectedType),
@@ -38,7 +39,7 @@ const rowRenderer = strategy => {
         .reverse()
         .map(method => (
           <li key={method} aria-label="method">
-            <Badge>{method}</Badge>
+            <InfoLabel>{method}</InfoLabel>
           </li>
         ))}
     </ul>,

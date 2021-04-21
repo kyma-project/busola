@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 
-import { ComboboxInput } from 'fundamental-react/ComboboxInput';
+import { ComboboxInput } from 'fundamental-react'; //TODO
 
 import DropdownRenderer from './DropdownRenderer/DropdownRenderer';
 import { HttpServiceContext } from '../../../services/httpService';
