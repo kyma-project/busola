@@ -294,7 +294,7 @@ export default function CreateInstanceForm({
                 position="top"
                 content="The service provider did not define specific parameters for the selected plan. Refer to the documentation to learn about the required parameters, and define them as JSON in the editor."
               >
-                <Icon glyph="sys-help" />
+                <Icon glyph="sys-help" ariaLabel="No schema for parameters" />
               </Tooltip>
             </div>
             {documentationUrl && (

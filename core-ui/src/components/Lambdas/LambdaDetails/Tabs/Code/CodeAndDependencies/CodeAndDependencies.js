@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Toggle } from 'fundamental-react';
+import { Button, Switch } from 'fundamental-react';
 import { useDebouncedCallback } from 'use-debounce';
 
 import { Tooltip } from 'react-shared';
@@ -145,9 +145,9 @@ export default function CodeAndDependencies({ lambda }) {
   );
 
   const toggle = (
-    <Toggle size="s" onChange={onChangeToggle}>
+    <Switch compact onChange={onChangeToggle}>
       {CODE_AND_DEPENDENCIES_PANEL.DIFF_TOGGLE}
-    </Toggle>
+    </Switch>
   );
   const actions = (
     <>

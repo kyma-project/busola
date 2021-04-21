@@ -11,10 +11,23 @@ export default function ServiceListItem({ service }) {
       placement="left"
       content={
         <>
-          APIs: <Icon glyph={glyphType(service.hasAPIs)} />
+          APIs:{' '}
+          <Icon
+            glyph={glyphType(service.hasAPIs)}
+            ariaLabel={
+              service.hasAPIs ? 'There are some APIs' : 'There are no APIs'
+            }
+          />
           <br />
           Events:
-          <Icon glyph={glyphType(service.hasEvents)} />
+          <Icon
+            glyph={glyphType(service.hasEvents)}
+            ariaLabel={
+              service.hasEvents
+                ? 'There are some events'
+                : 'There are no events'
+            }
+          />
         </>
       }
     >

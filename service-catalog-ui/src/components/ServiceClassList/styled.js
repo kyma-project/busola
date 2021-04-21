@@ -11,10 +11,11 @@ export const ServiceClassListWrapper = styled.div`
 
 export const CardsWrapper = styled.div`
   box-sizing: border-box;
-  display: flex;
-  flex-flow: row wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(26rem, auto));
+  grid-gap: 1.3rem;
   width: 100%;
-  padding: 0 20px 30px 20px;
+  padding: 1.3rem 30px 30px 30px;
 `;
 
 export const ServiceClassDescription = styled.div`
@@ -39,6 +40,10 @@ export const StatusWrapper = styled.li`
   }
   .fd-badge {
     padding: 1px 3px;
+  }
+
+  .fd-info-label {
+    font-size: var(--sapFontSmallSize, 0.875rem);
   }
 `;
 

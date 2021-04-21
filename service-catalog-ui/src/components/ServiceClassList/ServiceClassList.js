@@ -3,15 +3,15 @@ import LuigiClient from '@luigi-project/client';
 
 import { instancesTabUtils } from 'helpers/instances-tab-utils';
 import {
-  PageHeader,
   Tab,
   Tabs,
   Spinner,
   Tooltip,
   useGetList,
   useMicrofrontendContext,
+  PageHeader,
 } from 'react-shared';
-import { FormInput, Identifier } from 'fundamental-react';
+import { InfoLabel, FormInput } from 'fundamental-react';
 
 import { serviceClassConstants } from 'helpers/constants';
 import { determineDisplayedItems } from 'helpers/search';
@@ -46,9 +46,9 @@ const status = (data, id) => {
   return (
     <StatusesList key={id}>
       <StatusWrapper>
-        <Identifier size="xxs" data-e2e-id={id}>
+        <InfoLabel className="fd-has-font-size-large" numeric data-e2e-id={id}>
           {data}
-        </Identifier>
+        </InfoLabel>
       </StatusWrapper>
     </StatusesList>
   );

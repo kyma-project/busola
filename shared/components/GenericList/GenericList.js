@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Panel } from 'fundamental-react';
+import { LayoutPanel } from 'fundamental-react';
 
 import SearchInput from './SearchInput';
 import { Pagination } from './Pagination/Pagination';
@@ -136,15 +136,15 @@ export const GenericList = ({
   );
 
   return (
-    <Panel className={panelClassNames} data-testid={testid}>
+    <LayoutPanel className={panelClassNames} data-testid={testid}>
       {showRootHeader && (
-        <Panel.Header className="fd-has-padding-xs">
-          <Panel.Head title={title} />
-          <Panel.Actions>{headerActions}</Panel.Actions>
-        </Panel.Header>
+        <LayoutPanel.Header className="fd-has-padding-xs">
+          <LayoutPanel.Head title={title} />
+          <LayoutPanel.Actions>{headerActions}</LayoutPanel.Actions>
+        </LayoutPanel.Header>
       )}
 
-      <Panel.Body>
+      <LayoutPanel.Body className="fd-has-padding-none">
         <table className={tableClassNames}>
           {showHeader && (
             <thead>
@@ -159,20 +159,20 @@ export const GenericList = ({
           )}
           <tbody>{renderTableBody()}</tbody>
         </table>
-      </Panel.Body>
+      </LayoutPanel.Body>
       {!!pagination &&
         (!pagination.autoHide ||
           filteredEntries.length > pagination.itemsPerPage) && (
-          <Panel.Footer>
+          <LayoutPanel.Footer>
             <Pagination
               itemsTotal={filteredEntries.length}
               currentPage={currentPage}
               itemsPerPage={pagination.itemsPerPage}
               onChangePage={setCurrentPage}
             />
-          </Panel.Footer>
+          </LayoutPanel.Footer>
         )}
-    </Panel>
+    </LayoutPanel>
   );
 };
 

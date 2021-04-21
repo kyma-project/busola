@@ -4,16 +4,7 @@ import { v4 as uuid } from 'uuid';
 import { createPatch } from 'rfc6902';
 import LuigiClient from '@luigi-project/client';
 import classNames from 'classnames';
-import { K8sNameInput, InputWithSuffix } from 'react-shared';
-import {
-  LayoutGrid,
-  FormGroup,
-  FormItem,
-  FormLabel,
-  Panel,
-  InlineHelp,
-  Button,
-} from 'fundamental-react';
+import { FormItem, FormLabel, LayoutPanel, Button } from 'fundamental-react';
 import { supportedMethodsList } from '../accessStrategyTypes';
 
 import './ApiRuleForm.scss';
@@ -22,7 +13,13 @@ import ServicesDropdown from './ServicesDropdown/ServicesDropdown';
 import AccessStrategyForm from './AccessStrategyForm/AccessStrategyForm';
 import { EXCLUDED_SERVICES_LABELS } from 'components/ApiRules/constants';
 import { hasValidMethods } from 'components/ApiRules/accessStrategyTypes';
-import { useGetList, useNotification } from 'react-shared';
+import {
+  useGetList,
+  useNotification,
+  K8sNameInput,
+  InputWithSuffix,
+  Tooltip,
+} from 'react-shared';
 import { SERVICES_URL, API_RULE_URL } from '../constants';
 import { formatMessage as injectVariables } from 'components/Lambdas/helpers/misc';
 import { useGetGatewayDomain } from '../hooks/useGetGatewayDomain';
@@ -228,103 +225,99 @@ export default function ApiRuleForm({
           onChange={e => handleFormChanged(e)}
           ref={formRef}
         >
-          <LayoutGrid cols={1}>
-            <Panel>
-              <Panel.Header>
-                <Panel.Head title="General settings" />
-              </Panel.Header>
-              <Panel.Body>
-                <FormGroup>
-                  <LayoutGrid cols="3">
-                    <FormItem>
-                      <K8sNameInput
-                        _ref={formValues.name}
-                        id="apiRuleName"
-                        kind="API Rule"
-                        showHelp={!apiRule?.metadata.name}
-                        defaultValue={apiRule?.metadata.name}
-                        disabled={!!apiRule?.metadata.name}
-                      />
-                    </FormItem>
-                    <FormItem>
-                      <FormLabel htmlFor="hostname" required>
-                        Hostname
-                        <InlineHelp
-                          placement="bottom-right"
-                          text="The hostname must consist of alphanumeric characters, dots or dashes, 
+          <LayoutPanel className="fd-has-margin-bottom-small">
+            <LayoutPanel.Header>
+              <LayoutPanel.Head title="General settings" />
+            </LayoutPanel.Header>
+            <LayoutPanel.Body>
+              <div className="api-rule-form__input-group">
+                <FormItem>
+                  <K8sNameInput
+                    _ref={formValues.name}
+                    id="apiRuleName"
+                    kind="API Rule"
+                    showHelp={!apiRule?.metadata.name}
+                    defaultValue={apiRule?.metadata.name}
+                    disabled={!!apiRule?.metadata.name}
+                  />
+                </FormItem>
+                <FormItem>
+                  <FormLabel htmlFor="hostname" required>
+                    Hostname
+                    <Tooltip
+                      isInlineHelp
+                      content="The hostname must consist of alphanumeric characters, dots or dashes, 
                           and must start and end with an alphanumeric character (e.g. 'my-name1')."
-                        />
-                      </FormLabel>
-                      {domainLoading ? (
-                        'Loading...'
-                      ) : (
-                        <InputWithSuffix
-                          defaultValue={apiRule.spec.service.host.replace(
-                            `.${domain}`,
-                            '',
-                          )}
-                          id="hostname"
-                          suffix={domain}
-                          placeholder="Enter the hostname"
-                          required
-                          pattern="^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$"
-                          _ref={formValues.hostname}
-                        />
-                      )}
-                    </FormItem>
-                    <ServicesDropdown
-                      _ref={formValues.service}
-                      defaultValue={apiRule.spec.service}
-                      serviceName={serviceName}
-                      data={services}
-                      error={error}
-                      loading={loading}
                     />
-                  </LayoutGrid>
-                </FormGroup>
-              </Panel.Body>
-            </Panel>
+                  </FormLabel>
+                  {domainLoading ? (
+                    'Loading...'
+                  ) : (
+                    <InputWithSuffix
+                      defaultValue={apiRule.spec.service.host.replace(
+                        `.${domain}`,
+                        '',
+                      )}
+                      id="hostname"
+                      suffix={'.' + domain}
+                      placeholder="Enter the hostname"
+                      required
+                      pattern="^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$"
+                      _ref={formValues.hostname}
+                    />
+                  )}
+                </FormItem>
+                <ServicesDropdown
+                  _ref={formValues.service}
+                  defaultValue={apiRule.spec.service}
+                  serviceName={serviceName}
+                  data={services}
+                  error={error}
+                  loading={loading}
+                />
+              </div>
+            </LayoutPanel.Body>
+          </LayoutPanel>
 
-            <Panel>
-              <Panel.Header>
-                <Panel.Head title="Access strategies" />
-                <Panel.Actions>
-                  <Button
-                    onClick={addAccessStrategy}
-                    option="light"
-                    glyph="add"
-                    typeAttr="button"
-                  >
-                    Add access strategy
-                  </Button>
-                </Panel.Actions>
-              </Panel.Header>
-              {!!rules.length && (
-                <Panel.Body>
-                  {rules.map((rule, idx) => {
-                    return (
-                      <AccessStrategyForm
-                        key={rule.renderKey}
-                        strategy={rule}
-                        setStrategy={newStrategy => {
-                          setRules(rules => [
-                            ...rules.slice(0, idx),
-                            newStrategy,
-                            ...rules.slice(idx + 1, rules.length),
-                          ]);
-                          setValid(false);
-                          handleFormChanged();
-                        }}
-                        removeStrategy={() => removeAccessStrategy(idx)}
-                        canDelete={rules.length > 1}
-                        handleFormChanged={() => setTimeout(handleFormChanged)}
-                      />
-                    );
-                  })}
-                </Panel.Body>
-              )}
-            </Panel>
-          </LayoutGrid>
+          <LayoutPanel>
+            <LayoutPanel.Header>
+              <LayoutPanel.Head title="Access strategies" />
+              <LayoutPanel.Actions>
+                <Button
+                  onClick={addAccessStrategy}
+                  option="transparent"
+                  glyph="add"
+                  typeAttr="button"
+                >
+                  Add access strategy
+                </Button>
+              </LayoutPanel.Actions>
+            </LayoutPanel.Header>
+            {!!rules.length && (
+              <LayoutPanel.Body>
+                {rules.map((rule, idx) => {
+                  return (
+                    <AccessStrategyForm
+                      key={rule.renderKey}
+                      strategy={rule}
+                      setStrategy={newStrategy => {
+                        setRules(rules => [
+                          ...rules.slice(0, idx),
+                          newStrategy,
+                          ...rules.slice(idx + 1, rules.length),
+                        ]);
+                        setValid(false);
+                        handleFormChanged();
+                      }}
+                      removeStrategy={() => removeAccessStrategy(idx)}
+                      canDelete={rules.length > 1}
+                      handleFormChanged={() => setTimeout(handleFormChanged)}
+                    />
+                  );
+                })}
+              </LayoutPanel.Body>
+            )}
+          </LayoutPanel>
         </form>
       </section>
     </div>

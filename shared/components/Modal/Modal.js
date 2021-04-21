@@ -3,7 +3,7 @@ import LuigiClient from '@luigi-project/client';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import './Modal.scss';
-import { Modal as FdModal, Button } from 'fundamental-react';
+import { Dialog as FdModal, Button } from 'fundamental-react';
 import { Tooltip } from '../Tooltip/Tooltip';
 import { Spinner } from '../Spinner/Spinner';
 
@@ -96,30 +96,32 @@ export function Modal({
         {confirmMessage}
       </Button>
     );
-    return (
-      <>
-        {cancelText && (
-          <Button
-            style={{ marginRight: '12px' }}
-            option="light"
-            onClick={onClose}
-          >
-            {cancelText}
-          </Button>
-        )}
+    let output = [
+      tooltipData ? (
+        <Tooltip
+          {...tooltipData}
+          minWidth={tooltipData.minWidth ? tooltipData.minWidth : '191px'}
+        >
+          {confirmButton}
+        </Tooltip>
+      ) : (
+        confirmButton
+      ),
+    ];
 
-        {tooltipData ? (
-          <Tooltip
-            {...tooltipData}
-            minWidth={tooltipData.minWidth ? tooltipData.minWidth : '191px'}
-          >
-            {confirmButton}
-          </Tooltip>
-        ) : (
-          confirmButton
-        )}
-      </>
-    );
+    if (cancelText) {
+      output.unshift(
+        <Button
+          style={{ marginRight: '12px' }}
+          option="transparent"
+          onClick={onClose}
+        >
+          {cancelText}
+        </Button>,
+      );
+    }
+
+    return output;
   };
 
   const modalActions = () => {

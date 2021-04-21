@@ -194,7 +194,9 @@ export default function CreateServiceBindingForm({
               inputProps={checkBoxInputProps}
               initialChecked={true}
               onChange={(_, value) => setCreateBinding(value)}
-            />
+            >
+              Create new Service Binding
+            </Checkbox>
           </FormItem>
           {!createBinding && serviceBindings.length ? (
             <FormItem key="existingBindings">

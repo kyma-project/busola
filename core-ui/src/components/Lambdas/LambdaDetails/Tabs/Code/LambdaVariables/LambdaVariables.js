@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Icon, Badge } from 'fundamental-react';
+import { Icon, InfoLabel } from 'fundamental-react';
 import { GenericList, Tooltip } from 'react-shared';
 
 import EditVariablesModal from './EditVariablesModal';
@@ -32,6 +32,7 @@ function VariableStatus({ validation }) {
         {ENVIRONMENT_VARIABLES_PANEL.WARNINGS.TEXT}
       </span>
       <Icon
+        ariaLabel="Warning"
         glyph="message-warning"
         size="s"
         className={`${statusClassName} fd-has-margin-left-tiny`}
@@ -81,7 +82,7 @@ function VariableType({ variable }) {
 
   return (
     <Tooltip content={tooltipTitle}>
-      <Badge>{message.TEXT}</Badge>
+      <InfoLabel>{message.TEXT}</InfoLabel>
     </Tooltip>
   );
 }

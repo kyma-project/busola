@@ -1,10 +1,13 @@
 .page-header {
-  .fd-panel__title {
-    font-size: 24px;
+  .fd-layout-panel__title {
+    .fd-title {
+      font-size: inherit;
+    }
+    font-size: 1.5rem;
     word-break: break-word;
   }
 
-  .fd-panel__actions {
+  .fd-layout-panel__actions {
     display: flex;
     &.is-catalog {
       flex-grow: 1;
@@ -28,18 +31,28 @@
   grid-template-columns: repeat(auto-fill, minmax(20em, 1fr));
   &-even-split {
     grid-template-columns: 50% 50%;
-  
   }
 }
 .page-header__column {
   display: inline-block;
+
   .title,
   .content {
     display: block;
-    font-size: 14px;
+    font-size: 1rem;
+  }
+
+  .image {
+    display: inline-block;
+    margin-right: 0.5rem;
+  }
+
+  .content-container {
+    display: inline-block;
   }
 
   .title {
     color: var(--fd-color-text-4);
+    margin-bottom: 4px;
   }
 }

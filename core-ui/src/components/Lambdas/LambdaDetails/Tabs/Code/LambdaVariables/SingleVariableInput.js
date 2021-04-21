@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
-import { FormItem, FormInput, FormMessage } from 'fundamental-react';
+import { FormItem, FormInput } from 'fundamental-react';
 
 import { VARIABLE_VALIDATION } from 'components/Lambdas/helpers/lambdaVariables';
 import { ENVIRONMENT_VARIABLES_PANEL } from 'components/Lambdas/constants';
@@ -85,27 +85,27 @@ export default function SingleVariableInput({
       return null;
     }
 
-    let type = undefined;
+    let className = undefined;
     let message = '';
     switch (validation) {
       case VARIABLE_VALIDATION.EMPTY:
-        type = 'error';
+        className = 'fd-has-color-status-3';
         message = ENVIRONMENT_VARIABLES_PANEL.ERRORS.EMPTY;
         break;
       case VARIABLE_VALIDATION.INVALID:
-        type = 'error';
+        className = 'fd-has-color-status-3';
         message = ENVIRONMENT_VARIABLES_PANEL.ERRORS.INVALID;
         break;
       case VARIABLE_VALIDATION.DUPLICATED:
-        type = 'error';
+        className = 'fd-has-color-status-3';
         message = ENVIRONMENT_VARIABLES_PANEL.ERRORS.DUPLICATED;
         break;
       case VARIABLE_VALIDATION.RESTRICTED:
-        type = 'error';
+        className = 'fd-has-color-status-3';
         message = ENVIRONMENT_VARIABLES_PANEL.ERRORS.RESTRICTED;
         break;
       case VARIABLE_VALIDATION.CAN_OVERRIDE_SBU:
-        type = 'warning';
+        className = 'fd-has-color-status-2';
         message =
           ENVIRONMENT_VARIABLES_PANEL.WARNINGS.VARIABLE_CAN_OVERRIDE_SBU;
         break;
@@ -115,7 +115,7 @@ export default function SingleVariableInput({
 
     return (
       <td colSpan="3">
-        <FormMessage type={type}>{message}</FormMessage>
+        <span className={className}>{message}</span> {/* TODO */}
       </td>
     );
   }

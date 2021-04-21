@@ -1,7 +1,6 @@
-@import '~fundamental-styles/dist/root.css';
-
+@import '~fundamental-styles/dist/fundamental-styles.css';
 html {
-  font-size: 10px;
+  font-size: 1em;
 }
 
 body {
@@ -15,8 +14,8 @@ body {
   top: 0 !important;
 }
 
-.fd-overlay.fd-overlay--modal {	
-  --fd-overlay-background-color: rgba(0, 0, 0, 0.6);	
+.fd-overlay.fd-overlay--modal {
+  --fd-overlay-background-color: rgba(0, 0, 0, 0.6);
 }
 
 .cursor-pointer {
@@ -26,9 +25,9 @@ body {
 .link {
   color: var(--fd-color-action-1);
   cursor: pointer;
-  
+
   &.no-border {
-    border:none;
+    border: none;
   }
 }
 
@@ -36,25 +35,49 @@ body {
   background-color: transparent;
 }
 
-.y-fd-token {
-  &.y-fd-token {
-    border: 1px solid var(--fd-color-neutral-3);
+.fd-checkbox:focus + .fd-checkbox__label,
+.fd-radio:focus + .fd-radio__label {
+  outline: none; // disable a weird outline on clicked checkbox
+}
 
-    &--no-button {
-      cursor: default;
+.fd-radio__label:after {
+  top: 6px;
+}
+
+.fd-checkbox__text {
+  margin-left: 0.1rem;
+}
+
+.fd-checkbox__label:before {
+  margin-right: 0.2rem;
+}
+
+.fd-token {
+  font-size: 0.75rem;
+  flex: none !important;
+  padding: 0 8px !important;
+
+  &--readonly {
+    .fd-token__close {
+      display: none !important;
+    }
+    &::after {
+      content: none !important;
     }
 
-    &--no-button:after {
-      all: unset;
+    &:hover {
+      background-color: initial;
+      border-color: initial;
     }
+  }
 
-    &--gap:not(:last-of-type) {
-      margin-right: 8px;
-    }
+  .fd-token__close {
+    padding-right: 0;
+    display: inline;
   }
 }
 
-.fd-modal,
+.fd-dialog,
 .fd-panel,
 .fd-action-bar {
   &__actions {
@@ -64,26 +87,38 @@ body {
   }
 }
 
-.fd-modal {
-  .fd-modal__footer {
+.fd-dialog {
+  .fd-dialog__footer {
     button {
       margin-left: 6px;
+    }
+
+    padding-right: unset;
+    padding-left: unset;
+    padding: 0.5rem 1rem;
+    height: auto;
+    .fd-bar__right {
+      padding: 0;
     }
   }
 }
 
-.fd-modal--xl-size {
+.fd-dialog::before {
+  content: none; //remove double backdrop
+}
+
+.fd-dialog--xl-size {
   .modal-demo-bg {
     min-width: 1036px;
   }
 
-  .fd-modal,
-  .fd-modal__content,
-  .fd-modal__body {
+  .fd-dialog,
+  .fd-dialog__content,
+  .fd-dialog__body {
     min-width: 1036px;
   }
 
-  .fd-modal__body {
+  .fd-dialog__body {
     max-height: calc(100vh - 184px);
   }
 
@@ -93,9 +128,9 @@ body {
       padding: 0 32px;
     }
 
-    .fd-modal,
-    .fd-modal__content,
-    .fd-modal__body {
+    .fd-dialog,
+    .fd-dialog__content,
+    .fd-dialog__body {
       min-width: 100%;
     }
   }
@@ -169,23 +204,25 @@ li {
   visibility: hidden !important;
 }
 
-.fd-checkbox:checked::before, input[type=checkbox]:checked::before {
+.fd-checkbox:checked::before,
+input[type='checkbox']:checked::before {
   border-color: transparent;
 }
 
 .no-dismiss-tokens {
-  .fd-token::after, &.fd-token::after {
+  .fd-token::after,
+  &.fd-token::after {
     content: none !important;
   }
 }
 
 .clearfix::after {
-  content: "";
+  content: '';
   clear: both;
   display: table;
 }
 
 // override fd-styles for Safari
-input[type=checkbox] {
+input[type='checkbox'] {
   -webkit-appearance: checkbox !important;
 }

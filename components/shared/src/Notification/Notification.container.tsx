@@ -17,6 +17,7 @@ export const NotificationContainer: React.FunctionComponent<NotificationContaine
   return (
     <Notification
       {...notification}
+      icon={undefined} // temp - we're going to remove this library anyways
       orientation={orientation}
       visible={showNotification}
       onClick={hideNotification}

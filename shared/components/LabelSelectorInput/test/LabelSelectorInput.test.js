@@ -55,7 +55,7 @@ describe('LabelSelectorInput', () => {
       <LabelSelectorInput labels={{ a: 'a', b: 'b' }} onChange={mockChange} />,
     );
 
-    fireEvent.click(getByText('a=a'));
+    fireEvent.click(getByText('a=a').parentElement.querySelector('button'));
 
     expect(mockChange.mock.calls.length).toBe(1);
     expect(mockChange.mock.calls[0]).toEqual([{ b: 'b' }]);

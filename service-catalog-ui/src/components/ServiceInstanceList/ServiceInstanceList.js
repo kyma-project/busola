@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import LuigiClient from '@luigi-project/client';
 
 import {
-  PageHeader,
   Tab,
   Tabs,
   Spinner,
@@ -11,8 +10,9 @@ import {
   useMicrofrontendContext,
   useDelete,
   useNotification,
+  PageHeader,
 } from 'react-shared';
-import { Identifier, FormInput } from 'fundamental-react';
+import { InfoLabel, FormInput } from 'fundamental-react';
 
 import { instancesTabUtils } from 'helpers/instances-tab-utils';
 import { serviceInstanceConstants } from 'helpers/constants';
@@ -46,9 +46,7 @@ const status = (data, id) => {
   return (
     <StatusesList key={id}>
       <StatusWrapper>
-        <Identifier size="xxs" data-e2e-id={id}>
-          {data}
-        </Identifier>
+        <InfoLabel data-e2e-id={id}>{data}</InfoLabel>
       </StatusWrapper>
     </StatusesList>
   );

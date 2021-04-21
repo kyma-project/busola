@@ -41,7 +41,7 @@ const ServiceInstanceTable = ({
   const addServiceInstanceButton = (
     <Button
       compact
-      option="light"
+      option="transparent"
       onClick={goToServiceCatalog}
       data-e2e-id="add-instance"
       glyph="add"
