@@ -85,3 +85,5 @@ core
 backend/backend-production.*
 
 **/temp/**
+
+**/public/vs/loader.js
