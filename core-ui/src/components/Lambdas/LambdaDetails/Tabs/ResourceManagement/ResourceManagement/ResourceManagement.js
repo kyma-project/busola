@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { Panel, Button } from 'fundamental-react';
+import { LayoutPanel, Button } from 'fundamental-react';
 import { Tooltip } from 'react-shared';
 
 import LambdaReplicas from './LambdaReplicas';
@@ -208,20 +208,22 @@ export default function ResourcesManagement({ lambda }) {
   }
 
   return (
-    <Panel className="fd-has-margin-m lambda-resources-management">
+    <LayoutPanel className="fd-has-margin-m lambda-resources-management">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Panel.Header className="fd-has-padding-xs">
-          <Panel.Head title={RESOURCES_MANAGEMENT_PANEL.TITLE} />
-          <Panel.Actions>
+        <LayoutPanel.Header className="fd-has-padding-xs">
+          <LayoutPanel.Head title={RESOURCES_MANAGEMENT_PANEL.TITLE} />
+          <LayoutPanel.Actions>
             {renderCancelButton()}
             {renderConfirmButton()}
-          </Panel.Actions>
-        </Panel.Header>
+          </LayoutPanel.Actions>
+        </LayoutPanel.Header>
         <div className="lambda-resources-management__panel">
-          <Panel.Header className="fd-has-padding-xs">
-            <Panel.Head title={RESOURCES_MANAGEMENT_PANEL.REPLICAS.TITLE} />
-          </Panel.Header>
-          <Panel.Body className="fd-has-padding-xs">
+          <LayoutPanel.Header className="fd-has-padding-xs">
+            <LayoutPanel.Head
+              title={RESOURCES_MANAGEMENT_PANEL.REPLICAS.TITLE}
+            />
+          </LayoutPanel.Header>
+          <LayoutPanel.Body className="fd-has-padding-xs">
             <LambdaReplicas
               register={register}
               disabledForm={!isEditMode}
@@ -229,18 +231,18 @@ export default function ResourcesManagement({ lambda }) {
               triggerValidation={triggerValidation}
               retriggerValidation={retriggerValidation}
             />
-          </Panel.Body>
+          </LayoutPanel.Body>
         </div>
         <div className="lambda-resources-management__panel">
-          <Panel.Header className="fd-has-padding-xs">
-            <Panel.Head
+          <LayoutPanel.Header className="fd-has-padding-xs">
+            <LayoutPanel.Head
               title={RESOURCES_MANAGEMENT_PANEL.RESOURCES.TYPES.FUNCTION.TITLE}
               description={
                 RESOURCES_MANAGEMENT_PANEL.RESOURCES.TYPES.FUNCTION.DESCRIPTION
               }
             />
-          </Panel.Header>
-          <Panel.Body className="fd-has-padding-xs">
+          </LayoutPanel.Header>
+          <LayoutPanel.Body className="fd-has-padding-xs">
             <LambdaResources
               register={register}
               disabledForm={!isEditMode}
@@ -251,18 +253,18 @@ export default function ResourcesManagement({ lambda }) {
               type="function"
               defaultPreset={defaultValues[inputNames.function.preset]}
             />
-          </Panel.Body>
+          </LayoutPanel.Body>
         </div>
         <div className="lambda-resources-management__panel">
-          <Panel.Header className="fd-has-padding-xs">
-            <Panel.Head
+          <LayoutPanel.Header className="fd-has-padding-xs">
+            <LayoutPanel.Head
               title={RESOURCES_MANAGEMENT_PANEL.RESOURCES.TYPES.BUILD_JOB.TITLE}
               description={
                 RESOURCES_MANAGEMENT_PANEL.RESOURCES.TYPES.BUILD_JOB.DESCRIPTION
               }
             />
-          </Panel.Header>
-          <Panel.Body className="fd-has-padding-xs">
+          </LayoutPanel.Header>
+          <LayoutPanel.Body className="fd-has-padding-xs">
             <LambdaResources
               register={register}
               disabledForm={!isEditMode}
@@ -273,9 +275,9 @@ export default function ResourcesManagement({ lambda }) {
               type="buildJob"
               defaultPreset={defaultValues[inputNames.buildJob.preset]}
             />
-          </Panel.Body>
+          </LayoutPanel.Body>
         </div>
       </form>
-    </Panel>
+    </LayoutPanel>
   );
 }

@@ -89,7 +89,12 @@ const Plan = ({ instance }) => {
           title="Instance's Parameters"
           modalOpeningComponent={
             <ServicePlanButton data-e2e-id="service-plan">
-              {planDisplayName} <Icon glyph="detail-view" size="s" />
+              {planDisplayName}{' '}
+              <Icon
+                glyph="detail-view"
+                size="s"
+                ariaLabel="View instance parameters"
+              />
             </ServicePlanButton>
           }
           confirmText="Close"

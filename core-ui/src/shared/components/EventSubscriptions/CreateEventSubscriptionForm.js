@@ -24,7 +24,8 @@ export default function CreateEventSubscriptionForm({
 
   const eventTypeFinalInput = useRef();
 
-  async function handleSubmit() {
+  async function handleSubmit(e) {
+    e.preventDefault();
     onSubmit(EVENT_TYPE_PREFIX + eventTypeFinalInput.current.value);
   }
 
@@ -50,7 +51,12 @@ export default function CreateEventSubscriptionForm({
     >
       <FormFieldset>
         <h2 className="fd-has-type-4">
-          <Icon size="m" className="icon" glyph="process" />
+          <Icon
+            size="m"
+            className="icon"
+            glyph="process"
+            ariaLabel="Calculate from components"
+          />
           Calculate
           <span className="fd-has-font-style-italic fd-has-margin">
             {' '}
@@ -109,7 +115,12 @@ export default function CreateEventSubscriptionForm({
       <div className="create-event-subscription-form--divider"></div>
       <FormFieldset>
         <h2 className="fd-has-type-4">
-          <Icon size="m" className="icon" glyph="edit" />
+          <Icon
+            size="m"
+            className="icon"
+            glyph="edit"
+            ariaLabel="Fill manually"
+          />
           Enter
           <span className="fd-has-font-style-italic fd-has-margin">
             {' '}

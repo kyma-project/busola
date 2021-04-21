@@ -2,7 +2,7 @@ import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import PropTypes from 'prop-types';
 
-import { Panel, LayoutGrid, Icon } from 'fundamental-react';
+import { LayoutPanel, Icon } from 'fundamental-react';
 import { useGetList, Spinner, CircleProgress } from 'react-shared';
 
 import {
@@ -81,21 +81,20 @@ const DeploymentsCircle = ({ namespace }) => {
 
 export function NamespaceWorkloads({ namespace }) {
   return (
-    <Panel>
-      <Panel.Header>
+    <LayoutPanel>
+      <LayoutPanel.Header>
         <Icon
           size="m"
           className="fd-has-margin-right-small"
           glyph="stethoscope"
+          ariaLabel="Health icon"
         />
-        <Panel.Head title="Healthy Resources" />
-      </Panel.Header>
-      <Panel.Body className="namespace-workloads__body">
-        <LayoutGrid cols={2}>
-          <PodsCircle namespace={namespace} />
-          <DeploymentsCircle namespace={namespace} />
-        </LayoutGrid>
-      </Panel.Body>
-    </Panel>
+        <LayoutPanel.Head title="Healthy Resources" />
+      </LayoutPanel.Header>
+      <LayoutPanel.Body className="namespace-workloads__body">
+        <PodsCircle namespace={namespace} />
+        <DeploymentsCircle namespace={namespace} />
+      </LayoutPanel.Body>
+    </LayoutPanel>
   );
 }

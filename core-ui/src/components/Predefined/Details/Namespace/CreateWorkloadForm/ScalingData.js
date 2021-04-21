@@ -1,14 +1,19 @@
 import React from 'react';
 
-import { FormSet, FormLabel, FormInput } from 'fundamental-react';
+import {
+  FormFieldset,
+  FormLabel,
+  FormInput,
+  FormItem,
+} from 'fundamental-react';
 
 export default function ScalingData({ deployment, setDeployment }) {
   return (
     <div>
       <h3 className="configuration-data__title">Runtime Profile</h3>
-      <FormSet className="configuration-data__form">
-        <FormLabel>
-          Memory requests
+      <FormFieldset className="configuration-data__form">
+        <FormItem>
+          <FormLabel>Memory requests</FormLabel>
           <FormInput
             defaultValue={deployment.requests.memory}
             onChange={e =>
@@ -21,9 +26,9 @@ export default function ScalingData({ deployment, setDeployment }) {
               })
             }
           />
-        </FormLabel>
-        <FormLabel>
-          Memory limits
+        </FormItem>
+        <FormItem>
+          <FormLabel>Memory limits</FormLabel>
           <FormInput
             defaultValue={deployment.limits.memory}
             onChange={e =>
@@ -36,11 +41,11 @@ export default function ScalingData({ deployment, setDeployment }) {
               })
             }
           />
-        </FormLabel>
-      </FormSet>
-      <FormSet className="configuration-data__form">
-        <FormLabel>
-          CPU requests
+        </FormItem>
+      </FormFieldset>
+      <FormFieldset className="configuration-data__form">
+        <FormItem>
+          <FormLabel>CPU requests</FormLabel>
           <FormInput
             defaultValue={deployment.requests.cpu}
             onChange={e =>
@@ -53,9 +58,9 @@ export default function ScalingData({ deployment, setDeployment }) {
               })
             }
           />
-        </FormLabel>
-        <FormLabel>
-          CPU limits
+        </FormItem>
+        <FormItem>
+          <FormLabel>CPU limits</FormLabel>
           <FormInput
             defaultValue={deployment.limits.cpu}
             onChange={e =>
@@ -68,8 +73,8 @@ export default function ScalingData({ deployment, setDeployment }) {
               })
             }
           />
-        </FormLabel>
-      </FormSet>
+        </FormItem>
+      </FormFieldset>
     </div>
   );
 }

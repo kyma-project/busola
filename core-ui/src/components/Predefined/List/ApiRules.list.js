@@ -14,7 +14,7 @@ export const ApiRulesList = DefaultRenderer => ({ ...otherParams }) => {
   const createApiRule = (
     <Button
       glyph="add"
-      option="light"
+      option="transparent"
       onClick={() =>
         LuigiClient.linkManager()
           .fromContext('namespaces')

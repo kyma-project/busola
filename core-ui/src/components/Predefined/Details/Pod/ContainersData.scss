@@ -11,13 +11,14 @@
     font-size: 1.8rem;
 }
 
-.container-panel{
+.container-panel {
     .fd-panel__body:not(:last-child) {
         border-bottom-style: solid;
         border-bottom-width: 1px;
         border-bottom-color: var(--fd-panel-divider-color,#eeeeef);
         }
-
-   
 }
 
+.form-label {
+    cursor: default !important;
+}

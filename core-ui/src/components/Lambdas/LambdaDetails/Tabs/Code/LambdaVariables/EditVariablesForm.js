@@ -93,7 +93,8 @@ export default function EditVariablesForm({
     }));
   }
 
-  function handleFormSubmit() {
+  function handleFormSubmit(e) {
+    e.preventDefault();
     const preparedVariable = prepareVariablesInput();
     updateLambdaVariables({
       spec: {

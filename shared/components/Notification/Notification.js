@@ -27,7 +27,7 @@ export const Notification = ({
           <span className="notification-title">{title}</span>
           <div className="notification-icon">
             <span className="notification-icon">
-              <Icon glyph={icon} />
+              <Icon glyph={icon} ariaLabel="notification icon" />
             </span>
           </div>
         </div>

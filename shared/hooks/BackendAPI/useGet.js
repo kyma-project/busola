@@ -23,7 +23,7 @@ const useGetHook = processDataFn =>
       }
 
       try {
-        const response = await fetch(path);
+        const response = await fetch({ relativeUrl: path });
         const payload = await response.json();
 
         if (!isHookMounted.current) return;
@@ -77,8 +77,97 @@ const useGetHook = processDataFn =>
     };
   };
 
+const useGetStreamHook = _ =>
+  function(path) {
+    const isHookMounted = React.useRef(true); // becomes 'false' after the hook is unmounted to avoid performing any async actions afterwards
+    const lastAuthData = React.useRef(null);
+    const [data, setData] = React.useState([]);
+    const [error, setError] = React.useState(null);
+    const { authData } = useMicrofrontendContext();
+    const fetch = useFetch();
+
+    const fetchData = async abortController => {
+      if (!authData || !isHookMounted.current) return;
+
+      const processError = error => {
+        if (!abortController.signal.aborted) {
+          console.error(error);
+          setError(error);
+        }
+      };
+
+      try {
+        const response = await fetch({ relativeUrl: path, abortController });
+        if (!authData || !isHookMounted.current) return;
+        const payload = await response.body;
+        const reader = payload.getReader();
+
+        return new ReadableStream({
+          start(controller) {
+            const push = async () => {
+              try {
+                const { done, value } = await reader.read();
+                // If there is no more data to read
+                if (done) {
+                  controller.close();
+                  return;
+                }
+                // Get the data and send it to the browser via the controller
+                controller.enqueue(value);
+                const string = new TextDecoder().decode(value);
+                const streams = string
+                  ?.split('\n')
+                  .filter(stream => stream !== '');
+
+                setData(previousData => [...previousData, ...streams]);
+                return push();
+              } catch (e) {
+                processError(e);
+              }
+            };
+            push();
+          },
+        });
+      } catch (e) {
+        processError(e);
+      }
+    };
+
+    React.useEffect(() => {
+      const abortController = new AbortController();
+      if (lastAuthData.current && path) fetchData(abortController);
+      return _ => {
+        abortController.abort();
+      };
+    }, [path]);
+
+    React.useEffect(() => {
+      const abortController = new AbortController();
+      if (JSON.stringify(lastAuthData.current) != JSON.stringify(authData)) {
+        lastAuthData.current = authData;
+        fetchData(abortController);
+      }
+      return _ => {
+        abortController.abort();
+      };
+    }, [authData]);
+
+    React.useEffect(() => {
+      isHookMounted.current = true;
+      return _ => {
+        isHookMounted.current = false;
+      };
+    }, []);
+
+    return {
+      data,
+      error,
+    };
+  };
+
 export const useGetList = filter => useGetHook(handleListDataReceived(filter));
 export const useGet = useGetHook(handleSingleDataReceived);
+export const useGetStream = useGetStreamHook();
 
 function handleListDataReceived(filter) {
   return (newData, oldData, setDataFn) => {
@@ -110,5 +199,5 @@ function handleSingleDataReceived(newData, oldData, setDataFn) {
 
 export const useSingleGet = () => {
   const fetch = useFetch();
-  return url => fetch(url);
+  return url => fetch({ relativeUrl: url });
 };

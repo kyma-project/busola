@@ -49,7 +49,11 @@ export default function DeployNewWorkload({ namespaceName }) {
   );
 
   const control = (
-    <Button option="light" className="fd-has-margin-right-tiny" glyph="add">
+    <Button
+      option="transparent"
+      className="fd-has-margin-right-tiny"
+      glyph="add"
+    >
       Deploy new workload
     </Button>
   );

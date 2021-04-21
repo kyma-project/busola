@@ -22,6 +22,9 @@ export const StatusWrapper = styled.li`
   .fd-badge {
     padding: 1px 3px;
   }
+  .fd-info-label {
+    font-size: var(--sapFontSmallSize, 0.875rem);
+  }
 `;
 
 export const EmptyList = styled.div`

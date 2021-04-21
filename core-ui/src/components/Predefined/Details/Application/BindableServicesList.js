@@ -1,5 +1,5 @@
 import React from 'react';
-import { Checkbox, FormLabel, FormItem, Toggle } from 'fundamental-react';
+import { Checkbox, FormLabel, FormItem, Switch } from 'fundamental-react';
 import ServiceListItem from './ServiceListItem';
 
 export function BindableServicesList({
@@ -37,12 +37,12 @@ export function BindableServicesList({
   const servicesForm = (
     <>
       <FormItem>
-        <Toggle
+        <Switch
           checked={allServices}
           onChange={() => setAllServices(!allServices)}
         >
           Select all
-        </Toggle>
+        </Switch>
       </FormItem>
       {!allServices && (
         <ul>

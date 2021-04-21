@@ -1,15 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import LuigiClient from '@luigi-project/client';
 
-import { Panel, FormItem, FormLabel, LayoutGrid } from 'fundamental-react';
+import { LayoutPanel, FormItem, FormLabel, Button } from 'fundamental-react';
 import './ContainersData.scss';
 
 const SecretComponent = ({ name, value }) => (
   <FormItem className="item-wrapper">
-    <LayoutGrid cols="2">
-      <FormLabel>{name}:</FormLabel>
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
+      <FormLabel className="form-label">{name}:</FormLabel>
       <div>{value}</div>
-    </LayoutGrid>
+    </div>
   </FormItem>
 );
 
@@ -28,10 +29,19 @@ const getPorts = ports => {
 
 const ContainerComponent = ({ container }) => (
   <>
-    <Panel.Filters>
-      <Panel.Head title={container.name} />
-    </Panel.Filters>
-    <Panel.Body>
+    <LayoutPanel.Header>
+      <LayoutPanel.Head title={container.name} />
+      <LayoutPanel.Actions>
+        <Button
+          onClick={() =>
+            LuigiClient.linkManager().navigate(`containers/${container.name}`)
+          }
+        >
+          View Logs
+        </Button>
+      </LayoutPanel.Actions>
+    </LayoutPanel.Header>
+    <LayoutPanel.Body>
       <SecretComponent name="Name" value={container.name} />
       {container.image && (
         <SecretComponent name="Image" value={container.image} />
@@ -45,7 +55,7 @@ const ContainerComponent = ({ container }) => (
       {container.ports && (
         <SecretComponent name="Ports" value={getPorts(container.ports)} />
       )}
-    </Panel.Body>
+    </LayoutPanel.Body>
   </>
 );
 
@@ -63,14 +73,14 @@ export default function ContainersData({ type, containers }) {
   }
 
   return (
-    <Panel className="fd-has-margin-m container-panel">
-      <Panel.Header className="fd-has-padding-xs">
-        <Panel.Head title={type} />
-      </Panel.Header>
+    <LayoutPanel className="fd-has-margin-m container-panel">
+      <LayoutPanel.Header className="fd-has-padding-xs">
+        <LayoutPanel.Head title={type} />
+      </LayoutPanel.Header>
 
       {containers.map(container => (
         <ContainerComponent key={container.name} container={container} />
       ))}
-    </Panel>
+    </LayoutPanel>
   );
 }

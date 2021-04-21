@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   Button,
-  LayoutGrid,
   FormGroup,
   FormInput,
   FormItem,
@@ -10,7 +9,7 @@ import {
   FormFieldset,
   FormSelect,
   FormRadioGroup,
-  Alert,
+  MessageStrip,
 } from 'fundamental-react';
 import StringListInput from './StringListInput';
 import { Tooltip } from 'react-shared';
@@ -46,7 +45,13 @@ export default function AccessStrategyForm({
       <div className="access-strategy access-strategy--form">
         <div className="content">
           <FormGroup>
-            <LayoutGrid cols={3}>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr 1fr',
+                gridGap: '0.5rem',
+              }}
+            >
               <FormItem>
                 <FormInput
                   placeholder="Enter the path"
@@ -63,6 +68,7 @@ export default function AccessStrategyForm({
               </FormItem>
               <FormItem>
                 <FormSelect
+                  style={{ marginTop: '0.25rem' }}
                   defaultValue={selectedType}
                   aria-label="Access strategy type"
                   id="select-1"
@@ -98,7 +104,7 @@ export default function AccessStrategyForm({
                 setMethods={methods => setStrategy({ ...strategy, methods })}
                 isRelevant={usesMethods(selectedType)}
               ></MethodsForm>
-            </LayoutGrid>
+            </div>
           </FormGroup>
 
           <Details
@@ -125,9 +131,9 @@ export default function AccessStrategyForm({
         )}
       </div>
       {!hasValidMethods(strategy) && (
-        <Alert type="warning" className="fd-has-margin-bottom-m">
+        <MessageStrip type="warning" className="fd-has-margin-bottom-m">
           This access strategy requires at least one method.
-        </Alert>
+        </MessageStrip>
       )}
     </div>
   );
@@ -186,7 +192,9 @@ function MethodsForm({ methods, setMethods, isRelevant }) {
             value={m}
             defaultChecked={methods.includes(m)}
             onChange={e => toggleMethod(m, e.target.checked)}
-          />
+          >
+            {m}
+          </Checkbox>
         ))}
       </FormRadioGroup>
     </FormFieldset>

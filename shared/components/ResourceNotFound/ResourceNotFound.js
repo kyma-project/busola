@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import LuigiClient from '@luigi-project/client';
-import { Breadcrumb, Panel } from 'fundamental-react';
+import { Breadcrumb, LayoutPanel } from 'fundamental-react';
 
 export const ResourceNotFound = ({
   resource,
@@ -33,11 +33,11 @@ export const ResourceNotFound = ({
           </div>
         </section>
       </header>
-      <Panel className="fd-has-margin-large">
-        <Panel.Body className="fd-has-text-align-center">
+      <LayoutPanel className="fd-has-margin-large">
+        <LayoutPanel.Body className="fd-has-text-align-center">
           <span className="fd-has-type-4">Such {resource} doesn't exists.</span>
-        </Panel.Body>
-      </Panel>
+        </LayoutPanel.Body>
+      </LayoutPanel>
     </>
   );
 };

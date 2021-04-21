@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import CustomPropTypes from '../../typechecking/CustomPropTypes';
-import { InlineHelp, FormLabel } from 'fundamental-react';
+import { Tooltip } from '../Tooltip/Tooltip';
+import { FormLabel } from 'fundamental-react';
 
 const pattern = '^[a-z0-9]([-a-z0-9]*[a-z0-9])?$';
 const regex = new RegExp(pattern);
@@ -23,13 +24,12 @@ export const K8sNameInput = ({
     <FormLabel required={required} htmlFor={id}>
       {label}
       {showHelp && (
-        <InlineHelp
-          placement="bottom-right"
-          text="
+        <Tooltip
+          isInlineHelp
+          content="
               The name must consist of lower case alphanumeric characters or dashes, 
               and must start and end with an alphanumeric character (e.g. 'my-name1').
               "
-          className="fd-has-margin-left-tiny"
         />
       )}
     </FormLabel>

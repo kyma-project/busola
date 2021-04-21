@@ -2,7 +2,7 @@ import React from 'react';
 import { StatusBadge } from 'react-shared';
 
 export default function PodRestarts({ statuses }) {
-  const restartCount = statuses.reduce((acc, c) => acc + c.restartCount, 0);
+  const restartCount = statuses?.reduce((acc, c) => acc + c.restartCount, 0);
   const type = restartCount ? 'warning' : 'success';
 
   const getTooltipContent = () => {
@@ -18,7 +18,7 @@ export default function PodRestarts({ statuses }) {
 
   return (
     <StatusBadge type={type} tooltipContent={getTooltipContent()}>
-      {restartCount}
+      {restartCount || 0}
     </StatusBadge>
   );
 }

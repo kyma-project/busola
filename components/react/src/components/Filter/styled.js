@@ -3,7 +3,7 @@ import { sizes } from '../../commons';
 
 import {
   FormLabel as UnstyledFormLabel,
-  Panel as UnstyledPanel,
+  LayoutPanel as UnstyledPanel,
   FormItem as UnstyledFormItem,
 } from 'fundamental-react';
 

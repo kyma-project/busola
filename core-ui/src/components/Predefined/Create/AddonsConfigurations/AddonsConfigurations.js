@@ -78,6 +78,7 @@ export const AddonsConfigurations = ({
         <section className="addons-urls-list" key={url}>
           <p>{url}</p>
           <Button
+            typeAttr="button"
             glyph="delete"
             type="negative"
             onClick={() => handleUrlRemoved(url)}
@@ -120,6 +121,7 @@ export const AddonsConfigurations = ({
           <Button
             glyph="add"
             type="positive"
+            typeAttr="button"
             disabled={!newUrl}
             onClick={handleUrlAdded}
             key={`${resourceType}-url-add`}

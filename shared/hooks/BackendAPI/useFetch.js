@@ -10,7 +10,7 @@ export const useFetch = () => {
 
   if (!authData) return () => {};
 
-  return async (relativeUrl, init) => {
+  return async ({ relativeUrl, abortController, init }) => {
     checkForTokenExpiration(authData?.idToken);
 
     init = {
@@ -19,6 +19,7 @@ export const useFetch = () => {
         ...(init?.headers || {}),
         ...createHeaders(authData, cluster),
       },
+      signal: abortController?.signal,
     };
 
     const response = await fetch(baseUrl(fromConfig) + relativeUrl, init);
