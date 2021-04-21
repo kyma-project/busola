@@ -97,7 +97,7 @@ gulp.task('watch:libraries', () => {
 });
 
 // APPS
-const apps = ['core', 'core-ui', 'logging', 'service-catalog-ui', 'backend'];
+const apps = ['core', 'core-ui', 'service-catalog-ui', 'backend'];
 
 // Installing apps
 apps.forEach(app => {

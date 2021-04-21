@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "styled-components": "^5.2.3",
     "styled-components-grid": "^2.2.2"
   },
   "devDependencies": {
