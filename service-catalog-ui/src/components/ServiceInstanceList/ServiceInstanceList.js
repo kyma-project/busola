@@ -13,14 +13,14 @@ import {
   useMicrofrontendContext,
   useDelete,
   useNotification,
+  PageHeader,
 } from 'react-shared';
-import { InfoLabel } from 'fundamental-react';
+import { InfoLabel, FormInput } from 'fundamental-react';
 
 import { serviceInstanceConstants } from 'helpers/constants';
 import { determineDisplayedInstances } from 'helpers/search';
 
 import ServiceInstanceTable from './ServiceInstanceTable/ServiceInstanceTable';
-import ServiceInstanceToolbar from './ServiceInstanceToolbar/ServiceInstanceToolbar';
 
 import {
   EmptyList,
@@ -99,10 +99,20 @@ export default function ServiceInstancesList() {
 
   return (
     <ThemeWrapper>
-      <ServiceInstanceToolbar
-        searchQuery={searchQuery}
-        searchFn={setSearchQuery}
-        serviceInstancesExists={serviceInstances.length > 0}
+      <PageHeader
+        title={serviceInstanceConstants.title}
+        actions={
+          serviceInstances.length && (
+            <FormInput
+              style={{ width: '20rem' }}
+              value={searchQuery}
+              type="text"
+              placeholder="Search"
+              onChange={e => setSearchQuery(e.target.value)}
+              data-e2e-id="search"
+            />
+          )
+        }
       />
 
       <Tabs
