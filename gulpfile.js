@@ -12,13 +12,7 @@ process.on('unhandledRejection', err => {
 });
 
 // LIBRARIES
-const libraries = [
-  // 'common',
-  // 'components/shared',
-  // 'components/react',
-  // 'components/generic-documentation',
-  'shared',
-];
+const libraries = ['shared'];
 
 // Installing libraries
 libraries.forEach(lib => {
