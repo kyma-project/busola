@@ -35,9 +35,9 @@ const ServiceClassDetailsHeader = ({ serviceClass, children }) => {
         description={serviceClass.spec.externalMetadata?.providerDisplayName}
         breadcrumbItems={breadcrumbItems}
         actions={children}
-      />
-
-      <ServiceClassInfo serviceClass={serviceClass} labels={labels} />
+      >
+        <ServiceClassInfo serviceClass={serviceClass} labels={labels} />
+      </PageHeader>
     </>
   );
 };
