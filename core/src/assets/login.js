@@ -121,7 +121,7 @@ function onOidcFormSubmit(e) {
     issuerUrl,
     clientId: document.querySelector('#client-id').value,
     scope: document.querySelector('#scopes').value,
-    responseType: 'id_token',
+    responseType: 'id_token token',
   };
   saveInitParams({ cluster, auth });
 }

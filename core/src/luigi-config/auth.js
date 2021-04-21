@@ -10,26 +10,38 @@ export let groups;
 let isFetchingNewToken = false;
 export async function refreshAuth() {
   if (isFetchingNewToken) return;
-  isFetchingNewToken = true;
-  await userManager.signinSilent();
+  try {
+    // console.log('fetching new');
+    isFetchingNewToken = true;
+    await userManager.signinSilent();
 
-  const { id_token } = await userManager.getUser();
-  const idTokenExpiration = parseJWT(id_token).exp * 1000;
+    const res = await userManager.getUser();
+    console.log(res);
+    const { id_token, access_token } = res;
+    const idTokenExpiration = parseJWT(id_token).exp * 1000;
 
-  const auth = Luigi.auth().store.getAuthData();
-  Luigi.auth().store.setAuthData({
-    ...auth,
-    idToken: id_token,
-    idTokenExpiration,
-  });
+    const secondsLeft = (idTokenExpiration - Date.now()) / 1000;
+    console.log('secondsLeft', secondsLeft)
 
-  const navigation = await Luigi.getConfigValue('navigation.nodes');
-  const context = navigation[0].context;
-  context.authData.idToken = id_token;
-  context.authData.idTokenExpiration = idTokenExpiration;
-  Luigi.configChanged('navigation.nodes');
+    const auth = Luigi.auth().store.getAuthData();
+    Luigi.auth().store.setAuthData({
+      ...auth,
+      idToken: id_token,
+      idTokenExpiration,
+    });
 
-  isFetchingNewToken = false;
+    const navigation = await Luigi.getConfigValue('navigation.nodes');
+    const context = navigation[0].context;
+    context.authData.idToken = id_token;
+    context.authData.idTokenExpiration = idTokenExpiration;
+    context.authData.accessTokenExpiration = idTokenExpiration;
+    context.authData.accessTokenExpirationDate = idTokenExpiration;
+    Luigi.configChanged('navigation.nodes');
+  } catch (e) {
+    console.warn(e);
+  } finally {
+    isFetchingNewToken = false;
+  }
 }
 
 function addIdTokenExpirationToAuth() {
@@ -85,7 +97,7 @@ export const createAuth = async (authParams) => {
       scope: scope || 'openid',
       response_type: responseType,
       response_mode: responseMode,
-      automaticSilentRenew: true,
+      automaticSilentRenew: false,
       loadUserInfo: false,
       logoutUrl: end_session_endpoint,
       metadata: {
@@ -93,6 +105,7 @@ export const createAuth = async (authParams) => {
         end_session_endpoint,
       },
       userInfoFn: (_, authData) => {
+
         addIdTokenExpirationToAuth();
 
         groups = authData.profile['http://k8s/groups'];
