@@ -1,5 +1,5 @@
 import React from 'react';
-import { Label, PanelFooter } from '@kyma-project/react-components';
+import { Token } from 'fundamental-react';
 import { Tooltip } from 'react-shared';
 import './Labels.scss';
 import { isStringValueEqualToTrue } from 'helpers';
@@ -12,7 +12,7 @@ const labelsDescription = {
 export function Labels({ labels, ignoredLabels = [] }) {
   const ALWAYS_IGNORED_LABELS = ['local', 'provisionOnlyOnce'];
   return (
-    <PanelFooter className="service-list--card__footer">
+    <div className="service-list--card__footer">
       {labels &&
         Object.keys(labels).map(label => {
           if (
@@ -32,13 +32,13 @@ export function Labels({ labels, ignoredLabels = [] }) {
           return (
             <div className="service-list--card__footer__labels" key={label}>
               <Tooltip content={labelsDescription[label] || ''}>
-                <Label cursorType="help">
+                <Token readOnly buttonLabel="">
                   {label === 'connected-app' ? labels['connected-app'] : label}
-                </Label>
+                </Token>
               </Tooltip>
             </div>
           );
         })}
-    </PanelFooter>
+    </div>
   );
 }

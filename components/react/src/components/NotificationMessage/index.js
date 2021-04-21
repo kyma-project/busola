@@ -61,7 +61,10 @@ class NotificationMessage extends React.Component {
                       </Grid.Unit>
                       <Grid.Unit size={0.1}>
                         <InfoIcon onClick={this.handleHide}>
-                          <Icon glyph="decline" />
+                          <Icon
+                            ariaLabel="Close notification"
+                            glyph="decline"
+                          />
                         </InfoIcon>
                       </Grid.Unit>
                     </Grid>

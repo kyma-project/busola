@@ -1,13 +1,13 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import { Button, Panel } from 'fundamental-react';
+import { Button, LayoutPanel } from 'fundamental-react';
 import { mount, shallow } from 'enzyme';
 
 import { CollapsiblePanel } from './../CollapsiblePanel';
 
 describe('Collapsible Panel', () => {
   const exceptPanelVisible = (component, isVisible) => {
-    const body = component.find(Panel.Body);
+    const body = component.find(LayoutPanel.Body);
     expect(body.hasClass('body--closed')).toBe(!isVisible);
     expect(body.hasClass('body--open')).toBe(isVisible);
   };
@@ -41,7 +41,7 @@ describe('Collapsible Panel', () => {
         className="test-class-name"
       />,
     );
-    expect(component.find(Panel).hasClass('test-class-name')).toBe(true);
+    expect(component.find(LayoutPanel).hasClass('test-class-name')).toBe(true);
   });
 
   it('Is initially closed when isOpenInitially is false', () => {
@@ -53,8 +53,12 @@ describe('Collapsible Panel', () => {
       />,
     );
 
-    expect(component.find(Panel.Body).hasClass('body body--closed')).toBe(true);
-    expect(component.find(Panel.Body).hasClass('body body--open')).toBe(false);
+    expect(component.find(LayoutPanel.Body).hasClass('body body--closed')).toBe(
+      true,
+    );
+    expect(component.find(LayoutPanel.Body).hasClass('body body--open')).toBe(
+      false,
+    );
   });
 
   it('Opens and closes (chevron)', async () => {
@@ -81,7 +85,7 @@ describe('Collapsible Panel', () => {
     const component = mount(
       <CollapsiblePanel children={<p>test</p>} title="Collapsible panel" />,
     );
-    const header = component.find(Panel.Header);
+    const header = component.find(LayoutPanel.Header);
 
     // initially opened
     exceptPanelVisible(component, true);

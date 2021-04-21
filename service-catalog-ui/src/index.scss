@@ -6,6 +6,13 @@
   word-break: keep-all;
 }
 
+.fd-layout-panel__actions {
+  .fd-button__text {
+    font-size: 0.875rem !important;
+  }
+  font-size: 0.875rem !important;
+}
+
 .empty-list {
   width: 100%;
   font-family: '72';
@@ -26,9 +33,28 @@
   }
 }
 
-.fd-badge {
-  .fd-counter--notification {
-    transform: translate(10%, -50%);
+.fd-token {
+  font-size: 0.75rem;
+  flex: none;
+  line-height: unset !important;
+  border-color: var(--sapButton_TokenBorderColor, #c2c2c2) !important;
+
+  &__text {
+    line-height: inherit;
+  }
+
+  &--readonly {
+    .fd-token__close {
+      display: none;
+    }
+    &::after {
+      content: none !important;
+    }
+
+    &:hover {
+      background-color: initial;
+      border-color: initial;
+    }
   }
 }
 
@@ -36,19 +62,20 @@
   text-decoration: none !important;
 }
 
-.no-dismiss-tokens {
-  .fd-token {
-    cursor: default;
-  }
-
-  .fd-token::after,
-  &.fd-token::after {
-    content: none !important;
-  }
-}
-
 .has-padding-0 {
   padding: 0;
+}
+
+.fd-dialog {
+  .fd-bar--footer {
+    padding-right: unset;
+    padding-left: unset;
+    padding: 0.5rem 1rem;
+    height: auto;
+    .fd-bar__right {
+      padding: 0;
+    }
+  }
 }
 
 .y-fd-token {

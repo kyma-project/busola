@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { LayoutGrid, Panel } from 'fundamental-react';
+import { LayoutPanel } from 'fundamental-react';
 import { Input } from './TableElements/Input';
 import { Row } from './TableElements/Row';
 import { DropdownInput } from 'components/Lambdas/components';
@@ -68,38 +68,40 @@ export default function LambdaResources({
 
   return (
     <>
-      <LayoutGrid cols={1}>
-        <Panel
-          className={`has-box-shadow-none presets${
-            isHidden ? ' has-no-margin-bottom' : ''
-          }`}
-        >
-          <Panel.Body className="has-padding-none">
-            <Row
-              action={
-                <DropdownInput
-                  disabled={disabledForm}
-                  options={presetOptions}
-                  defaultValue={defaultPreset}
-                  _ref={register}
-                  id={inputNames.preset}
-                  name={inputNames.preset}
-                  onChange={onChangePreset}
-                />
-              }
-            />
-          </Panel.Body>
-        </Panel>
-      </LayoutGrid>
-      <LayoutGrid cols={2} className={isHidden ? 'hidden-panel' : ''}>
-        <Panel className="has-box-shadow-none">
-          <Panel.Header className="has-padding-none has-none-border-bottom">
-            <Panel.Head
+      <LayoutPanel
+        className={`has-box-shadow-none presets${
+          isHidden ? ' has-no-margin-bottom' : ''
+        }`}
+      >
+        <LayoutPanel.Body className="has-padding-none">
+          <Row
+            action={
+              <DropdownInput
+                disabled={disabledForm}
+                options={presetOptions}
+                defaultValue={defaultPreset}
+                _ref={register}
+                id={inputNames.preset}
+                name={inputNames.preset}
+                onChange={onChangePreset}
+              />
+            }
+          />
+        </LayoutPanel.Body>
+      </LayoutPanel>
+
+      <div
+        style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}
+        className={isHidden ? 'hidden-panel' : ''}
+      >
+        <LayoutPanel className="has-box-shadow-none">
+          <LayoutPanel.Header className="has-padding-none has-none-border-bottom">
+            <LayoutPanel.Head
               title={resourcesMode.REQUESTS.TITLE}
               description={resourcesMode.REQUESTS.DESCRIPTION}
             />
-          </Panel.Header>
-          <Panel.Body className="has-padding-none">
+          </LayoutPanel.Header>
+          <LayoutPanel.Body className="has-padding-none">
             <Row
               title={resourcesMode.MEMORY.TITLE}
               action={
@@ -144,16 +146,16 @@ export default function LambdaResources({
                 </>
               }
             />
-          </Panel.Body>
-        </Panel>
-        <Panel className="has-box-shadow-none">
-          <Panel.Header className="has-padding-none has-none-border-bottom">
-            <Panel.Head
+          </LayoutPanel.Body>
+        </LayoutPanel>
+        <LayoutPanel className="has-box-shadow-none">
+          <LayoutPanel.Header className="has-padding-none has-none-border-bottom">
+            <LayoutPanel.Head
               title={resourcesMode.LIMITS.TITLE}
               description={resourcesMode.LIMITS.DESCRIPTION}
             />
-          </Panel.Header>
-          <Panel.Body className="has-padding-none">
+          </LayoutPanel.Header>
+          <LayoutPanel.Body className="has-padding-none">
             <Row
               title={resourcesMode.MEMORY.TITLE}
               action={
@@ -195,9 +197,9 @@ export default function LambdaResources({
                 </>
               }
             />
-          </Panel.Body>
-        </Panel>
-      </LayoutGrid>
+          </LayoutPanel.Body>
+        </LayoutPanel>
+      </div>
     </>
   );
 }

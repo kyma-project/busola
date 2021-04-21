@@ -84,7 +84,7 @@ describe('ListActions', () => {
 
     const actionButton = queryByLabelText(actions[0].name);
     expect(actionButton).toBeInTheDocument();
-    expect(actionButton).toHaveClass('sap-icon--edit');
+    expect(actionButton.querySelector('i')).toHaveClass('sap-icon--edit');
 
     expect(queryByText(actions[0].name)).not.toBeInTheDocument();
   });
@@ -99,7 +99,7 @@ describe('ListActions', () => {
 
     const actionButton = queryByText(actions[0].name);
     expect(actionButton).toBeInTheDocument();
-    expect(actionButton).not.toHaveClass('sap-icon--edit');
+    expect(actionButton.querySelector('i')).not.toBeInTheDocument();
 
     expect(queryByLabelText(actions[0].name)).not.toBeInTheDocument();
   });
@@ -114,10 +114,10 @@ describe('ListActions', () => {
     );
 
     const editButton = getByLabelText('Edit');
-    expect(editButton).toHaveClass('sap-icon--edit');
+    expect(editButton.querySelector('i')).toHaveClass('sap-icon--edit');
 
     const deleteButton = getByLabelText('Delete');
-    expect(deleteButton).toHaveClass('sap-icon--delete');
+    expect(deleteButton.querySelector('i')).toHaveClass('sap-icon--delete');
   });
 
   it('Can override predefined icons', () => {
@@ -130,11 +130,11 @@ describe('ListActions', () => {
     );
 
     const editButton = getByLabelText('Edit');
-    expect(editButton).not.toHaveClass('sap-icon--edit');
-    expect(editButton).toHaveClass('sap-icon--add');
+    expect(editButton.querySelector('i')).not.toHaveClass('sap-icon--edit');
+    expect(editButton.querySelector('i')).toHaveClass('sap-icon--add');
 
     const deleteButton = getByLabelText('Delete');
-    expect(deleteButton).not.toHaveClass('sap-icon--delete');
-    expect(deleteButton).toHaveClass('sap-icon--minus');
+    expect(deleteButton.querySelector('i')).not.toHaveClass('sap-icon--delete');
+    expect(deleteButton.querySelector('i')).toHaveClass('sap-icon--minus');
   });
 });

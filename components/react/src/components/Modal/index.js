@@ -92,7 +92,7 @@ class Modal extends Component {
       <Fragment>
         <Button
           style={{ marginRight: '12px' }}
-          option="light"
+          option="transparent"
           onClick={this.onClose}
         >
           {cancelText}

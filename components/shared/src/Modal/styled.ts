@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Modal } from 'fundamental-react';
+import { Dialog } from 'fundamental-react';
 
 import { ModalType } from './index';
 
@@ -39,7 +39,7 @@ function modalBorder(type?: ModalType): string {
   }
 }
 
-export const FdModal = styled(Modal)<FdModalProps>`
+export const FdModal = styled(Dialog)<FdModalProps>`
   && {
     .fd-modal {
       max-width: unset;

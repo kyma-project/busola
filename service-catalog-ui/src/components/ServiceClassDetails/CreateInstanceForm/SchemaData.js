@@ -56,8 +56,13 @@ const SchemaData = ({
     <ErrorBoundary
       content={
         <Flex>
-          <Icon glyph="error" style={{ padding: '0 5px 0 0' }} /> Incorrect
-          Instance Create Parameter schema in <Bold>{planName}</Bold> plan
+          <Icon
+            glyph="error"
+            style={{ padding: '0 5px 0 0' }}
+            ariaLabel="Incorrect schema"
+          />{' '}
+          Incorrect Instance Create Parameter schema in <Bold>{planName}</Bold>{' '}
+          plan
         </Flex>
       }
     >

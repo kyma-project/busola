@@ -11,7 +11,7 @@ function Actions({ close, textToCopy, canCopy }) {
     >
       <Button
         disabled={!canCopy}
-        option="light"
+        option="transparent"
         onClick={() => copyToCliboard(textToCopy)}
       >
         Copy to clipboard

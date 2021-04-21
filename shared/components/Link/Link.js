@@ -11,7 +11,12 @@ export const Link = ({ url, text, className }) => {
       rel="noopener noreferrer"
     >
       {text || url}
-      <Icon glyph="inspect" size="s" className="fd-has-margin-left-tiny" />
+      <Icon
+        glyph="inspect"
+        size="s"
+        className="fd-has-margin-left-tiny"
+        ariaLabel="This link will be opened in a new tab"
+      />
     </a>
   );
 };

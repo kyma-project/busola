@@ -19,7 +19,7 @@ export default function CreateServiceBindingModal({
     !usageKinds || serviceInstance.status.lastConditionState !== 'Ready';
 
   const button = (
-    <Button glyph="add" option="light" disabled={shouldButtonBeDisabled}>
+    <Button glyph="add" option="transparent" disabled={shouldButtonBeDisabled}>
       {SERVICE_BINDINGS_PANEL.CREATE_MODAL.OPEN_BUTTON.TEXT}
     </Button>
   );

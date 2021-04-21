@@ -1,7 +1,7 @@
 import React from 'react';
 import './Header.scss';
 
-import { Panel } from 'fundamental-react';
+import { LayoutPanel } from 'fundamental-react';
 
 import SearchInput from './../Shared/SearchInput/SearchInput';
 import LabelsInput from './../Shared/LabelsInput/LabelsInput';
@@ -27,7 +27,7 @@ export default function Header() {
     : 'Show Advanced Settings';
 
   return (
-    <Panel className="fd-has-padding-bottom-none header">
+    <LayoutPanel className="fd-has-padding-bottom-none header">
       <h1
         className="fd-has-type-3 fd-has-padding-bottom-tiny fd-has-padding-top-regular fd-has-padding-right-regular fd-has-padding-left-regular"
         aria-label="title"
@@ -72,6 +72,6 @@ export default function Header() {
           />
         </div>
       </div>
-    </Panel>
+    </LayoutPanel>
   );
 }

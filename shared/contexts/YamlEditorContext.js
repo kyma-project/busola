@@ -43,14 +43,14 @@ const YamlContent = ({ json, setChangedYamlFn }) => {
         YAML
         <Tooltip content="Copy to clipboard" position="top">
           <Button
-            option="light"
+            option="transparent"
             glyph="copy"
             onClick={() => copyToCliboard(val)}
           />
         </Tooltip>
         <Tooltip content="Download" position="top">
           <Button
-            option="light"
+            option="transparent"
             glyph="download"
             onClick={() => {
               const blob = new Blob([val], {

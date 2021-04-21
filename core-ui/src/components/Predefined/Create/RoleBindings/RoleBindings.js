@@ -70,10 +70,10 @@ export const RoleBindings = ({
         inline
         onChange={e => setGroup(e.target.value !== 'user')}
       >
-        <FormRadioItem value="user" inputProps={{ defaultChecked: true }}>
+        <FormRadioItem data="user" inputProps={{ defaultChecked: true }}>
           User
         </FormRadioItem>
-        <FormRadioItem value="user-group">User Group</FormRadioItem>
+        <FormRadioItem data="user-group">User Group</FormRadioItem>
       </FormRadioGroup>
       <FormItem style={{ clear: 'both' }}>
         <FormLabel required>{isGroup ? 'User group' : 'User name'}</FormLabel>

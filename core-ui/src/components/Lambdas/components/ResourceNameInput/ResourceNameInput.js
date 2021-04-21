@@ -23,7 +23,8 @@ export function ResourceNameInput({ nameStatus, kind, ...otherProps }) {
         <FormLabel className="resource-name-input__label" required={true}>
           {FORMS.RESOURCE_NAME.LABEL}
           <InlineHelp
-            placement="bottom-right"
+            buttonLabel="help"
+            placement="right-end"
             text={FORMS.RESOURCE_NAME.INLINE_HELP}
           />
         </FormLabel>

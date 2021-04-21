@@ -22,7 +22,7 @@ const StandaloneAction = ({ action, entry, compact }) => {
     <Button
       onClick={() => action.handler(entry)}
       className="list-actions__standalone"
-      option="light"
+      option="transparent"
       glyph={icon}
       aria-label={action.name}
       typeAttr="button"
@@ -67,7 +67,7 @@ const ListActions = ({ actions, entry, standaloneItems = 2, compact }) => {
           control={
             <Button
               glyph="vertical-grip"
-              option="light"
+              option="transparent"
               aria-label="more-actions"
             />
           }

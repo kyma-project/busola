@@ -7,14 +7,14 @@ import {
   FormLabel,
   FormInput,
   FormItem,
-  FormSet,
+  FormFieldset,
 } from 'fundamental-react';
 
 export default function ResultOptionsDropdown() {
   const [state, actions] = useContext(SearchParamsContext);
 
   const PopoverContent = () => (
-    <FormSet id="result-options">
+    <FormFieldset id="result-options">
       <FormItem className="fd-has-margin-small">
         <FormInput
           type="checkbox"
@@ -29,7 +29,7 @@ export default function ResultOptionsDropdown() {
           health checks
         </FormLabel>
       </FormItem>
-    </FormSet>
+    </FormFieldset>
   );
 
   return (
@@ -39,7 +39,7 @@ export default function ResultOptionsDropdown() {
         control={
           <Button
             glyph="action-settings"
-            option="light"
+            option="transparent"
             className="fd-has-margin-right-tiny"
             size="xs"
           ></Button>
