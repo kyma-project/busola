@@ -7,7 +7,7 @@
     "test:watch": "jest --watch",
     "build": "webpack --env.production",
     "start:kyma": "webpack --env.development --watch",
-    "build:npx": "echo no-op, done during bootstrap"
+    "build:npx": "ln -sf ../shared/node_modules/monaco-editor/min/vs ../backend/vs"
   },
   "author": "hasselhoff-team@kyma",
   "devDependencies": {
