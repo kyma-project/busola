@@ -58,7 +58,7 @@ release: build-image push-image
 
 .PHONY: validate
 validate-shared:
-	npm run --prefix=../ conflict-check
+	# npm run --prefix=../ conflict-check
 	npm run --prefix=../ lint-check
 	npm run --prefix=../ test-shared-lib
 
