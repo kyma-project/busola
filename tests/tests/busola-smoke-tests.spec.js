@@ -7,7 +7,7 @@ const ADDRESS = config.localDev
   : `https://busola.${config.domain}`;
 
 const random = Math.floor(
-  Math.random() * 10 + Math.random() * 100 + Math.random() * 1000
+  Math.random() * 10 + Math.random() * 100 + Math.random() * 1000,
 );
 const NAMESPACE_NAME = `orders-service-${random}`;
 
