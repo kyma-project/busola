@@ -39,6 +39,7 @@ export const PageHeader = ({
   description,
   breadcrumbItems,
   actions,
+  isCatalog,
   children,
   columnWrapperClassName,
 }) => (
@@ -72,7 +73,9 @@ export const PageHeader = ({
       </section>
 
       {actions && (
-        <Panel.Actions className="fd-has-margin-left-s">
+        <Panel.Actions
+          className={`fd-has-margin-left-s ${isCatalog ? 'is-catalog' : ''}`}
+        >
           {actions}
         </Panel.Actions>
       )}
@@ -83,6 +86,7 @@ PageHeader.Column = Column;
 
 PageHeader.propTypes = {
   title: PropTypes.string.isRequired,
+  isCatalog: PropTypes.bool,
   description: PropTypes.node,
   breadcrumbItems: PropTypes.arrayOf(
     PropTypes.shape({

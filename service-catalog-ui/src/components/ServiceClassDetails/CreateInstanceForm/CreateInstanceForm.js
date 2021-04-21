@@ -6,8 +6,8 @@ import * as LuigiClient from '@luigi-project/client';
 import SchemaData from './SchemaData';
 
 import './CreateInstanceForm.scss';
-import { getResourceDisplayName, randomNameGenerator } from 'helpers';
-import { usePost, useNotification } from 'react-shared';
+import { getResourceDisplayName } from 'helpers';
+import { usePost, useNotification, randomNameGenerator } from 'react-shared';
 
 import {
   CustomPropTypes,

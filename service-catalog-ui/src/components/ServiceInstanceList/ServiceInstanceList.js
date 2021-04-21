@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import LuigiClient from '@luigi-project/client';
+
 import {
-  instancesTabUtils,
-  ThemeWrapper,
-} from '@kyma-project/react-components';
-import {
+  PageHeader,
   Tab,
   Tabs,
   Spinner,
@@ -14,13 +12,13 @@ import {
   useDelete,
   useNotification,
 } from 'react-shared';
-import { Identifier } from 'fundamental-react';
+import { Identifier, FormInput } from 'fundamental-react';
 
+import { instancesTabUtils } from 'helpers/instances-tab-utils';
 import { serviceInstanceConstants } from 'helpers/constants';
 import { determineDisplayedInstances } from 'helpers/search';
 
 import ServiceInstanceTable from './ServiceInstanceTable/ServiceInstanceTable';
-import ServiceInstanceToolbar from './ServiceInstanceToolbar/ServiceInstanceToolbar';
 
 import {
   EmptyList,
@@ -54,6 +52,18 @@ const status = (data, id) => {
       </StatusWrapper>
     </StatusesList>
   );
+};
+
+const actions = (serviceInstancesExists, searchQuery, searchFn) => {
+  return serviceInstancesExists ? (
+    <FormInput
+      value={searchQuery}
+      type="text"
+      placeholder="Search"
+      onChange={e => searchFn(e.target.value)}
+      data-e2e-id="search"
+    />
+  ) : null;
 };
 
 export default function ServiceInstancesList() {
@@ -100,13 +110,16 @@ export default function ServiceInstancesList() {
   };
 
   return (
-    <ThemeWrapper>
-      <ServiceInstanceToolbar
-        searchQuery={searchQuery}
-        searchFn={setSearchQuery}
-        serviceInstancesExists={serviceInstances.length > 0}
+    <>
+      <PageHeader
+        title={serviceInstanceConstants.title}
+        isCatalog={true}
+        actions={actions(
+          serviceInstances.length > 0,
+          searchQuery,
+          setSearchQuery,
+        )}
       />
-
       <Tabs
         defaultActiveTabIndex={determineSelectedTab()}
         callback={handleTabChange}
@@ -171,6 +184,6 @@ export default function ServiceInstancesList() {
           </ServiceInstancesWrapper>
         </Tab>
       </Tabs>
-    </ThemeWrapper>
+    </>
   );
 }

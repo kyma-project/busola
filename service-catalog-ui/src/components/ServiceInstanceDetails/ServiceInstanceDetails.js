@@ -1,5 +1,4 @@
 import React from 'react';
-import { ThemeWrapper } from '@kyma-project/react-components';
 import {
   Spinner,
   useGet,
@@ -85,7 +84,7 @@ export default function ServiceInstanceDetails({ match }) {
   };
 
   return (
-    <ThemeWrapper>
+    <>
       <ServiceInstanceHeader
         serviceInstance={serviceInstance}
         servicePlan={servicePlanRef}
@@ -97,6 +96,6 @@ export default function ServiceInstanceDetails({ match }) {
           serviceClassRef={serviceClassRef}
         />
       )}
-    </ThemeWrapper>
+    </>
   );
 }

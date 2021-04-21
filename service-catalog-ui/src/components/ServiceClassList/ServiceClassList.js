@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import LuigiClient from '@luigi-project/client';
 
-import { instancesTabUtils } from '@kyma-project/react-components';
+import { instancesTabUtils } from 'helpers/instances-tab-utils';
 import {
+  PageHeader,
   Tab,
   Tabs,
   Spinner,
@@ -10,13 +11,12 @@ import {
   useGetList,
   useMicrofrontendContext,
 } from 'react-shared';
-import { Identifier } from 'fundamental-react';
+import { FormInput, Identifier } from 'fundamental-react';
 
 import { serviceClassConstants } from 'helpers/constants';
 import { determineDisplayedItems } from 'helpers/search';
 
 import Cards from './Cards/Cards.component';
-import ServiceClassToolbar from './ServiceClassToolbar/ServiceClassToolbar.component';
 
 import {
   ServiceClassListWrapper,
@@ -52,6 +52,18 @@ const status = (data, id) => {
       </StatusWrapper>
     </StatusesList>
   );
+};
+
+const actions = (serviceClassesExists, searchQuery, searchFn) => {
+  return serviceClassesExists ? (
+    <FormInput
+      value={searchQuery}
+      type="text"
+      placeholder="Search"
+      onChange={e => searchFn(e.target.value)}
+      data-e2e-id="search"
+    />
+  ) : null;
 };
 
 export default function ServiceClassList() {
@@ -107,12 +119,15 @@ export default function ServiceClassList() {
 
   return (
     <>
-      <ServiceClassToolbar
-        searchQuery={searchQuery}
-        searchFn={setSearchQuery}
-        serviceClassesExists={allServiceClasses.length > 0}
+      <PageHeader
+        title={serviceClassConstants.title}
+        isCatalog={true}
+        actions={actions(
+          allServiceClasses.length > 0,
+          searchQuery,
+          setSearchQuery,
+        )}
       />
-
       <Tabs
         defaultActiveTabIndex={determineSelectedTab()}
         callback={handleTabChange}

@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { media } from '@kyma-project/react-components';
 
 export const ServiceClassListWrapper = styled.div`
   box-sizing: border-box;
@@ -8,7 +7,6 @@ export const ServiceClassListWrapper = styled.div`
   padding: 0;
   display: flex;
   flex-flow: row nowrap;
-  ${props => (props.phoneRows ? media.phone`flex-flow: column nowrap;` : '')};
 `;
 
 export const CardsWrapper = styled.div`
