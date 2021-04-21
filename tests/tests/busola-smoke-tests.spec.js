@@ -42,7 +42,7 @@ context('Busola Smoke Tests', () => {
       .should('be.visible')
       .type(NAMESPACE_NAME)
       .getIframeBody()
-      .contains('.fd-modal__footer > button', 'Create')
+      .contains('.fd-bar__element > button', 'Create')
       .should('be.visible')
       .click()
       .getIframeBody()
