@@ -85,3 +85,6 @@ core
 backend/backend-production.*
 
 **/temp/**
+
+# monaco editor
+**/vs/loader.js 
