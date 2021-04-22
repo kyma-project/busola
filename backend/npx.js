@@ -18,12 +18,12 @@ function tryLoadKubeconfig() {
 }
 
 function buildInitParams(kubeconfig) {
-  const cluster = kubeconfig.clusters[0].cluster;
+  const cluster = kubeconfig.clusters[0];
   const user = kubeconfig.users[0].user;
   return {
     cluster: {
-      server: cluster.server,
-      'certificate-authority-data': cluster['certificate-authority-data'],
+      name: cluster.name,
+      ...cluster.cluster,
     },
     rawAuth: {
       idToken: user.token,
@@ -65,6 +65,9 @@ app.get('/core-ui/*', (_, res) =>
 );
 
 app.use('/backend', handleRequest);
+
+// serve Monaco editor static files
+app.use('/vs', express.static(path.join(__dirname, 'vs')));
 
 app.use('/', express.static(path.join(__dirname, 'core')));
 app.get('/*', (_, res) =>

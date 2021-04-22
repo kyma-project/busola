@@ -44,9 +44,10 @@ export const communication = {
       // we'll bring it back when Luigi team decouples them
 
       const { cluster } = getInitParams();
-      const domain = cluster.server.replace(/^https?:\/\//, '');
+      const name =
+        cluster.name || cluster.server.replace(/^https?:\/\/\api\./, '');
       const luigiConfig = Luigi.getConfig();
-      luigiConfig.settings.header.title = `${domain}`;
+      luigiConfig.settings.header.title = `${name}`;
       Luigi.configChanged('settings.header');
     },
     'busola.silentNavigate': ({ newParams }) => {
