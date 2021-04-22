@@ -27,7 +27,6 @@ export default function LambdaDetails({ lambda, backendModules = [] }) {
   ) : null;
 
   const eventSubscriptions = backendModulesExist(backendModules, [
-    BACKEND_MODULES.APPLICATION,
     BACKEND_MODULES.EVENTING,
   ]) ? (
     <EventSubscriptionsWrapper lambda={lambda} />
