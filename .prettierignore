@@ -87,4 +87,4 @@ backend/backend-production.*
 **/temp/**
 
 # monaco editor
-**/public/vs/loader.js 
+**/vs/loader.js 
