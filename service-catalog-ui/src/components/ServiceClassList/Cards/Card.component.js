@@ -24,7 +24,7 @@ const Card = ({
     <div className="card__header ">
       <CardThumbnail>
         {imageUrl ? (
-          <CardImage size="s" photo={imageUrl} />
+          <CardImage size="s" src={imageUrl} />
         ) : (
           <Icon
             glyph="crm-service-manager"
