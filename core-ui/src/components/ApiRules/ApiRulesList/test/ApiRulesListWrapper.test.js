@@ -44,10 +44,6 @@
 //   }),
 // }));
 
-// jest.mock('@kyma-project/common', () => ({
-//   getApiUrl: () => 'kyma.cluster.com',
-// }));
-
 // const rowRenderer = apiRule => [
 //   <GoToApiRuleDetails apiRule={apiRule} />,
 //   <CopiableApiRuleHost apiRule={apiRule} />,

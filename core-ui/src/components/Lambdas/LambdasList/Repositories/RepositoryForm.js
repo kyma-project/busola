@@ -7,10 +7,8 @@ import {
   FormInput,
 } from 'components/Lambdas/components';
 
-import {
-  randomNameGenerator,
-  validateResourceName,
-} from 'components/Lambdas/helpers/misc';
+import { validateResourceName } from 'components/Lambdas/helpers/misc';
+import { randomNameGenerator } from 'react-shared';
 import { isGitUrl } from 'components/Lambdas/helpers/repositories';
 
 import { REPOSITORIES_LIST } from 'components/Lambdas/constants';

@@ -1,5 +1,3 @@
-import { randomNamesGenerator } from '@kyma-project/common';
-
 export const getResourceDisplayName = resource => {
   if (!resource) return null;
 
@@ -27,10 +25,6 @@ export function clearEmptyPropertiesInObject(object) {
       delete object[key];
     }
   }
-}
-/* eslint-enable no-unused-vars */
-export function randomNameGenerator() {
-  return randomNamesGenerator();
 }
 
 export function isStringValueEqualToTrue(value) {
