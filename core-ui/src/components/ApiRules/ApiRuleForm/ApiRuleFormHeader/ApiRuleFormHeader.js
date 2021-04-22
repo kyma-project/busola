@@ -36,16 +36,17 @@ const ApiRuleFormHeader = ({
       <PageHeader
         title={openedInModalBool ? '' : title}
         breadcrumbItems={openedInModalBool ? [] : breadcrumbItems}
-        actions={
+        actions={[
           <Button
+            key="submit"
             onClick={handleSave}
             disabled={!isValid}
             option="emphasized"
             aria-label="submit-form"
           >
             {saveButtonText}
-          </Button>
-        }
+          </Button>,
+        ]}
       >
         {serviceLink}
       </PageHeader>

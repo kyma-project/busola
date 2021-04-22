@@ -15,7 +15,7 @@ export const FunctionsList = DefaultRenderer => ({ ...otherParams }) => {
   }
 
   const headerActions = (
-    <Button option="light" onClick={goToGitRepositories}>
+    <Button option="transparent" onClick={goToGitRepositories}>
       Connected repositories
     </Button>
   );

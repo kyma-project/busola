@@ -1,5 +1,5 @@
 import React from 'react';
-import { Counter, Icon } from 'fundamental-react';
+import { InfoLabel, Icon, Token } from 'fundamental-react';
 import { Spinner, useGetList } from 'react-shared';
 import EventSubscriptions from 'shared/components/EventSubscriptions/EventSubscriptions';
 import './Service.details.scss';
@@ -60,15 +60,16 @@ export const ServicesDetails = DefaultRenderer => ({ ...otherParams }) => {
       value: resource => (
         <>
           {resource.spec.ports?.map(p => (
-            <span
-              key={p.name + p.targetPort}
-              className="fd-token y-fd-token y-fd-token--no-button service__port-container"
-            >
+            <Token key={p.name + p.targetPort} readOnly>
               <span className="name">{p.name}</span>
-              <Counter>{p.port}</Counter>
-              <Icon glyph="arrow-right" />
-              <Counter>{p.targetPort}</Counter>
-            </span>
+              <InfoLabel numeric style={{ margin: '0 4px' }}>
+                {p.port}
+              </InfoLabel>
+              <Icon glyph="arrow-right" ariaLabel="Port refers to" />
+              <InfoLabel numeric style={{ margin: '0 4px' }}>
+                {p.targetPort}
+              </InfoLabel>
+            </Token>
           ))}
         </>
       ),

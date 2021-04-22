@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Panel } from 'fundamental-react';
+import { LayoutPanel } from 'fundamental-react';
 
 import { BackendModules } from '../services';
 
@@ -41,9 +41,9 @@ export const BackendModulesDisabled: React.FunctionComponent<Props> = ({
 
   return (
     <Wrapper>
-      <Panel>
-        <Panel.Body>{text}</Panel.Body>
-      </Panel>
+      <LayoutPanel>
+        <LayoutPanel.Body>{text}</LayoutPanel.Body>
+      </LayoutPanel>
     </Wrapper>
   );
 };

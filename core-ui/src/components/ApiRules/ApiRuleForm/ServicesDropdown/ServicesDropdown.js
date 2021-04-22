@@ -44,7 +44,7 @@ const ServicesDropdown = ({
             service.spec.ports.map(port => (
               <option
                 aria-label="option"
-                key={service.metadata.name + port.port}
+                key={service.metadata.name + port.port + port.name}
                 value={`${service.metadata.name}:${port.port}`}
               >
                 {service.metadata.name} (port: {port.port})

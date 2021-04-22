@@ -1,14 +1,14 @@
 import React from 'react';
 
 import { TextFormItem } from 'react-shared';
-import { FormSet } from 'fundamental-react';
+import { FormFieldset } from 'fundamental-react';
 
 export default function ServiceData({ deployment, setDeployment }) {
   if (!deployment.createService) {
     return null;
   }
   return (
-    <FormSet>
+    <FormFieldset>
       <TextFormItem
         type="number"
         inputKey="port"
@@ -37,6 +37,6 @@ export default function ServiceData({ deployment, setDeployment }) {
           })
         }
       />
-    </FormSet>
+    </FormFieldset>
   );
 }

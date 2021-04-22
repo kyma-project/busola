@@ -26,7 +26,11 @@ export const DropdownInput = ({
         <FormLabel htmlFor={id} className="dropdown-input__label">
           {label}
           {inlineHelp && (
-            <InlineHelp placement="bottom-right" text={inlineHelp} />
+            <InlineHelp
+              buttonLabel="help"
+              placement="right-end"
+              text={inlineHelp}
+            />
           )}
         </FormLabel>
       )}

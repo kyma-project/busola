@@ -27,6 +27,7 @@ export const ResultLimitInput = ({ state, actions }) => (
         Result limit
         <span className="small-inline-help-wrapper">
           <InlineHelp
+            buttonLabel="help"
             placement="right"
             text="Return only limited number of most recent log lines."
           />
@@ -98,7 +99,7 @@ export default function AdvancedSettings({ hideSettings }) {
           glyph="decline"
           size="s"
           className="cursor-pointer"
-          aria-label="hide advanced settings"
+          ariaLabel="hide advanced settings"
           onClick={hideSettings}
         />
       </h2>

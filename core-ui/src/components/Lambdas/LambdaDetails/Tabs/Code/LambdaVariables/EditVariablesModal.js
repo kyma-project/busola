@@ -17,7 +17,7 @@ export default function EditVariablesModal({
   const [invalidModalPopupMessage, setInvalidModalPopupMessage] = useState('');
 
   const modalOpeningComponent = (
-    <Button glyph="edit" option="light">
+    <Button glyph="edit" option="transparent">
       {ENVIRONMENT_VARIABLES_PANEL.EDIT_MODAL.OPEN_BUTTON.TEXT}
     </Button>
   );
@@ -29,7 +29,7 @@ export default function EditVariablesModal({
       confirmText={ENVIRONMENT_VARIABLES_PANEL.EDIT_MODAL.CONFIRM_BUTTON.TEXT}
       invalidPopupMessage={invalidModalPopupMessage}
       id="add-lambda-variables-modal"
-      className="fd-modal--xl-size lambda-variables-modal"
+      className="fd-dialog--xl-size lambda-variables-modal"
       renderForm={props => (
         <EditVariablesForm
           {...props}

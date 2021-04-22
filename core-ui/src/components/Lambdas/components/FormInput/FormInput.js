@@ -8,10 +8,9 @@ import React, {
 import {
   FormItem,
   FormLabel,
-  FormMessage,
-  InlineHelp,
   FormInput as FioriFormInput,
 } from 'fundamental-react';
+import { Tooltip } from 'react-shared';
 
 import './FormInput.scss';
 
@@ -55,7 +54,7 @@ export const FormInput = forwardRef(
     }, [value, dirty, setStatus]);
 
     const validationMessage = status ? (
-      <FormMessage type="error">{status}</FormMessage>
+      <span className="fd-has-color-status-3">{status}</span>
     ) : null;
 
     return (
@@ -67,9 +66,7 @@ export const FormInput = forwardRef(
             required={required}
           >
             {label}
-            {inlineHelp && (
-              <InlineHelp placement="bottom-right" text={inlineHelp} />
-            )}
+            {inlineHelp && <Tooltip isInlineHelp content={inlineHelp} />}
           </FormLabel>
         )}
         <FioriFormInput

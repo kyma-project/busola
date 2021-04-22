@@ -42,7 +42,7 @@ export const ApiRulesDetails = DefaultRenderer => ({ ...otherParams }) => {
     });
     return (
       <Button
-        option="light"
+        option="transparent"
         onClick={() =>
           LuigiClient.linkManager()
             .fromContext('namespaces')

@@ -25,6 +25,7 @@ export default function SearchInput({ compact }) {
             Search
             <div className="small-inline-help-wrapper">
               <InlineHelp
+                buttonLabel="help"
                 placement="right"
                 text="Search for logs by text (optional)"
               />

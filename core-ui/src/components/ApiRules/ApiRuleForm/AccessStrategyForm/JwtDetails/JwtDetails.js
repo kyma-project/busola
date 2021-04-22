@@ -1,12 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  LayoutGrid,
-  FormInput,
-  FormItem,
-  FormLabel,
-  Button,
-} from 'fundamental-react';
+import { FormInput, FormItem, FormLabel, Button } from 'fundamental-react';
 import './JwtDetails.scss';
 
 JwtDetails.propTypes = {
@@ -74,7 +68,7 @@ export default function JwtDetails({ config, setConfig, handleFormChanged }) {
   const idpList = jwks_urls.map((_, idx) => (
     <div className="preset-row" key={`preset-row-${idx}`}>
       <div className="preset-content">
-        <LayoutGrid cols="2">
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
           <FormItem>
             <FormLabel htmlFor={`jwt-issuer-${idx}`} required>
               Issuer
@@ -107,7 +101,7 @@ export default function JwtDetails({ config, setConfig, handleFormChanged }) {
               title="JWKS Uri"
             />
           </FormItem>
-        </LayoutGrid>
+        </div>
       </div>
       <FormItem>
         <FormLabel htmlFor={`remove-preset-${idx}`} />

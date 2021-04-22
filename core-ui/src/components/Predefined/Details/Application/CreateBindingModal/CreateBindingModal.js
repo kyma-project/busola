@@ -2,7 +2,7 @@ import React from 'react';
 import {
   Button,
   FormLabel,
-  FormSet,
+  FormFieldset,
   Menu,
   ComboboxInput,
 } from 'fundamental-react';
@@ -34,7 +34,7 @@ export default function CreateBindingModal({
   );
 
   const modalOpeningComponent = (
-    <Button glyph="add" option="light">
+    <Button glyph="add" option="transparent">
       Create Binding
     </Button>
   );
@@ -79,7 +79,7 @@ export default function CreateBindingModal({
       {error && error.message}
       {loading && 'Loading...'}
       {data && (
-        <FormSet>
+        <FormFieldset>
           <FormLabel required>Namespace</FormLabel>
           <ComboboxInput
             inputProps={{
@@ -107,7 +107,7 @@ export default function CreateBindingModal({
             availableServices={application.spec.services}
             setServices={setServicesToBind}
           />
-        </FormSet>
+        </FormFieldset>
       )}
     </Modal>
   );

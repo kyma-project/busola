@@ -1,7 +1,7 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { useMicrofrontendContext } from 'react-shared';
-import { Panel, FormInput, FormLabel, Button } from 'fundamental-react';
+import { LayoutPanel, FormInput, FormLabel, Button } from 'fundamental-react';
 
 export default function ClusterSettings() {
   const clusterSettings = useMicrofrontendContext().cluster;
@@ -19,16 +19,16 @@ export default function ClusterSettings() {
   };
 
   return (
-    <Panel className="fd-has-margin-tiny fd-has-margin-top-small">
-      <Panel.Header>
-        <Panel.Head title="Cluster Setttings" />
-        <Panel.Actions>
+    <LayoutPanel className="fd-has-margin-tiny fd-has-margin-top-small">
+      <LayoutPanel.Header>
+        <LayoutPanel.Head title="Cluster Setttings" />
+        <LayoutPanel.Actions>
           <Button option="emphasized" onClick={updateApiUrl}>
             Update configuration
           </Button>
-        </Panel.Actions>
-      </Panel.Header>
-      <Panel.Body>
+        </LayoutPanel.Actions>
+      </LayoutPanel.Header>
+      <LayoutPanel.Body>
         <FormLabel>Kubernetes API Url</FormLabel>
         <FormInput
           type="url"
@@ -45,7 +45,7 @@ export default function ClusterSettings() {
           placeholder="Certificate authority data"
           onChange={e => setCa(e.target.value)}
         />
-      </Panel.Body>
-    </Panel>
+      </LayoutPanel.Body>
+    </LayoutPanel>
   );
 }

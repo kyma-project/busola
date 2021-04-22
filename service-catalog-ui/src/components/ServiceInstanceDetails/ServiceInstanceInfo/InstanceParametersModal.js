@@ -15,7 +15,7 @@ export default function InstanceParametersModal({ parameters, servicePlan }) {
   const formattedPlan = JSON.stringify(parameters, null, 2);
 
   const modalOpeningComponent = (
-    <button className="link has-padding-0" option="light">
+    <button className="link has-padding-0" option="transparent">
       {servicePlan.externalName}
     </button>
   );

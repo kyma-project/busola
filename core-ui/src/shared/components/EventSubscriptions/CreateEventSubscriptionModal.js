@@ -12,7 +12,7 @@ export default function CreateEventSubscriptionModal({
   onSubmit,
 }) {
   const button = (
-    <Button glyph="add" option="light">
+    <Button glyph="add" option="transparent">
       {EVENT_TRIGGERS_PANEL.ADD_MODAL.OPEN_BUTTON.TEXT}
     </Button>
   );
@@ -26,7 +26,7 @@ export default function CreateEventSubscriptionModal({
         EVENT_TRIGGERS_PANEL.ADD_MODAL.CONFIRM_BUTTON.INVALID_POPUP_MESSAGE
       }
       id="add-event-trigger-modal"
-      className="fd-modal--xl-size"
+      className="fd-dialog--xl-size"
       renderForm={props => (
         <CreateEventSubscriptionForm
           {...props}

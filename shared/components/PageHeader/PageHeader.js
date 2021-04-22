@@ -1,17 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Panel, Breadcrumb } from 'fundamental-react';
+import { LayoutPanel, Breadcrumb } from 'fundamental-react';
 import './PageHeader.scss';
 import LuigiClient from '@luigi-project/client';
 
-const Column = ({ title, children, columnSpan }) => {
-  const style = columnSpan !== undefined ? { gridColumn: columnSpan } : {};
+const Column = ({ title, children, columnSpan, image, style = {} }) => {
+  const styleComputed = { gridColumn: columnSpan, ...style };
   return (
-    <div className="page-header__column" style={style}>
-      <div className="title fd-has-color-text-4 fd-has-margin-bottom-none">
-        {title}
+    <div className="page-header__column" style={styleComputed}>
+      {image && <div className="image">{image}</div>}
+      <div className="content-container">
+        <div className="title fd-has-color-text-4 ">{title}</div>
+        <span className="content fd-has-color-text-1">{children}</span>
       </div>
-      <span className="content fd-has-color-text-1">{children}</span>
     </div>
   );
 };
@@ -42,8 +43,8 @@ export const PageHeader = ({
   children,
   columnWrapperClassName,
 }) => (
-  <Panel className="page-header">
-    <Panel.Header>
+  <LayoutPanel className="page-header">
+    <LayoutPanel.Header>
       <section className="header-wrapper">
         {breadcrumbItems.length ? (
           <section>
@@ -55,29 +56,30 @@ export const PageHeader = ({
                     key={item.name}
                     name={item.name}
                     url="#"
-                    onClick={() => performOnClick(item)}
+                    onClick={item.onClick || (() => performOnClick(item))}
                   />
                 );
               })}
             </Breadcrumb>
           </section>
         ) : null}
-        <Panel.Head title={title} aria-label="title" />
+
+        <LayoutPanel.Head title={title} aria-label="title" />
         {/* don't use Panel.Head's description, as it accepts only strings */}
         {description && <p className="description">{description}</p>}
-        <section className={`column-wrapper ${columnWrapperClassName}`}>
+        <section className={`column-wrapper ${columnWrapperClassName || ''}`}>
           {' '}
           {children}
         </section>
       </section>
 
       {actions && (
-        <Panel.Actions className="fd-has-margin-left-s">
+        <LayoutPanel.Actions className="fd-has-margin-left-s">
           {actions}
-        </Panel.Actions>
+        </LayoutPanel.Actions>
       )}
-    </Panel.Header>
-  </Panel>
+    </LayoutPanel.Header>
+  </LayoutPanel>
 );
 PageHeader.Column = Column;
 
@@ -91,6 +93,7 @@ PageHeader.propTypes = {
       params: PropTypes.object,
       fromContext: PropTypes.string,
       fromAbsolutePath: PropTypes.bool,
+      onClick: PropTypes.func,
     }),
   ),
 };

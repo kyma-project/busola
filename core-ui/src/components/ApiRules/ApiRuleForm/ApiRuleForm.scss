@@ -84,7 +84,7 @@
       margin-right: 16px;
     }
   }
-  
+
   .inline-radio-group {
     line-height: 2.4;
     .fd-form-item {
@@ -138,6 +138,11 @@
 .api-rule-form {
   .api-rule-form__form {
     padding: 32px;
+  }
+  &__input-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 0.5rem;
   }
 }
 

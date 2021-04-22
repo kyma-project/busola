@@ -1,7 +1,7 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { useMicrofrontendContext } from 'react-shared';
-import { Panel, Toggle, Button } from 'fundamental-react';
+import { LayoutPanel, Switch, Button } from 'fundamental-react';
 
 export default function AdditionalSettings() {
   const [bebEnabled, setBebEnabled] = React.useState(
@@ -16,28 +16,28 @@ export default function AdditionalSettings() {
   };
 
   return (
-    <Panel className="fd-has-margin-tiny fd-has-margin-top-small">
-      <Panel.Header>
-        <Panel.Head title="Additional Settings" />
-        <Panel.Actions>
+    <LayoutPanel className="fd-has-margin-tiny fd-has-margin-top-small">
+      <LayoutPanel.Header>
+        <LayoutPanel.Head title="Additional Settings" />
+        <LayoutPanel.Actions>
           <Button option="emphasized" onClick={updateApiUrl}>
             Update configuration
           </Button>
-        </Panel.Actions>
-      </Panel.Header>
-      <Panel.Body>
+        </LayoutPanel.Actions>
+      </LayoutPanel.Header>
+      <LayoutPanel.Body>
         <div
           className="fd-has-display-flex"
           style={{ justifyContent: 'space-between' }}
         >
           BEB integration enabled
-          <Toggle
+          <Switch
             inputProps={{ 'aria-label': 'beb-enabled' }}
             checked={bebEnabled}
             onChange={() => setBebEnabled(!bebEnabled)}
           />
         </div>
-      </Panel.Body>
-    </Panel>
+      </LayoutPanel.Body>
+    </LayoutPanel>
   );
 }

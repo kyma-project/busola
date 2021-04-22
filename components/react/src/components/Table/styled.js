@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Panel, Table } from 'fundamental-react';
+import { LayoutPanel as Panel, Table } from 'fundamental-react';
 
 const PanelHeader = Panel.Header;
 const PanelHead = Panel.Head;

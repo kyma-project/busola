@@ -52,13 +52,10 @@
       margin-left: 6px;
     }
 
-    &--non-removable {
-      @extend .label-selector__label;
-      cursor: default;
+    cursor: default;
 
-      &:after {
-        content: unset;
-      }
+    &:after {
+      content: unset;
     }
   }
 }

@@ -129,7 +129,11 @@ function Resource({
       <Button onClick={() => openYaml(resource)} option="emphasized">
         Edit YAML
       </Button>
-      <Button onClick={handleResourceDelete} option="light" type="negative">
+      <Button
+        onClick={handleResourceDelete}
+        option="transparent"
+        type="negative"
+      >
         Delete
       </Button>
     </>

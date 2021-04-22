@@ -1,11 +1,11 @@
 import styled from 'styled-components';
-import { Modal } from 'fundamental-react';
+import { Dialog } from 'fundamental-react';
 
 export const ModalWrapper = styled.div`
   display: inline-block;
 `;
 
-export const FdModal = styled(Modal)`
+export const FdModal = styled(Dialog)`
   && {
     .fd-modal {
       max-width: unset;

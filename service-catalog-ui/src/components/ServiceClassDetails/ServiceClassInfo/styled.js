@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Image as Img } from '@kyma-project/react-components';
+
 import { Icon as DefaultServiceClassIcon } from 'fundamental-react';
 
 export const ServiceClassInfoContentWrapper = styled.div`
@@ -13,7 +13,7 @@ export const Icon = styled(DefaultServiceClassIcon)`
   }
 `;
 
-export const Image = styled(Img)`
+export const Image = styled.img`
   && {
     align-self: center;
   }

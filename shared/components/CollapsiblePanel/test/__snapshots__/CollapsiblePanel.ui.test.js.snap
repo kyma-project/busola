@@ -2,10 +2,10 @@
 
 exports[`Collapsible Panel Renders in closed state 1`] = `
 <div
-  className="fd-panel collapsible-panel"
+  className="fd-layout-panel collapsible-panel"
 >
   <div
-    className="fd-panel__header"
+    className="fd-layout-panel__header"
     onClick={[Function]}
   >
     <h3
@@ -15,16 +15,23 @@ exports[`Collapsible Panel Renders in closed state 1`] = `
       Collapsible panel test
     </h3>
     <div
-      className="fd-panel__actions"
+      className="fd-layout-panel__actions"
     >
       <button
-        className="fd-button--light sap-icon--navigation-down-arrow"
+        className="fd-button fd-button--transparent"
         onClick={[Function]}
-      />
+        type="button"
+      >
+        <i
+          aria-hidden={true}
+          className="sap-icon--navigation-down-arrow"
+          role="img"
+        />
+      </button>
     </div>
   </div>
   <div
-    className="fd-panel__body body body--closed"
+    className="fd-layout-panel__body body body--closed"
   >
     <p>
       test
@@ -35,10 +42,10 @@ exports[`Collapsible Panel Renders in closed state 1`] = `
 
 exports[`Collapsible Panel Renders with minimal props (opened state) 1`] = `
 <div
-  className="fd-panel collapsible-panel"
+  className="fd-layout-panel collapsible-panel"
 >
   <div
-    className="fd-panel__header"
+    className="fd-layout-panel__header"
     onClick={[Function]}
   >
     <h3
@@ -48,16 +55,23 @@ exports[`Collapsible Panel Renders with minimal props (opened state) 1`] = `
       Collapsible panel test
     </h3>
     <div
-      className="fd-panel__actions"
+      className="fd-layout-panel__actions"
     >
       <button
-        className="fd-button--light sap-icon--navigation-up-arrow"
+        className="fd-button fd-button--transparent"
         onClick={[Function]}
-      />
+        type="button"
+      >
+        <i
+          aria-hidden={true}
+          className="sap-icon--navigation-up-arrow"
+          role="img"
+        />
+      </button>
     </div>
   </div>
   <div
-    className="fd-panel__body body body--open"
+    className="fd-layout-panel__body body body--open"
   >
     <p>
       test
