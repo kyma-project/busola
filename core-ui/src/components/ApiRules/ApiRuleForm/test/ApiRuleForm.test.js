@@ -5,10 +5,6 @@
 // import { mockNamespace, apiRule, servicesQuery } from './mocks';
 // import { supportedMethodsList } from 'components/ApiRules/accessStrategyTypes';
 
-// jest.mock('@kyma-project/common', () => ({
-//   getApiUrl: () => 'kyma.cluster.com',
-// }));
-
 // jest.mock('@luigi-project/client', () => ({
 //   getEventData: () => ({
 //     environmentId: mockNamespace,

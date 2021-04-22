@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { JsonSchemaForm as JsonSchemaFormComponent } from '@kyma-project/react-components';
+import { JsonSchemaForm as JsonSchemaFormComponent } from './JSONSchema/index';
 
 export const Bold = styled.span`
   font-weight: 700;
@@ -19,4 +19,10 @@ export const JsonSchemaForm = styled(JsonSchemaFormComponent)`
   ul.error-detail {
     margin-left: 16px;
   }
+`;
+
+export const ErrorWrapper = styled.div`
+  padding: 6px 0;
+  margin: 0 auto;
+  color: red;
 `;
