@@ -3,7 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "styled-components": "^5.2.3",
     "styled-components-grid": "^2.2.2"
+  },
+  "devDependencies": {
+    "react-jsonschema-form": "1.7.0"
   },
   "scripts": {
     "start": "BROWSER=none PORT=8000  ../node_modules/.bin/react-scripts start",

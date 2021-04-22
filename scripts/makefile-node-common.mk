@@ -58,7 +58,7 @@ release: build-image push-image
 
 .PHONY: validate
 validate-shared:
-	npm run --prefix=../ conflict-check
+	# npm run --prefix=../ conflict-check
 	npm run --prefix=../ lint-check
 	npm run --prefix=../ test-shared-lib
 
@@ -116,6 +116,3 @@ install-app:
 # for microfrontends which are not using /common or /components to speed up the build time;
 build-shared:
 	cd ../shared && npm ci && npm run build
-
-build-commons:
-	cd ../common && npm ci && npm run build 

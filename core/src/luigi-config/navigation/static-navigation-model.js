@@ -1,6 +1,4 @@
 import { config } from '../config';
-import { getToken } from './navigation-helpers';
-import { saveAs } from 'file-saver';
 
 export const coreUIViewGroupName = '_core_ui_';
 export const catalogViewGroupName = '_catalog_';

@@ -1,6 +1,8 @@
-import { getApiUrl } from '@kyma-project/common';
+// import { getApiUrl } from '@kyma-project/common';
+// @kyma-project/common is deprecated
 
-const domain = getApiUrl('domain');
+// const domain = getApiUrl('domain');
+const domain = '';
 
 const config = {
   queryEndpoint: `https://loki.${domain}/api/prom/query`,

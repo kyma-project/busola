@@ -1,4 +1,5 @@
-import { appInitializer } from '@kyma-project/common';
+// import { appInitializer } from '@kyma-project/common';
+// @kyma-project/common is deprecated
 import createUseContext from 'constate';
 
 import httpConfig from '../store/httpConfig';
@@ -38,7 +39,7 @@ export const httpService = () => {
   const authorizedFetch = url => {
     return fetch(url, {
       headers: new Headers({
-        Authorization: appInitializer.getBearerToken(),
+        // Authorization: appInitializer.getBearerToken(),
       }),
     });
   };

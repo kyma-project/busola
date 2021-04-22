@@ -2,12 +2,5 @@
   "lerna": "3.15.0",
   "version": "0.0.0",
   "npmClient": "npm",
-  "packages": [
-    "core",
-    "service-catalog-ui",
-    "logging",
-    "core-ui",
-    "shared",
-    "backend"
-  ]
+  "packages": ["core", "service-catalog-ui", "core-ui", "shared", "backend"]
 }

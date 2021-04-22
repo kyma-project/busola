@@ -24,10 +24,6 @@
 //   };
 // });
 
-// jest.mock('@kyma-project/common', () => ({
-//   getApiUrl: () => 'kyma.cluster.com',
-// }));
-
 describe('ApiRules', () => {
   test.todo('ApiRules');
   //   const subscriptionMock = API_RULE_EVENT_SUBSCRIPTION_MOCK({
