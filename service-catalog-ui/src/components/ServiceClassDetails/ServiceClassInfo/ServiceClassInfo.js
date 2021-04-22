@@ -31,9 +31,15 @@ const ServiceClassInfo = ({ serviceClass, labels, planSelector }) => {
       <PageHeader.Column
         image={
           extData.imageUrl ? (
-            <Image size="l" src={extData.imageUrl} />
+            <Image
+              size="l"
+              src={extData.imageUrl}
+              onError={e => {
+                e.target.src = '';
+              }}
+            />
           ) : (
-            <Icon glyph="crm-service-manager" aria-label="ServiceClass icon" />
+            <Icon glyph="crm-service-manager" ariaLabel="ServiceClass icon" />
           )
         }
         title={serviceClassTileTitles.creator}
