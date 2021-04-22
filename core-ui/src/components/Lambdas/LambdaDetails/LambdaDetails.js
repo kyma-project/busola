@@ -26,8 +26,8 @@ export default function LambdaDetails({ lambda, backendModules = [] }) {
     <ApiRules lambda={lambda} />
   ) : null;
 
+  console.log(backendModules);
   const eventSubscriptions = backendModulesExist(backendModules, [
-    BACKEND_MODULES.APPLICATION,
     BACKEND_MODULES.EVENTING,
   ]) ? (
     <EventSubscriptionsWrapper lambda={lambda} />

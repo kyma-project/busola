@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import LuigiClient from '@luigi-project/client';
 import ServiceClassInfo from '../ServiceClassInfo/ServiceClassInfo';
+
 import { PageHeader } from 'react-shared';
 
 import { serviceClassConstants } from 'helpers/constants';
@@ -13,33 +13,32 @@ const ServiceClassDetailsHeader = ({ serviceClass, children }) => {
     ...(serviceClass.metadata.labels || []),
   };
 
-  const goToList = () => {
-    LuigiClient.linkManager()
-      .fromClosestContext()
-      .withParams({
+  const breadcrumbItems = [
+    {
+      name: `${serviceClassConstants.title} - ${
+        isService(labels) ? 'Services' : 'Add-Ons'
+      }`,
+      path: '/',
+      params: {
         selectedTab: isService(labels) ? 'services' : 'addons',
-      })
-      .navigate('/');
-  };
+      },
+    },
+    {
+      name: '',
+    },
+  ];
 
   return (
-    <PageHeader
-      title={getResourceDisplayName(serviceClass)}
-      description={serviceClass.spec.externalMetadata?.providerDisplayName}
-      breadcrumbItems={[
-        {
-          name: `${serviceClassConstants.title} - ${
-            isService(labels) ? 'Services' : 'Add-Ons'
-          }`,
-          path: '/',
-          onClick: goToList,
-        },
-        { name: '' },
-      ]}
-      actions={[children]}
-    >
-      <ServiceClassInfo serviceClass={serviceClass} labels={labels} />
-    </PageHeader>
+    <>
+      <PageHeader
+        title={getResourceDisplayName(serviceClass)}
+        description={serviceClass.spec.externalMetadata?.providerDisplayName}
+        breadcrumbItems={breadcrumbItems}
+        actions={children}
+      >
+        <ServiceClassInfo serviceClass={serviceClass} labels={labels} />
+      </PageHeader>
+    </>
   );
 };
 

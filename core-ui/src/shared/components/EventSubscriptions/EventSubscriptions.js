@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { GenericList, usePost, useNotification, useDelete } from 'react-shared';
 import { EVENT_TRIGGERS_PANEL, ERRORS } from '../../constants';
 import CreateEventSubscriptionModal from './CreateEventSubscriptionModal';
-import { randomNamesGenerator } from '@kyma-project/common';
+import { randomNameGenerator } from 'react-shared';
 import { createSubscriptionInput } from './createSubscriptionInput';
 
 const textSearchProperties = ['metadata.name', 'spec.protocol']; //TODO add filtering by eventType
@@ -23,9 +23,8 @@ export default function EventSubscriptions({
   const notificationManager = useNotification();
   const postRequest = usePost();
   const deleteRequest = useDelete();
-
   async function handleSubscriptionAdded(eventType) {
-    const name = `${ownerRef.name}-${randomNamesGenerator()}`;
+    const name = `${ownerRef.name}-${randomNameGenerator()}`;
     const sink = `http://${ownerRef.name}.${namespace}.svc.cluster.local`;
     const subscriptionInput = createSubscriptionInput(
       name,

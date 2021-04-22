@@ -27,14 +27,14 @@ const customLogoutFn = () => {
 
 export let resolveNavigationNodes;
 export let navigation = {
-  viewGroupSettings: {
-    [coreUIViewGroupName]: {
-      preloadUrl: config.coreUIModuleUrl + '/preload',
-    },
-    [catalogViewGroupName]: {
-      preloadUrl: config.serviceCatalogModuleUrl + '/preload',
-    },
-  },
+  // viewGroupSettings: {
+  //   [coreUIViewGroupName]: {
+  //     preloadUrl: config.coreUIModuleUrl + '/preload',
+  //   },
+  //   [catalogViewGroupName]: {
+  //     preloadUrl: config.serviceCatalogModuleUrl + '/preload',
+  //   },
+  // },
   preloadViewGroups: false,
   nodeAccessibilityResolver: navigationPermissionChecker,
   contextSwitcher: {

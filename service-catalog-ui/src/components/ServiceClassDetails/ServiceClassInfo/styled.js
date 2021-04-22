@@ -16,6 +16,7 @@ export const Icon = styled(DefaultServiceClassIcon)`
 export const Image = styled.img`
   && {
     align-self: center;
+    max-width: 48px;
   }
 `;
 

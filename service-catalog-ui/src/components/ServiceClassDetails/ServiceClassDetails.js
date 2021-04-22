@@ -25,12 +25,14 @@ export default function ServiceClassDetails({ name }) {
 
   const serviceClassUrl = `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${namespaceId}/serviceclasses/${name}`;
   const clusterServiceClassUrl = `/apis/servicecatalog.k8s.io/v1beta1/clusterserviceclasses/${name}`;
+
   const { data: serviceClass, loading = true, error } = useGet(
     resourceType === 'ClusterServiceClass'
       ? clusterServiceClassUrl
       : serviceClassUrl,
     {
       pollingInterval: 3000,
+      skip: !resourceType,
     },
   );
 
