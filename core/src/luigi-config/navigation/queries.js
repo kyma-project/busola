@@ -66,7 +66,7 @@ export function fetchBusolaInitData(auth) {
     spec: { namespace: '*' },
   };
 
-  const ssrUrl = `${config.backendApiUrl}/apis/authorization.k8s.io/v1/selfsubjectrulsdcesreviews`;
+  const ssrUrl = `${config.backendApiUrl}/apis/authorization.k8s.io/v1/selfsubjectrulesreviews`;
   const ssrrQuery = failFastFetch(ssrUrl, auth, {
     method: 'POST',
     body: JSON.stringify(ssrr),
