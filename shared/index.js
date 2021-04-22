@@ -52,3 +52,8 @@ export * from './components/ModalWithForm/ModalWithForm';
 
 import * as CustomPropTypes from './typechecking/CustomPropTypes';
 export { CustomPropTypes };
+
+import { monaco } from '@monaco-editor/react';
+
+// monaco editor - load from static files instead of from CDN
+monaco.config({ paths: { vs: '/vs' } });
