@@ -39,8 +39,14 @@ export const communication = {
       Luigi.configChanged('navigation.nodes');
     },
     'busola.setWindowTitle': ({ title }) => {
+      // for now, the title is ignored as header.title sets both
+      // the tab title and the top left navigation title
+      // we'll bring it back when Luigi team decouples them
+
+      const { cluster } = getInitParams();
+      const domain = cluster.server.replace(/^https?:\/\//, '');
       const luigiConfig = Luigi.getConfig();
-      luigiConfig.settings.header.title = `${config.domain} | ${title}`;
+      luigiConfig.settings.header.title = `${domain}`;
       Luigi.configChanged('settings.header');
     },
     'busola.silentNavigate': ({ newParams }) => {
