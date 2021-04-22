@@ -42,7 +42,6 @@ export * from './contexts/NotificationContext';
 export * from './contexts/Microfrontend';
 export * from './contexts/YamlEditorContext';
 export * from './utils/helpers';
-export * from './utils/apollo';
 export * from './utils/handleSubscriptionArrayEvent';
 export * from './utils/getComponentForResource';
 export * from './utils/randomNamesGenerator/randomNamesGenerator';

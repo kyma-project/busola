@@ -274,7 +274,7 @@ const StyledForm = styled(Form)`
   }
 `;
 
-const JsonSchemaForm = ({ schemaFormRef, ...props }) => {
+export const JsonSchemaForm = ({ schemaFormRef, ...props }) => {
   return (
     <StyledForm
       additionalMetaSchemas={[
@@ -285,5 +285,3 @@ const JsonSchemaForm = ({ schemaFormRef, ...props }) => {
     />
   );
 };
-
-export default JsonSchemaForm;
