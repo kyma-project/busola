@@ -17,7 +17,7 @@ import { randomNameGenerator } from 'react-shared';
 
 import {
   functionAvailableLanguages,
-  nodejs12,
+  nodejs14,
 } from 'components/Lambdas/helpers/runtime';
 
 import { LAMBDAS_LIST } from 'components/Lambdas/constants';
@@ -46,7 +46,7 @@ export default function CreateLambdaForm({
 
   const [labels, setLabels] = useState({});
 
-  const [runtime, setRuntime] = React.useState(nodejs12);
+  const [runtime, setRuntime] = React.useState(nodejs14);
   const [sourceType, setSourceType] = React.useState('');
   const [repositoryName, setRepositoryName] = React.useState(
     repositories.length ? repositories[0].metadata.name : '',
