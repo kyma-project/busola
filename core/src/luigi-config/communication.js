@@ -40,7 +40,7 @@ export const communication = {
     },
     'busola.setWindowTitle': ({ title }) => {
       const luigiConfig = Luigi.getConfig();
-      luigiConfig.settings.header.title = `${config.domain} | ${title}`;
+      luigiConfig.settings.header.title = `${title} | ${config.domain}`;
       Luigi.configChanged('settings.header');
     },
     'busola.silentNavigate': ({ newParams }) => {
