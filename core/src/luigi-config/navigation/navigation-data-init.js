@@ -76,10 +76,11 @@ export function getNavigationData(authData) {
           } else {
             let errorNotification = 'Could not load initial configuration';
             if (err.code && err.message)
-              errorNotification += `: ${err.message} (${err.code}${err.originalMessage && err.message !== err.originalMessage
+              errorNotification += `: ${err.message} (${err.code}${
+                err.originalMessage && err.message !== err.originalMessage
                   ? ':' + err.originalMessage
                   : ''
-                })`;
+              })`;
             Luigi.ux().showAlert({
               text: errorNotification,
               type: 'error',
