@@ -66,9 +66,6 @@ app.get('/core-ui/*', (_, res) =>
 
 app.use('/backend', handleRequest);
 
-// serve Monaco editor static files
-app.use('/vs', express.static(path.join(__dirname, 'vs')));
-
 app.use('/', express.static(path.join(__dirname, 'core')));
 app.get('/*', (_, res) =>
   res.sendFile(path.join(__dirname + '/core/index.html')),
