@@ -39,7 +39,7 @@ export async function failFastFetch(input, auth, init = {}) {
         errorResponse.message && typeof errorResponse.message === 'string'
           ? errorResponse.message
           : response.statusText,
-        errorResponse.code ? errorResponse.code : response.status
+        errorResponse.statusCode ? errorResponse.statusCode : response.status
       );
     } else {
       throw new Error(response);

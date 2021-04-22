@@ -15,11 +15,15 @@ import {
   useNotification,
   navigateToList,
   ReadableCreationTimestamp,
+  ResourceNotFound,
 } from '../..';
 import CustomPropTypes from '../../typechecking/CustomPropTypes';
 import { handleDelete } from '../GenericList/actionHandlers/simpleDelete';
 import { useWindowTitle } from '../../hooks';
-import { prettifyNamePlural } from '../ResourcesList/helpers';
+import {
+  prettifyNamePlural,
+  prettifyNameSingular,
+} from '../ResourcesList/helpers';
 
 ResourceDetails.propTypes = {
   customColumns: CustomPropTypes.customColumnsType,
@@ -58,7 +62,18 @@ export function ResourceDetails(props) {
   const deleteResourceMutation = useDelete(props.resourceUrl);
 
   if (loading) return 'Loading...';
-  if (error) return `Error: ${error.message}`;
+  if (error) {
+    if (error.code === 404) {
+      return (
+        <ResourceNotFound
+          resource={prettifyNameSingular(undefined, props.resourceType)}
+          breadcrumb={props.resourceType}
+          path="/"
+        />
+      );
+    }
+    return `Error: ${error.message}`;
+  }
 
   return (
     <YamlEditorProvider>
