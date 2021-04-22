@@ -36,15 +36,17 @@ const DisableSidecarField = ({ onChange }) => {
   );
 };
 
-const MemoryQuotasCheckbox = ({ checkboxRef, children }) => {
+const MemoryQuotasCheckbox = ({ onChange, children }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   return (
     <FormFieldset>
       <FormItem>
         <Checkbox
-          ref={checkboxRef}
           id="memory-quotas"
-          onChange={e => setIsExpanded(e.target.checked)}
+          onChange={e => {
+            setIsExpanded(e.target.checked);
+            onChange(e.target.checked);
+          }}
           aria-label="memory-quotas"
         >
           Apply Total Memory Quotas
@@ -111,15 +113,17 @@ const MemoryQuotasSection = ({ limitsRef, requestsRef }) => (
   </FormFieldset>
 );
 
-const ContainerLimitsCheckbox = ({ checkboxRef, children }) => {
+const ContainerLimitsCheckbox = ({ onChange, children }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   return (
     <FormFieldset>
       <FormItem>
         <Checkbox
-          ref={checkboxRef}
           id="container-limits"
-          onChange={e => setIsExpanded(e.target.checked)}
+          onChange={e => {
+            setIsExpanded(e.target.checked);
+            onChange(e.target.checked);
+          }}
         >
           Apply limits per container
           <Tooltip
@@ -185,16 +189,16 @@ export const NamespacesCreate = ({
   const postRequest = usePost();
   const [labels, setLabels] = useState({});
   const [readonlyLabels, setReadonlyLabels] = useState({});
+  const [limitsChecked, setLimitsChecked] = useState(false);
+  const [quotasChecked, setQuotasChecked] = useState(false);
 
   const formValues = {
     name: useRef(null),
     memoryQuotas: {
-      enableMemoryQuotas: useRef(null),
       memoryLimit: useRef(null),
       memoryRequests: useRef(null),
     },
     containerLimits: {
-      enableContainerLimits: useRef(null),
       max: useRef(null),
       default: useRef(null),
       defaultRequest: useRef(null),
@@ -232,15 +236,13 @@ export const NamespacesCreate = ({
     e.preventDefault();
 
     const namespaceName = formValues.name.current.value;
-    const limits = formValues.containerLimits.enableContainerLimits.current
-      .checked && {
+    const limits = limitsChecked && {
       namespace: namespaceName,
       max: formValues.containerLimits.max.current.value,
       default: formValues.containerLimits.default.current.value,
       defaultRequest: formValues.containerLimits.defaultRequest.current.value,
     };
-    const quotas = formValues.memoryQuotas.enableMemoryQuotas.current
-      .checked && {
+    const quotas = quotasChecked && {
       namespace: namespaceName,
       limits: formValues.memoryQuotas.memoryLimit.current.value,
       requests: formValues.memoryQuotas.memoryRequests.current.value,
@@ -328,6 +330,7 @@ export const NamespacesCreate = ({
         <div className="fd-form__item">
           <MemoryQuotasCheckbox
             checkboxRef={formValues.memoryQuotas.enableMemoryQuotas}
+            onChange={setQuotasChecked}
           >
             <MemoryQuotasSection
               limitsRef={formValues.memoryQuotas.memoryLimit}
@@ -337,6 +340,7 @@ export const NamespacesCreate = ({
 
           <ContainerLimitsCheckbox
             checkboxRef={formValues.containerLimits.enableContainerLimits}
+            onChange={setLimitsChecked}
           >
             <ContainerLimitSection
               maxRef={formValues.containerLimits.max}
