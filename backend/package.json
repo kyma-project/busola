@@ -23,7 +23,6 @@
     "express": "^4.17.1",
     "https": "^1.0.0",
     "json-url": "^2.6.0",
-    "merge": "2.1.0",
     "open": "^7.4.2",
     "webpack-merge": "^5.7.3"
   },
