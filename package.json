@@ -2,7 +2,7 @@
   "private": true,
   "license": "Apache-2.0",
   "name": "@kyma-project/busola",
-  "version": "0.0.1-rc.7",
+  "version": "0.0.1-rc.8",
   "scripts": {
     "bootstrap": "npm install && npm run install:libraries && npm run build:libraries && npm run install:apps",
     "bootstrap:ci": "npm ci && npm run ci:libraries && npm run build:libraries",
