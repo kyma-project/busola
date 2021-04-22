@@ -328,20 +328,14 @@ export const NamespacesCreate = ({
           <DisableSidecarField onChange={handleIstioChange} />
         </div>
         <div className="fd-form__item">
-          <MemoryQuotasCheckbox
-            checkboxRef={formValues.memoryQuotas.enableMemoryQuotas}
-            onChange={setQuotasChecked}
-          >
+          <MemoryQuotasCheckbox onChange={setQuotasChecked}>
             <MemoryQuotasSection
               limitsRef={formValues.memoryQuotas.memoryLimit}
               requestsRef={formValues.memoryQuotas.memoryRequests}
             />
           </MemoryQuotasCheckbox>
 
-          <ContainerLimitsCheckbox
-            checkboxRef={formValues.containerLimits.enableContainerLimits}
-            onChange={setLimitsChecked}
-          >
+          <ContainerLimitsCheckbox onChange={setLimitsChecked}>
             <ContainerLimitSection
               maxRef={formValues.containerLimits.max}
               defaultRef={formValues.containerLimits.default}
