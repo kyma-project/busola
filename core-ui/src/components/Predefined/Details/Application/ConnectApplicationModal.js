@@ -82,7 +82,7 @@ export default function ConnectApplicationModal({ applicationName }) {
       )}
       title="URL to connect Application"
       modalOpeningComponent={
-        <Button className="fd-has-margin-right-s">Connect Application</Button>
+        <Button className="fd-margin-end--sm">Connect Application</Button>
       }
     >
       <p className="fd-has-color-text-4 fd-has-font-style-italic">

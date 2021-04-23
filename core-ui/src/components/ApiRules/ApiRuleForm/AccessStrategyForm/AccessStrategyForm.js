@@ -123,7 +123,7 @@ export default function AccessStrategyForm({
             glyph="delete"
             type="negative"
             typeAttr="button"
-            className="remove-access-strategy fd-has-margin-left-m"
+            className="remove-access-strategy fd-margin-begin--md"
             aria-label="remove-access-strategy"
             onClick={removeStrategy}
             disabled={!canDelete}
@@ -131,7 +131,7 @@ export default function AccessStrategyForm({
         )}
       </div>
       {!hasValidMethods(strategy) && (
-        <MessageStrip type="warning" className="fd-has-margin-bottom-m">
+        <MessageStrip type="warning" className="fd-margin-bottom--md">
           This access strategy requires at least one method.
         </MessageStrip>
       )}

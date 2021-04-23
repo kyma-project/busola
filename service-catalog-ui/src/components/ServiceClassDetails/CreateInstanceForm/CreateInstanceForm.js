@@ -278,10 +278,10 @@ export default function CreateInstanceForm({
 
       {!instanceCreateParameterSchemaExists && (
         <>
-          <div className="fd-has-margin-top-s fd-has-margin-bottom-tiny instance-schema-panel">
+          <div className="fd-margin-top--sm fd-margin-bottom--tiny instance-schema-panel">
             <div>
               <Link
-                className="link fd-has-margin-right-tiny clear-underline"
+                className="link fd-margin-end--tiny clear-underline"
                 onClick={() =>
                   setCustomParametersProvided(!customParametersProvided)
                 }

@@ -40,7 +40,7 @@ export default function LabelsDisplay() {
       {!!labels.length && (
         <span
           data-test-id="clear-all"
-          className="link-button fd-has-type-minus-1 fd-has-margin-left-tiny"
+          className="link-button fd-has-type-minus-1 fd-margin-begin--tiny"
           onClick={() => actions.setLabels([])}
         >
           Clear All

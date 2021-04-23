@@ -18,7 +18,7 @@ export default function BasicData({ deployment, setDeployment }) {
         id="name"
         kind="Deployment"
         onChange={e => setDeployment({ ...deployment, name: e.target.value })}
-        className="fd-has-margin-bottom-s"
+        className="fd-margin-bottom--sm"
       />
       <LabelsInput
         labels={deployment.labels}
@@ -40,7 +40,7 @@ export default function BasicData({ deployment, setDeployment }) {
           onChange={e =>
             setDeployment({ ...deployment, dockerImage: e.target.value })
           }
-          className="fd-has-margin-bottom-s"
+          className="fd-margin-bottom--sm"
         />
       </FormItem>
 

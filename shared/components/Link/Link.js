@@ -14,7 +14,7 @@ export const Link = ({ url, text, className }) => {
       <Icon
         glyph="inspect"
         size="s"
-        className="fd-has-margin-left-tiny"
+        className="fd-margin-begin--tiny"
         ariaLabel="This link will be opened in a new tab"
       />
     </a>

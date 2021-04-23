@@ -45,7 +45,7 @@ exports[`LabelDisplay Renders with minimal props 1`] = `
     </li>
   </ul>
   <span
-    className="link-button fd-has-type-minus-1 fd-has-margin-left-tiny"
+    className="link-button fd-has-type-minus-1 fd-margin-begin--tiny"
     data-test-id="clear-all"
     onClick={[Function]}
   >

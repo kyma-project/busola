@@ -118,7 +118,7 @@ export default function SearchInput({
               onFocus={() => setSearchHidden(false)}
               onChange={e => handleQueryChange(e.target.value)}
               onKeyPress={checkForEscapeKey}
-              className="fd-has-margin-right-tiny"
+              className="fd-margin-end--tiny"
             />
             {!!searchQuery && showSuggestion && (
               <div

@@ -17,14 +17,14 @@ export default function ExperimentalFunctionalities() {
   };
 
   return (
-    <LayoutPanel className="fd-has-margin-tiny fd-has-margin-top-small">
+    <LayoutPanel className="fd-has-margin-tiny fd-margin-top--sm">
       <LayoutPanel.Header>
         <LayoutPanel.Head title="Experimental functionalities" />
         <LayoutPanel.Actions>
           Enable all
           <Switch
             inputProps={{ 'aria-label': 'toggle-experimental' }}
-            className="fd-has-display-inline-block fd-has-margin-left-tiny"
+            className="fd-has-display-inline-block fd-margin-begin--tiny"
             checked={showExperimentalViews}
             onChange={toggleVisibility}
           />

@@ -57,7 +57,7 @@ export const CircleProgress = ({
     <div className={circleProgressClasses} onClick={onClick}>
       <span className="title" style={titleStyle}>
         {isInErrorState(percent, max, reversed) && (
-          <Icon size="s" className="fd-has-margin-right-xxs" glyph="error" />
+          <Icon size="s" className="fd-margin-end--tiny" glyph="error" />
         )}
         {title}
       </span>

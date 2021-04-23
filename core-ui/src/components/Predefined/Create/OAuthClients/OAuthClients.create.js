@@ -84,7 +84,7 @@ export const OAuth2ClientsCreate = ({
         />
       </FormItem>
       <p
-        className="link fd-has-display-block fd-has-margin-top-small"
+        className="link fd-has-display-block fd-margin-top--sm"
         onClick={() => setUseCustomSecret(!useCustomSecret)}
       >
         {useCustomSecret

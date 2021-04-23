@@ -27,14 +27,14 @@ export default function NamespaceSettings() {
 
   return (
     shouldShowNamespaceSettings() && (
-      <LayoutPanel className="fd-has-margin-tiny fd-has-margin-top-medium">
+      <LayoutPanel className="fd-has-margin-tiny fd-margin-top--md">
         <LayoutPanel.Header>
           <LayoutPanel.Head title="Namespace settings" />
           <LayoutPanel.Actions>
             Show System Namespaces
             <Switch
               inputProps={{ 'aria-label': 'toggle-system-namespaces' }}
-              className="fd-has-display-inline-block fd-has-margin-left-tiny"
+              className="fd-has-display-inline-block fd-margin-begin--tiny"
               checked={showSystemNamespaces}
               onChange={toggleVisibility}
             />

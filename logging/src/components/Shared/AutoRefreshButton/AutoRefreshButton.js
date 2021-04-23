@@ -7,7 +7,7 @@ export default function AutoRefreshButton() {
 
   return (
     <Button
-      className="link-button fd-has-margin-right-tiny fd-has-type-minus-1"
+      className="link-button fd-margin-end--tiny fd-has-type-minus-1"
       glyph={autoRefreshEnabled ? 'media-pause' : 'media-play'}
       option="transparent"
       size="xs"

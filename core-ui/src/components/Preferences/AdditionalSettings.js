@@ -16,7 +16,7 @@ export default function AdditionalSettings() {
   };
 
   return (
-    <LayoutPanel className="fd-has-margin-tiny fd-has-margin-top-small">
+    <LayoutPanel className="fd-has-margin-tiny fd-margin-top--sm">
       <LayoutPanel.Header>
         <LayoutPanel.Head title="Additional Settings" />
         <LayoutPanel.Actions>

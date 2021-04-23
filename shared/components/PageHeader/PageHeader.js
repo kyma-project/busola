@@ -76,7 +76,7 @@ export const PageHeader = ({
 
       {actions && (
         <LayoutPanel.Actions
-          className={`fd-has-margin-left-s ${isCatalog ? 'is-catalog' : ''}`}
+          className={`fd-margin-begin--sm ${isCatalog ? 'is-catalog' : ''}`}
         >
           {actions}
         </LayoutPanel.Actions>

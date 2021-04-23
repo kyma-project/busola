@@ -28,7 +28,7 @@ export function CopiableText({
           compact={compact}
           glyph="copy"
           option="transparent"
-          className="fd-has-margin-left-tiny"
+          className="fd-margin-begin--tiny"
           onClick={() => copyToCliboard(textToCopy)}
         >
           {buttonText ? buttonText : null}
