@@ -1,4 +1,4 @@
-:root{
+:root {
   --sapFontSize: 1rem;
 }
 
@@ -6,7 +6,7 @@ html {
   font-size: 14px;
 }
 
-button{
+button {
   font-size: inherit;
 }
 
@@ -28,7 +28,7 @@ button{
 }
 
 .link {
-  color: var(--fd-color-action-1);
+  color: var(--sapBrandColor);
   border: none;
   text-decoration: none;
   background: none;
@@ -85,7 +85,7 @@ button{
 
 .y-fd-token {
   &.y-fd-token {
-    border: 1px solid var(--fd-color-neutral-3);
+    border: 1px solid var(--sapNeutralBackground);
 
     &--no-button {
       cursor: default;

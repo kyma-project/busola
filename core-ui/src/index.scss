@@ -25,7 +25,7 @@ body {
 }
 
 .link {
-  color: var(--fd-color-action-1);
+  color: var(--sapBrandColor);
   cursor: pointer;
 
   &.no-border {
@@ -196,8 +196,8 @@ li {
 .fd-badge {
   &.fd-badge--filled {
     &.fd-badge--success {
-      background-color: var(--fd-color-positive);
-      --fd-badge-color: var(--fd-color-neutral-1);
+      background-color: var(--sapPositiveColor);
+      --fd-badge-color: var(--sapNeutralBackground);
     }
   }
 }

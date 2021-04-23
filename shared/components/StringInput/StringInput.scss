@@ -19,12 +19,12 @@
 
   &:active,
   &:focus {
-    box-shadow: 0 0 0 1px var(--fd-color-action-focus);
+    box-shadow: 0 0 0 1px var(--sapField_Focus_BorderColor);
   }
 
   &.is-invalid {
     box-shadow: 0 0 0 1px #b00;
-    --fd-forms-border-color: var(--fd-color-negative);
+    --fd-forms-border-color: var(--sapNegativeColor);
     border-width: 2px;
   }
 
@@ -46,7 +46,7 @@
     height: calc(var(--fd-forms-height) - 2 * 6px);
     margin: 4px 0;
     flex-shrink: 0;
-    border: 1px solid var(--fd-color-neutral-3);
+    border: 1px solid var(--sapNeutralBackground);
     margin-left: 4px;
     &:first-child {
       margin-left: 6px;

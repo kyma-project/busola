@@ -18,7 +18,7 @@ export const CircleProgress = ({
   valueText = value,
   max,
   maxText = max,
-  color = 'var(--fd-color-action-1)',
+  color = 'var(--sapBrandColor)',
   onClick,
   title,
   reversed = false,
