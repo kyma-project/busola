@@ -44,7 +44,7 @@ const handleTabChange = activeTabIndex => {
 
 const status = (data, id) => {
   return (
-    <StatusesList key={id}>
+    <StatusesList style={{ display: 'inline' }} key={id}>
       <StatusWrapper>
         <InfoLabel data-e2e-id={id}>{data}</InfoLabel>
       </StatusWrapper>
