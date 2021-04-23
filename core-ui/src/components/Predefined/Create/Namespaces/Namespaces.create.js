@@ -85,6 +85,7 @@ const SectionRow = ({
       pattern={pattern}
       ref={reference}
       required={required}
+      className="fd-input"
     />
   </>
 );
