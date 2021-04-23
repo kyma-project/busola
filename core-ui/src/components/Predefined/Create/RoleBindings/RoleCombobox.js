@@ -1,15 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import { Menu, Token, ComboboxInput } from 'fundamental-react';
+import { ComboboxInput } from 'fundamental-react';
 import { useGetList } from 'react-shared';
-import './RoleCombobox.scss';
 
 export const RoleCombobox = ({ setRole, setRoleKind, namespace }) => {
-  const [searchPhrase, setSearchPhrase] = useState('');
-  const chooseRole = (roleName, roleKind) => {
-    setSearchPhrase(roleName);
-    setRole(roleName);
-    setRoleKind(roleKind);
+  const chooseRole = role => {
+    if (!role.data) return;
+    setRoleKind(role.data.roleKind);
+    setRole(role.data.roleName);
   };
 
   const rolesUrl = `/apis/rbac.authorization.k8s.io/v1/namespaces/${namespace}/roles`;
@@ -30,45 +28,39 @@ export const RoleCombobox = ({ setRole, setRoleKind, namespace }) => {
   if (rolesError) return rolesError.message;
   if (clusterRolesError) return clusterRolesError.message;
 
-  const search = name => name.toLowerCase().includes(searchPhrase);
-  const rolesNames = (roles || [])
-    .map(role => role.metadata.name)
-    .filter(search);
-  const clusterRolesNames = (clusterRoles || [])
-    .map(role => role.metadata.name)
-    .filter(search);
+  const rolesNames = (roles || []).map(role => ({
+    key: `role-${role.metadata.name}`,
+    text: `${role.metadata.name} (R)`,
+    data: {
+      roleKind: 'Role',
+      roleName: role.metadata.name,
+    },
+  }));
+  const clusterRolesNames = (clusterRoles || []).map(role => ({
+    key: `clusterrole-${role.metadata.name}`,
+    text: `${role.metadata.name} (CR)`,
+    data: {
+      roleKind: 'ClusterRole',
+      roleName: role.metadata.name,
+    },
+  }));
 
-  const allRoles = rolesNames
-    .map(name => (
-      <Menu.Item key={`R_${name}`} onClick={() => chooseRole(name, 'Role')}>
-        <Token>R</Token> {name}
-      </Menu.Item>
-    ))
-    .concat(
-      clusterRolesNames.map(name => (
-        <Menu.Item
-          key={`CR_${name}`}
-          onClick={() => chooseRole(name, 'ClusterRole')}
-        >
-          <Token>CR</Token> {name}
-        </Menu.Item>
-      )),
-    );
+  const allRoles = [...rolesNames, ...clusterRolesNames];
 
   return (
     <ComboboxInput
-      inputProps={{
-        onChange: s => setSearchPhrase(s.target.value.toLowerCase()),
-        value: searchPhrase,
-      }}
+      id="role-combobox"
+      ariaLabel="Choose role"
       placeholder="Choose role..."
       className="role-combobox"
-      buttonProps={{ typeAttr: 'button' }}
-      menu={
-        <Menu.List className="role-combobox__list no-dismiss-tokens">
-          {allRoles.length ? allRoles : <Menu.Item>No roles found</Menu.Item>}
-        </Menu.List>
-      }
+      noMatchesText="No Roles found"
+      options={allRoles}
+      arrowLabel="Show roles"
+      selectionType="auto-inline"
+      inputProps={{
+        autoComplete: 'nope',
+      }}
+      onSelectionChange={(_, selected) => chooseRole(selected)}
     />
   );
 };
