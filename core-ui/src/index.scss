@@ -189,21 +189,8 @@ li {
   }
 }
 
-.fd-badge {
-  &.fd-badge--filled {
-    &.fd-badge--success {
-      background-color: var(--sapPositiveColor);
-    }
-  }
-}
-
 .fd-hidden {
   visibility: hidden !important;
-}
-
-.fd-checkbox:checked::before,
-input[type='checkbox']:checked::before {
-  border-color: transparent;
 }
 
 .no-dismiss-tokens {
