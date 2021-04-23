@@ -85,7 +85,7 @@ export default function ConnectApplicationModal({ applicationName }) {
         <Button className="fd-margin-end--sm">Connect Application</Button>
       }
     >
-      <p className="fd-has-color-text-4 fd-has-font-style-italic">
+      <p className="fd-has-color-status-4 fd-has-font-style-italic">
         Copy the following URL and use it at the external system that you would
         like to connect to:
       </p>

@@ -118,7 +118,7 @@ export default function SearchInput({
               onFocus={() => setSearchHidden(false)}
               onChange={e => handleQueryChange(e.target.value)}
               onKeyPress={checkForEscapeKey}
-              className="fd-margin-end--tiny fd-input"
+              className="fd-margin-none fd-input"
             />
             {!!searchQuery && showSuggestion && (
               <div
@@ -138,7 +138,7 @@ export default function SearchInput({
       {showControl && (
         <button
           disabled={disabled}
-          className={`fd-button--light sap-icon--search ${
+          className={`icon fd-button--light sap-icon--search ${
             disabled ? 'is-disabled' : ''
           }`}
           onClick={openSearchList}

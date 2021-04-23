@@ -51,11 +51,6 @@
     min-width: 5em;
   }
 
-  &__search {
-    display: flex;
-    align-items: center;
-  }
-
   .body-fallback {
     width: 100%;
     font-size: 18px;
@@ -73,6 +68,11 @@
 }
 
 .generic-list-search {
+  .icon {
+    color: var(--sapBrandColor);
+    font-size: var(--sapFontHeader3Size);
+    background: none;
+  }
   input {
     // override .fd-input
     width: 200px;

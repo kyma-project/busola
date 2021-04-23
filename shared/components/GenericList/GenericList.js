@@ -57,7 +57,7 @@ export const GenericList = ({
   }, [searchQuery, setFilteredEntries, entries]);
 
   const headerActions = (
-    <section className="generic-list__search">
+    <>
       {showSearchField && (
         <SearchInput
           entriesKind={entriesKind || title || ''}
@@ -71,7 +71,7 @@ export const GenericList = ({
         />
       )}
       {extraHeaderContent}
-    </section>
+    </>
   );
 
   const renderTableBody = () => {
@@ -142,7 +142,7 @@ export const GenericList = ({
   return (
     <LayoutPanel className={panelClassNames} data-testid={testid}>
       {showRootHeader && (
-        <LayoutPanel.Header className="fd-has-padding-tiny">
+        <LayoutPanel.Header className="fd-has-padding-left-small fd-has-padding-right-small">
           <LayoutPanel.Head title={title} />
           <LayoutPanel.Actions>{headerActions}</LayoutPanel.Actions>
         </LayoutPanel.Header>
