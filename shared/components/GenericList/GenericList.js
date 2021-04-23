@@ -130,7 +130,7 @@ export const GenericList = ({
   const panelClassNames = classnames(
     'generic-list',
     {
-      'fd-has-margin-m': hasExternalMargin,
+      'fd-margin--md': hasExternalMargin,
     },
     className,
   );
@@ -138,17 +138,17 @@ export const GenericList = ({
   return (
     <LayoutPanel className={panelClassNames} data-testid={testid}>
       {showRootHeader && (
-        <LayoutPanel.Header className="fd-has-padding-xs">
+        <LayoutPanel.Header className="fd-has-padding-tiny">
           <LayoutPanel.Head title={title} />
           <LayoutPanel.Actions>{headerActions}</LayoutPanel.Actions>
         </LayoutPanel.Header>
       )}
 
-      <LayoutPanel.Body className="fd-has-padding-none">
+      <LayoutPanel.Body className="fd-padding--none">
         <table className={tableClassNames}>
           {showHeader && (
-            <thead>
-              <tr>
+            <thead className="fd-table__header">
+              <tr className="fd-table__row">
                 <HeaderRenderer
                   entries={entries}
                   actions={actions}

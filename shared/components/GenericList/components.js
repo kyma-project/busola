@@ -15,10 +15,20 @@ export const BodyFallback = ({ children }) => (
 export const HeaderRenderer = ({ actions, headerRenderer }) => {
   let emptyColumn = [];
   if (actions.length) {
-    emptyColumn = [<th key="actions-column" aria-label="actions-column"></th>];
+    emptyColumn = [
+      <th
+        key="actions-column"
+        aria-label="actions-column"
+        className="fd-table__cell"
+      ></th>,
+    ];
   }
   return [
-    headerRenderer().map((h, index) => <th key={h || index}>{h}</th>),
+    headerRenderer().map((h, index) => (
+      <th className="fd-table__cell" scope="col" key={h || index}>
+        {h}
+      </th>
+    )),
     ...emptyColumn,
   ];
 };
