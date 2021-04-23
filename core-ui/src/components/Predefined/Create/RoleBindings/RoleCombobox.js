@@ -3,11 +3,12 @@ import React from 'react';
 import { ComboboxInput } from 'fundamental-react';
 import { useGetList } from 'react-shared';
 
+import './RoleCombobox.scss';
+
 export const RoleCombobox = ({ setRole, setRoleKind, namespace }) => {
   const chooseRole = role => {
-    if (!role.data) return;
-    setRoleKind(role.data.roleKind);
-    setRole(role.data.roleName);
+    setRoleKind(role.data?.roleKind);
+    setRole(role.data?.roleName);
   };
 
   const rolesUrl = `/apis/rbac.authorization.k8s.io/v1/namespaces/${namespace}/roles`;
