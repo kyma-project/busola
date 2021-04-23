@@ -12,7 +12,7 @@ export const ServiceClassListWrapper = styled.div`
 export const CardsWrapper = styled.div`
   box-sizing: border-box;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(26rem, auto));
+  grid-template-columns: repeat(auto-fill, minmax(21rem, auto));
   grid-gap: 1.3rem;
   width: 100%;
   padding: 1.3rem 30px 30px 30px;

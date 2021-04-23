@@ -3,6 +3,19 @@
 
 html {
   font-size: 16px;
+  font-family: var(
+    --sapFontFamily,
+    '72',
+    '72full',
+    Arial,
+    Helvetica,
+    sans-serif
+  );
+}
+
+body {
+  margin: 0;
+  padding: 0;
 }
 
 button {
@@ -38,27 +51,27 @@ button {
 }
 
 .fd-token {
-  font-size: 0.75rem;
-  flex: none;
-  line-height: unset !important;
-  border-color: var(--sapButton_TokenBorderColor, #c2c2c2) !important;
-
-  &__text {
-    line-height: inherit;
-  }
+  font-size: 0.75rem !important;
+  flex: none !important;
+  padding: 0 8px !important;
 
   &--readonly {
     .fd-token__close {
-      display: none;
+      display: none !important;
     }
     &::after {
       content: none !important;
     }
 
     &:hover {
-      background-color: initial;
-      border-color: initial;
+      background-color: initial !important;
+      border-color: initial !important;
     }
+  }
+
+  .fd-token__close {
+    padding-right: 0;
+    display: inline;
   }
 }
 
