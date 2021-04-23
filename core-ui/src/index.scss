@@ -230,3 +230,9 @@ input[type='checkbox']:checked::before {
 input[type='checkbox'] {
   -webkit-appearance: checkbox !important;
 }
+
+.modal-width--m {
+  .fd-dialog__content {
+      min-width: 70vw;
+  }
+}

@@ -1,0 +1,23 @@
+.key-value-form {
+    li {
+        margin-top: 8px;
+    }
+
+    header {
+        margin-bottom: 8px;
+
+        button {
+            margin-right: 8px !important;
+        }
+    }
+
+    .grid-wrapper {
+        display: grid;
+        grid-template-columns: 1fr 1fr 110px 30px;
+        grid-gap: 24px;
+    }
+
+    .grid-wrapper .fd-button {
+        margin-top: 4px;
+    }
+}
