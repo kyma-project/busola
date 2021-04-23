@@ -30,6 +30,7 @@ export const StatusesList = styled.ul`
   align-items: center;
   display: grid;
   grid-gap: 3px;
+  padding: 0;
 `;
 
 export const StatusWrapper = styled.li`

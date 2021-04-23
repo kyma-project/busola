@@ -1,9 +1,8 @@
-:root {
-  --sapFontSize: 1rem;
-}
+@import '~fundamental-styles/dist/margins.css';
+@import '~@sap-theming/theming-base-content/content/Base/baseLib/sap_fiori_3/css_variables.css';
 
 html {
-  font-size: 14px;
+  font-size: 16px;
 }
 
 button {
@@ -99,4 +98,50 @@ button {
       margin-right: 8px;
     }
   }
+}
+
+@font-face {
+  font-family: '72';
+  src: url('~@sap-theming/theming-base-content/content/Base/baseLib/sap_base_fiori/fonts/72-Regular-full.woff')
+    format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: '72';
+  src: url('~@sap-theming/theming-base-content/content/Base/baseLib/sap_base_fiori/fonts/72-Bold-full.woff')
+    format('woff');
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: '72';
+  src: url('~@sap-theming/theming-base-content/content/Base/baseLib/sap_base_fiori/fonts/72-Light-full.woff')
+    format('woff');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'SAP-icons';
+  src: url('~@sap-theming/theming-base-content/content/Base/baseLib/sap_fiori_3/fonts/SAP-icons.woff')
+    format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'BusinessSuiteInAppSymbols';
+  src: url('~@sap-theming/theming-base-content/content/Base/baseLib/sap_fiori_3/fonts/BusinessSuiteInAppSymbols.woff')
+    format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'SAP-icons-TNT';
+  src: url('~@sap-theming/theming-base-content/content/Base/baseLib/sap_fiori_3/fonts/SAP-icons-TNT.woff')
+    format('woff');
+  font-weight: normal;
+  font-style: normal;
 }
