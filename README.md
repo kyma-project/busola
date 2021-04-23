@@ -14,13 +14,6 @@ Busola project consists of the following UI projects:
 - [`Backend`](./backend) - A kind of a proxy between Busola and the Kubernetes cluster
 - [`Tests`](./tests) - Acceptance and end-to-end tests
 
-Busola also includes React libraries:
-
-- [`React common`](./common) - common functionalities for React applications
-- [`React components`](./components/react) - components for React applications (it will be replaced by `Shared components`)
-- [`Shared components`](./components/shared) - new versions of components for React applications written in TypeScript
-- [`Generic documentation`](./components/generic-documentation) - a React component that uses [`@kyma-project/documentation-component`](https://github.com/kyma-incubator/documentation-component) for displaying documentation and various specifications in the [`Service-Catalog-UI`](./service-catalog-ui) view.
-
 ## Prerequisites
 
 - [`npm`](https://www.npmjs.com/): >= 6.4.0
@@ -109,7 +102,3 @@ For the information on how to run tests and configure them, go to the [`tests`](
 ## Troubleshooting
 
 > **TIP:** To solve most of the problems with Busola development, clear the browser cache or do a hard refresh of the website.
-
-### CI fails on PRs related to staging dependencies
-
-Remove the `node_modules` folder and the `package-lock.json` file in all libraries in the [`components`](./components) folder and on the root. Then rerun the `npm run bootstrap` command in the root context and push all the changes.

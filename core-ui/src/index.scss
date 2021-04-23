@@ -1,6 +1,10 @@
 @import '~fundamental-styles/dist/fundamental-styles.css';
+:root{
+  --sapFontSize: 1rem;
+}
+
 html {
-  font-size: 1em;
+  font-size: 14px;
 }
 
 body {
