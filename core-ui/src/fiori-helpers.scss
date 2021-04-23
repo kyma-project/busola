@@ -22,9 +22,14 @@ $statusColors: (
   'status-2': var(--sapCriticalColor),
   'status-3': var(--sapNegativeColor),
   'status-4': var(--sapNeutralColor),
+  'text-1': var(--sapTextColor),
 );
 @each $colorName, $colorValue in $statusColors {
   .#{$fdNamespace}-color-#{$colorName} {
     color: $colorValue !important;
   }
+}
+
+.fd-has-font-size-small {
+  font-size: var(--sapFontSmallSize);
 }
