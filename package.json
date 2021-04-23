@@ -31,7 +31,6 @@
     "copy-to-clipboard": "^3.2.0",
     "core-js": "^3.3.6",
     "file-saver": "^2.0.2",
-    "fiori-fundamentals": "^1.7.1",
     "fundamental-react": "^0.13.1",
     "fundamental-styles": "^0.17.0",
     "lodash": "^4.17.19",
