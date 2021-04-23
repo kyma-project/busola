@@ -10,6 +10,9 @@ KeyValueForm.propTypes = {
   data: PropTypes.object.isRequired,
   setData: PropTypes.func.isRequired,
   setValid: PropTypes.func.isRequired,
+  customHeaderAction: PropTypes.any,
+  keyPatternInfo: PropTypes.string,
+  keyPattern: PropTypes.string,
 };
 
 export function KeyValueForm({
@@ -57,7 +60,11 @@ export function KeyValueForm({
       </header>
       <ul>
         {entries.map(entry => (
-          <li className="fd-has-margin-top-tiny" key={entry.renderId}>
+          <li
+            role="row"
+            className="fd-has-margin-top-tiny"
+            key={entry.renderId}
+          >
             <div className="grid-wrapper">
               <FormLabel htmlFor="key" required>
                 Key
@@ -112,6 +119,7 @@ export function KeyValueForm({
                 type="negative"
                 typeAttr="button"
                 glyph="delete"
+                aria-label="Delete entry"
                 onClick={() => deleteEntry(entry)}
               />
             </div>
