@@ -16,10 +16,6 @@ body {
   top: 0 !important;
 }
 
-.fd-overlay.fd-overlay--modal {
-  --fd-overlay-background-color: rgba(0, 0, 0, 0.6);
-}
-
 .cursor-pointer {
   cursor: pointer;
 }
@@ -197,7 +193,6 @@ li {
   &.fd-badge--filled {
     &.fd-badge--success {
       background-color: var(--sapPositiveColor);
-      --fd-badge-color: var(--sapNeutralBackground);
     }
   }
 }

@@ -40,7 +40,7 @@ const StyledForm = styled(Form)`
       padding: ${props => (props.isError ? '0 0 0 10px' : '1px 1px 1px 11px')};
       border: solid
         ${props =>
-          props.isError ? '2px #ee0000' : '1px var(--fd-forms-border-color)'};
+          props.isError ? '2px #ee0000' : '1px var(--sapField_BorderColor)'};
       transition: border-color ease-out 0.2s;
       width: 100%;
       height: 36px;
@@ -79,7 +79,7 @@ const StyledForm = styled(Form)`
     height: 36px;
     border-radius: 4px;
     background-color: rgba(255, 255, 255, 0.4);
-    border: solid 1px var(--fd-forms-border-color);
+    border: solid 1px var(--sapField_BorderColor);
     outline: none;
     display: block;
     transition: border-color ease-out 0.2s;

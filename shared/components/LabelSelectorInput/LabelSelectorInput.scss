@@ -1,11 +1,11 @@
 .label-selector {
-  color: var(--fd-forms-color);
+  color: var(--sapField_TextColor);
   outline: 0;
 
   border-style: solid;
   border-width: 1px;
   border-color: var(--sapField_BorderColor, #89919a);
-  background-color: var(--fd-forms-background-color);
+  background-color: var(--sapField_Background);
   border-radius: var(--sapField_BorderCornerRadius, 0.125rem);
   transition: border-color 125ms;
 
@@ -24,7 +24,7 @@
 
   &.is-invalid {
     box-shadow: 0 0 0 1px #b00;
-    --fd-forms-border-color: var(--sapNegativeColor);
+    --sapField_BorderColor: var(--sapNegativeColor);
     border-width: 2px;
   }
 
