@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, FormLabel, FormInput, InfoLabel } from 'fundamental-react';
+import { Button, FormLabel, FormInput, Icon } from 'fundamental-react';
 import { Tooltip } from '../..';
 import { fromEntries, toEntries, readFromFile } from './helpers';
 import { v4 as uuid } from 'uuid';
@@ -17,8 +17,8 @@ export function KeyValueForm({
   setData,
   setValid,
   customHeaderAction,
-  keyPatternInfo = 'Key name must consist of alphanumeric characters, dashes, full stops and underlines. It must not start with full stop.',
-  keyPattern = '[a-zA-z0-9_-][a-zA-z0-9_.-]*',
+  keyPatternInfo = 'Key name must consist of alphanumeric characters, dashes, full stops and underlines.',
+  keyPattern = '[a-zA-z0-9_.-]+',
 }) {
   const [entries, setEntries] = React.useState(toEntries(data));
   const [keyCounter, setKeyCounter] = React.useState({});
@@ -37,13 +37,13 @@ export function KeyValueForm({
   const addEntry = () =>
     setEntries([...entries, { key: '', value: '', renderId: uuid() }]);
 
-  const deleteEntry = () =>
+  const deleteEntry = entry =>
     setEntries(entries.filter(e => e.renderId !== entry.renderId));
 
   return (
     <section className="key-value-form">
       <span className="fd-has-color-text-4">{keyPatternInfo}</span>
-      <header className="fd-has-margin-top-m fd-has-margin-bottom-s">
+      <header className="fd-has-margin-top-s fd-has-margin-bottom-s">
         <Button
           className="add-entry"
           glyph="add"
@@ -67,7 +67,7 @@ export function KeyValueForm({
                     position="right"
                     content="Duplicate key"
                   >
-                    <InfoLabel color={2} glyph="alert" />
+                    <Icon ariaLabel="Duplicate key" glyph="alert" />
                   </Tooltip>
                 )}
               </FormLabel>
@@ -112,7 +112,7 @@ export function KeyValueForm({
                 type="negative"
                 typeAttr="button"
                 glyph="delete"
-                onClick={deleteEntry}
+                onClick={() => deleteEntry(entry)}
               />
             </div>
           </li>

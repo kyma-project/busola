@@ -48,6 +48,7 @@ export const ConfigMapsDetails = DefaultRenderer => ({ ...otherParams }) => {
           <EditConfigMapForm
             configMap={configMap}
             resourceUrl={otherParams.resourceUrl}
+            readonlyName={true}
             {...props}
           />
         )}

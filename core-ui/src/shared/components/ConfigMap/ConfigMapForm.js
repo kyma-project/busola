@@ -14,6 +14,7 @@ export function ConfigMapForm({
   setCustomValid,
   configMap,
   onSubmit,
+  readonlyName,
 }) {
   const { namespaceId } = useMicrofrontendContext();
 
@@ -41,6 +42,7 @@ export function ConfigMapForm({
             kind="Config Map"
             className="fd-has-margin-bottom-s"
             defaultValue={name}
+            readOnly={readonlyName}
           />
           <LabelSelectorInput labels={labels} onChange={setLabels} />
         </Tab>

@@ -23,6 +23,7 @@ export const SecretsDetails = DefaultRenderer => ({ ...otherParams }) => {
           <EditSecretForm
             secret={secret}
             resourceUrl={otherParams.resourceUrl}
+            readonlyName={true}
             {...props}
           />
         )}

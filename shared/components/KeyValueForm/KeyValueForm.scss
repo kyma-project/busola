@@ -7,11 +7,16 @@
 
     .grid-wrapper {
         display: grid;
-        grid-template-columns: 1fr 1fr 110px 30px;
+        grid-template-columns: 1fr 2fr 110px 30px;
         grid-gap: 24px;
     }
 
+    // align buttons with text fields
     .grid-wrapper .fd-button {
         margin-top: 4px;
+    }
+
+    i {
+        color: var(--sapButton_Critical_Background, #e9730c);
     }
 }

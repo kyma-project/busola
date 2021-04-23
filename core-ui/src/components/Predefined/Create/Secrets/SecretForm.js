@@ -17,6 +17,7 @@ export function SecretForm({
   setCustomValid,
   secret,
   onSubmit,
+  readonlyName,
 }) {
   const { namespaceId } = useMicrofrontendContext();
   const [name, setName] = React.useState(secret.metadata.name);
@@ -31,14 +32,17 @@ export function SecretForm({
 
   const handleFormSubmit = e => {
     e.preventDefault();
-    const secretInput = createSecretInput({
-      name,
-      namespaceId,
-      labels,
-      annotations,
-      data,
-      type: secret.type,
-    });
+    const secretInput = createSecretInput(
+      {
+        name,
+        namespaceId,
+        labels,
+        annotations,
+        data,
+        type: secret.type,
+      },
+      isEncoded,
+    );
     onSubmit(secretInput);
   };
 
@@ -51,6 +55,7 @@ export function SecretForm({
             onChange={e => setName(e.target.value)}
             kind="Secret"
             className="fd-has-margin-bottom-s"
+            readOnly={readonlyName}
           />
         </div>
         <TextFormItem

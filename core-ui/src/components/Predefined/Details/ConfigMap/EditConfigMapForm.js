@@ -8,10 +8,13 @@ export function EditConfigMapForm(props) {
   const { configMap, onCompleted, onError, resourceUrl, ...formProps } = props;
 
   const onSubmit = async updatedConfigMap => {
+    const mergedConfigMap = {
+      ...configMap,
+      ...updatedConfigMap,
+      metadata: { ...configMap.metadata, ...updatedConfigMap.metadata },
+    };
     try {
-      console.log(resourceUrl);
-      console.log(createPatch(configMap, updatedConfigMap));
-      await patchRequest(resourceUrl, createPatch(configMap, updatedConfigMap));
+      await patchRequest(resourceUrl, createPatch(configMap, mergedConfigMap));
       onCompleted('Config Map updated');
     } catch (e) {
       console.warn(e);
