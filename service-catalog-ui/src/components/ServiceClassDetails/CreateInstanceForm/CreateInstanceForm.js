@@ -233,7 +233,7 @@ export default function CreateInstanceForm({
             <div className="column">
               <FormLabel htmlFor="instanceName">Name*</FormLabel>
               <input
-                className="fd-form__control"
+                className="fd-input"
                 ref={formValues.name}
                 defaultValue={defaultName}
                 type="text"

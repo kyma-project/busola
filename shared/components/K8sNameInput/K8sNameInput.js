@@ -35,7 +35,7 @@ export const K8sNameInput = ({
     </FormLabel>
     <input
       role="input"
-      className="fd-form__control"
+      className="fd-input"
       ref={_ref}
       type="text"
       id={id}

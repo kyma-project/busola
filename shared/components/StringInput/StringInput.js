@@ -64,7 +64,7 @@ export const StringInput = ({
   }
 
   return (
-    <div className="fd-form__set">
+    <div className="fd-form-group">
       <div
         className={classNames(['label-selector', { 'is-invalid': !isValid }])}
       >
@@ -74,7 +74,7 @@ export const StringInput = ({
           ))}
         <input
           ref={inputRef}
-          className="fd-form__control label-selector__input"
+          className="fd-input label-selector__input"
           type="text"
           placeholder={placeholder}
           onKeyDown={handleKeyDown}

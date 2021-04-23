@@ -302,7 +302,7 @@ export const NamespacesCreate = ({
       ref={formElementRef}
       onSubmit={handleFormSubmit}
     >
-      <div className="fd-form__set">
+      <div className="fd-form-group">
         <div className="fd-form__item">
           <K8sNameInput
             _ref={formValues.name}
