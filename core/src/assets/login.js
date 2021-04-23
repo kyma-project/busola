@@ -61,6 +61,7 @@ function displayInitialView() {
 function handleKubeconfigAdded(kubeconfig, type) {
   try {
     cluster = {
+      name: kubeconfig.clusters[0].name,
       server: kubeconfig.clusters[0].cluster.server,
       'certificate-authority-data':
         kubeconfig.clusters[0].cluster['certificate-authority-data'],

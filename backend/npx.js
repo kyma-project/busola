@@ -18,12 +18,12 @@ function tryLoadKubeconfig() {
 }
 
 function buildInitParams(kubeconfig) {
-  const cluster = kubeconfig.clusters[0].cluster;
+  const cluster = kubeconfig.clusters[0];
   const user = kubeconfig.users[0].user;
   return {
     cluster: {
-      server: cluster.server,
-      'certificate-authority-data': cluster['certificate-authority-data'],
+      name: cluster.name,
+      ...cluster.cluster,
     },
     rawAuth: {
       idToken: user.token,
