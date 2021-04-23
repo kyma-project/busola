@@ -36,17 +36,21 @@ const DisableSidecarField = ({ onChange }) => {
   );
 };
 
-const MemoryQuotasCheckbox = ({ onChange, children }) => {
+const MemoryQuotasCheckbox = ({ isCheckedRef, children }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  useEffect(
+    _ => {
+      isCheckedRef.current = isExpanded;
+    }, // eslint-disable-next-line
+    [isExpanded],
+  );
+
   return (
     <FormFieldset>
       <FormItem>
         <Checkbox
           id="memory-quotas"
-          onChange={e => {
-            setIsExpanded(e.target.checked);
-            onChange(e.target.checked);
-          }}
+          onChange={e => setIsExpanded(e.target.checked)}
           aria-label="memory-quotas"
         >
           Apply Total Memory Quotas
@@ -114,22 +118,26 @@ const MemoryQuotasSection = ({ limitsRef, requestsRef }) => (
   </FormFieldset>
 );
 
-const ContainerLimitsCheckbox = ({ onChange, children }) => {
+const ContainerLimitsCheckbox = ({ isCheckedRef, children }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  useEffect(
+    _ => {
+      isCheckedRef.current = isExpanded;
+    }, // eslint-disable-next-line
+    [isExpanded],
+  );
+
   return (
     <FormFieldset>
       <FormItem>
         <Checkbox
           id="container-limits"
-          onChange={e => {
-            setIsExpanded(e.target.checked);
-            onChange(e.target.checked);
-          }}
+          onChange={e => setIsExpanded(e.target.checked)}
         >
           Apply limits per container
           <Tooltip
             isInlineHelp
-            className="fd-margin-begin--tiny"
+            className="fd-has-margin-left-tiny"
             content="
                   Define memory constraints for individual containers in your
                   namespace. Use plain value in bytes, or suffix
@@ -190,16 +198,16 @@ export const NamespacesCreate = ({
   const postRequest = usePost();
   const [labels, setLabels] = useState({});
   const [readonlyLabels, setReadonlyLabels] = useState({});
-  const [limitsChecked, setLimitsChecked] = useState(false);
-  const [quotasChecked, setQuotasChecked] = useState(false);
 
   const formValues = {
     name: useRef(null),
     memoryQuotas: {
+      enableMemoryQuotas: useRef(null),
       memoryLimit: useRef(null),
       memoryRequests: useRef(null),
     },
     containerLimits: {
+      enableContainerLimits: useRef(null),
       max: useRef(null),
       default: useRef(null),
       defaultRequest: useRef(null),
@@ -237,13 +245,13 @@ export const NamespacesCreate = ({
     e.preventDefault();
 
     const namespaceName = formValues.name.current.value;
-    const limits = limitsChecked && {
+    const limits = formValues.containerLimits.enableContainerLimits.current && {
       namespace: namespaceName,
       max: formValues.containerLimits.max.current.value,
       default: formValues.containerLimits.default.current.value,
       defaultRequest: formValues.containerLimits.defaultRequest.current.value,
     };
-    const quotas = quotasChecked && {
+    const quotas = formValues.memoryQuotas.enableMemoryQuotas.current && {
       namespace: namespaceName,
       limits: formValues.memoryQuotas.memoryLimit.current.value,
       requests: formValues.memoryQuotas.memoryRequests.current.value,
@@ -328,15 +336,19 @@ export const NamespacesCreate = ({
         <div className="fd-form-item">
           <DisableSidecarField onChange={handleIstioChange} />
         </div>
-        <div className="fd-form__item">
-          <MemoryQuotasCheckbox onChange={setQuotasChecked}>
+        <div className="fd-form-item">
+          <MemoryQuotasCheckbox
+            isCheckedRef={formValues.memoryQuotas.enableMemoryQuotas}
+          >
             <MemoryQuotasSection
               limitsRef={formValues.memoryQuotas.memoryLimit}
               requestsRef={formValues.memoryQuotas.memoryRequests}
             />
           </MemoryQuotasCheckbox>
 
-          <ContainerLimitsCheckbox onChange={setLimitsChecked}>
+          <ContainerLimitsCheckbox
+            isCheckedRef={formValues.containerLimits.enableContainerLimits}
+          >
             <ContainerLimitSection
               maxRef={formValues.containerLimits.max}
               defaultRef={formValues.containerLimits.default}
