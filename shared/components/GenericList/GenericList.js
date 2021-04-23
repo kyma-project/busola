@@ -144,7 +144,7 @@ export const GenericList = ({
         </LayoutPanel.Header>
       )}
 
-      <LayoutPanel.Body className="fd-padding--none">
+      <LayoutPanel.Body className="fd-has-padding-none">
         <table className={tableClassNames}>
           {showHeader && (
             <thead className="fd-table__header">
@@ -157,7 +157,9 @@ export const GenericList = ({
               </tr>
             </thead>
           )}
-          <tbody>{renderTableBody()}</tbody>
+          <tbody className="fd-table__body fd-table__body--no-horizontal-borders">
+            {renderTableBody()}
+          </tbody>
         </table>
       </LayoutPanel.Body>
       {!!pagination &&

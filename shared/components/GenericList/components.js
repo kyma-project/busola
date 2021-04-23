@@ -66,9 +66,13 @@ const DefaultRowRenderer = ({
   actionsStandaloneItems,
   compact,
 }) => {
-  const cells = rowRenderer.map((cell, id) => <td key={id}>{cell}</td>);
+  const cells = rowRenderer.map((cell, id) => (
+    <td className="fd-table__cell" key={id}>
+      {cell}
+    </td>
+  ));
   const actionsCell = (
-    <td>
+    <td className="fd-table__cell">
       <ListActions
         actions={actions}
         entry={entry}
@@ -78,7 +82,7 @@ const DefaultRowRenderer = ({
     </td>
   );
   return (
-    <tr>
+    <tr className="fd-table__row">
       {cells}
       {!!actions.length && actionsCell}
     </tr>
@@ -122,7 +126,11 @@ const CollapsedRowRenderer = ({
   );
 
   let collapseRow = collapseContent && (
-    <tr role="row" className="collapse-content" data-testid="collapse-content">
+    <tr
+      role="row"
+      className="collapse-content fd-table__row"
+      data-testid="collapse-content"
+    >
       {collapseContent}
     </tr>
   );
