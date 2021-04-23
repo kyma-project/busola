@@ -3,12 +3,13 @@ import PropTypes from 'prop-types';
 
 import { Button, LayoutPanel, FormItem, FormLabel } from 'fundamental-react';
 import './SecretData.scss';
+import { base64Decode } from 'shared/helpers';
 
 const SecretComponent = ({ name, value, showEncoded, isCollapsed }) => (
   <FormItem className="item-wrapper">
     <FormLabel>{name}</FormLabel>
     <div className={isCollapsed ? 'show-more-expand' : 'show-more-collapse'}>
-      {showEncoded ? value : atob(value)}
+      {showEncoded ? value : base64Decode(value)}
     </div>
   </FormItem>
 );

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from 'fundamental-react';
 import { useNotification } from 'react-shared';
+import { base64Decode, base64Encode } from 'shared/helpers';
 
 function applyOnEntries(fn, entries) {
   return entries.map(e => ({ ...e, value: fn(e.value) }));
@@ -16,7 +17,9 @@ export function DecodeSecretSwitch({
 
   const onClick = () => {
     try {
-      setEntries(applyOnEntries(isEncoded ? atob : btoa, entries));
+      setEntries(
+        applyOnEntries(isEncoded ? base64Decode : base64Encode, entries),
+      );
       setEncoded(!isEncoded);
     } catch (e) {
       notification.notifyError({
