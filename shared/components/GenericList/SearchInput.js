@@ -61,8 +61,12 @@ export default function SearchInput({
         if (typeof entry === 'string') {
           if (entryMatchesSearch(entry)) return entry;
         }
-        return suggestionProperties.map(property => {
-          const entryValue = entry[property];
+        return suggestionProperties.map(properties => {
+          const propertiesArray = properties.split('.');
+          let entryValue = entry;
+          propertiesArray?.forEach(prop => {
+            entryValue = entryValue[prop];
+          });
           if (entryMatchesSearch(entryValue)) return entryValue;
         });
       })
