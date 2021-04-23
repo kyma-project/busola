@@ -19,7 +19,7 @@ export default function ClusterSettings() {
   };
 
   return (
-    <LayoutPanel className="fd-has-margin-tiny fd-margin-top--sm">
+    <LayoutPanel className="fd-margin--tiny fd-margin-top--sm">
       <LayoutPanel.Header>
         <LayoutPanel.Head title="Cluster Setttings" />
         <LayoutPanel.Actions>

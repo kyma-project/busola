@@ -13,7 +13,7 @@ export const ConfigMapsDetails = DefaultRenderer => ({ ...otherParams }) => {
   const ConfigMapEditor = resource => {
     const { data } = resource;
     return Object.keys(data).map(key => (
-      <LayoutPanel className="fd-has-margin-m">
+      <LayoutPanel className="fd-margin--md">
         <LayoutPanel.Header>
           <LayoutPanel.Head title={key} />
         </LayoutPanel.Header>

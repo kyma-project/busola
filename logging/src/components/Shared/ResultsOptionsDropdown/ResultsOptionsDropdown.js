@@ -15,7 +15,7 @@ export default function ResultOptionsDropdown() {
 
   const PopoverContent = () => (
     <FormFieldset id="result-options">
-      <FormItem className="fd-has-margin-small">
+      <FormItem className="fd-margin--sm">
         <FormInput
           type="checkbox"
           id="health-checks"

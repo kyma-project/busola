@@ -17,7 +17,7 @@ export default function ExperimentalFunctionalities() {
   };
 
   return (
-    <LayoutPanel className="fd-has-margin-tiny fd-margin-top--sm">
+    <LayoutPanel className="fd-margin--tiny fd-margin-top--sm">
       <LayoutPanel.Header>
         <LayoutPanel.Head title="Experimental functionalities" />
         <LayoutPanel.Actions>

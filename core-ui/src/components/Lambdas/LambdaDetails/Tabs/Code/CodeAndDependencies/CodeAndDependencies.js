@@ -200,7 +200,7 @@ export default function CodeAndDependencies({ lambda }) {
 
   return (
     <TabsWithActions
-      className="fd-has-margin-medium lambda-code-and-deps"
+      className="fd-margin--md lambda-code-and-deps"
       tabsData={tabsData}
       actions={actions}
     />

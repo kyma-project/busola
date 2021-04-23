@@ -27,7 +27,7 @@ export default function NamespaceSettings() {
 
   return (
     shouldShowNamespaceSettings() && (
-      <LayoutPanel className="fd-has-margin-tiny fd-margin-top--md">
+      <LayoutPanel className="fd-margin--tiny fd-margin-top--md">
         <LayoutPanel.Header>
           <LayoutPanel.Head title="Namespace settings" />
           <LayoutPanel.Actions>
