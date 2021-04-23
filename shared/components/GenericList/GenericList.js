@@ -126,7 +126,11 @@ export const GenericList = ({
     ));
   };
 
-  const tableClassNames = classnames('fd-table', { compact });
+  const tableClassNames = classnames(
+    'fd-table',
+    'fd-table--no-horizontal-borders',
+    { compact },
+  );
   const panelClassNames = classnames(
     'generic-list',
     {
@@ -157,9 +161,7 @@ export const GenericList = ({
               </tr>
             </thead>
           )}
-          <tbody className="fd-table__body fd-table__body--no-horizontal-borders">
-            {renderTableBody()}
-          </tbody>
+          <tbody className="fd-table__body">{renderTableBody()}</tbody>
         </table>
       </LayoutPanel.Body>
       {!!pagination &&

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import classNames from 'classnames';
-import './StringInput.scss';
+// import './StringInput.scss';
 import { Token } from 'fundamental-react';
 
 export const SingleString = ({ text, onClick }) => (

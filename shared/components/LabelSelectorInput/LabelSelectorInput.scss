@@ -4,9 +4,9 @@
 
   border-style: solid;
   border-width: 1px;
-  border-color: var(--fd-forms-border-color);
+  border-color: var(--sapField_BorderColor, #89919a);
   background-color: var(--fd-forms-background-color);
-  border-radius: 4px;
+  // border-radius: 4px;
   transition: border-color 125ms;
 
   box-sizing: border-box;
