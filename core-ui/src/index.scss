@@ -68,8 +68,8 @@ body {
     }
 
     &:hover {
-      background-color: initial;
-      border-color: initial;
+      background-color: initial !important;
+      border-color: initial !important;
     }
   }
 

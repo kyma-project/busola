@@ -2,12 +2,6 @@
   height: fit-content;
 
   .fd-table {
-    thead {
-      th {
-        // font-size: 12.5px;
-      }
-    }
-
     tr {
       cursor: default;
     }
@@ -22,16 +16,16 @@
     border-left: none;
     border-right: none;
   }
-  .fd-panel__body {
+  .fd-layout-panel__body {
     padding: 0;
     display: flex;
   }
 
-  .fd-panel__header {
+  .fd-layout-panel__header {
     display: flex;
     justify-content: space-between;
 
-    .fd-panel__title {
+    .fd-layout-panel__title {
       font-size: 16px;
     }
 
@@ -39,7 +33,9 @@
       display: inline-block;
     }
 
-    .fd-panel__actions {
+    .fd-layout-panel__actions {
+      display: flex;
+      align-items: center;
       *:not(:last-child) {
         margin-right: 4px;
       }
@@ -68,6 +64,8 @@
 }
 
 .generic-list-search {
+  display: inline-block;
+
   .icon {
     color: var(--sapBrandColor);
     font-size: var(--sapFontHeader3Size);
