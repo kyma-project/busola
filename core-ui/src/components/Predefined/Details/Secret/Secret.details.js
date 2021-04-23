@@ -2,7 +2,7 @@ import React from 'react';
 import { ModalWithForm } from 'react-shared';
 import { Button } from 'fundamental-react';
 import SecretData from 'shared/components/Secret/SecretData';
-import { EditSecretModal } from './EditSecretModal';
+import { EditSecretForm } from './EditSecretForm';
 
 export const SecretsDetails = DefaultRenderer => ({ ...otherParams }) => {
   const Secret = resource => <SecretData key="secret-data" secret={resource} />;
@@ -20,7 +20,7 @@ export const SecretsDetails = DefaultRenderer => ({ ...otherParams }) => {
         confirmText="Update"
         className="fd-dialog--xl-size modal-width--m"
         renderForm={props => (
-          <EditSecretModal
+          <EditSecretForm
             secret={secret}
             resourceUrl={otherParams.resourceUrl}
             {...props}

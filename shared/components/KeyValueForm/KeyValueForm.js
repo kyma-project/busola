@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, FormLabel, FormInput, InfoLabel } from 'fundamental-react';
 import { Tooltip } from '../..';
+import { fromEntries, toEntries, readFromFile } from './helpers';
 import { v4 as uuid } from 'uuid';
 import './KeyValueForm.scss';
 
@@ -11,62 +12,44 @@ KeyValueForm.propTypes = {
   setValid: PropTypes.func.isRequired,
 };
 
-function fromEntries(entries) {
-  return Object.fromEntries(entries.map(e => [e.key, e.value]));
-}
-
-function toEntries(object) {
-  return Object.entries(object).map(([key, value]) => ({
-    renderId: uuid(),
-    key,
-    value,
-  }));
-}
-
-function readFromFile() {
-  return new Promise(resolve => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.addEventListener('change', e => {
-      const file = e.target.files[0];
-      if (!file) resolve(null);
-      const reader = new FileReader();
-      reader.readAsText(file);
-      reader.onload = e =>
-        resolve({ name: file.name, content: e.target.result });
-    });
-    input.click();
-  });
-}
-
-export function KeyValueForm({ data, setData, setValid, customHeaderAction }) {
-  // "field must consist of alphanumeric characters, -, _ or ." and not start with '.'
-  const keyPattern = '[a-zA-z0-9_-][a-zA-z0-9_.-]*';
+export function KeyValueForm({
+  data,
+  setData,
+  setValid,
+  customHeaderAction,
+  keyPatternInfo = 'Key name must consist of alphanumeric characters, dashes, full stops and underlines. It must not start with full stop.',
+  keyPattern = '[a-zA-z0-9_-][a-zA-z0-9_.-]*',
+}) {
   const [entries, setEntries] = React.useState(toEntries(data));
-  const [duplicateCounter, setDuplicateCounter] = React.useState({});
+  const [keyCounter, setKeyCounter] = React.useState({});
 
   React.useEffect(() => {
     const counter = {};
     for (const entry of entries) {
       counter[entry.key] = (counter[entry.key] || 0) + 1;
     }
-    setDuplicateCounter(counter);
+    setKeyCounter(counter);
     setData(fromEntries(entries));
     setValid(Object.values(counter).every(c => c === 1));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [entries]);
 
+  const addEntry = () =>
+    setEntries([...entries, { key: '', value: '', renderId: uuid() }]);
+
+  const deleteEntry = () =>
+    setEntries(entries.filter(e => e.renderId !== entry.renderId));
+
   return (
     <section className="key-value-form">
-      <header className="fd-has-margin-top-m">
+      <span className="fd-has-color-text-4">{keyPatternInfo}</span>
+      <header className="fd-has-margin-top-m fd-has-margin-bottom-s">
         <Button
           className="add-entry"
           glyph="add"
           type="ghost"
           typeAttr="button"
-          onClick={() =>
-            setEntries([...entries, { key: '', value: '', renderId: uuid() }])
-          }
+          onClick={addEntry}
         >
           Add data entry
         </Button>
@@ -74,11 +57,11 @@ export function KeyValueForm({ data, setData, setValid, customHeaderAction }) {
       </header>
       <ul>
         {entries.map(entry => (
-          <li key={entry.renderId}>
+          <li className="fd-has-margin-top-tiny" key={entry.renderId}>
             <div className="grid-wrapper">
               <FormLabel htmlFor="key" required>
                 Key
-                {duplicateCounter[entry.key] > 1 && (
+                {keyCounter[entry.key] > 1 && (
                   <Tooltip
                     className="fd-has-margin-left-tiny"
                     position="right"
@@ -129,9 +112,7 @@ export function KeyValueForm({ data, setData, setValid, customHeaderAction }) {
                 type="negative"
                 typeAttr="button"
                 glyph="delete"
-                onClick={() =>
-                  setEntries(entries.filter(e => e.renderId !== entry.renderId))
-                }
+                onClick={deleteEntry}
               />
             </div>
           </li>

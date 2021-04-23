@@ -1,17 +1,6 @@
 import React from 'react';
 import { usePost } from 'react-shared';
-import { ConfigMapForm } from './ConfigMapForm';
-
-export function createConfigMapInput(name, namespace, labels, data) {
-  return {
-    metadata: {
-      name,
-      namespace,
-      labels,
-    },
-    data,
-  };
-}
+import { ConfigMapForm } from '../../../shared/components/ConfigMap/ConfigMapForm';
 
 export const ConfigMapsCreate = props => {
   const postRequest = usePost();

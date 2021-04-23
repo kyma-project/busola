@@ -6,7 +6,7 @@ import {
   KeyValueForm,
 } from 'react-shared';
 import { Tab, TabGroup } from 'fundamental-react';
-import { createConfigMapInput } from './ConfigMaps.create';
+import { createConfigMapInput } from './createConfigMapInput';
 
 export function ConfigMapForm({
   formElementRef,

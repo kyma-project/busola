@@ -2,7 +2,7 @@ import React from 'react';
 import Editor from '@monaco-editor/react';
 import { ModalWithForm } from 'react-shared';
 import { Button, LayoutPanel } from 'fundamental-react';
-import { EditConfigMapModal } from './EditConfigMapModal';
+import { EditConfigMapForm } from './EditConfigMapForm';
 
 export const ConfigMapsDetails = DefaultRenderer => ({ ...otherParams }) => {
   const options = {
@@ -45,7 +45,7 @@ export const ConfigMapsDetails = DefaultRenderer => ({ ...otherParams }) => {
         confirmText="Update"
         className="fd-dialog--xl-size modal-width--m"
         renderForm={props => (
-          <EditConfigMapModal
+          <EditConfigMapForm
             configMap={configMap}
             resourceUrl={otherParams.resourceUrl}
             {...props}

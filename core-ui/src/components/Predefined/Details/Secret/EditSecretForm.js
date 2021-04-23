@@ -3,7 +3,7 @@ import { useUpdate } from 'react-shared';
 import { SecretForm } from '../../Create/Secrets/SecretForm';
 import { createPatch } from 'rfc6902';
 
-export function EditSecretModal(props) {
+export function EditSecretForm(props) {
   const patchRequest = useUpdate();
   const { secret, onCompleted, onError, resourceUrl, ...formProps } = props;
 
@@ -18,7 +18,7 @@ export function EditSecretModal(props) {
       onCompleted('Secret updated');
     } catch (e) {
       console.warn(e);
-      onError('Cannot update secret', `Error: ${e.message}`);
+      onError('Cannot update Secret', `Error: ${e.message}`);
     }
   };
 
