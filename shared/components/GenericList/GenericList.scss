@@ -15,7 +15,14 @@
 
     border-left: none;
     border-right: none;
+
+    &__header {
+      .fd-table__cell {
+        padding-top: 0.875em;
+      }
+    }
   }
+
   .fd-layout-panel__body {
     padding: 0;
     display: flex;
