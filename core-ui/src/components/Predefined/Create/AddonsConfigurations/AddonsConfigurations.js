@@ -99,7 +99,7 @@ export const AddonsConfigurations = ({
       onSubmit={handleFormSubmit}
     >
       <div className="fd-form-group">
-        <div className="fd-form__item">
+        <div className="fd-form-item">
           <K8sNameInput
             onChange={handleNameChanged}
             id={`${resourceType}-name`}

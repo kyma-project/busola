@@ -303,7 +303,7 @@ export const NamespacesCreate = ({
       onSubmit={handleFormSubmit}
     >
       <div className="fd-form-group">
-        <div className="fd-form__item">
+        <div className="fd-form-item">
           <K8sNameInput
             _ref={formValues.name}
             id="namespace-name"
@@ -322,10 +322,10 @@ export const NamespacesCreate = ({
           onChange={handleLabelsChanged}
         />
 
-        <div className="fd-form__item">
+        <div className="fd-form-item">
           <DisableSidecarField onChange={handleIstioChange} />
         </div>
-        <div className="fd-form__item">
+        <div className="fd-form-item">
           <MemoryQuotasCheckbox
             checkboxRef={formValues.memoryQuotas.enableMemoryQuotas}
           >

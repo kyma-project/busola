@@ -155,7 +155,7 @@ header.sticky {
   z-index: 1;
 }
 
-.fd-form__label[aria-required='true']::after {
+.fd-form-label[aria-required='true']::after {
   content: '';
 }
 
