@@ -2,7 +2,7 @@
 
 ## Overview
 
-Generic Documentation is a Busola-dedicated wrapper for the [Documentation Component](https://github.com/kyma-incubator/documentation-component/blob/master/README.md) - a generic, reusable, React set of libraries allowing you to render specifications of these types:
+Generic Documentation is a Busola-dedicated wrapper for the [Documentation Component](https://github.com/kyma-incubator/documentation-component/blob/main/README.md) - a generic, reusable, React set of libraries allowing you to render specifications of these types:
 
 - Markdown
 - OpenAPI
