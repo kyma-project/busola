@@ -15,7 +15,7 @@
     "start:api": "./scripts/pre-start-warning.sh && lerna exec --parallel -- npm run start:kyma:api",
     "lint-check": "prettier --config ./.prettierrc --ignore-path ./.prettierignore --check '**/*.{ts,tsx,js,jsx,json,html,css,yaml}'",
     "lint-fix": "prettier --config ./.prettierrc --ignore-path ./.prettierignore --write '**/*.{ts,tsx,js,jsx,json,html,css,yaml}'",
-    "markdownlint": "markdownlint **/*.md --ignore core/src/assets",
+    "markdownlint": "markdownlint **/*.md --ignore core/src/assets,",
     "lint-staged": "lint-staged",
     "test-shared-lib": "cd shared && jest",
     "start:npx": "npm run start:npx --prefix=backend",

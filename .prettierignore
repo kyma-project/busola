@@ -84,7 +84,6 @@ core
 **/public/config/config.js
 backend/backend-production.*
 
-
 **/temp/**
 
 # monaco editor
