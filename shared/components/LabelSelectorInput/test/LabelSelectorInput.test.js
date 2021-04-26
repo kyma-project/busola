@@ -29,7 +29,7 @@ describe('LabelSelectorInput', () => {
     const { queryByPlaceholderText } = render(
       <LabelSelectorInput onChange={mockChange} />,
     );
-    const input = queryByPlaceholderText('Enter label key=value');
+    const input = queryByPlaceholderText('Enter Labels key=value');
 
     fireEvent.change(input, { target: { value: 'abc' } });
     fireEvent.keyDown(input, { key: 'Enter', code: 'Enter' });
@@ -41,7 +41,7 @@ describe('LabelSelectorInput', () => {
     const { queryByPlaceholderText } = render(
       <LabelSelectorInput onChange={mockChange} />,
     );
-    const input = queryByPlaceholderText('Enter label key=value');
+    const input = queryByPlaceholderText('Enter Labels key=value');
 
     fireEvent.change(input, { target: { value: 'abc=def' } });
     fireEvent.keyDown(input, { key: 'Enter', code: 'Enter' });
