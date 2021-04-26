@@ -102,7 +102,6 @@ export const OAuth2ClientsCreate = ({
             />
           </FormItem>
           <p className="fd-has-display-block fd-has-color-status-4">
-            test
             {secretNames?.includes(spec.secretName) &&
               `Secret "${spec.secretName}" exists and will be used for this client.`}
           </p>
