@@ -56,7 +56,7 @@ describe('KeyValueForm', () => {
       <KeyValueForm data={{ a: 'b' }} setData={setData} setValid={jest.fn()} />,
     );
 
-    fireEvent.click(getByText('Read from file'));
+    fireEvent.click(getByText('Read value from file'));
 
     await wait(() =>
       expect(setData).toHaveBeenLastCalledWith({

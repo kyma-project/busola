@@ -101,20 +101,22 @@ export function KeyValueForm({
                 }}
                 value={entry.value}
               />
-              <Button
-                typeAttr="button"
-                onClick={() =>
-                  readFromFile().then(result => {
-                    if (result) {
-                      entry.key = result.name;
-                      entry.value = result.content;
-                      setEntries([...entries]);
-                    }
-                  })
-                }
-              >
-                Read from file
-              </Button>
+              <Tooltip content="Read file content as single value, with file name as a key.">
+                <Button
+                  typeAttr="button"
+                  onClick={() =>
+                    readFromFile().then(result => {
+                      if (result) {
+                        entry.key = result.name;
+                        entry.value = result.content;
+                        setEntries([...entries]);
+                      }
+                    })
+                  }
+                >
+                  Read value from file
+                </Button>
+              </Tooltip>
               <Button
                 type="negative"
                 typeAttr="button"
