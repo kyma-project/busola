@@ -107,7 +107,7 @@ export const YamlEditorProvider = ({ children }) => {
   const bottomContent = (
     <>
       <Button
-        className="fd-margin-end--smmall"
+        className="fd-margin-end--small"
         glyph="accept"
         type="positive"
         option="emphasized"
