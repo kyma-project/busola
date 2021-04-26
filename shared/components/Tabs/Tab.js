@@ -6,22 +6,21 @@ export const Tab = ({ status, title, onClick, tabIndex, id, isActive }) => {
   return (
     <li
       role="tab"
-      class="fd-tabs__item"
+      className="fd-tabs__item"
       key={tabIndex}
       aria-controls={'tab' + tabIndex}
+      onClick={event => {
+        event.preventDefault();
+        onClick(tabIndex);
+      }}
     >
       <a
-        class="fd-tabs__link"
+        className="fd-tabs__link"
         href={'#tab' + tabIndex}
-        onClick={event => {
-          event.preventDefault();
-          onClick(tabIndex);
-        }}
         aria-selected={isActive}
-        role="tab"
         data-e2e-id={id}
       >
-        <span class="fd-tabs__tag">
+        <span className="fd-tabs__tag">
           {title}
           {status}
         </span>
