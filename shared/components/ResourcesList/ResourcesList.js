@@ -193,7 +193,7 @@ function Resources({
         }
         confirmText="Create"
         id={`add-${resourceType}-modal`}
-        className="fd-dialog--xl-size"
+        className="fd-dialog--xl-size modal-width--m"
         renderForm={props => (
           <CreateResourceForm
             resourceType={resourceType}
