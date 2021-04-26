@@ -42,6 +42,7 @@ export function TextFormItem({
         autoComplete="off"
         defaultValue={defaultValue}
         {...inputProps}
+        className={'fd-input' + (inputProps?.className || '')}
       />
     </FormItem>
   );
