@@ -105,14 +105,15 @@ body {
   content: none; //remove double backdrop
 }
 
+.modal-width--m {
+  .fd-dialog__content {
+    width: 70vw;
+    min-width: unset;
+  }
+}
+
 .fd-dialog--xl-size {
   .modal-demo-bg {
-    min-width: 1036px;
-  }
-
-  .fd-dialog,
-  .fd-dialog__content,
-  .fd-dialog__body {
     min-width: 1036px;
   }
 

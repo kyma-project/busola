@@ -17,7 +17,7 @@ export const Label = ({ text, onClick }) => (
     title="Click to remove"
     className="label-selector__label"
     onClick={onClick}
-    buttonLabel="Remove this label"
+    buttonLabel="Remove"
   >
     {text}
   </Token>
@@ -33,6 +33,8 @@ export const LabelSelectorInput = ({
   labels = {},
   readonlyLabels = {},
   onChange,
+  type = 'Labels',
+  className,
 }) => {
   const [isValid, setValid] = useState(true);
   const inputRef = useRef(null);
@@ -92,9 +94,9 @@ export const LabelSelectorInput = ({
   }
 
   return (
-    <FormItem>
+    <FormItem className={className}>
       <FormLabel>
-        Labels
+        {type}
         <Tooltip
           isInlineHelp
           content="A key and value should be separated by a '=', a key cannot be empty, a key/value consists of alphanumeric characters, '-', '_' or '.', and must start and end with an alphanumeric character."
@@ -116,7 +118,7 @@ export const LabelSelectorInput = ({
             ref={inputRef}
             className="fd-input label-selector__input"
             type="text"
-            placeholder="Enter label key=value"
+            placeholder={`Enter ${type} key=value`}
             onKeyDown={handleKeyDown}
             onBlur={handleOutOfFocus}
             data-ignore-visual-validation
