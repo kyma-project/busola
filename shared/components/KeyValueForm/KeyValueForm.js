@@ -92,7 +92,8 @@ export function KeyValueForm({
                 }}
                 value={entry.key}
               />
-              <FormInput
+              <textarea
+                className="value-textarea"
                 name="value"
                 placeholder="Value"
                 onChange={e => {
