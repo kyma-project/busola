@@ -225,6 +225,10 @@ input[type='checkbox'] {
   -webkit-appearance: checkbox !important;
 }
 
+.fd-switch__input {
+  position: absolute !important;
+}
+
 .modal-width--m {
   .fd-dialog__content {
     width: 70vw;
