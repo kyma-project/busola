@@ -18,6 +18,7 @@ export const K8sNameInput = ({
   showHelp = true,
   label = 'Name',
   required = true,
+  defaultValue,
   ...props
 }) => (
   <>
@@ -39,6 +40,7 @@ export const K8sNameInput = ({
       ref={_ref}
       type="text"
       id={id}
+      defaultValue={defaultValue}
       placeholder={kind + ' name'}
       aria-required={required ? 'true' : 'false'}
       required={required}
