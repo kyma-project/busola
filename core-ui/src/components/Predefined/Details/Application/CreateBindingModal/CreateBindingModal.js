@@ -3,7 +3,6 @@ import {
   Button,
   FormLabel,
   FormFieldset,
-  Menu,
   ComboboxInput,
 } from 'fundamental-react';
 import {
@@ -82,24 +81,21 @@ export default function CreateBindingModal({
         <FormFieldset>
           <FormLabel required>Namespace</FormLabel>
           <ComboboxInput
-            inputProps={{
-              value: namespaceName,
-              readOnly: true,
-              className: 'namespace-combobox__input',
-            }}
+            id="namespace-bindings-combobox"
+            ariaLabel="Choose namespace"
             placeholder="Choose namespace..."
             className="namespace-combobox"
-            menu={
-              <Menu.List className="namespace-combobox__list">
-                {namespaceNames.map(name => (
-                  <Menu.Item key={name} onClick={() => setNamespaceName(name)}>
-                    {name}
-                  </Menu.Item>
-                ))}
-                {!namespaceNames.length && (
-                  <Menu.Item>No namespaces to bind</Menu.Item>
-                )}
-              </Menu.List>
+            noMatchesText="No Namespaces to bind"
+            options={namespaceNames.map(name => ({
+              key: name,
+              text: name,
+            }))}
+            arrowLabel="Show namespaces"
+            selectionType="auto-inline"
+            onSelectionChange={(_, selected) =>
+              setNamespaceName(
+                typeof selected.key === 'string' ? selected.key : undefined,
+              )
             }
           />
           <BindableServicesList
