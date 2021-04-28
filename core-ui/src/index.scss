@@ -261,6 +261,16 @@ input[type='checkbox'] {
   font-weight: normal;
   font-style: normal;
 }
+
+.fd-popover__body--dropdown {
+  width: 100% !important;
+  max-height: 200px !important;
+  overflow-y: auto !important;
+  .fd-list--dropdown {
+    max-width: 100% !important;
+  }
+}
+
 .fd-switch__input {
   position: absolute !important;
 }
