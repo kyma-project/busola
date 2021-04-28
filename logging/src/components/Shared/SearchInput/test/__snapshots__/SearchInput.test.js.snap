@@ -2,7 +2,7 @@
 
 exports[`SearchInput Renders in compact mode 1`] = `
 <section
-  className="fd-margin-end--small"
+  className="fd-margin-end--sm"
 >
   <span
     className="caption-muted search-input__caption"
@@ -20,7 +20,7 @@ exports[`SearchInput Renders in compact mode 1`] = `
 
 exports[`SearchInput Renders with minimal props 1`] = `
 <section
-  className="fd-margin-end--small"
+  className="fd-margin-end--sm"
 >
   <span
     className="caption-muted search-input__caption"

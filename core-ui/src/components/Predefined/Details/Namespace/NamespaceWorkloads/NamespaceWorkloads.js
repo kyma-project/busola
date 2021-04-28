@@ -85,7 +85,7 @@ export function NamespaceWorkloads({ namespace }) {
       <LayoutPanel.Header>
         <Icon
           size="m"
-          className="fd-margin-end--small"
+          className="fd-margin-end--sm"
           glyph="stethoscope"
           ariaLabel="Health icon"
         />

@@ -126,7 +126,7 @@ export const ResourcesUsage = ({ namespace }) => {
       <LayoutPanel.Header>
         <Icon
           size="m"
-          className="fd-margin-end--small"
+          className="fd-margin-end--sm"
           glyph="it-host"
           ariaLabel="Resource icon"
         />
