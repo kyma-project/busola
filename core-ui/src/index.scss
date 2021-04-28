@@ -261,3 +261,13 @@ input[type='checkbox'] {
   font-weight: normal;
   font-style: normal;
 }
+.fd-switch__input {
+  position: absolute !important;
+}
+
+.modal-width--m {
+  .fd-dialog__content {
+    width: 70vw;
+    min-width: unset;
+  }
+}
