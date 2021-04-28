@@ -34,7 +34,7 @@ spec:
             - containerPort: 6080
             - containerPort: 8080
         - name: core-ui
-          image: eu.gcr.io/kyma-project/busola-core-ui:PR-116
+          image: eu.gcr.io/kyma-project/busola-core-ui:PR-122
           imagePullPolicy: Always
           resources:
             # limits:
