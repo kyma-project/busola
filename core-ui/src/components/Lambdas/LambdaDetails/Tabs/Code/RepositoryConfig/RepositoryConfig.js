@@ -132,7 +132,7 @@ export default function RepositoryConfig({ lambda }) {
     const button = (
       <Button
         glyph={isEditMode ? 'save' : 'edit'}
-        option={isEditMode ? 'emphasized' : 'light'}
+        option={isEditMode ? 'emphasized' : 'transparent'}
         typeAttr="submit"
         onClick={() => {
           if (isEditMode) {
