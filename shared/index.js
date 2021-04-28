@@ -55,6 +55,7 @@ export * from './components/ModalWithForm/ModalWithForm';
 import * as CustomPropTypes from './typechecking/CustomPropTypes';
 export { CustomPropTypes };
 
+import { monaco } from '@monaco-editor/react';
 import { setupMonaco } from './utils/setupMonaco';
 
-setupMonaco();
+setupMonaco(monaco);

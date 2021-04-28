@@ -6,8 +6,9 @@ import './index.scss';
 import './fiori-helpers.scss';
 import App from './components/App/App';
 import { Microfrontend, setupMonaco } from 'react-shared';
+import { monaco } from '@monaco-editor/react';
 
-setupMonaco();
+setupMonaco(monaco);
 
 const isNpx = window.location.origin === 'http://localhost:3001';
 
