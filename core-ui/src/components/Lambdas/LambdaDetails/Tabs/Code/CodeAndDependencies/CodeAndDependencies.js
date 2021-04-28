@@ -120,7 +120,7 @@ export default function CodeAndDependencies({ lambda }) {
   const button = (
     <Button
       glyph="save"
-      option={disabled ? 'light' : 'emphasized'}
+      option={disabled ? 'transparent' : 'emphasized'}
       typeAttr="button"
       disabled={disabled}
       onClick={handleSave}

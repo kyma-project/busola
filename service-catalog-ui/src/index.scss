@@ -94,6 +94,9 @@ button {
     }
   }
 }
+.fd-form-item .fd-form-select {
+  margin-top: 0.25rem; // to align with other inputs
+}
 
 .y-fd-token {
   &.y-fd-token {
