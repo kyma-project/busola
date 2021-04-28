@@ -69,7 +69,7 @@ export class Tabs extends React.Component {
     const children = this.props.children.filter(child => child);
 
     const tabClass = classNames('fd-tabs', this.props.className);
-    const props = this.getPropsFromActiveTab(children);
+
     return (
       <div role="tablist">
         <div className={tabClass}>

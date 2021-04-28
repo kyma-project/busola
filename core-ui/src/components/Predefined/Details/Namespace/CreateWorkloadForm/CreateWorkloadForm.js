@@ -76,7 +76,7 @@ export default function CreateWorkloadForm({
         </div>
         <ScalingData deployment={deployment} setDeployment={setDeployment} />
       </form>
-      {/* <p className="create-workload-info fd-has-type-2 fd-has-color-text-3">
+      {/* <p className="create-workload-info fd-has-type-2 fd-has-color-status-4">
         For more advanced configuration options, use "Upload YAML" option.
       </p> */}
     </>

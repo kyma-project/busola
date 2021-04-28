@@ -1,0 +1,35 @@
+$fdNamespace: fd-has;
+
+$properties: padding, padding-top, padding-bottom, padding-left, padding-right;
+$sizes: (
+  'tiny': 0.5rem,
+  'small': 1rem,
+  'regular': 1.5rem,
+  'medium': 2rem,
+  'large': 3rem,
+  'none': 0,
+);
+@each $property in $properties {
+  @each $sizeName, $sizeValue in $sizes {
+    .#{$fdNamespace}-#{$property}-#{$sizeName} {
+      #{$property}: $sizeValue !important;
+    }
+  }
+}
+
+$statusColors: (
+  'status-1': var(--sapPositiveColor),
+  'status-2': var(--sapCriticalColor),
+  'status-3': var(--sapNegativeColor),
+  'status-4': var(--sapNeutralColor),
+  'text-1': var(--sapTextColor),
+);
+@each $colorName, $colorValue in $statusColors {
+  .#{$fdNamespace}-color-#{$colorName} {
+    color: $colorValue !important;
+  }
+}
+
+.fd-has-font-size-small {
+  font-size: var(--sapFontSmallSize);
+}

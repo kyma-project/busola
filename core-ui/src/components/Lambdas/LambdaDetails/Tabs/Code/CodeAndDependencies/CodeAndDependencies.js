@@ -120,7 +120,7 @@ export default function CodeAndDependencies({ lambda }) {
   const button = (
     <Button
       glyph="save"
-      option={disabled ? 'light' : 'emphasized'}
+      option={disabled ? 'transparent' : 'emphasized'}
       typeAttr="button"
       disabled={disabled}
       onClick={handleSave}
@@ -200,7 +200,7 @@ export default function CodeAndDependencies({ lambda }) {
 
   return (
     <TabsWithActions
-      className="fd-has-margin-medium lambda-code-and-deps"
+      className="fd-margin--md lambda-code-and-deps"
       tabsData={tabsData}
       actions={actions}
     />

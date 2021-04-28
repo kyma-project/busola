@@ -1,5 +1,5 @@
 $transition-length: 2s;
-$neutral-background: var(--fd-color-background-2, #fff);
+$neutral-background: var(--sapBaseColor, #fff);
 
 %flex-center {
   display: flex;
@@ -31,16 +31,16 @@ $neutral-background: var(--fd-color-background-2, #fff);
       background-color: $neutral-background;
       position: absolute;
       z-index: 8;
-      color: var(--fd-color-text-3);
+      color: var(--sapNeutralColor);
 
       .percentage {
         @include circle-shape(calc(100% - 6px));
         @extend %flex-center;
-        border: 1px solid var(--fd-color-text-3);
+        border: 1px solid var(--sapNeutralColor);
 
         &.is-error {
-          color: var(--fd-color-status-3);
-          border-color: var(--fd-color-status-3);
+          color: var(--sapNegativeColor);
+          border-color: var(--sapNegativeColor);
         }
       }
     }
@@ -55,7 +55,7 @@ $neutral-background: var(--fd-color-background-2, #fff);
   justify-items: center;
   justify-content: center;
   grid-gap: 3%;
-  color: var(--fd-color-text-3);
+  color: var(--sapNeutralColor);
   font-size: 1.2em;
 
   @keyframes fadeNrotate {

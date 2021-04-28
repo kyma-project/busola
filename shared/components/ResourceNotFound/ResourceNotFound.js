@@ -33,7 +33,7 @@ export const ResourceNotFound = ({
           </div>
         </section>
       </header>
-      <LayoutPanel className="fd-has-margin-large">
+      <LayoutPanel className="fd-margin--lg">
         <LayoutPanel.Body className="fd-has-text-align-center">
           <span className="fd-has-type-4">Such {resource} doesn't exists.</span>
         </LayoutPanel.Body>

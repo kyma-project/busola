@@ -19,19 +19,19 @@
   }
 
   @mixin white-bg {
-    background-color: var(--fd-color-background-2);
+    background-color: var(--sapBaseColor);
   }
 
   .open-btn {
     @include white-bg();
-    color: var(--fd-color-action-1);
+    color: var(--sapBrandColor);
 
     display: grid;
     align-content: center;
     grid-template-columns: 1fr;
     width: $btnWidth;
 
-    border-color: var(--fd-color-action-1);
+    border-color: var(--sapBrandColor);
     border-width: 1px 0 1px 1px;
     border-radius: 4px 0 0 4px;
     outline: none;
@@ -66,6 +66,10 @@
       padding: 1em;
       display: flex;
       justify-content: flex-end;
+
+      *:not(:last-child) {
+        margin-right: 4px;
+      }
     }
   }
 

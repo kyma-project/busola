@@ -20,8 +20,8 @@
 
     .icon {
       $verticalOffset: -4px;
-      background-color: var(--fd-color-neutral-2);
-      color: var(--fd-color-text-2);
+      background-color: var(--sapNeutralBackground);
+      color: var(--sapTextColor);
       margin-left: 10px;
       text-align: center;
       width: 28px;
@@ -34,6 +34,6 @@
   }
 
   &__description {
-    color: var(--fd-color-text-1);
+    color: var(--sapTextColor);
   }
 }

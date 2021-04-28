@@ -164,7 +164,7 @@ export default function RepositoryConfig({ lambda }) {
   }
 
   return (
-    <LayoutPanel className="fd-has-margin-m lambda-repository-config">
+    <LayoutPanel className="fd-margin--md lambda-repository-config">
       <LayoutPanel.Header className="fd-has-padding-xs">
         <LayoutPanel.Head title={REPOSITORY_CONFIG_PANEL.TITLE} />
         <LayoutPanel.Actions>

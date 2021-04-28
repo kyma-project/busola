@@ -1,9 +1,9 @@
 .page-header {
   .fd-layout-panel__title {
     .fd-title {
-      font-size: inherit;
+      font-size: var(--sapFontHeader3Size);
     }
-    font-size: 1.5rem;
+    // font-size: 1.5rem;
     word-break: break-word;
   }
 
@@ -15,13 +15,14 @@
   }
 
   .description {
-    font-size: 14px;
+    // font-size: 14px;
     margin-top: 4px;
   }
 }
 
 .header-wrapper {
   flex-grow: 1;
+  font-size: var(--sapFontSize);
 }
 .column-wrapper {
   display: grid;
@@ -39,7 +40,7 @@
   .title,
   .content {
     display: block;
-    font-size: 1rem;
+    // font-size: 1rem;
   }
 
   .image {
@@ -52,7 +53,7 @@
   }
 
   .title {
-    color: var(--fd-color-text-4);
+    color: var(--sapNeutralColor);
     margin-bottom: 4px;
   }
 }

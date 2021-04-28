@@ -6,7 +6,7 @@ import './Rules.scss';
 export const Rules = resource => (
   <div
     style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr' }}
-    className="fd-has-margin-m"
+    className="fd-margin--md"
   >
     {resource?.rules?.map((rule, index) => (
       <LayoutPanel key={`rule-${index}`}>

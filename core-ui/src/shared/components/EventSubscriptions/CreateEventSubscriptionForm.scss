@@ -4,11 +4,11 @@
   grid-gap: 1.5em;
 
   &--divider {
-    background-color: var(--fd-color-neutral-3);
+    background-color: var(--sapNeutralBackground);
   }
 
   .icon {
-    color: var(--fd-color-action-1, #0a6ed1);
+    color: var(--sapBrandColor, #0a6ed1);
     margin-right: 0.5em;
   }
 

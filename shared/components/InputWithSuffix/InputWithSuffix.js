@@ -8,7 +8,7 @@ export const InputWithSuffix = ({ suffix, required, _ref, ...props }) => {
     <div className="input-with-suffix">
       <input
         role="input"
-        className="fd-form__control"
+        className="fd-input"
         required={required}
         type="text"
         ref={_ref}

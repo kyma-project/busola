@@ -69,6 +69,7 @@
     padding: 12px 12px;
     box-sizing: border-box;
     position: relative;
+    overflow-wrap: break-word;
   }
 
   .notification-title {
@@ -147,8 +148,8 @@
       sans-serif
     );
     font-size: 12px;
-    background-color: var(--fd-color-shell-1);
-    color: var(--fd-color-text-5);
+    background-color: var(--sapShellColor);
+    color: var(--sapBaseColor);
     word-break: break-word;
     text-align: center;
 

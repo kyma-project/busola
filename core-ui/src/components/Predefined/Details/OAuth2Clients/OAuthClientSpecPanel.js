@@ -23,7 +23,7 @@ const Tokens = ({ tokens }) => (
 
 export default function OAuthClientSpecPanel({ spec }) {
   return (
-    <LayoutPanel className="fd-has-margin-m oauth-client-panel">
+    <LayoutPanel className="fd-margin--md oauth-client-panel">
       <LayoutPanel.Header>
         <LayoutPanel.Head title="Configuration" />
       </LayoutPanel.Header>
