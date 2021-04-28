@@ -50,7 +50,7 @@ function Logs({ params }) {
         title={params.containerName}
         breadcrumbItems={breadcrumbs}
       ></PageHeader>
-      <LayoutPanel className="fd-has-margin-m">
+      <LayoutPanel className="fd-margin--md">
         <LayoutPanel.Header>
           <LayoutPanel.Head title="Logs" />
         </LayoutPanel.Header>

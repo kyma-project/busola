@@ -55,7 +55,7 @@ export function HeaderLabelsEditor({
   const labelsTitle = (
     <>
       <span>Labels</span>
-      <span className="fd-has-display-inline-block fd-has-margin-left-tiny cursor-pointer">
+      <span className="fd-has-display-inline-block fd-margin-begin--tiny cursor-pointer">
         <Tooltip content="Edit labels" position="top">
           <Icon
             glyph="edit"

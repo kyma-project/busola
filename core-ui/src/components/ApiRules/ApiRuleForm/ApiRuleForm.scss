@@ -64,7 +64,7 @@
       &.is-pressed,
       &[aria-pressed='true'] {
         background-color: initial;
-        color: var(--fd-color-action-1, #0a6ed1);
+        color: var(--sapBrandColor, #0a6ed1);
       }
 
       &:active {
@@ -129,7 +129,7 @@
 
 .fd-form-item {
   .fd-form-label,
-  .fd-form__label {
+  .fd-form-label {
     line-height: 23px;
     height: 23px;
   }

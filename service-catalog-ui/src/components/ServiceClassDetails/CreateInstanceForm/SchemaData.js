@@ -68,6 +68,7 @@ const SchemaData = ({
       }
     >
       <JsonSchemaForm
+        id="schemaDataForm"
         schemaFormRef={schemaFormRef}
         schema={instanceCreateParameterSchema}
         additionalMetaSchemas={getAdditionalMetaSchemas(

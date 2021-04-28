@@ -98,8 +98,8 @@ export const AddonsConfigurations = ({
       ref={formElementRef}
       onSubmit={handleFormSubmit}
     >
-      <div className="fd-form__set">
-        <div className="fd-form__item">
+      <div className="fd-form-group">
+        <div className="fd-form-item">
           <K8sNameInput
             onChange={handleNameChanged}
             id={`${resourceType}-name`}
@@ -111,7 +111,7 @@ export const AddonsConfigurations = ({
         <FormLabel htmlFor={`${resourceType}-urls`}>URLs</FormLabel>
         <section className="addons-urls-editor">
           <input
-            className="fd-form__control"
+            className="fd-input"
             type="text"
             id={`${resourceType}-url-input`}
             placeholder="Enter URL"

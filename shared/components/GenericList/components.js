@@ -15,10 +15,20 @@ export const BodyFallback = ({ children }) => (
 export const HeaderRenderer = ({ actions, headerRenderer }) => {
   let emptyColumn = [];
   if (actions.length) {
-    emptyColumn = [<th key="actions-column" aria-label="actions-column"></th>];
+    emptyColumn = [
+      <th
+        key="actions-column"
+        aria-label="actions-column"
+        className="fd-table__cell"
+      ></th>,
+    ];
   }
   return [
-    headerRenderer().map((h, index) => <th key={h || index}>{h}</th>),
+    headerRenderer().map((h, index) => (
+      <th className="fd-table__cell" scope="col" key={h || index}>
+        {h}
+      </th>
+    )),
     ...emptyColumn,
   ];
 };
@@ -56,9 +66,13 @@ const DefaultRowRenderer = ({
   actionsStandaloneItems,
   compact,
 }) => {
-  const cells = rowRenderer.map((cell, id) => <td key={id}>{cell}</td>);
+  const cells = rowRenderer.map((cell, id) => (
+    <td className="fd-table__cell" key={id}>
+      {cell}
+    </td>
+  ));
   const actionsCell = (
-    <td>
+    <td className="fd-table__cell">
       <ListActions
         actions={actions}
         entry={entry}
@@ -68,7 +82,7 @@ const DefaultRowRenderer = ({
     </td>
   );
   return (
-    <tr>
+    <tr className="fd-table__row">
       {cells}
       {!!actions.length && actionsCell}
     </tr>
@@ -112,7 +126,11 @@ const CollapsedRowRenderer = ({
   );
 
   let collapseRow = collapseContent && (
-    <tr role="row" className="collapse-content" data-testid="collapse-content">
+    <tr
+      role="row"
+      className="collapse-content fd-table__row"
+      data-testid="collapse-content"
+    >
       {collapseContent}
     </tr>
   );

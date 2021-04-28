@@ -1,12 +1,25 @@
+#createInstanceForm {
+  #plan {
+    margin-top: 0.25rem;
+  }
+}
+
+#schemaDataForm {
+  fieldset {
+    border: none;
+    padding: 0;
+  }
+}
+
 .grid-wrapper {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
   grid-gap: 16px;
 }
 
 .instance-schema-panel__separator {
   height: 1px;
-  background-color: var(--fd-dialog-border-color);
+  background-color: var(--sapPageFooter_BorderColor);
   margin: 16px -16px;
 }
 

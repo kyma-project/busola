@@ -109,7 +109,7 @@ export default function JwtDetails({ config, setConfig, handleFormChanged }) {
           glyph="delete"
           type="negative"
           typeAttr="button"
-          className="fd-has-margin-left-s"
+          className="fd-margin-begin--sm"
           aria-label={`remove-preset-${idx}`}
           id={`remove-preset-${idx}`}
           onClick={() => removePreset(idx)}

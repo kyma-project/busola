@@ -46,7 +46,7 @@
   .is-block {
     display: block;
     padding: 10px 0;
-    
+
     > .fd-panel__head {
       padding-bottom: 10px;
     }
@@ -98,6 +98,7 @@
     margin-top: 16px;
     background: #ffffff;
     border-radius: 4px;
-    box-shadow: 0 5px 20px 0 var(--fd-panel-box-shadow-color,var(--fd-color-neutral-2,#eeeeef))
+    box-shadow: 0 5px 20px 0
+      var(--fd-panel-box-shadow-color, var(--sapNeutralBackground, #eeeeef));
   }
 }

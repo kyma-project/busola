@@ -32,7 +32,7 @@ export const Pagination = ({
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center' }}>
-      <span className="fd-has-color-text-2">{itemsTotal} items</span>
+      <span className="fd-has-color-status-4">{itemsTotal} items</span>
 
       <Link
         isInteractable={currentPage !== 1}

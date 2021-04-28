@@ -71,7 +71,7 @@ export default function SecretData({ secret }) {
   };
 
   return (
-    <LayoutPanel className="fd-has-margin-m secret-panel">
+    <LayoutPanel className="fd-margin--md secret-panel">
       <LayoutPanel.Header>
         <LayoutPanel.Head title={'Data'} />
         <LayoutPanel.Actions>

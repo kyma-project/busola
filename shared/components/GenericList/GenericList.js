@@ -57,7 +57,7 @@ export const GenericList = ({
   }, [searchQuery, setFilteredEntries, entries]);
 
   const headerActions = (
-    <section className="generic-list__search">
+    <>
       {showSearchField && (
         <SearchInput
           entriesKind={entriesKind || title || ''}
@@ -71,7 +71,7 @@ export const GenericList = ({
         />
       )}
       {extraHeaderContent}
-    </section>
+    </>
   );
 
   const renderTableBody = () => {
@@ -126,11 +126,15 @@ export const GenericList = ({
     ));
   };
 
-  const tableClassNames = classnames('fd-table', { compact });
+  const tableClassNames = classnames(
+    'fd-table',
+    'fd-table--no-horizontal-borders',
+    { compact },
+  );
   const panelClassNames = classnames(
     'generic-list',
     {
-      'fd-has-margin-m': hasExternalMargin,
+      'fd-margin--md': hasExternalMargin,
     },
     className,
   );
@@ -138,7 +142,7 @@ export const GenericList = ({
   return (
     <LayoutPanel className={panelClassNames} data-testid={testid}>
       {showRootHeader && (
-        <LayoutPanel.Header className="fd-has-padding-xs">
+        <LayoutPanel.Header className="fd-has-padding-left-small fd-has-padding-right-small">
           <LayoutPanel.Head title={title} />
           <LayoutPanel.Actions>{headerActions}</LayoutPanel.Actions>
         </LayoutPanel.Header>
@@ -147,8 +151,8 @@ export const GenericList = ({
       <LayoutPanel.Body className="fd-has-padding-none">
         <table className={tableClassNames}>
           {showHeader && (
-            <thead>
-              <tr>
+            <thead className="fd-table__header">
+              <tr className="fd-table__row">
                 <HeaderRenderer
                   entries={entries}
                   actions={actions}
@@ -157,7 +161,7 @@ export const GenericList = ({
               </tr>
             </thead>
           )}
-          <tbody>{renderTableBody()}</tbody>
+          <tbody className="fd-table__body">{renderTableBody()}</tbody>
         </table>
       </LayoutPanel.Body>
       {!!pagination &&

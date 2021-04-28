@@ -36,7 +36,6 @@ export const K8sNameInput = ({
     </FormLabel>
     <input
       role="input"
-      className="fd-form__control"
       ref={_ref}
       type="text"
       id={id}
@@ -46,6 +45,7 @@ export const K8sNameInput = ({
       required={required}
       pattern={pattern}
       {...props}
+      className={'fd-input ' + (props?.className || '')}
     />
   </>
 );

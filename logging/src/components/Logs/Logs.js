@@ -132,7 +132,7 @@ const Logs = ({ readonlyLabels, isCompact, httpService }) => {
           <LogTable entries={logs.filter(filterHealthChecks)} />
         ) : (
             <article className="fd-container fd-container--centered">
-              <p className="fd-has-margin-large logs__no-filter">
+              <p className="fd-margin--lg logs__no-filter">
                 Add at least one label to the filter to see the logs.
               </p>
             </article>
