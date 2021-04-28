@@ -1,4 +1,4 @@
-export * from './backendModulesExist';
+export * from './crdsExist';
 export * from './constants';
 export * from './formatMessage';
 export * from './useConfigData';

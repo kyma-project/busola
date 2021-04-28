@@ -1,9 +1,9 @@
 export const BACKEND_MODULES = {
-  SERVICE_CATALOG: 'servicecatalog',
-  SERVICE_CATALOG_ADDONS: 'servicecatalogaddons',
-  APPLICATION: 'application',
+  SERVICE_CATALOG: 'servicecatalog.k8s.io',
+  SERVICE_CATALOG_ADDONS: 'servicecatalog.kyma-project.io',
+  APPLICATION: 'applicationconnector.kyma-project.io',
   EVENTING: 'eventing',
-  API_GATEWAY: 'apigateway',
+  API_GATEWAY: 'gateway.kyma-project.io',
   LOGGING: 'logging-loki',
   GRAFANA: 'grafana',
 };

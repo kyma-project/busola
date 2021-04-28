@@ -8,7 +8,7 @@ import {
 } from './static-navigation-model';
 import navigationPermissionChecker, {
   setInitValues,
-  backendModules,
+  crds,
 } from './permissions';
 
 import {
@@ -66,7 +66,7 @@ export function getNavigationData(authData) {
     fetchBusolaInitData(authData)
       .then(
         (res) => {
-          setInitValues(res.backendModules, res.selfSubjectRules || []);
+          setInitValues(res.crds, res.selfSubjectRules || []);
           return res;
         },
         (err) => {
@@ -102,7 +102,7 @@ export function getNavigationData(authData) {
             context: {
               authData,
               groups,
-              backendModules,
+              crds,
               bebEnabled,
               systemNamespaces,
               showSystemNamespaces:

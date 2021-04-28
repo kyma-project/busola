@@ -11,28 +11,21 @@ import ApiRules from './Tabs/Configuration/ApiRules/ApiRules';
 // import { useLogsView } from '../helpers/misc';
 
 import { LAMBDA_DETAILS } from 'components/Lambdas/constants';
-import {
-  BACKEND_MODULES,
-  backendModulesExist,
-} from 'components/Lambdas/helpers/misc';
+import { BACKEND_MODULES, crdsExist } from 'components/Lambdas/helpers/misc';
 
-export default function LambdaDetails({ lambda, backendModules = [] }) {
+export default function LambdaDetails({ lambda, crds = [] }) {
   const [bindingUsages, setBindingUsages] = useState([]);
   // useLogsView(lambda.UID, lambda.namespace);
 
-  const apiRules = backendModulesExist(backendModules, [
-    BACKEND_MODULES.API_GATEWAY,
-  ]) ? (
+  const apiRules = crdsExist(crds, [BACKEND_MODULES.API_GATEWAY]) ? (
     <ApiRules lambda={lambda} />
   ) : null;
 
-  const eventSubscriptions = backendModulesExist(backendModules, [
-    BACKEND_MODULES.EVENTING,
-  ]) ? (
+  const eventSubscriptions = crdsExist(crds, [BACKEND_MODULES.EVENTING]) ? (
     <EventSubscriptionsWrapper lambda={lambda} />
   ) : null;
 
-  const serviceBindings = backendModulesExist(backendModules, [
+  const serviceBindings = crdsExist(crds, [
     BACKEND_MODULES.SERVICE_CATALOG,
     BACKEND_MODULES.SERVICE_CATALOG_ADDONS,
   ]) ? (

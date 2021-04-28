@@ -1,25 +1,24 @@
 import rbacRulesMatched from './rbac-rules-matcher';
-import { config } from './../config';
 
 let selfSubjectRulesReview = [];
-export let backendModules = [];
+export let crds = [];
 
-export function setInitValues(_backendModules, _selfSubjectRulesReview) {
-  backendModules = _backendModules.map((bm) => bm.name);
+export function setInitValues(_crds, _selfSubjectRulesReview) {
+  crds = _crds.map((crd) => crd.name);
   selfSubjectRulesReview = _selfSubjectRulesReview;
 }
 
-function checkRequiredBackendModules(nodeToCheckPermissionsFor) {
+function checkRequiredCrds(nodeToCheckPermissionsFor) {
   let hasPermissions = true;
   if (
     nodeToCheckPermissionsFor.context &&
-    nodeToCheckPermissionsFor.context.requiredBackendModules &&
-    nodeToCheckPermissionsFor.context.requiredBackendModules.length > 0
+    nodeToCheckPermissionsFor.context.requiredCrds &&
+    nodeToCheckPermissionsFor.context.requiredCrds.length > 0
   ) {
-    if (backendModules && backendModules.length > 0) {
-      nodeToCheckPermissionsFor.context.requiredBackendModules.forEach(
+    if (crds && crds.length > 0) {
+      nodeToCheckPermissionsFor.context.requiredCrds.forEach(
         (module) => {
-          if (hasPermissions && backendModules.indexOf(module) === -1) {
+          if (hasPermissions && crds.indexOf(module) === -1) {
             hasPermissions = false;
           }
         }
@@ -42,6 +41,6 @@ export default function navigationPermissionChecker(nodeToCheckPermissionsFor) {
         nodeToCheckPermissionsFor.requiredPermissions,
         selfSubjectRulesReview
       )) &&
-    checkRequiredBackendModules(nodeToCheckPermissionsFor)
+    checkRequiredCrds(nodeToCheckPermissionsFor)
   );
 }
