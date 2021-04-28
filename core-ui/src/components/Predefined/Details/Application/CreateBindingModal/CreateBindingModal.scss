@@ -1,10 +1,14 @@
 .namespace-combobox {
-    .fd-popover {
-        width: 100%;
-    }
+  .fd-popover {
+    width: 100%;
+  }
 
-    &__list {
-        max-height: 35vh;
-        width: 366px;
-    }
+  &__list {
+    max-height: 35vh;
+    width: 366px;
+  }
+
+  input {
+    border: 1px solid var(--sapNeutralBackground) !important;
+  }
 }

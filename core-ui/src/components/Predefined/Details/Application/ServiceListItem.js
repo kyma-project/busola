@@ -31,7 +31,7 @@ export default function ServiceListItem({ service }) {
         </>
       }
     >
-      <span className="fd-has-color-text-4">{service.displayName}</span>
+      <span className="fd-has-color-status-4">{service.displayName}</span>
     </Tooltip>
   );
 }

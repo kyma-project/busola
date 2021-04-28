@@ -16,11 +16,11 @@ export const Labels = labels => {
   return separatedLabels.map((label, id) => (
     <span
       aria-label={label}
-      className="fd-token fd-token--readonly"
+      className="fd-token fd-token--readonly "
       key={id}
       style={{ marginBottom: '4px', marginRight: '4px' }}
     >
-      <span className="fd-token__text">{label}</span>
+      <span className="fd-token__text fd-has-font-size-small">{label}</span>
     </span>
   ));
 };

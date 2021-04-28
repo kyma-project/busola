@@ -67,7 +67,7 @@ export default function SelectDropdown({
           <Button
             glyph={icon}
             option="transparent"
-            className="fd-has-margin-right-tiny"
+            className="fd-margin-end--tiny"
             size="xs"
           >
             {!compact && currentLabel}

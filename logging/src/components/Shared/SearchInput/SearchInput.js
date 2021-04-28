@@ -18,7 +18,7 @@ export default function SearchInput({ compact }) {
   const [state, actions] = useContext(SearchParamsContext);
 
   return (
-    <section className="fd-has-margin-right-small">
+    <section className="fd-margin-end--sm">
       <span className="caption-muted search-input__caption">
         {!compact && (
           <>

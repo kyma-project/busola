@@ -29,7 +29,7 @@ export function BindableServicesList({
   }, [servicesList, allServices, availableServices, setServices]);
 
   const noServicesMessage = (
-    <p className="fd-has-color-text-4 fd-has-margin-top-s fd-has-margin-bottom-s">
+    <p className="fd-has-color-status-4 fd-margin-top--sm fd-margin-bottom--sm">
       This Application doesn't expose any Service or Events.
     </p>
   );
@@ -68,7 +68,7 @@ export function BindableServicesList({
 
   return (
     <>
-      <FormLabel required className="fd-has-margin-top-s">
+      <FormLabel required className="fd-margin-top--sm">
         Applications & Events
       </FormLabel>
       {servicesList?.length ? servicesForm : noServicesMessage}

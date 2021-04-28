@@ -25,7 +25,7 @@ export default function LogTable({ entries }) {
   };
 
   return (
-    <table className="fd-table fd-has-margin-regular">
+    <table className="fd-table fd-margin--md">
       <thead>
         <tr>
           <th className="caption-muted">Timestamp</th>

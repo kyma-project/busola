@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { FormItem, FormLabel, Icon, Link } from 'fundamental-react';
+import { FormItem, FormLabel, Icon, Link, FormSelect } from 'fundamental-react';
 import * as LuigiClient from '@luigi-project/client';
 
 import SchemaData from './SchemaData';
@@ -56,11 +56,11 @@ const getInstanceCreateParameterSchema = (plans, currentPlan) => {
 };
 
 const PlanColumnContent = ({ onPlanChange, dropdownRef, allPlans }) => (
-  <>
+  <FormItem>
     <FormLabel required htmlFor="plan">
       Plan
     </FormLabel>
-    <select
+    <FormSelect
       id="plan"
       aria-label="plan-selector"
       ref={dropdownRef}
@@ -71,8 +71,8 @@ const PlanColumnContent = ({ onPlanChange, dropdownRef, allPlans }) => (
           {getResourceDisplayName(p)}
         </option>
       ))}
-    </select>
-  </>
+    </FormSelect>
+  </FormItem>
 );
 
 PlanColumnContent.proTypes = {
@@ -222,18 +222,20 @@ export default function CreateInstanceForm({
     <>
       <form
         ref={formElementRef}
-        style={{ width: '47em' }}
+        // style={{ width: '47em' }}
         onChange={onChange}
         onLoad={onChange}
         onSubmit={handleFormSubmit}
         id="createInstanceForm"
       >
-        <FormItem>
-          <div className="grid-wrapper">
-            <div className="column">
-              <FormLabel htmlFor="instanceName">Name*</FormLabel>
+        <div className="grid-wrapper">
+          <div className="column">
+            <FormItem>
+              <FormLabel required htmlFor="instanceName">
+                Name
+              </FormLabel>
               <input
-                className="fd-form__control"
+                className="fd-input"
                 ref={formValues.name}
                 defaultValue={defaultName}
                 type="text"
@@ -244,16 +246,16 @@ export default function CreateInstanceForm({
                 pattern="^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$"
                 autoComplete="off"
               />
-            </div>
-            <div className="column">
-              <PlanColumnContent
-                onPlanChange={handlePlanChange}
-                dropdownRef={formValues.plan}
-                allPlans={plans}
-              />
-            </div>
+            </FormItem>
           </div>
-        </FormItem>
+          <div className="column">
+            <PlanColumnContent
+              onPlanChange={handlePlanChange}
+              dropdownRef={formValues.plan}
+              allPlans={plans}
+            />
+          </div>
+        </div>
       </form>
       <div className="instance-schema-panel__separator" />
       {instanceCreateParameterSchemaExists && (
@@ -278,10 +280,10 @@ export default function CreateInstanceForm({
 
       {!instanceCreateParameterSchemaExists && (
         <>
-          <div className="fd-has-margin-top-s fd-has-margin-bottom-tiny instance-schema-panel">
+          <div className="fd-margin-top--sm fd-margin-bottom--tiny instance-schema-panel">
             <div>
               <Link
-                className="link fd-has-margin-right-tiny clear-underline"
+                className="link fd-margin-end--tiny clear-underline"
                 onClick={() =>
                   setCustomParametersProvided(!customParametersProvided)
                 }

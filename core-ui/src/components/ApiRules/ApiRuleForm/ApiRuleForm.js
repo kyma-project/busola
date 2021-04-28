@@ -225,7 +225,7 @@ export default function ApiRuleForm({
           onChange={e => handleFormChanged(e)}
           ref={formRef}
         >
-          <LayoutPanel className="fd-has-margin-bottom-small">
+          <LayoutPanel className="fd-margin-bottom--sm">
             <LayoutPanel.Header>
               <LayoutPanel.Head title="General settings" />
             </LayoutPanel.Header>

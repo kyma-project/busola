@@ -4,21 +4,28 @@ import './Tab.scss';
 
 export const Tab = ({ status, title, onClick, tabIndex, id, isActive }) => {
   return (
-    <div className="fd-tabs__item" key={tabIndex}>
-      <div
-        className="fd-tabs__link fd-tabs__link--flex"
-        onClick={event => {
-          event.preventDefault();
-          onClick(tabIndex);
-        }}
+    <li
+      role="tab"
+      className="fd-tabs__item"
+      key={tabIndex}
+      aria-controls={'tab' + tabIndex}
+      onClick={event => {
+        event.preventDefault();
+        onClick(tabIndex);
+      }}
+    >
+      <a
+        className="fd-tabs__link"
+        href={'#tab' + tabIndex}
         aria-selected={isActive}
-        role="tab"
         data-e2e-id={id}
       >
-        {title}
-        {status}
-      </div>
-    </div>
+        <span className="fd-tabs__tag">
+          {title}
+          {status}
+        </span>
+      </a>
+    </li>
   );
 };
 

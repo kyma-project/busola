@@ -15,7 +15,7 @@ export default function ResultOptionsDropdown() {
 
   const PopoverContent = () => (
     <FormFieldset id="result-options">
-      <FormItem className="fd-has-margin-small">
+      <FormItem className="fd-margin--sm">
         <FormInput
           type="checkbox"
           id="health-checks"
@@ -23,7 +23,7 @@ export default function ResultOptionsDropdown() {
           onChange={e => actions.setShowHealthChecks(e.target.checked)}
         />
         <FormLabel
-          className="caption-muted fd-has-margin-left-tiny"
+          className="caption-muted fd-margin-begin--tiny"
           htmlFor="health-checks"
         >
           health checks
@@ -40,7 +40,7 @@ export default function ResultOptionsDropdown() {
           <Button
             glyph="action-settings"
             option="transparent"
-            className="fd-has-margin-right-tiny"
+            className="fd-margin-end--tiny"
             size="xs"
           ></Button>
         }

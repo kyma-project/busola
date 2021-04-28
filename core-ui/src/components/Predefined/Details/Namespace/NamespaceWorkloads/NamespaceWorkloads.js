@@ -56,7 +56,7 @@ const PodsCircle = ({ namespace }) => {
       loading={loading}
       error={error}
       title="Pods"
-      color="var(--fd-color-accent-6)"
+      color="var(--sapIndicationColor_5)"
     />
   );
 };
@@ -74,7 +74,7 @@ const DeploymentsCircle = ({ namespace }) => {
       loading={loading}
       error={error}
       title="Deployments"
-      color="var(--fd-color-accent-5)"
+      color="var(--sapIndicationColor_6)"
     />
   );
 };
@@ -85,7 +85,7 @@ export function NamespaceWorkloads({ namespace }) {
       <LayoutPanel.Header>
         <Icon
           size="m"
-          className="fd-has-margin-right-small"
+          className="fd-margin-end--sm"
           glyph="stethoscope"
           ariaLabel="Health icon"
         />

@@ -208,7 +208,7 @@ export default function ResourcesManagement({ lambda }) {
   }
 
   return (
-    <LayoutPanel className="fd-has-margin-m lambda-resources-management">
+    <LayoutPanel className="fd-margin--md lambda-resources-management">
       <form onSubmit={handleSubmit(onSubmit)}>
         <LayoutPanel.Header className="fd-has-padding-xs">
           <LayoutPanel.Head title={RESOURCES_MANAGEMENT_PANEL.TITLE} />

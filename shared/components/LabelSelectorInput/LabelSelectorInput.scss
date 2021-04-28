@@ -1,16 +1,16 @@
 .label-selector {
-  color: var(--fd-forms-color);
+  color: var(--sapField_TextColor);
   outline: 0;
 
   border-style: solid;
   border-width: 1px;
-  border-color: var(--fd-forms-border-color);
-  background-color: var(--fd-forms-background-color);
-  border-radius: 4px;
+  border-color: var(--sapField_BorderColor, #89919a);
+  background-color: var(--sapField_Background);
+  border-radius: var(--sapField_BorderCornerRadius, 0.125rem);
   transition: border-color 125ms;
 
   box-sizing: border-box;
-  min-height: var(--fd-forms-height);
+  min-height: var(--sapElement_Height);
   padding-left: 0px;
 
   display: flex;
@@ -19,19 +19,20 @@
 
   &:active,
   &:focus {
-    box-shadow: 0 0 0 1px var(--fd-color-action-focus);
+    box-shadow: 0 0 0 1px var(--sapField_Focus_BorderColor);
   }
 
   &.is-invalid {
     box-shadow: 0 0 0 1px #b00;
-    --fd-forms-border-color: var(--fd-color-negative);
+    --sapField_BorderColor: var(--sapNegativeColor);
     border-width: 2px;
   }
 
   input[type='text'] {
-    height: calc(var(--fd-forms-height) - 2px);
+    height: calc(var(--sapElement_Height) - 2px);
     width: auto;
     padding-left: 12px;
+    margin: 0;
 
     border: none;
     flex-grow: 1;
@@ -43,10 +44,10 @@
   }
 
   .fd-token.label-selector__label {
-    height: calc(var(--fd-forms-height) - 2 * 6px);
+    height: calc(var(--sapElement_Height) - 2 * 6px);
     margin: 4px 0;
     flex-shrink: 0;
-    border: 1px solid var(--fd-color-neutral-3);
+    border: 1px solid var(--sapNeutralBackground);
     margin-left: 4px;
     &:first-child {
       margin-left: 6px;
