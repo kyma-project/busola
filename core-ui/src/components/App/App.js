@@ -9,6 +9,7 @@ import EditApiRule from 'components/ApiRules/EditApiRule/EditApiRule';
 import { ContainersLogs } from 'components/Predefined/Details/Pod/ContainersLogs';
 import { ComponentForList, ComponentForDetails } from 'shared/getComponents';
 import { API_RULES_TITLE } from 'shared/constants';
+import { getResourceUrl } from 'shared/helpers';
 
 export default function App() {
   return (
@@ -76,10 +77,7 @@ function RoutedContainerDetails({ match }) {
 function RoutedResourcesList({ match }) {
   const queryParams = new URLSearchParams(window.location.search);
 
-  // replace for npx routing
-  const resourceUrl =
-    queryParams.get('resourceApiPath') +
-    window.location.pathname.toLocaleLowerCase().replace(/^\/core-ui/, '');
+  const resourceUrl = getResourceUrl();
 
   const params = {
     hasDetailsView: queryParams.get('hasDetailsView') === 'true',
@@ -104,10 +102,7 @@ function RoutedResourcesList({ match }) {
 function RoutedResourceDetails({ match }) {
   const queryParams = new URLSearchParams(window.location.search);
 
-  // replace for npx routing
-  const resourceUrl =
-    queryParams.get('resourceApiPath') +
-    window.location.pathname.toLocaleLowerCase().replace(/^\/core-ui/, '');
+  const resourceUrl = getResourceUrl();
 
   const decodedResourceUrl = decodeURIComponent(resourceUrl);
   const decodedResourceName = decodeURIComponent(match.params.resourceName);
