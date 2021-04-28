@@ -12,12 +12,6 @@ export const communication = {
         Luigi.featureToggles().unsetFeatureToggle('showSystemNamespaces');
       }
     },
-    'busola.showExperimentalViews': ({ showExperimentalViews }) => {
-      localStorage.setItem(
-        'busola.showExperimentalViews',
-        showExperimentalViews
-      );
-    },
     'busola.bebEnabled': ({ bebEnabled }) => {
       const params = getInitParams();
       saveInitParams({

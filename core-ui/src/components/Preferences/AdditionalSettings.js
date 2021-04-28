@@ -4,14 +4,12 @@ import { useMicrofrontendContext } from 'react-shared';
 import { LayoutPanel, Switch, Button } from 'fundamental-react';
 
 export default function AdditionalSettings() {
-  const [bebEnabled, setBebEnabled] = React.useState(
-    useMicrofrontendContext().bebEnabled,
-  );
+  const context = useMicrofrontendContext();
 
-  const updateApiUrl = () => {
+  const updateSettings = () => {
     LuigiClient.sendCustomMessage({
       id: 'busola.bebEnabled',
-      bebEnabled,
+      bebEnabled: context.bebEnabled,
     });
   };
 
@@ -20,7 +18,7 @@ export default function AdditionalSettings() {
       <LayoutPanel.Header>
         <LayoutPanel.Head title="Additional Settings" />
         <LayoutPanel.Actions>
-          <Button option="emphasized" onClick={updateApiUrl}>
+          <Button option="emphasized" onClick={updateSettings}>
             Update configuration
           </Button>
         </LayoutPanel.Actions>
@@ -33,8 +31,8 @@ export default function AdditionalSettings() {
           BEB integration enabled
           <Switch
             inputProps={{ 'aria-label': 'beb-enabled' }}
-            checked={bebEnabled}
-            onChange={() => setBebEnabled(!bebEnabled)}
+            checked={context.bebEnabled}
+            onChange={() => (context.bebEnabled = !context.bebEnabled)}
           />
         </div>
       </LayoutPanel.Body>
