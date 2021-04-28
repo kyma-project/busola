@@ -19,9 +19,6 @@ spec:
           image: eu.gcr.io/kyma-project/busola-core:PR-119
           imagePullPolicy: Always
           resources:
-            # limits:
-            #   cpu: 100m
-            #   memory: 21Mi
             requests:
               cpu: 100m
               memory: 21Mi

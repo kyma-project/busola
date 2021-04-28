@@ -6,6 +6,7 @@ import extractErrors from 'shared/errorExtractor';
 
 import { formatMessage } from 'components/Lambdas/helpers/misc';
 import { LAMBDAS_MESSAGES } from 'components/Lambdas/constants';
+import { getResourceUrl } from 'shared/helpers';
 
 export const UPDATE_TYPE = {
   GENERAL_CONFIGURATION: 'GENERAL_CONFIGURATION',
@@ -40,6 +41,8 @@ export const useUpdateLambda = ({
   }
 
   async function handleUpdateLambda(updatedData, userCallback = () => {}) {
+    const url = getResourceUrl();
+
     try {
       const newLambda = {
         ...lambda,
@@ -48,7 +51,7 @@ export const useUpdateLambda = ({
 
       const diff = createPatch(lambda, newLambda);
 
-      const response = await updateLambda(lambda.metadata.selfLink, diff);
+      const response = await updateLambda(url, diff);
 
       if (response.error) {
         handleError(response.error);
