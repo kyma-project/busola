@@ -1,6 +1,11 @@
 import React, { useRef, useEffect } from 'react';
 import { ControlledEditor, DiffEditor } from '@monaco-editor/react';
 
+import { monaco } from '@monaco-editor/react';
+
+// monaco editor - load from static files instead of from CDN
+monaco.config({ paths: { vs: '/vs' } });
+
 export default function Editor({
   id,
   language = 'javascript',
