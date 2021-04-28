@@ -19,4 +19,11 @@
     i {
         color: var(--sapButton_Critical_Background, #e9730c);
     }
+
+    .value-textarea {
+        resize: none;
+        height: 36px;
+        margin-top: 4px;
+        padding-top: 8px;
+    }
 }
