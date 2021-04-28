@@ -8,9 +8,9 @@ import { base64Decode } from 'shared/helpers';
 const SecretComponent = ({ name, value, showEncoded, isCollapsed }) => (
   <FormItem className="item-wrapper">
     <FormLabel>{name}</FormLabel>
-    <div className={isCollapsed ? 'show-more-expand' : 'show-more-collapse'}>
+    <pre className={isCollapsed ? 'show-more-expand' : 'show-more-collapse'}>
       {showEncoded ? value : base64Decode(value)}
-    </div>
+    </pre>
   </FormItem>
 );
 
