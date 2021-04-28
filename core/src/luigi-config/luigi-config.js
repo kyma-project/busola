@@ -4,10 +4,9 @@ import {
   getPreviousLocation,
 } from './navigation/navigation-helpers';
 import { communication } from './communication';
-import { settings } from './settings';
+import { createSettings } from './settings';
 import { createAuth } from './auth.js';
 import { saveInitParamsIfPresent } from './init-params';
-import { config } from './config';
 import { getInitParams } from './init-params';
 
 import {
@@ -35,7 +34,7 @@ export const NODE_PARAM_PREFIX = `~`;
       nodeParamPrefix: NODE_PARAM_PREFIX,
       skipRoutingForUrlPatterns: [/access_token=/, /id_token=/],
     },
-    settings,
+    settings: createSettings(params),
     lifecycleHooks: {
       luigiAfterInit: () => {
         if (params?.rawAuth) {
