@@ -6,7 +6,9 @@ import { LayoutPanel, Switch } from 'fundamental-react';
 export default function NamespaceSettings() {
   const initialShowSystemNamespaces = useShowSystemNamespaces();
   const { groups } = useMicrofrontendContext();
-  const [showSystemNamespaces, setShowSystemNamespaces] = React.useState();
+  const [showSystemNamespaces, setShowSystemNamespaces] = React.useState(
+    useShowSystemNamespaces(),
+  );
 
   React.useEffect(() => {
     setShowSystemNamespaces(initialShowSystemNamespaces);
