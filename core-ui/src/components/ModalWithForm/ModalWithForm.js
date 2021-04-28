@@ -191,7 +191,7 @@ ModalWithForm.propTypes = {
     text: PropTypes.string.isRequired,
     glyph: PropTypes.string,
     compact: PropTypes.bool,
-    option: PropTypes.oneOf(['emphasized', 'light']),
+    option: PropTypes.oneOf(['emphasized', 'transparent']),
   }),
   modalOpeningComponent: PropTypes.node,
   renderForm: PropTypes.func.isRequired,
