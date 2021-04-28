@@ -4,11 +4,6 @@ import { ModalWithForm } from 'react-shared';
 import { Button, LayoutPanel } from 'fundamental-react';
 import { EditConfigMapForm } from './EditConfigMapForm';
 
-import { monaco } from '@monaco-editor/react';
-
-// monaco editor - load from static files instead of from CDN
-monaco.config({ paths: { vs: '/vs' } });
-
 export const ConfigMapsDetails = DefaultRenderer => ({ ...otherParams }) => {
   const options = {
     readOnly: true,

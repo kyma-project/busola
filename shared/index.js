@@ -46,6 +46,7 @@ export * from './utils/helpers';
 export * from './utils/handleSubscriptionArrayEvent';
 export * from './utils/getComponentForResource';
 export * from './utils/randomNamesGenerator/randomNamesGenerator';
+export * from './utils/setupMonaco';
 export * from './components/GenericList/actionHandlers/simpleDelete';
 export * from './constants/constants';
 
@@ -54,7 +55,6 @@ export * from './components/ModalWithForm/ModalWithForm';
 import * as CustomPropTypes from './typechecking/CustomPropTypes';
 export { CustomPropTypes };
 
-import { monaco } from '@monaco-editor/react';
+import { setupMonaco } from './utils/setupMonaco';
 
-// monaco editor - load from static files instead of from CDN
-monaco.config({ paths: { vs: '/vs' } });
+setupMonaco();
