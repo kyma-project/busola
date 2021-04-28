@@ -66,10 +66,7 @@ export const RoleBindings = ({
       ref={formElementRef}
       onSubmit={handleFormSubmit}
     >
-      <FormRadioGroup
-        inline
-        onChange={e => setGroup(e.target.value !== 'user')}
-      >
+      <FormRadioGroup inline onChange={(_, item) => setGroup(item !== 'user')}>
         <FormRadioItem data="user" inputProps={{ defaultChecked: true }}>
           User
         </FormRadioItem>
