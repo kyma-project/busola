@@ -5,17 +5,13 @@ import { LayoutPanel, Switch } from 'fundamental-react';
 
 export default function NamespaceSettings() {
   const { groups } = useMicrofrontendContext();
-
-  const [showSystemNamespaces, setShowSystemNamespaces] = React.useState(
-    useShowSystemNamespaces(),
-  );
+  const showSystemNamespaces = useShowSystemNamespaces();
 
   const toggleVisibility = () => {
     LuigiClient.sendCustomMessage({
       id: 'busola.showSystemNamespaces',
       showSystemNamespaces: !showSystemNamespaces,
     });
-    setShowSystemNamespaces(!showSystemNamespaces);
   };
 
   const shouldShowNamespaceSettings = () => {
