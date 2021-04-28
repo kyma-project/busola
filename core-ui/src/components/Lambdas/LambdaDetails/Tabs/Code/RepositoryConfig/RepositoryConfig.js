@@ -132,7 +132,7 @@ export default function RepositoryConfig({ lambda }) {
     const button = (
       <Button
         glyph={isEditMode ? 'save' : 'edit'}
-        option={isEditMode ? 'emphasized' : 'light'}
+        option={isEditMode ? 'emphasized' : 'transparent'}
         typeAttr="submit"
         onClick={() => {
           if (isEditMode) {
@@ -173,7 +173,13 @@ export default function RepositoryConfig({ lambda }) {
         </LayoutPanel.Actions>
       </LayoutPanel.Header>
       <LayoutPanel.Body className="fd-has-padding-xs">
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr ' }}>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr ',
+            gridGap: '1rem',
+          }}
+        >
           <LayoutPanel className="has-box-shadow-none">
             <LayoutPanel.Header className="has-padding-none has-none-border-bottom">
               <LayoutPanel.Head

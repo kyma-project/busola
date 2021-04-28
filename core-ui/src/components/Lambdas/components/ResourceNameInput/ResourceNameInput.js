@@ -3,7 +3,7 @@ import React from 'react';
 import {
   FormItem,
   FormLabel,
-  FormMessage,
+  MessageStrip,
   InlineHelp,
 } from 'fundamental-react';
 import { K8sNameInput } from 'react-shared';
@@ -14,7 +14,7 @@ import './ResourceNameInput.scss';
 
 export function ResourceNameInput({ nameStatus, kind, ...otherProps }) {
   const validationMessage = nameStatus ? (
-    <FormMessage type="error">{nameStatus}</FormMessage>
+    <MessageStrip type="error">{nameStatus}</MessageStrip>
   ) : null;
 
   return (
