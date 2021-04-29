@@ -12,13 +12,7 @@ export const communication = {
         Luigi.featureToggles().unsetFeatureToggle('showSystemNamespaces');
       }
     },
-    'busola.showExperimentalViews': ({ showExperimentalViews }) => {
-      localStorage.setItem(
-        'busola.showExperimentalViews',
-        showExperimentalViews
-      );
-    },
-    'busola.bebEnabled': ({ bebEnabled }) => {
+    'busola.updateBebEnabled': ({ bebEnabled }) => {
       const params = getInitParams();
       saveInitParams({
         ...params,
@@ -27,7 +21,7 @@ export const communication = {
           bebEnabled,
         },
       });
-      location.reload();
+      updateContext({ bebEnabled });
     },
     'busola.updateClusterParams': (clusterParams) => {
       const params = getInitParams();
@@ -85,4 +79,10 @@ const convertToObject = (paramsString) => {
       if (key) result[key] = val;
     });
   return result;
+};
+
+const updateContext = async (newContext) => {
+  const navigation = await Luigi.getConfigValue('navigation.nodes');
+  navigation[0].context = { ...navigation[0].context, ...newContext };
+  Luigi.configChanged('navigation.nodes');
 };
