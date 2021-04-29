@@ -51,8 +51,7 @@ export function fetchBusolaInitData(auth) {
   const crdsUrl = `${config.backendApiUrl}/apis/apiextensions.k8s.io/v1/customresourcedefinitions`;
   const crdsQuery = failFastFetch(crdsUrl, auth)
     .then((res) => res.json())
-    .then((data) => ({ crds: data.items.map((bM) => bM.metadata) }))
-    .catch(() => ({ crds: [] }));
+    .then((data) => ({ crds: data.items.map((crd) => crd.metadata) }));
 
   const apiGroupsQuery = failFastFetch(config.backendApiUrl, auth)
     .then((res) => res.json())

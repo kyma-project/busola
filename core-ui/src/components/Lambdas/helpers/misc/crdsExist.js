@@ -4,7 +4,9 @@ export function crdsExist(existingCrds = [], crds = []) {
   }
 
   for (const crd of crds) {
-    const crdExists = existingCrds.some(ecrd => ecrd.includes(crd));
+    const crdExists = existingCrds.some(existingCrds =>
+      existingCrds.includes(crd),
+    );
     if (!crdExists) {
       return false;
     }
