@@ -1,11 +1,10 @@
 .input-with-suffix {
   display: grid;
-  grid-template-columns: auto min-content;
+  grid-template-columns: auto minmax(auto, min-content);
 
   input {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
-    min-width: 10em;
   }
 
   &__suffix {
@@ -21,5 +20,6 @@
     padding: 0 8px;
     white-space: nowrap;
     margin-top: 0.25rem;
+    overflow: hidden;
   }
 }
