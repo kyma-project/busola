@@ -155,6 +155,7 @@ function Resources({
   const rowRenderer = entry => [
     hasDetailsView ? (
       <Link
+        href="#"
         onClick={_ =>
           fixedPath
             ? navigateToFixedPathResourceDetails(
