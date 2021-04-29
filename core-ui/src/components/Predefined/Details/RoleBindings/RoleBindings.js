@@ -21,7 +21,11 @@ export const RoleBindings = resource => (
       </LayoutPanel>
     </div>
     <div
-      style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr' }}
+      style={{
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr 1fr 1fr',
+        gridGap: '1rem',
+      }}
       className="fd-margin--md"
     >
       {resource?.subjects?.map((subject, index) => (

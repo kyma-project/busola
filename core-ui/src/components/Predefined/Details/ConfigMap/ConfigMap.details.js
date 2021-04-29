@@ -38,7 +38,7 @@ export const ConfigMapsDetails = DefaultRenderer => ({ ...otherParams }) => {
         key="edit-config-map-modal"
         title="Update Config Map"
         modalOpeningComponent={
-          <Button className="fd-has-margin-right-tiny" option="transparent">
+          <Button className="fd-margin-end--tiny" option="transparent">
             Edit
           </Button>
         }

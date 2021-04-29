@@ -17,6 +17,8 @@
   align-items: center;
   flex-wrap: wrap;
 
+  margin-bottom: 0.25rem;
+
   &:active,
   &:focus {
     box-shadow: 0 0 0 1px var(--sapField_Focus_BorderColor);

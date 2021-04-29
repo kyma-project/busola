@@ -46,7 +46,7 @@ export function KeyValueForm({
   return (
     <section className="key-value-form">
       <span className="fd-has-color-text-4">{keyPatternInfo}</span>
-      <header className="fd-has-margin-top-s fd-has-margin-bottom-s">
+      <header className="fd-margin-top--sm fd-margin-bottom--sm">
         <Button
           className="add-entry"
           glyph="add"
@@ -70,7 +70,7 @@ export function KeyValueForm({
                 Key
                 {keyCounter[entry.key] > 1 && (
                   <Tooltip
-                    className="fd-has-margin-left-tiny"
+                    className="fd-margin-end--tiny"
                     position="right"
                     content="Duplicate key"
                   >

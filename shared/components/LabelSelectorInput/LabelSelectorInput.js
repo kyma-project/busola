@@ -24,7 +24,7 @@ export const Label = ({ text, onClick }) => (
 );
 
 export const NonRemovableLabel = ({ text }) => (
-  <Token readOnly className="label-selector__label">
+  <Token readOnly buttonLabel="" className="label-selector__label">
     {text}
   </Token>
 );

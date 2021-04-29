@@ -181,7 +181,7 @@ export default function ResourcesManagement({ lambda }) {
     const button = (
       <Button
         glyph={isEditMode ? 'save' : 'edit'}
-        option={isEditMode ? 'emphasized' : 'light'}
+        option={isEditMode ? 'emphasized' : 'transparent'}
         typeAttr="submit"
         onClick={() => setIsEditMode(prev => !prev)}
         disabled={isEditMode && !formState.isValid}

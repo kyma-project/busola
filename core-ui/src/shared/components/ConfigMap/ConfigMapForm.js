@@ -40,7 +40,7 @@ export function ConfigMapForm({
           <K8sNameInput
             onChange={e => setName(e.target.value)}
             kind="Config Map"
-            className="fd-has-margin-bottom-s"
+            className="fd-margin-bottom--sm"
             defaultValue={name}
             readOnly={readonlyName}
           />
