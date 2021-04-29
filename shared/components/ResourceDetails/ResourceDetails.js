@@ -127,7 +127,7 @@ function Resource({
 
       {resourceHeaderActions.map(resourceAction => resourceAction(resource))}
       <Button
-        className="fd-has-margin-right-tiny"
+        className="fd-margin-end--tiny"
         onClick={() => openYaml(resource)}
         option="emphasized"
       >

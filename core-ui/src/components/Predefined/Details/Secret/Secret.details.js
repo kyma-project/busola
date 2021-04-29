@@ -13,7 +13,7 @@ export const SecretsDetails = DefaultRenderer => ({ ...otherParams }) => {
         key="edit-secret-modal"
         title="Update secret"
         modalOpeningComponent={
-          <Button className="fd-has-margin-right-tiny" option="transparent">
+          <Button className="fd-margin-end--tiny" option="transparent">
             Edit
           </Button>
         }

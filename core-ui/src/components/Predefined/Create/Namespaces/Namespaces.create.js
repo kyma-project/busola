@@ -137,7 +137,7 @@ const ContainerLimitsCheckbox = ({ isCheckedRef, children }) => {
           Apply limits per container
           <Tooltip
             isInlineHelp
-            className="fd-has-margin-left-tiny"
+            className="fd-margin-end--tiny"
             content="
                   Define memory constraints for individual containers in your
                   namespace. Use plain value in bytes, or suffix

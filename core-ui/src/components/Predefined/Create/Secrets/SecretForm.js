@@ -54,7 +54,7 @@ export function SecretForm({
             defaultValue={name}
             onChange={e => setName(e.target.value)}
             kind="Secret"
-            className="fd-has-margin-bottom-s"
+            className="fd-margin-bottom--sm"
             readOnly={readonlyName}
           />
         </div>
@@ -66,7 +66,7 @@ export function SecretForm({
       </div>
       <LabelSelectorInput labels={labels} onChange={setLabels} />
       <LabelSelectorInput
-        className="fd-has-margin-top-s fd-has-margin-bottom-tiny"
+        className="fd-margin-top--sm fd-margin-bottom--tiny"
         labels={annotations}
         onChange={setAnnotations}
         type="Annotations"
