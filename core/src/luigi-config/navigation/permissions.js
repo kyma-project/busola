@@ -17,8 +17,8 @@ function checkRequiredCrds(nodeToCheckPermissionsFor) {
   ) {
     if (crds && crds.length > 0) {
       nodeToCheckPermissionsFor.context.requiredCrds.forEach(
-        (module) => {
-          if (hasPermissions && crds.indexOf(module) === -1) {
+        (requiredCrd) => {
+          if (hasPermissions && crds.indexOf(requiredCrd) === -1) {
             hasPermissions = false;
           }
         }
