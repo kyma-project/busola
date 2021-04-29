@@ -1,5 +1,4 @@
 import React from 'react';
-import LuigiClient from '@luigi-project/client';
 
 import LambdaDetails from './LambdaDetails';
 import { useConfigData } from 'components/Lambdas/helpers/misc/useConfigData';
@@ -13,8 +12,7 @@ export default function LambdaDetailsWrapper({ lambda }) {
   if (!lambda) {
     content = <>Entry not found</>;
   } else {
-    const crds = LuigiClient.getEventData().crds;
-    content = <LambdaDetails lambda={lambda} crds={crds} />;
+    content = <LambdaDetails lambda={lambda} />;
   }
 
   return <div className="lambda-details">{content}</div>;
