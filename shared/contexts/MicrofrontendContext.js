@@ -39,11 +39,6 @@ export function MicrofrontendContextProvider({ children }) {
   );
 }
 
-export function useModuleEnabled(module) {
-  const { crds } = useMicrofrontendContext();
-  return crds && crds.includes(module);
-}
-
 export function useMicrofrontendContext() {
   return useContext(MicrofrontendContext);
 }
