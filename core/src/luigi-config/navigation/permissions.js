@@ -16,16 +16,12 @@ function checkRequiredModules(nodeToCheckPermissionsFor) {
     nodeToCheckPermissionsFor.context.requiredModules.length > 0
   ) {
     if (crds && crds.length > 0) {
-      nodeToCheckPermissionsFor.context.requiredModules.forEach(
-        (module) => {
-          const moduleExists = crds.some(crd =>
-            crd.includes(module)
-          );
-          if (hasPermissions && !moduleExists) {
-            hasPermissions = false;
-          }
+      nodeToCheckPermissionsFor.context.requiredModules.forEach((module) => {
+        const moduleExists = crds.some((crd) => crd.includes(module));
+        if (hasPermissions && !moduleExists) {
+          hasPermissions = false;
         }
-      );
+      });
     } else {
       hasPermissions = false;
     }
@@ -44,6 +40,6 @@ export default function navigationPermissionChecker(nodeToCheckPermissionsFor) {
         nodeToCheckPermissionsFor.requiredPermissions,
         selfSubjectRulesReview
       )) &&
-   checkRequiredModules(nodeToCheckPermissionsFor)
+    checkRequiredModules(nodeToCheckPermissionsFor)
   );
 }

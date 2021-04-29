@@ -92,8 +92,11 @@ export function getNavigationData(authData) {
       // 'Finally' not supported by IE and FIREFOX (if 'finally' is needed, update your .babelrc)
       .then((res) => {
         const params = getInitParams();
-        const { disabledNavigationNodes = '', systemNamespaces = '', modules = {} } =
-          params?.config || {};
+        const {
+          disabledNavigationNodes = '',
+          systemNamespaces = '',
+          modules = {},
+        } = params?.config || {};
         const { bebEnabled = false } = params?.features || {};
         const nodes = [
           {
@@ -113,8 +116,8 @@ export function getNavigationData(authData) {
             children: function () {
               const staticNodes = getStaticRootNodes(
                 getChildrenNodesForNamespace,
-                res.apiGroups, 
-                modules,
+                res.apiGroups,
+                modules
               );
               hideDisabledNodes(disabledNavigationNodes, staticNodes, false);
               return staticNodes;
