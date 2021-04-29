@@ -113,7 +113,8 @@ export function getNavigationData(authData) {
             children: function () {
               const staticNodes = getStaticRootNodes(
                 getChildrenNodesForNamespace,
-                res.apiGroups
+                res.apiGroups, 
+                modules,
               );
               hideDisabledNodes(disabledNavigationNodes, staticNodes, false);
               return staticNodes;
@@ -149,8 +150,8 @@ async function getNamespaces() {
 }
 
 function getChildrenNodesForNamespace(apiGroups) {
-  const { disabledNavigationNodes } = getInitParams().config;
-  const staticNodes = getStaticChildrenNodesForNamespace(apiGroups);
+  const { disabledNavigationNodes, modules } = getInitParams().config;
+  const staticNodes = getStaticChildrenNodesForNamespace(apiGroups, modules);
 
   hideDisabledNodes(disabledNavigationNodes, staticNodes, true);
   return staticNodes;
