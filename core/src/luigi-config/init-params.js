@@ -1,5 +1,5 @@
 import createEncoder from 'json-url';
-import { defaultModules } from '../../constants.js';
+import { defaultModules } from './constants.js';
 
 const PARAMS_KEY = 'busola.init-params';
 const encoder = createEncoder('lzma');
