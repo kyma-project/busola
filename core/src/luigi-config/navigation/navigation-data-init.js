@@ -92,7 +92,7 @@ export function getNavigationData(authData) {
       // 'Finally' not supported by IE and FIREFOX (if 'finally' is needed, update your .babelrc)
       .then((res) => {
         const params = getInitParams();
-        const { disabledNavigationNodes = '', systemNamespaces = '' } =
+        const { disabledNavigationNodes = '', systemNamespaces = '', modules = {} } =
           params?.config || {};
         const { bebEnabled = false } = params?.features || {};
         const nodes = [
@@ -105,6 +105,7 @@ export function getNavigationData(authData) {
               crds,
               bebEnabled,
               systemNamespaces,
+              modules,
               showSystemNamespaces:
                 localStorage.getItem('busola.showSystemNamespaces') === 'true',
               cluster: params?.cluster || '',

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { TabGroup, Tab } from 'fundamental-react';
+import LuigiClient from '@luigi-project/client';
 
 import CodeTab from './Tabs/Code/CodeTab';
 import ResourceManagementTab from './Tabs/ResourceManagement/ResourceManagementTab';
@@ -11,23 +12,25 @@ import ApiRules from './Tabs/Configuration/ApiRules/ApiRules';
 // import { useLogsView } from '../helpers/misc';
 
 import { LAMBDA_DETAILS } from 'components/Lambdas/constants';
-import { CRDS, crdsExist } from 'components/Lambdas/helpers/misc';
+import { crdsExist } from 'components/Lambdas/helpers/misc';
 
 export default function LambdaDetails({ lambda, crds = [] }) {
   const [bindingUsages, setBindingUsages] = useState([]);
   // useLogsView(lambda.UID, lambda.namespace);
 
-  const apiRules = crdsExist(crds, [CRDS.API_GATEWAY]) ? (
+  const modulesList = LuigiClient.getContext().modules;
+
+  const apiRules = crdsExist(crds, [modulesList.API_GATEWAY]) ? (
     <ApiRules lambda={lambda} />
   ) : null;
 
-  const eventSubscriptions = crdsExist(crds, [CRDS.EVENTING]) ? (
+  const eventSubscriptions = crdsExist(crds, [modulesList.EVENTING]) ? (
     <EventSubscriptionsWrapper lambda={lambda} />
   ) : null;
 
   const serviceBindings = crdsExist(crds, [
-    CRDS.SERVICE_CATALOG,
-    CRDS.SERVICE_CATALOG_ADDONS,
+    modulesList.SERVICE_CATALOG,
+    modulesList.SERVICE_CATALOG_ADDONS,
   ]) ? (
     <ServiceBindingsWrapper
       lambda={lambda}

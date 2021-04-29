@@ -1,4 +1,5 @@
 import createEncoder from 'json-url';
+import { defaultModules } from '../../constants.js';
 
 const PARAMS_KEY = 'busola.init-params';
 const encoder = createEncoder('lzma');
@@ -25,11 +26,13 @@ export async function saveInitParamsIfPresent(location) {
     const systemNamespaces = createSystemNamespacesList(
       decoded.config?.systemNamespaces
     );
+    const modules = { ...defaultModules, ...decoded.config?.modules };
     const params = {
       ...decoded,
       config: {
         ...decoded.config,
         systemNamespaces,
+        modules,
       },
     };
     if (decoded.auth) {

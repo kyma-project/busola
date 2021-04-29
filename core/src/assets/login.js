@@ -1,3 +1,5 @@
+import { modules } from '../../constants.js';
+
 let cluster;
 
 function saveInitParams(params) {
@@ -7,6 +9,7 @@ function saveInitParams(params) {
       systemNamespaces: 'istio-system knative-eventing knative-serving kube-public kube-system kyma-backup kyma-installer kyma-integration kyma-system natss kube-node-lease kubernetes-dashboard serverless-system'.split(
         ' '
       ),
+      modules,
     },
     features: {
       bebEnabled: false,

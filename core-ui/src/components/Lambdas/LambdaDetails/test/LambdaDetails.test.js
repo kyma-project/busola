@@ -7,7 +7,6 @@
 //   lambdaMock,
 // } from 'components/Lambdas/helpers/testing';
 
-// import { CRDS } from 'components/Lambdas/helpers/misc';
 // import { LAMBDA_DETAILS } from 'components/Lambdas/constants';
 
 // import LambdaDetails from '../LambdaDetails';
@@ -41,7 +40,7 @@
 //       removeBackdrop: () => {},
 //     }),
 //     getEventData: () => ({
-//       crds: [CRDS.API_GATEWAY],
+//       crds: [],
 //     }),
 //   };
 // });
@@ -88,10 +87,7 @@ describe('LambdaDetails', () => {
   //         component: (
   //           <LambdaDetails
   //             lambda={lambdaMock}
-  //             crds={[
-  //               CRDS.APPLICATION,
-  //               CRDS.EVENTING,
-  //             ]}
+  //             crds={[]}
   //           />
   //         ),
   //         mocks: [subscriptionMock],
