@@ -12,7 +12,7 @@ import ApiRules from './Tabs/Configuration/ApiRules/ApiRules';
 // import { useLogsView } from '../helpers/misc';
 
 import { LAMBDA_DETAILS } from 'components/Lambdas/constants';
-import { crdsExist } from 'components/Lambdas/helpers/misc';
+import { modulesExist } from 'components/Lambdas/helpers/misc';
 
 export default function LambdaDetails({ lambda, crds = [] }) {
   const [bindingUsages, setBindingUsages] = useState([]);
@@ -20,15 +20,15 @@ export default function LambdaDetails({ lambda, crds = [] }) {
 
   const modulesList = LuigiClient.getContext().modules;
 
-  const apiRules = crdsExist(crds, [modulesList.API_GATEWAY]) ? (
+  const apiRules = modulesExist(crds, [modulesList.API_GATEWAY]) ? (
     <ApiRules lambda={lambda} />
   ) : null;
 
-  const eventSubscriptions = crdsExist(crds, [modulesList.EVENTING]) ? (
+  const eventSubscriptions = modulesExist(crds, [modulesList.EVENTING]) ? (
     <EventSubscriptionsWrapper lambda={lambda} />
   ) : null;
 
-  const serviceBindings = crdsExist(crds, [
+  const serviceBindings = modulesExist(crds, [
     modulesList.SERVICE_CATALOG,
     modulesList.SERVICE_CATALOG_ADDONS,
   ]) ? (

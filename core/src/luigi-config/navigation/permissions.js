@@ -8,17 +8,20 @@ export function setInitValues(_crds, _selfSubjectRulesReview) {
   selfSubjectRulesReview = _selfSubjectRulesReview;
 }
 
-function checkRequiredCrds(nodeToCheckPermissionsFor) {
+function checkRequiredModules(nodeToCheckPermissionsFor) {
   let hasPermissions = true;
   if (
     nodeToCheckPermissionsFor.context &&
-    nodeToCheckPermissionsFor.context.requiredCrds &&
-    nodeToCheckPermissionsFor.context.requiredCrds.length > 0
+    nodeToCheckPermissionsFor.context.requiredModules &&
+    nodeToCheckPermissionsFor.context.requiredModules.length > 0
   ) {
     if (crds && crds.length > 0) {
-      nodeToCheckPermissionsFor.context.requiredCrds.forEach(
-        (requiredCrd) => {
-          if (hasPermissions && crds.indexOf(requiredCrd) === -1) {
+      nodeToCheckPermissionsFor.context.requiredModules.forEach(
+        (module) => {
+          const moduleExists = crds.some(crd =>
+            crd.includes(module)
+          );
+          if (hasPermissions && !moduleExists) {
             hasPermissions = false;
           }
         }
@@ -41,6 +44,6 @@ export default function navigationPermissionChecker(nodeToCheckPermissionsFor) {
         nodeToCheckPermissionsFor.requiredPermissions,
         selfSubjectRulesReview
       )) &&
-    checkRequiredCrds(nodeToCheckPermissionsFor)
+   checkRequiredModules(nodeToCheckPermissionsFor)
   );
 }

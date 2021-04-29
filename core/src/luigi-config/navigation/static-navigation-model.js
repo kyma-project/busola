@@ -1,4 +1,5 @@
 import { config } from '../config';
+import { defaultModules } from '../../../constants.js';
 
 export const coreUIViewGroupName = '_core_ui_';
 export const catalogViewGroupName = '_catalog_';
@@ -51,6 +52,9 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
         }),
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
+      context: {
+        requiredModules: [defaultModules.EVENTING]
+      },
       children: [
         {
           pathSegment: 'details',
