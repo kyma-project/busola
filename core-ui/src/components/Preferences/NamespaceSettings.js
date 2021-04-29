@@ -4,11 +4,15 @@ import { useMicrofrontendContext, useShowSystemNamespaces } from 'react-shared';
 import { LayoutPanel, Switch } from 'fundamental-react';
 
 export default function NamespaceSettings() {
+  const initialShowSystemNamespaces = useShowSystemNamespaces();
   const { groups } = useMicrofrontendContext();
-
   const [showSystemNamespaces, setShowSystemNamespaces] = React.useState(
     useShowSystemNamespaces(),
   );
+
+  React.useEffect(() => {
+    setShowSystemNamespaces(initialShowSystemNamespaces);
+  }, [initialShowSystemNamespaces]);
 
   const toggleVisibility = () => {
     LuigiClient.sendCustomMessage({
