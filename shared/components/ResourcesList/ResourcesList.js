@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import jsyaml from 'js-yaml';
 import { Link, Button } from 'fundamental-react';
 import { createPatch } from 'rfc6902';
+
+import './ResourcesList.scss';
 import {
   YamlEditorProvider,
   GenericList,
@@ -155,7 +157,7 @@ function Resources({
   const rowRenderer = entry => [
     hasDetailsView ? (
       <Link
-        href="#"
+        className="link"
         onClick={_ =>
           fixedPath
             ? navigateToFixedPathResourceDetails(
