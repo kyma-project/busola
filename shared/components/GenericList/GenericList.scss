@@ -93,16 +93,11 @@
     width: 100%;
   }
 
-  .fd-menu__list {
+  .fd-menu {
     max-height: 50vh;
     overflow-y: scroll;
 
-    .fd-menu__item {
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .fd-menu__item--no-entries {
+    .no-entries {
       font-style: italic;
     }
   }
