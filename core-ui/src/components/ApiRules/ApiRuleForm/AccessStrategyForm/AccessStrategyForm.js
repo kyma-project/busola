@@ -45,7 +45,7 @@ export default function AccessStrategyForm({
       <div className="access-strategy access-strategy--form">
         <div className="content">
           <FormGroup>
-            <FormItem style={{ marginRight: '0.5rem', flexShrink: 1 }}>
+            <FormItem style={{ marginRight: '0.5rem' }}>
               <FormInput
                 placeholder="Enter the path"
                 type="text"
@@ -59,7 +59,7 @@ export default function AccessStrategyForm({
                 }
               />
             </FormItem>
-            <FormItem style={{ flexShrink: 0 }}>
+            <FormItem>
               <FormSelect
                 defaultValue={selectedType}
                 aria-label="Access strategy type"
@@ -181,6 +181,7 @@ function MethodsForm({ methods, setMethods, isRelevant }) {
             value={m}
             defaultChecked={methods.includes(m)}
             onChange={e => toggleMethod(m, e.target.checked)}
+            style={{ marginBottom: '0.5rem' }}
           >
             {m}
           </Checkbox>
