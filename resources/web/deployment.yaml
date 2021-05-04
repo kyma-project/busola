@@ -19,9 +19,6 @@ spec:
           image: eu.gcr.io/kyma-project/busola-core:PR-116
           imagePullPolicy: Always
           resources:
-            # limits:
-            #   cpu: 100m
-            #   memory: 21Mi
             requests:
               cpu: 100m
               memory: 21Mi
@@ -34,12 +31,9 @@ spec:
             - containerPort: 6080
             - containerPort: 8080
         - name: core-ui
-          image: eu.gcr.io/kyma-project/busola-core-ui:PR-127
+          image: eu.gcr.io/kyma-project/busola-core-ui:PR-130
           imagePullPolicy: Always
           resources:
-            # limits:
-            #   cpu: 100m
-            #   memory: 21Mi
             requests:
               cpu: 100m
               memory: 21Mi

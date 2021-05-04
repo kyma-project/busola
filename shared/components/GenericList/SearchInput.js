@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Menu } from 'fundamental-react';
 
 import 'core-js/es/array/flat-map';
 
@@ -35,23 +36,16 @@ export default function SearchInput({
 
     if (!suggestions.length) {
       return (
-        <li
-          key="no-entries"
-          className="fd-menu__item fd-menu__item--no-entries"
-        >
+        <Menu.Item className="no-entries">
           {MESSAGES.NO_SEARCH_RESULT}
-        </li>
+        </Menu.Item>
       );
     }
 
     return suggestions.map(suggestion => (
-      <li
-        onClick={() => handleQueryChange(suggestion)}
-        key={suggestion}
-        className="fd-menu__item"
-      >
+      <Menu.Item onClick={() => handleQueryChange(suggestion)} key={suggestion}>
         {suggestion}
-      </li>
+      </Menu.Item>
     ));
   };
 
@@ -129,11 +123,7 @@ export default function SearchInput({
                 className="fd-popover__body fd-popover__body--no-arrow"
                 aria-hidden={isSearchHidden}
               >
-                <nav className="fd-menu">
-                  <ul className="fd-menu__list">
-                    {renderSearchList(filteredEntries)}
-                  </ul>
-                </nav>
+                <Menu>{renderSearchList(filteredEntries)}</Menu>
               </div>
             )}
           </div>
