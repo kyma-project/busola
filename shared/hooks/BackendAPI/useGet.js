@@ -7,6 +7,7 @@ const useGetHook = processDataFn =>
   function(path, { pollingInterval, onDataReceived, skip } = {}) {
     const isHookMounted = React.useRef(true); // becomes 'false' after the hook is unmounted to avoid performing any async actions afterwards
     const lastAuthData = React.useRef(null);
+    const lastResourceVersion = React.useRef(null);
     const [data, setData] = React.useState(null);
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(null);
@@ -29,7 +30,7 @@ const useGetHook = processDataFn =>
         if (!isHookMounted.current) return;
         if (typeof onDataReceived === 'function') onDataReceived(payload.items);
         if (error) setError(null); // bring back the data and clear the error once the connection started working again
-        processDataFn(payload, currentData, setData);
+        processDataFn(payload, currentData, setData, lastResourceVersion);
       } catch (e) {
         processError(e);
       }
@@ -170,20 +171,18 @@ export const useGet = useGetHook(handleSingleDataReceived);
 export const useGetStream = useGetStreamHook();
 
 function handleListDataReceived(filter) {
-  return (newData, oldData, setDataFn) => {
+  return (newData, oldData, setDataFn, lastResourceVersionRef) => {
     if (filter) {
       newData.items = newData.items.filter(filter);
     }
+
     if (
-      !oldData || // current data is empty and we received some. There's no doubdt we should update.
-      oldData.length !== newData.items.length || // current and received items are different length. We need to update.
-      !newData.items.every(
-        (newItem, index) =>
-          newItem.metadata.resourceVersion ===
-          oldData[index].metadata.resourceVersion,
-      ) // current and received items are the same length but the items might have changed. Compare its resourceVersion to check it.
-    )
+      !oldData ||
+      lastResourceVersionRef.current !== newData.metadata.resourceVersion
+    ) {
+      lastResourceVersionRef.current = newData.metadata.resourceVersion;
       setDataFn(newData.items);
+    }
   };
 }
 
