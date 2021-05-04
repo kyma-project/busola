@@ -61,7 +61,7 @@ export const ServiceClassDetailsContainer = ({ name }) => {
 };
 
 export const ClusterServiceClassDetailsContainer = ({ name }) => {
-  const RESOURCE_TYPE_LOWERCASE = `serviceClass`;
+  const RESOURCE_TYPE_LOWERCASE = `clusterServiceClass`;
   const { namespaceId } = useMicrofrontendContext();
 
   const { data: serviceClass, loading = true, error } = useGet(
@@ -84,9 +84,6 @@ export const ClusterServiceClassDetailsContainer = ({ name }) => {
 
   const servicePlansRequest = useGetList()(
     `/apis/servicecatalog.k8s.io/v1beta1/clusterserviceplans${labelSelector}`,
-    {
-      pollingInterval: 3500,
-    },
   );
   const servicePlans = servicePlansRequest.data?.sort(sortByDisplayName);
 
