@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { useMicrofrontendContext } from '../';
 
 function findByName(object, propertyName) {
   return object[
@@ -19,6 +20,7 @@ export const ComponentFor = ({
     nameForCreate,
     defaultRenderer = GenericRenderer,
   } = componentProps;
+  const microfrontendContext = useMicrofrontendContext();
 
   const predefined = findByName(PredefinedRenderersCollection, name);
   const Renderer = predefined
@@ -28,5 +30,11 @@ export const ComponentFor = ({
     ? findByName(PredefinedRenderersCollection, nameForCreate) || null
     : null;
 
-  return <Renderer createResourceForm={CreateFormRenderer} {...params} />;
+  return (
+    <Renderer
+      createResourceForm={CreateFormRenderer}
+      {...params}
+      microfrontendContext={microfrontendContext}
+    />
+  );
 };

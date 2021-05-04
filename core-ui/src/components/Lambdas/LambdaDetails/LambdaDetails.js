@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { TabGroup, Tab } from 'fundamental-react';
-import LuigiClient from '@luigi-project/client';
+
+import { modulesExist } from 'react-shared';
 
 import CodeTab from './Tabs/Code/CodeTab';
 import ResourceManagementTab from './Tabs/ResourceManagement/ResourceManagementTab';
-
 import EventSubscriptionsWrapper from './Tabs/Configuration/EventSubscriptions/EventSubscriptionsWrapper';
 import ServiceBindingsWrapper from './Tabs/Configuration/ServiceBindings/ServiceBindingsWrapper';
 import ApiRules from './Tabs/Configuration/ApiRules/ApiRules';
@@ -12,11 +12,10 @@ import ApiRules from './Tabs/Configuration/ApiRules/ApiRules';
 // import { useLogsView } from '../helpers/misc';
 
 import { LAMBDA_DETAILS } from 'components/Lambdas/constants';
-import { modulesExist } from 'components/Lambdas/helpers/misc';
 
-export default function LambdaDetails({ lambda }) {
+export default function LambdaDetails({ lambda, microfrontendContext }) {
   const [bindingUsages, setBindingUsages] = useState([]);
-  const { crds, modules } = LuigiClient.getEventData();
+  const { crds, modules } = microfrontendContext;
   // useLogsView(lambda.UID, lambda.namespace);
 
   const apiRules = modulesExist(crds, [modules.API_GATEWAY]) ? (

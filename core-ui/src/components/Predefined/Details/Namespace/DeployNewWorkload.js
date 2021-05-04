@@ -28,8 +28,8 @@ export default function DeployNewWorkload({ namespaceName }) {
 
   const lambdaModal = (
     <CreateLambdaModal
-      functionNames={functionNames}
-      repositories={repositories}
+      functionNames={functionNames || []}
+      repositories={repositories || []}
       serverDataError={serverDataError}
       serverDataLoading={serverDataLoading}
       modalOpeningComponent={<Menu.Item>Create Function</Menu.Item>}
