@@ -3,8 +3,8 @@
   "video": false,
   "defaultCommandTimeout": 30000,
 
+  "fixturesFolder": "fixtures",
   "integrationFolder": "tests",
   "pluginsFile": "plugins/index.js",
-  "supportFile": "support/index.js",
-  "fixturesFolder": false
+  "supportFile": "support/index.js"
 }
