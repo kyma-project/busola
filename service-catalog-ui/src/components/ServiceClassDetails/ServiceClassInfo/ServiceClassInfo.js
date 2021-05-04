@@ -80,15 +80,15 @@ const ServiceClassInfo = ({ serviceClass, labels, planSelector }) => {
       )}
 
       <PageHeader.Column
-        style={{ gridColumn: '1 / span 3' }}
+        style={{ gridColumn: '1 / span 4' }}
         title={serviceClassTileTitles.description}
       >
-        <p data-e2e-id="service-description">{serviceClass.spec.description}</p>
+        {serviceClass.spec.description}
       </PageHeader.Column>
 
       {tagsCombined && tagsCombined.length > 0 && (
         <PageHeader.Column
-          style={{ gridColumn: '4 / span 5' }}
+          style={{ gridColumn: '1 / span 4' }}
           title={serviceClassTileTitles.tags}
         >
           {tagsCombined.map(t => (

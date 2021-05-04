@@ -45,66 +45,55 @@ export default function AccessStrategyForm({
       <div className="access-strategy access-strategy--form">
         <div className="content">
           <FormGroup>
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr 1fr',
-                gridGap: '0.5rem',
-              }}
-            >
-              <FormItem>
-                <FormInput
-                  placeholder="Enter the path"
-                  type="text"
-                  value={strategy.path}
-                  required
-                  aria-label="Access strategy path"
-                  pattern="^[a-z0-9\/\(\)\?.!*\-]+"
-                  title="Path must consist of alphanumeric and the following characters: /.*?!-()"
-                  onChange={e =>
-                    setStrategy({ ...strategy, path: e.target.value })
+            <FormItem style={{ marginRight: '0.5rem' }}>
+              <FormInput
+                placeholder="Enter the path"
+                type="text"
+                value={strategy.path}
+                required
+                aria-label="Access strategy path"
+                pattern="^[a-z0-9\/\(\)\?.!*\-]+"
+                title="Path must consist of alphanumeric and the following characters: /.*?!-()"
+                onChange={e =>
+                  setStrategy({ ...strategy, path: e.target.value })
+                }
+              />
+            </FormItem>
+            <FormItem>
+              <FormSelect
+                defaultValue={selectedType}
+                aria-label="Access strategy type"
+                id="select-1"
+                onChange={e => {
+                  const newStrategy = {
+                    ...strategy,
+                    accessStrategies: [
+                      {
+                        ...strategy.accessStrategies[0],
+                        handler: e.target.value,
+                      },
+                    ],
+                  };
+                  // strategy type changed, reset current values
+                  if (e.target.value !== strategy.accessStrategies[0].handler) {
+                    newStrategy.accessStrategies[0].config = {};
                   }
-                />
-              </FormItem>
-              <FormItem>
-                <FormSelect
-                  style={{ marginTop: '0.25rem' }}
-                  defaultValue={selectedType}
-                  aria-label="Access strategy type"
-                  id="select-1"
-                  onChange={e => {
-                    const newStrategy = {
-                      ...strategy,
-                      accessStrategies: [
-                        {
-                          ...strategy.accessStrategies[0],
-                          handler: e.target.value,
-                        },
-                      ],
-                    };
-                    // strategy type changed, reset current values
-                    if (
-                      e.target.value !== strategy.accessStrategies[0].handler
-                    ) {
-                      newStrategy.accessStrategies[0].config = {};
-                    }
-                    setStrategy(newStrategy);
-                    handleFormChanged();
-                  }}
-                >
-                  {Object.values(accessStrategyTypes).map(ac => (
-                    <option key={ac.value} value={ac.value}>
-                      {ac.displayName}
-                    </option>
-                  ))}
-                </FormSelect>
-              </FormItem>
-              <MethodsForm
-                methods={strategy.methods}
-                setMethods={methods => setStrategy({ ...strategy, methods })}
-                isRelevant={usesMethods(selectedType)}
-              ></MethodsForm>
-            </div>
+                  setStrategy(newStrategy);
+                  handleFormChanged();
+                }}
+              >
+                {Object.values(accessStrategyTypes).map(ac => (
+                  <option key={ac.value} value={ac.value}>
+                    {ac.displayName}
+                  </option>
+                ))}
+              </FormSelect>
+            </FormItem>
+            <MethodsForm
+              methods={strategy.methods}
+              setMethods={methods => setStrategy({ ...strategy, methods })}
+              isRelevant={usesMethods(selectedType)}
+            ></MethodsForm>
           </FormGroup>
 
           <Details
@@ -192,6 +181,7 @@ function MethodsForm({ methods, setMethods, isRelevant }) {
             value={m}
             defaultChecked={methods.includes(m)}
             onChange={e => toggleMethod(m, e.target.checked)}
+            style={{ marginBottom: '0.5rem' }}
           >
             {m}
           </Checkbox>
