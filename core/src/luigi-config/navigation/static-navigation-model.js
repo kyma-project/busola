@@ -304,18 +304,19 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
       viewGroup: catalogViewGroupName,
       children: [
         {
-          pathSegment: 'details',
+          pathSegment: 'ServiceClass',
           children: [
             {
               pathSegment: ':serviceId',
               viewUrl:
-                config.serviceCatalogModuleUrl + '/catalog/details/:serviceId',
+                config.serviceCatalogModuleUrl +
+                '/catalog/ServiceClass/:serviceId',
               children: [
                 {
                   pathSegment: 'plans',
                   viewUrl:
                     config.serviceCatalogModuleUrl +
-                    '/catalog/details/:serviceId/plans',
+                    '/catalog/ServiceClass/:serviceId/plans',
                 },
                 {
                   pathSegment: 'plan',
@@ -324,7 +325,37 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
                       pathSegment: ':planId',
                       viewUrl:
                         config.serviceCatalogModuleUrl +
-                        '/catalog/details/:serviceId/plan/:planId',
+                        '/catalog/ServiceClass/:serviceId/plan/:planId',
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          pathSegment: 'ClusterServiceClass',
+          children: [
+            {
+              pathSegment: ':serviceId',
+              viewUrl:
+                config.serviceCatalogModuleUrl +
+                '/catalog/ClusterServiceClass/:serviceId',
+              children: [
+                {
+                  pathSegment: 'plans',
+                  viewUrl:
+                    config.serviceCatalogModuleUrl +
+                    '/catalog/ClusterServiceClass/:serviceId/plans',
+                },
+                {
+                  pathSegment: 'plan',
+                  children: [
+                    {
+                      pathSegment: ':planId',
+                      viewUrl:
+                        config.serviceCatalogModuleUrl +
+                        '/catalog/ClusterServiceClass/:serviceId/plan/:planId',
                     },
                   ],
                 },
