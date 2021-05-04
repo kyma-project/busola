@@ -20,13 +20,13 @@ Cypress.on('uncaught:exception', (err, runnable) => {
 context('Busola Smoke Tests', () => {
   before(() => {
     cy.visit(ADDRESS)
-      .get('#file-input')
+      .contains('Drag file here')
       .attachFile('kubeconfig.yaml', { subjectType: 'drag-n-drop' });
   });
 
   it('Renders navigation nodes', () => {
     ['Namespaces', 'Administration', 'Diagnostics'].forEach(node => {
-      cy.contains(node).should('exist');
+      cy.contains(node).should('be.visible');
     });
   });
 
