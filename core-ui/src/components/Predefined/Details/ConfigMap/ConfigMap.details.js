@@ -4,7 +4,7 @@ import { ModalWithForm } from 'react-shared';
 import { Button, LayoutPanel } from 'fundamental-react';
 import { EditConfigMapForm } from './EditConfigMapForm';
 
-export const ConfigMapsDetails = DefaultRenderer => ({ ...otherParams }) => {
+export const ConfigMapsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const options = {
     readOnly: true,
     minimap: {

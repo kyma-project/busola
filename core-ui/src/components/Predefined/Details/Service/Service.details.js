@@ -49,7 +49,7 @@ function ApiRules(service) {
   return <ServiceApiRules key="api-rules" service={service} />;
 }
 
-export const ServicesDetails = DefaultRenderer => ({ ...otherParams }) => {
+export const ServicesDetails = ({ DefaultRenderer, ...otherParams }) => {
   const customColumns = [
     {
       header: 'Cluster IP',

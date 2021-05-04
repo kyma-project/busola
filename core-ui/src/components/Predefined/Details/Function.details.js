@@ -6,8 +6,7 @@ import { prettyRuntime } from 'components/Lambdas/helpers/runtime';
 import { LAMBDA_DETAILS } from 'components/Lambdas/constants';
 import { LambdaStatusBadge } from 'components/Lambdas/LambdaStatusBadge/LambdaStatusBadge';
 
-export const FunctionsDetails = DefaultRenderer => ({ ...otherParams }) => {
-  const { microfrontendContext } = otherParams || {};
+export const FunctionsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const customColumns = [
     {
       header: 'Status',
@@ -24,13 +23,7 @@ export const FunctionsDetails = DefaultRenderer => ({ ...otherParams }) => {
   ];
 
   const Functions = (resource, resourceUrl) => {
-    return (
-      <LambdaDetailsWrapper
-        key="lambdaDetails"
-        lambda={resource}
-        microfrontendContext={microfrontendContext}
-      />
-    );
+    return <LambdaDetailsWrapper key="lambdaDetails" lambda={resource} />;
   };
   return (
     <DefaultRenderer

@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const SecretsList = DefaultRenderer => ({ ...otherParams }) => {
+export const SecretsList = ({ DefaultRenderer, ...otherParams }) => {
   const customColumns = [
     {
       header: 'Type',

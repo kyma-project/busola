@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { TabGroup, Tab } from 'fundamental-react';
 
-import { modulesExist } from 'react-shared';
+import { useMicrofrontendContext, modulesExist } from 'react-shared';
 
 import CodeTab from './Tabs/Code/CodeTab';
 import ResourceManagementTab from './Tabs/ResourceManagement/ResourceManagementTab';
@@ -13,8 +13,9 @@ import ApiRules from './Tabs/Configuration/ApiRules/ApiRules';
 
 import { LAMBDA_DETAILS } from 'components/Lambdas/constants';
 
-export default function LambdaDetails({ lambda, microfrontendContext }) {
+export default function LambdaDetails({ lambda }) {
   const [bindingUsages, setBindingUsages] = useState([]);
+  const microfrontendContext = useMicrofrontendContext();
   const { crds, modules } = microfrontendContext;
   // useLogsView(lambda.UID, lambda.namespace);
 

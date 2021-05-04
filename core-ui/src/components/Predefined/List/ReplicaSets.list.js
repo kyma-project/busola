@@ -21,7 +21,7 @@ const getStatusType = replicaSet => {
   return isStatusOk(replicaSet) ? 'success' : 'error';
 };
 
-export const ReplicaSetsList = DefaultRenderer => ({ ...otherParams }) => {
+export const ReplicaSetsList = ({ DefaultRenderer, ...otherParams }) => {
   const customColumns = [
     {
       header: 'Images',

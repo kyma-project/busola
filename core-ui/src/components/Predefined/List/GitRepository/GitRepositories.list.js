@@ -4,7 +4,7 @@ import CreateNewRepository from './CreateNewRepository';
 import { StatusBadge } from 'react-shared';
 import { Link } from 'fundamental-react';
 
-export const GitRepositoriesList = DefaultRenderer => ({ ...otherParams }) => {
+export const GitRepositoriesList = ({ DefaultRenderer, ...otherParams }) => {
   const listActions = (
     <CreateNewRepository namespaceName={otherParams.resourceName} />
   );

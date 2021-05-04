@@ -26,7 +26,7 @@ function goToSecretDetails(resourceKind, name) {
     .navigate(`${preperedResourceKind}s/details/${name}`);
 }
 
-export const PodsDetails = DefaultRenderer => ({ ...otherParams }) => {
+export const PodsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const customColumns = [
     {
       header: 'Pod IP',

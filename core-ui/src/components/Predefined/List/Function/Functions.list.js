@@ -7,7 +7,7 @@ import { prettyRuntime } from 'components/Lambdas/helpers/runtime';
 import { LambdaStatusBadge } from 'components/Lambdas/LambdaStatusBadge/LambdaStatusBadge';
 import CreateNewFunction from './CreateNewFunction';
 
-export const FunctionsList = DefaultRenderer => ({ ...otherParams }) => {
+export const FunctionsList = ({ DefaultRenderer, ...otherParams }) => {
   function goToGitRepositories() {
     LuigiClient.linkManager()
       .fromContext('namespaces')

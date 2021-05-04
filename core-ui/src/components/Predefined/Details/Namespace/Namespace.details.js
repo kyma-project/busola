@@ -1,5 +1,5 @@
 import React from 'react';
-import { modulesExist } from 'react-shared';
+import { useMicrofrontendContext, modulesExist } from 'react-shared';
 
 import { ComponentForList } from 'shared/getComponents';
 import DeployNewWorkload from './DeployNewWorkload';
@@ -8,8 +8,8 @@ import { NamespaceWorkloads } from './NamespaceWorkloads/NamespaceWorkloads';
 import { ResourcesUsage } from './ResourcesUsage';
 import './Namespace.details.scss';
 
-export const NamespacesDetails = DefaultRenderer => ({ ...otherParams }) => {
-  const { microfrontendContext } = otherParams || {};
+export const NamespacesDetails = ({ DefaultRenderer, ...otherParams }) => {
+  const microfrontendContext = useMicrofrontendContext();
   const { crds, modules } = microfrontendContext;
   const limitRangesParams = {
     hasDetailsView: false,

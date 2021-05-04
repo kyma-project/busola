@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const RoleBindingsList = DefaultRenderer => ({ ...otherParams }) => {
+export const RoleBindingsList = ({ DefaultRenderer, ...otherParams }) => {
   const customColumns = [
     {
       header: 'Role Name',
@@ -11,7 +11,8 @@ export const RoleBindingsList = DefaultRenderer => ({ ...otherParams }) => {
   return <DefaultRenderer customColumns={customColumns} {...otherParams} />;
 };
 
-export const ClusterRoleBindingsList = DefaultRenderer => ({
+export const ClusterRoleBindingsList = ({
+  DefaultRenderer,
   ...otherParams
 }) => {
   const customColumns = [
