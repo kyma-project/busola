@@ -6,7 +6,7 @@ import {
   useWindowTitle,
 } from 'react-shared';
 
-export const EventsList = _ => ({ ...otherParams }) => {
+export const EventsList = ({ ...otherParams }) => {
   return <Events namespace={otherParams.namespace} />;
 };
 
