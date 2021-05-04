@@ -52,7 +52,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
       context: {
-        requiredModules: [modules.EVENTING, modules.SERVERLESS],
+        requiredModules: [modules.SERVERLESS],
       },
       children: [
         {

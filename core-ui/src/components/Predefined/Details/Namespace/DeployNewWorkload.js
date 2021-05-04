@@ -1,10 +1,18 @@
 import React from 'react';
 import { Popover, Menu, Button } from 'fundamental-react';
-import { ModalWithForm, useGetList } from 'react-shared';
+import {
+  ModalWithForm,
+  useGetList,
+  useMicrofrontendContext,
+  modulesExist,
+} from 'react-shared';
 import CreateWorkloadForm from './CreateWorkloadForm/CreateWorkloadForm';
 import CreateLambdaModal from 'components/Lambdas/LambdasList/Lambdas/CreateLambdaModal';
 
 export default function DeployNewWorkload({ namespaceName }) {
+  const microfrontendContext = useMicrofrontendContext();
+  const { crds, modules } = microfrontendContext;
+
   const {
     data: functions,
     error: functionsError,
@@ -26,7 +34,7 @@ export default function DeployNewWorkload({ namespaceName }) {
   const serverDataError = functionsError || repositoriesError;
   const serverDataLoading = functionsLoading || repositoriesLoading;
 
-  const lambdaModal = (
+  const lambdaModal = modulesExist(crds, [modules.SERVERLESS]) ? (
     <CreateLambdaModal
       functionNames={functionNames || []}
       repositories={repositories || []}
@@ -34,7 +42,7 @@ export default function DeployNewWorkload({ namespaceName }) {
       serverDataLoading={serverDataLoading}
       modalOpeningComponent={<Menu.Item>Create Function</Menu.Item>}
     />
-  );
+  ) : null;
 
   const deploymentModal = (
     <ModalWithForm
