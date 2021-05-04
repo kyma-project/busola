@@ -35,9 +35,6 @@ export const ServiceClassDetailsContainer = ({ name }) => {
 
   const servicePlansRequest = useGetList()(
     `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${namespaceId}/serviceplans${labelSelector}`,
-    {
-      pollingInterval: 3500,
-    },
   );
   const servicePlans = servicePlansRequest.data?.sort(sortByDisplayName);
 
