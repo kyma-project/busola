@@ -1,7 +1,8 @@
 {
   "chromeWebSecurity": false,
   "video": false,
-  "defaultCommandTimeout": 30000,
+  "defaultCommandTimeout": 5000,
+  "responseTimeout": 4000,
 
   "fixturesFolder": "fixtures",
   "integrationFolder": "tests",

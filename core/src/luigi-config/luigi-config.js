@@ -24,6 +24,7 @@ export const NODE_PARAM_PREFIX = `~`;
   const params = getInitParams();
   if (!params) {
     window.location = '/login.html';
+    return;
   }
 
   const luigiConfig = {

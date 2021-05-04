@@ -22,26 +22,34 @@ context('Busola Smoke Tests', () => {
     cy.visit(ADDRESS)
       .contains('Drag file here')
       .attachFile('kubeconfig.yaml', { subjectType: 'drag-n-drop' });
+
+    cy.wait(5000); //it fixes error with loading namespaces
   });
 
   it('Renders navigation nodes', () => {
     ['Namespaces', 'Administration', 'Diagnostics'].forEach(node => {
-      cy.contains(node).should('be.visible');
+      cy.get('nav[data-testid=semiCollapsibleLeftNav]')
+        .contains(node)
+        .should('be.visible');
     });
   });
 
   it('Create a new namespace', () => {
-    cy.contains('Namespaces')
-      .click()
-      .getIframeBody()
+    cy.get('nav[data-testid=semiCollapsibleLeftNav]')
+      .contains('Namespaces')
+      .click();
+
+    cy.getIframeBody()
       .contains('Create Namespace')
       .should('be.visible')
-      .click()
-      .getIframeBody()
+      .click();
+
+    cy.getIframeBody()
       .contains('.fd-form-item', 'Name') //doesn't work without class name
       .should('be.visible')
-      .type(NAMESPACE_NAME)
-      .getIframeBody()
+      .type(NAMESPACE_NAME);
+
+    cy.getIframeBody()
       .contains('.fd-bar__element > button', 'Create') //doesn't work without selector
       .should('be.visible')
       .click()
@@ -86,7 +94,7 @@ context('Busola Smoke Tests', () => {
       .contains('Cluster Role Bindings')
       .click()
       .getIframeBody()
-      .contains('api-gateway-role')
+      .contains('cluster-admin')
       .should('be.visible');
   });
 
