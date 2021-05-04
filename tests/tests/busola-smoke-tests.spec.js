@@ -38,11 +38,11 @@ context('Busola Smoke Tests', () => {
       .should('be.visible')
       .click()
       .getIframeBody()
-      .contains('div .fd-form__item', 'Name')
+      .contains('.fd-form-item', 'Name') //doesn't work without class name
       .should('be.visible')
       .type(NAMESPACE_NAME)
       .getIframeBody()
-      .contains('.fd-bar__element > button', 'Create')
+      .contains('.fd-bar__element > button', 'Create') //doesn't work without selector
       .should('be.visible')
       .click()
       .getIframeBody()
