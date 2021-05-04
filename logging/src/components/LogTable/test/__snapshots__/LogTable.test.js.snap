@@ -2,7 +2,7 @@
 
 exports[`LogTable Renders custom title if name is provided 1`] = `
 <table
-  className="fd-table fd-has-margin-regular"
+  className="fd-table fd-margin--md"
 >
   <thead>
     <tr>
@@ -61,7 +61,7 @@ exports[`LogTable Renders custom title if name is provided 1`] = `
 
 exports[`LogTable Renders with minimal props 1`] = `
 <table
-  className="fd-table fd-has-margin-regular"
+  className="fd-table fd-margin--md"
 >
   <thead>
     <tr>

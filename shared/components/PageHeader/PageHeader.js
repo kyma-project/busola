@@ -10,7 +10,7 @@ const Column = ({ title, children, columnSpan, image, style = {} }) => {
     <div className="page-header__column" style={styleComputed}>
       {image && <div className="image">{image}</div>}
       <div className="content-container">
-        <div className="title fd-has-color-text-4 ">{title}</div>
+        <div className="title fd-has-color-status-4 ">{title}</div>
         <span className="content fd-has-color-text-1">{children}</span>
       </div>
     </div>
@@ -40,6 +40,7 @@ export const PageHeader = ({
   description,
   breadcrumbItems,
   actions,
+  isCatalog,
   children,
   columnWrapperClassName,
 }) => (
@@ -74,7 +75,9 @@ export const PageHeader = ({
       </section>
 
       {actions && (
-        <LayoutPanel.Actions className="fd-has-margin-left-s">
+        <LayoutPanel.Actions
+          className={`fd-margin-begin--sm ${isCatalog ? 'is-catalog' : ''}`}
+        >
           {actions}
         </LayoutPanel.Actions>
       )}
@@ -85,6 +88,7 @@ PageHeader.Column = Column;
 
 PageHeader.propTypes = {
   title: PropTypes.string.isRequired,
+  isCatalog: PropTypes.bool,
   description: PropTypes.node,
   breadcrumbItems: PropTypes.arrayOf(
     PropTypes.shape({

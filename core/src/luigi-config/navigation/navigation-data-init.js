@@ -27,14 +27,14 @@ const customLogoutFn = () => {
 
 export let resolveNavigationNodes;
 export let navigation = {
-  viewGroupSettings: {
-    [coreUIViewGroupName]: {
-      preloadUrl: config.coreUIModuleUrl + '/preload',
-    },
-    [catalogViewGroupName]: {
-      preloadUrl: config.serviceCatalogModuleUrl + '/preload',
-    },
-  },
+  // viewGroupSettings: {
+  //   [coreUIViewGroupName]: {
+  //     preloadUrl: config.coreUIModuleUrl + '/preload',
+  //   },
+  //   [catalogViewGroupName]: {
+  //     preloadUrl: config.serviceCatalogModuleUrl + '/preload',
+  //   },
+  // },
   preloadViewGroups: false,
   nodeAccessibilityResolver: navigationPermissionChecker,
   contextSwitcher: {
@@ -70,13 +70,13 @@ export function getNavigationData(authData) {
           return res;
         },
         (err) => {
-          if (err.code === 403) {
+          if (err.statusCode === 403) {
             clearAuthData();
             window.location = `/nopermissions.html?error=${err.originalMessage}`;
           } else {
             let errorNotification = 'Could not load initial configuration';
-            if (err.code && err.message)
-              errorNotification += `: ${err.message} (${err.code}${
+            if (err.statusCode && err.message)
+              errorNotification += `: ${err.message} (${err.statusCode}${
                 err.originalMessage && err.message !== err.originalMessage
                   ? ':' + err.originalMessage
                   : ''

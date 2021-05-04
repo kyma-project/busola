@@ -13,7 +13,7 @@ import { formatMessage } from 'components/Lambdas/helpers/misc';
 import { CONFIG } from 'components/Lambdas/config';
 import { RESOURCES_MANAGEMENT_PANEL } from 'components/Lambdas/constants';
 
-export const inputClassName = 'resource_input';
+export const inputClassName = 'fd-input resource_input';
 export const errorClassName = 'error_message';
 export const customPreset = 'custom';
 

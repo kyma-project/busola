@@ -57,7 +57,7 @@ function navigateToNamespaceList() {
 
 export function navigateToList(resourceType) {
   switch (resourceType) {
-    case 'Namespaces':
+    case 'namespaces':
       navigateToNamespaceList();
       break;
     default:

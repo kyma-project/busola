@@ -5,7 +5,7 @@ import './RoleBindings.scss';
 
 export const RoleBindings = resource => (
   <>
-    <div className="fd-has-margin-m">
+    <div className="fd-margin--md">
       <LayoutPanel key={`roleRef`}>
         <LayoutPanel.Header>
           <LayoutPanel.Head title="Role" />
@@ -21,8 +21,12 @@ export const RoleBindings = resource => (
       </LayoutPanel>
     </div>
     <div
-      style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr' }}
-      className="fd-has-margin-m"
+      style={{
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr 1fr 1fr',
+        gridGap: '1rem',
+      }}
+      className="fd-margin--md"
     >
       {resource?.subjects?.map((subject, index) => (
         <LayoutPanel key={`subject-${index}`}>

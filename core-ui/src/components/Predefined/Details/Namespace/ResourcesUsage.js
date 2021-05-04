@@ -16,6 +16,9 @@ const MEMORY_SUFFIX_POWER = {
 };
 
 function getBytes(memoryString) {
+  if (memoryString === '0') {
+    return 0;
+  }
   const suffixMatch = memoryString.match(/\D+$/);
 
   if (!suffixMatch?.length) {
@@ -70,7 +73,7 @@ const MemoryRequestsCircle = ({ resourceQuotas, isLoading }) => {
 
   return (
     <CircleProgress
-      color="var(--fd-color-accent-4)"
+      color="var(--sapIndicationColor_7)"
       value={totalUsage}
       valueText={bytesToHumanReadable(totalUsage)}
       max={totalRequests}
@@ -99,7 +102,7 @@ const MemoryLimitsCircle = ({ resourceQuotas, isLoading }) => {
 
   return (
     <CircleProgress
-      color="var(--fd-color-accent-3)"
+      color="var(--sapIndicationColor_8)"
       value={totalUsage}
       valueText={bytesToHumanReadable(totalUsage)}
       max={totalLimits}
@@ -123,7 +126,7 @@ export const ResourcesUsage = ({ namespace }) => {
       <LayoutPanel.Header>
         <Icon
           size="m"
-          className="fd-has-margin-right-small"
+          className="fd-margin-end--sm"
           glyph="it-host"
           ariaLabel="Resource icon"
         />

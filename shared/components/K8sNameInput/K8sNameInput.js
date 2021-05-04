@@ -18,6 +18,7 @@ export const K8sNameInput = ({
   showHelp = true,
   label = 'Name',
   required = true,
+  defaultValue,
   ...props
 }) => (
   <>
@@ -35,15 +36,16 @@ export const K8sNameInput = ({
     </FormLabel>
     <input
       role="input"
-      className="fd-form__control"
       ref={_ref}
       type="text"
       id={id}
+      defaultValue={defaultValue}
       placeholder={kind + ' name'}
       aria-required={required ? 'true' : 'false'}
       required={required}
       pattern={pattern}
       {...props}
+      className={'fd-input ' + (props?.className || '')}
     />
   </>
 );

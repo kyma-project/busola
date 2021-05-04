@@ -5,8 +5,13 @@ import './Rules.scss';
 
 export const Rules = resource => (
   <div
-    style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr' }}
-    className="fd-has-margin-m"
+    style={{
+      display: 'grid',
+      gridTemplateColumns:
+        'minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr)',
+      gridGap: '1rem',
+    }}
+    className="fd-margin--md"
   >
     {resource?.rules?.map((rule, index) => (
       <LayoutPanel key={`rule-${index}`}>

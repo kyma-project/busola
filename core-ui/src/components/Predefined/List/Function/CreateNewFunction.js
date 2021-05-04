@@ -27,11 +27,7 @@ export default function CreateNewFunction({ namespaceName }) {
   const serverDataLoading = functionsLoading || repositoriesLoading;
 
   const control = (
-    <Button
-      option="transparent"
-      className="fd-has-margin-right-tiny"
-      glyph="add"
-    >
+    <Button option="transparent" className="fd-margin-end--tiny" glyph="add">
       Create Function
     </Button>
   );

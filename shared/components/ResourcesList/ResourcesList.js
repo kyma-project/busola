@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import jsyaml from 'js-yaml';
 import { Link, Button } from 'fundamental-react';
 import { createPatch } from 'rfc6902';
+
+import './ResourcesList.scss';
 import {
   YamlEditorProvider,
   GenericList,
@@ -155,6 +157,7 @@ function Resources({
   const rowRenderer = entry => [
     hasDetailsView ? (
       <Link
+        className="link"
         onClick={_ =>
           fixedPath
             ? navigateToFixedPathResourceDetails(
@@ -193,7 +196,7 @@ function Resources({
         }
         confirmText="Create"
         id={`add-${resourceType}-modal`}
-        className="fd-dialog--xl-size"
+        className="fd-dialog--xl-size modal-width--m"
         renderForm={props => (
           <CreateResourceForm
             resourceType={resourceType}

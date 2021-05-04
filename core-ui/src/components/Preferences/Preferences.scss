@@ -6,4 +6,9 @@ main.preferences {
     strong {
         font-weight: 800;
     }
+
+    .fd-switch__label {
+        display: inline-grid; // use inline-grid for nice children centering
+        vertical-align: middle;
+    }
 }

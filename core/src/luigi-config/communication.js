@@ -1,5 +1,6 @@
 import { NODE_PARAM_PREFIX } from './luigi-config';
 import { saveInitParams, getInitParams } from './init-params';
+import { config } from './config';
 
 export const communication = {
   customMessagesListeners: {
@@ -11,13 +12,7 @@ export const communication = {
         Luigi.featureToggles().unsetFeatureToggle('showSystemNamespaces');
       }
     },
-    'busola.showExperimentalViews': ({ showExperimentalViews }) => {
-      localStorage.setItem(
-        'busola.showExperimentalViews',
-        showExperimentalViews
-      );
-    },
-    'busola.bebEnabled': ({ bebEnabled }) => {
+    'busola.updateBebEnabled': ({ bebEnabled }) => {
       const params = getInitParams();
       saveInitParams({
         ...params,
@@ -26,7 +21,7 @@ export const communication = {
           bebEnabled,
         },
       });
-      location.reload();
+      updateContext({ bebEnabled });
     },
     'busola.updateClusterParams': (clusterParams) => {
       const params = getInitParams();
@@ -38,9 +33,7 @@ export const communication = {
       Luigi.configChanged('navigation.nodes');
     },
     'busola.setWindowTitle': ({ title }) => {
-      const luigiConfig = Luigi.getConfig();
-      luigiConfig.settings.header.title = `Kyma - ${title}`;
-      Luigi.configChanged('settings.header');
+      Luigi.ux().setDocumentTitle(title);
     },
     'busola.silentNavigate': ({ newParams }) => {
       const { search: paramsString, pathname } = new URL(window.location.href);
@@ -65,20 +58,7 @@ export const communication = {
         pathname + newParamsString
       );
     },
-    'busola.showTokenExpirationWarning': () => {
-      const settings = {
-        header: 'Your session is about to expire in 2 minutes',
-        body: 'Save your work and refresh the page to extend your session.',
-        buttonConfirm: 'Refresh now',
-        buttonDismiss: 'Cancel',
-      };
-      Luigi.ux()
-        .showConfirmationModal(settings)
-        .then(() => {
-          location.reload();
-        })
-        .catch(() => {}); // cancel
-    },
+    'busola.reload': () => location.reload(),
   },
 };
 
@@ -99,4 +79,10 @@ const convertToObject = (paramsString) => {
       if (key) result[key] = val;
     });
   return result;
+};
+
+const updateContext = async (newContext) => {
+  const navigation = await Luigi.getConfigValue('navigation.nodes');
+  navigation[0].context = { ...navigation[0].context, ...newContext };
+  Luigi.configChanged('navigation.nodes');
 };

@@ -36,13 +36,19 @@ const DisableSidecarField = ({ onChange }) => {
   );
 };
 
-const MemoryQuotasCheckbox = ({ checkboxRef, children }) => {
+const MemoryQuotasCheckbox = ({ isCheckedRef, children }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  useEffect(
+    _ => {
+      isCheckedRef.current = isExpanded;
+    }, // eslint-disable-next-line
+    [isExpanded],
+  );
+
   return (
     <FormFieldset>
       <FormItem>
         <Checkbox
-          ref={checkboxRef}
           id="memory-quotas"
           onChange={e => setIsExpanded(e.target.checked)}
           aria-label="memory-quotas"
@@ -85,6 +91,7 @@ const SectionRow = ({
       pattern={pattern}
       ref={reference}
       required={required}
+      className="fd-input"
     />
   </>
 );
@@ -111,20 +118,26 @@ const MemoryQuotasSection = ({ limitsRef, requestsRef }) => (
   </FormFieldset>
 );
 
-const ContainerLimitsCheckbox = ({ checkboxRef, children }) => {
+const ContainerLimitsCheckbox = ({ isCheckedRef, children }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  useEffect(
+    _ => {
+      isCheckedRef.current = isExpanded;
+    }, // eslint-disable-next-line
+    [isExpanded],
+  );
+
   return (
     <FormFieldset>
       <FormItem>
         <Checkbox
-          ref={checkboxRef}
           id="container-limits"
           onChange={e => setIsExpanded(e.target.checked)}
         >
           Apply limits per container
           <Tooltip
             isInlineHelp
-            className="fd-has-margin-left-tiny"
+            className="fd-margin-end--tiny"
             content="
                   Define memory constraints for individual containers in your
                   namespace. Use plain value in bytes, or suffix
@@ -232,15 +245,13 @@ export const NamespacesCreate = ({
     e.preventDefault();
 
     const namespaceName = formValues.name.current.value;
-    const limits = formValues.containerLimits.enableContainerLimits.current
-      .checked && {
+    const limits = formValues.containerLimits.enableContainerLimits.current && {
       namespace: namespaceName,
       max: formValues.containerLimits.max.current.value,
       default: formValues.containerLimits.default.current.value,
       defaultRequest: formValues.containerLimits.defaultRequest.current.value,
     };
-    const quotas = formValues.memoryQuotas.enableMemoryQuotas.current
-      .checked && {
+    const quotas = formValues.memoryQuotas.enableMemoryQuotas.current && {
       namespace: namespaceName,
       limits: formValues.memoryQuotas.memoryLimit.current.value,
       requests: formValues.memoryQuotas.memoryRequests.current.value,
@@ -302,8 +313,8 @@ export const NamespacesCreate = ({
       ref={formElementRef}
       onSubmit={handleFormSubmit}
     >
-      <div className="fd-form__set">
-        <div className="fd-form__item">
+      <div className="fd-form-group">
+        <div className="fd-form-item">
           <K8sNameInput
             _ref={formValues.name}
             id="namespace-name"
@@ -322,12 +333,12 @@ export const NamespacesCreate = ({
           onChange={handleLabelsChanged}
         />
 
-        <div className="fd-form__item">
+        <div className="fd-form-item">
           <DisableSidecarField onChange={handleIstioChange} />
         </div>
-        <div className="fd-form__item">
+        <div className="fd-form-item">
           <MemoryQuotasCheckbox
-            checkboxRef={formValues.memoryQuotas.enableMemoryQuotas}
+            isCheckedRef={formValues.memoryQuotas.enableMemoryQuotas}
           >
             <MemoryQuotasSection
               limitsRef={formValues.memoryQuotas.memoryLimit}
@@ -336,7 +347,7 @@ export const NamespacesCreate = ({
           </MemoryQuotasCheckbox>
 
           <ContainerLimitsCheckbox
-            checkboxRef={formValues.containerLimits.enableContainerLimits}
+            isCheckedRef={formValues.containerLimits.enableContainerLimits}
           >
             <ContainerLimitSection
               maxRef={formValues.containerLimits.max}

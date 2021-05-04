@@ -61,8 +61,12 @@ export default function SearchInput({
         if (typeof entry === 'string') {
           if (entryMatchesSearch(entry)) return entry;
         }
-        return suggestionProperties.map(property => {
-          const entryValue = entry[property];
+        return suggestionProperties.map(properties => {
+          const propertiesArray = properties.split('.');
+          let entryValue = entry;
+          propertiesArray?.forEach(prop => {
+            entryValue = entryValue[prop];
+          });
           if (entryMatchesSearch(entryValue)) return entryValue;
         });
       })
@@ -118,7 +122,7 @@ export default function SearchInput({
               onFocus={() => setSearchHidden(false)}
               onChange={e => handleQueryChange(e.target.value)}
               onKeyPress={checkForEscapeKey}
-              className="fd-has-margin-right-tiny"
+              className="fd-margin-none fd-input"
             />
             {!!searchQuery && showSuggestion && (
               <div
@@ -138,7 +142,7 @@ export default function SearchInput({
       {showControl && (
         <button
           disabled={disabled}
-          className={`fd-button--light sap-icon--search ${
+          className={`icon fd-button--light sap-icon--search ${
             disabled ? 'is-disabled' : ''
           }`}
           onClick={openSearchList}

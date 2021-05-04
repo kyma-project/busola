@@ -3,13 +3,14 @@ import PropTypes from 'prop-types';
 
 import { Button, LayoutPanel, FormItem, FormLabel } from 'fundamental-react';
 import './SecretData.scss';
+import { base64Decode } from 'shared/helpers';
 
 const SecretComponent = ({ name, value, showEncoded, isCollapsed }) => (
   <FormItem className="item-wrapper">
     <FormLabel>{name}</FormLabel>
-    <div className={isCollapsed ? 'show-more-expand' : 'show-more-collapse'}>
-      {showEncoded ? value : atob(value)}
-    </div>
+    <pre className={isCollapsed ? 'show-more-expand' : 'show-more-collapse'}>
+      {showEncoded ? value : base64Decode(value)}
+    </pre>
   </FormItem>
 );
 
@@ -51,7 +52,7 @@ export default function SecretData({ secret }) {
       return <SecretWrapper>Secret not found.</SecretWrapper>;
     }
     if (!secret.data) {
-      return <SecretWrapper>Invalid secret.</SecretWrapper>;
+      return <SecretWrapper>Empty secret.</SecretWrapper>;
     }
 
     return (
@@ -70,7 +71,7 @@ export default function SecretData({ secret }) {
   };
 
   return (
-    <LayoutPanel className="fd-has-margin-m secret-panel">
+    <LayoutPanel className="fd-margin--md secret-panel">
       <LayoutPanel.Header>
         <LayoutPanel.Head title={'Data'} />
         <LayoutPanel.Actions>

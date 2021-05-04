@@ -1,7 +1,8 @@
 import React, { useState, useLayoutEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
-import { ErrorBoundary, Icon } from '@kyma-project/react-components';
+import { Icon } from 'fundamental-react';
+import ErrorBoundary from './ErrorBoundary';
 import { Bold, Flex, JsonSchemaForm } from './styled';
 const [draft04, draft06] = [
   require('ajv/lib/refs/json-schema-draft-04.json'),
@@ -67,6 +68,7 @@ const SchemaData = ({
       }
     >
       <JsonSchemaForm
+        id="schemaDataForm"
         schemaFormRef={schemaFormRef}
         schema={instanceCreateParameterSchema}
         additionalMetaSchemas={getAdditionalMetaSchemas(

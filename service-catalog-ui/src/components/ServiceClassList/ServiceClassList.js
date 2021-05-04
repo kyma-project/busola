@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import LuigiClient from '@luigi-project/client';
 
-import { instancesTabUtils } from '@kyma-project/react-components';
+import { instancesTabUtils } from 'helpers/instances-tab-utils';
 import {
   Tab,
   Tabs,
@@ -44,7 +44,7 @@ const handleTabChange = activeTabIndex => {
 
 const status = (data, id) => {
   return (
-    <StatusesList key={id}>
+    <StatusesList style={{ display: 'inline' }} key={id}>
       <StatusWrapper>
         <InfoLabel className="fd-has-font-size-large" numeric data-e2e-id={id}>
           {data}
@@ -52,6 +52,18 @@ const status = (data, id) => {
       </StatusWrapper>
     </StatusesList>
   );
+};
+
+const actions = (serviceClassesExists, searchQuery, searchFn) => {
+  return serviceClassesExists ? (
+    <FormInput
+      value={searchQuery}
+      type="text"
+      placeholder="Search"
+      onChange={e => searchFn(e.target.value)}
+      data-e2e-id="search"
+    />
+  ) : null;
 };
 
 export default function ServiceClassList() {
@@ -109,20 +121,13 @@ export default function ServiceClassList() {
     <>
       <PageHeader
         title={serviceClassConstants.title}
-        actions={
-          allServiceClasses.length && (
-            <FormInput
-              style={{ width: '20rem' }}
-              value={searchQuery}
-              type="text"
-              placeholder="Search"
-              onChange={e => setSearchQuery(e.target.value)}
-              data-e2e-id="search"
-            />
-          )
-        }
+        isCatalog={true}
+        actions={actions(
+          allServiceClasses.length > 0,
+          searchQuery,
+          setSearchQuery,
+        )}
       />
-
       <Tabs
         defaultActiveTabIndex={determineSelectedTab()}
         callback={handleTabChange}

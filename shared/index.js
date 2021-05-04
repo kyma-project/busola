@@ -33,6 +33,7 @@ export * from './components/SideDrawer/SideDrawer';
 export * from './components/ResourcesList/ResourcesList';
 export * from './components/ResourceDetails/ResourceDetails';
 export * from './components/ReadableCreationTimestamp/ReadableCreationTimestamp';
+export * from './components/KeyValueForm/KeyValueForm';
 
 export * from './forms';
 export * from './hooks';
@@ -42,10 +43,10 @@ export * from './contexts/NotificationContext';
 export * from './contexts/Microfrontend';
 export * from './contexts/YamlEditorContext';
 export * from './utils/helpers';
-export * from './utils/apollo';
 export * from './utils/handleSubscriptionArrayEvent';
 export * from './utils/getComponentForResource';
 export * from './utils/randomNamesGenerator/randomNamesGenerator';
+export * from './utils/setupMonaco';
 export * from './components/GenericList/actionHandlers/simpleDelete';
 export * from './constants/constants';
 
@@ -53,3 +54,8 @@ export * from './components/ModalWithForm/ModalWithForm';
 
 import * as CustomPropTypes from './typechecking/CustomPropTypes';
 export { CustomPropTypes };
+
+import { monaco } from '@monaco-editor/react';
+import { setupMonaco } from './utils/setupMonaco';
+
+setupMonaco(monaco);

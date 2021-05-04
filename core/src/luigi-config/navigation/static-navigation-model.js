@@ -1,6 +1,4 @@
 import { config } from '../config';
-import { getToken } from './navigation-helpers';
-import { saveAs } from 'file-saver';
 
 export const coreUIViewGroupName = '_core_ui_';
 export const catalogViewGroupName = '_catalog_';
@@ -599,12 +597,6 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
     },
-
-    //EXPERIMENTAL CATEGORY (NAMESPACE)
-    {
-      category: { label: 'Experimental', icon: 'lab', collapsible: true },
-      hideFromNav: true,
-    },
   ];
   filterNodesByAvailablePaths(nodes, apiGroups);
   return nodes;
@@ -869,12 +861,6 @@ export function getStaticRootNodes(namespaceChildrenNodesResolver, apiGroups) {
       viewUrl:
         config.logsModuleUrl +
         '/?function={nodeParams.function}&pod={nodeParams.pod}&namespace={nodeParams.namespace}&container_name={nodeParams.container_name}', // todo handle when logs are reintroduced
-      hideFromNav: true,
-    },
-
-    //CATEGORY EXPERIMENTAL (CLUSTER)
-    {
-      category: { label: 'Experimental', icon: 'lab', collapsible: true },
       hideFromNav: true,
     },
   ];

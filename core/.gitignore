@@ -41,4 +41,4 @@ testem.log
 Thumbs.db
 pkup.sh
 
-src/assets/luigi-core
+src/assets/libs

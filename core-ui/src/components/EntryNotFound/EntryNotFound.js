@@ -35,7 +35,7 @@ export default function EntryNotFound({ entryType, entryId, navigate }) {
           </section>
         </section>
       </header>
-      <LayoutPanel className="fd-has-padding-regular fd-has-margin-regular">
+      <LayoutPanel className="fd-has-padding-regular fd-margin--md">
         {entryType} "{entryId}" doesn't exist.
       </LayoutPanel>
     </>

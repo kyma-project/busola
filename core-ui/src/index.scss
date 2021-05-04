@@ -1,6 +1,8 @@
-@import '~fundamental-styles/dist/fundamental-styles.css';
+@import '~fundamental-styles/dist/margins.css';
+@import '~@sap-theming/theming-base-content/content/Base/baseLib/sap_fiori_3/css_variables.css';
+
 html {
-  font-size: 1em;
+  font-size: 16px;
 }
 
 body {
@@ -14,16 +16,12 @@ body {
   top: 0 !important;
 }
 
-.fd-overlay.fd-overlay--modal {
-  --fd-overlay-background-color: rgba(0, 0, 0, 0.6);
-}
-
 .cursor-pointer {
   cursor: pointer;
 }
 
 .link {
-  color: var(--fd-color-action-1);
+  color: var(--sapBrandColor);
   cursor: pointer;
 
   &.no-border {
@@ -53,7 +51,7 @@ body {
 }
 
 .fd-token {
-  font-size: 0.75rem;
+  font-size: 0.75rem !important;
   flex: none !important;
   padding: 0 8px !important;
 
@@ -66,8 +64,8 @@ body {
     }
 
     &:hover {
-      background-color: initial;
-      border-color: initial;
+      background-color: initial !important;
+      border-color: initial !important;
     }
   }
 
@@ -107,14 +105,15 @@ body {
   content: none; //remove double backdrop
 }
 
+.modal-width--m {
+  .fd-dialog__content {
+    width: 70vw;
+    min-width: unset;
+  }
+}
+
 .fd-dialog--xl-size {
   .modal-demo-bg {
-    min-width: 1036px;
-  }
-
-  .fd-dialog,
-  .fd-dialog__content,
-  .fd-dialog__body {
     min-width: 1036px;
   }
 
@@ -153,8 +152,12 @@ header.sticky {
   z-index: 1;
 }
 
-.fd-form__label[aria-required='true']::after {
+.fd-form-label[aria-required='true']::after {
   content: '';
+}
+
+.fd-form-item .fd-form-select {
+  margin-top: 0.25rem; // to align with other inputs
 }
 
 li {
@@ -191,22 +194,8 @@ li {
   }
 }
 
-.fd-badge {
-  &.fd-badge--filled {
-    &.fd-badge--success {
-      background-color: var(--fd-color-positive);
-      --fd-badge-color: var(--fd-color-neutral-1);
-    }
-  }
-}
-
 .fd-hidden {
   visibility: hidden !important;
-}
-
-.fd-checkbox:checked::before,
-input[type='checkbox']:checked::before {
-  border-color: transparent;
 }
 
 .no-dismiss-tokens {
@@ -225,4 +214,70 @@ input[type='checkbox']:checked::before {
 // override fd-styles for Safari
 input[type='checkbox'] {
   -webkit-appearance: checkbox !important;
+}
+
+@font-face {
+  font-family: '72';
+  src: url('~@sap-theming/theming-base-content/content/Base/baseLib/sap_base_fiori/fonts/72-Regular-full.woff')
+    format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: '72';
+  src: url('~@sap-theming/theming-base-content/content/Base/baseLib/sap_base_fiori/fonts/72-Bold-full.woff')
+    format('woff');
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: '72';
+  src: url('~@sap-theming/theming-base-content/content/Base/baseLib/sap_base_fiori/fonts/72-Light-full.woff')
+    format('woff');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'SAP-icons';
+  src: url('~@sap-theming/theming-base-content/content/Base/baseLib/sap_fiori_3/fonts/SAP-icons.woff')
+    format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'BusinessSuiteInAppSymbols';
+  src: url('~@sap-theming/theming-base-content/content/Base/baseLib/sap_fiori_3/fonts/BusinessSuiteInAppSymbols.woff')
+    format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'SAP-icons-TNT';
+  src: url('~@sap-theming/theming-base-content/content/Base/baseLib/sap_fiori_3/fonts/SAP-icons-TNT.woff')
+    format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.fd-popover__body--dropdown {
+  width: 100% !important;
+  max-height: 200px !important;
+  overflow-y: auto !important;
+  .fd-list--dropdown {
+    max-width: 100% !important;
+  }
+}
+
+.fd-switch__input {
+  position: absolute !important;
+}
+
+.modal-width--m {
+  .fd-dialog__content {
+    width: 70vw;
+    min-width: unset;
+  }
 }

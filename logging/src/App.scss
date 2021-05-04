@@ -1,14 +1,14 @@
 @import '~fundamental-styles/dist/fundamental-styles.css';
 
 .link-button {
-  color: var(--fd-color-action-1);
+  color: var(--sapBrandColor);
   cursor: pointer;
 }
 
 .caption-muted {
   font-size: 0.85714rem;
   font-weight: 400;
-  color: var(--fd-color-text-3);
+  color: var(--sapNeutralColor);
 }
 
 .cursor-pointer {
@@ -40,9 +40,9 @@
   }
 }
 // .fd-token[disabled] {
-//   color: var(--fd-color-text-1);
-//   background-color: var(--fd-color-neutral-2);
-//   border-color: var(--fd-color-neutral-4);
+//   color: var(--sapTextColor);
+//   background-color: var(--sapNeutralBackground);
+//   border-color: var(--sapNeutralBackground);
 
 //   &::after {
 //     cursor: unset;

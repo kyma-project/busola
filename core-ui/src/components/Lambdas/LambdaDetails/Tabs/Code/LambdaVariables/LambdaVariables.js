@@ -35,7 +35,7 @@ function VariableStatus({ validation }) {
         ariaLabel="Warning"
         glyph="message-warning"
         size="s"
-        className={`${statusClassName} fd-has-margin-left-tiny`}
+        className={`${statusClassName} fd-margin-begin--tiny`}
       />
     </div>
   );

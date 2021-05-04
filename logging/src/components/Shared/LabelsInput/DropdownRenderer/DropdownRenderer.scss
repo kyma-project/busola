@@ -5,12 +5,12 @@
   font-size: 1rem;
   line-height: 1.42857;
   font-weight: 400;
-  color: var(--fd-color-text-4);
+  color: var(--sapNeutralColor);
 }
 
 .fd-mega-menu__list.dimmed {
   .fd-mega-menu__link {
-    color: var(--fd-color-neutral-4);
+    color: var(--sapNeutralBackground);
   }
 }
 
@@ -34,7 +34,7 @@
     display: flex;
     align-content: normal;
     justify-content: space-between;
-    color: var(--fd-color-neutral-4);
+    color: var(--sapNeutralBackground);
     cursor: default;
     .sap-icon--m {
       margin-left: 5px;

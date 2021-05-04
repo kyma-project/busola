@@ -15,7 +15,7 @@
 
 .access-strategy--form {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
 }
 
 .access-strategy {
@@ -64,7 +64,7 @@
       &.is-pressed,
       &[aria-pressed='true'] {
         background-color: initial;
-        color: var(--fd-color-action-1, #0a6ed1);
+        color: var(--sapBrandColor, #0a6ed1);
       }
 
       &:active {
@@ -86,17 +86,39 @@
   }
 
   .inline-radio-group {
-    line-height: 2.4;
+    flex-wrap: wrap;
+    flex-shrink: 1;
     .fd-form-item {
       display: inline-block;
       vertical-align: middle;
-      margin-right: 16px;
+
       line-height: inherit;
       float: none;
+
+      .fd-checkbox {
+        display: none;
+      }
+      .fd-form-label {
+        margin-right: 0;
+      }
     }
   }
   input[type='text'][readonly] {
     border-bottom: none;
+  }
+
+  .content > .fd-form-group {
+    display: flex;
+    justify-content: space-between;
+
+    .fd-input,
+    .fd-form-select {
+      margin-top: 0;
+    }
+
+    .fd-fieldset {
+      flex-shrink: 2;
+    }
   }
 }
 
@@ -129,7 +151,7 @@
 
 .fd-form-item {
   .fd-form-label,
-  .fd-form__label {
+  .fd-form-label {
     line-height: 23px;
     height: 23px;
   }

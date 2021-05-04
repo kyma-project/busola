@@ -68,7 +68,13 @@ export default function JwtDetails({ config, setConfig, handleFormChanged }) {
   const idpList = jwks_urls.map((_, idx) => (
     <div className="preset-row" key={`preset-row-${idx}`}>
       <div className="preset-content">
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gridGap: '1rem',
+          }}
+        >
           <FormItem>
             <FormLabel htmlFor={`jwt-issuer-${idx}`} required>
               Issuer
@@ -109,7 +115,7 @@ export default function JwtDetails({ config, setConfig, handleFormChanged }) {
           glyph="delete"
           type="negative"
           typeAttr="button"
-          className="fd-has-margin-left-s"
+          className="fd-margin-begin--sm"
           aria-label={`remove-preset-${idx}`}
           id={`remove-preset-${idx}`}
           onClick={() => removePreset(idx)}
