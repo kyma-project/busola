@@ -17,21 +17,18 @@ const Cards = ({ items, serviceInstances }) => {
       item.spec.labels &&
       isStringValueEqualToTrue(item.spec.labels[DOCUMENTATION_PER_PLAN_LABEL]);
 
-    let path = `details/${item.metadata.name}`;
+    let path = `${item.kind}/${item.metadata.name}`;
 
     if (documentationPerPlan) {
       if (item.plans.length > 1) {
-        path = `details/${item.metadata.name}/plans`;
+        path = `${item.kind}/${item.metadata.name}/plans`;
       } else {
-        path = `details/${item.metadata.name}/plan/${item.plans[0].name}`;
+        path = `${item.kind}/${item.metadata.name}/plan/${item.plans[0].name}`;
       }
     }
 
     LuigiClient.linkManager()
       .fromClosestContext()
-      .withParams({
-        resourceType: item.kind,
-      })
       .navigate(path);
   };
 
