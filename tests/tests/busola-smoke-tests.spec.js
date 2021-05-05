@@ -9,7 +9,7 @@ const ADDRESS = config.localDev
 const random = Math.floor(
   Math.random() * 10 + Math.random() * 100 + Math.random() * 1000,
 );
-const NAMESPACE_NAME = `orders-service-${random}`;
+const NAMESPACE_NAME = `a-busola-test-${random}`;
 
 context('Busola Smoke Tests', () => {
   before(() => {
@@ -18,6 +18,28 @@ context('Busola Smoke Tests', () => {
       .attachFile('kubeconfig.yaml', { subjectType: 'drag-n-drop' });
 
     cy.wait(2000); //it fixes error with loading namespaces
+  });
+
+  after(() => {
+    cy.get('nav[data-testid=semiCollapsibleLeftNav]')
+      .contains('Namespaces') //it finds Namespaces and Back to Namespaces
+      .click();
+
+    cy.getIframeBody()
+      .find('[aria-label="open-search"]')
+      .click();
+
+    cy.getIframeBody()
+      .find('[placeholder="Search"]')
+      .type(NAMESPACE_NAME);
+
+    cy.getIframeBody()
+      .find('[aria-label="Delete"]')
+      .click();
+
+    cy.getIframeBody()
+      .find('[role="status"]')
+      .should('have.text', 'TERMINATING');
   });
 
   it('Renders navigation nodes', () => {
@@ -39,12 +61,14 @@ context('Busola Smoke Tests', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('.fd-form-item', 'Name') //doesn't work without class name
+      .find('[role=dialog]')
+      .find("input[placeholder='Namespace name']")
       .should('be.visible')
       .type(NAMESPACE_NAME);
 
     cy.getIframeBody()
-      .contains('.fd-bar__element > button', 'Create') //doesn't work without selector
+      .find('[role=dialog]')
+      .contains('button', 'Create')
       .should('be.visible')
       .click();
   });
