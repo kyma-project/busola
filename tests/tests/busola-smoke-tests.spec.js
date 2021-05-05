@@ -47,7 +47,9 @@ context('Busola Smoke Tests', () => {
       .contains('.fd-bar__element > button', 'Create') //doesn't work without selector
       .should('be.visible')
       .click();
+  });
 
+  it('Go to the details of namespace and check sections', () => {
     cy.getIframeBody()
       .contains('a', NAMESPACE_NAME)
       .should('be.visible')
@@ -76,8 +78,11 @@ context('Busola Smoke Tests', () => {
     cy.getIframeBody()
       .contains('Warnings')
       .should('be.visible');
+  });
 
+  it('Go back to the namespaces list', () => {
     cy.get('body')
+      .get('nav[data-testid=semiCollapsibleLeftNav]')
       .contains('Back to Namespaces')
       .click();
   });
