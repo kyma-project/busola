@@ -8,7 +8,7 @@ import {
 } from './static-navigation-model';
 import navigationPermissionChecker, {
   setInitValues,
-  backendModules,
+  crds,
 } from './permissions';
 
 import {
@@ -66,7 +66,7 @@ export function getNavigationData(authData) {
     fetchBusolaInitData(authData)
       .then(
         (res) => {
-          setInitValues(res.backendModules, res.selfSubjectRules || []);
+          setInitValues(res.crds, res.selfSubjectRules || []);
           return res;
         },
         (err) => {
@@ -92,8 +92,11 @@ export function getNavigationData(authData) {
       // 'Finally' not supported by IE and FIREFOX (if 'finally' is needed, update your .babelrc)
       .then((res) => {
         const params = getInitParams();
-        const { disabledNavigationNodes = '', systemNamespaces = '' } =
-          params?.config || {};
+        const {
+          disabledNavigationNodes = '',
+          systemNamespaces = '',
+          modules = {},
+        } = params?.config || {};
         const { bebEnabled = false } = params?.features || {};
         const nodes = [
           {
@@ -102,9 +105,10 @@ export function getNavigationData(authData) {
             context: {
               authData,
               groups,
-              backendModules,
+              crds,
               bebEnabled,
               systemNamespaces,
+              modules,
               showSystemNamespaces:
                 localStorage.getItem('busola.showSystemNamespaces') === 'true',
               cluster: params?.cluster || '',
@@ -112,7 +116,8 @@ export function getNavigationData(authData) {
             children: function () {
               const staticNodes = getStaticRootNodes(
                 getChildrenNodesForNamespace,
-                res.apiGroups
+                res.apiGroups,
+                modules
               );
               hideDisabledNodes(disabledNavigationNodes, staticNodes, false);
               return staticNodes;
@@ -149,8 +154,7 @@ async function getNamespaces() {
 
 function getChildrenNodesForNamespace(apiGroups) {
   const { disabledNavigationNodes } = getInitParams()?.config || {};
-  const staticNodes = getStaticChildrenNodesForNamespace(apiGroups);
-
+  const staticNodes = getStaticChildrenNodesForNamespace(apiGroups, modules);
   hideDisabledNodes(disabledNavigationNodes, staticNodes, true);
   return staticNodes;
 }

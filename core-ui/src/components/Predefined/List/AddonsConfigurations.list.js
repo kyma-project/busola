@@ -8,7 +8,8 @@ const statusColumn = {
   ),
 };
 
-export const AddonsConfigurationsList = DefaultRenderer => ({
+export const AddonsConfigurationsList = ({
+  DefaultRenderer,
   ...otherParams
 }) => {
   const customColumns = [statusColumn];

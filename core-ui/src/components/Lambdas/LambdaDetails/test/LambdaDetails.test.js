@@ -7,7 +7,6 @@
 //   lambdaMock,
 // } from 'components/Lambdas/helpers/testing';
 
-// import { BACKEND_MODULES } from 'components/Lambdas/helpers/misc';
 // import { LAMBDA_DETAILS } from 'components/Lambdas/constants';
 
 // import LambdaDetails from '../LambdaDetails';
@@ -41,7 +40,7 @@
 //       removeBackdrop: () => {},
 //     }),
 //     getEventData: () => ({
-//       backendModules: ['apigateway'],
+//       crds: [],
 //     }),
 //   };
 // });
@@ -88,10 +87,7 @@ describe('LambdaDetails', () => {
   //         component: (
   //           <LambdaDetails
   //             lambda={lambdaMock}
-  //             backendModules={[
-  //               BACKEND_MODULES.APPLICATION,
-  //               BACKEND_MODULES.EVENTING,
-  //             ]}
+  //             crds={[]}
   //           />
   //         ),
   //         mocks: [subscriptionMock],

@@ -7,7 +7,7 @@ function toSearchParamsString(object) {
   return new URLSearchParams(object).toString();
 }
 
-export function getStaticChildrenNodesForNamespace(apiGroups) {
+export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
   const nodes = [
     {
       link: '/home/workspace',
@@ -51,6 +51,9 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
         }),
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
+      context: {
+        requiredModules: [modules?.SERVERLESS],
+      },
       children: [
         {
           pathSegment: 'details',
@@ -213,6 +216,9 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
         }),
       viewGroup: coreUIViewGroupName,
       keepSelectedForChildren: true,
+      context: {
+        requiredModules: [modules?.API_GATEWAY],
+      },
       children: [
         {
           pathSegment: 'details',
@@ -302,20 +308,24 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
       viewUrl: config.serviceCatalogModuleUrl + '/catalog',
       keepSelectedForChildren: true,
       viewGroup: catalogViewGroupName,
+      context: {
+        requiredModules: [modules?.SERVICE_CATALOG],
+      },
       children: [
         {
-          pathSegment: 'details',
+          pathSegment: 'ServiceClass',
           children: [
             {
               pathSegment: ':serviceId',
               viewUrl:
-                config.serviceCatalogModuleUrl + '/catalog/details/:serviceId',
+                config.serviceCatalogModuleUrl +
+                '/catalog/ServiceClass/:serviceId',
               children: [
                 {
                   pathSegment: 'plans',
                   viewUrl:
                     config.serviceCatalogModuleUrl +
-                    '/catalog/details/:serviceId/plans',
+                    '/catalog/ServiceClass/:serviceId/plans',
                 },
                 {
                   pathSegment: 'plan',
@@ -324,7 +334,37 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
                       pathSegment: ':planId',
                       viewUrl:
                         config.serviceCatalogModuleUrl +
-                        '/catalog/details/:serviceId/plan/:planId',
+                        '/catalog/ServiceClass/:serviceId/plan/:planId',
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          pathSegment: 'ClusterServiceClass',
+          children: [
+            {
+              pathSegment: ':serviceId',
+              viewUrl:
+                config.serviceCatalogModuleUrl +
+                '/catalog/ClusterServiceClass/:serviceId',
+              children: [
+                {
+                  pathSegment: 'plans',
+                  viewUrl:
+                    config.serviceCatalogModuleUrl +
+                    '/catalog/ClusterServiceClass/:serviceId/plans',
+                },
+                {
+                  pathSegment: 'plan',
+                  children: [
+                    {
+                      pathSegment: ':planId',
+                      viewUrl:
+                        config.serviceCatalogModuleUrl +
+                        '/catalog/ClusterServiceClass/:serviceId/plan/:planId',
                     },
                   ],
                 },
@@ -342,6 +382,9 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
       viewUrl: config.serviceCatalogModuleUrl + '/instances',
       viewGroup: catalogViewGroupName,
       keepSelectedForChildren: true,
+      context: {
+        requiredModules: [modules?.SERVICE_CATALOG],
+      },
       children: [
         {
           pathSegment: 'details',
@@ -370,6 +413,9 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
           hasDetailsView: false,
         }),
       viewGroup: coreUIViewGroupName,
+      context: {
+        requiredModules: [modules?.SERVICE_CATALOG],
+      },
     },
 
     //CONFIGURATION CATEGORY
@@ -396,6 +442,9 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
         }),
       viewGroup: coreUIViewGroupName,
       keepSelectedForChildren: true,
+      context: {
+        requiredModules: [modules?.ADDONS],
+      },
       children: [
         {
           pathSegment: 'details',
@@ -596,13 +645,20 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
         }),
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
+      context: {
+        requiredModules: [modules?.SERVERLESS_REPOS],
+      },
     },
   ];
   filterNodesByAvailablePaths(nodes, apiGroups);
   return nodes;
 }
 
-export function getStaticRootNodes(namespaceChildrenNodesResolver, apiGroups) {
+export function getStaticRootNodes(
+  namespaceChildrenNodesResolver,
+  apiGroups,
+  modules
+) {
   const nodes = [
     {
       pathSegment: 'workspace',
@@ -661,6 +717,9 @@ export function getStaticRootNodes(namespaceChildrenNodesResolver, apiGroups) {
         }),
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
+      context: {
+        requiredModules: [modules?.APPLICATIONS],
+      },
       children: [
         {
           pathSegment: 'details',
@@ -705,6 +764,9 @@ export function getStaticRootNodes(namespaceChildrenNodesResolver, apiGroups) {
         }),
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
+      context: {
+        requiredModules: [modules?.ADDONS],
+      },
       children: [
         {
           pathSegment: 'details',

@@ -2,7 +2,7 @@ import React from 'react';
 import { ComponentForList } from 'shared/getComponents';
 import { StatusBadge } from 'react-shared';
 
-export const ReplicasetsDetails = DefaultRenderer => ({ ...otherParams }) => {
+export const ReplicasetsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const customColumns = [
     {
       header: 'Limits',

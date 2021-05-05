@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { TabGroup, Tab } from 'fundamental-react';
 
+import { useMicrofrontendContext, modulesExist } from 'react-shared';
+
 import CodeTab from './Tabs/Code/CodeTab';
 import ResourceManagementTab from './Tabs/ResourceManagement/ResourceManagementTab';
-
 import EventSubscriptionsWrapper from './Tabs/Configuration/EventSubscriptions/EventSubscriptionsWrapper';
 import ServiceBindingsWrapper from './Tabs/Configuration/ServiceBindings/ServiceBindingsWrapper';
 import ApiRules from './Tabs/Configuration/ApiRules/ApiRules';
@@ -11,30 +12,24 @@ import ApiRules from './Tabs/Configuration/ApiRules/ApiRules';
 // import { useLogsView } from '../helpers/misc';
 
 import { LAMBDA_DETAILS } from 'components/Lambdas/constants';
-import {
-  BACKEND_MODULES,
-  backendModulesExist,
-} from 'components/Lambdas/helpers/misc';
 
-export default function LambdaDetails({ lambda, backendModules = [] }) {
+export default function LambdaDetails({ lambda }) {
   const [bindingUsages, setBindingUsages] = useState([]);
+  const microfrontendContext = useMicrofrontendContext();
+  const { crds, modules } = microfrontendContext;
   // useLogsView(lambda.UID, lambda.namespace);
 
-  const apiRules = backendModulesExist(backendModules, [
-    BACKEND_MODULES.API_GATEWAY,
-  ]) ? (
+  const apiRules = modulesExist(crds, [modules?.API_GATEWAY]) ? (
     <ApiRules lambda={lambda} />
   ) : null;
 
-  const eventSubscriptions = backendModulesExist(backendModules, [
-    BACKEND_MODULES.EVENTING,
-  ]) ? (
+  const eventSubscriptions = modulesExist(crds, [modules?.EVENTING]) ? (
     <EventSubscriptionsWrapper lambda={lambda} />
   ) : null;
 
-  const serviceBindings = backendModulesExist(backendModules, [
-    BACKEND_MODULES.SERVICE_CATALOG,
-    BACKEND_MODULES.SERVICE_CATALOG_ADDONS,
+  const serviceBindings = modulesExist(crds, [
+    modules?.SERVICE_CATALOG,
+    modules?.SERVICE_CATALOG_ADDONS,
   ]) ? (
     <ServiceBindingsWrapper
       lambda={lambda}

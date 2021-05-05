@@ -1,7 +1,7 @@
 import React from 'react';
 import { OAuth2ClientStatus } from 'shared/components/OAuth2ClientStatus/OAuth2ClientStatus';
 
-export const OAuth2ClientsList = DefaultRenderer => ({ ...otherParams }) => {
+export const OAuth2ClientsList = ({ DefaultRenderer, ...otherParams }) => {
   const description = (
     <span>
       {'See the "Expose and secure a service" section in the '}

@@ -4,7 +4,7 @@ import { Button } from 'fundamental-react';
 import SecretData from 'shared/components/Secret/SecretData';
 import { EditSecretForm } from './EditSecretForm';
 
-export const SecretsDetails = DefaultRenderer => ({ ...otherParams }) => {
+export const SecretsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const Secret = resource => <SecretData key="secret-data" secret={resource} />;
 
   const headerActions = [

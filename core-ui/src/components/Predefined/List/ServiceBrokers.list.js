@@ -1,7 +1,7 @@
 import React from 'react';
 import { StatusBadge } from 'react-shared';
 
-export const ServiceBrokersList = DefaultRenderer => ({ ...otherParams }) => {
+export const ServiceBrokersList = ({ DefaultRenderer, ...otherParams }) => {
   const customColumns = [
     {
       header: 'Url',

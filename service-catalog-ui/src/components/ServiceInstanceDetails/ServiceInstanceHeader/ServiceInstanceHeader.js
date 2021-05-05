@@ -39,9 +39,13 @@ const ServiceInstanceHeader = ({ serviceInstance, servicePlan }) => {
     ? 'services'
     : 'addons';
 
-  async function handleSubscriptionDelete(s) {
+  async function handleInstanceDelete() {
     try {
-      await deleteRequest(serviceInstance.metadata.selfLink);
+      const { apiVersion } = serviceInstance;
+      const { name, namespace } = serviceInstance.metadata;
+      await deleteRequest(
+        `/apis/${apiVersion}/namespaces/${namespace}/serviceinstances/${name}`,
+      );
       notificationManager.notifySuccess({
         content: 'ServiceInstance removed succesfully',
       });
@@ -79,11 +83,7 @@ const ServiceInstanceHeader = ({ serviceInstance, servicePlan }) => {
   ];
 
   const actions = (
-    <Button
-      type="negative"
-      option="transparent"
-      onClick={handleSubscriptionDelete}
-    >
+    <Button type="negative" option="transparent" onClick={handleInstanceDelete}>
       {serviceInstanceConstants.delete}
     </Button>
   );
