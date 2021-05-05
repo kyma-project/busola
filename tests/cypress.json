@@ -6,6 +6,6 @@
 
   "fixturesFolder": "fixtures",
   "integrationFolder": "tests",
-  "pluginsFile": "plugins/index.js",
+  "pluginsFile": false,
   "supportFile": "support/index.js"
 }
