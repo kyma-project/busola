@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const ServicesList = DefaultRenderer => ({ ...otherParams }) => {
+export const ServicesList = ({ DefaultRenderer, ...otherParams }) => {
   const getEndpoints = service => {
     if (service.spec.ports?.length) {
       return service.spec.ports.map(port => {

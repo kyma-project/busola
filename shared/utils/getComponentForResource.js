@@ -22,11 +22,17 @@ export const ComponentFor = ({
 
   const predefined = findByName(PredefinedRenderersCollection, name);
   const Renderer = predefined
-    ? useMemo(() => predefined(defaultRenderer), [predefined, defaultRenderer])
+    ? useMemo(() => predefined, [predefined, defaultRenderer])
     : defaultRenderer;
   const CreateFormRenderer = nameForCreate
     ? findByName(PredefinedRenderersCollection, nameForCreate) || null
     : null;
 
-  return <Renderer createResourceForm={CreateFormRenderer} {...params} />;
+  return (
+    <Renderer
+      createResourceForm={CreateFormRenderer}
+      DefaultRenderer={defaultRenderer}
+      {...params}
+    />
+  );
 };

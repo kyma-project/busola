@@ -12,7 +12,7 @@ const FilterNamespaces = namespace => {
     : !systemNamespaces.includes(namespace.metadata.name);
 };
 
-export const NamespacesList = DefaultRenderer => ({ ...otherParams }) => {
+export const NamespacesList = ({ DefaultRenderer, ...otherParams }) => {
   const customColumns = [
     {
       header: 'Status',

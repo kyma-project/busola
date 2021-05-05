@@ -20,7 +20,7 @@
 //     }),
 //     getEventData: () => ({
 //       environmentId: 'namespace',
-//       backendModules: [],
+//       crds: [],
 //     }),
 //   };
 // });

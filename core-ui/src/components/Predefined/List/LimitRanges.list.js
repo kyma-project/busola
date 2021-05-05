@@ -1,7 +1,7 @@
 import React from 'react';
 import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 
-export const LimitRangesList = DefaultRenderer => ({ ...otherParams }) => {
+export const LimitRangesList = ({ DefaultRenderer, ...otherParams }) => {
   const customColumns = [
     {
       header: 'Max',

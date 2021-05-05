@@ -5,7 +5,7 @@ import NamespaceBindings from './NamespaceBindings';
 import ConnectApplicationModal from './ConnectApplicationModal';
 import { ApplicationStatus } from './ApplicationStatus';
 
-export const ApplicationsDetails = DefaultRenderer => ({ ...otherParams }) => {
+export const ApplicationsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const customColumns = [
     {
       header: 'Descritpion',

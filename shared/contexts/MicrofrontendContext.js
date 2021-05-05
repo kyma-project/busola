@@ -38,10 +38,6 @@ export function MicrofrontendContextProvider({ children }) {
     </MicrofrontendContext.Provider>
   );
 }
-export function useModuleEnabled(module) {
-  const { backendModules } = useMicrofrontendContext();
-  return backendModules && backendModules.includes(module);
-}
 
 export function useMicrofrontendContext() {
   return useContext(MicrofrontendContext);

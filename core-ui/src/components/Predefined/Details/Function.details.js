@@ -6,7 +6,7 @@ import { prettyRuntime } from 'components/Lambdas/helpers/runtime';
 import { LAMBDA_DETAILS } from 'components/Lambdas/constants';
 import { LambdaStatusBadge } from 'components/Lambdas/LambdaStatusBadge/LambdaStatusBadge';
 
-export const FunctionsDetails = DefaultRenderer => ({ ...otherParams }) => {
+export const FunctionsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const customColumns = [
     {
       header: 'Status',
