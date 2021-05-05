@@ -13,19 +13,20 @@ export default function DeployNewWorkload({ namespaceName }) {
   const microfrontendContext = useMicrofrontendContext();
   const { crds, modules } = microfrontendContext;
 
+  const functionsExist = modulesExist(crds, [modules?.SERVERLESS]);
+
+  const reposExist =
+    functionsExist && modulesExist(crds, [modules?.SERVERLESS_REPOS]);
+
   const {
     data: functions,
     error: functionsError,
     loading: functionsLoading = true,
   } = useGetList()(
     `/apis/serverless.kyma-project.io/v1alpha1/namespaces/${namespaceName}/functions`,
-    { pollingInterval: 5000 },
+    { pollingInterval: 5000, skip: !functionsExist },
   );
 
-  const reposExist = modulesExist(crds, [
-    modules?.SERVERLESS,
-    modules?.SERVERLESS_REPOS,
-  ]);
   const {
     data: repositories,
     error: repositoriesError,
@@ -39,7 +40,7 @@ export default function DeployNewWorkload({ namespaceName }) {
   const serverDataError = functionsError || repositoriesError;
   const serverDataLoading = functionsLoading || repositoriesLoading;
 
-  const lambdaModal = modulesExist(crds, [modules?.SERVERLESS]) ? (
+  const lambdaModal = functionsExist ? (
     <CreateLambdaModal
       functionNames={functionNames || []}
       repositories={repositories || []}
