@@ -1,23 +1,23 @@
 import {
   saveCurrentLocation,
-  getAuthData,
   getPreviousLocation,
 } from './navigation/navigation-helpers';
+import { getAuthData, setAuthData } from './auth-storage';
 import { communication } from './communication';
 import { createSettings } from './settings';
 import { createAuth } from './auth.js';
-import {
-  saveInitParamsIfPresent,
-  getClusters,
-  getInitParams,
-} from './init-params';
+import { saveInitParamsIfPresent } from './init-params';
+import { getInitParams } from './clusters';
 
-import { createNavigation, reloadNavigation } from './navigation/navigation-data-init';
+import {
+  createNavigation,
+  addClusterNodes,
+} from './navigation/navigation-data-init';
 import { onQuotaExceed } from './luigi-event-handlers';
 
 export const NODE_PARAM_PREFIX = `~`;
 
-function luigiAfterInit() {
+async function luigiAfterInit() {
   const params = getInitParams();
   const isClusterChoosen = !!params;
 
@@ -26,8 +26,8 @@ function luigiAfterInit() {
   if (!isClusterChoosen) {
     Luigi.navigation().navigate('/clusters');
   } else {
-    if (params?.auth) {
-      reloadNavigation();
+    if (params?.auth && getAuthData()) {
+      await addClusterNodes();
     }
   }
   Luigi.ux().hideAppLoadingIndicator();
@@ -37,15 +37,13 @@ function luigiAfterInit() {
   await saveInitParamsIfPresent(location);
 
   const params = getInitParams();
-  const isClusterChoosen = !!params;
 
   if (params?.rawAuth) {
-    Luigi.auth().store.setAuthData(params.rawAuth);
+    setAuthData(params.rawAuth);
   }
 
   const luigiConfig = {
-    auth:
-      isClusterChoosen && !params?.rawAuth && (await createAuth(params.auth)),
+    auth: await createAuth(params?.auth),
     communication,
     navigation: await createNavigation(),
     routing: {

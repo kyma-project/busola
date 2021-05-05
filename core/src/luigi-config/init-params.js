@@ -1,7 +1,10 @@
 import createEncoder from 'json-url';
+import {
+  saveClusterParams,
+  saveCurrentClusterName,
+  setCluster,
+} from './clusters';
 
-const CLUSTERS_KEY = 'busola.clusters';
-const CURRENT_CLUSTER_NAME_KEY = 'busola.current-cluster-name';
 const encoder = createEncoder('lzma');
 
 function getResponseParams(usePKCE = true) {
@@ -39,43 +42,14 @@ export async function saveInitParamsIfPresent(location) {
         ...getResponseParams(decoded.auth.usePKCE),
       };
     }
-    saveInitParams(params); // todo rename dis
+    if (!params.cluster.name) {
+      params.cluster.name = params.cluster.server.replace(
+        /^https?:\/\/(api\.)?/,
+        ''
+      );
+    }
+    saveClusterParams(params);
     saveCurrentClusterName(params.cluster.name);
+    setCluster(params.cluster.name);
   }
-}
-
-export function saveInitParams(params) {
-  const clusterName = params.cluster.name;
-  const clusters = getClusters();
-  clusters[clusterName] = params;
-  saveClusters(clusters);
-}
-
-export function getInitParams() {
-  const clusterName = getCurrentClusterName();
-  if (!clusterName) {
-    return null;
-  }
-  return getClusters()[clusterName];
-}
-
-export function clearInitParams() {
-  alert('clear init params? Nie sądzę');
-  // localStorage.removeItem(CLUSTERS_KEY);
-}
-
-export function getCurrentClusterName() {
-  return localStorage.getItem(CURRENT_CLUSTER_NAME_KEY);
-}
-
-export function saveCurrentClusterName(clusterName) {
-  localStorage.setItem(CURRENT_CLUSTER_NAME_KEY, clusterName);
-}
-
-export function getClusters() {
-  return JSON.parse(localStorage.getItem(CLUSTERS_KEY) || '{}');
-}
-
-export function saveClusters(clusters) {
-  localStorage.setItem(CLUSTERS_KEY, JSON.stringify(clusters));
 }

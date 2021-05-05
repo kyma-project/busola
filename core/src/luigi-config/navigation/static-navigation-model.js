@@ -647,6 +647,7 @@ export function getStaticRootNodes(namespaceChildrenNodesResolver, apiGroups) {
         }),
       icon: 'dimension',
       viewGroup: coreUIViewGroupName,
+      navigationContext: 'namespaces',
     },
     {
       pathSegment: 'namespaces',

@@ -1,5 +1,5 @@
 import { config } from './../config';
-import { getInitParams } from './../init-params';
+import { getInitParams } from './../clusters';
 import { HttpError } from '../../../../shared/hooks/BackendAPI/config';
 
 export async function failFastFetch(input, auth, init = {}) {

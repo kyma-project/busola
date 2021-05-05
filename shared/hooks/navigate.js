@@ -17,9 +17,9 @@ export function navigateToFixedPathResourceDetails(
 }
 
 function navigateToNamespaceDetails(namespaceName) {
-  LuigiClient.linkManager().navigate(
-    `/home/namespaces/${namespaceName}/details`,
-  );
+  LuigiClient.linkManager()
+    .fromContext('namespaces')
+    .navigate(`${namespaceName}/details`);
   LuigiClient.sendCustomMessage({ id: 'busola.refreshNavigation' });
 }
 

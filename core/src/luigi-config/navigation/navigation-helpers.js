@@ -1,3 +1,5 @@
+import { clearAuthData } from './../auth-storage';
+
 export const hideDisabledNodes = (disabledNavNodes, nodes, inNamespace) => {
   if (disabledNavNodes !== null && disabledNavNodes !== undefined) {
     const disabledNavNodesArray = disabledNavNodes.split(' ');
@@ -53,14 +55,6 @@ export function relogin() {
   saveCurrentLocation();
   clearAuthData();
   location.reload();
-}
-
-export function clearAuthData() {
-  Luigi.auth().store.removeAuthData();
-}
-
-export function getAuthData() {
-  return Luigi.auth().store.getAuthData();
 }
 
 export const getPreviousLocation = () => {

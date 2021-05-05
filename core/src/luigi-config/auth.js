@@ -1,6 +1,17 @@
 import OpenIdConnect from '@luigi-project/plugin-auth-oidc';
+import { setAuthData } from './auth-storage';
+import { getInitParams } from './clusters';
 
 export let groups;
+
+export async function reloadAuth() {
+  if (params?.rawAuth) {
+    setAuthData(params.rawAuth);
+  }
+  const params = getInitParams();
+  const auth = params?.auth && (await createAuth(params.auth));
+  Luigi.setConfig({ ...Luigi.getConfig(), auth });
+}
 
 async function fetchOidcProviderMetadata(issuerUrl) {
   try {
@@ -17,6 +28,11 @@ async function fetchOidcProviderMetadata(issuerUrl) {
 }
 
 export const createAuth = async (authParams) => {
+  if (!authParams) {
+    // create dummy auth just for storing auth data
+    return { storage: 'none' };
+  }
+
   const { issuerUrl, clientId, responseType, responseMode, scope } = authParams;
 
   const providerMetadata = await fetchOidcProviderMetadata(issuerUrl);
@@ -43,6 +59,7 @@ export const createAuth = async (authParams) => {
         end_session_endpoint,
       },
       userInfoFn: (_, authData) => {
+        setAuthData(authData);
         groups = authData.profile['http://k8s/groups'];
         return Promise.resolve({
           name: authData.profile.name,

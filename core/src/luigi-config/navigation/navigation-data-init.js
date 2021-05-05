@@ -10,29 +10,29 @@ import navigationPermissionChecker, {
   backendModules,
 } from './permissions';
 
-import {
-  hideDisabledNodes,
-  createNamespacesList,
-  clearAuthData,
-  getAuthData,
-} from './navigation-helpers';
+import { hideDisabledNodes, createNamespacesList } from './navigation-helpers';
+import { clearAuthData, getAuthData, setAuthData } from './../auth-storage';
 import { groups, createAuth } from '../auth';
 import {
   getInitParams,
   getClusters,
   getCurrentClusterName,
-  saveCurrentClusterName,
-} from '../init-params';
+  setCluster,
+} from '../clusters';
+
+export async function addClusterNodes() {
+  const nodes = await getNavigationData(getAuthData());
+  const config = Luigi.getConfig();
+  const navigation = {
+    ...navigation,
+    nodes,
+  };
+  Luigi.setConfig({ ...config, navigation });
+}
 
 export async function reloadNavigation() {
-  const params = getInitParams();
-
-  if (params?.rawAuth) {
-    Luigi.auth().store.setAuthData(params.rawAuth);
-  }
   const navigation = await createNavigation();
-  const auth = params?.auth && await createAuth(params.auth);
-  Luigi.setConfig({ ...Luigi.getConfig(), auth, navigation });
+  Luigi.setConfig({ ...Luigi.getConfig(), navigation });
 }
 
 function createTODONodes() {
@@ -67,17 +67,7 @@ function createTODONodes() {
       pathSegment: clusterName,
       hideFromNav: true,
       onNodeActivation: async () => {
-        if (clusterName !== activeClusterName) {
-          saveCurrentClusterName(clusterName);
-          if (getInitParams().auth) {
-            location = `${location.origin}/cluster/${clusterName}`;
-          } else {
-            await reloadNavigation();
-            Luigi.navigation().navigate(`/cluster/${clusterName}`);
-          }
-        } else {
-          Luigi.navigation().navigate(`/cluster/${clusterName}`);
-        }
+        await setCluster(clusterName);
         return false;
       },
     }));
@@ -138,9 +128,10 @@ export async function createNavigation() {
         },
       ],
     },
-    nodes: isClusterSelected && Object.keys(getAuthData() || []).length
-      ? await getNavigationData(getAuthData())
-      : createTODONodes(),
+    nodes:
+      isClusterSelected && getAuthData()
+        ? await getNavigationData(getAuthData())
+        : createTODONodes(),
   };
 }
 
@@ -193,6 +184,7 @@ export async function getNavigationData(authData) {
     ];
     return [...nodes, ...createTODONodes()];
   } catch (err) {
+    alert(err);
     if (err.statusCode === 403) {
       clearAuthData();
       window.location = `/nopermissions.html?error=${err.originalMessage}`;

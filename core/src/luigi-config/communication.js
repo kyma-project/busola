@@ -1,14 +1,15 @@
 import { NODE_PARAM_PREFIX } from './luigi-config';
 import {
-  saveInitParams,
-  getInitParams,
+  saveClusterParams,
   getClusters,
   saveClusters,
   saveCurrentClusterName,
   getCurrentClusterName,
-} from './init-params';
-import { config } from './config';
+  setCluster,
+} from './clusters';
+import { clearAuthData } from './auth-storage';
 import { reloadNavigation } from './navigation/navigation-data-init';
+import { reloadAuth } from './auth';
 
 export const communication = {
   customMessagesListeners: {
@@ -68,35 +69,23 @@ export const communication = {
     },
     'busola.reload': () => location.reload(),
     'busola.addCluster': async ({ params }) => {
-      Luigi.auth().store.removeAuthData();
-      saveInitParams(params);
-      saveCurrentClusterName(params.cluster.name);
-      await reloadNavigation();
-      Luigi.navigation().navigate(`/cluster/${params.cluster.name}`);
-      if (params.auth) {
-        location = `${location.origin}/cluster/${params.cluster.name}`;
-      }
+      saveClusterParams(params);
+      setCluster(params.cluster.name);
     },
-    'busola.deleteCluster': ({ clusterName }) => {
+    'busola.deleteCluster': async ({ clusterName }) => {
       const clusters = getClusters();
       const activeClusterName = getCurrentClusterName();
       if (activeClusterName === clusterName) {
-        Luigi.auth().store.removeAuthData();
+        await reloadAuth();
+        clearAuthData();
+        saveCurrentClusterName(null);
       }
       delete clusters[clusterName];
       saveClusters(clusters);
       reloadNavigation();
     },
     'busola.setCluster': async ({ clusterName }) => {
-      Luigi.auth().store.removeAuthData();
-      saveCurrentClusterName(clusterName);
-      if (getInitParams().auth) {
-        location = `${location.origin}/cluster/${clusterName}`;
-        return;
-      } else {
-        await reloadNavigation();
-        Luigi.navigation().navigate(`/cluster/${clusterName}`);
-      }
+      setCluster(clusterName);
     },
   },
 };
