@@ -52,7 +52,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
       context: {
-        requiredModules: [modules.SERVERLESS],
+        requiredModules: [modules?.SERVERLESS],
       },
       children: [
         {
@@ -217,7 +217,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
       viewGroup: coreUIViewGroupName,
       keepSelectedForChildren: true,
       context: {
-        requiredModules: [modules.API_GATEWAY],
+        requiredModules: [modules?.API_GATEWAY],
       },
       children: [
         {
@@ -309,7 +309,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
       keepSelectedForChildren: true,
       viewGroup: catalogViewGroupName,
       context: {
-        requiredModules: [modules.SERVICE_CATALOG],
+        requiredModules: [modules?.SERVICE_CATALOG],
       },
       children: [
         {
@@ -352,7 +352,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
       viewGroup: catalogViewGroupName,
       keepSelectedForChildren: true,
       context: {
-        requiredModules: [modules.SERVICE_CATALOG],
+        requiredModules: [modules?.SERVICE_CATALOG],
       },
       children: [
         {
@@ -383,7 +383,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
         }),
       viewGroup: coreUIViewGroupName,
       context: {
-        requiredModules: [modules.SERVICE_CATALOG],
+        requiredModules: [modules?.SERVICE_CATALOG],
       },
     },
 
@@ -412,7 +412,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
       viewGroup: coreUIViewGroupName,
       keepSelectedForChildren: true,
       context: {
-        requiredModules: [modules.ADDONS],
+        requiredModules: [modules?.ADDONS],
       },
       children: [
         {
@@ -615,7 +615,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
       context: {
-        requiredModules: [modules.SERVERLESS_REPOS],
+        requiredModules: [modules?.SERVERLESS_REPOS],
       },
     },
   ];
@@ -687,7 +687,7 @@ export function getStaticRootNodes(
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
       context: {
-        requiredModules: [modules.APPLICATIONS],
+        requiredModules: [modules?.APPLICATIONS],
       },
       children: [
         {
@@ -734,7 +734,7 @@ export function getStaticRootNodes(
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
       context: {
-        requiredModules: [modules.ADDONS],
+        requiredModules: [modules?.ADDONS],
       },
       children: [
         {

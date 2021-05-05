@@ -23,8 +23,8 @@ export default function DeployNewWorkload({ namespaceName }) {
   );
 
   const reposExist = modulesExist(crds, [
-    modules.SERVERLESS,
-    modules.SERVERLESS_REPOS,
+    modules?.SERVERLESS,
+    modules?.SERVERLESS_REPOS,
   ]);
   const {
     data: repositories,
@@ -39,7 +39,7 @@ export default function DeployNewWorkload({ namespaceName }) {
   const serverDataError = functionsError || repositoriesError;
   const serverDataLoading = functionsLoading || repositoriesLoading;
 
-  const lambdaModal = modulesExist(crds, [modules.SERVERLESS]) ? (
+  const lambdaModal = modulesExist(crds, [modules?.SERVERLESS]) ? (
     <CreateLambdaModal
       functionNames={functionNames || []}
       repositories={repositories || []}

@@ -19,17 +19,17 @@ export default function LambdaDetails({ lambda }) {
   const { crds, modules } = microfrontendContext;
   // useLogsView(lambda.UID, lambda.namespace);
 
-  const apiRules = modulesExist(crds, [modules.API_GATEWAY]) ? (
+  const apiRules = modulesExist(crds, [modules?.API_GATEWAY]) ? (
     <ApiRules lambda={lambda} />
   ) : null;
 
-  const eventSubscriptions = modulesExist(crds, [modules.EVENTING]) ? (
+  const eventSubscriptions = modulesExist(crds, [modules?.EVENTING]) ? (
     <EventSubscriptionsWrapper lambda={lambda} />
   ) : null;
 
   const serviceBindings = modulesExist(crds, [
-    modules.SERVICE_CATALOG,
-    modules.SERVICE_CATALOG_ADDONS,
+    modules?.SERVICE_CATALOG,
+    modules?.SERVICE_CATALOG_ADDONS,
   ]) ? (
     <ServiceBindingsWrapper
       lambda={lambda}

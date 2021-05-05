@@ -18,7 +18,7 @@ export const FunctionsList = ({ DefaultRenderer, ...otherParams }) => {
       .navigate(`gitrepositories`);
   }
 
-  const headerActions = modulesExist(crds, [modules.SERVERLESS_REPOS]) ? (
+  const headerActions = modulesExist(crds, [modules?.SERVERLESS_REPOS]) ? (
     <Button option="transparent" onClick={goToGitRepositories}>
       Connected repositories
     </Button>

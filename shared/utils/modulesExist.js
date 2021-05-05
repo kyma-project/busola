@@ -1,5 +1,5 @@
 export function modulesExist(existingCrds = [], modules = []) {
-  if (!existingCrds.length || !modules.length) {
+  if (!existingCrds.length || !modules?.length) {
     return false;
   }
 
