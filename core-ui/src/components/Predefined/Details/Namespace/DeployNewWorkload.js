@@ -21,13 +21,18 @@ export default function DeployNewWorkload({ namespaceName }) {
     `/apis/serverless.kyma-project.io/v1alpha1/namespaces/${namespaceName}/functions`,
     { pollingInterval: 5000 },
   );
+
+  const reposExist = modulesExist(crds, [
+    modules.SERVERLESS,
+    modules.SERVERLESS_REPOS,
+  ]);
   const {
     data: repositories,
     error: repositoriesError,
     loading: repositoriesLoading = true,
   } = useGetList()(
     `/apis/serverless.kyma-project.io/v1alpha1/namespaces/${namespaceName}/gitrepositories`,
-    { pollingInterval: 5000 },
+    { pollingInterval: 5000, skip: !reposExist },
   );
 
   const functionNames = (functions || []).map(fn => fn.metadata.name);
