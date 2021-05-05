@@ -19,6 +19,9 @@ context('Busola Smoke Tests', () => {
 
     cy.get('#error').should('not.exist');
     cy.url().should('eq', ADDRESS + '/home/workspace');
+    cy.getIframeBody()
+      .find('thead')
+      .should('be.visible'); //wait for the namespaces XHR request to finish to continue running the tests. There's no <thead> while the request is pending.
   });
 
   after(() => {
