@@ -11,19 +11,13 @@ const random = Math.floor(
 );
 const NAMESPACE_NAME = `orders-service-${random}`;
 
-Cypress.on('uncaught:exception', (err, runnable) => {
-  // returning false here prevents Cypress from failing the test
-  debugger;
-  return false;
-});
-
 context('Busola Smoke Tests', () => {
   before(() => {
     cy.visit(ADDRESS)
       .contains('Drag file here')
       .attachFile('kubeconfig.yaml', { subjectType: 'drag-n-drop' });
 
-    cy.wait(5000); //it fixes error with loading namespaces
+    cy.wait(2000); //it fixes error with loading namespaces
   });
 
   it('Renders navigation nodes', () => {
@@ -52,30 +46,38 @@ context('Busola Smoke Tests', () => {
     cy.getIframeBody()
       .contains('.fd-bar__element > button', 'Create') //doesn't work without selector
       .should('be.visible')
-      .click()
-      .getIframeBody()
+      .click();
+
+    cy.getIframeBody()
       .contains('a', NAMESPACE_NAME)
       .should('be.visible')
-      .click()
-      .getIframeBody()
+      .click();
+
+    cy.getIframeBody()
       .contains('Healthy Resources')
-      .should('be.visible')
-      .getIframeBody()
+      .should('be.visible');
+
+    cy.getIframeBody()
       .contains('Limit Ranges')
-      .should('be.visible')
-      .getIframeBody()
+      .should('be.visible');
+
+    cy.getIframeBody()
       .contains('Resource Quotas')
-      .should('be.visible')
-      .getIframeBody()
+      .should('be.visible');
+
+    cy.getIframeBody()
       .contains('Application Mappings')
-      .should('be.visible')
-      .getIframeBody()
+      .should('be.visible');
+
+    cy.getIframeBody()
       .contains('Healthy Resources')
-      .should('be.visible')
-      .getIframeBody()
+      .should('be.visible');
+
+    cy.getIframeBody()
       .contains('Warnings')
-      .should('be.visible')
-      .get('body')
+      .should('be.visible');
+
+    cy.get('body')
       .contains('Back to Namespaces')
       .click();
   });
