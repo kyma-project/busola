@@ -1,5 +1,7 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
+
+import { PageHeader } from 'react-shared';
 import { AuthForm } from './AuthForm';
 import jsyaml from 'js-yaml';
 import { addCluster, readFile } from './shared';
@@ -61,23 +63,23 @@ export function AddCluster() {
       cluster,
       auth: { ...auth, responseType: 'id_token' },
     };
+    console.log(params);
     addCluster(params);
   }
 
+  const breadcrumbItems = [
+    { name: 'Clusters', path: '/clusters', fromAbsolutePath: true },
+  ];
+
   return (
     <>
-      <button onClick={() => LuigiClient.linkManager().navigate('/clusters')}>
-        back
-      </button>
+      <PageHeader title="Add Cluster" breadcrumbItems={breadcrumbItems} />
       <input
         type="file"
         onChange={e => onKubeconfigUploaded(e.target.files[0])}
       />
       {showNoAuth && (
-        <>
-          <AuthForm auth={auth} setAuth={setAuth} />
-          <button onClick={addClusterWithAuth}>dawaj</button>
-        </>
+        <AuthForm auth={auth} setAuth={setAuth} onSubmit={addClusterWithAuth} />
       )}
     </>
   );

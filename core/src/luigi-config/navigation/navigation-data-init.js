@@ -16,7 +16,7 @@ import { groups, createAuth } from '../auth';
 import {
   getInitParams,
   getClusters,
-  getCurrentClusterName,
+  getActiveClusterName,
   setCluster,
 } from '../clusters';
 
@@ -36,7 +36,7 @@ export async function reloadNavigation() {
 }
 
 function createTODONodes() {
-  const activeClusterName = getCurrentClusterName();
+  const activeClusterName = getActiveClusterName();
 
   const clusterManagementNode = {
     pathSegment: 'clusters',
@@ -54,7 +54,7 @@ function createTODONodes() {
     ],
     context: {
       clusters: getClusters(),
-      currentClusterName: getCurrentClusterName(),
+      activeClusterName: getActiveClusterName(),
     },
   };
   const clusters = getClusters();
@@ -83,7 +83,7 @@ function createTODONodes() {
 export async function createNavigation() {
   const params = getInitParams();
   const clusters = getClusters();
-  const activeClusterName = getCurrentClusterName();
+  const activeClusterName = getActiveClusterName();
   const isClusterSelected = !!params;
 
   const clusterNodes = Object.entries(clusters).map(

@@ -3,8 +3,8 @@ import {
   saveClusterParams,
   getClusters,
   saveClusters,
-  saveCurrentClusterName,
-  getCurrentClusterName,
+  saveActiveClusterName,
+  getActiveClusterName,
   setCluster,
 } from './clusters';
 import { clearAuthData } from './auth-storage';
@@ -74,11 +74,11 @@ export const communication = {
     },
     'busola.deleteCluster': async ({ clusterName }) => {
       const clusters = getClusters();
-      const activeClusterName = getCurrentClusterName();
+      const activeClusterName = getActiveClusterName();
       if (activeClusterName === clusterName) {
         await reloadAuth();
         clearAuthData();
-        saveCurrentClusterName(null);
+        saveActiveClusterName(null);
       }
       delete clusters[clusterName];
       saveClusters(clusters);

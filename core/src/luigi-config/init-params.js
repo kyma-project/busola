@@ -1,7 +1,7 @@
 import createEncoder from 'json-url';
 import {
   saveClusterParams,
-  saveCurrentClusterName,
+  saveActiveClusterName,
   setCluster,
 } from './clusters';
 
@@ -49,7 +49,7 @@ export async function saveInitParamsIfPresent(location) {
       );
     }
     saveClusterParams(params);
-    saveCurrentClusterName(params.cluster.name);
+    saveActiveClusterName(params.cluster.name);
     setCluster(params.cluster.name);
   }
 }

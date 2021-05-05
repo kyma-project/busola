@@ -6,11 +6,11 @@ const CLUSTERS_KEY = 'busola.clusters';
 const CURRENT_CLUSTER_NAME_KEY = 'busola.current-cluster-name';
 
 export async function setCluster(clusterName) {
-  const activeClusterName = getCurrentClusterName();
+  const activeClusterName = getActiveClusterName();
 
   if (clusterName !== activeClusterName) {
     clearAuthData();
-    saveCurrentClusterName(clusterName);
+    saveActiveClusterName(clusterName);
     await reloadAuth();
 
     const params = getInitParams();
@@ -33,18 +33,18 @@ export function saveClusterParams(params) {
 }
 
 export function getInitParams() {
-  const clusterName = getCurrentClusterName();
+  const clusterName = getActiveClusterName();
   if (!clusterName) {
     return null;
   }
   return getClusters()[clusterName];
 }
 
-export function getCurrentClusterName() {
+export function getActiveClusterName() {
   return localStorage.getItem(CURRENT_CLUSTER_NAME_KEY);
 }
 
-export function saveCurrentClusterName(clusterName) {
+export function saveActiveClusterName(clusterName) {
   localStorage.setItem(CURRENT_CLUSTER_NAME_KEY, clusterName);
 }
 
