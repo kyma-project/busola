@@ -1,9 +1,8 @@
 import React from 'react';
-import LuigiClient from '@luigi-project/client';
-
-import { PageHeader } from 'react-shared';
-import { AuthForm } from './AuthForm';
 import jsyaml from 'js-yaml';
+
+import { PageHeader, FileInput } from 'react-shared';
+import { AuthForm } from './AuthForm';
 import { addCluster, readFile } from './shared';
 
 export function AddCluster() {
@@ -63,7 +62,6 @@ export function AddCluster() {
       cluster,
       auth: { ...auth, responseType: 'id_token' },
     };
-    console.log(params);
     addCluster(params);
   }
 
@@ -73,14 +71,24 @@ export function AddCluster() {
 
   return (
     <>
-      <PageHeader title="Add Cluster" breadcrumbItems={breadcrumbItems} />
-      <input
-        type="file"
-        onChange={e => onKubeconfigUploaded(e.target.files[0])}
+      <PageHeader
+        title="Add Cluster"
+        description="Upload or paste your kubeconfig file"
+        breadcrumbItems={breadcrumbItems}
       />
-      {showNoAuth && (
-        <AuthForm auth={auth} setAuth={setAuth} onSubmit={addClusterWithAuth} />
-      )}
+      <div className="fd-margin-top--lg">
+        <FileInput
+          fileInputChanged={onKubeconfigUploaded}
+          acceptedFileFormats="xd"
+        />
+        {showNoAuth && (
+          <AuthForm
+            auth={auth}
+            setAuth={setAuth}
+            onSubmit={addClusterWithAuth}
+          />
+        )}
+      </div>
     </>
   );
 }

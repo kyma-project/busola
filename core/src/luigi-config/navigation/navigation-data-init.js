@@ -150,13 +150,7 @@ export async function getNavigationData(authData) {
       {
         pathSegment: 'cluster',
         hideFromNav: true,
-        onNodeActivation: () => {
-          if (activeClusterName) {
-            Luigi.navigation().navigate(`/cluster/${activeClusterName}`);
-          } else {
-            alert('wtf');
-          }
-        },
+        onNodeActivation: () => Luigi.navigation().navigate(`/cluster/${activeClusterName}`),
         children: [
           {
             pathSegment: activeClusterName,

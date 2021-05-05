@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { Icon } from 'fundamental-react';
 import classNames from 'classnames';
 import './FileInput.scss';
 
@@ -38,35 +39,36 @@ export function FileInput({
     fileChanged(e.dataTransfer.files[0]);
   }
 
-  const labelClass = classNames('fd-asset-upload__label', {
-    'fd-asset-upload__input--drag-over': draggingOverCounter !== 0,
+  const containerClass = classNames('file-input', {
+    'file-input--drag-over': draggingOverCounter !== 0,
   });
 
   return (
-    <div
-      className="fd-asset-upload file-input"
+    <label
+      htmlFor="file-upload"
+      className={containerClass}
       onDrop={drop}
       onDragEnter={() => setDraggingCounter(draggingOverCounter + 1)}
       onDragLeave={() => setDraggingCounter(draggingOverCounter - 1)}
       onDragOver={dragOver}
     >
-      {!!fileName && <p className="fd-asset-upload__file-name">{fileName}</p>}
+      {!!fileName && <p className="file-input__secondary">{fileName}</p>}
       <input
         ref={inputRef}
         type="file"
         id="file-upload"
         onChange={e => fileChanged(e.target.files[0])}
-        className="fd-asset-upload__input"
+        className="input--hidden"
         accept={acceptedFileFormats}
         required={required}
       />
-      <label htmlFor="file-upload" className={labelClass}>
-        <span className="fd-asset-upload__text">Browse</span>
-        <p className="fd-asset-upload__message"> or drop file here</p>
+      <div>
+        <Icon glyph="upload" ariaLabel="file upload" />
+        <p>Drag file here</p>
         {availableFormatsMessage && (
-          <p className="fd-asset-upload__message">{availableFormatsMessage}</p>
+          <p className="file-input__secondary">{availableFormatsMessage}</p>
         )}
-      </label>
-    </div>
+      </div>
+    </label>
   );
 }
