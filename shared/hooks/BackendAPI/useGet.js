@@ -123,7 +123,14 @@ const useGetStreamHook = _ =>
                 setData(previousData => [...previousData, ...streams]);
                 return push();
               } catch (e) {
-                processError(e);
+                // Chrome closes connections after a while.
+                // Refetch logs after the connection has been closed.
+                if (e.toString().includes('network error')) {
+                  controller.close();
+                  fetchData(abortController);
+                } else {
+                  processError(e);
+                }
               }
             };
             push();
