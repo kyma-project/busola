@@ -128,6 +128,8 @@ const useGetStreamHook = _ =>
                 if (e.toString().includes('network error')) {
                   controller.close();
                   fetchData(abortController);
+                  // If we don't clear the data, streams would be shown multiple times.
+                  setData([]);
                 } else {
                   processError(e);
                 }
