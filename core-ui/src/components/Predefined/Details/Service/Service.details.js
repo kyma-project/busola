@@ -1,6 +1,12 @@
 import React from 'react';
 import { InfoLabel, Icon, Token } from 'fundamental-react';
-import { Spinner, useGetList } from 'react-shared';
+import {
+  Spinner,
+  useGetList,
+  useMicrofrontendContext,
+  modulesExist,
+} from 'react-shared';
+
 import EventSubscriptions from 'shared/components/EventSubscriptions/EventSubscriptions';
 import './Service.details.scss';
 import { ServiceApiRules } from 'components/Lambdas/LambdaDetails/Tabs/Configuration/ApiRules/ApiRules';
@@ -50,6 +56,16 @@ function ApiRules(service) {
 }
 
 export const ServicesDetails = ({ DefaultRenderer, ...otherParams }) => {
+  const microfrontendContext = useMicrofrontendContext();
+  const { crds, modules } = microfrontendContext;
+  const customComponents = [];
+  if (modulesExist(crds, [modules?.EVENTING])) {
+    customComponents.push(EventSubscriptionsWrapper);
+  }
+  if (modulesExist(crds, [modules?.API_GATEWAY])) {
+    customComponents.push(ApiRules);
+  }
+
   const customColumns = [
     {
       header: 'Cluster IP',
@@ -79,7 +95,7 @@ export const ServicesDetails = ({ DefaultRenderer, ...otherParams }) => {
   return (
     <DefaultRenderer
       customColumns={customColumns}
-      customComponents={[EventSubscriptionsWrapper, ApiRules]}
+      customComponents={customComponents}
       {...otherParams}
     />
   );
