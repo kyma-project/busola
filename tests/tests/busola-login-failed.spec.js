@@ -12,10 +12,6 @@ Cypress.on('uncaught:exception', (err, runnable) => {
 });
 
 context('Busola Login Failed', () => {
-  before(() => {
-    cy.clearSessionStorage().clearLocalStorage();
-  });
-
   it('Use wrong kubeconfig', () => {
     cy.visit(ADDRESS)
       .get('#textarea-kubeconfig')
