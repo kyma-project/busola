@@ -85,6 +85,10 @@ context('Busola Smoke Tests', () => {
       .should('be.visible');
 
     cy.getIframeBody()
+      .contains('Resource consumption')
+      .should('be.visible');
+
+    cy.getIframeBody()
       .contains('Limit Ranges')
       .should('be.visible');
 
@@ -94,10 +98,6 @@ context('Busola Smoke Tests', () => {
 
     cy.getIframeBody()
       .contains('Application Mappings')
-      .should('be.visible');
-
-    cy.getIframeBody()
-      .contains('Healthy Resources')
       .should('be.visible');
 
     cy.getIframeBody()
