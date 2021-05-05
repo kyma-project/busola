@@ -135,7 +135,7 @@ export function getNavigationData(authData) {
 }
 
 async function getNamespaces() {
-  const { systemNamespaces } = getInitParams().config;
+  const { systemNamespaces } = getInitParams()?.config || {};
   let namespaces;
   try {
     namespaces = await fetchNamespaces(getAuthData());
@@ -153,7 +153,7 @@ async function getNamespaces() {
 }
 
 function getChildrenNodesForNamespace(apiGroups) {
-  const { disabledNavigationNodes, modules } = getInitParams().config;
+  const { disabledNavigationNodes, modules } = getInitParams()?.config || {};
   const staticNodes = getStaticChildrenNodesForNamespace(apiGroups, modules);
 
   hideDisabledNodes(disabledNavigationNodes, staticNodes, true);

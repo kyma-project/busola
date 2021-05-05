@@ -6,6 +6,7 @@
     "start": "$(npm bin)/cypress open"
   },
   "devDependencies": {
-    "cypress": "^4.12.1"
+    "cypress": "^7.2.0",
+    "cypress-file-upload": "^5.0.7"
   }
 }

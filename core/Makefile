@@ -18,7 +18,7 @@ endif
 verify: lint test 
 
 lint:
-	npm run lint
+	npm run lint-check
 
 test:
 	npm run test

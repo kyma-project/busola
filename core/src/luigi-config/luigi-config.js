@@ -24,10 +24,11 @@ export const NODE_PARAM_PREFIX = `~`;
   const params = getInitParams();
   if (!params) {
     window.location = '/login.html';
+    return;
   }
 
   const luigiConfig = {
-    auth: !params.rawAuth && (await createAuth(params.auth)),
+    auth: !params?.rawAuth && (await createAuth(params?.auth)),
     communication,
     navigation,
     routing: {
@@ -37,7 +38,7 @@ export const NODE_PARAM_PREFIX = `~`;
     settings: createSettings(params),
     lifecycleHooks: {
       luigiAfterInit: () => {
-        if (params.rawAuth) {
+        if (params?.rawAuth) {
           Luigi.auth().store.setAuthData(params.rawAuth);
         }
         const showSystemNamespaces = localStorage.getItem(
