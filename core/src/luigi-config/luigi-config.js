@@ -6,65 +6,54 @@ import {
 import { communication } from './communication';
 import { createSettings } from './settings';
 import { createAuth } from './auth.js';
-import { saveInitParamsIfPresent } from './init-params';
-import { getInitParams } from './init-params';
-
 import {
-  navigation,
-  getNavigationData,
-  resolveNavigationNodes,
-} from './navigation/navigation-data-init';
+  saveInitParamsIfPresent,
+  getClusters,
+  getInitParams,
+} from './init-params';
+
+import { createNavigation, reloadNavigation } from './navigation/navigation-data-init';
 import { onQuotaExceed } from './luigi-event-handlers';
 
 export const NODE_PARAM_PREFIX = `~`;
+
+function luigiAfterInit() {
+  const params = getInitParams();
+  const isClusterChoosen = !!params;
+
+  initFeatureToggles();
+
+  if (!isClusterChoosen) {
+    Luigi.navigation().navigate('/clusters');
+  } else {
+    if (params?.auth) {
+      reloadNavigation();
+    }
+  }
+  Luigi.ux().hideAppLoadingIndicator();
+}
 
 (async () => {
   await saveInitParamsIfPresent(location);
 
   const params = getInitParams();
-  if (!params) {
-    window.location = '/login.html';
+  const isClusterChoosen = !!params;
+
+  if (params?.rawAuth) {
+    Luigi.auth().store.setAuthData(params.rawAuth);
   }
 
   const luigiConfig = {
-    auth: !params.rawAuth && (await createAuth(params.auth)),
+    auth:
+      isClusterChoosen && !params?.rawAuth && (await createAuth(params.auth)),
     communication,
-    navigation,
+    navigation: await createNavigation(),
     routing: {
       nodeParamPrefix: NODE_PARAM_PREFIX,
       skipRoutingForUrlPatterns: [/access_token=/, /id_token=/],
     },
     settings: createSettings(params),
-    lifecycleHooks: {
-      luigiAfterInit: () => {
-        if (params.rawAuth) {
-          Luigi.auth().store.setAuthData(params.rawAuth);
-        }
-        const showSystemNamespaces = localStorage.getItem(
-          'busola.showSystemNamespaces'
-        );
-
-        if (showSystemNamespaces === 'true') {
-          Luigi.featureToggles().setFeatureToggle('showSystemNamespaces');
-        } else {
-          Luigi.featureToggles().unsetFeatureToggle('showSystemNamespaces');
-        }
-        const auth = getAuthData();
-        if (auth) {
-          getNavigationData(auth).then((response) => {
-            resolveNavigationNodes(response);
-            Luigi.ux().hideAppLoadingIndicator();
-
-            const prevLocation = getPreviousLocation();
-            if (prevLocation) {
-              Luigi.navigation().navigate(prevLocation);
-            }
-          });
-        } else {
-          saveCurrentLocation();
-        }
-      },
-    },
+    lifecycleHooks: { luigiAfterInit },
   };
   Luigi.setConfig(luigiConfig);
 })();
@@ -74,3 +63,15 @@ window.addEventListener('message', (e) => {
     onQuotaExceed(e.data);
   }
 });
+
+function initFeatureToggles() {
+  const showSystemNamespaces = localStorage.getItem(
+    'busola.showSystemNamespaces'
+  );
+
+  if (showSystemNamespaces === 'true') {
+    Luigi.featureToggles().setFeatureToggle('showSystemNamespaces');
+  } else {
+    Luigi.featureToggles().unsetFeatureToggle('showSystemNamespaces');
+  }
+}

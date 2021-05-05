@@ -2,7 +2,6 @@ import { fetchBusolaInitData, fetchNamespaces } from './queries';
 import { config } from '../config';
 import {
   coreUIViewGroupName,
-  catalogViewGroupName,
   getStaticChildrenNodesForNamespace,
   getStaticRootNodes,
 } from './static-navigation-model';
@@ -17,98 +16,159 @@ import {
   clearAuthData,
   getAuthData,
 } from './navigation-helpers';
-import { groups } from '../auth';
-import { getInitParams, clearInitParams } from '../init-params';
+import { groups, createAuth } from '../auth';
+import {
+  getInitParams,
+  getClusters,
+  getCurrentClusterName,
+  saveCurrentClusterName,
+} from '../init-params';
 
-const customLogoutFn = () => {
-  clearInitParams();
-  window.location = '/logout.html';
-};
+export async function reloadNavigation() {
+  const params = getInitParams();
 
-export let resolveNavigationNodes;
-export let navigation = {
-  // viewGroupSettings: {
-  //   [coreUIViewGroupName]: {
-  //     preloadUrl: config.coreUIModuleUrl + '/preload',
-  //   },
-  //   [catalogViewGroupName]: {
-  //     preloadUrl: config.serviceCatalogModuleUrl + '/preload',
-  //   },
-  // },
-  preloadViewGroups: false,
-  nodeAccessibilityResolver: navigationPermissionChecker,
-  contextSwitcher: {
-    defaultLabel: 'Select Namespace ...',
-    parentNodePath: '/home/namespaces', // absolute path
-    lazyloadOptions: true, // load options on click instead on page load
-    options: getNamespaces,
-  },
-  profile: {
-    logout: {
-      label: 'Logout',
-      customLogoutFn,
-    },
-    items: [
+  if (params?.rawAuth) {
+    Luigi.auth().store.setAuthData(params.rawAuth);
+  }
+  const navigation = await createNavigation();
+  const auth = params?.auth && await createAuth(params.auth);
+  Luigi.setConfig({ ...Luigi.getConfig(), auth, navigation });
+}
+
+function createTODONodes() {
+  const activeClusterName = getCurrentClusterName();
+
+  const clusterManagementNode = {
+    pathSegment: 'clusters',
+    hideFromNav: true,
+    hideSideNav: true,
+    viewUrl: config.coreUIModuleUrl + '/clusters',
+    viewGroup: coreUIViewGroupName,
+    children: [
       {
-        icon: 'settings',
-        label: 'Preferences',
-        link: '/home/preferences',
+        hideSideNav: true,
+        pathSegment: 'add',
+        navigationContext: 'clusters',
+        viewUrl: config.coreUIModuleUrl + '/clusters/add',
       },
     ],
-  },
-  nodes: new Promise((res) => {
-    resolveNavigationNodes = res;
-  }),
-};
+    context: {
+      clusters: getClusters(),
+      currentClusterName: getCurrentClusterName(),
+    },
+  };
+  const clusters = getClusters();
 
-export function getNavigationData(authData) {
-  return new Promise(function (resolve, reject) {
-    fetchBusolaInitData(authData)
-      .then(
-        (res) => {
-          setInitValues(res.backendModules, res.selfSubjectRules || []);
-          return res;
-        },
-        (err) => {
-          if (err.statusCode === 403) {
-            clearAuthData();
-            window.location = `/nopermissions.html?error=${err.originalMessage}`;
+  const notActiveCluster = (name) => name !== activeClusterName;
+
+  const clusterNodes = Object.keys(clusters)
+    .filter(notActiveCluster)
+    .map((clusterName) => ({
+      pathSegment: clusterName,
+      hideFromNav: true,
+      onNodeActivation: async () => {
+        if (clusterName !== activeClusterName) {
+          saveCurrentClusterName(clusterName);
+          if (getInitParams().auth) {
+            location = `${location.origin}/cluster/${clusterName}`;
           } else {
-            let errorNotification = 'Could not load initial configuration';
-            if (err.statusCode && err.message)
-              errorNotification += `: ${err.message} (${err.statusCode}${
-                err.originalMessage && err.message !== err.originalMessage
-                  ? ':' + err.originalMessage
-                  : ''
-              })`;
-            Luigi.ux().showAlert({
-              text: errorNotification,
-              type: 'error',
-            });
-            console.warn(err);
+            await reloadNavigation();
+            Luigi.navigation().navigate(`/cluster/${clusterName}`);
           }
+        } else {
+          Luigi.navigation().navigate(`/cluster/${clusterName}`);
         }
-      )
-      // 'Finally' not supported by IE and FIREFOX (if 'finally' is needed, update your .babelrc)
-      .then((res) => {
-        const params = getInitParams();
-        const { disabledNavigationNodes = '', systemNamespaces = '' } =
-          params?.config || {};
-        const { bebEnabled = false } = params?.features || {};
-        const nodes = [
+        return false;
+      },
+    }));
+
+  const clusterNode = {
+    pathSegment: 'set-cluster',
+    hideFromNav: true,
+    children: clusterNodes,
+  };
+  return [clusterManagementNode, clusterNode];
+}
+
+export async function createNavigation() {
+  const params = getInitParams();
+  const clusters = getClusters();
+  const activeClusterName = getCurrentClusterName();
+  const isClusterSelected = !!params;
+
+  const clusterNodes = Object.entries(clusters).map(
+    ([clusterName, { cluster }]) => ({
+      title: clusterName,
+      subTitle: cluster.server,
+      link:
+        activeClusterName === clusterName
+          ? `/cluster/${clusterName}`
+          : `/set-cluster/${clusterName}`,
+    })
+  );
+  return {
+    preloadViewGroups: false,
+    nodeAccessibilityResolver: navigationPermissionChecker,
+    contextSwitcher: isClusterSelected && {
+      defaultLabel: 'Select Namespace ...',
+      parentNodePath: '/home/namespaces', // absolute path
+      lazyloadOptions: true, // load options on click instead on page load
+      options: getNamespaces,
+    },
+    appSwitcher: {
+      showMainAppEntry: false,
+      items: [
+        ...clusterNodes,
+        {
+          title: 'Add Cluster',
+          link: '/clusters/add',
+        },
+        {
+          title: 'Clusters Overview',
+          link: '/clusters',
+        },
+      ],
+    },
+    profile: isClusterSelected && {
+      items: [
+        {
+          icon: 'settings',
+          label: 'Preferences',
+          link: '/home/preferences',
+        },
+      ],
+    },
+    nodes: isClusterSelected && Object.keys(getAuthData() || []).length
+      ? await getNavigationData(getAuthData())
+      : createTODONodes(),
+  };
+}
+
+export async function getNavigationData(authData) {
+  try {
+    const res = await fetchBusolaInitData(authData);
+    setInitValues(res.backendModules, res.selfSubjectRules || []);
+    const params = getInitParams();
+    const activeClusterName = params.cluster.name;
+
+    const { disabledNavigationNodes = '', systemNamespaces = '' } =
+      params?.config || {};
+    const { bebEnabled = false } = params?.features || {};
+
+    const nodes = [
+      {
+        pathSegment: 'cluster',
+        hideFromNav: true,
+        onNodeActivation: () => {
+          if (activeClusterName) {
+            Luigi.navigation().navigate(`/cluster/${activeClusterName}`);
+          } else {
+            alert('wtf');
+          }
+        },
+        children: [
           {
-            pathSegment: 'home',
-            hideFromNav: true,
-            context: {
-              authData,
-              groups,
-              backendModules,
-              bebEnabled,
-              systemNamespaces,
-              showSystemNamespaces:
-                localStorage.getItem('busola.showSystemNamespaces') === 'true',
-              cluster: params?.cluster || '',
-            },
+            pathSegment: activeClusterName,
             children: function () {
               const staticNodes = getStaticRootNodes(
                 getChildrenNodesForNamespace,
@@ -118,15 +178,40 @@ export function getNavigationData(authData) {
               return staticNodes;
             },
           },
-        ];
-
-        resolve(nodes);
-      })
-      .catch((err) => {
-        console.error('Config Init Error', err);
-        reject(err);
+        ],
+        context: {
+          authData,
+          groups,
+          backendModules,
+          bebEnabled,
+          systemNamespaces,
+          showSystemNamespaces:
+            localStorage.getItem('busola.showSystemNamespaces') === 'true',
+          cluster: params.cluster,
+        },
+      },
+    ];
+    return [...nodes, ...createTODONodes()];
+  } catch (err) {
+    if (err.statusCode === 403) {
+      clearAuthData();
+      window.location = `/nopermissions.html?error=${err.originalMessage}`;
+    } else {
+      let errorNotification = 'Could not load initial configuration';
+      if (err.statusCode && err.message)
+        errorNotification += `: ${err.message} (${err.statusCode}${
+          err.originalMessage && err.message !== err.originalMessage
+            ? ':' + err.originalMessage
+            : ''
+        })`;
+      Luigi.ux().showAlert({
+        text: errorNotification,
+        type: 'error',
       });
-  });
+      console.warn(err);
+    }
+    return createTODONodes();
+  }
 }
 
 async function getNamespaces() {

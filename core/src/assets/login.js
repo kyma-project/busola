@@ -13,10 +13,10 @@ function saveInitParams(params) {
     },
   };
   localStorage.setItem(
-    'busola.init-params',
+    'busola.clusters',
     JSON.stringify({ ...params, ...defaultParams })
   );
-  window.location = '/home';
+  window.location = '/';
 }
 
 function readFile(file) {
@@ -58,7 +58,7 @@ function displayInitialView() {
   toggleConfigForm(true);
   toggleBackButton(false);
 }
-function handleKubeconfigAdded(kubeconfig, type) {
+function handleKubeconfigAdded(kubeconfig) {
   try {
     cluster = {
       name: kubeconfig.clusters[0].name,

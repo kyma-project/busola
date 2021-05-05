@@ -1,6 +1,7 @@
 import createEncoder from 'json-url';
 
-const PARAMS_KEY = 'busola.init-params';
+const CLUSTERS_KEY = 'busola.clusters';
+const CURRENT_CLUSTER_NAME_KEY = 'busola.current-cluster-name';
 const encoder = createEncoder('lzma');
 
 function getResponseParams(usePKCE = true) {
@@ -38,18 +39,43 @@ export async function saveInitParamsIfPresent(location) {
         ...getResponseParams(decoded.auth.usePKCE),
       };
     }
-    saveInitParams(params);
+    saveInitParams(params); // todo rename dis
+    saveCurrentClusterName(params.cluster.name);
   }
 }
 
 export function saveInitParams(params) {
-  localStorage.setItem(PARAMS_KEY, JSON.stringify(params));
+  const clusterName = params.cluster.name;
+  const clusters = getClusters();
+  clusters[clusterName] = params;
+  saveClusters(clusters);
 }
 
 export function getInitParams() {
-  return JSON.parse(localStorage.getItem(PARAMS_KEY) || 'null');
+  const clusterName = getCurrentClusterName();
+  if (!clusterName) {
+    return null;
+  }
+  return getClusters()[clusterName];
 }
 
 export function clearInitParams() {
-  localStorage.removeItem(PARAMS_KEY);
+  alert('clear init params? Nie sądzę');
+  // localStorage.removeItem(CLUSTERS_KEY);
+}
+
+export function getCurrentClusterName() {
+  return localStorage.getItem(CURRENT_CLUSTER_NAME_KEY);
+}
+
+export function saveCurrentClusterName(clusterName) {
+  localStorage.setItem(CURRENT_CLUSTER_NAME_KEY, clusterName);
+}
+
+export function getClusters() {
+  return JSON.parse(localStorage.getItem(CLUSTERS_KEY) || '{}');
+}
+
+export function saveClusters(clusters) {
+  localStorage.setItem(CLUSTERS_KEY, JSON.stringify(clusters));
 }

@@ -10,7 +10,7 @@ function toSearchParamsString(object) {
 export function getStaticChildrenNodesForNamespace(apiGroups) {
   const nodes = [
     {
-      link: '/home/workspace',
+      link: '/home/namespaces',
       label: 'Back to Namespaces',
       icon: 'nav-back',
     },
@@ -636,7 +636,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups) {
 export function getStaticRootNodes(namespaceChildrenNodesResolver, apiGroups) {
   const nodes = [
     {
-      pathSegment: 'workspace',
+      pathSegment: 'namespaces',
       label: 'Namespaces',
       viewUrl:
         config.coreUIModuleUrl +

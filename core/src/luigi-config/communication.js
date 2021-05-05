@@ -1,6 +1,14 @@
 import { NODE_PARAM_PREFIX } from './luigi-config';
-import { saveInitParams, getInitParams } from './init-params';
+import {
+  saveInitParams,
+  getInitParams,
+  getClusters,
+  saveClusters,
+  saveCurrentClusterName,
+  getCurrentClusterName,
+} from './init-params';
 import { config } from './config';
+import { reloadNavigation } from './navigation/navigation-data-init';
 
 export const communication = {
   customMessagesListeners: {
@@ -13,21 +21,21 @@ export const communication = {
       }
     },
     'busola.updateBebEnabled': ({ bebEnabled }) => {
-      const params = getInitParams();
-      saveInitParams({
-        ...params,
-        features: {
-          ...params.features,
-          bebEnabled,
-        },
-      });
-      updateContext({ bebEnabled });
+      // const params = getInitParams();
+      // saveInitParams({
+      //   ...params,
+      //   features: {
+      //     ...params.features,
+      //     bebEnabled,
+      //   },
+      // });
+      // updateContext({ bebEnabled });
     },
     'busola.updateClusterParams': (clusterParams) => {
-      const params = getInitParams();
-      delete clusterParams.id;
-      saveInitParams({ ...params, cluster: clusterParams });
-      location.reload();
+      // const params = getInitParams();
+      // delete clusterParams.id;
+      // saveInitParams({ ...params, cluster: clusterParams });
+      // location.reload();
     },
     'busola.refreshNavigation': () => {
       Luigi.configChanged('navigation.nodes');
@@ -59,6 +67,37 @@ export const communication = {
       );
     },
     'busola.reload': () => location.reload(),
+    'busola.addCluster': async ({ params }) => {
+      Luigi.auth().store.removeAuthData();
+      saveInitParams(params);
+      saveCurrentClusterName(params.cluster.name);
+      await reloadNavigation();
+      Luigi.navigation().navigate(`/cluster/${params.cluster.name}`);
+      if (params.auth) {
+        location = `${location.origin}/cluster/${params.cluster.name}`;
+      }
+    },
+    'busola.deleteCluster': ({ clusterName }) => {
+      const clusters = getClusters();
+      const activeClusterName = getCurrentClusterName();
+      if (activeClusterName === clusterName) {
+        Luigi.auth().store.removeAuthData();
+      }
+      delete clusters[clusterName];
+      saveClusters(clusters);
+      reloadNavigation();
+    },
+    'busola.setCluster': async ({ clusterName }) => {
+      Luigi.auth().store.removeAuthData();
+      saveCurrentClusterName(clusterName);
+      if (getInitParams().auth) {
+        location = `${location.origin}/cluster/${clusterName}`;
+        return;
+      } else {
+        await reloadNavigation();
+        Luigi.navigation().navigate(`/cluster/${clusterName}`);
+      }
+    },
   },
 };
 
