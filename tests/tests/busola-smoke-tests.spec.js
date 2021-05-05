@@ -18,8 +18,7 @@ context('Busola Smoke Tests', () => {
       .attachFile('kubeconfig.yaml', { subjectType: 'drag-n-drop' });
 
     cy.get('#error').should('not.exist');
-
-    cy.wait(2000); // wait for all the redirects; TODO: improve
+    cy.url().should('eq', ADDRESS + '/home/workspace');
   });
 
   after(() => {
