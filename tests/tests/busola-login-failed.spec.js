@@ -17,8 +17,8 @@ context('Busola Login Failed', () => {
       .get('#textarea-kubeconfig')
       .type('wrong_kubeconfig')
       .get('#apply-kubeconfig')
-      .click()
-      .get('#error')
-      .shouldHaveTrimmedText('Error reading kubeconfig.');
+      .click();
+
+    cy.get('#error').shouldHaveTrimmedText('Error reading kubeconfig.');
   });
 });
