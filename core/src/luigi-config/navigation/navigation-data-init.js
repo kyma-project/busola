@@ -153,8 +153,9 @@ async function getNamespaces() {
 }
 
 function getChildrenNodesForNamespace(apiGroups) {
-  const { disabledNavigationNodes } = getInitParams()?.config || {};
+  const { disabledNavigationNodes, modules } = getInitParams()?.config || {};
   const staticNodes = getStaticChildrenNodesForNamespace(apiGroups, modules);
+
   hideDisabledNodes(disabledNavigationNodes, staticNodes, true);
   return staticNodes;
 }
