@@ -2,7 +2,10 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 import ServiceClassList from '../ServiceClassList/ServiceClassList';
-import ServiceClassDetails from '../ServiceClassDetails/ServiceClassDetails';
+import {
+  ServiceClassDetailsContainer,
+  ClusterServiceClassDetailsContainer,
+} from '../ServiceClassDetails/ServiceClassDetails.container';
 import ServiceInstancesList from '../ServiceInstanceList/ServiceInstanceList';
 import ServiceInstancesDetails from '../ServiceInstanceDetails/ServiceInstanceDetails';
 import { NotificationProvider, withTitle } from 'react-shared';
@@ -22,8 +25,14 @@ const App = () => (
 
       <Route
         exact
-        path="/catalog/details/:name"
-        render={withTitle(CATALOG_TITLE, RoutedCatalogDetails)}
+        path="/catalog/ServiceClass/:name"
+        render={withTitle(CATALOG_TITLE, RoutedServiceClassDetails)}
+      />
+
+      <Route
+        exact
+        path="/catalog/ClusterServiceClass/:name"
+        render={withTitle(CATALOG_TITLE, RoutedClusterServiceClassDetails)}
       />
 
       <Route
@@ -40,8 +49,12 @@ const App = () => (
   </NotificationProvider>
 );
 
-const RoutedCatalogDetails = ({ match }) => (
-  <ServiceClassDetails name={match.params.name} />
+const RoutedServiceClassDetails = ({ match }) => (
+  <ServiceClassDetailsContainer name={match.params.name} />
+);
+
+const RoutedClusterServiceClassDetails = ({ match }) => (
+  <ClusterServiceClassDetailsContainer name={match.params.name} />
 );
 
 export default App;

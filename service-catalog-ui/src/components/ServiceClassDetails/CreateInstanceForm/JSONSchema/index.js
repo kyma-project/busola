@@ -35,7 +35,7 @@ const StyledForm = styled(Form)`
     &[type='text'],
     &[type='password'] {
       font-size: 14px;
-      border-radius: 4px;
+      border-radius: var(--sapField_BorderCornerRadius, 0.125rem);
       background-color: #ffffff;
       padding: ${props => (props.isError ? '0 0 0 10px' : '1px 1px 1px 11px')};
       border: solid
@@ -77,13 +77,17 @@ const StyledForm = styled(Form)`
     font-size: 14px;
     width: 100%;
     height: 36px;
-    border-radius: 4px;
+    border-radius: var(--sapField_BorderCornerRadius, 0.125rem);
     background-color: rgba(255, 255, 255, 0.4);
     border: solid 1px var(--sapField_BorderColor);
     outline: none;
     display: block;
     transition: border-color ease-out 0.2s;
     position: relative;
+    appearance: none;
+    background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzkiIGhlaWdodD0iMzYiIHZpZXdCb3g9IjAgMCAzOSAzNiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGZpbGw9IiNGQUZCRkMiIGQ9Ik0xIDBoMzd2MzZIMXoiLz48cGF0aCBkPSJNMSAwdjM2TTM4IDB2MzYiIHN0cm9rZT0iI0NFQ0VEMCIvPjxwYXRoIGQ9Ik0yNi45MTkgMTYuODQzbC03LjY2NyA4LjA1OGEuMzY0LjM2NCAwIDAgMS0uMjUzLjA5OS4zNjQuMzY0IDAgMCAxLS4yNTItLjFsLTcuNjY0LTguMDU3YS4yODMuMjgzIDAgMCAxIC4wMzQtLjQyOGwxLjcyMS0xLjM0MWEuMzUyLjM1MiAwIDAgMSAuMjE4LS4wNzRsLjAyNS4wMDFjLjA4OC4wMDYuMTcuMDQ1LjIyOC4xMDdMMTkgMjEuMjAybDUuNjkzLTYuMDk0Yy4xMi0uMTMuMzMtLjE0NS40Ny0uMDM0bDEuNzIyIDEuMzQxYS4yOTcuMjk3IDAgMCAxIC4xMTUuMjA3LjI4My4yODMgMCAwIDEtLjA4LjIyMXoiIGZpbGw9IiMwQTZFRDEiLz48L2c+PC9zdmc+);
+    background-repeat: no-repeat;
+    background-position: calc(100% + 0.0625rem) center;
 
     &:hover {
       border: 1px solid #2196f3;
@@ -91,6 +95,21 @@ const StyledForm = styled(Form)`
 
     &:focus {
       border: 1px solid #2196f3;
+    }
+
+    &::after {
+      content: '';
+      width: 0.625rem;
+      height: 0.3125rem;
+      border-color: transparent;
+      border-style: solid;
+      border-width: 0 0 0.125rem 0.125rem;
+      -webkit-transform: rotate(-45deg);
+      transform: rotate(-45deg);
+      position: absolute;
+      z-index: 2;
+      top: calc(50% - 0.25rem);
+      left: calc(50% - 0.625rem / 2);
     }
   }
 

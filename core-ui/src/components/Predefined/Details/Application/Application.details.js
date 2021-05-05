@@ -1,5 +1,4 @@
 import React from 'react';
-import { Labels } from 'react-shared';
 
 import ApplicationServices from './ApplicationServices';
 import NamespaceBindings from './NamespaceBindings';
@@ -11,10 +10,6 @@ export const ApplicationsDetails = ({ DefaultRenderer, ...otherParams }) => {
     {
       header: 'Descritpion',
       value: app => app.spec.description || '-',
-    },
-    {
-      header: 'Labels',
-      value: app => <Labels labels={app.metadata.labels} />,
     },
     {
       header: 'Status',
