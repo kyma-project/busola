@@ -1,4 +1,6 @@
 import React from 'react';
+import { useMicrofrontendContext, modulesExist } from 'react-shared';
+
 import { ComponentForList } from 'shared/getComponents';
 import DeployNewWorkload from './DeployNewWorkload';
 import { NamespaceStatus } from './NamespaceStatus';
@@ -6,7 +8,9 @@ import { NamespaceWorkloads } from './NamespaceWorkloads/NamespaceWorkloads';
 import { ResourcesUsage } from './ResourcesUsage';
 import './Namespace.details.scss';
 
-export const NamespacesDetails = DefaultRenderer => ({ ...otherParams }) => {
+export const NamespacesDetails = ({ DefaultRenderer, ...otherParams }) => {
+  const microfrontendContext = useMicrofrontendContext();
+  const { crds, modules } = microfrontendContext;
   const limitRangesParams = {
     hasDetailsView: false,
     resourceUrl: `/api/v1/namespaces/${otherParams.resourceName}/limitranges`,
@@ -42,12 +46,12 @@ export const NamespacesDetails = DefaultRenderer => ({ ...otherParams }) => {
     showTitle: true,
   };
 
-  const ApplicationMappings = (
+  const ApplicationMappings = modulesExist(crds, [modules?.APPLICATIONS]) ? (
     <ComponentForList
       name="applicationMappingsList"
       params={applicationMappingsParams}
     />
-  );
+  ) : null;
 
   const eventsParams = {
     namespace: otherParams.resourceName,

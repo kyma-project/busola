@@ -7,7 +7,7 @@ import {
 } from './static-navigation-model';
 import navigationPermissionChecker, {
   setInitValues,
-  backendModules,
+  crds,
 } from './permissions';
 
 import { hideDisabledNodes, createNamespacesList } from './navigation-helpers';
@@ -151,12 +151,15 @@ export async function createNavigation() {
 export async function getNavigationData(authData) {
   try {
     const res = await fetchBusolaInitData(authData);
-    setInitValues(res.backendModules, res.selfSubjectRules || []);
+    setInitValues(res.crds, res.selfSubjectRules || []);
     const params = getActiveCluster();
     const activeClusterName = params.cluster.name;
 
-    const { disabledNavigationNodes = '', systemNamespaces = '' } =
-      params?.config || {};
+    const {
+      disabledNavigationNodes = '',
+      systemNamespaces = '',
+      modules = {},
+    } = params?.config || {};
     const { bebEnabled = false } = params?.features || {};
 
     const nodes = [
@@ -171,7 +174,8 @@ export async function getNavigationData(authData) {
             children: function () {
               const staticNodes = getStaticRootNodes(
                 getChildrenNodesForNamespace,
-                res.apiGroups
+                res.apiGroups,
+                modules
               );
               hideDisabledNodes(disabledNavigationNodes, staticNodes, false);
               return staticNodes;
@@ -181,7 +185,7 @@ export async function getNavigationData(authData) {
         context: {
           authData,
           groups,
-          backendModules,
+          crds,
           bebEnabled,
           systemNamespaces,
           showSystemNamespaces: shouldShowSystemNamespaces(),
@@ -214,7 +218,7 @@ export async function getNavigationData(authData) {
 }
 
 async function getNamespaces() {
-  const { systemNamespaces } = getActiveCluster().config;
+  const { systemNamespaces } = getActiveCluster()?.config || {};
   let namespaces;
   try {
     namespaces = await fetchNamespaces(getAuthData());
@@ -232,8 +236,8 @@ async function getNamespaces() {
 }
 
 function getChildrenNodesForNamespace(apiGroups) {
-  const { disabledNavigationNodes } = getActiveCluster().config;
-  const staticNodes = getStaticChildrenNodesForNamespace(apiGroups);
+  const { disabledNavigationNodes, modules } = getActiveCluster()?.config || {};
+  const staticNodes = getStaticChildrenNodesForNamespace(apiGroups, modules);
 
   hideDisabledNodes(disabledNavigationNodes, staticNodes, true);
   return staticNodes;

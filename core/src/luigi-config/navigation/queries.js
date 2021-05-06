@@ -4,9 +4,13 @@ import { HttpError } from '../../../../shared/hooks/BackendAPI/config';
 
 export async function failFastFetch(input, auth, init = {}) {
   function createAuthHeaders(auth) {
-    if (auth.idToken) {
+    if (auth?.idToken) {
       return { Authorization: `Bearer ${auth.idToken}` };
-    } else if (auth['client-certificate-data'] && auth['client-key-data']) {
+    } else if (
+      auth &&
+      auth['client-certificate-data'] &&
+      auth['client-key-data']
+    ) {
       return {
         'X-Client-Certificate-Data': auth['client-certificate-data'],
         'X-Client-Key-Data': auth['client-key-data'],
@@ -17,7 +21,7 @@ export async function failFastFetch(input, auth, init = {}) {
   }
 
   function createHeaders(auth) {
-    const cluster = getActiveCluster().cluster;
+    const cluster = getActiveCluster()?.cluster;
     return {
       ...createAuthHeaders(auth),
       'Content-Type': 'application/json',
@@ -48,11 +52,10 @@ export async function failFastFetch(input, auth, init = {}) {
 }
 
 export function fetchBusolaInitData(auth) {
-  const backendModulesUrl = `${config.backendApiUrl}/apis/ui.kyma-project.io/v1alpha1/backendmodules`;
-  const backendModulesQuery = failFastFetch(backendModulesUrl, auth)
+  const crdsUrl = `${config.backendApiUrl}/apis/apiextensions.k8s.io/v1/customresourcedefinitions`;
+  const crdsQuery = failFastFetch(crdsUrl, auth)
     .then((res) => res.json())
-    .then((data) => ({ backendModules: data.items.map((bM) => bM.metadata) }))
-    .catch(() => ({ backendModules: [] }));
+    .then((data) => ({ crds: data.items.map((crd) => crd.metadata) }));
 
   const apiGroupsQuery = failFastFetch(config.backendApiUrl, auth)
     .then((res) => res.json())
@@ -74,7 +77,7 @@ export function fetchBusolaInitData(auth) {
     .then((res) => res.json())
     .then((res) => ({ selfSubjectRules: res.status.resourceRules }));
 
-  const promises = [backendModulesQuery, apiGroupsQuery, ssrrQuery];
+  const promises = [crdsQuery, apiGroupsQuery, ssrrQuery];
 
   return Promise.all(promises).then((res) => Object.assign(...res));
 }

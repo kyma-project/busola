@@ -8,7 +8,7 @@ const CURRENT_CLUSTER_NAME_KEY = 'busola.current-cluster-name';
 
 export function setActiveClusterIfPresentInUrl() {
   const match = location.pathname.match(/^\/cluster\/(.*?)\//);
-  console.log(match && match[1])
+  console.log(match && match[1]);
   if (match) {
     const clusterName = match[1];
     if (clusterName in getClusters()) {

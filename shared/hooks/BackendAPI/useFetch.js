@@ -22,11 +22,15 @@ export const useFetch = () => {
       signal: abortController?.signal,
     };
 
-    const response = await fetch(baseUrl(fromConfig) + relativeUrl, init);
-    if (response.ok) {
-      return response;
-    } else {
-      throw await throwHttpError(response);
+    try {
+      const response = await fetch(baseUrl(fromConfig) + relativeUrl, init);
+      if (response.ok) {
+        return response;
+      } else {
+        throw await throwHttpError(response);
+      }
+    } catch (e) {
+      console.error('Fetch failed: ', e);
     }
   };
 };

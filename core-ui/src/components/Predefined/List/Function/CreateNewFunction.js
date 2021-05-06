@@ -35,7 +35,7 @@ export default function CreateNewFunction({ namespaceName }) {
   return (
     <CreateLambdaModal
       functionNames={functionNames}
-      repositories={repositories}
+      repositories={repositories || []}
       serverDataError={serverDataError}
       serverDataLoading={serverDataLoading}
       modalOpeningComponent={control}

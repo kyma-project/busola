@@ -1,24 +1,28 @@
 import React from 'react';
 import { Button } from 'fundamental-react';
 import LuigiClient from '@luigi-project/client';
+import { useMicrofrontendContext, modulesExist } from 'react-shared';
 
 import { prettySourceType } from 'components/Lambdas/helpers/lambdas';
 import { prettyRuntime } from 'components/Lambdas/helpers/runtime';
 import { LambdaStatusBadge } from 'components/Lambdas/LambdaStatusBadge/LambdaStatusBadge';
 import CreateNewFunction from './CreateNewFunction';
 
-export const FunctionsList = DefaultRenderer => ({ ...otherParams }) => {
+export const FunctionsList = ({ DefaultRenderer, ...otherParams }) => {
+  const microfrontendContext = useMicrofrontendContext();
+  const { crds, modules } = microfrontendContext;
+
   function goToGitRepositories() {
     LuigiClient.linkManager()
       .fromContext('namespaces')
       .navigate(`gitrepositories`);
   }
 
-  const headerActions = (
+  const headerActions = modulesExist(crds, [modules?.SERVERLESS_REPOS]) ? (
     <Button option="transparent" onClick={goToGitRepositories}>
       Connected repositories
     </Button>
-  );
+  ) : null;
 
   const listActions = (
     <CreateNewFunction namespaceName={otherParams.namespace} />

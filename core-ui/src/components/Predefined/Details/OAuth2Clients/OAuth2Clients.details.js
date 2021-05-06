@@ -20,7 +20,7 @@ function SecretComponent({ namespaceName, secretName }) {
   return <SecretData secret={secret} />;
 }
 
-export const OAuth2ClientsDetails = DefaultRenderer => ({ ...otherParams }) => {
+export const OAuth2ClientsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const Secret = resource => (
     <SecretComponent
       key="secret"

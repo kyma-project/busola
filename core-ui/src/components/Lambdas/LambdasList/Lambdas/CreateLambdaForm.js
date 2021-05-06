@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import LuigiClient from '@luigi-project/client';
 
-import { Alert } from 'fundamental-react';
+import { MessageStrip } from 'fundamental-react';
 
 import {
   ResourceNameInput,
@@ -184,7 +184,7 @@ export default function CreateLambdaForm({
       value: sourceType.VALUE,
     }),
   );
-  const repositoryOptions = repositories.map(repository => ({
+  const repositoryOptions = repositories?.map(repository => ({
     key: `${repository.metadata.name} (${repository.spec.url})`,
     value: repository.metadata.name,
   }));
@@ -229,9 +229,9 @@ export default function CreateLambdaForm({
 
       {sourceType &&
         (!repositories.length ? (
-          <Alert dismissible={false} type="information">
+          <MessageStrip dismissible={false} type="information">
             {LAMBDAS_LIST.CREATE_MODAL.ERRORS.NO_REPOSITORY_FOUND}
-          </Alert>
+          </MessageStrip>
         ) : (
           <>
             <DropdownInput

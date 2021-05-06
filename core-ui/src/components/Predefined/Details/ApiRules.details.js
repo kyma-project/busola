@@ -13,7 +13,7 @@ import AccessStrategies from 'components/ApiRules/AccessStrategies/AccessStrateg
 import { formatMessage } from 'components/Lambdas/helpers/misc';
 import { useGetGatewayDomain as getGatewayDomain } from 'components/ApiRules/hooks/useGetGatewayDomain';
 
-export const ApiRulesDetails = DefaultRenderer => ({ ...otherParams }) => {
+export const ApiRulesDetails = ({ DefaultRenderer, ...otherParams }) => {
   const { domain } = getGatewayDomain();
   const customColumns = [
     {

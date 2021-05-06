@@ -98,9 +98,9 @@ const convertToObject = (paramsString) => {
   return result;
 };
 
-const updateClusterContext = newContext => {
+const updateClusterContext = (newContext) => {
   const nodes = Luigi.getConfig().navigation.nodes;
-  const clusterNode = nodes.find(n => n.pathSegment === 'cluster');
-  clusterNode.context = {...clusterNode.context, ...newContext};
+  const clusterNode = nodes.find((n) => n.pathSegment === 'cluster');
+  clusterNode.context = { ...clusterNode.context, ...newContext };
   Luigi.configChanged('navigation.nodes');
 };

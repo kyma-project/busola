@@ -8,7 +8,7 @@
     "start:kyma": "npm run start",
     "build": "npm run buildConfig",
     "test": "../node_modules/.bin/jest",
-    "lint": "prettier -c .",
+    "lint-check": "prettier -c .",
     "lint-fix": "prettier --write .",
     "buildConfig": "webpack --mode production --config webpack.config.js",
     "buildConfig:watch": "webpack --config webpack.config.js --watch",

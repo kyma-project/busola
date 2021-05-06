@@ -21,7 +21,8 @@ const RepositoryUrls = addon => {
   );
 };
 
-export const AddonsConfigurationsDetails = DefaultRenderer => ({
+export const AddonsConfigurationsDetails = ({
+  DefaultRenderer,
   ...otherParams
 }) => {
   return (

@@ -27,7 +27,7 @@ const getPodsCount = deployment => {
   }`;
 };
 
-export const DeploymentsList = DefaultRenderer => ({ ...otherParams }) => {
+export const DeploymentsList = ({ DefaultRenderer, ...otherParams }) => {
   const customColumns = [
     {
       header: 'Images',
