@@ -4,7 +4,7 @@ import { Button, Icon, MessageStrip } from 'fundamental-react';
 import { addCluster } from '../../shared';
 import './AuthForm.scss';
 
-export function AuthForm({ cluster, setShowNoAuth }) {
+export function AuthForm({ cluster, setShowingAuthForm }) {
   const formRef = React.useRef();
   const [auth, setAuth] = React.useState({
     issuerUrl: 'https://apskyxzcl.accounts400.ondemand.com',
@@ -31,7 +31,7 @@ export function AuthForm({ cluster, setShowNoAuth }) {
       onChange={onChange}
       className="cluster-auth-form"
     >
-      <Button option="transparent" onClick={() => setShowNoAuth(false)}>
+      <Button option="transparent" onClick={() => setShowingAuthForm(false)}>
         <Icon
           glyph="arrow-left"
           ariaLabel="back"

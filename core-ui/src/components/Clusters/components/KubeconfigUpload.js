@@ -5,7 +5,7 @@ import { MessageStrip } from 'fundamental-react';
 import { KubeconfigTextArea } from './KubeconfigTextArea/KubeconfigTextArea';
 import { addCluster, readFile } from '../shared';
 
-export function KubeconfigUpload({ setCluster, setShowNoAuth }) {
+export function KubeconfigUpload({ setCluster, setShowingAuthForm }) {
   const [showError, setShowError] = React.useState(false);
 
   async function onKubeconfigUploaded(file) {
@@ -20,7 +20,7 @@ export function KubeconfigUpload({ setCluster, setShowNoAuth }) {
   }
 
   function handleKubeconfigAdded(kubeconfig) {
-    setShowNoAuth(false);
+    setShowingAuthForm(false);
     setShowError(false);
 
     const clusterName = kubeconfig.clusters[0].name;
@@ -45,7 +45,7 @@ export function KubeconfigUpload({ setCluster, setShowNoAuth }) {
       };
       addCluster(params);
     } else {
-      setShowNoAuth(true);
+      setShowingAuthForm(true);
       setCluster(cluster);
     }
   }

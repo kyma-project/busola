@@ -4,6 +4,7 @@ import {
   deleteCluster,
   saveActiveClusterName,
   getActiveClusterName,
+  getActiveCluster,
   setCluster,
 } from './clusters';
 import { clearAuthData } from './auth-storage';
@@ -17,21 +18,15 @@ export const communication = {
       setShowSystemNamespaces(showSystemNamespaces);
     },
     'busola.updateBebEnabled': ({ bebEnabled }) => {
-      // const params = getActiveCluster();
-      // saveInitParams({
-      //   ...params,
-      //   features: {
-      //     ...params.features,
-      //     bebEnabled,
-      //   },
-      // });
-      // updateContext({ bebEnabled });
-    },
-    'busola.updateClusterParams': (clusterParams) => {
-      // const params = getActiveCluster();
-      // delete clusterParams.id;
-      // saveInitParams({ ...params, cluster: clusterParams });
-      // location.reload();
+      const params = getActiveCluster();
+      saveClusterParams({
+        ...params,
+        features: {
+          ...params.features,
+          bebEnabled,
+        },
+      });
+      updateClusterContext({ bebEnabled });
     },
     'busola.refreshNavigation': () => {
       Luigi.configChanged('navigation.nodes');
@@ -103,8 +98,9 @@ const convertToObject = (paramsString) => {
   return result;
 };
 
-const updateContext = async (newContext) => {
-  const navigation = await Luigi.getConfigValue('navigation.nodes');
-  navigation[0].context = { ...navigation[0].context, ...newContext };
+const updateClusterContext = newContext => {
+  const nodes = Luigi.getConfig().navigation.nodes;
+  const clusterNode = nodes.find(n => n.pathSegment === 'cluster');
+  clusterNode.context = {...clusterNode.context, ...newContext};
   Luigi.configChanged('navigation.nodes');
 };

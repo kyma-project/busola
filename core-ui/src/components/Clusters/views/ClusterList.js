@@ -60,7 +60,7 @@ export function ClusterList() {
         rowRenderer={rowRenderer}
         actions={actions}
         extraHeaderContent={extraHeaderContent}
-        noSearchResultMessage={'no nie ma klastrów i co zrobisz'}
+        noSearchResultMessage="No clusters found"
       />
     </>
   );

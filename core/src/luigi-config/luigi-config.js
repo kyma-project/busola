@@ -4,7 +4,7 @@ import { communication } from './communication';
 import { createSettings } from './settings';
 import { createAuth } from './auth.js';
 import { saveInitParamsIfPresent } from './init-params';
-import { getActiveCluster } from './clusters';
+import { getActiveCluster, setActiveClusterIfPresentInUrl } from './clusters';
 import { loadSystemNamespacesToggle } from './utils/system-namespaces-toggle';
 
 import {
@@ -40,6 +40,8 @@ async function luigiAfterInit() {
 }
 
 (async () => {
+  setActiveClusterIfPresentInUrl();
+
   await saveInitParamsIfPresent(location);
 
   const params = getActiveCluster();

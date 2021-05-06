@@ -20,16 +20,18 @@ import {
   setCluster,
 } from '../clusters';
 import { shouldShowSystemNamespaces } from './../utils/system-namespaces-toggle';
-import { tryRestorePreviousLocation } from './previous-location'; // todo previos-location
-//todo wywal sign out
+import { tryRestorePreviousLocation } from './previous-location';
+
 export async function addClusterNodes() {
-  const nodes = await getNavigationData(getAuthData());
   const config = Luigi.getConfig();
-  const navigation = {
-    ...navigation,
-    nodes,
-  };
-  Luigi.setConfig({ ...config, navigation });
+  const nodes = await getNavigationData(getAuthData());
+  Luigi.setConfig({
+    ...config,
+    navigation: {
+      ...config.navigation,
+      nodes,
+    },
+  });
   console.log('restore bc addClusterNodes');
   tryRestorePreviousLocation();
 }
@@ -39,7 +41,7 @@ export async function reloadNavigation() {
   Luigi.setConfig({ ...Luigi.getConfig(), navigation });
 }
 
-function createTODONodes() {
+function createClusterManagementNodes() {
   const activeClusterName = getActiveClusterName();
 
   const clusterManagementNode = {
@@ -114,7 +116,7 @@ export async function createNavigation() {
             {
               icon: 'settings',
               label: 'Preferences',
-              link: '/home/preferences',
+              link: `/cluster/${activeClusterName}/preferences`,
             },
           ],
         },
@@ -142,7 +144,7 @@ export async function createNavigation() {
     nodes:
       isClusterSelected && getAuthData()
         ? await getNavigationData(getAuthData())
-        : createTODONodes(),
+        : createClusterManagementNodes(),
   };
 }
 
@@ -187,7 +189,7 @@ export async function getNavigationData(authData) {
         },
       },
     ];
-    return [...nodes, ...createTODONodes()];
+    return [...nodes, ...createClusterManagementNodes()];
   } catch (err) {
     alert(err);
     if (err.statusCode === 403) {
@@ -207,7 +209,7 @@ export async function getNavigationData(authData) {
       });
       console.warn(err);
     }
-    return createTODONodes();
+    return createClusterManagementNodes();
   }
 }
 

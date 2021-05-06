@@ -6,6 +6,17 @@ import { saveLocation } from './navigation/previous-location';
 const CLUSTERS_KEY = 'busola.clusters';
 const CURRENT_CLUSTER_NAME_KEY = 'busola.current-cluster-name';
 
+export function setActiveClusterIfPresentInUrl() {
+  const match = location.pathname.match(/^\/cluster\/(.*?)\//);
+  console.log(match && match[1])
+  if (match) {
+    const clusterName = match[1];
+    if (clusterName in getClusters()) {
+      saveActiveClusterName(clusterName);
+    }
+  }
+}
+
 export async function setCluster(clusterName) {
   const activeClusterName = getActiveClusterName();
 

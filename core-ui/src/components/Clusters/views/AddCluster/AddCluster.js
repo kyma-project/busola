@@ -6,7 +6,7 @@ import { KubeconfigUpload } from '../../components/KubeconfigUpload';
 import { AuthForm } from 'components/Clusters/components/AuthForm/AuthForm';
 
 export function AddCluster() {
-  const [showNoAuth, setShowNoAuth] = React.useState(false);
+  const [showingAuthForm, setShowingAuthForm] = React.useState(false);
   const [cluster, setCluster] = React.useState(null);
 
   const breadcrumbItems = [
@@ -21,11 +21,11 @@ export function AddCluster() {
         breadcrumbItems={breadcrumbItems}
       />
       <div className="add-cluster-form fd-margin-top--lg">
-        {showNoAuth ? (
-          <AuthForm cluster={cluster} setShowNoAuth={setShowNoAuth} />
+        {showingAuthForm ? (
+          <AuthForm cluster={cluster} setShowingAuthForm={setShowingAuthForm} />
         ) : (
           <KubeconfigUpload
-            setShowNoAuth={setShowNoAuth}
+            setShowingAuthForm={setShowingAuthForm}
             setCluster={setCluster}
           />
         )}

@@ -3,6 +3,7 @@ import {
   saveClusterParams,
   saveActiveClusterName,
   setCluster,
+  getClusters,
 } from './clusters';
 
 const encoder = createEncoder('lzma');
@@ -48,8 +49,29 @@ export async function saveInitParamsIfPresent(location) {
         ''
       );
     }
-    saveClusterParams(params);
-    saveActiveClusterName(params.cluster.name);
-    setCluster(params.cluster.name);
+
+    const clusterName = params.cluster.name;
+    const clusters = getClusters();
+
+    if (clusterName in clusters) {
+      const settings = {
+        header: 'Replace cluster?',
+        body: `Are you sure you want to override settings for ${clusterName} cluster?`,
+        buttonConfirm: 'Replace',
+        buttonDismiss: 'Cancel',
+      };
+      Luigi.ux()
+        .showConfirmationModal(settings)
+        .then(() => {
+          saveClusterParams(params);
+          saveActiveClusterName(clusterName);
+          setCluster(clusterName);
+        })
+        .catch(() => {});
+    } else {
+      saveClusterParams(params);
+      saveActiveClusterName(clusterName);
+      setCluster(clusterName);
+    }
   }
 }

@@ -13,34 +13,12 @@ export async function reloadAuth() {
   Luigi.setConfig({ ...Luigi.getConfig(), auth });
 }
 
-async function fetchOidcProviderMetadata(issuerUrl) {
-  try {
-    const response = await fetch(
-      `${issuerUrl}/.well-known/openid-configuration`
-    );
-    return await response.json();
-  } catch (e) {
-    alert(
-      'Cannot fetch oidc provider metadata, see log console for more details'
-    );
-    console.error('cannot fetch OIDC metadata', e);
-  }
-}
-
 export const createAuth = async (authParams) => {
   if (!authParams) {
-    // create dummy auth just for storing auth data
-    return { storage: 'none' };
+    return null;
   }
 
   const { issuerUrl, clientId, responseType, responseMode, scope } = authParams;
-
-  const providerMetadata = await fetchOidcProviderMetadata(issuerUrl);
-  const end_session_endpoint =
-    providerMetadata.end_session_endpoint ||
-    `${issuerUrl}/v2/logout?returnTo=${encodeURI(
-      `${location.origin}/logout.html`
-    )}&client_id=${clientId}&`;
 
   return {
     use: 'openIdConnect',
@@ -53,11 +31,6 @@ export const createAuth = async (authParams) => {
       response_mode: responseMode,
       automaticSilentRenew: true,
       loadUserInfo: false,
-      logoutUrl: end_session_endpoint,
-      metadata: {
-        ...providerMetadata,
-        end_session_endpoint,
-      },
       userInfoFn: (_, authData) => {
         setAuthData(authData);
         groups = authData.profile['http://k8s/groups'];
