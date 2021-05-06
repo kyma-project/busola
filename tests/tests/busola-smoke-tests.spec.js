@@ -46,6 +46,14 @@ context('Busola - Smoke Tests', () => {
       .should('have.text', 'TERMINATING');
   });
 
+  beforeEach(() => {
+    cy.restoreLocalStorageCache();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorageCache();
+  });
+
   it('Renders navigation nodes', () => {
     ['Namespaces', 'Administration', 'Diagnostics'].forEach(node => {
       getLeftNav()

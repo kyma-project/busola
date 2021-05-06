@@ -76,11 +76,10 @@ export function getNavigationData(authData) {
           } else {
             let errorNotification = 'Could not load initial configuration';
             if (err.statusCode && err.message)
-              errorNotification += `: ${err.message} (${err.statusCode}${
-                err.originalMessage && err.message !== err.originalMessage
-                  ? ':' + err.originalMessage
-                  : ''
-              })`;
+              errorNotification += `: ${err.message} (${err.statusCode}${err.originalMessage && err.message !== err.originalMessage
+                ? ':' + err.originalMessage
+                : ''
+                })`;
             Luigi.ux().showAlert({
               text: errorNotification,
               type: 'error',
@@ -135,7 +134,7 @@ export function getNavigationData(authData) {
 }
 
 async function getNamespaces() {
-  const { systemNamespaces } = getInitParams()?.config || {};
+  const { systemNamespaces } = getInitParams().config;
   let namespaces;
   try {
     namespaces = await fetchNamespaces(getAuthData());
@@ -153,7 +152,7 @@ async function getNamespaces() {
 }
 
 function getChildrenNodesForNamespace(apiGroups) {
-  const { disabledNavigationNodes, modules } = getInitParams()?.config || {};
+  const { disabledNavigationNodes, modules } = getInitParams().config;
   const staticNodes = getStaticChildrenNodesForNamespace(apiGroups, modules);
 
   hideDisabledNodes(disabledNavigationNodes, staticNodes, true);

@@ -35,7 +35,7 @@ export async function saveInitParamsIfPresent(location) {
         modules,
       },
     };
-    if (decoded?.auth) {
+    if (decoded.auth) {
       params.auth = {
         ...decoded.auth,
         ...getResponseParams(decoded.auth.usePKCE),

@@ -46,6 +46,14 @@ context('Busola - Create a Function', () => {
       .should('have.text', 'TERMINATING');
   });
 
+  beforeEach(() => {
+    cy.restoreLocalStorageCache();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorageCache();
+  });
+
   it('Create a new namespace', () => {
     getLeftNav()
       .contains('Namespaces')
@@ -83,31 +91,29 @@ context('Busola - Create a Function', () => {
       .contains('Create Function')
       .click();
 
-    // cy.getIframeBody()
-    //   .find('[placeholder="Function name"]')
-    //   .clear()
-    //   .type('orders-function');
+    cy.getIframeBody()
+      .find('[placeholder="Function name"]')
+      .clear()
+      .type('orders-function');
 
-    // cy.getIframeBody()
-    //   .find('[placeholder="Enter Labels key=value"]')
-    //   .type('app=orders-function');
+    cy.getIframeBody()
+      .find('[placeholder="Enter Labels key=value"]')
+      .type('app=orders-function');
 
-    // cy.getIframeBody()
-    //   .contains('label', 'Labels')
-    //   .click()
-    //   .wait(2000);
+    cy.getIframeBody()
+      .contains('label', 'Labels')
+      .click();
 
-    // cy.getIframeBody()
-    //   .find('[placeholder="Enter Labels key=value"]')
-    //   .type('example=orders-function');
+    cy.getIframeBody()
+      .find('[placeholder="Enter Labels key=value"]')
+      .type('example=orders-function');
 
-    // cy.getIframeBody()
-    //   .contains('label', 'Labels')
-    //   .click();
+    cy.getIframeBody()
+      .contains('label', 'Labels')
+      .click();
 
     cy.getIframeBody()
       .contains('button', 'Create')
-      .click()
-      .wait(50000);
+      .click();
   });
 });
