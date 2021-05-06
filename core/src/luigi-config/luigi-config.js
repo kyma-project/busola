@@ -1,13 +1,11 @@
-import {
-  saveCurrentLocation,
-  getPreviousLocation,
-} from './navigation/navigation-helpers';
+import { saveCurrentLocation } from './navigation/previous-location';
 import { getAuthData, setAuthData } from './auth-storage';
 import { communication } from './communication';
 import { createSettings } from './settings';
 import { createAuth } from './auth.js';
 import { saveInitParamsIfPresent } from './init-params';
 import { getInitParams } from './clusters';
+import { loadSystemNamespacesToggle } from './utils/system-namespaces-toggle';
 
 import {
   createNavigation,
@@ -21,7 +19,12 @@ async function luigiAfterInit() {
   const params = getInitParams();
   const isClusterChoosen = !!params;
 
-  initFeatureToggles();
+  if (!getAuthData()) {
+    console.log('save current', window.location.pathname + window.location.search);
+    saveCurrentLocation();
+  }
+
+  loadSystemNamespacesToggle();
 
   if (!isClusterChoosen) {
     Luigi.navigation().navigate('/clusters');
@@ -61,15 +64,3 @@ window.addEventListener('message', (e) => {
     onQuotaExceed(e.data);
   }
 });
-
-function initFeatureToggles() {
-  const showSystemNamespaces = localStorage.getItem(
-    'busola.showSystemNamespaces'
-  );
-
-  if (showSystemNamespaces === 'true') {
-    Luigi.featureToggles().setFeatureToggle('showSystemNamespaces');
-  } else {
-    Luigi.featureToggles().unsetFeatureToggle('showSystemNamespaces');
-  }
-}

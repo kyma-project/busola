@@ -10,16 +10,12 @@ import {
 import { clearAuthData } from './auth-storage';
 import { reloadNavigation } from './navigation/navigation-data-init';
 import { reloadAuth } from './auth';
+import { setShowSystemNamespaces } from './utils/system-namespaces-toggle';
 
 export const communication = {
   customMessagesListeners: {
     'busola.showSystemNamespaces': ({ showSystemNamespaces }) => {
-      localStorage.setItem('busola.showSystemNamespaces', showSystemNamespaces);
-      if (showSystemNamespaces) {
-        Luigi.featureToggles().setFeatureToggle('showSystemNamespaces');
-      } else {
-        Luigi.featureToggles().unsetFeatureToggle('showSystemNamespaces');
-      }
+      setShowSystemNamespaces(showSystemNamespaces);
     },
     'busola.updateBebEnabled': ({ bebEnabled }) => {
       // const params = getInitParams();

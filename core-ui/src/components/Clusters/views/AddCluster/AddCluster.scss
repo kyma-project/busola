@@ -1,0 +1,12 @@
+.add-cluster-form {
+    display: flex;
+    place-items: center;
+    flex-direction: column;
+    
+    & > p {
+        margin-top: 32px;
+        margin-bottom: 32px;
+        text-align: center;
+        color: var(--sapTextColor,#32363a);
+    }
+}

@@ -1,7 +1,7 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { useMicrofrontendContext, PageHeader, GenericList } from 'react-shared';
-import { setCluster, deleteCluster } from './shared';
+import { setCluster, deleteCluster } from './../shared';
 import { Link, Button } from 'fundamental-react';
 
 export function ClusterList() {

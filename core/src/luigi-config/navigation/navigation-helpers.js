@@ -34,37 +34,6 @@ export const hideDisabledNodes = (disabledNavNodes, nodes, inNamespace) => {
   }
 };
 
-export const shouldShowSystemNamespaces = () => {
-  let showSystemNamespaces = false;
-  if (localStorage.getItem('busola.showSystemNamespaces')) {
-    showSystemNamespaces =
-      localStorage.getItem('busola.showSystemNamespaces') === 'true';
-  }
-  return showSystemNamespaces;
-};
-
-export const saveCurrentLocation = () => {
-  if (!window.location.hash) {
-    const location = window.location.pathname;
-    const params = window.location.search;
-    localStorage.setItem('busola.location', location + params);
-  }
-};
-
-export function relogin() {
-  saveCurrentLocation();
-  clearAuthData();
-  location.reload();
-}
-
-export const getPreviousLocation = () => {
-  const prevLocation = localStorage.getItem('busola.location');
-  if (prevLocation) {
-    localStorage.removeItem('busola.location');
-  }
-  return prevLocation;
-};
-
 export function hideByNodeCategory(node, showExperimentalCategory) {
   if (node.category === 'Experimental') {
     return { ...node, hideFromNav: !showExperimentalCategory };
@@ -108,6 +77,7 @@ export function setLimitExceededErrorsMessages(limitExceededErrors) {
 }
 
 function getCorrespondingNamespaceLocation(namespaceName) {
+  console.log('getCorrespondingNamespaceLocation');
   const addressTokens = window.location.pathname.split('/');
   // check if we are in namespaces context
   if (addressTokens[2] !== 'namespaces') {

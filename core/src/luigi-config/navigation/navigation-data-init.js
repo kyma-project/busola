@@ -11,15 +11,17 @@ import navigationPermissionChecker, {
 } from './permissions';
 
 import { hideDisabledNodes, createNamespacesList } from './navigation-helpers';
-import { clearAuthData, getAuthData, setAuthData } from './../auth-storage';
-import { groups, createAuth } from '../auth';
+import { clearAuthData, getAuthData } from './../auth-storage';
+import { groups } from '../auth';
 import {
   getInitParams,
   getClusters,
   getActiveClusterName,
   setCluster,
 } from '../clusters';
-
+import { shouldShowSystemNamespaces } from './../utils/system-namespaces-toggle';
+import { tryRestorePreviousLocation } from './previous-location'; // todo previos-location
+//todo wywal sign out
 export async function addClusterNodes() {
   const nodes = await getNavigationData(getAuthData());
   const config = Luigi.getConfig();
@@ -28,6 +30,8 @@ export async function addClusterNodes() {
     nodes,
   };
   Luigi.setConfig({ ...config, navigation });
+  console.log('restore bc addClusterNodes')
+  tryRestorePreviousLocation();
 }
 
 export async function reloadNavigation() {
@@ -150,7 +154,8 @@ export async function getNavigationData(authData) {
       {
         pathSegment: 'cluster',
         hideFromNav: true,
-        onNodeActivation: () => Luigi.navigation().navigate(`/cluster/${activeClusterName}`),
+        onNodeActivation: () =>
+          Luigi.navigation().navigate(`/cluster/${activeClusterName}`),
         children: [
           {
             pathSegment: activeClusterName,
@@ -170,8 +175,7 @@ export async function getNavigationData(authData) {
           backendModules,
           bebEnabled,
           systemNamespaces,
-          showSystemNamespaces:
-            localStorage.getItem('busola.showSystemNamespaces') === 'true',
+          showSystemNamespaces: shouldShowSystemNamespaces(),
           cluster: params.cluster,
         },
       },
@@ -212,7 +216,7 @@ async function getNamespaces() {
     });
     return [];
   }
-  if (localStorage.getItem('busola.showSystemNamespaces') !== 'true') {
+  if (shouldShowSystemNamespaces()) {
     namespaces = namespaces.filter((ns) => !systemNamespaces.includes(ns.name));
   }
   return createNamespacesList(namespaces);

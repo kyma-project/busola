@@ -1,6 +1,7 @@
 import { clearAuthData, setAuthData } from './auth-storage';
 import { reloadNavigation } from './navigation/navigation-data-init';
 import { reloadAuth } from './auth';
+import { saveLocation } from './navigation/previous-location';
 
 const CLUSTERS_KEY = 'busola.clusters';
 const CURRENT_CLUSTER_NAME_KEY = 'busola.current-cluster-name';
@@ -15,7 +16,8 @@ export async function setCluster(clusterName) {
 
     const params = getInitParams();
     if (params.auth) {
-      location = `${location.origin}/cluster/${clusterName}`;
+      saveLocation(`/cluster/${clusterName}`);
+      location = location.origin; // reload at root
       return;
     } else {
       setAuthData(params.rawAuth);

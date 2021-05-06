@@ -637,7 +637,9 @@ export function getStaticRootNodes(namespaceChildrenNodesResolver, apiGroups) {
   const nodes = [
     {
       pathSegment: 'namespaces',
+      navigationContext: 'namespaces',
       label: 'Namespaces',
+      icon: 'dimension',
       viewUrl:
         config.coreUIModuleUrl +
         '/Namespaces?' +
@@ -645,14 +647,7 @@ export function getStaticRootNodes(namespaceChildrenNodesResolver, apiGroups) {
           resourceApiPath: '/api/v1',
           hasDetailsView: true,
         }),
-      icon: 'dimension',
-      viewGroup: coreUIViewGroupName,
-      navigationContext: 'namespaces',
-    },
-    {
-      pathSegment: 'namespaces',
-      viewUrl: config.coreUIModuleUrl + '/Namespaces',
-      hideFromNav: true,
+      keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
       children: [
         {
@@ -661,8 +656,8 @@ export function getStaticRootNodes(namespaceChildrenNodesResolver, apiGroups) {
             namespaceId: ':namespaceId',
             environmentId: ':namespaceId',
           },
+          keepSelectedForChildren: false,
           children: () => namespaceChildrenNodesResolver(apiGroups),
-          navigationContext: 'namespaces',
           defaultChildNode: 'details',
         },
       ],

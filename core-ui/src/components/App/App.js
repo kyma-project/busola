@@ -11,8 +11,8 @@ import { ContainersLogs } from 'components/Predefined/Details/Pod/ContainersLogs
 import { ComponentForList, ComponentForDetails } from 'shared/getComponents';
 import { API_RULES_TITLE } from 'shared/constants';
 import { getResourceUrl } from 'shared/helpers';
-import { ClusterList } from 'components/Clusters/ClusterList';
-import { AddCluster } from 'components/Clusters/AddCluster';
+import { ClusterList } from 'components/Clusters/views/ClusterList';
+import { AddCluster } from 'components/Clusters/views/AddCluster/AddCluster';
 
 export default function App() {
   return (
