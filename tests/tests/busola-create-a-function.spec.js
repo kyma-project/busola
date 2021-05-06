@@ -9,7 +9,7 @@ const ADDRESS = config.localDev
 const random = Math.floor(Math.random() * 1000);
 const NAMESPACE_NAME = `a-busola-test-${random}`;
 
-context('Busola - Smoke Tests', () => {
+context('Busola - Create a Function', () => {
   const getLeftNav = () => cy.get('nav[data-testid=semiCollapsibleLeftNav]');
 
   before(() => {
@@ -46,14 +46,6 @@ context('Busola - Smoke Tests', () => {
       .should('have.text', 'TERMINATING');
   });
 
-  it('Renders navigation nodes', () => {
-    ['Namespaces', 'Administration', 'Diagnostics'].forEach(node => {
-      getLeftNav()
-        .contains(node)
-        .should('be.visible');
-    });
-  });
-
   it('Create a new namespace', () => {
     getLeftNav()
       .contains('Namespaces')
@@ -75,77 +67,47 @@ context('Busola - Smoke Tests', () => {
       .click();
   });
 
-  it('Go to the details of namespace and check sections', () => {
+  it('Go to the details of namespace', () => {
     cy.getIframeBody()
       .contains('a', NAMESPACE_NAME)
       .click();
-
-    cy.getIframeBody()
-      .contains('Healthy Resources')
-      .should('be.visible');
-
-    cy.getIframeBody()
-      .contains('Resource consumption')
-      .should('be.visible');
-
-    cy.getIframeBody()
-      .contains('Limit Ranges')
-      .should('be.visible');
-
-    cy.getIframeBody()
-      .contains('Resource Quotas')
-      .should('be.visible');
-
-    cy.getIframeBody()
-      .contains('Application Mappings') //exists only for Kyma clusters
-      .should('be.visible');
-
-    cy.getIframeBody()
-      .contains('Warnings')
-      .should('be.visible');
   });
 
-  it('Go back to the namespaces list', () => {
-    getLeftNav()
-      .contains('Back to Namespaces')
+  it('Create a Function', () => {
+    cy.getIframeBody()
+      .contains('Deploy new workload')
       .click();
 
-    cy.url().should('eq', ADDRESS + '/home/workspace');
-  });
-
-  it('Check Administration tab', () => {
-    getLeftNav()
-      .contains('Administration')
+    cy.getIframeBody()
+      .find('[role="menu"]')
+      .contains('Create Function')
       .click();
 
-    getLeftNav()
-      .contains('Cluster Roles')
-      .should('be.visible');
+    // cy.getIframeBody()
+    //   .find('[placeholder="Function name"]')
+    //   .clear()
+    //   .type('orders-function');
 
-    getLeftNav()
-      .contains('Cluster Role Bindings')
-      .should('be.visible');
-  });
+    // cy.getIframeBody()
+    //   .find('[placeholder="Enter Labels key=value"]')
+    //   .type('app=orders-function');
 
-  it('Check Diagnostic tab', () => {
-    getLeftNav()
-      .contains('Diagnostic')
-      .click();
+    // cy.getIframeBody()
+    //   .contains('label', 'Labels')
+    //   .click()
+    //   .wait(2000);
 
-    getLeftNav()
-      .contains('Logs')
-      .should('be.visible');
+    // cy.getIframeBody()
+    //   .find('[placeholder="Enter Labels key=value"]')
+    //   .type('example=orders-function');
 
-    getLeftNav()
-      .contains('Metrics')
-      .should('be.visible');
+    // cy.getIframeBody()
+    //   .contains('label', 'Labels')
+    //   .click();
 
-    getLeftNav()
-      .contains('Traces')
-      .should('be.visible');
-
-    getLeftNav()
-      .contains('Service Mesh')
-      .should('be.visible');
+    cy.getIframeBody()
+      .contains('button', 'Create')
+      .click()
+      .wait(50000);
   });
 });

@@ -5,7 +5,7 @@ const ADDRESS = config.localDev
   ? `http://localhost:4200`
   : `https://busola.${config.domain}`;
 
-context('Busola Login Failed', () => {
+context('Busola - Login failed', () => {
   it('Use wrong kubeconfig', () => {
     cy.visit(ADDRESS)
       .get('#textarea-kubeconfig')

@@ -7,5 +7,8 @@
   "fixturesFolder": "fixtures",
   "integrationFolder": "tests",
   "pluginsFile": false,
-  "supportFile": "support/index.js"
+  "supportFile": "support/index.js",
+
+  "viewportWidth": 1500,
+  "viewportHeight": 1500
 }
