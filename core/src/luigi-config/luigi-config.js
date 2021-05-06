@@ -1,9 +1,9 @@
 import { saveCurrentLocation } from './navigation/previous-location';
-import { getAuthData, setAuthData } from './auth-storage';
+import { getAuthData, setAuthData } from './auth/auth-storage';
 import { communication } from './communication';
 import { createSettings } from './settings';
-import { createAuth } from './auth.js';
-import { getActiveCluster, setActiveClusterIfPresentInUrl } from './clusters';
+import { createAuth } from './auth/auth.js';
+import { getActiveCluster, setActiveClusterIfPresentInUrl } from './cluster-management'
 import { loadSystemNamespacesToggle } from './utils/system-namespaces-toggle';
 
 import {
@@ -44,7 +44,7 @@ async function luigiAfterInit() {
   }
 
   const luigiConfig = {
-    auth: await createAuth(params?.auth),
+    auth: createAuth(params?.auth),
     communication,
     navigation: await createNavigation(),
     routing: {

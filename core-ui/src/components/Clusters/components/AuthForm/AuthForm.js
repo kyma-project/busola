@@ -7,9 +7,9 @@ import './AuthForm.scss';
 export function AuthForm({ cluster, setShowingAuthForm }) {
   const formRef = React.useRef();
   const [auth, setAuth] = React.useState({
-    issuerUrl: 'https://apskyxzcl.accounts400.ondemand.com',
-    clientId: 'd0316c58-b0fe-45cd-9960-0fea0708355a',
-    scope: 'openid',
+    issuerUrl: '',
+    clientId: '',
+    scope: '',
   });
   const [isFormValid, setFormValid] = React.useState(false);
 

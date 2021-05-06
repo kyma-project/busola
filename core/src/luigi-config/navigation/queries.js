@@ -1,5 +1,5 @@
 import { config } from './../config';
-import { getActiveCluster } from './../clusters';
+import { getActiveCluster } from './../cluster-management'
 import { HttpError } from '../../../../shared/hooks/BackendAPI/config';
 
 export async function failFastFetch(input, auth, init = {}) {

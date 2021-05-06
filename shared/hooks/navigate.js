@@ -11,9 +11,9 @@ export function navigateToFixedPathResourceDetails(
   resourceType,
   resourceName,
 ) {
-  LuigiClient.linkManager().navigate(
-    `/home/namespaces/${namespaceName}/${resourceType}/details/${resourceName}`,
-  );
+  LuigiClient.linkManager()
+    .fromContext('namespaces')
+    .navigate(`${namespaceName}/${resourceType}/details/${resourceName}`);
 }
 
 function navigateToNamespaceDetails(namespaceName) {

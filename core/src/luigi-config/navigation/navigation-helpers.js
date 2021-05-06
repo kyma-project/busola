@@ -1,5 +1,3 @@
-import { clearAuthData } from './../auth-storage';
-
 export const hideDisabledNodes = (disabledNavNodes, nodes, inNamespace) => {
   if (disabledNavNodes !== null && disabledNavNodes !== undefined) {
     const disabledNavNodesArray = disabledNavNodes.split(' ');

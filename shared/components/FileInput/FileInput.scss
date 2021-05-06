@@ -1,6 +1,6 @@
 .file-input {
   display: grid;
-  font-size: 0.875rem; // todo --sap-font-size
+  font-size: var(--sapFontSmallSize, 0.875rem);
   place-items: center;
   width: 300px;
   height: 80px;
@@ -17,7 +17,7 @@
 
   i {
     display: block;
-    color: #0a6ed1;
+    color: var(--sapBrandColor, #0a6ed1);
   }
   
   .input--hidden {
@@ -30,12 +30,12 @@
   }
 
   &__secondary {
-    color: gray; // todo
+    color: gray;
     margin-top: 4px;
   }
 
   &--drag-over {
-    border: 1px solid #0a6ed1;
+    border: 1px solid var(--sapBrandColor, #0a6ed1);
   }
 }
 

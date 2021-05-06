@@ -11,14 +11,14 @@ import navigationPermissionChecker, {
 } from './permissions';
 
 import { hideDisabledNodes, createNamespacesList } from './navigation-helpers';
-import { clearAuthData, getAuthData } from './../auth-storage';
-import { groups } from '../auth';
+import { clearAuthData, getAuthData } from './../auth/auth-storage';
+import { groups } from '../auth/auth';
 import {
   getActiveCluster,
   getClusters,
   getActiveClusterName,
   setCluster,
-} from '../clusters';
+} from '../cluster-management'
 import { shouldShowSystemNamespaces } from './../utils/system-namespaces-toggle';
 import { tryRestorePreviousLocation } from './previous-location';
 
@@ -194,7 +194,7 @@ export async function getNavigationData(authData) {
     ];
     return [...nodes, ...createClusterManagementNodes()];
   } catch (err) {
-    alert(err);
+    saveActiveClusterName(null);
     if (err.statusCode === 403) {
       clearAuthData();
       window.location = `/nopermissions.html?error=${err.originalMessage}`;

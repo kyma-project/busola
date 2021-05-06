@@ -1,9 +1,9 @@
-import { clearAuthData, setAuthData } from './auth-storage';
+import { clearAuthData, setAuthData } from './auth/auth-storage';
 import { reloadNavigation } from './navigation/navigation-data-init';
-import { reloadAuth } from './auth';
+import { reloadAuth } from './auth/auth';
 import { saveLocation } from './navigation/previous-location';
 
-const CLUSTERS_KEY = 'busola.clusters';
+const CLUSTERS_KEY = 'busola.clusters'
 const CURRENT_CLUSTER_NAME_KEY = 'busola.current-cluster-name';
 
 export function setActiveClusterIfPresentInUrl() {
@@ -22,7 +22,7 @@ export async function setCluster(clusterName) {
   if (clusterName !== activeClusterName) {
     clearAuthData();
     saveActiveClusterName(clusterName);
-    await reloadAuth();
+    reloadAuth();
 
     const params = getActiveCluster();
     if (params.auth) {

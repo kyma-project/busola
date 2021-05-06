@@ -7,7 +7,7 @@ import {
   API_RULES_TITLE,
   CLUSTER_OVERVIEW_TITLE,
   ADD_CLUSTER_TITLE,
-} from '../../shared/constants';
+} from 'shared/constants';
 import { withTitle, useMicrofrontendContext } from 'react-shared';
 import CreateApiRule from '../ApiRules/CreateApiRule/CreateApiRule';
 import EditApiRule from 'components/ApiRules/EditApiRule/EditApiRule';

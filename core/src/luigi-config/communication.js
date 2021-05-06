@@ -6,10 +6,10 @@ import {
   getActiveClusterName,
   getActiveCluster,
   setCluster,
-} from './clusters';
-import { clearAuthData } from './auth-storage';
+} from './cluster-management'
+import { clearAuthData } from './auth/auth-storage';
 import { reloadNavigation } from './navigation/navigation-data-init';
-import { reloadAuth } from './auth';
+import { reloadAuth } from './auth/auth';
 import { setShowSystemNamespaces } from './utils/system-namespaces-toggle';
 
 export const communication = {
@@ -67,13 +67,13 @@ export const communication = {
 
       const activeClusterName = getActiveClusterName();
       if (activeClusterName === clusterName) {
-        await reloadAuth();
+        reloadAuth();
         clearAuthData();
         saveActiveClusterName(null);
       }
       await reloadNavigation();
     },
-    'busola.setCluster': async ({ clusterName }) => {
+    'busola.setCluster': ({ clusterName }) => {
       setCluster(clusterName);
     },
   },

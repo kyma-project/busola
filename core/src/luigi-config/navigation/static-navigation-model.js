@@ -1,4 +1,5 @@
 import { config } from '../config';
+import { getActiveClusterName } from './../cluster-management';
 
 export const coreUIViewGroupName = '_core_ui_';
 export const catalogViewGroupName = '_catalog_';
@@ -10,7 +11,7 @@ function toSearchParamsString(object) {
 export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
   const nodes = [
     {
-      link: '/home/namespaces',
+      link: `/cluster/${getActiveClusterName()}/namespaces`,
       label: 'Back to Namespaces',
       icon: 'nav-back',
     },
@@ -611,7 +612,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
           pathSegment: 'create',
           viewUrl:
             config.coreUIModuleUrl +
-            '/home/namespaces/:namespaceId/oauth-clients/create',
+            '/namespaces/:namespaceId/oauth-clients/create',
           viewGroup: coreUIViewGroupName,
         },
         {
