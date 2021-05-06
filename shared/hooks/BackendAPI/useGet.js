@@ -119,8 +119,14 @@ const useGetStreamHook = _ =>
                 const streams = string
                   ?.split('\n')
                   .filter(stream => stream !== '');
+                const streamsObjects = streams.map(stream => ({
+                  id: Math.random()
+                    .toString(36)
+                    .substr(2, 9),
+                  stream,
+                }));
 
-                setData(previousData => [...previousData, ...streams]);
+                setData(previousData => [...previousData, ...streamsObjects]);
                 return push();
               } catch (e) {
                 // Chrome closes connections after a while.

@@ -66,9 +66,9 @@ function Logs({ params }) {
         </div>
       );
 
-    return filteredEntries?.map((arr, idx) => (
-      <div className="logs" key={idx}>
-        {arr}
+    return filteredEntries?.map(arr => (
+      <div className="logs" key={arr.id}>
+        {arr.stream}
       </div>
     ));
   };
