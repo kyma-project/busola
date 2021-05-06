@@ -3,6 +3,7 @@ import { getAuthData, setAuthData } from './auth/auth-storage';
 import { communication } from './communication';
 import { createSettings } from './settings';
 import { createAuth } from './auth/auth.js';
+import { saveInitParamsIfPresent } from './init-params';
 import {
   getActiveCluster,
   setActiveClusterIfPresentInUrl,
@@ -17,6 +18,8 @@ import {
 export const NODE_PARAM_PREFIX = `~`;
 
 async function luigiAfterInit() {
+  Luigi.ux().hideAppLoadingIndicator();
+
   const params = getActiveCluster();
   const isClusterChoosen = !!params;
 
@@ -34,11 +37,12 @@ async function luigiAfterInit() {
       await addClusterNodes();
     }
   }
-  Luigi.ux().hideAppLoadingIndicator();
 }
 
 (async () => {
   setActiveClusterIfPresentInUrl();
+
+  await saveInitParamsIfPresent();
 
   const params = getActiveCluster();
 
