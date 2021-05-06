@@ -97,7 +97,7 @@ context('Busola Smoke Tests', () => {
       .should('be.visible');
 
     cy.getIframeBody()
-      .contains('Application Mappings')
+      .contains('Application Mappings') //exists only for Kyma clusters
       .should('be.visible');
 
     cy.getIframeBody()
