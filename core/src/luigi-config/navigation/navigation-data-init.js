@@ -30,7 +30,7 @@ export async function addClusterNodes() {
     nodes,
   };
   Luigi.setConfig({ ...config, navigation });
-  console.log('restore bc addClusterNodes')
+  console.log('restore bc addClusterNodes');
   tryRestorePreviousLocation();
 }
 
@@ -100,15 +100,30 @@ export async function createNavigation() {
           : `/set-cluster/${clusterName}`,
     })
   );
+
+  const optionsForCurrentCluster = isClusterSelected
+    ? {
+        contextSwitcher: {
+          defaultLabel: 'Select Namespace ...',
+          parentNodePath: `/cluster/${activeClusterName}/namespaces`, // absolute path
+          lazyloadOptions: true, // load options on click instead on page load
+          options: getNamespaces,
+        },
+        profile: {
+          items: [
+            {
+              icon: 'settings',
+              label: 'Preferences',
+              link: '/home/preferences',
+            },
+          ],
+        },
+      }
+    : {};
+
   return {
     preloadViewGroups: false,
     nodeAccessibilityResolver: navigationPermissionChecker,
-    contextSwitcher: isClusterSelected && {
-      defaultLabel: 'Select Namespace ...',
-      parentNodePath: '/home/namespaces', // absolute path
-      lazyloadOptions: true, // load options on click instead on page load
-      options: getNamespaces,
-    },
     appSwitcher: {
       showMainAppEntry: false,
       items: [
@@ -123,15 +138,7 @@ export async function createNavigation() {
         },
       ],
     },
-    profile: isClusterSelected && {
-      items: [
-        {
-          icon: 'settings',
-          label: 'Preferences',
-          link: '/home/preferences',
-        },
-      ],
-    },
+    ...optionsForCurrentCluster,
     nodes:
       isClusterSelected && getAuthData()
         ? await getNavigationData(getAuthData())

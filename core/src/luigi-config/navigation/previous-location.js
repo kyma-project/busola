@@ -1,6 +1,6 @@
 const PREVIOUS_LOCATION_KEY = 'busola.location';
 
-export const saveLocation = location => {
+export const saveLocation = (location) => {
   localStorage.setItem(PREVIOUS_LOCATION_KEY, location);
 };
 
@@ -8,7 +8,7 @@ export const saveCurrentLocation = () => {
   if (!window.location.hash) {
     const location = window.location.pathname;
     const params = window.location.search;
-    saveLocation(location + params)
+    saveLocation(location + params);
   }
 };
 

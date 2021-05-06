@@ -1,5 +1,4 @@
 import React from 'react';
-import LuigiClient from '@luigi-project/client';
 import { Route, Switch } from 'react-router-dom';
 
 import Preferences from 'components/Preferences/Preferences';
@@ -15,8 +14,10 @@ import { ClusterList } from 'components/Clusters/views/ClusterList';
 import { AddCluster } from 'components/Clusters/views/AddCluster/AddCluster';
 
 export default function App() {
+  const { cluster } = useMicrofrontendContext();
   return (
-    <Switch>
+    // force rerender on cluster change
+    <Switch key={cluster?.name}>
       <Route path="/clusters" exact component={ClusterList} />
       <Route path="/clusters/add" exact component={AddCluster} />
       <Route

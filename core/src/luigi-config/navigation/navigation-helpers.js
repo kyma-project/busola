@@ -77,18 +77,17 @@ export function setLimitExceededErrorsMessages(limitExceededErrors) {
 }
 
 function getCorrespondingNamespaceLocation(namespaceName) {
-  console.log('getCorrespondingNamespaceLocation');
   const addressTokens = window.location.pathname.split('/');
   // check if we are in namespaces context
-  if (addressTokens[2] !== 'namespaces') {
+  if (addressTokens[3] !== 'namespaces') {
     return null;
   }
   // check if any path after namespace name exists - if not,
   // it will default to namespace name (and then to '/details')
-  if (!addressTokens[4]) {
+  if (!addressTokens[5]) {
     return null;
   }
-  const fullPath = addressTokens.slice(4).join('/');
+  const fullPath = addressTokens.slice(5).join('/');
   // navigate to the list view from the details
   const path =
     fullPath === 'details' ? fullPath : fullPath.split('/details')[0];
