@@ -11,7 +11,6 @@ import {
   createNavigation,
   addClusterNodes,
 } from './navigation/navigation-data-init';
-import { onQuotaExceed } from './luigi-event-handlers';
 
 export const NODE_PARAM_PREFIX = `~`;
 
@@ -63,9 +62,3 @@ async function luigiAfterInit() {
   };
   Luigi.setConfig(luigiConfig);
 })();
-
-window.addEventListener('message', (e) => {
-  if (e.data.msg === 'busola.quotaexceeded') {
-    onQuotaExceed(e.data);
-  }
-});
