@@ -11,14 +11,13 @@ SearchInput.propTypes = {
   entriesKind: PropTypes.string,
   entries: PropTypes.arrayOf(PropTypes.object.isRequired),
   handleQueryChange: PropTypes.func.isRequired,
-  suggestionProperties: PropTypes.arrayOf(PropTypes.string.isRequired)
-    .isRequired,
+  suggestionProperties: PropTypes.arrayOf(PropTypes.string.isRequired),
   showSuggestion: PropTypes.bool,
   showSearchControl: PropTypes.bool,
   disabled: PropTypes.bool,
 };
 
-export default function SearchInput({
+export function SearchInput({
   searchQuery,
   entriesKind,
   filteredEntries,
@@ -55,7 +54,7 @@ export default function SearchInput({
         if (typeof entry === 'string') {
           if (entryMatchesSearch(entry)) return entry;
         }
-        return suggestionProperties.map(properties => {
+        return suggestionProperties?.map(properties => {
           const propertiesArray = properties.split('.');
           let entryValue = entry;
           propertiesArray?.forEach(prop => {

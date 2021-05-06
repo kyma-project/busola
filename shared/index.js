@@ -1,4 +1,5 @@
 export { GenericList } from './components/GenericList/GenericList';
+export { SearchInput } from './components/GenericList/SearchInput';
 export {
   K8sNameInput,
   isK8SNameValid,
