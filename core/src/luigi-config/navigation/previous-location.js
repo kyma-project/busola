@@ -15,7 +15,6 @@ export const saveCurrentLocation = () => {
 export const tryRestorePreviousLocation = () => {
   const prevLocation = localStorage.getItem(PREVIOUS_LOCATION_KEY);
   if (prevLocation) {
-    console.log('restore', prevLocation);
     localStorage.removeItem(PREVIOUS_LOCATION_KEY);
     Luigi.navigation().navigate(prevLocation);
   }

@@ -32,7 +32,6 @@ export async function addClusterNodes() {
       nodes,
     },
   });
-  console.log('restore bc addClusterNodes');
   tryRestorePreviousLocation();
 }
 

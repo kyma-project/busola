@@ -17,11 +17,8 @@ async function luigiAfterInit() {
   const params = getActiveCluster();
   const isClusterChoosen = !!params;
 
+  // save location, as we'll be logged out in a moment
   if (!getAuthData()) {
-    console.log(
-      'save current',
-      window.location.pathname + window.location.search
-    );
     saveCurrentLocation();
   }
 
