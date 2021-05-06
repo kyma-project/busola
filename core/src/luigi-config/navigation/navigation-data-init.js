@@ -18,7 +18,7 @@ import {
   getClusters,
   getActiveClusterName,
   setCluster,
-} from '../cluster-management'
+} from '../cluster-management';
 import { shouldShowSystemNamespaces } from './../utils/system-namespaces-toggle';
 import { tryRestorePreviousLocation } from './previous-location';
 

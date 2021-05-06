@@ -3,7 +3,10 @@ import { getAuthData, setAuthData } from './auth/auth-storage';
 import { communication } from './communication';
 import { createSettings } from './settings';
 import { createAuth } from './auth/auth.js';
-import { getActiveCluster, setActiveClusterIfPresentInUrl } from './cluster-management'
+import {
+  getActiveCluster,
+  setActiveClusterIfPresentInUrl,
+} from './cluster-management';
 import { loadSystemNamespacesToggle } from './utils/system-namespaces-toggle';
 
 import {

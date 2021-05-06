@@ -3,7 +3,7 @@ import { reloadNavigation } from './navigation/navigation-data-init';
 import { reloadAuth } from './auth/auth';
 import { saveLocation } from './navigation/previous-location';
 
-const CLUSTERS_KEY = 'busola.clusters'
+const CLUSTERS_KEY = 'busola.clusters';
 const CURRENT_CLUSTER_NAME_KEY = 'busola.current-cluster-name';
 
 export function setActiveClusterIfPresentInUrl() {
