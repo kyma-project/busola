@@ -1,6 +1,6 @@
 import OpenIdConnect from '@luigi-project/plugin-auth-oidc';
 import { setAuthData } from './auth-storage';
-import { getInitParams } from './clusters';
+import { getActiveCluster } from './clusters';
 
 export let groups;
 
@@ -8,7 +8,7 @@ export async function reloadAuth() {
   if (params?.rawAuth) {
     setAuthData(params.rawAuth);
   }
-  const params = getInitParams();
+  const params = getActiveCluster();
   const auth = params?.auth && (await createAuth(params.auth));
   Luigi.setConfig({ ...Luigi.getConfig(), auth });
 }

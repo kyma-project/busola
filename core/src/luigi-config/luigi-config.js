@@ -4,7 +4,7 @@ import { communication } from './communication';
 import { createSettings } from './settings';
 import { createAuth } from './auth.js';
 import { saveInitParamsIfPresent } from './init-params';
-import { getInitParams } from './clusters';
+import { getActiveCluster } from './clusters';
 import { loadSystemNamespacesToggle } from './utils/system-namespaces-toggle';
 
 import {
@@ -16,7 +16,7 @@ import { onQuotaExceed } from './luigi-event-handlers';
 export const NODE_PARAM_PREFIX = `~`;
 
 async function luigiAfterInit() {
-  const params = getInitParams();
+  const params = getActiveCluster();
   const isClusterChoosen = !!params;
 
   if (!getAuthData()) {
@@ -42,7 +42,7 @@ async function luigiAfterInit() {
 (async () => {
   await saveInitParamsIfPresent(location);
 
-  const params = getInitParams();
+  const params = getActiveCluster();
 
   if (params?.rawAuth) {
     setAuthData(params.rawAuth);

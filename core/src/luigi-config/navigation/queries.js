@@ -1,5 +1,5 @@
 import { config } from './../config';
-import { getInitParams } from './../clusters';
+import { getActiveCluster } from './../clusters';
 import { HttpError } from '../../../../shared/hooks/BackendAPI/config';
 
 export async function failFastFetch(input, auth, init = {}) {
@@ -17,7 +17,7 @@ export async function failFastFetch(input, auth, init = {}) {
   }
 
   function createHeaders(auth) {
-    const cluster = getInitParams().cluster;
+    const cluster = getActiveCluster().cluster;
     return {
       ...createAuthHeaders(auth),
       'Content-Type': 'application/json',

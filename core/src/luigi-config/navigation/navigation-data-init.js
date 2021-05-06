@@ -14,7 +14,7 @@ import { hideDisabledNodes, createNamespacesList } from './navigation-helpers';
 import { clearAuthData, getAuthData } from './../auth-storage';
 import { groups } from '../auth';
 import {
-  getInitParams,
+  getActiveCluster,
   getClusters,
   getActiveClusterName,
   setCluster,
@@ -85,7 +85,7 @@ function createTODONodes() {
 }
 
 export async function createNavigation() {
-  const params = getInitParams();
+  const params = getActiveCluster();
   const clusters = getClusters();
   const activeClusterName = getActiveClusterName();
   const isClusterSelected = !!params;
@@ -150,7 +150,7 @@ export async function getNavigationData(authData) {
   try {
     const res = await fetchBusolaInitData(authData);
     setInitValues(res.backendModules, res.selfSubjectRules || []);
-    const params = getInitParams();
+    const params = getActiveCluster();
     const activeClusterName = params.cluster.name;
 
     const { disabledNavigationNodes = '', systemNamespaces = '' } =
@@ -212,7 +212,7 @@ export async function getNavigationData(authData) {
 }
 
 async function getNamespaces() {
-  const { systemNamespaces } = getInitParams().config;
+  const { systemNamespaces } = getActiveCluster().config;
   let namespaces;
   try {
     namespaces = await fetchNamespaces(getAuthData());
@@ -230,7 +230,7 @@ async function getNamespaces() {
 }
 
 function getChildrenNodesForNamespace(apiGroups) {
-  const { disabledNavigationNodes } = getInitParams().config;
+  const { disabledNavigationNodes } = getActiveCluster().config;
   const staticNodes = getStaticChildrenNodesForNamespace(apiGroups);
 
   hideDisabledNodes(disabledNavigationNodes, staticNodes, true);

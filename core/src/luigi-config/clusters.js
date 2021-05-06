@@ -14,7 +14,7 @@ export async function setCluster(clusterName) {
     saveActiveClusterName(clusterName);
     await reloadAuth();
 
-    const params = getInitParams();
+    const params = getActiveCluster();
     if (params.auth) {
       saveLocation(`/cluster/${clusterName}`);
       location = location.origin; // reload at root
@@ -34,7 +34,7 @@ export function saveClusterParams(params) {
   saveClusters(clusters);
 }
 
-export function getInitParams() {
+export function getActiveCluster() {
   const clusterName = getActiveClusterName();
   if (!clusterName) {
     return null;
@@ -52,6 +52,12 @@ export function saveActiveClusterName(clusterName) {
 
 export function getClusters() {
   return JSON.parse(localStorage.getItem(CLUSTERS_KEY) || '{}');
+}
+
+export function deleteCluster(clusterName) {
+  const clusters = getClusters();
+  delete clusters[clusterName];
+  saveClusters(clusters);
 }
 
 export function saveClusters(clusters) {

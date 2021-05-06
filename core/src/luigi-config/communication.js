@@ -1,8 +1,7 @@
 import { NODE_PARAM_PREFIX } from './luigi-config';
 import {
   saveClusterParams,
-  getClusters,
-  saveClusters,
+  deleteCluster,
   saveActiveClusterName,
   getActiveClusterName,
   setCluster,
@@ -18,7 +17,7 @@ export const communication = {
       setShowSystemNamespaces(showSystemNamespaces);
     },
     'busola.updateBebEnabled': ({ bebEnabled }) => {
-      // const params = getInitParams();
+      // const params = getActiveCluster();
       // saveInitParams({
       //   ...params,
       //   features: {
@@ -29,7 +28,7 @@ export const communication = {
       // updateContext({ bebEnabled });
     },
     'busola.updateClusterParams': (clusterParams) => {
-      // const params = getInitParams();
+      // const params = getActiveCluster();
       // delete clusterParams.id;
       // saveInitParams({ ...params, cluster: clusterParams });
       // location.reload();
@@ -69,16 +68,15 @@ export const communication = {
       setCluster(params.cluster.name);
     },
     'busola.deleteCluster': async ({ clusterName }) => {
-      const clusters = getClusters();
+      deleteCluster(clusterName);
+
       const activeClusterName = getActiveClusterName();
       if (activeClusterName === clusterName) {
         await reloadAuth();
         clearAuthData();
         saveActiveClusterName(null);
       }
-      delete clusters[clusterName];
-      saveClusters(clusters);
-      reloadNavigation();
+      await reloadNavigation();
     },
     'busola.setCluster': async ({ clusterName }) => {
       setCluster(clusterName);
