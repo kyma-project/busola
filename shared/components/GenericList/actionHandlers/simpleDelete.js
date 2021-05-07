@@ -18,6 +18,7 @@ export async function handleDelete(
   entityType,
   entityId,
   entityName,
+  notificationManager,
   deleteRequestFn,
   callback = () => {},
 ) {
@@ -25,12 +26,12 @@ export async function handleDelete(
     if (await displayConfirmationMessage(entityType, entityName)) {
       deleteRequestFn(entityId, entityName);
       callback();
+      notificationManager.notifySuccess({ title: `Resource deleted` });
     }
-  } catch (err) {
-    LuigiClient.uxManager().showAlert({
-      text: `An error occurred while deleting ${entityType} ${entityName}: ${err.message}`,
-      type: 'error',
-      closeAfter: 10000,
+  } catch (e) {
+    notificationManager.notifyError({
+      title: `Failed to delete the Resource`,
+      content: e.message,
     });
   }
 }
@@ -65,9 +66,10 @@ export function easyHandleDelete(
         }
       }
     })
-    .catch(err => {
+    .catch(e => {
       notificationManager.notifyError({
-        content: `An error occurred while deleting ${entityType} ${entityName}: ${err.message}`,
+        title: `Failed to delete the Resource`,
+        content: e.message,
       });
     });
 }
