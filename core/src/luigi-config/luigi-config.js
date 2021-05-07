@@ -14,7 +14,6 @@ import {
   getNavigationData,
   resolveNavigationNodes,
 } from './navigation/navigation-data-init';
-import { onQuotaExceed } from './luigi-event-handlers';
 
 export const NODE_PARAM_PREFIX = `~`;
 
@@ -69,9 +68,3 @@ export const NODE_PARAM_PREFIX = `~`;
   };
   Luigi.setConfig(luigiConfig);
 })();
-
-window.addEventListener('message', (e) => {
-  if (e.data.msg === 'busola.quotaexceeded') {
-    onQuotaExceed(e.data);
-  }
-});
