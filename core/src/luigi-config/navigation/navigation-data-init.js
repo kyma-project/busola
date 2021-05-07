@@ -206,6 +206,7 @@ export async function getNavigationData(authData) {
           authData,
           groups,
           crds,
+          modules,
           bebEnabled,
           systemNamespaces,
           showSystemNamespaces: shouldShowSystemNamespaces(),

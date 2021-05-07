@@ -53,9 +53,12 @@ export const ApiRulesDetails = ({ DefaultRenderer, ...otherParams }) => {
               redirectCtx: 'namespaces',
               redirectPath: encodeURIComponent('apirules/'),
             })
-            .openAsModal(`apirules/edit/${apirule.metadata.name}`, {
-              title: formattedTitle,
-            })
+            .openAsModal(
+              `${apirule.metadata.namespace}/apirules/edit/${apirule.metadata.name}`,
+              {
+                title: formattedTitle,
+              },
+            )
         }
       >
         Edit apirule

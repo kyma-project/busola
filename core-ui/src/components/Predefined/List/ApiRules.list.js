@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from 'fundamental-react';
 import LuigiClient from '@luigi-project/client';
+import { useMicrofrontendContext } from 'react-shared';
 import { PANEL } from '../../ApiRules/constants';
 import {
   CopiableApiRuleHost,
@@ -11,6 +12,7 @@ import { useGetGatewayDomain as getGatewayDomain } from 'components/ApiRules/hoo
 
 export const ApiRulesList = ({ DefaultRenderer, ...otherParams }) => {
   const { domain } = getGatewayDomain();
+  const { namespaceId } = useMicrofrontendContext();
   const createApiRule = (
     <Button
       glyph="add"
@@ -25,7 +27,7 @@ export const ApiRulesList = ({ DefaultRenderer, ...otherParams }) => {
             redirectCtx: 'namespaces',
             redirectPath: encodeURIComponent('apirules/'),
           })
-          .openAsModal(`apirules/create`, {
+          .openAsModal(`${namespaceId}/apirules/create`, {
             title: PANEL.CREATE_MODAL.TITLE,
           })
       }
