@@ -10,6 +10,7 @@ const random = Math.floor(Math.random() * 1000);
 const NAMESPACE_NAME = `b-busola-test-${random}`;
 
 const DOCKER_IMAGE = 'eu.gcr.io/kyma-project/pr/orders-service:PR-162';
+const DEPLOYMENT_NAME = 'orders-service';
 
 context('Busola - Create a Deployment', () => {
   const getLeftNav = () => cy.get('nav[data-testid=semiCollapsibleLeftNav]');
@@ -30,11 +31,11 @@ context('Busola - Create a Deployment', () => {
     getLeftNav()
       .contains('Namespaces') //it finds Namespaces (expected) or Back to Namespaces (if tests fail in the middle)
       .click({ force: true }) //we need to use force when others elements make menu not visible
-      .wait(0);
+      .wait(1000);
 
     cy.getIframeBody()
       .find('[aria-label="open-search"]')
-      .click();
+      .click({ force: true });
 
     cy.getIframeBody()
       .find('[placeholder="Search"]')
@@ -42,7 +43,7 @@ context('Busola - Create a Deployment', () => {
 
     cy.getIframeBody()
       .find('[aria-label="Delete"]')
-      .click();
+      .click({ force: true });
 
     cy.getIframeBody()
       .find('[role="status"]')
@@ -89,11 +90,11 @@ context('Busola - Create a Deployment', () => {
     cy.getIframeBody()
       .find('[placeholder="Deployment name"]')
       .clear()
-      .type('orders-service');
+      .type(DEPLOYMENT_NAME);
 
     cy.getIframeBody()
       .find('[placeholder="Enter Labels key=value"]')
-      .type('app=orders-service');
+      .type(`app=${DEPLOYMENT_NAME}`);
 
     cy.getIframeBody()
       .contains('label', 'Labels')
@@ -101,7 +102,7 @@ context('Busola - Create a Deployment', () => {
 
     cy.getIframeBody()
       .find('[placeholder="Enter Labels key=value"]')
-      .type('example=orders-service');
+      .type(`example=${DEPLOYMENT_NAME}`);
 
     cy.getIframeBody()
       .contains('label', 'Labels')
@@ -137,7 +138,25 @@ context('Busola - Create a Deployment', () => {
 
     cy.getIframeBody()
       .contains('button', 'Create')
-      .click()
+      .click({ force: true });
+  });
+
+  it('Check if deployment and service exist', () => {
+    cy.getIframeBody()
+      .contains('a', DEPLOYMENT_NAME)
+      .should('be.visible');
+
+    getLeftNav()
+      .contains('Discovery and Network')
+      .click({ force: true });
+
+    getLeftNav()
+      .contains('Services')
+      .click({ force: true })
       .wait(2000);
+
+    cy.getIframeBody()
+      .contains('a', DEPLOYMENT_NAME)
+      .should('be.visible');
   });
 });
