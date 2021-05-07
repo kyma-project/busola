@@ -58,7 +58,7 @@ export function FileInput({
         type="file"
         id="file-upload"
         onChange={e => fileChanged(e.target.files[0])}
-        className="input--hidden"
+        aria-hidden="true"
         accept={acceptedFileFormats}
         required={required}
       />

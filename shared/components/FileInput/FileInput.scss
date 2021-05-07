@@ -20,7 +20,7 @@
     color: var(--sapBrandColor, #0a6ed1);
   }
   
-  .input--hidden {
+  input[aria-hidden=true] {
     width: 0.1px;
     height: 0.1px;
     opacity: 0;
