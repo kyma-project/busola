@@ -19,6 +19,7 @@ import {
   K8sNameInput,
   InputWithSuffix,
   Tooltip,
+  useMicrofrontendContext,
 } from 'react-shared';
 import { SERVICES_URL, API_RULE_URL } from '../constants';
 import { formatMessage as injectVariables } from 'components/Lambdas/helpers/misc';
@@ -64,7 +65,7 @@ export default function ApiRuleForm({
     error: domainError,
     loading: domainLoading,
   } = useGetGatewayDomain();
-  const namespace = LuigiClient.getEventData().namespaceId;
+  const { namespaceId: namespace } = useMicrofrontendContext();
   const notification = useNotification();
   const { serviceName, port, openedInModal = false } =
     LuigiClient.getNodeParams() || {};
