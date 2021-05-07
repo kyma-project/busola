@@ -22,7 +22,7 @@ export function AuthForm({ cluster, setShowingAuthForm }) {
     addCluster(params);
   };
 
-  const onChange = () => setFormValid(!formRef.current?.checkValidity());
+  const onChange = () => setFormValid(formRef.current?.checkValidity());
 
   return (
     <form
@@ -68,7 +68,7 @@ export function AuthForm({ cluster, setShowingAuthForm }) {
         onChange={e => setAuth({ ...auth, scope: e.target.value })}
         defaultValue={auth.scope}
       />
-      <Button typeAttr="submit" disabled={isFormValid} option="emphasized">
+      <Button typeAttr="submit" disabled={!isFormValid} option="emphasized">
         Connect
       </Button>
     </form>
