@@ -99,20 +99,6 @@ export function createNamespacesList(rawNamespaceNames) {
   return namespaces;
 }
 
-export function setLimitExceededErrorsMessages(limitExceededErrors) {
-  let limitExceededErrorscomposed = [];
-  limitExceededErrors.forEach((resource) => {
-    if (resource.affectedResources && resource.affectedResources.length > 0) {
-      resource.affectedResources.forEach((affectedResource) => {
-        limitExceededErrorscomposed.push(
-          `'${resource.resourceName}' by '${affectedResource}' (${resource.quotaName})`
-        );
-      });
-    }
-  });
-  return limitExceededErrorscomposed;
-}
-
 function getCorrespondingNamespaceLocation(namespaceName) {
   const addressTokens = window.location.pathname.split('/');
   // check if we are in namespaces context
