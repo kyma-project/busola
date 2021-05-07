@@ -9,9 +9,10 @@ function toSearchParamsString(object) {
 }
 
 export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
+  const encodedClusterName = encodeURIComponent(getActiveClusterName());
   const nodes = [
     {
-      link: `/cluster/${getActiveClusterName()}/namespaces`,
+      link: `/cluster/${encodedClusterName}/namespaces`,
       label: 'Back to Namespaces',
       icon: 'nav-back',
     },

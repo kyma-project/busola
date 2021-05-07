@@ -9,7 +9,7 @@ const CURRENT_CLUSTER_NAME_KEY = 'busola.current-cluster-name';
 export function setActiveClusterIfPresentInUrl() {
   const match = location.pathname.match(/^\/cluster\/(.*?)\//);
   if (match) {
-    const clusterName = match[1];
+    const clusterName = decodeURIComponent(match[1]);
     if (clusterName in getClusters()) {
       saveActiveClusterName(clusterName);
     }
@@ -26,7 +26,7 @@ export async function setCluster(clusterName) {
 
     const params = getActiveCluster();
     if (params.auth) {
-      saveLocation(`/cluster/${clusterName}`);
+      saveLocation(`/cluster/${encodeURIComponent(clusterName)}`);
       location = location.origin; // reload at root
       return;
     } else {
@@ -34,7 +34,7 @@ export async function setCluster(clusterName) {
       await reloadNavigation();
     }
   }
-  Luigi.navigation().navigate(`/cluster/${clusterName}`);
+  Luigi.navigation().navigate(`/cluster/${encodeURIComponent(clusterName)}`);
 }
 
 export function saveClusterParams(params) {

@@ -79,21 +79,12 @@ function createClusterManagementNodes() {
   const clusterNodes = Object.keys(clusters)
     .filter(notActiveCluster)
     .map((clusterName) => ({
-      pathSegment: clusterName,
+      pathSegment: encodeURIComponent(clusterName),
       hideFromNav: true,
       onNodeActivation: async () => {
         await setCluster(clusterName);
         return false;
       },
-      children: [
-        {
-          pathSegment: 'remove',
-          onNodeActivation: () => {
-            alert('działa!');
-            return false;
-          },
-        },
-      ],
     }));
 
   const clusterNode = {
@@ -116,8 +107,8 @@ export async function createNavigation() {
       subTitle: cluster.server,
       link:
         activeClusterName === clusterName
-          ? `/cluster/${clusterName}`
-          : `/set-cluster/${clusterName}`,
+          ? `/cluster/${encodeURIComponent(clusterName)}`
+          : `/set-cluster/${encodeURIComponent(clusterName)}`,
     })
   );
 
@@ -125,7 +116,7 @@ export async function createNavigation() {
     ? {
         contextSwitcher: {
           defaultLabel: 'Select Namespace ...',
-          parentNodePath: `/cluster/${activeClusterName}/namespaces`, // absolute path
+          parentNodePath: `/cluster/${encodeURIComponent(activeClusterName)}/namespaces`, // absolute path
           lazyloadOptions: true, // load options on click instead on page load
           options: getNamespaces,
         },
@@ -134,7 +125,7 @@ export async function createNavigation() {
             {
               icon: 'settings',
               label: 'Preferences',
-              link: `/cluster/${activeClusterName}/preferences`,
+              link: `/cluster/${encodeURIComponent(activeClusterName)}/preferences`,
             },
             {
               icon: 'log',
@@ -190,10 +181,10 @@ export async function getNavigationData(authData) {
         pathSegment: 'cluster',
         hideFromNav: true,
         onNodeActivation: () =>
-          Luigi.navigation().navigate(`/cluster/${activeClusterName}`),
+          Luigi.navigation().navigate(`/cluster/${encodeURIComponent(activeClusterName)}`),
         children: [
           {
-            pathSegment: activeClusterName,
+            pathSegment: encodeURIComponent(activeClusterName),
             children: function () {
               const staticNodes = getStaticRootNodes(
                 getChildrenNodesForNamespace,
