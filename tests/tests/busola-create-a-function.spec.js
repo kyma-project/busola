@@ -123,5 +123,11 @@ context('Busola - Create a Function', () => {
     cy.getIframeBody()
       .contains('button', 'Create')
       .click();
+
+    cy.getIframeBody()
+      .find('div[role="code"]')
+      .find('.monaco-editor')
+      .clear()
+      .type(cy.readFile('fixtures/handler.js'));
   });
 });
