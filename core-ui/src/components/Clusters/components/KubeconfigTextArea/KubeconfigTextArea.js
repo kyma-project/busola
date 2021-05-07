@@ -20,6 +20,7 @@ export function KubeconfigTextArea({ onSubmit, setShowError }) {
   return (
     <div className="kubeconfig-text-area">
       <textarea
+        id="textarea-kubeconfig"
         placeholder="Paste your config"
         onChange={e => setKubeconfigText(e.target.value)}
       ></textarea>
