@@ -116,7 +116,9 @@ export async function createNavigation() {
     ? {
         contextSwitcher: {
           defaultLabel: 'Select Namespace ...',
-          parentNodePath: `/cluster/${encodeURIComponent(activeClusterName)}/namespaces`, // absolute path
+          parentNodePath: `/cluster/${encodeURIComponent(
+            activeClusterName
+          )}/namespaces`, // absolute path
           lazyloadOptions: true, // load options on click instead on page load
           options: getNamespaces,
         },
@@ -125,7 +127,9 @@ export async function createNavigation() {
             {
               icon: 'settings',
               label: 'Preferences',
-              link: `/cluster/${encodeURIComponent(activeClusterName)}/preferences`,
+              link: `/cluster/${encodeURIComponent(
+                activeClusterName
+              )}/preferences`,
             },
             {
               icon: 'log',
@@ -181,7 +185,9 @@ export async function getNavigationData(authData) {
         pathSegment: 'cluster',
         hideFromNav: true,
         onNodeActivation: () =>
-          Luigi.navigation().navigate(`/cluster/${encodeURIComponent(activeClusterName)}`),
+          Luigi.navigation().navigate(
+            `/cluster/${encodeURIComponent(activeClusterName)}`
+          ),
         children: [
           {
             pathSegment: encodeURIComponent(activeClusterName),
