@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project contains UI smoke tests for Kyma.
+This project contains UI smoke tests for Busola. Copy your cluster's kubeconfig file to [`fixtures/kubeconfig.yaml`](fixtures/kubeconfig.yaml).
 
 ## Installation
 
@@ -12,12 +12,18 @@ To install dependencies, run the `npm install` command.
 
 To run UI tests inside a container in the cluster using a Chrome browser, use this command:
 
-``` bash
+```bash
 npm run test:cluster
 ```
 
 To run UI tests on a cluster, use this command:
 
-``` bash
-CYPRESS_DOMAIN={YOUR_DOMAIN} CYPRESS_PASSWORD={YOUR_CLUSTER_PASSWORD} npm start
+```bash
+CYPRESS_DOMAIN={YOUR_DOMAIN} npm start
+```
+
+To run UI tests on a local instance, use this command:
+
+```bash
+CYPRESS_LOCAL_DEV=true npm start
 ```

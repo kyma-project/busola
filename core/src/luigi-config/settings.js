@@ -1,12 +1,10 @@
-export function createSettings({ cluster }) {
-  const title =
-    cluster.name || cluster.server.replace(/^https?:\/\/(api\.)?/, '');
+export function createSettings(params) {
   return {
     responsiveNavigation: 'simpleMobileOnly',
     sideNavFooterText: '',
     header: {
       logo: 'assets/logo.svg',
-      title,
+      title: params?.cluster.name || 'Busola',
       favicon: 'favicon.ico',
     },
     appLoadingIndicator: {

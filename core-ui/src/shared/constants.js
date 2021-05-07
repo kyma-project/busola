@@ -1,9 +1,8 @@
-export const LOCAL_STORAGE_NAMESPACE_FILTERS = 'workspace/namespaceFilters';
-export const REFETCH_TIMEOUT = 600;
-
 export const PREFERENCES_TITLE = 'Preferences';
-
+export const CLUSTER_OVERVIEW_TITLE = 'Clusters Overview';
+export const ADD_CLUSTER_TITLE = 'Add Cluster';
 export const API_RULES_TITLE = 'API Rules';
+
 export const ERRORS = {
   SERVER: 'Server error. Contact your cluster admin.',
   RESOURCES_NOT_FOUND: 'There are no related resources yet.',

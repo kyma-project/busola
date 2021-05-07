@@ -23,10 +23,6 @@ module.exports = {
   plugins: [
     new CopyWebpackPlugin([
       { from: './node_modules/@luigi-project/core', to: 'libs/luigi-core' },
-      {
-        from: '../node_modules/js-yaml/dist/js-yaml.min.js',
-        to: 'libs/js-yaml',
-      },
     ]),
   ],
 };

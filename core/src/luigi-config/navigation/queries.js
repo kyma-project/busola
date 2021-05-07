@@ -1,12 +1,16 @@
 import { config } from './../config';
-import { getInitParams } from './../init-params';
+import { getActiveCluster } from './../cluster-management';
 import { HttpError } from '../../../../shared/hooks/BackendAPI/config';
 
 export async function failFastFetch(input, auth, init = {}) {
   function createAuthHeaders(auth) {
-    if (auth.idToken) {
+    if (auth?.idToken) {
       return { Authorization: `Bearer ${auth.idToken}` };
-    } else if (auth['client-certificate-data'] && auth['client-key-data']) {
+    } else if (
+      auth &&
+      auth['client-certificate-data'] &&
+      auth['client-key-data']
+    ) {
       return {
         'X-Client-Certificate-Data': auth['client-certificate-data'],
         'X-Client-Key-Data': auth['client-key-data'],
@@ -17,7 +21,7 @@ export async function failFastFetch(input, auth, init = {}) {
   }
 
   function createHeaders(auth) {
-    const cluster = getInitParams().cluster;
+    const cluster = getActiveCluster()?.cluster;
     return {
       ...createAuthHeaders(auth),
       'Content-Type': 'application/json',
