@@ -14,27 +14,20 @@ export const ContainersLogs = ({ params }) => {
 
 function Logs({ params }) {
   useWindowTitle('Logs');
-  const [entries, setEntries] = useState([]);
-  const [filteredEntries, setFilteredEntries] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
 
-  useEffect(() => {
-    const filterEntry = (entry, query) =>
+  const filterEntries = (entries, query) => {
+    if (!query) return entries;
+
+    const filterEntry = entry =>
       entry &&
-      entry
+      entry.stream
         .toString()
         .toLowerCase()
         .indexOf(query.toLowerCase()) !== -1;
 
-    const filterEntries = (entries, query) => {
-      if (!query) {
-        return entries;
-      }
-      return entries.filter(entry => filterEntry(entry, query));
-    };
-
-    setFilteredEntries(filterEntries([...entries], searchQuery));
-  }, [entries, searchQuery, setFilteredEntries]);
+    return entries.filter(filterEntry);
+  };
 
   const breadcrumbs = [
     {
@@ -56,17 +49,16 @@ function Logs({ params }) {
   const LogsPanel = ({ streamData, containerName }) => {
     const { error, data } = streamData;
     if (error) return error.message;
-    if (data !== entries) {
-      setEntries(streamData.data);
-    }
-    if (filteredEntries?.length === 0)
+    const filteredEntries = filterEntries(data, searchQuery);
+
+    if (filteredEntries.length === 0)
       return (
         <div className="empty-logs">
           No logs avaliable for the '{containerName}' container.
         </div>
       );
 
-    return filteredEntries?.map(arr => (
+    return filteredEntries.map(arr => (
       <div className="logs" key={arr.id}>
         {arr.stream}
       </div>
