@@ -58,7 +58,7 @@ export function AuthForm({ cluster, setShowingAuthForm }) {
         inputKey="client-id"
         required
         label="Client ID"
-        onChange={e => setAuth({ ...auth, cliendId: e.target.value })}
+        onChange={e => setAuth({ ...auth, clientId: e.target.value })}
         defaultValue={auth.clientId}
       />
       <TextFormItem
