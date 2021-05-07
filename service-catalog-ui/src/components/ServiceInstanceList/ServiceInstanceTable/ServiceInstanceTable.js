@@ -1,7 +1,7 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { Button } from 'fundamental-react';
-import { GenericList, handleDelete } from 'react-shared';
+import { GenericList, handleDelete, useNotification } from 'react-shared';
 
 import renderRow from './ServiceInstanceRowRenderer';
 
@@ -11,6 +11,8 @@ const ServiceInstanceTable = ({
   loading,
   type,
 }) => {
+  const notification = useNotification();
+
   function goToServiceCatalog() {
     LuigiClient.linkManager()
       .fromContext('namespaces')
@@ -31,6 +33,7 @@ const ServiceInstanceTable = ({
           'Service Instance',
           entry.metadata.uid,
           entry.metadata.name,
+          notification,
           () => deleteServiceInstance(entry.metadata.name),
         ),
     },

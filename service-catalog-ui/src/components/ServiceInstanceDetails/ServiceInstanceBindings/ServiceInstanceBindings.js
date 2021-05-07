@@ -81,6 +81,7 @@ const ServiceInstanceBindings = ({ serviceInstance }) => {
       serviceBindingUsage.kind,
       null,
       serviceBindingUsage.metadata.name,
+      notification,
       () => sendDeleteRequest(serviceBindingUsage.metadata.selfLink),
       () => {
         bindingUsagesRequest.silentRefetch();
