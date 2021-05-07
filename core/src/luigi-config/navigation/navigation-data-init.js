@@ -18,6 +18,7 @@ import {
   getClusters,
   getActiveClusterName,
   setCluster,
+  deleteActiveCluster,
   saveActiveClusterName,
 } from '../cluster-management';
 import { shouldShowSystemNamespaces } from './../utils/system-namespaces-toggle';
@@ -57,6 +58,14 @@ function createClusterManagementNodes() {
         navigationContext: 'clusters',
         viewUrl: config.coreUIModuleUrl + '/clusters/add',
       },
+      {
+        hideSideNav: true,
+        pathSegment: 'remove',
+        async onNodeActivation() {
+          await deleteActiveCluster();
+          return false;
+        },
+      },
     ],
     context: {
       clusters: getClusters(),
@@ -76,6 +85,15 @@ function createClusterManagementNodes() {
         await setCluster(clusterName);
         return false;
       },
+      children: [
+        {
+          pathSegment: 'remove',
+          onNodeActivation: () => {
+            alert('działa!');
+            return false;
+          },
+        },
+      ],
     }));
 
   const clusterNode = {
@@ -117,6 +135,11 @@ export async function createNavigation() {
               icon: 'settings',
               label: 'Preferences',
               link: `/cluster/${activeClusterName}/preferences`,
+            },
+            {
+              icon: 'log',
+              label: 'Remove current cluster config',
+              link: `/clusters/remove`,
             },
           ],
         },

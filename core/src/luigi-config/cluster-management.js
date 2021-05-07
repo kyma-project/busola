@@ -70,6 +70,16 @@ export function deleteCluster(clusterName) {
   saveClusters(clusters);
 }
 
+export async function deleteActiveCluster() {
+  deleteCluster(getActiveClusterName());
+  saveActiveClusterName(null);
+  Luigi.navigation().navigate('/clusters');
+  // even though we navigate to /clusters, Luigi complains it can't find
+  // current cluster path in navigation - skip a frame to fix it
+  await new Promise((resolve) => setTimeout(resolve));
+  await reloadNavigation();
+}
+
 export function saveClusters(clusters) {
   localStorage.setItem(CLUSTERS_KEY, JSON.stringify(clusters));
 }
