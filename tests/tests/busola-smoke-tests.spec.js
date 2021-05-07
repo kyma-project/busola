@@ -29,17 +29,25 @@ context('Busola - Smoke Tests', () => {
       .contains('Namespaces') //it finds Namespaces (expected) or Back to Namespaces (if tests fail in the middle)
       .click({ force: true }); //we need to use force when others elements make menu not visible
 
-    cy.getIframeBody()
-      .find('[aria-label="open-search"]')
-      .click();
+    cy.wait(1000);
 
     cy.getIframeBody()
-      .find('[placeholder="Search"]')
+      .find('[aria-label="open-search"]')
+      .click({ force: true });
+
+    cy.wait(1000);
+
+    cy.getIframeBody()
+      .find('input[placeholder="Search"]')
       .type(NAMESPACE_NAME);
+
+    cy.wait(1000);
 
     cy.getIframeBody()
       .find('[aria-label="Delete"]')
-      .click();
+      .click({ force: true });
+
+    cy.wait(5000);
 
     cy.getIframeBody()
       .find('[role="status"]')
