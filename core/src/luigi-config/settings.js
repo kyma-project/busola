@@ -4,7 +4,7 @@ export function createSettings(params) {
     sideNavFooterText: '',
     header: {
       logo: 'assets/logo.svg',
-      title: params ? params.cluster.name : 'Busola',
+      title: params?.cluster.name || 'Busola',
       favicon: 'favicon.ico',
     },
     appLoadingIndicator: {
