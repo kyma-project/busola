@@ -1,6 +1,5 @@
 import { NODE_PARAM_PREFIX } from './luigi-config';
 import { saveInitParams, getInitParams } from './init-params';
-import { config } from './config';
 
 export const communication = {
   customMessagesListeners: {
@@ -59,6 +58,14 @@ export const communication = {
       );
     },
     'busola.reload': () => location.reload(),
+    'busola.showMessage': ({ message, tittle, type }) => {
+      Luigi.customMessages().sendToAll({
+        id: 'busola.showMessage',
+        message,
+        tittle,
+        type,
+      });
+    },
   },
 };
 

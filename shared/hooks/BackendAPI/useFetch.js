@@ -31,6 +31,7 @@ export const useFetch = () => {
       }
     } catch (e) {
       console.error('Fetch failed: ', e);
+      throw e;
     }
   };
 };

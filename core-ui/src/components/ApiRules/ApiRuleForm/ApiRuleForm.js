@@ -183,6 +183,13 @@ export default function ApiRuleForm({
         }),
         data,
       );
+      const message =
+        requestType === 'create' ? 'Api Rule created' : 'API Rule updated';
+      LuigiClient.sendCustomMessage({
+        id: 'busola.showMessage',
+        message,
+        type: 'success',
+      });
       LuigiClient.uxManager().closeCurrentModal();
     } catch (e) {
       notification.notifyError({
