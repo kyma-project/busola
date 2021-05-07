@@ -1,7 +1,7 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
 
-import { GenericList, useMicrofrontendContext } from 'react-shared';
+import { GenericList } from 'react-shared';
 import { Button } from 'fundamental-react';
 
 import { formatMessage } from 'components/Lambdas/helpers/misc';
@@ -45,12 +45,9 @@ function editApiRuleModal(
       redirectCtx: redirectCtx,
       redirectPath: encodeURIComponent(redirectPath),
     })
-    .openAsModal(
-      `${apiRule.metadata.namespace}/apirules/edit/${apiRule.metadata.name}`,
-      {
-        title: formattedTitle,
-      },
-    );
+    .openAsModal(`apirules/edit/${apiRule.metadata.name}`, {
+      title: formattedTitle,
+    });
 }
 
 function createApiRuleModal(
@@ -59,7 +56,6 @@ function createApiRuleModal(
   redirectPath,
   redirectCtx,
   portForCreate,
-  namespaceId,
 ) {
   if (!inSubView) {
     LuigiClient.linkManager()
@@ -77,7 +73,7 @@ function createApiRuleModal(
       redirectCtx: redirectCtx,
       redirectPath: encodeURIComponent(redirectPath),
     })
-    .openAsModal(`${namespaceId}/apirules/create`, {
+    .openAsModal(`apirules/create`, {
       title: PANEL.CREATE_MODAL.TITLE,
     });
 }
@@ -108,7 +104,6 @@ export default function ApiRules({
   disableExposeButton = false,
 }) {
   const deleteApiRule = useDeleteApiRule();
-  const { namespaceId } = useMicrofrontendContext();
 
   const actions = [
     {
@@ -138,7 +133,6 @@ export default function ApiRules({
           redirectPath,
           redirectCtx,
           portForCreate,
-          namespaceId,
         )
       }
       disabled={disableExposeButton || !!(serverDataLoading || serverDataError)}
