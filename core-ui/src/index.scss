@@ -21,7 +21,7 @@ body {
 }
 
 .link {
-  color: var(--sapNeutralColor, #6a6d70);
+  color: var(--sapBrandColor);
   cursor: pointer;
 
   &.no-border {
