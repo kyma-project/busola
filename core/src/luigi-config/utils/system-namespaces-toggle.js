@@ -13,9 +13,6 @@ export const shouldShowSystemNamespaces = () => {
 };
 
 function updateFeatureToggles(toggleValue) {
-  if (toggleValue) {
-    Luigi.featureToggles().setFeatureToggle('showSystemNamespaces');
-  } else {
-    Luigi.featureToggles().unsetFeatureToggle('showSystemNamespaces');
-  }
+  const fn = toggleValue ? 'setFeatureToggle' : 'unsetFeatureToggle';
+  Luigi.featureToggles()[fn]('showSystemNamespaces');
 }
