@@ -159,7 +159,7 @@ export default function RepositoryForm({
     if (formType === FORM_TYPE.CREATE) {
       await onSubmitAction({
         name: name,
-        namespace: LuigiClient.getEventData().environmentId,
+        namespace: LuigiClient.getEventData().namespaceId,
         spec,
       });
     } else {

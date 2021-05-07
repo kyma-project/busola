@@ -167,7 +167,7 @@ export default function CreateLambdaForm({
 
     await createLambda({
       name: name,
-      namespace: LuigiClient.getEventData().environmentId,
+      namespace: LuigiClient.getEventData().namespaceId,
       inputData,
     });
   }

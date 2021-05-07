@@ -664,7 +664,6 @@ export function getStaticRootNodes(
   const nodes = [
     {
       pathSegment: 'namespaces',
-      navigationContext: 'namespaces',
       label: 'Namespaces',
       icon: 'dimension',
       viewUrl:
@@ -681,8 +680,8 @@ export function getStaticRootNodes(
           pathSegment: ':namespaceId',
           context: {
             namespaceId: ':namespaceId',
-            environmentId: ':namespaceId',
           },
+          navigationContext: 'namespaces',
           keepSelectedForChildren: false,
           children: () => namespaceChildrenNodesResolver(apiGroups),
           defaultChildNode: 'details',

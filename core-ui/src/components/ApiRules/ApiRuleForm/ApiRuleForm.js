@@ -64,7 +64,7 @@ export default function ApiRuleForm({
     error: domainError,
     loading: domainLoading,
   } = useGetGatewayDomain();
-  const namespace = LuigiClient.getEventData().environmentId;
+  const namespace = LuigiClient.getEventData().namespaceId;
   const notification = useNotification();
   const { serviceName, port, openedInModal = false } =
     LuigiClient.getNodeParams() || {};
