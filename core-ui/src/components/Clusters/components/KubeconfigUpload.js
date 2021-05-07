@@ -54,7 +54,7 @@ export function KubeconfigUpload({ setCluster, setShowingAuthForm }) {
     <>
       <FileInput
         fileInputChanged={onKubeconfigUploaded}
-        acceptedFileFormats="xd"
+        acceptedFileFormats=".yaml"
       />
       <p>or</p>
       <KubeconfigTextArea
