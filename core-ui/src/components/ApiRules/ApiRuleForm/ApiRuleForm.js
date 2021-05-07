@@ -193,7 +193,8 @@ export default function ApiRuleForm({
       LuigiClient.uxManager().closeCurrentModal();
     } catch (e) {
       notification.notifyError({
-        content: `Cannot create API Rule: ${e.message}`,
+        title: `Failed to create the API Rule`,
+        content: e.message,
       });
     }
   }

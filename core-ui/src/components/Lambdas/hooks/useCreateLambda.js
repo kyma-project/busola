@@ -23,6 +23,7 @@ export const useCreateLambda = ({ redirect = true }) => {
     );
 
     notificationManager.notifyError({
+      title: 'Failed to create the Function',
       content: message,
       autoClose: false,
     });

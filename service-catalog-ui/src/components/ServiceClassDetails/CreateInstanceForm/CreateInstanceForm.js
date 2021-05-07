@@ -164,7 +164,7 @@ export default function CreateInstanceForm({
       );
 
       notificationManager.notifySuccess({
-        content: `Resource created succesfully`,
+        content: `Service Instance created`,
       });
 
       LuigiClient.linkManager()
@@ -172,7 +172,8 @@ export default function CreateInstanceForm({
         .navigate(`instances/details/${name}`);
     } catch (err) {
       notificationManager.notifyError({
-        content: `Failed to create a Resource due to: ${err}`,
+        title: `Failed to create the Service Instance`,
+        content: err.message,
       });
     }
   }

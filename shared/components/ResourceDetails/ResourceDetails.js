@@ -113,6 +113,8 @@ function Resource({
   const setEditedSpec = useYamlEditor();
   const notification = useNotification();
 
+  const prettifiedResourceName = prettifyNameSingular(undefined, resourceType);
+
   const breadcrumbs = [
     {
       name: resourceType,
@@ -154,11 +156,13 @@ function Resource({
 
       await updateResourceMutation(resourceUrl, diff);
       silentRefetch();
-      notification.notifySuccess({ title: 'Succesfully updated Resource' });
+      notification.notifySuccess({
+        content: `${prettifiedResourceName} updated`,
+      });
     } catch (e) {
       console.error(e);
       notification.notifyError({
-        title: 'Failed to update the Resource',
+        title: `Failed to update the ${prettifiedResourceName}`,
         content: e.message,
       });
       throw e;

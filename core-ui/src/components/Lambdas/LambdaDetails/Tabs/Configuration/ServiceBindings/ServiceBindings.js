@@ -43,7 +43,7 @@ export default function ServiceBindings({
     try {
       await deleteServiceBindingUsage(u.metadata.selfLink);
       notification.notifySuccess({
-        title: 'Succesfully deleted Service Binding Usage',
+        content: 'Service Binding Usage deleted',
       });
     } catch (e) {
       console.error(e);

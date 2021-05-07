@@ -96,13 +96,8 @@ export const ModalWithForm = ({
   }
 
   function handleFormSuccess(title, message) {
-    notificationManager.notify({
+    notificationManager.notifySuccess({
       content: message,
-      title: title,
-      color: '#107E3E',
-      icon: 'accept',
-      autoClose: true,
-      type: 'success',
     });
 
     performRefetch();

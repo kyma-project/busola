@@ -96,17 +96,24 @@ function Resources({
     filter,
   )(resourceUrl, { pollingInterval: 3000 });
 
+  const prettifiedResourceName = prettifyNameSingular(
+    resourceName,
+    resourceType,
+  );
+
   const handleSaveClick = resourceData => async newYAML => {
     try {
       const diff = createPatch(resourceData, jsyaml.safeLoad(newYAML));
       const url = resourceUrl + '/' + resourceData.metadata.name;
       await updateResourceMutation(url, diff);
       silentRefetch();
-      notification.notifySuccess({ title: 'Succesfully updated Resource' });
+      notification.notifySuccess({
+        content: `${prettifiedResourceName} updated`,
+      });
     } catch (e) {
       console.error(e);
       notification.notifyError({
-        title: 'Failed to update the Resource',
+        title: `Failed to update the ${prettifiedResourceName}`,
         content: e.message,
       });
       throw e;
@@ -117,11 +124,13 @@ function Resources({
     const url = resourceUrl + '/' + resource.metadata.name;
     try {
       await deleteResourceMutation(url);
-      notification.notifySuccess({ title: 'Succesfully deleted Resource' });
+      notification.notifySuccess({
+        content: `${prettifiedResourceName} deleted`,
+      });
     } catch (e) {
       console.error(e);
       notification.notifyError({
-        title: 'Failed to delete the Resource',
+        title: `Failed to delete the ${prettifiedResourceName}`,
         content: e.message,
       });
       throw e;
@@ -180,10 +189,6 @@ function Resources({
     ...customColumns.map(col => col.value(entry)),
   ];
 
-  const prettifiedResourceName = prettifyNameSingular(
-    resourceName,
-    resourceType,
-  );
   const extraHeaderContent =
     listHeaderActions ||
     (CreateResourceForm && (

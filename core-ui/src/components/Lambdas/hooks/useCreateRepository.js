@@ -22,6 +22,7 @@ export const useCreateRepository = () => {
     );
 
     notificationManager.notifyError({
+      title: 'Failed to create the Repository',
       content: message,
       autoClose: false,
     });

@@ -35,6 +35,7 @@ export const useUpdateLambda = ({
     );
 
     notificationManager.notifyError({
+      title: 'Failed to update the Function',
       content: message,
       autoClose: false,
     });

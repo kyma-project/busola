@@ -14,6 +14,7 @@ export const useCreateServiceBindingUsage = ({
     const message = formatMessage(errorMessage, { serviceInstanceName });
 
     notificationManager.notifyError({
+      title: `Failed to create the Resource`,
       content: message,
       autoClose: false,
     });

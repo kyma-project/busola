@@ -38,11 +38,12 @@ export default function EventSubscriptions({
       await postRequest(`${subscriptionsUrl}/${name}`, subscriptionInput);
       silentRefetch();
       notificationManager.notifySuccess({
-        content: 'Subscription created succesfully',
+        content: 'Subscription created',
       });
     } catch (err) {
       console.error(err);
       notificationManager.notifyError({
+        title: 'Failed to create the Subscription',
         content: err.message,
         autoClose: false,
       });
@@ -54,11 +55,12 @@ export default function EventSubscriptions({
       await deleteRequest(`${subscriptionsUrl}/${s.metadata.name}`); //TODO use selfLink which is not there; why?
       silentRefetch();
       notificationManager.notifySuccess({
-        content: 'Subscription removed succesfully',
+        content: 'Subscription removed',
       });
     } catch (err) {
       console.error(err);
       notificationManager.notifyError({
+        title: 'Failed to delete the Subscription',
         content: err.message,
         autoClose: false,
       });

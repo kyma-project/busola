@@ -26,7 +26,7 @@ export async function handleDelete(
     if (await displayConfirmationMessage(entityType, entityName)) {
       await deleteRequestFn(entityId, entityName);
       callback();
-      notificationManager.notifySuccess({ title: `Resource deleted` });
+      notificationManager.notifySuccess({ content: `Resource deleted` });
     }
   } catch (e) {
     notificationManager.notifyError({

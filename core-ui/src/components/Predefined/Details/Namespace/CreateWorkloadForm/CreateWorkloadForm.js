@@ -49,14 +49,14 @@ export default function CreateWorkloadForm({
           formatService(deployment, createdResourceUID),
         );
       }
-      notification.notifySuccess({ title: 'Succesfully created Deployment' });
+      notification.notifySuccess({ content: 'Deployment created' });
       LuigiClient.linkManager()
         .fromContext('namespaces')
         .navigate('/deployments');
     } catch (e) {
       console.error(e);
       notification.notifyError({
-        title: 'Succesfully created Deployment, failed to create the Service',
+        title: 'Deployment created, failed to create the Service',
         content: e.message,
       });
     }
