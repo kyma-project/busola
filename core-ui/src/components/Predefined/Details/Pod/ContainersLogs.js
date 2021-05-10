@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LayoutPanel } from 'fundamental-react';
+import { LayoutPanel, Switch } from 'fundamental-react';
 import {
   useGetStream,
   useWindowTitle,
@@ -15,6 +15,7 @@ export const ContainersLogs = ({ params }) => {
 function Logs({ params }) {
   useWindowTitle('Logs');
   const [searchQuery, setSearchQuery] = useState('');
+  const [showTimestamps, setShowTimestamps] = useState(false);
 
   const filterEntries = (entries, query) => {
     if (!query) return entries;
@@ -43,7 +44,7 @@ function Logs({ params }) {
     { name: '' },
   ];
 
-  const url = `/api/v1/namespaces/${params.namespace}/pods/${params.podName}/log?container=${params.containerName}&follow=true&tailLines=1000`;
+  const url = `/api/v1/namespaces/${params.namespace}/pods/${params.podName}/log?container=${params.containerName}&follow=true&tailLines=1000&timestamps=true`;
   const streamData = useGetStream(url);
 
   const LogsPanel = ({ streamData, containerName }) => {
@@ -58,11 +59,19 @@ function Logs({ params }) {
         </div>
       );
 
-    return filteredEntries.map(arr => (
-      <div className="logs" key={arr.id}>
-        {arr.stream}
-      </div>
-    ));
+    return filteredEntries.map(arr => {
+      const timestamp = arr.stream?.split(' ')[0];
+      const stream = arr.stream?.replace(timestamp, '');
+      return (
+        <div className="logs" key={arr.id}>
+          {showTimestamps ? `${timestamp} ${stream}` : stream}
+        </div>
+      );
+    });
+  };
+
+  const onSwitchChange = () => {
+    setShowTimestamps(prev => !prev);
   };
 
   return (
@@ -74,7 +83,10 @@ function Logs({ params }) {
       <LayoutPanel className="fd-margin--md">
         <LayoutPanel.Header>
           <LayoutPanel.Head title="Logs" />
-          <LayoutPanel.Actions>
+          <LayoutPanel.Actions className="logs-actions">
+            <Switch compact onChange={onSwitchChange}>
+              {showTimestamps ? 'Hide timestamps' : 'Show timestamps'}
+            </Switch>
             <SearchInput
               entriesKind={'Logs'}
               searchQuery={searchQuery}
