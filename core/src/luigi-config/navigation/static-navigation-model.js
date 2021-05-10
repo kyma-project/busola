@@ -21,7 +21,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
       label: 'Overview',
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId?' +
+        '/Namespaces/:namespaceId?' +
         toSearchParamsString({
           resourceApiPath: '/api/v1',
         }),
