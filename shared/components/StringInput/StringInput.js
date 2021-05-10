@@ -7,6 +7,7 @@ export const SingleString = ({ text, onClick }) => (
     title="Click to remove"
     className="label-selector__label"
     onClick={onClick}
+    buttonLabel=""
   >
     {text}
   </Token>
