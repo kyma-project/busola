@@ -51,7 +51,7 @@ async function luigiAfterInit() {
   }
 
   const luigiConfig = {
-    auth: createAuth(params.auth),
+    auth: createAuth(params?.auth),
     communication,
     navigation: await createNavigation(),
     routing: {

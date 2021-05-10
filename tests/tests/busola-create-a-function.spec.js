@@ -14,11 +14,18 @@ context('Busola - Create a Function', () => {
 
   before(() => {
     cy.visit(ADDRESS)
+      .getIframeBody()
+      .contains('Add Cluster')
+      .click();
+
+    cy.getIframeBody()
       .contains('Drag file here')
       .attachFile('kubeconfig.yaml', { subjectType: 'drag-n-drop' });
 
-    cy.get('#error').should('not.exist');
-    cy.url().should('eq', ADDRESS + '/home/workspace');
+    cy.getIframeBody()
+      .find('[role=alert]')
+      .should('not.exist');
+    cy.url().should('match', /namespaces$/);
     cy.getIframeBody()
       .find('thead')
       .should('be.visible'); //wait for the namespaces XHR request to finish to continue running the tests. There's no <thead> while the request is pending.
@@ -30,25 +37,21 @@ context('Busola - Create a Function', () => {
       .click({ force: true }); //we need to use force when others elements make menu not visible
 
     cy.wait(1000);
-
     cy.getIframeBody()
       .find('[aria-label="open-search"]')
       .click({ force: true });
 
     cy.wait(1000);
-
     cy.getIframeBody()
       .find('input[placeholder="Search"]')
       .type(NAMESPACE_NAME);
 
     cy.wait(1000);
-
     cy.getIframeBody()
       .find('[aria-label="Delete"]')
       .click({ force: true });
 
     cy.wait(5000);
-
     cy.getIframeBody()
       .find('[role="status"]')
       .should('have.text', 'TERMINATING');
@@ -90,12 +93,15 @@ context('Busola - Create a Function', () => {
   });
 
   it('Create a Function', () => {
-    cy.getIframeBody()
-      .contains('Deploy new workload')
+    getLeftNav()
+      .contains('Workloads')
+      .click();
+
+    getLeftNav()
+      .contains('Functions')
       .click();
 
     cy.getIframeBody()
-      .find('[role="menu"]')
       .contains('Create Function')
       .click();
 
@@ -121,16 +127,25 @@ context('Busola - Create a Function', () => {
       .click();
 
     cy.getIframeBody()
+      .find('[role="dialog"]')
       .contains('button', 'Create')
       .click();
 
-    cy.wait(5000);
+    cy.wait(3000);
     cy.readFile('fixtures/handler.js').then(body => {
       cy.getIframeBody()
         .find('textarea[aria-roledescription="editor"]')
         .filter(':visible')
         .clear()
-        .type(body.replaceAll('}', ''), { parseSpecialCharSequences: false }); //doesn't work because of monaco-editor autoclosing brackets functionality
+        .paste({
+          pastePayload: body,
+        });
     });
+
+    cy.wait(3000);
+    cy.getIframeBody()
+      .find('.lambda-details')
+      .contains('button', 'Save')
+      .click();
   });
 });
