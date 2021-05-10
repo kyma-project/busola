@@ -24,6 +24,15 @@
       :root {
         --luigi__left-sidenav--width: 16rem;
       }
+
+      .fd-shellbar__group--product .fd-popover__control > button {
+        max-width: unset;
+      }
+
+      /* luigi adds "Sign out" for OIDC clusters - we don't need it */
+      [data-testid='signout'] {
+        display: none;
+      }
     </style>
   </head>
 

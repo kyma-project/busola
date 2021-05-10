@@ -1,7 +1,10 @@
 import createEncoder from 'json-url';
-import { defaultModules } from './constants.js';
+import {
+  saveClusterParams,
+  saveActiveClusterName,
+  setCluster,
+} from './cluster-management';
 
-const PARAMS_KEY = 'busola.init-params';
 const encoder = createEncoder('lzma');
 
 function getResponseParams(usePKCE = true) {
@@ -19,20 +22,18 @@ function createSystemNamespacesList(namespaces) {
   return namespaces ? namespaces.split(' ') : [];
 }
 
-export async function saveInitParamsIfPresent(location) {
+export async function saveInitParamsIfPresent() {
   const initParams = new URL(location).searchParams.get('init');
   if (initParams) {
     const decoded = await encoder.decompress(initParams);
     const systemNamespaces = createSystemNamespacesList(
       decoded.config?.systemNamespaces
     );
-    const modules = { ...defaultModules, ...decoded.config?.modules };
     const params = {
       ...decoded,
       config: {
         ...decoded.config,
         systemNamespaces,
-        modules,
       },
     };
     if (decoded.auth) {
@@ -41,18 +42,16 @@ export async function saveInitParamsIfPresent(location) {
         ...getResponseParams(decoded.auth.usePKCE),
       };
     }
-    saveInitParams(params);
+    if (!params.cluster.name) {
+      params.cluster.name = params.cluster.server.replace(
+        /^https?:\/\/(api\.)?/,
+        ''
+      );
+    }
+
+    const clusterName = params.cluster.name;
+    saveClusterParams(params);
+    saveActiveClusterName(clusterName);
+    setCluster(clusterName);
   }
-}
-
-export function saveInitParams(params) {
-  localStorage.setItem(PARAMS_KEY, JSON.stringify(params));
-}
-
-export function getInitParams() {
-  return JSON.parse(localStorage.getItem(PARAMS_KEY) || 'null');
-}
-
-export function clearInitParams() {
-  localStorage.removeItem(PARAMS_KEY);
 }

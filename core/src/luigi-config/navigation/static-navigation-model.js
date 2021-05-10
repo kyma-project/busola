@@ -1,4 +1,5 @@
 import { config } from '../config';
+import { getActiveClusterName } from './../cluster-management';
 
 export const coreUIViewGroupName = '_core_ui_';
 export const catalogViewGroupName = '_catalog_';
@@ -8,9 +9,10 @@ function toSearchParamsString(object) {
 }
 
 export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
+  const encodedClusterName = encodeURIComponent(getActiveClusterName());
   const nodes = [
     {
-      link: '/home/workspace',
+      link: `/cluster/${encodedClusterName}/namespaces`,
       label: 'Back to Namespaces',
       icon: 'nav-back',
     },
@@ -611,7 +613,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
           pathSegment: 'create',
           viewUrl:
             config.coreUIModuleUrl +
-            '/home/namespaces/:namespaceId/oauth-clients/create',
+            '/namespaces/:namespaceId/oauth-clients/create',
           viewGroup: coreUIViewGroupName,
         },
         {
@@ -661,8 +663,10 @@ export function getStaticRootNodes(
 ) {
   const nodes = [
     {
-      pathSegment: 'workspace',
+      pathSegment: 'namespaces',
+      navigationContext: 'namespaces',
       label: 'Namespaces',
+      icon: 'dimension',
       viewUrl:
         config.coreUIModuleUrl +
         '/Namespaces?' +
@@ -670,13 +674,7 @@ export function getStaticRootNodes(
           resourceApiPath: '/api/v1',
           hasDetailsView: true,
         }),
-      icon: 'dimension',
-      viewGroup: coreUIViewGroupName,
-    },
-    {
-      pathSegment: 'namespaces',
-      viewUrl: config.coreUIModuleUrl + '/Namespaces',
-      hideFromNav: true,
+      keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
       children: [
         {
@@ -685,8 +683,8 @@ export function getStaticRootNodes(
             namespaceId: ':namespaceId',
             environmentId: ':namespaceId',
           },
+          keepSelectedForChildren: false,
           children: () => namespaceChildrenNodesResolver(apiGroups),
-          navigationContext: 'namespaces',
           defaultChildNode: 'details',
         },
       ],

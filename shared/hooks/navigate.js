@@ -11,15 +11,15 @@ export function navigateToFixedPathResourceDetails(
   resourceType,
   resourceName,
 ) {
-  LuigiClient.linkManager().navigate(
-    `/home/namespaces/${namespaceName}/${resourceType}/details/${resourceName}`,
-  );
+  LuigiClient.linkManager()
+    .fromContext('namespaces')
+    .navigate(`${namespaceName}/${resourceType}/details/${resourceName}`);
 }
 
 function navigateToNamespaceDetails(namespaceName) {
-  LuigiClient.linkManager().navigate(
-    `/home/namespaces/${namespaceName}/details`,
-  );
+  LuigiClient.linkManager()
+    .fromContext('namespaces')
+    .navigate(`${namespaceName}/details`);
   LuigiClient.sendCustomMessage({ id: 'busola.refreshNavigation' });
 }
 

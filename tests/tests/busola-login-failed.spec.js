@@ -8,11 +8,18 @@ const ADDRESS = config.localDev
 context('Busola - Login failed', () => {
   it('Use wrong kubeconfig', () => {
     cy.visit(ADDRESS)
-      .get('#textarea-kubeconfig')
+      .getIframeBody()
+      .contains('Add Cluster')
+      .click()
+      .getIframeBody()
+      .find('#textarea-kubeconfig')
       .type('wrong_kubeconfig')
-      .get('#apply-kubeconfig')
+      .getIframeBody()
+      .contains('Apply kubeconfig')
       .click();
 
-    cy.get('#error').shouldHaveTrimmedText('Error reading kubeconfig.');
+    cy.getIframeBody()
+      .find('[role=alert]')
+      .shouldHaveTrimmedText('Error reading kubeconfig');
   });
 });
