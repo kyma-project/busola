@@ -19,13 +19,14 @@
 .logs-actions {
   > * {
     display: inline-block;
+    vertical-align: middle;
   }
 
   .fd-switch--compact {
     padding: 0;
   }
 
-  .generic-list-search{
+  .generic-list-search, .logs-download  {
     margin-left: 15px;
   }
 }
