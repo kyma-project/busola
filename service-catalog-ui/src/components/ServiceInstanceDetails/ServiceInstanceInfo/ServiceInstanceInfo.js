@@ -13,9 +13,9 @@ const ServiceInstanceInfo = ({
   servicePlan,
 }) => {
   const goToServiceClassDetails = name => {
-    const target = `catalog/details/${name}`;
+    const target = `catalog/${serviceClass.kind}/${name}`;
     LuigiClient.linkManager()
-      .fromContext('namespaces')
+      .fromContext('namespace')
       .withParams({
         resourceType: serviceClass.kind,
       })

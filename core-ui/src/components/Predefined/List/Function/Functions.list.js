@@ -14,7 +14,7 @@ export const FunctionsList = ({ DefaultRenderer, ...otherParams }) => {
 
   function goToGitRepositories() {
     LuigiClient.linkManager()
-      .fromContext('namespaces')
+      .fromContext('namespace')
       .navigate(`gitrepositories`);
   }
 
