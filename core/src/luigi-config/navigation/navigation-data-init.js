@@ -122,50 +122,6 @@ export async function createNavigation() {
           lazyloadOptions: true, // load options on click instead on page load
           options: getNamespaces,
         },
-<<<<<<< HEAD
-        (err) => {
-          if (err.statusCode === 403) {
-            clearAuthData();
-            window.location = `/nopermissions.html?error=${err.originalMessage}`;
-          } else {
-            let errorNotification = 'Could not load initial configuration';
-            if (err.statusCode && err.message)
-              errorNotification += `: ${err.message} (${err.statusCode}${err.originalMessage && err.message !== err.originalMessage
-                ? ':' + err.originalMessage
-                : ''
-                })`;
-            Luigi.ux().showAlert({
-              text: errorNotification,
-              type: 'error',
-            });
-            console.warn(err);
-          }
-        }
-      )
-      // 'Finally' not supported by IE and FIREFOX (if 'finally' is needed, update your .babelrc)
-      .then((res) => {
-        const params = getInitParams();
-        const {
-          disabledNavigationNodes = '',
-          systemNamespaces = '',
-          modules = {},
-        } = params?.config || {};
-        const { bebEnabled = false } = params?.features || {};
-        const nodes = [
-          {
-            pathSegment: 'home',
-            hideFromNav: true,
-            context: {
-              authData,
-              groups,
-              crds,
-              bebEnabled,
-              systemNamespaces,
-              modules,
-              showSystemNamespaces:
-                localStorage.getItem('busola.showSystemNamespaces') === 'true',
-              cluster: params?.cluster || '',
-=======
         profile: {
           items: [
             {
@@ -179,7 +135,6 @@ export async function createNavigation() {
               icon: 'log',
               label: 'Remove current cluster config',
               link: `/clusters/remove`,
->>>>>>> main
             },
           ],
         },
@@ -283,11 +238,7 @@ export async function getNavigationData(authData) {
 }
 
 async function getNamespaces() {
-<<<<<<< HEAD
   const { systemNamespaces } = getInitParams().config;
-=======
-  const { systemNamespaces } = getActiveCluster()?.config || {};
->>>>>>> main
   let namespaces;
   try {
     namespaces = await fetchNamespaces(getAuthData());
@@ -305,11 +256,7 @@ async function getNamespaces() {
 }
 
 function getChildrenNodesForNamespace(apiGroups) {
-<<<<<<< HEAD
   const { disabledNavigationNodes, modules } = getInitParams().config;
-=======
-  const { disabledNavigationNodes, modules } = getActiveCluster()?.config || {};
->>>>>>> main
   const staticNodes = getStaticChildrenNodesForNamespace(apiGroups, modules);
 
   hideDisabledNodes(disabledNavigationNodes, staticNodes, true);

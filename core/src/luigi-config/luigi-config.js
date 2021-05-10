@@ -51,11 +51,7 @@ async function luigiAfterInit() {
   }
 
   const luigiConfig = {
-<<<<<<< HEAD
-    auth: !params.rawAuth && (await createAuth(params.auth)),
-=======
-    auth: createAuth(params?.auth),
->>>>>>> main
+    auth: createAuth(params.auth),
     communication,
     navigation: await createNavigation(),
     routing: {
@@ -63,40 +59,7 @@ async function luigiAfterInit() {
       skipRoutingForUrlPatterns: [/access_token=/, /id_token=/],
     },
     settings: createSettings(params),
-<<<<<<< HEAD
-    lifecycleHooks: {
-      luigiAfterInit: () => {
-        if (params.rawAuth) {
-          Luigi.auth().store.setAuthData(params.rawAuth);
-        }
-        const showSystemNamespaces = localStorage.getItem(
-          'busola.showSystemNamespaces'
-        );
-
-        if (showSystemNamespaces === 'true') {
-          Luigi.featureToggles().setFeatureToggle('showSystemNamespaces');
-        } else {
-          Luigi.featureToggles().unsetFeatureToggle('showSystemNamespaces');
-        }
-        const auth = getAuthData();
-        if (auth) {
-          getNavigationData(auth).then((response) => {
-            resolveNavigationNodes(response);
-            Luigi.ux().hideAppLoadingIndicator();
-
-            const prevLocation = getPreviousLocation();
-            if (prevLocation) {
-              Luigi.navigation().navigate(prevLocation);
-            }
-          });
-        } else {
-          saveCurrentLocation();
-        }
-      },
-    },
-=======
     lifecycleHooks: { luigiAfterInit },
->>>>>>> main
   };
   Luigi.setConfig(luigiConfig);
 })();
