@@ -100,7 +100,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
                 toSearchParamsString({
                   resourceApiPath: '/api/v1',
                 }),
-                navigationContext: 'pod',
+              navigationContext: 'pod',
               children: [
                 {
                   navigationContext: 'containers',
