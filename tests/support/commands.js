@@ -29,6 +29,14 @@ Cypress.Commands.add('restoreLocalStorageCache', () => {
   });
 });
 
+/**
+ * Simulates a paste event.
+ *
+ * @example
+ * cy.get('some-selector').paste({
+ *  pastePayload: 'String example'
+ *  });
+ */
 Cypress.Commands.add(
   'paste',
   {
@@ -41,25 +49,17 @@ Cypress.Commands.add(
  * Simulates a paste event.
  *
  * @param subject A jQuery context representing a DOM element.
- * @param pasteOptions Set of options for a simulated paste event.
- * @param pasteOptions.pastePayload Simulated data that is on the clipboard.
- * @param pasteOptions.pasteFormat The format of the simulated paste payload. Default value is 'text'.
+ * @param pastePayload Simulated String that is on the clipboard.
  *
  * @returns The subject parameter.
- *
- * @example
- * cy.get('some-selector').paste({
- *  pastePayload: 'sample text,
- *  pasteType = 'text',
- *  });
  */
-export function paste(subject, { pastePayload, pasteType = 'text' }) {
+function paste(subject, { pastePayload }) {
   // https://developer.mozilla.org/en-US/docs/Web/API/Element/paste_event
   const pasteEvent = Object.assign(
     new Event('paste', { bubbles: true, cancelable: true }),
     {
       clipboardData: {
-        getData: (type = pasteType) => pastePayload,
+        getData: (type = 'text') => pastePayload,
       },
     },
   );

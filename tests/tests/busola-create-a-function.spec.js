@@ -132,7 +132,7 @@ context('Busola - Create a Function', () => {
       .click();
 
     cy.wait(3000);
-    cy.readFile('fixtures/handler.js').then(body => {
+    cy.readFile('fixtures/orders-function.js').then(body => {
       cy.getIframeBody()
         .find('textarea[aria-roledescription="editor"]')
         .filter(':visible')
@@ -142,7 +142,21 @@ context('Busola - Create a Function', () => {
         });
     });
 
-    cy.wait(3000);
+    cy.getIframeBody()
+      .find('[aria-controls="function-dependencies"]')
+      .click();
+
+    cy.readFile('fixtures/orders-function-dependencies.json').then(body => {
+      cy.getIframeBody()
+        .find('textarea[aria-roledescription="editor"]')
+        .filter(':visible')
+        .clear()
+        .paste({
+          pastePayload: JSON.stringify(body),
+        });
+    });
+
+    cy.wait(1000);
     cy.getIframeBody()
       .find('.lambda-details')
       .contains('button', 'Save')
