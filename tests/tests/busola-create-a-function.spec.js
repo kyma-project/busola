@@ -124,10 +124,14 @@ context('Busola - Create a Function', () => {
       .contains('button', 'Create')
       .click();
 
-    cy.getIframeBody()
-      .find('div[role="code"]')
-      .find('.monaco-editor')
-      .clear()
-      .type(cy.readFile('fixtures/handler.js'));
+    cy.wait(5000);
+    cy.readFile('fixtures/handler.js').then(body => {
+      cy.getIframeBody()
+        .find('textarea[aria-roledescription="editor"]')
+        .filter(':visible')
+        .clear()
+        .type(body.replaceAll('}', ''), { parseSpecialCharSequences: false }) //doesn't work because of monaco-editor autoclosing brackets functionality
+        .wait(50 * 1000);
+    });
   });
 });
