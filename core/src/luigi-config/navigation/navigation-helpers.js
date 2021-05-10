@@ -32,45 +32,6 @@ export const hideDisabledNodes = (disabledNavNodes, nodes, inNamespace) => {
   }
 };
 
-export const shouldShowSystemNamespaces = () => {
-  let showSystemNamespaces = false;
-  if (localStorage.getItem('busola.showSystemNamespaces')) {
-    showSystemNamespaces =
-      localStorage.getItem('busola.showSystemNamespaces') === 'true';
-  }
-  return showSystemNamespaces;
-};
-
-export const saveCurrentLocation = () => {
-  if (!window.location.hash) {
-    const location = window.location.pathname;
-    const params = window.location.search;
-    localStorage.setItem('busola.location', location + params);
-  }
-};
-
-export function relogin() {
-  saveCurrentLocation();
-  clearAuthData();
-  location.reload();
-}
-
-export function clearAuthData() {
-  Luigi.auth().store.removeAuthData();
-}
-
-export function getAuthData() {
-  return Luigi.auth().store.getAuthData();
-}
-
-export const getPreviousLocation = () => {
-  const prevLocation = localStorage.getItem('busola.location');
-  if (prevLocation) {
-    localStorage.removeItem('busola.location');
-  }
-  return prevLocation;
-};
-
 export function hideByNodeCategory(node, showExperimentalCategory) {
   if (node.category === 'Experimental') {
     return { ...node, hideFromNav: !showExperimentalCategory };
@@ -99,32 +60,18 @@ export function createNamespacesList(rawNamespaceNames) {
   return namespaces;
 }
 
-export function setLimitExceededErrorsMessages(limitExceededErrors) {
-  let limitExceededErrorscomposed = [];
-  limitExceededErrors.forEach((resource) => {
-    if (resource.affectedResources && resource.affectedResources.length > 0) {
-      resource.affectedResources.forEach((affectedResource) => {
-        limitExceededErrorscomposed.push(
-          `'${resource.resourceName}' by '${affectedResource}' (${resource.quotaName})`
-        );
-      });
-    }
-  });
-  return limitExceededErrorscomposed;
-}
-
 function getCorrespondingNamespaceLocation(namespaceName) {
   const addressTokens = window.location.pathname.split('/');
   // check if we are in namespaces context
-  if (addressTokens[2] !== 'namespaces') {
+  if (addressTokens[3] !== 'namespaces') {
     return null;
   }
   // check if any path after namespace name exists - if not,
   // it will default to namespace name (and then to '/details')
-  if (!addressTokens[4]) {
+  if (!addressTokens[5]) {
     return null;
   }
-  const fullPath = addressTokens.slice(4).join('/');
+  const fullPath = addressTokens.slice(5).join('/');
   // navigate to the list view from the details
   const path =
     fullPath === 'details' ? fullPath : fullPath.split('/details')[0];
