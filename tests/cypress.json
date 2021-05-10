@@ -1,13 +1,19 @@
 {
-  "chromeWebSecurity": false,
-  "video": false,
   "defaultCommandTimeout": 5000,
-  "responseTimeout": 4000,
+  "execTimeout": 3000,
+  "taskTimeout": 3000,
+  "pageLoadTimeout": 3000,
+  "requestTimeout": 3000,
+  "responseTimeout": 3000,
 
   "fixturesFolder": "fixtures",
   "integrationFolder": "tests",
   "pluginsFile": false,
   "supportFile": "support/index.js",
+
+  "video": false,
+
+  "chromeWebSecurity": false,
 
   "viewportWidth": 1500,
   "viewportHeight": 1500

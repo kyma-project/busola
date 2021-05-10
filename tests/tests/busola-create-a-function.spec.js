@@ -130,8 +130,7 @@ context('Busola - Create a Function', () => {
         .find('textarea[aria-roledescription="editor"]')
         .filter(':visible')
         .clear()
-        .type(body.replaceAll('}', ''), { parseSpecialCharSequences: false }) //doesn't work because of monaco-editor autoclosing brackets functionality
-        .wait(50 * 1000);
+        .type(body.replaceAll('}', ''), { parseSpecialCharSequences: false }); //doesn't work because of monaco-editor autoclosing brackets functionality
     });
   });
 });
