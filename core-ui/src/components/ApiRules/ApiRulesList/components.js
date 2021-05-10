@@ -9,13 +9,13 @@ import { getApiRuleUrl } from 'components/ApiRules/helpers';
 
 function goToApiRuleDetails(apiRule) {
   LuigiClient.linkManager()
-    .fromContext('namespaces')
+    .fromContext('namespace')
     .navigate(`apirules/details/${apiRule.metadata.name}`);
 }
 
 function navigateToService(apiRule) {
   LuigiClient.linkManager()
-    .fromContext('namespaces')
+    .fromContext('namespace')
     .navigate(`services/details/${apiRule.spec.service.name}`);
 }
 

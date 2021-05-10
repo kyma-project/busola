@@ -45,7 +45,7 @@ export const ApiRulesDetails = ({ DefaultRenderer, ...otherParams }) => {
         option="transparent"
         onClick={() =>
           LuigiClient.linkManager()
-            .fromContext('namespaces')
+            .fromContext('namespace')
             .withParams({
               serviceName: apirule.spec.service.name,
               port: apirule.spec.service.port,

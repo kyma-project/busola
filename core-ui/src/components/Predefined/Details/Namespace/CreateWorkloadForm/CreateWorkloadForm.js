@@ -51,8 +51,8 @@ export default function CreateWorkloadForm({
       }
       notification.notifySuccess({ title: 'Succesfully created Deployment' });
       LuigiClient.linkManager()
-        .fromContext('namespaces')
-        .navigate('/deployments');
+        .fromContext('namespace')
+        .navigate(`/deployments/details/${deployment.name}`);
     } catch (e) {
       console.error(e);
       notification.notifyError({

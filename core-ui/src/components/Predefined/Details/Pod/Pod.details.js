@@ -22,7 +22,7 @@ function goToSecretDetails(resourceKind, name) {
   const preperedResourceKind = toSnakeCase(resourceKind);
 
   LuigiClient.linkManager()
-    .fromContext('namespaces')
+    .fromContext('namespace')
     .navigate(`${preperedResourceKind}s/details/${name}`);
 }
 
@@ -66,10 +66,15 @@ export const PodsDetails = ({ DefaultRenderer, ...otherParams }) => {
   };
 
   const Containers = resource => (
-    <ContainersData type="Containers" containers={resource.spec.containers} />
+    <ContainersData
+      key="containers"
+      type="Containers"
+      containers={resource.spec.containers}
+    />
   );
   const InitContainers = resource => (
     <ContainersData
+      key="init-containers"
       type="Init containers"
       containers={resource.spec.initContainers}
     />
