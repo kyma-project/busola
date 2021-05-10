@@ -1,9 +1,12 @@
 .logs {
-  color: var(--sapNeutralColor);
-  padding-top: 2px;
+  color: white;
   padding-left: 15px;
   font-family: 'Consolas', monospace;
   font-size: 12px;
+}
+
+.logs-panel {
+  background-color: #252525;
 }
 
 .empty-logs {

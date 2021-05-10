@@ -83,7 +83,7 @@ function Logs({ params }) {
             />
           </LayoutPanel.Actions>
         </LayoutPanel.Header>
-        <LayoutPanel.Body>
+        <LayoutPanel.Body className="logs-panel">
           <LogsPanel
             streamData={streamData}
             containerName={params.containerName}
