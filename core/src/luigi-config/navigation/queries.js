@@ -21,7 +21,7 @@ export async function failFastFetch(input, auth, init = {}) {
   }
 
   function createHeaders(auth) {
-    const cluster = getInitParams().cluster;
+    const cluster = getActiveCluster().cluster;
     return {
       ...createAuthHeaders(auth),
       'Content-Type': 'application/json',
