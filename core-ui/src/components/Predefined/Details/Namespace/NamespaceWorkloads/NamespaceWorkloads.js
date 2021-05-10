@@ -28,7 +28,6 @@ const ResourceCircle = ({ data, loading, error, title, color }) => {
     .split(' ')
     .join('')
     .toLowerCase();
-
   return (
     <CircleProgress
       onClick={navigateTo(navigationPath)}

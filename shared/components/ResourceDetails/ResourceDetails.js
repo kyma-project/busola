@@ -121,7 +121,6 @@ function Resource({
     },
     { name: '' },
   ];
-
   const actions = readOnly ? null : (
     <>
       {headerActions}
