@@ -15,7 +15,7 @@ export const ConfigMapsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const ConfigMapEditor = resource => {
     const { data } = resource;
     return Object.keys(data || {}).map(key => (
-      <LayoutPanel className="fd-has-margin-m">
+      <LayoutPanel key={key} className="fd-has-margin-m">
         <LayoutPanel.Header>
           <LayoutPanel.Head title={key} />
         </LayoutPanel.Header>

@@ -66,7 +66,7 @@ export default function ServiceBindings({
       data-test-id="service-instance-name"
       onClick={() =>
         LuigiClient.linkManager()
-          .fromContext('namespaces')
+          .fromContext('namespace')
           .navigate(`instances/details/${serviceBinding.spec.instanceRef.name}`)
       }
     >

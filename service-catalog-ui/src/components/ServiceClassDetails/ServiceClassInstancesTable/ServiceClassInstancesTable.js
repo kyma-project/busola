@@ -13,7 +13,7 @@ const ServiceClassInstancesTable = ({ instanceList }) => {
 
   function goToServiceInstanceDetails(instanceName) {
     LuigiClient.linkManager()
-      .fromContext('namespaces')
+      .fromContext('namespace')
       .navigate(`instances/details/${instanceName}`);
   }
 

@@ -49,7 +49,7 @@ export const useCreateLambda = ({ redirect = true }) => {
 
       if (redirect) {
         LuigiClient.linkManager()
-          .fromContext('namespaces')
+          .fromContext('namespace')
           .navigate(`functions/details/${name}`);
       }
     } catch (err) {

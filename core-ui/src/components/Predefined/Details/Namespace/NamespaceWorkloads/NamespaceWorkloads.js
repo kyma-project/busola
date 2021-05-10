@@ -14,7 +14,7 @@ NamespaceWorkloads.propTypes = { namespace: PropTypes.string.isRequired };
 
 const navigateTo = path => () => {
   LuigiClient.linkManager()
-    .fromContext('namespaces')
+    .fromContext('namespace')
     .navigate(path);
 };
 
@@ -28,6 +28,7 @@ const ResourceCircle = ({ data, loading, error, title, color }) => {
     .split(' ')
     .join('')
     .toLowerCase();
+
   return (
     <CircleProgress
       onClick={navigateTo(navigationPath)}

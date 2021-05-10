@@ -117,10 +117,11 @@ function Resource({
     {
       name: resourceType,
       path: '/',
-      fromAbsolutePath: resourceType === 'namespaces',
+      fromContext: resourceType.toLowerCase(),
     },
     { name: '' },
   ];
+
   const actions = readOnly ? null : (
     <>
       {headerActions}
