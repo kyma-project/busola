@@ -14,7 +14,6 @@ function goToApiRuleDetails(apiRule) {
 }
 
 function navigateToService(apiRule) {
-  console.log(apiRule);
   LuigiClient.linkManager()
     .fromContext('namespace')
     .navigate(`services/details/${apiRule.spec.service.name}`);
