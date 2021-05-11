@@ -5,7 +5,6 @@
   "responseTimeout": 4000,
   "fixturesFolder": "fixtures",
   "integrationFolder": "tests",
-  "pageLoadTimeout": 10000,
   "pluginsFile": false,
   "supportFile": "support/index.js",
   "viewportWidth": 1500,

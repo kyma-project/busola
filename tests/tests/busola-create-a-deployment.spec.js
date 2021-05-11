@@ -148,15 +148,16 @@ context('Busola - Create a Deployment', () => {
 
     getLeftNav()
       .contains('Discovery and Network')
-      .click({ force: true });
+      .click();
 
     getLeftNav()
-      .contains('Services')
-      .click({ force: true })
-      .wait(2000);
+      .find('[data-testid=services_services]')
+      .click()
+      .wait(1000);
 
     cy.getIframeBody()
-      .contains('a', DEPLOYMENT_NAME)
+      .find('a')
+      .contains(DEPLOYMENT_NAME)
       .should('be.visible');
   });
 });
