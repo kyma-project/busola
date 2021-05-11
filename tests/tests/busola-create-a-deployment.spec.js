@@ -17,11 +17,18 @@ context('Busola - Create a Deployment', () => {
 
   before(() => {
     cy.visit(ADDRESS)
+      .getIframeBody()
+      .contains('Add Cluster')
+      .click();
+
+    cy.getIframeBody()
       .contains('Drag file here')
       .attachFile('kubeconfig.yaml', { subjectType: 'drag-n-drop' });
 
-    cy.get('#error').should('not.exist');
-    cy.url().should('eq', ADDRESS + '/home/workspace');
+    cy.getIframeBody()
+      .find('[role=alert]')
+      .should('not.exist');
+    cy.url().should('match', /namespaces$/);
     cy.getIframeBody()
       .find('thead')
       .should('be.visible'); //wait for the namespaces XHR request to finish to continue running the tests. There's no <thead> while the request is pending.
@@ -30,12 +37,11 @@ context('Busola - Create a Deployment', () => {
   after(() => {
     getLeftNav()
       .contains('Namespaces') //it finds Namespaces (expected) or Back to Namespaces (if tests fail in the middle)
-      .click({ force: true }) //we need to use force when others elements make menu not visible
-      .wait(1000);
+      .click({ force: true }); //we need to use force when others elements make menu not visible
 
     cy.getIframeBody()
       .find('[aria-label="open-search"]')
-      .click({ force: true });
+      .click();
 
     cy.getIframeBody()
       .find('[placeholder="Search"]')
@@ -43,7 +49,7 @@ context('Busola - Create a Deployment', () => {
 
     cy.getIframeBody()
       .find('[aria-label="Delete"]')
-      .click({ force: true });
+      .click();
 
     cy.getIframeBody()
       .find('[role="status"]')
