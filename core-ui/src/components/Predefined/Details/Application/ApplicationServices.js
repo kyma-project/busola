@@ -14,6 +14,7 @@ export default function ApplicationServices({ spec: applicationSpec }) {
 
   return (
     <GenericList
+      key="application-services"
       title="Provided Services & Events"
       textSearchProperties={['displayName']}
       entries={entries}

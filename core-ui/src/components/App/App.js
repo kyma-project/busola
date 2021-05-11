@@ -2,18 +2,36 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 import Preferences from 'components/Preferences/Preferences';
-import { PREFERENCES_TITLE } from '../../shared/constants';
-import { withTitle } from 'react-shared';
+import {
+  PREFERENCES_TITLE,
+  API_RULES_TITLE,
+  CLUSTER_OVERVIEW_TITLE,
+  ADD_CLUSTER_TITLE,
+} from 'shared/constants';
+import { withTitle, useMicrofrontendContext } from 'react-shared';
 import CreateApiRule from '../ApiRules/CreateApiRule/CreateApiRule';
 import EditApiRule from 'components/ApiRules/EditApiRule/EditApiRule';
 import { ContainersLogs } from 'components/Predefined/Details/Pod/ContainersLogs';
 import { ComponentForList, ComponentForDetails } from 'shared/getComponents';
-import { API_RULES_TITLE } from 'shared/constants';
 import { getResourceUrl } from 'shared/helpers';
+import { ClusterList } from 'components/Clusters/views/ClusterList';
+import { AddCluster } from 'components/Clusters/views/AddCluster/AddCluster';
 
 export default function App() {
+  const { cluster } = useMicrofrontendContext();
   return (
-    <Switch>
+    // force rerender on cluster change
+    <Switch key={cluster?.name}>
+      <Route
+        path="/clusters"
+        exact
+        component={withTitle(CLUSTER_OVERVIEW_TITLE, ClusterList)}
+      />
+      <Route
+        path="/clusters/add"
+        exact
+        component={withTitle(ADD_CLUSTER_TITLE, AddCluster)}
+      />
       <Route
         path="/preferences"
         render={withTitle(PREFERENCES_TITLE, Preferences)}

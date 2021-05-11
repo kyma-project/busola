@@ -14,11 +14,17 @@ context('Busola Smoke Tests', () => {
 
   before(() => {
     cy.visit(ADDRESS)
+      .getIframeBody()
+      .contains('Add Cluster')
+      .click()
+      .getIframeBody()
       .contains('Drag file here')
       .attachFile('kubeconfig.yaml', { subjectType: 'drag-n-drop' });
 
-    cy.get('#error').should('not.exist');
-    cy.url().should('eq', ADDRESS + '/home/workspace');
+    cy.getIframeBody()
+      .find('[role=alert]')
+      .should('not.exist');
+    cy.url().should('match', /namespaces$/);
     cy.getIframeBody()
       .find('thead')
       .should('be.visible'); //wait for the namespaces XHR request to finish to continue running the tests. There's no <thead> while the request is pending.
@@ -93,14 +99,6 @@ context('Busola Smoke Tests', () => {
       .should('be.visible');
 
     cy.getIframeBody()
-      .contains('Application Mappings')
-      .should('be.visible');
-
-    cy.getIframeBody()
-      .contains('Healthy Resources')
-      .should('be.visible');
-
-    cy.getIframeBody()
       .contains('Warnings')
       .should('be.visible');
   });
@@ -110,7 +108,7 @@ context('Busola Smoke Tests', () => {
       .contains('Back to Namespaces')
       .click();
 
-    cy.url().should('eq', ADDRESS + '/home/workspace');
+    cy.url().should('match', /namespaces$/);
   });
 
   it('Check Administration tab', () => {

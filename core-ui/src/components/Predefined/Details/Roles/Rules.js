@@ -5,6 +5,7 @@ import './Rules.scss';
 
 export const Rules = resource => (
   <div
+    key="rules"
     style={{
       display: 'grid',
       gridTemplateColumns:

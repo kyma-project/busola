@@ -1,4 +1,5 @@
 import { config } from '../config';
+import { getActiveClusterName } from './../cluster-management';
 
 export const coreUIViewGroupName = '_core_ui_';
 export const catalogViewGroupName = '_catalog_';
@@ -8,9 +9,10 @@ function toSearchParamsString(object) {
 }
 
 export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
+  const encodedClusterName = encodeURIComponent(getActiveClusterName());
   const nodes = [
     {
-      link: '/home/workspace',
+      link: `/cluster/${encodedClusterName}/namespaces`,
       label: 'Back to Namespaces',
       icon: 'nav-back',
     },
@@ -19,7 +21,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
       label: 'Overview',
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId?' +
+        '/Namespaces/:namespaceId?' +
         toSearchParamsString({
           resourceApiPath: '/api/v1',
         }),
@@ -98,8 +100,10 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
                 toSearchParamsString({
                   resourceApiPath: '/api/v1',
                 }),
+              navigationContext: 'pod',
               children: [
                 {
+                  navigationContext: 'containers',
                   pathSegment: 'containers',
                   children: [
                     {
@@ -112,6 +116,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
                 },
                 {
                   pathSegment: 'initContainers',
+                  navigationContext: 'init-containers',
                   children: [
                     {
                       pathSegment: ':containerName',
@@ -270,7 +275,6 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
         }),
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
-      navigationContext: 'services',
       children: [
         {
           pathSegment: 'details',
@@ -431,7 +435,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
     {
       category: 'Configuration',
       pathSegment: 'addons',
-      navigationContext: 'addons',
+      navigationContext: 'addonsconfigurations',
       label: 'Addons',
       viewUrl:
         config.coreUIModuleUrl +
@@ -466,7 +470,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
     {
       category: 'Configuration',
       pathSegment: 'config-maps',
-      navigationContext: 'config-maps',
+      navigationContext: 'configmaps',
       label: 'Config Maps',
       viewUrl:
         config.coreUIModuleUrl +
@@ -563,7 +567,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
     {
       category: 'Configuration',
       pathSegment: 'role-bindings',
-      navigationContext: 'role-bindings',
+      navigationContext: 'rolebindings',
       label: 'Role Bindings',
       viewUrl:
         config.coreUIModuleUrl +
@@ -611,7 +615,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
           pathSegment: 'create',
           viewUrl:
             config.coreUIModuleUrl +
-            '/home/namespaces/:namespaceId/oauth-clients/create',
+            '/namespaces/:namespaceId/oauth-clients/create',
           viewGroup: coreUIViewGroupName,
         },
         {
@@ -661,8 +665,10 @@ export function getStaticRootNodes(
 ) {
   const nodes = [
     {
-      pathSegment: 'workspace',
+      pathSegment: 'namespaces',
+      navigationContext: 'namespaces',
       label: 'Namespaces',
+      icon: 'dimension',
       viewUrl:
         config.coreUIModuleUrl +
         '/Namespaces?' +
@@ -670,23 +676,18 @@ export function getStaticRootNodes(
           resourceApiPath: '/api/v1',
           hasDetailsView: true,
         }),
-      icon: 'dimension',
-      viewGroup: coreUIViewGroupName,
-    },
-    {
-      pathSegment: 'namespaces',
-      viewUrl: config.coreUIModuleUrl + '/Namespaces',
-      hideFromNav: true,
+      keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
       children: [
         {
+          navigationContext: 'namespace',
           pathSegment: ':namespaceId',
           context: {
             namespaceId: ':namespaceId',
             environmentId: ':namespaceId',
           },
+          keepSelectedForChildren: false,
           children: () => namespaceChildrenNodesResolver(apiGroups),
-          navigationContext: 'namespaces',
           defaultChildNode: 'details',
         },
       ],
@@ -741,14 +742,13 @@ export function getStaticRootNodes(
     },
     {
       pathSegment: 'preferences',
-      navigationContext: 'settings',
       viewUrl: config.coreUIModuleUrl + '/preferences',
       viewGroup: coreUIViewGroupName,
       hideFromNav: true,
     },
     {
       pathSegment: 'addons-config',
-      navigationContext: 'addons-config',
+      navigationContext: 'clusteraddonsconfigurations',
       label: 'Cluster Addons',
       category: {
         label: 'Integration',
@@ -789,7 +789,7 @@ export function getStaticRootNodes(
     //ADMINISTRATION CATEGORY
     {
       pathSegment: 'cluster-roles',
-      navigationContext: 'cluster-roles',
+      navigationContext: 'clusterroles',
       label: 'Cluster Roles',
       category: {
         label: 'Administration',
@@ -834,7 +834,7 @@ export function getStaticRootNodes(
     },
     {
       pathSegment: 'cluster-role-bindings',
-      navigationContext: 'cluster-role-bindings',
+      navigationContext: 'clusterrolebindings',
       label: 'Cluster Role Bindings',
       category: {
         label: 'Administration',

@@ -1,29 +1,42 @@
-// todo change after fd-styles 0.2.0 is released
-// and remove fiori-fundamentals from package.json
-//  @import '~fiori-fundamentals/dist/components/asset-upload.min.css';
+.file-input {
+  display: grid;
+  font-size: var(--sapFontSmallSize, 0.875rem);
+  place-items: center;
+  width: 300px;
+  height: 80px;
+  border-radius: 8px;
+  background: #ffffff;
+  margin: 0 auto;
+  border: 1px dashed #89919a;
+  color: #0a6ed1;
 
-.fd-asset-upload.file-input {
-  position: relative;
-  font-size: 14px;
+  &, & > * {
+    cursor: pointer;
+    text-align: center;
+  }
 
-  .fd-asset-upload__input {
+  i {
+    display: block;
+    color: var(--sapBrandColor, #0a6ed1);
+  }
+  
+  input[aria-hidden=true] {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
     position: absolute;
-    left: 100px;
-    top: 100px;
     z-index: -1;
-
-    // override fd styles
-    height: unset !important;
-    width: unset !important;
-    overflow: unset;
   }
 
-  .fd-asset-upload__input--drag-over {
-    border: 1px solid var(--sapBrandColor) !important;
+  &__secondary {
+    color: gray;
+    margin-top: 4px;
   }
 
-  .fd-asset-upload__file-name {
-    font-style: italic;
-    margin-bottom: 0;
+  &--drag-over {
+    border: 1px solid var(--sapBrandColor, #0a6ed1);
   }
 }
+
+
