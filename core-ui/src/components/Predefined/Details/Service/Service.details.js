@@ -76,7 +76,7 @@ export const ServicesDetails = ({ DefaultRenderer, ...otherParams }) => {
       value: resource => (
         <>
           {resource.spec.ports?.map(p => (
-            <Token key={p.name + p.targetPort} readOnly>
+            <Token key={p.name + p.targetPort} buttonLabel="" readOnly>
               <span className="name">{p.name}</span>
               <InfoLabel numeric style={{ margin: '0 4px' }}>
                 {p.port}

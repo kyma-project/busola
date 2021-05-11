@@ -161,7 +161,6 @@ function Resources({
         onClick={_ =>
           fixedPath
             ? navigateToFixedPathResourceDetails(
-                namespace,
                 resourceType,
                 entry.metadata.name,
               )
