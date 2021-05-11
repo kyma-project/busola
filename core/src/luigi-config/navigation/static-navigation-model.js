@@ -677,6 +677,7 @@ export function getStaticRootNodes(
         }),
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
+      navigationContext: 'namespaces',
       children: [
         {
           navigationContext: 'namespace',
@@ -684,7 +685,6 @@ export function getStaticRootNodes(
           context: {
             namespaceId: ':namespaceId',
           },
-          navigationContext: 'namespaces',
           keepSelectedForChildren: false,
           children: () => namespaceChildrenNodesResolver(apiGroups),
           defaultChildNode: 'details',
