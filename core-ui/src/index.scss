@@ -86,6 +86,7 @@ body {
 }
 
 .fd-dialog {
+  z-index: 1000;
   .fd-dialog__footer {
     button {
       margin-left: 6px;
