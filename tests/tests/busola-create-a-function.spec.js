@@ -66,6 +66,7 @@ context('Busola - Create a Function', () => {
   });
 
   it('Create a new namespace', () => {
+    cy.wait(3000);
     getLeftNav()
       .contains('Namespaces')
       .click();
