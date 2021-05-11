@@ -57,6 +57,8 @@ context('Busola - Create a Deployment', () => {
   });
 
   it('Create a new namespace', () => {
+    cy.wait(3000);
+
     getLeftNav()
       .contains('Namespaces')
       .click();
