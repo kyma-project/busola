@@ -16,7 +16,7 @@ function Logs({ params }) {
   useWindowTitle('Logs');
   const [searchQuery, setSearchQuery] = useState('');
   const [showTimestamps, setShowTimestamps] = useState(false);
-  const [textToSave, setTextToSave] = useState([]);
+  const [logsToSave, setLogsToSave] = useState([]);
 
   const filterEntries = (entries, query) => {
     if (!query) return entries;
@@ -50,7 +50,7 @@ function Logs({ params }) {
   const LogsPanel = ({ streamData, containerName }) => {
     const { error, data } = streamData;
     if (error) return error.message;
-    setTextToSave(data || []);
+    setLogsToSave(data || []);
 
     const filteredEntries = filterEntries(data, searchQuery);
 
@@ -86,7 +86,10 @@ function Logs({ params }) {
     const date = `${day}-${month}-${year}-${hour}-${minute}`;
 
     const element = document.createElement('a');
-    const file = new Blob(textToSave, { type: 'text/plain' });
+    const file = new Blob(
+      logsToSave.map(log => `${log}\n`),
+      { type: 'text/plain' },
+    );
     element.href = URL.createObjectURL(file);
     element.download = `${podName}-${containerName}-${date}.txt`;
     document.body.appendChild(element); // required for this to work in FireFox
