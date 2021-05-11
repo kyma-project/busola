@@ -146,7 +146,7 @@ context('Busola - Create a Deployment', () => {
 
     cy.getIframeBody()
       .contains('button', 'Create')
-      .click({ force: true });
+      .click();
   });
 
   it('Check if deployment and service exist', () => {
