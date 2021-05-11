@@ -19,7 +19,7 @@
 //       removeBackdrop: () => {},
 //     }),
 //     getEventData: () => ({
-//       environmentId: 'namespace',
+//       namespaceId: 'namespace',
 //       crds: [],
 //     }),
 //   };

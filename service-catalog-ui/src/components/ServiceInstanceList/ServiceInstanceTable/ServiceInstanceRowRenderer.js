@@ -16,7 +16,7 @@ import { ServiceInstanceStatus } from './../../../shared/ServiceInstanceStatus.j
 
 const goToServiceInstanceDetails = name => {
   LuigiClient.linkManager()
-    .fromContext('namespaces')
+    .fromContext('namespace')
     .navigate(`instances/details/${name}`);
 };
 
@@ -56,7 +56,7 @@ const ServiceClassName = ({ instance }) => {
           classRef
             ? () =>
                 LuigiClient.linkManager()
-                  .fromContext('namespaces')
+                  .fromContext('namespace')
                   .withParams({
                     resourceType,
                   })

@@ -34,12 +34,12 @@ function Logs({ params }) {
     {
       name: 'Pods',
       path: '/',
-      fromAbsolutePath: false,
+      fromContext: 'pods',
     },
     {
       name: params.podName,
-      path: `/details/${params.podName}`,
-      fromAbsolutePath: false,
+      path: '/',
+      fromContext: 'pod',
     },
     { name: '' },
   ];

@@ -19,7 +19,7 @@
 
 // jest.mock('@luigi-project/client', () => ({
 //   getEventData: () => ({
-//     environmentId: mockNamespace,
+//     namespaceId: mockNamespace,
 //   }),
 //   linkManager: () => ({
 //     fromClosestContext: () => ({

@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import LuigiClient from '@luigi-project/client';
 
 import { MessageStrip } from 'fundamental-react';
 
@@ -13,7 +12,7 @@ import {
 import { useCreateLambda } from 'components/Lambdas/hooks';
 
 import { validateResourceName } from 'components/Lambdas/helpers/misc';
-import { randomNameGenerator } from 'react-shared';
+import { randomNameGenerator, useMicrofrontendContext } from 'react-shared';
 
 import {
   functionAvailableLanguages,
@@ -38,6 +37,7 @@ export default function CreateLambdaForm({
   functionNames = [],
   repositories = [],
 }) {
+  const { namespaceId: namespace } = useMicrofrontendContext();
   const createLambda = useCreateLambda({ redirect: true });
   const [errors, setErrors] = useState([]);
 
@@ -167,7 +167,7 @@ export default function CreateLambdaForm({
 
     await createLambda({
       name: name,
-      namespace: LuigiClient.getEventData().environmentId,
+      namespace,
       inputData,
     });
   }
