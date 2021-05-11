@@ -84,6 +84,7 @@ button {
 }
 
 .fd-dialog {
+  z-index: 1000;
   .fd-bar--footer {
     padding-right: unset;
     padding-left: unset;
