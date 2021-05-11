@@ -666,7 +666,6 @@ export function getStaticRootNodes(
   const nodes = [
     {
       pathSegment: 'namespaces',
-      navigationContext: 'namespaces',
       label: 'Namespaces',
       icon: 'dimension',
       viewUrl:
@@ -678,13 +677,13 @@ export function getStaticRootNodes(
         }),
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
+      navigationContext: 'namespaces',
       children: [
         {
           navigationContext: 'namespace',
           pathSegment: ':namespaceId',
           context: {
             namespaceId: ':namespaceId',
-            environmentId: ':namespaceId',
           },
           keepSelectedForChildren: false,
           children: () => namespaceChildrenNodesResolver(apiGroups),

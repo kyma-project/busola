@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import LuigiClient from '@luigi-project/client';
 
 import {
   ResourceNameInput,
@@ -8,7 +7,7 @@ import {
 } from 'components/Lambdas/components';
 
 import { validateResourceName } from 'components/Lambdas/helpers/misc';
-import { randomNameGenerator } from 'react-shared';
+import { randomNameGenerator, useMicrofrontendContext } from 'react-shared';
 import { isGitUrl } from 'components/Lambdas/helpers/repositories';
 
 import { REPOSITORIES_LIST } from 'components/Lambdas/constants';
@@ -35,6 +34,7 @@ export default function RepositoryForm({
   onSubmitAction,
   formType = FORM_TYPE.CREATE,
 }) {
+  const { namespaceId: namespace } = useMicrofrontendContext();
   const [errors, setErrors] = useState(
     repository ? [] : [ERRORS.REPOSITORY_URL],
   );
@@ -159,7 +159,7 @@ export default function RepositoryForm({
     if (formType === FORM_TYPE.CREATE) {
       await onSubmitAction({
         name: name,
-        namespace: LuigiClient.getEventData().environmentId,
+        namespace,
         spec,
       });
     } else {

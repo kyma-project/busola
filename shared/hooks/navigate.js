@@ -6,20 +6,16 @@ function navigateToResourceDetails(resourceName) {
     .navigate('/details/' + resourceName);
 }
 
-export function navigateToFixedPathResourceDetails(
-  namespaceName,
-  resourceType,
-  resourceName,
-) {
+export function navigateToFixedPathResourceDetails(resourceType, resourceName) {
   LuigiClient.linkManager()
     .fromContext('namespaces')
-    .navigate(`${namespaceName}/${resourceType}/details/${resourceName}`);
+    .navigate(`${resourceType}/details/${resourceName}`);
 }
 
 function navigateToNamespaceDetails(namespaceName) {
   LuigiClient.linkManager()
-    .fromContext('namespaces')
-    .navigate(`${namespaceName}/details`);
+    .fromContext('cluster')
+    .navigate(`namespaces/${namespaceName}/details`);
   LuigiClient.sendCustomMessage({ id: 'busola.refreshNavigation' });
 }
 

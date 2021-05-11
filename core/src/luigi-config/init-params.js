@@ -23,6 +23,17 @@ function createSystemNamespacesList(namespaces) {
 }
 
 export async function saveInitParamsIfPresent() {
+  const DEFAULT_MODULES = {
+    SERVICE_CATALOG: 'servicecatalog.k8s.io',
+    SERVICE_CATALOG_ADDONS: 'servicecatalog.kyma-project.io',
+    EVENTING: 'eventing.kyma-project.io',
+    API_GATEWAY: 'gateway.kyma-project.io',
+    APPLICATIONS: 'applicationconnector.kyma-project.io',
+    ADDONS: 'addons.kyma-project.io',
+    SERVERLESS: 'serverless.kyma-project.io',
+    SERVERLESS_REPOS: 'gitrepositories.serverless.kyma-project.io',
+  };
+
   const initParams = new URL(location).searchParams.get('init');
   if (initParams) {
     const decoded = await encoder.decompress(initParams);
@@ -34,6 +45,7 @@ export async function saveInitParamsIfPresent() {
       config: {
         ...decoded.config,
         systemNamespaces,
+        modules: { ...DEFAULT_MODULES, ...(decoded.config?.modules || {}) },
       },
     };
     if (decoded.auth) {

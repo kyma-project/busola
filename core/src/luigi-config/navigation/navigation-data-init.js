@@ -190,6 +190,7 @@ export async function getNavigationData(authData) {
           ),
         children: [
           {
+            navigationContext: 'cluster',
             pathSegment: encodeURIComponent(activeClusterName),
             children: function () {
               const staticNodes = getStaticRootNodes(
@@ -206,6 +207,7 @@ export async function getNavigationData(authData) {
           authData,
           groups,
           crds,
+          modules,
           bebEnabled,
           systemNamespaces,
           showSystemNamespaces: shouldShowSystemNamespaces(),
