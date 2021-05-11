@@ -22,8 +22,7 @@ function Logs({ params }) {
     if (!query) return entries;
 
     const filterEntry = entry =>
-      entry &&
-      entry.stream
+      entry
         .toString()
         .toLowerCase()
         .indexOf(query.toLowerCase()) !== -1;
@@ -51,11 +50,7 @@ function Logs({ params }) {
   const LogsPanel = ({ streamData, containerName }) => {
     const { error, data } = streamData;
     if (error) return error.message;
-
-    // !
-    data.forEach(element => {
-      textToSave.push(element.stream);
-    });
+    setTextToSave(data || []);
 
     const filteredEntries = filterEntries(data, searchQuery);
 
@@ -66,11 +61,11 @@ function Logs({ params }) {
         </div>
       );
 
-    return filteredEntries.map(arr => {
-      const timestamp = arr.stream?.split(' ')[0];
-      const stream = arr.stream?.replace(timestamp, '');
+    return filteredEntries.map((arr, idx) => {
+      const timestamp = arr.split(' ')[0];
+      const stream = arr.replace(timestamp, '');
       return (
-        <div className="logs" key={arr.id}>
+        <div className="logs" key={idx}>
           {showTimestamps ? `${timestamp} ${stream}` : stream}
         </div>
       );
