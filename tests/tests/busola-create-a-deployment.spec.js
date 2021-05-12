@@ -39,18 +39,22 @@ context('Busola - Create a Deployment', () => {
       .contains('Namespaces') //it finds Namespaces (expected) or Back to Namespaces (if tests fail in the middle)
       .click({ force: true }); //we need to use force when others elements make menu not visible
 
+    cy.wait(1000);
     cy.getIframeBody()
       .find('[aria-label="open-search"]')
-      .click();
+      .click({ force: true });
 
+    cy.wait(1000);
     cy.getIframeBody()
       .find('[placeholder="Search"]')
       .type(NAMESPACE_NAME);
 
+    cy.wait(1000);
     cy.getIframeBody()
       .find('[aria-label="Delete"]')
-      .click();
+      .click({ force: true });
 
+    cy.wait(5000);
     cy.getIframeBody()
       .find('[role="status"]')
       .should('have.text', 'TERMINATING');
