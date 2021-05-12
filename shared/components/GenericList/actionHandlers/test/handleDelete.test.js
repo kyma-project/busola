@@ -13,6 +13,7 @@ jest.mock('@luigi-project/client', () => ({
 describe('simpleDelete', () => {
   it('Calls delete function and custom callback with valid parameters', async () => {
     mockModal.mockImplementation(() => new Promise(resolve => resolve()));
+    const notificationManager = jest.fn();
     const deleteFunction = jest.fn();
     const customCallback = jest.fn();
 
@@ -20,7 +21,14 @@ describe('simpleDelete', () => {
     const id = 'some-id';
     const name = 'some-name';
 
-    await handleDelete(type, id, name, deleteFunction, customCallback);
+    await handleDelete(
+      type,
+      id,
+      name,
+      notificationManager,
+      deleteFunction,
+      customCallback,
+    );
 
     expect(mockModal).toHaveBeenCalled();
     expect(mockModal.mock.calls[0][0].body).toBe(
@@ -37,6 +45,7 @@ describe('simpleDelete', () => {
     mockModal.mockImplementation(
       () => new Promise((_resolve, reject) => reject()),
     );
+    const notificationManager = jest.fn();
     const deleteFunction = jest.fn();
     const customCallback = jest.fn();
 
@@ -44,6 +53,7 @@ describe('simpleDelete', () => {
       'some-type',
       'some-id',
       'some-name',
+      notificationManager,
       deleteFunction,
       customCallback,
     );
@@ -58,12 +68,14 @@ describe('simpleDelete', () => {
     const deleteFunction = () => {
       throw Error('DANGER');
     };
+    const notificationManager = jest.fn();
     const customCallback = jest.fn();
 
     await handleDelete(
       'some-type',
       'some-id',
       'some-name',
+      notificationManager,
       deleteFunction,
       customCallback,
     );
