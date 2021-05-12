@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Menu } from 'fundamental-react';
+import { Menu, Button } from 'fundamental-react';
 
 import 'core-js/es/array/flat-map';
 
@@ -129,13 +129,12 @@ export function SearchInput({
         </div>
       </div>
       {showControl && (
-        <button
+        <Button
           disabled={disabled}
-          className={`icon fd-button--light sap-icon--search ${
-            disabled ? 'is-disabled' : ''
-          }`}
+          option="transparent"
+          glyph="search"
           onClick={openSearchList}
-          aria-label={`open-search`}
+          aria-label="open-search"
         />
       )}
     </section>

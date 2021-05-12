@@ -103,7 +103,6 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
               navigationContext: 'pod',
               children: [
                 {
-                  navigationContext: 'containers',
                   pathSegment: 'containers',
                   children: [
                     {
@@ -116,7 +115,6 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
                 },
                 {
                   pathSegment: 'initContainers',
-                  navigationContext: 'init-containers',
                   children: [
                     {
                       pathSegment: ':containerName',

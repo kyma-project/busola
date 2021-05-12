@@ -106,16 +106,22 @@ function Logs({ params }) {
         <LayoutPanel.Header>
           <LayoutPanel.Head title="Logs" />
           <LayoutPanel.Actions className="logs-actions">
-            <Switch compact onChange={onSwitchChange}>
+            <Switch
+              disabled={!logsToSave?.length}
+              compact
+              onChange={onSwitchChange}
+            >
               {showTimestamps ? 'Hide timestamps' : 'Show timestamps'}
             </Switch>
             <Button
+              disabled={!logsToSave?.length}
               className="logs-download"
               onClick={() => saveToFile(params.podName, params.containerName)}
             >
               Save to a file
             </Button>
             <SearchInput
+              disabled={!logsToSave?.length}
               entriesKind={'Logs'}
               searchQuery={searchQuery}
               handleQueryChange={setSearchQuery}
