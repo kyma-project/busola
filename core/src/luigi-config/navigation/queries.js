@@ -51,6 +51,24 @@ export async function failFastFetch(input, auth, init = {}) {
   }
 }
 
+export function fetchPermissions(auth) {
+  const ssrr = {
+    typeMeta: {
+      kind: 'SelfSubjectRulesReview',
+      aPIVersion: 'authorization.k8s.io/v1',
+    },
+    spec: { namespace: '*' },
+  };
+
+  const ssrUrl = `${config.backendApiUrl}/apis/authorization.k8s.io/v1/selfsubjectrulesreviews`;
+  return failFastFetch(ssrUrl, auth, {
+    method: 'POST',
+    body: JSON.stringify(ssrr),
+  })
+    .then((res) => res.json())
+    .then((res) => ({ selfSubjectRules: res.status.resourceRules }));
+}
+
 export function fetchBusolaInitData(auth) {
   const crdsUrl = `${config.backendApiUrl}/apis/apiextensions.k8s.io/v1/customresourcedefinitions`;
   const crdsQuery = failFastFetch(crdsUrl, auth)
@@ -61,23 +79,7 @@ export function fetchBusolaInitData(auth) {
     .then((res) => res.json())
     .then((data) => ({ apiGroups: data.paths }));
 
-  const ssrr = {
-    typeMeta: {
-      kind: 'SelfSubjectRulesReview',
-      aPIVersion: 'authorization.k8s.io/v1',
-    },
-    spec: { namespace: '*' },
-  };
-
-  const ssrUrl = `${config.backendApiUrl}/apis/authorization.k8s.io/v1/selfsubjectrulesreviews`;
-  const ssrrQuery = failFastFetch(ssrUrl, auth, {
-    method: 'POST',
-    body: JSON.stringify(ssrr),
-  })
-    .then((res) => res.json())
-    .then((res) => ({ selfSubjectRules: res.status.resourceRules }));
-
-  const promises = [crdsQuery, apiGroupsQuery, ssrrQuery];
+  const promises = [crdsQuery, apiGroupsQuery, fetchPermissions(auth)];
 
   return Promise.all(promises).then((res) => Object.assign(...res));
 }

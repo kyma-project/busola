@@ -1,22 +1,11 @@
 import rbacRulesMatched from './rbac-rules-matcher';
 
-let selfSubjectRulesReview = [];
-export let crds = [];
-
-export function setInitValues(_crds, _selfSubjectRulesReview) {
-  crds = _crds.map((crd) => crd.name);
-  selfSubjectRulesReview = _selfSubjectRulesReview;
-}
-
-function checkRequiredModules(nodeToCheckPermissionsFor) {
+function checkRequiredModules(nodeToCheckPermissionsFor, crds) {
+  const requiredModules = nodeToCheckPermissionsFor.context?.requiredModules;
   let hasPermissions = true;
-  if (
-    nodeToCheckPermissionsFor.context &&
-    nodeToCheckPermissionsFor.context.requiredModules &&
-    nodeToCheckPermissionsFor.context.requiredModules.length > 0
-  ) {
-    if (crds && crds.length > 0) {
-      nodeToCheckPermissionsFor.context.requiredModules.forEach((module) => {
+  if (requiredModules?.length > 0) {
+    if (crds?.length > 0) {
+      requiredModules.forEach((module) => {
         const moduleExists = crds.some((crd) => crd.includes(module));
         if (hasPermissions && !moduleExists) {
           hasPermissions = false;
@@ -29,7 +18,11 @@ function checkRequiredModules(nodeToCheckPermissionsFor) {
   return hasPermissions;
 }
 
-export default function navigationPermissionChecker(nodeToCheckPermissionsFor) {
+export default function navigationPermissionChecker(
+  nodeToCheckPermissionsFor,
+  selfSubjectRulesReview,
+  crds
+) {
   const noRulesApplied =
     !Array.isArray(nodeToCheckPermissionsFor.requiredPermissions) ||
     !nodeToCheckPermissionsFor.requiredPermissions.length;
@@ -40,6 +33,8 @@ export default function navigationPermissionChecker(nodeToCheckPermissionsFor) {
         nodeToCheckPermissionsFor.requiredPermissions,
         selfSubjectRulesReview
       )) &&
-    checkRequiredModules(nodeToCheckPermissionsFor)
+    checkRequiredModules(nodeToCheckPermissionsFor, crds)
   );
 }
+
+export function hasWildcardPermissions() {}

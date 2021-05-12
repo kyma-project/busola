@@ -1,14 +1,15 @@
-import { fetchBusolaInitData, fetchNamespaces } from './queries';
+import {
+  fetchPermissions,
+  fetchBusolaInitData,
+  fetchNamespaces,
+} from './queries';
 import { config } from '../config';
 import {
   coreUIViewGroupName,
   getStaticChildrenNodesForNamespace,
   getStaticRootNodes,
 } from './static-navigation-model';
-import navigationPermissionChecker, {
-  setInitValues,
-  crds,
-} from './permissions';
+import navigationPermissionChecker from './permissions';
 
 import { hideDisabledNodes, createNamespacesList } from './navigation-helpers';
 import { clearAuthData, getAuthData } from './../auth/auth-storage';
@@ -23,6 +24,9 @@ import {
 } from '../cluster-management';
 import { shouldShowSystemNamespaces } from './../utils/system-namespaces-toggle';
 import { tryRestorePreviousLocation } from './previous-location';
+
+let selfSubjectRulesReview;
+let crds;
 
 export async function addClusterNodes() {
   const config = Luigi.getConfig();
@@ -143,7 +147,8 @@ export async function createNavigation() {
 
   return {
     preloadViewGroups: false,
-    nodeAccessibilityResolver: navigationPermissionChecker,
+    nodeAccessibilityResolver: (node) =>
+      navigationPermissionChecker(node, selfSubjectRulesReview, crds),
     appSwitcher: {
       showMainAppEntry: false,
       items: [
@@ -169,7 +174,8 @@ export async function createNavigation() {
 export async function getNavigationData(authData) {
   try {
     const res = await fetchBusolaInitData(authData);
-    setInitValues(res.crds, res.selfSubjectRules || []);
+    crds = res.crds.map((crd) => crd.name);
+    selfSubjectRulesReview = res.selfSubjectRules || [];
     const params = getActiveCluster();
     const activeClusterName = params.cluster.name;
 
