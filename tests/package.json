@@ -1,6 +1,6 @@
 {
   "name": "ui-tests",
-  "description": "Smoke tests for Busola",
+  "description": "Smoke tests for Busola change literally nothing",
   "scripts": {
     "test:cluster": "$(npm bin)/cypress run --browser chrome --headless",
     "start": "$(npm bin)/cypress open"
