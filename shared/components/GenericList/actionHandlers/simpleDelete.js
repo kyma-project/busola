@@ -1,11 +1,14 @@
 import LuigiClient from '@luigi-project/client';
+import { prettifyNameSingular } from '../../..';
 
 function displayConfirmationMessage(entityType, entityName) {
   return new Promise(resolve => {
     LuigiClient.uxManager()
       .showConfirmationModal({
         header: `Remove ${entityType}`,
-        body: `Are you sure you want to delete ${entityType} "${entityName}"?`,
+        body: `Are you sure you want to delete ${prettifyNameSingular(
+          entityType,
+        )} "${entityName}"?`,
         buttonConfirm: 'Delete',
         buttonDismiss: 'Cancel',
       })
@@ -26,11 +29,13 @@ export async function handleDelete(
     if (await displayConfirmationMessage(entityType, entityName)) {
       await deleteRequestFn(entityId, entityName);
       callback();
-      notificationManager.notifySuccess({ content: `Resource deleted` });
+      notificationManager.notifySuccess({
+        content: `${prettifyNameSingular(entityType)} deleted`,
+      });
     }
   } catch (e) {
     notificationManager.notifyError({
-      title: `Failed to delete the Resource`,
+      title: `Failed to delete the ${prettifyNameSingular(entityType)}`,
       content: e.message,
     });
   }

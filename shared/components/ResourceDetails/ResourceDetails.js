@@ -16,14 +16,12 @@ import {
   navigateToList,
   ReadableCreationTimestamp,
   ResourceNotFound,
+  prettifyNamePlural,
+  prettifyNameSingular,
 } from '../..';
 import CustomPropTypes from '../../typechecking/CustomPropTypes';
 import { handleDelete } from '../GenericList/actionHandlers/simpleDelete';
 import { useWindowTitle } from '../../hooks';
-import {
-  prettifyNamePlural,
-  prettifyNameSingular,
-} from '../ResourcesList/helpers';
 
 ResourceDetails.propTypes = {
   customColumns: CustomPropTypes.customColumnsType,

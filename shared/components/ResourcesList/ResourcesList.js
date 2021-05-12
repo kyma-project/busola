@@ -17,11 +17,12 @@ import {
   PageHeader,
   navigateToDetails,
   navigateToFixedPathResourceDetails,
+  prettifyNameSingular,
+  prettifyNamePlural,
 } from '../..';
 import CustomPropTypes from '../../typechecking/CustomPropTypes';
 import { ModalWithForm } from '../ModalWithForm/ModalWithForm';
 import { ReadableCreationTimestamp } from '../ReadableCreationTimestamp/ReadableCreationTimestamp';
-import { prettifyNameSingular, prettifyNamePlural } from './helpers';
 import { useWindowTitle } from '../../hooks';
 
 ResourcesList.propTypes = {
