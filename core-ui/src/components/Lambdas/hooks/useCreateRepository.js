@@ -2,28 +2,16 @@ import { useNotification, usePost } from 'react-shared';
 
 import extractErrors from 'shared/errorExtractor';
 
-import { formatMessage } from 'components/Lambdas/helpers/misc';
-
-import { LAMBDAS_MESSAGES } from 'components/Lambdas/constants';
-
 export const useCreateRepository = () => {
   const notificationManager = useNotification();
   const postRequest = usePost();
 
-  function handleError(name, error) {
+  function handleError(error) {
     const errorToDisplay = extractErrors(error);
-
-    const message = formatMessage(
-      LAMBDAS_MESSAGES.CREATE_REPOSITORY.ERROR_MESSAGE,
-      {
-        repositoryName: name,
-        error: errorToDisplay,
-      },
-    );
 
     notificationManager.notifyError({
       title: 'Failed to create the Repository',
-      content: message,
+      content: errorToDisplay,
       autoClose: false,
     });
   }
@@ -43,18 +31,11 @@ export const useCreateRepository = () => {
         },
       );
 
-      const message = formatMessage(
-        LAMBDAS_MESSAGES.CREATE_REPOSITORY.SUCCESS_MESSAGE,
-        {
-          repositoryName: name,
-        },
-      );
-
       notificationManager.notifySuccess({
-        content: message,
+        content: 'Repository created',
       });
     } catch (err) {
-      handleError(name, err);
+      handleError(err);
     }
   }
 

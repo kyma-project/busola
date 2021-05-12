@@ -6,25 +6,16 @@ import { createLambdaInput } from './createLambdaInput';
 import { formatMessage } from 'components/Lambdas/helpers/misc';
 import { getDefaultDependencies } from 'components/Lambdas/helpers/runtime';
 
-import { LAMBDAS_MESSAGES } from 'components/Lambdas/constants';
 import { CONFIG } from 'components/Lambdas/config';
 
 export const useCreateLambda = ({ redirect = true }) => {
   const notificationManager = useNotification();
   const postRequest = usePost();
 
-  function handleError(name, error) {
-    const message = formatMessage(
-      LAMBDAS_MESSAGES.CREATE_LAMBDA.ERROR_MESSAGE,
-      {
-        lambdaName: name,
-        error,
-      },
-    );
-
+  function handleError(error) {
     notificationManager.notifyError({
       title: 'Failed to create the Function',
-      content: message,
+      content: error.message,
       autoClose: false,
     });
   }
@@ -37,12 +28,7 @@ export const useCreateLambda = ({ redirect = true }) => {
         input,
       );
 
-      const message = formatMessage(
-        LAMBDAS_MESSAGES.CREATE_LAMBDA.SUCCESS_MESSAGE,
-        {
-          lambdaName: name,
-        },
-      );
+      const message = formatMessage('Function created');
 
       notificationManager.notifySuccess({
         content: message,
@@ -54,7 +40,7 @@ export const useCreateLambda = ({ redirect = true }) => {
           .navigate(`functions/details/${name}`);
       }
     } catch (err) {
-      handleError(name, err);
+      handleError(err);
     }
   }
 

@@ -86,7 +86,7 @@ const ServiceInstanceBindings = ({ serviceInstance }) => {
       () => {
         bindingUsagesRequest.silentRefetch();
         notification.notifySuccess({
-          content: SERVICE_BINDINGS_PANEL.DELETE_BINDING_USAGE.SUCCESS_MESSAGE,
+          content: 'Service Binding Usage deleted',
         });
       },
     );
