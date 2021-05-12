@@ -30,3 +30,13 @@
     margin-left: 15px;
   }
 }
+
+.fd-layout-panel__body {
+  > :first-child {
+    padding-top: 10px;
+  }
+
+  > :last-child {
+    padding-bottom: 10px;
+  }
+}
