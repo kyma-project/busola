@@ -1,5 +1,5 @@
 # ---- Base Alpine with Node ----
-FROM alpine:3.12 AS base
+FROM alpine:3.13.5 AS base
 # install node
 RUN apk add --update nodejs npm openssl nghttp2 --repository=http://dl-cdn.alpinelinux.org/alpine/edge/main
 
