@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Menu } from 'fundamental-react';
+import { Menu, Button } from 'fundamental-react';
 
 import 'core-js/es/array/flat-map';
 
@@ -11,14 +11,13 @@ SearchInput.propTypes = {
   entriesKind: PropTypes.string,
   entries: PropTypes.arrayOf(PropTypes.object.isRequired),
   handleQueryChange: PropTypes.func.isRequired,
-  suggestionProperties: PropTypes.arrayOf(PropTypes.string.isRequired)
-    .isRequired,
+  suggestionProperties: PropTypes.arrayOf(PropTypes.string.isRequired),
   showSuggestion: PropTypes.bool,
   showSearchControl: PropTypes.bool,
   disabled: PropTypes.bool,
 };
 
-export default function SearchInput({
+export function SearchInput({
   searchQuery,
   entriesKind,
   filteredEntries,
@@ -55,7 +54,7 @@ export default function SearchInput({
         if (typeof entry === 'string') {
           if (entryMatchesSearch(entry)) return entry;
         }
-        return suggestionProperties.map(properties => {
+        return suggestionProperties?.map(properties => {
           const propertiesArray = properties.split('.');
           let entryValue = entry;
           propertiesArray?.forEach(prop => {
@@ -130,13 +129,12 @@ export default function SearchInput({
         </div>
       </div>
       {showControl && (
-        <button
+        <Button
           disabled={disabled}
-          className={`icon fd-button--light sap-icon--search ${
-            disabled ? 'is-disabled' : ''
-          }`}
+          option="transparent"
+          glyph="search"
           onClick={openSearchList}
-          aria-label={`open-search`}
+          aria-label="open-search"
         />
       )}
     </section>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { LayoutPanel } from 'fundamental-react';
 
-import SearchInput from './SearchInput';
+import { SearchInput } from './SearchInput';
 import { Pagination } from './Pagination/Pagination';
 import ListActions from '../ListActions/ListActions';
 import { Spinner } from '../Spinner/Spinner';
