@@ -7,17 +7,21 @@ const ADDRESS = config.localDev
   : `https://busola.${config.domain}`;
 
 const random = Math.floor(Math.random() * 1000);
-const NAMESPACE_NAME = `a-busola-test-${random}`;
+const NAMESPACE_NAME = `b-busola-test-${random}`;
 
-context('Busola - Smoke Tests', () => {
+const DOCKER_IMAGE = 'eu.gcr.io/kyma-project/pr/orders-service:PR-162';
+const DEPLOYMENT_NAME = 'orders-service';
+
+context('Busola - Create a Deployment', () => {
   const getLeftNav = () => cy.get('nav[data-testid=semiCollapsibleLeftNav]');
 
   before(() => {
     cy.visit(ADDRESS)
       .getIframeBody()
       .contains('Add Cluster')
-      .click()
-      .getIframeBody()
+      .click();
+
+    cy.getIframeBody()
       .contains('Drag file here')
       .attachFile('kubeconfig.yaml', { subjectType: 'drag-n-drop' });
 
@@ -34,45 +38,31 @@ context('Busola - Smoke Tests', () => {
     getLeftNav()
       .contains('Namespaces') //it finds Namespaces (expected) or Back to Namespaces (if tests fail in the middle)
       .click({ force: true }); //we need to use force when others elements make menu not visible
-    cy.wait(1000);
 
+    cy.wait(1000);
     cy.getIframeBody()
       .find('[aria-label="open-search"]')
       .click({ force: true });
-    cy.wait(1000);
 
+    cy.wait(1000);
     cy.getIframeBody()
       .find('[placeholder="Search"]')
       .type(NAMESPACE_NAME);
-    cy.wait(1000);
 
+    cy.wait(1000);
     cy.getIframeBody()
       .find('[aria-label="Delete"]')
-      .click();
-    cy.wait(5000);
+      .click({ force: true });
 
+    cy.wait(5000);
     cy.getIframeBody()
       .find('[role="status"]')
       .should('have.text', 'TERMINATING');
   });
 
-  beforeEach(() => {
-    cy.restoreLocalStorageCache();
-  });
-
-  afterEach(() => {
-    cy.saveLocalStorageCache();
-  });
-
-  it('Renders navigation nodes', () => {
-    ['Namespaces', 'Administration', 'Diagnostics'].forEach(node => {
-      getLeftNav()
-        .contains(node)
-        .should('be.visible');
-    });
-  });
-
   it('Create a new namespace', () => {
+    cy.wait(3000);
+
     getLeftNav()
       .contains('Namespaces')
       .click();
@@ -93,73 +83,93 @@ context('Busola - Smoke Tests', () => {
       .click();
   });
 
-  it('Go to the details of namespace and check sections', () => {
+  it('Go to the details of namespace', () => {
     cy.getIframeBody()
       .contains('a', NAMESPACE_NAME)
       .click();
-
-    cy.getIframeBody()
-      .contains('Healthy Resources')
-      .should('be.visible');
-
-    cy.getIframeBody()
-      .contains('Resource consumption')
-      .should('be.visible');
-
-    cy.getIframeBody()
-      .contains('Limit Ranges')
-      .should('be.visible');
-
-    cy.getIframeBody()
-      .contains('Resource Quotas')
-      .should('be.visible');
-
-    cy.getIframeBody()
-      .contains('Warnings')
-      .should('be.visible');
   });
 
-  it('Go back to the namespaces list', () => {
-    getLeftNav()
-      .contains('Back to Namespaces')
+  it('Create a Deployment', () => {
+    cy.getIframeBody()
+      .contains('Deploy new workload')
       .click();
 
-    cy.url().should('match', /namespaces$/);
+    cy.getIframeBody()
+      .find('[role="menuitem"]')
+      .contains('Create Deployment')
+      .click();
+
+    cy.getIframeBody()
+      .find('[placeholder="Deployment name"]')
+      .clear()
+      .type(DEPLOYMENT_NAME);
+
+    cy.getIframeBody()
+      .find('[placeholder="Enter Labels key=value"]')
+      .type(`app=${DEPLOYMENT_NAME}`);
+
+    cy.getIframeBody()
+      .contains('label', 'Labels')
+      .click();
+
+    cy.getIframeBody()
+      .find('[placeholder="Enter Labels key=value"]')
+      .type(`example=${DEPLOYMENT_NAME}`);
+
+    cy.getIframeBody()
+      .contains('label', 'Labels')
+      .click();
+
+    cy.getIframeBody()
+      .find('[placeholder="Enter Docker image"]')
+      .type(DOCKER_IMAGE);
+
+    cy.getIframeBody()
+      .contains('label', 'Memory requests')
+      .next('input')
+      .clear()
+      .type('16Mi');
+
+    cy.getIframeBody()
+      .contains('label', 'Memory limits')
+      .next('input')
+      .clear()
+      .type('32Mi');
+
+    cy.getIframeBody()
+      .contains('label', 'CPU requests')
+      .next('input')
+      .clear()
+      .type('10m');
+
+    cy.getIframeBody()
+      .contains('label', 'CPU limits')
+      .next('input')
+      .clear()
+      .type('20m');
+
+    cy.getIframeBody()
+      .contains('button', 'Create')
+      .click();
   });
 
-  it('Check Administration tab', () => {
+  it('Check if deployment and service exist', () => {
+    cy.getIframeBody()
+      .contains('a', DEPLOYMENT_NAME)
+      .should('be.visible');
+
     getLeftNav()
-      .contains('Administration')
+      .contains('Discovery and Network')
       .click();
 
     getLeftNav()
-      .contains('Cluster Roles')
-      .should('be.visible');
+      .find('[data-testid=services_services]')
+      .click()
+      .wait(1000);
 
-    getLeftNav()
-      .contains('Cluster Role Bindings')
-      .should('be.visible');
-  });
-
-  it('Check Diagnostic tab', () => {
-    getLeftNav()
-      .contains('Diagnostic')
-      .click();
-
-    getLeftNav()
-      .contains('Logs')
-      .should('be.visible');
-
-    getLeftNav()
-      .contains('Metrics')
-      .should('be.visible');
-
-    getLeftNav()
-      .contains('Traces')
-      .should('be.visible');
-
-    getLeftNav()
-      .contains('Service Mesh')
+    cy.getIframeBody()
+      .find('a')
+      .contains(DEPLOYMENT_NAME)
       .should('be.visible');
   });
 });

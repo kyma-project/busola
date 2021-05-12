@@ -1,5 +1,5 @@
 function createAuthHeaders(auth) {
-  if (auth?.idToken) {
+  if (auth.idToken) {
     return { Authorization: `Bearer ${auth.idToken}` };
   } else if (auth['client-certificate-data'] && auth['client-key-data']) {
     return {

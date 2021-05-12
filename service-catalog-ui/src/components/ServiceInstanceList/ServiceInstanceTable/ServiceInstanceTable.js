@@ -15,7 +15,7 @@ const ServiceInstanceTable = ({
 
   function goToServiceCatalog() {
     LuigiClient.linkManager()
-      .fromContext('namespaces')
+      .fromContext('namespace')
       .withParams({ selectedTab: type })
       .navigate('catalog');
   }

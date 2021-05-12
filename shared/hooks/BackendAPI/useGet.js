@@ -86,8 +86,9 @@ const useGetStreamHook = _ =>
     const [error, setError] = React.useState(null);
     const { authData } = useMicrofrontendContext();
     const fetch = useFetch();
+    const abortController = new AbortController();
 
-    const fetchData = async abortController => {
+    const fetchData = async _ => {
       if (!authData || !isHookMounted.current) return;
 
       const processError = error => {
@@ -123,7 +124,16 @@ const useGetStreamHook = _ =>
                 setData(previousData => [...previousData, ...streams]);
                 return push();
               } catch (e) {
-                processError(e);
+                // Chrome closes connections after a while.
+                // Refetch logs after the connection has been closed.
+                if (e.toString().includes('network error')) {
+                  controller.close();
+                  fetchData(abortController);
+                  // If we don't clear the data, streams would be shown multiple times.
+                  setData([]);
+                } else {
+                  processError(e);
+                }
               }
             };
             push();
@@ -135,22 +145,16 @@ const useGetStreamHook = _ =>
     };
 
     React.useEffect(() => {
-      const abortController = new AbortController();
-      if (lastAuthData.current && path) fetchData(abortController);
       return _ => {
         abortController.abort();
       };
     }, [path]);
 
     React.useEffect(() => {
-      const abortController = new AbortController();
       if (JSON.stringify(lastAuthData.current) != JSON.stringify(authData)) {
         lastAuthData.current = authData;
-        fetchData(abortController);
+        fetchData();
       }
-      return _ => {
-        abortController.abort();
-      };
     }, [authData]);
 
     React.useEffect(() => {

@@ -51,7 +51,7 @@ const ServiceInstanceHeader = ({ serviceInstance, servicePlan }) => {
       });
 
       LuigiClient.linkManager()
-        .fromContext('namespaces')
+        .fromContext('namespace')
         .withParams({
           selectedTab: preselectTabOnList,
         })

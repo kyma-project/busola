@@ -59,6 +59,7 @@ export default function NamespaceBindings(application) {
 
   return (
     <GenericList
+      key="application-bindings"
       extraHeaderContent={
         <CreateBindingModal
           application={application}

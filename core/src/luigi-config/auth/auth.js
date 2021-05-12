@@ -1,6 +1,9 @@
 import OpenIdConnect from '@luigi-project/plugin-auth-oidc';
 import { setAuthData } from './auth-storage';
-import { getActiveCluster } from './../cluster-management';
+import {
+  getActiveCluster,
+  saveActiveClusterName,
+} from './../cluster-management';
 
 export let groups;
 
@@ -50,6 +53,7 @@ export const createAuth = (authParams) => {
       },
       // TODO: define luigi-client api for getting errors
       onAuthError: (err) => {
+        saveActiveClusterName(null);
         console.log('authErrorHandler 1', err);
       },
     },

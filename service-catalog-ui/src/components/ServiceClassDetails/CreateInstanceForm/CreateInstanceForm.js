@@ -168,7 +168,7 @@ export default function CreateInstanceForm({
       });
 
       LuigiClient.linkManager()
-        .fromContext('namespaces')
+        .fromContext('namespace')
         .navigate(`instances/details/${name}`);
     } catch (err) {
       notificationManager.notifyError({

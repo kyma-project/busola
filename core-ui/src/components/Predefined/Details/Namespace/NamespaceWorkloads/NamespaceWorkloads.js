@@ -14,7 +14,7 @@ NamespaceWorkloads.propTypes = { namespace: PropTypes.string.isRequired };
 
 const navigateTo = path => () => {
   LuigiClient.linkManager()
-    .fromContext('namespaces')
+    .fromContext('namespace')
     .navigate(path);
 };
 

@@ -190,6 +190,7 @@ export async function getNavigationData(authData) {
           ),
         children: [
           {
+            navigationContext: 'cluster',
             pathSegment: encodeURIComponent(activeClusterName),
             children: function () {
               const staticNodes = getStaticRootNodes(
@@ -206,6 +207,7 @@ export async function getNavigationData(authData) {
           authData,
           groups,
           crds,
+          modules,
           bebEnabled,
           systemNamespaces,
           showSystemNamespaces: shouldShowSystemNamespaces(),
@@ -238,7 +240,7 @@ export async function getNavigationData(authData) {
 }
 
 async function getNamespaces() {
-  const { systemNamespaces } = getActiveCluster()?.config || {};
+  const { systemNamespaces } = getActiveCluster().config;
   let namespaces;
   try {
     namespaces = await fetchNamespaces(getAuthData());
@@ -256,7 +258,7 @@ async function getNamespaces() {
 }
 
 function getChildrenNodesForNamespace(apiGroups) {
-  const { disabledNavigationNodes, modules } = getActiveCluster()?.config || {};
+  const { disabledNavigationNodes, modules } = getActiveCluster().config;
   const staticNodes = getStaticChildrenNodesForNamespace(apiGroups, modules);
 
   hideDisabledNodes(disabledNavigationNodes, staticNodes, true);

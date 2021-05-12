@@ -4,7 +4,7 @@ import { LayoutPanel } from 'fundamental-react';
 import './RoleBindings.scss';
 
 export const RoleBindings = resource => (
-  <>
+  <React.Fragment key="role-bindings">
     <div className="fd-margin--md">
       <LayoutPanel key={`roleRef`}>
         <LayoutPanel.Header>
@@ -44,5 +44,5 @@ export const RoleBindings = resource => (
         </LayoutPanel>
       ))}
     </div>
-  </>
+  </React.Fragment>
 );

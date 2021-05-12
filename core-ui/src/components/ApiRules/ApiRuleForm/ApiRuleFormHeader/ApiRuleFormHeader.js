@@ -22,7 +22,7 @@ const ApiRuleFormHeader = ({
         className="link"
         onClick={() =>
           LuigiClient.linkManager()
-            .fromContext('namespaces')
+            .fromContext('namespace')
             .navigate(`services/details/${serviceName}`)
         }
       >

@@ -27,7 +27,7 @@ function editApiRuleModal(
 ) {
   if (!inSubView) {
     LuigiClient.linkManager()
-      .fromContext('namespaces')
+      .fromContext('namespace')
       .navigate(`apirules/edit/${apiRule.metadata.name}`);
     return;
   }
@@ -37,7 +37,7 @@ function editApiRuleModal(
   });
 
   LuigiClient.linkManager()
-    .fromContext('namespaces')
+    .fromContext('namespace')
     .withParams({
       serviceName: apiRule.spec.service.name,
       port: apiRule.spec.service.port,

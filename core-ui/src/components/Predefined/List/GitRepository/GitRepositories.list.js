@@ -30,7 +30,7 @@ export const GitRepositoriesList = ({ DefaultRenderer, ...otherParams }) => {
             className="link"
             onClick={() =>
               LuigiClient.linkManager()
-                .fromContext('namespaces')
+                .fromContext('namespace')
                 .navigate(`secrets/details/${secretName}`)
             }
           >

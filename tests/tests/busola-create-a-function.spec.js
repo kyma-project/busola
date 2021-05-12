@@ -9,15 +9,16 @@ const ADDRESS = config.localDev
 const random = Math.floor(Math.random() * 1000);
 const NAMESPACE_NAME = `a-busola-test-${random}`;
 
-context('Busola - Smoke Tests', () => {
+context('Busola - Create a Function', () => {
   const getLeftNav = () => cy.get('nav[data-testid=semiCollapsibleLeftNav]');
 
   before(() => {
     cy.visit(ADDRESS)
       .getIframeBody()
       .contains('Add Cluster')
-      .click()
-      .getIframeBody()
+      .click();
+
+    cy.getIframeBody()
       .contains('Drag file here')
       .attachFile('kubeconfig.yaml', { subjectType: 'drag-n-drop' });
 
@@ -34,23 +35,23 @@ context('Busola - Smoke Tests', () => {
     getLeftNav()
       .contains('Namespaces') //it finds Namespaces (expected) or Back to Namespaces (if tests fail in the middle)
       .click({ force: true }); //we need to use force when others elements make menu not visible
-    cy.wait(1000);
 
+    cy.wait(1000);
     cy.getIframeBody()
       .find('[aria-label="open-search"]')
       .click({ force: true });
-    cy.wait(1000);
 
+    cy.wait(1000);
     cy.getIframeBody()
-      .find('[placeholder="Search"]')
+      .find('input[placeholder="Search"]')
       .type(NAMESPACE_NAME);
-    cy.wait(1000);
 
+    cy.wait(1000);
     cy.getIframeBody()
       .find('[aria-label="Delete"]')
-      .click();
-    cy.wait(5000);
+      .click({ force: true });
 
+    cy.wait(5000);
     cy.getIframeBody()
       .find('[role="status"]')
       .should('have.text', 'TERMINATING');
@@ -64,15 +65,8 @@ context('Busola - Smoke Tests', () => {
     cy.saveLocalStorageCache();
   });
 
-  it('Renders navigation nodes', () => {
-    ['Namespaces', 'Administration', 'Diagnostics'].forEach(node => {
-      getLeftNav()
-        .contains(node)
-        .should('be.visible');
-    });
-  });
-
   it('Create a new namespace', () => {
+    cy.wait(3000);
     getLeftNav()
       .contains('Namespaces')
       .click();
@@ -93,73 +87,80 @@ context('Busola - Smoke Tests', () => {
       .click();
   });
 
-  it('Go to the details of namespace and check sections', () => {
+  it('Go to the details of namespace', () => {
     cy.getIframeBody()
       .contains('a', NAMESPACE_NAME)
       .click();
-
-    cy.getIframeBody()
-      .contains('Healthy Resources')
-      .should('be.visible');
-
-    cy.getIframeBody()
-      .contains('Resource consumption')
-      .should('be.visible');
-
-    cy.getIframeBody()
-      .contains('Limit Ranges')
-      .should('be.visible');
-
-    cy.getIframeBody()
-      .contains('Resource Quotas')
-      .should('be.visible');
-
-    cy.getIframeBody()
-      .contains('Warnings')
-      .should('be.visible');
   });
 
-  it('Go back to the namespaces list', () => {
+  it('Create a Function', () => {
     getLeftNav()
-      .contains('Back to Namespaces')
-      .click();
-
-    cy.url().should('match', /namespaces$/);
-  });
-
-  it('Check Administration tab', () => {
-    getLeftNav()
-      .contains('Administration')
+      .contains('Workloads')
       .click();
 
     getLeftNav()
-      .contains('Cluster Roles')
-      .should('be.visible');
-
-    getLeftNav()
-      .contains('Cluster Role Bindings')
-      .should('be.visible');
-  });
-
-  it('Check Diagnostic tab', () => {
-    getLeftNav()
-      .contains('Diagnostic')
+      .contains('Functions')
       .click();
 
-    getLeftNav()
-      .contains('Logs')
-      .should('be.visible');
+    cy.getIframeBody()
+      .contains('Create Function')
+      .click();
 
-    getLeftNav()
-      .contains('Metrics')
-      .should('be.visible');
+    cy.getIframeBody()
+      .find('[placeholder="Function name"]')
+      .clear()
+      .type('orders-function');
 
-    getLeftNav()
-      .contains('Traces')
-      .should('be.visible');
+    cy.getIframeBody()
+      .find('[placeholder="Enter Labels key=value"]')
+      .type('app=orders-function');
 
-    getLeftNav()
-      .contains('Service Mesh')
-      .should('be.visible');
+    cy.getIframeBody()
+      .contains('label', 'Labels')
+      .click();
+
+    cy.getIframeBody()
+      .find('[placeholder="Enter Labels key=value"]')
+      .type('example=orders-function');
+
+    cy.getIframeBody()
+      .contains('label', 'Labels')
+      .click();
+
+    cy.getIframeBody()
+      .find('[role="dialog"]')
+      .contains('button', 'Create')
+      .click();
+
+    cy.wait(3000);
+    cy.readFile('fixtures/orders-function.js').then(body => {
+      cy.getIframeBody()
+        .find('textarea[aria-roledescription="editor"]')
+        .filter(':visible')
+        .clear()
+        .paste({
+          pastePayload: body,
+        });
+    });
+
+    cy.getIframeBody()
+      .find('[aria-controls="function-dependencies"]')
+      .click();
+
+    cy.readFile('fixtures/orders-function-dependencies.json').then(body => {
+      cy.getIframeBody()
+        .find('textarea[aria-roledescription="editor"]')
+        .filter(':visible')
+        .clear()
+        .paste({
+          pastePayload: JSON.stringify(body),
+        });
+    });
+
+    cy.wait(1000);
+    cy.getIframeBody()
+      .find('.lambda-details')
+      .contains('button', 'Save')
+      .click();
   });
 });
