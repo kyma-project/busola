@@ -7,12 +7,9 @@ const ADDRESS = config.localDev
   : `https://busola.${config.domain}`;
 
 const random = Math.floor(Math.random() * 1000);
-const NAMESPACE_NAME = `b-busola-test-${random}`;
+const NAMESPACE_NAME = `a-busola-test-${random}`;
 
-const DOCKER_IMAGE = 'eu.gcr.io/kyma-project/pr/orders-service:PR-162';
-const DEPLOYMENT_NAME = 'orders-service';
-
-context('Busola - Create a Deployment', () => {
+context('Busola - Create a Function', () => {
   const getLeftNav = () => cy.get('nav[data-testid=semiCollapsibleLeftNav]');
 
   before(() => {
@@ -46,7 +43,7 @@ context('Busola - Create a Deployment', () => {
 
     cy.wait(1000);
     cy.getIframeBody()
-      .find('[placeholder="Search"]')
+      .find('input[placeholder="Search"]')
       .type(NAMESPACE_NAME);
 
     cy.wait(1000);
@@ -60,9 +57,16 @@ context('Busola - Create a Deployment', () => {
       .should('have.text', 'TERMINATING');
   });
 
+  beforeEach(() => {
+    cy.restoreLocalStorageCache();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorageCache();
+  });
+
   it('Create a new namespace', () => {
     cy.wait(3000);
-
     getLeftNav()
       .contains('Namespaces')
       .click();
@@ -89,24 +93,27 @@ context('Busola - Create a Deployment', () => {
       .click();
   });
 
-  it('Create a Deployment', () => {
-    cy.getIframeBody()
-      .contains('Deploy new workload')
+  it('Create a Function', () => {
+    getLeftNav()
+      .contains('Workloads')
+      .click();
+
+    getLeftNav()
+      .contains('Functions')
       .click();
 
     cy.getIframeBody()
-      .find('[role="menuitem"]')
-      .contains('Create Deployment')
+      .contains('Create Function')
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Deployment name"]')
+      .find('[placeholder="Function name"]')
       .clear()
-      .type(DEPLOYMENT_NAME);
+      .type('orders-function');
 
     cy.getIframeBody()
       .find('[placeholder="Enter Labels key=value"]')
-      .type(`app=${DEPLOYMENT_NAME}`);
+      .type('app=orders-function');
 
     cy.getIframeBody()
       .contains('label', 'Labels')
@@ -114,62 +121,46 @@ context('Busola - Create a Deployment', () => {
 
     cy.getIframeBody()
       .find('[placeholder="Enter Labels key=value"]')
-      .type(`example=${DEPLOYMENT_NAME}`);
+      .type('example=orders-function');
 
     cy.getIframeBody()
       .contains('label', 'Labels')
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Docker image"]')
-      .type(DOCKER_IMAGE);
-
-    cy.getIframeBody()
-      .contains('label', 'Memory requests')
-      .next('input')
-      .clear()
-      .type('16Mi');
-
-    cy.getIframeBody()
-      .contains('label', 'Memory limits')
-      .next('input')
-      .clear()
-      .type('32Mi');
-
-    cy.getIframeBody()
-      .contains('label', 'CPU requests')
-      .next('input')
-      .clear()
-      .type('10m');
-
-    cy.getIframeBody()
-      .contains('label', 'CPU limits')
-      .next('input')
-      .clear()
-      .type('20m');
-
-    cy.getIframeBody()
+      .find('[role="dialog"]')
       .contains('button', 'Create')
       .click();
-  });
 
-  it('Check if deployment and service exist', () => {
+    cy.wait(3000);
+    cy.readFile('fixtures/orders-function.js').then(body => {
+      cy.getIframeBody()
+        .find('textarea[aria-roledescription="editor"]')
+        .filter(':visible')
+        .clear()
+        .paste({
+          pastePayload: body,
+        });
+    });
+
     cy.getIframeBody()
-      .contains('a', DEPLOYMENT_NAME)
-      .should('be.visible');
-
-    getLeftNav()
-      .contains('Discovery and Network')
+      .find('[aria-controls="function-dependencies"]')
       .click();
 
-    getLeftNav()
-      .find('[data-testid=services_services]')
-      .click()
-      .wait(1000);
+    cy.readFile('fixtures/orders-function-dependencies.json').then(body => {
+      cy.getIframeBody()
+        .find('textarea[aria-roledescription="editor"]')
+        .filter(':visible')
+        .clear()
+        .paste({
+          pastePayload: JSON.stringify(body),
+        });
+    });
 
+    cy.wait(1000);
     cy.getIframeBody()
-      .find('a')
-      .contains(DEPLOYMENT_NAME)
-      .should('be.visible');
+      .find('.lambda-details')
+      .contains('button', 'Save')
+      .click();
   });
 });

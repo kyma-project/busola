@@ -9,7 +9,7 @@ const ADDRESS = config.localDev
 const random = Math.floor(Math.random() * 1000);
 const NAMESPACE_NAME = `a-busola-test-${random}`;
 
-context('Busola Smoke Tests', () => {
+context('Busola - Smoke Tests', () => {
   const getLeftNav = () => cy.get('nav[data-testid=semiCollapsibleLeftNav]');
 
   before(() => {
@@ -33,23 +33,35 @@ context('Busola Smoke Tests', () => {
   after(() => {
     getLeftNav()
       .contains('Namespaces') //it finds Namespaces (expected) or Back to Namespaces (if tests fail in the middle)
-      .click();
+      .click({ force: true }); //we need to use force when others elements make menu not visible
+    cy.wait(1000);
 
     cy.getIframeBody()
       .find('[aria-label="open-search"]')
-      .click();
+      .click({ force: true });
+    cy.wait(1000);
 
     cy.getIframeBody()
       .find('[placeholder="Search"]')
       .type(NAMESPACE_NAME);
+    cy.wait(1000);
 
     cy.getIframeBody()
       .find('[aria-label="Delete"]')
       .click();
+    cy.wait(5000);
 
     cy.getIframeBody()
       .find('[role="status"]')
       .should('have.text', 'TERMINATING');
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorageCache();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorageCache();
   });
 
   it('Renders navigation nodes', () => {
@@ -88,6 +100,10 @@ context('Busola Smoke Tests', () => {
 
     cy.getIframeBody()
       .contains('Healthy Resources')
+      .should('be.visible');
+
+    cy.getIframeBody()
+      .contains('Resource consumption')
       .should('be.visible');
 
     cy.getIframeBody()
