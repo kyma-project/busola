@@ -2,7 +2,6 @@ import React from 'react';
 import { GenericList, handleDelete } from 'react-shared';
 import CreateServiceBindingModal from './CreateServiceBindingModal/CreateServiceBindingModal';
 import SecretDataModal from './SecretDataModal/SecretDataModal.component';
-import { SERVICE_BINDINGS_PANEL } from './constants';
 import { Link } from 'fundamental-react';
 import {
   StatusBadge,
