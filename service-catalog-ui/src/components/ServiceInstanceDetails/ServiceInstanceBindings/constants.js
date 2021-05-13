@@ -21,7 +21,7 @@ export const SERVICE_BINDINGS_PANEL = {
       'There are no Service Bindings available. Create a new Service Binding to bind the Application.',
   },
   DELETE_BINDING_USAGE: {
-    SUCCESS_MESSAGE: 'Succesfully deleted Service Binding Usage',
+    SUCCESS_MESSAGE: 'Service Binding Usage deleted',
     ERROR_MESSAGE: 'Failed to delete the Service Binding Usage',
   },
   CREATE_BINDING_USAGE: {

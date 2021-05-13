@@ -21,7 +21,12 @@ export async function throwHttpError(response) {
       parsed.status,
       parsed.code,
     );
-  } catch (e) {} // proceed to show more generic error
+  } catch (e) {
+    try {
+      const text = await response.text();
+      return new Error(text);
+    } catch (e) {}
+  } // proceed to show more generic error
 
-  return new Error(await response.text());
+  return new Error(response.message || response.statusText || response);
 }

@@ -76,6 +76,14 @@ export const communication = {
     'busola.setCluster': ({ clusterName }) => {
       setCluster(clusterName);
     },
+    'busola.showMessage': ({ message, tittle, type }) => {
+      Luigi.customMessages().sendToAll({
+        id: 'busola.showMessage',
+        message,
+        tittle,
+        type,
+      });
+    },
   },
 };
 

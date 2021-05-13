@@ -1,20 +1,17 @@
 import { useNotification } from '../contexts/NotificationContext';
 import { usePost } from './BackendAPI/usePost';
-import { formatMessage, randomNameGenerator } from '../utils/helpers';
+import { randomNameGenerator } from '../utils/helpers';
 
-export const useCreateServiceBindingUsage = ({
-  successMessage,
-  errorMessage,
-}) => {
+export const useCreateServiceBindingUsage = () => {
   const postRequest = usePost();
   const notificationManager = useNotification();
 
-  function handleError(serviceInstanceName, error) {
+  function handleError(error) {
     console.error(error);
-    const message = formatMessage(errorMessage, { serviceInstanceName });
 
     notificationManager.notifyError({
-      content: message,
+      title: `Failed to create the Resource`,
+      content: error.message || error,
       autoClose: false,
     });
   }
@@ -93,10 +90,8 @@ export const useCreateServiceBindingUsage = ({
       return;
     }
 
-    const message = formatMessage(successMessage, { serviceInstanceName });
-
     notificationManager.notifySuccess({
-      content: message,
+      content: 'Resource created',
     });
   }
 

@@ -9,7 +9,6 @@ import {
   useGetList,
   useMicrofrontendContext,
   useDelete,
-  useNotification,
   PageHeader,
 } from 'react-shared';
 import { InfoLabel, FormInput } from 'fundamental-react';
@@ -68,7 +67,6 @@ export default function ServiceInstancesList() {
   const [searchQuery, setSearchQuery] = useState('');
   const { namespaceId } = useMicrofrontendContext();
   const sendDeleteRequest = useDelete();
-  const notificationManager = useNotification();
 
   const { loading, error, data: serviceInstances } = useGetList()(
     `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${namespaceId}/serviceinstances`,
@@ -91,20 +89,10 @@ export default function ServiceInstancesList() {
       </EmptyList>
     );
 
-  const handleDelete = async instanceName => {
-    try {
-      await sendDeleteRequest(
-        `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${namespaceId}/serviceinstances/${instanceName}`,
-      );
-      notificationManager.notifySuccess({
-        content: 'Succesfully deleted ' + instanceName,
-      });
-    } catch (e) {
-      notificationManager.notifyError({
-        title: 'Failed to delete the Service Instance',
-        content: e.message,
-      });
-    }
+  const handleDelete = instanceName => {
+    return sendDeleteRequest(
+      `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${namespaceId}/serviceinstances/${instanceName}`,
+    );
   };
 
   return (

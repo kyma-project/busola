@@ -1,10 +1,11 @@
 import LuigiClient from '@luigi-project/client';
 
-import { useDelete, handleDelete } from 'react-shared';
+import { useDelete, handleDelete, useNotification } from 'react-shared';
 import { formatMessage as injectVariables } from 'components/Lambdas/helpers/misc';
 import { API_RULE_URL } from '../constants';
 
 export function useDeleteApiRule() {
+  const notification = useNotification();
   const namespace = LuigiClient.getContext().namespaceId;
 
   const deleteAPIRule = useDelete();
@@ -14,6 +15,7 @@ export function useDeleteApiRule() {
       'apirules',
       null,
       name,
+      notification,
       () =>
         deleteAPIRule(
           injectVariables(API_RULE_URL, {

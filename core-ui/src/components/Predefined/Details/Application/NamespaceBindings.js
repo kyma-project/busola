@@ -45,6 +45,7 @@ export default function NamespaceBindings(application) {
           'Binding',
           null,
           binding.metadata.name,
+          notification,
           () => deleteRequest(binding.metadata.selfLink),
           () => {
             silentRefetch();

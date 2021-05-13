@@ -22,11 +22,11 @@ export const Notification = ({
   if (type !== 'success') {
     // deprecated notification
     return (
-      <div className={deprecatedClasses} onClick={onClick}>
+      <div className={deprecatedClasses}>
         <div className="notification-header">
           <span className="notification-title">{title}</span>
           <div className="notification-icon">
-            <span className="notification-icon">
+            <span className="notification-icon" onClick={onClick}>
               <Icon glyph={icon} ariaLabel="notification icon" />
             </span>
           </div>
