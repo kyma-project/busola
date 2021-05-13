@@ -8,11 +8,20 @@ const ADDRESS = config.localDev
 
 const random = Math.floor(Math.random() * 1000);
 const NAMESPACE_NAME = `a-busola-test-${random}`;
+const FUNCTION_CODE_URL =
+  'https://raw.githubusercontent.com/kyma-project/examples/main/orders-service/function/handler.js';
 
 context('Busola - Create a Function', () => {
   const getLeftNav = () => cy.get('nav[data-testid=semiCollapsibleLeftNav]');
 
   before(() => {
+    cy.request({
+      url: FUNCTION_CODE_URL,
+    }).then(response => {
+      cy.log('Downloaded the Function code');
+      cy.writeFile('fixtures/orders-function.js', response.body);
+    });
+
     cy.visit(ADDRESS)
       .getIframeBody()
       .contains('Add Cluster')
@@ -36,22 +45,21 @@ context('Busola - Create a Function', () => {
       .contains('Namespaces') //it finds Namespaces (expected) or Back to Namespaces (if tests fail in the middle)
       .click({ force: true }); //we need to use force when others elements make menu not visible
 
-    cy.wait(1000);
     cy.getIframeBody()
       .find('[aria-label="open-search"]')
-      .click({ force: true });
+      .click();
 
-    cy.wait(1000);
     cy.getIframeBody()
-      .find('input[placeholder="Search"]')
+      .find('[aria-expanded="true"]')
+      .find('input[placeholder = "Search"]')
       .type(NAMESPACE_NAME);
 
-    cy.wait(1000);
+    // cy.wait(1000);
     cy.getIframeBody()
       .find('[aria-label="Delete"]')
-      .click({ force: true });
+      .click();
 
-    cy.wait(5000);
+    // cy.wait(5000);
     cy.getIframeBody()
       .find('[role="status"]')
       .should('have.text', 'TERMINATING');
