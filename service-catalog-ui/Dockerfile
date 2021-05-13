@@ -3,6 +3,7 @@
 FROM alpine:3.13.5 AS builder
 # install node
 RUN apk add --update nodejs npm
+RUN node --version
 
 
 ARG app_name=service-catalog-ui
