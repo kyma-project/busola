@@ -8,7 +8,7 @@ function toSearchParamsString(object) {
   return new URLSearchParams(object).toString();
 }
 
-export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
+export function getStaticChildrenNodesForNamespace(apiPaths, permissionSet, modules) {
   const encodedClusterName = encodeURIComponent(getActiveClusterName());
   const nodes = [
     {
@@ -41,6 +41,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
     },
     {
       category: 'Workloads',
+      resourceType: 'functions',
       pathSegment: 'functions',
       navigationContext: 'functions',
       label: 'Functions',
@@ -59,6 +60,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
       children: [
         {
           pathSegment: 'details',
+          resourceType: 'functions',
           children: [
             {
               pathSegment: ':functionName',
@@ -77,6 +79,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
     {
       category: 'Workloads',
       pathSegment: 'pods',
+      resourceType: 'pods',
       label: 'Pods',
       viewUrl:
         config.coreUIModuleUrl +
@@ -94,6 +97,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
           children: [
             {
               pathSegment: ':podName',
+              resourceType: 'pods',
               viewUrl:
                 config.coreUIModuleUrl +
                 '/namespaces/:namespaceId/Pods/:podName?' +
@@ -135,6 +139,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
     {
       category: 'Workloads',
       pathSegment: 'deployments',
+      resourceType: 'deployments',
 
       label: 'Deployments',
       keepSelectedForChildren: true,
@@ -153,6 +158,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
           children: [
             {
               pathSegment: ':deploymentName',
+              resourceType: 'deployments',
               viewUrl:
                 config.coreUIModuleUrl +
                 '/namespaces/:namespaceId/Deployments/:deploymentName?' +
@@ -166,6 +172,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
     },
     {
       category: 'Workloads',
+      resourceType: 'replicasets',
       pathSegment: 'replicasets',
       label: 'Replica Sets',
       viewUrl:
@@ -185,6 +192,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
           children: [
             {
               pathSegment: ':replicaSetName',
+              resourceType: 'replicasets',
               viewUrl:
                 config.coreUIModuleUrl +
                 '/namespaces/:namespaceId/ReplicaSets/:replicaSetName?' +
@@ -209,6 +217,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
     },
     {
       category: 'Discovery and Network',
+      resourceType: 'apirules',
       pathSegment: 'apirules',
       navigationContext: 'apirules',
       label: 'API Rules',
@@ -230,6 +239,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
           children: [
             {
               pathSegment: ':apiName',
+              resourceType: 'apirules',
               viewUrl:
                 config.coreUIModuleUrl +
                 '/namespaces/:namespaceId/ApiRules/:apiName?' +
@@ -264,6 +274,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
     {
       category: 'Discovery and Network',
       pathSegment: 'services',
+      resourceType: 'services',
       navigationContext: 'services',
       label: 'Services',
       viewUrl:
@@ -281,6 +292,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
           children: [
             {
               pathSegment: ':serviceName',
+              resourceType: 'services',
               viewUrl:
                 config.coreUIModuleUrl +
                 '/namespaces/:namespaceId/Services/:serviceName?' +
@@ -435,6 +447,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
     {
       category: 'Configuration',
       pathSegment: 'addons',
+      resourceType: 'addonsconfigurations',
       navigationContext: 'addonsconfigurations',
       label: 'Addons',
       viewUrl:
@@ -455,6 +468,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
           children: [
             {
               pathSegment: ':addonName',
+              resourceType: 'addonsconfigurations',
               viewUrl:
                 config.coreUIModuleUrl +
                 '/namespaces/:namespaceId/AddonsConfigurations/:addonName?' +
@@ -470,6 +484,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
     {
       category: 'Configuration',
       pathSegment: 'config-maps',
+      resourceType: 'configmaps',
       navigationContext: 'configmaps',
       label: 'Config Maps',
       viewUrl:
@@ -487,6 +502,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
           children: [
             {
               pathSegment: ':name',
+              resourceType: 'configmaps',
               viewUrl:
                 config.coreUIModuleUrl +
                 '/namespaces/:namespaceId/ConfigMaps/:name?' +
@@ -500,6 +516,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
     },
     {
       category: 'Configuration',
+      resourceType: 'secrets',
       pathSegment: 'secrets',
       navigationContext: 'secrets',
       label: 'Secrets',
@@ -518,6 +535,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
           children: [
             {
               pathSegment: ':name',
+              resourceType: 'secrets',
               viewUrl:
                 config.coreUIModuleUrl +
                 '/namespaces/:namespaceId/Secrets/:name?' +
@@ -533,6 +551,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
     {
       category: 'Configuration',
       pathSegment: 'roles',
+      resourceType: 'roles',
       navigationContext: 'roles',
       label: 'Roles',
       viewUrl:
@@ -551,6 +570,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
           children: [
             {
               pathSegment: ':roleName',
+              resourceType: 'roles',
               viewUrl:
                 config.coreUIModuleUrl +
                 '/namespaces/:namespaceId/Roles/:roleName?' +
@@ -567,6 +587,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
     {
       category: 'Configuration',
       pathSegment: 'role-bindings',
+      resourceType: 'rolebindings',
       navigationContext: 'rolebindings',
       label: 'Role Bindings',
       viewUrl:
@@ -584,6 +605,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
           children: [
             {
               pathSegment: ':roleBindingName',
+              resourceType: 'rolebindings',
               viewUrl:
                 config.coreUIModuleUrl +
                 '/namespaces/:namespaceId/RoleBindings/:roleBindingName?' +
@@ -599,6 +621,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
     {
       category: 'Configuration',
       pathSegment: 'oauth2clients',
+      resourceType: 'oauth2clients',
       navigationContext: 'oauth2clients',
       label: 'OAuth Clients',
       viewUrl:
@@ -623,6 +646,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
           children: [
             {
               pathSegment: ':clientName',
+              resourceType: 'oauth2clients',
               viewUrl:
                 config.coreUIModuleUrl +
                 '/namespaces/:namespaceId/Oauth2Clients/:clientName?' +
@@ -638,6 +662,7 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
     {
       category: 'Configuration',
       pathSegment: 'gitrepositories',
+      resourceType: 'gitrepositories',
       navigationContext: 'gitrepositories',
       label: 'Git Repositories',
       viewUrl:
@@ -654,18 +679,20 @@ export function getStaticChildrenNodesForNamespace(apiGroups, modules) {
       },
     },
   ];
-  filterNodesByAvailablePaths(nodes, apiGroups);
+  filterNodesByAvailablePaths(nodes, apiPaths, permissionSet);
   return nodes;
 }
 
 export function getStaticRootNodes(
   namespaceChildrenNodesResolver,
-  apiGroups,
+  apiPaths,
+  permissionSet,
   modules
 ) {
   const nodes = [
     {
       pathSegment: 'namespaces',
+      resourceType: 'namespaces',
       label: 'Namespaces',
       icon: 'dimension',
       viewUrl:
@@ -681,12 +708,13 @@ export function getStaticRootNodes(
       children: [
         {
           navigationContext: 'namespace',
+          resourceType: 'namespaces',
           pathSegment: ':namespaceId',
           context: {
             namespaceId: ':namespaceId',
           },
           keepSelectedForChildren: false,
-          children: () => namespaceChildrenNodesResolver(apiGroups),
+          children: () => namespaceChildrenNodesResolver(apiPaths, permissionSet),
           defaultChildNode: 'details',
         },
       ],
@@ -704,6 +732,7 @@ export function getStaticRootNodes(
     },
     {
       pathSegment: 'applications',
+      resourceType: 'applications',
       navigationContext: 'applications',
       label: 'Applications/Systems',
       category: 'Integration',
@@ -726,6 +755,7 @@ export function getStaticRootNodes(
           children: [
             {
               pathSegment: ':name',
+              resourceType: 'applications',
               viewUrl:
                 config.coreUIModuleUrl +
                 '/Applications/:name?' +
@@ -748,6 +778,7 @@ export function getStaticRootNodes(
     {
       pathSegment: 'addons-config',
       navigationContext: 'clusteraddonsconfigurations',
+      resourceType: 'clusteraddonsconfigurations',
       label: 'Cluster Addons',
       category: {
         label: 'Integration',
@@ -772,6 +803,7 @@ export function getStaticRootNodes(
           children: [
             {
               pathSegment: ':addonName',
+              resourceType: 'clusteraddonsconfigurations',
               viewUrl:
                 config.coreUIModuleUrl +
                 '/ClusterAddonsConfigurations/:addonName?' +
@@ -789,6 +821,7 @@ export function getStaticRootNodes(
     {
       pathSegment: 'cluster-roles',
       navigationContext: 'clusterroles',
+      resourceType: 'clusterroles',
       label: 'Cluster Roles',
       category: {
         label: 'Administration',
@@ -811,6 +844,7 @@ export function getStaticRootNodes(
           children: [
             {
               pathSegment: ':roleName',
+              resourceType: 'clusterroles',
               viewUrl:
                 config.coreUIModuleUrl +
                 '/ClusterRoles/:roleName?' +
@@ -833,6 +867,7 @@ export function getStaticRootNodes(
     },
     {
       pathSegment: 'cluster-role-bindings',
+      resourceType: 'clusterrolebindings',
       navigationContext: 'clusterrolebindings',
       label: 'Cluster Role Bindings',
       category: {
@@ -856,6 +891,7 @@ export function getStaticRootNodes(
           children: [
             {
               pathSegment: ':clusterRoleBindingName',
+              resourceType: 'clusterrolebindings',
               viewUrl:
                 config.coreUIModuleUrl +
                 '/ClusterRoleBindings/:clusterRoleBindingName?' +
@@ -925,22 +961,54 @@ export function getStaticRootNodes(
       hideFromNav: true,
     },
   ];
-  filterNodesByAvailablePaths(nodes, apiGroups);
+  filterNodesByAvailablePaths(nodes, apiPaths, permissionSet);
   return nodes;
 }
 
-function filterNodesByAvailablePaths(nodes, apiGroups) {
+function extractApiGroup(apiPath) {
+  if (apiPath === '/api/v1') {
+    return '';
+  }
+  return apiPath.split('/')[2];
+}
+
+function filterNodesByAvailablePaths(nodes, apiPaths, permissionSet) {
   for (let i = nodes.length - 1; i >= 0; i--) {
     const node = nodes[i];
     if (typeof node.children === 'object') {
-      filterNodesByAvailablePaths(node.children, apiGroups);
+      filterNodesByAvailablePaths(node.children, apiPaths, permissionSet);
     }
-    if (!node.viewUrl) continue;
-    const apiPath = new URL(node.viewUrl).searchParams.get('resourceApiPath');
-    if (!apiPath) continue;
 
-    if (!apiGroups.includes(apiPath)) {
+    const removeNode = () => {
+      console.log('remove', node);
       nodes.splice(i, 1);
     }
+    checkSingleNode(node, apiPaths, permissionSet, removeNode);
   }
+}
+
+function checkSingleNode(node, apiPaths, permissionSet, removeNode) {
+  if (!node.viewUrl || !node.resourceType) return;
+  const apiPath = new URL(node.viewUrl).searchParams.get('resourceApiPath');
+  if (!apiPath) return;
+
+  if (apiPaths) {
+    // we have '*' in permissions, just check if this resource exists
+    if (!apiPaths.includes(apiPath)) {
+      removeNode();
+    }
+  } else {
+    // we need to filter through permissions
+    const apiGroup = extractApiGroup(apiPath);
+    if (!hasPermissionsFor(apiGroup, node.resourceType, permissionSet)) {
+      removeNode();
+    }
+  }
+}
+
+function hasPermissionsFor(apiGroup, resourceType, permissionSet) {
+  const permissionsForApiGroup = permissionSet.filter(p => p.apiGroups.includes(apiGroup));
+  const matchingPermission = permissionsForApiGroup.find(p => p.resources.includes(resourceType));
+  const wildcardPermission = permissionsForApiGroup.find(p => p.resources[0] === '*');
+  return matchingPermission || wildcardPermission;
 }

@@ -7,6 +7,7 @@ import {
   API_RULES_TITLE,
   CLUSTER_OVERVIEW_TITLE,
   ADD_CLUSTER_TITLE,
+  NO_PERMISSIONS_TITLE,
 } from 'shared/constants';
 import { withTitle, useMicrofrontendContext } from 'react-shared';
 import CreateApiRule from '../ApiRules/CreateApiRule/CreateApiRule';
@@ -15,6 +16,7 @@ import { ContainersLogs } from 'components/Predefined/Details/Pod/ContainersLogs
 import { ComponentForList, ComponentForDetails } from 'shared/getComponents';
 import { getResourceUrl } from 'shared/helpers';
 import { ClusterList } from 'components/Clusters/views/ClusterList';
+import { NoPermissions } from 'components/NoPermissions/NoPermissions';
 import { AddCluster } from 'components/Clusters/views/AddCluster/AddCluster';
 
 export default function App() {
@@ -22,6 +24,11 @@ export default function App() {
   return (
     // force rerender on cluster change
     <Switch key={cluster?.name}>
+      <Route
+        path="/no-permissions"
+        exact
+        component={withTitle(NO_PERMISSIONS_TITLE, NoPermissions)}
+      />
       <Route
         path="/clusters"
         exact

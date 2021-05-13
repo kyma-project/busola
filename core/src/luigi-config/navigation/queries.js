@@ -52,6 +52,28 @@ export async function failFastFetch(input, auth, init = {}) {
 }
 
 export function fetchPermissions(auth) {
+  // const ssar = {
+  //   "kind": "SelfSubjectAccessReview",
+  //   "apiVersion": "authorization.k8s.io/v1",
+  //   spec: {
+  //     resourceAttributes: {
+  //       group: "*",
+  //       resource: "*",
+  //       verb: "*",
+  //       namespace: "*"
+  //     }
+  //   }
+  // };
+  // const ssarUrl = `${config.backendApiUrl}/apis/authorization.k8s.io/v1/selfsubjectaccessreviews`;
+  // failFastFetch(ssarUrl, auth, {
+  //   method: 'POST',
+  //   body: JSON.stringify(ssar),
+  // })
+  //   .then((res) => res.json())
+  //   .then((res) => res.status.resourceRules);
+
+
+
   const ssrr = {
     typeMeta: {
       kind: 'SelfSubjectRulesReview',
@@ -66,7 +88,7 @@ export function fetchPermissions(auth) {
     body: JSON.stringify(ssrr),
   })
     .then((res) => res.json())
-    .then((res) => ({ selfSubjectRules: res.status.resourceRules }));
+    .then((res) => res.status.resourceRules);
 }
 
 export function fetchBusolaInitData(auth) {
@@ -75,11 +97,11 @@ export function fetchBusolaInitData(auth) {
     .then((res) => res.json())
     .then((data) => ({ crds: data.items.map((crd) => crd.metadata) }));
 
-  const apiGroupsQuery = failFastFetch(config.backendApiUrl, auth)
+  const apiPathsQuery = failFastFetch(config.backendApiUrl, auth)
     .then((res) => res.json())
-    .then((data) => ({ apiGroups: data.paths }));
+    .then((data) => ({ apiPaths: data.paths }));
 
-  const promises = [crdsQuery, apiGroupsQuery, fetchPermissions(auth)];
+  const promises = [crdsQuery, apiPathsQuery];
 
   return Promise.all(promises).then((res) => Object.assign(...res));
 }

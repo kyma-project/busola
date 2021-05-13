@@ -18,7 +18,7 @@ function checkRequiredModules(nodeToCheckPermissionsFor, crds) {
   return hasPermissions;
 }
 
-export default function navigationPermissionChecker(
+export function navigationPermissionChecker(
   nodeToCheckPermissionsFor,
   selfSubjectRulesReview,
   crds
@@ -37,4 +37,9 @@ export default function navigationPermissionChecker(
   );
 }
 
-export function hasWildcardPermissions() {}
+export function hasWildcardPermissions(selfSubjectRulesReview) {
+  return !!selfSubjectRulesReview.find(
+    (rule) =>
+      rule.apiGroups[0] === '*' && rule.resources[0] === '*' && rule.verbs[0] === '*'
+  );
+}
