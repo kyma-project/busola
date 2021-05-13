@@ -37,9 +37,11 @@ export function navigationPermissionChecker(
   );
 }
 
-export function hasWildcardPermissions(selfSubjectRulesReview) {
+export function hasWildcardPermission(selfSubjectRulesReview) {
   return !!selfSubjectRulesReview.find(
     (rule) =>
-      rule.apiGroups[0] === '*' && rule.resources[0] === '*' && rule.verbs[0] === '*'
+      rule.apiGroups[0] === '*' &&
+      rule.resources[0] === '*' &&
+      rule.verbs[0] === '*'
   );
 }

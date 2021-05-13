@@ -52,28 +52,6 @@ export async function failFastFetch(input, auth, init = {}) {
 }
 
 export function fetchPermissions(auth) {
-  // const ssar = {
-  //   "kind": "SelfSubjectAccessReview",
-  //   "apiVersion": "authorization.k8s.io/v1",
-  //   spec: {
-  //     resourceAttributes: {
-  //       group: "*",
-  //       resource: "*",
-  //       verb: "*",
-  //       namespace: "*"
-  //     }
-  //   }
-  // };
-  // const ssarUrl = `${config.backendApiUrl}/apis/authorization.k8s.io/v1/selfsubjectaccessreviews`;
-  // failFastFetch(ssarUrl, auth, {
-  //   method: 'POST',
-  //   body: JSON.stringify(ssar),
-  // })
-  //   .then((res) => res.json())
-  //   .then((res) => res.status.resourceRules);
-
-
-
   const ssrr = {
     typeMeta: {
       kind: 'SelfSubjectRulesReview',

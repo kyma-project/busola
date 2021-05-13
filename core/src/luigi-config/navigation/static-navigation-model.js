@@ -8,7 +8,11 @@ function toSearchParamsString(object) {
   return new URLSearchParams(object).toString();
 }
 
-export function getStaticChildrenNodesForNamespace(apiPaths, permissionSet, modules) {
+export function getStaticChildrenNodesForNamespace(
+  apiPaths,
+  permissionSet,
+  modules
+) {
   const encodedClusterName = encodeURIComponent(getActiveClusterName());
   const nodes = [
     {
@@ -714,7 +718,8 @@ export function getStaticRootNodes(
             namespaceId: ':namespaceId',
           },
           keepSelectedForChildren: false,
-          children: () => namespaceChildrenNodesResolver(apiPaths, permissionSet),
+          children: () =>
+            namespaceChildrenNodesResolver(apiPaths, permissionSet),
           defaultChildNode: 'details',
         },
       ],
@@ -979,10 +984,7 @@ function filterNodesByAvailablePaths(nodes, apiPaths, permissionSet) {
       filterNodesByAvailablePaths(node.children, apiPaths, permissionSet);
     }
 
-    const removeNode = () => {
-      console.log('remove', node);
-      nodes.splice(i, 1);
-    }
+    const removeNode = () => nodes.splice(i, 1);
     checkSingleNode(node, apiPaths, permissionSet, removeNode);
   }
 }
@@ -998,7 +1000,7 @@ function checkSingleNode(node, apiPaths, permissionSet, removeNode) {
       removeNode();
     }
   } else {
-    // we need to filter through permissions
+    // we need to filter through permissions to check the node availability
     const apiGroup = extractApiGroup(apiPath);
     if (!hasPermissionsFor(apiGroup, node.resourceType, permissionSet)) {
       removeNode();
@@ -1007,8 +1009,14 @@ function checkSingleNode(node, apiPaths, permissionSet, removeNode) {
 }
 
 function hasPermissionsFor(apiGroup, resourceType, permissionSet) {
-  const permissionsForApiGroup = permissionSet.filter(p => p.apiGroups.includes(apiGroup));
-  const matchingPermission = permissionsForApiGroup.find(p => p.resources.includes(resourceType));
-  const wildcardPermission = permissionsForApiGroup.find(p => p.resources[0] === '*');
+  const permissionsForApiGroup = permissionSet.filter((p) =>
+    p.apiGroups.includes(apiGroup)
+  );
+  const matchingPermission = permissionsForApiGroup.find((p) =>
+    p.resources.includes(resourceType)
+  );
+  const wildcardPermission = permissionsForApiGroup.find(
+    (p) => p.resources[0] === '*'
+  );
   return matchingPermission || wildcardPermission;
 }
