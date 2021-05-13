@@ -71,7 +71,6 @@ export default function ServiceBindingsWrapper({
     bindingUsagesRequest.loading ||
     secretsRequest.loading
   );
-
   return (
     <ServiceBindings
       lambda={lambda}

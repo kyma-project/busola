@@ -45,7 +45,6 @@ const Checkbox = React.forwardRef(
     return (
       <FormItem {...props} disabled={disabled} isInline={inline} ref={ref}>
         <FormLabel {...labelProps} disabled={disabled}>
-          test
           <input
             {...inputProps}
             aria-checked={getCheckStatus(checked, indeterminate)}

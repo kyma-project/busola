@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { FormItem, FormLabel, FormInput, Alert } from 'fundamental-react';
+import {
+  FormItem,
+  FormLabel,
+  FormInput,
+  MessageStrip,
+} from 'fundamental-react';
 
 import Checkbox from 'components/Lambdas/Checkbox/Checkbox';
 import { useCreateServiceBindingUsage } from 'react-shared';
@@ -117,9 +122,9 @@ export default function CreateServiceBindingForm({
   );
 
   const noSecretsFound = (
-    <Alert dismissible={false} type="information">
+    <MessageStrip dismissible={false} type="information">
       {SERVICE_BINDINGS_PANEL.FORM.NO_SECRETS_FOUND}
-    </Alert>
+    </MessageStrip>
   );
 
   return (
