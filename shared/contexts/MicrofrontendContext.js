@@ -7,20 +7,28 @@ import React, {
 } from 'react';
 import LuigiClient from '@luigi-project/client';
 
+import { useNotification } from '../';
+
 export const MicrofrontendContext = createContext({});
 
 export function MicrofrontendContextProvider({ children }) {
   const [context, setContext] = useState({});
   const lastContext = useRef({});
+  const notification = useNotification();
 
   useEffect(() => {
     const initHandle = LuigiClient.addInitListener(handleContextChanged);
     const updateHandle = LuigiClient.addContextUpdateListener(
       handleContextChanged,
     );
+    const customMessageHandle = LuigiClient.addCustomMessageListener(
+      'busola.showMessage',
+      handleCustomMessage,
+    );
     return () => {
       LuigiClient.removeContextUpdateListener(updateHandle);
       LuigiClient.removeInitListener(initHandle);
+      LuigiClient.removeCustomMessageListener(customMessageHandle);
     };
   }, [context]);
 
@@ -30,6 +38,17 @@ export function MicrofrontendContextProvider({ children }) {
       lastContext.current = newContext;
       setContext(newContext);
     }
+  }
+
+  function handleCustomMessage({ message, title, type }) {
+    type.toLowerCase() === 'error'
+      ? notification.notifyError({
+          title,
+          content: message,
+        })
+      : notification.notifySuccess({
+          content: message,
+        });
   }
 
   return (

@@ -49,11 +49,11 @@ export default function CreateBindingModal({
         `/apis/applicationconnector.kyma-project.io/v1alpha1/namespaces/${namespaceName}/applicationmappings`,
         applicationBinding,
       );
-      notification.notifySuccess({ title: 'Binding created' });
+      notification.notifySuccess({ content: 'Binding created' });
     } catch (e) {
       console.warn(e);
       notification.notifyError({
-        title: 'Failed to create the binding',
+        title: 'Failed to create the Binding',
         content: e.message,
       });
     }

@@ -51,10 +51,7 @@ export default function CreateServiceBindingForm({
   formElementRef,
   setCustomValid = () => void 0,
 }) {
-  const createServiceBindingUsageSet = useCreateServiceBindingUsage({
-    successMessage: SERVICE_BINDINGS_PANEL.CREATE_BINDING_USAGE.SUCCESS_MESSAGE,
-    errorMessage: SERVICE_BINDINGS_PANEL.CREATE_BINDING_USAGE.ERROR_MESSAGE,
-  });
+  const createServiceBindingUsageSet = useCreateServiceBindingUsage();
 
   const [selectedApplication, setSelectedApplication] = useState(null);
   const [envPrefix, setEnvPrefix] = useState('');

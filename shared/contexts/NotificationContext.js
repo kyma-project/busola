@@ -11,7 +11,7 @@ export const NotificationContext = createContext({
 export const NotificationProvider = ({
   children,
   defaultVisibilityTime = 5000,
-  defaultErrorVisibilityTime = 10000,
+  defaultErrorVisibilityTime = 15000,
 }) => {
   const [state, setState] = useState({
     isOpen: false,

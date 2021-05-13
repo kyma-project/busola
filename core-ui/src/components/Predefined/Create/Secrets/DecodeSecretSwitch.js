@@ -31,7 +31,7 @@ export function DecodeSecretSwitch({
       setEncoded(!isEncoded);
     } catch (e) {
       notification.notifyError({
-        title: 'Cannot decode secret data',
+        title: 'Failed to decode the Secret data',
         content:
           "Some of the secret data couldn't be decoded. Correct them and try again: " +
           e.message,

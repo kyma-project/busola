@@ -47,7 +47,7 @@ const ServiceInstanceHeader = ({ serviceInstance, servicePlan }) => {
         `/apis/${apiVersion}/namespaces/${namespace}/serviceinstances/${name}`,
       );
       notificationManager.notifySuccess({
-        content: 'ServiceInstance removed succesfully',
+        content: 'Service Instance deleted',
       });
 
       LuigiClient.linkManager()
@@ -59,6 +59,7 @@ const ServiceInstanceHeader = ({ serviceInstance, servicePlan }) => {
     } catch (err) {
       console.error(err);
       notificationManager.notifyError({
+        title: 'Failed to delete the Service Instance',
         content: err.message,
         autoClose: false,
       });

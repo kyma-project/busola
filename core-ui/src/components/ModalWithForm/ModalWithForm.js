@@ -75,10 +75,9 @@ const ModalWithForm = ({
     });
   }
 
-  function handleFormSuccess(title, message) {
+  function handleFormSuccess(message) {
     notificationManager.notifySuccess({
       content: message,
-      title: title,
     });
 
     performRefetch();

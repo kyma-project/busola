@@ -5,20 +5,24 @@ const useMutation = method => {
     const fetch = useFetch();
 
     return async (relativeUrl, data) => {
-      const response = await fetch({
-        relativeUrl,
-        init: {
-          method,
-          headers: {
-            'Content-Type': 'application/json-patch+json',
-            Accept: 'application/json',
+      try {
+        const response = await fetch({
+          relativeUrl,
+          init: {
+            method,
+            headers: {
+              'Content-Type': 'application/json-patch+json',
+              Accept: 'application/json',
+            },
+            body: JSON.stringify(data),
           },
-          body: JSON.stringify(data),
-        },
-      });
+        });
 
-      if (typeof options?.refetch === 'function') options.refetch();
-      return await response.json();
+        if (typeof options?.refetch === 'function') options.refetch();
+        return await response.json();
+      } catch (e) {
+        throw e;
+      }
     };
   };
 };

@@ -2,7 +2,6 @@ import React from 'react';
 import { GenericList, handleDelete } from 'react-shared';
 import CreateServiceBindingModal from './CreateServiceBindingModal/CreateServiceBindingModal';
 import SecretDataModal from './SecretDataModal/SecretDataModal.component';
-import { SERVICE_BINDINGS_PANEL } from './constants';
 import { Link } from 'fundamental-react';
 import {
   StatusBadge,
@@ -81,11 +80,12 @@ const ServiceInstanceBindings = ({ serviceInstance }) => {
       serviceBindingUsage.kind,
       null,
       serviceBindingUsage.metadata.name,
+      notification,
       () => sendDeleteRequest(serviceBindingUsage.metadata.selfLink),
       () => {
         bindingUsagesRequest.silentRefetch();
         notification.notifySuccess({
-          content: SERVICE_BINDINGS_PANEL.DELETE_BINDING_USAGE.SUCCESS_MESSAGE,
+          content: 'Service Binding Usage deleted',
         });
       },
     );

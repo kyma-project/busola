@@ -5,7 +5,11 @@ const RepositoryUrls = addon => {
   const headerRenderer = _ => ['URL', 'Status'];
   const rowRenderer = repo => [
     repo.url,
-    <StatusBadge tooltipContent={repo.message} autoResolveType>
+    <StatusBadge
+      ariaLabel="Addons Status"
+      tooltipContent={repo.message}
+      autoResolveType
+    >
       {repo.status}
     </StatusBadge>,
   ];
@@ -16,7 +20,7 @@ const RepositoryUrls = addon => {
       title="Repository URLs"
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
-      entries={addon.status.repositories}
+      entries={addon.status.repositories || []}
     />
   );
 };
