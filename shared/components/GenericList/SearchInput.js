@@ -96,12 +96,13 @@ export function SearchInput({
   return (
     <section
       className="generic-list-search"
-      role="search"
       aria-label={`search-${entriesKind}`}
     >
       <div
         className="fd-popover"
         style={{ display: showControl ? 'none' : 'initial' }}
+        aria-expanded={!showControl}
+        role="search"
       >
         <div className="fd-popover__control">
           <div className="fd-combobox-control">
