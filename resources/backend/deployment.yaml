@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: eu.gcr.io/kyma-project/busola-backend:PR-119
+          image: eu.gcr.io/kyma-project/busola-backend:PR-144
           imagePullPolicy: Always
           resources:
             limits:
@@ -40,4 +40,4 @@ spec:
           terminationMessagePolicy: File
           env:
             - name: ADDRESS
-              value: '0.0.0.0'
+              value: 0.0.0.0
