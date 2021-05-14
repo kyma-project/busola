@@ -42,11 +42,14 @@ export default function NamespaceBindings(application) {
       name: 'Delete',
       handler: binding =>
         handleDelete(
-          'Binding',
+          'Bindings',
           null,
           binding.metadata.name,
           notification,
-          () => deleteRequest(binding.metadata.selfLink),
+          () =>
+            deleteRequest(
+              `/apis/applicationconnector.kyma-project.io/v1alpha1/namespaces/${binding.metadata.namespace}/applicationmappings/${binding.metadata.name}`,
+            ),
           () => {
             silentRefetch();
             notification.notifySuccess({

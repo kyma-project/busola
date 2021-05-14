@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Button, Alert } from 'fundamental-react';
+import { Button, MessageStrip } from 'fundamental-react';
 import { Spinner, Tooltip, useGetList } from 'react-shared';
 
 import ModalWithForm from 'components/ModalWithForm/ModalWithForm';
@@ -29,7 +29,7 @@ export default function CreateServiceBindingModal({
   } = useGetList()(
     `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${lambda.metadata.namespace}/serviceinstances`,
     {
-      pollingInterval: 3000,
+      pollingInterval: 5500,
     },
   );
   const { data: servicePlans } = useGetList()(
@@ -42,21 +42,21 @@ export default function CreateServiceBindingModal({
   const { data: clusterServicePlans } = useGetList()(
     `/apis/servicecatalog.k8s.io/v1beta1/clusterserviceplans`,
     {
-      pollingInterval: 6000,
+      pollingInterval: 6500,
     },
   );
 
   const { data: serviceClasses } = useGetList()(
     `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${lambda.metadata.namespace}/serviceclasses`,
     {
-      pollingInterval: 6000,
+      pollingInterval: 7000,
     },
   );
 
   const { data: clusterServiceclasses } = useGetList()(
     `/apis/servicecatalog.k8s.io/v1beta1/clusterserviceclasses`,
     {
-      pollingInterval: 6000,
+      pollingInterval: 7500,
     },
   );
 
@@ -112,9 +112,9 @@ export default function CreateServiceBindingModal({
   let fallbackContent = null;
   if (error) {
     fallbackContent = (
-      <Alert dismissible={false} type="error">
-        {error}
-      </Alert>
+      <MessageStrip dismissible={false} type="error">
+        {error.message}
+      </MessageStrip>
     );
   }
   if (!fallbackContent && loading) {
