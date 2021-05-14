@@ -113,7 +113,7 @@ export default function CreateServiceBindingModal({
   if (error) {
     fallbackContent = (
       <MessageStrip dismissible={false} type="error">
-        {error}
+        {error.message}
       </MessageStrip>
     );
   }
