@@ -1,7 +1,12 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
 
-import { GenericList, useNotification, useDelete } from 'react-shared';
+import {
+  GenericList,
+  useNotification,
+  useDelete,
+  useMicrofrontendContext,
+} from 'react-shared';
 import { Link } from 'fundamental-react';
 
 import CreateServiceBindingModal from './CreateServiceBindingModal';
@@ -19,6 +24,7 @@ export default function ServiceBindings({
   serverDataLoading,
 }) {
   const notification = useNotification();
+  const { namespaceId } = useMicrofrontendContext();
 
   const deleteServiceBindingUsage = useDelete();
   const serviceBindingsWithUsages = serviceBindingsCombined.filter(
@@ -39,9 +45,10 @@ export default function ServiceBindings({
     );
   };
 
-  async function handleServiceBindingUsageDelete({ serviceBindingUsage: u }) {
+  async function handleServiceBindingUsageDelete({ serviceBindingUsage: sbu }) {
+    const url = `/apis/servicecatalog.kyma-project.io/v1alpha1/namespaces/${namespaceId}/servicebindingusages/${sbu.metadata.name}`;
     try {
-      await deleteServiceBindingUsage(u.metadata.selfLink);
+      await deleteServiceBindingUsage(url);
       notification.notifySuccess({
         content: 'Service Binding Usage deleted',
       });
