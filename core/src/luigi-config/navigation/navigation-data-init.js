@@ -12,6 +12,7 @@ import {
 import {
   navigationPermissionChecker,
   hasWildcardPermission,
+  hasNoUsefulResourcePermissions,
 } from './permissions';
 
 import { hideDisabledNodes, createNamespacesList } from './navigation-helpers';
@@ -183,25 +184,26 @@ export async function createNavigation() {
   };
 }
 
-async function getDATA(authData, permissionSet) {
+async function fetchNavigationData(authData, permissionSet) {
   if (hasWildcardPermission(permissionSet)) {
     const res = await fetchBusolaInitData(authData);
-    crds = res.crds = res.crds.map((crd) => crd.name);
-    return res; // crds, apiPaths
+    crds = res.crds.map((crd) => crd.name);
+    return {...res, crds };
   } else {
+    // as we may not be able to make CRDs call, apiGroups call shall suffice
     const apiGroups = [...new Set(permissionSet.flatMap((p) => p.apiGroups))];
     crds = apiGroups;
-    return { crds: apiGroups }; // crds
+    return { crds: apiGroups, apiPaths: null };
   }
 }
 
 export async function getNavigationData(authData) {
   // we assume all users can make SelfSubjectRulesReview request
   const permissionSet = await fetchPermissions(authData);
-  selfSubjectRulesReview = permissionSet || [];
+  selfSubjectRulesReview = permissionSet;
 
   try {
-    const { crds, apiPaths } = await getDATA(authData, permissionSet);
+    const { crds, apiPaths } = await fetchNavigationData(authData, permissionSet);
     const params = getActiveCluster();
     const activeClusterName = params.cluster.name;
 

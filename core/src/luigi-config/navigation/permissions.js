@@ -37,8 +37,8 @@ export function navigationPermissionChecker(
   );
 }
 
-export function hasWildcardPermission(selfSubjectRulesReview) {
-  return !!selfSubjectRulesReview.find(
+export function hasWildcardPermission(permissionSet) {
+  return !!permissionSet.find(
     (rule) =>
       rule.apiGroups[0] === '*' &&
       rule.resources[0] === '*' &&
