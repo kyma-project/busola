@@ -188,7 +188,7 @@ async function fetchNavigationData(authData, permissionSet) {
   if (hasWildcardPermission(permissionSet)) {
     const res = await fetchBusolaInitData(authData);
     crds = res.crds.map((crd) => crd.name);
-    return {...res, crds };
+    return { ...res, crds };
   } else {
     // as we may not be able to make CRDs call, apiGroups call shall suffice
     const apiGroups = [...new Set(permissionSet.flatMap((p) => p.apiGroups))];
@@ -203,7 +203,10 @@ export async function getNavigationData(authData) {
   selfSubjectRulesReview = permissionSet;
 
   try {
-    const { crds, apiPaths } = await fetchNavigationData(authData, permissionSet);
+    const { crds, apiPaths } = await fetchNavigationData(
+      authData,
+      permissionSet
+    );
     const params = getActiveCluster();
     const activeClusterName = params.cluster.name;
 

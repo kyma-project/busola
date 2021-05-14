@@ -1,5 +1,6 @@
 import { config } from '../config';
 import { getActiveClusterName } from './../cluster-management';
+import { hasPermissionsFor } from './permissions';
 
 export const coreUIViewGroupName = '_core_ui_';
 export const catalogViewGroupName = '_catalog_';
@@ -972,7 +973,7 @@ export function getStaticRootNodes(
 
 function extractApiGroup(apiPath) {
   if (apiPath === '/api/v1') {
-    return '';
+    return ''; // core api group
   }
   return apiPath.split('/')[2];
 }
@@ -1006,17 +1007,4 @@ function checkSingleNode(node, apiPaths, permissionSet, removeNode) {
       removeNode();
     }
   }
-}
-
-function hasPermissionsFor(apiGroup, resourceType, permissionSet) {
-  const permissionsForApiGroup = permissionSet.filter((p) =>
-    p.apiGroups.includes(apiGroup)
-  );
-  const matchingPermission = permissionsForApiGroup.find((p) =>
-    p.resources.includes(resourceType)
-  );
-  const wildcardPermission = permissionsForApiGroup.find(
-    (p) => p.resources[0] === '*'
-  );
-  return matchingPermission || wildcardPermission;
 }

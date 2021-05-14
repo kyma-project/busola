@@ -1,4 +1,4 @@
-import rbacRulesMatched from './rbac-rules-matcher';
+import rbacRulesMatched from './../rbac-rules-matcher';
 
 // Allowance
 
