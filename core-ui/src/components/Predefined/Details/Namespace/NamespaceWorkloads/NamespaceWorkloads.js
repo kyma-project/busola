@@ -20,7 +20,9 @@ const navigateTo = path => () => {
 
 const ResourceCircle = ({ data, loading, error, title, color }) => {
   if (error) {
-    return `Error while loading ${title} data due to: ${error.message}`;
+    return (
+      <p>{`Error while loading ${title} data due to: ${error.message}`}</p>
+    );
   } else if (loading || !data) {
     return <Spinner />;
   }
