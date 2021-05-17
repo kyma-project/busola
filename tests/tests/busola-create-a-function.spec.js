@@ -50,7 +50,6 @@ context('Busola - Create a Function and access it', () => {
       .click({ force: true }); //we need to use force when others elements make menu not visible
 
     cy.wait(3000);
-    // cy.get();
 
     cy.getIframeBody()
       .find('[aria-label="open-search"]')
@@ -58,7 +57,7 @@ context('Busola - Create a Function and access it', () => {
     cy.wait(1000);
 
     cy.getIframeBody()
-      .find('[role=search][aria-expanded="true"]')
+      .find('[role=search] [aria-expanded="true"]')
       .find('input[placeholder = "Search"]')
       .type(NAMESPACE_NAME);
 
