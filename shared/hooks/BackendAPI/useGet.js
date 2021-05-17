@@ -39,11 +39,12 @@ const useGetHook = processDataFn =>
     };
 
     React.useEffect(() => {
+      const receivedForbidden = error?.code === 403;
       // POLLING
-      if (!pollingInterval) return;
+      if (!pollingInterval || receivedForbidden) return;
       const intervalId = setInterval(refetch(true, data), pollingInterval);
       return _ => clearInterval(intervalId);
-    }, [path, pollingInterval, data]);
+    }, [path, pollingInterval, data, error]);
 
     React.useEffect(() => {
       // INITIAL FETCH

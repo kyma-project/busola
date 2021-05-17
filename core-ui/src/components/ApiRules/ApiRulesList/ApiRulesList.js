@@ -57,15 +57,16 @@ function createApiRuleModal(
   redirectCtx,
   portForCreate,
 ) {
+  const context = service ? 'namespace' : 'namespaces';
   if (!inSubView) {
     LuigiClient.linkManager()
-      .fromContext('namespaces')
+      .fromContext(context)
       .navigate(`apirules/create`);
     return;
   }
 
   LuigiClient.linkManager()
-    .fromContext('namespaces')
+    .fromContext(context)
     .withParams({
       serviceName: service.metadata.name,
       port: portForCreate,

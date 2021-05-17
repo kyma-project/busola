@@ -1,0 +1,23 @@
+.no-permissions {
+  display: flex;
+  flex-direction: column;
+  place-items: center;
+  margin: 10vh auto 0;
+  max-width: 70vw;
+
+  i {
+    font-size: 2.5em;
+    color: #b00;
+  }
+
+  header {
+    padding-top: 30px;
+    font-size: 36px;
+  }
+
+  p {
+    font-size: 18px;
+    color: #6f7275;
+    text-align: center;
+  }
+}
