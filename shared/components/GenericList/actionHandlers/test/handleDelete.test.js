@@ -1,56 +1,70 @@
 import { handleDelete } from '../simpleDelete';
 
 const mockModal = jest.fn();
-const mockAlert = jest.fn();
+
+const type = 'resource';
+const typePlurar = 'resources';
+const id = 'some-id';
+const name = 'some-name';
 
 jest.mock('@luigi-project/client', () => ({
   uxManager: () => ({
     showConfirmationModal: mockModal,
-    showAlert: mockAlert,
   }),
 }));
 
 describe('simpleDelete', () => {
   it('Calls delete function and custom callback with valid parameters', async () => {
     mockModal.mockImplementation(() => new Promise(resolve => resolve()));
+    const notificationManager = {
+      notifyError: jest.fn(),
+      notifySuccess: jest.fn(),
+    };
     const deleteFunction = jest.fn();
     const customCallback = jest.fn();
 
-    const type = 'some-type';
-    const id = 'some-id';
-    const name = 'some-name';
-
-    await handleDelete(type, id, name, deleteFunction, customCallback);
+    await handleDelete(
+      typePlurar,
+      id,
+      name,
+      notificationManager,
+      deleteFunction,
+      customCallback,
+    );
 
     expect(mockModal).toHaveBeenCalled();
     expect(mockModal.mock.calls[0][0].body).toBe(
       `Are you sure you want to delete ${type} "${name}"?`,
     );
-    expect(mockModal.mock.calls[0][0].header).toBe(`Remove ${type}`);
 
     expect(deleteFunction).toHaveBeenCalledWith(id, name);
     expect(customCallback).toHaveBeenCalled();
-    expect(mockAlert).not.toHaveBeenCalled();
+    expect(notificationManager.notifyError).not.toHaveBeenCalled();
   });
 
   it('Does not call any functions when user cancels', async () => {
     mockModal.mockImplementation(
       () => new Promise((_resolve, reject) => reject()),
     );
+    const notificationManager = {
+      notifyError: jest.fn(),
+      notifySuccess: jest.fn(),
+    };
     const deleteFunction = jest.fn();
     const customCallback = jest.fn();
 
     await handleDelete(
-      'some-type',
-      'some-id',
-      'some-name',
+      typePlurar,
+      id,
+      name,
+      notificationManager,
       deleteFunction,
       customCallback,
     );
 
     expect(deleteFunction).not.toHaveBeenCalled();
     expect(customCallback).not.toHaveBeenCalled();
-    expect(mockAlert).not.toHaveBeenCalled();
+    expect(notificationManager.notifyError).not.toHaveBeenCalled();
   });
 
   it('Does not call custom callback and shows alert on delete function error', async () => {
@@ -58,18 +72,22 @@ describe('simpleDelete', () => {
     const deleteFunction = () => {
       throw Error('DANGER');
     };
+    const notificationManager = {
+      notifyError: jest.fn(),
+      notifySuccess: jest.fn(),
+    };
     const customCallback = jest.fn();
 
     await handleDelete(
-      'some-type',
-      'some-id',
-      'some-name',
+      typePlurar,
+      id,
+      name,
+      notificationManager,
       deleteFunction,
       customCallback,
     );
 
-    expect(mockAlert).toHaveBeenCalled();
-    expect(mockAlert.mock.calls[0][0].text).toMatch('DANGER');
+    expect(notificationManager.notifyError).toHaveBeenCalled();
     expect(customCallback).not.toHaveBeenCalled();
   });
 });

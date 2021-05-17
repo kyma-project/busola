@@ -2,7 +2,7 @@
 # If you want to build image without local changes of react components, delete 16 line of code.
 FROM alpine:3.13.5 AS builder
 # install node
-RUN apk add --update nodejs npm --repository=http://dl-cdn.alpinelinux.org/alpine/edge/main
+RUN apk add --update nodejs npm
 
 
 ARG app_name=service-catalog-ui

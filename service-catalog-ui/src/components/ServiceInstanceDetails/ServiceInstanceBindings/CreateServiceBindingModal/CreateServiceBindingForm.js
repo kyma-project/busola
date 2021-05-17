@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { FormItem, FormLabel, FormInput, Alert } from 'fundamental-react';
+import {
+  FormItem,
+  FormLabel,
+  FormInput,
+  MessageStrip,
+} from 'fundamental-react';
 import {
   Checkbox,
   useGetList,
@@ -51,10 +56,7 @@ export default function CreateServiceBindingForm({
   formElementRef,
   setCustomValid = () => void 0,
 }) {
-  const createServiceBindingUsageSet = useCreateServiceBindingUsage({
-    successMessage: SERVICE_BINDINGS_PANEL.CREATE_BINDING_USAGE.SUCCESS_MESSAGE,
-    errorMessage: SERVICE_BINDINGS_PANEL.CREATE_BINDING_USAGE.ERROR_MESSAGE,
-  });
+  const createServiceBindingUsageSet = useCreateServiceBindingUsage();
 
   const [selectedApplication, setSelectedApplication] = useState(null);
   const [envPrefix, setEnvPrefix] = useState('');
@@ -157,9 +159,9 @@ export default function CreateServiceBindingForm({
   );
 
   const noServiceBindingsFound = (
-    <Alert dismissible={false} type="information">
+    <MessageStrip dismissible={false} type="information">
       {SERVICE_BINDINGS_PANEL.FORM.NO_BINDINGS_FOUND}
-    </Alert>
+    </MessageStrip>
   );
 
   return (

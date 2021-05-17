@@ -1,11 +1,14 @@
 import LuigiClient from '@luigi-project/client';
+import { prettifyNameSingular } from '../../..';
 
 function displayConfirmationMessage(entityType, entityName) {
   return new Promise(resolve => {
     LuigiClient.uxManager()
       .showConfirmationModal({
         header: `Remove ${entityType}`,
-        body: `Are you sure you want to delete ${entityType} "${entityName}"?`,
+        body: `Are you sure you want to delete ${prettifyNameSingular(
+          entityType,
+        )} "${entityName}"?`,
         buttonConfirm: 'Delete',
         buttonDismiss: 'Cancel',
       })
@@ -18,19 +21,22 @@ export async function handleDelete(
   entityType,
   entityId,
   entityName,
+  notificationManager,
   deleteRequestFn,
   callback = () => {},
 ) {
   try {
     if (await displayConfirmationMessage(entityType, entityName)) {
-      deleteRequestFn(entityId, entityName);
+      await deleteRequestFn(entityId, entityName);
       callback();
+      notificationManager.notifySuccess({
+        content: `${prettifyNameSingular(entityType)} deleted`,
+      });
     }
-  } catch (err) {
-    LuigiClient.uxManager().showAlert({
-      text: `An error occurred while deleting ${entityType} ${entityName}: ${err.message}`,
-      type: 'error',
-      closeAfter: 10000,
+  } catch (e) {
+    notificationManager.notifyError({
+      title: `Failed to delete the ${prettifyNameSingular(entityType)}`,
+      content: e.message,
     });
   }
 }
@@ -65,9 +71,10 @@ export function easyHandleDelete(
         }
       }
     })
-    .catch(err => {
+    .catch(e => {
       notificationManager.notifyError({
-        content: `An error occurred while deleting ${entityType} ${entityName}: ${err.message}`,
+        title: `Failed to delete the Resource`,
+        content: e.message,
       });
     });
 }

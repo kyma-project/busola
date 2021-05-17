@@ -3,9 +3,6 @@ import { useNotification, useUpdate } from 'react-shared';
 import { createPatch } from 'rfc6902';
 
 import extractErrors from 'shared/errorExtractor';
-
-import { formatMessage } from 'components/Lambdas/helpers/misc';
-import { LAMBDAS_MESSAGES } from 'components/Lambdas/constants';
 import { getResourceUrl } from 'shared/helpers';
 
 export const UPDATE_TYPE = {
@@ -26,16 +23,9 @@ export const useUpdateLambda = ({
   function handleError(error) {
     const errorToDisplay = extractErrors(error);
 
-    const message = formatMessage(
-      LAMBDAS_MESSAGES.UPDATE_LAMBDA[type].ERROR_MESSAGE,
-      {
-        lambdaName: lambda.metadata.name,
-        error: errorToDisplay,
-      },
-    );
-
     notificationManager.notifyError({
-      content: message,
+      title: 'Failed to update the Function',
+      content: errorToDisplay,
       autoClose: false,
     });
   }
@@ -58,15 +48,8 @@ export const useUpdateLambda = ({
         return;
       }
 
-      const message = formatMessage(
-        LAMBDAS_MESSAGES.UPDATE_LAMBDA[type].SUCCESS_MESSAGE,
-        {
-          lambdaName: lambda.metadata.name,
-        },
-      );
-
       notificationManager.notifySuccess({
-        content: message,
+        content: 'Lambda updated',
       });
       userCallback({ ok: true });
     } catch (err) {

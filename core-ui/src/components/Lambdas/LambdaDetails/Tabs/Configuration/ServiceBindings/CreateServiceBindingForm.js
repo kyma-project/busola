@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { FormItem, FormLabel, FormInput, Alert } from 'fundamental-react';
+import {
+  FormItem,
+  FormLabel,
+  FormInput,
+  MessageStrip,
+} from 'fundamental-react';
 
 import Checkbox from 'components/Lambdas/Checkbox/Checkbox';
 import { useCreateServiceBindingUsage } from 'react-shared';
-import {
-  SERVICE_BINDINGS_PANEL,
-  LAMBDAS_MESSAGES,
-} from 'components/Lambdas/constants';
+import { SERVICE_BINDINGS_PANEL } from 'components/Lambdas/constants';
 import { CONFIG } from 'components/Lambdas/config';
 
 const checkBoxInputProps = {
@@ -27,10 +29,7 @@ export default function CreateServiceBindingForm({
   setValidity = () => void 0,
   isOpen = false,
 }) {
-  const createServiceBindingUsageSet = useCreateServiceBindingUsage({
-    successMessage: LAMBDAS_MESSAGES.CREATE_BINDING_USAGE.SUCCESS_MESSAGE,
-    errorMessage: LAMBDAS_MESSAGES.CREATE_BINDING_USAGE.ERROR_MESSAGE,
-  });
+  const createServiceBindingUsageSet = useCreateServiceBindingUsage();
 
   const [selectedServiceInstance, setSelectedServiceInstance] = useState('');
   const [envPrefix, setEnvPrefix] = useState('');
@@ -123,9 +122,9 @@ export default function CreateServiceBindingForm({
   );
 
   const noSecretsFound = (
-    <Alert dismissible={false} type="information">
+    <MessageStrip dismissible={false} type="information">
       {SERVICE_BINDINGS_PANEL.FORM.NO_SECRETS_FOUND}
-    </Alert>
+    </MessageStrip>
   );
 
   return (

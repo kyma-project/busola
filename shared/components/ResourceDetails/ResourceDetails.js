@@ -16,14 +16,12 @@ import {
   navigateToList,
   ReadableCreationTimestamp,
   ResourceNotFound,
+  prettifyNamePlural,
+  prettifyNameSingular,
 } from '../..';
 import CustomPropTypes from '../../typechecking/CustomPropTypes';
 import { handleDelete } from '../GenericList/actionHandlers/simpleDelete';
 import { useWindowTitle } from '../../hooks';
-import {
-  prettifyNamePlural,
-  prettifyNameSingular,
-} from '../ResourcesList/helpers';
 
 ResourceDetails.propTypes = {
   customColumns: CustomPropTypes.customColumnsType,
@@ -113,6 +111,8 @@ function Resource({
   const setEditedSpec = useYamlEditor();
   const notification = useNotification();
 
+  const prettifiedResourceName = prettifyNameSingular(undefined, resourceType);
+
   const breadcrumbs = [
     {
       name: resourceType,
@@ -154,11 +154,13 @@ function Resource({
 
       await updateResourceMutation(resourceUrl, diff);
       silentRefetch();
-      notification.notifySuccess({ title: 'Succesfully updated Resource' });
+      notification.notifySuccess({
+        content: `${prettifiedResourceName} updated`,
+      });
     } catch (e) {
       console.error(e);
       notification.notifyError({
-        title: 'Failed to update the Resource',
+        title: `Failed to update the ${prettifiedResourceName}`,
         content: e.message,
       });
       throw e;
@@ -170,6 +172,7 @@ function Resource({
       resourceType,
       null,
       resourceName,
+      notification,
       () => deleteResourceMutation(resourceUrl),
       () => navigateToList(resourceType),
     );
