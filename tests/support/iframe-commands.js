@@ -6,9 +6,9 @@ Cypress.Commands.add('getIframeBody', () => {
   return (
     cy
       .get('.iframeContainer iframe', { log: false })
-      .filter(':visible')
+      .filter(':visible', { log: false })
       .its('0.contentDocument.body', { log: false })
-      .should('not.be.empty')
+      .should('not.be.empty', { log: false })
       // wraps "body" DOM element to allow
       // chaining more Cypress commands, like ".find(...)"
       // https://on.cypress.io/wrap
