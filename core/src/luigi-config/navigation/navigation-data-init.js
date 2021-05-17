@@ -198,11 +198,11 @@ async function fetchNavigationData(authData, permissionSet) {
 }
 
 export async function getNavigationData(authData) {
-  // we assume all users can make SelfSubjectRulesReview request
-  const permissionSet = await fetchPermissions(authData);
-  selfSubjectRulesReview = permissionSet;
-
   try {
+    // we assume all users can make SelfSubjectRulesReview request
+    const permissionSet = await fetchPermissions(authData);
+    selfSubjectRulesReview = permissionSet;
+
     const { crds, apiPaths } = await fetchNavigationData(
       authData,
       permissionSet
