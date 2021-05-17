@@ -69,7 +69,7 @@ context('Busola - Create a Function and access it', () => {
 
     cy.getIframeBody()
       .find('[role="status"]')
-      .contains('TERMINATING');
+      .should('have.text', 'TERMINATING');
   });
 
   beforeEach(() => {
