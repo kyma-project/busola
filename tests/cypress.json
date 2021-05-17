@@ -1,8 +1,8 @@
 {
-  "defaultCommandTimeout": 5000,
+  "defaultCommandTimeout": 7000,
   "execTimeout": 3000,
   "taskTimeout": 3000,
-  "pageLoadTimeout": 3000,
+  "pageLoadTimeout": 4000,
   "requestTimeout": 3000,
   "responseTimeout": 3000,
 
