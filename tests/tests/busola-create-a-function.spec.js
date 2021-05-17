@@ -10,9 +10,12 @@ const random = Math.floor(Math.random() * 9999) + 1000;
 const NAMESPACE_NAME = `a-busola-test-${random}`;
 const FUNCTION_CODE_URL =
   'https://raw.githubusercontent.com/kyma-project/examples/main/orders-service/function/handler.js';
-const API_RULE_HOST_PREFIX = `https://orders-function-host.`;
+const API_RULE_NAME = 'orders-function';
+const API_RULE_HOST = API_RULE_NAME + '-' + random;
+const API_RULE_HOST_EXPECTED_PREFIX = `https://${API_RULE_HOST}.`;
 
 context('Busola - Create a Function', () => {
+  let apiRuleUrl;
   const getLeftNav = () => cy.get('nav[data-testid=semiCollapsibleLeftNav]');
 
   before(() => {
@@ -169,7 +172,6 @@ context('Busola - Create a Function', () => {
         });
     });
 
-    // cy.wait(1000);
     cy.getIframeBody()
       .find('.lambda-details')
       .contains('button', 'Save')
@@ -178,11 +180,11 @@ context('Busola - Create a Function', () => {
 
     //TODO use one namespace per all tests. Then we'll be able create the lambda at the beginning and create API Rule for it at the end
     cy.getIframeBody()
-      .find('[role="status"]', { timeout: 60000 })
+      .find('[role="status"]', { timeout: 120000 })
       .should('have.text', 'RUNNING');
   });
 
-  it('Create API Rule for the Function', () => {
+  it('Create an API Rule for the Function', () => {
     getLeftNav()
       .contains('Discovery and Network')
       .click();
@@ -195,16 +197,13 @@ context('Busola - Create a Function', () => {
       .contains('Create apirules')
       .click();
 
-    // cy.wait(2000);
-
     cy.getModalBody().within($modal => {
-      cy.get('[placeholder="API Rule name"]').type('orders-function');
-      cy.get('[placeholder="Enter the hostname"]').type('orders-function-host'); //the host is ocupied by another virtualservice
-      cy.get('[role="select"]#service').select('orders-function:80');
+      cy.get('[placeholder="API Rule name"]').type(API_RULE_NAME);
+      cy.get('[placeholder="Enter the hostname"]').type(API_RULE_HOST); //the host is ocupied by another virtualservice
+      cy.get('[role="select"]#service').select(API_RULE_NAME + ':80');
 
       cy.get('[aria-label="Access strategy type"]').select('noop');
 
-      // cy.wait(10000);
       // inputs are invisible because the Fundamental uses label::before to display the check area
       cy.get('input[type="checkbox"]').check(['GET', 'POST'], { force: true });
       cy.get('input[type="checkbox"]').uncheck(
@@ -212,20 +211,45 @@ context('Busola - Create a Function', () => {
         { force: true },
       );
       cy.get('[aria-label="submit-form"]')
-        // .contains('button', 'Create')
         .should('not.be.disabled')
         .click();
     });
+
+    cy.getModalBody().should('not.exist');
   });
 
-  it('Check Host value for the API Rule', () => {
+  it('Get Host value for the API Rule', () => {
     getLeftNav()
       .contains('API Rules')
       .click();
 
     cy.getIframeBody()
       .find('tbody>tr')
-      .find(`a[href^="${API_RULE_HOST_PREFIX}"]`)
-      .should('exist');
+      .within($tr => {
+        cy.get('[role="status"]').should('have.text', 'OK');
+        cy.get(`a[href^="${API_RULE_HOST_EXPECTED_PREFIX}"]`)
+          .should('exist')
+          .then($link => {
+            apiRuleUrl = $link.attr('href');
+            cy.log('api rule host set to ', apiRuleUrl);
+          });
+      });
+  });
+
+  it('Make a request to the Function', () => {
+    assert.exists(apiRuleUrl, 'the "apiRuleUrl" variable is defined');
+    assert.notEqual(
+      apiRuleUrl,
+      API_RULE_HOST_EXPECTED_PREFIX,
+      'the "apiRuleUrl" variable is not equal',
+    );
+
+    cy.request({ method: 'GET', url: apiRuleUrl, timeout: 10000 }).then(
+      response => {
+        // response.body is automatically serialized into JSON
+        expect(response.body).to.be.an('array');
+        expect(response.body.length).to.eq(0);
+      },
+    );
   });
 });
