@@ -1,13 +1,18 @@
-import { fetchBusolaInitData, fetchNamespaces } from './queries';
+import {
+  fetchPermissions,
+  fetchBusolaInitData,
+  fetchNamespaces,
+} from './queries';
 import { config } from '../config';
 import {
   coreUIViewGroupName,
   getStaticChildrenNodesForNamespace,
   getStaticRootNodes,
 } from './static-navigation-model';
-import navigationPermissionChecker, {
-  setInitValues,
-  crds,
+import {
+  navigationPermissionChecker,
+  hasWildcardPermission,
+  hasNoUsefulResourcePermissions,
 } from './permissions';
 
 import { hideDisabledNodes, createNamespacesList } from './navigation-helpers';
@@ -22,7 +27,11 @@ import {
   saveActiveClusterName,
 } from '../cluster-management';
 import { shouldShowSystemNamespaces } from './../utils/system-namespaces-toggle';
-import { tryRestorePreviousLocation } from './previous-location';
+import { saveLocation, tryRestorePreviousLocation } from './previous-location';
+import { NODE_PARAM_PREFIX } from '../luigi-config';
+
+let selfSubjectRulesReview;
+let crds = [];
 
 export async function addClusterNodes() {
   const config = Luigi.getConfig();
@@ -92,7 +101,15 @@ function createClusterManagementNodes() {
     hideFromNav: true,
     children: clusterNodes,
   };
-  return [clusterManagementNode, clusterNode];
+
+  const noPermissionsNode = {
+    pathSegment: 'no-permissions',
+    hideFromNav: true,
+    hideSideNav: true,
+    viewUrl: config.coreUIModuleUrl + '/no-permissions',
+  };
+
+  return [clusterManagementNode, clusterNode, noPermissionsNode];
 }
 
 export async function createNavigation() {
@@ -143,7 +160,8 @@ export async function createNavigation() {
 
   return {
     preloadViewGroups: false,
-    nodeAccessibilityResolver: navigationPermissionChecker,
+    nodeAccessibilityResolver: (node) =>
+      navigationPermissionChecker(node, selfSubjectRulesReview, crds),
     appSwitcher: {
       showMainAppEntry: false,
       items: [
@@ -166,10 +184,29 @@ export async function createNavigation() {
   };
 }
 
+async function fetchNavigationData(authData, permissionSet) {
+  if (hasWildcardPermission(permissionSet)) {
+    const res = await fetchBusolaInitData(authData);
+    crds = res.crds.map((crd) => crd.name);
+    return { ...res, crds };
+  } else {
+    // as we may not be able to make CRDs call, apiGroups call shall suffice
+    const apiGroups = [...new Set(permissionSet.flatMap((p) => p.apiGroups))];
+    crds = apiGroups;
+    return { crds: apiGroups, apiPaths: null };
+  }
+}
+
 export async function getNavigationData(authData) {
   try {
-    const res = await fetchBusolaInitData(authData);
-    setInitValues(res.crds, res.selfSubjectRules || []);
+    // we assume all users can make SelfSubjectRulesReview request
+    const permissionSet = await fetchPermissions(authData);
+    selfSubjectRulesReview = permissionSet;
+
+    const { crds, apiPaths } = await fetchNavigationData(
+      authData,
+      permissionSet
+    );
     const params = getActiveCluster();
     const activeClusterName = params.cluster.name;
 
@@ -195,7 +232,8 @@ export async function getNavigationData(authData) {
             children: function () {
               const staticNodes = getStaticRootNodes(
                 getChildrenNodesForNamespace,
-                res.apiGroups,
+                apiPaths,
+                permissionSet,
                 modules
               );
               hideDisabledNodes(disabledNavigationNodes, staticNodes, false);
@@ -220,7 +258,9 @@ export async function getNavigationData(authData) {
     saveActiveClusterName(null);
     if (err.statusCode === 403) {
       clearAuthData();
-      window.location = `/nopermissions.html?error=${err.originalMessage}`;
+      saveLocation(
+        `/no-permissions?${NODE_PARAM_PREFIX}error=${err.originalMessage}`
+      );
     } else {
       let errorNotification = 'Could not load initial configuration';
       if (err.statusCode && err.message)
@@ -257,9 +297,13 @@ async function getNamespaces() {
   return createNamespacesList(namespaces);
 }
 
-function getChildrenNodesForNamespace(apiGroups) {
+function getChildrenNodesForNamespace(apiPaths, permissionSet) {
   const { disabledNavigationNodes, modules } = getActiveCluster().config;
-  const staticNodes = getStaticChildrenNodesForNamespace(apiGroups, modules);
+  const staticNodes = getStaticChildrenNodesForNamespace(
+    apiPaths,
+    permissionSet,
+    modules
+  );
 
   hideDisabledNodes(disabledNavigationNodes, staticNodes, true);
   return staticNodes;
