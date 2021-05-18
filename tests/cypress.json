@@ -5,16 +5,12 @@
   "pageLoadTimeout": 3000,
   "requestTimeout": 3000,
   "responseTimeout": 3000,
-
   "fixturesFolder": "fixtures",
   "integrationFolder": "tests",
   "pluginsFile": false,
   "supportFile": "support/index.js",
-
   "video": false,
-
   "chromeWebSecurity": false,
-
   "viewportWidth": 1500,
   "viewportHeight": 1500
 }

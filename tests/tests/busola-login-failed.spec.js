@@ -7,6 +7,7 @@ const ADDRESS = config.localDev
 
 context('Busola - Login failed', () => {
   it('Use wrong kubeconfig', () => {
+    cy.restoreLocalStorageCache();
     cy.visit(ADDRESS)
       .getIframeBody()
       .contains('Add Cluster')
