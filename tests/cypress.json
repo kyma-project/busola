@@ -7,10 +7,11 @@
   "responseTimeout": 3000,
   "fixturesFolder": "fixtures",
   "integrationFolder": "tests",
-  "pluginsFile": false,
+  "pluginsFile": "plugins",
   "supportFile": "support/index.js",
   "video": false,
   "chromeWebSecurity": false,
   "viewportWidth": 1500,
-  "viewportHeight": 1500
+  "viewportHeight": 1500,
+  "experimentalInteractiveRunEvents": true
 }
