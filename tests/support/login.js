@@ -4,7 +4,6 @@ const ADDRESS = config.localDev
   : `https://busola.${config.domain}`;
 
 const NAMESPACE_NAME = config.namespace;
-const getLeftNav = () => cy.get('nav[data-testid=semiCollapsibleLeftNav]');
 
 before(() => {
   cy.visit(ADDRESS)
@@ -26,9 +25,7 @@ before(() => {
 });
 
 after(() => {
-  getLeftNav()
-    .contains('Namespaces') //it finds Namespaces (expected) or Back to Namespaces (if tests fail in the middle)
-    .click({ force: true }); //we need to use force when others elements make menu not visible
+  cy.get('[data-testid=luigi-topnav-logo]').click({ force: true }); //we need to use force when others elements make menu not visible
 
   cy.wait(1000);
   cy.getIframeBody()
