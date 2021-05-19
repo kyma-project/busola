@@ -8,7 +8,7 @@ Cypress.Commands.add('getIframeBody', () => {
       .get('.iframeContainer iframe', { log: false })
       .filter(':visible')
       .its('0.contentDocument.body', { log: false })
-      .should('not.be.empty')
+      //.should('not.be.empty') doesn't work with should and callback function
       // wraps "body" DOM element to allow
       // chaining more Cypress commands, like ".find(...)"
       // https://on.cypress.io/wrap
