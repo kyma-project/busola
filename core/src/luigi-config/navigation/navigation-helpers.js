@@ -1,7 +1,7 @@
-export const hideDisabledNodes = (disabledNavNodes, nodes, inNamespace) => {
-  if (disabledNavNodes !== null && disabledNavNodes !== undefined) {
-    const disabledNavNodesArray = disabledNavNodes.split(' ');
-    if (disabledNavNodesArray && disabledNavNodesArray.length > 0) {
+export const hideDisabledNodes = (disablednavigationNodes, nodes, inNamespace) => {
+  if (disablednavigationNodes !== null && disablednavigationNodes !== undefined) {
+    const disablednavigationNodesArray = disablednavigationNodes.split(' ');
+    if (disablednavigationNodesArray && disablednavigationNodesArray.length > 0) {
       nodes.forEach((node) => {
         // namespace node have pattern 'namespace.category.label' or 'namespace.label' if doesn't have category
         // cluster node have pattern 'category.label' or 'label' if doesn't have category
@@ -26,7 +26,7 @@ export const hideDisabledNodes = (disabledNavNodes, nodes, inNamespace) => {
         const shouldBeDisabled = (element) =>
           element && (element === categoryId || element === nodeId);
         node.hideFromNav =
-          disabledNavNodesArray.some(shouldBeDisabled) || node.hideFromNav;
+          disablednavigationNodesArray.some(shouldBeDisabled) || node.hideFromNav;
       });
     }
   }
@@ -58,6 +58,39 @@ export function createNamespacesList(rawNamespaceNames) {
       });
     });
   return namespaces;
+}
+
+export const addExternalNodes = (externalNodes) => {
+  if (!externalNodes || externalNodes.length === 0) return;
+  let navigationNodes = [];
+
+  externalNodes.forEach(node => {
+    const { category = 'External Links', icon = 'action', children } = node;
+    if (!children || children.length === 0) return;
+    navigationNodes = [...navigationNodes, {
+      category: {
+        label: category,
+        icon,
+        collapsible: true,
+      },
+      pathSegment: `${category.replace(' ', '_')}_placeholder`,
+      hideFromNav: false,
+    }];
+
+    children.forEach(child => {
+      const { label, link } = child;
+      navigationNodes = [...navigationNodes, {
+        label,
+        category,
+        viewUrl: '',
+        externalLink: {
+          url: link,
+        },
+      }];
+    });
+  });
+
+  return navigationNodes;
 }
 
 function getCorrespondingNamespaceLocation(namespaceName) {

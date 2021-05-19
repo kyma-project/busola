@@ -12,10 +12,9 @@ import {
 import {
   navigationPermissionChecker,
   hasWildcardPermission,
-  hasNoUsefulResourcePermissions,
 } from './permissions';
 
-import { hideDisabledNodes, createNamespacesList } from './navigation-helpers';
+import { hideDisabledNodes, createNamespacesList, addExternalNodes } from './navigation-helpers';
 import { clearAuthData, getAuthData } from './../auth/auth-storage';
 import { groups } from '../auth/auth';
 import {
@@ -211,12 +210,11 @@ export async function getNavigationData(authData) {
     const activeClusterName = params.cluster.name;
 
     const {
-      disabledNavigationNodes = '',
+      navigation = {},
       systemNamespaces = '',
       modules = {},
     } = params?.config || {};
     const { bebEnabled = false } = params?.features || {};
-
     const nodes = [
       {
         pathSegment: 'cluster',
@@ -236,8 +234,10 @@ export async function getNavigationData(authData) {
                 permissionSet,
                 modules
               );
-              hideDisabledNodes(disabledNavigationNodes, staticNodes, false);
-              return staticNodes;
+              const externalNodes = addExternalNodes(navigation.externalNodes);
+              const allNodes = [...staticNodes, ...externalNodes];
+              hideDisabledNodes(navigation.disabledNodes, allNodes, false);
+              return allNodes;
             },
           },
         ],
@@ -298,13 +298,13 @@ async function getNamespaces() {
 }
 
 function getChildrenNodesForNamespace(apiPaths, permissionSet) {
-  const { disabledNavigationNodes, modules } = getActiveCluster().config;
+  const { navigation = {}, modules = {} } = getActiveCluster().config;
   const staticNodes = getStaticChildrenNodesForNamespace(
     apiPaths,
     permissionSet,
     modules
   );
 
-  hideDisabledNodes(disabledNavigationNodes, staticNodes, true);
+  hideDisabledNodes(navigation.disabledNodes, staticNodes, true);
   return staticNodes;
 }
