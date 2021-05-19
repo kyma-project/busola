@@ -1,7 +1,7 @@
-export const hideDisabledNodes = (disablednavigationNodes, nodes, inNamespace) => {
-  if (disablednavigationNodes !== null && disablednavigationNodes !== undefined) {
-    const disablednavigationNodesArray = disablednavigationNodes.split(' ');
-    if (disablednavigationNodesArray && disablednavigationNodesArray.length > 0) {
+export const hideDisabledNodes = (disabledNavNodes, nodes, inNamespace) => {
+  if (disabledNavNodes !== null && disabledNavNodes !== undefined) {
+    const disabledNavNodesArray = disabledNavNodes.split(' ');
+    if (disabledNavNodesArray && disabledNavNodesArray.length > 0) {
       nodes.forEach((node) => {
         // namespace node have pattern 'namespace.category.label' or 'namespace.label' if doesn't have category
         // cluster node have pattern 'category.label' or 'label' if doesn't have category
@@ -26,7 +26,7 @@ export const hideDisabledNodes = (disablednavigationNodes, nodes, inNamespace) =
         const shouldBeDisabled = (element) =>
           element && (element === categoryId || element === nodeId);
         node.hideFromNav =
-          disablednavigationNodesArray.some(shouldBeDisabled) || node.hideFromNav;
+          disabledNavNodesArray.some(shouldBeDisabled) || node.hideFromNav;
       });
     }
   }
