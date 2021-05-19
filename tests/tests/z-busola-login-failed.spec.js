@@ -4,21 +4,24 @@ import config from '../config';
 const ADDRESS = config.localDev
   ? `http://localhost:4200`
   : `https://busola.${config.domain}`;
+const NAMESPACE_NAME = config.namespace;
 
 context('Busola - Login failed', () => {
   it('Use wrong kubeconfig', () => {
-    cy.restoreLocalStorageCache();
-    cy.visit(ADDRESS)
-      .getIframeBody()
-      .contains('Add Cluster')
+    cy.get('[data-testid=app-switcher]')
       .click()
-      .getIframeBody()
+      .get('[data-testid=addcluster]')
+      .click();
+
+    cy.wait(2000);
+    cy.getIframeBody()
       .find('#textarea-kubeconfig')
       .type('wrong_kubeconfig')
       .getIframeBody()
       .contains('Apply kubeconfig')
       .click();
 
+    cy.wait(2000);
     cy.getIframeBody()
       .find('[role=alert]')
       .shouldHaveTrimmedText('Error reading kubeconfig');
