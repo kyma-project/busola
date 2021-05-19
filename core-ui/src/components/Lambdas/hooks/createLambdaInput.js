@@ -19,28 +19,8 @@ export function createLambdaInput(name, namespace, params) {
       labels,
     },
     spec: {
-      buildResources: {
-        limits: {
-          cpu: '700m',
-          memory: '700Mi',
-        },
-        requests: {
-          cpu: '200m',
-          memory: '200Mi',
-        },
-      },
       maxReplicas: 1,
       minReplicas: 1,
-      resources: {
-        limits: {
-          cpu: '25m',
-          memory: '32Mi',
-        },
-        requests: {
-          cpu: '10m',
-          memory: '16Mi',
-        },
-      },
       runtime,
       ...spec,
     },
