@@ -89,7 +89,7 @@ function Resources({
   readOnly,
 }) {
   useWindowTitle(windowTitle || prettifyNamePlural(resourceName, resourceType));
-  const { setEditedJson: setEditedSpec, closeEditor } = useYamlEditor();
+  const { setEditedYaml: setEditedSpec, closeEditor } = useYamlEditor();
   const notification = useNotification();
   const updateResourceMutation = useUpdate(resourceUrl);
   const deleteResourceMutation = useDelete(resourceUrl);

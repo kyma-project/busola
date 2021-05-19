@@ -15,7 +15,7 @@ import copyToCliboard from 'copy-to-clipboard';
 import { saveAs } from 'file-saver';
 
 export const YamlEditorContext = createContext({
-  setEditedJson: _ => {},
+  setEditedYaml: _ => {},
 });
 
 const isValidYaml = yaml => {
@@ -92,7 +92,7 @@ export const YamlEditorProvider = ({ children }) => {
     LuigiClient.uxManager().setDirtyStatus(!!changedYaml);
   }, [changedYaml]);
 
-  function setEditedJson(newJson, onSaveHandler) {
+  function setEditedYaml(newJson, onSaveHandler) {
     onSaveFn.current = onSaveHandler;
     setJson(newJson);
   }
@@ -139,7 +139,7 @@ export const YamlEditorProvider = ({ children }) => {
   );
 
   return (
-    <YamlEditorContext.Provider value={{ setEditedJson, closeEditor }}>
+    <YamlEditorContext.Provider value={{ setEditedYaml, closeEditor }}>
       {drawerComponent}
       {children}
     </YamlEditorContext.Provider>
