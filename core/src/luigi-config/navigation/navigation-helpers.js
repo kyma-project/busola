@@ -60,6 +60,45 @@ export function createNamespacesList(rawNamespaceNames) {
   return namespaces;
 }
 
+export const addExternalNodes = (externalNodes) => {
+  if (!externalNodes || externalNodes.length === 0) return;
+  let navigationNodes = [];
+
+  externalNodes.forEach((node) => {
+    const { category = 'External Links', icon = 'action', children } = node;
+    if (!children || children.length === 0) return;
+    navigationNodes = [
+      ...navigationNodes,
+      {
+        category: {
+          label: category,
+          icon,
+          collapsible: true,
+        },
+        pathSegment: `${category.replace(' ', '_')}_placeholder`,
+        hideFromNav: false,
+      },
+    ];
+
+    children.forEach((child) => {
+      const { label, link } = child;
+      navigationNodes = [
+        ...navigationNodes,
+        {
+          label,
+          category,
+          viewUrl: '',
+          externalLink: {
+            url: link,
+          },
+        },
+      ];
+    });
+  });
+
+  return navigationNodes;
+};
+
 function getCorrespondingNamespaceLocation(namespaceName) {
   const addressTokens = window.location.pathname.split('/');
   // check if we are in namespaces context
