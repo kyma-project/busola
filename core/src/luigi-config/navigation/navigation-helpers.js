@@ -66,7 +66,7 @@ export const addExternalNodes = (externalNodes) => {
 
   externalNodes.forEach((node) => {
     const { category = 'External Links', icon = 'action', children } = node;
-    if (!children || children.length === 0) return [];
+    if (!children || children.length === 0) return;
     navigationNodes = [
       ...navigationNodes,
       {
