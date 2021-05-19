@@ -1,10 +1,10 @@
 /// <reference types="cypress" />
-import config from '../config';
+// import config from '../config';
 import 'cypress-file-upload';
 
-const NAMESPACE_NAME = config.namespace;
+// const NAMESPACE_NAME = config.namespace;
 
-context.skip('Busola - Smoke Tests', () => {
+context('Busola - Smoke Tests', () => {
   const getLeftNav = () => cy.get('nav[data-testid=semiCollapsibleLeftNav]');
 
   it('Renders navigation nodes', () => {
@@ -16,35 +16,35 @@ context.skip('Busola - Smoke Tests', () => {
     });
   });
 
-  it('Go to the details of namespace and check sections', () => {
-    cy.getIframeBody()
-      .contains('a', NAMESPACE_NAME)
-      .click();
+  // it('Go to the details of namespace and check sections', () => {
+  //   cy.getIframeBody()
+  //     .contains('a', NAMESPACE_NAME)
+  //     .click();
 
-    cy.getIframeBody()
-      .contains('Healthy Resources')
-      .should('be.visible');
+  //   cy.getIframeBody()
+  //     .contains('Healthy Resources')
+  //     .should('be.visible');
 
-    cy.getIframeBody()
-      .contains('Resource consumption')
-      .should('be.visible');
+  //   cy.getIframeBody()
+  //     .contains('Resource consumption')
+  //     .should('be.visible');
 
-    cy.getIframeBody()
-      .contains('Limit Ranges')
-      .should('be.visible');
+  //   cy.getIframeBody()
+  //     .contains('Limit Ranges')
+  //     .should('be.visible');
 
-    cy.getIframeBody()
-      .contains('Resource Quotas')
-      .should('be.visible');
+  //   cy.getIframeBody()
+  //     .contains('Resource Quotas')
+  //     .should('be.visible');
 
-    cy.getIframeBody()
-      .contains('Warnings')
-      .should('be.visible');
-  });
+  //   cy.getIframeBody()
+  //     .contains('Warnings')
+  //     .should('be.visible');
+  // });
 
   it('Go back to the namespaces list', () => {
     getLeftNav()
-      .contains('Back to Namespaces')
+      .contains('Namespaces')
       .click();
 
     cy.url().should('match', /namespaces$/);
