@@ -2,8 +2,8 @@ import config from '../config';
 import 'cypress-file-upload';
 const NAMESPACE_NAME = config.namespace;
 
-context('Run after all', () => {
-  it('Delete the namespace (cleanup step 1)', () => {
+context('Clean up namespace', () => {
+  it('Delete the namespace (step 1)', () => {
     cy.get('[data-testid=luigi-topnav-logo]').click({ force: true });
 
     cy.wait(1000);
@@ -18,13 +18,9 @@ context('Run after all', () => {
       .click({ force: true });
   });
 
-  it(
-    'Check if the namespace is terminated (cleanup step 2)',
-    { retries: 3 },
-    () => {
-      cy.getIframeBody()
-        .find('tbody tr [role="status"]')
-        .should('have.text', 'TERMINATING');
-    },
-  );
+  it('Check if the namespace is terminated (step 2)', { retries: 3 }, () => {
+    cy.getIframeBody()
+      .find('tbody tr [role="status"]')
+      .should('have.text', 'TERMINATING');
+  });
 });
