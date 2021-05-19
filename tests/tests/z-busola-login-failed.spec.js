@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
 
-context.skip('Busola - Login failed', () => {
+context('Busola - Login failed', () => {
   it('Use wrong kubeconfig', () => {
     cy.get('[data-testid=app-switcher]')
       .click()

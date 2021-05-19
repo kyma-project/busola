@@ -4,7 +4,7 @@ import 'cypress-file-upload';
 const DOCKER_IMAGE = 'eu.gcr.io/kyma-project/pr/orders-service:PR-162';
 const DEPLOYMENT_NAME = 'orders-service';
 
-context.skip('Busola - Create a Deployment', () => {
+context('Busola - Create a Deployment', () => {
   const getLeftNav = () => cy.get('nav[data-testid=semiCollapsibleLeftNav]');
 
   it('Create a Deployment', () => {
