@@ -1,4 +1,5 @@
 import config from '../config';
+import 'cypress-file-upload';
 const NAMESPACE_NAME = config.namespace;
 
 context('Run after all', () => {
