@@ -14,7 +14,11 @@ import {
   hasWildcardPermission,
 } from './permissions';
 
-import { hideDisabledNodes, createNamespacesList, addExternalNodes } from './navigation-helpers';
+import {
+  hideDisabledNodes,
+  createNamespacesList,
+  addExternalNodes,
+} from './navigation-helpers';
 import { clearAuthData, getAuthData } from './../auth/auth-storage';
 import { groups } from '../auth/auth';
 import {
@@ -209,11 +213,8 @@ export async function getNavigationData(authData) {
     const params = getActiveCluster();
     const activeClusterName = params.cluster.name;
 
-    const {
-      navigation = {},
-      systemNamespaces = '',
-      modules = {},
-    } = params?.config || {};
+    const { navigation = {}, systemNamespaces = '', modules = {} } =
+      params?.config || {};
     const { bebEnabled = false } = params?.features || {};
     const nodes = [
       {
