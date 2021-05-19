@@ -2,8 +2,9 @@
   "name": "ui-tests",
   "description": "Smoke tests for Busola",
   "scripts": {
-    "test:cluster": "$(npm bin)/cypress run --browser chrome --headless",
-    "start": "$(npm bin)/cypress open"
+    "test:cluster": "CYPRESS_LOCAL_DEV=true  $(npm bin)/cypress run --browser chrome --headless",
+    "start": "$(npm bin)/cypress open",
+    "start:local": "CYPRESS_LOCAL_DEV=true $(npm bin)/cypress open"
   },
   "devDependencies": {
     "cypress-file-upload": "^5.0.7"
