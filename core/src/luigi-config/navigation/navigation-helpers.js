@@ -61,7 +61,7 @@ export function createNamespacesList(rawNamespaceNames) {
 }
 
 export const addExternalNodes = (externalNodes) => {
-  if (!externalNodes || externalNodes.length === 0) return;
+  if (!externalNodes || externalNodes.length === 0) return [];
   let navigationNodes = [];
 
   externalNodes.forEach((node) => {
