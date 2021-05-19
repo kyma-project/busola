@@ -49,11 +49,11 @@ context('Busola - Smoke Tests', () => {
     cy.getIframeBody()
       .find('[aria-label="Delete"]')
       .click();
+    cy.wait(5000);
 
-    cy.getIframeBody().should($body => {
-      const status = $body.find('[role="status"]').text();
-      expect(status).to.be.eq('TERMINATING');
-    });
+    cy.getIframeBody()
+      .find('[role="status"]')
+      .should('have.text', 'TERMINATING');
   });
 
   beforeEach(() => {
