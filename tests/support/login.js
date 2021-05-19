@@ -26,6 +26,7 @@ before(() => {
 
   cy.wait(3000);
 
+  // Create a new namespace
   getLeftNav()
     .contains('Namespaces')
     .click();
@@ -44,13 +45,12 @@ before(() => {
     .find('[role=dialog]')
     .contains('button', 'Create')
     .click();
-
   cy.wait(1000);
+
+  // Go to the details of namespace
   cy.getIframeBody()
     .contains('a', NAMESPACE_NAME)
     .click({ force: true });
-
-  cy.wait(1000);
 });
 
 after(() => {
@@ -71,7 +71,6 @@ after(() => {
     .find('[aria-label="Delete"]')
     .click({ force: true });
 
-  cy.wait(5000);
   cy.getIframeBody()
     .find('[role="status"]')
     .should('have.text', 'TERMINATING');

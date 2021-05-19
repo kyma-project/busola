@@ -2,6 +2,7 @@
 import config from '../config';
 import 'cypress-file-upload';
 
+const random = Math.floor(Math.random() * 9999) + 1000;
 const NAMESPACE_NAME = config.namespace;
 const FUNCTION_CODE_URL =
   'https://raw.githubusercontent.com/kyma-project/examples/main/orders-service/function/handler.js';
@@ -9,7 +10,7 @@ const API_RULE_NAME = 'orders-function';
 const API_RULE_HOST = API_RULE_NAME + '-' + random;
 const API_RULE_HOST_EXPECTED_PREFIX = `https://${API_RULE_HOST}.`;
 
-context('Busola - Create a Function and access it', () => {
+context.skip('Busola - Create a Function and access it', () => {
   let apiRuleUrl;
   const getLeftNav = () => cy.get('nav[data-testid=semiCollapsibleLeftNav]');
 
@@ -167,27 +168,27 @@ context('Busola - Create a Function and access it', () => {
     );
   });
 
-  it('Delete the namespace (cleanup step 1)', () => {
-    getLeftNav()
-      .contains('Namespaces') //it finds Namespaces (expected) or Back to Namespaces (if tests fail in the middle)
-      .click({ force: true }); //we need to use force when others elements make menu not visible
+  // it('Delete the namespace (cleanup step 1)', () => {
+  //   getLeftNav()
+  //     .contains('Namespaces') //it finds Namespaces (expected) or Back to Namespaces (if tests fail in the middle)
+  //     .click({ force: true }); //we need to use force when others elements make menu not visible
 
-    cy.getIframeBody()
-      .find('[role="search"] [aria-label="search-input"]')
-      .type(NAMESPACE_NAME, { force: true }); // use force to skip clicking (the table could re-render between the click and the typing)
+  //   cy.getIframeBody()
+  //     .find('[role="search"] [aria-label="search-input"]')
+  //     .type(NAMESPACE_NAME, { force: true }); // use force to skip clicking (the table could re-render between the click and the typing)
 
-    cy.getIframeBody()
-      .find('tbody tr [aria-label="Delete"]')
-      .click({ force: true });
-  });
+  //   cy.getIframeBody()
+  //     .find('tbody tr [aria-label="Delete"]')
+  //     .click({ force: true });
+  // });
 
-  it(
-    'Check if the namespace is terminated (cleanup step 2)',
-    { retries: 3 },
-    () => {
-      cy.getIframeBody()
-        .find('tbody tr [role="status"]')
-        .should('have.text', 'TERMINATING');
-    },
-  );
+  // it(
+  //   'Check if the namespace is terminated (cleanup step 2)',
+  //   { retries: 3 },
+  //   () => {
+  //     cy.getIframeBody()
+  //       .find('tbody tr [role="status"]')
+  //       .should('have.text', 'TERMINATING');
+  //   },
+  // );
 });

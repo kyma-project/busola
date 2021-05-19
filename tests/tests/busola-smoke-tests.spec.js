@@ -4,7 +4,7 @@ import 'cypress-file-upload';
 
 const NAMESPACE_NAME = config.namespace;
 
-context('Busola - Smoke Tests', () => {
+context.skip('Busola - Smoke Tests', () => {
   const getLeftNav = () => cy.get('nav[data-testid=semiCollapsibleLeftNav]');
 
   it('Renders navigation nodes', () => {
