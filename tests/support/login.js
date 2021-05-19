@@ -53,29 +53,6 @@ before(() => {
     .click({ force: true });
 });
 
-after(() => {
-  cy.get('[data-testid=luigi-topnav-logo]').click({ force: true }); //we need to use force when others elements make menu not visible
-
-  cy.wait(1000);
-  cy.getIframeBody()
-    .find('[aria-label="open-search"]')
-    .click({ force: true });
-
-  cy.wait(1000);
-  cy.getIframeBody()
-    .find('[placeholder="Search"]')
-    .type(NAMESPACE_NAME);
-
-  cy.wait(1000);
-  cy.getIframeBody()
-    .find('[aria-label="Delete"]')
-    .click({ force: true });
-
-  cy.getIframeBody()
-    .find('[role="status"]')
-    .should('have.text', 'TERMINATING');
-});
-
 beforeEach(() => {
   cy.restoreLocalStorageCache();
 });
