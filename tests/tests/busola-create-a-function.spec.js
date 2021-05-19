@@ -1,5 +1,4 @@
 /// <reference types="cypress" />
-import config from '../config';
 import 'cypress-file-upload';
 
 const random = Math.floor(Math.random() * 9999) + 1000;
@@ -9,7 +8,7 @@ const API_RULE_NAME = 'orders-function';
 const API_RULE_HOST = API_RULE_NAME + '-' + random;
 const API_RULE_HOST_EXPECTED_PREFIX = `https://${API_RULE_HOST}.`;
 
-context.skip('Busola - Create a Function and access it', () => {
+context('Busola - Create a Function and access it', () => {
   let apiRuleUrl;
   const getLeftNav = () => cy.get('nav[data-testid=semiCollapsibleLeftNav]');
 
