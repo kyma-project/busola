@@ -1,10 +1,5 @@
 /// <reference types="cypress" />
-import config from '../config';
-
-const ADDRESS = config.localDev
-  ? `http://localhost:4200`
-  : `https://busola.${config.domain}`;
-const NAMESPACE_NAME = config.namespace;
+import 'cypress-file-upload';
 
 context('Busola - Login failed', () => {
   it('Use wrong kubeconfig', () => {
