@@ -19,8 +19,6 @@ export function createLambdaInput(name, namespace, params) {
       labels,
     },
     spec: {
-      maxReplicas: 1,
-      minReplicas: 1,
       runtime,
       ...spec,
     },
