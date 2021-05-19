@@ -44,28 +44,6 @@ context('Busola - Create a Function and access it', () => {
       .should('be.visible'); //wait for the namespaces XHR request to finish to continue running the tests. There's no <thead> while the request is pending.
   });
 
-  after(() => {
-    getLeftNav()
-      .contains('Namespaces') //it finds Namespaces (expected) or Back to Namespaces (if tests fail in the middle)
-      .click({ force: true }); //we need to use force when others elements make menu not visible
-
-    cy.getIframeBody()
-      .find('[role="search"] [aria-label="search-input"]')
-      .type(NAMESPACE_NAME, { force: true }); // use force to skip clicking (the table could re-render between the click and the typing)
-
-    cy.getIframeBody()
-      .find('tbody tr [aria-label="Delete"]')
-      .click({ force: true });
-
-    // cy.getIframeBody()
-    //   .contains('tbody tr [role="status"]', 'TERMINATING')
-    //   .should('exist');
-    cy.getIframeBody().should($body => {
-      const status = $body.find('[role="status"]').text();
-      expect(status).to.be.eq('TERMINATING');
-    });
-  });
-
   beforeEach(() => {
     cy.restoreLocalStorageCache();
   });
@@ -103,7 +81,7 @@ context('Busola - Create a Function and access it', () => {
       .click();
   });
 
-  it.skip('Create a Function', () => {
+  it('Create a Function', () => {
     getLeftNav()
       .contains('Workloads')
       .click();
@@ -175,11 +153,11 @@ context('Busola - Create a Function and access it', () => {
 
     //TODO use one namespace per all tests. Then we'll be able create the lambda at the beginning and create API Rule for it at the end
     cy.getIframeBody()
-      .find('[role="status"]', { timeout: 1 })
+      .find('[role="status"]', { timeout: 90 * 1000 })
       .should('have.text', 'RUNNING');
   });
 
-  it.skip('Create an API Rule for the Function', () => {
+  it('Create an API Rule for the Function', () => {
     getLeftNav()
       .contains('Discovery and Network')
       .click();
@@ -213,7 +191,7 @@ context('Busola - Create a Function and access it', () => {
     cy.getModalBody().should('not.exist');
   });
 
-  it.skip('Get Host value for the API Rule', () => {
+  it('Get Host value for the API Rule', () => {
     getLeftNav()
       .contains('API Rules')
       .click();
@@ -247,4 +225,28 @@ context('Busola - Create a Function and access it', () => {
       },
     );
   });
+
+  it('Delete the namespace (cleanup step 1)', () => {
+    getLeftNav()
+      .contains('Namespaces') //it finds Namespaces (expected) or Back to Namespaces (if tests fail in the middle)
+      .click({ force: true }); //we need to use force when others elements make menu not visible
+
+    cy.getIframeBody()
+      .find('[role="search"] [aria-label="search-input"]')
+      .type(NAMESPACE_NAME, { force: true }); // use force to skip clicking (the table could re-render between the click and the typing)
+
+    cy.getIframeBody()
+      .find('tbody tr [aria-label="Delete"]')
+      .click({ force: true });
+  });
+
+  it(
+    'Check if the namespace is terminated (cleanup step 2)',
+    { retries: 3 },
+    () => {
+      cy.getIframeBody()
+        .find('tbody tr [role="status"]')
+        .should('have.text', 'TERMINATING');
+    },
+  );
 });
