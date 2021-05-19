@@ -97,10 +97,14 @@ export const YamlEditorProvider = ({ children }) => {
     setJson(newJson);
   }
 
+  function closeEditor() {
+    setOpen(false);
+  }
+
   async function handleSaveClick() {
     try {
       await onSaveFn.current(changedYaml);
-      setOpen(false);
+      closeEditor();
     } catch (_) {}
   }
 
@@ -135,7 +139,7 @@ export const YamlEditorProvider = ({ children }) => {
   );
 
   return (
-    <YamlEditorContext.Provider value={setEditedJson}>
+    <YamlEditorContext.Provider value={{ setEditedJson, closeEditor }}>
       {drawerComponent}
       {children}
     </YamlEditorContext.Provider>

@@ -108,7 +108,7 @@ function Resource({
   readOnly,
 }) {
   useWindowTitle(windowTitle || prettifyNamePlural(null, resourceType));
-  const setEditedSpec = useYamlEditor();
+  const { setEditedJson: setEditedSpec } = useYamlEditor();
   const notification = useNotification();
 
   const prettifiedResourceName = prettifyNameSingular(undefined, resourceType);
