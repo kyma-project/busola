@@ -61,12 +61,12 @@ export function createNamespacesList(rawNamespaceNames) {
 }
 
 export const addExternalNodes = (externalNodes) => {
-  if (!externalNodes || externalNodes.length === 0) return;
+  if (!externalNodes || externalNodes.length === 0) return [];
   let navigationNodes = [];
 
   externalNodes.forEach((node) => {
     const { category = 'External Links', icon = 'action', children } = node;
-    if (!children || children.length === 0) return;
+    if (!children || children.length === 0) return [];
     navigationNodes = [
       ...navigationNodes,
       {
