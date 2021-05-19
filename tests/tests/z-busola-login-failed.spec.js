@@ -8,7 +8,6 @@ context('Busola - Login failed', () => {
       .get('[data-testid=addcluster]')
       .click();
 
-    cy.wait(2000);
     cy.getIframeBody()
       .find('#textarea-kubeconfig')
       .type('wrong_kubeconfig')
@@ -16,7 +15,6 @@ context('Busola - Login failed', () => {
       .contains('Apply kubeconfig')
       .click();
 
-    cy.wait(2000);
     cy.getIframeBody()
       .find('[role=alert]')
       .shouldHaveTrimmedText('Error reading kubeconfig');

@@ -93,7 +93,7 @@ context('Busola - Create a Function and access it', () => {
 
     //TODO use one namespace per all tests. Then we'll be able create the lambda at the beginning and create API Rule for it at the end
     cy.getIframeBody()
-      .find('[role="status"]', { timeout: 90 * 1000 })
+      .find('[role="status"]', { timeout: 120 * 1000 })
       .should('have.text', 'RUNNING');
   });
 
