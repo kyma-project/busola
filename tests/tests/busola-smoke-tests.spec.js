@@ -16,27 +16,6 @@ context('Busola - Smoke Tests', () => {
     });
   });
 
-  // it('Create a new namespace', () => {
-  //   getLeftNav()
-  //     .contains('Namespaces')
-  //     .click();
-
-  //   cy.getIframeBody()
-  //     .contains('Create Namespace')
-  //     .click();
-
-  //   cy.getIframeBody()
-  //     .find('[role=dialog]')
-  //     .find("input[placeholder='Namespace name']")
-  //     .should('be.visible')
-  //     .type(NAMESPACE_NAME);
-
-  //   cy.getIframeBody()
-  //     .find('[role=dialog]')
-  //     .contains('button', 'Create')
-  //     .click();
-  // });
-
   it('Go to the details of namespace and check sections', () => {
     cy.getIframeBody()
       .contains('a', NAMESPACE_NAME)

@@ -1,45 +1,10 @@
 /// <reference types="cypress" />
-import config from '../config';
-import 'cypress-file-upload';
 
 const DOCKER_IMAGE = 'eu.gcr.io/kyma-project/pr/orders-service:PR-162';
 const DEPLOYMENT_NAME = 'orders-service';
-const NAMESPACE_NAME = config.namespace;
 
 context('Busola - Create a Deployment', () => {
   const getLeftNav = () => cy.get('nav[data-testid=semiCollapsibleLeftNav]');
-
-  // it('Create a new namespace', () => {
-  //   cy.wait(3000);
-
-  //   getLeftNav()
-  //     .contains('Namespaces')
-  //     .click();
-
-  //   cy.getIframeBody()
-  //     .contains('Create Namespace')
-  //     .click();
-
-  //   cy.getIframeBody()
-  //     .find('[role=dialog]')
-  //     .find("input[placeholder='Namespace name']")
-  //     .should('be.visible')
-  //     .type(NAMESPACE_NAME);
-
-  //   cy.getIframeBody()
-  //     .find('[role=dialog]')
-  //     .contains('button', 'Create')
-  //     .click();
-  // });
-
-  // it('Go to the details of namespace', () => {
-  //   cy.wait(1000);
-  //   cy.getIframeBody()
-  //     .contains('a', NAMESPACE_NAME)
-  //     .click({ force: true });
-
-  //   cy.wait(1000);
-  // });
 
   it('Create a Deployment', () => {
     cy.getIframeBody()
