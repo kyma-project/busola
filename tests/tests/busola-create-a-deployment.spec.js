@@ -12,7 +12,7 @@ const NAMESPACE_NAME = `b-busola-test-${random}`;
 const DOCKER_IMAGE = 'eu.gcr.io/kyma-project/pr/orders-service:PR-162';
 const DEPLOYMENT_NAME = 'orders-service';
 
-context('Busola - Create a Deployment', () => {
+context.skip('Busola - Create a Deployment', () => {
   const getLeftNav = () => cy.get('nav[data-testid=semiCollapsibleLeftNav]');
 
   before(() => {
@@ -61,8 +61,6 @@ context('Busola - Create a Deployment', () => {
   });
 
   it('Create a new namespace', () => {
-    cy.wait(3000);
-
     getLeftNav()
       .contains('Namespaces')
       .click();
@@ -87,6 +85,10 @@ context('Busola - Create a Deployment', () => {
     cy.getIframeBody()
       .contains('a', NAMESPACE_NAME)
       .click();
+
+    cy.getIframeBody()
+      .get('[aria-label="title"]')
+      .contains(NAMESPACE_NAME);
   });
 
   it('Create a Deployment', () => {
