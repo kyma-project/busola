@@ -82,14 +82,6 @@ context.skip('Busola - Create a Deployment', () => {
   });
 
   it('Go to the details of namespace', () => {
-    // console.log(cy.url());
-    // // cy.visit(cy.url() + '/' + NAMESPACE_NAME + '/details');
-    // cy.reload();
-
-    // getLeftNav()
-    //   .contains('Namespaces')
-    //   .click();
-
     cy.getIframeBody()
       .contains('a', NAMESPACE_NAME)
       .click();
