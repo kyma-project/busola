@@ -7,34 +7,34 @@ const NAMESPACE_NAME = config.namespace;
 context('Busola - Create a Function', () => {
   const getLeftNav = () => cy.get('nav[data-testid=semiCollapsibleLeftNav]');
 
-  it('Create a new namespace', () => {
-    cy.wait(3000);
-    getLeftNav()
-      .contains('Namespaces')
-      .click();
+  // it('Create a new namespace', () => {
+  //   cy.wait(3000);
+  //   getLeftNav()
+  //     .contains('Namespaces')
+  //     .click();
 
-    cy.getIframeBody()
-      .contains('Create Namespace')
-      .click();
+  //   cy.getIframeBody()
+  //     .contains('Create Namespace')
+  //     .click();
 
-    cy.getIframeBody()
-      .find('[role=dialog]')
-      .find("input[placeholder='Namespace name']")
-      .should('be.visible')
-      .type(NAMESPACE_NAME);
+  //   cy.getIframeBody()
+  //     .find('[role=dialog]')
+  //     .find("input[placeholder='Namespace name']")
+  //     .should('be.visible')
+  //     .type(NAMESPACE_NAME);
 
-    cy.getIframeBody()
-      .find('[role=dialog]')
-      .contains('button', 'Create')
-      .click();
-  });
+  //   cy.getIframeBody()
+  //     .find('[role=dialog]')
+  //     .contains('button', 'Create')
+  //     .click();
+  // });
 
-  it('Go to the details of namespace', () => {
-    cy.wait(1000);
-    cy.getIframeBody()
-      .contains('a', NAMESPACE_NAME)
-      .click();
-  });
+  // it('Go to the details of namespace', () => {
+  //   cy.wait(1000);
+  //   cy.getIframeBody()
+  //     .contains('a', NAMESPACE_NAME)
+  //     .click();
+  // });
 
   it('Create a Function', () => {
     getLeftNav()

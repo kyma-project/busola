@@ -4,6 +4,7 @@ const ADDRESS = config.localDev
   : `https://busola.${config.domain}`;
 
 const NAMESPACE_NAME = config.namespace;
+const getLeftNav = () => cy.get('nav[data-testid=semiCollapsibleLeftNav]');
 
 before(() => {
   cy.visit(ADDRESS)
@@ -22,6 +23,34 @@ before(() => {
   cy.getIframeBody()
     .find('thead')
     .should('be.visible'); //wait for the namespaces XHR request to finish to continue running the tests. There's no <thead> while the request is pending.
+
+  cy.wait(3000);
+
+  getLeftNav()
+    .contains('Namespaces')
+    .click();
+
+  cy.getIframeBody()
+    .contains('Create Namespace')
+    .click();
+
+  cy.getIframeBody()
+    .find('[role=dialog]')
+    .find("input[placeholder='Namespace name']")
+    .should('be.visible')
+    .type(NAMESPACE_NAME);
+
+  cy.getIframeBody()
+    .find('[role=dialog]')
+    .contains('button', 'Create')
+    .click();
+
+  cy.wait(1000);
+  cy.getIframeBody()
+    .contains('a', NAMESPACE_NAME)
+    .click({ force: true });
+
+  cy.wait(1000);
 });
 
 after(() => {
