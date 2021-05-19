@@ -1,17 +1,14 @@
 /// <reference types="cypress" />
-import config from '../config';
-
-const ADDRESS = config.localDev
-  ? `http://localhost:4200`
-  : `https://busola.${config.domain}`;
+import 'cypress-file-upload';
 
 context('Busola - Login failed', () => {
   it('Use wrong kubeconfig', () => {
-    cy.visit(ADDRESS)
-      .getIframeBody()
-      .contains('Add Cluster')
+    cy.get('[data-testid=app-switcher]')
       .click()
-      .getIframeBody()
+      .get('[data-testid=addcluster]')
+      .click();
+
+    cy.getIframeBody()
       .find('#textarea-kubeconfig')
       .type('wrong_kubeconfig')
       .getIframeBody()
