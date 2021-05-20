@@ -76,8 +76,9 @@ context('Busola - Create a Deployment', () => {
       'match',
       new RegExp(`\/deployments\/details\/${DEPLOYMENT_NAME}$`),
     );
+
     cy.getIframeBody()
-      .contains('a', DEPLOYMENT_NAME)
+      .contains('a', DEPLOYMENT_NAME, { timeout: 7000 })
       .should('be.visible');
 
     getLeftNav()
