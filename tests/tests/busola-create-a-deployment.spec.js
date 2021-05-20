@@ -72,6 +72,10 @@ context('Busola - Create a Deployment', () => {
   });
 
   it('Check if deployment and service exist', () => {
+    cy.url().should(
+      'match',
+      new RegExp(`\/deployments\/details\/${DEPLOYMENT_NAME}$`),
+    );
     cy.getIframeBody()
       .contains('a', DEPLOYMENT_NAME)
       .should('be.visible');
