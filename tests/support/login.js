@@ -37,12 +37,11 @@ before(() => {
     .find('[role=dialog]')
     .contains('button', 'Create')
     .click();
-  cy.wait(1000);
 
   // Go to the details of namespace
   cy.getIframeBody()
     .contains('a', NAMESPACE_NAME)
-    .click({ force: true });
+    .click();
 });
 
 beforeEach(() => {
