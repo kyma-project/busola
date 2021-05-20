@@ -5,12 +5,10 @@ import 'cypress-file-upload';
 const NAMESPACE_NAME = config.namespace;
 
 context('Busola - Smoke Tests', () => {
-  const getLeftNav = () => cy.get('nav[data-testid=semiCollapsibleLeftNav]');
-
   it('Renders navigation nodes', () => {
     cy.get('[data-testid=luigi-topnav-logo]').click();
     ['Namespaces', 'Administration', 'Diagnostics'].forEach(node => {
-      getLeftNav()
+      cy.getLeftNav()
         .contains(node)
         .should('be.visible');
     });
@@ -44,7 +42,7 @@ context('Busola - Smoke Tests', () => {
   });
 
   it('Go back to the namespaces list', () => {
-    getLeftNav()
+    cy.getLeftNav()
       .contains('Namespaces')
       .click();
 
@@ -52,37 +50,37 @@ context('Busola - Smoke Tests', () => {
   });
 
   it('Check Administration tab', () => {
-    getLeftNav()
+    cy.getLeftNav()
       .contains('Administration')
       .click();
 
-    getLeftNav()
+    cy.getLeftNav()
       .contains('Cluster Roles')
       .should('be.visible');
 
-    getLeftNav()
+    cy.getLeftNav()
       .contains('Cluster Role Bindings')
       .should('be.visible');
   });
 
   it('Check Diagnostic tab', () => {
-    getLeftNav()
+    cy.getLeftNav()
       .contains('Diagnostic')
       .click();
 
-    getLeftNav()
+    cy.getLeftNav()
       .contains('Logs')
       .should('be.visible');
 
-    getLeftNav()
+    cy.getLeftNav()
       .contains('Metrics')
       .should('be.visible');
 
-    getLeftNav()
+    cy.getLeftNav()
       .contains('Traces')
       .should('be.visible');
 
-    getLeftNav()
+    cy.getLeftNav()
       .contains('Service Mesh')
       .should('be.visible');
   });

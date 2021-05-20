@@ -5,8 +5,6 @@ const DOCKER_IMAGE = 'eu.gcr.io/kyma-project/pr/orders-service:PR-162';
 const DEPLOYMENT_NAME = 'orders-service';
 
 context('Busola - Create a Deployment', () => {
-  const getLeftNav = () => cy.get('nav[data-testid=semiCollapsibleLeftNav]');
-
   it('Create a Deployment', () => {
     cy.getIframeBody()
       .contains('Deploy new workload')
@@ -76,11 +74,11 @@ context('Busola - Create a Deployment', () => {
       .contains('a', DEPLOYMENT_NAME)
       .should('be.visible');
 
-    getLeftNav()
+    cy.getLeftNav()
       .contains('Discovery and Network')
       .click();
 
-    getLeftNav()
+    cy.getLeftNav()
       .find('[data-testid=services_services]')
       .click()
       .wait(1000);
