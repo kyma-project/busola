@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
 
-context('Busola - Login failed', () => {
+context('Busola - Invalid kubeconfig', () => {
   it('Use wrong kubeconfig', () => {
     cy.get('[data-testid=app-switcher]')
       .click()
@@ -16,7 +16,7 @@ context('Busola - Login failed', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[role=alert]')
+      .find('[role=alert][aria-label="invalid-kubeconfig"]')
       .shouldHaveTrimmedText('Error reading kubeconfig');
   });
 });
