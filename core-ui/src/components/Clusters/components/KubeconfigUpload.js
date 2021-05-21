@@ -8,7 +8,6 @@ import { KubeconfigTextArea } from './KubeconfigTextArea/KubeconfigTextArea';
 import { addCluster, readFile } from '../shared';
 
 export function KubeconfigUpload({ setCluster, setShowingAuthForm }) {
-  console.log('KubeconfigUpload');
   const [showError, setShowError] = React.useState(false);
   const [config, setConfig] = React.useState({});
 
@@ -17,7 +16,6 @@ export function KubeconfigUpload({ setCluster, setShowingAuthForm }) {
   useMemo(() => {
     let isHookMounted = true;
     if (initParams && isHookMounted) {
-      console.log('1', initParams);
       const getConfigFromParams = async () => {
         const encoder = createEncoder('lzma');
         const decoded = await encoder.decompress(initParams);
