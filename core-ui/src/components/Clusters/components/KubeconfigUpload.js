@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import createEncoder from 'json-url';
 import jsyaml from 'js-yaml';
 import LuigiClient from '@luigi-project/client';
@@ -9,34 +9,23 @@ import { addCluster, readFile } from '../shared';
 
 export function KubeconfigUpload({ setCluster, setShowingAuthForm }) {
   const [showError, setShowError] = React.useState(false);
-  const [config, setConfig] = React.useState({});
 
   const initParams = LuigiClient.getNodeParams().init;
 
-  useMemo(() => {
-    let isHookMounted = true;
-    if (initParams && isHookMounted) {
-      const getConfigFromParams = async () => {
-        const encoder = createEncoder('lzma');
-        const decoded = await encoder.decompress(initParams);
-        const systemNamespaces = decoded.config?.systemNamespaces;
-        const systemNamespacesList = systemNamespaces
-          ? systemNamespaces.split(' ')
-          : [];
-        const clusterConfig = {
-          ...decoded?.config,
-          systemNamespaces: systemNamespacesList,
-          modules: { ...DEFAULT_MODULES, ...(decoded?.config?.modules || {}) },
-        };
-        setConfig(clusterConfig);
-      };
-
-      getConfigFromParams();
-    }
-    return () => {
-      isHookMounted = false;
+  const getConfigFromParams = async () => {
+    const encoder = createEncoder('lzma');
+    const decoded = await encoder.decompress(initParams);
+    const systemNamespaces = decoded.config?.systemNamespaces;
+    const systemNamespacesList = systemNamespaces
+      ? systemNamespaces.split(' ')
+      : [];
+    const clusterConfig = {
+      ...decoded?.config,
+      systemNamespaces: systemNamespacesList,
+      modules: { ...DEFAULT_MODULES, ...(decoded?.config?.modules || {}) },
     };
-  }, []);
+    return clusterConfig;
+  };
 
   async function onKubeconfigUploaded(file) {
     setShowError(false);
@@ -49,10 +38,11 @@ export function KubeconfigUpload({ setCluster, setShowingAuthForm }) {
     }
   }
 
-  function handleKubeconfigAdded(kubeconfig) {
+  async function handleKubeconfigAdded(kubeconfig) {
     setShowingAuthForm(false);
     setShowError(false);
 
+    const config = await getConfigFromParams();
     const clusterName = kubeconfig.clusters[0].name;
     const cluster = {
       name: clusterName,
@@ -83,7 +73,7 @@ export function KubeconfigUpload({ setCluster, setShowingAuthForm }) {
 
   return (
     <>
-      {!(config && Object.keys(config).length === 0) ? (
+      {initParams ? (
         <p>
           {' '}
           Configuration has been included properly but is missing Cluster and
