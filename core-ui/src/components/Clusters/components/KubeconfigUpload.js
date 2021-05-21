@@ -13,6 +13,7 @@ export function KubeconfigUpload({ setCluster, setShowingAuthForm }) {
   const initParams = LuigiClient.getNodeParams().init;
 
   const getConfigFromParams = async () => {
+    if (!initParams) return {};
     const encoder = createEncoder('lzma');
     const decoded = await encoder.decompress(initParams);
     const systemNamespaces = decoded.config?.systemNamespaces;
