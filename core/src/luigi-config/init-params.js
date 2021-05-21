@@ -48,6 +48,12 @@ export async function saveInitParamsIfPresent() {
         modules: { ...DEFAULT_MODULES, ...(decoded.config?.modules || {}) },
       },
     };
+
+    if (!params.auth || !params.cluster) {
+      window.location.href = window.location.origin + '/clusters/add?~init=' + initParams;
+      return;
+    }
+    
     if (decoded.auth) {
       params.auth = {
         ...decoded.auth,

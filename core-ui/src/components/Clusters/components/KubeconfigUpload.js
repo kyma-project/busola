@@ -1,12 +1,44 @@
-import React from 'react';
+import React, { useMemo } from 'react';
+import createEncoder from 'json-url';
 import jsyaml from 'js-yaml';
-import { FileInput } from 'react-shared';
+import LuigiClient from '@luigi-project/client';
+import { FileInput, DEFAULT_MODULES } from 'react-shared';
 import { MessageStrip } from 'fundamental-react';
 import { KubeconfigTextArea } from './KubeconfigTextArea/KubeconfigTextArea';
 import { addCluster, readFile } from '../shared';
 
 export function KubeconfigUpload({ setCluster, setShowingAuthForm }) {
+  console.log('KubeconfigUpload');
   const [showError, setShowError] = React.useState(false);
+  const [config, setConfig] = React.useState({});
+
+  const initParams = LuigiClient.getNodeParams().init;
+
+  useMemo(() => {
+    let isHookMounted = true;
+    if (initParams && isHookMounted) {
+      console.log('1', initParams);
+      const getConfigFromParams = async () => {
+        const encoder = createEncoder('lzma');
+        const decoded = await encoder.decompress(initParams);
+        const systemNamespaces = decoded.config?.systemNamespaces;
+        const systemNamespacesList = systemNamespaces
+          ? systemNamespaces.split(' ')
+          : [];
+        const clusterConfig = {
+          ...decoded?.config,
+          systemNamespaces: systemNamespacesList,
+          modules: { ...DEFAULT_MODULES, ...(decoded?.config?.modules || {}) },
+        };
+        setConfig(clusterConfig);
+      };
+
+      getConfigFromParams();
+    }
+    return () => {
+      isHookMounted = false;
+    };
+  }, []);
 
   async function onKubeconfigUploaded(file) {
     setShowError(false);
@@ -37,6 +69,7 @@ export function KubeconfigUpload({ setCluster, setShowingAuthForm }) {
     if (token || (clientCA && clientKeyData)) {
       const params = {
         cluster,
+        config,
         rawAuth: {
           idToken: token,
           'client-certificate-data': clientCA,
@@ -52,6 +85,15 @@ export function KubeconfigUpload({ setCluster, setShowingAuthForm }) {
 
   return (
     <>
+      {!(config && Object.keys(config).length === 0) ? (
+        <p>
+          {' '}
+          Configuration has been included properly but is missing Cluster and
+          Auth data. Please upload a kubeconfig.{' '}
+        </p>
+      ) : (
+        ''
+      )}
       <FileInput
         fileInputChanged={onKubeconfigUploaded}
         acceptedFileFormats=".yaml"

@@ -60,7 +60,7 @@ export const communication = {
     'busola.reload': () => location.reload(),
     'busola.addCluster': async ({ params }) => {
       saveClusterParams(params);
-      setCluster(params.cluster.name);
+      setCluster(params.cluster?.name);
     },
     'busola.deleteCluster': async ({ clusterName }) => {
       deleteCluster(clusterName);
