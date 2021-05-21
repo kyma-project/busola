@@ -47,12 +47,11 @@ export default function BasicData({ deployment, setDeployment }) {
       <h3 className="configuration-data__title">Service options</h3>
       <Checkbox
         defaultChecked={deployment.createService}
-        value="Create Service"
         onChange={e =>
           setDeployment({ ...deployment, createService: e.target.checked })
         }
       >
-        Create Service
+        Create Service (a separate resource) to expose this Deployment
       </Checkbox>
     </FormFieldset>
   );
