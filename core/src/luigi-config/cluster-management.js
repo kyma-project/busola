@@ -34,7 +34,10 @@ export async function setCluster(clusterName) {
       await reloadNavigation();
     }
   }
-  Luigi.navigation().navigate(`/cluster/${encodeURIComponent(clusterName)}`);
+
+  Luigi.navigation().navigate(
+    `/cluster/${encodeURIComponent(clusterName)}/namespaces`
+  );
 }
 
 export function saveClusterParams(params) {

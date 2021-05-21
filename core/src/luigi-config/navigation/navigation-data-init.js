@@ -216,30 +216,27 @@ export async function getNavigationData(authData) {
     const { navigation = {}, systemNamespaces = '', modules = {} } =
       params?.config || {};
     const { bebEnabled = false } = params?.features || {};
+    const staticNodes = getStaticRootNodes(
+      getChildrenNodesForNamespace,
+      apiPaths,
+      permissionSet,
+      modules
+    );
+    const externalNodes = addExternalNodes(navigation.externalNodes);
+    const allNodes = [...staticNodes, ...externalNodes];
+    hideDisabledNodes(navigation.disabledNodes, allNodes, false);
+    const clusterNodeChildren = allNodes;
+
     const nodes = [
       {
         pathSegment: 'cluster',
         hideFromNav: true,
-        onNodeActivation: () =>
-          Luigi.navigation().navigate(
-            `/cluster/${encodeURIComponent(activeClusterName)}`
-          ),
+        defaultChildNode: encodeURIComponent(activeClusterName),
         children: [
           {
             navigationContext: 'cluster',
             pathSegment: encodeURIComponent(activeClusterName),
-            children: function () {
-              const staticNodes = getStaticRootNodes(
-                getChildrenNodesForNamespace,
-                apiPaths,
-                permissionSet,
-                modules
-              );
-              const externalNodes = addExternalNodes(navigation.externalNodes);
-              const allNodes = [...staticNodes, ...externalNodes];
-              hideDisabledNodes(navigation.disabledNodes, allNodes, false);
-              return allNodes;
-            },
+            children: clusterNodeChildren,
           },
         ],
         context: {

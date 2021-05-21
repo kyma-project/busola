@@ -1,7 +1,7 @@
 import config from '../config';
 const ADDRESS = config.localDev
-  ? `http://localhost:4200`
-  : `https://busola.${config.domain}`;
+  ? `http://localhost:4200/clusters`
+  : `https://busola.${config.domain}/clusters`;
 
 const NAMESPACE_NAME = config.namespace;
 
