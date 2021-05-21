@@ -87,12 +87,10 @@ context('Busola - Create a Deployment', () => {
 
     getLeftNav()
       .find('[data-testid=services_services]')
-      .click()
-      .wait(1000);
+      .click();
 
     cy.getIframeBody()
-      .find('a')
-      .contains(DEPLOYMENT_NAME)
+      .contains('a', DEPLOYMENT_NAME, { timeout: 7000 })
       .should('be.visible');
   });
 });
