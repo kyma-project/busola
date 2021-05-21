@@ -4,10 +4,10 @@ const NAMESPACE_NAME = config.namespace;
 
 context('Clean up namespace', () => {
   it('Delete the namespace (step 1)', () => {
-    cy.get('[data-testid=luigi-topnav-logo]').click({ force: true });
+    cy.get('[data-testid=luigi-topnav-logo]').click();
+    cy.wait(1000);
 
-    cy.get('[data-testid=namespaces_namespaces]').click({ force: true }); //we need to use force when others elements make menu not visible
-
+    cy.get('[data-testid=namespaces_namespaces]').click(); //we need to use force when others elements make menu not visible
     cy.getIframeBody()
       .find('[role="search"] [aria-label="search-input"]')
       .type(NAMESPACE_NAME, { force: true }); // use force to skip clicking (the table could re-render between the click and the typing)
