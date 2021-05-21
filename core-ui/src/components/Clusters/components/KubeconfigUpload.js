@@ -62,7 +62,11 @@ export function KubeconfigUpload({ setCluster, setShowingAuthForm }) {
         setShowError={setShowError}
       />
       {showError && (
-        <MessageStrip className="fd-margin-top--sm" type="error">
+        <MessageStrip
+          aria-label="invalid-kubeconfig"
+          className="fd-margin-top--sm"
+          type="error"
+        >
           Error reading kubeconfig
         </MessageStrip>
       )}
