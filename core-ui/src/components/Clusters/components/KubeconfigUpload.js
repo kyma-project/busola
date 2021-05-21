@@ -76,9 +76,8 @@ export function KubeconfigUpload({ setCluster, setShowingAuthForm }) {
     <>
       {initParams ? (
         <p>
-          {' '}
           Configuration has been included properly but is missing Cluster and
-          Auth data. Please upload a kubeconfig.{' '}
+          Auth data. Please upload a kubeconfig.
         </p>
       ) : (
         ''

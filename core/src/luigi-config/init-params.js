@@ -50,6 +50,7 @@ export async function saveInitParamsIfPresent() {
     };
 
     if (!params.auth || !params.cluster) {
+      // Luigi navigate doesn't work here. Simulate the Luigi's nodeParams by adding the `~`
       window.location.href = window.location.origin + '/clusters/add?~init=' + initParams;
       return;
     }
