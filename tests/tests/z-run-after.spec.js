@@ -6,7 +6,6 @@ context('Clean up namespace', () => {
   it('Delete the namespace (step 1)', () => {
     cy.get('[data-testid=luigi-topnav-logo]').click({ force: true });
 
-    cy.wait(1000);
     cy.get('[data-testid=namespaces_namespaces]').click({ force: true }); //we need to use force when others elements make menu not visible
 
     cy.getIframeBody()
