@@ -19,7 +19,7 @@ export function getStaticChildrenNodesForNamespace(
     {
       link: `/cluster/${encodedClusterName}/namespaces`,
       label: 'Back to Namespaces',
-      icon: 'nav-back',
+      icon: 'nav-back'
     },
     {
       pathSegment: 'details',
@@ -28,10 +28,10 @@ export function getStaticChildrenNodesForNamespace(
         config.coreUIModuleUrl +
         '/Namespaces/:namespaceId?' +
         toSearchParamsString({
-          resourceApiPath: '/api/v1',
+          resourceApiPath: '/api/v1'
         }),
       icon: 'product',
-      viewGroup: coreUIViewGroupName,
+      viewGroup: coreUIViewGroupName
     },
 
     //WORKLOADS CATEGORY
@@ -39,10 +39,10 @@ export function getStaticChildrenNodesForNamespace(
       category: {
         label: 'Workloads',
         icon: 'source-code',
-        collapsible: true,
+        collapsible: true
       },
       pathSegment: '_workloads_category_placeholder_',
-      hideFromNav: true,
+      hideFromNav: true
     },
     {
       category: 'Workloads',
@@ -55,12 +55,12 @@ export function getStaticChildrenNodesForNamespace(
         '/namespaces/:namespaceId/Functions?' +
         toSearchParamsString({
           resourceApiPath: '/apis/serverless.kyma-project.io/v1alpha1',
-          hasDetailsView: true,
+          hasDetailsView: true
         }),
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
       context: {
-        requiredModules: [modules?.SERVERLESS],
+        requiredModules: [modules?.SERVERLESS]
       },
       children: [
         {
@@ -73,13 +73,13 @@ export function getStaticChildrenNodesForNamespace(
                 config.coreUIModuleUrl +
                 '/namespaces/:namespaceId/Functions/:functionName?' +
                 toSearchParamsString({
-                  resourceApiPath: '/apis/serverless.kyma-project.io/v1alpha1',
+                  resourceApiPath: '/apis/serverless.kyma-project.io/v1alpha1'
                 }),
-              viewGroup: coreUIViewGroupName,
-            },
-          ],
-        },
-      ],
+              viewGroup: coreUIViewGroupName
+            }
+          ]
+        }
+      ]
     },
     {
       category: 'Workloads',
@@ -91,7 +91,7 @@ export function getStaticChildrenNodesForNamespace(
         '/namespaces/:namespaceId/Pods?' +
         toSearchParamsString({
           resourceApiPath: '/api/v1',
-          hasDetailsView: true,
+          hasDetailsView: true
         }),
       viewGroup: coreUIViewGroupName,
       keepSelectedForChildren: true,
@@ -107,7 +107,7 @@ export function getStaticChildrenNodesForNamespace(
                 config.coreUIModuleUrl +
                 '/namespaces/:namespaceId/Pods/:podName?' +
                 toSearchParamsString({
-                  resourceApiPath: '/api/v1',
+                  resourceApiPath: '/api/v1'
                 }),
               navigationContext: 'pod',
               children: [
@@ -119,9 +119,9 @@ export function getStaticChildrenNodesForNamespace(
                       pathSegment: ':containerName',
                       viewUrl:
                         config.coreUIModuleUrl +
-                        '/namespaces/:namespaceId/Pods/:podName/Containers/:containerName',
-                    },
-                  ],
+                        '/namespaces/:namespaceId/Pods/:podName/Containers/:containerName'
+                    }
+                  ]
                 },
                 {
                   pathSegment: 'initContainers',
@@ -131,15 +131,15 @@ export function getStaticChildrenNodesForNamespace(
                       pathSegment: ':containerName',
                       viewUrl:
                         config.coreUIModuleUrl +
-                        '/namespaces/:namespaceId/Pods/:podName/InitContainers/:containerName',
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
-      ],
+                        '/namespaces/:namespaceId/Pods/:podName/InitContainers/:containerName'
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       category: 'Workloads',
@@ -153,7 +153,7 @@ export function getStaticChildrenNodesForNamespace(
         '/namespaces/:namespaceId/Deployments?' +
         toSearchParamsString({
           resourceApiPath: '/apis/apps/v1',
-          hasDetailsView: true,
+          hasDetailsView: true
         }),
       viewGroup: coreUIViewGroupName,
       navigationContext: 'deployments',
@@ -168,12 +168,12 @@ export function getStaticChildrenNodesForNamespace(
                 config.coreUIModuleUrl +
                 '/namespaces/:namespaceId/Deployments/:deploymentName?' +
                 toSearchParamsString({
-                  resourceApiPath: '/apis/apps/v1',
-                }),
-            },
-          ],
-        },
-      ],
+                  resourceApiPath: '/apis/apps/v1'
+                })
+            }
+          ]
+        }
+      ]
     },
     {
       category: 'Workloads',
@@ -185,7 +185,7 @@ export function getStaticChildrenNodesForNamespace(
         '/namespaces/:namespaceId/ReplicaSets?' +
         toSearchParamsString({
           resourceApiPath: '/apis/apps/v1',
-          hasDetailsView: true,
+          hasDetailsView: true
         }),
       viewGroup: coreUIViewGroupName,
       keepSelectedForChildren: true,
@@ -202,12 +202,12 @@ export function getStaticChildrenNodesForNamespace(
                 config.coreUIModuleUrl +
                 '/namespaces/:namespaceId/ReplicaSets/:replicaSetName?' +
                 toSearchParamsString({
-                  resourceApiPath: '/apis/apps/v1',
-                }),
-            },
-          ],
-        },
-      ],
+                  resourceApiPath: '/apis/apps/v1'
+                })
+            }
+          ]
+        }
+      ]
     },
 
     //DISCOVERY AND NETWORK CATEGORY
@@ -215,10 +215,10 @@ export function getStaticChildrenNodesForNamespace(
       category: {
         label: 'Discovery and Network',
         icon: 'instance',
-        collapsible: true,
+        collapsible: true
       },
       pathSegment: '_discovery_and_network_category_placeholder_',
-      hideFromNav: true,
+      hideFromNav: true
     },
     {
       category: 'Discovery and Network',
@@ -231,12 +231,12 @@ export function getStaticChildrenNodesForNamespace(
         '/namespaces/:namespaceId/ApiRules?' +
         toSearchParamsString({
           resourceApiPath: '/apis/gateway.kyma-project.io/v1alpha1',
-          hasDetailsView: true,
+          hasDetailsView: true
         }),
       viewGroup: coreUIViewGroupName,
       keepSelectedForChildren: true,
       context: {
-        requiredModules: [modules?.API_GATEWAY],
+        requiredModules: [modules?.API_GATEWAY]
       },
       children: [
         {
@@ -249,10 +249,10 @@ export function getStaticChildrenNodesForNamespace(
                 config.coreUIModuleUrl +
                 '/namespaces/:namespaceId/ApiRules/:apiName?' +
                 toSearchParamsString({
-                  resourceApiPath: '/apis/gateway.kyma-project.io/v1alpha1',
-                }),
-            },
-          ],
+                  resourceApiPath: '/apis/gateway.kyma-project.io/v1alpha1'
+                })
+            }
+          ]
         },
         {
           pathSegment: 'create',
@@ -261,8 +261,8 @@ export function getStaticChildrenNodesForNamespace(
             '/ApiRules/create?' +
             toSearchParamsString({
               resourceApiPath: '/apis/gateway.kyma-project.io/v1alpha1',
-              hasDetailsView: true,
-            }),
+              hasDetailsView: true
+            })
         },
         {
           pathSegment: 'edit/:apiName',
@@ -271,10 +271,10 @@ export function getStaticChildrenNodesForNamespace(
             '/ApiRules/edit/:apiName?' +
             toSearchParamsString({
               resourceApiPath: '/apis/gateway.kyma-project.io/v1alpha1',
-              hasDetailsView: true,
-            }),
-        },
-      ],
+              hasDetailsView: true
+            })
+        }
+      ]
     },
     {
       category: 'Discovery and Network',
@@ -287,7 +287,7 @@ export function getStaticChildrenNodesForNamespace(
         '/namespaces/:namespaceId/Services?' +
         toSearchParamsString({
           resourceApiPath: '/api/v1',
-          hasDetailsView: true,
+          hasDetailsView: true
         }),
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
@@ -302,13 +302,13 @@ export function getStaticChildrenNodesForNamespace(
                 config.coreUIModuleUrl +
                 '/namespaces/:namespaceId/Services/:serviceName?' +
                 toSearchParamsString({
-                  resourceApiPath: '/api/v1',
+                  resourceApiPath: '/api/v1'
                 }),
-              viewGroup: coreUIViewGroupName,
-            },
-          ],
-        },
-      ],
+              viewGroup: coreUIViewGroupName
+            }
+          ]
+        }
+      ]
     },
 
     //SERVICE MANAGEMENT CATEGORY
@@ -316,10 +316,10 @@ export function getStaticChildrenNodesForNamespace(
       category: {
         label: 'Service Management',
         icon: 'add-coursebook',
-        collapsible: true,
+        collapsible: true
       },
       pathSegment: '_service_management_category_placeholder_',
-      hideFromNav: true,
+      hideFromNav: true
     },
     {
       category: 'Service Management',
@@ -330,7 +330,7 @@ export function getStaticChildrenNodesForNamespace(
       keepSelectedForChildren: true,
       viewGroup: catalogViewGroupName,
       context: {
-        requiredModules: [modules?.SERVICE_CATALOG],
+        requiredModules: [modules?.SERVICE_CATALOG]
       },
       children: [
         {
@@ -346,7 +346,7 @@ export function getStaticChildrenNodesForNamespace(
                   pathSegment: 'plans',
                   viewUrl:
                     config.serviceCatalogModuleUrl +
-                    '/catalog/ServiceClass/:serviceId/plans',
+                    '/catalog/ServiceClass/:serviceId/plans'
                 },
                 {
                   pathSegment: 'plan',
@@ -355,13 +355,13 @@ export function getStaticChildrenNodesForNamespace(
                       pathSegment: ':planId',
                       viewUrl:
                         config.serviceCatalogModuleUrl +
-                        '/catalog/ServiceClass/:serviceId/plan/:planId',
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
+                        '/catalog/ServiceClass/:serviceId/plan/:planId'
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         },
         {
           pathSegment: 'ClusterServiceClass',
@@ -376,7 +376,7 @@ export function getStaticChildrenNodesForNamespace(
                   pathSegment: 'plans',
                   viewUrl:
                     config.serviceCatalogModuleUrl +
-                    '/catalog/ClusterServiceClass/:serviceId/plans',
+                    '/catalog/ClusterServiceClass/:serviceId/plans'
                 },
                 {
                   pathSegment: 'plan',
@@ -385,15 +385,15 @@ export function getStaticChildrenNodesForNamespace(
                       pathSegment: ':planId',
                       viewUrl:
                         config.serviceCatalogModuleUrl +
-                        '/catalog/ClusterServiceClass/:serviceId/plan/:planId',
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
-      ],
+                        '/catalog/ClusterServiceClass/:serviceId/plan/:planId'
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       category: 'Service Management',
@@ -404,7 +404,7 @@ export function getStaticChildrenNodesForNamespace(
       viewGroup: catalogViewGroupName,
       keepSelectedForChildren: true,
       context: {
-        requiredModules: [modules?.SERVICE_CATALOG],
+        requiredModules: [modules?.SERVICE_CATALOG]
       },
       children: [
         {
@@ -414,11 +414,11 @@ export function getStaticChildrenNodesForNamespace(
               pathSegment: ':instanceName',
               viewUrl:
                 config.serviceCatalogModuleUrl +
-                '/instances/details/:instanceName',
-            },
-          ],
-        },
-      ],
+                '/instances/details/:instanceName'
+            }
+          ]
+        }
+      ]
     },
     {
       category: 'Service Management',
@@ -431,12 +431,12 @@ export function getStaticChildrenNodesForNamespace(
         toSearchParamsString({
           resourceApiPath: '/apis/servicecatalog.k8s.io/v1beta1',
           readOnly: true,
-          hasDetailsView: false,
+          hasDetailsView: false
         }),
       viewGroup: coreUIViewGroupName,
       context: {
-        requiredModules: [modules?.SERVICE_CATALOG],
-      },
+        requiredModules: [modules?.SERVICE_CATALOG]
+      }
     },
 
     //CONFIGURATION CATEGORY
@@ -444,10 +444,10 @@ export function getStaticChildrenNodesForNamespace(
       category: {
         label: 'Configuration',
         icon: 'key-user-settings',
-        collapsible: true,
+        collapsible: true
       },
       pathSegment: '_configuration_category_placeholder_',
-      hideFromNav: true,
+      hideFromNav: true
     },
     {
       category: 'Configuration',
@@ -460,12 +460,12 @@ export function getStaticChildrenNodesForNamespace(
         '/namespaces/:namespaceId/AddonsConfigurations?' +
         toSearchParamsString({
           resourceApiPath: '/apis/addons.kyma-project.io/v1alpha1',
-          hasDetailsView: true,
+          hasDetailsView: true
         }),
       viewGroup: coreUIViewGroupName,
       keepSelectedForChildren: true,
       context: {
-        requiredModules: [modules?.ADDONS],
+        requiredModules: [modules?.ADDONS]
       },
       children: [
         {
@@ -478,13 +478,13 @@ export function getStaticChildrenNodesForNamespace(
                 config.coreUIModuleUrl +
                 '/namespaces/:namespaceId/AddonsConfigurations/:addonName?' +
                 toSearchParamsString({
-                  resourceApiPath: '/apis/addons.kyma-project.io/v1alpha1',
+                  resourceApiPath: '/apis/addons.kyma-project.io/v1alpha1'
                 }),
-              viewGroup: coreUIViewGroupName,
-            },
-          ],
-        },
-      ],
+              viewGroup: coreUIViewGroupName
+            }
+          ]
+        }
+      ]
     },
     {
       category: 'Configuration',
@@ -497,7 +497,7 @@ export function getStaticChildrenNodesForNamespace(
         '/namespaces/:namespaceId/ConfigMaps?' +
         toSearchParamsString({
           resourceApiPath: '/api/v1',
-          hasDetailsView: true,
+          hasDetailsView: true
         }),
       viewGroup: coreUIViewGroupName,
       keepSelectedForChildren: true,
@@ -512,12 +512,12 @@ export function getStaticChildrenNodesForNamespace(
                 config.coreUIModuleUrl +
                 '/namespaces/:namespaceId/ConfigMaps/:name?' +
                 toSearchParamsString({
-                  resourceApiPath: '/api/v1',
-                }),
-            },
-          ],
-        },
-      ],
+                  resourceApiPath: '/api/v1'
+                })
+            }
+          ]
+        }
+      ]
     },
     {
       category: 'Configuration',
@@ -530,7 +530,7 @@ export function getStaticChildrenNodesForNamespace(
         '/namespaces/:namespaceId/Secrets?' +
         toSearchParamsString({
           resourceApiPath: '/api/v1',
-          hasDetailsView: true,
+          hasDetailsView: true
         }),
       viewGroup: coreUIViewGroupName,
       keepSelectedForChildren: true,
@@ -545,13 +545,13 @@ export function getStaticChildrenNodesForNamespace(
                 config.coreUIModuleUrl +
                 '/namespaces/:namespaceId/Secrets/:name?' +
                 toSearchParamsString({
-                  resourceApiPath: '/api/v1',
+                  resourceApiPath: '/api/v1'
                 }),
-              viewGroup: coreUIViewGroupName,
-            },
-          ],
-        },
-      ],
+              viewGroup: coreUIViewGroupName
+            }
+          ]
+        }
+      ]
     },
     {
       category: 'Configuration',
@@ -565,7 +565,7 @@ export function getStaticChildrenNodesForNamespace(
         toSearchParamsString({
           resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
           hasDetailsView: true,
-          readOnly: true,
+          readOnly: true
         }),
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
@@ -581,13 +581,13 @@ export function getStaticChildrenNodesForNamespace(
                 '/namespaces/:namespaceId/Roles/:roleName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
-                  readOnly: true,
+                  readOnly: true
                 }),
-              viewGroup: coreUIViewGroupName,
-            },
-          ],
-        },
-      ],
+              viewGroup: coreUIViewGroupName
+            }
+          ]
+        }
+      ]
     },
     {
       category: 'Configuration',
@@ -600,7 +600,7 @@ export function getStaticChildrenNodesForNamespace(
         '/namespaces/:namespaceId/RoleBindings?' +
         toSearchParamsString({
           resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
-          hasDetailsView: true,
+          hasDetailsView: true
         }),
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
@@ -615,13 +615,13 @@ export function getStaticChildrenNodesForNamespace(
                 config.coreUIModuleUrl +
                 '/namespaces/:namespaceId/RoleBindings/:roleBindingName?' +
                 toSearchParamsString({
-                  resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
+                  resourceApiPath: '/apis/rbac.authorization.k8s.io/v1'
                 }),
-              viewGroup: coreUIViewGroupName,
-            },
-          ],
-        },
-      ],
+              viewGroup: coreUIViewGroupName
+            }
+          ]
+        }
+      ]
     },
     {
       category: 'Configuration',
@@ -634,7 +634,7 @@ export function getStaticChildrenNodesForNamespace(
         '/namespaces/:namespaceId/Oauth2Clients?' +
         toSearchParamsString({
           resourceApiPath: '/apis/hydra.ory.sh/v1alpha1',
-          hasDetailsView: true,
+          hasDetailsView: true
         }),
       viewGroup: coreUIViewGroupName,
       keepSelectedForChildren: true,
@@ -644,7 +644,7 @@ export function getStaticChildrenNodesForNamespace(
           viewUrl:
             config.coreUIModuleUrl +
             '/namespaces/:namespaceId/oauth-clients/create',
-          viewGroup: coreUIViewGroupName,
+          viewGroup: coreUIViewGroupName
         },
         {
           pathSegment: 'details',
@@ -656,13 +656,13 @@ export function getStaticChildrenNodesForNamespace(
                 config.coreUIModuleUrl +
                 '/namespaces/:namespaceId/Oauth2Clients/:clientName?' +
                 toSearchParamsString({
-                  resourceApiPath: '/apis/hydra.ory.sh/v1alpha1',
+                  resourceApiPath: '/apis/hydra.ory.sh/v1alpha1'
                 }),
-              viewGroup: coreUIViewGroupName,
-            },
-          ],
-        },
-      ],
+              viewGroup: coreUIViewGroupName
+            }
+          ]
+        }
+      ]
     },
     {
       category: 'Configuration',
@@ -675,14 +675,14 @@ export function getStaticChildrenNodesForNamespace(
         '/namespaces/:namespaceId/GitRepositories?' +
         toSearchParamsString({
           resourceApiPath: '/apis/serverless.kyma-project.io/v1alpha1',
-          hasDetailsView: false,
+          hasDetailsView: false
         }),
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
       context: {
-        requiredModules: [modules?.SERVERLESS_REPOS],
-      },
-    },
+        requiredModules: [modules?.SERVERLESS_REPOS]
+      }
+    }
   ];
   filterNodesByAvailablePaths(nodes, apiPaths, permissionSet);
   return nodes;
@@ -705,7 +705,7 @@ export function getStaticRootNodes(
         '/Namespaces?' +
         toSearchParamsString({
           resourceApiPath: '/api/v1',
-          hasDetailsView: true,
+          hasDetailsView: true
         }),
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
@@ -716,21 +716,21 @@ export function getStaticRootNodes(
           resourceType: 'namespaces',
           pathSegment: ':namespaceId',
           context: {
-            namespaceId: ':namespaceId',
+            namespaceId: ':namespaceId'
           },
           keepSelectedForChildren: false,
           children: () =>
             namespaceChildrenNodesResolver(apiPaths, permissionSet),
-          defaultChildNode: 'details',
-        },
-      ],
+          defaultChildNode: 'details'
+        }
+      ]
     },
     {
       pathSegment: 'overview',
       label: 'Cluster Overview',
       icon: 'database',
       viewUrl: config.coreUIModuleUrl + '/overview',
-      viewGroup: coreUIViewGroupName,
+      viewGroup: coreUIViewGroupName
     },
 
     //INTEGRATION CATEGORY
@@ -738,10 +738,10 @@ export function getStaticRootNodes(
       category: {
         label: 'Integration',
         icon: 'overview-chart',
-        collapsible: true,
+        collapsible: true
       },
       pathSegment: '_integration_category_placeholder_',
-      hideFromNav: true,
+      hideFromNav: true
     },
     {
       pathSegment: 'applications',
@@ -755,12 +755,12 @@ export function getStaticRootNodes(
         toSearchParamsString({
           resourceApiPath:
             '/apis/applicationconnector.kyma-project.io/v1alpha1',
-          hasDetailsView: true,
+          hasDetailsView: true
         }),
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
       context: {
-        requiredModules: [modules?.APPLICATIONS],
+        requiredModules: [modules?.APPLICATIONS]
       },
       children: [
         {
@@ -774,19 +774,19 @@ export function getStaticRootNodes(
                 '/Applications/:name?' +
                 toSearchParamsString({
                   resourceApiPath:
-                    '/apis/applicationconnector.kyma-project.io/v1alpha1',
+                    '/apis/applicationconnector.kyma-project.io/v1alpha1'
                 }),
-              viewGroup: coreUIViewGroupName,
-            },
-          ],
-        },
-      ],
+              viewGroup: coreUIViewGroupName
+            }
+          ]
+        }
+      ]
     },
     {
       pathSegment: 'preferences',
       viewUrl: config.coreUIModuleUrl + '/preferences',
       viewGroup: coreUIViewGroupName,
-      hideFromNav: true,
+      hideFromNav: true
     },
     {
       pathSegment: 'addons-config',
@@ -796,19 +796,19 @@ export function getStaticRootNodes(
       category: {
         label: 'Integration',
         icon: 'settings',
-        collapsible: true,
+        collapsible: true
       },
       viewUrl:
         config.coreUIModuleUrl +
         '/ClusterAddonsConfigurations?' +
         toSearchParamsString({
           resourceApiPath: '/apis/addons.kyma-project.io/v1alpha1',
-          hasDetailsView: true,
+          hasDetailsView: true
         }),
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
       context: {
-        requiredModules: [modules?.ADDONS],
+        requiredModules: [modules?.ADDONS]
       },
       children: [
         {
@@ -821,13 +821,13 @@ export function getStaticRootNodes(
                 config.coreUIModuleUrl +
                 '/ClusterAddonsConfigurations/:addonName?' +
                 toSearchParamsString({
-                  resourceApiPath: '/apis/addons.kyma-project.io/v1alpha1',
+                  resourceApiPath: '/apis/addons.kyma-project.io/v1alpha1'
                 }),
-              viewGroup: coreUIViewGroupName,
-            },
-          ],
-        },
-      ],
+              viewGroup: coreUIViewGroupName
+            }
+          ]
+        }
+      ]
     },
 
     //ADMINISTRATION CATEGORY
@@ -839,7 +839,7 @@ export function getStaticRootNodes(
       category: {
         label: 'Administration',
         icon: 'settings',
-        collapsible: true,
+        collapsible: true
       },
       viewUrl:
         config.coreUIModuleUrl +
@@ -847,7 +847,7 @@ export function getStaticRootNodes(
         toSearchParamsString({
           resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
           hasDetailsView: true,
-          readOnly: true,
+          readOnly: true
         }),
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
@@ -863,20 +863,20 @@ export function getStaticRootNodes(
                 '/ClusterRoles/:roleName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
-                  readOnly: true,
+                  readOnly: true
                 }),
-              viewGroup: coreUIViewGroupName,
-            },
-          ],
-        },
+              viewGroup: coreUIViewGroupName
+            }
+          ]
+        }
       ],
       requiredPermissions: [
         {
           apiGroup: 'rbac.authorization.k8s.io',
           resource: 'clusterrolebindings',
-          verbs: ['create'],
-        },
-      ],
+          verbs: ['create']
+        }
+      ]
     },
     {
       pathSegment: 'cluster-role-bindings',
@@ -886,14 +886,14 @@ export function getStaticRootNodes(
       category: {
         label: 'Administration',
         icon: 'settings',
-        collapsible: true,
+        collapsible: true
       },
       viewUrl:
         config.coreUIModuleUrl +
         '/ClusterRoleBindings?' +
         toSearchParamsString({
           resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
-          hasDetailsView: true,
+          hasDetailsView: true
         }),
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
@@ -909,13 +909,13 @@ export function getStaticRootNodes(
                 config.coreUIModuleUrl +
                 '/ClusterRoleBindings/:clusterRoleBindingName?' +
                 toSearchParamsString({
-                  resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
+                  resourceApiPath: '/apis/rbac.authorization.k8s.io/v1'
                 }),
-              viewGroup: coreUIViewGroupName,
-            },
-          ],
-        },
-      ],
+              viewGroup: coreUIViewGroupName
+            }
+          ]
+        }
+      ]
     },
 
     //DIAGNOSTICS CATEGORY
@@ -923,10 +923,10 @@ export function getStaticRootNodes(
       category: {
         label: 'Diagnostics',
         icon: 'electrocardiogram',
-        collapsible: true,
+        collapsible: true
       },
       pathSegment: '_integration_category_placeholder_',
-      hideFromNav: false,
+      hideFromNav: false
     },
     {
       label: 'Logs',
@@ -934,8 +934,8 @@ export function getStaticRootNodes(
       viewUrl: '',
       externalLink: {
         url:
-          'https://grafana.kyma0.hasselhoff.shoot.canary.k8s-hana.ondemand.com/explore?left=%5B"now-1h","now","Loki",%7B%7D,%7B"mode":"Logs"%7D,%7B"ui":%5Btrue,true,true,"none"%5D%7D%5D',
-      },
+          'https://grafana.kyma0.hasselhoff.shoot.canary.k8s-hana.ondemand.com/explore?left=%5B"now-1h","now","Loki",%7B%7D,%7B"mode":"Logs"%7D,%7B"ui":%5Btrue,true,true,"none"%5D%7D%5D'
+      }
     },
     {
       label: 'Metrics',
@@ -943,8 +943,8 @@ export function getStaticRootNodes(
       viewUrl: '',
       externalLink: {
         url:
-          'https://grafana.kyma0.hasselhoff.shoot.canary.k8s-hana.ondemand.com',
-      },
+          'https://grafana.kyma0.hasselhoff.shoot.canary.k8s-hana.ondemand.com'
+      }
     },
     {
       label: 'Traces',
@@ -952,17 +952,16 @@ export function getStaticRootNodes(
       viewUrl: '',
       externalLink: {
         url:
-          'https://jaeger.kyma0.hasselhoff.shoot.canary.k8s-hana.ondemand.com',
-      },
+          'https://jaeger.kyma0.hasselhoff.shoot.canary.k8s-hana.ondemand.com'
+      }
     },
     {
       label: 'Service Mesh',
       category: 'Diagnostics',
       viewUrl: '',
       externalLink: {
-        url:
-          'https://kiali.kyma0.hasselhoff.shoot.canary.k8s-hana.ondemand.com',
-      },
+        url: 'https://kiali.kyma0.hasselhoff.shoot.canary.k8s-hana.ondemand.com'
+      }
     },
     {
       pathSegment: 'logs',
@@ -971,8 +970,8 @@ export function getStaticRootNodes(
       viewUrl:
         config.logsModuleUrl +
         '/?function={nodeParams.function}&pod={nodeParams.pod}&namespace={nodeParams.namespace}&container_name={nodeParams.container_name}', // todo handle when logs are reintroduced
-      hideFromNav: true,
-    },
+      hideFromNav: true
+    }
   ];
   filterNodesByAvailablePaths(nodes, apiPaths, permissionSet);
   return nodes;

@@ -21,7 +21,7 @@ async function luigiAfterInit() {
   Luigi.ux().hideAppLoadingIndicator();
 
   const params = getActiveCluster();
-  const isClusterChoosen = !!params || undefined;
+  const isClusterChoosen = !!params;
 
   // save location, as we'll be logged out in a moment
   if (!getAuthData()) {
