@@ -2,7 +2,7 @@ import createEncoder from 'json-url';
 import {
   saveClusterParams,
   saveActiveClusterName,
-  setCluster,
+  setCluster
 } from './cluster-management';
 
 const encoder = createEncoder('lzma');
@@ -11,7 +11,7 @@ function getResponseParams(usePKCE = true) {
   if (usePKCE) {
     return {
       responseType: 'code',
-      responseMode: 'query',
+      responseMode: 'query'
     };
   } else {
     return { responseType: 'id_token' };
@@ -31,7 +31,7 @@ export async function saveInitParamsIfPresent() {
     APPLICATIONS: 'applicationconnector.kyma-project.io',
     ADDONS: 'addons.kyma-project.io',
     SERVERLESS: 'serverless.kyma-project.io',
-    SERVERLESS_REPOS: 'gitrepositories.serverless.kyma-project.io',
+    SERVERLESS_REPOS: 'gitrepositories.serverless.kyma-project.io'
   };
 
   const initParams = new URL(location).searchParams.get('init');
@@ -45,13 +45,21 @@ export async function saveInitParamsIfPresent() {
       config: {
         ...decoded.config,
         systemNamespaces,
-        modules: { ...DEFAULT_MODULES, ...(decoded.config?.modules || {}) },
-      },
+        modules: { ...DEFAULT_MODULES, ...(decoded.config?.modules || {}) }
+      }
     };
+
+    if (!params.auth || !params.cluster) {
+      // Luigi navigate doesn't work here. Simulate the Luigi's nodeParams by adding the `~`
+      window.location.href =
+        window.location.origin + '/clusters/add?~init=' + initParams;
+      return;
+    }
+
     if (decoded.auth) {
       params.auth = {
         ...decoded.auth,
-        ...getResponseParams(decoded.auth.usePKCE),
+        ...getResponseParams(decoded.auth.usePKCE)
       };
     }
     if (!params.cluster.name) {

@@ -6,13 +6,13 @@ import { createAuth } from './auth/auth.js';
 import { saveInitParamsIfPresent } from './init-params';
 import {
   getActiveCluster,
-  setActiveClusterIfPresentInUrl,
+  setActiveClusterIfPresentInUrl
 } from './cluster-management';
 import { loadSystemNamespacesToggle } from './utils/system-namespaces-toggle';
 
 import {
   createNavigation,
-  addClusterNodes,
+  addClusterNodes
 } from './navigation/navigation-data-init';
 
 export const NODE_PARAM_PREFIX = `~`;
@@ -31,7 +31,9 @@ async function luigiAfterInit() {
   loadSystemNamespacesToggle();
 
   if (!isClusterChoosen) {
-    Luigi.navigation().navigate('/clusters');
+    if (!window.location.pathname.startsWith('/clusters')) {
+      Luigi.navigation().navigate('/clusters');
+    }
   } else {
     if (params?.auth && getAuthData()) {
       await addClusterNodes();
@@ -56,10 +58,10 @@ async function luigiAfterInit() {
     navigation: await createNavigation(),
     routing: {
       nodeParamPrefix: NODE_PARAM_PREFIX,
-      skipRoutingForUrlPatterns: [/access_token=/, /id_token=/],
+      skipRoutingForUrlPatterns: [/access_token=/, /id_token=/]
     },
     settings: createSettings(params),
-    lifecycleHooks: { luigiAfterInit },
+    lifecycleHooks: { luigiAfterInit }
   };
   Luigi.setConfig(luigiConfig);
 })();

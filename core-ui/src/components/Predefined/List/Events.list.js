@@ -3,7 +3,6 @@ import {
   GenericList,
   useGetList,
   ReadableCreationTimestamp,
-  useWindowTitle,
 } from 'react-shared';
 
 export const EventsList = ({ ...otherParams }) => {
@@ -11,8 +10,6 @@ export const EventsList = ({ ...otherParams }) => {
 };
 
 function Events({ namespace }) {
-  useWindowTitle('Warnings');
-
   const url = `/api/v1/namespaces/${namespace}/events`;
   const { loading = true, error, data: resources } = useGetList(
     e => e.type === 'Error' || e.type === 'Warning',
@@ -43,7 +40,7 @@ function Events({ namespace }) {
       serverDataError={error}
       serverErrorMessage={error?.message}
       serverDataLoading={loading}
-      pagination={{ itemsPerPage: 20, autoHide: true }}
+      pagination={{ itemsPerPage: 10, autoHide: true }}
     />
   );
 }
