@@ -93,22 +93,4 @@ context('Busola - In-cluster eventing flow', () => {
       },
     );
   });
-
-  //TODO: In Progress (logs for function container loads 2 minutes)
-  it('Check that event was received in receiver function Pod Logs', () => {
-    // cy.getLeftNav()
-    //   .contains('Workloads')
-    //   .click();
-    // cy.getLeftNav()
-    //   .contains('Pods')
-    //   .click();
-    // cy.getIframeBody()
-    //   .contains('a', 'in-cluster-eventing-receiver-crl9l-f77c994c5-bc4mn')
-    //   .click();
-    // cy.getIframeBody()
-    //   .contains('.container-panel', 'Containers')
-    //   .contains('.fd-layout-panel__header', 'function')
-    //   .contains('button', 'View Logs')
-    //   .click();
-  });
 });
