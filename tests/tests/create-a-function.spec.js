@@ -108,6 +108,7 @@ context('Busola - Create a Function and access it', () => {
 
     cy.getIframeBody()
       .contains('Create apirules')
+      .should('be.visible')
       .click();
 
     cy.getModalBody().within($modal => {
