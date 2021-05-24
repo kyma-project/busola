@@ -51,7 +51,7 @@ export default function BasicData({ deployment, setDeployment }) {
           setDeployment({ ...deployment, createService: e.target.checked })
         }
       >
-        Create Service (a separate resource) to expose this Deployment
+        Create a separate Service resource to expose this Deployment
       </Checkbox>
     </FormFieldset>
   );
