@@ -80,7 +80,6 @@ stats.html
 shared/build
 **/react-shared
 
-core
 **/public/config/config.js
 backend/backend-production.*
 
