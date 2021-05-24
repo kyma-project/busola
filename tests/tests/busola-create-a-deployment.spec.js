@@ -87,5 +87,9 @@ context('Busola - Create a Deployment', () => {
       .find('a')
       .contains(DEPLOYMENT_NAME)
       .should('be.visible');
+
+    cy.getLeftNav()
+      .contains('Discovery and Network')
+      .click();
   });
 });
