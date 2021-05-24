@@ -20,7 +20,8 @@
     "@luigi-project/plugin-auth-oidc": "1.8.1",
     "copy-webpack-plugin": "^5.0.0",
     "file-saver": "2.0.2",
-    "json-url": "^2.6.0"
+    "json-url": "^2.6.0",
+    "prettier": "^2.2.1"
   },
   "devDependencies": {
     "babel-loader": "^8.0.4",
