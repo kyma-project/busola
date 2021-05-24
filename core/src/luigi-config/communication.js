@@ -5,7 +5,7 @@ import {
   saveActiveClusterName,
   getActiveClusterName,
   getActiveCluster,
-  setCluster
+  setCluster,
 } from './cluster-management';
 import { clearAuthData } from './auth/auth-storage';
 import { reloadNavigation } from './navigation/navigation-data-init';
@@ -23,8 +23,8 @@ export const communication = {
         ...params,
         features: {
           ...params.features,
-          bebEnabled
-        }
+          bebEnabled,
+        },
       });
       updateClusterContext({ bebEnabled });
     },
@@ -48,13 +48,13 @@ export const communication = {
 
       const newParamsString = convertToURLsearch({
         ...currentParams,
-        ...newParams
+        ...newParams,
       });
 
       window.history.replaceState(
         null,
         window.document.title,
-        pathname + newParamsString
+        pathname + newParamsString,
       );
     },
     'busola.reload': () => location.reload(),
@@ -81,15 +81,15 @@ export const communication = {
         id: 'busola.showMessage',
         message,
         tittle,
-        type
+        type,
       });
-    }
-  }
+    },
+  },
 };
 
 const convertToURLsearch = params => {
   const a = Object.keys(params).map(
-    k => NODE_PARAM_PREFIX + k + '=' + params[k]
+    k => NODE_PARAM_PREFIX + k + '=' + params[k],
   );
   return '?' + a.join('&');
 };

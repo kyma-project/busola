@@ -1,6 +1,6 @@
 const PREVIOUS_LOCATION_KEY = 'busola.location';
 
-export const saveLocation = (location) => {
+export const saveLocation = location => {
   localStorage.setItem(PREVIOUS_LOCATION_KEY, location);
 };
 

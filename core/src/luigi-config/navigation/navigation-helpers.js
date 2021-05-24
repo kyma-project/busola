@@ -58,12 +58,12 @@ export function createNamespacesList(rawNamespaceNames) {
     .map(namespace => {
       const namespaceName = namespace.name;
       const alternativeLocation = getCorrespondingNamespaceLocation(
-        namespaceName
+        namespaceName,
       );
       namespaces.push({
         category: 'Namespaces',
         label: namespaceName,
-        pathValue: alternativeLocation || namespaceName + '/details'
+        pathValue: alternativeLocation || namespaceName + '/details',
       });
     });
   return namespaces;
@@ -82,11 +82,11 @@ export const addExternalNodes = externalNodes => {
         category: {
           label: category,
           icon,
-          collapsible: true
+          collapsible: true,
         },
         pathSegment: `${category.replace(' ', '_')}_placeholder`,
-        hideFromNav: false
-      }
+        hideFromNav: false,
+      },
     ];
 
     children.forEach(child => {
@@ -98,9 +98,9 @@ export const addExternalNodes = externalNodes => {
           category,
           viewUrl: '',
           externalLink: {
-            url: link
-          }
-        }
+            url: link,
+          },
+        },
       ];
     });
   });

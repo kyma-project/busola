@@ -1,23 +1,23 @@
 import {
   fetchPermissions,
   fetchBusolaInitData,
-  fetchNamespaces
+  fetchNamespaces,
 } from './queries';
 import { config } from '../config';
 import {
   coreUIViewGroupName,
   getStaticChildrenNodesForNamespace,
-  getStaticRootNodes
+  getStaticRootNodes,
 } from './static-navigation-model';
 import {
   navigationPermissionChecker,
-  hasWildcardPermission
+  hasWildcardPermission,
 } from './permissions';
 
 import {
   hideDisabledNodes,
   createNamespacesList,
-  addExternalNodes
+  addExternalNodes,
 } from './navigation-helpers';
 import { clearAuthData, getAuthData } from './../auth/auth-storage';
 import { groups } from '../auth/auth';
@@ -27,7 +27,7 @@ import {
   getActiveClusterName,
   setCluster,
   deleteActiveCluster,
-  saveActiveClusterName
+  saveActiveClusterName,
 } from '../cluster-management';
 import { shouldShowSystemNamespaces } from './../utils/system-namespaces-toggle';
 import { saveLocation, tryRestorePreviousLocation } from './previous-location';
@@ -43,8 +43,8 @@ export async function addClusterNodes() {
     ...config,
     navigation: {
       ...config.navigation,
-      nodes
-    }
+      nodes,
+    },
   });
   tryRestorePreviousLocation();
 }
@@ -68,7 +68,7 @@ function createClusterManagementNodes() {
         hideSideNav: true,
         pathSegment: 'add',
         navigationContext: 'clusters',
-        viewUrl: config.coreUIModuleUrl + '/clusters/add'
+        viewUrl: config.coreUIModuleUrl + '/clusters/add',
       },
       {
         hideSideNav: true,
@@ -76,13 +76,13 @@ function createClusterManagementNodes() {
         async onNodeActivation() {
           await deleteActiveCluster();
           return false;
-        }
-      }
+        },
+      },
     ],
     context: {
       clusters: getClusters(),
-      activeClusterName: getActiveClusterName()
-    }
+      activeClusterName: getActiveClusterName(),
+    },
   };
   const clusters = getClusters();
 
@@ -96,20 +96,20 @@ function createClusterManagementNodes() {
       onNodeActivation: async () => {
         await setCluster(clusterName);
         return false;
-      }
+      },
     }));
 
   const clusterNode = {
     pathSegment: 'set-cluster',
     hideFromNav: true,
-    children: clusterNodes
+    children: clusterNodes,
   };
 
   const noPermissionsNode = {
     pathSegment: 'no-permissions',
     hideFromNav: true,
     hideSideNav: true,
-    viewUrl: config.coreUIModuleUrl + '/no-permissions'
+    viewUrl: config.coreUIModuleUrl + '/no-permissions',
   };
 
   return [clusterManagementNode, clusterNode, noPermissionsNode];
@@ -128,8 +128,8 @@ export async function createNavigation() {
       link:
         activeClusterName === clusterName
           ? `/cluster/${encodeURIComponent(clusterName)}`
-          : `/set-cluster/${encodeURIComponent(clusterName)}`
-    })
+          : `/set-cluster/${encodeURIComponent(clusterName)}`,
+    }),
   );
 
   const optionsForCurrentCluster = isClusterSelected
@@ -137,10 +137,10 @@ export async function createNavigation() {
         contextSwitcher: {
           defaultLabel: 'Select Namespace ...',
           parentNodePath: `/cluster/${encodeURIComponent(
-            activeClusterName
+            activeClusterName,
           )}/namespaces`, // absolute path
           lazyloadOptions: true, // load options on click instead on page load
-          options: getNamespaces
+          options: getNamespaces,
         },
         profile: {
           items: [
@@ -148,16 +148,16 @@ export async function createNavigation() {
               icon: 'settings',
               label: 'Preferences',
               link: `/cluster/${encodeURIComponent(
-                activeClusterName
-              )}/preferences`
+                activeClusterName,
+              )}/preferences`,
             },
             {
               icon: 'log',
               label: 'Remove current cluster config',
-              link: `/clusters/remove`
-            }
-          ]
-        }
+              link: `/clusters/remove`,
+            },
+          ],
+        },
       }
     : {};
 
@@ -171,19 +171,19 @@ export async function createNavigation() {
         ...clusterNodes,
         {
           title: 'Add Cluster',
-          link: '/clusters/add'
+          link: '/clusters/add',
         },
         {
           title: 'Clusters Overview',
-          link: '/clusters'
-        }
-      ]
+          link: '/clusters',
+        },
+      ],
     },
     ...optionsForCurrentCluster,
     nodes:
       isClusterSelected && getAuthData()
         ? await getNavigationData(getAuthData())
-        : createClusterManagementNodes()
+        : createClusterManagementNodes(),
   };
 }
 
@@ -208,7 +208,7 @@ export async function getNavigationData(authData) {
 
     const { crds, apiPaths } = await fetchNavigationData(
       authData,
-      permissionSet
+      permissionSet,
     );
     const params = getActiveCluster();
     const activeClusterName = params.cluster.name;
@@ -222,7 +222,7 @@ export async function getNavigationData(authData) {
         hideFromNav: true,
         onNodeActivation: () =>
           Luigi.navigation().navigate(
-            `/cluster/${encodeURIComponent(activeClusterName)}`
+            `/cluster/${encodeURIComponent(activeClusterName)}`,
           ),
         children: [
           {
@@ -233,14 +233,14 @@ export async function getNavigationData(authData) {
                 getChildrenNodesForNamespace,
                 apiPaths,
                 permissionSet,
-                modules
+                modules,
               );
               const externalNodes = addExternalNodes(navigation.externalNodes);
               const allNodes = [...staticNodes, ...externalNodes];
               hideDisabledNodes(navigation.disabledNodes, allNodes, false);
               return allNodes;
-            }
-          }
+            },
+          },
         ],
         context: {
           authData,
@@ -250,9 +250,9 @@ export async function getNavigationData(authData) {
           bebEnabled,
           systemNamespaces,
           showSystemNamespaces: shouldShowSystemNamespaces(),
-          cluster: params.cluster
-        }
-      }
+          cluster: params.cluster,
+        },
+      },
     ];
     return [...nodes, ...createClusterManagementNodes()];
   } catch (err) {
@@ -260,7 +260,7 @@ export async function getNavigationData(authData) {
     if (err.statusCode === 403) {
       clearAuthData();
       saveLocation(
-        `/no-permissions?${NODE_PARAM_PREFIX}error=${err.originalMessage}`
+        `/no-permissions?${NODE_PARAM_PREFIX}error=${err.originalMessage}`,
       );
     } else {
       let errorNotification = 'Could not load initial configuration';
@@ -272,7 +272,7 @@ export async function getNavigationData(authData) {
         })`;
       Luigi.ux().showAlert({
         text: errorNotification,
-        type: 'error'
+        type: 'error',
       });
       console.warn(err);
     }
@@ -288,7 +288,7 @@ async function getNamespaces() {
   } catch (e) {
     Luigi.ux().showAlert({
       text: `Cannot fetch namespaces: ${e.message}`,
-      type: 'error'
+      type: 'error',
     });
     return [];
   }
@@ -303,7 +303,7 @@ function getChildrenNodesForNamespace(apiPaths, permissionSet) {
   const staticNodes = getStaticChildrenNodesForNamespace(
     apiPaths,
     permissionSet,
-    modules
+    modules,
   );
 
   hideDisabledNodes(navigation.disabledNodes, staticNodes, true);

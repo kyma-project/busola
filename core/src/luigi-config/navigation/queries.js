@@ -13,7 +13,7 @@ export async function failFastFetch(input, auth, init = {}) {
     ) {
       return {
         'X-Client-Certificate-Data': auth['client-certificate-data'],
-        'X-Client-Key-Data': auth['client-key-data']
+        'X-Client-Key-Data': auth['client-key-data'],
       };
     } else {
       throw Error('No available data to authenticate the request.');
@@ -27,7 +27,7 @@ export async function failFastFetch(input, auth, init = {}) {
       'Content-Type': 'application/json',
       'X-Cluster-Url': cluster?.server,
       'X-Cluster-Certificate-Authority-Data':
-        cluster && cluster['certificate-authority-data']
+        cluster && cluster['certificate-authority-data'],
     };
   }
 
@@ -43,7 +43,7 @@ export async function failFastFetch(input, auth, init = {}) {
         errorResponse.message && typeof errorResponse.message === 'string'
           ? errorResponse.message
           : response.statusText,
-        errorResponse.statusCode ? errorResponse.statusCode : response.status
+        errorResponse.statusCode ? errorResponse.statusCode : response.status,
       );
     } else {
       throw new Error(response);
@@ -55,15 +55,15 @@ export function fetchPermissions(auth) {
   const ssrr = {
     typeMeta: {
       kind: 'SelfSubjectRulesReview',
-      aPIVersion: 'authorization.k8s.io/v1'
+      aPIVersion: 'authorization.k8s.io/v1',
     },
-    spec: { namespace: '*' }
+    spec: { namespace: '*' },
   };
 
   const ssrUrl = `${config.backendApiUrl}/apis/authorization.k8s.io/v1/selfsubjectrulesreviews`;
   return failFastFetch(ssrUrl, auth, {
     method: 'POST',
-    body: JSON.stringify(ssrr)
+    body: JSON.stringify(ssrr),
   })
     .then(res => res.json())
     .then(res => res.status.resourceRules);

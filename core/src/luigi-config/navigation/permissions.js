@@ -21,7 +21,7 @@ function checkRequiredModules(nodeToCheckPermissionsFor, crds) {
 export function navigationPermissionChecker(
   nodeToCheckPermissionsFor,
   selfSubjectRulesReview,
-  crds
+  crds,
 ) {
   const noRulesApplied =
     !Array.isArray(nodeToCheckPermissionsFor.requiredPermissions) ||
@@ -31,7 +31,7 @@ export function navigationPermissionChecker(
     (noRulesApplied ||
       rbacRulesMatched(
         nodeToCheckPermissionsFor.requiredPermissions,
-        selfSubjectRulesReview
+        selfSubjectRulesReview,
       )) &&
     checkRequiredModules(nodeToCheckPermissionsFor, crds)
   );
@@ -42,19 +42,19 @@ export function hasWildcardPermission(permissionSet) {
     rule =>
       rule.apiGroups[0] === '*' &&
       rule.resources[0] === '*' &&
-      rule.verbs[0] === '*'
+      rule.verbs[0] === '*',
   );
 }
 
 export function hasPermissionsFor(apiGroup, resourceType, permissionSet) {
   const permissionsForApiGroup = permissionSet.filter(
-    p => p.apiGroups.includes(apiGroup) || p.apiGroups[0] === '*'
+    p => p.apiGroups.includes(apiGroup) || p.apiGroups[0] === '*',
   );
   const matchingPermission = permissionsForApiGroup.find(p =>
-    p.resources.includes(resourceType)
+    p.resources.includes(resourceType),
   );
   const wildcardPermission = permissionsForApiGroup.find(
-    p => p.resources[0] === '*'
+    p => p.resources[0] === '*',
   );
   return !!matchingPermission || !!wildcardPermission;
 }
