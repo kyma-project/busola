@@ -31,25 +31,24 @@ const ERRORS = {
 export default function CreateLambdaForm({
   onChange,
   formElementRef,
-  isValid = false,
-  setValidity = () => void 0,
+  isValid = true,
+  setValid = () => void 0,
   setInvalidModalPopupMessage = () => void 0,
   repositories = [],
 }) {
   const { namespaceId: namespace } = useMicrofrontendContext();
   const createLambda = useCreateLambda({ redirect: true });
-  const [errors, setErrors] = useState([]);
 
+  const [errors, setErrors] = useState([]);
   const [nameStatus, setNameStatus] = useState('');
   const [name, setName] = useState(randomNameGenerator());
-
   const [labels, setLabels] = useState({});
-
-  const [runtime, setRuntime] = React.useState(nodejs14);
-  const [sourceType, setSourceType] = React.useState('');
-  const [repositoryName, setRepositoryName] = React.useState(
+  const [runtime, setRuntime] = useState(nodejs14);
+  const [sourceType, setSourceType] = useState('');
+  const [repositoryName, setRepositoryName] = useState(
     repositories.length ? repositories[0].metadata.name : '',
   );
+
   const referenceRef = useRef('');
   const baseDirRef = useRef('');
 
@@ -66,18 +65,17 @@ export default function CreateLambdaForm({
   useEffect(() => {
     if (isValid && errors.length) {
       setInvalidModalPopupMessage(LAMBDAS_LIST.CREATE_MODAL.ERRORS.INVALID);
-      setValidity(false);
+      setValid(false);
     } else if (!isValid && !errors.length) {
       setInvalidModalPopupMessage('');
-      setValidity(true);
+      setValid(true);
     }
-  }, [isValid, errors, setValidity, setInvalidModalPopupMessage]);
+  }, [isValid, errors, setValid, setInvalidModalPopupMessage]);
 
   useEffect(() => {
     if (sourceType) {
       if (!repositories.length) {
         addError(ERRORS.REPOSITORY_URL);
-        setValidity(false);
         setInvalidModalPopupMessage(
           LAMBDAS_LIST.CREATE_MODAL.ERRORS.NO_REPOSITORY_FOUND,
         );
@@ -90,7 +88,6 @@ export default function CreateLambdaForm({
     sourceType,
     setInvalidModalPopupMessage,
     repositories,
-    setValidity,
     addError,
     removeError,
   ]);
@@ -102,7 +99,7 @@ export default function CreateLambdaForm({
     );
     if (validationMessage) {
       setNameStatus(validationMessage);
-      addError(ERRORS.NAME);
+      // addError(ERRORS.NAME);
       return;
     }
     setNameStatus('');
@@ -243,7 +240,7 @@ export default function CreateLambdaForm({
                 LAMBDAS_LIST.CREATE_MODAL.INPUTS.REFERENCE.INLINE_HELP
               }
               id="reference"
-              firstValue={'master'}
+              firstValue={'main'}
               placeholder={
                 LAMBDAS_LIST.CREATE_MODAL.INPUTS.REFERENCE.PLACEHOLDER
               }
