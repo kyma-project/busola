@@ -49,7 +49,7 @@ export const useUpdateLambda = ({
       }
 
       notificationManager.notifySuccess({
-        content: 'Lambda updated',
+        content: 'Function updated',
       });
       userCallback({ ok: true });
     } catch (err) {

@@ -5,26 +5,13 @@ import CreateLambdaModal from 'components/Lambdas/LambdasList/Lambdas/CreateLamb
 
 export default function CreateNewFunction({ namespaceName }) {
   const {
-    data: functions,
-    error: functionsError,
-    loading: functionsLoading = true,
-  } = useGetList()(
-    `/apis/serverless.kyma-project.io/v1alpha1/namespaces/${namespaceName}/functions`,
-    { pollingInterval: 5000 },
-  );
-
-  const {
     data: repositories,
     error: repositoriesError,
     loading: repositoriesLoading = true,
   } = useGetList()(
     `/apis/serverless.kyma-project.io/v1alpha1/namespaces/${namespaceName}/gitrepositories`,
-    { pollingInterval: 5000 },
+    { pollingInterval: 10000 },
   );
-
-  const functionNames = (functions || []).map(fn => fn.metadata.name);
-  const serverDataError = functionsError || repositoriesError;
-  const serverDataLoading = functionsLoading || repositoriesLoading;
 
   const control = (
     <Button option="transparent" className="fd-margin-end--tiny" glyph="add">
@@ -34,10 +21,9 @@ export default function CreateNewFunction({ namespaceName }) {
 
   return (
     <CreateLambdaModal
-      functionNames={functionNames}
       repositories={repositories || []}
-      serverDataError={serverDataError}
-      serverDataLoading={serverDataLoading}
+      serverDataError={repositoriesError}
+      serverDataLoading={repositoriesLoading}
       modalOpeningComponent={control}
     />
   );

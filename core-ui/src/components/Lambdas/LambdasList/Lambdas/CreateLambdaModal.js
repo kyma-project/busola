@@ -2,13 +2,12 @@ import React, { useState } from 'react';
 
 import { Button } from 'fundamental-react';
 
-import ModalWithForm from 'components/ModalWithForm/ModalWithForm';
+import { ModalWithForm } from 'react-shared';
 import CreateLambdaForm from './CreateLambdaForm';
 
 import { LAMBDAS_LIST } from 'components/Lambdas/constants';
 
 export default function CreateLambdaModal({
-  functionNames = [],
   repositories = [],
   serverDataError,
   serverDataLoading,
@@ -39,7 +38,6 @@ export default function CreateLambdaModal({
       renderForm={props => (
         <CreateLambdaForm
           {...props}
-          functionNames={functionNames}
           repositories={repositories}
           setInvalidModalPopupMessage={setInvalidModalPopupMessage}
         />

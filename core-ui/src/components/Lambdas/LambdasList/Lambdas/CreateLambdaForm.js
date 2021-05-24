@@ -34,7 +34,6 @@ export default function CreateLambdaForm({
   isValid = false,
   setValidity = () => void 0,
   setInvalidModalPopupMessage = () => void 0,
-  functionNames = [],
   repositories = [],
 }) {
   const { namespaceId: namespace } = useMicrofrontendContext();
@@ -68,18 +67,11 @@ export default function CreateLambdaForm({
     if (isValid && errors.length) {
       setInvalidModalPopupMessage(LAMBDAS_LIST.CREATE_MODAL.ERRORS.INVALID);
       setValidity(false);
-    }
-  }, [isValid, errors, setValidity, setInvalidModalPopupMessage]);
-
-  useEffect(() => {
-    if (errors.length) {
-      setInvalidModalPopupMessage(LAMBDAS_LIST.CREATE_MODAL.ERRORS.INVALID);
-      setValidity(false);
-    } else {
+    } else if (!isValid && !errors.length) {
       setInvalidModalPopupMessage('');
       setValidity(true);
     }
-  }, [errors, setValidity, setInvalidModalPopupMessage]);
+  }, [isValid, errors, setValidity, setInvalidModalPopupMessage]);
 
   useEffect(() => {
     if (sourceType) {
@@ -89,13 +81,12 @@ export default function CreateLambdaForm({
         setInvalidModalPopupMessage(
           LAMBDAS_LIST.CREATE_MODAL.ERRORS.NO_REPOSITORY_FOUND,
         );
-      } else {
-        addError(ERRORS.REFERENCE, ERRORS.BASE_DIR);
       }
-    } else {
+    } else if (errors && errors.length) {
       removeError(ERRORS.REPOSITORY_URL, ERRORS.REFERENCE, ERRORS.BASE_DIR);
     }
   }, [
+    errors,
     sourceType,
     setInvalidModalPopupMessage,
     repositories,
@@ -107,7 +98,6 @@ export default function CreateLambdaForm({
   useEffect(() => {
     const validationMessage = validateResourceName(
       name,
-      functionNames,
       LAMBDAS_LIST.CREATE_MODAL.INPUTS.NAME.ERRORS,
     );
     if (validationMessage) {
@@ -117,7 +107,7 @@ export default function CreateLambdaForm({
     }
     setNameStatus('');
     removeError(ERRORS.NAME);
-  }, [setNameStatus, functionNames, name, addError, removeError]);
+  }, [setNameStatus, name, addError, removeError]);
 
   function validateReference(reference, setStatus) {
     if (!reference) {
