@@ -23,7 +23,7 @@ Cypress.Commands.add('getModalBody', () => {
 
   return (
     cy
-      .get('.iframeModalCtn iframe', { log: false })
+      .get('.iframeModalCtn iframe', { log: false, timeout: 6000 })
       .filter(':visible')
       .its('0.contentDocument.body', { log: false })
       .should('not.be.empty')
