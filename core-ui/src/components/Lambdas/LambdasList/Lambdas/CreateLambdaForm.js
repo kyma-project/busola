@@ -80,11 +80,10 @@ export default function CreateLambdaForm({
           LAMBDAS_LIST.CREATE_MODAL.ERRORS.NO_REPOSITORY_FOUND,
         );
       }
-    } else if (errors && errors.length) {
+    } else {
       removeError(ERRORS.REPOSITORY_URL, ERRORS.REFERENCE, ERRORS.BASE_DIR);
     }
   }, [
-    errors,
     sourceType,
     setInvalidModalPopupMessage,
     repositories,
@@ -100,7 +99,7 @@ export default function CreateLambdaForm({
     );
     if (validationMessage) {
       setNameStatus(validationMessage);
-      // addError(ERRORS.NAME);
+      addError(ERRORS.NAME);
       return;
     }
     setNameStatus('');
