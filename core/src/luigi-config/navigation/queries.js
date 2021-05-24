@@ -13,7 +13,7 @@ export async function failFastFetch(input, auth, init = {}) {
     ) {
       return {
         'X-Client-Certificate-Data': auth['client-certificate-data'],
-        'X-Client-Key-Data': auth['client-key-data'],
+        'X-Client-Key-Data': auth['client-key-data']
       };
     } else {
       throw Error('No available data to authenticate the request.');
@@ -27,7 +27,7 @@ export async function failFastFetch(input, auth, init = {}) {
       'Content-Type': 'application/json',
       'X-Cluster-Url': cluster?.server,
       'X-Cluster-Certificate-Authority-Data':
-        cluster && cluster['certificate-authority-data'],
+        cluster && cluster['certificate-authority-data']
     };
   }
 
@@ -55,37 +55,37 @@ export function fetchPermissions(auth) {
   const ssrr = {
     typeMeta: {
       kind: 'SelfSubjectRulesReview',
-      aPIVersion: 'authorization.k8s.io/v1',
+      aPIVersion: 'authorization.k8s.io/v1'
     },
-    spec: { namespace: '*' },
+    spec: { namespace: '*' }
   };
 
   const ssrUrl = `${config.backendApiUrl}/apis/authorization.k8s.io/v1/selfsubjectrulesreviews`;
   return failFastFetch(ssrUrl, auth, {
     method: 'POST',
-    body: JSON.stringify(ssrr),
+    body: JSON.stringify(ssrr)
   })
-    .then((res) => res.json())
-    .then((res) => res.status.resourceRules);
+    .then(res => res.json())
+    .then(res => res.status.resourceRules);
 }
 
 export function fetchBusolaInitData(auth) {
   const crdsUrl = `${config.backendApiUrl}/apis/apiextensions.k8s.io/v1/customresourcedefinitions`;
   const crdsQuery = failFastFetch(crdsUrl, auth)
-    .then((res) => res.json())
-    .then((data) => ({ crds: data.items.map((crd) => crd.metadata) }));
+    .then(res => res.json())
+    .then(data => ({ crds: data.items.map(crd => crd.metadata) }));
 
   const apiPathsQuery = failFastFetch(config.backendApiUrl, auth)
-    .then((res) => res.json())
-    .then((data) => ({ apiPaths: data.paths }));
+    .then(res => res.json())
+    .then(data => ({ apiPaths: data.paths }));
 
   const promises = [crdsQuery, apiPathsQuery];
 
-  return Promise.all(promises).then((res) => Object.assign(...res));
+  return Promise.all(promises).then(res => Object.assign(...res));
 }
 
 export function fetchNamespaces(auth) {
   return failFastFetch(`${config.backendApiUrl}/api/v1/namespaces/`, auth)
-    .then((res) => res.json())
-    .then((list) => list.items.map((ns) => ns.metadata));
+    .then(res => res.json())
+    .then(list => list.items.map(ns => ns.metadata));
 }

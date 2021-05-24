@@ -5,7 +5,7 @@ import {
   saveActiveClusterName,
   getActiveClusterName,
   getActiveCluster,
-  setCluster,
+  setCluster
 } from './cluster-management';
 import { clearAuthData } from './auth/auth-storage';
 import { reloadNavigation } from './navigation/navigation-data-init';
@@ -23,8 +23,8 @@ export const communication = {
         ...params,
         features: {
           ...params.features,
-          bebEnabled,
-        },
+          bebEnabled
+        }
       });
       updateClusterContext({ bebEnabled });
     },
@@ -39,7 +39,7 @@ export const communication = {
       const currentParams = convertToObject(paramsString);
 
       // remove params explicitly marked for removal
-      Object.keys(newParams).forEach((key) => {
+      Object.keys(newParams).forEach(key => {
         if (newParams[key] === undefined) {
           delete currentParams[key];
           delete newParams[key];
@@ -48,7 +48,7 @@ export const communication = {
 
       const newParamsString = convertToURLsearch({
         ...currentParams,
-        ...newParams,
+        ...newParams
       });
 
       window.history.replaceState(
@@ -81,34 +81,34 @@ export const communication = {
         id: 'busola.showMessage',
         message,
         tittle,
-        type,
+        type
       });
-    },
-  },
+    }
+  }
 };
 
-const convertToURLsearch = (params) => {
+const convertToURLsearch = params => {
   const a = Object.keys(params).map(
-    (k) => NODE_PARAM_PREFIX + k + '=' + params[k]
+    k => NODE_PARAM_PREFIX + k + '=' + params[k]
   );
   return '?' + a.join('&');
 };
 
-const convertToObject = (paramsString) => {
+const convertToObject = paramsString => {
   let result = {};
   paramsString
     .replace('?', '')
     .split('&')
-    .forEach((p) => {
+    .forEach(p => {
       const [key, val] = p.replace(NODE_PARAM_PREFIX, '').split('=');
       if (key) result[key] = val;
     });
   return result;
 };
 
-const updateClusterContext = (newContext) => {
+const updateClusterContext = newContext => {
   const nodes = Luigi.getConfig().navigation.nodes;
-  const clusterNode = nodes.find((n) => n.pathSegment === 'cluster');
+  const clusterNode = nodes.find(n => n.pathSegment === 'cluster');
   clusterNode.context = { ...clusterNode.context, ...newContext };
   Luigi.configChanged('navigation.nodes');
 };

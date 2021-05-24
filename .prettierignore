@@ -87,3 +87,5 @@ backend/backend-production.*
 
 # monaco editor
 **/vs/loader.js 
+
+core/src/assets/**

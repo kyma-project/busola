@@ -5,45 +5,45 @@ import rbacRulesMatched from './../rbac-rules-matcher';
 const allowEverything = {
   apiGroups: ['*'],
   resources: ['*'],
-  verbs: ['*'],
+  verbs: ['*']
 };
 
 const allowGetListWatchAB = {
   apiGroups: ['groupA', 'groupB'],
   resources: ['resourceA', 'resourceB'],
-  verbs: ['get', 'list', 'watch'],
+  verbs: ['get', 'list', 'watch']
 };
 
 const allowGetListWatchA = {
   apiGroups: ['groupA'],
   resources: ['resourceA'],
-  verbs: ['get', 'list', 'watch'],
+  verbs: ['get', 'list', 'watch']
 };
 
 const allowUpdateA = {
   apiGroups: ['groupA'],
   resources: ['resourceA'],
-  verbs: ['update'],
+  verbs: ['update']
 };
 
 // Permission Requiremenst
 
 const groupA_resourceA = {
   apiGroup: 'groupA',
-  resource: 'resourceA',
+  resource: 'resourceA'
 };
 
 const groupB_resourceB = {
   apiGroup: 'groupB',
-  resource: 'resourceB',
+  resource: 'resourceB'
 };
 
-const require = (verbs) => {
+const require = verbs => {
   return {
     verbs,
-    from: (resource) => {
+    from: resource => {
       return Object.assign({ verbs }, resource);
-    },
+    }
   };
 };
 
@@ -81,7 +81,7 @@ describe('rbacRulesMatched', () => {
         rbacRulesMatched(
           [
             require(['get']).from(groupA_resourceA),
-            require(['maskopatol']).from({ apiGroup: 'foo', resource: 'bar' }),
+            require(['maskopatol']).from({ apiGroup: 'foo', resource: 'bar' })
           ],
           [allowEverything]
         )
@@ -96,8 +96,8 @@ describe('rbacRulesMatched', () => {
             {
               apiGroups: ['groupA'],
               resources: ['*'],
-              verbs: ['*'],
-            },
+              verbs: ['*']
+            }
           ]
         )
       ).toBe(false);
@@ -111,8 +111,8 @@ describe('rbacRulesMatched', () => {
             {
               apiGroups: ['groupA'],
               resources: ['*'],
-              verbs: ['*'],
-            },
+              verbs: ['*']
+            }
           ]
         )
       ).toBe(true);
@@ -172,8 +172,8 @@ describe('rbacRulesMatched', () => {
             {
               apiGroups: ['groupA'],
               resources: ['resourceA'],
-              verbs: ['delete'],
-            },
+              verbs: ['delete']
+            }
           ]
         )
       ).toBe(false);
@@ -206,7 +206,7 @@ describe('rbacRulesMatched', () => {
         rbacRulesMatched(
           [
             require(['update']).from(groupA_resourceA),
-            require(['get']).from(groupA_resourceA),
+            require(['get']).from(groupA_resourceA)
           ],
           [allowGetListWatchA]
         )
@@ -218,7 +218,7 @@ describe('rbacRulesMatched', () => {
         rbacRulesMatched(
           [
             require(['update']).from(groupA_resourceA),
-            require(['get']).from(groupA_resourceA),
+            require(['get']).from(groupA_resourceA)
           ],
           [allowGetListWatchA, allowUpdateA]
         )
@@ -230,7 +230,7 @@ describe('rbacRulesMatched', () => {
         rbacRulesMatched(
           [
             require(['get', 'list']).from(groupA_resourceA),
-            require(['get']).from(groupB_resourceB),
+            require(['get']).from(groupB_resourceB)
           ],
           [allowGetListWatchA]
         )
@@ -242,7 +242,7 @@ describe('rbacRulesMatched', () => {
         rbacRulesMatched(
           [
             require(['get', 'list']).from(groupA_resourceA),
-            require(['get']).from(groupB_resourceB),
+            require(['get']).from(groupB_resourceB)
           ],
           [allowGetListWatchAB]
         )
@@ -254,14 +254,14 @@ describe('rbacRulesMatched', () => {
         rbacRulesMatched(
           [
             require(['delete']).from(groupA_resourceA),
-            require(['delete']).from(groupB_resourceB),
+            require(['delete']).from(groupB_resourceB)
           ],
           [
             {
               apiGroups: ['groupA'],
               resources: ['resourceA', 'resourceB'],
-              verbs: ['delete'],
-            },
+              verbs: ['delete']
+            }
           ]
         )
       ).toBe(false);
@@ -272,19 +272,19 @@ describe('rbacRulesMatched', () => {
         rbacRulesMatched(
           [
             require(['create']).from(groupA_resourceA),
-            require(['delete']).from(groupB_resourceB),
+            require(['delete']).from(groupB_resourceB)
           ],
           [
             {
               apiGroups: ['groupA'],
               resources: ['resourceA'],
-              verbs: ['delete'],
+              verbs: ['delete']
             },
             {
               apiGroups: ['groupB'],
               resources: ['resourceB'],
-              verbs: ['create'],
-            },
+              verbs: ['create']
+            }
           ]
         )
       ).toBe(false);
