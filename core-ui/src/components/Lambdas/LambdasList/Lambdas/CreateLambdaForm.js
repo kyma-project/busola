@@ -92,7 +92,8 @@ export default function CreateLambdaForm({
     removeError,
   ]);
 
-  useEffect(() => {
+  function validateName(name) {
+    setName(name);
     const validationMessage = validateResourceName(
       name,
       LAMBDAS_LIST.CREATE_MODAL.INPUTS.NAME.ERRORS,
@@ -104,7 +105,7 @@ export default function CreateLambdaForm({
     }
     setNameStatus('');
     removeError(ERRORS.NAME);
-  }, [setNameStatus, name, addError, removeError]);
+  }
 
   function validateReference(reference, setStatus) {
     if (!reference) {
@@ -187,7 +188,7 @@ export default function CreateLambdaForm({
         id="lambdaName"
         kind="Function"
         value={name}
-        onChange={e => setName(e.target.value)}
+        onChange={e => validateName(e.target.value)}
         nameStatus={nameStatus}
       />
 
