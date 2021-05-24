@@ -58,10 +58,6 @@ context('Busola - In-cluster eventing flow', () => {
   });
 
   it('Get Host value for the API Rule', () => {
-    cy.getLeftNav()
-      .contains('API Rules')
-      .click();
-
     cy.getIframeBody()
       .find('tbody>tr')
       .within($tr => {
