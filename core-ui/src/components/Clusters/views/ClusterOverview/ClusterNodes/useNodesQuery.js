@@ -34,12 +34,12 @@ export function useNodesQuery() {
   React.useEffect(() => {
     if (nodes && nodeMetrics) {
       const getNodeMetrics = n => {
-        const metrics = nodeMetrics.items.find(
-          nM => n.metadata.name === nM.metadata.name,
+        const metricsForNode = nodeMetrics.items.find(
+          metrics => n.metadata.name === metrics.metadata.name,
         );
 
-        const cpuUsage = formatCpu(metrics?.usage.cpu);
-        const memoryUsage = formatMemory(metrics?.usage.memory);
+        const cpuUsage = formatCpu(metricsForNode?.usage.cpu);
+        const memoryUsage = formatMemory(metricsForNode?.usage.memory);
         const allocatableCpu = parseInt(n.status.allocatable?.cpu || '0');
         const allocatableMemory = formatMemory(n.status.allocatable?.memory);
 

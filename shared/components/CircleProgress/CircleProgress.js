@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from 'fundamental-react';
+import { Tooltip } from './../Tooltip/Tooltip';
 import classNames from 'classnames';
 import './CircleProgress.scss';
 
@@ -10,6 +11,13 @@ const isInErrorState = (percent, max, reversed) => {
   }
 
   return max > 0 && percent < 33;
+};
+
+const TooltipWrapper = ({ tooltipProps, children }) => {
+  if (tooltipProps?.content) {
+    return <Tooltip {...tooltipProps}>{children}</Tooltip>;
+  }
+  return children;
 };
 
 export const CircleProgress = ({
@@ -22,6 +30,7 @@ export const CircleProgress = ({
   onClick,
   title,
   reversed = false,
+  tooltip,
 }) => {
   const percent = max ? Math.round((value * 100) / max) : 0;
 
@@ -54,22 +63,29 @@ export const CircleProgress = ({
   };
 
   return (
-    <div className={circleProgressClasses} onClick={onClick}>
-      <span className="title" style={titleStyle}>
-        {isInErrorState(percent, max, reversed) && (
-          <Icon size="s" className="fd-margin-end--tiny" glyph="error" />
-        )}
-        {title}
-      </span>
-      <div className="circle__container" style={containerStyle}>
-        <div className="value-indicator" style={valueIndicatorStyle}></div>
-        <div className="inner-area">
-          <div className={circleInnerClasses} style={innerStyle}>
-            {text}
+    <TooltipWrapper tooltipProps={tooltip}>
+      <div className={circleProgressClasses} onClick={onClick}>
+        <span className="title" style={titleStyle}>
+          {isInErrorState(percent, max, reversed) && (
+            <Icon
+              size="s"
+              className="fd-margin-end--tiny"
+              glyph="error"
+              ariaLabel="Error state icon"
+            />
+          )}
+          {title}
+        </span>
+        <div className="circle__container" style={containerStyle}>
+          <div className="value-indicator" style={valueIndicatorStyle}></div>
+          <div className="inner-area">
+            <div className={circleInnerClasses} style={innerStyle}>
+              {text}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </TooltipWrapper>
   );
 };
 

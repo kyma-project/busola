@@ -4,10 +4,10 @@ import { useNodesQuery } from './useNodesQuery';
 import { NodeDetails } from './NodeDetails';
 import './ClusterNodes.scss';
 
+const Message = ({ content }) => <p className="body-fallback">{content}</p>;
+
 export function ClusterNodes() {
   const { nodes, error, loading } = useNodesQuery();
-
-  const Message = ({ content }) => <p className="body-fallback">{content}</p>;
 
   return (
     <LayoutPanel className="fd-margin--md">

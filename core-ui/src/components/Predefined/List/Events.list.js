@@ -3,7 +3,6 @@ import {
   GenericList,
   useGetList,
   ReadableCreationTimestamp,
-  useWindowTitle,
 } from 'react-shared';
 
 export const EventsList = ({ ...otherParams }) => {
