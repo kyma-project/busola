@@ -64,14 +64,14 @@
     "react-test-renderer": "^16.9.0",
     "waait": "^1.0.5",
     "webpack-cli": "^3.3.5",
-    "json-url": "^2.6.0"
+    "json-url": "^2.6.0",
+    "prettier": "^1.18.2"
   },
   "optionalDependencies": {
     "husky": "^2.4.1",
     "lerna": "^3.15.0",
     "lint-staged": "^10.4.0",
-    "markdownlint-cli": "^0.17.0",
-    "prettier": "^2.3.0"
+    "markdownlint-cli": "^0.17.0"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx,json,html,css,yaml}": [
