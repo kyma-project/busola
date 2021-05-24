@@ -8,7 +8,7 @@
     "start:kyma": "npm run start",
     "build": "npm run buildConfig",
     "test": "../node_modules/.bin/jest",
-    "lint-check": "prettier --config ./../.prettierrc --ignore-path ./../.prettierignore '**/*.{ts,tsx,js,jsx,json,html,css,yaml}'",
+    "lint-check": "prettier --config ./../.prettierrc --ignore-path ./../.prettierignore -c '**/*.{ts,tsx,js,jsx,json,html,css,yaml}'",
     "lint-fix": "prettier --config ./../.prettierrc --ignore-path ./../.prettierignore --write '**/*.{ts,tsx,js,jsx,json,html,css,yaml}'",
     "buildConfig": "webpack --mode production --config webpack.config.js",
     "buildConfig:watch": "webpack --config webpack.config.js --watch",
