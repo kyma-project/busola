@@ -34,12 +34,12 @@ context('Busola - Create a Function and access it', () => {
 
   it('Get Host value for the API Rule', () => {
     cy.getIframeBody()
+      .find('[role="status"]')
+      .should('have.text', 'OK');
+
+    cy.getIframeBody()
       .find('tbody>tr')
       .within($tr => {
-        cy.get('[role="status"]', { timeout: 60 * 1000 }).should(
-          'have.text',
-          'OK',
-        );
         cy.get(`a[href^="${API_RULE_HOST_EXPECTED_PREFIX}"]`)
           .should('exist')
           .then($link => {

@@ -12,6 +12,15 @@ const API_RULE_HOST_EXPECTED_PREFIX = `https://${API_RULE_HOST}.`;
 
 context('Busola - In-cluster eventing flow', () => {
   it('Create a Receiver Function', () => {
+    // Go to the details of namespace
+    cy.getIframeBody()
+      .contains('a', NAMESPACE_NAME)
+      .click({ force: true });
+
+    cy.getLeftNav()
+      .contains('Workloads')
+      .click();
+
     cy.createFunction(
       FUNCTION_NAME,
       'fixtures/in-cluster-eventing-receiver.js',
@@ -59,12 +68,12 @@ context('Busola - In-cluster eventing flow', () => {
 
   it('Get Host value for the API Rule', () => {
     cy.getIframeBody()
+      .find('[role="status"]')
+      .should('have.text', 'OK');
+
+    cy.getIframeBody()
       .find('tbody>tr')
       .within($tr => {
-        cy.get('[role="status"]', { timeout: 60 * 1000 }).should(
-          'have.text',
-          'OK',
-        );
         cy.get(`a[href^="${API_RULE_HOST_EXPECTED_PREFIX}"]`)
           .should('exist')
           .then($link => {
