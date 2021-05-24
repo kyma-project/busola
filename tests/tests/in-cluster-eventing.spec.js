@@ -63,6 +63,10 @@ context('Busola - In-cluster eventing flow', () => {
   });
 
   it('Create an API Rule for the publisher Function', () => {
+    cy.getLeftNav()
+      .contains('Discovery and Network')
+      .click();
+
     cy.createApiRule(API_RULE_AND_FUNCTION_NAME, API_RULE_HOST);
   });
 
