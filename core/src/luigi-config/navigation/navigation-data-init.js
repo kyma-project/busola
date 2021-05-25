@@ -86,11 +86,11 @@ function createClusterManagementNodes() {
   };
   const clusters = getClusters();
 
-  const notActiveCluster = (name) => name !== activeClusterName;
+  const notActiveCluster = name => name !== activeClusterName;
 
   const clusterNodes = Object.keys(clusters)
     .filter(notActiveCluster)
-    .map((clusterName) => ({
+    .map(clusterName => ({
       pathSegment: encodeURIComponent(clusterName),
       hideFromNav: true,
       onNodeActivation: async () => {
@@ -129,7 +129,7 @@ export async function createNavigation() {
         activeClusterName === clusterName
           ? `/cluster/${encodeURIComponent(clusterName)}`
           : `/set-cluster/${encodeURIComponent(clusterName)}`,
-    })
+    }),
   );
 
   const optionsForCurrentCluster = isClusterSelected
@@ -137,7 +137,7 @@ export async function createNavigation() {
         contextSwitcher: {
           defaultLabel: 'Select Namespace ...',
           parentNodePath: `/cluster/${encodeURIComponent(
-            activeClusterName
+            activeClusterName,
           )}/namespaces`, // absolute path
           lazyloadOptions: true, // load options on click instead on page load
           options: getNamespaces,
@@ -148,7 +148,7 @@ export async function createNavigation() {
               icon: 'settings',
               label: 'Preferences',
               link: `/cluster/${encodeURIComponent(
-                activeClusterName
+                activeClusterName,
               )}/preferences`,
             },
             {
@@ -163,7 +163,7 @@ export async function createNavigation() {
 
   return {
     preloadViewGroups: false,
-    nodeAccessibilityResolver: (node) =>
+    nodeAccessibilityResolver: node =>
       navigationPermissionChecker(node, selfSubjectRulesReview, crds),
     appSwitcher: {
       showMainAppEntry: false,
@@ -190,11 +190,11 @@ export async function createNavigation() {
 async function fetchNavigationData(authData, permissionSet) {
   if (hasWildcardPermission(permissionSet)) {
     const res = await fetchBusolaInitData(authData);
-    crds = res.crds.map((crd) => crd.name);
+    crds = res.crds.map(crd => crd.name);
     return { ...res, crds };
   } else {
     // as we may not be able to make CRDs call, apiGroups call shall suffice
-    const apiGroups = [...new Set(permissionSet.flatMap((p) => p.apiGroups))];
+    const apiGroups = [...new Set(permissionSet.flatMap(p => p.apiGroups))];
     crds = apiGroups;
     return { crds: apiGroups, apiPaths: null };
   }
@@ -208,7 +208,7 @@ export async function getNavigationData(authData) {
 
     const { crds, apiPaths } = await fetchNavigationData(
       authData,
-      permissionSet
+      permissionSet,
     );
     const params = getActiveCluster();
     const activeClusterName = params.cluster.name;
@@ -222,18 +222,18 @@ export async function getNavigationData(authData) {
         hideFromNav: true,
         onNodeActivation: () =>
           Luigi.navigation().navigate(
-            `/cluster/${encodeURIComponent(activeClusterName)}`
+            `/cluster/${encodeURIComponent(activeClusterName)}`,
           ),
         children: [
           {
             navigationContext: 'cluster',
             pathSegment: encodeURIComponent(activeClusterName),
-            children: function () {
+            children: function() {
               const staticNodes = getStaticRootNodes(
                 getChildrenNodesForNamespace,
                 apiPaths,
                 permissionSet,
-                modules
+                modules,
               );
               const externalNodes = addExternalNodes(navigation.externalNodes);
               const allNodes = [...staticNodes, ...externalNodes];
@@ -260,7 +260,7 @@ export async function getNavigationData(authData) {
     if (err.statusCode === 403) {
       clearAuthData();
       saveLocation(
-        `/no-permissions?${NODE_PARAM_PREFIX}error=${err.originalMessage}`
+        `/no-permissions?${NODE_PARAM_PREFIX}error=${err.originalMessage}`,
       );
     } else {
       let errorNotification = 'Could not load initial configuration';
@@ -293,7 +293,7 @@ async function getNamespaces() {
     return [];
   }
   if (!shouldShowSystemNamespaces()) {
-    namespaces = namespaces.filter((ns) => !systemNamespaces.includes(ns.name));
+    namespaces = namespaces.filter(ns => !systemNamespaces.includes(ns.name));
   }
   return createNamespacesList(namespaces);
 }
@@ -303,7 +303,7 @@ function getChildrenNodesForNamespace(apiPaths, permissionSet) {
   const staticNodes = getStaticChildrenNodesForNamespace(
     apiPaths,
     permissionSet,
-    modules
+    modules,
   );
 
   hideDisabledNodes(navigation.disabledNodes, staticNodes, true);

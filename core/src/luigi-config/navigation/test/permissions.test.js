@@ -9,7 +9,7 @@ describe('hasPermissionsFor', () => {
     expect(
       hasPermissionsFor('exact-group-name', 'exact-resource', [
         exactPermissions,
-      ])
+      ]),
     ).toBe(true);
   });
 
@@ -21,7 +21,7 @@ describe('hasPermissionsFor', () => {
     expect(
       hasPermissionsFor('api-group', 'exact-resource', [
         wildcardResourcesPermissions,
-      ])
+      ]),
     ).toBe(true);
   });
 
@@ -31,7 +31,7 @@ describe('hasPermissionsFor', () => {
       resources: ['resource'],
     };
     expect(
-      hasPermissionsFor('api-group', 'resource', [wildcardApiGroupPermissions])
+      hasPermissionsFor('api-group', 'resource', [wildcardApiGroupPermissions]),
     ).toBe(true);
   });
 
@@ -51,7 +51,7 @@ describe('hasPermissionsFor', () => {
       },
     ];
     expect(hasPermissionsFor('api-group', 'resource', permissionSet)).toBe(
-      false
+      false,
     );
   });
 });
