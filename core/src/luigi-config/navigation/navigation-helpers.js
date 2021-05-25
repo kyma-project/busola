@@ -2,13 +2,19 @@ export const hideDisabledNodes = (disabledNavNodes, nodes, inNamespace) => {
   if (disabledNavNodes !== null && disabledNavNodes !== undefined) {
     const disabledNavNodesArray = disabledNavNodes.split(' ');
     if (disabledNavNodesArray && disabledNavNodesArray.length > 0) {
-      nodes.forEach((node) => {
+      nodes.forEach(node => {
         // namespace node have pattern 'namespace.category.label' or 'namespace.label' if doesn't have category
         // cluster node have pattern 'category.label' or 'label' if doesn't have category
         const nodeCategory = node.category
           ? node.category.label
-            ? node.category.label.split(' ').join('').toLowerCase()
-            : node.category.split(' ').join('').toLowerCase()
+            ? node.category.label
+                .split(' ')
+                .join('')
+                .toLowerCase()
+            : node.category
+                .split(' ')
+                .join('')
+                .toLowerCase()
           : '';
         const categoryId = inNamespace
           ? nodeCategory
@@ -17,13 +23,16 @@ export const hideDisabledNodes = (disabledNavNodes, nodes, inNamespace) => {
           : nodeCategory;
 
         const nodeLabel = node.label
-          ? node.label.split(/ |-/).join('').toLowerCase()
+          ? node.label
+              .split(/ |-/)
+              .join('')
+              .toLowerCase()
           : '';
         const nodeId = `${categoryId}${
           categoryId && nodeLabel ? '.' : ''
         }${nodeLabel}`;
 
-        const shouldBeDisabled = (element) =>
+        const shouldBeDisabled = element =>
           element && (element === categoryId || element === nodeId);
         node.hideFromNav =
           disabledNavNodesArray.some(shouldBeDisabled) || node.hideFromNav;
@@ -46,10 +55,10 @@ export function createNamespacesList(rawNamespaceNames) {
     .sort((namespaceA, namespaceB) => {
       return namespaceA.name.localeCompare(namespaceB.name);
     })
-    .map((namespace) => {
+    .map(namespace => {
       const namespaceName = namespace.name;
       const alternativeLocation = getCorrespondingNamespaceLocation(
-        namespaceName
+        namespaceName,
       );
       namespaces.push({
         category: 'Namespaces',
@@ -60,11 +69,11 @@ export function createNamespacesList(rawNamespaceNames) {
   return namespaces;
 }
 
-export const addExternalNodes = (externalNodes) => {
+export const addExternalNodes = externalNodes => {
   if (!externalNodes || externalNodes.length === 0) return [];
   let navigationNodes = [];
 
-  externalNodes.forEach((node) => {
+  externalNodes.forEach(node => {
     const { category = 'External Links', icon = 'action', children } = node;
     if (!children || children.length === 0) return;
     navigationNodes = [
@@ -80,7 +89,7 @@ export const addExternalNodes = (externalNodes) => {
       },
     ];
 
-    children.forEach((child) => {
+    children.forEach(child => {
       const { label, link } = child;
       navigationNodes = [
         ...navigationNodes,

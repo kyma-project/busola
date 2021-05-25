@@ -187,7 +187,7 @@ describe('CreateLambdaModal + CreateLambdaForm', () => {
   //     const baseDir = document.querySelector('#baseDir');
 
   //     await wait(() => {
-  //       expect(reference).toHaveValue('master');
+  //       expect(reference).toHaveValue('main');
   //       expect(baseDir).toHaveValue('/');
 
   //       button = getByText(createButton);

@@ -38,7 +38,7 @@ export async function saveInitParamsIfPresent() {
   if (initParams) {
     const decoded = await encoder.decompress(initParams);
     const systemNamespaces = createSystemNamespacesList(
-      decoded.config?.systemNamespaces
+      decoded.config?.systemNamespaces,
     );
     const params = {
       ...decoded,
@@ -65,7 +65,7 @@ export async function saveInitParamsIfPresent() {
     if (!params.cluster.name) {
       params.cluster.name = params.cluster.server.replace(
         /^https?:\/\/(api\.)?/,
-        ''
+        '',
       );
     }
 

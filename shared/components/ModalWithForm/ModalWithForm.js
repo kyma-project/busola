@@ -194,6 +194,7 @@ export const ModalWithForm = ({
             setValid(formElementRef.current.checkValidity());
             setCustomValid(isValid);
           },
+          setValid: setValid,
           onChange: handleFormChanged,
           onError: handleFormError,
           onCompleted: handleFormSuccess,

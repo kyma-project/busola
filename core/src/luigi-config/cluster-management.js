@@ -36,7 +36,7 @@ export async function setCluster(clusterName) {
   }
 
   Luigi.navigation().navigate(
-    `/cluster/${encodeURIComponent(clusterName)}/namespaces`
+    `/cluster/${encodeURIComponent(clusterName)}/namespaces`,
   );
 }
 
@@ -79,7 +79,7 @@ export async function deleteActiveCluster() {
   Luigi.navigation().navigate('/clusters');
   // even though we navigate to /clusters, Luigi complains it can't find
   // current cluster path in navigation - skip a frame to fix it
-  await new Promise((resolve) => setTimeout(resolve));
+  await new Promise(resolve => setTimeout(resolve));
   await reloadNavigation();
 }
 
