@@ -20,7 +20,7 @@ Cypress.Commands.add('getModalBody', () => {
   // get the iframe > document > body
   // and retry until the body element is not empty
   cy.log('getModalBody');
-
+  cy.wait(600);
   return (
     cy
       .get('.iframeModalCtn iframe', { log: false, timeout: 10000 })
