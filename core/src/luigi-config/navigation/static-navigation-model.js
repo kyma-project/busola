@@ -725,6 +725,13 @@ export function getStaticRootNodes(
         },
       ],
     },
+    {
+      pathSegment: 'overview',
+      label: 'Cluster Overview',
+      icon: 'database',
+      viewUrl: config.coreUIModuleUrl + '/overview',
+      viewGroup: coreUIViewGroupName,
+    },
 
     //INTEGRATION CATEGORY
     {
