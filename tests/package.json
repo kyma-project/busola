@@ -10,6 +10,6 @@
     "cypress-file-upload": "^5.0.7"
   },
   "optionalDependencies": {
-    "cypress": "^7.3.0"
+    "cypress": "^7.4.0"
   }
 }
