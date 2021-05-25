@@ -1,13 +1,14 @@
 import React from 'react';
 import { CircleProgress } from 'react-shared';
 import { LayoutPanel } from 'fundamental-react';
+import './NodeResources.scss';
 
-export function NodeDetails({ name, cpu, memory }) {
+export function NodeResources({ metrics, headerContent }) {
+  const { cpu, memory } = metrics;
+
   return (
-    <LayoutPanel>
-      <LayoutPanel.Header>
-        <LayoutPanel.Head title={name} />
-      </LayoutPanel.Header>
+    <LayoutPanel className="node-resources">
+      <LayoutPanel.Header>{headerContent}</LayoutPanel.Header>
       <LayoutPanel.Body>
         <CircleProgress
           color="var(--sapIndicationColor_7)"

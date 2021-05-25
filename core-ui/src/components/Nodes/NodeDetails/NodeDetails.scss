@@ -1,0 +1,21 @@
+.node-details {
+  .panels > * {
+    margin: 32px;
+  }
+
+  @media (min-width: 700px) {
+    .panels {
+      display: flex;
+      justify-content: space-between;
+
+      & > * {
+        width: 100%;
+        margin-bottom: 0;
+      }
+
+      & > :first-child {
+        margin-right: 0;
+      }
+    }
+  }
+}
