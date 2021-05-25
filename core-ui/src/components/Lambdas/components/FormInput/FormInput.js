@@ -9,6 +9,7 @@ import {
   FormItem,
   FormLabel,
   FormInput as FioriFormInput,
+  MessageStrip,
 } from 'fundamental-react';
 import { Tooltip } from 'react-shared';
 
@@ -54,7 +55,7 @@ export const FormInput = forwardRef(
     }, [value, dirty, setStatus]);
 
     const validationMessage = status ? (
-      <span className="fd-has-color-status-3">{status}</span>
+      <MessageStrip type="error">{status}</MessageStrip>
     ) : null;
 
     return (
