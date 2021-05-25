@@ -71,7 +71,7 @@ context('Busola - Create a Deployment', () => {
 
   it('Check if deployment and service exist', () => {
     cy.getIframeBody()
-      .contains('a', DEPLOYMENT_NAME)
+      .contains('a', DEPLOYMENT_NAME, { timeout: 5000 })
       .should('be.visible');
 
     cy.getLeftNav()
@@ -80,12 +80,10 @@ context('Busola - Create a Deployment', () => {
 
     cy.getLeftNav()
       .find('[data-testid=services_services]')
-      .click()
-      .wait(1000);
+      .click();
 
     cy.getIframeBody()
-      .find('a')
-      .contains(DEPLOYMENT_NAME)
+      .contains('a', DEPLOYMENT_NAME)
       .should('be.visible');
 
     cy.getLeftNav()

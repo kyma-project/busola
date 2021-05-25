@@ -23,7 +23,7 @@ export function KubeconfigUpload({ setCluster, setShowingAuthForm }) {
     const clusterConfig = {
       ...decoded?.config,
       systemNamespaces: systemNamespacesList,
-      modules: { ...DEFAULT_MODULES, ...(decoded?.config?.modules || {}) },
+      modules: DEFAULT_MODULES,
     };
     return clusterConfig;
   };

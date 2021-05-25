@@ -45,7 +45,7 @@ export async function saveInitParamsIfPresent() {
       config: {
         ...decoded.config,
         systemNamespaces,
-        modules: { ...DEFAULT_MODULES, ...(decoded.config?.modules || {}) },
+        modules: DEFAULT_MODULES,
       },
     };
 
