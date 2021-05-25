@@ -31,26 +31,24 @@ const ERRORS = {
 export default function CreateLambdaForm({
   onChange,
   formElementRef,
-  isValid = false,
-  setValidity = () => void 0,
+  isValid = true,
+  setValid = () => void 0,
   setInvalidModalPopupMessage = () => void 0,
-  functionNames = [],
   repositories = [],
 }) {
   const { namespaceId: namespace } = useMicrofrontendContext();
   const createLambda = useCreateLambda({ redirect: true });
-  const [errors, setErrors] = useState([]);
 
+  const [errors, setErrors] = useState([]);
   const [nameStatus, setNameStatus] = useState('');
   const [name, setName] = useState(randomNameGenerator());
-
   const [labels, setLabels] = useState({});
-
-  const [runtime, setRuntime] = React.useState(nodejs14);
-  const [sourceType, setSourceType] = React.useState('');
-  const [repositoryName, setRepositoryName] = React.useState(
+  const [runtime, setRuntime] = useState(nodejs14);
+  const [sourceType, setSourceType] = useState('');
+  const [repositoryName, setRepositoryName] = useState(
     repositories.length ? repositories[0].metadata.name : '',
   );
+
   const referenceRef = useRef('');
   const baseDirRef = useRef('');
 
@@ -67,30 +65,20 @@ export default function CreateLambdaForm({
   useEffect(() => {
     if (isValid && errors.length) {
       setInvalidModalPopupMessage(LAMBDAS_LIST.CREATE_MODAL.ERRORS.INVALID);
-      setValidity(false);
-    }
-  }, [isValid, errors, setValidity, setInvalidModalPopupMessage]);
-
-  useEffect(() => {
-    if (errors.length) {
-      setInvalidModalPopupMessage(LAMBDAS_LIST.CREATE_MODAL.ERRORS.INVALID);
-      setValidity(false);
-    } else {
+      setValid(false);
+    } else if (!isValid && !errors.length) {
       setInvalidModalPopupMessage('');
-      setValidity(true);
+      setValid(true);
     }
-  }, [errors, setValidity, setInvalidModalPopupMessage]);
+  }, [isValid, errors, setValid, setInvalidModalPopupMessage]);
 
   useEffect(() => {
     if (sourceType) {
       if (!repositories.length) {
         addError(ERRORS.REPOSITORY_URL);
-        setValidity(false);
         setInvalidModalPopupMessage(
           LAMBDAS_LIST.CREATE_MODAL.ERRORS.NO_REPOSITORY_FOUND,
         );
-      } else {
-        addError(ERRORS.REFERENCE, ERRORS.BASE_DIR);
       }
     } else {
       removeError(ERRORS.REPOSITORY_URL, ERRORS.REFERENCE, ERRORS.BASE_DIR);
@@ -99,15 +87,14 @@ export default function CreateLambdaForm({
     sourceType,
     setInvalidModalPopupMessage,
     repositories,
-    setValidity,
     addError,
     removeError,
   ]);
 
-  useEffect(() => {
+  function validateName(name) {
+    setName(name);
     const validationMessage = validateResourceName(
       name,
-      functionNames,
       LAMBDAS_LIST.CREATE_MODAL.INPUTS.NAME.ERRORS,
     );
     if (validationMessage) {
@@ -117,7 +104,7 @@ export default function CreateLambdaForm({
     }
     setNameStatus('');
     removeError(ERRORS.NAME);
-  }, [setNameStatus, functionNames, name, addError, removeError]);
+  }
 
   function validateReference(reference, setStatus) {
     if (!reference) {
@@ -200,7 +187,7 @@ export default function CreateLambdaForm({
         id="lambdaName"
         kind="Function"
         value={name}
-        onChange={e => setName(e.target.value)}
+        onChange={e => validateName(e.target.value)}
         nameStatus={nameStatus}
       />
 
@@ -253,7 +240,7 @@ export default function CreateLambdaForm({
                 LAMBDAS_LIST.CREATE_MODAL.INPUTS.REFERENCE.INLINE_HELP
               }
               id="reference"
-              firstValue={'master'}
+              firstValue={'main'}
               placeholder={
                 LAMBDAS_LIST.CREATE_MODAL.INPUTS.REFERENCE.PLACEHOLDER
               }
