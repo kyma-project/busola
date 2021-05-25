@@ -31,7 +31,9 @@ async function luigiAfterInit() {
   loadSystemNamespacesToggle();
 
   if (!isClusterChoosen) {
-    Luigi.navigation().navigate('/clusters');
+    if (!window.location.pathname.startsWith('/clusters')) {
+      Luigi.navigation().navigate('/clusters');
+    }
   } else {
     if (params?.auth && getAuthData()) {
       await addClusterNodes();

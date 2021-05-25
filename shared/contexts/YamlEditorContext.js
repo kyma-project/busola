@@ -15,7 +15,7 @@ import copyToCliboard from 'copy-to-clipboard';
 import { saveAs } from 'file-saver';
 
 export const YamlEditorContext = createContext({
-  setEditedJson: _ => {},
+  setEditedYaml: _ => {},
 });
 
 const isValidYaml = yaml => {
@@ -28,14 +28,14 @@ const isValidYaml = yaml => {
   }
 };
 
-const YamlContent = ({ json, setChangedYamlFn }) => {
-  const [val, setVal] = useState(jsyaml.safeDump(json));
+const YamlContent = ({ yaml, setChangedYamlFn }) => {
+  const [val, setVal] = useState(jsyaml.safeDump(yaml));
 
   useEffect(() => {
-    const converted = jsyaml.safeDump(json);
+    const converted = jsyaml.safeDump(yaml);
     setChangedYamlFn(null);
     setVal(converted);
-  }, [json]);
+  }, [yaml]);
 
   return (
     <>
@@ -74,33 +74,37 @@ const YamlContent = ({ json, setChangedYamlFn }) => {
 };
 
 export const YamlEditorProvider = ({ children }) => {
-  const [json, setJson] = useState(null);
+  const [yaml, setYaml] = useState(null);
   const [isOpen, setOpen] = useState(false);
   const [changedYaml, setChangedYaml] = useState(null);
   const onSaveFn = useRef(_ => {});
 
   useEffect(() => {
     LuigiClient.uxManager().setDirtyStatus(false);
-    json && setOpen(true);
-  }, [json]);
+    yaml && setOpen(true);
+  }, [yaml]);
 
   useEffect(() => {
-    if (!isOpen) setJson(null);
+    if (!isOpen) setYaml(null);
   }, [isOpen]);
 
   useEffect(() => {
     LuigiClient.uxManager().setDirtyStatus(!!changedYaml);
   }, [changedYaml]);
 
-  function setEditedJson(newJson, onSaveHandler) {
+  function setEditedYaml(newYaml, onSaveHandler) {
     onSaveFn.current = onSaveHandler;
-    setJson(newJson);
+    setYaml(newYaml);
+  }
+
+  function closeEditor() {
+    setOpen(false);
   }
 
   async function handleSaveClick() {
     try {
       await onSaveFn.current(changedYaml);
-      setOpen(false);
+      closeEditor();
     } catch (_) {}
   }
 
@@ -130,12 +134,12 @@ export const YamlEditorProvider = ({ children }) => {
       bottomContent={bottomContent}
       hideDefaultButton={true}
     >
-      <YamlContent json={json} setChangedYamlFn={setChangedYaml} />
+      <YamlContent yaml={yaml} setChangedYamlFn={setChangedYaml} />
     </SideDrawer>
   );
 
   return (
-    <YamlEditorContext.Provider value={setEditedJson}>
+    <YamlEditorContext.Provider value={{ setEditedYaml, closeEditor }}>
       {drawerComponent}
       {children}
     </YamlEditorContext.Provider>

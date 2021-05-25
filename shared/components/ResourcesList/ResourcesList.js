@@ -89,13 +89,15 @@ function Resources({
   readOnly,
 }) {
   useWindowTitle(windowTitle || prettifyNamePlural(resourceName, resourceType));
-  const setEditedSpec = useYamlEditor();
+  const { setEditedYaml: setEditedSpec, closeEditor } = useYamlEditor();
   const notification = useNotification();
   const updateResourceMutation = useUpdate(resourceUrl);
   const deleteResourceMutation = useDelete(resourceUrl);
   const { loading = true, error, data: resources, silentRefetch } = useGetList(
     filter,
   )(resourceUrl, { pollingInterval: 3000 });
+
+  React.useEffect(() => closeEditor(), [namespace]);
 
   const prettifiedResourceName = prettifyNameSingular(
     resourceName,

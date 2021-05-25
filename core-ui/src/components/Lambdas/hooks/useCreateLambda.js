@@ -4,9 +4,6 @@ import LuigiClient from '@luigi-project/client';
 import { createLambdaInput } from './createLambdaInput';
 
 import { formatMessage } from 'components/Lambdas/helpers/misc';
-import { getDefaultDependencies } from 'components/Lambdas/helpers/runtime';
-
-import { CONFIG } from 'components/Lambdas/config';
 
 export const useCreateLambda = ({ redirect = true }) => {
   const notificationManager = useNotification();
@@ -46,21 +43,3 @@ export const useCreateLambda = ({ redirect = true }) => {
 
   return createLambda;
 };
-
-export function prepareCreateLambdaInput(name, runtime = 'nodejs14') {
-  return {
-    labels: {},
-    source: CONFIG.defaultLambdaCodeAndDeps[runtime].code,
-    dependencies: getDefaultDependencies(name, runtime),
-    resources: {
-      requests: {},
-      limits: {},
-    },
-    buildResources: {
-      requests: {},
-      limits: {},
-    },
-    replicas: {},
-    env: [],
-  };
-}
