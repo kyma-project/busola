@@ -24,8 +24,7 @@
   "devDependencies": {
     "babel-loader": "^8.0.4",
     "sirv-cli": "^1.0.11",
-    "webpack": "^4.44.2",
-    "prettier": "^1.18.2"
+    "webpack": "^4.44.2"
   },
   "jest": {
     "testRegex": "(/__tests__/.*|(\\.|/)(test))\\.js$"
