@@ -88,5 +88,5 @@ backend/backend-production.*
 # monaco editor
 **/vs/loader.js 
 
-**/src/assets/**
-
+**/assets/**
+**/*.chunk.*
