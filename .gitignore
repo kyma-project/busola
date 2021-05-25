@@ -48,4 +48,4 @@ licenses
 scripts/clusterRegistry.txt
 
 tests/cypress/*
-tests/fixtures/orders-function.js
+tests/fixtures/kubeconfig.yaml

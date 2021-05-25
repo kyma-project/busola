@@ -1,4 +1,5 @@
 {
+  "projectId": "busola",
   "defaultCommandTimeout": 3000,
   "execTimeout": 3000,
   "taskTimeout": 3000,
@@ -9,7 +10,7 @@
   "integrationFolder": "tests",
   "pluginsFile": "plugins",
   "supportFile": "support/index.js",
-  "video": false,
+  "videoUploadOnPasses": false,
   "chromeWebSecurity": false,
   "viewportWidth": 1500,
   "viewportHeight": 1500,

@@ -14,11 +14,10 @@ context('Busola - Smoke Tests', () => {
     });
   });
 
-  // skipped due to luigi problem with going to namespace details
-  it.skip('Go to the details of namespace and check sections', () => {
+  it('Go to the details of namespace and check sections', () => {
     cy.getIframeBody()
       .contains('a', NAMESPACE_NAME)
-      .click();
+      .click({ force: true });
 
     cy.getIframeBody()
       .contains('Healthy Resources')

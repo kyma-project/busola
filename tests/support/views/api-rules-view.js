@@ -30,4 +30,8 @@ Cypress.Commands.add('createApiRule', (ApiRuleName, ApiRuleHost) => {
   });
 
   cy.getModalBody().should('not.exist');
+
+  cy.getLeftNav()
+    .contains('Discovery and Network')
+    .click();
 });

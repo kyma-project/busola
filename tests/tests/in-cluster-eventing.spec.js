@@ -17,10 +17,6 @@ context('Busola - In-cluster eventing flow', () => {
       .contains('a', NAMESPACE_NAME)
       .click({ force: true });
 
-    cy.getLeftNav()
-      .contains('Workloads')
-      .click();
-
     cy.createFunction(
       FUNCTION_NAME,
       'fixtures/in-cluster-eventing-receiver.js',
@@ -49,12 +45,7 @@ context('Busola - In-cluster eventing flow', () => {
       .click();
   });
 
-  let apiRuleUrl;
   it('Create a publisher Function', () => {
-    cy.getLeftNav()
-      .contains('Workloads')
-      .click();
-
     cy.createFunction(
       API_RULE_AND_FUNCTION_NAME,
       'fixtures/in-cluster-eventing-publisher.js',
@@ -63,14 +54,15 @@ context('Busola - In-cluster eventing flow', () => {
   });
 
   it('Create an API Rule for the publisher Function', () => {
+    cy.createApiRule(API_RULE_AND_FUNCTION_NAME, API_RULE_HOST);
+  });
+
+  let apiRuleUrl;
+  it('Get Host value for the API Rule', () => {
     cy.getLeftNav()
       .contains('Discovery and Network')
       .click();
 
-    cy.createApiRule(API_RULE_AND_FUNCTION_NAME, API_RULE_HOST);
-  });
-
-  it('Get Host value for the API Rule', () => {
     cy.getIframeBody()
       .find('[role="status"]')
       .should('have.text', 'OK');
@@ -85,6 +77,10 @@ context('Busola - In-cluster eventing flow', () => {
             cy.log('api rule host set to ', apiRuleUrl);
           });
       });
+
+    cy.getLeftNav()
+      .contains('Discovery and Network')
+      .click();
   });
 
   it('Make a request to the Function', () => {

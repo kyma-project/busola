@@ -43,10 +43,6 @@ Cypress.Commands.add(
       .find('[role="status"]', { timeout: 60 * 1000 })
       .should('have.text', 'DEPLOYING');
 
-    cy.getIframeBody()
-      .find('[role="status"]', { timeout: 120 * 1000 })
-      .should('have.text', 'RUNNING');
-
     cy.readFile(functionPath).then(body => {
       cy.getIframeBody()
         .find('textarea[aria-roledescription="editor"]')
@@ -85,5 +81,9 @@ Cypress.Commands.add(
     cy.getIframeBody()
       .find('[role="status"]', { timeout: 120 * 1000 })
       .should('have.text', 'RUNNING');
+
+    cy.getLeftNav()
+      .contains('Workloads')
+      .click();
   },
 );
