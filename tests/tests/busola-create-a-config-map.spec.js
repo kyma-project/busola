@@ -18,8 +18,7 @@ context('Busola - Testing Configuration', () => {
 
     getLeftNav()
       .find('[data-testid=config-maps_configmaps]')
-      .click()
-      .wait(1000);
+      .click();
 
     cy.getIframeBody()
       .contains('Create Config Map')
@@ -42,7 +41,6 @@ context('Busola - Testing Configuration', () => {
       .find('[role="dialog"]')
       .contains('button', 'Create')
       .click();
-    cy.wait(1000);
 
     cy.getIframeBody()
       .contains('a', CONFIG_MAP_NAME)
@@ -56,8 +54,7 @@ context('Busola - Testing Configuration', () => {
   it('Test a Secret', () => {
     getLeftNav()
       .find('[data-testid=secrets_secrets]')
-      .click()
-      .wait(1000);
+      .click();
 
     cy.getIframeBody()
       .contains('Create Secret')
@@ -80,7 +77,6 @@ context('Busola - Testing Configuration', () => {
       .find('[role="dialog"]')
       .contains('button', 'Create')
       .click();
-    cy.wait(1000);
 
     cy.getIframeBody()
       .contains('a', SECRET_NAME)
@@ -94,8 +90,7 @@ context('Busola - Testing Configuration', () => {
   it('Test a Roles list view', () => {
     getLeftNav()
       .find('[data-testid=roles_roles]')
-      .click()
-      .wait(1000);
+      .click();
 
     cy.getIframeBody()
       .contains('h3', 'Roles')
@@ -105,8 +100,7 @@ context('Busola - Testing Configuration', () => {
   it('Test a Role Binding', () => {
     getLeftNav()
       .find('[data-testid=role-bindings_rolebindings]')
-      .click()
-      .wait(1000);
+      .click();
 
     cy.getIframeBody()
       .contains('Create Role Binding')
@@ -125,8 +119,6 @@ context('Busola - Testing Configuration', () => {
       .find('[role="dialog"]')
       .contains('button', 'Create')
       .click();
-
-    cy.wait(1000);
 
     cy.getIframeBody()
       .contains('a', `${USER_NAME}-view`)
@@ -148,8 +140,8 @@ context('Busola - Testing Configuration', () => {
 
     getLeftNav()
       .find('[data-testid=cluster-roles_clusterroles]')
-      .click()
-      .wait(1000);
+      .click();
+    // .wait(1000);
 
     cy.getIframeBody()
       .contains('h3', 'Cluster Roles')
@@ -164,8 +156,7 @@ context('Busola - Testing Configuration', () => {
   it('Test a Cluster Role Binding', () => {
     getLeftNav()
       .find('[data-testid=cluster-role-bindings_clusterrolebindings]')
-      .click()
-      .wait(1000);
+      .click();
 
     cy.getIframeBody()
       .contains('Create Cluster Role Binding')
@@ -184,8 +175,6 @@ context('Busola - Testing Configuration', () => {
       .find('[role="dialog"]')
       .contains('button', 'Create')
       .click();
-
-    cy.wait(1000);
 
     cy.getIframeBody()
       .find('[role="search"] [aria-label="search-input"]')
@@ -219,8 +208,7 @@ context('Busola - Testing Configuration', () => {
 
     getLeftNav()
       .find('[data-testid=oauth2clients_oauthclients]')
-      .click()
-      .wait(1000);
+      .click();
 
     cy.getIframeBody()
       .contains('Create OAuth2 Client')
@@ -254,8 +242,6 @@ context('Busola - Testing Configuration', () => {
       .find('[role="dialog"]')
       .contains('button', 'Create')
       .click();
-
-    cy.wait(1000);
 
     cy.getIframeBody()
       .contains('a', CLIENT_NAME)
