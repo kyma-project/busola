@@ -32,7 +32,7 @@ export function KubeconfigUpload({ setCluster, setShowingAuthForm }) {
     setShowError(false);
     try {
       const kubeconfigParsed = jsyaml.load(await readFile(file));
-      handleKubeconfigAdded(kubeconfigParsed);
+      await handleKubeconfigAdded(kubeconfigParsed);
     } catch (e) {
       setShowError(true);
       console.warn(e);
