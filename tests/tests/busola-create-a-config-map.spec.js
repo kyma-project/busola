@@ -1,11 +1,13 @@
 /// <reference types="cypress" />
+import config from '../config';
 import 'cypress-file-upload';
 
-const DOCKER_IMAGE = 'eu.gcr.io/kyma-project/pr/orders-service:PR-162';
+const NAMESPACE_NAME = config.namespace;
 const CONFIG_MAP_NAME = 'test-configmap';
 const SECRET_NAME = 'test-secret';
 const USER_NAME = 'user@kyma.eu';
 const ROLE_NAME = 'view (CR)';
+const CLIENT_NAME = 'test-oauth-client';
 
 context('Busola - Testing Configuration', () => {
   const getLeftNav = () => cy.get('nav[data-testid=semiCollapsibleLeftNav]');
@@ -202,5 +204,65 @@ context('Busola - Testing Configuration', () => {
       .click();
 
     cy.get('[data-testid=luigi-modal-confirm]').click();
+
+    getLeftNav()
+      .contains('Administration')
+      .click(); // close navigation tab after yourself
+  });
+
+  it('Test a OAuth Clients', () => {
+    cy.get('[data-testid=luigi-topnav-logo]').click();
+
+    cy.getIframeBody()
+      .contains('a', NAMESPACE_NAME)
+      .click({ force: true });
+
+    getLeftNav()
+      .find('[data-testid=oauth2clients_oauthclients]')
+      .click()
+      .wait(1000);
+
+    cy.getIframeBody()
+      .contains('Create OAuth2 Client')
+      .click();
+
+    cy.getIframeBody()
+      .find('[placeholder="Client name"]')
+      .clear()
+      .type(CLIENT_NAME);
+
+    cy.getIframeBody()
+      .contains('label', 'ID token')
+      .prev('input')
+      .click({ force: true });
+
+    cy.getIframeBody()
+      .contains('label', 'Client credentials')
+      .prev('input')
+      .click({ force: true });
+
+    cy.getIframeBody()
+      .find('[placeholder="Enter multiple values separated by comma"]')
+      .clear()
+      .type(CLIENT_NAME);
+
+    cy.getIframeBody()
+      .contains('label', 'Scopes')
+      .click();
+
+    cy.getIframeBody()
+      .find('[role="dialog"]')
+      .contains('button', 'Create')
+      .click();
+
+    cy.wait(1000);
+
+    cy.getIframeBody()
+      .contains('a', CLIENT_NAME)
+      .click({ force: true });
+
+    cy.getIframeBody()
+      .contains(CLIENT_NAME)
+      .should('be.visible');
   });
 });
