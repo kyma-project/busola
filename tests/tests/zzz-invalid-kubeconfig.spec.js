@@ -16,7 +16,7 @@ context('Busola - Invalid kubeconfig', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[role=alert]')
+      .find('[role=alert][aria-label="invalid-kubeconfig"]')
       .shouldHaveTrimmedText('Error reading kubeconfig');
   });
 });

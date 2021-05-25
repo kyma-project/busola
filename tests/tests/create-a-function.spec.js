@@ -98,9 +98,9 @@ context('Busola - Create a Function and access it', () => {
   });
 
   it('Create an API Rule for the Function', () => {
-    getLeftNav()
-      .contains('Discovery and Network')
-      .click();
+    // getLeftNav()
+    //   .contains('Discovery and Network')
+    //   .click();
 
     getLeftNav()
       .contains('API Rules')
