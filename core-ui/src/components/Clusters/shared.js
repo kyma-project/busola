@@ -1,5 +1,6 @@
 import LuigiClient from '@luigi-project/client';
 import { DEFAULT_MODULES } from 'react-shared';
+import { merge } from 'lodash';
 
 export function setCluster(clusterName) {
   LuigiClient.sendCustomMessage({
@@ -27,7 +28,7 @@ export function addCluster(params) {
 
   LuigiClient.sendCustomMessage({
     id: 'busola.addCluster',
-    params: { ...defaultParams, ...params },
+    params: merge(defaultParams, params),
   });
 }
 
