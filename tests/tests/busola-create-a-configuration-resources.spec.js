@@ -8,6 +8,8 @@ const SECRET_NAME = 'test-secret';
 const USER_NAME = 'user@kyma.eu';
 const ROLE_NAME = 'view (CR)';
 const CLIENT_NAME = 'test-oauth-client';
+const GIT_REPOSITORY_URL = 'https://github.com/test/sample-function.git';
+const GIT_REPOSITORY_NAME = 'test-git-repository';
 
 context('Busola - Testing Configuration', () => {
   const getLeftNav = () => cy.get('nav[data-testid=semiCollapsibleLeftNav]');
@@ -141,7 +143,6 @@ context('Busola - Testing Configuration', () => {
     getLeftNav()
       .find('[data-testid=cluster-roles_clusterroles]')
       .click();
-    // .wait(1000);
 
     cy.getIframeBody()
       .contains('h3', 'Cluster Roles')
@@ -250,5 +251,44 @@ context('Busola - Testing Configuration', () => {
     cy.getIframeBody()
       .contains(CLIENT_NAME)
       .should('be.visible');
+  });
+
+  it('Test a Git Repository', () => {
+    getLeftNav()
+      .find('[data-testid=gitrepositories_gitrepositories]')
+      .click();
+
+    cy.getIframeBody()
+      .contains('Connect Repository')
+      .click();
+
+    cy.getIframeBody()
+      .find('[placeholder="Repository name"]')
+      .clear()
+      .type(GIT_REPOSITORY_NAME);
+
+    cy.getIframeBody()
+      .find(
+        '[placeholder="Enter the URL address of your Git repository (Required)"]',
+      )
+      .clear()
+      .type(GIT_REPOSITORY_URL);
+
+    cy.getIframeBody()
+      .find('[role="dialog"]')
+      .contains('button', 'Connect')
+      .click();
+
+    cy.getIframeBody()
+      .contains(GIT_REPOSITORY_NAME)
+      .should('be.visible');
+
+    cy.getIframeBody()
+      .contains(GIT_REPOSITORY_URL)
+      .should('be.visible');
+
+    getLeftNav()
+      .contains('Configuration')
+      .click(); // close navigation tab after yourself
   });
 });
