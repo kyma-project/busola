@@ -41,10 +41,6 @@ Cypress.Commands.add(
 
     cy.getIframeBody()
       .find('[role="status"]', { timeout: 60 * 1000 })
-      .should('have.text', 'BUILDING');
-
-    cy.getIframeBody()
-      .find('[role="status"]', { timeout: 60 * 1000 })
       .should('have.text', 'DEPLOYING');
 
     cy.getIframeBody()
@@ -82,10 +78,6 @@ Cypress.Commands.add(
       .click();
 
     //TODO use one namespace per all tests. Then we'll be able create the lambda at the beginning and create API Rule for it at the end
-    cy.getIframeBody()
-      .find('[role="status"]', { timeout: 60 * 1000 })
-      .should('have.text', 'BUILDING');
-
     cy.getIframeBody()
       .find('[role="status"]', { timeout: 60 * 1000 })
       .should('have.text', 'DEPLOYING');
