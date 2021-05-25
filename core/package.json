@@ -8,7 +8,7 @@
     "start:kyma": "npm run start",
     "build": "npm run buildConfig",
     "test": "../node_modules/.bin/jest",
-    "lint-check": "prettier -v && prettier --config ./../.prettierrc --ignore-path ./../.prettierignore -l '**/*.{ts,tsx,js,jsx,json,html,css,yaml}'",
+    "lint-check": "prettier --config ./../.prettierrc --ignore-path ./../.prettierignore -l '**/*.{ts,tsx,js,jsx,json,html,css,yaml}'",
     "lint-fix": "prettier --config ./../.prettierrc --ignore-path ./../.prettierignore --write '**/*.{ts,tsx,js,jsx,json,html,css,yaml}'",
     "buildConfig": "webpack --mode production --config webpack.config.js",
     "buildConfig:watch": "webpack --config webpack.config.js --watch",
@@ -24,7 +24,8 @@
   "devDependencies": {
     "babel-loader": "^8.0.4",
     "sirv-cli": "^1.0.11",
-    "webpack": "^4.44.2"
+    "webpack": "^4.44.2",
+    "prettier": "^1.18.2"
   },
   "jest": {
     "testRegex": "(/__tests__/.*|(\\.|/)(test))\\.js$"
