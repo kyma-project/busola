@@ -104,7 +104,7 @@ context('Busola - Create a Function and access it', () => {
 
     getLeftNav()
       .contains('API Rules')
-      .click();
+      .click({ force: true });
 
     cy.getIframeBody()
       .contains('Create apirules')
@@ -135,7 +135,7 @@ context('Busola - Create a Function and access it', () => {
   it('Get Host value for the API Rule', () => {
     getLeftNav()
       .contains('API Rules')
-      .click();
+      .click({ force: true });
 
     cy.getIframeBody()
       .find('tbody>tr')
