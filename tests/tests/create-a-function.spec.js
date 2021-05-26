@@ -19,6 +19,8 @@ context('Busola - Create a Function and access it', () => {
       cy.log('Downloaded the Function code');
       cy.writeFile('fixtures/orders-function.js', response.body);
     });
+    cy.loginAndSelectCluster();
+    cy.goToNamespaceDetails();
   });
 
   it('Create a Function', () => {

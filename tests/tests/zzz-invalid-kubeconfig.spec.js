@@ -2,7 +2,11 @@
 import 'cypress-file-upload';
 
 context('Busola - Invalid kubeconfig', () => {
+  // before(() => {
+  //   cy.restoreURL();
+  // });
   it('Use wrong kubeconfig', () => {
+    cy.visit(Cypress.env('CLUSTERS_ADDRESS'));
     cy.get('[data-testid=app-switcher]')
       .click()
       .get('[data-testid=addcluster]')

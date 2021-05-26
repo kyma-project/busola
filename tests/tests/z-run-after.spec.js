@@ -3,6 +3,10 @@ import 'cypress-file-upload';
 const NAMESPACE_NAME = config.namespace;
 
 context('Clean up namespace', () => {
+  before(() => {
+    cy.loginAndSelectCluster();
+    // cy.goToNamespaceDetails();
+  });
   it('Delete the namespace (step 1)', () => {
     cy.get('[data-testid=luigi-topnav-logo]').click();
 

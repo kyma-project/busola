@@ -7,6 +7,11 @@ const DEPLOYMENT_NAME = 'orders-service';
 context('Busola - Create a Deployment', () => {
   const getLeftNav = () => cy.get('nav[data-testid=semiCollapsibleLeftNav]');
 
+  before(() => {
+    cy.loginAndSelectCluster();
+    cy.goToNamespaceDetails();
+  });
+
   it('Create a Deployment', () => {
     cy.getIframeBody()
       .contains('Deploy new workload')

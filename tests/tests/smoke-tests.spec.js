@@ -6,7 +6,10 @@ const NAMESPACE_NAME = config.namespace;
 
 context('Busola - Smoke Tests', () => {
   const getLeftNav = () => cy.get('nav[data-testid=semiCollapsibleLeftNav]');
-
+  before(() => {
+    cy.loginAndSelectCluster();
+    cy.goToNamespaceDetails();
+  });
   it('Renders navigation nodes', () => {
     cy.get('[data-testid=luigi-topnav-logo]').click();
     ['Namespaces', 'Administration', 'Diagnostics'].forEach(node => {
