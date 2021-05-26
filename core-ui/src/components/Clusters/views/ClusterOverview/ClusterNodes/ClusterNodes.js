@@ -1,5 +1,6 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
+import { Pagination } from 'react-shared';
 import { LayoutPanel, Icon, Link } from 'fundamental-react';
 import { useNodesQuery } from 'components/Nodes/nodeQueries';
 import { NodeResources } from '../../../../Nodes/NodeResources/NodeResources';
@@ -14,38 +15,43 @@ const NodeHeader = ({ nodeName }) => {
 
   return (
     <Link className="link" onClick={() => navigateToNodeDetails(nodeName)}>
-      {nodeName}
+      Node {nodeName}
     </Link>
   );
 };
 
 export function ClusterNodes() {
   const { nodes, error, loading } = useNodesQuery();
+  const itemsPerPage = 8;
+  const [currentPage, setCurrentPage] = React.useState(1);
+
+  const pagedNodes =
+    nodes?.slice(
+      (currentPage - 1) * itemsPerPage,
+      currentPage * itemsPerPage,
+    ) || [];
 
   return (
     <>
-      <LayoutPanel className="fd-margin--md">
-        <LayoutPanel.Header>
-          <Icon
-            size="m"
-            className="fd-margin-end--sm"
-            glyph="stethoscope"
-            ariaLabel="Node status icon"
+      {loading && <Message content="Loading..." />}
+      {error && <Message content={error.message} />}
+      <div className="cluster-overview__nodes">
+        {pagedNodes.map(node => (
+          <NodeResources
+            key={node.name}
+            {...node}
+            headerContent={<NodeHeader nodeName={node.name} />}
           />
-          <LayoutPanel.Head title="Nodes Status" />
-        </LayoutPanel.Header>
-        <LayoutPanel.Body className="cluster-overview__nodes">
-          {loading && <Message content="Loading..." />}
-          {error && <Message content={error.message} />}
-          {nodes?.map(node => (
-            <NodeResources
-              key={node.name}
-              {...node}
-              headerContent={<NodeHeader nodeName={node.name} />}
-            />
-          ))}
-        </LayoutPanel.Body>
-      </LayoutPanel>
+        ))}
+      </div>
+      <LayoutPanel.Footer>
+        <Pagination
+          itemsTotal={nodes?.length || 0}
+          currentPage={currentPage}
+          itemsPerPage={itemsPerPage}
+          onChangePage={setCurrentPage}
+        />
+      </LayoutPanel.Footer>
       <ClusterNodesWarnings nodesNames={nodes?.map(n => n.name) || []} />
     </>
   );

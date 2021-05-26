@@ -4,6 +4,14 @@ import { useGet, GenericList, ReadableCreationTimestamp } from 'react-shared';
 export function NodeWarnings({ nodeName }) {
   const { data, loading, error } = useGet('/api/v1/events');
 
+  const formatInvolvedObject = obj => {
+    if (obj.namespace) {
+      return `${obj.kind} ${obj.namespace}/${obj.name}`;
+    } else {
+      return `${obj.kind} ${obj.name}`;
+    }
+  };
+
   const warnings = data?.items
     .filter(e => e.type === 'Warning')
     .filter(e => e.source.host === nodeName);
@@ -11,7 +19,7 @@ export function NodeWarnings({ nodeName }) {
   const headerRenderer = () => ['Message', 'Involved object', 'Timestamp'];
   const rowRenderer = e => [
     e.message,
-    `${e.involvedObject.kind} ${e.involvedObject.namespace}/${e.involvedObject.name}`,
+    formatInvolvedObject(e.involvedObject),
     <ReadableCreationTimestamp timestamp={e.firstTimestamp} />,
   ];
 
@@ -25,6 +33,7 @@ export function NodeWarnings({ nodeName }) {
       rowRenderer={rowRenderer}
       serverDataError={error}
       serverDataLoading={loading}
+      pagination={{ itemsPerPage: 10, autoHide: true }}
     />
   );
 }
