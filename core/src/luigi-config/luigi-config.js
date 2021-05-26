@@ -8,7 +8,7 @@ import {
   getActiveCluster,
   setActiveClusterIfPresentInUrl,
 } from './cluster-management';
-import { loadSystemNamespacesToggle } from './utils/system-namespaces-toggle';
+import { loadHiddenNamespacesToggle } from './utils/system-namespaces-toggle';
 
 import {
   createNavigation,
@@ -28,7 +28,7 @@ async function luigiAfterInit() {
     saveCurrentLocation();
   }
 
-  loadSystemNamespacesToggle();
+  loadHiddenNamespacesToggle();
 
   if (!isClusterChoosen) {
     if (!window.location.pathname.startsWith('/clusters')) {

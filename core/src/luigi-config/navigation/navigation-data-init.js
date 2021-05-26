@@ -29,7 +29,7 @@ import {
   deleteActiveCluster,
   saveActiveClusterName,
 } from '../cluster-management';
-import { shouldShowSystemNamespaces } from './../utils/system-namespaces-toggle';
+import { shouldShowHiddenNamespaces } from './../utils/system-namespaces-toggle';
 import { saveLocation, tryRestorePreviousLocation } from './previous-location';
 import { NODE_PARAM_PREFIX } from '../luigi-config';
 
@@ -213,7 +213,7 @@ export async function getNavigationData(authData) {
     const params = getActiveCluster();
     const activeClusterName = params.cluster.name;
 
-    const { navigation = {}, systemNamespaces = '', modules = {} } =
+    const { navigation = {}, hiddenNamespaces = [], modules = {} } =
       params?.config || {};
     const nodes = [
       {
@@ -246,8 +246,8 @@ export async function getNavigationData(authData) {
           groups,
           crds,
           modules,
-          systemNamespaces,
-          showSystemNamespaces: shouldShowSystemNamespaces(),
+          hiddenNamespaces,
+          showHiddenNamespaces: shouldShowHiddenNamespaces(),
           cluster: params.cluster,
         },
       },
@@ -279,7 +279,7 @@ export async function getNavigationData(authData) {
 }
 
 async function getNamespaces() {
-  const { systemNamespaces } = getActiveCluster().config;
+  const { hiddenNamespaces } = getActiveCluster().config;
   let namespaces;
   try {
     namespaces = await fetchNamespaces(getAuthData());
@@ -290,8 +290,8 @@ async function getNamespaces() {
     });
     return [];
   }
-  if (!shouldShowSystemNamespaces()) {
-    namespaces = namespaces.filter(ns => !systemNamespaces.includes(ns.name));
+  if (!shouldShowHiddenNamespaces()) {
+    namespaces = namespaces.filter(ns => !hiddenNamespaces.includes(ns.name));
   }
   return createNamespacesList(namespaces);
 }

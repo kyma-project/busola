@@ -16,13 +16,9 @@ export function KubeconfigUpload({ setCluster, setShowingAuthForm }) {
     if (!initParams) return {};
     const encoder = createEncoder('lzma');
     const decoded = await encoder.decompress(initParams);
-    const systemNamespaces = decoded.config?.systemNamespaces;
-    const systemNamespacesList = systemNamespaces
-      ? systemNamespaces.split(' ')
-      : [];
+
     const clusterConfig = {
       ...decoded?.config,
-      systemNamespaces: systemNamespacesList,
       modules: { ...DEFAULT_MODULES, ...(decoded?.config?.modules || {}) },
     };
     return clusterConfig;

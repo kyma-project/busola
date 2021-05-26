@@ -10,12 +10,12 @@ import {
 import { clearAuthData } from './auth/auth-storage';
 import { reloadNavigation } from './navigation/navigation-data-init';
 import { reloadAuth } from './auth/auth';
-import { setShowSystemNamespaces } from './utils/system-namespaces-toggle';
+import { setShowHiddenNamespaces } from './utils/system-namespaces-toggle';
 
 export const communication = {
   customMessagesListeners: {
-    'busola.showSystemNamespaces': ({ showSystemNamespaces }) => {
-      setShowSystemNamespaces(showSystemNamespaces);
+    'busola.showHiddenNamespaces': ({ showHiddenNamespaces }) => {
+      setShowHiddenNamespaces(showHiddenNamespaces);
     },
     'busola.refreshNavigation': () => {
       Luigi.configChanged('navigation.nodes');

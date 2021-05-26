@@ -1,18 +1,18 @@
-export function setShowSystemNamespaces(showSystemNamespaces) {
-  localStorage.setItem('busola.showSystemNamespaces', showSystemNamespaces);
-  updateFeatureToggles(showSystemNamespaces);
+export function setShowHiddenNamespaces(showHiddenNamespaces) {
+  localStorage.setItem('busola.showHiddenNamespaces', showHiddenNamespaces);
+  updateFeatureToggles(showHiddenNamespaces);
 }
 
-export function loadSystemNamespacesToggle() {
-  const toggleValue = shouldShowSystemNamespaces();
+export function loadHiddenNamespacesToggle() {
+  const toggleValue = shouldShowHiddenNamespaces();
   updateFeatureToggles(toggleValue);
 }
 
-export const shouldShowSystemNamespaces = () => {
-  return localStorage.getItem('busola.showSystemNamespaces') === 'true';
+export const shouldShowHiddenNamespaces = () => {
+  return localStorage.getItem('busola.showHiddenNamespaces') === 'true';
 };
 
 function updateFeatureToggles(toggleValue) {
   const fn = toggleValue ? 'setFeatureToggle' : 'unsetFeatureToggle';
-  Luigi.featureToggles()[fn]('showSystemNamespaces');
+  Luigi.featureToggles()[fn]('showHiddenNamespaces');
 }

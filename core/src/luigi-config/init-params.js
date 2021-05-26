@@ -18,10 +18,6 @@ function getResponseParams(usePKCE = true) {
   }
 }
 
-function createSystemNamespacesList(namespaces) {
-  return namespaces ? namespaces.split(' ') : [];
-}
-
 export async function saveInitParamsIfPresent() {
   const DEFAULT_MODULES = {
     SERVICE_CATALOG: 'servicecatalog.k8s.io',
@@ -37,14 +33,10 @@ export async function saveInitParamsIfPresent() {
   const initParams = new URL(location).searchParams.get('init');
   if (initParams) {
     const decoded = await encoder.decompress(initParams);
-    const systemNamespaces = createSystemNamespacesList(
-      decoded.config?.systemNamespaces,
-    );
     const params = {
       ...decoded,
       config: {
         ...decoded.config,
-        systemNamespaces,
         modules: { ...DEFAULT_MODULES, ...(decoded.config?.modules || {}) },
       },
     };
