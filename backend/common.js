@@ -11,6 +11,15 @@ const decodeHeaderToBuffer = headerValue => {
     : null;
 };
 
+// for some mysterious reason, request for node metrics
+// comes with "Connection: Upgrade" header, causing
+// "invalid upgrade response: status code 200" error
+const workaroundForNodeMetrics = req => {
+  if (req.originalUrl.includes('apis/metrics.k8s.io/v1beta1/nodes')) {
+    req.headers['connection'] = 'close';
+  }
+};
+
 export const handleRequest = async (req, res) => {
   const urlHeader = 'x-cluster-url';
   const caHeader = 'x-cluster-certificate-authority-data';
@@ -41,7 +50,7 @@ export const handleRequest = async (req, res) => {
     cert,
     key,
   };
-
+  workaroundForNodeMetrics(req);
   const k8sRequest = https
     .request(options, function(k8sResponse) {
       res.writeHead(k8sResponse.statusCode, {

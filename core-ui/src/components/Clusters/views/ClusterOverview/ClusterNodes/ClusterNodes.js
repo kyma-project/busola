@@ -1,32 +1,61 @@
 import React from 'react';
-import { LayoutPanel, Icon } from 'fundamental-react';
-import { useNodesQuery } from './useNodesQuery';
-import { NodeDetails } from './NodeDetails';
+import LuigiClient from '@luigi-project/client';
+import { Pagination } from 'react-shared';
+import { LayoutPanel, Link } from 'fundamental-react';
+import { useNodesQuery } from 'components/Nodes/nodeQueries';
+import { NodeResources } from '../../../../Nodes/NodeResources/NodeResources';
+import { ClusterNodesWarnings } from './NodeWarningsList';
 import './ClusterNodes.scss';
 
 const Message = ({ content }) => <p className="body-fallback">{content}</p>;
 
-export function ClusterNodes() {
-  const { nodes, error, loading } = useNodesQuery();
+const NodeHeader = ({ nodeName }) => {
+  const navigateToNodeDetails = nodeName =>
+    LuigiClient.linkManager().navigate(`nodes/${nodeName}`);
 
   return (
-    <LayoutPanel className="fd-margin--md">
-      <LayoutPanel.Header>
-        <Icon
-          size="m"
-          className="fd-margin-end--sm"
-          glyph="stethoscope"
-          ariaLabel="Node status icon"
-        />
-        <LayoutPanel.Head title="Nodes Status" />
-      </LayoutPanel.Header>
-      <LayoutPanel.Body className="cluster-overview__nodes">
-        {loading && <Message content="Loading..." />}
-        {error && <Message content={error.message} />}
-        {nodes?.map(node => (
-          <NodeDetails key={node.name} {...node} />
+    <>
+      <p className="node-header-title">Node:</p>
+      <Link className="link" onClick={() => navigateToNodeDetails(nodeName)}>
+        {nodeName}
+      </Link>
+    </>
+  );
+};
+
+export function ClusterNodes() {
+  const { nodes, error, loading } = useNodesQuery();
+  const itemsPerPage = 8;
+  const [currentPage, setCurrentPage] = React.useState(1);
+
+  const pagedNodes =
+    nodes?.slice(
+      (currentPage - 1) * itemsPerPage,
+      currentPage * itemsPerPage,
+    ) || [];
+
+  return (
+    <>
+      {loading && <Message content="Loading..." />}
+      {error && <Message content={error.message} />}
+      <div className="cluster-overview__nodes">
+        {pagedNodes.map(node => (
+          <NodeResources
+            key={node.name}
+            {...node}
+            headerContent={<NodeHeader nodeName={node.name} />}
+          />
         ))}
-      </LayoutPanel.Body>
-    </LayoutPanel>
+      </div>
+      <LayoutPanel.Footer>
+        <Pagination
+          itemsTotal={nodes?.length || 0}
+          currentPage={currentPage}
+          itemsPerPage={itemsPerPage}
+          onChangePage={setCurrentPage}
+        />
+      </LayoutPanel.Footer>
+      <ClusterNodesWarnings nodesNames={nodes?.map(n => n.name) || []} />
+    </>
   );
 }

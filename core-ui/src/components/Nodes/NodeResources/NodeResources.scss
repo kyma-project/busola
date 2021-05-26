@@ -1,0 +1,12 @@
+.node-resources {
+  padding-top: 0 !important; // override fd-styles
+
+  .fd-layout-panel__body {
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .fd-layout-panel__body > :first-child {
+    padding-top: 0 !important; // override fd-styles
+  }
+}

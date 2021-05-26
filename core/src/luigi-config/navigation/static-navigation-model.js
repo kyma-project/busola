@@ -696,6 +696,25 @@ export function getStaticRootNodes(
 ) {
   const nodes = [
     {
+      pathSegment: 'overview',
+      label: 'Cluster Overview',
+      icon: 'database',
+      viewUrl: config.coreUIModuleUrl + '/overview',
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+      children: [
+        {
+          pathSegment: 'nodes',
+          children: [
+            {
+              pathSegment: ':nodeName',
+              viewUrl: config.coreUIModuleUrl + '/overview/nodes/:nodeName',
+            },
+          ],
+        },
+      ],
+    },
+    {
       pathSegment: 'namespaces',
       resourceType: 'namespaces',
       label: 'Namespaces',
@@ -724,13 +743,6 @@ export function getStaticRootNodes(
           defaultChildNode: 'details',
         },
       ],
-    },
-    {
-      pathSegment: 'overview',
-      label: 'Cluster Overview',
-      icon: 'database',
-      viewUrl: config.coreUIModuleUrl + '/overview',
-      viewGroup: coreUIViewGroupName,
     },
 
     //INTEGRATION CATEGORY
