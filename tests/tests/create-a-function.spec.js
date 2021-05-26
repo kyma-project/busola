@@ -129,7 +129,7 @@ context('Busola - Create a Function and access it', () => {
         .click();
     });
 
-    cy.getModalBody().should('not.exist');
+    // cy.getModalBody().should('not.exist');
   });
 
   it('Get Host value for the API Rule', () => {
