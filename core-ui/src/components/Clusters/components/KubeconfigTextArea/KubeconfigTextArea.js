@@ -10,7 +10,7 @@ export function KubeconfigTextArea({ onSubmit, setShowError }) {
   const onClick = async () => {
     setShowError(false);
     try {
-      onSubmit(jsyaml.load(kubeconfigText));
+      await onSubmit(jsyaml.load(kubeconfigText));
     } catch (e) {
       setShowError(true);
       console.warn(e);

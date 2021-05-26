@@ -63,7 +63,8 @@
     "react-scripts": "3.4.0",
     "react-test-renderer": "^16.9.0",
     "waait": "^1.0.5",
-    "webpack-cli": "^3.3.5"
+    "webpack-cli": "^3.3.5",
+    "json-url": "^2.6.0"
   },
   "optionalDependencies": {
     "husky": "^2.4.1",

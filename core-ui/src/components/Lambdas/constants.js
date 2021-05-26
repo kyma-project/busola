@@ -99,8 +99,6 @@ export const LAMBDAS_LIST = {
         ERRORS: {
           EMPTY: 'Function name is required.',
           INVALID: `Invalid Function name. The name must consist of lower case alphanumeric characters or dashes, and must start and end with an alphanumeric character (e.g. 'my-name1').`,
-          DUPLICATED:
-            'There is already a Function with the same name in this Namespace.',
           TOO_LONG: 'Function name cannot be longer than 63 characters.',
         },
       },

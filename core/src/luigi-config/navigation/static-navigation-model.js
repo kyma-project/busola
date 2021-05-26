@@ -12,7 +12,7 @@ function toSearchParamsString(object) {
 export function getStaticChildrenNodesForNamespace(
   apiPaths,
   permissionSet,
-  modules
+  modules,
 ) {
   const encodedClusterName = encodeURIComponent(getActiveClusterName());
   const nodes = [
@@ -692,7 +692,7 @@ export function getStaticRootNodes(
   namespaceChildrenNodesResolver,
   apiPaths,
   permissionSet,
-  modules
+  modules,
 ) {
   const nodes = [
     {
@@ -724,6 +724,13 @@ export function getStaticRootNodes(
           defaultChildNode: 'details',
         },
       ],
+    },
+    {
+      pathSegment: 'overview',
+      label: 'Cluster Overview',
+      icon: 'database',
+      viewUrl: config.coreUIModuleUrl + '/overview',
+      viewGroup: coreUIViewGroupName,
     },
 
     //INTEGRATION CATEGORY

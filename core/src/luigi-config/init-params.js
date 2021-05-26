@@ -38,7 +38,7 @@ export async function saveInitParamsIfPresent() {
   if (initParams) {
     const decoded = await encoder.decompress(initParams);
     const systemNamespaces = createSystemNamespacesList(
-      decoded.config?.systemNamespaces
+      decoded.config?.systemNamespaces,
     );
     const params = {
       ...decoded,
@@ -48,6 +48,14 @@ export async function saveInitParamsIfPresent() {
         modules: { ...DEFAULT_MODULES, ...(decoded.config?.modules || {}) },
       },
     };
+
+    if (!params.auth || !params.cluster) {
+      // Luigi navigate doesn't work here. Simulate the Luigi's nodeParams by adding the `~`
+      window.location.href =
+        window.location.origin + '/clusters/add?~init=' + initParams;
+      return;
+    }
+
     if (decoded.auth) {
       params.auth = {
         ...decoded.auth,
@@ -57,7 +65,7 @@ export async function saveInitParamsIfPresent() {
     if (!params.cluster.name) {
       params.cluster.name = params.cluster.server.replace(
         /^https?:\/\/(api\.)?/,
-        ''
+        '',
       );
     }
 

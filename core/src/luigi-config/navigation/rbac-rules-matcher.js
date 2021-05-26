@@ -1,6 +1,6 @@
 export default function rbacRulesMatched(
   requiredPermissions,
-  selfSubjectRulesReview
+  selfSubjectRulesReview,
 ) {
   if (
     !isNonEmptyArray(requiredPermissions) ||
@@ -27,7 +27,7 @@ export default function rbacRulesMatched(
   return true;
 }
 
-const isNonEmptyArray = (array) => {
+const isNonEmptyArray = array => {
   return (
     array !== null &&
     typeof array !== 'undefined' &&
@@ -58,12 +58,12 @@ const matchingVerbRuleFound = (allrules, requiredVerbRule) => {
       arrayContainsStringOrJoker(
         rule.apiGroups,
         requiredVerbRule.apiGroup,
-        '*'
+        '*',
       ) &&
       arrayContainsStringOrJoker(
         rule.resources,
         requiredVerbRule.resource,
-        '*'
+        '*',
       ) &&
       arrayContainsStringOrJoker(rule.verbs, requiredVerbRule.verbs[0], '*')
     ) {

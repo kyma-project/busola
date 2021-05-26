@@ -1,6 +1,8 @@
 import React from 'react';
+import createEncoder from 'json-url';
 import jsyaml from 'js-yaml';
-import { FileInput } from 'react-shared';
+import LuigiClient from '@luigi-project/client';
+import { FileInput, DEFAULT_MODULES } from 'react-shared';
 import { MessageStrip } from 'fundamental-react';
 import { KubeconfigTextArea } from './KubeconfigTextArea/KubeconfigTextArea';
 import { addCluster, readFile } from '../shared';
@@ -8,21 +10,40 @@ import { addCluster, readFile } from '../shared';
 export function KubeconfigUpload({ setCluster, setShowingAuthForm }) {
   const [showError, setShowError] = React.useState(false);
 
+  const initParams = LuigiClient.getNodeParams().init;
+
+  const getConfigFromParams = async () => {
+    if (!initParams) return {};
+    const encoder = createEncoder('lzma');
+    const decoded = await encoder.decompress(initParams);
+    const systemNamespaces = decoded.config?.systemNamespaces;
+    const systemNamespacesList = systemNamespaces
+      ? systemNamespaces.split(' ')
+      : [];
+    const clusterConfig = {
+      ...decoded?.config,
+      systemNamespaces: systemNamespacesList,
+      modules: { ...DEFAULT_MODULES, ...(decoded?.config?.modules || {}) },
+    };
+    return clusterConfig;
+  };
+
   async function onKubeconfigUploaded(file) {
     setShowError(false);
     try {
       const kubeconfigParsed = jsyaml.load(await readFile(file));
-      handleKubeconfigAdded(kubeconfigParsed);
+      await handleKubeconfigAdded(kubeconfigParsed);
     } catch (e) {
       setShowError(true);
       console.warn(e);
     }
   }
 
-  function handleKubeconfigAdded(kubeconfig) {
+  async function handleKubeconfigAdded(kubeconfig) {
     setShowingAuthForm(false);
     setShowError(false);
 
+    const config = await getConfigFromParams();
     const clusterName = kubeconfig.clusters[0].name;
     const cluster = {
       name: clusterName,
@@ -37,6 +58,7 @@ export function KubeconfigUpload({ setCluster, setShowingAuthForm }) {
     if (token || (clientCA && clientKeyData)) {
       const params = {
         cluster,
+        config,
         rawAuth: {
           idToken: token,
           'client-certificate-data': clientCA,
@@ -52,6 +74,14 @@ export function KubeconfigUpload({ setCluster, setShowingAuthForm }) {
 
   return (
     <>
+      {initParams ? (
+        <p>
+          Configuration has been included properly but is missing Cluster and
+          Auth data. Please upload a kubeconfig.
+        </p>
+      ) : (
+        ''
+      )}
       <FileInput
         fileInputChanged={onKubeconfigUploaded}
         acceptedFileFormats=".yaml"

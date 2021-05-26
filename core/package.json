@@ -8,8 +8,8 @@
     "start:kyma": "npm run start",
     "build": "npm run buildConfig",
     "test": "../node_modules/.bin/jest",
-    "lint-check": "prettier -c .",
-    "lint-fix": "prettier --write .",
+    "lint-check": "prettier --config ./../.prettierrc --ignore-path ./../.prettierignore -l '**/*.{ts,tsx,js,jsx,json,html,css,yaml}'",
+    "lint-fix": "prettier --config ./../.prettierrc --ignore-path ./../.prettierignore --write '**/*.{ts,tsx,js,jsx,json,html,css,yaml}'",
     "buildConfig": "webpack --mode production --config webpack.config.js",
     "buildConfig:watch": "webpack --config webpack.config.js --watch",
     "build:npx": "rm -rf ../backend/core && npm run buildConfig && cp -r src ../backend/core"
@@ -19,17 +19,13 @@
     "@luigi-project/core": "^1.7.1",
     "@luigi-project/plugin-auth-oidc": "1.8.1",
     "copy-webpack-plugin": "^5.0.0",
-    "file-saver": "2.0.2",
-    "json-url": "^2.6.0",
-    "prettier": "^2.2.1"
+    "file-saver": "2.0.2"
   },
   "devDependencies": {
     "babel-loader": "^8.0.4",
     "sirv-cli": "^1.0.11",
-    "webpack": "^4.44.2"
-  },
-  "prettier": {
-    "singleQuote": true
+    "webpack": "^4.44.2",
+    "prettier": "^1.18.2"
   },
   "jest": {
     "testRegex": "(/__tests__/.*|(\\.|/)(test))\\.js$"

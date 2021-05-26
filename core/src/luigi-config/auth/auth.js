@@ -16,7 +16,7 @@ export function reloadAuth() {
   Luigi.setConfig({ ...Luigi.getConfig(), auth });
 }
 
-export const createAuth = (authParams) => {
+export const createAuth = authParams => {
   if (!authParams) {
     return null;
   }
@@ -52,7 +52,7 @@ export const createAuth = (authParams) => {
         console.log('onAuthExpired');
       },
       // TODO: define luigi-client api for getting errors
-      onAuthError: (err) => {
+      onAuthError: err => {
         saveActiveClusterName(null);
         console.log('authErrorHandler 1', err);
       },

@@ -14,9 +14,5 @@ export function validateFunctionName(name = '', functionNames = []) {
     return LAMBDAS_LIST.CREATE_MODAL.INPUTS.NAME.ERRORS.INVALID;
   }
 
-  if (functionNames.includes(name)) {
-    return LAMBDAS_LIST.CREATE_MODAL.INPUTS.NAME.ERRORS.DUPLICATED;
-  }
-
   return '';
 }
