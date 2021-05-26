@@ -17,17 +17,6 @@ export const communication = {
     'busola.showSystemNamespaces': ({ showSystemNamespaces }) => {
       setShowSystemNamespaces(showSystemNamespaces);
     },
-    'busola.updateBebEnabled': ({ bebEnabled }) => {
-      const params = getActiveCluster();
-      saveClusterParams({
-        ...params,
-        features: {
-          ...params.features,
-          bebEnabled,
-        },
-      });
-      updateClusterContext({ bebEnabled });
-    },
     'busola.refreshNavigation': () => {
       Luigi.configChanged('navigation.nodes');
     },

@@ -215,28 +215,30 @@ export async function getNavigationData(authData) {
 
     const { navigation = {}, systemNamespaces = '', modules = {} } =
       params?.config || {};
-    const { bebEnabled = false } = params?.features || {};
-    const staticNodes = getStaticRootNodes(
-      getChildrenNodesForNamespace,
-      apiPaths,
-      permissionSet,
-      modules,
-    );
-    const externalNodes = addExternalNodes(navigation.externalNodes);
-    const allNodes = [...staticNodes, ...externalNodes];
-    hideDisabledNodes(navigation.disabledNodes, allNodes, false);
-    const clusterNodeChildren = allNodes;
-
     const nodes = [
       {
         pathSegment: 'cluster',
         hideFromNav: true,
-        defaultChildNode: encodeURIComponent(activeClusterName),
+        onNodeActivation: () =>
+          Luigi.navigation().navigate(
+            `/cluster/${encodeURIComponent(activeClusterName)}`,
+          ),
         children: [
           {
             navigationContext: 'cluster',
             pathSegment: encodeURIComponent(activeClusterName),
-            children: clusterNodeChildren,
+            children: function() {
+              const staticNodes = getStaticRootNodes(
+                getChildrenNodesForNamespace,
+                apiPaths,
+                permissionSet,
+                modules,
+              );
+              const externalNodes = addExternalNodes(navigation.externalNodes);
+              const allNodes = [...staticNodes, ...externalNodes];
+              hideDisabledNodes(navigation.disabledNodes, allNodes, false);
+              return allNodes;
+            },
           },
         ],
         context: {
@@ -244,7 +246,6 @@ export async function getNavigationData(authData) {
           groups,
           crds,
           modules,
-          bebEnabled,
           systemNamespaces,
           showSystemNamespaces: shouldShowSystemNamespaces(),
           cluster: params.cluster,
