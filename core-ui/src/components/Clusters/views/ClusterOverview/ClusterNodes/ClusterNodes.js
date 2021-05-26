@@ -14,9 +14,12 @@ const NodeHeader = ({ nodeName }) => {
     LuigiClient.linkManager().navigate(`nodes/${nodeName}`);
 
   return (
-    <Link className="link" onClick={() => navigateToNodeDetails(nodeName)}>
-      Node {nodeName}
-    </Link>
+    <>
+      <p className="node-header-title">Node:</p>
+      <Link className="link" onClick={() => navigateToNodeDetails(nodeName)}>
+        {nodeName}
+      </Link>
+    </>
   );
 };
 

@@ -3,4 +3,9 @@
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   margin: 32px;
   grid-gap: 32px;
+
+  .node-header-title {
+    font-size: 14px;
+    margin-right: 8px;
+  }
 }
