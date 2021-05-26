@@ -1,6 +1,8 @@
 /// <reference types="cypress" />
+import config from '../config';
 import 'cypress-file-upload';
 
+const NAMESPACE_NAME = config.namespace;
 const DOCKER_IMAGE = 'eu.gcr.io/kyma-project/pr/orders-service:PR-162';
 const DEPLOYMENT_NAME = 'orders-service';
 
@@ -13,6 +15,12 @@ context('Busola - Create a Deployment', () => {
   });
 
   it('Create a Deployment', () => {
+    cy.get('[data-testid=luigi-topnav-logo]').click();
+
+    cy.getIframeBody()
+      .contains('a', NAMESPACE_NAME)
+      .click({ force: true });
+
     cy.getIframeBody()
       .contains('Deploy new workload')
       .click();
