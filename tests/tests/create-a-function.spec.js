@@ -128,8 +128,7 @@ context('Busola - Create a Function and access it', () => {
         .should('not.be.disabled')
         .click();
     });
-
-    // cy.getModalBody().should('not.exist');
+    cy.get('.iframeModalCtn iframe').should('not.exist');
   });
 
   it('Get Host value for the API Rule', () => {
