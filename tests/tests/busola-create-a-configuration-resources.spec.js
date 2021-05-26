@@ -203,6 +203,10 @@ context('Busola - Testing Configuration', () => {
   it('Test a OAuth Clients', () => {
     cy.get('[data-testid=luigi-topnav-logo]').click();
 
+    getLeftNav()
+      .contains('Namespaces')
+      .click();
+
     cy.getIframeBody()
       .contains('a', NAMESPACE_NAME)
       .click({ force: true });
