@@ -215,7 +215,6 @@ export async function getNavigationData(authData) {
 
     const { navigation = {}, systemNamespaces = '', modules = {} } =
       params?.config || {};
-    const { bebEnabled = false } = params?.features || {};
     const nodes = [
       {
         pathSegment: 'cluster',
@@ -247,7 +246,6 @@ export async function getNavigationData(authData) {
           groups,
           crds,
           modules,
-          bebEnabled,
           systemNamespaces,
           showSystemNamespaces: shouldShowSystemNamespaces(),
           cluster: params.cluster,
