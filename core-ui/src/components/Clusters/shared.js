@@ -21,9 +21,6 @@ export function addCluster(params) {
       ),
       modules: DEFAULT_MODULES,
     },
-    features: {
-      bebEnabled: false,
-    },
   };
 
   LuigiClient.sendCustomMessage({
