@@ -1,7 +1,7 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { Pagination } from 'react-shared';
-import { LayoutPanel, Icon, Link } from 'fundamental-react';
+import { LayoutPanel, Link } from 'fundamental-react';
 import { useNodesQuery } from 'components/Nodes/nodeQueries';
 import { NodeResources } from '../../../../Nodes/NodeResources/NodeResources';
 import { ClusterNodesWarnings } from './NodeWarningsList';
