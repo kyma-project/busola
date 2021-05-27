@@ -11,13 +11,15 @@ Cypress.Commands.add('loginAndSelectCluster', () => {
     .contains('Drag file here')
     .attachFile('kubeconfig.yaml', { subjectType: 'drag-n-drop' });
 
+  cy.getIframeBody()
+    .find('[role=alert]')
+    .should('not.exist');
+
+  cy.wait(5000); //it frezzes locally - we need to find a better solution
   getLeftNav()
     .contains('Namespaces')
     .click();
 
-  cy.getIframeBody()
-    .find('[role=alert]')
-    .should('not.exist');
   cy.url().should('match', /namespaces$/);
   cy.getIframeBody()
     .find('thead')

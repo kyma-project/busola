@@ -4,6 +4,7 @@
   "scripts": {
     "start": "$(npm bin)/cypress open",
     "start:local": "CYPRESS_LOCAL_DEV=true $(npm bin)/cypress open",
+    "test": "$(npm bin)/cypress run --browser chrome --headless",
     "test:local": "CYPRESS_LOCAL_DEV=true $(npm bin)/cypress run --browser chrome --headless"
   },
   "devDependencies": {
