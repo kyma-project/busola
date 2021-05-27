@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 import config from '../config';
 
-context('Busola - Create Namespace', () => {
+context('Create Namespace', () => {
   before(() => {
     cy.loginAndSelectCluster();
   });

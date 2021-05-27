@@ -2,7 +2,7 @@
 import 'cypress-file-upload';
 import config from '../config';
 
-context('Busola - Invalid kubeconfig', () => {
+context('Invalid kubeconfig', () => {
   it('Use wrong kubeconfig', () => {
     cy.visit(config.clusterAddress);
     cy.get('[data-testid=app-switcher]')

@@ -8,7 +8,7 @@ const API_RULE_NAME = 'orders-function';
 const API_RULE_HOST = API_RULE_NAME + '-' + random;
 const API_RULE_HOST_EXPECTED_PREFIX = `https://${API_RULE_HOST}.`;
 
-context('Busola - Create a Function and access it', () => {
+context.skip('Create a Function and access it', () => {
   let apiRuleUrl;
   const getLeftNav = () => cy.get('nav[data-testid=semiCollapsibleLeftNav]');
 

@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
 
-context('Busola - Smoke Tests', () => {
+context('Smoke Tests', () => {
   const getLeftNav = () => cy.get('nav[data-testid=semiCollapsibleLeftNav]');
   before(() => {
     cy.loginAndSelectCluster();
