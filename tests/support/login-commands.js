@@ -15,7 +15,7 @@ Cypress.Commands.add('loginAndSelectCluster', () => {
     .find('[role=alert]')
     .should('not.exist');
 
-  cy.wait(5000); //it frezzes locally - we need to find a better solution
+  cy.wait(5000); //it freezes locally - we need to find a better solution
   getLeftNav()
     .contains('Namespaces')
     .click();
