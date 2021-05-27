@@ -15,16 +15,6 @@ context('Busola - Create a Deployment', () => {
   });
 
   it('Create a Deployment', () => {
-    cy.get('[data-testid=luigi-topnav-logo]').click();
-
-    getLeftNav()
-      .contains('Namespaces')
-      .click();
-
-    cy.getIframeBody()
-      .contains('a', NAMESPACE_NAME)
-      .click({ force: true });
-
     cy.getIframeBody()
       .contains('Deploy new workload')
       .click();

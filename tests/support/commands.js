@@ -1,4 +1,5 @@
 import 'cypress-file-upload';
+import config from '../config';
 
 Cypress.Commands.add('handleInvalidLoginData', () => {
   const loginErrorAlert = Cypress.$('#error');
@@ -17,9 +18,10 @@ Cypress.Commands.add(
   },
 );
 
+const getLeftNav = () => cy.get('nav[data-testid=semiCollapsibleLeftNav]');
 Cypress.Commands.add('loginAndSelectCluster', () => {
-  console.log('env', Cypress.env());
-  cy.visit(Cypress.env('CLUSTERS_ADDRESS'))
+  console.log('env', config);
+  cy.visit(config.clusterAddress)
     .getIframeBody()
     .contains('Add Cluster')
     .click();
@@ -27,6 +29,10 @@ Cypress.Commands.add('loginAndSelectCluster', () => {
   cy.getIframeBody()
     .contains('Drag file here')
     .attachFile('kubeconfig.yaml', { subjectType: 'drag-n-drop' });
+
+  getLeftNav()
+    .contains('Namespaces')
+    .click();
 
   cy.getIframeBody()
     .find('[role=alert]')
@@ -42,7 +48,7 @@ Cypress.Commands.add('loginAndSelectCluster', () => {
 Cypress.Commands.add('goToNamespaceDetails', () => {
   // // Go to the details of namespace
   cy.getIframeBody()
-    .contains('a', Cypress.env('NAMESPACE_NAME'))
+    .contains('a', config.namespace)
     .click();
 
   return cy.end();

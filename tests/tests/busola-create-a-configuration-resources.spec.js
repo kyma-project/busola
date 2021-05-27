@@ -11,11 +11,11 @@ const CLIENT_NAME = 'test-oauth-client';
 const GIT_REPOSITORY_URL = 'https://github.com/test/sample-function.git';
 const GIT_REPOSITORY_NAME = 'test-git-repository';
 
-before(() => {
-  cy.goToNamespaceDetails();
-});
-
 context('Busola - Testing Configuration', () => {
+  before(() => {
+    cy.loginAndSelectCluster();
+    cy.goToNamespaceDetails();
+  });
   const getLeftNav = () => cy.get('nav[data-testid=semiCollapsibleLeftNav]');
 
   it('Test a Config Map', () => {
