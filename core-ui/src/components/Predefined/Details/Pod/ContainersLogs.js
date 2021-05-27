@@ -18,18 +18,6 @@ function Logs({ params }) {
   const [showTimestamps, setShowTimestamps] = useState(false);
   const [logsToSave, setLogsToSave] = useState([]);
 
-  const filterEntries = (entries, query) => {
-    if (!query) return entries;
-
-    const filterEntry = entry =>
-      entry
-        .toString()
-        .toLowerCase()
-        .indexOf(query.toLowerCase()) !== -1;
-
-    return entries.filter(filterEntry);
-  };
-
   const breadcrumbs = [
     {
       name: 'Pods',
@@ -47,26 +35,44 @@ function Logs({ params }) {
   const url = `/api/v1/namespaces/${params.namespace}/pods/${params.podName}/log?container=${params.containerName}&follow=true&tailLines=1000&timestamps=true`;
   const streamData = useGetStream(url);
 
+  function highlightSearch(entry, searchText) {
+    if (searchText) {
+      const entryArray = entry.split(new RegExp(`(${searchText})`, 'gi'));
+      return (
+        <span>
+          {entryArray.map((part, idx) =>
+            part.toLowerCase() === searchText.toLowerCase() ? (
+              <b key={idx} className="logs-highlighted">
+                {part}
+              </b>
+            ) : (
+              part
+            ),
+          )}
+        </span>
+      );
+    }
+    return <span>{entry}</span>;
+  }
+
   const LogsPanel = ({ streamData, containerName }) => {
     const { error, data } = streamData;
     if (error) return error.message;
     setLogsToSave(data || []);
 
-    const filteredEntries = filterEntries(data, searchQuery);
+    if (data.length === 0)
+      <div className="empty-logs">
+        No logs avaliable for the '{containerName}' container.
+      </div>;
 
-    if (filteredEntries.length === 0)
-      return (
-        <div className="empty-logs">
-          No logs avaliable for the '{containerName}' container.
-        </div>
-      );
-
-    return filteredEntries.map((arr, idx) => {
+    return data.map((arr, idx) => {
       const timestamp = arr.split(' ')[0];
       const stream = arr.replace(timestamp, '');
+      const entry = showTimestamps ? `${timestamp} ${stream}` : stream;
+      const highlightedEntry = highlightSearch(entry, searchQuery);
       return (
         <div className="logs" key={idx}>
-          {showTimestamps ? `${timestamp} ${stream}` : stream}
+          {highlightedEntry}
         </div>
       );
     });

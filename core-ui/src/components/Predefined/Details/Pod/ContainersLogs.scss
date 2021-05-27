@@ -6,6 +6,10 @@
   background-color: #252525;
 }
 
+.logs-highlighted {
+  background-color: var(--sapBrandColor);
+}
+
 .empty-logs {
   width: 100%;
   font-size: 18px;
