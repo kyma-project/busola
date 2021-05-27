@@ -1,6 +1,5 @@
 import config from '../config';
 
-const getLeftNav = () => cy.get('nav[data-testid=semiCollapsibleLeftNav]');
 Cypress.Commands.add('loginAndSelectCluster', () => {
   cy.visit(config.clusterAddress)
     .getIframeBody()
@@ -14,11 +13,6 @@ Cypress.Commands.add('loginAndSelectCluster', () => {
   cy.getIframeBody()
     .find('[role=alert]')
     .should('not.exist');
-
-  cy.wait(5000); //it freezes locally - we need to find a better solution
-  getLeftNav()
-    .contains('Namespaces')
-    .click();
 
   cy.url().should('match', /namespaces$/);
   cy.getIframeBody()
