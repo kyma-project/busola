@@ -1,8 +1,6 @@
 /// <reference types="cypress" />
-import config from '../config';
 import 'cypress-file-upload';
 
-const NAMESPACE_NAME = config.namespace;
 const DOCKER_IMAGE = 'eu.gcr.io/kyma-project/pr/orders-service:PR-162';
 const DEPLOYMENT_NAME = 'orders-service';
 

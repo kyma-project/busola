@@ -1,8 +1,5 @@
 /// <reference types="cypress" />
-import config from '../config';
 import 'cypress-file-upload';
-
-const NAMESPACE_NAME = config.namespace;
 
 context('Busola - Smoke Tests', () => {
   const getLeftNav = () => cy.get('nav[data-testid=semiCollapsibleLeftNav]');

@@ -1,3 +1,4 @@
 import './commands';
 import './iframe-commands';
-import './login';
+import './local-storage';
+import './login-commands';

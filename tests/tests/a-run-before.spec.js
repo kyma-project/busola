@@ -1,3 +1,4 @@
+/// <reference types="cypress" />
 import config from '../config';
 
 context('Busola - Create Namespace', () => {
@@ -14,7 +15,7 @@ context('Busola - Create Namespace', () => {
       .find('[role=dialog]')
       .find("input[placeholder='Namespace name']")
       .should('be.visible')
-      .type(config.namespace);
+      .type(config.namespaceName);
 
     cy.getIframeBody()
       .find('[role=dialog]')

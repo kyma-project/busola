@@ -1,6 +1,6 @@
+/// <reference types="cypress" />
 import config from '../config';
 import 'cypress-file-upload';
-const NAMESPACE_NAME = config.namespace;
 
 context('Clean up namespace', () => {
   before(() => {
@@ -12,7 +12,7 @@ context('Clean up namespace', () => {
     cy.get('[data-testid=namespaces_namespaces]').click(); //we need to use force when others elements make menu not visible
     cy.getIframeBody()
       .find('[role="search"] [aria-label="search-input"]')
-      .type(NAMESPACE_NAME, { force: true }); // use force to skip clicking (the table could re-render between the click and the typing)
+      .type(config.namespaceName, { force: true }); // use force to skip clicking (the table could re-render between the click and the typing)
 
     cy.getIframeBody()
       .find('tbody tr [aria-label="Delete"]')

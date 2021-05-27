@@ -1,8 +1,6 @@
 /// <reference types="cypress" />
-import config from '../config';
 import 'cypress-file-upload';
 
-const NAMESPACE_NAME = config.namespace;
 const CONFIG_MAP_NAME = 'test-configmap';
 const SECRET_NAME = 'test-secret';
 const USER_NAME = 'user@kyma.eu';
@@ -212,9 +210,7 @@ context('Busola - Testing Configuration', () => {
       .contains('Namespaces')
       .click();
 
-    cy.getIframeBody()
-      .contains('a', NAMESPACE_NAME)
-      .click({ force: true });
+    cy.goToNamespaceDetails();
 
     getLeftNav()
       .find('[data-testid=oauth2clients_oauthclients]')
