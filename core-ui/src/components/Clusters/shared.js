@@ -35,6 +35,11 @@ export function addCluster(params) {
     },
   };
 
+  params.currentContext = {
+    cluster: params.kubeconfig.clusters[0],
+    user: params.kubeconfig.users[0],
+  };
+
   LuigiClient.sendCustomMessage({
     id: 'busola.addCluster',
     params: merge(defaultParams, params),

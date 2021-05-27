@@ -122,9 +122,9 @@ export async function createNavigation() {
   const isClusterSelected = !!params;
 
   const clusterNodes = Object.entries(clusters).map(
-    ([clusterName, { cluster }]) => ({
+    ([clusterName, { currentContext }]) => ({
       title: clusterName,
-      subTitle: cluster.server,
+      subTitle: currentContext.cluster.server,
       link:
         activeClusterName === clusterName
           ? `/cluster/${encodeURIComponent(clusterName)}`
@@ -211,7 +211,7 @@ export async function getNavigationData(authData) {
       permissionSet,
     );
     const params = getActiveCluster();
-    const activeClusterName = params.cluster.name;
+    const activeClusterName = params.currentContext.cluster.name;
 
     const { navigation = {}, hiddenNamespaces = [], modules = {} } =
       params?.config || {};
@@ -248,7 +248,8 @@ export async function getNavigationData(authData) {
           modules,
           hiddenNamespaces,
           showHiddenNamespaces: shouldShowHiddenNamespaces(),
-          cluster: params.cluster,
+          cluster: params.currentContext.cluster,
+          kubeconfig: params.kubeconfig,
         },
       },
     ];

@@ -2,7 +2,7 @@ import { saveCurrentLocation } from './navigation/previous-location';
 import { getAuthData, setAuthData } from './auth/auth-storage';
 import { communication } from './communication';
 import { createSettings } from './settings';
-import { createAuth } from './auth/auth.js';
+import { createAuth, hasKubeconfigAuth } from './auth/auth.js';
 import { saveInitParamsIfPresent } from './init-params';
 import {
   getActiveCluster,
@@ -35,7 +35,7 @@ async function luigiAfterInit() {
       Luigi.navigation().navigate('/clusters');
     }
   } else {
-    if (params?.auth && getAuthData()) {
+    if (getAuthData()) {
       await addClusterNodes();
     }
   }
@@ -48,12 +48,14 @@ async function luigiAfterInit() {
 
   const params = getActiveCluster();
 
-  if (params?.rawAuth) {
-    setAuthData(params.rawAuth);
+  const kubeconfigUser = params?.currentContext.user.user;
+  if (hasKubeconfigAuth(kubeconfigUser)) {
+    setAuthData(kubeconfigUser);
   }
 
   const luigiConfig = {
-    auth: createAuth(params?.auth),
+    auth:
+      !hasKubeconfigAuth(kubeconfigUser) && createAuth(params?.config?.auth),
     communication,
     navigation: await createNavigation(),
     routing: {

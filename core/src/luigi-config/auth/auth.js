@@ -7,13 +7,29 @@ import {
 
 export let groups;
 
+export function hasKubeconfigAuth(user) {
+  return (
+    user &&
+    (user.token || (user['client-certificate-data'] && user['client-key-data']))
+  );
+}
+
 export function reloadAuth() {
-  if (params?.rawAuth) {
-    setAuthData(params.rawAuth);
-  }
   const params = getActiveCluster();
-  const auth = params?.auth && createAuth(params.auth);
-  Luigi.setConfig({ ...Luigi.getConfig(), auth });
+
+  if (!params) return;
+
+  const kubeconfigUser = params.currentContext.user.user;
+
+  if (hasKubeconfigAuth(kubeconfigUser)) {
+    // auth is already in kubeconfig
+    setAuthData(kubeconfigUser);
+    Luigi.setConfig({ ...Luigi.getConfig(), auth: null });
+  } else {
+    // we need to use OIDC flow
+    const auth = createAuth(params.auth);
+    Luigi.setConfig({ ...Luigi.getConfig(), auth });
+  }
 }
 
 export const createAuth = authParams => {
@@ -35,6 +51,9 @@ export const createAuth = authParams => {
       automaticSilentRenew: true,
       loadUserInfo: false,
       userInfoFn: (_, authData) => {
+        // rename received "idToken" to keep consistency with kubeconfig "token"
+        authData.token = authData.idToken;
+        delete authData.idToken;
         setAuthData(authData);
         groups = authData.profile['http://k8s/groups'];
         return Promise.resolve({

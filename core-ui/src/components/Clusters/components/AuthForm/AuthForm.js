@@ -4,7 +4,7 @@ import { Button, Icon, MessageStrip } from 'fundamental-react';
 import { addCluster } from '../../shared';
 import './AuthForm.scss';
 
-export function AuthForm({ cluster, setShowingAuthForm }) {
+export function AuthForm({ kubeconfig, setShowingAuthForm }) {
   const formRef = React.useRef();
   const [auth, setAuth] = React.useState({
     issuerUrl: '',
@@ -16,8 +16,8 @@ export function AuthForm({ cluster, setShowingAuthForm }) {
   const submitForm = e => {
     e.preventDefault();
     const params = {
-      cluster,
-      auth: { ...auth, responseType: 'id_token' },
+      kubeconfig,
+      config: { auth: { ...auth, responseType: 'id_token' } },
     };
     addCluster(params);
   };

@@ -11,30 +11,33 @@ export function ClusterList() {
   }
 
   const styleActiveCluster = entry => {
-    return entry.cluster.name === activeClusterName
+    return entry.currentContext.cluster.name === activeClusterName
       ? { fontWeight: 'bolder' }
       : {};
   };
 
   const entries = Object.values(clusters);
   const headerRenderer = () => ['Name', 'API Server address'];
-  const textSearchProperties = ['cluster.name', 'cluster.server'];
+  const textSearchProperties = [
+    'currentContext.cluster.name',
+    'currentContext.cluster.cluster.server',
+  ];
 
   const rowRenderer = entry => [
     <Link
       className="link"
       style={styleActiveCluster(entry)}
-      onClick={() => setCluster(entry.cluster.name)}
+      onClick={() => setCluster(entry.currentContext.cluster.name)}
     >
-      {entry.cluster.name}
+      {entry.currentContext.cluster.name}
     </Link>,
-    entry.cluster.server,
+    entry.currentContext.cluster.cluster.server,
   ];
 
   const actions = [
     {
       name: 'Delete',
-      handler: e => deleteCluster(e.cluster.name),
+      handler: e => deleteCluster(e.currentContext.cluster.name),
     },
   ];
 

@@ -7,16 +7,27 @@ import { MessageStrip } from 'fundamental-react';
 import { KubeconfigTextArea } from './KubeconfigTextArea/KubeconfigTextArea';
 import { addCluster, readFile } from '../shared';
 
-export function KubeconfigUpload({ setCluster, setShowingAuthForm }) {
+export function KubeconfigUpload({ setKubeconfig, setShowingAuthForm }) {
   const [showError, setShowError] = React.useState(false);
+  const encoder = React.useRef(createEncoder('lzma'));
 
   const initParams = LuigiClient.getNodeParams().init;
 
+  React.useEffect(() => {
+    if (!initParams) return;
+    async function setKubeconfigIfPresentInParams() {
+      const params = await encoder.current.decompress(initParams);
+      if (params.kubeconfig) {
+        handleKubeconfigAdded(params.kubeconfig);
+      }
+    }
+    setKubeconfigIfPresentInParams();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initParams]);
+
   const getConfigFromParams = async () => {
     if (!initParams) return {};
-    const encoder = createEncoder('lzma');
-    const decoded = await encoder.decompress(initParams);
-
+    const decoded = await encoder.current.decompress(initParams);
     const clusterConfig = {
       ...decoded?.config,
       modules: { ...DEFAULT_MODULES, ...(decoded?.config?.modules || {}) },
@@ -39,32 +50,20 @@ export function KubeconfigUpload({ setCluster, setShowingAuthForm }) {
     setShowingAuthForm(false);
     setShowError(false);
 
-    const config = await getConfigFromParams();
-    const clusterName = kubeconfig.clusters[0].name;
-    const cluster = {
-      name: clusterName,
-      server: kubeconfig.clusters[0].cluster.server,
-      'certificate-authority-data':
-        kubeconfig.clusters[0].cluster['certificate-authority-data'],
-    };
     const user = kubeconfig.users[0].user;
     const token = user.token;
     const clientCA = user['client-certificate-data'];
     const clientKeyData = user['client-key-data'];
     if (token || (clientCA && clientKeyData)) {
+      const config = await getConfigFromParams();
       const params = {
-        cluster,
+        kubeconfig,
         config,
-        rawAuth: {
-          idToken: token,
-          'client-certificate-data': clientCA,
-          'client-key-data': clientKeyData,
-        },
       };
       addCluster(params);
     } else {
       setShowingAuthForm(true);
-      setCluster(cluster);
+      setKubeconfig(kubeconfig);
     }
   }
 
@@ -72,8 +71,8 @@ export function KubeconfigUpload({ setCluster, setShowingAuthForm }) {
     <>
       {initParams ? (
         <p>
-          Configuration has been included properly but is missing Cluster and
-          Auth data. Please upload a kubeconfig.
+          Configuration has been included properly but is missing the
+          kubeconfig. Please add one.
         </p>
       ) : (
         ''

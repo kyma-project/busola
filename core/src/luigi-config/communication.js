@@ -4,7 +4,6 @@ import {
   deleteCluster,
   saveActiveClusterName,
   getActiveClusterName,
-  getActiveCluster,
   setCluster,
 } from './cluster-management';
 import { clearAuthData } from './auth/auth-storage';
@@ -49,7 +48,7 @@ export const communication = {
     'busola.reload': () => location.reload(),
     'busola.addCluster': async ({ params }) => {
       saveClusterParams(params);
-      setCluster(params.cluster.name);
+      setCluster(params.currentContext.cluster.name);
     },
     'busola.deleteCluster': async ({ clusterName }) => {
       deleteCluster(clusterName);
@@ -93,11 +92,4 @@ const convertToObject = paramsString => {
       if (key) result[key] = val;
     });
   return result;
-};
-
-const updateClusterContext = newContext => {
-  const nodes = Luigi.getConfig().navigation.nodes;
-  const clusterNode = nodes.find(n => n.pathSegment === 'cluster');
-  clusterNode.context = { ...clusterNode.context, ...newContext };
-  Luigi.configChanged('navigation.nodes');
 };

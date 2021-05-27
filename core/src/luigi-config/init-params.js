@@ -4,6 +4,7 @@ import {
   saveActiveClusterName,
   setCluster,
 } from './cluster-management';
+import { hasKubeconfigAuth } from './auth/auth';
 
 const encoder = createEncoder('lzma');
 
@@ -30,40 +31,47 @@ export async function saveInitParamsIfPresent() {
     SERVERLESS_REPOS: 'gitrepositories.serverless.kyma-project.io',
   };
 
-  const initParams = new URL(location).searchParams.get('init');
-  if (initParams) {
-    const decoded = await encoder.decompress(initParams);
-    const params = {
+  const encodedParams = new URL(location).searchParams.get('init');
+  if (encodedParams) {
+    const decoded = await encoder.decompress(encodedParams);
+
+    const isKubeconfigPresent = !!decoded.kubeconfig;
+    const kubeconfigUser =
+      decoded.kubeconfig?.users && decoded.kubeconfig?.users[0].user;
+    const isOidcAuthPresent = decoded.config?.auth;
+
+    if (
+      !isKubeconfigPresent ||
+      (!isOidcAuthPresent && !hasKubeconfigAuth(kubeconfigUser))
+    ) {
+      // Luigi navigate doesn't work here. Simulate the Luigi's nodeParams by adding the `~`
+      window.location.href =
+        window.location.origin + '/clusters/add?~init=' + encodedParams;
+      return;
+    }
+
+    handleInitParams({
       ...decoded,
       config: {
         ...decoded.config,
         modules: { ...DEFAULT_MODULES, ...(decoded.config?.modules || {}) },
       },
-    };
-
-    if (!params.auth || !params.cluster) {
-      // Luigi navigate doesn't work here. Simulate the Luigi's nodeParams by adding the `~`
-      window.location.href =
-        window.location.origin + '/clusters/add?~init=' + initParams;
-      return;
-    }
-
-    if (decoded.auth) {
-      params.auth = {
-        ...decoded.auth,
-        ...getResponseParams(decoded.auth.usePKCE),
-      };
-    }
-    if (!params.cluster.name) {
-      params.cluster.name = params.cluster.server.replace(
-        /^https?:\/\/(api\.)?/,
-        '',
-      );
-    }
-
-    const clusterName = params.cluster.name;
-    saveClusterParams(params);
-    saveActiveClusterName(clusterName);
-    setCluster(clusterName);
+      currentContext: {
+        cluster: decoded?.kubeconfig?.clusters[0],
+        user: decoded?.kubeconfig?.users[0],
+      },
+    });
   }
+}
+
+function handleInitParams(params) {
+  if (params.config.auth && !hasKubeconfigAuth(kubeconfigUser)) {
+    params.config.auth = {
+      ...params.config.auth,
+      ...getResponseParams(params.config.auth.usePKCE),
+    };
+  }
+  const clusterName = params.currentContext.cluster.name;
+  saveClusterParams(params);
+  setCluster(clusterName);
 }
