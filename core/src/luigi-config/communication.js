@@ -10,7 +10,7 @@ import {
 import { clearAuthData } from './auth/auth-storage';
 import { reloadNavigation } from './navigation/navigation-data-init';
 import { reloadAuth } from './auth/auth';
-import { setShowHiddenNamespaces } from './utils/system-namespaces-toggle';
+import { setShowHiddenNamespaces } from './utils/hidden-namespaces-toggle';
 
 export const communication = {
   customMessagesListeners: {

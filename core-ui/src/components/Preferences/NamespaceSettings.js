@@ -37,7 +37,7 @@ export default function NamespaceSettings() {
           <LayoutPanel.Actions>
             Show System Namespaces
             <Switch
-              inputProps={{ 'aria-label': 'toggle-system-namespaces' }}
+              inputProps={{ 'aria-label': 'toggle-hidden-namespaces' }}
               className="fd-has-display-inline-block fd-margin-begin--tiny"
               checked={showHiddenNamespaces}
               onChange={toggleVisibility}

@@ -29,7 +29,7 @@ import {
   deleteActiveCluster,
   saveActiveClusterName,
 } from '../cluster-management';
-import { shouldShowHiddenNamespaces } from './../utils/system-namespaces-toggle';
+import { shouldShowHiddenNamespaces } from './../utils/hidden-namespaces-toggle';
 import { saveLocation, tryRestorePreviousLocation } from './previous-location';
 import { NODE_PARAM_PREFIX } from '../luigi-config';
 

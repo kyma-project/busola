@@ -8,7 +8,7 @@ import {
   getActiveCluster,
   setActiveClusterIfPresentInUrl,
 } from './cluster-management';
-import { loadHiddenNamespacesToggle } from './utils/system-namespaces-toggle';
+import { loadHiddenNamespacesToggle } from './utils/hidden-namespaces-toggle';
 
 import {
   createNavigation,

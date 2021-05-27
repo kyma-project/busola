@@ -23,7 +23,7 @@ describe('NamespaceSettings', () => {
     const spy = jest.spyOn(LuigiClient, 'sendCustomMessage');
     const { getByLabelText } = render(<NamespaceSettings />);
 
-    fireEvent.click(getByLabelText('toggle-system-namespaces'));
+    fireEvent.click(getByLabelText('toggle-hidden-namespaces'));
 
     expect(spy).toHaveBeenCalledWith({
       id: 'busola.showHiddenNamespaces',
