@@ -6,6 +6,7 @@ const ADDRESS = config.localDev
 const NAMESPACE_NAME = config.namespace;
 
 before(() => {
+  const getLeftNav = () => cy.get('nav[data-testid=semiCollapsibleLeftNav]');
   cy.visit(ADDRESS)
     .getIframeBody()
     .contains('Add Cluster')
@@ -14,6 +15,10 @@ before(() => {
   cy.getIframeBody()
     .contains('Drag file here')
     .attachFile('kubeconfig.yaml', { subjectType: 'drag-n-drop' });
+
+  getLeftNav()
+    .contains('Namespaces')
+    .click();
 
   cy.getIframeBody()
     .find('[role=alert]')
