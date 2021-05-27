@@ -62,7 +62,10 @@ context('Busola - Create a Function and access it', () => {
       .contains('button', 'Create')
       .click();
 
-    cy.wait(3000);
+    cy.getIframeBody()
+      .find('[role="status"]', { timeout: 60 * 1000 })
+      .should('have.text', 'DEPLOYING');
+
     cy.readFile('fixtures/orders-function.js').then(body => {
       cy.getIframeBody()
         .find('textarea[aria-roledescription="editor"]')
@@ -94,6 +97,10 @@ context('Busola - Create a Function and access it', () => {
       .click();
 
     //TODO use one namespace per all tests. Then we'll be able create the lambda at the beginning and create API Rule for it at the end
+    cy.getIframeBody()
+      .find('[role="status"]', { timeout: 60 * 1000 })
+      .should('have.text', 'DEPLOYING');
+
     cy.getIframeBody()
       .find('[role="status"]', { timeout: 120 * 1000 })
       .should('have.text', 'RUNNING');
