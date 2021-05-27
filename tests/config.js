@@ -1,11 +1,11 @@
 const env = Cypress.env();
 
-const random = Math.floor(Math.random() * 9999) + 1000;
+const domain = env.DOMAIN || 'local.kyma.dev';
 module.exports = {
-  domain: env.DOMAIN || 'local.kyma.dev',
+  domain: domain,
   localDev: env.LOCAL_DEV || false,
   namespace: env.NAMESPACE_NAME,
   clusterAddress: env.LOCAL_DEV
     ? `http://localhost:4200/clusters`
-    : `https://busola.${env.DOMAIN}/clusters`,
+    : `https://busola.${domain}/clusters`,
 };
