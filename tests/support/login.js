@@ -3,9 +3,9 @@ const env = Cypress.env();
 
 const NAMESPACE_NAME = config.namespace;
 
-// before(() => {
-//   cy.visit(ADDRESS);
-// });
+before(() => {
+  cy.loginAndSelectCluster();
+});
 
 beforeEach(() => {
   cy.restoreLocalStorageCache();

@@ -11,8 +11,13 @@ const CLIENT_NAME = 'test-oauth-client';
 const GIT_REPOSITORY_URL = 'https://github.com/test/sample-function.git';
 const GIT_REPOSITORY_NAME = 'test-git-repository';
 
+before(() => {
+  cy.goToNamespaceDetails();
+});
+
 context('Busola - Testing Configuration', () => {
   const getLeftNav = () => cy.get('nav[data-testid=semiCollapsibleLeftNav]');
+
   it('Test a Config Map', () => {
     getLeftNav()
       .contains('Configuration')
@@ -202,6 +207,10 @@ context('Busola - Testing Configuration', () => {
 
   it('Test a OAuth Clients', () => {
     cy.get('[data-testid=luigi-topnav-logo]').click();
+
+    getLeftNav()
+      .contains('Namespaces')
+      .click();
 
     cy.getIframeBody()
       .contains('a', NAMESPACE_NAME)

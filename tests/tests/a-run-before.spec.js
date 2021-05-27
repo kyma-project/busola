@@ -4,10 +4,7 @@ const ADDRESS = config.localDev
   : `https://busola.${config.domain}/clusters`;
 
 const NAMESPACE_NAME = config.namespace;
-describe('create ns', () => {
-  before(() => {
-    cy.loginAndSelectCluster();
-  });
+describe('Busola - Create Namespace', () => {
   it('Create Namespace', () => {
     cy.getIframeBody()
       .contains('Create Namespace')
