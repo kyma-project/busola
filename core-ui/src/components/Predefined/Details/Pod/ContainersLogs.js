@@ -61,9 +61,11 @@ function Logs({ params }) {
     setLogsToSave(data || []);
 
     if (data.length === 0)
-      <div className="empty-logs">
-        No logs avaliable for the '{containerName}' container.
-      </div>;
+      return (
+        <div className="empty-logs">
+          No logs avaliable for the '{containerName}' container.
+        </div>
+      );
 
     return data.map((arr, idx) => {
       const timestamp = arr.split(' ')[0];
