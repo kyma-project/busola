@@ -9,14 +9,14 @@ const CLIENT_NAME = 'test-oauth-client';
 const GIT_REPOSITORY_URL = 'https://github.com/test/sample-function.git';
 const GIT_REPOSITORY_NAME = 'test-git-repository';
 
-context('Busola - Testing Configuration', () => {
+context('Test configuration resources', () => {
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
   });
   const getLeftNav = () => cy.get('nav[data-testid=semiCollapsibleLeftNav]');
 
-  it('Test a Config Map', () => {
+  it('Create a Config Map', () => {
     getLeftNav()
       .contains('Configuration')
       .click();
@@ -56,7 +56,7 @@ context('Busola - Testing Configuration', () => {
       .should('be.visible');
   });
 
-  it('Test a Secret', () => {
+  it('Create a Secret', () => {
     getLeftNav()
       .find('[data-testid=secrets_secrets]')
       .click();
@@ -92,7 +92,7 @@ context('Busola - Testing Configuration', () => {
       .should('be.visible');
   });
 
-  it('Test a Roles list view', () => {
+  it('Create a Roles list view', () => {
     getLeftNav()
       .find('[data-testid=roles_roles]')
       .click();
@@ -102,7 +102,7 @@ context('Busola - Testing Configuration', () => {
       .should('be.visible');
   });
 
-  it('Test a Role Binding', () => {
+  it('Create a Role Binding', () => {
     getLeftNav()
       .find('[data-testid=role-bindings_rolebindings]')
       .click();
@@ -134,7 +134,7 @@ context('Busola - Testing Configuration', () => {
       .should('be.visible');
   });
 
-  it('Test a Cluster Roles list view', () => {
+  it('Create a Cluster Roles list view', () => {
     getLeftNav()
       .contains('Namespaces')
       .click();
@@ -157,7 +157,7 @@ context('Busola - Testing Configuration', () => {
       .should('be.gte', 1);
   });
 
-  it('Test a Cluster Role Binding', () => {
+  it('Create a Cluster Role Binding', () => {
     getLeftNav()
       .find('[data-testid=cluster-role-bindings_clusterrolebindings]')
       .click();
@@ -203,7 +203,7 @@ context('Busola - Testing Configuration', () => {
       .click(); // close navigation tab after yourself
   });
 
-  it('Test a OAuth Clients', () => {
+  it('Create a OAuth Clients', () => {
     cy.get('[data-testid=luigi-topnav-logo]').click();
 
     getLeftNav()
@@ -258,7 +258,7 @@ context('Busola - Testing Configuration', () => {
       .should('be.visible');
   });
 
-  it('Test a Git Repository', () => {
+  it('Create a Git Repository', () => {
     getLeftNav()
       .find('[data-testid=gitrepositories_gitrepositories]')
       .click();
@@ -294,6 +294,6 @@ context('Busola - Testing Configuration', () => {
 
     getLeftNav()
       .contains('Configuration')
-      .click(); // close navigation tab after yourself
+      .click(); // close navigation tab at the end
   });
 });
