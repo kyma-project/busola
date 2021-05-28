@@ -14,14 +14,13 @@ context('Test configuration resources', () => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
   });
-  const getLeftNav = () => cy.get('nav[data-testid=semiCollapsibleLeftNav]');
 
   it('Create a Config Map', () => {
-    getLeftNav()
+    cy.getLeftNav()
       .contains('Configuration')
       .click();
 
-    getLeftNav()
+    cy.getLeftNav()
       .find('[data-testid=config-maps_configmaps]')
       .click();
 
@@ -57,7 +56,7 @@ context('Test configuration resources', () => {
   });
 
   it('Create a Secret', () => {
-    getLeftNav()
+    cy.getLeftNav()
       .find('[data-testid=secrets_secrets]')
       .click();
 
@@ -93,7 +92,7 @@ context('Test configuration resources', () => {
   });
 
   it('Create a Roles list view', () => {
-    getLeftNav()
+    cy.getLeftNav()
       .find('[data-testid=roles_roles]')
       .click();
 
@@ -103,7 +102,7 @@ context('Test configuration resources', () => {
   });
 
   it('Create a Role Binding', () => {
-    getLeftNav()
+    cy.getLeftNav()
       .find('[data-testid=role-bindings_rolebindings]')
       .click();
 
@@ -135,15 +134,15 @@ context('Test configuration resources', () => {
   });
 
   it('Create a Cluster Roles list view', () => {
-    getLeftNav()
+    cy.getLeftNav()
       .contains('Namespaces')
       .click();
 
-    getLeftNav()
+    cy.getLeftNav()
       .contains('Administration')
       .click();
 
-    getLeftNav()
+    cy.getLeftNav()
       .find('[data-testid=cluster-roles_clusterroles]')
       .click();
 
@@ -158,7 +157,7 @@ context('Test configuration resources', () => {
   });
 
   it('Create a Cluster Role Binding', () => {
-    getLeftNav()
+    cy.getLeftNav()
       .find('[data-testid=cluster-role-bindings_clusterrolebindings]')
       .click();
 
@@ -198,7 +197,7 @@ context('Test configuration resources', () => {
 
     cy.get('[data-testid=luigi-modal-confirm]').click();
 
-    getLeftNav()
+    cy.getLeftNav()
       .contains('Administration')
       .click(); // close navigation tab after yourself
   });
@@ -206,13 +205,13 @@ context('Test configuration resources', () => {
   it('Create a OAuth Clients', () => {
     cy.get('[data-testid=luigi-topnav-logo]').click();
 
-    getLeftNav()
+    cy.getLeftNav()
       .contains('Namespaces')
       .click();
 
     cy.goToNamespaceDetails();
 
-    getLeftNav()
+    cy.getLeftNav()
       .find('[data-testid=oauth2clients_oauthclients]')
       .click();
 
@@ -259,7 +258,7 @@ context('Test configuration resources', () => {
   });
 
   it('Create a Git Repository', () => {
-    getLeftNav()
+    cy.getLeftNav()
       .find('[data-testid=gitrepositories_gitrepositories]')
       .click();
 
@@ -292,7 +291,7 @@ context('Test configuration resources', () => {
       .contains(GIT_REPOSITORY_URL)
       .should('be.visible');
 
-    getLeftNav()
+    cy.getLeftNav()
       .contains('Configuration')
       .click(); // close navigation tab at the end
   });
