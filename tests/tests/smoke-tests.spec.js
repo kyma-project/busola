@@ -6,17 +6,8 @@ context('Smoke Tests', () => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
   });
-  it('Renders navigation nodes', () => {
-    cy.get('[data-testid=luigi-topnav-logo]').click();
-    ['Namespaces', 'Administration', 'Diagnostics'].forEach(node => {
-      cy.getLeftNav()
-        .contains(node)
-        .should('be.visible');
-    });
-  });
 
-  // skipped due to luigi problem with going to namespace details
-  it.skip('Check sections of namespace details', () => {
+  it('Check sections of namespace details', () => {
     cy.getIframeBody()
       .contains('Healthy Resources')
       .should('be.visible');
@@ -44,6 +35,15 @@ context('Smoke Tests', () => {
       .click();
 
     cy.url().should('match', /namespaces$/);
+  });
+
+  it('Renders navigation nodes', () => {
+    cy.get('[data-testid=luigi-topnav-logo]').click();
+    ['Administration', 'Diagnostics'].forEach(node => {
+      cy.getLeftNav()
+        .contains(node)
+        .should('be.visible');
+    });
   });
 
   it('Check Administration tab', () => {

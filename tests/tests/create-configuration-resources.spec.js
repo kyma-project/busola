@@ -284,15 +284,11 @@ context('Test configuration resources', () => {
       .click();
 
     cy.getIframeBody()
-      .contains(GIT_REPOSITORY_NAME)
+      .find('td', GIT_REPOSITORY_NAME, { timeout: 5000 })
       .should('be.visible');
 
     cy.getIframeBody()
       .contains(GIT_REPOSITORY_URL)
       .should('be.visible');
-
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click(); // close navigation tab at the end
   });
 });
