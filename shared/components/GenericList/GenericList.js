@@ -44,17 +44,25 @@ export const GenericList = ({
   className,
 }) => {
   const [currentPage, setCurrentPage] = React.useState(
-    (pagination && pagination.initialPage) || 1,
+    pagination?.initialPage || 1,
   );
   const [filteredEntries, setFilteredEntries] = useState(entries);
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    setCurrentPage(1);
+    if (pagination) {
+      // move back when the last item from the last page is deleted
+      const pagesCount = Math.ceil(entries.length / pagination.itemsPerPage);
+      if (currentPage > pagesCount) {
+        setCurrentPage(pagesCount);
+      }
+    }
     setFilteredEntries(
       filterEntries([...entries], searchQuery, textSearchProperties),
     );
   }, [searchQuery, setFilteredEntries, entries]);
+
+  React.useEffect(() => setCurrentPage(1), [searchQuery]);
 
   const headerActions = (
     <>
