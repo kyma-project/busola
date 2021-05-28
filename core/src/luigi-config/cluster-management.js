@@ -26,15 +26,13 @@ export async function setCluster(clusterName) {
   if (hasKubeconfigAuth(kubeconfigUser)) {
     setAuthData(kubeconfigUser);
     await reloadNavigation();
+    Luigi.navigation().navigate(
+      `/cluster/${encodeURIComponent(clusterName)}/namespaces`,
+    );
   } else {
     saveLocation(`/cluster/${encodeURIComponent(clusterName)}`);
     location = location.origin;
-    return;
   }
-
-  Luigi.navigation().navigate(
-    `/cluster/${encodeURIComponent(clusterName)}/namespaces`,
-  );
 }
 
 export function saveClusterParams(params) {

@@ -2,6 +2,17 @@ import LuigiClient from '@luigi-project/client';
 import { DEFAULT_MODULES } from 'react-shared';
 import { merge } from 'lodash';
 
+function getResponseParams(usePKCE = true) {
+  if (usePKCE) {
+    return {
+      responseType: 'code',
+      responseMode: 'query',
+    };
+  } else {
+    return { responseType: 'id_token' };
+  }
+}
+
 export function setCluster(clusterName) {
   LuigiClient.sendCustomMessage({
     id: 'busola.setCluster',
@@ -39,6 +50,13 @@ export function addCluster(params) {
     cluster: params.kubeconfig.clusters[0],
     user: params.kubeconfig.users[0],
   };
+
+  if (params.config?.auth) {
+    params.config.auth = {
+      ...params.config.auth,
+      ...getResponseParams(params.config.auth.usePKCE),
+    };
+  }
 
   LuigiClient.sendCustomMessage({
     id: 'busola.addCluster',

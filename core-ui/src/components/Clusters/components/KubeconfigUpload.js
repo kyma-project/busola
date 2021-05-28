@@ -7,6 +7,16 @@ import { KubeconfigTextArea } from './KubeconfigTextArea/KubeconfigTextArea';
 import { addCluster, readFile } from '../shared';
 import { decompress, getConfigFromParams } from './getConfigFromParams';
 
+function hasKubeconfigAuth(kubeconfig) {
+  const user = kubeconfig?.users && kubeconfig.users[0]?.user;
+  if (user) return false;
+  const token = user.token;
+  const clientCA = user['client-certificate-data'];
+  const clientKeyData = user['client-key-data'];
+
+  return !!token || (!!clientCA && !!clientKeyData);
+}
+
 export function KubeconfigUpload({ setKubeconfig, setShowingAuthForm }) {
   const [showError, setShowError] = React.useState(false);
 
@@ -39,12 +49,10 @@ export function KubeconfigUpload({ setKubeconfig, setShowingAuthForm }) {
     setShowingAuthForm(false);
     setShowError(false);
 
-    const user = kubeconfig?.users && kubeconfig.users[0].user;
-    const token = user?.token;
-    const clientCA = user && user['client-certificate-data'];
-    const clientKeyData = user && user['client-key-data'];
-    if (token || (clientCA && clientKeyData)) {
-      const config = await getConfigFromParams(initParams);
+    const kubeconfigHasAuth = hasKubeconfigAuth(kubeconfig);
+    const config = await getConfigFromParams(initParams);
+
+    if (kubeconfigHasAuth || config?.auth) {
       const params = {
         kubeconfig,
         config,
