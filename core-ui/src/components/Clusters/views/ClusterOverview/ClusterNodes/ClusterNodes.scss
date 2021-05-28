@@ -1,19 +1,11 @@
 .cluster-overview__nodes {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  grid-row-gap: 42px;
+  margin: 32px;
+  grid-gap: 32px;
 
-  & > * {
-    margin-right: 24px;
-    padding-top: 0 !important; // override fd-styles
-
-    .fd-layout-panel__body {
-      display: flex;
-      justify-content: space-around;
-    }
-
-    .fd-layout-panel__body > :first-child {
-      padding-top: 0 !important; // override fd-styles
-    }
+  .node-header-title {
+    font-size: 14px;
+    margin-right: 8px;
   }
 }

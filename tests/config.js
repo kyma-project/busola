@@ -1,7 +1,11 @@
 const env = Cypress.env();
 
+const domain = env.DOMAIN || 'local.kyma.dev';
 module.exports = {
-  domain: env.DOMAIN || 'local.kyma.dev',
+  domain: domain,
   localDev: env.LOCAL_DEV || false,
-  namespace: env.NAMESPACE_NAME || `a-busola-test-default`,
+  namespaceName: env.NAMESPACE_NAME,
+  clusterAddress: env.LOCAL_DEV
+    ? `http://localhost:4200/clusters`
+    : `https://busola.${domain}/clusters`,
 };

@@ -5,10 +5,11 @@ Cypress.Commands.add('createApiRule', (ApiRuleName, ApiRuleHost) => {
 
   cy.getLeftNav()
     .contains('API Rules')
-    .click();
+    .click({ force: true });
 
   cy.getIframeBody()
     .contains('Create apirules')
+    .should('be.visible')
     .click();
 
   cy.getModalBody().within($modal => {
@@ -29,7 +30,7 @@ Cypress.Commands.add('createApiRule', (ApiRuleName, ApiRuleHost) => {
       .click();
   });
 
-  cy.getModalBody().should('not.exist');
+  cy.get('.iframeModalCtn iframe').should('not.exist');
 
   cy.getLeftNav()
     .contains('Discovery and Network')

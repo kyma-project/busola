@@ -20,6 +20,7 @@ import { ClusterList } from 'components/Clusters/views/ClusterList';
 import { NoPermissions } from 'components/NoPermissions/NoPermissions';
 import { AddCluster } from 'components/Clusters/views/AddCluster/AddCluster';
 import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
+import { NodeDetails } from 'components/Nodes/NodeDetails/NodeDetails';
 
 export default function App() {
   const { cluster } = useMicrofrontendContext();
@@ -36,6 +37,7 @@ export default function App() {
         exact
         component={withTitle(CLUSTER_OVERVIEW_TITLE, ClusterOverview)}
       />
+      <Route path="/overview/nodes/:nodeName" component={RoutedNodeDetails} />
       <Route
         path="/clusters"
         exact
@@ -91,6 +93,10 @@ export default function App() {
 
 function RoutedEditApiRule({ match }) {
   return <EditApiRule apiName={match.params.apiName} />;
+}
+
+function RoutedNodeDetails({ match }) {
+  return <NodeDetails nodeName={match.params.nodeName} />;
 }
 
 function RoutedContainerDetails({ match }) {

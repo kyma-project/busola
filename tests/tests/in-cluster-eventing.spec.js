@@ -10,13 +10,13 @@ const API_RULE_AND_FUNCTION_NAME = 'in-cluster-eventing-publisher';
 const API_RULE_HOST = API_RULE_AND_FUNCTION_NAME + '-' + random;
 const API_RULE_HOST_EXPECTED_PREFIX = `https://${API_RULE_HOST}.`;
 
-context('Busola - In-cluster eventing flow', () => {
-  it('Create a Receiver Function', () => {
-    // Go to the details of namespace
-    cy.getIframeBody()
-      .contains('a', NAMESPACE_NAME)
-      .click({ force: true });
+context.skip('Busola - In-cluster eventing flow', () => {
+  before(() => {
+    cy.loginAndSelectCluster();
+    cy.goToNamespaceDetails();
+  });
 
+  it('Create a Receiver Function', () => {
     cy.createFunction(
       FUNCTION_NAME,
       'fixtures/in-cluster-eventing-receiver.js',
