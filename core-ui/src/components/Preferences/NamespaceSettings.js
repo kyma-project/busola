@@ -35,7 +35,7 @@ export default function NamespaceSettings() {
         <LayoutPanel.Header>
           <LayoutPanel.Head title="Namespace settings" />
           <LayoutPanel.Actions>
-            Show System Namespaces
+            Show Hidden Namespaces
             <Switch
               inputProps={{ 'aria-label': 'toggle-hidden-namespaces' }}
               className="fd-has-display-inline-block fd-margin-begin--tiny"
