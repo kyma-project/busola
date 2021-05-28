@@ -35,7 +35,7 @@ export async function saveInitParamsIfPresent() {
   if (encodedParams) {
     const decoded = await encoder.decompress(encodedParams);
 
-    const isKubeconfigPresent = !!decoded.kubeconfig;
+    const isKubeconfigPresent = !!Object.keys(decoded.kubeconfig || {}).length;
     const kubeconfigUser =
       decoded.kubeconfig?.users && decoded.kubeconfig?.users[0].user;
     const isOidcAuthPresent = decoded.config?.auth;

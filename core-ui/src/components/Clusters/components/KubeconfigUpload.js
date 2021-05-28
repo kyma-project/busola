@@ -16,7 +16,7 @@ export function KubeconfigUpload({ setKubeconfig, setShowingAuthForm }) {
     if (!initParams) return;
     async function setKubeconfigIfPresentInParams() {
       const params = await decompress(initParams);
-      if (params.kubeconfig) {
+      if (Object.keys(params.kubeconfig || {}).length) {
         handleKubeconfigAdded(params.kubeconfig);
       }
     }
@@ -39,10 +39,10 @@ export function KubeconfigUpload({ setKubeconfig, setShowingAuthForm }) {
     setShowingAuthForm(false);
     setShowError(false);
 
-    const user = kubeconfig.users[0].user;
-    const token = user.token;
-    const clientCA = user['client-certificate-data'];
-    const clientKeyData = user['client-key-data'];
+    const user = kubeconfig?.users && kubeconfig.users[0].user;
+    const token = user?.token;
+    const clientCA = user && user['client-certificate-data'];
+    const clientKeyData = user && user['client-key-data'];
     if (token || (clientCA && clientKeyData)) {
       const config = await getConfigFromParams(initParams);
       const params = {
