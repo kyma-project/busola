@@ -10,7 +10,7 @@ const API_RULE_AND_FUNCTION_NAME = 'in-cluster-eventing-publisher';
 const API_RULE_HOST = API_RULE_AND_FUNCTION_NAME + '-' + random;
 const API_RULE_HOST_EXPECTED_PREFIX = `https://${API_RULE_HOST}.`;
 
-context.skip('Busola - In-cluster eventing flow', () => {
+context.skip('Test in-cluster eventing', () => {
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
@@ -24,7 +24,7 @@ context.skip('Busola - In-cluster eventing flow', () => {
     );
   });
 
-  it('Create an Event Subscriptions', () => {
+  it('Create an Event Subscription', () => {
     cy.getIframeBody()
       .contains('a', 'Configuration')
       .click();

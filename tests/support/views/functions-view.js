@@ -73,7 +73,6 @@ Cypress.Commands.add(
       .should('not.be.disabled')
       .click();
 
-    //TODO use one namespace per all tests. Then we'll be able create the lambda at the beginning and create API Rule for it at the end
     cy.getIframeBody()
       .find('[role="status"]', { timeout: 60 * 1000 })
       .should('have.text', 'DEPLOYING');
