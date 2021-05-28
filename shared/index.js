@@ -1,5 +1,6 @@
 export { GenericList } from './components/GenericList/GenericList';
 export { SearchInput } from './components/GenericList/SearchInput';
+export { Pagination } from './components/GenericList/Pagination/Pagination';
 export {
   K8sNameInput,
   isK8SNameValid,

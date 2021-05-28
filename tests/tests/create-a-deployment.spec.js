@@ -4,8 +4,13 @@ import 'cypress-file-upload';
 const DOCKER_IMAGE = 'eu.gcr.io/kyma-project/pr/orders-service:PR-162';
 const DEPLOYMENT_NAME = 'orders-service';
 
-context('Busola - Create a Deployment', () => {
+context('Create a Deployment', () => {
   const getLeftNav = () => cy.get('nav[data-testid=semiCollapsibleLeftNav]');
+
+  before(() => {
+    cy.loginAndSelectCluster();
+    cy.goToNamespaceDetails();
+  });
 
   it('Create a Deployment', () => {
     cy.getIframeBody()
@@ -72,8 +77,13 @@ context('Busola - Create a Deployment', () => {
   });
 
   it('Check if deployment and service exist', () => {
+    cy.url().should(
+      'match',
+      new RegExp(`\/deployments\/details\/${DEPLOYMENT_NAME}$`),
+    );
+
     cy.getIframeBody()
-      .contains('a', DEPLOYMENT_NAME)
+      .contains('a', DEPLOYMENT_NAME, { timeout: 7000 })
       .should('be.visible');
 
     getLeftNav()
@@ -82,12 +92,10 @@ context('Busola - Create a Deployment', () => {
 
     getLeftNav()
       .find('[data-testid=services_services]')
-      .click()
-      .wait(1000);
+      .click();
 
     cy.getIframeBody()
-      .find('a')
-      .contains(DEPLOYMENT_NAME)
+      .contains('a', DEPLOYMENT_NAME, { timeout: 7000 })
       .should('be.visible');
   });
 });

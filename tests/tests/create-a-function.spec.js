@@ -8,7 +8,7 @@ const API_RULE_NAME = 'orders-function';
 const API_RULE_HOST = API_RULE_NAME + '-' + random;
 const API_RULE_HOST_EXPECTED_PREFIX = `https://${API_RULE_HOST}.`;
 
-context('Busola - Create a Function and access it', () => {
+context.skip('Create a Function and access it', () => {
   let apiRuleUrl;
   const getLeftNav = () => cy.get('nav[data-testid=semiCollapsibleLeftNav]');
 
@@ -19,6 +19,8 @@ context('Busola - Create a Function and access it', () => {
       cy.log('Downloaded the Function code');
       cy.writeFile('fixtures/orders-function.js', response.body);
     });
+    cy.loginAndSelectCluster();
+    cy.goToNamespaceDetails();
   });
 
   it('Create a Function', () => {
@@ -60,7 +62,10 @@ context('Busola - Create a Function and access it', () => {
       .contains('button', 'Create')
       .click();
 
-    cy.wait(3000);
+    cy.getIframeBody()
+      .find('[role="status"]', { timeout: 60 * 1000 })
+      .should('have.text', 'DEPLOYING');
+
     cy.readFile('fixtures/orders-function.js').then(body => {
       cy.getIframeBody()
         .find('textarea[aria-roledescription="editor"]')
@@ -93,21 +98,22 @@ context('Busola - Create a Function and access it', () => {
 
     //TODO use one namespace per all tests. Then we'll be able create the lambda at the beginning and create API Rule for it at the end
     cy.getIframeBody()
+      .find('[role="status"]', { timeout: 60 * 1000 })
+      .should('have.text', 'DEPLOYING');
+
+    cy.getIframeBody()
       .find('[role="status"]', { timeout: 120 * 1000 })
       .should('have.text', 'RUNNING');
   });
 
   it('Create an API Rule for the Function', () => {
     getLeftNav()
-      .contains('Discovery and Network')
-      .click();
-
-    getLeftNav()
       .contains('API Rules')
-      .click();
+      .click({ force: true });
 
     cy.getIframeBody()
       .contains('Create apirules')
+      .should('be.visible')
       .click();
 
     cy.getModalBody().within($modal => {
@@ -127,14 +133,13 @@ context('Busola - Create a Function and access it', () => {
         .should('not.be.disabled')
         .click();
     });
-
-    cy.getModalBody().should('not.exist');
+    cy.get('.iframeModalCtn iframe').should('not.exist');
   });
 
   it('Get Host value for the API Rule', () => {
     getLeftNav()
       .contains('API Rules')
-      .click();
+      .click({ force: true });
 
     cy.getIframeBody()
       .find('tbody>tr')
