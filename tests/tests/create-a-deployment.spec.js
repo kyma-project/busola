@@ -5,8 +5,6 @@ const DOCKER_IMAGE = 'eu.gcr.io/kyma-project/pr/orders-service:PR-162';
 const DEPLOYMENT_NAME = 'orders-service';
 
 context('Create a Deployment', () => {
-  const getLeftNav = () => cy.get('nav[data-testid=semiCollapsibleLeftNav]');
-
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
@@ -86,16 +84,20 @@ context('Create a Deployment', () => {
       .contains('a', DEPLOYMENT_NAME, { timeout: 7000 })
       .should('be.visible');
 
-    getLeftNav()
+    cy.getLeftNav()
       .contains('Discovery and Network')
       .click();
 
-    getLeftNav()
+    cy.getLeftNav()
       .find('[data-testid=services_services]')
       .click();
 
     cy.getIframeBody()
       .contains('a', DEPLOYMENT_NAME, { timeout: 7000 })
       .should('be.visible');
+
+    cy.getLeftNav()
+      .contains('Discovery and Network')
+      .click();
   });
 });

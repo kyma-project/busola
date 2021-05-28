@@ -57,3 +57,7 @@ function paste(subject, { pastePayload }) {
 
   return subject;
 }
+
+Cypress.Commands.add('getLeftNav', () => {
+  cy.get('nav[data-testid=semiCollapsibleLeftNav]');
+});
