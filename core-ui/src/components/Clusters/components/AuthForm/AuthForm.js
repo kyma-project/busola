@@ -1,7 +1,10 @@
 import React from 'react';
+import LuigiClient from '@luigi-project/client';
 import { TextFormItem } from 'react-shared';
 import { Button, Icon, MessageStrip } from 'fundamental-react';
 import { addCluster } from '../../shared';
+import { getConfigFromParams } from './../getConfigFromParams';
+
 import './AuthForm.scss';
 
 export function AuthForm({ kubeconfig, setShowingAuthForm }) {
@@ -13,11 +16,15 @@ export function AuthForm({ kubeconfig, setShowingAuthForm }) {
   });
   const [isFormValid, setFormValid] = React.useState(false);
 
-  const submitForm = e => {
+  const submitForm = async e => {
     e.preventDefault();
+    const config = await getConfigFromParams(LuigiClient.getNodeParams().init);
     const params = {
       kubeconfig,
-      config: { auth: { ...auth, responseType: 'id_token' } },
+      config: {
+        ...config,
+        auth: { ...auth, responseType: 'id_token' },
+      },
     };
     addCluster(params);
   };

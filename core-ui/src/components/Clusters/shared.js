@@ -13,7 +13,7 @@ export function addCluster(params) {
   const defaultParams = {
     config: {
       navigation: {
-        disabledNodes: '',
+        disabledNodes: [],
         externalNodes: [],
       },
       hiddenNamespaces: [
