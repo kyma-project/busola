@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button, LayoutPanel, Switch } from 'fundamental-react';
 import {
   useGetStream,
@@ -17,14 +17,35 @@ function Logs({ params }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [showTimestamps, setShowTimestamps] = useState(false);
   const [logsToSave, setLogsToSave] = useState([]);
+  const scrollToIndex = useRef(0);
 
-  useEffect(() => {
+  const scroll = () => {
     const elements = document.getElementsByClassName('logs-highlighted');
-    const requiredElement = elements[0];
+    if (scrollToIndex.current < 0) {
+      scrollToIndex.current = elements?.length - 1 || 0;
+    } else if (scrollToIndex.current > elements?.length - 1) {
+      scrollToIndex.current = 0;
+    }
+    const requiredElement = elements[scrollToIndex.current];
     if (requiredElement) {
       requiredElement.scrollIntoView();
     }
-  }, [searchQuery]);
+  };
+
+  const onKeyDown = e => {
+    if (e.key === 'Enter' || e.key === 'ArrowDown') {
+      scrollToIndex.current = scrollToIndex.current + 1;
+      scroll();
+    } else if (e.key === 'ArrowUp') {
+      scrollToIndex.current = scrollToIndex.current - 1;
+      scroll();
+    }
+  };
+
+  useEffect(() => {
+    scrollToIndex.current = 0;
+    scroll();
+  }, [searchQuery, scroll]);
 
   const breadcrumbs = [
     {
@@ -142,6 +163,7 @@ function Logs({ params }) {
               searchQuery={searchQuery}
               handleQueryChange={setSearchQuery}
               showSuggestion={false}
+              onKeyDown={onKeyDown}
             />
           </LayoutPanel.Actions>
         </LayoutPanel.Header>
