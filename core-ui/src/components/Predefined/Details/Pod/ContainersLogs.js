@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, LayoutPanel, Switch } from 'fundamental-react';
 import {
   useGetStream,
@@ -17,6 +17,14 @@ function Logs({ params }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [showTimestamps, setShowTimestamps] = useState(false);
   const [logsToSave, setLogsToSave] = useState([]);
+
+  useEffect(() => {
+    const elements = document.getElementsByClassName('logs-highlighted');
+    const requiredElement = elements[0];
+    if (requiredElement) {
+      requiredElement.scrollIntoView();
+    }
+  }, [searchQuery]);
 
   const breadcrumbs = [
     {
@@ -84,15 +92,6 @@ function Logs({ params }) {
     setShowTimestamps(prev => !prev);
   };
 
-  const handleSearchChange = query => {
-    setSearchQuery(query);
-    const elements = document.getElementsByClassName('logs-highlighted');
-    const requiredElement = elements[0];
-    if (requiredElement) {
-      requiredElement.scrollIntoView();
-    }
-  };
-
   const saveToFile = (podName, containerName) => {
     const dateObj = new Date();
     const day = dateObj.getDate();
@@ -141,7 +140,7 @@ function Logs({ params }) {
               disabled={!logsToSave?.length}
               entriesKind={'Logs'}
               searchQuery={searchQuery}
-              handleQueryChange={handleSearchChange}
+              handleQueryChange={setSearchQuery}
               showSuggestion={false}
             />
           </LayoutPanel.Actions>
