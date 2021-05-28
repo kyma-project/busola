@@ -50,7 +50,7 @@ export async function saveInitParamsIfPresent() {
       return;
     }
 
-    handleInitParams({
+    const params = {
       ...decoded,
       config: {
         ...decoded.config,
@@ -60,18 +60,17 @@ export async function saveInitParamsIfPresent() {
         cluster: decoded?.kubeconfig?.clusters[0],
         user: decoded?.kubeconfig?.users[0],
       },
-    });
-  }
-}
-
-function handleInitParams(params) {
-  if (params.config.auth && !hasKubeconfigAuth(kubeconfigUser)) {
-    params.config.auth = {
-      ...params.config.auth,
-      ...getResponseParams(params.config.auth.usePKCE),
     };
+
+    if (params.config.auth && !hasKubeconfigAuth(kubeconfigUser)) {
+      // no auth in kubeconfig, setup OIDC auth
+      params.config.auth = {
+        ...params.config.auth,
+        ...getResponseParams(params.config.auth.usePKCE),
+      };
+    }
+    const clusterName = params.currentContext.cluster.name;
+    saveClusterParams(params);
+    setCluster(clusterName);
   }
-  const clusterName = params.currentContext.cluster.name;
-  saveClusterParams(params);
-  setCluster(clusterName);
 }
