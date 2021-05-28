@@ -3,3 +3,6 @@
 
 # Owners of all .md files in the repository
 *.md @kazydek @klaudiagrz @mmitoraj @majakurcius @alexandra-simeonova @superojla
+
+
+tests/ @Sawthis
