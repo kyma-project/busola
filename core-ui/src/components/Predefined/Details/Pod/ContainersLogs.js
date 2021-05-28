@@ -84,6 +84,15 @@ function Logs({ params }) {
     setShowTimestamps(prev => !prev);
   };
 
+  const handleSearchChange = query => {
+    setSearchQuery(query);
+    const elements = document.getElementsByClassName('logs-highlighted');
+    const requiredElement = elements[0];
+    if (requiredElement) {
+      requiredElement.scrollIntoView();
+    }
+  };
+
   const saveToFile = (podName, containerName) => {
     const dateObj = new Date();
     const day = dateObj.getDate();
@@ -132,7 +141,7 @@ function Logs({ params }) {
               disabled={!logsToSave?.length}
               entriesKind={'Logs'}
               searchQuery={searchQuery}
-              handleQueryChange={setSearchQuery}
+              handleQueryChange={handleSearchChange}
               showSuggestion={false}
             />
           </LayoutPanel.Actions>
