@@ -22,7 +22,7 @@ export const Notification = ({
   if (type !== 'success') {
     // deprecated notification
     return (
-      <div className={deprecatedClasses}>
+      <div role="alert" className={deprecatedClasses}>
         <div className="notification-header">
           <span className="notification-title">{title}</span>
           <div className="notification-icon">

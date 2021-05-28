@@ -28,13 +28,15 @@ describe('BasicData', () => {
     const { getByLabelText } = render(
       <BasicData deployment={{}} setDeployment={setDeploymentMock} />,
     );
-    fireEvent.click(getByLabelText(/Create Service/));
+
+    const serviceCreationSwitch = getByLabelText(/Create a separate Service/);
+    fireEvent.click(serviceCreationSwitch);
 
     expect(setDeploymentMock).toHaveBeenCalledWith({
       createService: true,
     });
 
-    fireEvent.click(getByLabelText(/Create Service/));
+    fireEvent.click(serviceCreationSwitch);
 
     expect(setDeploymentMock).toHaveBeenCalledWith({
       createService: false,

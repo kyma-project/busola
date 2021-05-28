@@ -2,7 +2,7 @@
   "defaultCommandTimeout": 3000,
   "execTimeout": 3000,
   "taskTimeout": 3000,
-  "pageLoadTimeout": 3000,
+  "pageLoadTimeout": 5000,
   "requestTimeout": 3000,
   "responseTimeout": 3000,
   "fixturesFolder": "fixtures",

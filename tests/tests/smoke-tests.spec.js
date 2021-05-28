@@ -1,12 +1,12 @@
 /// <reference types="cypress" />
-import config from '../config';
 import 'cypress-file-upload';
 
-const NAMESPACE_NAME = config.namespace;
-
-context('Busola - Smoke Tests', () => {
+context('Smoke Tests', () => {
   const getLeftNav = () => cy.get('nav[data-testid=semiCollapsibleLeftNav]');
-
+  before(() => {
+    cy.loginAndSelectCluster();
+    cy.goToNamespaceDetails();
+  });
   it('Renders navigation nodes', () => {
     cy.get('[data-testid=luigi-topnav-logo]').click();
     ['Namespaces', 'Administration', 'Diagnostics'].forEach(node => {
@@ -17,11 +17,7 @@ context('Busola - Smoke Tests', () => {
   });
 
   // skipped due to luigi problem with going to namespace details
-  it.skip('Go to the details of namespace and check sections', () => {
-    cy.getIframeBody()
-      .contains('a', NAMESPACE_NAME)
-      .click();
-
+  it.skip('Check sections of namespace details', () => {
     cy.getIframeBody()
       .contains('Healthy Resources')
       .should('be.visible');
