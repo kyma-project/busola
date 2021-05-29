@@ -9,7 +9,8 @@ import { decompress, getConfigFromParams } from './getConfigFromParams';
 
 function hasKubeconfigAuth(kubeconfig) {
   const user = kubeconfig?.users && kubeconfig.users[0]?.user;
-  if (user) return false;
+
+  if (!user) return false;
   const token = user.token;
   const clientCA = user['client-certificate-data'];
   const clientKeyData = user['client-key-data'];
@@ -34,7 +35,7 @@ export function KubeconfigUpload({ setKubeconfig, setShowingAuthForm }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initParams]);
 
-  async function onKubeconfigUploaded(file) {
+  async function onKubeconfigFileUploaded(file) {
     setShowError(false);
     try {
       const kubeconfigParsed = jsyaml.load(await readFile(file));
@@ -75,7 +76,7 @@ export function KubeconfigUpload({ setKubeconfig, setShowingAuthForm }) {
         ''
       )}
       <FileInput
-        fileInputChanged={onKubeconfigUploaded}
+        fileInputChanged={onKubeconfigFileUploaded}
         acceptedFileFormats=".yaml"
       />
       <p>or</p>

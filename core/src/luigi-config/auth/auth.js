@@ -1,5 +1,5 @@
 import OpenIdConnect from '@luigi-project/plugin-auth-oidc';
-import { setAuthData } from './auth-storage';
+import { clearAuthData, setAuthData } from './auth-storage';
 import {
   getActiveCluster,
   saveActiveClusterName,
@@ -14,6 +14,14 @@ export function hasKubeconfigAuth(user) {
   );
 }
 
+function updateLuigiAuth(auth) {
+  if (!Luigi.getConfig()) {
+    throw Error('Cannot updateLuigiAuth, Luigi config is not set.');
+  }
+  Luigi.getConfig().auth = auth;
+  Luigi.configChanged();
+}
+
 export function reloadAuth() {
   const params = getActiveCluster();
 
@@ -24,11 +32,10 @@ export function reloadAuth() {
   if (hasKubeconfigAuth(kubeconfigUser)) {
     // auth is already in kubeconfig
     setAuthData(kubeconfigUser);
-    Luigi.setConfig({ ...Luigi.getConfig(), auth: null });
+    updateLuigiAuth(null);
   } else {
     // we need to use OIDC flow
-    const auth = createAuth(params.auth);
-    Luigi.setConfig({ ...Luigi.getConfig(), auth });
+    updateLuigiAuth(createAuth(params.config.auth));
   }
 }
 

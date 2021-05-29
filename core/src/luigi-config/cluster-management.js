@@ -1,4 +1,4 @@
-import { clearAuthData, setAuthData } from './auth/auth-storage';
+import { setAuthData } from './auth/auth-storage';
 import { reloadNavigation } from './navigation/navigation-data-init';
 import { reloadAuth, hasKubeconfigAuth } from './auth/auth';
 import { saveLocation } from './navigation/previous-location';
@@ -17,7 +17,6 @@ export function setActiveClusterIfPresentInUrl() {
 }
 
 export async function setCluster(clusterName) {
-  clearAuthData();
   saveActiveClusterName(clusterName);
   reloadAuth();
 
