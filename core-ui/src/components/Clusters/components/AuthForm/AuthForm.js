@@ -7,7 +7,7 @@ import { getConfigFromParams } from './../getConfigFromParams';
 
 import './AuthForm.scss';
 
-export function AuthForm({ kubeconfig, setShowingAuthForm }) {
+export function AuthForm({ kubeconfig }) {
   const formRef = React.useRef();
   const [auth, setAuth] = React.useState({
     issuerUrl: '',
@@ -31,6 +31,12 @@ export function AuthForm({ kubeconfig, setShowingAuthForm }) {
 
   const onChange = () => setFormValid(formRef.current?.checkValidity());
 
+  const goBack = () => {
+    // we could use setShowingAuthForm(false), but that won't
+    // remove search from the URL
+    LuigiClient.linkManager().navigate('/clusters/add');
+  };
+
   return (
     <form
       ref={formRef}
@@ -38,7 +44,7 @@ export function AuthForm({ kubeconfig, setShowingAuthForm }) {
       onChange={onChange}
       className="cluster-auth-form"
     >
-      <Button option="transparent" onClick={() => setShowingAuthForm(false)}>
+      <Button option="transparent" onClick={goBack}>
         <Icon
           glyph="arrow-left"
           ariaLabel="back"
