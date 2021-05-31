@@ -10,7 +10,11 @@ export function KubeconfigTextArea({ onSubmit, setShowError }) {
   const onClick = async () => {
     setShowError(false);
     try {
-      await onSubmit(jsyaml.load(kubeconfigText));
+      const parsed = jsyaml.load(kubeconfigText);
+      if (!parsed || typeof parsed !== 'object') {
+        throw Error('Kubeconfig must be an object.');
+      }
+      await onSubmit(parsed);
     } catch (e) {
       setShowError(true);
       console.warn(e);

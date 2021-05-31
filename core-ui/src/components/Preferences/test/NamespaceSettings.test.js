@@ -8,7 +8,7 @@ jest.mock('react-shared', () => ({
   useMicrofrontendContext: () => ({
     groups: mockGroups,
   }),
-  useShowSystemNamespaces: () => true,
+  useShowHiddenNamespaces: () => true,
 }));
 
 describe('NamespaceSettings', () => {
@@ -23,11 +23,11 @@ describe('NamespaceSettings', () => {
     const spy = jest.spyOn(LuigiClient, 'sendCustomMessage');
     const { getByLabelText } = render(<NamespaceSettings />);
 
-    fireEvent.click(getByLabelText('toggle-system-namespaces'));
+    fireEvent.click(getByLabelText('toggle-hidden-namespaces'));
 
     expect(spy).toHaveBeenCalledWith({
-      id: 'busola.showSystemNamespaces',
-      showSystemNamespaces: false,
+      id: 'busola.showHiddenNamespaces',
+      showHiddenNamespaces: false,
     });
 
     spy.mockRestore();

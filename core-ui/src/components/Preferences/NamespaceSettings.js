@@ -1,25 +1,25 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
-import { useMicrofrontendContext, useShowSystemNamespaces } from 'react-shared';
+import { useMicrofrontendContext, useShowHiddenNamespaces } from 'react-shared';
 import { LayoutPanel, Switch } from 'fundamental-react';
 
 export default function NamespaceSettings() {
-  const initialShowSystemNamespaces = useShowSystemNamespaces();
+  const initialShowHiddenNamespaces = useShowHiddenNamespaces();
   const { groups } = useMicrofrontendContext();
-  const [showSystemNamespaces, setShowSystemNamespaces] = React.useState(
-    useShowSystemNamespaces(),
+  const [showHiddenNamespaces, setShowHiddenNamespaces] = React.useState(
+    useShowHiddenNamespaces(),
   );
 
   React.useEffect(() => {
-    setShowSystemNamespaces(initialShowSystemNamespaces);
-  }, [initialShowSystemNamespaces]);
+    setShowHiddenNamespaces(initialShowHiddenNamespaces);
+  }, [initialShowHiddenNamespaces]);
 
   const toggleVisibility = () => {
     LuigiClient.sendCustomMessage({
-      id: 'busola.showSystemNamespaces',
-      showSystemNamespaces: !showSystemNamespaces,
+      id: 'busola.showHiddenNamespaces',
+      showHiddenNamespaces: !showHiddenNamespaces,
     });
-    setShowSystemNamespaces(!showSystemNamespaces);
+    setShowHiddenNamespaces(!showHiddenNamespaces);
   };
 
   const shouldShowNamespaceSettings = () => {
@@ -35,11 +35,11 @@ export default function NamespaceSettings() {
         <LayoutPanel.Header>
           <LayoutPanel.Head title="Namespace settings" />
           <LayoutPanel.Actions>
-            Show System Namespaces
+            Show Hidden Namespaces
             <Switch
-              inputProps={{ 'aria-label': 'toggle-system-namespaces' }}
+              inputProps={{ 'aria-label': 'toggle-hidden-namespaces' }}
               className="fd-has-display-inline-block fd-margin-begin--tiny"
-              checked={showSystemNamespaces}
+              checked={showHiddenNamespaces}
               onChange={toggleVisibility}
             />
           </LayoutPanel.Actions>

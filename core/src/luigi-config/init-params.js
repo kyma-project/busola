@@ -1,9 +1,18 @@
 import createEncoder from 'json-url';
-import {
-  saveClusterParams,
-  saveActiveClusterName,
-  setCluster,
-} from './cluster-management';
+import { saveClusterParams, saveActiveClusterName } from './cluster-management';
+import { hasKubeconfigAuth } from './auth/auth';
+import { saveLocation } from './navigation/previous-location';
+
+const DEFAULT_MODULES = {
+  SERVICE_CATALOG: 'servicecatalog.k8s.io',
+  SERVICE_CATALOG_ADDONS: 'servicecatalog.kyma-project.io',
+  EVENTING: 'eventing.kyma-project.io',
+  API_GATEWAY: 'gateway.kyma-project.io',
+  APPLICATIONS: 'applicationconnector.kyma-project.io',
+  ADDONS: 'addons.kyma-project.io',
+  SERVERLESS: 'serverless.kyma-project.io',
+  SERVERLESS_REPOS: 'gitrepositories.serverless.kyma-project.io',
+};
 
 const encoder = createEncoder('lzma');
 
@@ -18,60 +27,64 @@ function getResponseParams(usePKCE = true) {
   }
 }
 
-function createSystemNamespacesList(namespaces) {
-  return namespaces ? namespaces.split(' ') : [];
+export async function saveInitParamsIfPresent() {
+  const encodedParams = new URL(location).searchParams.get('init');
+  if (encodedParams) {
+    try {
+      await setupFromParams(encodedParams);
+    } catch (e) {
+      alert('Error loading init params, configuration not changed.');
+      console.warn(e);
+    }
+  }
 }
 
-export async function saveInitParamsIfPresent() {
-  const DEFAULT_MODULES = {
-    SERVICE_CATALOG: 'servicecatalog.k8s.io',
-    SERVICE_CATALOG_ADDONS: 'servicecatalog.kyma-project.io',
-    EVENTING: 'eventing.kyma-project.io',
-    API_GATEWAY: 'gateway.kyma-project.io',
-    APPLICATIONS: 'applicationconnector.kyma-project.io',
-    ADDONS: 'addons.kyma-project.io',
-    SERVERLESS: 'serverless.kyma-project.io',
-    SERVERLESS_REPOS: 'gitrepositories.serverless.kyma-project.io',
+async function setupFromParams(encodedParams) {
+  const decoded = await encoder.decompress(encodedParams);
+
+  const isKubeconfigPresent = !!Object.keys(decoded.kubeconfig || {}).length;
+  const kubeconfigUser =
+    decoded.kubeconfig?.users && decoded.kubeconfig?.users[0].user;
+  const isOidcAuthPresent = decoded.config?.auth;
+
+  const requireMoreInput =
+    !isKubeconfigPresent ||
+    (!isOidcAuthPresent && !hasKubeconfigAuth(kubeconfigUser));
+
+  if (requireMoreInput) {
+    navigateToAddCluster(encodedParams);
+    return;
+  }
+
+  const params = {
+    ...decoded,
+    config: {
+      ...decoded.config,
+      modules: { ...DEFAULT_MODULES, ...(decoded.config?.modules || {}) },
+    },
+    currentContext: {
+      cluster: decoded.kubeconfig.clusters[0],
+      user: decoded.kubeconfig.users[0],
+    },
   };
 
-  const initParams = new URL(location).searchParams.get('init');
-  if (initParams) {
-    const decoded = await encoder.decompress(initParams);
-    const systemNamespaces = createSystemNamespacesList(
-      decoded.config?.systemNamespaces,
-    );
-    const params = {
-      ...decoded,
-      config: {
-        ...decoded.config,
-        systemNamespaces,
-        modules: { ...DEFAULT_MODULES, ...(decoded.config?.modules || {}) },
-      },
+  if (params.config.auth && !hasKubeconfigAuth(kubeconfigUser)) {
+    // no auth in kubeconfig, setup OIDC auth
+    params.config.auth = {
+      ...params.config.auth,
+      ...getResponseParams(params.config.auth.usePKCE),
     };
-
-    if (!params.auth || !params.cluster) {
-      // Luigi navigate doesn't work here. Simulate the Luigi's nodeParams by adding the `~`
-      window.location.href =
-        window.location.origin + '/clusters/add?~init=' + initParams;
-      return;
-    }
-
-    if (decoded.auth) {
-      params.auth = {
-        ...decoded.auth,
-        ...getResponseParams(decoded.auth.usePKCE),
-      };
-    }
-    if (!params.cluster.name) {
-      params.cluster.name = params.cluster.server.replace(
-        /^https?:\/\/(api\.)?/,
-        '',
-      );
-    }
-
-    const clusterName = params.cluster.name;
-    saveClusterParams(params);
-    saveActiveClusterName(clusterName);
-    setCluster(clusterName);
   }
+
+  saveClusterParams(params);
+
+  const clusterName = params.currentContext.cluster.name;
+  saveActiveClusterName(clusterName);
+  saveLocation(`/cluster/${encodeURIComponent(clusterName)}/namespaces`);
+}
+
+function navigateToAddCluster(encodedParams) {
+  // Luigi navigate doesn't work here. Simulate the Luigi's nodeParams by adding the `~`
+  window.location.href =
+    window.location.origin + '/clusters/add?~init=' + encodedParams;
 }

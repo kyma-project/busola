@@ -1,6 +1,6 @@
-import { clearAuthData, setAuthData } from './auth/auth-storage';
+import { setAuthData } from './auth/auth-storage';
 import { reloadNavigation } from './navigation/navigation-data-init';
-import { reloadAuth } from './auth/auth';
+import { reloadAuth, hasKubeconfigAuth } from './auth/auth';
 import { saveLocation } from './navigation/previous-location';
 
 const CLUSTERS_KEY = 'busola.clusters';
@@ -17,31 +17,25 @@ export function setActiveClusterIfPresentInUrl() {
 }
 
 export async function setCluster(clusterName) {
-  const activeClusterName = getActiveClusterName();
+  saveActiveClusterName(clusterName);
+  reloadAuth();
 
-  if (clusterName !== activeClusterName) {
-    clearAuthData();
-    saveActiveClusterName(clusterName);
-    reloadAuth();
-
-    const params = getActiveCluster();
-    if (params.auth) {
-      saveLocation(`/cluster/${encodeURIComponent(clusterName)}`);
-      location = location.origin; // reload at root
-      return;
-    } else {
-      setAuthData(params.rawAuth);
-      await reloadNavigation();
-    }
+  const params = getActiveCluster();
+  const kubeconfigUser = params.currentContext.user.user;
+  if (hasKubeconfigAuth(kubeconfigUser)) {
+    setAuthData(kubeconfigUser);
+    await reloadNavigation();
+    Luigi.navigation().navigate(
+      `/cluster/${encodeURIComponent(clusterName)}/namespaces`,
+    );
+  } else {
+    saveLocation(`/cluster/${encodeURIComponent(clusterName)}`);
+    location = location.origin;
   }
-
-  Luigi.navigation().navigate(
-    `/cluster/${encodeURIComponent(clusterName)}/namespaces`,
-  );
 }
 
 export function saveClusterParams(params) {
-  const clusterName = params.cluster.name;
+  const clusterName = params.currentContext.cluster.name;
   const clusters = getClusters();
   clusters[clusterName] = params;
   saveClusters(clusters);
