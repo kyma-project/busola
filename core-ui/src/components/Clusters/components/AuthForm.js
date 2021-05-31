@@ -9,7 +9,7 @@ export function AuthForm({ setAuthValid, auth, setAuth }) {
     if (formRef) {
       setAuthValid(formRef.current.checkValidity());
     }
-  }, [formRef, auth]);
+  }, [formRef, auth, setAuthValid]);
 
   return (
     <form ref={formRef}>

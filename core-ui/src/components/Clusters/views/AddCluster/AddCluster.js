@@ -5,6 +5,7 @@ import './AddCluster.scss';
 import { PageHeader } from 'react-shared';
 import { AuthForm } from 'components/Clusters/components/AuthForm';
 import { KubeconfigUpload } from 'components/Clusters/components/KubeconfigUpload/KubeconfigUpload';
+import { ContextChooser } from 'components/Clusters/components/ContextChooser/ContextChooser';
 import {
   getContext,
   hasKubeconfigAuth,
@@ -12,7 +13,6 @@ import {
   decompressParams,
 } from 'components/Clusters/shared';
 import { Button } from 'fundamental-react';
-import { ContextChooser } from 'components/Clusters/components/ContextChooser/ContextChooser';
 
 export function AddCluster() {
   const [kubeconfig, setKubeconfig] = React.useState(null);
@@ -61,11 +61,13 @@ export function AddCluster() {
       <PageHeader
         title="Add Cluster"
         description="Upload or paste your kubeconfig file"
-        breadcrumbItems={{
-          name: 'Clusters',
-          path: '/clusters',
-          fromAbsolutePath: true,
-        }}
+        breadcrumbItems={[
+          {
+            name: 'Clusters',
+            path: '/clusters',
+            fromAbsolutePath: true,
+          },
+        ]}
       />
       <section className="add-cluster-form fd-margin-top--lg">
         {initParams && (

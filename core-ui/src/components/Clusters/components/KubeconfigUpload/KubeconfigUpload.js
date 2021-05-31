@@ -67,7 +67,7 @@ export function KubeconfigUpload({
           className="fd-margin-top--sm"
           type="error"
         >
-          Error reading kubeconfig.
+          Error reading kubeconfig
         </MessageStrip>
       )}
     </>

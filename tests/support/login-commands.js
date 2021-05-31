@@ -10,6 +10,10 @@ Cypress.Commands.add('loginAndSelectCluster', () => {
     .contains('Drag file here')
     .attachFile('kubeconfig.yaml', { subjectType: 'drag-n-drop' });
 
+  cy.getIframeBody()
+    .contains('Apply configuration')
+    .click();
+
   cy.url().should('match', /namespaces$/);
   cy.getIframeBody()
     .find('thead')
