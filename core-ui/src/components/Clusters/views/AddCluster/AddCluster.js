@@ -1,17 +1,65 @@
 import React from 'react';
+import LuigiClient from '@luigi-project/client';
 import './AddCluster.scss';
 
 import { PageHeader } from 'react-shared';
-import { KubeconfigUpload } from '../../components/KubeconfigUpload';
-import { AuthForm } from 'components/Clusters/components/AuthForm/AuthForm';
+import { AuthForm } from 'components/Clusters/components/AuthForm';
+import { KubeconfigUpload } from 'components/Clusters/components/KubeconfigUpload/KubeconfigUpload';
+import {
+  getContext,
+  hasKubeconfigAuth,
+  addCluster,
+  decompressParams,
+} from 'components/Clusters/shared';
+import { Button } from 'fundamental-react';
+import { ContextChooser } from 'components/Clusters/components/ContextChooser/ContextChooser';
 
 export function AddCluster() {
-  const [showingAuthForm, setShowingAuthForm] = React.useState(false);
   const [kubeconfig, setKubeconfig] = React.useState(null);
+  const [contextName, setContextName] = React.useState(null);
+  const [initParams, setInitParams] = React.useState(null);
+  const [auth, setAuth] = React.useState({});
+  const [authValid, setAuthValid] = React.useState(false);
+
+  const requireAuth = kubeconfig && !hasKubeconfigAuth(kubeconfig, contextName);
+
+  const encodedParams = LuigiClient.getNodeParams().init;
+  React.useEffect(() => {
+    if (!encodedParams) return;
+    async function setKubeconfigIfPresentInParams() {
+      const params = await decompressParams(encodedParams);
+      setInitParams(params);
+      if (params.config.auth) {
+        setAuth(params.config.auth);
+      }
+      if (Object.keys(params.kubeconfig || {}).length) {
+        handleKubeconfigAdded(params.kubeconfig);
+      }
+    }
+    setKubeconfigIfPresentInParams();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [encodedParams]);
+
+  const handleKubeconfigAdded = async kubeconfig => {
+    setContextName(kubeconfig['current-context']);
+    setKubeconfig(kubeconfig);
+  };
 
   const breadcrumbItems = [
     { name: 'Clusters', path: '/clusters', fromAbsolutePath: true },
   ];
+
+  const onApply = () => {
+    // update original kk's choosen context
+    kubeconfig['current-context'] = contextName;
+    console.log(contextName);
+
+    addCluster({
+      kubeconfig,
+      config: { ...initParams?.config, auth: requireAuth ? auth : null },
+      currentContext: getContext(kubeconfig, contextName),
+    });
+  };
 
   return (
     <>
@@ -20,19 +68,36 @@ export function AddCluster() {
         description="Upload or paste your kubeconfig file"
         breadcrumbItems={breadcrumbItems}
       />
-      <div className="add-cluster-form fd-margin-top--lg">
-        {showingAuthForm ? (
-          <AuthForm
+      <section className="add-cluster-form fd-margin-top--lg">
+        {initParams && (
+          <p>
+            Configuration has been included properly. Please fill remaining
+            required data.
+          </p>
+        )}
+        <KubeconfigUpload
+          onTabChange={() => setKubeconfig(null)}
+          handleKubeconfigAdded={handleKubeconfigAdded}
+          kubeconfigFromParams={initParams?.kubeconfig}
+        />
+        {kubeconfig && (
+          <ContextChooser
             kubeconfig={kubeconfig}
-            setShowingAuthForm={setShowingAuthForm}
-          />
-        ) : (
-          <KubeconfigUpload
-            setShowingAuthForm={setShowingAuthForm}
-            setKubeconfig={setKubeconfig}
+            setContextName={setContextName}
           />
         )}
-      </div>
+        {requireAuth && (
+          <AuthForm auth={auth} setAuth={setAuth} setAuthValid={setAuthValid} />
+        )}
+        <Button
+          option="emphasized"
+          className="fd-margin-top--sm"
+          onClick={onApply}
+          disabled={!kubeconfig || (requireAuth && !authValid)}
+        >
+          Apply configuration
+        </Button>
+      </section>
     </>
   );
 }
