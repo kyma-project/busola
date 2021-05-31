@@ -1,26 +1,32 @@
-.wrap {
+.logs-wraper {
   height: 100vh;
   width: 100%;
   display:flex;
   flex-direction:column;
+  overflow: hidden;
 }
 
-.top {
+.logs-header {
   width: 100%;
-}
-
-.mid {
-  width: 100%;
-  flex:1;
-  display:flex;
-  flex-direction:column;
-}
-
-.fd-layout-panel {
-  height: 100%;
+  height: 88px;
 }
 
 .logs-panel {
+  height: calc(100% - 152px); // 88px(header height) + 2*32px(padding)
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  padding: 0;
+}
+
+.logs-panel-body {
+  > :first-child {
+    padding-top: 10px;
+  }
+
+  > :last-child {
+    padding-bottom: 10px;
+  }
   height: 100%;
   overflow-y: scroll;
   padding: 0;
@@ -60,15 +66,5 @@
 
   .generic-list-search, .logs-download  {
     margin-left: 15px;
-  }
-}
-
-.fd-layout-panel__body {
-  > :first-child {
-    padding-top: 10px;
-  }
-
-  > :last-child {
-    padding-bottom: 10px;
   }
 }

@@ -135,50 +135,48 @@ function Logs({ params }) {
   };
 
   return (
-    <div className="wrap">
-      <div className="top">
+    <div className="logs-wraper">
+      <div className="logs-header">
         <PageHeader
           title={params.containerName}
           breadcrumbItems={breadcrumbs}
         ></PageHeader>
       </div>
-      <div className="mid">
-        <LayoutPanel className="fd-margin--md">
-          <LayoutPanel.Header>
-            <LayoutPanel.Head title="Logs" />
-            <LayoutPanel.Actions className="logs-actions">
-              <Switch
-                disabled={!logsToSave?.length}
-                compact
-                onChange={onSwitchChange}
-              >
-                {showTimestamps ? 'Hide timestamps' : 'Show timestamps'}
-              </Switch>
-              <Button
-                disabled={!logsToSave?.length}
-                className="logs-download"
-                onClick={() => saveToFile(params.podName, params.containerName)}
-              >
-                Save to a file
-              </Button>
-              <SearchInput
-                disabled={!logsToSave?.length}
-                entriesKind={'Logs'}
-                searchQuery={searchQuery}
-                handleQueryChange={setSearchQuery}
-                showSuggestion={false}
-                onKeyDown={changeSelectedLog}
-              />
-            </LayoutPanel.Actions>
-          </LayoutPanel.Header>
-          <LayoutPanel.Body className="logs-panel">
-            <LogsPanel
-              streamData={streamData}
-              containerName={params.containerName}
+      <LayoutPanel className="fd-margin--md logs-panel">
+        <LayoutPanel.Header>
+          <LayoutPanel.Head title="Logs" />
+          <LayoutPanel.Actions className="logs-actions">
+            <Switch
+              disabled={!logsToSave?.length}
+              compact
+              onChange={onSwitchChange}
+            >
+              {showTimestamps ? 'Hide timestamps' : 'Show timestamps'}
+            </Switch>
+            <Button
+              disabled={!logsToSave?.length}
+              className="logs-download"
+              onClick={() => saveToFile(params.podName, params.containerName)}
+            >
+              Save to a file
+            </Button>
+            <SearchInput
+              disabled={!logsToSave?.length}
+              entriesKind={'Logs'}
+              searchQuery={searchQuery}
+              handleQueryChange={setSearchQuery}
+              showSuggestion={false}
+              onKeyDown={changeSelectedLog}
             />
-          </LayoutPanel.Body>
-        </LayoutPanel>
-      </div>
+          </LayoutPanel.Actions>
+        </LayoutPanel.Header>
+        <LayoutPanel.Body className="logs-panel-body">
+          <LogsPanel
+            streamData={streamData}
+            containerName={params.containerName}
+          />
+        </LayoutPanel.Body>
+      </LayoutPanel>
     </div>
   );
 }
