@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button, LayoutPanel, Switch } from 'fundamental-react';
 import {
   useGetStream,
@@ -17,18 +17,7 @@ function Logs({ params }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [showTimestamps, setShowTimestamps] = useState(false);
   const [logsToSave, setLogsToSave] = useState([]);
-
-  const filterEntries = (entries, query) => {
-    if (!query) return entries;
-
-    const filterEntry = entry =>
-      entry
-        .toString()
-        .toLowerCase()
-        .indexOf(query.toLowerCase()) !== -1;
-
-    return entries.filter(filterEntry);
-  };
+  const selectedLogIndex = useRef(0);
 
   const breadcrumbs = [
     {
@@ -47,29 +36,53 @@ function Logs({ params }) {
   const url = `/api/v1/namespaces/${params.namespace}/pods/${params.podName}/log?container=${params.containerName}&follow=true&tailLines=1000&timestamps=true`;
   const streamData = useGetStream(url);
 
-  const LogsPanel = ({ streamData, containerName }) => {
-    const { error, data } = streamData;
-    if (error) return error.message;
-    setLogsToSave(data || []);
+  useEffect(() => {
+    selectedLogIndex.current = 0;
+    scrollToSelectedLog();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchQuery]);
 
-    const filteredEntries = filterEntries(data, searchQuery);
-
-    if (filteredEntries.length === 0)
+  function highlightSearch(log, searchText) {
+    if (searchText) {
+      const logArray = log.split(new RegExp(`(${searchText})`, 'gi'));
       return (
-        <div className="empty-logs">
-          No logs avaliable for the '{containerName}' container.
-        </div>
+        <span>
+          {logArray.map((part, idx) =>
+            part.toLowerCase() === searchText.toLowerCase() ? (
+              <b key={idx} className="logs-highlighted">
+                {part}
+              </b>
+            ) : (
+              part
+            ),
+          )}
+        </span>
       );
+    }
+    return <span>{log}</span>;
+  }
 
-    return filteredEntries.map((arr, idx) => {
-      const timestamp = arr.split(' ')[0];
-      const stream = arr.replace(timestamp, '');
-      return (
-        <div className="logs" key={idx}>
-          {showTimestamps ? `${timestamp} ${stream}` : stream}
-        </div>
-      );
-    });
+  const scrollToSelectedLog = () => {
+    const highlightedLogs = document.getElementsByClassName('logs-highlighted');
+    if (selectedLogIndex.current < 0) {
+      selectedLogIndex.current = highlightedLogs?.length - 1 || 0;
+    } else if (selectedLogIndex.current > highlightedLogs?.length - 1) {
+      selectedLogIndex.current = 0;
+    }
+    const selectedLog = highlightedLogs[selectedLogIndex.current];
+    if (selectedLog) {
+      selectedLog.scrollIntoView();
+    }
+  };
+
+  const changeSelectedLog = e => {
+    if (e.key === 'Enter' || e.key === 'ArrowDown') {
+      selectedLogIndex.current = selectedLogIndex.current + 1;
+      scrollToSelectedLog();
+    } else if (e.key === 'ArrowUp') {
+      selectedLogIndex.current = selectedLogIndex.current - 1;
+      scrollToSelectedLog();
+    }
   };
 
   const onSwitchChange = () => {
@@ -96,13 +109,40 @@ function Logs({ params }) {
     element.click();
   };
 
+  const LogsPanel = ({ streamData, containerName }) => {
+    const { error, data } = streamData;
+    if (error) return <div className="empty-logs">{error.message}</div>;
+    setLogsToSave(data || []);
+
+    if (data.length === 0)
+      return (
+        <div className="empty-logs">
+          No logs avaliable for the '{containerName}' container.
+        </div>
+      );
+
+    return data.map((arr, idx) => {
+      const timestamp = arr.split(' ')[0];
+      const stream = arr.replace(timestamp, '');
+      const log = showTimestamps ? `${timestamp} ${stream}` : stream;
+      const highlightedLog = highlightSearch(log, searchQuery);
+      return (
+        <div className="logs" key={idx}>
+          {highlightedLog}
+        </div>
+      );
+    });
+  };
+
   return (
-    <>
-      <PageHeader
-        title={params.containerName}
-        breadcrumbItems={breadcrumbs}
-      ></PageHeader>
-      <LayoutPanel className="fd-margin--md">
+    <div className="logs-wraper">
+      <div className="logs-header">
+        <PageHeader
+          title={params.containerName}
+          breadcrumbItems={breadcrumbs}
+        ></PageHeader>
+      </div>
+      <LayoutPanel className="fd-margin--md logs-panel">
         <LayoutPanel.Header>
           <LayoutPanel.Head title="Logs" />
           <LayoutPanel.Actions className="logs-actions">
@@ -126,16 +166,17 @@ function Logs({ params }) {
               searchQuery={searchQuery}
               handleQueryChange={setSearchQuery}
               showSuggestion={false}
+              onKeyDown={changeSelectedLog}
             />
           </LayoutPanel.Actions>
         </LayoutPanel.Header>
-        <LayoutPanel.Body className="logs-panel">
+        <LayoutPanel.Body className="logs-panel-body">
           <LogsPanel
             streamData={streamData}
             containerName={params.containerName}
           />
         </LayoutPanel.Body>
       </LayoutPanel>
-    </>
+    </div>
   );
 }

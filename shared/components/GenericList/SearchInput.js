@@ -15,6 +15,7 @@ SearchInput.propTypes = {
   showSuggestion: PropTypes.bool,
   showSearchControl: PropTypes.bool,
   disabled: PropTypes.bool,
+  onKeyDown: PropTypes.func,
 };
 
 export function SearchInput({
@@ -26,6 +27,7 @@ export function SearchInput({
   showSuggestion = true,
   showSearchControl = true,
   disabled = false,
+  onKeyDown,
 }) {
   const [isSearchHidden, setSearchHidden] = React.useState(true);
   const searchInputRef = React.useRef();
@@ -85,10 +87,13 @@ export function SearchInput({
     });
   };
 
-  const checkForEscapeKey = e => {
+  const handleOnKeyDown = e => {
     const ESCAPE_KEY_CODE = 27;
     if (e.keyCode === ESCAPE_KEY_CODE) {
       setSearchHidden(true);
+    }
+    if (onKeyDown) {
+      onKeyDown(e);
     }
   };
 
@@ -115,7 +120,7 @@ export function SearchInput({
               onBlur={() => setSearchHidden(true)}
               onFocus={() => setSearchHidden(false)}
               onChange={e => handleQueryChange(e.target.value)}
-              onKeyPress={checkForEscapeKey}
+              onKeyDown={handleOnKeyDown}
               className="fd-margin-none fd-input"
             />
             {!!searchQuery && showSuggestion && (
