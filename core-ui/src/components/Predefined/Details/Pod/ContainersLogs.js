@@ -17,35 +17,36 @@ function Logs({ params }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [showTimestamps, setShowTimestamps] = useState(false);
   const [logsToSave, setLogsToSave] = useState([]);
-  const scrollToIndex = useRef(0);
+  const focusedLogIndex = useRef(0);
 
-  const scroll = () => {
-    const elements = document.getElementsByClassName('logs-highlighted');
-    if (scrollToIndex.current < 0) {
-      scrollToIndex.current = elements?.length - 1 || 0;
-    } else if (scrollToIndex.current > elements?.length - 1) {
-      scrollToIndex.current = 0;
+  useEffect(() => {
+    focusedLogIndex.current = 0;
+    scrollToLog();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchQuery]);
+
+  const scrollToLog = () => {
+    const highlightedLogs = document.getElementsByClassName('logs-highlighted');
+    if (focusedLogIndex.current < 0) {
+      focusedLogIndex.current = highlightedLogs?.length - 1 || 0;
+    } else if (focusedLogIndex.current > highlightedLogs?.length - 1) {
+      focusedLogIndex.current = 0;
     }
-    const requiredElement = elements[scrollToIndex.current];
-    if (requiredElement) {
-      requiredElement.scrollIntoView();
+    const focusedLog = highlightedLogs[focusedLogIndex.current];
+    if (focusedLog) {
+      focusedLog.scrollIntoView();
     }
   };
 
   const onKeyDown = e => {
     if (e.key === 'Enter' || e.key === 'ArrowDown') {
-      scrollToIndex.current = scrollToIndex.current + 1;
-      scroll();
+      focusedLogIndex.current = focusedLogIndex.current + 1;
+      scrollToLog();
     } else if (e.key === 'ArrowUp') {
-      scrollToIndex.current = scrollToIndex.current - 1;
-      scroll();
+      focusedLogIndex.current = focusedLogIndex.current - 1;
+      scrollToLog();
     }
   };
-
-  useEffect(() => {
-    scrollToIndex.current = 0;
-    scroll();
-  }, [searchQuery, scroll]);
 
   const breadcrumbs = [
     {
