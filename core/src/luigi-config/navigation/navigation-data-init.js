@@ -29,7 +29,7 @@ import {
   deleteActiveCluster,
   saveActiveClusterName,
 } from '../cluster-management';
-import { shouldShowSystemNamespaces } from './../utils/system-namespaces-toggle';
+import { shouldShowHiddenNamespaces } from './../utils/hidden-namespaces-toggle';
 import { saveLocation, tryRestorePreviousLocation } from './previous-location';
 import { NODE_PARAM_PREFIX } from '../luigi-config';
 
@@ -122,9 +122,9 @@ export async function createNavigation() {
   const isClusterSelected = !!params;
 
   const clusterNodes = Object.entries(clusters).map(
-    ([clusterName, { cluster }]) => ({
+    ([clusterName, { currentContext }]) => ({
       title: clusterName,
-      subTitle: cluster.server,
+      subTitle: currentContext.cluster.server,
       link:
         activeClusterName === clusterName
           ? `/cluster/${encodeURIComponent(clusterName)}`
@@ -211,9 +211,9 @@ export async function getNavigationData(authData) {
       permissionSet,
     );
     const params = getActiveCluster();
-    const activeClusterName = params.cluster.name;
+    const activeClusterName = params.currentContext.cluster.name;
 
-    const { navigation = {}, systemNamespaces = '', modules = {} } =
+    const { navigation = {}, hiddenNamespaces = [], modules = {} } =
       params?.config || {};
     const nodes = [
       {
@@ -246,9 +246,10 @@ export async function getNavigationData(authData) {
           groups,
           crds,
           modules,
-          systemNamespaces,
-          showSystemNamespaces: shouldShowSystemNamespaces(),
-          cluster: params.cluster,
+          hiddenNamespaces,
+          showHiddenNamespaces: shouldShowHiddenNamespaces(),
+          cluster: params.currentContext.cluster,
+          kubeconfig: params.kubeconfig,
         },
       },
     ];
@@ -279,7 +280,7 @@ export async function getNavigationData(authData) {
 }
 
 async function getNamespaces() {
-  const { systemNamespaces } = getActiveCluster().config;
+  const { hiddenNamespaces } = getActiveCluster().config;
   let namespaces;
   try {
     namespaces = await fetchNamespaces(getAuthData());
@@ -290,8 +291,8 @@ async function getNamespaces() {
     });
     return [];
   }
-  if (!shouldShowSystemNamespaces()) {
-    namespaces = namespaces.filter(ns => !systemNamespaces.includes(ns.name));
+  if (!shouldShowHiddenNamespaces()) {
+    namespaces = namespaces.filter(ns => !hiddenNamespaces.includes(ns.name));
   }
   return createNamespacesList(namespaces);
 }

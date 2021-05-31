@@ -20,7 +20,7 @@ export default function CreateBindingModal({
   application,
   alreadyBoundNamespaces,
 }) {
-  const { systemNamespaces } = useMicrofrontendContext();
+  const { hiddenNamespaces } = useMicrofrontendContext();
   const [servicesToBind, setServicesToBind] = React.useState([]);
   const [namespaceName, setNamespaceName] = React.useState('');
   const notification = useNotification();
@@ -63,7 +63,7 @@ export default function CreateBindingModal({
     data
       ?.map(n => n.metadata.name)
       .filter(name => !alreadyBoundNamespaces.includes(name))
-      .filter(name => !systemNamespaces.includes(name)) || [];
+      .filter(name => !hiddenNamespaces.includes(name)) || [];
 
   return (
     <Modal

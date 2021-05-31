@@ -1,7 +1,7 @@
 import LuigiClient from '@luigi-project/client';
 
-export function useShowSystemNamespaces() {
+export function useShowHiddenNamespaces() {
   return (LuigiClient.getActiveFeatureToggles() || []).includes(
-    'showSystemNamespaces',
+    'showHiddenNamespaces',
   );
 }

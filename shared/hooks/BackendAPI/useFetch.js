@@ -11,13 +11,13 @@ export const useFetch = () => {
   if (!authData) return () => {};
 
   return async ({ relativeUrl, abortController, init }) => {
-    checkForTokenExpiration(authData?.idToken);
+    checkForTokenExpiration(authData?.token);
 
     init = {
       ...init,
       headers: {
         ...(init?.headers || {}),
-        ...createHeaders(authData, cluster),
+        ...createHeaders(authData, cluster.cluster),
       },
       signal: abortController?.signal,
     };
