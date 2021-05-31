@@ -12,10 +12,9 @@
 }
 
 .logs-panel {
-  height: calc(100% - 152px); // 88px(header height) + 2*32px(padding)
+  max-height: calc(100% - 152px); // 88px(header height) + 2*32px(padding)
   display: flex;
   flex-direction: column;
-  overflow-y: scroll;
   padding: 0;
 }
 

@@ -111,7 +111,7 @@ function Logs({ params }) {
 
   const LogsPanel = ({ streamData, containerName }) => {
     const { error, data } = streamData;
-    if (error) return error.message;
+    if (error) return <div className="empty-logs">{error.message}</div>;
     setLogsToSave(data || []);
 
     if (data.length === 0)
