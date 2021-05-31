@@ -62,8 +62,6 @@ export function addCluster(params) {
     };
   }
 
-  console.log(merge(defaultParams, params));
-
   LuigiClient.sendCustomMessage({
     id: 'busola.addCluster',
     params: merge(defaultParams, params),

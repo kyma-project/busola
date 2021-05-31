@@ -4,7 +4,7 @@ import './ContextChooser.scss';
 
 export function ContextChooser({ kubeconfig, setContextName }) {
   const contexts =
-    kubeconfig?.contexts?.map(({ name }) => ({
+    kubeconfig.contexts?.map(({ name }) => ({
       key: name,
       text: name,
     })) || [];

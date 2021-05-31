@@ -45,14 +45,9 @@ export function AddCluster() {
     setKubeconfig(kubeconfig);
   };
 
-  const breadcrumbItems = [
-    { name: 'Clusters', path: '/clusters', fromAbsolutePath: true },
-  ];
-
   const onApply = () => {
     // update original kk's choosen context
     kubeconfig['current-context'] = contextName;
-    console.log(contextName);
 
     addCluster({
       kubeconfig,
@@ -66,7 +61,11 @@ export function AddCluster() {
       <PageHeader
         title="Add Cluster"
         description="Upload or paste your kubeconfig file"
-        breadcrumbItems={breadcrumbItems}
+        breadcrumbItems={{
+          name: 'Clusters',
+          path: '/clusters',
+          fromAbsolutePath: true,
+        }}
       />
       <section className="add-cluster-form fd-margin-top--lg">
         {initParams && (

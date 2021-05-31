@@ -13,20 +13,18 @@ export function KubeconfigUpload({
   const [showParseError, setShowParseError] = React.useState(false);
 
   React.useEffect(() => {
-    // select second tab
+    // select second tab, the one with text field
     if (!!kubeconfigFromParams) setTabIndex(1);
   }, [kubeconfigFromParams]);
 
   const parseKubeconfig = text => {
     try {
-      setShowParseError(false);
       const parsed = jsyaml.load(text);
       if (!parsed || typeof parsed !== 'object') {
         throw Error('Kubeconfig must be an object.');
       }
       return parsed;
     } catch (e) {
-      setShowParseError(true);
       console.warn(e);
       return null;
     }
@@ -35,7 +33,10 @@ export function KubeconfigUpload({
   function onKubeconfigTextAdded(text) {
     const kubeconfig = parseKubeconfig(text);
     if (kubeconfig) {
+      setShowParseError(false);
       handleKubeconfigAdded(kubeconfig);
+    } else {
+      setShowParseError(true);
     }
   }
 

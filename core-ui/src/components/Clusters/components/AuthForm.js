@@ -4,16 +4,15 @@ import { MessageStrip } from 'fundamental-react';
 
 export function AuthForm({ setAuthValid, auth, setAuth }) {
   const formRef = React.useRef();
-  const onChange = () => setAuthValid(formRef.current.checkValidity());
 
   React.useEffect(() => {
     if (formRef) {
       setAuthValid(formRef.current.checkValidity());
     }
-  }, [formRef]);
+  }, [formRef, auth]);
 
   return (
-    <form ref={formRef} onChange={onChange}>
+    <form ref={formRef}>
       <MessageStrip
         type="warning"
         className="fd-margin-top--sm fd-margin-bottom--sm"
