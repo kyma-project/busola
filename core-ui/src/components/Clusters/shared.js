@@ -82,7 +82,7 @@ export const decompressParams = async initParams => {
 export function getContext(kubeconfig, contextName) {
   const contexts = kubeconfig.contexts;
   const currentContextName = contextName || kubeconfig['current-context'];
-  if (contexts.length == 0 || !currentContextName) {
+  if (contexts.length === 0 || !currentContextName) {
     // no contexts or no context choosen, just take first cluster and user
     return {
       cluster: kubeconfig.clusters[0],

@@ -20,6 +20,7 @@
     "in-cluster-eventing.js",
     "smoke-tests.spec.js",
     "run-after.spec.js",
-    "invalid-kubeconfig.spec.js"
+    "invalid-kubeconfig.spec.js",
+    "login-enkode.js"
   ]
 }
