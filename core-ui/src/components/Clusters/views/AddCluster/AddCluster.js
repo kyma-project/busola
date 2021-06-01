@@ -2,7 +2,7 @@ import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import './AddCluster.scss';
 
-import { PageHeader } from 'react-shared';
+import { PageHeader, useNotification } from 'react-shared';
 import {
   AuthForm,
   AUTH_FORM_TOKEN,
@@ -24,6 +24,7 @@ export function AddCluster() {
   const [initParams, setInitParams] = React.useState(null);
   const [auth, setAuth] = React.useState({ type: AUTH_FORM_TOKEN });
   const [authValid, setAuthValid] = React.useState(false);
+  const notification = useNotification();
 
   const requireAuth = kubeconfig && !hasKubeconfigAuth(kubeconfig, contextName);
 
@@ -49,39 +50,47 @@ export function AddCluster() {
   }, [encodedParams]);
 
   const handleKubeconfigAdded = async kubeconfig => {
-    setContextName(kubeconfig['current-context']);
+    setContextName(kubeconfig && kubeconfig['current-context']);
     setKubeconfig(kubeconfig);
   };
 
-  const onApply = () => {
-    // update original kk's choosen context
-    kubeconfig['current-context'] = contextName;
-
-    const config = { ...initParams?.config };
-
-    const params = {
-      kubeconfig,
-      config,
-      currentContext: getContext(kubeconfig, contextName),
-    };
-
-    if (requireAuth) {
-      const { type: authType, token, ...oidcProps } = auth;
-      if (authType === AUTH_FORM_OIDC) {
-        // just add OIDC params to configuration
-        params.config.auth = oidcProps;
-      } else {
-        // add token to current context's user
-        const { context } = kubeconfig.contexts.find(
-          c => c.name === contextName,
-        );
-        params.kubeconfig.users.find(
-          u => u.name === context.user,
-        ).user.token = token;
-      }
+  const addAuthToParams = params => {
+    const { type: authType, token, ...oidcConfig } = auth;
+    if (authType === AUTH_FORM_OIDC) {
+      // just add OIDC params to configuration
+      params.config.auth = oidcConfig;
+    } else {
+      // add token to current context's user
+      const { context } = kubeconfig.contexts.find(c => c.name === contextName);
+      params.kubeconfig.users.find(
+        u => u.name === context.user,
+      ).user.token = token;
     }
+  };
 
-    addCluster(params);
+  const onApply = () => {
+    try {
+      // update original kk's choosen context
+      kubeconfig['current-context'] = contextName;
+
+      const params = {
+        kubeconfig,
+        config: { ...initParams?.config },
+        currentContext: getContext(kubeconfig, contextName),
+      };
+
+      if (requireAuth) {
+        addAuthToParams(params);
+      }
+
+      addCluster(params);
+    } catch (e) {
+      notification.notifyError({
+        title: 'Cannot apply configuration',
+        content: 'Error: ' + e.message,
+      });
+      console.warn(e);
+    }
   };
 
   return (
@@ -101,7 +110,7 @@ export function AddCluster() {
         {initParams && (
           <p>
             Configuration has been included properly. Please fill remaining
-            required data.
+            śrequired data.
           </p>
         )}
         <KubeconfigUpload

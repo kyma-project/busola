@@ -32,12 +32,8 @@ export function KubeconfigUpload({
 
   function onKubeconfigTextAdded(text) {
     const kubeconfig = parseKubeconfig(text);
-    if (kubeconfig) {
-      setShowParseError(false);
-      handleKubeconfigAdded(kubeconfig);
-    } else {
-      setShowParseError(true);
-    }
+    setShowParseError(!kubeconfig);
+    handleKubeconfigAdded(kubeconfig);
   }
 
   return (
