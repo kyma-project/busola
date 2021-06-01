@@ -9,12 +9,10 @@
   },
   "devDependencies": {
     "cypress-file-upload": "^5.0.7",
-    "js-yaml": "^4.1.0"
+    "js-yaml": "^4.1.0",
+    "json-url": "^3.0.0"
   },
   "optionalDependencies": {
     "cypress": "^7.4.0"
-  },
-  "dependencies": {
-    "json-url": "^3.0.0"
   }
 }
