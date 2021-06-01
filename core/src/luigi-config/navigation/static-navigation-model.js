@@ -17,13 +17,24 @@ function downloadKubeconfig() {
   if (clusterName && clusters && clusters[clusterName]) {
     try {
       const { kubeconfig } = clusters[clusterName];
+      if (!kubeconfig) {
+        Luigi.ux().showAlert({
+          text: `Failed to dowload the Kubeconfig due to: Kubeconfig is missing`,
+          type: 'error',
+        });
+        return false;
+      }
       const kubeconfigYaml = jsyaml.dump(kubeconfig);
       const blob = new Blob([kubeconfigYaml], {
         type: 'application/yaml;charset=utf-8',
       });
       saveAs(blob, 'kubeconfig.yml');
     } catch (e) {
-      console.log(e);
+      console.error(e);
+      Luigi.ux().showAlert({
+        text: `Failed to dowload the Kubeconfig due to: ${e.message}`,
+        type: 'error',
+      });
     }
   }
 
