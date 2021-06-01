@@ -1,5 +1,5 @@
 import createEncoder from 'json-url';
-import { loadKubeconfig } from './loadKubeconfig';
+import { loadKubeconfig } from './loadKubeconfigFile';
 
 const encoder = createEncoder('lzma');
 
