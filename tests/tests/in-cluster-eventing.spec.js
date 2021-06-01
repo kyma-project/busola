@@ -10,7 +10,7 @@ const API_RULE_AND_FUNCTION_NAME = 'in-cluster-eventing-publisher';
 const API_RULE_HOST = API_RULE_AND_FUNCTION_NAME + '-' + random;
 const API_RULE_HOST_EXPECTED_PREFIX = `https://${API_RULE_HOST}.`;
 
-context.skip('Test in-cluster eventing', () => {
+context('Test in-cluster eventing', () => {
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
@@ -97,5 +97,18 @@ context.skip('Test in-cluster eventing', () => {
         expect(response.body).to.eq('');
       },
     );
+  });
+
+  it('Check the receiver logs', () => {
+    cy.getLeftNav()
+      .contains('Pods')
+      .click();
+    cy.getIframeBody()
+      .contains(API_RULE_AND_FUNCTION_NAME)
+      .should('not.contain', 'build')
+      .click();
+    cy.getIframeBody()
+      .contains('[aria-label="get-logs-for-function"]')
+      .click();
   });
 });
