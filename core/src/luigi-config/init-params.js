@@ -80,7 +80,13 @@ async function setupFromParams(encodedParams) {
 
   const clusterName = params.currentContext.cluster.name;
   saveActiveClusterName(clusterName);
-  saveLocation(`/cluster/${encodeURIComponent(clusterName)}/namespaces`);
+  const namespace = params.kubeconfig.contexts[0].context.namespace;
+
+  const targetLocation =
+    `/cluster/${encodeURIComponent(clusterName)}/namespaces` +
+    (namespace ? `/${namespace}/details` : '');
+
+  saveLocation(targetLocation);
 }
 
 function navigateToAddCluster(encodedParams) {

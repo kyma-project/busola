@@ -21,15 +21,20 @@ export async function setCluster(clusterName) {
   reloadAuth();
 
   const params = getActiveCluster();
+  const namespace = params.kubeconfig.contexts[0].context.namespace;
   const kubeconfigUser = params.currentContext.user.user;
+
+  const targetLocation =
+    `/cluster/${encodeURIComponent(clusterName)}/namespaces` +
+    (namespace ? `/${namespace}/details` : '');
+  console.log(targetLocation);
+
   if (hasKubeconfigAuth(kubeconfigUser)) {
     setAuthData(kubeconfigUser);
     await reloadNavigation();
-    Luigi.navigation().navigate(
-      `/cluster/${encodeURIComponent(clusterName)}/namespaces`,
-    );
+    Luigi.navigation().navigate(targetLocation);
   } else {
-    saveLocation(`/cluster/${encodeURIComponent(clusterName)}`);
+    saveLocation(targetLocation);
     location = location.origin;
   }
 }
