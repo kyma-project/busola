@@ -35,8 +35,20 @@ context('Create a Function and access it', () => {
   let apiRuleUrl;
   it('Get Host value for the API Rule', () => {
     cy.getLeftNav()
+      .contains('Discovery and Network')
+      .click();
+
+    cy.getLeftNav()
       .contains('API Rules')
-      .click({ force: true });
+      .click();
+
+    cy.getIframeBody()
+      .find('[aria-label="open-search"]')
+      .click();
+
+    cy.getIframeBody()
+      .find('[aria-label="search-input"]')
+      .type(API_RULE_NAME);
 
     cy.getIframeBody()
       .find('[role="status"]')

@@ -63,6 +63,18 @@ context.skip('Test in-cluster eventing', () => {
       .contains('Discovery and Network')
       .click();
 
+    cy.getLeftNav()
+      .contains('API Rules')
+      .click();
+
+    cy.getIframeBody()
+      .find('[aria-label="open-search"]')
+      .click();
+
+    cy.getIframeBody()
+      .find('[aria-label="search-input"]')
+      .type(API_RULE_NAME);
+
     cy.getIframeBody()
       .find('[role="status"]')
       .should('have.text', 'OK');
