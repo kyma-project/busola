@@ -110,5 +110,9 @@ context('Test in-cluster eventing', () => {
     cy.getIframeBody()
       .contains('[aria-label="get-logs-for-function"]')
       .click();
+
+    cy.getIframeBody()
+      .contains('.logs', 'Event received')
+      .should('be.visible');
   });
 });
