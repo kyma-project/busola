@@ -1,14 +1,12 @@
 /// <reference types="cypress" />
-import 'cypress-file-upload';
 import config from '../config';
 
 context('Invalid kubeconfig', () => {
   it('Use wrong kubeconfig - textfield', () => {
     cy.visit(config.clusterAddress);
-    cy.get('[data-testid=app-switcher]')
-      .click()
-      .get('[data-testid=addcluster]')
-      .click();
+    cy.get('[data-testid=app-switcher]').click();
+
+    cy.get('[data-testid=addcluster]').click();
 
     cy.getIframeBody()
       .contains('Paste')
