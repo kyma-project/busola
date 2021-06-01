@@ -110,7 +110,7 @@ export function AddCluster() {
         {initParams && (
           <p>
             Configuration has been included properly. Please fill remaining
-            śrequired data.
+            required data.
           </p>
         )}
         <KubeconfigUpload
