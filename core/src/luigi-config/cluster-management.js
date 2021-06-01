@@ -27,7 +27,6 @@ export async function setCluster(clusterName) {
   const targetLocation =
     `/cluster/${encodeURIComponent(clusterName)}/namespaces` +
     (namespace ? `/${namespace}/details` : '');
-  console.log(targetLocation);
 
   if (hasKubeconfigAuth(kubeconfigUser)) {
     setAuthData(kubeconfigUser);
