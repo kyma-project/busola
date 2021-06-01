@@ -8,7 +8,7 @@ const API_RULE_NAME = 'orders-function';
 const API_RULE_HOST = API_RULE_NAME + '-' + random;
 const API_RULE_HOST_EXPECTED_PREFIX = `https://${API_RULE_HOST}.`;
 
-context.skip('Create a Function and access it', () => {
+context('Create a Function and access it', () => {
   before(() => {
     cy.request({
       url: FUNCTION_CODE_URL,
