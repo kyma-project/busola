@@ -156,6 +156,13 @@ export async function createNavigation() {
               label: 'Remove current cluster config',
               link: `/clusters/remove`,
             },
+            {
+              icon: 'download',
+              label: 'Download kubeconfig',
+              link: `/cluster/${encodeURIComponent(
+                activeClusterName,
+              )}/download-kubeconfig`,
+            },
           ],
         },
       }
