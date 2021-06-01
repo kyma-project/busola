@@ -49,10 +49,11 @@ function paste(subject, { pastePayload }) {
     new Event('paste', { bubbles: true, cancelable: true }),
     {
       clipboardData: {
-        getData: (type = 'text') => pastePayload,
+        getData: (type = 'text') => 'pastePayload',
       },
     },
   );
+  console.log(subject[0], pastePayload);
   subject[0].dispatchEvent(pasteEvent);
 
   return subject;

@@ -1,6 +1,9 @@
 import React from 'react';
 import { TextFormItem } from 'react-shared';
-import { MessageStrip } from 'fundamental-react';
+import { MessageStrip, FormRadioGroup, FormRadioItem } from 'fundamental-react';
+
+export const AUTH_FORM_TOKEN = 'Token';
+export const AUTH_FORM_OIDC = 'OIDC';
 
 export function AuthForm({ setAuthValid, auth, setAuth }) {
   const formRef = React.useRef();
@@ -11,15 +14,8 @@ export function AuthForm({ setAuthValid, auth, setAuth }) {
     }
   }, [formRef, auth, setAuthValid]);
 
-  return (
-    <form ref={formRef}>
-      <MessageStrip
-        type="warning"
-        className="fd-margin-top--sm fd-margin-bottom--sm"
-      >
-        It looks like your kubeconfig is incomplete. Please fill the additional
-        fields.
-      </MessageStrip>
+  const oidcForm = (
+    <>
       <TextFormItem
         inputKey="issuer-url"
         required
@@ -42,6 +38,47 @@ export function AuthForm({ setAuthValid, auth, setAuth }) {
         onChange={e => setAuth({ ...auth, scope: e.target.value })}
         defaultValue={auth.scope}
       />
+    </>
+  );
+
+  const tokenForm = (
+    <TextFormItem
+      inputKey="token"
+      required
+      label="Token"
+      onChange={e => setAuth({ ...auth, token: e.target.value })}
+      defaultValue={auth.token}
+    />
+  );
+
+  return (
+    <form ref={formRef}>
+      <MessageStrip
+        type="warning"
+        className="fd-margin-top--sm fd-margin-bottom--sm"
+      >
+        It looks like your kubeconfig is incomplete. Please fill the additional
+        fields.
+      </MessageStrip>
+      <FormRadioGroup
+        className="fd-margin-bottom--sm"
+        inline
+        onChange={(_, type) => setAuth({ ...auth, type })}
+      >
+        <FormRadioItem
+          inputProps={{ defaultChecked: auth.type === AUTH_FORM_TOKEN }}
+          data={AUTH_FORM_TOKEN}
+        >
+          Token
+        </FormRadioItem>
+        <FormRadioItem
+          inputProps={{ defaultChecked: auth.type === AUTH_FORM_OIDC }}
+          data={AUTH_FORM_OIDC}
+        >
+          OIDC provider
+        </FormRadioItem>
+      </FormRadioGroup>
+      {auth.type === AUTH_FORM_OIDC ? oidcForm : tokenForm}
     </form>
   );
 }

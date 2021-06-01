@@ -1,11 +1,15 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
 import config from '../config';
-import { generateParams, generateParams2 } from '../support/enkode';
+import {
+  generateDefaultParams,
+  generateParamsWithNoKubeconfig,
+  generateParamsAndToken,
+} from '../support/enkode';
 
 context('Login - enkode link', () => {
   it('Unmodified kubeconfig', () => {
-    cy.wrap(generateParams()).then(params => {
+    cy.wrap(generateDefaultParams()).then(params => {
       cy.visit(`${config.clusterAddress}?init=${params}`);
 
       cy.url().should('match', /namespaces$/);
@@ -16,7 +20,7 @@ context('Login - enkode link', () => {
   });
 
   it('Only params from enkode, upload kubeconfig manually', () => {
-    cy.wrap(generateParams2()).then(params => {
+    cy.wrap(generateParamsWithNoKubeconfig()).then(params => {
       cy.visit(`${config.clusterAddress}?init=${params}`);
 
       cy.getIframeBody()
@@ -41,6 +45,38 @@ context('Login - enkode link', () => {
 
       cy.getLeftNav()
         .contains('Test nav node')
+        .should('be.visible');
+    });
+  });
+
+  it('Login with no token in kubeconfig', () => {
+    cy.wrap(generateParamsAndToken()).then(({ token, params }) => {
+      cy.visit(`${config.clusterAddress}?init=${params}`);
+
+      cy.getIframeBody()
+        .find('[role=alert]')
+        .contains(
+          'It looks like your kubeconfig is incomplete. Please fill the additional fields.',
+        )
+        .should('be.visible');
+
+      cy.getIframeBody()
+        .contains(
+          'Configuration has been included properly. Please fill remaining required data.',
+        )
+        .should('be.visible');
+
+      cy.getIframeBody()
+        .find('[placeholder="Token"]')
+        .type(token);
+
+      cy.getIframeBody()
+        .contains('Apply configuration')
+        .click();
+
+      cy.url().should('match', /namespaces$/);
+      cy.getIframeBody()
+        .find('thead')
         .should('be.visible');
     });
   });

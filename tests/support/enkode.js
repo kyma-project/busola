@@ -1,15 +1,7 @@
 import createEncoder from 'json-url';
-import jsyaml from 'js-yaml';
+import { loadKubeconfig } from './loadKubeconfig';
 
 const encoder = createEncoder('lzma');
-
-async function loadKubeconfig() {
-  return new Promise(resolve => {
-    cy.fixture('kubeconfig.yaml').then(fileContent =>
-      resolve(jsyaml.load(fileContent)),
-    );
-  });
-}
 
 const DEFAULT_CONFIG = {
   navigation: {
@@ -62,7 +54,7 @@ const DEFAULT_CONFIG = {
   },
 };
 
-export async function generateParams() {
+export async function generateDefaultParams() {
   const kubeconfig = await loadKubeconfig();
   const params = {
     kubeconfig,
@@ -71,7 +63,7 @@ export async function generateParams() {
   return await encoder.compress(params);
 }
 
-export async function generateParams2() {
+export async function generateParamsWithNoKubeconfig() {
   const customExternalNodes = [
     {
       category: 'Testing Busola',
@@ -90,4 +82,15 @@ export async function generateParams2() {
   };
 
   return await encoder.compress(params);
+}
+
+export async function generateParamsAndToken() {
+  const kubeconfig = await loadKubeconfig();
+  const token = kubeconfig.users[0].user.token;
+  kubeconfig.users[0].user.token = null;
+  const params = {
+    kubeconfig,
+    config: DEFAULT_CONFIG,
+  };
+  return { token, params: await encoder.compress(params) };
 }
