@@ -1,27 +1,13 @@
 /// <reference types="cypress" />
-import config from '../config';
 import 'cypress-file-upload';
 
-const NAMESPACE_NAME = config.namespace;
-
-context('Busola - Smoke Tests', () => {
-  const getLeftNav = () => cy.get('nav[data-testid=semiCollapsibleLeftNav]');
-
-  it('Renders navigation nodes', () => {
-    cy.get('[data-testid=luigi-topnav-logo]').click();
-    ['Namespaces', 'Administration', 'Diagnostics'].forEach(node => {
-      getLeftNav()
-        .contains(node)
-        .should('be.visible');
-    });
+context('Smoke Tests', () => {
+  before(() => {
+    cy.loginAndSelectCluster();
+    cy.goToNamespaceDetails();
   });
 
-  // skipped due to luigi problem with going to namespace details
-  it.skip('Go to the details of namespace and check sections', () => {
-    cy.getIframeBody()
-      .contains('a', NAMESPACE_NAME)
-      .click();
-
+  it('Check sections of namespace details', () => {
     cy.getIframeBody()
       .contains('Healthy Resources')
       .should('be.visible');
@@ -44,45 +30,54 @@ context('Busola - Smoke Tests', () => {
   });
 
   it('Go back to the namespaces list', () => {
-    getLeftNav()
+    cy.getLeftNav()
       .contains('Namespaces')
       .click();
 
     cy.url().should('match', /namespaces$/);
   });
 
+  it('Renders navigation nodes', () => {
+    cy.get('[data-testid=luigi-topnav-logo]').click();
+    ['Administration', 'Diagnostics'].forEach(node => {
+      cy.getLeftNav()
+        .contains(node)
+        .should('be.visible');
+    });
+  });
+
   it('Check Administration tab', () => {
-    getLeftNav()
+    cy.getLeftNav()
       .contains('Administration')
       .click();
 
-    getLeftNav()
+    cy.getLeftNav()
       .contains('Cluster Roles')
       .should('be.visible');
 
-    getLeftNav()
+    cy.getLeftNav()
       .contains('Cluster Role Bindings')
       .should('be.visible');
   });
 
   it('Check Diagnostic tab', () => {
-    getLeftNav()
+    cy.getLeftNav()
       .contains('Diagnostic')
       .click();
 
-    getLeftNav()
+    cy.getLeftNav()
       .contains('Logs')
       .should('be.visible');
 
-    getLeftNav()
+    cy.getLeftNav()
       .contains('Metrics')
       .should('be.visible');
 
-    getLeftNav()
+    cy.getLeftNav()
       .contains('Traces')
       .should('be.visible');
 
-    getLeftNav()
+    cy.getLeftNav()
       .contains('Service Mesh')
       .should('be.visible');
   });

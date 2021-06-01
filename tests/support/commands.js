@@ -1,10 +1,5 @@
-Cypress.Commands.add('handleInvalidLoginData', () => {
-  const loginErrorAlert = Cypress.$('#error');
-  if (loginErrorAlert.length !== 0) {
-    throw Error(`Login failed with message: ${loginErrorAlert.text()}`);
-  }
-  return cy.end();
-});
+import 'cypress-file-upload';
+import config from '../config';
 
 Cypress.Commands.add(
   'shouldHaveTrimmedText',
@@ -15,18 +10,13 @@ Cypress.Commands.add(
   },
 );
 
-let LOCAL_STORAGE_MEMORY = {};
+Cypress.Commands.add('goToNamespaceDetails', () => {
+  // // Go to the details of namespace
+  cy.getIframeBody()
+    .contains('a', config.namespaceName)
+    .click();
 
-Cypress.Commands.add('saveLocalStorageCache', () => {
-  Object.keys(localStorage).forEach(key => {
-    LOCAL_STORAGE_MEMORY[key] = localStorage[key];
-  });
-});
-
-Cypress.Commands.add('restoreLocalStorageCache', () => {
-  Object.keys(LOCAL_STORAGE_MEMORY).forEach(key => {
-    localStorage.setItem(key, LOCAL_STORAGE_MEMORY[key]);
-  });
+  return cy.end();
 });
 
 /**
@@ -67,3 +57,7 @@ function paste(subject, { pastePayload }) {
 
   return subject;
 }
+
+Cypress.Commands.add('getLeftNav', () => {
+  cy.get('nav[data-testid=semiCollapsibleLeftNav]');
+});

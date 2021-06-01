@@ -3,7 +3,6 @@ import { useGet, useMicrofrontendContext, PageHeader } from 'react-shared';
 
 export function ClusterOverviewHeader() {
   const { cluster } = useMicrofrontendContext();
-
   const {
     data: version,
     error: versionError,
@@ -22,7 +21,7 @@ export function ClusterOverviewHeader() {
         {formatClusterVersion()}
       </PageHeader.Column>
       <PageHeader.Column title="API server address">
-        {cluster?.server}
+        {cluster?.cluster.server}
       </PageHeader.Column>
     </PageHeader>
   );

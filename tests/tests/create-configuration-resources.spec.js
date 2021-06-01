@@ -1,8 +1,6 @@
 /// <reference types="cypress" />
-import config from '../config';
 import 'cypress-file-upload';
 
-const NAMESPACE_NAME = config.namespace;
 const CONFIG_MAP_NAME = 'test-configmap';
 const SECRET_NAME = 'test-secret';
 const USER_NAME = 'user@kyma.eu';
@@ -11,14 +9,18 @@ const CLIENT_NAME = 'test-oauth-client';
 const GIT_REPOSITORY_URL = 'https://github.com/test/sample-function.git';
 const GIT_REPOSITORY_NAME = 'test-git-repository';
 
-context('Busola - Testing Configuration', () => {
-  const getLeftNav = () => cy.get('nav[data-testid=semiCollapsibleLeftNav]');
-  it('Test a Config Map', () => {
-    getLeftNav()
+context('Test configuration resources', () => {
+  before(() => {
+    cy.loginAndSelectCluster();
+    cy.goToNamespaceDetails();
+  });
+
+  it('Create a Config Map', () => {
+    cy.getLeftNav()
       .contains('Configuration')
       .click();
 
-    getLeftNav()
+    cy.getLeftNav()
       .find('[data-testid=config-maps_configmaps]')
       .click();
 
@@ -53,8 +55,8 @@ context('Busola - Testing Configuration', () => {
       .should('be.visible');
   });
 
-  it('Test a Secret', () => {
-    getLeftNav()
+  it('Create a Secret', () => {
+    cy.getLeftNav()
       .find('[data-testid=secrets_secrets]')
       .click();
 
@@ -89,8 +91,8 @@ context('Busola - Testing Configuration', () => {
       .should('be.visible');
   });
 
-  it('Test a Roles list view', () => {
-    getLeftNav()
+  it('Create a Roles list view', () => {
+    cy.getLeftNav()
       .find('[data-testid=roles_roles]')
       .click();
 
@@ -99,8 +101,8 @@ context('Busola - Testing Configuration', () => {
       .should('be.visible');
   });
 
-  it('Test a Role Binding', () => {
-    getLeftNav()
+  it('Create a Role Binding', () => {
+    cy.getLeftNav()
       .find('[data-testid=role-bindings_rolebindings]')
       .click();
 
@@ -131,16 +133,16 @@ context('Busola - Testing Configuration', () => {
       .should('be.visible');
   });
 
-  it('Test a Cluster Roles list view', () => {
-    getLeftNav()
+  it('Create a Cluster Roles list view', () => {
+    cy.getLeftNav()
       .contains('Namespaces')
       .click();
 
-    getLeftNav()
+    cy.getLeftNav()
       .contains('Administration')
       .click();
 
-    getLeftNav()
+    cy.getLeftNav()
       .find('[data-testid=cluster-roles_clusterroles]')
       .click();
 
@@ -154,8 +156,8 @@ context('Busola - Testing Configuration', () => {
       .should('be.gte', 1);
   });
 
-  it('Test a Cluster Role Binding', () => {
-    getLeftNav()
+  it('Create a Cluster Role Binding', () => {
+    cy.getLeftNav()
       .find('[data-testid=cluster-role-bindings_clusterrolebindings]')
       .click();
 
@@ -195,23 +197,21 @@ context('Busola - Testing Configuration', () => {
 
     cy.get('[data-testid=luigi-modal-confirm]').click();
 
-    getLeftNav()
+    cy.getLeftNav()
       .contains('Administration')
       .click(); // close navigation tab after yourself
   });
 
-  it('Test a OAuth Clients', () => {
+  it('Create a OAuth Clients', () => {
     cy.get('[data-testid=luigi-topnav-logo]').click();
 
-    getLeftNav()
+    cy.getLeftNav()
       .contains('Namespaces')
       .click();
 
-    cy.getIframeBody()
-      .contains('a', NAMESPACE_NAME)
-      .click({ force: true });
+    cy.goToNamespaceDetails();
 
-    getLeftNav()
+    cy.getLeftNav()
       .find('[data-testid=oauth2clients_oauthclients]')
       .click();
 
@@ -257,8 +257,8 @@ context('Busola - Testing Configuration', () => {
       .should('be.visible');
   });
 
-  it('Test a Git Repository', () => {
-    getLeftNav()
+  it('Create a Git Repository', () => {
+    cy.getLeftNav()
       .find('[data-testid=gitrepositories_gitrepositories]')
       .click();
 
@@ -284,15 +284,11 @@ context('Busola - Testing Configuration', () => {
       .click();
 
     cy.getIframeBody()
-      .contains(GIT_REPOSITORY_NAME)
+      .find('td', GIT_REPOSITORY_NAME, { timeout: 5000 })
       .should('be.visible');
 
     cy.getIframeBody()
       .contains(GIT_REPOSITORY_URL)
       .should('be.visible');
-
-    getLeftNav()
-      .contains('Configuration')
-      .click(); // close navigation tab after yourself
   });
 });

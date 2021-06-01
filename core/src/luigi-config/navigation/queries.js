@@ -4,8 +4,8 @@ import { HttpError } from '../../../../shared/hooks/BackendAPI/config';
 
 export async function failFastFetch(input, auth, init = {}) {
   function createAuthHeaders(auth) {
-    if (auth.idToken) {
-      return { Authorization: `Bearer ${auth.idToken}` };
+    if (auth.token) {
+      return { Authorization: `Bearer ${auth.token}` };
     } else if (
       auth &&
       auth['client-certificate-data'] &&
@@ -21,7 +21,7 @@ export async function failFastFetch(input, auth, init = {}) {
   }
 
   function createHeaders(auth) {
-    const cluster = getActiveCluster().cluster;
+    const cluster = getActiveCluster().currentContext.cluster.cluster;
     return {
       ...createAuthHeaders(auth),
       'Content-Type': 'application/json',
