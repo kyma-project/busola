@@ -7,6 +7,14 @@ context('Create Namespace', () => {
   });
 
   it('Create Namespace', () => {
+    sessionStorage.clear();
+    if (!config.namespaceName) {
+      // generate random namespace name if it wasn't provided as env
+
+      const random = Math.floor(Math.random() * 9999) + 1000;
+      config.namespaceName = `a-busola-test-${random}`;
+    }
+
     cy.getIframeBody()
       .contains('Create Namespace')
       .click();
