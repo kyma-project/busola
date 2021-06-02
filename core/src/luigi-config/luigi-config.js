@@ -35,7 +35,10 @@ async function luigiAfterInit() {
       Luigi.navigation().navigate('/clusters');
     }
   } else {
-    if (getAuthData()) {
+    if (
+      getAuthData() &&
+      !hasKubeconfigAuth(params.currentContext?.user?.user)
+    ) {
       await addClusterNodes();
     }
   }
