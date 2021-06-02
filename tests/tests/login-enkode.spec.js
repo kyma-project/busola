@@ -19,7 +19,7 @@ context('Login - enkode link', () => {
     });
   });
 
-  it('Only params from enkode without kubeconfig', () => {
+  it.only('Only params from enkode without kubeconfig', () => {
     cy.wrap(generateParamsWithNoKubeconfig()).then(params => {
       cy.visit(`${config.clusterAddress}?init=${params}`);
 

@@ -9,16 +9,12 @@ context('Invalid kubeconfig', () => {
     cy.get('[data-testid=addcluster]').click();
 
     cy.getIframeBody()
-      .contains('Paste')
-      .click();
-
-    cy.getIframeBody()
       .find('#textarea-kubeconfig')
       .type('wrong_kubeconfig');
 
     cy.getIframeBody()
-      .contains('Apply configuration')
-      .should('be.disabled');
+      .contains('Apply kubeconfig')
+      .click();
 
     cy.getIframeBody()
       .find('[role=alert][aria-label="invalid-kubeconfig"]')
@@ -34,10 +30,6 @@ context('Invalid kubeconfig', () => {
     cy.getIframeBody()
       .contains('Drag file here')
       .attachFile('kubeconfig--invalid.txt', { subjectType: 'drag-n-drop' });
-
-    cy.getIframeBody()
-      .contains('Apply configuration')
-      .should('be.disabled');
 
     cy.getIframeBody()
       .find('[role=alert][aria-label="invalid-kubeconfig"]')

@@ -16,15 +16,15 @@ context('Other login options', () => {
         .click();
 
       cy.getIframeBody()
-        .contains('Paste')
-        .click();
-
-      cy.getIframeBody()
         .find('#textarea-kubeconfig')
         // "paste" command doesn't work here
         .then(subj => subj.val(JSON.stringify(kubeconfig)))
         // trigger onchange
         .type(' ')
+        .click();
+
+      cy.getIframeBody()
+        .contains('Apply kubeconfig')
         .click();
 
       cy.getIframeBody()

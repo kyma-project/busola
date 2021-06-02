@@ -9,7 +9,7 @@ max-width: 400px;
         color: var(--sapTextColor, #32363a);
     }
 
-    & > button {
+    & > button:last-child {
         width: 100%;
     }
 }

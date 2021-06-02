@@ -12,7 +12,7 @@ export function ContextChooser({ kubeconfig, setContextName }) {
   const selectedKey = kubeconfig['current-context'];
 
   return (
-    <div className="context-chooser fd-margin-top--sm">
+    <div className="context-chooser">
       <FormLabel htmlFor="context-chooser">Context:</FormLabel>
       <Select
         id="context-chooser"
