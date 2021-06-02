@@ -28,7 +28,7 @@ function downloadKubeconfig() {
       const blob = new Blob([kubeconfigYaml], {
         type: 'application/yaml;charset=utf-8',
       });
-      saveAs(blob, 'kubeconfig.yml');
+      saveAs(blob, 'kubeconfig.yaml');
     } catch (e) {
       console.error(e);
       Luigi.ux().showAlert({

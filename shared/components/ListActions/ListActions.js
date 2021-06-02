@@ -20,6 +20,7 @@ const StandaloneAction = ({ action, entry, compact }) => {
   }
   const actionButton = (
     <Button
+      data-testid={action.name.replace(' ', '').toLowerCase()}
       onClick={() => action.handler(entry)}
       className="list-actions__standalone"
       option="transparent"

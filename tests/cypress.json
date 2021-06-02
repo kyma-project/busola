@@ -17,6 +17,7 @@
     "run-before.spec.js",
     "create-a-deployment.spec.js",
     "create-a-function.spec.js",
+    "download-a-kubeconfig.spec.js",
     "in-cluster-eventing.js",
     "smoke-tests.spec.js",
     "run-after.spec.js",
