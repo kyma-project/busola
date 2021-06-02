@@ -5,12 +5,14 @@ import { KubeconfigTextArea } from './KubeconfigTextArea/KubeconfigTextArea';
 import jsyaml from 'js-yaml';
 
 export function KubeconfigUpload({
-  onTabChange,
   handleKubeconfigAdded,
   kubeconfigFromParams,
 }) {
   const [tabIndex, setTabIndex] = React.useState(0);
   const [showParseError, setShowParseError] = React.useState(false);
+  const [kubeconfigs, setKubeconfigs] = React.useState({
+    text: jsyaml.dump(kubeconfigFromParams),
+  });
 
   React.useEffect(() => {
     // select second tab, the one with text field
@@ -30,28 +32,31 @@ export function KubeconfigUpload({
     }
   };
 
-  function onKubeconfigTextAdded(text) {
+  const onKubeconfigTextAdded = source => text => {
     const kubeconfig = parseKubeconfig(text);
     setShowParseError(!kubeconfig);
+    setKubeconfigs({ ...kubeconfigs, [source]: kubeconfig });
     handleKubeconfigAdded(kubeconfig);
-  }
+  };
 
   return (
     <>
       <TabGroup
         selectedIndex={tabIndex}
-        onTabClick={() => {
+        onTabClick={(_, index) => {
           setShowParseError(false);
-          onTabChange();
+          handleKubeconfigAdded(kubeconfigs[index === 0 ? 'upload' : 'text']);
         }}
         className="fd-margin-bottom--sm"
       >
         <Tab title="Upload">
-          <KubeconfigFileUpload onKubeconfigTextAdded={onKubeconfigTextAdded} />
+          <KubeconfigFileUpload
+            onKubeconfigTextAdded={onKubeconfigTextAdded('upload')}
+          />
         </Tab>
         <Tab title="Paste">
           <KubeconfigTextArea
-            onKubeconfigTextAdded={onKubeconfigTextAdded}
+            onKubeconfigTextAdded={onKubeconfigTextAdded('text')}
             kubeconfigFromParams={kubeconfigFromParams}
           />
         </Tab>

@@ -114,7 +114,6 @@ export function AddCluster() {
           </p>
         )}
         <KubeconfigUpload
-          onTabChange={() => setKubeconfig(null)}
           handleKubeconfigAdded={handleKubeconfigAdded}
           kubeconfigFromParams={initParams?.kubeconfig}
         />
