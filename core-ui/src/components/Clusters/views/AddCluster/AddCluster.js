@@ -44,6 +44,12 @@ export function AddCluster() {
       if (Object.keys(params.kubeconfig || {}).length) {
         handleKubeconfigAdded(params.kubeconfig);
       }
+      notification.notify({
+        title:
+          'Configuration has been included properly. Please fill remaining required data.',
+        type: 'info',
+        autoClose: true,
+      });
     }
     setKubeconfigIfPresentInParams();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -107,12 +113,6 @@ export function AddCluster() {
         ]}
       />
       <section className="add-cluster-form fd-margin-top--lg">
-        {initParams && (
-          <p>
-            Configuration has been included properly. Please fill remaining
-            required data.
-          </p>
-        )}
         <KubeconfigUpload
           handleKubeconfigAdded={handleKubeconfigAdded}
           kubeconfigFromParams={initParams?.kubeconfig}

@@ -45,6 +45,13 @@
     }
   }
 
+  &.type-info {
+    border-left: 6px solid var(--sapButton_Information_Background, #0a6ed1);
+    .notification-icon {
+      color: var(--sapButton_Information_Background, #0a6ed1);
+    }
+  }
+
   .notification-header {
     font-family: '72';
     font-size: 13px;
