@@ -14,8 +14,9 @@ context('Invalid kubeconfig', () => {
 
     cy.getIframeBody()
       .find('#textarea-kubeconfig')
-      .type('wrong_kubeconfig')
-      .getIframeBody()
+      .type('wrong_kubeconfig');
+
+    cy.getIframeBody()
       .contains('Apply configuration')
       .should('be.disabled');
 
@@ -26,10 +27,9 @@ context('Invalid kubeconfig', () => {
 
   it('Use wrong kubeconfig - from file', () => {
     cy.visit(config.clusterAddress);
-    cy.get('[data-testid=app-switcher]')
-      .click()
-      .get('[data-testid=addcluster]')
-      .click();
+    cy.get('[data-testid=app-switcher]').click();
+
+    cy.get('[data-testid=addcluster]').click();
 
     cy.getIframeBody()
       .contains('Drag file here')
