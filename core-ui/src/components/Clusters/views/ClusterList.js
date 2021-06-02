@@ -43,7 +43,7 @@ export function ClusterList() {
     } else {
       notification.notifyError({
         title: 'Failed to download the Kubeconfig',
-        content: 'Kubeconfig is missing',
+        content: 'Kubeconfig is missing on the Cluster',
       });
     }
   };

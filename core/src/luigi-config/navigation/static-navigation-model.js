@@ -19,7 +19,7 @@ function downloadKubeconfig() {
       const { kubeconfig } = clusters[clusterName];
       if (!kubeconfig) {
         Luigi.ux().showAlert({
-          text: `Failed to dowload the Kubeconfig due to: Kubeconfig is missing`,
+          text: `Failed to dowload the Kubeconfig due to: Kubeconfig is missing on the Cluster`,
           type: 'error',
         });
         return false;
