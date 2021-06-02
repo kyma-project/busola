@@ -3,11 +3,12 @@ import { FormLabel, Select } from 'fundamental-react';
 import './ContextChooser.scss';
 
 export function ContextChooser({ kubeconfig, setContextName }) {
-  const contexts =
-    kubeconfig.contexts?.map(({ name }) => ({
-      key: name,
-      text: name,
-    })) || [];
+  const contexts = Array.isArray(kubeconfig.contexts)
+    ? kubeconfig.contexts.map(({ name }) => ({
+        key: name,
+        text: name,
+      }))
+    : [];
   const selectedKey = kubeconfig['current-context'];
 
   return (
