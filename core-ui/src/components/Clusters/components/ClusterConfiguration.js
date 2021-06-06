@@ -2,25 +2,25 @@ import React from 'react';
 import { useNotification } from 'react-shared';
 import { AuthForm, AUTH_FORM_OIDC } from './AuthForm';
 import { ContextChooser } from './ContextChooser/ContextChooser';
-import { getContext, hasKubeconfigAuth, addCluster } from '..//shared';
+import { getContext, hasKubeconfigAuth, addCluster } from '../shared';
 import { Button, Icon } from 'fundamental-react';
 
-export function ConfigurationDetails({
+export function ClusterConfiguration({
   kubeconfig,
-  goBack,
   initParams,
   auth: initialAuth,
+  goBack,
 }) {
   const [authValid, setAuthValid] = React.useState(false);
   const [auth, setAuth] = React.useState(initialAuth);
   const [contextName, setContextName] = React.useState(null);
   const notification = useNotification();
 
+  const requireAuth = kubeconfig && !hasKubeconfigAuth(kubeconfig, contextName);
+
   React.useEffect(() => {
     setContextName(kubeconfig['current-context']);
   }, [kubeconfig]);
-
-  const requireAuth = kubeconfig && !hasKubeconfigAuth(kubeconfig, contextName);
 
   const addAuthToParams = params => {
     const { type: authType, token, ...oidcConfig } = auth;
@@ -30,9 +30,17 @@ export function ConfigurationDetails({
     } else {
       // add token to current context's user
       const { context } = kubeconfig.contexts.find(c => c.name === contextName);
-      params.kubeconfig.users.find(
-        u => u.name === context.user,
-      ).user.token = token;
+      const user = params.kubeconfig.users.find(u => u.name === context.user);
+      if (user) {
+        user.user = { token };
+      } else {
+        params.kubeconfig.users = [
+          {
+            name: context.user,
+            user: { token },
+          },
+        ];
+      }
     }
   };
 

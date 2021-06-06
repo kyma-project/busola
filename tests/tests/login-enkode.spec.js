@@ -19,7 +19,7 @@ context('Login - enkode link', () => {
     });
   });
 
-  it.only('Only params from enkode without kubeconfig', () => {
+  it('Only params from enkode without kubeconfig', () => {
     cy.wrap(generateParamsWithNoKubeconfig()).then(params => {
       cy.visit(`${config.clusterAddress}?init=${params}`);
 
@@ -33,10 +33,6 @@ context('Login - enkode link', () => {
         .contains('Drag file here')
         .attachFile('kubeconfig.yaml', { subjectType: 'drag-n-drop' });
 
-      cy.getIframeBody()
-        .contains('Apply configuration')
-        .click();
-
       cy.url().should('match', /namespaces$/);
 
       cy.getLeftNav()
@@ -49,7 +45,7 @@ context('Login - enkode link', () => {
     });
   });
 
-  it('Login with without in kubeconfig', () => {
+  it('Login without token in kubeconfig', () => {
     cy.wrap(generateParamsAndToken()).then(({ token, params }) => {
       cy.visit(`${config.clusterAddress}?init=${params}`);
 

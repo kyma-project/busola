@@ -3,23 +3,32 @@ import LuigiClient from '@luigi-project/client';
 import './AddCluster.scss';
 
 import { PageHeader, useNotification } from 'react-shared';
+import { AUTH_FORM_TOKEN, AUTH_FORM_OIDC } from '../../components/AuthForm';
+import { KubeconfigUpload } from '../../components/KubeconfigUpload/KubeconfigUpload';
 import {
-  AUTH_FORM_TOKEN,
-  AUTH_FORM_OIDC,
-} from 'components/Clusters/components/AuthForm';
-import { KubeconfigUpload } from 'components/Clusters/components/KubeconfigUpload/KubeconfigUpload';
-import { decompressParams } from 'components/Clusters/shared';
-import { ConfigurationDetails } from '../../components/ConfigurationDetails';
+  decompressParams,
+  hasKubeconfigAuth,
+  getContext,
+  addCluster,
+} from '../../shared';
+import { ClusterConfiguration } from '../../components/ClusterConfiguration';
 
 export function AddCluster() {
   const [kubeconfig, setKubeconfig] = React.useState(null);
   const [initParams, setInitParams] = React.useState(null);
   const notification = useNotification();
+  const isMounted = React.useRef();
+
+  React.useEffect(() => {
+    isMounted.current = true;
+    return _ => (isMounted.current = false);
+  }, []);
 
   const encodedParams = LuigiClient.getNodeParams().init;
 
   React.useEffect(() => {
-    if (!encodedParams) return;
+    if (!isMounted.current) return; // avoid state updates on onmounted component
+    if (!encodedParams || initParams) return;
     async function setKubeconfigIfPresentInParams() {
       const params = await decompressParams(encodedParams);
       setInitParams(params);
@@ -36,7 +45,38 @@ export function AddCluster() {
     }
     setKubeconfigIfPresentInParams();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [encodedParams]);
+  }, [encodedParams, initParams]);
+
+  function handleKubeconfigAdded(kubeconfig) {
+    if (!kubeconfig) {
+      setKubeconfig(null);
+      return;
+    }
+
+    const hasOneContext = kubeconfig.contexts?.length === 1;
+    const contextName = kubeconfig.contexts && kubeconfig.contexts[0]?.name;
+    const hasAuth = hasKubeconfigAuth(kubeconfig, contextName);
+
+    // skip config
+    if (hasOneContext && hasAuth) {
+      try {
+        addCluster({
+          kubeconfig,
+          config: { ...initParams?.config },
+          currentContext: getContext(kubeconfig, contextName),
+        });
+      } catch (e) {
+        notification.notifyError({
+          title: 'Cannot apply configuration',
+          content: 'Error: ' + e.message,
+        });
+        console.warn(e);
+      }
+    } else {
+      // show additional configuration
+      setKubeconfig(kubeconfig);
+    }
+  }
 
   return (
     <>
@@ -54,12 +94,12 @@ export function AddCluster() {
       <section className="add-cluster-form fd-margin-top--lg">
         {!kubeconfig && (
           <KubeconfigUpload
-            handleKubeconfigAdded={setKubeconfig}
+            handleKubeconfigAdded={handleKubeconfigAdded}
             kubeconfigFromParams={initParams?.kubeconfig}
           />
         )}
         {kubeconfig && (
-          <ConfigurationDetails
+          <ClusterConfiguration
             kubeconfig={kubeconfig}
             auth={
               initParams?.config?.auth
