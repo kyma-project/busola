@@ -22,6 +22,8 @@
     "test-cluster-overview.spec.js",
     "smoke-tests.spec.js",
     "run-after.spec.js",
-    "invalid-kubeconfig.spec.js"
+    "invalid-kubeconfig.spec.js",
+    "login-enkode.spec.js",
+    "other-logins.spec.js"
   ]
 }
