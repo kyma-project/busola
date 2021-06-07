@@ -35,13 +35,16 @@ export function AddCluster() {
       if (Object.keys(params.kubeconfig || {}).length) {
         setKubeconfig(params.kubeconfig);
       }
-      notification.notify({
-        title:
-          'Configuration has been included properly. Please fill remaining required data.',
-        type: 'info',
-        icon: '',
-        autoClose: true,
-      });
+      notification.notify(
+        {
+          title:
+            'Configuration has been included properly. Please fill remaining required data.',
+          type: 'info',
+          icon: '',
+          autoClose: true,
+        },
+        7500,
+      );
     }
     setKubeconfigIfPresentInParams();
     // eslint-disable-next-line react-hooks/exhaustive-deps
