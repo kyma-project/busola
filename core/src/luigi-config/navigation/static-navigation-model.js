@@ -1,5 +1,8 @@
+import jsyaml from 'js-yaml';
+import { saveAs } from 'file-saver';
+
 import { config } from '../config';
-import { getActiveClusterName } from './../cluster-management';
+import { getActiveClusterName, getClusters } from './../cluster-management';
 import { hasPermissionsFor } from './permissions';
 
 export const coreUIViewGroupName = '_core_ui_';
@@ -7,6 +10,35 @@ export const catalogViewGroupName = '_catalog_';
 
 function toSearchParamsString(object) {
   return new URLSearchParams(object).toString();
+}
+function downloadKubeconfig() {
+  const clusterName = getActiveClusterName();
+  const clusters = getClusters();
+  if (clusterName && clusters && clusters[clusterName]) {
+    try {
+      const { kubeconfig } = clusters[clusterName];
+      if (!kubeconfig) {
+        Luigi.ux().showAlert({
+          text: `Failed to dowload the Kubeconfig due to: Kubeconfig is missing on the Cluster`,
+          type: 'error',
+        });
+        return false;
+      }
+      const kubeconfigYaml = jsyaml.dump(kubeconfig);
+      const blob = new Blob([kubeconfigYaml], {
+        type: 'application/yaml;charset=utf-8',
+      });
+      saveAs(blob, 'kubeconfig.yaml');
+    } catch (e) {
+      console.error(e);
+      Luigi.ux().showAlert({
+        text: `Failed to dowload the Kubeconfig due to: ${e.message}`,
+        type: 'error',
+      });
+    }
+  }
+
+  return false; // cancel Luigi navigation
 }
 
 export function getStaticChildrenNodesForNamespace(
@@ -795,12 +827,6 @@ export function getStaticRootNodes(
       ],
     },
     {
-      pathSegment: 'preferences',
-      viewUrl: config.coreUIModuleUrl + '/preferences',
-      viewGroup: coreUIViewGroupName,
-      hideFromNav: true,
-    },
-    {
       pathSegment: 'addons-config',
       navigationContext: 'clusteraddonsconfigurations',
       resourceType: 'clusteraddonsconfigurations',
@@ -984,6 +1010,20 @@ export function getStaticRootNodes(
         config.logsModuleUrl +
         '/?function={nodeParams.function}&pod={nodeParams.pod}&namespace={nodeParams.namespace}&container_name={nodeParams.container_name}', // todo handle when logs are reintroduced
       hideFromNav: true,
+    },
+
+    // OTHER
+    {
+      pathSegment: 'preferences',
+      viewUrl: config.coreUIModuleUrl + '/preferences',
+      viewGroup: coreUIViewGroupName,
+      hideFromNav: true,
+    },
+    {
+      pathSegment: 'download-kubeconfig',
+      navigationContext: 'kubeconfig',
+      hideFromNav: true,
+      onNodeActivation: downloadKubeconfig,
     },
   ];
   filterNodesByAvailablePaths(nodes, apiPaths, permissionSet);

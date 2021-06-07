@@ -35,6 +35,26 @@ export async function setCluster(clusterName) {
 }
 
 export function saveClusterParams(params) {
+  const { users } = params.kubeconfig;
+  if (users?.length) {
+    users.forEach(userObject => {
+      const { user } = userObject;
+      if (!user.token && config.auth) {
+        // it's needed for the downloaded kubeconfig to work
+        user.exec = {
+          apiVersion: 'client.authentication.k8s.io/v1beta1',
+          command: 'kubectl',
+          args: [
+            'oidc-login',
+            'get-token',
+            `--oidc-issuer-url=${config.auth.issuerUrl}`,
+            `--oidc-client-id=${config.auth.clientId}`,
+          ],
+        };
+      }
+    });
+  }
+
   const clusterName = params.currentContext.cluster.name;
   const clusters = getClusters();
   clusters[clusterName] = params;
