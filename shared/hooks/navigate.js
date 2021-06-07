@@ -8,7 +8,7 @@ function navigateToResourceDetails(resourceName) {
 
 export function navigateToFixedPathResourceDetails(resourceType, resourceName) {
   LuigiClient.linkManager()
-    .fromContext('namespaces')
+    .fromContext('namespace')
     .navigate(`${resourceType}/details/${resourceName}`);
 }
 
