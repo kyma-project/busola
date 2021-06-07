@@ -1,8 +1,9 @@
 /// <reference types='cypress' />
 
 const path = require('path');
-const downloadsFolder = Cypress.config('downloadsFolder');
-const kubeconfigPath = path.join(downloadsFolder, 'kubeconfig.yaml');
+
+const DOWNLOADS_FOLDER = Cypress.config('downloadsFolder');
+const KUBECONFIG_PATH = path.join(DOWNLOADS_FOLDER, 'kubeconfig.yaml');
 
 context('Download a Kubeconfig', () => {
   before(() => {
@@ -11,23 +12,23 @@ context('Download a Kubeconfig', () => {
   });
 
   it('Download a Kubeconfig from the top nav', () => {
-    cy.readFile(kubeconfigPath).should('not.exist');
+    cy.readFile(KUBECONFIG_PATH).should('not.exist');
     cy.get('[data-testid=luigi-topnav-profile]').click();
     cy.get('[data-testid=downloadcurrentclusterkubeconfig]').click();
 
-    cy.readFile(kubeconfigPath).should('exist');
-    cy.task('removeFile', kubeconfigPath);
+    cy.readFile(KUBECONFIG_PATH).should('exist');
+    cy.task('removeFile', KUBECONFIG_PATH);
   });
 
   it('Download a Kubeconfig from the Clusters list', () => {
-    cy.readFile(kubeconfigPath).should('not.exist');
+    cy.readFile(KUBECONFIG_PATH).should('not.exist');
     cy.get('[data-testid=app-switcher]').click();
     cy.get('[data-testid=clustersoverview]').click();
     cy.getIframeBody()
       .find('[data-testid=downloadkubeconfig]')
       .click({ force: true });
 
-    cy.readFile(kubeconfigPath).should('exist');
-    cy.task('removeFile', kubeconfigPath);
+    cy.readFile(KUBECONFIG_PATH).should('exist');
+    cy.task('removeFile', KUBECONFIG_PATH);
   });
 });
