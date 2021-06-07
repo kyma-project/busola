@@ -17,18 +17,18 @@ context('Download a Kubeconfig', () => {
     cy.get('[data-testid=downloadcurrentclusterkubeconfig]').click();
 
     cy.readFile(KUBECONFIG_PATH).should('exist');
-    cy.task('removeFile', KUBECONFIG_PATH);
+    // cy.task('removeFile', KUBECONFIG_PATH);
   });
 
-  it('Download a Kubeconfig from the Clusters list', () => {
-    cy.readFile(KUBECONFIG_PATH).should('not.exist');
-    cy.get('[data-testid=app-switcher]').click();
-    cy.get('[data-testid=clustersoverview]').click();
-    cy.getIframeBody()
-      .find('[data-testid=downloadkubeconfig]')
-      .click({ force: true });
+  // it('Download a Kubeconfig from the Clusters list', () => {
+  //   cy.readFile(KUBECONFIG_PATH).should('not.exist');
+  //   cy.get('[data-testid=app-switcher]').click();
+  //   cy.get('[data-testid=clustersoverview]').click();
+  //   cy.getIframeBody()
+  //     .find('[data-testid=downloadkubeconfig]')
+  //     .click({ force: true });
 
-    cy.readFile(KUBECONFIG_PATH).should('exist');
-    cy.task('removeFile', KUBECONFIG_PATH);
-  });
+  //   cy.readFile(KUBECONFIG_PATH).should('exist');
+  //   cy.task('removeFile', KUBECONFIG_PATH);
+  // });
 });
