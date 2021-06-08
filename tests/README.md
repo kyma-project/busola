@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project contain smoke and integration UI tests for Busola. Copy your cluster's kubeconfig file to [`fixtures/kubeconfig.yaml`](fixtures/kubeconfig.yaml).
+This project contains smoke and integration UI tests for Busola. Copy your cluster's kubeconfig file to [`fixtures/kubeconfig.yaml`](fixtures/kubeconfig.yaml).
 
 ## Installation
 
