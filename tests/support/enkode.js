@@ -63,6 +63,16 @@ export async function generateDefaultParams() {
   return await encoder.compress(params);
 }
 
+export async function generateParamsWithNamespace() {
+  const kubeconfig = await loadKubeconfig();
+  kubeconfig.contexts[0].context.namespace = 'default';
+  const params = {
+    kubeconfig,
+    config: DEFAULT_CONFIG,
+  };
+  return await encoder.compress(params);
+}
+
 export async function generateParamsWithNoKubeconfig() {
   const customExternalNodes = [
     {
