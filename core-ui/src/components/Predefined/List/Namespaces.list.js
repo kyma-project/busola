@@ -7,7 +7,7 @@ const FilterNamespaces = namespace => {
   const showHiddenNamespaces = useShowHiddenNamespaces();
   const hiddenNamespaces = LuigiClient.getContext().hiddenNamespaces;
 
-  return showHiddenNamespaces
+  return showHiddenNamespaces || !hiddenNamespaces
     ? true
     : !hiddenNamespaces.includes(namespace.metadata.name);
 };

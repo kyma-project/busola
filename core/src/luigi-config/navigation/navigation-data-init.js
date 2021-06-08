@@ -298,7 +298,7 @@ async function getNamespaces() {
     });
     return [];
   }
-  if (!shouldShowHiddenNamespaces()) {
+  if (!shouldShowHiddenNamespaces() && hiddenNamespaces) {
     namespaces = namespaces.filter(ns => !hiddenNamespaces.includes(ns.name));
   }
   return createNamespacesList(namespaces);
