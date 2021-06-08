@@ -28,6 +28,7 @@ import {
   setCluster,
   deleteActiveCluster,
   saveActiveClusterName,
+  getCurrentContextNamespace,
 } from '../cluster-management';
 import { shouldShowHiddenNamespaces } from './../utils/hidden-namespaces-toggle';
 import { saveLocation, tryRestorePreviousLocation } from './previous-location';
@@ -201,9 +202,14 @@ async function fetchNavigationData(authData, permissionSet) {
 }
 
 export async function getNavigationData(authData) {
+  const { kubeconfig } = getActiveCluster();
+  const preselectedNamespace = getCurrentContextNamespace(kubeconfig);
   try {
     // we assume all users can make SelfSubjectRulesReview request
-    const permissionSet = await fetchPermissions(authData);
+    const permissionSet = await fetchPermissions(
+      authData,
+      preselectedNamespace,
+    );
     selfSubjectRulesReview = permissionSet;
 
     const { crds, apiPaths } = await fetchNavigationData(

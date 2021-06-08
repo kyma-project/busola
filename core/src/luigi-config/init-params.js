@@ -1,5 +1,9 @@
 import createEncoder from 'json-url';
-import { saveClusterParams, saveActiveClusterName } from './cluster-management';
+import {
+  saveClusterParams,
+  saveActiveClusterName,
+  getCurrentContextNamespace,
+} from './cluster-management';
 import { hasKubeconfigAuth } from './auth/auth';
 import { saveLocation } from './navigation/previous-location';
 
@@ -80,11 +84,11 @@ async function setupFromParams(encodedParams) {
 
   const clusterName = params.currentContext.cluster.name;
   saveActiveClusterName(clusterName);
-  const namespace = params.kubeconfig.contexts[0].context.namespace;
 
+  const preselectedNamespace = getCurrentContextNamespace(params.kubeconfig);
   const targetLocation =
     `/cluster/${encodeURIComponent(clusterName)}/namespaces` +
-    (namespace ? `/${namespace}/details` : '');
+    (preselectedNamespace ? `/${preselectedNamespace}/details` : '');
 
   saveLocation(targetLocation);
 }

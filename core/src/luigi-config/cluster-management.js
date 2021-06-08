@@ -16,17 +16,25 @@ export function setActiveClusterIfPresentInUrl() {
   }
 }
 
+export function getCurrentContextNamespace(kubeconfig) {
+  const currentContextName = kubeconfig['current-context'];
+  const context =
+    kubeconfig.contexts.find(c => c.name === currentContextName) ||
+    kubeconfig.contexts[0];
+  return context.context.namespace;
+}
+
 export async function setCluster(clusterName) {
   saveActiveClusterName(clusterName);
   reloadAuth();
 
   const params = getActiveCluster();
-  const namespace = params.kubeconfig.contexts[0].context.namespace;
+  const preselectedNamespace = getCurrentContextNamespace(params.kubeconfig);
   const kubeconfigUser = params.currentContext.user.user;
 
   const targetLocation =
     `/cluster/${encodeURIComponent(clusterName)}/namespaces` +
-    (namespace ? `/${namespace}/details` : '');
+    (preselectedNamespace ? `/${preselectedNamespace}/details` : '');
 
   if (hasKubeconfigAuth(kubeconfigUser)) {
     setAuthData(kubeconfigUser);
