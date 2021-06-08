@@ -1,15 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { saveAs } from 'file-saver';
 import { Button, LayoutPanel, Switch } from 'fundamental-react';
 import {
   useGetStream,
   useWindowTitle,
   PageHeader,
   SearchInput,
+  useNotification,
 } from 'react-shared';
 import './ContainersLogs.scss';
 
 export const ContainersLogs = ({ params }) => {
   useWindowTitle('Logs');
+  const notification = useNotification();
   const [searchQuery, setSearchQuery] = useState('');
   const [showTimestamps, setShowTimestamps] = useState(false);
   const [logsToSave, setLogsToSave] = useState([]);
@@ -94,15 +97,19 @@ export const ContainersLogs = ({ params }) => {
     const minute = dateObj.getMinutes();
     const date = `${day}-${month}-${year}-${hour}-${minute}`;
 
-    const element = document.createElement('a');
-    const file = new Blob(
-      logsToSave.map(log => `${log}\n`),
-      { type: 'text/plain' },
-    );
-    element.href = URL.createObjectURL(file);
-    element.download = `${podName}-${containerName}-${date}.txt`;
-    document.body.appendChild(element); // required for this to work in FireFox
-    element.click();
+    try {
+      const file = new Blob(
+        logsToSave.map(log => `${log}\n`),
+        { type: 'text/plain' },
+      );
+      saveAs(file, `${podName}-${containerName}-${date}.txt`);
+    } catch (e) {
+      console.error(e);
+      notification.notifyError({
+        title: 'Failed to download the Logs',
+        content: e.message,
+      });
+    }
   };
 
   const LogsPanel = ({ streamData, containerName }) => {

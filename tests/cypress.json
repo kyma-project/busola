@@ -15,9 +15,13 @@
   "testFiles": [
     "run-before.spec.js",
     "create-a-deployment.spec.js",
-    "in-cluster-eventing.spec.js",
+    "download-a-kubeconfig.spec.js",
+    "in-cluster-eventing.js",
+    "test-cluster-overview.spec.js",
     "smoke-tests.spec.js",
     "run-after.spec.js",
-    "invalid-kubeconfig.spec.js"
+    "invalid-kubeconfig.spec.js",
+    "login-enkode.spec.js",
+    "other-logins.spec.js"
   ]
 }

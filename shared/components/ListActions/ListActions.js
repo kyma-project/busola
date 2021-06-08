@@ -3,6 +3,7 @@ import { Popover, Menu, Button } from 'fundamental-react';
 import './ListActions.scss';
 
 import PropTypes from 'prop-types';
+import { Tooltip } from '../Tooltip/Tooltip';
 import CustomPropTypes from '../../typechecking/CustomPropTypes';
 
 const AUTO_ICONS_BY_NAME = new Map([
@@ -17,9 +18,9 @@ const StandaloneAction = ({ action, entry, compact }) => {
   if (action.component) {
     return action.component(entry);
   }
-
-  return (
+  const actionButton = (
     <Button
+      data-testid={action.name.replace(' ', '').toLowerCase()}
       onClick={() => action.handler(entry)}
       className="list-actions__standalone"
       option="transparent"
@@ -31,6 +32,12 @@ const StandaloneAction = ({ action, entry, compact }) => {
     >
       {icon ? '' : action.name}
     </Button>
+  );
+
+  return action.tooltip ? (
+    <Tooltip content={action.tooltip}> {actionButton} </Tooltip>
+  ) : (
+    <div> {actionButton} </div>
   );
 };
 

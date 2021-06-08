@@ -12,7 +12,7 @@ const API_RULE_HOST_EXPECTED_PREFIX = `https://${API_RULE_HOST}.`;
 
 const POD_NAME_REGEX = new RegExp(`${FUNCTION_NAME}-(?!.*build)`);
 
-context('Test in-cluster eventing', () => {
+context('In-cluster eventing', () => {
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
@@ -59,15 +59,9 @@ context('Test in-cluster eventing', () => {
     cy.createApiRule(API_RULE_AND_FUNCTION_NAME, API_RULE_HOST);
   });
 
-  let apiRuleUrl;
+  let apiRuleHost;
   it('Get Host value for the API Rule', () => {
-    cy.getLeftNav()
-      .contains('Discovery and Network')
-      .click();
-
-    cy.getIframeBody()
-      .find('[role="status"]')
-      .should('have.text', 'OK');
+    cy.checkApiRuleStatus(API_RULE_AND_FUNCTION_NAME);
 
     cy.getIframeBody()
       .find('tbody>tr')
@@ -75,25 +69,21 @@ context('Test in-cluster eventing', () => {
         cy.get(`a[href^="${API_RULE_HOST_EXPECTED_PREFIX}"]`)
           .should('exist')
           .then($link => {
-            apiRuleUrl = $link.attr('href');
-            cy.log('api rule host set to ', apiRuleUrl);
+            apiRuleHost = $link.attr('href');
+            cy.log('api rule host set to ', apiRuleHost);
           });
       });
-
-    cy.getLeftNav()
-      .contains('Discovery and Network')
-      .click();
   });
 
   it('Make a request to the Function', () => {
-    assert.exists(apiRuleUrl, 'the "apiRuleUrl" variable is defined');
+    assert.exists(apiRuleHost, 'the "apiRuleHost" variable is defined');
     assert.notEqual(
-      apiRuleUrl,
+      apiRuleHost,
       API_RULE_HOST_EXPECTED_PREFIX,
-      'the "apiRuleUrl" variable is not equal',
+      'the "apiRuleHost" variable is not equal',
     );
 
-    cy.request({ method: 'GET', url: apiRuleUrl, timeout: 10000 }).then(
+    cy.request({ method: 'GET', url: apiRuleHost, timeout: 10000 }).then(
       response => {
         // response.body is automatically serialized into JSON
         expect(response.body).to.eq('');

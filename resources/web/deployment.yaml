@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: busola
-          image: eu.gcr.io/kyma-project/busola-core:1a89bff0
+          image: eu.gcr.io/kyma-project/busola-core:PR-189
           imagePullPolicy: Always
           resources:
             requests:
@@ -31,7 +31,7 @@ spec:
             - containerPort: 6080
             - containerPort: 8080
         - name: core-ui
-          image: eu.gcr.io/kyma-project/busola-core-ui:1a89bff0
+          image: eu.gcr.io/kyma-project/busola-core-ui:PR-180
           imagePullPolicy: Always
           resources:
             requests:
