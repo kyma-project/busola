@@ -9,7 +9,7 @@ import {
 
 context('Login - enkode link', () => {
   it.skip('Unmodified kubeconfig', () => {
-    cy.wrap(generateDefaultParams()).then(params => {
+    cy(generateDefaultParams()).then(params => {
       cy.visit(`${config.clusterAddress}?init=${params}`);
 
       cy.url().should('match', /namespaces$/);
