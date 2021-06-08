@@ -12,6 +12,7 @@ import {
 import {
   navigationPermissionChecker,
   hasWildcardPermission,
+  hasPermissionsFor,
 } from './permissions';
 
 import {
@@ -195,7 +196,12 @@ export async function createNavigation() {
 }
 
 async function fetchNavigationData(authData, permissionSet) {
-  if (hasWildcardPermission(permissionSet)) {
+  if (
+    hasWildcardPermission(permissionSet) ||
+    hasPermissionsFor('apiextensions.k8s.io', 'customresourcedefinitions', [
+      ...permissionSet,
+    ])
+  ) {
     const res = await fetchBusolaInitData(authData);
     crds = res.crds.map(crd => crd.name);
     return { ...res, crds };
