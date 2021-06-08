@@ -8,7 +8,7 @@ import {
 } from '../support/enkode';
 
 context('Login - enkode link', () => {
-  it('Unmodified kubeconfig', () => {
+  it.skip('Unmodified kubeconfig', () => {
     cy.wrap(generateDefaultParams()).then(params => {
       cy.visit(`${config.clusterAddress}?init=${params}`);
 
