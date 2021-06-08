@@ -10,3 +10,19 @@ export const DEFAULT_MODULES = {
   SERVERLESS: 'serverless.kyma-project.io',
   SERVERLESS_REPOS: 'gitrepositories.serverless.kyma-project.io',
 };
+
+export const DEFAULT_HIDDEN_NAMESPACES = [
+  'istio-system',
+  'knative-eventing',
+  'knative-serving',
+  'kube-public',
+  'kube-system',
+  'kyma-backup',
+  'kyma-installer',
+  'kyma-integration',
+  'kyma-system',
+  'natss',
+  'kube-node-lease',
+  'kubernetes-dashboard',
+  'serverless-system',
+];
