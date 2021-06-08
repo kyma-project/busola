@@ -13,6 +13,7 @@ const DEFAULT_MODULES = {
   SERVERLESS: 'serverless.kyma-project.io',
   SERVERLESS_REPOS: 'gitrepositories.serverless.kyma-project.io',
 };
+
 const DEFAULT_HIDDEN_NAMESPACES = [
   'istio-system',
   'knative-eventing',
