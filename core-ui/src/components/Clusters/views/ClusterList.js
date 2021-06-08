@@ -1,11 +1,20 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
-import { useMicrofrontendContext, PageHeader, GenericList } from 'react-shared';
-import { setCluster, deleteCluster } from './../shared';
+import jsyaml from 'js-yaml';
+import { saveAs } from 'file-saver';
 import { Link, Button } from 'fundamental-react';
+import {
+  useMicrofrontendContext,
+  PageHeader,
+  GenericList,
+  useNotification,
+} from 'react-shared';
+
+import { setCluster, deleteCluster } from './../shared';
 
 export function ClusterList() {
   const { clusters, activeClusterName } = useMicrofrontendContext();
+  const notification = useNotification();
   if (!clusters) {
     return null;
   }
@@ -14,6 +23,29 @@ export function ClusterList() {
     return entry.currentContext.cluster.name === activeClusterName
       ? { fontWeight: 'bolder' }
       : {};
+  };
+
+  const downloadKubeconfig = entry => {
+    if (entry.kubeconfig) {
+      try {
+        const kubeconfigYaml = jsyaml.dump(entry.kubeconfig);
+        const blob = new Blob([kubeconfigYaml], {
+          type: 'application/yaml;charset=utf-8',
+        });
+        saveAs(blob, 'kubeconfig.yaml');
+      } catch (e) {
+        console.error(e);
+        notification.notifyError({
+          title: 'Failed to download the Kubeconfig',
+          content: e.message,
+        });
+      }
+    } else {
+      notification.notifyError({
+        title: 'Failed to download the Kubeconfig',
+        content: 'Kubeconfig is missing on the Cluster',
+      });
+    }
   };
 
   const entries = Object.values(clusters);
@@ -35,6 +67,12 @@ export function ClusterList() {
   ];
 
   const actions = [
+    {
+      name: 'Download Kubeconfig',
+      icon: 'download',
+      tooltip: 'Download Kubeconfig',
+      handler: e => downloadKubeconfig(e),
+    },
     {
       name: 'Delete',
       handler: e => deleteCluster(e.currentContext.cluster.name),

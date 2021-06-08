@@ -29,7 +29,9 @@ export function FileInput({
 
   function fileChanged(file) {
     setFileName(file ? file.name : '');
-    fileInputChanged(file);
+    if (file) {
+      fileInputChanged(file);
+    }
   }
 
   function drop(e) {

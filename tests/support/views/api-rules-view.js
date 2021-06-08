@@ -5,7 +5,7 @@ Cypress.Commands.add('createApiRule', (ApiRuleName, ApiRuleHost) => {
 
   cy.getLeftNav()
     .contains('API Rules')
-    .click({ force: true });
+    .click();
 
   cy.getIframeBody()
     .contains('Create apirules')
@@ -35,4 +35,26 @@ Cypress.Commands.add('createApiRule', (ApiRuleName, ApiRuleHost) => {
   cy.getLeftNav()
     .contains('Discovery and Network')
     .click();
+});
+
+Cypress.Commands.add('checkApiRuleStatus', ApiRuleName => {
+  cy.getLeftNav()
+    .contains('Discovery and Network')
+    .click();
+
+  cy.getLeftNav()
+    .contains('API Rules')
+    .click();
+
+  cy.getIframeBody()
+    .find('[aria-label="open-search"]')
+    .click();
+
+  cy.getIframeBody()
+    .find('[aria-label="search-input"]')
+    .type(ApiRuleName);
+
+  cy.getIframeBody()
+    .find('[role="status"]')
+    .should('have.text', 'OK');
 });

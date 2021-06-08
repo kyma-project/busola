@@ -31,6 +31,10 @@ function getResponseParams(usePKCE = true) {
   }
 }
 
+function hasExactlyOneContext(kubeconfig) {
+  return kubeconfig?.contexts?.length === 1;
+}
+
 export async function saveInitParamsIfPresent() {
   const encodedParams = new URL(location).searchParams.get('init');
   if (encodedParams) {
@@ -56,6 +60,11 @@ async function setupFromParams(encodedParams) {
     (!isOidcAuthPresent && !hasKubeconfigAuth(kubeconfigUser));
 
   if (requireMoreInput) {
+    navigateToAddCluster(encodedParams);
+    return;
+  }
+
+  if (!hasExactlyOneContext(decoded.kubeconfig)) {
     navigateToAddCluster(encodedParams);
     return;
   }
