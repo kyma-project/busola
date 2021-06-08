@@ -16,7 +16,7 @@ export default function DeployNewWorkload({ namespaceName }) {
   const functionsExist = modulesExist(crds, [modules?.SERVERLESS]);
 
   const reposExist =
-    functionsExist && modulesExist(crds, [modules?.SERVERLESS_REPOS]);
+    functionsExist && modulesExist(crds, [modules?.SERVERLESS]);
 
   const {
     data: functions,

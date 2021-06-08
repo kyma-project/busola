@@ -9,11 +9,7 @@ import {
   getStaticChildrenNodesForNamespace,
   getStaticRootNodes,
 } from './static-navigation-model';
-import {
-  navigationPermissionChecker,
-  hasWildcardPermission,
-  hasPermissionsFor,
-} from './permissions';
+import { navigationPermissionChecker, hasPermissionsFor } from './permissions';
 
 import {
   hideDisabledNodes,
@@ -197,7 +193,6 @@ export async function createNavigation() {
 
 async function fetchNavigationData(authData, permissionSet) {
   if (
-    hasWildcardPermission(permissionSet) ||
     hasPermissionsFor('apiextensions.k8s.io', 'customresourcedefinitions', [
       ...permissionSet,
     ])
