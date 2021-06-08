@@ -149,7 +149,10 @@ export const useGetStream = path => {
   React.useEffect(_ => abort, [path]);
   React.useEffect(_ => abort, []);
   React.useEffect(() => {
-    if (JSON.stringify(lastAuthData.current) != JSON.stringify(authData)) {
+    if (
+      authData &&
+      JSON.stringify(lastAuthData.current) != JSON.stringify(authData)
+    ) {
       lastAuthData.current = authData;
       refetchData();
     }
