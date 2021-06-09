@@ -11,7 +11,7 @@ export function useShowNodeParamsError() {
     if (nodeParams.error) {
       showError(nodeParams);
     }
-  }, [nodeParams]);
+  }, [nodeParams, showError]);
 
   function showError({ error, errorDescription }) {
     const description = errorDescription ? ` (${errorDescription})` : '';
