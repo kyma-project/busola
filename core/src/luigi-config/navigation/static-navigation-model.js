@@ -52,6 +52,9 @@ export function getStaticChildrenNodesForNamespace(
       link: `/cluster/${encodedClusterName}/namespaces`,
       label: 'Back to Namespaces',
       icon: 'nav-back',
+      hideFromNav: !hasPermissionsFor('', 'namespaces', permissionSet, [
+        'list',
+      ]),
     },
     {
       pathSegment: 'details',
