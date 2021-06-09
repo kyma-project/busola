@@ -49,7 +49,7 @@ export function useNodesQuery() {
     data: nodes,
     error: nodesError,
     loading: nodesLoading,
-  } = useGet('/api/v1/nodes', { pollingInterval: 4500 });
+  } = useGet('/api/v1/nodes', { pollingInterval: 5500 });
 
   React.useEffect(() => {
     if (nodes && nodeMetrics) {
