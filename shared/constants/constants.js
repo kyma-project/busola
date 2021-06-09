@@ -8,7 +8,6 @@ export const DEFAULT_MODULES = {
   APPLICATIONS: 'applicationconnector.kyma-project.io',
   ADDONS: 'addons.kyma-project.io',
   SERVERLESS: 'serverless.kyma-project.io',
-  SERVERLESS_REPOS: 'gitrepositories.serverless.kyma-project.io',
 };
 
 export const DEFAULT_HIDDEN_NAMESPACES = [

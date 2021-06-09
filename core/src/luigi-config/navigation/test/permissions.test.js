@@ -54,4 +54,50 @@ describe('hasPermissionsFor', () => {
       false,
     );
   });
+
+  test('false if required verb is not found', () => {
+    const permissionSet = [
+      {
+        apiGroups: ['*'],
+        resources: ['*'],
+        verbs: ['add', 'remove'],
+      },
+    ];
+    expect(
+      hasPermissionsFor('api-group', 'resource', permissionSet, [
+        'add',
+        'remove',
+        'cancel',
+      ]),
+    ).toBe(false);
+  });
+
+  test('true for wildcard verb', () => {
+    const permissionSet = [
+      {
+        apiGroups: ['*'],
+        resources: ['*'],
+        verbs: ['*'],
+      },
+    ];
+    expect(
+      hasPermissionsFor('api-group', 'resource', permissionSet, [
+        'add',
+        'remove',
+      ]),
+    ).toBe(true);
+  });
+
+  test('false if all required verb is not found', () => {
+    const permissionSet = [
+      {
+        apiGroups: ['*'],
+        resources: ['*'],
+        verbs: ['tets'],
+      },
+    ];
+    expect(
+      hasPermissionsFor('api-group', 'resource', permissionSet, ['add']),
+    ).toBe(false);
+  });
 });

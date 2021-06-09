@@ -3,6 +3,7 @@ import 'cypress-file-upload';
 import config from '../config';
 import {
   generateDefaultParams,
+  generateParamsWithPreselectedNamespace,
   generateParamsWithNoKubeconfig,
   generateParamsAndToken,
   generateParamsWithHiddenNamespacesList,
@@ -67,6 +68,17 @@ context('Login - enkode link', () => {
           .should('be.visible');
       },
     );
+  });
+
+  it('Kubeconfig with preselected namespace', () => {
+    cy.wrap(generateParamsWithPreselectedNamespace()).then(params => {
+      cy.visit(`${config.clusterAddress}?init=${params}`);
+
+      cy.url().should('match', /namespaces\/default\/details$/);
+      cy.getIframeBody()
+        .find('thead')
+        .should('be.visible');
+    });
   });
 
   it('Only params from enkode without kubeconfig', () => {

@@ -12,9 +12,11 @@ Cypress.Commands.add(
 
 Cypress.Commands.add('goToNamespaceDetails', () => {
   // // Go to the details of namespace
-  cy.getIframeBody()
-    .contains('a', config.namespaceName)
-    .click();
+  cy.task('getNamespace').then(ns => {
+    cy.getIframeBody()
+      .contains('a', ns)
+      .click();
+  });
 
   return cy.end();
 });

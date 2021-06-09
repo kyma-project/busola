@@ -1,5 +1,9 @@
 import createEncoder from 'json-url';
-import { saveClusterParams, saveActiveClusterName } from './cluster-management';
+import {
+  saveClusterParams,
+  saveActiveClusterName,
+  getCurrentContextNamespace,
+} from './cluster-management';
 import { hasKubeconfigAuth } from './auth/auth';
 import { saveLocation } from './navigation/previous-location';
 
@@ -11,7 +15,6 @@ const DEFAULT_MODULES = {
   APPLICATIONS: 'applicationconnector.kyma-project.io',
   ADDONS: 'addons.kyma-project.io',
   SERVERLESS: 'serverless.kyma-project.io',
-  SERVERLESS_REPOS: 'gitrepositories.serverless.kyma-project.io',
 };
 
 const DEFAULT_HIDDEN_NAMESPACES = [
@@ -107,7 +110,13 @@ async function setupFromParams(encodedParams) {
 
   const clusterName = params.currentContext.cluster.name;
   saveActiveClusterName(clusterName);
-  saveLocation(`/cluster/${encodeURIComponent(clusterName)}/namespaces`);
+
+  const preselectedNamespace = getCurrentContextNamespace(params.kubeconfig);
+  const targetLocation =
+    `/cluster/${encodeURIComponent(clusterName)}/namespaces` +
+    (preselectedNamespace ? `/${preselectedNamespace}/details` : '');
+
+  saveLocation(targetLocation);
 }
 
 function navigateToAddCluster(encodedParams) {

@@ -79,101 +79,100 @@ const useGetHook = processDataFn =>
     };
   };
 
-const useGetStreamHook = _ =>
-  function(path) {
-    const isHookMounted = React.useRef(true); // becomes 'false' after the hook is unmounted to avoid performing any async actions afterwards
-    const lastAuthData = React.useRef(null);
-    const [data, setData] = React.useState([]);
-    const [error, setError] = React.useState(null);
-    const { authData } = useMicrofrontendContext();
-    const fetch = useFetch();
-    const abortController = new AbortController();
+export const useGetStream = path => {
+  const isHookMounted = React.useRef(true); // becomes 'false' after the hook is unmounted to avoid performing any async actions afterwards
+  const lastAuthData = React.useRef(null);
+  const [data, setData] = React.useState([]);
+  const [error, setError] = React.useState(null);
+  const { authData } = useMicrofrontendContext();
+  const fetch = useFetch();
+  const abortController = React.useRef(new AbortController());
 
-    const fetchData = async _ => {
-      if (!authData || !isHookMounted.current) return;
-
-      const processError = error => {
-        if (!abortController.signal.aborted) {
-          console.error(error);
-          setError(error);
-        }
-      };
-
-      try {
-        const response = await fetch({ relativeUrl: path, abortController });
-        if (!authData || !isHookMounted.current) return;
-        const payload = await response.body;
-        const reader = payload.getReader();
-
-        return new ReadableStream({
-          start(controller) {
-            const push = async () => {
-              try {
-                const { done, value } = await reader.read();
-                // If there is no more data to read
-                if (done) {
-                  controller.close();
-                  return;
-                }
-                // Get the data and send it to the browser via the controller
-                controller.enqueue(value);
-                const string = new TextDecoder().decode(value);
-                const streams = string
-                  ?.split('\n')
-                  .filter(stream => stream !== '');
-
-                setData(previousData => [...previousData, ...streams]);
-                return push();
-              } catch (e) {
-                // Chrome closes connections after a while.
-                // Refetch logs after the connection has been closed.
-                if (e.toString().includes('network error')) {
-                  controller.close();
-                  fetchData(abortController);
-                  // If we don't clear the data, streams would be shown multiple times.
-                  setData([]);
-                } else {
-                  processError(e);
-                }
-              }
-            };
-            push();
-          },
-        });
-      } catch (e) {
-        processError(e);
-      }
-    };
-
-    React.useEffect(() => {
-      return _ => {
-        abortController.abort();
-      };
-    }, [path]);
-
-    React.useEffect(() => {
-      if (JSON.stringify(lastAuthData.current) != JSON.stringify(authData)) {
-        lastAuthData.current = authData;
-        fetchData();
-      }
-    }, [authData]);
-
-    React.useEffect(() => {
-      isHookMounted.current = true;
-      return _ => {
-        isHookMounted.current = false;
-      };
-    }, []);
-
-    return {
-      data,
-      error,
-    };
+  const processError = error => {
+    if (!abortController.current.signal.aborted) {
+      console.error(error);
+      setError(error);
+    }
   };
+
+  const fetchData = async _ => {
+    if (!authData || !isHookMounted.current) return;
+
+    try {
+      const response = await fetch({ relativeUrl: path, abortController });
+      if (!authData || !isHookMounted.current) return;
+      const reader = response.body.getReader();
+
+      return new ReadableStream({
+        start(streamController) {
+          const push = async () => {
+            try {
+              const { done, value } = await reader.read();
+              // If there is no more data to read
+              if (done) return streamController.close();
+
+              // Get the data and send it to the browser via the controller
+              streamController.enqueue(value);
+              const string = new TextDecoder().decode(value);
+              const streams = string
+                ?.split('\n')
+                .filter(stream => stream !== '');
+
+              setData(prevData => [...prevData, ...streams]);
+              return push();
+            } catch (e) {
+              // Chrome closes connections after a while.
+              // Refetch logs after the connection has been closed.
+              if (e.toString().includes('network error'))
+                return setImmediate(refetchData);
+              else processError(e);
+            }
+          };
+          return push();
+        },
+      });
+    } catch (e) {
+      processError(e);
+    }
+  };
+
+  function abort() {
+    abortController.current.abort();
+  }
+
+  function refetchData() {
+    abort();
+    abortController.current = new AbortController();
+    fetchData();
+  }
+
+  React.useEffect(_ => abort, [path]);
+  React.useEffect(_ => abort, []);
+  React.useEffect(() => {
+    if (
+      authData &&
+      JSON.stringify(lastAuthData.current) != JSON.stringify(authData)
+    ) {
+      lastAuthData.current = authData;
+      refetchData();
+    }
+  }, [authData]);
+
+  React.useEffect(() => {
+    isHookMounted.current = true;
+    return _ => {
+      isHookMounted.current = false;
+    };
+  }, []);
+
+  return {
+    data,
+    error,
+  };
+};
 
 export const useGetList = filter => useGetHook(handleListDataReceived(filter));
 export const useGet = useGetHook(handleSingleDataReceived);
-export const useGetStream = useGetStreamHook();
 
 function handleListDataReceived(filter) {
   return (newData, oldData, setDataFn, lastResourceVersionRef) => {

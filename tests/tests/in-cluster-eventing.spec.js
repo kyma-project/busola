@@ -10,6 +10,8 @@ const API_RULE_AND_FUNCTION_NAME = 'in-cluster-eventing-publisher';
 const API_RULE_HOST = API_RULE_AND_FUNCTION_NAME + '-' + random;
 const API_RULE_HOST_EXPECTED_PREFIX = `https://${API_RULE_HOST}.`;
 
+const POD_NAME_REGEX = new RegExp(`${FUNCTION_NAME}-(?!.*build)`);
+
 context('In-cluster eventing', () => {
   before(() => {
     cy.loginAndSelectCluster();
@@ -87,5 +89,28 @@ context('In-cluster eventing', () => {
         expect(response.body).to.eq('');
       },
     );
+  });
+
+  it('Open the receiver logs', () => {
+    cy.getLeftNav()
+      .contains('Workloads')
+      .click();
+
+    cy.getLeftNav()
+      .contains('Pods')
+      .click();
+
+    cy.getIframeBody()
+      .contains('a', POD_NAME_REGEX)
+      .click();
+
+    cy.getIframeBody()
+      .find('[aria-label="view-logs-for-function"]')
+      .click();
+
+    // it just doesn't work in cypress
+    // cy.getIframeBody()
+    //   .contains('.logs', 'Event received')
+    //   .should('be.visible');
   });
 });
