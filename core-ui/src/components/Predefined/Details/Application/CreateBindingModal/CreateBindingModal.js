@@ -63,7 +63,7 @@ export default function CreateBindingModal({
     ?.map(n => n.metadata.name)
     .filter(name => !alreadyBoundNamespaces.includes(name))
     .filter(name =>
-      hiddenNamespaces ? !hiddenNamespaces.includes(name) : true,
+      !hiddenNamespaces || !hiddenNamespaces.includes(name)
     );
 
   return (
