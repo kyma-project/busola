@@ -31,7 +31,7 @@ import {
   getCurrentContextNamespace,
 } from '../cluster-management';
 import { shouldShowHiddenNamespaces } from './../utils/hidden-namespaces-toggle';
-import { saveLocation, tryRestorePreviousLocation } from './previous-location';
+import { saveLocation } from './previous-location';
 import { NODE_PARAM_PREFIX } from '../luigi-config';
 
 let selfSubjectRulesReview;
@@ -47,7 +47,6 @@ export async function addClusterNodes() {
       nodes,
     },
   });
-  tryRestorePreviousLocation();
 }
 
 export async function reloadNavigation() {
