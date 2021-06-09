@@ -192,7 +192,11 @@ export async function createNavigation() {
 
 async function fetchNavigationData(authData, permissionSet) {
   if (
-    hasPermissionsFor('apiextensions.k8s.io', 'customresourcedefinitions', permissionSet)
+    hasPermissionsFor(
+      'apiextensions.k8s.io',
+      'customresourcedefinitions',
+      permissionSet,
+    )
   ) {
     const res = await fetchBusolaInitData(authData);
     crds = res.crds.map(crd => crd.name);
