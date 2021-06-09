@@ -8,8 +8,8 @@ import {
 } from '../support/enkode';
 
 context('Login - enkode link', () => {
-  it.skip('Unmodified kubeconfig', () => {
-    cy(generateDefaultParams()).then(params => {
+  it('Unmodified kubeconfig', () => {
+    cy.wrap(generateDefaultParams()).then(params => {
       cy.visit(`${config.clusterAddress}?init=${params}`);
 
       cy.url().should('match', /namespaces$/);
