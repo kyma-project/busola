@@ -3,6 +3,7 @@ import LuigiClient from '@luigi-project/client';
 import jsyaml from 'js-yaml';
 import { saveAs } from 'file-saver';
 import { Link, Button } from 'fundamental-react';
+import { useShowNodeParamsError } from 'shared/useShowNodeParamsError';
 import {
   useMicrofrontendContext,
   PageHeader,
@@ -15,6 +16,9 @@ import { setCluster, deleteCluster } from './../shared';
 export function ClusterList() {
   const { clusters, activeClusterName } = useMicrofrontendContext();
   const notification = useNotification();
+
+  useShowNodeParamsError();
+
   if (!clusters) {
     return null;
   }
