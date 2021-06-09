@@ -27,21 +27,6 @@ const DEFAULT_CONFIG = {
       },
     ],
   },
-  hiddenNamespaces: [
-    'istio-system',
-    'knative-eventing',
-    'knative-serving',
-    'kube-public',
-    'kube-system',
-    'kyma-backup',
-    'kyma-installer',
-    'kyma-integration',
-    'kyma-system',
-    'natss',
-    'kube-node-lease',
-    'kubernetes-dashboard',
-    'serverless-system',
-  ],
   modules: {
     SERVICE_CATALOG: 'servicecatalog.k8s.io',
     SERVICE_CATALOG_ADDONS: 'servicecatalog.kyma-project.io',
@@ -59,6 +44,18 @@ export async function generateDefaultParams() {
   const params = {
     kubeconfig,
     config: DEFAULT_CONFIG,
+  };
+  return await encoder.compress(params);
+}
+
+export async function generateParamsWithHiddenNamespacesList(namespaceName) {
+  const kubeconfig = await loadKubeconfig();
+  const params = {
+    kubeconfig,
+    config: {
+      ...DEFAULT_CONFIG,
+      hiddenNamespaces: [namespaceName],
+    },
   };
   return await encoder.compress(params);
 }
