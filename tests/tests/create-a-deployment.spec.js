@@ -74,7 +74,7 @@ context('Create a Deployment', () => {
       .click();
   });
 
-  it('Check if deployment and service exist', () => {
+  it('Check if deployment, pod and service exist', () => {
     cy.url().should(
       'match',
       new RegExp(`\/deployments\/details\/${DEPLOYMENT_NAME}$`),
@@ -82,6 +82,11 @@ context('Create a Deployment', () => {
 
     cy.getIframeBody()
       .contains('a', DEPLOYMENT_NAME, { timeout: 7000 })
+      .should('be.visible')
+      .click();
+
+    cy.getIframeBody()
+      .contains('h3', DEPLOYMENT_NAME, { timeout: 7000 })
       .should('be.visible');
 
     cy.getLeftNav()
