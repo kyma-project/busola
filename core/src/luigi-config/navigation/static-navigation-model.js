@@ -715,7 +715,7 @@ export function getStaticChildrenNodesForNamespace(
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
       context: {
-        requiredModules: [modules?.SERVERLESS_REPOS],
+        requiredModules: [modules?.SERVERLESS],
       },
     },
   ];

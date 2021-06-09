@@ -9,10 +9,7 @@ import {
   getStaticChildrenNodesForNamespace,
   getStaticRootNodes,
 } from './static-navigation-model';
-import {
-  navigationPermissionChecker,
-  hasWildcardPermission,
-} from './permissions';
+import { navigationPermissionChecker, hasPermissionsFor } from './permissions';
 
 import {
   hideDisabledNodes,
@@ -195,7 +192,13 @@ export async function createNavigation() {
 }
 
 async function fetchNavigationData(authData, permissionSet) {
-  if (hasWildcardPermission(permissionSet)) {
+  if (
+    hasPermissionsFor(
+      'apiextensions.k8s.io',
+      'customresourcedefinitions',
+      permissionSet,
+    )
+  ) {
     const res = await fetchBusolaInitData(authData);
     crds = res.crds.map(crd => crd.name);
     return { ...res, crds };
