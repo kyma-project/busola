@@ -33,6 +33,7 @@ const ContainerComponent = ({ container }) => (
       <LayoutPanel.Head title={container.name} />
       <LayoutPanel.Actions>
         <Button
+          aria-label={'view-logs-for-' + container.name}
           onClick={() =>
             LuigiClient.linkManager().navigate(`containers/${container.name}`)
           }

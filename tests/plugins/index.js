@@ -1,14 +1,19 @@
 const fs = require('fs');
 
 module.exports = (on, config) => {
+  let namespaceName = process.env.NAMESPACE_NAME || null;
   on('task', {
     removeFile(filePath) {
       fs.unlinkSync(filePath);
       return null;
     },
+    setNamespace(name) {
+      namespaceName = name;
+      return null;
+    },
+    getNamespace() {
+      return namespaceName;
+    },
   });
-  const random = Math.floor(Math.random() * 9999) + 1000;
-  const NAMESPACE_NAME = `a-busola-test-${random}`;
-  config.env.NAMESPACE_NAME = NAMESPACE_NAME;
   return config;
 };
