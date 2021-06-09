@@ -1,4 +1,7 @@
-import { saveCurrentLocation } from './navigation/previous-location';
+import {
+  saveCurrentLocation,
+  tryRestorePreviousLocation,
+} from './navigation/previous-location';
 import { getAuthData, setAuthData } from './auth/auth-storage';
 import { communication } from './communication';
 import { createSettings } from './settings';
@@ -35,9 +38,13 @@ async function luigiAfterInit() {
       Luigi.navigation().navigate('/clusters');
     }
   } else {
-    if (getAuthData()) {
+    if (
+      getAuthData() &&
+      !hasKubeconfigAuth(params.currentContext?.user?.user)
+    ) {
       await addClusterNodes();
     }
+    tryRestorePreviousLocation();
   }
 }
 
