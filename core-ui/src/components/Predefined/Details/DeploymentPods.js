@@ -2,6 +2,10 @@ import React from 'react';
 import { ComponentForList } from 'shared/getComponents';
 import { useGetList } from 'react-shared';
 
+const isStatusOk = replicaSet => {
+  return replicaSet.status.readyReplicas === replicaSet.status.replicas;
+};
+
 export function DeploymentPods({ namespace, deploymentName }) {
   const [ownerReplicaName, setOwnerReplicaName] = React.useState();
 
@@ -13,6 +17,7 @@ export function DeploymentPods({ namespace, deploymentName }) {
   React.useEffect(() => {
     const ownerReplica = replicas?.find(
       rs =>
+        isStatusOk(rs) &&
         !!rs.metadata.ownerReferences.find(
           ref => ref.kind === 'Deployment' && ref.name === deploymentName,
         ),
