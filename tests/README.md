@@ -2,9 +2,9 @@
 
 ## Overview
 
-This project contains smoke and integration UI tests for Busola. 
+This project contains smoke and integration UI tests for Busola.
 
-## Prerequisites 
+## Prerequisites
 
 Before testing, you need to copy your cluster's kubeconfig file to [`fixtures/kubeconfig.yaml`](fixtures/kubeconfig.yaml).
 
@@ -44,13 +44,13 @@ pointing to a `remote Busola` cluster with the default `local.kyma.dev` domain, 
 npm run start
 ```
 
-To run the tests, pointing to a `remote Busola` cluster with `custom` domain, use this command:
+To open the `tests runner`, pointing to a `remote Busola` cluster with `custom` domain, use this command:
 
 ```bash
 CYPRESS_DOMAIN={YOUR_DOMAIN} npm start
 ```
 
-To run the tests, pointing to a `local Busola` instance, use this command:
+To open the `tests runner`, pointing to a `local Busola` instance, use this command:
 
 ```bash
 npm run start:local
