@@ -17,6 +17,22 @@ const DEFAULT_MODULES = {
   SERVERLESS: 'serverless.kyma-project.io',
 };
 
+const DEFAULT_HIDDEN_NAMESPACES = [
+  'istio-system',
+  'knative-eventing',
+  'knative-serving',
+  'kube-public',
+  'kube-system',
+  'kyma-backup',
+  'kyma-installer',
+  'kyma-integration',
+  'kyma-system',
+  'natss',
+  'kube-node-lease',
+  'kubernetes-dashboard',
+  'serverless-system',
+];
+
 const encoder = createEncoder('lzma');
 
 function getResponseParams(usePKCE = true) {
@@ -72,6 +88,8 @@ async function setupFromParams(encodedParams) {
     ...decoded,
     config: {
       ...decoded.config,
+      hiddenNamespaces:
+        decoded.config?.hiddenNamespaces || DEFAULT_HIDDEN_NAMESPACES,
       modules: { ...DEFAULT_MODULES, ...(decoded.config?.modules || {}) },
     },
     currentContext: {
