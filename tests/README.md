@@ -33,7 +33,7 @@ npm run test:local
 
 ### Run Cypress UI tests in the test runner mode
 
-To open Cypress UI tests runner,
+To open Cypress UI `tests runner`,
 pointing to `remote Busola` cluster with default `local.kyma.dev` domain, use this command:
 
 ```bash
