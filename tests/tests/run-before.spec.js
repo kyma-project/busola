@@ -2,10 +2,7 @@
 import config from '../config';
 
 context('Create Namespace', () => {
-  before(() => {
-    cy.screenshot('create-namespace-before-login'); //create screenshots folder - error on CI when folder doesn't exist
-    cy.loginAndSelectCluster();
-  });
+  before(cy.loginAndSelectCluster);
 
   it('Create Namespace', () => {
     cy.getIframeBody()
