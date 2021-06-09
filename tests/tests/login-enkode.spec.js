@@ -3,7 +3,7 @@ import 'cypress-file-upload';
 import config from '../config';
 import {
   generateDefaultParams,
-  generateParamsWithNamespace,
+  generateParamsWithPreselectedNamespace,
   generateParamsWithNoKubeconfig,
   generateParamsAndToken,
 } from '../support/enkode';
@@ -21,7 +21,7 @@ context('Login - enkode link', () => {
   });
 
   it('Kubeconfig with preselected namespace', () => {
-    cy.wrap(generateParamsWithNamespace()).then(params => {
+    cy.wrap(generateParamsWithPreselectedNamespace()).then(params => {
       cy.visit(`${config.clusterAddress}?init=${params}`);
 
       cy.url().should('match', /namespaces\/default\/details$/);

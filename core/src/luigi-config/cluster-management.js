@@ -18,10 +18,8 @@ export function setActiveClusterIfPresentInUrl() {
 
 export function getCurrentContextNamespace(kubeconfig) {
   const currentContextName = kubeconfig['current-context'];
-  const context =
-    kubeconfig.contexts.find(c => c.name === currentContextName) ||
-    kubeconfig.contexts[0];
-  return context.context.namespace;
+  const context = kubeconfig.contexts.find(c => c.name === currentContextName);
+  return context?.context.namespace;
 }
 
 export async function setCluster(clusterName) {
