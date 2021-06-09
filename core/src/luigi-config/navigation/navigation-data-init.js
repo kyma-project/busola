@@ -9,10 +9,7 @@ import {
   getStaticChildrenNodesForNamespace,
   getStaticRootNodes,
 } from './static-navigation-model';
-import {
-  navigationPermissionChecker,
-  hasWildcardPermission,
-} from './permissions';
+import { navigationPermissionChecker, hasPermissionsFor } from './permissions';
 
 import {
   hideDisabledNodes,
@@ -28,9 +25,10 @@ import {
   setCluster,
   deleteActiveCluster,
   saveActiveClusterName,
+  getCurrentContextNamespace,
 } from '../cluster-management';
 import { shouldShowHiddenNamespaces } from './../utils/hidden-namespaces-toggle';
-import { saveLocation, tryRestorePreviousLocation } from './previous-location';
+import { saveLocation } from './previous-location';
 import { NODE_PARAM_PREFIX } from '../luigi-config';
 
 let selfSubjectRulesReview;
@@ -46,7 +44,6 @@ export async function addClusterNodes() {
       nodes,
     },
   });
-  tryRestorePreviousLocation();
 }
 
 export async function reloadNavigation() {
@@ -195,7 +192,13 @@ export async function createNavigation() {
 }
 
 async function fetchNavigationData(authData, permissionSet) {
-  if (hasWildcardPermission(permissionSet)) {
+  if (
+    hasPermissionsFor(
+      'apiextensions.k8s.io',
+      'customresourcedefinitions',
+      permissionSet,
+    )
+  ) {
     const res = await fetchBusolaInitData(authData);
     crds = res.crds.map(crd => crd.name);
     return { ...res, crds };
@@ -208,9 +211,14 @@ async function fetchNavigationData(authData, permissionSet) {
 }
 
 export async function getNavigationData(authData) {
+  const { kubeconfig } = getActiveCluster();
+  const preselectedNamespace = getCurrentContextNamespace(kubeconfig);
   try {
     // we assume all users can make SelfSubjectRulesReview request
-    const permissionSet = await fetchPermissions(authData);
+    const permissionSet = await fetchPermissions(
+      authData,
+      preselectedNamespace,
+    );
     selfSubjectRulesReview = permissionSet;
 
     const { crds, apiPaths } = await fetchNavigationData(
@@ -298,7 +306,7 @@ async function getNamespaces() {
     });
     return [];
   }
-  if (!shouldShowHiddenNamespaces()) {
+  if (!shouldShowHiddenNamespaces() && hiddenNamespaces) {
     namespaces = namespaces.filter(ns => !hiddenNamespaces.includes(ns.name));
   }
   return createNamespacesList(namespaces);

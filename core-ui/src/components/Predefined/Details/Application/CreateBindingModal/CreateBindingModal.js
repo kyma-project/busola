@@ -59,11 +59,10 @@ export default function CreateBindingModal({
     }
   }
 
-  const namespaceNames =
-    data
-      ?.map(n => n.metadata.name)
-      .filter(name => !alreadyBoundNamespaces.includes(name))
-      .filter(name => !hiddenNamespaces.includes(name)) || [];
+  const namespaceNames = data
+    ?.map(n => n.metadata.name)
+    .filter(name => !alreadyBoundNamespaces.includes(name))
+    .filter(name => !hiddenNamespaces || !hiddenNamespaces.includes(name));
 
   return (
     <Modal

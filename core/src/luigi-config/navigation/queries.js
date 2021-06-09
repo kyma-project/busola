@@ -51,13 +51,13 @@ export async function failFastFetch(input, auth, init = {}) {
   }
 }
 
-export function fetchPermissions(auth) {
+export function fetchPermissions(auth, namespace = '*') {
   const ssrr = {
     typeMeta: {
       kind: 'SelfSubjectRulesReview',
       aPIVersion: 'authorization.k8s.io/v1',
     },
-    spec: { namespace: '*' },
+    spec: { namespace },
   };
 
   const ssrUrl = `${config.backendApiUrl}/apis/authorization.k8s.io/v1/selfsubjectrulesreviews`;
