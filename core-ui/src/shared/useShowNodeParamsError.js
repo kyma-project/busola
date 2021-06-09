@@ -8,16 +8,16 @@ export function useShowNodeParamsError() {
   const nodeParams = LuigiClient.getNodeParams();
 
   React.useEffect(() => {
+    function showError({ error, errorDescription }) {
+      const description = errorDescription ? ` (${errorDescription})` : '';
+      notification.notifyError({
+        title: 'Failed to add cluster',
+        content: `Error: ${error}${description}`,
+      });
+    }
+
     if (nodeParams.error) {
       showError(nodeParams);
     }
-  }, [nodeParams, showError]);
-
-  function showError({ error, errorDescription }) {
-    const description = errorDescription ? ` (${errorDescription})` : '';
-    notification.notifyError({
-      title: 'Failed to add cluster',
-      content: `Error: ${error}${description}`,
-    });
-  }
+  }, [nodeParams, notification]);
 }

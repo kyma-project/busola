@@ -52,6 +52,9 @@ export function getStaticChildrenNodesForNamespace(
       link: `/cluster/${encodedClusterName}/namespaces`,
       label: 'Back to Namespaces',
       icon: 'nav-back',
+      hideFromNav: !hasPermissionsFor('', 'namespaces', permissionSet, [
+        'list',
+      ]),
     },
     {
       pathSegment: 'details',
@@ -712,7 +715,7 @@ export function getStaticChildrenNodesForNamespace(
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
       context: {
-        requiredModules: [modules?.SERVERLESS_REPOS],
+        requiredModules: [modules?.SERVERLESS],
       },
     },
   ];

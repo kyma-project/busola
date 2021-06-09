@@ -11,10 +11,6 @@ import {
 import './ContainersLogs.scss';
 
 export const ContainersLogs = ({ params }) => {
-  return <Logs params={params} />;
-};
-
-function Logs({ params }) {
   useWindowTitle('Logs');
   const notification = useNotification();
   const [searchQuery, setSearchQuery] = useState('');
@@ -186,4 +182,4 @@ function Logs({ params }) {
       </LayoutPanel>
     </div>
   );
-}
+};
