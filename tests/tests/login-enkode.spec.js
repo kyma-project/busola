@@ -13,36 +13,8 @@ const SYSTEM_NAMESPACE = 'kyma-system';
 
 context('Login - enkode link', () => {
   it('Unmodified kubeconfig with default hidden namespaces', () => {
-    cy.wrap(generateDefaultParams()).then(params => {
-      cy.visit(`${config.clusterAddress}?init=${params}`);
-
-      cy.url().should('match', /namespaces$/);
-      cy.getIframeBody()
-        .find('thead')
-        .should('be.visible');
-
-      cy.getIframeBody()
-        .find('[role="search"] [aria-label="search-input"]')
-        .type(config.namespaceName, { force: true });
-
-      cy.getIframeBody()
-        .contains('a', config.namespaceName, { timeout: 7000 })
-        .should('be.visible');
-
-      cy.getIframeBody()
-        .find('[role="search"] [aria-label="search-input"]')
-        .clear({ force: true })
-        .type(SYSTEM_NAMESPACE, { force: true });
-
-      cy.getIframeBody()
-        .contains('a', SYSTEM_NAMESPACE, { timeout: 7000 })
-        .should('not.exist');
-    });
-  });
-
-  it('Kubeconfig with a hidden namespace', () => {
-    cy.wrap(generateParamsWithHiddenNamespacesList(config.namespaceName)).then(
-      params => {
+    cy.task('getNamespace').then(namespaceName => {
+      cy.wrap(generateDefaultParams()).then(params => {
         cy.visit(`${config.clusterAddress}?init=${params}`);
 
         cy.url().should('match', /namespaces$/);
@@ -52,11 +24,11 @@ context('Login - enkode link', () => {
 
         cy.getIframeBody()
           .find('[role="search"] [aria-label="search-input"]')
-          .type(config.namespaceName, { force: true });
+          .type(namespaceName, { force: true });
 
         cy.getIframeBody()
-          .contains('a', config.namespaceName, { timeout: 7000 })
-          .should('not.exist');
+          .contains('a', namespaceName, { timeout: 7000 })
+          .should('be.visible');
 
         cy.getIframeBody()
           .find('[role="search"] [aria-label="search-input"]')
@@ -65,9 +37,41 @@ context('Login - enkode link', () => {
 
         cy.getIframeBody()
           .contains('a', SYSTEM_NAMESPACE, { timeout: 7000 })
-          .should('be.visible');
-      },
-    );
+          .should('not.exist');
+      });
+    });
+  });
+
+  it('Kubeconfig with a hidden namespace', () => {
+    cy.task('getNamespace').then(namespaceName => {
+      cy.wrap(generateParamsWithHiddenNamespacesList(namespaceName)).then(
+        params => {
+          cy.visit(`${config.clusterAddress}?init=${params}`);
+
+          cy.url().should('match', /namespaces$/);
+          cy.getIframeBody()
+            .find('thead')
+            .should('be.visible');
+
+          cy.getIframeBody()
+            .find('[role="search"] [aria-label="search-input"]')
+            .type(namespaceName, { force: true });
+
+          cy.getIframeBody()
+            .contains('a', namespaceName, { timeout: 7000 })
+            .should('not.exist');
+
+          cy.getIframeBody()
+            .find('[role="search"] [aria-label="search-input"]')
+            .clear({ force: true })
+            .type(SYSTEM_NAMESPACE, { force: true });
+
+          cy.getIframeBody()
+            .contains('a', SYSTEM_NAMESPACE, { timeout: 7000 })
+            .should('be.visible');
+        },
+      );
+    });
   });
 
   it('Kubeconfig with preselected namespace', () => {
