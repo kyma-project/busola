@@ -37,7 +37,14 @@ export function ClusterNodes() {
   return (
     <>
       {loading && <Message content="Loading..." />}
-      {error && <Message content={error.message} />}
+      {error && (
+        <LayoutPanel className="fd-margin--md">
+          <LayoutPanel.Header>
+            <LayoutPanel.Head title="Metrics" />
+          </LayoutPanel.Header>
+          <LayoutPanel.Body>Error: {error.message}</LayoutPanel.Body>
+        </LayoutPanel>
+      )}
       <div className="cluster-overview__nodes">
         {pagedNodes.map(node => (
           <NodeResources
