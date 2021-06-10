@@ -10,7 +10,6 @@ import {
 import { ENVIRONMENT_VARIABLES_PANEL } from 'components/Lambdas/constants';
 
 import LambdaVariables from '../LambdaVariables';
-import { formatMessage } from 'components/Lambdas/helpers/misc';
 
 const timeout = 10000;
 
