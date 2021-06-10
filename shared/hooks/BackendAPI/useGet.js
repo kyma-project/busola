@@ -82,7 +82,6 @@ const useGetHook = processDataFn =>
   };
 
 export const useGetStream = path => {
-  const isHookMounted = React.useRef(true); // becomes 'false' after the hook is unmounted to avoid performing any async actions afterwards
   const lastAuthData = React.useRef(null);
   const [data, setData] = React.useState([]);
   const [error, setError] = React.useState(null);
@@ -98,11 +97,11 @@ export const useGetStream = path => {
   };
 
   const fetchData = async _ => {
-    if (!authData || !isHookMounted.current) return;
+    if (!authData || abortController.current.signal.aborted) return;
 
     try {
       const response = await fetch({ relativeUrl: path, abortController });
-      if (!authData || !isHookMounted.current) return;
+      if (!authData || abortController.current.signal.aborted) return;
       const reader = response.body.getReader();
 
       return new ReadableStream({
@@ -159,13 +158,6 @@ export const useGetStream = path => {
       refetchData();
     }
   }, [authData]);
-
-  React.useEffect(() => {
-    isHookMounted.current = true;
-    return _ => {
-      isHookMounted.current = false;
-    };
-  }, []);
 
   return {
     data,
