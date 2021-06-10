@@ -64,18 +64,18 @@ export const communication = {
     'busola.setCluster': ({ clusterName }) => {
       setCluster(clusterName);
     },
-    'busola.showMessage': ({ message, tittle, type }) => {
+    'busola.showMessage': ({ message, title, type }) => {
       Luigi.customMessages().sendToAll({
         id: 'busola.showMessage',
         message,
-        tittle,
+        title,
         type,
       });
     },
   },
 };
 
-const convertToURLsearch = params => {
+export const convertToURLsearch = params => {
   const a = Object.keys(params).map(
     k => NODE_PARAM_PREFIX + k + '=' + params[k],
   );
