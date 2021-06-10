@@ -4,7 +4,7 @@ import { Button } from 'fundamental-react';
 
 import { useCreateRepository } from 'components/Lambdas/hooks';
 
-import ModalWithForm from 'components/ModalWithForm/ModalWithForm';
+import { ModalWithForm } from 'react-shared';
 import RepositoryForm, { FORM_TYPE } from './RepositoryForm';
 
 import { REPOSITORIES_LIST } from 'components/Lambdas/constants';

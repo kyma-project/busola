@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 
 import { Button } from 'fundamental-react';
 
-import ModalWithForm from 'components/ModalWithForm/ModalWithForm';
-
+import { ModalWithForm } from 'react-shared';
 import { ENVIRONMENT_VARIABLES_PANEL } from 'components/Lambdas/constants';
 
 import EditVariablesForm from './EditVariablesForm';
