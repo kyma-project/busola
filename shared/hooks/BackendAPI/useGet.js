@@ -16,7 +16,7 @@ const useGetHook = processDataFn =>
 
     const refetch = (isSilent, currentData) => async () => {
       if (skip || !authData || abortController.current.signal.aborted) return;
-      if (!isSilent) setImmediate(_ => setLoading(true));
+      if (!isSilent) setTimeout(_ => setLoading(true));
 
       abortController.current = new AbortController();
 
@@ -33,16 +33,16 @@ const useGetHook = processDataFn =>
 
         if (abortController.current.signal.aborted) return;
         if (typeof onDataReceived === 'function') onDataReceived(payload.items);
-        if (error) setImmediate(_ => setError(null)); // bring back the data and clear the error once the connection started working again
-        setImmediate(_ =>
+        if (error) setTimeout(_ => setError(null)); // bring back the data and clear the error once the connection started working again
+        setTimeout(_ =>
           processDataFn(payload, currentData, setData, lastResourceVersion),
         );
       } catch (e) {
-        setImmediate(_ => processError(e));
+        setTimeout(_ => processError(e));
       }
 
       if (!isSilent && !abortController.current.signal.aborted)
-        setImmediate(_ => setLoading(false));
+        setTimeout(_ => setLoading(false));
     };
 
     React.useEffect(() => {
@@ -126,7 +126,7 @@ export const useGetStream = path => {
               // Chrome closes connections after a while.
               // Refetch logs after the connection has been closed.
               if (e.toString().includes('network error'))
-                return setImmediate(refetchData);
+                return setTimeout(refetchData);
               else processError(e);
             }
           };
