@@ -1,7 +1,7 @@
 import LuigiClient from '@luigi-project/client';
 
 import createEncoder from 'json-url';
-import { DEFAULT_MODULES } from 'react-shared';
+import { DEFAULT_MODULES, DEFAULT_HIDDEN_NAMESPACES } from 'react-shared';
 import { merge } from 'lodash';
 
 const encoder = createEncoder('lzma');
@@ -24,47 +24,33 @@ export function setCluster(clusterName) {
   });
 }
 
-export function addCluster(params) {
+export function addCluster(initParams) {
   const defaultParams = {
     config: {
       navigation: {
         disabledNodes: [],
         externalNodes: [],
       },
-      hiddenNamespaces: [
-        'istio-system',
-        'knative-eventing',
-        'knative-serving',
-        'kube-public',
-        'kube-system',
-        'kyma-backup',
-        'kyma-installer',
-        'kyma-integration',
-        'kyma-system',
-        'natss',
-        'kube-node-lease',
-        'kubernetes-dashboard',
-        'serverless-system',
-      ],
+      hiddenNamespaces: DEFAULT_HIDDEN_NAMESPACES,
       modules: DEFAULT_MODULES,
     },
   };
 
-  params.config = {
-    ...params.config,
-    modules: { ...DEFAULT_MODULES, ...params?.config?.modules },
-  };
-
-  if (params.config.auth) {
-    params.config.auth = {
-      ...params.config.auth,
-      ...getResponseParams(params.config.auth.usePKCE),
+  if (initParams.config.auth) {
+    initParams.config.auth = {
+      ...initParams.config.auth,
+      ...getResponseParams(initParams.config.auth.usePKCE),
     };
   }
 
+  const params = merge(defaultParams, initParams);
+  // Don't merge hiddenNamespaces, use the defaults only when initParams are empty
+  params.config.hiddenNamespaces =
+    initParams.config?.hiddenNamespaces || DEFAULT_HIDDEN_NAMESPACES;
+
   LuigiClient.sendCustomMessage({
     id: 'busola.addCluster',
-    params: merge(defaultParams, params),
+    params,
   });
 }
 

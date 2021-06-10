@@ -16,20 +16,30 @@ export function setActiveClusterIfPresentInUrl() {
   }
 }
 
+export function getCurrentContextNamespace(kubeconfig) {
+  const currentContextName = kubeconfig['current-context'];
+  const context = kubeconfig.contexts.find(c => c.name === currentContextName);
+  return context?.context.namespace;
+}
+
 export async function setCluster(clusterName) {
   saveActiveClusterName(clusterName);
   reloadAuth();
 
   const params = getActiveCluster();
+  const preselectedNamespace = getCurrentContextNamespace(params.kubeconfig);
   const kubeconfigUser = params.currentContext.user.user;
+
+  const targetLocation =
+    `/cluster/${encodeURIComponent(clusterName)}/namespaces` +
+    (preselectedNamespace ? `/${preselectedNamespace}/details` : '');
+
   if (hasKubeconfigAuth(kubeconfigUser)) {
     setAuthData(kubeconfigUser);
     await reloadNavigation();
-    Luigi.navigation().navigate(
-      `/cluster/${encodeURIComponent(clusterName)}/namespaces`,
-    );
+    Luigi.navigation().navigate(targetLocation);
   } else {
-    saveLocation(`/cluster/${encodeURIComponent(clusterName)}`);
+    saveLocation(targetLocation);
     location = location.origin;
   }
 }
