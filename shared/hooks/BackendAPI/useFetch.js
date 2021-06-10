@@ -27,9 +27,11 @@ export const useFetch = () => {
       if (response.ok) {
         return response;
       } else {
+        console.log('try!');
         throw await throwHttpError(response);
       }
     } catch (e) {
+      console.log('catch!');
       console.error('Fetch failed: ', e);
       throw e;
     }
