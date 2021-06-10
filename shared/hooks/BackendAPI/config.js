@@ -31,6 +31,13 @@ export async function throwHttpError(response) {
       return new Error(text);
     } catch (e) {
       console.log('response.text fail!');
+      try {
+        const body = await response.body;
+        console.log('body', body);
+        return new Error(bocy);
+      } catch (e) {
+        console.log('no hope for us..', e);
+      }
     }
   } // proceed to show more generic error
 
