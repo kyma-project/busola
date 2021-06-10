@@ -1,4 +1,4 @@
-const domain = location.hostname.replace(/^busola?\./, '');
+const domain = location.hostname.replace(/^busola?\./, ''); // todo może niepotrzebne już?
 const isNpx = location.origin === 'http://localhost:3001';
 const isLocalDev = location.hostname.startsWith('localhost');
 const localDomain = 'http://localhost';
@@ -10,9 +10,7 @@ if (isNpx) {
     domain,
     isNpx,
     localDomain,
-    serviceCatalogModuleUrl: location.origin + '/catalog',
-    addOnsModuleUrl: location.origin + '/addons',
-    logsModuleUrl: location.origin + '/logs',
+    serviceCatalogModuleUrl: location.origin + '/catalog', // todo da się to uprościć?
     coreUIModuleUrl: location.origin + '/core-ui',
     backendApiUrl: location.origin + '/backend',
   };
@@ -23,16 +21,10 @@ if (isNpx) {
     localDomain,
     serviceCatalogModuleUrl: isLocalDev
       ? localDomain + ':8000'
-      : 'https://catalog.' + domain,
-    addOnsModuleUrl: isLocalDev
-      ? localDomain + ':8004'
-      : 'https://addons.' + domain,
-    logsModuleUrl: isLocalDev
-      ? localDomain + ':8005'
-      : 'https://logs.' + domain,
+      : 'https://busola.' + domain + '/catalog',
     coreUIModuleUrl: isLocalDev
       ? localDomain + ':8889'
-      : 'https://core-ui.' + domain,
+      : 'https://busola.' + domain + '/core-ui',
     backendApiUrl: isLocalDev
       ? 'http://localhost:3001'
       : 'https://busola.' + domain + '/backend',

@@ -8,7 +8,7 @@ function getbackendApiUrl() {
     return 'http://localhost:3001';
   } else {
     // on cluster
-    return 'https://' + domain + '/backend';
+    return 'https://busola.' + domain + '/backend';
   }
 }
 export const getClusterConfig = () => ({
