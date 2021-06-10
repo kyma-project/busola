@@ -1,9 +1,11 @@
 import React from 'react';
 
-export const Spinner = ({ ariaLabel = 'Loading' }) => {
+export const Spinner = ({ ariaLabel = 'Loading', compact = false }) => {
   return (
     <div
-      className="fd-busy-indicator--l fd-margin-top-bottom--md"
+      className={`fd-busy-indicator--${
+        compact ? 'm' : 'l'
+      } fd-margin-top-bottom--md`}
       style={{ width: '100%', display: 'flex', justifyContent: 'center' }}
       aria-hidden="false"
       aria-label={ariaLabel}
