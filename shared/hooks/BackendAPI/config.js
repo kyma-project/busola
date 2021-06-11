@@ -14,32 +14,21 @@ export class HttpError extends Error {
 }
 
 export async function throwHttpError(response) {
-  console.log('response:', response);
   try {
     const parsed = await response.json();
-    console.log('parsed:', parsed);
     return new HttpError(
       parsed.message || 'Unknown error',
       parsed.status,
       parsed.code,
     );
   } catch (e) {
-    console.log('response.json fail!');
     try {
       const text = await response.text();
-      console.log('text', text);
       return new Error(text);
-    } catch (e) {
-      console.log('response.text fail!');
-      try {
-        const body = await response.body;
-        console.log('body', body);
-        return new Error(body);
-      } catch (e) {
-        console.log('no hope for us..', e);
-      }
-    }
+    } catch (e) {}
   } // proceed to show more generic error
 
-  return new Error(response.message || response.statusText || response);
+  return new Error(
+    response.message || response.statusText || response.status || response,
+  );
 }
