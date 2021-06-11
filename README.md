@@ -16,8 +16,8 @@ Busola project consists of the following UI projects:
 
 ## Prerequisites
 
-- [`npm`](https://www.npmjs.com/): >= 6.4.0
-- [`node`](https://nodejs.org/en/): >= 12.0.0
+- [`npm`](https://www.npmjs.com/): >= 6.14.12
+- [`node`](https://nodejs.org/en/): >= 14.16.1
 
 ## Installation
 
