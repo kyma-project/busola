@@ -165,14 +165,14 @@ export default function RepositoryConfig({ lambda }) {
 
   return (
     <LayoutPanel className="fd-margin--md lambda-repository-config">
-      <LayoutPanel.Header className="fd-has-padding-xs">
+      <LayoutPanel.Header>
         <LayoutPanel.Head title={REPOSITORY_CONFIG_PANEL.TITLE} />
         <LayoutPanel.Actions>
           {renderCancelButton()}
           {renderConfirmButton()}
         </LayoutPanel.Actions>
       </LayoutPanel.Header>
-      <LayoutPanel.Body className="fd-has-padding-xs">
+      <LayoutPanel.Body>
         <div
           style={{
             display: 'grid',
