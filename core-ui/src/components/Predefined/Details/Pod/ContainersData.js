@@ -75,7 +75,7 @@ export default function ContainersData({ type, containers }) {
 
   return (
     <LayoutPanel className="fd-margin--md container-panel">
-      <LayoutPanel.Header className="fd-has-padding-xs">
+      <LayoutPanel.Header>
         <LayoutPanel.Head title={type} />
       </LayoutPanel.Header>
 
