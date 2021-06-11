@@ -63,9 +63,7 @@
     "react-test-renderer": "^16.9.0",
     "waait": "^1.0.5",
     "webpack-cli": "^3.3.5",
-    "json-url": "^2.6.0"
-  },
-  "optionalDependencies": {
+    "json-url": "^2.6.0",
     "husky": "^2.4.1",
     "lerna": "^4.0.0",
     "lint-staged": "^10.4.0",
