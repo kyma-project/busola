@@ -165,6 +165,7 @@ export default function ResourcesManagement({ lambda }) {
       <Button
         glyph="sys-cancel"
         type="negative"
+        className="fd-margin-end--tiny"
         onClick={async () => {
           updateFields(defaultValues);
           setIsEditMode(false);
@@ -210,7 +211,7 @@ export default function ResourcesManagement({ lambda }) {
   return (
     <LayoutPanel className="fd-margin--md lambda-resources-management">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <LayoutPanel.Header className="fd-has-padding-xs">
+        <LayoutPanel.Header>
           <LayoutPanel.Head title={RESOURCES_MANAGEMENT_PANEL.TITLE} />
           <LayoutPanel.Actions>
             {renderCancelButton()}
@@ -218,12 +219,12 @@ export default function ResourcesManagement({ lambda }) {
           </LayoutPanel.Actions>
         </LayoutPanel.Header>
         <div className="lambda-resources-management__panel">
-          <LayoutPanel.Header className="fd-has-padding-xs">
+          <LayoutPanel.Header>
             <LayoutPanel.Head
               title={RESOURCES_MANAGEMENT_PANEL.REPLICAS.TITLE}
             />
           </LayoutPanel.Header>
-          <LayoutPanel.Body className="fd-has-padding-xs">
+          <LayoutPanel.Body>
             <LambdaReplicas
               register={register}
               disabledForm={!isEditMode}
@@ -234,7 +235,7 @@ export default function ResourcesManagement({ lambda }) {
           </LayoutPanel.Body>
         </div>
         <div className="lambda-resources-management__panel">
-          <LayoutPanel.Header className="fd-has-padding-xs">
+          <LayoutPanel.Header>
             <LayoutPanel.Head
               title={RESOURCES_MANAGEMENT_PANEL.RESOURCES.TYPES.FUNCTION.TITLE}
               description={
@@ -242,7 +243,7 @@ export default function ResourcesManagement({ lambda }) {
               }
             />
           </LayoutPanel.Header>
-          <LayoutPanel.Body className="fd-has-padding-xs">
+          <LayoutPanel.Body>
             <LambdaResources
               register={register}
               disabledForm={!isEditMode}
@@ -256,7 +257,7 @@ export default function ResourcesManagement({ lambda }) {
           </LayoutPanel.Body>
         </div>
         <div className="lambda-resources-management__panel">
-          <LayoutPanel.Header className="fd-has-padding-xs">
+          <LayoutPanel.Header>
             <LayoutPanel.Head
               title={RESOURCES_MANAGEMENT_PANEL.RESOURCES.TYPES.BUILD_JOB.TITLE}
               description={
@@ -264,7 +265,7 @@ export default function ResourcesManagement({ lambda }) {
               }
             />
           </LayoutPanel.Header>
-          <LayoutPanel.Body className="fd-has-padding-xs">
+          <LayoutPanel.Body>
             <LambdaResources
               register={register}
               disabledForm={!isEditMode}

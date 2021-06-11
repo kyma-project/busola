@@ -22,8 +22,9 @@
 
     .value-textarea {
         resize: none;
+        box-sizing: border-box;
         height: 36px;
         margin-top: 4px;
-        padding-top: 8px;
+        padding: 8px;
     }
 }
