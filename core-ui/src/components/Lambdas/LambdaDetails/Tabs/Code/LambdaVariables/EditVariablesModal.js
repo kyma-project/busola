@@ -28,7 +28,7 @@ export default function EditVariablesModal({
       confirmText={ENVIRONMENT_VARIABLES_PANEL.EDIT_MODAL.CONFIRM_BUTTON.TEXT}
       invalidPopupMessage={invalidModalPopupMessage}
       id="add-lambda-variables-modal"
-      className="fd-dialog--xl-size lambda-variables-modal modal-width--m"
+      className="fd-dialog--xl-size modal--no-padding modal-width--m"
       renderForm={props => (
         <EditVariablesForm
           {...props}
