@@ -1,9 +1,11 @@
-const domain = location.hostname.replace(/^busola?\./, ''); // todo może niepotrzebne już?
+const domain = location.hostname.replace(/^busola?\./, '');
 const isNpx = location.origin === 'http://localhost:3001';
 const isLocalDev = location.hostname.startsWith('localhost');
 const localDomain = 'http://localhost';
 
 export let config;
+
+console.log(location.origin);
 
 if (isNpx) {
   config = {
@@ -21,12 +23,12 @@ if (isNpx) {
     localDomain,
     serviceCatalogModuleUrl: isLocalDev
       ? localDomain + ':8000'
-      : 'https://busola.' + domain + '/catalog',
+      : location.origin + '/catalog',
     coreUIModuleUrl: isLocalDev
       ? localDomain + ':8889'
-      : 'https://busola.' + domain + '/core-ui',
+      : location.origin + '/core-ui',
     backendApiUrl: isLocalDev
       ? 'http://localhost:3001'
-      : 'https://busola.' + domain + '/backend',
+      : location.origin + '/backend',
   };
 }
