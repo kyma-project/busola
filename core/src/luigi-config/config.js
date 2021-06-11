@@ -1,4 +1,4 @@
-const domain = location.hostname.replace(/^busola?\./, '');
+const domain = location.hostname;
 const isNpx = location.origin === 'http://localhost:3001';
 const isLocalDev = location.hostname.startsWith('localhost');
 const localDomain = 'http://localhost';
