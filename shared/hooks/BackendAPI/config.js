@@ -28,7 +28,10 @@ export async function throwHttpError(response) {
     } catch (e) {}
   } // proceed to show more generic error
 
+  const errorMessage = response.message || response.statusText || response;
   return new Error(
-    response.message || response.statusText || response.status || response,
+    errorMessage && typeof errorMessage === 'string'
+      ? errorMessage
+      : 'An error occured. The component cannot be rendered.',
   );
 }

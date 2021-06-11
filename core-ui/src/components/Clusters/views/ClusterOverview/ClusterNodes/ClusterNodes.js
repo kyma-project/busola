@@ -40,7 +40,7 @@ export function ClusterNodes() {
           <LayoutPanel.Header>
             <LayoutPanel.Head title="Metrics" />
           </LayoutPanel.Header>
-          <LayoutPanel.Body>Error: {error.message}</LayoutPanel.Body>
+          <LayoutPanel.Body>{error.message}</LayoutPanel.Body>
         </LayoutPanel>
       )}
       <div className="cluster-overview__nodes">
