@@ -5,14 +5,12 @@ const localDomain = 'http://localhost';
 
 export let config;
 
-console.log(location.origin);
-
 if (isNpx) {
   config = {
     domain,
     isNpx,
     localDomain,
-    serviceCatalogModuleUrl: location.origin + '/catalog', // todo da się to uprościć?
+    serviceCatalogModuleUrl: location.origin + '/catalog',
     coreUIModuleUrl: location.origin + '/core-ui',
     backendApiUrl: location.origin + '/backend',
   };
