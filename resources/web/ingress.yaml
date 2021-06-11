@@ -28,7 +28,7 @@ spec:
                 name: service-catalog
                 port:
                   number: 8080
-            path: /catalog/(.*)
+            path: /service-catalog/(.*)
             pathType: Prefix
           - backend:
               service:

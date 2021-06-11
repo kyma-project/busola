@@ -10,7 +10,7 @@ if (isNpx) {
     domain,
     isNpx,
     localDomain,
-    serviceCatalogModuleUrl: location.origin + '/catalog',
+    serviceCatalogModuleUrl: location.origin + '/service-catalog',
     coreUIModuleUrl: location.origin + '/core-ui',
     backendApiUrl: location.origin + '/backend',
   };
@@ -21,7 +21,7 @@ if (isNpx) {
     localDomain,
     serviceCatalogModuleUrl: isLocalDev
       ? localDomain + ':8000'
-      : location.origin + '/catalog',
+      : location.origin + '/service-catalog',
     coreUIModuleUrl: isLocalDev
       ? localDomain + ':8889'
       : location.origin + '/core-ui',
