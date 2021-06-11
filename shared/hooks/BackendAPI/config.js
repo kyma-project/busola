@@ -34,7 +34,7 @@ export async function throwHttpError(response) {
       try {
         const body = await response.body;
         console.log('body', body);
-        return new Error(bocy);
+        return new Error(body);
       } catch (e) {
         console.log('no hope for us..', e);
       }
