@@ -5,7 +5,6 @@ import { useFetch } from './useFetch';
 
 const useGetHook = processDataFn =>
   function(path, { pollingInterval, onDataReceived, skip } = {}) {
-    const isHookMounted = React.useRef(true); // becomes 'false' after the hook is unmounted to avoid performing any async actions afterwards
     const lastAuthData = React.useRef(null);
     const lastResourceVersion = React.useRef(null);
     const [data, setData] = React.useState(null);
@@ -13,29 +12,37 @@ const useGetHook = processDataFn =>
     const [error, setError] = React.useState(null);
     const { authData } = useMicrofrontendContext();
     const fetch = useFetch();
+    const abortController = React.useRef(new AbortController());
 
     const refetch = (isSilent, currentData) => async () => {
-      if (skip || !authData || !isHookMounted.current) return;
-      if (!isSilent) setLoading(true);
+      if (skip || !authData || abortController.current.signal.aborted) return;
+      if (!isSilent) setTimeout(_ => setLoading(true));
+
+      abortController.current = new AbortController();
 
       function processError(error) {
-        console.error(error);
-        if (!isSilent) setError(error);
+        if (!abortController.current.signal.aborted) {
+          console.error(error);
+          setError(error);
+        }
       }
 
       try {
-        const response = await fetch({ relativeUrl: path });
+        const response = await fetch({ relativeUrl: path, abortController });
         const payload = await response.json();
 
-        if (!isHookMounted.current) return;
+        if (abortController.current.signal.aborted) return;
         if (typeof onDataReceived === 'function') onDataReceived(payload.items);
-        if (error) setError(null); // bring back the data and clear the error once the connection started working again
-        processDataFn(payload, currentData, setData, lastResourceVersion);
+        if (error) setTimeout(_ => setError(null)); // bring back the data and clear the error once the connection started working again
+        setTimeout(_ =>
+          processDataFn(payload, currentData, setData, lastResourceVersion),
+        );
       } catch (e) {
-        processError(e);
+        setTimeout(_ => processError(e));
       }
 
-      if (!isSilent && isHookMounted.current) setLoading(false);
+      if (!isSilent && !abortController.current.signal.aborted)
+        setTimeout(_ => setLoading(false));
     };
 
     React.useEffect(() => {
@@ -63,12 +70,7 @@ const useGetHook = processDataFn =>
       }
     }, [authData]);
 
-    React.useEffect(() => {
-      isHookMounted.current = true;
-      return _ => {
-        isHookMounted.current = false;
-      };
-    }, []);
+    React.useEffect(_ => _ => abortController.current.abort(), []);
 
     return {
       data,
@@ -80,7 +82,6 @@ const useGetHook = processDataFn =>
   };
 
 export const useGetStream = path => {
-  const isHookMounted = React.useRef(true); // becomes 'false' after the hook is unmounted to avoid performing any async actions afterwards
   const lastAuthData = React.useRef(null);
   const [data, setData] = React.useState([]);
   const [error, setError] = React.useState(null);
@@ -96,11 +97,11 @@ export const useGetStream = path => {
   };
 
   const fetchData = async _ => {
-    if (!authData || !isHookMounted.current) return;
+    if (!authData || abortController.current.signal.aborted) return;
 
     try {
       const response = await fetch({ relativeUrl: path, abortController });
-      if (!authData || !isHookMounted.current) return;
+      if (!authData || abortController.current.signal.aborted) return;
       const reader = response.body.getReader();
 
       return new ReadableStream({
@@ -124,7 +125,7 @@ export const useGetStream = path => {
               // Chrome closes connections after a while.
               // Refetch logs after the connection has been closed.
               if (e.toString().includes('network error'))
-                return setImmediate(refetchData);
+                return setTimeout(refetchData);
               else processError(e);
             }
           };
@@ -157,13 +158,6 @@ export const useGetStream = path => {
       refetchData();
     }
   }, [authData]);
-
-  React.useEffect(() => {
-    isHookMounted.current = true;
-    return _ => {
-      isHookMounted.current = false;
-    };
-  }, []);
 
   return {
     data,
