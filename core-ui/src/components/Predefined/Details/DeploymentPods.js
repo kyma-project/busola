@@ -1,50 +1,20 @@
 import React from 'react';
 import { ComponentForList } from 'shared/getComponents';
-import { useGetList } from 'react-shared';
 
-const isStatusOk = replicaSet => {
-  return replicaSet.status.readyReplicas === replicaSet.status.replicas;
-};
+export function DeploymentPods(resource) {
+  if (!resource) return null;
+  const labelSelectors = Object.entries(resource.spec.selector.matchLabels)
+    .map(([key, value]) => `${key}=${value}`)
+    .join(',');
 
-export function DeploymentPods({ namespace, deploymentName }) {
-  const [ownerReplicaName, setOwnerReplicaName] = React.useState();
-
-  const replicasUrl = `/apis/apps/v1/namespaces/${namespace}/replicasets`;
-  const { data: replicas } = useGetList(() => true)(replicasUrl, {
-    pollingInterval: 3000,
-  });
-
-  React.useEffect(() => {
-    const ownerReplica = replicas?.find(
-      rs =>
-        isStatusOk(rs) &&
-        !!rs.metadata.ownerReferences.find(
-          ref => ref.kind === 'Deployment' && ref.name === deploymentName,
-        ),
-    );
-    setOwnerReplicaName(ownerReplica?.metadata.name);
-  }, [replicas]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  if (!ownerReplicaName) {
-    return 'Loading...';
-  }
-
-  // we can't use ?labelSelector=app%3D${otherParams.resourceName}, as some
-  // pods (like function ones) don't have this label
   const podListParams = {
     hasDetailsView: true,
     fixedPath: true,
-    resourceUrl: `/api/v1/namespaces/${namespace}/pods`,
+    resourceUrl: `/api/v1/namespaces/${resource.metadata.namespace}/pods?labelSelector=${labelSelectors}`,
     resourceType: 'pods',
-    namespace,
+    namespace: resource.metadata.namespace,
     isCompact: true,
     showTitle: true,
-    filter: e => {
-      return e.metadata.ownerReferences.find(
-        ref => ref.kind === 'ReplicaSet' && ref.name === ownerReplicaName,
-      );
-    },
   };
-
   return <ComponentForList name="podsList" params={podListParams} />;
 }
