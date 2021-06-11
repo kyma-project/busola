@@ -35,7 +35,7 @@ export function ConfigMapForm({
 
   return (
     <form onSubmit={handleFormSubmit} onChange={onChange} ref={formElementRef}>
-      <TabGroup>
+      <TabGroup style={{ padding: 0 }}>
         <Tab title="Metadata">
           <K8sNameInput
             onChange={e => setName(e.target.value)}

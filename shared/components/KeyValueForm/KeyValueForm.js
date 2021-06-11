@@ -60,11 +60,7 @@ export function KeyValueForm({
       </header>
       <ul>
         {entries.map(entry => (
-          <li
-            role="row"
-            className="fd-has-margin-top-tiny"
-            key={entry.renderId}
-          >
+          <li role="row" className="fd-margin-top--tiny" key={entry.renderId}>
             <div className="grid-wrapper">
               <FormLabel htmlFor="key" required>
                 Key
