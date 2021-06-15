@@ -7,8 +7,7 @@ import {
   MessageStrip,
 } from 'fundamental-react';
 
-import Checkbox from 'components/Lambdas/Checkbox/Checkbox';
-import { useCreateServiceBindingUsage } from 'react-shared';
+import { useCreateServiceBindingUsage, Checkbox } from 'react-shared';
 import { SERVICE_BINDINGS_PANEL } from 'components/Lambdas/constants';
 import { CONFIG } from 'components/Lambdas/config';
 
