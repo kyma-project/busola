@@ -6,54 +6,34 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /$1
 spec:
   rules:
-    - host: busola.%DOMAIN%
+    - host: %DOMAIN%
       http:
         paths:
-          - path: /(.*)
-            pathType: Prefix
-            backend:
+          - backend:
               service:
                 name: core
                 port:
                   number: 8080
-          - path: /backend(?:/|$)(.*)
+            path: /(.*)
             pathType: Prefix
-            backend:
+          - backend:
               service:
                 name: backend
                 port:
                   number: 3001
-    - host: core-ui.%DOMAIN%
-      http:
-        paths:
-          - path: /(.*)
+            path: /backend(?:/|$)(.*)
             pathType: Prefix
-            backend:
-              service:
-                name: core-ui
-                port:
-                  number: 8080
-          - path: /backend(?:/|$)(.*)
-            pathType: Prefix
-            backend:
-              service:
-                name: backend
-                port:
-                  number: 3001
-    - host: catalog.%DOMAIN%
-      http:
-        paths:
-          - path: /(.*)
-            pathType: Prefix
-            backend:
+          - backend:
               service:
                 name: service-catalog
                 port:
                   number: 8080
-          - path: /backend(?:/|$)(.*)
+            path: /service-catalog/(.*)
             pathType: Prefix
-            backend:
+          - backend:
               service:
-                name: backend
+                name: core-ui
                 port:
-                  number: 3001
+                  number: 8080
+            path: /core-ui/(.*)
+            pathType: Prefix

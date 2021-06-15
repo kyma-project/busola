@@ -23,6 +23,7 @@ module.exports = {
   plugins: [
     new CopyWebpackPlugin([
       { from: './node_modules/@luigi-project/core', to: 'libs/luigi-core' },
+      { from: '../node_modules/monaco-editor/min/vs', to: 'libs/vs' },
     ]),
   ],
 };
