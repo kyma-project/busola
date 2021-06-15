@@ -113,6 +113,12 @@ body {
   }
 }
 
+.modal--no-padding {
+  .fd-dialog__body {
+    padding:0;
+  }
+}
+
 .fd-dialog--xl-size {
   .modal-demo-bg {
     min-width: 1036px;
