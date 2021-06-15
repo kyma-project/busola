@@ -12,7 +12,7 @@ setupMonaco(monaco);
 
 ReactDOM.render(
   <Microfrontend env={process.env}>
-    <BrowserRouter basename={'/core-ui'}>
+    <BrowserRouter basename={process.env.PUBLIC_URL}>
       <App />
     </BrowserRouter>
   </Microfrontend>,
