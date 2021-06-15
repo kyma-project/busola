@@ -1,13 +1,11 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
-import { Pagination } from 'react-shared';
+import { Pagination, Spinner, ErrorPanel } from 'react-shared';
 import { LayoutPanel, Link } from 'fundamental-react';
 import { useNodesQuery } from 'components/Nodes/nodeQueries';
 import { NodeResources } from '../../../../Nodes/NodeResources/NodeResources';
 import { ClusterNodesWarnings } from './NodeWarningsList';
 import './ClusterNodes.scss';
-
-const Message = ({ content }) => <p className="body-fallback">{content}</p>;
 
 const NodeHeader = ({ nodeName }) => {
   const navigateToNodeDetails = nodeName =>
@@ -36,8 +34,8 @@ export function ClusterNodes() {
 
   return (
     <>
-      {loading && <Message content="Loading..." />}
-      {error && <Message content={error.message} />}
+      {loading && <Spinner compact={true} />}
+      {error && <ErrorPanel error={error.message} title="Metrics" />}
       <div className="cluster-overview__nodes">
         {pagedNodes.map(node => (
           <NodeResources

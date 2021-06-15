@@ -31,6 +31,7 @@ export { HeaderLabelsEditor } from './components/HeaderLabelsEditor/HeaderLabels
 export { LabelSelectorInput } from './components/LabelSelectorInput/LabelSelectorInput';
 export { LogsLink } from './components/LogsLink/LogsLink';
 export { CircleProgress } from './components/CircleProgress/CircleProgress';
+export { ErrorPanel } from './components/ErrorPanel/ErrorPanel';
 export * from './components/SideDrawer/SideDrawer';
 export * from './components/ResourcesList/ResourcesList';
 export * from './components/ResourceDetails/ResourceDetails';
