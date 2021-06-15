@@ -138,6 +138,7 @@ export default function CreateServiceBindingForm({
         <FormLabel htmlFor="serviceInstanceName">Service Instance</FormLabel>
         <select
           id="serviceInstanceName"
+          className="fd-form-select"
           value={selectedServiceInstance}
           onChange={e => setSelectedServiceInstance(e.target.value)}
           required
@@ -176,6 +177,7 @@ export default function CreateServiceBindingForm({
               <FormLabel htmlFor="existingCredentials">Secrets</FormLabel>
               <select
                 id="existingCredentials"
+                className="fd-form-select"
                 value={existingCredentials}
                 onChange={e => setExistingCredentials(e.target.value)}
                 required
