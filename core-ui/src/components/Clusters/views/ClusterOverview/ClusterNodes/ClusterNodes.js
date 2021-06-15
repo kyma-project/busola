@@ -45,14 +45,16 @@ export function ClusterNodes() {
           />
         ))}
       </div>
-      <LayoutPanel.Footer>
-        <Pagination
-          itemsTotal={nodes?.length || 0}
-          currentPage={currentPage}
-          itemsPerPage={itemsPerPage}
-          onChangePage={setCurrentPage}
-        />
-      </LayoutPanel.Footer>
+      {nodes?.length > itemsPerPage && (
+        <LayoutPanel.Footer>
+          <Pagination
+            itemsTotal={nodes?.length || 0}
+            currentPage={currentPage}
+            itemsPerPage={itemsPerPage}
+            onChangePage={setCurrentPage}
+          />
+        </LayoutPanel.Footer>
+      )}
       <ClusterNodesWarnings nodesNames={nodes?.map(n => n.name) || []} />
     </>
   );
