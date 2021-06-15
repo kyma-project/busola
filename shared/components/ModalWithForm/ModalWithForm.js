@@ -199,6 +199,7 @@ export const ModalWithForm = ({
           onError: handleFormError,
           onCompleted: handleFormSuccess,
           performManualSubmit: handleFormSubmit,
+          setValidity: setValid,
           item: item,
         })}
       </Dialog>

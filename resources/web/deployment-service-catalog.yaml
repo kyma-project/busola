@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: service-catalog
-          image: eu.gcr.io/kyma-project/busola-service-catalog-ui:PR-212
+          image: eu.gcr.io/kyma-project/busola-service-catalog-ui:PR-210
           imagePullPolicy: Always
           resources: {}
           ports:

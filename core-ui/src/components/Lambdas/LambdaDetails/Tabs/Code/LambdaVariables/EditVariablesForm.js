@@ -23,6 +23,7 @@ export default function EditVariablesForm({
   customVariables = [],
   customValueFromVariables = [],
   injectedVariables = [],
+  onChange,
   formElementRef,
   setValidity = () => void 0,
   setCustomValid = () => void 0,
@@ -141,6 +142,7 @@ export default function EditVariablesForm({
     <form
       ref={formElementRef}
       onSubmit={handleFormSubmit}
+      onChange={onChange}
       className="edit-lambda-variables-form"
     >
       <GenericList
