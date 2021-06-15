@@ -27,6 +27,5 @@ backend-production.js
 backend-production.js.LICENSE*
 
 
-index-npx.js
 core/
 core-ui/

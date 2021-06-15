@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const http = require('http');
+const path = require('path');
 import { handleRequest } from './common';
 import { requestLogger } from './utils/other';
 
@@ -17,8 +18,26 @@ const server = http.createServer(app);
 const port = process.env.PORT || 3001;
 const address = process.env.ADDRESS || 'localhost';
 
-app.use(handleRequest);
+const isLocalDev = address === 'localhost';
+
+if (isLocalDev) {
+  app.use('/backend', handleRequest);
+} else {
+  app.use('/core-ui', express.static(path.join(__dirname, 'core-ui')));
+  app.get('/core-ui/*', (_, res) =>
+    res.sendFile(path.join(__dirname + '/core-ui/index.html')),
+  );
+
+  app.use('/backend', handleRequest);
+
+  app.use('/', express.static(path.join(__dirname, 'core')));
+  app.get('/*', (_, res) =>
+    res.sendFile(path.join(__dirname + '/core/index.html')),
+  );
+}
 
 server.listen(port, address, () => {
-  console.log(`Busola backend server started @ ${port}!`);
+  console.log(
+    `${isLocalDev ? 'Local ' : ''}Busola backend server started @ ${port}!`,
+  );
 });

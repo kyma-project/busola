@@ -16,9 +16,7 @@
     "lint-check": "prettier --config ./.prettierrc --ignore-path ./.prettierignore --check '**/*.{ts,tsx,js,jsx,json,html,css,yaml,md}'",
     "lint-fix": "prettier --config ./.prettierrc --ignore-path ./.prettierignore --write '**/*.{ts,tsx,js,jsx,json,html,css,yaml,md}'",
     "lint-staged": "lint-staged",
-    "test-shared-lib": "cd shared && jest",
-    "start:npx": "npm run start:npx --prefix=backend",
-    "build:npx": "npm run bootstrap && lerna exec --parallel -- npm run build:npx"
+    "test-shared-lib": "cd shared && jest"
   },
   "dependencies": {
     "@luigi-project/client": "^1.12.1",
