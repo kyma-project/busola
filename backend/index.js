@@ -20,20 +20,21 @@ const address = process.env.ADDRESS || 'localhost';
 
 const isLocalDev = address === 'localhost';
 
+const serveStatic = (app, requestPath, directoryPath) => {
+  app.use(requestPath, express.static(path.join(__dirname, directoryPath)));
+  app.get(requestPath + '*', (_, res) =>
+    res.sendFile(path.join(__dirname + directoryPath + '/index.html')),
+  );
+};
+
 if (isLocalDev) {
   app.use('/backend', handleRequest);
 } else {
-  app.use('/core-ui', express.static(path.join(__dirname, 'core-ui')));
-  app.get('/core-ui/*', (_, res) =>
-    res.sendFile(path.join(__dirname + '/core-ui/index.html')),
-  );
-
+  // yup, order matters here
+  serveStatic(app, '/core-ui/', '/core-ui');
+  serveStatic(app, '/service-catalog', '/service-catalog-ui');
   app.use('/backend', handleRequest);
-
-  app.use('/', express.static(path.join(__dirname, 'core')));
-  app.get('/*', (_, res) =>
-    res.sendFile(path.join(__dirname + '/core/index.html')),
-  );
+  serveStatic(app, '/', '/core');
 }
 
 server.listen(port, address, () => {

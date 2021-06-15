@@ -15,11 +15,6 @@ else
 	mkdir -p licenses
 endif
 
-verify: lint test 
-
-lint:
-	npm run lint-check
-
 test:
 	npm run test
 
