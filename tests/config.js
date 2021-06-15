@@ -6,5 +6,5 @@ export default {
   localDev: env.LOCAL_DEV || false,
   clusterAddress: env.LOCAL_DEV
     ? `http://localhost:4200/clusters`
-    : `https://busola.${domain}/clusters`,
+    : `https://${domain}/clusters`,
 };

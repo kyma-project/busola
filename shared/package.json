@@ -5,8 +5,8 @@
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
-    "build": "webpack --env.production",
-    "start:kyma": "webpack --env.development --watch",
+    "build": "webpack",
+    "start:kyma": "webpack --watch",
     "build:npx": "ln -sf ../node_modules/monaco-editor/min/vs ../backend/vs"
   },
   "author": "hasselhoff-team@kyma",
@@ -15,7 +15,7 @@
     "@babel/plugin-proposal-class-properties": "^7.5.5",
     "@babel/preset-env": "^7.6.3",
     "jest": "^24.9.0",
-    "webpack": "^4.41.2"
+    "webpack": "^5.38.1"
   },
   "peerDependencies": {
     "fundamental-react": "0.8.0-rc.12",

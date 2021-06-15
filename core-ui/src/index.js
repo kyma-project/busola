@@ -10,11 +10,9 @@ import { monaco } from '@monaco-editor/react';
 
 setupMonaco(monaco);
 
-const isNpx = window.location.origin === 'http://localhost:3001';
-
 ReactDOM.render(
   <Microfrontend env={process.env}>
-    <BrowserRouter basename={isNpx ? '/core-ui' : '/'}>
+    <BrowserRouter basename={process.env.PUBLIC_URL}>
       <App />
     </BrowserRouter>
   </Microfrontend>,

@@ -13,7 +13,7 @@
   "scripts": {
     "start": "PORT=8889 ../node_modules/.bin/react-scripts start",
     "start:kyma": "BROWSER=none  PORT=8889 ../node_modules/.bin/react-scripts start",
-    "build": "INLINE_RUNTIME_CHUNK=false ../node_modules/.bin/react-scripts build",
+    "build": "PUBLIC_URL=/core-ui INLINE_RUNTIME_CHUNK=false ../node_modules/.bin/react-scripts build",
     "test": "../node_modules/.bin/react-scripts test",
     "eject": "../node_modules/.bin/react-scripts eject",
     "build:npx": "rm -rf ../backend/core-ui && PUBLIC_URL=/core-ui npm run build && mv build ../backend/core-ui"
