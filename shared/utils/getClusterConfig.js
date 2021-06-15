@@ -1,4 +1,4 @@
-const domain = location.hostname.replace(/^busola?\./, '');
+const domain = location.hostname;
 
 function getbackendApiUrl() {
   if (location.origin === 'http://localhost:3001') {
@@ -8,7 +8,7 @@ function getbackendApiUrl() {
     return 'http://localhost:3001';
   } else {
     // on cluster
-    return 'https://' + domain + '/backend';
+    return '/backend';
   }
 }
 export const getClusterConfig = () => ({
