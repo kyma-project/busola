@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Button, MessageStrip } from 'fundamental-react';
 import { Spinner, Tooltip, useGetList } from 'react-shared';
 
-import ModalWithForm from 'components/ModalWithForm/ModalWithForm';
+import { ModalWithForm } from 'react-shared';
 import CreateServiceBindingForm from './CreateServiceBindingForm';
 import { SERVICE_BINDINGS_PANEL } from 'components/Lambdas/constants';
 
