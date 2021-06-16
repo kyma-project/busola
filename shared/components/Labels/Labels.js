@@ -1,6 +1,6 @@
 import React from 'react';
 import { EMPTY_TEXT_PLACEHOLDER } from '../../constants/constants';
-import './labels.scss';
+import './Labels.scss';
 
 const SHORTENING_TRESHOLD = 60;
 
