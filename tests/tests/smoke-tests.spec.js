@@ -39,11 +39,9 @@ context('Smoke Tests', () => {
 
   it('Renders navigation nodes', () => {
     cy.get('[data-testid=luigi-topnav-logo]').click();
-    ['Administration', 'Diagnostics'].forEach(node => {
-      cy.getLeftNav()
-        .contains(node)
-        .should('be.visible');
-    });
+    cy.getLeftNav()
+      .contains('Administration')
+      .should('be.visible');
   });
 
   it('Check Administration tab', () => {
