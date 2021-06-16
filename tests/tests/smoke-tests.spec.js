@@ -57,26 +57,4 @@ context('Smoke Tests', () => {
       .contains('Cluster Role Bindings')
       .should('be.visible');
   });
-
-  it('Check Diagnostic tab', () => {
-    cy.getLeftNav()
-      .contains('Diagnostic')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Logs')
-      .should('be.visible');
-
-    cy.getLeftNav()
-      .contains('Metrics')
-      .should('be.visible');
-
-    cy.getLeftNav()
-      .contains('Traces')
-      .should('be.visible');
-
-    cy.getLeftNav()
-      .contains('Service Mesh')
-      .should('be.visible');
-  });
 });
