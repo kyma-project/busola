@@ -967,51 +967,6 @@ export function getStaticRootNodes(
         collapsible: true,
       },
       pathSegment: '_integration_category_placeholder_',
-      hideFromNav: false,
-    },
-    {
-      label: 'Logs',
-      category: 'Diagnostics',
-      viewUrl: '',
-      externalLink: {
-        url:
-          'https://grafana.kyma0.hasselhoff.shoot.canary.k8s-hana.ondemand.com/explore?left=%5B"now-1h","now","Loki",%7B%7D,%7B"mode":"Logs"%7D,%7B"ui":%5Btrue,true,true,"none"%5D%7D%5D',
-      },
-    },
-    {
-      label: 'Metrics',
-      category: 'Diagnostics',
-      viewUrl: '',
-      externalLink: {
-        url:
-          'https://grafana.kyma0.hasselhoff.shoot.canary.k8s-hana.ondemand.com',
-      },
-    },
-    {
-      label: 'Traces',
-      category: 'Diagnostics',
-      viewUrl: '',
-      externalLink: {
-        url:
-          'https://jaeger.kyma0.hasselhoff.shoot.canary.k8s-hana.ondemand.com',
-      },
-    },
-    {
-      label: 'Service Mesh',
-      category: 'Diagnostics',
-      viewUrl: '',
-      externalLink: {
-        url:
-          'https://kiali.kyma0.hasselhoff.shoot.canary.k8s-hana.ondemand.com',
-      },
-    },
-    {
-      pathSegment: 'logs',
-      label: 'Logs',
-      category: 'Diagnostics',
-      viewUrl:
-        config.logsModuleUrl +
-        '/?function={nodeParams.function}&pod={nodeParams.pod}&namespace={nodeParams.namespace}&container_name={nodeParams.container_name}', // todo handle when logs are reintroduced
       hideFromNav: true,
     },
 
