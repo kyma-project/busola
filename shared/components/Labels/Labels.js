@@ -1,8 +1,10 @@
 import React from 'react';
 import { EMPTY_TEXT_PLACEHOLDER } from '../../constants/constants';
+import './labels.scss';
 
-export const Labels = labels => {
-  labels = labels.labels;
+const SHORTENING_TRESHOLD = 60;
+
+export const Labels = ({ labels, shortenLongLabels = false }) => {
   if (!labels || Object.keys(labels).length === 0) {
     return <span>{EMPTY_TEXT_PLACEHOLDER}</span>;
   }
@@ -12,15 +14,25 @@ export const Labels = labels => {
     separatedLabels.push(`${key}=${labels[key]}`);
   }
 
+  const shortenLabel = label => label.slice(0, SHORTENING_TRESHOLD) + '...';
+
   /* eslint-enable no-unused-vars */
-  return separatedLabels.map((label, id) => (
-    <span
-      aria-label={label}
-      className="fd-token fd-token--readonly "
-      key={id}
-      style={{ marginBottom: '4px', marginRight: '4px' }}
-    >
-      <span className="fd-token__text fd-has-font-size-small">{label}</span>
-    </span>
-  ));
+  return (
+    <div className="labels">
+      {separatedLabels.map((label, id) => (
+        <span
+          aria-label={label}
+          className="fd-token fd-token--readonly"
+          key={id}
+          title={shortenLongLabels && label.length && label}
+        >
+          <span className="fd-token__text fd-has-font-size-small">
+            {shortenLongLabels && label.length > SHORTENING_TRESHOLD
+              ? shortenLabel(label)
+              : label}
+          </span>
+        </span>
+      ))}
+    </div>
+  );
 };

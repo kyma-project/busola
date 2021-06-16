@@ -185,8 +185,8 @@ function Resources({
       <b>{entry.metadata.name}</b>
     ),
     <ReadableCreationTimestamp timestamp={entry.metadata.creationTimestamp} />,
-    <div style={{ maxWidth: '55em' /*TODO*/ }}>
-      <Labels labels={entry.metadata.labels} />
+    <div style={{ maxWidth: '36rem' /*TODO*/ }}>
+      <Labels labels={entry.metadata.labels} shortenLongLabels />
     </div>,
     ...customColumns.map(col => col.value(entry)),
   ];
