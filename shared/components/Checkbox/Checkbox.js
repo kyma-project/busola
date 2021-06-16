@@ -44,23 +44,28 @@ export const Checkbox = React.forwardRef(
 
     return (
       <FormItem {...props} disabled={disabled} isInline={inline} ref={ref}>
-        <FormLabel {...labelProps} disabled={disabled}>
-          <input
-            {...inputProps}
-            aria-checked={getCheckStatus(checked, indeterminate)}
-            checked={checked}
-            className="fd-checkbox"
-            disabled={disabled}
-            id={name}
-            name={name}
-            onChange={e => {
-              const newChecked = !checked;
-              setChecked(newChecked);
-              onChange(e, newChecked);
-            }}
-            ref={inputEl}
-            type="checkbox"
-          />
+        <input
+          {...inputProps}
+          aria-checked={getCheckStatus(checked, indeterminate)}
+          checked={checked}
+          className="fd-checkbox"
+          disabled={disabled}
+          id={name}
+          name={name}
+          onChange={e => {
+            const newChecked = !checked;
+            setChecked(newChecked);
+            onChange(e, newChecked);
+          }}
+          ref={inputEl}
+          type="checkbox"
+        />
+        <FormLabel
+          {...labelProps}
+          disabled={disabled}
+          className="fd-checkbox__label"
+          htmlFor={name}
+        >
           {value}
         </FormLabel>
       </FormItem>

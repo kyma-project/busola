@@ -7,8 +7,7 @@ import {
   MessageStrip,
 } from 'fundamental-react';
 
-import Checkbox from 'components/Lambdas/Checkbox/Checkbox';
-import { useCreateServiceBindingUsage } from 'react-shared';
+import { useCreateServiceBindingUsage, Checkbox } from 'react-shared';
 import { SERVICE_BINDINGS_PANEL } from 'components/Lambdas/constants';
 import { CONFIG } from 'components/Lambdas/config';
 
@@ -138,6 +137,7 @@ export default function CreateServiceBindingForm({
         <FormLabel htmlFor="serviceInstanceName">Service Instance</FormLabel>
         <select
           id="serviceInstanceName"
+          className="fd-form-select"
           value={selectedServiceInstance}
           onChange={e => setSelectedServiceInstance(e.target.value)}
           required
@@ -176,6 +176,7 @@ export default function CreateServiceBindingForm({
               <FormLabel htmlFor="existingCredentials">Secrets</FormLabel>
               <select
                 id="existingCredentials"
+                className="fd-form-select"
                 value={existingCredentials}
                 onChange={e => setExistingCredentials(e.target.value)}
                 required
