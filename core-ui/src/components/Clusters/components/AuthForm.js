@@ -36,7 +36,7 @@ export function AuthForm({ setAuthValid, auth, setAuth }) {
         required
         label="Scopes"
         onChange={e => setAuth({ ...auth, scope: e.target.value })}
-        defaultValue={auth.scope}
+        defaultValue={auth.scope || 'openid '}
       />
     </>
   );
