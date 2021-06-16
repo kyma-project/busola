@@ -28,7 +28,7 @@ export const ReplicaSetsList = ({ DefaultRenderer, ...otherParams }) => {
       value: replicaSet => {
         const images = getImages(replicaSet);
         const imagesString = images.join(', ');
-        return imagesString;
+        return <span style={{ overflowWrap: 'anywhere' }}>{imagesString}</span>;
       },
     },
     {
