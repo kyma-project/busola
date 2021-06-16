@@ -4,13 +4,14 @@ import { MessageStrip, FormRadioGroup, FormRadioItem } from 'fundamental-react';
 
 export const AUTH_FORM_TOKEN = 'Token';
 export const AUTH_FORM_OIDC = 'OIDC';
+export const DEFAULT_SCOPE_VALUE = 'openid ';
 
 export function AuthForm({ setAuthValid, auth, setAuth }) {
   const formRef = React.useRef();
 
   React.useEffect(() => {
     if (formRef) {
-      setAuthValid(formRef.current.checkValidity());
+      setAuthValid(formRef.current?.checkValidity());
     }
   }, [formRef, auth, setAuthValid]);
 
@@ -36,7 +37,7 @@ export function AuthForm({ setAuthValid, auth, setAuth }) {
         required
         label="Scopes"
         onChange={e => setAuth({ ...auth, scope: e.target.value })}
-        defaultValue={auth.scope || 'openid '}
+        defaultValue={auth.scope || DEFAULT_SCOPE_VALUE}
       />
     </>
   );
