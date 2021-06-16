@@ -23,7 +23,6 @@ const headerRenderer = () => [
   '',
   'Value',
   'Source',
-  'Resource Name',
   'Key',
   '',
 ];
@@ -79,12 +78,12 @@ function VariableStatus({ validation }) {
 }
 
 function VariableSource({ variable }) {
-  let message = ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.CUSTOM.TEXT;
+  let source = ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.CUSTOM.TEXT;
   let tooltipTitle =
     ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.CUSTOM.TOOLTIP_MESSAGE;
 
   if (variable.type === VARIABLE_TYPE.BINDING_USAGE) {
-    message = ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.BINDING_USAGE.TEXT;
+    source = ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.BINDING_USAGE.TEXT;
     tooltipTitle = formatMessage(
       ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.BINDING_USAGE.TOOLTIP_MESSAGE,
       {
@@ -95,7 +94,7 @@ function VariableSource({ variable }) {
 
   if (variable.valueFrom) {
     if (variable.valueFrom.configMapKeyRef) {
-      message = 'Config Map';
+      source = 'Config Map';
       tooltipTitle = formatMessage(
         'This variable comes from the "{resourceName}" Config Map.',
         {
@@ -104,7 +103,7 @@ function VariableSource({ variable }) {
       );
     }
     if (variable.valueFrom.secretKeyRef) {
-      message = 'Secret';
+      source = 'Secret';
       tooltipTitle = formatMessage(
         'This variable comes from the "{resourceName}" Secret.',
         {
@@ -116,7 +115,7 @@ function VariableSource({ variable }) {
 
   return (
     <Tooltip content={tooltipTitle}>
-      <InfoLabel>{message}</InfoLabel>
+      <InfoLabel>{source}</InfoLabel>
     </Tooltip>
   );
 }
@@ -136,6 +135,10 @@ function VariableSourceLink({ variable }) {
 
   return (
     <>
+      <Tooltip
+        isInlineHelp
+        content="This variable comes from a Resource. Check its details to get the value."
+      />
       {resourceLink ? (
         <span
           className="link"
@@ -167,10 +170,7 @@ function VariableValue({ variable }) {
   const isBindingUsageVar = variable.type === VARIABLE_TYPE.BINDING_USAGE;
   const [show, setShow] = useState(false);
   const value = variable.valueFrom ? (
-    <Tooltip
-      isInlineHelp
-      content="This variable comes from a Resource. Check its details to get the value."
-    />
+    <VariableSourceLink variable={variable} />
   ) : (
     <span>{variable.value || '-'}</span>
   );
@@ -214,7 +214,6 @@ export default function LambdaEnvs({
     <span className="sap-icon--arrow-right" />,
     <VariableValue variable={variable} />,
     <VariableSource variable={variable} />,
-    <VariableSourceLink variable={variable} />,
     <VariableKey variable={variable} />,
     <VariableStatus validation={variable.validation} />,
   ];
