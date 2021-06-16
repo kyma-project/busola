@@ -5,8 +5,8 @@
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
-    "build": "webpack",
-    "start:kyma": "webpack --watch",
+    "build": "webpack --mode=production",
+    "start:kyma": "webpack --mode=development --watch",
     "build:npx": "ln -sf ../node_modules/monaco-editor/min/vs ../backend/vs"
   },
   "author": "hasselhoff-team@kyma",
