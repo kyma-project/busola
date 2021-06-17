@@ -12,7 +12,7 @@
   "chromeWebSecurity": false,
   "viewportWidth": 1500,
   "viewportHeight": 1500,
-  "videoCompression": false,
+  "videoCompression": 32,
   "experimentalInteractiveRunEvents": true,
   "testFiles": [
     "run-before.spec.js",
