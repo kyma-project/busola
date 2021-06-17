@@ -39,11 +39,9 @@ context('Smoke Tests', () => {
 
   it('Renders navigation nodes', () => {
     cy.get('[data-testid=luigi-topnav-logo]').click();
-    ['Administration', 'Diagnostics'].forEach(node => {
-      cy.getLeftNav()
-        .contains(node)
-        .should('be.visible');
-    });
+    cy.getLeftNav()
+      .contains('Administration')
+      .should('be.visible');
   });
 
   it('Check Administration tab', () => {
@@ -57,28 +55,6 @@ context('Smoke Tests', () => {
 
     cy.getLeftNav()
       .contains('Cluster Role Bindings')
-      .should('be.visible');
-  });
-
-  it('Check Diagnostic tab', () => {
-    cy.getLeftNav()
-      .contains('Diagnostic')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Logs')
-      .should('be.visible');
-
-    cy.getLeftNav()
-      .contains('Metrics')
-      .should('be.visible');
-
-    cy.getLeftNav()
-      .contains('Traces')
-      .should('be.visible');
-
-    cy.getLeftNav()
-      .contains('Service Mesh')
       .should('be.visible');
   });
 });
