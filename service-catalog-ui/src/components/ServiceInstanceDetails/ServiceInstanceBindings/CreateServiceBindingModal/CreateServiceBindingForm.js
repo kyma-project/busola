@@ -142,6 +142,7 @@ export default function CreateServiceBindingForm({
   const applicationsDropdown = (
     <select
       id="applicationName"
+      className="fd-form-select"
       value={JSON.stringify(selectedApplication)}
       onChange={handleApplicationChange}
       required
@@ -205,6 +206,7 @@ export default function CreateServiceBindingForm({
               <FormLabel htmlFor="existingBindings">Service Bindings</FormLabel>
               <select
                 id="existingBindings"
+                className="fd-form-select"
                 value={existingBindings}
                 onChange={e => setExistingBindings(e.target.value)}
                 required

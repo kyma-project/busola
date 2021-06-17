@@ -23,12 +23,17 @@
   &:focus {
     box-shadow: 0 0 0 1px var(--sapField_Focus_BorderColor);
   }
-
+  
   &.is-invalid {
-    box-shadow: 0 0 0 1px #b00;
-    --sapField_BorderColor: var(--sapNegativeColor);
-    border-width: 2px;
+    border-width: .125rem;
+    background-color: var(--sapField_InvalidBackground,#fff);
+    border-color: var(--sapField_InvalidColor,#b00);
   }
+  
+    &:hover {
+      background-color: var(--sapField_Hover_Background,#fff);
+      border-color: var(--sapField_Hover_BorderColor,#0854a0);
+    }
 
   input[type='text'] {
     height: calc(var(--sapElement_Height) - 2px);

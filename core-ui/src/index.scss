@@ -288,3 +288,8 @@ input[type='checkbox'] {
     min-width: unset;
   }
 }
+.fd-input.is-invalid {
+  border-width: .125rem;
+  background-color: var(--sapField_InvalidBackground,#fff);
+  border-color: var(--sapField_InvalidColor,#b00);
+}
