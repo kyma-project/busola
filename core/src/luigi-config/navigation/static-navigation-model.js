@@ -718,6 +718,41 @@ export function getStaticChildrenNodesForNamespace(
         requiredModules: [modules?.SERVERLESS],
       },
     },
+    {
+      category: 'Configuration',
+      pathSegment: 'customresourcedefinitions',
+      resourceType: 'customresourcedefinitions',
+      navigationContext: 'customresourcedefinitions',
+      label: 'Custom Resource Definitions',
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/CustomResourceDefinitions?' +
+        toSearchParamsString({
+          fullResourceApiPath:
+            '/apis/apiextensions.k8s.io/v1/customresourcedefinitions',
+          hasDetailsView: true,
+        }),
+      keepSelectedForChildren: true,
+      viewGroup: coreUIViewGroupName,
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':CustomResourceDefinitionName',
+              resourceType: 'customresourcedefinitions',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/CustomResourceDefinitions/:CustomResourceDefinitionName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/apiextensions.k8s.io/v1',
+                }),
+              viewGroup: coreUIViewGroupName,
+            },
+          ],
+        },
+      ],
+    },
   ];
   filterNodesByAvailablePaths(nodes, apiPaths, permissionSet);
   return nodes;
@@ -951,6 +986,40 @@ export function getStaticRootNodes(
                 '/ClusterRoleBindings/:clusterRoleBindingName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
+                }),
+              viewGroup: coreUIViewGroupName,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: 'Administration',
+      pathSegment: 'customresourcedefinitions',
+      resourceType: 'customresourcedefinitions',
+      navigationContext: 'customresourcedefinitions',
+      label: 'Cluster Custom Resource Definitions',
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/CustomResourceDefinitions?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/apiextensions.k8s.io/v1',
+          hasDetailsView: true,
+        }),
+      keepSelectedForChildren: true,
+      viewGroup: coreUIViewGroupName,
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':CustomResourceDefinitionName',
+              resourceType: 'customresourcedefinitions',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/CustomResourceDefinitions/:CustomResourceDefinitionName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/apiextensions.k8s.io/v1',
                 }),
               viewGroup: coreUIViewGroupName,
             },
