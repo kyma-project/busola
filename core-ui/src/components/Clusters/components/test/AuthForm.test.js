@@ -1,14 +1,9 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
+import { render } from '@testing-library/react';
 
 import { AuthForm, AUTH_FORM_OIDC, DEFAULT_SCOPE_VALUE } from '../AuthForm';
 
 const DEFINED_SCOPE_VALUE = 'email openid';
-
-const findElByInputTypeAndPropsId = (instance, propsId) =>
-  instance.findAll(
-    ({ type, props }) => type === 'input' && props.id === propsId,
-  );
 
 describe('AuthForm', () => {
   it('Renders Scope input with defined scope value', () => {
@@ -19,10 +14,8 @@ describe('AuthForm', () => {
         setAuth={() => {}}
       />
     );
-    const component = renderer.create(authForm).root;
-    const elValue = findElByInputTypeAndPropsId(component, 'scope')[0].props
-      .defaultValue;
-    expect(elValue).toEqual(DEFINED_SCOPE_VALUE);
+    const { getByPlaceholderText } = render(authForm);
+    expect(getByPlaceholderText('Scopes').value).toEqual(DEFINED_SCOPE_VALUE);
   });
 
   it('Renders Scope input with default scope value', () => {
@@ -33,9 +26,7 @@ describe('AuthForm', () => {
         setAuth={() => {}}
       />
     );
-    const component = renderer.create(authForm).root;
-    const elValue = findElByInputTypeAndPropsId(component, 'scope')[0].props
-      .defaultValue;
-    expect(elValue).toEqual(DEFAULT_SCOPE_VALUE);
+    const { getByPlaceholderText } = render(authForm);
+    expect(getByPlaceholderText('Scopes').value).toEqual(DEFAULT_SCOPE_VALUE);
   });
 });
