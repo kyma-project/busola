@@ -22,22 +22,29 @@ RUN make pull-licenses
 RUN cd /app/core && make test && make build
 RUN cd /app/service-catalog-ui && make test && make build
 RUN cd /app/core-ui && make test && make build
-RUN cd /app/backend && npm run build
 
 # ---- Serve ----
-FROM alpine:3.13 AS release
-RUN apk add --update nodejs npm
+FROM eu.gcr.io/kyma-project/tpi/console-nginx:1de56388
 WORKDIR /app
 
+# apps
 COPY --from=builder /app/core/src /app/core
 COPY --from=builder /app/core-ui/build /app/core-ui
-COPY --from=builder /app/service-catalog-ui/build /app/service-catalog-ui
-COPY --from=builder /app/backend/backend-production.js /app/backend-production.js
-COPY --from=builder /app/backend/package* /app
-RUN npm ci --only=production
+COPY --from=builder /app/service-catalog-ui/build /app/service-catalog
 
-# COPY --from=builder /app/${app_name}/licenses/ /app/licenses/
+# nginx
+COPY --from=builder /app/nginx/conf.d /etc/nginx/conf.d/
+COPY --from=builder /app/nginx/nginx.conf /etc/nginx/
+COPY --from=builder /app/nginx/mime.types /etc/nginx/
 
-EXPOSE 3001
-ENV NODE_ENV production
-CMD ["node", "backend-production.js"]
+# # licenses
+# COPY --from=builder /app/core/licenses/ /app/licenses/
+# COPY --from=builder /app/core-ui/licenses/ /app/licenses/
+# COPY --from=builder /app/service-catalog-ui/licenses/ /app/licenses/
+
+
+RUN touch /var/run/nginx.pid && \
+  chown -R nginx:nginx /var/run/nginx.pid
+
+EXPOSE 8080
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
