@@ -1,6 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { saveAs } from 'file-saver';
-import { Button, LayoutPanel, Switch } from 'fundamental-react';
+import {
+  Button,
+  LayoutPanel,
+  Switch,
+  Select,
+  FormLabel,
+} from 'fundamental-react';
 import {
   useGetStream,
   useWindowTitle,
@@ -10,13 +16,26 @@ import {
 } from 'react-shared';
 import './ContainersLogs.scss';
 
+const HOUR_IN_SECONDS = 3600;
+const MAX_TIMEFRAME_IN_SECONDS = Number.MAX_SAFE_INTEGER;
+
 export const ContainersLogs = ({ params }) => {
   useWindowTitle('Logs');
   const notification = useNotification();
   const [searchQuery, setSearchQuery] = useState('');
   const [showTimestamps, setShowTimestamps] = useState(false);
+  const [reverseLogs, setReverseLogs] = useState(false);
   const [logsToSave, setLogsToSave] = useState([]);
+  const [sinceSeconds, setSinceSeconds] = useState(MAX_TIMEFRAME_IN_SECONDS);
   const selectedLogIndex = useRef(0);
+
+  const logTimeframeOptions = [
+    { text: '1 hour', key: '1' },
+    { text: '3 hours', key: '3' },
+    { text: '6 hours', key: '6' },
+    { text: '1 day', key: '24' },
+    { text: 'all', key: MAX_TIMEFRAME_IN_SECONDS.toString() },
+  ];
 
   const breadcrumbs = [
     {
@@ -32,7 +51,7 @@ export const ContainersLogs = ({ params }) => {
     { name: '' },
   ];
 
-  const url = `/api/v1/namespaces/${params.namespace}/pods/${params.podName}/log?container=${params.containerName}&follow=true&tailLines=1000&timestamps=true`;
+  const url = `/api/v1/namespaces/${params.namespace}/pods/${params.podName}/log?container=${params.containerName}&follow=true&tailLines=1000&timestamps=true&sinceSeconds=${sinceSeconds}`;
   const streamData = useGetStream(url);
 
   useEffect(() => {
@@ -88,6 +107,18 @@ export const ContainersLogs = ({ params }) => {
     setShowTimestamps(prev => !prev);
   };
 
+  const onReverseChange = () => {
+    setReverseLogs(prev => !prev);
+  };
+
+  const onLogTimeframeChange = timeValue => {
+    setSinceSeconds(
+      +timeValue === MAX_TIMEFRAME_IN_SECONDS
+        ? MAX_TIMEFRAME_IN_SECONDS
+        : +timeValue * HOUR_IN_SECONDS,
+    );
+  };
+
   const saveToFile = (podName, containerName) => {
     const dateObj = new Date();
     const day = dateObj.getDate();
@@ -124,7 +155,9 @@ export const ContainersLogs = ({ params }) => {
         </div>
       );
 
-    return data.map((arr, idx) => {
+    const newData = reverseLogs ? [...data].reverse() : [...data];
+
+    return newData.map((arr, idx) => {
       const timestamp = arr.split(' ')[0];
       const stream = arr.replace(timestamp, '');
       const log = showTimestamps ? `${timestamp} ${stream}` : stream;
@@ -149,12 +182,29 @@ export const ContainersLogs = ({ params }) => {
         <LayoutPanel.Header>
           <LayoutPanel.Head title="Logs" />
           <LayoutPanel.Actions className="logs-actions">
+            <FormLabel htmlFor="context-chooser">
+              Filter timeframe by:
+            </FormLabel>
+            <Select
+              options={logTimeframeOptions}
+              placeholder="all"
+              compact
+              selectedKey={sinceSeconds.toString()}
+              onSelect={(_, { key }) => onLogTimeframeChange(key)}
+            />
             <Switch
               disabled={!logsToSave?.length}
               compact
               onChange={onSwitchChange}
             >
               {showTimestamps ? 'Hide timestamps' : 'Show timestamps'}
+            </Switch>
+            <Switch
+              disabled={!logsToSave?.length}
+              compact
+              onChange={onReverseChange}
+            >
+              Reverse logs
             </Switch>
             <Button
               disabled={!logsToSave?.length}
