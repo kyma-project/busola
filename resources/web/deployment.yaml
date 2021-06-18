@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: busola
-          image: wawrzyn321/single
+          image: eu.gcr.io/kyma-project/busola-core:PR-224
           imagePullPolicy: Always
           resources:
             requests:
@@ -31,3 +31,18 @@ spec:
           ports:
             - containerPort: 6080
             - containerPort: 8080
+        - name: core-ui
+          image: eu.gcr.io/kyma-project/busola-core-ui:PR-219
+          imagePullPolicy: Always
+          resources:
+            requests:
+              cpu: 100m
+              memory: 21Mi
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 6080
+            initialDelaySeconds: 10
+          ports:
+            - containerPort: 6080
+            - containerPort: 80

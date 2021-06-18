@@ -17,10 +17,10 @@
   "dependencies": {
     "@luigi-project/core": "^1.7.1",
     "@luigi-project/plugin-auth-oidc": "1.8.1",
-    "copy-webpack-plugin": "^5.0.0",
     "file-saver": "2.0.2"
   },
   "devDependencies": {
+    "copy-webpack-plugin": "^5.0.0",
     "babel-loader": "^8.0.4",
     "sirv-cli": "^1.0.11",
     "webpack": "^4.44.2",
