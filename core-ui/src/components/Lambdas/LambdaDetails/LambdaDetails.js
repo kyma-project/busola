@@ -73,12 +73,7 @@ export default function LambdaDetails({ lambda }) {
         <Tab
           key="lambda-replicas"
           id="lambda-replicas"
-          title={<span>Replicas </span>}
-          status={
-            <InfoLabel className="fd-margin-begin--tiny" numeric>
-              {4}
-            </InfoLabel>
-          }
+          title={<span>Replicas</span>}
         >
           <Replicas
             name={lambda.metadata.name}
