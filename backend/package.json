@@ -6,7 +6,7 @@
   "scripts": {
     "start:kyma": "npm run watch",
     "watch": "NODE_ENV=development nodemon --exec babel-node index.js",
-    "build": "webpack",
+    "build": "webpack --mode=production",
     "start": "NODE_ENV=production node backend-production.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
