@@ -15,6 +15,7 @@ const Tokens = ({ tokens }) => (
           <Token
             key={scope}
             style={{ marginTop: '4px' }}
+            buttonLabel=""
             className="y-fd-token y-fd-token--no-button y-fd-token--gap fd-margin-end--tiny"
             readOnly={true}
           >
