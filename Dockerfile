@@ -33,7 +33,6 @@ COPY --from=builder /app/core-ui/build /app/core-ui
 COPY --from=builder /app/service-catalog-ui/build /app/service-catalog
 
 # nginx
-COPY --from=builder /app/nginx/conf.d /etc/nginx/conf.d/
 COPY --from=builder /app/nginx/nginx.conf /etc/nginx/
 COPY --from=builder /app/nginx/mime.types /etc/nginx/
 
