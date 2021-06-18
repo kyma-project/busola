@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { TabGroup, Tab } from 'fundamental-react';
+import { InfoLabel } from 'fundamental-react';
 
-import { useMicrofrontendContext, modulesExist } from 'react-shared';
+import { useMicrofrontendContext, modulesExist, Tabs, Tab } from 'react-shared';
 
 import CodeTab from './Tabs/Code/CodeTab';
 import ResourceManagementTab from './Tabs/ResourceManagement/ResourceManagementTab';
@@ -12,6 +12,7 @@ import ApiRules from './Tabs/Configuration/ApiRules/ApiRules';
 // import { useLogsView } from '../helpers/misc';
 
 import { LAMBDA_DETAILS } from 'components/Lambdas/constants';
+import Replicas from './Tabs/Replicas';
 
 export default function LambdaDetails({ lambda }) {
   const [bindingUsages, setBindingUsages] = useState([]);
@@ -42,7 +43,7 @@ export default function LambdaDetails({ lambda }) {
 
   return (
     <>
-      <TabGroup className="lambda-details-tabs">
+      <Tabs className="lambda-details-tabs">
         <Tab
           key="lambda-code"
           id="lambda-code"
@@ -68,7 +69,23 @@ export default function LambdaDetails({ lambda }) {
         >
           <ResourceManagementTab lambda={lambda} />
         </Tab>
-      </TabGroup>
+
+        <Tab
+          key="lambda-replicas"
+          id="lambda-replicas"
+          title={<span>Replicas </span>}
+          status={
+            <InfoLabel className="fd-margin-begin--tiny" numeric>
+              {4}
+            </InfoLabel>
+          }
+        >
+          <Replicas
+            name={lambda.metadata.name}
+            namespace={lambda.metadata.namespace}
+          />
+        </Tab>
+      </Tabs>
     </>
   );
 }
