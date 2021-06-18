@@ -5,8 +5,8 @@
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
-    "build": "webpack",
-    "start:kyma": "webpack --watch"
+    "build": "webpack --mode=production",
+    "start:kyma": "webpack --mode=development --watch"
   },
   "author": "hasselhoff-team@kyma",
   "devDependencies": {

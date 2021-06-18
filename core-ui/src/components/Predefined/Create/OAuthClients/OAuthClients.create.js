@@ -81,6 +81,7 @@ export const OAuth2ClientsCreate = ({
           stringList={spec.scope.split(' ').filter(scope => scope)}
           onChange={scope => setSpec({ ...spec, scope: scope.join(' ') })}
           id="scope"
+          required
         />
       </FormItem>
       <p

@@ -17,6 +17,7 @@ export const StringInput = ({
   stringList = {},
   onChange,
   regexp = /^[A-z_-]+$/,
+  required,
   placeholder = 'Enter multiple values separated by comma',
   ...props
 }) => {
@@ -46,6 +47,10 @@ export const StringInput = ({
 
   function handleStringEntered(sourceEvent) {
     const inputValue = sourceEvent.target.value;
+    if (!!required && !inputValue.length) {
+      setValid(false);
+      return;
+    }
     if (!regexp.test(inputValue)) {
       if (inputValue) setValid(false);
       return;

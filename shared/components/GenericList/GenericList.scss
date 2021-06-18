@@ -64,9 +64,14 @@
     border-bottom-right-radius: 4px;
   }
 
-  .fd-table .list-actions button {
-    margin-top: -12px;
-    margin-bottom: -12px;
+  .fd-table .list-actions {
+    button {
+      margin-top: -12px;
+      margin-bottom: -12px;
+    }
+    & > * {
+      display: inline-block !important; //override the default fd-modal opening component 'display: contents';
+    }
   }
 }
 
