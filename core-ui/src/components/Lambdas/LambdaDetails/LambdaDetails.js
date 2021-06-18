@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import { InfoLabel } from 'fundamental-react';
-
 import { useMicrofrontendContext, modulesExist, Tabs, Tab } from 'react-shared';
 
 import CodeTab from './Tabs/Code/CodeTab';
