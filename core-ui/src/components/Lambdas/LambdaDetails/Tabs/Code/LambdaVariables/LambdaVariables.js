@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import LuigiClient from '@luigi-project/client';
 
 import { Icon, InfoLabel } from 'fundamental-react';
 import { GenericList, Tooltip } from 'react-shared';
@@ -17,7 +18,14 @@ import { validateVariables } from './validation';
 import './LambdaEnvs.scss';
 import { formatMessage } from 'components/Lambdas/helpers/misc';
 
-const headerRenderer = () => ['Variable Name', '', 'Value', 'Type', ''];
+const headerRenderer = () => [
+  'Variable Name',
+  '',
+  'Value',
+  'Source',
+  'Key',
+  '',
+];
 const textSearchProperties = ['name', 'value', 'type'];
 
 function VariableStatus({ validation }) {
@@ -69,28 +77,103 @@ function VariableStatus({ validation }) {
   return <Tooltip content={message}>{control}</Tooltip>;
 }
 
-function VariableType({ variable }) {
-  let message = ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.CUSTOM;
-  let tooltipTitle = message.TOOLTIP_MESSAGE;
+function VariableSource({ variable }) {
+  let source = ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.CUSTOM.TEXT;
+  let tooltipTitle =
+    ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.CUSTOM.TOOLTIP_MESSAGE;
 
   if (variable.type === VARIABLE_TYPE.BINDING_USAGE) {
-    message = ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.BINDING_USAGE;
-    tooltipTitle = formatMessage(message.TOOLTIP_MESSAGE, {
-      serviceInstanceName: variable.serviceInstanceName,
-    });
+    source = ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.BINDING_USAGE.TEXT;
+    tooltipTitle = formatMessage(
+      ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.BINDING_USAGE.TOOLTIP_MESSAGE,
+      {
+        serviceInstanceName: variable.serviceInstanceName,
+      },
+    );
+  }
+
+  if (variable.valueFrom) {
+    if (variable.valueFrom.configMapKeyRef) {
+      source = 'Config Map';
+      tooltipTitle = formatMessage(
+        'This variable comes from the "{resourceName}" Config Map.',
+        {
+          resourceName: variable.valueFrom.configMapKeyRef.name,
+        },
+      );
+    }
+    if (variable.valueFrom.secretKeyRef) {
+      source = 'Secret';
+      tooltipTitle = formatMessage(
+        'This variable comes from the "{resourceName}" Secret.',
+        {
+          resourceName: variable.valueFrom.secretKeyRef.name,
+        },
+      );
+    }
   }
 
   return (
     <Tooltip content={tooltipTitle}>
-      <InfoLabel>{message.TEXT}</InfoLabel>
+      <InfoLabel>{source}</InfoLabel>
     </Tooltip>
+  );
+}
+
+function VariableSourceLink({ variable }) {
+  let resourceName;
+  let resourceLink;
+
+  if (variable.valueFrom?.configMapKeyRef) {
+    resourceName = variable.valueFrom.configMapKeyRef.name;
+    resourceLink = `config-maps/details/${resourceName}`;
+  }
+  if (variable.valueFrom?.secretKeyRef) {
+    resourceName = variable.valueFrom.secretKeyRef.name;
+    resourceLink = `secrets/details/${resourceName}`;
+  }
+
+  return (
+    <>
+      <Tooltip
+        isInlineHelp
+        content="This variable comes from a Resource. Check its details to get the value."
+      />
+      {resourceLink ? (
+        <span
+          className="link"
+          onClick={() =>
+            LuigiClient.linkManager()
+              .fromContext('namespace')
+              .navigate(resourceLink)
+          }
+        >
+          {' '}
+          {resourceName}{' '}
+        </span>
+      ) : (
+        '-'
+      )}
+    </>
+  );
+}
+
+function VariableKey({ variable }) {
+  return (
+    variable.valueFrom?.configMapKeyRef?.key ||
+    variable.valueFrom?.secretKeyRef?.key ||
+    '-'
   );
 }
 
 function VariableValue({ variable }) {
   const isBindingUsageVar = variable.type === VARIABLE_TYPE.BINDING_USAGE;
   const [show, setShow] = useState(false);
-  const value = <span>{variable.value || '-'}</span>;
+  const value = variable.valueFrom ? (
+    <VariableSourceLink variable={variable} />
+  ) : (
+    <span>{variable.value || '-'}</span>
+  );
 
   if (isBindingUsageVar) {
     const blurVariable = (
@@ -130,7 +213,8 @@ export default function LambdaEnvs({
     <span>{variable.name}</span>,
     <span className="sap-icon--arrow-right" />,
     <VariableValue variable={variable} />,
-    <VariableType variable={variable} />,
+    <VariableSource variable={variable} />,
+    <VariableKey variable={variable} />,
     <VariableStatus validation={variable.validation} />,
   ];
 
@@ -146,6 +230,7 @@ export default function LambdaEnvs({
   const entries = [
     ...validateVariables(customVariables, injectedVariables),
     ...injectedVariables,
+    ...customValueFromVariables,
   ];
 
   return (
