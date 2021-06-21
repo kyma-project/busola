@@ -1,6 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  namespace: busola
   name: web
   labels:
     app: busola
@@ -16,7 +17,7 @@ spec:
     spec:
       containers:
         - name: busola
-          image: eu.gcr.io/kyma-project/busola-core:PR-216
+          image: wawrzyn321/single
           imagePullPolicy: Always
           resources:
             requests:
@@ -30,18 +31,3 @@ spec:
           ports:
             - containerPort: 6080
             - containerPort: 8080
-        - name: core-ui
-          image: eu.gcr.io/kyma-project/busola-core-ui:PR-233
-          imagePullPolicy: Always
-          resources:
-            requests:
-              cpu: 100m
-              memory: 21Mi
-          livenessProbe:
-            httpGet:
-              path: /healthz
-              port: 6080
-            initialDelaySeconds: 10
-          ports:
-            - containerPort: 6080
-            - containerPort: 80

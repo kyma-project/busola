@@ -60,7 +60,7 @@ export function fetchPermissions(auth, namespace = '*') {
     spec: { namespace },
   };
 
-  const ssrUrl = `${config.backendApiUrl}/apis/authorization.k8s.io/v1/selfsubjectrulesreviews`;
+  const ssrUrl = `${config.backendAddress}/apis/authorization.k8s.io/v1/selfsubjectrulesreviews`;
   return failFastFetch(ssrUrl, auth, {
     method: 'POST',
     body: JSON.stringify(ssrr),
@@ -70,12 +70,12 @@ export function fetchPermissions(auth, namespace = '*') {
 }
 
 export function fetchBusolaInitData(auth) {
-  const crdsUrl = `${config.backendApiUrl}/apis/apiextensions.k8s.io/v1/customresourcedefinitions`;
+  const crdsUrl = `${config.backendAddress}/apis/apiextensions.k8s.io/v1/customresourcedefinitions`;
   const crdsQuery = failFastFetch(crdsUrl, auth)
     .then(res => res.json())
     .then(data => ({ crds: data.items.map(crd => crd.metadata) }));
 
-  const apiPathsQuery = failFastFetch(config.backendApiUrl, auth)
+  const apiPathsQuery = failFastFetch(config.backendAddress, auth)
     .then(res => res.json())
     .then(data => ({ apiPaths: data.paths }));
 
@@ -85,7 +85,7 @@ export function fetchBusolaInitData(auth) {
 }
 
 export function fetchNamespaces(auth) {
-  return failFastFetch(`${config.backendApiUrl}/api/v1/namespaces/`, auth)
+  return failFastFetch(`${config.backendAddress}/api/v1/namespaces/`, auth)
     .then(res => res.json())
     .then(list => list.items.map(ns => ns.metadata));
 }

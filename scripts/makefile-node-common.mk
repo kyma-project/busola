@@ -90,7 +90,7 @@ pull-licenses:
 ifdef LICENSE_PULLER_PATH
 	mkdir -p ../licenses && bash $(LICENSE_PULLER_PATH) --dirs-to-pulling="../"
 else
-	mkdir -p licenses
+	mkdir -p ../licenses
 endif
 
 # Targets copying sources to buildpack
