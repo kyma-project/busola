@@ -1,5 +1,6 @@
 const domain = location.hostname;
-const isLocalDev = location.hostname.startsWith('localhost');
+const isLocalDev =
+  location.hostname.startsWith('localhost') && location.port !== '3001'; // todo
 const localDomain = 'http://localhost';
 
 export const config = {
