@@ -197,7 +197,7 @@ export const ContainersLogs = ({ params }) => {
               compact
               onChange={onSwitchChange}
             >
-              {showTimestamps ? 'Hide timestamps' : 'Show timestamps'}
+              Show timestamps
             </Switch>
             <Switch
               disabled={!logsToSave?.length}
