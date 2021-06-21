@@ -1,6 +1,6 @@
 const domain = location.hostname;
 
-function getBackendApiUrl() {
+function getBackendAddress() {
   // dev busola
   if (location.hostname.startsWith('localhost')) {
     return 'http://localhost:3001/backend';
@@ -11,5 +11,5 @@ function getBackendApiUrl() {
 }
 export const getClusterConfig = () => ({
   domain,
-  backendApiUrl: getBackendApiUrl(),
+  backendAddress: getBackendAddress(),
 });

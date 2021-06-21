@@ -10,7 +10,7 @@ export const config = {
   coreUIModuleUrl: isLocalDev
     ? localDomain + ':8889'
     : location.origin + '/core-ui',
-  backendApiUrl: isLocalDev
+  backendAddress: isLocalDev
     ? 'http://localhost:3001/backend'
     : location.origin + '/backend',
 };
