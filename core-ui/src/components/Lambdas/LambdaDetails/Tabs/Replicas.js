@@ -12,6 +12,7 @@ export default function Replicas({ name, namespace }) {
     namespace: namespace,
     isCompact: true,
     showTitle: true,
+    readOnly: true,
   };
   return <ComponentForList name="podsList" params={podListParams} />;
 }
