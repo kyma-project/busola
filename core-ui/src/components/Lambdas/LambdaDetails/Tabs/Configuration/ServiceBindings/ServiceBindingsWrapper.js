@@ -9,7 +9,6 @@ export default function ServiceBindingsWrapper({
   setBindingUsages = () => void 0, // might be needed for other Lambda subcomponents
   isActive,
 }) {
-  console.log(isActive);
   const isBindingUsageForThisFunction = bindingUsage =>
     bindingUsage.spec.usedBy.kind === CONFIG.functionUsageKind &&
     bindingUsage.spec.usedBy.name === lambda.metadata.name;
@@ -37,7 +36,7 @@ export default function ServiceBindingsWrapper({
       skip: !isActive,
     },
   );
-  if (!isActive) return null; //sacrifice re-render to stop child components from re-fetching constantly in the background
+
   if (
     !bindingsRequest.data ||
     !bindingUsagesRequest.data ||
