@@ -177,7 +177,7 @@ export const ContainersLogs = ({ params }) => {
       </div>
       <LayoutPanel className="fd-margin--md logs-panel">
         <LayoutPanel.Header>
-          <LayoutPanel.Head title="Logs" />
+          <LayoutPanel.Head title="Logs" className="logs-title" />
           <LayoutPanel.Actions className="logs-actions">
             <FormLabel htmlFor="context-chooser">
               Filter timeframe by:
