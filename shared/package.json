@@ -6,8 +6,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "build": "webpack --mode=production",
-    "start:kyma": "webpack --mode=development --watch",
-    "build:npx": "ln -sf ../node_modules/monaco-editor/min/vs ../backend/vs"
+    "start:kyma": "webpack --mode=development --watch"
   },
   "author": "hasselhoff-team@kyma",
   "devDependencies": {
