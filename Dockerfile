@@ -24,8 +24,11 @@ RUN cd /app/service-catalog-ui && make test && make build
 RUN cd /app/core-ui && make test && make build
 
 # ---- Serve ----
-FROM eu.gcr.io/kyma-project/tpi/console-nginx:1de56388
+FROM alpine:3.14.0
 WORKDIR /app
+
+RUN apk --no-cache upgrade &&\
+    apk --no-cache add nginx
 
 # apps
 COPY --from=builder /app/core/src /app/core
