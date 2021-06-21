@@ -1,7 +1,7 @@
 import React from 'react';
 import { ComponentForList } from 'shared/getComponents';
 
-export default function Replicas({ name, namespace }) {
+export default function Replicas({ name, namespace, isActive = false }) {
   const labelSelectors = `serverless.kyma-project.io/function-name=${name},serverless.kyma-project.io/resource=deployment`;
   const podListParams = {
     hasDetailsView: true,
@@ -12,6 +12,7 @@ export default function Replicas({ name, namespace }) {
     namespace: namespace,
     isCompact: true,
     showTitle: true,
+    skipDataLoading: !isActive,
   };
   return <ComponentForList name="podsList" params={podListParams} />;
 }

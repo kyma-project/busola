@@ -37,7 +37,7 @@ export default function ServiceBindingsWrapper({
       skip: !isActive,
     },
   );
-
+  if (!isActive) return null; //sacrifice re-render to stop child components from re-fetching constantly in the background
   if (
     !bindingsRequest.data ||
     !bindingUsagesRequest.data ||

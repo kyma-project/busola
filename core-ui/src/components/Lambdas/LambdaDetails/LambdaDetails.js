@@ -53,7 +53,7 @@ export default function LambdaDetails({ lambda }) {
           id="lambda-code"
           title={LAMBDA_DETAILS.TABS.CODE.TITLE}
         >
-          {/* <CodeTab lambda={lambda} bindingUsages={bindingUsages} /> */}
+          <CodeTab lambda={lambda} bindingUsages={bindingUsages} />
         </Tab>
         {configTabShouldRender && (
           <Tab
@@ -78,14 +78,15 @@ export default function LambdaDetails({ lambda }) {
           id="lambda-resources"
           title={LAMBDA_DETAILS.TABS.RESOURCE_MANAGEMENT.TITLE}
         >
-          {/* <ResourceManagementTab lambda={lambda} /> */}
+          <ResourceManagementTab lambda={lambda} />
         </Tab>
 
         <Tab key="lambda-replicas" id="lambda-replicas" title="Replicas">
-          {/* <Replicas
+          <Replicas
             name={lambda.metadata.name}
             namespace={lambda.metadata.namespace}
-          /> */}
+            isActive={selectedTabIndex === 3}
+          />
         </Tab>
       </Tabs>
     </>
