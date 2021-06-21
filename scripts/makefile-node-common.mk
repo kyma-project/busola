@@ -88,7 +88,7 @@ resolve:
 
 pull-licenses:
 ifdef LICENSE_PULLER_PATH
-	bash $(LICENSE_PULLER_PATH) --dirs-to-pulling="../,../common,../components/react,../components/shared,../components/generic-documentation"
+	bash $(LICENSE_PULLER_PATH)  --dirs-to-pulling="../"
 else
 	mkdir -p licenses
 endif
