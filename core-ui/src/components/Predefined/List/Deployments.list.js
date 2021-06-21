@@ -34,7 +34,7 @@ export const DeploymentsList = ({ DefaultRenderer, ...otherParams }) => {
       value: deployment => {
         const images = getImages(deployment);
         const imagesString = images.join(', ');
-        return imagesString;
+        return <span style={{ overflowWrap: 'anywhere' }}>{imagesString}</span>;
       },
     },
     {
