@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useMicrofrontendContext, modulesExist, Tabs, Tab } from 'react-shared';
 
 import CodeTab from './Tabs/Code/CodeTab';
 import ResourceManagementTab from './Tabs/ResourceManagement/ResourceManagementTab';
 import EventSubscriptionsWrapper from './Tabs/Configuration/EventSubscriptions/EventSubscriptionsWrapper';
 import ServiceBindingsWrapper from './Tabs/Configuration/ServiceBindings/ServiceBindingsWrapper';
-import ApiRules from './Tabs/Configuration/ApiRules/ApiRules';
+import ApiRulesWrapper from './Tabs/Configuration/ApiRules/ApiRules';
 
 // import { useLogsView } from '../helpers/misc';
 
@@ -16,38 +16,44 @@ export default function LambdaDetails({ lambda }) {
   const [bindingUsages, setBindingUsages] = useState([]);
   const microfrontendContext = useMicrofrontendContext();
   const { crds, modules } = microfrontendContext;
+  const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   // useLogsView(lambda.UID, lambda.namespace);
+  // useEffect(() => {
+  //   console.log(selectedTabIndex);
+  // }, [selectedTabIndex]);
 
-  const apiRules = modulesExist(crds, [modules?.API_GATEWAY]) ? (
-    <ApiRules lambda={lambda} />
-  ) : null;
+  const ApiRules = modulesExist(crds, [modules?.API_GATEWAY])
+    ? ApiRulesWrapper
+    : () => null;
 
-  const eventSubscriptions = modulesExist(crds, [modules?.EVENTING]) ? (
-    <EventSubscriptionsWrapper lambda={lambda} />
-  ) : null;
+  const EventSubscriptions = modulesExist(crds, [modules?.EVENTING])
+    ? EventSubscriptionsWrapper
+    : () => null;
 
-  const serviceBindings = modulesExist(crds, [
+  const ServiceBindings = modulesExist(crds, [
     modules?.SERVICE_CATALOG,
     modules?.SERVICE_CATALOG_ADDONS,
-  ]) ? (
-    <ServiceBindingsWrapper
-      lambda={lambda}
-      setBindingUsages={setBindingUsages}
-    />
-  ) : null;
+  ])
+    ? ServiceBindingsWrapper
+    : () => null;
 
   const configTabShouldRender =
-    apiRules || eventSubscriptions || serviceBindings;
+    modulesExist(crds, [modules?.API_GATEWAY]) ||
+    modulesExist(crds, [modules?.EVENTING]) ||
+    modulesExist(crds, [
+      modules?.SERVICE_CATALOG,
+      modules?.SERVICE_CATALOG_ADDONS,
+    ]);
 
   return (
     <>
-      <Tabs className="lambda-details-tabs">
+      <Tabs className="lambda-details-tabs" callback={setSelectedTabIndex}>
         <Tab
           key="lambda-code"
           id="lambda-code"
           title={LAMBDA_DETAILS.TABS.CODE.TITLE}
         >
-          <CodeTab lambda={lambda} bindingUsages={bindingUsages} />
+          {/* <CodeTab lambda={lambda} bindingUsages={bindingUsages} /> */}
         </Tab>
         {configTabShouldRender && (
           <Tab
@@ -55,9 +61,16 @@ export default function LambdaDetails({ lambda }) {
             id="lambda-configuration"
             title={LAMBDA_DETAILS.TABS.CONFIGURATION.TITLE}
           >
-            {apiRules}
-            {eventSubscriptions}
-            {serviceBindings}
+            <ApiRules lambda={lambda} isActive={selectedTabIndex === 1} />
+            <EventSubscriptions
+              isActive={selectedTabIndex === 1}
+              lambda={lambda}
+            />
+            <ServiceBindings
+              lambda={lambda}
+              isActive={selectedTabIndex === 1}
+              setBindingUsages={setBindingUsages}
+            />
           </Tab>
         )}
         <Tab
@@ -65,14 +78,14 @@ export default function LambdaDetails({ lambda }) {
           id="lambda-resources"
           title={LAMBDA_DETAILS.TABS.RESOURCE_MANAGEMENT.TITLE}
         >
-          <ResourceManagementTab lambda={lambda} />
+          {/* <ResourceManagementTab lambda={lambda} /> */}
         </Tab>
 
         <Tab key="lambda-replicas" id="lambda-replicas" title="Replicas">
-          <Replicas
+          {/* <Replicas
             name={lambda.metadata.name}
             namespace={lambda.metadata.namespace}
-          />
+          /> */}
         </Tab>
       </Tabs>
     </>

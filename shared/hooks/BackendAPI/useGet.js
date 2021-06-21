@@ -47,19 +47,20 @@ const useGetHook = processDataFn =>
 
     React.useEffect(() => {
       const receivedForbidden = error?.code === 403;
+      console.log('sklip', skip);
       // POLLING
-      if (!pollingInterval || receivedForbidden) return;
+      if (!pollingInterval || receivedForbidden || skip) return;
       const intervalId = setInterval(refetch(true, data), pollingInterval);
       return _ => clearInterval(intervalId);
-    }, [path, pollingInterval, data, error]);
+    }, [path, pollingInterval, data, error, skip]);
 
     React.useEffect(() => {
       // INITIAL FETCH
-      if (lastAuthData.current && path) refetch(false, null)();
+      if (lastAuthData.current && path && !skip) refetch(false, null)();
       return _ => {
         if (loading) setLoading(false);
       };
-    }, [path]);
+    }, [path, skip]);
 
     React.useEffect(() => {
       if (JSON.stringify(lastAuthData.current) != JSON.stringify(authData)) {
