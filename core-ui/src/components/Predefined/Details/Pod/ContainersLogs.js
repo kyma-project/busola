@@ -18,6 +18,7 @@ import './ContainersLogs.scss';
 
 const HOUR_IN_SECONDS = 3600;
 const MAX_TIMEFRAME_IN_SECONDS = Number.MAX_SAFE_INTEGER;
+const DEFAULT_TIMEFRAME = HOUR_IN_SECONDS * 6;
 
 export const ContainersLogs = ({ params }) => {
   useWindowTitle('Logs');
@@ -26,15 +27,15 @@ export const ContainersLogs = ({ params }) => {
   const [showTimestamps, setShowTimestamps] = useState(false);
   const [reverseLogs, setReverseLogs] = useState(false);
   const [logsToSave, setLogsToSave] = useState([]);
-  const [sinceSeconds, setSinceSeconds] = useState(MAX_TIMEFRAME_IN_SECONDS);
+  const [sinceSeconds, setSinceSeconds] = useState(String(DEFAULT_TIMEFRAME));
   const selectedLogIndex = useRef(0);
 
   const logTimeframeOptions = [
-    { text: '1 hour', key: '1' },
-    { text: '3 hours', key: '3' },
-    { text: '6 hours', key: '6' },
-    { text: '1 day', key: '24' },
-    { text: 'all', key: MAX_TIMEFRAME_IN_SECONDS.toString() },
+    { text: '1 hour', key: String(HOUR_IN_SECONDS) },
+    { text: '3 hours', key: String(3 * HOUR_IN_SECONDS) },
+    { text: '6 hours', key: String(6 * HOUR_IN_SECONDS) },
+    { text: '1 day', key: String(24 * HOUR_IN_SECONDS) },
+    { text: 'all', key: String(MAX_TIMEFRAME_IN_SECONDS) },
   ];
 
   const breadcrumbs = [
@@ -112,11 +113,7 @@ export const ContainersLogs = ({ params }) => {
   };
 
   const onLogTimeframeChange = timeValue => {
-    setSinceSeconds(
-      +timeValue === MAX_TIMEFRAME_IN_SECONDS
-        ? MAX_TIMEFRAME_IN_SECONDS
-        : +timeValue * HOUR_IN_SECONDS,
-    );
+    setSinceSeconds(timeValue);
   };
 
   const saveToFile = (podName, containerName) => {
