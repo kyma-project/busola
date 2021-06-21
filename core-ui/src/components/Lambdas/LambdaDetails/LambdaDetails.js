@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useMicrofrontendContext, modulesExist, Tabs, Tab } from 'react-shared';
 
 import CodeTab from './Tabs/Code/CodeTab';
@@ -18,9 +18,6 @@ export default function LambdaDetails({ lambda }) {
   const { crds, modules } = microfrontendContext;
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   // useLogsView(lambda.UID, lambda.namespace);
-  // useEffect(() => {
-  //   console.log(selectedTabIndex);
-  // }, [selectedTabIndex]);
 
   const ApiRules = modulesExist(crds, [modules?.API_GATEWAY])
     ? ApiRulesWrapper
