@@ -87,6 +87,7 @@ function Resources({
   listHeaderActions,
   windowTitle,
   readOnly,
+  isCompact = false,
 }) {
   useWindowTitle(windowTitle || prettifyNamePlural(resourceName, resourceType));
   const { setEditedYaml: setEditedSpec, closeEditor } = useYamlEditor();
@@ -185,8 +186,15 @@ function Resources({
       <b>{entry.metadata.name}</b>
     ),
     <ReadableCreationTimestamp timestamp={entry.metadata.creationTimestamp} />,
-    <div style={{ maxWidth: '55em' /*TODO*/ }}>
-      <Labels labels={entry.metadata.labels} />
+    <div style={{ maxWidth: '36rem' /*TODO*/ }}>
+      {isCompact ? (
+        <details>
+          <summary style={{ cursor: 'pointer' }}>Expand labels</summary>
+          <Labels labels={entry.metadata.labels} shortenLongLabels />
+        </details>
+      ) : (
+        <Labels labels={entry.metadata.labels} shortenLongLabels />
+      )}
     </div>,
     ...customColumns.map(col => col.value(entry)),
   ];
