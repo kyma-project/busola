@@ -38,7 +38,7 @@ export default function PodList({ namespace, functionName }) {
   return (
     <GenericList
       className="pods-of-function"
-      showSearchField
+      showSearchField={false}
       compact
       title="Replicas of the Function"
       entries={pods || []}
