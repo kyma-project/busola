@@ -4,31 +4,31 @@ import { GenericList, useGetList } from 'react-shared';
 import { Link, Button } from 'fundamental-react';
 import './PodList.scss';
 
+const navigateTo = path => _ =>
+  LuigiClient.linkManager()
+    .fromContext('namespace')
+    .navigate(path);
+
 export default function PodList({ namespace, functionName }) {
   const labelSelectors = `serverless.kyma-project.io/function-name=${functionName},serverless.kyma-project.io/resource=deployment`;
   const resourceUrl = `/api/v1/namespaces/${namespace}/pods?labelSelector=${labelSelectors}`;
   const { data: pods, error, loading = true } = useGetList()(resourceUrl, {
     pollingInterval: 4000,
   });
+
   const headerRenderer = () => ['Name', 'Logs'];
 
   const rowRenderer = entry => [
     <Link
       className="link"
-      onClick={_ =>
-        LuigiClient.linkManager()
-          .fromContext('namespace')
-          .navigate(`pods/details/${entry.metadata.name}`)
-      }
+      onClick={navigateTo(`pods/details/${entry.metadata.name}`)}
     >
       {entry.metadata.name}
     </Link>,
     <Button
-      onClick={_ =>
-        LuigiClient.linkManager()
-          .fromContext('namespace')
-          .navigate(`pods/details/${entry.metadata.name}/containers/function`)
-      }
+      onClick={navigateTo(
+        `pods/details/${entry.metadata.name}/containers/function`,
+      )}
       glyph="form"
     >
       View logs
