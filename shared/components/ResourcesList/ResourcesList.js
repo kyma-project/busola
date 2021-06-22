@@ -190,7 +190,7 @@ function Resources({
     <div style={{ maxWidth: '36rem' /*TODO*/ }}>
       {isCompact ? (
         <details>
-          <summary>Expand labels</summary>
+          <summary style={{ cursor: 'pointer' }}>Expand labels</summary>
           <Labels labels={entry.metadata.labels} shortenLongLabels />
         </details>
       ) : (

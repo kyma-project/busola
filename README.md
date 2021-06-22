@@ -21,8 +21,6 @@ Busola project consists of the following UI projects:
 
 ## Installation
 
-> **CAUTION:** You don't have to perform any manual installation steps to use Busola in the NPX mode. See the [Usage](#usage) section for details.
-
 To install dependencies for the root and all UI projects, and to prepare symlinks for local libraries within this repository, run the following command:
 
 ```bash
@@ -36,14 +34,6 @@ npm run bootstrap:ci
 > - Builds all the [libraries](#components).
 
 ## Usage
-
-### Usage with NPX
-
-This mode has no hot-reload feature so it's not designed for the development. Hovewer, it gives you the ability to run Busola in a few seconds with one command.
-
-To run Busola in the `npx` mode from the latest release you have to provide `KUBECONFIG` environment variable pointing to a valid KUBECONFIG file, then type `npx @kyma-project/busola@latest` in your terminal. That's it, your default browser should open Busola within a few seconds.
-
-### Usage without NPX
 
 See the [Development](#development) section.
 
@@ -68,15 +58,6 @@ The apps you started run at the following addresses:
 - `Log UI` - [http://localhost:4400](http://localhost:4400)
 - `Service-Catalog-UI` - [http://localhost:8000](http://localhost:8000)
 - `Backend` - [http://localhost:3001](http://localhost:3001)
-
-### Build the NPX package of Busola
-
-To build and run Busola for the `npx` mode:
-
-- Run `npm run build` in `/shared`.
-- Run `npm run build:npx` in `/core`, `/core-ui` and `/backend`.
-- Export a kubeconfig in your terminal.
-- Run `node index-npx.js` in `/backend` to start the app.
 
 ### Security countermeasures
 

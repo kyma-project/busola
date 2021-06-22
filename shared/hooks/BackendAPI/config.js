@@ -1,4 +1,4 @@
-export const baseUrl = getConfigFn => getConfigFn('backendApiUrl');
+export const baseUrl = getConfigFn => getConfigFn('backendAddress');
 
 export class HttpError extends Error {
   constructor(message, statusCode, code) {
