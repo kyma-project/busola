@@ -11,4 +11,4 @@ for i in ../temp/resources/**{/*,}.yaml; do
     sed -i '' "s/%DOMAIN%/$1/g" $i
 done
 
-kubectl apply -k ../temp/resources
+kubectl apply -k ../temp/resources --namespace=busola
