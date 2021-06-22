@@ -67,13 +67,6 @@ export default function LambdaDetails({ lambda }) {
         >
           <ResourceManagementTab lambda={lambda} />
         </Tab>
-
-        <Tab key="lambda-replicas" id="lambda-replicas" title="Replicas">
-          <Replicas
-            name={lambda.metadata.name}
-            namespace={lambda.metadata.namespace}
-          />
-        </Tab>
       </Tabs>
     </>
   );

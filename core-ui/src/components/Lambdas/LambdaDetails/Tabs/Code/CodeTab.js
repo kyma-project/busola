@@ -6,6 +6,7 @@ import LambdaVariables from './LambdaVariables/LambdaVariables';
 
 import { isGitSourceType } from 'components/Lambdas/helpers/lambdas';
 import { serializeVariables } from 'components/Lambdas/helpers/lambdaVariables';
+import PodList from './PodList/PodList';
 
 export default function CodeTab({ lambda, bindingUsages }) {
   const {
@@ -29,6 +30,10 @@ export default function CodeTab({ lambda, bindingUsages }) {
         customVariables={customVariables}
         customValueFromVariables={customValueFromVariables}
         injectedVariables={injectedVariables}
+      />
+      <PodList
+        namespace={lambda.metadata.namespace}
+        functionName={lambda.metadata.name}
       />
     </>
   );
