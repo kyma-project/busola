@@ -69,7 +69,7 @@ export const DeleteButtonWrapper = styled.div`
 
 export const TextOverflowWrapper = styled.div`
   display: block;
-  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  overflow-wrap: anywhere;
 `;

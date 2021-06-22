@@ -3,7 +3,6 @@ export function getResourceUrl() {
   const fullResourceApiPath = queryParams.get('fullResourceApiPath');
   const resourceApiPath = queryParams.get('resourceApiPath');
 
-  // replace for npx routing
   return fullResourceApiPath
     ? fullResourceApiPath
     : resourceApiPath +

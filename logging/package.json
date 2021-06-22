@@ -8,8 +8,7 @@
     "start:kyma:api": "REACT_APP_LOCAL_API=true BROWSER=none  PORT=8005 react-scripts start",
     "build": "INLINE_RUNTIME_CHUNK=false ../node_modules/.bin/react-scripts build",
     "test": "../node_modules/.bin/react-scripts test",
-    "eject": "../node_modules/.bin/react-scripts eject",
-    "build:npx": "echo no-op"
+    "eject": "../node_modules/.bin/react-scripts eject"
   },
   "devDependencies": {
     "enzyme-to-json": "^3.4.0",

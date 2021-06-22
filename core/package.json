@@ -11,8 +11,7 @@
     "lint-check": "prettier --config ./../.prettierrc --ignore-path ./../.prettierignore -l '**/*.{ts,tsx,js,jsx,json,html,css,yaml}'",
     "lint-fix": "prettier --config ./../.prettierrc --ignore-path ./../.prettierignore --write '**/*.{ts,tsx,js,jsx,json,html,css,yaml}'",
     "buildConfig": "webpack --mode production --config webpack.config.js",
-    "buildConfig:watch": "webpack --config webpack.config.js --watch",
-    "build:npx": "rm -rf ../backend/core && npm run buildConfig && cp -r src ../backend/core"
+    "buildConfig:watch": "webpack --config webpack.config.js --watch"
   },
   "private": true,
   "dependencies": {
