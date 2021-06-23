@@ -18,6 +18,7 @@ function CustomResource({ resource, namespace, version }) {
     namespace,
     isCompact: true,
     showTitle: true,
+    title: `${name} - ${version.name}`,
   };
 
   return <ComponentForList name={name} params={params} />;
