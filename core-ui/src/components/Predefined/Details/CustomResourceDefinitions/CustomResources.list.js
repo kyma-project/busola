@@ -53,13 +53,9 @@ export function CustomResources(resource) {
   if (!resource) return null;
   const { versions } = resource.spec;
 
-  // const options = {
-  //   readOnly: true,
-  //   minimap: {
-  //     enabled: false,
-  //   },
-  // };
-
+  const prettifySchema = schema => {
+    return JSON.stringify(schema, null, 2);
+  };
   return (
     <>
       {versions.map(version => (
@@ -91,7 +87,7 @@ export function CustomResources(resource) {
                     key={`crd-schema-editor-${version.name}`}
                     theme="vs-light"
                     height="20em"
-                    value={JSON.stringify(version.schema)}
+                    value={prettifySchema(version.schema)}
                     options={{
                       readOnly: true,
                       minimap: {
