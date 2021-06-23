@@ -3,17 +3,13 @@ import LuigiClient from '@luigi-project/client';
 
 import { ComponentForList } from 'shared/getComponents';
 
-export function CustomResources(resource) {
-  const namespace = LuigiClient.getContext().namespaceId;
-
-  if (!resource) return null;
-  const { group, names, versions } = resource.spec;
+function CustomResource({ resource, namespace, version }) {
+  const { group, names } = resource.spec;
   const name = names.plural;
-  const version = versions[0].name; //improve
 
   const resourceUrl = namespace
-    ? `/apis/${group}/${version}/namespaces/${namespace}/${name}`
-    : `/apis/${group}/${version}/${name}`;
+    ? `/apis/${group}/${version.name}/namespaces/${namespace}/${name}`
+    : `/apis/${group}/${version.name}/${name}`;
   const params = {
     hasDetailsView: false,
     fixedPath: true,
@@ -23,5 +19,25 @@ export function CustomResources(resource) {
     isCompact: true,
     showTitle: true,
   };
+
   return <ComponentForList name={name} params={params} />;
+}
+
+export function CustomResources(resource) {
+  const namespace = LuigiClient.getContext().namespaceId;
+
+  if (!resource) return null;
+  const { versions } = resource.spec;
+
+  return (
+    <>
+      {versions.map(version => (
+        <CustomResource
+          resource={resource}
+          version={version}
+          namespace={namespace}
+        />
+      ))}
+    </>
+  );
 }
