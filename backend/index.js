@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const http = require('http');
-import { handleRequest, serveStatic } from './common';
+import { handleRequest, serveStaticApp, serveMonaco } from './common';
 import { requestLogger } from './utils/other';
 
 const app = express();
@@ -23,10 +23,11 @@ if (isLocalDev) {
   app.use(handleRequest);
 } else {
   // yup, order matters here
-  serveStatic(app, '/core-ui/', '/core-ui');
-  serveStatic(app, '/service-catalog', '/service-catalog-ui');
+  serveStaticApp(app, '/core-ui/', '/core-ui');
+  serveStaticApp(app, '/service-catalog', '/service-catalog-ui');
+  serveMonaco(app);
   app.use('/backend', handleRequest);
-  serveStatic(app, '/', '/core');
+  serveStaticApp(app, '/', '/core');
 }
 
 server.listen(port, address, () => {

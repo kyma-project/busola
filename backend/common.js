@@ -73,9 +73,13 @@ export const handleRequest = async (req, res) => {
   req.pipe(k8sRequest);
 };
 
-export const serveStatic = (app, requestPath, directoryPath) => {
+export const serveStaticApp = (app, requestPath, directoryPath) => {
   app.use(requestPath, express.static(path.join(__dirname, directoryPath)));
   app.get(requestPath + '*', (_, res) =>
     res.sendFile(path.join(__dirname + directoryPath + '/index.html')),
   );
+};
+
+export const serveMonaco = app => {
+  app.use('/vs', express.static(path.join(__dirname, '/core-ui/vs')));
 };

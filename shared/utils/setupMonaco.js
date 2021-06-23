@@ -1,5 +1,4 @@
-const isLocalDev =
-  location.hostname.startsWith('localhost') && location.port !== '3001'; // todo
+const isLocalDev = location.hostname.startsWith('localhost');
 
 export function setupMonaco(monaco) {
   // monaco editor - load from static files instead of from CDN
