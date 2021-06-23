@@ -10,7 +10,6 @@ import ApiRulesWrapper from './Tabs/Configuration/ApiRules/ApiRules';
 // import { useLogsView } from '../helpers/misc';
 
 import { LAMBDA_DETAILS } from 'components/Lambdas/constants';
-import Replicas from './Tabs/Replicas';
 
 export default function LambdaDetails({ lambda }) {
   const [bindingUsages, setBindingUsages] = useState([]);
@@ -76,14 +75,6 @@ export default function LambdaDetails({ lambda }) {
           title={LAMBDA_DETAILS.TABS.RESOURCE_MANAGEMENT.TITLE}
         >
           <ResourceManagementTab lambda={lambda} />
-        </Tab>
-
-        <Tab key="lambda-replicas" id="lambda-replicas" title="Replicas">
-          <Replicas
-            name={lambda.metadata.name}
-            namespace={lambda.metadata.namespace}
-            isActive={selectedTabIndex === 3}
-          />
         </Tab>
       </Tabs>
     </>

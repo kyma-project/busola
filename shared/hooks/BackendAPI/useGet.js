@@ -91,6 +91,7 @@ const useGetHook = processDataFn =>
 
 export const useGetStream = path => {
   const lastAuthData = React.useRef(null);
+  const initialPath = React.useRef(true);
   const [data, setData] = React.useState([]);
   const [error, setError] = React.useState(null);
   const { authData } = useMicrofrontendContext();
@@ -154,6 +155,15 @@ export const useGetStream = path => {
     abortController.current = new AbortController();
     fetchData();
   }
+
+  React.useEffect(() => {
+    if (initialPath.current) {
+      initialPath.current = false;
+      return;
+    }
+    setData([]);
+    refetchData();
+  }, [path]);
 
   React.useEffect(_ => abort, [path]);
   React.useEffect(_ => abort, []);
