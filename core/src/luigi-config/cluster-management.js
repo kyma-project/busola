@@ -44,7 +44,7 @@ export async function setCluster(clusterName) {
   }
 }
 
-export function saveClusterParams(params) {
+export function saveClusterParams(params, authorizeNewCluster = false) {
   const { kubeconfig, config } = params;
   const { users } = kubeconfig;
   if (users?.length) {
@@ -68,6 +68,24 @@ export function saveClusterParams(params) {
 
   const clusterName = params.currentContext.cluster.name;
   const clusters = getClusters();
+
+  if (authorizeNewCluster) {
+    const clusterServer = params.currentContext.cluster.cluster.server;
+    const isExistingCluster =
+      !!clusters[clusterName] &&
+      clusterServer ===
+        clusters[clusterName]?.currentContext.cluster.cluster.server;
+
+    if (
+      !isExistingCluster &&
+      !confirm(
+        `credentials to connect with cluster: ${clusterServer}. Do you want to proceed?`,
+      )
+    ) {
+      return Promise.reject();
+    }
+  }
+
   clusters[clusterName] = params;
   saveClusters(clusters);
 }
