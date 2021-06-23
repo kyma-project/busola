@@ -1,0 +1,15 @@
+IMG_NAME = busola-core
+IMG = $(DOCKER_PUSH_REPOSITORY)$(DOCKER_PUSH_DIRECTORY)/$(IMG_NAME)
+TAG = $(DOCKER_TAG)
+
+resolve:
+	cd .. && npm ci --no-optional # Install common dependencies 
+	npm ci
+
+verify: lint test 
+
+lint:
+	npm run lint-check
+
+test:
+	npm run test
