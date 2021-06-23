@@ -15,7 +15,7 @@ export function AuthForm({ setAuthValid, auth, setAuth }) {
     }
   }, [formRef, auth, setAuthValid]);
 
-  const oidcForm = (
+  const OIDCform = _ => (
     <>
       <TextFormItem
         inputKey="issuer-url"
@@ -79,7 +79,7 @@ export function AuthForm({ setAuthValid, auth, setAuth }) {
           OIDC provider
         </FormRadioItem>
       </FormRadioGroup>
-      {auth.type === AUTH_FORM_OIDC ? oidcForm : tokenForm}
+      {auth.type === AUTH_FORM_OIDC ? <OIDCform /> : tokenForm}
     </form>
   );
 }
