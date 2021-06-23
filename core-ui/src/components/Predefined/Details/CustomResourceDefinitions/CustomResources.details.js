@@ -16,12 +16,27 @@ export function CustomResource({ params }) {
     namespace ? `namespaces/${namespace}/` : ''
   }${crdName}/${resourceName}`;
 
+  const breadcrumbs = [
+    {
+      name: 'CustomResourceDefinitions',
+      path: '/',
+      fromContext: 'customresourcedefinitions',
+    },
+    {
+      name: customResourceDefinitionName,
+      path: '/',
+      fromContext: 'customresourcedefinition',
+    },
+    { name: '' },
+  ];
+
   return (
     <ResourceDetails
       resourceUrl={resourceUrl}
       resourceType={crdName}
       resourceName={resourceName}
       namespace={namespace}
+      breadcrumbs={breadcrumbs}
     />
   );
 }

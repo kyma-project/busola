@@ -37,7 +37,6 @@ ResourcesList.propTypes = {
   fixedPath: PropTypes.bool,
   isCompact: PropTypes.bool,
   showTitle: PropTypes.bool,
-  title: PropTypes.string,
   filter: PropTypes.func,
   listHeaderActions: PropTypes.node,
   description: PropTypes.node,
@@ -85,7 +84,6 @@ function Resources({
   hasDetailsView,
   fixedPath,
   showTitle,
-  title,
   filter,
   listHeaderActions,
   windowTitle,
@@ -232,11 +230,7 @@ function Resources({
 
   return (
     <GenericList
-      title={
-        showTitle
-          ? title || prettifyNamePlural(resourceName, resourceType)
-          : null
-      }
+      title={showTitle ? prettifyNamePlural(resourceName, resourceType) : null}
       textSearchProperties={['metadata.name']}
       actions={actions}
       entries={resources || []}

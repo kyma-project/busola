@@ -1,7 +1,11 @@
 import React from 'react';
+import Editor from '@monaco-editor/react';
 import LuigiClient from '@luigi-project/client';
+import { LayoutPanel } from 'fundamental-react';
 
+import { GenericList } from 'react-shared';
 import { ComponentForList } from 'shared/getComponents';
+import './CustomResources.list.scss';
 
 function CustomResource({ resource, namespace, version }) {
   const { group, names } = resource.spec;
@@ -25,11 +29,23 @@ function CustomResource({ resource, namespace, version }) {
     namespace,
     isCompact: true,
     showTitle: true,
-    title: `${name} - ${version}`,
   };
 
   return <ComponentForList name={name} params={params} />;
 }
+const AdditionalPrinterColumns = version => {
+  const headerRenderer = () => ['name', 'type', 'jsonPath'];
+  const rowRenderer = entry => [entry.name, entry.type, entry.jsonPath];
+
+  return (
+    <GenericList
+      title="Additional Printer Columns"
+      entries={version.additionalPrinterColumns || []}
+      headerRenderer={headerRenderer}
+      rowRenderer={rowRenderer}
+    />
+  );
+};
 
 export function CustomResources(resource) {
   const namespace = LuigiClient.getContext().namespaceId;
@@ -37,14 +53,57 @@ export function CustomResources(resource) {
   if (!resource) return null;
   const { versions } = resource.spec;
 
+  // const options = {
+  //   readOnly: true,
+  //   minimap: {
+  //     enabled: false,
+  //   },
+  // };
+
   return (
     <>
       {versions.map(version => (
-        <CustomResource
-          resource={resource}
-          version={version.name}
-          namespace={namespace}
-        />
+        <LayoutPanel className="fd-margin--md">
+          <LayoutPanel.Header>
+            <LayoutPanel.Head title={`Version ${version.name}`} />
+          </LayoutPanel.Header>
+          <LayoutPanel.Body className="crd-version">
+            <CustomResource
+              resource={resource}
+              version={version.name}
+              namespace={namespace}
+            />
+            {version.additionalPrinterColumns && (
+              <AdditionalPrinterColumns
+                additionalPrinterColumns={version.additionalPrinterColumns}
+              />
+            )}
+            {version.schema && (
+              <LayoutPanel
+                key={`crd-schema-${version.name}`}
+                className="fd-margin--md"
+              >
+                <LayoutPanel.Header>
+                  <LayoutPanel.Head title="Schema" />
+                </LayoutPanel.Header>
+                <LayoutPanel.Body>
+                  <Editor
+                    key={`crd-schema-editor-${version.name}`}
+                    theme="vs-light"
+                    height="20em"
+                    value={JSON.stringify(version.schema)}
+                    options={{
+                      readOnly: true,
+                      minimap: {
+                        enabled: false,
+                      },
+                    }}
+                  />
+                </LayoutPanel.Body>
+              </LayoutPanel>
+            )}
+          </LayoutPanel.Body>
+        </LayoutPanel>
       ))}
     </>
   );
