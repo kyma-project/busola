@@ -9,7 +9,8 @@ export const createOAuthClient = (namespace, spec) => {
     },
     spec: {
       grantTypes,
-      responseTypes,
+      // we can either specify a non-empty array, or null - empty array is forbidden
+      responseTypes: responseTypes?.length ? responseTypes : null,
       scope,
       secretName,
     },
