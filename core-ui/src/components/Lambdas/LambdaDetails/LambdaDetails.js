@@ -49,7 +49,11 @@ export default function LambdaDetails({ lambda }) {
           id="lambda-code"
           title={LAMBDA_DETAILS.TABS.CODE.TITLE}
         >
-          <CodeTab lambda={lambda} bindingUsages={bindingUsages} />
+          <CodeTab
+            lambda={lambda}
+            bindingUsages={bindingUsages}
+            isActive={selectedTabIndex === 0}
+          />
         </Tab>
         {configTabShouldRender && (
           <Tab
