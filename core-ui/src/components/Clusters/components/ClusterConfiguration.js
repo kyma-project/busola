@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useNotification } from 'react-shared';
 import { AuthForm, AUTH_FORM_OIDC } from './AuthForm';
 import { ContextChooser } from './ContextChooser/ContextChooser';
@@ -11,7 +11,7 @@ const OIDC_PARAM_NAMES = new Map([
   ['--oidc-extra-scope', 'scope'],
 ]);
 
-async function tryParseOIDCparams({ exec: commandData }) {
+function parseOIDCparams({ exec: commandData }) {
   if (!commandData || !commandData.args) throw new Error('No args provided');
   let output = {};
 
@@ -49,7 +49,7 @@ export function ClusterConfiguration({
     fillAuthFromKubeconfig();
   }, [auth, kubeconfig, setAuth]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     fillAuthFromKubeconfig();
   }, [contextName]);
 
@@ -57,21 +57,22 @@ export function ClusterConfiguration({
     if (auth.type !== AUTH_FORM_OIDC || !kubeconfig || !contextName) return;
     const { context } = kubeconfig.contexts.find(c => c.name === contextName);
     const user = kubeconfig.users.find(u => u.name === context.user);
-    tryParseOIDCparams(user.user)
-      .then(parsedParams => {
-        setAuth({
-          ...auth,
-          ...parsedParams,
-        });
-      })
-      .catch(e => console.debug('Failed to parse predefined OIDC args', e));
+    try {
+      const parsedParams = parseOIDCparams(user?.user);
+      setAuth({
+        ...auth,
+        ...parsedParams,
+      });
+    } catch (e) {
+      console.debug('Failed to parse predefined OIDC args', e);
+    }
   }
 
   const addAuthToParams = params => {
     const { type: authType, token, ...oidcConfig } = auth;
+
     if (authType === AUTH_FORM_OIDC) {
       // just add OIDC params to configuration
-
       params.config.auth = oidcConfig;
     } else {
       // add token to current context's user
