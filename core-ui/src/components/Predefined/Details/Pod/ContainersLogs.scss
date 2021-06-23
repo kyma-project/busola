@@ -11,6 +11,10 @@
   height: 88px;
 }
 
+.logs-title {
+  margin-right: 20px;
+}
+
 .logs-panel {
   max-height: calc(100% - 152px); // 88px(header height) + 2*32px(padding)
   display: flex;
@@ -57,10 +61,16 @@
   > * {
     display: inline-block;
     vertical-align: middle;
+    margin-bottom: 5px;
+    margin-top: 5px;
   }
 
   .fd-switch--compact {
     padding: 0;
+  }
+
+  .fd-popover {
+    margin-right: 10px;
   }
 
   .generic-list-search, .logs-download  {
