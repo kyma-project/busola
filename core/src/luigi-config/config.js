@@ -1,6 +1,6 @@
 const domain = location.hostname;
 const isLocalDev =
-  location.hostname.startsWith('localhost') && location.port !== '3001'; // todo
+  location.hostname.startsWith('localhost') && !process.env.IS_DOCKER;
 const localDomain = 'http://localhost';
 
 export const config = {
