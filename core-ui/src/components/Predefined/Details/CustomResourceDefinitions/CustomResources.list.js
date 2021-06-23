@@ -8,17 +8,24 @@ function CustomResource({ resource, namespace, version }) {
   const name = names.plural;
 
   const resourceUrl = namespace
-    ? `/apis/${group}/${version.name}/namespaces/${namespace}/${name}`
-    : `/apis/${group}/${version.name}/${name}`;
+    ? `/apis/${group}/${version}/namespaces/${namespace}/${name}`
+    : `/apis/${group}/${version}/${name}`;
+
+  const navigateFn = resourceName => {
+    LuigiClient.linkManager()
+      .fromClosestContext()
+      .navigate(`${version}/${resourceName}`);
+  };
+
   const params = {
-    hasDetailsView: false,
-    fixedPath: true,
+    hasDetailsView: true,
+    navigateFn,
     resourceUrl,
     resourceType: name,
     namespace,
     isCompact: true,
     showTitle: true,
-    title: `${name} - ${version.name}`,
+    title: `${name} - ${version}`,
   };
 
   return <ComponentForList name={name} params={params} />;
@@ -35,7 +42,7 @@ export function CustomResources(resource) {
       {versions.map(version => (
         <CustomResource
           resource={resource}
-          version={version}
+          version={version.name}
           namespace={namespace}
         />
       ))}

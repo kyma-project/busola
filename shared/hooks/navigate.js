@@ -29,16 +29,6 @@ export function navigateToDetails(resourceType, name) {
       navigateToResourceDetails(encodedName);
   }
 }
-export function navigateFromDetailsToDetails(resourceType, name) {
-  const encodedName = encodeURIComponent(name);
-  switch (resourceType) {
-    case 'Namespaces':
-      navigateToNamespaceDetails(encodedName);
-      break;
-    default:
-      navigateToResourceDetails(encodedName);
-  }
-}
 
 function navigateToResourceList() {
   LuigiClient.linkManager()

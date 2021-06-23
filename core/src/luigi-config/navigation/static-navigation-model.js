@@ -741,6 +741,7 @@ export function getStaticChildrenNodesForNamespace(
             {
               pathSegment: ':CustomResourceDefinitionName',
               resourceType: 'customresourcedefinitions',
+              navigationContext: 'customresourcedefinition',
               viewUrl:
                 config.coreUIModuleUrl +
                 '/CustomResourceDefinitions/:CustomResourceDefinitionName?' +
@@ -748,6 +749,22 @@ export function getStaticChildrenNodesForNamespace(
                   resourceApiPath: '/apis/apiextensions.k8s.io/v1',
                 }),
               viewGroup: coreUIViewGroupName,
+              children: [
+                {
+                  pathSegment: ':resourceVersion',
+                  children: [
+                    {
+                      pathSegment: ':resourceName',
+                      resourceType: 'customresource',
+                      navigationContext: 'customresource',
+                      viewUrl:
+                        config.coreUIModuleUrl +
+                        '/CustomResourceDefinitions/:CustomResourceDefinitionName/:resourceVersion/:resourceName',
+                      viewGroup: coreUIViewGroupName,
+                    },
+                  ],
+                },
+              ],
             },
           ],
         },
@@ -1015,6 +1032,7 @@ export function getStaticRootNodes(
             {
               pathSegment: ':CustomResourceDefinitionName',
               resourceType: 'customresourcedefinitions',
+              navigationContext: 'customresourcedefinition',
               viewUrl:
                 config.coreUIModuleUrl +
                 '/CustomResourceDefinitions/:CustomResourceDefinitionName?' +
@@ -1022,6 +1040,22 @@ export function getStaticRootNodes(
                   resourceApiPath: '/apis/apiextensions.k8s.io/v1',
                 }),
               viewGroup: coreUIViewGroupName,
+              children: [
+                {
+                  pathSegment: ':resourceVersion',
+                  children: [
+                    {
+                      pathSegment: ':resourceName',
+                      resourceType: 'customresource',
+                      navigationContext: 'customresource',
+                      viewUrl:
+                        config.coreUIModuleUrl +
+                        '/CustomResourceDefinitions/:CustomResourceDefinitionName/:resourceVersion/:resourceName',
+                      viewGroup: coreUIViewGroupName,
+                    },
+                  ],
+                },
+              ],
             },
           ],
         },

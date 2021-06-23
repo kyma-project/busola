@@ -42,6 +42,7 @@ ResourcesList.propTypes = {
   listHeaderActions: PropTypes.node,
   description: PropTypes.node,
   readOnly: PropTypes.bool,
+  navigateFn: PropTypes.func,
 };
 
 ResourcesList.defaultProps = {
@@ -90,6 +91,7 @@ function Resources({
   windowTitle,
   readOnly,
   isCompact = false,
+  navigateFn,
 }) {
   useWindowTitle(windowTitle || prettifyNamePlural(resourceName, resourceType));
   const { setEditedYaml: setEditedSpec, closeEditor } = useYamlEditor();
@@ -174,7 +176,9 @@ function Resources({
       <Link
         className="link"
         onClick={_ =>
-          fixedPath
+          navigateFn
+            ? navigateFn(entry.metadata.name)
+            : fixedPath
             ? navigateToFixedPathResourceDetails(
                 resourceType,
                 entry.metadata.name,
