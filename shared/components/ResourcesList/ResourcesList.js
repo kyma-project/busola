@@ -90,6 +90,7 @@ function Resources({
   readOnly,
   isCompact = false,
   navigateFn,
+  skipDataLoading = false,
 }) {
   useWindowTitle(windowTitle || prettifyNamePlural(resourceName, resourceType));
   const { setEditedYaml: setEditedSpec, closeEditor } = useYamlEditor();
@@ -98,7 +99,7 @@ function Resources({
   const deleteResourceMutation = useDelete(resourceUrl);
   const { loading = true, error, data: resources, silentRefetch } = useGetList(
     filter,
-  )(resourceUrl, { pollingInterval: 3000 });
+  )(resourceUrl, { pollingInterval: 3000, skip: skipDataLoading });
 
   React.useEffect(() => closeEditor(), [namespace]);
 
