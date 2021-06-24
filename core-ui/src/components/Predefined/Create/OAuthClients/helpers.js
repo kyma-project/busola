@@ -12,8 +12,8 @@ export const responseTypes = {
 };
 
 export function validateSpec(spec) {
-  const { grantTypes, responseTypes, scope } = spec;
-  return grantTypes.length >= 1 && responseTypes.length >= 1 && !!scope;
+  const { grantTypes, scope } = spec;
+  return grantTypes.length >= 1 && !!scope;
 }
 
 export const emptySpec = {

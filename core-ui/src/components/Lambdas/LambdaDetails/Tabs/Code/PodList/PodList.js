@@ -9,11 +9,12 @@ const navigateTo = path => _ =>
     .fromContext('namespace')
     .navigate(path);
 
-export default function PodList({ namespace, functionName }) {
+export default function PodList({ namespace, functionName, isActive }) {
   const labelSelectors = `serverless.kyma-project.io/function-name=${functionName},serverless.kyma-project.io/resource=deployment`;
   const resourceUrl = `/api/v1/namespaces/${namespace}/pods?labelSelector=${labelSelectors}`;
   const { data: pods, error, loading = true } = useGetList()(resourceUrl, {
     pollingInterval: 4000,
+    skip: !isActive,
   });
 
   const headerRenderer = () => ['Name', 'Logs'];
