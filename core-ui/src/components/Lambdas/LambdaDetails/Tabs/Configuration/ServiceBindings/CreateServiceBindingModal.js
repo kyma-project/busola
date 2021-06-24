@@ -12,6 +12,7 @@ export default function CreateServiceBindingModal({
   serviceBindingsCombined,
 }) {
   const [popupModalMessage, setPopupModalMessage] = useState('');
+  const [skipRequests, setSkipRequests] = useState(true);
 
   const serviceInstancesAlreadyUsed = serviceBindingsCombined.map(
     ({ serviceBinding, serviceBindingUsage }) =>
@@ -30,12 +31,14 @@ export default function CreateServiceBindingModal({
     `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${lambda.metadata.namespace}/serviceinstances`,
     {
       pollingInterval: 5500,
+      skip: skipRequests,
     },
   );
   const { data: servicePlans } = useGetList()(
     `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${lambda.metadata.namespace}/serviceplans`,
     {
       pollingInterval: 6000,
+      skip: skipRequests,
     },
   );
 
@@ -43,6 +46,7 @@ export default function CreateServiceBindingModal({
     `/apis/servicecatalog.k8s.io/v1beta1/clusterserviceplans`,
     {
       pollingInterval: 6500,
+      skip: skipRequests,
     },
   );
 
@@ -50,6 +54,7 @@ export default function CreateServiceBindingModal({
     `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${lambda.metadata.namespace}/serviceclasses`,
     {
       pollingInterval: 7000,
+      skip: skipRequests,
     },
   );
 
@@ -163,6 +168,7 @@ export default function CreateServiceBindingModal({
 
   return (
     <ModalWithForm
+      onModalOpenStateChange={isOpen => setSkipRequests(!isOpen)}
       title={SERVICE_BINDINGS_PANEL.CREATE_MODAL.TITLE}
       modalOpeningComponent={modalOpeningComponent}
       confirmText={SERVICE_BINDINGS_PANEL.CREATE_MODAL.CONFIRM_BUTTON.TEXT}

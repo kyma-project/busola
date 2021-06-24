@@ -1,6 +1,5 @@
 import React from 'react';
 import { useMicrofrontendContext } from '../../contexts/MicrofrontendContext';
-
 import { useFetch } from './useFetch';
 
 const useGetHook = processDataFn =>
@@ -47,19 +46,28 @@ const useGetHook = processDataFn =>
 
     React.useEffect(() => {
       const receivedForbidden = error?.code === 403;
+
       // POLLING
-      if (!pollingInterval || receivedForbidden) return;
+      if (!pollingInterval || receivedForbidden || skip) return;
       const intervalId = setInterval(refetch(true, data), pollingInterval);
       return _ => clearInterval(intervalId);
-    }, [path, pollingInterval, data, error]);
+    }, [path, pollingInterval, data, error, skip]);
 
     React.useEffect(() => {
-      // INITIAL FETCH
-      if (lastAuthData.current && path) refetch(false, null)();
+      // INITIAL FETCH on path being set/changed
+      if (lastAuthData.current && path && !skip) refetch(false, null)();
       return _ => {
         if (loading) setLoading(false);
       };
     }, [path]);
+
+    React.useEffect(() => {
+      // silent refetch once 'skip' has been disabled
+      if (lastAuthData.current && path && !skip) refetch(true, null)();
+      return _ => {
+        if (loading) setLoading(false);
+      };
+    }, [skip]);
 
     React.useEffect(() => {
       if (JSON.stringify(lastAuthData.current) != JSON.stringify(authData)) {
