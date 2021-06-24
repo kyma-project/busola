@@ -8,7 +8,7 @@ import { isGitSourceType } from 'components/Lambdas/helpers/lambdas';
 import { serializeVariables } from 'components/Lambdas/helpers/lambdaVariables';
 import PodList from './PodList/PodList';
 
-export default function CodeTab({ lambda, bindingUsages }) {
+export default function CodeTab({ lambda, bindingUsages, isActive }) {
   const {
     customVariables,
     customValueFromVariables,
@@ -32,6 +32,7 @@ export default function CodeTab({ lambda, bindingUsages }) {
         injectedVariables={injectedVariables}
       />
       <PodList
+        isActive={isActive}
         namespace={lambda.metadata.namespace}
         functionName={lambda.metadata.name}
       />
