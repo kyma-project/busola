@@ -17,6 +17,8 @@ context('Login - enkode link', () => {
       cy.visit(`${config.clusterAddress}?init=${params}`);
     });
 
+    cy.on('window:confirm', () => true);
+
     cy.url().should('match', /namespaces$/);
 
     cy.getIframeBody()
@@ -52,6 +54,8 @@ context('Login - enkode link', () => {
       );
     });
 
+    cy.on('window:confirm', () => true);
+
     cy.url().should('match', /namespaces$/);
 
     cy.getIframeBody()
@@ -83,6 +87,8 @@ context('Login - enkode link', () => {
       cy.visit(`${config.clusterAddress}?init=${params}`);
     });
 
+    cy.on('window:confirm', () => true);
+
     cy.url().should('match', /namespaces\/default\/details$/);
 
     cy.getIframeBody()
@@ -104,6 +110,8 @@ context('Login - enkode link', () => {
     cy.getIframeBody()
       .contains('Drag file here')
       .attachFile('kubeconfig.yaml', { subjectType: 'drag-n-drop' });
+
+    cy.on('window:confirm', () => true);
 
     cy.url().should('match', /namespaces$/);
 
@@ -143,6 +151,8 @@ context('Login - enkode link', () => {
     cy.getIframeBody()
       .contains('Apply configuration')
       .click();
+
+    cy.on('window:confirm', () => true);
 
     cy.url().should('match', /namespaces$/);
 
