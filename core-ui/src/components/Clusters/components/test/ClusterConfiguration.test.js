@@ -3,7 +3,6 @@ import { render } from '@testing-library/react';
 import { AUTH_FORM_OIDC, AuthForm } from '../AuthForm';
 import { parseOIDCparams, ClusterConfiguration } from '../ClusterConfiguration';
 
-// const mockAuthForm = jest.fn().mockReturnValue('mocked AuthForm');
 jest.mock('../AuthForm', () => ({
   AuthForm: jest.fn().mockReturnValue('test2'),
 }));
@@ -20,11 +19,11 @@ const TWO_USERS_KUBECONFIG = {
   contexts: [
     {
       context: {
-        cluster: 'garden-hasselhoff',
-        user: 'oidc-login',
-        namespace: 'garden-hasselhoff',
+        cluster: 'garden-pamela',
+        user: 'pamela-a',
+        namespace: 'garden-pamela',
       },
-      name: 'garden-hasselhoff',
+      name: 'garden-pamela',
     },
     {
       context: {
@@ -35,28 +34,8 @@ const TWO_USERS_KUBECONFIG = {
       name: 'exclusive-david-h-context',
     },
   ],
-  'current-context': 'garden-hasselhoff',
+  'current-context': 'exclusive-david-h-context',
   users: [
-    {
-      name: 'oidc-login',
-      user: {
-        exec: {
-          apiVersion: 'client.authentication.k8s.io/v1beta1',
-          command: 'kubectl',
-          args: [
-            'oidc-login',
-            'get-token',
-            '--oidc-issuer-url=https://identity.cia.gov',
-            '--oidc-client-id=kube-kubectl',
-            '--oidc-client-secret=testsecret',
-            '--oidc-extra-scope=email',
-            '--oidc-extra-scope=profile',
-            '--oidc-extra-scope=groups',
-            '--grant-type=auto',
-          ],
-        },
-      },
-    },
     {
       name: 'david-h',
       user: {
@@ -77,12 +56,22 @@ const TWO_USERS_KUBECONFIG = {
         },
       },
     },
+    {
+      name: 'pamela-a',
+      user: {
+        exec: {
+          apiVersion: 'client.authentication.k8s.io/v1beta1',
+          command: 'kubectl',
+        },
+      },
+    },
   ],
-  preferences: {},
 };
 
 describe('ClusterConfiguration', () => {
-  beforeEach(() => {});
+  afterEach(() => {
+    AuthForm.mockClear();
+  });
 
   it('Renders AuthForm with issuerUrl, clientId and scope with the values from kubeconfig', () => {
     render(
@@ -91,16 +80,80 @@ describe('ClusterConfiguration', () => {
         auth={{ type: AUTH_FORM_OIDC }}
       />,
     );
-
     expect(AuthForm).toHaveBeenCalledWith(
       expect.objectContaining({
         auth: {
-          clientId: 'kube-kubectl',
-          issuerUrl: 'https://identity.cia.gov',
-          scope: 'email profile groups',
+          clientId: 'hasselhoff',
+          issuerUrl: 'https://coastguard.gov.us',
+          scope: 'blondies rescue muscles',
         },
       }),
       expect.anything(),
     );
+  });
+
+  it('Renders AuthForm with no issuerUrl, clientId and scope when not provided in kubeconfig', () => {
+    render(
+      <ClusterConfiguration
+        kubeconfig={{
+          ...TWO_USERS_KUBECONFIG,
+          'current-context': 'garden-pamela',
+        }}
+        auth={{ type: AUTH_FORM_OIDC }}
+      />,
+    );
+    expect(AuthForm).not.toHaveBeenCalledWith(
+      expect.objectContaining({
+        auth: {
+          clientId: 'hasselhoff',
+          issuerUrl: 'https://coastguard.gov.us',
+          scope: 'blondies rescue muscles',
+        },
+      }),
+      expect.anything(),
+    );
+  });
+
+  describe('parseOIDCparams', () => {
+    it('Parses params properly', () => {
+      const input = {
+        exec: {
+          args: [
+            '--oidc-issuer-url=https://coastguard.gov.us',
+            '--oidc-client-id=hasselhoff',
+            '--oidc-extra-scope=blondies',
+          ],
+        },
+      };
+      expect(parseOIDCparams(input)).toMatchObject({
+        clientId: 'hasselhoff',
+        issuerUrl: 'https://coastguard.gov.us',
+        scope: 'blondies',
+      });
+    });
+
+    it('Concatinates params', () => {
+      const input = {
+        exec: {
+          args: [
+            '--oidc-extra-scope=blondies',
+            '--oidc-extra-scope=brunettes',
+            '--oidc-extra-scope=redheads',
+          ],
+        },
+      };
+      expect(parseOIDCparams(input)).toMatchObject({
+        scope: 'blondies brunettes redheads',
+      });
+    });
+
+    it('Ignores not recognized params', () => {
+      const input = {
+        exec: {
+          args: ['--patroling=on-a-jetski'],
+        },
+      };
+      expect(parseOIDCparams(input)).toMatchObject({});
+    });
   });
 });
