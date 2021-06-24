@@ -1,7 +1,7 @@
 import React from 'react';
 import { CustomResources } from './CustomResources.list';
 
-import { GenericList } from 'react-shared';
+import { GenericList, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 
 export const CustomResourceDefinitionsDetails = ({
   DefaultRenderer,
@@ -15,12 +15,19 @@ export const CustomResourceDefinitionsDetails = ({
   ];
 
   const ResourceNames = resource => {
-    const headerRenderer = () => ['kind', 'listKind', 'plural', 'singular'];
+    const headerRenderer = () => [
+      'Kind',
+      'List Kind',
+      'Plural',
+      'Singular',
+      'Short Names',
+    ];
     const rowRenderer = entry => [
       entry.kind,
       entry.listKind,
       entry.plural,
       entry.singular,
+      entry.shortNames?.join(', ') || EMPTY_TEXT_PLACEHOLDER,
     ];
     return (
       <GenericList

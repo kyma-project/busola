@@ -34,7 +34,7 @@ function CustomResource({ resource, namespace, version }) {
   return <ComponentForList name={name} params={params} />;
 }
 const AdditionalPrinterColumns = version => {
-  const headerRenderer = () => ['name', 'type', 'jsonPath'];
+  const headerRenderer = () => ['Name', 'Type', 'JSON Path'];
   const rowRenderer = entry => [entry.name, entry.type, entry.jsonPath];
 
   return (
