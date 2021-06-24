@@ -7,6 +7,7 @@ import { CONFIG } from 'components/Lambdas/config.js';
 export default function ServiceBindingsWrapper({
   lambda,
   setBindingUsages = () => void 0, // might be needed for other Lambda subcomponents
+  isActive,
 }) {
   const isBindingUsageForThisFunction = bindingUsage =>
     bindingUsage.spec.usedBy.kind === CONFIG.functionUsageKind &&
@@ -16,6 +17,7 @@ export default function ServiceBindingsWrapper({
     `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${lambda?.metadata.namespace}/servicebindings`,
     {
       pollingInterval: 3100,
+      skip: !isActive,
     },
   );
 
@@ -23,6 +25,7 @@ export default function ServiceBindingsWrapper({
     `/apis/servicecatalog.kyma-project.io/v1alpha1/namespaces/${lambda?.metadata.namespace}/servicebindingusages`,
     {
       pollingInterval: 2900,
+      skip: !isActive,
     },
   );
 
@@ -30,6 +33,7 @@ export default function ServiceBindingsWrapper({
     `/api/v1/namespaces/${lambda?.metadata.namespace}/secrets`,
     {
       pollingInterval: 3300,
+      skip: !isActive,
     },
   );
 

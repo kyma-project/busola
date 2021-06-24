@@ -7,7 +7,7 @@ import {
   SERVERLESS_RESOURCE_KIND,
 } from '../../../../constants';
 
-export default function EventSubscriptionsWrapper({ lambda }) {
+export default function EventSubscriptionsWrapper({ lambda, isActive }) {
   const subscriptionsUrl = `/apis/eventing.kyma-project.io/v1alpha1/namespaces/${lambda.metadata.namespace}/subscriptions`;
 
   const ownerRef = {
@@ -31,6 +31,7 @@ export default function EventSubscriptionsWrapper({ lambda }) {
     silentRefetch,
   } = useGetList(filterByOwnerRef)(subscriptionsUrl, {
     pollingInterval: 3000,
+    skip: !isActive,
   });
 
   if (!subscriptions) return <Spinner />;

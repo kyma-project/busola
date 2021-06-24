@@ -31,7 +31,7 @@ const apiRuleRowRenderer = domain => apiRule => ({
   withCollapseControl: true,
 });
 
-export default function ApiRules({ lambda }) {
+export default function ApiRules({ lambda, isActive }) {
   const { domain } = useGetGatewayDomain();
 
   const rowRenderer = apiRuleRowRenderer(domain);
@@ -41,6 +41,7 @@ export default function ApiRules({ lambda }) {
 
   return (
     <ApiRulesListWrapper
+      skipRequest={!isActive}
       service={lambda}
       resourceType="Function"
       inSubView={true}
