@@ -38,7 +38,8 @@ export function ClusterConfiguration({
   const [contextName, setContextName] = React.useState(null);
   const notification = useNotification();
 
-  const requireAuth = kubeconfig && !hasKubeconfigAuth(kubeconfig, contextName);
+  const requireAuth =
+    kubeconfig && contextName && !hasKubeconfigAuth(kubeconfig, contextName);
 
   React.useEffect(() => {
     setContextName(kubeconfig['current-context']);
@@ -57,6 +58,7 @@ export function ClusterConfiguration({
     if (auth.type !== AUTH_FORM_OIDC || !kubeconfig || !contextName) return;
     const { context } = kubeconfig.contexts.find(c => c.name === contextName);
     const user = kubeconfig.users.find(u => u.name === context.user);
+
     try {
       const parsedParams = parseOIDCparams(user?.user);
       setAuth({
@@ -64,7 +66,10 @@ export function ClusterConfiguration({
         ...parsedParams,
       });
     } catch (e) {
-      console.debug('Failed to parse predefined OIDC args', e);
+      console.debug(
+        '[INFO] Tried to parse predefined OIDC args and failed due to',
+        e,
+      );
     }
   }
 
