@@ -5,9 +5,9 @@ import { LayoutPanel } from 'fundamental-react';
 
 import { GenericList } from 'react-shared';
 import { ComponentForList } from 'shared/getComponents';
-import './CustomResources.list.scss';
+import './CustomResourceDefinitionVersions.scss';
 
-function CustomResource({ resource, namespace, version }) {
+function CustomResources({ resource, namespace, version }) {
   const { group, names } = resource.spec;
   const name = names.plural;
 
@@ -47,7 +47,7 @@ const AdditionalPrinterColumns = version => {
   );
 };
 
-export function CustomResources(resource) {
+export function CustomResourceDefinitionVersions(resource) {
   const namespace = LuigiClient.getContext().namespaceId;
 
   if (!resource) return null;
@@ -64,7 +64,7 @@ export function CustomResources(resource) {
             <LayoutPanel.Head title={`Version ${version.name}`} />
           </LayoutPanel.Header>
           <LayoutPanel.Body className="crd-version">
-            <CustomResource
+            <CustomResources
               resource={resource}
               version={version.name}
               namespace={namespace}

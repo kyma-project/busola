@@ -1,5 +1,5 @@
 import React from 'react';
-import { CustomResources } from './CustomResources.list';
+import { CustomResourceDefinitionVersions } from './CustomResourceDefinitionVersions';
 
 import { GenericList, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 
@@ -42,7 +42,7 @@ export const CustomResourceDefinitionsDetails = ({
   return (
     <DefaultRenderer
       customColumns={customColumns}
-      customComponents={[ResourceNames, CustomResources]}
+      customComponents={[ResourceNames, CustomResourceDefinitionVersions]}
       {...otherParams}
     ></DefaultRenderer>
   );
