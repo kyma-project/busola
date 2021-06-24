@@ -3,23 +3,39 @@ import Editor from '@monaco-editor/react';
 import LuigiClient from '@luigi-project/client';
 import { LayoutPanel } from 'fundamental-react';
 
-import { GenericList } from 'react-shared';
+import { GenericList, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 import { ComponentForList } from 'shared/getComponents';
 import './CustomResourceDefinitionVersions.scss';
 
-function CustomResources({ resource, namespace, version }) {
+const CustomResources = ({ resource, namespace, version }) => {
   const { group, names } = resource.spec;
   const name = names.plural;
 
   const resourceUrl = namespace
-    ? `/apis/${group}/${version}/namespaces/${namespace}/${name}`
-    : `/apis/${group}/${version}/${name}`;
+    ? `/apis/${group}/${version.name}/namespaces/${namespace}/${name}`
+    : `/apis/${group}/${version.name}/${name}`;
 
   const navigateFn = resourceName => {
     LuigiClient.linkManager()
       .fromClosestContext()
-      .navigate(`${version}/${resourceName}`);
+      .navigate(`${version.name}/${resourceName}`);
   };
+
+  const getJsonPath = (resource, jsonPath) => {
+    return (
+      jsonPath
+        ?.substring(1)
+        .split('.')
+        .reduce((obj, i) => obj[i], resource) || EMPTY_TEXT_PLACEHOLDER
+    );
+  };
+
+  const customColumns = version.additionalPrinterColumns?.map(column => ({
+    header: column.name,
+    value: resource => getJsonPath(resource, column.jsonPath),
+  }));
+  // CRD can have infinite number of additionalPrinterColumns what would be impossible to fit into the table
+  if (customColumns?.length > 5) customColumns.length = 5;
 
   const params = {
     hasDetailsView: true,
@@ -29,10 +45,12 @@ function CustomResources({ resource, namespace, version }) {
     namespace,
     isCompact: true,
     showTitle: true,
+    customColumns,
   };
 
   return <ComponentForList name={name} params={params} />;
-}
+};
+
 const AdditionalPrinterColumns = version => {
   const headerRenderer = () => ['Name', 'Type', 'JSON Path'];
   const rowRenderer = entry => [entry.name, entry.type, entry.jsonPath];
@@ -47,15 +65,15 @@ const AdditionalPrinterColumns = version => {
   );
 };
 
-export function CustomResourceDefinitionVersions(resource) {
+export const CustomResourceDefinitionVersions = resource => {
   const namespace = LuigiClient.getContext().namespaceId;
 
   if (!resource) return null;
   const { versions } = resource.spec;
-
   const prettifySchema = schema => {
     return JSON.stringify(schema, null, 2);
   };
+
   return (
     <>
       {versions.map(version => (
@@ -66,7 +84,7 @@ export function CustomResourceDefinitionVersions(resource) {
           <LayoutPanel.Body className="crd-version">
             <CustomResources
               resource={resource}
-              version={version.name}
+              version={version}
               namespace={namespace}
             />
             {version.additionalPrinterColumns && (
@@ -103,4 +121,4 @@ export function CustomResourceDefinitionVersions(resource) {
       ))}
     </>
   );
-}
+};
