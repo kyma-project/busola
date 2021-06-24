@@ -11,7 +11,7 @@ const OIDC_PARAM_NAMES = new Map([
   ['--oidc-extra-scope', 'scope'],
 ]);
 
-function parseOIDCparams({ exec: commandData }) {
+export function parseOIDCparams({ exec: commandData }) {
   if (!commandData || !commandData.args) throw new Error('No args provided');
   let output = {};
 
