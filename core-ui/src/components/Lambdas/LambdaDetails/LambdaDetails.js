@@ -7,8 +7,6 @@ import EventSubscriptionsWrapper from './Tabs/Configuration/EventSubscriptions/E
 import ServiceBindingsWrapper from './Tabs/Configuration/ServiceBindings/ServiceBindingsWrapper';
 import ApiRulesWrapper from './Tabs/Configuration/ApiRules/ApiRules';
 
-// import { useLogsView } from '../helpers/misc';
-
 import { LAMBDA_DETAILS } from 'components/Lambdas/constants';
 
 export default function LambdaDetails({ lambda }) {
@@ -16,7 +14,6 @@ export default function LambdaDetails({ lambda }) {
   const microfrontendContext = useMicrofrontendContext();
   const { crds, modules } = microfrontendContext;
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
-  // useLogsView(lambda.UID, lambda.namespace);
 
   const ApiRules = modulesExist(crds, [modules?.API_GATEWAY])
     ? ApiRulesWrapper
