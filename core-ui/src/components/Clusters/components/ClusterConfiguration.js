@@ -48,10 +48,12 @@ export function ClusterConfiguration({
   React.useEffect(() => {
     if (Object.keys(auth).length > 1) return; // Some properties were already predefined for the auth. Filling them again would cause an infinite loop.
     fillAuthFromKubeconfig();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth, kubeconfig, setAuth]);
 
   React.useEffect(() => {
     fillAuthFromKubeconfig();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contextName]);
 
   function fillAuthFromKubeconfig() {
