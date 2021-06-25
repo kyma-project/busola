@@ -16,18 +16,17 @@ const server = http.createServer(app);
 
 const port = process.env.PORT || 3001;
 const address = process.env.ADDRESS || 'localhost';
+const isDocker = process.env.IS_DOCKER === 'true';
 
-const isLocalDev = address === 'localhost';
-
-if (isLocalDev) {
-  app.use(handleRequest);
-} else {
+if (isDocker) {
   // yup, order matters here
   serveStaticApp(app, '/core-ui/', '/core-ui');
   serveStaticApp(app, '/service-catalog', '/service-catalog-ui');
   serveMonaco(app);
   app.use('/backend', handleRequest);
   serveStaticApp(app, '/', '/core');
+} else {
+  app.use(handleRequest);
 }
 
 server.listen(port, address, () => {
