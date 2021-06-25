@@ -49,6 +49,7 @@ export function CustomResource({ params }) {
         entries={version?.additionalPrinterColumns || []}
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
+        testid="cr-additional-printer-columns"
       />
     );
   };

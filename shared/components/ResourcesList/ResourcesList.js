@@ -42,6 +42,7 @@ ResourcesList.propTypes = {
   description: PropTypes.node,
   readOnly: PropTypes.bool,
   navigateFn: PropTypes.func,
+  testid: PropTypes.string,
 };
 
 ResourcesList.defaultProps = {
@@ -91,6 +92,7 @@ function Resources({
   isCompact = false,
   navigateFn,
   skipDataLoading = false,
+  testid,
 }) {
   useWindowTitle(windowTitle || prettifyNamePlural(resourceName, resourceType));
   const { setEditedYaml: setEditedSpec, closeEditor } = useYamlEditor();
@@ -235,6 +237,7 @@ function Resources({
       serverDataLoading={loading}
       pagination={{ itemsPerPage: 20, autoHide: true }}
       extraHeaderContent={extraHeaderContent}
+      testid={testid}
     />
   );
 }

@@ -44,6 +44,7 @@ const CustomResources = ({ resource, namespace, version }) => {
     isCompact: true,
     showTitle: true,
     customColumns,
+    testid: 'crd-custom-resources',
   };
 
   return <ComponentForList name={name} params={params} />;
@@ -64,6 +65,7 @@ const AdditionalPrinterColumns = version => {
       entries={version.additionalPrinterColumns || []}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
+      testid="crd-additional-printer-columns"
     />
   );
 };

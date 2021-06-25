@@ -35,6 +35,7 @@ export const CustomResourceDefinitionsDetails = ({
         entries={resource.spec.names ? [resource.spec.names] : []}
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
+        testid="crd-names"
       />
     );
   };
