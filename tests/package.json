@@ -8,11 +8,11 @@
     "test:local": "CYPRESS_LOCAL_DEV=true $(npm bin)/cypress run --browser chrome --headless"
   },
   "devDependencies": {
-    "cypress-file-upload": "^5.0.7",
+    "cypress-file-upload": "^5.0.8",
     "js-yaml": "^4.1.0",
     "json-url": "^3.0.0"
   },
   "optionalDependencies": {
-    "cypress": "^7.5.0"
+    "cypress": "^7.6.0"
   }
 }
