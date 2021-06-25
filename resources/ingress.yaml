@@ -24,7 +24,3 @@ spec:
                   number: 3001
             path: /backend(?:/|$)(.*)
             pathType: Prefix
-status:
-  loadBalancer:
-    ingress:
-      - ip: 34.77.84.51
