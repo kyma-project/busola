@@ -4,6 +4,7 @@ metadata:
   name: ingress-busola
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/force-ssl-redirect: 'true'
 spec:
   rules:
     - host: %DOMAIN%
