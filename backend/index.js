@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const http = require('http');
-import { handleRequest } from './common';
+import { handleRequest, serveStaticApp, serveMonaco } from './common';
 import { requestLogger } from './utils/other';
 
 const app = express();
@@ -16,8 +16,18 @@ const server = http.createServer(app);
 
 const port = process.env.PORT || 3001;
 const address = process.env.ADDRESS || 'localhost';
+const isDocker = process.env.IS_DOCKER === 'true';
 
-app.use(handleRequest);
+if (isDocker) {
+  // yup, order matters here
+  serveStaticApp(app, '/core-ui/', '/core-ui');
+  serveStaticApp(app, '/service-catalog', '/service-catalog-ui');
+  serveMonaco(app);
+  app.use('/backend', handleRequest);
+  serveStaticApp(app, '/', '/core');
+} else {
+  app.use(handleRequest);
+}
 
 server.listen(port, address, () => {
   console.log(`Busola backend server started @ ${port}!`);

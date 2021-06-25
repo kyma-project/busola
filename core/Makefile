@@ -26,6 +26,9 @@ test:
 build:
 	npm run build
 
+build-docker:
+	npm run build:docker
+	
 build-image: 
 	docker build -t $(IMG_NAME) -f Dockerfile ..
 

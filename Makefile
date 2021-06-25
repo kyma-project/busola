@@ -1,3 +1,7 @@
+IMG_NAME = busola-core
+IMG = $(DOCKER_PUSH_REPOSITORY)$(DOCKER_PUSH_DIRECTORY)/$(IMG_NAME)
+TAG = $(DOCKER_TAG)
+
 ci-pr: resolve validate validate-libraries
 ci-master: resolve validate validate-libraries
 
@@ -28,3 +32,12 @@ ifdef LICENSE_PULLER_PATH
 else
 	mkdir -p ../licenses
 endif
+
+release: build-image push-image
+
+build-image: 
+	docker build -t $(IMG_NAME) -f Dockerfile .
+
+push-image:
+	docker tag $(IMG_NAME) $(IMG):$(TAG)
+	docker push $(IMG):$(TAG)

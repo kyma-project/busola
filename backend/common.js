@@ -1,5 +1,7 @@
 const https = require('https');
 const url = require('url');
+const express = require('express');
+const path = require('path');
 
 const isHeaderDefined = headerValue => {
   return headerValue !== undefined && headerValue !== 'undefined';
@@ -69,4 +71,15 @@ export const handleRequest = async (req, res) => {
 
   k8sRequest.end(Buffer.isBuffer(req.body) ? req.body : undefined);
   req.pipe(k8sRequest);
+};
+
+export const serveStaticApp = (app, requestPath, directoryPath) => {
+  app.use(requestPath, express.static(path.join(__dirname, directoryPath)));
+  app.get(requestPath + '*', (_, res) =>
+    res.sendFile(path.join(__dirname + directoryPath + '/index.html')),
+  );
+};
+
+export const serveMonaco = app => {
+  app.use('/vs', express.static(path.join(__dirname, '/core-ui/vs')));
 };
