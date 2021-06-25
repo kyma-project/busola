@@ -97,15 +97,15 @@ context('In-cluster eventing', () => {
       .click();
 
     cy.getLeftNav()
-      .contains('Pods')
+      .contains('Functions')
       .click();
 
     cy.getIframeBody()
-      .contains('a', POD_NAME_REGEX)
+      .contains('a', FUNCTION_NAME)
       .click();
 
     cy.getIframeBody()
-      .find('[aria-label="view-logs-for-function"]')
+      .contains('View logs')
       .click();
 
     // it just doesn't work in cypress
