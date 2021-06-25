@@ -29,8 +29,6 @@ export function CustomResource({ params }) {
   const version = versions?.find(version => version.name === resourceVersion);
 
   const AdditionalPrinterColumns = resource => {
-    if (!(version && version.additionalPrinterColumns)) return null;
-
     const getJsonPath = (resource, jsonPath) => {
       const value =
         jsonPath
@@ -50,7 +48,7 @@ export function CustomResource({ params }) {
     return (
       <GenericList
         title="Additional Printer Columns"
-        entries={version.additionalPrinterColumns || []}
+        entries={version?.additionalPrinterColumns || []}
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
       />

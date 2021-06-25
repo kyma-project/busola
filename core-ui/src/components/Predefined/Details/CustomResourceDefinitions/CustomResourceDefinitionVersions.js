@@ -102,11 +102,9 @@ export const CustomResourceDefinitionVersions = resource => {
             version={version}
             namespace={namespace}
           />
-          {version.additionalPrinterColumns && (
-            <AdditionalPrinterColumns
-              additionalPrinterColumns={version.additionalPrinterColumns}
-            />
-          )}
+          <AdditionalPrinterColumns
+            additionalPrinterColumns={version.additionalPrinterColumns}
+          />
           {version.schema && (
             <LayoutPanel
               key={`crd-schema-${version.name}`}
