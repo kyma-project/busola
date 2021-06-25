@@ -3,8 +3,9 @@ import Editor from '@monaco-editor/react';
 import LuigiClient from '@luigi-project/client';
 import { LayoutPanel } from 'fundamental-react';
 
-import { GenericList, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+import { GenericList, StatusBadge, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 import { ComponentForList } from 'shared/getComponents';
+import './CustomResourceDefinitionVersions.scss';
 
 const CustomResources = ({ resource, namespace, version }) => {
   const { group, names } = resource.spec;
@@ -84,6 +85,17 @@ export const CustomResourceDefinitionVersions = resource => {
         <LayoutPanel className="fd-margin--md">
           <LayoutPanel.Header>
             <LayoutPanel.Head title={`Version ${version.name}`} />
+            <StatusBadge
+              type={version.served ? 'positive' : 'informative'}
+              className="version-status"
+            >
+              {version.served ? 'Served' : 'Not Served'}
+            </StatusBadge>
+            {version.storage && (
+              <StatusBadge type="positive" className="version-status">
+                Storage
+              </StatusBadge>
+            )}
           </LayoutPanel.Header>
           <CustomResources
             resource={resource}
