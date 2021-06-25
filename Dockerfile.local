@@ -43,6 +43,5 @@ COPY --from=builder /app/backend/package* /app
 RUN npm ci --only=production
 
 EXPOSE 3001
-ENV NODE_ENV production
-ENV ADDRESS 0.0.0.0
+ENV NODE_ENV=production ADDRESS=0.0.0.0 IS_DOCKER=true
 CMD ["node", "backend-production.js"]

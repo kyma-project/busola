@@ -16,3 +16,6 @@ test:
 
 build:
 	npm run build
+
+build-docker:
+	npm run build:docker

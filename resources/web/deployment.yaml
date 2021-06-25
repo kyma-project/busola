@@ -1,7 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: busola
   name: web
   labels:
     app: busola
@@ -17,7 +16,7 @@ spec:
     spec:
       containers:
         - name: busola
-          image: wawrzyn321/single
+          image: eu.gcr.io/kyma-project/busola-web:PR-242
           imagePullPolicy: Always
           resources:
             requests:
