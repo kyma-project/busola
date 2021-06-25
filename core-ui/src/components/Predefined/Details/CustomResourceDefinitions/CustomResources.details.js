@@ -31,13 +31,14 @@ export function CustomResource({ params }) {
     if (!version.additionalPrinterColumns) return null;
 
     const getJsonPath = (resource, jsonPath) => {
-      return (
+      const value =
         jsonPath
           ?.substring(1)
           .split('.')
-          .reduce((obj, i) => obj[i], resource) || EMPTY_TEXT_PLACEHOLDER
-      );
+          .reduce((obj, i) => obj[i], resource) || EMPTY_TEXT_PLACEHOLDER;
+      return typeof value === 'boolean' ? value.toString() : value;
     };
+
     const headerRenderer = () => ['Name', 'Description', 'Value'];
     const rowRenderer = entry => [
       entry.name,

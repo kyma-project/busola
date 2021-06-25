@@ -21,12 +21,12 @@ const CustomResources = ({ resource, namespace, version }) => {
   };
 
   const getJsonPath = (resource, jsonPath) => {
-    return (
+    const value =
       jsonPath
         ?.substring(1)
         .split('.')
-        .reduce((obj, i) => obj[i], resource) || EMPTY_TEXT_PLACEHOLDER
-    );
+        .reduce((obj, i) => obj[i], resource) || EMPTY_TEXT_PLACEHOLDER;
+    return typeof value === 'boolean' ? value.toString() : value;
   };
 
   const customColumns = version.additionalPrinterColumns?.map(column => ({
