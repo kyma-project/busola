@@ -192,14 +192,7 @@ function Resources({
     ),
     <ReadableCreationTimestamp timestamp={entry.metadata.creationTimestamp} />,
     <div style={{ maxWidth: '36rem' /*TODO*/ }}>
-      {isCompact ? (
-        <details>
-          <summary style={{ cursor: 'pointer' }}>Expand labels</summary>
-          <Labels labels={entry.metadata.labels} shortenLongLabels />
-        </details>
-      ) : (
-        <Labels labels={entry.metadata.labels} shortenLongLabels />
-      )}
+      <Labels labels={entry.metadata.labels} shortenLongLabels />
     </div>,
     ...customColumns.map(col => col.value(entry)),
   ];
