@@ -2,6 +2,7 @@ import React from 'react';
 import Editor from '@monaco-editor/react';
 import LuigiClient from '@luigi-project/client';
 import { LayoutPanel } from 'fundamental-react';
+import * as jp from 'jsonpath';
 
 import { GenericList, StatusBadge, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 import { ComponentForList } from 'shared/getComponents';
@@ -23,10 +24,7 @@ const CustomResources = ({ resource, namespace, version }) => {
 
   const getJsonPath = (resource, jsonPath) => {
     const value =
-      jsonPath
-        ?.substring(1)
-        .split('.')
-        .reduce((obj, i) => obj[i], resource) || EMPTY_TEXT_PLACEHOLDER;
+      jp.value(resource, jsonPath.substring(1)) || EMPTY_TEXT_PLACEHOLDER;
     return typeof value === 'boolean' ? value.toString() : value;
   };
 

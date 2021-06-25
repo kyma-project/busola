@@ -723,7 +723,7 @@ export function getStaticChildrenNodesForNamespace(
       pathSegment: 'customresourcedefinitions',
       resourceType: 'customresourcedefinitions',
       navigationContext: 'customresourcedefinitions',
-      label: 'Custom Resource Definitions (Namespace Scoped)',
+      label: 'Custom Resource Definitions',
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/CustomResourceDefinitions?' +
@@ -1016,7 +1016,7 @@ export function getStaticRootNodes(
       pathSegment: 'customresourcedefinitions',
       resourceType: 'customresourcedefinitions',
       navigationContext: 'customresourcedefinitions',
-      label: 'Custom Resource Definitions (Cluster Scoped)',
+      label: 'Custom Resource Definitions',
       viewUrl:
         config.coreUIModuleUrl +
         '/CustomResourceDefinitions?' +

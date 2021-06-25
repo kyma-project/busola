@@ -1,5 +1,6 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
+import * as jp from 'jsonpath';
 
 import {
   ResourceDetails,
@@ -31,10 +32,7 @@ export function CustomResource({ params }) {
   const AdditionalPrinterColumns = resource => {
     const getJsonPath = (resource, jsonPath) => {
       const value =
-        jsonPath
-          ?.substring(1)
-          .split('.')
-          .reduce((obj, i) => obj[i], resource) || EMPTY_TEXT_PLACEHOLDER;
+        jp.value(resource, jsonPath.substring(1)) || EMPTY_TEXT_PLACEHOLDER;
       return typeof value === 'boolean' ? value.toString() : value;
     };
 
