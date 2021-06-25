@@ -6,6 +6,35 @@ export const AUTH_FORM_TOKEN = 'Token';
 export const AUTH_FORM_OIDC = 'OIDC';
 export const DEFAULT_SCOPE_VALUE = 'openid ';
 
+const OIDCform = ({ auth, setAuth }) => {
+  return (
+    <>
+      <TextFormItem
+        inputKey="issuer-url"
+        required
+        type="url"
+        label="Issuer URL"
+        onChange={e => setAuth({ ...auth, issuerUrl: e.target.value })}
+        inputProps={{ value: auth.issuerUrl || '' }}
+      />
+      <TextFormItem
+        inputKey="client-id"
+        required
+        label="Client ID"
+        onChange={e => setAuth({ ...auth, clientId: e.target.value })}
+        inputProps={{ value: auth.clientId || '' }}
+      />
+      <TextFormItem
+        inputKey="scope"
+        required
+        label="Scopes"
+        onChange={e => setAuth({ ...auth, scope: e.target.value })}
+        inputProps={{ value: auth.scope || DEFAULT_SCOPE_VALUE }}
+      />
+    </>
+  );
+};
+
 export function AuthForm({ setAuthValid, auth, setAuth }) {
   const formRef = React.useRef();
 
@@ -14,33 +43,6 @@ export function AuthForm({ setAuthValid, auth, setAuth }) {
       setAuthValid(formRef.current?.checkValidity());
     }
   }, [formRef, auth, setAuthValid]);
-
-  const oidcForm = (
-    <>
-      <TextFormItem
-        inputKey="issuer-url"
-        required
-        type="url"
-        label="Issuer URL"
-        onChange={e => setAuth({ ...auth, issuerUrl: e.target.value })}
-        defaultValue={auth.issuerUrl}
-      />
-      <TextFormItem
-        inputKey="client-id"
-        required
-        label="Client ID"
-        onChange={e => setAuth({ ...auth, clientId: e.target.value })}
-        defaultValue={auth.clientId}
-      />
-      <TextFormItem
-        inputKey="scope"
-        required
-        label="Scopes"
-        onChange={e => setAuth({ ...auth, scope: e.target.value })}
-        defaultValue={auth.scope || DEFAULT_SCOPE_VALUE}
-      />
-    </>
-  );
 
   const tokenForm = (
     <TextFormItem
@@ -79,7 +81,11 @@ export function AuthForm({ setAuthValid, auth, setAuth }) {
           OIDC provider
         </FormRadioItem>
       </FormRadioGroup>
-      {auth.type === AUTH_FORM_OIDC ? oidcForm : tokenForm}
+      {auth.type === AUTH_FORM_OIDC ? (
+        <OIDCform auth={auth} setAuth={setAuth} />
+      ) : (
+        tokenForm
+      )}
     </form>
   );
 }
