@@ -48,9 +48,9 @@ const TWO_USERS_KUBECONFIG = {
             '--oidc-issuer-url=https://coastguard.gov.us',
             '--oidc-client-id=hasselhoff',
             '--oidc-client-secret=otherSecret',
-            '--oidc-extra-scope=blondies',
-            '--oidc-extra-scope=rescue',
-            '--oidc-extra-scope=muscles',
+            '--oidc-extra-scope=peach',
+            '--oidc-extra-scope=melon',
+            '--oidc-extra-scope=plum',
             '--grant-type=auto',
           ],
         },
@@ -85,7 +85,7 @@ describe('ClusterConfiguration', () => {
         auth: {
           clientId: 'hasselhoff',
           issuerUrl: 'https://coastguard.gov.us',
-          scope: 'blondies rescue muscles',
+          scope: 'peach melon plum',
         },
       }),
       expect.anything(),
@@ -107,7 +107,7 @@ describe('ClusterConfiguration', () => {
         auth: {
           clientId: 'hasselhoff',
           issuerUrl: 'https://coastguard.gov.us',
-          scope: 'blondies rescue muscles',
+          scope: 'peach melon plum',
         },
       }),
       expect.anything(),
@@ -121,14 +121,14 @@ describe('ClusterConfiguration', () => {
           args: [
             '--oidc-issuer-url=https://coastguard.gov.us',
             '--oidc-client-id=hasselhoff',
-            '--oidc-extra-scope=blondies',
+            '--oidc-extra-scope=peach',
           ],
         },
       };
       expect(parseOIDCparams(input)).toMatchObject({
         clientId: 'hasselhoff',
         issuerUrl: 'https://coastguard.gov.us',
-        scope: 'blondies',
+        scope: 'peach',
       });
     });
 
@@ -136,14 +136,14 @@ describe('ClusterConfiguration', () => {
       const input = {
         exec: {
           args: [
-            '--oidc-extra-scope=blondies',
-            '--oidc-extra-scope=brunettes',
-            '--oidc-extra-scope=redheads',
+            '--oidc-extra-scope=peach',
+            '--oidc-extra-scope=melon',
+            '--oidc-extra-scope=plum',
           ],
         },
       };
       expect(parseOIDCparams(input)).toMatchObject({
-        scope: 'blondies brunettes redheads',
+        scope: 'peach melon plum',
       });
     });
 
