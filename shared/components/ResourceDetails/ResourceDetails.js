@@ -18,6 +18,7 @@ import {
   ResourceNotFound,
   prettifyNamePlural,
   prettifyNameSingular,
+  Spinner,
 } from '../..';
 import CustomPropTypes from '../../typechecking/CustomPropTypes';
 import { handleDelete } from '../GenericList/actionHandlers/simpleDelete';
@@ -60,7 +61,7 @@ export function ResourceDetails(props) {
   const updateResourceMutation = useUpdate(props.resourceUrl);
   const deleteResourceMutation = useDelete(props.resourceUrl);
 
-  if (loading) return 'Loading...';
+  if (loading) return <Spinner />;
   if (error) {
     if (error.code === 404) {
       return (

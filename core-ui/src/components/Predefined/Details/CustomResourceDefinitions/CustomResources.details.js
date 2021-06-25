@@ -6,6 +6,7 @@ import {
   useGet,
   EMPTY_TEXT_PLACEHOLDER,
   GenericList,
+  Spinner,
 } from 'react-shared';
 
 export function CustomResource({ params }) {
@@ -15,20 +16,20 @@ export function CustomResource({ params }) {
     resourceVersion,
     resourceName,
   } = params;
-  const { data, error, loading } = useGet(
+  const { data, loading } = useGet(
     `/apis/apiextensions.k8s.io/v1/customresourcedefinitions/${customResourceDefinitionName}`,
     {
       pollingInterval: null,
     },
   );
 
-  if (loading) return 'loading'; //change!
+  if (loading) return <Spinner />;
 
   const versions = data?.spec?.versions;
   const version = versions?.find(version => version.name === resourceVersion);
 
   const AdditionalPrinterColumns = resource => {
-    if (!version.additionalPrinterColumns) return null;
+    if (!(version && version.additionalPrinterColumns)) return null;
 
     const getJsonPath = (resource, jsonPath) => {
       const value =
