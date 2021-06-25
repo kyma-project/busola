@@ -18,6 +18,7 @@ export default function ApiRulesListWrapper({
   rowRenderer = undefined,
   textSearchProperties = undefined,
   disableExposeButton = false,
+  skipRequest = false,
 }) {
   const { data: apiRulesForThisService, error, loading = true } = useGetList(
     rule => rule.spec.service.name === service?.metadata.name,
@@ -25,7 +26,7 @@ export default function ApiRulesListWrapper({
     injectVariables(API_RULES_URL, {
       namespace: namespace || service?.metadata.namespace,
     }),
-    { pollingInterval: 3000 },
+    { pollingInterval: 3000, skip: skipRequest },
   );
 
   if (!apiRulesForThisService) return <Spinner />;

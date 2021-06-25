@@ -38,6 +38,7 @@ export const ModalWithForm = ({
   confirmText,
   invalidPopupMessage,
   className,
+  onModalOpenStateChange,
   ...props
 }) => {
   const [isOpen, setOpen] = useState(false);
@@ -51,6 +52,11 @@ export const ModalWithForm = ({
     setOpenStatus(opened);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [opened]);
+
+  useEffect(() => {
+    onModalOpenStateChange(isOpen);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
 
   function checkAllForms(reportValidity = false) {
     const _isEveryFormValid =
@@ -185,23 +191,24 @@ export const ModalWithForm = ({
         }}
         title={title}
       >
-        {renderForm({
-          formElementRef,
-          jsonSchemaFormRef,
-          isValid,
-          setCustomValid: isValid => {
-            // revalidate rest of the form
-            setValid(formElementRef.current.checkValidity());
-            setCustomValid(isValid);
-          },
-          setValid: setValid,
-          onChange: handleFormChanged,
-          onError: handleFormError,
-          onCompleted: handleFormSuccess,
-          performManualSubmit: handleFormSubmit,
-          setValidity: setValid,
-          item: item,
-        })}
+        {isOpen &&
+          renderForm({
+            formElementRef,
+            jsonSchemaFormRef,
+            isValid,
+            setCustomValid: isValid => {
+              // revalidate rest of the form
+              setValid(formElementRef.current.checkValidity());
+              setCustomValid(isValid);
+            },
+            setValid: setValid,
+            onChange: handleFormChanged,
+            onError: handleFormError,
+            onCompleted: handleFormSuccess,
+            performManualSubmit: handleFormSubmit,
+            setValidity: setValid,
+            item: item,
+          })}
       </Dialog>
     </>
   );
@@ -219,10 +226,12 @@ ModalWithForm.propTypes = {
   invalidPopupMessage: PropTypes.string,
   button: CustomPropTypes.button,
   className: PropTypes.string,
+  onModalOpenStateChange: PropTypes.func,
 };
 
 ModalWithForm.defaultProps = {
   performRefetch: () => {},
   confirmText: 'Create',
   invalidPopupMessage: '',
+  onModalOpenStateChange: () => {},
 };
