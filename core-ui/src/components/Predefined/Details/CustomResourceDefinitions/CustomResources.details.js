@@ -38,9 +38,10 @@ export function CustomResource({ params }) {
           .reduce((obj, i) => obj[i], resource) || EMPTY_TEXT_PLACEHOLDER
       );
     };
-    const headerRenderer = () => ['Name', 'Value'];
+    const headerRenderer = () => ['Name', 'Description', 'Value'];
     const rowRenderer = entry => [
       entry.name,
+      entry.description || EMPTY_TEXT_PLACEHOLDER,
       getJsonPath(resource, entry.jsonPath),
     ];
 

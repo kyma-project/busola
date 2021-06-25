@@ -5,7 +5,6 @@ import { LayoutPanel } from 'fundamental-react';
 
 import { GenericList, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 import { ComponentForList } from 'shared/getComponents';
-import './CustomResourceDefinitionVersions.scss';
 
 const CustomResources = ({ resource, namespace, version }) => {
   const { group, names } = resource.spec;
@@ -52,8 +51,13 @@ const CustomResources = ({ resource, namespace, version }) => {
 };
 
 const AdditionalPrinterColumns = version => {
-  const headerRenderer = () => ['Name', 'Type', 'JSON Path'];
-  const rowRenderer = entry => [entry.name, entry.type, entry.jsonPath];
+  const headerRenderer = () => ['Name', 'Type', 'Description', 'JSON Path'];
+  const rowRenderer = entry => [
+    entry.name,
+    entry.type,
+    entry.description || EMPTY_TEXT_PLACEHOLDER,
+    entry.jsonPath,
+  ];
 
   return (
     <GenericList
@@ -81,42 +85,40 @@ export const CustomResourceDefinitionVersions = resource => {
           <LayoutPanel.Header>
             <LayoutPanel.Head title={`Version ${version.name}`} />
           </LayoutPanel.Header>
-          <LayoutPanel.Body className="crd-version">
-            <CustomResources
-              resource={resource}
-              version={version}
-              namespace={namespace}
+          <CustomResources
+            resource={resource}
+            version={version}
+            namespace={namespace}
+          />
+          {version.additionalPrinterColumns && (
+            <AdditionalPrinterColumns
+              additionalPrinterColumns={version.additionalPrinterColumns}
             />
-            {version.additionalPrinterColumns && (
-              <AdditionalPrinterColumns
-                additionalPrinterColumns={version.additionalPrinterColumns}
-              />
-            )}
-            {version.schema && (
-              <LayoutPanel
-                key={`crd-schema-${version.name}`}
-                className="fd-margin--md"
-              >
-                <LayoutPanel.Header>
-                  <LayoutPanel.Head title="Schema" />
-                </LayoutPanel.Header>
-                <LayoutPanel.Body>
-                  <Editor
-                    key={`crd-schema-editor-${version.name}`}
-                    theme="vs-light"
-                    height="20em"
-                    value={prettifySchema(version.schema)}
-                    options={{
-                      readOnly: true,
-                      minimap: {
-                        enabled: false,
-                      },
-                    }}
-                  />
-                </LayoutPanel.Body>
-              </LayoutPanel>
-            )}
-          </LayoutPanel.Body>
+          )}
+          {version.schema && (
+            <LayoutPanel
+              key={`crd-schema-${version.name}`}
+              className="fd-margin--md"
+            >
+              <LayoutPanel.Header>
+                <LayoutPanel.Head title="Schema" />
+              </LayoutPanel.Header>
+              <LayoutPanel.Body>
+                <Editor
+                  key={`crd-schema-editor-${version.name}`}
+                  theme="vs-light"
+                  height="20em"
+                  value={prettifySchema(version.schema)}
+                  options={{
+                    readOnly: true,
+                    minimap: {
+                      enabled: false,
+                    },
+                  }}
+                />
+              </LayoutPanel.Body>
+            </LayoutPanel>
+          )}
         </LayoutPanel>
       ))}
     </>
