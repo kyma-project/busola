@@ -60,16 +60,16 @@ export const prettifyNameSingular = (resourceName, resourceType) => {
 };
 
 export const getErrorMessage = (error, message = null) => {
-  let errorNotification = message ? message : MESSAGES.SERVER_ERROR;
+  let errorNotification = message ? message : 'Error';
 
-  if (error?.statusCode && error?.message) {
-    errorNotification += `: ${error.message} (${error.statusCode}${
-      error.originalMessage && error.message !== error.originalMessage
-        ? ':' + error.originalMessage
-        : ''
-    })`;
-  } else {
-    errorNotification += `: ${JSON.stringify(error, null, 1)} `;
+  if (error?.message && typeof error?.originalMessage !== 'object') {
+    console.log(
+      'in if',
+      error?.message,
+      error?.originalMessage,
+      typeof error?.message,
+    );
+    errorNotification += `: ${error.message} `;
   }
   return errorNotification;
 };

@@ -19,7 +19,6 @@ import {
   navigateToFixedPathResourceDetails,
   prettifyNameSingular,
   prettifyNamePlural,
-  getErrorMessage,
 } from '../..';
 import CustomPropTypes from '../../typechecking/CustomPropTypes';
 import { ModalWithForm } from '../ModalWithForm/ModalWithForm';
@@ -99,7 +98,6 @@ function Resources({
     filter,
   )(resourceUrl, { pollingInterval: 3000, skip: skipDataLoading });
   React.useEffect(() => closeEditor(), [namespace]);
-
   const prettifiedResourceName = prettifyNameSingular(
     resourceName,
     resourceType,
@@ -226,10 +224,6 @@ function Resources({
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       serverDataError={error}
-      serverErrorMessage={getErrorMessage(
-        error,
-        `Could not load resource: ${prettifiedResourceName}. Error occured`,
-      )}
       serverDataLoading={loading}
       pagination={{ itemsPerPage: 20, autoHide: true }}
       extraHeaderContent={extraHeaderContent}
