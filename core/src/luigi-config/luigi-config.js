@@ -43,8 +43,8 @@ async function luigiAfterInit() {
       !hasKubeconfigAuth(params.currentContext?.user?.user)
     ) {
       await addClusterNodes();
+      tryRestorePreviousLocation();
     }
-    tryRestorePreviousLocation();
   }
 }
 
@@ -56,6 +56,7 @@ async function luigiAfterInit() {
   const params = getActiveCluster();
 
   const kubeconfigUser = params?.currentContext.user.user;
+  console.debug(kubeconfigUser, hasKubeconfigAuth(kubeconfigUser));
   if (hasKubeconfigAuth(kubeconfigUser)) {
     setAuthData(kubeconfigUser);
   }

@@ -5,10 +5,14 @@ export const saveLocation = location => {
 };
 
 export const saveCurrentLocation = () => {
-  const hasInitParams = [...window.location.searchParams.keys()].includes(
-    'init',
-  );
-  if (!window.location.hash && !hasInitParams) {
+  const hasInitParams = [
+    ...(window.location.searchParams?.keys() || []),
+  ].includes('init');
+  if (
+    !window.location.hash &&
+    !hasInitParams &&
+    window.location.pathname !== '/'
+  ) {
     const location = window.location.pathname;
     const params = window.location.search;
     saveLocation(location + params);
