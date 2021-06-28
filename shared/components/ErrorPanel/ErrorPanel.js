@@ -7,7 +7,11 @@ export const ErrorPanel = ({ error, title }) => {
       <LayoutPanel.Header>
         <LayoutPanel.Head title={title || 'Error'} />
       </LayoutPanel.Header>
-      <LayoutPanel.Body>
+      <LayoutPanel.Body
+        style={{
+          fontSize: '18px',
+        }}
+      >
         {error || 'An error occured. The component cannot be rendered.'}
       </LayoutPanel.Body>
     </LayoutPanel>
