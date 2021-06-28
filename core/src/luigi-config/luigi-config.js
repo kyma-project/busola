@@ -29,6 +29,7 @@ async function luigiAfterInit() {
   // save location, as we'll be logged out in a moment
   if (!getAuthData()) {
     saveCurrentLocation();
+    return;
   }
 
   loadHiddenNamespacesToggle();
@@ -43,8 +44,8 @@ async function luigiAfterInit() {
       !hasKubeconfigAuth(params.currentContext?.user?.user)
     ) {
       await addClusterNodes();
-      tryRestorePreviousLocation();
     }
+    tryRestorePreviousLocation();
   }
 }
 
