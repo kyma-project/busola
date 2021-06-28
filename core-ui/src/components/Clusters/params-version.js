@@ -1,12 +1,8 @@
-export const PARAMS_VERSION = 1; // make sure to sync it in core
-const PREV_SUPPORTED_VERSIONS = 1;
+import { major, satisfies, coerce } from 'semver';
+
+export const PARAMS_VERSION = '1.0'; // make sure to sync it in core
 
 export function areParamsCompatible(paramsVersion) {
-  if (typeof paramsVersion !== 'number') {
-    return false;
-  }
-  return (
-    paramsVersion <= PARAMS_VERSION &&
-    paramsVersion >= PARAMS_VERSION - PREV_SUPPORTED_VERSIONS
-  );
+  const majorVersion = major(coerce(PARAMS_VERSION));
+  return satisfies(coerce(paramsVersion), `^${coerce(majorVersion)}`);
 }
