@@ -3,8 +3,4 @@ kind: Kustomization
 resources:
   - deployment.yaml
   - hpa.yaml
-  - deployment-service-catalog.yaml
-  - service-core-ui.yaml
-  - service-core.yaml
-  - service-service-catalog.yaml
-  - ingress.yaml
+  - service.yaml
