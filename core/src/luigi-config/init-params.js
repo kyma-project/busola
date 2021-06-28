@@ -71,7 +71,6 @@ async function setupFromParams(encodedParams) {
 
   if (!areParamsCompatible(decoded.config?.version)) {
     showIncompatibleParamsWarning(decoded?.config?.version);
-    return;
   }
 
   const isKubeconfigPresent = !!Object.keys(decoded.kubeconfig || {}).length;
