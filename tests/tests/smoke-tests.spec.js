@@ -40,13 +40,13 @@ context('Smoke Tests', () => {
   it('Renders navigation nodes', () => {
     cy.get('[data-testid=luigi-topnav-logo]').click();
     cy.getLeftNav()
-      .contains('Administration')
+      .contains('Configuration')
       .should('be.visible');
   });
 
-  it('Check Administration tab', () => {
+  it('Check Configuration tab', () => {
     cy.getLeftNav()
-      .contains('Administration')
+      .contains('Configuration')
       .click();
 
     cy.getLeftNav()

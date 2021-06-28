@@ -35,6 +35,7 @@ const badgeType = status => {
     case 'Terminated':
     case 'Terminating':
     case 'PodInitializing':
+    case 'ContainerCreating':
       return 'info';
     default:
       return 'error';

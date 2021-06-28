@@ -14,6 +14,7 @@ import { withTitle, useMicrofrontendContext } from 'react-shared';
 import CreateApiRule from '../ApiRules/CreateApiRule/CreateApiRule';
 import EditApiRule from 'components/ApiRules/EditApiRule/EditApiRule';
 import { ContainersLogs } from 'components/Predefined/Details/Pod/ContainersLogs';
+import { CustomResource } from 'components/Predefined/Details/CustomResourceDefinitions/CustomResources.details';
 import { ComponentForList, ComponentForDetails } from 'shared/getComponents';
 import { getResourceUrl } from 'shared/helpers';
 import { ClusterList } from 'components/Clusters/views/ClusterList';
@@ -72,6 +73,12 @@ export default function App() {
 
       <Route
         exact
+        path="/customresourcedefinitions/:customResourceDefinitionName/:resourceVersion/:resourceName"
+        component={RoutedCustomResourceDetails}
+      />
+
+      <Route
+        exact
         path="/namespaces/:namespaceId/:resourceType/:resourceName"
         component={RoutedResourceDetails}
       />
@@ -110,6 +117,22 @@ function RoutedContainerDetails({ match }) {
   };
 
   return <ContainersLogs params={params} />;
+}
+
+function RoutedCustomResourceDetails({ match }) {
+  const customResourceDefinitionName = decodeURIComponent(
+    match.params.customResourceDefinitionName,
+  );
+  const resourceVersion = decodeURIComponent(match.params.resourceVersion);
+  const resourceName = decodeURIComponent(match.params.resourceName);
+
+  const params = {
+    customResourceDefinitionName,
+    resourceVersion,
+    resourceName,
+  };
+
+  return <CustomResource params={params} />;
 }
 
 function RoutedResourcesList({ match }) {

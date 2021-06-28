@@ -18,6 +18,7 @@ import {
   ResourceNotFound,
   prettifyNamePlural,
   prettifyNameSingular,
+  Spinner,
 } from '../..';
 import CustomPropTypes from '../../typechecking/CustomPropTypes';
 import { handleDelete } from '../GenericList/actionHandlers/simpleDelete';
@@ -34,6 +35,7 @@ ResourceDetails.propTypes = {
   headerActions: PropTypes.node,
   resourceHeaderActions: PropTypes.arrayOf(PropTypes.func),
   readOnly: PropTypes.bool,
+  breadcrumbs: PropTypes.array,
 };
 
 ResourceDetails.defaultProps = {
@@ -59,7 +61,7 @@ export function ResourceDetails(props) {
   const updateResourceMutation = useUpdate(props.resourceUrl);
   const deleteResourceMutation = useDelete(props.resourceUrl);
 
-  if (loading) return 'Loading...';
+  if (loading) return <Spinner />;
   if (error) {
     if (error.code === 404) {
       return (
@@ -106,6 +108,7 @@ function Resource({
   resourceHeaderActions,
   windowTitle,
   readOnly,
+  breadcrumbs,
 }) {
   useWindowTitle(windowTitle || prettifyNamePlural(null, resourceType));
   const { setEditedYaml: setEditedSpec } = useYamlEditor();
@@ -113,7 +116,7 @@ function Resource({
 
   const prettifiedResourceName = prettifyNameSingular(undefined, resourceType);
 
-  const breadcrumbs = [
+  const breadcrumbItems = breadcrumbs || [
     {
       name: resourceType,
       path: '/',
@@ -121,6 +124,7 @@ function Resource({
     },
     { name: '' },
   ];
+
   const actions = readOnly ? null : (
     <>
       {headerActions}
@@ -183,7 +187,7 @@ function Resource({
       <PageHeader
         title={resource.metadata.name}
         actions={actions}
-        breadcrumbItems={breadcrumbs}
+        breadcrumbItems={breadcrumbItems}
       >
         <PageHeader.Column key="Labels" title="Labels" columnSpan="1 / 3">
           <Labels labels={resource.metadata.labels || {}} />
