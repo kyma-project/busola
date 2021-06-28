@@ -2,6 +2,10 @@ import { setAuthData } from './auth/auth-storage';
 import { reloadNavigation } from './navigation/navigation-data-init';
 import { reloadAuth, hasKubeconfigAuth } from './auth/auth';
 import { saveLocation } from './navigation/previous-location';
+import {
+  areParamsCompatible,
+  showIncompatibleParamsWarning,
+} from './utils/params-version';
 
 const CLUSTERS_KEY = 'busola.clusters';
 const CURRENT_CLUSTER_NAME_KEY = 'busola.current-cluster-name';
@@ -23,10 +27,15 @@ export function getCurrentContextNamespace(kubeconfig) {
 }
 
 export async function setCluster(clusterName) {
+  const params = getClusters()[clusterName];
+
+  if (!areParamsCompatible(params?.config?.version)) {
+    showIncompatibleParamsWarning(params?.config?.version);
+  }
+
   saveActiveClusterName(clusterName);
   reloadAuth();
 
-  const params = getActiveCluster();
   const preselectedNamespace = getCurrentContextNamespace(params.kubeconfig);
   const kubeconfigUser = params.currentContext.user.user;
 

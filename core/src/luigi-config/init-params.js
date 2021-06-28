@@ -6,6 +6,10 @@ import {
 } from './cluster-management';
 import { hasKubeconfigAuth } from './auth/auth';
 import { saveLocation } from './navigation/previous-location';
+import {
+  areParamsCompatible,
+  showIncompatibleParamsWarning,
+} from './utils/params-version';
 
 const DEFAULT_MODULES = {
   SERVICE_CATALOG: 'servicecatalog.k8s.io',
@@ -64,6 +68,11 @@ export async function saveInitParamsIfPresent() {
 
 async function setupFromParams(encodedParams) {
   const decoded = await encoder.decompress(encodedParams);
+
+  if (!areParamsCompatible(decoded.config?.version)) {
+    showIncompatibleParamsWarning(decoded?.config?.version);
+    return;
+  }
 
   const isKubeconfigPresent = !!Object.keys(decoded.kubeconfig || {}).length;
   const kubeconfigUser =

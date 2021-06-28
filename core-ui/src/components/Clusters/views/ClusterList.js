@@ -2,16 +2,19 @@ import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import jsyaml from 'js-yaml';
 import { saveAs } from 'file-saver';
-import { Link, Button } from 'fundamental-react';
+import { Link, Button, Icon } from 'fundamental-react';
 import { useShowNodeParamsError } from 'shared/useShowNodeParamsError';
 import {
   useMicrofrontendContext,
   PageHeader,
   GenericList,
   useNotification,
+  Tooltip,
 } from 'react-shared';
 
 import { setCluster, deleteCluster } from './../shared';
+import { areParamsCompatible } from '../params-version';
+import './ClusterList.scss';
 
 export function ClusterList() {
   const { clusters, activeClusterName } = useMicrofrontendContext();
@@ -53,7 +56,11 @@ export function ClusterList() {
   };
 
   const entries = Object.values(clusters);
-  const headerRenderer = () => ['Name', 'API Server address'];
+  const headerRenderer = () => [
+    'Name',
+    'Configuration version',
+    'API Server address',
+  ];
   const textSearchProperties = [
     'currentContext.cluster.name',
     'currentContext.cluster.cluster.server',
@@ -67,6 +74,18 @@ export function ClusterList() {
     >
       {entry.currentContext.cluster.name}
     </Link>,
+    <div>
+      {entry.config?.version || 'Unknown'}
+      {!areParamsCompatible(entry.config?.version) && (
+        <Tooltip content="This version is incompatible. Errors may occur.">
+          <Icon
+            ariaLabel="version incompatible warning"
+            className="params-warning-icon"
+            glyph="message-warning"
+          />
+        </Tooltip>
+      )}
+    </div>,
     entry.currentContext.cluster.cluster.server,
   ];
 
