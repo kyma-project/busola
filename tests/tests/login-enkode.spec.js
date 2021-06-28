@@ -7,12 +7,17 @@ import {
   generateParamsWithNoKubeconfig,
   generateParamsAndToken,
   generateParamsWithHiddenNamespacesList,
+  generateUnsupportedVersionParams,
 } from '../support/enkode';
 
 const SYSTEM_NAMESPACE = 'kyma-system';
 
 context('Login - enkode link', () => {
   it('Unmodified kubeconfig with default hidden namespaces', () => {
+    // we don't expect version alerts here
+    Cypress.on('window:alert', alertContent =>
+      expect(alertContent).not.to.include('Configuration incompatible'),
+    );
     cy.wrap(generateDefaultParams()).then(params => {
       cy.visit(`${config.clusterAddress}?init=${params}`);
     });
@@ -149,5 +154,14 @@ context('Login - enkode link', () => {
     cy.getIframeBody()
       .find('thead')
       .should('be.visible');
+  });
+
+  it('Add unsupported version params', () => {
+    Cypress.on('window:alert', alertContent =>
+      expect(alertContent).to.include('Configuration incompatible'),
+    );
+    cy.wrap(generateUnsupportedVersionParams()).then(params => {
+      cy.visit(`${config.clusterAddress}?init=${params}`);
+    });
   });
 });

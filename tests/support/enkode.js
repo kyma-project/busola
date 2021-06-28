@@ -36,6 +36,7 @@ const DEFAULT_CONFIG = {
     ADDONS: 'addons.kyma-project.io',
     SERVERLESS: 'serverless.kyma-project.io',
   },
+  version: '1.0.0',
 };
 
 export async function generateDefaultParams() {
@@ -99,4 +100,12 @@ export async function generateParamsAndToken() {
     config: DEFAULT_CONFIG,
   };
   return { token, params: await encoder.compress(params) };
+}
+
+export async function generateUnsupportedVersionParams() {
+  const params = {
+    kubeconfig: null,
+    config: { ...DEFAULT_CONFIG, version: '0.0' },
+  };
+  return await encoder.compress(params);
 }
