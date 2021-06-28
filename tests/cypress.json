@@ -20,6 +20,7 @@
     "in-cluster-eventing.spec.js",
     "test-cluster-overview.spec.js",
     "smoke-tests.spec.js",
+    "test-crds.spec.js",
     "invalid-kubeconfig.spec.js",
     "login-enkode.spec.js",
     "other-logins.spec.js",

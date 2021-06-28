@@ -1,0 +1,20 @@
+:root {
+  --luigi__left-sidenav--width: 17rem !important;
+}
+
+#app .fd-shellbar__title {
+  margin-left: 40px;
+}
+
+.fd-nested-list__link .fd-nested-list__title {
+  padding-right: 5px !important;
+}
+
+.fd-shellbar__group--product .fd-popover__control > button {
+  max-width: unset;
+}
+
+/* luigi adds "Sign out" for OIDC clusters - we don't need it */
+[data-testid='signout'] {
+  display: none;
+}

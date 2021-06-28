@@ -139,7 +139,7 @@ context('Test configuration resources', () => {
       .click();
 
     cy.getLeftNav()
-      .contains('Administration')
+      .contains('Configuration')
       .click();
 
     cy.getLeftNav()
@@ -198,7 +198,7 @@ context('Test configuration resources', () => {
     cy.get('[data-testid=luigi-modal-confirm]').click();
 
     cy.getLeftNav()
-      .contains('Administration')
+      .contains('Configuration')
       .click(); // close navigation tab after yourself
   });
 
