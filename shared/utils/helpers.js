@@ -1,4 +1,5 @@
 import { randomNamesGenerator } from './randomNamesGenerator/randomNamesGenerator';
+import { MESSAGES } from '../components/GenericList/constants';
 
 export function formatMessage(message = '', variables = {}) {
   const serializedVariables = {};
@@ -56,4 +57,19 @@ export const prettifyNamePlural = (resourceName, resourceType) => {
 export const prettifyNameSingular = (resourceName, resourceType) => {
   const resources = prettifyNamePlural(resourceName, resourceType);
   return resources.slice(0, -1);
+};
+
+export const getErrorMessage = (error, message = null) => {
+  let errorNotification = message ? message : MESSAGES.SERVER_ERROR;
+
+  if (error?.statusCode && error?.message) {
+    errorNotification += `: ${error.message} (${error.statusCode}${
+      error.originalMessage && error.message !== error.originalMessage
+        ? ':' + error.originalMessage
+        : ''
+    })`;
+  } else {
+    errorNotification += `: ${JSON.stringify(error, null, 1)} `;
+  }
+  return errorNotification;
 };
