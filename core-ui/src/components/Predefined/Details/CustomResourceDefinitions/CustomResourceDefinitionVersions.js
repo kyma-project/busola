@@ -4,13 +4,30 @@ import LuigiClient from '@luigi-project/client';
 import { LayoutPanel } from 'fundamental-react';
 import * as jp from 'jsonpath';
 
-import { GenericList, StatusBadge, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+import {
+  GenericList,
+  StatusBadge,
+  prettifyNamePlural,
+  EMPTY_TEXT_PLACEHOLDER,
+} from 'react-shared';
 import { ComponentForList } from 'shared/getComponents';
 import './CustomResourceDefinitionVersions.scss';
 
 const CustomResources = ({ resource, namespace, version }) => {
   const { group, names } = resource.spec;
   const name = names.plural;
+
+  if (!version.served) {
+    return (
+      <GenericList
+        title={prettifyNamePlural(undefined, name)}
+        notFoundMessage={'No entries found because the version is not served'}
+        entries={[]}
+        headerRenderer={() => []}
+        rowRenderer={() => []}
+      />
+    );
+  }
 
   const resourceUrl = namespace
     ? `/apis/${group}/${version.name}/namespaces/${namespace}/${name}`

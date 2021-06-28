@@ -176,16 +176,15 @@ function Resources({
     hasDetailsView ? (
       <Link
         className="link"
-        onClick={_ =>
-          navigateFn
-            ? navigateFn(entry.metadata.name)
-            : fixedPath
-            ? navigateToFixedPathResourceDetails(
-                resourceType,
-                entry.metadata.name,
-              )
-            : navigateToDetails(resourceType, entry.metadata.name)
-        }
+        onClick={_ => {
+          if (navigateFn) return navigateFn(entry.metadata.name);
+          if (fixedPath)
+            return navigateToFixedPathResourceDetails(
+              resourceType,
+              entry.metadata.name,
+            );
+          navigateToDetails(resourceType, entry.metadata.name);
+        }}
       >
         {entry.metadata.name}
       </Link>

@@ -1,5 +1,4 @@
 import React from 'react';
-import LuigiClient from '@luigi-project/client';
 import * as jp from 'jsonpath';
 
 import {
@@ -8,10 +7,11 @@ import {
   EMPTY_TEXT_PLACEHOLDER,
   GenericList,
   Spinner,
+  useMicrofrontendContext,
 } from 'react-shared';
 
 export function CustomResource({ params }) {
-  const namespace = LuigiClient.getContext().namespaceId;
+  const { namespaceId: namespace } = useMicrofrontendContext();
   const {
     customResourceDefinitionName,
     resourceVersion,
