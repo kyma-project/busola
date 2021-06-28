@@ -60,7 +60,9 @@ export const prettifyNameSingular = (resourceName, resourceType) => {
 };
 
 export const getErrorMessage = (error, message = null) => {
-  let errorNotification = message ? message : 'Error';
+  let errorNotification = message
+    ? message
+    : 'An error occured. The component cannot be rendered.';
 
   if (error?.message && typeof error?.originalMessage !== 'object') {
     console.log(

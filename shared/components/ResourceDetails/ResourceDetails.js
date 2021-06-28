@@ -18,6 +18,8 @@ import {
   ResourceNotFound,
   prettifyNamePlural,
   prettifyNameSingular,
+  ErrorPanel,
+  getErrorMessage,
 } from '../..';
 import CustomPropTypes from '../../typechecking/CustomPropTypes';
 import { handleDelete } from '../GenericList/actionHandlers/simpleDelete';
@@ -70,7 +72,7 @@ export function ResourceDetails(props) {
         />
       );
     }
-    return `Error: ${error.message}`;
+    return <ErrorPanel error={getErrorMessage(error)} />;
   }
 
   return (
