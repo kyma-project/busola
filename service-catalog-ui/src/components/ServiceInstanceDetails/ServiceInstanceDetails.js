@@ -54,12 +54,15 @@ export default function ServiceInstanceDetails({ match }) {
   if (loading || !serviceInstance) return <Spinner />;
 
   if (!serviceInstance) {
+    const breadcrumbItems = [
+      { name: 'Instances', path: '/', fromContext: 'instances' },
+      { name: '' },
+    ];
+
     return (
       <ResourceNotFound
         resource="Service Instance"
-        breadcrumb="Instances"
-        path="/"
-        navigationContext="instances"
+        breadcrumbs={breadcrumbItems}
       />
     );
   }

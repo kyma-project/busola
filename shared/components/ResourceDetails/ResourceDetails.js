@@ -63,16 +63,29 @@ export function ResourceDetails(props) {
 
   if (loading) return 'Loading...';
   if (error) {
+    const breadcrumbs = [
+      {
+        name: props.resourceType,
+        path: '/',
+        fromContext: props.resourceType.toLowerCase(),
+      },
+      { name: '' },
+    ];
     if (error.code === 404) {
       return (
         <ResourceNotFound
           resource={prettifyNameSingular(undefined, props.resourceType)}
-          breadcrumb={props.resourceType}
-          path="/"
+          breadcrumbs={breadcrumbs}
         />
       );
     }
-    return <ErrorPanel error={getErrorMessage(error)} />;
+    return (
+      <ResourceNotFound
+        resource={prettifyNameSingular(undefined, props.resourceType)}
+        breadcrumbs={breadcrumbs}
+        customMessage={getErrorMessage(error)}
+      />
+    );
   }
 
   return (
