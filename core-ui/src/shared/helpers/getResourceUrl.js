@@ -1,8 +1,10 @@
 export function getResourceUrl() {
   const queryParams = new URLSearchParams(window.location.search);
+  const fullResourceApiPath = queryParams.get('fullResourceApiPath');
+  const resourceApiPath = queryParams.get('resourceApiPath');
 
-  return (
-    queryParams.get('resourceApiPath') +
-    window.location.pathname.toLocaleLowerCase().replace(/^\/core-ui/, '')
-  );
+  return fullResourceApiPath
+    ? fullResourceApiPath
+    : resourceApiPath +
+        window.location.pathname.toLocaleLowerCase().replace(/^\/core-ui/, '');
 }

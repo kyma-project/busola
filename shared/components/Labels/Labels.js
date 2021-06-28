@@ -24,7 +24,7 @@ export const Labels = ({ labels, shortenLongLabels = false }) => {
           aria-label={label}
           className="fd-token fd-token--readonly"
           key={id}
-          title={shortenLongLabels && label.length && label}
+          title={(shortenLongLabels && label.length && label) || undefined}
         >
           <span className="fd-token__text fd-has-font-size-small">
             {shortenLongLabels && label.length > SHORTENING_TRESHOLD

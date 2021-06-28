@@ -41,6 +41,8 @@ ResourcesList.propTypes = {
   listHeaderActions: PropTypes.node,
   description: PropTypes.node,
   readOnly: PropTypes.bool,
+  navigateFn: PropTypes.func,
+  testid: PropTypes.string,
 };
 
 ResourcesList.defaultProps = {
@@ -87,7 +89,10 @@ function Resources({
   listHeaderActions,
   windowTitle,
   readOnly,
+  isCompact = false,
+  navigateFn,
   skipDataLoading = false,
+  testid,
 }) {
   useWindowTitle(windowTitle || prettifyNamePlural(resourceName, resourceType));
   const { setEditedYaml: setEditedSpec, closeEditor } = useYamlEditor();
@@ -169,14 +174,15 @@ function Resources({
     hasDetailsView ? (
       <Link
         className="link"
-        onClick={_ =>
-          fixedPath
-            ? navigateToFixedPathResourceDetails(
-                resourceType,
-                entry.metadata.name,
-              )
-            : navigateToDetails(resourceType, entry.metadata.name)
-        }
+        onClick={_ => {
+          if (navigateFn) return navigateFn(entry.metadata.name);
+          if (fixedPath)
+            return navigateToFixedPathResourceDetails(
+              resourceType,
+              entry.metadata.name,
+            );
+          navigateToDetails(resourceType, entry.metadata.name);
+        }}
       >
         {entry.metadata.name}
       </Link>
@@ -227,6 +233,7 @@ function Resources({
       serverDataLoading={loading}
       pagination={{ itemsPerPage: 20, autoHide: true }}
       extraHeaderContent={extraHeaderContent}
+      testid={testid}
     />
   );
 }
