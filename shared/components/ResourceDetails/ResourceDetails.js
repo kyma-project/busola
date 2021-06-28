@@ -64,11 +64,11 @@ export function ResourceDetails(props) {
 
   if (loading) return <Spinner />;
   if (error) {
-    const breadcrumbItems = breadcrumbs || [
+    const breadcrumbItems = props.breadcrumbs || [
       {
-        name: resourceType,
+        name: props.resourceType,
         path: '/',
-        fromContext: resourceType.toLowerCase(),
+        fromContext: props.resourceType.toLowerCase(),
       },
       { name: '' },
     ];
@@ -83,7 +83,7 @@ export function ResourceDetails(props) {
     return (
       <ResourceNotFound
         resource={prettifyNameSingular(undefined, props.resourceType)}
-        breadcrumbs={breadcrumbs}
+        breadcrumbs={breadcrumbItems}
         customMessage={getErrorMessage(error)}
       />
     );
