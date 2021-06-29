@@ -1,7 +1,8 @@
 import { setAuthData } from './auth/auth-storage';
 import { reloadNavigation } from './navigation/navigation-data-init';
-import { reloadAuth, hasKubeconfigAuth } from './auth/auth';
+import { reloadAuth, hasNonOidcAuth } from './auth/auth';
 import { saveLocation } from './navigation/previous-location';
+import { parseOIDCParams } from './auth/oidc-params';
 
 const CLUSTERS_KEY = 'busola.clusters';
 const CURRENT_CLUSTER_NAME_KEY = 'busola.current-cluster-name';
@@ -34,7 +35,7 @@ export async function setCluster(clusterName) {
     `/cluster/${encodeURIComponent(clusterName)}/namespaces` +
     (preselectedNamespace ? `/${preselectedNamespace}/details` : '');
 
-  if (hasKubeconfigAuth(kubeconfigUser)) {
+  if (hasNonOidcAuth(kubeconfigUser)) {
     setAuthData(kubeconfigUser);
     await reloadNavigation();
     Luigi.navigation().navigate(targetLocation);
@@ -45,23 +46,14 @@ export async function setCluster(clusterName) {
 }
 
 export function saveClusterParams(params) {
-  const { kubeconfig, config } = params;
+  const { kubeconfig } = params;
   const { users } = kubeconfig;
   if (users?.length) {
     users.forEach(user => {
       user.user = user.user || {};
-      if (!user.user.token && config.auth) {
+      if (!hasNonOidcAuth(user.user) && !!user.exec) {
         // it's needed for the downloaded kubeconfig to work
-        user.user.exec = {
-          apiVersion: 'client.authentication.k8s.io/v1beta1',
-          command: 'kubectl',
-          args: [
-            'oidc-login',
-            'get-token',
-            `--oidc-issuer-url=${config.auth.issuerUrl}`,
-            `--oidc-client-id=${config.auth.clientId}`,
-          ],
-        };
+        user.user.exec = createLoginCommand(parseOIDCParams());
       }
     });
   }

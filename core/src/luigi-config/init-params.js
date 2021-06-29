@@ -4,7 +4,7 @@ import {
   saveActiveClusterName,
   getCurrentContextNamespace,
 } from './cluster-management';
-import { hasKubeconfigAuth } from './auth/auth';
+import { hasNonOidcAuth } from './auth/auth';
 import { saveLocation } from './navigation/previous-location';
 
 const DEFAULT_MODULES = {
@@ -35,17 +35,6 @@ const DEFAULT_HIDDEN_NAMESPACES = [
 
 const encoder = createEncoder('lzma');
 
-function getResponseParams(usePKCE = true) {
-  if (usePKCE) {
-    return {
-      responseType: 'code',
-      responseMode: 'query',
-    };
-  } else {
-    return { responseType: 'id_token' };
-  }
-}
-
 function hasExactlyOneContext(kubeconfig) {
   return kubeconfig?.contexts?.length === 1;
 }
@@ -65,25 +54,25 @@ export async function saveInitParamsIfPresent() {
 async function setupFromParams(encodedParams) {
   const decoded = await encoder.decompress(encodedParams);
 
-  const isKubeconfigPresent = !!Object.keys(decoded.kubeconfig || {}).length;
-  const kubeconfigUser =
-    decoded.kubeconfig?.users && decoded.kubeconfig?.users[0].user;
-  const isOidcAuthPresent = decoded.config?.auth;
-
-  const requireMoreInput =
-    !isKubeconfigPresent ||
-    (!isOidcAuthPresent && !hasKubeconfigAuth(kubeconfigUser));
-
-  if (requireMoreInput) {
-    navigateToAddCluster(encodedParams);
-    return;
-  }
-
   if (!hasExactlyOneContext(decoded.kubeconfig)) {
     navigateToAddCluster(encodedParams);
     return;
   }
 
+  const isKubeconfigPresent = !!Object.keys(decoded.kubeconfig || {}).length;
+  const kubeconfigUser =
+    decoded.kubeconfig?.users && decoded.kubeconfig?.users[0].user;
+
+  const isOidcAuthPresent = kubeconfigUser?.exec;
+
+  const requireMoreInput =
+    !isKubeconfigPresent ||
+    (!isOidcAuthPresent && !hasNonOidcAuth(kubeconfigUser));
+
+  if (requireMoreInput) {
+    navigateToAddCluster(encodedParams);
+    return;
+  }
   const params = {
     ...decoded,
     config: {
@@ -97,14 +86,6 @@ async function setupFromParams(encodedParams) {
       user: decoded.kubeconfig.users[0],
     },
   };
-
-  if (params.config.auth && !hasKubeconfigAuth(kubeconfigUser)) {
-    // no auth in kubeconfig, setup OIDC auth
-    params.config.auth = {
-      ...params.config.auth,
-      ...getResponseParams(params.config.auth.usePKCE),
-    };
-  }
 
   saveClusterParams(params);
 

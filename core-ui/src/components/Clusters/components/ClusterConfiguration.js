@@ -4,28 +4,7 @@ import { AuthForm, AUTH_FORM_OIDC } from './AuthForm';
 import { ContextChooser } from './ContextChooser/ContextChooser';
 import { getContext, hasKubeconfigAuth, addCluster } from '../shared';
 import { Button, Icon } from 'fundamental-react';
-
-const OIDC_PARAM_NAMES = new Map([
-  ['--oidc-issuer-url', 'issuerUrl'],
-  ['--oidc-client-id', 'clientId'],
-  ['--oidc-extra-scope', 'scope'],
-]);
-
-export function parseOIDCparams({ exec: commandData }) {
-  if (!commandData || !commandData.args) throw new Error('No args provided');
-  let output = {};
-
-  commandData.args.forEach(arg => {
-    const [argKey, argValue] = arg.split('=');
-    if (!OIDC_PARAM_NAMES.has(argKey)) return;
-
-    const outputKey = OIDC_PARAM_NAMES.get(argKey);
-    if (output[outputKey]) output[outputKey] += ' ' + argValue;
-    else output[outputKey] = argValue;
-  });
-
-  return output;
-}
+import { createLoginCommand, parseOIDCparams } from './oidc-params';
 
 export function ClusterConfiguration({
   kubeconfig,
@@ -78,24 +57,22 @@ export function ClusterConfiguration({
   const addAuthToParams = params => {
     const { type: authType, token, ...oidcConfig } = auth;
 
-    if (authType === AUTH_FORM_OIDC) {
-      // just add OIDC params to configuration
-      params.config.auth = oidcConfig;
-    } else {
-      // add token to current context's user
-      const { context } = kubeconfig.contexts.find(c => c.name === contextName);
-      const user = params.kubeconfig.users.find(u => u.name === context.user);
+    const authConfig =
+      authType === AUTH_FORM_OIDC
+        ? { exec: createLoginCommand(oidcConfig) }
+        : { token };
 
-      if (user) {
-        user.user = { token };
-      } else {
-        params.kubeconfig.users = [
-          {
-            name: context.user,
-            user: { token },
-          },
-        ];
-      }
+    const { context } = kubeconfig.contexts.find(c => c.name === contextName);
+    const user = params.kubeconfig.users.find(u => u.name === context.user);
+    if (user) {
+      user.user = authConfig;
+    } else {
+      params.kubeconfig.users = [
+        {
+          name: context.user,
+          user: authConfig,
+        },
+      ];
     }
   };
 
