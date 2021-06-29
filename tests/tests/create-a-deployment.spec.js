@@ -101,6 +101,10 @@ context('Create a Deployment', () => {
       .contains('a', DEPLOYMENT_NAME, { timeout: 7000 })
       .should('be.visible');
 
+    cy.getIframeBody()
+      .contains('a', DEPLOYMENT_NAME, { timeout: 7000 })
+      .should('be.visible');
+
     cy.getLeftNav()
       .contains('Discovery and Network')
       .click();
