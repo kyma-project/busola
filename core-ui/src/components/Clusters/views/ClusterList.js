@@ -56,28 +56,23 @@ export function ClusterList() {
   };
 
   const entries = Object.values(clusters);
-  const headerRenderer = () => [
-    'Name',
-    'Configuration version',
-    'API Server address',
-  ];
+  const headerRenderer = () => ['Name', 'API Server address'];
   const textSearchProperties = [
     'currentContext.cluster.name',
     'currentContext.cluster.cluster.server',
   ];
 
   const rowRenderer = entry => [
-    <Link
-      className="link"
-      style={styleActiveCluster(entry)}
-      onClick={() => setCluster(entry.currentContext.cluster.name)}
-    >
-      {entry.currentContext.cluster.name}
-    </Link>,
-    <div>
-      {entry.config?.version || 'Unknown'}
+    <>
+      <Link
+        className="link"
+        style={styleActiveCluster(entry)}
+        onClick={() => setCluster(entry.currentContext.cluster.name)}
+      >
+        {entry.currentContext.cluster.name}
+      </Link>
       {!areParamsCompatible(entry.config?.version) && (
-        <Tooltip content="This version is incompatible. Errors may occur.">
+        <Tooltip content="The parameter version is outdated. Errors may occur, please re-add you cluster.">
           <Icon
             ariaLabel="version incompatible warning"
             className="params-warning-icon"
@@ -85,7 +80,7 @@ export function ClusterList() {
           />
         </Tooltip>
       )}
-    </div>,
+    </>,
     entry.currentContext.cluster.cluster.server,
   ];
 
