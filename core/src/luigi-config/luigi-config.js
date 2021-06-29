@@ -29,6 +29,7 @@ async function luigiAfterInit() {
   // save location, as we'll be logged out in a moment
   if (!getAuthData()) {
     saveCurrentLocation();
+    return;
   }
 
   loadHiddenNamespacesToggle();
