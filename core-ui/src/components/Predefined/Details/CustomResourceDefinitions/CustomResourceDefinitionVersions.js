@@ -1,5 +1,5 @@
 import React from 'react';
-import Editor from '@monaco-editor/react';
+import { MonacoEditor } from 'react-shared';
 import LuigiClient from '@luigi-project/client';
 import { LayoutPanel } from 'fundamental-react';
 import * as jp from 'jsonpath';
@@ -131,7 +131,7 @@ export const CustomResourceDefinitionVersions = resource => {
                 <LayoutPanel.Head title="Schema" />
               </LayoutPanel.Header>
               <LayoutPanel.Body>
-                <Editor
+                <MonacoEditor
                   key={`crd-schema-editor-${version.name}`}
                   theme="vs-light"
                   height="20em"

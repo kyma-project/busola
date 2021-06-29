@@ -5,10 +5,7 @@ import { BrowserRouter } from 'react-router-dom';
 import './index.scss';
 import './fiori-helpers.scss';
 import App from './components/App/App';
-import { Microfrontend, setupMonaco } from 'react-shared';
-import { monaco } from '@monaco-editor/react';
-
-setupMonaco(monaco);
+import { Microfrontend } from 'react-shared';
 
 ReactDOM.render(
   <Microfrontend env={process.env}>
