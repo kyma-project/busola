@@ -19,5 +19,3 @@ You can also start this app individually by running the `npm start` command. The
 ### Code style
 
 Your contributions must match the style guide used in Busola. Busola uses [Prettier](https://prettier.io) for code formatting. For convenience, [husky](https://github.com/typicode/husky) installs the Git pre-commit hook, so you do not need to perform any additional work. Remember to run `npm ci` in the root folder (../) of this repository to install both tools.
-
-test test
