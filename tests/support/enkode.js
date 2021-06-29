@@ -36,7 +36,7 @@ const DEFAULT_CONFIG = {
     ADDONS: 'addons.kyma-project.io',
     SERVERLESS: 'serverless.kyma-project.io',
   },
-  version: '1.0.0',
+  version: '1.0',
 };
 
 export async function generateDefaultParams() {
