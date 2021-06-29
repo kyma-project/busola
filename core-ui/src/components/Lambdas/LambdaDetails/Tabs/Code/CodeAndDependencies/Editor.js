@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { ControlledEditor, DiffEditor } from '@monaco-editor/react';
+import { ControlledEditor, DiffEditor } from 'react-shared';
 
 export default function Editor({
   id,
