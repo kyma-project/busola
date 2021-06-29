@@ -7,17 +7,6 @@ import { tryParseOIDCparams } from './components/oidc-params';
 
 const encoder = createEncoder('lzma');
 
-function getResponseParams(usePKCE = true) {
-  if (usePKCE) {
-    return {
-      responseType: 'code',
-      responseMode: 'query',
-    };
-  } else {
-    return { responseType: 'id_token' };
-  }
-}
-
 export function setCluster(clusterName) {
   LuigiClient.sendCustomMessage({
     id: 'busola.setCluster',
