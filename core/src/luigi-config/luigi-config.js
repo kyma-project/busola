@@ -38,11 +38,19 @@ async function luigiAfterInit() {
       Luigi.navigation().navigate('/clusters');
     }
   } else {
-    if (
-      getAuthData() &&
-      !hasKubeconfigAuth(params.currentContext?.user?.user)
-    ) {
-      await addClusterNodes();
+    try {
+      if (
+        getAuthData() &&
+        !hasKubeconfigAuth(params.currentContext?.user?.user)
+      ) {
+        await addClusterNodes();
+      }
+    } catch (e) {
+      console.warn(e);
+      Luigi.ux().showAlert({
+        text: 'Cannot load navigation nodes',
+        type: 'error',
+      });
     }
     tryRestorePreviousLocation();
   }

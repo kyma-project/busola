@@ -1,6 +1,6 @@
 import { major, satisfies, coerce } from 'semver';
 
-const PARAMS_VERSION = '1.0'; // make sure to sync it in core-ui
+const PARAMS_VERSION = '2.0'; // make sure to sync it in core-ui
 
 export function areParamsCompatible(paramsVersion) {
   const majorVersion = major(coerce(PARAMS_VERSION));
