@@ -85,7 +85,6 @@ export const GenericList = ({
 
   const renderTableBody = () => {
     if (serverDataError) {
-      // console.log('serverDataError', serverDataError)
       return (
         <BodyFallback>
           <p>

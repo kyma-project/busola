@@ -65,12 +65,6 @@ export const getErrorMessage = (error, message = null) => {
     : 'An error occured. The component cannot be rendered.';
 
   if (error?.message && typeof error?.originalMessage !== 'object') {
-    console.log(
-      'in if',
-      error?.message,
-      error?.originalMessage,
-      typeof error?.message,
-    );
     errorNotification += `: ${error.message} `;
   }
   return errorNotification;
