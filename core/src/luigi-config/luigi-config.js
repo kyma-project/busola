@@ -6,7 +6,7 @@ import { getAuthData, setAuthData } from './auth/auth-storage';
 import { communication } from './communication';
 import { createSettings } from './settings';
 import { createAuth, hasKubeconfigAuth } from './auth/auth.js';
-import { saveInitParamsIfPresent } from './init-params';
+import { saveInitParamsIfPresent } from './init-params/init-params.js';
 import {
   getActiveCluster,
   setActiveClusterIfPresentInUrl,

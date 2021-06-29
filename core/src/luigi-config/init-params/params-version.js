@@ -1,6 +1,5 @@
 import { major, satisfies, coerce } from 'semver';
-
-const PARAMS_VERSION = '1.0'; // make sure to sync it in core-ui
+import { PARAMS_VERSION } from './constants';
 
 export function areParamsCompatible(paramsVersion) {
   const majorVersion = major(coerce(PARAMS_VERSION));
@@ -8,8 +7,9 @@ export function areParamsCompatible(paramsVersion) {
 }
 
 export function showIncompatibleParamsWarning(paramsVersion) {
+  const minimalVersion = coerce(major(coerce(PARAMS_VERSION)));
   const message = `Configuration incompatible: version: ${paramsVersion ||
-    "'unknown'"}, supported version: ${PARAMS_VERSION}. Errors may occur.`;
+    "'unknown'"}, supported versions: ^${minimalVersion}. Errors may occur.`;
 
   const showAlert = Luigi.initialized
     ? text =>

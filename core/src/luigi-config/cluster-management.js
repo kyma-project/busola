@@ -5,7 +5,7 @@ import { saveLocation } from './navigation/previous-location';
 import {
   areParamsCompatible,
   showIncompatibleParamsWarning,
-} from './utils/params-version';
+} from './init-params/params-version';
 
 const CLUSTERS_KEY = 'busola.clusters';
 const CURRENT_CLUSTER_NAME_KEY = 'busola.current-cluster-name';

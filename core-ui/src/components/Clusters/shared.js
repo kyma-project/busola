@@ -3,7 +3,7 @@ import LuigiClient from '@luigi-project/client';
 import createEncoder from 'json-url';
 import { DEFAULT_MODULES, DEFAULT_HIDDEN_NAMESPACES } from 'react-shared';
 import { merge } from 'lodash';
-import { PARAMS_VERSION } from './params-version';
+import { PARAMS_VERSION } from 'react-shared';
 
 const encoder = createEncoder('lzma');
 
