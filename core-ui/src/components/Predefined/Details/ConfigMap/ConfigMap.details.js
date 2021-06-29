@@ -1,6 +1,5 @@
 import React from 'react';
-import Editor from '@monaco-editor/react';
-import { ModalWithForm } from 'react-shared';
+import { ModalWithForm, MonacoEditor } from 'react-shared';
 import { Button, LayoutPanel } from 'fundamental-react';
 import { EditConfigMapForm } from './EditConfigMapForm';
 
@@ -20,7 +19,7 @@ export const ConfigMapsDetails = ({ DefaultRenderer, ...otherParams }) => {
           <LayoutPanel.Head title={key} />
         </LayoutPanel.Header>
         <LayoutPanel.Body>
-          <Editor
+          <MonacoEditor
             key={`editor-${key}`}
             theme="vs-light"
             height="20em"
