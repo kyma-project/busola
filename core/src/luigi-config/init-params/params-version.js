@@ -1,13 +1,17 @@
 import { major, satisfies, coerce } from 'semver';
 import { PARAMS_VERSION } from './constants';
 
+export function formatVersion(version) {
+  const fullVersion = coerce(version);
+  return `${fullVersion.major}.0`;
+}
+
 export function areParamsCompatible(paramsVersion) {
-  const majorVersion = major(coerce(PARAMS_VERSION));
-  return satisfies(coerce(paramsVersion), `^${coerce(majorVersion)}`);
+  return satisfies(coerce(paramsVersion), `^${formatVersion(PARAMS_VERSION)}`);
 }
 
 export function showIncompatibleParamsWarning(paramsVersion) {
-  const minimalVersion = coerce(major(coerce(PARAMS_VERSION)));
+  const minimalVersion = formatVersion(PARAMS_VERSION);
   const message = `Configuration incompatible: version: ${paramsVersion ||
     "'unknown'"}, supported versions: ^${minimalVersion}. Errors may occur.`;
 
