@@ -61,4 +61,8 @@ export { CustomPropTypes };
 import { monaco } from '@monaco-editor/react';
 import { setupMonaco } from './utils/setupMonaco';
 
+export * from '@monaco-editor/react';
+import Editor from '@monaco-editor/react';
+export const MonacoEditor = Editor;
+
 setupMonaco(monaco);
