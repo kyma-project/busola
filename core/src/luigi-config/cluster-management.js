@@ -26,6 +26,11 @@ export function getCurrentContextNamespace(kubeconfig) {
   return context?.context.namespace;
 }
 
+export function mergeParamsWithBusolaConfig(params) {
+  console.log(params);
+  console.log(window.clusterConfig);
+}
+
 export async function setCluster(clusterName) {
   const params = getClusters()[clusterName];
 
@@ -83,6 +88,7 @@ export function saveClusterParams(params) {
 
   const clusterName = params.currentContext.cluster.name;
   const clusters = getClusters();
+  params.config = { ...params.config, ...window.clusterConfig };
   clusters[clusterName] = params;
   saveClusters(clusters);
 }

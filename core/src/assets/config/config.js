@@ -1,2 +1,4 @@
 // this file will be populated by configmap
-window.clusterConfig = {};
+window.clusterConfig = {
+    localDev: "true"
+};
