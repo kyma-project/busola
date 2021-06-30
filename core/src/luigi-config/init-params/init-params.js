@@ -3,35 +3,14 @@ import {
   saveClusterParams,
   saveActiveClusterName,
   getCurrentContextNamespace,
-} from './cluster-management';
-import { hasKubeconfigAuth } from './auth/auth';
-import { saveLocation } from './navigation/previous-location';
-
-const DEFAULT_MODULES = {
-  SERVICE_CATALOG: 'servicecatalog.k8s.io',
-  SERVICE_CATALOG_ADDONS: 'servicecatalog.kyma-project.io',
-  EVENTING: 'eventing.kyma-project.io',
-  API_GATEWAY: 'gateway.kyma-project.io',
-  APPLICATIONS: 'applicationconnector.kyma-project.io',
-  ADDONS: 'addons.kyma-project.io',
-  SERVERLESS: 'serverless.kyma-project.io',
-};
-
-const DEFAULT_HIDDEN_NAMESPACES = [
-  'istio-system',
-  'knative-eventing',
-  'knative-serving',
-  'kube-public',
-  'kube-system',
-  'kyma-backup',
-  'kyma-installer',
-  'kyma-integration',
-  'kyma-system',
-  'natss',
-  'kube-node-lease',
-  'kubernetes-dashboard',
-  'serverless-system',
-];
+} from '../cluster-management';
+import { hasKubeconfigAuth } from '../auth/auth';
+import { saveLocation } from '../navigation/previous-location';
+import {
+  areParamsCompatible,
+  showIncompatibleParamsWarning,
+} from './params-version';
+import * as constants from './constants';
 
 const encoder = createEncoder('lzma');
 
@@ -65,6 +44,10 @@ export async function saveInitParamsIfPresent() {
 async function setupFromParams(encodedParams) {
   const decoded = await encoder.decompress(encodedParams);
 
+  if (!areParamsCompatible(decoded.config?.version)) {
+    showIncompatibleParamsWarning(decoded?.config?.version);
+  }
+
   const isKubeconfigPresent = !!Object.keys(decoded.kubeconfig || {}).length;
   const kubeconfigUser =
     decoded.kubeconfig?.users && decoded.kubeconfig?.users[0].user;
@@ -89,8 +72,11 @@ async function setupFromParams(encodedParams) {
     config: {
       ...decoded.config,
       hiddenNamespaces:
-        decoded.config?.hiddenNamespaces || DEFAULT_HIDDEN_NAMESPACES,
-      modules: { ...DEFAULT_MODULES, ...(decoded.config?.modules || {}) },
+        decoded.config?.hiddenNamespaces || constants.DEFAULT_HIDDEN_NAMESPACES,
+      modules: {
+        ...constants.DEFAULT_MODULES,
+        ...(decoded.config?.modules || {}),
+      },
     },
     currentContext: {
       cluster: decoded.kubeconfig.clusters[0],
