@@ -139,11 +139,11 @@ async function mergeParams(params) {
 
   if (params.config.auth) {
     params.config.auth = {
-      ...initParams.config.auth,
-      ...getResponseParams(initParams.config.auth.usePKCE),
+      ...params.config.auth,
+      ...getResponseParams(params.config.auth.usePKCE),
     };
   }
-  // Don't merge hiddenNamespaces, use the defaults only when initParams are empty
+  // Don't merge hiddenNamespaces, use the defaults only when params are empty
   params.config.hiddenNamespaces =
     params.config?.hiddenNamespaces || DEFAULT_HIDDEN_NAMESPACES;
 
