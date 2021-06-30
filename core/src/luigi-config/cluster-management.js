@@ -3,6 +3,10 @@ import { reloadNavigation } from './navigation/navigation-data-init';
 import { reloadAuth, hasNonOidcAuth } from './auth/auth';
 import { saveLocation } from './navigation/previous-location';
 import { parseOIDCParams } from './auth/oidc-params';
+import {
+  areParamsCompatible,
+  showIncompatibleParamsWarning,
+} from './init-params/params-version';
 
 const CLUSTERS_KEY = 'busola.clusters';
 const CURRENT_CLUSTER_NAME_KEY = 'busola.current-cluster-name';
@@ -24,24 +28,35 @@ export function getCurrentContextNamespace(kubeconfig) {
 }
 
 export async function setCluster(clusterName) {
+  const params = getClusters()[clusterName];
+
+  if (!areParamsCompatible(params?.config?.version)) {
+    showIncompatibleParamsWarning(params?.config?.version);
+  }
+
   saveActiveClusterName(clusterName);
-  reloadAuth();
+  try {
+    reloadAuth();
 
-  const params = getActiveCluster();
-  const preselectedNamespace = getCurrentContextNamespace(params.kubeconfig);
-  const kubeconfigUser = params.currentContext.user.user;
+    const preselectedNamespace = getCurrentContextNamespace(params.kubeconfig);
+    const kubeconfigUser = params.currentContext.user.user;
 
-  const targetLocation =
-    `/cluster/${encodeURIComponent(clusterName)}/namespaces` +
-    (preselectedNamespace ? `/${preselectedNamespace}/details` : '');
+    const targetLocation =
+      `/cluster/${encodeURIComponent(clusterName)}/namespaces` +
+      (preselectedNamespace ? `/${preselectedNamespace}/details` : '');
 
-  if (hasNonOidcAuth(kubeconfigUser)) {
-    setAuthData(kubeconfigUser);
-    await reloadNavigation();
-    Luigi.navigation().navigate(targetLocation);
-  } else {
-    saveLocation(targetLocation);
-    location = location.origin;
+    if (hasNonOidcAuth(kubeconfigUser)) {
+      setAuthData(kubeconfigUser);
+      await reloadNavigation();
+      Luigi.navigation().navigate(targetLocation);
+    } else {
+      saveLocation(targetLocation);
+      location = location.origin;
+    }
+  } catch (e) {
+    console.warn(e);
+    alert('An error occured while setting up the cluster.');
+    saveActiveClusterName(null);
   }
 }
 

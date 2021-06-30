@@ -6,7 +6,7 @@ import { getAuthData, setAuthData } from './auth/auth-storage';
 import { communication } from './communication';
 import { createSettings } from './settings';
 import { createAuth, hasNonOidcAuth } from './auth/auth.js';
-import { saveInitParamsIfPresent } from './init-params';
+import { saveInitParamsIfPresent } from './init-params/init-params.js';
 import {
   getActiveCluster,
   setActiveClusterIfPresentInUrl,
@@ -39,8 +39,16 @@ async function luigiAfterInit() {
       Luigi.navigation().navigate('/clusters');
     }
   } else {
-    if (getAuthData() && !hasNonOidcAuth(params.currentContext?.user?.user)) {
-      await addClusterNodes();
+    try {
+      if (getAuthData() && !hasNonOidcAuth(params.currentContext?.user?.user)) {
+        await addClusterNodes();
+      }
+    } catch (e) {
+      console.warn(e);
+      Luigi.ux().showAlert({
+        text: 'Cannot load navigation nodes',
+        type: 'error',
+      });
     }
     tryRestorePreviousLocation();
   }

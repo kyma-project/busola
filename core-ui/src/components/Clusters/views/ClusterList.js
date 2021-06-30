@@ -2,16 +2,19 @@ import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import jsyaml from 'js-yaml';
 import { saveAs } from 'file-saver';
-import { Link, Button } from 'fundamental-react';
+import { Link, Button, Icon } from 'fundamental-react';
 import { useShowNodeParamsError } from 'shared/useShowNodeParamsError';
 import {
   useMicrofrontendContext,
   PageHeader,
   GenericList,
   useNotification,
+  Tooltip,
 } from 'react-shared';
 
 import { setCluster, deleteCluster } from './../shared';
+import { areParamsCompatible } from '../params-version';
+import './ClusterList.scss';
 
 export function ClusterList() {
   const { clusters, activeClusterName } = useMicrofrontendContext();
@@ -60,13 +63,24 @@ export function ClusterList() {
   ];
 
   const rowRenderer = entry => [
-    <Link
-      className="link"
-      style={styleActiveCluster(entry)}
-      onClick={() => setCluster(entry.currentContext.cluster.name)}
-    >
-      {entry.currentContext.cluster.name}
-    </Link>,
+    <>
+      <Link
+        className="link"
+        style={styleActiveCluster(entry)}
+        onClick={() => setCluster(entry.currentContext.cluster.name)}
+      >
+        {entry.currentContext.cluster.name}
+      </Link>
+      {!areParamsCompatible(entry.config?.version) && (
+        <Tooltip content="The parameter version is outdated. Errors may occur, please re-add you cluster.">
+          <Icon
+            ariaLabel="version incompatible warning"
+            className="params-warning-icon"
+            glyph="message-warning"
+          />
+        </Tooltip>
+      )}
+    </>,
     entry.currentContext.cluster.cluster.server,
   ];
 
