@@ -92,7 +92,7 @@ async function setupFromParams(encodedParams) {
     };
   }
 
-  saveClusterParams(params);
+  await saveClusterParams(params);
 
   const clusterName = params.currentContext.cluster.name;
   saveActiveClusterName(clusterName);

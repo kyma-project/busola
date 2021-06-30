@@ -20,8 +20,8 @@ export async function failFastFetch(input, auth, init = {}) {
     }
   }
 
-  function createHeaders(auth) {
-    const cluster = getActiveCluster().currentContext.cluster.cluster;
+  async function createHeaders(auth) {
+    const cluster = (await getActiveCluster()).currentContext.cluster.cluster;
     return {
       ...createAuthHeaders(auth),
       'Content-Type': 'application/json',
@@ -31,7 +31,7 @@ export async function failFastFetch(input, auth, init = {}) {
     };
   }
 
-  init.headers = createHeaders(auth);
+  init.headers = await createHeaders(auth);
 
   const response = await fetch(input, init);
   if (response.ok) {

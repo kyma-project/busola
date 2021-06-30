@@ -23,7 +23,7 @@ export const NODE_PARAM_PREFIX = `~`;
 async function luigiAfterInit() {
   Luigi.ux().hideAppLoadingIndicator();
 
-  const params = getActiveCluster();
+  const params = await getActiveCluster();
   const isClusterChoosen = !!params;
 
   // save location, as we'll be logged out in a moment
@@ -58,11 +58,11 @@ async function luigiAfterInit() {
 }
 
 (async () => {
-  setActiveClusterIfPresentInUrl();
+  await setActiveClusterIfPresentInUrl();
 
   await saveInitParamsIfPresent();
 
-  const params = getActiveCluster();
+  const params = await getActiveCluster();
 
   const kubeconfigUser = params?.currentContext.user.user;
   if (hasKubeconfigAuth(kubeconfigUser)) {

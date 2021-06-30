@@ -23,8 +23,8 @@ function updateLuigiAuth(auth) {
   Luigi.configChanged();
 }
 
-export function reloadAuth() {
-  const params = getActiveCluster();
+export async function reloadAuth() {
+  const params = await getActiveCluster();
 
   if (!params) return;
 

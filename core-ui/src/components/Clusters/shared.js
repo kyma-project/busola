@@ -1,22 +1,9 @@
 import LuigiClient from '@luigi-project/client';
 
 import createEncoder from 'json-url';
-import { DEFAULT_MODULES, DEFAULT_HIDDEN_NAMESPACES } from 'react-shared';
-import { merge } from 'lodash';
 import { PARAMS_VERSION } from 'react-shared';
 
 const encoder = createEncoder('lzma');
-
-function getResponseParams(usePKCE = true) {
-  if (usePKCE) {
-    return {
-      responseType: 'code',
-      responseMode: 'query',
-    };
-  } else {
-    return { responseType: 'id_token' };
-  }
-}
 
 export function setCluster(clusterName) {
   LuigiClient.sendCustomMessage({
@@ -25,32 +12,8 @@ export function setCluster(clusterName) {
   });
 }
 
-export function addCluster(initParams) {
-  const defaultParams = {
-    config: {
-      navigation: {
-        disabledNodes: [],
-        externalNodes: [],
-      },
-      hiddenNamespaces: DEFAULT_HIDDEN_NAMESPACES,
-      modules: DEFAULT_MODULES,
-    },
-  };
-
-  if (initParams.config.auth) {
-    initParams.config.auth = {
-      ...initParams.config.auth,
-      ...getResponseParams(initParams.config.auth.usePKCE),
-    };
-  }
-
-  const params = merge(defaultParams, initParams);
-  // Don't merge hiddenNamespaces, use the defaults only when initParams are empty
-  params.config.hiddenNamespaces =
-    initParams.config?.hiddenNamespaces || DEFAULT_HIDDEN_NAMESPACES;
-
+export function addCluster(params) {
   params.config.version = PARAMS_VERSION;
-
   LuigiClient.sendCustomMessage({
     id: 'busola.addCluster',
     params,

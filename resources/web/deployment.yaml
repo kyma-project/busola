@@ -38,5 +38,5 @@ spec:
           configMap:
             name: busola-web-config
             items:
-              - key: config.js
-                path: config.js
+              - key: config.json
+                path: config.json
