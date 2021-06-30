@@ -57,3 +57,14 @@ export const prettifyNameSingular = (resourceName, resourceType) => {
   const resources = prettifyNamePlural(resourceName, resourceType);
   return resources.slice(0, -1);
 };
+
+export const getErrorMessage = (error, message = null) => {
+  let errorNotification = message
+    ? message
+    : 'An error occured. The component cannot be rendered.';
+
+  if (error?.message && typeof error?.originalMessage !== 'object') {
+    errorNotification += `: ${error.message} `;
+  }
+  return errorNotification;
+};
