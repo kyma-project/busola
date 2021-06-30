@@ -9,7 +9,7 @@ export const ResourceNotFound = ({ resource, breadcrumbs, customMessage }) => {
     <>
       <PageHeader title="" breadcrumbItems={breadcrumbs} />
       <LayoutPanel className="fd-has-padding-regular fd-margin--md">
-        {customMessage ? customMessage : `Such ${resource} doesn't exists.`}
+        {customMessage ? customMessage : `Such ${resource} doesn't exist.`}
       </LayoutPanel>
     </>
   );
