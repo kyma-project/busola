@@ -8,7 +8,6 @@ import { Spinner } from '../Spinner/Spinner';
 import { HeaderRenderer, RowRenderer, BodyFallback } from './components';
 
 import { filterEntries } from './helpers';
-import { MESSAGES } from './constants';
 import classnames from 'classnames';
 
 import PropTypes from 'prop-types';
@@ -90,7 +89,7 @@ export const GenericList = ({
           <p>
             {serverErrorMessage
               ? serverErrorMessage
-              : getErrorMessage(serverDataError, MESSAGES.SERVER_ERROR)}
+              : getErrorMessage(serverDataError)}
           </p>
         </BodyFallback>
       );
