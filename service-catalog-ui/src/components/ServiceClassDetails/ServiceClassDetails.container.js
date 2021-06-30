@@ -39,12 +39,11 @@ export const ServiceClassDetailsContainer = ({ name }) => {
   const servicePlans = servicePlansRequest.data?.sort(sortByDisplayName);
 
   if (error) {
+    const breadcrumbItems = [{ name: 'Catalog', path: '/' }, { name: '' }];
     return (
       <ResourceNotFound
         resource="Service Class"
-        breadcrumb="Catalog"
-        path="/"
-        fromClosestContext={true}
+        breadcrumbs={breadcrumbItems}
       />
     );
   }
@@ -88,12 +87,11 @@ export const ClusterServiceClassDetailsContainer = ({ name }) => {
   const servicePlans = servicePlansRequest.data?.sort(sortByDisplayName);
 
   if (error) {
+    const breadcrumbItems = [{ name: 'Catalog', path: '/' }, { name: '' }];
     return (
       <ResourceNotFound
         resource="Cluster Service Class"
-        breadcrumb="Catalog"
-        path="/"
-        fromClosestContext={true}
+        breadcrumbs={breadcrumbItems}
       />
     );
   }
