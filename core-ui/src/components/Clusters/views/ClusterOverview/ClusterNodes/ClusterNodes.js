@@ -1,6 +1,6 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
-import { Pagination, Spinner, ErrorPanel, getErrorMessage } from 'react-shared';
+import { Pagination, Spinner, ErrorPanel } from 'react-shared';
 import { LayoutPanel, Link } from 'fundamental-react';
 import { useNodesQuery } from 'components/Nodes/nodeQueries';
 import { NodeResources } from '../../../../Nodes/NodeResources/NodeResources';
@@ -35,7 +35,7 @@ export function ClusterNodes() {
   return (
     <>
       {loading && <Spinner compact={true} />}
-      {error && <ErrorPanel error={getErrorMessage(error)} title="Metrics" />}
+      {error && <ErrorPanel error={error} title="Metrics" />}
       <div className="cluster-overview__nodes">
         {pagedNodes.map(node => (
           <NodeResources

@@ -1,5 +1,4 @@
 import { randomNamesGenerator } from './randomNamesGenerator/randomNamesGenerator';
-import { MESSAGES } from '../components/GenericList/constants';
 
 export function formatMessage(message = '', variables = {}) {
   const serializedVariables = {};
