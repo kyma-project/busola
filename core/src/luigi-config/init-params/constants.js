@@ -1,5 +1,3 @@
-export const EMPTY_TEXT_PLACEHOLDER = '-';
-
 export const DEFAULT_MODULES = {
   SERVICE_CATALOG: 'servicecatalog.k8s.io',
   SERVICE_CATALOG_ADDONS: 'servicecatalog.kyma-project.io',
@@ -26,4 +24,4 @@ export const DEFAULT_HIDDEN_NAMESPACES = [
   'serverless-system',
 ];
 
-export const PARAMS_VERSION = '1.0'; // make sure to sync it in core
+export const PARAMS_VERSION = '1.0'; // make sure to sync it in shared

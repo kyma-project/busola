@@ -3,6 +3,7 @@ import LuigiClient from '@luigi-project/client';
 import createEncoder from 'json-url';
 import { DEFAULT_MODULES, DEFAULT_HIDDEN_NAMESPACES } from 'react-shared';
 import { merge } from 'lodash';
+import { PARAMS_VERSION } from 'react-shared';
 
 const encoder = createEncoder('lzma');
 
@@ -47,6 +48,8 @@ export function addCluster(initParams) {
   // Don't merge hiddenNamespaces, use the defaults only when initParams are empty
   params.config.hiddenNamespaces =
     initParams.config?.hiddenNamespaces || DEFAULT_HIDDEN_NAMESPACES;
+
+  params.config.version = PARAMS_VERSION;
 
   LuigiClient.sendCustomMessage({
     id: 'busola.addCluster',
