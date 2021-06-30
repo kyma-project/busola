@@ -10,6 +10,7 @@ import {
   showIncompatibleParamsWarning,
 } from './params-version';
 import * as constants from './constants';
+import { hasNonOidcAuth } from '../auth/auth';
 
 const encoder = createEncoder('lzma');
 
