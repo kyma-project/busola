@@ -4,7 +4,7 @@ import { AuthForm, AUTH_FORM_OIDC } from './AuthForm';
 import { ContextChooser } from './ContextChooser/ContextChooser';
 import { getContext, hasKubeconfigAuth, addCluster } from '../shared';
 import { Button, Icon } from 'fundamental-react';
-import { createLoginCommand, parseOIDCparams } from './oidc-params';
+import { createLoginCommand } from './oidc-params';
 
 export function ClusterConfiguration({
   kubeconfig,
@@ -23,36 +23,6 @@ export function ClusterConfiguration({
   React.useEffect(() => {
     setContextName(kubeconfig['current-context']);
   }, [kubeconfig]);
-
-  React.useEffect(() => {
-    if (Object.keys(auth).length > 1) return; // Some properties were already predefined for the auth. Filling them again would cause an infinite loop.
-    fillAuthFromKubeconfig();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [auth, kubeconfig, setAuth]);
-
-  React.useEffect(() => {
-    fillAuthFromKubeconfig();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [contextName]);
-
-  function fillAuthFromKubeconfig() {
-    if (auth.type !== AUTH_FORM_OIDC || !kubeconfig || !contextName) return;
-    const { context } = kubeconfig.contexts.find(c => c.name === contextName);
-    const user = kubeconfig.users.find(u => u.name === context.user);
-
-    try {
-      const parsedParams = parseOIDCparams(user?.user);
-      setAuth({
-        ...auth,
-        ...parsedParams,
-      });
-    } catch (e) {
-      console.debug(
-        '[INFO] Tried to parse predefined OIDC args and failed due to',
-        e,
-      );
-    }
-  }
 
   const addAuthToParams = params => {
     const { type: authType, token, ...oidcConfig } = auth;

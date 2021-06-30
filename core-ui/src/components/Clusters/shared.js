@@ -77,7 +77,7 @@ export function hasKubeconfigAuth(kubeconfig, contextName) {
     const clientKeyData = user['client-key-data'];
     const oidcParams = tryParseOIDCparams(user);
 
-    return !!token || (!!clientCA && !!clientKeyData) || oidcParams;
+    return !!token || (!!clientCA && !!clientKeyData) || !!oidcParams;
   } catch (e) {
     // we could arduously check for falsy values, but...
     console.warn(e);
