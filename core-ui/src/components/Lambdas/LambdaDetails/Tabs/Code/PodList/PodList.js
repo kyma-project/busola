@@ -46,7 +46,6 @@ export default function PodList({ namespace, functionName, isActive }) {
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       serverDataError={error}
-      serverErrorMessage={error?.message}
       serverDataLoading={loading}
     />
   );

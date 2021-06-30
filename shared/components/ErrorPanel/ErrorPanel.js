@@ -1,5 +1,6 @@
 import React from 'react';
 import { LayoutPanel } from 'fundamental-react';
+import { getErrorMessage } from '../..';
 
 export const ErrorPanel = ({ error, title }) => {
   return (
@@ -7,8 +8,15 @@ export const ErrorPanel = ({ error, title }) => {
       <LayoutPanel.Header>
         <LayoutPanel.Head title={title || 'Error'} />
       </LayoutPanel.Header>
-      <LayoutPanel.Body>
-        {error || 'An error occured. The component cannot be rendered.'}
+      <LayoutPanel.Body
+        style={{
+          fontSize: '18px',
+        }}
+      >
+        {getErrorMessage(
+          error,
+          'An error occured. The component cannot be rendered.',
+        )}
       </LayoutPanel.Body>
     </LayoutPanel>
   );

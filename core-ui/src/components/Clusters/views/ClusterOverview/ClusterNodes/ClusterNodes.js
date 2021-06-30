@@ -35,7 +35,7 @@ export function ClusterNodes() {
   return (
     <>
       {loading && <Spinner compact={true} />}
-      {error && <ErrorPanel error={error.message} title="Metrics" />}
+      {error && <ErrorPanel error={error} title="Metrics" />}
       <div className="cluster-overview__nodes">
         {pagedNodes.map(node => (
           <NodeResources

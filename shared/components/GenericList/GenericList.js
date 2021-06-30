@@ -14,6 +14,7 @@ import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import CustomPropTypes from '../../typechecking/CustomPropTypes';
 
+import { getErrorMessage } from '../..';
 import './GenericList.scss';
 
 export const GenericList = ({
@@ -86,7 +87,11 @@ export const GenericList = ({
     if (serverDataError) {
       return (
         <BodyFallback>
-          <p>{serverErrorMessage}</p>
+          <p>
+            {serverErrorMessage
+              ? serverErrorMessage
+              : getErrorMessage(serverDataError)}
+          </p>
         </BodyFallback>
       );
     }
@@ -228,7 +233,6 @@ GenericList.propTypes = {
 GenericList.defaultProps = {
   notFoundMessage: MESSAGES.NOT_FOUND,
   noSearchResultMessage: MESSAGES.NO_SEARCH_RESULT,
-  serverErrorMessage: MESSAGES.SERVER_ERROR,
   actions: [],
   textSearchProperties: ['name', 'description'],
   showSearchField: true,

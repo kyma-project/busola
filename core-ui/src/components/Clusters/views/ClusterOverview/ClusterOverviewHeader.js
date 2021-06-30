@@ -1,5 +1,10 @@
 import React from 'react';
-import { useGet, useMicrofrontendContext, PageHeader } from 'react-shared';
+import {
+  useGet,
+  useMicrofrontendContext,
+  PageHeader,
+  getErrorMessage,
+} from 'react-shared';
 
 export function ClusterOverviewHeader() {
   const { cluster } = useMicrofrontendContext();
@@ -11,7 +16,7 @@ export function ClusterOverviewHeader() {
 
   function formatClusterVersion() {
     if (versionLoading) return 'Loading...';
-    if (versionError) return versionError.message;
+    if (versionError) return getErrorMessage(versionError);
     return version.gitVersion;
   }
 

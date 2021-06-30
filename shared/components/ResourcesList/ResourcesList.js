@@ -102,9 +102,7 @@ function Resources({
   const { loading = true, error, data: resources, silentRefetch } = useGetList(
     filter,
   )(resourceUrl, { pollingInterval: 3000, skip: skipDataLoading });
-
   React.useEffect(() => closeEditor(), [namespace]);
-
   const prettifiedResourceName = prettifyNameSingular(
     resourceName,
     resourceType,
@@ -232,7 +230,6 @@ function Resources({
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       serverDataError={error}
-      serverErrorMessage={error?.message}
       serverDataLoading={loading}
       pagination={{ itemsPerPage: 20, autoHide: true }}
       extraHeaderContent={extraHeaderContent}
