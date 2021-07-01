@@ -1,7 +1,7 @@
 import LuigiClient from '@luigi-project/client';
 
 import createEncoder from 'json-url';
-import { DEFAULT_MODULES, DEFAULT_HIDDEN_NAMESPACES } from 'react-shared';
+import { DEFAULT_FEATURES, DEFAULT_HIDDEN_NAMESPACES } from 'react-shared';
 import { merge } from 'lodash';
 import { tryParseOIDCparams } from './components/oidc-params';
 import { PARAMS_VERSION } from 'react-shared';
@@ -23,7 +23,7 @@ export function addCluster(initParams) {
         externalNodes: [],
       },
       hiddenNamespaces: DEFAULT_HIDDEN_NAMESPACES,
-      modules: DEFAULT_MODULES,
+      features: DEFAULT_FEATURES,
     },
   };
 

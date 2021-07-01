@@ -27,14 +27,63 @@ const DEFAULT_CONFIG = {
       },
     ],
   },
-  modules: {
-    SERVICE_CATALOG: 'servicecatalog.k8s.io',
-    SERVICE_CATALOG_ADDONS: 'servicecatalog.kyma-project.io',
-    EVENTING: 'eventing.kyma-project.io',
-    API_GATEWAY: 'gateway.kyma-project.io',
-    APPLICATIONS: 'applicationconnector.kyma-project.io',
-    ADDONS: 'addons.kyma-project.io',
-    SERVERLESS: 'serverless.kyma-project.io',
+  features: {
+    SERVICE_CATALOG: {
+      selectors: [
+        {
+          type: 'apiGroup',
+          apiGroup: 'servicecatalog.k8s.io',
+        },
+      ],
+    },
+    SERVICE_CATALOG_ADDONS: {
+      selectors: [
+        {
+          type: 'apiGroup',
+          apiGroup: 'servicecatalog.kyma-project.io',
+        },
+      ],
+    },
+    EVENTING: {
+      selectors: [
+        {
+          type: 'apiGroup',
+          apiGroup: 'eventing.kyma-project.io',
+        },
+      ],
+    },
+    API_GATEWAY: {
+      selectors: [
+        {
+          type: 'apiGroup',
+          apiGroup: 'gateway.kyma-project.io',
+        },
+      ],
+    },
+    APPLICATIONS: {
+      selectors: [
+        {
+          type: 'apiGroup',
+          apiGroup: 'applicationconnector.kyma-project.io',
+        },
+      ],
+    },
+    ADDONS: {
+      selectors: [
+        {
+          type: 'apiGroup',
+          apiGroup: 'addons.kyma-project.io',
+        },
+      ],
+    },
+    SERVERLESS: {
+      selectors: [
+        {
+          type: 'apiGroup',
+          apiGroup: 'serverless.kyma-project.io',
+        },
+      ],
+    },
   },
   version: '1.0',
 };

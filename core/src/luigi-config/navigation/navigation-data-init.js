@@ -10,6 +10,7 @@ import {
   getStaticRootNodes,
 } from './static-navigation-model';
 import { navigationPermissionChecker, hasPermissionsFor } from './permissions';
+import { resolveNonLazyFeatures } from './../features';
 
 import {
   hideDisabledNodes,
@@ -165,10 +166,20 @@ export async function createNavigation() {
       }
     : {};
 
+  const isNodeEnabled = node => {
+    // disable node only if explicitly set to "false"
+    if (node.context?.isEnabled === undefined) {
+      return true;
+    } else {
+      return node.context.isEnabled;
+    }
+  };
+
   return {
     preloadViewGroups: false,
     nodeAccessibilityResolver: node =>
-      navigationPermissionChecker(node, selfSubjectRulesReview, crds),
+      isNodeEnabled(node) &&
+      navigationPermissionChecker(node, selfSubjectRulesReview),
     appSwitcher: {
       showMainAppEntry: false,
       items: [
@@ -228,8 +239,14 @@ export async function getNavigationData(authData) {
     const params = getActiveCluster();
     const activeClusterName = params.currentContext.cluster.name;
 
-    const { navigation = {}, hiddenNamespaces = [], modules = {} } =
+    const { navigation = {}, hiddenNamespaces = [], features = {} } =
       params?.config || {};
+
+    const resolvedFeatures = await resolveNonLazyFeatures(features, {
+      authData,
+      crds,
+    });
+    console.log(resolvedFeatures);
     const nodes = [
       {
         pathSegment: 'cluster',
@@ -247,7 +264,7 @@ export async function getNavigationData(authData) {
                 getChildrenNodesForNamespace,
                 apiPaths,
                 permissionSet,
-                modules,
+                resolvedFeatures,
               );
               const externalNodes = addExternalNodes(navigation.externalNodes);
               const allNodes = [...staticNodes, ...externalNodes];
@@ -260,7 +277,8 @@ export async function getNavigationData(authData) {
           authData,
           groups,
           crds,
-          modules,
+          features,
+          resolvedFeatures,
           hiddenNamespaces,
           showHiddenNamespaces: shouldShowHiddenNamespaces(),
           cluster: params.currentContext.cluster,
@@ -313,11 +331,11 @@ async function getNamespaces() {
 }
 
 function getChildrenNodesForNamespace(apiPaths, permissionSet) {
-  const { navigation = {}, modules = {} } = getActiveCluster().config;
+  const { navigation = {}, features = {} } = getActiveCluster().config;
   const staticNodes = getStaticChildrenNodesForNamespace(
     apiPaths,
     permissionSet,
-    modules,
+    features,
   );
 
   hideDisabledNodes(navigation.disabledNodes, staticNodes, true);

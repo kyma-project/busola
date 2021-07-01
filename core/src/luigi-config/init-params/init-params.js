@@ -62,9 +62,9 @@ async function setupFromParams(encodedParams) {
       ...decoded.config,
       hiddenNamespaces:
         decoded.config?.hiddenNamespaces || constants.DEFAULT_HIDDEN_NAMESPACES,
-      modules: {
-        ...constants.DEFAULT_MODULES,
-        ...(decoded.config?.modules || {}),
+      features: {
+        ...constants.DEFAULT_FEATURES,
+        ...(decoded.config?.features || {}),
       },
     },
     currentContext: {

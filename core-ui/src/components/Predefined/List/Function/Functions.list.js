@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from 'fundamental-react';
 import LuigiClient from '@luigi-project/client';
-import { useMicrofrontendContext, modulesExist } from 'react-shared';
+import { useMicrofrontendContext } from 'react-shared';
 
 import { prettySourceType } from 'components/Lambdas/helpers/lambdas';
 import { prettyRuntime } from 'components/Lambdas/helpers/runtime';
@@ -10,7 +10,7 @@ import CreateNewFunction from './CreateNewFunction';
 
 export const FunctionsList = ({ DefaultRenderer, ...otherParams }) => {
   const microfrontendContext = useMicrofrontendContext();
-  const { crds, modules } = microfrontendContext;
+  const { resolvedFeatures } = microfrontendContext;
 
   function goToGitRepositories() {
     LuigiClient.linkManager()
@@ -18,7 +18,7 @@ export const FunctionsList = ({ DefaultRenderer, ...otherParams }) => {
       .navigate(`gitrepositories`);
   }
 
-  const headerActions = modulesExist(crds, [modules?.SERVERLESS]) ? (
+  const headerActions = resolvedFeatures?.SERVERLESS ? (
     <Button option="transparent" onClick={goToGitRepositories}>
       Connected repositories
     </Button>

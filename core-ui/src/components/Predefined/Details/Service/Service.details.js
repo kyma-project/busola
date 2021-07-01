@@ -1,11 +1,6 @@
 import React from 'react';
 import { InfoLabel, Icon, Token } from 'fundamental-react';
-import {
-  Spinner,
-  useGetList,
-  useMicrofrontendContext,
-  modulesExist,
-} from 'react-shared';
+import { Spinner, useGetList, useMicrofrontendContext } from 'react-shared';
 
 import EventSubscriptions from 'shared/components/EventSubscriptions/EventSubscriptions';
 import './Service.details.scss';
@@ -57,12 +52,12 @@ function ApiRules(service) {
 
 export const ServicesDetails = ({ DefaultRenderer, ...otherParams }) => {
   const microfrontendContext = useMicrofrontendContext();
-  const { crds, modules } = microfrontendContext;
+  const { resolvedFeatures } = microfrontendContext;
   const customComponents = [];
-  if (modulesExist(crds, [modules?.EVENTING])) {
+  if (resolvedFeatures?.EVENTING) {
     customComponents.push(EventSubscriptionsWrapper);
   }
-  if (modulesExist(crds, [modules?.API_GATEWAY])) {
+  if (resolvedFeatures?.API_GATEWAY) {
     customComponents.push(ApiRules);
   }
 

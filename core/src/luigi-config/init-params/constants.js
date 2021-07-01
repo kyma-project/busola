@@ -1,4 +1,4 @@
-export const DEFAULT_MODULES = {
+const DEFAULT_MODULES = {
   SERVICE_CATALOG: 'servicecatalog.k8s.io',
   SERVICE_CATALOG_ADDONS: 'servicecatalog.kyma-project.io',
   EVENTING: 'eventing.kyma-project.io',
@@ -7,6 +7,21 @@ export const DEFAULT_MODULES = {
   ADDONS: 'addons.kyma-project.io',
   SERVERLESS: 'serverless.kyma-project.io',
 };
+
+export const DEFAULT_FEATURES = Object.fromEntries(
+  Object.entries(DEFAULT_MODULES).map(([key, value]) => [
+    key,
+    {
+      selectors: [
+        {
+          lazy: false,
+          type: 'apiGroup',
+          apiGroup: value,
+        },
+      ],
+    },
+  ]),
+);
 
 export const DEFAULT_HIDDEN_NAMESPACES = [
   'istio-system',
@@ -24,4 +39,4 @@ export const DEFAULT_HIDDEN_NAMESPACES = [
   'serverless-system',
 ];
 
-export const PARAMS_VERSION = '1.0'; // make sure to sync it in shared
+export const PARAMS_VERSION = '2.0'; // make sure to sync it in shared
