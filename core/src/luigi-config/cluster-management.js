@@ -106,17 +106,6 @@ export function saveActiveClusterName(clusterName) {
 // setup params:
 // defaults < config from CM < init params
 async function mergeParams(params) {
-  function getResponseParams(usePKCE = true) {
-    if (usePKCE) {
-      return {
-        responseType: 'code',
-        responseMode: 'query',
-      };
-    } else {
-      return { responseType: 'id_token' };
-    }
-  }
-
   const defaultConfig = {
     navigation: {
       disabledNodes: [],
@@ -129,12 +118,6 @@ async function mergeParams(params) {
 
   params.config = { ...defaultConfig, ...params.config };
 
-  if (params.config.auth) {
-    params.config.auth = {
-      ...params.config.auth,
-      ...getResponseParams(params.config.auth.usePKCE),
-    };
-  }
   // Don't merge hiddenNamespaces, use the defaults only when params are empty
   params.config.hiddenNamespaces =
     params.config?.hiddenNamespaces || DEFAULT_HIDDEN_NAMESPACES;

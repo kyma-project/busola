@@ -37,7 +37,7 @@ export async function reloadAuth() {
     updateLuigiAuth(null);
   } else {
     // we need to use OIDC flow
-    updateLuigiAuth(createAuth(params.config.auth));
+    updateLuigiAuth(createAuth(kubeconfigUser));
   }
 }
 
