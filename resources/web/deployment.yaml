@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: web
-  namespace: busola
   labels:
     app: busola
 spec:

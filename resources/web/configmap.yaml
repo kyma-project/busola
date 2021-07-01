@@ -2,7 +2,6 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: busola-web-config
-  namespace: busola
 data:
   config.json: >
     {};
