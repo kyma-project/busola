@@ -24,7 +24,6 @@ export function KubeconfigTextArea({
         ref={textAreaRef}
         id="textarea-kubeconfig"
         placeholder="Paste your config"
-        defaultValue={kubeconfigFromParams}
         value={value}
         onChange={e => setValue(e.target.value)}
       ></textarea>

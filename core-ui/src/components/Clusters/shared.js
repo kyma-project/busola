@@ -1,6 +1,7 @@
 import LuigiClient from '@luigi-project/client';
 
 import createEncoder from 'json-url';
+import { tryParseOIDCparams } from './components/oidc-params';
 import { PARAMS_VERSION } from 'react-shared';
 
 const encoder = createEncoder('lzma');
@@ -58,8 +59,9 @@ export function hasKubeconfigAuth(kubeconfig, contextName) {
     const token = user.token;
     const clientCA = user['client-certificate-data'];
     const clientKeyData = user['client-key-data'];
+    const oidcParams = tryParseOIDCparams(user);
 
-    return !!token || (!!clientCA && !!clientKeyData);
+    return !!token || (!!clientCA && !!clientKeyData) || !!oidcParams;
   } catch (e) {
     // we could arduously check for falsy values, but...
     console.warn(e);

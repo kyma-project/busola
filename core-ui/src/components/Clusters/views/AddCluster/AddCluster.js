@@ -3,7 +3,7 @@ import LuigiClient from '@luigi-project/client';
 import './AddCluster.scss';
 
 import { PageHeader, useNotification } from 'react-shared';
-import { AUTH_FORM_TOKEN, AUTH_FORM_OIDC } from '../../components/AuthForm';
+import { AUTH_FORM_TOKEN } from '../../components/AuthForm';
 import { KubeconfigUpload } from '../../components/KubeconfigUpload/KubeconfigUpload';
 import {
   decompressParams,
@@ -104,14 +104,7 @@ export function AddCluster() {
         {kubeconfig && (
           <ClusterConfiguration
             kubeconfig={kubeconfig}
-            auth={
-              initParams?.config?.auth
-                ? {
-                    type: AUTH_FORM_OIDC,
-                    ...initParams.config.auth,
-                  }
-                : { type: AUTH_FORM_TOKEN }
-            }
+            auth={{ type: AUTH_FORM_TOKEN }}
             initParams={initParams}
             goBack={() => setKubeconfig(false)}
           />

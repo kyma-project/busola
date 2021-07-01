@@ -5,7 +5,7 @@ import {
 import { getAuthData, setAuthData } from './auth/auth-storage';
 import { communication } from './communication';
 import { createSettings } from './settings';
-import { createAuth, hasKubeconfigAuth } from './auth/auth.js';
+import { createAuth, hasNonOidcAuth } from './auth/auth.js';
 import { saveInitParamsIfPresent } from './init-params/init-params.js';
 import {
   getActiveCluster,
@@ -40,10 +40,7 @@ async function luigiAfterInit() {
     }
   } else {
     try {
-      if (
-        getAuthData() &&
-        !hasKubeconfigAuth(params.currentContext?.user?.user)
-      ) {
+      if (getAuthData() && !hasNonOidcAuth(params.currentContext?.user?.user)) {
         await addClusterNodes();
       }
     } catch (e) {
@@ -65,13 +62,12 @@ async function luigiAfterInit() {
   const params = await getActiveCluster();
 
   const kubeconfigUser = params?.currentContext.user.user;
-  if (hasKubeconfigAuth(kubeconfigUser)) {
+  if (hasNonOidcAuth(kubeconfigUser)) {
     setAuthData(kubeconfigUser);
   }
 
   const luigiConfig = {
-    auth:
-      !hasKubeconfigAuth(kubeconfigUser) && createAuth(params?.config?.auth),
+    auth: createAuth(kubeconfigUser),
     communication,
     navigation: await createNavigation(),
     routing: {

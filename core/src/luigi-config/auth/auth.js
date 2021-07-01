@@ -5,10 +5,11 @@ import {
   saveActiveClusterName,
 } from './../cluster-management';
 import { convertToURLsearch } from '../communication';
+import { parseOIDCParams } from './oidc-params';
 
 export let groups;
 
-export function hasKubeconfigAuth(user) {
+export function hasNonOidcAuth(user) {
   return (
     user &&
     (user.token || (user['client-certificate-data'] && user['client-key-data']))
@@ -30,7 +31,7 @@ export async function reloadAuth() {
 
   const kubeconfigUser = params.currentContext.user.user;
 
-  if (hasKubeconfigAuth(kubeconfigUser)) {
+  if (hasNonOidcAuth(kubeconfigUser)) {
     // auth is already in kubeconfig
     setAuthData(kubeconfigUser);
     updateLuigiAuth(null);
@@ -40,47 +41,55 @@ export async function reloadAuth() {
   }
 }
 
-export const createAuth = authParams => {
-  if (!authParams) {
+export const createAuth = kubeconfigUser => {
+  if (hasNonOidcAuth(kubeconfigUser)) {
+    return null;
+  }
+  if (!kubeconfigUser?.exec) {
     return null;
   }
 
-  const { issuerUrl, clientId, responseType, responseMode, scope } = authParams;
+  try {
+    const { issuerUrl, clientId, scope } = parseOIDCParams(kubeconfigUser);
 
-  return {
-    use: 'openIdConnect',
-    openIdConnect: {
-      idpProvider: OpenIdConnect,
-      authority: issuerUrl,
-      client_id: clientId,
-      scope: scope || 'openid',
-      response_type: responseType,
-      response_mode: responseMode,
-      loadUserInfo: false,
-      userInfoFn: (_, authData) => {
-        // rename received "idToken" to keep consistency with kubeconfig "token"
-        setAuthData({ token: authData.idToken });
-        groups = authData.profile['http://k8s/groups'];
-        return Promise.resolve({
-          name: authData.profile.name,
-          email: authData.profile.email,
-        });
+    return {
+      use: 'openIdConnect',
+      openIdConnect: {
+        idpProvider: OpenIdConnect,
+        authority: issuerUrl,
+        client_id: clientId,
+        scope: scope || 'openid',
+        response_type: 'code',
+        response_mode: 'query',
+        loadUserInfo: false,
+        userInfoFn: (_, authData) => {
+          // rename received "idToken" to keep consistency with kubeconfig "token"
+          setAuthData({ token: authData.idToken });
+          groups = authData.profile['http://k8s/groups'];
+          return Promise.resolve({
+            name: authData.profile.name,
+            email: authData.profile.email,
+          });
+        },
       },
-    },
 
-    events: {
-      onLogout: () => {
-        console.log('onLogout');
+      events: {
+        onLogout: () => {
+          console.log('onLogout');
+        },
+        onAuthExpired: () => {
+          console.log('onAuthExpired');
+        },
+        onAuthError: (_config, err) => {
+          saveActiveClusterName(null);
+          window.location.href = '/clusters' + convertToURLsearch(err);
+          return false; // return false to prevent OIDC plugin navigation
+        },
       },
-      onAuthExpired: () => {
-        console.log('onAuthExpired');
-      },
-      onAuthError: (_config, err) => {
-        saveActiveClusterName(null);
-        window.location.href = '/clusters' + convertToURLsearch(err);
-        return false; // return false to prevent OIDC plugin navigation
-      },
-    },
-    storage: 'none',
-  };
+      storage: 'none',
+    };
+  } catch (e) {
+    console.warn(e);
+    alert('Cannot setup OIDC auth: ' + e.message);
+  }
 };
