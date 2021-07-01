@@ -1,6 +1,5 @@
 import { satisfies, coerce } from 'semver';
-
-export const PARAMS_VERSION = '1.0'; // make sure to sync it in core
+import { PARAMS_VERSION } from 'react-shared';
 
 export function formatVersion(version) {
   const fullVersion = coerce(version);
