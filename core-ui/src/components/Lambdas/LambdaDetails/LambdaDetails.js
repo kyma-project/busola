@@ -12,26 +12,28 @@ import { LAMBDA_DETAILS } from 'components/Lambdas/constants';
 export default function LambdaDetails({ lambda }) {
   const [bindingUsages, setBindingUsages] = useState([]);
   const microfrontendContext = useMicrofrontendContext();
-  const { resolvedFeatures } = microfrontendContext;
+  const { features } = microfrontendContext;
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
-  const ApiRules = resolvedFeatures?.API_GATEWAY ? ApiRulesWrapper : () => null;
+  const ApiRules = features?.API_GATEWAY?.isEnabled
+    ? ApiRulesWrapper
+    : () => null;
 
-  const EventSubscriptions = resolvedFeatures?.EVENTING
+  const EventSubscriptions = features?.EVENTING?.isEnabled
     ? EventSubscriptionsWrapper
     : () => null;
 
-  const ServiceBindings =
-    resolvedFeatures?.SERVICE_CATALOG &&
-    resolvedFeatures?.SERVICE_CATALOG_ADDONS
-      ? ServiceBindingsWrapper
-      : () => null;
+  const catalogEnabled =
+    features?.SERVICE_CATALOG.isEnabled &&
+    features?.SERVICE_CATALOG_ADDONS.isEnabled;
+
+  const ServiceBindings = catalogEnabled ? ServiceBindingsWrapper : () => null;
 
   const configTabShouldRender =
-    resolvedFeatures?.API_GATEWAY ||
-    resolvedFeatures?.EVENTING ||
-    (resolvedFeatures?.SERVICE_CATALOG &&
-      resolvedFeatures?.SERVICE_CATALOG_ADDONS);
+    features?.API_GATEWAY?.isEnabled ||
+    features?.EVENTING?.isEnabled ||
+    catalogEnabled;
+
   return (
     <>
       <Tabs className="lambda-details-tabs" callback={setSelectedTabIndex}>

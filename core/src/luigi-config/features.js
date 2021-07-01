@@ -43,12 +43,9 @@ export async function resolveFeatureAvailability(feature, data) {
 }
 
 export async function resolveNonLazyFeatures(features, data) {
-  return Object.fromEntries(
-    await Promise.all(
-      Object.entries(features).map(async ([key, value]) => [
-        key,
-        value.lazy ? undefined : await resolveFeatureAvailability(value, data),
-      ]),
-    ),
-  );
+  for (const featureName in features) {
+    features[featureName].isEnabled = features[featureName].lazy
+      ? undefined
+      : await resolveFeatureAvailability(features[featureName], data);
+  }
 }

@@ -242,11 +242,12 @@ export async function getNavigationData(authData) {
     const { navigation = {}, hiddenNamespaces = [], features = {} } =
       params?.config || {};
 
-    const resolvedFeatures = await resolveNonLazyFeatures(features, {
+    console.log(features);
+    await resolveNonLazyFeatures(features, {
       authData,
       crds,
     });
-    console.log(resolvedFeatures);
+    console.log(features);
     const nodes = [
       {
         pathSegment: 'cluster',
@@ -264,7 +265,7 @@ export async function getNavigationData(authData) {
                 getChildrenNodesForNamespace,
                 apiPaths,
                 permissionSet,
-                resolvedFeatures,
+                features,
               );
               const externalNodes = addExternalNodes(navigation.externalNodes);
               const allNodes = [...staticNodes, ...externalNodes];
@@ -278,7 +279,6 @@ export async function getNavigationData(authData) {
           groups,
           crds,
           features,
-          resolvedFeatures,
           hiddenNamespaces,
           showHiddenNamespaces: shouldShowHiddenNamespaces(),
           cluster: params.currentContext.cluster,

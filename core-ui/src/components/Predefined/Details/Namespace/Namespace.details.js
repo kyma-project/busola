@@ -10,7 +10,7 @@ import './Namespace.details.scss';
 
 export const NamespacesDetails = ({ DefaultRenderer, ...otherParams }) => {
   const microfrontendContext = useMicrofrontendContext();
-  const { resolvedFeatures } = microfrontendContext;
+  const { features } = microfrontendContext;
   const limitRangesParams = {
     hasDetailsView: false,
     resourceUrl: `/api/v1/namespaces/${otherParams.resourceName}/limitranges`,
@@ -46,7 +46,7 @@ export const NamespacesDetails = ({ DefaultRenderer, ...otherParams }) => {
     showTitle: true,
   };
 
-  const ApplicationMappings = resolvedFeatures?.APPLICATIONS ? (
+  const ApplicationMappings = features?.APPLICATIONS?.isEnabled ? (
     <ComponentForList
       name="applicationMappingsList"
       params={applicationMappingsParams}

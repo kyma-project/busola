@@ -44,7 +44,7 @@ function downloadKubeconfig() {
 export function getStaticChildrenNodesForNamespace(
   apiPaths,
   permissionSet,
-  resolvedFeatures,
+  features,
 ) {
   const encodedClusterName = encodeURIComponent(getActiveClusterName());
   const nodes = [
@@ -95,7 +95,7 @@ export function getStaticChildrenNodesForNamespace(
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
       context: {
-        isEnabled: resolvedFeatures.SERVERLESS,
+        isEnabled: features.SERVERLESS?.isEnabled,
       },
       children: [
         {
@@ -271,7 +271,7 @@ export function getStaticChildrenNodesForNamespace(
       viewGroup: coreUIViewGroupName,
       keepSelectedForChildren: true,
       context: {
-        isEnabled: resolvedFeatures.API_GATEWAY,
+        isEnabled: features.API_GATEWAY?.isEnabled,
       },
       children: [
         {
@@ -365,7 +365,7 @@ export function getStaticChildrenNodesForNamespace(
       keepSelectedForChildren: true,
       viewGroup: catalogViewGroupName,
       context: {
-        isEnabled: resolvedFeatures.SERVICE_CATALOG,
+        isEnabled: features.SERVICE_CATALOG?.isEnabled,
       },
       children: [
         {
@@ -439,7 +439,7 @@ export function getStaticChildrenNodesForNamespace(
       viewGroup: catalogViewGroupName,
       keepSelectedForChildren: true,
       context: {
-        isEnabled: resolvedFeatures.SERVICE_CATALOG,
+        isEnabled: features.SERVICE_CATALOG?.isEnabled,
       },
       children: [
         {
@@ -470,7 +470,7 @@ export function getStaticChildrenNodesForNamespace(
         }),
       viewGroup: coreUIViewGroupName,
       context: {
-        isEnabled: resolvedFeatures.SERVICE_CATALOG,
+        isEnabled: features.SERVICE_CATALOG?.isEnabled,
       },
     },
 
@@ -500,7 +500,7 @@ export function getStaticChildrenNodesForNamespace(
       viewGroup: coreUIViewGroupName,
       keepSelectedForChildren: true,
       context: {
-        isEnabled: resolvedFeatures.ADDONS,
+        isEnabled: features.ADDONS?.isEnabled,
       },
       children: [
         {
@@ -715,7 +715,7 @@ export function getStaticChildrenNodesForNamespace(
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
       context: {
-        isEnabled: resolvedFeatures.SERVERLESS,
+        isEnabled: features.SERVERLESS?.isEnabled,
       },
     },
     {
@@ -779,7 +779,7 @@ export function getStaticRootNodes(
   namespaceChildrenNodesResolver,
   apiPaths,
   permissionSet,
-  resolvedFeatures,
+  features,
 ) {
   const nodes = [
     {
@@ -859,7 +859,7 @@ export function getStaticRootNodes(
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
       context: {
-        isEnabled: resolvedFeatures.APPLICATIONS,
+        isEnabled: features.APPLICATIONS?.isEnabled,
       },
       children: [
         {
@@ -901,7 +901,7 @@ export function getStaticRootNodes(
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
       context: {
-        isEnabled: resolvedFeatures.ADDONS,
+        isEnabled: features.ADDONS?.isEnabled,
       },
       children: [
         {

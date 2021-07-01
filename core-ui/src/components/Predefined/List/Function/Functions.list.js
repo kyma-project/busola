@@ -10,7 +10,7 @@ import CreateNewFunction from './CreateNewFunction';
 
 export const FunctionsList = ({ DefaultRenderer, ...otherParams }) => {
   const microfrontendContext = useMicrofrontendContext();
-  const { resolvedFeatures } = microfrontendContext;
+  const { features } = microfrontendContext;
 
   function goToGitRepositories() {
     LuigiClient.linkManager()
@@ -18,7 +18,7 @@ export const FunctionsList = ({ DefaultRenderer, ...otherParams }) => {
       .navigate(`gitrepositories`);
   }
 
-  const headerActions = resolvedFeatures?.SERVERLESS ? (
+  const headerActions = features?.SERVERLESS?.isEnabled ? (
     <Button option="transparent" onClick={goToGitRepositories}>
       Connected repositories
     </Button>

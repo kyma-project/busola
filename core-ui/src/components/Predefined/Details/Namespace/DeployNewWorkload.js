@@ -10,10 +10,10 @@ import CreateLambdaModal from 'components/Lambdas/LambdasList/Lambdas/CreateLamb
 
 export default function DeployNewWorkload({ namespaceName }) {
   const microfrontendContext = useMicrofrontendContext();
-  const { resolvedFeatures } = microfrontendContext;
+  const { features } = microfrontendContext;
 
-  const functionsExist = resolvedFeatures?.SERVERLESS;
-  const reposExist = functionsExist && resolvedFeatures.SERVERLESS;
+  const functionsExist = features?.SERVERLESS?.isEnabled;
+  const reposExist = functionsExist && features.SERVERLESS?.isEnabled;
 
   const {
     data: functions,

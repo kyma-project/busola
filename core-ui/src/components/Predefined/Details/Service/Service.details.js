@@ -52,12 +52,12 @@ function ApiRules(service) {
 
 export const ServicesDetails = ({ DefaultRenderer, ...otherParams }) => {
   const microfrontendContext = useMicrofrontendContext();
-  const { resolvedFeatures } = microfrontendContext;
+  const { features } = microfrontendContext;
   const customComponents = [];
-  if (resolvedFeatures?.EVENTING) {
+  if (features?.EVENTING?.isEnabled) {
     customComponents.push(EventSubscriptionsWrapper);
   }
-  if (resolvedFeatures?.API_GATEWAY) {
+  if (features?.API_GATEWAY?.isEnabled) {
     customComponents.push(ApiRules);
   }
 
