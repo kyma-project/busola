@@ -113,9 +113,9 @@ async function mergeParams(params) {
     },
     hiddenNamespaces: DEFAULT_HIDDEN_NAMESPACES,
     features: DEFAULT_FEATURES,
-    ...(await getClusterParams()),
+    ...(await getClusterParams()).config,
   };
-
+  console.log('config from params', params.config);
   params.config = { ...defaultConfig, ...params.config };
 
   // Don't merge hiddenNamespaces, use the defaults only when params are empty

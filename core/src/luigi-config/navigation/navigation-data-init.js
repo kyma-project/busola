@@ -246,6 +246,8 @@ export async function getNavigationData(authData) {
       crds,
     });
 
+    console.log(features);
+
     const nodes = [
       {
         pathSegment: 'cluster',
