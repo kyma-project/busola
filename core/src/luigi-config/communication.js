@@ -47,15 +47,15 @@ export const communication = {
     },
     'busola.reload': () => location.reload(),
     'busola.addCluster': async ({ params }) => {
-      saveClusterParams(params);
+      await saveClusterParams(params);
       setCluster(params.currentContext.cluster.name);
     },
     'busola.deleteCluster': async ({ clusterName }) => {
-      deleteCluster(clusterName);
+      await deleteCluster(clusterName);
 
       const activeClusterName = getActiveClusterName();
       if (activeClusterName === clusterName) {
-        reloadAuth();
+        await reloadAuth();
         clearAuthData();
         saveActiveClusterName(null);
       }
