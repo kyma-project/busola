@@ -1,4 +1,4 @@
-import { setAuthData } from './auth/auth-storage';
+import { setAuthData, clearAuthData } from './auth/auth-storage';
 import { reloadNavigation } from './navigation/navigation-data-init';
 import { reloadAuth, hasNonOidcAuth } from './auth/auth';
 import { saveLocation } from './navigation/previous-location';
@@ -107,6 +107,8 @@ export function deleteCluster(clusterName) {
 
 export async function deleteActiveCluster() {
   deleteCluster(getActiveClusterName());
+  reloadAuth();
+  clearAuthData();
   saveActiveClusterName(null);
   Luigi.navigation().navigate('/clusters');
   // even though we navigate to /clusters, Luigi complains it can't find
