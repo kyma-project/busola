@@ -134,6 +134,7 @@ export const CustomResourceDefinitionVersions = resource => {
                 <MonacoEditor
                   key={`crd-schema-editor-${version.name}`}
                   theme="vs-light"
+                  language="json"
                   height="20em"
                   value={prettifySchema(version.schema)}
                   options={{
