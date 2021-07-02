@@ -14,7 +14,6 @@ export const DEFAULT_FEATURES = Object.fromEntries(
     {
       selectors: [
         {
-          lazy: false,
           type: 'apiGroup',
           apiGroup: value,
         },
