@@ -328,8 +328,8 @@ async function getNamespaces() {
   return createNamespacesList(namespaces);
 }
 
-async function getChildrenNodesForNamespace(apiPaths, permissionSet) {
-  const { navigation = {}, features = {} } = (await getActiveCluster()).config;
+async function getChildrenNodesForNamespace(apiPaths, permissionSet, features) {
+  const { navigation = {} } = (await getActiveCluster()).config;
   const staticNodes = getStaticChildrenNodesForNamespace(
     apiPaths,
     permissionSet,

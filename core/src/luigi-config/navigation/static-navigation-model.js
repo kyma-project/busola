@@ -826,7 +826,11 @@ export function getStaticRootNodes(
           },
           keepSelectedForChildren: false,
           children: async () =>
-            await namespaceChildrenNodesResolver(apiPaths, permissionSet),
+            await namespaceChildrenNodesResolver(
+              apiPaths,
+              permissionSet,
+              features,
+            ),
           defaultChildNode: 'details',
         },
       ],
