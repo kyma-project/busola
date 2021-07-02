@@ -30,3 +30,13 @@ spec:
           ports:
             - containerPort: 6080
             - containerPort: 8080
+          volumeMounts:
+            - name: config
+              mountPath: /app/core/assets/config
+      volumes:
+        - name: config
+          configMap:
+            name: busola-web-config
+            items:
+              - key: config.json
+                path: config.json

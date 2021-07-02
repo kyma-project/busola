@@ -5,8 +5,8 @@ import {
 import { getAuthData, setAuthData } from './auth/auth-storage';
 import { communication } from './communication';
 import { createSettings } from './settings';
-import { createAuth, hasKubeconfigAuth } from './auth/auth.js';
-import { saveInitParamsIfPresent } from './init-params';
+import { createAuth, hasNonOidcAuth } from './auth/auth.js';
+import { saveInitParamsIfPresent } from './init-params/init-params.js';
 import {
   getActiveCluster,
   setActiveClusterIfPresentInUrl,
@@ -23,12 +23,13 @@ export const NODE_PARAM_PREFIX = `~`;
 async function luigiAfterInit() {
   Luigi.ux().hideAppLoadingIndicator();
 
-  const params = getActiveCluster();
+  const params = await getActiveCluster();
   const isClusterChoosen = !!params;
 
   // save location, as we'll be logged out in a moment
   if (!getAuthData()) {
     saveCurrentLocation();
+    return;
   }
 
   loadHiddenNamespacesToggle();
@@ -38,31 +39,35 @@ async function luigiAfterInit() {
       Luigi.navigation().navigate('/clusters');
     }
   } else {
-    if (
-      getAuthData() &&
-      !hasKubeconfigAuth(params.currentContext?.user?.user)
-    ) {
-      await addClusterNodes();
+    try {
+      if (getAuthData() && !hasNonOidcAuth(params.currentContext?.user?.user)) {
+        await addClusterNodes();
+      }
+    } catch (e) {
+      console.warn(e);
+      Luigi.ux().showAlert({
+        text: 'Cannot load navigation nodes',
+        type: 'error',
+      });
     }
     tryRestorePreviousLocation();
   }
 }
 
 (async () => {
-  setActiveClusterIfPresentInUrl();
+  await setActiveClusterIfPresentInUrl();
 
   await saveInitParamsIfPresent();
 
-  const params = getActiveCluster();
+  const params = await getActiveCluster();
 
   const kubeconfigUser = params?.currentContext.user.user;
-  if (hasKubeconfigAuth(kubeconfigUser)) {
+  if (hasNonOidcAuth(kubeconfigUser)) {
     setAuthData(kubeconfigUser);
   }
 
   const luigiConfig = {
-    auth:
-      !hasKubeconfigAuth(kubeconfigUser) && createAuth(params?.config?.auth),
+    auth: createAuth(kubeconfigUser),
     communication,
     navigation: await createNavigation(),
     routing: {

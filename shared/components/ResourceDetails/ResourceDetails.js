@@ -18,6 +18,7 @@ import {
   ResourceNotFound,
   prettifyNamePlural,
   prettifyNameSingular,
+  getErrorMessage,
   Spinner,
 } from '../..';
 import CustomPropTypes from '../../typechecking/CustomPropTypes';
@@ -63,16 +64,29 @@ export function ResourceDetails(props) {
 
   if (loading) return <Spinner />;
   if (error) {
+    const breadcrumbItems = props.breadcrumbs || [
+      {
+        name: props.resourceType,
+        path: '/',
+        fromContext: props.resourceType.toLowerCase(),
+      },
+      { name: '' },
+    ];
     if (error.code === 404) {
       return (
         <ResourceNotFound
           resource={prettifyNameSingular(undefined, props.resourceType)}
-          breadcrumb={props.resourceType}
-          path="/"
+          breadcrumbs={breadcrumbItems}
         />
       );
     }
-    return `Error: ${error.message}`;
+    return (
+      <ResourceNotFound
+        resource={prettifyNameSingular(undefined, props.resourceType)}
+        breadcrumbs={breadcrumbItems}
+        customMessage={getErrorMessage(error)}
+      />
+    );
   }
 
   return (

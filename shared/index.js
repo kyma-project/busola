@@ -15,7 +15,6 @@ export { Spinner } from './components/Spinner/Spinner';
 export { CopiableText } from './components/CopiableText/CopiableText';
 export { Link } from './components/Link/Link';
 export { CopiableLink } from './components/Link/CopiableLink';
-export { DetailsError } from './components/DetailsError/DetailsError';
 export { Modal } from './components/Modal/Modal';
 export { Labels } from './components/Labels/Labels';
 export { Checkbox } from './components/Checkbox/Checkbox';
@@ -61,5 +60,9 @@ export { CustomPropTypes };
 
 import { monaco } from '@monaco-editor/react';
 import { setupMonaco } from './utils/setupMonaco';
+
+export * from '@monaco-editor/react';
+import Editor from '@monaco-editor/react';
+export const MonacoEditor = Editor;
 
 setupMonaco(monaco);

@@ -1,62 +1,36 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { render } from '@testing-library/react';
 
 import { ResourceNotFound } from '../ResourceNotFound';
 
-const mockNavigate = jest.fn();
-const mockAbsoluteNavigate = jest.fn();
-
-jest.mock('@luigi-project/client', () => ({
-  linkManager: () => ({
-    fromClosestContext: () => ({
-      navigate: mockNavigate,
-    }),
-    navigate: mockAbsoluteNavigate,
-  }),
-}));
+const breadcrumbs = [
+  { name: 'test-1', path: '/' },
+  { name: 'test-2', path: '/test' },
+];
 
 describe('ResourceNotFound', () => {
   it('Renders resource type and breadcrumb', () => {
     const { queryByText } = render(
-      <ResourceNotFound
-        resource="Resource"
-        breadcrumb="Breadcrumb value"
-        path=""
-      />,
+      <ResourceNotFound resource="Resource" breadcrumbs={breadcrumbs} />,
     );
 
     expect(queryByText("Such Resource doesn't exists.")).toBeInTheDocument();
-    expect(queryByText('Breadcrumb value')).toBeInTheDocument();
+
+    expect(queryByText(breadcrumbs[0].name)).toBeInTheDocument();
+    expect(queryByText(breadcrumbs[1].name)).toBeInTheDocument();
   });
 
-  it('Navigates to path on click on breadcrumb', () => {
-    const { getByText } = render(
+  it('Renders custom message', () => {
+    const message = 'Error';
+
+    const { queryByText } = render(
       <ResourceNotFound
         resource="Resource"
-        breadcrumb="Breadcrumb value"
-        path="path"
+        breadcrumbs={breadcrumbs}
+        customMessage={message}
       />,
     );
 
-    const breadcrumbLink = getByText('Breadcrumb value');
-    fireEvent.click(breadcrumbLink);
-
-    expect(mockNavigate).toHaveBeenCalledWith('path');
-  });
-
-  it('Navigates to absolute path on click on breadcrumb', () => {
-    const { getByText } = render(
-      <ResourceNotFound
-        resource="Resource"
-        breadcrumb="Breadcrumb value"
-        path="path"
-        fromClosestContext={false}
-      />,
-    );
-
-    const breadcrumbLink = getByText('Breadcrumb value');
-    fireEvent.click(breadcrumbLink);
-
-    expect(mockAbsoluteNavigate).toHaveBeenCalledWith('path');
+    expect(queryByText(message)).toBeInTheDocument();
   });
 });

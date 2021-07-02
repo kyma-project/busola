@@ -1,21 +1,10 @@
 import LuigiClient from '@luigi-project/client';
 
 import createEncoder from 'json-url';
-import { DEFAULT_MODULES, DEFAULT_HIDDEN_NAMESPACES } from 'react-shared';
-import { merge } from 'lodash';
+import { tryParseOIDCparams } from './components/oidc-params';
+import { PARAMS_VERSION } from 'react-shared';
 
 const encoder = createEncoder('lzma');
-
-function getResponseParams(usePKCE = true) {
-  if (usePKCE) {
-    return {
-      responseType: 'code',
-      responseMode: 'query',
-    };
-  } else {
-    return { responseType: 'id_token' };
-  }
-}
 
 export function setCluster(clusterName) {
   LuigiClient.sendCustomMessage({
@@ -24,30 +13,8 @@ export function setCluster(clusterName) {
   });
 }
 
-export function addCluster(initParams) {
-  const defaultParams = {
-    config: {
-      navigation: {
-        disabledNodes: [],
-        externalNodes: [],
-      },
-      hiddenNamespaces: DEFAULT_HIDDEN_NAMESPACES,
-      modules: DEFAULT_MODULES,
-    },
-  };
-
-  if (initParams.config.auth) {
-    initParams.config.auth = {
-      ...initParams.config.auth,
-      ...getResponseParams(initParams.config.auth.usePKCE),
-    };
-  }
-
-  const params = merge(defaultParams, initParams);
-  // Don't merge hiddenNamespaces, use the defaults only when initParams are empty
-  params.config.hiddenNamespaces =
-    initParams.config?.hiddenNamespaces || DEFAULT_HIDDEN_NAMESPACES;
-
+export function addCluster(params) {
+  params.config.version = PARAMS_VERSION;
   LuigiClient.sendCustomMessage({
     id: 'busola.addCluster',
     params,
@@ -92,8 +59,9 @@ export function hasKubeconfigAuth(kubeconfig, contextName) {
     const token = user.token;
     const clientCA = user['client-certificate-data'];
     const clientKeyData = user['client-key-data'];
+    const oidcParams = tryParseOIDCparams(user);
 
-    return !!token || (!!clientCA && !!clientKeyData);
+    return !!token || (!!clientCA && !!clientKeyData) || !!oidcParams;
   } catch (e) {
     // we could arduously check for falsy values, but...
     console.warn(e);
