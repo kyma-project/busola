@@ -24,8 +24,8 @@ export default function LambdaDetails({ lambda }) {
     : () => null;
 
   const catalogEnabled =
-    features?.SERVICE_CATALOG.isEnabled &&
-    features?.SERVICE_CATALOG_ADDONS.isEnabled;
+    features?.SERVICE_CATALOG?.isEnabled &&
+    features?.SERVICE_CATALOG_ADDONS?.isEnabled;
 
   const ServiceBindings = catalogEnabled ? ServiceBindingsWrapper : () => null;
 

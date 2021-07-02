@@ -241,12 +241,11 @@ export async function getNavigationData(authData) {
     const { navigation = {}, hiddenNamespaces = [], features = {} } =
       params?.config || {};
 
-    console.log(features);
     await resolveNonLazyFeatures(features, {
       authData,
       crds,
     });
-    console.log(features);
+
     const nodes = [
       {
         pathSegment: 'cluster',
