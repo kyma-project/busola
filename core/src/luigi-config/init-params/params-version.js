@@ -1,4 +1,4 @@
-import { major, satisfies, coerce } from 'semver';
+import { satisfies, coerce } from 'semver';
 import { PARAMS_VERSION } from './constants';
 
 export function formatVersion(version) {

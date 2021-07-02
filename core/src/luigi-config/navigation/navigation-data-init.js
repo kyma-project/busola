@@ -51,7 +51,7 @@ export async function reloadNavigation() {
   Luigi.setConfig({ ...Luigi.getConfig(), navigation });
 }
 
-function createClusterManagementNodes() {
+async function createClusterManagementNodes() {
   const activeClusterName = getActiveClusterName();
 
   const clusterManagementNode = {
@@ -77,11 +77,11 @@ function createClusterManagementNodes() {
       },
     ],
     context: {
-      clusters: getClusters(),
+      clusters: await getClusters(),
       activeClusterName: getActiveClusterName(),
     },
   };
-  const clusters = getClusters();
+  const clusters = await getClusters();
 
   const notActiveCluster = name => name !== activeClusterName;
 
@@ -113,11 +113,10 @@ function createClusterManagementNodes() {
 }
 
 export async function createNavigation() {
-  const params = getActiveCluster();
-  const clusters = getClusters();
+  const params = await getActiveCluster();
+  const clusters = await getClusters();
   const activeClusterName = getActiveClusterName();
   const isClusterSelected = !!params;
-
   const clusterNodes = Object.entries(clusters).map(
     ([clusterName, { currentContext }]) => ({
       title: clusterName,
@@ -187,7 +186,7 @@ export async function createNavigation() {
     nodes:
       isClusterSelected && getAuthData()
         ? await getNavigationData(getAuthData())
-        : createClusterManagementNodes(),
+        : await createClusterManagementNodes(),
   };
 }
 
@@ -211,7 +210,7 @@ async function fetchNavigationData(authData, permissionSet) {
 }
 
 export async function getNavigationData(authData) {
-  const { kubeconfig } = getActiveCluster();
+  const { kubeconfig } = await getActiveCluster();
   const preselectedNamespace = getCurrentContextNamespace(kubeconfig);
   try {
     // we assume all users can make SelfSubjectRulesReview request
@@ -225,7 +224,7 @@ export async function getNavigationData(authData) {
       authData,
       permissionSet,
     );
-    const params = getActiveCluster();
+    const params = await getActiveCluster();
     const activeClusterName = params.currentContext.cluster.name;
 
     const { navigation = {}, hiddenNamespaces = [], modules = {} } =
@@ -242,7 +241,7 @@ export async function getNavigationData(authData) {
           {
             navigationContext: 'cluster',
             pathSegment: encodeURIComponent(activeClusterName),
-            children: function() {
+            children: async function() {
               const staticNodes = getStaticRootNodes(
                 getChildrenNodesForNamespace,
                 apiPaths,
@@ -268,7 +267,7 @@ export async function getNavigationData(authData) {
         },
       },
     ];
-    return [...nodes, ...createClusterManagementNodes()];
+    return [...nodes, ...(await createClusterManagementNodes())];
   } catch (err) {
     saveActiveClusterName(null);
     if (err.statusCode === 403) {
@@ -295,7 +294,7 @@ export async function getNavigationData(authData) {
 }
 
 async function getNamespaces() {
-  const { hiddenNamespaces } = getActiveCluster().config;
+  const { hiddenNamespaces } = (await getActiveCluster()).config;
   let namespaces;
   try {
     namespaces = await fetchNamespaces(getAuthData());
@@ -312,8 +311,8 @@ async function getNamespaces() {
   return createNamespacesList(namespaces);
 }
 
-function getChildrenNodesForNamespace(apiPaths, permissionSet) {
-  const { navigation = {}, modules = {} } = getActiveCluster().config;
+async function getChildrenNodesForNamespace(apiPaths, permissionSet) {
+  const { navigation = {}, modules = {} } = (await getActiveCluster()).config;
   const staticNodes = getStaticChildrenNodesForNamespace(
     apiPaths,
     permissionSet,

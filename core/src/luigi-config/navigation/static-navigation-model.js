@@ -11,9 +11,9 @@ export const catalogViewGroupName = '_catalog_';
 function toSearchParamsString(object) {
   return new URLSearchParams(object).toString();
 }
-function downloadKubeconfig() {
+async function downloadKubeconfig() {
   const clusterName = getActiveClusterName();
-  const clusters = getClusters();
+  const clusters = await getClusters();
   if (clusterName && clusters && clusters[clusterName]) {
     try {
       const { kubeconfig } = clusters[clusterName];
@@ -825,8 +825,8 @@ export function getStaticRootNodes(
             namespaceId: ':namespaceId',
           },
           keepSelectedForChildren: false,
-          children: () =>
-            namespaceChildrenNodesResolver(apiPaths, permissionSet),
+          children: async () =>
+            await namespaceChildrenNodesResolver(apiPaths, permissionSet),
           defaultChildNode: 'details',
         },
       ],

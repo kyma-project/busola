@@ -7,15 +7,21 @@ import {
   areParamsCompatible,
   showIncompatibleParamsWarning,
 } from './init-params/params-version';
+import {
+  DEFAULT_HIDDEN_NAMESPACES,
+  DEFAULT_MODULES,
+} from './init-params/constants';
+import { getClusterParams } from './cluster-params';
 
 const CLUSTERS_KEY = 'busola.clusters';
 const CURRENT_CLUSTER_NAME_KEY = 'busola.current-cluster-name';
 
-export function setActiveClusterIfPresentInUrl() {
+export async function setActiveClusterIfPresentInUrl() {
   const match = location.pathname.match(/^\/cluster\/(.*?)\//);
   if (match) {
     const clusterName = decodeURIComponent(match[1]);
-    if (clusterName in getClusters()) {
+    const clusters = await getClusters();
+    if (clusterName in clusters) {
       saveActiveClusterName(clusterName);
     }
   }
@@ -28,7 +34,8 @@ export function getCurrentContextNamespace(kubeconfig) {
 }
 
 export async function setCluster(clusterName) {
-  const params = getClusters()[clusterName];
+  const clusters = await getClusters();
+  const params = clusters[clusterName];
 
   if (!areParamsCompatible(params?.config?.version)) {
     showIncompatibleParamsWarning(params?.config?.version);
@@ -36,7 +43,7 @@ export async function setCluster(clusterName) {
 
   saveActiveClusterName(clusterName);
   try {
-    reloadAuth();
+    await reloadAuth();
 
     const preselectedNamespace = getCurrentContextNamespace(params.kubeconfig);
     const kubeconfigUser = params.currentContext.user.user;
@@ -60,7 +67,7 @@ export async function setCluster(clusterName) {
   }
 }
 
-export function saveClusterParams(params) {
+export async function saveClusterParams(params) {
   const { kubeconfig } = params;
   const { users } = kubeconfig;
   if (users?.length) {
@@ -74,17 +81,18 @@ export function saveClusterParams(params) {
   }
 
   const clusterName = params.currentContext.cluster.name;
-  const clusters = getClusters();
+  const clusters = await getClusters();
   clusters[clusterName] = params;
   saveClusters(clusters);
 }
 
-export function getActiveCluster() {
+export async function getActiveCluster() {
   const clusterName = getActiveClusterName();
   if (!clusterName) {
     return null;
   }
-  return getClusters()[clusterName];
+  const clusters = await getClusters();
+  return clusters[clusterName];
 }
 
 export function getActiveClusterName() {
@@ -95,19 +103,45 @@ export function saveActiveClusterName(clusterName) {
   localStorage.setItem(CURRENT_CLUSTER_NAME_KEY, clusterName);
 }
 
-export function getClusters() {
-  return JSON.parse(localStorage.getItem(CLUSTERS_KEY) || '{}');
+// setup params:
+// defaults < config from CM < init params
+async function mergeParams(params) {
+  const defaultConfig = {
+    navigation: {
+      disabledNodes: [],
+      externalNodes: [],
+    },
+    hiddenNamespaces: DEFAULT_HIDDEN_NAMESPACES,
+    modules: DEFAULT_MODULES,
+    ...(await getClusterParams()),
+  };
+
+  params.config = { ...defaultConfig, ...params.config };
+
+  // Don't merge hiddenNamespaces, use the defaults only when params are empty
+  params.config.hiddenNamespaces =
+    params.config?.hiddenNamespaces || DEFAULT_HIDDEN_NAMESPACES;
+
+  return params;
 }
 
-export function deleteCluster(clusterName) {
-  const clusters = getClusters();
+export async function getClusters() {
+  const clusters = JSON.parse(localStorage.getItem(CLUSTERS_KEY) || '{}');
+  for (const clusterName in clusters) {
+    clusters[clusterName] = await mergeParams(clusters[clusterName]);
+  }
+  return clusters;
+}
+
+export async function deleteCluster(clusterName) {
+  const clusters = await getClusters();
   delete clusters[clusterName];
   saveClusters(clusters);
 }
 
 export async function deleteActiveCluster() {
-  deleteCluster(getActiveClusterName());
-  reloadAuth();
+  await deleteCluster(getActiveClusterName());
+  await reloadAuth();
   clearAuthData();
   saveActiveClusterName(null);
   Luigi.navigation().navigate('/clusters');

@@ -24,8 +24,8 @@ function updateLuigiAuth(auth) {
   Luigi.configChanged();
 }
 
-export function reloadAuth() {
-  const params = getActiveCluster();
+export async function reloadAuth() {
+  const params = await getActiveCluster();
 
   if (!params) {
     updateLuigiAuth(null);
@@ -40,7 +40,7 @@ export function reloadAuth() {
     updateLuigiAuth(null);
   } else {
     // we need to use OIDC flow
-    updateLuigiAuth(createAuth(params.config.auth));
+    updateLuigiAuth(createAuth(kubeconfigUser));
   }
 }
 
