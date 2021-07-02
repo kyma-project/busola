@@ -1,8 +1,6 @@
 import LuigiClient from '@luigi-project/client';
 
 import createEncoder from 'json-url';
-import { DEFAULT_MODULES, DEFAULT_HIDDEN_NAMESPACES } from 'react-shared';
-import { merge } from 'lodash';
 import { tryParseOIDCparams } from './components/oidc-params';
 import { PARAMS_VERSION } from 'react-shared';
 
@@ -15,25 +13,8 @@ export function setCluster(clusterName) {
   });
 }
 
-export function addCluster(initParams) {
-  const defaultParams = {
-    config: {
-      navigation: {
-        disabledNodes: [],
-        externalNodes: [],
-      },
-      hiddenNamespaces: DEFAULT_HIDDEN_NAMESPACES,
-      modules: DEFAULT_MODULES,
-    },
-  };
-
-  const params = merge(defaultParams, initParams);
-  // Don't merge hiddenNamespaces, use the defaults only when initParams are empty
-  params.config.hiddenNamespaces =
-    initParams.config?.hiddenNamespaces || DEFAULT_HIDDEN_NAMESPACES;
-
+export function addCluster(params) {
   params.config.version = PARAMS_VERSION;
-
   LuigiClient.sendCustomMessage({
     id: 'busola.addCluster',
     params,
