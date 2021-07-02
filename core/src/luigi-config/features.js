@@ -5,7 +5,6 @@ import jsonpath from 'jsonpath';
 const resolvers = {
   apiGroup: (selector, data) =>
     data.crds.some(crd => crd.includes(selector.apiGroup)),
-  flag: (selector, _data) => selector.value,
   configMapJsonPath: async (selector, data) => {
     const { namespace, name, entry, jsonPath, expectedValue } = selector;
 
@@ -31,6 +30,9 @@ async function resolveSelector(selector, data) {
 
 export async function resolveFeatureAvailability(feature, data) {
   try {
+    if (feature.isEnabled === false) {
+      return false;
+    }
     for (const selector of feature.selectors) {
       if (!(await resolveSelector(selector, data))) {
         return false;
