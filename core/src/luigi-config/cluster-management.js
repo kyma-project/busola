@@ -9,7 +9,7 @@ import {
 } from './init-params/params-version';
 import {
   DEFAULT_HIDDEN_NAMESPACES,
-  DEFAULT_MODULES,
+  DEFAULT_FEATURES,
 } from './init-params/constants';
 import { getClusterParams } from './cluster-params';
 
@@ -112,7 +112,7 @@ async function mergeParams(params) {
       externalNodes: [],
     },
     hiddenNamespaces: DEFAULT_HIDDEN_NAMESPACES,
-    modules: DEFAULT_MODULES,
+    features: DEFAULT_FEATURES,
     ...(await getClusterParams()),
   };
 
