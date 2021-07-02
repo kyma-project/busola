@@ -5,6 +5,7 @@ import jsonpath from 'jsonpath';
 const resolvers = {
   apiGroup: (selector, data) =>
     data.crds.some(crd => crd.includes(selector.apiGroup)),
+  flag: (selector, _data) => selector.value,
   configMapJsonPath: async (selector, data) => {
     const { namespace, name, entry, jsonPath, expectedValue } = selector;
 
