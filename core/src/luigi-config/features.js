@@ -33,7 +33,7 @@ export async function resolveFeatureAvailability(feature, data) {
     if (feature.isEnabled === false) {
       return false;
     }
-    for (const selector of feature.selectors) {
+    for (const selector of feature.selectors || []) {
       if (!(await resolveSelector(selector, data))) {
         return false;
       }
