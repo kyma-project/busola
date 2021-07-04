@@ -246,7 +246,7 @@ export async function getNavigationData(authData) {
       crds,
     });
 
-    console.log(features);
+    console.log('resolved features', features);
 
     const nodes = [
       {

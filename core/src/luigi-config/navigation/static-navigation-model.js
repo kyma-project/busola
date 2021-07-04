@@ -95,7 +95,7 @@ export function getStaticChildrenNodesForNamespace(
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
       context: {
-        isEnabled: features.SERVERLESS?.isEnabled,
+        isEnabled: features.SERVERLESS?.isEnabled || false,
       },
       children: [
         {
@@ -271,7 +271,7 @@ export function getStaticChildrenNodesForNamespace(
       viewGroup: coreUIViewGroupName,
       keepSelectedForChildren: true,
       context: {
-        isEnabled: features.API_GATEWAY?.isEnabled,
+        isEnabled: features.API_GATEWAY?.isEnabled || false,
       },
       children: [
         {
@@ -365,7 +365,7 @@ export function getStaticChildrenNodesForNamespace(
       keepSelectedForChildren: true,
       viewGroup: catalogViewGroupName,
       context: {
-        isEnabled: features.SERVICE_CATALOG?.isEnabled,
+        isEnabled: features.SERVICE_CATALOG?.isEnabled || false,
       },
       children: [
         {
@@ -439,7 +439,7 @@ export function getStaticChildrenNodesForNamespace(
       viewGroup: catalogViewGroupName,
       keepSelectedForChildren: true,
       context: {
-        isEnabled: features.SERVICE_CATALOG?.isEnabled,
+        isEnabled: features.SERVICE_CATALOG?.isEnabled || false,
       },
       children: [
         {
@@ -470,7 +470,7 @@ export function getStaticChildrenNodesForNamespace(
         }),
       viewGroup: coreUIViewGroupName,
       context: {
-        isEnabled: features.SERVICE_CATALOG?.isEnabled,
+        isEnabled: features.SERVICE_CATALOG?.isEnabled || false,
       },
     },
 
@@ -500,7 +500,7 @@ export function getStaticChildrenNodesForNamespace(
       viewGroup: coreUIViewGroupName,
       keepSelectedForChildren: true,
       context: {
-        isEnabled: features.ADDONS?.isEnabled,
+        isEnabled: features.ADDONS?.isEnabled || false,
       },
       children: [
         {
@@ -715,7 +715,7 @@ export function getStaticChildrenNodesForNamespace(
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
       context: {
-        isEnabled: features.SERVERLESS?.isEnabled,
+        isEnabled: features.SERVERLESS?.isEnabled || false,
       },
     },
     {
@@ -863,7 +863,7 @@ export function getStaticRootNodes(
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
       context: {
-        isEnabled: features.APPLICATIONS?.isEnabled,
+        isEnabled: features.APPLICATIONS?.isEnabled || false,
       },
       children: [
         {
@@ -905,7 +905,7 @@ export function getStaticRootNodes(
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
       context: {
-        isEnabled: features.ADDONS?.isEnabled,
+        isEnabled: features.ADDONS?.isEnabled || false,
       },
       children: [
         {

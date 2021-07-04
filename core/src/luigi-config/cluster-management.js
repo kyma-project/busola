@@ -115,7 +115,14 @@ async function mergeParams(params) {
     features: DEFAULT_FEATURES,
     ...(await getClusterParams()).config,
   };
-  console.log('config from params', params.config);
+  console.log(
+    'from params',
+    params.config,
+    'default',
+    defaultConfig,
+    'merged',
+    { ...defaultConfig, ...params.config },
+  );
   params.config = { ...defaultConfig, ...params.config };
 
   // Don't merge hiddenNamespaces, use the defaults only when params are empty

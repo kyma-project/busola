@@ -6,7 +6,7 @@ export async function getClusterParams() {
       const cacheBuster = '?cache-buster=' + Date.now();
       const response = await fetch('/assets/config/config.json' + cacheBuster);
       params = await response.json();
-      console.log('cparams', params);
+      console.log('cluster params:', params);
     } catch (e) {
       console.warn('Cannot load cluster params: ', e);
       params = {};
