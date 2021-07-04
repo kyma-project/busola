@@ -10,13 +10,18 @@ const resolvers = {
 
     const cmUrl = `${config.backendAddress}/api/v1/namespaces/${namespace}/configmaps/${name}`;
     const response = await failFastFetch(cmUrl, data.authData);
-    const configMap = await response.json();
+    try {
+      const configMap = await response.json();
 
-    const value = jsonpath.query(
-      JSON.parse(configMap.data[entry]),
-      jsonPath,
-    )[0];
-    return value === expectedValue;
+      const value = jsonpath.query(
+        JSON.parse(configMap.data[entry]),
+        jsonPath,
+      )[0];
+      return value === expectedValue;
+    } catch (e) {
+      console.warn('Cannot get configMapJsonPath: ' + e.message);
+      return false;
+    }
   },
 };
 
