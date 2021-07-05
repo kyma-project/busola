@@ -168,10 +168,9 @@ export async function createNavigation() {
 
   const isNodeEnabled = (node, crds) => {
     if (node.context?.feature) {
-      const isEnabled = resolveFeatureAvailability(node.context?.feature, {
+      return resolveFeatureAvailability(node.context?.feature, {
         crds,
       });
-      return isEnabled;
     } else {
       return true;
     }
