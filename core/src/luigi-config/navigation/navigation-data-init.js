@@ -10,7 +10,7 @@ import {
   getStaticRootNodes,
 } from './static-navigation-model';
 import { navigationPermissionChecker, hasPermissionsFor } from './permissions';
-import { resolveNonLazyFeatures } from './../features';
+import { resolveFeatures } from './../features';
 
 import {
   hideDisabledNodes,
@@ -241,7 +241,7 @@ export async function getNavigationData(authData) {
     const { navigation = {}, hiddenNamespaces = [], features = {} } =
       params?.config || {};
 
-    await resolveNonLazyFeatures(features, {
+    await resolveFeatures(features, {
       authData,
       crds,
     });

@@ -1,28 +1,7 @@
-import { failFastFetch } from './navigation/queries';
-import { config } from './config';
-import jsonpath from 'jsonpath';
-
 const resolvers = {
+  //leave the structure for the future when we add new options
   apiGroup: (selector, data) =>
     data.crds.some(crd => crd.includes(selector.apiGroup)),
-  configMapJsonPath: async (selector, data) => {
-    const { namespace, name, entry, jsonPath, expectedValue } = selector;
-
-    const cmUrl = `${config.backendAddress}/api/v1/namespaces/${namespace}/configmaps/${name}`;
-    const response = await failFastFetch(cmUrl, data.authData);
-    try {
-      const configMap = await response.json();
-
-      const value = jsonpath.query(
-        JSON.parse(configMap.data[entry]),
-        jsonPath,
-      )[0];
-      return value === expectedValue;
-    } catch (e) {
-      console.warn('Cannot get configMapJsonPath: ' + e.message);
-      return false;
-    }
-  },
 };
 
 async function resolveSelector(selector, data) {
@@ -50,10 +29,8 @@ export async function resolveFeatureAvailability(feature, data) {
   }
 }
 
-export async function resolveNonLazyFeatures(features, data) {
+export async function resolveFeatures(features, data) {
   for (const featureName in features) {
-    features[featureName].isEnabled = features[featureName].config?.lazy
-      ? undefined
-      : await resolveFeatureAvailability(features[featureName], data);
+    await resolveFeatureAvailability(features[featureName], data);
   }
 }
