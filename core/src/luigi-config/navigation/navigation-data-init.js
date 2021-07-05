@@ -10,7 +10,7 @@ import {
   getStaticRootNodes,
 } from './static-navigation-model';
 import { navigationPermissionChecker, hasPermissionsFor } from './permissions';
-import { resolveFeatures } from './../features';
+import { resolveFeatures, resolveFeatureAvailability } from './../features';
 
 import {
   hideDisabledNodes,
@@ -31,7 +31,6 @@ import {
 import { shouldShowHiddenNamespaces } from './../utils/hidden-namespaces-toggle';
 import { saveLocation } from './previous-location';
 import { NODE_PARAM_PREFIX } from '../luigi-config';
-import { resolveFeatureAvailability } from '../features';
 
 let selfSubjectRulesReview;
 let crds = [];
@@ -167,10 +166,14 @@ export async function createNavigation() {
     : {};
 
   const isNodeEnabled = (node, crds) => {
-    if (node.context?.feature) {
-      return resolveFeatureAvailability(node.context?.feature, {
-        crds,
-      });
+    if (node.context?.requiredFeatures) {
+      for (const feature of node.context.requiredFeatures || []) {
+        const isEnabled = resolveFeatureAvailability(feature, {
+          crds,
+        });
+        if (!isEnabled) return false;
+      }
+      return true;
     } else {
       return true;
     }

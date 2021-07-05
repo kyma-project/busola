@@ -95,7 +95,7 @@ export function getStaticChildrenNodesForNamespace(
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
       context: {
-        feature: features.SERVERLESS,
+        requiredFeatures: [features.SERVERLESS],
       },
       children: [
         {
@@ -271,7 +271,7 @@ export function getStaticChildrenNodesForNamespace(
       viewGroup: coreUIViewGroupName,
       keepSelectedForChildren: true,
       context: {
-        feature: features.API_GATEWAY,
+        requiredFeatures: [features.API_GATEWAY],
       },
       children: [
         {
@@ -365,7 +365,7 @@ export function getStaticChildrenNodesForNamespace(
       keepSelectedForChildren: true,
       viewGroup: catalogViewGroupName,
       context: {
-        feature: features.SERVICE_CATALOG,
+        requiredFeatures: [features.SERVICE_CATALOG],
       },
       children: [
         {
@@ -439,7 +439,7 @@ export function getStaticChildrenNodesForNamespace(
       viewGroup: catalogViewGroupName,
       keepSelectedForChildren: true,
       context: {
-        feature: features.SERVICE_CATALOG,
+        requiredFeatures: [features.SERVICE_CATALOG],
       },
       children: [
         {
@@ -470,7 +470,7 @@ export function getStaticChildrenNodesForNamespace(
         }),
       viewGroup: coreUIViewGroupName,
       context: {
-        feature: features.SERVICE_CATALOG,
+        requiredFeatures: [features.SERVICE_CATALOG],
       },
     },
 
@@ -500,7 +500,7 @@ export function getStaticChildrenNodesForNamespace(
       viewGroup: coreUIViewGroupName,
       keepSelectedForChildren: true,
       context: {
-        feature: features.ADDONS,
+        requiredFeatures: [features.ADDONS],
       },
       children: [
         {
@@ -715,7 +715,7 @@ export function getStaticChildrenNodesForNamespace(
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
       context: {
-        feature: features.SERVERLESS,
+        requiredFeatures: [features.SERVERLESS],
       },
     },
     {
@@ -863,7 +863,7 @@ export function getStaticRootNodes(
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
       context: {
-        feature: features.APPLICATIONS,
+        requiredFeatures: [features.APPLICATIONS],
       },
       children: [
         {
@@ -905,7 +905,7 @@ export function getStaticRootNodes(
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
       context: {
-        feature: features.ADDONS,
+        requiredFeatures: [features.ADDONS],
       },
       children: [
         {
