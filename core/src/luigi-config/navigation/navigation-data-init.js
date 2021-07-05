@@ -31,6 +31,7 @@ import {
 import { shouldShowHiddenNamespaces } from './../utils/hidden-namespaces-toggle';
 import { saveLocation } from './previous-location';
 import { NODE_PARAM_PREFIX } from '../luigi-config';
+import { resolveFeatureAvailability } from '../features';
 
 let selfSubjectRulesReview;
 let crds = [];
@@ -165,19 +166,21 @@ export async function createNavigation() {
       }
     : {};
 
-  const isNodeEnabled = node => {
-    // disable node only if explicitly set to "false"
-    if (node.context?.isEnabled === undefined) {
-      return true;
+  const isNodeEnabled = (node, crds) => {
+    if (node.context?.feature) {
+      const isEnabled = resolveFeatureAvailability(node.context?.feature, {
+        crds,
+      });
+      return isEnabled;
     } else {
-      return node.context.isEnabled;
+      return true;
     }
   };
 
   return {
     preloadViewGroups: false,
     nodeAccessibilityResolver: node =>
-      isNodeEnabled(node) &&
+      isNodeEnabled(node, crds) &&
       navigationPermissionChecker(node, selfSubjectRulesReview),
     appSwitcher: {
       showMainAppEntry: false,
@@ -241,7 +244,7 @@ export async function getNavigationData(authData) {
     const { navigation = {}, hiddenNamespaces = [], features = {} } =
       params?.config || {};
 
-    await resolveFeatures(features, {
+    resolveFeatures(features, {
       authData,
       crds,
     });
