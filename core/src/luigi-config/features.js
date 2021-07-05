@@ -4,21 +4,21 @@ const resolvers = {
     data.crds.some(crd => crd.includes(selector.apiGroup)),
 };
 
-function resolveSelector(selector, data) {
+async function resolveSelector(selector, data) {
   if (!resolvers[selector.type]) {
     throw Error('Unkown selector type ' + selector.type);
   } else {
-    return resolvers[selector.type](selector, data);
+    return await resolvers[selector.type](selector, data);
   }
 }
 
-export function resolveFeatureAvailability(feature, data) {
+export async function resolveFeatureAvailability(feature, data) {
   try {
     if (feature.isEnabled === false) {
       return false;
     }
     for (const selector of feature.selectors || []) {
-      if (!resolveSelector(selector, data)) {
+      if (!(await resolveSelector(selector, data))) {
         return false;
       }
     }
@@ -29,13 +29,11 @@ export function resolveFeatureAvailability(feature, data) {
   }
 }
 
-function setFeatureAvailability(feature, data) {
-  const isEnabled = resolveFeatureAvailability(feature, data);
-  feature.isEnabled = isEnabled;
-}
-
-export function resolveFeatures(features, data) {
+export async function resolveFeatures(features, data) {
   for (const featureName in features) {
-    setFeatureAvailability(features[featureName], data);
+    features[featureName].isEnabled = await resolveFeatureAvailability(
+      features[featureName],
+      data,
+    );
   }
 }

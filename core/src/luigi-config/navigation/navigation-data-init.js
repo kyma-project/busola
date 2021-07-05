@@ -116,6 +116,12 @@ async function createClusterManagementNodes() {
 export async function createNavigation() {
   const params = await getActiveCluster();
   const clusters = await getClusters();
+  const { features = {} } = params?.config || {};
+
+  await resolveFeatures(features, {
+    crds,
+  });
+
   const activeClusterName = getActiveClusterName();
   const isClusterSelected = !!params;
   const clusterNodes = Object.entries(clusters).map(
@@ -165,24 +171,19 @@ export async function createNavigation() {
       }
     : {};
 
-  const isNodeEnabled = (node, crds) => {
+  const isNodeEnabled = node => {
     if (node.context?.requiredFeatures) {
       for (const feature of node.context.requiredFeatures || []) {
-        const isEnabled = resolveFeatureAvailability(feature, {
-          crds,
-        });
-        if (!isEnabled) return false;
+        if (!feature.isEnabled) return false;
       }
-      return true;
-    } else {
-      return true;
     }
+    return true;
   };
 
   return {
     preloadViewGroups: false,
     nodeAccessibilityResolver: node =>
-      isNodeEnabled(node, crds) &&
+      isNodeEnabled(node) &&
       navigationPermissionChecker(node, selfSubjectRulesReview),
     appSwitcher: {
       showMainAppEntry: false,
@@ -246,7 +247,7 @@ export async function getNavigationData(authData) {
     const { navigation = {}, hiddenNamespaces = [], features = {} } =
       params?.config || {};
 
-    resolveFeatures(features, {
+    await resolveFeatures(features, {
       authData,
       crds,
     });
