@@ -116,7 +116,6 @@ async function createClusterManagementNodes() {
 export async function createNavigation() {
   const params = await getActiveCluster();
   const clusters = await getClusters();
-  const { features = {} } = params?.config || {};
 
   const activeClusterName = getActiveClusterName();
   const isClusterSelected = !!params;
