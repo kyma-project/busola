@@ -7,6 +7,7 @@ import {
   generateParamsWithNoKubeconfig,
   generateParamsAndToken,
   generateParamsWithHiddenNamespacesList,
+  generateParamsWithDisabledFeatures,
   generateUnsupportedVersionParams,
 } from '../support/enkode';
 
@@ -154,6 +155,43 @@ context('Login - enkode link', () => {
     cy.getIframeBody()
       .find('thead')
       .should('be.visible');
+  });
+
+  it('Parameters with disabled features', () => {
+    cy.task('getNamespace').then(namespaceName => {
+      cy.wrap(generateParamsWithDisabledFeatures(namespaceName)).then(
+        params => {
+          cy.visit(`${config.clusterAddress}?init=${params}`);
+        },
+      );
+    });
+
+    cy.url().should('match', /namespaces$/);
+
+    cy.goToNamespaceDetails();
+
+    cy.getLeftNav()
+      .contains('Workloads')
+      .click();
+
+    // selector with apiGroup that doesn't exist
+    cy.getLeftNav()
+      .contains('Functions')
+      .should('not.exist');
+
+    cy.getLeftNav()
+      .contains('Configuration')
+      .click();
+
+    // feature is disabled
+    cy.getLeftNav()
+      .contains('Addons')
+      .should('not.exist');
+
+    // feature is enabled
+    cy.getLeftNav()
+      .contains('OAuth Clients')
+      .should('exist');
   });
 
   it('Add unsupported version params', () => {
