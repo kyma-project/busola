@@ -6,7 +6,7 @@ import { getAuthData, setAuthData } from './auth/auth-storage';
 import { communication } from './communication';
 import { createSettings } from './settings';
 import { createAuth, hasNonOidcAuth } from './auth/auth.js';
-import { saveInitParamsIfPresent } from './init-params/init-params.js';
+import { saveQueryParamsIfPresent } from './init-params/init-params.js';
 import {
   getActiveCluster,
   setActiveClusterIfPresentInUrl,
@@ -57,7 +57,7 @@ async function luigiAfterInit() {
 (async () => {
   await setActiveClusterIfPresentInUrl();
 
-  await saveInitParamsIfPresent();
+  await saveQueryParamsIfPresent();
 
   const params = await getActiveCluster();
 
