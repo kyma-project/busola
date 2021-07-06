@@ -11,6 +11,7 @@ import {
 } from './params-version';
 import * as constants from './constants';
 import { hasNonOidcAuth } from '../auth/auth';
+import { applyKubeconfigIdIfPresent } from './../kubeconfig-id';
 
 const encoder = createEncoder('lzma');
 
@@ -19,19 +20,25 @@ function hasExactlyOneContext(kubeconfig) {
 }
 
 export async function saveInitParamsIfPresent() {
-  const encodedParams = new URL(location).searchParams.get('init');
-  if (encodedParams) {
-    try {
-      await setupFromParams(encodedParams);
-    } catch (e) {
-      alert('Error loading init params, configuration not changed.');
-      console.warn(e);
-    }
+  try {
+    await setupFromParams();
+  } catch (e) {
+    alert('Error loading init params, configuration not changed.');
+    console.warn(e);
   }
 }
 
-async function setupFromParams(encodedParams) {
-  const decoded = await encoder.decompress(encodedParams);
+async function setupFromParams() {
+  const searchParams = new URL(location).searchParams;
+  const encodedParams = searchParams.get('init');
+  const kubeconfigId = searchParams.get('kubeconfigID');
+  if (!encodedParams && !kubeconfigId) {
+    return;
+  }
+
+  const decoded = encodedParams ? await encoder.decompress(encodedParams) : {};
+
+  await applyKubeconfigIdIfPresent(kubeconfigId, decoded);
 
   if (!hasExactlyOneContext(decoded.kubeconfig)) {
     navigateToAddCluster(encodedParams);
@@ -82,7 +89,6 @@ async function setupFromParams(encodedParams) {
   const targetLocation =
     `/cluster/${encodeURIComponent(clusterName)}/namespaces` +
     (preselectedNamespace ? `/${preselectedNamespace}/details` : '');
-
   saveLocation(targetLocation);
 }
 

@@ -5,9 +5,12 @@ export const saveLocation = location => {
 };
 
 export const saveCurrentLocation = () => {
-  const hasInitParams = [
-    ...(window.location.searchParams?.keys() || []),
-  ].includes('init');
+  const searchParams = [
+    ...(new URL(window.location).searchParams?.keys() || []),
+  ];
+  const hasInitParams =
+    searchParams.includes('init') || searchParams.includes('kubeconfigID');
+
   if (
     !window.location.hash &&
     !hasInitParams &&
