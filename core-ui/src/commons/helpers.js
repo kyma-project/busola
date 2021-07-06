@@ -7,6 +7,7 @@ export const sortDocumentsByType = documents => {
     return docs.reduce((obj, document) => {
       const key = document.type ? 'type' : 'Type';
       const val = document[key];
+      const val123 = document[key];
 
       if (!val) return {};
 
