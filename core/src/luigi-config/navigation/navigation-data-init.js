@@ -2,6 +2,7 @@ import {
   fetchPermissions,
   fetchBusolaInitData,
   fetchNamespaces,
+  fetchObservabilityHost,
 } from './queries';
 import { config } from '../config';
 import {
@@ -209,6 +210,47 @@ async function fetchNavigationData(authData, permissionSet) {
   }
 }
 
+async function getObservabilityNodes(authData) {
+  const CATEGORY = {
+    label: 'Observability',
+    icon: 'stethoscope',
+    collapsible: true,
+  };
+  const VIRTUAL_SERVICES = [
+    [
+      'Grafana',
+      'apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/monitoring-grafana',
+    ],
+    [
+      'Kiali',
+      'apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/kiali',
+    ],
+    [
+      'Tracing',
+      'apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/tracing',
+    ],
+  ];
+
+  const navNodes = await Promise.all(
+    VIRTUAL_SERVICES.map(async ([label, path]) => {
+      try {
+        return {
+          category: CATEGORY,
+          externalLink: {
+            url: 'https://' + (await fetchObservabilityHost(authData, path)),
+            sameWindow: false,
+          },
+          label,
+        };
+      } catch (e) {
+        return undefined;
+      }
+    }),
+  );
+
+  return navNodes.filter(n => n);
+}
+
 export async function getNavigationData(authData) {
   const { kubeconfig } = await getActiveCluster();
   const preselectedNamespace = getCurrentContextNamespace(kubeconfig);
@@ -248,8 +290,15 @@ export async function getNavigationData(authData) {
                 permissionSet,
                 modules,
               );
+              const observabilitySection = await getObservabilityNodes(
+                authData,
+              );
               const externalNodes = addExternalNodes(navigation.externalNodes);
-              const allNodes = [...staticNodes, ...externalNodes];
+              const allNodes = [
+                ...staticNodes,
+                ...observabilitySection,
+                ...externalNodes,
+              ];
               hideDisabledNodes(navigation.disabledNodes, allNodes, false);
               return allNodes;
             },
