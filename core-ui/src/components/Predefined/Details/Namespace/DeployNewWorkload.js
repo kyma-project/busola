@@ -4,19 +4,16 @@ import {
   ModalWithForm,
   useGetList,
   useMicrofrontendContext,
-  modulesExist,
 } from 'react-shared';
 import CreateWorkloadForm from './CreateWorkloadForm/CreateWorkloadForm';
 import CreateLambdaModal from 'components/Lambdas/LambdasList/Lambdas/CreateLambdaModal';
 
 export default function DeployNewWorkload({ namespaceName }) {
   const microfrontendContext = useMicrofrontendContext();
-  const { crds, modules } = microfrontendContext;
+  const { features } = microfrontendContext;
 
-  const functionsExist = modulesExist(crds, [modules?.SERVERLESS]);
-
-  const reposExist =
-    functionsExist && modulesExist(crds, [modules?.SERVERLESS]);
+  const functionsExist = features?.SERVERLESS?.isEnabled;
+  const reposExist = functionsExist && features.SERVERLESS?.isEnabled;
 
   const {
     data: functions,

@@ -11,6 +11,7 @@ import {
   getStaticRootNodes,
 } from './static-navigation-model';
 import { navigationPermissionChecker, hasPermissionsFor } from './permissions';
+import { resolveFeatures } from './../features';
 
 import {
   hideDisabledNodes,
@@ -116,6 +117,7 @@ async function createClusterManagementNodes() {
 export async function createNavigation() {
   const params = await getActiveCluster();
   const clusters = await getClusters();
+
   const activeClusterName = getActiveClusterName();
   const isClusterSelected = !!params;
   const clusterNodes = Object.entries(clusters).map(
@@ -165,10 +167,20 @@ export async function createNavigation() {
       }
     : {};
 
+  const isNodeEnabled = node => {
+    if (node.context?.requiredFeatures) {
+      for (const feature of node.context.requiredFeatures || []) {
+        if (feature.isEnabled === false) return false;
+      }
+    }
+    return true;
+  };
+
   return {
     preloadViewGroups: false,
     nodeAccessibilityResolver: node =>
-      navigationPermissionChecker(node, selfSubjectRulesReview, crds),
+      isNodeEnabled(node) &&
+      navigationPermissionChecker(node, selfSubjectRulesReview),
     appSwitcher: {
       showMainAppEntry: false,
       items: [
@@ -269,8 +281,14 @@ export async function getNavigationData(authData) {
     const params = await getActiveCluster();
     const activeClusterName = params.currentContext.cluster.name;
 
-    const { navigation = {}, hiddenNamespaces = [], modules = {} } =
+    const { navigation = {}, hiddenNamespaces = [], features = {} } =
       params?.config || {};
+
+    await resolveFeatures(features, {
+      authData,
+      crds,
+    });
+
     const nodes = [
       {
         pathSegment: 'cluster',
@@ -288,7 +306,7 @@ export async function getNavigationData(authData) {
                 getChildrenNodesForNamespace,
                 apiPaths,
                 permissionSet,
-                modules,
+                features,
               );
               const observabilitySection = await getObservabilityNodes(
                 authData,
@@ -308,7 +326,7 @@ export async function getNavigationData(authData) {
           authData,
           groups,
           crds,
-          modules,
+          features,
           hiddenNamespaces,
           showHiddenNamespaces: shouldShowHiddenNamespaces(),
           cluster: params.currentContext.cluster,
@@ -360,12 +378,12 @@ async function getNamespaces() {
   return createNamespacesList(namespaces);
 }
 
-async function getChildrenNodesForNamespace(apiPaths, permissionSet) {
-  const { navigation = {}, modules = {} } = (await getActiveCluster()).config;
+async function getChildrenNodesForNamespace(apiPaths, permissionSet, features) {
+  const { navigation = {} } = (await getActiveCluster()).config;
   const staticNodes = getStaticChildrenNodesForNamespace(
     apiPaths,
     permissionSet,
-    modules,
+    features,
   );
 
   hideDisabledNodes(navigation.disabledNodes, staticNodes, true);

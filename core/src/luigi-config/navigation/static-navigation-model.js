@@ -44,7 +44,7 @@ async function downloadKubeconfig() {
 export function getStaticChildrenNodesForNamespace(
   apiPaths,
   permissionSet,
-  modules,
+  features,
 ) {
   const encodedClusterName = encodeURIComponent(getActiveClusterName());
   const nodes = [
@@ -95,7 +95,7 @@ export function getStaticChildrenNodesForNamespace(
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
       context: {
-        requiredModules: [modules?.SERVERLESS],
+        requiredFeatures: [features.SERVERLESS],
       },
       children: [
         {
@@ -271,7 +271,7 @@ export function getStaticChildrenNodesForNamespace(
       viewGroup: coreUIViewGroupName,
       keepSelectedForChildren: true,
       context: {
-        requiredModules: [modules?.API_GATEWAY],
+        requiredFeatures: [features.API_GATEWAY],
       },
       children: [
         {
@@ -365,7 +365,7 @@ export function getStaticChildrenNodesForNamespace(
       keepSelectedForChildren: true,
       viewGroup: catalogViewGroupName,
       context: {
-        requiredModules: [modules?.SERVICE_CATALOG],
+        requiredFeatures: [features.SERVICE_CATALOG],
       },
       children: [
         {
@@ -439,7 +439,7 @@ export function getStaticChildrenNodesForNamespace(
       viewGroup: catalogViewGroupName,
       keepSelectedForChildren: true,
       context: {
-        requiredModules: [modules?.SERVICE_CATALOG],
+        requiredFeatures: [features.SERVICE_CATALOG],
       },
       children: [
         {
@@ -470,7 +470,7 @@ export function getStaticChildrenNodesForNamespace(
         }),
       viewGroup: coreUIViewGroupName,
       context: {
-        requiredModules: [modules?.SERVICE_CATALOG],
+        requiredFeatures: [features.SERVICE_CATALOG],
       },
     },
 
@@ -500,7 +500,7 @@ export function getStaticChildrenNodesForNamespace(
       viewGroup: coreUIViewGroupName,
       keepSelectedForChildren: true,
       context: {
-        requiredModules: [modules?.ADDONS],
+        requiredFeatures: [features.ADDONS],
       },
       children: [
         {
@@ -715,7 +715,7 @@ export function getStaticChildrenNodesForNamespace(
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
       context: {
-        requiredModules: [modules?.SERVERLESS],
+        requiredFeatures: [features.SERVERLESS],
       },
     },
     {
@@ -779,7 +779,7 @@ export function getStaticRootNodes(
   namespaceChildrenNodesResolver,
   apiPaths,
   permissionSet,
-  modules,
+  features,
 ) {
   const nodes = [
     {
@@ -826,7 +826,11 @@ export function getStaticRootNodes(
           },
           keepSelectedForChildren: false,
           children: async () =>
-            await namespaceChildrenNodesResolver(apiPaths, permissionSet),
+            await namespaceChildrenNodesResolver(
+              apiPaths,
+              permissionSet,
+              features,
+            ),
           defaultChildNode: 'details',
         },
       ],
@@ -859,7 +863,7 @@ export function getStaticRootNodes(
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
       context: {
-        requiredModules: [modules?.APPLICATIONS],
+        requiredFeatures: [features.APPLICATIONS],
       },
       children: [
         {
@@ -901,7 +905,7 @@ export function getStaticRootNodes(
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
       context: {
-        requiredModules: [modules?.ADDONS],
+        requiredFeatures: [features.ADDONS],
       },
       children: [
         {
