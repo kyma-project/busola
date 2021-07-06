@@ -118,10 +118,6 @@ export async function createNavigation() {
   const clusters = await getClusters();
   const { features = {} } = params?.config || {};
 
-  await resolveFeatures(features, {
-    crds,
-  });
-
   const activeClusterName = getActiveClusterName();
   const isClusterSelected = !!params;
   const clusterNodes = Object.entries(clusters).map(
