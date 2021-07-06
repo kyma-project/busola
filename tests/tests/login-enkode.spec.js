@@ -208,7 +208,6 @@ context('Login - enkode link', () => {
     const kubeconfigIdAddress = 'http://localhost:3030';
     cy.wrap(generateWithKubeconfigId(kubeconfigIdAddress)).then(
       ({ params, kubeconfig }) => {
-        console.log(params, kubeconfig);
         cy.intercept(
           {
             method: 'GET',
@@ -218,6 +217,43 @@ context('Login - enkode link', () => {
         );
         cy.visit(`${config.clusterAddress}?init=${params}&kubeconfigID=tests`);
         cy.url().should('match', /namespaces$/);
+      },
+    );
+  });
+
+  it('Enkode + kubeconfigID: valid kubeconfig ID', () => {
+    const kubeconfigIdAddress = 'http://localhost:3030';
+    cy.wrap(generateWithKubeconfigId(kubeconfigIdAddress)).then(
+      ({ params, kubeconfig }) => {
+        cy.intercept(
+          {
+            method: 'GET',
+            url: kubeconfigIdAddress + '/*',
+          },
+          kubeconfig,
+        );
+        cy.visit(`${config.clusterAddress}?init=${params}&kubeconfigID=tests`);
+        cy.url().should('match', /namespaces$/);
+      },
+    );
+  });
+
+  it.only('Enkode + kubeconfigID: invalid kubeconfig ID', () => {
+    const kubeconfigIdAddress = 'http://localhost:3030';
+    cy.wrap(generateWithKubeconfigId(kubeconfigIdAddress)).then(
+      ({ params }) => {
+        cy.intercept(
+          {
+            method: 'GET',
+            url: kubeconfigIdAddress + '/*',
+          },
+          { Error: 'not found' },
+        );
+        cy.visit(`${config.clusterAddress}?init=${params}&kubeconfigID=tests`);
+
+        Cypress.on('window:alert', alertContent =>
+          expect(alertContent).to.include('Error: not found'),
+        );
       },
     );
   });

@@ -27,12 +27,9 @@ export async function applyKubeconfigIdIfPresent(kubeconfigId, initParams) {
     return;
   }
 
-  console.log(kubeconfigIdFeature.config.kubeconfigUrl, kubeconfigId);
   const url = join(kubeconfigIdFeature.config.kubeconfigUrl, kubeconfigId);
   const responseText = await fetch(url).then(res => res.text());
   const payload = jsyaml.load(responseText);
-
-  console.log(payload);
 
   if (payload.Error) {
     throw Error(payload.Error);

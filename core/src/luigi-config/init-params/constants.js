@@ -23,9 +23,6 @@ export const DEFAULT_FEATURES = {
     ]),
   ),
   KUBECONFIG_ID: {
-    isEnabled: true,
-    lazy: false,
-    selectors: [],
     config: {
       kubeconfigUrl: 'https://kyma-env-broker.cp.dev.kyma.cloud.sap/kubeconfig',
     },

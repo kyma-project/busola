@@ -19,7 +19,7 @@ function hasExactlyOneContext(kubeconfig) {
   return kubeconfig?.contexts?.length === 1;
 }
 
-export async function saveInitParamsIfPresent() {
+export async function saveQueryParamsIfPresent() {
   try {
     await setupFromParams();
   } catch (e) {
@@ -91,6 +91,7 @@ async function setupFromParams() {
   const targetLocation =
     `/cluster/${encodeURIComponent(clusterName)}/namespaces` +
     (preselectedNamespace ? `/${preselectedNamespace}/details` : '');
+
   saveLocation(targetLocation);
 }
 
