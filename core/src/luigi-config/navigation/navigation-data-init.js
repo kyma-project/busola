@@ -10,7 +10,7 @@ import {
   getStaticRootNodes,
 } from './static-navigation-model';
 import { navigationPermissionChecker, hasPermissionsFor } from './permissions';
-import { resolveFeatures, resolveFeatureAvailability } from './../features';
+import { resolveFeatures } from './../features';
 
 import {
   hideDisabledNodes,
@@ -174,7 +174,7 @@ export async function createNavigation() {
   const isNodeEnabled = node => {
     if (node.context?.requiredFeatures) {
       for (const feature of node.context.requiredFeatures || []) {
-        if (!feature.isEnabled) return false;
+        if (feature.isEnabled === false) return false;
       }
     }
     return true;
