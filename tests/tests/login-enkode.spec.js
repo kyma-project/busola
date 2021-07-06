@@ -204,23 +204,6 @@ context('Login - enkode link', () => {
     });
   });
 
-  it('Enkode + kubeconfigID', () => {
-    const kubeconfigIdAddress = 'http://localhost:3030';
-    cy.wrap(generateWithKubeconfigId(kubeconfigIdAddress)).then(
-      ({ params, kubeconfig }) => {
-        cy.intercept(
-          {
-            method: 'GET',
-            url: kubeconfigIdAddress + '/*',
-          },
-          kubeconfig,
-        );
-        cy.visit(`${config.clusterAddress}?init=${params}&kubeconfigID=tests`);
-        cy.url().should('match', /namespaces$/);
-      },
-    );
-  });
-
   it('Enkode + kubeconfigID: valid kubeconfig ID', () => {
     const kubeconfigIdAddress = 'http://localhost:3030';
     cy.wrap(generateWithKubeconfigId(kubeconfigIdAddress)).then(
@@ -238,7 +221,7 @@ context('Login - enkode link', () => {
     );
   });
 
-  it.only('Enkode + kubeconfigID: invalid kubeconfig ID', () => {
+  it('Enkode + kubeconfigID: invalid kubeconfig ID', () => {
     const kubeconfigIdAddress = 'http://localhost:3030';
     cy.wrap(generateWithKubeconfigId(kubeconfigIdAddress)).then(
       ({ params }) => {
