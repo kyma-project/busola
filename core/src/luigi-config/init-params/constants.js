@@ -27,7 +27,7 @@ export const DEFAULT_FEATURES = {
     lazy: false,
     selectors: [],
     config: {
-      kubeconfigUrl: 'http://localhost:3030',
+      kubeconfigUrl: 'https://kyma-env-broker.cp.dev.kyma.cloud.sap/kubeconfig',
     },
   },
 };

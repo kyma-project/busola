@@ -1,6 +1,14 @@
 import { getClusterParams } from './cluster-params';
 import { resolveFeatureAvailability } from './features';
 import { DEFAULT_FEATURES, PARAMS_VERSION } from './init-params/constants';
+import jsyaml from 'js-yaml';
+
+function join(path, fileName) {
+  if (!path.endsWith('/')) {
+    path += '/';
+  }
+  return path + fileName;
+}
 
 export async function applyKubeconfigIdIfPresent(kubeconfigId, initParams) {
   if (!kubeconfigId) {
@@ -9,32 +17,32 @@ export async function applyKubeconfigIdIfPresent(kubeconfigId, initParams) {
 
   const clusterParams = await getClusterParams();
 
-  const feature = {
+  const kubeconfigIdFeature = {
     ...DEFAULT_FEATURES,
     ...clusterParams.config?.features,
     ...initParams.config?.features,
   }['KUBECONFIG_ID'];
 
-  if (!(await resolveFeatureAvailability(feature))) {
+  if (!(await resolveFeatureAvailability(kubeconfigIdFeature))) {
     return;
   }
 
-  if (!feature.config.kubeconfigUrl.endsWith('/')) {
-    feature.config.kubeconfigUrl += '/';
+  console.log(kubeconfigIdFeature.config.kubeconfigUrl, kubeconfigId);
+  const url = join(kubeconfigIdFeature.config.kubeconfigUrl, kubeconfigId);
+  const responseText = await fetch(url).then(res => res.text());
+  const payload = jsyaml.load(responseText);
+
+  console.log(payload);
+
+  if (payload.Error) {
+    throw Error(payload.Error);
   }
 
-  try {
-    const response = await fetch(feature.config.kubeconfigUrl + kubeconfigId);
-
-    initParams.kubeconfig = await response.json();
-    if (!initParams.config?.version) {
-      initParams.config = {
-        ...initParams.config,
-        version: PARAMS_VERSION,
-      };
-    }
-  } catch (e) {
-    alert('Cannot reach kubeconfig ID service.');
-    throw e;
+  initParams.kubeconfig = payload;
+  if (!initParams.config?.version) {
+    initParams.config = {
+      ...initParams.config,
+      version: PARAMS_VERSION,
+    };
   }
 }

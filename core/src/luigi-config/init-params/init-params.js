@@ -23,7 +23,9 @@ export async function saveInitParamsIfPresent() {
   try {
     await setupFromParams();
   } catch (e) {
-    alert('Error loading init params, configuration not changed.');
+    alert(
+      `Error loading init params, configuration not changed (Error: ${e.message}).`,
+    );
     console.warn(e);
   }
 }
