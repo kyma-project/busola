@@ -151,6 +151,35 @@ export async function generateParamsAndToken() {
   return { token, params: await encoder.compress(params) };
 }
 
+export async function generateParamsWithDisabledFeatures() {
+  const kubeconfig = await loadKubeconfig();
+  const config = DEFAULT_CONFIG;
+
+  config.features.ADDONS = {
+    isEnabled: false,
+    selectors: [
+      {
+        type: 'apiGroup',
+        apiGroup: 'servicecatalog.k8s.io',
+      },
+    ],
+  };
+  config.features.SERVERLESS = {
+    selectors: [
+      {
+        type: 'apiGroup',
+        apiGroup: 'api_group_that_doesnt_exist',
+      },
+    ],
+  };
+
+  const params = {
+    kubeconfig,
+    config,
+  };
+  return await encoder.compress(params);
+}
+
 export async function generateUnsupportedVersionParams() {
   const params = {
     kubeconfig: null,
