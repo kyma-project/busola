@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useMicrofrontendContext, modulesExist, Tabs, Tab } from 'react-shared';
+import { useMicrofrontendContext, Tabs, Tab } from 'react-shared';
 
 import CodeTab from './Tabs/Code/CodeTab';
 import ResourceManagementTab from './Tabs/ResourceManagement/ResourceManagementTab';
@@ -12,31 +12,27 @@ import { LAMBDA_DETAILS } from 'components/Lambdas/constants';
 export default function LambdaDetails({ lambda }) {
   const [bindingUsages, setBindingUsages] = useState([]);
   const microfrontendContext = useMicrofrontendContext();
-  const { crds, modules } = microfrontendContext;
+  const { features } = microfrontendContext;
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
-  const ApiRules = modulesExist(crds, [modules?.API_GATEWAY])
+  const ApiRules = features?.API_GATEWAY?.isEnabled
     ? ApiRulesWrapper
     : () => null;
 
-  const EventSubscriptions = modulesExist(crds, [modules?.EVENTING])
+  const EventSubscriptions = features?.EVENTING?.isEnabled
     ? EventSubscriptionsWrapper
     : () => null;
 
-  const ServiceBindings = modulesExist(crds, [
-    modules?.SERVICE_CATALOG,
-    modules?.SERVICE_CATALOG_ADDONS,
-  ])
-    ? ServiceBindingsWrapper
-    : () => null;
+  const catalogEnabled =
+    features?.SERVICE_CATALOG?.isEnabled &&
+    features?.SERVICE_CATALOG_ADDONS?.isEnabled;
+
+  const ServiceBindings = catalogEnabled ? ServiceBindingsWrapper : () => null;
 
   const configTabShouldRender =
-    modulesExist(crds, [modules?.API_GATEWAY]) ||
-    modulesExist(crds, [modules?.EVENTING]) ||
-    modulesExist(crds, [
-      modules?.SERVICE_CATALOG,
-      modules?.SERVICE_CATALOG_ADDONS,
-    ]);
+    features?.API_GATEWAY?.isEnabled ||
+    features?.EVENTING?.isEnabled ||
+    catalogEnabled;
 
   return (
     <>
