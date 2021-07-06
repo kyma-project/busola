@@ -4,6 +4,7 @@ import {
   fetchNamespaces,
   fetchObservabilityHost,
 } from './queries';
+import { getClusterParams } from '../cluster-params';
 import { config } from '../config';
 import {
   coreUIViewGroupName,
@@ -222,29 +223,18 @@ async function fetchNavigationData(authData, permissionSet) {
   }
 }
 
-async function getObservabilityNodes(authData) {
+async function getObservabilityNodes(authData, enabledFeatures) {
+  const links =
+    enabledFeatures.OBSERVABILITY?.config.links || // take the custom config at first
+    (await getClusterParams()).config.features.OBSERVABILITY?.config.links; // use the Busola configMap as a fallback
+
   const CATEGORY = {
     label: 'Observability',
     icon: 'stethoscope',
     collapsible: true,
   };
-  const VIRTUAL_SERVICES = [
-    [
-      'Grafana',
-      'apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/monitoring-grafana',
-    ],
-    [
-      'Kiali',
-      'apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/kiali',
-    ],
-    [
-      'Tracing',
-      'apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/tracing',
-    ],
-  ];
-
   const navNodes = await Promise.all(
-    VIRTUAL_SERVICES.map(async ([label, path]) => {
+    links.map(async ([label, path]) => {
       try {
         return {
           category: CATEGORY,
@@ -259,7 +249,6 @@ async function getObservabilityNodes(authData) {
       }
     }),
   );
-
   return navNodes.filter(n => n);
 }
 
@@ -310,6 +299,7 @@ export async function getNavigationData(authData) {
               );
               const observabilitySection = await getObservabilityNodes(
                 authData,
+                features,
               );
               const externalNodes = addExternalNodes(navigation.externalNodes);
               const allNodes = [
