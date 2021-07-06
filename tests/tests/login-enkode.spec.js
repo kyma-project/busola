@@ -171,26 +171,26 @@ context('Login - enkode link', () => {
     cy.goToNamespaceDetails();
 
     cy.getLeftNav()
-      .contains('Workloads', { timeout: 7000 })
+      .contains('Workloads')
       .click();
 
     // selector with apiGroup that doesn't exist
     cy.getLeftNav()
-      .contains('Functions', { timeout: 7000 })
+      .contains('Functions')
       .should('not.exist');
 
     cy.getLeftNav()
-      .contains('Configuration', { timeout: 7000 })
+      .contains('Configuration')
       .click();
 
     // feature is disabled
     cy.getLeftNav()
-      .contains('Addons', { timeout: 7000 })
+      .contains('Addons')
       .should('not.exist');
 
     // feature is enabled
     cy.getLeftNav()
-      .contains('OAuth Clients', { timeout: 7000 })
+      .contains('OAuth Clients')
       .should('exist');
   });
 
