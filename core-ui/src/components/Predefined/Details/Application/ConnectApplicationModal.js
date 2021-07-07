@@ -5,16 +5,16 @@ import copyToCliboard from 'copy-to-clipboard';
 
 function Actions({ close, textToCopy, canCopy }) {
   return [
-    <Button option="emphasized" onClick={close} key="close">
-      OK
-    </Button>,
     <Button
       disabled={!canCopy}
-      option="transparent"
+      option="emphasized"
       onClick={() => copyToCliboard(textToCopy)}
       key="copy"
     >
       Copy to clipboard
+    </Button>,
+    <Button onClick={close} key="close">
+      Close
     </Button>,
   ];
 }
