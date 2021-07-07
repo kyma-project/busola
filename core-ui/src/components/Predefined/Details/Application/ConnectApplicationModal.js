@@ -4,23 +4,19 @@ import { Modal, usePost, useDelete, useSingleGet } from 'react-shared';
 import copyToCliboard from 'copy-to-clipboard';
 
 function Actions({ close, textToCopy, canCopy }) {
-  return (
-    <div
-      className="fd-has-display-flex"
-      style={{ justifyContent: 'space-between' }}
+  return [
+    <Button option="emphasized" onClick={close} key="close">
+      OK
+    </Button>,
+    <Button
+      disabled={!canCopy}
+      option="transparent"
+      onClick={() => copyToCliboard(textToCopy)}
+      key="copy"
     >
-      <Button
-        disabled={!canCopy}
-        option="transparent"
-        onClick={() => copyToCliboard(textToCopy)}
-      >
-        Copy to clipboard
-      </Button>
-      <Button option="emphasized" onClick={close}>
-        OK
-      </Button>
-    </div>
-  );
+      Copy to clipboard
+    </Button>,
+  ];
 }
 
 export default function ConnectApplicationModal({ applicationName }) {
@@ -80,7 +76,7 @@ export default function ConnectApplicationModal({ applicationName }) {
           canCopy={url !== 'Loading...'}
         />
       )}
-      title="URL to connect Application"
+      title="Connect Application"
       modalOpeningComponent={
         <Button className="fd-margin-end--sm">Connect Application</Button>
       }
