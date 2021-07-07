@@ -59,16 +59,19 @@ export const SideDrawer = ({
       )}
 
       <section className="content">
-        {children}
-        <div className="bottom">
-          {bottomContent}
-          {textToCopy && (
-            <CopiableText
-              textToCopy={textToCopy}
-              iconOnly={true}
-              buttonText="Copy"
-            />
-          )}
+        <div className="handle"></div>
+        <div className="content-wrapper">
+          {children}
+          <div className="bottom">
+            {bottomContent}
+            {textToCopy && (
+              <CopiableText
+                textToCopy={textToCopy}
+                iconOnly={true}
+                buttonText="Copy"
+              />
+            )}
+          </div>
         </div>
       </section>
     </div>

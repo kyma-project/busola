@@ -1,5 +1,6 @@
 .side-drawer {
   $btnWidth: 4.2em;
+  --handleWidth: 10px;
 
   position: fixed;
   z-index: 1000; // very important, do not lower it (you can raise it)
@@ -52,10 +53,21 @@
 
   .content {
     @include white-bg();
-    padding: 16px;
     align-self: stretch;
     overflow: auto;
     position: relative;
+    display: grid;
+    grid-template-columns: var(--handleWidth) 100%;
+
+    .handle {
+      cursor: ew-resize;
+      z-index: 1001;
+    }
+
+    .content-wrapper {
+      margin: 16px;
+      margin-left: calc(16px - var(--handleWidth));
+    }
 
     .bottom {
       @include white-bg();

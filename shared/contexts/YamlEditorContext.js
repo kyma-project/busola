@@ -29,7 +29,14 @@ const isValidYaml = yaml => {
 };
 
 const YamlContent = ({ yaml, setChangedYamlFn }) => {
+  const editorRef = React.useRef();
   const [val, setVal] = useState(jsyaml.safeDump(yaml));
+
+  const openSearch = () => {
+    // focus is required for search to appear
+    editorRef.current.focus();
+    editorRef.current.trigger('', 'actions.find');
+  };
 
   useEffect(() => {
     const converted = jsyaml.safeDump(yaml);
@@ -47,6 +54,9 @@ const YamlContent = ({ yaml, setChangedYamlFn }) => {
             glyph="copy"
             onClick={() => copyToCliboard(val)}
           />
+        </Tooltip>
+        <Tooltip content="Search" position="top">
+          <Button option="transparent" glyph="filter" onClick={openSearch} />
         </Tooltip>
         <Tooltip content="Download" position="top">
           <Button
@@ -68,6 +78,7 @@ const YamlContent = ({ yaml, setChangedYamlFn }) => {
         theme="vs-light"
         value={val}
         onChange={(_, text) => setChangedYamlFn(text)}
+        editorDidMount={(_, editor) => (editorRef.current = editor)}
       />
     </>
   );
