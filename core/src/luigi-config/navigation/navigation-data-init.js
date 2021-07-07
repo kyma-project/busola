@@ -234,7 +234,7 @@ async function getObservabilityNodes(authData, enabledFeatures) {
     collapsible: true,
   };
   const navNodes = await Promise.all(
-    links.map(async ([label, path]) => {
+    links.map(async ({ label, path }) => {
       try {
         return {
           category: CATEGORY,
