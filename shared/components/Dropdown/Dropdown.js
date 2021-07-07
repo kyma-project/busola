@@ -11,19 +11,25 @@ export function Dropdown({
   onSelect,
   inlineHelp = '',
   id,
+  disabled = false,
+  _ref,
 }) {
   return (
     <div className="dropdown">
-      <FormLabel>
-        {label}
-        {inlineHelp && <Tooltip isInlineHelp content={inlineHelp} />}
-      </FormLabel>
+      {label && (
+        <FormLabel>
+          {label}
+          {inlineHelp && <Tooltip isInlineHelp content={inlineHelp} />}
+        </FormLabel>
+      )}
       <Select
         id={id || 'select-dropdown'}
         aria-label={label}
         options={options}
         selectedKey={selectedKey}
         onSelect={onSelect}
+        disabled={disabled}
+        ref={_ref}
       />
     </div>
   );

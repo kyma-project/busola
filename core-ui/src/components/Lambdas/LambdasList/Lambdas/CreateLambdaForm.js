@@ -1,17 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-
 import { MessageStrip } from 'fundamental-react';
-
-import {
-  ResourceNameInput,
-  LabelsInput,
-  DropdownInput,
-  FormInput,
-} from 'components/Lambdas/components';
-
-import { useCreateLambda } from 'components/Lambdas/hooks';
-
-import { validateResourceName } from 'components/Lambdas/helpers/misc';
 import {
   randomNameGenerator,
   useMicrofrontendContext,
@@ -19,10 +7,16 @@ import {
 } from 'react-shared';
 
 import {
+  ResourceNameInput,
+  LabelsInput,
+  FormInput,
+} from 'components/Lambdas/components';
+import { useCreateLambda } from 'components/Lambdas/hooks';
+import { validateResourceName } from 'components/Lambdas/helpers/misc';
+import {
   functionAvailableLanguages,
   nodejs14,
 } from 'components/Lambdas/helpers/runtime';
-
 import { LAMBDAS_LIST } from 'components/Lambdas/constants';
 
 const ERRORS = {
