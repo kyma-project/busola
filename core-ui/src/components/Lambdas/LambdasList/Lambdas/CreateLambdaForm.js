@@ -166,18 +166,18 @@ export default function CreateLambdaForm({
   const runtimeOptions = Object.entries(functionAvailableLanguages).map(
     ([runtime, lang]) => ({
       key: runtime,
-      value: lang,
+      text: lang,
     }),
   );
   const sourceTypeOptions = LAMBDAS_LIST.CREATE_MODAL.INPUTS.SOURCE_TYPE.OPTIONS.map(
     sourceType => ({
       key: sourceType.KEY,
-      value: sourceType.VALUE,
+      text: sourceType.VALUE,
     }),
   );
   const repositoryOptions = repositories?.map(repository => ({
-    key: `${repository.metadata.name} (${repository.spec.url})`,
-    value: repository.metadata.name,
+    key: repository.metadata.name,
+    text: `${repository.metadata.name} (${repository.spec.url})`,
   }));
 
   return (
@@ -201,23 +201,17 @@ export default function CreateLambdaForm({
       />
 
       <Dropdown
-        id="function-runtime-combobox"
+        id="function-runtime-dropdown"
         label={LAMBDAS_LIST.CREATE_MODAL.INPUTS.RUNTIME.LABEL}
-        options={runtimeOptions.map(runtime => ({
-          key: runtime.key,
-          text: runtime.value,
-        }))}
+        options={runtimeOptions}
         selectedKey={runtimeOptions[0].key}
         onSelect={(_, selected) => setRuntime(selected.key)}
       />
 
       <Dropdown
-        id="function-source-combobox"
+        id="function-source-dropdown"
         label={LAMBDAS_LIST.CREATE_MODAL.INPUTS.SOURCE_TYPE.LABEL}
-        options={sourceTypeOptions.map(source => ({
-          key: source.key,
-          text: source.value,
-        }))}
+        options={sourceTypeOptions}
         selectedKey={sourceTypeOptions[0].key}
         onSelect={(_, selected) => setSourceType(selected.key)}
         inlineHelp={LAMBDAS_LIST.CREATE_MODAL.INPUTS.SOURCE_TYPE.INLINE_HELP}
@@ -230,15 +224,15 @@ export default function CreateLambdaForm({
           </MessageStrip>
         ) : (
           <>
-            <DropdownInput
+            <Dropdown
+              id="function-repos-dropdown"
               label={LAMBDAS_LIST.CREATE_MODAL.INPUTS.REPOSITORY.LABEL}
+              options={repositoryOptions}
+              selectedKey={repositoryOptions[0].key}
+              onSelect={(_, selected) => setRepositoryName(selected.key)}
               inlineHelp={
                 LAMBDAS_LIST.CREATE_MODAL.INPUTS.REPOSITORY.INLINE_HELP
               }
-              options={repositoryOptions}
-              id="repositoryName"
-              defaultValue={repositoryName}
-              onChange={e => setRepositoryName(e.target.value)}
             />
 
             <FormInput
