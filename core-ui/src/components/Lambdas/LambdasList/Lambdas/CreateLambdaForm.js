@@ -12,7 +12,11 @@ import {
 import { useCreateLambda } from 'components/Lambdas/hooks';
 
 import { validateResourceName } from 'components/Lambdas/helpers/misc';
-import { randomNameGenerator, useMicrofrontendContext } from 'react-shared';
+import {
+  randomNameGenerator,
+  useMicrofrontendContext,
+  Dropdown,
+} from 'react-shared';
 
 import {
   functionAvailableLanguages,
@@ -196,22 +200,27 @@ export default function CreateLambdaForm({
         onChange={newLabels => setLabels(newLabels)}
       />
 
-      <DropdownInput
+      <Dropdown
+        id="function-runtime-combobox"
         label={LAMBDAS_LIST.CREATE_MODAL.INPUTS.RUNTIME.LABEL}
-        inlineHelp={LAMBDAS_LIST.CREATE_MODAL.INPUTS.RUNTIME.INLINE_HELP}
-        options={runtimeOptions}
-        id="runtime"
-        defaultValue={runtime}
-        onChange={e => setRuntime(e.target.value)}
+        options={runtimeOptions.map(runtime => ({
+          key: runtime.key,
+          text: runtime.value,
+        }))}
+        selectedKey={runtimeOptions[0].key}
+        onSelect={(_, selected) => setRuntime(selected.text)}
       />
 
-      <DropdownInput
+      <Dropdown
+        id="function-source-combobox"
         label={LAMBDAS_LIST.CREATE_MODAL.INPUTS.SOURCE_TYPE.LABEL}
+        options={sourceTypeOptions.map(source => ({
+          key: source.value,
+          text: source.key,
+        }))}
+        selectedKey={sourceTypeOptions[0].value}
+        onSelect={(_, selected) => setSourceType(selected.text)}
         inlineHelp={LAMBDAS_LIST.CREATE_MODAL.INPUTS.SOURCE_TYPE.INLINE_HELP}
-        options={sourceTypeOptions}
-        defaultValue={sourceType}
-        id="sourceType"
-        onChange={e => setSourceType(e.target.value)}
       />
 
       {sourceType &&
