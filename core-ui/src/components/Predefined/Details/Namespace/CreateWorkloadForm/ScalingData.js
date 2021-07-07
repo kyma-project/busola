@@ -13,8 +13,9 @@ export default function ScalingData({ deployment, setDeployment }) {
       <h3 className="configuration-data__title">Runtime Profile</h3>
       <FormFieldset className="configuration-data__form">
         <FormItem>
-          <FormLabel>Memory requests</FormLabel>
+          <FormLabel required>Memory requests</FormLabel>
           <FormInput
+            required
             defaultValue={deployment.requests.memory}
             onChange={e =>
               setDeployment({
@@ -28,8 +29,9 @@ export default function ScalingData({ deployment, setDeployment }) {
           />
         </FormItem>
         <FormItem>
-          <FormLabel>Memory limits</FormLabel>
+          <FormLabel required>Memory limits</FormLabel>
           <FormInput
+            required
             defaultValue={deployment.limits.memory}
             onChange={e =>
               setDeployment({
@@ -45,8 +47,9 @@ export default function ScalingData({ deployment, setDeployment }) {
       </FormFieldset>
       <FormFieldset className="configuration-data__form">
         <FormItem>
-          <FormLabel>CPU requests</FormLabel>
+          <FormLabel required>CPU requests</FormLabel>
           <FormInput
+            required
             defaultValue={deployment.requests.cpu}
             onChange={e =>
               setDeployment({
@@ -60,8 +63,9 @@ export default function ScalingData({ deployment, setDeployment }) {
           />
         </FormItem>
         <FormItem>
-          <FormLabel>CPU limits</FormLabel>
+          <FormLabel required>CPU limits</FormLabel>
           <FormInput
+            required
             defaultValue={deployment.limits.cpu}
             onChange={e =>
               setDeployment({
