@@ -73,7 +73,6 @@ const YamlContent = ({ yaml, setChangedYamlFn }) => {
       </h1>
       <ControlledEditor
         height="90vh"
-        width="min(48vw, 150em)"
         language={'yaml'}
         theme="vs-light"
         value={val}
