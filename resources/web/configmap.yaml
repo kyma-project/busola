@@ -62,6 +62,24 @@ data:
                     "apiGroup":"serverless.kyma-project.io"
                   }
               ]
+            },
+            "OBSERVABILITY": {
+              "config": {
+                "links": [
+                  {
+                    "label": "Grafana",
+                    "path": "apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/monitoring-grafana"
+                  },
+                  {
+                    "label": "Kiali",
+                    "path": "apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/kiali"
+                  },
+                  {
+                    "label": "Tracing",
+                    "path": "apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/tracing"
+                  }
+                ]
+              }
             }
         }
       }
