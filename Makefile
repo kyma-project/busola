@@ -1,5 +1,7 @@
 IMG_NAME = busola-web
+LOCAL_IMG_NAME = busola-backend-and-web
 IMG = $(DOCKER_PUSH_REPOSITORY)$(DOCKER_PUSH_DIRECTORY)/$(IMG_NAME)
+LOCAL_IMG = $(DOCKER_PUSH_REPOSITORY)$(DOCKER_PUSH_DIRECTORY)/$(LOCAL_IMG_NAME)
 TAG = $(DOCKER_TAG)
 
 ci-pr: resolve validate validate-libraries
@@ -35,9 +37,18 @@ endif
 
 release: build-image push-image
 
+release-local: build-image-local push-image-local
+
 build-image: 
 	docker build -t $(IMG_NAME) -f Dockerfile .
+
+build-image-local:
+	docker build -t $(LOCAL_IMG_NAME) -f Dockerfile.local .
 
 push-image:
 	docker tag $(IMG_NAME) $(IMG):$(TAG)
 	docker push $(IMG):$(TAG)
+
+push-image-local:
+	docker tag $(LOCAL_IMG_NAME) $(LOCAL_IMG):$(TAG)
+	docker push $(LOCAL_IMG):$(TAG)
