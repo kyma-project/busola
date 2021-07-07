@@ -9,6 +9,7 @@ import {
   generateParamsWithHiddenNamespacesList,
   generateParamsWithDisabledFeatures,
   generateUnsupportedVersionParams,
+  generateWithKubeconfigId,
 } from '../support/enkode';
 
 const SYSTEM_NAMESPACE = 'kyma-system';
@@ -201,5 +202,42 @@ context('Login - enkode link', () => {
     cy.wrap(generateUnsupportedVersionParams()).then(params => {
       cy.visit(`${config.clusterAddress}?init=${params}`);
     });
+  });
+
+  it('Enkode + kubeconfigID: valid kubeconfig ID', () => {
+    const kubeconfigIdAddress = 'http://localhost:3030';
+    cy.wrap(generateWithKubeconfigId(kubeconfigIdAddress)).then(
+      ({ params, kubeconfig }) => {
+        cy.intercept(
+          {
+            method: 'GET',
+            url: kubeconfigIdAddress + '/*',
+          },
+          kubeconfig,
+        );
+        cy.visit(`${config.clusterAddress}?init=${params}&kubeconfigID=tests`);
+        cy.url().should('match', /namespaces$/);
+      },
+    );
+  });
+
+  it('Enkode + kubeconfigID: invalid kubeconfig ID', () => {
+    const kubeconfigIdAddress = 'http://localhost:3030';
+    cy.wrap(generateWithKubeconfigId(kubeconfigIdAddress)).then(
+      ({ params }) => {
+        cy.intercept(
+          {
+            method: 'GET',
+            url: kubeconfigIdAddress + '/*',
+          },
+          { Error: 'not found' },
+        );
+        cy.visit(`${config.clusterAddress}?init=${params}&kubeconfigID=tests`);
+
+        Cypress.on('window:alert', alertContent =>
+          expect(alertContent).to.include('Error: not found'),
+        );
+      },
+    );
   });
 });

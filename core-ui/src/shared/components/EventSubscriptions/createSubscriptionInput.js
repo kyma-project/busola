@@ -14,8 +14,6 @@ export function createSubscriptionInput(
       ownerReferences: [ownerRef],
     },
     spec: {
-      protocol: '',
-      protocolsettings: {},
       sink,
       filter: {
         filters: [

@@ -187,3 +187,22 @@ export async function generateUnsupportedVersionParams() {
   };
   return await encoder.compress(params);
 }
+
+export async function generateWithKubeconfigId(kubeconfigIdAddress) {
+  const kubeconfig = await loadKubeconfig();
+  const params = {
+    kubeconfig: null,
+    config: {
+      ...DEFAULT_CONFIG,
+      features: {
+        KUBECONFIG_ID: {
+          selectors: [],
+          config: {
+            kubeconfigUrl: kubeconfigIdAddress,
+          },
+        },
+      },
+    },
+  };
+  return { params: await encoder.compress(params), kubeconfig };
+}

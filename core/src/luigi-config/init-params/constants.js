@@ -8,19 +8,26 @@ const DEFAULT_MODULES = {
   SERVERLESS: 'serverless.kyma-project.io',
 };
 
-export const DEFAULT_FEATURES = Object.fromEntries(
-  Object.entries(DEFAULT_MODULES).map(([key, value]) => [
-    key,
-    {
-      selectors: [
-        {
-          type: 'apiGroup',
-          apiGroup: value,
-        },
-      ],
+export const DEFAULT_FEATURES = {
+  ...Object.fromEntries(
+    Object.entries(DEFAULT_MODULES).map(([key, value]) => [
+      key,
+      {
+        selectors: [
+          {
+            type: 'apiGroup',
+            apiGroup: value,
+          },
+        ],
+      },
+    ]),
+  ),
+  KUBECONFIG_ID: {
+    config: {
+      kubeconfigUrl: 'https://kyma-env-broker.cp.dev.kyma.cloud.sap/kubeconfig',
     },
-  ]),
-);
+  },
+};
 
 export const DEFAULT_HIDDEN_NAMESPACES = [
   'istio-system',
