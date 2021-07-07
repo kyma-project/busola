@@ -165,8 +165,8 @@ export default function CreateLambdaForm({
 
   const runtimeOptions = Object.entries(functionAvailableLanguages).map(
     ([runtime, lang]) => ({
-      key: lang,
-      value: runtime,
+      key: runtime,
+      value: lang,
     }),
   );
   const sourceTypeOptions = LAMBDAS_LIST.CREATE_MODAL.INPUTS.SOURCE_TYPE.OPTIONS.map(
@@ -208,18 +208,18 @@ export default function CreateLambdaForm({
           text: runtime.value,
         }))}
         selectedKey={runtimeOptions[0].key}
-        onSelect={(_, selected) => setRuntime(selected.text)}
+        onSelect={(_, selected) => setRuntime(selected.key)}
       />
 
       <Dropdown
         id="function-source-combobox"
         label={LAMBDAS_LIST.CREATE_MODAL.INPUTS.SOURCE_TYPE.LABEL}
         options={sourceTypeOptions.map(source => ({
-          key: source.value,
-          text: source.key,
+          key: source.key,
+          text: source.value,
         }))}
-        selectedKey={sourceTypeOptions[0].value}
-        onSelect={(_, selected) => setSourceType(selected.text)}
+        selectedKey={sourceTypeOptions[0].key}
+        onSelect={(_, selected) => setSourceType(selected.key)}
         inlineHelp={LAMBDAS_LIST.CREATE_MODAL.INPUTS.SOURCE_TYPE.INLINE_HELP}
       />
 

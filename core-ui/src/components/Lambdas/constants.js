@@ -111,12 +111,12 @@ export const LAMBDAS_LIST = {
         INLINE_HELP: `Type of your Function's code source: Inline editor (code and dependencies are provided as plain text) or Git repository (code and dependencies are fetched from a Git repository)`,
         OPTIONS: [
           {
-            KEY: 'Inline editor',
-            VALUE: '',
+            VALUE: 'Inline editor',
+            KEY: '',
           },
           {
-            KEY: 'Git repository',
-            VALUE: 'git',
+            VALUE: 'Git repository',
+            KEY: 'git',
           },
         ],
       },
