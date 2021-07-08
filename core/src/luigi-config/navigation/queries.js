@@ -21,13 +21,18 @@ export async function failFastFetch(input, auth, init = {}) {
   }
 
   async function createHeaders(auth) {
-    const cluster = (await getActiveCluster()).currentContext.cluster.cluster;
+    const params = await getActiveCluster();
+    const cluster = params.currentContext.cluster.cluster;
+    const requiresCA = params.config?.requiresCA;
+
+    console.log(params.config?.requiresCA);
     return {
       ...createAuthHeaders(auth),
       'Content-Type': 'application/json',
       'X-Cluster-Url': cluster?.server,
-      'X-Cluster-Certificate-Authority-Data':
-        cluster && cluster['certificate-authority-data'],
+      'X-Cluster-Certificate-Authority-Data': requiresCA
+        ? cluster['certificate-authority-data']
+        : undefined,
     };
   }
 
@@ -48,6 +53,17 @@ export async function failFastFetch(input, auth, init = {}) {
     } else {
       throw new Error(response);
     }
+  }
+}
+
+export async function checkIfClusterRequiresCA(auth) {
+  try {
+    // try to fetch without CA (requiresCA is undefined)
+    await failFastFetch(config.backendAddress, auth);
+    return false;
+  } catch (_) {
+    // if it fails, use CA
+    return true;
   }
 }
 
