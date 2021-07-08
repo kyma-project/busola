@@ -226,7 +226,7 @@ async function fetchNavigationData(authData, permissionSet) {
 async function getObservabilityNodes(authData, enabledFeatures) {
   const links =
     enabledFeatures.OBSERVABILITY?.config.links || // take the custom config at first
-    (await getClusterParams()).config.features.OBSERVABILITY?.config.links; // use the Busola configMap as a fallback
+    (await getClusterParams()).config.features.OBSERVABILITY?.config.links; //  use the Busola configMap as a fallback
 
   const CATEGORY = {
     label: 'Observability',
