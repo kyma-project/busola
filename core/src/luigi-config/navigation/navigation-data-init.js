@@ -2,6 +2,7 @@ import {
   fetchPermissions,
   fetchBusolaInitData,
   fetchNamespaces,
+  checkIfClusterRequiresCA,
 } from './queries';
 import { config } from '../config';
 import {
@@ -27,6 +28,7 @@ import {
   deleteActiveCluster,
   saveActiveClusterName,
   getCurrentContextNamespace,
+  saveClusterParams,
 } from '../cluster-management';
 import { shouldShowHiddenNamespaces } from './../utils/hidden-namespaces-toggle';
 import { saveLocation } from './previous-location';
@@ -222,8 +224,21 @@ async function fetchNavigationData(authData, permissionSet) {
 }
 
 export async function getNavigationData(authData) {
-  const { kubeconfig } = await getActiveCluster();
+  const activeCluster = await getActiveCluster();
+
+  if (activeCluster.config.requiresCA === undefined) {
+    activeCluster.config = {
+      ...activeCluster.config,
+      requiresCA: await checkIfClusterRequiresCA(authData),
+    };
+  }
+
+  await saveClusterParams(activeCluster);
+
+  const { kubeconfig } = activeCluster;
+
   const preselectedNamespace = getCurrentContextNamespace(kubeconfig);
+
   try {
     // we assume all users can make SelfSubjectRulesReview request
     const permissionSet = await fetchPermissions(
@@ -281,6 +296,7 @@ export async function getNavigationData(authData) {
           hiddenNamespaces,
           showHiddenNamespaces: shouldShowHiddenNamespaces(),
           cluster: params.currentContext.cluster,
+          config: params.config,
           kubeconfig: params.kubeconfig,
         },
       },
