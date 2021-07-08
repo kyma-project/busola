@@ -25,7 +25,6 @@ export async function failFastFetch(input, auth, init = {}) {
     const cluster = params.currentContext.cluster.cluster;
     const requiresCA = params.config?.requiresCA;
 
-    console.log(params.config?.requiresCA);
     return {
       ...createAuthHeaders(auth),
       'Content-Type': 'application/json',
