@@ -153,6 +153,7 @@ function Resources({
             const { status, ...otherResourceData } = resource; // remove 'status' property because you can't edit it anyway; TODO: decide if it's good
             setEditedSpec(
               otherResourceData,
+              resource.metadata.name + '.yaml',
               handleSaveClick(otherResourceData),
             );
           },

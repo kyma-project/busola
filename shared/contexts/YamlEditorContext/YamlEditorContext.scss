@@ -1,0 +1,12 @@
+.yaml-editor-header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+
+  h1 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-right: 10px;
+    vertical-align: middle;
+    line-height: 32px;
+  }
+}
