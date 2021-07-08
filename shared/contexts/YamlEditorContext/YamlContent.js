@@ -17,6 +17,9 @@ export function YamlContent({
     const converted = jsyaml.safeDump(yaml);
     setChangedYamlFn(null);
     setVal(converted);
+
+    // close search
+    editorRef.current?.trigger('', 'closeFindWidget');
   }, [yaml]);
 
   return (
