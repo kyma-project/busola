@@ -28,7 +28,7 @@
     "copy-to-clipboard": "^3.2.0",
     "core-js": "^3.3.6",
     "file-saver": "^2.0.2",
-    "fundamental-react": "^0.13.1",
+    "fundamental-react": "^v0.14.0-rc.27",
     "fundamental-styles": "^0.17.0",
     "jsonpath": "^1.1.1",
     "lodash": "^4.17.19",
