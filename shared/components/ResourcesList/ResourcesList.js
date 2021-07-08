@@ -95,7 +95,11 @@ function Resources({
   testid,
 }) {
   useWindowTitle(windowTitle || prettifyNamePlural(resourceName, resourceType));
-  const { setEditedYaml: setEditedSpec, closeEditor } = useYamlEditor();
+  const {
+    setEditedYaml: setEditedSpec,
+    closeEditor,
+    currentlyEditedResourceID,
+  } = useYamlEditor();
   const notification = useNotification();
   const updateResourceMutation = useUpdate(resourceUrl);
   const deleteResourceMutation = useDelete(resourceUrl);
@@ -154,6 +158,7 @@ function Resources({
             setEditedSpec(
               otherResourceData,
               handleSaveClick(otherResourceData),
+              otherResourceData.metadata.resourceVersion,
             );
           },
         },
@@ -234,6 +239,7 @@ function Resources({
       pagination={{ itemsPerPage: 20, autoHide: true }}
       extraHeaderContent={extraHeaderContent}
       testid={testid}
+      currentlyEditedResourceVersion={currentlyEditedResourceID}
     />
   );
 }

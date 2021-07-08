@@ -6,6 +6,19 @@
       cursor: default;
     }
 
+    &__row.is-edited {
+      position: relative;
+      background-color: var(--sapInformationBackground);
+      &::after {
+        position: absolute;
+        content: '';
+        background-color: var(--sapHighlightColor);
+        width: 6px;
+        height: 100%;
+        left: 0;
+      }
+    }
+
     &.compact {
       td {
         padding-top: 8px;
