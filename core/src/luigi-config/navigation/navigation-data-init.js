@@ -318,7 +318,7 @@ export async function getNavigationData(authData) {
             : ''
         })`;
       Luigi.ux().showAlert({
-        text: errorNotification,
+        text: err.message,
         type: 'error',
       });
       console.warn(err);
