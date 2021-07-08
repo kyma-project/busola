@@ -77,7 +77,6 @@ export const YamlEditorProvider = ({ children }) => {
   const [yaml, setYaml] = useState(null);
   const [isOpen, setOpen] = useState(false);
   const [changedYaml, setChangedYaml] = useState(null);
-  const [editedResourceID, setEditedResourceID] = useState(null);
   const onSaveFn = useRef(_ => {});
 
   useEffect(() => {
@@ -93,10 +92,9 @@ export const YamlEditorProvider = ({ children }) => {
     LuigiClient.uxManager().setDirtyStatus(!!changedYaml);
   }, [changedYaml]);
 
-  function setEditedYaml(newYaml, onSaveHandler, currentlyEditedResourceID) {
+  function setEditedYaml(newYaml, onSaveHandler) {
     onSaveFn.current = onSaveHandler;
     setYaml(newYaml);
-    setEditedResourceID(currentlyEditedResourceID);
   }
 
   function closeEditor() {
@@ -145,7 +143,8 @@ export const YamlEditorProvider = ({ children }) => {
       value={{
         setEditedYaml,
         closeEditor,
-        currentlyEditedResourceID: isOpen ? editedResourceID : null,
+        currentlyEditedResourceVersion:
+          (isOpen && yaml?.metadata?.resourceVersion) || null, // provide the resourceVersion of the currently edited resource if possible
       }}
     >
       {drawerComponent}
