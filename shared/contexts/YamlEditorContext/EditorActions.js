@@ -40,7 +40,7 @@ export function EditorActions({ val, editor, title, onSave, saveDisabled }) {
   };
 
   return (
-    <section className="fd-margin-bottom--sm fd-margin-top--tiny">
+    <section className="editor-actions fd-margin-bottom--sm">
       <ButtonWithTooltip
         tooltipContent="Search"
         glyph="filter"

@@ -1,6 +1,6 @@
 .side-drawer {
   $btnWidth: 4.2em;
-  --handleWidth: 10px;
+  --handleWidth: 14px;
 
   position: fixed;
   z-index: 1000; // very important, do not lower it (you can raise it)
@@ -11,7 +11,7 @@
   height: 100%;
 
   filter: drop-shadow(0 0 0.4em rgba(0, 0, 0, 0.42));
-  transition: transform ease-in 0.5s;
+  transition: transform cubic-bezier(0.68,-0.55,0.27,1.55) 0.5s;
   transform: translateX(calc(100% - #{$btnWidth}));
 
   &--open {
@@ -57,10 +57,13 @@
     position: relative;
     display: grid;
     grid-template-columns: var(--handleWidth) 100%;
+    border-radius: 8px 0 0 8px;
 
     .handle {
       cursor: ew-resize;
       z-index: 1001;
+      display: grid;
+      place-items: center;
     }
 
     .content-wrapper {

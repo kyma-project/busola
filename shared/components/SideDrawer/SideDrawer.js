@@ -8,8 +8,8 @@ import { Icon } from 'fundamental-react';
 import './SideDrawer.scss';
 import { CopiableText } from '../CopiableText/CopiableText';
 
-const MIN_EDITOR_RATIO = 30; // %
-const MAX_EDITOR_RATIO = 90;
+const MIN_EDITOR_RATIO = 33; // %
+const MAX_EDITOR_RATIO = 100;
 
 export const SideDrawer = ({
   buttonText,
@@ -95,7 +95,9 @@ export const SideDrawer = ({
       )}
 
       <section className="content">
-        <div className="handle" onMouseDown={onResizeStart} />
+        <div className="handle" onMouseDown={onResizeStart}>
+          <Icon glyph="vertical-grip" ariaLabel="resize" size="m" />
+        </div>
         <div className="content-wrapper">
           {children}
           {(bottomContent || textToCopy) && (

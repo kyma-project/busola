@@ -38,6 +38,7 @@ export function YamlContent({
         value={val}
         onChange={(_, text) => setChangedYamlFn(text)}
         editorDidMount={(_, editor) => (editorRef.current = editor)}
+        options={{ minimap: { enabled: false } }}
       />
     </>
   );
