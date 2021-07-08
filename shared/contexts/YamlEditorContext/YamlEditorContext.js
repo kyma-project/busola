@@ -16,6 +16,18 @@ export const YamlEditorContext = createContext({
   setEditedYaml: _ => {},
 });
 
+const DrawerHeader = ({ title, closeEditor }) => (
+  <header className="yaml-editor-header">
+    <h1 className="fd-has-type-4">{title || 'YAML'}</h1>
+    <Button
+      option="transparent"
+      glyph="decline"
+      aria-label="close drawer"
+      onClick={closeEditor}
+    />
+  </header>
+);
+
 export const YamlEditorProvider = ({ children }) => {
   const [yaml, setYaml] = useState(null);
   const [title, setTitle] = useState('');
@@ -60,20 +72,12 @@ export const YamlEditorProvider = ({ children }) => {
       buttonText={null}
       hideDefaultButton={true}
     >
-      <header className="yaml-editor-header">
-        <h1 className="fd-has-type-4">{title || 'YAML'}</h1>
-        <Button
-          option="transparent"
-          glyph="decline"
-          aria-label="close drawer"
-          onClick={closeEditor}
-        />
-      </header>
+      <DrawerHeader title={title} closeEditor={closeEditor} />
       <YamlContent
         yaml={yaml}
         setChangedYamlFn={setChangedYaml}
         title={title}
-        save={handleSaveClick}
+        onSave={handleSaveClick}
         saveDisabled={!isValidYaml(changedYaml)}
       />
     </SideDrawer>

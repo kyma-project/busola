@@ -98,16 +98,18 @@ export const SideDrawer = ({
         <div className="handle" onMouseDown={onResizeStart} />
         <div className="content-wrapper">
           {children}
-          <div className="bottom">
-            {bottomContent}
-            {textToCopy && (
-              <CopiableText
-                textToCopy={textToCopy}
-                iconOnly={true}
-                buttonText="Copy"
-              />
-            )}
-          </div>
+          {(bottomContent || textToCopy) && (
+            <div className="bottom">
+              {bottomContent}
+              {textToCopy && (
+                <CopiableText
+                  textToCopy={textToCopy}
+                  iconOnly={true}
+                  buttonText="Copy"
+                />
+              )}
+            </div>
+          )}
         </div>
       </section>
     </div>

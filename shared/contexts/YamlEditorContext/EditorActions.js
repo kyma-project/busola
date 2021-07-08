@@ -25,9 +25,9 @@ const ButtonWithTooltip = ({
   );
 };
 
-export function EditorActions({ val, editor, title, save, saveDisabled }) {
+export function EditorActions({ val, editor, title, onSave, saveDisabled }) {
   const openSearch = () => {
-    // focus is required for search to appear
+    // focus is required for search control to appear
     editor.focus();
     editor.trigger('', 'actions.find');
   };
@@ -40,7 +40,7 @@ export function EditorActions({ val, editor, title, save, saveDisabled }) {
   };
 
   return (
-    <section>
+    <section className="fd-margin-bottom--sm fd-margin-top--tiny">
       <ButtonWithTooltip
         tooltipContent="Search"
         glyph="filter"
@@ -50,7 +50,7 @@ export function EditorActions({ val, editor, title, save, saveDisabled }) {
       <ButtonWithTooltip
         tooltipContent="Save"
         glyph="save"
-        onClick={save}
+        onClick={onSave}
         disabled={saveDisabled}
       />
       <ButtonWithTooltip

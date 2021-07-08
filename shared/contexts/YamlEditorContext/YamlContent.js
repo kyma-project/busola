@@ -7,7 +7,7 @@ export function YamlContent({
   yaml,
   setChangedYamlFn,
   title,
-  save,
+  onSave,
   saveDisabled,
 }) {
   const editorRef = React.useRef();
@@ -25,12 +25,12 @@ export function YamlContent({
         val={val}
         editor={editorRef.current}
         title={title}
-        save={save}
+        onSave={onSave}
         saveDisabled={saveDisabled}
       />
       <ControlledEditor
-        height="90vh"
-        language={'yaml'}
+        height="85vh"
+        language="yaml"
         theme="vs-light"
         value={val}
         onChange={(_, text) => setChangedYamlFn(text)}
