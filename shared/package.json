@@ -17,7 +17,7 @@
     "webpack": "^5.38.1"
   },
   "peerDependencies": {
-    "fundamental-react": "0.8.0-rc.12",
+    "fundamental-react": "^0.13.1",
     "react": "^16.8.6"
   },
   "jest": {
