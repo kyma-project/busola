@@ -231,6 +231,7 @@ GenericList.propTypes = {
   pagination: PaginationProps,
   compact: PropTypes.bool,
   className: PropTypes.string,
+  currentlyEditedResourceVersion: PropTypes.string,
 };
 
 GenericList.defaultProps = {
