@@ -4,6 +4,7 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 
+// https://github.tools.sap/sgs/SAP-Global-Trust-List/blob/master/approved.pem
 const certs = fs.readFileSync('certs.pem', 'utf8');
 
 const isHeaderDefined = headerValue => {
