@@ -196,16 +196,16 @@ export const REPOSITORIES_LIST = {
       INLINE_HELP: `Authenticate with your Git repository using a token or password (Basic), an authentication key (SSH key), or don't use any authorization method (Public)`,
       OPTIONS: [
         {
-          KEY: 'Public',
-          VALUE: '',
+          VALUE: 'Public',
+          KEY: '',
         },
         {
-          KEY: 'Basic',
-          VALUE: 'basic',
+          VALUE: 'Basic',
+          KEY: 'basic',
         },
         {
-          KEY: 'SSH key',
-          VALUE: 'key',
+          VALUE: 'SSH key',
+          KEY: 'key',
         },
       ],
     },
