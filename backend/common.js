@@ -2,6 +2,9 @@ const https = require('https');
 const url = require('url');
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
+
+const certs = fs.readFileSync('certs.pem', 'utf8');
 
 const isHeaderDefined = headerValue => {
   return headerValue !== undefined && headerValue !== 'undefined';
@@ -32,7 +35,7 @@ export const handleRequest = async (req, res) => {
 
   const targetApiServer = url.parse(req.headers[urlHeader]);
 
-  const ca = decodeHeaderToBuffer(req.headers[caHeader]);
+  const ca = decodeHeaderToBuffer(req.headers[caHeader]) || certs;
   const cert = decodeHeaderToBuffer(req.headers[clientCAHeader]);
   const key = decodeHeaderToBuffer(req.headers[clientKeyDataHeader]);
 
