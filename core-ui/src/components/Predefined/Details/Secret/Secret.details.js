@@ -11,7 +11,7 @@ export const SecretsDetails = ({ DefaultRenderer, ...otherParams }) => {
     secret => (
       <ModalWithForm
         key="edit-secret-modal"
-        title="Update secret"
+        title="Edit secret"
         modalOpeningComponent={
           <Button className="fd-margin-end--tiny" option="transparent">
             Edit

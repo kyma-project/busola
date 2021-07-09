@@ -141,9 +141,6 @@ function Resource({
 
   const actions = readOnly ? null : (
     <>
-      {headerActions}
-
-      {resourceHeaderActions.map(resourceAction => resourceAction(resource))}
       <Button
         className="fd-margin-end--tiny"
         onClick={() => openYaml(resource)}
@@ -151,6 +148,8 @@ function Resource({
       >
         Edit YAML
       </Button>
+      {headerActions}
+      {resourceHeaderActions.map(resourceAction => resourceAction(resource))}
       <Button
         onClick={handleResourceDelete}
         option="transparent"
@@ -186,7 +185,7 @@ function Resource({
   };
 
   async function handleResourceDelete() {
-    return await handleDelete(
+    return handleDelete(
       resourceType,
       null,
       resourceName,

@@ -34,7 +34,7 @@ export default function CreateBindingModal({
 
   const modalOpeningComponent = (
     <Button glyph="add" option="transparent">
-      Create Binding
+      Create Namespace Binding
     </Button>
   );
 
