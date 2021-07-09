@@ -134,7 +134,7 @@ export const YamlEditorProvider = ({ children }) => {
       bottomContent={bottomContent}
       hideDefaultButton={true}
     >
-      <YamlContent yaml={yaml} setChangedYamlFn={setChangedYaml} />
+      {isOpen && <YamlContent yaml={yaml} setChangedYamlFn={setChangedYaml} />}
     </SideDrawer>
   );
 
