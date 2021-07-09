@@ -1,7 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import Preferences from 'components/Preferences/Preferences';
 import {
   PREFERENCES_TITLE,
   API_RULES_TITLE,
@@ -11,6 +10,8 @@ import {
   CLUSTER_OVERVIEW_TITLE,
 } from 'shared/constants';
 import { withTitle, useMicrofrontendContext } from 'react-shared';
+import CreateApiRule from '../ApiRules/CreateApiRule/CreateApiRule';
+import EditApiRule from 'components/ApiRules/EditApiRule/EditApiRule';
 import { ContainersLogs } from 'components/Predefined/Details/Pod/ContainersLogs';
 import { CustomResource } from 'components/Predefined/Details/CustomResourceDefinitions/CustomResources.details';
 import { ComponentForList, ComponentForDetails } from 'shared/getComponents';
@@ -21,11 +22,9 @@ import { AddCluster } from 'components/Clusters/views/AddCluster/AddCluster';
 import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
 import { NodeDetails } from 'components/Nodes/NodeDetails/NodeDetails';
 
-const CreateApiRule = React.lazy(() =>
-  import('../ApiRules/CreateApiRule/CreateApiRule'),
-);
-const EditApiRule = React.lazy(() =>
-  import('components/ApiRules/EditApiRule/EditApiRule'),
+//React.lazy currently only supports default exports. If the module you want to import uses named exports, you can create an intermediate module that reexports it as the default.
+const Preferences = React.lazy(() =>
+  import('components/Preferences/Preferences'),
 );
 
 export default function App() {
