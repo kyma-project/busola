@@ -12,7 +12,7 @@ import {
   getStaticRootNodes,
 } from './static-navigation-model';
 import { navigationPermissionChecker, hasPermissionsFor } from './permissions';
-import { resolveFeatures } from './../features';
+import { resolveFeatures, resolveFeatureAvailability } from './../features';
 
 import {
   hideDisabledNodes,
@@ -224,10 +224,19 @@ async function fetchNavigationData(authData, permissionSet) {
 }
 
 async function getObservabilityNodes(authData, enabledFeatures) {
-  const links =
-    enabledFeatures.OBSERVABILITY?.config.links || // take the custom config at first
-    (await getClusterParams()).config.features.OBSERVABILITY?.config.links; //  use the Busola configMap as a fallback
+  console.log();
+  let links =
+    // take the Config Params at first
+    (await resolveFeatureAvailability(enabledFeatures.OBSERVABILITY)) &&
+    enabledFeatures.OBSERVABILITY?.config.links;
 
+  if (!links) {
+    const defaultObservability = (await getClusterParams()).config.features
+      .OBSERVABILITY;
+    links =
+      (await resolveFeatureAvailability(defaultObservability)) &&
+      defaultObservability.config.links; //  use the Busola configMap as a fallback
+  }
   const CATEGORY = {
     label: 'Observability',
     icon: 'stethoscope',
