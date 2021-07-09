@@ -95,7 +95,11 @@ function Resources({
   testid,
 }) {
   useWindowTitle(windowTitle || prettifyNamePlural(resourceName, resourceType));
-  const { setEditedYaml: setEditedSpec, closeEditor } = useYamlEditor();
+  const {
+    setEditedYaml: setEditedSpec,
+    closeEditor,
+    currentlyEditedResourceUID,
+  } = useYamlEditor();
   const notification = useNotification();
   const updateResourceMutation = useUpdate(resourceUrl);
   const deleteResourceMutation = useDelete(resourceUrl);
@@ -235,6 +239,7 @@ function Resources({
       pagination={{ itemsPerPage: 20, autoHide: true }}
       extraHeaderContent={extraHeaderContent}
       testid={testid}
+      currentlyEditedResourceUID={currentlyEditedResourceUID}
     />
   );
 }
