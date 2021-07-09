@@ -36,7 +36,8 @@ const ServicesDropdown = ({
       .flat() || [];
 
   let defaultService;
-  if (options?.length) {
+  if (_ref.current) defaultService = _ref.current;
+  else if (options?.length) {
     if (defaultValue?.name && defaultValue.name !== 'undefined') {
       if (defaultValue?.port && defaultValue.port !== 'undefined') {
         defaultService = `${defaultValue.name}:${defaultValue.port}`;
