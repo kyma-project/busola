@@ -108,11 +108,18 @@ export const AddonsConfigurations = ({
         </div>
 
         <LabelSelectorInput labels={labels} onChange={handleLabelsChanged} />
-        <FormLabel htmlFor={`${resourceType}-urls`}>URLs</FormLabel>
+        <FormLabel
+          style={{ display: 'block' }}
+          className="fd-margin-top--tiny"
+          required
+          htmlFor={`${resourceType}-urls`}
+        >
+          URLs
+        </FormLabel>
         <section className="addons-urls-editor">
           <input
             className="fd-input"
-            type="text"
+            type="url"
             id={`${resourceType}-url-input`}
             placeholder="Enter URL"
             value={newUrl}

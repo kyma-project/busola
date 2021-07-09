@@ -9,7 +9,7 @@ context('Other login options', () => {
       const token = kubeconfig.users[0].user.token;
       kubeconfig.users[0].user.token = null;
 
-      cy.visit(config.clusterAddress);
+      cy.visit(`${config.clusterAddress}/clusters`);
 
       cy.getIframeBody()
         .contains('Add Cluster')
@@ -47,5 +47,13 @@ context('Other login options', () => {
         .find('thead')
         .should('be.visible');
     });
+  });
+
+  it('Reset endpoint', () => {
+    cy.loginAndSelectCluster();
+    cy.url().should('match', /namespaces$/);
+
+    cy.visit(`${config.clusterAddress}/reset`);
+    cy.url().should('match', /clusters$/);
   });
 });
