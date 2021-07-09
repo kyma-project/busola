@@ -200,6 +200,7 @@ export default function CreateLambdaForm({
         options={runtimeOptions}
         selectedKey={runtimeOptions[0].key}
         onSelect={(_, selected) => setRuntime(selected.key)}
+        inlineHelp={LAMBDAS_LIST.CREATE_MODAL.INPUTS.RUNTIME.INLINE_HELP}
       />
 
       <Dropdown
