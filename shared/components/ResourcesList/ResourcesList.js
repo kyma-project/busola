@@ -112,13 +112,13 @@ function Resources({
     resourceType,
   );
 
-  const withNoQueryString = path => path.split('?')[0];
+  const withoutQueryString = path => path.split('?')[0];
 
   const handleSaveClick = resourceData => async newYAML => {
     try {
       const diff = createPatch(resourceData, jsyaml.safeLoad(newYAML));
       const url =
-        withNoQueryString(resourceUrl) + '/' + resourceData.metadata.name;
+        withoutQueryString(resourceUrl) + '/' + resourceData.metadata.name;
       await updateResourceMutation(url, diff);
       silentRefetch();
       notification.notifySuccess({
@@ -135,7 +135,7 @@ function Resources({
   };
 
   async function handleResourceDelete(resource) {
-    const url = withNoQueryString(resourceUrl) + '/' + resource.metadata.name;
+    const url = withoutQueryString(resourceUrl) + '/' + resource.metadata.name;
     try {
       await deleteResourceMutation(url);
       notification.notifySuccess({
