@@ -143,8 +143,7 @@ export const YamlEditorProvider = ({ children }) => {
       value={{
         setEditedYaml,
         closeEditor,
-        currentlyEditedResourceVersion:
-          (isOpen && yaml?.metadata?.resourceVersion) || null, // provide the resourceVersion of the currently edited resource if possible
+        currentlyEditedResourceUID: (isOpen && yaml?.metadata?.uid) || null, // provide the UID of the currently edited resource if possible
       }}
     >
       {drawerComponent}

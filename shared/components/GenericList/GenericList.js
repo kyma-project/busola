@@ -42,7 +42,7 @@ export const GenericList = ({
   pagination,
   compact,
   className,
-  currentlyEditedResourceVersion,
+  currentlyEditedResourceUID,
 }) => {
   const [currentPage, setCurrentPage] = React.useState(
     pagination?.initialPage || 1,
@@ -136,7 +136,8 @@ export const GenericList = ({
         rowRenderer={rowRenderer}
         compact={compact}
         isBeingEdited={
-          e?.metadata.resourceVersion === currentlyEditedResourceVersion
+          currentlyEditedResourceUID &&
+          e?.metadata?.uid === currentlyEditedResourceUID
         }
       />
     ));
@@ -231,7 +232,7 @@ GenericList.propTypes = {
   pagination: PaginationProps,
   compact: PropTypes.bool,
   className: PropTypes.string,
-  currentlyEditedResourceVersion: PropTypes.string,
+  currentlyEditedResourceUID: PropTypes.string,
 };
 
 GenericList.defaultProps = {

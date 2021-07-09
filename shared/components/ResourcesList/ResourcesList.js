@@ -98,7 +98,7 @@ function Resources({
   const {
     setEditedYaml: setEditedSpec,
     closeEditor,
-    currentlyEditedResourceVersion,
+    currentlyEditedResourceUID,
   } = useYamlEditor();
   const notification = useNotification();
   const updateResourceMutation = useUpdate(resourceUrl);
@@ -238,7 +238,7 @@ function Resources({
       pagination={{ itemsPerPage: 20, autoHide: true }}
       extraHeaderContent={extraHeaderContent}
       testid={testid}
-      currentlyEditedResourceVersion={currentlyEditedResourceVersion}
+      currentlyEditedResourceUID={currentlyEditedResourceUID}
     />
   );
 }
