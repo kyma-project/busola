@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Button } from 'fundamental-react';
 
 import ListActions from '../ListActions/ListActions';
+import classNames from 'classnames';
 
 export const BodyFallback = ({ children }) => (
   <tr>
@@ -65,6 +66,7 @@ const DefaultRowRenderer = ({
   rowRenderer,
   actionsStandaloneItems,
   compact,
+  isBeingEdited = false,
 }) => {
   const cells = rowRenderer.map((cell, id) => (
     <td className="fd-table__cell" key={id}>
@@ -82,7 +84,7 @@ const DefaultRowRenderer = ({
     </td>
   );
   return (
-    <tr className="fd-table__row">
+    <tr className={classNames('fd-table__row', { 'is-edited': isBeingEdited })}>
       {cells}
       {!!actions.length && actionsCell}
     </tr>
