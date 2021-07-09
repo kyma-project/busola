@@ -224,7 +224,6 @@ async function fetchNavigationData(authData, permissionSet) {
 }
 
 async function getObservabilityNodes(authData, enabledFeatures) {
-  console.log();
   let links =
     // take the Config Params at first
     (await resolveFeatureAvailability(enabledFeatures.OBSERVABILITY)) &&
@@ -234,9 +233,11 @@ async function getObservabilityNodes(authData, enabledFeatures) {
     const defaultObservability = (await getClusterParams()).config.features
       .OBSERVABILITY;
     links =
-      (await resolveFeatureAvailability(defaultObservability)) &&
-      defaultObservability.config.links; //  use the Busola configMap as a fallback
+      (await resolveFeatureAvailability(defaultObservability)) && //  use the Busola configMap as a fallback
+      defaultObservability.config.links;
   }
+  if (!links) return []; // could not get the OBSERVABILITY feature config from either source, do not add any nodes
+
   const CATEGORY = {
     label: 'Observability',
     icon: 'stethoscope',
