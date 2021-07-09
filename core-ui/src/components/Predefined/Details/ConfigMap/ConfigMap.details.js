@@ -35,7 +35,7 @@ export const ConfigMapsDetails = ({ DefaultRenderer, ...otherParams }) => {
     configMap => (
       <ModalWithForm
         key="edit-config-map-modal"
-        title="Update Config Map"
+        title="Edit Config Map"
         modalOpeningComponent={
           <Button className="fd-margin-end--tiny" option="transparent">
             Edit

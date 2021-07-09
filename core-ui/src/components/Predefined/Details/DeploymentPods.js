@@ -16,5 +16,11 @@ export function DeploymentPods(resource) {
     isCompact: true,
     showTitle: true,
   };
-  return <ComponentForList name="podsList" params={podListParams} />;
+  return (
+    <ComponentForList
+      name="podsList"
+      params={podListParams}
+      key="deployment-pods"
+    />
+  );
 }
