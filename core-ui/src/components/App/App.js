@@ -11,8 +11,6 @@ import {
   CLUSTER_OVERVIEW_TITLE,
 } from 'shared/constants';
 import { withTitle, useMicrofrontendContext } from 'react-shared';
-import CreateApiRule from '../ApiRules/CreateApiRule/CreateApiRule';
-import EditApiRule from 'components/ApiRules/EditApiRule/EditApiRule';
 import { ContainersLogs } from 'components/Predefined/Details/Pod/ContainersLogs';
 import { CustomResource } from 'components/Predefined/Details/CustomResourceDefinitions/CustomResources.details';
 import { ComponentForList, ComponentForDetails } from 'shared/getComponents';
@@ -22,6 +20,13 @@ import { NoPermissions } from 'components/NoPermissions/NoPermissions';
 import { AddCluster } from 'components/Clusters/views/AddCluster/AddCluster';
 import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
 import { NodeDetails } from 'components/Nodes/NodeDetails/NodeDetails';
+
+const CreateApiRule = React.lazy(() =>
+  import('../ApiRules/CreateApiRule/CreateApiRule'),
+);
+const EditApiRule = React.lazy(() =>
+  import('components/ApiRules/EditApiRule/EditApiRule'),
+);
 
 export default function App() {
   const { cluster } = useMicrofrontendContext();

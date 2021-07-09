@@ -10,7 +10,9 @@ import { Microfrontend } from 'react-shared';
 ReactDOM.render(
   <Microfrontend env={process.env}>
     <BrowserRouter basename={process.env.PUBLIC_URL}>
-      <App />
+      <React.Suspense fallback={<div>Loading...</div>}>
+        <App />
+      </React.Suspense>
     </BrowserRouter>
   </Microfrontend>,
   document.getElementById('root'),
