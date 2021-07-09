@@ -154,3 +154,11 @@ export async function deleteActiveCluster() {
 export function saveClusters(clusters) {
   localStorage.setItem(CLUSTERS_KEY, JSON.stringify(clusters));
 }
+
+export function handleResetEndpoint() {
+  if (location.pathname === '/reset') {
+    saveActiveClusterName(null);
+    // we could use location = '/clusters', but it would trigger unnecessary reload
+    window.history.replaceState(null, window.document.title, '/clusters');
+  }
+}
