@@ -176,6 +176,7 @@ export const ModalWithForm = ({
         {...props}
         show={isOpen}
         actions={[
+          renderConfirmButton(),
           <Button
             onClick={() => {
               setOpenStatus(false);
@@ -184,7 +185,6 @@ export const ModalWithForm = ({
           >
             Cancel
           </Button>,
-          renderConfirmButton(),
         ]}
         onClose={() => {
           setOpenStatus(false);

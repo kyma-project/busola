@@ -67,6 +67,7 @@ export const OAuth2ClientsCreate = ({
       </FormItem>
       <FormItem className="clearfix">
         <CheckboxFormControl
+          required={true}
           name="Grant types"
           availableValues={grantTypes}
           values={spec.grantTypes}
