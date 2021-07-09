@@ -1,7 +1,7 @@
 import config from '../config';
 
 Cypress.Commands.add('loginAndSelectCluster', () => {
-  cy.visit(config.clusterAddress)
+  cy.visit(`${config.clusterAddress}/clusters`)
     .getIframeBody()
     .contains('Add Cluster')
     .click();
