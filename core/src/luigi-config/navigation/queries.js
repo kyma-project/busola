@@ -51,6 +51,13 @@ export async function failFastFetch(input, auth, init = {}) {
   }
 }
 
+export async function fetchObservabilityHost(auth, vsPath) {
+  const res = await failFastFetch(config.backendAddress + '/' + vsPath, auth, {
+    method: 'GET',
+  });
+  return (await res.json()).spec.hosts[0];
+}
+
 export function fetchPermissions(auth, namespace = '*') {
   const ssrr = {
     typeMeta: {
