@@ -6,7 +6,7 @@ This project contains smoke and integration UI tests for Busola.
 
 ## Prerequisites
 
-Before testing, you need to copy your cluster's kubeconfig file to [`fixtures/kubeconfig.yaml`](fixtures/kubeconfig.yaml).
+Before testing, you need to copy your cluster's kubeconfig file to `fixtures/kubeconfig.yaml`.
 
 ## Installation
 
