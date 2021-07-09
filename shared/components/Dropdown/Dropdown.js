@@ -13,7 +13,19 @@ export function Dropdown({
   id,
   disabled = false,
   _ref,
+  emptyListMessage = 'No resources available',
 }) {
+  if (!options || !options.length) {
+    options = [
+      {
+        key: 'empty-list',
+        text: emptyListMessage,
+      },
+    ];
+    selectedKey = options[0].key;
+    disabled = true;
+  }
+
   return (
     <div className="dropdown">
       {label && (
