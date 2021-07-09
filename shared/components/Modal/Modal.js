@@ -98,10 +98,7 @@ export function Modal({
     );
     let output = [
       tooltipData ? (
-        <Tooltip
-          {...tooltipData}
-          minWidth={tooltipData.minWidth ? tooltipData.minWidth : '191px'}
-        >
+        <Tooltip {...tooltipData} minWidth={tooltipData.minWidth || '191px'}>
           {confirmButton}
         </Tooltip>
       ) : (
@@ -110,7 +107,7 @@ export function Modal({
     ];
 
     if (cancelText) {
-      output.unshift(
+      output.push(
         <Button
           style={{ marginRight: '12px' }}
           option="transparent"
