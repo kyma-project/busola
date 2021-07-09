@@ -3,7 +3,7 @@ import { ClusterOverviewHeader } from './ClusterOverviewHeader';
 import { ClusterNodes } from './ClusterNodes/ClusterNodes';
 import './ClusterOverview.scss';
 
-export function ClusterOverview() {
+export default function ClusterOverview() {
   return (
     <>
       <ClusterOverviewHeader />

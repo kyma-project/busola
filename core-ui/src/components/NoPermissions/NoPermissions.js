@@ -8,7 +8,7 @@ function decodeHTMLEncoded(str) {
   return str.replaceAll('&quot;', '"');
 }
 
-export function NoPermissions() {
+export default function NoPermissions() {
   let { error } = LuigiClient.getNodeParams();
   if (error) {
     error = decodeHTMLEncoded(error);

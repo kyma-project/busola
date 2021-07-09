@@ -12,19 +12,39 @@ import {
 import { withTitle, useMicrofrontendContext } from 'react-shared';
 import CreateApiRule from '../ApiRules/CreateApiRule/CreateApiRule';
 import EditApiRule from 'components/ApiRules/EditApiRule/EditApiRule';
-import { ContainersLogs } from 'components/Predefined/Details/Pod/ContainersLogs';
-import { CustomResource } from 'components/Predefined/Details/CustomResourceDefinitions/CustomResources.details';
 import { ComponentForList, ComponentForDetails } from 'shared/getComponents';
 import { getResourceUrl } from 'shared/helpers';
 import { ClusterList } from 'components/Clusters/views/ClusterList';
-import { NoPermissions } from 'components/NoPermissions/NoPermissions';
-import { AddCluster } from 'components/Clusters/views/AddCluster/AddCluster';
-import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
-import { NodeDetails } from 'components/Nodes/NodeDetails/NodeDetails';
 
 //React.lazy currently only supports default exports. If the module you want to import uses named exports, you can create an intermediate module that reexports it as the default.
 const Preferences = React.lazy(() =>
   import('components/Preferences/Preferences'),
+);
+
+const ContainersLogs = React.lazy(() =>
+  import('components/Predefined/Details/Pod/ContainersLogs'),
+);
+
+const CustomResource = React.lazy(() =>
+  import(
+    'components/Predefined/Details/CustomResourceDefinitions/CustomResources.details'
+  ),
+);
+
+const NoPermissions = React.lazy(() =>
+  import('components/NoPermissions/NoPermissions'),
+);
+
+const AddCluster = React.lazy(() =>
+  import('components/Clusters/views/AddCluster/AddCluster'),
+);
+
+const NodeDetails = React.lazy(() =>
+  import('components/Nodes/NodeDetails/NodeDetails'),
+);
+
+const ClusterOverview = React.lazy(() =>
+  import('components/Clusters/views/ClusterOverview/ClusterOverview'),
 );
 
 export default function App() {

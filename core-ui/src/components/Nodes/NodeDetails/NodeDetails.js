@@ -8,7 +8,7 @@ import { NodeResources } from '../NodeResources/NodeResources';
 
 import './NodeDetails.scss';
 
-export function NodeDetails({ nodeName }) {
+export default function NodeDetails({ nodeName }) {
   const { data, error, loading } = useNodeQuery(nodeName);
   return (
     <div className="node-details">
