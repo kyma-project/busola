@@ -1,4 +1,3 @@
-import OpenIdConnect from '@luigi-project/plugin-auth-oidc';
 import { setAuthData } from './auth-storage';
 import {
   getActiveCluster,
@@ -44,7 +43,11 @@ export async function reloadAuth() {
   }
 }
 
-export const createAuth = kubeconfigUser => {
+async function importOpenIdConnect() {
+  return (await import('@luigi-project/plugin-auth-oidc')).default;
+}
+
+export const createAuth = async kubeconfigUser => {
   if (hasNonOidcAuth(kubeconfigUser)) {
     return null;
   }
@@ -54,6 +57,8 @@ export const createAuth = kubeconfigUser => {
 
   try {
     const { issuerUrl, clientId, scope } = parseOIDCParams(kubeconfigUser);
+
+    const OpenIdConnect = await importOpenIdConnect();
 
     return {
       use: 'openIdConnect',

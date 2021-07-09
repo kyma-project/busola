@@ -11,6 +11,8 @@ module.exports = env => {
     output: {
       filename: '[name].bundle.js',
       path: path.resolve(__dirname, 'src/assets'),
+      chunkFilename: '[name].bundle.js',
+      publicPath: '/assets/',
     },
     module: {
       rules: [
