@@ -22,7 +22,6 @@ export const GenericList = ({
   entriesKind,
   actions,
   title,
-
   headerRenderer,
   rowRenderer,
   notFoundMessage,
@@ -43,6 +42,7 @@ export const GenericList = ({
   pagination,
   compact,
   className,
+  currentlyEditedResourceUID,
 }) => {
   const [currentPage, setCurrentPage] = React.useState(
     pagination?.initialPage || 1,
@@ -135,6 +135,10 @@ export const GenericList = ({
         actionsStandaloneItems={actionsStandaloneItems}
         rowRenderer={rowRenderer}
         compact={compact}
+        isBeingEdited={
+          currentlyEditedResourceUID &&
+          e?.metadata?.uid === currentlyEditedResourceUID
+        }
       />
     ));
   };
@@ -228,6 +232,7 @@ GenericList.propTypes = {
   pagination: PaginationProps,
   compact: PropTypes.bool,
   className: PropTypes.string,
+  currentlyEditedResourceUID: PropTypes.string,
 };
 
 GenericList.defaultProps = {
