@@ -13,7 +13,7 @@ import {
 } from '../../shared';
 import { ClusterConfiguration } from '../../components/ClusterConfiguration';
 
-export default function AddCluster() {
+export function AddCluster() {
   const [kubeconfig, setKubeconfig] = React.useState(null);
   const [initParams, setInitParams] = React.useState(null);
   const notification = useNotification();

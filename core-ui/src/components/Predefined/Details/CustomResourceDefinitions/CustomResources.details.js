@@ -10,7 +10,7 @@ import {
   useMicrofrontendContext,
 } from 'react-shared';
 
-export default function CustomResource({ params }) {
+export function CustomResource({ params }) {
   const { namespaceId: namespace } = useMicrofrontendContext();
   const {
     customResourceDefinitionName,
