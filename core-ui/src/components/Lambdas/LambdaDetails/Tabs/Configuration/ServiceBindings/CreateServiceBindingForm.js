@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import {
   FormItem,
@@ -7,7 +7,7 @@ import {
   MessageStrip,
 } from 'fundamental-react';
 
-import { useCreateServiceBindingUsage, Checkbox } from 'react-shared';
+import { useCreateServiceBindingUsage, Checkbox, Dropdown } from 'react-shared';
 import { SERVICE_BINDINGS_PANEL } from 'components/Lambdas/constants';
 import { CONFIG } from 'components/Lambdas/config';
 
@@ -30,9 +30,8 @@ export default function CreateServiceBindingForm({
 }) {
   const createServiceBindingUsageSet = useCreateServiceBindingUsage();
 
-  const [selectedServiceInstance, setSelectedServiceInstance] = useState('');
+  const instanceRef = useRef(null);
   const [envPrefix, setEnvPrefix] = useState('');
-
   const [createCredentials, setCreateCredentials] = useState(true);
   const [existingCredentials, setExistingCredentials] = useState('');
   const [secrets, setSecrets] = useState([]);
@@ -48,21 +47,21 @@ export default function CreateServiceBindingForm({
   }, [isOpen, refetchServiceInstances]);
 
   useEffect(() => {
-    if (!selectedServiceInstance) {
+    if (!instanceRef.current) {
       setEnvPrefix('');
       setCreateCredentials(true);
       setSecrets([]);
       return;
     }
     const bindingsForThisInstance = serviceBindings.filter(
-      b => b.spec.instanceRef.name === selectedServiceInstance,
+      b => b.spec.instanceRef.name === instanceRef.current,
     );
     setSecrets(bindingsForThisInstance.map(b => b.spec.secretName));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedServiceInstance, availableServiceInstances]);
+  }, [instanceRef, availableServiceInstances]);
 
   useEffect(() => {
-    if (!selectedServiceInstance) {
+    if (!instanceRef.current) {
       setPopupModalMessage(
         SERVICE_BINDINGS_PANEL.CREATE_MODAL.CONFIRM_BUTTON.POPUP_MESSAGES
           .NO_SERVICE_INSTANCE_SELECTED,
@@ -82,7 +81,7 @@ export default function CreateServiceBindingForm({
 
     setValidity(true);
   }, [
-    selectedServiceInstance,
+    instanceRef,
     createCredentials,
     existingCredentials,
     setValidity,
@@ -91,13 +90,13 @@ export default function CreateServiceBindingForm({
 
   useEffect(() => {
     setExistingCredentials('');
-  }, [selectedServiceInstance, createCredentials]);
+  }, [instanceRef, createCredentials]);
 
   async function handleFormSubmit(e) {
     e.preventDefault();
     const parameters = {
       namespace: lambda.metadata.namespace,
-      serviceInstanceName: selectedServiceInstance,
+      serviceInstanceName: instanceRef.current,
       serviceBindingUsageParameters: envPrefix
         ? {
             envPrefix: {
@@ -112,13 +111,13 @@ export default function CreateServiceBindingForm({
     await createServiceBindingUsageSet(parameters);
   }
 
-  const serviceInstancesNames = availableServiceInstances.map(
-    ({ metadata }) => (
-      <option value={metadata.name} key={metadata.name}>
-        {metadata.name}
-      </option>
-    ),
-  );
+  const options = availableServiceInstances.map(({ metadata }) => ({
+    key: metadata.name,
+    text: metadata.name,
+  }));
+
+  const selectedInstance = instanceRef.current || options[0].key;
+  instanceRef.current = selectedInstance;
 
   const noSecretsFound = (
     <MessageStrip dismissible={false} type="information">
@@ -135,16 +134,14 @@ export default function CreateServiceBindingForm({
     >
       <FormItem key="serviceInstanceName">
         <FormLabel htmlFor="serviceInstanceName">Service Instance</FormLabel>
-        <select
+        <Dropdown
           id="serviceInstanceName"
-          className="fd-form-select"
-          value={selectedServiceInstance}
-          onChange={e => setSelectedServiceInstance(e.target.value)}
-          required
-        >
-          <option value=""></option>
-          {serviceInstancesNames}
-        </select>
+          options={options}
+          onSelect={(_, selected) => {
+            instanceRef.current = selected.key;
+          }}
+          selectedKey={selectedInstance}
+        />
       </FormItem>
 
       <FormItem key="envPrefix">
@@ -158,7 +155,7 @@ export default function CreateServiceBindingForm({
         />
       </FormItem>
 
-      {selectedServiceInstance && (
+      {instanceRef.current && (
         <>
           <FormItem key="createCredentials">
             <Checkbox
