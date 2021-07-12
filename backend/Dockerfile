@@ -19,6 +19,7 @@ RUN npm run build
 FROM base AS release
 WORKDIR /app
 COPY --from=build /app/backend-production.js ./
+COPY certs.pem certs.pem
 COPY package* ./
 RUN npm ci --only=production
 
