@@ -11,8 +11,6 @@ import {
   CLUSTER_OVERVIEW_TITLE,
 } from 'shared/constants';
 import { withTitle, useMicrofrontendContext } from 'react-shared';
-import CreateApiRule from '../ApiRules/CreateApiRule/CreateApiRule';
-import EditApiRule from 'components/ApiRules/EditApiRule/EditApiRule';
 import { ContainersLogs } from 'components/Predefined/Details/Pod/ContainersLogs';
 import { CustomResource } from 'components/Predefined/Details/CustomResourceDefinitions/CustomResources.details';
 import { ComponentForList, ComponentForDetails } from 'shared/getComponents';
