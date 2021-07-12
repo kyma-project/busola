@@ -11,11 +11,12 @@ function createAuthHeaders(auth) {
   }
 }
 
-export function createHeaders(authData, cluster) {
+export function createHeaders(authData, cluster, requiresCA) {
   return {
     ...createAuthHeaders(authData),
     'X-Cluster-Url': cluster?.server,
-    'X-Cluster-Certificate-Authority-Data':
-      cluster && cluster['certificate-authority-data'],
+    'X-Cluster-Certificate-Authority-Data': requiresCA
+      ? cluster['certificate-authority-data']
+      : undefined,
   };
 }
