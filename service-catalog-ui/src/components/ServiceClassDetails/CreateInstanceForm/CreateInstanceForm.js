@@ -99,7 +99,7 @@ export default function CreateInstanceForm({
   };
 
   // eslint-disable-next-line
-  useEffect(_ => handlePlanChange(plan, formValues.plan), [plans, plan]);
+  useEffect(_ => handlePlanChange(plan), [plans, plan]);
 
   const formValues = {
     name: useRef(null),
