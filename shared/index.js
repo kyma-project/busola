@@ -42,7 +42,7 @@ export * from './contexts/MicrofrontendContext';
 export * from './contexts/ConfigContext';
 export * from './contexts/NotificationContext';
 export * from './contexts/Microfrontend';
-export * from './contexts/YamlEditorContext';
+export * from './contexts/YamlEditorContext/YamlEditorContext';
 export * from './utils/helpers';
 export * from './utils/handleSubscriptionArrayEvent';
 export * from './utils/getComponentForResource';
