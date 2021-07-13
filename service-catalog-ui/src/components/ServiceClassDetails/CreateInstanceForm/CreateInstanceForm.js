@@ -7,14 +7,16 @@ import SchemaData from './SchemaData';
 
 import './CreateInstanceForm.scss';
 import { getResourceDisplayName } from 'helpers';
+
 import {
+  CustomPropTypes,
+  Tooltip,
+  CopiableLink,
   usePost,
   useNotification,
   randomNameGenerator,
   ControlledEditor,
 } from 'react-shared';
-
-import { CustomPropTypes, Tooltip, CopiableLink } from 'react-shared';
 
 const SERVICE_PLAN_SHAPE = PropTypes.shape({
   name: PropTypes.string.isRequired,
