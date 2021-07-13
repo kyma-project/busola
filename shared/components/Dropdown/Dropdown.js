@@ -29,7 +29,7 @@ export function Dropdown({
   return (
     <div className="dropdown">
       {label && (
-        <FormLabel>
+        <FormLabel htmlFor={id || 'select-dropdown'}>
           {label}
           {inlineHelp && <Tooltip isInlineHelp content={inlineHelp} />}
         </FormLabel>
