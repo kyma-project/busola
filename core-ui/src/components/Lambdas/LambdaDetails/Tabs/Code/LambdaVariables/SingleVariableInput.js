@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
-import { FormItem, FormInput } from 'fundamental-react';
+import { FormItem, FormInput, InfoLabel } from 'fundamental-react';
 
 import { VARIABLE_VALIDATION } from 'components/Lambdas/helpers/lambdaVariables';
 import { ENVIRONMENT_VARIABLES_PANEL } from 'components/Lambdas/constants';
@@ -12,6 +12,7 @@ export default function SingleVariableInput({
   currentVariable = {},
   variables = [],
   injectedVariables = [],
+  variableResources = [],
   onUpdateVariables,
   setValidity,
   setInvalidModalPopupMessage,
@@ -141,6 +142,9 @@ export default function SingleVariableInput({
           onChange={onChangeValue}
         />
       </FormItem>,
+      <InfoLabel>
+        {ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE[currentVariable.type].TEXT}
+      </InfoLabel>,
     ],
     collapseContent: renderValidationContent(),
     withCollapseControl: false,

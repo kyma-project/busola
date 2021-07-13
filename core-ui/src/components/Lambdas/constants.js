@@ -519,6 +519,15 @@ export const ENVIRONMENT_VARIABLES_PANEL = {
       SHOW_VALUE_MESSAGE: 'Click to show',
       HIDE_VALUE_MESSAGE: 'Click to hide',
     },
+    CONFIG_MAP: {
+      TEXT: 'Config Map',
+      TOOLTIP_MESSAGE:
+        'This variable comes from the "{resourceName}" Config Map.',
+    },
+    SECRET: {
+      TEXT: 'Secret',
+      TOOLTIP_MESSAGE: 'This variable comes from the "{resourceName}" Secret.',
+    },
   },
 };
 

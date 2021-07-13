@@ -7,23 +7,26 @@ import { CONFIG } from 'components/Lambdas/config';
 
 export function validateVariables(
   customVariables = [],
+  customValueFromVariables = [],
   injectedVariables = [],
 ) {
-  return customVariables.map((variable, _, array) => {
-    const validation = getValidationStatus({
-      userVariables: array,
-      injectedVariables,
-      restrictedVariables: CONFIG.restrictedVariables,
-      varName: variable.name,
-      varID: variable.id,
-      varDirty: variable.dirty,
-    });
-
-    return {
-      ...variable,
-      validation,
-    };
-  });
+  return [...customVariables, ...customValueFromVariables].map(
+    (variable, _, array) => {
+      const validation = getValidationStatus({
+        userVariables: array,
+        injectedVariables,
+        restrictedVariables: CONFIG.restrictedVariables,
+        varName: variable.name,
+        varID: variable.id,
+        varDirty: variable.dirty,
+      });
+      console.log('validation', validation);
+      return {
+        ...variable,
+        validation,
+      };
+    },
+  );
 }
 
 export function validateVariable(variables = [], currentVariable = {}) {
@@ -95,6 +98,18 @@ export function getValidationStatus({
     injectedVariables.some(
       variable =>
         variable.type === VARIABLE_TYPE.BINDING_USAGE &&
+        variable.name === varName,
+    )
+  ) {
+    return VARIABLE_VALIDATION.CAN_OVERRIDE_SBU;
+  }
+
+  // override SECRETS and CONFIG MAPS
+  if (
+    injectedVariables.some(
+      variable =>
+        (variable.type === VARIABLE_TYPE.CONFIG_MAP ||
+          variable.type === VARIABLE_TYPE.SECRET) &&
         variable.name === varName,
     )
   ) {

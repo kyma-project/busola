@@ -24,8 +24,23 @@ export function serializeVariables({
     // we don't support yet defining in UI variables with configMapKeyRef and secretKeyRef
     const isValueFromVariable =
       variable.valueFrom && Object.keys(variable.valueFrom).length;
+    const typeOfValueFromVariable = variable.valueFrom?.configMapKeyRef
+      ? VARIABLE_TYPE.CONFIG_MAP
+      : variable.valueFrom?.secretKeyRef
+      ? VARIABLE_TYPE.SECRET
+      : VARIABLE_TYPE.CUSTOM;
+    console.log('typeOfValueFromVariable', typeOfValueFromVariable);
     if (isValueFromVariable) {
-      customValueFromVariables.push(variable);
+      customValueFromVariables.push(
+        newVariableModel({
+          type: VARIABLE_TYPE[typeOfValueFromVariable],
+          variable: {
+            name: variable.name,
+            valueFrom: variable.valueFrom,
+          },
+          additionalProps: { dirty: true },
+        }),
+      );
       return;
     }
 

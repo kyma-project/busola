@@ -94,18 +94,18 @@ function VariableSource({ variable }) {
 
   if (variable.valueFrom) {
     if (variable.valueFrom.configMapKeyRef) {
-      source = 'Config Map';
+      source = ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.CONFIG_MAP.TEXT;
       tooltipTitle = formatMessage(
-        'This variable comes from the "{resourceName}" Config Map.',
+        ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.CONFIG_MAP.TOOLTIP_MESSAGE,
         {
           resourceName: variable.valueFrom.configMapKeyRef.name,
         },
       );
     }
     if (variable.valueFrom.secretKeyRef) {
-      source = 'Secret';
+      source = ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.SECRET.TEXT;
       tooltipTitle = formatMessage(
-        'This variable comes from the "{resourceName}" Secret.',
+        ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.SECRET.TOOLTIP_MESSAGE,
         {
           resourceName: variable.valueFrom.secretKeyRef.name,
         },
