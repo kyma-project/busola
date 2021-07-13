@@ -37,6 +37,8 @@ const ApplicationsDropdown = ({
   useEffect(() => {
     if (resources?.length) {
       setSelectedResource(resources[0]);
+    } else {
+      setSelectedResource(null);
     }
   }, [resources, setSelectedResource]);
 
@@ -59,25 +61,23 @@ const ApplicationsDropdown = ({
           );
         }}
       />
-      {selectedResource && (
-        <Dropdown
-          id="resources-dropdown"
-          label="Application"
-          options={resources?.map(
-            selectedResource =>
-              ({
-                key: selectedResource.metadata.name,
-                text: selectedResource.metadata.name,
-              } || []),
-          )}
-          selectedKey={selectedResource.metadata.name}
-          onSelect={(_, selected) => {
-            setSelectedResource(
-              resources.find(r => r.metadata.name === selected.key),
-            );
-          }}
-        />
-      )}
+      <Dropdown
+        id="resources-dropdown"
+        label="Application"
+        options={resources?.map(
+          r =>
+            ({
+              key: r.metadata.name,
+              text: r.metadata.name,
+            } || []),
+        )}
+        selectedKey={selectedResource?.metadata.name}
+        onSelect={(_, selected) => {
+          setSelectedResource(
+            resources.find(r => r.metadata.name === selected.key),
+          );
+        }}
+      />
     </>
   );
 };
@@ -96,7 +96,9 @@ export default function CreateServiceBindingForm({
   const [envPrefix, setEnvPrefix] = useState('');
 
   const [createBinding, setCreateBinding] = useState(true);
-  const [existingBindings, setExistingBindings] = useState('');
+  const [existingBinding, setExistingBinding] = useState(
+    serviceBindings[0]?.metadata.name || '',
+  );
 
   const [selectedUsageKind, setSelectedUsageKind] = useState(usageKinds[0]);
   const [selectedResource, setSelectedResource] = useState(null);
@@ -120,7 +122,7 @@ export default function CreateServiceBindingForm({
       return;
     }
 
-    if (!createBinding && !existingBindings) {
+    if (!createBinding && !existingBinding) {
       setPopupModalMessage(
         SERVICE_BINDINGS_PANEL.CREATE_MODAL.CONFIRM_BUTTON.POPUP_MESSAGES
           .NO_BINDING_SELECTED,
@@ -130,14 +132,13 @@ export default function CreateServiceBindingForm({
     }
     setCustomValid(true);
   }, [
+    selectedUsageKind,
     selectedResource,
     createBinding,
-    existingBindings,
+    existingBinding,
     setCustomValid,
     setPopupModalMessage,
   ]);
-
-  useEffect(() => setExistingBindings(''), [selectedResource, createBinding]);
 
   async function handleFormSubmit(e) {
     e.preventDefault();
@@ -155,7 +156,7 @@ export default function CreateServiceBindingForm({
         name: selectedResource.metadata.name,
         kind: selectedUsageKind.metadata.name,
       },
-      existingCredentials: existingBindings || undefined,
+      existingCredentials: createBinding ? undefined : existingBinding,
     };
 
     await createServiceBindingUsageSet(parameters);
@@ -210,22 +211,17 @@ export default function CreateServiceBindingForm({
             </Checkbox>
           </FormItem>
           {!createBinding && serviceBindings.length ? (
-            <FormItem key="existingBindings">
-              <FormLabel htmlFor="existingBindings">Service Bindings</FormLabel>
-              <select
-                id="existingBindings"
-                className="fd-form-select"
-                value={existingBindings}
-                onChange={e => setExistingBindings(e.target.value)}
-                required
-              >
-                <option value=""></option>
-                {serviceBindings.map(b => (
-                  <option value={b.metadata.name} key={b.metadata.uid}>
-                    {b.metadata.name}
-                  </option>
-                ))}
-              </select>
+            <FormItem>
+              <Dropdown
+                label="Service Bindings"
+                id="existingBinding"
+                options={serviceBindings?.map(s => ({
+                  key: s.metadata.name,
+                  text: s.metadata.name,
+                }))}
+                selectedKey={existingBinding}
+                onSelect={(_, selected) => setExistingBinding(selected.key)}
+              />
             </FormItem>
           ) : null}
           {!createBinding && !serviceBindings.length
