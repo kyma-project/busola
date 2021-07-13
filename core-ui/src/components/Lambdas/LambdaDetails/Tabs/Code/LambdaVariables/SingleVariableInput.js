@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 import { FormItem, FormInput, InfoLabel } from 'fundamental-react';
 
@@ -26,6 +26,35 @@ export default function SingleVariableInput({
   const [debouncedCallback] = useDebouncedCallback(newVariable => {
     onUpdateVariables(newVariable);
   }, 200);
+
+  function getCurrentResource(name, resource) {
+    if (!name || !resource) return {};
+    const currentResource = resource.find(s => s.metadata.name === name);
+    return currentResource;
+  }
+
+  function getInitSecret() {
+    const name =
+      currentVariable.type === VARIABLE_TYPE.SECRET &&
+      currentVariable?.valueFrom?.secretKeyRef?.name
+        ? currentVariable?.valueFrom?.secretKeyRef?.name
+        : null;
+    return getCurrentResource(name, secrets);
+  }
+
+  function getInitConfigMap() {
+    const name =
+      currentVariable.type === VARIABLE_TYPE.CONFIG_MAP &&
+      currentVariable?.valueFrom?.configMapKeyRef?.name
+        ? currentVariable?.valueFrom?.configMapKeyRef?.name
+        : null;
+    return getCurrentResource(name, configmaps);
+  }
+
+  const [selectedSecret, setSelectedSecret] = useState(getInitSecret());
+  const [selectedConfigMap, setSelectedConfigMap] = useState(
+    getInitConfigMap(),
+  );
 
   useEffect(() => {
     setValidity(false);
@@ -84,6 +113,16 @@ export default function SingleVariableInput({
     debouncedCallback(newVariable);
   }
 
+  function onChangeValueFrom(valueFrom) {
+    const newVariable = {
+      ...variable,
+      valueFrom,
+      dirty: true,
+    };
+    setVariable(newVariable);
+    debouncedCallback(newVariable);
+  }
+
   function renderValidationContent() {
     const { validation } = variable;
 
@@ -131,10 +170,27 @@ export default function SingleVariableInput({
     text: metadata.name,
   }));
 
-  const configmapsOptions = configmaps.map(({ metadata }) => ({
+  const secretKeysOptions = Object.keys(selectedSecret.data || []).map(key => {
+    return {
+      key: key,
+      text: key,
+    };
+  });
+
+  const configmapOptions = configmaps.map(({ metadata }) => ({
     key: metadata.name,
     text: metadata.name,
   }));
+
+  const configmapKeysOptions = Object.keys(selectedConfigMap.data || []).map(
+    key => {
+      return {
+        key: key,
+        text: key,
+      };
+    },
+  );
+
   return {
     cells: [
       <FormItem>
@@ -147,7 +203,7 @@ export default function SingleVariableInput({
         />
       </FormItem>,
       <span className="sap-icon--arrow-right"></span>,
-      <FormItem>
+      <FormItem style={{ maxWidth: '200px' }}>
         {currentVariable.type === VARIABLE_TYPE.CUSTOM && (
           <FormInput
             id={`variableValue-${currentVariable.id}`}
@@ -163,26 +219,77 @@ export default function SingleVariableInput({
           <Dropdown
             id={`variableValueFromSecret-${currentVariable.id}`}
             options={secretOptions}
-            // onSelect={(_, selected) => {
-            //   instanceRef.current = selected.key;
-            // }}
-            // selectedKey={selectedInstance}
+            onSelect={(_, selected) => {
+              setSelectedSecret(getCurrentResource(selected.key, secrets));
+              onChangeValueFrom({
+                secretKeyRef: {
+                  name: selected.key,
+                  key: null,
+                },
+              });
+            }}
+            selectedKey={currentVariable?.valueFrom?.secretKeyRef?.name || null}
           />
         )}
         {currentVariable.type === VARIABLE_TYPE.CONFIG_MAP && (
           <Dropdown
             id={`variableValueFromConfigMap-${currentVariable.id}`}
-            options={configmapsOptions}
-            // onSelect={(_, selected) => {
-            //   instanceRef.current = selected.key;
-            // }}
-            // selectedKey={selectedInstance}
+            options={configmapOptions}
+            onSelect={(_, selected) => {
+              setSelectedConfigMap(
+                getCurrentResource(selected.key, configmaps),
+              );
+              onChangeValueFrom({
+                configMapKeyRef: {
+                  name: selected.key,
+                  key: null,
+                },
+              });
+            }}
+            selectedKey={
+              currentVariable?.valueFrom?.configMapKeyRef?.name || null
+            }
           />
         )}
       </FormItem>,
       <InfoLabel>
         {ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE[currentVariable.type].TEXT}
       </InfoLabel>,
+      <FormItem>
+        {currentVariable.type === VARIABLE_TYPE.CUSTOM && <span>-</span>}
+        {currentVariable.type === VARIABLE_TYPE.SECRET && selectedSecret && (
+          <Dropdown
+            id={`variableValueFromSecret-${currentVariable.id}`}
+            options={secretKeysOptions}
+            onSelect={(_, selected) => {
+              onChangeValueFrom({
+                secretKeyRef: {
+                  ...currentVariable.valueFrom.secretKeyRef,
+                  key: selected.key,
+                },
+              });
+            }}
+            selectedKey={currentVariable?.valueFrom?.secretKeyRef?.key || null}
+          />
+        )}
+        {currentVariable.type === VARIABLE_TYPE.CONFIG_MAP && (
+          <Dropdown
+            id={`variableValueFromConfigMap-${currentVariable.id}`}
+            options={configmapKeysOptions}
+            onSelect={(_, selected) => {
+              onChangeValueFrom({
+                configMapKeyRef: {
+                  ...currentVariable.valueFrom.configMapKeyRef,
+                  key: selected.key,
+                },
+              });
+            }}
+            selectedKey={
+              currentVariable?.valueFrom?.configMapKeyRef?.key || null
+            }
+          />
+        )}
+      </FormItem>,
     ],
     collapseContent: renderValidationContent(),
     withCollapseControl: false,

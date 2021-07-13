@@ -31,13 +31,6 @@ export default function EditVariablesForm({
   setCustomValid = () => void 0,
   setInvalidModalPopupMessage = () => void 0,
 }) {
-  console.log(
-    '[...customVariables, ...customValueFromVariables]',
-    [...customVariables, ...customValueFromVariables],
-    'customValueFromVariables',
-    customValueFromVariables,
-  );
-  console.log('configmaps', configmaps, 'secrets', secrets);
   const updateLambdaVariables = useUpdateLambda({
     lambda,
     type: UPDATE_TYPE.VARIABLES,
@@ -98,6 +91,7 @@ export default function EditVariablesForm({
       }
       return oldVariable;
     });
+
     newVariables = validateVariables(newVariables, injectedVariables);
     setVariables(newVariables);
   }
@@ -112,10 +106,18 @@ export default function EditVariablesForm({
 
   function prepareVariablesInput() {
     console.log('prepareVariablesInput', variables);
-    return variables.map(variable => ({
-      name: variable.name,
-      value: variable.value,
-    }));
+    return variables.map(variable => {
+      if (variable.type === VARIABLE_TYPE.CUSTOM) {
+        return {
+          name: variable.name,
+          value: variable.value,
+        };
+      }
+      return {
+        name: variable.name,
+        valueFrom: variable.valueFrom,
+      };
+    });
   }
 
   function handleFormSubmit(e) {
@@ -124,7 +126,7 @@ export default function EditVariablesForm({
     updateLambdaVariables({
       spec: {
         ...lambda.spec,
-        env: [...preparedVariable, ...customValueFromVariables],
+        env: [...preparedVariable],
       },
     });
   }

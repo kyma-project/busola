@@ -27,7 +27,7 @@ export function serializeVariables({
       : variable.valueFrom?.secretKeyRef
       ? VARIABLE_TYPE.SECRET
       : VARIABLE_TYPE.CUSTOM;
-    console.log('typeOfValueFromVariable', typeOfValueFromVariable);
+
     if (isValueFromVariable) {
       customValueFromVariables.push(
         newVariableModel({
