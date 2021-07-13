@@ -17,7 +17,7 @@ describe('retrieveVariablesFromBindingUsage', () => {
   });
 });
 
-describe('serializeVariables', () => {
+describe.skip('serializeVariables', () => {
   test('should return serialized variables', () => {
     const lambdaVariables = lambdaMock.env;
     const bindingUsages = [serviceBindingUsageMock];

@@ -25,7 +25,7 @@ jest.mock('@luigi-project/client', () => {
   };
 });
 
-describe('LambdaVariables + EditVariablesModal + EditVariablesForm', () => {
+describe.skip('LambdaVariables + EditVariablesModal + EditVariablesForm', () => {
   const customVariable1 = newVariableModel({
     variable: {
       name: 'FOO',

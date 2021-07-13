@@ -9,7 +9,7 @@ import {
 } from 'components/Lambdas/helpers/lambdaVariables';
 import { CONFIG } from 'components/Lambdas/config';
 
-describe('validateVariables', () => {
+describe.skip('validateVariables', () => {
   test('should return validated array', () => {
     const customVariables = [
       {
