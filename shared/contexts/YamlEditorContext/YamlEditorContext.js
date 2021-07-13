@@ -73,13 +73,15 @@ export const YamlEditorProvider = ({ children }) => {
       hideDefaultButton={true}
     >
       <DrawerHeader title={title} closeEditor={closeEditor} />
-      <YamlContent
-        yaml={yaml}
-        setChangedYamlFn={setChangedYaml}
-        title={title}
-        onSave={handleSaveClick}
-        saveDisabled={!isValidYaml(changedYaml)}
-      />
+      {isOpen && (
+        <YamlContent
+          yaml={yaml}
+          setChangedYamlFn={setChangedYaml}
+          title={title}
+          onSave={handleSaveClick}
+          saveDisabled={!isValidYaml(changedYaml)}
+        />
+      )}
     </SideDrawer>
   );
 
