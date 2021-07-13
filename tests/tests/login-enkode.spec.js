@@ -21,7 +21,7 @@ context('Login - enkode link', () => {
       expect(alertContent).not.to.include('Configuration incompatible'),
     );
     cy.wrap(generateDefaultParams()).then(params => {
-      cy.visit(`${config.clusterAddress}?init=${params}`);
+      cy.visit(`${config.clusterAddress}/clusters?init=${params}`);
     });
 
     cy.url().should('match', /namespaces$/);
@@ -54,7 +54,7 @@ context('Login - enkode link', () => {
     cy.task('getNamespace').then(namespaceName => {
       cy.wrap(generateParamsWithHiddenNamespacesList(namespaceName)).then(
         params => {
-          cy.visit(`${config.clusterAddress}?init=${params}`);
+          cy.visit(`${config.clusterAddress}/clusters?init=${params}`);
         },
       );
     });
@@ -87,7 +87,7 @@ context('Login - enkode link', () => {
 
   it('Kubeconfig with preselected namespace', () => {
     cy.wrap(generateParamsWithPreselectedNamespace()).then(params => {
-      cy.visit(`${config.clusterAddress}?init=${params}`);
+      cy.visit(`${config.clusterAddress}/clusters?init=${params}`);
     });
 
     cy.url().should('match', /namespaces\/default\/details$/);
@@ -99,7 +99,7 @@ context('Login - enkode link', () => {
 
   it('Only params from enkode without kubeconfig', () => {
     cy.wrap(generateParamsWithNoKubeconfig()).then(params => {
-      cy.visit(`${config.clusterAddress}?init=${params}`);
+      cy.visit(`${config.clusterAddress}/clusters?init=${params}`);
     });
 
     cy.getIframeBody()
@@ -125,7 +125,7 @@ context('Login - enkode link', () => {
 
   it('Login without token in kubeconfig', () => {
     cy.wrap(generateParamsAndToken()).then(({ params }) => {
-      cy.visit(`${config.clusterAddress}?init=${params}`);
+      cy.visit(`${config.clusterAddress}/clusters?init=${params}`);
     });
 
     cy.getIframeBody()
@@ -162,7 +162,7 @@ context('Login - enkode link', () => {
     cy.task('getNamespace').then(namespaceName => {
       cy.wrap(generateParamsWithDisabledFeatures(namespaceName)).then(
         params => {
-          cy.visit(`${config.clusterAddress}?init=${params}`);
+          cy.visit(`${config.clusterAddress}/clusters?init=${params}`);
         },
       );
     });
@@ -200,7 +200,7 @@ context('Login - enkode link', () => {
       expect(alertContent).to.include('Configuration incompatible'),
     );
     cy.wrap(generateUnsupportedVersionParams()).then(params => {
-      cy.visit(`${config.clusterAddress}?init=${params}`);
+      cy.visit(`${config.clusterAddress}/clusters?init=${params}`);
     });
   });
 
@@ -215,7 +215,9 @@ context('Login - enkode link', () => {
           },
           kubeconfig,
         );
-        cy.visit(`${config.clusterAddress}?init=${params}&kubeconfigID=tests`);
+        cy.visit(
+          `${config.clusterAddress}/clusters?init=${params}&kubeconfigID=tests`,
+        );
         cy.url().should('match', /namespaces$/);
       },
     );
@@ -232,7 +234,9 @@ context('Login - enkode link', () => {
           },
           { Error: 'not found' },
         );
-        cy.visit(`${config.clusterAddress}?init=${params}&kubeconfigID=tests`);
+        cy.visit(
+          `${config.clusterAddress}/clusters?init=${params}&kubeconfigID=tests`,
+        );
 
         Cypress.on('window:alert', alertContent =>
           expect(alertContent).to.include('Error: not found'),

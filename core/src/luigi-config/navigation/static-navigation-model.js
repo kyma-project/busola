@@ -1,4 +1,3 @@
-import jsyaml from 'js-yaml';
 import { saveAs } from 'file-saver';
 
 import { config } from '../config';
@@ -8,10 +7,16 @@ import { hasPermissionsFor } from './permissions';
 export const coreUIViewGroupName = '_core_ui_';
 export const catalogViewGroupName = '_catalog_';
 
+async function importJsYaml() {
+  return (await import('js-yaml')).default;
+}
+
 function toSearchParamsString(object) {
   return new URLSearchParams(object).toString();
 }
 async function downloadKubeconfig() {
+  const jsyaml = await importJsYaml();
+
   const clusterName = getActiveClusterName();
   const clusters = await getClusters();
   if (clusterName && clusters && clusters[clusterName]) {

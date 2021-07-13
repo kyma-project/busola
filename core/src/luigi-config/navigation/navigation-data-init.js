@@ -2,7 +2,10 @@ import {
   fetchPermissions,
   fetchBusolaInitData,
   fetchNamespaces,
+  checkIfClusterRequiresCA,
+  fetchObservabilityHost,
 } from './queries';
+import { getClusterParams } from '../cluster-params';
 import { config } from '../config';
 import {
   coreUIViewGroupName,
@@ -10,7 +13,7 @@ import {
   getStaticRootNodes,
 } from './static-navigation-model';
 import { navigationPermissionChecker, hasPermissionsFor } from './permissions';
-import { resolveFeatures } from './../features';
+import { resolveFeatures, resolveFeatureAvailability } from './../features';
 
 import {
   hideDisabledNodes,
@@ -27,6 +30,7 @@ import {
   deleteActiveCluster,
   saveActiveClusterName,
   getCurrentContextNamespace,
+  saveClusterParams,
 } from '../cluster-management';
 import { shouldShowHiddenNamespaces } from './../utils/hidden-namespaces-toggle';
 import { saveLocation } from './previous-location';
@@ -221,9 +225,61 @@ async function fetchNavigationData(authData, permissionSet) {
   }
 }
 
+async function getObservabilityNodes(authData, enabledFeatures) {
+  let links =
+    // take the Config Params at first
+    (await resolveFeatureAvailability(enabledFeatures.OBSERVABILITY)) &&
+    enabledFeatures.OBSERVABILITY?.config.links;
+
+  if (!links) {
+    const defaultObservability = (await getClusterParams()).config.features
+      .OBSERVABILITY;
+    links =
+      (await resolveFeatureAvailability(defaultObservability)) && //  use the Busola configMap as a fallback
+      defaultObservability.config.links;
+  }
+  if (!links) return []; // could not get the OBSERVABILITY feature config from either source, do not add any nodes
+
+  const CATEGORY = {
+    label: 'Observability',
+    icon: 'stethoscope',
+    collapsible: true,
+  };
+  const navNodes = await Promise.all(
+    links.map(async ({ label, path }) => {
+      try {
+        return {
+          category: CATEGORY,
+          externalLink: {
+            url: 'https://' + (await fetchObservabilityHost(authData, path)),
+            sameWindow: false,
+          },
+          label,
+        };
+      } catch (e) {
+        return undefined;
+      }
+    }),
+  );
+  return navNodes.filter(n => n);
+}
+
 export async function getNavigationData(authData) {
-  const { kubeconfig } = await getActiveCluster();
+  const activeCluster = await getActiveCluster();
+
+  if (activeCluster.config.requiresCA === undefined) {
+    activeCluster.config = {
+      ...activeCluster.config,
+      requiresCA: await checkIfClusterRequiresCA(authData),
+    };
+  }
+
+  await saveClusterParams(activeCluster);
+
+  const { kubeconfig } = activeCluster;
+
   const preselectedNamespace = getCurrentContextNamespace(kubeconfig);
+
   try {
     // we assume all users can make SelfSubjectRulesReview request
     const permissionSet = await fetchPermissions(
@@ -266,8 +322,16 @@ export async function getNavigationData(authData) {
                 permissionSet,
                 features,
               );
+              const observabilitySection = await getObservabilityNodes(
+                authData,
+                features,
+              );
               const externalNodes = addExternalNodes(navigation.externalNodes);
-              const allNodes = [...staticNodes, ...externalNodes];
+              const allNodes = [
+                ...staticNodes,
+                ...observabilitySection,
+                ...externalNodes,
+              ];
               hideDisabledNodes(navigation.disabledNodes, allNodes, false);
               return allNodes;
             },
@@ -281,6 +345,7 @@ export async function getNavigationData(authData) {
           hiddenNamespaces,
           showHiddenNamespaces: shouldShowHiddenNamespaces(),
           cluster: params.currentContext.cluster,
+          config: params.config,
           kubeconfig: params.kubeconfig,
         },
       },

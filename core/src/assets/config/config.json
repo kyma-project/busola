@@ -1,62 +1,81 @@
 {
   "config": {
-    "features":{
-        "SERVICE_CATALOG":{
-          "selectors":[
-              {
-                "type":"apiGroup",
-                "apiGroup":"servicecatalog.k8s.io"
-              }
-          ]
-        },
-        "SERVICE_CATALOG_ADDONS":{
-          "selectors":[
-              {
-                "type":"apiGroup",
-                "apiGroup":"servicecatalog.kyma-project.io"
-              }
-          ]
-        },
-        "EVENTING":{
-          "selectors":[
-              {
-                "type":"apiGroup",
-                "apiGroup":"eventing.kyma-project.io"
-              }
-          ]
-        },
-        "API_GATEWAY":{
-          "selectors":[
-              {
-                "type":"apiGroup",
-                "apiGroup":"gateway.kyma-project.io"
-              }
-          ]
-        },
-        "APPLICATIONS":{
-          "selectors":[
-              {
-                "type":"apiGroup",
-                "apiGroup":"applicationconnector.kyma-project.io"
-              }
-          ]
-        },
-        "ADDONS":{
-          "selectors":[
-              {
-                "type":"apiGroup",
-                "apiGroup":"addons.kyma-project.io"
-              }
-          ]
-        },
-        "SERVERLESS":{
-          "selectors":[
-              {
-                "type":"apiGroup",
-                "apiGroup":"serverless.kyma-project.io"
-              }
+    "features": {
+      "SERVICE_CATALOG": {
+        "selectors": [
+          {
+            "type": "apiGroup",
+            "apiGroup": "servicecatalog.k8s.io"
+          }
+        ]
+      },
+      "SERVICE_CATALOG_ADDONS": {
+        "selectors": [
+          {
+            "type": "apiGroup",
+            "apiGroup": "servicecatalog.kyma-project.io"
+          }
+        ]
+      },
+      "EVENTING": {
+        "selectors": [
+          {
+            "type": "apiGroup",
+            "apiGroup": "eventing.kyma-project.io"
+          }
+        ]
+      },
+      "API_GATEWAY": {
+        "selectors": [
+          {
+            "type": "apiGroup",
+            "apiGroup": "gateway.kyma-project.io"
+          }
+        ]
+      },
+      "APPLICATIONS": {
+        "selectors": [
+          {
+            "type": "apiGroup",
+            "apiGroup": "applicationconnector.kyma-project.io"
+          }
+        ]
+      },
+      "ADDONS": {
+        "selectors": [
+          {
+            "type": "apiGroup",
+            "apiGroup": "addons.kyma-project.io"
+          }
+        ]
+      },
+      "SERVERLESS": {
+        "selectors": [
+          {
+            "type": "apiGroup",
+            "apiGroup": "serverless.kyma-project.io"
+          }
+        ]
+      },
+      "OBSERVABILITY": {
+        "isEnabled": false,
+        "config": {
+          "links": [
+            {
+              "label": "Grafana",
+              "path": "apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/monitoring-grafana"
+            },
+            {
+              "label": "Kiali",
+              "path": "apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/kiali"
+            },
+            {
+              "label": "Tracing",
+              "path": "apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/tracing"
+            }
           ]
         }
+      }
     }
   }
 }

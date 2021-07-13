@@ -3,7 +3,7 @@ import config from '../config';
 
 context('Invalid kubeconfig', () => {
   it('Use wrong kubeconfig - textfield', () => {
-    cy.visit(config.clusterAddress);
+    cy.visit(`${config.clusterAddress}/clusters`);
     cy.get('[data-testid=app-switcher]').click();
 
     cy.get('[data-testid=addcluster]').click();
@@ -22,7 +22,7 @@ context('Invalid kubeconfig', () => {
   });
 
   it('Use wrong kubeconfig - from file', () => {
-    cy.visit(config.clusterAddress);
+    cy.visit(`${config.clusterAddress}/clusters`);
     cy.get('[data-testid=app-switcher]').click();
 
     cy.get('[data-testid=addcluster]').click();

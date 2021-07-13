@@ -8,6 +8,7 @@ CheckboxFormControl.propTypes = {
   values: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
   name: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
+  required: PropTypes.bool,
 };
 
 export default function CheckboxFormControl({
@@ -15,6 +16,7 @@ export default function CheckboxFormControl({
   values,
   name,
   onChange,
+  required,
 }) {
   const updateValues = (value, checked) => {
     if (checked) {
@@ -28,7 +30,7 @@ export default function CheckboxFormControl({
 
   return (
     <>
-      <FormLabel htmlFor={name} required>
+      <FormLabel htmlFor={name} required={required}>
         {name}
       </FormLabel>
       <FormRadioGroup inline className="inline-radio-group">

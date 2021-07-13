@@ -1,4 +1,3 @@
-import createEncoder from 'json-url';
 import {
   saveClusterParams,
   saveActiveClusterName,
@@ -13,7 +12,10 @@ import * as constants from './constants';
 import { hasNonOidcAuth } from '../auth/auth';
 import { applyKubeconfigIdIfPresent } from './../kubeconfig-id';
 
-const encoder = createEncoder('lzma');
+const getEncoder = async () => {
+  const createEncoder = (await import('json-url')).default;
+  return createEncoder('lzma');
+};
 
 function hasExactlyOneContext(kubeconfig) {
   return kubeconfig?.contexts?.length === 1;
@@ -38,6 +40,7 @@ async function setupFromParams() {
     return;
   }
 
+  const encoder = await getEncoder();
   const decoded = encodedParams ? await encoder.decompress(encodedParams) : {};
 
   await applyKubeconfigIdIfPresent(kubeconfigId, decoded);

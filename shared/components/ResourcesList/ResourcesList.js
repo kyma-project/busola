@@ -95,7 +95,11 @@ function Resources({
   testid,
 }) {
   useWindowTitle(windowTitle || prettifyNamePlural(resourceName, resourceType));
-  const { setEditedYaml: setEditedSpec, closeEditor } = useYamlEditor();
+  const {
+    setEditedYaml: setEditedSpec,
+    closeEditor,
+    currentlyEditedResourceUID,
+  } = useYamlEditor();
   const notification = useNotification();
   const updateResourceMutation = useUpdate(resourceUrl);
   const deleteResourceMutation = useDelete(resourceUrl);
@@ -108,10 +112,13 @@ function Resources({
     resourceType,
   );
 
+  const withoutQueryString = path => path.split('?')[0];
+
   const handleSaveClick = resourceData => async newYAML => {
     try {
       const diff = createPatch(resourceData, jsyaml.safeLoad(newYAML));
-      const url = resourceUrl + '/' + resourceData.metadata.name;
+      const url =
+        withoutQueryString(resourceUrl) + '/' + resourceData.metadata.name;
       await updateResourceMutation(url, diff);
       silentRefetch();
       notification.notifySuccess({
@@ -128,7 +135,7 @@ function Resources({
   };
 
   async function handleResourceDelete(resource) {
-    const url = resourceUrl + '/' + resource.metadata.name;
+    const url = withoutQueryString(resourceUrl) + '/' + resource.metadata.name;
     try {
       await deleteResourceMutation(url);
       notification.notifySuccess({
@@ -153,6 +160,7 @@ function Resources({
             const { status, ...otherResourceData } = resource; // remove 'status' property because you can't edit it anyway; TODO: decide if it's good
             setEditedSpec(
               otherResourceData,
+              resource.metadata.name + '.yaml',
               handleSaveClick(otherResourceData),
             );
           },
@@ -234,6 +242,7 @@ function Resources({
       pagination={{ itemsPerPage: 20, autoHide: true }}
       extraHeaderContent={extraHeaderContent}
       testid={testid}
+      currentlyEditedResourceUID={currentlyEditedResourceUID}
     />
   );
 }

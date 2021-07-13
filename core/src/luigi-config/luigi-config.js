@@ -9,6 +9,7 @@ import { createAuth, hasNonOidcAuth } from './auth/auth.js';
 import { saveQueryParamsIfPresent } from './init-params/init-params.js';
 import {
   getActiveCluster,
+  handleResetEndpoint,
   setActiveClusterIfPresentInUrl,
 } from './cluster-management';
 import { loadHiddenNamespacesToggle } from './utils/hidden-namespaces-toggle';
@@ -55,6 +56,8 @@ async function luigiAfterInit() {
 }
 
 (async () => {
+  handleResetEndpoint();
+
   await setActiveClusterIfPresentInUrl();
 
   await saveQueryParamsIfPresent();
@@ -67,7 +70,7 @@ async function luigiAfterInit() {
   }
 
   const luigiConfig = {
-    auth: createAuth(kubeconfigUser),
+    auth: await createAuth(kubeconfigUser),
     communication,
     navigation: await createNavigation(),
     routing: {

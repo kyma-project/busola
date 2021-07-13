@@ -19,8 +19,8 @@
     "test-shared-lib": "cd shared && jest"
   },
   "dependencies": {
-    "@luigi-project/client": "^1.12.1",
-    "@luigi-project/core": "^1.12.1",
+    "@luigi-project/client": "^1.14.0",
+    "@luigi-project/core": "^1.14.0",
     "@sap-theming/theming-base-content": "^11.1.28",
     "ajv": "^6.10.2",
     "classnames": "^2.2.6",
@@ -29,7 +29,7 @@
     "core-js": "^3.3.6",
     "file-saver": "^2.0.2",
     "fundamental-react": "^v0.14.0-rc.27",
-    "fundamental-styles": "^0.17.0",
+    "fundamental-styles": "^0.18.0",
     "jsonpath": "^1.1.1",
     "lodash": "^4.17.19",
     "lodash.clonedeep": "^4.5.0",

@@ -4,12 +4,12 @@ import { FormItem, FormLabel, Icon, Link } from 'fundamental-react';
 import * as LuigiClient from '@luigi-project/client';
 
 import {
-  JSONEditor,
   Tooltip,
   CopiableLink,
   usePost,
   useNotification,
   randomNameGenerator,
+  ControlledEditor,
 } from 'react-shared';
 
 import SchemaData from './SchemaData';
@@ -148,7 +148,7 @@ export default function CreateInstanceForm({
     }
   }
 
-  const handleCustomParametersChange = input => {
+  const handleCustomParametersChange = (_, input) => {
     try {
       const parsedInput = JSON.parse(input);
       if (isNonNullObject(parsedInput)) {
@@ -270,10 +270,13 @@ export default function CreateInstanceForm({
             )}
           </div>
           {customParametersProvided && (
-            <JSONEditor
+            <ControlledEditor
               aria-label="schema-editor"
-              onChangeText={handleCustomParametersChange}
-              text={JSON.stringify(instanceCreateParameters, null, 2)}
+              height="25em"
+              language="JSON"
+              theme="vs-light"
+              onChange={handleCustomParametersChange}
+              value={JSON.stringify(instanceCreateParameters, null, 2)}
             />
           )}
         </>

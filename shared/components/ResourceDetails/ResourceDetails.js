@@ -141,9 +141,6 @@ function Resource({
 
   const actions = readOnly ? null : (
     <>
-      {headerActions}
-
-      {resourceHeaderActions.map(resourceAction => resourceAction(resource))}
       <Button
         className="fd-margin-end--tiny"
         onClick={() => openYaml(resource)}
@@ -151,6 +148,8 @@ function Resource({
       >
         Edit YAML
       </Button>
+      {headerActions}
+      {resourceHeaderActions.map(resourceAction => resourceAction(resource))}
       <Button
         onClick={handleResourceDelete}
         option="transparent"
@@ -163,7 +162,11 @@ function Resource({
 
   const openYaml = resource => {
     const { status, ...otherResourceData } = resource; // remove 'status' property because you can't edit it anyway; TODO: decide if it's good
-    setEditedSpec(otherResourceData, handleSaveClick(otherResourceData));
+    setEditedSpec(
+      otherResourceData,
+      resource.metadata.name + '.yaml',
+      handleSaveClick(otherResourceData),
+    );
   };
 
   const handleSaveClick = resourceData => async newYAML => {
@@ -186,7 +189,7 @@ function Resource({
   };
 
   async function handleResourceDelete() {
-    return await handleDelete(
+    return handleDelete(
       resourceType,
       null,
       resourceName,

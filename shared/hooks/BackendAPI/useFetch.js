@@ -5,7 +5,7 @@ import { baseUrl, throwHttpError } from './config';
 import { useConfig } from '../../contexts/ConfigContext';
 
 export const useFetch = () => {
-  const { authData, cluster } = useMicrofrontendContext();
+  const { authData, cluster, config } = useMicrofrontendContext();
   const { fromConfig } = useConfig();
 
   if (!authData) return () => {};
@@ -17,7 +17,7 @@ export const useFetch = () => {
       ...init,
       headers: {
         ...(init?.headers || {}),
-        ...createHeaders(authData, cluster.cluster),
+        ...createHeaders(authData, cluster.cluster, config.requiresCA),
       },
       signal: abortController?.signal,
     };

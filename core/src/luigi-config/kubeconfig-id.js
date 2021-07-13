@@ -1,13 +1,16 @@
 import { getClusterParams } from './cluster-params';
 import { resolveFeatureAvailability } from './features';
 import { DEFAULT_FEATURES, PARAMS_VERSION } from './init-params/constants';
-import jsyaml from 'js-yaml';
 
 function join(path, fileName) {
   if (!path.endsWith('/')) {
     path += '/';
   }
   return path + fileName;
+}
+
+async function importJsYaml() {
+  return (await import('js-yaml')).default;
 }
 
 export async function applyKubeconfigIdIfPresent(kubeconfigId, initParams) {
@@ -26,6 +29,8 @@ export async function applyKubeconfigIdIfPresent(kubeconfigId, initParams) {
   if (!(await resolveFeatureAvailability(kubeconfigIdFeature))) {
     return;
   }
+
+  const jsyaml = await importJsYaml();
 
   const url = join(kubeconfigIdFeature.config.kubeconfigUrl, kubeconfigId);
   const responseText = await fetch(url).then(res => res.text());

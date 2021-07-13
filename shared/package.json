@@ -17,7 +17,7 @@
     "webpack": "^5.38.1"
   },
   "peerDependencies": {
-    "fundamental-react": "0.8.0-rc.12",
+    "fundamental-react": "^0.13.1",
     "react": "^16.8.6"
   },
   "jest": {
@@ -30,7 +30,6 @@
   },
   "dependencies": {
     "@monaco-editor/react": "^3.6.3",
-    "jsoneditor": "^9.0.2",
     "jwt-decode": "^3.1.2",
     "react-tippy": "^1.3.1"
   }
