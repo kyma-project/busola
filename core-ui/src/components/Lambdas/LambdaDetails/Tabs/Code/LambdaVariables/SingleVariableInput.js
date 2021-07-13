@@ -2,17 +2,22 @@ import React, { useState, useEffect } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 import { FormItem, FormInput, InfoLabel } from 'fundamental-react';
 
-import { VARIABLE_VALIDATION } from 'components/Lambdas/helpers/lambdaVariables';
+import {
+  VARIABLE_TYPE,
+  VARIABLE_VALIDATION,
+} from 'components/Lambdas/helpers/lambdaVariables';
 import { ENVIRONMENT_VARIABLES_PANEL } from 'components/Lambdas/constants';
 import { CONFIG } from 'components/Lambdas/config';
 
+import { Dropdown } from 'react-shared';
 import { getValidationStatus, validateVariable } from './validation';
 
 export default function SingleVariableInput({
   currentVariable = {},
   variables = [],
   injectedVariables = [],
-  variableResources = [],
+  configmaps = [],
+  secrets = [],
   onUpdateVariables,
   setValidity,
   setInvalidModalPopupMessage,
@@ -121,6 +126,15 @@ export default function SingleVariableInput({
     );
   }
 
+  const secretOptions = secrets.map(({ metadata }) => ({
+    key: metadata.name,
+    text: metadata.name,
+  }));
+
+  const configmapsOptions = configmaps.map(({ metadata }) => ({
+    key: metadata.name,
+    text: metadata.name,
+  }));
   return {
     cells: [
       <FormItem>
@@ -134,13 +148,37 @@ export default function SingleVariableInput({
       </FormItem>,
       <span className="sap-icon--arrow-right"></span>,
       <FormItem>
-        <FormInput
-          id={`variableValue-${currentVariable.id}`}
-          placeholder={ENVIRONMENT_VARIABLES_PANEL.PLACEHOLDERS.VARIABLE_VALUE}
-          type="text"
-          value={variable.value}
-          onChange={onChangeValue}
-        />
+        {currentVariable.type === VARIABLE_TYPE.CUSTOM && (
+          <FormInput
+            id={`variableValue-${currentVariable.id}`}
+            placeholder={
+              ENVIRONMENT_VARIABLES_PANEL.PLACEHOLDERS.VARIABLE_VALUE
+            }
+            type="text"
+            value={variable.value}
+            onChange={onChangeValue}
+          />
+        )}
+        {currentVariable.type === VARIABLE_TYPE.SECRET && (
+          <Dropdown
+            id={`variableValueFromSecret-${currentVariable.id}`}
+            options={secretOptions}
+            // onSelect={(_, selected) => {
+            //   instanceRef.current = selected.key;
+            // }}
+            // selectedKey={selectedInstance}
+          />
+        )}
+        {currentVariable.type === VARIABLE_TYPE.CONFIG_MAP && (
+          <Dropdown
+            id={`variableValueFromConfigMap-${currentVariable.id}`}
+            options={configmapsOptions}
+            // onSelect={(_, selected) => {
+            //   instanceRef.current = selected.key;
+            // }}
+            // selectedKey={selectedInstance}
+          />
+        )}
       </FormItem>,
       <InfoLabel>
         {ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE[currentVariable.type].TEXT}

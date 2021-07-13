@@ -20,6 +20,8 @@ const textSearchProperties = ['name', 'value', 'type'];
 
 export default function EditVariablesForm({
   lambda,
+  configmaps = [],
+  secrets = [],
   customVariables = [],
   customValueFromVariables = [],
   injectedVariables = [],
@@ -35,6 +37,7 @@ export default function EditVariablesForm({
     'customValueFromVariables',
     customValueFromVariables,
   );
+  console.log('configmaps', configmaps, 'secrets', secrets);
   const updateLambdaVariables = useUpdateLambda({
     lambda,
     type: UPDATE_TYPE.VARIABLES,
@@ -137,6 +140,8 @@ export default function EditVariablesForm({
       currentVariable: variable,
       variables,
       injectedVariables,
+      configmaps,
+      secrets,
       onUpdateVariables,
       setValidity,
       setCustomValid,

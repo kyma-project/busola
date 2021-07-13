@@ -20,8 +20,6 @@ export function serializeVariables({
   const customValueFromVariables = [];
 
   lambdaVariables.forEach(variable => {
-    // at the moment save custom variables with valueFrom field in separate array
-    // we don't support yet defining in UI variables with configMapKeyRef and secretKeyRef
     const isValueFromVariable =
       variable.valueFrom && Object.keys(variable.valueFrom).length;
     const typeOfValueFromVariable = variable.valueFrom?.configMapKeyRef
