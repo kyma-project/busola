@@ -16,7 +16,7 @@ const MEMORY_SUFFIX_POWER = {
 };
 
 function getBytes(memoryString) {
-  if (memoryString === '0') {
+  if (!memoryString || memoryString === '0') {
     return 0;
   }
   const suffixMatch = memoryString.match(/\D+$/);
