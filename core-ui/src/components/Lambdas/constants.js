@@ -489,6 +489,8 @@ export const ENVIRONMENT_VARIABLES_PANEL = {
     INVALID: `Invalid variable name. The name must consist of alphanumeric characters, can contain "_" and no spaces, like "VARIABLE_NAME".`,
     RESTRICTED:
       'This variable name is restricted and cannot be used. Try a different one.',
+    INVALID_SECRET: `Select the secret name and key`,
+    INVALID_CONFIG: `Select the config name and key`,
   },
   WARNINGS: {
     TEXT: 'Warning',

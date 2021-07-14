@@ -141,6 +141,14 @@ export default function SingleVariableInput({
         className = 'fd-has-color-status-3';
         message = ENVIRONMENT_VARIABLES_PANEL.ERRORS.INVALID;
         break;
+      case VARIABLE_VALIDATION.INVALID_SECRET:
+        className = 'fd-has-color-status-3';
+        message = ENVIRONMENT_VARIABLES_PANEL.ERRORS.INVALID_SECRET;
+        break;
+      case VARIABLE_VALIDATION.INVALID_CONFIG:
+        className = 'fd-has-color-status-3';
+        message = ENVIRONMENT_VARIABLES_PANEL.ERRORS.INVALID_CONFIG;
+        break;
       case VARIABLE_VALIDATION.DUPLICATED:
         className = 'fd-has-color-status-3';
         message = ENVIRONMENT_VARIABLES_PANEL.ERRORS.DUPLICATED;
@@ -170,7 +178,7 @@ export default function SingleVariableInput({
     text: metadata.name,
   }));
 
-  const secretKeysOptions = Object.keys(selectedSecret.data || []).map(key => {
+  let secretKeysOptions = Object.keys(selectedSecret.data || []).map(key => {
     return {
       key: key,
       text: key,
@@ -259,7 +267,7 @@ export default function SingleVariableInput({
         {currentVariable.type === VARIABLE_TYPE.CUSTOM && <span>-</span>}
         {currentVariable.type === VARIABLE_TYPE.SECRET && selectedSecret && (
           <Dropdown
-            id={`variableValueFromSecret-${currentVariable.id}`}
+            id={`variableKeyFromSecret-${currentVariable.id}`}
             options={secretKeysOptions}
             onSelect={(_, selected) => {
               onChangeValueFrom({
@@ -274,7 +282,7 @@ export default function SingleVariableInput({
         )}
         {currentVariable.type === VARIABLE_TYPE.CONFIG_MAP && (
           <Dropdown
-            id={`variableValueFromConfigMap-${currentVariable.id}`}
+            id={`variableKeyFromConfigMap-${currentVariable.id}`}
             options={configmapKeysOptions}
             onSelect={(_, selected) => {
               onChangeValueFrom({
