@@ -81,7 +81,6 @@ export default function EditVariablesForm({
   ]);
 
   function onUpdateVariables(variable) {
-    console.log('variable', variable, 'variables', variables);
     let newVariables = variables.map(oldVariable => {
       if (oldVariable.id === variable.id) {
         return {
@@ -105,7 +104,6 @@ export default function EditVariablesForm({
   }
 
   function prepareVariablesInput() {
-    console.log('prepareVariablesInput', variables);
     return variables.map(variable => {
       if (variable.type === VARIABLE_TYPE.CUSTOM) {
         return {
