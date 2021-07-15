@@ -37,7 +37,7 @@ export default function CreateServiceBindingModal({
     `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${lambda.metadata.namespace}/serviceplans`,
     {
       pollingInterval: skipRequests ? 0 : 6000,
-      skip: skipRequests,
+      skip: false,
     },
   );
 
@@ -45,7 +45,7 @@ export default function CreateServiceBindingModal({
     `/apis/servicecatalog.k8s.io/v1beta1/clusterserviceplans`,
     {
       pollingInterval: skipRequests ? 0 : 6500,
-      skip: skipRequests,
+      skip: false,
     },
   );
 
@@ -53,7 +53,7 @@ export default function CreateServiceBindingModal({
     `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${lambda.metadata.namespace}/serviceclasses`,
     {
       pollingInterval: skipRequests ? 0 : 7000,
-      skip: skipRequests,
+      skip: false,
     },
   );
 
@@ -96,18 +96,19 @@ export default function CreateServiceBindingModal({
           ? p.metadata.name === instance.spec[classRefFieldName].name
           : false,
       ) || {};
-
     return {
       ...instance,
       isBindable: plan?.spec?.bindable || serviceClass?.spec?.bindable || false,
     };
   };
-
   const instancesWithBindableData =
     serviceInstances?.map(getInstancesWithBindableData) || [];
 
-  const instancesNotBound =
-    instancesWithBindableData?.filter(isNotAlreadyUsed) || [];
+  const instancesBindable =
+    instancesWithBindableData.filter(
+      serviceInstance => serviceInstance.isBindable,
+    ) || [];
+  const instancesNotBound = instancesBindable?.filter(isNotAlreadyUsed) || [];
 
   const hasAnyInstances = !!instancesNotBound.length;
 
