@@ -162,7 +162,11 @@ function Resource({
 
   const openYaml = resource => {
     const { status, ...otherResourceData } = resource; // remove 'status' property because you can't edit it anyway; TODO: decide if it's good
-    setEditedSpec(otherResourceData, handleSaveClick(otherResourceData));
+    setEditedSpec(
+      otherResourceData,
+      resource.metadata.name + '.yaml',
+      handleSaveClick(otherResourceData),
+    );
   };
 
   const handleSaveClick = resourceData => async newYAML => {

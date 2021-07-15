@@ -70,7 +70,7 @@ async function luigiAfterInit() {
   }
 
   const luigiConfig = {
-    auth: createAuth(kubeconfigUser),
+    auth: await createAuth(kubeconfigUser),
     communication,
     navigation: await createNavigation(),
     routing: {

@@ -7,13 +7,15 @@ import SchemaData from './SchemaData';
 
 import './CreateInstanceForm.scss';
 import { getResourceDisplayName } from 'helpers';
-import { usePost, useNotification, randomNameGenerator } from 'react-shared';
 
 import {
   CustomPropTypes,
-  JSONEditor,
   Tooltip,
   CopiableLink,
+  usePost,
+  useNotification,
+  randomNameGenerator,
+  ControlledEditor,
 } from 'react-shared';
 
 const SERVICE_PLAN_SHAPE = PropTypes.shape({
@@ -178,7 +180,7 @@ export default function CreateInstanceForm({
     }
   }
 
-  const handleCustomParametersChange = input => {
+  const handleCustomParametersChange = (_, input) => {
     try {
       const parsedInput = JSON.parse(input);
       if (isNonNullObject(parsedInput)) {
@@ -305,10 +307,13 @@ export default function CreateInstanceForm({
             )}
           </div>
           {customParametersProvided && (
-            <JSONEditor
+            <ControlledEditor
               aria-label="schema-editor"
-              onChangeText={handleCustomParametersChange}
-              text={JSON.stringify(instanceCreateParameters, null, 2)}
+              height="25em"
+              language="JSON"
+              theme="vs-light"
+              onChange={handleCustomParametersChange}
+              value={JSON.stringify(instanceCreateParameters, null, 2)}
             />
           )}
         </>
