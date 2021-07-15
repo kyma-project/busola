@@ -123,32 +123,6 @@ describe('LambdaVariables + EditVariablesModal + EditVariablesForm', () => {
     timeout,
   );
 
-  it(
-    'should can save variables when custom variables override injected variables',
-    async () => {
-      const { getByText } = render(
-        <LambdaVariables
-          lambda={lambdaMock}
-          customVariables={customVariables}
-          customValueFromVariables={[]}
-          injectedVariables={injectedVariables}
-        />,
-      );
-
-      const button = getByText(
-        ENVIRONMENT_VARIABLES_PANEL.EDIT_MODAL.OPEN_BUTTON.TEXT,
-      );
-      fireEvent.click(button);
-
-      const editButton = getByText(
-        ENVIRONMENT_VARIABLES_PANEL.EDIT_MODAL.CONFIRM_BUTTON.TEXT,
-      );
-      expect(editButton).toBeInTheDocument();
-      expect(editButton).not.toBeDisabled();
-    },
-    timeout,
-  );
-
   //skip test with bindings since we don't pass bindings
   it.skip(
     'should show warnings about override injected variables in edit form',
