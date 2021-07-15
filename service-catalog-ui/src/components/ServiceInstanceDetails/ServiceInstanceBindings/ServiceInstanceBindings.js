@@ -81,7 +81,10 @@ const ServiceInstanceBindings = ({ serviceInstance }) => {
       null,
       serviceBindingUsage.metadata.name,
       notification,
-      () => sendDeleteRequest(serviceBindingUsage.metadata.selfLink),
+      () =>
+        sendDeleteRequest(
+          `/apis/servicecatalog.kyma-project.io/v1alpha1/namespaces/${serviceBindingUsage.metadata.namespace}/servicebindingusages/${serviceBindingUsage.metadata.name}`,
+        ),
       () => {
         bindingUsagesRequest.silentRefetch();
         notification.notifySuccess({

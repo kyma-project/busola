@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import {
   Button,
   FormGroup,
@@ -7,14 +8,13 @@ import {
   FormItem,
   Checkbox,
   FormFieldset,
-  FormSelect,
   FormRadioGroup,
   MessageStrip,
 } from 'fundamental-react';
+import { Tooltip, Dropdown } from 'react-shared';
+
 import StringListInput from './StringListInput';
-import { Tooltip } from 'react-shared';
 import JwtDetails from './JwtDetails/JwtDetails';
-import classNames from 'classnames';
 import accessStrategyTypes, {
   usesMethods,
   supportedMethodsList,
@@ -40,6 +40,29 @@ export default function AccessStrategyForm({
         </div>
       );
 
+  const options = Object.values(accessStrategyTypes).map(ac => ({
+    key: ac.value,
+    text: ac.displayName,
+  }));
+
+  const handleStrategyChange = (_, selected) => {
+    const newStrategy = {
+      ...strategy,
+      accessStrategies: [
+        {
+          ...strategy.accessStrategies[0],
+          handler: selected.key,
+        },
+      ],
+    };
+    // strategy type changed, reset current values
+    if (selected.key !== strategy.accessStrategies[0].handler) {
+      newStrategy.accessStrategies[0].config = {};
+    }
+    setStrategy(newStrategy);
+    handleFormChanged();
+  };
+
   return (
     <div role="row">
       <div className="access-strategy access-strategy--form">
@@ -60,34 +83,12 @@ export default function AccessStrategyForm({
               />
             </FormItem>
             <FormItem>
-              <FormSelect
-                defaultValue={selectedType}
-                aria-label="Access strategy type"
-                id="select-1"
-                onChange={e => {
-                  const newStrategy = {
-                    ...strategy,
-                    accessStrategies: [
-                      {
-                        ...strategy.accessStrategies[0],
-                        handler: e.target.value,
-                      },
-                    ],
-                  };
-                  // strategy type changed, reset current values
-                  if (e.target.value !== strategy.accessStrategies[0].handler) {
-                    newStrategy.accessStrategies[0].config = {};
-                  }
-                  setStrategy(newStrategy);
-                  handleFormChanged();
-                }}
-              >
-                {Object.values(accessStrategyTypes).map(ac => (
-                  <option key={ac.value} value={ac.value}>
-                    {ac.displayName}
-                  </option>
-                ))}
-              </FormSelect>
+              <Dropdown
+                id="access-strategies-dropdown"
+                options={options}
+                selectedKey={selectedType}
+                onSelect={handleStrategyChange}
+              />
             </FormItem>
             <MethodsForm
               methods={strategy.methods}

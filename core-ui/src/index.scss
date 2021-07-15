@@ -277,6 +277,13 @@ input[type='checkbox'] {
     max-width: 100% !important;
   }
 }
+.fd-popover__popper {
+  max-height: 200px !important;
+  overflow-y: auto !important;
+  .fd-list--dropdown {
+    max-width: 100% !important;
+  }
+}
 
 .fd-switch__input {
   position: absolute !important;

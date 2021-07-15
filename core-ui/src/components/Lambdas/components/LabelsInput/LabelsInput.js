@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { FormLabel, InlineHelp } from 'fundamental-react';
-import { LabelSelectorInput } from 'react-shared';
+import { FormLabel } from 'fundamental-react';
+import { LabelSelectorInput, Tooltip } from 'react-shared';
 
 import { FORMS } from 'components/Lambdas/constants';
 
@@ -12,11 +12,7 @@ export function LabelsInput({ ...otherProps }) {
     <div className="resource-labels-input">
       <FormLabel className="resource-labels-input__label">
         {FORMS.LABELS.LABEL}
-        <InlineHelp
-          buttonLabel="help"
-          placement="right-end"
-          text={FORMS.LABELS.INLINE_HELP}
-        />
+        <Tooltip isInlineHelp content={FORMS.LABELS.INLINE_HELP} />
       </FormLabel>
       <LabelSelectorInput {...otherProps} />
     </div>

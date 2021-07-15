@@ -10,6 +10,7 @@ import {
   Checkbox,
   useGetList,
   useCreateServiceBindingUsage,
+  Dropdown,
 } from 'react-shared';
 
 import { SERVICE_BINDINGS_PANEL } from '../constants';
@@ -20,31 +21,65 @@ const checkBoxInputProps = {
   },
 };
 
-const ResourceKindOptgroup = ({
-  kindResource,
-  kindResourceName,
-  namespace,
+const ApplicationsDropdown = ({
+  usageKinds,
+  serviceInstance,
+  selectedResource,
+  setSelectedResource,
+  selectedUsageKind,
+  setSelectedUsageKind,
 }) => {
-  const { data } = useGetList()(
-    `/apis/${kindResource.group}/${kindResource.version}/namespaces/${namespace}/${kindResource.kind}s`,
+  const { data: resources } = useGetList()(
+    `/apis/${selectedUsageKind.spec.resource.group}/${selectedUsageKind.spec.resource.version}/namespaces/${serviceInstance.metadata.namespace}/${selectedUsageKind.spec.resource.kind}s`,
     {},
   );
 
-  return data && data.length ? (
-    <optgroup label={kindResourceName}>
-      {data.map(res => (
-        <option
-          value={JSON.stringify({
-            kind: kindResourceName,
-            name: res.metadata.name,
-          })}
-          key={res.metadata.uid}
-        >
-          {res.metadata.name}
-        </option>
-      ))}
-    </optgroup>
-  ) : null;
+  useEffect(() => {
+    if (resources?.length) {
+      setSelectedResource(resources[0]);
+    } else {
+      setSelectedResource(null);
+    }
+  }, [resources, setSelectedResource]);
+
+  return (
+    <>
+      <Dropdown
+        id="usage-kinds-dropdown"
+        label="Usage Kind"
+        options={usageKinds?.map(
+          u =>
+            ({
+              key: u.metadata.name,
+              text: u.metadata.name,
+            } || []),
+        )}
+        selectedKey={selectedUsageKind.metadata.name}
+        onSelect={(_, selected) => {
+          setSelectedUsageKind(
+            usageKinds.find(u => u.metadata.name === selected.key),
+          );
+        }}
+      />
+      <Dropdown
+        id="resources-dropdown"
+        label="Application"
+        options={resources?.map(
+          r =>
+            ({
+              key: r.metadata.name,
+              text: r.metadata.name,
+            } || []),
+        )}
+        selectedKey={selectedResource?.metadata.name}
+        onSelect={(_, selected) => {
+          setSelectedResource(
+            resources.find(r => r.metadata.name === selected.key),
+          );
+        }}
+      />
+    </>
+  );
 };
 
 export default function CreateServiceBindingForm({
@@ -58,27 +93,27 @@ export default function CreateServiceBindingForm({
 }) {
   const createServiceBindingUsageSet = useCreateServiceBindingUsage();
 
-  const [selectedApplication, setSelectedApplication] = useState(null);
   const [envPrefix, setEnvPrefix] = useState('');
 
   const [createBinding, setCreateBinding] = useState(true);
-  const [existingBindings, setExistingBindings] = useState('');
+  const [existingBinding, setExistingBinding] = useState(
+    serviceBindings[0]?.metadata.name || '',
+  );
+
+  const [selectedUsageKind, setSelectedUsageKind] = useState(usageKinds[0]);
+  const [selectedResource, setSelectedResource] = useState(null);
 
   useEffect(() => {
-    setCustomValid(false);
-  }, [setCustomValid]);
-
-  useEffect(() => {
-    if (!selectedApplication) {
+    if (!selectedResource) {
       setEnvPrefix('');
       setCreateBinding(true);
       return;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedApplication]);
+  }, [selectedResource]);
 
   useEffect(() => {
-    if (!selectedApplication) {
+    if (!selectedResource) {
       setPopupModalMessage(
         SERVICE_BINDINGS_PANEL.CREATE_MODAL.CONFIRM_BUTTON.POPUP_MESSAGES
           .NO_APP_SELECTED,
@@ -87,7 +122,7 @@ export default function CreateServiceBindingForm({
       return;
     }
 
-    if (!createBinding && !existingBindings) {
+    if (!createBinding && !existingBinding) {
       setPopupModalMessage(
         SERVICE_BINDINGS_PANEL.CREATE_MODAL.CONFIRM_BUTTON.POPUP_MESSAGES
           .NO_BINDING_SELECTED,
@@ -97,25 +132,13 @@ export default function CreateServiceBindingForm({
     }
     setCustomValid(true);
   }, [
-    selectedApplication,
+    selectedUsageKind,
+    selectedResource,
     createBinding,
-    existingBindings,
+    existingBinding,
     setCustomValid,
     setPopupModalMessage,
   ]);
-
-  useEffect(() => setExistingBindings(''), [
-    selectedApplication,
-    createBinding,
-  ]);
-
-  function handleApplicationChange(e) {
-    let value = null;
-    try {
-      value = JSON.parse(e.target.value);
-    } catch (e) {}
-    setSelectedApplication(value);
-  }
 
   async function handleFormSubmit(e) {
     e.preventDefault();
@@ -130,34 +153,14 @@ export default function CreateServiceBindingForm({
           }
         : undefined,
       usedBy: {
-        name: selectedApplication.name,
-        kind: selectedApplication.kind,
+        name: selectedResource.metadata.name,
+        kind: selectedUsageKind.metadata.name,
       },
-      existingCredentials: existingBindings || undefined,
+      existingCredentials: createBinding ? undefined : existingBinding,
     };
 
     await createServiceBindingUsageSet(parameters);
   }
-
-  const applicationsDropdown = (
-    <select
-      id="applicationName"
-      className="fd-form-select"
-      value={JSON.stringify(selectedApplication)}
-      onChange={handleApplicationChange}
-      required
-    >
-      <option value="" />
-      {usageKinds.map(u => (
-        <ResourceKindOptgroup
-          key={u.metadata.uid}
-          kindResource={u.spec.resource}
-          kindResourceName={u.metadata.name}
-          namespace={serviceInstance.metadata.namespace}
-        />
-      ))}
-    </select>
-  );
 
   const noServiceBindingsFound = (
     <MessageStrip dismissible={false} type="information">
@@ -172,9 +175,15 @@ export default function CreateServiceBindingForm({
       onChange={onChange}
       onSubmit={handleFormSubmit}
     >
-      <FormItem key="applicationName">
-        <FormLabel htmlFor="applicationName">Application</FormLabel>
-        {applicationsDropdown}
+      <FormItem>
+        <ApplicationsDropdown
+          usageKinds={usageKinds}
+          serviceInstance={serviceInstance}
+          selectedResource={selectedResource}
+          setSelectedResource={setSelectedResource}
+          selectedUsageKind={selectedUsageKind}
+          setSelectedUsageKind={setSelectedUsageKind}
+        />
       </FormItem>
 
       <FormItem key="envPrefix">
@@ -188,7 +197,7 @@ export default function CreateServiceBindingForm({
         />
       </FormItem>
 
-      {selectedApplication && (
+      {selectedResource && (
         <>
           <FormItem key="createBinding">
             <Checkbox
@@ -202,22 +211,17 @@ export default function CreateServiceBindingForm({
             </Checkbox>
           </FormItem>
           {!createBinding && serviceBindings.length ? (
-            <FormItem key="existingBindings">
-              <FormLabel htmlFor="existingBindings">Service Bindings</FormLabel>
-              <select
-                id="existingBindings"
-                className="fd-form-select"
-                value={existingBindings}
-                onChange={e => setExistingBindings(e.target.value)}
-                required
-              >
-                <option value=""></option>
-                {serviceBindings.map(b => (
-                  <option value={b.metadata.name} key={b.metadata.uid}>
-                    {b.metadata.name}
-                  </option>
-                ))}
-              </select>
+            <FormItem>
+              <Dropdown
+                label="Service Bindings"
+                id="existingBinding"
+                options={serviceBindings?.map(s => ({
+                  key: s.metadata.name,
+                  text: s.metadata.name,
+                }))}
+                selectedKey={existingBinding}
+                onSelect={(_, selected) => setExistingBinding(selected.key)}
+              />
             </FormItem>
           ) : null}
           {!createBinding && !serviceBindings.length
