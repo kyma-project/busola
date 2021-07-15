@@ -22,7 +22,6 @@ export function validateVariables(
         varType: variable.type,
         varDirty: variable.dirty,
       });
-      console.log('validation', validation);
       return {
         ...variable,
         validation,

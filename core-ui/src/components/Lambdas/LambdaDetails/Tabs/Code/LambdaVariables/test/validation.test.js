@@ -7,9 +7,8 @@ import {
   VARIABLE_VALIDATION,
   VARIABLE_TYPE,
 } from 'components/Lambdas/helpers/lambdaVariables';
-import { CONFIG } from 'components/Lambdas/config';
 
-describe.skip('validateVariables', () => {
+describe('validateVariables', () => {
   test('should return validated array', () => {
     const customVariables = [
       {
@@ -64,7 +63,7 @@ describe.skip('validateVariables', () => {
       },
     ];
 
-    expect(validateVariables(customVariables, injectedVariables)).toEqual(
+    expect(validateVariables(customVariables, [], injectedVariables)).toEqual(
       expectedVariables,
     );
   });
@@ -85,6 +84,10 @@ describe('validateVariable', () => {
         name: 'variable2',
         validation: VARIABLE_VALIDATION.NONE,
       },
+      {
+        name: 'variable3',
+        validation: VARIABLE_VALIDATION.NONE,
+      },
     ];
     const currentVariable = {
       name: 'variable',
@@ -102,6 +105,57 @@ describe('validateVariable', () => {
     };
 
     expect(validateVariable(variables, currentVariable)).toBeFalsy();
+  });
+
+  test('should return false if currentVariable valueFrom.name is empty', () => {
+    const variables = [];
+    const currentVariable = {
+      name: 'variable',
+      type: VARIABLE_TYPE.SECRET,
+      valueFrom: {
+        secretKeyRef: {
+          name: null,
+          key: 'key',
+        },
+      },
+      validation: VARIABLE_VALIDATION.NONE,
+    };
+
+    expect(validateVariable(variables, currentVariable)).toBeFalsy();
+  });
+
+  test('should return false if currentVariable valueFrom.key is empty', () => {
+    const variables = [];
+    const currentVariable = {
+      name: 'variable',
+      type: VARIABLE_TYPE.SECRET,
+      valueFrom: {
+        secretKeyRef: {
+          name: 'name',
+          key: null,
+        },
+      },
+      validation: VARIABLE_VALIDATION.NONE,
+    };
+
+    expect(validateVariable(variables, currentVariable)).toBeFalsy();
+  });
+
+  test('should return true if currentVariable valueFrom.name or key are present', () => {
+    const variables = [];
+    const currentVariable = {
+      name: 'variable',
+      type: VARIABLE_TYPE.SECRET,
+      valueFrom: {
+        secretKeyRef: {
+          name: 'name',
+          key: 'key',
+        },
+      },
+      validation: VARIABLE_VALIDATION.NONE,
+    };
+
+    expect(validateVariable(variables, currentVariable)).toBeTruthy();
   });
 
   test('should return false if currentVariable is duplicated, invalid or empty', () => {

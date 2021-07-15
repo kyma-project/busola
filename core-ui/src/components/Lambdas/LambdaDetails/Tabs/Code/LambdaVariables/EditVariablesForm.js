@@ -161,7 +161,11 @@ export default function EditVariablesForm({
   }
 
   const variableTypeButton = (type = 'CUSTOM') => (
-    <Button typeAttr="button" onClick={() => addNewVariable(type)}>
+    <Button
+      typeAttr="button"
+      data-testid="add-custom-variable"
+      onClick={() => addNewVariable(type)}
+    >
       {VARIABLE_TYPE[type]}
     </Button>
   );

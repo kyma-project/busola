@@ -25,7 +25,7 @@ jest.mock('@luigi-project/client', () => {
   };
 });
 
-describe.skip('LambdaVariables + EditVariablesModal + EditVariablesForm', () => {
+describe('LambdaVariables + EditVariablesModal + EditVariablesForm', () => {
   const customVariable1 = newVariableModel({
     variable: {
       name: 'FOO',
@@ -85,29 +85,19 @@ describe.skip('LambdaVariables + EditVariablesModal + EditVariablesForm', () => 
           lambda={lambdaMock}
           customVariables={customVariables}
           customValueFromVariables={[]}
-          injectedVariables={injectedVariables}
+          injectedVariables={[]}
         />,
       );
 
       const table = queryByRole('table');
       expect(table).toBeInTheDocument();
 
-      expect(queryAllByRole('row')).toHaveLength(4); // header + 3 element;
+      expect(queryAllByRole('row')).toHaveLength(3); // header + 3 element;
 
       const userVariables = getAllByText(
         ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.CUSTOM.TEXT,
       );
       expect(userVariables).toHaveLength(2);
-
-      const serviceBindingVariables = getAllByText(
-        ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.BINDING_USAGE.TEXT,
-      );
-      expect(serviceBindingVariables).toHaveLength(1);
-
-      const rowsWithWarningText = getAllByText(
-        ENVIRONMENT_VARIABLES_PANEL.WARNINGS.TEXT,
-      );
-      expect(rowsWithWarningText).toHaveLength(2);
     },
     timeout,
   );
@@ -129,32 +119,6 @@ describe.skip('LambdaVariables + EditVariablesModal + EditVariablesForm', () => 
       );
       fireEvent.click(button);
       expect(getByRole('dialog')).toBeInTheDocument();
-    },
-    timeout,
-  );
-
-  it(
-    'should not able to save variables if there are any custom variables',
-    async () => {
-      const { getByText } = render(
-        <LambdaVariables
-          lambda={lambdaMock}
-          customVariables={[]}
-          customValueFromVariables={[]}
-          injectedVariables={injectedVariables}
-        />,
-      );
-
-      const button = getByText(
-        ENVIRONMENT_VARIABLES_PANEL.EDIT_MODAL.OPEN_BUTTON.TEXT,
-      );
-      fireEvent.click(button);
-
-      const editButton = getByText(
-        ENVIRONMENT_VARIABLES_PANEL.EDIT_MODAL.CONFIRM_BUTTON.TEXT,
-      );
-      expect(editButton).toBeInTheDocument();
-      expect(editButton).toBeDisabled();
     },
     timeout,
   );
@@ -185,7 +149,8 @@ describe.skip('LambdaVariables + EditVariablesModal + EditVariablesForm', () => 
     timeout,
   );
 
-  it(
+  //skip test with bindings since we don't pass bindings
+  it.skip(
     'should show warnings about override injected variables in edit form',
     async () => {
       const { getByText, getAllByText } = render(
@@ -219,7 +184,7 @@ describe.skip('LambdaVariables + EditVariablesModal + EditVariablesForm', () => 
           lambda={lambdaMock}
           customVariables={customVariables}
           customValueFromVariables={[]}
-          injectedVariables={injectedVariables}
+          injectedVariables={[]}
         />,
       );
 
@@ -251,7 +216,7 @@ describe.skip('LambdaVariables + EditVariablesModal + EditVariablesForm', () => 
           lambda={lambdaMock}
           customVariables={customVariables}
           customValueFromVariables={[]}
-          injectedVariables={injectedVariables}
+          injectedVariables={[]}
         />,
       );
 
@@ -287,7 +252,7 @@ describe.skip('LambdaVariables + EditVariablesModal + EditVariablesForm', () => 
           lambda={lambdaMock}
           customVariables={customVariables}
           customValueFromVariables={[]}
-          injectedVariables={injectedVariables}
+          injectedVariables={[]}
         />,
       );
 
@@ -323,7 +288,7 @@ describe.skip('LambdaVariables + EditVariablesModal + EditVariablesForm', () => 
           lambda={lambdaMock}
           customVariables={customVariables}
           customValueFromVariables={[]}
-          injectedVariables={injectedVariables}
+          injectedVariables={[]}
         />,
       );
 
@@ -343,41 +308,6 @@ describe.skip('LambdaVariables + EditVariablesModal + EditVariablesForm', () => 
         ENVIRONMENT_VARIABLES_PANEL.EDIT_MODAL.CONFIRM_BUTTON.TEXT,
       );
       expect(editButton).toBeInTheDocument();
-      expect(editButton).toBeDisabled();
-    },
-    timeout,
-  );
-
-  it(
-    'should not able to save when user add new variables - without empty error message',
-    async () => {
-      const { getByText } = render(
-        <LambdaVariables
-          lambda={lambdaMock}
-          customVariables={customVariables}
-          customValueFromVariables={[]}
-          injectedVariables={injectedVariables}
-        />,
-      );
-
-      const button = getByText(
-        ENVIRONMENT_VARIABLES_PANEL.EDIT_MODAL.OPEN_BUTTON.TEXT,
-      );
-      fireEvent.click(button);
-
-      const editButton = getByText(
-        ENVIRONMENT_VARIABLES_PANEL.EDIT_MODAL.CONFIRM_BUTTON.TEXT,
-      );
-      expect(editButton).toBeInTheDocument();
-      expect(editButton).not.toBeDisabled();
-
-      const addButton = getByText(
-        ENVIRONMENT_VARIABLES_PANEL.EDIT_MODAL.ADD_ENV_BUTTON.TEXT,
-      );
-      expect(addButton).toBeInTheDocument();
-
-      fireEvent.click(addButton);
-
       expect(editButton).toBeDisabled();
     },
     timeout,

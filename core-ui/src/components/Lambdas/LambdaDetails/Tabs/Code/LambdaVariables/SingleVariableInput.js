@@ -173,7 +173,7 @@ export default function SingleVariableInput({
     );
   }
 
-  const secretOptions = secrets.map(({ metadata }) => ({
+  const secretOptions = (secrets || []).map(({ metadata }) => ({
     key: metadata.name,
     text: metadata.name,
   }));
@@ -185,7 +185,7 @@ export default function SingleVariableInput({
     };
   });
 
-  const configmapOptions = configmaps.map(({ metadata }) => ({
+  const configmapOptions = (configmaps || []).map(({ metadata }) => ({
     key: metadata.name,
     text: metadata.name,
   }));
