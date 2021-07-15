@@ -3,6 +3,7 @@ import { render, fireEvent, queryByText } from '@testing-library/react';
 import AccessStrategyForm from '../AccessStrategyForm';
 
 const allowStrategy = {
+  text: 'Allow',
   path: '/allow',
   methods: [],
   accessStrategies: [
@@ -14,6 +15,7 @@ const allowStrategy = {
 };
 
 const noopStrategy = {
+  text: 'noop',
   path: '/path',
   methods: ['GET', 'PUT'],
   accessStrategies: [
@@ -25,6 +27,7 @@ const noopStrategy = {
 };
 
 const oauthStrategy = {
+  text: 'OAuth2',
   path: '/path',
   methods: ['GET', 'PUT'],
   accessStrategies: [
@@ -38,6 +41,7 @@ const oauthStrategy = {
 };
 
 const jwtStrategy = {
+  text: 'JWT',
   path: '/path',
   methods: ['GET', 'PUT'],
   accessStrategies: [
@@ -83,8 +87,8 @@ describe('AccessStrategyForm', () => {
     expect(queryByRole('alert')).not.toBeInTheDocument();
   });
 
-  xit('renders OAuth2 strategy', () => {
-    const { getByLabelText, queryByLabelText } = render(
+  it('renders OAuth2 strategy', () => {
+    const { queryByLabelText, getByText } = render(
       <AccessStrategyForm
         strategy={oauthStrategy}
         setStrategy={setStrategy}
@@ -94,9 +98,7 @@ describe('AccessStrategyForm', () => {
       />,
     );
 
-    expect(getByLabelText('Access strategy type')).toHaveValue(
-      noopStrategy.accessStrategies[0].type,
-    );
+    expect(getByText(oauthStrategy.text)).toBeDefined();
     const requiredScope = queryByLabelText('Required scope');
     expect(requiredScope).toBeInTheDocument();
     oauthStrategy.accessStrategies[0].config.required_scope.forEach(scope => {
@@ -141,8 +143,8 @@ describe('AccessStrategyForm', () => {
     });
   });
 
-  xit('renders JWT strategy', async () => {
-    const { getByLabelText, queryByText } = render(
+  it('renders JWT strategy', async () => {
+    const { getByLabelText, getByText } = render(
       <AccessStrategyForm
         strategy={jwtStrategy}
         setStrategy={setStrategy}
@@ -152,9 +154,7 @@ describe('AccessStrategyForm', () => {
       />,
     );
 
-    expect(getByLabelText('Access strategy type')).toHaveValue(
-      jwtStrategy.accessStrategies[0].type,
-    );
+    expect(getByText(jwtStrategy.text)).toBeDefined();
 
     expect(getByLabelText('jwt-issuer-0').value).toBe(
       jwtStrategy.accessStrategies[0].config.trusted_issuers[0],
