@@ -12,7 +12,7 @@ export default function CreateServiceBindingModal({
   serviceBindingsCombined,
 }) {
   const [popupModalMessage, setPopupModalMessage] = useState('');
-  const [skipRequests, setSkipRequests] = useState(true);
+  const [disablePolling, setDisablePolling] = useState(true);
 
   const serviceInstancesAlreadyUsed = serviceBindingsCombined.map(
     ({ serviceBinding, serviceBindingUsage }) =>
@@ -29,14 +29,14 @@ export default function CreateServiceBindingModal({
   } = useGetList()(
     `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${lambda.metadata.namespace}/serviceinstances`,
     {
-      pollingInterval: skipRequests ? 0 : 5500,
+      pollingInterval: disablePolling ? 0 : 5500,
       skip: false,
     },
   );
   const { data: servicePlans } = useGetList()(
     `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${lambda.metadata.namespace}/serviceplans`,
     {
-      pollingInterval: skipRequests ? 0 : 6000,
+      pollingInterval: disablePolling ? 0 : 6000,
       skip: false,
     },
   );
@@ -44,7 +44,7 @@ export default function CreateServiceBindingModal({
   const { data: clusterServicePlans } = useGetList()(
     `/apis/servicecatalog.k8s.io/v1beta1/clusterserviceplans`,
     {
-      pollingInterval: skipRequests ? 0 : 6500,
+      pollingInterval: disablePolling ? 0 : 6500,
       skip: false,
     },
   );
@@ -52,7 +52,7 @@ export default function CreateServiceBindingModal({
   const { data: serviceClasses } = useGetList()(
     `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${lambda.metadata.namespace}/serviceclasses`,
     {
-      pollingInterval: skipRequests ? 0 : 7000,
+      pollingInterval: disablePolling ? 0 : 7000,
       skip: false,
     },
   );
@@ -108,6 +108,7 @@ export default function CreateServiceBindingModal({
     instancesWithBindableData.filter(
       serviceInstance => serviceInstance.isBindable,
     ) || [];
+
   const instancesNotBound = instancesBindable?.filter(isNotAlreadyUsed) || [];
 
   const hasAnyInstances = !!instancesNotBound.length;
@@ -166,7 +167,7 @@ export default function CreateServiceBindingModal({
 
   return (
     <ModalWithForm
-      onModalOpenStateChange={isOpen => setSkipRequests(!isOpen)}
+      onModalOpenStateChange={isOpen => setDisablePolling(!isOpen)}
       title={SERVICE_BINDINGS_PANEL.CREATE_MODAL.TITLE}
       modalOpeningComponent={modalOpeningComponent}
       confirmText={SERVICE_BINDINGS_PANEL.CREATE_MODAL.CONFIRM_BUTTON.TEXT}
