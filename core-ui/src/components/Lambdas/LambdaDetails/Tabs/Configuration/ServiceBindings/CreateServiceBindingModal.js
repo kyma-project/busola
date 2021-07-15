@@ -18,7 +18,6 @@ export default function CreateServiceBindingModal({
     ({ serviceBinding, serviceBindingUsage }) =>
       serviceBindingUsage && serviceBinding?.spec.instanceRef.name,
   );
-
   const isNotAlreadyUsed = serviceInstance =>
     !serviceInstancesAlreadyUsed.includes(serviceInstance.metadata.name);
 
@@ -30,14 +29,14 @@ export default function CreateServiceBindingModal({
   } = useGetList()(
     `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${lambda.metadata.namespace}/serviceinstances`,
     {
-      pollingInterval: 5500,
+      pollingInterval: skipRequests ? 0 : 5500,
       skip: false,
     },
   );
   const { data: servicePlans } = useGetList()(
     `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${lambda.metadata.namespace}/serviceplans`,
     {
-      pollingInterval: 6000,
+      pollingInterval: skipRequests ? 0 : 6000,
       skip: skipRequests,
     },
   );
@@ -45,7 +44,7 @@ export default function CreateServiceBindingModal({
   const { data: clusterServicePlans } = useGetList()(
     `/apis/servicecatalog.k8s.io/v1beta1/clusterserviceplans`,
     {
-      pollingInterval: 6500,
+      pollingInterval: skipRequests ? 0 : 6500,
       skip: skipRequests,
     },
   );
@@ -53,7 +52,7 @@ export default function CreateServiceBindingModal({
   const { data: serviceClasses } = useGetList()(
     `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${lambda.metadata.namespace}/serviceclasses`,
     {
-      pollingInterval: 7000,
+      pollingInterval: skipRequests ? 0 : 7000,
       skip: skipRequests,
     },
   );
@@ -107,11 +106,9 @@ export default function CreateServiceBindingModal({
   const instancesWithBindableData =
     serviceInstances?.map(getInstancesWithBindableData) || [];
 
-  const instancesBindable =
-    instancesWithBindableData.filter(
-      serviceInstance => serviceInstance.isBindable,
-    ) || [];
-  const instancesNotBound = instancesBindable?.filter(isNotAlreadyUsed) || [];
+  const instancesNotBound =
+    instancesWithBindableData?.filter(isNotAlreadyUsed) || [];
+
   const hasAnyInstances = !!instancesNotBound.length;
 
   let fallbackContent = null;
