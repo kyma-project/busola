@@ -64,3 +64,5 @@ import Editor from '@monaco-editor/react';
 export const MonacoEditor = Editor;
 
 setupMonaco(monaco);
+
+export * from './Test';
