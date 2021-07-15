@@ -18,7 +18,15 @@ const navigateTo = path => () => {
     .navigate(path);
 };
 
-const ResourceCircle = ({ data, loading, error, title, color }) => {
+const ResourceCircle = ({
+  data,
+  counter,
+  loading,
+  error,
+  title,
+  color,
+  onClick,
+}) => {
   if (error) {
     return (
       <p>{`Error while loading ${title} data due to: ${error.message}`}</p>
@@ -26,19 +34,11 @@ const ResourceCircle = ({ data, loading, error, title, color }) => {
   } else if (loading || !data) {
     return <Spinner />;
   }
-  const navigationPath = title
-    .split(' ')
-    .join('')
-    .toLowerCase();
   return (
     <CircleProgress
-      onClick={navigateTo(navigationPath)}
+      onClick={onClick}
       color={color}
-      value={
-        title === 'Pods'
-          ? getHealthyStatusesCount(data)
-          : getHealthyReplicasCount(data)
-      }
+      value={counter(data)}
       max={data.length}
       title={title}
     />
@@ -54,7 +54,9 @@ const PodsCircle = ({ namespace }) => {
   );
   return (
     <ResourceCircle
+      onClick={navigateTo('pods')}
       data={data}
+      counter={getHealthyStatusesCount}
       loading={loading}
       error={error}
       title="Pods"
@@ -72,7 +74,9 @@ const DeploymentsCircle = ({ namespace }) => {
   );
   return (
     <ResourceCircle
+      onClick={navigateTo('deployments')}
       data={data}
+      counter={getHealthyReplicasCount}
       loading={loading}
       error={error}
       title="Deployments"

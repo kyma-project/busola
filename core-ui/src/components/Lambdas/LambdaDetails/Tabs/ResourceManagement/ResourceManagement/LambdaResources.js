@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-
 import { LayoutPanel } from 'fundamental-react';
+import { Dropdown } from 'react-shared';
+
 import { Input } from './TableElements/Input';
 import { Row } from './TableElements/Row';
-import { DropdownInput } from 'components/Lambdas/components';
-
 import { RESOURCES_MANAGEMENT_PANEL } from 'components/Lambdas/constants';
 import { CONFIG } from 'components/Lambdas/config';
 import {
@@ -39,18 +38,18 @@ export default function LambdaResources({
   const presets = CONFIG[`${type}ResourcesPresets`];
 
   const presetOptions = Object.entries(presets).map(([preset, values]) => ({
-    key: `${preset} (${Object.entries(values)
+    text: `${preset} (${Object.entries(values)
       .map(([t, v]) => `${t}: ${v}`)
       .join(', ')})`,
-    value: preset,
+    key: preset,
   }));
   presetOptions.push({
-    key: 'Custom',
-    value: customPreset,
+    text: 'Custom',
+    key: customPreset,
   });
 
-  async function onChangePreset(e) {
-    const preset = e.target.value;
+  async function onChangePreset(selected) {
+    const preset = selected.key;
     if (preset) {
       if (presets && preset !== customPreset) {
         const values = presets[preset];
@@ -76,14 +75,14 @@ export default function LambdaResources({
         <LayoutPanel.Body className="has-padding-none">
           <Row
             action={
-              <DropdownInput
+              <Dropdown
                 disabled={disabledForm}
                 options={presetOptions}
-                defaultValue={defaultPreset}
+                selectedKey={defaultPreset}
                 _ref={register}
                 id={inputNames.preset}
                 name={inputNames.preset}
-                onChange={onChangePreset}
+                onSelect={(_, selected) => onChangePreset(selected)}
               />
             }
           />

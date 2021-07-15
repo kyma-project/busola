@@ -25,17 +25,19 @@ export function Dropdown({
     selectedKey = options[0].key;
     disabled = true;
   }
+  id = id || 'select-dropdown';
 
   return (
     <div className="dropdown">
       {label && (
-        <FormLabel>
+        <FormLabel htmlFor={id}>
           {label}
           {inlineHelp && <Tooltip isInlineHelp content={inlineHelp} />}
         </FormLabel>
       )}
       <Select
-        id={id || 'select-dropdown'}
+        id={id}
+        data-testid={id}
         aria-label={label}
         options={options}
         selectedKey={selectedKey}
