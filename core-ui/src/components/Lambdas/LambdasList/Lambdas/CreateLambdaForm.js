@@ -1,24 +1,22 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-
 import { MessageStrip } from 'fundamental-react';
+import {
+  randomNameGenerator,
+  useMicrofrontendContext,
+  Dropdown,
+} from 'react-shared';
 
 import {
   ResourceNameInput,
   LabelsInput,
-  DropdownInput,
   FormInput,
 } from 'components/Lambdas/components';
-
 import { useCreateLambda } from 'components/Lambdas/hooks';
-
 import { validateResourceName } from 'components/Lambdas/helpers/misc';
-import { randomNameGenerator, useMicrofrontendContext } from 'react-shared';
-
 import {
   functionAvailableLanguages,
   nodejs14,
 } from 'components/Lambdas/helpers/runtime';
-
 import { LAMBDAS_LIST } from 'components/Lambdas/constants';
 
 const ERRORS = {
@@ -161,19 +159,19 @@ export default function CreateLambdaForm({
 
   const runtimeOptions = Object.entries(functionAvailableLanguages).map(
     ([runtime, lang]) => ({
-      key: lang,
-      value: runtime,
+      key: runtime,
+      text: lang,
     }),
   );
   const sourceTypeOptions = LAMBDAS_LIST.CREATE_MODAL.INPUTS.SOURCE_TYPE.OPTIONS.map(
     sourceType => ({
       key: sourceType.KEY,
-      value: sourceType.VALUE,
+      text: sourceType.VALUE,
     }),
   );
   const repositoryOptions = repositories?.map(repository => ({
-    key: `${repository.metadata.name} (${repository.spec.url})`,
-    value: repository.metadata.name,
+    key: repository.metadata.name,
+    text: `${repository.metadata.name} (${repository.spec.url})`,
   }));
 
   return (
@@ -196,22 +194,22 @@ export default function CreateLambdaForm({
         onChange={newLabels => setLabels(newLabels)}
       />
 
-      <DropdownInput
+      <Dropdown
+        id="function-runtime-dropdown"
         label={LAMBDAS_LIST.CREATE_MODAL.INPUTS.RUNTIME.LABEL}
-        inlineHelp={LAMBDAS_LIST.CREATE_MODAL.INPUTS.RUNTIME.INLINE_HELP}
         options={runtimeOptions}
-        id="runtime"
-        defaultValue={runtime}
-        onChange={e => setRuntime(e.target.value)}
+        selectedKey={runtimeOptions[0].key}
+        onSelect={(_, selected) => setRuntime(selected.key)}
+        inlineHelp={LAMBDAS_LIST.CREATE_MODAL.INPUTS.RUNTIME.INLINE_HELP}
       />
 
-      <DropdownInput
+      <Dropdown
+        id="function-source-dropdown"
         label={LAMBDAS_LIST.CREATE_MODAL.INPUTS.SOURCE_TYPE.LABEL}
-        inlineHelp={LAMBDAS_LIST.CREATE_MODAL.INPUTS.SOURCE_TYPE.INLINE_HELP}
         options={sourceTypeOptions}
-        defaultValue={sourceType}
-        id="sourceType"
-        onChange={e => setSourceType(e.target.value)}
+        selectedKey={sourceTypeOptions[0].key}
+        onSelect={(_, selected) => setSourceType(selected.key)}
+        inlineHelp={LAMBDAS_LIST.CREATE_MODAL.INPUTS.SOURCE_TYPE.INLINE_HELP}
       />
 
       {sourceType &&
@@ -221,15 +219,15 @@ export default function CreateLambdaForm({
           </MessageStrip>
         ) : (
           <>
-            <DropdownInput
+            <Dropdown
+              id="function-repos-dropdown"
               label={LAMBDAS_LIST.CREATE_MODAL.INPUTS.REPOSITORY.LABEL}
+              options={repositoryOptions}
+              selectedKey={repositoryOptions[0].key}
+              onSelect={(_, selected) => setRepositoryName(selected.key)}
               inlineHelp={
                 LAMBDAS_LIST.CREATE_MODAL.INPUTS.REPOSITORY.INLINE_HELP
               }
-              options={repositoryOptions}
-              id="repositoryName"
-              defaultValue={repositoryName}
-              onChange={e => setRepositoryName(e.target.value)}
             />
 
             <FormInput

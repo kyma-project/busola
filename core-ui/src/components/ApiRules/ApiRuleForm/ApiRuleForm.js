@@ -82,26 +82,27 @@ export default function ApiRuleForm({
     apiRule.spec.service.port = port;
   }
 
-  const { data: allServices, error, loading = true } = useGetList()(
+  const filterServices = service => {
+    let show = true;
+    EXCLUDED_SERVICES_LABELS.forEach(excludedLabel => {
+      if (
+        service?.metadata?.labels &&
+        Object.keys(service?.metadata?.labels).includes([excludedLabel])
+      ) {
+        show = false;
+      }
+    });
+    return show;
+  };
+
+  const { data: allServices, error, loading = true } = useGetList(
+    filterServices,
+  )(
     injectVariables(SERVICES_URL, {
       namespace: namespace,
     }),
-    { pollingInterval: 3000 },
+    { pollingInterval: 4000 },
   );
-
-  const services =
-    allServices?.filter(service => {
-      let show = true;
-      EXCLUDED_SERVICES_LABELS.forEach(excludedLabel => {
-        if (
-          service?.metadata?.labels &&
-          Object.keys(service?.metadata?.labels).includes([excludedLabel])
-        ) {
-          show = false;
-        }
-      });
-      return show;
-    }) || [];
 
   React.useEffect(() => setMethodsValid(rules.every(hasValidMethods)), [rules]);
 
@@ -140,9 +141,7 @@ export default function ApiRuleForm({
     if (!formRef.current.checkValidity()) {
       return;
     }
-    const [serviceName, servicePort] = formValues.service.current.value.split(
-      ':',
-    );
+    const [serviceName, servicePort] = formValues.service.current.split(':');
 
     const variables = {
       metadata: {
@@ -280,7 +279,7 @@ export default function ApiRuleForm({
                   _ref={formValues.service}
                   defaultValue={apiRule.spec.service}
                   serviceName={serviceName}
-                  data={services}
+                  data={allServices}
                   error={error}
                   loading={loading}
                 />

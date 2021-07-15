@@ -16,6 +16,10 @@
 .access-strategy--form {
   display: flex;
   justify-content: space-between;
+  
+  .dropdown {
+    margin-top: 0;
+  }
 }
 
 .access-strategy {

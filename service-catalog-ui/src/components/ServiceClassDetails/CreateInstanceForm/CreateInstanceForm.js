@@ -1,15 +1,9 @@
 import React, { useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { FormItem, FormLabel, Icon, Link, FormSelect } from 'fundamental-react';
+import { FormItem, FormLabel, Icon, Link } from 'fundamental-react';
 import * as LuigiClient from '@luigi-project/client';
 
-import SchemaData from './SchemaData';
-
-import './CreateInstanceForm.scss';
-import { getResourceDisplayName } from 'helpers';
-
 import {
-  CustomPropTypes,
   Tooltip,
   CopiableLink,
   usePost,
@@ -18,10 +12,9 @@ import {
   ControlledEditor,
 } from 'react-shared';
 
-const SERVICE_PLAN_SHAPE = PropTypes.shape({
-  name: PropTypes.string.isRequired,
-  displayName: PropTypes.string.isRequired,
-});
+import SchemaData from './SchemaData';
+import './CreateInstanceForm.scss';
+import { PlanColumnContent } from './PlanColumnContent';
 
 CreateInstanceForm.propTypes = {
   onChange: PropTypes.func.isRequired,
@@ -55,32 +48,6 @@ const getInstanceCreateParameterSchema = (plans, currentPlan) => {
         e.metadata.name === currentPlan,
     ) || plans[0]?.name;
   return schema?.spec.instanceCreateParameterSchema || {};
-};
-
-const PlanColumnContent = ({ onPlanChange, dropdownRef, allPlans }) => (
-  <FormItem>
-    <FormLabel required htmlFor="plan">
-      Plan
-    </FormLabel>
-    <FormSelect
-      id="plan"
-      aria-label="plan-selector"
-      ref={dropdownRef}
-      onChange={e => onPlanChange(e.target.value)}
-    >
-      {allPlans.map((p, i) => (
-        <option key={['plan', i].join('_')} value={p.metadata.name}>
-          {getResourceDisplayName(p)}
-        </option>
-      ))}
-    </FormSelect>
-  </FormItem>
-);
-
-PlanColumnContent.proTypes = {
-  onPlanChange: PropTypes.func.isRequired,
-  dropdownRef: CustomPropTypes.ref.isRequired,
-  allPlans: PropTypes.arrayOf(SERVICE_PLAN_SHAPE),
 };
 
 const isNonNullObject = o => typeof o === 'object' && !!o;
@@ -118,6 +85,7 @@ export default function CreateInstanceForm({
   ] = useState({});
 
   const handlePlanChange = planName => {
+    formValues.plan.current = planName;
     const newParametersSchema = getInstanceCreateParameterSchema(
       plans,
       planName,
@@ -195,7 +163,7 @@ export default function CreateInstanceForm({
   async function handleFormSubmit(e) {
     e.preventDefault();
     const currentPlan =
-      plans?.find(e => e.spec.externalID === formValues.plan.current.value) ||
+      plans?.find(e => e.spec.externalID === formValues.plan.current) ||
       (plans?.length && plans[0]);
 
     const isClusterServiceClass = item.kind === 'ClusterServiceClass';
@@ -263,16 +231,11 @@ export default function CreateInstanceForm({
       <div className="instance-schema-panel__separator" />
       {instanceCreateParameterSchemaExists && (
         <SchemaData
-          key={formValues.plan.current.value}
+          key={formValues.plan.current}
           schemaFormRef={jsonSchemaFormRef}
           data={instanceCreateParameters || {}}
           instanceCreateParameterSchema={instanceCreateParameterSchema}
-          planName={
-            (formValues.plan &&
-              formValues.plan.current &&
-              formValues.plan.current.value) ||
-            ''
-          }
+          planName={(formValues.plan && formValues.plan.current) || ''}
           onSubmitSchemaForm={() => {}}
           onFormChange={formData => {
             onChange(formData);

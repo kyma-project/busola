@@ -6,10 +6,9 @@ import {
   FormFieldset,
   FormLabel,
   FormInput,
-  InlineHelp,
   FormItem,
 } from 'fundamental-react';
-import { K8sNameInput } from 'react-shared';
+import { K8sNameInput, Tooltip } from 'react-shared';
 
 export default function BasicData({ deployment, setDeployment }) {
   return (
@@ -27,10 +26,9 @@ export default function BasicData({ deployment, setDeployment }) {
       <FormItem>
         <FormLabel htmlFor="docker-image" required>
           Docker image
-          <InlineHelp
-            buttonLabel="help"
-            placement="right-end"
-            text="Image should be a valid docker image registry path."
+          <Tooltip
+            isInlineHelp
+            content="Image should be a valid docker image registry path."
           />
         </FormLabel>
         <FormInput
