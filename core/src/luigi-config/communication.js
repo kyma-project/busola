@@ -10,9 +10,13 @@ import { clearAuthData } from './auth/auth-storage';
 import { reloadNavigation } from './navigation/navigation-data-init';
 import { reloadAuth } from './auth/auth';
 import { setShowHiddenNamespaces } from './utils/hidden-namespaces-toggle';
+import { setTheme } from './utils/theme';
 
 export const communication = {
   customMessagesListeners: {
+    'busola.theme': ({ name }) => {
+      setTheme(name);
+    },
     'busola.showHiddenNamespaces': ({ showHiddenNamespaces }) => {
       setShowHiddenNamespaces(showHiddenNamespaces);
     },

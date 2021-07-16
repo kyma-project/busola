@@ -27,6 +27,11 @@ module.exports = env => {
     plugins: [
       new CopyWebpackPlugin([
         { from: './node_modules/@luigi-project/core', to: 'libs/luigi-core' },
+        {
+          from:
+            '../node_modules/@sap-theming/theming-base-content/content/Base/baseLib/sap_fiori_3_hcb/css_variables.css',
+          to: 'libs/themes/hcb.css',
+        },
         { from: '../node_modules/monaco-editor/min/vs', to: 'libs/vs' },
       ]),
       new webpack.DefinePlugin({

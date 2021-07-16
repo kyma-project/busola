@@ -50,3 +50,5 @@ scripts/clusterRegistry.txt
 tests/cypress/*
 tests/fixtures/orders-function.js
 tests/fixtures/kubeconfig.yaml
+
+core-ui/public/themes/@sap-theming/*
