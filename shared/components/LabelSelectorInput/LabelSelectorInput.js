@@ -41,9 +41,6 @@ export const LabelSelectorInput = ({
 
   useEffect(() => {
     if (!inputRef.current) return;
-    inputRef.current.setCustomValidity(
-      isValid ? '' : `Please match the requested format`,
-    );
     if (typeof inputRef.current.reportValidity === 'function')
       inputRef.current.reportValidity();
   }, [isValid]);
