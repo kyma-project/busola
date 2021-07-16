@@ -27,23 +27,16 @@ const workaroundForNodeMetrics = req => {
 };
 
 export const handleRequest = async (req, res) => {
-  const urlHeader = 'x-cluster-url';
-  const caHeader = 'x-cluster-certificate-authority-data';
-  const clientCAHeader = 'x-client-certificate-data';
-  const clientKeyDataHeader = 'x-client-key-data';
+  let requestData;
+  try {
+    requestData = extractRequestData(req);
+  } catch (e) {
+    console.warn('Headers error:', e.message);
+    res.status(400).send('Headers are missing or in a wrong format.');
+    return;
+  }
 
-  delete req.headers.host; // remove host in order not to confuse APIServer
-
-  const targetApiServer = url.parse(req.headers[urlHeader]);
-
-  const ca = decodeHeaderToBuffer(req.headers[caHeader]) || certs;
-  const cert = decodeHeaderToBuffer(req.headers[clientCAHeader]);
-  const key = decodeHeaderToBuffer(req.headers[clientKeyDataHeader]);
-
-  delete req.headers[urlHeader];
-  delete req.headers[caHeader];
-  delete req.headers[clientCAHeader];
-  delete req.headers[clientKeyDataHeader];
+  const { targetApiServer, ca, cert, key } = requestData;
 
   const options = {
     hostname: targetApiServer.hostname,
@@ -87,3 +80,25 @@ export const serveStaticApp = (app, requestPath, directoryPath) => {
 export const serveMonaco = app => {
   app.use('/vs', express.static(path.join(__dirname, '/core-ui/vs')));
 };
+
+function extractRequestData(req) {
+  const urlHeader = 'x-cluster-url';
+  const caHeader = 'x-cluster-certificate-authority-data';
+  const clientCAHeader = 'x-client-certificate-data';
+  const clientKeyDataHeader = 'x-client-key-data';
+
+  const targetApiServer = url.parse(req.headers[urlHeader]);
+
+  const ca = decodeHeaderToBuffer(req.headers[caHeader]) || certs;
+  const cert = decodeHeaderToBuffer(req.headers[clientCAHeader]);
+  const key = decodeHeaderToBuffer(req.headers[clientKeyDataHeader]);
+
+  delete req.headers[urlHeader];
+  delete req.headers[caHeader];
+  delete req.headers[clientCAHeader];
+  delete req.headers[clientKeyDataHeader];
+
+  delete req.headers.host; // remove host in order not to confuse APIServer
+
+  return { targetApiServer, ca, cert, key };
+}
