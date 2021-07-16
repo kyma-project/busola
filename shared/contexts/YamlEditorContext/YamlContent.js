@@ -37,7 +37,11 @@ export function YamlContent({
         theme="vs-light"
         value={val}
         onChange={(_, text) => setChangedYamlFn(text)}
-        editorDidMount={(_, editor) => (editorRef.current = editor)}
+        editorDidMount={(_, editor) => {
+          console.log('set editor', editor);
+          editorRef.current = editor;
+          console.log('now ref', editorRef.current);
+        }}
         options={{ minimap: { enabled: false } }}
       />
     </>

@@ -26,7 +26,9 @@ const ButtonWithTooltip = ({
 };
 
 export function EditorActions({ val, editorRef, title, onSave, saveDisabled }) {
+  console.log('ea', editorRef);
   const openSearch = () => {
+    console.log('ea', editorRef);
     // focus is required for search control to appear
     editorRef.current.focus();
     editorRef.current.trigger('', 'actions.find');
