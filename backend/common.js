@@ -27,16 +27,16 @@ const workaroundForNodeMetrics = req => {
 };
 
 export const handleRequest = async (req, res) => {
-  let requestData;
+  let headersData;
   try {
-    requestData = extractRequestData(req);
+    headersData = extractHeadersData(req);
   } catch (e) {
     console.warn('Headers error:', e.message);
     res.status(400).send('Headers are missing or in a wrong format.');
     return;
   }
 
-  const { targetApiServer, ca, cert, key } = requestData;
+  const { targetApiServer, ca, cert, key } = headersData;
 
   const options = {
     hostname: targetApiServer.hostname,
@@ -81,14 +81,13 @@ export const serveMonaco = app => {
   app.use('/vs', express.static(path.join(__dirname, '/core-ui/vs')));
 };
 
-function extractRequestData(req) {
+function extractHeadersData(req) {
   const urlHeader = 'x-cluster-url';
   const caHeader = 'x-cluster-certificate-authority-data';
   const clientCAHeader = 'x-client-certificate-data';
   const clientKeyDataHeader = 'x-client-key-data';
 
   const targetApiServer = url.parse(req.headers[urlHeader]);
-
   const ca = decodeHeaderToBuffer(req.headers[caHeader]) || certs;
   const cert = decodeHeaderToBuffer(req.headers[clientCAHeader]);
   const key = decodeHeaderToBuffer(req.headers[clientKeyDataHeader]);
