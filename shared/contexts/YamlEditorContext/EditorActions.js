@@ -25,11 +25,11 @@ const ButtonWithTooltip = ({
   );
 };
 
-export function EditorActions({ val, editor, title, onSave, saveDisabled }) {
+export function EditorActions({ val, editorRef, title, onSave, saveDisabled }) {
   const openSearch = () => {
     // focus is required for search control to appear
-    editor.focus();
-    editor.trigger('', 'actions.find');
+    editorRef.current.focus();
+    editorRef.current.trigger('', 'actions.find');
   };
 
   const download = () => {

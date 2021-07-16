@@ -26,7 +26,7 @@ export function YamlContent({
     <>
       <EditorActions
         val={val}
-        editor={editorRef.current}
+        editorRef={editorRef}
         title={title}
         onSave={onSave}
         saveDisabled={saveDisabled}
