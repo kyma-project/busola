@@ -25,13 +25,11 @@ const ButtonWithTooltip = ({
   );
 };
 
-export function EditorActions({ val, editorRef, title, onSave, saveDisabled }) {
-  console.log('ea', editorRef);
+export function EditorActions({ val, editor, title, onSave, saveDisabled }) {
   const openSearch = () => {
-    console.log('ea', editorRef);
     // focus is required for search control to appear
-    editorRef.current.focus();
-    editorRef.current.trigger('', 'actions.find');
+    editor.focus();
+    editor.trigger('', 'actions.find');
   };
 
   const download = () => {
@@ -48,22 +46,25 @@ export function EditorActions({ val, editorRef, title, onSave, saveDisabled }) {
         glyph="filter"
         onClick={openSearch}
         className="fd-margin-end--sm"
+        disabled={!editor}
       />
       <ButtonWithTooltip
         tooltipContent="Save"
         glyph="save"
         onClick={onSave}
-        disabled={saveDisabled}
+        disabled={saveDisabled || !editor}
       />
       <ButtonWithTooltip
         tooltipContent="Copy to clipboard"
         glyph="copy"
         onClick={() => copyToCliboard(val)}
+        disabled={!editor}
       />
       <ButtonWithTooltip
         tooltipContent="Download"
         glyph="download"
         onClick={download}
+        disabled={!editor}
       />
     </section>
   );
