@@ -1,4 +1,5 @@
 @import '~fundamental-styles/dist/margins.css';
+@import '~@sap-theming/theming-base-content/content/Base/baseLib/sap_fiori_3/css_variables.css';
 
 html {
   font-size: 16px;
@@ -114,7 +115,7 @@ body {
 
 .modal--no-padding {
   .fd-dialog__body {
-    padding: 0;
+    padding:0;
   }
 }
 
@@ -222,31 +223,6 @@ input[type='checkbox'] {
   -webkit-appearance: checkbox !important;
 }
 
-.fd-popover__body--dropdown {
-  width: 100% !important;
-  max-height: 200px !important;
-  overflow-y: auto !important;
-  .fd-list--dropdown {
-    max-width: 100% !important;
-  }
-}
-
-.fd-switch__input {
-  position: absolute !important;
-}
-
-.modal-width--m {
-  .fd-dialog__content {
-    width: 70vw;
-    min-width: unset;
-  }
-}
-.fd-input.is-invalid {
-  border-width: 0.125rem;
-  background-color: var(--sapField_InvalidBackground, #fff);
-  border-color: var(--sapField_InvalidColor, #b00);
-}
-
 @font-face {
   font-family: '72';
   src: url('~@sap-theming/theming-base-content/content/Base/baseLib/sap_base_fiori/fonts/72-Regular-full.woff')
@@ -291,4 +267,36 @@ input[type='checkbox'] {
     format('woff');
   font-weight: normal;
   font-style: normal;
+}
+
+.fd-popover__body--dropdown {
+  width: 100% !important;
+  max-height: 200px !important;
+  overflow-y: auto !important;
+  .fd-list--dropdown {
+    max-width: 100% !important;
+  }
+}
+.fd-popover__popper {
+  max-height: 200px !important;
+  overflow-y: auto !important;
+  .fd-list--dropdown {
+    max-width: 100% !important;
+  }
+}
+
+.fd-switch__input {
+  position: absolute !important;
+}
+
+.modal-width--m {
+  .fd-dialog__content {
+    width: 70vw;
+    min-width: unset;
+  }
+}
+.fd-input.is-invalid {
+  border-width: .125rem;
+  background-color: var(--sapField_InvalidBackground,#fff);
+  border-color: var(--sapField_InvalidColor,#b00);
 }

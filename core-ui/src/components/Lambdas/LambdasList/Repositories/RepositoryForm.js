@@ -1,15 +1,14 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 
 import {
-  ResourceNameInput,
-  DropdownInput,
-  FormInput,
-} from 'components/Lambdas/components';
+  randomNameGenerator,
+  useMicrofrontendContext,
+  Dropdown,
+} from 'react-shared';
 
+import { ResourceNameInput, FormInput } from 'components/Lambdas/components';
 import { validateResourceName } from 'components/Lambdas/helpers/misc';
-import { randomNameGenerator, useMicrofrontendContext } from 'react-shared';
 import { isGitUrl } from 'components/Lambdas/helpers/repositories';
-
 import { REPOSITORIES_LIST } from 'components/Lambdas/constants';
 
 export const FORM_TYPE = {
@@ -138,8 +137,9 @@ export default function RepositoryForm({
     setName(event.target.value);
   }
 
-  function updateAuthType(event) {
-    setShowSecretName(event.target.value !== '');
+  function updateAuthType(selected) {
+    authTypeRef.current = selected.key;
+    setShowSecretName(selected.key !== '');
   }
 
   async function handleSubmit(e) {
@@ -149,9 +149,9 @@ export default function RepositoryForm({
       auth: null,
     };
 
-    if (authTypeRef.current.value) {
+    if (authTypeRef.current) {
       spec.auth = {
-        type: authTypeRef.current.value,
+        type: authTypeRef.current,
         secretName: secretNameRef.current.value.trim(),
       };
     }
@@ -170,7 +170,7 @@ export default function RepositoryForm({
   const authTypeOptions = REPOSITORIES_LIST.MODAL_INPUTS.AUTH_TYPE.OPTIONS.map(
     option => ({
       key: option.KEY,
-      value: option.VALUE,
+      text: option.VALUE,
     }),
   );
 
@@ -202,14 +202,13 @@ export default function RepositoryForm({
         firstValue={repository?.spec.url}
       />
 
-      <DropdownInput
-        _ref={authTypeRef}
+      <Dropdown
         label={REPOSITORIES_LIST.MODAL_INPUTS.AUTH_TYPE.LABEL}
         inlineHelp={REPOSITORIES_LIST.MODAL_INPUTS.AUTH_TYPE.INLINE_HELP}
         options={authTypeOptions}
         id="authType"
-        onChange={updateAuthType}
-        defaultValue={repository?.spec.auth?.type}
+        onSelect={(_, selected) => updateAuthType(selected)}
+        selectedKey={authTypeOptions[0].key}
       />
 
       {showSecretName && (

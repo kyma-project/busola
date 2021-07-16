@@ -7,7 +7,7 @@ import {
   MessageStrip,
 } from 'fundamental-react';
 
-import { useCreateServiceBindingUsage, Checkbox } from 'react-shared';
+import { useCreateServiceBindingUsage, Checkbox, Dropdown } from 'react-shared';
 import { SERVICE_BINDINGS_PANEL } from 'components/Lambdas/constants';
 import { CONFIG } from 'components/Lambdas/config';
 
@@ -22,19 +22,18 @@ export default function CreateServiceBindingForm({
   availableServiceInstances = [],
   serviceBindings,
   setPopupModalMessage = () => void 0,
-  refetchServiceInstances = () => void 0,
   onChange,
   formElementRef,
   setValidity = () => void 0,
-  isOpen = false,
 }) {
   const createServiceBindingUsageSet = useCreateServiceBindingUsage();
 
-  const [selectedServiceInstance, setSelectedServiceInstance] = useState('');
+  const [existingInstanceName, setExistingInstanceName] = useState(
+    availableServiceInstances[0].metadata.name,
+  );
+  const [existingSecretName, setExistingSecretName] = useState(null);
   const [envPrefix, setEnvPrefix] = useState('');
-
   const [createCredentials, setCreateCredentials] = useState(true);
-  const [existingCredentials, setExistingCredentials] = useState('');
   const [secrets, setSecrets] = useState([]);
 
   useEffect(() => {
@@ -42,27 +41,22 @@ export default function CreateServiceBindingForm({
   }, [setValidity]);
 
   useEffect(() => {
-    if (isOpen) {
-      refetchServiceInstances();
-    }
-  }, [isOpen, refetchServiceInstances]);
-
-  useEffect(() => {
-    if (!selectedServiceInstance) {
+    if (!existingInstanceName) {
       setEnvPrefix('');
       setCreateCredentials(true);
       setSecrets([]);
       return;
     }
     const bindingsForThisInstance = serviceBindings.filter(
-      b => b.spec.instanceRef.name === selectedServiceInstance,
+      b => b.spec.instanceRef.name === existingInstanceName,
     );
     setSecrets(bindingsForThisInstance.map(b => b.spec.secretName));
+    setExistingSecretName(bindingsForThisInstance[0].spec.secretName);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedServiceInstance, availableServiceInstances]);
+  }, [existingInstanceName, availableServiceInstances]);
 
   useEffect(() => {
-    if (!selectedServiceInstance) {
+    if (!existingInstanceName) {
       setPopupModalMessage(
         SERVICE_BINDINGS_PANEL.CREATE_MODAL.CONFIRM_BUTTON.POPUP_MESSAGES
           .NO_SERVICE_INSTANCE_SELECTED,
@@ -71,7 +65,7 @@ export default function CreateServiceBindingForm({
       return;
     }
 
-    if (!createCredentials && !existingCredentials) {
+    if (!createCredentials && !existingSecretName) {
       setPopupModalMessage(
         SERVICE_BINDINGS_PANEL.CREATE_MODAL.CONFIRM_BUTTON.POPUP_MESSAGES
           .NO_SECRET_SELECTED,
@@ -82,22 +76,18 @@ export default function CreateServiceBindingForm({
 
     setValidity(true);
   }, [
-    selectedServiceInstance,
+    existingInstanceName,
     createCredentials,
-    existingCredentials,
+    existingSecretName,
     setValidity,
     setPopupModalMessage,
   ]);
-
-  useEffect(() => {
-    setExistingCredentials('');
-  }, [selectedServiceInstance, createCredentials]);
 
   async function handleFormSubmit(e) {
     e.preventDefault();
     const parameters = {
       namespace: lambda.metadata.namespace,
-      serviceInstanceName: selectedServiceInstance,
+      serviceInstanceName: existingInstanceName,
       serviceBindingUsageParameters: envPrefix
         ? {
             envPrefix: {
@@ -106,19 +96,24 @@ export default function CreateServiceBindingForm({
           }
         : undefined,
       usedBy: { name: lambda.metadata.name, kind: CONFIG.functionUsageKind },
-      existingCredentials: existingCredentials || undefined,
+      existingSecretName:
+        (!createCredentials && existingSecretName) || undefined,
     };
 
     await createServiceBindingUsageSet(parameters);
   }
 
-  const serviceInstancesNames = availableServiceInstances.map(
-    ({ metadata }) => (
-      <option value={metadata.name} key={metadata.name}>
-        {metadata.name}
-      </option>
-    ),
+  const serviceInstancesOptions = availableServiceInstances?.map(
+    ({ metadata }) => ({
+      key: metadata.name,
+      text: metadata.name,
+    }),
   );
+
+  const secretsOptions = secrets?.map(secret => ({
+    key: secret,
+    text: secret,
+  }));
 
   const noSecretsFound = (
     <MessageStrip dismissible={false} type="information">
@@ -134,17 +129,15 @@ export default function CreateServiceBindingForm({
       onSubmit={handleFormSubmit}
     >
       <FormItem key="serviceInstanceName">
-        <FormLabel htmlFor="serviceInstanceName">Service Instance</FormLabel>
-        <select
+        <Dropdown
+          label="Service Instance"
           id="serviceInstanceName"
-          className="fd-form-select"
-          value={selectedServiceInstance}
-          onChange={e => setSelectedServiceInstance(e.target.value)}
-          required
-        >
-          <option value=""></option>
-          {serviceInstancesNames}
-        </select>
+          options={serviceInstancesOptions}
+          onSelect={(_, selected) => {
+            setExistingInstanceName(selected.key);
+          }}
+          selectedKey={existingInstanceName}
+        />
       </FormItem>
 
       <FormItem key="envPrefix">
@@ -158,7 +151,7 @@ export default function CreateServiceBindingForm({
         />
       </FormItem>
 
-      {selectedServiceInstance && (
+      {existingInstanceName && (
         <>
           <FormItem key="createCredentials">
             <Checkbox
@@ -172,22 +165,16 @@ export default function CreateServiceBindingForm({
             </Checkbox>
           </FormItem>
           {!createCredentials && secrets.length ? (
-            <FormItem key="existingCredentials">
-              <FormLabel htmlFor="existingCredentials">Secrets</FormLabel>
-              <select
-                id="existingCredentials"
-                className="fd-form-select"
-                value={existingCredentials}
-                onChange={e => setExistingCredentials(e.target.value)}
-                required
-              >
-                <option value=""></option>
-                {secrets.map(s => (
-                  <option value={s} key={s}>
-                    {s}
-                  </option>
-                ))}
-              </select>
+            <FormItem key="existingSecretName">
+              <Dropdown
+                label="Secrets"
+                id="existingSecretName"
+                options={secretsOptions}
+                onSelect={(_, selected) => {
+                  setExistingSecretName(selected.key);
+                }}
+                selectedKey={existingSecretName}
+              />
             </FormItem>
           ) : null}
           {!createCredentials && !secrets.length ? noSecretsFound : null}

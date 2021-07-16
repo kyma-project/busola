@@ -15,9 +15,15 @@ Cypress.Commands.add('createApiRule', (ApiRuleName, ApiRuleHost) => {
   cy.getModalBody().within($modal => {
     cy.get('[placeholder="API Rule name"]').type(ApiRuleName);
     cy.get('[placeholder="Enter the hostname"]').type(ApiRuleHost); //the host is ocupied by another virtualservice
-    cy.get('[role="select"]#service').select(ApiRuleName + ':80');
+    cy.get('[data-testid=service]').click();
+    cy.get('li[role="option"]')
+      .contains(ApiRuleName + ' (port: 80)')
+      .click({ force: true });
 
-    cy.get('[aria-label="Access strategy type"]').select('noop');
+    cy.get('[data-testid="access-strategies-dropdown"]').click();
+    cy.get('li[role="option"]')
+      .contains('noop')
+      .click({ force: true });
 
     // inputs are invisible because the Fundamental uses label::before to display the check area
     cy.get('input[type="checkbox"]').check(['GET', 'POST'], { force: true });
