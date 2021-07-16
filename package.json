@@ -11,13 +11,12 @@
     "build:libraries": "gulp build:libraries",
     "watch:libraries": "gulp watch:libraries",
     "install:apps": "gulp install:apps",
-    "start": "./scripts/pre-start-warning.sh && npm run copy-themes && lerna exec --parallel -- npm run start:kyma",
+    "start": "./scripts/pre-start-warning.sh && lerna exec --parallel -- npm run start:kyma",
     "start:api": "./scripts/pre-start-warning.sh && lerna exec --parallel -- npm run start:kyma:api",
     "lint-check": "prettier --config ./.prettierrc --ignore-path ./.prettierignore --check '**/*.{ts,tsx,js,jsx,json,html,css,yaml,md}'",
     "lint-fix": "prettier --config ./.prettierrc --ignore-path ./.prettierignore --write '**/*.{ts,tsx,js,jsx,json,html,css,yaml,md}'",
     "lint-staged": "lint-staged",
-    "test-shared-lib": "cd shared && jest",
-    "copy-themes": "gulp copy-themes"
+    "test-shared-lib": "cd shared && jest"
   },
   "dependencies": {
     "@luigi-project/client": "^1.14.0",
