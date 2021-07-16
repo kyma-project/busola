@@ -32,6 +32,21 @@ module.exports = env => {
             '../node_modules/@sap-theming/theming-base-content/content/Base/baseLib/sap_fiori_3_hcb/css_variables.css',
           to: 'libs/themes/hcb.css',
         },
+        {
+          from:
+            '../node_modules/@sap-theming/theming-base-content/content/Base/baseLib/sap_fiori_3_hcw/css_variables.css',
+          to: 'libs/themes/hcw.css',
+        },
+        {
+          from:
+            '../node_modules/@sap-theming/theming-base-content/content/Base/baseLib/sap_fiori_3_dark/css_variables.css',
+          to: 'libs/themes/dark.css',
+        },
+        {
+          from:
+            '../node_modules/@sap-theming/theming-base-content/content/Base/baseLib/sap_fiori_3_light-dark/css_variables.css',
+          to: 'libs/themes/light-dark.css',
+        },
         { from: '../node_modules/monaco-editor/min/vs', to: 'libs/vs' },
       ]),
       new webpack.DefinePlugin({
