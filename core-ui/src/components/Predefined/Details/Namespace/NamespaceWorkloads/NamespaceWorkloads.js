@@ -18,6 +18,14 @@ const navigateTo = path => () => {
     .navigate(path);
 };
 
+const tooltipContent = (value, total, resourceType) => {
+  if (total === 0) {
+    return `There are no ${resourceType} in this Namespace`;
+  } else {
+    return `${value}/${total} ${resourceType} are healthy.`;
+  }
+};
+
 const ResourceCircle = ({
   data,
   counter,
@@ -43,7 +51,7 @@ const ResourceCircle = ({
       max={data.length}
       title={resourceType}
       tooltip={{
-        content: `${counter(data)}/${data.length} ${resourceType} are healthy.`,
+        content: tooltipContent(counter(data), data.length, resourceType),
         position: 'bottom',
       }}
     />
