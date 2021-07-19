@@ -251,14 +251,14 @@ export default function ApiRuleForm({
                   />
                 </FormItem>
                 <FormItem>
-                  <FormLabel htmlFor="hostname" required>
-                    Hostname
-                    <Tooltip
-                      isInlineHelp
-                      content="The hostname must consist of alphanumeric characters, dots or dashes, 
+                  <Tooltip
+                    content="The hostname must consist of alphanumeric characters, dots or dashes, 
                           and must start and end with an alphanumeric character (e.g. 'my-name1')."
-                    />
-                  </FormLabel>
+                  >
+                    <FormLabel htmlFor="hostname" required>
+                      Hostname
+                    </FormLabel>
+                  </Tooltip>
                   {domainLoading ? (
                     'Loading...'
                   ) : (

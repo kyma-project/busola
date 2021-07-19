@@ -12,7 +12,6 @@ export const Tooltip = ({
   trigger,
   tippyProps,
   className,
-  isInlineHelp = false,
 }) => {
   return (
     <TippyTooltip
@@ -22,9 +21,6 @@ export const Tooltip = ({
       trigger={trigger}
       {...tippyProps}
     >
-      {isInlineHelp && (
-        <span className="sap-icon--sys-help fd-margin-begin--tiny"></span>
-      )}
       {children}
     </TippyTooltip>
   );

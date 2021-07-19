@@ -24,13 +24,11 @@ export default function BasicData({ deployment, setDeployment }) {
         onChange={labels => setDeployment({ ...deployment, labels })}
       />
       <FormItem>
-        <FormLabel htmlFor="docker-image" required>
-          Docker image
-          <Tooltip
-            isInlineHelp
-            content="Image should be a valid docker image registry path."
-          />
-        </FormLabel>
+        <Tooltip ontent="Image should be a valid docker image registry path.">
+          <FormLabel htmlFor="docker-image" required>
+            Docker image
+          </FormLabel>
+        </Tooltip>
         <FormInput
           id="docker-image"
           required

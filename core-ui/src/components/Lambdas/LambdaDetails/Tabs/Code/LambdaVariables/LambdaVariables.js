@@ -135,22 +135,20 @@ function VariableSourceLink({ variable }) {
 
   return (
     <>
-      <Tooltip
-        isInlineHelp
-        content="This variable comes from a Resource. Check its details to get the value."
-      />
       {resourceLink ? (
-        <span
-          className="link"
-          onClick={() =>
-            LuigiClient.linkManager()
-              .fromContext('namespace')
-              .navigate(resourceLink)
-          }
-        >
-          {' '}
-          {resourceName}{' '}
-        </span>
+        <Tooltip content="This variable comes from a Resource. Check its details to get the value.">
+          <span
+            className="link"
+            onClick={() =>
+              LuigiClient.linkManager()
+                .fromContext('namespace')
+                .navigate(resourceLink)
+            }
+          >
+            {' '}
+            {resourceName}{' '}
+          </span>
+        </Tooltip>
       ) : (
         '-'
       )}
