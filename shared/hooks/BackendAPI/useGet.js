@@ -194,7 +194,12 @@ function handleListDataReceived(filter) {
 
     if (
       !oldData ||
-      lastResourceVersionRef.current !== newData.metadata.resourceVersion
+      (lastResourceVersionRef.current !== newData.metadata.resourceVersion &&
+        !newData.items.every(
+          (item, idx) =>
+            item.metadata.resourceVersion ===
+            oldData[idx]?.metadata.resourceVersion,
+        ))
     ) {
       lastResourceVersionRef.current = newData.metadata.resourceVersion;
       setDataFn(newData.items);

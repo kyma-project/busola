@@ -31,7 +31,7 @@ export default function CreateServiceBindingModal({
     `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${lambda.metadata.namespace}/serviceinstances`,
     {
       pollingInterval: 5500,
-      skip: skipRequests,
+      skip: false,
     },
   );
   const { data: servicePlans } = useGetList()(
