@@ -232,7 +232,7 @@ function Resources({
   return (
     <GenericList
       title={showTitle ? prettifyNamePlural(resourceName, resourceType) : null}
-      textSearchProperties={['metadata.name']}
+      textSearchProperties={['metadata.name', 'metadata.labels']}
       actions={actions}
       entries={resources || []}
       headerRenderer={headerRenderer}

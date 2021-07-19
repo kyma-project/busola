@@ -56,7 +56,13 @@ export function SearchInput({
         if (typeof entry === 'string') {
           if (entryMatchesSearch(entry)) return entry;
         }
-        return suggestionProperties?.map(properties => {
+        return suggestionProperties?.flatMap(properties => {
+          if (properties === 'metadata.labels' && entry.metadata?.labels) {
+            const labels = Object.keys(entry.metadata.labels).map(
+              key => `${key}=${entry.metadata.labels[key]}`,
+            );
+            return labels.filter(label => entryMatchesSearch(label));
+          }
           const propertiesArray = properties.split('.');
           let entryValue = entry;
           propertiesArray?.forEach(prop => {

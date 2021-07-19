@@ -17,10 +17,17 @@ const filterEntry = (entry, query, searchProperties) => {
     return false;
   }
 
-  const flattenEntry = flattenProperties(entry);
+  const flattenedEntry = flattenProperties(entry);
   for (const property of searchProperties) {
-    if (flattenEntry.hasOwnProperty(property)) {
-      const value = flattenEntry[property];
+    if (property === 'metadata.labels') {
+      const labels = getLabelStrings(entry);
+      if (
+        labels.some(label => label.toLowerCase().includes(query.toLowerCase()))
+      ) {
+        return true;
+      }
+    } else if (flattenedEntry.hasOwnProperty(property)) {
+      const value = flattenedEntry[property];
       // apply to string to include numbers
       if (
         value &&
@@ -51,6 +58,11 @@ const flattenProperties = (obj, prefix = '') =>
 
     return properties;
   }, {});
+
+const getLabelStrings = props => {
+  const labels = props.metadata?.labels || [];
+  return Object.keys(labels).map(key => `${key}=${labels[key]}`.toLowerCase());
+};
 
 const isPrimitive = type => {
   return (
