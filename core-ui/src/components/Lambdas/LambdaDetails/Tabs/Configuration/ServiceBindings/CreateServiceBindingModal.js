@@ -12,13 +12,12 @@ export default function CreateServiceBindingModal({
   serviceBindingsCombined,
 }) {
   const [popupModalMessage, setPopupModalMessage] = useState('');
-  const [skipRequests, setSkipRequests] = useState(true);
+  const [disablePolling, setDisablePolling] = useState(true);
 
   const serviceInstancesAlreadyUsed = serviceBindingsCombined.map(
     ({ serviceBinding, serviceBindingUsage }) =>
       serviceBindingUsage && serviceBinding?.spec.instanceRef.name,
   );
-
   const isNotAlreadyUsed = serviceInstance =>
     !serviceInstancesAlreadyUsed.includes(serviceInstance.metadata.name);
 
@@ -30,31 +29,31 @@ export default function CreateServiceBindingModal({
   } = useGetList()(
     `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${lambda.metadata.namespace}/serviceinstances`,
     {
-      pollingInterval: 5500,
+      pollingInterval: disablePolling ? 0 : 5500,
       skip: false,
     },
   );
   const { data: servicePlans } = useGetList()(
     `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${lambda.metadata.namespace}/serviceplans`,
     {
-      pollingInterval: 6000,
-      skip: skipRequests,
+      pollingInterval: disablePolling ? 0 : 6000,
+      skip: false,
     },
   );
 
   const { data: clusterServicePlans } = useGetList()(
     `/apis/servicecatalog.k8s.io/v1beta1/clusterserviceplans`,
     {
-      pollingInterval: 6500,
-      skip: skipRequests,
+      pollingInterval: disablePolling ? 0 : 6500,
+      skip: false,
     },
   );
 
   const { data: serviceClasses } = useGetList()(
     `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${lambda.metadata.namespace}/serviceclasses`,
     {
-      pollingInterval: 7000,
-      skip: skipRequests,
+      pollingInterval: disablePolling ? 0 : 7000,
+      skip: false,
     },
   );
 
@@ -97,13 +96,11 @@ export default function CreateServiceBindingModal({
           ? p.metadata.name === instance.spec[classRefFieldName].name
           : false,
       ) || {};
-
     return {
       ...instance,
       isBindable: plan?.spec?.bindable || serviceClass?.spec?.bindable || false,
     };
   };
-
   const instancesWithBindableData =
     serviceInstances?.map(getInstancesWithBindableData) || [];
 
@@ -111,7 +108,9 @@ export default function CreateServiceBindingModal({
     instancesWithBindableData.filter(
       serviceInstance => serviceInstance.isBindable,
     ) || [];
+
   const instancesNotBound = instancesBindable?.filter(isNotAlreadyUsed) || [];
+
   const hasAnyInstances = !!instancesNotBound.length;
 
   let fallbackContent = null;
@@ -168,7 +167,7 @@ export default function CreateServiceBindingModal({
 
   return (
     <ModalWithForm
-      onModalOpenStateChange={isOpen => setSkipRequests(!isOpen)}
+      onModalOpenStateChange={isOpen => setDisablePolling(!isOpen)}
       title={SERVICE_BINDINGS_PANEL.CREATE_MODAL.TITLE}
       modalOpeningComponent={modalOpeningComponent}
       confirmText={SERVICE_BINDINGS_PANEL.CREATE_MODAL.CONFIRM_BUTTON.TEXT}

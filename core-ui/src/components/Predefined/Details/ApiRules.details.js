@@ -33,7 +33,12 @@ export const ApiRulesDetails = ({ DefaultRenderer, ...otherParams }) => {
   ];
 
   const ApiRulesAccessStrategies = (resource, resourceUrl) => {
-    return <AccessStrategies strategies={resource?.spec?.rules || []} />;
+    return (
+      <AccessStrategies
+        key={`access-strategies-${resource?.metadata.name}`}
+        strategies={resource?.spec?.rules || []}
+      />
+    );
   };
 
   const editApiRule = apirule => {
@@ -42,6 +47,7 @@ export const ApiRulesDetails = ({ DefaultRenderer, ...otherParams }) => {
     });
     return (
       <Button
+        key={`button-${apirule.metadata.name}`}
         option="transparent"
         onClick={() =>
           LuigiClient.linkManager()
