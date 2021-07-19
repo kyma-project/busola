@@ -58,8 +58,8 @@ export function SearchInput({
         }
         return suggestionProperties?.flatMap(properties => {
           if (properties === 'metadata.labels' && entry.metadata?.labels) {
-            const labels = Object.keys(entry.metadata.labels).map(
-              key => `${key}=${entry.metadata.labels[key]}`,
+            const labels = Object.entries(entry.metadata.labels).map(
+              ([key, val]) => `${key}=${val}`,
             );
             return labels.filter(label => entryMatchesSearch(label));
           }

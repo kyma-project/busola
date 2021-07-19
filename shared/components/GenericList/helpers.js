@@ -61,7 +61,9 @@ const flattenProperties = (obj, prefix = '') =>
 
 const getLabelStrings = props => {
   const labels = props.metadata?.labels || [];
-  return Object.keys(labels).map(key => `${key}=${labels[key]}`.toLowerCase());
+  return Object.entries(labels).map(([key, val]) =>
+    `${key}=${val}`.toLowerCase(),
+  );
 };
 
 const isPrimitive = type => {
