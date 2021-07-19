@@ -17,23 +17,9 @@ export const K8sNameInput = ({
   kind,
   showHelp = true,
   label = 'Name',
-  required = true,
+  required = false,
   defaultValue,
-  ...props
-}) => (
-  <>
-    <FormLabel required={required} htmlFor={id}>
-      {label}
-      {showHelp && (
-        <Tooltip
-          isInlineHelp
-          content="
-              The name must consist of lower case alphanumeric characters or dashes, 
-              and must start and end with an alphanumeric character (e.g. 'my-name1').
-              "
-        />
-      )}
-    </FormLabel>
+  input = (
     <input
       role="input"
       ref={_ref}
@@ -47,6 +33,24 @@ export const K8sNameInput = ({
       {...props}
       className={'fd-input ' + (props?.className || '')}
     />
+  ),
+  ...props
+}) => (
+  <>
+    <FormLabel required={required} htmlFor={id}>
+      {label}
+    </FormLabel>
+    {showHelp && (
+      <Tooltip
+        content="
+              The name must consist of lower case alphanumeric characters or dashes, 
+              and must start and end with an alphanumeric character (e.g. 'my-name1').
+              "
+      >
+        {input}
+      </Tooltip>
+    )}
+    {!showHelp && input}
   </>
 );
 

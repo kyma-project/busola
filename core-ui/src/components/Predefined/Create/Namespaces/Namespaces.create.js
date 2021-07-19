@@ -21,16 +21,19 @@ const DisableSidecarField = ({ onChange }) => {
   return (
     <FormFieldset>
       <FormItem>
-        <Checkbox id="disable-istio" onChange={e => onChange(e.target.checked)}>
-          Disable side-car injection
-          <Tooltip
-            isInlineHelp
-            content="
+        <Tooltip
+          content="
                 Select this option to disable istio to mediate all
                   communication between the pods in your namespace.
                 "
-          />
-        </Checkbox>
+        >
+          <Checkbox
+            id="disable-istio"
+            onChange={e => onChange(e.target.checked)}
+          >
+            Disable side-car injection
+          </Checkbox>
+        </Tooltip>
       </FormItem>
     </FormFieldset>
   );
@@ -48,22 +51,22 @@ const MemoryQuotasCheckbox = ({ isCheckedRef, children }) => {
   return (
     <FormFieldset>
       <FormItem>
-        <Checkbox
-          id="memory-quotas"
-          onChange={e => setIsExpanded(e.target.checked)}
-          aria-label="memory-quotas"
-        >
-          Apply Total Memory Quotas
-          <Tooltip
-            isInlineHelp
-            content="
+        <Tooltip
+          content="
                   Define constraints that limit total memory consumption in your
                   namespace. 
                   Use plain value in bytes, or suffix equivalents. For example:
                   128974848, 129e6, 129M, 123Mi.
                 "
-          />
-        </Checkbox>
+        >
+          <Checkbox
+            id="memory-quotas"
+            onChange={e => setIsExpanded(e.target.checked)}
+            aria-label="memory-quotas"
+          >
+            Apply Total Memory Quotas
+          </Checkbox>
+        </Tooltip>
 
         {isExpanded && children}
       </FormItem>
@@ -130,21 +133,21 @@ const ContainerLimitsCheckbox = ({ isCheckedRef, children }) => {
   return (
     <FormFieldset>
       <FormItem>
-        <Checkbox
-          id="container-limits"
-          onChange={e => setIsExpanded(e.target.checked)}
-        >
-          Apply limits per container
-          <Tooltip
-            isInlineHelp
-            className="fd-margin-end--tiny"
-            content="
+        <Tooltip
+          className="fd-margin-end--tiny"
+          content="
                   Define memory constraints for individual containers in your
                   namespace. Use plain value in bytes, or suffix
                   equivalents. For example: 128974848, 129e6, 129M, 123Mi.
                 "
-          />
-        </Checkbox>
+        >
+          <Checkbox
+            id="container-limits"
+            onChange={e => setIsExpanded(e.target.checked)}
+          >
+            Apply limits per container
+          </Checkbox>
+        </Tooltip>
         {isExpanded && children}
       </FormItem>
     </FormFieldset>
