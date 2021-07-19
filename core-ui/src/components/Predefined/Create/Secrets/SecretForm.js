@@ -91,7 +91,12 @@ export function SecretForm({
   );
 
   return (
-    <form onSubmit={handleFormSubmit} onChange={onChange} ref={formElementRef}>
+    <form
+      onSubmit={handleFormSubmit}
+      onChange={onChange}
+      ref={formElementRef}
+      noValidate
+    >
       <TabGroup>
         <Tab title="Metadata">{metadataContent}</Tab>
         <Tab title="Data">{secretDataContent}</Tab>

@@ -55,7 +55,7 @@ export function AuthForm({ setAuthValid, auth, setAuth }) {
   );
 
   return (
-    <form ref={formRef}>
+    <form ref={formRef} onSubmit={e => e.preventDefault()} noValidate>
       <MessageStrip
         type="warning"
         className="fd-margin-top--sm fd-margin-bottom--sm"

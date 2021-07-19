@@ -97,6 +97,7 @@ export const AddonsConfigurations = ({
       onChange={onChange}
       ref={formElementRef}
       onSubmit={handleFormSubmit}
+      noValidate
     >
       <div className="fd-form-group">
         <div className="fd-form-item">
