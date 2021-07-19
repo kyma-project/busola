@@ -34,7 +34,12 @@ export function ConfigMapForm({
   };
 
   return (
-    <form onSubmit={handleFormSubmit} onChange={onChange} ref={formElementRef}>
+    <form
+      onSubmit={handleFormSubmit}
+      onChange={onChange}
+      ref={formElementRef}
+      noValidate
+    >
       <TabGroup style={{ padding: 0 }}>
         <Tab title="Metadata">
           <K8sNameInput
