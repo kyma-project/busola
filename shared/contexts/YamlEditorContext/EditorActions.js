@@ -46,22 +46,25 @@ export function EditorActions({ val, editor, title, onSave, saveDisabled }) {
         glyph="filter"
         onClick={openSearch}
         className="fd-margin-end--sm"
+        disabled={!editor}
       />
       <ButtonWithTooltip
         tooltipContent="Save"
         glyph="save"
         onClick={onSave}
-        disabled={saveDisabled}
+        disabled={saveDisabled || !editor}
       />
       <ButtonWithTooltip
         tooltipContent="Copy to clipboard"
         glyph="copy"
         onClick={() => copyToCliboard(val)}
+        disabled={!editor}
       />
       <ButtonWithTooltip
         tooltipContent="Download"
         glyph="download"
         onClick={download}
+        disabled={!editor}
       />
     </section>
   );
