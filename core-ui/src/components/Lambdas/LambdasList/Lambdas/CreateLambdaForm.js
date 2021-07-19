@@ -180,6 +180,7 @@ export default function CreateLambdaForm({
       style={{ width: '30em' }}
       onChange={onChange}
       onSubmit={handleSubmit}
+      noValidate
     >
       <ResourceNameInput
         id="lambdaName"

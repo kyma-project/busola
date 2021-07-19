@@ -69,6 +69,7 @@ export default function CreateWorkloadForm({
         ref={formElementRef}
         onSubmit={handleFormSubmit}
         className="create-workload-form"
+        noValidate
       >
         <div>
           <BasicData deployment={deployment} setDeployment={setDeployment} />
