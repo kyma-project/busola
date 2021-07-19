@@ -180,6 +180,7 @@ export default function RepositoryForm({
       style={{ width: '30em' }}
       onChange={onChange}
       onSubmit={handleSubmit}
+      noValidate
     >
       {!repository && (
         <ResourceNameInput
