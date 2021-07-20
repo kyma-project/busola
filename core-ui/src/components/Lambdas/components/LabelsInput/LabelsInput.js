@@ -13,9 +13,7 @@ export function LabelsInput({ ...otherProps }) {
       <FormLabel className="resource-labels-input__label">
         {FORMS.LABELS.LABEL}
       </FormLabel>
-      <Tooltip content={FORMS.LABELS.INLINE_HELP}>
-        <LabelSelectorInput {...otherProps} />
-      </Tooltip>
+      <LabelSelectorInput {...otherProps} />
     </div>
   );
 }

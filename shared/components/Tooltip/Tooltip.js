@@ -31,7 +31,6 @@ Tooltip.propTypes = {
   position: PropTypes.oneOf(['top', 'bottom', 'left', 'right']),
   trigger: PropTypes.oneOf(['mouseenter', 'focus', 'click', 'manual']),
   children: PropTypes.node,
-  isInlineHelp: PropTypes.bool,
 };
 
 Tooltip.defaultProps = {

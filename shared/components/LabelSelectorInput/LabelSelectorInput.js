@@ -94,7 +94,7 @@ export const LabelSelectorInput = ({
     <FormItem className={className}>
       <FormLabel>{type}</FormLabel>
 
-      <Tooltip content="A key and value should be separated by a '=', a key cannot be empty, a key/value consists of alphanumeric characters, '-', '_' or '.', and must start and end with an alphanumeric character.">
+      <Tooltip content="The key/value pair should be separated by '=', consist of alphanumeric characters, '-', '_' or '.', and must start and end with an alphanumeric character. The key cannot be empty.">
         <div className="fd-form-group">
           <div
             className={classNames([
