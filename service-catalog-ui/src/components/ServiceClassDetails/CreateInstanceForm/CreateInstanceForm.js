@@ -193,11 +193,11 @@ export default function CreateInstanceForm({
     <>
       <form
         ref={formElementRef}
-        // style={{ width: '47em' }}
         onChange={onChange}
         onLoad={onChange}
         onSubmit={handleFormSubmit}
         id="createInstanceForm"
+        noValidate
       >
         <div className="grid-wrapper">
           <div className="column">

@@ -48,6 +48,7 @@ export default function CreateEventSubscriptionForm({
       onSubmit={handleSubmit}
       onChange={onChange}
       className="create-event-subscription-form"
+      noValidate
     >
       <FormFieldset>
         <h2 className="fd-has-type-4">
