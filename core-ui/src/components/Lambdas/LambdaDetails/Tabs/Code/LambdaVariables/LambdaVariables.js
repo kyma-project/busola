@@ -12,6 +12,7 @@ import {
   WARNINGS_VARIABLE_VALIDATION,
 } from 'components/Lambdas/helpers/lambdaVariables';
 import { ENVIRONMENT_VARIABLES_PANEL } from 'components/Lambdas/constants';
+import { useUpdateLambda, UPDATE_TYPE } from 'components/Lambdas/hooks';
 
 import { validateVariables } from './validation';
 
@@ -161,8 +162,9 @@ function VariableSourceLink({ variable }) {
 function VariableKey({ variable }) {
   return (
     variable.valueFrom?.configMapKeyRef?.key ||
-    variable.valueFrom?.secretKeyRef?.key ||
-    '-'
+    variable.valueFrom?.secretKeyRef?.key || (
+      <span style={{ color: 'var(--sapNeutralTextColor,#6a6d70)' }}>N/A</span>
+    )
   );
 }
 
@@ -209,6 +211,11 @@ export default function LambdaEnvs({
   customValueFromVariables,
   injectedVariables,
 }) {
+  const updateLambdaVariables = useUpdateLambda({
+    lambda,
+    type: UPDATE_TYPE.VARIABLES,
+  });
+
   const rowRenderer = variable => [
     <span>{variable.name}</span>,
     <span className="sap-icon--arrow-right" />,
@@ -233,6 +240,50 @@ export default function LambdaEnvs({
     ...customValueFromVariables,
   ];
 
+  function prepareVariablesInput(newVariables) {
+    return newVariables.map(variable => {
+      if (variable.type === VARIABLE_TYPE.CUSTOM) {
+        return {
+          name: variable.name,
+          value: variable.value,
+        };
+      }
+      return {
+        name: variable.name,
+        valueFrom: variable.valueFrom,
+      };
+    });
+  }
+
+  function onDeleteVariables(variable) {
+    let newVariables = entries.filter(
+      oldVariable => oldVariable.id !== variable.id,
+    );
+
+    newVariables = validateVariables(newVariables, injectedVariables);
+    const preparedVariable = prepareVariablesInput(newVariables);
+
+    updateLambdaVariables({
+      spec: {
+        ...lambda.spec,
+        env: [...preparedVariable],
+      },
+    });
+  }
+
+  const actions = [
+    // {
+    //   name: 'Edit',
+    //   handler: variable => {
+    //     return editVariableModal(variable, variables);
+    //   },
+    // },
+    {
+      name: 'Delete',
+      handler: variable => onDeleteVariables(variable),
+    },
+  ];
+
   return (
     <div className="lambda-variables">
       <GenericList
@@ -241,6 +292,7 @@ export default function LambdaEnvs({
         showSearchSuggestion={false}
         textSearchProperties={textSearchProperties}
         extraHeaderContent={editEnvsModal}
+        actions={actions}
         entries={entries}
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
