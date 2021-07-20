@@ -19,6 +19,7 @@ export const Tooltip = ({
       html={content}
       position={position}
       trigger={trigger}
+      distance={0}
       {...tippyProps}
     >
       {children}
