@@ -5,6 +5,7 @@ import { Icon, InfoLabel } from 'fundamental-react';
 import { GenericList, Tooltip } from 'react-shared';
 
 import EditVariablesModal from './EditVariablesModal';
+import CreateVariable from './CreateVariable/CreateVariable';
 
 import {
   VARIABLE_VALIDATION,
@@ -226,12 +227,16 @@ export default function LambdaEnvs({
   ];
 
   const editEnvsModal = (
-    <EditVariablesModal
-      lambda={lambda}
-      customVariables={customVariables}
-      customValueFromVariables={customValueFromVariables}
-      injectedVariables={injectedVariables}
-    />
+    <>
+      <CreateVariable lambda={lambda} />
+
+      <EditVariablesModal
+        lambda={lambda}
+        customVariables={customVariables}
+        customValueFromVariables={customValueFromVariables}
+        injectedVariables={injectedVariables}
+      />
+    </>
   );
 
   const entries = [
