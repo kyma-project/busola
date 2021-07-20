@@ -210,7 +210,7 @@ export default function ResourcesManagement({ lambda }) {
 
   return (
     <LayoutPanel className="fd-margin--md lambda-resources-management">
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <LayoutPanel.Header>
           <LayoutPanel.Head title={RESOURCES_MANAGEMENT_PANEL.TITLE} />
           <LayoutPanel.Actions>

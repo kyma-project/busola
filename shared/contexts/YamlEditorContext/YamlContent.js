@@ -10,7 +10,7 @@ export function YamlContent({
   onSave,
   saveDisabled,
 }) {
-  const editorRef = React.useRef();
+  const [editor, setEditor] = React.useState(null);
   const [val, setVal] = useState(jsyaml.safeDump(yaml));
 
   useEffect(() => {
@@ -19,14 +19,14 @@ export function YamlContent({
     setVal(converted);
 
     // close search
-    editorRef.current?.trigger('', 'closeFindWidget');
+    editor?.trigger('', 'closeFindWidget');
   }, [yaml]);
 
   return (
     <>
       <EditorActions
         val={val}
-        editor={editorRef.current}
+        editor={editor}
         title={title}
         onSave={onSave}
         saveDisabled={saveDisabled}
@@ -37,7 +37,7 @@ export function YamlContent({
         theme="vs-light"
         value={val}
         onChange={(_, text) => setChangedYamlFn(text)}
-        editorDidMount={(_, editor) => (editorRef.current = editor)}
+        editorDidMount={(_, editor) => setEditor(editor)}
         options={{ minimap: { enabled: false } }}
       />
     </>

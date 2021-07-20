@@ -53,7 +53,12 @@ export function CreateApplicationForm({
   }
 
   return (
-    <form onChange={onChange} ref={formElementRef} onSubmit={handleFormSubmit}>
+    <form
+      onChange={onChange}
+      ref={formElementRef}
+      onSubmit={handleFormSubmit}
+      noValidate
+    >
       <FormFieldset>
         <TextFormItem
           inputKey="name"

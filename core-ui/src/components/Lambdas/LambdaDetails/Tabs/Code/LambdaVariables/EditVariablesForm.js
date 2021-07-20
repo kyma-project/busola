@@ -144,6 +144,7 @@ export default function EditVariablesForm({
       onSubmit={handleFormSubmit}
       onChange={onChange}
       className="edit-lambda-variables-form"
+      noValidate
     >
       <GenericList
         entries={variables}
