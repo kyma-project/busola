@@ -92,32 +92,35 @@ export const LabelSelectorInput = ({
 
   return (
     <FormItem className={className}>
+      <FormLabel>{type}</FormLabel>
+
       <Tooltip content="A key and value should be separated by a '=', a key cannot be empty, a key/value consists of alphanumeric characters, '-', '_' or '.', and must start and end with an alphanumeric character.">
-        <FormLabel>{type}</FormLabel>
-      </Tooltip>
+        <div className="fd-form-group">
+          <div
+            className={classNames([
+              'label-selector',
+              { 'is-invalid': !isValid },
+            ])}
+          >
+            {createLabelsToDisplay(readonlyLabels).map(l => (
+              <NonRemovableLabel key={l} text={l} />
+            ))}
 
-      <div className="fd-form-group">
-        <div
-          className={classNames(['label-selector', { 'is-invalid': !isValid }])}
-        >
-          {createLabelsToDisplay(readonlyLabels).map(l => (
-            <NonRemovableLabel key={l} text={l} />
-          ))}
-
-          {createLabelsToDisplay(labels).map(l => (
-            <Label key={l} text={l} onClick={() => deleteLabel(l)} />
-          ))}
-          <input
-            ref={inputRef}
-            className="fd-input label-selector__input"
-            type="text"
-            placeholder={`Enter ${type} key=value`}
-            onKeyDown={handleKeyDown}
-            onBlur={handleOutOfFocus}
-            data-ignore-visual-validation
-          />
+            {createLabelsToDisplay(labels).map(l => (
+              <Label key={l} text={l} onClick={() => deleteLabel(l)} />
+            ))}
+            <input
+              ref={inputRef}
+              className="fd-input label-selector__input"
+              type="text"
+              placeholder={`Enter ${type} key=value`}
+              onKeyDown={handleKeyDown}
+              onBlur={handleOutOfFocus}
+              data-ignore-visual-validation
+            />
+          </div>
         </div>
-      </div>
+      </Tooltip>
     </FormItem>
   );
 };
