@@ -41,7 +41,7 @@ export default function CreateServiceBindingForm({
   }, [setValidity]);
 
   useEffect(() => {
-    if (!existingInstanceName) {
+    if (!existingInstanceName || !serviceBindings?.length) {
       setEnvPrefix('');
       setCreateCredentials(true);
       setSecrets([]);
