@@ -24,20 +24,20 @@ export default function BasicData({ deployment, setDeployment }) {
         onChange={labels => setDeployment({ ...deployment, labels })}
       />
       <FormItem>
-        <Tooltip ontent="Image should be a valid docker image registry path.">
-          <FormLabel htmlFor="docker-image" required>
-            Docker image
-          </FormLabel>
+        <FormLabel htmlFor="docker-image" required>
+          Docker image
+        </FormLabel>
+        <Tooltip content="Image should be a valid docker image registry path.">
+          <FormInput
+            id="docker-image"
+            required
+            placeholder="Enter Docker image"
+            onChange={e =>
+              setDeployment({ ...deployment, dockerImage: e.target.value })
+            }
+            className="fd-margin-bottom--sm"
+          />
         </Tooltip>
-        <FormInput
-          id="docker-image"
-          required
-          placeholder="Enter Docker image"
-          onChange={e =>
-            setDeployment({ ...deployment, dockerImage: e.target.value })
-          }
-          className="fd-margin-bottom--sm"
-        />
       </FormItem>
 
       <h3 className="configuration-data__title">Service options</h3>

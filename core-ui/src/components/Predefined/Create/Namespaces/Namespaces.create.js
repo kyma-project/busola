@@ -134,7 +134,6 @@ const ContainerLimitsCheckbox = ({ isCheckedRef, children }) => {
     <FormFieldset>
       <FormItem>
         <Tooltip
-          className="fd-margin-end--tiny"
           content="
                   Define memory constraints for individual containers in your
                   namespace. Use plain value in bytes, or suffix

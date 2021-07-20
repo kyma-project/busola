@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import CustomPropTypes from '../../typechecking/CustomPropTypes';
 import { Tooltip } from '../Tooltip/Tooltip';
-import { FormLabel } from 'fundamental-react';
+import { FormInput, FormLabel } from 'fundamental-react';
 
 const pattern = '^[a-z0-9]([-a-z0-9]*[a-z0-9])?$';
 const regex = new RegExp(pattern);
@@ -20,7 +20,7 @@ export const K8sNameInput = ({
   required = false,
   defaultValue,
   input = (
-    <input
+    <FormInput
       role="input"
       ref={_ref}
       type="text"
