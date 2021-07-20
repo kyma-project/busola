@@ -20,7 +20,7 @@ export const K8sNameInput = ({
   required = false,
   defaultValue,
   input = (
-    <FormInput
+    <input
       role="input"
       ref={_ref}
       type="text"
