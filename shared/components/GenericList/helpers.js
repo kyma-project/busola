@@ -1,39 +1,24 @@
-const filterEntry = (entry, query, searchProperties) => {
-  if (!query) {
-    return true;
-  }
+const getLabelStrings = entry => {
+  const labels = entry.metadata?.labels || [];
+  return Object.entries(labels).map(([key, val]) =>
+    `${key}=${val}`.toLowerCase(),
+  );
+};
 
-  if (typeof entry === 'string') {
-    return (
-      entry &&
-      entry
-        .toString()
-        .toLowerCase()
-        .indexOf(query.toLowerCase()) !== -1
-    );
-  }
+const match = (entry, query) => {
+  return (
+    entry &&
+    entry
+      .toString()
+      .toLowerCase()
+      .includes(query.toLowerCase())
+  );
+};
 
-  if (!Object.keys(searchProperties).length) {
-    return false;
-  }
-
-  const flattenEntry = flattenProperties(entry);
-  for (const property of searchProperties) {
-    if (flattenEntry.hasOwnProperty(property)) {
-      const value = flattenEntry[property];
-      // apply to string to include numbers
-      if (
-        value &&
-        value
-          .toString()
-          .toLowerCase()
-          .indexOf(query.toLowerCase()) !== -1
-      ) {
-        return true;
-      }
-    }
-  }
-  return false;
+const isPrimitive = type => {
+  return (
+    type === null || (typeof type !== 'function' && typeof type !== 'object')
+  );
 };
 
 const flattenProperties = (obj, prefix = '') =>
@@ -52,10 +37,34 @@ const flattenProperties = (obj, prefix = '') =>
     return properties;
   }, {});
 
-const isPrimitive = type => {
+export const getEntryMatches = (entry, query, searchProperties) => {
+  if (typeof entry === 'string') {
+    if (match(entry, query)) return [entry];
+  }
+
+  const flattenedEntry = flattenProperties(entry);
   return (
-    type === null || (typeof type !== 'function' && typeof type !== 'object')
+    searchProperties
+      ?.flatMap(property => {
+        if (property === 'metadata.labels' && entry.metadata?.labels) {
+          return getLabelStrings(entry).filter(label => match(label, query));
+        } else if (match(flattenedEntry[property], query)) {
+          return flattenedEntry[property];
+        } else {
+          return null;
+        }
+      })
+      .filter(match => match) || []
   );
+};
+
+const filterEntry = (entry, query, searchProperties) => {
+  if (!query) {
+    return true;
+  }
+
+  const matches = getEntryMatches(entry, query, searchProperties);
+  return !!matches.length;
 };
 
 export const filterEntries = (entries, query, searchProperties) => {
