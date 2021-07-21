@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import CustomPropTypes from '../../typechecking/CustomPropTypes';
 import { Tooltip } from '../Tooltip/Tooltip';
-import { FormInput, FormLabel } from 'fundamental-react';
+import { FormLabel } from 'fundamental-react';
 
 const pattern = '^[a-z0-9]([-a-z0-9]*[a-z0-9])?$';
 const regex = new RegExp(pattern);
@@ -17,23 +17,8 @@ export const K8sNameInput = ({
   kind,
   showHelp = true,
   label = 'Name',
-  required = false,
+  required = true,
   defaultValue,
-  input = (
-    <input
-      role="input"
-      ref={_ref}
-      type="text"
-      id={id}
-      defaultValue={defaultValue}
-      placeholder={kind + ' name'}
-      aria-required={required ? 'true' : 'false'}
-      required={required}
-      pattern={pattern}
-      {...props}
-      className={'fd-input ' + (props?.className || '')}
-    />
-  ),
   ...props
 }) => (
   <>
@@ -47,10 +32,36 @@ export const K8sNameInput = ({
               and must start and end with an alphanumeric character (e.g. 'my-name1').
               "
       >
-        {input}
+        <input
+          role="input"
+          ref={_ref}
+          type="text"
+          id={id}
+          defaultValue={defaultValue}
+          placeholder={kind + ' name'}
+          aria-required={required ? 'true' : 'false'}
+          required={required}
+          pattern={pattern}
+          {...props}
+          className={'fd-input ' + (props?.className || '')}
+        />
       </Tooltip>
     )}
-    {!showHelp && input}
+    {!showHelp && (
+      <input
+        role="input"
+        ref={_ref}
+        type="text"
+        id={id}
+        defaultValue={defaultValue}
+        placeholder={kind + ' name'}
+        aria-required={required ? 'true' : 'false'}
+        required={required}
+        pattern={pattern}
+        {...props}
+        className={'fd-input ' + (props?.className || '')}
+      />
+    )}
   </>
 );
 
