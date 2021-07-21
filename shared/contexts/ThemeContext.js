@@ -7,6 +7,7 @@ const getInitialTheme = _ => localStorage.getItem('busola.theme') || 'default';
 
 function applyThemeToLinkNode(name, publicUrl) {
   const link = document.querySelector('head #_theme');
+  console.log('applyThemeToLinkNode', link, name);
   if (name === 'default' && link) {
     link.parentNode.removeChild(link);
   }
@@ -18,6 +19,7 @@ function applyThemeToLinkNode(name, publicUrl) {
 }
 
 function addLinkNode() {
+  console.log(addLinkNode);
   const newLink = document.createElement('link');
   newLink.id = '_theme';
   newLink.rel = 'stylesheet';
@@ -28,6 +30,7 @@ export const ThemeProvider = ({ children, env }) => {
   const [theme, setTheme] = useState(getInitialTheme());
 
   useEffect(() => {
+    console.log('ThemeProvider useEffect changing theme to', theme);
     applyThemeToLinkNode(theme, env.PUBLIC_URL);
     localStorage.setItem('busola.theme', theme);
     LuigiClient.sendCustomMessage({ id: 'busola.theme', name: theme });
