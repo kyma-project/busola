@@ -1,46 +1,24 @@
-const filterEntry = (entry, query, searchProperties) => {
-  if (!query) {
-    return true;
-  }
+const getLabelStrings = entry => {
+  const labels = entry.metadata?.labels || [];
+  return Object.entries(labels).map(([key, val]) =>
+    `${key}=${val}`.toLowerCase(),
+  );
+};
 
-  if (typeof entry === 'string') {
-    return (
-      entry &&
-      entry
-        .toString()
-        .toLowerCase()
-        .indexOf(query.toLowerCase()) !== -1
-    );
-  }
+const match = (entry, query) => {
+  return (
+    entry &&
+    entry
+      .toString()
+      .toLowerCase()
+      .includes(query.toLowerCase())
+  );
+};
 
-  if (!Object.keys(searchProperties).length) {
-    return false;
-  }
-
-  const flattenedEntry = flattenProperties(entry);
-  for (const property of searchProperties) {
-    if (property === 'metadata.labels') {
-      const labels = getLabelStrings(entry);
-      if (
-        labels.some(label => label.toLowerCase().includes(query.toLowerCase()))
-      ) {
-        return true;
-      }
-    } else if (flattenedEntry.hasOwnProperty(property)) {
-      const value = flattenedEntry[property];
-      // apply to string to include numbers
-      if (
-        value &&
-        value
-          .toString()
-          .toLowerCase()
-          .indexOf(query.toLowerCase()) !== -1
-      ) {
-        return true;
-      }
-    }
-  }
-  return false;
+const isPrimitive = type => {
+  return (
+    type === null || (typeof type !== 'function' && typeof type !== 'object')
+  );
 };
 
 const flattenProperties = (obj, prefix = '') =>
@@ -59,17 +37,35 @@ const flattenProperties = (obj, prefix = '') =>
     return properties;
   }, {});
 
-const getLabelStrings = props => {
-  const labels = props.metadata?.labels || [];
-  return Object.entries(labels).map(([key, val]) =>
-    `${key}=${val}`.toLowerCase(),
+export const getEntryMatches = (entry, query, searchProperties) => {
+  if (typeof entry === 'string') {
+    if (match(entry, query)) return [entry];
+  }
+
+  const flattenedEntry = flattenProperties(entry);
+  return (
+    searchProperties
+      ?.flatMap(property => {
+        if (property === 'metadata.labels' && entry.metadata?.labels) {
+          console.log('match vs labels', getLabelStrings(entry));
+          return getLabelStrings(entry).filter(label => match(label, query));
+        } else if (match(flattenedEntry[property], query)) {
+          return flattenedEntry[property];
+        } else {
+          return null;
+        }
+      })
+      .filter(match => match) || []
   );
 };
 
-const isPrimitive = type => {
-  return (
-    type === null || (typeof type !== 'function' && typeof type !== 'object')
-  );
+const filterEntry = (entry, query, searchProperties) => {
+  if (!query) {
+    return true;
+  }
+
+  const matches = getEntryMatches(entry, query, searchProperties);
+  return !!matches.length;
 };
 
 export const filterEntries = (entries, query, searchProperties) => {

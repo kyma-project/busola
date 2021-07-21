@@ -5,6 +5,7 @@ import { Menu, Button } from 'fundamental-react';
 import 'core-js/es/array/flat-map';
 
 import { MESSAGES } from './constants';
+import { getEntryMatches } from './helpers';
 
 SearchInput.propTypes = {
   searchQuery: PropTypes.string,
@@ -52,37 +53,11 @@ export function SearchInput({
 
   const getSearchSuggestions = entries => {
     const suggestions = entries
-      .flatMap(entry => {
-        if (typeof entry === 'string') {
-          if (entryMatchesSearch(entry)) return entry;
-        }
-        return suggestionProperties?.flatMap(properties => {
-          if (properties === 'metadata.labels' && entry.metadata?.labels) {
-            const labels = Object.entries(entry.metadata.labels).map(
-              ([key, val]) => `${key}=${val}`,
-            );
-            return labels.filter(label => entryMatchesSearch(label));
-          }
-          const propertiesArray = properties.split('.');
-          let entryValue = entry;
-          propertiesArray?.forEach(prop => {
-            entryValue = entryValue[prop];
-          });
-          if (entryMatchesSearch(entryValue)) return entryValue;
-        });
-      })
+      .flatMap(entry =>
+        getEntryMatches(entry, searchQuery, suggestionProperties),
+      )
       .filter(suggestion => suggestion);
     return Array.from(new Set(suggestions));
-  };
-
-  const entryMatchesSearch = entry => {
-    return (
-      entry &&
-      entry
-        .toString()
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase())
-    );
   };
 
   const openSearchList = () => {

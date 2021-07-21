@@ -16,6 +16,7 @@ SearchInput.defaultProps = {
 
 export default function SearchInput({ compact }) {
   const [state, actions] = useContext(SearchParamsContext);
+  console.log('SEARCH INPUT!');
 
   return (
     <section className="fd-margin-end--sm">
