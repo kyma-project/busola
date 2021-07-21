@@ -47,7 +47,6 @@ export const getEntryMatches = (entry, query, searchProperties) => {
     searchProperties
       ?.flatMap(property => {
         if (property === 'metadata.labels' && entry.metadata?.labels) {
-          console.log('match vs labels', getLabelStrings(entry));
           return getLabelStrings(entry).filter(label => match(label, query));
         } else if (match(flattenedEntry[property], query)) {
           return flattenedEntry[property];
