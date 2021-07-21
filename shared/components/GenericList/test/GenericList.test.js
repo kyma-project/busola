@@ -12,9 +12,24 @@ describe('GenericList', () => {
   const mockEntryRenderer = entry => [entry.id, entry.name, entry.description];
 
   const mockEntries = [
-    { id: '1', name: 'first_entry', description: 'testdescription1' },
-    { id: '2', name: 'second_entry', description: 'testdescription2' },
-    { id: '3', name: 'THIRD_ENTRY', description: 'testdescription3' },
+    {
+      id: '1',
+      name: 'first_entry',
+      description: 'testdescription1',
+      metadata: { labels: { label1: 'val1' } },
+    },
+    {
+      id: '2',
+      name: 'second_entry',
+      description: 'testdescription2',
+      metadata: { labels: { label1: 'val2' } },
+    },
+    {
+      id: '3',
+      name: 'THIRD_ENTRY',
+      description: 'testdescription3',
+      metadata: { labels: { label1: 'otherval' } },
+    },
   ];
 
   it('Renders with minimal props', async () => {
@@ -127,7 +142,9 @@ describe('GenericList', () => {
     );
 
     mockEntries.forEach(entry =>
-      Object.keys(entry).forEach(key => getByText(entry[key])),
+      Object.keys(entry)
+        .filter(key => key != 'metadata')
+        .forEach(key => getByText(entry[key])),
     );
   });
 
@@ -161,7 +178,9 @@ describe('GenericList', () => {
     );
 
     mockEntries.forEach(entry =>
-      Object.keys(entry).forEach(key => getByText(entry[key])),
+      Object.keys(entry)
+        .filter(key => key != 'metadata')
+        .forEach(key => getByText(entry[key])),
     );
 
     let foundCollapseButtons = await getAllByTestId('collapse-button-close');
@@ -285,6 +304,25 @@ describe('GenericList', () => {
       fireEvent.change(searchInput, { target: { value: searchText } });
 
       expect(await queryAllByRole('row')).toHaveLength(2); // header + one row
+    });
+
+    it('Finds proper entries by label when search text is entered', async () => {
+      const searchText = 'label1=val';
+
+      const { queryAllByRole, getByLabelText } = render(
+        <GenericList
+          entries={mockEntries}
+          headerRenderer={mockHeaderRenderer}
+          rowRenderer={mockEntryRenderer}
+          textSearchProperties={['metadata.labels']}
+        />,
+      );
+      expect(await queryAllByRole('row')).toHaveLength(mockEntries.length + 1); // header + {mockEntries.length} rows
+
+      const searchInput = await getByLabelText('search-input');
+      fireEvent.change(searchInput, { target: { value: searchText } });
+
+      expect(await queryAllByRole('row')).toHaveLength(3); // header + one row
     });
 
     it('Search is case insensitive', async () => {
