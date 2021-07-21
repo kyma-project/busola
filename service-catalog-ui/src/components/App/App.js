@@ -8,7 +8,11 @@ import {
 } from '../ServiceClassDetails/ServiceClassDetails.container';
 import ServiceInstancesList from '../ServiceInstanceList/ServiceInstanceList';
 import ServiceInstancesDetails from '../ServiceInstanceDetails/ServiceInstanceDetails';
-import { NotificationProvider, withTitle } from 'react-shared';
+import {
+  NotificationProvider,
+  withTitle,
+  MainFrameRedirection,
+} from 'react-shared';
 
 import { CATALOG_TITLE, INSTANCES_TITLE } from '../../shared/constants';
 
@@ -45,6 +49,7 @@ const App = () => (
         path="/instances/details/:name"
         render={withTitle(INSTANCES_TITLE, ServiceInstancesDetails)}
       />
+      <Route exact path="" component={MainFrameRedirection} />
     </Switch>
   </NotificationProvider>
 );
