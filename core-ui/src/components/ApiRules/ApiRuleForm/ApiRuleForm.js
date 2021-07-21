@@ -232,6 +232,7 @@ export default function ApiRuleForm({
           onSubmit={e => e.preventDefault()}
           onChange={e => handleFormChanged(e)}
           ref={formRef}
+          noValidate
         >
           <LayoutPanel className="fd-margin-bottom--sm">
             <LayoutPanel.Header>

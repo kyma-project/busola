@@ -174,6 +174,7 @@ export default function CreateServiceBindingForm({
       style={{ width: '30em' }}
       onChange={onChange}
       onSubmit={handleFormSubmit}
+      noValidate
     >
       <FormItem>
         <ApplicationsDropdown

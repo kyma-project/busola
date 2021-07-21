@@ -41,7 +41,7 @@ export default function CreateServiceBindingForm({
   }, [setValidity]);
 
   useEffect(() => {
-    if (!existingInstanceName) {
+    if (!existingInstanceName || !serviceBindings?.length) {
       setEnvPrefix('');
       setCreateCredentials(true);
       setSecrets([]);
@@ -127,6 +127,7 @@ export default function CreateServiceBindingForm({
       style={{ width: '30em' }}
       onChange={onChange}
       onSubmit={handleFormSubmit}
+      noValidate
     >
       <FormItem key="serviceInstanceName">
         <Dropdown

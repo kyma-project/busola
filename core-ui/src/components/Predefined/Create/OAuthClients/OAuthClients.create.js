@@ -48,7 +48,12 @@ export const OAuth2ClientsCreate = ({
   }
 
   return (
-    <form ref={formElementRef} onChange={onChange} onSubmit={handleFormSubmit}>
+    <form
+      ref={formElementRef}
+      onChange={onChange}
+      onSubmit={handleFormSubmit}
+      noValidate
+    >
       <FormItem>
         <K8sNameInput
           value={spec.name}
