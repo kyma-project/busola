@@ -7,7 +7,7 @@ const getInitialTheme = _ => localStorage.getItem('busola.theme') || 'default';
 
 function applyThemeToLinkNode(name, publicUrl) {
   const link = document.querySelector('head #_theme');
-  console.log('applyThemeToLinkNode', link, name);
+  console.log('applyThemeToLinkNode', publicUrl, name);
   if (name === 'default' && link) {
     link.parentNode.removeChild(link);
   }
@@ -19,7 +19,7 @@ function applyThemeToLinkNode(name, publicUrl) {
 }
 
 function addLinkNode() {
-  console.log(addLinkNode);
+  console.log('addLinkNode');
   const newLink = document.createElement('link');
   newLink.id = '_theme';
   newLink.rel = 'stylesheet';
