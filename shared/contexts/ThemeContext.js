@@ -30,6 +30,7 @@ export const ThemeProvider = ({ children, env }) => {
   const [theme, setTheme] = useState(getInitialTheme());
 
   useEffect(() => {
+    if (typeof env.PUBLIC_URL === 'undefined') return;
     console.log('ThemeProvider useEffect changing theme to', theme);
     applyThemeToLinkNode(theme, env.PUBLIC_URL);
     localStorage.setItem('busola.theme', theme);
