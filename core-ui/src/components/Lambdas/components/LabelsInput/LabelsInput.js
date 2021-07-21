@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { FormLabel } from 'fundamental-react';
-import { LabelSelectorInput, Tooltip } from 'react-shared';
+import { LabelSelectorInput } from 'react-shared';
 
 import { FORMS } from 'components/Lambdas/constants';
 

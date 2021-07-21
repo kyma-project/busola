@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { FormItem, FormLabel, MessageStrip } from 'fundamental-react';
-import { K8sNameInput, Tooltip } from 'react-shared';
+import { K8sNameInput } from 'react-shared';
 
 import { FORMS } from '../../constants';
 
