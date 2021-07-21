@@ -1,13 +1,18 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 
-import { Button, FormItem } from 'fundamental-react';
+import { FormInput, FormItem, FormLabel } from 'fundamental-react';
 
+import { K8sNameInput, useMicrofrontendContext } from 'react-shared';
+import { VARIABLE_TYPE } from 'components/Lambdas/helpers/lambdaVariables';
+import { CONFIG } from 'components/Lambdas/config';
+import { useUpdateLambda, UPDATE_TYPE } from 'components/Lambdas/hooks';
+
+import CustomVariableInput from '../CustomVariableInput/CustomVariableInput';
 import {
-  K8sNameInput,
-  useGetList,
-  useMicrofrontendContext,
-} from 'react-shared';
-import { ENVIRONMENT_VARIABLES_PANEL } from 'components/Lambdas/constants';
+  getValidationStatus,
+  validateVariable,
+  validateVariables,
+} from '../validation';
 
 export const FORM_TYPE = {
   CREATE: 'CREATE',
@@ -15,50 +20,86 @@ export const FORM_TYPE = {
 };
 
 export default function VariableForm({
-  onChange,
   formElementRef,
-  isValid = false,
   setValidity = () => void 0,
+  setCustomValid = () => void 0,
   setInvalidModalPopupMessage = () => void 0,
   lambda,
   currentVariable,
-  variables,
+  setCurrentVariable = () => void 0,
+  customVariables,
+  customValueFromVariables,
   injectedVariables,
-  sendRequest,
-  onSubmitAction,
-  requestType,
-  saveButtonText,
   formType = FORM_TYPE.CREATE,
 }) {
-  const { namespaceId: namespace } = useMicrofrontendContext();
+  const updateLambdaVariables = useUpdateLambda({
+    lambda,
+    type: UPDATE_TYPE.VARIABLES,
+  });
 
-  const [name, setName] = useState(currentVariable?.name);
-  const [value, setValue] = useState('c');
+  function prepareVariablesInput(variables, newVariable) {
+    return variables.map(variable => {
+      if (newVariable.id === variable.id) {
+        variable = {
+          ...variable,
+          ...newVariable,
+        };
+      }
+      if (variable.type === VARIABLE_TYPE.CUSTOM) {
+        return {
+          name: variable.name,
+          value: variable.value,
+        };
+      }
+      return {
+        name: variable.name,
+        valueFrom: variable.valueFrom,
+      };
+    });
+  }
 
-  const handleNameChanged = event => {
-    setName(event.target.value);
-  };
-  function handleFormChanged(e) {}
+  function handleSubmit(e) {
+    e.preventDefault();
+    let customValueExits =
+      [...customVariables, ...customValueFromVariables].findIndex(variable => {
+        return variable.id === currentVariable.id;
+      }) > 0;
+    const updatedVariables = !customValueExits
+      ? [...customVariables, currentVariable, ...customValueFromVariables]
+      : [...customVariables, ...customValueFromVariables];
+    const preparedVariable = prepareVariablesInput(
+      updatedVariables,
+      currentVariable,
+    );
+
+    updateLambdaVariables({
+      spec: {
+        ...lambda.spec,
+        env: [...preparedVariable],
+      },
+    });
+  }
+
+  function onUpdateVariable(newVariable) {
+    setCurrentVariable(newVariable);
+  }
 
   return (
-    <div className="variable-form">
-      <form
-        onSubmit={e => e.preventDefault()}
-        onChange={e => handleFormChanged(e)}
-        ref={formElementRef}
-        noValidate
-      >
-        <FormItem>
-          <K8sNameInput
-            onChange={handleNameChanged}
-            id={`variableName-${currentVariable.id}`}
-            kind="Variable"
-            showHelp={!currentVariable?.name}
-            defaultValue={currentVariable?.name}
-            disabled={!!currentVariable?.name}
-          />
-        </FormItem>
-      </form>
-    </div>
+    <form
+      onSubmit={handleSubmit}
+      onChange={e => e.preventDefault()}
+      ref={formElementRef}
+      noValidate
+    >
+      <CustomVariableInput
+        currentVariable={currentVariable}
+        variables={[...customVariables, ...customValueFromVariables]}
+        injectedVariables={injectedVariables}
+        onUpdateVariable={onUpdateVariable}
+        setValidity={setValidity}
+        setCustomValid={setCustomValid}
+        setInvalidModalPopupMessage={setInvalidModalPopupMessage}
+      />
+    </form>
   );
 }

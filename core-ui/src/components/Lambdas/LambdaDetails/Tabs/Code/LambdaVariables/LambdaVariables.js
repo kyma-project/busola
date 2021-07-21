@@ -6,6 +6,7 @@ import { GenericList, Tooltip } from 'react-shared';
 
 import EditVariablesModal from './EditVariablesModal';
 import CreateVariable from './CreateVariable/CreateVariable';
+import EditVariable from './EditVariable/EditVariable';
 
 import {
   VARIABLE_VALIDATION,
@@ -228,7 +229,11 @@ export default function LambdaEnvs({
 
   const editEnvsModal = (
     <>
-      <CreateVariable lambda={lambda} />
+      <CreateVariable
+        lambda={lambda}
+        customVariables={customVariables}
+        customValueFromVariables={customValueFromVariables}
+      />
 
       <EditVariablesModal
         lambda={lambda}
@@ -277,12 +282,18 @@ export default function LambdaEnvs({
   }
 
   const actions = [
-    // {
-    //   name: 'Edit',
-    //   handler: variable => {
-    //     return editVariableModal(variable, variables);
-    //   },
-    // },
+    {
+      name: 'Edit',
+      component: variable => (
+        <EditVariable
+          lambda={lambda}
+          customVariables={customVariables}
+          customValueFromVariables={customValueFromVariables}
+          type={variable.type}
+          variable={variable}
+        />
+      ),
+    },
     {
       name: 'Delete',
       handler: variable => onDeleteVariables(variable),
