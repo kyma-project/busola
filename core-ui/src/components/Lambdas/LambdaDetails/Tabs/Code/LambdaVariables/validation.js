@@ -87,21 +87,6 @@ export function getValidationStatus({
   varType,
   varDirty = false,
 }) {
-  console.log(
-    'getValidationStatus varValue',
-    varValue,
-    'varType',
-    varType,
-    'varName',
-    varName,
-    'varDirty',
-    varDirty,
-  );
-  console.log(
-    'varType === VARIABLE_TYPE.CONFIG_MAP &&    (!varValue?.configMapKeyRef?.name || !varValue?.configMapKeyRef?.key)',
-    varType === VARIABLE_TYPE.CONFIG_MAP &&
-      (!varValue?.configMapKeyRef?.name || !varValue?.configMapKeyRef?.key),
-  );
   // empty
   if (!varName) {
     if (varDirty) {

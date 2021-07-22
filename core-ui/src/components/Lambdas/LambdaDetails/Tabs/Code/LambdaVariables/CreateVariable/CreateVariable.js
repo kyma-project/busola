@@ -1,48 +1,9 @@
 import React from 'react';
 import { Button, Menu, Popover } from 'fundamental-react';
 
-import {
-  newVariableModel,
-  VARIABLE_TYPE,
-} from 'components/Lambdas/helpers/lambdaVariables';
+import { VARIABLE_TYPE } from 'components/Lambdas/helpers/lambdaVariables';
 import { ENVIRONMENT_VARIABLES_PANEL } from 'components/Lambdas/constants';
 import VariableModal from '../VariableForm/VariableModal';
-
-const emptyCustomVariable = newVariableModel({
-  type: VARIABLE_TYPE.CUSTOM,
-  variable: {
-    name: '',
-    value: '',
-  },
-  additionalProps: { dirty: true },
-});
-const emptySecretVariable = newVariableModel({
-  type: VARIABLE_TYPE.SECRET,
-  variable: {
-    name: '',
-    valueFrom: {
-      secretKeyRef: {
-        name: null,
-        key: null,
-      },
-    },
-  },
-  additionalProps: { dirty: true },
-});
-
-const emptyConfigMapVariable = newVariableModel({
-  type: VARIABLE_TYPE.CONFIG_MAP,
-  variable: {
-    name: '',
-    valueFrom: {
-      configMapKeyRef: {
-        name: null,
-        key: null,
-      },
-    },
-  },
-  additionalProps: { dirty: true },
-});
 
 export default function CreateVariable({
   lambda,
@@ -60,7 +21,6 @@ export default function CreateVariable({
   const customVariableModal = (
     <VariableModal
       title={ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.TITLE.CUSTOM}
-      // openingButtonText={ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.OPEN_BUTTON.CUSTOM}
       modalOpeningComponent={
         <Menu.Item>
           {ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.OPEN_BUTTON.CUSTOM}
@@ -78,7 +38,6 @@ export default function CreateVariable({
   const secretVariableModal = (
     <VariableModal
       title={ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.TITLE.SECRET}
-      // openingButtonText={ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.OPEN_BUTTON.SECRET}
       modalOpeningComponent={
         <Menu.Item>
           {ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.OPEN_BUTTON.SECRET}
