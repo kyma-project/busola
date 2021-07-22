@@ -34,7 +34,6 @@ export default function ThemeChooser() {
       <LayoutPanel.Header>
         <LayoutPanel.Head title="Theme" />
         <LayoutPanel.Actions>
-          {/* Choose the theme of the app */}
           <Dropdown
             id="access-strategies-dropdown"
             options={THEMES}
