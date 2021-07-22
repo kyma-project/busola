@@ -52,15 +52,23 @@ export const handleRequest = async (req, res) => {
   workaroundForNodeMetrics(req);
   const k8sRequest = https
     .request(options, function(k8sResponse) {
+      if (
+        k8sResponse.headers['Content-Type'].includes('\\') ||
+        k8sResponse.headers['content-encoding'].includes('\\')
+      )
+        throw new Error('Response headers are potentially dangerous');
+
       res.writeHead(k8sResponse.statusCode, {
         'Content-Type': k8sResponse.headers['Content-Type'] || 'text/json',
         'Content-Encoding': k8sResponse.headers['content-encoding'] || '',
       });
-
       k8sResponse.pipe(res);
     })
     .on('error', function(err) {
       console.error('Internal server error thrown', err);
+
+      if (!err.match(/^[0-9a-zA-Z]$/)) err = '';
+
       res.statusMessage = 'Internal server error';
       res.statusCode = 500;
       res.end(Buffer.from(JSON.stringify({ message: err })));
