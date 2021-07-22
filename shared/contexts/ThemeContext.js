@@ -6,13 +6,14 @@ export const ThemeContext = createContext({});
 const getInitialTheme = _ => localStorage.getItem('busola.theme') || 'default';
 
 function applyThemeToLinkNode(name, publicUrl) {
+  console.log('applythemetolink', name, publicUrl);
   const link = document.querySelector('head #_theme');
   if (name === 'default' && link) {
     link.parentNode.removeChild(link);
   }
   if (!link) {
     addLinkNode();
-    return applyThemeToLinkNode(publicUrl, name);
+    return applyThemeToLinkNode(name, publicUrl);
   }
   link.href = `${publicUrl || ''}/themes/${name}.css`;
 }
