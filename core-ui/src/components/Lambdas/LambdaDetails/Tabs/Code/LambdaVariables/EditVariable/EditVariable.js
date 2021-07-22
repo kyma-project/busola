@@ -37,5 +37,5 @@ export default function EditVariable({
       customValueFromVariables={customValueFromVariables}
     />
   );
-  return VariableModal;
+  return variableModal;
 }
