@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { FormItem, FormLabel, MessageStrip } from 'fundamental-react';
-import { K8sNameInput, Tooltip } from 'react-shared';
+import { K8sNameInput } from 'react-shared';
 
 import { FORMS } from '../../constants';
 
@@ -17,7 +17,6 @@ export function ResourceNameInput({ nameStatus, kind, ...otherProps }) {
       <FormItem>
         <FormLabel className="resource-name-input__label" required={true}>
           {FORMS.RESOURCE_NAME.LABEL}
-          <Tooltip isInlineHelp content={FORMS.RESOURCE_NAME.INLINE_HELP} />
         </FormLabel>
         <K8sNameInput {...otherProps} kind={kind} />
         {validationMessage}
