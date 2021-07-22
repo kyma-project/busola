@@ -465,10 +465,26 @@ export const ENVIRONMENT_VARIABLES_PANEL = {
         "Couldn't find environment variables matching this query.",
     },
   },
-  EDIT_MODAL: {
-    TITLE: 'Edit Environment Variables',
+  CREATE_MODAL: {
+    TITLE: {
+      CUSTOM: 'Create Custom Variable',
+      SECRET: 'Create Variable From Secret',
+      CONFIG_MAP: 'Create Variable From Config Map',
+    },
     OPEN_BUTTON: {
-      TEXT: 'Edit Environment Variables',
+      CUSTOM: 'Custom Variable',
+      SECRET: 'Secret Variable',
+      CONFIG_MAP: 'Config Map Variable',
+    },
+    CONFIRM_BUTTON: {
+      TEXT: 'Create',
+    },
+  },
+  EDIT_MODAL: {
+    TITLE: {
+      CUSTOM: 'Edit Custom Variable',
+      SECRET: 'Edit Variable From Secret',
+      CONFIG_MAP: 'Edit Variable From Config Map',
     },
     CONFIRM_BUTTON: {
       TEXT: 'Save',

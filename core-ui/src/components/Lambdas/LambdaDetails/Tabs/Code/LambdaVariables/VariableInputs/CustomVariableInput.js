@@ -7,7 +7,7 @@ import { ENVIRONMENT_VARIABLES_PANEL } from 'components/Lambdas/constants';
 import { CONFIG } from 'components/Lambdas/config';
 
 import { getValidationStatus, validateVariable } from '../validation';
-import './CustomVariableInput.scss';
+import './VariableInputs.scss';
 
 export default function CustomVariableInput({
   currentVariable = {},
@@ -17,7 +17,6 @@ export default function CustomVariableInput({
   setValidity,
   setInvalidModalPopupMessage,
 }) {
-  console.log('currentVariable', currentVariable);
   const [variable, setVariable] = useState(currentVariable);
   const [debouncedCallback] = useDebouncedCallback(newVariable => {
     onUpdateVariable(newVariable);
@@ -59,14 +58,12 @@ export default function CustomVariableInput({
       varID: variable.id,
       varDirty: variable.dirty,
     });
-    console.log('validation', validation, 'name', name);
     const newVariable = {
       ...variable,
       validation,
       name,
       dirty: true,
     };
-    console.log('newVariable', newVariable, 'variable', variable);
     setVariable(newVariable);
     debouncedCallback(newVariable);
   }
@@ -123,7 +120,7 @@ export default function CustomVariableInput({
   }
 
   return (
-    <>
+    <div className="custom-variable-form">
       <FormItem className="grid-input-fields">
         <FormLabel required={true}>Name</FormLabel>
         <FormInput
@@ -136,7 +133,7 @@ export default function CustomVariableInput({
       </FormItem>
       {renderValidationContent()}
       <FormItem className="grid-input-fields">
-        <FormLabel className="padding-right">Value</FormLabel>
+        <FormLabel>Value</FormLabel>
         <FormInput
           id={`variableValue-${currentVariable.id}`}
           placeholder={ENVIRONMENT_VARIABLES_PANEL.PLACEHOLDERS.VARIABLE_VALUE}
@@ -145,6 +142,6 @@ export default function CustomVariableInput({
           onChange={onChangeValue}
         />
       </FormItem>
-    </>
+    </div>
   );
 }

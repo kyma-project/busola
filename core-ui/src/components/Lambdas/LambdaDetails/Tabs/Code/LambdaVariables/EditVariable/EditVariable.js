@@ -1,54 +1,41 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Button } from 'fundamental-react';
 
-import { ModalWithForm } from 'react-shared';
-
 import { ENVIRONMENT_VARIABLES_PANEL } from 'components/Lambdas/constants';
-import VariableForm, { FORM_TYPE } from '../VariableForm/VariableForm';
+import VariableModal from '../VariableForm/VariableModal';
+
+import { VARIABLE_TYPE } from 'components/Lambdas/helpers/lambdaVariables';
 
 export default function EditVariable({
   lambda,
+  secrets,
+  configmaps,
   customVariables,
   customValueFromVariables,
-  type,
   variable,
 }) {
-  const [invalidModalPopupMessage, setInvalidModalPopupMessage] = useState('');
-  const [currentVariable, setCurrentVariable] = useState(variable);
-
-  // const { data: configmaps } = useGetList()(
-  //   `/api/v1/namespaces/${lambda.metadata.namespace}/configmaps`,
-  // );
-  // const { data: secrets } = useGetList()(
-  //   `/api/v1/namespaces/${lambda.metadata.namespace}/secrets`,
-  // );
-
   const modalOpeningComponent = (
     <Button compact option="transparent" glyph="edit" />
   );
-  const customVariableModal = (
-    <ModalWithForm
-      title="Edit Custom Variable"
+
+  const variableModal = (
+    <VariableModal
+      title={ENVIRONMENT_VARIABLES_PANEL.EDIT_MODAL.TITLE[variable.type]}
       modalOpeningComponent={modalOpeningComponent}
       confirmText={ENVIRONMENT_VARIABLES_PANEL.EDIT_MODAL.CONFIRM_BUTTON.TEXT}
-      invalidPopupMessage={invalidModalPopupMessage}
-      id="add-lambda-variables-modal"
-      className="fd-dialog--xl-size modal-width--m"
-      confirmText="Edit"
-      renderForm={props => (
-        <VariableForm
-          {...props}
-          lambda={lambda}
-          currentVariable={currentVariable}
-          setCurrentVariable={setCurrentVariable}
-          customVariables={customVariables}
-          customValueFromVariables={customValueFromVariables}
-          setInvalidModalPopupMessage={setInvalidModalPopupMessage}
-          formType={FORM_TYPE.CREATE}
-        />
-      )}
+      lambda={lambda}
+      variable={variable}
+      type={variable.type}
+      resources={
+        variable.type === VARIABLE_TYPE.CONFIG_MAP
+          ? configmaps
+          : variable.type === VARIABLE_TYPE.SECRET
+          ? secrets
+          : []
+      }
+      customVariables={customVariables}
+      customValueFromVariables={customValueFromVariables}
     />
   );
-
-  return customVariableModal;
+  return VariableModal;
 }

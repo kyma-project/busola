@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Button, Menu, Popover } from 'fundamental-react';
 
-import { ModalWithForm, useGetList } from 'react-shared';
 import {
   newVariableModel,
   VARIABLE_TYPE,
 } from 'components/Lambdas/helpers/lambdaVariables';
 import { ENVIRONMENT_VARIABLES_PANEL } from 'components/Lambdas/constants';
-import VariableForm, { FORM_TYPE } from '../VariableForm/VariableForm';
+import VariableModal from '../VariableForm/VariableModal';
 
 const emptyCustomVariable = newVariableModel({
   type: VARIABLE_TYPE.CUSTOM,
@@ -47,19 +46,11 @@ const emptyConfigMapVariable = newVariableModel({
 
 export default function CreateVariable({
   lambda,
+  secrets,
+  configmaps,
   customVariables,
   customValueFromVariables,
-  variable,
 }) {
-  const [invalidModalPopupMessage, setInvalidModalPopupMessage] = useState('');
-  const [currentVariable, setCurrentVariable] = useState(emptyCustomVariable);
-  const { data: configmaps } = useGetList()(
-    `/api/v1/namespaces/${lambda.metadata.namespace}/configmaps`,
-  );
-  const { data: secrets } = useGetList()(
-    `/api/v1/namespaces/${lambda.metadata.namespace}/secrets`,
-  );
-
   const addNewVariableButton = (
     <Button glyph="add" typeAttr="button">
       {ENVIRONMENT_VARIABLES_PANEL.EDIT_MODAL.ADD_ENV_BUTTON.TEXT}
@@ -67,50 +58,55 @@ export default function CreateVariable({
   );
 
   const customVariableModal = (
-    <ModalWithForm
-      title="Create Custom Variable"
-      modalOpeningComponent={<Menu.Item>Custom Variable</Menu.Item>}
-      confirmText={ENVIRONMENT_VARIABLES_PANEL.EDIT_MODAL.CONFIRM_BUTTON.TEXT}
-      invalidPopupMessage={invalidModalPopupMessage}
-      id="add-lambda-variables-modal"
-      className="fd-dialog--xl-size modal-width--m"
-      confirmText="Create"
-      renderForm={props => (
-        <VariableForm
-          {...props}
-          lambda={lambda}
-          currentVariable={currentVariable}
-          setCurrentVariable={setCurrentVariable}
-          customVariables={customVariables}
-          customValueFromVariables={customValueFromVariables}
-          setInvalidModalPopupMessage={setInvalidModalPopupMessage}
-          formType={FORM_TYPE.CREATE}
-        />
-      )}
+    <VariableModal
+      title={ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.TITLE.CUSTOM}
+      // openingButtonText={ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.OPEN_BUTTON.CUSTOM}
+      modalOpeningComponent={
+        <Menu.Item>
+          {ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.OPEN_BUTTON.CUSTOM}
+        </Menu.Item>
+      }
+      confirmText={ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.CONFIRM_BUTTON.TEXT}
+      lambda={lambda}
+      type={VARIABLE_TYPE.CUSTOM}
+      resources={null}
+      customVariables={customVariables}
+      customValueFromVariables={customValueFromVariables}
     />
   );
 
   const secretVariableModal = (
-    <ModalWithForm
-      title="Create Secret Variable"
-      modalOpeningComponent={<Menu.Item>Secret Variable</Menu.Item>}
-      confirmText={ENVIRONMENT_VARIABLES_PANEL.EDIT_MODAL.CONFIRM_BUTTON.TEXT}
-      invalidPopupMessage={invalidModalPopupMessage}
-      id="add-lambda-variables-modal"
-      className="fd-dialog--xl-size modal-width--m"
-      confirmText="Create"
-      renderForm={props => (
-        <VariableForm
-          {...props}
-          lambda={lambda}
-          currentVariable={currentVariable}
-          setCurrentVariable={setCurrentVariable}
-          customVariables={customVariables}
-          customValueFromVariables={customValueFromVariables}
-          setInvalidModalPopupMessage={setInvalidModalPopupMessage}
-          formType={FORM_TYPE.CREATE}
-        />
-      )}
+    <VariableModal
+      title={ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.TITLE.SECRET}
+      // openingButtonText={ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.OPEN_BUTTON.SECRET}
+      modalOpeningComponent={
+        <Menu.Item>
+          {ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.OPEN_BUTTON.SECRET}
+        </Menu.Item>
+      }
+      confirmText={ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.CONFIRM_BUTTON.TEXT}
+      lambda={lambda}
+      type={VARIABLE_TYPE.SECRET}
+      resources={secrets}
+      customVariables={customVariables}
+      customValueFromVariables={customValueFromVariables}
+    />
+  );
+
+  const configMapVariableModal = (
+    <VariableModal
+      title={ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.TITLE.CONFIG_MAP}
+      modalOpeningComponent={
+        <Menu.Item>
+          {ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.OPEN_BUTTON.CONFIG_MAP}
+        </Menu.Item>
+      }
+      confirmText={ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.CONFIRM_BUTTON.TEXT}
+      lambda={lambda}
+      type={VARIABLE_TYPE.CONFIG_MAP}
+      resources={configmaps}
+      customVariables={customVariables}
+      customValueFromVariables={customValueFromVariables}
     />
   );
 
@@ -120,8 +116,8 @@ export default function CreateVariable({
         <Menu>
           <Menu.List>
             {customVariableModal}
-            {/* {configMapVariableModal}
-            {secretVariableModal} */}
+            {configMapVariableModal}
+            {secretVariableModal}
           </Menu.List>
         </Menu>
       }

@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import LuigiClient from '@luigi-project/client';
 
 import { Icon, InfoLabel } from 'fundamental-react';
-import { GenericList, Tooltip } from 'react-shared';
+import { GenericList, Tooltip, useGetList } from 'react-shared';
 
-import EditVariablesModal from './EditVariablesModal';
 import CreateVariable from './CreateVariable/CreateVariable';
 import EditVariable from './EditVariable/EditVariable';
 
@@ -218,6 +217,12 @@ export default function LambdaEnvs({
     type: UPDATE_TYPE.VARIABLES,
   });
 
+  const { data: configmaps } = useGetList()(
+    `/api/v1/namespaces/${lambda.metadata.namespace}/configmaps`,
+  );
+  const { data: secrets } = useGetList()(
+    `/api/v1/namespaces/${lambda.metadata.namespace}/secrets`,
+  );
   const rowRenderer = variable => [
     <span>{variable.name}</span>,
     <span className="sap-icon--arrow-right" />,
@@ -231,15 +236,10 @@ export default function LambdaEnvs({
     <>
       <CreateVariable
         lambda={lambda}
+        secrets={secrets}
+        configmaps={configmaps}
         customVariables={customVariables}
         customValueFromVariables={customValueFromVariables}
-      />
-
-      <EditVariablesModal
-        lambda={lambda}
-        customVariables={customVariables}
-        customValueFromVariables={customValueFromVariables}
-        injectedVariables={injectedVariables}
       />
     </>
   );
@@ -287,9 +287,10 @@ export default function LambdaEnvs({
       component: variable => (
         <EditVariable
           lambda={lambda}
+          secrets={secrets}
+          configmaps={configmaps}
           customVariables={customVariables}
           customValueFromVariables={customValueFromVariables}
-          type={variable.type}
           variable={variable}
         />
       ),

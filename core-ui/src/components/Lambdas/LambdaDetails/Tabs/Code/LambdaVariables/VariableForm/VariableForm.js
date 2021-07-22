@@ -1,18 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import { FormInput, FormItem, FormLabel } from 'fundamental-react';
-
-import { K8sNameInput, useMicrofrontendContext } from 'react-shared';
 import { VARIABLE_TYPE } from 'components/Lambdas/helpers/lambdaVariables';
-import { CONFIG } from 'components/Lambdas/config';
 import { useUpdateLambda, UPDATE_TYPE } from 'components/Lambdas/hooks';
 
-import CustomVariableInput from '../CustomVariableInput/CustomVariableInput';
-import {
-  getValidationStatus,
-  validateVariable,
-  validateVariables,
-} from '../validation';
+import CustomVariableInput from '../VariableInputs/CustomVariableInput';
+import ResourceVariableInput from '../VariableInputs/ResourceVariableInput';
 
 export const FORM_TYPE = {
   CREATE: 'CREATE',
@@ -25,18 +17,18 @@ export default function VariableForm({
   setCustomValid = () => void 0,
   setInvalidModalPopupMessage = () => void 0,
   lambda,
+  resources,
   currentVariable,
   setCurrentVariable = () => void 0,
   customVariables,
   customValueFromVariables,
   injectedVariables,
-  formType = FORM_TYPE.CREATE,
 }) {
   const updateLambdaVariables = useUpdateLambda({
     lambda,
     type: UPDATE_TYPE.VARIABLES,
   });
-
+  console.log('currentVariable', currentVariable);
   function prepareVariablesInput(variables, newVariable) {
     return variables.map(variable => {
       if (newVariable.id === variable.id) {
@@ -91,15 +83,32 @@ export default function VariableForm({
       ref={formElementRef}
       noValidate
     >
-      <CustomVariableInput
-        currentVariable={currentVariable}
-        variables={[...customVariables, ...customValueFromVariables]}
-        injectedVariables={injectedVariables}
-        onUpdateVariable={onUpdateVariable}
-        setValidity={setValidity}
-        setCustomValid={setCustomValid}
-        setInvalidModalPopupMessage={setInvalidModalPopupMessage}
-      />
+      {currentVariable.type === VARIABLE_TYPE.CUSTOM && (
+        <CustomVariableInput
+          className="CustomVariableInput"
+          currentVariable={currentVariable}
+          resources={resources}
+          variables={[...customVariables, ...customValueFromVariables]}
+          injectedVariables={injectedVariables}
+          onUpdateVariable={onUpdateVariable}
+          setValidity={setValidity}
+          setCustomValid={setCustomValid}
+          setInvalidModalPopupMessage={setInvalidModalPopupMessage}
+        />
+      )}
+      {(currentVariable.type === VARIABLE_TYPE.SECRET ||
+        currentVariable.type === VARIABLE_TYPE.CONFIG_MAP) && (
+        <ResourceVariableInput
+          currentVariable={currentVariable}
+          resources={resources}
+          variables={[...customVariables, ...customValueFromVariables]}
+          injectedVariables={injectedVariables}
+          onUpdateVariable={onUpdateVariable}
+          setValidity={setValidity}
+          setCustomValid={setCustomValid}
+          setInvalidModalPopupMessage={setInvalidModalPopupMessage}
+        />
+      )}
     </form>
   );
 }
