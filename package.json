@@ -16,7 +16,8 @@
     "lint-check": "prettier --config ./.prettierrc --ignore-path ./.prettierignore --check '**/*.{ts,tsx,js,jsx,json,html,css,yaml,md}'",
     "lint-fix": "prettier --config ./.prettierrc --ignore-path ./.prettierignore --write '**/*.{ts,tsx,js,jsx,json,html,css,yaml,md}'",
     "lint-staged": "lint-staged",
-    "test-shared-lib": "cd shared && jest"
+    "test-shared-lib": "cd shared && jest",
+    "copy-themes": "gulp copy-themes"
   },
   "dependencies": {
     "@luigi-project/client": "^1.14.0",
@@ -30,6 +31,7 @@
     "file-saver": "^2.0.2",
     "fundamental-react": "^v0.14.0-rc.27",
     "fundamental-styles": "^0.18.0",
+    "gulp-rename": "^2.0.0",
     "jsonpath": "^1.1.1",
     "lodash": "^4.17.19",
     "lodash.clonedeep": "^4.5.0",
@@ -55,18 +57,18 @@
     "gulp-clean": "^0.4.0",
     "gulp-watch": "^5.0.1",
     "handlebars": "^4.7.7",
+    "husky": "^2.4.1",
     "jest": "^24.8.0",
     "jsdom-worker-fix": "^0.1.8",
+    "json-url": "^2.6.0",
+    "lerna": "^4.0.0",
+    "lint-staged": "^10.4.0",
     "node-sass": "^4.14.1",
+    "prettier": "^1.18.2",
     "react-scripts": "3.4.0",
     "react-test-renderer": "^16.9.0",
     "waait": "^1.0.5",
-    "webpack-cli": "^4.7.2",
-    "json-url": "^2.6.0",
-    "husky": "^2.4.1",
-    "lerna": "^4.0.0",
-    "lint-staged": "^10.4.0",
-    "prettier": "^1.18.2"
+    "webpack-cli": "^4.7.2"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx,json,html,css,yaml,md}": [
