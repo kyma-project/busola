@@ -28,7 +28,7 @@ export default function VariableForm({
     lambda,
     type: UPDATE_TYPE.VARIABLES,
   });
-  console.log('currentVariable', currentVariable);
+
   function prepareVariablesInput(variables, newVariable) {
     return variables.map(variable => {
       if (newVariable.id === variable.id) {

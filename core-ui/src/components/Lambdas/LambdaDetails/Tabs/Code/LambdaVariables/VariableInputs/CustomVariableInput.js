@@ -70,6 +70,7 @@ export default function CustomVariableInput({
 
   function onChangeValue(event) {
     const value = event.target.value;
+
     const newVariable = {
       ...variable,
       value,

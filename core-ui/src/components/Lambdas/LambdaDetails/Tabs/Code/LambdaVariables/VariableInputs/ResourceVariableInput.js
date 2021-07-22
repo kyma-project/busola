@@ -67,7 +67,6 @@ export default function ResourceVariableInput({
   useEffect(() => {
     const validate = validateVariable(variables, variable);
     setValidity(validate);
-
     if (!validate) {
       setInvalidModalPopupMessage(
         ENVIRONMENT_VARIABLES_PANEL.EDIT_MODAL.CONFIRM_BUTTON.POPUP_MESSAGES
@@ -91,6 +90,8 @@ export default function ResourceVariableInput({
       varName: name,
       varID: variable.id,
       varDirty: variable.dirty,
+      varType: variable.type,
+      varValue: variable.valueFrom,
     });
     const newVariable = {
       ...variable,
@@ -103,8 +104,19 @@ export default function ResourceVariableInput({
   }
 
   function onChangeValueFrom(valueFrom) {
+    const validation = getValidationStatus({
+      userVariables: variables,
+      injectedVariables,
+      restrictedVariables: CONFIG.restrictedVariables,
+      varName: variable.name,
+      varID: variable.id,
+      varDirty: variable.dirty,
+      varType: variable.type,
+      varValue: valueFrom,
+    });
     const newVariable = {
       ...variable,
+      validation,
       valueFrom,
       dirty: true,
     };
@@ -114,7 +126,6 @@ export default function ResourceVariableInput({
 
   function renderValidationContent() {
     const { validation } = variable;
-
     if (validation === VARIABLE_VALIDATION.NONE) {
       return null;
     }
@@ -130,6 +141,15 @@ export default function ResourceVariableInput({
         className = 'fd-has-color-status-3';
         message = ENVIRONMENT_VARIABLES_PANEL.ERRORS.INVALID;
         break;
+      case VARIABLE_VALIDATION.INVALID_SECRET:
+        className = 'fd-has-color-status-3';
+        message = ENVIRONMENT_VARIABLES_PANEL.ERRORS.INVALID_SECRET;
+        break;
+      case VARIABLE_VALIDATION.INVALID_CONFIG:
+        className = 'fd-has-color-status-3';
+        message = ENVIRONMENT_VARIABLES_PANEL.ERRORS.INVALID_CONFIG;
+        break;
+
       case VARIABLE_VALIDATION.DUPLICATED:
         className = 'fd-has-color-status-3';
         message = ENVIRONMENT_VARIABLES_PANEL.ERRORS.DUPLICATED;
@@ -146,7 +166,6 @@ export default function ResourceVariableInput({
       default:
         return null;
     }
-
     return (
       <span className={className}>{message}</span> //{/* TODO */}
     );
