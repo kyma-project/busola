@@ -35,6 +35,7 @@ export * from './components/ResourcesList/ResourcesList';
 export * from './components/ResourceDetails/ResourceDetails';
 export * from './components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 export * from './components/KeyValueForm/KeyValueForm';
+export * from './components/MainFrameRedirection/MainFrameRedirection';
 
 export * from './forms';
 export * from './hooks';
@@ -43,6 +44,7 @@ export * from './contexts/ConfigContext';
 export * from './contexts/NotificationContext';
 export * from './contexts/Microfrontend';
 export * from './contexts/YamlEditorContext/YamlEditorContext';
+export * from './contexts/ThemeContext';
 export * from './utils/helpers';
 export * from './utils/handleSubscriptionArrayEvent';
 export * from './utils/getComponentForResource';

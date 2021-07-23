@@ -24,29 +24,44 @@ export const K8sNameInput = ({
   <>
     <FormLabel required={required} htmlFor={id}>
       {label}
-      {showHelp && (
-        <Tooltip
-          isInlineHelp
-          content="
+    </FormLabel>
+    {showHelp && (
+      <Tooltip
+        content="
               The name must consist of lower case alphanumeric characters or dashes, 
               and must start and end with an alphanumeric character (e.g. 'my-name1').
               "
+      >
+        <input
+          role="input"
+          ref={_ref}
+          type="text"
+          id={id}
+          defaultValue={defaultValue}
+          placeholder={kind + ' name'}
+          aria-required={required ? 'true' : 'false'}
+          required={required}
+          pattern={pattern}
+          {...props}
+          className={'fd-input ' + (props?.className || '')}
         />
-      )}
-    </FormLabel>
-    <input
-      role="input"
-      ref={_ref}
-      type="text"
-      id={id}
-      defaultValue={defaultValue}
-      placeholder={kind + ' name'}
-      aria-required={required ? 'true' : 'false'}
-      required={required}
-      pattern={pattern}
-      {...props}
-      className={'fd-input ' + (props?.className || '')}
-    />
+      </Tooltip>
+    )}
+    {!showHelp && (
+      <input
+        role="input"
+        ref={_ref}
+        type="text"
+        id={id}
+        defaultValue={defaultValue}
+        placeholder={kind + ' name'}
+        aria-required={required ? 'true' : 'false'}
+        required={required}
+        pattern={pattern}
+        {...props}
+        className={'fd-input ' + (props?.className || '')}
+      />
+    )}
   </>
 );
 

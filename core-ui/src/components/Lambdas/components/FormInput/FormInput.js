@@ -67,7 +67,7 @@ export const FormInput = forwardRef(
             required={required}
           >
             {label}
-            {inlineHelp && <Tooltip isInlineHelp content={inlineHelp} />}
+            {inlineHelp && <Tooltip content={inlineHelp} />}
           </FormLabel>
         )}
         <FioriFormInput

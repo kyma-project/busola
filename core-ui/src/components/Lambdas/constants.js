@@ -415,7 +415,7 @@ export const CODE_AND_DEPENDENCIES_PANEL = {
     TEXT: 'Save',
     POPUP_MESSAGE: {
       EMPTY_SOURCE: 'Source cannot be empty.',
-      INVALID_DEPS: 'Dependencies must be specified in a valid JSON format',
+      INVALID_DEPS: 'Dependencies must be specified in a valid JSON format.',
       NO_CHANGES: 'No changes made.',
     },
   },
@@ -552,7 +552,7 @@ export const ENVIRONMENT_VARIABLES_PANEL = {
 export const FORMS = {
   RESOURCE_NAME: {
     LABEL: 'Name',
-    INLINE_HELP: `Name must consist of lower case alphanumeric characters or dashes, and must start and end with an alphanumeric character (e.g. 'my-name1').`,
+    INLINE_HELP: `The name must consist of lower case alphanumeric characters or dashes, and must start and end with an alphanumeric character (e.g. 'my-name1').`,
   },
   LABELS: {
     LABEL: 'Labels',

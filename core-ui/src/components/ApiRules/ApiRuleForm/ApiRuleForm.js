@@ -253,27 +253,28 @@ export default function ApiRuleForm({
                 <FormItem>
                   <FormLabel htmlFor="hostname" required>
                     Hostname
-                    <Tooltip
-                      isInlineHelp
-                      content="The hostname must consist of alphanumeric characters, dots or dashes, 
-                          and must start and end with an alphanumeric character (e.g. 'my-name1')."
-                    />
                   </FormLabel>
+
                   {domainLoading ? (
                     'Loading...'
                   ) : (
-                    <InputWithSuffix
-                      defaultValue={apiRule.spec.service.host.replace(
-                        `.${domain}`,
-                        '',
-                      )}
-                      id="hostname"
-                      suffix={'.' + domain}
-                      placeholder="Enter the hostname"
-                      required
-                      pattern="^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$"
-                      _ref={formValues.hostname}
-                    />
+                    <Tooltip
+                      content="The hostname must consist of alphanumeric characters, dots or dashes, 
+                          and must start and end with an alphanumeric character (e.g. 'my-name1')."
+                    >
+                      <InputWithSuffix
+                        defaultValue={apiRule.spec.service.host.replace(
+                          `.${domain}`,
+                          '',
+                        )}
+                        id="hostname"
+                        suffix={'.' + domain}
+                        placeholder="Enter the hostname"
+                        required
+                        pattern="^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$"
+                        _ref={formValues.hostname}
+                      />
+                    </Tooltip>
                   )}
                 </FormItem>
                 <ServicesDropdown

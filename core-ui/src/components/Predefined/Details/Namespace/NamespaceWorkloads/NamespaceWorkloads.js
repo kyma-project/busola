@@ -18,29 +18,42 @@ const navigateTo = path => () => {
     .navigate(path);
 };
 
+const tooltipContent = (value, total, resourceType) => {
+  if (total === 0) {
+    return `There are no ${resourceType} in this Namespace`;
+  } else {
+    return `${value}/${total} ${resourceType} are healthy.`;
+  }
+};
+
 const ResourceCircle = ({
   data,
   counter,
   loading,
   error,
-  title,
+  resourceType,
   color,
   onClick,
 }) => {
   if (error) {
     return (
-      <p>{`Error while loading ${title} data due to: ${error.message}`}</p>
+      <p>{`Error while loading ${resourceType} data due to: ${error.message}`}</p>
     );
   } else if (loading || !data) {
     return <Spinner />;
   }
+
   return (
     <CircleProgress
       onClick={onClick}
       color={color}
       value={counter(data)}
       max={data.length}
-      title={title}
+      title={resourceType}
+      tooltip={{
+        content: tooltipContent(counter(data), data.length, resourceType),
+        position: 'bottom',
+      }}
     />
   );
 };
@@ -59,7 +72,7 @@ const PodsCircle = ({ namespace }) => {
       counter={getHealthyStatusesCount}
       loading={loading}
       error={error}
-      title="Pods"
+      resourceType="Pods"
       color="var(--sapIndicationColor_5)"
     />
   );
@@ -79,7 +92,7 @@ const DeploymentsCircle = ({ namespace }) => {
       counter={getHealthyReplicasCount}
       loading={loading}
       error={error}
-      title="Deployments"
+      resourceType="Deployments"
       color="var(--sapIndicationColor_6)"
     />
   );

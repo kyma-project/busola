@@ -1,0 +1,23 @@
+export function setTheme(name) {
+  localStorage.setItem('busola.theme', name);
+  const link = document.querySelector('head #_theme');
+  if (name === 'default' && link) {
+    link.parentNode.removeChild(link);
+  }
+  if (!link) {
+    addLinkNode();
+    return setTheme(name);
+  }
+  link.href = `/assets/libs/themes/${name}.css`;
+}
+
+function addLinkNode() {
+  const newLink = document.createElement('link');
+  newLink.id = '_theme';
+  newLink.rel = 'stylesheet';
+  document.head.appendChild(newLink);
+}
+
+export const getTheme = () => {
+  return localStorage.getItem('busola.theme') || 'default';
+};

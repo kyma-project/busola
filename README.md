@@ -47,13 +47,13 @@ Use the following command to run Busola with the [`core`](./core) and all other 
 npm run start
 ```
 
-After a while, open the [http://localhost:4200](http://localhost:4200) address in your browser, and add your **init params** to the address to make it look like `http://localhost:4200?init=yourInitParams`. You can generate the params with [this generator](http://enkode.surge.sh/).
+After a while, open the [http://localhost:8080](http://localhost:8080) address in your browser, and add your **init params** to the address to make it look like `http://localhost:8080?init=yourInitParams`. You can generate the params with [this generator](http://enkode.surge.sh/).
 
 Once you started Busola locally, you can begin the development. All modules have the hot-reload feature enabled, therefore, you can edit the code in real-time and see the changes in your browser.
 
 The apps you started run at the following addresses:
 
-- `Core` - [http://localhost:4200](http://localhost:4200)
+- `Core` - [http://localhost:8080](http://localhost:8080)
 - `Core-UI` - [http://localhost:8889](http://localhost:8889)
 - `Log UI` - [http://localhost:4400](http://localhost:4400)
 - `Service-Catalog-UI` - [http://localhost:8000](http://localhost:8000)
