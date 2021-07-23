@@ -166,9 +166,7 @@ export default function ResourceVariableInput({
       default:
         return null;
     }
-    return (
-      <span className={className}>{message}</span> //{/* TODO */}
-    );
+    return <span className={className}>{message}</span>;
   }
 
   const resourceOptions = (resources || []).map(({ metadata }) => ({

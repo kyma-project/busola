@@ -60,6 +60,7 @@ describe('serializeVariables', () => {
     delete customValueFromVariable.id;
     expect(customValueFromVariable).toEqual(expectedCustomValueFromVariable);
 
+    //TODO bring back after injected variables fix
     // const expectedInjectedVariables = [
     //   {
     //     type: VARIABLE_TYPE.BINDING_USAGE,

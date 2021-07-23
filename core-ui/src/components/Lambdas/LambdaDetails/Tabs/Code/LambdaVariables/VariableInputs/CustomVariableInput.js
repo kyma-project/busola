@@ -115,9 +115,7 @@ export default function CustomVariableInput({
         return null;
     }
 
-    return (
-      <span className={className}>{message}</span> //{/* TODO */}
-    );
+    return <span className={className}>{message}</span>;
   }
 
   return (
