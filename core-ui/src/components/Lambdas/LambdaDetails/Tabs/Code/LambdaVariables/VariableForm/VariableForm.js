@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import { VARIABLE_TYPE } from 'components/Lambdas/helpers/lambdaVariables';
+import {
+  VARIABLE_TYPE,
+  newVariableModel,
+} from 'components/Lambdas/helpers/lambdaVariables';
 import { useUpdateLambda, UPDATE_TYPE } from 'components/Lambdas/hooks';
 
 import CustomVariableInput from '../VariableInputs/CustomVariableInput';
@@ -11,6 +14,46 @@ export const FORM_TYPE = {
   UPDATE: 'UPDATE',
 };
 
+const EMPTY_VARIABLE_CUSTOM = {
+  type: VARIABLE_TYPE.CUSTOM,
+  variable: {
+    name: '',
+    value: '',
+  },
+  additionalProps: { dirty: true },
+};
+const EMPTY_VARIABLE_SECRET = {
+  type: VARIABLE_TYPE.SECRET,
+  variable: {
+    name: '',
+    valueFrom: {
+      secretKeyRef: {
+        name: null,
+        key: null,
+      },
+    },
+  },
+  additionalProps: { dirty: true },
+};
+
+const EMPTY_VARIABLE_CONFIG_MAP = {
+  type: VARIABLE_TYPE.CONFIG_MAP,
+  variable: {
+    name: '',
+    valueFrom: {
+      configMapKeyRef: {
+        name: null,
+        key: null,
+      },
+    },
+  },
+  additionalProps: { dirty: true },
+};
+const EMPTY_VARIABLE = {
+  CUSTOM: EMPTY_VARIABLE_CUSTOM,
+  SECRET: EMPTY_VARIABLE_SECRET,
+  CONFIG_MAP: EMPTY_VARIABLE_CONFIG_MAP,
+};
 export default function VariableForm({
   formElementRef,
   setValidity = () => void 0,
@@ -18,8 +61,8 @@ export default function VariableForm({
   setInvalidModalPopupMessage = () => void 0,
   lambda,
   resources,
-  currentVariable,
-  setCurrentVariable = () => void 0,
+  variable,
+  type,
   customVariables,
   customValueFromVariables,
   injectedVariables,
@@ -29,6 +72,9 @@ export default function VariableForm({
     type: UPDATE_TYPE.VARIABLES,
   });
 
+  const [currentVariable, setCurrentVariable] = useState(
+    variable || newVariableModel(EMPTY_VARIABLE[type]),
+  );
   function prepareVariablesInput(variables, newVariable) {
     return variables.map(variable => {
       if (newVariable.id === variable.id) {
