@@ -174,13 +174,11 @@ export default function ResourceVariableInput({
     text: metadata.name,
   }));
 
-  let resourceKeysOptions = Object.keys(selectedResource.data || []).map(
-    key => {
-      return {
-        key: key,
-        text: key,
-      };
-    },
+  const resourceKeysOptions = Object.keys(selectedResource.data || []).map(
+    key => ({
+      key: key,
+      text: key,
+    }),
   );
 
   return (

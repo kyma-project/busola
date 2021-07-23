@@ -17,7 +17,14 @@ export default function EditVariable({
   const modalOpeningComponent = (
     <Button compact option="transparent" glyph="edit" />
   );
-
+  let resources;
+  if (variable.type === VARIABLE_TYPE.CONFIG_MAP) {
+    resources = configmaps;
+  } else if (variable.type === VARIABLE_TYPE.SECRET) {
+    resources = secrets;
+  } else {
+    resources = [];
+  }
   const variableModal = (
     <VariableModal
       title={ENVIRONMENT_VARIABLES_PANEL.EDIT_MODAL.TITLE[variable.type]}
@@ -26,13 +33,7 @@ export default function EditVariable({
       lambda={lambda}
       variable={variable}
       type={variable.type}
-      resources={
-        variable.type === VARIABLE_TYPE.CONFIG_MAP
-          ? configmaps
-          : variable.type === VARIABLE_TYPE.SECRET
-          ? secrets
-          : []
-      }
+      resources={resources}
       customVariables={customVariables}
       customValueFromVariables={customValueFromVariables}
     />

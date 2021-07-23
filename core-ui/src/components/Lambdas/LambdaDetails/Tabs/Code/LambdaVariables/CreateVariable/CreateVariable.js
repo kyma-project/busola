@@ -18,6 +18,12 @@ export default function CreateVariable({
     </Button>
   );
 
+  const commonProps = {
+    lambda: lambda,
+    customVariables: customVariables,
+    customValueFromVariables: customValueFromVariables,
+  };
+
   const customVariableModal = (
     <VariableModal
       title={ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.TITLE.CUSTOM}
@@ -27,11 +33,9 @@ export default function CreateVariable({
         </Menu.Item>
       }
       confirmText={ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.CONFIRM_BUTTON.TEXT}
-      lambda={lambda}
       type={VARIABLE_TYPE.CUSTOM}
       resources={null}
-      customVariables={customVariables}
-      customValueFromVariables={customValueFromVariables}
+      {...commonProps}
     />
   );
 
@@ -44,11 +48,9 @@ export default function CreateVariable({
         </Menu.Item>
       }
       confirmText={ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.CONFIRM_BUTTON.TEXT}
-      lambda={lambda}
       type={VARIABLE_TYPE.SECRET}
       resources={secrets}
-      customVariables={customVariables}
-      customValueFromVariables={customValueFromVariables}
+      {...commonProps}
     />
   );
 
@@ -61,11 +63,9 @@ export default function CreateVariable({
         </Menu.Item>
       }
       confirmText={ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.CONFIRM_BUTTON.TEXT}
-      lambda={lambda}
       type={VARIABLE_TYPE.CONFIG_MAP}
       resources={configmaps}
-      customVariables={customVariables}
-      customValueFromVariables={customValueFromVariables}
+      {...commonProps}
     />
   );
 

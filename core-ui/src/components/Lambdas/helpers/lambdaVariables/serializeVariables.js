@@ -22,11 +22,15 @@ export function serializeVariables({
   lambdaVariables.forEach(variable => {
     const isValueFromVariable =
       variable.valueFrom && Object.keys(variable.valueFrom).length;
-    const typeOfValueFromVariable = variable.valueFrom?.configMapKeyRef
-      ? VARIABLE_TYPE.CONFIG_MAP
-      : variable.valueFrom?.secretKeyRef
-      ? VARIABLE_TYPE.SECRET
-      : VARIABLE_TYPE.CUSTOM;
+
+    let typeOfValueFromVariable;
+    if (variable.valueFrom?.configMapKeyRef) {
+      typeOfValueFromVariable = VARIABLE_TYPE.CONFIG_MAP;
+    } else if (variable.valueFrom?.secretKeyRef) {
+      typeOfValueFromVariable = VARIABLE_TYPE.SECRET;
+    } else {
+      typeOfValueFromVariable = VARIABLE_TYPE.CUSTOM;
+    }
 
     if (isValueFromVariable) {
       customValueFromVariables.push(

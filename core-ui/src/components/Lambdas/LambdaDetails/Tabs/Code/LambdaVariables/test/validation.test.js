@@ -141,7 +141,7 @@ describe('validateVariable', () => {
     expect(validateVariable(variables, currentVariable)).toBeFalsy();
   });
 
-  test('should return true if currentVariable valueFrom.name or key are present', () => {
+  test('should return true if currentVariable valueFrom.name and key are present', () => {
     const variables = [];
     const currentVariable = {
       name: 'variable',

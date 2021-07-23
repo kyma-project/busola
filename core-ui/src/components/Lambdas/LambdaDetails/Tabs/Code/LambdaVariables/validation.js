@@ -18,7 +18,7 @@ export function validateVariables(
         restrictedVariables: CONFIG.restrictedVariables,
         varName: variable.name,
         varID: variable.id,
-        varValue: variable.value ? variable.value : variable.valueFrom,
+        varValue: variable.value || variable.valueFrom,
         varType: variable.type,
         varDirty: variable.dirty,
       });
