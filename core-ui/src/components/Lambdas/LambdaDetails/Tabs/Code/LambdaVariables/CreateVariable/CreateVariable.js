@@ -20,6 +20,7 @@ export default function CreateVariable({
 
   const commonProps = {
     lambda: lambda,
+    confirmText: ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.CONFIRM_BUTTON.TEXT,
     customVariables: customVariables,
     customValueFromVariables: customValueFromVariables,
   };
@@ -32,7 +33,6 @@ export default function CreateVariable({
           {ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.OPEN_BUTTON.CUSTOM}
         </Menu.Item>
       }
-      confirmText={ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.CONFIRM_BUTTON.TEXT}
       type={VARIABLE_TYPE.CUSTOM}
       resources={null}
       {...commonProps}
@@ -47,7 +47,6 @@ export default function CreateVariable({
           {ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.OPEN_BUTTON.SECRET}
         </Menu.Item>
       }
-      confirmText={ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.CONFIRM_BUTTON.TEXT}
       type={VARIABLE_TYPE.SECRET}
       resources={secrets}
       {...commonProps}
@@ -62,7 +61,6 @@ export default function CreateVariable({
           {ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.OPEN_BUTTON.CONFIG_MAP}
         </Menu.Item>
       }
-      confirmText={ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.CONFIRM_BUTTON.TEXT}
       type={VARIABLE_TYPE.CONFIG_MAP}
       resources={configmaps}
       {...commonProps}
