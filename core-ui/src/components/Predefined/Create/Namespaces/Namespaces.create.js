@@ -51,14 +51,7 @@ const MemoryQuotasCheckbox = ({ isCheckedRef, children }) => {
   return (
     <FormFieldset>
       <FormItem>
-        <Tooltip
-          content="
-                  Define constraints that limit total memory consumption in your
-                  namespace. 
-                  Use plain value in bytes, or suffix equivalents. For example:
-                  128974848, 129e6, 129M, 123Mi.
-                "
-        >
+        <Tooltip content="Define constraints that limit total memory consumption in your namespace.">
           <Checkbox
             id="memory-quotas"
             onChange={e => setIsExpanded(e.target.checked)}
@@ -101,23 +94,27 @@ const SectionRow = ({
 
 const MemoryQuotasSection = ({ limitsRef, requestsRef }) => (
   <FormFieldset className="input-fields" data-test-id="memory-quotas-section">
-    <SectionRow
-      id="memory-limit"
-      reference={limitsRef}
-      defaultValue="3Gi"
-      pattern={LIMIT_REGEX}
-      description="Memory limit *"
-      placeholder="Memory limit"
-    />
-    <SectionRow
-      id="memory-requests"
-      placeholder="Memory requests"
-      type="text"
-      defaultValue="2.8Gi"
-      pattern={LIMIT_REGEX}
-      reference={requestsRef}
-      description="Memory requests *"
-    />
+    <Tooltip content="Use plain value in bytes (128974848) or suffix equivalents (like 129e6, 129M, 123Mi).">
+      <SectionRow
+        id="memory-limit"
+        reference={limitsRef}
+        defaultValue="3Gi"
+        pattern={LIMIT_REGEX}
+        description="Memory limit *"
+        placeholder="Memory limit"
+      />
+    </Tooltip>
+    <Tooltip content="Use plain value in bytes (128974848) or suffix equivalents (like 129e6, 129M, 123Mi).">
+      <SectionRow
+        id="memory-requests"
+        placeholder="Memory requests"
+        type="text"
+        defaultValue="2.8Gi"
+        pattern={LIMIT_REGEX}
+        reference={requestsRef}
+        description="Memory requests *"
+      />
+    </Tooltip>
   </FormFieldset>
 );
 
@@ -133,13 +130,7 @@ const ContainerLimitsCheckbox = ({ isCheckedRef, children }) => {
   return (
     <FormFieldset>
       <FormItem>
-        <Tooltip
-          content="
-                  Define memory constraints for individual containers in your
-                  namespace. Use plain value in bytes, or suffix
-                  equivalents. For example: 128974848, 129e6, 129M, 123Mi.
-                "
-        >
+        <Tooltip content="Define memory constraints for individual containers in your namespace.">
           <Checkbox
             id="container-limits"
             onChange={e => setIsExpanded(e.target.checked)}
@@ -158,33 +149,39 @@ const ContainerLimitSection = ({ maxRef, defaultRef, requestRef }) => (
     className="input-fields"
     data-test-id="container-limits-section"
   >
-    <SectionRow
-      id="container-max"
-      placeholder="Max"
-      type="text"
-      defaultValue="1100Mi"
-      pattern={LIMIT_REGEX}
-      reference={maxRef}
-      description="Max *"
-    />
-    <SectionRow
-      id="container-default"
-      placeholder="Default"
-      type="text"
-      defaultValue="512Mi"
-      pattern={LIMIT_REGEX}
-      reference={defaultRef}
-      description="Default *"
-    />
-    <SectionRow
-      id="container-default-request"
-      placeholder="Default request"
-      type="text"
-      defaultValue="32Mi"
-      pattern={LIMIT_REGEX}
-      reference={requestRef}
-      description="Default request *"
-    />
+    <Tooltip content="Use plain value in bytes (128974848) or suffix equivalents (like 129e6, 129M, 123Mi).">
+      <SectionRow
+        id="container-max"
+        placeholder="Max"
+        type="text"
+        defaultValue="1100Mi"
+        pattern={LIMIT_REGEX}
+        reference={maxRef}
+        description="Max *"
+      />
+    </Tooltip>
+    <Tooltip content="Use plain value in bytes (128974848) or suffix equivalents (like 129e6, 129M, 123Mi).">
+      <SectionRow
+        id="container-default"
+        placeholder="Default"
+        type="text"
+        defaultValue="512Mi"
+        pattern={LIMIT_REGEX}
+        reference={defaultRef}
+        description="Default *"
+      />
+    </Tooltip>
+    <Tooltip content="Use plain value in bytes (128974848) or suffix equivalents (like 129e6, 129M, 123Mi).">
+      <SectionRow
+        id="container-default-request"
+        placeholder="Default request"
+        type="text"
+        defaultValue="32Mi"
+        pattern={LIMIT_REGEX}
+        reference={requestRef}
+        description="Default request *"
+      />
+    </Tooltip>
   </FormFieldset>
 );
 

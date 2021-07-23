@@ -92,7 +92,7 @@ export default function CreateEventSubscriptionForm({
           <FormInput
             onChange={calculateEventType}
             ref={eventTypeInput}
-            placeholder="Type of the event"
+            placeholder="Event Type"
             id="event_type"
           />
         </FormItem>
@@ -107,7 +107,7 @@ export default function CreateEventSubscriptionForm({
           <FormInput
             onChange={calculateEventType}
             ref={eventVersionInput}
-            placeholder="Version of the event"
+            placeholder="Event Version"
             id="event_version"
             defaultValue="v1"
           />

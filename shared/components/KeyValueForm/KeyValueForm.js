@@ -20,7 +20,7 @@ export function KeyValueForm({
   setData,
   setValid,
   customHeaderAction,
-  keyPatternInfo = 'Key name must consist of alphanumeric characters, dashes, full stops and underlines.',
+  keyPatternInfo = "Key name must contain alphanumeric characters, can contain  ' - ', '_' or '.'.",
   keyPattern = '[a-zA-z0-9_.-]+',
 }) {
   const [entries, setEntries] = React.useState(toEntries(data));

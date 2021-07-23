@@ -72,7 +72,7 @@ export function ClusterList() {
         {entry.currentContext.cluster.name}
       </Link>
       {!areParamsCompatible(entry.config?.version) && (
-        <Tooltip content="The parameter version is outdated. Errors may occur, please re-add you cluster.">
+        <Tooltip content="Outdated parameter version may cause errors. Delete and re-add your cluster.">
           <Icon
             ariaLabel="version incompatible warning"
             className="params-warning-icon"
