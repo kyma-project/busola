@@ -7,23 +7,27 @@ import { CONFIG } from 'components/Lambdas/config';
 
 export function validateVariables(
   customVariables = [],
+  customValueFromVariables = [],
   injectedVariables = [],
 ) {
-  return customVariables.map((variable, _, array) => {
-    const validation = getValidationStatus({
-      userVariables: array,
-      injectedVariables,
-      restrictedVariables: CONFIG.restrictedVariables,
-      varName: variable.name,
-      varID: variable.id,
-      varDirty: variable.dirty,
-    });
-
-    return {
-      ...variable,
-      validation,
-    };
-  });
+  return [...customVariables, ...customValueFromVariables].map(
+    (variable, _, array) => {
+      const validation = getValidationStatus({
+        userVariables: array,
+        injectedVariables,
+        restrictedVariables: CONFIG.restrictedVariables,
+        varName: variable.name,
+        varID: variable.id,
+        varValue: variable.value || variable.valueFrom,
+        varType: variable.type,
+        varDirty: variable.dirty,
+      });
+      return {
+        ...variable,
+        validation,
+      };
+    },
+  );
 }
 
 export function validateVariable(variables = [], currentVariable = {}) {
@@ -31,6 +35,24 @@ export function validateVariable(variables = [], currentVariable = {}) {
     return false;
   }
   if (ERROR_VARIABLE_VALIDATION.includes(currentVariable.validation)) {
+    return false;
+  }
+
+  // check if secret and config map has value and key
+
+  if (
+    currentVariable.type === VARIABLE_TYPE.SECRET &&
+    (!currentVariable?.valueFrom?.secretKeyRef?.name ||
+      !currentVariable?.valueFrom?.secretKeyRef?.key)
+  ) {
+    return false;
+  }
+
+  if (
+    currentVariable.type === VARIABLE_TYPE.CONFIG_MAP &&
+    (!currentVariable?.valueFrom?.configMapKeyRef?.name ||
+      !currentVariable?.valueFrom?.configMapKeyRef?.key)
+  ) {
     return false;
   }
 
@@ -61,6 +83,8 @@ export function getValidationStatus({
   restrictedVariables = [],
   varName,
   varID,
+  varValue,
+  varType,
   varDirty = false,
 }) {
   // empty
@@ -81,6 +105,22 @@ export function getValidationStatus({
     return VARIABLE_VALIDATION.INVALID;
   }
 
+  // check if secret and config map has value and key
+
+  if (
+    varType === VARIABLE_TYPE.SECRET &&
+    (!varValue?.secretKeyRef?.name || !varValue?.secretKeyRef?.key)
+  ) {
+    return VARIABLE_VALIDATION.INVALID_SECRET;
+  }
+
+  if (
+    varType === VARIABLE_TYPE.CONFIG_MAP &&
+    (!varValue?.configMapKeyRef?.name || !varValue?.configMapKeyRef?.key)
+  ) {
+    return VARIABLE_VALIDATION.INVALID_CONFIG;
+  }
+
   // duplicated
   if (
     userVariables.some(
@@ -89,7 +129,6 @@ export function getValidationStatus({
   ) {
     return VARIABLE_VALIDATION.DUPLICATED;
   }
-
   // override SBU
   if (
     injectedVariables.some(
