@@ -1,4 +1,4 @@
-import React, { useState, Suspense } from 'react';
+import React, { useState } from 'react';
 import LuigiClient from '@luigi-project/client';
 
 import { instancesTabUtils } from 'helpers/instances-tab-utils';
@@ -120,7 +120,7 @@ export default function ServiceClassList() {
   );
 
   return (
-    <Suspense fallback="loading">
+    <>
       <PageHeader
         title={t('service-catalog.catalog.title')}
         isCatalog={true}
@@ -182,6 +182,6 @@ export default function ServiceClassList() {
           </>
         </Tab>
       </Tabs>
-    </Suspense>
+    </>
   );
 }
