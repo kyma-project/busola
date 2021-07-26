@@ -1,0 +1,18 @@
+clusters:
+  overview:
+    title: Cluster Overview
+namespaces:
+  overview:
+    title: Overview
+    workloads:
+      title: Healthy Resources
+      pods: $t(pods.title)
+      deployments: $t(deployments.title)
+pods:
+  title: Pods
+deployments:
+  title: Deployments
+service-catalog:
+  title: Service Management
+  catalog:
+    title: Service Catalog

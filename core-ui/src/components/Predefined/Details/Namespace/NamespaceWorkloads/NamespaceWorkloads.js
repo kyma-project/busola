@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 
 import { LayoutPanel, Icon } from 'fundamental-react';
 import { useGetList, Spinner, CircleProgress } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 
 import {
   getHealthyStatusesCount,
@@ -46,6 +47,7 @@ const ResourceCircle = ({
 };
 
 const PodsCircle = ({ namespace }) => {
+  const { t } = useTranslation();
   const { data, error, loading = true } = useGetList()(
     `/api/v1/namespaces/${namespace}/pods`,
     {
@@ -59,13 +61,14 @@ const PodsCircle = ({ namespace }) => {
       counter={getHealthyStatusesCount}
       loading={loading}
       error={error}
-      title="Pods"
+      title={t('namespaces.overview.workloads.pods')}
       color="var(--sapIndicationColor_5)"
     />
   );
 };
 
 const DeploymentsCircle = ({ namespace }) => {
+  const { t } = useTranslation();
   const { data, error, loading = true } = useGetList()(
     `/apis/apps/v1/namespaces/${namespace}/deployments`,
     {
@@ -79,13 +82,14 @@ const DeploymentsCircle = ({ namespace }) => {
       counter={getHealthyReplicasCount}
       loading={loading}
       error={error}
-      title="Deployments"
+      title={t('namespaces.overview.workloads.deployments')}
       color="var(--sapIndicationColor_6)"
     />
   );
 };
 
 export function NamespaceWorkloads({ namespace }) {
+  const { t } = useTranslation();
   return (
     <LayoutPanel>
       <LayoutPanel.Header>
@@ -95,7 +99,7 @@ export function NamespaceWorkloads({ namespace }) {
           glyph="stethoscope"
           ariaLabel="Health icon"
         />
-        <LayoutPanel.Head title="Healthy Resources" />
+        <LayoutPanel.Head title={t('namespaces.overview.workloads.title')} />
       </LayoutPanel.Header>
       <LayoutPanel.Body className="namespace-workloads__body">
         <PodsCircle namespace={namespace} />
