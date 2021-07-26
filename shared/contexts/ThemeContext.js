@@ -36,18 +36,18 @@ const getEditorTheme = theme => {
 };
 export const ThemeProvider = ({ children, env }) => {
   const [theme, setTheme] = useState(getInitialTheme());
-  const [editorTheme, setEditorTheme] = useState(getEditorTheme(theme));
 
   useEffect(() => {
     if (typeof env.PUBLIC_URL === 'undefined') return;
     applyThemeToLinkNode(theme, env.PUBLIC_URL);
     localStorage.setItem('busola.theme', theme);
     LuigiClient.sendCustomMessage({ id: 'busola.theme', name: theme });
-    setEditorTheme(getEditorTheme(theme));
   }, [theme]);
 
   return (
-    <ThemeContext.Provider value={{ theme, editorTheme, setTheme }}>
+    <ThemeContext.Provider
+      value={{ theme, editorTheme: getEditorTheme(theme), setTheme }}
+    >
       {children}
     </ThemeContext.Provider>
   );
