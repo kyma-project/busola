@@ -94,7 +94,10 @@ const SectionRow = ({
 
 const MemoryQuotasSection = ({ limitsRef, requestsRef }) => (
   <FormFieldset className="input-fields" data-test-id="memory-quotas-section">
-    <Tooltip content="Use plain value in bytes (128974848) or suffix equivalents (like 129e6, 129M, 123Mi).">
+    <Tooltip
+      content="Use plain value in bytes (128974848) or suffix equivalents (like 129e6, 129M, 123Mi)."
+      className="input-fields-tooltip"
+    >
       <SectionRow
         id="memory-limit"
         reference={limitsRef}
@@ -104,7 +107,10 @@ const MemoryQuotasSection = ({ limitsRef, requestsRef }) => (
         placeholder="Memory limit"
       />
     </Tooltip>
-    <Tooltip content="Use plain value in bytes (128974848) or suffix equivalents (like 129e6, 129M, 123Mi).">
+    <Tooltip
+      content="Use plain value in bytes (128974848) or suffix equivalents (like 129e6, 129M, 123Mi)."
+      className="input-fields-tooltip"
+    >
       <SectionRow
         id="memory-requests"
         placeholder="Memory requests"
@@ -130,7 +136,10 @@ const ContainerLimitsCheckbox = ({ isCheckedRef, children }) => {
   return (
     <FormFieldset>
       <FormItem>
-        <Tooltip content="Define memory constraints for individual containers in your namespace.">
+        <Tooltip
+          content="Define memory constraints for individual containers in your namespace."
+          className="input-fields-tooltip"
+        >
           <Checkbox
             id="container-limits"
             onChange={e => setIsExpanded(e.target.checked)}
@@ -149,7 +158,10 @@ const ContainerLimitSection = ({ maxRef, defaultRef, requestRef }) => (
     className="input-fields"
     data-test-id="container-limits-section"
   >
-    <Tooltip content="Use plain value in bytes (128974848) or suffix equivalents (like 129e6, 129M, 123Mi).">
+    <Tooltip
+      content="Use plain value in bytes (128974848) or suffix equivalents (like 129e6, 129M, 123Mi)."
+      className="input-fields-tooltip"
+    >
       <SectionRow
         id="container-max"
         placeholder="Max"
@@ -160,7 +172,10 @@ const ContainerLimitSection = ({ maxRef, defaultRef, requestRef }) => (
         description="Max *"
       />
     </Tooltip>
-    <Tooltip content="Use plain value in bytes (128974848) or suffix equivalents (like 129e6, 129M, 123Mi).">
+    <Tooltip
+      content="Use plain value in bytes (128974848) or suffix equivalents (like 129e6, 129M, 123Mi)."
+      className="input-fields-tooltip"
+    >
       <SectionRow
         id="container-default"
         placeholder="Default"
@@ -171,7 +186,10 @@ const ContainerLimitSection = ({ maxRef, defaultRef, requestRef }) => (
         description="Default *"
       />
     </Tooltip>
-    <Tooltip content="Use plain value in bytes (128974848) or suffix equivalents (like 129e6, 129M, 123Mi).">
+    <Tooltip
+      content="Use plain value in bytes (128974848) or suffix equivalents (like 129e6, 129M, 123Mi)."
+      className="input-fields-tooltip"
+    >
       <SectionRow
         id="container-default-request"
         placeholder="Default request"
