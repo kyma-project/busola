@@ -12,7 +12,6 @@ export const Tooltip = ({
   trigger,
   tippyProps,
   className,
-  isInlineHelp = false,
 }) => {
   return (
     <TippyTooltip
@@ -20,11 +19,9 @@ export const Tooltip = ({
       html={content}
       position={position}
       trigger={trigger}
+      distance={0}
       {...tippyProps}
     >
-      {isInlineHelp && (
-        <span className="sap-icon--sys-help fd-margin-begin--tiny"></span>
-      )}
       {children}
     </TippyTooltip>
   );
@@ -35,7 +32,6 @@ Tooltip.propTypes = {
   position: PropTypes.oneOf(['top', 'bottom', 'left', 'right']),
   trigger: PropTypes.oneOf(['mouseenter', 'focus', 'click', 'manual']),
   children: PropTypes.node,
-  isInlineHelp: PropTypes.bool,
 };
 
 Tooltip.defaultProps = {

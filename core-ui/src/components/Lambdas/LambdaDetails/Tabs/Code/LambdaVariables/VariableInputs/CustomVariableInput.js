@@ -1,24 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
-import { FormItem, FormInput } from 'fundamental-react';
+import { FormItem, FormInput, FormLabel } from 'fundamental-react';
 
 import { VARIABLE_VALIDATION } from 'components/Lambdas/helpers/lambdaVariables';
 import { ENVIRONMENT_VARIABLES_PANEL } from 'components/Lambdas/constants';
 import { CONFIG } from 'components/Lambdas/config';
 
-import { getValidationStatus, validateVariable } from './validation';
+import { getValidationStatus, validateVariable } from '../validation';
+import './VariableInputs.scss';
 
-export default function SingleVariableInput({
+export default function CustomVariableInput({
   currentVariable = {},
   variables = [],
   injectedVariables = [],
-  onUpdateVariables,
+  onUpdateVariable,
   setValidity,
   setInvalidModalPopupMessage,
 }) {
   const [variable, setVariable] = useState(currentVariable);
   const [debouncedCallback] = useDebouncedCallback(newVariable => {
-    onUpdateVariables(newVariable);
+    onUpdateVariable(newVariable);
   }, 200);
 
   useEffect(() => {
@@ -69,6 +70,7 @@ export default function SingleVariableInput({
 
   function onChangeValue(event) {
     const value = event.target.value;
+
     const newVariable = {
       ...variable,
       value,
@@ -113,16 +115,13 @@ export default function SingleVariableInput({
         return null;
     }
 
-    return (
-      <td colSpan="3">
-        <span className={className}>{message}</span> {/* TODO */}
-      </td>
-    );
+    return <span className={className}>{message}</span>;
   }
 
-  return {
-    cells: [
-      <FormItem>
+  return (
+    <div className="custom-variable-form">
+      <FormItem className="grid-input-fields">
+        <FormLabel required={true}>Name</FormLabel>
         <FormInput
           id={`variableName-${currentVariable.id}`}
           placeholder={ENVIRONMENT_VARIABLES_PANEL.PLACEHOLDERS.VARIABLE_NAME}
@@ -130,9 +129,10 @@ export default function SingleVariableInput({
           value={variable.name}
           onChange={onChangeName}
         />
-      </FormItem>,
-      <span className="sap-icon--arrow-right"></span>,
-      <FormItem>
+      </FormItem>
+      {renderValidationContent()}
+      <FormItem className="grid-input-fields">
+        <FormLabel>Value</FormLabel>
         <FormInput
           id={`variableValue-${currentVariable.id}`}
           placeholder={ENVIRONMENT_VARIABLES_PANEL.PLACEHOLDERS.VARIABLE_VALUE}
@@ -140,9 +140,7 @@ export default function SingleVariableInput({
           value={variable.value}
           onChange={onChangeValue}
         />
-      </FormItem>,
-    ],
-    collapseContent: renderValidationContent(),
-    withCollapseControl: false,
-  };
+      </FormItem>
+    </div>
+  );
 }

@@ -18,6 +18,7 @@ import {
   createNavigation,
   addClusterNodes,
 } from './navigation/navigation-data-init';
+import { setTheme, getTheme } from './utils/theme';
 
 export const NODE_PARAM_PREFIX = `~`;
 
@@ -81,4 +82,5 @@ async function luigiAfterInit() {
     lifecycleHooks: { luigiAfterInit },
   };
   Luigi.setConfig(luigiConfig);
+  setTheme(getTheme());
 })();

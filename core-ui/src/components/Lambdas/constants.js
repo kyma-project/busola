@@ -415,7 +415,7 @@ export const CODE_AND_DEPENDENCIES_PANEL = {
     TEXT: 'Save',
     POPUP_MESSAGE: {
       EMPTY_SOURCE: 'Source cannot be empty.',
-      INVALID_DEPS: 'Dependencies must be specified in a valid JSON format',
+      INVALID_DEPS: 'Dependencies must be specified in a valid JSON format.',
       NO_CHANGES: 'No changes made.',
     },
   },
@@ -465,10 +465,26 @@ export const ENVIRONMENT_VARIABLES_PANEL = {
         "Couldn't find environment variables matching this query.",
     },
   },
-  EDIT_MODAL: {
-    TITLE: 'Edit Environment Variables',
+  CREATE_MODAL: {
+    TITLE: {
+      CUSTOM: 'Create Custom Variable',
+      SECRET: 'Create Variable From Secret',
+      CONFIG_MAP: 'Create Variable From Config Map',
+    },
     OPEN_BUTTON: {
-      TEXT: 'Edit Environment Variables',
+      CUSTOM: 'Custom Variable',
+      SECRET: 'Secret Variable',
+      CONFIG_MAP: 'Config Map Variable',
+    },
+    CONFIRM_BUTTON: {
+      TEXT: 'Create',
+    },
+  },
+  EDIT_MODAL: {
+    TITLE: {
+      CUSTOM: 'Edit Custom Variable',
+      SECRET: 'Edit Variable From Secret',
+      CONFIG_MAP: 'Edit Variable From Config Map',
     },
     CONFIRM_BUTTON: {
       TEXT: 'Save',
@@ -489,6 +505,8 @@ export const ENVIRONMENT_VARIABLES_PANEL = {
     INVALID: `Invalid variable name. The name must consist of alphanumeric characters, can contain "_" and no spaces, like "VARIABLE_NAME".`,
     RESTRICTED:
       'This variable name is restricted and cannot be used. Try a different one.',
+    INVALID_SECRET: `Select the secret name and key`,
+    INVALID_CONFIG: `Select the config name and key`,
   },
   WARNINGS: {
     TEXT: 'Warning',
@@ -519,13 +537,22 @@ export const ENVIRONMENT_VARIABLES_PANEL = {
       SHOW_VALUE_MESSAGE: 'Click to show',
       HIDE_VALUE_MESSAGE: 'Click to hide',
     },
+    CONFIG_MAP: {
+      TEXT: 'Config Map',
+      TOOLTIP_MESSAGE:
+        'This variable comes from the "{resourceName}" Config Map.',
+    },
+    SECRET: {
+      TEXT: 'Secret',
+      TOOLTIP_MESSAGE: 'This variable comes from the "{resourceName}" Secret.',
+    },
   },
 };
 
 export const FORMS = {
   RESOURCE_NAME: {
     LABEL: 'Name',
-    INLINE_HELP: `Name must consist of lower case alphanumeric characters or dashes, and must start and end with an alphanumeric character (e.g. 'my-name1').`,
+    INLINE_HELP: `The name must consist of lower case alphanumeric characters or dashes, and must start and end with an alphanumeric character (e.g. 'my-name1').`,
   },
   LABELS: {
     LABEL: 'Labels',

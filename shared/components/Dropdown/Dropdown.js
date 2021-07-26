@@ -32,7 +32,7 @@ export function Dropdown({
       {label && (
         <FormLabel htmlFor={id}>
           {label}
-          {inlineHelp && <Tooltip isInlineHelp content={inlineHelp} />}
+          {inlineHelp && <Tooltip content={inlineHelp} />}
         </FormLabel>
       )}
       <Select

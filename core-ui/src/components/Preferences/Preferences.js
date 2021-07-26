@@ -2,6 +2,7 @@ import React from 'react';
 
 import './Preferences.scss';
 import NamespaceSettings from './NamespaceSettings';
+import ThemeChooser from './ThemeChooser';
 
 import { PageHeader } from 'react-shared';
 
@@ -10,6 +11,7 @@ export default function Preferences() {
     <main className="preferences">
       <PageHeader title="Preferences" />
       <NamespaceSettings />
+      <ThemeChooser />
     </main>
   );
 }

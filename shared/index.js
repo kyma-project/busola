@@ -44,6 +44,7 @@ export * from './contexts/ConfigContext';
 export * from './contexts/NotificationContext';
 export * from './contexts/Microfrontend';
 export * from './contexts/YamlEditorContext/YamlEditorContext';
+export * from './contexts/ThemeContext';
 export * from './utils/helpers';
 export * from './utils/handleSubscriptionArrayEvent';
 export * from './utils/getComponentForResource';

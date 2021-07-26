@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import LuigiClient from '@luigi-project/client';
 
 import { Icon, InfoLabel } from 'fundamental-react';
-import { GenericList, Tooltip } from 'react-shared';
+import { GenericList, Tooltip, useGetList } from 'react-shared';
 
-import EditVariablesModal from './EditVariablesModal';
+import CreateVariable from './CreateVariable/CreateVariable';
+import EditVariable from './EditVariable/EditVariable';
 
 import {
   VARIABLE_VALIDATION,
@@ -12,6 +13,7 @@ import {
   WARNINGS_VARIABLE_VALIDATION,
 } from 'components/Lambdas/helpers/lambdaVariables';
 import { ENVIRONMENT_VARIABLES_PANEL } from 'components/Lambdas/constants';
+import { useUpdateLambda, UPDATE_TYPE } from 'components/Lambdas/hooks';
 
 import { validateVariables } from './validation';
 
@@ -94,18 +96,18 @@ function VariableSource({ variable }) {
 
   if (variable.valueFrom) {
     if (variable.valueFrom.configMapKeyRef) {
-      source = 'Config Map';
+      source = ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.CONFIG_MAP.TEXT;
       tooltipTitle = formatMessage(
-        'This variable comes from the "{resourceName}" Config Map.',
+        ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.CONFIG_MAP.TOOLTIP_MESSAGE,
         {
           resourceName: variable.valueFrom.configMapKeyRef.name,
         },
       );
     }
     if (variable.valueFrom.secretKeyRef) {
-      source = 'Secret';
+      source = ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.SECRET.TEXT;
       tooltipTitle = formatMessage(
-        'This variable comes from the "{resourceName}" Secret.',
+        ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.SECRET.TOOLTIP_MESSAGE,
         {
           resourceName: variable.valueFrom.secretKeyRef.name,
         },
@@ -135,22 +137,20 @@ function VariableSourceLink({ variable }) {
 
   return (
     <>
-      <Tooltip
-        isInlineHelp
-        content="This variable comes from a Resource. Check its details to get the value."
-      />
       {resourceLink ? (
-        <span
-          className="link"
-          onClick={() =>
-            LuigiClient.linkManager()
-              .fromContext('namespace')
-              .navigate(resourceLink)
-          }
-        >
-          {' '}
-          {resourceName}{' '}
-        </span>
+        <Tooltip content="This variable comes from a Resource. Check its details to get the value.">
+          <span
+            className="link"
+            onClick={() =>
+              LuigiClient.linkManager()
+                .fromContext('namespace')
+                .navigate(resourceLink)
+            }
+          >
+            {' '}
+            {resourceName}{' '}
+          </span>
+        </Tooltip>
       ) : (
         '-'
       )}
@@ -161,8 +161,9 @@ function VariableSourceLink({ variable }) {
 function VariableKey({ variable }) {
   return (
     variable.valueFrom?.configMapKeyRef?.key ||
-    variable.valueFrom?.secretKeyRef?.key ||
-    '-'
+    variable.valueFrom?.secretKeyRef?.key || (
+      <span style={{ color: 'var(--sapNeutralTextColor,#6a6d70)' }}>N/A</span>
+    )
   );
 }
 
@@ -209,6 +210,17 @@ export default function LambdaEnvs({
   customValueFromVariables,
   injectedVariables,
 }) {
+  const updateLambdaVariables = useUpdateLambda({
+    lambda,
+    type: UPDATE_TYPE.VARIABLES,
+  });
+
+  const { data: configmaps } = useGetList()(
+    `/api/v1/namespaces/${lambda.metadata.namespace}/configmaps`,
+  );
+  const { data: secrets } = useGetList()(
+    `/api/v1/namespaces/${lambda.metadata.namespace}/secrets`,
+  );
   const rowRenderer = variable => [
     <span>{variable.name}</span>,
     <span className="sap-icon--arrow-right" />,
@@ -219,18 +231,72 @@ export default function LambdaEnvs({
   ];
 
   const editEnvsModal = (
-    <EditVariablesModal
-      lambda={lambda}
-      customVariables={customVariables}
-      customValueFromVariables={customValueFromVariables}
-      injectedVariables={injectedVariables}
-    />
+    <>
+      <CreateVariable
+        lambda={lambda}
+        secrets={secrets}
+        configmaps={configmaps}
+        customVariables={customVariables}
+        customValueFromVariables={customValueFromVariables}
+      />
+    </>
   );
 
   const entries = [
     ...validateVariables(customVariables, injectedVariables),
     ...injectedVariables,
     ...customValueFromVariables,
+  ];
+
+  function prepareVariablesInput(newVariables) {
+    return newVariables.map(variable => {
+      if (variable.type === VARIABLE_TYPE.CUSTOM) {
+        return {
+          name: variable.name,
+          value: variable.value,
+        };
+      }
+      return {
+        name: variable.name,
+        valueFrom: variable.valueFrom,
+      };
+    });
+  }
+
+  function onDeleteVariables(variable) {
+    let newVariables = entries.filter(
+      oldVariable => oldVariable.id !== variable.id,
+    );
+
+    newVariables = validateVariables(newVariables, injectedVariables);
+    const preparedVariable = prepareVariablesInput(newVariables);
+
+    updateLambdaVariables({
+      spec: {
+        ...lambda.spec,
+        env: [...preparedVariable],
+      },
+    });
+  }
+
+  const actions = [
+    {
+      name: 'Edit',
+      component: variable => (
+        <EditVariable
+          lambda={lambda}
+          secrets={secrets}
+          configmaps={configmaps}
+          customVariables={customVariables}
+          customValueFromVariables={customValueFromVariables}
+          variable={variable}
+        />
+      ),
+    },
+    {
+      name: 'Delete',
+      handler: variable => onDeleteVariables(variable),
+    },
   ];
 
   return (
@@ -241,6 +307,7 @@ export default function LambdaEnvs({
         showSearchSuggestion={false}
         textSearchProperties={textSearchProperties}
         extraHeaderContent={editEnvsModal}
+        actions={actions}
         entries={entries}
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
