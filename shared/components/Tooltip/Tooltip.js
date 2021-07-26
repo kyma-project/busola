@@ -11,7 +11,7 @@ export const Tooltip = ({
   position,
   trigger,
   tippyProps,
-  className,
+  className = 'tippy-tooltip',
 }) => {
   return (
     <TippyTooltip
