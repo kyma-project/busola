@@ -5,24 +5,24 @@ import { LayoutPanel } from 'fundamental-react';
 const THEMES = [
   {
     key: 'default',
-    text: 'Light (default)',
+    text: 'SAP Quartz Light (default)',
   },
-  // {
-  //   key: 'light_dark',
-  //   text: 'Light Dark',
-  // },
-  // I cannot see any difference from "dark"
+
   {
     key: 'dark',
-    text: 'Dark',
+    text: 'SAP Quartz Dark',
+  },
+  {
+    key: 'light_dark',
+    text: 'SAP Belize Deep',
   },
   {
     key: 'hcw',
-    text: 'High Contrast White',
+    text: 'SAP High-Contrast White',
   },
   {
     key: 'hcb',
-    text: 'High Contrast Black',
+    text: 'SAP High-Contrast Black',
   },
 ];
 
