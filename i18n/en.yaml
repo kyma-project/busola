@@ -8,7 +8,7 @@ namespaces:
       title: Healthy Resources
       pods: $t(pods.title)
       deployments: $t(deployments.title)
-      # error: Error while loading {{title}} data due to: {{message}}
+      error: 'Error while loading {{title}} data due to: {{message}}'
     resources:
       title: Resource consumption
       requests: Memory requests
