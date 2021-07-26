@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import i18next from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { BrowserRouter } from 'react-router-dom';
-import { Microfrontend } from 'react-shared';
+import { Microfrontend, Spinner } from 'react-shared';
 import i18nextBackend from 'i18next-http-backend';
 import yaml from 'js-yaml';
 
@@ -19,14 +19,19 @@ export const i18n = i18next
     fallbackLng: false,
     backend: {
       loadPath: '/i18n/{{lng}}.yaml',
-      parse: data => yaml.load(data),
+      parse: data => {
+        console.log('loading data', yaml.load(data));
+        return yaml.load(data);
+      },
     },
   });
 
 ReactDOM.render(
   <Microfrontend env={process.env}>
     <BrowserRouter basename={process.env.PUBLIC_URL}>
-      <App />
+      <Suspense fallback={<Spinner />}>
+        <App />
+      </Suspense>
     </BrowserRouter>
   </Microfrontend>,
   document.getElementById('root'),

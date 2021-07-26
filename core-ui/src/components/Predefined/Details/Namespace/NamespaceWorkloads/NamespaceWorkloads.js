@@ -28,9 +28,16 @@ const ResourceCircle = ({
   color,
   onClick,
 }) => {
+  const { t } = useTranslation();
+
   if (error) {
     return (
-      <p>{`Error while loading ${title} data due to: ${error.message}`}</p>
+      <p>
+        {t('namespaces.overview.workloads.error', {
+          title,
+          message: error.message,
+        })}
+      </p>
     );
   } else if (loading || !data) {
     return <Spinner />;

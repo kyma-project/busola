@@ -4,7 +4,7 @@ import i18next from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import i18nextBackend from 'i18next-http-backend';
 import { BrowserRouter } from 'react-router-dom';
-import { Microfrontend } from 'react-shared';
+import { Microfrontend, Spinner } from 'react-shared';
 import yaml from 'js-yaml';
 
 import './index.scss';
@@ -27,7 +27,7 @@ export const i18n = i18next
 ReactDOM.render(
   <Microfrontend env={process.env}>
     <BrowserRouter basename={process.env.PUBLIC_URL}>
-      <Suspense fallback="loading...">
+      <Suspense fallback={<Spinner />}>
         <App />
       </Suspense>
     </BrowserRouter>

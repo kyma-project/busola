@@ -2,6 +2,7 @@ import React from 'react';
 
 import { LayoutPanel, Icon } from 'fundamental-react';
 import { useGetList, Spinner, CircleProgress } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 
 const MEMORY_SUFFIX_POWER = {
   // must be sorted from the smallest to the largest; it is case sensitive; more info: https://medium.com/swlh/understanding-kubernetes-resource-cpu-and-memory-units-30284b3cc866
@@ -56,8 +57,10 @@ function bytesToHumanReadable(bytesNumber) {
 }
 
 const MemoryRequestsCircle = ({ resourceQuotas, isLoading }) => {
+  const { t } = useTranslation();
+
   if (!resourceQuotas) {
-    return `Error while loading memory consumption data`;
+    return t('namespaces.overview.resources.error');
   } else if (isLoading) {
     return <Spinner />;
   }
@@ -78,15 +81,17 @@ const MemoryRequestsCircle = ({ resourceQuotas, isLoading }) => {
       valueText={bytesToHumanReadable(totalUsage)}
       max={totalRequests}
       maxText={bytesToHumanReadable(totalRequests)}
-      title="Memory requests"
+      title={t('namespaces.overview.resources.requests')}
       reversed={true}
     />
   );
 };
 
 const MemoryLimitsCircle = ({ resourceQuotas, isLoading }) => {
+  const { t } = useTranslation();
+
   if (!resourceQuotas) {
-    return `Error while loading memory consumption data`;
+    return t('namespaces.overview.resources.error');
   } else if (isLoading) {
     return <Spinner />;
   }
@@ -107,13 +112,14 @@ const MemoryLimitsCircle = ({ resourceQuotas, isLoading }) => {
       valueText={bytesToHumanReadable(totalUsage)}
       max={totalLimits}
       maxText={bytesToHumanReadable(totalLimits)}
-      title="Memory limits"
+      title={t('namespaces.overview.resources.limits')}
       reversed={true}
     />
   );
 };
 
 export const ResourcesUsage = ({ namespace }) => {
+  const { t } = useTranslation();
   const { data: resourceQuotas, loading = true } = useGetList()(
     `/api/v1/namespaces/${namespace}/resourcequotas`,
     {
@@ -130,7 +136,7 @@ export const ResourcesUsage = ({ namespace }) => {
           glyph="it-host"
           ariaLabel="Resource icon"
         />
-        <LayoutPanel.Head title="Resource consumption" />
+        <LayoutPanel.Head title={t('namespaces.overview.resources.title')} />
       </LayoutPanel.Header>
       <LayoutPanel.Body className="resources-usage__body">
         <MemoryRequestsCircle
