@@ -7,6 +7,7 @@ import { Icon } from 'fundamental-react';
 
 import './SideDrawer.scss';
 import { CopiableText } from '../CopiableText/CopiableText';
+import { useTheme } from '../../contexts/ThemeContext';
 
 const MIN_EDITOR_RATIO = 33; // %
 const MAX_EDITOR_RATIO = 100;
@@ -20,6 +21,7 @@ export const SideDrawer = ({
   withYamlEditor,
 }) => {
   const [width, setWidth] = React.useState(MIN_EDITOR_RATIO);
+  const { editorTheme } = useTheme();
 
   let textToCopy;
 
@@ -32,7 +34,7 @@ export const SideDrawer = ({
           height="90vh"
           width="100%"
           language={'yaml'}
-          theme="vs-light"
+          theme={editorTheme}
           value={textToCopy}
           options={{ readOnly: true }}
         />
