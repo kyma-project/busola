@@ -9,6 +9,11 @@ export function setTheme(name) {
     return setTheme(name);
   }
   link.href = `/assets/libs/themes/${name}.css`;
+
+  const logo = document.querySelector('[data-testid="luigi-topnav-logo"]');
+  if (logo !== null) {
+    logo.src = name === 'hcw' ? 'assets/logo-black.svg' : 'assets/logo.svg';
+  }
 }
 
 function addLinkNode() {

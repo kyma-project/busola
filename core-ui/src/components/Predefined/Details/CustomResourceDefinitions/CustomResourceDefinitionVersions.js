@@ -9,6 +9,7 @@ import {
   StatusBadge,
   prettifyNamePlural,
   EMPTY_TEXT_PLACEHOLDER,
+  useTheme,
 } from 'react-shared';
 import { ComponentForList } from 'shared/getComponents';
 import './CustomResourceDefinitionVersions.scss';
@@ -88,6 +89,7 @@ const AdditionalPrinterColumns = version => {
 };
 
 export const CustomResourceDefinitionVersions = resource => {
+  const { editorTheme } = useTheme();
   const namespace = LuigiClient.getContext().namespaceId;
 
   if (!resource) return null;
@@ -133,7 +135,7 @@ export const CustomResourceDefinitionVersions = resource => {
               <LayoutPanel.Body>
                 <MonacoEditor
                   key={`crd-schema-editor-${version.name}`}
-                  theme="vs-light"
+                  theme={editorTheme}
                   language="json"
                   height="20em"
                   value={prettifySchema(version.schema)}

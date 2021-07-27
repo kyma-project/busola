@@ -50,24 +50,36 @@ export const handleRequest = async (req, res) => {
     key,
   };
   workaroundForNodeMetrics(req);
-  const k8sRequest = https
-    .request(options, function(k8sResponse) {
-      res.writeHead(k8sResponse.statusCode, {
-        'Content-Type': k8sResponse.headers['Content-Type'] || 'text/json',
-        'Content-Encoding': k8sResponse.headers['content-encoding'] || '',
-      });
 
-      k8sResponse.pipe(res);
-    })
-    .on('error', function(err) {
-      console.error('Internal server error thrown', err);
-      res.statusMessage = 'Internal server error';
-      res.statusCode = 500;
-      res.end(Buffer.from(JSON.stringify({ message: err })));
+  const k8sRequest = https.request(options, function(k8sResponse) {
+    if (
+      k8sResponse.headers &&
+      (k8sResponse.headers['Content-Type']?.includes('\\') ||
+        k8sResponse.headers['content-encoding']?.includes('\\'))
+    )
+      return throwInternalServerError(
+        'Response headers are potentially dangerous',
+      );
+
+    res.writeHead(k8sResponse.statusCode, {
+      'Content-Type': k8sResponse.headers['Content-Type'] || 'text/json',
+      'Content-Encoding': k8sResponse.headers['content-encoding'] || '',
     });
-
+    k8sResponse.pipe(res);
+  });
+  k8sRequest.on('error', throwInternalServerError); // no need to sanitize the error here as the http.request() will never throw a vulnerable error
   k8sRequest.end(Buffer.isBuffer(req.body) ? req.body : undefined);
   req.pipe(k8sRequest);
+
+  function throwInternalServerError(originalError) {
+    console.error(
+      'Throwing an Internal server error with reason:',
+      originalError,
+    );
+    res.statusMessage = 'Internal server error';
+    res.statusCode = 500;
+    res.end(Buffer.from(JSON.stringify({ message: originalError })));
+  }
 };
 
 export const serveStaticApp = (app, requestPath, directoryPath) => {

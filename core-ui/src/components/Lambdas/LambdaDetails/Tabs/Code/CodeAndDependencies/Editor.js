@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { ControlledEditor, DiffEditor } from 'react-shared';
+import { ControlledEditor, DiffEditor, useTheme } from 'react-shared';
 
 export default function Editor({
   id,
@@ -15,6 +15,7 @@ export default function Editor({
   const subscription = useRef();
   const editorContainer = useRef();
   const monacoEditorInstance = useRef();
+  const { editorTheme } = useTheme();
 
   const observer =
     typeof IntersectionObserver !== 'undefined'
@@ -74,7 +75,7 @@ export default function Editor({
           id={id}
           height="30em"
           language={language}
-          theme="vs-light"
+          theme={editorTheme}
           original={originalValue}
           modified={controlledValue}
           editorDidMount={handleDiffEditorDidMount}
@@ -92,7 +93,7 @@ export default function Editor({
         id={id}
         height="30em"
         language={language}
-        theme="vs-light"
+        theme={editorTheme}
         value={controlledValue}
         onChange={handleControlledChange}
       />

@@ -10,6 +10,7 @@ import {
   useNotification,
   randomNameGenerator,
   ControlledEditor,
+  useTheme,
 } from 'react-shared';
 
 import SchemaData from './SchemaData';
@@ -67,6 +68,8 @@ export default function CreateInstanceForm({
     false,
   );
   const [instanceCreateParameters, setInstanceCreateParameters] = useState({});
+  const { editorTheme } = useTheme();
+
   useEffect(() => {
     setCustomValid(true);
     // Make the form initially valid because a form without instanceCreateParameters is always valid.
@@ -274,7 +277,7 @@ export default function CreateInstanceForm({
               aria-label="schema-editor"
               height="25em"
               language="JSON"
-              theme="vs-light"
+              theme={editorTheme}
               onChange={handleCustomParametersChange}
               value={JSON.stringify(instanceCreateParameters, null, 2)}
             />
