@@ -3,6 +3,8 @@ import jsyaml from 'js-yaml';
 import { ControlledEditor } from '@monaco-editor/react';
 import { EditorActions } from './EditorActions';
 
+import { useTheme } from '../ThemeContext';
+
 export function YamlContent({
   yaml,
   setChangedYamlFn,
@@ -12,6 +14,7 @@ export function YamlContent({
 }) {
   const [editor, setEditor] = React.useState(null);
   const [val, setVal] = useState(jsyaml.safeDump(yaml));
+  const { editorTheme } = useTheme();
 
   useEffect(() => {
     const converted = jsyaml.safeDump(yaml);
@@ -34,7 +37,7 @@ export function YamlContent({
       <ControlledEditor
         height="85vh"
         language="yaml"
-        theme="vs-light"
+        theme={editorTheme}
         value={val}
         onChange={(_, text) => setChangedYamlFn(text)}
         editorDidMount={(_, editor) => setEditor(editor)}
