@@ -34,7 +34,7 @@ export default function AccessStrategyForm({
     ? component => component
     : component => (
         <div>
-          <Tooltip content="API rule requires at least one access strategy.">
+          <Tooltip content="Define at least one access strategy.">
             {component}
           </Tooltip>
         </div>
@@ -76,7 +76,7 @@ export default function AccessStrategyForm({
                 required
                 aria-label="Access strategy path"
                 pattern="^[a-z0-9\/\(\)\?.!*\-]+"
-                title="Path must consist of alphanumeric and the following characters: /.*?!-()"
+                title="Path can contain alphanumeric characters and  '/', '.', '*', '?', '!', '-', '(', and ')'."
                 onChange={e =>
                   setStrategy({ ...strategy, path: e.target.value })
                 }
