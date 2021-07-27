@@ -7,11 +7,16 @@
   grid-template-columns: auto max-content;
   grid-gap: 0.8em;
   margin-left: 3em;
-  justify-items: right;
   margin-top: 1em;
 
-  .fd-form-label {
+  .input-fields-tooltip {
+    grid-column: 1;
+    width: 100%;
     text-align: right;
+
+    .fd-input {
+      width: auto;
+    }
   }
 }
 

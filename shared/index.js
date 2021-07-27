@@ -25,7 +25,6 @@ export { StatusBadge } from './components/StatusBadge/StatusBadge';
 export { TextFormItem } from './components/TextFormItem/TextFormItem';
 export { Tabs } from './components/Tabs/Tabs';
 export { Tab } from './components/Tabs/Tab.js';
-export { HeaderLabelsEditor } from './components/HeaderLabelsEditor/HeaderLabelsEditor';
 export { LabelSelectorInput } from './components/LabelSelectorInput/LabelSelectorInput';
 export { LogsLink } from './components/LogsLink/LogsLink';
 export { CircleProgress } from './components/CircleProgress/CircleProgress';

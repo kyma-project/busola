@@ -5,12 +5,13 @@
   width: 400px;
   height: 80px;
   border-radius: 8px;
-  background: #ffffff;
+  background: var(--sapButton_Background);
   margin: 0 auto;
-  border: 1px dashed #89919a;
+  border: 1px dashed var(--sapNeutralBorderColor);
   color: #0a6ed1;
 
-  &, & > * {
+  &,
+  & > * {
     cursor: pointer;
     text-align: center;
   }
@@ -19,8 +20,8 @@
     display: block;
     color: var(--sapBrandColor, #0a6ed1);
   }
-  
-  input[aria-hidden=true] {
+
+  input[aria-hidden='true'] {
     width: 0.1px;
     height: 0.1px;
     opacity: 0;
@@ -38,5 +39,3 @@
     border: 1px solid var(--sapBrandColor, #0a6ed1);
   }
 }
-
-
