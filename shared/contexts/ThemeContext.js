@@ -24,6 +24,16 @@ function addLinkNode() {
   document.head.appendChild(newLink);
 }
 
+const getEditorTheme = theme => {
+  switch (theme) {
+    case 'dark':
+      return 'vs-dark';
+    case 'hcb':
+      return 'hc-black';
+    default:
+      return 'vs';
+  }
+};
 export const ThemeProvider = ({ children, env }) => {
   const [theme, setTheme] = useState(getInitialTheme());
 
@@ -35,7 +45,9 @@ export const ThemeProvider = ({ children, env }) => {
   }, [theme]);
 
   return (
-    <ThemeContext.Provider value={{ theme, setTheme }}>
+    <ThemeContext.Provider
+      value={{ theme, editorTheme: getEditorTheme(theme), setTheme }}
+    >
       {children}
     </ThemeContext.Provider>
   );
