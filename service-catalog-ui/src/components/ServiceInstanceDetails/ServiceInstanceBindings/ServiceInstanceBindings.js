@@ -157,7 +157,7 @@ const ServiceInstanceBindings = ({ serviceInstance }) => {
           <SecretDataModal
             title={`Secret ${secret.metadata.name}`}
             modalOpeningComponent={
-              <Link className="link" data-e2e-id="secret-button">
+              <Link className="fd-link" data-e2e-id="secret-button">
                 {secret.metadata.name}
               </Link>
             }

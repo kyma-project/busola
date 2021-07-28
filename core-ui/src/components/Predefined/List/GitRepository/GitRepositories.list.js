@@ -27,7 +27,7 @@ export const GitRepositoriesList = ({ DefaultRenderer, ...otherParams }) => {
         const secretName = repo.spec.auth.secretName;
         return (
           <Link
-            className="link"
+            className="fd-link"
             onClick={() =>
               LuigiClient.linkManager()
                 .fromContext('namespace')
