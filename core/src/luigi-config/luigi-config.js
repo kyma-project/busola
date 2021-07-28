@@ -84,3 +84,16 @@ async function luigiAfterInit() {
   Luigi.setConfig(luigiConfig);
   setTheme(getTheme());
 })();
+
+window.addEventListener(
+  'message',
+  event => {
+    if (event.data.msg === 'busola.getCurrentTheme') {
+      event.source.postMessage(
+        { msg: 'busola.getCurrentTheme.response', name: getTheme() },
+        event.origin,
+      );
+    }
+  },
+  false,
+);

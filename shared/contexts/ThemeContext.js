@@ -3,8 +3,6 @@ import LuigiClient from '@luigi-project/client';
 
 export const ThemeContext = createContext({});
 
-const getInitialTheme = _ => localStorage.getItem('busola.theme') || 'default';
-
 function applyThemeToLinkNode(name, publicUrl) {
   const link = document.querySelector('head #_theme');
   if (name === 'default' && link) {
@@ -35,18 +33,34 @@ const getEditorTheme = theme => {
   }
 };
 export const ThemeProvider = ({ children, env }) => {
-  const [theme, setTheme] = useState(getInitialTheme());
+  const [theme, setTheme] = useState('default');
 
   useEffect(() => {
     if (typeof env.PUBLIC_URL === 'undefined') return;
     applyThemeToLinkNode(theme, env.PUBLIC_URL);
-    localStorage.setItem('busola.theme', theme);
-    LuigiClient.sendCustomMessage({ id: 'busola.theme', name: theme });
   }, [theme]);
+
+  useEffect(() => {
+    window.parent.postMessage({ msg: 'busola.getCurrentTheme' }, '*'); // send a message to the parent app and expect a response shorly
+    const messageListenerId = addEventListener('message', event => {
+      if (event.data.msg === 'busola.getCurrentTheme.response')
+        setTheme(event.data.name);
+    });
+    return _ => removeEventListener(messageListenerId);
+  }, []);
+
+  function handleThemeChange(name) {
+    LuigiClient.sendCustomMessage({ id: 'busola.theme', name });
+    setTheme(name);
+  }
 
   return (
     <ThemeContext.Provider
-      value={{ theme, editorTheme: getEditorTheme(theme), setTheme }}
+      value={{
+        theme,
+        editorTheme: getEditorTheme(theme),
+        setTheme: handleThemeChange,
+      }}
     >
       {children}
     </ThemeContext.Provider>
