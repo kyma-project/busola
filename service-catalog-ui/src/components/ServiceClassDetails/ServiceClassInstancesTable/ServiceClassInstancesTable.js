@@ -25,6 +25,7 @@ const ServiceClassInstancesTable = ({ instanceList }) => {
   const rowRenderer = instance => [
     <LinkButton>
       <Link
+        className="fd-link"
         onClick={() => goToServiceInstanceDetails(instance.metadata.name)}
         title={instance.metadata.name}
       >
