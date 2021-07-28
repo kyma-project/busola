@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Menu, Popover } from 'fundamental-react';
 
 import { VARIABLE_TYPE } from 'components/Lambdas/helpers/lambdaVariables';
@@ -12,6 +12,7 @@ export default function CreateVariable({
   customVariables,
   customValueFromVariables,
 }) {
+  const [currentModal, setCurrentModal] = useState();
   const addNewVariableButton = (
     <Button glyph="add" typeAttr="button">
       {ENVIRONMENT_VARIABLES_PANEL.EDIT_MODAL.ADD_ENV_BUTTON.TEXT}
@@ -23,64 +24,66 @@ export default function CreateVariable({
     confirmText: ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.CONFIRM_BUTTON.TEXT,
     customVariables: customVariables,
     customValueFromVariables: customValueFromVariables,
+    onModalOpenStateChange: state => {
+      if (!state) setCurrentModal(null);
+      console.log('state changed', state);
+    },
+    alwaysOpen: true,
   };
 
-  const customVariableModal = (
-    <VariableModal
-      title={ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.TITLE.CUSTOM}
-      modalOpeningComponent={
-        <Menu.Item>
-          {ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.OPEN_BUTTON.CUSTOM}
-        </Menu.Item>
-      }
-      type={VARIABLE_TYPE.CUSTOM}
-      resources={null}
-      {...commonProps}
-    />
-  );
+  const customVariableModalProps = {
+    title: ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.TITLE.CUSTOM,
+    type: VARIABLE_TYPE.CUSTOM,
+    resources: null,
+  };
 
-  const secretVariableModal = (
-    <VariableModal
-      title={ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.TITLE.SECRET}
-      modalOpeningComponent={
-        <Menu.Item>
-          {ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.OPEN_BUTTON.SECRET}
-        </Menu.Item>
-      }
-      type={VARIABLE_TYPE.SECRET}
-      resources={secrets}
-      {...commonProps}
-    />
-  );
+  const secretVariableModalProps = {
+    title: ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.TITLE.SECRET,
+    type: VARIABLE_TYPE.SECRET,
+    resources: secrets,
+  };
 
-  const configMapVariableModal = (
-    <VariableModal
-      title={ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.TITLE.CONFIG_MAP}
-      modalOpeningComponent={
-        <Menu.Item>
-          {ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.OPEN_BUTTON.CONFIG_MAP}
-        </Menu.Item>
-      }
-      type={VARIABLE_TYPE.CONFIG_MAP}
-      resources={configmaps}
-      {...commonProps}
-    />
-  );
-
+  const configMapVariableModalProps = {
+    title: ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.TITLE.CONFIG_MAP,
+    type: VARIABLE_TYPE.CONFIG_MAP,
+    resources: configmaps,
+  };
+  function openModalWithProps(props) {
+    setCurrentModal(<VariableModal {...props} {...commonProps} />);
+  }
+  console.count('render');
   return (
-    <Popover
-      body={
-        <Menu>
-          <Menu.List>
-            {customVariableModal}
-            {configMapVariableModal}
-            {secretVariableModal}
-          </Menu.List>
-        </Menu>
-      }
-      control={addNewVariableButton}
-      widthSizingType="matchTarget"
-      placement="bottom-end"
-    />
+    <>
+      {currentModal}
+      <Popover
+        body={
+          <Menu>
+            <Menu.List>
+              <Menu.Item
+                onClick={_ => openModalWithProps(customVariableModalProps)}
+              >
+                {ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.OPEN_BUTTON.CUSTOM}
+              </Menu.Item>
+              <Menu.Item
+                onClick={_ => openModalWithProps(secretVariableModalProps)}
+              >
+                {ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.OPEN_BUTTON.SECRET}
+              </Menu.Item>
+              <Menu.Item
+                onClick={_ => openModalWithProps(configMapVariableModalProps)}
+              >
+                {
+                  ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.OPEN_BUTTON
+                    .CONFIG_MAP
+                }
+              </Menu.Item>
+            </Menu.List>
+          </Menu>
+        }
+        control={addNewVariableButton}
+        widthSizingType="matchTarget"
+        placement="bottom-end"
+      />
+    </>
   );
 }

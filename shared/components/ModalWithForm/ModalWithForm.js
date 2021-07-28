@@ -39,9 +39,10 @@ export const ModalWithForm = ({
   invalidPopupMessage,
   className,
   onModalOpenStateChange,
+  alwaysOpen,
   ...props
 }) => {
-  const [isOpen, setOpen] = useState(false);
+  const [isOpen, setOpen] = useState(alwaysOpen || false);
   const [isValid, setValid] = useState(false);
   const [customValid, setCustomValid] = useState(true);
   const formElementRef = useRef(null);
@@ -49,12 +50,12 @@ export const ModalWithForm = ({
   const notificationManager = useNotification();
 
   useEffect(() => {
-    setOpenStatus(opened);
+    if (!alwaysOpen) setOpenStatus(opened); // if alwaysOpen===true we can ignore this
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [opened]);
 
   useEffect(() => {
-    onModalOpenStateChange(isOpen);
+    if (isOpen !== undefined) onModalOpenStateChange(isOpen);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
@@ -73,9 +74,7 @@ export const ModalWithForm = ({
       LuigiClient.uxManager().addBackdrop();
     } else {
       LuigiClient.uxManager().removeBackdrop();
-      if (customCloseAction) {
-        customCloseAction();
-      }
+      if (customCloseAction) customCloseAction();
     }
     setOpen(status);
   }
@@ -150,27 +149,27 @@ export const ModalWithForm = ({
     return button;
   }
 
+  const renderModalOpeningComponent = _ =>
+    modalOpeningComponent ? (
+      <div style={{ display: 'contents' }} onClick={() => setOpenStatus(true)}>
+        {modalOpeningComponent}
+      </div>
+    ) : (
+      <Button
+        glyph={button.glyph || null}
+        aria-label={button.label || null}
+        option={button.option}
+        compact={button.compact || false}
+        disabled={!!button.disabled}
+        onClick={() => setOpenStatus(true)}
+      >
+        {button.text}
+      </Button>
+    );
+
   return (
     <>
-      {modalOpeningComponent ? (
-        <div
-          style={{ display: 'contents' }}
-          onClick={() => setOpenStatus(true)}
-        >
-          {modalOpeningComponent}
-        </div>
-      ) : (
-        <Button
-          glyph={button.glyph || null}
-          aria-label={button.label || null}
-          option={button.option}
-          compact={button.compact || false}
-          disabled={!!button.disabled}
-          onClick={() => setOpenStatus(true)}
-        >
-          {button.text}
-        </Button>
-      )}
+      {alwaysOpen ? null : renderModalOpeningComponent()}
       <Dialog
         className={className}
         {...props}
