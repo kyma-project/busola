@@ -12,13 +12,12 @@ import './fiori-helpers.scss';
 
 import App from 'components/App/App';
 
-const queryParams = new URLSearchParams(window.location.search);
 export const i18n = i18next
   .use(initReactI18next)
   .use(i18nextBackend)
   .init({
-    lng: queryParams.get('language') || 'en',
-    fallbackLng: 'en',
+    lng: false,
+    fallbackLng: false,
     backend: {
       loadPath: '/i18n/{{lng}}.yaml',
       parse: data => yaml.load(data),

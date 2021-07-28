@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Route, Switch } from 'react-router-dom';
 
 import ServiceClassList from '../ServiceClassList/ServiceClassList';
@@ -12,11 +13,17 @@ import {
   NotificationProvider,
   withTitle,
   MainFrameRedirection,
+  useMicrofrontendContext,
 } from 'react-shared';
 
 import { CATALOG_TITLE, INSTANCES_TITLE } from '../../shared/constants';
 
 const App = () => {
+  const { language } = useMicrofrontendContext();
+  const { i18n } = useTranslation();
+  useEffect(() => {
+    i18n.changeLanguage(language);
+  }, [language, i18n]);
   return (
     <NotificationProvider>
       <Switch>
