@@ -20,10 +20,7 @@ export const i18n = i18next
     fallbackLng: 'en',
     backend: {
       loadPath: '/i18n/{{lng}}.yaml',
-      parse: data => {
-        console.log('loading data', yaml.load(data));
-        return yaml.load(data);
-      },
+      parse: data => yaml.load(data),
     },
   });
 
