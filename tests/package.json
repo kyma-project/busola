@@ -4,8 +4,8 @@
   "scripts": {
     "start": "$(npm bin)/cypress open",
     "start:local": "CYPRESS_LOCAL_DEV=true $(npm bin)/cypress open",
-    "test": "$(npm bin)/cypress run --browser chrome --headless",
-    "test:local": "CYPRESS_LOCAL_DEV=true $(npm bin)/cypress run --browser chrome --headless"
+    "test": "$(npm bin)/cypress run --browser chrome",
+    "test:local": "CYPRESS_LOCAL_DEV=true $(npm bin)/cypress run --browser chrome"
   },
   "devDependencies": {
     "cypress-file-upload": "^5.0.8",
