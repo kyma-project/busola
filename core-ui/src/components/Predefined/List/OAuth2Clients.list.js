@@ -6,6 +6,7 @@ export const OAuth2ClientsList = ({ DefaultRenderer, ...otherParams }) => {
     <span>
       {'See the "Expose and secure a service" section in the '}
       <a
+        className="fd-link"
         target="_blank"
         rel="noopener noreferrer"
         href="https://kyma-project.io/docs/components/api-gateway#tutorials-expose-and-secure-a-service"

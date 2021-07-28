@@ -7,7 +7,7 @@ import ServiceListItem from './ServiceListItem';
 export default function ServicesBoundModal({ binding }) {
   const namespace = binding.metadata.namespace;
 
-  const modalOpeningComponent = <Link className="link">{namespace}</Link>;
+  const modalOpeningComponent = <Link className="fd-link">{namespace}</Link>;
 
   return (
     <Modal
