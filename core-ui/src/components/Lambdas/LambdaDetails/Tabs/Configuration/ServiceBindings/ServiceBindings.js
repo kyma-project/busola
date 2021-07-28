@@ -69,7 +69,7 @@ export default function ServiceBindings({
   ];
   const rowRenderer = ({ secret, serviceBinding, serviceBindingUsage }) => [
     <Link
-      className="link"
+      className="fd-link"
       data-test-id="service-instance-name"
       onClick={() =>
         LuigiClient.linkManager()

@@ -21,7 +21,7 @@ function navigateToService(apiRule) {
 
 export function GoToApiRuleDetails({ apiRule }) {
   return (
-    <Link className="link" onClick={() => goToApiRuleDetails(apiRule)}>
+    <Link className="fd-link" onClick={() => goToApiRuleDetails(apiRule)}>
       {apiRule.metadata.name}
     </Link>
   );

@@ -31,7 +31,10 @@ export function ClusterNodesWarnings({ nodesNames }) {
 
   const rowRenderer = e => [
     <p style={{ maxWidth: '50vw' }}>{e.message}</p>,
-    <Link className="link" onClick={() => navigateToNodeDetails(e.source.host)}>
+    <Link
+      className="fd-link"
+      onClick={() => navigateToNodeDetails(e.source.host)}
+    >
       {e.source.host}
     </Link>,
     formatInvolvedObject(e.involvedObject),

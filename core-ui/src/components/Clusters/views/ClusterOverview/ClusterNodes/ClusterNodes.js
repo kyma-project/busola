@@ -14,7 +14,7 @@ const NodeHeader = ({ nodeName }) => {
   return (
     <>
       <p className="node-header-title">Node:</p>
-      <Link className="link" onClick={() => navigateToNodeDetails(nodeName)}>
+      <Link className="fd-link" onClick={() => navigateToNodeDetails(nodeName)}>
         {nodeName}
       </Link>
     </>
