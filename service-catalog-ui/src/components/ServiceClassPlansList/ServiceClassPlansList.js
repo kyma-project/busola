@@ -25,7 +25,7 @@ export default function ServiceClassPlansList({ serviceClass, plans }) {
   const rowRenderer = plan => [
     <div>
       <Link
-        className="link link--bold"
+        className="fd-link link--bold"
         data-test-id="plan-name"
         onClick={() =>
           goToDetails(

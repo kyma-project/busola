@@ -181,7 +181,7 @@ function Resources({
   const rowRenderer = entry => [
     hasDetailsView ? (
       <Link
-        className="link"
+        className="fd-link"
         onClick={_ => {
           if (navigateFn) return navigateFn(entry.metadata.name);
           if (fixedPath)

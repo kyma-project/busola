@@ -5,7 +5,7 @@ import { Link } from './Link';
 export const CopiableLink = props => {
   return (
     <CopiableText textToCopy={props.url} compact={true}>
-      <Link {...props} />
+      <Link className="fd-link" {...props} />
     </CopiableText>
   );
 };
