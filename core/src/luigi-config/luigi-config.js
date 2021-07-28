@@ -25,8 +25,8 @@ import {
 import { setTheme, getTheme } from './utils/theme';
 
 export const i18n = i18next.use(i18nextBackend).init({
-  lng: 'en',
-  fallbackLng: false,
+  lng: localStorage.getItem('busola.language') || 'en',
+  fallbackLng: 'en',
   backend: {
     loadPath: '/i18n/{{lng}}.yaml',
     parse: data => yaml.load(data),

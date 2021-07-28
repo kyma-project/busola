@@ -1,11 +1,11 @@
 clusters:
   overview:
-    title: Cluster Overview
+    title: Przegląd Klastrów
 namespaces:
   overview:
-    title: Overview
+    title: Przegląd
     workloads:
-      title: Healthy Resources
+      title: Zdrowe zasoby
       pods: $t(pods.title)
       deployments: $t(deployments.title)
       error: 'Error while loading {{title}} data due to: {{message}}'
@@ -15,14 +15,14 @@ namespaces:
       limits: Memory limits
       error: Error while loading memory consumption data
 pods:
-  title: Pods
+  title: Pody
 deployments:
-  title: Deployments
+  title: Deploymenty
 service-catalog:
-  title: Service Management
+  title: Zarządzanie Serwisami
   catalog:
-    title: Service Catalog
+    title: Katalog Serwisów
     services:
       description: Enrich your experience with additional services that are installed outside the cluster.
 settings:
-  language: Language
+  language: Język

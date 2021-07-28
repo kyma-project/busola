@@ -52,6 +52,8 @@ export function getStaticChildrenNodesForNamespace(
   permissionSet,
   features,
 ) {
+  console.log('getStaticChildrenNodesForNamespace');
+  const language = i18next.language;
   const encodedClusterName = encodeURIComponent(getActiveClusterName());
   const nodes = [
     {
@@ -97,6 +99,7 @@ export function getStaticChildrenNodesForNamespace(
         toSearchParamsString({
           resourceApiPath: '/apis/serverless.kyma-project.io/v1alpha1',
           hasDetailsView: true,
+          language,
         }),
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
@@ -133,6 +136,7 @@ export function getStaticChildrenNodesForNamespace(
         toSearchParamsString({
           resourceApiPath: '/api/v1',
           hasDetailsView: true,
+          language,
         }),
       viewGroup: coreUIViewGroupName,
       keepSelectedForChildren: true,
@@ -195,6 +199,7 @@ export function getStaticChildrenNodesForNamespace(
         toSearchParamsString({
           resourceApiPath: '/apis/apps/v1',
           hasDetailsView: true,
+          language,
         }),
       viewGroup: coreUIViewGroupName,
       navigationContext: 'deployments',
@@ -227,6 +232,7 @@ export function getStaticChildrenNodesForNamespace(
         toSearchParamsString({
           resourceApiPath: '/apis/apps/v1',
           hasDetailsView: true,
+          language,
         }),
       viewGroup: coreUIViewGroupName,
       keepSelectedForChildren: true,
@@ -273,6 +279,7 @@ export function getStaticChildrenNodesForNamespace(
         toSearchParamsString({
           resourceApiPath: '/apis/gateway.kyma-project.io/v1alpha1',
           hasDetailsView: true,
+          language,
         }),
       viewGroup: coreUIViewGroupName,
       keepSelectedForChildren: true,
@@ -303,6 +310,7 @@ export function getStaticChildrenNodesForNamespace(
             toSearchParamsString({
               resourceApiPath: '/apis/gateway.kyma-project.io/v1alpha1',
               hasDetailsView: true,
+              language,
             }),
         },
         {
@@ -313,6 +321,7 @@ export function getStaticChildrenNodesForNamespace(
             toSearchParamsString({
               resourceApiPath: '/apis/gateway.kyma-project.io/v1alpha1',
               hasDetailsView: true,
+              language,
             }),
         },
       ],
@@ -329,6 +338,7 @@ export function getStaticChildrenNodesForNamespace(
         toSearchParamsString({
           resourceApiPath: '/api/v1',
           hasDetailsView: true,
+          language,
         }),
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
@@ -473,6 +483,7 @@ export function getStaticChildrenNodesForNamespace(
           resourceApiPath: '/apis/servicecatalog.k8s.io/v1beta1',
           readOnly: true,
           hasDetailsView: false,
+          language,
         }),
       viewGroup: coreUIViewGroupName,
       context: {
@@ -502,6 +513,7 @@ export function getStaticChildrenNodesForNamespace(
         toSearchParamsString({
           resourceApiPath: '/apis/addons.kyma-project.io/v1alpha1',
           hasDetailsView: true,
+          language,
         }),
       viewGroup: coreUIViewGroupName,
       keepSelectedForChildren: true,
@@ -539,6 +551,7 @@ export function getStaticChildrenNodesForNamespace(
         toSearchParamsString({
           resourceApiPath: '/api/v1',
           hasDetailsView: true,
+          language,
         }),
       viewGroup: coreUIViewGroupName,
       keepSelectedForChildren: true,
@@ -572,6 +585,7 @@ export function getStaticChildrenNodesForNamespace(
         toSearchParamsString({
           resourceApiPath: '/api/v1',
           hasDetailsView: true,
+          language,
         }),
       viewGroup: coreUIViewGroupName,
       keepSelectedForChildren: true,
@@ -606,6 +620,7 @@ export function getStaticChildrenNodesForNamespace(
         toSearchParamsString({
           resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
           hasDetailsView: true,
+          language,
           readOnly: true,
         }),
       keepSelectedForChildren: true,
@@ -642,6 +657,7 @@ export function getStaticChildrenNodesForNamespace(
         toSearchParamsString({
           resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
           hasDetailsView: true,
+          language,
         }),
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
@@ -676,6 +692,7 @@ export function getStaticChildrenNodesForNamespace(
         toSearchParamsString({
           resourceApiPath: '/apis/hydra.ory.sh/v1alpha1',
           hasDetailsView: true,
+          language,
         }),
       viewGroup: coreUIViewGroupName,
       keepSelectedForChildren: true,
@@ -717,6 +734,7 @@ export function getStaticChildrenNodesForNamespace(
         toSearchParamsString({
           resourceApiPath: '/apis/serverless.kyma-project.io/v1alpha1',
           hasDetailsView: false,
+          language,
         }),
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
@@ -737,6 +755,7 @@ export function getStaticChildrenNodesForNamespace(
           fullResourceApiPath:
             '/apis/apiextensions.k8s.io/v1/customresourcedefinitions',
           hasDetailsView: true,
+          language,
         }),
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
@@ -787,6 +806,7 @@ export function getStaticRootNodes(
   permissionSet,
   features,
 ) {
+  const language = i18next.language;
   const nodes = [
     {
       pathSegment: 'overview',
@@ -818,6 +838,7 @@ export function getStaticRootNodes(
         toSearchParamsString({
           resourceApiPath: '/api/v1',
           hasDetailsView: true,
+          language,
         }),
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
@@ -865,6 +886,7 @@ export function getStaticRootNodes(
           resourceApiPath:
             '/apis/applicationconnector.kyma-project.io/v1alpha1',
           hasDetailsView: true,
+          language,
         }),
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
@@ -907,6 +929,7 @@ export function getStaticRootNodes(
         toSearchParamsString({
           resourceApiPath: '/apis/addons.kyma-project.io/v1alpha1',
           hasDetailsView: true,
+          language,
         }),
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
@@ -955,6 +978,7 @@ export function getStaticRootNodes(
         toSearchParamsString({
           resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
           hasDetailsView: true,
+          language,
           readOnly: true,
         }),
       keepSelectedForChildren: true,
@@ -998,6 +1022,7 @@ export function getStaticRootNodes(
         toSearchParamsString({
           resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
           hasDetailsView: true,
+          language,
         }),
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
@@ -1033,6 +1058,7 @@ export function getStaticRootNodes(
         toSearchParamsString({
           resourceApiPath: '/apis/apiextensions.k8s.io/v1',
           hasDetailsView: true,
+          language,
         }),
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
@@ -1087,7 +1113,10 @@ export function getStaticRootNodes(
     // OTHER
     {
       pathSegment: 'preferences',
-      viewUrl: config.coreUIModuleUrl + '/preferences',
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/preferences?' +
+        toSearchParamsString({ language }),
       viewGroup: coreUIViewGroupName,
       hideFromNav: true,
     },

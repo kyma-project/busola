@@ -1,3 +1,4 @@
+import i18next from 'i18next';
 import { NODE_PARAM_PREFIX } from './luigi-config';
 import {
   saveClusterParams,
@@ -14,6 +15,11 @@ import { setTheme } from './utils/theme';
 
 export const communication = {
   customMessagesListeners: {
+    'busola.language': ({ language }) => {
+      localStorage.setItem('busola.language', language);
+      i18next.changeLanguage(language);
+      Luigi.configChanged('navigation.nodes');
+    },
     'busola.theme': ({ name }) => {
       setTheme(name);
     },
