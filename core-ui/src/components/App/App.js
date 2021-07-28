@@ -10,7 +10,11 @@ import {
   NO_PERMISSIONS_TITLE,
   CLUSTER_OVERVIEW_TITLE,
 } from 'shared/constants';
-import { withTitle, useMicrofrontendContext } from 'react-shared';
+import {
+  withTitle,
+  useMicrofrontendContext,
+  MainFrameRedirection,
+} from 'react-shared';
 import CreateApiRule from '../ApiRules/CreateApiRule/CreateApiRule';
 import EditApiRule from 'components/ApiRules/EditApiRule/EditApiRule';
 import { ContainersLogs } from 'components/Predefined/Details/Pod/ContainersLogs';
@@ -94,6 +98,7 @@ export default function App() {
       />
 
       <Route exact path="/:resourceType" component={RoutedResourcesList} />
+      <Route exact path="" component={MainFrameRedirection} />
     </Switch>
   );
 }

@@ -24,7 +24,7 @@ function getBytes(memoryString) {
 
   if (!suffixMatch?.length) {
     console.warn('error');
-    return;
+    return 0;
   }
   const suffix = suffixMatch[0];
   const number = memoryString.replace(suffix, '');
@@ -32,7 +32,7 @@ function getBytes(memoryString) {
   const suffixPower = MEMORY_SUFFIX_POWER[suffix];
   if (!suffixPower) {
     console.warn('error');
-    return;
+    return 0;
   }
 
   return number * suffixPower;
@@ -59,30 +59,41 @@ function bytesToHumanReadable(bytesNumber) {
 const MemoryRequestsCircle = ({ resourceQuotas, isLoading }) => {
   const { t } = useTranslation();
 
-  if (!resourceQuotas) {
-    return t('namespaces.overview.resources.error');
-  } else if (isLoading) {
+  if (isLoading) {
     return <Spinner />;
+  } else if (!resourceQuotas) {
+    return t('namespaces.overview.resources.error');
   }
 
   const totalRequests = resourceQuotas.reduce(
-    (sum, quota) => sum + getBytes(quota.status.hard['requests.memory']), //should we sum it or take the max number?
+    (sum, quota) =>
+      sum +
+      getBytes(quota.status.hard['requests.memory'] || quota.status.hard.cpu),
     0,
   );
   const totalUsage = resourceQuotas.reduce(
-    (sum, quota) => sum + getBytes(quota.status.used['requests.memory']), //should we sum it or take the max number?
+    (sum, quota) =>
+      sum +
+      getBytes(quota.status.used['requests.memory'] || quota.status.used.cpu),
     0,
   );
+
+  const valueText = bytesToHumanReadable(totalUsage);
+  const maxText = bytesToHumanReadable(totalRequests);
 
   return (
     <CircleProgress
       color="var(--sapIndicationColor_7)"
       value={totalUsage}
-      valueText={bytesToHumanReadable(totalUsage)}
+      valueText={valueText}
       max={totalRequests}
-      maxText={bytesToHumanReadable(totalRequests)}
-      title={t('namespaces.overview.resources.requests')}
+      maxText={maxText}
+      title="Memory requests"
       reversed={true}
+      tooltip={{
+        content: `This Namespace uses ${valueText} of ${maxText} its memory requests.`,
+        position: 'bottom',
+      }}
     />
   );
 };
@@ -90,10 +101,10 @@ const MemoryRequestsCircle = ({ resourceQuotas, isLoading }) => {
 const MemoryLimitsCircle = ({ resourceQuotas, isLoading }) => {
   const { t } = useTranslation();
 
-  if (!resourceQuotas) {
-    return t('namespaces.overview.resources.error');
-  } else if (isLoading) {
+  if (isLoading) {
     return <Spinner />;
+  } else if (!resourceQuotas) {
+    return t('namespaces.overview.resources.error');
   }
 
   const totalLimits = resourceQuotas.reduce(
@@ -105,15 +116,22 @@ const MemoryLimitsCircle = ({ resourceQuotas, isLoading }) => {
     0,
   );
 
+  const valueText = bytesToHumanReadable(totalUsage);
+  const maxText = bytesToHumanReadable(totalLimits);
+
   return (
     <CircleProgress
       color="var(--sapIndicationColor_8)"
       value={totalUsage}
-      valueText={bytesToHumanReadable(totalUsage)}
+      valueText={valueText}
       max={totalLimits}
-      maxText={bytesToHumanReadable(totalLimits)}
+      maxText={maxText}
       title={t('namespaces.overview.resources.limits')}
       reversed={true}
+      tooltip={{
+        content: `This Namespace uses ${valueText} of ${maxText} its memory limits.`,
+        position: 'bottom',
+      }}
     />
   );
 };

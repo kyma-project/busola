@@ -1,42 +1,42 @@
 import React, { useState } from 'react';
 
-import { Button } from 'fundamental-react';
-
 import { ModalWithForm } from 'react-shared';
-import { ENVIRONMENT_VARIABLES_PANEL } from 'components/Lambdas/constants';
 
-import EditVariablesForm from './EditVariablesForm';
+import VariableForm, { FORM_TYPE } from '../VariableForm/VariableForm';
+import { VARIABLE_TYPE } from 'components/Lambdas/helpers/lambdaVariables';
 
-export default function EditVariablesModal({
+export default function VariableModal({
   lambda,
+  resources = [],
   customVariables,
   customValueFromVariables,
-  injectedVariables,
+  variable = null,
+  type = VARIABLE_TYPE.CUSTOM,
+  title,
+  modalOpeningComponent,
+  confirmText,
 }) {
   const [invalidModalPopupMessage, setInvalidModalPopupMessage] = useState('');
 
-  const modalOpeningComponent = (
-    <Button glyph="edit" option="transparent">
-      {ENVIRONMENT_VARIABLES_PANEL.EDIT_MODAL.OPEN_BUTTON.TEXT}
-    </Button>
-  );
-
   return (
     <ModalWithForm
-      title={ENVIRONMENT_VARIABLES_PANEL.EDIT_MODAL.TITLE}
+      title={title}
       modalOpeningComponent={modalOpeningComponent}
-      confirmText={ENVIRONMENT_VARIABLES_PANEL.EDIT_MODAL.CONFIRM_BUTTON.TEXT}
+      confirmText={confirmText}
       invalidPopupMessage={invalidModalPopupMessage}
       id="add-lambda-variables-modal"
-      className="fd-dialog--xl-size modal--no-padding modal-width--m"
+      className="fd-dialog--xl-size modal-width--m"
       renderForm={props => (
-        <EditVariablesForm
+        <VariableForm
           {...props}
           lambda={lambda}
+          resources={resources}
+          variable={variable}
+          type={type}
           customVariables={customVariables}
           customValueFromVariables={customValueFromVariables}
-          injectedVariables={injectedVariables}
           setInvalidModalPopupMessage={setInvalidModalPopupMessage}
+          formType={FORM_TYPE.CREATE}
         />
       )}
     />

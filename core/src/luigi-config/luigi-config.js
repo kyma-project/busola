@@ -22,6 +22,7 @@ import {
   createNavigation,
   addClusterNodes,
 } from './navigation/navigation-data-init';
+import { setTheme, getTheme } from './utils/theme';
 
 export const i18n = i18next.use(i18nextBackend).init({
   lng: 'en',
@@ -96,4 +97,5 @@ async function luigiAfterInit() {
     lifecycleHooks: { luigiAfterInit },
   };
   Luigi.setConfig(luigiConfig);
+  setTheme(getTheme());
 })();

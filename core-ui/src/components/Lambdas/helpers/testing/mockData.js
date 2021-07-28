@@ -1,58 +1,25 @@
 export const lambdaMock = {
-  name: 'lambda-pico-bello',
-  namespace: 'namespace',
-  UID: 'pico-bello-123',
-  labels: {
-    foo: 'bar',
-    pico: 'bello',
+  metadata: {
+    name: 'lambda-pico-bello',
+    namespace: 'namespace',
   },
-  source: 'source',
-  dependencies: '{dependencies}',
-  replicas: {
-    min: 1,
-    max: 1,
-  },
-  resources: {
-    requests: {
-      memory: '512Mi',
-      cpu: '100m',
-    },
-    limits: {
-      memory: '512Mi',
-      cpu: '100m',
-    },
-  },
-  buildResources: {
-    requests: {
-      memory: '700Mi',
-      cpu: '700m',
-    },
-    limits: {
-      memory: '1100Mi',
-      cpu: '1100m',
-    },
-  },
-  runtime: 'nodejs12',
-  env: [
-    {
-      name: 'FOO',
-      value: 'bar',
-      valueFrom: null,
-    },
-    {
-      name: 'PICO',
-      valueFrom: {
-        type: 'Secret',
-        name: 'secret',
-        key: 'KEY',
-        optional: false,
+  spec: {
+    env: [
+      {
+        name: 'FOO',
+        value: 'bar',
+        valueFrom: null,
       },
-    },
-  ],
-  status: {
-    phase: 'INITIALIZING',
-    reason: '',
-    message: '',
+      {
+        name: 'PICO',
+        valueFrom: {
+          secretKeyRef: {
+            name: 'secret',
+            key: 'KEY',
+          },
+        },
+      },
+    ],
   },
 };
 

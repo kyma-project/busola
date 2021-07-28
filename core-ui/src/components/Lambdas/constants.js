@@ -99,7 +99,7 @@ export const LAMBDAS_LIST = {
       NAME: {
         ERRORS: {
           EMPTY: 'Function name is required.',
-          INVALID: `Invalid Function name. The name must consist of lower case alphanumeric characters or dashes, and must start and end with an alphanumeric character (e.g. 'my-name1').`,
+          INVALID: `Name must contain lower case alphanumeric characters, can contain '-'  (like 'my-name1').`,
           TOO_LONG: 'Function name cannot be longer than 63 characters.',
         },
       },
@@ -189,12 +189,12 @@ export const REPOSITORIES_LIST = {
       PLACEHOLDER: 'Enter the URL address of your Git repository (Required)',
       ERRORS: {
         INVALID: `Invalid Repository URL. The URL must start with the "http(s)", "git", or "ssh" prefix and end with the ".git" suffix.`,
-        EMPTY: 'Repository URL is required.',
+        EMPTY: 'Enter repository URL.',
       },
     },
     AUTH_TYPE: {
       LABEL: 'Authorization',
-      INLINE_HELP: `Authenticate with your Git repository using a token or password (Basic), an authentication key (SSH key), or don't use any authorization method (Public)`,
+      INLINE_HELP: `Basic: token or password / SSH key: authentication key / Public: no authentication`,
       OPTIONS: [
         {
           VALUE: 'Public',
@@ -212,10 +212,10 @@ export const REPOSITORIES_LIST = {
     },
     SECRET_NAME: {
       LABEL: 'Secret name',
-      INLINE_HELP: `Secret name must consist of lower case alphanumeric characters or dashes, and must start and end with an alphanumeric character (e.g. 'my-name1').`,
+      INLINE_HELP: `Name must contain lower case alphanumeric characters, can contain '-'  (like 'my-name1').`,
       PLACEHOLDER: 'Enter a Secret name with credentials (Required)',
       ERRORS: {
-        INVALID: `Invalid Secret name. The name must consist of lower case alphanumeric characters or dashes, and must start and end with an alphanumeric character (e.g. 'my-name1').`,
+        INVALID: `Name must contain lower case alphanumeric characters, can contain '-'  (like 'my-name1').`,
         EMPTY: 'Secret name is required.',
         TOO_LONG: 'Repository name cannot be longer than 63 characters.',
       },
@@ -415,7 +415,7 @@ export const CODE_AND_DEPENDENCIES_PANEL = {
     TEXT: 'Save',
     POPUP_MESSAGE: {
       EMPTY_SOURCE: 'Source cannot be empty.',
-      INVALID_DEPS: 'Dependencies must be specified in a valid JSON format',
+      INVALID_DEPS: 'Dependencies must be specified in a valid JSON format.',
       NO_CHANGES: 'No changes made.',
     },
   },
@@ -465,10 +465,26 @@ export const ENVIRONMENT_VARIABLES_PANEL = {
         "Couldn't find environment variables matching this query.",
     },
   },
-  EDIT_MODAL: {
-    TITLE: 'Edit Environment Variables',
+  CREATE_MODAL: {
+    TITLE: {
+      CUSTOM: 'Create Custom Variable',
+      SECRET: 'Create Variable From Secret',
+      CONFIG_MAP: 'Create Variable From Config Map',
+    },
     OPEN_BUTTON: {
-      TEXT: 'Edit Environment Variables',
+      CUSTOM: 'Custom Variable',
+      SECRET: 'Secret Variable',
+      CONFIG_MAP: 'Config Map Variable',
+    },
+    CONFIRM_BUTTON: {
+      TEXT: 'Create',
+    },
+  },
+  EDIT_MODAL: {
+    TITLE: {
+      CUSTOM: 'Edit Custom Variable',
+      SECRET: 'Edit Variable From Secret',
+      CONFIG_MAP: 'Edit Variable From Config Map',
     },
     CONFIRM_BUTTON: {
       TEXT: 'Save',
@@ -486,9 +502,11 @@ export const ENVIRONMENT_VARIABLES_PANEL = {
   ERRORS: {
     EMPTY: 'Variable is empty.',
     DUPLICATED: 'Duplicated variable name.',
-    INVALID: `Invalid variable name. The name must consist of alphanumeric characters, can contain "_" and no spaces, like "VARIABLE_NAME".`,
+    INVALID: `Variable name must contain alphanumeric characters, can contain '_', no blank spaces.`,
     RESTRICTED:
       'This variable name is restricted and cannot be used. Try a different one.',
+    INVALID_SECRET: `Select the secret name and key`,
+    INVALID_CONFIG: `Select the config name and key`,
   },
   WARNINGS: {
     TEXT: 'Warning',
@@ -519,16 +537,25 @@ export const ENVIRONMENT_VARIABLES_PANEL = {
       SHOW_VALUE_MESSAGE: 'Click to show',
       HIDE_VALUE_MESSAGE: 'Click to hide',
     },
+    CONFIG_MAP: {
+      TEXT: 'Config Map',
+      TOOLTIP_MESSAGE:
+        'This variable comes from the "{resourceName}" Config Map.',
+    },
+    SECRET: {
+      TEXT: 'Secret',
+      TOOLTIP_MESSAGE: 'This variable comes from the "{resourceName}" Secret.',
+    },
   },
 };
 
 export const FORMS = {
   RESOURCE_NAME: {
     LABEL: 'Name',
-    INLINE_HELP: `Name must consist of lower case alphanumeric characters or dashes, and must start and end with an alphanumeric character (e.g. 'my-name1').`,
+    INLINE_HELP: `Name must contain lower case alphanumeric characters, can contain '-'  (like 'my-name1').`,
   },
   LABELS: {
     LABEL: 'Labels',
-    INLINE_HELP: `The key/value pair should be separated by '=', consist of alphanumeric characters, '-', '_' or '.', and must start and end with an alphanumeric character. The key cannot be empty.`,
+    INLINE_HELP: `key=value', must start and end with alphanumeric character, can contain '-', '_' or '.'`,
   },
 };

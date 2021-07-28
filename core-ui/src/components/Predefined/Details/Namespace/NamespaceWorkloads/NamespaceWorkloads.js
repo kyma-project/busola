@@ -19,12 +19,20 @@ const navigateTo = path => () => {
     .navigate(path);
 };
 
+const tooltipContent = (value, total, resourceType) => {
+  if (total === 0) {
+    return `There are no ${resourceType} in this Namespace`;
+  } else {
+    return `${value}/${total} ${resourceType} are healthy.`;
+  }
+};
+
 const ResourceCircle = ({
   data,
   counter,
   loading,
   error,
-  title,
+  resourceType,
   color,
   onClick,
 }) => {
@@ -34,7 +42,7 @@ const ResourceCircle = ({
     return (
       <p>
         {t('namespaces.overview.workloads.error', {
-          title,
+          title: resourceType,
           message: error.message,
         })}
       </p>
@@ -42,13 +50,18 @@ const ResourceCircle = ({
   } else if (loading || !data) {
     return <Spinner />;
   }
+
   return (
     <CircleProgress
       onClick={onClick}
       color={color}
       value={counter(data)}
       max={data.length}
-      title={title}
+      title={resourceType}
+      tooltip={{
+        content: tooltipContent(counter(data), data.length, resourceType),
+        position: 'bottom',
+      }}
     />
   );
 };
@@ -68,7 +81,7 @@ const PodsCircle = ({ namespace }) => {
       counter={getHealthyStatusesCount}
       loading={loading}
       error={error}
-      title={t('namespaces.overview.workloads.pods')}
+      resourceType={t('namespaces.overview.workloads.pods')}
       color="var(--sapIndicationColor_5)"
     />
   );
@@ -89,7 +102,7 @@ const DeploymentsCircle = ({ namespace }) => {
       counter={getHealthyReplicasCount}
       loading={loading}
       error={error}
-      title={t('namespaces.overview.workloads.deployments')}
+      resourceType={t('namespaces.overview.workloads.deployments')}
       color="var(--sapIndicationColor_6)"
     />
   );

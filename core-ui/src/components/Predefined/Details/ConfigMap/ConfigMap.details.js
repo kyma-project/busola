@@ -1,9 +1,11 @@
 import React from 'react';
-import { ModalWithForm, MonacoEditor } from 'react-shared';
+import { ModalWithForm, MonacoEditor, useTheme } from 'react-shared';
 import { Button, LayoutPanel } from 'fundamental-react';
 import { EditConfigMapForm } from './EditConfigMapForm';
 
 export const ConfigMapsDetails = ({ DefaultRenderer, ...otherParams }) => {
+  const { editorTheme } = useTheme();
+
   const options = {
     readOnly: true,
     minimap: {
@@ -21,7 +23,7 @@ export const ConfigMapsDetails = ({ DefaultRenderer, ...otherParams }) => {
         <LayoutPanel.Body>
           <MonacoEditor
             key={`editor-${key}`}
-            theme="vs-light"
+            theme={editorTheme}
             height="20em"
             value={data[key]}
             options={options}

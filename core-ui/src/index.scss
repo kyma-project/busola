@@ -10,6 +10,10 @@ body {
   padding: 0;
   font-family: sans-serif;
   background-color: #f3f4f5;
+
+  .tippy-popper[aria-hidden='true'] {
+    display: none;
+  }
 }
 
 .fd-action-bar__actions .fd-popover {
@@ -115,7 +119,7 @@ body {
 
 .modal--no-padding {
   .fd-dialog__body {
-    padding:0;
+    padding: 0 !important;
   }
 }
 
@@ -296,7 +300,7 @@ input[type='checkbox'] {
   }
 }
 .fd-input.is-invalid {
-  border-width: .125rem;
-  background-color: var(--sapField_InvalidBackground,#fff);
-  border-color: var(--sapField_InvalidColor,#b00);
+  border-width: 0.125rem;
+  background-color: var(--sapField_InvalidBackground, #fff);
+  border-color: var(--sapField_InvalidColor, #b00);
 }
