@@ -101,7 +101,7 @@ export default function VariableForm({
     let customValueExits =
       [...customVariables, ...customValueFromVariables].findIndex(variable => {
         return variable.id === currentVariable.id;
-      }) > 0;
+      }) >= 0;
     const updatedVariables = !customValueExits
       ? [...customVariables, currentVariable, ...customValueFromVariables]
       : [...customVariables, ...customValueFromVariables];
