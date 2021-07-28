@@ -11,7 +11,6 @@ export default function LanguageSettings() {
     { key: 'pl', text: 'Polski' },
   ];
   const selectLanguage = (_, language) => {
-    console.log('send language change', language);
     i18n.changeLanguage(language.key);
     LuigiClient.sendCustomMessage({
       id: 'busola.language',
