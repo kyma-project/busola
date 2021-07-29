@@ -2,7 +2,7 @@ import { setTheme, getTheme } from './utils/theme';
 
 export function createSettings(params) {
   return {
-    responsiveNavigation: 'simpleMobileOnly',
+    responsiveNavigation: 'semiCollapsed',
     sideNavFooterText: '',
     header: {
       logo: getTheme() === 'hcw' ? 'assets/logo-black.svg' : 'assets/logo.svg',
