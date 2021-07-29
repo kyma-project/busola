@@ -13,11 +13,11 @@ export function YamlContent({
   saveDisabled,
 }) {
   const [editor, setEditor] = React.useState(null);
-  const [val, setVal] = useState(jsyaml.safeDump(yaml));
+  const [val, setVal] = useState(jsyaml.dump(yaml));
   const { editorTheme } = useTheme();
 
   useEffect(() => {
-    const converted = jsyaml.safeDump(yaml);
+    const converted = jsyaml.dump(yaml);
     setChangedYamlFn(null);
     setVal(converted);
 

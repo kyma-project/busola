@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Route, Switch } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import Preferences from 'components/Preferences/Preferences';
 import {
@@ -28,7 +29,11 @@ import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/Clust
 import { NodeDetails } from 'components/Nodes/NodeDetails/NodeDetails';
 
 export default function App() {
-  const { cluster } = useMicrofrontendContext();
+  const { cluster, language } = useMicrofrontendContext();
+  const { i18n } = useTranslation();
+  useEffect(() => {
+    i18n.changeLanguage(language);
+  }, [language, i18n]);
   return (
     // force rerender on cluster change
     <Switch key={cluster?.name}>
