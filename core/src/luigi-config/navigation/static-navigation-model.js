@@ -668,7 +668,7 @@ export function getStaticChildrenNodesForNamespace(
       pathSegment: 'oauth2clients',
       resourceType: 'oauth2clients',
       navigationContext: 'oauth2clients',
-      label: 'OAuth Clients',
+      label: 'OAuth2 Clients',
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/Oauth2Clients?' +
