@@ -3,15 +3,16 @@ import ReactDOM from 'react-dom';
 import i18next from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { BrowserRouter } from 'react-router-dom';
-import { Microfrontend, Spinner } from 'react-shared';
 import i18nextBackend from 'i18next-http-backend';
 import yaml from 'js-yaml';
 
 import './index.scss';
 import './fiori-helpers.scss';
 import App from './components/App/App';
+// NOTE react-shared has to be imported after App for some unknown reason
+import { Microfrontend, Spinner } from 'react-shared';
 
-export const i18n = i18next
+i18next
   .use(initReactI18next)
   .use(i18nextBackend)
   .init({
