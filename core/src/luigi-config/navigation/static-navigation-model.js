@@ -1,3 +1,4 @@
+import i18next from 'i18next';
 import { saveAs } from 'file-saver';
 
 import { config } from '../config';
@@ -63,7 +64,7 @@ export function getStaticChildrenNodesForNamespace(
     },
     {
       pathSegment: 'details',
-      label: 'Overview',
+      label: i18next.t('namespaces.overview.title'),
       viewUrl:
         config.coreUIModuleUrl +
         '/Namespaces/:namespaceId?' +
@@ -789,7 +790,7 @@ export function getStaticRootNodes(
   const nodes = [
     {
       pathSegment: 'overview',
-      label: 'Cluster Overview',
+      label: i18next.t('clusters.overview.title'),
       icon: 'database',
       viewUrl: config.coreUIModuleUrl + '/overview',
       viewGroup: coreUIViewGroupName,
