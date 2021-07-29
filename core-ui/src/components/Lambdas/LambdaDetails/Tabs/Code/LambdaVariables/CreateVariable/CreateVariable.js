@@ -5,6 +5,12 @@ import { VARIABLE_TYPE } from 'components/Lambdas/helpers/lambdaVariables';
 import { ENVIRONMENT_VARIABLES_PANEL } from 'components/Lambdas/constants';
 import VariableModal from '../VariableForm/VariableModal';
 
+const addNewVariableButton = (
+  <Button glyph="add" typeAttr="button">
+    {ENVIRONMENT_VARIABLES_PANEL.EDIT_MODAL.ADD_ENV_BUTTON.TEXT}
+  </Button>
+);
+
 export default function CreateVariable({
   lambda,
   secrets,
@@ -13,11 +19,6 @@ export default function CreateVariable({
   customValueFromVariables,
 }) {
   const [currentModal, setCurrentModal] = useState();
-  const addNewVariableButton = (
-    <Button glyph="add" typeAttr="button">
-      {ENVIRONMENT_VARIABLES_PANEL.EDIT_MODAL.ADD_ENV_BUTTON.TEXT}
-    </Button>
-  );
 
   const commonProps = {
     lambda: lambda,
@@ -25,8 +26,7 @@ export default function CreateVariable({
     customVariables: customVariables,
     customValueFromVariables: customValueFromVariables,
     onModalOpenStateChange: state => {
-      if (!state) setCurrentModal(null);
-      console.log('state changed', state);
+      if (!state) setCurrentModal();
     },
     alwaysOpen: true,
   };
@@ -51,7 +51,7 @@ export default function CreateVariable({
   function openModalWithProps(props) {
     setCurrentModal(<VariableModal {...props} {...commonProps} />);
   }
-  console.count('render');
+
   return (
     <>
       {currentModal}

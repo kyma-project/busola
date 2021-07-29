@@ -50,7 +50,7 @@ export const ModalWithForm = ({
   const notificationManager = useNotification();
 
   useEffect(() => {
-    if (!alwaysOpen) setOpenStatus(opened); // if alwaysOpen===true we can ignore this
+    if (!alwaysOpen) setOpenStatus(opened); // if alwaysOpen===true we can ignore the 'opened' prop
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [opened]);
 
@@ -115,7 +115,7 @@ export const ModalWithForm = ({
       formElementRef.current.dispatchEvent(
         new Event('submit', { cancelable: true }),
       );
-      setTimeout(() => setOpenStatus(false));
+      setOpenStatus(false);
     }
   }
 
@@ -176,12 +176,7 @@ export const ModalWithForm = ({
         show={isOpen}
         actions={[
           renderConfirmButton(),
-          <Button
-            onClick={() => {
-              setOpenStatus(false);
-            }}
-            option="transparent"
-          >
+          <Button onClick={() => setOpenStatus(false)} option="transparent">
             Cancel
           </Button>,
         ]}
@@ -226,6 +221,7 @@ ModalWithForm.propTypes = {
   button: CustomPropTypes.button,
   className: PropTypes.string,
   onModalOpenStateChange: PropTypes.func,
+  alwaysOpen: PropTypes.bool, // set this to true if you want to control the modal by rendering and un-rendering it instead of the open/closed state
 };
 
 ModalWithForm.defaultProps = {
@@ -233,4 +229,5 @@ ModalWithForm.defaultProps = {
   confirmText: 'Create',
   invalidPopupMessage: '',
   onModalOpenStateChange: () => {},
+  alwaysOpen: false,
 };
