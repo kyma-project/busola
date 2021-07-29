@@ -17,8 +17,9 @@ export const communication = {
   customMessagesListeners: {
     'busola.language': ({ language }) => {
       localStorage.setItem('busola.language', language);
-      i18next.changeLanguage(language);
-      Luigi.configChanged('navigation.nodes');
+      i18next
+        .changeLanguage(language)
+        .then(() => Luigi.configChanged('navigation.nodes'));
     },
     'busola.theme': ({ name }) => {
       setTheme(name);
