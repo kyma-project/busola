@@ -5,7 +5,7 @@ import { LayoutPanel } from 'fundamental-react';
 const THEMES = [
   {
     key: 'light_dark',
-    text: 'Light / Dark (depending on the system settings)',
+    text: 'Light / Dark (depending on system settings)',
   },
   {
     key: 'light',
