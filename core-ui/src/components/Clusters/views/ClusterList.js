@@ -65,7 +65,7 @@ export function ClusterList() {
   const rowRenderer = entry => [
     <>
       <Link
-        className="link"
+        className="fd-link"
         style={styleActiveCluster(entry)}
         onClick={() => setCluster(entry.currentContext.cluster.name)}
       >

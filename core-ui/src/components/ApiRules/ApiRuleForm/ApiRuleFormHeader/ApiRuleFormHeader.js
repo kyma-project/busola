@@ -19,7 +19,7 @@ const ApiRuleFormHeader = ({
   const serviceLink = !openedInModalBool && serviceName && (
     <PageHeader.Column title="Service">
       <Link
-        className="link"
+        className="fd-link"
         onClick={() =>
           LuigiClient.linkManager()
             .fromContext('namespace')

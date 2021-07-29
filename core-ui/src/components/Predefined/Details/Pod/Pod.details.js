@@ -46,7 +46,7 @@ export const PodsDetails = ({ DefaultRenderer, ...otherParams }) => {
         volume.name,
         volumeType,
         <Link
-          className="link"
+          className="fd-link"
           onClick={() => goToSecretDetails(volumeType, volume[volumeType].name)}
         >
           {volume[volumeType].name}

@@ -24,6 +24,7 @@ const ServiceInstanceName = ({ instance }) => (
   <TextOverflowWrapper>
     <LinkButton data-e2e-id="instance-name">
       <Link
+        className="fd-link"
         onClick={() => goToServiceInstanceDetails(instance.metadata.name)}
         data-e2e-id={`instance-name-${instance.name}`}
         title={instance.metadata.name}
