@@ -3,11 +3,12 @@ import LuigiClient from '@luigi-project/client';
 
 export const ThemeContext = createContext({});
 
-const getInitialTheme = _ => localStorage.getItem('busola.theme') || 'default';
+const getInitialTheme = _ =>
+  localStorage.getItem('busola.theme') || 'light_dark';
 
 function applyThemeToLinkNode(name, publicUrl) {
   const link = document.querySelector('head #_theme');
-  if (name === 'default' && link) {
+  if (name === 'light' && link) {
     link.parentNode.removeChild(link);
   }
   if (!link) {
