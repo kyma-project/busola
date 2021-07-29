@@ -21,7 +21,7 @@ export default function PodList({ namespace, functionName, isActive }) {
 
   const rowRenderer = entry => [
     <Link
-      className="link"
+      className="fd-link"
       onClick={navigateTo(`pods/details/${entry.metadata.name}`)}
     >
       {entry.metadata.name}

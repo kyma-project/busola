@@ -39,6 +39,7 @@ const ServiceInstanceInfo = ({
   const documentationLink = serviceClass.spec.externalMetadata
     ?.documentationUrl && (
     <Link
+      className="fd-link"
       url={serviceClass.spec.externalMetadata.documentationUrl}
       text={serviceInstanceConstants.link}
       data-e2e-id="instance-service-documentation-link"
@@ -47,6 +48,7 @@ const ServiceInstanceInfo = ({
 
   const supportLink = serviceClass.spec.externalMetadata?.supportUrl && (
     <Link
+      className="fd-link"
       url={serviceClass.spec.externalMetadata.supportUrl}
       text={serviceInstanceConstants.link}
       data-e2e-id="instance-service-support-link"
