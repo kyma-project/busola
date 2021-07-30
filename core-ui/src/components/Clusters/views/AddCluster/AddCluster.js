@@ -1,27 +1,45 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import LuigiClient from '@luigi-project/client';
 import './AddCluster.scss';
 
-import { PageHeader, useNotification } from 'react-shared';
-import { AUTH_FORM_TOKEN } from '../../components/AuthForm';
-import { KubeconfigUpload } from '../../components/KubeconfigUpload/KubeconfigUpload';
+import { useNotification } from 'react-shared';
 import {
   decompressParams,
   hasKubeconfigAuth,
   getContext,
   addCluster,
 } from '../../shared';
-import { ClusterConfiguration } from '../../components/ClusterConfiguration';
 
 export function AddCluster() {
   const [kubeconfig, setKubeconfig] = React.useState(null);
   const [initParams, setInitParams] = React.useState(null);
   const notification = useNotification();
-  const isMounted = React.useRef();
+  const isMounted = useRef();
+
+  const toStep2Ref = useRef();
+  const wizardRef = useRef();
+  const fileUploaderRef = useRef();
 
   React.useEffect(() => {
     isMounted.current = true;
     return _ => (isMounted.current = false);
+  }, []);
+
+  useEffect(() => {
+    toStep2Ref.current.addEventListener('click', () => {
+      deselectAllSteps();
+      moveToStep(1);
+    });
+    fileUploaderRef.current.addEventListener('change', async event => {
+      const file = event?.target?.files[0];
+      const kubeconfig = await readFile(file);
+      handleKubeconfigAdded(kubeconfig);
+    });
+
+    return () => {
+      toStep2Ref.current.removeEventListener('click', () => {});
+      fileUploaderRef.current.removeEventListener('change', () => {});
+    };
   }, []);
 
   const encodedParams = LuigiClient.getNodeParams().init;
@@ -49,6 +67,14 @@ export function AddCluster() {
     setKubeconfigIfPresentInParams();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [encodedParams, initParams]);
+
+  const readFile = file => {
+    return new Promise(resolve => {
+      const reader = new FileReader();
+      reader.onload = e => resolve(e.target.result);
+      reader.readAsText(file);
+    });
+  };
 
   function handleKubeconfigAdded(kubeconfig) {
     if (!kubeconfig) {
@@ -81,35 +107,44 @@ export function AddCluster() {
     }
   }
 
+  const moveToStep = idx => {
+    const step = getStep(idx);
+    step.selected = true;
+    step.disabled = false;
+  };
+  const getStep = idx => {
+    return Array.from(wizardRef.current.children)[idx];
+  };
+  const deselectAllSteps = () => {
+    Array.from(wizardRef.current.children).forEach(function(step) {
+      step.selected = false;
+    });
+  };
+
   return (
-    <>
-      <PageHeader
-        title="Add Cluster"
-        description="Upload or paste your kubeconfig file"
-        breadcrumbItems={[
-          {
-            name: 'Clusters',
-            path: '/clusters',
-            fromAbsolutePath: true,
-          },
-        ]}
-      />
-      <section className="add-cluster-form fd-margin-top--lg">
-        {!kubeconfig && (
-          <KubeconfigUpload
-            handleKubeconfigAdded={handleKubeconfigAdded}
-            kubeconfigFromParams={initParams?.kubeconfig}
-          />
-        )}
-        {kubeconfig && (
-          <ClusterConfiguration
-            kubeconfig={kubeconfig}
-            auth={{ type: AUTH_FORM_TOKEN }}
-            initParams={initParams}
-            goBack={() => setKubeconfig(false)}
-          />
-        )}
-      </section>
-    </>
+    <div className="wizard">
+      <ui5-wizard ref={wizardRef} id="wiz">
+        <ui5-wizard-step icon="product" heading="Product type" selected>
+          <ui5-title>Choose configuration</ui5-title>
+          <ui5-file-uploader
+            ref={fileUploaderRef}
+            accept=".yaml,.yml,.json"
+            multiple="false"
+          >
+            <ui5-button icon="upload">Upload kubeconfig</ui5-button>
+          </ui5-file-uploader>
+
+          <ui5-button ref={toStep2Ref}>Step 2</ui5-button>
+        </ui5-wizard-step>
+
+        <ui5-wizard-step icon="hint" heading="Product Information" disabled>
+          <ui5-title>Verify configuration</ui5-title>
+
+          <ui5-button id="toStep3" disabled>
+            Step 3
+          </ui5-button>
+        </ui5-wizard-step>
+      </ui5-wizard>
+    </div>
   );
 }
