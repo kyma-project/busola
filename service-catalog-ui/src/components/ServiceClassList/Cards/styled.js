@@ -10,8 +10,7 @@ export const CardThumbnail = styled.div`
     line-height: 45px;
     text-align: center;
     border-radius: 4px;
-    background-color: #f3f4f5;
-    border: solid 1px rgba(63, 80, 96, 0.15);
+    border: 1px solid var(--sapNeutralBorderColor, #6a6d70);
     color: #32363a;
     font-size: 20px;
     padding: 0;
