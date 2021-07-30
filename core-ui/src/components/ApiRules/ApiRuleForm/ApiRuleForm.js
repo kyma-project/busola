@@ -120,11 +120,6 @@ export default function ApiRuleForm({
       return;
     }
 
-    if (typeof e.target.reportValidity === 'function') {
-      // for IE
-      e.target.reportValidity();
-    }
-
     if (e.target.getAttribute('data-ignore-visual-validation')) {
       return;
     }

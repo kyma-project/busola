@@ -12,6 +12,7 @@ import {
   PageHeader,
 } from 'react-shared';
 import { InfoLabel, FormInput } from 'fundamental-react';
+import { useTranslation } from 'react-i18next';
 
 import { serviceClassConstants } from 'helpers/constants';
 import { determineDisplayedItems } from 'helpers/search';
@@ -69,6 +70,7 @@ const actions = (serviceClassesExists, searchQuery, searchFn) => {
 export default function ServiceClassList() {
   const [searchQuery, setSearchQuery] = useState('');
   const { namespaceId } = useMicrofrontendContext();
+  const { t } = useTranslation();
 
   const serviceClassesRequest = useGetList()(
     `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${namespaceId}/serviceclasses`,
@@ -120,7 +122,7 @@ export default function ServiceClassList() {
   return (
     <>
       <PageHeader
-        title={serviceClassConstants.title}
+        title={t('service-catalog.catalog.title')}
         isCatalog={true}
         actions={actions(
           allServiceClasses.length > 0,
@@ -143,7 +145,7 @@ export default function ServiceClassList() {
         >
           <>
             <ServiceClassDescription>
-              {serviceClassConstants.servicesDescription}
+              {t('service-catalog.catalog.services.description')}
             </ServiceClassDescription>
             <ServiceClassListWrapper>
               <CardsWrapper data-e2e-id="cards">

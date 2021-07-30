@@ -1,3 +1,4 @@
+import i18next from 'i18next';
 import {
   fetchPermissions,
   fetchBusolaInitData,
@@ -347,6 +348,7 @@ export async function getNavigationData(authData) {
           cluster: params.currentContext.cluster,
           config: params.config,
           kubeconfig: params.kubeconfig,
+          language: i18next.language,
         },
       },
     ];

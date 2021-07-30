@@ -26,7 +26,7 @@ export const SideDrawer = ({
   let textToCopy;
 
   if (withYamlEditor) {
-    textToCopy = jsyaml.safeDump(children);
+    textToCopy = jsyaml.dump(children);
     children = (
       <>
         <h1 className="fd-has-type-4">YAML</h1>

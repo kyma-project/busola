@@ -1,3 +1,7 @@
+import i18next from 'i18next';
+import i18nextBackend from 'i18next-http-backend';
+import yaml from 'js-yaml';
+
 import {
   saveCurrentLocation,
   tryRestorePreviousLocation,
@@ -19,6 +23,15 @@ import {
   addClusterNodes,
 } from './navigation/navigation-data-init';
 import { setTheme, getTheme } from './utils/theme';
+
+export const i18n = i18next.use(i18nextBackend).init({
+  lng: localStorage.getItem('busola.language') || 'en',
+  fallbackLng: 'en',
+  backend: {
+    loadPath: '/i18n/{{lng}}.yaml',
+    parse: data => yaml.load(data),
+  },
+});
 
 export const NODE_PARAM_PREFIX = `~`;
 
@@ -58,6 +71,8 @@ async function luigiAfterInit() {
 
 (async () => {
   handleResetEndpoint();
+
+  await 118n;
 
   await setActiveClusterIfPresentInUrl();
 
