@@ -1,7 +1,7 @@
 export function setTheme(name) {
   localStorage.setItem('busola.theme', name);
   const link = document.querySelector('head #_theme');
-  if (name === 'default' && link) {
+  if (name === 'light' && link) {
     link.parentNode.removeChild(link);
   }
   if (!link) {
@@ -24,5 +24,5 @@ function addLinkNode() {
 }
 
 export const getTheme = () => {
-  return localStorage.getItem('busola.theme') || 'default';
+  return localStorage.getItem('busola.theme') || 'light_dark';
 };
