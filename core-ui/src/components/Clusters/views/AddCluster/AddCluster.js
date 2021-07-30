@@ -9,6 +9,7 @@ import {
   getContext,
   addCluster,
 } from '../../shared';
+import { KubeconfigUpload } from '../../components/KubeconfigUpload/KubeconfigUpload';
 
 export function AddCluster() {
   const [kubeconfig, setKubeconfig] = React.useState(null);
@@ -16,30 +17,13 @@ export function AddCluster() {
   const notification = useNotification();
   const isMounted = useRef();
 
-  const toStep2Ref = useRef();
   const wizardRef = useRef();
   const fileUploaderRef = useRef();
+  const textAreaRef = useRef();
 
   React.useEffect(() => {
     isMounted.current = true;
     return _ => (isMounted.current = false);
-  }, []);
-
-  useEffect(() => {
-    toStep2Ref.current.addEventListener('click', () => {
-      deselectAllSteps();
-      moveToStep(1);
-    });
-    fileUploaderRef.current.addEventListener('change', async event => {
-      const file = event?.target?.files[0];
-      const kubeconfig = await readFile(file);
-      handleKubeconfigAdded(kubeconfig);
-    });
-
-    return () => {
-      toStep2Ref.current.removeEventListener('click', () => {});
-      fileUploaderRef.current.removeEventListener('change', () => {});
-    };
   }, []);
 
   const encodedParams = LuigiClient.getNodeParams().init;
@@ -67,14 +51,6 @@ export function AddCluster() {
     setKubeconfigIfPresentInParams();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [encodedParams, initParams]);
-
-  const readFile = file => {
-    return new Promise(resolve => {
-      const reader = new FileReader();
-      reader.onload = e => resolve(e.target.result);
-      reader.readAsText(file);
-    });
-  };
 
   function handleKubeconfigAdded(kubeconfig) {
     if (!kubeconfig) {
@@ -105,6 +81,7 @@ export function AddCluster() {
       // show additional configuration
       setKubeconfig(kubeconfig);
     }
+    moveToStep(1);
   }
 
   const moveToStep = idx => {
@@ -124,25 +101,23 @@ export function AddCluster() {
   return (
     <div className="wizard">
       <ui5-wizard ref={wizardRef} id="wiz">
-        <ui5-wizard-step icon="product" heading="Product type" selected>
+        <ui5-wizard-step icon="product" heading="Choose configuration" selected>
           <ui5-title>Choose configuration</ui5-title>
-          <ui5-file-uploader
-            ref={fileUploaderRef}
-            accept=".yaml,.yml,.json"
-            multiple="false"
-          >
-            <ui5-button icon="upload">Upload kubeconfig</ui5-button>
-          </ui5-file-uploader>
-
-          <ui5-button ref={toStep2Ref}>Step 2</ui5-button>
+          <KubeconfigUpload
+            handleKubeconfigAdded={handleKubeconfigAdded}
+            kubeconfigFromParams={initParams?.kubeconfig}
+            fileUploaderRef={fileUploaderRef}
+            textAreaRef={textAreaRef}
+          />
         </ui5-wizard-step>
 
-        <ui5-wizard-step icon="hint" heading="Product Information" disabled>
+        <ui5-wizard-step icon="hint" heading="Verify configuration" disabled>
           <ui5-title>Verify configuration</ui5-title>
-
-          <ui5-button id="toStep3" disabled>
-            Step 3
-          </ui5-button>
+          <ui5-select class="select">
+            {kubeconfig?.contexts?.map(context => (
+              <ui5-option>{context.name}</ui5-option>
+            ))}
+          </ui5-select>
         </ui5-wizard-step>
       </ui5-wizard>
     </div>

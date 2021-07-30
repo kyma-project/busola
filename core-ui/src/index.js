@@ -12,10 +12,21 @@ import App from './components/App/App';
 // NOTE react-shared has to be imported after App for some unknown reason
 import { Microfrontend, Spinner } from 'react-shared';
 
-// import "@ui5/webcomponents-base/src/browsersupport/IE11"; add support for edge and ie
 import '@ui5/webcomponents-fiori/dist/Wizard.js';
+
 import '@ui5/webcomponents/dist/Button.js';
 import '@ui5/webcomponents/dist/FileUploader.js';
+import '@ui5/webcomponents/dist/Select.js';
+import '@ui5/webcomponents/dist/Option.js';
+import '@ui5/webcomponents/dist/TextArea.js';
+
+import '@ui5/webcomponents-icons/dist/hint.js';
+import '@ui5/webcomponents-icons/dist/product.js';
+import '@ui5/webcomponents-icons/dist/upload.js';
+// import "@ui5/webcomponents-icons/dist/AllIcons.js"; ?
+
+// import "@ui5/webcomponents-base/src/browsersupport/IE11"; add support for edge and ie
+
 //add webpack cofnig!
 
 i18next

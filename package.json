@@ -25,6 +25,7 @@
     "@sap-theming/theming-base-content": "^11.1.28",
     "@ui5/webcomponents": "^1.0.0-rc.14",
     "@ui5/webcomponents-fiori": "^1.0.0-rc.14",
+    "@ui5/webcomponents-icons": "^1.0.0-rc.14",
     "ajv": "^6.10.2",
     "classnames": "^2.2.6",
     "constate": "^1.2.0",

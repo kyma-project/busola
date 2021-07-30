@@ -7,6 +7,8 @@ import jsyaml from 'js-yaml';
 export function KubeconfigUpload({
   handleKubeconfigAdded,
   kubeconfigFromParams,
+  fileUploaderRef,
+  textAreaRef,
 }) {
   const [showParseError, setShowParseError] = React.useState(false);
   const [kubeconfigs, setKubeconfigs] = React.useState({
@@ -37,11 +39,13 @@ export function KubeconfigUpload({
     <>
       <KubeconfigFileUpload
         onKubeconfigTextAdded={onKubeconfigTextAdded('upload')}
+        fileUploaderRef={fileUploaderRef}
       />
       <p>or</p>
       <KubeconfigTextArea
         onKubeconfigTextAdded={onKubeconfigTextAdded('text')}
         kubeconfigFromParams={kubeconfigFromParams}
+        textAreaRef={textAreaRef}
       />
       {showParseError && (
         <MessageStrip
