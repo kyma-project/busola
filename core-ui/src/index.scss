@@ -304,3 +304,8 @@ input[type='checkbox'] {
   background-color: var(--sapField_InvalidBackground, #fff);
   border-color: var(--sapField_InvalidColor, #b00);
 }
+
+.fd-layout-panel.page-header {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}

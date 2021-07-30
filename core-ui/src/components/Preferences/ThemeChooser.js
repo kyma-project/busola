@@ -4,25 +4,26 @@ import { LayoutPanel } from 'fundamental-react';
 
 const THEMES = [
   {
-    key: 'default',
-    text: 'SAP Quartz Light (default)',
+    key: 'light_dark',
+    text: 'Light / Dark (depending on system settings)',
+  },
+  {
+    key: 'light',
+    text: 'Light',
   },
 
   {
     key: 'dark',
-    text: 'SAP Quartz Dark',
+    text: 'Dark',
   },
-  {
-    key: 'light_dark',
-    text: 'SAP Belize Deep',
-  },
+
   {
     key: 'hcw',
-    text: 'SAP High-Contrast White',
+    text: 'High-Contrast White',
   },
   {
     key: 'hcb',
-    text: 'SAP High-Contrast Black',
+    text: 'High-Contrast Black',
   },
 ];
 
