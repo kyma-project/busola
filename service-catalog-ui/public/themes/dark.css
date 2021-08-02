@@ -1,5 +1,5 @@
 @import '@sap-theming/dark.css';
 html,
 #root {
-  background: var(--sapNeutralBackground); /* should we use another color? */
+  background: var(--sapNeutralBackground);
 }
