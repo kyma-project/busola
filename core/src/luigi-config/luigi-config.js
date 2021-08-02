@@ -23,6 +23,7 @@ import {
   addClusterNodes,
 } from './navigation/navigation-data-init';
 import { setTheme, getTheme } from './utils/theme';
+import { readFeatureToggles } from './utils/feature-toggles';
 
 export const i18n = i18next.use(i18nextBackend).init({
   lng: localStorage.getItem('busola.language') || 'en',
@@ -97,5 +98,6 @@ async function luigiAfterInit() {
     lifecycleHooks: { luigiAfterInit },
   };
   Luigi.setConfig(luigiConfig);
+  readFeatureToggles(['dontConfirmDelete', 'showHiddenNamespaces']);
   setTheme(getTheme());
 })();

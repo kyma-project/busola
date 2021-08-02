@@ -11,6 +11,7 @@ import { clearAuthData } from './auth/auth-storage';
 import { reloadNavigation } from './navigation/navigation-data-init';
 import { reloadAuth } from './auth/auth';
 import { setShowHiddenNamespaces } from './utils/hidden-namespaces-toggle';
+import { setFeatureToggle } from './utils/feature-toggles';
 import { setTheme } from './utils/theme';
 
 export const communication = {
@@ -25,7 +26,10 @@ export const communication = {
       setTheme(name);
     },
     'busola.showHiddenNamespaces': ({ showHiddenNamespaces }) => {
-      setShowHiddenNamespaces(showHiddenNamespaces);
+      setFeatureToggle('showHiddenNamespaces', showHiddenNamespaces);
+    },
+    'busola.dontConfirmDelete': ({ value }) => {
+      setFeatureToggle('dontConfirmDelete', value);
     },
     'busola.refreshNavigation': () => {
       Luigi.configChanged('navigation.nodes');

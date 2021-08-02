@@ -26,3 +26,5 @@ service-catalog:
       description: Enrich your experience with additional services that are installed outside the cluster.
 settings:
   language: Language
+  confirmations: Confirmations
+  dontConfirmDelete: Delete without confirmation

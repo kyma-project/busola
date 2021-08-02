@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import jsyaml from 'js-yaml';
 import { Link, Button } from 'fundamental-react';
 import { createPatch } from 'rfc6902';
+import LuigiClient from '@luigi-project/client';
 
 import './ResourcesList.scss';
 import {
@@ -23,7 +24,7 @@ import {
 import CustomPropTypes from '../../typechecking/CustomPropTypes';
 import { ModalWithForm } from '../ModalWithForm/ModalWithForm';
 import { ReadableCreationTimestamp } from '../ReadableCreationTimestamp/ReadableCreationTimestamp';
-import { useWindowTitle } from '../../hooks';
+import { useWindowTitle, useFeatureToggle } from '../../hooks';
 
 ResourcesList.propTypes = {
   customColumns: CustomPropTypes.customColumnsType,
@@ -107,6 +108,7 @@ function Resources({
     filter,
   )(resourceUrl, { pollingInterval: 3000, skip: skipDataLoading });
   React.useEffect(() => closeEditor(), [namespace]);
+  const [dontConfirmDelete] = useFeatureToggle('dontConfirmDelete');
   const prettifiedResourceName = prettifyNameSingular(
     resourceName,
     resourceType,
@@ -136,18 +138,37 @@ function Resources({
 
   async function handleResourceDelete(resource) {
     const url = withoutQueryString(resourceUrl) + '/' + resource.metadata.name;
-    try {
-      await deleteResourceMutation(url);
-      notification.notifySuccess({
-        content: `${prettifiedResourceName} deleted`,
-      });
-    } catch (e) {
-      console.error(e);
-      notification.notifyError({
-        title: `Failed to delete the ${prettifiedResourceName}`,
-        content: e.message,
-      });
-      throw e;
+    const name = prettifyNameSingular(resourceType);
+
+    const performDelete = async () => {
+      try {
+        await deleteResourceMutation(url);
+        notification.notifySuccess({
+          content: `${prettifiedResourceName} deleted`,
+        });
+      } catch (e) {
+        console.error(e);
+        notification.notifyError({
+          title: `Failed to delete the ${prettifiedResourceName}`,
+          content: e.message,
+        });
+        throw e;
+      }
+    };
+
+    if (dontConfirmDelete) {
+      await performDelete();
+    } else {
+      LuigiClient.uxManager()
+        .showConfirmationModal({
+          header: `Remove ${resource.metadata.name}`,
+          body: `Are you sure you want to delete ${prettifiedResourceName} ${resource.metadata.name}?`,
+          buttonConfirm: 'Delete',
+          buttonDismiss: 'Cancel',
+        })
+        .then(() => {
+          return performDelete();
+        });
     }
   }
 
