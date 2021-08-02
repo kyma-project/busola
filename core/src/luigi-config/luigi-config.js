@@ -16,7 +16,6 @@ import {
   handleResetEndpoint,
   setActiveClusterIfPresentInUrl,
 } from './cluster-management';
-import { loadHiddenNamespacesToggle } from './utils/hidden-namespaces-toggle';
 
 import {
   createNavigation,
@@ -48,7 +47,7 @@ async function luigiAfterInit() {
     return;
   }
 
-  loadHiddenNamespacesToggle();
+  readFeatureToggles(['dontConfirmDelete', 'showHiddenNamespaces']);
 
   if (!isClusterChoosen) {
     if (!window.location.pathname.startsWith('/clusters')) {
@@ -98,6 +97,5 @@ async function luigiAfterInit() {
     lifecycleHooks: { luigiAfterInit },
   };
   Luigi.setConfig(luigiConfig);
-  readFeatureToggles(['dontConfirmDelete', 'showHiddenNamespaces']);
   setTheme(getTheme());
 })();

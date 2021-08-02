@@ -7,7 +7,9 @@ export function updateFeatureToggle(key, value) {
 }
 
 export function getFeatureToggle(key) {
-  return (Luigi.featureToggles().getActiveFeatureToggles() || []).includes(key);
+  return (Luigi.featureToggles().getActiveFeatureToggleList() || []).includes(
+    key,
+  );
 }
 
 export function setFeatureToggle(key, value) {

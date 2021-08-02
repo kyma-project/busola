@@ -8,7 +8,7 @@ jest.mock('@luigi-project/client', () => ({
 }));
 
 function TestComponent() {
-  const [value] = useFeatureToggle('firstFeature');
+  const value = useFeatureToggle('firstFeature');
   return <p data-testid="value">{value.toString()}</p>;
 }
 
