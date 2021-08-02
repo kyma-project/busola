@@ -1,8 +1,8 @@
-import { setTheme, getTheme } from './utils/theme';
+import { getTheme } from './utils/theme';
 
 export function createSettings(params) {
   return {
-    responsiveNavigation: 'simpleMobileOnly',
+    responsiveNavigation: 'Fiori3',
     sideNavFooterText: '',
     header: {
       logo: getTheme() === 'hcw' ? 'assets/logo-black.svg' : 'assets/logo.svg',
