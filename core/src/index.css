@@ -18,3 +18,7 @@
 [data-testid='signout'] {
   display: none;
 }
+
+.fd-page.spinnerContainer {
+  background: var(--sapBackgroundColor);
+}
