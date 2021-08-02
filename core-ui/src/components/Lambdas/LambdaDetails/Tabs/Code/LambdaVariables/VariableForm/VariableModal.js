@@ -15,6 +15,8 @@ export default function VariableModal({
   title,
   modalOpeningComponent,
   confirmText,
+  alwaysOpen,
+  onModalOpenStateChange,
 }) {
   const [invalidModalPopupMessage, setInvalidModalPopupMessage] = useState('');
 
@@ -26,6 +28,8 @@ export default function VariableModal({
       invalidPopupMessage={invalidModalPopupMessage}
       id="add-lambda-variables-modal"
       className="fd-dialog--xl-size modal-width--m"
+      onModalOpenStateChange={onModalOpenStateChange}
+      alwaysOpen={alwaysOpen}
       renderForm={props => (
         <VariableForm
           {...props}
