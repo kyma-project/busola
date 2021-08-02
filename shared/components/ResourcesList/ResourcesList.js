@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import jsyaml from 'js-yaml';
-import { Link, Button } from 'fundamental-react';
+import { Link, Button, Dialog, Checkbox } from 'fundamental-react';
 import { createPatch } from 'rfc6902';
 import LuigiClient from '@luigi-project/client';
 
@@ -96,6 +96,8 @@ function Resources({
   testid,
 }) {
   useWindowTitle(windowTitle || prettifyNamePlural(resourceName, resourceType));
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [activeResource, setActiveResource] = useState(null);
   const {
     setEditedYaml: setEditedSpec,
     closeEditor,
@@ -108,7 +110,9 @@ function Resources({
     filter,
   )(resourceUrl, { pollingInterval: 3000, skip: skipDataLoading });
   React.useEffect(() => closeEditor(), [namespace]);
-  const [dontConfirmDelete] = useFeatureToggle('dontConfirmDelete');
+  const [dontConfirmDelete, setDontConfirmDelete] = useFeatureToggle(
+    'dontConfirmDelete',
+  );
   const prettifiedResourceName = prettifyNameSingular(
     resourceName,
     resourceType,
@@ -136,39 +140,37 @@ function Resources({
     }
   };
 
-  async function handleResourceDelete(resource) {
+  const performDelete = async resource => {
     const url = withoutQueryString(resourceUrl) + '/' + resource.metadata.name;
     const name = prettifyNameSingular(resourceType);
 
-    const performDelete = async () => {
-      try {
-        await deleteResourceMutation(url);
-        notification.notifySuccess({
-          content: `${prettifiedResourceName} deleted`,
-        });
-      } catch (e) {
-        console.error(e);
-        notification.notifyError({
-          title: `Failed to delete the ${prettifiedResourceName}`,
-          content: e.message,
-        });
-        throw e;
-      }
-    };
+    setShowDeleteDialog(false);
+    try {
+      await deleteResourceMutation(url);
+      notification.notifySuccess({
+        content: `${prettifiedResourceName} deleted`,
+      });
+    } catch (e) {
+      console.error(e);
+      notification.notifyError({
+        title: `Failed to delete the ${prettifiedResourceName}`,
+        content: e.message,
+      });
+      throw e;
+    }
+  };
 
+  const toggleDontConfirmDelete = value => {
+    LuigiClient.sendCustomMessage({ id: 'busola.dontConfirmDelete', value });
+    setDontConfirmDelete(value);
+  };
+
+  async function handleResourceDelete(resource) {
     if (dontConfirmDelete) {
-      await performDelete();
+      performDelete(resource);
     } else {
-      LuigiClient.uxManager()
-        .showConfirmationModal({
-          header: `Remove ${resource.metadata.name}`,
-          body: `Are you sure you want to delete ${prettifiedResourceName} ${resource.metadata.name}?`,
-          buttonConfirm: 'Delete',
-          buttonDismiss: 'Cancel',
-        })
-        .then(() => {
-          return performDelete();
-        });
+      setActiveResource(resource);
+      setShowDeleteDialog(true);
     }
   }
 
@@ -251,19 +253,43 @@ function Resources({
     ));
 
   return (
-    <GenericList
-      title={showTitle ? prettifyNamePlural(resourceName, resourceType) : null}
-      textSearchProperties={['metadata.name', 'metadata.labels']}
-      actions={actions}
-      entries={resources || []}
-      headerRenderer={headerRenderer}
-      rowRenderer={rowRenderer}
-      serverDataError={error}
-      serverDataLoading={loading}
-      pagination={{ itemsPerPage: 20, autoHide: true }}
-      extraHeaderContent={extraHeaderContent}
-      testid={testid}
-      currentlyEditedResourceUID={currentlyEditedResourceUID}
-    />
+    <>
+      <Dialog
+        actions={[
+          <Checkbox onChange={e => toggleDontConfirmDelete(e.target.checked)}>
+            Don't show delete confirmations
+          </Checkbox>,
+          <Button
+            option="emphasized"
+            onClick={() => performDelete(activeResource)}
+          >
+            Delete
+          </Button>,
+          <Button onClick={() => setShowDeleteDialog(false)}>Cancel</Button>,
+        ]}
+        footerProps={{}}
+        show={showDeleteDialog}
+        title={`Remove ${activeResource?.metadata.name}`}
+      >
+        Are you sure you want to delete {prettifiedResourceName}{' '}
+        {activeResource?.metadata.name}?
+      </Dialog>
+      <GenericList
+        title={
+          showTitle ? prettifyNamePlural(resourceName, resourceType) : null
+        }
+        textSearchProperties={['metadata.name', 'metadata.labels']}
+        actions={actions}
+        entries={resources || []}
+        headerRenderer={headerRenderer}
+        rowRenderer={rowRenderer}
+        serverDataError={error}
+        serverDataLoading={loading}
+        pagination={{ itemsPerPage: 20, autoHide: true }}
+        extraHeaderContent={extraHeaderContent}
+        testid={testid}
+        currentlyEditedResourceUID={currentlyEditedResourceUID}
+      />
+    </>
   );
 }
