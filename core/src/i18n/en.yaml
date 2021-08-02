@@ -1,28 +1,82 @@
 clusters:
   overview:
-    title: Cluster Overview
+    title:
+      message: Cluster Overview #not confirmed structure with description for translators
+      #description: Optional additional comment for translators.
 namespaces:
+  title: Namespaces
   overview:
     title: Overview
+    back: Back to Namespaces
     workloads:
       title: Healthy Resources
-      pods: $t(pods.title)
-      deployments: $t(deployments.title)
+      pods: $t(namespaces.workloads.pods.title)
+      deployments: $t(namespaces.workloads.deployments.title)
       error: 'Error while loading {{title}} data due to: {{message}}'
     resources:
       title: Resource consumption
       requests: Memory requests
       limits: Memory limits
       error: Error while loading memory consumption data
-pods:
-  title: Pods
-deployments:
-  title: Deployments
-service-catalog:
-  title: Service Management
-  catalog:
-    title: Service Catalog
+  workloads:
+    title: Workloads
+    functions:
+      title: Functions
+    pods:
+      title: Pods
+    deployments:
+      title: Deployments
+    replica_sets:
+      title: Replica Sets
+  discovery-and-network:
+    title: Discovery and Network
+    api-rules:
+      title: API Rules
     services:
-      description: Enrich your experience with additional services that are installed outside the cluster.
+      title: Services
+  service-management:
+    title: Service Management
+    catalog:
+      menu-title: Catalog
+      title: Service Catalog
+      subtitle: Enrich your experience with additional services that are installed outside the cluster.
+    instances:
+      title: Instances
+    brokers:
+      title: Brokers
+  configuration:
+    title: $t(configuration.title)
+    addons:
+      title: Addons
+    config-maps:
+      title: Config Maps
+    secrets:
+      title: Secrets
+    roles:
+      title: Roles
+    role-bindings:
+      title: Role Bindings
+    oauth2-clients:
+      title: OAuth2 Clients
+    git-repositories:
+      title: Git Repositories
+    custom-resource-definitions:
+      title: $t(configuration.custom-resource-definitions.title)
+integration:
+  title: Integration
+  applications:
+    title: Applications
+  cluster-addons:
+    title: Cluster Addons
+configuration:
+  title: Configuration
+  cluster-roles:
+    title: Cluster Roles
+  cluster-role-bindings:
+    title: Cluster Role Bindings
+  custom-resource-definitions:
+    title: Custom Resource Definitions
+observability:
+  title: Observability
 settings:
   language: Language
