@@ -1,5 +1,5 @@
 export * from './ApiRules.details';
-export * from './Deployment.details';
+export * from './Deployment/Deployment.details';
 export * from './Pod/Pod.details';
 export * from './Replicaset.details';
 export * from './Namespace/Namespace.details';
@@ -13,3 +13,4 @@ export * from './OAuth2Clients/OAuth2Clients.details';
 export * from './ConfigMap/ConfigMap.details.js';
 export * from './AddonsConfiguration.details';
 export * from './CustomResourceDefinitions/CustomResourceDefinitions.details.js';
+export * from './CronJobs/CronJob.details';
