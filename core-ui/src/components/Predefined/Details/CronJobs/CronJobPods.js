@@ -4,7 +4,7 @@ import { ComponentForList } from 'shared/getComponents';
 export function CronJobPods(cronJob) {
   const namespace = cronJob.metadata.namespace;
   const jobsUrl = `/apis/batch/v1/namespaces/${namespace}/jobs`;
-  console.log(cronJob.status.active);
+
   const filterByOwnerRef = ({ metadata }) =>
     metadata.ownerReferences?.find(
       ref => ref.kind === 'CronJob' && ref.name === cronJob.metadata.name,

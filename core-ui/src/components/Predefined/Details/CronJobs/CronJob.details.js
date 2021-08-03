@@ -29,7 +29,9 @@ export const CronJobsDetails = ({ DefaultRenderer, ...otherParams }) => {
     {
       header: 'Last job execution',
       value: resource =>
-        resource.status.active?.at(-1).name || 'None scheduled yet',
+        resource.status.active
+          ? resource.status.active[resource.status.active.length - 1].name
+          : 'None scheduled yet',
     },
   ];
 
