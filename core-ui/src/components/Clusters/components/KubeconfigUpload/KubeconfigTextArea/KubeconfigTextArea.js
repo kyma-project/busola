@@ -1,7 +1,7 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import jsyaml from 'js-yaml';
-import { Button } from 'fundamental-react';
 import './KubeconfigTextArea.scss';
+import { useWebcomponents } from 'react-shared';
 
 export function KubeconfigTextArea({
   onKubeconfigTextAdded,
@@ -11,26 +11,20 @@ export function KubeconfigTextArea({
   const [value, setValue] = React.useState('');
   const submitButtonRef = useRef();
 
-  useEffect(() => {
-    textAreaRef.current.addEventListener('input', event => {
-      const text = event.target.value;
-      console.log(text);
-      if (text) {
-        submitButtonRef.current.disabled = false;
-      } else {
-        submitButtonRef.current.disabled = true;
-      }
-      setValue(text);
-    });
-    submitButtonRef.current.addEventListener('click', async _ => {
-      onKubeconfigTextAdded(value);
-    });
+  const handleInputChange = event => {
+    const text = event.target.value;
+    if (text) {
+      submitButtonRef.current.disabled = false;
+    } else {
+      submitButtonRef.current.disabled = true;
+    }
+    setValue(text);
+  };
 
-    return () => {
-      textAreaRef.current.removeEventListener('input', () => {});
-      submitButtonRef.current.removeEventListener('click', () => {});
-    };
-  }, []);
+  useWebcomponents(textAreaRef, 'input', handleInputChange);
+  useWebcomponents(submitButtonRef, 'click', () =>
+    onKubeconfigTextAdded(value),
+  );
 
   // it would be better to use just the defaultValue, but during the first render
   // kkFromParams is empty - even though it will be set in the next render

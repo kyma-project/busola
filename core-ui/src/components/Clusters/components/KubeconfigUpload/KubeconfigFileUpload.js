@@ -1,20 +1,17 @@
-import React, { useEffect } from 'react';
-import { FileInput } from 'react-shared';
+import React from 'react';
+import { useWebcomponents } from 'react-shared';
 
 export function KubeconfigFileUpload({
   onKubeconfigTextAdded,
   fileUploaderRef,
 }) {
-  useEffect(() => {
-    fileUploaderRef.current.addEventListener('change', async event => {
-      const file = event?.target?.files[0];
-      onKubeconfigFileUploaded(file);
-    });
+  const onKubeconfigFileUploaded = async event => {
+    const file = event?.target?.files[0];
+    const fileContent = await readFile(file);
+    onKubeconfigTextAdded(fileContent);
+  };
 
-    return () => {
-      fileUploaderRef.current.removeEventListener('change', () => {});
-    };
-  }, []);
+  useWebcomponents(fileUploaderRef, 'change', onKubeconfigFileUploaded);
 
   const readFile = file => {
     return new Promise(resolve => {
@@ -22,11 +19,6 @@ export function KubeconfigFileUpload({
       reader.onload = e => resolve(e.target.result);
       reader.readAsText(file);
     });
-  };
-
-  const onKubeconfigFileUploaded = async file => {
-    const fileContent = await readFile(file);
-    onKubeconfigTextAdded(fileContent);
   };
 
   return (

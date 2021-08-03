@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import LuigiClient from '@luigi-project/client';
 import './AddCluster.scss';
 
@@ -91,11 +91,6 @@ export function AddCluster() {
   };
   const getStep = idx => {
     return Array.from(wizardRef.current.children)[idx];
-  };
-  const deselectAllSteps = () => {
-    Array.from(wizardRef.current.children).forEach(function(step) {
-      step.selected = false;
-    });
   };
 
   return (
