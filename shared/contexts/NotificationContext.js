@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
+import LuigiClient from '@luigi-project/client';
 import { Notification } from '../components/Notification/Notification';
 
 export const NotificationContext = createContext({
@@ -45,14 +46,15 @@ export const NotificationProvider = ({
       notificationProps,
       visibilityTime = defaultErrorVisibilityTime,
     ) {
-      notificationProps = {
-        title: 'Error',
-        type: 'error',
-        icon: 'decline',
-        autoClose: true,
-        ...notificationProps,
-      };
-      notify(notificationProps, visibilityTime);
+      LuigiClient.uxManager()
+        .showConfirmationModal({
+          type: 'error',
+          buttonConfirm: false,
+          buttonDismiss: 'Close',
+          header: 'Error',
+          body: notificationProps.content,
+        })
+        .catch(e => {});
     },
   };
 
