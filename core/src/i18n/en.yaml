@@ -1,8 +1,6 @@
 clusters:
   overview:
-    title:
-      message: Cluster Overview #not confirmed structure with description for translators
-      #description: Optional additional comment for translators.
+    title: Cluster Overview
 namespaces:
   title: Namespaces
   overview:
