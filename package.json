@@ -21,7 +21,6 @@
   },
   "dependencies": {
     "@luigi-project/client": "^1.14.3",
-    "@luigi-project/core": "^1.14.0",
     "@sap-theming/theming-base-content": "^11.1.28",
     "ajv": "^6.10.2",
     "classnames": "^2.2.6",
