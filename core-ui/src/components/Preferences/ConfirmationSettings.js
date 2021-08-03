@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { LayoutPanel, Switch } from 'fundamental-react';
 import LuigiClient from '@luigi-project/client';
 import { useFeatureToggle } from 'react-shared';
 
 export default function ConfirmationSettings() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [dontConfirmDelete, setDontConfirmDelete] = useFeatureToggle(
     'dontConfirmDelete',
   );
