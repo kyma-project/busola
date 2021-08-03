@@ -37,7 +37,7 @@ export function createLoginCommand(oidcConfig) {
       'get-token',
       `--oidc-issuer-url=${oidcConfig.issuerUrl}`,
       `--oidc-client-id=${oidcConfig.clientId}`,
-      `--oidc-extra-scope=openid ${oidcConfig.scope}`,
+      `--oidc-extra-scope=${oidcConfig.scope || 'openid'}`,
       '--grant-type=auto',
     ],
   };

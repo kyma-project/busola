@@ -23,11 +23,29 @@ const OIDCform = ({ auth, setAuth }) => {
   return (
     <>
       <ui5-label>Issuer URL</ui5-label>
-      <ui5-input key="issuer-url" required type="url" ref={issuerUrlRef} />
+      <ui5-input
+        key="issuer-url"
+        required
+        type="url"
+        ref={issuerUrlRef}
+        value={auth.issuerUrl || ''}
+      />
       <ui5-label>Client ID</ui5-label>
-      <ui5-input key="client-id" required label="Client ID" ref={clientIdRef} />
+      <ui5-input
+        key="client-id"
+        required
+        label="Client ID"
+        ref={clientIdRef}
+        value={auth.clientId || ''}
+      />
       <ui5-label>Scopes</ui5-label>
-      <ui5-input key="scope" required label="Scopes" ref={scopesRef} />
+      <ui5-input
+        key="scope"
+        required
+        label="Scopes"
+        ref={scopesRef}
+        value={auth.scope || DEFAULT_SCOPE_VALUE}
+      />
     </>
   );
 };
@@ -41,7 +59,7 @@ const TokenForm = ({ auth, setAuth }) => {
   return (
     <>
       <ui5-label>Token</ui5-label>
-      <ui5-input key="token" required ref={tokenRef} />
+      <ui5-input key="token" required ref={tokenRef} value={auth.token || ''} />
     </>
   );
 };
