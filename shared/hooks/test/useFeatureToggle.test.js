@@ -8,11 +8,11 @@ jest.mock('@luigi-project/client', () => ({
 }));
 
 function TestComponent() {
-  const value = useFeatureToggle('firstFeature');
+  const value = getFeatureToggle('firstFeature');
   return <p data-testid="value">{value.toString()}</p>;
 }
 
-describe('useShowHiddenNamespaces', () => {
+describe('getFeatureToggle', () => {
   it('Changes returned value during re-renders', () => {
     const { queryByTestId, rerender } = render(<TestComponent />);
     expect(queryByTestId('value')).toHaveTextContent('false');
