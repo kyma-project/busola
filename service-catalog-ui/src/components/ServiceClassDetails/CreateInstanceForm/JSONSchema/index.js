@@ -9,6 +9,10 @@ const StyledForm = styled(Form)`
     &:last-child {
       margin: 0;
     }
+    select,
+    input {
+      color: var(--sapNeutralTextColor, #6a6d70);
+    }
   }
 
   label {
@@ -21,7 +25,7 @@ const StyledForm = styled(Form)`
     line-height: 1.14;
     letter-spacing: normal;
     text-align: left;
-    color: #32363b;
+    color: var(--sapTextColor, #32363a);
     display: block;
   }
 
@@ -36,11 +40,13 @@ const StyledForm = styled(Form)`
     &[type='password'] {
       font-size: 14px;
       border-radius: var(--sapField_BorderCornerRadius, 0.125rem);
-      background-color: #ffffff;
+      background-color: var(--sapGroup_ContentBackground, #fff);
       padding: ${props => (props.isError ? '0 0 0 10px' : '1px 1px 1px 11px')};
       border: solid
         ${props =>
-          props.isError ? '2px #ee0000' : '1px var(--sapField_BorderColor)'};
+          props.isError
+            ? '2px var(--sapErrorBorderColor, #bb0000)'
+            : '1px var(--sapField_BorderColor, #89919a)'};
       transition: border-color ease-out 0.2s;
       width: 100%;
       height: 36px;
@@ -50,7 +56,7 @@ const StyledForm = styled(Form)`
     &[type='text']::placeholder,
     &[type='password']::placeholder {
       font-style: italic;
-      color: #32363b;
+      color: var(--sapTextColor, #32363a);
       opacity: 0.5;
     }
 
@@ -78,7 +84,7 @@ const StyledForm = styled(Form)`
     width: 100%;
     height: 36px;
     border-radius: var(--sapField_BorderCornerRadius, 0.125rem);
-    background-color: rgba(255, 255, 255, 0.4);
+    background-color: var(--sapGroup_ContentBackground, #fff);
     border: solid 1px var(--sapField_BorderColor);
     outline: none;
     display: block;
@@ -140,14 +146,14 @@ const StyledForm = styled(Form)`
     font-stretch: normal;
     line-height: 1.33;
     letter-spacing: normal;
-    color: #32363b99;
+    color: var(--sapContent_DisabledTextColor, rgba(50, 54, 58, 0.6));
     display: block;
     margin: 6px 0 0 0;
   }
 
   .required {
     padding-left: 3px;
-    color: #ee0000;
+    color: var(--sapField_RequiredColor, #ce3b3b);
   }
 
   .btn-add,
@@ -175,7 +181,7 @@ const StyledForm = styled(Form)`
   .btn-add,
   .array-item-move-down,
   .array-item-move-up {
-    color: #0a6ed1;
+    color: var(--sapTextColor, #32363a);
   }
 
   .btn-add {
@@ -195,7 +201,7 @@ const StyledForm = styled(Form)`
   }
 
   .array-item-remove {
-    color: #0a6ed1;
+    color: var(--sapTextColor, #32363a);
     i:before {
       content: '\uE03D';
       font-family: SAP-icons;
@@ -257,7 +263,7 @@ const StyledForm = styled(Form)`
   .field-object .field-string {
     div > ul.error-detail > li.text-danger {
       padding-top: 5px;
-      color: #ee0000;
+      color: var(--sapTextColor, #32363a);
     }
   }
 
@@ -290,6 +296,9 @@ const StyledForm = styled(Form)`
   }
   fieldset#root_tags > div.form-group {
     border-bottom: 2px solid rgba(204, 204, 204, 0.3);
+  }
+  fieldset#root {
+    background-color: var(--sapGroup_ContentBackground, #fff);
   }
 `;
 

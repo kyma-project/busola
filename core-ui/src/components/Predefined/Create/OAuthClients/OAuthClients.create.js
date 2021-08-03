@@ -41,9 +41,9 @@ export const OAuth2ClientsCreate = ({
     try {
       await postRequest(resourceUrl, input);
       refetchList();
-      onCompleted(`OAuth Client ${spec.name} created`);
+      onCompleted(`OAuth2 Client ${spec.name} created`);
     } catch (e) {
-      onError('Cannot create OAuth Client', `Error: ${e.message}`);
+      onError('Cannot create OAuth2 Client', `Error: ${e.message}`);
     }
   }
 

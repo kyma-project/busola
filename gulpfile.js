@@ -127,7 +127,8 @@ gulp.task('copy-themes', function() {
             path,
         )
         .pipe(rename(name + '.css'))
-        .pipe(gulp.dest(`./core-ui/public/themes/@sap-theming`)),
+        .pipe(gulp.dest(`./core-ui/public/themes/@sap-theming`))
+        .pipe(gulp.dest(`./service-catalog-ui/public/themes/@sap-theming`)),
     ),
   );
 });
