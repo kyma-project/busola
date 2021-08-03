@@ -1,25 +1,26 @@
-import React from 'react';
-import { FormLabel, Select } from 'fundamental-react';
+import React, { useRef } from 'react';
+import { useWebcomponents } from 'react-shared';
 import './ContextChooser.scss';
 
 export function ContextChooser({ kubeconfig, setContextName }) {
-  const contexts = Array.isArray(kubeconfig.contexts)
-    ? kubeconfig.contexts.map(({ name }) => ({
-        key: name,
-        text: name,
-      }))
-    : [];
-  const selectedKey = kubeconfig['current-context'];
+  const selectRef = useRef();
+  useWebcomponents(selectRef, 'change', setContextName);
 
   return (
     <div className="context-chooser">
-      <FormLabel htmlFor="context-chooser">Context:</FormLabel>
-      <Select
-        id="context-chooser"
-        selectedKey={selectedKey}
-        options={contexts}
-        onSelect={(_, { text }) => setContextName(text)}
-      />
+      <ui5-label> Context:</ui5-label>
+      <ui5-select class="select" ref={selectRef}>
+        {kubeconfig?.contexts?.map(context => {
+          const currentContext = context.name === kubeconfig['current-context'];
+          return currentContext ? (
+            <ui5-option key={context.name} selected>
+              {context.name}
+            </ui5-option>
+          ) : (
+            <ui5-option key={context.name}>{context.name}</ui5-option>
+          );
+        })}
+      </ui5-select>
     </div>
   );
 }

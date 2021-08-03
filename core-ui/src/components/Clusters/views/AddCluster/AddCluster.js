@@ -9,7 +9,9 @@ import {
   getContext,
   addCluster,
 } from '../../shared';
+import { AUTH_FORM_TOKEN } from '../../components/AuthForm';
 import { KubeconfigUpload } from '../../components/KubeconfigUpload/KubeconfigUpload';
+import { ClusterConfiguration } from '../../components/ClusterConfiguration';
 
 export function AddCluster() {
   const [kubeconfig, setKubeconfig] = React.useState(null);
@@ -108,11 +110,11 @@ export function AddCluster() {
 
         <ui5-wizard-step icon="hint" heading="Verify configuration" disabled>
           <ui5-title>Verify configuration</ui5-title>
-          <ui5-select class="select">
-            {kubeconfig?.contexts?.map(context => (
-              <ui5-option>{context.name}</ui5-option>
-            ))}
-          </ui5-select>
+          <ClusterConfiguration
+            kubeconfig={kubeconfig}
+            auth={{ type: AUTH_FORM_TOKEN }}
+            initParams={initParams}
+          />
         </ui5-wizard-step>
       </ui5-wizard>
     </div>
