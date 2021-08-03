@@ -1,5 +1,4 @@
 import React from 'react';
-import { MessageStrip } from 'fundamental-react';
 import { KubeconfigFileUpload } from './KubeconfigFileUpload';
 import { KubeconfigTextArea } from './KubeconfigTextArea/KubeconfigTextArea';
 import jsyaml from 'js-yaml';
@@ -48,13 +47,9 @@ export function KubeconfigUpload({
         textAreaRef={textAreaRef}
       />
       {showParseError && (
-        <MessageStrip
-          aria-label="invalid-kubeconfig"
-          className="fd-margin-top--sm"
-          type="error"
-        >
+        <ui5-messagestrip type="Negative">
           Error reading kubeconfig
-        </MessageStrip>
+        </ui5-messagestrip>
       )}
     </>
   );

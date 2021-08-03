@@ -19,6 +19,8 @@ import '@ui5/webcomponents/dist/FileUploader.js';
 import '@ui5/webcomponents/dist/Select.js';
 import '@ui5/webcomponents/dist/Option.js';
 import '@ui5/webcomponents/dist/TextArea.js';
+import '@ui5/webcomponents/dist/MessageStrip.js';
+import '@ui5/webcomponents/dist/RadioButton.js';
 
 import '@ui5/webcomponents-icons/dist/hint.js';
 import '@ui5/webcomponents-icons/dist/product.js';
