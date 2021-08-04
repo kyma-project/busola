@@ -1,12 +1,13 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { StatusBadge } from 'react-shared';
 
 export function CronJobConcurrencyPolicy({ concurrencyPolicy }) {
+  const { t } = useTranslation();
   const descriptions = {
-    Allow: 'Allow concurrent executions.',
-    Forbid:
-      "No concurrent executions, skip new run if the previous one hasn't finished yet.",
-    Replace: 'No concurrent executions, replace previous run with the new one.',
+    Allow: t('cron-jobs.concurrency-policy.descriptions.allow'),
+    Forbid: t('cron-jobs.concurrency-policy.descriptions.forbid'),
+    Replace: t('cron-jobs.concurrency-policy.descriptions.replace'),
   };
 
   return (

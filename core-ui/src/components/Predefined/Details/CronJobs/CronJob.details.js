@@ -3,15 +3,17 @@ import { CronJobSchedule } from 'shared/components/CronJob/CronJobSchedule';
 import { CronJobConcurrencyPolicy } from './CronJobConcurrencyPolicy';
 import { CronJobJobs } from './CronJobJobs.js';
 import { CronJobLastScheduleTime } from '../../../../shared/components/CronJob/CronJobLastScheduleTime';
+import { useTranslation } from 'react-i18next';
 
 export const CronJobsDetails = ({ DefaultRenderer, ...otherParams }) => {
+  const { t } = useTranslation();
   const customColumns = [
     {
-      header: 'Schedule',
+      header: t('cron-jobs.schedule'),
       value: resource => <CronJobSchedule schedule={resource.spec.schedule} />,
     },
     {
-      header: 'Last schedule time',
+      header: t('cron-jobs.last-schedule-time'),
       value: resource => (
         <CronJobLastScheduleTime
           lastScheduleTime={resource.status.lastScheduleTime}
@@ -19,7 +21,7 @@ export const CronJobsDetails = ({ DefaultRenderer, ...otherParams }) => {
       ),
     },
     {
-      header: 'Concurrency Policy',
+      header: t('cron-jobs.concurrency-policy.title'),
       value: resource => (
         <CronJobConcurrencyPolicy
           concurrencyPolicy={resource.spec.concurrencyPolicy}
@@ -27,11 +29,11 @@ export const CronJobsDetails = ({ DefaultRenderer, ...otherParams }) => {
       ),
     },
     {
-      header: 'Last job execution',
+      header: t('cron-jobs.last-job-execution'),
       value: resource =>
         resource.status.active
           ? resource.status.active[resource.status.active.length - 1].name
-          : 'None scheduled yet',
+          : t('cron-jobs.not-scheduled-yet'),
     },
   ];
 
