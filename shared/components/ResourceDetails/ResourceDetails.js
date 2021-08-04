@@ -171,7 +171,7 @@ function Resource({
 
   const handleSaveClick = resourceData => async newYAML => {
     try {
-      const diff = createPatch(resourceData, jsyaml.safeLoad(newYAML));
+      const diff = createPatch(resourceData, jsyaml.load(newYAML));
 
       await updateResourceMutation(resourceUrl, diff);
       silentRefetch();
