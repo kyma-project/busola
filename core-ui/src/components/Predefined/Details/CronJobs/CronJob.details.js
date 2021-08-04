@@ -4,6 +4,9 @@ import { CronJobConcurrencyPolicy } from './CronJobConcurrencyPolicy';
 import { CronJobJobs } from './CronJobJobs.js';
 import { CronJobLastScheduleTime } from '../../../../shared/components/CronJob/CronJobLastScheduleTime';
 import { useTranslation } from 'react-i18next';
+import LuigiClient from '@luigi-project/client';
+import { navigateToFixedPathResourceDetails } from 'react-shared';
+import { Link } from 'fundamental-react';
 
 export const CronJobsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
@@ -30,10 +33,21 @@ export const CronJobsDetails = ({ DefaultRenderer, ...otherParams }) => {
     },
     {
       header: t('cron-jobs.last-job-execution'),
-      value: resource =>
-        resource.status.active
-          ? resource.status.active[resource.status.active.length - 1].name
-          : t('cron-jobs.not-scheduled-yet'),
+      value: resource => {
+        if (!resource.status.active) {
+          return t('cron-jobs.not-scheduled-yet');
+        }
+
+        const jobName =
+          resource.status.active[resource.status.active.length - 1].name;
+        return (
+          <Link
+            onClick={() => navigateToFixedPathResourceDetails('jobs', jobName)}
+          >
+            {jobName}
+          </Link>
+        );
+      },
     },
   ];
 
