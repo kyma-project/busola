@@ -4,7 +4,6 @@ import { CronJobConcurrencyPolicy } from './CronJobConcurrencyPolicy';
 import { CronJobJobs } from './CronJobJobs.js';
 import { CronJobLastScheduleTime } from '../../../../shared/components/CronJob/CronJobLastScheduleTime';
 import { useTranslation } from 'react-i18next';
-import LuigiClient from '@luigi-project/client';
 import { navigateToFixedPathResourceDetails } from 'react-shared';
 import { Link } from 'fundamental-react';
 

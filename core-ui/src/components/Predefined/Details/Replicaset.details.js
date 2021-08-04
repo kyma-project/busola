@@ -1,5 +1,4 @@
 import React from 'react';
-import { ComponentForList } from 'shared/getComponents';
 import { StatusBadge } from 'react-shared';
 
 import { ResourcePods } from './ResourcePods';
