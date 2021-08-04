@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ResourcePods } from './ResourcePods.js';
+import { ResourcePods } from '../ResourcePods.js';
 
 export function JobsDetails({ DefaultRenderer, ...otherParams }) {
   const customColumns = [
