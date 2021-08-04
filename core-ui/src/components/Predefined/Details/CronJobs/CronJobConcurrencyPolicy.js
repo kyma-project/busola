@@ -5,9 +5,8 @@ export function CronJobConcurrencyPolicy({ concurrencyPolicy }) {
   const descriptions = {
     Allow: 'Allow concurrent executions.',
     Forbid:
-      "No concurrent executions, skip current run if the previous one hasn't finished yet.",
-    Replace:
-      "No concurrent executions, replace current run if the previous one hasn't finished yet.",
+      "No concurrent executions, skip new run if the previous one hasn't finished yet.",
+    Replace: 'No concurrent executions, replace previous run with the new one.',
   };
 
   return (
