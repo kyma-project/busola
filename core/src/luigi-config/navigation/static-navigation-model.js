@@ -250,6 +250,40 @@ export function getStaticChildrenNodesForNamespace(
         },
       ],
     },
+    {
+      category: 'Workloads',
+      resourceType: 'jobs',
+      pathSegment: 'jobs',
+      label: i18next.t('jobs.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/jobs?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/batch/v1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+
+      navigationContext: 'jobs',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':jobName',
+              resourceType: 'jobs',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/jobs/:jobName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/batch/v1',
+                }),
+            },
+          ],
+        },
+      ],
+    },
 
     //DISCOVERY AND NETWORK CATEGORY
     {
