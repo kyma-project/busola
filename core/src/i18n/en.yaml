@@ -1,3 +1,4 @@
+---
 addons:
   title: Addons
 api-rules:
@@ -8,33 +9,33 @@ brokers:
   title: Brokers
 catalog:
   menu-title: Catalog
-  title: Service Catalog
   subtitle: Enrich your experience with additional services that are installed outside the cluster.
+  title: Service Catalog
+cluster-addons:
+  title: Cluster Addons
+cluster-role-bindings:
+  title: Cluster Role Bindings
+cluster-roles:
+  title: Cluster Roles
 clusters:
   overview:
     title: Cluster Overview
-cluster-addons:
-  title: Cluster Addons
-cluster-roles:
-  title: Cluster Roles
-cluster-role-bindings:
-  title: Cluster Role Bindings
 config-maps:
   title: Config Maps
 configuration:
   title: Configuration
 cron-jobs:
-  title: Cron Jobs
-  schedule: Schedule
-  last-schedule-time: Last schedule time
   concurrency-policy:
-    title: Concurrency Policy
     descriptions:
       allow: Allow concurrent executions.
-      skip: No concurrent executions, skip new run if the previous one hasn't finished yet.
       replace: No concurrent executions, replace previous run with the new one.
+      skip: No concurrent executions, skip new run if the previous one hasn't finished yet.
+    title: Concurrency Policy
   last-job-execution: Last job execution
+  last-schedule-time: Last schedule time
   not-scheduled-yet: None scheduled yet
+  schedule: Schedule
+  title: Cron Jobs
 custom-resource-definitions:
   title: Custom Resource Definitions
 deployments:
@@ -50,20 +51,20 @@ instances:
 integration:
   title: Integration
 namespaces:
-  title: Namespaces
   overview:
-    title: Overview
     back: Back to Namespaces
+    resources:
+      error: Error while loading memory consumption data
+      limits: Memory limits
+      requests: Memory requests
+      title: Resource consumption
+    title: Overview
     workloads:
-      title: Healthy Resources
-      pods: $t(pods.title)
       deployments: $t(deployments.title)
       error: 'Error while loading {{title}} data due to: {{message}}'
-    resources:
-      title: Resource consumption
-      requests: Memory requests
-      limits: Memory limits
-      error: Error while loading memory consumption data
+      pods: $t(pods.title)
+      title: Healthy Resources
+  title: Namespaces
 oauth2-clients:
   title: OAuth2 Clients
 observability:
@@ -72,16 +73,16 @@ pods:
   title: Pods
 replica-sets:
   title: Replica Sets
-roles:
-  title: Roles
 role-bindings:
   title: Role Bindings
+roles:
+  title: Roles
 secrets:
   title: Secrets
-services:
-  title: Services
 service-management:
   title: Service Management
+services:
+  title: Services
 settings:
   language: Language
 workloads:
