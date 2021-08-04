@@ -9,7 +9,7 @@ export const CronJobsList = ({ DefaultRenderer, ...otherParams }) => {
       value: resource => <CronJobSchedule schedule={resource.spec.schedule} />,
     },
     {
-      header: 'Last schedue time',
+      header: 'Last schedule time',
       value: resource => (
         <CronJobLastScheduleTime
           lastScheduleTime={resource.status.lastScheduleTime}
