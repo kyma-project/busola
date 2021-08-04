@@ -17,3 +17,4 @@ export * from './ResourceQuotas.list';
 export * from './Events.list';
 export * from './CustomResourceDefinitions.list';
 export * from './Jobs.list.js';
+export * from './CronJobs.list';

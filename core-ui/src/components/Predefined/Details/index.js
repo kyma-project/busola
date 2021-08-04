@@ -14,3 +14,4 @@ export * from './ConfigMap/ConfigMap.details.js';
 export * from './AddonsConfiguration.details';
 export * from './CustomResourceDefinitions/CustomResourceDefinitions.details.js';
 export * from './Job/Job.details';
+export * from './CronJobs/CronJob.details';
