@@ -218,6 +218,40 @@ export function getStaticChildrenNodesForNamespace(
     },
     {
       category: 'Workloads',
+      resourceType: 'cronjobs',
+      pathSegment: 'cronjobs',
+      label: 'Cron Jobs',
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/cronjobs?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/batch/v1beta1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+
+      navigationContext: 'cronjobs',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':cronJobName',
+              resourceType: 'cronjobs',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/cronjobs/:cronJobName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/batch/v1beta1',
+                }),
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: 'Workloads',
       resourceType: 'replicasets',
       pathSegment: 'replicasets',
       label: 'Replica Sets',
