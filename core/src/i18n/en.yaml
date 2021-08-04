@@ -18,6 +18,10 @@ pods:
   title: Pods
 deployments:
   title: Deployments
+jobs:
+  title: Jobs
+  completions: Completions
+  conditions: Conditions
 service-catalog:
   title: Service Management
   catalog:

@@ -1,25 +1,19 @@
 import React from 'react';
-import { Button } from 'fundamental-react';
 import { StatusBadge } from 'react-shared';
+import { useTranslation } from 'react-i18next';
+
+import { JobCompletions } from '../Details/Job/JobCompletions';
 
 export const JobsList = ({ DefaultRenderer, ...otherParams }) => {
+  const { t } = useTranslation();
+
   const customColumns = [
     {
-      header: 'Runs',
-      value: job => {
-        console.log('job', job);
-        const succeeded = job.status.succeeded || 0;
-        const completions = job.spec.completions;
-        const statusType = succeeded === completions ? 'success' : 'info';
-        return (
-          <StatusBadge
-            type={statusType}
-          >{`${succeeded} / ${completions}`}</StatusBadge>
-        );
-      },
+      header: t('jobs.completions'),
+      value: job => <JobCompletions job={job} />,
     },
     {
-      header: 'Conditions',
+      header: t('jobs.conditions'),
       value: job => {
         const statusType = status =>
           status === 'Complete' ? 'success' : 'error';
