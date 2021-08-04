@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ReadableCreationTimestamp } from 'react-shared';
 
-import { ResourcePods } from '../ResourcePods.js';
+import { ResourcePods } from '../ResourcePods';
 import { JobCompletions } from './JobCompletions';
 import { JobConditions } from './JobConditions';
 
