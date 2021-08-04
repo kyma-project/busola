@@ -16,3 +16,4 @@ export * from './LimitRanges.list';
 export * from './ResourceQuotas.list';
 export * from './Events.list';
 export * from './CustomResourceDefinitions.list';
+export * from './CronJobs.list';
