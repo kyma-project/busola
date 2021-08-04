@@ -1,7 +1,7 @@
 import React from 'react';
 import { CronJobSchedule } from 'shared/components/CronJob/CronJobSchedule';
 import { CronJobConcurrencyPolicy } from './CronJobConcurrencyPolicy';
-import { CronJobPods } from './CronJobPods.js';
+import { CronJobJobs } from './CronJobJobs.js';
 import { CronJobLastScheduleTime } from '../../../../shared/components/CronJob/CronJobLastScheduleTime';
 
 export const CronJobsDetails = ({ DefaultRenderer, ...otherParams }) => {
@@ -37,7 +37,7 @@ export const CronJobsDetails = ({ DefaultRenderer, ...otherParams }) => {
 
   return (
     <DefaultRenderer
-      customComponents={[CronJobPods]}
+      customComponents={[CronJobJobs]}
       customColumns={customColumns}
       {...otherParams}
     />

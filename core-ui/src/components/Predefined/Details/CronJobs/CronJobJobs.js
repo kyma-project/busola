@@ -1,7 +1,7 @@
 import React from 'react';
 import { ComponentForList } from 'shared/getComponents';
 
-export function CronJobPods(cronJob) {
+export function CronJobJobs(cronJob) {
   const namespace = cronJob.metadata.namespace;
   const jobsUrl = `/apis/batch/v1/namespaces/${namespace}/jobs`;
 
