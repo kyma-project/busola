@@ -19,7 +19,6 @@ export function setFeatureToggle(key, value) {
 
 export function readFeatureToggle(key) {
   const value = localStorage.getItem(`busola.${key}`) === 'true';
-  console.log('readFeatureToggle', key, value);
   updateFeatureToggle(key, value);
 }
 
