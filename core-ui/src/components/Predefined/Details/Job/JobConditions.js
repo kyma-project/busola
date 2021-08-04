@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { GenericList, ReadableCreationTimestamp } from 'react-shared';
 
 export function JobConditions(job) {
-  console.log('job', job);
   const { t } = useTranslation();
 
   if (!job.status.conditions) {
