@@ -1,6 +1,28 @@
+addons:
+  title: Addons
+api-rules:
+  title: API Rules
+applications:
+  title: Applications
+brokers:
+  title: Brokers
+catalog:
+  menu-title: Catalog
+  title: Service Catalog
+  subtitle: Enrich your experience with additional services that are installed outside the cluster.
 clusters:
   overview:
     title: Cluster Overview
+cluster-addons:
+  title: Cluster Addons
+cluster-roles:
+  title: Cluster Roles
+cluster-role-bindings:
+  title: Cluster Role Bindings
+config-maps:
+  title: Config Maps
+configuration:
+  title: Configuration
 cron-jobs:
   title: Cron Jobs
   schedule: Schedule
@@ -13,6 +35,20 @@ cron-jobs:
       replace: No concurrent executions, replace previous run with the new one.
   last-job-execution: Last job execution
   not-scheduled-yet: None scheduled yet
+custom-resource-definitions:
+  title: Custom Resource Definitions
+deployments:
+  title: Deployments
+discovery-and-network:
+  title: Discovery and Network
+functions:
+  title: Functions
+git-repositories:
+  title: Git Repositories
+instances:
+  title: Instances
+integration:
+  title: Integration
 namespaces:
   title: Namespaces
   overview:
@@ -28,61 +64,25 @@ namespaces:
       requests: Memory requests
       limits: Memory limits
       error: Error while loading memory consumption data
-workloads:
-  title: Workloads
-functions:
-  title: Functions
+oauth2-clients:
+  title: OAuth2 Clients
+observability:
+  title: Observability
 pods:
   title: Pods
-deployments:
-  title: Deployments
 replica-sets:
   title: Replica Sets
-discovery-and-network:
-  title: Discovery and Network
-api-rules:
-  title: API Rules
-services:
-  title: Services
-service-management:
-  title: Service Management
-catalog:
-  menu-title: Catalog
-  title: Service Catalog
-  subtitle: Enrich your experience with additional services that are installed outside the cluster.
-instances:
-  title: Instances
-brokers:
-  title: Brokers
-configuration:
-  title: Configuration
-addons:
-  title: Addons
-config-maps:
-  title: Config Maps
-secrets:
-  title: Secrets
 roles:
   title: Roles
 role-bindings:
   title: Role Bindings
-oauth2-clients:
-  title: OAuth2 Clients
-git-repositories:
-  title: Git Repositories
-custom-resource-definitions:
-  title: Custom Resource Definitions
-integration:
-  title: Integration
-applications:
-  title: Applications
-cluster-addons:
-  title: Cluster Addons
-cluster-roles:
-  title: Cluster Roles
-cluster-role-bindings:
-  title: Cluster Role Bindings
-observability:
-  title: Observability
+secrets:
+  title: Secrets
+services:
+  title: Services
+service-management:
+  title: Service Management
 settings:
   language: Language
+workloads:
+  title: Workloads

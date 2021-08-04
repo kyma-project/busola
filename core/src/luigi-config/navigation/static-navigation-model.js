@@ -982,7 +982,7 @@ export function getStaticRootNodes(
       pathSegment: 'cluster-roles',
       navigationContext: 'clusterroles',
       resourceType: 'clusterroles',
-      label: i18next.t('configuration.cluster-roles.title'),
+      label: i18next.t('cluster-roles.title'),
       viewUrl:
         config.coreUIModuleUrl +
         '/ClusterRoles?' +
@@ -1024,7 +1024,7 @@ export function getStaticRootNodes(
       pathSegment: 'cluster-role-bindings',
       resourceType: 'clusterrolebindings',
       navigationContext: 'clusterrolebindings',
-      label: i18next.t('configuration.cluster-role-bindings.title'),
+      label: i18next.t('cluster-role-bindings.title'),
       category: 'Configuration',
       viewUrl:
         config.coreUIModuleUrl +
