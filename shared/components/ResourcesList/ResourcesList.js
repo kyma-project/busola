@@ -1,7 +1,14 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import jsyaml from 'js-yaml';
-import { Link, Button, Dialog, Checkbox } from 'fundamental-react';
+import {
+  FormFieldset,
+  FormItem,
+  Link,
+  Button,
+  Dialog,
+  Checkbox,
+} from 'fundamental-react';
 import { createPatch } from 'rfc6902';
 import LuigiClient from '@luigi-project/client';
 
@@ -256,9 +263,6 @@ function Resources({
     <>
       <Dialog
         actions={[
-          <Checkbox onChange={e => toggleDontConfirmDelete(e.target.checked)}>
-            Don't show delete confirmations
-          </Checkbox>,
           <Button
             option="emphasized"
             onClick={() => performDelete(activeResource)}
@@ -271,8 +275,15 @@ function Resources({
         show={showDeleteDialog}
         title={`Remove ${activeResource?.metadata.name}`}
       >
-        Are you sure you want to delete {prettifiedResourceName}{' '}
-        {activeResource?.metadata.name}?
+        <p>
+          Are you sure you want to delete {prettifiedResourceName}{' '}
+          {activeResource?.metadata.name}?
+        </p>
+        <div className="fd-margin-top--sm">
+          <Checkbox onChange={e => toggleDontConfirmDelete(e.target.checked)}>
+            Don't show delete confirmations
+          </Checkbox>
+        </div>
       </Dialog>
       <GenericList
         title={
