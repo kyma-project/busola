@@ -83,6 +83,17 @@ service-management:
   title: Service Management
 services:
   title: Services
+jobs:
+  title: Jobs
+  completions: Completions
+  start-time: Start Time
+  completion-time: Completion Time
+  conditions:
+    title: Conditions
+    type: Type
+    status: Status
+    last-probe: Last Probe
+    last-transition: Last Transition
 settings:
   language: Language
 workloads:

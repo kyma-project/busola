@@ -1,7 +1,7 @@
 import React from 'react';
 import { ComponentForList } from 'shared/getComponents';
 
-export function DeploymentPods(resource) {
+export function ResourcePods(resource) {
   if (!resource) return null;
   const labelSelectors = Object.entries(resource.spec.selector.matchLabels)
     .map(([key, value]) => `${key}=${value}`)
