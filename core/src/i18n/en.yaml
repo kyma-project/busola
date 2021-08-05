@@ -1,52 +1,100 @@
+---
+addons:
+  title: Addons
+api-rules:
+  title: API Rules
+applications:
+  title: Applications
+brokers:
+  title: Brokers
+catalog:
+  menu-title: Catalog
+  subtitle: Enrich your experience with additional services that are installed outside the cluster.
+  title: Service Catalog
+cluster-addons:
+  title: Cluster Addons
+cluster-role-bindings:
+  title: Cluster Role Bindings
+cluster-roles:
+  title: Cluster Roles
 clusters:
   overview:
     title: Cluster Overview
-namespaces:
-  overview:
-    title: Overview
-    workloads:
-      title: Healthy Resources
-      pods: $t(pods.title)
-      deployments: $t(deployments.title)
-      error: 'Error while loading {{title}} data due to: {{message}}'
-    resources:
-      title: Resource consumption
-      requests: Memory requests
-      limits: Memory limits
-      error: Error while loading memory consumption data
-pods:
-  title: Pods
-deployments:
-  title: Deployments
-service-catalog:
-  title: Service Management
-  catalog:
-    title: Service Catalog
-    services:
-      description: Enrich your experience with additional services that are installed outside the cluster.
-jobs:
-  title: Jobs
-  completions: Completions
-  start-time: Start Time
-  completion-time: Completion Time
-  conditions:
-    title: Conditions
-    type: Type
-    status: Status
-    last-probe: Last Probe
-    last-transition: Last Transition
-
+config-maps:
+  title: Config Maps
+configuration:
+  title: Configuration
 cron-jobs:
-  title: Cron Jobs
-  schedule: Schedule
-  last-schedule-time: Last schedule time
   concurrency-policy:
-    title: Concurrency Policy
     descriptions:
       allow: Allow concurrent executions.
-      skip: No concurrent executions, skip new run if the previous one hasn't finished yet.
       replace: No concurrent executions, replace previous run with the new one.
+      skip: No concurrent executions, skip new run if the previous one hasn't finished yet.
+    title: Concurrency Policy
   last-job-execution: Last job execution
+  last-schedule-time: Last schedule time
   not-scheduled-yet: None scheduled yet
+  schedule: Schedule
+  title: Cron Jobs
+custom-resource-definitions:
+  title: Custom Resource Definitions
+deployments:
+  title: Deployments
+discovery-and-network:
+  title: Discovery and Network
+functions:
+  title: Functions
+git-repositories:
+  title: Git Repositories
+instances:
+  title: Instances
+integration:
+  title: Integration
+jobs:
+  completion-time: Completion Time
+  completions: Completions
+  conditions:
+    last-probe: Last Probe
+    last-transition: Last Transition
+    status: Status
+    title: Conditions
+    type: Type
+  start-time: Start Time
+  title: Jobs
+namespaces:
+  overview:
+    back: Back to Namespaces
+    resources:
+      error: Error while loading memory consumption data
+      limits: Memory limits
+      requests: Memory requests
+      title: Resource consumption
+    title: Overview
+    workloads:
+      deployments: $t(deployments.title)
+      error: 'Error while loading {{title}} data due to: {{message}}'
+      pods: $t(pods.title)
+      title: Healthy Resources
+  title: Namespaces
+oauth2-clients:
+  title: OAuth2 Clients
+observability:
+  title: Observability
+pods:
+  title: Pods
+replica-sets:
+  title: Replica Sets
+role-bindings:
+  title: Role Bindings
+roles:
+  title: Roles
+secrets:
+  title: Secrets
+service-management:
+  title: Service Management
+services:
+  title: Services
 settings:
   language: Language
+workloads:
+  title: Workloads
