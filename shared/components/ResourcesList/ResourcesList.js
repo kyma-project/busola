@@ -267,10 +267,7 @@ function Resources({
     <>
       <Dialog
         actions={[
-          <Button
-            option="emphasized"
-            onClick={() => performDelete(activeResource)}
-          >
+          <Button type="negative" onClick={() => performDelete(activeResource)}>
             {t('common.delete-dialog.buttons.delete')}
           </Button>,
           <Button onClick={() => setShowDeleteDialog(false)}>
