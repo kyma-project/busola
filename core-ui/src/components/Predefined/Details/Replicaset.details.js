@@ -1,6 +1,7 @@
 import React from 'react';
-import { ComponentForList } from 'shared/getComponents';
 import { StatusBadge } from 'react-shared';
+
+import { ResourcePods } from './ResourcePods';
 
 export const ReplicasetsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const customColumns = [
@@ -54,30 +55,11 @@ export const ReplicasetsDetails = ({ DefaultRenderer, ...otherParams }) => {
     },
   ];
 
-  const PodsList = (
-    <ComponentForList
-      name="podsList"
-      params={{
-        hasDetailsView: true,
-        fixedPath: true,
-        resourceUrl: `/api/v1/namespaces/${otherParams.namespace}/pods`,
-        resourceType: 'pods',
-        namespace: otherParams.namespace,
-        isCompact: true,
-        showTitle: true,
-        filter: pod =>
-          !!pod.metadata.ownerReferences.find(
-            ref =>
-              ref.kind === 'ReplicaSet' &&
-              ref.name === otherParams.resourceName,
-          ),
-      }}
-    />
-  );
-
   return (
-    <DefaultRenderer customColumns={customColumns} {...otherParams}>
-      {PodsList}
-    </DefaultRenderer>
+    <DefaultRenderer
+      customColumns={customColumns}
+      customComponents={[ResourcePods]}
+      {...otherParams}
+    ></DefaultRenderer>
   );
 };
