@@ -318,6 +318,40 @@ export function getStaticChildrenNodesForNamespace(
         },
       ],
     },
+    {
+      category: 'Workloads',
+      resourceType: 'statefulsets',
+      pathSegment: 'statefulsets',
+      label: i18next.t('stateful-sets.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/statefulsets?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/apps/v1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+
+      navigationContext: 'statefulsets',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':statefulSetName',
+              resourceType: 'statefulsets',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/statefulsets/:statefulSetName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/apps/v1',
+                }),
+            },
+          ],
+        },
+      ],
+    },
 
     //DISCOVERY AND NETWORK CATEGORY
     {
