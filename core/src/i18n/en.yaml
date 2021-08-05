@@ -24,5 +24,29 @@ service-catalog:
     title: Service Catalog
     services:
       description: Enrich your experience with additional services that are installed outside the cluster.
+jobs:
+  title: Jobs
+  completions: Completions
+  start-time: Start Time
+  completion-time: Completion Time
+  conditions:
+    title: Conditions
+    type: Type
+    status: Status
+    last-probe: Last Probe
+    last-transition: Last Transition
+
+cron-jobs:
+  title: Cron Jobs
+  schedule: Schedule
+  last-schedule-time: Last schedule time
+  concurrency-policy:
+    title: Concurrency Policy
+    descriptions:
+      allow: Allow concurrent executions.
+      skip: No concurrent executions, skip new run if the previous one hasn't finished yet.
+      replace: No concurrent executions, replace previous run with the new one.
+  last-job-execution: Last job execution
+  not-scheduled-yet: None scheduled yet
 settings:
   language: Language
