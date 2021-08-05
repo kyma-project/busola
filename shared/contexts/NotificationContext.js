@@ -15,11 +15,19 @@ export const NotificationProvider = ({
   const [toastProps, setToastProps] = useState();
 
   function showLuigiNotification(notificationProps) {
+    console.log(notificationProps);
+    const header =
+      (notificationProps.content && notificationProps.title) ||
+      notificationProps.type === 'error'
+        ? 'Error'
+        : 'Information';
+    const body = notificationProps.content || notificationProps.title;
+
     LuigiClient.uxManager()
       .showConfirmationModal({
         type: notificationProps.type,
-        body: notificationProps.content,
-        header: notificationProps.title,
+        body,
+        header,
         ...notificationProps,
       })
       .catch(e => {});
