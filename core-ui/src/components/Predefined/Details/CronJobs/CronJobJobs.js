@@ -15,7 +15,7 @@ export function CronJobJobs(cronJob) {
       name="jobsList"
       key="cron-job-jobs"
       params={{
-        hasDetailsView: false,
+        hasDetailsView: true,
         fixedPath: true,
         resourceUrl: jobsUrl,
         resourceType: 'jobs',

@@ -24,6 +24,18 @@ service-catalog:
     title: Service Catalog
     services:
       description: Enrich your experience with additional services that are installed outside the cluster.
+jobs:
+  title: Jobs
+  completions: Completions
+  start-time: Start Time
+  completion-time: Completion Time
+  conditions:
+    title: Conditions
+    type: Type
+    status: Status
+    last-probe: Last Probe
+    last-transition: Last Transition
+
 cron-jobs:
   title: Cron Jobs
   schedule: Schedule
