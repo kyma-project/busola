@@ -26,12 +26,7 @@ export const K8sNameInput = ({
       {label}
     </FormLabel>
     {showHelp && (
-      <Tooltip
-        content="
-              The name must consist of lower case alphanumeric characters or dashes, 
-              and must start and end with an alphanumeric character (e.g. 'my-name1').
-              "
-      >
+      <Tooltip content="Name must contain lower case alphanumeric characters, can contain '-'  (like 'my-name1').">
         <input
           role="input"
           ref={_ref}

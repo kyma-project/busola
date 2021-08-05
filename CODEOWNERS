@@ -2,7 +2,8 @@
 * @akucharska @dariadomagala @parostatkiem @valentinvieriu @Wawrzyn321
 
 # Owners of all .md files in the repository
-*.md @kazydek @klaudiagrz @mmitoraj @majakurcius @alexandra-simeonova @superojla
+*.md @kyma-project/technical-writers
 
+core/src/i18n/ @kyma-project/technical-writers
 
 tests/ @akucharska @dariadomagala @parostatkiem @valentinvieriu @Wawrzyn321 @Sawthis
