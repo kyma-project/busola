@@ -50,6 +50,17 @@ instances:
   title: Instances
 integration:
   title: Integration
+jobs:
+  completion-time: Completion Time
+  completions: Completions
+  conditions:
+    last-probe: Last Probe
+    last-transition: Last Transition
+    status: Status
+    title: Conditions
+    type: Type
+  start-time: Start Time
+  title: Jobs
 namespaces:
   overview:
     back: Back to Namespaces
@@ -83,17 +94,6 @@ service-management:
   title: Service Management
 services:
   title: Services
-jobs:
-  title: Jobs
-  completions: Completions
-  start-time: Start Time
-  completion-time: Completion Time
-  conditions:
-    title: Conditions
-    type: Type
-    status: Status
-    last-probe: Last Probe
-    last-transition: Last Transition
 settings:
   language: Language
 workloads:
