@@ -15,7 +15,6 @@ export const NotificationProvider = ({
   const [toastProps, setToastProps] = useState();
 
   function showLuigiNotification(notificationProps) {
-    console.log(notificationProps);
     const header =
       (notificationProps.content && notificationProps.title) ||
       notificationProps.type === 'error'
