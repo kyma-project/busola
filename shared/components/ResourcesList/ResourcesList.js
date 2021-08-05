@@ -32,6 +32,7 @@ import CustomPropTypes from '../../typechecking/CustomPropTypes';
 import { ModalWithForm } from '../ModalWithForm/ModalWithForm';
 import { ReadableCreationTimestamp } from '../ReadableCreationTimestamp/ReadableCreationTimestamp';
 import { useWindowTitle, useFeatureToggle } from '../../hooks';
+import { useTranslation } from 'react-i18next';
 
 ResourcesList.propTypes = {
   customColumns: CustomPropTypes.customColumnsType,
@@ -101,8 +102,11 @@ function Resources({
   navigateFn,
   skipDataLoading = false,
   testid,
+  i18n,
 }) {
   useWindowTitle(windowTitle || prettifyNamePlural(resourceName, resourceType));
+  const { t } = useTranslation(['translation'], { i18n });
+
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [activeResource, setActiveResource] = useState(null);
   const {
@@ -267,21 +271,27 @@ function Resources({
             option="emphasized"
             onClick={() => performDelete(activeResource)}
           >
-            Delete
+            {t('common.delete-dialog.buttons.delete')}
           </Button>,
-          <Button onClick={() => setShowDeleteDialog(false)}>Cancel</Button>,
+          <Button onClick={() => setShowDeleteDialog(false)}>
+            {t('common.delete-dialog.buttons.cancel')}
+          </Button>,
         ]}
         footerProps={{}}
         show={showDeleteDialog}
-        title={`Remove ${activeResource?.metadata.name}`}
+        title={t('common.delete-dialog.title', {
+          name: activeResource?.metadata.name,
+        })}
       >
         <p>
-          Are you sure you want to delete {prettifiedResourceName}{' '}
-          {activeResource?.metadata.name}?
+          {t('common.delete-dialog.message', {
+            type: prettifiedResourceName,
+            name: activeResource?.metadata.name,
+          })}
         </p>
         <div className="fd-margin-top--sm">
           <Checkbox onChange={e => toggleDontConfirmDelete(e.target.checked)}>
-            Don't show delete confirmations
+            {t('common.delete-dialog.delete-confirm')}
           </Checkbox>
         </div>
       </Dialog>
