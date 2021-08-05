@@ -94,7 +94,17 @@ service-management:
   title: Service Management
 services:
   title: Services
-settings:
-  language: Language
 workloads:
   title: Workloads
+settings:
+  language: Language
+  confirmations: Confirmations
+  dontConfirmDelete: Delete without confirmation
+common:
+  delete-dialog:
+    title: Remove {{name}}
+    message: Are you sure you want to delete {{type}} {{name}}?
+    delete-confirm: Don't show delete confirmations
+    buttons:
+      delete: Delete
+      cancel: Cancel
