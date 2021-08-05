@@ -18,3 +18,8 @@
 [data-testid='signout'] {
   display: none;
 }
+
+.fd-page.spinnerContainer,
+body.lui-semiCollapsible {
+  background: var(--sapBackgroundColor);
+}

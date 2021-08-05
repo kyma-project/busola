@@ -50,7 +50,7 @@ export const CircleProgress = ({
     height: size + 'px',
   };
   const valueIndicatorStyle = {
-    backgroundColor: `#f0f0f0`,
+    backgroundColor: `var(--sapContent_ForegroundColor)`,
     backgroundImage: `conic-gradient(transparent ${100 -
       percent}%, ${color} 0)`, // we have to prepare it here to avoid using styledComponents
   };
@@ -59,7 +59,7 @@ export const CircleProgress = ({
     fontSize: textSize,
   };
   const titleStyle = {
-    color: isInErrorState(percent, max, reversed) ? color : 'initial',
+    color: isInErrorState(percent, max, reversed) ? color : 'inherit',
   };
 
   return (
