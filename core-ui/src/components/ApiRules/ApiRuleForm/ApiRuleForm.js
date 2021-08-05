@@ -253,10 +253,7 @@ export default function ApiRuleForm({
                   {domainLoading ? (
                     'Loading...'
                   ) : (
-                    <Tooltip
-                      content="The hostname must consist of alphanumeric characters, dots or dashes, 
-                          and must start and end with an alphanumeric character (e.g. 'my-name1')."
-                    >
+                    <Tooltip content="Name must contain lower case alphanumeric characters, can contain '-'  (like 'my-name1').">
                       <InputWithSuffix
                         defaultValue={apiRule.spec.service.host.replace(
                           `.${domain}`,

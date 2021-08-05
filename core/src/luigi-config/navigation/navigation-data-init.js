@@ -14,14 +14,14 @@ import {
   getStaticRootNodes,
 } from './static-navigation-model';
 import { navigationPermissionChecker, hasPermissionsFor } from './permissions';
-import { resolveFeatures, resolveFeatureAvailability } from './../features';
+import { resolveFeatures, resolveFeatureAvailability } from '../features';
 
 import {
   hideDisabledNodes,
   createNamespacesList,
   addExternalNodes,
 } from './navigation-helpers';
-import { clearAuthData, getAuthData } from './../auth/auth-storage';
+import { clearAuthData, getAuthData } from '../auth/auth-storage';
 import { groups } from '../auth/auth';
 import {
   getActiveCluster,
@@ -33,7 +33,7 @@ import {
   getCurrentContextNamespace,
   saveClusterParams,
 } from '../cluster-management';
-import { shouldShowHiddenNamespaces } from './../utils/hidden-namespaces-toggle';
+import { getFeatureToggle } from '../utils/feature-toggles';
 import { saveLocation } from './previous-location';
 import { NODE_PARAM_PREFIX } from '../luigi-config';
 
@@ -344,7 +344,6 @@ export async function getNavigationData(authData) {
           crds,
           features,
           hiddenNamespaces,
-          showHiddenNamespaces: shouldShowHiddenNamespaces(),
           cluster: params.currentContext.cluster,
           config: params.config,
           kubeconfig: params.kubeconfig,
@@ -390,7 +389,7 @@ async function getNamespaces() {
     });
     return [];
   }
-  if (!shouldShowHiddenNamespaces() && hiddenNamespaces) {
+  if (!getFeatureToggle('showHiddenNamespaces') && hiddenNamespaces) {
     namespaces = namespaces.filter(ns => !hiddenNamespaces.includes(ns.name));
   }
   return createNamespacesList(namespaces);

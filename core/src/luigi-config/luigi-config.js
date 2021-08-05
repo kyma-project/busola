@@ -16,13 +16,13 @@ import {
   handleResetEndpoint,
   setActiveClusterIfPresentInUrl,
 } from './cluster-management';
-import { loadHiddenNamespacesToggle } from './utils/hidden-namespaces-toggle';
 
 import {
   createNavigation,
   addClusterNodes,
 } from './navigation/navigation-data-init';
 import { setTheme, getTheme } from './utils/theme';
+import { readFeatureToggles } from './utils/feature-toggles';
 
 export const i18n = i18next.use(i18nextBackend).init({
   lng: localStorage.getItem('busola.language') || 'en',
@@ -47,7 +47,7 @@ async function luigiAfterInit() {
     return;
   }
 
-  loadHiddenNamespacesToggle();
+  readFeatureToggles(['dontConfirmDelete', 'showHiddenNamespaces']);
 
   if (!isClusterChoosen) {
     if (!window.location.pathname.startsWith('/clusters')) {
