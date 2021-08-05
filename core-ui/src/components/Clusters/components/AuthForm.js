@@ -6,17 +6,17 @@ export const AUTH_FORM_OIDC = 'OIDC';
 export const DEFAULT_SCOPE_VALUE = 'openid ';
 
 const OIDCform = ({ auth, setAuth }) => {
-  const issuerUrlRef = useRef();
-  const clientIdRef = useRef();
-  const scopesRef = useRef();
+  const issuerUrlInputRef = useRef();
+  const clientIdInputRef = useRef();
+  const scopesInputRef = useRef();
 
-  useWebcomponents(issuerUrlRef, 'input', e =>
+  useWebcomponents(issuerUrlInputRef, 'input', e =>
     setAuth({ ...auth, issuerUrl: e.target.value }),
   );
-  useWebcomponents(clientIdRef, 'input', e =>
+  useWebcomponents(clientIdInputRef, 'input', e =>
     setAuth({ ...auth, clientId: e.target.value }),
   );
-  useWebcomponents(scopesRef, 'input', e =>
+  useWebcomponents(scopesInputRef, 'input', e =>
     setAuth({ ...auth, scope: e.target.value }),
   );
 
@@ -27,7 +27,7 @@ const OIDCform = ({ auth, setAuth }) => {
         key="issuer-url"
         required
         type="url"
-        ref={issuerUrlRef}
+        ref={issuerUrlInputRef}
         value={auth.issuerUrl || ''}
       />
       <ui5-label>Client ID</ui5-label>
@@ -35,7 +35,7 @@ const OIDCform = ({ auth, setAuth }) => {
         key="client-id"
         required
         label="Client ID"
-        ref={clientIdRef}
+        ref={clientIdInputRef}
         value={auth.clientId || ''}
       />
       <ui5-label>Scopes</ui5-label>
@@ -43,7 +43,7 @@ const OIDCform = ({ auth, setAuth }) => {
         key="scope"
         required
         label="Scopes"
-        ref={scopesRef}
+        ref={scopesInputRef}
         value={auth.scope || DEFAULT_SCOPE_VALUE}
       />
     </>
@@ -51,15 +51,20 @@ const OIDCform = ({ auth, setAuth }) => {
 };
 
 const TokenForm = ({ auth, setAuth }) => {
-  const tokenRef = useRef();
+  const tokenInputRef = useRef();
 
-  useWebcomponents(tokenRef, 'input', e =>
+  useWebcomponents(tokenInputRef, 'input', e =>
     setAuth({ ...auth, token: e.target.value }),
   );
   return (
     <>
       <ui5-label>Token</ui5-label>
-      <ui5-input key="token" required ref={tokenRef} value={auth.token || ''} />
+      <ui5-input
+        key="token"
+        required
+        ref={tokenInputRef}
+        value={auth.token || ''}
+      />
     </>
   );
 };
@@ -67,14 +72,14 @@ const TokenForm = ({ auth, setAuth }) => {
 export function AuthForm({ setAuthValid, auth, setAuth }) {
   const [tokenSelected, setTokenSelected] = useState(true);
   const formRef = useRef();
-  const tokenRef = useRef();
-  const oidcRef = useRef();
+  const tokenSelectRef = useRef();
+  const oidcSelectRef = useRef();
 
-  useWebcomponents(tokenRef, 'select', () => {
+  useWebcomponents(tokenSelectRef, 'select', () => {
     setTokenSelected(true);
     setAuth({ ...auth, type: AUTH_FORM_TOKEN });
   });
-  useWebcomponents(oidcRef, 'select', () => {
+  useWebcomponents(oidcSelectRef, 'select', () => {
     setTokenSelected(false);
     setAuth({ ...auth, type: AUTH_FORM_OIDC });
   });
@@ -91,8 +96,17 @@ export function AuthForm({ setAuthValid, auth, setAuth }) {
         It looks like your kubeconfig is incomplete. Please fill the additional
         fields.
       </ui5-messagestrip>
-      <ui5-radiobutton text="Token" selected name="authGroup" ref={tokenRef} />
-      <ui5-radiobutton text="OIDC provider" name="authGroup" ref={oidcRef} />
+      <ui5-radiobutton
+        text="Token"
+        selected
+        name="authGroup"
+        ref={tokenSelectRef}
+      />
+      <ui5-radiobutton
+        text="OIDC provider"
+        name="authGroup"
+        ref={oidcSelectRef}
+      />
       {tokenSelected ? (
         <TokenForm auth={auth} setAuth={setAuth} />
       ) : (

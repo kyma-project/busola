@@ -7,7 +7,6 @@ export function KubeconfigUpload({
   handleKubeconfigAdded,
   kubeconfigFromParams,
   fileUploaderRef,
-  textAreaRef,
 }) {
   const [showParseError, setShowParseError] = React.useState(false);
   const [kubeconfigs, setKubeconfigs] = React.useState({
@@ -44,7 +43,6 @@ export function KubeconfigUpload({
       <KubeconfigTextArea
         onKubeconfigTextAdded={onKubeconfigTextAdded('text')}
         kubeconfigFromParams={kubeconfigFromParams}
-        textAreaRef={textAreaRef}
       />
       {showParseError && (
         <ui5-messagestrip type="Negative">

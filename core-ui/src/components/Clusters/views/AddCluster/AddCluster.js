@@ -21,7 +21,6 @@ export function AddCluster() {
 
   const wizardRef = useRef();
   const fileUploaderRef = useRef();
-  const textAreaRef = useRef();
 
   React.useEffect(() => {
     isMounted.current = true;
@@ -104,7 +103,6 @@ export function AddCluster() {
             handleKubeconfigAdded={handleKubeconfigAdded}
             kubeconfigFromParams={initParams?.kubeconfig}
             fileUploaderRef={fileUploaderRef}
-            textAreaRef={textAreaRef}
           />
         </ui5-wizard-step>
 

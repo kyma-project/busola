@@ -14,7 +14,7 @@ export function ClusterConfiguration({
   const [authValid, setAuthValid] = React.useState(false);
   const [auth, setAuth] = React.useState(initialAuth);
   const [contextName, setContextName] = React.useState(null);
-  const buttonRef = useRef();
+  const applyConfigurationButtonRef = useRef();
 
   const onApply = () => {
     try {
@@ -42,7 +42,7 @@ export function ClusterConfiguration({
   };
 
   const notification = useNotification();
-  useWebcomponents(buttonRef, 'click', onApply);
+  useWebcomponents(applyConfigurationButtonRef, 'click', onApply);
 
   const requireAuth =
     kubeconfig && contextName && !hasKubeconfigAuth(kubeconfig, contextName);
@@ -50,6 +50,10 @@ export function ClusterConfiguration({
   React.useEffect(() => {
     if (kubeconfig) setContextName(kubeconfig['current-context']);
   }, [kubeconfig]);
+
+  React.useEffect(() => {
+    console.log('authValid', authValid);
+  }, [authValid]);
 
   const addAuthToParams = params => {
     const { type: authType, token, ...oidcConfig } = auth;
@@ -79,7 +83,9 @@ export function ClusterConfiguration({
       {requireAuth && (
         <AuthForm auth={auth} setAuth={setAuth} setAuthValid={setAuthValid} />
       )}
-      <ui5-button ref={buttonRef}>Apply configuration</ui5-button>
+      <ui5-button ref={applyConfigurationButtonRef} disabled>
+        Apply configuration
+      </ui5-button>
     </>
   );
 }
