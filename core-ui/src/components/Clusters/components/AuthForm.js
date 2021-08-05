@@ -5,11 +5,13 @@ export const AUTH_FORM_TOKEN = 'Token';
 export const AUTH_FORM_OIDC = 'OIDC';
 export const DEFAULT_SCOPE_VALUE = 'openid ';
 
-const OIDCform = ({ auth, setAuth }) => {
-  const issuerUrlInputRef = useRef();
-  const clientIdInputRef = useRef();
-  const scopesInputRef = useRef();
-
+const OIDCform = ({
+  auth,
+  setAuth,
+  issuerUrlInputRef,
+  clientIdInputRef,
+  scopesInputRef,
+}) => {
   useWebcomponents(issuerUrlInputRef, 'input', e =>
     setAuth({ ...auth, issuerUrl: e.target.value }),
   );
@@ -44,15 +46,13 @@ const OIDCform = ({ auth, setAuth }) => {
         required
         label="Scopes"
         ref={scopesInputRef}
-        value={auth.scope || DEFAULT_SCOPE_VALUE}
+        value={auth.scope || DEFAULT_SCOPE_VALUE} //fix
       />
     </>
   );
 };
 
-const TokenForm = ({ auth, setAuth }) => {
-  const tokenInputRef = useRef();
-
+const TokenForm = ({ auth, setAuth, tokenInputRef }) => {
   useWebcomponents(tokenInputRef, 'input', e =>
     setAuth({ ...auth, token: e.target.value }),
   );
@@ -69,11 +69,33 @@ const TokenForm = ({ auth, setAuth }) => {
   );
 };
 
-export function AuthForm({ setAuthValid, auth, setAuth }) {
+const checkOIDCFormValidity = ({
+  issuerUrlInputRef,
+  clientIdInputRef,
+  scopesInputRef,
+}) => {
+  return !!(
+    issuerUrlInputRef.current?.value &&
+    clientIdInputRef.current?.value &&
+    scopesInputRef.current?.value &&
+    (issuerUrlInputRef.current?.value.startsWith('https://') ||
+      issuerUrlInputRef.current?.value.startsWith('http://'))
+  );
+};
+
+const checkTokenFormValidity = ({ tokenInputRef }) => {
+  return !!tokenInputRef.current.value;
+};
+
+export function AuthForm({ auth, setAuth, applyConfigurationButtonRef }) {
   const [tokenSelected, setTokenSelected] = useState(true);
   const formRef = useRef();
   const tokenSelectRef = useRef();
   const oidcSelectRef = useRef();
+  const issuerUrlInputRef = useRef();
+  const clientIdInputRef = useRef();
+  const scopesInputRef = useRef();
+  const tokenInputRef = useRef();
 
   useWebcomponents(tokenSelectRef, 'select', () => {
     setTokenSelected(true);
@@ -86,9 +108,19 @@ export function AuthForm({ setAuthValid, auth, setAuth }) {
 
   React.useEffect(() => {
     if (formRef) {
-      setAuthValid(formRef.current?.checkValidity());
+      let formValid;
+      if (tokenSelected) {
+        formValid = checkTokenFormValidity({ tokenInputRef });
+      } else {
+        formValid = checkOIDCFormValidity({
+          issuerUrlInputRef,
+          clientIdInputRef,
+          scopesInputRef,
+        });
+      }
+      applyConfigurationButtonRef.current.disabled = !formValid;
     }
-  }, [formRef, auth, setAuthValid]);
+  }, [formRef, auth, applyConfigurationButtonRef]);
 
   return (
     <form ref={formRef} onSubmit={e => e.preventDefault()} noValidate>
@@ -108,9 +140,19 @@ export function AuthForm({ setAuthValid, auth, setAuth }) {
         ref={oidcSelectRef}
       />
       {tokenSelected ? (
-        <TokenForm auth={auth} setAuth={setAuth} />
+        <TokenForm
+          auth={auth}
+          setAuth={setAuth}
+          tokenInputRef={tokenInputRef}
+        />
       ) : (
-        <OIDCform auth={auth} setAuth={setAuth} />
+        <OIDCform
+          auth={auth}
+          setAuth={setAuth}
+          issuerUrlInputRef={issuerUrlInputRef}
+          clientIdInputRef={clientIdInputRef}
+          scopesInputRef={scopesInputRef}
+        />
       )}
     </form>
   );

@@ -9,9 +9,7 @@ export function ClusterConfiguration({
   kubeconfig,
   initParams,
   auth: initialAuth,
-  goBack,
 }) {
-  const [authValid, setAuthValid] = React.useState(false);
   const [auth, setAuth] = React.useState(initialAuth);
   const [contextName, setContextName] = React.useState(null);
   const applyConfigurationButtonRef = useRef();
@@ -51,10 +49,6 @@ export function ClusterConfiguration({
     if (kubeconfig) setContextName(kubeconfig['current-context']);
   }, [kubeconfig]);
 
-  React.useEffect(() => {
-    console.log('authValid', authValid);
-  }, [authValid]);
-
   const addAuthToParams = params => {
     const { type: authType, token, ...oidcConfig } = auth;
 
@@ -81,7 +75,11 @@ export function ClusterConfiguration({
     <>
       <ContextChooser kubeconfig={kubeconfig} setContextName={setContextName} />
       {requireAuth && (
-        <AuthForm auth={auth} setAuth={setAuth} setAuthValid={setAuthValid} />
+        <AuthForm
+          auth={auth}
+          setAuth={setAuth}
+          applyConfigurationButtonRef={applyConfigurationButtonRef}
+        />
       )}
       <ui5-button ref={applyConfigurationButtonRef} disabled>
         Apply configuration
