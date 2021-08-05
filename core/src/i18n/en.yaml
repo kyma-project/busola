@@ -52,7 +52,6 @@ settings:
   language: Language
   confirmations: Confirmations
   dontConfirmDelete: Delete without confirmation
-test: Test!!
 common:
   delete-dialog:
     title: Remove {{name}}
