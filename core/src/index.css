@@ -19,6 +19,7 @@
   display: none;
 }
 
-.fd-page.spinnerContainer {
+.fd-page.spinnerContainer,
+body.lui-semiCollapsible {
   background: var(--sapBackgroundColor);
 }
