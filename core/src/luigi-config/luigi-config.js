@@ -23,6 +23,7 @@ import {
 } from './navigation/navigation-data-init';
 import { setTheme, getTheme } from './utils/theme';
 import { readFeatureToggles } from './utils/feature-toggles';
+import { loadTargetClusterConfig } from './utils/target-cluster-config';
 
 export const i18n = i18next.use(i18nextBackend).init({
   lng: localStorage.getItem('busola.language') || 'en',
@@ -56,6 +57,7 @@ async function luigiAfterInit() {
   } else {
     try {
       if (getAuthData() && !hasNonOidcAuth(params.currentContext?.user?.user)) {
+        await loadTargetClusterConfig(getAuthData());
         await addClusterNodes();
       }
     } catch (e) {
@@ -80,9 +82,10 @@ async function luigiAfterInit() {
 
   const params = await getActiveCluster();
 
-  const kubeconfigUser = params?.currentContext.user.user;
+  const kubeconfigUser = params?.currentContext?.user?.user;
   if (hasNonOidcAuth(kubeconfigUser)) {
     setAuthData(kubeconfigUser);
+    await loadTargetClusterConfig(getAuthData());
   }
 
   const luigiConfig = {

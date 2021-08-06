@@ -6,7 +6,7 @@ import {
   checkIfClusterRequiresCA,
   fetchObservabilityHost,
 } from './queries';
-import { getClusterParams } from '../cluster-params';
+import { getBusolaClusterParams } from '../busola-cluster-params';
 import { config } from '../config';
 import {
   coreUIViewGroupName,
@@ -233,8 +233,8 @@ async function getObservabilityNodes(authData, enabledFeatures) {
     enabledFeatures.OBSERVABILITY?.config.links;
 
   if (!links) {
-    const defaultObservability = (await getClusterParams()).config.features
-      .OBSERVABILITY;
+    const defaultObservability = (await getBusolaClusterParams()).config
+      .features.OBSERVABILITY;
     links =
       (await resolveFeatureAvailability(defaultObservability)) && //  use the Busola configMap as a fallback
       defaultObservability.config.links;

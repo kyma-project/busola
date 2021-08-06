@@ -11,7 +11,12 @@ import {
   DEFAULT_HIDDEN_NAMESPACES,
   DEFAULT_FEATURES,
 } from './init-params/constants';
-import { getClusterParams } from './cluster-params';
+import { getBusolaClusterParams } from './busola-cluster-params';
+import {
+  getTargetClusterConfig,
+  loadTargetClusterConfig,
+} from './utils/target-cluster-config';
+import { merge } from 'lodash';
 
 const CLUSTERS_KEY = 'busola.clusters';
 const CURRENT_CLUSTER_NAME_KEY = 'busola.current-cluster-name';
@@ -44,6 +49,7 @@ export async function setCluster(clusterName) {
   saveActiveClusterName(clusterName);
   try {
     await reloadAuth();
+    await loadTargetClusterConfig();
 
     const preselectedNamespace = getCurrentContextNamespace(params.kubeconfig);
     const kubeconfigUser = params.currentContext.user.user;
@@ -87,11 +93,20 @@ export async function saveClusterParams(params) {
 }
 
 export async function getActiveCluster() {
+  const clusters = JSON.parse(localStorage.getItem(CLUSTERS_KEY) || '{}');
   const clusterName = getActiveClusterName();
-  if (!clusterName) {
+  if (!clusterName || !clusters[clusterName]) {
     return null;
   }
-  const clusters = await getClusters();
+  // add target cluster config
+  clusters[clusterName].config = merge(
+    getTargetClusterConfig(),
+    clusters[clusterName].config,
+  );
+  clusters[clusterName] = await mergeParams(
+    clusters[clusterName],
+    'from getactivecluster',
+  );
   return clusters[clusterName];
 }
 
@@ -104,8 +119,8 @@ export function saveActiveClusterName(clusterName) {
 }
 
 // setup params:
-// defaults < config from CM < init params
-async function mergeParams(params) {
+// defaults < config from Busola cluster CM < (config from target cluster CM + init params)
+async function mergeParams(params, f) {
   const defaultConfig = {
     navigation: {
       disabledNodes: [],
@@ -113,10 +128,13 @@ async function mergeParams(params) {
     },
     hiddenNamespaces: DEFAULT_HIDDEN_NAMESPACES,
     features: DEFAULT_FEATURES,
-    ...(await getClusterParams()).config,
   };
 
-  params.config = { ...defaultConfig, ...params.config };
+  params.config = {
+    ...defaultConfig,
+    ...(await getBusolaClusterParams()).config,
+    ...params.config,
+  };
 
   // Don't merge hiddenNamespaces, use the defaults only when params are empty
   params.config.hiddenNamespaces =
