@@ -96,6 +96,9 @@ services:
   title: Services
 workloads:
   title: Workloads
+stateful-sets:
+  title: Stateful Sets
+  replicas: Replicas
 settings:
   language: Language
   confirmations: Confirmations
