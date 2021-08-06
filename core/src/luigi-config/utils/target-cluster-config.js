@@ -14,10 +14,12 @@ export async function loadTargetClusterConfig(auth) {
         '/api/v1/namespaces/kube-public/configmaps/busola-config',
       auth,
     );
-    const data = (await res.json()).data.config;
-    clusterConfig = JSON.parse(data);
-    console.log('CONFIG LOADED');
+    clusterConfig = JSON.parse((await res.json()).data.config);
   } catch (e) {
-    console.warn(e);
+    if (e.statusCode === 404) {
+      return {}; // there's no custom config on target cluster
+    } else {
+      console.warn(e);
+    }
   }
 }

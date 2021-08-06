@@ -103,10 +103,7 @@ export async function getActiveCluster() {
     getTargetClusterConfig(),
     clusters[clusterName].config,
   );
-  clusters[clusterName] = await mergeParams(
-    clusters[clusterName],
-    'from getactivecluster',
-  );
+  clusters[clusterName] = await mergeParams(clusters[clusterName]);
   return clusters[clusterName];
 }
 
@@ -120,7 +117,7 @@ export function saveActiveClusterName(clusterName) {
 
 // setup params:
 // defaults < config from Busola cluster CM < (config from target cluster CM + init params)
-async function mergeParams(params, f) {
+async function mergeParams(params) {
   const defaultConfig = {
     navigation: {
       disabledNodes: [],

@@ -82,7 +82,7 @@ async function luigiAfterInit() {
 
   const params = await getActiveCluster();
 
-  const kubeconfigUser = params?.currentContext?.user?.user;
+  const kubeconfigUser = params?.currentContext.user.user;
   if (hasNonOidcAuth(kubeconfigUser)) {
     setAuthData(kubeconfigUser);
     await loadTargetClusterConfig(getAuthData());

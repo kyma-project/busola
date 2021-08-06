@@ -233,8 +233,8 @@ async function getObservabilityNodes(authData, enabledFeatures) {
     enabledFeatures.OBSERVABILITY?.config.links;
 
   if (!links) {
-    const defaultObservability = (await getBusolaClusterParams()).config
-      .features.OBSERVABILITY;
+    let defaultObservability = (await getBusolaClusterParams()).config.features
+      .OBSERVABILITY;
     links =
       (await resolveFeatureAvailability(defaultObservability)) && //  use the Busola configMap as a fallback
       defaultObservability.config.links;
