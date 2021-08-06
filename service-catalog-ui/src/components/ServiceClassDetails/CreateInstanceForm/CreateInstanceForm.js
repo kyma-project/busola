@@ -193,7 +193,7 @@ export default function CreateInstanceForm({
     });
   }
 
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   return (
     <>
       <form
@@ -271,7 +271,11 @@ export default function CreateInstanceForm({
               </Tooltip>
             </div>
             {documentationUrl && (
-              <CopiableLink url={documentationUrl} text="Documentation" />
+              <CopiableLink
+                url={documentationUrl}
+                text="Documentation"
+                i18n={i18n}
+              />
             )}
           </div>
           {customParametersProvided && (

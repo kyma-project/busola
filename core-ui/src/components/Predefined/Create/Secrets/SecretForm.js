@@ -58,6 +58,7 @@ export function SecretForm({
             kind="Secret"
             className="fd-margin-bottom--sm"
             readOnly={readonlyName}
+            i18n={i18n}
           />
         </div>
         <TextFormItem

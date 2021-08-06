@@ -20,9 +20,10 @@ export const K8sNameInput = ({
   label = 'Name',
   required = true,
   defaultValue,
+  i18n,
   ...props
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(null, { i18n });
   return (
     <>
       <FormLabel required={required} htmlFor={id}>

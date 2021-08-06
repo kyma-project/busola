@@ -115,7 +115,7 @@ export default function ApiRuleForm({
     service: useRef(null),
   };
 
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   function handleFormChanged(e) {
     setValid(formRef.current.checkValidity()); // general form validity
@@ -246,6 +246,7 @@ export default function ApiRuleForm({
                     showHelp={!apiRule?.metadata.name}
                     defaultValue={apiRule?.metadata.name}
                     disabled={!!apiRule?.metadata.name}
+                    i18n={i18n}
                   />
                 </FormItem>
                 <FormItem>

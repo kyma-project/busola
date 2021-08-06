@@ -12,7 +12,7 @@ import { K8sNameInput, Tooltip } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
 export default function BasicData({ deployment, setDeployment }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   return (
     <FormFieldset>
       <K8sNameInput
@@ -20,6 +20,7 @@ export default function BasicData({ deployment, setDeployment }) {
         kind="Deployment"
         onChange={e => setDeployment({ ...deployment, name: e.target.value })}
         className="fd-margin-bottom--sm"
+        i18n={i18n}
       />
       <LabelsInput
         labels={deployment.labels}

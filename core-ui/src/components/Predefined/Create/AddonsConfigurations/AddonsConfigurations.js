@@ -107,6 +107,7 @@ export const AddonsConfigurations = ({
             onChange={handleNameChanged}
             id={`${resourceType}-name`}
             kind={resourceType}
+            i18n={i18n}
           />
         </div>
 

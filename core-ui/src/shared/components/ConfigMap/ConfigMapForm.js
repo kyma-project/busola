@@ -51,6 +51,7 @@ export function ConfigMapForm({
             className="fd-margin-bottom--sm"
             defaultValue={name}
             readOnly={readonlyName}
+            i18n={i18n}
           />
           <LabelSelectorInput
             labels={labels}

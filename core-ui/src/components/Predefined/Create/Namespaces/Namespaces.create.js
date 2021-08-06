@@ -8,10 +8,10 @@ import {
   usePost,
   Tooltip,
 } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 
 import './CreateNamespace.scss';
 import { formatNamespace, formatLimits, formatMemoryQuotas } from './helpers';
-import { useTranslation } from 'react-i18next';
 
 const LIMIT_REGEX =
   '^[+]?[0-9]*(.[0-9]*)?(([eE][-+]?[0-9]+(.[0-9]*)?)?|([MGTPE]i?)|Ki|k|m)?$';
@@ -349,6 +349,7 @@ export const NamespacesCreate = ({
                 performManualSubmit();
               }
             }}
+            i18n={i18n}
           />
         </div>
 
