@@ -19,3 +19,4 @@ export * from './CustomResourceDefinitions.list';
 export * from './Jobs.list.js';
 export * from './CronJobs.list';
 export * from './DaemonSets.list';
+export * from './StatefulSets.list';
