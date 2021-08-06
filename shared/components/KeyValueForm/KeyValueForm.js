@@ -21,8 +21,8 @@ export function KeyValueForm({
   setData,
   setValid,
   customHeaderAction,
-  keyPatternInfo = "Key name must contain alphanumeric characters, can contain  ' - ', '_' or '.'.",
   keyPattern = '[a-zA-z0-9_.-]+',
+  i18n,
 }) {
   const [entries, setEntries] = React.useState(toEntries(data));
   const [keyCounter, setKeyCounter] = React.useState({});
@@ -44,10 +44,12 @@ export function KeyValueForm({
   const deleteEntry = entry =>
     setEntries(entries.filter(e => e.renderId !== entry.renderId));
 
-  const { t } = useTranslation();
+  const { t } = useTranslation(null, { i18n });
   return (
     <section className="key-value-form">
-      <span className="fd-has-color-text-4">{keyPatternInfo}</span>
+      <span className="fd-has-color-text-4">
+        {t('common.tooltips.k8s-name-input')}
+      </span>
       <header className="fd-margin-top--sm fd-margin-bottom--sm">
         <Button
           className="add-entry"

@@ -327,6 +327,7 @@ export const NamespacesCreate = ({
     }
   }
 
+  const { i18n } = useTranslation();
   return (
     // although HTML spec assigns the role by default to a <form> element, @testing-library ignores it
     // eslint-disable-next-line jsx-a11y/no-redundant-roles
@@ -355,6 +356,7 @@ export const NamespacesCreate = ({
           labels={labels}
           readonlyLabels={readonlyLabels}
           onChange={handleLabelsChanged}
+          i18n={i18n}
         />
 
         <div className="fd-form-item">

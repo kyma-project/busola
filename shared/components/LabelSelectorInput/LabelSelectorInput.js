@@ -36,6 +36,7 @@ export const LabelSelectorInput = ({
   onChange,
   type = 'Labels',
   className,
+  i18n,
 }) => {
   const [isValid, setValid] = useState(true);
   const inputRef = useRef(null);
@@ -91,7 +92,7 @@ export const LabelSelectorInput = ({
     onChange(newLabels);
   }
 
-  const { t } = useTranslation();
+  const { t } = useTranslation(null, { i18n });
   return (
     <FormItem className={className}>
       <FormLabel>{type}</FormLabel>
