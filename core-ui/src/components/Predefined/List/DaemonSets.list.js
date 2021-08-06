@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Labels } from 'react-shared';
+import { Labels, StatusBadge } from 'react-shared';
 
 export const DaemonSetsList = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
@@ -13,6 +13,22 @@ export const DaemonSetsList = ({ DefaultRenderer, ...otherParams }) => {
     return images;
   };
 
+  const isStatusOk = daemonSet => {
+    const allPods =
+      daemonSet.status.numberReady + (daemonSet.status.numberUnavailable || 0);
+    return daemonSet.status.numberReady === allPods;
+  };
+
+  const getStatusType = daemonSet => {
+    return isStatusOk(daemonSet) ? 'success' : 'error';
+  };
+
+  const getPodsCount = daemonSet => {
+    const allPods =
+      daemonSet.status.numberReady + (daemonSet.status.numberUnavailable || 0);
+    return `${daemonSet.status.numberReady || 0} / ${allPods || 0}`;
+  };
+
   const customColumns = [
     {
       header: t('daemon-sets.images'),
@@ -23,7 +39,11 @@ export const DaemonSetsList = ({ DefaultRenderer, ...otherParams }) => {
     },
     {
       header: t('daemon-sets.pods'),
-      value: resource => resource.status.numberReady,
+      value: resource => {
+        const podsCount = getPodsCount(resource);
+        const statusType = getStatusType(resource);
+        return <StatusBadge type={statusType}>{podsCount}</StatusBadge>;
+      },
     },
     {
       header: t('daemon-sets.node-selector'),
