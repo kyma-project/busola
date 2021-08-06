@@ -5,6 +5,7 @@ import { Tooltip } from '../..';
 import { fromEntries, toEntries, readFromFile } from './helpers';
 import { v4 as uuid } from 'uuid';
 import './KeyValueForm.scss';
+import { useTranslation } from 'react-i18next';
 
 KeyValueForm.propTypes = {
   data: PropTypes.object.isRequired,
@@ -43,6 +44,7 @@ export function KeyValueForm({
   const deleteEntry = entry =>
     setEntries(entries.filter(e => e.renderId !== entry.renderId));
 
+  const { t } = useTranslation();
   return (
     <section className="key-value-form">
       <span className="fd-has-color-text-4">{keyPatternInfo}</span>
@@ -68,7 +70,7 @@ export function KeyValueForm({
                   <Tooltip
                     className="fd-margin-end--tiny"
                     position="right"
-                    content="Duplicate key"
+                    content={t('common.tooltips.duplicate-key')}
                   >
                     <Icon ariaLabel="Duplicate key" glyph="alert" />
                   </Tooltip>
@@ -98,7 +100,7 @@ export function KeyValueForm({
                 }}
                 value={entry.value}
               />
-              <Tooltip content="Read file content as single value, with file name as a key.">
+              <Tooltip content={t('common.tooltips.read-file')}>
                 <Button
                   typeAttr="button"
                   onClick={() =>

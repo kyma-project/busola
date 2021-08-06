@@ -3,6 +3,9 @@ addons:
   title: Addons
 api-rules:
   title: API Rules
+  access-strategies:
+    delete:
+      tooltip: Define at least one access strategy.
 applications:
   title: Applications
 brokers:
@@ -20,6 +23,24 @@ cluster-roles:
 clusters:
   overview:
     title: Cluster Overview
+  list:
+    outdated:
+      download: Download Kubeconfig
+      tooltip: Outdated parameter version may cause errors. Delete and re-add your cluster.
+common:
+  delete-dialog:
+    buttons:
+      cancel: Cancel
+      delete: Delete
+    delete-confirm: Don't show delete confirmations
+    message: Are you sure you want to delete {{type}} {{name}}?
+    title: Remove {{name}}
+  tooltips:
+    copy-button: Copy to clipboard
+    k8s-name-input: Name must contain lower case alphanumeric characters, can contain '-' (like 'my-name1').
+    read-file: Read file content as single value, with file name as a key.
+    key-value: key=value', must start and end with alphanumeric character, can contain '-', '_' or '.'
+    duplicate-key: Duplicate key
 config-maps:
   title: Config Maps
 configuration:
@@ -44,10 +65,14 @@ discovery-and-network:
   title: Discovery and Network
 functions:
   title: Functions
+  variable:
+    tooltip: This variable comes from a Resource. Check its details to get the value.
 git-repositories:
   title: Git Repositories
 instances:
   title: Instances
+  no-specific-plan-parameters:
+    tooltip: The service provider did not define specific parameters for the selected plan. Refer to the documentation to learn about the required parameters, and define them as JSON in the editor.
 integration:
   title: Integration
 jobs:
@@ -62,6 +87,11 @@ jobs:
   start-time: Start Time
   title: Jobs
 namespaces:
+  tooltips:
+    container-memory-limit: Define memory constraints for individual containers in your namespace.
+    total-memory-limit: Define constraints that limit total memory consumption in your namespace.
+    create: Select this option to disable istio to mediate all communication between the pods in your namespace.
+    memory-examples: Use plain value in bytes (128974848) or suffix equivalents (like 129e6, 129M, 123Mi).
   overview:
     back: Back to Namespaces
     resources:
@@ -94,17 +124,11 @@ service-management:
   title: Service Management
 services:
   title: Services
-workloads:
-  title: Workloads
 settings:
-  language: Language
   confirmations: Confirmations
   dontConfirmDelete: Delete without confirmation
-common:
-  delete-dialog:
-    title: Remove {{name}}
-    message: Are you sure you want to delete {{type}} {{name}}?
-    delete-confirm: Don't show delete confirmations
-    buttons:
-      delete: Delete
-      cancel: Cancel
+  language: Language
+workloads:
+  title: Workloads
+  docker-image:
+    tooltip: Enter a valid docker image registry path.

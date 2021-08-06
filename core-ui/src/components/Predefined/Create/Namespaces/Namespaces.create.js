@@ -11,6 +11,7 @@ import {
 
 import './CreateNamespace.scss';
 import { formatNamespace, formatLimits, formatMemoryQuotas } from './helpers';
+import { useTranslation } from 'react-i18next';
 
 const LIMIT_REGEX =
   '^[+]?[0-9]*(.[0-9]*)?(([eE][-+]?[0-9]+(.[0-9]*)?)?|([MGTPE]i?)|Ki|k|m)?$';
@@ -18,15 +19,11 @@ const LIMIT_REGEX =
 const ISTIO_INJECTION_LABEL = 'istio-injection=disabled';
 
 const DisableSidecarField = ({ onChange }) => {
+  const { t } = useTranslation();
   return (
     <FormFieldset>
       <FormItem>
-        <Tooltip
-          content="
-                Select this option to disable istio to mediate all
-                  communication between the pods in your namespace.
-                "
-        >
+        <Tooltip content={t('namespaces.tooltips.create')}>
           <Checkbox
             id="disable-istio"
             onChange={e => onChange(e.target.checked)}
@@ -48,10 +45,12 @@ const MemoryQuotasCheckbox = ({ isCheckedRef, children }) => {
     [isExpanded],
   );
 
+  const { t } = useTranslation();
+
   return (
     <FormFieldset>
       <FormItem>
-        <Tooltip content="Define constraints that limit total memory consumption in your namespace.">
+        <Tooltip content={t('namespaces.tooltips.total-memory-limit')}>
           <Checkbox
             id="memory-quotas"
             onChange={e => setIsExpanded(e.target.checked)}
@@ -92,37 +91,40 @@ const SectionRow = ({
   </>
 );
 
-const MemoryQuotasSection = ({ limitsRef, requestsRef }) => (
-  <FormFieldset className="input-fields" data-test-id="memory-quotas-section">
-    <Tooltip
-      content="Use plain value in bytes (128974848) or suffix equivalents (like 129e6, 129M, 123Mi)."
-      className="input-fields-tooltip"
-    >
-      <SectionRow
-        id="memory-limit"
-        reference={limitsRef}
-        defaultValue="3Gi"
-        pattern={LIMIT_REGEX}
-        description="Memory limit *"
-        placeholder="Memory limit"
-      />
-    </Tooltip>
-    <Tooltip
-      content="Use plain value in bytes (128974848) or suffix equivalents (like 129e6, 129M, 123Mi)."
-      className="input-fields-tooltip"
-    >
-      <SectionRow
-        id="memory-requests"
-        placeholder="Memory requests"
-        type="text"
-        defaultValue="2.8Gi"
-        pattern={LIMIT_REGEX}
-        reference={requestsRef}
-        description="Memory requests *"
-      />
-    </Tooltip>
-  </FormFieldset>
-);
+const MemoryQuotasSection = ({ limitsRef, requestsRef }) => {
+  const { t } = useTranslation();
+  return (
+    <FormFieldset className="input-fields" data-test-id="memory-quotas-section">
+      <Tooltip
+        content={t('namespaces.tooltips.memory-examples')}
+        className="input-fields-tooltip"
+      >
+        <SectionRow
+          id="memory-limit"
+          reference={limitsRef}
+          defaultValue="3Gi"
+          pattern={LIMIT_REGEX}
+          description="Memory limit *"
+          placeholder="Memory limit"
+        />
+      </Tooltip>
+      <Tooltip
+        content={t('namespaces.tooltips.memory-examples')}
+        className="input-fields-tooltip"
+      >
+        <SectionRow
+          id="memory-requests"
+          placeholder="Memory requests"
+          type="text"
+          defaultValue="2.8Gi"
+          pattern={LIMIT_REGEX}
+          reference={requestsRef}
+          description="Memory requests *"
+        />
+      </Tooltip>
+    </FormFieldset>
+  );
+};
 
 const ContainerLimitsCheckbox = ({ isCheckedRef, children }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -132,12 +134,13 @@ const ContainerLimitsCheckbox = ({ isCheckedRef, children }) => {
     }, // eslint-disable-next-line
     [isExpanded],
   );
+  const { t } = useTranslation();
 
   return (
     <FormFieldset>
       <FormItem>
         <Tooltip
-          content="Define memory constraints for individual containers in your namespace."
+          content={t('namespaces.tooltips.container-memory-limit')}
           className="input-fields-tooltip"
         >
           <Checkbox
@@ -153,55 +156,58 @@ const ContainerLimitsCheckbox = ({ isCheckedRef, children }) => {
   );
 };
 
-const ContainerLimitSection = ({ maxRef, defaultRef, requestRef }) => (
-  <FormFieldset
-    className="input-fields"
-    data-test-id="container-limits-section"
-  >
-    <Tooltip
-      content="Use plain value in bytes (128974848) or suffix equivalents (like 129e6, 129M, 123Mi)."
-      className="input-fields-tooltip"
+const ContainerLimitSection = ({ maxRef, defaultRef, requestRef }) => {
+  const { t } = useTranslation();
+  return (
+    <FormFieldset
+      className="input-fields"
+      data-test-id="container-limits-section"
     >
-      <SectionRow
-        id="container-max"
-        placeholder="Max"
-        type="text"
-        defaultValue="1100Mi"
-        pattern={LIMIT_REGEX}
-        reference={maxRef}
-        description="Max *"
-      />
-    </Tooltip>
-    <Tooltip
-      content="Use plain value in bytes (128974848) or suffix equivalents (like 129e6, 129M, 123Mi)."
-      className="input-fields-tooltip"
-    >
-      <SectionRow
-        id="container-default"
-        placeholder="Default"
-        type="text"
-        defaultValue="512Mi"
-        pattern={LIMIT_REGEX}
-        reference={defaultRef}
-        description="Default *"
-      />
-    </Tooltip>
-    <Tooltip
-      content="Use plain value in bytes (128974848) or suffix equivalents (like 129e6, 129M, 123Mi)."
-      className="input-fields-tooltip"
-    >
-      <SectionRow
-        id="container-default-request"
-        placeholder="Default request"
-        type="text"
-        defaultValue="32Mi"
-        pattern={LIMIT_REGEX}
-        reference={requestRef}
-        description="Default request *"
-      />
-    </Tooltip>
-  </FormFieldset>
-);
+      <Tooltip
+        content={t('namespaces.tooltips.memory-examples')}
+        className="input-fields-tooltip"
+      >
+        <SectionRow
+          id="container-max"
+          placeholder="Max"
+          type="text"
+          defaultValue="1100Mi"
+          pattern={LIMIT_REGEX}
+          reference={maxRef}
+          description="Max *"
+        />
+      </Tooltip>
+      <Tooltip
+        content={t('namespaces.tooltips.memory-examples')}
+        className="input-fields-tooltip"
+      >
+        <SectionRow
+          id="container-default"
+          placeholder="Default"
+          type="text"
+          defaultValue="512Mi"
+          pattern={LIMIT_REGEX}
+          reference={defaultRef}
+          description="Default *"
+        />
+      </Tooltip>
+      <Tooltip
+        content={t('workloads.tooltips.memory-examples')}
+        className="input-fields-tooltip"
+      >
+        <SectionRow
+          id="container-default-request"
+          placeholder="Default request"
+          type="text"
+          defaultValue="32Mi"
+          pattern={LIMIT_REGEX}
+          reference={requestRef}
+          description="Default request *"
+        />
+      </Tooltip>
+    </FormFieldset>
+  );
+};
 
 export const NamespacesCreate = ({
   formElementRef,

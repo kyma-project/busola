@@ -9,8 +9,10 @@ import {
   FormItem,
 } from 'fundamental-react';
 import { K8sNameInput, Tooltip } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 
 export default function BasicData({ deployment, setDeployment }) {
+  const { t } = useTranslation();
   return (
     <FormFieldset>
       <K8sNameInput
@@ -27,7 +29,7 @@ export default function BasicData({ deployment, setDeployment }) {
         <FormLabel htmlFor="docker-image" required>
           Docker image
         </FormLabel>
-        <Tooltip content="Enter a valid docker image registry path.">
+        <Tooltip content={t('namespaces.docker-image.tooltip')}>
           <FormInput
             id="docker-image"
             required

@@ -6,6 +6,7 @@ import LuigiClient from '@luigi-project/client';
 import classNames from 'classnames';
 import { FormItem, FormLabel, LayoutPanel, Button } from 'fundamental-react';
 import { supportedMethodsList } from '../accessStrategyTypes';
+import { useTranslation } from 'react-i18next';
 
 import './ApiRuleForm.scss';
 import ApiRuleFormHeader from './ApiRuleFormHeader/ApiRuleFormHeader';
@@ -113,6 +114,8 @@ export default function ApiRuleForm({
     runtime: useRef(null),
     service: useRef(null),
   };
+
+  const { t } = useTranslation();
 
   function handleFormChanged(e) {
     setValid(formRef.current.checkValidity()); // general form validity
@@ -253,7 +256,7 @@ export default function ApiRuleForm({
                   {domainLoading ? (
                     'Loading...'
                   ) : (
-                    <Tooltip content="Name must contain lower case alphanumeric characters, can contain '-'  (like 'my-name1').">
+                    <Tooltip content={t('common.tooltips.k8s-name-input')}>
                       <InputWithSuffix
                         defaultValue={apiRule.spec.service.host.replace(
                           `.${domain}`,

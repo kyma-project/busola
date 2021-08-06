@@ -16,6 +16,7 @@ import {
 import SchemaData from './SchemaData';
 import './CreateInstanceForm.scss';
 import { PlanColumnContent } from './PlanColumnContent';
+import { useTranslation } from 'react-i18next';
 
 CreateInstanceForm.propTypes = {
   onChange: PropTypes.func.isRequired,
@@ -192,6 +193,7 @@ export default function CreateInstanceForm({
     });
   }
 
+  const { t } = useTranslation();
   return (
     <>
       <form
@@ -263,7 +265,7 @@ export default function CreateInstanceForm({
               </Link>
               <Tooltip
                 position="top"
-                content="The service provider did not define specific parameters for the selected plan. Refer to the documentation to learn about the required parameters, and define them as JSON in the editor."
+                content={t('instances.no-specific-plan-parameters.tooltip')}
               >
                 <Icon glyph="sys-help" ariaLabel="No schema for parameters" />
               </Tooltip>
