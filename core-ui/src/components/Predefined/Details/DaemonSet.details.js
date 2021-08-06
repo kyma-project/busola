@@ -19,6 +19,12 @@ const Tolerations = resource => {
     entry.effect || EMPTY_TEXT_PLACEHOLDER,
     entry.tolerationSeconds || EMPTY_TEXT_PLACEHOLDER,
   ];
+  const textSearchProperties = [
+    'key',
+    'operator',
+    'effect',
+    'toleration-seconds',
+  ];
   return (
     <GenericList
       title={t('daemon-sets.tolerations.title')}
@@ -26,6 +32,7 @@ const Tolerations = resource => {
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       testid="daemon-set-tolerations"
+      textSearchProperties={textSearchProperties}
     />
   );
 };
