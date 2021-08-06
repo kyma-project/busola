@@ -1,16 +1,18 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { GenericList, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 import { ResourcePods } from './ResourcePods.js';
 
 const Tolerations = resource => {
-  const headerRenderer = () => [
-    'Key',
-    'Operator',
-    'Effect',
-    'Toleration Seconds',
-  ];
+  const { t } = useTranslation();
 
+  const headerRenderer = () => [
+    t('daemon-sets.tolerations.key'),
+    t('daemon-sets.tolerations.operator'),
+    t('daemon-sets.tolerations.effect'),
+    t('daemon-sets.tolerations.toleration-seconds'),
+  ];
   const rowRenderer = entry => [
     entry.key || EMPTY_TEXT_PLACEHOLDER,
     entry.operator || EMPTY_TEXT_PLACEHOLDER,
@@ -19,7 +21,7 @@ const Tolerations = resource => {
   ];
   return (
     <GenericList
-      title="Tolerations"
+      title={t('daemon-sets.tolerations.title')}
       entries={resource.spec.template.spec.tolerations || []}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
@@ -28,10 +30,35 @@ const Tolerations = resource => {
   );
 };
 
+const Images = resource => {
+  const { t } = useTranslation();
+
+  const getImages = daemonSet => {
+    const images =
+      daemonSet.spec.template.spec.containers?.map(
+        container => container.image,
+      ) || [];
+    return images;
+  };
+
+  const headerRenderer = () => [t('daemon-sets.images')];
+  const rowRenderer = entry => [entry];
+  return (
+    <GenericList
+      title={t('daemon-sets.images')}
+      entries={getImages(resource) || []}
+      headerRenderer={headerRenderer}
+      rowRenderer={rowRenderer}
+      testid="daemon-set-images"
+      showHeader={false}
+    />
+  );
+};
+
 export const DaemonSetsDetails = ({ DefaultRenderer, ...otherParams }) => {
   return (
     <DefaultRenderer
-      customComponents={[ResourcePods, Tolerations]}
+      customComponents={[ResourcePods, Tolerations, Images]}
       {...otherParams}
     ></DefaultRenderer>
   );

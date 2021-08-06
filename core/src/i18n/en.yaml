@@ -43,6 +43,12 @@ daemon-sets:
   pods: Pods
   node-selector: Node selector
   images: Images
+  tolerations:
+    title: Tolerations
+    key: Key
+    operator: Operator
+    effect: Effect
+    toleration-seconds: Seconds
 deployments:
   title: Deployments
 discovery-and-network:
