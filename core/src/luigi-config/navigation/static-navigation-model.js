@@ -318,6 +318,40 @@ export function getStaticChildrenNodesForNamespace(
         },
       ],
     },
+    {
+      category: 'Workloads',
+      resourceType: 'daemonsets',
+      pathSegment: 'daemonsets',
+      label: i18next.t('daemon-sets.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/DaemonSets?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/apps/v1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+
+      navigationContext: 'daemonsets',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':daemonSetName',
+              resourceType: 'daemonsets',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/DaemonSets/:daemonSetName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/apps/v1',
+                }),
+            },
+          ],
+        },
+      ],
+    },
 
     //DISCOVERY AND NETWORK CATEGORY
     {

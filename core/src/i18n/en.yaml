@@ -38,6 +38,11 @@ cron-jobs:
   title: Cron Jobs
 custom-resource-definitions:
   title: Custom Resource Definitions
+daemon-sets:
+  title: Daemon Sets
+  pods: Pods
+  node-selector: Node selector
+  images: Images
 deployments:
   title: Deployments
 discovery-and-network:
