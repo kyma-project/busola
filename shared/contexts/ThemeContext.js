@@ -3,9 +3,6 @@ import LuigiClient from '@luigi-project/client';
 
 export const ThemeContext = createContext({});
 
-const getInitialTheme = _ =>
-  localStorage.getItem('busola.theme') || 'light_dark';
-
 function applyThemeToLinkNode(name, publicUrl) {
   const link = document.querySelector('head #_theme');
   if (name === 'light' && link) {
@@ -31,6 +28,11 @@ const getEditorTheme = theme => {
       return 'vs-dark';
     case 'hcb':
       return 'hc-black';
+    case 'light_dark':
+      return window.matchMedia &&
+        window.matchMedia('(prefers-color-scheme: dark)')
+        ? 'vs-dark'
+        : 'vs';
     default:
       return 'vs';
   }
