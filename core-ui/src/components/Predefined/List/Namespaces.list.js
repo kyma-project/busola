@@ -1,13 +1,13 @@
 import React from 'react';
 import { NamespaceStatus } from '../Details/Namespace/NamespaceStatus';
 import LuigiClient from '@luigi-project/client';
-import { useShowHiddenNamespaces } from 'react-shared';
+import { getFeatureToggle } from 'react-shared';
 
 const FilterNamespaces = namespace => {
-  const showHiddenNamespaces = useShowHiddenNamespaces();
+  const showHiddenNamespaces = getFeatureToggle('showHiddenNamespaces');
   const hiddenNamespaces = LuigiClient.getContext().hiddenNamespaces;
 
-  return showHiddenNamespaces || !hiddenNamespaces
+  return showHiddenNamespaces
     ? true
     : !hiddenNamespaces.includes(namespace.metadata.name);
 };

@@ -56,7 +56,7 @@ export function getStaticChildrenNodesForNamespace(
   const nodes = [
     {
       link: `/cluster/${encodedClusterName}/namespaces`,
-      label: 'Back to Namespaces',
+      label: i18next.t('namespaces.overview.back'),
       icon: 'nav-back',
       hideFromNav: !hasPermissionsFor('', 'namespaces', permissionSet, [
         'list',
@@ -78,7 +78,7 @@ export function getStaticChildrenNodesForNamespace(
     //WORKLOADS CATEGORY
     {
       category: {
-        label: 'Workloads',
+        label: i18next.t('workloads.title'),
         icon: 'source-code',
         collapsible: true,
       },
@@ -90,7 +90,7 @@ export function getStaticChildrenNodesForNamespace(
       resourceType: 'functions',
       pathSegment: 'functions',
       navigationContext: 'functions',
-      label: 'Functions',
+      label: i18next.t('functions.title'),
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/Functions?' +
@@ -126,7 +126,7 @@ export function getStaticChildrenNodesForNamespace(
       category: 'Workloads',
       pathSegment: 'pods',
       resourceType: 'pods',
-      label: 'Pods',
+      label: i18next.t('pods.title'),
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/Pods?' +
@@ -187,7 +187,7 @@ export function getStaticChildrenNodesForNamespace(
       pathSegment: 'deployments',
       resourceType: 'deployments',
 
-      label: 'Deployments',
+      label: i18next.t('deployments.title'),
       keepSelectedForChildren: true,
       viewUrl:
         config.coreUIModuleUrl +
@@ -254,7 +254,7 @@ export function getStaticChildrenNodesForNamespace(
       category: 'Workloads',
       resourceType: 'replicasets',
       pathSegment: 'replicasets',
-      label: 'Replica Sets',
+      label: i18next.t('replica-sets.title'),
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/ReplicaSets?' +
@@ -356,7 +356,7 @@ export function getStaticChildrenNodesForNamespace(
     //DISCOVERY AND NETWORK CATEGORY
     {
       category: {
-        label: 'Discovery and Network',
+        label: i18next.t('discovery-and-network.title'),
         icon: 'instance',
         collapsible: true,
       },
@@ -368,7 +368,7 @@ export function getStaticChildrenNodesForNamespace(
       resourceType: 'apirules',
       pathSegment: 'apirules',
       navigationContext: 'apirules',
-      label: 'API Rules',
+      label: i18next.t('api-rules.title'),
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/ApiRules?' +
@@ -424,7 +424,7 @@ export function getStaticChildrenNodesForNamespace(
       pathSegment: 'services',
       resourceType: 'services',
       navigationContext: 'services',
-      label: 'Services',
+      label: i18next.t('services.title'),
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/Services?' +
@@ -457,7 +457,7 @@ export function getStaticChildrenNodesForNamespace(
     //SERVICE MANAGEMENT CATEGORY
     {
       category: {
-        label: 'Service Management',
+        label: i18next.t('service-management.title'),
         icon: 'add-coursebook',
         collapsible: true,
       },
@@ -468,7 +468,7 @@ export function getStaticChildrenNodesForNamespace(
       category: 'Service Management',
       pathSegment: 'catalog',
       navigationContext: 'catalog',
-      label: 'Catalog',
+      label: i18next.t('catalog.menu-title'),
       viewUrl: config.serviceCatalogModuleUrl + '/catalog',
       keepSelectedForChildren: true,
       viewGroup: catalogViewGroupName,
@@ -542,7 +542,7 @@ export function getStaticChildrenNodesForNamespace(
       category: 'Service Management',
       pathSegment: 'instances',
       navigationContext: 'instances',
-      label: 'Instances',
+      label: i18next.t('instances.title'),
       viewUrl: config.serviceCatalogModuleUrl + '/instances',
       viewGroup: catalogViewGroupName,
       keepSelectedForChildren: true,
@@ -567,7 +567,7 @@ export function getStaticChildrenNodesForNamespace(
       category: 'Service Management',
       pathSegment: 'brokers',
       navigationContext: 'brokers',
-      label: 'Brokers',
+      label: i18next.t('brokers.title'),
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/ServiceBrokers?' +
@@ -585,7 +585,7 @@ export function getStaticChildrenNodesForNamespace(
     //CONFIGURATION CATEGORY (NAMESPACE)
     {
       category: {
-        label: 'Configuration',
+        label: i18next.t('configuration.title'),
         icon: 'settings',
         collapsible: true,
       },
@@ -597,7 +597,7 @@ export function getStaticChildrenNodesForNamespace(
       pathSegment: 'addons',
       resourceType: 'addonsconfigurations',
       navigationContext: 'addonsconfigurations',
-      label: 'Addons',
+      label: i18next.t('addons.title'),
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/AddonsConfigurations?' +
@@ -634,7 +634,7 @@ export function getStaticChildrenNodesForNamespace(
       pathSegment: 'config-maps',
       resourceType: 'configmaps',
       navigationContext: 'configmaps',
-      label: 'Config Maps',
+      label: i18next.t('config-maps.title'),
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/ConfigMaps?' +
@@ -667,7 +667,7 @@ export function getStaticChildrenNodesForNamespace(
       resourceType: 'secrets',
       pathSegment: 'secrets',
       navigationContext: 'secrets',
-      label: 'Secrets',
+      label: i18next.t('secrets.title'),
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/Secrets?' +
@@ -701,7 +701,7 @@ export function getStaticChildrenNodesForNamespace(
       pathSegment: 'roles',
       resourceType: 'roles',
       navigationContext: 'roles',
-      label: 'Roles',
+      label: i18next.t('roles.title'),
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/Roles?' +
@@ -737,7 +737,7 @@ export function getStaticChildrenNodesForNamespace(
       pathSegment: 'role-bindings',
       resourceType: 'rolebindings',
       navigationContext: 'rolebindings',
-      label: 'Role Bindings',
+      label: i18next.t('role-bindings.title'),
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/RoleBindings?' +
@@ -771,7 +771,7 @@ export function getStaticChildrenNodesForNamespace(
       pathSegment: 'oauth2clients',
       resourceType: 'oauth2clients',
       navigationContext: 'oauth2clients',
-      label: 'OAuth2 Clients',
+      label: i18next.t('oauth2-clients.title'),
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/Oauth2Clients?' +
@@ -812,7 +812,7 @@ export function getStaticChildrenNodesForNamespace(
       pathSegment: 'gitrepositories',
       resourceType: 'gitrepositories',
       navigationContext: 'gitrepositories',
-      label: 'Git Repositories',
+      label: i18next.t('git-repositories.title'),
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/GitRepositories?' +
@@ -831,7 +831,7 @@ export function getStaticChildrenNodesForNamespace(
       pathSegment: 'customresourcedefinitions',
       resourceType: 'customresourcedefinitions',
       navigationContext: 'customresourcedefinitions',
-      label: 'Custom Resource Definitions',
+      label: i18next.t('custom-resource-definitions.title'),
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/CustomResourceDefinitions?' +
@@ -912,7 +912,7 @@ export function getStaticRootNodes(
     {
       pathSegment: 'namespaces',
       resourceType: 'namespaces',
-      label: 'Namespaces',
+      label: i18next.t('namespaces.title'),
       icon: 'dimension',
       viewUrl:
         config.coreUIModuleUrl +
@@ -947,7 +947,7 @@ export function getStaticRootNodes(
     //INTEGRATION CATEGORY
     {
       category: {
-        label: 'Integration',
+        label: i18next.t('integration.title'),
         icon: 'overview-chart',
         collapsible: true,
       },
@@ -958,7 +958,7 @@ export function getStaticRootNodes(
       pathSegment: 'applications',
       resourceType: 'applications',
       navigationContext: 'applications',
-      label: 'Applications/Systems',
+      label: i18next.t('applications.title'),
       category: 'Integration',
       viewUrl:
         config.coreUIModuleUrl +
@@ -997,7 +997,7 @@ export function getStaticRootNodes(
       pathSegment: 'addons-config',
       navigationContext: 'clusteraddonsconfigurations',
       resourceType: 'clusteraddonsconfigurations',
-      label: 'Cluster Addons',
+      label: i18next.t('cluster-addons.title'),
       category: {
         label: 'Integration',
         icon: 'settings',
@@ -1038,7 +1038,7 @@ export function getStaticRootNodes(
     //CONFIGURATION CATEGORY (CLUSTER)
     {
       category: {
-        label: 'Configuration',
+        label: i18next.t('configuration.title'),
         icon: 'settings',
         collapsible: true,
       },
@@ -1050,7 +1050,7 @@ export function getStaticRootNodes(
       pathSegment: 'cluster-roles',
       navigationContext: 'clusterroles',
       resourceType: 'clusterroles',
-      label: 'Cluster Roles',
+      label: i18next.t('cluster-roles.title'),
       viewUrl:
         config.coreUIModuleUrl +
         '/ClusterRoles?' +
@@ -1092,7 +1092,7 @@ export function getStaticRootNodes(
       pathSegment: 'cluster-role-bindings',
       resourceType: 'clusterrolebindings',
       navigationContext: 'clusterrolebindings',
-      label: 'Cluster Role Bindings',
+      label: i18next.t('cluster-role-bindings.title'),
       category: 'Configuration',
       viewUrl:
         config.coreUIModuleUrl +
@@ -1128,7 +1128,7 @@ export function getStaticRootNodes(
       pathSegment: 'customresourcedefinitions',
       resourceType: 'customresourcedefinitions',
       navigationContext: 'customresourcedefinitions',
-      label: 'Custom Resource Definitions',
+      label: i18next.t('custom-resource-definitions.title'),
       viewUrl:
         config.coreUIModuleUrl +
         '/CustomResourceDefinitions?' +
@@ -1173,17 +1173,6 @@ export function getStaticRootNodes(
           ],
         },
       ],
-    },
-
-    //DIAGNOSTICS CATEGORY
-    {
-      category: {
-        label: 'Diagnostics',
-        icon: 'electrocardiogram',
-        collapsible: true,
-      },
-      pathSegment: '_integration_category_placeholder_',
-      hideFromNav: true,
     },
 
     // OTHER
