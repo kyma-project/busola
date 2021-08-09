@@ -1,4 +1,4 @@
-import { setAuthData, clearAuthData } from './auth/auth-storage';
+import { setAuthData, clearAuthData, getAuthData } from './auth/auth-storage';
 import { reloadNavigation } from './navigation/navigation-data-init';
 import { reloadAuth, hasNonOidcAuth } from './auth/auth';
 import { saveLocation } from './navigation/previous-location';
@@ -17,6 +17,7 @@ import {
   loadTargetClusterConfig,
 } from './utils/target-cluster-config';
 import { merge } from 'lodash';
+import { checkIfClusterRequiresCA } from './navigation/queries';
 
 const CLUSTERS_KEY = 'busola.clusters';
 const CURRENT_CLUSTER_NAME_KEY = 'busola.current-cluster-name';
@@ -49,7 +50,6 @@ export async function setCluster(clusterName) {
   saveActiveClusterName(clusterName);
   try {
     await reloadAuth();
-    await loadTargetClusterConfig();
 
     const preselectedNamespace = getCurrentContextNamespace(params.kubeconfig);
     const kubeconfigUser = params.currentContext.user.user;
@@ -60,6 +60,8 @@ export async function setCluster(clusterName) {
 
     if (hasNonOidcAuth(kubeconfigUser)) {
       setAuthData(kubeconfigUser);
+      await saveCARequired();
+      await loadTargetClusterConfig();
       await reloadNavigation();
       Luigi.navigation().navigate(targetLocation);
     } else {
@@ -90,6 +92,18 @@ export async function saveClusterParams(params) {
   const clusters = await getClusters();
   clusters[clusterName] = params;
   saveClusters(clusters);
+}
+
+export async function saveCARequired() {
+  const clusters = JSON.parse(localStorage.getItem(CLUSTERS_KEY) || '{}');
+  const cluster = clusters[getActiveClusterName()];
+  if (cluster.config.requiresCA === undefined) {
+    cluster.config = {
+      ...cluster.config,
+      requiresCA: await checkIfClusterRequiresCA(getAuthData()),
+    };
+  }
+  await saveClusterParams(cluster);
 }
 
 export async function getActiveCluster() {

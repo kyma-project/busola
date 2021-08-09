@@ -14,6 +14,7 @@ import { saveQueryParamsIfPresent } from './init-params/init-params.js';
 import {
   getActiveCluster,
   handleResetEndpoint,
+  saveCARequired,
   setActiveClusterIfPresentInUrl,
 } from './cluster-management';
 
@@ -57,7 +58,8 @@ async function luigiAfterInit() {
   } else {
     try {
       if (getAuthData() && !hasNonOidcAuth(params.currentContext?.user?.user)) {
-        await loadTargetClusterConfig(getAuthData());
+        await saveCARequired();
+        await loadTargetClusterConfig();
         await addClusterNodes();
       }
     } catch (e) {
@@ -85,7 +87,8 @@ async function luigiAfterInit() {
   const kubeconfigUser = params?.currentContext.user.user;
   if (hasNonOidcAuth(kubeconfigUser)) {
     setAuthData(kubeconfigUser);
-    await loadTargetClusterConfig(getAuthData());
+    await saveCARequired();
+    await loadTargetClusterConfig();
   }
 
   const luigiConfig = {
