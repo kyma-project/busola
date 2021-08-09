@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import CustomPropTypes from '../../typechecking/CustomPropTypes';
 import { Tooltip } from '../Tooltip/Tooltip';
 import { FormLabel } from 'fundamental-react';
+import { useTranslation } from 'react-i18next';
 
 const pattern = '^[a-z0-9]([-a-z0-9]*[a-z0-9])?$';
 const regex = new RegExp(pattern);
@@ -19,14 +20,33 @@ export const K8sNameInput = ({
   label = 'Name',
   required = true,
   defaultValue,
+  i18n,
   ...props
-}) => (
-  <>
-    <FormLabel required={required} htmlFor={id}>
-      {label}
-    </FormLabel>
-    {showHelp && (
-      <Tooltip content="Name must contain lower case alphanumeric characters, can contain '-'  (like 'my-name1').">
+}) => {
+  const { t } = useTranslation(null, { i18n });
+  return (
+    <>
+      <FormLabel required={required} htmlFor={id}>
+        {label}
+      </FormLabel>
+      {showHelp && (
+        <Tooltip content={t('common.tooltips.k8s-name-input')}>
+          <input
+            role="input"
+            ref={_ref}
+            type="text"
+            id={id}
+            defaultValue={defaultValue}
+            placeholder={kind + ' name'}
+            aria-required={required ? 'true' : 'false'}
+            required={required}
+            pattern={pattern}
+            {...props}
+            className={'fd-input ' + (props?.className || '')}
+          />
+        </Tooltip>
+      )}
+      {!showHelp && (
         <input
           role="input"
           ref={_ref}
@@ -40,25 +60,10 @@ export const K8sNameInput = ({
           {...props}
           className={'fd-input ' + (props?.className || '')}
         />
-      </Tooltip>
-    )}
-    {!showHelp && (
-      <input
-        role="input"
-        ref={_ref}
-        type="text"
-        id={id}
-        defaultValue={defaultValue}
-        placeholder={kind + ' name'}
-        aria-required={required ? 'true' : 'false'}
-        required={required}
-        pattern={pattern}
-        {...props}
-        className={'fd-input ' + (props?.className || '')}
-      />
-    )}
-  </>
-);
+      )}
+    </>
+  );
+};
 
 K8sNameInput.propTypes = {
   _ref: CustomPropTypes.ref,

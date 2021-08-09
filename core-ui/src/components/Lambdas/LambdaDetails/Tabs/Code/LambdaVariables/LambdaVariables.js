@@ -19,6 +19,7 @@ import { validateVariables } from './validation';
 
 import './LambdaEnvs.scss';
 import { formatMessage } from 'components/Lambdas/helpers/misc';
+import { useTranslation } from 'react-i18next';
 
 const headerRenderer = () => [
   'Variable Name',
@@ -123,6 +124,7 @@ function VariableSource({ variable }) {
 }
 
 function VariableSourceLink({ variable }) {
+  const { t } = useTranslation();
   let resourceName;
   let resourceLink;
 
@@ -138,7 +140,7 @@ function VariableSourceLink({ variable }) {
   return (
     <>
       {resourceLink ? (
-        <Tooltip content="This variable comes from a Resource. Check its details to get the value.">
+        <Tooltip content={t('functions.variable.tooltip')}>
           <span
             className="link"
             onClick={() =>

@@ -10,6 +10,7 @@ import { Tab, TabGroup } from 'fundamental-react';
 import { createSecretInput, mapObjectValues } from './helpers';
 import './SecretForm.scss';
 import { DecodeSecretSwitch } from './DecodeSecretSwitch';
+import { useTranslation } from 'react-i18next';
 
 export function SecretForm({
   formElementRef,
@@ -46,6 +47,7 @@ export function SecretForm({
     onSubmit(secretInput);
   };
 
+  const { i18n } = useTranslation();
   const metadataContent = (
     <>
       <div className="secrets-form-metadata">
@@ -56,6 +58,7 @@ export function SecretForm({
             kind="Secret"
             className="fd-margin-bottom--sm"
             readOnly={readonlyName}
+            i18n={i18n}
           />
         </div>
         <TextFormItem
@@ -64,12 +67,13 @@ export function SecretForm({
           inputProps={{ value: secret.type, disabled: true }}
         />
       </div>
-      <LabelSelectorInput labels={labels} onChange={setLabels} />
+      <LabelSelectorInput labels={labels} onChange={setLabels} i18n={i18n} />
       <LabelSelectorInput
         className="fd-margin-top--sm fd-margin-bottom--tiny"
         labels={annotations}
         onChange={setAnnotations}
         type="Annotations"
+        i18n={i18n}
       />
     </>
   );
@@ -87,6 +91,7 @@ export function SecretForm({
           setEncoded={setEncoded}
         />
       )}
+      i18n={i18n}
     />
   );
 

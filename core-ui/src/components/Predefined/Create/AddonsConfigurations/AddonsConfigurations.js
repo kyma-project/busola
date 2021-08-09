@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, FormLabel } from 'fundamental-react';
 import { K8sNameInput, LabelSelectorInput, usePost } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 
 import './AddonsConfigurations.scss';
 
@@ -89,6 +90,7 @@ export const AddonsConfigurations = ({
     return <></>;
   };
 
+  const { i18n } = useTranslation();
   return (
     // although HTML spec assigns the role by default to a <form> element, @testing-library ignores it
     // eslint-disable-next-line jsx-a11y/no-redundant-roles
@@ -105,10 +107,15 @@ export const AddonsConfigurations = ({
             onChange={handleNameChanged}
             id={`${resourceType}-name`}
             kind={resourceType}
+            i18n={i18n}
           />
         </div>
 
-        <LabelSelectorInput labels={labels} onChange={handleLabelsChanged} />
+        <LabelSelectorInput
+          labels={labels}
+          onChange={handleLabelsChanged}
+          i18n={i18n}
+        />
         <FormLabel
           style={{ display: 'block' }}
           className="fd-margin-top--tiny"
