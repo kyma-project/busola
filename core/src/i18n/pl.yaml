@@ -39,7 +39,7 @@ common:
     copy-button: Skopiuj do schowka
     duplicate-key: Zduplikowany klucz
     k8s-name-input: Nazwa musi zawierać małe znaki alfanumeryczne, może zawierać „-” (np. „my-name1”).
-    key-value: klucz=wartość”, musi zaczynać się i kończyć znakiem alfanumerycznym, może zawierać „-”, „_” lub „.”
+    key-value: klucz=wartość, musi zaczynać się i kończyć znakiem alfanumerycznym, może zawierać „-”, „_” lub „.”
     read-file: Odczytuj zawartość pliku jako pojedynczą wartość, z nazwą pliku jako kluczem.
 config-maps:
   title: Mapy konfiguracji
