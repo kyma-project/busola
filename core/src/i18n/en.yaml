@@ -40,7 +40,7 @@ custom-resource-definitions:
   title: Custom Resource Definitions
 daemon-sets:
   title: Daemon Sets
-  pods: Pods
+  pods: $t(pods.title)
   node-selector: Node selector
   images: Images
   tolerations:
@@ -93,6 +93,8 @@ observability:
   title: Observability
 pods:
   title: Pods
+  restarts: Restarts
+  node: Node
 replica-sets:
   title: Replica Sets
 role-bindings:
@@ -115,10 +117,15 @@ settings:
   confirmations: Confirmations
   dontConfirmDelete: Delete without confirmation
 common:
+  name: Name
+  created: Created
+  labels: Labels
+  status: Status
+  buttons:
+    delete: Delete
+    cancel: Cancel
+    edit-yaml: Edit YAML
   delete-dialog:
     title: Remove {{name}}
     message: Are you sure you want to delete {{type}} {{name}}?
     delete-confirm: Don't show delete confirmations
-    buttons:
-      delete: Delete
-      cancel: Cancel

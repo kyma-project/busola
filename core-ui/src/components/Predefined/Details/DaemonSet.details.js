@@ -49,7 +49,9 @@ const Images = resource => {
   };
 
   const headerRenderer = () => [t('daemon-sets.images')];
-  const rowRenderer = entry => [entry];
+  const rowRenderer = entry => [
+    <span style={{ overflowWrap: 'anywhere' }}>{entry}</span>,
+  ];
   return (
     <GenericList
       title={t('daemon-sets.images')}
@@ -65,7 +67,11 @@ const Images = resource => {
 export const DaemonSetsDetails = ({ DefaultRenderer, ...otherParams }) => {
   return (
     <DefaultRenderer
-      customComponents={[Tolerations, Images, ResourcePods]}
+      customComponents={[
+        Tolerations,
+        Images,
+        resource => ResourcePods(resource, null, true),
+      ]}
       {...otherParams}
     ></DefaultRenderer>
   );

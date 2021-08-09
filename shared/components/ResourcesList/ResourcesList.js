@@ -206,9 +206,9 @@ function Resources({
       ];
 
   const headerRenderer = () => [
-    'Name',
-    'Created',
-    'Labels',
+    t('common.name'),
+    t('common.created'),
+    t('common.labels'),
     ...customColumns.map(col => col.header),
   ];
 
@@ -268,10 +268,10 @@ function Resources({
       <Dialog
         actions={[
           <Button type="negative" onClick={() => performDelete(activeResource)}>
-            {t('common.delete-dialog.buttons.delete')}
+            {t('common.buttons.delete')}
           </Button>,
           <Button onClick={() => setShowDeleteDialog(false)}>
-            {t('common.delete-dialog.buttons.cancel')}
+            {t('common.buttons.cancel')}
           </Button>,
         ]}
         footerProps={{}}

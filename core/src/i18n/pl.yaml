@@ -1,6 +1,17 @@
 clusters:
   overview:
     title: Przegląd Klastrów
+daemon-sets:
+  title: Daemon Sety
+  pods: $t(pods.title)
+  node-selector: Selektory Węzłów
+  images: Obrazy
+  tolerations:
+    title: Tolerancje
+    key: Klucz
+    operator: Operator
+    effect: Efekt
+    toleration-seconds: Sekundy
 namespaces:
   overview:
     title: Przegląd
@@ -16,6 +27,8 @@ namespaces:
       error: Error while loading memory consumption data
 pods:
   title: Pody
+  restarts: Ponownych uruchomień
+  node: Węzeł
 deployments:
   title: Deploymenty
 service-catalog:
@@ -26,3 +39,12 @@ service-catalog:
       description: Enrich your experience with additional services that are installed outside the cluster.
 settings:
   language: Język
+common:
+  name: Nazwa
+  created: Stworzono
+  labels: Etykiety
+  status: Status
+  buttons:
+    delete: Usuń
+    cancel: Anuluj
+    edit-yaml: Edituj YAML
