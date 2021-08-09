@@ -1,7 +1,6 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import BasicData from '../BasicData';
-import { shallow } from 'enzyme';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -18,7 +17,7 @@ jest.mock('react-i18next', () => ({
 
 jest.mock('react-shared', () => ({
   K8sNameInput: () => <input role="name-input" />,
-  Tooltip: () => null,
+  Tooltip: ({ children }) => children,
 }));
 
 jest.mock('components/Lambdas/components', () => ({
@@ -26,27 +25,27 @@ jest.mock('components/Lambdas/components', () => ({
 }));
 
 describe('BasicData', () => {
-  it('Updates name and docker image', () => {
+  it('Updates name and docker image', async () => {
     const setDeploymentMock = jest.fn();
-    const component = shallow(
+    const { getByPlaceholderText, getByRole } = render(
       <BasicData deployment={{}} setDeployment={setDeploymentMock} />,
     );
 
-    const nameEvent = {
-      preventDefault() {},
+    fireEvent.change(getByRole('name-input'), {
       target: { value: 'test-name' },
-    };
-    component.find('K8sNameInput').simulate('change', nameEvent);
-    expect(setDeploymentMock).toHaveBeenCalledWith({ name: 'test-name' });
-
-    const imageEvent = {
-      preventDefault() {},
-      target: { value: 'test-image' },
-    };
-    component.find('FormInput').simulate('change', imageEvent);
-    expect(setDeploymentMock).toHaveBeenCalledWith({
-      dockerImage: 'test-image',
     });
+    await wait(() =>
+      expect(setDeploymentMock).toHaveBeenCalledWith({ name: 'test-name' }),
+    );
+
+    fireEvent.change(getByPlaceholderText('Enter Docker image'), {
+      target: { value: 'test-image' },
+    });
+    await wait(() =>
+      expect(setDeploymentMock).toHaveBeenCalledWith({
+        dockerImage: 'test-image',
+      }),
+    );
   });
 
   it('Switches service creation', () => {
