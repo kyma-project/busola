@@ -65,7 +65,7 @@ const Images = resource => {
 export const DaemonSetsDetails = ({ DefaultRenderer, ...otherParams }) => {
   return (
     <DefaultRenderer
-      customComponents={[ResourcePods, Tolerations, Images]}
+      customComponents={[Tolerations, Images, ResourcePods]}
       {...otherParams}
     ></DefaultRenderer>
   );
