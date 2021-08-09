@@ -30,7 +30,7 @@ const getEditorTheme = theme => {
       return 'hc-black';
     case 'light_dark':
       return window.matchMedia &&
-        window.matchMedia('(prefers-color-scheme: dark)')
+        window.matchMedia('(prefers-color-scheme: dark)').matches
         ? 'vs-dark'
         : 'vs';
     default:
