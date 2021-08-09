@@ -102,8 +102,8 @@ export async function saveCARequired() {
       ...cluster.config,
       requiresCA: await checkIfClusterRequiresCA(getAuthData()),
     };
+    await saveClusterParams(cluster);
   }
-  await saveClusterParams(cluster);
 }
 
 export async function getActiveCluster() {
@@ -114,6 +114,7 @@ export async function getActiveCluster() {
   }
   // add target cluster config
   clusters[clusterName].config = merge(
+    {},
     getTargetClusterConfig(),
     clusters[clusterName].config,
   );
