@@ -39,7 +39,7 @@ common:
     copy-button: Copy to clipboard
     duplicate-key: Duplicate key
     k8s-name-input: Name must contain lower case alphanumeric characters, can contain '-' (like 'my-name1').
-    key-value: key=value', must start and end with alphanumeric character, can contain '-', '_' or '.'
+    key-value: key=value, must start and end with alphanumeric character, can contain '-', '_' or '.'
     read-file: Read file content as single value, with file name as a key.
 config-maps:
   title: Config Maps
