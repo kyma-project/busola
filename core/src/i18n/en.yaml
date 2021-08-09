@@ -66,7 +66,7 @@ discovery-and-network:
 functions:
   title: Functions
   variable:
-    tooltip: This variable comes from a Resource. Check its details to get the value.
+    tooltip: This variable comes from a Resource. To get the value, follow the link.
 git-repositories:
   title: Git Repositories
 instances:
