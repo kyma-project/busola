@@ -11,6 +11,7 @@ import {
   useNotification,
   Tooltip,
 } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 
 import { setCluster, deleteCluster } from './../shared';
 import { areParamsCompatible } from '../params-version';
@@ -19,6 +20,7 @@ import './ClusterList.scss';
 export function ClusterList() {
   const { clusters, activeClusterName } = useMicrofrontendContext();
   const notification = useNotification();
+  const { t } = useTranslation();
 
   useShowNodeParamsError();
 
@@ -72,7 +74,7 @@ export function ClusterList() {
         {entry.currentContext.cluster.name}
       </Link>
       {!areParamsCompatible(entry.config?.version) && (
-        <Tooltip content="Outdated parameter version may cause errors. Delete and re-add your cluster.">
+        <Tooltip content={t('clusters.list.outdated.tooltip')}>
           <Icon
             ariaLabel="version incompatible warning"
             className="params-warning-icon"

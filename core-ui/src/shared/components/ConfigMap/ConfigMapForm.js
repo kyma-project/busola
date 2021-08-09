@@ -7,6 +7,7 @@ import {
 } from 'react-shared';
 import { Tab, TabGroup } from 'fundamental-react';
 import { createConfigMapInput } from './createConfigMapInput';
+import { useTranslation } from 'react-i18next';
 
 export function ConfigMapForm({
   formElementRef,
@@ -33,6 +34,8 @@ export function ConfigMapForm({
     onSubmit(configMapInput);
   };
 
+  const { i18n } = useTranslation();
+
   return (
     <form
       onSubmit={handleFormSubmit}
@@ -48,14 +51,20 @@ export function ConfigMapForm({
             className="fd-margin-bottom--sm"
             defaultValue={name}
             readOnly={readonlyName}
+            i18n={i18n}
           />
-          <LabelSelectorInput labels={labels} onChange={setLabels} />
+          <LabelSelectorInput
+            labels={labels}
+            onChange={setLabels}
+            i18n={i18n}
+          />
         </Tab>
         <Tab title="Data">
           <KeyValueForm
             data={data}
             setData={setData}
             setValid={setCustomValid}
+            i18n={i18n}
           />
         </Tab>
       </TabGroup>

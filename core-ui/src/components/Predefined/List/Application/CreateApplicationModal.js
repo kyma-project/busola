@@ -6,6 +6,7 @@ import {
   LabelSelectorInput,
   usePost,
 } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 
 export function createApplicationInput({ name, description, labels }) {
   return {
@@ -52,6 +53,7 @@ export function CreateApplicationForm({
     }
   }
 
+  const { i18n } = useTranslation();
   return (
     <form
       onChange={onChange}
@@ -81,6 +83,7 @@ export function CreateApplicationForm({
         <LabelSelectorInput
           labels={application.labels || {}}
           onChange={labels => setApplication({ ...application, labels })}
+          i18n={i18n}
         />
       </FormFieldset>
     </form>
