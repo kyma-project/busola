@@ -38,7 +38,7 @@ export const NotificationProvider = ({
       notificationProps,
       visibilityTime = defaultVisibilityTime,
     ) {
-      if (notificationProps.autoClose && visibilityTime !== 0) {
+      if (visibilityTime !== 0) {
         setTimeout(() => {
           setToastProps(null);
         }, visibilityTime);

@@ -41,7 +41,6 @@ export function AddCluster() {
             'Configuration has been included properly. Please fill remaining required data.',
           type: 'info',
           icon: '',
-          autoClose: true,
           buttonConfirm: false,
           buttonDismiss: 'Ok',
         },
