@@ -268,10 +268,10 @@ function Resources({
       <Dialog
         actions={[
           <Button type="negative" onClick={() => performDelete(activeResource)}>
-            {t('common.delete-dialog.buttons.delete')}
+            {t('common.buttons.delete')}
           </Button>,
           <Button onClick={() => setShowDeleteDialog(false)}>
-            {t('common.delete-dialog.buttons.cancel')}
+            {t('common.buttons.cancel')}
           </Button>,
         ]}
         footerProps={{}}
