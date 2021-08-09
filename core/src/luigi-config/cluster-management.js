@@ -155,6 +155,12 @@ async function mergeParams(params) {
     ...params.config,
   };
 
+  params.config.features = {
+    ...defaultConfig.features,
+    ...(await getBusolaClusterParams()).config?.features,
+    ...params.config.features,
+  };
+
   // Don't merge hiddenNamespaces, use the defaults only when params are empty
   params.config.hiddenNamespaces =
     params.config?.hiddenNamespaces || DEFAULT_HIDDEN_NAMESPACES;
