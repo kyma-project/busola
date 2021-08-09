@@ -53,8 +53,8 @@ cron-jobs:
       skip: Brak jednoczesnych wykonań, pomiń nowy przebieg, jeśli poprzedni jeszcze się nie zakończył.
     title: Polityka współbieżności
   last-job-execution: Ostatnie wykonanie zadania
-  last-schedule-time: Czas ostatniego harmonogramu
-  not-scheduled-yet: Jeszcze nic nie zaplanowano
+  last-schedule-time: Data ostatniego wykonania
+  not-scheduled-yet: Jeszcze nie uruchomiono
   schedule: Harmonogram
   title: Cron Jobs
 custom-resource-definitions:
