@@ -32,8 +32,8 @@ common:
     buttons:
       cancel: Cancel
       delete: Delete
-    delete-confirm: Don't show delete confirmations
-    message: Are you sure you want to delete {{type}} {{name}}?
+    delete-confirm: Don't ask this again
+    message: Are you sure you want to remove {{type}} {{name}}?
     title: Remove {{name}}
   tooltips:
     copy-button: Copy to clipboard
