@@ -118,6 +118,13 @@ export async function getActiveCluster() {
     getTargetClusterConfig(),
     clusters[clusterName].config,
   );
+
+  // merge keys of config.features
+  clusters[clusterName].config.features = {
+    ...clusters[clusterName].config.features,
+    ...getTargetClusterConfig()?.features,
+  };
+
   clusters[clusterName] = await mergeParams(clusters[clusterName]);
   return clusters[clusterName];
 }
