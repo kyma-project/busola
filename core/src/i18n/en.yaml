@@ -5,7 +5,7 @@ api-rules:
   access-strategies:
     delete:
       tooltip: Define at least one access strategy.
-  title: API Rules
+  title: APIRules
 applications:
   title: Applications
 brokers:
@@ -15,11 +15,11 @@ catalog:
   subtitle: Enrich your experience with additional services that are installed outside the cluster.
   title: Service Catalog
 cluster-addons:
-  title: Cluster Addons
+  title: ClusterAddons
 cluster-role-bindings:
-  title: Cluster Role Bindings
+  title: ClusterRoleBindings
 cluster-roles:
-  title: Cluster Roles
+  title: ClusterRoles
 clusters:
   list:
     outdated:
@@ -44,13 +44,13 @@ common:
     copy-to-clipboard: Copy to clipboard
     download: Download
     duplicate-key: Duplicate key
-    k8s-name-input: Name must contain lower case alphanumeric characters, can contain '-' (like 'my-name1').
-    key-value: key=value, must start and end with alphanumeric character, can contain '-', '_' or '.'
-    read-file: Read file content as single value, with file name as a key.
+    k8s-name-input: Name must contain lowercase alphanumeric characters, can also contain '-' (like 'my-name1').
+    key-value: key=value, must start and end with an alphanumeric character, can also contain '-', '_' or '.'
+    read-file: Read file content as a single value, with file name as a key.
     save: Save
     search: Search
 config-maps:
-  title: Config Maps
+  title: ConfigMaps
 configuration:
   title: Configuration
 cron-jobs:
@@ -126,7 +126,7 @@ namespaces:
     memory-examples: Use plain value in bytes (128974848) or suffix equivalents (like 129e6, 129M, 123Mi).
     total-memory-limit: Define constraints that limit total memory consumption in your Namespace.
 oauth2-clients:
-  title: OAuth2 Clients
+  title: OAuth2Clients
 observability:
   title: Observability
 pods:
@@ -136,7 +136,7 @@ pods:
 replica-sets:
   title: ReplicaSets
 role-bindings:
-  title: Role Bindings
+  title: RoleBindings
 roles:
   title: Roles
 secrets:

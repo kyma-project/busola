@@ -12,12 +12,12 @@ brokers:
   title: Brokerzy
 catalog:
   menu-title: Katalog
-  subtitle: Wzbogać swoje doświadczenie dodatkowymi usługami, które są instalowane poza klastrem.
+  subtitle: Rozszerz możliwości za pomocą dodatkowych usług instalowanych poza klastrem.
   title: Katalog Serwisów
 cluster-addons:
   title: Dodatki do klastra
 cluster-role-bindings:
-  title: Powiązania ról klastra
+  title: Powiązania Ról klastra
 cluster-roles:
   title: Role klastra
 clusters:
@@ -31,7 +31,7 @@ common:
   buttons:
     cancel: Anuluj
     delete: Usuń
-    edit-yaml: Edituj YAML
+    edit-yaml: Edytuj YAML
   created: Stworzono
   delete-dialog:
     delete-confirm: Nie pytaj ponownie
@@ -44,7 +44,7 @@ common:
     copy-to-clipboard: Skopiuj do schowka
     download: Pobierz
     duplicate-key: Zduplikowany klucz
-    k8s-name-input: Nazwa musi zawierać małe znaki alfanumeryczne, może zawierać „-” (np. „my-name1”).
+    k8s-name-input: Nazwa musi składać się z małych znaków alfanumerycznych, może zawierać „-” (np. „my-name1”).
     key-value: klucz=wartość, musi zaczynać się i kończyć znakiem alfanumerycznym, może zawierać „-”, „_” lub „.”
     read-file: Odczytuj zawartość pliku jako pojedynczą wartość, z nazwą pliku jako kluczem.
     save: Zapisz
@@ -96,9 +96,9 @@ integration:
   title: Integracja
 jobs:
   completion-time: Czas realizacji
-  completions: Ukończenia
+  completions: Realizacje
   conditions:
-    last-probe: Ostatnia Sonda
+    last-probe: Ostatnia sonda
     last-transition: Ostatnie przejście
     status: Status
     title: Warunki
@@ -107,7 +107,7 @@ jobs:
   title: Zadania
 namespaces:
   overview:
-    back: Powrót do Przestrzeni Nazw
+    back: Powrót do przestrzeni nazw
     resources:
       error: Błąd podczas ładowania danych o zużyciu pamięci
       limits: Limity pamięci
@@ -116,7 +116,7 @@ namespaces:
     title: Przegląd
     workloads:
       deployments: $t(deployments.title)
-      error: 'Błąd podczas ładowania {{title}} danych z powodu: {{message}}'
+      error: 'Błąd podczas ładowania danych dla {{title}} z powodu: {{message}}'
       pods: $t(pods.title)
       title: Zdrowe zasoby
   title: Przestrzenie nazw
@@ -134,7 +134,7 @@ pods:
   restarts: Ponownych uruchomień
   title: Pody
 replica-sets:
-  title: Zestawy replik
+  title: Zestawy Replik
 role-bindings:
   title: Powiązania Ról
 roles:
@@ -152,8 +152,8 @@ settings:
   language: Język
 stateful-sets:
   replicas: Repliki
-  title: Zestawy Stanowe
+  title: Zestawy stanowe
 workloads:
   docker-image:
-    tooltip: Wprowadź poprawną ścieżkę rejestru obrazu dockera.
+    tooltip: Wprowadź poprawną ścieżkę rejestru obrazu Dockera.
   title: Obciążenia
