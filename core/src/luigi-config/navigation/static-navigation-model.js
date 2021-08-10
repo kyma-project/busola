@@ -86,7 +86,7 @@ export function getStaticChildrenNodesForNamespace(
       hideFromNav: true,
     },
     {
-      category: 'Workloads',
+      category: i18next.t('workloads.title'),
       resourceType: 'functions',
       pathSegment: 'functions',
       navigationContext: 'functions',
@@ -123,7 +123,7 @@ export function getStaticChildrenNodesForNamespace(
       ],
     },
     {
-      category: 'Workloads',
+      category: i18next.t('workloads.title'),
       pathSegment: 'pods',
       resourceType: 'pods',
       label: i18next.t('pods.title'),
@@ -183,7 +183,7 @@ export function getStaticChildrenNodesForNamespace(
       ],
     },
     {
-      category: 'Workloads',
+      category: i18next.t('workloads.title'),
       pathSegment: 'deployments',
       resourceType: 'deployments',
 
@@ -217,7 +217,7 @@ export function getStaticChildrenNodesForNamespace(
       ],
     },
     {
-      category: 'Workloads',
+      category: i18next.t('workloads.title'),
       resourceType: 'cronjobs',
       pathSegment: 'cronjobs',
       label: 'Cron Jobs',
@@ -251,7 +251,7 @@ export function getStaticChildrenNodesForNamespace(
       ],
     },
     {
-      category: 'Workloads',
+      category: i18next.t('workloads.title'),
       resourceType: 'replicasets',
       pathSegment: 'replicasets',
       label: i18next.t('replica-sets.title'),
@@ -285,7 +285,7 @@ export function getStaticChildrenNodesForNamespace(
       ],
     },
     {
-      category: 'Workloads',
+      category: i18next.t('workloads.title'),
       resourceType: 'jobs',
       pathSegment: 'jobs',
       label: i18next.t('jobs.title'),
@@ -319,7 +319,7 @@ export function getStaticChildrenNodesForNamespace(
       ],
     },
     {
-      category: 'Workloads',
+      category: i18next.t('workloads.title'),
       resourceType: 'statefulsets',
       pathSegment: 'statefulsets',
       label: i18next.t('stateful-sets.title'),
@@ -398,7 +398,7 @@ export function getStaticChildrenNodesForNamespace(
       hideFromNav: true,
     },
     {
-      category: 'Discovery and Network',
+      category: i18next.t('discovery-and-network.title'),
       resourceType: 'apirules',
       pathSegment: 'apirules',
       navigationContext: 'apirules',
@@ -454,7 +454,7 @@ export function getStaticChildrenNodesForNamespace(
       ],
     },
     {
-      category: 'Discovery and Network',
+      category: i18next.t('discovery-and-network.title'),
       pathSegment: 'services',
       resourceType: 'services',
       navigationContext: 'services',
@@ -499,7 +499,7 @@ export function getStaticChildrenNodesForNamespace(
       hideFromNav: true,
     },
     {
-      category: 'Service Management',
+      category: i18next.t('service-management.title'),
       pathSegment: 'catalog',
       navigationContext: 'catalog',
       label: i18next.t('catalog.menu-title'),
@@ -573,7 +573,7 @@ export function getStaticChildrenNodesForNamespace(
       ],
     },
     {
-      category: 'Service Management',
+      category: i18next.t('service-management.title'),
       pathSegment: 'instances',
       navigationContext: 'instances',
       label: i18next.t('instances.title'),
@@ -598,7 +598,7 @@ export function getStaticChildrenNodesForNamespace(
       ],
     },
     {
-      category: 'Service Management',
+      category: i18next.t('service-management.title'),
       pathSegment: 'brokers',
       navigationContext: 'brokers',
       label: i18next.t('brokers.title'),
@@ -627,7 +627,7 @@ export function getStaticChildrenNodesForNamespace(
       hideFromNav: true,
     },
     {
-      category: 'Configuration',
+      category: i18next.t('configuration.title'),
       pathSegment: 'addons',
       resourceType: 'addonsconfigurations',
       navigationContext: 'addonsconfigurations',
@@ -664,7 +664,7 @@ export function getStaticChildrenNodesForNamespace(
       ],
     },
     {
-      category: 'Configuration',
+      category: i18next.t('configuration.title'),
       pathSegment: 'config-maps',
       resourceType: 'configmaps',
       navigationContext: 'configmaps',
@@ -697,7 +697,7 @@ export function getStaticChildrenNodesForNamespace(
       ],
     },
     {
-      category: 'Configuration',
+      category: i18next.t('configuration.title'),
       resourceType: 'secrets',
       pathSegment: 'secrets',
       navigationContext: 'secrets',
@@ -731,7 +731,7 @@ export function getStaticChildrenNodesForNamespace(
       ],
     },
     {
-      category: 'Configuration',
+      category: i18next.t('configuration.title'),
       pathSegment: 'roles',
       resourceType: 'roles',
       navigationContext: 'roles',
@@ -767,7 +767,7 @@ export function getStaticChildrenNodesForNamespace(
       ],
     },
     {
-      category: 'Configuration',
+      category: i18next.t('configuration.title'),
       pathSegment: 'role-bindings',
       resourceType: 'rolebindings',
       navigationContext: 'rolebindings',
@@ -801,7 +801,7 @@ export function getStaticChildrenNodesForNamespace(
       ],
     },
     {
-      category: 'Configuration',
+      category: i18next.t('configuration.title'),
       pathSegment: 'oauth2clients',
       resourceType: 'oauth2clients',
       navigationContext: 'oauth2clients',
@@ -842,7 +842,7 @@ export function getStaticChildrenNodesForNamespace(
       ],
     },
     {
-      category: 'Configuration',
+      category: i18next.t('configuration.title'),
       pathSegment: 'gitrepositories',
       resourceType: 'gitrepositories',
       navigationContext: 'gitrepositories',
@@ -861,7 +861,7 @@ export function getStaticChildrenNodesForNamespace(
       },
     },
     {
-      category: 'Configuration',
+      category: i18next.t('configuration.title'),
       pathSegment: 'customresourcedefinitions',
       resourceType: 'customresourcedefinitions',
       navigationContext: 'customresourcedefinitions',
@@ -993,7 +993,7 @@ export function getStaticRootNodes(
       resourceType: 'applications',
       navigationContext: 'applications',
       label: i18next.t('applications.title'),
-      category: 'Integration',
+      category: i18next.t('integration.title'),
       viewUrl:
         config.coreUIModuleUrl +
         '/Applications?' +
@@ -1033,7 +1033,7 @@ export function getStaticRootNodes(
       resourceType: 'clusteraddonsconfigurations',
       label: i18next.t('cluster-addons.title'),
       category: {
-        label: 'Integration',
+        label: i18next.t('integration.title'),
         icon: 'settings',
         collapsible: true,
       },
@@ -1080,7 +1080,7 @@ export function getStaticRootNodes(
       hideFromNav: true,
     },
     {
-      category: 'Configuration',
+      category: i18next.t('configuration.title'),
       pathSegment: 'cluster-roles',
       navigationContext: 'clusterroles',
       resourceType: 'clusterroles',
@@ -1127,7 +1127,7 @@ export function getStaticRootNodes(
       resourceType: 'clusterrolebindings',
       navigationContext: 'clusterrolebindings',
       label: i18next.t('cluster-role-bindings.title'),
-      category: 'Configuration',
+      category: i18next.t('configuration.title'),
       viewUrl:
         config.coreUIModuleUrl +
         '/ClusterRoleBindings?' +
@@ -1158,7 +1158,7 @@ export function getStaticRootNodes(
       ],
     },
     {
-      category: 'Configuration',
+      category: i18next.t('configuration.title'),
       pathSegment: 'customresourcedefinitions',
       resourceType: 'customresourcedefinitions',
       navigationContext: 'customresourcedefinitions',
