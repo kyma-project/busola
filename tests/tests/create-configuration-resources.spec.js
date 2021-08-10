@@ -156,13 +156,13 @@ context('Test configuration resources', () => {
       .should('be.gte', 1);
   });
 
-  it('Create a Cluster Role Binding', () => {
+  it('Create a ClusterRoleBinding', () => {
     cy.getLeftNav()
       .find('[data-testid=cluster-role-bindings_clusterrolebindings]')
       .click();
 
     cy.getIframeBody()
-      .contains('Create Cluster Role Binding')
+      .contains('Create ClusterRoleBinding')
       .click();
 
     cy.getIframeBody()

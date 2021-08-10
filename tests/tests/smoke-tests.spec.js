@@ -54,7 +54,7 @@ context('Smoke Tests', () => {
       .should('be.visible');
 
     cy.getLeftNav()
-      .contains('Cluster Role Bindings')
+      .contains('ClusterRoleBindings')
       .should('be.visible');
   });
 });
