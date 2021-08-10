@@ -124,6 +124,176 @@ export function getStaticChildrenNodesForNamespace(
     },
     {
       category: i18next.t('workloads.title'),
+      pathSegment: 'deployments',
+      resourceType: 'deployments',
+
+      label: i18next.t('deployments.title'),
+      keepSelectedForChildren: true,
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/Deployments?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/apps/v1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      navigationContext: 'deployments',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':deploymentName',
+              resourceType: 'deployments',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/Deployments/:deploymentName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/apps/v1',
+                }),
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: i18next.t('workloads.title'),
+      resourceType: 'statefulsets',
+      pathSegment: 'statefulsets',
+      label: i18next.t('stateful-sets.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/statefulsets?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/apps/v1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+
+      navigationContext: 'statefulsets',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':statefulSetName',
+              resourceType: 'statefulsets',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/statefulsets/:statefulSetName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/apps/v1',
+                }),
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: i18next.t('workloads.title'),
+      resourceType: 'cronjobs',
+      pathSegment: 'cronjobs',
+      label: 'Cron Jobs',
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/cronjobs?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/batch/v1beta1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+
+      navigationContext: 'cronjobs',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':cronJobName',
+              resourceType: 'cronjobs',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/cronjobs/:cronJobName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/batch/v1beta1',
+                }),
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: i18next.t('workloads.title'),
+      resourceType: 'jobs',
+      pathSegment: 'jobs',
+      label: i18next.t('jobs.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/jobs?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/batch/v1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+
+      navigationContext: 'jobs',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':jobName',
+              resourceType: 'jobs',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/jobs/:jobName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/batch/v1',
+                }),
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: i18next.t('workloads.title'),
+      resourceType: 'replicasets',
+      pathSegment: 'replicasets',
+      label: i18next.t('replica-sets.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/ReplicaSets?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/apps/v1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+
+      navigationContext: 'replicasets',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':replicaSetName',
+              resourceType: 'replicasets',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/ReplicaSets/:replicaSetName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/apps/v1',
+                }),
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: i18next.t('workloads.title'),
       pathSegment: 'pods',
       resourceType: 'pods',
       label: i18next.t('pods.title'),
@@ -177,176 +347,6 @@ export function getStaticChildrenNodesForNamespace(
                   ],
                 },
               ],
-            },
-          ],
-        },
-      ],
-    },
-    {
-      category: i18next.t('workloads.title'),
-      pathSegment: 'deployments',
-      resourceType: 'deployments',
-
-      label: i18next.t('deployments.title'),
-      keepSelectedForChildren: true,
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/Deployments?' +
-        toSearchParamsString({
-          resourceApiPath: '/apis/apps/v1',
-          hasDetailsView: true,
-        }),
-      viewGroup: coreUIViewGroupName,
-      navigationContext: 'deployments',
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':deploymentName',
-              resourceType: 'deployments',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/Deployments/:deploymentName?' +
-                toSearchParamsString({
-                  resourceApiPath: '/apis/apps/v1',
-                }),
-            },
-          ],
-        },
-      ],
-    },
-    {
-      category: i18next.t('workloads.title'),
-      resourceType: 'cronjobs',
-      pathSegment: 'cronjobs',
-      label: 'Cron Jobs',
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/cronjobs?' +
-        toSearchParamsString({
-          resourceApiPath: '/apis/batch/v1beta1',
-          hasDetailsView: true,
-        }),
-      viewGroup: coreUIViewGroupName,
-      keepSelectedForChildren: true,
-
-      navigationContext: 'cronjobs',
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':cronJobName',
-              resourceType: 'cronjobs',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/cronjobs/:cronJobName?' +
-                toSearchParamsString({
-                  resourceApiPath: '/apis/batch/v1beta1',
-                }),
-            },
-          ],
-        },
-      ],
-    },
-    {
-      category: i18next.t('workloads.title'),
-      resourceType: 'replicasets',
-      pathSegment: 'replicasets',
-      label: i18next.t('replica-sets.title'),
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/ReplicaSets?' +
-        toSearchParamsString({
-          resourceApiPath: '/apis/apps/v1',
-          hasDetailsView: true,
-        }),
-      viewGroup: coreUIViewGroupName,
-      keepSelectedForChildren: true,
-
-      navigationContext: 'replicasets',
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':replicaSetName',
-              resourceType: 'replicasets',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/ReplicaSets/:replicaSetName?' +
-                toSearchParamsString({
-                  resourceApiPath: '/apis/apps/v1',
-                }),
-            },
-          ],
-        },
-      ],
-    },
-    {
-      category: i18next.t('workloads.title'),
-      resourceType: 'jobs',
-      pathSegment: 'jobs',
-      label: i18next.t('jobs.title'),
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/jobs?' +
-        toSearchParamsString({
-          resourceApiPath: '/apis/batch/v1',
-          hasDetailsView: true,
-        }),
-      viewGroup: coreUIViewGroupName,
-      keepSelectedForChildren: true,
-
-      navigationContext: 'jobs',
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':jobName',
-              resourceType: 'jobs',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/jobs/:jobName?' +
-                toSearchParamsString({
-                  resourceApiPath: '/apis/batch/v1',
-                }),
-            },
-          ],
-        },
-      ],
-    },
-    {
-      category: i18next.t('workloads.title'),
-      resourceType: 'statefulsets',
-      pathSegment: 'statefulsets',
-      label: i18next.t('stateful-sets.title'),
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/statefulsets?' +
-        toSearchParamsString({
-          resourceApiPath: '/apis/apps/v1',
-          hasDetailsView: true,
-        }),
-      viewGroup: coreUIViewGroupName,
-      keepSelectedForChildren: true,
-
-      navigationContext: 'statefulsets',
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':statefulSetName',
-              resourceType: 'statefulsets',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/statefulsets/:statefulSetName?' +
-                toSearchParamsString({
-                  resourceApiPath: '/apis/apps/v1',
-                }),
             },
           ],
         },
