@@ -1,6 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, FormLabel, FormInput, Icon } from 'fundamental-react';
+import {
+  Button,
+  FormLabel,
+  FormInput,
+  FormTextarea,
+  Icon,
+} from 'fundamental-react';
 import { Tooltip } from '../..';
 import { fromEntries, toEntries, readFromFile } from './helpers';
 import { v4 as uuid } from 'uuid';
@@ -92,7 +98,7 @@ export function KeyValueForm({
                 }}
                 value={entry.key}
               />
-              <textarea
+              <FormTextarea
                 className="value-textarea"
                 name="value"
                 placeholder="Value"

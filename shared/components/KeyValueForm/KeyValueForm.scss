@@ -21,10 +21,7 @@
     }
 
     .value-textarea {
-        resize: none;
-        box-sizing: border-box;
-        height: 36px;
-        margin-top: 4px;
-        padding: 8px;
+        resize: vertical;
+        height: 37px;
     }
 }
