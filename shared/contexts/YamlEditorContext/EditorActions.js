@@ -4,6 +4,7 @@ import { Button } from 'fundamental-react';
 import copyToCliboard from 'copy-to-clipboard';
 import { saveAs } from 'file-saver';
 import './EditorActions.scss';
+import { useTranslation } from 'react-i18next';
 
 const ButtonWithTooltip = ({
   tooltipContent,
@@ -25,7 +26,14 @@ const ButtonWithTooltip = ({
   );
 };
 
-export function EditorActions({ val, editor, title, onSave, saveDisabled }) {
+export function EditorActions({
+  val,
+  editor,
+  title,
+  onSave,
+  saveDisabled,
+  i18n,
+}) {
   const openSearch = () => {
     // focus is required for search control to appear
     editor.focus();
@@ -39,29 +47,31 @@ export function EditorActions({ val, editor, title, onSave, saveDisabled }) {
     saveAs(blob, title || 'spec.yaml');
   };
 
+  const { t } = useTranslation(null, { i18n });
+
   return (
     <section className="editor-actions fd-margin-bottom--sm">
       <ButtonWithTooltip
-        tooltipContent="Search"
+        tooltipContent={t('common.tooltips.search')}
         glyph="filter"
         onClick={openSearch}
         className="fd-margin-end--sm"
         disabled={!editor}
       />
       <ButtonWithTooltip
-        tooltipContent="Save"
+        tooltipContent={t('common.tooltips.save')}
         glyph="save"
         onClick={onSave}
         disabled={saveDisabled || !editor}
       />
       <ButtonWithTooltip
-        tooltipContent="Copy to clipboard"
+        tooltipContent={t('common.tooltips.copy-to-clipboard')}
         glyph="copy"
         onClick={() => copyToCliboard(val)}
         disabled={!editor}
       />
       <ButtonWithTooltip
-        tooltipContent="Download"
+        tooltipContent={t('common.tooltips.download')}
         glyph="download"
         onClick={download}
         disabled={!editor}

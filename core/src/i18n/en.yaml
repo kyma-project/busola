@@ -34,15 +34,18 @@ common:
     edit-yaml: Edit YAML
   created: Created
   delete-dialog:
-    delete-confirm: Don't show delete confirmations
-    message: Are you sure you want to delete {{type}} {{name}}?
+    delete-confirm: Don't ask this again
+    message: Are you sure you want to remove {{type}} {{name}}?
     title: Remove {{name}}
   labels: Labels
   language: Language
   name: Name
   status: Status
   tooltips:
-    copy-button: Copy to clipboard
+    download: Download
+    search: Search
+    save: Save
+    copy-to-clipboard: Copy to clipboard
     duplicate-key: Duplicate key
     k8s-name-input: Name must contain lower case alphanumeric characters, can contain '-' (like 'my-name1').
     key-value: key=value, must start and end with alphanumeric character, can contain '-', '_' or '.'
