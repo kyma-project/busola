@@ -133,7 +133,7 @@ context('Test configuration resources', () => {
       .should('be.visible');
   });
 
-  it('Create a Cluster Roles list view', () => {
+  it('Create a ClusterRoles list view', () => {
     cy.getLeftNav()
       .contains('Namespaces')
       .click();
@@ -147,7 +147,7 @@ context('Test configuration resources', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('h3', 'Cluster Roles')
+      .contains('h3', 'ClusterRoles')
       .should('be.visible');
 
     cy.getIframeBody()
@@ -202,7 +202,7 @@ context('Test configuration resources', () => {
       .click(); // close navigation tab after yourself
   });
 
-  it('Create a OAuth2 Clients', () => {
+  it('Create a OAuth2Clients', () => {
     cy.get('[data-testid=luigi-topnav-logo]').click();
 
     cy.getLeftNav()

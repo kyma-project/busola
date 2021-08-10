@@ -194,7 +194,7 @@ export function getStaticChildrenNodesForNamespace(
       category: i18next.t('workloads.title'),
       resourceType: 'cronjobs',
       pathSegment: 'cronjobs',
-      label: 'Cron Jobs',
+      label: t('cron-jobs.title'),
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/cronjobs?' +

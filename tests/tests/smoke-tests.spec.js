@@ -50,7 +50,7 @@ context('Smoke Tests', () => {
       .click();
 
     cy.getLeftNav()
-      .contains('Cluster Roles')
+      .contains('ClusterRoles')
       .should('be.visible');
 
     cy.getLeftNav()
