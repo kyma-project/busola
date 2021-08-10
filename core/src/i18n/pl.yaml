@@ -57,21 +57,21 @@ cron-jobs:
   concurrency-policy:
     descriptions:
       allow: Zezwalaj na współbieżne wykonania.
-      replace: Brak jednoczesnych wykonań, zastąp poprzednie uruchomienie nowym.
-      skip: Brak jednoczesnych wykonań, pomiń nowy przebieg, jeśli poprzedni jeszcze się nie zakończył.
+      replace: Brak współbieżnych wykonań, zastąp poprzednie uruchomienie nowym.
+      skip: Brak współbieżnych wykonań, pomiń nowy przebieg, jeśli poprzedni jeszcze się nie zakończył.
     title: Polityka współbieżności
   last-job-execution: Ostatnie wykonanie zadania
   last-schedule-time: Data ostatniego wykonania
   not-scheduled-yet: Jeszcze nie uruchomiono
   schedule: Harmonogram
-  title: Cron Jobs
+  title: CronJoby
 custom-resource-definitions:
   title: Definicje zasobów niestandardowych
 daemon-sets:
   images: Obrazy
   node-selector: Selektory Węzłów
   pods: $t(pods.title)
-  title: Daemon Sety
+  title: Zestawy Daemonów
   tolerations:
     effect: Efekt
     key: Klucz
@@ -122,8 +122,8 @@ namespaces:
   title: Przestrzenie nazw
   tooltips:
     container-memory-limit: Zdefiniuj ograniczenia pamięci dla poszczególnych kontenerów w swojej przestrzeni nazw.
-    create: Wybierz tę opcję, aby wyłączyć istio, aby pośredniczyć w całej komunikacji między zasobnikami w Twojej przestrzeni nazw.
-    memory-examples: Użyj zwykłej wartości w bajtach (128974848) lub odpowiedników przyrostków (takich jak 129e6, 129M, 123Mi).
+    create: Wybierz tę opcję, aby wyłączyć istio, aby pośredniczyć w całej komunikacji między Podami w Twojej przestrzeni nazw.
+    memory-examples: Użyj zwykłej wartości w bajtach (128974848) lub odpowiednich przyrostków (takich jak 129e6, 129M, 123Mi).
     total-memory-limit: Zdefiniuj ograniczenia, które ograniczają całkowite zużycie pamięci w Twojej przestrzeni nazw.
 oauth2-clients:
   title: Klienci OAuth2
@@ -152,7 +152,7 @@ settings:
   language: Język
 stateful-sets:
   replicas: Repliki
-  title: Zestaw Stanowy
+  title: Zestawy Stanowe
 workloads:
   docker-image:
     tooltip: Wprowadź poprawną ścieżkę rejestru obrazu dockera.
