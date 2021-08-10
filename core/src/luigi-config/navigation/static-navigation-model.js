@@ -124,66 +124,6 @@ export function getStaticChildrenNodesForNamespace(
     },
     {
       category: i18next.t('workloads.title'),
-      pathSegment: 'pods',
-      resourceType: 'pods',
-      label: i18next.t('pods.title'),
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/Pods?' +
-        toSearchParamsString({
-          resourceApiPath: '/api/v1',
-          hasDetailsView: true,
-        }),
-      viewGroup: coreUIViewGroupName,
-      keepSelectedForChildren: true,
-      navigationContext: 'pods',
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':podName',
-              resourceType: 'pods',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/Pods/:podName?' +
-                toSearchParamsString({
-                  resourceApiPath: '/api/v1',
-                }),
-              navigationContext: 'pod',
-              children: [
-                {
-                  navigationContext: 'containers',
-                  pathSegment: 'containers',
-                  children: [
-                    {
-                      pathSegment: ':containerName',
-                      viewUrl:
-                        config.coreUIModuleUrl +
-                        '/namespaces/:namespaceId/Pods/:podName/Containers/:containerName',
-                    },
-                  ],
-                },
-                {
-                  pathSegment: 'initContainers',
-                  navigationContext: 'init-containers',
-                  children: [
-                    {
-                      pathSegment: ':containerName',
-                      viewUrl:
-                        config.coreUIModuleUrl +
-                        '/namespaces/:namespaceId/Pods/:podName/InitContainers/:containerName',
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-    {
-      category: i18next.t('workloads.title'),
       pathSegment: 'deployments',
       resourceType: 'deployments',
 
@@ -347,6 +287,66 @@ export function getStaticChildrenNodesForNamespace(
                 toSearchParamsString({
                   resourceApiPath: '/apis/apps/v1',
                 }),
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: i18next.t('workloads.title'),
+      pathSegment: 'pods',
+      resourceType: 'pods',
+      label: i18next.t('pods.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/Pods?' +
+        toSearchParamsString({
+          resourceApiPath: '/api/v1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+      navigationContext: 'pods',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':podName',
+              resourceType: 'pods',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/Pods/:podName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/api/v1',
+                }),
+              navigationContext: 'pod',
+              children: [
+                {
+                  navigationContext: 'containers',
+                  pathSegment: 'containers',
+                  children: [
+                    {
+                      pathSegment: ':containerName',
+                      viewUrl:
+                        config.coreUIModuleUrl +
+                        '/namespaces/:namespaceId/Pods/:podName/Containers/:containerName',
+                    },
+                  ],
+                },
+                {
+                  pathSegment: 'initContainers',
+                  navigationContext: 'init-containers',
+                  children: [
+                    {
+                      pathSegment: ':containerName',
+                      viewUrl:
+                        config.coreUIModuleUrl +
+                        '/namespaces/:namespaceId/Pods/:podName/InitContainers/:containerName',
+                    },
+                  ],
+                },
+              ],
             },
           ],
         },
