@@ -2,24 +2,24 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Labels, StatusBadge } from 'react-shared';
 
+const isStatusOk = daemonSet => {
+  const allPods =
+    daemonSet.status.numberReady + (daemonSet.status.numberUnavailable || 0);
+  return daemonSet.status.numberReady === allPods;
+};
+
+export const getStatusType = daemonSet => {
+  return isStatusOk(daemonSet) ? 'success' : 'error';
+};
+
+export const getPodsCount = daemonSet => {
+  const allPods =
+    daemonSet.status.numberReady + (daemonSet.status.numberUnavailable || 0);
+  return `${daemonSet.status.numberReady || 0} / ${allPods || 0}`;
+};
+
 export const DaemonSetsList = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
-
-  const isStatusOk = daemonSet => {
-    const allPods =
-      daemonSet.status.numberReady + (daemonSet.status.numberUnavailable || 0);
-    return daemonSet.status.numberReady === allPods;
-  };
-
-  const getStatusType = daemonSet => {
-    return isStatusOk(daemonSet) ? 'success' : 'error';
-  };
-
-  const getPodsCount = daemonSet => {
-    const allPods =
-      daemonSet.status.numberReady + (daemonSet.status.numberUnavailable || 0);
-    return `${daemonSet.status.numberReady || 0} / ${allPods || 0}`;
-  };
 
   const customColumns = [
     {

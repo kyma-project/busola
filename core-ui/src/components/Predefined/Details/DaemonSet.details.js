@@ -1,8 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { GenericList, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+import { GenericList, EMPTY_TEXT_PLACEHOLDER, StatusBadge } from 'react-shared';
 import { ResourcePods } from './ResourcePods.js';
+import { getPodsCount, getStatusType } from '../List/DaemonSets.list';
 
 const Tolerations = resource => {
   const { t } = useTranslation();
@@ -64,6 +65,17 @@ const Images = resource => {
   );
 };
 
+const customColumns = [
+  {
+    header: 'Status',
+    value: resource => {
+      const podsCount = getPodsCount(resource);
+      const statusType = getStatusType(resource);
+      return <StatusBadge type={statusType}>{podsCount}</StatusBadge>;
+    },
+  },
+];
+
 export const DaemonSetsDetails = ({ DefaultRenderer, ...otherParams }) => {
   return (
     <DefaultRenderer
@@ -72,6 +84,7 @@ export const DaemonSetsDetails = ({ DefaultRenderer, ...otherParams }) => {
         Images,
         resource => ResourcePods(resource, null, true),
       ]}
+      customColumns={customColumns}
       {...otherParams}
     ></DefaultRenderer>
   );
