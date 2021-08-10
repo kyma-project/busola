@@ -96,39 +96,44 @@ export const useGetStream = path => {
   const [error, setError] = React.useState(null);
   const { authData } = useMicrofrontendContext();
   const fetch = useFetch();
-  const abortController = React.useRef(new AbortController());
+  const readerRef = React.useRef(null);
 
   const processError = error => {
-    if (!abortController.current.signal.aborted) {
-      console.error(error);
-      setError(error);
-    }
+    console.error(error);
+    setError(error);
+  };
+
+  const processData = data => {
+    const string = new TextDecoder().decode(data);
+    const streams = string?.split('\n').filter(stream => stream !== '');
+    setData(prevData => [...prevData, ...streams]);
   };
 
   const fetchData = async _ => {
-    if (!authData || abortController.current.signal.aborted) return;
+    if (!authData) return;
 
     try {
-      const response = await fetch({ relativeUrl: path, abortController });
-      if (!authData || abortController.current.signal.aborted) return;
-      const reader = response.body.getReader();
+      const response = await fetch({ relativeUrl: path });
+      if (!authData) return;
+      readerRef.current = response.body.getReader();
 
       return new ReadableStream({
         start(streamController) {
           const push = async () => {
             try {
-              const { done, value } = await reader.read();
+              const { done, value } = await readerRef.current.read();
               // If there is no more data to read
-              if (done) return streamController.close();
+              if (done) {
+                streamController.close();
+                cancelReader();
+                return;
+              }
 
               // Get the data and send it to the browser via the controller
               streamController.enqueue(value);
-              const string = new TextDecoder().decode(value);
-              const streams = string
-                ?.split('\n')
-                .filter(stream => stream !== '');
 
-              setData(prevData => [...prevData, ...streams]);
+              processData(value);
+
               return push();
             } catch (e) {
               // Chrome closes connections after a while.
@@ -138,7 +143,7 @@ export const useGetStream = path => {
               else processError(e);
             }
           };
-          return push();
+          push();
         },
       });
     } catch (e) {
@@ -146,17 +151,19 @@ export const useGetStream = path => {
     }
   };
 
-  function abort() {
-    abortController.current.abort();
+  function cancelReader() {
+    if (readerRef.current) {
+      readerRef.current.cancel();
+    }
   }
 
   function refetchData() {
-    abort();
-    abortController.current = new AbortController();
+    cancelReader();
     fetchData();
   }
 
   React.useEffect(() => {
+    // without this logs are duplicated
     if (initialPath.current) {
       initialPath.current = false;
       return;
@@ -165,8 +172,8 @@ export const useGetStream = path => {
     refetchData();
   }, [path]);
 
-  React.useEffect(_ => abort, [path]);
-  React.useEffect(_ => abort, []);
+  React.useEffect(_ => cancelReader, [path]);
+  React.useEffect(_ => cancelReader, []);
   React.useEffect(() => {
     if (
       authData &&
@@ -194,6 +201,7 @@ function handleListDataReceived(filter) {
 
     if (
       !oldData ||
+      newData.items.length !== oldData.length ||
       (lastResourceVersionRef.current !== newData.metadata.resourceVersion &&
         !newData.items.every(
           (item, idx) =>
