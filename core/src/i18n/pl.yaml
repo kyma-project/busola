@@ -41,14 +41,14 @@ common:
   name: Nazwa
   status: Status
   tooltips:
-    download: Pobierz
-    search: Szukaj
-    save: Zapisz
     copy-to-clipboard: Skopiuj do schowka
+    download: Pobierz
     duplicate-key: Zduplikowany klucz
     k8s-name-input: Nazwa musi zawierać małe znaki alfanumeryczne, może zawierać „-” (np. „my-name1”).
     key-value: klucz=wartość, musi zaczynać się i kończyć znakiem alfanumerycznym, może zawierać „-”, „_” lub „.”
     read-file: Odczytuj zawartość pliku jako pojedynczą wartość, z nazwą pliku jako kluczem.
+    save: Zapisz
+    search: Szukaj
 config-maps:
   title: Mapy konfiguracji
 configuration:

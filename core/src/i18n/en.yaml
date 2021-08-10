@@ -38,18 +38,17 @@ common:
     message: Are you sure you want to remove {{type}} {{name}}?
     title: Remove {{name}}
   labels: Labels
-  language: Language
   name: Name
   status: Status
   tooltips:
-    download: Download
-    search: Search
-    save: Save
     copy-to-clipboard: Copy to clipboard
+    download: Download
     duplicate-key: Duplicate key
     k8s-name-input: Name must contain lower case alphanumeric characters, can contain '-' (like 'my-name1').
     key-value: key=value, must start and end with alphanumeric character, can contain '-', '_' or '.'
     read-file: Read file content as single value, with file name as a key.
+    save: Save
+    search: Search
 config-maps:
   title: Config Maps
 configuration:
@@ -149,6 +148,7 @@ services:
 settings:
   confirmations: Confirmations
   dontConfirmDelete: Delete without confirmation
+  language: Language
 stateful-sets:
   replicas: Replicas
   title: StatefulSets
