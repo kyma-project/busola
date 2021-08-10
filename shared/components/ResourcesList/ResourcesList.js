@@ -69,7 +69,7 @@ export function ResourcesList(props) {
   }
 
   return (
-    <YamlEditorProvider>
+    <YamlEditorProvider i18n={props.i18n}>
       {!props.isCompact && (
         <PageHeader
           title={prettifyNamePlural(props.resourceName, props.resourceType)}
