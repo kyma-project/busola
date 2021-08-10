@@ -27,6 +27,26 @@ clusters:
       tooltip: Outdated parameter version may cause errors. Delete and re-add your cluster.
   overview:
     title: Cluster Overview
+common:
+  buttons:
+    cancel: Cancel
+    delete: Delete
+    edit-yaml: Edit YAML
+  created: Created
+  delete-dialog:
+    delete-confirm: Don't show delete confirmations
+    message: Are you sure you want to delete {{type}} {{name}}?
+    title: Remove {{name}}
+  labels: Labels
+  language: Language
+  name: Name
+  status: Status
+  tooltips:
+    copy-button: Copy to clipboard
+    duplicate-key: Duplicate key
+    k8s-name-input: Name must contain lower case alphanumeric characters, can contain '-' (like 'my-name1').
+    key-value: key=value, must start and end with alphanumeric character, can contain '-', '_' or '.'
+    read-file: Read file content as single value, with file name as a key.
 config-maps:
   title: Config Maps
 configuration:
@@ -46,15 +66,15 @@ cron-jobs:
 custom-resource-definitions:
   title: Custom Resource Definitions
 daemon-sets:
-  title: Daemon Sets
-  pods: $t(pods.title)
-  node-selector: Node selector
   images: Images
+  node-selector: Node selector
+  pods: $t(pods.title)
+  title: Daemon Sets
   tolerations:
-    title: Tolerations
+    effect: Effect
     key: Key
     operator: Operator
-    effect: Effect
+    title: Tolerations
     toleration-seconds: Seconds
 deployments:
   title: Deployments
@@ -108,9 +128,9 @@ oauth2-clients:
 observability:
   title: Observability
 pods:
-  title: Pods
-  restarts: Restarts
   node: Node
+  restarts: Restarts
+  title: Pods
 replica-sets:
   title: Replica Sets
 role-bindings:
@@ -126,26 +146,6 @@ services:
 settings:
   confirmations: Confirmations
   dontConfirmDelete: Delete without confirmation
-common:
-  name: Name
-  created: Created
-  labels: Labels
-  status: Status
-  language: Language
-  buttons:
-    delete: Delete
-    cancel: Cancel
-    edit-yaml: Edit YAML
-  delete-dialog:
-    title: Remove {{name}}
-    message: Are you sure you want to delete {{type}} {{name}}?
-    delete-confirm: Don't show delete confirmations
-  tooltips:
-    copy-button: Copy to clipboard
-    duplicate-key: Duplicate key
-    k8s-name-input: Name must contain lower case alphanumeric characters, can contain '-' (like 'my-name1').
-    key-value: key=value, must start and end with alphanumeric character, can contain '-', '_' or '.'
-    read-file: Read file content as single value, with file name as a key.
 stateful-sets:
   replicas: Replicas
   title: Stateful Sets

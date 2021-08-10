@@ -27,17 +27,25 @@ clusters:
       tooltip: Nieaktualna wersja parametru może powodować błędy. Usuń i ponownie dodaj swój klaster.
   overview:
     title: Przegląd Klastrów
-daemon-sets:
-  title: Daemon Sety
-  pods: $t(pods.title)
-  node-selector: Selektory Węzłów
-  images: Obrazy
-  tolerations:
-    title: Tolerancje
-    key: Klucz
-    operator: Operator
-    effect: Efekt
-    toleration-seconds: Sekundy
+common:
+  buttons:
+    cancel: Anuluj
+    delete: Usuń
+    edit-yaml: Edituj YAML
+  created: Stworzono
+  delete-dialog:
+    delete-confirm: Nie pytaj ponownie
+    message: Czy na pewno chcesz usunąć {{type}} {{name}}?
+    title: Usuń {{name}}
+  labels: Etykiety
+  name: Nazwa
+  status: Status
+  tooltips:
+    copy-button: Skopiuj do schowka
+    duplicate-key: Zduplikowany klucz
+    k8s-name-input: Nazwa musi zawierać małe znaki alfanumeryczne, może zawierać „-” (np. „my-name1”).
+    key-value: klucz=wartość, musi zaczynać się i kończyć znakiem alfanumerycznym, może zawierać „-”, „_” lub „.”
+    read-file: Odczytuj zawartość pliku jako pojedynczą wartość, z nazwą pliku jako kluczem.
 config-maps:
   title: Mapy konfiguracji
 configuration:
@@ -56,6 +64,19 @@ cron-jobs:
   title: Cron Jobs
 custom-resource-definitions:
   title: Definicje zasobów niestandardowych
+daemon-sets:
+  images: Obrazy
+  node-selector: Selektory Węzłów
+  pods: $t(pods.title)
+  title: Daemon Sety
+  tolerations:
+    effect: Efekt
+    key: Klucz
+    operator: Operator
+    title: Tolerancje
+    toleration-seconds: Sekundy
+deployments:
+  title: Deploymenty
 discovery-and-network:
   title: Odkrywanie i Sieć
 functions:
@@ -106,12 +127,9 @@ oauth2-clients:
 observability:
   title: Obserwowalność
 pods:
-  title: Pody
-  restarts: Ponownych uruchomień
   node: Węzeł
-deployments:
-  title: Deploymenty
-service-catalog:
+  restarts: Ponownych uruchomień
+  title: Pody
 replica-sets:
   title: Zestawy replik
 role-bindings:
@@ -120,6 +138,7 @@ roles:
   title: Role
 secrets:
   title: Sekrety
+service-catalog: null
 service-management:
   title: Zarządzanie Serwisami
 services:
@@ -128,25 +147,6 @@ settings:
   confirmations: Potwierdzenia
   dontConfirmDelete: Usuwanie bez potwierdzenia
   language: Język
-common:
-  name: Nazwa
-  created: Stworzono
-  labels: Etykiety
-  status: Status
-  buttons:
-    delete: Usuń
-    cancel: Anuluj
-    edit-yaml: Edituj YAML
-  delete-dialog:
-    delete-confirm: Nie pytaj ponownie
-    message: Czy na pewno chcesz usunąć {{type}} {{name}}?
-    title: Usuń {{name}}
-  tooltips:
-    copy-button: Skopiuj do schowka
-    duplicate-key: Zduplikowany klucz
-    k8s-name-input: Nazwa musi zawierać małe znaki alfanumeryczne, może zawierać „-” (np. „my-name1”).
-    key-value: klucz=wartość, musi zaczynać się i kończyć znakiem alfanumerycznym, może zawierać „-”, „_” lub „.”
-    read-file: Odczytuj zawartość pliku jako pojedynczą wartość, z nazwą pliku jako kluczem.
 stateful-sets:
   replicas: Repliki
   title: Zestaw Stanowy
