@@ -90,7 +90,7 @@ export function ResourceDetails(props) {
   }
 
   return (
-    <YamlEditorProvider>
+    <YamlEditorProvider i18n={props.i18n}>
       {resource && (
         <Resource
           key={resource.metadata.name}

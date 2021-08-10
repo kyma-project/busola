@@ -28,15 +28,18 @@ clusters:
   overview:
     title: Cluster Overview
 common:
+  buttons:
+    cancel: Cancel
+    delete: Delete
   delete-dialog:
-    buttons:
-      cancel: Cancel
-      delete: Delete
     delete-confirm: Don't ask this again
     message: Are you sure you want to remove {{type}} {{name}}?
     title: Remove {{name}}
   tooltips:
-    copy-button: Copy to clipboard
+    download: Download
+    search: Search
+    save: Save
+    copy-to-clipboard: Copy to clipboard
     duplicate-key: Duplicate key
     k8s-name-input: Name must contain lower case alphanumeric characters, can contain '-' (like 'my-name1').
     key-value: key=value, must start and end with alphanumeric character, can contain '-', '_' or '.'
