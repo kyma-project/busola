@@ -28,15 +28,18 @@ clusters:
   overview:
     title: Przegląd Klastrów
 common:
+  buttons:
+    cancel: Anuluj
+    delete: Usuń
   delete-dialog:
-    buttons:
-      cancel: Anuluj
-      delete: Usuń
     delete-confirm: Nie pytaj ponownie
     message: Czy na pewno chcesz usunąć {{type}} {{name}}?
     title: Usuń {{name}}
   tooltips:
-    copy-button: Skopiuj do schowka
+    download: Pobierz
+    search: Szukaj
+    save: Zapisz
+    copy-to-clipboard: Skopiuj do schowka
     duplicate-key: Zduplikowany klucz
     k8s-name-input: Nazwa musi zawierać małe znaki alfanumeryczne, może zawierać „-” (np. „my-name1”).
     key-value: klucz=wartość, musi zaczynać się i kończyć znakiem alfanumerycznym, może zawierać „-”, „_” lub „.”
