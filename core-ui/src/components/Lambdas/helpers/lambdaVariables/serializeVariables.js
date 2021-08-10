@@ -5,6 +5,8 @@ export function serializeVariables({
   lambdaVariables = [],
   bindingUsages = [],
 }) {
+  console.log('bindingUsages', bindingUsages);
+  console.log('lambdaVariables', lambdaVariables);
   const bindingUsageVariableNames = [];
   let bindingUsageVariables = bindingUsages.flatMap(bindingUsage => {
     const variables = retrieveVariablesFromBindingUsage(bindingUsage);
@@ -106,17 +108,21 @@ export function serializeVariables({
   };
 }
 
-export function retrieveVariablesFromBindingUsage(bindingUsage) {
+export function retrieveVariablesFromBindingUsage(binding) {
+  console.log('bindingUsage', binding);
   let envPrefix = '';
-  if (bindingUsage.parameters && bindingUsage.parameters.envPrefix) {
-    envPrefix = bindingUsage.parameters.envPrefix.name || '';
+  if (
+    binding.serviceBindingUsage.spec.parameters &&
+    binding.serviceBindingUsage.spec.parameters.envPrefix
+  ) {
+    envPrefix =
+      binding.serviceBindingUsage.spec.parameters.envPrefix.name || '';
   }
 
-  const secretData =
-    bindingUsage.serviceBinding &&
-    bindingUsage.serviceBinding.secret &&
-    bindingUsage.serviceBinding.secret.data;
+  const secretData = binding.secret && binding.secret.data;
 
+  console.log('envPrefix', envPrefix);
+  console.log('secretData', secretData);
   return Object.entries(secretData || {}).map(([env, value]) => ({
     key: `${envPrefix}${env}`,
     value: value,

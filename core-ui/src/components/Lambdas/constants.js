@@ -465,6 +465,9 @@ export const ENVIRONMENT_VARIABLES_PANEL = {
         "Couldn't find environment variables matching this query.",
     },
   },
+  INJECTED_LIST: {
+    TITLE: 'Injected Variables',
+  },
   CREATE_MODAL: {
     TITLE: {
       CUSTOM: 'Create Custom Variable',

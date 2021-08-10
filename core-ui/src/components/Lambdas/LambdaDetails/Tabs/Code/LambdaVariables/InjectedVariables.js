@@ -206,7 +206,7 @@ function VariableValue({ variable }) {
   return value;
 }
 
-export default function LambdaEnvs({
+export default function InjectedVariables({
   lambda,
   customVariables,
   customValueFromVariables,
@@ -245,14 +245,11 @@ export default function LambdaEnvs({
   );
 
   const entries = [
-    ...validateVariables(customVariables, [], injectedVariables),
-    // ...injectedVariables,
-    ...customValueFromVariables,
+    // ...validateVariables(customVariables, injectedVariables),
+    ...injectedVariables,
+    // ...customValueFromVariables,
   ];
-  console.log(
-    'validateVariables(customVariables, injectedVariables)',
-    validateVariables(customVariables, [], injectedVariables),
-  );
+
   function prepareVariablesInput(newVariables) {
     return newVariables.map(variable => {
       if (variable.type === VARIABLE_TYPE.CUSTOM) {
@@ -273,7 +270,7 @@ export default function LambdaEnvs({
       oldVariable => oldVariable.id !== variable.id,
     );
 
-    newVariables = validateVariables(newVariables, [], injectedVariables);
+    newVariables = validateVariables(newVariables, injectedVariables);
     const preparedVariable = prepareVariablesInput(newVariables);
 
     updateLambdaVariables({
@@ -307,12 +304,12 @@ export default function LambdaEnvs({
   return (
     <div className="lambda-variables">
       <GenericList
-        title={ENVIRONMENT_VARIABLES_PANEL.LIST.TITLE}
+        title={ENVIRONMENT_VARIABLES_PANEL.INJECTED_LIST.TITLE}
         showSearchField={true}
         showSearchSuggestion={false}
         textSearchProperties={textSearchProperties}
-        extraHeaderContent={editEnvsModal}
-        actions={actions}
+        // extraHeaderContent={editEnvsModal}
+        // actions={actions}
         entries={entries}
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
