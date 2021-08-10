@@ -3,8 +3,17 @@ addons:
   title: Addons
 api-rules:
   access-strategies:
-    delete:
-      tooltip: Define at least one access strategy.
+    labels:
+      required-scope: Required scope
+    messages:
+      one-method: This access strategy requires at least one method.
+    tooltips:
+      delete: Define at least one access strategy.
+      path: Path can contain alphanumeric characters and  '/', '.', '*', '?', '!', '-', '(', and ')'.
+  services:
+    error-load: Couldn't load service list
+    loading: Loading services...
+    ns-no-services: No Services in this Namespace
   title: API Rules
 applications:
   title: Applications
@@ -126,6 +135,8 @@ secrets:
 service-management:
   title: Service Management
 services:
+  labels:
+    service: Service
   title: Services
 settings:
   confirmations: Confirmations
