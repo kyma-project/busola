@@ -24,6 +24,7 @@
     "invalid-kubeconfig.spec.js",
     "login-enkode.spec.js",
     "other-logins.spec.js",
+    "cluster-configuration.spec.js",
     "run-after.spec.js"
   ]
 }
