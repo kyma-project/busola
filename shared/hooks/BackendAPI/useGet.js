@@ -194,6 +194,7 @@ function handleListDataReceived(filter) {
 
     if (
       !oldData ||
+      newData.items.length !== oldData.length ||
       (lastResourceVersionRef.current !== newData.metadata.resourceVersion &&
         !newData.items.every(
           (item, idx) =>
