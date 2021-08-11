@@ -13,11 +13,11 @@ brokers:
 catalog:
   menu-title: Katalog
   subtitle: Rozszerz możliwości za pomocą dodatkowych usług instalowanych poza klastrem.
-  title: Katalog Serwisów
+  title: Katalog serwisów
 cluster-addons:
   title: Dodatki do klastra
 cluster-role-bindings:
-  title: Powiązania Ról klastra
+  title: Powiązania ról klastra
 cluster-roles:
   title: Role klastra
 clusters:
@@ -26,7 +26,7 @@ clusters:
       download: Pobierz Kubeconfig
       tooltip: Nieaktualna wersja parametru może powodować błędy. Usuń i ponownie dodaj swój klaster.
   overview:
-    title: Przegląd Klastrów
+    title: Przegląd klastrów
 common:
   buttons:
     cancel: Anuluj
@@ -44,8 +44,8 @@ common:
     copy-to-clipboard: Skopiuj do schowka
     download: Pobierz
     duplicate-key: Zduplikowany klucz
-    k8s-name-input: Nazwa musi składać się z małych znaków alfanumerycznych, może zawierać „-” (np. „my-name1”).
-    key-value: klucz=wartość, musi zaczynać się i kończyć znakiem alfanumerycznym, może zawierać „-”, „_” lub „.”
+    k8s-name-input: Nazwa musi składać się z małych znaków alfanumerycznych, może zawierać również „-” (np. „my-name1”).
+    key-value: klucz=wartość, musi zaczynać się i kończyć znakiem alfanumerycznym, może zawierać również „-”, „_” lub „.”
     read-file: Odczytuj zawartość pliku jako pojedynczą wartość, z nazwą pliku jako kluczem.
     save: Zapisz
     search: Szukaj
@@ -69,9 +69,9 @@ custom-resource-definitions:
   title: Definicje zasobów niestandardowych
 daemon-sets:
   images: Obrazy
-  node-selector: Selektory Węzłów
+  node-selector: Selektory węzłów
   pods: $t(pods.title)
-  title: Zestawy Daemonów
+  title: Zestawy demonów
   tolerations:
     effect: Efekt
     key: Klucz
@@ -81,7 +81,7 @@ daemon-sets:
 deployments:
   title: Deploymenty
 discovery-and-network:
-  title: Odkrywanie i Sieć
+  title: Odkrywanie i sieć
 functions:
   title: Funkcje
   variable:
@@ -122,7 +122,7 @@ namespaces:
   title: Przestrzenie nazw
   tooltips:
     container-memory-limit: Zdefiniuj ograniczenia pamięci dla poszczególnych kontenerów w swojej przestrzeni nazw.
-    create: Wybierz tę opcję, aby wyłączyć istio, aby pośredniczyć w całej komunikacji między Podami w Twojej przestrzeni nazw.
+    create: Wybierz tę opcję, aby wyłączyć istio, aby pośredniczyć w całej komunikacji między podami w Twojej przestrzeni nazw.
     memory-examples: Użyj zwykłej wartości w bajtach (128974848) lub odpowiednich przyrostków (takich jak 129e6, 129M, 123Mi).
     total-memory-limit: Zdefiniuj ograniczenia, które ograniczają całkowite zużycie pamięci w Twojej przestrzeni nazw.
 oauth2-clients:
@@ -134,16 +134,16 @@ pods:
   restarts: Ponownych uruchomień
   title: Pody
 replica-sets:
-  title: Zestawy Replik
+  title: Zestawy replik
 role-bindings:
-  title: Powiązania Ról
+  title: Powiązania ról
 roles:
   title: Role
 secrets:
   title: Sekrety
 service-catalog: null
 service-management:
-  title: Zarządzanie Serwisami
+  title: Zarządzanie serwisami
 services:
   title: Serwisy
 settings:

@@ -202,7 +202,7 @@ context('Test configuration resources', () => {
       .click(); // close navigation tab after yourself
   });
 
-  it('Create a OAuth2Clients', () => {
+  it('Create a OAuth2 Clients', () => {
     cy.get('[data-testid=luigi-topnav-logo]').click();
 
     cy.getLeftNav()

@@ -191,7 +191,7 @@ context('Login - enkode link', () => {
 
     // feature is enabled
     cy.getLeftNav()
-      .contains('OAuth2Clients')
+      .contains('OAuth2 Clients')
       .should('exist');
   });
 
