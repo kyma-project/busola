@@ -127,9 +127,9 @@ namespaces:
     total-memory-limit: Define constraints that limit total memory consumption in your Namespace.
 top-nav:
   profile:
+    download-current-cluster-config: Download current Cluster Config
     preferences: $t(preferences.title)
     remove-current-cluster-config: Remove current Cluster Config
-    download-current-cluster-config: Download current Cluster Config
 oauth2-clients:
   title: OAuth2 Clients
 observability:
