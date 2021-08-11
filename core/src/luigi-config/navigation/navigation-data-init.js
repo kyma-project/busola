@@ -153,7 +153,7 @@ export async function createNavigation() {
           items: [
             {
               icon: 'settings',
-              label: i18next.t('navigation.profile.preferences'),
+              label: i18next.t('top-nav.profile.preferences'),
               link: `/cluster/${encodeURIComponent(
                 activeClusterName,
               )}/preferences`,
@@ -164,15 +164,13 @@ export async function createNavigation() {
             },
             {
               icon: 'log',
-              label: i18next.t(
-                'navigation.profile.remove-current-cluster-config',
-              ),
+              label: i18next.t('top-nav.profile.remove-current-cluster-config'),
               link: `/clusters/remove`,
             },
             {
               icon: 'download',
               label: i18next.t(
-                'navigation.profile.download-current-cluster-config',
+                'top-nav.profile.download-current-cluster-config',
               ),
               link: `/cluster/${encodeURIComponent(
                 activeClusterName,
@@ -186,7 +184,7 @@ export async function createNavigation() {
           items: [
             {
               icon: 'settings',
-              label: i18next.t('navigation.profile.preferences'),
+              label: i18next.t('top-nav.profile.preferences'),
               link: '/clusters/preferences',
               openNodeInModal: {
                 title: i18next.t('preferences.title'),
