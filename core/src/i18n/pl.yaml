@@ -2,7 +2,17 @@
 addons:
   title: Dodatki
 api-rules:
+  list:
+    headers:
+      host: Host
+      service-name: Nazwa Serwisu
+      status: Status
+  buttons:
+    create: Stwórz reguły API
   access-strategies:
+    buttons:
+      add: Dodaj strategię dostępu
+    title: Strategie dostępu
     labels:
       required-scope: Wymagany zakres
     messages:
@@ -10,6 +20,12 @@ api-rules:
     tooltips:
       delete: Zdefiniuj co najmniej jedną strategię dostępu.
       path: Ścieżka może zawierać znaki alfanumeryczne oraz „/”, „.”, „*”, „?”, „!”, „-”, „(” i „)”.
+  general-settings:
+    title: Ustawienia główne
+  messages:
+    create-failed: Nie udało się utworzyć reguły API
+    created: Utworzono regułę API
+    updated: Zaktualizowano regułę API
   services:
     error-load: Nie udało się wczytać listy serwisów
     loading: Ładowanie serwisów...
@@ -37,6 +53,10 @@ clusters:
   overview:
     title: Przegląd Klastrów
 common:
+  headers:
+    name: Nazwa
+    created: Stworzony
+    labels: Etykiety
   buttons:
     cancel: Anuluj
     delete: Usuń
@@ -45,14 +65,18 @@ common:
     message: Czy na pewno chcesz usunąć {{type}} {{name}}?
     title: Usuń {{name}}
   tooltips:
-    download: Pobierz
-    search: Szukaj
-    save: Zapisz
     copy-to-clipboard: Skopiuj do schowka
+    download: Pobierz
     duplicate-key: Zduplikowany klucz
     k8s-name-input: Nazwa musi zawierać małe znaki alfanumeryczne, może zawierać „-” (np. „my-name1”).
     key-value: klucz=wartość, musi zaczynać się i kończyć znakiem alfanumerycznym, może zawierać „-”, „_” lub „.”
     read-file: Odczytuj zawartość pliku jako pojedynczą wartość, z nazwą pliku jako kluczem.
+    save: Zapisz
+    search: Szukaj
+  labels:
+    hostname: Nazwa hosta
+    name: Nazwa
+    service: Serwis
 config-maps:
   title: Mapy konfiguracji
 configuration:

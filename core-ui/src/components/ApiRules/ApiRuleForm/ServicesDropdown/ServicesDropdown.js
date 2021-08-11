@@ -61,7 +61,7 @@ const ServicesDropdown = ({
   return (
     <FormItem>
       <Dropdown
-        label="Service"
+        label={t('common.labels.service')}
         id="service"
         options={options}
         onSelect={onSelect}

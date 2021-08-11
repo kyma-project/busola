@@ -2,7 +2,17 @@
 addons:
   title: Addons
 api-rules:
+  list:
+    headers:
+      host: Host
+      service-name: Service Name
+      status: Status
+  buttons:
+    create: Create API Rules
   access-strategies:
+    buttons:
+      add: Add access strategy
+    title: Access strategies
     labels:
       required-scope: Required scope
     messages:
@@ -10,6 +20,12 @@ api-rules:
     tooltips:
       delete: Define at least one access strategy.
       path: Path can contain alphanumeric characters and  '/', '.', '*', '?', '!', '-', '(', and ')'.
+  general-settings:
+    title: General settings
+  messages:
+    create-failed: Failed to create the API Rule
+    created: API Rule created
+    updated: API Rule updated
   services:
     error-load: Couldn't load service list
     loading: Loading services...
@@ -37,6 +53,10 @@ clusters:
   overview:
     title: Cluster Overview
 common:
+  headers:
+    name: Name
+    created: Created
+    labels: Labels
   buttons:
     cancel: Cancel
     delete: Delete
@@ -45,14 +65,18 @@ common:
     message: Are you sure you want to remove {{type}} {{name}}?
     title: Remove {{name}}
   tooltips:
-    download: Download
-    search: Search
-    save: Save
     copy-to-clipboard: Copy to clipboard
+    download: Download
     duplicate-key: Duplicate key
     k8s-name-input: Name must contain lower case alphanumeric characters, can contain '-' (like 'my-name1').
     key-value: key=value, must start and end with alphanumeric character, can contain '-', '_' or '.'
     read-file: Read file content as single value, with file name as a key.
+    save: Save
+    search: Search
+  labels:
+    hostname: Hostname
+    name: Name
+    service: Service
 config-maps:
   title: Config Maps
 configuration:

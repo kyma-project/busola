@@ -8,7 +8,7 @@ Cypress.Commands.add('createApiRule', (ApiRuleName, ApiRuleHost) => {
     .click();
 
   cy.getIframeBody()
-    .contains('Create apirules')
+    .contains('Create API Rules')
     .should('be.visible')
     .click();
 
