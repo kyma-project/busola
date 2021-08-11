@@ -3,10 +3,9 @@ import {
   fetchPermissions,
   fetchBusolaInitData,
   fetchNamespaces,
-  checkIfClusterRequiresCA,
   fetchObservabilityHost,
 } from './queries';
-import { getClusterParams } from '../cluster-params';
+import { getBusolaClusterParams } from '../busola-cluster-params';
 import { config } from '../config';
 import {
   coreUIViewGroupName,
@@ -31,7 +30,6 @@ import {
   deleteActiveCluster,
   saveActiveClusterName,
   getCurrentContextNamespace,
-  saveClusterParams,
 } from '../cluster-management';
 import { getFeatureToggle } from '../utils/feature-toggles';
 import { saveLocation } from './previous-location';
@@ -233,8 +231,8 @@ async function getObservabilityNodes(authData, enabledFeatures) {
     enabledFeatures.OBSERVABILITY?.config.links;
 
   if (!links) {
-    const defaultObservability = (await getClusterParams()).config.features
-      .OBSERVABILITY;
+    const defaultObservability = (await getBusolaClusterParams()).config
+      .features.OBSERVABILITY;
     links =
       (await resolveFeatureAvailability(defaultObservability)) && //  use the Busola configMap as a fallback
       defaultObservability.config.links;
@@ -267,15 +265,6 @@ async function getObservabilityNodes(authData, enabledFeatures) {
 
 export async function getNavigationData(authData) {
   const activeCluster = await getActiveCluster();
-
-  if (activeCluster.config.requiresCA === undefined) {
-    activeCluster.config = {
-      ...activeCluster.config,
-      requiresCA: await checkIfClusterRequiresCA(authData),
-    };
-  }
-
-  await saveClusterParams(activeCluster);
 
   const { kubeconfig } = activeCluster;
 
