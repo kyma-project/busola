@@ -13,7 +13,6 @@ Cypress.Commands.add(
 Cypress.Commands.add('goToNamespaceDetails', () => {
   // // Go to the details of namespace
   cy.task('getNamespace').then(ns => {
-    console.log('ns', ns);
     cy.getIframeBody()
       .contains('a', ns)
       .click();
