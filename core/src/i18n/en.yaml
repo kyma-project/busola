@@ -2,26 +2,26 @@
 addons:
   title: Addons
 api-rules:
+  access-strategies:
+    buttons:
+      add: Add access strategy
+    labels:
+      required-scope: Required scope
+    messages:
+      one-method: This access strategy requires at least one method.
+    title: Access strategies
+    tooltips:
+      delete: Define at least one access strategy.
+      path: Path can contain alphanumeric characters and  '/', '.', '*', '?', '!', '-', '(', and ')'.
+  buttons:
+    create: Create API Rules
+  general-settings:
+    title: General settings
   list:
     headers:
       host: Host
       service-name: Service Name
       status: Status
-  buttons:
-    create: Create API Rules
-  access-strategies:
-    buttons:
-      add: Add access strategy
-    title: Access strategies
-    labels:
-      required-scope: Required scope
-    messages:
-      one-method: This access strategy requires at least one method.
-    tooltips:
-      delete: Define at least one access strategy.
-      path: Path can contain alphanumeric characters and  '/', '.', '*', '?', '!', '-', '(', and ')'.
-  general-settings:
-    title: General settings
   messages:
     create-failed: Failed to create the API Rule
     created: API Rule created
@@ -53,10 +53,6 @@ clusters:
   overview:
     title: Cluster Overview
 common:
-  headers:
-    name: Name
-    created: Created
-    labels: Labels
   buttons:
     cancel: Cancel
     delete: Delete
@@ -66,8 +62,14 @@ common:
     delete-confirm: Don't ask this again
     message: Are you sure you want to remove {{type}} {{name}}?
     title: Remove {{name}}
-  labels: Labels
-  name: Name
+  headers:
+    created: Created
+    labels: Labels
+    name: Name
+  labels:
+    hostname: Hostname
+    name: Name
+    service: Service
   status: Status
   tooltips:
     copy-to-clipboard: Copy to clipboard
@@ -78,10 +80,6 @@ common:
     read-file: Read file content as single value, with file name as a key.
     save: Save
     search: Search
-  labels:
-    hostname: Hostname
-    name: Name
-    service: Service
 config-maps:
   title: ConfigMaps
 configuration:

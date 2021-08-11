@@ -66,8 +66,6 @@ common:
     delete-confirm: Nie pytaj ponownie
     message: Czy na pewno chcesz usunąć {{type}} {{name}}?
     title: Usuń {{name}}
-  labels: Etykiety
-  name: Nazwa
   status: Status
   tooltips:
     copy-to-clipboard: Skopiuj do schowka
