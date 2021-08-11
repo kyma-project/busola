@@ -15,7 +15,7 @@ catalog:
   subtitle: Enrich your experience with additional services that are installed outside the cluster.
   title: Service Catalog
 cluster-addons:
-  title: Cluster addons
+  title: Cluster Addons
 cluster-role-bindings:
   title: ClusterRoleBindings
 cluster-roles:
