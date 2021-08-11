@@ -192,9 +192,43 @@ export function getStaticChildrenNodesForNamespace(
     },
     {
       category: i18next.t('workloads.title'),
+      resourceType: 'daemonsets',
+      pathSegment: 'daemonsets',
+      label: i18next.t('daemon-sets.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/DaemonSets?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/apps/v1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+
+      navigationContext: 'daemonsets',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':daemonSetName',
+              resourceType: 'daemonsets',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/DaemonSets/:daemonSetName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/apps/v1',
+                }),
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: i18next.t('workloads.title'),
       resourceType: 'cronjobs',
       pathSegment: 'cronjobs',
-      label: 'Cron Jobs',
+      label: i18next.t('cron-jobs.title'),
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/cronjobs?' +
