@@ -37,8 +37,8 @@ brokers:
   title: Brokerzy
 catalog:
   menu-title: Katalog
-  subtitle: Wzbogać swoje doświadczenie dodatkowymi usługami, które są instalowane poza klastrem.
-  title: Katalog Serwisów
+  subtitle: Rozszerz możliwości za pomocą dodatkowych usług instalowanych poza klastrem.
+  title: Katalog serwisów
 cluster-addons:
   title: Dodatki do klastra
 cluster-role-bindings:
@@ -51,7 +51,7 @@ clusters:
       download: Pobierz Kubeconfig
       tooltip: Nieaktualna wersja parametru może powodować błędy. Usuń i ponownie dodaj swój klaster.
   overview:
-    title: Przegląd Klastrów
+    title: Przegląd klastrów
 common:
   headers:
     name: Nazwa
@@ -60,16 +60,21 @@ common:
   buttons:
     cancel: Anuluj
     delete: Usuń
+    edit-yaml: Edytuj YAML
+  created: Stworzono
   delete-dialog:
     delete-confirm: Nie pytaj ponownie
     message: Czy na pewno chcesz usunąć {{type}} {{name}}?
     title: Usuń {{name}}
+  labels: Etykiety
+  name: Nazwa
+  status: Status
   tooltips:
     copy-to-clipboard: Skopiuj do schowka
     download: Pobierz
     duplicate-key: Zduplikowany klucz
-    k8s-name-input: Nazwa musi zawierać małe znaki alfanumeryczne, może zawierać „-” (np. „my-name1”).
-    key-value: klucz=wartość, musi zaczynać się i kończyć znakiem alfanumerycznym, może zawierać „-”, „_” lub „.”
+    k8s-name-input: Nazwa musi składać się z małych znaków alfanumerycznych, może zawierać również „-” (np. „my-name1”).
+    key-value: klucz=wartość, musi zaczynać się i kończyć znakiem alfanumerycznym, może zawierać również „-”, „_” lub „.”
     read-file: Odczytuj zawartość pliku jako pojedynczą wartość, z nazwą pliku jako kluczem.
     save: Zapisz
     search: Szukaj
@@ -85,20 +90,31 @@ cron-jobs:
   concurrency-policy:
     descriptions:
       allow: Zezwalaj na współbieżne wykonania.
-      replace: Brak jednoczesnych wykonań, zastąp poprzednie uruchomienie nowym.
-      skip: Brak jednoczesnych wykonań, pomiń nowy przebieg, jeśli poprzedni jeszcze się nie zakończył.
+      replace: Brak współbieżnych wykonań, zastąp poprzednie uruchomienie nowym.
+      skip: Brak współbieżnych wykonań, pomiń nowy przebieg, jeśli poprzedni jeszcze się nie zakończył.
     title: Polityka współbieżności
   last-job-execution: Ostatnie wykonanie zadania
   last-schedule-time: Data ostatniego wykonania
   not-scheduled-yet: Jeszcze nie uruchomiono
   schedule: Harmonogram
-  title: Cron Jobs
+  title: CronJoby
 custom-resource-definitions:
   title: Definicje zasobów niestandardowych
+daemon-sets:
+  images: Obrazy
+  node-selector: Selektory węzłów
+  pods: $t(pods.title)
+  title: Zestawy demonów
+  tolerations:
+    effect: Efekt
+    key: Klucz
+    operator: Operator
+    title: Tolerancje
+    toleration-seconds: Sekundy
 deployments:
   title: Deploymenty
 discovery-and-network:
-  title: Odkrywanie i Sieć
+  title: Odkrywanie i sieć
 functions:
   title: Funkcje
   variable:
@@ -113,9 +129,9 @@ integration:
   title: Integracja
 jobs:
   completion-time: Czas realizacji
-  completions: Ukończenia
+  completions: Realizacje
   conditions:
-    last-probe: Ostatnia Sonda
+    last-probe: Ostatnia sonda
     last-transition: Ostatnie przejście
     status: Status
     title: Warunki
@@ -124,7 +140,7 @@ jobs:
   title: Zadania
 namespaces:
   overview:
-    back: Powrót do Przestrzeni Nazw
+    back: Powrót do przestrzeni nazw
     resources:
       error: Błąd podczas ładowania danych o zużyciu pamięci
       limits: Limity pamięci
@@ -133,31 +149,34 @@ namespaces:
     title: Przegląd
     workloads:
       deployments: $t(deployments.title)
-      error: 'Błąd podczas ładowania {{title}} danych z powodu: {{message}}'
+      error: 'Błąd podczas ładowania danych dla {{title}} z powodu: {{message}}'
       pods: $t(pods.title)
       title: Zdrowe zasoby
   title: Przestrzenie nazw
   tooltips:
     container-memory-limit: Zdefiniuj ograniczenia pamięci dla poszczególnych kontenerów w swojej przestrzeni nazw.
-    create: Wybierz tę opcję, aby wyłączyć istio, aby pośredniczyć w całej komunikacji między zasobnikami w Twojej przestrzeni nazw.
-    memory-examples: Użyj zwykłej wartości w bajtach (128974848) lub odpowiedników przyrostków (takich jak 129e6, 129M, 123Mi).
+    create: Wybierz tę opcję, aby wyłączyć istio, aby pośredniczyć w całej komunikacji między podami w Twojej przestrzeni nazw.
+    memory-examples: Użyj zwykłej wartości w bajtach (128974848) lub odpowiednich przyrostków (takich jak 129e6, 129M, 123Mi).
     total-memory-limit: Zdefiniuj ograniczenia, które ograniczają całkowite zużycie pamięci w Twojej przestrzeni nazw.
 oauth2-clients:
   title: Klienci OAuth2
 observability:
   title: Obserwowalność
 pods:
+  node: Węzeł
+  restarts: Ponownych uruchomień
   title: Pody
 replica-sets:
   title: Zestawy replik
 role-bindings:
-  title: Powiązania Ról
+  title: Powiązania ról
 roles:
   title: Role
 secrets:
   title: Sekrety
+service-catalog: null
 service-management:
-  title: Zarządzanie Serwisami
+  title: Zarządzanie serwisami
 services:
   labels:
     service: Serwis
@@ -168,8 +187,8 @@ settings:
   language: Język
 stateful-sets:
   replicas: Repliki
-  title: Zestaw Stanowy
+  title: Zestawy stanowe
 workloads:
   docker-image:
-    tooltip: Wprowadź poprawną ścieżkę rejestru obrazu dockera.
+    tooltip: Wprowadź poprawną ścieżkę rejestru obrazu Dockera.
   title: Obciążenia

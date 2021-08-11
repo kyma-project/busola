@@ -4,7 +4,7 @@ Cypress.Commands.add('createApiRule', (ApiRuleName, ApiRuleHost) => {
     .click();
 
   cy.getLeftNav()
-    .contains('API Rules')
+    .contains('APIRules')
     .click();
 
   cy.getIframeBody()
@@ -49,7 +49,7 @@ Cypress.Commands.add('checkApiRuleStatus', ApiRuleName => {
     .click();
 
   cy.getLeftNav()
-    .contains('API Rules')
+    .contains('APIRules')
     .click();
 
   cy.getIframeBody()

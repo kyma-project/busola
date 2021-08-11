@@ -133,7 +133,7 @@ context('Test configuration resources', () => {
       .should('be.visible');
   });
 
-  it('Create a Cluster Roles list view', () => {
+  it('Create a ClusterRoles list view', () => {
     cy.getLeftNav()
       .contains('Namespaces')
       .click();
@@ -147,7 +147,7 @@ context('Test configuration resources', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('h3', 'Cluster Roles')
+      .contains('h3', 'ClusterRoles')
       .should('be.visible');
 
     cy.getIframeBody()
@@ -156,13 +156,13 @@ context('Test configuration resources', () => {
       .should('be.gte', 1);
   });
 
-  it('Create a Cluster Role Binding', () => {
+  it('Create a ClusterRoleBinding', () => {
     cy.getLeftNav()
       .find('[data-testid=cluster-role-bindings_clusterrolebindings]')
       .click();
 
     cy.getIframeBody()
-      .contains('Create Cluster Role Binding')
+      .contains('Create ClusterRoleBinding')
       .click();
 
     cy.getIframeBody()
