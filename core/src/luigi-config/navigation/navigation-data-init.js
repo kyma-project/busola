@@ -88,6 +88,7 @@ async function createClusterManagementNodes() {
     context: {
       clusters: await getClusters(),
       activeClusterName: getActiveClusterName(),
+      language: i18next.language,
     },
   };
   const clusters = await getClusters();
