@@ -70,7 +70,6 @@ common:
     hostname: Hostname
     name: Name
     service: Service
-  status: Status
   tooltips:
     copy-to-clipboard: Copy to clipboard
     download: Download
