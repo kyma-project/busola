@@ -79,6 +79,11 @@ async function createClusterManagementNodes() {
           return false;
         },
       },
+      {
+        pathSegment: 'preferences',
+        viewUrl: config.coreUIModuleUrl + '/preferences',
+        openNodeInModal: { title: 'Preferences', size: 'm' },
+      },
     ],
     context: {
       clusters: await getClusters(),
@@ -151,6 +156,7 @@ export async function createNavigation() {
               link: `/cluster/${encodeURIComponent(
                 activeClusterName,
               )}/preferences`,
+              openNodeInModal: { title: 'Preferences', size: 'm' },
             },
             {
               icon: 'log',
@@ -167,7 +173,18 @@ export async function createNavigation() {
           ],
         },
       }
-    : {};
+    : {
+        profile: {
+          items: [
+            {
+              icon: 'settings',
+              label: 'Preferences',
+              link: '/clusters/preferences',
+              openNodeInModal: { title: 'Preferences', size: 'm' },
+            },
+          ],
+        },
+      };
 
   const isNodeEnabled = node => {
     if (node.context?.requiredFeatures) {
