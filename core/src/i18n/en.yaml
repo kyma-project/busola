@@ -35,6 +35,7 @@ common:
     delete-confirm: Don't ask this again
     message: Are you sure you want to remove {{type}} {{name}}?
     title: Remove {{name}}
+    information: Delete confirmations will be disabled for all resources. It can be turned back on in Preferences.
   tooltips:
     download: Download
     search: Search

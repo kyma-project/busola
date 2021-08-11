@@ -8,6 +8,7 @@ import {
   Button,
   Dialog,
   Checkbox,
+  MessageStrip,
 } from 'fundamental-react';
 import { createPatch } from 'rfc6902';
 import LuigiClient from '@luigi-project/client';
@@ -171,6 +172,11 @@ function Resources({
     }
   };
 
+  const closeDeleteDialog = () => {
+    LuigiClient.uxManager().removeBackdrop();
+    setShowDeleteDialog(false);
+  };
+
   const toggleDontConfirmDelete = value => {
     LuigiClient.sendCustomMessage({ id: 'busola.dontConfirmDelete', value });
     setDontConfirmDelete(value);
@@ -180,6 +186,7 @@ function Resources({
     if (dontConfirmDelete) {
       performDelete(resource);
     } else {
+      LuigiClient.uxManager().addBackdrop();
       setActiveResource(resource);
       setShowDeleteDialog(true);
     }
@@ -270,12 +277,11 @@ function Resources({
           <Button type="negative" onClick={() => performDelete(activeResource)}>
             {t('common.buttons.delete')}
           </Button>,
-          <Button onClick={() => setShowDeleteDialog(false)}>
-            {t('common.buttons.cancel')}
-          </Button>,
+          <Button>{t('common.buttons.cancel')}</Button>,
         ]}
         footerProps={{}}
         show={showDeleteDialog}
+        onClose={closeDeleteDialog}
         title={t('common.delete-dialog.title', {
           name: activeResource?.metadata.name,
         })}
@@ -291,6 +297,11 @@ function Resources({
             {t('common.delete-dialog.delete-confirm')}
           </Checkbox>
         </div>
+        {dontConfirmDelete && (
+          <MessageStrip type="information" className="fd-margin-top--sm">
+            {t('common.delete-dialog.information')}
+          </MessageStrip>
+        )}
       </Dialog>
       <GenericList
         title={
