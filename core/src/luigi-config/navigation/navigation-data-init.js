@@ -175,6 +175,7 @@ export async function createNavigation() {
               link: `/cluster/${encodeURIComponent(
                 activeClusterName,
               )}/download-kubeconfig`,
+              testId: 'download-current-cluster-config',
             },
           ],
         },
