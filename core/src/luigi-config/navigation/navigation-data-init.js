@@ -82,7 +82,7 @@ async function createClusterManagementNodes() {
       {
         pathSegment: 'preferences',
         viewUrl: config.coreUIModuleUrl + '/preferences',
-        openNodeInModal: { title: 'Preferences', size: 'm' },
+        openNodeInModal: { title: i18next.t('preferences.title'), size: 'm' },
       },
     ],
     context: {
@@ -153,20 +153,27 @@ export async function createNavigation() {
           items: [
             {
               icon: 'settings',
-              label: 'Preferences',
+              label: i18next.t('navigation.profile.preferences'),
               link: `/cluster/${encodeURIComponent(
                 activeClusterName,
               )}/preferences`,
-              openNodeInModal: { title: 'Preferences', size: 'm' },
+              openNodeInModal: {
+                title: i18next.t('preferences.title'),
+                size: 'm',
+              },
             },
             {
               icon: 'log',
-              label: 'Remove current Cluster Config',
+              label: i18next.t(
+                'navigation.profile.remove-current-cluster-config',
+              ),
               link: `/clusters/remove`,
             },
             {
               icon: 'download',
-              label: 'Download current Cluster Kubeconfig',
+              label: i18next.t(
+                'navigation.profile.download-current-cluster-config',
+              ),
               link: `/cluster/${encodeURIComponent(
                 activeClusterName,
               )}/download-kubeconfig`,
@@ -179,9 +186,12 @@ export async function createNavigation() {
           items: [
             {
               icon: 'settings',
-              label: 'Preferences',
+              label: i18next.t('navigation.profile.preferences'),
               link: '/clusters/preferences',
-              openNodeInModal: { title: 'Preferences', size: 'm' },
+              openNodeInModal: {
+                title: i18next.t('preferences.title'),
+                size: 'm',
+              },
             },
           ],
         },

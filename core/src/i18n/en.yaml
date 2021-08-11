@@ -109,12 +109,19 @@ namespaces:
     create: Select this option to disable istio to mediate all communication between the pods in your namespace.
     memory-examples: Use plain value in bytes (128974848) or suffix equivalents (like 129e6, 129M, 123Mi).
     total-memory-limit: Define constraints that limit total memory consumption in your namespace.
+navigation:
+  profile:
+    preferences: $t(preferences.title)
+    remove-current-cluster-config: Remove current Cluster Config
+    download-current-cluster-config: Download current Cluster Config
 oauth2-clients:
   title: OAuth2 Clients
 observability:
   title: Observability
 pods:
   title: Pods
+preferences:
+  title: Preferences
 replica-sets:
   title: Replica Sets
 role-bindings:

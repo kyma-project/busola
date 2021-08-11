@@ -5,10 +5,12 @@ import LuigiClient from '@luigi-project/client';
 
 export default function LanguageSettings() {
   const { t, i18n } = useTranslation();
+
   const languages = [
     { key: 'en', text: 'English' },
     { key: 'pl', text: 'Polski' },
   ];
+
   const selectLanguage = (_, language) => {
     i18n.changeLanguage(language.key);
     LuigiClient.sendCustomMessage({
