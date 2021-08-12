@@ -9,7 +9,7 @@ api-rules:
       required-scope: Required scope
     messages:
       one-method: This access strategy requires at least one method.
-    title: Access strategies
+    title: Access Strategies
     tooltips:
       delete: Define at least one access strategy.
       path: Path can contain alphanumeric characters and  '/', '.', '*', '?', '!', '-', '(', and ')'.
@@ -142,7 +142,7 @@ namespaces:
       error: Error while loading memory consumption data
       limits: Memory limits
       requests: Memory requests
-      title: Resource consumption
+      title: Resource Consumption
     title: Overview
     workloads:
       deployments: $t(deployments.title)
