@@ -156,6 +156,7 @@ settings:
   confirmations: Confirmations
   dontConfirmDelete: Delete without confirmation
   language: Language
+  theme: Theme
 stateful-sets:
   replicas: Replicas
   title: StatefulSets

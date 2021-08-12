@@ -1,29 +1,33 @@
 import React from 'react';
-import { useTheme, Dropdown } from 'react-shared';
-import { LayoutPanel } from 'fundamental-react';
+import { useTheme } from 'react-shared';
+import { TileButton } from './ThemePreview/TileButton';
+import { ThemePreview } from './ThemePreview/ThemePreview';
 
 const THEMES = [
   {
     key: 'light_dark',
-    text: 'Light / Dark (depending on system settings)',
+    text: 'Light / Dark',
+    description: 'Depends on system settings',
   },
   {
     key: 'light',
     text: 'Light',
+    description: 'Use in a default office environment',
   },
-
   {
     key: 'dark',
     text: 'Dark',
+    description: 'Use in dimmed environments',
   },
-
   {
     key: 'hcw',
     text: 'High-Contrast White',
+    description: 'Optimized contrast and accessibility for dark environments',
   },
   {
     key: 'hcb',
     text: 'High-Contrast Black',
+    description: 'Optimized contrast and accessibility for bright environments',
   },
 ];
 
@@ -31,18 +35,18 @@ export default function ThemeChooser() {
   const { theme, setTheme } = useTheme();
 
   return (
-    <LayoutPanel className="fd-margin--tiny fd-margin-top--md">
-      <LayoutPanel.Header>
-        <LayoutPanel.Head title="Theme" />
-        <LayoutPanel.Actions>
-          <Dropdown
-            id="access-strategies-dropdown"
-            options={THEMES}
-            selectedKey={theme}
-            onSelect={(_, option) => setTheme(option.key)}
-          />
-        </LayoutPanel.Actions>
-      </LayoutPanel.Header>
-    </LayoutPanel>
+    <ul>
+      {THEMES.map(t => (
+        <TileButton
+          key={t.key}
+          id={t.key}
+          title={t.text}
+          description={t.description}
+          icon={<ThemePreview theme={t.key} />}
+          isActive={t.key === theme}
+          handleClick={() => setTheme(t.key)}
+        />
+      ))}
+    </ul>
   );
 }
