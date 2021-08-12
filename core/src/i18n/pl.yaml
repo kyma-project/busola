@@ -35,6 +35,7 @@ common:
     delete-confirm: Nie pytaj ponownie
     message: Czy na pewno chcesz usunąć {{type}} {{name}}?
     title: Usuń {{name}}
+    information: Potwierdzenie usuwania zostanie usunięte dla wszystkich zasobów. Można je ponownie włączyć w Ustawieniach.
   tooltips:
     download: Pobierz
     search: Szukaj
