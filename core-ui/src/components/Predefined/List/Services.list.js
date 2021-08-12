@@ -1,8 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { intersperse } from 'react-shared';
-
 export const ServicesList = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
 
