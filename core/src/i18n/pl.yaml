@@ -149,7 +149,6 @@ services:
   type: Typ serwisu
   cluster-ip: IP Klastra
   ports: Porty
-  internal-endpoints: Wewnętrzne Endpointy
   external-ips: Zewnętrzne IP
 settings:
   confirmations: Potwierdzenia

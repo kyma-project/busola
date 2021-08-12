@@ -148,7 +148,6 @@ services:
   type: Service Type
   cluster-ip: Cluster IP
   ports: Ports
-  internal-endpoints: Internal Endpoints
   external-ips: External IPs
 settings:
   confirmations: Confirmations

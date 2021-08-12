@@ -1,37 +1,24 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { intersperse } from 'react-shared';
+
 export const ServicesList = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
 
-  const getEndpoints = service => {
-    if (service.spec.ports?.length) {
-      return (
-        <ul>
-          {service.spec.ports.map(port => {
-            const portValue = `${service.metadata.name}.${otherParams.namespace}:${port.port} ${port.protocol}`;
-            return <li key={portValue}>{portValue}</li>;
-          })}
-        </ul>
-      );
+  const getPortString = port => {
+    if (port.port === port.targetPort) {
+      return `${port.port}/${port.protocol}`;
     } else {
-      return '';
+      return `${port.port}:${port.targetPort}/${port.protocol}`;
     }
   };
 
-  const getExternalIPs = service => {
-    if (service.spec.externalIPs?.length) {
-      return (
-        <ul>
-          {service.spec.externalIPs?.map(ip => (
-            <li key={ip}>{ip}</li>
-          ))}
-        </ul>
-      );
-    } else {
-      return '';
-    }
-  };
+  const getPorts = service =>
+    intersperse(service.spec.ports?.map(getPortString) || [], ', ');
+
+  const getExternalIPs = service =>
+    intersperse(service.spec.externalIPs || [], ', ');
 
   const customColumns = [
     {
@@ -45,8 +32,8 @@ export const ServicesList = ({ DefaultRenderer, ...otherParams }) => {
       },
     },
     {
-      header: t('services.internal-endpoints'),
-      value: getEndpoints,
+      header: t('services.ports'),
+      value: getPorts,
     },
     {
       header: t('services.external-ips'),
