@@ -4,7 +4,7 @@ import './ThemePreview.scss';
 export function ThemePreview({ theme }) {
   if (theme === 'light_dark') {
     return (
-      <div class="double-theme">
+      <div className="double-theme">
         <ThemePreview theme="light" />
         <ThemePreview theme="dark" />
       </div>

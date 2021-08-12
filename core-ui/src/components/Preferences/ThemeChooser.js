@@ -1,6 +1,5 @@
 import React from 'react';
-import { useTheme } from 'react-shared';
-import { TileButton } from './ThemePreview/TileButton';
+import { useTheme, TileButton } from 'react-shared';
 import { ThemePreview } from './ThemePreview/ThemePreview';
 
 const THEMES = [
