@@ -61,9 +61,7 @@ cron-jobs:
       replace: No concurrent executions, replace previous run with the new one.
       skip: No concurrent executions, skip new run if the previous one hasn't finished yet.
     title: Concurrency Policy
-  last-job-execution: Last J>>>>>>> main
-45
-ob execution
+  last-job-execution: Last Job execution
   last-schedule-time: Last schedule time
   not-scheduled-yet: None scheduled yet
   schedule: Schedule
