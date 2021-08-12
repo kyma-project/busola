@@ -37,7 +37,7 @@ common:
     delete-confirm: Nie pytaj ponownie
     message: Czy na pewno chcesz usunąć {{type}} {{name}}?
     title: Usuń {{name}}
-    information: Potwierdzenie usuwania zostanie usunięte dla wszystkich zasobów. Można je ponownie włączyć w Ustawieniach.
+    information: Wyłączyłeś potwierdzenia usuwania dla wszystkich zasobów. Możnesz je ponownie włączyć w Ustawieniach.
   labels: Etykiety
   name: Nazwa
   status: Status
