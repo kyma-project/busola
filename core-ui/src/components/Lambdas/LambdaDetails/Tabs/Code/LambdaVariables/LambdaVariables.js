@@ -246,13 +246,9 @@ export default function LambdaEnvs({
 
   const entries = [
     ...validateVariables(customVariables, [], injectedVariables),
-    // ...injectedVariables,
     ...customValueFromVariables,
   ];
-  console.log(
-    'validateVariables(customVariables, injectedVariables)',
-    validateVariables(customVariables, [], injectedVariables),
-  );
+
   function prepareVariablesInput(newVariables) {
     return newVariables.map(variable => {
       if (variable.type === VARIABLE_TYPE.CUSTOM) {

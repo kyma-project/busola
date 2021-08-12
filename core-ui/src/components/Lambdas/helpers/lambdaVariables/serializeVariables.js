@@ -1,12 +1,11 @@
 import { newVariableModel } from './newVariableModel';
 import { VARIABLE_TYPE, VARIABLE_VALIDATION } from './constants';
+import { base64Decode } from 'shared/helpers';
 
 export function serializeVariables({
   lambdaVariables = [],
   bindingUsages = [],
 }) {
-  console.log('bindingUsages', bindingUsages);
-  console.log('lambdaVariables', lambdaVariables);
   const bindingUsageVariableNames = [];
   let bindingUsageVariables = bindingUsages.flatMap(bindingUsage => {
     const variables = retrieveVariablesFromBindingUsage(bindingUsage);
@@ -86,12 +85,13 @@ export function serializeVariables({
           type: VARIABLE_TYPE.BINDING_USAGE,
           variable: {
             name: variableName,
-            value,
+            value: value,
           },
           validation,
           additionalProps: {
             serviceInstanceName:
-              bindingUsage.serviceBinding.serviceInstanceName,
+              bindingUsage.serviceBinding.spec.instanceRef.name,
+            secretName: bindingUsage.secret.metadata.name,
           },
         });
         serializedInjectedVariables.push(newVariable);
@@ -109,7 +109,6 @@ export function serializeVariables({
 }
 
 export function retrieveVariablesFromBindingUsage(binding) {
-  console.log('bindingUsage', binding);
   let envPrefix = '';
   if (
     binding.serviceBindingUsage.spec.parameters &&
@@ -121,10 +120,8 @@ export function retrieveVariablesFromBindingUsage(binding) {
 
   const secretData = binding.secret && binding.secret.data;
 
-  console.log('envPrefix', envPrefix);
-  console.log('secretData', secretData);
   return Object.entries(secretData || {}).map(([env, value]) => ({
     key: `${envPrefix}${env}`,
-    value: value,
+    value: base64Decode(value),
   }));
 }

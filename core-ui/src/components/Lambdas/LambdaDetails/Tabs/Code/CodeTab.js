@@ -15,7 +15,6 @@ export default function CodeTab({ lambda, isActive }) {
   const serviceBindingsWithUsages = (serviceBindingsCombined || []).filter(
     ({ serviceBindingUsage }) => serviceBindingUsage,
   );
-  console.log('serviceBindingsWithUsages', serviceBindingsWithUsages);
   const {
     customVariables,
     customValueFromVariables,
@@ -24,7 +23,6 @@ export default function CodeTab({ lambda, isActive }) {
     lambdaVariables: lambda?.spec?.env,
     bindingUsages: serviceBindingsWithUsages || [],
   });
-  console.log('!!!injectedVariables', injectedVariables);
   return (
     <>
       {isGitSourceType(lambda?.spec?.type) ? (

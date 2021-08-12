@@ -1,10 +1,7 @@
-import React from 'react';
-
 import { useGetList } from 'react-shared';
 import { CONFIG } from 'components/Lambdas/config.js';
 
 export const useGetBindingsCombined = (lambda, isActive) => {
-  console.log('lambda', lambda, 'isActive', isActive);
   const isBindingUsageForThisFunction = bindingUsage =>
     bindingUsage.spec.usedBy.kind === CONFIG.functionUsageKind &&
     bindingUsage.spec.usedBy.name === lambda.metadata.name;
@@ -32,10 +29,6 @@ export const useGetBindingsCombined = (lambda, isActive) => {
       skip: !isActive,
     },
   );
-  console.log('bindingsRequest', bindingsRequest);
-  console.log('bindingUsagesRequest', bindingUsagesRequest);
-  console.log('secretsRequest', secretsRequest);
-
   if (
     !bindingsRequest.data ||
     !bindingUsagesRequest.data ||
@@ -65,7 +58,6 @@ export const useGetBindingsCombined = (lambda, isActive) => {
     getBindingCombinedData,
   );
 
-  console.log('serviceBindingsCombined', serviceBindingsCombined);
   const error = !!(
     bindingsRequest.error ||
     bindingUsagesRequest.error ||
@@ -76,6 +68,5 @@ export const useGetBindingsCombined = (lambda, isActive) => {
     bindingUsagesRequest.loading ||
     secretsRequest.loading
   );
-  console.log('use', serviceBindingsCombined, loading, error);
   return { serviceBindingsCombined, loading, error };
 };

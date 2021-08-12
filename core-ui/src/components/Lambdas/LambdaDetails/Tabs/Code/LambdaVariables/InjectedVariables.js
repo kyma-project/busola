@@ -2,10 +2,7 @@ import React, { useState } from 'react';
 import LuigiClient from '@luigi-project/client';
 
 import { Icon, InfoLabel } from 'fundamental-react';
-import { GenericList, Tooltip, useGetList } from 'react-shared';
-
-import CreateVariable from './CreateVariable/CreateVariable';
-import EditVariable from './EditVariable/EditVariable';
+import { GenericList, Tooltip } from 'react-shared';
 
 import {
   VARIABLE_VALIDATION,
@@ -13,9 +10,6 @@ import {
   WARNINGS_VARIABLE_VALIDATION,
 } from 'components/Lambdas/helpers/lambdaVariables';
 import { ENVIRONMENT_VARIABLES_PANEL } from 'components/Lambdas/constants';
-import { useUpdateLambda, UPDATE_TYPE } from 'components/Lambdas/hooks';
-
-import { validateVariables } from './validation';
 
 import './LambdaEnvs.scss';
 import { formatMessage } from 'components/Lambdas/helpers/misc';
@@ -26,7 +20,7 @@ const headerRenderer = () => [
   '',
   'Value',
   'Source',
-  'Key',
+  'Secret Name',
   '',
 ];
 const textSearchProperties = ['name', 'value', 'type'];
@@ -160,12 +154,20 @@ function VariableSourceLink({ variable }) {
   );
 }
 
-function VariableKey({ variable }) {
+function FromSecret({ variable }) {
+  const resourceLink = `secrets/details/${variable.secretName}`;
   return (
-    variable.valueFrom?.configMapKeyRef?.key ||
-    variable.valueFrom?.secretKeyRef?.key || (
-      <span style={{ color: 'var(--sapNeutralTextColor,#6a6d70)' }}>N/A</span>
-    )
+    <span
+      className="link"
+      onClick={() =>
+        LuigiClient.linkManager()
+          .fromContext('namespace')
+          .navigate(resourceLink)
+      }
+    >
+      {' '}
+      {variable.secretName}{' '}
+    </span>
   );
 }
 
@@ -175,7 +177,7 @@ function VariableValue({ variable }) {
   const value = variable.valueFrom ? (
     <VariableSourceLink variable={variable} />
   ) : (
-    <span>{variable.value || '-'}</span>
+    <span style={{ overflowWrap: 'anywhere' }}>{variable.value || '-'}</span>
   );
 
   if (isBindingUsageVar) {
@@ -212,93 +214,18 @@ export default function InjectedVariables({
   customValueFromVariables,
   injectedVariables,
 }) {
-  const updateLambdaVariables = useUpdateLambda({
-    lambda,
-    type: UPDATE_TYPE.VARIABLES,
-  });
-
-  const { data: configmaps } = useGetList()(
-    `/api/v1/namespaces/${lambda.metadata.namespace}/configmaps`,
-  );
-  const { data: secrets } = useGetList()(
-    `/api/v1/namespaces/${lambda.metadata.namespace}/secrets`,
-  );
   const rowRenderer = variable => [
     <span>{variable.name}</span>,
     <span className="sap-icon--arrow-right" />,
     <VariableValue variable={variable} />,
     <VariableSource variable={variable} />,
-    <VariableKey variable={variable} />,
+    <FromSecret variable={variable} />,
     <VariableStatus validation={variable.validation} />,
   ];
-
-  const editEnvsModal = (
-    <>
-      <CreateVariable
-        lambda={lambda}
-        secrets={secrets}
-        configmaps={configmaps}
-        customVariables={customVariables}
-        customValueFromVariables={customValueFromVariables}
-      />
-    </>
-  );
 
   const entries = [
     // ...validateVariables(customVariables, injectedVariables),
     ...injectedVariables,
-    // ...customValueFromVariables,
-  ];
-
-  function prepareVariablesInput(newVariables) {
-    return newVariables.map(variable => {
-      if (variable.type === VARIABLE_TYPE.CUSTOM) {
-        return {
-          name: variable.name,
-          value: variable.value,
-        };
-      }
-      return {
-        name: variable.name,
-        valueFrom: variable.valueFrom,
-      };
-    });
-  }
-
-  function onDeleteVariables(variable) {
-    let newVariables = entries.filter(
-      oldVariable => oldVariable.id !== variable.id,
-    );
-
-    newVariables = validateVariables(newVariables, injectedVariables);
-    const preparedVariable = prepareVariablesInput(newVariables);
-
-    updateLambdaVariables({
-      spec: {
-        ...lambda.spec,
-        env: [...preparedVariable],
-      },
-    });
-  }
-
-  const actions = [
-    {
-      name: 'Edit',
-      component: variable => (
-        <EditVariable
-          lambda={lambda}
-          secrets={secrets}
-          configmaps={configmaps}
-          customVariables={customVariables}
-          customValueFromVariables={customValueFromVariables}
-          variable={variable}
-        />
-      ),
-    },
-    {
-      name: 'Delete',
-      handler: variable => onDeleteVariables(variable),
-    },
   ];
 
   return (
@@ -308,8 +235,6 @@ export default function InjectedVariables({
         showSearchField={true}
         showSearchSuggestion={false}
         textSearchProperties={textSearchProperties}
-        // extraHeaderContent={editEnvsModal}
-        // actions={actions}
         entries={entries}
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
