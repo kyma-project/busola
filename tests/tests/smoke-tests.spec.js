@@ -13,7 +13,7 @@ context('Smoke Tests', () => {
       .should('be.visible');
 
     cy.getIframeBody()
-      .contains('Resource consumption')
+      .contains('Resource Consumption')
       .should('be.visible');
 
     cy.getIframeBody()
