@@ -27,9 +27,7 @@ export const ServicesList = ({ DefaultRenderer, ...otherParams }) => {
     },
     {
       header: t('services.cluster-ip'),
-      value: service => {
-        return service.spec.clusterIP;
-      },
+      value: service => service.spec.clusterIP,
     },
     {
       header: t('services.ports'),
