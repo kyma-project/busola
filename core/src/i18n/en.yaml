@@ -60,9 +60,9 @@ common:
   created: Created
   delete-dialog:
     delete-confirm: Don't ask this again
+    information: You've switched off delete confirmations for all resources. You can switch them back on in Preferences.
     message: Are you sure you want to remove {{type}} {{name}}?
     title: Remove {{name}}
-    information: You've switched off delete confirmations for all resources. You can switch them back on in Preferences.
   headers:
     created: Created
     labels: Labels
@@ -157,11 +157,6 @@ namespaces:
     create: Select this option to disable Istio to mediate all communication between the Pods in your Namespace.
     memory-examples: Use plain value in bytes (128974848) or suffix equivalents (like 129e6, 129M, 123Mi).
     total-memory-limit: Define constraints that limit total memory consumption in your Namespace.
-top-nav:
-  profile:
-    download-current-cluster-config: Download current Cluster Config
-    preferences: $t(preferences.title)
-    remove-current-cluster-config: Remove current Cluster Config
 oauth2-clients:
   title: OAuth2 Clients
 observability:
@@ -193,6 +188,11 @@ settings:
 stateful-sets:
   replicas: Replicas
   title: StatefulSets
+top-nav:
+  profile:
+    download-current-cluster-config: Download current Cluster Config
+    preferences: $t(preferences.title)
+    remove-current-cluster-config: Remove current Cluster Config
 workloads:
   docker-image:
     tooltip: Enter a valid Docker image registry path.
