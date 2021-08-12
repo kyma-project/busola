@@ -79,10 +79,16 @@ async function createClusterManagementNodes() {
           return false;
         },
       },
+      {
+        pathSegment: 'preferences',
+        viewUrl: config.coreUIModuleUrl + '/preferences',
+        openNodeInModal: { title: i18next.t('preferences.title'), size: 'm' },
+      },
     ],
     context: {
       clusters: await getClusters(),
       activeClusterName: getActiveClusterName(),
+      language: i18next.language,
     },
   };
   const clusters = await getClusters();
@@ -147,27 +153,48 @@ export async function createNavigation() {
           items: [
             {
               icon: 'settings',
-              label: 'Preferences',
+              label: i18next.t('top-nav.profile.preferences'),
               link: `/cluster/${encodeURIComponent(
                 activeClusterName,
               )}/preferences`,
+              openNodeInModal: {
+                title: i18next.t('preferences.title'),
+                size: 'm',
+              },
             },
             {
               icon: 'log',
-              label: 'Remove current Cluster Config',
+              label: i18next.t('top-nav.profile.remove-current-cluster-config'),
               link: `/clusters/remove`,
             },
             {
               icon: 'download',
-              label: 'Download current Cluster Kubeconfig',
+              label: i18next.t(
+                'top-nav.profile.download-current-cluster-config',
+              ),
               link: `/cluster/${encodeURIComponent(
                 activeClusterName,
               )}/download-kubeconfig`,
+              testId: 'download-current-cluster-config',
             },
           ],
         },
       }
-    : {};
+    : {
+        profile: {
+          items: [
+            {
+              icon: 'settings',
+              label: i18next.t('top-nav.profile.preferences'),
+              link: '/clusters/preferences',
+              openNodeInModal: {
+                title: i18next.t('preferences.title'),
+                size: 'm',
+              },
+            },
+          ],
+        },
+      };
 
   const isNodeEnabled = node => {
     if (node.context?.requiredFeatures) {
