@@ -27,7 +27,7 @@ VerticalTabs.propTypes = {
 };
 
 export function VerticalTabs({ tabs, children, height }) {
-  const [tabId, setTabId] = React.useState(children[0]?.id || 0);
+  const [tabId, setTabId] = React.useState(children[0]?.props.id || 0);
 
   return (
     <section className="vertical-tabs-wrapper" style={{ height }}>

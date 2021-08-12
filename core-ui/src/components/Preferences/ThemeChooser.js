@@ -1,49 +1,25 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useTheme, TileButton } from 'react-shared';
 import { ThemePreview } from './ThemePreview/ThemePreview';
 
-const THEMES = [
-  {
-    key: 'light_dark',
-    text: 'Light / Dark',
-    description: 'Depends on system settings',
-  },
-  {
-    key: 'light',
-    text: 'Light',
-    description: 'Use in a default office environment',
-  },
-  {
-    key: 'dark',
-    text: 'Dark',
-    description: 'Use in dimmed environments',
-  },
-  {
-    key: 'hcw',
-    text: 'High-Contrast White',
-    description: 'Optimized contrast and accessibility for dark environments',
-  },
-  {
-    key: 'hcb',
-    text: 'High-Contrast Black',
-    description: 'Optimized contrast and accessibility for bright environments',
-  },
-];
+const themes = ['light_dark', 'light', 'dark', 'hcw', 'hcb'];
 
 export default function ThemeChooser() {
+  const { t } = useTranslation();
   const { theme, setTheme } = useTheme();
 
   return (
     <ul>
-      {THEMES.map(t => (
+      {themes.map(themeName => (
         <TileButton
-          key={t.key}
-          id={t.key}
-          title={t.text}
-          description={t.description}
-          icon={<ThemePreview theme={t.key} />}
-          isActive={t.key === theme}
-          handleClick={() => setTheme(t.key)}
+          key={themeName}
+          id={themeName}
+          title={t(`settings.interface.themes.${themeName}.title`)}
+          description={t(`settings.interface.themes.${themeName}.description`)}
+          icon={<ThemePreview theme={themeName} />}
+          isActive={themeName === theme}
+          handleClick={() => setTheme(themeName)}
         />
       ))}
     </ul>

@@ -154,8 +154,30 @@ service-management:
 services:
   title: Services
 settings:
+  clusters:
+    title: Clusters
+    description: Cluster interaction
   confirmations: Confirmations
   dontConfirmDelete: Delete without confirmation
+  interface:
+    title: Interface
+    description: Language, theme
+    themes:
+      hcb:
+        title: High-Contrast Black
+        description: Optimized contrast and accessibility for bright environments
+      hcw:
+        title: High-Contrast White
+        description: Optimized contrast and accessibility for dark environments
+      dark:
+        title: Dark
+        description: Use in dimmed environments
+      light:
+        title: Light
+        description: Use in a default office environment
+      light_dark:
+        title: Light / Dark
+        description: 'Depends on system settings'
   language: Language
   theme: Theme
 stateful-sets:

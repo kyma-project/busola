@@ -14,14 +14,14 @@ export default function Preferences() {
 
   const tabs = [
     {
-      title: 'Interface',
-      description: 'Language, theme',
+      title: t('settings.interface.title'),
+      description: t('settings.interface.description'),
       icon: <Icon glyph="accelerated" size="xl" ariaLabel="Interface" />,
       id: 1,
     },
     {
-      title: 'Clusters',
-      description: 'Cluster interaction',
+      title: t('settings.clusters.title'),
+      description: t('settings.clusters.description'),
       icon: <Icon glyph="database" size="xl" ariaLabel="Clusters" />,
       id: 2,
     },
