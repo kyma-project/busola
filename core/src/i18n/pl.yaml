@@ -114,6 +114,8 @@ deployments:
   title: Deploymenty
 discovery-and-network:
   title: Odkrywanie i sieć
+dnsproviders:
+  title: Dostawcy DNS
 functions:
   title: Funkcje
   variable:

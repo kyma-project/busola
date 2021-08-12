@@ -52,6 +52,7 @@ export function getStaticChildrenNodesForNamespace(
   permissionSet,
   features,
 ) {
+  console.log('features', features);
   const encodedClusterName = encodeURIComponent(getActiveClusterName());
   const nodes = [
     {
@@ -859,6 +860,43 @@ export function getStaticChildrenNodesForNamespace(
       context: {
         requiredFeatures: [features.SERVERLESS],
       },
+    },
+    {
+      category: i18next.t('configuration.title'),
+      resourceType: 'dnsproviders',
+      pathSegment: 'dnsproviders',
+      navigationContext: 'dnsproviders',
+      label: i18next.t('dnsproviders.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/DNSProviders?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/dns.gardener.cloud/v1alpha1',
+          hasDetailsView: true,
+        }),
+      keepSelectedForChildren: true,
+      viewGroup: coreUIViewGroupName,
+      context: {
+        requiredFeatures: [features.SERVERLESS],
+      },
+      children: [
+        {
+          pathSegment: 'details',
+          resourceType: 'dnsproviders',
+          children: [
+            {
+              pathSegment: ':dnsproviderName',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/DNSProviders/:dnsproviderName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/dns.gardener.cloud/v1alpha1',
+                }),
+              viewGroup: coreUIViewGroupName,
+            },
+          ],
+        },
+      ],
     },
     {
       category: i18next.t('configuration.title'),
