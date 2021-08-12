@@ -8,9 +8,11 @@ import {
 } from 'components/ApiRules/ApiRulesList/components';
 import ApiRuleStatus from 'components/ApiRules/ApiRuleStatus/ApiRuleStatus';
 import { useGetGatewayDomain as getGatewayDomain } from 'components/ApiRules/hooks/useGetGatewayDomain';
+import { useTranslation } from 'react-i18next';
 
 export const ApiRulesList = ({ DefaultRenderer, ...otherParams }) => {
   const { domain } = getGatewayDomain();
+  const { t } = useTranslation();
   const createApiRule = (
     <Button
       glyph="add"
@@ -30,23 +32,23 @@ export const ApiRulesList = ({ DefaultRenderer, ...otherParams }) => {
           })
       }
     >
-      Create apirules
+      {t('api-rules.buttons.create')}
     </Button>
   );
 
   const customColumns = [
     {
-      header: 'Host',
+      header: t('api-rules.list.headers.host'),
       value: apiRule => (
         <CopiableApiRuleHost apiRule={apiRule} domain={domain} />
       ),
     },
     {
-      header: 'Service Name',
+      header: t('api-rules.list.headers.service-name'),
       value: apiRule => <ApiRuleServiceInfo apiRule={apiRule} />,
     },
     {
-      header: 'Status',
+      header: t('api-rules.list.headers.status'),
       value: apiRule => <ApiRuleStatus apiRule={apiRule} />,
     },
   ];
@@ -55,7 +57,7 @@ export const ApiRulesList = ({ DefaultRenderer, ...otherParams }) => {
     <DefaultRenderer
       customColumns={customColumns}
       listHeaderActions={createApiRule}
-      resourceName="API Rules"
+      resourceName={t('api-rules.title')}
       {...otherParams}
     />
   );

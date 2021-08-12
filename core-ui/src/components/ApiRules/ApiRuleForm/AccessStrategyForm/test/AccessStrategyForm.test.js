@@ -2,6 +2,19 @@ import React from 'react';
 import { render, fireEvent, queryByText } from '@testing-library/react';
 import AccessStrategyForm from '../AccessStrategyForm';
 
+jest.mock('react-i18next', () => ({
+  // this mock makes sure any components using the translate hook can use it without a warning being shown
+  useTranslation: () => {
+    return {
+      t: str => str,
+      i18n: {
+        changeLanguage: () => new Promise(() => {}),
+        options: {},
+      },
+    };
+  },
+}));
+
 const allowStrategy = {
   text: 'Allow',
   path: '/allow',
@@ -99,7 +112,9 @@ describe('AccessStrategyForm', () => {
     );
 
     expect(getByText(oauthStrategy.text)).toBeDefined();
-    const requiredScope = queryByLabelText('Required scope');
+    const requiredScope = queryByLabelText(
+      'api-rules.access-strategies.labels.required-scope',
+    );
     expect(requiredScope).toBeInTheDocument();
     oauthStrategy.accessStrategies[0].config.required_scope.forEach(scope => {
       expect(
@@ -119,7 +134,9 @@ describe('AccessStrategyForm', () => {
       />,
     );
 
-    const requiredScope = queryByLabelText('Required scope');
+    const requiredScope = queryByLabelText(
+      'api-rules.access-strategies.labels.required-scope',
+    );
     expect(requiredScope).toBeInTheDocument();
 
     fireEvent.keyDown(requiredScope, {
@@ -226,7 +243,7 @@ describe('AccessStrategyForm', () => {
       />,
     );
     expect(queryByRole('alert')).toHaveTextContent(
-      'This access strategy requires at least one method.',
+      'api-rules.access-strategies.messages.one-method',
     );
   });
 
