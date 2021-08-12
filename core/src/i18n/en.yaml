@@ -3,9 +3,34 @@ addons:
   title: Addons
 api-rules:
   access-strategies:
-    delete:
-      tooltip: Define at least one access strategy.
-  title: APIRules
+    buttons:
+      add: Add access strategy
+    labels:
+      required-scope: Required scope
+    messages:
+      one-method: This access strategy requires at least one method.
+    title: Access Strategies
+    tooltips:
+      delete: Define at least one access strategy.
+      path: Path can contain alphanumeric characters and  '/', '.', '*', '?', '!', '-', '(', and ')'.
+  buttons:
+    create: Create API Rules
+  general-settings:
+    title: General Settings
+  list:
+    headers:
+      host: Host
+      service-name: Service Name
+      status: Status
+  messages:
+    create-failed: Failed to create the API Rule
+    created: API Rule created
+    updated: API Rule updated
+  services:
+    error-load: Couldn't load service list
+    loading: Loading services...
+    ns-no-services: No Services in this Namespace
+  title: API Rules
 applications:
   title: Applications
 brokers:
@@ -35,19 +60,25 @@ common:
   created: Created
   delete-dialog:
     delete-confirm: Don't ask this again
+    information: You've switched off removal confirmations for all resources. You can switch them back on in Preferences.
     message: Are you sure you want to remove {{type}} {{name}}?
     title: Remove {{name}}
-    information: You've switched off delete confirmations for all resources. You can switch them back on in Preferences.
-  labels: Labels
-  name: Name
-  status: Status
+  headers:
+    created: Created
+    labels: Labels
+    name: Name
+    status: Status
+  labels:
+    hostname: Hostname
+    name: Name
+    service: Service
   tooltips:
     copy-to-clipboard: Copy to clipboard
     download: Download
     duplicate-key: Duplicate key
-    k8s-name-input: Name must consist of lowercase alphanumeric characters, can also contain '-' (like 'my-name1').
-    key-value: key=value, must start and end with an alphanumeric character, can also contain '-', '_' or '.'
-    read-file: Read file content as a single value, with file name as a key.
+    k8s-name-input: Name must contain lower case alphanumeric characters, can contain '-' (like 'my-name1').
+    key-value: key=value, must start and end with alphanumeric character, can contain '-', '_' or '.'
+    read-file: Read file content as single value, with file name as a key.
     save: Save
     search: Search
 config-maps:
@@ -113,7 +144,7 @@ namespaces:
       error: Error while loading memory consumption data
       limits: Memory limits
       requests: Memory requests
-      title: Resource consumption
+      title: Resource Consumption
     title: Overview
     workloads:
       deployments: $t(deployments.title)
@@ -126,11 +157,6 @@ namespaces:
     create: Select this option to disable Istio to mediate all communication between the Pods in your Namespace.
     memory-examples: Use plain value in bytes (128974848) or suffix equivalents (like 129e6, 129M, 123Mi).
     total-memory-limit: Define constraints that limit total memory consumption in your Namespace.
-top-nav:
-  profile:
-    download-current-cluster-config: Download current Cluster Config
-    preferences: $t(preferences.title)
-    remove-current-cluster-config: Remove current Cluster Config
 oauth2-clients:
   title: OAuth2 Clients
 observability:
@@ -152,6 +178,8 @@ secrets:
 service-management:
   title: Service Management
 services:
+  labels:
+    service: Service
   title: Services
 settings:
   clusters:
@@ -175,15 +203,20 @@ settings:
         description: Use in dimmed environments
       light:
         title: Light
-        description: Use in a default office environment
+        description: Use in default office environments
       light_dark:
         title: Light / Dark
-        description: Depends on system settings
+        description: Automatically matches your system settings
   language: Language
   theme: Theme
 stateful-sets:
   replicas: Replicas
   title: StatefulSets
+top-nav:
+  profile:
+    download-current-cluster-config: Download current Cluster Config
+    preferences: $t(preferences.title)
+    remove-current-cluster-config: Remove current Cluster Config
 workloads:
   docker-image:
     tooltip: Enter a valid Docker image registry path.

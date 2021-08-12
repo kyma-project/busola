@@ -17,7 +17,7 @@ export const K8sNameInput = ({
   id,
   kind,
   showHelp = true,
-  label = 'Name',
+  label = 'common.labels.name',
   required = true,
   defaultValue,
   i18n,
@@ -27,7 +27,7 @@ export const K8sNameInput = ({
   return (
     <>
       <FormLabel required={required} htmlFor={id}>
-        {label}
+        {t(label)}
       </FormLabel>
       {showHelp && (
         <Tooltip content={t('common.tooltips.k8s-name-input')}>
