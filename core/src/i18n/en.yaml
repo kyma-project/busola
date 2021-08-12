@@ -60,7 +60,7 @@ common:
   created: Created
   delete-dialog:
     delete-confirm: Don't ask this again
-    information: You've switched off delete confirmations for all resources. You can switch them back on in Preferences.
+    information: You've switched off removal confirmations for all resources. You can switch them back on in Preferences.
     message: Are you sure you want to remove {{type}} {{name}}?
     title: Remove {{name}}
   headers:
