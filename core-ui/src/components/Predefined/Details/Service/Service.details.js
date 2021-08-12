@@ -1,6 +1,7 @@
 import React from 'react';
 import { InfoLabel, Icon, Token } from 'fundamental-react';
 import { Spinner, useGetList, useMicrofrontendContext } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 
 import EventSubscriptions from 'shared/components/EventSubscriptions/EventSubscriptions';
 import './Service.details.scss';
@@ -51,6 +52,7 @@ function ApiRules(service) {
 }
 
 export const ServicesDetails = ({ DefaultRenderer, ...otherParams }) => {
+  const { t } = useTranslation();
   const microfrontendContext = useMicrofrontendContext();
   const { features } = microfrontendContext;
   const customComponents = [];
@@ -63,11 +65,15 @@ export const ServicesDetails = ({ DefaultRenderer, ...otherParams }) => {
 
   const customColumns = [
     {
-      header: 'Cluster IP',
+      header: t('services.type'),
+      value: service => service.spec.type,
+    },
+    {
+      header: t('services.cluster-ip'),
       value: resource => resource.spec.clusterIP,
     },
     {
-      header: 'Ports',
+      header: t('services.ports'),
       value: resource => (
         <>
           {resource.spec.ports?.map(p => (
@@ -88,6 +94,16 @@ export const ServicesDetails = ({ DefaultRenderer, ...otherParams }) => {
             </Token>
           ))}
         </>
+      ),
+    },
+    {
+      header: t('services.external-ips'),
+      value: service => (
+        <ul>
+          {service.spec.externalIPs?.map(ip => (
+            <li key={ip}>{ip}</li>
+          ))}
+        </ul>
       ),
     },
   ];
