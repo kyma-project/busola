@@ -50,11 +50,11 @@ context('Smoke Tests', () => {
       .click();
 
     cy.getLeftNav()
-      .contains('Cluster Roles')
+      .contains('ClusterRoles')
       .should('be.visible');
 
     cy.getLeftNav()
-      .contains('Cluster Role Bindings')
+      .contains('ClusterRoleBindings')
       .should('be.visible');
   });
 });
