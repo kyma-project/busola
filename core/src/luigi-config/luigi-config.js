@@ -76,7 +76,7 @@ async function luigiAfterInit() {
 (async () => {
   handleResetEndpoint();
 
-  await 118n;
+  await i18n;
 
   await setActiveClusterIfPresentInUrl();
 
