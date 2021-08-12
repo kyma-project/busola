@@ -10,6 +10,7 @@ export default function VariableModal({
   resources = [],
   customVariables,
   customValueFromVariables,
+  injectedVariables,
   variable = null,
   type = VARIABLE_TYPE.CUSTOM,
   title,
@@ -39,6 +40,7 @@ export default function VariableModal({
           type={type}
           customVariables={customVariables}
           customValueFromVariables={customValueFromVariables}
+          injectedVariables={injectedVariables}
           setInvalidModalPopupMessage={setInvalidModalPopupMessage}
           formType={FORM_TYPE.CREATE}
         />

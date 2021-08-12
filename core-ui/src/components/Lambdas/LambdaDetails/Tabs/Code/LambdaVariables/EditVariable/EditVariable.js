@@ -12,6 +12,7 @@ export default function EditVariable({
   configmaps,
   customVariables,
   customValueFromVariables,
+  injectedVariables,
   variable,
 }) {
   const modalOpeningComponent = (
@@ -36,6 +37,7 @@ export default function EditVariable({
       resources={resources}
       customVariables={customVariables}
       customValueFromVariables={customValueFromVariables}
+      injectedVariables={injectedVariables}
     />
   );
   return variableModal;

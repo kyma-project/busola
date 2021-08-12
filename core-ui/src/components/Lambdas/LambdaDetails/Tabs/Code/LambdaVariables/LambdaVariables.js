@@ -240,6 +240,7 @@ export default function LambdaEnvs({
         configmaps={configmaps}
         customVariables={customVariables}
         customValueFromVariables={customValueFromVariables}
+        injectedVariables={injectedVariables}
       />
     </>
   );
@@ -290,6 +291,7 @@ export default function LambdaEnvs({
           configmaps={configmaps}
           customVariables={customVariables}
           customValueFromVariables={customValueFromVariables}
+          injectedVariables={injectedVariables}
           variable={variable}
         />
       ),

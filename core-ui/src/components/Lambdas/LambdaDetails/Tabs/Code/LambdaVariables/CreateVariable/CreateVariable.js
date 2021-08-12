@@ -17,6 +17,7 @@ export default function CreateVariable({
   configmaps,
   customVariables,
   customValueFromVariables,
+  injectedVariables,
 }) {
   const [currentModal, setCurrentModal] = useState();
 
@@ -25,6 +26,7 @@ export default function CreateVariable({
     confirmText: ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.CONFIRM_BUTTON.TEXT,
     customVariables: customVariables,
     customValueFromVariables: customValueFromVariables,
+    injectedVariables: injectedVariables,
     onModalOpenStateChange: state => {
       if (!state) setCurrentModal();
     },
