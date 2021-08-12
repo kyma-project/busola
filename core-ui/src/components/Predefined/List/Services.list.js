@@ -14,11 +14,21 @@ export const ServicesList = ({ DefaultRenderer, ...otherParams }) => {
     }
   };
 
-  const getPorts = service =>
-    intersperse(service.spec.ports?.map(getPortString) || [], ', ');
+  const getPorts = service => {
+    if (!service.spec.ports?.length) {
+      return '-';
+    } else {
+      return service.spec.ports?.map(getPortString).join(', ');
+    }
+  };
 
-  const getExternalIPs = service =>
-    intersperse(service.spec.externalIPs || [], ', ');
+  const getExternalIPs = service => {
+    if (!service.spec.externalIPs?.length) {
+      return '-';
+    } else {
+      return service.spec.externalIPs.join(', ');
+    }
+  };
 
   const customColumns = [
     {
