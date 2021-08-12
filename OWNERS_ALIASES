@@ -1,11 +1,11 @@
 aliases:
     default-reviewers:
-    - parostatkiem
+    - qbalukom
     - Wawrzyn321
     - dariadomagala
     - akucharska
     default-approvers:
-    - parostatkiem
+    - qbalukom
     - kwiatekus
     - dariadomagala
     - akucharska
@@ -14,16 +14,14 @@ aliases:
     content-ui-approvers:
     - aerfio
     documentation-reviewers:
-    - kazydek
     - klaudiagrz
-    - bszwarc
     - mmitoraj
     - majakurcius
     - alexandra-simeonova
+    - NHingerl
     documentation-approvers:
-    - kazydek
     - klaudiagrz
-    - bszwarc
     - mmitoraj
     - majakurcius
     - alexandra-simeonova
+    - NHingerl

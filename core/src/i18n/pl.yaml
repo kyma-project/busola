@@ -126,6 +126,11 @@ namespaces:
     create: Wybierz tę opcję, aby wyłączyć istio, aby pośredniczyć w całej komunikacji między podami w Twojej przestrzeni nazw.
     memory-examples: Użyj zwykłej wartości w bajtach (128974848) lub odpowiednich przyrostków (takich jak 129e6, 129M, 123Mi).
     total-memory-limit: Zdefiniuj ograniczenia, które ograniczają całkowite zużycie pamięci w Twojej przestrzeni nazw.
+top-nav:
+  profile:
+    download-current-cluster-config: Pobierz konfigurację klastra
+    preferences: $t(preferences.title)
+    remove-current-cluster-config: Usuń bieżącą konfigurację
 oauth2-clients:
   title: Klienci OAuth2
 observability:
@@ -134,6 +139,8 @@ pods:
   node: Węzeł
   restarts: Ponownych uruchomień
   title: Pody
+preferences:
+  title: Ustawienia
 replica-sets:
   title: Zestawy replik
 role-bindings:
