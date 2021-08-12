@@ -163,7 +163,7 @@ settings:
     title: Klastry
   interface:
     title: Interfejs
-    description: Język, motyw
+    description: Motyw, język
     themes:
       hcb:
         title: Ciemny z wysokim kontrastem

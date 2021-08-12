@@ -162,7 +162,7 @@ settings:
     title: Clusters
   interface:
     title: Interface
-    description: Language, theme
+    description: Theme, language
     themes:
       hcb:
         title: High-Contrast Black
