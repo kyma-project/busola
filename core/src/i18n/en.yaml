@@ -203,7 +203,7 @@ settings:
         description: Use in dimmed environments
       light:
         title: Light
-        description: Use in a default office environment
+        description: Use in default office environments
       light_dark:
         title: Light / Dark
         description: Automatically matches your system settings
