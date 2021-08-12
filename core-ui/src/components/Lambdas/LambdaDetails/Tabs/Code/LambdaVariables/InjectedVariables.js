@@ -223,10 +223,7 @@ export default function InjectedVariables({
     <VariableStatus validation={variable.validation} />,
   ];
 
-  const entries = [
-    // ...validateVariables(customVariables, injectedVariables),
-    ...injectedVariables,
-  ];
+  const entries = [...injectedVariables];
 
   return (
     <div className="lambda-variables">
