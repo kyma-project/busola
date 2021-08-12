@@ -51,6 +51,5 @@ push-image:
 
 push-image-local:
 	docker tag $(LOCAL_IMG_NAME) $(LOCAL_IMG):$(TAG)
-	docker push $(LOCAL_IMG):$(TAG)
 	docker tag $(LOCAL_IMG_NAME) $(LOCAL_IMG):latest
-	docker push $(LOCAL_IMG):latest
+	docker push --all-tags $(LOCAL_IMG)
