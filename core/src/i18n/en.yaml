@@ -178,7 +178,7 @@ settings:
         description: Use in a default office environment
       light_dark:
         title: Light / Dark
-        description: Depends on system settings
+        description: Automatically matches your system settings
   language: Language
   theme: Theme
 stateful-sets:
