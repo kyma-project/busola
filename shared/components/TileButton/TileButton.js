@@ -25,7 +25,7 @@ export function TileButton({
     <li className={className}>
       <button onClick={handleClick}>
         {icon}
-        <div>
+        <div className="tile-button__text">
           <p>{title}</p>
           <p className="fd-has-color-status-4">{description}</p>
         </div>

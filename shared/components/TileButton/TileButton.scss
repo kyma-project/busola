@@ -34,9 +34,10 @@
     color: var(--sapTextColor);
     cursor: pointer;
 
-    div {
+    .tile-button__text {
       text-align: left;
       padding-left: 16px;
+      align-self: center;
     }
   }
 }
