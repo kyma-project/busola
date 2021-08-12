@@ -23,10 +23,14 @@ export const ServicesList = ({ DefaultRenderer, ...otherParams }) => {
   };
 
   const getExternalIPs = service => {
-    if (!service.spec.externalIPs?.length) {
-      return '-';
-    } else {
+    if (service.status.loadBalancer?.ingress) {
+      return service.status.loadBalancer?.ingress
+        .map(endpoint => endpoint.ip || endpoint.hostname)
+        .join(', ');
+    } else if (service.spec.externalIPs?.length) {
       return service.spec.externalIPs.join(', ');
+    } else {
+      return '-';
     }
   };
 

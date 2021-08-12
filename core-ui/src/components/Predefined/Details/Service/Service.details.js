@@ -63,6 +63,18 @@ export const ServicesDetails = ({ DefaultRenderer, ...otherParams }) => {
     customComponents.push(ApiRules);
   }
 
+  const getExternalIPs = service => {
+    if (service.status.loadBalancer?.ingress) {
+      return service.status.loadBalancer?.ingress.map(
+        endpoint => endpoint.ip || endpoint.hostname,
+      );
+    } else if (service.spec.externalIPs?.length) {
+      return service.spec.externalIPs;
+    } else {
+      return [];
+    }
+  };
+
   const customColumns = [
     {
       header: t('services.type'),
@@ -98,13 +110,19 @@ export const ServicesDetails = ({ DefaultRenderer, ...otherParams }) => {
     },
     {
       header: t('services.external-ips'),
-      value: service => (
-        <ul>
-          {service.spec.externalIPs?.map(ip => (
-            <li key={ip}>{ip}</li>
-          ))}
-        </ul>
-      ),
+      value: service => {
+        const ips = getExternalIPs(service);
+        if (!ips.length) {
+          return '-';
+        }
+        return (
+          <ul>
+            {ips.map(ip => (
+              <li key={ip}>{ip}</li>
+            ))}
+          </ul>
+        );
+      },
     },
   ];
 
