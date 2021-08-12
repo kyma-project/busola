@@ -10,10 +10,13 @@ const childrenPropType = PropTypes.oneOfType([
   PropTypes.node,
 ]).isRequired;
 
+const tabIdPropType = PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+  .isRequired;
+
 VerticalTabs.propTypes = {
   tabs: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+      id: tabIdPropType,
       title: PropTypes.string.isRequired,
       description: PropTypes.string,
       icon: PropTypes.node.isRequired,
@@ -24,9 +27,7 @@ VerticalTabs.propTypes = {
 };
 
 export function VerticalTabs({ tabs, children, height }) {
-  const [tabId, setTabId] = React.useState(
-    children.map(({ props }) => props.id)[0],
-  );
+  const [tabId, setTabId] = React.useState(children[0]?.id || 0);
 
   return (
     <section className="vertical-tabs-wrapper" style={{ height }}>
@@ -48,6 +49,6 @@ export function VerticalTabs({ tabs, children, height }) {
 VerticalTabs.Content = ({ children }) => children;
 
 VerticalTabs.Content.propTypes = {
-  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  id: tabIdPropType,
   children: childrenPropType,
 };

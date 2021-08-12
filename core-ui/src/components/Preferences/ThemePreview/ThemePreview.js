@@ -11,6 +11,7 @@ export function ThemePreview({ theme }) {
     );
   }
 
+  // those are copied from https://sap.live.dxp.k8s.ondemand.com/projects
   return (
     <svg
       viewBox="0 0 200 200"
