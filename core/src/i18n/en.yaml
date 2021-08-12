@@ -5,7 +5,7 @@ api-rules:
   access-strategies:
     delete:
       tooltip: Define at least one access strategy.
-  title: API Rules
+  title: APIRules
 applications:
   title: Applications
 brokers:
@@ -17,9 +17,9 @@ catalog:
 cluster-addons:
   title: Cluster Addons
 cluster-role-bindings:
-  title: Cluster Role Bindings
+  title: ClusterRoleBindings
 cluster-roles:
-  title: Cluster Roles
+  title: ClusterRoles
 clusters:
   list:
     outdated:
@@ -31,22 +31,27 @@ common:
   buttons:
     cancel: Cancel
     delete: Delete
+    edit-yaml: Edit YAML
+  created: Created
   delete-dialog:
     delete-confirm: Don't ask this again
     message: Are you sure you want to remove {{type}} {{name}}?
     title: Remove {{name}}
     information: Delete confirmations will be disabled for all resources. It can be turned back on in Preferences.
+  labels: Labels
+  name: Name
+  status: Status
   tooltips:
-    download: Download
-    search: Search
-    save: Save
     copy-to-clipboard: Copy to clipboard
+    download: Download
     duplicate-key: Duplicate key
-    k8s-name-input: Name must contain lower case alphanumeric characters, can contain '-' (like 'my-name1').
-    key-value: key=value, must start and end with alphanumeric character, can contain '-', '_' or '.'
-    read-file: Read file content as single value, with file name as a key.
+    k8s-name-input: Name must consist of lowercase alphanumeric characters, can also contain '-' (like 'my-name1').
+    key-value: key=value, must start and end with an alphanumeric character, can also contain '-', '_' or '.'
+    read-file: Read file content as a single value, with file name as a key.
+    save: Save
+    search: Search
 config-maps:
-  title: Config Maps
+  title: ConfigMaps
 configuration:
   title: Configuration
 cron-jobs:
@@ -56,13 +61,26 @@ cron-jobs:
       replace: No concurrent executions, replace previous run with the new one.
       skip: No concurrent executions, skip new run if the previous one hasn't finished yet.
     title: Concurrency Policy
-  last-job-execution: Last job execution
+  last-job-execution: Last J>>>>>>> main
+45
+ob execution
   last-schedule-time: Last schedule time
   not-scheduled-yet: None scheduled yet
   schedule: Schedule
-  title: Cron Jobs
+  title: CronJobs
 custom-resource-definitions:
-  title: Custom Resource Definitions
+  title: CustomResourceDefinitions
+daemon-sets:
+  images: Images
+  node-selector: Node selector
+  pods: $t(pods.title)
+  title: DaemonSets
+  tolerations:
+    effect: Effect
+    key: Key
+    operator: Operator
+    title: Tolerations
+    toleration-seconds: Seconds
 deployments:
   title: Deployments
 discovery-and-network:
@@ -106,20 +124,22 @@ namespaces:
       title: Healthy Resources
   title: Namespaces
   tooltips:
-    container-memory-limit: Define memory constraints for individual containers in your namespace.
-    create: Select this option to disable istio to mediate all communication between the pods in your namespace.
+    container-memory-limit: Define memory constraints for individual containers in your Namespace.
+    create: Select this option to disable Istio to mediate all communication between the Pods in your Namespace.
     memory-examples: Use plain value in bytes (128974848) or suffix equivalents (like 129e6, 129M, 123Mi).
-    total-memory-limit: Define constraints that limit total memory consumption in your namespace.
+    total-memory-limit: Define constraints that limit total memory consumption in your Namespace.
 oauth2-clients:
   title: OAuth2 Clients
 observability:
   title: Observability
 pods:
+  node: Node
+  restarts: Restarts
   title: Pods
 replica-sets:
-  title: Replica Sets
+  title: ReplicaSets
 role-bindings:
-  title: Role Bindings
+  title: RoleBindings
 roles:
   title: Roles
 secrets:
@@ -134,8 +154,8 @@ settings:
   language: Language
 stateful-sets:
   replicas: Replicas
-  title: Stateful Sets
+  title: StatefulSets
 workloads:
   docker-image:
-    tooltip: Enter a valid docker image registry path.
+    tooltip: Enter a valid Docker image registry path.
   title: Workloads

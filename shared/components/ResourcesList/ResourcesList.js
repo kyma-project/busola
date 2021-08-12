@@ -213,9 +213,9 @@ function Resources({
       ];
 
   const headerRenderer = () => [
-    'Name',
-    'Created',
-    'Labels',
+    t('common.name'),
+    t('common.created'),
+    t('common.labels'),
     ...customColumns.map(col => col.header),
   ];
 
