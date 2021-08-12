@@ -62,10 +62,12 @@ common:
     delete-confirm: Don't ask this again
     message: Are you sure you want to remove {{type}} {{name}}?
     title: Remove {{name}}
+    information: You've switched off delete confirmations for all resources. You can switch them back on in Preferences.
   headers:
     created: Created
     labels: Labels
     name: Name
+    status: Status
   labels:
     hostname: Hostname
     name: Name
