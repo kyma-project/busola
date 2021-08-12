@@ -12,7 +12,7 @@ export default function ConfirmationSettings() {
 
   const toggleValue = () => {
     LuigiClient.sendCustomMessage({
-      id: 'busola.dontConfirmDelete',
+      id: 'busola.clusters.dontConfirmDelete',
       value: !dontConfirmDelete,
     });
     setDontConfirmDelete(!dontConfirmDelete);
@@ -21,7 +21,7 @@ export default function ConfirmationSettings() {
   return (
     <div className="preferences-row">
       <span className="fd-has-color-status-4">
-        {t('settings.dontConfirmDelete')}
+        {t('settings.clusters.dontConfirmDelete')}
       </span>
       <div>
         <Switch

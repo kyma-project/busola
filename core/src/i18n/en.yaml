@@ -155,10 +155,11 @@ services:
   title: Services
 settings:
   clusters:
-    title: Clusters
+    confirmations: Confirmations
     description: Cluster interaction
-  confirmations: Confirmations
-  dontConfirmDelete: Delete without confirmation
+    dontConfirmDelete: Delete without confirmation
+    showHiddenNamespaces: Show Hidden Namespaces
+    title: Clusters
   interface:
     title: Interface
     description: Language, theme
@@ -177,7 +178,7 @@ settings:
         description: Use in a default office environment
       light_dark:
         title: Light / Dark
-        description: 'Depends on system settings'
+        description: Depends on system settings
   language: Language
   theme: Theme
 stateful-sets:
