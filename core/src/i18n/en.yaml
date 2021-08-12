@@ -16,7 +16,7 @@ api-rules:
   buttons:
     create: Create API Rules
   general-settings:
-    title: General settings
+    title: General Settings
   list:
     headers:
       host: Host
