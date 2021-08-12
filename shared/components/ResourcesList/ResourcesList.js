@@ -6,8 +6,9 @@ import {
   FormItem,
   Link,
   Button,
-  Dialog,
   Checkbox,
+  MessageBox,
+  MessageStrip,
 } from 'fundamental-react';
 import { createPatch } from 'rfc6902';
 import LuigiClient from '@luigi-project/client';
@@ -155,7 +156,6 @@ function Resources({
     const url = withoutQueryString(resourceUrl) + '/' + resource.metadata.name;
     const name = prettifyNameSingular(resourceType);
 
-    setShowDeleteDialog(false);
     try {
       await deleteResourceMutation(url);
       notification.notifySuccess({
@@ -171,6 +171,11 @@ function Resources({
     }
   };
 
+  const closeDeleteDialog = () => {
+    LuigiClient.uxManager().removeBackdrop();
+    setShowDeleteDialog(false);
+  };
+
   const toggleDontConfirmDelete = value => {
     LuigiClient.sendCustomMessage({ id: 'busola.dontConfirmDelete', value });
     setDontConfirmDelete(value);
@@ -181,6 +186,7 @@ function Resources({
       performDelete(resource);
     } else {
       setActiveResource(resource);
+      LuigiClient.uxManager().addBackdrop();
       setShowDeleteDialog(true);
     }
   }
@@ -265,20 +271,24 @@ function Resources({
 
   return (
     <>
-      <Dialog
-        actions={[
-          <Button type="negative" onClick={() => performDelete(activeResource)}>
-            {t('common.buttons.delete')}
-          </Button>,
-          <Button onClick={() => setShowDeleteDialog(false)}>
-            {t('common.buttons.cancel')}
-          </Button>,
-        ]}
-        footerProps={{}}
-        show={showDeleteDialog}
+      <MessageBox
+        type="warning"
         title={t('common.delete-dialog.title', {
           name: activeResource?.metadata.name,
         })}
+        compact
+        actions={[
+          <Button
+            type="negative"
+            compact
+            onClick={() => performDelete(activeResource)}
+          >
+            {t('common.delete-dialog.buttons.delete')}
+          </Button>,
+          <Button compact>{t('common.delete-dialog.buttons.cancel')}</Button>,
+        ]}
+        show={showDeleteDialog}
+        onClose={closeDeleteDialog}
       >
         <p>
           {t('common.delete-dialog.message', {
@@ -291,7 +301,12 @@ function Resources({
             {t('common.delete-dialog.delete-confirm')}
           </Checkbox>
         </div>
-      </Dialog>
+        {dontConfirmDelete && (
+          <MessageStrip type="information" className="fd-margin-top--sm">
+            {t('common.delete-dialog.information')}
+          </MessageStrip>
+        )}
+      </MessageBox>
       <GenericList
         title={
           showTitle ? prettifyNamePlural(resourceName, resourceType) : null
