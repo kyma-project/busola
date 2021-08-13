@@ -182,9 +182,33 @@ services:
     service: Service
   title: Services
 settings:
-  confirmations: Confirmations
-  dontConfirmDelete: Delete without confirmation
+  clusters:
+    confirmations: Confirmations
+    description: Cluster interaction
+    dontConfirmDelete: Delete without confirmation
+    showHiddenNamespaces: Show Hidden Namespaces
+    title: Clusters
+  interface:
+    title: Interface
+    description: Theme, language
+    themes:
+      hcb:
+        title: High-Contrast Black
+        description: Optimized contrast and accessibility for bright environments
+      hcw:
+        title: High-Contrast White
+        description: Optimized contrast and accessibility for dark environments
+      dark:
+        title: Dark
+        description: Use in dimmed environments
+      light:
+        title: Light
+        description: Use in default office environments
+      light_dark:
+        title: Light / Dark
+        description: Automatically matches your system settings
   language: Language
+  theme: Theme
 stateful-sets:
   replicas: Replicas
   title: StatefulSets
