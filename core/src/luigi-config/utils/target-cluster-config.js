@@ -5,6 +5,7 @@ import { failFastFetch } from './../navigation/queries';
 let clusterConfig = null;
 
 export function getTargetClusterConfig() {
+  console.log('return config', clusterConfig);
   return clusterConfig;
 }
 
@@ -15,7 +16,9 @@ export async function loadTargetClusterConfig() {
         '/api/v1/namespaces/kube-public/configmaps/busola-config',
       getAuthData(),
     );
-    clusterConfig = JSON.parse((await res.json()).data.config);
+    const r = await res.json();
+    clusterConfig = JSON.parse(r.data.config);
+    console.log('loaded config', r);
   } catch (e) {
     if (e.statusCode !== 404) {
       // don't warn on Not Found, that's fine

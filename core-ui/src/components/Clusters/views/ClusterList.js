@@ -16,6 +16,7 @@ import { useTranslation } from 'react-i18next';
 import { setCluster, deleteCluster } from './../shared';
 import { areParamsCompatible } from '../params-version';
 import './ClusterList.scss';
+import { ClusterStorageType } from './ClusterStorageType';
 
 export function ClusterList() {
   const { clusters, activeClusterName } = useMicrofrontendContext();
@@ -58,7 +59,7 @@ export function ClusterList() {
   };
 
   const entries = Object.values(clusters);
-  const headerRenderer = () => ['Name', 'API Server address'];
+  const headerRenderer = () => ['Name', 'API Server address', 'Storage type'];
   const textSearchProperties = [
     'currentContext.cluster.name',
     'currentContext.cluster.cluster.server',
@@ -84,6 +85,7 @@ export function ClusterList() {
       )}
     </>,
     entry.currentContext.cluster.cluster.server,
+    <ClusterStorageType clusterConfig={entry.config} />,
   ];
 
   const actions = [

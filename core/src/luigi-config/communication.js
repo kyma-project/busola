@@ -6,7 +6,7 @@ import {
   saveActiveClusterName,
   getActiveClusterName,
   setCluster,
-} from './cluster-management';
+} from './cluster-management/cluster-management';
 import { clearAuthData } from './auth/auth-storage';
 import { reloadNavigation } from './navigation/navigation-data-init';
 import { reloadAuth } from './auth/auth';

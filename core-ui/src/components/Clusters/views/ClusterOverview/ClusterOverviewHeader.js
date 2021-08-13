@@ -5,9 +5,10 @@ import {
   PageHeader,
   getErrorMessage,
 } from 'react-shared';
+import { ClusterStorageType } from '../ClusterStorageType';
 
 export function ClusterOverviewHeader() {
-  const { cluster } = useMicrofrontendContext();
+  const { cluster, config } = useMicrofrontendContext();
   const {
     data: version,
     error: versionError,
@@ -27,6 +28,9 @@ export function ClusterOverviewHeader() {
       </PageHeader.Column>
       <PageHeader.Column title="API server address">
         {cluster?.cluster.server}
+      </PageHeader.Column>
+      <PageHeader.Column title="Storage type">
+        <ClusterStorageType clusterConfig={config} />
       </PageHeader.Column>
     </PageHeader>
   );
