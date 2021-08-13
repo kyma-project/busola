@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import LuigiClient from '@luigi-project/client';
 
 import { Icon, InfoLabel } from 'fundamental-react';
