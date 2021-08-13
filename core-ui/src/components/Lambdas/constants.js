@@ -466,7 +466,7 @@ export const ENVIRONMENT_VARIABLES_PANEL = {
     },
   },
   INJECTED_LIST: {
-    TITLE: 'Injected Variables',
+    TITLE: 'Injected Variables via Service Bindings',
   },
   CREATE_MODAL: {
     TITLE: {

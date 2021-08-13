@@ -1,6 +1,5 @@
 import { newVariableModel } from './newVariableModel';
 import { VARIABLE_TYPE, VARIABLE_VALIDATION } from './constants';
-import { base64Decode } from 'shared/helpers';
 
 export function serializeVariables({
   lambdaVariables = [],
@@ -64,7 +63,7 @@ export function serializeVariables({
     ({ variables, bindingUsage }) => {
       const serializedInjectedVariables = [];
 
-      variables.forEach(({ key: variableName, value }) => {
+      variables.forEach(({ key: variableName, valueFrom }) => {
         let validation = VARIABLE_VALIDATION.NONE;
 
         const canOverrideByCustomVar = customVariablesNames.includes(
@@ -80,18 +79,16 @@ export function serializeVariables({
         } else if (canOverrideBySBU) {
           validation = VARIABLE_VALIDATION.CAN_OVERRIDE_BY_SBU;
         }
-
         const newVariable = newVariableModel({
           type: VARIABLE_TYPE.BINDING_USAGE,
           variable: {
             name: variableName,
-            value: value,
+            valueFrom: valueFrom,
           },
           validation,
           additionalProps: {
             serviceInstanceName:
               bindingUsage.serviceBinding.spec.instanceRef.name,
-            secretName: bindingUsage.secret.metadata.name,
           },
         });
         serializedInjectedVariables.push(newVariable);
@@ -122,6 +119,11 @@ export function retrieveVariablesFromBindingUsage(binding) {
 
   return Object.entries(secretData || {}).map(([env, value]) => ({
     key: `${envPrefix}${env}`,
-    value: base64Decode(value),
+    valueFrom: {
+      secretKeyRef: {
+        name: binding.secret.metadata.name,
+        key: env,
+      },
+    },
   }));
 }

@@ -7,7 +7,7 @@ export function newVariableModel({
   validation = VARIABLE_VALIDATION.NONE,
   additionalProps = {},
 }) {
-  return type === VARIABLE_TYPE.CUSTOM || type === VARIABLE_TYPE.BINDING_USAGE
+  return type === VARIABLE_TYPE.CUSTOM
     ? {
         id: shortid.generate(),
         type,

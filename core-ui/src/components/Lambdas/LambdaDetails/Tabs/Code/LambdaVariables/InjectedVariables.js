@@ -20,7 +20,7 @@ const headerRenderer = () => [
   '',
   'Value',
   'Source',
-  'Secret Name',
+  'Key',
   '',
 ];
 const textSearchProperties = ['name', 'value', 'type'];
@@ -89,27 +89,6 @@ function VariableSource({ variable }) {
     );
   }
 
-  if (variable.valueFrom) {
-    if (variable.valueFrom.configMapKeyRef) {
-      source = ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.CONFIG_MAP.TEXT;
-      tooltipTitle = formatMessage(
-        ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.CONFIG_MAP.TOOLTIP_MESSAGE,
-        {
-          resourceName: variable.valueFrom.configMapKeyRef.name,
-        },
-      );
-    }
-    if (variable.valueFrom.secretKeyRef) {
-      source = ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.SECRET.TEXT;
-      tooltipTitle = formatMessage(
-        ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.SECRET.TOOLTIP_MESSAGE,
-        {
-          resourceName: variable.valueFrom.secretKeyRef.name,
-        },
-      );
-    }
-  }
-
   return (
     <Tooltip content={tooltipTitle}>
       <InfoLabel>{source}</InfoLabel>
@@ -122,10 +101,6 @@ function VariableSourceLink({ variable }) {
   let resourceName;
   let resourceLink;
 
-  if (variable.valueFrom?.configMapKeyRef) {
-    resourceName = variable.valueFrom.configMapKeyRef.name;
-    resourceLink = `config-maps/details/${resourceName}`;
-  }
   if (variable.valueFrom?.secretKeyRef) {
     resourceName = variable.valueFrom.secretKeyRef.name;
     resourceLink = `secrets/details/${resourceName}`;
@@ -154,58 +129,13 @@ function VariableSourceLink({ variable }) {
   );
 }
 
-function FromSecret({ variable }) {
-  const resourceLink = `secrets/details/${variable.secretName}`;
+function VariableKey({ variable }) {
   return (
-    <span
-      className="link"
-      onClick={() =>
-        LuigiClient.linkManager()
-          .fromContext('namespace')
-          .navigate(resourceLink)
-      }
-    >
-      {' '}
-      {variable.secretName}{' '}
-    </span>
+    variable.valueFrom?.configMapKeyRef?.key ||
+    variable.valueFrom?.secretKeyRef?.key || (
+      <span style={{ color: 'var(--sapNeutralTextColor,#6a6d70)' }}>N/A</span>
+    )
   );
-}
-
-function VariableValue({ variable }) {
-  const isBindingUsageVar = variable.type === VARIABLE_TYPE.BINDING_USAGE;
-  const [show, setShow] = useState(false);
-  const value = variable.valueFrom ? (
-    <VariableSourceLink variable={variable} />
-  ) : (
-    <span style={{ overflowWrap: 'anywhere' }}>{variable.value || '-'}</span>
-  );
-
-  if (isBindingUsageVar) {
-    const blurVariable = (
-      <div
-        className={!show ? 'blur-variable' : ''}
-        onClick={_ => setShow(!show)}
-      >
-        {value}
-      </div>
-    );
-    return (
-      <div className="lambda-variable">
-        <Tooltip
-          content={
-            show
-              ? ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.BINDING_USAGE
-                  .HIDE_VALUE_MESSAGE
-              : ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.BINDING_USAGE
-                  .SHOW_VALUE_MESSAGE
-          }
-        >
-          {blurVariable}
-        </Tooltip>
-      </div>
-    );
-  }
-  return value;
 }
 
 export default function InjectedVariables({
@@ -217,9 +147,9 @@ export default function InjectedVariables({
   const rowRenderer = variable => [
     <span>{variable.name}</span>,
     <span className="sap-icon--arrow-right" />,
-    <VariableValue variable={variable} />,
+    <VariableSourceLink variable={variable} />,
     <VariableSource variable={variable} />,
-    <FromSecret variable={variable} />,
+    <VariableKey variable={variable} />,
     <VariableStatus validation={variable.validation} />,
   ];
 
