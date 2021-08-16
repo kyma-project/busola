@@ -45,14 +45,14 @@ export function ClusterList() {
       } catch (e) {
         console.error(e);
         notification.notifyError({
-          title: 'Failed to download the Kubeconfig',
+          title: t('clusters.messages.download-failed'),
           content: e.message,
         });
       }
     } else {
       notification.notifyError({
-        title: 'Failed to download the Kubeconfig',
-        content: 'Kubeconfig is missing on the Cluster',
+        title: t('clusters.messages.download-failed'),
+        content: t('clusters.messages.missing-kubeconfig'),
       });
     }
   };
@@ -88,9 +88,9 @@ export function ClusterList() {
 
   const actions = [
     {
-      name: 'Download Kubeconfig',
+      name: t('clusters.buttons.download'),
       icon: 'download',
-      tooltip: 'Download Kubeconfig',
+      tooltip: t('clusters.buttons.download'),
       handler: e => downloadKubeconfig(e),
     },
     {
@@ -106,13 +106,13 @@ export function ClusterList() {
       className="fd-margin-begin--sm"
       onClick={() => LuigiClient.linkManager().navigate('add')}
     >
-      Add Cluster
+      {t('clusters.buttons.add')}
     </Button>
   );
 
   return (
     <>
-      <PageHeader title="Clusters Overview" />
+      <PageHeader title={t('clusters.list.title')} />
       <GenericList
         textSearchProperties={textSearchProperties}
         showSearchSuggestion={false}
@@ -121,7 +121,7 @@ export function ClusterList() {
         rowRenderer={rowRenderer}
         actions={actions}
         extraHeaderContent={extraHeaderContent}
-        noSearchResultMessage="No clusters found"
+        noSearchResultMessage={t('clusters.messages.no-clusters')}
       />
     </>
   );
