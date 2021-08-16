@@ -14,7 +14,9 @@ api-rules:
       delete: Define at least one access strategy.
       path: Path can contain alphanumeric characters and  '/', '.', '*', '?', '!', '-', '(', and ')'.
   buttons:
-    create: Create API Rules
+    create: Create API Rule
+    edit: Edit API Rule "{{apiRuleName}}"
+    expose: Expose {{type}}
   general-settings:
     title: General Settings
   list:
@@ -26,6 +28,7 @@ api-rules:
     create-failed: Failed to create the API Rule
     created: API Rule created
     description: Expose Services outside the cluster with API Rules.
+    not-matching-results: Couldn't find API Rules matching this query.
     updated: API Rule updated
   services:
     error-load: Couldn't load service list

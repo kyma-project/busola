@@ -14,7 +14,8 @@ api-rules:
       delete: Zdefiniuj co najmniej jedną strategię dostępu.
       path: Ścieżka może zawierać znaki alfanumeryczne oraz „/”, „.”, „*”, „?”, „!”, „-”, „(” i „)”.
   buttons:
-    create: Stwórz reguły API
+    create: Stwórz regułę API
+    expose: Wystaw {type}
   general-settings:
     title: Ustawienia główne
   list:
@@ -26,6 +27,7 @@ api-rules:
     create-failed: Nie udało się utworzyć reguły API
     created: Utworzono regułę API
     description: Udostępnij usługi poza klastrem za pomocą reguł interfejsu API.
+    not-matching-results: Nie można znaleźć reguł API pasujących do tego zapytania.
     updated: Zaktualizowano regułę API
   services:
     error-load: Nie udało się wczytać listy serwisów

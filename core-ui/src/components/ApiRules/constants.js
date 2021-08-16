@@ -11,29 +11,26 @@ export const PANEL = {
     ERRORS: {
       RESOURCES_NOT_FOUND:
         "This {resourceType} doesn't have any API Rules yet.",
-      NOT_MATCHING_SEARCH_QUERY: "Couldn't find API Rules matching this query.",
+      NOT_MATCHING_SEARCH_QUERY: 'api-rules.messages.not-matching-results',
     },
   },
   CREATE_BUTTON: {
-    TEXT: 'Create API Rule',
+    TEXT: 'api-rules.buttons.create',
   },
   EXPOSE_BUTTON: {
-    TEXT: 'Expose {type}',
+    TEXT: 'api-rules.buttons.expose',
   },
   CREATE_MODAL: {
-    TITLE: 'Create API Rule',
-    OPEN_BUTTON: {
-      TEXT: 'Expose API',
-    },
+    TITLE: 'api-rules.buttons.create',
   },
   EDIT_MODAL: {
-    TITLE: 'Edit API Rule "{apiRuleName}"',
+    TITLE: 'api-rules.buttons.edit',
   },
 };
 
 export const ACCESS_STRATEGIES_PANEL = {
   LIST: {
-    TITLE: 'Access Strategies',
+    TITLE: 'api-rules.access-strategies.title',
     ERRORS: {
       NOT_MATCHING_SEARCH_QUERY:
         "Couldn't find Access Strategies matching this query.",
