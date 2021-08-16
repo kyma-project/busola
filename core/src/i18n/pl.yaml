@@ -182,6 +182,10 @@ services:
   labels:
     service: Serwis
   title: Serwisy
+  type: Typ serwisu
+  cluster-ip: IP Klastra
+  ports: Porty
+  external-ips: Zewnętrzne IP
 settings:
   clusters:
     confirmations: Potwierdzenia
