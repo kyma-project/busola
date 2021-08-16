@@ -30,7 +30,7 @@ import { NodeDetails } from 'components/Nodes/NodeDetails/NodeDetails';
 
 export default function App() {
   const { cluster, language } = useMicrofrontendContext();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   useEffect(() => {
     i18n.changeLanguage(language);
   }, [language, i18n]);
@@ -65,13 +65,13 @@ export default function App() {
       <Route
         exact
         path="/apirules/create"
-        render={withTitle(API_RULES_TITLE, CreateApiRule)}
+        render={withTitle(t(API_RULES_TITLE), CreateApiRule)}
       />
 
       <Route
         exact
         path="/apirules/edit/:apiName"
-        render={withTitle(API_RULES_TITLE, RoutedEditApiRule)}
+        render={withTitle(t(API_RULES_TITLE), RoutedEditApiRule)}
       />
 
       <Route

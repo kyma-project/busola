@@ -3,6 +3,7 @@ import LuigiClient from '@luigi-project/client';
 
 import { GenericList } from 'react-shared';
 import { Button } from 'fundamental-react';
+import { useTranslation } from 'react-i18next';
 
 import { formatMessage } from 'components/Lambdas/helpers/misc';
 import { ERRORS } from 'components/Lambdas/constants';
@@ -146,10 +147,11 @@ export default function ApiRules({
     resourceType: resourceType || 'Namespace',
   });
 
+  const { t } = useTranslation();
   return (
     <div>
       <GenericList
-        title={noTitle ? '' : PANEL.LIST.TITLE}
+        title={noTitle ? '' : t(PANEL.LIST.TITLE)}
         showSearchField={true}
         textSearchProperties={textSearchProperties}
         showSearchSuggestion={false}

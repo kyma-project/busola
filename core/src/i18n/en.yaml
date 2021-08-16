@@ -25,6 +25,7 @@ api-rules:
   messages:
     create-failed: Failed to create the API Rule
     created: API Rule created
+    description: Expose Services outside the cluster with API Rules.
     updated: API Rule updated
   services:
     error-load: Couldn't load service list
@@ -189,24 +190,24 @@ settings:
     showHiddenNamespaces: Show Hidden Namespaces
     title: Clusters
   interface:
-    title: Interface
     description: Theme, language
     themes:
-      hcb:
-        title: High-Contrast Black
-        description: Optimized contrast and accessibility for bright environments
-      hcw:
-        title: High-Contrast White
-        description: Optimized contrast and accessibility for dark environments
       dark:
-        title: Dark
         description: Use in dimmed environments
+        title: Dark
+      hcb:
+        description: Optimized contrast and accessibility for bright environments
+        title: High-Contrast Black
+      hcw:
+        description: Optimized contrast and accessibility for dark environments
+        title: High-Contrast White
       light:
-        title: Light
         description: Use in default office environments
+        title: Light
       light_dark:
-        title: Light / Dark
         description: Automatically matches your system settings
+        title: Light / Dark
+    title: Interface
   language: Language
   theme: Theme
 stateful-sets:

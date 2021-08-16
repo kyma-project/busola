@@ -1,13 +1,13 @@
 export const EXCLUDED_SERVICES_LABELS = ['serving.knative.dev/revision'];
 
 export const TOOLBAR = {
-  TITLE: 'API Rules',
-  DESCRIPTION: 'Expose Services outside the cluster with API Rules.',
+  TITLE: 'api-rules.title',
+  DESCRIPTION: 'api-rules.messages.description',
 };
 
 export const PANEL = {
   LIST: {
-    TITLE: 'API Rules',
+    TITLE: 'api-rules.title',
     ERRORS: {
       RESOURCES_NOT_FOUND:
         "This {resourceType} doesn't have any API Rules yet.",

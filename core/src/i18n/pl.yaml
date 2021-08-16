@@ -25,6 +25,7 @@ api-rules:
   messages:
     create-failed: Nie udało się utworzyć reguły API
     created: Utworzono regułę API
+    description: Udostępnij usługi poza klastrem za pomocą reguł interfejsu API.
     updated: Zaktualizowano regułę API
   services:
     error-load: Nie udało się wczytać listy serwisów
@@ -190,24 +191,24 @@ settings:
     showHiddenNamespaces: Pokaż ukryte Przestrzenie Nazw
     title: Klastry
   interface:
-    title: Interfejs
     description: Motyw, język
     themes:
-      hcb:
-        title: Ciemny z wysokim kontrastem
-        description: Zwiększony kontrast oraz dostępność
-      hcw:
-        title: Jasny z wysokim kontrastem
-        description: Zwiększony kontrast oraz dostępność
       dark:
-        title: Ciemny
         description: Do użycia przy kodowaniu po nocach
+        title: Ciemny
+      hcb:
+        description: Zwiększony kontrast oraz dostępność
+        title: Ciemny z wysokim kontrastem
+      hcw:
+        description: Zwiększony kontrast oraz dostępność
+        title: Jasny z wysokim kontrastem
       light:
-        title: Jasny
         description: Do użycia w normalnych warunkach
+        title: Jasny
       light_dark:
-        title: Light / Dark
         description: Używa ustawień systemowych
+        title: Light / Dark
+    title: Interfejs
   language: Język
   theme: Motyw
 stateful-sets:

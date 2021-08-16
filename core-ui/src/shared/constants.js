@@ -1,7 +1,7 @@
 export const PREFERENCES_TITLE = 'Preferences';
 export const CLUSTERS_OVERVIEW_TITLE = 'Clusters Overview';
 export const ADD_CLUSTER_TITLE = 'Add Cluster';
-export const API_RULES_TITLE = 'API Rules';
+export const API_RULES_TITLE = 'api-rules.title';
 export const NO_PERMISSIONS_TITLE = 'No Permissions';
 export const CLUSTER_OVERVIEW_TITLE = 'Cluster Overview';
 
