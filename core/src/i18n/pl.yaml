@@ -187,9 +187,33 @@ services:
   ports: Porty
   external-ips: Zewnętrzne IP
 settings:
-  confirmations: Potwierdzenia
-  dontConfirmDelete: Usuwanie bez potwierdzenia
+  clusters:
+    confirmations: Potwierdzenia
+    description: Ustawienia klastrów
+    dontConfirmDelete: Usuwanie bez potwierdzenia
+    showHiddenNamespaces: Pokaż ukryte Przestrzenie Nazw
+    title: Klastry
+  interface:
+    title: Interfejs
+    description: Motyw, język
+    themes:
+      hcb:
+        title: Ciemny z wysokim kontrastem
+        description: Zwiększony kontrast oraz dostępność
+      hcw:
+        title: Jasny z wysokim kontrastem
+        description: Zwiększony kontrast oraz dostępność
+      dark:
+        title: Ciemny
+        description: Do użycia przy kodowaniu po nocach
+      light:
+        title: Jasny
+        description: Do użycia w normalnych warunkach
+      light_dark:
+        title: Light / Dark
+        description: Używa ustawień systemowych
   language: Język
+  theme: Motyw
 stateful-sets:
   replicas: Repliki
   title: Zestawy stanowe
