@@ -11,6 +11,7 @@ import { ENVIRONMENT_VARIABLES_PANEL } from 'components/Lambdas/constants';
 import { CONFIG } from 'components/Lambdas/config';
 
 import { getValidationStatus, validateVariable } from '../validation';
+import { useTranslation } from 'react-i18next';
 import './VariableInputs.scss';
 
 export default function ResourceVariableInput({
@@ -22,6 +23,7 @@ export default function ResourceVariableInput({
   setValidity,
   setInvalidModalPopupMessage,
 }) {
+  const { t } = useTranslation();
   const [variable, setVariable] = useState(currentVariable);
   const [debouncedCallback] = useDebouncedCallback(newVariable => {
     onUpdateVariable(newVariable);
@@ -68,10 +70,7 @@ export default function ResourceVariableInput({
     const validate = validateVariable(variables, variable);
     setValidity(validate);
     if (!validate) {
-      setInvalidModalPopupMessage(
-        ENVIRONMENT_VARIABLES_PANEL.EDIT_MODAL.CONFIRM_BUTTON.POPUP_MESSAGES
-          .ERROR,
-      );
+      setInvalidModalPopupMessage(t('functions.variable.popup-error'));
     }
   }, [
     variables,
@@ -160,8 +159,7 @@ export default function ResourceVariableInput({
         break;
       case VARIABLE_VALIDATION.CAN_OVERRIDE_SBU:
         className = 'fd-has-color-status-2';
-        message =
-          ENVIRONMENT_VARIABLES_PANEL.WARNINGS.VARIABLE_CAN_OVERRIDE_SBU;
+        message = t('functions.variable.warnings.variable-can-override-sbu');
         break;
       default:
         return null;

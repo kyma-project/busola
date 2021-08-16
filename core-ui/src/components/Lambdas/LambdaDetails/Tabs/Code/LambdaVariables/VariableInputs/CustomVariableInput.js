@@ -7,8 +7,45 @@ import { ENVIRONMENT_VARIABLES_PANEL } from 'components/Lambdas/constants';
 import { CONFIG } from 'components/Lambdas/config';
 
 import { getValidationStatus, validateVariable } from '../validation';
+import { useTranslation } from 'react-i18next';
 import './VariableInputs.scss';
 
+function RenderValidationContent(validation) {
+  const { t } = useTranslation();
+
+  if (validation === VARIABLE_VALIDATION.NONE) {
+    return null;
+  }
+
+  let className = undefined;
+  let message = '';
+  switch (validation) {
+    case VARIABLE_VALIDATION.EMPTY:
+      className = 'fd-has-color-status-3';
+      message = ENVIRONMENT_VARIABLES_PANEL.ERRORS.EMPTY;
+      break;
+    case VARIABLE_VALIDATION.INVALID:
+      className = 'fd-has-color-status-3';
+      message = ENVIRONMENT_VARIABLES_PANEL.ERRORS.INVALID;
+      break;
+    case VARIABLE_VALIDATION.DUPLICATED:
+      className = 'fd-has-color-status-3';
+      message = ENVIRONMENT_VARIABLES_PANEL.ERRORS.DUPLICATED;
+      break;
+    case VARIABLE_VALIDATION.RESTRICTED:
+      className = 'fd-has-color-status-3';
+      message = ENVIRONMENT_VARIABLES_PANEL.ERRORS.RESTRICTED;
+      break;
+    case VARIABLE_VALIDATION.CAN_OVERRIDE_SBU:
+      className = 'fd-has-color-status-2';
+      message = t('functions.variable.warnings.variable-can-override-sbu');
+      break;
+    default:
+      return null;
+  }
+
+  return <span className={className}>{message}</span>;
+}
 export default function CustomVariableInput({
   currentVariable = {},
   variables = [],
@@ -17,6 +54,7 @@ export default function CustomVariableInput({
   setValidity,
   setInvalidModalPopupMessage,
 }) {
+  const { t } = useTranslation();
   const [variable, setVariable] = useState(currentVariable);
   const [debouncedCallback] = useDebouncedCallback(newVariable => {
     onUpdateVariable(newVariable);
@@ -35,10 +73,7 @@ export default function CustomVariableInput({
     setValidity(validate);
 
     if (!validate) {
-      setInvalidModalPopupMessage(
-        ENVIRONMENT_VARIABLES_PANEL.EDIT_MODAL.CONFIRM_BUTTON.POPUP_MESSAGES
-          .ERROR,
-      );
+      setInvalidModalPopupMessage(t('functions.variable.popup-error'));
     }
   }, [
     variables,
@@ -80,44 +115,6 @@ export default function CustomVariableInput({
     debouncedCallback(newVariable);
   }
 
-  function renderValidationContent() {
-    const { validation } = variable;
-
-    if (validation === VARIABLE_VALIDATION.NONE) {
-      return null;
-    }
-
-    let className = undefined;
-    let message = '';
-    switch (validation) {
-      case VARIABLE_VALIDATION.EMPTY:
-        className = 'fd-has-color-status-3';
-        message = ENVIRONMENT_VARIABLES_PANEL.ERRORS.EMPTY;
-        break;
-      case VARIABLE_VALIDATION.INVALID:
-        className = 'fd-has-color-status-3';
-        message = ENVIRONMENT_VARIABLES_PANEL.ERRORS.INVALID;
-        break;
-      case VARIABLE_VALIDATION.DUPLICATED:
-        className = 'fd-has-color-status-3';
-        message = ENVIRONMENT_VARIABLES_PANEL.ERRORS.DUPLICATED;
-        break;
-      case VARIABLE_VALIDATION.RESTRICTED:
-        className = 'fd-has-color-status-3';
-        message = ENVIRONMENT_VARIABLES_PANEL.ERRORS.RESTRICTED;
-        break;
-      case VARIABLE_VALIDATION.CAN_OVERRIDE_SBU:
-        className = 'fd-has-color-status-2';
-        message =
-          ENVIRONMENT_VARIABLES_PANEL.WARNINGS.VARIABLE_CAN_OVERRIDE_SBU;
-        break;
-      default:
-        return null;
-    }
-
-    return <span className={className}>{message}</span>;
-  }
-
   return (
     <div className="custom-variable-form">
       <FormItem className="grid-input-fields">
@@ -130,7 +127,7 @@ export default function CustomVariableInput({
           onChange={onChangeName}
         />
       </FormItem>
-      {renderValidationContent()}
+      <RenderValidationContent validation={variable.validation} />
       <FormItem className="grid-input-fields">
         <FormLabel>Value</FormLabel>
         <FormInput

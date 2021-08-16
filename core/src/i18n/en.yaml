@@ -55,8 +55,10 @@ clusters:
 common:
   buttons:
     cancel: Cancel
+    create: Create
     delete: Delete
     edit-yaml: Edit YAML
+    save: Save
   created: Created
   delete-dialog:
     delete-confirm: Don't ask this again
@@ -117,7 +119,40 @@ discovery-and-network:
 functions:
   title: Functions
   variable:
+    buttons:
+      add: Add environment variable
+      open:
+        custom: Custom Variable
+        secret: Secret Variable
+        config-map: Config Map Variable
+    header:
+      key: Key
+      name: Variable Name
+      source: Source
+      value: Value
+    not-found: This Function doesn't have any environment variables yet.
+    not-match: Couldn't find environment variables matching this query.
+    title:
+      create-modal:
+        custom: Create Custom Variable
+        secret: Create Secret Variable
+        config-map: Create Config Map Variable
+      edit-modal:
+        custom: Edit Custom Variable
+        secret: Edit Secret Variable
+        config-map: Edit Config Map Variable
+      environment-variables: Environment variables
+      injected-variables: Environment variables injected via Service Bindings
+    popup-error: At least one variable has an incorrect name format, is restricted, duplicated, or empty.
     tooltip: This variable comes from a Resource. To get the value, follow the link.
+    warning: Warning
+    warnings:
+      text: Warning
+      variable-can-override-sbu: This variable can override or be overridden by a variable injected by one of the created Service Bindings.
+      sbu-can-be-override:
+        by-custom-env: This variable can override or be overridden by one of the custom variables.
+        by-sbu: This variable can override or be overridden by a variable injected by one of the Service Bindings.
+        by-both: This variable can be overridden by one of the custom variables or a variable injected by one of the Service Bindings.
 git-repositories:
   title: Git Repositories
 instances:

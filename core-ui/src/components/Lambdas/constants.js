@@ -456,52 +456,6 @@ export const REPOSITORY_CONFIG_PANEL = {
 };
 
 export const ENVIRONMENT_VARIABLES_PANEL = {
-  LIST: {
-    TITLE: 'Environment Variables',
-    ERRORS: {
-      RESOURCES_NOT_FOUND:
-        "This Function doesn't have any environment variables yet.",
-      NOT_MATCHING_SEARCH_QUERY:
-        "Couldn't find environment variables matching this query.",
-    },
-  },
-  INJECTED_LIST: {
-    TITLE: 'Injected Variables via Service Bindings',
-  },
-  CREATE_MODAL: {
-    TITLE: {
-      CUSTOM: 'Create Custom Variable',
-      SECRET: 'Create Variable From Secret',
-      CONFIG_MAP: 'Create Variable From Config Map',
-    },
-    OPEN_BUTTON: {
-      CUSTOM: 'Custom Variable',
-      SECRET: 'Secret Variable',
-      CONFIG_MAP: 'Config Map Variable',
-    },
-    CONFIRM_BUTTON: {
-      TEXT: 'Create',
-    },
-  },
-  EDIT_MODAL: {
-    TITLE: {
-      CUSTOM: 'Edit Custom Variable',
-      SECRET: 'Edit Variable From Secret',
-      CONFIG_MAP: 'Edit Variable From Config Map',
-    },
-    CONFIRM_BUTTON: {
-      TEXT: 'Save',
-      POPUP_MESSAGES: {
-        NO_ENVS_DEFINED: 'You must define at least one variable.',
-        COLLECTIONS_EQUAL: 'Changes in variables are required.',
-        ERROR:
-          'At least one variable has an incorrect name format, is restricted, duplicated, or empty.',
-      },
-    },
-    ADD_ENV_BUTTON: {
-      TEXT: 'Add Environment Variable',
-    },
-  },
   ERRORS: {
     EMPTY: 'Variable is empty.',
     DUPLICATED: 'Duplicated variable name.',

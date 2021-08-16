@@ -2,7 +2,7 @@ import React from 'react';
 import LuigiClient from '@luigi-project/client';
 
 import { Icon, InfoLabel } from 'fundamental-react';
-import { GenericList, Tooltip } from 'react-shared';
+import { EMPTY_TEXT_PLACEHOLDER, GenericList, Tooltip } from 'react-shared';
 
 import {
   VARIABLE_VALIDATION,
@@ -15,17 +15,10 @@ import './LambdaEnvs.scss';
 import { formatMessage } from 'components/Lambdas/helpers/misc';
 import { useTranslation } from 'react-i18next';
 
-const headerRenderer = () => [
-  'Variable Name',
-  '',
-  'Value',
-  'Source',
-  'Key',
-  '',
-];
 const textSearchProperties = ['name', 'value', 'type'];
 
 function VariableStatus({ validation }) {
+  const { t } = useTranslation();
   if (!WARNINGS_VARIABLE_VALIDATION.includes(validation)) {
     return null;
   }
@@ -34,7 +27,7 @@ function VariableStatus({ validation }) {
   const control = (
     <div>
       <span className={statusClassName}>
-        {ENVIRONMENT_VARIABLES_PANEL.WARNINGS.TEXT}
+        {t('functions.variable.warnings.text')}
       </span>
       <Icon
         ariaLabel="Warning"
@@ -48,7 +41,7 @@ function VariableStatus({ validation }) {
   let message = '';
   switch (validation) {
     case VARIABLE_VALIDATION.CAN_OVERRIDE_SBU: {
-      message = ENVIRONMENT_VARIABLES_PANEL.WARNINGS.VARIABLE_CAN_OVERRIDE_SBU;
+      message = t('functions.variable.warnings.variable-can-override-sbu');
       break;
     }
     case VARIABLE_VALIDATION.CAN_OVERRIDE_BY_CUSTOM_ENV_AND_SBU: {
@@ -67,7 +60,7 @@ function VariableStatus({ validation }) {
       break;
     }
     default: {
-      message = ENVIRONMENT_VARIABLES_PANEL.WARNINGS.VARIABLE_CAN_OVERRIDE_SBU;
+      message = t('functions.variable.warnings.variable-can-override-sbu');
     }
   }
 
@@ -118,12 +111,11 @@ function VariableSourceLink({ variable }) {
                 .navigate(resourceLink)
             }
           >
-            {' '}
-            {resourceName}{' '}
+            {` ${resourceName} `}
           </span>
         </Tooltip>
       ) : (
-        '-'
+        EMPTY_TEXT_PLACEHOLDER
       )}
     </>
   );
@@ -144,6 +136,17 @@ export default function InjectedVariables({
   customValueFromVariables,
   injectedVariables,
 }) {
+  const { t } = useTranslation();
+
+  const headerRenderer = () => [
+    t('functions.variable.header.name'),
+    '',
+    t('functions.variable.header.value'),
+    t('functions.variable.header.source'),
+    t('functions.variable.header.key'),
+    '',
+  ];
+
   const rowRenderer = variable => [
     <span>{variable.name}</span>,
     <span className="sap-icon--arrow-right" />,
@@ -158,19 +161,15 @@ export default function InjectedVariables({
   return (
     <div className="lambda-variables">
       <GenericList
-        title={ENVIRONMENT_VARIABLES_PANEL.INJECTED_LIST.TITLE}
+        title={t('functions.variable.titleinjected-variables')}
         showSearchField={true}
         showSearchSuggestion={false}
         textSearchProperties={textSearchProperties}
         entries={entries}
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
-        notFoundMessage={
-          ENVIRONMENT_VARIABLES_PANEL.LIST.ERRORS.RESOURCES_NOT_FOUND
-        }
-        noSearchResultMessage={
-          ENVIRONMENT_VARIABLES_PANEL.LIST.ERRORS.NOT_MATCHING_SEARCH_QUERY
-        }
+        notFoundMessage={t('functions.variable.not-found')}
+        noSearchResultMessage={t('functions.variable.not-match')}
       />
     </div>
   );

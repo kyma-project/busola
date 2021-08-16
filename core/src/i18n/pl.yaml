@@ -55,8 +55,10 @@ clusters:
 common:
   buttons:
     cancel: Anuluj
+    create: Stwórz
     delete: Usuń
     edit-yaml: Edytuj YAML
+    save: Zapisz
   created: Stworzono
   delete-dialog:
     delete-confirm: Nie pytaj ponownie
@@ -117,7 +119,39 @@ discovery-and-network:
 functions:
   title: Funkcje
   variable:
+    buttons:
+      add: Dodaj zmienną środowiskową
+      open:
+        custom: Zmienna niestandardowa
+        secret: Zmienna z sekretu
+        config-map: Zmienna z mapy konfiguracji
+    header:
+      key: Klucz
+      name: Nazwa zmiennej
+      source: Żródło
+      value: Wartość
+    not-found: Ta funkcja nie posiada jeszcze zmiennych środowiskowych
+    not-match: Nie znaleziono zmiennych środowiskowych pasujących do wyszukiwanej frazy.
+    title:
+      create-modal:
+        custom: Stwórz Zmienną niestandardową
+        secret: Stwórz Secret Variable
+        config-map: Stwórz Config Map Variable
+      edit-modal:
+        custom: Edytuj Zmienną niestandardową
+        secret: Edytuj Zmienną z Sekretu
+        config-map: Edytuj Zmienną z Mapy Konfiguracji
+      environment-variables: Zmienne środowiskowe
+      injected-variables: Zmienne środowiskowe wstrzyknięte poprzez Service Bindings
+    popup-error: Przynajmniej jedna ze zmiennych ma niepoprawny format, jest zastrzerzona, zduplikowana, lub pusta.
     tooltip: Ta zmienna pochodzi z zasobu. Aby uzyskać wartość, kliknij link.
+    warnings:
+      text: Ostrzeżenie
+      variable-can-override-sbu: Ta zmienna może nadpisać lub być nadpisana przez zmienną wstrzykniętą przez jeden ze stworzonych service bindingów.
+      sbu-can-be-override:
+        by-custom-env: Ta zmienna może nadpisać lub być nadpisana przez jedną z niestandardowych zmiennych.
+        by-sbu: Ta zmienna może nadpisać lub być nadpisana przez zmienną wstrzykniętą przez jeden z service bindingów.
+        by-both: TTa zmienna może być nadpisana przez jedną z niestandardowych zmiennych lub przez zmienną wstrzykniętą przez jeden z service bindingów.
 git-repositories:
   title: Repozytoria Git
 instances:

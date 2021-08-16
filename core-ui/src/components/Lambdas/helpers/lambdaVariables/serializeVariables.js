@@ -33,6 +33,7 @@ export function serializeVariables({
     }
 
     if (isValueFromVariable) {
+      customVariablesNames.push(variable.name);
       customValueFromVariables.push(
         newVariableModel({
           type: VARIABLE_TYPE[typeOfValueFromVariable],
