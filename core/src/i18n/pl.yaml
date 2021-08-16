@@ -51,11 +51,21 @@ cluster-roles:
 clusters:
   buttons:
     add: Dodaj klaster
+    apply-configuration: Zastosuj konfigurację
+    apply-kubeconfig: Zastosuj kubeconfig
+  labels:
+    client-id: Identyfikator klienta
+    issuer-url: Adres URL wystawcy
+    scopes: Zakresy
   list:
     outdated:
       download: Pobierz Kubeconfig
       tooltip: Nieaktualna wersja parametru może powodować błędy. Usuń i ponownie dodaj swój klaster.
     title: Przegląd klastrów
+  messages:
+    error-kubeconfig: Błąd odczytu kubeconfiga
+    missing-configuration-data: Konfiguracja została poprawnie dołączona. Proszę wypełnić pozostałe wymagane dane.
+    upload-paste-kubeconfig: Prześlij lub wklej plik kubeconfig
   overview:
     title: Przegląd klastra
 common:
@@ -63,7 +73,6 @@ common:
     cancel: Anuluj
     delete: Usuń
     edit-yaml: Edytuj YAML
-  created: Stworzono
   delete-dialog:
     delete-confirm: Nie pytaj ponownie
     information: Wyłączyłeś potwierdzenia usuwania dla wszystkich zasobów. Możnesz je ponownie włączyć w Ustawieniach.
@@ -82,6 +91,7 @@ common:
     copy-to-clipboard: Skopiuj do schowka
     download: Pobierz
     duplicate-key: Zduplikowany klucz
+    error: 'Error: '
     k8s-name-input: Nazwa musi składać się z małych znaków alfanumerycznych, może zawierać również „-” (np. „my-name1”).
     key-value: klucz=wartość, musi zaczynać się i kończyć znakiem alfanumerycznym, może zawierać również „-”, „_” lub „.”
     read-file: Odczytuj zawartość pliku jako pojedynczą wartość, z nazwą pliku jako kluczem.
@@ -187,13 +197,13 @@ service-catalog: null
 service-management:
   title: Zarządzanie serwisami
 services:
+  cluster-ip: IP Klastra
+  external-ips: Zewnętrzne IP
   labels:
     service: Serwis
+  ports: Porty
   title: Serwisy
   type: Typ serwisu
-  cluster-ip: IP Klastra
-  ports: Porty
-  external-ips: Zewnętrzne IP
 settings:
   clusters:
     confirmations: Potwierdzenia

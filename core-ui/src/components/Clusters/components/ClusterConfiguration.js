@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNotification } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 import { AuthForm, AUTH_FORM_OIDC } from './AuthForm';
 import { ContextChooser } from './ContextChooser/ContextChooser';
 import { getContext, hasKubeconfigAuth, addCluster } from '../shared';
@@ -46,6 +47,8 @@ export function ClusterConfiguration({
     }
   };
 
+  const { t } = useTranslation();
+
   const onApply = () => {
     try {
       // update original kk's choosen context
@@ -64,8 +67,8 @@ export function ClusterConfiguration({
       addCluster(params);
     } catch (e) {
       notification.notifyError({
-        title: 'Cannot apply configuration',
-        content: 'Error: ' + e.message,
+        title: t('clusters.messages.wrong-configuration'),
+        content: t('common.tooltips.error') + e.message,
       });
       console.warn(e);
     }
@@ -91,7 +94,7 @@ export function ClusterConfiguration({
         onClick={onApply}
         disabled={!kubeconfig || (requireAuth && !authValid)}
       >
-        Apply configuration
+        {t('clusters.buttons.apply-configuration')}
       </Button>
     </>
   );
