@@ -49,12 +49,15 @@ cluster-role-bindings:
 cluster-roles:
   title: Role klastra
 clusters:
+  buttons:
+    add: Dodaj klaster
   list:
     outdated:
       download: Pobierz Kubeconfig
       tooltip: Nieaktualna wersja parametru może powodować błędy. Usuń i ponownie dodaj swój klaster.
-  overview:
     title: Przegląd klastrów
+  overview:
+    title: Przegląd klastra
 common:
   buttons:
     cancel: Anuluj
@@ -160,6 +163,8 @@ namespaces:
     create: Wybierz tę opcję, aby wyłączyć istio, aby pośredniczyć w całej komunikacji między podami w Twojej przestrzeni nazw.
     memory-examples: Użyj zwykłej wartości w bajtach (128974848) lub odpowiednich przyrostków (takich jak 129e6, 129M, 123Mi).
     total-memory-limit: Zdefiniuj ograniczenia, które ograniczają całkowite zużycie pamięci w Twojej przestrzeni nazw.
+no-permissions:
+  title: Brak uprawnień
 oauth2-clients:
   title: Klienci OAuth2
 observability:

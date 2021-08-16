@@ -1,9 +1,9 @@
-export const PREFERENCES_TITLE = 'Preferences';
-export const CLUSTERS_OVERVIEW_TITLE = 'Clusters Overview';
-export const ADD_CLUSTER_TITLE = 'Add Cluster';
+export const PREFERENCES_TITLE = 'preferences.title';
+export const CLUSTERS_OVERVIEW_TITLE = 'clusters.list.title';
+export const ADD_CLUSTER_TITLE = 'clusters.buttons.add';
 export const API_RULES_TITLE = 'api-rules.title';
-export const NO_PERMISSIONS_TITLE = 'No Permissions';
-export const CLUSTER_OVERVIEW_TITLE = 'Cluster Overview';
+export const NO_PERMISSIONS_TITLE = 'no-permissions.title';
+export const CLUSTER_OVERVIEW_TITLE = 'clusters.overview.title';
 
 export const ERRORS = {
   SERVER: 'Server error. Contact your cluster admin.',

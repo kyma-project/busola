@@ -40,27 +40,27 @@ export default function App() {
       <Route
         path="/no-permissions"
         exact
-        component={withTitle(NO_PERMISSIONS_TITLE, NoPermissions)}
+        component={withTitle(t(NO_PERMISSIONS_TITLE), NoPermissions)}
       />
       <Route
         path="/overview"
         exact
-        component={withTitle(CLUSTER_OVERVIEW_TITLE, ClusterOverview)}
+        component={withTitle(t(CLUSTER_OVERVIEW_TITLE), ClusterOverview)}
       />
       <Route path="/overview/nodes/:nodeName" component={RoutedNodeDetails} />
       <Route
         path="/clusters"
         exact
-        component={withTitle(CLUSTERS_OVERVIEW_TITLE, ClusterList)}
+        component={withTitle(t(CLUSTERS_OVERVIEW_TITLE), ClusterList)}
       />
       <Route
         path="/clusters/add"
         exact
-        component={withTitle(ADD_CLUSTER_TITLE, AddCluster)}
+        component={withTitle(t(ADD_CLUSTER_TITLE), AddCluster)}
       />
       <Route
         path="/preferences"
-        render={withTitle(PREFERENCES_TITLE, Preferences)}
+        render={withTitle(t(PREFERENCES_TITLE), Preferences)}
       />
       <Route
         exact
