@@ -125,6 +125,13 @@ functions:
         custom: Zmienna niestandardowa
         secret: Zmienna z sekretu
         config-map: Zmienna z mapy konfiguracji
+    errors:
+      empty: Nazwa zmiennej jest pusta.
+      duplicated: Zmienna o takiej nazwie ju istnieje.
+      invalid: "Nazwa zmiennej musi składać się ze znaków alfanumerycznych, może zawierać również '_', bez spacji"
+      invalid-config: Select the config map name and key
+      invalid-secret: Select the secret name and key
+      restricted: Ta nazwa zmiennej jest zastrzerzona i nie może by użyta. Spróbuj użyć innej nazwy.
     form:
       config-map: $t(functions.variable.type.config-map)
       key: $t(functions.variable.header.key)

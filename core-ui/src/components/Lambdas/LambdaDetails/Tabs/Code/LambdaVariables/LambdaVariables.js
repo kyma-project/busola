@@ -17,7 +17,6 @@ import {
   VARIABLE_TYPE,
   WARNINGS_VARIABLE_VALIDATION,
 } from 'components/Lambdas/helpers/lambdaVariables';
-import { ENVIRONMENT_VARIABLES_PANEL } from 'components/Lambdas/constants';
 import { useUpdateLambda, UPDATE_TYPE } from 'components/Lambdas/hooks';
 
 import { validateVariables } from './validation';
@@ -57,18 +56,17 @@ function VariableStatus({ validation }) {
       break;
     }
     case VARIABLE_VALIDATION.CAN_OVERRIDE_BY_CUSTOM_ENV_AND_SBU: {
-      message =
-        ENVIRONMENT_VARIABLES_PANEL.WARNINGS.SBU_CAN_BE_OVERRIDE
-          .BY_CUSTOM_ENV_AND_SBU;
+      message = t('functions.variable.warnings.sbu-can-be-override.by-both');
       break;
     }
     case VARIABLE_VALIDATION.CAN_OVERRIDE_BY_CUSTOM_ENV: {
-      message =
-        ENVIRONMENT_VARIABLES_PANEL.WARNINGS.SBU_CAN_BE_OVERRIDE.BY_CUSTOM_ENV;
+      message = t(
+        'functions.variable.warnings.sbu-can-be-override.by-custom-env',
+      );
       break;
     }
     case VARIABLE_VALIDATION.CAN_OVERRIDE_BY_SBU: {
-      message = ENVIRONMENT_VARIABLES_PANEL.WARNINGS.SBU_CAN_BE_OVERRIDE.BY_SBU;
+      message = t('functions.variable.warnings.sbu-can-be-override.by-sbu');
       break;
     }
     default: {
@@ -166,7 +164,7 @@ function VariableValue({ variable }) {
   const value = variable.valueFrom ? (
     <VariableSourceLink variable={variable} />
   ) : (
-    <span>{variable.value || '-'}</span>
+    <span>{variable.value || EMPTY_TEXT_PLACEHOLDER}</span>
   );
 
   return value;

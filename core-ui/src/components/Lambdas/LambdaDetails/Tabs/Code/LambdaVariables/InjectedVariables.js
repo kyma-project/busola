@@ -9,7 +9,6 @@ import {
   VARIABLE_TYPE,
   WARNINGS_VARIABLE_VALIDATION,
 } from 'components/Lambdas/helpers/lambdaVariables';
-import { ENVIRONMENT_VARIABLES_PANEL } from 'components/Lambdas/constants';
 
 import './LambdaEnvs.scss';
 import { formatMessage } from 'components/Lambdas/helpers/misc';
@@ -45,18 +44,17 @@ function VariableStatus({ validation }) {
       break;
     }
     case VARIABLE_VALIDATION.CAN_OVERRIDE_BY_CUSTOM_ENV_AND_SBU: {
-      message =
-        ENVIRONMENT_VARIABLES_PANEL.WARNINGS.SBU_CAN_BE_OVERRIDE
-          .BY_CUSTOM_ENV_AND_SBU;
+      message = t('functions.variable.warnings.sbu-can-be-override.by-both');
       break;
     }
     case VARIABLE_VALIDATION.CAN_OVERRIDE_BY_CUSTOM_ENV: {
-      message =
-        ENVIRONMENT_VARIABLES_PANEL.WARNINGS.SBU_CAN_BE_OVERRIDE.BY_CUSTOM_ENV;
+      message = t(
+        'functions.variable.warnings.sbu-can-be-override.by-custom-env',
+      );
       break;
     }
     case VARIABLE_VALIDATION.CAN_OVERRIDE_BY_SBU: {
-      message = ENVIRONMENT_VARIABLES_PANEL.WARNINGS.SBU_CAN_BE_OVERRIDE.BY_SBU;
+      message = t('functions.variable.warnings.sbu-can-be-override.by-sbu');
       break;
     }
     default: {
@@ -161,7 +159,7 @@ export default function InjectedVariables({
   return (
     <div className="lambda-variables">
       <GenericList
-        title={t('functions.variable.titleinjected-variables')}
+        title={t('functions.variable.title.injected-variables')}
         showSearchField={true}
         showSearchSuggestion={false}
         textSearchProperties={textSearchProperties}

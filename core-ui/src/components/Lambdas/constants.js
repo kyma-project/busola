@@ -455,31 +455,6 @@ export const REPOSITORY_CONFIG_PANEL = {
   },
 };
 
-export const ENVIRONMENT_VARIABLES_PANEL = {
-  ERRORS: {
-    EMPTY: 'Variable is empty.',
-    DUPLICATED: 'Duplicated variable name.',
-    INVALID: `Variable name must contain alphanumeric characters, can contain '_', no blank spaces.`,
-    RESTRICTED:
-      'This variable name is restricted and cannot be used. Try a different one.',
-    INVALID_SECRET: `Select the secret name and key`,
-    INVALID_CONFIG: `Select the config name and key`,
-  },
-  WARNINGS: {
-    TEXT: 'Warning',
-    VARIABLE_CAN_OVERRIDE_SBU:
-      'This variable can override or be overridden by a variable injected by one of the created Service Bindings.',
-    SBU_CAN_BE_OVERRIDE: {
-      BY_CUSTOM_ENV:
-        'This variable can override or be overridden by one of the custom variables.',
-      BY_SBU:
-        'This variable can override or be overridden by a variable injected by one of the Service Bindings.',
-      BY_CUSTOM_ENV_AND_SBU:
-        'This variable can be overridden by one of the custom variables or a variable injected by one of the Service Bindings.',
-    },
-  },
-};
-
 export const FORMS = {
   RESOURCE_NAME: {
     LABEL: 'Name',

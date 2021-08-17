@@ -7,7 +7,6 @@ import {
   VARIABLE_TYPE,
   VARIABLE_VALIDATION,
 } from 'components/Lambdas/helpers/lambdaVariables';
-import { ENVIRONMENT_VARIABLES_PANEL } from 'components/Lambdas/constants';
 import { CONFIG } from 'components/Lambdas/config';
 
 import { getValidationStatus, validateVariable } from '../validation';
@@ -135,28 +134,28 @@ export default function ResourceVariableInput({
     switch (validation) {
       case VARIABLE_VALIDATION.EMPTY:
         className = 'fd-has-color-status-3';
-        message = ENVIRONMENT_VARIABLES_PANEL.ERRORS.EMPTY;
+        message = t('functions.variable.errors.empty');
         break;
       case VARIABLE_VALIDATION.INVALID:
         className = 'fd-has-color-status-3';
-        message = ENVIRONMENT_VARIABLES_PANEL.ERRORS.INVALID;
+        message = t('functions.variable.errors.invalid');
         break;
       case VARIABLE_VALIDATION.INVALID_SECRET:
         className = 'fd-has-color-status-3';
-        message = ENVIRONMENT_VARIABLES_PANEL.ERRORS.INVALID_SECRET;
+        message = t('functions.variable.errors.invalid-secret');
         break;
       case VARIABLE_VALIDATION.INVALID_CONFIG:
         className = 'fd-has-color-status-3';
-        message = ENVIRONMENT_VARIABLES_PANEL.ERRORS.INVALID_CONFIG;
+        message = t('functions.variable.errors.invalid-config');
         break;
 
       case VARIABLE_VALIDATION.DUPLICATED:
         className = 'fd-has-color-status-3';
-        message = ENVIRONMENT_VARIABLES_PANEL.ERRORS.DUPLICATED;
+        message = t('functions.variable.errors.duplicated');
         break;
       case VARIABLE_VALIDATION.RESTRICTED:
         className = 'fd-has-color-status-3';
-        message = ENVIRONMENT_VARIABLES_PANEL.ERRORS.RESTRICTED;
+        message = t('functions.variable.errors.restricted');
         break;
       case VARIABLE_VALIDATION.CAN_OVERRIDE_SBU:
         className = 'fd-has-color-status-2';
