@@ -63,12 +63,12 @@ clusters:
       tooltip: Nieaktualna wersja parametru może powodować błędy. Usuń i ponownie dodaj swój klaster.
     title: Przegląd klastrów
   messages:
-    missing-kubeconfig: Brakuje Kubeconfigu na klastrze
     download-failed: Nie udało się pobrać Kubeconfigu
     error-kubeconfig: Błąd odczytu Kubeconfiga
     missing-configuration-data: Konfiguracja została poprawnie dołączona. Proszę wypełnić pozostałe wymagane dane.
-    upload-paste-kubeconfig: Prześlij lub wklej plik Kubeconfig
+    missing-kubeconfig: Brakuje Kubeconfigu na klastrze
     no-clusters: Nie znaleziono klastrów
+    upload-paste-kubeconfig: Prześlij lub wklej plik Kubeconfig
   overview:
     title: Przegląd klastra
 common:
@@ -84,12 +84,17 @@ common:
   headers:
     created: Stworzony
     labels: Etykiety
+    loading: Ładowanie...
     name: Nazwa
+    resources: Zasoby
     status: Status
   labels:
     hostname: Nazwa hosta
     name: Nazwa
     service: Serwis
+  messages:
+    doesnt-exist: nie istnieje.
+    loading-name: Ładowanie nazwy...
   tooltips:
     copy-to-clipboard: Skopiuj do schowka
     download: Pobierz
@@ -100,9 +105,6 @@ common:
     read-file: Odczytuj zawartość pliku jako pojedynczą wartość, z nazwą pliku jako kluczem.
     save: Zapisz
     search: Szukaj
-  messages:
-    doesnt-exist: nie istnieje.
-    loading-name: Ładowanie nazwy...
 config-maps:
   title: Mapy konfiguracji
 configuration:
@@ -140,6 +142,8 @@ functions:
   title: Funkcje
   variable:
     tooltip: Ta zmienna pochodzi z zasobu. Aby uzyskać wartość, kliknij link.
+generic-list:
+  no-entries-found: Nie znaleziono wpisów
 git-repositories:
   title: Repozytoria Git
 instances:
@@ -159,6 +163,20 @@ jobs:
     type: Typ
   start-time: Czas rozpoczęcia
   title: Zadania
+machine-info:
+  architecture-cpus: Architektura i procesory
+  cpu-m: Procesor (m)
+  cpu-usage: 'Zużycie procesora:'
+  cpus: Procesorów
+  gib: GiB
+  kube-proxy-version: Wersja Kube proxy
+  kubelet-version: Wersja Kubelet
+  memory: Pamięć
+  memory-gib: Pamięć (GiB)
+  memory-usage: 'Zuycie pamięci:'
+  operating-system: System operacyjny
+  pods-capacity: Pojemność podów
+  title: Informacje o maszynie
 namespaces:
   overview:
     back: Powrót do przestrzeni nazw
@@ -181,6 +199,14 @@ namespaces:
     total-memory-limit: Zdefiniuj ograniczenia, które ograniczają całkowite zużycie pamięci w Twojej przestrzeni nazw.
 no-permissions:
   title: Brak uprawnień
+node-details:
+  internal-ip: Wewnętrzny adres IP
+  involved-object: Zaangażowany obiekt
+  message: Wiadomość
+  name: Przegląd klastra — węzły
+  pod-cidr: Pod CIDR
+  timestamp: Znacznik czasu
+  title-warnings: Ostrzeżenia
 oauth2-clients:
   title: Klienci OAuth2
 observability:
