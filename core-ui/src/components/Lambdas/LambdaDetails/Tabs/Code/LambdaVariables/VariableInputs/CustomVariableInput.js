@@ -81,6 +81,7 @@ export default function CustomVariableInput({
     setValidity,
     setInvalidModalPopupMessage,
     debouncedCallback,
+    t,
   ]);
 
   function onChangeName(event) {
@@ -118,10 +119,12 @@ export default function CustomVariableInput({
   return (
     <div className="custom-variable-form">
       <FormItem className="grid-input-fields">
-        <FormLabel required={true}>Name</FormLabel>
+        <FormLabel required={true}>
+          {t('functions.variable.form.name')}
+        </FormLabel>
         <FormInput
           id={`variableName-${currentVariable.id}`}
-          placeholder={ENVIRONMENT_VARIABLES_PANEL.PLACEHOLDERS.VARIABLE_NAME}
+          placeholder={t('functions.variable.placeholders.name')}
           type="text"
           value={variable.name}
           onChange={onChangeName}
@@ -129,10 +132,10 @@ export default function CustomVariableInput({
       </FormItem>
       <RenderValidationContent validation={variable.validation} />
       <FormItem className="grid-input-fields">
-        <FormLabel>Value</FormLabel>
+        <FormLabel>{t('functions.variable.form.value')}</FormLabel>
         <FormInput
           id={`variableValue-${currentVariable.id}`}
-          placeholder={ENVIRONMENT_VARIABLES_PANEL.PLACEHOLDERS.VARIABLE_VALUE}
+          placeholder={t('functions.variable.placeholders.value')}
           type="text"
           value={variable.value}
           onChange={onChangeValue}

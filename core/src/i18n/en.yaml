@@ -125,6 +125,12 @@ functions:
         custom: Custom Variable
         secret: Secret Variable
         config-map: Config Map Variable
+    form:
+      config-map: $t(functions.variable.type.config-map)
+      key: $t(functions.variable.header.key)
+      name: Name
+      secret: $t(functions.variable.type.secret)
+      value: $t(functions.variable.header.value)
     header:
       key: Key
       name: Variable Name
@@ -143,8 +149,21 @@ functions:
         config-map: Edit Config Map Variable
       environment-variables: Environment variables
       injected-variables: Environment variables injected via Service Bindings
+    placeholders:
+      name: Variable name
+      value: Variable value
     popup-error: At least one variable has an incorrect name format, is restricted, duplicated, or empty.
-    tooltip: This variable comes from a Resource. To get the value, follow the link.
+    tooltip:
+      text: This variable comes from a Resource. To get the value, follow the link.
+      config-map: This variable comes from the "{resourceName}" Config Map.
+      custom: This variable was provided by the user.
+      secret: This variable comes from the "{resourceName}" Secret.
+      service-binding: This variable was injected by the Service Binding referencing Service Instance "{serviceInstanceName}".
+    type:
+      config-map: Config Map
+      custom: Custom
+      secret: Secret
+      service-binding: Service Binding
     warning: Warning
     warnings:
       text: Warning

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import LuigiClient from '@luigi-project/client';
 
 import { Icon, InfoLabel } from 'fundamental-react';
@@ -80,14 +80,15 @@ function VariableStatus({ validation }) {
 }
 
 function VariableSource({ variable }) {
-  let source = ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.CUSTOM.TEXT;
-  let tooltipTitle =
-    ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.CUSTOM.TOOLTIP_MESSAGE;
+  const { t } = useTranslation();
+
+  let source = t('functions.variable.type.custom');
+  let tooltipTitle = t('functions.variable.tooltip.custom');
 
   if (variable.type === VARIABLE_TYPE.BINDING_USAGE) {
-    source = ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.BINDING_USAGE.TEXT;
+    source = t('functions.variable.type.service-binding');
     tooltipTitle = formatMessage(
-      ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.BINDING_USAGE.TOOLTIP_MESSAGE,
+      t('functions.variable.tooltip.service-binding'),
       {
         serviceInstanceName: variable.serviceInstanceName,
       },
@@ -96,22 +97,16 @@ function VariableSource({ variable }) {
 
   if (variable.valueFrom) {
     if (variable.valueFrom.configMapKeyRef) {
-      source = ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.CONFIG_MAP.TEXT;
-      tooltipTitle = formatMessage(
-        ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.CONFIG_MAP.TOOLTIP_MESSAGE,
-        {
-          resourceName: variable.valueFrom.configMapKeyRef.name,
-        },
-      );
+      source = t('functions.variable.type.config-map');
+      tooltipTitle = formatMessage(t('functions.variable.tooltip.config-map'), {
+        resourceName: variable.valueFrom.configMapKeyRef.name,
+      });
     }
     if (variable.valueFrom.secretKeyRef) {
-      source = ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.SECRET.TEXT;
-      tooltipTitle = formatMessage(
-        ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.SECRET.TOOLTIP_MESSAGE,
-        {
-          resourceName: variable.valueFrom.secretKeyRef.name,
-        },
-      );
+      source = t('functions.variable.type.secret');
+      tooltipTitle = formatMessage(t('functions.variable.tooltip.secret'), {
+        resourceName: variable.valueFrom.secretKeyRef.name,
+      });
     }
   }
 
@@ -139,7 +134,7 @@ function VariableSourceLink({ variable }) {
   return (
     <>
       {resourceLink ? (
-        <Tooltip content={t('functions.variable.tooltip')}>
+        <Tooltip content={t('functions.variable.tooltip.text')}>
           <span
             className="link"
             onClick={() =>
@@ -168,39 +163,12 @@ function VariableKey({ variable }) {
 }
 
 function VariableValue({ variable }) {
-  const isBindingUsageVar = variable.type === VARIABLE_TYPE.BINDING_USAGE;
-  const [show, setShow] = useState(false);
   const value = variable.valueFrom ? (
     <VariableSourceLink variable={variable} />
   ) : (
     <span>{variable.value || '-'}</span>
   );
 
-  if (isBindingUsageVar) {
-    const blurVariable = (
-      <div
-        className={!show ? 'blur-variable' : ''}
-        onClick={_ => setShow(!show)}
-      >
-        {value}
-      </div>
-    );
-    return (
-      <div className="lambda-variable">
-        <Tooltip
-          content={
-            show
-              ? ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.BINDING_USAGE
-                  .HIDE_VALUE_MESSAGE
-              : ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.BINDING_USAGE
-                  .SHOW_VALUE_MESSAGE
-          }
-        >
-          {blurVariable}
-        </Tooltip>
-      </div>
-    );
-  }
   return value;
 }
 

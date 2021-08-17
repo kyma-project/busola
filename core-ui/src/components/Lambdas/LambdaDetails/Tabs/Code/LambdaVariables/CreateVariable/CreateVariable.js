@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Button, Menu, Popover } from 'fundamental-react';
 
 import { VARIABLE_TYPE } from 'components/Lambdas/helpers/lambdaVariables';
-import { ENVIRONMENT_VARIABLES_PANEL } from 'components/Lambdas/constants';
 import VariableModal from '../VariableForm/VariableModal';
 import { useTranslation } from 'react-i18next';
 

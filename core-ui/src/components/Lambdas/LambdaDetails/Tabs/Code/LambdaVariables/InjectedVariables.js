@@ -68,14 +68,14 @@ function VariableStatus({ validation }) {
 }
 
 function VariableSource({ variable }) {
-  let source = ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.CUSTOM.TEXT;
-  let tooltipTitle =
-    ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.CUSTOM.TOOLTIP_MESSAGE;
+  const { t } = useTranslation();
+  let source = t('functions.variable.type.custom');
+  let tooltipTitle = t('functions.variable.tooltip.custom');
 
   if (variable.type === VARIABLE_TYPE.BINDING_USAGE) {
-    source = ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.BINDING_USAGE.TEXT;
+    source = t('functions.variable.type.service-binding');
     tooltipTitle = formatMessage(
-      ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.BINDING_USAGE.TOOLTIP_MESSAGE,
+      t('functions.variable.tooltip.service-binding'),
       {
         serviceInstanceName: variable.serviceInstanceName,
       },
@@ -102,7 +102,7 @@ function VariableSourceLink({ variable }) {
   return (
     <>
       {resourceLink ? (
-        <Tooltip content={t('functions.variable.tooltip')}>
+        <Tooltip content={t('functions.variable.tooltip.text')}>
           <span
             className="link"
             onClick={() =>

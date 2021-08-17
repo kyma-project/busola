@@ -478,32 +478,6 @@ export const ENVIRONMENT_VARIABLES_PANEL = {
         'This variable can be overridden by one of the custom variables or a variable injected by one of the Service Bindings.',
     },
   },
-  PLACEHOLDERS: {
-    VARIABLE_NAME: 'Variable name',
-    VARIABLE_VALUE: 'Variable value',
-  },
-  VARIABLE_TYPE: {
-    CUSTOM: {
-      TEXT: 'Custom',
-      TOOLTIP_MESSAGE: 'This variable was provided by the user.',
-    },
-    BINDING_USAGE: {
-      TEXT: 'Service Binding',
-      TOOLTIP_MESSAGE:
-        'This variable was injected by the Service Binding referencing Service Instance "{serviceInstanceName}".',
-      SHOW_VALUE_MESSAGE: 'Click to show',
-      HIDE_VALUE_MESSAGE: 'Click to hide',
-    },
-    CONFIG_MAP: {
-      TEXT: 'Config Map',
-      TOOLTIP_MESSAGE:
-        'This variable comes from the "{resourceName}" Config Map.',
-    },
-    SECRET: {
-      TEXT: 'Secret',
-      TOOLTIP_MESSAGE: 'This variable comes from the "{resourceName}" Secret.',
-    },
-  },
 };
 
 export const FORMS = {

@@ -78,6 +78,7 @@ export default function ResourceVariableInput({
     setValidity,
     setInvalidModalPopupMessage,
     debouncedCallback,
+    t,
   ]);
 
   function onChangeName(event) {
@@ -182,10 +183,12 @@ export default function ResourceVariableInput({
   return (
     <div className="resource-variable-form">
       <FormItem className="grid-input-fields">
-        <FormLabel required={true}>Name</FormLabel>
+        <FormLabel required={true}>
+          {t('functions.variable.form.name')}
+        </FormLabel>
         <FormInput
           id={`variableName-${currentVariable.id}`}
-          placeholder={ENVIRONMENT_VARIABLES_PANEL.PLACEHOLDERS.VARIABLE_NAME}
+          placeholder={t('functions.variable.placeholders.name')}
           type="text"
           value={variable.name}
           onChange={onChangeName}
@@ -197,7 +200,7 @@ export default function ResourceVariableInput({
         <>
           <FormItem className="grid-input-fields">
             <FormLabel required={true}>
-              {ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.SECRET.TEXT}
+              {t('functions.variable.form.secret')}
             </FormLabel>
             <Dropdown
               id={`variableValueFromSecret-${currentVariable.id}`}
@@ -219,7 +222,9 @@ export default function ResourceVariableInput({
             />
           </FormItem>
           <FormItem className="grid-input-fields">
-            <FormLabel required={true}>Key</FormLabel>
+            <FormLabel required={true}>
+              {t('functions.variable.form.key')}
+            </FormLabel>
             <Dropdown
               id={`variableKeyFromSecret-${currentVariable.id}`}
               options={resourceKeysOptions}
@@ -243,7 +248,7 @@ export default function ResourceVariableInput({
         <>
           <FormItem className="grid-input-fields">
             <FormLabel required={true}>
-              {ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.CONFIG_MAP.TEXT}
+              {t('functions.variable.form.config-map')}
             </FormLabel>
             <Dropdown
               id={`variableValueFromConfigMap-${currentVariable.id}`}
@@ -265,7 +270,9 @@ export default function ResourceVariableInput({
             />
           </FormItem>
           <FormItem className="grid-input-fields">
-            <FormLabel required={true}>Key</FormLabel>
+            <FormLabel required={true}>
+              {t('functions.variable.form.key')}
+            </FormLabel>
             <Dropdown
               id={`variableKeyFromConfigMap-${currentVariable.id}`}
               options={resourceKeysOptions}

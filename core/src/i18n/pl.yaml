@@ -125,6 +125,12 @@ functions:
         custom: Zmienna niestandardowa
         secret: Zmienna z sekretu
         config-map: Zmienna z mapy konfiguracji
+    form:
+      config-map: $t(functions.variable.type.config-map)
+      key: $t(functions.variable.header.key)
+      name: Nazwa
+      secret: $t(functions.variable.type.secret)
+      value: $t(functions.variable.header.value)
     header:
       key: Klucz
       name: Nazwa zmiennej
@@ -143,8 +149,21 @@ functions:
         config-map: Edytuj Zmienną z Mapy Konfiguracji
       environment-variables: Zmienne środowiskowe
       injected-variables: Zmienne środowiskowe wstrzyknięte poprzez Service Bindings
+    placeholders:
+      name: $t(functions.variable.header.name)
+      value: Wartość zmiennej
     popup-error: Przynajmniej jedna ze zmiennych ma niepoprawny format, jest zastrzerzona, zduplikowana, lub pusta.
-    tooltip: Ta zmienna pochodzi z zasobu. Aby uzyskać wartość, kliknij link.
+    tooltip:
+      text: Ta zmienna pochodzi z zasobu. Aby uzyskać wartość, kliknij link.
+      config-map: 'Ta zmienna pochodzi z Mapy Konfiguracji: "{resourceName}".'
+      custom: Ta zmienna została wprowadzona przez użytkownika.
+      secret: 'Ta zmienna pochodzi z Sekretu: "{resourceName}".'
+      service-binding: 'Ta zmienna została wstrzyknięta przez Service Binding odwołujący się do Instancji Serwisu: "{serviceInstanceName}".'
+    type:
+      config-map: Mapa konfiguracji
+      custom: Niestandardowe
+      secret: Sekret
+      service-binding: Service Binding
     warnings:
       text: Ostrzeżenie
       variable-can-override-sbu: Ta zmienna może nadpisać lub być nadpisana przez zmienną wstrzykniętą przez jeden ze stworzonych service bindingów.
