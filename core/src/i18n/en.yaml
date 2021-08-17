@@ -125,6 +125,16 @@ functions:
         custom: Custom Variable
         secret: Secret Variable
         config-map: Config Map Variable
+    create-modal:
+      title:
+        custom: Create Custom Variable
+        secret: Create Secret Variable
+        config-map: Create Config Map Variable
+    edit-modal:
+      title:
+        custom: Edit Custom Variable
+        secret: Edit Secret Variable
+        config-map: Edit Config Map Variable
     errors:
       empty: Variable is empty.
       duplicated: Duplicated variable name.
@@ -146,14 +156,6 @@ functions:
     not-found: This Function doesn't have any environment variables yet.
     not-match: Couldn't find environment variables matching this query.
     title:
-      create-modal:
-        custom: Create Custom Variable
-        secret: Create Secret Variable
-        config-map: Create Config Map Variable
-      edit-modal:
-        custom: Edit Custom Variable
-        secret: Edit Secret Variable
-        config-map: Edit Config Map Variable
       environment-variables: Environment variables
       injected-variables: Environment variables injected via Service Bindings
     placeholders:

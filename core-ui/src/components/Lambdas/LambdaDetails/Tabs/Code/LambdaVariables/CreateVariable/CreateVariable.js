@@ -35,19 +35,19 @@ export default function CreateVariable({
   };
 
   const customVariableModalProps = {
-    title: t('functions.variable.title.create-modal.custom'),
+    title: t('functions.variable.create-modal.title.custom'),
     type: VARIABLE_TYPE.CUSTOM,
     resources: null,
   };
 
   const secretVariableModalProps = {
-    title: t('functions.variable.title.create-modal.secret'),
+    title: t('functions.variable.create-modal.title.secret'),
     type: VARIABLE_TYPE.SECRET,
     resources: secrets,
   };
 
   const configMapVariableModalProps = {
-    title: t('functions.variable.title.create-modal.config-map'),
+    title: t('functions.variable.create-modal.title.config-map'),
     type: VARIABLE_TYPE.CONFIG_MAP,
     resources: configmaps,
   };

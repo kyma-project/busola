@@ -34,7 +34,7 @@ export default function EditVariable({
   }
   const variableModal = (
     <VariableModal
-      title={t(`functions.variable.title.edit-modal.${type}`)}
+      title={t(`functions.variable.edit-modal.title.${type}`)}
       modalOpeningComponent={modalOpeningComponent}
       confirmText={t('common.buttons.save')}
       lambda={lambda}
