@@ -1,5 +1,4 @@
-import { getTargetClusterConfig } from '../utils/target-cluster-config';
-import { getActiveCluster, getClusters } from './cluster-management';
+import { getActiveCluster, getActiveClusterName } from './cluster-management';
 
 const CLUSTERS_KEY = 'busola.clusters';
 
@@ -36,33 +35,28 @@ export function save(clusters, defaultStorage) {
           clusterName,
           ': Unknown storage type ',
           cluster?.config?.storage,
+          'saving in localStorage',
         );
+        cluster.config.storage = 'localStorage';
+        localStorageClusters[clusterName] = cluster;
         break;
     }
-    console.log(cluster.config.storage);
   }
   localStorage.setItem(CLUSTERS_KEY, JSON.stringify(localStorageClusters));
   sessionStorage.setItem(CLUSTERS_KEY, JSON.stringify(sessionStorageClusters));
 }
 
-export async function checkClusterStorageType() {
-  console.log(await getClusters());
-  const a = (await getActiveCluster()).config.storage;
-  const b = getTargetClusterConfig()?.storage;
-  if (b && a !== b) {
-    alert(a + b);
-  } else {
-    console.log(
-      'cluster.config',
-      JSON.parse(JSON.stringify((await getActiveCluster()).config.storage)),
-    );
-    if (b) {
-      console.log(
-        'getTargetClusterConfig.config',
-        JSON.parse(JSON.stringify(b)),
-      );
-    } else {
-      console.log('no b');
-    }
+export async function checkClusterStorageType(originalStorage) {
+  const targetStorage = (await getActiveCluster()).config.storage;
+  if (targetStorage !== originalStorage) {
+    // move the cluster to the valid storage
+    const clusters = load();
+    clusters[getActiveClusterName()].config.storage = targetStorage;
+    save(clusters, null);
+
+    Luigi.ux().showAlert({
+      text: `Cluster storage changed from ${originalStorage} to ${targetStorage}.`,
+      type: 'info',
+    });
   }
 }

@@ -43,6 +43,8 @@ export async function setCluster(clusterName) {
   const clusters = await getClusters();
   const params = clusters[clusterName];
 
+  const originalStorage = clusters[clusterName].config.storage;
+
   if (!areParamsCompatible(params?.config?.version)) {
     showIncompatibleParamsWarning(params?.config?.version);
   }
@@ -62,7 +64,7 @@ export async function setCluster(clusterName) {
       setAuthData(kubeconfigUser);
       await saveCARequired();
       await loadTargetClusterConfig();
-      await clusterStorage.checkClusterStorageType();
+      await clusterStorage.checkClusterStorageType(originalStorage);
       await reloadNavigation();
       Luigi.navigation().navigate(targetLocation);
     } else {
@@ -128,6 +130,8 @@ export async function getActiveCluster() {
     clusters[clusterName].config.storage = targetClusterConfig.storage;
   }
 
+  const originalStorage = clusters[clusterName].config.storage;
+
   // merge keys of config.features
   clusters[clusterName].config.features = {
     ...clusters[clusterName].config.features,
@@ -135,6 +139,13 @@ export async function getActiveCluster() {
   };
 
   clusters[clusterName] = await mergeParams(clusters[clusterName]);
+
+  if (originalStorage !== clusters[clusterName].config.storage) {
+    alert(
+      `prev ${clusters[clusterName].config.storage} nao ${originalStorage}`,
+    );
+  }
+
   return clusters[clusterName];
 }
 

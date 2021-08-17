@@ -2,22 +2,21 @@ import React from 'react';
 import { StatusBadge } from 'react-shared';
 
 export function ClusterStorageType({ clusterConfig }) {
-  console.log(clusterConfig);
   const storage = clusterConfig?.storage;
 
   const descriptions = {
     localStorage: {
       name: 'localStorage',
-      tooltip: 'This data is persisted between browser reloads.',
+      tooltip: 'Cluster data is persisted between browser reloads.',
     },
     sessionStorage: {
       name: 'sessionStorage',
-      tooltip: 'This data is cleared when the page session ends.',
+      tooltip: 'Cluster data is cleared when the page session ends.',
     },
     inMemory: {
       name: 'In memory',
       tooltip:
-        'This data is cleared when the page is refreshed or navigated out of.',
+        'Cluster data is cleared when the page is refreshed or navigated out of.',
     },
   };
 

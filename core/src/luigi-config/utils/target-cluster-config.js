@@ -5,7 +5,6 @@ import { failFastFetch } from './../navigation/queries';
 let clusterConfig = null;
 
 export function getTargetClusterConfig() {
-  console.log('return config', clusterConfig);
   return clusterConfig;
 }
 
