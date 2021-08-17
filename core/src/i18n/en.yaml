@@ -181,6 +181,10 @@ services:
   labels:
     service: Service
   title: Services
+  type: Service Type
+  cluster-ip: Cluster IP
+  ports: Ports
+  external-ips: External IPs
 settings:
   clusters:
     confirmations: Confirmations
