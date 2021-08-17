@@ -14,12 +14,10 @@ export function load() {
 }
 
 export function save(clusters, defaultStorage) {
-  localStorage.removeItem(CLUSTERS_KEY);
-  sessionStorage.removeItem(CLUSTERS_KEY);
+  clear();
+
   const localStorageClusters = {};
   const sessionStorageClusters = {};
-  inMemoryClusters = {};
-
   for (const [clusterName, cluster] of Object.entries(clusters)) {
     switch (cluster?.config?.storage || defaultStorage) {
       case 'localStorage':
@@ -65,4 +63,10 @@ export async function checkClusterStorageType(originalStorage) {
       });
     }
   }
+}
+
+function clear() {
+  localStorage.removeItem(CLUSTERS_KEY);
+  sessionStorage.removeItem(CLUSTERS_KEY);
+  inMemoryClusters = {};
 }

@@ -10,8 +10,9 @@ export function ChooseStorage({ storage, setStorage }) {
   const storages = [
     { key: 'localStorage', text: 'localStorage' },
     { key: 'sessionStorage', text: 'sessionStorage' },
-    { key: 'inMemory', text: t('clusters.storage.inMemory') },
+    { key: 'inMemory', text: t('clusters.storage.labels.inMemory') },
   ];
+
   return (
     <div className="choose-storage">
       <FormLabel>{t('clusters.storage.choose-storage.label')}</FormLabel>

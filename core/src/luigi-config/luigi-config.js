@@ -61,7 +61,7 @@ async function luigiAfterInit() {
       if (getAuthData() && !hasNonOidcAuth(params.currentContext?.user?.user)) {
         await saveCARequired();
         await loadTargetClusterConfig();
-        await checkClusterStorageType();
+        await checkClusterStorageType(params.config.storage);
         await addClusterNodes();
       }
     } catch (e) {
@@ -91,7 +91,6 @@ async function luigiAfterInit() {
     setAuthData(kubeconfigUser);
     await saveCARequired();
     await loadTargetClusterConfig();
-    await checkClusterStorageType();
   }
 
   const luigiConfig = {

@@ -130,8 +130,6 @@ export async function getActiveCluster() {
     clusters[clusterName].config.storage = targetClusterConfig.storage;
   }
 
-  const originalStorage = clusters[clusterName].config.storage;
-
   // merge keys of config.features
   clusters[clusterName].config.features = {
     ...clusters[clusterName].config.features,
