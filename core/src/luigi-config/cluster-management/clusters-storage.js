@@ -54,9 +54,11 @@ export async function checkClusterStorageType(originalStorage) {
     clusters[getActiveClusterName()].config.storage = targetStorage;
     save(clusters, null);
 
-    Luigi.ux().showAlert({
-      text: `Cluster storage changed from ${originalStorage} to ${targetStorage}.`,
-      type: 'info',
-    });
+    if (originalStorage) {
+      Luigi.ux().showAlert({
+        text: `Cluster storage changed from ${originalStorage} to ${targetStorage}.`,
+        type: 'info',
+      });
+    }
   }
 }
