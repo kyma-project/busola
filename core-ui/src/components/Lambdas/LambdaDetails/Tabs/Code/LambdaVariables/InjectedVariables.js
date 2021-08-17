@@ -44,17 +44,17 @@ function VariableStatus({ validation }) {
       break;
     }
     case VARIABLE_VALIDATION.CAN_OVERRIDE_BY_CUSTOM_ENV_AND_SBU: {
-      message = t('functions.variable.warnings.sbu-can-be-override.by-both');
+      message = t('functions.variable.warnings.sbu-can-be-overridden.by-both');
       break;
     }
     case VARIABLE_VALIDATION.CAN_OVERRIDE_BY_CUSTOM_ENV: {
       message = t(
-        'functions.variable.warnings.sbu-can-be-override.by-custom-env',
+        'functions.variable.warnings.sbu-can-be-overridden.by-custom-env',
       );
       break;
     }
     case VARIABLE_VALIDATION.CAN_OVERRIDE_BY_SBU: {
-      message = t('functions.variable.warnings.sbu-can-be-override.by-sbu');
+      message = t('functions.variable.warnings.sbu-can-be-overridden.by-sbu');
       break;
     }
     default: {

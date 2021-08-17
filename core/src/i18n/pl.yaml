@@ -129,8 +129,8 @@ functions:
       empty: Nazwa zmiennej jest pusta.
       duplicated: Zmienna o takiej nazwie ju istnieje.
       invalid: "Nazwa zmiennej musi składać się ze znaków alfanumerycznych, może zawierać również '_', bez spacji"
-      invalid-config: Select the config map name and key
-      invalid-secret: Select the secret name and key
+      invalid-config: Wybierz nazwę mapy konfiguracji i klucz
+      invalid-secret: Wybierz nazwę sekretu i klucz
       restricted: Ta nazwa zmiennej jest zastrzerzona i nie może by użyta. Spróbuj użyć innej nazwy.
     form:
       config-map: $t(functions.variable.type.config-map)
@@ -147,34 +147,34 @@ functions:
     not-match: Nie znaleziono zmiennych środowiskowych pasujących do wyszukiwanej frazy.
     title:
       create-modal:
-        custom: Stwórz Zmienną niestandardową
+        custom: Stwórz zmienną niestandardową
         secret: Stwórz zmienną z sekretu
         config-map: Stwórz zmienną z mapy konfiguracji
       edit-modal:
         custom: Edytuj zmienną niestandardową
-        secret: Edytuj Zmienną z Sekretu
-        config-map: Edytuj Zmienną z Mapy Konfiguracji
+        secret: Edytuj zmienną z sekretu
+        config-map: Edytuj zmienną z mapy konfiguracji
       environment-variables: Zmienne środowiskowe
-      injected-variables: Zmienne środowiskowe wstrzyknięte poprzez Service Bindings
+      injected-variables: Zmienne środowiskowe wstrzyknięte poprzez service binding
     placeholders:
       name: $t(functions.variable.header.name)
       value: Wartość zmiennej
     popup-error: Przynajmniej jedna ze zmiennych ma niepoprawny format, jest zastrzerzona, zduplikowana, lub pusta.
     tooltip:
       text: Ta zmienna pochodzi z zasobu. Aby uzyskać wartość, kliknij link.
-      config-map: 'Ta zmienna pochodzi z Mapy Konfiguracji: "{resourceName}".'
+      config-map: 'Ta zmienna pochodzi z mapy konfiguracji: "{resourceName}".'
       custom: Ta zmienna została wprowadzona przez użytkownika.
-      secret: 'Ta zmienna pochodzi z Sekretu: "{resourceName}".'
-      service-binding: 'Ta zmienna została wstrzyknięta przez Service Binding odwołujący się do Instancji Serwisu: "{serviceInstanceName}".'
+      secret: 'Ta zmienna pochodzi z sekretu: "{resourceName}".'
+      service-binding: 'Ta zmienna została wstrzyknięta przez service binding odwołujący się do instancji serwisu: "{serviceInstanceName}".'
     type:
       config-map: Mapa konfiguracji
       custom: Niestandardowe
       secret: Sekret
-      service-binding: Service Binding
+      service-binding: Service binding
     warnings:
       text: Ostrzeżenie
       variable-can-override-sbu: Ta zmienna może nadpisać lub być nadpisana przez zmienną wstrzykniętą przez jeden ze stworzonych service bindingów.
-      sbu-can-be-override:
+      sbu-can-be-overridden:
         by-custom-env: Ta zmienna może nadpisać lub być nadpisana przez jedną z niestandardowych zmiennych.
         by-sbu: Ta zmienna może nadpisać lub być nadpisana przez zmienną wstrzykniętą przez jeden z service bindingów.
         by-both: Ta zmienna może być nadpisana przez jedną z niestandardowych zmiennych lub przez zmienną wstrzykniętą przez jeden z service bindingów.
