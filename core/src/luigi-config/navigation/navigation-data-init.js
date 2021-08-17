@@ -222,6 +222,7 @@ export async function createNavigation() {
         {
           title: i18next.t('clusters.overview.title'),
           link: '/clusters',
+          testId: 'clusters-overview',
         },
       ],
     },

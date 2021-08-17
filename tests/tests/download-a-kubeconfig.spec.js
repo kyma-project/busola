@@ -23,7 +23,7 @@ context('Download a Kubeconfig', () => {
   it('Download a Kubeconfig from the Clusters list', () => {
     cy.readFile(KUBECONFIG_PATH).should('not.exist');
     cy.get('[data-testid=app-switcher]').click();
-    cy.get('[data-testid=clustersoverview]').click();
+    cy.get('[data-testid=clusters-overview]').click();
     cy.getIframeBody()
       .find('[data-testid=downloadkubeconfig]')
       .click({ force: true });

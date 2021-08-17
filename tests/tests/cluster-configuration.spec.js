@@ -38,13 +38,15 @@ context('Cluster configuration', () => {
     cy.url().should('match', /namespaces$/);
 
     // cluster storage message should be visible
-    cy.contains(/storage changed/).should('be.visible');
+    cy.contains(/Cluster storage changed/).should('be.visible');
 
     // custom category should be added
     cy.contains('Category from target cluster').should('be.visible');
 
     // custom storage type should be set
-    cy.contains('Cluster Overview').click();
+    cy.getLeftNav()
+      .contains('Cluster Overview')
+      .click();
     cy.contains('sessionStorage').should('be.visible');
   });
 
