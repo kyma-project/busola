@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   useGet,
   useMicrofrontendContext,
@@ -8,6 +9,7 @@ import {
 import { ClusterStorageType } from '../ClusterStorageType';
 
 export function ClusterOverviewHeader() {
+  const { t } = useTranslation();
   const { cluster, config } = useMicrofrontendContext();
   const {
     data: version,
@@ -16,20 +18,20 @@ export function ClusterOverviewHeader() {
   } = useGet('/version');
 
   function formatClusterVersion() {
-    if (versionLoading) return 'Loading...';
+    if (versionLoading) return t('common.loading');
     if (versionError) return getErrorMessage(versionError);
     return version.gitVersion;
   }
 
   return (
-    <PageHeader title="Cluster Overview">
-      <PageHeader.Column title="Version">
+    <PageHeader title={t('clusters.overview.title')}>
+      <PageHeader.Column title={t('clusters.overview.version')}>
         {formatClusterVersion()}
       </PageHeader.Column>
-      <PageHeader.Column title="API server address">
+      <PageHeader.Column title={t('clusters.common.api-server-address')}>
         {cluster?.cluster.server}
       </PageHeader.Column>
-      <PageHeader.Column title="Storage type">
+      <PageHeader.Column title={t('clusters.storage.title')}>
         <ClusterStorageType clusterConfig={config} />
       </PageHeader.Column>
     </PageHeader>

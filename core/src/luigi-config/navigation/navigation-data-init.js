@@ -216,11 +216,11 @@ export async function createNavigation() {
       items: [
         ...clusterNodes,
         {
-          title: 'Add Cluster',
+          title: i18next.t('clusters.add.title'),
           link: '/clusters/add',
         },
         {
-          title: 'Clusters Overview',
+          title: i18next.t('clusters.overview.title'),
           link: '/clusters',
         },
       ],

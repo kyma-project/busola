@@ -1,28 +1,30 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { StatusBadge } from 'react-shared';
 
 export function ClusterStorageType({ clusterConfig }) {
+  const { t } = useTranslation();
+
   const storage = clusterConfig?.storage;
 
   const descriptions = {
     localStorage: {
       name: 'localStorage',
-      tooltip: 'Cluster data is persisted between browser reloads.',
+      tooltip: t('clusters.storage.descriptions.localStorage'),
     },
     sessionStorage: {
       name: 'sessionStorage',
-      tooltip: 'Cluster data is cleared when the page session ends.',
+      tooltip: t('clusters.storage.descriptions.sessionStorage'),
     },
     inMemory: {
-      name: 'In memory',
-      tooltip:
-        'Cluster data is cleared when the page is refreshed or navigated out of.',
+      name: t('clusters.storage.labels.inMemory'),
+      tooltip: t('clusters.storage.descriptions.inMemory'),
     },
   };
 
   const description = descriptions[storage] || {
-    name: 'unknown',
-    description: 'Unknown storage type.',
+    name: t('clusters.storage.labels.unknown'),
+    description: t('clusters.storage.descriptions.unknown'),
   };
 
   return (

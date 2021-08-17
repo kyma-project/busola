@@ -46,12 +46,34 @@ cluster-role-bindings:
 cluster-roles:
   title: ClusterRoles
 clusters:
+  add:
+    title: Add cluster
+  common:
+    api-server-address: API server address
+    download-kubeconfig: Download kubeconfig
+    kubeconfig-download-error: Failed to download the Kubeconfig
+    kubeconfig-not-present: Kubeconfig is missing on the Cluster
   list:
     outdated:
       download: Download Kubeconfig
       tooltip: Outdated parameter version may cause errors. Delete and re-add your cluster.
+    no-clusters-found: No clusters found
   overview:
     title: Cluster Overview
+    version: Version
+  storage:
+    changed-message: Cluster storage changed from {{originalStorage}} to {{targetStorage}}.
+    choose-storage:
+      label: Configuration storage type
+    descriptions:
+      localStorage: Cluster data is persisted between browser reloads.
+      sessionStorage: Cluster data is cleared when the page session ends.
+      inMemory: Cluster data is cleared when the page is refreshed or navigated out of.
+      unknown: Unknown storage type
+    labels:
+      inMemory: In memory
+      unknown: Unknown
+    title: Storage type
 common:
   buttons:
     cancel: Cancel
@@ -72,6 +94,7 @@ common:
     hostname: Hostname
     name: Name
     service: Service
+  loading: Loading...
   tooltips:
     copy-to-clipboard: Copy to clipboard
     download: Download

@@ -46,20 +46,24 @@ export function ClusterList() {
       } catch (e) {
         console.error(e);
         notification.notifyError({
-          title: 'Failed to download the Kubeconfig',
+          title: t('clusters.common.kubeconfig-download-error'),
           content: e.message,
         });
       }
     } else {
       notification.notifyError({
-        title: 'Failed to download the Kubeconfig',
-        content: 'Kubeconfig is missing on the Cluster',
+        title: t('clusters.common.kubeconfig-download-error'),
+        content: t('clusters.common.kubeconfig-not-present'),
       });
     }
   };
 
   const entries = Object.values(clusters);
-  const headerRenderer = () => ['Name', 'API Server address', 'Storage type'];
+  const headerRenderer = () => [
+    t('common.headers.name'),
+    t('clusters.common.api-server-address'),
+    t('clusters.storage.title'),
+  ];
   const textSearchProperties = [
     'currentContext.cluster.name',
     'currentContext.cluster.cluster.server',
@@ -90,9 +94,9 @@ export function ClusterList() {
 
   const actions = [
     {
-      name: 'Download Kubeconfig',
+      name: t('clusters.common.download-kubeconfig'),
       icon: 'download',
-      tooltip: 'Download Kubeconfig',
+      tooltip: t('clusters.common.download-kubeconfig'),
       handler: e => downloadKubeconfig(e),
     },
     {
@@ -108,13 +112,13 @@ export function ClusterList() {
       className="fd-margin-begin--sm"
       onClick={() => LuigiClient.linkManager().navigate('add')}
     >
-      Add Cluster
+      {t('clusters.add.title')}
     </Button>
   );
 
   return (
     <>
-      <PageHeader title="Clusters Overview" />
+      <PageHeader title={t('clusters.overview.title')} />
       <GenericList
         textSearchProperties={textSearchProperties}
         showSearchSuggestion={false}
@@ -123,7 +127,7 @@ export function ClusterList() {
         rowRenderer={rowRenderer}
         actions={actions}
         extraHeaderContent={extraHeaderContent}
-        noSearchResultMessage="No clusters found"
+        noSearchResultMessage={t('clusters.list.no-clusters-found')}
       />
     </>
   );

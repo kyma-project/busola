@@ -139,13 +139,6 @@ export async function getActiveCluster() {
   };
 
   clusters[clusterName] = await mergeParams(clusters[clusterName]);
-
-  if (originalStorage !== clusters[clusterName].config.storage) {
-    alert(
-      `prev ${clusters[clusterName].config.storage} nao ${originalStorage}`,
-    );
-  }
-
   return clusters[clusterName];
 }
 

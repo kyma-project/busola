@@ -1,3 +1,4 @@
+import i18next from 'i18next';
 import { getActiveCluster, getActiveClusterName } from './cluster-management';
 
 const CLUSTERS_KEY = 'busola.clusters';
@@ -56,7 +57,10 @@ export async function checkClusterStorageType(originalStorage) {
 
     if (originalStorage) {
       Luigi.ux().showAlert({
-        text: `Cluster storage changed from ${originalStorage} to ${targetStorage}.`,
+        text: i18next.t('clusters.storage.changed-message', {
+          originalStorage,
+          targetStorage,
+        }),
         type: 'info',
       });
     }
