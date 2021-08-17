@@ -174,7 +174,7 @@ functions:
     warnings:
       text: Warning
       variable-can-override-sbu: This variable can override or be overridden by a variable injected by one of the created Service Bindings.
-      sbu-can-be-override:
+      sbu-can-be-overridden:
         by-custom-env: This variable can override or be overridden by one of the custom variables.
         by-sbu: This variable can override or be overridden by a variable injected by one of the Service Bindings.
         by-both: This variable can be overridden by one of the custom variables or a variable injected by one of the Service Bindings.

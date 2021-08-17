@@ -148,10 +148,10 @@ functions:
     title:
       create-modal:
         custom: Stwórz Zmienną niestandardową
-        secret: Stwórz Secret Variable
-        config-map: Stwórz Config Map Variable
+        secret: Stwórz zmienną z sekretu
+        config-map: Stwórz zmienną z mapy konfiguracji
       edit-modal:
-        custom: Edytuj Zmienną niestandardową
+        custom: Edytuj zmienną niestandardową
         secret: Edytuj Zmienną z Sekretu
         config-map: Edytuj Zmienną z Mapy Konfiguracji
       environment-variables: Zmienne środowiskowe
@@ -177,7 +177,7 @@ functions:
       sbu-can-be-override:
         by-custom-env: Ta zmienna może nadpisać lub być nadpisana przez jedną z niestandardowych zmiennych.
         by-sbu: Ta zmienna może nadpisać lub być nadpisana przez zmienną wstrzykniętą przez jeden z service bindingów.
-        by-both: TTa zmienna może być nadpisana przez jedną z niestandardowych zmiennych lub przez zmienną wstrzykniętą przez jeden z service bindingów.
+        by-both: Ta zmienna może być nadpisana przez jedną z niestandardowych zmiennych lub przez zmienną wstrzykniętą przez jeden z service bindingów.
 git-repositories:
   title: Repozytoria Git
 instances:
