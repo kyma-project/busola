@@ -47,7 +47,7 @@ cluster-roles:
   title: ClusterRoles
 clusters:
   add:
-    title: Add cluster
+    title: Add Cluster
   common:
     api-server-address: API server address
     download-kubeconfig: Download kubeconfig
