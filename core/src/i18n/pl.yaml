@@ -76,8 +76,10 @@ clusters:
 common:
   buttons:
     cancel: Anuluj
+    create: Stwórz
     delete: Usuń
     edit-yaml: Edytuj YAML
+    save: Zapisz
   delete-dialog:
     delete-confirm: Nie pytaj ponownie
     information: Wyłączyłeś potwierdzenia usuwania dla wszystkich zasobów. Możnesz je ponownie włączyć w Ustawieniach.
@@ -147,7 +149,68 @@ discovery-and-network:
 functions:
   title: Funkcje
   variable:
-    tooltip: Ta zmienna pochodzi z zasobu. Aby uzyskać wartość, kliknij link.
+    buttons:
+      add: Dodaj zmienną środowiskową
+      open:
+        config-map: Zmienna z mapy konfiguracji
+        custom: Zmienna niestandardowa
+        secret: Zmienna z sekretu
+    create-modal:
+      title:
+        config-map: Stwórz zmienną z mapy konfiguracji
+        custom: Stwórz zmienną niestandardową
+        secret: Stwórz zmienną z sekretu
+    edit-modal:
+      title:
+        config-map: Edytuj zmienną z mapy konfiguracji
+        custom: Edytuj zmienną niestandardową
+        secret: Edytuj zmienną z sekretu
+    errors:
+      duplicated: Zmienna o takiej nazwie ju istnieje.
+      empty: Nazwa zmiennej jest pusta.
+      invalid: Nazwa zmiennej musi składać się ze znaków alfanumerycznych, może zawierać również '_', bez spacji
+      invalid-config: Wybierz nazwę mapy konfiguracji i klucz
+      invalid-secret: Wybierz nazwę sekretu i klucz
+      restricted: Ta nazwa zmiennej jest zastrzerzona i nie może by użyta. Spróbuj użyć innej nazwy.
+    form:
+      config-map: $t(functions.variable.type.config-map)
+      key: $t(functions.variable.header.key)
+      name: Nazwa
+      secret: $t(functions.variable.type.secret)
+      value: $t(functions.variable.header.value)
+    header:
+      key: Klucz
+      name: Nazwa zmiennej
+      source: Żródło
+      value: Wartość
+    not-found: Ta funkcja nie posiada jeszcze zmiennych środowiskowych
+    not-match: Nie znaleziono zmiennych środowiskowych pasujących do wyszukiwanej frazy.
+    placeholders:
+      name: $t(functions.variable.header.name)
+      value: Wartość zmiennej
+    popup-error: Przynajmniej jedna ze zmiennych ma niepoprawny format, jest zastrzerzona, zduplikowana, lub pusta.
+    title:
+      environment-variables: Zmienne środowiskowe
+      injected-variables: Zmienne środowiskowe wstrzyknięte poprzez service binding
+    tooltip:
+      config-map: 'Ta zmienna pochodzi z mapy konfiguracji: "{resourceName}".'
+      custom: Ta zmienna została wprowadzona przez użytkownika.
+      secret: 'Ta zmienna pochodzi z sekretu: "{resourceName}".'
+      service-binding: 'Ta zmienna została wstrzyknięta przez service binding odwołujący się do instancji serwisu: "{serviceInstanceName}".'
+      text: Ta zmienna pochodzi z zasobu. Aby uzyskać wartość, kliknij link.
+    type:
+      config-map: Mapa konfiguracji
+      custom: Niestandardowe
+      secret: Sekret
+      service-binding: Service binding
+    warnings:
+      override: Ta nazwa zmiennej jest identyczna ze zmienną wstrzykniętą przez Service Binding. Kontynuuj, jeśli chcesz, aby mogły się wzajemnie nadpisywać. W przeciwnym razie wybierz inną nazwę.
+      sbu-can-be-overridden:
+        by-both: Ta zmienna może być nadpisana przez jedną z niestandardowych zmiennych lub przez zmienną wstrzykniętą przez jeden z service bindingów.
+        by-custom-env: Ta zmienna może nadpisać lub być nadpisana przez jedną z niestandardowych zmiennych.
+        by-sbu: Ta zmienna może nadpisać lub być nadpisana przez zmienną wstrzykniętą przez jeden z service bindingów.
+      text: Ostrzeżenie
+      variable-can-override-sbu: Ta zmienna może nadpisać lub być nadpisana przez zmienną wstrzykniętą przez jeden ze stworzonych service bindingów.
 generic-list:
   no-entries-found: Nie znaleziono wpisów
 git-repositories:
