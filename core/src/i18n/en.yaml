@@ -169,7 +169,7 @@ functions:
       secret: This variable comes from the "{resourceName}" Secret.
       service-binding: This variable was injected by the Service Binding referencing Service Instance "{serviceInstanceName}".
     type:
-      config-map: Config Map
+      config-map: ConfigMap
       custom: Custom
       secret: Secret
       service-binding: Service Binding
