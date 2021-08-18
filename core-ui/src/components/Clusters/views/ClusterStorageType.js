@@ -24,7 +24,7 @@ export function ClusterStorageType({ clusterConfig }) {
 
   const description = descriptions[storage] || {
     name: t('clusters.storage.labels.unknown'),
-    description: t('clusters.storage.descriptions.unknown'),
+    tooltip: t('clusters.storage.descriptions.unknown'),
   };
 
   return (
