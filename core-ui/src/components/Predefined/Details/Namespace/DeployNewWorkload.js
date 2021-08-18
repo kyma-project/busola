@@ -1,11 +1,7 @@
 import React from 'react';
 import { Popover, Menu, Button } from 'fundamental-react';
-import {
-  ModalWithForm,
-  useGetList,
-  useMicrofrontendContext,
-} from 'react-shared';
-import CreateWorkloadForm from './CreateWorkloadForm/CreateWorkloadForm';
+import { useGetList, useMicrofrontendContext } from 'react-shared';
+import { CreateDeploymentForm } from 'components/Predefined/List/CreateDeploymentForm/CreateDeploymentForm';
 import CreateLambdaModal from 'components/Lambdas/LambdasList/Lambdas/CreateLambdaModal';
 
 export default function DeployNewWorkload({ namespaceName }) {
@@ -48,14 +44,9 @@ export default function DeployNewWorkload({ namespaceName }) {
   ) : null;
 
   const deploymentModal = (
-    <ModalWithForm
-      title="Create Deployment"
-      confirmText="Create"
-      className="add-deployment-modal"
+    <CreateDeploymentForm
+      namespaceId={namespaceName}
       modalOpeningComponent={<Menu.Item>Create Deployment</Menu.Item>}
-      renderForm={props => (
-        <CreateWorkloadForm namespaceId={namespaceName} {...props} />
-      )}
     />
   );
 
@@ -70,10 +61,6 @@ export default function DeployNewWorkload({ namespaceName }) {
       body={
         <Menu>
           <Menu.List>
-            {/* <DeployResourceModal
-              namespace={namespaceNameame}
-              modalOpeningComponent={<Menu.Item>Upload YAML</Menu.Item>}
-            /> */}
             {lambdaModal}
             {deploymentModal}
           </Menu.List>

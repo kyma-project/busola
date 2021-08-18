@@ -1,0 +1,19 @@
+.create-modal__collapsible-section {
+  background: var(--sapList_HeaderBackground);
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+    padding: 8px 16px;
+
+    i {
+      margin-right: 8px;
+    }
+  }
+
+  .content {
+      padding: 16px;
+      background: var(--sapPageHeader_Background);
+  }
+}
