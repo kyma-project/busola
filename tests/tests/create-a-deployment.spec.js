@@ -21,12 +21,12 @@ context('Create a Deployment', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Deployment name"]')
+      .find('[placeholder="Deployment name"]:visible')
       .clear()
       .type(DEPLOYMENT_NAME);
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Labels key=value"]')
+      .find('[placeholder="Enter Labels key=value"]:visible')
       .type(`app=${DEPLOYMENT_NAME}`);
 
     cy.getIframeBody()
@@ -34,7 +34,7 @@ context('Create a Deployment', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Labels key=value"]')
+      .find('[placeholder="Enter Labels key=value"]:visible')
       .type(`example=${DEPLOYMENT_NAME}`);
 
     cy.getIframeBody()
@@ -42,8 +42,16 @@ context('Create a Deployment', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Docker image"]')
+      .find('[placeholder="Enter Docker image"]:visible')
       .type(DOCKER_IMAGE);
+
+    cy.getIframeBody()
+      .contains('Advanced')
+      .click();
+
+    cy.getIframeBody()
+      .contains('Runtime profile')
+      .click();
 
     cy.getIframeBody()
       .contains('label', 'Memory requests')
