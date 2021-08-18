@@ -21,6 +21,7 @@ export const AddonsConfigurations = ({
   const [newUrl, setNewUrl] = useState('');
   const [urls, setUrls] = useState([]);
   const request = usePost();
+  const { t } = useTranslation();
 
   useEffect(_ => setCustomValid(!!urls.length), [urls, setCustomValid]);
 
@@ -63,8 +64,6 @@ export const AddonsConfigurations = ({
         repositories,
       },
     };
-
-    const { t } = useTranslation();
 
     try {
       await request(resourceUrl, resourceData);
