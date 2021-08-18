@@ -33,6 +33,7 @@ export function serializeVariables({
     }
 
     if (isValueFromVariable) {
+      customVariablesNames.push(variable.name);
       customValueFromVariables.push(
         newVariableModel({
           type: VARIABLE_TYPE[typeOfValueFromVariable],
@@ -63,7 +64,7 @@ export function serializeVariables({
     ({ variables, bindingUsage }) => {
       const serializedInjectedVariables = [];
 
-      variables.forEach(({ key: variableName, value }) => {
+      variables.forEach(({ key: variableName, valueFrom }) => {
         let validation = VARIABLE_VALIDATION.NONE;
 
         const canOverrideByCustomVar = customVariablesNames.includes(
@@ -79,17 +80,16 @@ export function serializeVariables({
         } else if (canOverrideBySBU) {
           validation = VARIABLE_VALIDATION.CAN_OVERRIDE_BY_SBU;
         }
-
         const newVariable = newVariableModel({
           type: VARIABLE_TYPE.BINDING_USAGE,
           variable: {
             name: variableName,
-            value,
+            valueFrom: valueFrom,
           },
           validation,
           additionalProps: {
             serviceInstanceName:
-              bindingUsage.serviceBinding.serviceInstanceName,
+              bindingUsage.serviceBinding.spec.instanceRef.name,
           },
         });
         serializedInjectedVariables.push(newVariable);
@@ -106,19 +106,25 @@ export function serializeVariables({
   };
 }
 
-export function retrieveVariablesFromBindingUsage(bindingUsage) {
+export function retrieveVariablesFromBindingUsage(binding) {
   let envPrefix = '';
-  if (bindingUsage.parameters && bindingUsage.parameters.envPrefix) {
-    envPrefix = bindingUsage.parameters.envPrefix.name || '';
+  if (
+    binding.serviceBindingUsage.spec.parameters &&
+    binding.serviceBindingUsage.spec.parameters.envPrefix
+  ) {
+    envPrefix =
+      binding.serviceBindingUsage.spec.parameters.envPrefix.name || '';
   }
 
-  const secretData =
-    bindingUsage.serviceBinding &&
-    bindingUsage.serviceBinding.secret &&
-    bindingUsage.serviceBinding.secret.data;
+  const secretData = binding.secret && binding.secret.data;
 
   return Object.entries(secretData || {}).map(([env, value]) => ({
     key: `${envPrefix}${env}`,
-    value: value,
+    valueFrom: {
+      secretKeyRef: {
+        name: binding.secret.metadata.name,
+        key: env,
+      },
+    },
   }));
 }
