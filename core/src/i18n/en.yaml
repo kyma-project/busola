@@ -124,7 +124,7 @@ functions:
       open:
         custom: Custom Variable
         secret: Secret Variable
-        config-map: Config Map Variable
+        config-map: ConfigMap Variable
     create-modal:
       title:
         custom: Create Custom Variable
