@@ -38,7 +38,9 @@ context('Cluster configuration', () => {
     cy.url().should('match', /namespaces$/);
 
     // cluster storage message should be visible
-    cy.contains(/Cluster storage changed/).should('be.visible');
+    cy.contains(/The chosen storage type has been overwritten/).should(
+      'be.visible',
+    );
 
     // custom category should be added
     cy.contains('Category from target cluster').should('be.visible');
