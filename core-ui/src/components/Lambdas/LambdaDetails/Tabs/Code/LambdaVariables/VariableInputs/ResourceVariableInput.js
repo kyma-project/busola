@@ -159,7 +159,7 @@ export default function ResourceVariableInput({
         break;
       case VARIABLE_VALIDATION.CAN_OVERRIDE_SBU:
         className = 'fd-has-color-status-2';
-        message = t('functions.variable.warnings.variable-can-override-sbu');
+        message = t('functions.variable.warnings.override');
         break;
       default:
         return null;
