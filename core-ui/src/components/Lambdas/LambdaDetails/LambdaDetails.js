@@ -10,7 +10,6 @@ import ApiRulesWrapper from './Tabs/Configuration/ApiRules/ApiRules';
 import { LAMBDA_DETAILS } from 'components/Lambdas/constants';
 
 export default function LambdaDetails({ lambda }) {
-  const [bindingUsages, setBindingUsages] = useState([]);
   const microfrontendContext = useMicrofrontendContext();
   const { features } = microfrontendContext;
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
@@ -22,7 +21,6 @@ export default function LambdaDetails({ lambda }) {
   const EventSubscriptions = features?.EVENTING?.isEnabled
     ? EventSubscriptionsWrapper
     : () => null;
-
   const catalogEnabled =
     features?.SERVICE_CATALOG?.isEnabled &&
     features?.SERVICE_CATALOG_ADDONS?.isEnabled;
@@ -42,11 +40,7 @@ export default function LambdaDetails({ lambda }) {
           id="lambda-code"
           title={LAMBDA_DETAILS.TABS.CODE.TITLE}
         >
-          <CodeTab
-            lambda={lambda}
-            bindingUsages={bindingUsages}
-            isActive={selectedTabIndex === 0}
-          />
+          <CodeTab lambda={lambda} isActive={selectedTabIndex === 0} />
         </Tab>
         {configTabShouldRender && (
           <Tab
@@ -62,7 +56,6 @@ export default function LambdaDetails({ lambda }) {
             <ServiceBindings
               lambda={lambda}
               isActive={selectedTabIndex === 1}
-              setBindingUsages={setBindingUsages}
             />
           </Tab>
         )}

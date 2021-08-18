@@ -1,3 +1,5 @@
+import { base64Encode } from 'shared/helpers';
+
 export const lambdaMock = {
   metadata: {
     name: 'lambda-pico-bello',
@@ -90,21 +92,36 @@ export const eventTriggerMock = {
 };
 
 export const serviceBindingUsageMock = {
-  name: 'serviceBindingUsage',
-  parameters: {
-    envPrefix: {
-      name: 'PREFIX_',
+  serviceBinding: {
+    metadata: {
+      name: 'serviceBinding',
+    },
+    spec: {
+      instanceRef: {
+        name: 'serviceInstanceName',
+      },
     },
   },
-  serviceBinding: {
-    name: 'serviceBinding',
-    serviceInstanceName: 'serviceInstanceName',
-    secret: {
-      name: 'secret',
-      data: {
-        FOO: 'foo',
-        BAR: 'bar',
+  serviceBindingUsage: {
+    metadata: {
+      name: 'serviceBindingUsage',
+    },
+    spec: {
+      parameters: {
+        envPrefix: {
+          name: 'PREFIX_',
+        },
       },
+    },
+  },
+  secret: {
+    metadata: {
+      name: 'secret',
+      namespace: 'namespace',
+    },
+    data: {
+      FOO: base64Encode('foo'),
+      BAR: base64Encode('bar'),
     },
   },
 };
