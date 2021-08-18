@@ -3,8 +3,33 @@ addons:
   title: Dodatki
 api-rules:
   access-strategies:
-    delete:
-      tooltip: Zdefiniuj co najmniej jedną strategię dostępu.
+    buttons:
+      add: Dodaj strategię dostępu
+    labels:
+      required-scope: Wymagany zakres
+    messages:
+      one-method: Ta strategia dostępu wymaga co najmniej jednej metody.
+    title: Strategie dostępu
+    tooltips:
+      delete: Zdefiniuj co najmniej jedną strategię dostępu.
+      path: Ścieżka może zawierać znaki alfanumeryczne oraz „/”, „.”, „*”, „?”, „!”, „-”, „(” i „)”.
+  buttons:
+    create: Stwórz reguły API
+  general-settings:
+    title: Ustawienia główne
+  list:
+    headers:
+      host: Host
+      service-name: Nazwa Serwisu
+      status: Status
+  messages:
+    create-failed: Nie udało się utworzyć reguły API
+    created: Utworzono regułę API
+    updated: Zaktualizowano regułę API
+  services:
+    error-load: Nie udało się wczytać listy serwisów
+    loading: Ładowanie serwisów...
+    ns-no-services: Brak Serwisów w tej Przestrzeni Nazw
   title: Reguły API
 applications:
   title: Aplikacje
@@ -35,11 +60,18 @@ common:
   created: Stworzono
   delete-dialog:
     delete-confirm: Nie pytaj ponownie
+    information: Wyłączyłeś potwierdzenia usuwania dla wszystkich zasobów. Możnesz je ponownie włączyć w Ustawieniach.
     message: Czy na pewno chcesz usunąć {{type}} {{name}}?
     title: Usuń {{name}}
-  labels: Etykiety
-  name: Nazwa
-  status: Status
+  headers:
+    created: Stworzony
+    labels: Etykiety
+    name: Nazwa
+    status: Status
+  labels:
+    hostname: Nazwa hosta
+    name: Nazwa
+    service: Serwis
   tooltips:
     copy-to-clipboard: Skopiuj do schowka
     download: Pobierz
@@ -133,6 +165,8 @@ pods:
   node: Węzeł
   restarts: Ponownych uruchomień
   title: Pody
+preferences:
+  title: Ustawienia
 replica-sets:
   title: Zestawy replik
 role-bindings:
@@ -145,14 +179,49 @@ service-catalog: null
 service-management:
   title: Zarządzanie serwisami
 services:
+  labels:
+    service: Serwis
   title: Serwisy
+  type: Typ serwisu
+  cluster-ip: IP Klastra
+  ports: Porty
+  external-ips: Zewnętrzne IP
 settings:
-  confirmations: Potwierdzenia
-  dontConfirmDelete: Usuwanie bez potwierdzenia
+  clusters:
+    confirmations: Potwierdzenia
+    description: Ustawienia klastrów
+    dontConfirmDelete: Usuwanie bez potwierdzenia
+    showHiddenNamespaces: Pokaż ukryte Przestrzenie Nazw
+    title: Klastry
+  interface:
+    title: Interfejs
+    description: Motyw, język
+    themes:
+      hcb:
+        title: Ciemny z wysokim kontrastem
+        description: Zwiększony kontrast oraz dostępność
+      hcw:
+        title: Jasny z wysokim kontrastem
+        description: Zwiększony kontrast oraz dostępność
+      dark:
+        title: Ciemny
+        description: Do użycia przy kodowaniu po nocach
+      light:
+        title: Jasny
+        description: Do użycia w normalnych warunkach
+      light_dark:
+        title: Light / Dark
+        description: Używa ustawień systemowych
   language: Język
+  theme: Motyw
 stateful-sets:
   replicas: Repliki
   title: Zestawy stanowe
+top-nav:
+  profile:
+    download-current-cluster-config: Pobierz konfigurację klastra
+    preferences: $t(preferences.title)
+    remove-current-cluster-config: Usuń bieżącą konfigurację
 workloads:
   docker-image:
     tooltip: Wprowadź poprawną ścieżkę rejestru obrazu Dockera.

@@ -6,6 +6,7 @@ import {
   FormItem,
   Link,
   Button,
+  Dialog,
   Checkbox,
   MessageBox,
   MessageStrip,
@@ -185,8 +186,8 @@ function Resources({
     if (dontConfirmDelete) {
       performDelete(resource);
     } else {
-      setActiveResource(resource);
       LuigiClient.uxManager().addBackdrop();
+      setActiveResource(resource);
       setShowDeleteDialog(true);
     }
   }
@@ -212,9 +213,9 @@ function Resources({
       ];
 
   const headerRenderer = () => [
-    t('common.name'),
-    t('common.created'),
-    t('common.labels'),
+    t('common.headers.name'),
+    t('common.headers.created'),
+    t('common.headers.labels'),
     ...customColumns.map(col => col.header),
   ];
 
@@ -283,9 +284,9 @@ function Resources({
             compact
             onClick={() => performDelete(activeResource)}
           >
-            {t('common.delete-dialog.buttons.delete')}
+            {t('common.buttons.delete')}
           </Button>,
-          <Button compact>{t('common.delete-dialog.buttons.cancel')}</Button>,
+          <Button compact>{t('common.buttons.cancel')}</Button>,
         ]}
         show={showDeleteDialog}
         onClose={closeDeleteDialog}
