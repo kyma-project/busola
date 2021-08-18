@@ -1,7 +1,7 @@
 import React from 'react';
 import { Popover, Menu, Button } from 'fundamental-react';
 import { useGetList, useMicrofrontendContext } from 'react-shared';
-import { CreateDeploymentForm } from 'components/Predefined/List/CreateDeploymentForm/CreateDeploymentForm';
+import { CreateDeploymentForm } from 'shared/components/CreateDeploymentForm/CreateDeploymentForm';
 import CreateLambdaModal from 'components/Lambdas/LambdasList/Lambdas/CreateLambdaModal';
 
 export default function DeployNewWorkload({ namespaceName }) {

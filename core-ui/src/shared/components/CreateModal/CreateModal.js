@@ -32,7 +32,7 @@ export function CreateModal({
     });
   }
 
-  React.useEffect(revalidate, [formRef]);
+  React.useEffect(revalidate, [formRef, resource]);
 
   function setOpenStatus(status) {
     if (status) {

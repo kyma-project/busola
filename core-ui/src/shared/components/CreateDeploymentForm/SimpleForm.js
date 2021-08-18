@@ -27,16 +27,17 @@ export function SimpleForm({ deployment, setDeployment }) {
         <LabelsInput
           labels={deployment.labels}
           onChange={labels => setDeployment({ ...deployment, labels })}
+          i18n={i18n}
         />
         <FormItem>
           <FormLabel htmlFor="docker-image" required>
             Docker image
           </FormLabel>
-          <Tooltip content={t('namespaces.docker-image.tooltip')}>
+          <Tooltip content={t('workloads.docker-image.tooltip')}>
             <FormInput
               id="docker-image"
               required
-              placeholder="Enter Docker image"
+              placeholder="Enter Docker image tag, e.g. bitnami/nginx"
               onChange={e =>
                 setDeployment({ ...deployment, dockerImage: e.target.value })
               }

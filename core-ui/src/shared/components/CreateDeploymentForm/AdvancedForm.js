@@ -9,6 +9,7 @@ import {
 import { TextFormItem } from 'react-shared';
 import { merge } from 'lodash';
 import { SimpleForm } from './SimpleForm';
+import './AdvancedForm.scss';
 
 export function AdvancedForm({ deployment, setDeployment }) {
   const setServiceData = data => {
@@ -56,7 +57,7 @@ export function AdvancedForm({ deployment, setDeployment }) {
 
   const runtimeProfileForm = (
     <CreateModal.CollapsibleSection title="Runtime profile">
-      <FormFieldset className="configuration-data__form">
+      <FormFieldset className="runtime-profile-form">
         <FormItem>
           <FormLabel required>Memory requests</FormLabel>
           <FormInput
@@ -74,7 +75,7 @@ export function AdvancedForm({ deployment, setDeployment }) {
           />
         </FormItem>
       </FormFieldset>
-      <FormFieldset className="configuration-data__form">
+      <FormFieldset className="runtime-profile-form">
         <FormItem>
           <FormLabel required>CPU requests</FormLabel>
           <FormInput
@@ -103,7 +104,7 @@ export function AdvancedForm({ deployment, setDeployment }) {
           inputKey="port"
           required
           label="Port"
-          placeholder="Enter port"
+          placeholder="Enter port at which expose the Service"
           defaultValue={deployment.serviceData.port.port || 0}
           value={deployment.serviceData.port.port}
           inputProps={{ disabled: !deployment.serviceData.create }}
@@ -117,7 +118,7 @@ export function AdvancedForm({ deployment, setDeployment }) {
           required
           inputProps={{ disabled: !deployment.serviceData.create }}
           label="Target port"
-          placeholder="Enter target port"
+          placeholder="Enter target port of the container"
           defaultValue={deployment.serviceData.port.targetPort || 0}
           value={deployment.serviceData.port.targetPort}
           onChange={e =>
