@@ -1,22 +1,17 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { Dialog, Button } from 'fundamental-react';
-import {
-  ModeSelector,
-  MODE_ADVANCED,
-  MODE_SIMPLE,
-  MODE_YAML,
-} from './ModeSelector/ModeSelector';
+import { ModeSelector } from './ModeSelector/ModeSelector';
 import { Editor } from './Editor';
 import './CreateModal.scss';
 import { CollapsibleSection } from './CollapsibleSection/CollapsibleSection';
 import { Presets } from './Presets';
 
 export function CreateModal({
+  title,
   modalOpeningComponent,
   simpleForm,
   advancedForm,
-  title,
   resource,
   setResource,
   onClose,
@@ -26,7 +21,7 @@ export function CreateModal({
   presets,
 }) {
   const [isOpen, setOpen] = React.useState(false);
-  const [mode, setMode] = React.useState(MODE_SIMPLE);
+  const [mode, setMode] = React.useState(ModeSelector.MODE_SIMPLE);
   const formRef = React.useRef();
   const [formValid, setFormValid] = React.useState(false);
 
@@ -37,9 +32,7 @@ export function CreateModal({
     });
   }
 
-  React.useEffect(() => {
-    revalidate();
-  }, [formRef]);
+  React.useEffect(revalidate, [formRef]);
 
   function setOpenStatus(status) {
     if (status) {
@@ -57,6 +50,34 @@ export function CreateModal({
     }
   }
 
+  const formsToDisplay = (
+    <>
+      {mode === ModeSelector.MODE_SIMPLE && (
+        <div onChange={revalidate}>{simpleForm}</div>
+      )}
+      {mode === ModeSelector.MODE_YAML && (
+        <Editor
+          resource={toYaml(resource)}
+          setResource={yaml => {
+            setResource(fromYaml(yaml, resource));
+          }}
+        />
+      )}
+
+      {/* always keep the advanced form to ensure validation */}
+      <form
+        onChange={revalidate}
+        ref={formRef}
+        style={{
+          display: mode === ModeSelector.MODE_ADVANCED ? 'initial' : 'none',
+        }}
+        onSubmit={confirm}
+      >
+        {advancedForm}
+      </form>
+    </>
+  );
+
   const content = (
     <>
       {presets?.length && (
@@ -73,23 +94,7 @@ export function CreateModal({
         setMode={setMode}
         style={{ position: 'sticky' }}
       />
-      <div onChange={revalidate}>{mode === MODE_SIMPLE && simpleForm}</div>
-      <form
-        onChange={revalidate}
-        ref={formRef}
-        style={{ display: mode === MODE_ADVANCED ? 'initial' : 'none' }}
-        onSubmit={confirm}
-      >
-        {advancedForm}
-      </form>
-      {mode === MODE_YAML && (
-        <Editor
-          resource={toYaml(resource)}
-          setResource={yaml => {
-            setResource(fromYaml(yaml, resource));
-          }}
-        />
-      )}
+      {formsToDisplay}
     </>
   );
 
@@ -113,7 +118,7 @@ export function CreateModal({
         actions={actions}
         onClose={() => {
           setOpenStatus(false);
-          setMode(MODE_SIMPLE);
+          setMode(ModeSelector.MODE_SIMPLE);
           onClose && onClose();
         }}
         title={title}
@@ -127,5 +132,5 @@ export function CreateModal({
 CreateModal.CollapsibleSection = CollapsibleSection;
 
 CreateModal.Section = ({ children }) => (
-  <div style={{ padding: '16px' }}>{children}</div>
+  <div className="fd-margin--sm">{children}</div>
 );

@@ -13,7 +13,10 @@ export function Presets({ presets, onSelect }) {
       compact
       options={options}
       selectedKey={''}
-      onSelect={(_, { key }) => onSelect(presets.find(p => p.name === key))}
+      onSelect={(e, preset) => {
+        e.stopPropagation();
+        onSelect(presets.find(p => p.name === preset.key));
+      }}
     />
   );
 }

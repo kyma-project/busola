@@ -36,7 +36,7 @@ export function deploymentToYaml(deployment) {
     deployment.labels.app = deployment.name;
   }
 
-  const runtimeDeployment = {
+  return {
     apiVersion: 'apps/v1',
     kind: 'Deployment',
     metadata: {
@@ -64,7 +64,6 @@ export function deploymentToYaml(deployment) {
       },
     },
   };
-  return runtimeDeployment;
 }
 
 export function yamlToDeployment(yaml, prevDeployment) {
@@ -128,6 +127,7 @@ export function createDeploymentTemplate(namespaceId) {
 
 export function createPresets(namespaceId) {
   return [
+    { name: 'Default', value: createDeploymentTemplate(namespaceId) },
     {
       name: 'Echo server',
       value: {
