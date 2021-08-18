@@ -139,7 +139,7 @@ functions:
       empty: Variable is empty.
       duplicated: Duplicated variable name.
       invalid: Variable name must contain alphanumeric characters, can contain '_', no blank spaces.
-      invalid-config: Select the config map name and key
+      invalid-config: Select the ConfigMap name and key.
       invalid-secret: Select the secret name and key.
       restricted: This variable name is restricted and cannot be used. Try a different one.
     form:
