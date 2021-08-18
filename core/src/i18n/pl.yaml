@@ -1,5 +1,7 @@
 ---
 addons:
+  errors:
+    cannot-create: Nie można utworzyć konfiguracji dodatków
   title: Dodatki
 api-rules:
   access-strategies:
@@ -81,6 +83,10 @@ common:
     information: Wyłączyłeś potwierdzenia usuwania dla wszystkich zasobów. Możnesz je ponownie włączyć w Ustawieniach.
     message: Czy na pewno chcesz usunąć {{type}} {{name}}?
     title: Usuń {{name}}
+  errors:
+    no-permissions: Nie masz wystarczających uprawnień, aby wyświetlić tę zawartość.
+    no-permissions-header: Za mało uprawnień
+    no-permissions-message: Skontaktuj się z administratorem, aby przyznać Ci dostęp.
   headers:
     created: Stworzony
     labels: Etykiety

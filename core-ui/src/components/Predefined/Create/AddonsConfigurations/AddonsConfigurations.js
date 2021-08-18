@@ -64,12 +64,18 @@ export const AddonsConfigurations = ({
       },
     };
 
+    const { t } = useTranslation();
+
     try {
       await request(resourceUrl, resourceData);
-      onCompleted(`Addons Configuration ${name} created`);
+      onCompleted(
+        t('addons.messages.created', {
+          name: name,
+        }),
+      );
       refetchList();
     } catch (e) {
-      onError('Cannot create Addons Configuration', `Error: ${e.message}`);
+      onError(t('addons.errors.cannot-create'), `Error: ${e.message}`);
     }
   };
 
