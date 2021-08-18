@@ -60,6 +60,7 @@ export async function checkClusterStorageType(originalStorage) {
           targetStorage,
         }),
         type: 'info',
+        closeAfter: 7500,
       });
     }
   }

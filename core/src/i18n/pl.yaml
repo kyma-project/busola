@@ -54,21 +54,21 @@ clusters:
     kubeconfig-download-error: Nie udało się pobrać kubeconfigu
     kubeconfig-not-present: Brak kubeconfigu w konfiguracji klastra
   list:
+    no-clusters-found: Nie znaleziono klastrów
     outdated:
       download: Pobierz Kubeconfig
       tooltip: Nieaktualna wersja parametru może powodować błędy. Usuń i ponownie dodaj swój klaster.
-    no-clusters-found: Nie znaleziono klastrów
   overview:
     title: Przegląd klastrów
     version: Wersja
   storage:
-    changed-message: Zmieniono miejsce przechowywania konfiguracji z {{originalStorage}} na {{targetStorage}}.
+    changed-message: Nadpisano miejsce przechowywania konfiguracji z {{originalStorage}} na {{targetStorage}}.
     choose-storage:
       label: Miejsce przechowywania konfiguracji
     descriptions:
+      inMemory: Konfiguracja jest usuwana wraz z odświeżeniem strony.
       localStorage: Konfiguracja nie jest usuwana pomiędzy odświeżeniami przeglądarki.
       sessionStorage: Konfiguracja jest usuwana w momencie zakończenia sesji karty przeglądarki.
-      inMemory: Konfiguracja jest usuwana wraz z odświeżeniem strony.
       unknown: Nie rozpoznano.
     labels:
       inMemory: W pamięci
@@ -145,23 +145,23 @@ functions:
     buttons:
       add: Dodaj zmienną środowiskową
       open:
+        config-map: Zmienna z mapy konfiguracji
         custom: Zmienna niestandardowa
         secret: Zmienna z sekretu
-        config-map: Zmienna z mapy konfiguracji
     create-modal:
       title:
+        config-map: Stwórz zmienną z mapy konfiguracji
         custom: Stwórz zmienną niestandardową
         secret: Stwórz zmienną z sekretu
-        config-map: Stwórz zmienną z mapy konfiguracji
     edit-modal:
       title:
+        config-map: Edytuj zmienną z mapy konfiguracji
         custom: Edytuj zmienną niestandardową
         secret: Edytuj zmienną z sekretu
-        config-map: Edytuj zmienną z mapy konfiguracji
     errors:
-      empty: Nazwa zmiennej jest pusta.
       duplicated: Zmienna o takiej nazwie ju istnieje.
-      invalid: "Nazwa zmiennej musi składać się ze znaków alfanumerycznych, może zawierać również '_', bez spacji"
+      empty: Nazwa zmiennej jest pusta.
+      invalid: Nazwa zmiennej musi składać się ze znaków alfanumerycznych, może zawierać również '_', bez spacji
       invalid-config: Wybierz nazwę mapy konfiguracji i klucz
       invalid-secret: Wybierz nazwę sekretu i klucz
       restricted: Ta nazwa zmiennej jest zastrzerzona i nie może by użyta. Spróbuj użyć innej nazwy.
@@ -178,19 +178,19 @@ functions:
       value: Wartość
     not-found: Ta funkcja nie posiada jeszcze zmiennych środowiskowych
     not-match: Nie znaleziono zmiennych środowiskowych pasujących do wyszukiwanej frazy.
-    title:
-      environment-variables: Zmienne środowiskowe
-      injected-variables: Zmienne środowiskowe wstrzyknięte poprzez service binding
     placeholders:
       name: $t(functions.variable.header.name)
       value: Wartość zmiennej
     popup-error: Przynajmniej jedna ze zmiennych ma niepoprawny format, jest zastrzerzona, zduplikowana, lub pusta.
+    title:
+      environment-variables: Zmienne środowiskowe
+      injected-variables: Zmienne środowiskowe wstrzyknięte poprzez service binding
     tooltip:
-      text: Ta zmienna pochodzi z zasobu. Aby uzyskać wartość, kliknij link.
       config-map: 'Ta zmienna pochodzi z mapy konfiguracji: "{resourceName}".'
       custom: Ta zmienna została wprowadzona przez użytkownika.
       secret: 'Ta zmienna pochodzi z sekretu: "{resourceName}".'
       service-binding: 'Ta zmienna została wstrzyknięta przez service binding odwołujący się do instancji serwisu: "{serviceInstanceName}".'
+      text: Ta zmienna pochodzi z zasobu. Aby uzyskać wartość, kliknij link.
     type:
       config-map: Mapa konfiguracji
       custom: Niestandardowe
@@ -198,12 +198,12 @@ functions:
       service-binding: Service binding
     warnings:
       override: Ta nazwa zmiennej jest identyczna ze zmienną wstrzykniętą przez Service Binding. Kontynuuj, jeśli chcesz, aby mogły się wzajemnie nadpisywać. W przeciwnym razie wybierz inną nazwę.
-      text: Ostrzeżenie
-      variable-can-override-sbu: Ta zmienna może nadpisać lub być nadpisana przez zmienną wstrzykniętą przez jeden ze stworzonych service bindingów.
       sbu-can-be-overridden:
+        by-both: Ta zmienna może być nadpisana przez jedną z niestandardowych zmiennych lub przez zmienną wstrzykniętą przez jeden z service bindingów.
         by-custom-env: Ta zmienna może nadpisać lub być nadpisana przez jedną z niestandardowych zmiennych.
         by-sbu: Ta zmienna może nadpisać lub być nadpisana przez zmienną wstrzykniętą przez jeden z service bindingów.
-        by-both: Ta zmienna może być nadpisana przez jedną z niestandardowych zmiennych lub przez zmienną wstrzykniętą przez jeden z service bindingów.
+      text: Ostrzeżenie
+      variable-can-override-sbu: Ta zmienna może nadpisać lub być nadpisana przez zmienną wstrzykniętą przez jeden ze stworzonych service bindingów.
 git-repositories:
   title: Repozytoria Git
 instances:
@@ -265,13 +265,13 @@ service-catalog: null
 service-management:
   title: Zarządzanie serwisami
 services:
+  cluster-ip: IP Klastra
+  external-ips: Zewnętrzne IP
   labels:
     service: Serwis
+  ports: Porty
   title: Serwisy
   type: Typ serwisu
-  cluster-ip: IP Klastra
-  ports: Porty
-  external-ips: Zewnętrzne IP
 settings:
   clusters:
     confirmations: Potwierdzenia
@@ -280,24 +280,24 @@ settings:
     showHiddenNamespaces: Pokaż ukryte Przestrzenie Nazw
     title: Klastry
   interface:
-    title: Interfejs
     description: Motyw, język
     themes:
-      hcb:
-        title: Ciemny z wysokim kontrastem
-        description: Zwiększony kontrast oraz dostępność
-      hcw:
-        title: Jasny z wysokim kontrastem
-        description: Zwiększony kontrast oraz dostępność
       dark:
-        title: Ciemny
         description: Do użycia przy kodowaniu po nocach
+        title: Ciemny
+      hcb:
+        description: Zwiększony kontrast oraz dostępność
+        title: Ciemny z wysokim kontrastem
+      hcw:
+        description: Zwiększony kontrast oraz dostępność
+        title: Jasny z wysokim kontrastem
       light:
-        title: Jasny
         description: Do użycia w normalnych warunkach
+        title: Jasny
       light_dark:
-        title: Light / Dark
         description: Używa ustawień systemowych
+        title: Light / Dark
+    title: Interfejs
   language: Język
   theme: Motyw
 stateful-sets:
