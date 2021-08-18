@@ -164,7 +164,7 @@ functions:
     popup-error: At least one variable has an incorrect name format, is restricted, duplicated, or empty.
     tooltip:
       text: This variable comes from a Resource. To get the value, follow the link.
-      config-map: This variable comes from the "{resourceName}" Config Map.
+      config-map: This variable comes from the "{resourceName}" ConfigMap.
       custom: This variable was provided by the user.
       secret: This variable comes from the "{resourceName}" Secret.
       service-binding: This variable was injected by the Service Binding referencing Service Instance "{serviceInstanceName}".
