@@ -134,7 +134,7 @@ functions:
       title:
         custom: Edit Custom Variable
         secret: Edit Secret Variable
-        config-map: Edit Config Map Variable
+        config-map: Edit ConfigMap Variable
     errors:
       empty: Variable is empty.
       duplicated: Duplicated variable name.
