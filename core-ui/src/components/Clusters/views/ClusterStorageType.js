@@ -9,11 +9,11 @@ export function ClusterStorageType({ clusterConfig }) {
 
   const descriptions = {
     localStorage: {
-      name: 'localStorage',
+      name: t('clusters.storage.labels.localStorage'),
       tooltip: t('clusters.storage.descriptions.localStorage'),
     },
     sessionStorage: {
-      name: 'sessionStorage',
+      name: t('clusters.storage.labels.sessionStorage'),
       tooltip: t('clusters.storage.descriptions.sessionStorage'),
     },
     inMemory: {

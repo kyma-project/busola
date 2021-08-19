@@ -8,8 +8,11 @@ export function ChooseStorage({ storage, setStorage }) {
   const { t } = useTranslation();
 
   const storages = [
-    { key: 'localStorage', text: 'localStorage' },
-    { key: 'sessionStorage', text: 'sessionStorage' },
+    { key: 'localStorage', text: t('clusters.storage.labels.localStorage') },
+    {
+      key: 'sessionStorage',
+      text: t('clusters.storage.labels.sessionStorage'),
+    },
     { key: 'inMemory', text: t('clusters.storage.labels.inMemory') },
   ];
 

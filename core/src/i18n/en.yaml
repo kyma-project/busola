@@ -72,6 +72,8 @@ clusters:
       unknown: Unknown storage type
     labels:
       inMemory: In memory
+      localStorage: localStorage
+      sessionStorage: sessionStorage
       unknown: Unknown
     title: Storage Type
 common:

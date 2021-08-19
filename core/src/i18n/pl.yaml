@@ -72,6 +72,8 @@ clusters:
       unknown: Nie rozpoznano.
     labels:
       inMemory: W pamięci
+      localStorage: localStorage
+      sessionStorage: sessionStorage
       unknown: Nieznany
     title: Rodzaj przechowywania konfiguracji
 common:
