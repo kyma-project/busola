@@ -66,14 +66,14 @@ clusters:
     choose-storage:
       label: Storage type configuration
     descriptions:
-      inMemory: Cluster data is cleared when the page is refreshed or navigated out of.
+      inMemory: Cluster data is cleared when you leave or refresh the page.
       localStorage: Cluster data is persisted between browser reloads.
       sessionStorage: Cluster data is cleared when the page session ends.
       unknown: Unknown storage type
     labels:
       inMemory: In memory
       unknown: Unknown
-    title: Storage type
+    title: Storage Type
 common:
   buttons:
     cancel: Cancel
