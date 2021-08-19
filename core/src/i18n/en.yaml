@@ -35,7 +35,7 @@ api-rules:
     not-matching-results: Couldn't find API Rules matching this query.
     updated: API Rule updated
   services:
-    error-load: Couldn't load service list
+    error-load: Couldn't load Service list
     loading: Loading services...
     ns-no-services: No Services in this Namespace
   title: API Rules
