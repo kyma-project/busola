@@ -42,7 +42,7 @@ context('Create a Deployment', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Docker image"]:visible')
+      .find('[placeholder^="Enter Docker image"]:visible')
       .type(DOCKER_IMAGE);
 
     cy.getIframeBody()

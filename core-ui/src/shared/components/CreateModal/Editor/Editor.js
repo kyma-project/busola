@@ -3,10 +3,11 @@ import { ControlledEditor, useTheme } from 'react-shared';
 import jsyaml from 'js-yaml';
 import { MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
+import './Editor.scss';
 
 export function Editor({ resource, setResource }) {
   const { t } = useTranslation();
-  const [error, setError] = React.useState(false);
+  const [error, setError] = React.useState('');
   const { editorTheme } = useTheme();
   // don't useState, as it's value needs to be referenced in onEditorBlur
   // using useState value in onEditorBlur results in stale closure
@@ -38,24 +39,24 @@ export function Editor({ resource, setResource }) {
   };
 
   return (
-    <>
-      <div style={{ height: 'calc(100% - 110px)' }}>
-        <ControlledEditor
-          height="100%"
-          language="yaml"
-          theme={editorTheme}
-          value={textResource.current}
-          onChange={handleChange}
-          editorDidMount={(_, editor) =>
-            editor.onDidBlurEditorWidget(onEditorBlur)
-          }
-        />
-      </div>
+    <div className="create-modal__editor">
+      <ControlledEditor
+        height="100%"
+        language="yaml"
+        theme={editorTheme}
+        value={textResource.current}
+        onChange={handleChange}
+        editorDidMount={(_, editor) =>
+          editor.onDidBlurEditorWidget(onEditorBlur)
+        }
+      />
       {error && (
-        <MessageStrip type="error" className="fd-margin--sm">
-          {t('common.create-modal.editor-error', { error })}
-        </MessageStrip>
+        <div className="create-modal__editor__error">
+          <MessageStrip type="error" className="fd-margin--sm">
+            {t('common.create-modal.editor-error', { error })}
+          </MessageStrip>
+        </div>
       )}
-    </>
+    </div>
   );
 }

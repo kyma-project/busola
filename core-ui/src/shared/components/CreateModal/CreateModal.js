@@ -2,7 +2,7 @@ import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { Dialog, Button } from 'fundamental-react';
 import { ModeSelector } from './ModeSelector/ModeSelector';
-import { Editor } from './Editor';
+import { Editor } from './Editor/Editor';
 import './CreateModal.scss';
 import { CollapsibleSection } from './CollapsibleSection/CollapsibleSection';
 import { Presets } from './Presets';
