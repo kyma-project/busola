@@ -1,4 +1,5 @@
 import i18next from 'i18next';
+import { getBusolaClusterParams } from '../busola-cluster-params';
 import { getActiveCluster, getActiveClusterName } from './cluster-management';
 
 const CLUSTERS_KEY = 'busola.clusters';
@@ -13,8 +14,10 @@ export function load() {
   };
 }
 
-export function save(clusters, defaultStorage) {
+export async function save(clusters) {
   clear();
+
+  const defaultStorage = await getDefaultStorage();
 
   const localStorageClusters = {};
   const sessionStorageClusters = {};
@@ -47,11 +50,11 @@ export function save(clusters, defaultStorage) {
 
 export async function checkClusterStorageType(originalStorage) {
   const targetStorage = (await getActiveCluster()).config.storage;
-  if (targetStorage !== originalStorage) {
+  if (!!targetStorage && targetStorage !== originalStorage) {
     // move the cluster to the valid storage
     const clusters = load();
     clusters[getActiveClusterName()].config.storage = targetStorage;
-    save(clusters, null);
+    await save(clusters);
 
     if (originalStorage) {
       Luigi.ux().showAlert({
@@ -64,6 +67,12 @@ export async function checkClusterStorageType(originalStorage) {
       });
     }
   }
+}
+
+export async function getDefaultStorage() {
+  return (
+    (await getBusolaClusterParams()).config.defaultStorage || 'sessionStorage'
+  );
 }
 
 function clear() {
