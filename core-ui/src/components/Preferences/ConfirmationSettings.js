@@ -12,7 +12,7 @@ export default function ConfirmationSettings() {
 
   const toggleValue = () => {
     LuigiClient.sendCustomMessage({
-      id: 'busola.clusters.dontConfirmDelete',
+      id: 'busola.dontConfirmDelete',
       value: !dontConfirmDelete,
     });
     setDontConfirmDelete(!dontConfirmDelete);
