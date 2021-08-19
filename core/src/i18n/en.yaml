@@ -70,7 +70,7 @@ clusters:
   messages:
     download-failed: Failed to download the Kubeconfig
     error-kubeconfig: Error reading Kubeconfig
-    missing-configuration-data: Configuration has been included properly. Please fill remaining required data.
+    missing-configuration-data: Configuration has been provided but mandatory data is missing
     missing-kubeconfig: Kubeconfig is missing on the Cluster
     no-clusters: No clusters found
     upload-paste-kubeconfig: Upload or paste your Kubeconfig file
