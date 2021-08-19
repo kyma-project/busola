@@ -248,7 +248,7 @@ machine-info:
   memory-usage: 'Memory usage:'
   operating-system: Operating system
   pods-capacity: Pods capacity
-  title: Machine info
+  title: Machine Info
 namespaces:
   overview:
     back: Back to Namespaces
