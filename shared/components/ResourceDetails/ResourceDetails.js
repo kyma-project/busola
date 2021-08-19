@@ -135,7 +135,7 @@ function Resource({
 
   const breadcrumbItems = breadcrumbs || [
     {
-      name: resourceType,
+      name: prettifyNamePlural(null, resourceType),
       path: '/',
       fromContext: resourceType.toLowerCase(),
     },

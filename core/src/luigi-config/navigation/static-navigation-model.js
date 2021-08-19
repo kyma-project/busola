@@ -618,6 +618,60 @@ export function getStaticChildrenNodesForNamespace(
         requiredFeatures: [features.SERVICE_CATALOG],
       },
     },
+    {
+      category: i18next.t('service-management.title'),
+      pathSegment: 'btp-instances',
+      navigationContext: 'serviceinstances',
+      label: i18next.t('btp-instances.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/serviceInstances?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/services.cloud.sap.com/v1alpha1',
+          readOnly: false,
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+      context: {
+        requiredFeatures: [features.BTP_CATALOG],
+      },
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':instanceName',
+              resourceType: 'apirules',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/serviceInstances/:instanceName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/services.cloud.sap.com/v1alpha1',
+                }),
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: i18next.t('service-management.title'),
+      pathSegment: 'btp-service-bindings',
+      navigationContext: 'btp-service-bindings',
+      label: i18next.t('btp-service-bindings.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/ServiceBindings?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/services.cloud.sap.com/v1alpha1',
+          readOnly: false,
+          hasDetailsView: false,
+        }),
+      viewGroup: coreUIViewGroupName,
+      context: {
+        requiredFeatures: [features.BTP_CATALOG],
+      },
+    },
 
     //CONFIGURATION CATEGORY (NAMESPACE)
     {

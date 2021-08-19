@@ -35,6 +35,10 @@ applications:
   title: Applications
 brokers:
   title: Brokers
+btp-instances:
+  title: BTP Service Instances
+btp-service-bindings:
+  title: BTP Service Bindings
 catalog:
   menu-title: Catalog
   subtitle: Enrich your experience with additional services that are installed outside the cluster.

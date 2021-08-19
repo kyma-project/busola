@@ -157,6 +157,7 @@ function RoutedResourcesList({ match }) {
     resourceType: match.params.resourceType,
     namespace: match.params.namespaceId,
   };
+  console.log(params);
 
   const rendererName = params.resourceType + 'List';
   const rendererNameForCreate = params.resourceType + 'Create';
