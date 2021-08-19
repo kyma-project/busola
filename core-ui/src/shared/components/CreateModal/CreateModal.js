@@ -6,6 +6,7 @@ import { Editor } from './Editor';
 import './CreateModal.scss';
 import { CollapsibleSection } from './CollapsibleSection/CollapsibleSection';
 import { Presets } from './Presets';
+import { useTranslation } from 'react-i18next';
 
 export function CreateModal({
   title,
@@ -20,6 +21,7 @@ export function CreateModal({
   fromYaml,
   presets,
 }) {
+  const { t } = useTranslation();
   const [isOpen, setOpen] = React.useState(false);
   const [mode, setMode] = React.useState(ModeSelector.MODE_SIMPLE);
   const formRef = React.useRef();
@@ -100,10 +102,10 @@ export function CreateModal({
 
   const actions = [
     <Button disabled={!formValid} onClick={confirm}>
-      Create
+      {t('common.buttons.create')}
     </Button>,
     <Button onClick={() => setOpenStatus(false)} option="transparent">
-      Cancel
+      {t('common.buttons.cancel')}
     </Button>,
   ];
 

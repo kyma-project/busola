@@ -1,7 +1,9 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Dropdown } from 'react-shared';
 
 export function Presets({ presets, onSelect }) {
+  const { t } = useTranslation();
   const options = presets.map(({ name }) => ({
     key: name,
     text: name,
@@ -9,7 +11,7 @@ export function Presets({ presets, onSelect }) {
 
   return (
     <Dropdown
-      placeholder="Select template"
+      placeholder={t('deployments.create-modal.presets.choose')}
       compact
       options={options}
       selectedKey={''}

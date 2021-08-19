@@ -1,6 +1,6 @@
 import React from 'react';
 import { StatusBadge } from 'react-shared';
-import { CreateDeploymentForm } from '../../../shared/components/CreateDeploymentForm/CreateDeploymentForm';
+import { CreateDeploymentForm } from 'shared/components/CreateDeploymentForm/CreateDeploymentForm';
 
 const getImages = deployment => {
   const images =

@@ -2,8 +2,10 @@ import React from 'react';
 import { ControlledEditor, useTheme } from 'react-shared';
 import jsyaml from 'js-yaml';
 import { MessageStrip } from 'fundamental-react';
+import { useTranslation } from 'react-i18next';
 
 export function Editor({ resource, setResource }) {
+  const { t } = useTranslation();
   const [error, setError] = React.useState(false);
   const { editorTheme } = useTheme();
   // don't useState, as it's value needs to be referenced in onEditorBlur
@@ -51,7 +53,7 @@ export function Editor({ resource, setResource }) {
       </div>
       {error && (
         <MessageStrip type="error" className="fd-margin--sm">
-          Parse error: {error}, changes won't be saved.
+          {t('common.create-modal.editor-error', { error })}
         </MessageStrip>
       )}
     </>

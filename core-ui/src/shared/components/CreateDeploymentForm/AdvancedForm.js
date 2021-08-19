@@ -10,8 +10,10 @@ import { TextFormItem } from 'react-shared';
 import { merge } from 'lodash';
 import { SimpleForm } from './SimpleForm';
 import './AdvancedForm.scss';
+import { useTranslation } from 'react-i18next';
 
 export function AdvancedForm({ deployment, setDeployment }) {
+  const { t } = useTranslation();
   const setServiceData = data => {
     setDeployment({
       ...merge(deployment, {
@@ -24,7 +26,7 @@ export function AdvancedForm({ deployment, setDeployment }) {
 
   const serviceActions = (
     <label>
-      Expose separate Service{' '}
+      {t('deployments.create-modal.advanced.expose-service')}{' '}
       <input
         type="checkbox"
         checked={deployment.serviceData.create}
@@ -56,10 +58,14 @@ export function AdvancedForm({ deployment, setDeployment }) {
   };
 
   const runtimeProfileForm = (
-    <CreateModal.CollapsibleSection title="Runtime profile">
+    <CreateModal.CollapsibleSection
+      title={t('deployments.create-modal.advanced.runtime-profile')}
+    >
       <FormFieldset className="runtime-profile-form">
         <FormItem>
-          <FormLabel required>Memory requests</FormLabel>
+          <FormLabel required>
+            {t('deployments.create-modal.advanced.memory-requests')}
+          </FormLabel>
           <FormInput
             required
             value={deployment.requests.memory}
@@ -67,7 +73,9 @@ export function AdvancedForm({ deployment, setDeployment }) {
           />
         </FormItem>
         <FormItem>
-          <FormLabel required>Memory limits</FormLabel>
+          <FormLabel required>
+            {t('deployments.create-modal.advanced.memory-limits')}
+          </FormLabel>
           <FormInput
             required
             value={deployment.limits.memory}
@@ -77,7 +85,9 @@ export function AdvancedForm({ deployment, setDeployment }) {
       </FormFieldset>
       <FormFieldset className="runtime-profile-form">
         <FormItem>
-          <FormLabel required>CPU requests</FormLabel>
+          <FormLabel required>
+            {t('deployments.create-modal.advanced.cpu-requests')}
+          </FormLabel>
           <FormInput
             required
             value={deployment.requests.cpu}
@@ -85,7 +95,9 @@ export function AdvancedForm({ deployment, setDeployment }) {
           />
         </FormItem>
         <FormItem>
-          <FormLabel required>CPU limits</FormLabel>
+          <FormLabel required>
+            {t('deployments.create-modal.advanced.cpu-limits')}
+          </FormLabel>
           <FormInput
             required
             value={deployment.limits.cpu}
@@ -97,14 +109,17 @@ export function AdvancedForm({ deployment, setDeployment }) {
   );
 
   const serviceForm = (
-    <CreateModal.CollapsibleSection title="Service" actions={serviceActions}>
+    <CreateModal.CollapsibleSection
+      title={t('services.labels.service')}
+      actions={serviceActions}
+    >
       <FormFieldset>
         <TextFormItem
           type="number"
           inputKey="port"
           required
-          label="Port"
-          placeholder="Enter port at which expose the Service"
+          label={t('deployments.create-modal.advanced.port')}
+          placeholder={t('deployments.create-modal.advanced.port-placeholder')}
           defaultValue={deployment.serviceData.port.port || 0}
           value={deployment.serviceData.port.port}
           inputProps={{ disabled: !deployment.serviceData.create }}
@@ -117,8 +132,10 @@ export function AdvancedForm({ deployment, setDeployment }) {
           inputKey="target-port"
           required
           inputProps={{ disabled: !deployment.serviceData.create }}
-          label="Target port"
-          placeholder="Enter target port of the container"
+          label={t('deployments.create-modal.advanced.target-port')}
+          placeholder={t(
+            'deployments.create-modal.advanced.target-port-placeholder',
+          )}
           defaultValue={deployment.serviceData.port.targetPort || 0}
           value={deployment.serviceData.port.targetPort}
           onChange={e =>

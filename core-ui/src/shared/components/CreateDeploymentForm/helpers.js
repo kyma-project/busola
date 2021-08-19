@@ -125,9 +125,12 @@ export function createDeploymentTemplate(namespaceId) {
   };
 }
 
-export function createPresets(namespaceId) {
+export function createPresets(namespaceId, translate) {
   return [
-    { name: 'Default', value: createDeploymentTemplate(namespaceId) },
+    {
+      name: translate('deployments.create-modal.presets.default'),
+      value: createDeploymentTemplate(namespaceId),
+    },
     {
       name: 'Echo server',
       value: {

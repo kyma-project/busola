@@ -12,15 +12,18 @@ import {
 } from './helpers';
 import { SimpleForm } from './SimpleForm';
 import { AdvancedForm } from './AdvancedForm';
+import { useTranslation } from 'react-i18next';
 
-export function CreateDeploymentForm({
-  namespaceId,
-  modalOpeningComponent = <Button glyph="add">Create Deployment</Button>,
-}) {
+export function CreateDeploymentForm({ namespaceId, modalOpeningComponent }) {
+  const { t } = useTranslation();
   const notification = useNotification();
   const postRequest = usePost();
   const [deployment, setDeployment] = React.useState(
     createDeploymentTemplate(namespaceId),
+  );
+
+  modalOpeningComponent = modalOpeningComponent || (
+    <Button glyph="add">{t('deployments.create-modal.title')}</Button>
   );
 
   const createDeployment = async () => {
@@ -33,7 +36,7 @@ export function CreateDeploymentForm({
     } catch (e) {
       console.error(e);
       notification.notifyError({
-        title: 'Failed to create the Deployment',
+        title: t('deployments.create-modal.messages.failure'),
         content: e.message,
       });
       return false;
@@ -47,14 +50,16 @@ export function CreateDeploymentForm({
           formatService(deployment, createdResourceUID),
         );
       }
-      notification.notifySuccess({ content: 'Deployment created' });
+      notification.notifySuccess({
+        content: t('deployments.create-modal.messages.success'),
+      });
       LuigiClient.linkManager()
         .fromContext('namespace')
         .navigate(`/deployments/details/${deployment.name}`);
     } catch (e) {
       console.error(e);
       notification.notifyError({
-        title: 'Deployment created, failed to create the Service',
+        title: t('deployments.create-modal.messages.deployment-ok-service-bad'),
         content: e.message,
       });
     }
@@ -62,7 +67,7 @@ export function CreateDeploymentForm({
 
   return (
     <CreateModal
-      title="Create Deployment"
+      title={t('deployments.create-modal.title')}
       simpleForm={
         <SimpleForm deployment={deployment} setDeployment={setDeployment} />
       }
@@ -76,7 +81,7 @@ export function CreateDeploymentForm({
       toYaml={deploymentToYaml}
       fromYaml={yamlToDeployment}
       onCreate={createDeployment}
-      presets={createPresets(namespaceId)}
+      presets={createPresets(namespaceId, t)}
     />
   );
 }

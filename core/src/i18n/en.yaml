@@ -59,6 +59,11 @@ common:
     delete: Delete
     edit-yaml: Edit YAML
     save: Save
+  create-modal:
+    editor-error: "Parse error: {{error}}, changes won't be saved."
+    modes:
+      advanced: Advanced
+      simple: Simple
   created: Created
   delete-dialog:
     delete-confirm: Don't ask this again
@@ -113,6 +118,29 @@ daemon-sets:
     title: Tolerations
     toleration-seconds: Seconds
 deployments:
+  create-modal:
+    advanced:
+      cpu-limits: CPU limits
+      cpu-requests: CPU requests
+      expose-service: Expose separate Service
+      memory-limits: Memory limits
+      memory-requests: Memory requests
+      port: Port
+      port-description: Enter port at which expose the Service
+      runtime-profile: Runtime profile
+      target-port: Target port
+      target-port-placeholder: Enter target port of the container
+    messages:
+      deployment-ok-service-bad: Deployment created, failed to create the Service
+      failure: Failed to create the Deployment
+      success: Deployment created
+    presets:
+      choose: Select preset
+      default: Default
+    simple:
+      docker-image: Docker image
+      docker-image-placeholder: Enter Docker image tag, e.g. bitnami/nginx
+    title: Create Deployment
   title: Deployments
 discovery-and-network:
   title: Discovery and Network
@@ -122,22 +150,22 @@ functions:
     buttons:
       add: Add environment variable
       open:
+        config-map: ConfigMap Variable
         custom: Custom Variable
         secret: Secret Variable
-        config-map: ConfigMap Variable
     create-modal:
       title:
+        config-map: Create ConfigMap Variable
         custom: Create Custom Variable
         secret: Create Secret Variable
-        config-map: Create ConfigMap Variable
     edit-modal:
       title:
+        config-map: Edit ConfigMap Variable
         custom: Edit Custom Variable
         secret: Edit Secret Variable
-        config-map: Edit ConfigMap Variable
     errors:
-      empty: Variable is empty.
       duplicated: Duplicated variable name.
+      empty: Variable is empty.
       invalid: Variable name must contain alphanumeric characters, can contain '_', no blank spaces.
       invalid-config: Select the ConfigMap name and key.
       invalid-secret: Select the secret name and key.
@@ -155,19 +183,19 @@ functions:
       value: Value
     not-found: This Function doesn't have any environment variables yet.
     not-match: Couldn't find environment variables matching this query.
-    title:
-      environment-variables: Environment Variables
-      injected-variables: Environment Variables Injected via Service Bindings
     placeholders:
       name: Variable name
       value: Variable value
     popup-error: At least one variable has an incorrect name format, is restricted, duplicated, or empty.
+    title:
+      environment-variables: Environment Variables
+      injected-variables: Environment Variables Injected via Service Bindings
     tooltip:
-      text: This variable comes from a Resource. To get the value, follow the link.
       config-map: This variable comes from the "{resourceName}" ConfigMap.
       custom: This variable was provided by the user.
       secret: This variable comes from the "{resourceName}" Secret.
       service-binding: This variable was injected by the Service Binding referencing Service Instance "{serviceInstanceName}".
+      text: This variable comes from a Resource. To get the value, follow the link.
     type:
       config-map: ConfigMap
       custom: Custom
@@ -175,12 +203,12 @@ functions:
       service-binding: Service Binding
     warnings:
       override: This variable name is identical to the variable injected via Service Binding. Continue if you intend that they can override each other. Otherwise, choose another name.
-      text: Warning
-      variable-can-override-sbu: This variable can override or be overridden by a variable injected by one of the created Service Bindings.
       sbu-can-be-overridden:
+        by-both: This variable can be overridden by one of the custom variables or a variable injected by one of the Service Bindings.
         by-custom-env: This variable can override or be overridden by one of the custom variables.
         by-sbu: This variable can override or be overridden by a variable injected by one of the Service Bindings.
-        by-both: This variable can be overridden by one of the custom variables or a variable injected by one of the Service Bindings.
+      text: Warning
+      variable-can-override-sbu: This variable can override or be overridden by a variable injected by one of the created Service Bindings.
 git-repositories:
   title: Git Repositories
 instances:
@@ -210,6 +238,7 @@ namespaces:
       title: Resource Consumption
     title: Overview
     workloads:
+      deploy-new: Deploy new workload
       deployments: $t(deployments.title)
       error: 'Error while loading {{title}} data due to: {{message}}'
       pods: $t(pods.title)
@@ -241,13 +270,13 @@ secrets:
 service-management:
   title: Service Management
 services:
+  cluster-ip: Cluster IP
+  external-ips: External IPs
   labels:
     service: Service
+  ports: Ports
   title: Services
   type: Service Type
-  cluster-ip: Cluster IP
-  ports: Ports
-  external-ips: External IPs
 settings:
   clusters:
     confirmations: Confirmations
@@ -256,24 +285,24 @@ settings:
     showHiddenNamespaces: Show Hidden Namespaces
     title: Clusters
   interface:
-    title: Interface
     description: Theme, language
     themes:
-      hcb:
-        title: High-Contrast Black
-        description: Optimized contrast and accessibility for bright environments
-      hcw:
-        title: High-Contrast White
-        description: Optimized contrast and accessibility for dark environments
       dark:
-        title: Dark
         description: Use in dimmed environments
+        title: Dark
+      hcb:
+        description: Optimized contrast and accessibility for bright environments
+        title: High-Contrast Black
+      hcw:
+        description: Optimized contrast and accessibility for dark environments
+        title: High-Contrast White
       light:
-        title: Light
         description: Use in default office environments
+        title: Light
       light_dark:
-        title: Light / Dark
         description: Automatically matches your system settings
+        title: Light / Dark
+    title: Interface
   language: Language
   theme: Theme
 stateful-sets:

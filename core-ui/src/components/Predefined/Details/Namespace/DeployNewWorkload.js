@@ -3,8 +3,10 @@ import { Popover, Menu, Button } from 'fundamental-react';
 import { useGetList, useMicrofrontendContext } from 'react-shared';
 import { CreateDeploymentForm } from 'shared/components/CreateDeploymentForm/CreateDeploymentForm';
 import CreateLambdaModal from 'components/Lambdas/LambdasList/Lambdas/CreateLambdaModal';
+import { useTranslation } from 'react-i18next';
 
 export default function DeployNewWorkload({ namespaceName }) {
+  const { t } = useTranslation();
   const microfrontendContext = useMicrofrontendContext();
   const { features } = microfrontendContext;
 
@@ -52,7 +54,7 @@ export default function DeployNewWorkload({ namespaceName }) {
 
   const control = (
     <Button option="transparent" className="fd-margin-end--tiny" glyph="add">
-      Deploy new workload
+      {t('namespaces.overview.workloads.deploy-new')}
     </Button>
   );
 

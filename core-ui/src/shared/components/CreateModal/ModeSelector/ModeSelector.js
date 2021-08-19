@@ -1,11 +1,17 @@
 import React from 'react';
 import { Button, ButtonSegmented } from 'fundamental-react';
 import './ModeSelector.scss';
+import { useTranslation } from 'react-i18next';
 
 export function ModeSelector({ mode, setMode }) {
+  const { t } = useTranslation();
+
   const modeButtons = [
-    { mode: ModeSelector.MODE_SIMPLE, label: 'Simple' },
-    { mode: ModeSelector.MODE_ADVANCED, label: 'Advanced' },
+    { mode: ModeSelector.MODE_SIMPLE, label: t('create-modal.modes.simple') },
+    {
+      mode: ModeSelector.MODE_ADVANCED,
+      label: t('create-modal.modes.advanced'),
+    },
     { mode: ModeSelector.MODE_YAML, label: 'YAML' },
   ];
 
