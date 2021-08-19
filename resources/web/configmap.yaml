@@ -6,6 +6,7 @@ data:
   config.json: >
     {
       "config": {
+        "defaultStorage": "localStorage",
         "features":{
             "SERVICE_CATALOG":{
               "selectors":[

@@ -7,10 +7,13 @@ export function ModeSelector({ mode, setMode }) {
   const { t } = useTranslation();
 
   const modeButtons = [
-    { mode: ModeSelector.MODE_SIMPLE, label: t('create-modal.modes.simple') },
+    {
+      mode: ModeSelector.MODE_SIMPLE,
+      label: t('common.create-modal.modes.simple'),
+    },
     {
       mode: ModeSelector.MODE_ADVANCED,
-      label: t('create-modal.modes.advanced'),
+      label: t('common.create-modal.modes.advanced'),
     },
     { mode: ModeSelector.MODE_YAML, label: 'YAML' },
   ];

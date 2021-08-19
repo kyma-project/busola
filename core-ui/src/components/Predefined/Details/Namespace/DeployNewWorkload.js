@@ -48,7 +48,9 @@ export default function DeployNewWorkload({ namespaceName }) {
   const deploymentModal = (
     <CreateDeploymentForm
       namespaceId={namespaceName}
-      modalOpeningComponent={<Menu.Item>Create Deployment</Menu.Item>}
+      modalOpeningComponent={
+        <Menu.Item>{t('deployments.create-modal.title')}</Menu.Item>
+      }
     />
   );
 

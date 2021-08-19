@@ -46,12 +46,36 @@ cluster-role-bindings:
 cluster-roles:
   title: Role klastra
 clusters:
+  add:
+    title: Dodaj klaster
+  common:
+    api-server-address: Adres API serwera
+    download-kubeconfig: Pobierz kubeconfig
+    kubeconfig-download-error: Nie udało się pobrać kubeconfigu
+    kubeconfig-not-present: Brak kubeconfigu w konfiguracji klastra
   list:
+    no-clusters-found: Nie znaleziono klastrów
     outdated:
       download: Pobierz Kubeconfig
       tooltip: Nieaktualna wersja parametru może powodować błędy. Usuń i ponownie dodaj swój klaster.
   overview:
     title: Przegląd klastrów
+    version: Wersja
+  storage:
+    changed-message: Nadpisano miejsce przechowywania konfiguracji z {{originalStorage}} na {{targetStorage}}.
+    choose-storage:
+      label: Miejsce przechowywania konfiguracji
+    descriptions:
+      inMemory: Konfiguracja jest usuwana wraz z odświeżeniem strony.
+      localStorage: Konfiguracja nie jest usuwana pomiędzy odświeżeniami przeglądarki.
+      sessionStorage: Konfiguracja jest usuwana w momencie zakończenia sesji karty przeglądarki.
+      unknown: Nie rozpoznano.
+    labels:
+      inMemory: W pamięci
+      localStorage: localStorage
+      sessionStorage: sessionStorage
+      unknown: Nieznany
+    title: Rodzaj przechowywania konfiguracji
 common:
   buttons:
     cancel: Anuluj
@@ -62,8 +86,8 @@ common:
   create-modal:
     editor-error: 'Błąd parsowania: {{error}}, zmiany nie zostaną zapisane.'
     modes:
-      advanced: Zaawansowany
-      simple: Uproszczony
+      advanced: Zaawansowane
+      simple: Minimalne
   created: Stworzono
   delete-dialog:
     delete-confirm: Nie pytaj ponownie
@@ -79,6 +103,7 @@ common:
     hostname: Nazwa hosta
     name: Nazwa
     service: Serwis
+  loading: Ładowanie...
   tooltips:
     copy-to-clipboard: Skopiuj do schowka
     download: Pobierz

@@ -38,6 +38,7 @@ export default function NamespaceSettings() {
             className="fd-has-display-inline-block fd-margin-begin--tiny"
             checked={showHiddenNamespaces}
             onChange={toggleVisibility}
+            compact
           />
         </div>
       </div>
