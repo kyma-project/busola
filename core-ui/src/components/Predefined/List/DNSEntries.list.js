@@ -2,17 +2,11 @@ import React from 'react';
 import { StatusBadge } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
-export const DNSProvidersList = ({ DefaultRenderer, ...otherParams }) => {
+export const DNSEntriesList = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
   const customColumns = [
     {
-      header: t('dnsproviders.headers.type'),
-      value: dnsprovider => {
-        return dnsprovider.spec.type;
-      },
-    },
-    {
-      header: t('dnsproviders.headers.status'),
+      header: t('dnsentries.headers.status'),
       value: dnsprovider => (
         <StatusBadge autoResolveType>{dnsprovider.status?.state}</StatusBadge>
       ),
@@ -22,7 +16,7 @@ export const DNSProvidersList = ({ DefaultRenderer, ...otherParams }) => {
   return (
     <DefaultRenderer
       customColumns={customColumns}
-      resourceName="DNS Providers"
+      resourceName="DNS Entries"
       {...otherParams}
     />
   );

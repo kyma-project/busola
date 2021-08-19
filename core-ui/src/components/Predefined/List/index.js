@@ -20,4 +20,5 @@ export * from './Jobs.list.js';
 export * from './CronJobs.list';
 export * from './DaemonSets.list';
 export * from './StatefulSets.list';
+export * from './DNSEntries.list';
 export * from './DNSProviders.list';

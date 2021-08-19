@@ -116,7 +116,17 @@ deployments:
   title: Deploymenty
 discovery-and-network:
   title: Odkrywanie i sieć
+dnsentries:
+  headers:
+    status: Status
+  title: Wpisy DNS
 dnsproviders:
+  domains: Domeny
+  headers:
+    exclude: Wykluczone domeny
+    include: Zawarte domeny
+    type: Typ
+    status: Status
   title: Dostawcy DNS
 functions:
   title: Funkcje

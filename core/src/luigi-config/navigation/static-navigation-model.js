@@ -863,6 +863,43 @@ export function getStaticChildrenNodesForNamespace(
     },
     {
       category: i18next.t('configuration.title'),
+      resourceType: 'dnsentries',
+      pathSegment: 'dnsentries',
+      navigationContext: 'dnsentries',
+      label: i18next.t('dnsentries.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/DNSEntries?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/dns.gardener.cloud/v1alpha1',
+          hasDetailsView: true,
+        }),
+      keepSelectedForChildren: true,
+      viewGroup: coreUIViewGroupName,
+      context: {
+        requiredFeatures: [features.SERVERLESS],
+      },
+      children: [
+        {
+          pathSegment: 'details',
+          resourceType: 'dnsentries',
+          children: [
+            {
+              pathSegment: ':dnsentryName',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/DNSEntries/:dnsentryName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/dns.gardener.cloud/v1alpha1',
+                }),
+              viewGroup: coreUIViewGroupName,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: i18next.t('configuration.title'),
       resourceType: 'dnsproviders',
       pathSegment: 'dnsproviders',
       navigationContext: 'dnsproviders',

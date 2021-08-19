@@ -116,8 +116,18 @@ deployments:
   title: Deployments
 discovery-and-network:
   title: Discovery and Network
+dnsentries:
+  headers:
+    status: Status
+  title: DNS Entries
 dnsproviders:
-  title: DNSProviders
+  domains: Domains
+  headers:
+    exclude: Excluded domains
+    include: Included domains
+    type: Type
+    status: Status
+  title: DNS Providers
 functions:
   title: Functions
   variable:
