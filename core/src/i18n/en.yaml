@@ -99,6 +99,9 @@ common:
     read-file: Read file content as single value, with file name as a key.
     save: Save
     search: Search
+  messages:
+    doesnt-exist: doesn't exist.
+    loading-name: Loading name...
 config-maps:
   title: ConfigMaps
 configuration:
