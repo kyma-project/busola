@@ -106,10 +106,6 @@ body {
   }
 }
 
-.fd-dialog::before {
-  content: none; //remove double backdrop
-}
-
 .modal-width--m {
   .fd-dialog__content {
     width: 70vw;
