@@ -211,7 +211,7 @@ function Resource({
       >
         <PageHeader.Column
           key="Labels"
-          title={t('common.labels')}
+          title={t('common.headers.labels')}
           columnSpan="1 / 3"
         >
           <Labels labels={resource.metadata.labels || {}} />
