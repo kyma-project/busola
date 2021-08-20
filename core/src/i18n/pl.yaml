@@ -20,7 +20,7 @@ api-rules:
   buttons:
     create: Stwórz regułę API
     edit: Edytuj regułę API "{{apiRuleName}}"
-    expose: Wystaw {type}
+    expose: Wystaw {{type}}
   general-settings:
     title: Ustawienia główne
   list:
@@ -117,6 +117,7 @@ common:
     name: Nazwa
     resources: Zasoby
     status: Status
+    logs: Logi
   labels:
     hostname: Nazwa hosta
     name: Nazwa
@@ -232,6 +233,10 @@ functions:
         by-sbu: Ta zmienna może nadpisać lub być nadpisana przez zmienną wstrzykniętą przez jeden z service bindingów.
       text: Ostrzeżenie
       variable-can-override-sbu: Ta zmienna może nadpisać lub być nadpisana przez zmienną wstrzykniętą przez jeden ze stworzonych service bindingów.
+  pod-list:
+    title: Repliki funkcji
+    buttons:
+      view-logs: Pokaż logi
 generic-list:
   no-entries-found: Nie znaleziono wpisów
 git-repositories:

@@ -117,6 +117,7 @@ common:
     name: Name
     resources: Resources
     status: Status
+    logs: Logs
   labels:
     hostname: Hostname
     name: Name
@@ -232,6 +233,10 @@ functions:
         by-sbu: This variable can override or be overridden by a variable injected by one of the Service Bindings.
       text: Warning
       variable-can-override-sbu: This variable can override or be overridden by a variable injected by one of the created Service Bindings.
+  pod-list:
+    title: Replicas of the Function
+    buttons:
+      view-logs: View logs
 generic-list:
   no-entries-found: No entries found
 git-repositories:

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useMicrofrontendContext, Tabs, Tab } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 
 import CodeTab from './Tabs/Code/CodeTab';
 import ResourceManagementTab from './Tabs/ResourceManagement/ResourceManagementTab';
@@ -32,6 +33,13 @@ export default function LambdaDetails({ lambda }) {
     features?.EVENTING?.isEnabled ||
     catalogEnabled;
 
+  const { t } = useTranslation();
+  const defaultHeaderRenderer = () => [
+    t('common.headers.name'),
+    t('api-rules.list.headers.host'),
+    t('common.labels.service'),
+    t('api-rules.list.headers.status'),
+  ];
   return (
     <>
       <Tabs className="lambda-details-tabs" callback={setSelectedTabIndex}>
@@ -48,7 +56,11 @@ export default function LambdaDetails({ lambda }) {
             id="lambda-configuration"
             title={LAMBDA_DETAILS.TABS.CONFIGURATION.TITLE}
           >
-            <ApiRules lambda={lambda} isActive={selectedTabIndex === 1} />
+            <ApiRules
+              lambda={lambda}
+              isActive={selectedTabIndex === 1}
+              headerRenderer={defaultHeaderRenderer}
+            />
             <EventSubscriptions
               isActive={selectedTabIndex === 1}
               lambda={lambda}
