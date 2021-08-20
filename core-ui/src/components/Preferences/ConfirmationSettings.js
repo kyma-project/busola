@@ -29,6 +29,7 @@ export default function ConfirmationSettings() {
           className="fd-has-display-inline-block fd-margin-begin--tiny"
           checked={dontConfirmDelete}
           onChange={toggleValue}
+          compact
         />
       </div>
     </div>

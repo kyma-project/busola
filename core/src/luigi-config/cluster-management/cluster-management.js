@@ -1,25 +1,25 @@
-import { setAuthData, clearAuthData, getAuthData } from './auth/auth-storage';
-import { reloadNavigation } from './navigation/navigation-data-init';
-import { reloadAuth, hasNonOidcAuth } from './auth/auth';
-import { saveLocation } from './navigation/previous-location';
-import { parseOIDCParams } from './auth/oidc-params';
+import { setAuthData, clearAuthData, getAuthData } from '../auth/auth-storage';
+import { reloadNavigation } from '../navigation/navigation-data-init';
+import { reloadAuth, hasNonOidcAuth } from '../auth/auth';
+import { saveLocation } from '../navigation/previous-location';
+import { parseOIDCParams } from '../auth/oidc-params';
 import {
   areParamsCompatible,
   showIncompatibleParamsWarning,
-} from './init-params/params-version';
+} from '../init-params/params-version';
 import {
   DEFAULT_HIDDEN_NAMESPACES,
   DEFAULT_FEATURES,
-} from './init-params/constants';
-import { getBusolaClusterParams } from './busola-cluster-params';
+} from '../init-params/constants';
+import { getBusolaClusterParams } from '../busola-cluster-params';
 import {
   getTargetClusterConfig,
   loadTargetClusterConfig,
-} from './utils/target-cluster-config';
+} from '../utils/target-cluster-config';
 import { merge } from 'lodash';
-import { checkIfClusterRequiresCA } from './navigation/queries';
+import { checkIfClusterRequiresCA } from '../navigation/queries';
+import * as clusterStorage from './clusters-storage';
 
-const CLUSTERS_KEY = 'busola.clusters';
 const CURRENT_CLUSTER_NAME_KEY = 'busola.current-cluster-name';
 
 export async function setActiveClusterIfPresentInUrl() {
@@ -43,6 +43,8 @@ export async function setCluster(clusterName) {
   const clusters = await getClusters();
   const params = clusters[clusterName];
 
+  const originalStorage = clusters[clusterName].config.storage;
+
   if (!areParamsCompatible(params?.config?.version)) {
     showIncompatibleParamsWarning(params?.config?.version);
   }
@@ -62,6 +64,7 @@ export async function setCluster(clusterName) {
       setAuthData(kubeconfigUser);
       await saveCARequired();
       await loadTargetClusterConfig();
+      await clusterStorage.checkClusterStorageType(originalStorage);
       await reloadNavigation();
       Luigi.navigation().navigate(targetLocation);
     } else {
@@ -91,11 +94,11 @@ export async function saveClusterParams(params) {
   const clusterName = params.currentContext.cluster.name;
   const clusters = await getClusters();
   clusters[clusterName] = params;
-  saveClusters(clusters);
+  await saveClusters(clusters);
 }
 
 export async function saveCARequired() {
-  const clusters = JSON.parse(localStorage.getItem(CLUSTERS_KEY) || '{}');
+  const clusters = clusterStorage.load();
   const cluster = clusters[getActiveClusterName()];
   if (cluster.config.requiresCA === undefined) {
     cluster.config = {
@@ -107,22 +110,30 @@ export async function saveCARequired() {
 }
 
 export async function getActiveCluster() {
-  const clusters = JSON.parse(localStorage.getItem(CLUSTERS_KEY) || '{}');
+  const clusters = clusterStorage.load();
   const clusterName = getActiveClusterName();
   if (!clusterName || !clusters[clusterName]) {
     return null;
   }
+
+  const targetClusterConfig = getTargetClusterConfig() || {};
+
   // add target cluster config
   clusters[clusterName].config = merge(
     {},
-    getTargetClusterConfig(),
+    targetClusterConfig,
     clusters[clusterName].config,
   );
+
+  // init params can't override target cluster storage
+  if (targetClusterConfig.storage) {
+    clusters[clusterName].config.storage = targetClusterConfig.storage;
+  }
 
   // merge keys of config.features
   clusters[clusterName].config.features = {
     ...clusters[clusterName].config.features,
-    ...getTargetClusterConfig()?.features,
+    ...targetClusterConfig.features,
   };
 
   clusters[clusterName] = await mergeParams(clusters[clusterName]);
@@ -147,6 +158,7 @@ async function mergeParams(params) {
     },
     hiddenNamespaces: DEFAULT_HIDDEN_NAMESPACES,
     features: DEFAULT_FEATURES,
+    storage: 'localStorage',
   };
 
   params.config = {
@@ -169,7 +181,7 @@ async function mergeParams(params) {
 }
 
 export async function getClusters() {
-  const clusters = JSON.parse(localStorage.getItem(CLUSTERS_KEY) || '{}');
+  const clusters = clusterStorage.load();
   for (const clusterName in clusters) {
     clusters[clusterName] = await mergeParams(clusters[clusterName]);
   }
@@ -179,7 +191,7 @@ export async function getClusters() {
 export async function deleteCluster(clusterName) {
   const clusters = await getClusters();
   delete clusters[clusterName];
-  saveClusters(clusters);
+  await saveClusters(clusters);
 }
 
 export async function deleteActiveCluster() {
@@ -194,8 +206,10 @@ export async function deleteActiveCluster() {
   await reloadNavigation();
 }
 
-export function saveClusters(clusters) {
-  localStorage.setItem(CLUSTERS_KEY, JSON.stringify(clusters));
+export async function saveClusters(clusters) {
+  const defaultStorage =
+    (await getBusolaClusterParams()).config.storage || 'localStorage';
+  clusterStorage.save(clusters, defaultStorage);
 }
 
 export function handleResetEndpoint() {

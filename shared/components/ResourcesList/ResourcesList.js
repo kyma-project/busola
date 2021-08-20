@@ -8,6 +8,7 @@ import {
   Button,
   Dialog,
   Checkbox,
+  MessageBox,
   MessageStrip,
 } from 'fundamental-react';
 import { createPatch } from 'rfc6902';
@@ -156,7 +157,6 @@ function Resources({
     const url = withoutQueryString(resourceUrl) + '/' + resource.metadata.name;
     const name = prettifyNameSingular(resourceType);
 
-    setShowDeleteDialog(false);
     LuigiClient.sendCustomMessage({
       id: 'busola.dontConfirmDelete',
       value: dontConfirmDelete,
@@ -275,21 +275,26 @@ function Resources({
 
   return (
     <>
-      <Dialog
-        actions={[
-          <Button type="negative" onClick={() => performDelete(activeResource)}>
-            {t('common.buttons.delete')}
-          </Button>,
-          <Button onClick={() => setDontConfirmDelete(false)}>
-            {t('common.buttons.cancel')}
-          </Button>,
-        ]}
-        footerProps={{}}
-        show={showDeleteDialog}
-        onClose={closeDeleteDialog}
+      <MessageBox
+        type="warning"
         title={t('common.delete-dialog.title', {
           name: activeResource?.metadata.name,
         })}
+        compact
+        actions={[
+          <Button
+            type="negative"
+            compact
+            onClick={() => performDelete(activeResource)}
+          >
+            {t('common.buttons.delete')}
+          </Button>,
+          <Button onClick={() => setDontConfirmDelete(false)} compact>
+            {t('common.buttons.cancel')}
+          </Button>,
+        ]}
+        show={showDeleteDialog}
+        onClose={closeDeleteDialog}
       >
         <p>
           {t('common.delete-dialog.message', {
@@ -307,7 +312,7 @@ function Resources({
             {t('common.delete-dialog.information')}
           </MessageStrip>
         )}
-      </Dialog>
+      </MessageBox>
       <GenericList
         title={
           showTitle ? prettifyNamePlural(resourceName, resourceType) : null

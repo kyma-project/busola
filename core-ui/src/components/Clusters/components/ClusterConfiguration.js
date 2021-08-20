@@ -10,6 +10,7 @@ export function ClusterConfiguration({
   kubeconfig,
   initParams,
   auth: initialAuth,
+  storage,
   goBack,
 }) {
   const [authValid, setAuthValid] = React.useState(false);
@@ -53,7 +54,7 @@ export function ClusterConfiguration({
 
       const params = {
         kubeconfig,
-        config: { ...initParams?.config },
+        config: { ...initParams?.config, storage },
         currentContext: getContext(kubeconfig, contextName),
       };
 

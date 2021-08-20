@@ -30,7 +30,7 @@ import {
   deleteActiveCluster,
   saveActiveClusterName,
   getCurrentContextNamespace,
-} from '../cluster-management';
+} from '../cluster-management/cluster-management';
 import { getFeatureToggle } from '../utils/feature-toggles';
 import { saveLocation } from './previous-location';
 import { NODE_PARAM_PREFIX } from '../luigi-config';
@@ -89,6 +89,7 @@ async function createClusterManagementNodes() {
       clusters: await getClusters(),
       activeClusterName: getActiveClusterName(),
       language: i18next.language,
+      busolaClusterParams: await getBusolaClusterParams(),
     },
   };
   const clusters = await getClusters();
@@ -215,12 +216,13 @@ export async function createNavigation() {
       items: [
         ...clusterNodes,
         {
-          title: 'Add Cluster',
+          title: i18next.t('clusters.add.title'),
           link: '/clusters/add',
         },
         {
-          title: 'Clusters Overview',
+          title: i18next.t('clusters.overview.title'),
           link: '/clusters',
+          testId: 'clusters-overview',
         },
       ],
     },

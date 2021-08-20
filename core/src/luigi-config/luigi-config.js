@@ -16,7 +16,7 @@ import {
   handleResetEndpoint,
   saveCARequired,
   setActiveClusterIfPresentInUrl,
-} from './cluster-management';
+} from './cluster-management/cluster-management';
 
 import {
   createNavigation,
@@ -25,6 +25,7 @@ import {
 import { setTheme, getTheme } from './utils/theme';
 import { readFeatureToggles } from './utils/feature-toggles';
 import { loadTargetClusterConfig } from './utils/target-cluster-config';
+import { checkClusterStorageType } from './cluster-management/clusters-storage';
 
 export const i18n = i18next.use(i18nextBackend).init({
   lng: localStorage.getItem('busola.language') || 'en',
@@ -60,6 +61,7 @@ async function luigiAfterInit() {
       if (getAuthData() && !hasNonOidcAuth(params.currentContext?.user?.user)) {
         await saveCARequired();
         await loadTargetClusterConfig();
+        await checkClusterStorageType(params.config.storage);
         await addClusterNodes();
       }
     } catch (e) {
