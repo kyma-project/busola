@@ -118,7 +118,13 @@ discovery-and-network:
   title: Discovery and Network
 dnsentries:
   headers:
+    dns-name: DNS Name
+    provider: Provider
+    provider-type: Provider type
+    spec: Specification
     status: Status
+    targets: Targets
+    ttl: TTL
   title: DNS Entries
 dnsproviders:
   domains: Domains
