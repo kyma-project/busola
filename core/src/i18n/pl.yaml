@@ -25,6 +25,7 @@ api-rules:
   messages:
     create-failed: Nie udało się utworzyć reguły API
     created: Utworzono regułę API
+    description: Udostępnij usługi poza klastrem za pomocą reguł interfejsu API.
     updated: Zaktualizowano regułę API
   services:
     error-load: Nie udało się wczytać listy serwisów

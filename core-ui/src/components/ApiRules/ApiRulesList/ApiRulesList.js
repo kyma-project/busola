@@ -157,6 +157,7 @@ export default function ApiRules({
     resourceType: resourceType || 'Namespace',
   });
 
+  const { t } = useTranslation();
   return (
     <div>
       <GenericList

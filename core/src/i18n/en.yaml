@@ -25,6 +25,7 @@ api-rules:
   messages:
     create-failed: Failed to create the API Rule
     created: API Rule created
+    description: Expose Services outside the cluster with API Rules.
     updated: API Rule updated
   services:
     error-load: Couldn't load service list
