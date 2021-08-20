@@ -1,5 +1,6 @@
 import React from 'react';
 import { MessageStrip } from 'fundamental-react';
+import { useTranslation } from 'react-i18next';
 import { KubeconfigFileUpload } from './KubeconfigFileUpload';
 import { KubeconfigTextArea } from './KubeconfigTextArea/KubeconfigTextArea';
 import jsyaml from 'js-yaml';
@@ -33,6 +34,8 @@ export function KubeconfigUpload({
     handleKubeconfigAdded(kubeconfig);
   };
 
+  const { t } = useTranslation();
+
   return (
     <>
       <KubeconfigFileUpload
@@ -49,7 +52,7 @@ export function KubeconfigUpload({
           className="fd-margin-top--sm"
           type="error"
         >
-          Error reading kubeconfig
+          {t('clusters.messages.error-kubeconfig')}
         </MessageStrip>
       )}
     </>

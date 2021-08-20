@@ -217,7 +217,7 @@ function Resource({
           <Labels labels={resource.metadata.labels || {}} />
         </PageHeader.Column>
 
-        <PageHeader.Column key="Created" title={t('common.created')}>
+        <PageHeader.Column key="Created" title={t('common.headers.created')}>
           <ReadableCreationTimestamp
             timestamp={resource.metadata.creationTimestamp}
           />
