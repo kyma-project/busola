@@ -66,7 +66,7 @@ clusters:
     title: Przegląd klastrów
   messages:
     download-failed: Nie udało się pobrać Kubeconfigu
-    error-kubeconfig: Błąd odczytu Kubeconfiga
+    error-kubeconfig: Błąd odczytu Kubeconfigu
     missing-configuration-data: Konfiguracja została poprawnie dołączona. Proszę wypełnić pozostałe wymagane dane.
     missing-kubeconfig: Brakuje Kubeconfigu na klastrze
     no-clusters: Nie znaleziono klastrów
@@ -242,7 +242,7 @@ machine-info:
   kubelet-version: Wersja Kubelet
   memory: Pamięć
   memory-gib: Pamięć (GiB)
-  memory-usage: 'Zuycie pamięci:'
+  memory-usage: 'Zużycie pamięci:'
   operating-system: System operacyjny
   pods-capacity: Pojemność podów
   title: Informacje o maszynie
@@ -270,10 +270,10 @@ no-permissions:
   title: Brak uprawnień
 node-details:
   internal-ip: Wewnętrzny adres IP
-  involved-object: Zaangażowany obiekt
+  involved-object: Związany obiekt
   message: Wiadomość
   name: Przegląd klastra — węzły
-  pod-cidr: Pod CIDR
+  pod-cidr: Adres CIDR Poda
   timestamp: Znacznik czasu
   title-warnings: Ostrzeżenia
 oauth2-clients:
