@@ -930,7 +930,7 @@ export function getStaticChildrenNodesForNamespace(
       viewGroup: coreUIViewGroupName,
       keepSelectedForChildren: true,
       context: {
-        requiredFeatures: [features.SERVERLESS, features.CUSTOM_DOMAINS],
+        requiredFeatures: [features.CUSTOM_DOMAINS],
       },
 
       navigationContext: 'issuers',
@@ -967,7 +967,7 @@ export function getStaticChildrenNodesForNamespace(
       viewGroup: coreUIViewGroupName,
       keepSelectedForChildren: true,
       context: {
-        requiredFeatures: [features.SERVERLESS, features.CUSTOM_DOMAINS],
+        requiredFeatures: [features.CUSTOM_DOMAINS],
       },
 
       navigationContext: 'certificates',
