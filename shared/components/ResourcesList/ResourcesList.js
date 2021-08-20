@@ -157,6 +157,10 @@ function Resources({
     const name = prettifyNameSingular(resourceType);
 
     setShowDeleteDialog(false);
+    LuigiClient.sendCustomMessage({
+      id: 'busola.dontConfirmDelete',
+      value: dontConfirmDelete,
+    });
     try {
       await deleteResourceMutation(url);
       notification.notifySuccess({
@@ -178,7 +182,6 @@ function Resources({
   };
 
   const toggleDontConfirmDelete = value => {
-    LuigiClient.sendCustomMessage({ id: 'busola.dontConfirmDelete', value });
     setDontConfirmDelete(value);
   };
 
@@ -277,7 +280,9 @@ function Resources({
           <Button type="negative" onClick={() => performDelete(activeResource)}>
             {t('common.buttons.delete')}
           </Button>,
-          <Button>{t('common.buttons.cancel')}</Button>,
+          <Button onClick={() => setDontConfirmDelete(false)}>
+            {t('common.buttons.cancel')}
+          </Button>,
         ]}
         footerProps={{}}
         show={showDeleteDialog}
