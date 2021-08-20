@@ -95,7 +95,7 @@ export function AddCluster() {
   return (
     <>
       <PageHeader
-        title={t('clusters.buttons.add')}
+        title={t('clusters.add.title')}
         description={t('clusters.messages.upload-paste-kubeconfig')}
         breadcrumbItems={[
           {
