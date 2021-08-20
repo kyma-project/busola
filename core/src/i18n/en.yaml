@@ -49,11 +49,22 @@ cluster-roles:
 clusters:
   buttons:
     add: Add Cluster
+    apply-configuration: Apply configuration
+    apply-kubeconfig: Apply kubeconfig
+  labels:
+    client-id: Client ID
+    issuer-url: Issuer URL
+    scopes: Scopes
   list:
     outdated:
       download: Download Kubeconfig
       tooltip: Outdated parameter version may cause errors. Delete and re-add your cluster.
     title: Clusters Overview
+  messages:
+    error-kubeconfig: Error reading kubeconfig
+    missing-configuration-data: Configuration has been included properly. Please fill remaining required data.
+    upload-paste-kubeconfig: Upload or paste your kubeconfig file
+    wrong-configuration: Cannot apply configuration
   overview:
     title: Cluster Overview
 common:
@@ -61,7 +72,6 @@ common:
     cancel: Cancel
     delete: Delete
     edit-yaml: Edit YAML
-  created: Created
   delete-dialog:
     delete-confirm: Don't ask this again
     information: You've switched off removal confirmations for all resources. You can switch them back on in Preferences.
@@ -80,6 +90,7 @@ common:
     copy-to-clipboard: Copy to clipboard
     download: Download
     duplicate-key: Duplicate key
+    error: 'Error: '
     k8s-name-input: Name must contain lower case alphanumeric characters, can contain '-' (like 'my-name1').
     key-value: key=value, must start and end with alphanumeric character, can contain '-', '_' or '.'
     read-file: Read file content as single value, with file name as a key.
@@ -184,13 +195,13 @@ secrets:
 service-management:
   title: Service Management
 services:
+  cluster-ip: Cluster IP
+  external-ips: External IPs
   labels:
     service: Service
+  ports: Ports
   title: Services
   type: Service Type
-  cluster-ip: Cluster IP
-  ports: Ports
-  external-ips: External IPs
 settings:
   clusters:
     confirmations: Confirmations

@@ -7,6 +7,8 @@ export const AUTH_FORM_TOKEN = 'Token';
 export const AUTH_FORM_OIDC = 'OIDC';
 export const DEFAULT_SCOPE_VALUE = 'openid ';
 
+const { t } = useTranslation();
+
 const OIDCform = ({ auth, setAuth }) => {
   const { t } = useTranslation();
   return (
