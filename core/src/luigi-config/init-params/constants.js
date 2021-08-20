@@ -6,6 +6,7 @@ const DEFAULT_MODULES = {
   APPLICATIONS: 'applicationconnector.kyma-project.io',
   ADDONS: 'addons.kyma-project.io',
   SERVERLESS: 'serverless.kyma-project.io',
+  CUSTOM_DOMAINS: 'dnsproviders.dns.gardener.cloud',
 };
 
 export const DEFAULT_FEATURES = {
