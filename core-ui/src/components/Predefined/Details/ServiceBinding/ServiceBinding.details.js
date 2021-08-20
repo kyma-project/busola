@@ -1,15 +1,18 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
 import { ServiceBindingStatus } from '../../../../shared/components/ServiceBindingStatus';
 import { ServiceBindingData } from './ServiceBindingData';
 
 export const ServiceBindingsDetails = ({ DefaultRenderer, ...otherParams }) => {
+  const { t } = useTranslation();
+
   const ServiceBindingParameters = ({ spec }) => {
     if (!spec.parameters) return;
 
     return (
       <ReadonlyEditorPanel
-        title="Instance Binding Parameters"
+        title={t('btp-service-bindings.parameters')}
         value={JSON.stringify(spec.parameters, null, 2)}
         key="instance-binding-parameters"
         editorProps={{ language: 'json', height: '10em' }}
@@ -19,7 +22,7 @@ export const ServiceBindingsDetails = ({ DefaultRenderer, ...otherParams }) => {
 
   const customColumns = [
     {
-      header: 'Status',
+      header: t('common.headers.status'),
       value: resource => <ServiceBindingStatus serviceBinding={resource} />,
     },
   ];

@@ -1,23 +1,25 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { DefinitionList } from '../../../../shared/components/DefinitionList/DefinitionList';
 
 export function ServiceInstanceData({ spec, status }) {
+  const { t } = useTranslation();
   const list = [
     {
-      name: 'Offering name:',
+      name: t('btp-instances.offering-name'),
       value: spec.serviceOfferingName,
     },
     {
-      name: 'Plan name:',
+      name: t('btp-instances.plan-name'),
       value: spec.servicePlanName,
     },
     {
-      name: 'External name:',
+      name: t('btp-instances.external-name'),
       value: spec.externalName,
     },
     {
-      name: 'Instance ID:',
-      value: status.instanceID || 'Not set',
+      name: t('btp-instances.instance-id'),
+      value: status.instanceID || t('common.messages.not-set'),
     },
   ];
 

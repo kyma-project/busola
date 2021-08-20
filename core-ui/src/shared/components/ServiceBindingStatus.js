@@ -9,7 +9,7 @@ export function ServiceBindingStatus({ serviceBinding }) {
     return <StatusBadge type="positive">{lastCondition.reason}</StatusBadge>;
   }
 
-  const message = conditions.find(c => c.message).message;
+  const message = conditions.find(c => c.message)?.message || '';
   return (
     <Tooltip content={message}>
       <StatusBadge type="negative">{lastCondition.reason}</StatusBadge>

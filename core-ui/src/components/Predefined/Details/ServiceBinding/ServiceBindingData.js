@@ -2,8 +2,10 @@ import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { Link } from 'fundamental-react';
 import { DefinitionList } from '../../../../shared/components/DefinitionList/DefinitionList';
+import { useTranslation } from 'react-i18next';
 
 export function ServiceBindingData({ spec, status }) {
+  const { t } = useTranslation();
   const navigateToInstance = instanceName =>
     LuigiClient.linkManager()
       .fromContext('namespace')
@@ -16,8 +18,7 @@ export function ServiceBindingData({ spec, status }) {
 
   const list = [
     {
-      name: 'Service Instance name:',
-
+      name: t('btp-service-bindings.instance-name'),
       value: (
         <Link
           className="fd-link"
@@ -28,7 +29,7 @@ export function ServiceBindingData({ spec, status }) {
       ),
     },
     {
-      name: 'Secret:',
+      name: t('btp-service-bindings.secret'),
       value: (
         <Link
           className="fd-link"
@@ -38,10 +39,22 @@ export function ServiceBindingData({ spec, status }) {
         </Link>
       ),
     },
-    { name: 'External name:', value: spec.externalName },
-    { name: 'Binding ID:', value: status.bindingID || 'Not set' },
-    { name: 'Instance ID:', value: status.instanceID || 'Not set' },
+    { name: t('btp-service-bindings.external-name'), value: spec.externalName },
+    {
+      name: t('btp-service-bindings.binding-id'),
+      value: status.bindingID || t('common.messages.not-set'),
+    },
+    {
+      name: t('btp-service-bindings.instance-id'),
+      value: status.instanceID || t('common.messages.not-set'),
+    },
   ];
 
-  return <DefinitionList title="Binding Data" list={list} key="binding-data" />;
+  return (
+    <DefinitionList
+      title={t('btp-service-bindings.data')}
+      list={list}
+      key="binding-data"
+    />
+  );
 }

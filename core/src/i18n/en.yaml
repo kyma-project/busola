@@ -45,8 +45,20 @@ brokers:
   title: Brokers
 btp-instances:
   title: BTP Service Instances
+  parameters: Instance Parameters
+  offering-name: Offering name
+  plan-name: Plan name
+  external-name: External Name
+  instance-id: Instance ID
 btp-service-bindings:
   title: BTP Service Bindings
+  parameters: Instance Binding Parameters
+  instance-name: Service Instance name
+  secret: Secret
+  external-name: External Name
+  instance-id: Instance ID
+  binding-id: Binding ID
+  data: Binding Data
 catalog:
   menu-title: Catalog
   subtitle: Enrich your experience with additional services that are installed outside the cluster.
@@ -128,6 +140,7 @@ common:
   messages:
     doesnt-exist: doesn't exist.
     loading-name: Loading name...
+    not-set: Not set
   tooltips:
     copy-to-clipboard: Copy to clipboard
     download: Download

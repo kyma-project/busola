@@ -14,7 +14,7 @@ export const ServiceBindingsList = ({ DefaultRenderer, ...otherParams }) => {
 
   const customColumns = [
     {
-      header: 'Instance name',
+      header: t('btp-service-bindings.instance-name'),
       value: resource => (
         <Link
           className="fd-link"
@@ -25,11 +25,11 @@ export const ServiceBindingsList = ({ DefaultRenderer, ...otherParams }) => {
       ),
     },
     {
-      header: 'External name',
+      header: t('btp-service-bindings.external-name'),
       value: resource => resource.spec.externalName,
     },
     {
-      header: 'Status',
+      header: t('common.headers.status'),
       value: resource => <ServiceBindingStatus serviceBinding={resource} />,
     },
   ];
