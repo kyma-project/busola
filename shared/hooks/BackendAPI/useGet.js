@@ -159,6 +159,7 @@ export const useGetStream = path => {
 
   function refetchData() {
     cancelReader();
+    setData([]);
     fetchData();
   }
 

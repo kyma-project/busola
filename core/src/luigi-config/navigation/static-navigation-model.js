@@ -642,7 +642,6 @@ export function getStaticChildrenNodesForNamespace(
           children: [
             {
               pathSegment: ':instanceName',
-              resourceType: 'apirules',
               viewUrl:
                 config.coreUIModuleUrl +
                 '/namespaces/:namespaceId/serviceInstances/:instanceName?' +
@@ -657,20 +656,37 @@ export function getStaticChildrenNodesForNamespace(
     {
       category: i18next.t('service-management.title'),
       pathSegment: 'btp-service-bindings',
-      navigationContext: 'btp-service-bindings',
+      navigationContext: 'servicebindings',
       label: i18next.t('btp-service-bindings.title'),
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/ServiceBindings?' +
+        '/namespaces/:namespaceId/serviceBindings?' +
         toSearchParamsString({
           resourceApiPath: '/apis/services.cloud.sap.com/v1alpha1',
           readOnly: false,
-          hasDetailsView: false,
+          hasDetailsView: true,
         }),
       viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
       context: {
         requiredFeatures: [features.BTP_CATALOG],
       },
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':bindingName',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/serviceBindings/:bindingName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/services.cloud.sap.com/v1alpha1',
+                }),
+            },
+          ],
+        },
+      ],
     },
 
     //CONFIGURATION CATEGORY (NAMESPACE)

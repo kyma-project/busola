@@ -2,6 +2,7 @@ import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'fundamental-react';
+import { ServiceBindingStatus } from '../../../shared/components/ServiceBindingStatus';
 
 export const ServiceBindingsList = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
@@ -10,11 +11,6 @@ export const ServiceBindingsList = ({ DefaultRenderer, ...otherParams }) => {
     LuigiClient.linkManager()
       .fromContext('namespace')
       .navigate(`/btp-instances/details/${instanceName}`);
-
-  const navigateToSecret = secretName =>
-    LuigiClient.linkManager()
-      .fromContext('namespace')
-      .navigate(`/secrets/details/${secretName}`);
 
   const customColumns = [
     {
@@ -33,15 +29,8 @@ export const ServiceBindingsList = ({ DefaultRenderer, ...otherParams }) => {
       value: resource => resource.spec.externalName,
     },
     {
-      header: 'Secret name',
-      value: resource => (
-        <Link
-          className="fd-link"
-          onClick={() => navigateToSecret(resource.spec.secretName)}
-        >
-          {resource.spec.secretName}
-        </Link>
-      ),
+      header: 'Status',
+      value: resource => <ServiceBindingStatus serviceBinding={resource} />,
     },
   ];
 
@@ -49,11 +38,7 @@ export const ServiceBindingsList = ({ DefaultRenderer, ...otherParams }) => {
     <DefaultRenderer
       customColumns={customColumns}
       resourceName={t('btp-service-bindings.title')}
-      textSearchProperties={[
-        'spec.serviceInstanceName',
-        'spec.externalName',
-        'spec.secretName',
-      ]}
+      textSearchProperties={['spec.serviceInstanceName', 'spec.externalName']}
       {...otherParams}
     />
   );

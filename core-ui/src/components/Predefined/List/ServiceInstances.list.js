@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { ServiceInstanceStatus } from 'shared/components/ServiceInstanceStatus';
 
 export const ServiceInstancesList = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
@@ -16,6 +17,10 @@ export const ServiceInstancesList = ({ DefaultRenderer, ...otherParams }) => {
     {
       header: 'External name',
       value: resource => resource.spec.externalName,
+    },
+    {
+      header: 'Status',
+      value: resource => <ServiceInstanceStatus serviceInstance={resource} />,
     },
   ];
 
