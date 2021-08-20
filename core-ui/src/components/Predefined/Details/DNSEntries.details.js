@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { LayoutPanel, FormItem, FormLabel, Token } from 'fundamental-react';
+import { LayoutPanel, FormItem, FormLabel } from 'fundamental-react';
 import { StatusBadge } from 'react-shared';
 
 const RowComponent = ({ name, value }) => (
