@@ -1,5 +1,9 @@
 ---
 addons:
+  errors:
+    cannot-create: Nie można utworzyć konfiguracji dodatków
+  messages:
+    created: Utworzono konfigurację dodatków {{name}}
   title: Dodatki
 api-rules:
   access-strategies:
@@ -14,7 +18,9 @@ api-rules:
       delete: Zdefiniuj co najmniej jedną strategię dostępu.
       path: Ścieżka może zawierać znaki alfanumeryczne oraz „/”, „.”, „*”, „?”, „!”, „-”, „(” i „)”.
   buttons:
-    create: Stwórz reguły API
+    create: Stwórz regułę API
+    edit: Edytuj regułę API "{{apiRuleName}}"
+    expose: Wystaw {type}
   general-settings:
     title: Ustawienia główne
   list:
@@ -25,6 +31,8 @@ api-rules:
   messages:
     create-failed: Nie udało się utworzyć reguły API
     created: Utworzono regułę API
+    description: Udostępnij usługi poza klastrem za pomocą reguł interfejsu API.
+    not-matching-results: Nie można znaleźć reguł API pasujących do tego zapytania.
     updated: Zaktualizowano regułę API
   services:
     error-load: Nie udało się wczytać listy serwisów
@@ -48,18 +56,29 @@ cluster-roles:
 clusters:
   add:
     title: Dodaj klaster
+  buttons:
+    apply-configuration: Zastosuj konfigurację
+    apply-kubeconfig: Zastosuj Kubeconfig
   common:
     api-server-address: Adres API serwera
     download-kubeconfig: Pobierz kubeconfig
     kubeconfig-download-error: Nie udało się pobrać kubeconfigu
     kubeconfig-not-present: Brak kubeconfigu w konfiguracji klastra
+  labels:
+    client-id: Identyfikator klienta
+    issuer-url: Adres URL wystawcy
+    scopes: Zakresy
   list:
     no-clusters-found: Nie znaleziono klastrów
     outdated:
-      download: Pobierz Kubeconfig
       tooltip: Nieaktualna wersja parametru może powodować błędy. Usuń i ponownie dodaj swój klaster.
+  messages:
+    error-kubeconfig: Błąd odczytu Kubeconfiga
+    missing-configuration-data: Konfiguracja została poprawnie dołączona. Proszę wypełnić pozostałe wymagane dane.
+    upload-paste-kubeconfig: Prześlij lub wklej plik Kubeconfig
+    wrong-configuration: Nie można zastosować konfiguracji
   overview:
-    title: Przegląd klastrów
+    title: Przegląd klastra
     version: Wersja
   storage:
     changed-message: Nadpisano miejsce przechowywania konfiguracji z {{originalStorage}} na {{targetStorage}}.
@@ -88,26 +107,34 @@ common:
     modes:
       advanced: Zaawansowane
       simple: Minimalne
-  created: Stworzono
   delete-dialog:
     delete-confirm: Nie pytaj ponownie
     information: Wyłączyłeś potwierdzenia usuwania dla wszystkich zasobów. Możnesz je ponownie włączyć w Ustawieniach.
     message: Czy na pewno chcesz usunąć {{type}} {{name}}?
     title: Usuń {{name}}
+  errors:
+    no-permissions: Nie masz wystarczających uprawnień, aby wyświetlić tę zawartość.
+    no-permissions-header: Za mało uprawnień
+    no-permissions-message: Skontaktuj się z administratorem, aby przyznać Ci dostęp.
   headers:
     created: Stworzony
     labels: Etykiety
+    loading: Ładowanie...
     name: Nazwa
+    resources: Zasoby
     status: Status
   labels:
     hostname: Nazwa hosta
     name: Nazwa
     service: Serwis
-  loading: Ładowanie...
+  messages:
+    doesnt-exist: nie istnieje.
+    loading-name: Ładowanie nazwy...
   tooltips:
     copy-to-clipboard: Skopiuj do schowka
     download: Pobierz
     duplicate-key: Zduplikowany klucz
+    error: 'Error: '
     k8s-name-input: Nazwa musi składać się z małych znaków alfanumerycznych, może zawierać również „-” (np. „my-name1”).
     key-value: klucz=wartość, musi zaczynać się i kończyć znakiem alfanumerycznym, może zawierać również „-”, „_” lub „.”
     read-file: Odczytuj zawartość pliku jako pojedynczą wartość, z nazwą pliku jako kluczem.
@@ -135,7 +162,7 @@ daemon-sets:
   images: Obrazy
   node-selector: Selektory węzłów
   pods: $t(pods.title)
-  title: Zestawy demonów
+  title: DeamonSety
   tolerations:
     effect: Efekt
     key: Klucz
@@ -234,6 +261,8 @@ functions:
         by-sbu: Ta zmienna może nadpisać lub być nadpisana przez zmienną wstrzykniętą przez jeden z service bindingów.
       text: Ostrzeżenie
       variable-can-override-sbu: Ta zmienna może nadpisać lub być nadpisana przez zmienną wstrzykniętą przez jeden ze stworzonych service bindingów.
+generic-list:
+  no-entries-found: Nie znaleziono wpisów
 git-repositories:
   title: Repozytoria Git
 instances:
@@ -253,6 +282,20 @@ jobs:
     type: Typ
   start-time: Czas rozpoczęcia
   title: Zadania
+machine-info:
+  architecture-cpus: Architektura i procesory
+  cpu-m: Procesor (m)
+  cpu-usage: 'Zużycie procesora:'
+  cpus: Procesorów
+  gib: GiB
+  kube-proxy-version: Wersja Kube proxy
+  kubelet-version: Wersja Kubelet
+  memory: Pamięć
+  memory-gib: Pamięć (GiB)
+  memory-usage: 'Zuycie pamięci:'
+  operating-system: System operacyjny
+  pods-capacity: Pojemność podów
+  title: Informacje o maszynie
 namespaces:
   overview:
     back: Powrót do przestrzeni nazw
@@ -274,6 +317,16 @@ namespaces:
     create: Wybierz tę opcję, aby wyłączyć istio, aby pośredniczyć w całej komunikacji między podami w Twojej przestrzeni nazw.
     memory-examples: Użyj zwykłej wartości w bajtach (128974848) lub odpowiednich przyrostków (takich jak 129e6, 129M, 123Mi).
     total-memory-limit: Zdefiniuj ograniczenia, które ograniczają całkowite zużycie pamięci w Twojej przestrzeni nazw.
+no-permissions:
+  title: Brak uprawnień
+node-details:
+  internal-ip: Wewnętrzny adres IP
+  involved-object: Zaangażowany obiekt
+  message: Wiadomość
+  name: Przegląd klastra — węzły
+  pod-cidr: Pod CIDR
+  timestamp: Znacznik czasu
+  title-warnings: Ostrzeżenia
 oauth2-clients:
   title: Klienci OAuth2
 observability:
@@ -282,8 +335,6 @@ pods:
   node: Węzeł
   restarts: Ponownych uruchomień
   title: Pody
-preferences:
-  title: Ustawienia
 replica-sets:
   title: Zestawy replik
 role-bindings:
@@ -292,7 +343,6 @@ roles:
   title: Role
 secrets:
   title: Sekrety
-service-catalog: null
 service-management:
   title: Zarządzanie serwisami
 services:
@@ -342,4 +392,4 @@ top-nav:
 workloads:
   docker-image:
     tooltip: Wprowadź poprawną ścieżkę rejestru obrazu Dockera.
-  title: Obciążenia
+  title: Workloady

@@ -18,7 +18,7 @@ context('Invalid kubeconfig', () => {
 
     cy.getIframeBody()
       .find('[role=alert][aria-label="invalid-kubeconfig"]')
-      .shouldHaveTrimmedText('Error reading kubeconfig');
+      .shouldHaveTrimmedText('Error reading Kubeconfig');
   });
 
   it('Use wrong kubeconfig - from file', () => {
@@ -33,6 +33,6 @@ context('Invalid kubeconfig', () => {
 
     cy.getIframeBody()
       .find('[role=alert][aria-label="invalid-kubeconfig"]')
-      .shouldHaveTrimmedText('Error reading kubeconfig');
+      .shouldHaveTrimmedText('Error reading Kubeconfig');
   });
 });

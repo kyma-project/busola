@@ -158,7 +158,7 @@ async function mergeParams(params) {
     },
     hiddenNamespaces: DEFAULT_HIDDEN_NAMESPACES,
     features: DEFAULT_FEATURES,
-    storage: 'localStorage',
+    storage: await clusterStorage.getDefaultStorage(),
   };
 
   params.config = {
@@ -207,9 +207,7 @@ export async function deleteActiveCluster() {
 }
 
 export async function saveClusters(clusters) {
-  const defaultStorage =
-    (await getBusolaClusterParams()).config.storage || 'localStorage';
-  clusterStorage.save(clusters, defaultStorage);
+  await clusterStorage.save(clusters);
 }
 
 export function handleResetEndpoint() {

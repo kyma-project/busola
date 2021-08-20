@@ -455,13 +455,96 @@ export const REPOSITORY_CONFIG_PANEL = {
   },
 };
 
-export const FORMS = {
-  RESOURCE_NAME: {
-    LABEL: 'Name',
-    INLINE_HELP: `Name must contain lower case alphanumeric characters, can contain '-'  (like 'my-name1').`,
+export const ENVIRONMENT_VARIABLES_PANEL = {
+  LIST: {
+    TITLE: 'Environment Variables',
+    ERRORS: {
+      RESOURCES_NOT_FOUND:
+        "This Function doesn't have any environment variables yet.",
+      NOT_MATCHING_SEARCH_QUERY:
+        "Couldn't find environment variables matching this query.",
+    },
   },
-  LABELS: {
-    LABEL: 'Labels',
-    INLINE_HELP: `key=value', must start and end with alphanumeric character, can contain '-', '_' or '.'`,
+  CREATE_MODAL: {
+    TITLE: {
+      CUSTOM: 'Create Custom Variable',
+      SECRET: 'Create Variable From Secret',
+      CONFIG_MAP: 'Create Variable From Config Map',
+    },
+    OPEN_BUTTON: {
+      CUSTOM: 'Custom Variable',
+      SECRET: 'Secret Variable',
+      CONFIG_MAP: 'Config Map Variable',
+    },
+    CONFIRM_BUTTON: {
+      TEXT: 'Create',
+    },
+  },
+  EDIT_MODAL: {
+    TITLE: {
+      CUSTOM: 'Edit Custom Variable',
+      SECRET: 'Edit Variable From Secret',
+      CONFIG_MAP: 'Edit Variable From Config Map',
+    },
+    CONFIRM_BUTTON: {
+      TEXT: 'Save',
+      POPUP_MESSAGES: {
+        NO_ENVS_DEFINED: 'You must define at least one variable.',
+        COLLECTIONS_EQUAL: 'Changes in variables are required.',
+        ERROR:
+          'At least one variable has an incorrect name format, is restricted, duplicated, or empty.',
+      },
+    },
+    ADD_ENV_BUTTON: {
+      TEXT: 'Add Environment Variable',
+    },
+  },
+  ERRORS: {
+    EMPTY: 'Variable is empty.',
+    DUPLICATED: 'Duplicated variable name.',
+    INVALID: `Variable name must contain alphanumeric characters, can contain '_', no blank spaces.`,
+    RESTRICTED:
+      'This variable name is restricted and cannot be used. Try a different one.',
+    INVALID_SECRET: `Select the secret name and key`,
+    INVALID_CONFIG: `Select the config name and key`,
+  },
+  WARNINGS: {
+    TEXT: 'Warning',
+    VARIABLE_CAN_OVERRIDE_SBU:
+      'This variable can override or be overridden by a variable injected by one of the created Service Bindings.',
+    SBU_CAN_BE_OVERRIDE: {
+      BY_CUSTOM_ENV:
+        'This variable can override or be overridden by one of the custom variables.',
+      BY_SBU:
+        'This variable can override or be overridden by a variable injected by one of the Service Bindings.',
+      BY_CUSTOM_ENV_AND_SBU:
+        'This variable can be overridden by one of the custom variables or a variable injected by one of the Service Bindings.',
+    },
+  },
+  PLACEHOLDERS: {
+    VARIABLE_NAME: 'Variable name',
+    VARIABLE_VALUE: 'Variable value',
+  },
+  VARIABLE_TYPE: {
+    CUSTOM: {
+      TEXT: 'Custom',
+      TOOLTIP_MESSAGE: 'This variable was provided by the user.',
+    },
+    BINDING_USAGE: {
+      TEXT: 'Service Binding',
+      TOOLTIP_MESSAGE:
+        'This variable was injected by the Service Binding referencing Service Instance "{serviceInstanceName}".',
+      SHOW_VALUE_MESSAGE: 'Click to show',
+      HIDE_VALUE_MESSAGE: 'Click to hide',
+    },
+    CONFIG_MAP: {
+      TEXT: 'Config Map',
+      TOOLTIP_MESSAGE:
+        'This variable comes from the "{resourceName}" Config Map.',
+    },
+    SECRET: {
+      TEXT: 'Secret',
+      TOOLTIP_MESSAGE: 'This variable comes from the "{resourceName}" Secret.',
+    },
   },
 };
