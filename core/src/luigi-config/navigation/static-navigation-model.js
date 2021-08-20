@@ -2,7 +2,10 @@ import i18next from 'i18next';
 import { saveAs } from 'file-saver';
 
 import { config } from '../config';
-import { getActiveClusterName, getClusters } from './../cluster-management';
+import {
+  getActiveClusterName,
+  getClusters,
+} from './../cluster-management/cluster-management';
 import { hasPermissionsFor } from './permissions';
 
 export const coreUIViewGroupName = '_core_ui_';

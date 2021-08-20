@@ -2,7 +2,7 @@ import { setAuthData } from './auth-storage';
 import {
   getActiveCluster,
   saveActiveClusterName,
-} from './../cluster-management';
+} from './../cluster-management/cluster-management';
 import { convertToURLsearch } from '../communication';
 import { parseOIDCParams } from './oidc-params';
 

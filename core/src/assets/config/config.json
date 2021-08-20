@@ -1,5 +1,6 @@
 {
   "config": {
+    "defaultStorage": "localStorage",
     "features": {
       "SERVICE_CATALOG": {
         "selectors": [
