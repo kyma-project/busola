@@ -1,5 +1,9 @@
 ---
 addons:
+  errors:
+    cannot-create: Cannot create Addons Configuration
+  messages:
+    created: Addons Configuration {{name}} created
   title: Addons
 api-rules:
   access-strategies:
@@ -14,7 +18,9 @@ api-rules:
       delete: Define at least one access strategy.
       path: Path can contain alphanumeric characters and  '/', '.', '*', '?', '!', '-', '(', and ')'.
   buttons:
-    create: Create API Rules
+    create: Create API Rule
+    edit: Edit API Rule "{{apiRuleName}}"
+    expose: Expose {{type}}
   general-settings:
     title: General Settings
   list:
@@ -26,6 +32,7 @@ api-rules:
     create-failed: Failed to create the API Rule
     created: API Rule created
     description: Expose Services outside the cluster with API Rules.
+    not-matching-results: Couldn't find API Rules matching this query.
     updated: API Rule updated
   services:
     error-load: Couldn't load service list
@@ -47,32 +54,51 @@ cluster-role-bindings:
 cluster-roles:
   title: ClusterRoles
 clusters:
+  add:
+    title: Add Cluster
   buttons:
-    add: Add Cluster
     apply-configuration: Apply configuration
     apply-kubeconfig: Apply kubeconfig
-    download: Download Kubeconfig
+  common:
+    api-server-address: API server address
+    download-kubeconfig: Download kubeconfig
+    kubeconfig-download-error: Failed to download the Kubeconfig
+    kubeconfig-not-present: Kubeconfig is missing on the Cluster
   labels:
     client-id: Client ID
     issuer-url: Issuer URL
     scopes: Scopes
   list:
+    no-clusters-found: No clusters found
     outdated:
       tooltip: Outdated parameter version may cause errors. Delete and re-add your cluster.
-    title: Clusters Overview
   messages:
-    download-failed: Failed to download the Kubeconfig
-    missing-kubeconfig: Kubeconfig is missing on the Cluster
     error-kubeconfig: Error reading Kubeconfig
     missing-configuration-data: Configuration has been included properly. Please fill remaining required data.
     upload-paste-kubeconfig: Upload or paste your Kubeconfig file
     wrong-configuration: Cannot apply configuration
-    no-clusters: No clusters found
   overview:
     title: Cluster Overview
+    version: Version
+  storage:
+    changed-message: The chosen storage type has been overwritten by the Cluster configuration from {{originalStorage}} to {{targetStorage}}.
+    choose-storage:
+      label: Storage type configuration
+    descriptions:
+      inMemory: Cluster data is cleared when you leave or refresh the page.
+      localStorage: Cluster data is persisted between browser reloads.
+      sessionStorage: Cluster data is cleared when the page session ends.
+      unknown: Unknown storage type
+    labels:
+      inMemory: In memory
+      localStorage: localStorage
+      sessionStorage: sessionStorage
+      unknown: Unknown
+    title: Storage Type
 common:
   buttons:
     cancel: Cancel
+    create: Create
     delete: Delete
     edit-yaml: Edit YAML
   delete-dialog:
@@ -80,15 +106,24 @@ common:
     information: You've switched off removal confirmations for all resources. You can switch them back on in Preferences.
     message: Are you sure you want to remove {{type}} {{name}}?
     title: Remove {{name}}
+  errors:
+    no-permissions: You don't have enough permissions to view this content.
+    no-permissions-header: Not enough permissions
+    no-permissions-message: Contact your administrator to grant you access.
   headers:
     created: Created
     labels: Labels
+    loading: Loading...
     name: Name
+    resources: Resources
     status: Status
   labels:
     hostname: Hostname
     name: Name
     service: Service
+  messages:
+    doesnt-exist: doesn't exist.
+    loading-name: Loading name...
   tooltips:
     copy-to-clipboard: Copy to clipboard
     download: Download
@@ -99,9 +134,6 @@ common:
     read-file: Read file content as single value, with file name as a key.
     save: Save
     search: Search
-  messages:
-    doesnt-exist: doesn't exist.
-    loading-name: Loading name...
 config-maps:
   title: ConfigMaps
 configuration:
@@ -138,7 +170,70 @@ discovery-and-network:
 functions:
   title: Functions
   variable:
-    tooltip: This variable comes from a Resource. To get the value, follow the link.
+    buttons:
+      add: Add environment variable
+      open:
+        config-map: ConfigMap Variable
+        custom: Custom Variable
+        secret: Secret Variable
+    create-modal:
+      title:
+        config-map: Create ConfigMap Variable
+        custom: Create Custom Variable
+        secret: Create Secret Variable
+    edit-modal:
+      title:
+        config-map: Edit ConfigMap Variable
+        custom: Edit Custom Variable
+        secret: Edit Secret Variable
+    errors:
+      duplicated: Duplicated variable name.
+      empty: Variable is empty.
+      invalid: Variable name must contain alphanumeric characters, can contain '_', no blank spaces.
+      invalid-config: Select the ConfigMap name and key.
+      invalid-secret: Select the secret name and key.
+      restricted: This variable name is restricted and cannot be used. Try a different one.
+    form:
+      config-map: $t(functions.variable.type.config-map)
+      key: $t(functions.variable.header.key)
+      name: Name
+      secret: $t(functions.variable.type.secret)
+      value: $t(functions.variable.header.value)
+    header:
+      key: Key
+      name: Variable Name
+      source: Source
+      value: Value
+    not-found: This Function doesn't have any environment variables yet.
+    not-match: Couldn't find environment variables matching this query.
+    placeholders:
+      name: Variable name
+      value: Variable value
+    popup-error: At least one variable has an incorrect name format, is restricted, duplicated, or empty.
+    title:
+      environment-variables: Environment Variables
+      injected-variables: Environment Variables Injected via Service Bindings
+    tooltip:
+      config-map: This variable comes from the "{resourceName}" ConfigMap.
+      custom: This variable was provided by the user.
+      secret: This variable comes from the "{resourceName}" Secret.
+      service-binding: This variable was injected by the Service Binding referencing Service Instance "{serviceInstanceName}".
+      text: This variable comes from a Resource. To get the value, follow the link.
+    type:
+      config-map: ConfigMap
+      custom: Custom
+      secret: Secret
+      service-binding: Service Binding
+    warnings:
+      override: This variable name is identical to the variable injected via Service Binding. Continue if you intend that they can override each other. Otherwise, choose another name.
+      sbu-can-be-overridden:
+        by-both: This variable can be overridden by one of the custom variables or a variable injected by one of the Service Bindings.
+        by-custom-env: This variable can override or be overridden by one of the custom variables.
+        by-sbu: This variable can override or be overridden by a variable injected by one of the Service Bindings.
+      text: Warning
+      variable-can-override-sbu: This variable can override or be overridden by a variable injected by one of the created Service Bindings.
+generic-list:
+  no-entries-found: No entries found
 git-repositories:
   title: Git Repositories
 instances:
@@ -158,6 +253,20 @@ jobs:
     type: Type
   start-time: Start Time
   title: Jobs
+machine-info:
+  architecture-cpus: Architecture & CPUs
+  cpu-m: CPU (m)
+  cpu-usage: 'CPU usage:'
+  cpus: CPUs
+  gib: GiB
+  kube-proxy-version: Kube proxy version
+  kubelet-version: Kubelet version
+  memory: Memory
+  memory-gib: Memory (GiB)
+  memory-usage: 'Memory usage:'
+  operating-system: Operating system
+  pods-capacity: Pods capacity
+  title: Machine info
 namespaces:
   overview:
     back: Back to Namespaces
@@ -180,6 +289,14 @@ namespaces:
     total-memory-limit: Define constraints that limit total memory consumption in your Namespace.
 no-permissions:
   title: No Permissions
+node-details:
+  internal-ip: Internal IP
+  involved-object: Involved object
+  message: Message
+  name: Cluster Overview - Nodes
+  pod-cidr: Pod CIDR
+  timestamp: Timestamp
+  title-warnings: Warnings
 oauth2-clients:
   title: OAuth2 Clients
 observability:

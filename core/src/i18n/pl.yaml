@@ -1,5 +1,7 @@
 ---
 addons:
+  errors:
+    cannot-create: Nie można utworzyć konfiguracji dodatków
   title: Dodatki
 api-rules:
   access-strategies:
@@ -14,7 +16,8 @@ api-rules:
       delete: Zdefiniuj co najmniej jedną strategię dostępu.
       path: Ścieżka może zawierać znaki alfanumeryczne oraz „/”, „.”, „*”, „?”, „!”, „-”, „(” i „)”.
   buttons:
-    create: Stwórz reguły API
+    create: Stwórz regułę API
+    expose: Wystaw {type}
   general-settings:
     title: Ustawienia główne
   list:
@@ -26,6 +29,7 @@ api-rules:
     create-failed: Nie udało się utworzyć reguły API
     created: Utworzono regułę API
     description: Udostępnij usługi poza klastrem za pomocą reguł interfejsu API.
+    not-matching-results: Nie można znaleźć reguł API pasujących do tego zapytania.
     updated: Zaktualizowano regułę API
   services:
     error-load: Nie udało się wczytać listy serwisów
@@ -47,47 +51,78 @@ cluster-role-bindings:
 cluster-roles:
   title: Role klastra
 clusters:
+  add:
+    title: Dodaj klaster
   buttons:
-    add: Dodaj klaster
     apply-configuration: Zastosuj konfigurację
     apply-kubeconfig: Zastosuj Kubeconfig
-    download: Pobierz Kubeconfig
+  common:
+    api-server-address: Adres API serwera
+    download-kubeconfig: Pobierz kubeconfig
+    kubeconfig-download-error: Nie udało się pobrać kubeconfigu
+    kubeconfig-not-present: Brak kubeconfigu w konfiguracji klastra
   labels:
     client-id: Identyfikator klienta
     issuer-url: Adres URL wystawcy
     scopes: Zakresy
   list:
+    no-clusters-found: Nie znaleziono klastrów
     outdated:
       tooltip: Nieaktualna wersja parametru może powodować błędy. Usuń i ponownie dodaj swój klaster.
     title: Przegląd klastrów
   messages:
-    missing-kubeconfig: Brakuje Kubeconfigu na klastrze
-    download-failed: Nie udało się pobrać Kubeconfigu
     error-kubeconfig: Błąd odczytu Kubeconfiga
     missing-configuration-data: Konfiguracja została poprawnie dołączona. Proszę wypełnić pozostałe wymagane dane.
     upload-paste-kubeconfig: Prześlij lub wklej plik Kubeconfig
-    no-clusters: Nie znaleziono klastrów
+    wrong-configuration: Nie można zastosować konfiguracji
   overview:
     title: Przegląd klastra
+    version: Wersja
+  storage:
+    changed-message: Nadpisano miejsce przechowywania konfiguracji z {{originalStorage}} na {{targetStorage}}.
+    choose-storage:
+      label: Miejsce przechowywania konfiguracji
+    descriptions:
+      inMemory: Konfiguracja jest usuwana wraz z odświeżeniem strony.
+      localStorage: Konfiguracja nie jest usuwana pomiędzy odświeżeniami przeglądarki.
+      sessionStorage: Konfiguracja jest usuwana w momencie zakończenia sesji karty przeglądarki.
+      unknown: Nie rozpoznano.
+    labels:
+      inMemory: W pamięci
+      localStorage: localStorage
+      sessionStorage: sessionStorage
+      unknown: Nieznany
+    title: Rodzaj przechowywania konfiguracji
 common:
   buttons:
     cancel: Anuluj
+    create: Stwórz
     delete: Usuń
     edit-yaml: Edytuj YAML
+    save: Zapisz
   delete-dialog:
     delete-confirm: Nie pytaj ponownie
     information: Wyłączyłeś potwierdzenia usuwania dla wszystkich zasobów. Możnesz je ponownie włączyć w Ustawieniach.
     message: Czy na pewno chcesz usunąć {{type}} {{name}}?
     title: Usuń {{name}}
+  errors:
+    no-permissions: Nie masz wystarczających uprawnień, aby wyświetlić tę zawartość.
+    no-permissions-header: Za mało uprawnień
+    no-permissions-message: Skontaktuj się z administratorem, aby przyznać Ci dostęp.
   headers:
     created: Stworzony
     labels: Etykiety
+    loading: Ładowanie...
     name: Nazwa
+    resources: Zasoby
     status: Status
   labels:
     hostname: Nazwa hosta
     name: Nazwa
     service: Serwis
+  messages:
+    doesnt-exist: nie istnieje.
+    loading-name: Ładowanie nazwy...
   tooltips:
     copy-to-clipboard: Skopiuj do schowka
     download: Pobierz
@@ -98,9 +133,6 @@ common:
     read-file: Odczytuj zawartość pliku jako pojedynczą wartość, z nazwą pliku jako kluczem.
     save: Zapisz
     search: Szukaj
-  messages:
-    doesnt-exist: nie istnieje.
-    loading-name: Ładowanie nazwy...
 config-maps:
   title: Mapy konfiguracji
 configuration:
@@ -123,7 +155,7 @@ daemon-sets:
   images: Obrazy
   node-selector: Selektory węzłów
   pods: $t(pods.title)
-  title: Zestawy demonów
+  title: DeamonSety
   tolerations:
     effect: Efekt
     key: Klucz
@@ -137,7 +169,70 @@ discovery-and-network:
 functions:
   title: Funkcje
   variable:
-    tooltip: Ta zmienna pochodzi z zasobu. Aby uzyskać wartość, kliknij link.
+    buttons:
+      add: Dodaj zmienną środowiskową
+      open:
+        config-map: Zmienna z mapy konfiguracji
+        custom: Zmienna niestandardowa
+        secret: Zmienna z sekretu
+    create-modal:
+      title:
+        config-map: Stwórz zmienną z mapy konfiguracji
+        custom: Stwórz zmienną niestandardową
+        secret: Stwórz zmienną z sekretu
+    edit-modal:
+      title:
+        config-map: Edytuj zmienną z mapy konfiguracji
+        custom: Edytuj zmienną niestandardową
+        secret: Edytuj zmienną z sekretu
+    errors:
+      duplicated: Zmienna o takiej nazwie ju istnieje.
+      empty: Nazwa zmiennej jest pusta.
+      invalid: Nazwa zmiennej musi składać się ze znaków alfanumerycznych, może zawierać również '_', bez spacji
+      invalid-config: Wybierz nazwę mapy konfiguracji i klucz
+      invalid-secret: Wybierz nazwę sekretu i klucz
+      restricted: Ta nazwa zmiennej jest zastrzerzona i nie może by użyta. Spróbuj użyć innej nazwy.
+    form:
+      config-map: $t(functions.variable.type.config-map)
+      key: $t(functions.variable.header.key)
+      name: Nazwa
+      secret: $t(functions.variable.type.secret)
+      value: $t(functions.variable.header.value)
+    header:
+      key: Klucz
+      name: Nazwa zmiennej
+      source: Żródło
+      value: Wartość
+    not-found: Ta funkcja nie posiada jeszcze zmiennych środowiskowych
+    not-match: Nie znaleziono zmiennych środowiskowych pasujących do wyszukiwanej frazy.
+    placeholders:
+      name: $t(functions.variable.header.name)
+      value: Wartość zmiennej
+    popup-error: Przynajmniej jedna ze zmiennych ma niepoprawny format, jest zastrzerzona, zduplikowana, lub pusta.
+    title:
+      environment-variables: Zmienne środowiskowe
+      injected-variables: Zmienne środowiskowe wstrzyknięte poprzez service binding
+    tooltip:
+      config-map: 'Ta zmienna pochodzi z mapy konfiguracji: "{resourceName}".'
+      custom: Ta zmienna została wprowadzona przez użytkownika.
+      secret: 'Ta zmienna pochodzi z sekretu: "{resourceName}".'
+      service-binding: 'Ta zmienna została wstrzyknięta przez service binding odwołujący się do instancji serwisu: "{serviceInstanceName}".'
+      text: Ta zmienna pochodzi z zasobu. Aby uzyskać wartość, kliknij link.
+    type:
+      config-map: Mapa konfiguracji
+      custom: Niestandardowe
+      secret: Sekret
+      service-binding: Service binding
+    warnings:
+      override: Ta nazwa zmiennej jest identyczna ze zmienną wstrzykniętą przez Service Binding. Kontynuuj, jeśli chcesz, aby mogły się wzajemnie nadpisywać. W przeciwnym razie wybierz inną nazwę.
+      sbu-can-be-overridden:
+        by-both: Ta zmienna może być nadpisana przez jedną z niestandardowych zmiennych lub przez zmienną wstrzykniętą przez jeden z service bindingów.
+        by-custom-env: Ta zmienna może nadpisać lub być nadpisana przez jedną z niestandardowych zmiennych.
+        by-sbu: Ta zmienna może nadpisać lub być nadpisana przez zmienną wstrzykniętą przez jeden z service bindingów.
+      text: Ostrzeżenie
+      variable-can-override-sbu: Ta zmienna może nadpisać lub być nadpisana przez zmienną wstrzykniętą przez jeden ze stworzonych service bindingów.
+generic-list:
+  no-entries-found: Nie znaleziono wpisów
 git-repositories:
   title: Repozytoria Git
 instances:
@@ -157,6 +252,20 @@ jobs:
     type: Typ
   start-time: Czas rozpoczęcia
   title: Zadania
+machine-info:
+  architecture-cpus: Architektura i procesory
+  cpu-m: Procesor (m)
+  cpu-usage: 'Zużycie procesora:'
+  cpus: Procesorów
+  gib: GiB
+  kube-proxy-version: Wersja Kube proxy
+  kubelet-version: Wersja Kubelet
+  memory: Pamięć
+  memory-gib: Pamięć (GiB)
+  memory-usage: 'Zuycie pamięci:'
+  operating-system: System operacyjny
+  pods-capacity: Pojemność podów
+  title: Informacje o maszynie
 namespaces:
   overview:
     back: Powrót do przestrzeni nazw
@@ -179,6 +288,14 @@ namespaces:
     total-memory-limit: Zdefiniuj ograniczenia, które ograniczają całkowite zużycie pamięci w Twojej przestrzeni nazw.
 no-permissions:
   title: Brak uprawnień
+node-details:
+  internal-ip: Wewnętrzny adres IP
+  involved-object: Zaangażowany obiekt
+  message: Wiadomość
+  name: Przegląd klastra — węzły
+  pod-cidr: Pod CIDR
+  timestamp: Znacznik czasu
+  title-warnings: Ostrzeżenia
 oauth2-clients:
   title: Klienci OAuth2
 observability:
@@ -247,4 +364,4 @@ top-nav:
 workloads:
   docker-image:
     tooltip: Wprowadź poprawną ścieżkę rejestru obrazu Dockera.
-  title: Obciążenia
+  title: Workloady
