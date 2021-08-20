@@ -52,7 +52,6 @@ export function getStaticChildrenNodesForNamespace(
   permissionSet,
   features,
 ) {
-  console.log('features', features);
   const encodedClusterName = encodeURIComponent(getActiveClusterName());
   const nodes = [
     {

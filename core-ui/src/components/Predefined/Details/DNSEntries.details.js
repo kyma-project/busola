@@ -75,12 +75,6 @@ export const DNSEntriesDetails = ({ DefaultRenderer, ...otherParams }) => {
 
   const customColumns = [
     {
-      header: t('dnsentries.headers.type'),
-      value: dnsentry => {
-        return dnsentry.spec.type;
-      },
-    },
-    {
       header: t('dnsentries.headers.status'),
       value: dnsentry => (
         <StatusBadge autoResolveType>{dnsentry.status?.state}</StatusBadge>
