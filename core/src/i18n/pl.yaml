@@ -2,6 +2,8 @@
 addons:
   errors:
     cannot-create: Nie można utworzyć konfiguracji dodatków
+  messages:
+    created: Utworzono konfigurację dodatków {{name}}
   title: Dodatki
 api-rules:
   access-strategies:
@@ -17,6 +19,7 @@ api-rules:
       path: Ścieżka może zawierać znaki alfanumeryczne oraz „/”, „.”, „*”, „?”, „!”, „-”, „(” i „)”.
   buttons:
     create: Stwórz regułę API
+    edit: Edytuj regułę API "{{apiRuleName}}"
     expose: Wystaw {type}
   general-settings:
     title: Ustawienia główne
@@ -69,7 +72,6 @@ clusters:
     no-clusters-found: Nie znaleziono klastrów
     outdated:
       tooltip: Nieaktualna wersja parametru może powodować błędy. Usuń i ponownie dodaj swój klaster.
-    title: Przegląd klastrów
   messages:
     error-kubeconfig: Błąd odczytu Kubeconfiga
     missing-configuration-data: Konfiguracja została poprawnie dołączona. Proszę wypełnić pozostałe wymagane dane.
@@ -99,7 +101,6 @@ common:
     create: Stwórz
     delete: Usuń
     edit-yaml: Edytuj YAML
-    save: Zapisz
   delete-dialog:
     delete-confirm: Nie pytaj ponownie
     information: Wyłączyłeś potwierdzenia usuwania dla wszystkich zasobów. Możnesz je ponownie włączyć w Ustawieniach.
@@ -314,7 +315,6 @@ roles:
   title: Role
 secrets:
   title: Sekrety
-service-catalog: null
 service-management:
   title: Zarządzanie serwisami
 services:
