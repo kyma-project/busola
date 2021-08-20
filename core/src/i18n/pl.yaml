@@ -50,20 +50,23 @@ clusters:
   buttons:
     add: Dodaj klaster
     apply-configuration: Zastosuj konfigurację
-    apply-kubeconfig: Zastosuj kubeconfig
+    apply-kubeconfig: Zastosuj Kubeconfig
+    download: Pobierz Kubeconfig
   labels:
     client-id: Identyfikator klienta
     issuer-url: Adres URL wystawcy
     scopes: Zakresy
   list:
     outdated:
-      download: Pobierz Kubeconfig
       tooltip: Nieaktualna wersja parametru może powodować błędy. Usuń i ponownie dodaj swój klaster.
     title: Przegląd klastrów
   messages:
-    error-kubeconfig: Błąd odczytu kubeconfiga
+    missing-kubeconfig: Brakuje Kubeconfigu na klastrze
+    download-failed: Nie udało się pobrać Kubeconfigu
+    error-kubeconfig: Błąd odczytu Kubeconfiga
     missing-configuration-data: Konfiguracja została poprawnie dołączona. Proszę wypełnić pozostałe wymagane dane.
-    upload-paste-kubeconfig: Prześlij lub wklej plik kubeconfig
+    upload-paste-kubeconfig: Prześlij lub wklej plik Kubeconfig
+    no-clusters: Nie znaleziono klastrów
   overview:
     title: Przegląd klastra
 common:
