@@ -44,21 +44,21 @@ applications:
 brokers:
   title: Brokers
 btp-instances:
-  title: BTP Service Instances
-  parameters: Instance Parameters
+  external-name: External Name
+  instance-id: Instance ID
   offering-name: Offering name
+  parameters: Instance Parameters
   plan-name: Plan name
-  external-name: External Name
-  instance-id: Instance ID
+  title: BTP Service Instances
 btp-service-bindings:
-  title: BTP Service Bindings
-  parameters: Instance Binding Parameters
-  instance-name: Service Instance name
-  secret: Secret
-  external-name: External Name
-  instance-id: Instance ID
   binding-id: Binding ID
   data: Binding Data
+  external-name: External Name
+  instance-id: Instance ID
+  instance-name: Service Instance name
+  parameters: Instance Binding Parameters
+  secret: Secret
+  title: BTP Service Bindings
 catalog:
   menu-title: Catalog
   subtitle: Enrich your experience with additional services that are installed outside the cluster.
