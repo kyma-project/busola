@@ -929,6 +929,9 @@ export function getStaticChildrenNodesForNamespace(
         }),
       viewGroup: coreUIViewGroupName,
       keepSelectedForChildren: true,
+      context: {
+        requiredFeatures: [features.SERVERLESS],
+      },
 
       navigationContext: 'certificates',
       children: [
@@ -963,6 +966,9 @@ export function getStaticChildrenNodesForNamespace(
         }),
       viewGroup: coreUIViewGroupName,
       keepSelectedForChildren: true,
+      context: {
+        requiredFeatures: [features.SERVERLESS],
+      },
 
       navigationContext: 'issuers',
       children: [
