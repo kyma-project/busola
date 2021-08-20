@@ -917,43 +917,6 @@ export function getStaticChildrenNodesForNamespace(
     },
     {
       category: i18next.t('configuration.title'),
-      resourceType: 'certificates',
-      pathSegment: 'certificates',
-      label: i18next.t('certificates.title'),
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/certificates?' +
-        toSearchParamsString({
-          resourceApiPath: '/apis/cert.gardener.cloud/v1alpha1',
-          hasDetailsView: true,
-        }),
-      viewGroup: coreUIViewGroupName,
-      keepSelectedForChildren: true,
-      context: {
-        requiredFeatures: [features.SERVERLESS, features.CUSTOM_DOMAINS],
-      },
-
-      navigationContext: 'certificates',
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':certificateName',
-              resourceType: 'certificates',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/certificates/:certificateName?' +
-                toSearchParamsString({
-                  resourceApiPath: '/apis/cert.gardener.cloud/v1alpha1',
-                }),
-            },
-          ],
-        },
-      ],
-    },
-    {
-      category: i18next.t('configuration.title'),
       resourceType: 'issuers',
       pathSegment: 'issuers',
       label: i18next.t('issuers.title'),
@@ -981,6 +944,43 @@ export function getStaticChildrenNodesForNamespace(
               viewUrl:
                 config.coreUIModuleUrl +
                 '/namespaces/:namespaceId/issuers/:issuerName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/cert.gardener.cloud/v1alpha1',
+                }),
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: i18next.t('configuration.title'),
+      resourceType: 'certificates',
+      pathSegment: 'certificates',
+      label: i18next.t('certificates.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/certificates?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/cert.gardener.cloud/v1alpha1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+      context: {
+        requiredFeatures: [features.SERVERLESS, features.CUSTOM_DOMAINS],
+      },
+
+      navigationContext: 'certificates',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':certificateName',
+              resourceType: 'certificates',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/certificates/:certificateName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/cert.gardener.cloud/v1alpha1',
                 }),
