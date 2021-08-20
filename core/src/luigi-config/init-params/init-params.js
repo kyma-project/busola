@@ -2,7 +2,7 @@ import {
   saveClusterParams,
   saveActiveClusterName,
   getCurrentContextNamespace,
-} from '../cluster-management';
+} from '../cluster-management/cluster-management';
 import { saveLocation } from '../navigation/previous-location';
 import {
   areParamsCompatible,
@@ -78,6 +78,7 @@ async function setupFromParams() {
         ...constants.DEFAULT_FEATURES,
         ...(decoded.config?.features || {}),
       },
+      storage: 'localStorage',
     },
     currentContext: {
       cluster: decoded.kubeconfig.clusters[0],

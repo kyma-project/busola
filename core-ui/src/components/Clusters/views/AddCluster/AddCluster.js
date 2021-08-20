@@ -2,8 +2,11 @@ import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import './AddCluster.scss';
 
-import { PageHeader, useNotification } from 'react-shared';
-import { useTranslation } from 'react-i18next';
+import {
+  PageHeader,
+  useNotification,
+  useMicrofrontendContext,
+} from 'react-shared';
 import { AUTH_FORM_TOKEN } from '../../components/AuthForm';
 import { KubeconfigUpload } from '../../components/KubeconfigUpload/KubeconfigUpload';
 import {
@@ -13,10 +16,15 @@ import {
   addCluster,
 } from '../../shared';
 import { ClusterConfiguration } from '../../components/ClusterConfiguration';
+import { ChooseStorage } from './ChooseStorage';
 
 export function AddCluster() {
+  const { busolaClusterParams } = useMicrofrontendContext();
   const [kubeconfig, setKubeconfig] = React.useState(null);
   const [initParams, setInitParams] = React.useState(null);
+  const [storage, setStorage] = React.useState(
+    busolaClusterParams?.config.defaultStorage || 'localStorage',
+  );
   const notification = useNotification();
   const isMounted = React.useRef();
 
@@ -26,7 +34,6 @@ export function AddCluster() {
   }, []);
 
   const encodedParams = LuigiClient.getNodeParams().init;
-  const { t } = useTranslation();
 
   React.useEffect(() => {
     if (!isMounted.current) return; // avoid state updates on onmounted component
@@ -39,7 +46,8 @@ export function AddCluster() {
       }
       notification.notifySuccess(
         {
-          title: t('clusters.messages.missing-configuration-data'),
+          title:
+            'Configuration has been included properly. Please fill remaining required data.',
           type: 'info',
           icon: '',
           buttonConfirm: false,
@@ -67,13 +75,13 @@ export function AddCluster() {
       try {
         addCluster({
           kubeconfig,
-          config: { ...initParams?.config },
+          config: { ...initParams?.config, storage },
           currentContext: getContext(kubeconfig, contextName),
         });
       } catch (e) {
         notification.notifyError({
-          title: t('clusters.messages.wrong-configuration'),
-          content: t('common.tooltips.error') + e.message,
+          title: 'Cannot apply configuration',
+          content: 'Error: ' + e.message,
         });
         console.warn(e);
       }
@@ -86,8 +94,8 @@ export function AddCluster() {
   return (
     <>
       <PageHeader
-        title={t('clusters.buttons.add')}
-        description={t('clusters.messages.upload-paste-kubeconfig')}
+        title="Add Cluster"
+        description="Upload or paste your kubeconfig file"
         breadcrumbItems={[
           {
             name: 'Clusters',
@@ -98,16 +106,22 @@ export function AddCluster() {
       />
       <section className="add-cluster-form fd-margin-top--lg">
         {!kubeconfig && (
-          <KubeconfigUpload
-            handleKubeconfigAdded={handleKubeconfigAdded}
-            kubeconfigFromParams={initParams?.kubeconfig}
-          />
+          <>
+            <ChooseStorage storage={storage} setStorage={setStorage} />
+            <KubeconfigUpload
+              handleKubeconfigAdded={handleKubeconfigAdded}
+              kubeconfigFromParams={initParams?.kubeconfig}
+              storage={storage}
+              setStorage={setStorage}
+            />
+          </>
         )}
         {kubeconfig && (
           <ClusterConfiguration
             kubeconfig={kubeconfig}
             auth={{ type: AUTH_FORM_TOKEN }}
             initParams={initParams}
+            storage={storage}
             goBack={() => setKubeconfig(false)}
           />
         )}
