@@ -1,5 +1,6 @@
 import React from 'react';
 import { useGet, GenericList, ReadableCreationTimestamp } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 
 export function NodeWarnings({ nodeName }) {
   const { data, loading, error } = useGet('/api/v1/events');
@@ -16,7 +17,12 @@ export function NodeWarnings({ nodeName }) {
     .filter(e => e.type === 'Warning')
     .filter(e => e.source.host === nodeName);
 
-  const headerRenderer = () => ['Message', 'Involved object', 'Timestamp'];
+  const { t } = useTranslation();
+  const headerRenderer = () => [
+    t('node-details.message'),
+    t('node-details.involved-object'),
+    t('node-details.timestamp'),
+  ];
   const rowRenderer = e => [
     e.message,
     formatInvolvedObject(e.involvedObject),
@@ -25,7 +31,7 @@ export function NodeWarnings({ nodeName }) {
 
   return (
     <GenericList
-      title="Warnings"
+      title={t('node-details.title-warnings')}
       showSearchField={false}
       showSearchSuggestion={false}
       entries={warnings || []}

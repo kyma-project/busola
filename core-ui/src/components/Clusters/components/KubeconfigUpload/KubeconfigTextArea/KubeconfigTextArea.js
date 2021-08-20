@@ -1,6 +1,7 @@
 import React from 'react';
 import jsyaml from 'js-yaml';
 import { Button } from 'fundamental-react';
+import { useTranslation } from 'react-i18next';
 import './KubeconfigTextArea.scss';
 
 export function KubeconfigTextArea({
@@ -8,6 +9,7 @@ export function KubeconfigTextArea({
   kubeconfigFromParams,
 }) {
   const [value, setValue] = React.useState('');
+  const { t } = useTranslation();
 
   // it would be better to use just the defaultValue, but during the first render
   // kkFromParams is empty - even though it will be set in the next render
@@ -33,7 +35,7 @@ export function KubeconfigTextArea({
         onClick={() => onKubeconfigTextAdded(value)}
         disabled={!value}
       >
-        Apply kubeconfig
+        {t('clusters.buttons.apply-kubeconfig')}
       </Button>
     </div>
   );
