@@ -104,6 +104,7 @@ function Resources({
   skipDataLoading = false,
   testid,
   i18n,
+  textSearchProperties = [],
 }) {
   useWindowTitle(windowTitle || prettifyNamePlural(resourceName, resourceType));
   const { t } = useTranslation(['translation'], { i18n });
@@ -307,7 +308,11 @@ function Resources({
         title={
           showTitle ? prettifyNamePlural(resourceName, resourceType) : null
         }
-        textSearchProperties={['metadata.name', 'metadata.labels']}
+        textSearchProperties={[
+          'metadata.name',
+          'metadata.labels',
+          ...textSearchProperties,
+        ]}
         actions={actions}
         entries={resources || []}
         headerRenderer={headerRenderer}

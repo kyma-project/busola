@@ -23,6 +23,11 @@ export const ServiceInstancesList = ({ DefaultRenderer, ...otherParams }) => {
     <DefaultRenderer
       customColumns={customColumns}
       resourceName={t('btp-instances.title')}
+      textSearchProperties={[
+        'spec.serviceOfferingName',
+        'spec.servicePlanName',
+        'spec.externalName',
+      ]}
       {...otherParams}
     />
   );

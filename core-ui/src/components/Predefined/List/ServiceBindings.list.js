@@ -49,6 +49,11 @@ export const ServiceBindingsList = ({ DefaultRenderer, ...otherParams }) => {
     <DefaultRenderer
       customColumns={customColumns}
       resourceName={t('btp-service-bindings.title')}
+      textSearchProperties={[
+        'spec.serviceInstanceName',
+        'spec.externalName',
+        'spec.secretName',
+      ]}
       {...otherParams}
     />
   );
