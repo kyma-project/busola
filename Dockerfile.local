@@ -43,6 +43,9 @@ COPY --from=builder /app/backend/certs.pem /app/certs.pem
 COPY --from=builder /app/backend/package* /app/
 RUN npm ci --only=production
 
+# use sessionStorage as default
+RUN sed -i 's/"defaultStorage": "localStorage",/"defaultStorage": "sessionStorage",/g' core/assets/config/config.json 
+
 EXPOSE 3001
 ENV NODE_ENV=production ADDRESS=0.0.0.0 IS_DOCKER=true
 CMD ["node", "backend-production.js"]
