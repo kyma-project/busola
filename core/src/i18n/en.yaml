@@ -226,7 +226,9 @@ issuers:
   email: E-mail
   state: Status
   server: Server
-  domains: Domains
+  domains:
+    included: Included Domains
+    excluded: Excluded Domains
 jobs:
   completion-time: Completion Time
   completions: Completions
