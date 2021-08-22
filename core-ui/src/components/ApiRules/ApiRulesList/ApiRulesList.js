@@ -3,6 +3,7 @@ import LuigiClient from '@luigi-project/client';
 
 import { GenericList } from 'react-shared';
 import { Button } from 'fundamental-react';
+import { useTranslation } from 'react-i18next';
 
 import { formatMessage } from 'components/Lambdas/helpers/misc';
 import { ERRORS } from 'components/Lambdas/constants';
@@ -24,6 +25,7 @@ function editApiRuleModal(
   inSubView = false,
   redirectPath,
   redirectCtx,
+  t,
 ) {
   if (!inSubView) {
     LuigiClient.linkManager()
@@ -32,7 +34,7 @@ function editApiRuleModal(
     return;
   }
 
-  const formattedTitle = formatMessage(PANEL.EDIT_MODAL.TITLE, {
+  const formattedTitle = t(PANEL.EDIT_MODAL.TITLE, {
     apiRuleName: apiRule.metadata.name,
   });
 
@@ -56,6 +58,7 @@ function createApiRuleModal(
   redirectPath,
   redirectCtx,
   portForCreate,
+  t,
 ) {
   const context = service ? 'namespace' : 'namespaces';
   if (!inSubView) {
@@ -75,17 +78,17 @@ function createApiRuleModal(
       redirectPath: encodeURIComponent(redirectPath),
     })
     .openAsModal(`apirules/create`, {
-      title: PANEL.CREATE_MODAL.TITLE,
+      title: t(PANEL.CREATE_MODAL.TITLE),
     });
 }
 
-function exposeButtonText(resourceType) {
+function exposeButtonText(resourceType, t) {
   if (resourceType) {
-    return formatMessage(PANEL.EXPOSE_BUTTON.TEXT, {
+    return t(PANEL.EXPOSE_BUTTON.TEXT, {
       type: resourceType,
     });
   }
-  return PANEL.CREATE_BUTTON.TEXT;
+  return t(PANEL.CREATE_BUTTON.TEXT);
 }
 
 export default function ApiRules({
@@ -105,13 +108,20 @@ export default function ApiRules({
   disableExposeButton = false,
 }) {
   const deleteApiRule = useDeleteApiRule();
+  const { t } = useTranslation();
 
   const actions = [
     {
       name: 'Edit',
       disabledHandler: apiRule => !!apiRule.ownerSubscription, // TODO what is this ownerSubscription?
       handler: apiRule => {
-        return editApiRuleModal(apiRule, inSubView, redirectPath, redirectCtx);
+        return editApiRuleModal(
+          apiRule,
+          inSubView,
+          redirectPath,
+          redirectCtx,
+          t,
+        );
       },
     },
     {
@@ -134,11 +144,12 @@ export default function ApiRules({
           redirectPath,
           redirectCtx,
           portForCreate,
+          t,
         )
       }
       disabled={disableExposeButton || !!(serverDataLoading || serverDataError)}
     >
-      {exposeButtonText(resourceType)}
+      {exposeButtonText(resourceType, t)}
     </Button>
   );
 
@@ -149,7 +160,7 @@ export default function ApiRules({
   return (
     <div>
       <GenericList
-        title={noTitle ? '' : PANEL.LIST.TITLE}
+        title={noTitle ? '' : t(PANEL.LIST.TITLE)}
         showSearchField={true}
         textSearchProperties={textSearchProperties}
         showSearchSuggestion={false}
@@ -161,7 +172,7 @@ export default function ApiRules({
         serverDataError={serverDataError}
         serverDataLoading={serverDataLoading}
         notFoundMessage={notFoundMessage}
-        noSearchResultMessage={PANEL.LIST.ERRORS.NOT_MATCHING_SEARCH_QUERY}
+        noSearchResultMessage={t(PANEL.LIST.ERRORS.NOT_MATCHING_SEARCH_QUERY)}
         serverErrorMessage={ERRORS.SERVER}
       />
     </div>

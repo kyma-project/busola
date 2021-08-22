@@ -4,14 +4,6 @@ import { useTranslation } from 'react-i18next';
 
 import Preferences from 'components/Preferences/Preferences';
 import {
-  PREFERENCES_TITLE,
-  API_RULES_TITLE,
-  CLUSTERS_OVERVIEW_TITLE,
-  ADD_CLUSTER_TITLE,
-  NO_PERMISSIONS_TITLE,
-  CLUSTER_OVERVIEW_TITLE,
-} from 'shared/constants';
-import {
   withTitle,
   useMicrofrontendContext,
   MainFrameRedirection,
@@ -30,7 +22,7 @@ import { NodeDetails } from 'components/Nodes/NodeDetails/NodeDetails';
 
 export default function App() {
   const { cluster, language } = useMicrofrontendContext();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   useEffect(() => {
     i18n.changeLanguage(language);
   }, [language, i18n]);
@@ -40,38 +32,38 @@ export default function App() {
       <Route
         path="/no-permissions"
         exact
-        component={withTitle(NO_PERMISSIONS_TITLE, NoPermissions)}
+        component={withTitle(t('no-permissions.title'), NoPermissions)}
       />
       <Route
         path="/overview"
         exact
-        component={withTitle(CLUSTER_OVERVIEW_TITLE, ClusterOverview)}
+        component={withTitle(t('clusters.overview.title'), ClusterOverview)}
       />
       <Route path="/overview/nodes/:nodeName" component={RoutedNodeDetails} />
       <Route
         path="/clusters"
         exact
-        component={withTitle(CLUSTERS_OVERVIEW_TITLE, ClusterList)}
+        component={withTitle(t('clusters.list.title'), ClusterList)}
       />
       <Route
         path="/clusters/add"
         exact
-        component={withTitle(ADD_CLUSTER_TITLE, AddCluster)}
+        component={withTitle(t('clusters.add.title'), AddCluster)}
       />
       <Route
         path="/preferences"
-        render={withTitle(PREFERENCES_TITLE, Preferences)}
+        render={withTitle(t('preferences.title'), Preferences)}
       />
       <Route
         exact
         path="/apirules/create"
-        render={withTitle(API_RULES_TITLE, CreateApiRule)}
+        render={withTitle(t('api-rules.title'), CreateApiRule)}
       />
 
       <Route
         exact
         path="/apirules/edit/:apiName"
-        render={withTitle(API_RULES_TITLE, RoutedEditApiRule)}
+        render={withTitle(t('api-rules.title'), RoutedEditApiRule)}
       />
 
       <Route
