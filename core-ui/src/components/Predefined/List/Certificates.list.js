@@ -4,15 +4,10 @@ import LuigiClient from '@luigi-project/client';
 import { Link } from 'fundamental-react';
 import { FormattedDatetime } from 'react-shared';
 
+import { goToIssuer } from '../Details/Certificate/helpers';
+
 export const CertificatesList = ({ DefaultRenderer, ...otherParams }) => {
   const { t, i18n } = useTranslation();
-
-  const goToIssuer = certificate => {
-    const { name, namespace } = certificate.status.issuerRef;
-    LuigiClient.linkManager()
-      .fromContext('cluster')
-      .navigate(`namespaces/${namespace}/issuers/details/${name}`);
-  };
 
   const customColumns = [
     {

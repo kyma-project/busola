@@ -17,5 +17,5 @@ export * from './Job/Job.details';
 export * from './CronJobs/CronJob.details';
 export * from './DaemonSet.details';
 export * from './StatefulSet/StatefulSets.details';
-export * from './Certificate.details';
-export * from './Issuer.details';
+export * from './Certificate/Certificate.details';
+export * from './Issuer/Issuer.details';

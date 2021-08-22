@@ -44,6 +44,8 @@ certificates:
   issuer: Issuer
   state: State
   expiration-date: Expiration Date
+  common-name: Common Name
+  refs: References
 cluster-addons:
   title: Cluster Addons
 cluster-role-bindings:
