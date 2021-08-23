@@ -178,7 +178,7 @@ deployments:
       memory-limits: Memory limits
       memory-requests: Memory requests
       port: Port
-      port-placeholder: Enter port at which expose the Service
+      port-placeholder: Enter the port exposed by the Service
       runtime-profile: Runtime profile
       target-port: Target port
       target-port-placeholder: Enter the target port of the container
