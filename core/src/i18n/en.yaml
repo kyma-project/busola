@@ -172,16 +172,16 @@ daemon-sets:
 deployments:
   create-modal:
     advanced:
-      cpu-limits: CPU limits
-      cpu-requests: CPU requests
+      cpu-limits: CPU Limits
+      cpu-requests: CPU Requests
       expose-service: Expose separate Service
-      memory-limits: Memory limits
-      memory-requests: Memory requests
+      memory-limits: Memory Limits
+      memory-requests: Memory Requests
       port: Port
-      port-placeholder: Enter port at which expose the Service
-      runtime-profile: Runtime profile
-      target-port: Target port
-      target-port-placeholder: Enter target port of the container
+      port-placeholder: Enter the port exposed by the Service
+      runtime-profile: Runtime Profile
+      target-port: Target Port
+      target-port-placeholder: Enter the target port of the container
     messages:
       deployment-ok-service-bad: Deployment created, failed to create the Service
       failure: Failed to create the Deployment
@@ -190,8 +190,8 @@ deployments:
       choose: Select preset
       default: Default
     simple:
-      docker-image: Docker image
-      docker-image-placeholder: Enter Docker image tag, e.g. bitnami/nginx
+      docker-image: Docker Image
+      docker-image-placeholder: Enter Docker image tag, for example, bitnami/nginx
     title: Create Deployment
   title: Deployments
 discovery-and-network:
