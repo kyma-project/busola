@@ -1,6 +1,5 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import LuigiClient from '@luigi-project/client';
 import { Link } from 'fundamental-react';
 import { FormattedDatetime } from 'react-shared';
 
