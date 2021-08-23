@@ -3,9 +3,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import { LayoutPanel, Button } from 'fundamental-react';
 import { Tooltip } from 'react-shared';
 import { FormInput } from 'components/Lambdas/components';
+import { useTranslation } from 'react-i18next';
 
 import { useUpdateLambda, UPDATE_TYPE } from 'components/Lambdas/hooks';
-import { BUTTONS, REPOSITORY_CONFIG_PANEL } from 'components/Lambdas/constants';
+import { REPOSITORY_CONFIG_PANEL } from 'components/Lambdas/constants';
 
 import './RepositoryConfig.scss';
 
@@ -32,6 +33,8 @@ export default function RepositoryConfig({ lambda }) {
 
   const baseDirCompRef = useRef(null);
   const baseDirRef = useRef('');
+
+  const { t } = useTranslation();
 
   function clearValues() {
     referenceCompRef.current &&
@@ -123,7 +126,7 @@ export default function RepositoryConfig({ lambda }) {
           clearValues();
         }}
       >
-        {BUTTONS.CANCEL}
+        {t('common.buttons.cancel')}
       </Button>
     );
   }

@@ -114,22 +114,24 @@ common:
     created: Stworzony
     labels: Etykiety
     loading: Ładowanie...
+    logs: Logi
     name: Nazwa
     resources: Zasoby
     status: Status
-    logs: Logi
   labels:
     hostname: Nazwa hosta
     name: Nazwa
     service: Serwis
   messages:
     doesnt-exist: nie istnieje.
+    entry-not-found: Wpis nie został znaleziony
+    error: 'Błąd: {{error}}'
     loading-name: Ładowanie nazwy...
   tooltips:
     copy-to-clipboard: Skopiuj do schowka
     download: Pobierz
     duplicate-key: Zduplikowany klucz
-    error: 'Error: '
+    error: 'Błąd: '
     k8s-name-input: Nazwa musi składać się z małych znaków alfanumerycznych, może zawierać również „-” (np. „my-name1”).
     key-value: klucz=wartość, musi zaczynać się i kończyć znakiem alfanumerycznym, może zawierać również „-”, „_” lub „.”
     read-file: Odczytuj zawartość pliku jako pojedynczą wartość, z nazwą pliku jako kluczem.
@@ -169,6 +171,10 @@ deployments:
 discovery-and-network:
   title: Odkrywanie i sieć
 functions:
+  pod-list:
+    buttons:
+      view-logs: Pokaż logi
+    title: Repliki funkcji
   title: Funkcje
   variable:
     buttons:
@@ -233,10 +239,6 @@ functions:
         by-sbu: Ta zmienna może nadpisać lub być nadpisana przez zmienną wstrzykniętą przez jeden z service bindingów.
       text: Ostrzeżenie
       variable-can-override-sbu: Ta zmienna może nadpisać lub być nadpisana przez zmienną wstrzykniętą przez jeden ze stworzonych service bindingów.
-  pod-list:
-    title: Repliki funkcji
-    buttons:
-      view-logs: Pokaż logi
 generic-list:
   no-entries-found: Nie znaleziono wpisów
 git-repositories:

@@ -114,16 +114,18 @@ common:
     created: Created
     labels: Labels
     loading: Loading...
+    logs: Logs
     name: Name
     resources: Resources
     status: Status
-    logs: Logs
   labels:
     hostname: Hostname
     name: Name
     service: Service
   messages:
     doesnt-exist: doesn't exist.
+    entry-not-found: Entry not found
+    error: 'Error: {{error}}'
     loading-name: Loading name...
   tooltips:
     copy-to-clipboard: Copy to clipboard
@@ -169,6 +171,10 @@ deployments:
 discovery-and-network:
   title: Discovery and Network
 functions:
+  pod-list:
+    buttons:
+      view-logs: View logs
+    title: Replicas of the Function
   title: Functions
   variable:
     buttons:
@@ -233,10 +239,6 @@ functions:
         by-sbu: This variable can override or be overridden by a variable injected by one of the Service Bindings.
       text: Warning
       variable-can-override-sbu: This variable can override or be overridden by a variable injected by one of the created Service Bindings.
-  pod-list:
-    title: Replicas of the Function
-    buttons:
-      view-logs: View logs
 generic-list:
   no-entries-found: No entries found
 git-repositories:

@@ -3,15 +3,13 @@ import { useForm } from 'react-hook-form';
 
 import { LayoutPanel, Button } from 'fundamental-react';
 import { Tooltip } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 
 import LambdaReplicas from './LambdaReplicas';
 import LambdaResources from './LambdaResources';
 
 import { useUpdateLambda, UPDATE_TYPE } from 'components/Lambdas/hooks';
-import {
-  BUTTONS,
-  RESOURCES_MANAGEMENT_PANEL,
-} from 'components/Lambdas/constants';
+import { RESOURCES_MANAGEMENT_PANEL } from 'components/Lambdas/constants';
 import { parseCpu } from 'components/Lambdas/helpers/resources';
 import { CONFIG } from 'components/Lambdas/config';
 import {
@@ -74,6 +72,7 @@ function getDefaultFormValues(lambda) {
 
 export default function ResourcesManagement({ lambda }) {
   const defaultValues = getDefaultFormValues(lambda);
+  const { t } = useTranslation();
 
   const {
     register,
@@ -172,7 +171,7 @@ export default function ResourcesManagement({ lambda }) {
           retriggerValidation();
         }}
       >
-        {BUTTONS.CANCEL}
+        {t('common.buttons.cancel')}
       </Button>
     );
   }

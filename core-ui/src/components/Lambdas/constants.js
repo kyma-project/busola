@@ -1,6 +1,3 @@
-export const FUNCTIONS_WINDOW_TITLE = 'Functions';
-export const FIRST_BREADCRUMB_NODE = 'Functions';
-
 export const SERVERLESS_API_VERSION = 'serverless.kyma-project.io/v1alpha1';
 export const SERVERLESS_RESOURCE_KIND = 'Function';
 
@@ -18,11 +15,6 @@ export const SERVERLESS_PRESETS_LABELS = [
 
 export const REFETCH_LAMBDAS_TIMEOUT = 2000;
 
-export const BUTTONS = {
-  CANCEL: 'Cancel',
-  DELETE: 'Delete',
-};
-
 export const ERRORS = {
   SERVER: 'Server error. Contact your cluster admin.',
   RESOURCES_NOT_FOUND: "This lambda doesn't have any related resources yet.",
@@ -33,31 +25,22 @@ export const ERRORS = {
 export const LAMBDA_PHASES = {
   INITIALIZING: {
     TYPE: 'INITIALIZING',
-    TITLE: 'Initializing',
   },
   BUILDING: {
     TYPE: 'BUILDING',
-    TITLE: 'Building',
   },
   DEPLOYING: {
     TYPE: 'DEPLOYING',
-    TITLE: 'Deploying',
   },
   RUNNING: {
     TYPE: 'RUNNING',
-    TITLE: 'Running',
   },
   NEW_REVISION_ERROR: {
     TYPE: 'NEW_REVISION_ERROR',
-    TITLE: 'New Revision Error',
-    MESSAGE: `A new revision couldn't be created due to an error.`,
   },
   FAILED: {
     TYPE: 'FAILED',
-    TITLE: 'Failed',
-    MESSAGE: `Function couldn't be processed.`,
   },
-  ERROR_SUFFIX: 'Error: {error}',
 };
 
 export const PRETTY_RUNTIME_NODEJS12_NAME = 'Node.js 12';
