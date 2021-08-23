@@ -1,16 +1,24 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { Link } from 'fundamental-react';
-import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+import { EMPTY_TEXT_PLACEHOLDER, useGet, Tooltip } from 'react-shared';
 import { DefinitionList } from '../../../../shared/components/DefinitionList/DefinitionList';
 import { useTranslation } from 'react-i18next';
 
-export function ServiceBindingData({ spec, status }) {
+export function ServiceBindingData({ metadata, spec, status }) {
   const { t } = useTranslation();
   const navigateToInstance = instanceName =>
     LuigiClient.linkManager()
       .fromContext('namespace')
       .navigate(`/btp-instances/details/${instanceName}`);
+
+  const { data, loading } = useGet(
+    `/api/v1/namespaces/${metadata.namespace}/secrets/${spec.secretName}`,
+    {
+      pollingInterval: 5000,
+    },
+  );
+  const secretExists = !!data;
 
   const navigateToSecret = secretName =>
     LuigiClient.linkManager()
@@ -31,14 +39,19 @@ export function ServiceBindingData({ spec, status }) {
     },
     {
       name: t('btp-service-bindings.secret'),
-      value: (
-        <Link
-          className="fd-link"
-          onClick={() => navigateToSecret(spec.secretName)}
-        >
-          {spec.secretName}
-        </Link>
-      ),
+      value:
+        secretExists || loading ? (
+          <Link
+            className="fd-link"
+            onClick={() => navigateToSecret(spec.secretName)}
+          >
+            {spec.secretName}
+          </Link>
+        ) : (
+          <Tooltip content={t('btp-service-bindings.secret-not-found')}>
+            {spec.secretName}
+          </Tooltip>
+        ),
     },
     { name: t('btp-service-bindings.external-name'), value: spec.externalName },
     {

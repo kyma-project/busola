@@ -59,6 +59,7 @@ btp-service-bindings:
   instance-name: Service Instance name
   parameters: Instance Binding Parameters
   secret: Secret
+  secret-not-found: This secret doesn't exist.
   title: BTP Service Bindings
 catalog:
   menu-title: Catalog
