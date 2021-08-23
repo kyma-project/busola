@@ -879,7 +879,7 @@ export function getStaticChildrenNodesForNamespace(
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
       context: {
-        requiredFeatures: [features.SERVERLESS],
+        requiredFeatures: [features.CUSTOM_DOMAINS],
       },
       children: [
         {
@@ -916,7 +916,7 @@ export function getStaticChildrenNodesForNamespace(
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
       context: {
-        requiredFeatures: [features.SERVERLESS],
+        requiredFeatures: [features.CUSTOM_DOMAINS],
       },
       children: [
         {
