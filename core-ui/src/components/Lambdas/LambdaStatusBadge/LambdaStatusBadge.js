@@ -28,12 +28,12 @@ export function LambdaStatusBadge({ status }) {
     const formattedError = t('common.messages.error', {
       error: translatedStatus.message,
     });
-    tooltipText = `${texts.MESSAGE} ${formattedError}`;
+    tooltipText = `${t(texts.MESSAGE)} ${formattedError}`;
   }
 
   return (
     <StatusBadge tooltipContent={tooltipText} type={badgeType}>
-      {texts.TITLE}
+      {t(texts.TITLE)}
     </StatusBadge>
   );
 }

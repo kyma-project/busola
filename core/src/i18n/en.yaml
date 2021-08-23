@@ -171,6 +171,14 @@ deployments:
 discovery-and-network:
   title: Discovery and Network
 functions:
+  statuses:
+    initializing: Initializing
+    building: Building
+    deploying: Deploying
+    running: Running
+    new-revision-error: New Revision Error
+    failed: Failed
+    failed-message: Function couldn't be processed.
   pod-list:
     buttons:
       view-logs: View logs

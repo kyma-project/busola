@@ -171,6 +171,14 @@ deployments:
 discovery-and-network:
   title: Odkrywanie i sieć
 functions:
+  statuses:
+    initializing: Inicjowanie
+    building: Budowanie
+    deploying: Wdrażanie
+    running: Działanie
+    new-revision-error: Błąd nowej wersji
+    failed: Nieudane
+    failed-message: Nie udało się przetworzyć funkcji.
   pod-list:
     buttons:
       view-logs: Pokaż logi
