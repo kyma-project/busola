@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ServiceInstanceStatus } from 'shared/components/ServiceInstanceStatus';
+import { BTPResourceStatus } from 'shared/components/BTPResourceStatus';
 
 export const ServiceInstancesList = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
@@ -20,7 +20,7 @@ export const ServiceInstancesList = ({ DefaultRenderer, ...otherParams }) => {
     },
     {
       header: t('common.headers.status'),
-      value: resource => <ServiceInstanceStatus serviceInstance={resource} />,
+      value: resource => <BTPResourceStatus status={resource.status} />,
     },
   ];
 

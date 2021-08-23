@@ -2,7 +2,7 @@ import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'fundamental-react';
-import { ServiceBindingStatus } from '../../../shared/components/ServiceBindingStatus';
+import { BTPResourceStatus } from 'shared/components/BTPResourceStatus';
 
 export const ServiceBindingsList = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
@@ -31,7 +31,7 @@ export const ServiceBindingsList = ({ DefaultRenderer, ...otherParams }) => {
     },
     {
       header: t('common.headers.status'),
-      value: resource => <ServiceBindingStatus serviceBinding={resource} />,
+      value: resource => <BTPResourceStatus status={resource.status} />,
     },
   ];
 

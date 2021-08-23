@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
-import { ServiceBindingStatus } from '../../../../shared/components/ServiceBindingStatus';
+import { BTPResourceStatus } from 'shared/components/BTPResourceStatus';
 import { ServiceBindingData } from './ServiceBindingData';
 
 export const ServiceBindingsDetails = ({ DefaultRenderer, ...otherParams }) => {
@@ -23,7 +23,7 @@ export const ServiceBindingsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const customColumns = [
     {
       header: t('common.headers.status'),
-      value: resource => <ServiceBindingStatus serviceBinding={resource} />,
+      value: resource => <BTPResourceStatus status={resource.status} />,
     },
   ];
 

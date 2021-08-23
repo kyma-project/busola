@@ -1,5 +1,5 @@
 import React from 'react';
-import { ServiceInstanceStatus } from 'shared/components/ServiceInstanceStatus';
+import { BTPResourceStatus } from 'shared/components/BTPResourceStatus';
 import { ServiceBindingList } from './ServiceBindingList';
 import { ServiceInstanceData } from './ServiceInstanceData';
 import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
@@ -27,7 +27,7 @@ export const ServiceInstancesDetails = ({
   const customColumns = [
     {
       header: t('common.headers.status'),
-      value: resource => <ServiceInstanceStatus serviceInstance={resource} />,
+      value: resource => <BTPResourceStatus status={resource.status} />,
     },
   ];
 
