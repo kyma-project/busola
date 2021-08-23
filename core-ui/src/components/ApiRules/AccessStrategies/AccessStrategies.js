@@ -3,6 +3,7 @@ import classNames from 'classnames';
 
 import { GenericList } from 'react-shared';
 import { InfoLabel, Icon } from 'fundamental-react';
+import { useTranslation } from 'react-i18next';
 
 import accessStrategyTypes, { usesMethods } from '../accessStrategyTypes';
 
@@ -51,6 +52,7 @@ export default function AccessStrategies({
   showSearchField = true,
   compact = false,
 }) {
+  const { t } = useTranslation();
   return (
     <div
       className={classNames('api-rules__access-strategies', {
@@ -59,7 +61,7 @@ export default function AccessStrategies({
       aria-label="Access strategies"
     >
       <GenericList
-        title={ACCESS_STRATEGIES_PANEL.LIST.TITLE}
+        title={t(ACCESS_STRATEGIES_PANEL.LIST.TITLE)}
         showSearchField={showSearchField}
         textSearchProperties={textSearchProperties}
         showSearchSuggestion={false}

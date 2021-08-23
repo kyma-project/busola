@@ -11,6 +11,7 @@ import {
 import * as constants from './constants';
 import { hasNonOidcAuth } from '../auth/auth';
 import { applyKubeconfigIdIfPresent } from './../kubeconfig-id';
+import { getDefaultStorage } from '../cluster-management/clusters-storage';
 
 const getEncoder = async () => {
   const createEncoder = (await import('json-url')).default;
@@ -78,7 +79,7 @@ async function setupFromParams() {
         ...constants.DEFAULT_FEATURES,
         ...(decoded.config?.features || {}),
       },
-      storage: 'localStorage',
+      storage: await getDefaultStorage(),
     },
     currentContext: {
       cluster: decoded.kubeconfig.clusters[0],

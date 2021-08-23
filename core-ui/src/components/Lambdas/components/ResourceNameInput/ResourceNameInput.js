@@ -4,8 +4,6 @@ import { FormItem, FormLabel, MessageStrip } from 'fundamental-react';
 import { K8sNameInput } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
-import { FORMS } from '../../constants';
-
 import './ResourceNameInput.scss';
 
 export function ResourceNameInput({ nameStatus, kind, ...otherProps }) {
@@ -13,13 +11,13 @@ export function ResourceNameInput({ nameStatus, kind, ...otherProps }) {
     <MessageStrip type="error">{nameStatus}</MessageStrip>
   ) : null;
 
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   return (
     <div className="resource-name-input">
       <FormItem>
         <FormLabel className="resource-name-input__label" required={true}>
-          {FORMS.RESOURCE_NAME.LABEL}
+          {t('common.headers.name')}
         </FormLabel>
         <K8sNameInput {...otherProps} kind={kind} i18n={i18n} />
         {validationMessage}
