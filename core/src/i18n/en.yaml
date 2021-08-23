@@ -173,7 +173,7 @@ dnsentries:
     provider: Provider
     provider-type: Provider type
     spec: Specification
-    status: Status
+    status: $t(common.headers.status)
     targets: Targets
     ttl: TTL
   title: DNS Entries
@@ -183,7 +183,7 @@ dnsproviders:
     exclude: Excluded domains
     include: Included domains
     type: Type
-    status: Status
+    status: $t(common.headers.status)
   title: DNS Providers
 functions:
   title: Functions

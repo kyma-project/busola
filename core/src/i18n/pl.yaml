@@ -173,7 +173,7 @@ dnsentries:
     provider: Dostawca
     provider-type: Typ dostawcy
     spec: Specyfikacja
-    status: Status
+    status: $t(common.headers.status)
     targets: Cele
     ttl: TTL
   title: Wpisy DNS
@@ -183,7 +183,7 @@ dnsproviders:
     exclude: Wykluczone domeny
     include: Zawarte domeny
     type: Typ
-    status: Status
+    status: $t(common.headers.status)
   title: Dostawcy DNS
 functions:
   title: Funkcje
