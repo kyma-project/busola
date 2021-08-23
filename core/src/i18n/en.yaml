@@ -181,7 +181,7 @@ deployments:
       port-placeholder: Enter port at which expose the Service
       runtime-profile: Runtime profile
       target-port: Target port
-      target-port-placeholder: Enter target port of the container
+      target-port-placeholder: Enter the target port of the container
     messages:
       deployment-ok-service-bad: Deployment created, failed to create the Service
       failure: Failed to create the Deployment
