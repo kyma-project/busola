@@ -23,6 +23,7 @@ export const ServiceBindingsList = ({ DefaultRenderer, ...otherParams }) => {
           {resource.spec.serviceInstanceName}
         </Link>
       ),
+      id: 'service-instance-name',
     },
     {
       header: t('btp-service-bindings.external-name'),

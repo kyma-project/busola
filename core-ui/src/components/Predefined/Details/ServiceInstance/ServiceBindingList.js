@@ -16,6 +16,7 @@ export function ServiceBindingList(instance) {
     showTitle: true,
     filter: binding =>
       binding.spec.serviceInstanceName === instance.metadata.name,
+    omitColumnsIds: ['service-instance-name'],
   };
   return (
     <ComponentForList
