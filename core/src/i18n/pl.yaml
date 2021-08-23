@@ -335,6 +335,8 @@ pods:
   node: Węzeł
   restarts: Ponownych uruchomień
   title: Pody
+preferences:
+  title: Ustawienia
 replica-sets:
   title: Zestawy replik
 role-bindings:

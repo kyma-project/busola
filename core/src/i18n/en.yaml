@@ -335,6 +335,8 @@ pods:
   node: Node
   restarts: Restarts
   title: Pods
+preferences:
+  title: Preferences
 replica-sets:
   title: ReplicaSets
 role-bindings:
