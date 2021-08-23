@@ -191,7 +191,7 @@ deployments:
       default: Default
     simple:
       docker-image: Docker image
-      docker-image-placeholder: Enter Docker image tag, e.g. bitnami/nginx
+      docker-image-placeholder: Enter Docker image tag, for example, bitnami/nginx
     title: Create Deployment
   title: Deployments
 discovery-and-network:
