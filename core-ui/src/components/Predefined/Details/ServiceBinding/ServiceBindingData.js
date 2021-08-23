@@ -1,6 +1,7 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { Link } from 'fundamental-react';
+import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 import { DefinitionList } from '../../../../shared/components/DefinitionList/DefinitionList';
 import { useTranslation } from 'react-i18next';
 
@@ -42,11 +43,11 @@ export function ServiceBindingData({ spec, status }) {
     { name: t('btp-service-bindings.external-name'), value: spec.externalName },
     {
       name: t('btp-service-bindings.binding-id'),
-      value: status.bindingID || t('common.messages.not-set'),
+      value: status.bindingID || EMPTY_TEXT_PLACEHOLDER,
     },
     {
       name: t('btp-service-bindings.instance-id'),
-      value: status.instanceID || t('common.messages.not-set'),
+      value: status.instanceID || EMPTY_TEXT_PLACEHOLDER,
     },
   ];
 

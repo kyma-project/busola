@@ -140,7 +140,6 @@ common:
   messages:
     doesnt-exist: doesn't exist.
     loading-name: Loading name...
-    not-set: Not set
   tooltips:
     copy-to-clipboard: Copy to clipboard
     download: Download

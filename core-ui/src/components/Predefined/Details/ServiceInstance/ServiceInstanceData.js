@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 import { DefinitionList } from '../../../../shared/components/DefinitionList/DefinitionList';
 
 export function ServiceInstanceData({ spec, status }) {
@@ -19,7 +20,7 @@ export function ServiceInstanceData({ spec, status }) {
     },
     {
       name: t('btp-instances.instance-id'),
-      value: status.instanceID || t('common.messages.not-set'),
+      value: status.instanceID || EMPTY_TEXT_PLACEHOLDER,
     },
   ];
 
