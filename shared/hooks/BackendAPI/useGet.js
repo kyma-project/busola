@@ -134,7 +134,7 @@ export const useGetStream = path => {
 
               processData(value);
 
-              // browsers close the connection after a minute (only on cluster!), erroring with:
+              // browsers close the connection after a minute (only on a cluster!), erroring with:
               // FF: TypeError: Error in body stream
               // Chrome: TypeError: network error
               // Safari: The operation couldn’t be completed. (kCFErrorDomainCFNetwork error 303.)
@@ -143,7 +143,6 @@ export const useGetStream = path => {
 
               return push();
             } catch (e) {
-              console.log(e);
               processError(e);
             }
           };
