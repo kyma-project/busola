@@ -174,25 +174,25 @@ deployments:
     advanced:
       cpu-limits: Limity CPU
       cpu-requests: Żądania CPU
-      expose-service: Dodaj osobno Serwis
+      expose-service: Dodaj osobno serwis
       memory-limits: Limity pamięci
       memory-requests: Żądania pamięci
       port: Port
-      port-description: Port na którym wystawić Serwis
+      port-description: Port na którym wystawić serwis
       runtime-profile: Profil runtime
       target-port: Port docelowy
       target-port-placeholder: Port docelowy w kontenerze
     messages:
-      deployment-ok-service-bad: Dodano Deployment, nie udało się dodać Serwisu
-      failure: Nie udało się dodać Deploymentu
-      success: Dodano Deployment
+      deployment-ok-service-bad: Dodano deployment, nie udało się dodać serwisu
+      failure: Nie udało się dodać deploymentu
+      success: Dodano deployment
     presets:
       choose: Wybierz jedną z predefiniowanych wartości
       default: Domyślny
     simple:
-      docker-image: Obraz Dockerowy
-      docker-image-placeholder: Obraz Dockerowy, np. bitnami/nginx
-    title: Dodaj Deployment
+      docker-image: Obraz dockerowy
+      docker-image-placeholder: Obraz dockerowy, np. bitnami/nginx
+    title: Dodaj deployment
   title: Deploymenty
 discovery-and-network:
   title: Odkrywanie i sieć
