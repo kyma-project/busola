@@ -101,6 +101,12 @@ common:
     create: Stwórz
     delete: Usuń
     edit-yaml: Edytuj YAML
+    save: Zapisz
+  create-modal:
+    editor-error: 'Błąd parsowania: {{error}}, zmiany nie zostaną zapisane.'
+    modes:
+      advanced: Zaawansowane
+      simple: Minimalne
   delete-dialog:
     delete-confirm: Nie pytaj ponownie
     information: Wyłączyłeś potwierdzenia usuwania dla wszystkich zasobów. Możnesz je ponownie włączyć w Ustawieniach.
@@ -164,6 +170,29 @@ daemon-sets:
     title: Tolerancje
     toleration-seconds: Sekundy
 deployments:
+  create-modal:
+    advanced:
+      cpu-limits: Limity CPU
+      cpu-requests: Żądania CPU
+      expose-service: Dodaj osobno serwis
+      memory-limits: Limity pamięci
+      memory-requests: Żądania pamięci
+      port: Port
+      port-description: Port na którym wystawić serwis
+      runtime-profile: Profil runtime
+      target-port: Port docelowy
+      target-port-placeholder: Port docelowy w kontenerze
+    messages:
+      deployment-ok-service-bad: Dodano deployment, nie udało się dodać serwisu
+      failure: Nie udało się dodać deploymentu
+      success: Dodano deployment
+    presets:
+      choose: Wybierz jedną z predefiniowanych wartości
+      default: Domyślny
+    simple:
+      docker-image: Obraz dockerowy
+      docker-image-placeholder: Obraz dockerowy, np. bitnami/nginx
+    title: Dodaj deployment
   title: Deploymenty
 discovery-and-network:
   title: Odkrywanie i sieć
@@ -277,6 +306,7 @@ namespaces:
       title: Zużycie zasobów
     title: Przegląd
     workloads:
+      deploy-new: Dodaj...
       deployments: $t(deployments.title)
       error: 'Błąd podczas ładowania danych dla {{title}} z powodu: {{message}}'
       pods: $t(pods.title)

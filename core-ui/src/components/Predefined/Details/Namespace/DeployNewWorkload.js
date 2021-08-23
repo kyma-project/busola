@@ -1,14 +1,12 @@
 import React from 'react';
 import { Popover, Menu, Button } from 'fundamental-react';
-import {
-  ModalWithForm,
-  useGetList,
-  useMicrofrontendContext,
-} from 'react-shared';
-import CreateWorkloadForm from './CreateWorkloadForm/CreateWorkloadForm';
+import { useGetList, useMicrofrontendContext } from 'react-shared';
+import { CreateDeploymentForm } from 'shared/components/CreateDeploymentForm/CreateDeploymentForm';
 import CreateLambdaModal from 'components/Lambdas/LambdasList/Lambdas/CreateLambdaModal';
+import { useTranslation } from 'react-i18next';
 
 export default function DeployNewWorkload({ namespaceName }) {
+  const { t } = useTranslation();
   const microfrontendContext = useMicrofrontendContext();
   const { features } = microfrontendContext;
 
@@ -48,20 +46,17 @@ export default function DeployNewWorkload({ namespaceName }) {
   ) : null;
 
   const deploymentModal = (
-    <ModalWithForm
-      title="Create Deployment"
-      confirmText="Create"
-      className="add-deployment-modal"
-      modalOpeningComponent={<Menu.Item>Create Deployment</Menu.Item>}
-      renderForm={props => (
-        <CreateWorkloadForm namespaceId={namespaceName} {...props} />
-      )}
+    <CreateDeploymentForm
+      namespaceId={namespaceName}
+      modalOpeningComponent={
+        <Menu.Item>{t('deployments.create-modal.title')}</Menu.Item>
+      }
     />
   );
 
   const control = (
     <Button option="transparent" className="fd-margin-end--tiny" glyph="add">
-      Deploy new workload
+      {t('namespaces.overview.workloads.deploy-new')}
     </Button>
   );
 
@@ -70,10 +65,6 @@ export default function DeployNewWorkload({ namespaceName }) {
       body={
         <Menu>
           <Menu.List>
-            {/* <DeployResourceModal
-              namespace={namespaceNameame}
-              modalOpeningComponent={<Menu.Item>Upload YAML</Menu.Item>}
-            /> */}
             {lambdaModal}
             {deploymentModal}
           </Menu.List>

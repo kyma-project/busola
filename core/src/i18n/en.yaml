@@ -101,6 +101,12 @@ common:
     create: Create
     delete: Delete
     edit-yaml: Edit YAML
+    save: Save
+  create-modal:
+    editor-error: "Parse error: {{error}}, changes won't be saved."
+    modes:
+      advanced: Advanced
+      simple: Simple
   delete-dialog:
     delete-confirm: Don't ask this again
     information: You've switched off removal confirmations for all resources. You can switch them back on in Preferences.
@@ -164,6 +170,29 @@ daemon-sets:
     title: Tolerations
     toleration-seconds: Seconds
 deployments:
+  create-modal:
+    advanced:
+      cpu-limits: CPU Limits
+      cpu-requests: CPU Requests
+      expose-service: Expose separate Service
+      memory-limits: Memory Limits
+      memory-requests: Memory Requests
+      port: Port
+      port-placeholder: Enter the port exposed by the Service
+      runtime-profile: Runtime Profile
+      target-port: Target Port
+      target-port-placeholder: Enter the target port of the container
+    messages:
+      deployment-ok-service-bad: Deployment created, failed to create the Service
+      failure: Failed to create the Deployment
+      success: Deployment created
+    presets:
+      choose: Select preset
+      default: Default
+    simple:
+      docker-image: Docker Image
+      docker-image-placeholder: Enter Docker image tag, for example, bitnami/nginx
+    title: Create Deployment
   title: Deployments
 discovery-and-network:
   title: Discovery and Network
@@ -277,6 +306,7 @@ namespaces:
       title: Resource Consumption
     title: Overview
     workloads:
+      deploy-new: Deploy new workload
       deployments: $t(deployments.title)
       error: 'Error while loading {{title}} data due to: {{message}}'
       pods: $t(pods.title)
