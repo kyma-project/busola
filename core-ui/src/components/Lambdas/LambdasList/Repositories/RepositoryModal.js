@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Button } from 'fundamental-react';
 
@@ -7,8 +8,6 @@ import { useCreateRepository } from 'components/Lambdas/hooks';
 import { ModalWithForm } from 'react-shared';
 import RepositoryForm, { FORM_TYPE } from './RepositoryForm';
 
-import { REPOSITORIES_LIST } from 'components/Lambdas/constants';
-
 export function CreateRepositoryModal({
   repositoryNames = [],
   serverDataError = false,
@@ -16,6 +15,7 @@ export function CreateRepositoryModal({
 }) {
   const createRepository = useCreateRepository();
   const [invalidModalPopupMessage, setInvalidModalPopupMessage] = useState('');
+  const { t } = useTranslation();
 
   const modalOpeningComponent = (
     <Button
@@ -23,15 +23,15 @@ export function CreateRepositoryModal({
       option="transparent"
       disabled={Boolean(serverDataError || serverDataLoading)}
     >
-      {REPOSITORIES_LIST.CREATE_MODAL.OPEN_BUTTON.TEXT}
+      {t('functions.repositories-list.create.title')}
     </Button>
   );
 
   return (
     <ModalWithForm
-      title={REPOSITORIES_LIST.CREATE_MODAL.TITLE}
+      title={t('functions.repositories-list.create.title')}
       modalOpeningComponent={modalOpeningComponent}
-      confirmText={REPOSITORIES_LIST.CREATE_MODAL.CONFIRM_BUTTON.TEXT}
+      confirmText={t('functions.repositories-list.create.buttons.confirm')}
       invalidPopupMessage={invalidModalPopupMessage}
       id="create-repository-modal"
       className="repositories-list__create-repository-modal"

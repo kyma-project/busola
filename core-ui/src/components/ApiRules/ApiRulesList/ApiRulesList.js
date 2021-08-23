@@ -172,7 +172,7 @@ export default function ApiRules({
         serverDataLoading={serverDataLoading}
         notFoundMessage={notFoundMessage}
         noSearchResultMessage={t(PANEL.LIST.ERRORS.NOT_MATCHING_SEARCH_QUERY)}
-        serverErrorMessage={ERRORS.SERVER}
+        serverErrorMessage={t(ERRORS.SERVER)}
       />
     </div>
   );

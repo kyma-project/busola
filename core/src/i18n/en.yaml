@@ -171,18 +171,29 @@ deployments:
 discovery-and-network:
   title: Discovery and Network
 functions:
-  statuses:
-    initializing: Initializing
-    building: Building
-    deploying: Deploying
-    running: Running
-    new-revision-error: New Revision Error
-    failed: Failed
-    failed-message: Function couldn't be processed.
+  create-view:
+    buttons:
+      confirm: Create
+      create: Create Function
+  errors:
+    server: Server error. Contact your cluster admin.
   pod-list:
     buttons:
       view-logs: View logs
     title: Replicas of the Function
+  repositories-list:
+    create:
+      buttons:
+        confirm: Connect
+      title: Connect Repository
+  statuses:
+    building: Building
+    deploying: Deploying
+    failed: Failed
+    failed-message: Function couldn't be processed.
+    initializing: Initializing
+    new-revision-error: New Revision Error
+    running: Running
   title: Functions
   variable:
     buttons:

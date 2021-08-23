@@ -171,18 +171,29 @@ deployments:
 discovery-and-network:
   title: Odkrywanie i sieć
 functions:
-  statuses:
-    initializing: Inicjowanie
-    building: Budowanie
-    deploying: Wdrażanie
-    running: Działanie
-    new-revision-error: Błąd nowej wersji
-    failed: Nieudane
-    failed-message: Nie udało się przetworzyć funkcji.
+  create-view:
+    buttons:
+      confirm: Stwórz
+      create: Stwórz Funkcję
+  errors:
+    server: Błąd serwera. Skontaktuj się z administratorem klastra.
   pod-list:
     buttons:
       view-logs: Pokaż logi
     title: Repliki funkcji
+  repositories-list:
+    create:
+      buttons:
+        confirm: Połącz
+      title: Połącz repozytorium
+  statuses:
+    building: Budowanie
+    deploying: Wdrażanie
+    failed: Nieudane
+    failed-message: Nie udało się przetworzyć funkcji.
+    initializing: Inicjowanie
+    new-revision-error: Błąd nowej wersji
+    running: Działanie
   title: Funkcje
   variable:
     buttons:

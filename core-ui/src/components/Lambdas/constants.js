@@ -16,10 +16,7 @@ export const SERVERLESS_PRESETS_LABELS = [
 export const REFETCH_LAMBDAS_TIMEOUT = 2000;
 
 export const ERRORS = {
-  SERVER: 'Server error. Contact your cluster admin.',
-  RESOURCES_NOT_FOUND: "This lambda doesn't have any related resources yet.",
-  NOT_MATCHING_SEARCH_QUERY: "Couldn't find resources matching this query.",
-  NOT_MATCHING_FILTERS: "Couldn't find resources matching these filters.",
+  SERVER: 'functions.errors.server',
 };
 
 export const LAMBDA_PHASES = {
@@ -60,26 +57,8 @@ export const LAMBDA_ERROR_PHASES = [
   LAMBDA_PHASES.NEW_REVISION_ERROR.TYPE,
 ];
 
-export const TOOLBAR = {
-  TITLE: 'Functions',
-  DESCRIPTION:
-    'Extend your applications with Functions that you can trigger with incoming events and expose outside the cluster with API Rules.',
-};
-
 export const LAMBDAS_LIST = {
-  TAB_TITLE: 'Functions',
-  ERRORS: {
-    RESOURCES_NOT_FOUND: 'There are no Functions in this Namespace yet.',
-    NOT_MATCHING_SEARCH_QUERY: "Couldn't find Functions matching this query.",
-  },
   CREATE_MODAL: {
-    TITLE: 'Create Function',
-    OPEN_BUTTON: {
-      TEXT: 'Create Function',
-    },
-    CONFIRM_BUTTON: {
-      TEXT: 'Create',
-    },
     ERRORS: {
       INVALID: 'At least one field is empty or incorrectly formatted.',
       NO_REPOSITORY_FOUND:
@@ -141,21 +120,6 @@ export const FUNCTION_SOURCE_TYPE = {
 };
 
 export const REPOSITORIES_LIST = {
-  TAB_TITLE: 'Repositories',
-  ERRORS: {
-    RESOURCES_NOT_FOUND: 'There are no Repositories in this Namespace yet.',
-    NOT_MATCHING_SEARCH_QUERY:
-      "Couldn't find Repositories matching this query.",
-  },
-  CREATE_MODAL: {
-    TITLE: 'Connect Repository',
-    OPEN_BUTTON: {
-      TEXT: 'Connect Repository',
-    },
-    CONFIRM_BUTTON: {
-      TEXT: 'Connect',
-    },
-  },
   UPDATE_MODAL: {
     TITLE: 'Update Repository {repositoryName}',
     CONFIRM_BUTTON: {
