@@ -6,7 +6,6 @@ import {
   FormInput,
   FormItem,
 } from 'fundamental-react';
-import { TextFormItem } from 'react-shared';
 import { merge } from 'lodash';
 import { SimpleForm } from './SimpleForm';
 import './AdvancedForm.scss';
@@ -114,32 +113,50 @@ export function AdvancedForm({ deployment, setDeployment }) {
       actions={serviceActions}
     >
       <FormFieldset>
-        <TextFormItem
-          type="number"
-          inputKey="port"
-          required
-          label={t('deployments.create-modal.advanced.port')}
-          placeholder={t('deployments.create-modal.advanced.port-placeholder')}
-          defaultValue={deployment.serviceData.port.port || 0}
-          value={deployment.serviceData.port.port}
-          inputProps={{ disabled: !deployment.serviceData.create }}
-          onChange={e =>
-            setServiceData({ port: { port: e.target.valueAsNumber } })
+        <CreateModal.FormField
+          label={
+            <FormLabel required>
+              {t('deployments.create-modal.advanced.port')}
+            </FormLabel>
+          }
+          input={
+            <FormInput
+              type="number"
+              required
+              compact
+              placeholder={t(
+                'deployments.create-modal.advanced.port-placeholder',
+              )}
+              disabled={!deployment.serviceData.create}
+              value={deployment.serviceData.port.port}
+              onChange={e =>
+                setServiceData({ port: { port: e.target.valueAsNumber || '' } })
+              }
+            />
           }
         />
-        <TextFormItem
-          type="number"
-          inputKey="target-port"
-          required
-          inputProps={{ disabled: !deployment.serviceData.create }}
-          label={t('deployments.create-modal.advanced.target-port')}
-          placeholder={t(
-            'deployments.create-modal.advanced.target-port-placeholder',
-          )}
-          defaultValue={deployment.serviceData.port.targetPort || 0}
-          value={deployment.serviceData.port.targetPort}
-          onChange={e =>
-            setServiceData({ port: { targetPort: e.target.valueAsNumber } })
+        <CreateModal.FormField
+          label={
+            <FormLabel required>
+              {t('deployments.create-modal.advanced.target-port')}
+            </FormLabel>
+          }
+          input={
+            <FormInput
+              type="number"
+              required
+              compact
+              placeholder={t(
+                'deployments.create-modal.advanced.target-port-placeholder',
+              )}
+              disabled={!deployment.serviceData.create}
+              value={deployment.serviceData.port.targetPort}
+              onChange={e =>
+                setServiceData({
+                  port: { targetPort: e.target.valueAsNumber || '' },
+                })
+              }
+            />
           }
         />
       </FormFieldset>

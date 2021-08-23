@@ -1,13 +1,23 @@
 .create-modal {
-    .fd-dialog__body {
-        padding: 0;
-        min-width: 25rem;
-        width: 75vw;
-        height: 50vh;
-        max-height: calc(100vh - 8rem);
-    }
+  .fd-dialog__body {
+    padding: 0;
+    min-width: 25rem;
+    width: 75vw;
+    height: 50vh;
+    max-height: calc(100vh - 8rem);
+  }
 
-    .dropdown {
-        margin-top: unset;
+  .dropdown {
+    margin-top: unset;
+  }
+
+  .form-field {
+    align-items: baseline;
+
+    @media (min-width: 600px) {
+      &__label {
+        text-align: right;
+      }
     }
+  }
 }

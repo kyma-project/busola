@@ -133,6 +133,15 @@ export function CreateModal({
 
 CreateModal.CollapsibleSection = CollapsibleSection;
 
+CreateModal.FormField = function({ label, input }) {
+  return (
+    <div className="fd-row form-field">
+      <div className="fd-col fd-col-md--4 form-field__label">{label}</div>
+      <div className="fd-col fd-col-md--7">{input}</div>
+    </div>
+  );
+};
+
 CreateModal.Section = ({ children }) => (
   <div className="fd-margin--sm">{children}</div>
 );
