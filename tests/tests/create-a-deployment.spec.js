@@ -50,29 +50,29 @@ context('Create a Deployment', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('Runtime profile')
+      .contains('Runtime Profile')
       .click();
 
     cy.getIframeBody()
-      .contains('label', 'Memory requests')
+      .contains('label', 'Memory Requests')
       .next('input')
       .clear()
       .type('16Mi');
 
     cy.getIframeBody()
-      .contains('label', 'Memory limits')
+      .contains('label', 'Memory Limits')
       .next('input')
       .clear()
       .type('32Mi');
 
     cy.getIframeBody()
-      .contains('label', 'CPU requests')
+      .contains('label', 'CPU Requests')
       .next('input')
       .clear()
       .type('10m');
 
     cy.getIframeBody()
-      .contains('label', 'CPU limits')
+      .contains('label', 'CPU Limits')
       .next('input')
       .clear()
       .type('20m');
