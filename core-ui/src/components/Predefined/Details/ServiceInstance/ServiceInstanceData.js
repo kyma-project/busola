@@ -25,6 +25,10 @@ export function ServiceInstanceData({ spec, status }) {
   ];
 
   return (
-    <DefinitionList title="Instance Data" list={list} key="instance-data" />
+    <DefinitionList
+      title={t('btp-instances.instance-data')}
+      list={list}
+      key="instance-data"
+    />
   );
 }

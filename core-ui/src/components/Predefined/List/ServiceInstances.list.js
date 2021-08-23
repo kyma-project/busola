@@ -7,19 +7,19 @@ export const ServiceInstancesList = ({ DefaultRenderer, ...otherParams }) => {
 
   const customColumns = [
     {
-      header: 'Offering name',
+      header: t('btp-instances.offering-name'),
       value: resource => resource.spec.serviceOfferingName,
     },
     {
-      header: 'Plan name',
+      header: t('btp-instances.plan-name'),
       value: resource => resource.spec.servicePlanName,
     },
     {
-      header: 'External name',
+      header: t('btp-instances.external-name'),
       value: resource => resource.spec.externalName,
     },
     {
-      header: 'Status',
+      header: t('common.headers.status'),
       value: resource => <ServiceInstanceStatus serviceInstance={resource} />,
     },
   ];

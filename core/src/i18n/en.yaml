@@ -45,6 +45,7 @@ brokers:
   title: Brokers
 btp-instances:
   external-name: External Name
+  instance-data: Service Instance data
   instance-id: Instance ID
   offering-name: Offering name
   parameters: Instance Parameters
