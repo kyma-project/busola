@@ -138,6 +138,9 @@ export const useGetStream = path => {
             } catch (e) {
               // Chrome closes connections after a while.
               // Refetch logs after the connection has been closed.
+              console.log(e.message);
+              console.log(e.toString());
+              console.log(e);
               if (e.toString().includes('network error'))
                 return setTimeout(refetchData);
               else processError(e);
