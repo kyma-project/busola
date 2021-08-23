@@ -179,7 +179,7 @@ deployments:
       memory-requests: Memory requests
       port: Port
       port-placeholder: Enter the port exposed by the Service
-      runtime-profile: Runtime profile
+      runtime-profile: Runtime Profile
       target-port: Target port
       target-port-placeholder: Enter the target port of the container
     messages:
