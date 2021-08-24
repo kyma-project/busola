@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Button } from 'fundamental-react';
 import { useNotification } from 'react-shared';
 import { base64Decode, base64Encode } from 'shared/helpers';
+import { useTranslation } from 'react-i18next';
 
 function applyOnEntries(fn, entries) {
   return entries.map(e => ({ ...e, value: fn(e.value) }));
@@ -21,6 +22,8 @@ export function DecodeSecretSwitch({
   isEncoded,
   setEncoded,
 }) {
+  const { t } = useTranslation();
+
   const notification = useNotification();
 
   const onClick = () => {
@@ -31,10 +34,8 @@ export function DecodeSecretSwitch({
       setEncoded(!isEncoded);
     } catch (e) {
       notification.notifyError({
-        title: 'Failed to decode the Secret data',
-        content:
-          "Some of the secret data couldn't be decoded. Correct them and try again: " +
-          e.message,
+        title: t('secrets.error.failed-to-decode'),
+        content: t('secrets.error.failed-to-decode-long') + e.message,
       });
     }
   };
@@ -45,7 +46,7 @@ export function DecodeSecretSwitch({
       glyph={isEncoded ? 'show' : 'hide'}
       onClick={onClick}
     >
-      {isEncoded ? 'Decode' : 'Encode'}
+      {isEncoded ? t('secrets.buttons.decode') : t('secrets.buttons.encode')}
     </Button>
   );
 }

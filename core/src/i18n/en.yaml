@@ -5,6 +5,7 @@ addons:
   messages:
     created: Addons Configuration {{name}} created
   title: Addons
+  urls: URLs
 api-rules:
   access-strategies:
     buttons:
@@ -316,6 +317,10 @@ machine-info:
   pods-capacity: Pods capacity
   title: Machine info
 namespaces:
+  create-modal:
+    apply-limits: Apply limits per container
+    apply-memory-quotas: Apply Total Memory Quotas
+    disable-sidecar: Disable side-car injection
   overview:
     back: Back to Namespaces
     resources:
@@ -348,6 +353,19 @@ node-details:
   title-warnings: Warnings
 oauth2-clients:
   title: OAuth2 Clients
+  grand-types:
+    client-credentials: Client credentials
+    authorization-code: Authorization code
+    implicit: Implicit
+    refresh-token: Refresh token
+  labels:
+    grand-types: Grant types
+    response-types: Response types
+    scope: Scope
+  response-types:
+    id-token: ID token
+    code: Code
+    token: Token
 observability:
   title: Observability
 pods:
@@ -359,11 +377,38 @@ preferences:
 replica-sets:
   title: ReplicaSets
 role-bindings:
+  aria:
+    choose-role: Choose role
+  errors:
+    cannot-create: Cannot create Role Binding
+  messages:
+    created: Role Binding {{name}} created
+  labels:
+    arrow: Show roles
+    role: Role
+    user: User
+    user-group: User Group
+  placeholders:
+    choose-role: Choose role...
+    user-group: User group
+    user-name: User name
   title: RoleBindings
+  tooltip:
+    no-found: No Roles found
 roles:
   title: Roles
 secrets:
+  buttons:
+    decode: Decode
+    encode: Encode
+  data: Data
+  metadata: Metadata
+  labels:
+    type: Secret type
   title: Secrets
+  error:
+    failed-to-decode: Failed to decode the Secret data
+    failed-to-decode-long: "Some of the secret data couldn't be decoded. Correct them and try again:"
 service-management:
   title: Service Management
 services:

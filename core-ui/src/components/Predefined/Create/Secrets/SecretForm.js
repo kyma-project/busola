@@ -47,7 +47,7 @@ export function SecretForm({
     onSubmit(secretInput);
   };
 
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const metadataContent = (
     <>
       <div className="secrets-form-metadata">
@@ -63,7 +63,7 @@ export function SecretForm({
         </div>
         <TextFormItem
           inputKey="type"
-          label="Secret type"
+          label={t('secrets.labels.type')}
           inputProps={{ value: secret.type, disabled: true }}
         />
       </div>
@@ -103,8 +103,8 @@ export function SecretForm({
       noValidate
     >
       <TabGroup>
-        <Tab title="Metadata">{metadataContent}</Tab>
-        <Tab title="Data">{secretDataContent}</Tab>
+        <Tab title={t('secrets.metadata')}>{metadataContent}</Tab>
+        <Tab title={t('secrets.data')}>{secretDataContent}</Tab>
       </TabGroup>
     </form>
   );
