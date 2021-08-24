@@ -12,7 +12,7 @@ export function SimpleForm({ deployment, setDeployment }) {
     <CreateModal.Section>
       <FormFieldset>
         <CreateModal.FormField
-          label={<FormLabel>{t('common.labels.name')}</FormLabel>}
+          label={<FormLabel required>{t('common.labels.name')}</FormLabel>}
           input={
             <K8sNameInput
               showLabel={false}
