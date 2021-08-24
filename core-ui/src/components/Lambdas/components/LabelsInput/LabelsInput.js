@@ -6,13 +6,15 @@ import { useTranslation } from 'react-i18next';
 
 import './LabelsInput.scss';
 
-export function LabelsInput({ ...otherProps }) {
+export function LabelsInput({ showFormLabel = true, ...otherProps }) {
   const { t } = useTranslation();
   return (
     <div className="resource-labels-input">
-      <FormLabel className="resource-labels-input__label">
-        {t('common.headers.labels')}
-      </FormLabel>
+      {showFormLabel && (
+        <FormLabel className="resource-labels-input__label">
+          {t('common.headers.labels')}
+        </FormLabel>
+      )}
       <LabelSelectorInput {...otherProps} />
     </div>
   );
