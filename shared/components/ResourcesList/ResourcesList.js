@@ -54,6 +54,7 @@ ResourcesList.propTypes = {
   readOnly: PropTypes.bool,
   navigateFn: PropTypes.func,
   testid: PropTypes.string,
+  omitColumnsIds: PropTypes.arrayOf(PropTypes.string.isRequired),
 };
 
 ResourcesList.defaultProps = {
@@ -105,6 +106,8 @@ function Resources({
   skipDataLoading = false,
   testid,
   i18n,
+  textSearchProperties = [],
+  omitColumnsIds = [],
 }) {
   useWindowTitle(windowTitle || prettifyNamePlural(resourceName, resourceType));
   const { t } = useTranslation(['translation'], { i18n });
@@ -130,6 +133,8 @@ function Resources({
     resourceName,
     resourceType,
   );
+
+  customColumns = customColumns.filter(col => !omitColumnsIds.includes(col.id));
 
   const withoutQueryString = path => path.split('?')[0];
 
@@ -157,6 +162,10 @@ function Resources({
     const url = withoutQueryString(resourceUrl) + '/' + resource.metadata.name;
     const name = prettifyNameSingular(resourceType);
 
+    LuigiClient.sendCustomMessage({
+      id: 'busola.dontConfirmDelete',
+      value: dontConfirmDelete,
+    });
     try {
       await deleteResourceMutation(url);
       notification.notifySuccess({
@@ -175,11 +184,6 @@ function Resources({
   const closeDeleteDialog = () => {
     LuigiClient.uxManager().removeBackdrop();
     setShowDeleteDialog(false);
-  };
-
-  const toggleDontConfirmDelete = value => {
-    LuigiClient.sendCustomMessage({ id: 'busola.dontConfirmDelete', value });
-    setDontConfirmDelete(value);
   };
 
   async function handleResourceDelete(resource) {
@@ -286,7 +290,9 @@ function Resources({
           >
             {t('common.buttons.delete')}
           </Button>,
-          <Button compact>{t('common.buttons.cancel')}</Button>,
+          <Button onClick={() => setDontConfirmDelete(false)} compact>
+            {t('common.buttons.cancel')}
+          </Button>,
         ]}
         show={showDeleteDialog}
         onClose={closeDeleteDialog}
@@ -298,7 +304,7 @@ function Resources({
           })}
         </p>
         <div className="fd-margin-top--sm">
-          <Checkbox onChange={e => toggleDontConfirmDelete(e.target.checked)}>
+          <Checkbox onChange={e => setDontConfirmDelete(e.target.checked)}>
             {t('common.delete-dialog.delete-confirm')}
           </Checkbox>
         </div>
@@ -312,7 +318,11 @@ function Resources({
         title={
           showTitle ? prettifyNamePlural(resourceName, resourceType) : null
         }
-        textSearchProperties={['metadata.name', 'metadata.labels']}
+        textSearchProperties={[
+          'metadata.name',
+          'metadata.labels',
+          ...textSearchProperties,
+        ]}
         actions={actions}
         entries={resources || []}
         headerRenderer={headerRenderer}

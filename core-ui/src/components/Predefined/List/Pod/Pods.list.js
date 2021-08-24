@@ -12,7 +12,7 @@ export const PodsList = ({ DefaultRenderer, ...otherParams }) => {
 
   let customColumns = [
     {
-      header: t('common.status'),
+      header: t('common.headers.status'),
       value: pod => <PodStatus pod={pod} />,
     },
     {

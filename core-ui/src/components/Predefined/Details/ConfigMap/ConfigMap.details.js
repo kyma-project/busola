@@ -1,35 +1,14 @@
 import React from 'react';
-import { ModalWithForm, MonacoEditor, useTheme } from 'react-shared';
-import { Button, LayoutPanel } from 'fundamental-react';
+import { ModalWithForm } from 'react-shared';
+import { Button } from 'fundamental-react';
 import { EditConfigMapForm } from './EditConfigMapForm';
+import { ReadonlyEditorPanel } from '../../../../shared/components/ReadonlyEditorPanel';
 
 export const ConfigMapsDetails = ({ DefaultRenderer, ...otherParams }) => {
-  const { editorTheme } = useTheme();
-
-  const options = {
-    readOnly: true,
-    minimap: {
-      enabled: false,
-    },
-  };
-
   const ConfigMapEditor = resource => {
     const { data } = resource;
     return Object.keys(data || {}).map(key => (
-      <LayoutPanel key={key} className="fd-margin--md">
-        <LayoutPanel.Header>
-          <LayoutPanel.Head title={key} />
-        </LayoutPanel.Header>
-        <LayoutPanel.Body>
-          <MonacoEditor
-            key={`editor-${key}`}
-            theme={editorTheme}
-            height="20em"
-            value={data[key]}
-            options={options}
-          />
-        </LayoutPanel.Body>
-      </LayoutPanel>
+      <ReadonlyEditorPanel title={key} value={data[key]} key={key} />
     ));
   };
 

@@ -134,13 +134,16 @@ export const useGetStream = path => {
 
               processData(value);
 
+              // browsers close the connection after a minute (only on a cluster!), erroring with:
+              // FF: TypeError: Error in body stream
+              // Chrome: TypeError: network error
+              // Safari: The operation couldn’t be completed. (kCFErrorDomainCFNetwork error 303.)
+              // reset the connection a little before
+              setTimeout(refetchData, 55 * 1000);
+
               return push();
             } catch (e) {
-              // Chrome closes connections after a while.
-              // Refetch logs after the connection has been closed.
-              if (e.toString().includes('network error'))
-                return setTimeout(refetchData);
-              else processError(e);
+              processError(e);
             }
           };
           push();
@@ -159,6 +162,7 @@ export const useGetStream = path => {
 
   function refetchData() {
     cancelReader();
+    setData([]);
     fetchData();
   }
 
