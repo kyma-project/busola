@@ -1,15 +1,11 @@
 import LuigiClient from '@luigi-project/client';
 
-export const goToIssuer = certificate => {
-  const { name, namespace } = certificate.status.issuerRef;
+export const goToIssuer = ({ name, namespace }) =>
   LuigiClient.linkManager()
     .fromContext('cluster')
     .navigate(`namespaces/${namespace}/issuers/details/${name}`);
-};
 
-export const goToSecret = certificate => {
-  const { name, namespace } = certificate.spec.secretRef;
+export const goToSecret = ({ name, namespace }) =>
   LuigiClient.linkManager()
     .fromContext('cluster')
     .navigate(`namespaces/${namespace}/secrets/details/${name}`);
-};

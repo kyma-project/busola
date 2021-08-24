@@ -1,9 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'fundamental-react';
 import { FormattedDatetime } from 'react-shared';
 
-import { goToIssuer } from '../Details/Certificate/helpers';
+import { IssuerLink } from '../Details/Certificate/IssuerLink';
 
 export const CertificatesList = ({ DefaultRenderer, ...otherParams }) => {
   const { t, i18n } = useTranslation();
@@ -11,11 +10,10 @@ export const CertificatesList = ({ DefaultRenderer, ...otherParams }) => {
   const customColumns = [
     {
       header: t('certificates.issuer'),
-      value: certificate => (
-        <Link onClick={() => goToIssuer(certificate)}>
-          {certificate.status.issuerRef.name}
-        </Link>
-      ),
+      value: certificate => {
+        console.log('issuerRef', certificate.status.issuerRef);
+        return <IssuerLink issuerRef={certificate.status.issuerRef} />;
+      },
     },
     {
       header: t('certificates.state'),

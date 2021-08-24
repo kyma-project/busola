@@ -1,13 +1,13 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { LayoutPanel, Link, FormItem, FormLabel } from 'fundamental-react';
-import { goToIssuer, goToSecret } from './helpers';
+
+import { goToSecret } from './helpers';
+import { IssuerLink } from './IssuerLink';
 import './CertificateRefs.scss';
 
 export function CertificateRefs(certificate) {
   const { t } = useTranslation();
-
-  console.log(certificate);
 
   return (
     <LayoutPanel className="fd-margin--md certificate-refs-panel">
@@ -16,13 +16,11 @@ export function CertificateRefs(certificate) {
       </LayoutPanel.Header>
       <FormItem>
         <FormLabel>Issuer</FormLabel>
-        <Link onClick={() => goToIssuer(certificate)}>
-          {certificate.status.issuerRef.name}
-        </Link>
+        <IssuerLink issuerRef={certificate.status.issuerRef} />
       </FormItem>
       <FormItem>
         <FormLabel>Secret</FormLabel>
-        <Link onClick={() => goToSecret(certificate)}>
+        <Link onClick={() => goToSecret(certificate.status.secretRef)}>
           {certificate.spec.secretRef.name}
         </Link>
       </FormItem>
