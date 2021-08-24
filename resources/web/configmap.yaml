@@ -71,7 +71,7 @@ data:
                   "apiGroup": "dnsproviders.dns.gardener.cloud"
                 }
               ]
-            }
+            },
             "OBSERVABILITY": {
               "isEnabled": true,
               "config": {
