@@ -60,13 +60,6 @@ export const LAMBDA_ERROR_PHASES = [
 export const LAMBDAS_LIST = {
   CREATE_MODAL: {
     INPUTS: {
-      NAME: {
-        ERRORS: {
-          EMPTY: 'Function name is required.',
-          INVALID: `Name must contain lower case alphanumeric characters, can contain '-'  (like 'my-name1').`,
-          TOO_LONG: 'Function name cannot be longer than 63 characters.',
-        },
-      },
       RUNTIME: {
         LABEL: 'Runtime',
         INLINE_HELP: `Runtime on which your Function will run`,

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import {
   randomNameGenerator,
@@ -47,6 +48,8 @@ export default function RepositoryForm({
   const authTypeRef = useRef('');
   const secretNameRef = useRef('');
 
+  const { t } = useTranslation();
+
   const addError = useCallback(
     (...newErrors) => setErrors(oldErrors => [...oldErrors, ...newErrors]),
     [setErrors],
@@ -79,6 +82,7 @@ export default function RepositoryForm({
       name,
       repositoryNames,
       REPOSITORIES_LIST.MODAL_INPUTS.NAME.ERRORS,
+      t,
     );
     if (validationMessage) {
       setNameStatus(validationMessage);
@@ -87,7 +91,7 @@ export default function RepositoryForm({
     }
     setNameStatus('');
     removeError(ERRORS.NAME);
-  }, [setNameStatus, repositoryNames, name, addError, removeError]);
+  }, [setNameStatus, repositoryNames, name, addError, removeError, t]);
 
   useEffect(() => {
     if (errors.length) {
@@ -122,6 +126,7 @@ export default function RepositoryForm({
       secretName,
       [],
       REPOSITORIES_LIST.MODAL_INPUTS.SECRET_NAME.ERRORS,
+      t,
     );
     if (validationMessage) {
       setStatus(validationMessage);

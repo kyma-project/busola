@@ -97,6 +97,7 @@ export default function CreateLambdaForm({
     const validationMessage = validateResourceName(
       name,
       LAMBDAS_LIST.CREATE_MODAL.INPUTS.NAME.ERRORS,
+      t,
     );
     if (validationMessage) {
       setNameStatus(validationMessage);

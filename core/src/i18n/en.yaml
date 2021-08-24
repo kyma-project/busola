@@ -176,6 +176,8 @@ functions:
       confirm: Create
       create: Create Function
     errors:
+      too-long: Function name cannot be longer than 63 characters.
+      required-name: Function name is required.
       invalid: At least one field is empty or incorrectly formatted.
       no-repository-found: There are no Repositories available. Create a new Repository first.
   errors:
