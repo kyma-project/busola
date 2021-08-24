@@ -175,6 +175,9 @@ functions:
     buttons:
       confirm: Stwórz
       create: Stwórz Funkcję
+    errors:
+      invalid: Co najmniej jedno pole jest puste lub niepoprawnie sformatowane.
+      no-repository-found: Brak dostępnych repozytoriów. Najpierw utwórz nowe repozytorium.
   errors:
     server: Błąd serwera. Skontaktuj się z administratorem klastra.
   pod-list:

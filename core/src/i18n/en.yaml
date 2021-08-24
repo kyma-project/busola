@@ -175,6 +175,9 @@ functions:
     buttons:
       confirm: Create
       create: Create Function
+    errors:
+      invalid: At least one field is empty or incorrectly formatted.
+      no-repository-found: There are no Repositories available. Create a new Repository first.
   errors:
     server: Server error. Contact your cluster admin.
   pod-list:

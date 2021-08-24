@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { MessageStrip } from 'fundamental-react';
 import {
   randomNameGenerator,
@@ -60,22 +61,23 @@ export default function CreateLambdaForm({
     [setErrors],
   );
 
+  const { t } = useTranslation();
   useEffect(() => {
     if (isValid && errors.length) {
-      setInvalidModalPopupMessage(LAMBDAS_LIST.CREATE_MODAL.ERRORS.INVALID);
+      setInvalidModalPopupMessage(t('functions.create-view.errors.invalid'));
       setValid(false);
     } else if (!isValid && !errors.length) {
       setInvalidModalPopupMessage('');
       setValid(true);
     }
-  }, [isValid, errors, setValid, setInvalidModalPopupMessage]);
+  }, [isValid, errors, setValid, setInvalidModalPopupMessage, t]);
 
   useEffect(() => {
     if (sourceType) {
       if (!repositories.length) {
         addError(ERRORS.REPOSITORY_URL);
         setInvalidModalPopupMessage(
-          LAMBDAS_LIST.CREATE_MODAL.ERRORS.NO_REPOSITORY_FOUND,
+          t('functions.create-view.errors.no-repository-found'),
         );
       }
     } else {
@@ -87,6 +89,7 @@ export default function CreateLambdaForm({
     repositories,
     addError,
     removeError,
+    t,
   ]);
 
   function validateName(name) {
@@ -216,7 +219,7 @@ export default function CreateLambdaForm({
       {sourceType &&
         (!repositories.length ? (
           <MessageStrip dismissible={false} type="information">
-            {LAMBDAS_LIST.CREATE_MODAL.ERRORS.NO_REPOSITORY_FOUND}
+            {t('functions.create-view.errors.no-repository-found')}
           </MessageStrip>
         ) : (
           <>

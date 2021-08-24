@@ -59,11 +59,6 @@ export const LAMBDA_ERROR_PHASES = [
 
 export const LAMBDAS_LIST = {
   CREATE_MODAL: {
-    ERRORS: {
-      INVALID: 'At least one field is empty or incorrectly formatted.',
-      NO_REPOSITORY_FOUND:
-        'There are no Repositories available. Create a new Repository first.',
-    },
     INPUTS: {
       NAME: {
         ERRORS: {
