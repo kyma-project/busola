@@ -181,7 +181,7 @@ deployments:
       memory-limits: Limity pamięci
       memory-requests: Żądania pamięci
       port: Port
-      port-description: Port na którym wystawić serwis
+      port-placeholder: Wprowadź port wystawiony przez serwis
       runtime-profile: Profil runtime
       target-port: Port docelowy
       target-port-placeholder: Port docelowy w kontenerze
@@ -205,10 +205,20 @@ functions:
       confirm: Stwórz
       create: Stwórz Funkcję
     errors:
-      too-long: Nazwa funkcji nie może być dłuższa niż 63 znaki.
-      required-name: Nazwa funkcji jest wymagana.
       invalid: Co najmniej jedno pole jest puste lub niepoprawnie sformatowane.
       no-repository-found: Brak dostępnych repozytoriów. Najpierw utwórz nowe repozytorium.
+      required-name: Nazwa funkcji jest wymagana.
+      too-long: Nazwa funkcji nie może być dłuższa niż 63 znaki.
+    inline-help:
+      repository: Repozytorium, którego chcesz użyć
+      runtime: Środowisko wykonawcze, w którym będzie działać Twoja funkcja
+      source-type: 'Typ źródła kodu funkcji: edytor wbudowany (kod i zależności są dostarczane jako zwykły tekst) lub repozytorium Git (kod i zależności są pobierane z repozytorium Git)'
+    labels:
+      git-repository: Repozytorium Git
+      inline-editor: Edytor wbudowany
+      repository: Repository
+      runtime: Runtime
+      source-type: Typ źródła
   errors:
     server: Błąd serwera. Skontaktuj się z administratorem klastra.
   pod-list:

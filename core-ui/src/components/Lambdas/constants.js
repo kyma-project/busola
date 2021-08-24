@@ -60,27 +60,17 @@ export const LAMBDA_ERROR_PHASES = [
 export const LAMBDAS_LIST = {
   CREATE_MODAL: {
     INPUTS: {
-      RUNTIME: {
-        LABEL: 'Runtime',
-        INLINE_HELP: `Runtime on which your Function will run`,
-      },
       SOURCE_TYPE: {
-        LABEL: 'Source Type',
-        INLINE_HELP: `Type of your Function's code source: Inline editor (code and dependencies are provided as plain text) or Git repository (code and dependencies are fetched from a Git repository)`,
         OPTIONS: [
           {
-            VALUE: 'Inline editor',
+            VALUE: 'functions.create-view.labels.inline-editor',
             KEY: '',
           },
           {
-            VALUE: 'Git repository',
+            VALUE: 'functions.create-view.labels.git-repository',
             KEY: 'git',
           },
         ],
-      },
-      REPOSITORY: {
-        LABEL: 'Repository',
-        INLINE_HELP: `Repository which you want to use`,
       },
       REFERENCE: {
         LABEL: 'Reference',

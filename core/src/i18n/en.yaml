@@ -205,10 +205,20 @@ functions:
       confirm: Create
       create: Create Function
     errors:
-      too-long: Function name cannot be longer than 63 characters.
-      required-name: Function name is required.
       invalid: At least one field is empty or incorrectly formatted.
       no-repository-found: There are no Repositories available. Create a new Repository first.
+      required-name: Function name is required.
+      too-long: Function name cannot be longer than 63 characters.
+    inline-help:
+      repository: Repository which you want to use
+      runtime: Runtime on which your Function will run
+      source-type: "Type of your Function's code source: Inline editor (code and dependencies are provided as plain text) or Git repository (code and dependencies are fetched from a Git repository)"
+    labels:
+      git-repository: Git repository
+      inline-editor: Inline editor
+      repository: Repository
+      runtime: Runtime
+      source-type: Source Type
   errors:
     server: Server error. Contact your cluster admin.
   pod-list:

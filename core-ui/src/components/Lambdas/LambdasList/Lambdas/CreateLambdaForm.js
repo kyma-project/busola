@@ -170,7 +170,7 @@ export default function CreateLambdaForm({
   const sourceTypeOptions = LAMBDAS_LIST.CREATE_MODAL.INPUTS.SOURCE_TYPE.OPTIONS.map(
     sourceType => ({
       key: sourceType.KEY,
-      text: sourceType.VALUE,
+      text: t(sourceType.VALUE),
     }),
   );
   const repositoryOptions = repositories?.map(repository => ({
@@ -201,20 +201,20 @@ export default function CreateLambdaForm({
 
       <Dropdown
         id="function-runtime-dropdown"
-        label={LAMBDAS_LIST.CREATE_MODAL.INPUTS.RUNTIME.LABEL}
+        label={t('functions.create-view.labels.runtime')}
         options={runtimeOptions}
         selectedKey={runtimeOptions[0].key}
         onSelect={(_, selected) => setRuntime(selected.key)}
-        inlineHelp={LAMBDAS_LIST.CREATE_MODAL.INPUTS.RUNTIME.INLINE_HELP}
+        inlineHelp={t('functions.create-view.inline-help.runtime')}
       />
 
       <Dropdown
         id="function-source-dropdown"
-        label={LAMBDAS_LIST.CREATE_MODAL.INPUTS.SOURCE_TYPE.LABEL}
+        label={t('functions.create-view.labels.source-type')}
         options={sourceTypeOptions}
         selectedKey={sourceTypeOptions[0].key}
         onSelect={(_, selected) => setSourceType(selected.key)}
-        inlineHelp={LAMBDAS_LIST.CREATE_MODAL.INPUTS.SOURCE_TYPE.INLINE_HELP}
+        inlineHelp={t('functions.create-view.inline-help.source-type')}
       />
 
       {sourceType &&
@@ -226,13 +226,11 @@ export default function CreateLambdaForm({
           <>
             <Dropdown
               id="function-repos-dropdown"
-              label={LAMBDAS_LIST.CREATE_MODAL.INPUTS.REPOSITORY.LABEL}
+              label={t('functions.create-view.labels.repository')}
               options={repositoryOptions}
               selectedKey={repositoryOptions[0].key}
               onSelect={(_, selected) => setRepositoryName(selected.key)}
-              inlineHelp={
-                LAMBDAS_LIST.CREATE_MODAL.INPUTS.REPOSITORY.INLINE_HELP
-              }
+              inlineHelp={t('functions.create-view.inline-help.repository')}
             />
 
             <FormInput

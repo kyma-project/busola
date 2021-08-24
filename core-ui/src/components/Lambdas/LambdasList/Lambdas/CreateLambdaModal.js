@@ -27,7 +27,7 @@ export default function CreateLambdaModal({
 
   return (
     <ModalWithForm
-      title={t('functions.buttons.create')}
+      title={t('functions.create-view.buttons.create')}
       modalOpeningComponent={
         modalOpeningComponent || defaultModalOpeningComponent
       }
