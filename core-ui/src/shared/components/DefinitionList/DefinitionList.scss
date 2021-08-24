@@ -1,0 +1,11 @@
+.definition-list {
+  dl {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-row-gap: 4px;
+
+    dt {
+      color: var(--sapContent_LabelColor);
+    }
+  }
+}
