@@ -171,7 +171,7 @@ dnsentries:
   headers:
     dns-name: DNS Name
     provider: Provider
-    provider-type: Provider type
+    provider-type: Provider Type
     spec: Specification
     status: $t(common.headers.status)
     targets: Targets
@@ -180,8 +180,8 @@ dnsentries:
 dnsproviders:
   domains: Domains
   headers:
-    exclude: Excluded domains
-    include: Included domains
+    exclude: Excluded Domains
+    include: Included Domains
     type: Type
     status: $t(common.headers.status)
   title: DNS Providers
