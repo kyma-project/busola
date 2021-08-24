@@ -45,21 +45,21 @@ brokers:
   title: Brokers
 btp-instances:
   external-name: External Name
-  instance-data: Service Instance data
+  instance-data: Service Instance Data
   instance-id: Instance ID
-  offering-name: Offering name
+  offering-name: Offering Name
   parameters: Instance Parameters
-  plan-name: Plan name
+  plan-name: Plan Name
   title: BTP Service Instances
 btp-service-bindings:
   binding-id: Binding ID
   data: Binding Data
   external-name: External Name
   instance-id: Instance ID
-  instance-name: Service Instance name
+  instance-name: Service Instance Name
   parameters: Instance Binding Parameters
   secret: Secret
-  secret-not-found: This secret doesn't exist.
+  secret-not-found: This Secret doesn't exist.
   title: BTP Service Bindings
 catalog:
   menu-title: Catalog
