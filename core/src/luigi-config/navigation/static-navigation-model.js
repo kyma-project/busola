@@ -987,6 +987,43 @@ export function getStaticChildrenNodesForNamespace(
     },
     {
       category: i18next.t('configuration.title'),
+      resourceType: 'gatewats',
+      pathSegment: 'gateways',
+      label: i18next.t('gateways.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/gateways?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/networking.istio.io/v1beta1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+      context: {
+        requiredFeatures: [features.CUSTOM_DOMAINS],
+      },
+
+      navigationContext: 'gateways',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':gatewayName',
+              resourceType: 'gateways',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/gateways/:gatewayName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/networking.istio.io/v1beta1',
+                }),
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: i18next.t('configuration.title'),
       resourceType: 'issuers',
       pathSegment: 'issuers',
       label: i18next.t('issuers.title'),
