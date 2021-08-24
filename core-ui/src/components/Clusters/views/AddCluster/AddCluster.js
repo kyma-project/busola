@@ -7,6 +7,7 @@ import {
   useNotification,
   useMicrofrontendContext,
 } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 import { AUTH_FORM_TOKEN } from '../../components/AuthForm';
 import { KubeconfigUpload } from '../../components/KubeconfigUpload/KubeconfigUpload';
 import {
@@ -34,6 +35,7 @@ export function AddCluster() {
   }, []);
 
   const encodedParams = LuigiClient.getNodeParams().init;
+  const { t } = useTranslation();
 
   React.useEffect(() => {
     if (!isMounted.current) return; // avoid state updates on onmounted component
@@ -46,8 +48,7 @@ export function AddCluster() {
       }
       notification.notifySuccess(
         {
-          title:
-            'Configuration has been included properly. Please fill remaining required data.',
+          title: t('clusters.messages.missing-configuration-data'),
           type: 'info',
           icon: '',
           buttonConfirm: false,
@@ -80,8 +81,8 @@ export function AddCluster() {
         });
       } catch (e) {
         notification.notifyError({
-          title: 'Cannot apply configuration',
-          content: 'Error: ' + e.message,
+          title: t('clusters.messages.wrong-configuration'),
+          content: t('common.tooltips.error') + e.message,
         });
         console.warn(e);
       }
@@ -94,8 +95,8 @@ export function AddCluster() {
   return (
     <>
       <PageHeader
-        title="Add Cluster"
-        description="Upload or paste your kubeconfig file"
+        title={t('clusters.add.title')}
+        description={t('clusters.messages.upload-paste-kubeconfig')}
         breadcrumbItems={[
           {
             name: 'Clusters',

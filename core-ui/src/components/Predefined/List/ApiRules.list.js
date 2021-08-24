@@ -28,7 +28,7 @@ export const ApiRulesList = ({ DefaultRenderer, ...otherParams }) => {
             redirectPath: encodeURIComponent('apirules/'),
           })
           .openAsModal(`apirules/create`, {
-            title: PANEL.CREATE_MODAL.TITLE,
+            title: t(PANEL.CREATE_MODAL.TITLE),
           })
       }
     >

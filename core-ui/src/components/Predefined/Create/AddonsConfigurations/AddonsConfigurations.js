@@ -21,6 +21,7 @@ export const AddonsConfigurations = ({
   const [newUrl, setNewUrl] = useState('');
   const [urls, setUrls] = useState([]);
   const request = usePost();
+  const { t } = useTranslation();
 
   useEffect(_ => setCustomValid(!!urls.length), [urls, setCustomValid]);
 
@@ -66,10 +67,14 @@ export const AddonsConfigurations = ({
 
     try {
       await request(resourceUrl, resourceData);
-      onCompleted(`Addons Configuration ${name} created`);
+      onCompleted(
+        t('addons.messages.created', {
+          name: name,
+        }),
+      );
       refetchList();
     } catch (e) {
-      onError('Cannot create Addons Configuration', `Error: ${e.message}`);
+      onError(t('addons.errors.cannot-create'), `Error: ${e.message}`);
     }
   };
 
