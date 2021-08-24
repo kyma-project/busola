@@ -27,6 +27,14 @@ export function CreateModal({
   const formRef = React.useRef();
   const [formValid, setFormValid] = React.useState(false);
 
+  React.useEffect(() => {
+    if (isOpen) {
+      LuigiClient.uxManager().addBackdrop();
+    } else {
+      LuigiClient.uxManager().removeBackdrop();
+    }
+  }, [isOpen]);
+
   function revalidate() {
     // wait for React to flush the updates
     setTimeout(() => {
@@ -35,22 +43,6 @@ export function CreateModal({
   }
 
   React.useEffect(revalidate, [formRef, resource]);
-
-  function setOpenStatus(status) {
-    if (status) {
-      LuigiClient.uxManager().addBackdrop();
-    } else {
-      LuigiClient.uxManager().removeBackdrop();
-    }
-    setOpen(status);
-  }
-
-  async function confirm(e) {
-    e && e.preventDefault();
-    if ((await onCreate()) !== false) {
-      setOpenStatus(false);
-    }
-  }
 
   const formsToDisplay = (
     <>
@@ -73,7 +65,7 @@ export function CreateModal({
         style={{
           display: mode === ModeSelector.MODE_ADVANCED ? 'initial' : 'none',
         }}
-        onSubmit={confirm}
+        onSubmit={onCreate}
       >
         {advancedForm}
       </form>
@@ -101,12 +93,10 @@ export function CreateModal({
   );
 
   const actions = [
-    <Button disabled={!formValid} onClick={confirm}>
+    <Button disabled={!formValid} onClick={onCreate}>
       {t('common.buttons.create')}
     </Button>,
-    <Button onClick={() => setOpenStatus(false)} option="transparent">
-      {t('common.buttons.cancel')}
-    </Button>,
+    <Button option="transparent">{t('common.buttons.cancel')}</Button>,
   ];
 
   return (
@@ -119,7 +109,7 @@ export function CreateModal({
         show={isOpen}
         actions={actions}
         onClose={() => {
-          setOpenStatus(false);
+          setOpen(false);
           setMode(ModeSelector.MODE_SIMPLE);
           onClose && onClose();
         }}

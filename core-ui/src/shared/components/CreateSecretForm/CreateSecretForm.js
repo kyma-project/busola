@@ -20,14 +20,7 @@ export function CreateSecretForm({ namespaceId, modalOpeningComponent }) {
   const [secret, setSecret] = React.useState(createSecretTemplate(namespaceId));
 
   modalOpeningComponent = modalOpeningComponent || (
-    <Button
-      glyph="add"
-      onClick={() => {
-        LuigiClient.uxManager().addBackdrop();
-      }}
-    >
-      {t('secrets.create-modal.title')}
-    </Button>
+    <Button glyph="add">{t('secrets.create-modal.title')}</Button>
   );
 
   const createSecret = async () => {
