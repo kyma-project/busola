@@ -50,10 +50,7 @@ export default function App() {
         exact
         component={withTitle(t('clusters.add.title'), AddCluster)}
       />
-      <Route
-        path="/preferences"
-        render={withTitle(t('preferences.title'), Preferences)}
-      />
+      <Route path="/preferences" render={Preferences} />
       <Route
         exact
         path="/apirules/create"
