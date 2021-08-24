@@ -22,3 +22,5 @@ export * from './DaemonSets.list';
 export * from './StatefulSets.list';
 export * from './Certificates.list';
 export * from './Issuers.list';
+export * from './ServiceInstances.list';
+export * from './ServiceBindings.list';

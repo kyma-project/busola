@@ -54,6 +54,7 @@ ResourcesList.propTypes = {
   readOnly: PropTypes.bool,
   navigateFn: PropTypes.func,
   testid: PropTypes.string,
+  omitColumnsIds: PropTypes.arrayOf(PropTypes.string.isRequired),
 };
 
 ResourcesList.defaultProps = {
@@ -105,6 +106,8 @@ function Resources({
   skipDataLoading = false,
   testid,
   i18n,
+  textSearchProperties = [],
+  omitColumnsIds = [],
 }) {
   useWindowTitle(windowTitle || prettifyNamePlural(resourceName, resourceType));
   const { t } = useTranslation(['translation'], { i18n });
@@ -130,6 +133,8 @@ function Resources({
     resourceName,
     resourceType,
   );
+
+  customColumns = customColumns.filter(col => !omitColumnsIds.includes(col.id));
 
   const withoutQueryString = path => path.split('?')[0];
 
@@ -313,7 +318,11 @@ function Resources({
         title={
           showTitle ? prettifyNamePlural(resourceName, resourceType) : null
         }
-        textSearchProperties={['metadata.name', 'metadata.labels']}
+        textSearchProperties={[
+          'metadata.name',
+          'metadata.labels',
+          ...textSearchProperties,
+        ]}
         actions={actions}
         entries={resources || []}
         headerRenderer={headerRenderer}

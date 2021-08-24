@@ -36,6 +36,14 @@ const DEFAULT_CONFIG = {
         },
       ],
     },
+    BTP_SERVICE_CATALOG: {
+      selectors: [
+        {
+          type: 'apiGroup',
+          apiGroup: 'services.cloud.sap.com',
+        },
+      ],
+    },
     SERVICE_CATALOG_ADDONS: {
       selectors: [
         {
