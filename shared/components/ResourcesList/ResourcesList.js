@@ -181,10 +181,6 @@ function Resources({
     setShowDeleteDialog(false);
   };
 
-  const toggleDontConfirmDelete = value => {
-    setDontConfirmDelete(value);
-  };
-
   async function handleResourceDelete(resource) {
     if (dontConfirmDelete) {
       performDelete(resource);
@@ -303,7 +299,7 @@ function Resources({
           })}
         </p>
         <div className="fd-margin-top--sm">
-          <Checkbox onChange={e => toggleDontConfirmDelete(e.target.checked)}>
+          <Checkbox onChange={e => setDontConfirmDelete(e.target.checked)}>
             {t('common.delete-dialog.delete-confirm')}
           </Checkbox>
         </div>
