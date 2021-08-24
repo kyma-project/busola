@@ -200,7 +200,7 @@ export async function createNavigation() {
   const isNodeEnabled = node => {
     if (node.context?.requiredFeatures) {
       for (const feature of node.context.requiredFeatures || []) {
-        if (feature?.isEnabled === false) return false;
+        if (!feature || feature.isEnabled === false) return false;
       }
     }
     return true;
