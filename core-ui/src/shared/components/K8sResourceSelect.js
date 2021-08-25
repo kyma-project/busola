@@ -49,7 +49,6 @@ export function K8sResourceSelect({
         text: t('common.headers.loading'),
       };
     } else if (!resourceNames.length) {
-      console.log('nie res len', pluralResourceType, resourceNames.length);
       return {
         state: 'information',
         text: isNamespaced
