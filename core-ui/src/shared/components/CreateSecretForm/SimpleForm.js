@@ -1,9 +1,10 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { FormFieldset, FormLabel, FormInput } from 'fundamental-react';
+
+import { K8sNameInput, Tooltip } from 'react-shared';
 import { CreateModal } from 'shared/components/CreateModal/CreateModal';
 import { LabelsInput } from 'components/Lambdas/components';
-import { FormFieldset, FormLabel, FormInput } from 'fundamental-react';
-import { K8sNameInput, Tooltip } from 'react-shared';
-import { useTranslation } from 'react-i18next';
 
 export function SimpleForm({ secret, setSecret }) {
   const { t, i18n } = useTranslation();
@@ -12,7 +13,7 @@ export function SimpleForm({ secret, setSecret }) {
     <CreateModal.Section>
       <FormFieldset>
         <CreateModal.FormField
-          label={<FormLabel>{t('common.labels.name')}</FormLabel>}
+          label={<FormLabel required>{t('common.labels.name')}</FormLabel>}
           input={
             <K8sNameInput
               showLabel={false}
@@ -49,18 +50,6 @@ export function SimpleForm({ secret, setSecret }) {
               showFormLabel={false}
               labels={secret.labels}
               onChange={labels => setSecret({ ...secret, labels })}
-              i18n={i18n}
-              compact
-            />
-          }
-        />
-        <CreateModal.FormField
-          label={<FormLabel>{t('common.headers.annotations')}</FormLabel>}
-          input={
-            <LabelsInput
-              showFormLabel={false}
-              labels={secret.annotations}
-              onChange={annotations => setSecret({ ...secret, annotations })}
               i18n={i18n}
               compact
             />

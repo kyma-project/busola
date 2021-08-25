@@ -1,8 +1,10 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
-import { CreateModal } from 'shared/components/CreateModal/CreateModal';
+import { useTranslation } from 'react-i18next';
 import { Button } from 'fundamental-react';
+
 import { usePost, useNotification } from 'react-shared';
+import { CreateModal } from 'shared/components/CreateModal/CreateModal';
 import {
   secretToYaml,
   yamlToSecret,
@@ -11,7 +13,6 @@ import {
 } from './helpers';
 import { SimpleForm } from './SimpleForm';
 import { AdvancedForm } from './AdvancedForm';
-import { useTranslation } from 'react-i18next';
 
 export function CreateSecretForm({ namespaceId, modalOpeningComponent }) {
   const { t } = useTranslation();
@@ -24,12 +25,17 @@ export function CreateSecretForm({ namespaceId, modalOpeningComponent }) {
   );
 
   const createSecret = async () => {
-    let createdSecret = null;
     try {
-      createdSecret = await postRequest(
+      await postRequest(
         `/api/v1/namespaces/${namespaceId}/secrets/`,
         secretToYaml(secret),
       );
+      notification.notifySuccess({
+        content: t('secrets.create-modal.messages.success'),
+      });
+      LuigiClient.linkManager()
+        .fromContext('namespace')
+        .navigate(`/secrets/details/${secret.name}`);
     } catch (e) {
       console.error(e);
       notification.notifyError({

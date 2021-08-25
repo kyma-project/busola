@@ -136,6 +136,7 @@ common:
     no-permissions-header: Not enough permissions
     no-permissions-message: Contact your administrator to grant you access.
   headers:
+    annotations: Annotations
     created: Created
     labels: Labels
     loading: Loading...
@@ -364,6 +365,15 @@ roles:
   title: Roles
 secrets:
   title: Secrets
+  create-modal:
+    title: Create Secret
+    messages:
+      failure: Failed to create the Secret
+      success: Secret created
+    simple:
+      type: Type
+    presets:
+      default: Default
 service-management:
   title: Service Management
 services:

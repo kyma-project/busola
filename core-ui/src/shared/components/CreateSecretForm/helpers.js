@@ -11,25 +11,7 @@ export function secretToYaml(secret) {
       labels: secret.labels,
       annotations: secret.annotations,
     },
-    spec: {
-      replicas: 1,
-      selector: { matchLabels: secret.labels },
-      template: {
-        metadata: { labels: secret.labels },
-        annotations: { annotations: secret.annotations },
-        spec: {
-          containers: [
-            {
-              name: secret.name,
-              resources: {
-                requests: secret.requests,
-                limits: secret.limits,
-              },
-            },
-          ],
-        },
-      },
-    },
+    data: secret.data,
   };
 }
 
@@ -39,6 +21,8 @@ export function yamlToSecret(yaml, prevSecret) {
     namespace: jp.value(yaml, '$.metadata.namespace') || '',
     type: jp.value(yaml, '$.type') || '',
     labels: jp.value(yaml, '$.metadata.labels') || {},
+    annotations: jp.value(yaml, '$.metadata.annotations') || {},
+    data: jp.value(yaml, '$.data') || '',
   };
 }
 
@@ -49,6 +33,7 @@ export function createSecretTemplate(namespaceId) {
     type: 'Opaque',
     labels: {},
     annotations: {},
+    data: {},
   };
 }
 
@@ -59,13 +44,126 @@ export function createPresets(namespaceId, translate) {
       value: createSecretTemplate(namespaceId),
     },
     {
-      name: 'Echo server',
+      name: 'Amazon Route53',
       value: {
-        name: 'echo-server',
+        name: 'amazon-route53',
         namespace: namespaceId,
         type: 'Opaque',
         labels: {},
         annotations: {},
+        data: {
+          AWS_ACCESS_KEY_ID: '',
+          AWS_SECRET_ACCESS_KEY: '',
+        },
+      },
+    },
+    {
+      name: 'GoogleCloud DNS',
+      value: {
+        name: 'google-cloud-dns',
+        namespace: namespaceId,
+        type: 'Opaque',
+        labels: {},
+        annotations: {},
+        data: {
+          'serviceaccount.json': '',
+        },
+      },
+    },
+    {
+      name: 'AliCloud DNS',
+      value: {
+        name: 'ali-cloud-dns',
+        namespace: namespaceId,
+        type: 'Opaque',
+        labels: {},
+        annotations: {},
+        data: {
+          ACCESS_KEY_ID: '',
+          SECRET_ACCESS_KEY: '',
+        },
+      },
+    },
+    {
+      name: 'Azure DNS',
+      value: {
+        name: 'azure-dns',
+        namespace: namespaceId,
+        type: 'Opaque',
+        labels: {},
+        annotations: {},
+        data: {
+          AZURE_SUBSCRIPTION_ID: '',
+          AZURE_TENANT_ID: '',
+          AZURE_CLIENT_ID: '',
+          AZURE_CLIENT_SECRET: '',
+        },
+      },
+    },
+    {
+      name: 'OpenStack Designate',
+      value: {
+        name: 'openstack-designate',
+        namespace: namespaceId,
+        type: 'Opaque',
+        labels: {},
+        annotations: {},
+        data: {
+          OS_AUTH_URL: '',
+          OS_DOMAIN_NAME: '',
+          OS_PROJECT_NAME: '',
+          OS_USERNAME: '',
+          OS_PASSWORD: '',
+          OS_PROJECT_ID: '',
+          OS_REGION_NAME: '',
+          OS_TENANT_NAME: '',
+          OS_APPLICATION_CREDENTIAL_ID: '',
+          OS_APPLICATION_CREDENTIAL_NAME: '',
+          OS_APPLICATION_CREDENTIAL_SECRET: '',
+          OS_DOMAIN_ID: '',
+          OS_USER_DOMAIN_NAME: '',
+          OS_USER_DOMAIN_ID: '',
+        },
+      },
+    },
+    {
+      name: 'Cloudflare DNS',
+      value: {
+        name: 'cloudflare-dns',
+        namespace: namespaceId,
+        type: 'Opaque',
+        labels: {},
+        annotations: {},
+        data: {
+          CLOUDFLARE_API_TOKEN: '',
+        },
+      },
+    },
+    {
+      name: 'Infoblox',
+      value: {
+        name: 'infoblox',
+        namespace: namespaceId,
+        type: 'Opaque',
+        labels: {},
+        annotations: {},
+        data: {
+          USERNAME: '',
+          PASSWORD: '',
+        },
+      },
+    },
+    {
+      name: 'Netlify DNS',
+      value: {
+        name: 'netlify-dns',
+        namespace: namespaceId,
+        type: 'Opaque',
+        labels: {},
+        annotations: {},
+        data: {
+          NETLIFY_AUTH_TOKEN: '',
+        },
       },
     },
   ];
