@@ -49,8 +49,6 @@ export const K8sNameInput = ({
     />
   );
 
-  return input;
-
   return (
     <>
       {showLabel && (

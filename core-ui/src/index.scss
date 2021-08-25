@@ -159,10 +159,6 @@ header.sticky {
   z-index: 1;
 }
 
-.fd-form-label[aria-required='true']::after {
-  content: '';
-}
-
 .fd-form-item .fd-form-select {
   margin-top: 0.25rem; // to align with other inputs
 }
