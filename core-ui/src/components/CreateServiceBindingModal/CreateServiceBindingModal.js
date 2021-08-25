@@ -28,7 +28,7 @@ export function CreateServiceBindingModal({ namespaceId }) {
       );
 
       notification.notifySuccess({
-        content: t('common.create-modal.success', {
+        content: t('common.create-modal.messages.success', {
           resourceType: t('btp-service-bindings.resource-type'),
         }),
       });
@@ -38,7 +38,7 @@ export function CreateServiceBindingModal({ namespaceId }) {
     } catch (e) {
       console.error(e);
       notification.notifyError({
-        title: t('common.create-modal.failure', {
+        title: t('common.create-modal.messages.failure', {
           resourceType: t('btp-service-bindings.resource-type'),
         }),
         content: e.message,
