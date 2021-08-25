@@ -5,9 +5,9 @@ import { GenericList } from 'react-shared';
 export function IssuerDomains(issuer) {
   const { t } = useTranslation();
   return (
-    <>
+    <div className="panel-grid">
       <GenericList
-        key="domains"
+        key="included-domains"
         title={t('issuers.domains.included')}
         showSearchField={false}
         headerRenderer={() => []}
@@ -16,7 +16,7 @@ export function IssuerDomains(issuer) {
         entries={issuer.spec.acme?.domains.include || []}
       />
       <GenericList
-        key="domains"
+        key="excluded-domains"
         title={t('issuers.domains.excluded')}
         showSearchField={false}
         headerRenderer={() => []}
@@ -24,6 +24,6 @@ export function IssuerDomains(issuer) {
         showHeader={false}
         entries={issuer.spec.acme?.domains.exclude || []}
       />
-    </>
+    </div>
   );
 }
