@@ -8,8 +8,6 @@ import EventSubscriptionsWrapper from './Tabs/Configuration/EventSubscriptions/E
 import ServiceBindingsWrapper from './Tabs/Configuration/ServiceBindings/ServiceBindingsWrapper';
 import ApiRulesWrapper from './Tabs/Configuration/ApiRules/ApiRules';
 
-import { LAMBDA_DETAILS } from 'components/Lambdas/constants';
-
 export default function LambdaDetails({ lambda }) {
   const microfrontendContext = useMicrofrontendContext();
   const { features } = microfrontendContext;
@@ -46,7 +44,7 @@ export default function LambdaDetails({ lambda }) {
         <Tab
           key="lambda-code"
           id="lambda-code"
-          title={LAMBDA_DETAILS.TABS.CODE.TITLE}
+          title={t('functions.details.title.code')}
         >
           <CodeTab lambda={lambda} isActive={selectedTabIndex === 0} />
         </Tab>
@@ -54,7 +52,7 @@ export default function LambdaDetails({ lambda }) {
           <Tab
             key="lambda-configuration"
             id="lambda-configuration"
-            title={LAMBDA_DETAILS.TABS.CONFIGURATION.TITLE}
+            title={t('functions.details.title.configuration')}
           >
             <ApiRules
               lambda={lambda}
@@ -74,7 +72,7 @@ export default function LambdaDetails({ lambda }) {
         <Tab
           key="lambda-resources"
           id="lambda-resources"
-          title={LAMBDA_DETAILS.TABS.RESOURCE_MANAGEMENT.TITLE}
+          title={t('functions.details.title.resources')}
         >
           <ResourceManagementTab lambda={lambda} />
         </Tab>

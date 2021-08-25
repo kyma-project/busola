@@ -225,18 +225,22 @@ functions:
       repository: Repository
       runtime: Runtime
       source-type: Typ źródła
+  details:
+    title:
+      code: Kod
+      configuration: Konfiguracja
+      resources: Zasoby
   errors:
     server: Błąd serwera. Skontaktuj się z administratorem klastra.
   pod-list:
     buttons:
       view-logs: Pokaż logi
     title: Repliki funkcji
-  repositories-list:
+  repository-list:
     create:
       buttons:
         confirm: Połącz
       title: Połącz repozytorium
-  repository-list:
     errors:
       invalid-url: Nieprawidłowy adres URL repozytorium. URL musi zaczynać się od prefiksu „http(s)”, „git” lub „ssh” i kończyć się sufiksem „.git”.
       req-name: Nazwa repozytorium jest wymagana.

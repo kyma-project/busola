@@ -139,49 +139,6 @@ export const REPOSITORY_AUTH = {
   KEY: 'SSH key',
 };
 
-export const LAMBDA_DETAILS = {
-  STATUS: {
-    TITLE: 'Status',
-    ERROR: {
-      LINK: 'See error logs.',
-      MODAL: {
-        TITLE: 'Error logs from Function "{lambdaName}"',
-      },
-    },
-  },
-  LABELS: {
-    TITLE: 'Labels',
-    POPUP_MESSAGE: 'Edit Labels',
-    EDIT_MODAL: {
-      TITLE: 'Edit Labels',
-      CONFIRM_BUTTON: {
-        TEXT: 'Save',
-        INVALID_POPUP_MESSAGE: 'Invalid label',
-      },
-    },
-  },
-  SOURCE_TYPE: {
-    TEXT: 'Source Type',
-  },
-  RUNTIME: {
-    TEXT: 'Runtime',
-  },
-  REPOSITORY: {
-    TEXT: 'Repository',
-  },
-  TABS: {
-    CODE: {
-      TITLE: 'Code',
-    },
-    CONFIGURATION: {
-      TITLE: 'Configuration',
-    },
-    RESOURCE_MANAGEMENT: {
-      TITLE: 'Resources',
-    },
-  },
-};
-
 export const LOGS_AND_METRICS = {
   LOGS: {
     SPLIT_VIEW: {

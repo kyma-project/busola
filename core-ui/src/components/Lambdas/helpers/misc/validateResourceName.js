@@ -1,5 +1,3 @@
-import { LAMBDAS_LIST } from 'components/Lambdas/constants';
-
 export function validateResourceName(name = '', errorMessages, t) {
   if (!errorMessages) {
     return '';

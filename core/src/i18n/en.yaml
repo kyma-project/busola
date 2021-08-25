@@ -244,18 +244,22 @@ functions:
       repository: Repository
       runtime: Runtime
       source-type: Source Type
+  details:
+    title:
+      code: Code
+      configuration: Configuration
+      resources: Resources
   errors:
     server: Server error. Contact your cluster admin.
   pod-list:
     buttons:
       view-logs: View logs
     title: Replicas of the Function
-  repositories-list:
+  repository-list:
     create:
       buttons:
         confirm: Connect
       title: Connect Repository
-  repository-list:
     errors:
       invalid-url: Invalid Repository URL. The URL must start with the "http(s)", "git", or "ssh" prefix and end with the ".git" suffix.
       req-name: Repository name is required.

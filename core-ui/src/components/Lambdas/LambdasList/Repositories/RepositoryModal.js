@@ -23,15 +23,15 @@ export function CreateRepositoryModal({
       option="transparent"
       disabled={Boolean(serverDataError || serverDataLoading)}
     >
-      {t('functions.repositories-list.create.title')}
+      {t('functions.repository-list.create.title')}
     </Button>
   );
 
   return (
     <ModalWithForm
-      title={t('functions.repositories-list.create.title')}
+      title={t('functions.repository-list.create.title')}
       modalOpeningComponent={modalOpeningComponent}
-      confirmText={t('functions.repositories-list.create.buttons.confirm')}
+      confirmText={t('functions.repository-list.create.buttons.confirm')}
       invalidPopupMessage={invalidModalPopupMessage}
       id="create-repository-modal"
       className="repositories-list__create-repository-modal"
