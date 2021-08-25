@@ -51,7 +51,9 @@ btp-instances:
   parameters: Instance Parameters
   plan-name: Plan Name
   title: BTP Service Instances
+  resource-type: Service Instances
 btp-service-bindings:
+  resource-type: Service Binding
   binding-id: Binding ID
   data: Binding Data
   external-name: External Name
@@ -61,6 +63,12 @@ btp-service-bindings:
   secret: Secret
   secret-not-found: This Secret doesn't exist.
   title: BTP Service Bindings
+  create:
+    title: Create $t(btp-service-bindings.resource-type)
+    success: $t(btp-service-bindings.resource-type) created
+    failed: Failed to create the Service Binding
+    external-name-placeholder: Defaults to the binding name if empty.
+    instance-parameters: Instance Parameters
 catalog:
   menu-title: Catalog
   subtitle: Enrich your experience with additional services that are installed outside the cluster.
@@ -146,9 +154,15 @@ common:
     hostname: Hostname
     name: Name
     service: Service
+    resource: Resource
   messages:
     doesnt-exist: doesn't exist.
     loading-name: Loading name...
+    choose: Choose {{value}}
+    type-to-select: 'Start typing to select {{value}} from list.'
+    cannot-load: 'Cannot load {{value}}: {{error.message}}'
+    not-found: '{{value}} not found.'
+    parse-error: Parse error, changes will not be saved.
   tooltips:
     copy-to-clipboard: Copy to clipboard
     download: Download

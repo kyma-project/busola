@@ -20,4 +20,12 @@
       }
     }
   }
+
+  .fd-form-item .fd-popover {
+    width: 100%;
+  }
+
+  form > .fd-margin--sm + .fd-margin--sm {
+    margin-top: -1em !important;
+  }
 }

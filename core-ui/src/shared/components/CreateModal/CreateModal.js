@@ -3,6 +3,7 @@ import LuigiClient from '@luigi-project/client';
 import { Dialog, Button } from 'fundamental-react';
 import { ModeSelector } from './ModeSelector/ModeSelector';
 import { Editor } from './Editor/Editor';
+import classnames from 'classnames';
 import './CreateModal.scss';
 import { CollapsibleSection } from './CollapsibleSection/CollapsibleSection';
 import { Presets } from './Presets';
@@ -20,6 +21,7 @@ export function CreateModal({
   toYaml,
   fromYaml,
   presets,
+  customValidityFunction,
 }) {
   const { t } = useTranslation();
   const [isOpen, setOpen] = React.useState(false);
@@ -30,9 +32,20 @@ export function CreateModal({
   function revalidate() {
     // wait for React to flush the updates
     setTimeout(() => {
-      setFormValid(formRef?.current?.checkValidity());
+      const customValidity =
+        typeof customValidityFunction !== 'function' ||
+        customValidityFunction(resource);
+      setFormValid(formRef?.current?.checkValidity() && customValidity);
     });
   }
+
+  React.useEffect(() => {
+    if (isOpen) {
+      LuigiClient.uxManager().addBackdrop();
+    } else {
+      LuigiClient.uxManager().removeBackdrop();
+    }
+  }, [isOpen]);
 
   React.useEffect(revalidate, [formRef, resource]);
 
@@ -133,9 +146,9 @@ export function CreateModal({
 
 CreateModal.CollapsibleSection = CollapsibleSection;
 
-CreateModal.FormField = function({ label, input }) {
+CreateModal.FormField = function({ label, input, className }) {
   return (
-    <div className="fd-row form-field">
+    <div className={classnames('fd-row form-field', className)}>
       <div className="fd-col fd-col-md--4 form-field__label">{label}</div>
       <div className="fd-col fd-col-md--7">{input}</div>
     </div>

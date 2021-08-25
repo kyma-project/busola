@@ -2,6 +2,7 @@ export { GenericList } from './components/GenericList/GenericList';
 export { SearchInput } from './components/GenericList/SearchInput';
 export { Pagination } from './components/GenericList/Pagination/Pagination';
 export {
+  k8sNamePattern,
   K8sNameInput,
   isK8SNameValid,
 } from './components/K8sNameInput/K8sNameInput';
