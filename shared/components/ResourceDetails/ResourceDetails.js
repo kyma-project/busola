@@ -2,9 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import jsyaml from 'js-yaml';
 import { Button } from 'fundamental-react';
-import { useTranslation } from 'react-i18next';
-import { createPatch } from 'rfc6902';
 
+import { createPatch } from 'rfc6902';
 import {
   PageHeader,
   Labels,
@@ -124,10 +123,8 @@ function Resource({
   windowTitle,
   readOnly,
   breadcrumbs,
-  i18n,
 }) {
   useWindowTitle(windowTitle || prettifyNamePlural(null, resourceType));
-  const { t } = useTranslation(['translation'], { i18n });
   const { setEditedYaml: setEditedSpec } = useYamlEditor();
   const notification = useNotification();
 
@@ -135,7 +132,7 @@ function Resource({
 
   const breadcrumbItems = breadcrumbs || [
     {
-      name: prettifyNamePlural(null, resourceType),
+      name: resourceType,
       path: '/',
       fromContext: resourceType.toLowerCase(),
     },
@@ -149,7 +146,7 @@ function Resource({
         onClick={() => openYaml(resource)}
         option="emphasized"
       >
-        {t('common.buttons.edit-yaml')}
+        Edit YAML
       </Button>
       {headerActions}
       {resourceHeaderActions.map(resourceAction => resourceAction(resource))}
@@ -158,7 +155,7 @@ function Resource({
         option="transparent"
         type="negative"
       >
-        {t('common.buttons.delete')}
+        Delete
       </Button>
     </>
   );
@@ -209,15 +206,11 @@ function Resource({
         actions={actions}
         breadcrumbItems={breadcrumbItems}
       >
-        <PageHeader.Column
-          key="Labels"
-          title={t('common.headers.labels')}
-          columnSpan="1 / 3"
-        >
+        <PageHeader.Column key="Labels" title="Labels" columnSpan="1 / 3">
           <Labels labels={resource.metadata.labels || {}} />
         </PageHeader.Column>
 
-        <PageHeader.Column key="Created" title={t('common.headers.created')}>
+        <PageHeader.Column key="Created" title="Created">
           <ReadableCreationTimestamp
             timestamp={resource.metadata.creationTimestamp}
           />

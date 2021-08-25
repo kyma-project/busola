@@ -26,7 +26,6 @@ export function TextFormItem({
   defaultValue,
   inputRef,
   inputProps,
-  placeholder,
 }) {
   return (
     <FormItem key={inputKey}>
@@ -38,7 +37,7 @@ export function TextFormItem({
         required={required}
         id={inputKey}
         type={type}
-        placeholder={placeholder || label}
+        placeholder={label}
         onChange={onChange}
         autoComplete="off"
         defaultValue={defaultValue}

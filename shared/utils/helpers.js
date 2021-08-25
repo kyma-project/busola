@@ -68,5 +68,3 @@ export const getErrorMessage = (error, message = null) => {
   }
   return errorNotification;
 };
-
-export const intersperse = (arr, sep) => arr.flatMap(el => [sep, el]).slice(1);

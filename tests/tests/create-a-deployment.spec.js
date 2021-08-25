@@ -21,12 +21,12 @@ context('Create a Deployment', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Deployment name"]:visible')
+      .find('[placeholder="Deployment name"]')
       .clear()
       .type(DEPLOYMENT_NAME);
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Labels key=value"]:visible')
+      .find('[placeholder="Enter Labels key=value"]')
       .type(`app=${DEPLOYMENT_NAME}`);
 
     cy.getIframeBody()
@@ -34,7 +34,7 @@ context('Create a Deployment', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Labels key=value"]:visible')
+      .find('[placeholder="Enter Labels key=value"]')
       .type(`example=${DEPLOYMENT_NAME}`);
 
     cy.getIframeBody()
@@ -42,37 +42,29 @@ context('Create a Deployment', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder^="Enter Docker image"]:visible')
+      .find('[placeholder="Enter Docker image"]')
       .type(DOCKER_IMAGE);
 
     cy.getIframeBody()
-      .contains('Advanced')
-      .click();
-
-    cy.getIframeBody()
-      .contains('Runtime Profile')
-      .click();
-
-    cy.getIframeBody()
-      .contains('label', 'Memory Requests')
+      .contains('label', 'Memory requests')
       .next('input')
       .clear()
       .type('16Mi');
 
     cy.getIframeBody()
-      .contains('label', 'Memory Limits')
+      .contains('label', 'Memory limits')
       .next('input')
       .clear()
       .type('32Mi');
 
     cy.getIframeBody()
-      .contains('label', 'CPU Requests')
+      .contains('label', 'CPU requests')
       .next('input')
       .clear()
       .type('10m');
 
     cy.getIframeBody()
-      .contains('label', 'CPU Limits')
+      .contains('label', 'CPU limits')
       .next('input')
       .clear()
       .type('20m');

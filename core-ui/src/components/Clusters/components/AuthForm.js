@@ -1,6 +1,5 @@
 import React from 'react';
 import { TextFormItem } from 'react-shared';
-import { useTranslation } from 'react-i18next';
 import { MessageStrip, FormRadioGroup, FormRadioItem } from 'fundamental-react';
 
 export const AUTH_FORM_TOKEN = 'Token';
@@ -8,28 +7,27 @@ export const AUTH_FORM_OIDC = 'OIDC';
 export const DEFAULT_SCOPE_VALUE = 'openid ';
 
 const OIDCform = ({ auth, setAuth }) => {
-  const { t } = useTranslation();
   return (
     <>
       <TextFormItem
         inputKey="issuer-url"
         required
         type="url"
-        label={t('clusters.labels.issuer-url')}
+        label="Issuer URL"
         onChange={e => setAuth({ ...auth, issuerUrl: e.target.value })}
         inputProps={{ value: auth.issuerUrl || '' }}
       />
       <TextFormItem
         inputKey="client-id"
         required
-        label={t('clusters.labels.client-id')}
+        label="Client ID"
         onChange={e => setAuth({ ...auth, clientId: e.target.value })}
         inputProps={{ value: auth.clientId || '' }}
       />
       <TextFormItem
         inputKey="scope"
         required
-        label={t('clusters.labels.scopes')}
+        label="Scopes"
         onChange={e => setAuth({ ...auth, scope: e.target.value })}
         inputProps={{ value: auth.scope || DEFAULT_SCOPE_VALUE }}
       />

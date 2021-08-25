@@ -2,8 +2,14 @@ import React, { useState } from 'react';
 import { Button, Menu, Popover } from 'fundamental-react';
 
 import { VARIABLE_TYPE } from 'components/Lambdas/helpers/lambdaVariables';
+import { ENVIRONMENT_VARIABLES_PANEL } from 'components/Lambdas/constants';
 import VariableModal from '../VariableForm/VariableModal';
-import { useTranslation } from 'react-i18next';
+
+const addNewVariableButton = (
+  <Button glyph="add" typeAttr="button">
+    {ENVIRONMENT_VARIABLES_PANEL.EDIT_MODAL.ADD_ENV_BUTTON.TEXT}
+  </Button>
+);
 
 export default function CreateVariable({
   lambda,
@@ -11,23 +17,14 @@ export default function CreateVariable({
   configmaps,
   customVariables,
   customValueFromVariables,
-  injectedVariables,
 }) {
-  const { t } = useTranslation();
-
-  const addNewVariableButton = (
-    <Button glyph="add" typeAttr="button">
-      {t('functions.variable.buttons.add')}
-    </Button>
-  );
   const [currentModal, setCurrentModal] = useState();
 
   const commonProps = {
     lambda: lambda,
-    confirmText: t('common.buttons.create'),
+    confirmText: ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.CONFIRM_BUTTON.TEXT,
     customVariables: customVariables,
     customValueFromVariables: customValueFromVariables,
-    injectedVariables: injectedVariables,
     onModalOpenStateChange: state => {
       if (!state) setCurrentModal();
     },
@@ -35,19 +32,19 @@ export default function CreateVariable({
   };
 
   const customVariableModalProps = {
-    title: t('functions.variable.create-modal.title.custom'),
+    title: ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.TITLE.CUSTOM,
     type: VARIABLE_TYPE.CUSTOM,
     resources: null,
   };
 
   const secretVariableModalProps = {
-    title: t('functions.variable.create-modal.title.secret'),
+    title: ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.TITLE.SECRET,
     type: VARIABLE_TYPE.SECRET,
     resources: secrets,
   };
 
   const configMapVariableModalProps = {
-    title: t('functions.variable.create-modal.title.config-map'),
+    title: ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.TITLE.CONFIG_MAP,
     type: VARIABLE_TYPE.CONFIG_MAP,
     resources: configmaps,
   };
@@ -65,17 +62,20 @@ export default function CreateVariable({
               <Menu.Item
                 onClick={_ => openModalWithProps(customVariableModalProps)}
               >
-                {t('functions.variable.buttons.open.custom')}
+                {ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.OPEN_BUTTON.CUSTOM}
               </Menu.Item>
               <Menu.Item
                 onClick={_ => openModalWithProps(secretVariableModalProps)}
               >
-                {t('functions.variable.buttons.open.secret')}
+                {ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.OPEN_BUTTON.SECRET}
               </Menu.Item>
               <Menu.Item
                 onClick={_ => openModalWithProps(configMapVariableModalProps)}
               >
-                {t('functions.variable.buttons.open.config-map')}
+                {
+                  ENVIRONMENT_VARIABLES_PANEL.CREATE_MODAL.OPEN_BUTTON
+                    .CONFIG_MAP
+                }
               </Menu.Item>
             </Menu.List>
           </Menu>

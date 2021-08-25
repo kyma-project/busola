@@ -181,11 +181,8 @@ export default function ApiRuleForm({
         }),
         data,
       );
-
       const message =
-        requestType === 'create'
-          ? t('api-rules.messages.created')
-          : t('api-rules.messages.updated');
+        requestType === 'create' ? 'Api Rule created' : 'API Rule updated';
       LuigiClient.sendCustomMessage({
         id: 'busola.showMessage',
         message,
@@ -194,7 +191,7 @@ export default function ApiRuleForm({
       LuigiClient.uxManager().closeCurrentModal();
     } catch (e) {
       notification.notifyError({
-        title: t('api-rules.messages.create-failed'),
+        title: `Failed to create the API Rule`,
         content: e.message,
       });
     }
@@ -237,7 +234,7 @@ export default function ApiRuleForm({
         >
           <LayoutPanel className="fd-margin-bottom--sm">
             <LayoutPanel.Header>
-              <LayoutPanel.Head title={t('api-rules.general-settings.title')} />
+              <LayoutPanel.Head title="General settings" />
             </LayoutPanel.Header>
             <LayoutPanel.Body>
               <div className="api-rule-form__input-group">
@@ -254,7 +251,7 @@ export default function ApiRuleForm({
                 </FormItem>
                 <FormItem>
                   <FormLabel htmlFor="hostname" required>
-                    {t('common.labels.hostname')}
+                    Hostname
                   </FormLabel>
 
                   {domainLoading ? (
@@ -290,9 +287,7 @@ export default function ApiRuleForm({
 
           <LayoutPanel>
             <LayoutPanel.Header>
-              <LayoutPanel.Head
-                title={t('api-rules.access-strategies.title')}
-              />
+              <LayoutPanel.Head title="Access strategies" />
               <LayoutPanel.Actions>
                 <Button
                   onClick={addAccessStrategy}
@@ -300,7 +295,7 @@ export default function ApiRuleForm({
                   glyph="add"
                   typeAttr="button"
                 >
-                  {t('api-rules.access-strategies.buttons.add')}
+                  Add access strategy
                 </Button>
               </LayoutPanel.Actions>
             </LayoutPanel.Header>

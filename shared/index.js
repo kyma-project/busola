@@ -35,8 +35,6 @@ export * from './components/ResourceDetails/ResourceDetails';
 export * from './components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 export * from './components/KeyValueForm/KeyValueForm';
 export * from './components/MainFrameRedirection/MainFrameRedirection';
-export * from './components/TileButton/TileButton';
-export * from './components/VerticalTabs/VerticalTabs';
 
 export * from './forms';
 export * from './hooks';

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 import { CustomPropTypes, Dropdown } from 'react-shared';
 import { FormItem } from 'fundamental-react';
-import { useTranslation } from 'react-i18next';
 
 const ServicesDropdown = ({
   _ref,
@@ -13,13 +12,12 @@ const ServicesDropdown = ({
   defaultValue,
   serviceName,
 }) => {
-  const { t } = useTranslation();
   if (loading) {
-    return t('api-rules.services.loading');
+    return 'Loading services...';
   }
 
   if (error || (!loading && !data)) {
-    return t('api-rules.services.error-load') + error.message;
+    return "Couldn't load service list " + error.message;
   }
 
   const services =
@@ -61,12 +59,12 @@ const ServicesDropdown = ({
   return (
     <FormItem>
       <Dropdown
-        label={t('common.labels.service')}
+        label="Service"
         id="service"
         options={options}
         onSelect={onSelect}
         selectedKey={defaultService}
-        emptyListMessage={t('api-rules.services.ns-no-services')}
+        emptyListMessage="No Services in this Namespace"
       />
     </FormItem>
   );

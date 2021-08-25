@@ -8,11 +8,9 @@ import {
 } from 'components/ApiRules/ApiRulesList/components';
 import ApiRuleStatus from 'components/ApiRules/ApiRuleStatus/ApiRuleStatus';
 import { useGetGatewayDomain as getGatewayDomain } from 'components/ApiRules/hooks/useGetGatewayDomain';
-import { useTranslation } from 'react-i18next';
 
 export const ApiRulesList = ({ DefaultRenderer, ...otherParams }) => {
   const { domain } = getGatewayDomain();
-  const { t } = useTranslation();
   const createApiRule = (
     <Button
       glyph="add"
@@ -28,27 +26,27 @@ export const ApiRulesList = ({ DefaultRenderer, ...otherParams }) => {
             redirectPath: encodeURIComponent('apirules/'),
           })
           .openAsModal(`apirules/create`, {
-            title: t(PANEL.CREATE_MODAL.TITLE),
+            title: PANEL.CREATE_MODAL.TITLE,
           })
       }
     >
-      {t('api-rules.buttons.create')}
+      Create apirules
     </Button>
   );
 
   const customColumns = [
     {
-      header: t('api-rules.list.headers.host'),
+      header: 'Host',
       value: apiRule => (
         <CopiableApiRuleHost apiRule={apiRule} domain={domain} />
       ),
     },
     {
-      header: t('api-rules.list.headers.service-name'),
+      header: 'Service Name',
       value: apiRule => <ApiRuleServiceInfo apiRule={apiRule} />,
     },
     {
-      header: t('api-rules.list.headers.status'),
+      header: 'Status',
       value: apiRule => <ApiRuleStatus apiRule={apiRule} />,
     },
   ];
@@ -57,7 +55,7 @@ export const ApiRulesList = ({ DefaultRenderer, ...otherParams }) => {
     <DefaultRenderer
       customColumns={customColumns}
       listHeaderActions={createApiRule}
-      resourceName={t('api-rules.title')}
+      resourceName="API Rules"
       {...otherParams}
     />
   );

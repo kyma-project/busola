@@ -1,15 +1,6 @@
 {
   "config": {
-    "defaultStorage": "localStorage",
     "features": {
-      "BTP_CATALOG": {
-        "selectors": [
-          {
-            "type": "apiGroup",
-            "apiGroup": "services.cloud.sap.com"
-          }
-        ]
-      },
       "SERVICE_CATALOG": {
         "selectors": [
           {

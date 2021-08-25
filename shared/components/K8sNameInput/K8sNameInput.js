@@ -4,7 +4,6 @@ import CustomPropTypes from '../../typechecking/CustomPropTypes';
 import { Tooltip } from '../Tooltip/Tooltip';
 import { FormLabel } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
-import classnames from 'classnames';
 
 const pattern = '^[a-z0-9]([-a-z0-9]*[a-z0-9])?$';
 const regex = new RegExp(pattern);
@@ -18,48 +17,49 @@ export const K8sNameInput = ({
   id,
   kind,
   showHelp = true,
-  showLabel = true,
-  label = 'common.labels.name',
+  label = 'Name',
   required = true,
   defaultValue,
   i18n,
   ...props
 }) => {
   const { t } = useTranslation(null, { i18n });
-
-  const { className, compact, ...inputProps } = props || {};
-
-  const inputClassName = classnames('fd-input', className, {
-    'fd-input--compact': compact,
-  });
-
-  const input = (
-    <input
-      role="input"
-      ref={_ref}
-      type="text"
-      id={id}
-      defaultValue={defaultValue}
-      placeholder={kind + ' name'}
-      aria-required={required ? 'true' : 'false'}
-      required={required}
-      pattern={pattern}
-      {...inputProps}
-      className={inputClassName}
-    />
-  );
-
   return (
     <>
-      {showLabel && (
-        <FormLabel required={required} htmlFor={id}>
-          {t(label)}
-        </FormLabel>
+      <FormLabel required={required} htmlFor={id}>
+        {label}
+      </FormLabel>
+      {showHelp && (
+        <Tooltip content={t('common.tooltips.k8s-name-input')}>
+          <input
+            role="input"
+            ref={_ref}
+            type="text"
+            id={id}
+            defaultValue={defaultValue}
+            placeholder={kind + ' name'}
+            aria-required={required ? 'true' : 'false'}
+            required={required}
+            pattern={pattern}
+            {...props}
+            className={'fd-input ' + (props?.className || '')}
+          />
+        </Tooltip>
       )}
-      {showHelp ? (
-        <Tooltip content={t('common.tooltips.k8s-name-input')}>{input}</Tooltip>
-      ) : (
-        input
+      {!showHelp && (
+        <input
+          role="input"
+          ref={_ref}
+          type="text"
+          id={id}
+          defaultValue={defaultValue}
+          placeholder={kind + ' name'}
+          aria-required={required ? 'true' : 'false'}
+          required={required}
+          pattern={pattern}
+          {...props}
+          className={'fd-input ' + (props?.className || '')}
+        />
       )}
     </>
   );

@@ -8,8 +8,6 @@ import {
   Button,
   Dialog,
   Checkbox,
-  MessageBox,
-  MessageStrip,
 } from 'fundamental-react';
 import { createPatch } from 'rfc6902';
 import LuigiClient from '@luigi-project/client';
@@ -54,7 +52,6 @@ ResourcesList.propTypes = {
   readOnly: PropTypes.bool,
   navigateFn: PropTypes.func,
   testid: PropTypes.string,
-  omitColumnsIds: PropTypes.arrayOf(PropTypes.string.isRequired),
 };
 
 ResourcesList.defaultProps = {
@@ -106,8 +103,6 @@ function Resources({
   skipDataLoading = false,
   testid,
   i18n,
-  textSearchProperties = [],
-  omitColumnsIds = [],
 }) {
   useWindowTitle(windowTitle || prettifyNamePlural(resourceName, resourceType));
   const { t } = useTranslation(['translation'], { i18n });
@@ -133,8 +128,6 @@ function Resources({
     resourceName,
     resourceType,
   );
-
-  customColumns = customColumns.filter(col => !omitColumnsIds.includes(col.id));
 
   const withoutQueryString = path => path.split('?')[0];
 
@@ -162,10 +155,7 @@ function Resources({
     const url = withoutQueryString(resourceUrl) + '/' + resource.metadata.name;
     const name = prettifyNameSingular(resourceType);
 
-    LuigiClient.sendCustomMessage({
-      id: 'busola.dontConfirmDelete',
-      value: dontConfirmDelete,
-    });
+    setShowDeleteDialog(false);
     try {
       await deleteResourceMutation(url);
       notification.notifySuccess({
@@ -181,16 +171,15 @@ function Resources({
     }
   };
 
-  const closeDeleteDialog = () => {
-    LuigiClient.uxManager().removeBackdrop();
-    setShowDeleteDialog(false);
+  const toggleDontConfirmDelete = value => {
+    LuigiClient.sendCustomMessage({ id: 'busola.dontConfirmDelete', value });
+    setDontConfirmDelete(value);
   };
 
   async function handleResourceDelete(resource) {
     if (dontConfirmDelete) {
       performDelete(resource);
     } else {
-      LuigiClient.uxManager().addBackdrop();
       setActiveResource(resource);
       setShowDeleteDialog(true);
     }
@@ -217,9 +206,9 @@ function Resources({
       ];
 
   const headerRenderer = () => [
-    t('common.headers.name'),
-    t('common.headers.created'),
-    t('common.headers.labels'),
+    'Name',
+    'Created',
+    'Labels',
     ...customColumns.map(col => col.header),
   ];
 
@@ -276,26 +265,20 @@ function Resources({
 
   return (
     <>
-      <MessageBox
-        type="warning"
-        title={t('common.delete-dialog.title', {
-          name: activeResource?.metadata.name,
-        })}
-        compact
+      <Dialog
         actions={[
-          <Button
-            type="negative"
-            compact
-            onClick={() => performDelete(activeResource)}
-          >
+          <Button type="negative" onClick={() => performDelete(activeResource)}>
             {t('common.buttons.delete')}
           </Button>,
-          <Button onClick={() => setDontConfirmDelete(false)} compact>
+          <Button onClick={() => setShowDeleteDialog(false)}>
             {t('common.buttons.cancel')}
           </Button>,
         ]}
+        footerProps={{}}
         show={showDeleteDialog}
-        onClose={closeDeleteDialog}
+        title={t('common.delete-dialog.title', {
+          name: activeResource?.metadata.name,
+        })}
       >
         <p>
           {t('common.delete-dialog.message', {
@@ -304,25 +287,16 @@ function Resources({
           })}
         </p>
         <div className="fd-margin-top--sm">
-          <Checkbox onChange={e => setDontConfirmDelete(e.target.checked)}>
+          <Checkbox onChange={e => toggleDontConfirmDelete(e.target.checked)}>
             {t('common.delete-dialog.delete-confirm')}
           </Checkbox>
         </div>
-        {dontConfirmDelete && (
-          <MessageStrip type="information" className="fd-margin-top--sm">
-            {t('common.delete-dialog.information')}
-          </MessageStrip>
-        )}
-      </MessageBox>
+      </Dialog>
       <GenericList
         title={
           showTitle ? prettifyNamePlural(resourceName, resourceType) : null
         }
-        textSearchProperties={[
-          'metadata.name',
-          'metadata.labels',
-          ...textSearchProperties,
-        ]}
+        textSearchProperties={['metadata.name', 'metadata.labels']}
         actions={actions}
         entries={resources || []}
         headerRenderer={headerRenderer}

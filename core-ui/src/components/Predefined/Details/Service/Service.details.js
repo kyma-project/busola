@@ -1,7 +1,6 @@
 import React from 'react';
 import { InfoLabel, Icon, Token } from 'fundamental-react';
 import { Spinner, useGetList, useMicrofrontendContext } from 'react-shared';
-import { useTranslation } from 'react-i18next';
 
 import EventSubscriptions from 'shared/components/EventSubscriptions/EventSubscriptions';
 import './Service.details.scss';
@@ -52,7 +51,6 @@ function ApiRules(service) {
 }
 
 export const ServicesDetails = ({ DefaultRenderer, ...otherParams }) => {
-  const { t } = useTranslation();
   const microfrontendContext = useMicrofrontendContext();
   const { features } = microfrontendContext;
   const customComponents = [];
@@ -63,29 +61,13 @@ export const ServicesDetails = ({ DefaultRenderer, ...otherParams }) => {
     customComponents.push(ApiRules);
   }
 
-  const getExternalIPs = service => {
-    if (service.status.loadBalancer?.ingress) {
-      return service.status.loadBalancer?.ingress.map(
-        endpoint => endpoint.ip || endpoint.hostname,
-      );
-    } else if (service.spec.externalIPs?.length) {
-      return service.spec.externalIPs;
-    } else {
-      return [];
-    }
-  };
-
   const customColumns = [
     {
-      header: t('services.type'),
-      value: service => service.spec.type,
-    },
-    {
-      header: t('services.cluster-ip'),
+      header: 'Cluster IP',
       value: resource => resource.spec.clusterIP,
     },
     {
-      header: t('services.ports'),
+      header: 'Ports',
       value: resource => (
         <>
           {resource.spec.ports?.map(p => (
@@ -107,22 +89,6 @@ export const ServicesDetails = ({ DefaultRenderer, ...otherParams }) => {
           ))}
         </>
       ),
-    },
-    {
-      header: t('services.external-ips'),
-      value: service => {
-        const ips = getExternalIPs(service);
-        if (!ips.length) {
-          return '-';
-        }
-        return (
-          <ul>
-            {ips.map(ip => (
-              <li key={ip}>{ip}</li>
-            ))}
-          </ul>
-        );
-      },
     },
   ];
 

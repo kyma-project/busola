@@ -2,19 +2,17 @@ import React from 'react';
 
 import { FormLabel } from 'fundamental-react';
 import { LabelSelectorInput } from 'react-shared';
-import { useTranslation } from 'react-i18next';
+
+import { FORMS } from 'components/Lambdas/constants';
 
 import './LabelsInput.scss';
 
-export function LabelsInput({ showFormLabel = true, ...otherProps }) {
-  const { t } = useTranslation();
+export function LabelsInput({ ...otherProps }) {
   return (
     <div className="resource-labels-input">
-      {showFormLabel && (
-        <FormLabel className="resource-labels-input__label">
-          {t('common.headers.labels')}
-        </FormLabel>
-      )}
+      <FormLabel className="resource-labels-input__label">
+        {FORMS.LABELS.LABEL}
+      </FormLabel>
       <LabelSelectorInput {...otherProps} />
     </div>
   );

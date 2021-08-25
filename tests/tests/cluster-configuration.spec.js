@@ -21,7 +21,6 @@ const configMock = {
           },
         ],
       },
-      storage: 'sessionStorage',
     }),
   },
 };
@@ -37,19 +36,7 @@ context('Cluster configuration', () => {
     cy.loginAndSelectCluster();
     cy.url().should('match', /namespaces$/);
 
-    // cluster storage message should be visible
-    cy.contains(/The chosen storage type has been overwritten/).should(
-      'be.visible',
-    );
-
-    // custom category should be added
     cy.contains('Category from target cluster').should('be.visible');
-
-    // custom storage type should be set
-    cy.getLeftNav()
-      .contains('Cluster Overview')
-      .click();
-    cy.contains('sessionStorage').should('be.visible');
   });
 
   it('Init params config override target cluster config', () => {

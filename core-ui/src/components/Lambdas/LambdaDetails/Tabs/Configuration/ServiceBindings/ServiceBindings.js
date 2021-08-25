@@ -30,6 +30,7 @@ export default function ServiceBindings({
   const serviceBindingsWithUsages = serviceBindingsCombined.filter(
     ({ serviceBindingUsage }) => serviceBindingUsage,
   );
+
   const renderEnvs = (secret, prefix = '') => {
     if (!secret) return ''; // don't display if secret not present
     return (

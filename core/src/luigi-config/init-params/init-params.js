@@ -2,7 +2,7 @@ import {
   saveClusterParams,
   saveActiveClusterName,
   getCurrentContextNamespace,
-} from '../cluster-management/cluster-management';
+} from '../cluster-management';
 import { saveLocation } from '../navigation/previous-location';
 import {
   areParamsCompatible,
@@ -11,7 +11,6 @@ import {
 import * as constants from './constants';
 import { hasNonOidcAuth } from '../auth/auth';
 import { applyKubeconfigIdIfPresent } from './../kubeconfig-id';
-import { getDefaultStorage } from '../cluster-management/clusters-storage';
 
 const getEncoder = async () => {
   const createEncoder = (await import('json-url')).default;
@@ -79,7 +78,6 @@ async function setupFromParams() {
         ...constants.DEFAULT_FEATURES,
         ...(decoded.config?.features || {}),
       },
-      storage: await getDefaultStorage(),
     },
     currentContext: {
       cluster: decoded.kubeconfig.clusters[0],

@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { Button } from 'fundamental-react';
-import { useTranslation } from 'react-i18next';
 import LuigiClient from '@luigi-project/client';
 import { PANEL } from '../../ApiRules/constants';
 
@@ -11,23 +10,22 @@ import {
 } from 'components/ApiRules/ApiRulesList/components';
 import ApiRuleStatus from 'components/ApiRules/ApiRuleStatus/ApiRuleStatus';
 import AccessStrategies from 'components/ApiRules/AccessStrategies/AccessStrategies';
+import { formatMessage } from 'components/Lambdas/helpers/misc';
 import { useGetGatewayDomain as getGatewayDomain } from 'components/ApiRules/hooks/useGetGatewayDomain';
 
 export const ApiRulesDetails = ({ DefaultRenderer, ...otherParams }) => {
   const { domain } = getGatewayDomain();
-  const { t } = useTranslation();
-
   const customColumns = [
     {
-      header: t('api-rules.list.headers.status'),
+      header: 'Status',
       value: resource => <ApiRuleStatus apiRule={resource} />,
     },
     {
-      header: t('api-rules.list.headers.service-name'),
+      header: 'Service',
       value: resource => <ApiRuleServiceInfo apiRule={resource} />,
     },
     {
-      header: t('api-rules.list.headers.host'),
+      header: 'Host',
       value: resource => (
         <CopiableApiRuleHost apiRule={resource} domain={domain} />
       ),
@@ -44,7 +42,7 @@ export const ApiRulesDetails = ({ DefaultRenderer, ...otherParams }) => {
   };
 
   const editApiRule = apirule => {
-    const formattedTitle = t(PANEL.EDIT_MODAL.TITLE, {
+    const formattedTitle = formatMessage(PANEL.EDIT_MODAL.TITLE, {
       apiRuleName: apirule.metadata.name,
     });
     return (

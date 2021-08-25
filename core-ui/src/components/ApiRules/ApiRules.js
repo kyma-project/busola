@@ -1,5 +1,4 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import LuigiClient from '@luigi-project/client';
 
 import { PageHeader } from 'react-shared';
@@ -31,14 +30,10 @@ const rowRenderer = apiRule => [
 
 export default function ApiRules() {
   const namespace = LuigiClient.getContext().namespaceId;
-  const { t } = useTranslation();
 
   return (
     <>
-      <PageHeader
-        title={t(TOOLBAR.TITLE)}
-        description={t(TOOLBAR.DESCRIPTION)}
-      />
+      <PageHeader title={TOOLBAR.TITLE} description={TOOLBAR.DESCRIPTION} />
       <ApiRulesListWrapper
         noTitle={true}
         namespace={namespace}

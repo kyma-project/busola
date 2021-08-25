@@ -1,13 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import LuigiClient from '@luigi-project/client';
 
 import { Icon, InfoLabel } from 'fundamental-react';
-import {
-  EMPTY_TEXT_PLACEHOLDER,
-  GenericList,
-  Tooltip,
-  useGetList,
-} from 'react-shared';
+import { GenericList, Tooltip, useGetList } from 'react-shared';
 
 import CreateVariable from './CreateVariable/CreateVariable';
 import EditVariable from './EditVariable/EditVariable';
@@ -17,6 +12,7 @@ import {
   VARIABLE_TYPE,
   WARNINGS_VARIABLE_VALIDATION,
 } from 'components/Lambdas/helpers/lambdaVariables';
+import { ENVIRONMENT_VARIABLES_PANEL } from 'components/Lambdas/constants';
 import { useUpdateLambda, UPDATE_TYPE } from 'components/Lambdas/hooks';
 
 import { validateVariables } from './validation';
@@ -25,11 +21,17 @@ import './LambdaEnvs.scss';
 import { formatMessage } from 'components/Lambdas/helpers/misc';
 import { useTranslation } from 'react-i18next';
 
+const headerRenderer = () => [
+  'Variable Name',
+  '',
+  'Value',
+  'Source',
+  'Key',
+  '',
+];
 const textSearchProperties = ['name', 'value', 'type'];
 
 function VariableStatus({ validation }) {
-  const { t } = useTranslation();
-
   if (!WARNINGS_VARIABLE_VALIDATION.includes(validation)) {
     return null;
   }
@@ -38,7 +40,7 @@ function VariableStatus({ validation }) {
   const control = (
     <div>
       <span className={statusClassName}>
-        {t('functions.variable.warnings.text')}
+        {ENVIRONMENT_VARIABLES_PANEL.WARNINGS.TEXT}
       </span>
       <Icon
         ariaLabel="Warning"
@@ -52,25 +54,26 @@ function VariableStatus({ validation }) {
   let message = '';
   switch (validation) {
     case VARIABLE_VALIDATION.CAN_OVERRIDE_SBU: {
-      message = t('functions.variable.warnings.variable-can-override-sbu');
+      message = ENVIRONMENT_VARIABLES_PANEL.WARNINGS.VARIABLE_CAN_OVERRIDE_SBU;
       break;
     }
     case VARIABLE_VALIDATION.CAN_OVERRIDE_BY_CUSTOM_ENV_AND_SBU: {
-      message = t('functions.variable.warnings.sbu-can-be-overridden.by-both');
+      message =
+        ENVIRONMENT_VARIABLES_PANEL.WARNINGS.SBU_CAN_BE_OVERRIDE
+          .BY_CUSTOM_ENV_AND_SBU;
       break;
     }
     case VARIABLE_VALIDATION.CAN_OVERRIDE_BY_CUSTOM_ENV: {
-      message = t(
-        'functions.variable.warnings.sbu-can-be-overridden.by-custom-env',
-      );
+      message =
+        ENVIRONMENT_VARIABLES_PANEL.WARNINGS.SBU_CAN_BE_OVERRIDE.BY_CUSTOM_ENV;
       break;
     }
     case VARIABLE_VALIDATION.CAN_OVERRIDE_BY_SBU: {
-      message = t('functions.variable.warnings.sbu-can-be-overridden.by-sbu');
+      message = ENVIRONMENT_VARIABLES_PANEL.WARNINGS.SBU_CAN_BE_OVERRIDE.BY_SBU;
       break;
     }
     default: {
-      message = t('functions.variable.warnings.variable-can-override-sbu');
+      message = ENVIRONMENT_VARIABLES_PANEL.WARNINGS.VARIABLE_CAN_OVERRIDE_SBU;
     }
   }
 
@@ -78,15 +81,14 @@ function VariableStatus({ validation }) {
 }
 
 function VariableSource({ variable }) {
-  const { t } = useTranslation();
-
-  let source = t('functions.variable.type.custom');
-  let tooltipTitle = t('functions.variable.tooltip.custom');
+  let source = ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.CUSTOM.TEXT;
+  let tooltipTitle =
+    ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.CUSTOM.TOOLTIP_MESSAGE;
 
   if (variable.type === VARIABLE_TYPE.BINDING_USAGE) {
-    source = t('functions.variable.type.service-binding');
+    source = ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.BINDING_USAGE.TEXT;
     tooltipTitle = formatMessage(
-      t('functions.variable.tooltip.service-binding'),
+      ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.BINDING_USAGE.TOOLTIP_MESSAGE,
       {
         serviceInstanceName: variable.serviceInstanceName,
       },
@@ -95,16 +97,22 @@ function VariableSource({ variable }) {
 
   if (variable.valueFrom) {
     if (variable.valueFrom.configMapKeyRef) {
-      source = t('functions.variable.type.config-map');
-      tooltipTitle = formatMessage(t('functions.variable.tooltip.config-map'), {
-        resourceName: variable.valueFrom.configMapKeyRef.name,
-      });
+      source = ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.CONFIG_MAP.TEXT;
+      tooltipTitle = formatMessage(
+        ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.CONFIG_MAP.TOOLTIP_MESSAGE,
+        {
+          resourceName: variable.valueFrom.configMapKeyRef.name,
+        },
+      );
     }
     if (variable.valueFrom.secretKeyRef) {
-      source = t('functions.variable.type.secret');
-      tooltipTitle = formatMessage(t('functions.variable.tooltip.secret'), {
-        resourceName: variable.valueFrom.secretKeyRef.name,
-      });
+      source = ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.SECRET.TEXT;
+      tooltipTitle = formatMessage(
+        ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.SECRET.TOOLTIP_MESSAGE,
+        {
+          resourceName: variable.valueFrom.secretKeyRef.name,
+        },
+      );
     }
   }
 
@@ -132,7 +140,7 @@ function VariableSourceLink({ variable }) {
   return (
     <>
       {resourceLink ? (
-        <Tooltip content={t('functions.variable.tooltip.text')}>
+        <Tooltip content={t('functions.variable.tooltip')}>
           <span
             className="link"
             onClick={() =>
@@ -141,11 +149,12 @@ function VariableSourceLink({ variable }) {
                 .navigate(resourceLink)
             }
           >
-            {` ${resourceName} `}
+            {' '}
+            {resourceName}{' '}
           </span>
         </Tooltip>
       ) : (
-        EMPTY_TEXT_PLACEHOLDER
+        '-'
       )}
     </>
   );
@@ -161,12 +170,39 @@ function VariableKey({ variable }) {
 }
 
 function VariableValue({ variable }) {
+  const isBindingUsageVar = variable.type === VARIABLE_TYPE.BINDING_USAGE;
+  const [show, setShow] = useState(false);
   const value = variable.valueFrom ? (
     <VariableSourceLink variable={variable} />
   ) : (
-    <span>{variable.value || EMPTY_TEXT_PLACEHOLDER}</span>
+    <span>{variable.value || '-'}</span>
   );
 
+  if (isBindingUsageVar) {
+    const blurVariable = (
+      <div
+        className={!show ? 'blur-variable' : ''}
+        onClick={_ => setShow(!show)}
+      >
+        {value}
+      </div>
+    );
+    return (
+      <div className="lambda-variable">
+        <Tooltip
+          content={
+            show
+              ? ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.BINDING_USAGE
+                  .HIDE_VALUE_MESSAGE
+              : ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.BINDING_USAGE
+                  .SHOW_VALUE_MESSAGE
+          }
+        >
+          {blurVariable}
+        </Tooltip>
+      </div>
+    );
+  }
   return value;
 }
 
@@ -176,17 +212,6 @@ export default function LambdaEnvs({
   customValueFromVariables,
   injectedVariables,
 }) {
-  const { t } = useTranslation();
-
-  const headerRenderer = () => [
-    t('functions.variable.header.name'),
-    '',
-    t('functions.variable.header.value'),
-    t('functions.variable.header.source'),
-    t('functions.variable.header.key'),
-    '',
-  ];
-
   const updateLambdaVariables = useUpdateLambda({
     lambda,
     type: UPDATE_TYPE.VARIABLES,
@@ -215,14 +240,14 @@ export default function LambdaEnvs({
         configmaps={configmaps}
         customVariables={customVariables}
         customValueFromVariables={customValueFromVariables}
-        injectedVariables={injectedVariables}
       />
     </>
   );
 
   const entries = [
-    ...validateVariables(customVariables, [], injectedVariables),
-    ...validateVariables(customValueFromVariables, [], injectedVariables),
+    ...validateVariables(customVariables, injectedVariables),
+    ...injectedVariables,
+    ...customValueFromVariables,
   ];
 
   function prepareVariablesInput(newVariables) {
@@ -245,7 +270,7 @@ export default function LambdaEnvs({
       oldVariable => oldVariable.id !== variable.id,
     );
 
-    newVariables = validateVariables(newVariables, [], injectedVariables);
+    newVariables = validateVariables(newVariables, injectedVariables);
     const preparedVariable = prepareVariablesInput(newVariables);
 
     updateLambdaVariables({
@@ -266,7 +291,6 @@ export default function LambdaEnvs({
           configmaps={configmaps}
           customVariables={customVariables}
           customValueFromVariables={customValueFromVariables}
-          injectedVariables={injectedVariables}
           variable={variable}
         />
       ),
@@ -280,7 +304,7 @@ export default function LambdaEnvs({
   return (
     <div className="lambda-variables">
       <GenericList
-        title={t('functions.variable.title.environment-variables')}
+        title={ENVIRONMENT_VARIABLES_PANEL.LIST.TITLE}
         showSearchField={true}
         showSearchSuggestion={false}
         textSearchProperties={textSearchProperties}
@@ -289,8 +313,12 @@ export default function LambdaEnvs({
         entries={entries}
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
-        notFoundMessage={t('functions.variable.not-found')}
-        noSearchResultMessage={t('functions.variable.not-match')}
+        notFoundMessage={
+          ENVIRONMENT_VARIABLES_PANEL.LIST.ERRORS.RESOURCES_NOT_FOUND
+        }
+        noSearchResultMessage={
+          ENVIRONMENT_VARIABLES_PANEL.LIST.ERRORS.NOT_MATCHING_SEARCH_QUERY
+        }
       />
     </div>
   );

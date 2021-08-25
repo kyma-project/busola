@@ -16,7 +16,6 @@ import { useTranslation } from 'react-i18next';
 import { setCluster, deleteCluster } from './../shared';
 import { areParamsCompatible } from '../params-version';
 import './ClusterList.scss';
-import { ClusterStorageType } from './ClusterStorageType';
 
 export function ClusterList() {
   const { clusters, activeClusterName } = useMicrofrontendContext();
@@ -46,24 +45,20 @@ export function ClusterList() {
       } catch (e) {
         console.error(e);
         notification.notifyError({
-          title: t('clusters.common.kubeconfig-download-error'),
+          title: 'Failed to download the Kubeconfig',
           content: e.message,
         });
       }
     } else {
       notification.notifyError({
-        title: t('clusters.common.kubeconfig-download-error'),
-        content: t('clusters.common.kubeconfig-not-present'),
+        title: 'Failed to download the Kubeconfig',
+        content: 'Kubeconfig is missing on the Cluster',
       });
     }
   };
 
   const entries = Object.values(clusters);
-  const headerRenderer = () => [
-    t('common.headers.name'),
-    t('clusters.common.api-server-address'),
-    t('clusters.storage.title'),
-  ];
+  const headerRenderer = () => ['Name', 'API Server address'];
   const textSearchProperties = [
     'currentContext.cluster.name',
     'currentContext.cluster.cluster.server',
@@ -89,14 +84,13 @@ export function ClusterList() {
       )}
     </>,
     entry.currentContext.cluster.cluster.server,
-    <ClusterStorageType clusterConfig={entry.config} />,
   ];
 
   const actions = [
     {
-      name: t('clusters.common.download-kubeconfig'),
+      name: 'Download Kubeconfig',
       icon: 'download',
-      tooltip: t('clusters.common.download-kubeconfig'),
+      tooltip: 'Download Kubeconfig',
       handler: e => downloadKubeconfig(e),
     },
     {
@@ -112,13 +106,13 @@ export function ClusterList() {
       className="fd-margin-begin--sm"
       onClick={() => LuigiClient.linkManager().navigate('add')}
     >
-      {t('clusters.add.title')}
+      Add Cluster
     </Button>
   );
 
   return (
     <>
-      <PageHeader title={t('clusters.overview.title')} />
+      <PageHeader title="Clusters Overview" />
       <GenericList
         textSearchProperties={textSearchProperties}
         showSearchSuggestion={false}
@@ -127,7 +121,7 @@ export function ClusterList() {
         rowRenderer={rowRenderer}
         actions={actions}
         extraHeaderContent={extraHeaderContent}
-        noSearchResultMessage={t('clusters.list.no-clusters-found')}
+        noSearchResultMessage="No clusters found"
       />
     </>
   );

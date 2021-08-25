@@ -1,5 +1,4 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { ActionBar, Breadcrumb, LayoutPanel } from 'fundamental-react';
 import LuigiClient from '@luigi-project/client';
@@ -19,8 +18,6 @@ export default function EntryNotFound({ entryType, entryId, navigate }) {
           .navigate('');
   };
 
-  const { t } = useTranslation();
-
   return (
     <>
       <header className="fd-has-background-color-background-2">
@@ -34,12 +31,12 @@ export default function EntryNotFound({ entryType, entryId, navigate }) {
               />
               <Breadcrumb.Item />
             </Breadcrumb>
-            <ActionBar title={entryId || t('common.messages.doesnt-exist')} />
+            <ActionBar title={entryId || 'Loading name...'} />
           </section>
         </section>
       </header>
       <LayoutPanel className="fd-has-padding-regular fd-margin--md">
-        {entryType} "{entryId}" {t('common.messages.loading-name')}
+        {entryType} "{entryId}" doesn't exist.
       </LayoutPanel>
     </>
   );

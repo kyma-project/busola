@@ -6,21 +6,12 @@ data:
   config.json: >
     {
       "config": {
-        "defaultStorage": "localStorage",
         "features":{
             "SERVICE_CATALOG":{
               "selectors":[
                   {
                     "type":"apiGroup",
                     "apiGroup":"servicecatalog.k8s.io"
-                  }
-              ]
-            },
-            "BTP_SERVICE_CATALOG":{
-              "selectors":[
-                  {
-                    "type":"apiGroup",
-                    "apiGroup":"services.cloud.sap.com"
                   }
               ]
             },

@@ -548,3 +548,14 @@ export const ENVIRONMENT_VARIABLES_PANEL = {
     },
   },
 };
+
+export const FORMS = {
+  RESOURCE_NAME: {
+    LABEL: 'Name',
+    INLINE_HELP: `Name must contain lower case alphanumeric characters, can contain '-'  (like 'my-name1').`,
+  },
+  LABELS: {
+    LABEL: 'Labels',
+    INLINE_HELP: `key=value', must start and end with alphanumeric character, can contain '-', '_' or '.'`,
+  },
+};

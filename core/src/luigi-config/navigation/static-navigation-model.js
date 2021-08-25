@@ -2,10 +2,7 @@ import i18next from 'i18next';
 import { saveAs } from 'file-saver';
 
 import { config } from '../config';
-import {
-  getActiveClusterName,
-  getClusters,
-} from './../cluster-management/cluster-management';
+import { getActiveClusterName, getClusters } from './../cluster-management';
 import { hasPermissionsFor } from './permissions';
 
 export const coreUIViewGroupName = '_core_ui_';
@@ -195,43 +192,9 @@ export function getStaticChildrenNodesForNamespace(
     },
     {
       category: i18next.t('workloads.title'),
-      resourceType: 'daemonsets',
-      pathSegment: 'daemonsets',
-      label: i18next.t('daemon-sets.title'),
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/DaemonSets?' +
-        toSearchParamsString({
-          resourceApiPath: '/apis/apps/v1',
-          hasDetailsView: true,
-        }),
-      viewGroup: coreUIViewGroupName,
-      keepSelectedForChildren: true,
-
-      navigationContext: 'daemonsets',
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':daemonSetName',
-              resourceType: 'daemonsets',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/DaemonSets/:daemonSetName?' +
-                toSearchParamsString({
-                  resourceApiPath: '/apis/apps/v1',
-                }),
-            },
-          ],
-        },
-      ],
-    },
-    {
-      category: i18next.t('workloads.title'),
       resourceType: 'cronjobs',
       pathSegment: 'cronjobs',
-      label: i18next.t('cron-jobs.title'),
+      label: 'Cron Jobs',
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/cronjobs?' +
@@ -617,76 +580,6 @@ export function getStaticChildrenNodesForNamespace(
       context: {
         requiredFeatures: [features.SERVICE_CATALOG],
       },
-    },
-    {
-      category: i18next.t('service-management.title'),
-      pathSegment: 'btp-instances',
-      navigationContext: 'serviceinstances',
-      label: i18next.t('btp-instances.title'),
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/serviceInstances?' +
-        toSearchParamsString({
-          resourceApiPath: '/apis/services.cloud.sap.com/v1alpha1',
-          readOnly: false,
-          hasDetailsView: true,
-        }),
-      viewGroup: coreUIViewGroupName,
-      keepSelectedForChildren: true,
-      context: {
-        requiredFeatures: [features.BTP_CATALOG],
-      },
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':instanceName',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/serviceInstances/:instanceName?' +
-                toSearchParamsString({
-                  resourceApiPath: '/apis/services.cloud.sap.com/v1alpha1',
-                }),
-            },
-          ],
-        },
-      ],
-    },
-    {
-      category: i18next.t('service-management.title'),
-      pathSegment: 'btp-service-bindings',
-      navigationContext: 'servicebindings',
-      label: i18next.t('btp-service-bindings.title'),
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/serviceBindings?' +
-        toSearchParamsString({
-          resourceApiPath: '/apis/services.cloud.sap.com/v1alpha1',
-          readOnly: false,
-          hasDetailsView: true,
-        }),
-      viewGroup: coreUIViewGroupName,
-      keepSelectedForChildren: true,
-      context: {
-        requiredFeatures: [features.BTP_CATALOG],
-      },
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':bindingName',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/serviceBindings/:bindingName?' +
-                toSearchParamsString({
-                  resourceApiPath: '/apis/services.cloud.sap.com/v1alpha1',
-                }),
-            },
-          ],
-        },
-      ],
     },
 
     //CONFIGURATION CATEGORY (NAMESPACE)

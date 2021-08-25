@@ -9,14 +9,8 @@ describe('retrieveVariablesFromBindingUsage', () => {
   test('should correct retrieve variables from bindingUsage', () => {
     const envs = retrieveVariablesFromBindingUsage(serviceBindingUsageMock);
     const expectedEnvs = [
-      {
-        key: 'PREFIX_FOO',
-        valueFrom: { secretKeyRef: { key: 'FOO', name: 'secret' } },
-      },
-      {
-        key: 'PREFIX_BAR',
-        valueFrom: { secretKeyRef: { key: 'BAR', name: 'secret' } },
-      },
+      { key: 'PREFIX_FOO', value: 'foo' },
+      { key: 'PREFIX_BAR', value: 'bar' },
     ];
 
     expect(envs).toEqual(expectedEnvs);

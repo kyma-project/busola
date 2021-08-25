@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 
 import { Button, Link } from 'fundamental-react';
 import { PageHeader } from 'react-shared';
-import { useTranslation } from 'react-i18next';
 
 import './ApiRuleFormHeader.scss';
 
@@ -17,9 +16,8 @@ const ApiRuleFormHeader = ({
   serviceName = '',
   openedInModalBool = false,
 }) => {
-  const { t } = useTranslation();
   const serviceLink = !openedInModalBool && serviceName && (
-    <PageHeader.Column title={t('services.labels.service')}>
+    <PageHeader.Column title="Service">
       <Link
         className="fd-link"
         onClick={() =>

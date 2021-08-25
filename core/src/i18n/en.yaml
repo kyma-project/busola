@@ -1,66 +1,15 @@
 ---
 addons:
-  errors:
-    cannot-create: Cannot create Addons Configuration
-  messages:
-    created: Addons Configuration {{name}} created
   title: Addons
 api-rules:
   access-strategies:
-    buttons:
-      add: Add access strategy
-    labels:
-      required-scope: Required scope
-    messages:
-      one-method: This access strategy requires at least one method.
-    title: Access Strategies
-    tooltips:
-      delete: Define at least one access strategy.
-      path: Path can contain alphanumeric characters and  '/', '.', '*', '?', '!', '-', '(', and ')'.
-  buttons:
-    create: Create API Rule
-    edit: Edit API Rule "{{apiRuleName}}"
-    expose: Expose {{type}}
-  general-settings:
-    title: General Settings
-  list:
-    headers:
-      host: Host
-      service-name: Service Name
-      status: Status
-  messages:
-    create-failed: Failed to create the API Rule
-    created: API Rule created
-    description: Expose Services outside the cluster with API Rules.
-    not-matching-results: Couldn't find API Rules matching this query.
-    updated: API Rule updated
-  services:
-    error-load: Couldn't load service list
-    loading: Loading services...
-    ns-no-services: No Services in this Namespace
+    delete:
+      tooltip: Define at least one access strategy.
   title: API Rules
 applications:
   title: Applications
 brokers:
   title: Brokers
-btp-instances:
-  external-name: External Name
-  instance-data: Service Instance Data
-  instance-id: Instance ID
-  offering-name: Offering Name
-  parameters: Instance Parameters
-  plan-name: Plan Name
-  title: BTP Service Instances
-btp-service-bindings:
-  binding-id: Binding ID
-  data: Binding Data
-  external-name: External Name
-  instance-id: Instance ID
-  instance-name: Service Instance Name
-  parameters: Instance Binding Parameters
-  secret: Secret
-  secret-not-found: This Secret doesn't exist.
-  title: BTP Service Bindings
 catalog:
   menu-title: Catalog
   subtitle: Enrich your experience with additional services that are installed outside the cluster.
@@ -68,99 +17,35 @@ catalog:
 cluster-addons:
   title: Cluster Addons
 cluster-role-bindings:
-  title: ClusterRoleBindings
+  title: Cluster Role Bindings
 cluster-roles:
-  title: ClusterRoles
+  title: Cluster Roles
 clusters:
-  add:
-    title: Add Cluster
-  buttons:
-    apply-configuration: Apply configuration
-    apply-kubeconfig: Apply kubeconfig
-  common:
-    api-server-address: API server address
-    download-kubeconfig: Download kubeconfig
-    kubeconfig-download-error: Failed to download the Kubeconfig
-    kubeconfig-not-present: Kubeconfig is missing on the Cluster
-  labels:
-    client-id: Client ID
-    issuer-url: Issuer URL
-    scopes: Scopes
   list:
-    title: Clusters
-    no-clusters-found: No clusters found
     outdated:
+      download: Download Kubeconfig
       tooltip: Outdated parameter version may cause errors. Delete and re-add your cluster.
-  messages:
-    error-kubeconfig: Error reading Kubeconfig
-    missing-configuration-data: Configuration has been included properly. Please fill remaining required data.
-    upload-paste-kubeconfig: Upload or paste your Kubeconfig file
-    wrong-configuration: Cannot apply configuration
   overview:
     title: Cluster Overview
-    version: Version
-  storage:
-    changed-message: The chosen storage type has been overwritten by the Cluster configuration from {{originalStorage}} to {{targetStorage}}.
-    choose-storage:
-      label: Storage type configuration
-    descriptions:
-      inMemory: Cluster data is cleared when you leave or refresh the page.
-      localStorage: Cluster data is persisted between browser reloads.
-      sessionStorage: Cluster data is cleared when the page session ends.
-      unknown: Unknown storage type
-    labels:
-      inMemory: In memory
-      localStorage: localStorage
-      sessionStorage: sessionStorage
-      unknown: Unknown
-    title: Storage Type
 common:
   buttons:
     cancel: Cancel
-    create: Create
     delete: Delete
-    edit-yaml: Edit YAML
-    save: Save
-  create-modal:
-    editor-error: "Parse error: {{error}}, changes won't be saved."
-    modes:
-      advanced: Advanced
-      simple: Simple
   delete-dialog:
     delete-confirm: Don't ask this again
-    information: You've switched off removal confirmations for all resources. You can switch them back on in Preferences.
     message: Are you sure you want to remove {{type}} {{name}}?
     title: Remove {{name}}
-  errors:
-    no-permissions: You don't have enough permissions to view this content.
-    no-permissions-header: Not enough permissions
-    no-permissions-message: Contact your administrator to grant you access.
-  headers:
-    created: Created
-    labels: Labels
-    loading: Loading...
-    name: Name
-    resources: Resources
-    status: Status
-  labels:
-    hostname: Hostname
-    name: Name
-    service: Service
-  messages:
-    doesnt-exist: doesn't exist.
-    loading-name: Loading name...
   tooltips:
-    copy-to-clipboard: Copy to clipboard
     download: Download
+    search: Search
+    save: Save
+    copy-to-clipboard: Copy to clipboard
     duplicate-key: Duplicate key
-    error: 'Error: '
     k8s-name-input: Name must contain lower case alphanumeric characters, can contain '-' (like 'my-name1').
     key-value: key=value, must start and end with alphanumeric character, can contain '-', '_' or '.'
     read-file: Read file content as single value, with file name as a key.
-    save: Save
-    search: Search
 config-maps:
-  title: ConfigMaps
+  title: Config Maps
 configuration:
   title: Configuration
 cron-jobs:
@@ -170,118 +55,21 @@ cron-jobs:
       replace: No concurrent executions, replace previous run with the new one.
       skip: No concurrent executions, skip new run if the previous one hasn't finished yet.
     title: Concurrency Policy
-  last-job-execution: Last Job execution
+  last-job-execution: Last job execution
   last-schedule-time: Last schedule time
   not-scheduled-yet: None scheduled yet
   schedule: Schedule
-  title: CronJobs
+  title: Cron Jobs
 custom-resource-definitions:
-  title: CustomResourceDefinitions
-daemon-sets:
-  images: Images
-  node-selector: Node selector
-  pods: $t(pods.title)
-  title: DaemonSets
-  tolerations:
-    effect: Effect
-    key: Key
-    operator: Operator
-    title: Tolerations
-    toleration-seconds: Seconds
+  title: Custom Resource Definitions
 deployments:
-  create-modal:
-    advanced:
-      cpu-limits: CPU Limits
-      cpu-requests: CPU Requests
-      expose-service: Expose separate Service
-      memory-limits: Memory Limits
-      memory-requests: Memory Requests
-      port: Port
-      port-placeholder: Enter the port exposed by the Service
-      runtime-profile: Runtime Profile
-      target-port: Target Port
-      target-port-placeholder: Enter the target port of the container
-    messages:
-      deployment-ok-service-bad: Deployment created, failed to create the Service
-      failure: Failed to create the Deployment
-      success: Deployment created
-    presets:
-      choose: Select preset
-      default: Default
-    simple:
-      docker-image: Docker Image
-      docker-image-placeholder: Enter Docker image tag, for example, bitnami/nginx
-    title: Create Deployment
   title: Deployments
 discovery-and-network:
   title: Discovery and Network
 functions:
   title: Functions
   variable:
-    buttons:
-      add: Add environment variable
-      open:
-        config-map: ConfigMap Variable
-        custom: Custom Variable
-        secret: Secret Variable
-    create-modal:
-      title:
-        config-map: Create ConfigMap Variable
-        custom: Create Custom Variable
-        secret: Create Secret Variable
-    edit-modal:
-      title:
-        config-map: Edit ConfigMap Variable
-        custom: Edit Custom Variable
-        secret: Edit Secret Variable
-    errors:
-      duplicated: Duplicated variable name.
-      empty: Variable is empty.
-      invalid: Variable name must contain alphanumeric characters, can contain '_', no blank spaces.
-      invalid-config: Select the ConfigMap name and key.
-      invalid-secret: Select the secret name and key.
-      restricted: This variable name is restricted and cannot be used. Try a different one.
-    form:
-      config-map: $t(functions.variable.type.config-map)
-      key: $t(functions.variable.header.key)
-      name: Name
-      secret: $t(functions.variable.type.secret)
-      value: $t(functions.variable.header.value)
-    header:
-      key: Key
-      name: Variable Name
-      source: Source
-      value: Value
-    not-found: This Function doesn't have any environment variables yet.
-    not-match: Couldn't find environment variables matching this query.
-    placeholders:
-      name: Variable name
-      value: Variable value
-    popup-error: At least one variable has an incorrect name format, is restricted, duplicated, or empty.
-    title:
-      environment-variables: Environment Variables
-      injected-variables: Environment Variables Injected via Service Bindings
-    tooltip:
-      config-map: This variable comes from the "{resourceName}" ConfigMap.
-      custom: This variable was provided by the user.
-      secret: This variable comes from the "{resourceName}" Secret.
-      service-binding: This variable was injected by the Service Binding referencing Service Instance "{serviceInstanceName}".
-      text: This variable comes from a Resource. To get the value, follow the link.
-    type:
-      config-map: ConfigMap
-      custom: Custom
-      secret: Secret
-      service-binding: Service Binding
-    warnings:
-      override: This variable name is identical to the variable injected via Service Binding. Continue if you intend that they can override each other. Otherwise, choose another name.
-      sbu-can-be-overridden:
-        by-both: This variable can be overridden by one of the custom variables or a variable injected by one of the Service Bindings.
-        by-custom-env: This variable can override or be overridden by one of the custom variables.
-        by-sbu: This variable can override or be overridden by a variable injected by one of the Service Bindings.
-      text: Warning
-      variable-can-override-sbu: This variable can override or be overridden by a variable injected by one of the created Service Bindings.
-generic-list:
-  no-entries-found: No entries found
+    tooltip: This variable comes from a Resource. To get the value, follow the link.
 git-repositories:
   title: Git Repositories
 instances:
@@ -301,20 +89,6 @@ jobs:
     type: Type
   start-time: Start Time
   title: Jobs
-machine-info:
-  architecture-cpus: Architecture & CPUs
-  cpu-m: CPU (m)
-  cpu-usage: 'CPU usage:'
-  cpus: CPUs
-  gib: GiB
-  kube-proxy-version: Kube proxy version
-  kubelet-version: Kubelet version
-  memory: Memory
-  memory-gib: Memory (GiB)
-  memory-usage: 'Memory usage:'
-  operating-system: Operating system
-  pods-capacity: Pods capacity
-  title: Machine info
 namespaces:
   overview:
     back: Back to Namespaces
@@ -322,44 +96,29 @@ namespaces:
       error: Error while loading memory consumption data
       limits: Memory limits
       requests: Memory requests
-      title: Resource Consumption
+      title: Resource consumption
     title: Overview
     workloads:
-      deploy-new: Deploy new workload
       deployments: $t(deployments.title)
       error: 'Error while loading {{title}} data due to: {{message}}'
       pods: $t(pods.title)
       title: Healthy Resources
   title: Namespaces
   tooltips:
-    container-memory-limit: Define memory constraints for individual containers in your Namespace.
-    create: Select this option to disable Istio to mediate all communication between the Pods in your Namespace.
+    container-memory-limit: Define memory constraints for individual containers in your namespace.
+    create: Select this option to disable istio to mediate all communication between the pods in your namespace.
     memory-examples: Use plain value in bytes (128974848) or suffix equivalents (like 129e6, 129M, 123Mi).
-    total-memory-limit: Define constraints that limit total memory consumption in your Namespace.
-no-permissions:
-  title: No Permissions
-node-details:
-  internal-ip: Internal IP
-  involved-object: Involved object
-  message: Message
-  name: Cluster Overview - Nodes
-  pod-cidr: Pod CIDR
-  timestamp: Timestamp
-  title-warnings: Warnings
+    total-memory-limit: Define constraints that limit total memory consumption in your namespace.
 oauth2-clients:
   title: OAuth2 Clients
 observability:
   title: Observability
 pods:
-  node: Node
-  restarts: Restarts
   title: Pods
-preferences:
-  title: Preferences
 replica-sets:
-  title: ReplicaSets
+  title: Replica Sets
 role-bindings:
-  title: RoleBindings
+  title: Role Bindings
 roles:
   title: Roles
 secrets:
@@ -367,50 +126,15 @@ secrets:
 service-management:
   title: Service Management
 services:
-  cluster-ip: Cluster IP
-  external-ips: External IPs
-  labels:
-    service: Service
-  ports: Ports
   title: Services
-  type: Service Type
 settings:
-  clusters:
-    confirmations: Confirmations
-    description: Cluster interaction
-    dontConfirmDelete: Delete without confirmation
-    showHiddenNamespaces: Show Hidden Namespaces
-    title: Clusters
-  interface:
-    description: Theme, language
-    themes:
-      dark:
-        description: Use in dimmed environments
-        title: Dark
-      hcb:
-        description: Optimized contrast and accessibility for bright environments
-        title: High-Contrast Black
-      hcw:
-        description: Optimized contrast and accessibility for dark environments
-        title: High-Contrast White
-      light:
-        description: Use in default office environments
-        title: Light
-      light_dark:
-        description: Automatically matches your system settings
-        title: Light / Dark
-    title: Interface
+  confirmations: Confirmations
+  dontConfirmDelete: Delete without confirmation
   language: Language
-  theme: Theme
 stateful-sets:
   replicas: Replicas
-  title: StatefulSets
-top-nav:
-  profile:
-    download-current-cluster-config: Download current Cluster Config
-    preferences: $t(preferences.title)
-    remove-current-cluster-config: Remove current Cluster Config
+  title: Stateful Sets
 workloads:
   docker-image:
-    tooltip: Enter a valid Docker image registry path.
+    tooltip: Enter a valid docker image registry path.
   title: Workloads

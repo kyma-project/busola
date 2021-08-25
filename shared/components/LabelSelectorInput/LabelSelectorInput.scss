@@ -23,10 +23,6 @@
   &:focus {
     box-shadow: 0 0 0 1px var(--sapField_Focus_BorderColor);
   }
-
-  &.compact {
-    min-height: var(--sapElement_Compact_Height);
-  }
   
   &.is-invalid {
     border-width: .125rem;
@@ -52,10 +48,6 @@
     &:focus {
       box-shadow: none !important;
       outline: none !important;
-    }
-
-    &.fd-input--compact {
-      height: unset;
     }
   }
 

@@ -15,7 +15,4 @@ export * from './AddonsConfiguration.details';
 export * from './CustomResourceDefinitions/CustomResourceDefinitions.details.js';
 export * from './Job/Job.details';
 export * from './CronJobs/CronJob.details';
-export * from './DaemonSet.details';
 export * from './StatefulSet/StatefulSets.details';
-export * from './ServiceInstance/ServiceInstance.details';
-export * from './ServiceBinding/ServiceBinding.details';

@@ -3,19 +3,6 @@ import { render } from '@testing-library/react';
 
 import { AuthForm, AUTH_FORM_OIDC, DEFAULT_SCOPE_VALUE } from '../AuthForm';
 
-jest.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => {
-    return {
-      t: str => str,
-      i18n: {
-        changeLanguage: () => new Promise(() => {}),
-        options: {},
-      },
-    };
-  },
-}));
-
 const DEFINED_SCOPE_VALUE = 'email openid';
 
 describe('AuthForm', () => {
@@ -28,9 +15,7 @@ describe('AuthForm', () => {
       />
     );
     const { getByPlaceholderText } = render(authForm);
-    expect(getByPlaceholderText('clusters.labels.scopes').value).toEqual(
-      DEFINED_SCOPE_VALUE,
-    );
+    expect(getByPlaceholderText('Scopes').value).toEqual(DEFINED_SCOPE_VALUE);
   });
 
   it('Renders Scope input with default scope value', () => {
@@ -42,8 +27,6 @@ describe('AuthForm', () => {
       />
     );
     const { getByPlaceholderText } = render(authForm);
-    expect(getByPlaceholderText('clusters.labels.scopes').value).toEqual(
-      DEFAULT_SCOPE_VALUE,
-    );
+    expect(getByPlaceholderText('Scopes').value).toEqual(DEFAULT_SCOPE_VALUE);
   });
 });

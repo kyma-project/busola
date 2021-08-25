@@ -13,7 +13,7 @@ context('Smoke Tests', () => {
       .should('be.visible');
 
     cy.getIframeBody()
-      .contains('Resource Consumption')
+      .contains('Resource consumption')
       .should('be.visible');
 
     cy.getIframeBody()
@@ -50,11 +50,11 @@ context('Smoke Tests', () => {
       .click();
 
     cy.getLeftNav()
-      .contains('ClusterRoles')
+      .contains('Cluster Roles')
       .should('be.visible');
 
     cy.getLeftNav()
-      .contains('ClusterRoleBindings')
+      .contains('Cluster Role Bindings')
       .should('be.visible');
   });
 });

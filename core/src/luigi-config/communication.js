@@ -6,7 +6,7 @@ import {
   saveActiveClusterName,
   getActiveClusterName,
   setCluster,
-} from './cluster-management/cluster-management';
+} from './cluster-management';
 import { clearAuthData } from './auth/auth-storage';
 import { reloadNavigation } from './navigation/navigation-data-init';
 import { reloadAuth } from './auth/auth';
@@ -17,14 +17,12 @@ export const communication = {
   customMessagesListeners: {
     'busola.language': ({ language }) => {
       localStorage.setItem('busola.language', language);
-      i18next.changeLanguage(language).then(() => reloadNavigation());
+      i18next
+        .changeLanguage(language)
+        .then(() => Luigi.configChanged('navigation.nodes'));
     },
     'busola.theme': ({ name }) => {
       setTheme(name);
-      Luigi.customMessages().sendToAll({
-        id: 'busola.theme',
-        theme: name,
-      });
     },
     'busola.showHiddenNamespaces': ({ showHiddenNamespaces }) => {
       setFeatureToggle('showHiddenNamespaces', showHiddenNamespaces);

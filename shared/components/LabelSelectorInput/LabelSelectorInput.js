@@ -37,7 +37,6 @@ export const LabelSelectorInput = ({
   type = 'Labels',
   className,
   i18n,
-  compact,
 }) => {
   const [isValid, setValid] = useState(true);
   const inputRef = useRef(null);
@@ -94,11 +93,6 @@ export const LabelSelectorInput = ({
   }
 
   const { t } = useTranslation(null, { i18n });
-
-  const inputClassNames = classNames('fd-input label-selector__input', {
-    'fd-input--compact': compact,
-  });
-
   return (
     <FormItem className={className}>
       <FormLabel>{type}</FormLabel>
@@ -109,7 +103,6 @@ export const LabelSelectorInput = ({
             className={classNames([
               'label-selector',
               { 'is-invalid': !isValid },
-              { compact: compact },
             ])}
           >
             {createLabelsToDisplay(readonlyLabels).map(l => (
@@ -121,7 +114,7 @@ export const LabelSelectorInput = ({
             ))}
             <input
               ref={inputRef}
-              className={inputClassNames}
+              className="fd-input label-selector__input"
               type="text"
               placeholder={`Enter ${type} key=value`}
               onKeyDown={handleKeyDown}

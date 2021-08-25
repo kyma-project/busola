@@ -54,14 +54,6 @@ export const ThemeProvider = ({ children, env }) => {
     return _ => removeEventListener(messageListenerId);
   }, []);
 
-  useEffect(() => {
-    const listenerId = LuigiClient.addCustomMessageListener(
-      'busola.theme',
-      ({ theme }) => setTheme(theme),
-    );
-    return () => LuigiClient.removeCustomMessageListener(listenerId);
-  }, []);
-
   function handleThemeChange(name) {
     LuigiClient.sendCustomMessage({ id: 'busola.theme', name });
     setTheme(name);

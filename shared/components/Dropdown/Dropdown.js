@@ -14,7 +14,6 @@ export function Dropdown({
   disabled = false,
   _ref,
   emptyListMessage = 'No resources available',
-  ...fdSelectProps
 }) {
   if (!options || !options.length) {
     options = [
@@ -45,7 +44,6 @@ export function Dropdown({
         onSelect={onSelect}
         disabled={disabled}
         ref={_ref}
-        {...fdSelectProps}
       />
     </div>
   );

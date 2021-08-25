@@ -7,10 +7,10 @@ import {
   VARIABLE_TYPE,
   VARIABLE_VALIDATION,
 } from 'components/Lambdas/helpers/lambdaVariables';
+import { ENVIRONMENT_VARIABLES_PANEL } from 'components/Lambdas/constants';
 import { CONFIG } from 'components/Lambdas/config';
 
 import { getValidationStatus, validateVariable } from '../validation';
-import { useTranslation } from 'react-i18next';
 import './VariableInputs.scss';
 
 export default function ResourceVariableInput({
@@ -22,7 +22,6 @@ export default function ResourceVariableInput({
   setValidity,
   setInvalidModalPopupMessage,
 }) {
-  const { t } = useTranslation();
   const [variable, setVariable] = useState(currentVariable);
   const [debouncedCallback] = useDebouncedCallback(newVariable => {
     onUpdateVariable(newVariable);
@@ -69,7 +68,10 @@ export default function ResourceVariableInput({
     const validate = validateVariable(variables, variable);
     setValidity(validate);
     if (!validate) {
-      setInvalidModalPopupMessage(t('functions.variable.popup-error'));
+      setInvalidModalPopupMessage(
+        ENVIRONMENT_VARIABLES_PANEL.EDIT_MODAL.CONFIRM_BUTTON.POPUP_MESSAGES
+          .ERROR,
+      );
     }
   }, [
     variables,
@@ -77,7 +79,6 @@ export default function ResourceVariableInput({
     setValidity,
     setInvalidModalPopupMessage,
     debouncedCallback,
-    t,
   ]);
 
   function onChangeName(event) {
@@ -134,32 +135,33 @@ export default function ResourceVariableInput({
     switch (validation) {
       case VARIABLE_VALIDATION.EMPTY:
         className = 'fd-has-color-status-3';
-        message = t('functions.variable.errors.empty');
+        message = ENVIRONMENT_VARIABLES_PANEL.ERRORS.EMPTY;
         break;
       case VARIABLE_VALIDATION.INVALID:
         className = 'fd-has-color-status-3';
-        message = t('functions.variable.errors.invalid');
+        message = ENVIRONMENT_VARIABLES_PANEL.ERRORS.INVALID;
         break;
       case VARIABLE_VALIDATION.INVALID_SECRET:
         className = 'fd-has-color-status-3';
-        message = t('functions.variable.errors.invalid-secret');
+        message = ENVIRONMENT_VARIABLES_PANEL.ERRORS.INVALID_SECRET;
         break;
       case VARIABLE_VALIDATION.INVALID_CONFIG:
         className = 'fd-has-color-status-3';
-        message = t('functions.variable.errors.invalid-config');
+        message = ENVIRONMENT_VARIABLES_PANEL.ERRORS.INVALID_CONFIG;
         break;
 
       case VARIABLE_VALIDATION.DUPLICATED:
         className = 'fd-has-color-status-3';
-        message = t('functions.variable.errors.duplicated');
+        message = ENVIRONMENT_VARIABLES_PANEL.ERRORS.DUPLICATED;
         break;
       case VARIABLE_VALIDATION.RESTRICTED:
         className = 'fd-has-color-status-3';
-        message = t('functions.variable.errors.restricted');
+        message = ENVIRONMENT_VARIABLES_PANEL.ERRORS.RESTRICTED;
         break;
       case VARIABLE_VALIDATION.CAN_OVERRIDE_SBU:
         className = 'fd-has-color-status-2';
-        message = t('functions.variable.warnings.override');
+        message =
+          ENVIRONMENT_VARIABLES_PANEL.WARNINGS.VARIABLE_CAN_OVERRIDE_SBU;
         break;
       default:
         return null;
@@ -182,12 +184,10 @@ export default function ResourceVariableInput({
   return (
     <div className="resource-variable-form">
       <FormItem className="grid-input-fields">
-        <FormLabel required={true}>
-          {t('functions.variable.form.name')}
-        </FormLabel>
+        <FormLabel required={true}>Name</FormLabel>
         <FormInput
           id={`variableName-${currentVariable.id}`}
-          placeholder={t('functions.variable.placeholders.name')}
+          placeholder={ENVIRONMENT_VARIABLES_PANEL.PLACEHOLDERS.VARIABLE_NAME}
           type="text"
           value={variable.name}
           onChange={onChangeName}
@@ -199,7 +199,7 @@ export default function ResourceVariableInput({
         <>
           <FormItem className="grid-input-fields">
             <FormLabel required={true}>
-              {t('functions.variable.form.secret')}
+              {ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.SECRET.TEXT}
             </FormLabel>
             <Dropdown
               id={`variableValueFromSecret-${currentVariable.id}`}
@@ -221,9 +221,7 @@ export default function ResourceVariableInput({
             />
           </FormItem>
           <FormItem className="grid-input-fields">
-            <FormLabel required={true}>
-              {t('functions.variable.form.key')}
-            </FormLabel>
+            <FormLabel required={true}>Key</FormLabel>
             <Dropdown
               id={`variableKeyFromSecret-${currentVariable.id}`}
               options={resourceKeysOptions}
@@ -247,7 +245,7 @@ export default function ResourceVariableInput({
         <>
           <FormItem className="grid-input-fields">
             <FormLabel required={true}>
-              {t('functions.variable.form.config-map')}
+              {ENVIRONMENT_VARIABLES_PANEL.VARIABLE_TYPE.CONFIG_MAP.TEXT}
             </FormLabel>
             <Dropdown
               id={`variableValueFromConfigMap-${currentVariable.id}`}
@@ -269,9 +267,7 @@ export default function ResourceVariableInput({
             />
           </FormItem>
           <FormItem className="grid-input-fields">
-            <FormLabel required={true}>
-              {t('functions.variable.form.key')}
-            </FormLabel>
+            <FormLabel required={true}>Key</FormLabel>
             <Dropdown
               id={`variableKeyFromConfigMap-${currentVariable.id}`}
               options={resourceKeysOptions}

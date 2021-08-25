@@ -36,7 +36,7 @@ export default function AccessStrategyForm({
     ? component => component
     : component => (
         <div>
-          <Tooltip content={t('api-rules.access-strategies.tooltips.delete')}>
+          <Tooltip content={t('api-rules.access-strategies.delete.tooltip')}>
             {component}
           </Tooltip>
         </div>
@@ -71,19 +71,18 @@ export default function AccessStrategyForm({
         <div className="content">
           <FormGroup>
             <FormItem style={{ marginRight: '0.5rem' }}>
-              <Tooltip content={t('api-rules.access-strategies.tooltips.path')}>
-                <FormInput
-                  placeholder="Enter the path"
-                  type="text"
-                  value={strategy.path}
-                  required
-                  aria-label="Access strategy path"
-                  pattern="^[a-z0-9\/\(\)\?.!*\-]+"
-                  onChange={e =>
-                    setStrategy({ ...strategy, path: e.target.value })
-                  }
-                />
-              </Tooltip>
+              <FormInput
+                placeholder="Enter the path"
+                type="text"
+                value={strategy.path}
+                required
+                aria-label="Access strategy path"
+                pattern="^[a-z0-9\/\(\)\?.!*\-]+"
+                title="Path can contain alphanumeric characters and  '/', '.', '*', '?', '!', '-', '(', and ')'."
+                onChange={e =>
+                  setStrategy({ ...strategy, path: e.target.value })
+                }
+              />
             </FormItem>
             <FormItem>
               <Dropdown
@@ -125,7 +124,7 @@ export default function AccessStrategyForm({
       </div>
       {!hasValidMethods(strategy) && (
         <MessageStrip type="warning" className="fd-margin-bottom--md">
-          {t('api-rules.access-strategies.messages.one-method')}
+          This access strategy requires at least one method.
         </MessageStrip>
       )}
     </div>
@@ -152,13 +151,12 @@ function Details({ handler, ...props }) {
 }
 
 function OAuth2Details({ config, setConfig }) {
-  const { t } = useTranslation();
   return (
     <StringListInput
       list={config?.required_scope || []}
       onChange={scopes => setConfig({ required_scope: scopes })}
       isEditMode={true}
-      label={t('api-rules.access-strategies.labels.required-scope')}
+      label="Required scope"
       regexp={/^[^, ]+$/}
     />
   );

@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import React from 'react';
-import { Select } from 'fundamental-react';
+import { LayoutPanel, Select } from 'fundamental-react';
 import LuigiClient from '@luigi-project/client';
 
 export default function LanguageSettings() {
@@ -18,13 +18,17 @@ export default function LanguageSettings() {
   };
 
   return (
-    <div className="preferences-row">
-      <span className="fd-has-color-status-4">{t('settings.language')}</span>
-      <Select
-        options={languages}
-        selectedKey={i18n.language}
-        onSelect={selectLanguage}
-      />
-    </div>
+    <LayoutPanel className="fd-margin--tiny fd-margin-top--md">
+      <LayoutPanel.Header>
+        <LayoutPanel.Head title={t('settings.language')} />
+        <LayoutPanel.Actions>
+          <Select
+            options={languages}
+            selectedKey={i18n.language}
+            onSelect={selectLanguage}
+          />
+        </LayoutPanel.Actions>
+      </LayoutPanel.Header>
+    </LayoutPanel>
   );
 }

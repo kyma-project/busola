@@ -30,7 +30,7 @@ import {
   deleteActiveCluster,
   saveActiveClusterName,
   getCurrentContextNamespace,
-} from '../cluster-management/cluster-management';
+} from '../cluster-management';
 import { getFeatureToggle } from '../utils/feature-toggles';
 import { saveLocation } from './previous-location';
 import { NODE_PARAM_PREFIX } from '../luigi-config';
@@ -79,17 +79,10 @@ async function createClusterManagementNodes() {
           return false;
         },
       },
-      {
-        pathSegment: 'preferences',
-        viewUrl: config.coreUIModuleUrl + '/preferences',
-        openNodeInModal: { title: i18next.t('preferences.title'), size: 'm' },
-      },
     ],
     context: {
       clusters: await getClusters(),
       activeClusterName: getActiveClusterName(),
-      language: i18next.language,
-      busolaClusterParams: await getBusolaClusterParams(),
     },
   };
   const clusters = await getClusters();
@@ -154,53 +147,32 @@ export async function createNavigation() {
           items: [
             {
               icon: 'settings',
-              label: i18next.t('top-nav.profile.preferences'),
+              label: 'Preferences',
               link: `/cluster/${encodeURIComponent(
                 activeClusterName,
               )}/preferences`,
-              openNodeInModal: {
-                title: i18next.t('preferences.title'),
-                size: 'm',
-              },
             },
             {
               icon: 'log',
-              label: i18next.t('top-nav.profile.remove-current-cluster-config'),
+              label: 'Remove current Cluster Config',
               link: `/clusters/remove`,
             },
             {
               icon: 'download',
-              label: i18next.t(
-                'top-nav.profile.download-current-cluster-config',
-              ),
+              label: 'Download current Cluster Kubeconfig',
               link: `/cluster/${encodeURIComponent(
                 activeClusterName,
               )}/download-kubeconfig`,
-              testId: 'download-current-cluster-config',
             },
           ],
         },
       }
-    : {
-        profile: {
-          items: [
-            {
-              icon: 'settings',
-              label: i18next.t('top-nav.profile.preferences'),
-              link: '/clusters/preferences',
-              openNodeInModal: {
-                title: i18next.t('preferences.title'),
-                size: 'm',
-              },
-            },
-          ],
-        },
-      };
+    : {};
 
   const isNodeEnabled = node => {
     if (node.context?.requiredFeatures) {
       for (const feature of node.context.requiredFeatures || []) {
-        if (!feature || feature.isEnabled === false) return false;
+        if (feature.isEnabled === false) return false;
       }
     }
     return true;
@@ -216,13 +188,12 @@ export async function createNavigation() {
       items: [
         ...clusterNodes,
         {
-          title: i18next.t('clusters.add.title'),
+          title: 'Add Cluster',
           link: '/clusters/add',
         },
         {
-          title: i18next.t('clusters.overview.title'),
+          title: 'Clusters Overview',
           link: '/clusters',
-          testId: 'clusters-overview',
         },
       ],
     },

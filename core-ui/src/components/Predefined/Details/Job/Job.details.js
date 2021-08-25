@@ -1,10 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import {
-  ReadableCreationTimestamp,
-  EMPTY_TEXT_PLACEHOLDER,
-} from 'react-shared';
+import { ReadableCreationTimestamp } from 'react-shared';
 
 import { ResourcePods } from '../ResourcePods';
 import { JobCompletions } from './JobCompletions';
@@ -27,7 +24,7 @@ export function JobsDetails({ DefaultRenderer, ...otherParams }) {
             timestamp={job.status.startTime}
           />
         ) : (
-          EMPTY_TEXT_PLACEHOLDER
+          '-'
         ),
     },
     {
@@ -39,7 +36,7 @@ export function JobsDetails({ DefaultRenderer, ...otherParams }) {
             timestamp={job.status.completionTime}
           />
         ) : (
-          EMPTY_TEXT_PLACEHOLDER
+          '-'
         ),
     },
   ];
