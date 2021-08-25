@@ -1,25 +1,12 @@
 import React from 'react';
-import {
-  FormFieldset,
-  FormInput,
-  FormLabel,
-  MessageStrip,
-} from 'fundamental-react';
-import { ControlledEditor, useTheme, Tooltip } from 'react-shared';
+import { FormFieldset, FormInput, FormLabel } from 'fundamental-react';
+import { Tooltip } from 'react-shared';
 import { CreateModal } from 'shared/components/CreateModal/CreateModal';
 import './ServiceBindingAdvancedForm.scss';
 import { SimpleForm } from './SimpleForm';
 import { K8sResourceSelect } from '../../shared/components/K8sResourceSelect';
 import { useTranslation } from 'react-i18next';
-
-function isParseableToObject(value) {
-  try {
-    const parsed = JSON.parse(value);
-    return !!parsed && typeof parsed === 'object';
-  } catch (_) {
-    return false;
-  }
-}
+import { JSONSection } from './JSONInputSection';
 
 export function AdvancedForm({
   serviceBinding,
@@ -27,20 +14,6 @@ export function AdvancedForm({
   namespaceId,
 }) {
   const { t } = useTranslation();
-  const { theme } = useTheme();
-  const [areParamsValid, setParamsValid] = React.useState(true);
-
-  const onEditorChange = (_, value) => {
-    if (isParseableToObject(value)) {
-      setServiceBinding({
-        ...serviceBinding,
-        parameters: value,
-      });
-      setParamsValid(true);
-    } else {
-      setParamsValid(false);
-    }
-  };
 
   return (
     <>
@@ -93,24 +66,22 @@ export function AdvancedForm({
           />
         </FormFieldset>
       </CreateModal.Section>
-      <CreateModal.CollapsibleSection
-        title={t('btp-service-bindings.create.instance-parameters')}
-        actions={
-          !areParamsValid && (
-            <MessageStrip type="warning">
-              {t('common.messages.parse-error')}
-            </MessageStrip>
-          )
+      <JSONSection
+        title={t('btp-service-bindings.parameters')}
+        value={serviceBinding.parameters}
+        setValue={parameters =>
+          setServiceBinding({ ...serviceBinding, parameters })
         }
-      >
-        <ControlledEditor
-          height="12em"
-          language="json"
-          theme={theme}
-          value={serviceBinding.parameters}
-          onChange={onEditorChange}
-        />
-      </CreateModal.CollapsibleSection>
+        validate={parsed => !!parsed && typeof parsed === 'object'}
+      />
+      <JSONSection
+        title={t('btp-service-bindings.parameters-from')}
+        value={serviceBinding.parametersFrom}
+        setValue={parametersFrom =>
+          setServiceBinding({ ...serviceBinding, parametersFrom })
+        }
+        validate={Array.isArray}
+      />
     </>
   );
 }
