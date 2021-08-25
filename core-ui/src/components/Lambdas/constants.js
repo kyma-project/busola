@@ -73,20 +73,10 @@ export const LAMBDAS_LIST = {
         ],
       },
       REFERENCE: {
-        LABEL: 'Reference',
-        INLINE_HELP: `Reference to the Function's source. Select a branch name or commit revision.`,
         PLACEHOLDER: 'Enter a branch name or commit revision (Required)',
-        ERRORS: {
-          EMPTY: 'Reference is required.',
-        },
       },
       BASE_DIR: {
-        LABEL: 'Base Directory',
-        INLINE_HELP: `Directory with Function's code and dependencies`,
         PLACEHOLDER: 'Enter a base directory (Required)',
-        ERRORS: {
-          EMPTY: 'Base Directory is required.',
-        },
       },
     },
   },

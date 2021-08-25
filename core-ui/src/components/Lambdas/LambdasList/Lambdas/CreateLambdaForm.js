@@ -110,7 +110,7 @@ export default function CreateLambdaForm({
 
   function validateReference(reference, setStatus) {
     if (!reference) {
-      setStatus(LAMBDAS_LIST.CREATE_MODAL.INPUTS.REFERENCE.ERRORS.EMPTY);
+      setStatus(t('functions.create-view.errors.req-reference'));
       addError(ERRORS.REFERENCE);
       return;
     }
@@ -120,7 +120,7 @@ export default function CreateLambdaForm({
 
   function validateBaseDir(baseDir, setStatus) {
     if (!baseDir) {
-      setStatus(LAMBDAS_LIST.CREATE_MODAL.INPUTS.BASE_DIR.ERRORS.EMPTY);
+      setStatus(t('functions.create-view.errors.req-base-dir'));
       addError(ERRORS.BASE_DIR);
       return;
     }
@@ -236,10 +236,8 @@ export default function CreateLambdaForm({
             <FormInput
               _ref={referenceRef}
               required={true}
-              label={LAMBDAS_LIST.CREATE_MODAL.INPUTS.REFERENCE.LABEL}
-              inlineHelp={
-                LAMBDAS_LIST.CREATE_MODAL.INPUTS.REFERENCE.INLINE_HELP
-              }
+              label={t('functions.create-view.labels.reference')}
+              inlineHelp={t('functions.create-view.inline-help.reference')}
               id="reference"
               firstValue={'main'}
               placeholder={
@@ -251,8 +249,8 @@ export default function CreateLambdaForm({
             <FormInput
               _ref={baseDirRef}
               required={true}
-              label={LAMBDAS_LIST.CREATE_MODAL.INPUTS.BASE_DIR.LABEL}
-              inlineHelp={LAMBDAS_LIST.CREATE_MODAL.INPUTS.BASE_DIR.INLINE_HELP}
+              label={t('functions.create-view.labels.base-directory')}
+              inlineHelp={t('functions.create-view.inline-help.base-directory')}
               id="baseDir"
               firstValue={'/'}
               placeholder={

@@ -228,11 +228,17 @@ functions:
       no-repository-found: There are no Repositories available. Create a new Repository first.
       required-name: Function name is required.
       too-long: Function name cannot be longer than 63 characters.
+      req-reference: Reference is required.
+      req-base-dir: Base Directory is required.
     inline-help:
+      base-directory: Directory with Function's code and dependencies
+      reference: Reference to the Function's source. Select a branch name or commit revision.
       repository: Repository which you want to use
       runtime: Runtime on which your Function will run
       source-type: "Type of your Function's code source: Inline editor (code and dependencies are provided as plain text) or Git repository (code and dependencies are fetched from a Git repository)"
     labels:
+      base-directory: Base Directory
+      reference: Reference
       git-repository: Git repository
       inline-editor: Inline editor
       repository: Repository
