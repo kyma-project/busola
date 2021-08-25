@@ -10,16 +10,16 @@ export function validateResourceName(
   }
 
   if (!name) {
-    return t('functions.create-view.errors.required-name');
+    return t(errorMessages.EMPTY);
   }
 
   if (name.length > 63) {
-    return t('functions.create-view.errors.too-long');
+    return t(errorMessages.TOO_LONG);
   }
 
   const regex = /^[a-z]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$/;
   if (!regex.test(name)) {
-    return t('common.tooltips.k8s-name-input');
+    return t(errorMessages.INVALID);
   }
 
   return '';

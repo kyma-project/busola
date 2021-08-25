@@ -219,6 +219,11 @@ deployments:
 discovery-and-network:
   title: Discovery and Network
 functions:
+  repository-list:
+    errors:
+      req-name: Repository name is required.
+      invalid-url: Invalid Repository URL. The URL must start with the "http(s)", "git", or "ssh" prefix and end with the ".git" suffix.
+      too-long-name: Repository name cannot be longer than 63 characters.
   create-view:
     buttons:
       confirm: Create

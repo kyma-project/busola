@@ -62,10 +62,10 @@ export default function RepositoryForm({
 
   useEffect(() => {
     if (isValid && errors.length) {
-      setInvalidModalPopupMessage(REPOSITORIES_LIST.MODAL_ERROR);
+      setInvalidModalPopupMessage(t('functions.create-view.errors.invalid'));
       setValidity(false);
     }
-  }, [isValid, errors, setValidity, setInvalidModalPopupMessage]);
+  }, [isValid, errors, setValidity, setInvalidModalPopupMessage, t]);
 
   useEffect(() => {
     if (showSecretName) {
@@ -80,7 +80,6 @@ export default function RepositoryForm({
   useEffect(() => {
     const validationMessage = validateResourceName(
       name,
-      repositoryNames,
       REPOSITORIES_LIST.MODAL_INPUTS.NAME.ERRORS,
       t,
     );
@@ -95,13 +94,13 @@ export default function RepositoryForm({
 
   useEffect(() => {
     if (errors.length) {
-      setInvalidModalPopupMessage(REPOSITORIES_LIST.MODAL_ERROR);
+      setInvalidModalPopupMessage(t('functions.create-view.errors.invalid'));
       setValidity(false);
     } else {
       setInvalidModalPopupMessage('');
       setValidity(true);
     }
-  }, [errors, setValidity, setInvalidModalPopupMessage]);
+  }, [errors, setValidity, setInvalidModalPopupMessage, t]);
 
   function validateRepositoryUrl(url, setStatus) {
     if (!url) {
@@ -124,7 +123,6 @@ export default function RepositoryForm({
   function validateSecretName(secretName, setStatus) {
     const validationMessage = validateResourceName(
       secretName,
-      [],
       REPOSITORIES_LIST.MODAL_INPUTS.SECRET_NAME.ERRORS,
       t,
     );

@@ -200,6 +200,11 @@ deployments:
 discovery-and-network:
   title: Odkrywanie i sieć
 functions:
+  repository-list:
+    errors:
+      req-name: Nazwa repozytorium jest wymagana.
+      invalid-url: Nieprawidłowy adres URL repozytorium. URL musi zaczynać się od prefiksu „http(s)”, „git” lub „ssh” i kończyć się sufiksem „.git”.
+      too-long-name: Nazwa repozytorium nie może być dłuższa niż 63 znaki.
   create-view:
     buttons:
       confirm: Stwórz

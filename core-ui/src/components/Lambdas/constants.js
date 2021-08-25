@@ -60,6 +60,13 @@ export const LAMBDA_ERROR_PHASES = [
 export const LAMBDAS_LIST = {
   CREATE_MODAL: {
     INPUTS: {
+      NAME: {
+        ERRORS: {
+          EMPTY: 'functions.create-view.errors.required-name',
+          INVALID: 'common.tooltips.k8s-name-input',
+          TOO_LONG: 'functions.create-view.errors.too-long',
+        },
+      },
       SOURCE_TYPE: {
         OPTIONS: [
           {
@@ -88,21 +95,12 @@ export const FUNCTION_SOURCE_TYPE = {
 };
 
 export const REPOSITORIES_LIST = {
-  UPDATE_MODAL: {
-    TITLE: 'Update Repository {repositoryName}',
-    CONFIRM_BUTTON: {
-      TEXT: 'Update',
-    },
-  },
-  MODAL_ERROR: 'At least one field is empty or incorrectly formatted.',
   MODAL_INPUTS: {
     NAME: {
       ERRORS: {
-        EMPTY: 'Repository name is required.',
-        INVALID: `Invalid Repository URL. The URL must start with the "http(s)", "git", or "ssh" prefix and end with the ".git" suffix.`,
-        DUPLICATED:
-          'There is already a Repository with the same name in this Namespace.',
-        TOO_LONG: 'Repository name cannot be longer than 63 characters.',
+        EMPTY: 'functions.repository-list.errors.req-name',
+        INVALID: 'functions.repository-list.errors.invalid-url',
+        TOO_LONG: 'functions.repository-list.errors.too-long-name',
       },
     },
     URL: {
