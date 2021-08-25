@@ -11,7 +11,6 @@ export function YamlContent({
   title,
   onSave,
   saveDisabled,
-  i18n,
 }) {
   const [editor, setEditor] = React.useState(null);
   const [val, setVal] = useState(jsyaml.dump(yaml));
@@ -34,7 +33,6 @@ export function YamlContent({
         title={title}
         onSave={onSave}
         saveDisabled={saveDisabled}
-        i18n={i18n}
       />
       <ControlledEditor
         height="85vh"

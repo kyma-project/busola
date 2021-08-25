@@ -47,6 +47,7 @@ const ListActions = ({ actions, entry, standaloneItems = 2, compact }) => {
   }
 
   const listItems = actions.slice(standaloneItems, actions.length);
+
   return (
     <div className="list-actions">
       {actions.slice(0, standaloneItems).map(a => (

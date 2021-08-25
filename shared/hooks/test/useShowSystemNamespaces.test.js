@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import { getFeatureToggle, useFeatureToggle } from '../useFeatureToggle.js';
+import { useShowHiddenNamespaces } from '../useShowHiddenNamespaces.js';
 
 let mockToggles = [];
 jest.mock('@luigi-project/client', () => ({
@@ -8,16 +8,16 @@ jest.mock('@luigi-project/client', () => ({
 }));
 
 function TestComponent() {
-  const value = getFeatureToggle('firstFeature');
-  return <p data-testid="value">{value.toString()}</p>;
+  const showHiddenNamespaces = useShowHiddenNamespaces();
+  return <p data-testid="value">{showHiddenNamespaces.toString()}</p>;
 }
 
-describe('getFeatureToggle', () => {
+describe('useShowHiddenNamespaces', () => {
   it('Changes returned value during re-renders', () => {
     const { queryByTestId, rerender } = render(<TestComponent />);
     expect(queryByTestId('value')).toHaveTextContent('false');
 
-    mockToggles = ['firstFeature'];
+    mockToggles = ['showHiddenNamespaces'];
 
     rerender(<TestComponent />);
     expect(queryByTestId('value')).toHaveTextContent('true');

@@ -52,4 +52,3 @@ tests/fixtures/orders-function.js
 tests/fixtures/kubeconfig.yaml
 
 core-ui/public/themes/@sap-theming/*
-service-catalog-ui/public/themes/@sap-theming/*

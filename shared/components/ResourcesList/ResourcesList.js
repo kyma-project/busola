@@ -1,16 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import jsyaml from 'js-yaml';
-import {
-  FormFieldset,
-  FormItem,
-  Link,
-  Button,
-  Dialog,
-  Checkbox,
-} from 'fundamental-react';
+import { Link, Button } from 'fundamental-react';
 import { createPatch } from 'rfc6902';
-import LuigiClient from '@luigi-project/client';
 
 import './ResourcesList.scss';
 import {
@@ -31,8 +23,7 @@ import {
 import CustomPropTypes from '../../typechecking/CustomPropTypes';
 import { ModalWithForm } from '../ModalWithForm/ModalWithForm';
 import { ReadableCreationTimestamp } from '../ReadableCreationTimestamp/ReadableCreationTimestamp';
-import { useWindowTitle, useFeatureToggle } from '../../hooks';
-import { useTranslation } from 'react-i18next';
+import { useWindowTitle } from '../../hooks';
 
 ResourcesList.propTypes = {
   customColumns: CustomPropTypes.customColumnsType,
@@ -69,7 +60,7 @@ export function ResourcesList(props) {
   }
 
   return (
-    <YamlEditorProvider i18n={props.i18n}>
+    <YamlEditorProvider>
       {!props.isCompact && (
         <PageHeader
           title={prettifyNamePlural(props.resourceName, props.resourceType)}
@@ -102,13 +93,8 @@ function Resources({
   navigateFn,
   skipDataLoading = false,
   testid,
-  i18n,
 }) {
   useWindowTitle(windowTitle || prettifyNamePlural(resourceName, resourceType));
-  const { t } = useTranslation(['translation'], { i18n });
-
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const [activeResource, setActiveResource] = useState(null);
   const {
     setEditedYaml: setEditedSpec,
     closeEditor,
@@ -121,9 +107,6 @@ function Resources({
     filter,
   )(resourceUrl, { pollingInterval: 3000, skip: skipDataLoading });
   React.useEffect(() => closeEditor(), [namespace]);
-  const [dontConfirmDelete, setDontConfirmDelete] = useFeatureToggle(
-    'dontConfirmDelete',
-  );
   const prettifiedResourceName = prettifyNameSingular(
     resourceName,
     resourceType,
@@ -133,7 +116,7 @@ function Resources({
 
   const handleSaveClick = resourceData => async newYAML => {
     try {
-      const diff = createPatch(resourceData, jsyaml.load(newYAML));
+      const diff = createPatch(resourceData, jsyaml.safeLoad(newYAML));
       const url =
         withoutQueryString(resourceUrl) + '/' + resourceData.metadata.name;
       await updateResourceMutation(url, diff);
@@ -151,11 +134,8 @@ function Resources({
     }
   };
 
-  const performDelete = async resource => {
+  async function handleResourceDelete(resource) {
     const url = withoutQueryString(resourceUrl) + '/' + resource.metadata.name;
-    const name = prettifyNameSingular(resourceType);
-
-    setShowDeleteDialog(false);
     try {
       await deleteResourceMutation(url);
       notification.notifySuccess({
@@ -168,20 +148,6 @@ function Resources({
         content: e.message,
       });
       throw e;
-    }
-  };
-
-  const toggleDontConfirmDelete = value => {
-    LuigiClient.sendCustomMessage({ id: 'busola.dontConfirmDelete', value });
-    setDontConfirmDelete(value);
-  };
-
-  async function handleResourceDelete(resource) {
-    if (dontConfirmDelete) {
-      performDelete(resource);
-    } else {
-      setActiveResource(resource);
-      setShowDeleteDialog(true);
     }
   }
 
@@ -206,9 +172,9 @@ function Resources({
       ];
 
   const headerRenderer = () => [
-    t('common.name'),
-    t('common.created'),
-    t('common.labels'),
+    'Name',
+    'Created',
+    'Labels',
     ...customColumns.map(col => col.header),
   ];
 
@@ -264,50 +230,19 @@ function Resources({
     ));
 
   return (
-    <>
-      <Dialog
-        actions={[
-          <Button type="negative" onClick={() => performDelete(activeResource)}>
-            {t('common.buttons.delete')}
-          </Button>,
-          <Button onClick={() => setShowDeleteDialog(false)}>
-            {t('common.buttons.cancel')}
-          </Button>,
-        ]}
-        footerProps={{}}
-        show={showDeleteDialog}
-        title={t('common.delete-dialog.title', {
-          name: activeResource?.metadata.name,
-        })}
-      >
-        <p>
-          {t('common.delete-dialog.message', {
-            type: prettifiedResourceName,
-            name: activeResource?.metadata.name,
-          })}
-        </p>
-        <div className="fd-margin-top--sm">
-          <Checkbox onChange={e => toggleDontConfirmDelete(e.target.checked)}>
-            {t('common.delete-dialog.delete-confirm')}
-          </Checkbox>
-        </div>
-      </Dialog>
-      <GenericList
-        title={
-          showTitle ? prettifyNamePlural(resourceName, resourceType) : null
-        }
-        textSearchProperties={['metadata.name', 'metadata.labels']}
-        actions={actions}
-        entries={resources || []}
-        headerRenderer={headerRenderer}
-        rowRenderer={rowRenderer}
-        serverDataError={error}
-        serverDataLoading={loading}
-        pagination={{ itemsPerPage: 20, autoHide: true }}
-        extraHeaderContent={extraHeaderContent}
-        testid={testid}
-        currentlyEditedResourceUID={currentlyEditedResourceUID}
-      />
-    </>
+    <GenericList
+      title={showTitle ? prettifyNamePlural(resourceName, resourceType) : null}
+      textSearchProperties={['metadata.name', 'metadata.labels']}
+      actions={actions}
+      entries={resources || []}
+      headerRenderer={headerRenderer}
+      rowRenderer={rowRenderer}
+      serverDataError={error}
+      serverDataLoading={loading}
+      pagination={{ itemsPerPage: 20, autoHide: true }}
+      extraHeaderContent={extraHeaderContent}
+      testid={testid}
+      currentlyEditedResourceUID={currentlyEditedResourceUID}
+    />
   );
 }

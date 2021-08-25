@@ -37,7 +37,7 @@ context('In-cluster eventing', () => {
 
     cy.getIframeBody()
       .find(
-        '[placeholder="The Event Type value used to create the subscription"]',
+        '[placeholder="The eventType value used to create the subscription"]',
       )
       .type('nonexistingapp.order.created.v1');
 

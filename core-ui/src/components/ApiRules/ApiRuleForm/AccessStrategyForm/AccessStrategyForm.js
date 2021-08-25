@@ -12,7 +12,6 @@ import {
   MessageStrip,
 } from 'fundamental-react';
 import { Tooltip, Dropdown } from 'react-shared';
-import { useTranslation } from 'react-i18next';
 
 import StringListInput from './StringListInput';
 import JwtDetails from './JwtDetails/JwtDetails';
@@ -30,13 +29,12 @@ export default function AccessStrategyForm({
   handleFormChanged,
 }) {
   const selectedType = strategy.accessStrategies[0].handler;
-  const { t } = useTranslation();
 
   const deleteButtonWrapper = canDelete
     ? component => component
     : component => (
         <div>
-          <Tooltip content={t('api-rules.access-strategies.delete.tooltip')}>
+          <Tooltip content="Define at least one access strategy.">
             {component}
           </Tooltip>
         </div>

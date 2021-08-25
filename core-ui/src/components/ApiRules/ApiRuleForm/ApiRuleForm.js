@@ -6,7 +6,6 @@ import LuigiClient from '@luigi-project/client';
 import classNames from 'classnames';
 import { FormItem, FormLabel, LayoutPanel, Button } from 'fundamental-react';
 import { supportedMethodsList } from '../accessStrategyTypes';
-import { useTranslation } from 'react-i18next';
 
 import './ApiRuleForm.scss';
 import ApiRuleFormHeader from './ApiRuleFormHeader/ApiRuleFormHeader';
@@ -114,8 +113,6 @@ export default function ApiRuleForm({
     runtime: useRef(null),
     service: useRef(null),
   };
-
-  const { t, i18n } = useTranslation();
 
   function handleFormChanged(e) {
     setValid(formRef.current.checkValidity()); // general form validity
@@ -246,7 +243,6 @@ export default function ApiRuleForm({
                     showHelp={!apiRule?.metadata.name}
                     defaultValue={apiRule?.metadata.name}
                     disabled={!!apiRule?.metadata.name}
-                    i18n={i18n}
                   />
                 </FormItem>
                 <FormItem>
@@ -257,7 +253,10 @@ export default function ApiRuleForm({
                   {domainLoading ? (
                     'Loading...'
                   ) : (
-                    <Tooltip content={t('common.tooltips.k8s-name-input')}>
+                    <Tooltip
+                      content="The hostname must consist of alphanumeric characters, dots or dashes, 
+                          and must start and end with an alphanumeric character (e.g. 'my-name1')."
+                    >
                       <InputWithSuffix
                         defaultValue={apiRule.spec.service.host.replace(
                           `.${domain}`,

@@ -1,11 +1,10 @@
 import React from 'react';
-
-import { ResourcePods } from './ResourcePods.js';
+import { DeploymentPods } from './DeploymentPods.js';
 
 export const DeploymentsDetails = ({ DefaultRenderer, ...otherParams }) => {
   return (
     <DefaultRenderer
-      customComponents={[ResourcePods]}
+      customComponents={[DeploymentPods]}
       {...otherParams}
     ></DefaultRenderer>
   );

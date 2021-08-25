@@ -1,6 +1,6 @@
 let params = null;
 
-export async function getBusolaClusterParams() {
+export async function getClusterParams() {
   if (!params) {
     try {
       const cacheBuster = '?cache-buster=' + Date.now();

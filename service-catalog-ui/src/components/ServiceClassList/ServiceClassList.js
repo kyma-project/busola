@@ -122,7 +122,7 @@ export default function ServiceClassList() {
   return (
     <>
       <PageHeader
-        title={t('catalog.title')}
+        title={t('service-catalog.catalog.title')}
         isCatalog={true}
         actions={actions(
           allServiceClasses.length > 0,
@@ -145,7 +145,7 @@ export default function ServiceClassList() {
         >
           <>
             <ServiceClassDescription>
-              {t('catalog.subtitle')}
+              {t('service-catalog.catalog.services.description')}
             </ServiceClassDescription>
             <ServiceClassListWrapper>
               <CardsWrapper data-e2e-id="cards">

@@ -1,17 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  Button,
-  FormLabel,
-  FormInput,
-  FormTextarea,
-  Icon,
-} from 'fundamental-react';
+import { Button, FormLabel, FormInput, Icon } from 'fundamental-react';
 import { Tooltip } from '../..';
 import { fromEntries, toEntries, readFromFile } from './helpers';
 import { v4 as uuid } from 'uuid';
 import './KeyValueForm.scss';
-import { useTranslation } from 'react-i18next';
 
 KeyValueForm.propTypes = {
   data: PropTypes.object.isRequired,
@@ -27,8 +20,8 @@ export function KeyValueForm({
   setData,
   setValid,
   customHeaderAction,
+  keyPatternInfo = "Key name must contain alphanumeric characters, can contain  ' - ', '_' or '.'.",
   keyPattern = '[a-zA-z0-9_.-]+',
-  i18n,
 }) {
   const [entries, setEntries] = React.useState(toEntries(data));
   const [keyCounter, setKeyCounter] = React.useState({});
@@ -50,12 +43,9 @@ export function KeyValueForm({
   const deleteEntry = entry =>
     setEntries(entries.filter(e => e.renderId !== entry.renderId));
 
-  const { t } = useTranslation(null, { i18n });
   return (
     <section className="key-value-form">
-      <span className="fd-has-color-text-4">
-        {t('common.tooltips.k8s-name-input')}
-      </span>
+      <span className="fd-has-color-text-4">{keyPatternInfo}</span>
       <header className="fd-margin-top--sm fd-margin-bottom--sm">
         <Button
           className="add-entry"
@@ -78,7 +68,7 @@ export function KeyValueForm({
                   <Tooltip
                     className="fd-margin-end--tiny"
                     position="right"
-                    content={t('common.tooltips.duplicate-key')}
+                    content="Duplicate key"
                   >
                     <Icon ariaLabel="Duplicate key" glyph="alert" />
                   </Tooltip>
@@ -98,7 +88,7 @@ export function KeyValueForm({
                 }}
                 value={entry.key}
               />
-              <FormTextarea
+              <textarea
                 className="value-textarea"
                 name="value"
                 placeholder="Value"
@@ -108,7 +98,7 @@ export function KeyValueForm({
                 }}
                 value={entry.value}
               />
-              <Tooltip content={t('common.tooltips.read-file')}>
+              <Tooltip content="Read file content as single value, with file name as a key.">
                 <Button
                   typeAttr="button"
                   onClick={() =>

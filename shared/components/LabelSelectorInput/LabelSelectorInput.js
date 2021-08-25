@@ -3,7 +3,6 @@ import classNames from 'classnames';
 import './LabelSelectorInput.scss';
 import { Token, FormItem, FormLabel } from 'fundamental-react';
 import { Tooltip } from './../Tooltip/Tooltip';
-import { useTranslation } from 'react-i18next';
 
 const domainSegmentRegexp = '([a-z0-9]([a-z0-9-_]{0,61}[a-z0-9])?)';
 
@@ -36,7 +35,6 @@ export const LabelSelectorInput = ({
   onChange,
   type = 'Labels',
   className,
-  i18n,
 }) => {
   const [isValid, setValid] = useState(true);
   const inputRef = useRef(null);
@@ -92,12 +90,11 @@ export const LabelSelectorInput = ({
     onChange(newLabels);
   }
 
-  const { t } = useTranslation(null, { i18n });
   return (
     <FormItem className={className}>
       <FormLabel>{type}</FormLabel>
 
-      <Tooltip content={t('common.tooltips.key-value')}>
+      <Tooltip content="key=value', must start and end with alphanumeric character, can contain '-', '_' or '.'">
         <div className="fd-form-group">
           <div
             className={classNames([

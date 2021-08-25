@@ -21,10 +21,6 @@ context('Clean up namespace', () => {
     cy.getIframeBody()
       .find('tbody tr [aria-label="Delete"]')
       .click({ force: true });
-
-    cy.getIframeBody()
-      .contains('button', 'Delete')
-      .click();
   });
 
   it('Check if the namespace is terminated (step 2)', { retries: 3 }, () => {

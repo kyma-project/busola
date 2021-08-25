@@ -61,8 +61,9 @@ export default function CreateEventSubscriptionForm({
           Calculate
           <span className="fd-has-font-style-italic fd-has-margin">
             {' '}
-            Event Type{' '}
+            eventType{' '}
           </span>
+          field value
         </h2>
 
         <FormItem>
@@ -86,12 +87,12 @@ export default function CreateEventSubscriptionForm({
             required
             className="fd-has-display-block"
           >
-            Event name
+            Event type
           </FormLabel>
           <FormInput
             onChange={calculateEventType}
             ref={eventTypeInput}
-            placeholder="Event name"
+            placeholder="Event Type"
             id="event_type"
           />
         </FormItem>
@@ -124,8 +125,9 @@ export default function CreateEventSubscriptionForm({
           Enter
           <span className="fd-has-font-style-italic fd-has-margin">
             {' '}
-            Event Type{' '}
+            eventType{' '}
           </span>
+          field value manually
         </h2>
         <FormItem>
           <FormLabel
@@ -133,14 +135,14 @@ export default function CreateEventSubscriptionForm({
             required
             className="fd-has-display-block"
           >
-            Event Type
+            eventType field value
           </FormLabel>
           <InputWithPrefix
             prefix={EVENT_TYPE_PREFIX}
             _ref={eventTypeFinalInput}
             onChange={handleEventTypeManualChange}
             required
-            placeholder="The Event Type value used to create the subscription"
+            placeholder="The eventType value used to create the subscription"
             id="final_value"
           />
         </FormItem>

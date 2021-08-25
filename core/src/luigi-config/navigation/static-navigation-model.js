@@ -56,7 +56,7 @@ export function getStaticChildrenNodesForNamespace(
   const nodes = [
     {
       link: `/cluster/${encodedClusterName}/namespaces`,
-      label: i18next.t('namespaces.overview.back'),
+      label: 'Back to Namespaces',
       icon: 'nav-back',
       hideFromNav: !hasPermissionsFor('', 'namespaces', permissionSet, [
         'list',
@@ -78,7 +78,7 @@ export function getStaticChildrenNodesForNamespace(
     //WORKLOADS CATEGORY
     {
       category: {
-        label: i18next.t('workloads.title'),
+        label: 'Workloads',
         icon: 'source-code',
         collapsible: true,
       },
@@ -86,11 +86,11 @@ export function getStaticChildrenNodesForNamespace(
       hideFromNav: true,
     },
     {
-      category: i18next.t('workloads.title'),
+      category: 'Workloads',
       resourceType: 'functions',
       pathSegment: 'functions',
       navigationContext: 'functions',
-      label: i18next.t('functions.title'),
+      label: 'Functions',
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/Functions?' +
@@ -123,214 +123,10 @@ export function getStaticChildrenNodesForNamespace(
       ],
     },
     {
-      category: i18next.t('workloads.title'),
-      pathSegment: 'deployments',
-      resourceType: 'deployments',
-
-      label: i18next.t('deployments.title'),
-      keepSelectedForChildren: true,
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/Deployments?' +
-        toSearchParamsString({
-          resourceApiPath: '/apis/apps/v1',
-          hasDetailsView: true,
-        }),
-      viewGroup: coreUIViewGroupName,
-      navigationContext: 'deployments',
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':deploymentName',
-              resourceType: 'deployments',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/Deployments/:deploymentName?' +
-                toSearchParamsString({
-                  resourceApiPath: '/apis/apps/v1',
-                }),
-            },
-          ],
-        },
-      ],
-    },
-    {
-      category: i18next.t('workloads.title'),
-      resourceType: 'statefulsets',
-      pathSegment: 'statefulsets',
-      label: i18next.t('stateful-sets.title'),
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/statefulsets?' +
-        toSearchParamsString({
-          resourceApiPath: '/apis/apps/v1',
-          hasDetailsView: true,
-        }),
-      viewGroup: coreUIViewGroupName,
-      keepSelectedForChildren: true,
-
-      navigationContext: 'statefulsets',
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':statefulSetName',
-              resourceType: 'statefulsets',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/statefulsets/:statefulSetName?' +
-                toSearchParamsString({
-                  resourceApiPath: '/apis/apps/v1',
-                }),
-            },
-          ],
-        },
-      ],
-    },
-    {
-      category: i18next.t('workloads.title'),
-      resourceType: 'daemonsets',
-      pathSegment: 'daemonsets',
-      label: i18next.t('daemon-sets.title'),
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/DaemonSets?' +
-        toSearchParamsString({
-          resourceApiPath: '/apis/apps/v1',
-          hasDetailsView: true,
-        }),
-      viewGroup: coreUIViewGroupName,
-      keepSelectedForChildren: true,
-
-      navigationContext: 'daemonsets',
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':daemonSetName',
-              resourceType: 'daemonsets',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/DaemonSets/:daemonSetName?' +
-                toSearchParamsString({
-                  resourceApiPath: '/apis/apps/v1',
-                }),
-            },
-          ],
-        },
-      ],
-    },
-    {
-      category: i18next.t('workloads.title'),
-      resourceType: 'cronjobs',
-      pathSegment: 'cronjobs',
-      label: i18next.t('cron-jobs.title'),
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/cronjobs?' +
-        toSearchParamsString({
-          resourceApiPath: '/apis/batch/v1beta1',
-          hasDetailsView: true,
-        }),
-      viewGroup: coreUIViewGroupName,
-      keepSelectedForChildren: true,
-
-      navigationContext: 'cronjobs',
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':cronJobName',
-              resourceType: 'cronjobs',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/cronjobs/:cronJobName?' +
-                toSearchParamsString({
-                  resourceApiPath: '/apis/batch/v1beta1',
-                }),
-            },
-          ],
-        },
-      ],
-    },
-    {
-      category: i18next.t('workloads.title'),
-      resourceType: 'jobs',
-      pathSegment: 'jobs',
-      label: i18next.t('jobs.title'),
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/jobs?' +
-        toSearchParamsString({
-          resourceApiPath: '/apis/batch/v1',
-          hasDetailsView: true,
-        }),
-      viewGroup: coreUIViewGroupName,
-      keepSelectedForChildren: true,
-
-      navigationContext: 'jobs',
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':jobName',
-              resourceType: 'jobs',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/jobs/:jobName?' +
-                toSearchParamsString({
-                  resourceApiPath: '/apis/batch/v1',
-                }),
-            },
-          ],
-        },
-      ],
-    },
-    {
-      category: i18next.t('workloads.title'),
-      resourceType: 'replicasets',
-      pathSegment: 'replicasets',
-      label: i18next.t('replica-sets.title'),
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/ReplicaSets?' +
-        toSearchParamsString({
-          resourceApiPath: '/apis/apps/v1',
-          hasDetailsView: true,
-        }),
-      viewGroup: coreUIViewGroupName,
-      keepSelectedForChildren: true,
-
-      navigationContext: 'replicasets',
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':replicaSetName',
-              resourceType: 'replicasets',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/ReplicaSets/:replicaSetName?' +
-                toSearchParamsString({
-                  resourceApiPath: '/apis/apps/v1',
-                }),
-            },
-          ],
-        },
-      ],
-    },
-    {
-      category: i18next.t('workloads.title'),
+      category: 'Workloads',
       pathSegment: 'pods',
       resourceType: 'pods',
-      label: i18next.t('pods.title'),
+      label: 'Pods',
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/Pods?' +
@@ -386,11 +182,79 @@ export function getStaticChildrenNodesForNamespace(
         },
       ],
     },
+    {
+      category: 'Workloads',
+      pathSegment: 'deployments',
+      resourceType: 'deployments',
+
+      label: 'Deployments',
+      keepSelectedForChildren: true,
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/Deployments?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/apps/v1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      navigationContext: 'deployments',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':deploymentName',
+              resourceType: 'deployments',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/Deployments/:deploymentName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/apps/v1',
+                }),
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: 'Workloads',
+      resourceType: 'replicasets',
+      pathSegment: 'replicasets',
+      label: 'Replica Sets',
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/ReplicaSets?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/apps/v1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+
+      navigationContext: 'replicasets',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':replicaSetName',
+              resourceType: 'replicasets',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/ReplicaSets/:replicaSetName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/apps/v1',
+                }),
+            },
+          ],
+        },
+      ],
+    },
 
     //DISCOVERY AND NETWORK CATEGORY
     {
       category: {
-        label: i18next.t('discovery-and-network.title'),
+        label: 'Discovery and Network',
         icon: 'instance',
         collapsible: true,
       },
@@ -398,11 +262,11 @@ export function getStaticChildrenNodesForNamespace(
       hideFromNav: true,
     },
     {
-      category: i18next.t('discovery-and-network.title'),
+      category: 'Discovery and Network',
       resourceType: 'apirules',
       pathSegment: 'apirules',
       navigationContext: 'apirules',
-      label: i18next.t('api-rules.title'),
+      label: 'API Rules',
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/ApiRules?' +
@@ -454,11 +318,11 @@ export function getStaticChildrenNodesForNamespace(
       ],
     },
     {
-      category: i18next.t('discovery-and-network.title'),
+      category: 'Discovery and Network',
       pathSegment: 'services',
       resourceType: 'services',
       navigationContext: 'services',
-      label: i18next.t('services.title'),
+      label: 'Services',
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/Services?' +
@@ -491,7 +355,7 @@ export function getStaticChildrenNodesForNamespace(
     //SERVICE MANAGEMENT CATEGORY
     {
       category: {
-        label: i18next.t('service-management.title'),
+        label: 'Service Management',
         icon: 'add-coursebook',
         collapsible: true,
       },
@@ -499,10 +363,10 @@ export function getStaticChildrenNodesForNamespace(
       hideFromNav: true,
     },
     {
-      category: i18next.t('service-management.title'),
+      category: 'Service Management',
       pathSegment: 'catalog',
       navigationContext: 'catalog',
-      label: i18next.t('catalog.menu-title'),
+      label: 'Catalog',
       viewUrl: config.serviceCatalogModuleUrl + '/catalog',
       keepSelectedForChildren: true,
       viewGroup: catalogViewGroupName,
@@ -573,10 +437,10 @@ export function getStaticChildrenNodesForNamespace(
       ],
     },
     {
-      category: i18next.t('service-management.title'),
+      category: 'Service Management',
       pathSegment: 'instances',
       navigationContext: 'instances',
-      label: i18next.t('instances.title'),
+      label: 'Instances',
       viewUrl: config.serviceCatalogModuleUrl + '/instances',
       viewGroup: catalogViewGroupName,
       keepSelectedForChildren: true,
@@ -598,10 +462,10 @@ export function getStaticChildrenNodesForNamespace(
       ],
     },
     {
-      category: i18next.t('service-management.title'),
+      category: 'Service Management',
       pathSegment: 'brokers',
       navigationContext: 'brokers',
-      label: i18next.t('brokers.title'),
+      label: 'Brokers',
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/ServiceBrokers?' +
@@ -619,7 +483,7 @@ export function getStaticChildrenNodesForNamespace(
     //CONFIGURATION CATEGORY (NAMESPACE)
     {
       category: {
-        label: i18next.t('configuration.title'),
+        label: 'Configuration',
         icon: 'settings',
         collapsible: true,
       },
@@ -627,11 +491,11 @@ export function getStaticChildrenNodesForNamespace(
       hideFromNav: true,
     },
     {
-      category: i18next.t('configuration.title'),
+      category: 'Configuration',
       pathSegment: 'addons',
       resourceType: 'addonsconfigurations',
       navigationContext: 'addonsconfigurations',
-      label: i18next.t('addons.title'),
+      label: 'Addons',
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/AddonsConfigurations?' +
@@ -664,11 +528,11 @@ export function getStaticChildrenNodesForNamespace(
       ],
     },
     {
-      category: i18next.t('configuration.title'),
+      category: 'Configuration',
       pathSegment: 'config-maps',
       resourceType: 'configmaps',
       navigationContext: 'configmaps',
-      label: i18next.t('config-maps.title'),
+      label: 'Config Maps',
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/ConfigMaps?' +
@@ -697,11 +561,11 @@ export function getStaticChildrenNodesForNamespace(
       ],
     },
     {
-      category: i18next.t('configuration.title'),
+      category: 'Configuration',
       resourceType: 'secrets',
       pathSegment: 'secrets',
       navigationContext: 'secrets',
-      label: i18next.t('secrets.title'),
+      label: 'Secrets',
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/Secrets?' +
@@ -731,11 +595,11 @@ export function getStaticChildrenNodesForNamespace(
       ],
     },
     {
-      category: i18next.t('configuration.title'),
+      category: 'Configuration',
       pathSegment: 'roles',
       resourceType: 'roles',
       navigationContext: 'roles',
-      label: i18next.t('roles.title'),
+      label: 'Roles',
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/Roles?' +
@@ -767,11 +631,11 @@ export function getStaticChildrenNodesForNamespace(
       ],
     },
     {
-      category: i18next.t('configuration.title'),
+      category: 'Configuration',
       pathSegment: 'role-bindings',
       resourceType: 'rolebindings',
       navigationContext: 'rolebindings',
-      label: i18next.t('role-bindings.title'),
+      label: 'Role Bindings',
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/RoleBindings?' +
@@ -801,11 +665,11 @@ export function getStaticChildrenNodesForNamespace(
       ],
     },
     {
-      category: i18next.t('configuration.title'),
+      category: 'Configuration',
       pathSegment: 'oauth2clients',
       resourceType: 'oauth2clients',
       navigationContext: 'oauth2clients',
-      label: i18next.t('oauth2-clients.title'),
+      label: 'OAuth2 Clients',
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/Oauth2Clients?' +
@@ -842,11 +706,11 @@ export function getStaticChildrenNodesForNamespace(
       ],
     },
     {
-      category: i18next.t('configuration.title'),
+      category: 'Configuration',
       pathSegment: 'gitrepositories',
       resourceType: 'gitrepositories',
       navigationContext: 'gitrepositories',
-      label: i18next.t('git-repositories.title'),
+      label: 'Git Repositories',
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/GitRepositories?' +
@@ -861,11 +725,11 @@ export function getStaticChildrenNodesForNamespace(
       },
     },
     {
-      category: i18next.t('configuration.title'),
+      category: 'Configuration',
       pathSegment: 'customresourcedefinitions',
       resourceType: 'customresourcedefinitions',
       navigationContext: 'customresourcedefinitions',
-      label: i18next.t('custom-resource-definitions.title'),
+      label: 'Custom Resource Definitions',
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/CustomResourceDefinitions?' +
@@ -946,7 +810,7 @@ export function getStaticRootNodes(
     {
       pathSegment: 'namespaces',
       resourceType: 'namespaces',
-      label: i18next.t('namespaces.title'),
+      label: 'Namespaces',
       icon: 'dimension',
       viewUrl:
         config.coreUIModuleUrl +
@@ -981,7 +845,7 @@ export function getStaticRootNodes(
     //INTEGRATION CATEGORY
     {
       category: {
-        label: i18next.t('integration.title'),
+        label: 'Integration',
         icon: 'overview-chart',
         collapsible: true,
       },
@@ -992,8 +856,8 @@ export function getStaticRootNodes(
       pathSegment: 'applications',
       resourceType: 'applications',
       navigationContext: 'applications',
-      label: i18next.t('applications.title'),
-      category: i18next.t('integration.title'),
+      label: 'Applications/Systems',
+      category: 'Integration',
       viewUrl:
         config.coreUIModuleUrl +
         '/Applications?' +
@@ -1031,9 +895,9 @@ export function getStaticRootNodes(
       pathSegment: 'addons-config',
       navigationContext: 'clusteraddonsconfigurations',
       resourceType: 'clusteraddonsconfigurations',
-      label: i18next.t('cluster-addons.title'),
+      label: 'Cluster Addons',
       category: {
-        label: i18next.t('integration.title'),
+        label: 'Integration',
         icon: 'settings',
         collapsible: true,
       },
@@ -1072,7 +936,7 @@ export function getStaticRootNodes(
     //CONFIGURATION CATEGORY (CLUSTER)
     {
       category: {
-        label: i18next.t('configuration.title'),
+        label: 'Configuration',
         icon: 'settings',
         collapsible: true,
       },
@@ -1080,11 +944,11 @@ export function getStaticRootNodes(
       hideFromNav: true,
     },
     {
-      category: i18next.t('configuration.title'),
+      category: 'Configuration',
       pathSegment: 'cluster-roles',
       navigationContext: 'clusterroles',
       resourceType: 'clusterroles',
-      label: i18next.t('cluster-roles.title'),
+      label: 'Cluster Roles',
       viewUrl:
         config.coreUIModuleUrl +
         '/ClusterRoles?' +
@@ -1126,8 +990,8 @@ export function getStaticRootNodes(
       pathSegment: 'cluster-role-bindings',
       resourceType: 'clusterrolebindings',
       navigationContext: 'clusterrolebindings',
-      label: i18next.t('cluster-role-bindings.title'),
-      category: i18next.t('configuration.title'),
+      label: 'Cluster Role Bindings',
+      category: 'Configuration',
       viewUrl:
         config.coreUIModuleUrl +
         '/ClusterRoleBindings?' +
@@ -1158,11 +1022,11 @@ export function getStaticRootNodes(
       ],
     },
     {
-      category: i18next.t('configuration.title'),
+      category: 'Configuration',
       pathSegment: 'customresourcedefinitions',
       resourceType: 'customresourcedefinitions',
       navigationContext: 'customresourcedefinitions',
-      label: i18next.t('custom-resource-definitions.title'),
+      label: 'Custom Resource Definitions',
       viewUrl:
         config.coreUIModuleUrl +
         '/CustomResourceDefinitions?' +
@@ -1207,6 +1071,17 @@ export function getStaticRootNodes(
           ],
         },
       ],
+    },
+
+    //DIAGNOSTICS CATEGORY
+    {
+      category: {
+        label: 'Diagnostics',
+        icon: 'electrocardiogram',
+        collapsible: true,
+      },
+      pathSegment: '_integration_category_placeholder_',
+      hideFromNav: true,
     },
 
     // OTHER

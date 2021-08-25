@@ -28,7 +28,7 @@ const DrawerHeader = ({ title, closeEditor }) => (
   </header>
 );
 
-export const YamlEditorProvider = ({ children, i18n }) => {
+export const YamlEditorProvider = ({ children }) => {
   const [yaml, setYaml] = useState(null);
   const [title, setTitle] = useState('');
   const [isOpen, setOpen] = useState(false);
@@ -80,7 +80,6 @@ export const YamlEditorProvider = ({ children, i18n }) => {
           title={title}
           onSave={handleSaveClick}
           saveDisabled={!isValidYaml(changedYaml)}
-          i18n={i18n}
         />
       )}
     </SideDrawer>

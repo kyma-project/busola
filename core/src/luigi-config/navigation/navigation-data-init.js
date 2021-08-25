@@ -3,9 +3,10 @@ import {
   fetchPermissions,
   fetchBusolaInitData,
   fetchNamespaces,
+  checkIfClusterRequiresCA,
   fetchObservabilityHost,
 } from './queries';
-import { getBusolaClusterParams } from '../busola-cluster-params';
+import { getClusterParams } from '../cluster-params';
 import { config } from '../config';
 import {
   coreUIViewGroupName,
@@ -13,14 +14,14 @@ import {
   getStaticRootNodes,
 } from './static-navigation-model';
 import { navigationPermissionChecker, hasPermissionsFor } from './permissions';
-import { resolveFeatures, resolveFeatureAvailability } from '../features';
+import { resolveFeatures, resolveFeatureAvailability } from './../features';
 
 import {
   hideDisabledNodes,
   createNamespacesList,
   addExternalNodes,
 } from './navigation-helpers';
-import { clearAuthData, getAuthData } from '../auth/auth-storage';
+import { clearAuthData, getAuthData } from './../auth/auth-storage';
 import { groups } from '../auth/auth';
 import {
   getActiveCluster,
@@ -30,8 +31,9 @@ import {
   deleteActiveCluster,
   saveActiveClusterName,
   getCurrentContextNamespace,
+  saveClusterParams,
 } from '../cluster-management';
-import { getFeatureToggle } from '../utils/feature-toggles';
+import { shouldShowHiddenNamespaces } from './../utils/hidden-namespaces-toggle';
 import { saveLocation } from './previous-location';
 import { NODE_PARAM_PREFIX } from '../luigi-config';
 
@@ -79,16 +81,10 @@ async function createClusterManagementNodes() {
           return false;
         },
       },
-      {
-        pathSegment: 'preferences',
-        viewUrl: config.coreUIModuleUrl + '/preferences',
-        openNodeInModal: { title: i18next.t('preferences.title'), size: 'm' },
-      },
     ],
     context: {
       clusters: await getClusters(),
       activeClusterName: getActiveClusterName(),
-      language: i18next.language,
     },
   };
   const clusters = await getClusters();
@@ -153,48 +149,27 @@ export async function createNavigation() {
           items: [
             {
               icon: 'settings',
-              label: i18next.t('top-nav.profile.preferences'),
+              label: 'Preferences',
               link: `/cluster/${encodeURIComponent(
                 activeClusterName,
               )}/preferences`,
-              openNodeInModal: {
-                title: i18next.t('preferences.title'),
-                size: 'm',
-              },
             },
             {
               icon: 'log',
-              label: i18next.t('top-nav.profile.remove-current-cluster-config'),
+              label: 'Remove current Cluster Config',
               link: `/clusters/remove`,
             },
             {
               icon: 'download',
-              label: i18next.t(
-                'top-nav.profile.download-current-cluster-config',
-              ),
+              label: 'Download current Cluster Kubeconfig',
               link: `/cluster/${encodeURIComponent(
                 activeClusterName,
               )}/download-kubeconfig`,
-              testId: 'download-current-cluster-config',
             },
           ],
         },
       }
-    : {
-        profile: {
-          items: [
-            {
-              icon: 'settings',
-              label: i18next.t('top-nav.profile.preferences'),
-              link: '/clusters/preferences',
-              openNodeInModal: {
-                title: i18next.t('preferences.title'),
-                size: 'm',
-              },
-            },
-          ],
-        },
-      };
+    : {};
 
   const isNodeEnabled = node => {
     if (node.context?.requiredFeatures) {
@@ -258,8 +233,8 @@ async function getObservabilityNodes(authData, enabledFeatures) {
     enabledFeatures.OBSERVABILITY?.config.links;
 
   if (!links) {
-    const defaultObservability = (await getBusolaClusterParams()).config
-      .features.OBSERVABILITY;
+    const defaultObservability = (await getClusterParams()).config.features
+      .OBSERVABILITY;
     links =
       (await resolveFeatureAvailability(defaultObservability)) && //  use the Busola configMap as a fallback
       defaultObservability.config.links;
@@ -292,6 +267,15 @@ async function getObservabilityNodes(authData, enabledFeatures) {
 
 export async function getNavigationData(authData) {
   const activeCluster = await getActiveCluster();
+
+  if (activeCluster.config.requiresCA === undefined) {
+    activeCluster.config = {
+      ...activeCluster.config,
+      requiresCA: await checkIfClusterRequiresCA(authData),
+    };
+  }
+
+  await saveClusterParams(activeCluster);
 
   const { kubeconfig } = activeCluster;
 
@@ -360,6 +344,7 @@ export async function getNavigationData(authData) {
           crds,
           features,
           hiddenNamespaces,
+          showHiddenNamespaces: shouldShowHiddenNamespaces(),
           cluster: params.currentContext.cluster,
           config: params.config,
           kubeconfig: params.kubeconfig,
@@ -405,7 +390,7 @@ async function getNamespaces() {
     });
     return [];
   }
-  if (!getFeatureToggle('showHiddenNamespaces') && hiddenNamespaces) {
+  if (!shouldShowHiddenNamespaces() && hiddenNamespaces) {
     namespaces = namespaces.filter(ns => !hiddenNamespaces.includes(ns.name));
   }
   return createNamespacesList(namespaces);

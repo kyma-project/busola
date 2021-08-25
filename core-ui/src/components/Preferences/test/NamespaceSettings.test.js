@@ -8,7 +8,7 @@ jest.mock('react-shared', () => ({
   useMicrofrontendContext: () => ({
     groups: mockGroups,
   }),
-  useFeatureToggle: () => [true, () => null],
+  useShowHiddenNamespaces: () => true,
 }));
 
 describe('NamespaceSettings', () => {

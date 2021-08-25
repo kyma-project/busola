@@ -19,7 +19,7 @@ export const CardsWrapper = styled.div`
 `;
 
 export const ServiceClassDescription = styled.div`
-  color: var(--sapContent_DisabledTextColor, rgba(50, 54, 58, 0.6));
+  color: #74777a;
   font-size: 16px;
   text-align: left;
   padding: 16px 30px 0;

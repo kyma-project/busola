@@ -20,7 +20,8 @@
     "copy-themes": "gulp copy-themes"
   },
   "dependencies": {
-    "@luigi-project/client": "^1.14.3",
+    "@luigi-project/client": "^1.14.0",
+    "@luigi-project/core": "^1.14.0",
     "@sap-theming/theming-base-content": "^11.1.28",
     "ajv": "^6.10.2",
     "classnames": "^2.2.6",
@@ -75,7 +76,8 @@
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx,json,html,css,yaml,md}": [
-      "prettier --write"
+      "prettier --write",
+      "git add"
     ]
   },
   "husky": {

@@ -1,166 +1,28 @@
----
-addons:
-  title: Dodatki
-api-rules:
-  access-strategies:
-    delete:
-      tooltip: Zdefiniuj co najmniej jedną strategię dostępu.
-  title: Reguły API
-applications:
-  title: Aplikacje
-brokers:
-  title: Brokerzy
-catalog:
-  menu-title: Katalog
-  subtitle: Rozszerz możliwości za pomocą dodatkowych usług instalowanych poza klastrem.
-  title: Katalog serwisów
-cluster-addons:
-  title: Dodatki do klastra
-cluster-role-bindings:
-  title: Powiązania ról klastra
-cluster-roles:
-  title: Role klastra
 clusters:
-  list:
-    outdated:
-      download: Pobierz Kubeconfig
-      tooltip: Nieaktualna wersja parametru może powodować błędy. Usuń i ponownie dodaj swój klaster.
   overview:
-    title: Przegląd klastrów
-common:
-  buttons:
-    cancel: Anuluj
-    delete: Usuń
-    edit-yaml: Edytuj YAML
-  created: Stworzono
-  delete-dialog:
-    delete-confirm: Nie pytaj ponownie
-    message: Czy na pewno chcesz usunąć {{type}} {{name}}?
-    title: Usuń {{name}}
-  labels: Etykiety
-  name: Nazwa
-  status: Status
-  tooltips:
-    copy-to-clipboard: Skopiuj do schowka
-    download: Pobierz
-    duplicate-key: Zduplikowany klucz
-    k8s-name-input: Nazwa musi składać się z małych znaków alfanumerycznych, może zawierać również „-” (np. „my-name1”).
-    key-value: klucz=wartość, musi zaczynać się i kończyć znakiem alfanumerycznym, może zawierać również „-”, „_” lub „.”
-    read-file: Odczytuj zawartość pliku jako pojedynczą wartość, z nazwą pliku jako kluczem.
-    save: Zapisz
-    search: Szukaj
-config-maps:
-  title: Mapy konfiguracji
-configuration:
-  title: Konfiguracja
-cron-jobs:
-  concurrency-policy:
-    descriptions:
-      allow: Zezwalaj na współbieżne wykonania.
-      replace: Brak współbieżnych wykonań, zastąp poprzednie uruchomienie nowym.
-      skip: Brak współbieżnych wykonań, pomiń nowy przebieg, jeśli poprzedni jeszcze się nie zakończył.
-    title: Polityka współbieżności
-  last-job-execution: Ostatnie wykonanie zadania
-  last-schedule-time: Data ostatniego wykonania
-  not-scheduled-yet: Jeszcze nie uruchomiono
-  schedule: Harmonogram
-  title: CronJoby
-custom-resource-definitions:
-  title: Definicje zasobów niestandardowych
-daemon-sets:
-  images: Obrazy
-  node-selector: Selektory węzłów
-  pods: $t(pods.title)
-  title: Zestawy demonów
-  tolerations:
-    effect: Efekt
-    key: Klucz
-    operator: Operator
-    title: Tolerancje
-    toleration-seconds: Sekundy
-deployments:
-  title: Deploymenty
-discovery-and-network:
-  title: Odkrywanie i sieć
-functions:
-  title: Funkcje
-  variable:
-    tooltip: Ta zmienna pochodzi z zasobu. Aby uzyskać wartość, kliknij link.
-git-repositories:
-  title: Repozytoria Git
-instances:
-  no-specific-plan-parameters:
-    tooltip: Usługodawca nie określił konkretnych parametrów dla wybranego planu. Zapoznaj się z dokumentacją, aby poznać wymagane parametry i zdefiniuj je jako JSON w edytorze.
-  title: Instancje
-integration:
-  title: Integracja
-jobs:
-  completion-time: Czas realizacji
-  completions: Realizacje
-  conditions:
-    last-probe: Ostatnia sonda
-    last-transition: Ostatnie przejście
-    status: Status
-    title: Warunki
-    type: Typ
-  start-time: Czas rozpoczęcia
-  title: Zadania
+    title: Przegląd Klastrów
 namespaces:
   overview:
-    back: Powrót do przestrzeni nazw
-    resources:
-      error: Błąd podczas ładowania danych o zużyciu pamięci
-      limits: Limity pamięci
-      requests: Żądania pamięci
-      title: Zużycie zasobów
     title: Przegląd
     workloads:
-      deployments: $t(deployments.title)
-      error: 'Błąd podczas ładowania danych dla {{title}} z powodu: {{message}}'
-      pods: $t(pods.title)
       title: Zdrowe zasoby
-  title: Przestrzenie nazw
-  tooltips:
-    container-memory-limit: Zdefiniuj ograniczenia pamięci dla poszczególnych kontenerów w swojej przestrzeni nazw.
-    create: Wybierz tę opcję, aby wyłączyć istio, aby pośredniczyć w całej komunikacji między podami w Twojej przestrzeni nazw.
-    memory-examples: Użyj zwykłej wartości w bajtach (128974848) lub odpowiednich przyrostków (takich jak 129e6, 129M, 123Mi).
-    total-memory-limit: Zdefiniuj ograniczenia, które ograniczają całkowite zużycie pamięci w Twojej przestrzeni nazw.
-top-nav:
-  profile:
-    download-current-cluster-config: Pobierz konfigurację klastra
-    preferences: $t(preferences.title)
-    remove-current-cluster-config: Usuń bieżącą konfigurację
-oauth2-clients:
-  title: Klienci OAuth2
-observability:
-  title: Obserwowalność
+      pods: $t(pods.title)
+      deployments: $t(deployments.title)
+      error: 'Error while loading {{title}} data due to: {{message}}'
+    resources:
+      title: Resource consumption
+      requests: Memory requests
+      limits: Memory limits
+      error: Error while loading memory consumption data
 pods:
-  node: Węzeł
-  restarts: Ponownych uruchomień
   title: Pody
-preferences:
-  title: Ustawienia
-replica-sets:
-  title: Zestawy replik
-role-bindings:
-  title: Powiązania ról
-roles:
-  title: Role
-secrets:
-  title: Sekrety
-service-catalog: null
-service-management:
-  title: Zarządzanie serwisami
-services:
-  title: Serwisy
+deployments:
+  title: Deploymenty
+service-catalog:
+  title: Zarządzanie Serwisami
+  catalog:
+    title: Katalog Serwisów
+    services:
+      description: Enrich your experience with additional services that are installed outside the cluster.
 settings:
-  confirmations: Potwierdzenia
-  dontConfirmDelete: Usuwanie bez potwierdzenia
   language: Język
-stateful-sets:
-  replicas: Repliki
-  title: Zestawy stanowe
-workloads:
-  docker-image:
-    tooltip: Wprowadź poprawną ścieżkę rejestru obrazu Dockera.
-  title: Obciążenia

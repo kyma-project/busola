@@ -1,4 +1,4 @@
-import { getBusolaClusterParams } from './busola-cluster-params';
+import { getClusterParams } from './cluster-params';
 import { resolveFeatureAvailability } from './features';
 import { DEFAULT_FEATURES, PARAMS_VERSION } from './init-params/constants';
 
@@ -18,7 +18,7 @@ export async function applyKubeconfigIdIfPresent(kubeconfigId, initParams) {
     return;
   }
 
-  const clusterParams = await getBusolaClusterParams();
+  const clusterParams = await getClusterParams();
 
   const kubeconfigIdFeature = {
     ...DEFAULT_FEATURES,

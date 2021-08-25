@@ -39,10 +39,9 @@ export const ModalWithForm = ({
   invalidPopupMessage,
   className,
   onModalOpenStateChange,
-  alwaysOpen,
   ...props
 }) => {
-  const [isOpen, setOpen] = useState(alwaysOpen || false);
+  const [isOpen, setOpen] = useState(false);
   const [isValid, setValid] = useState(false);
   const [customValid, setCustomValid] = useState(true);
   const formElementRef = useRef(null);
@@ -50,12 +49,12 @@ export const ModalWithForm = ({
   const notificationManager = useNotification();
 
   useEffect(() => {
-    if (!alwaysOpen) setOpenStatus(opened); // if alwaysOpen===true we can ignore the 'opened' prop
+    setOpenStatus(opened);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [opened]);
 
   useEffect(() => {
-    if (isOpen !== undefined) onModalOpenStateChange(isOpen);
+    onModalOpenStateChange(isOpen);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
@@ -74,7 +73,9 @@ export const ModalWithForm = ({
       LuigiClient.uxManager().addBackdrop();
     } else {
       LuigiClient.uxManager().removeBackdrop();
-      if (customCloseAction) customCloseAction();
+      if (customCloseAction) {
+        customCloseAction();
+      }
     }
     setOpen(status);
   }
@@ -115,7 +116,7 @@ export const ModalWithForm = ({
       formElementRef.current.dispatchEvent(
         new Event('submit', { cancelable: true }),
       );
-      setOpenStatus(false);
+      setTimeout(() => setOpenStatus(false));
     }
   }
 
@@ -149,34 +150,39 @@ export const ModalWithForm = ({
     return button;
   }
 
-  const renderModalOpeningComponent = _ =>
-    modalOpeningComponent ? (
-      <div style={{ display: 'contents' }} onClick={() => setOpenStatus(true)}>
-        {modalOpeningComponent}
-      </div>
-    ) : (
-      <Button
-        glyph={button.glyph || null}
-        aria-label={button.label || null}
-        option={button.option}
-        compact={button.compact || false}
-        disabled={!!button.disabled}
-        onClick={() => setOpenStatus(true)}
-      >
-        {button.text}
-      </Button>
-    );
-
   return (
     <>
-      {alwaysOpen ? null : renderModalOpeningComponent()}
+      {modalOpeningComponent ? (
+        <div
+          style={{ display: 'contents' }}
+          onClick={() => setOpenStatus(true)}
+        >
+          {modalOpeningComponent}
+        </div>
+      ) : (
+        <Button
+          glyph={button.glyph || null}
+          aria-label={button.label || null}
+          option={button.option}
+          compact={button.compact || false}
+          disabled={!!button.disabled}
+          onClick={() => setOpenStatus(true)}
+        >
+          {button.text}
+        </Button>
+      )}
       <Dialog
         className={className}
         {...props}
         show={isOpen}
         actions={[
           renderConfirmButton(),
-          <Button onClick={() => setOpenStatus(false)} option="transparent">
+          <Button
+            onClick={() => {
+              setOpenStatus(false);
+            }}
+            option="transparent"
+          >
             Cancel
           </Button>,
         ]}
@@ -221,7 +227,6 @@ ModalWithForm.propTypes = {
   button: CustomPropTypes.button,
   className: PropTypes.string,
   onModalOpenStateChange: PropTypes.func,
-  alwaysOpen: PropTypes.bool, // set this to true if you want to control the modal by rendering and un-rendering it instead of the open/closed state
 };
 
 ModalWithForm.defaultProps = {
@@ -229,5 +234,4 @@ ModalWithForm.defaultProps = {
   confirmText: 'Create',
   invalidPopupMessage: '',
   onModalOpenStateChange: () => {},
-  alwaysOpen: false,
 };

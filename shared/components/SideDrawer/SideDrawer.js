@@ -4,7 +4,6 @@ import classNames from 'classnames';
 import { ControlledEditor } from '@monaco-editor/react';
 import jsyaml from 'js-yaml';
 import { Icon } from 'fundamental-react';
-import { useTranslation } from 'react-i18next';
 
 import './SideDrawer.scss';
 import { CopiableText } from '../CopiableText/CopiableText';
@@ -23,7 +22,6 @@ export const SideDrawer = ({
 }) => {
   const [width, setWidth] = React.useState(MIN_EDITOR_RATIO);
   const { editorTheme } = useTheme();
-  const { i18n } = useTranslation();
 
   let textToCopy;
 
@@ -112,7 +110,6 @@ export const SideDrawer = ({
                   textToCopy={textToCopy}
                   iconOnly={true}
                   buttonText="Copy"
-                  i18n={i18n}
                 />
               )}
             </div>

@@ -9,10 +9,8 @@ import {
   FormItem,
 } from 'fundamental-react';
 import { K8sNameInput, Tooltip } from 'react-shared';
-import { useTranslation } from 'react-i18next';
 
 export default function BasicData({ deployment, setDeployment }) {
-  const { t, i18n } = useTranslation();
   return (
     <FormFieldset>
       <K8sNameInput
@@ -20,7 +18,6 @@ export default function BasicData({ deployment, setDeployment }) {
         kind="Deployment"
         onChange={e => setDeployment({ ...deployment, name: e.target.value })}
         className="fd-margin-bottom--sm"
-        i18n={i18n}
       />
       <LabelsInput
         labels={deployment.labels}
@@ -30,7 +27,7 @@ export default function BasicData({ deployment, setDeployment }) {
         <FormLabel htmlFor="docker-image" required>
           Docker image
         </FormLabel>
-        <Tooltip content={t('namespaces.docker-image.tooltip')}>
+        <Tooltip content="Enter a valid docker image registry path.">
           <FormInput
             id="docker-image"
             required

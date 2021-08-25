@@ -1,4 +1,4 @@
-import { getTheme } from './utils/theme';
+import { setTheme, getTheme } from './utils/theme';
 
 export function createSettings(params) {
   return {

@@ -35,14 +35,13 @@ export function AddCluster() {
       if (Object.keys(params.kubeconfig || {}).length) {
         setKubeconfig(params.kubeconfig);
       }
-      notification.notifySuccess(
+      notification.notify(
         {
           title:
             'Configuration has been included properly. Please fill remaining required data.',
           type: 'info',
           icon: '',
-          buttonConfirm: false,
-          buttonDismiss: 'Ok',
+          autoClose: true,
         },
         7500,
       );

@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { useGetList, usePost, StringInput, K8sNameInput } from 'react-shared';
-import { useTranslation } from 'react-i18next';
 
 import { FormItem, FormLabel } from 'fundamental-react';
 import CheckboxFormControl from './CheckboxFormControl';
@@ -48,7 +47,6 @@ export const OAuth2ClientsCreate = ({
     }
   }
 
-  const { i18n } = useTranslation();
   return (
     <form
       ref={formElementRef}
@@ -62,7 +60,6 @@ export const OAuth2ClientsCreate = ({
           label="Name"
           kind="Client"
           onChange={e => setSpec({ ...spec, name: e.target.value })}
-          i18n={i18n}
         />
       </FormItem>
       <FormItem className="clearfix">
@@ -109,7 +106,6 @@ export const OAuth2ClientsCreate = ({
               kind="Secret"
               onChange={e => setSpec({ ...spec, secretName: e.target.value })}
               value={spec.secretName}
-              i18n={i18n}
             />
           </FormItem>
           <p className="fd-has-display-block fd-has-color-status-4">

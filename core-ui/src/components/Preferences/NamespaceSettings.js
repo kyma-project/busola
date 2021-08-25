@@ -1,13 +1,18 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
-import { useMicrofrontendContext, useFeatureToggle } from 'react-shared';
+import { useMicrofrontendContext, useShowHiddenNamespaces } from 'react-shared';
 import { LayoutPanel, Switch } from 'fundamental-react';
 
 export default function NamespaceSettings() {
+  const initialShowHiddenNamespaces = useShowHiddenNamespaces();
   const { groups } = useMicrofrontendContext();
-  const [showHiddenNamespaces, setShowHiddenNamespaces] = useFeatureToggle(
-    'showHiddenNamespaces',
+  const [showHiddenNamespaces, setShowHiddenNamespaces] = React.useState(
+    useShowHiddenNamespaces(),
   );
+
+  React.useEffect(() => {
+    setShowHiddenNamespaces(initialShowHiddenNamespaces);
+  }, [initialShowHiddenNamespaces]);
 
   const toggleVisibility = () => {
     LuigiClient.sendCustomMessage({

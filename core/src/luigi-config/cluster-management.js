@@ -1,4 +1,4 @@
-import { setAuthData, clearAuthData, getAuthData } from './auth/auth-storage';
+import { setAuthData, clearAuthData } from './auth/auth-storage';
 import { reloadNavigation } from './navigation/navigation-data-init';
 import { reloadAuth, hasNonOidcAuth } from './auth/auth';
 import { saveLocation } from './navigation/previous-location';
@@ -11,13 +11,7 @@ import {
   DEFAULT_HIDDEN_NAMESPACES,
   DEFAULT_FEATURES,
 } from './init-params/constants';
-import { getBusolaClusterParams } from './busola-cluster-params';
-import {
-  getTargetClusterConfig,
-  loadTargetClusterConfig,
-} from './utils/target-cluster-config';
-import { merge } from 'lodash';
-import { checkIfClusterRequiresCA } from './navigation/queries';
+import { getClusterParams } from './cluster-params';
 
 const CLUSTERS_KEY = 'busola.clusters';
 const CURRENT_CLUSTER_NAME_KEY = 'busola.current-cluster-name';
@@ -60,8 +54,6 @@ export async function setCluster(clusterName) {
 
     if (hasNonOidcAuth(kubeconfigUser)) {
       setAuthData(kubeconfigUser);
-      await saveCARequired();
-      await loadTargetClusterConfig();
       await reloadNavigation();
       Luigi.navigation().navigate(targetLocation);
     } else {
@@ -94,38 +86,12 @@ export async function saveClusterParams(params) {
   saveClusters(clusters);
 }
 
-export async function saveCARequired() {
-  const clusters = JSON.parse(localStorage.getItem(CLUSTERS_KEY) || '{}');
-  const cluster = clusters[getActiveClusterName()];
-  if (cluster.config.requiresCA === undefined) {
-    cluster.config = {
-      ...cluster.config,
-      requiresCA: await checkIfClusterRequiresCA(getAuthData()),
-    };
-    await saveClusterParams(cluster);
-  }
-}
-
 export async function getActiveCluster() {
-  const clusters = JSON.parse(localStorage.getItem(CLUSTERS_KEY) || '{}');
   const clusterName = getActiveClusterName();
-  if (!clusterName || !clusters[clusterName]) {
+  if (!clusterName) {
     return null;
   }
-  // add target cluster config
-  clusters[clusterName].config = merge(
-    {},
-    getTargetClusterConfig(),
-    clusters[clusterName].config,
-  );
-
-  // merge keys of config.features
-  clusters[clusterName].config.features = {
-    ...clusters[clusterName].config.features,
-    ...getTargetClusterConfig()?.features,
-  };
-
-  clusters[clusterName] = await mergeParams(clusters[clusterName]);
+  const clusters = await getClusters();
   return clusters[clusterName];
 }
 
@@ -138,7 +104,7 @@ export function saveActiveClusterName(clusterName) {
 }
 
 // setup params:
-// defaults < config from Busola cluster CM < (config from target cluster CM + init params)
+// defaults < config from CM < init params
 async function mergeParams(params) {
   const defaultConfig = {
     navigation: {
@@ -147,19 +113,10 @@ async function mergeParams(params) {
     },
     hiddenNamespaces: DEFAULT_HIDDEN_NAMESPACES,
     features: DEFAULT_FEATURES,
+    ...(await getClusterParams()).config,
   };
 
-  params.config = {
-    ...defaultConfig,
-    ...(await getBusolaClusterParams()).config,
-    ...params.config,
-  };
-
-  params.config.features = {
-    ...defaultConfig.features,
-    ...(await getBusolaClusterParams()).config?.features,
-    ...params.config.features,
-  };
+  params.config = { ...defaultConfig, ...params.config };
 
   // Don't merge hiddenNamespaces, use the defaults only when params are empty
   params.config.hiddenNamespaces =

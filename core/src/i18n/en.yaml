@@ -1,165 +1,28 @@
----
-addons:
-  title: Addons
-api-rules:
-  access-strategies:
-    delete:
-      tooltip: Define at least one access strategy.
-  title: APIRules
-applications:
-  title: Applications
-brokers:
-  title: Brokers
-catalog:
-  menu-title: Catalog
-  subtitle: Enrich your experience with additional services that are installed outside the cluster.
-  title: Service Catalog
-cluster-addons:
-  title: Cluster Addons
-cluster-role-bindings:
-  title: ClusterRoleBindings
-cluster-roles:
-  title: ClusterRoles
 clusters:
-  list:
-    outdated:
-      download: Download Kubeconfig
-      tooltip: Outdated parameter version may cause errors. Delete and re-add your cluster.
   overview:
     title: Cluster Overview
-common:
-  buttons:
-    cancel: Cancel
-    delete: Delete
-    edit-yaml: Edit YAML
-  created: Created
-  delete-dialog:
-    delete-confirm: Don't ask this again
-    message: Are you sure you want to remove {{type}} {{name}}?
-    title: Remove {{name}}
-  labels: Labels
-  name: Name
-  status: Status
-  tooltips:
-    copy-to-clipboard: Copy to clipboard
-    download: Download
-    duplicate-key: Duplicate key
-    k8s-name-input: Name must consist of lowercase alphanumeric characters, can also contain '-' (like 'my-name1').
-    key-value: key=value, must start and end with an alphanumeric character, can also contain '-', '_' or '.'
-    read-file: Read file content as a single value, with file name as a key.
-    save: Save
-    search: Search
-config-maps:
-  title: ConfigMaps
-configuration:
-  title: Configuration
-cron-jobs:
-  concurrency-policy:
-    descriptions:
-      allow: Allow concurrent executions.
-      replace: No concurrent executions, replace previous run with the new one.
-      skip: No concurrent executions, skip new run if the previous one hasn't finished yet.
-    title: Concurrency Policy
-  last-job-execution: Last Job execution
-  last-schedule-time: Last schedule time
-  not-scheduled-yet: None scheduled yet
-  schedule: Schedule
-  title: CronJobs
-custom-resource-definitions:
-  title: CustomResourceDefinitions
-daemon-sets:
-  images: Images
-  node-selector: Node selector
-  pods: $t(pods.title)
-  title: DaemonSets
-  tolerations:
-    effect: Effect
-    key: Key
-    operator: Operator
-    title: Tolerations
-    toleration-seconds: Seconds
-deployments:
-  title: Deployments
-discovery-and-network:
-  title: Discovery and Network
-functions:
-  title: Functions
-  variable:
-    tooltip: This variable comes from a Resource. To get the value, follow the link.
-git-repositories:
-  title: Git Repositories
-instances:
-  no-specific-plan-parameters:
-    tooltip: The service provider did not define specific parameters for the selected plan. Refer to the documentation to learn about the required parameters, and define them as JSON in the editor.
-  title: Instances
-integration:
-  title: Integration
-jobs:
-  completion-time: Completion Time
-  completions: Completions
-  conditions:
-    last-probe: Last Probe
-    last-transition: Last Transition
-    status: Status
-    title: Conditions
-    type: Type
-  start-time: Start Time
-  title: Jobs
 namespaces:
   overview:
-    back: Back to Namespaces
-    resources:
-      error: Error while loading memory consumption data
-      limits: Memory limits
-      requests: Memory requests
-      title: Resource consumption
     title: Overview
     workloads:
+      title: Healthy Resources
+      pods: $t(pods.title)
       deployments: $t(deployments.title)
       error: 'Error while loading {{title}} data due to: {{message}}'
-      pods: $t(pods.title)
-      title: Healthy Resources
-  title: Namespaces
-  tooltips:
-    container-memory-limit: Define memory constraints for individual containers in your Namespace.
-    create: Select this option to disable Istio to mediate all communication between the Pods in your Namespace.
-    memory-examples: Use plain value in bytes (128974848) or suffix equivalents (like 129e6, 129M, 123Mi).
-    total-memory-limit: Define constraints that limit total memory consumption in your Namespace.
-top-nav:
-  profile:
-    download-current-cluster-config: Download current Cluster Config
-    preferences: $t(preferences.title)
-    remove-current-cluster-config: Remove current Cluster Config
-oauth2-clients:
-  title: OAuth2 Clients
-observability:
-  title: Observability
+    resources:
+      title: Resource consumption
+      requests: Memory requests
+      limits: Memory limits
+      error: Error while loading memory consumption data
 pods:
-  node: Node
-  restarts: Restarts
   title: Pods
-preferences:
-  title: Preferences
-replica-sets:
-  title: ReplicaSets
-role-bindings:
-  title: RoleBindings
-roles:
-  title: Roles
-secrets:
-  title: Secrets
-service-management:
+deployments:
+  title: Deployments
+service-catalog:
   title: Service Management
-services:
-  title: Services
+  catalog:
+    title: Service Catalog
+    services:
+      description: Enrich your experience with additional services that are installed outside the cluster.
 settings:
-  confirmations: Confirmations
-  dontConfirmDelete: Delete without confirmation
   language: Language
-stateful-sets:
-  replicas: Replicas
-  title: StatefulSets
-workloads:
-  docker-image:
-    tooltip: Enter a valid Docker image registry path.
-  title: Workloads

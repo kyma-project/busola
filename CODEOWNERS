@@ -2,8 +2,7 @@
 * @akucharska @dariadomagala @parostatkiem @valentinvieriu @Wawrzyn321
 
 # Owners of all .md files in the repository
-*.md @mmitoraj @klaudiagrz @alexandra-simeonova @majakurcius @NHingerl
+*.md @kazydek @klaudiagrz @mmitoraj @majakurcius @alexandra-simeonova @superojla
 
-core/src/i18n/ @mmitoraj @klaudiagrz @alexandra-simeonova @majakurcius @NHingerl
 
 tests/ @akucharska @dariadomagala @parostatkiem @valentinvieriu @Wawrzyn321 @Sawthis

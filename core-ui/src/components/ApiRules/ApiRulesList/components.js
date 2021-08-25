@@ -3,7 +3,6 @@ import LuigiClient from '@luigi-project/client';
 
 import { Link } from 'fundamental-react';
 import { CopiableLink } from 'react-shared';
-import { useTranslation } from 'react-i18next';
 
 import AccessStrategies from 'components/ApiRules/AccessStrategies/AccessStrategies';
 import { getApiRuleUrl } from 'components/ApiRules/helpers';
@@ -29,13 +28,7 @@ export function GoToApiRuleDetails({ apiRule }) {
 }
 
 export function CopiableApiRuleHost({ apiRule, domain }) {
-  const { i18n } = useTranslation();
-  return (
-    <CopiableLink
-      url={getApiRuleUrl(apiRule.spec.service, domain)}
-      i18n={i18n}
-    />
-  );
+  return <CopiableLink url={getApiRuleUrl(apiRule.spec.service, domain)} />;
 }
 
 export function ApiRuleServiceInfo({ apiRule, withName = true }) {

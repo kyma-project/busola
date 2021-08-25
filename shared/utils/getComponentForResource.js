@@ -11,7 +11,6 @@ function findByName(object, propertyName) {
 export const ComponentFor = ({
   PredefinedRenderersCollection,
   GenericRenderer,
-  i18n,
   ...componentProps
 }) => {
   const {
@@ -33,7 +32,6 @@ export const ComponentFor = ({
     <Renderer
       createResourceForm={CreateFormRenderer}
       DefaultRenderer={defaultRenderer}
-      i18n={i18n}
       {...params}
     />
   );

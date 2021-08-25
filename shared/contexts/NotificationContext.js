@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
-import LuigiClient from '@luigi-project/client';
+import { Notification } from '../components/Notification/Notification';
 
 export const NotificationContext = createContext({
   isOpen: false,
@@ -11,67 +11,68 @@ export const NotificationContext = createContext({
 export const NotificationProvider = ({
   children,
   defaultVisibilityTime = 5000,
+  defaultErrorVisibilityTime = 15000,
 }) => {
-  const [toastProps, setToastProps] = useState();
+  const [state, setState] = useState({
+    isOpen: false,
+  });
 
-  function showLuigiNotification(notificationProps) {
-    const header =
-      (notificationProps.content && notificationProps.title) ||
-      notificationProps.type === 'error'
-        ? 'Error'
-        : 'Information';
-    const body = notificationProps.content || notificationProps.title;
-
-    LuigiClient.uxManager()
-      .showConfirmationModal({
-        type: notificationProps.type,
-        body,
-        header,
-        ...notificationProps,
-      })
-      .catch(e => {});
+  function notify(notificationProps, visibilityTime = defaultVisibilityTime) {
+    setState({ isOpen: true, notificationProps });
+    if (notificationProps.autoClose && visibilityTime !== 0) {
+      setTimeout(() => {
+        closeNotification();
+      }, visibilityTime);
+    }
   }
 
   const methods = {
-    notify: showLuigiNotification,
+    notify,
     notifySuccess: function(
       notificationProps,
       visibilityTime = defaultVisibilityTime,
     ) {
-      if (visibilityTime !== 0) {
-        setTimeout(() => {
-          setToastProps(null);
-        }, visibilityTime);
-      }
-      setToastProps(notificationProps);
-    },
-    notifyError: function(notificationProps) {
-      showLuigiNotification({
-        type: 'error',
-        buttonConfirm: false,
-        buttonDismiss: 'Close',
-        header: 'Error',
+      notificationProps = {
+        title: 'Success',
+        type: 'success',
+        icon: 'accept',
+        autoClose: true,
         ...notificationProps,
-      });
+      };
+      notify(notificationProps, visibilityTime);
     },
+    notifyError: function(
+      notificationProps,
+      visibilityTime = defaultErrorVisibilityTime,
+    ) {
+      notificationProps = {
+        title: 'Error',
+        type: 'error',
+        icon: 'decline',
+        autoClose: true,
+        ...notificationProps,
+      };
+      notify(notificationProps, visibilityTime);
+    },
+  };
+
+  const closeNotification = () => {
+    setState({ isOpen: false });
   };
 
   return (
     <NotificationContext.Provider
       value={{
-        isOpen: !!toastProps,
+        isOpen: state.isOpen,
         ...methods,
       }}
     >
-      {toastProps && (
-        <div
-          className="message-toast--wrapper"
-          onClick={() => setToastProps(null)}
-        >
-          <div className="fd-message-toast">
-            {toastProps.content || toastProps.title}
-          </div>
-        </div>
+      {state.isOpen && (
+        <Notification
+          visible={true}
+          {...state.notificationProps}
+          onClick={closeNotification}
+        />
       )}
       {children}
     </NotificationContext.Provider>
