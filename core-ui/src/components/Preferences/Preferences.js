@@ -9,7 +9,7 @@ import { VerticalTabs, Tabs, Tab } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 import { Icon } from 'fundamental-react';
 
-export default function Preferences() {
+function Preferences() {
   const { t } = useTranslation();
 
   const tabs = [
@@ -55,3 +55,7 @@ export default function Preferences() {
     </VerticalTabs>
   );
 }
+
+/* for some mysterious reason hooks fail in root component, so instead a
+ * wrapper component has to be exported */
+export default () => <Preferences />;
