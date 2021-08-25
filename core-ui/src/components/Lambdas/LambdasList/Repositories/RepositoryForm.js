@@ -104,14 +104,14 @@ export default function RepositoryForm({
 
   function validateRepositoryUrl(url, setStatus) {
     if (!url) {
-      setStatus(REPOSITORIES_LIST.MODAL_INPUTS.URL.ERRORS.EMPTY);
+      setStatus(t('functions.repository-list.errors.req-name'));
       addError(ERRORS.REPOSITORY_URL);
       return;
     }
 
     const isCorrectUrl = isGitUrl(url);
     if (!isCorrectUrl) {
-      setStatus(REPOSITORIES_LIST.MODAL_INPUTS.URL.ERRORS.INVALID);
+      setStatus(t('functions.repository-list.errors.invalid-url'));
       addError(ERRORS.REPOSITORY_URL);
       return;
     }
@@ -198,8 +198,8 @@ export default function RepositoryForm({
       <FormInput
         _ref={urlRef}
         required={true}
-        label={REPOSITORIES_LIST.MODAL_INPUTS.URL.LABEL}
-        inlineHelp={REPOSITORIES_LIST.MODAL_INPUTS.URL.INLINE_HELP}
+        label={t('functions.repository-list.labels.url')}
+        inlineHelp={t('functions.repository-list.inline-help.url')}
         id="repositoryUrl"
         placeholder={REPOSITORIES_LIST.MODAL_INPUTS.URL.PLACEHOLDER}
         validate={validateRepositoryUrl}
@@ -207,8 +207,8 @@ export default function RepositoryForm({
       />
 
       <Dropdown
-        label={REPOSITORIES_LIST.MODAL_INPUTS.AUTH_TYPE.LABEL}
-        inlineHelp={REPOSITORIES_LIST.MODAL_INPUTS.AUTH_TYPE.INLINE_HELP}
+        label={t('functions.repository-list.labels.auth')}
+        inlineHelp={t('functions.repository-list.inline-help.auth')}
         options={authTypeOptions}
         id="authType"
         onSelect={(_, selected) => updateAuthType(selected)}
@@ -219,8 +219,8 @@ export default function RepositoryForm({
         <FormInput
           _ref={secretNameRef}
           required={true}
-          label={REPOSITORIES_LIST.MODAL_INPUTS.SECRET_NAME.LABEL}
-          inlineHelp={REPOSITORIES_LIST.MODAL_INPUTS.SECRET_NAME.INLINE_HELP}
+          label={t('functions.repository-list.labels.secret-name')}
+          inlineHelp={'common.tooltips.k8s-name-input'}
           id="secretName"
           placeholder={REPOSITORIES_LIST.MODAL_INPUTS.SECRET_NAME.PLACEHOLDER}
           validate={validateSecretName}

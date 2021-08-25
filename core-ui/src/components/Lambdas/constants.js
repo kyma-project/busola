@@ -104,17 +104,9 @@ export const REPOSITORIES_LIST = {
       },
     },
     URL: {
-      LABEL: 'URL',
-      INLINE_HELP: `URL must be a valid Git repository address that starts with the "http(s)", "git", or "ssh" prefix and ends with the ".git" suffix.`,
       PLACEHOLDER: 'Enter the URL address of your Git repository (Required)',
-      ERRORS: {
-        INVALID: `Invalid Repository URL. The URL must start with the "http(s)", "git", or "ssh" prefix and end with the ".git" suffix.`,
-        EMPTY: 'Enter repository URL.',
-      },
     },
     AUTH_TYPE: {
-      LABEL: 'Authorization',
-      INLINE_HELP: `Basic: token or password / SSH key: authentication key / Public: no authentication`,
       OPTIONS: [
         {
           VALUE: 'Public',
@@ -131,13 +123,11 @@ export const REPOSITORIES_LIST = {
       ],
     },
     SECRET_NAME: {
-      LABEL: 'Secret name',
-      INLINE_HELP: `Name must contain lower case alphanumeric characters, can contain '-'  (like 'my-name1').`,
       PLACEHOLDER: 'Enter a Secret name with credentials (Required)',
       ERRORS: {
-        INVALID: `Name must contain lower case alphanumeric characters, can contain '-'  (like 'my-name1').`,
-        EMPTY: 'Secret name is required.',
-        TOO_LONG: 'Repository name cannot be longer than 63 characters.',
+        INVALID: `common.tooltips.k8s-name-input`,
+        EMPTY: 'functions.repository-list.errors.req-sec-name',
+        TOO_LONG: 'functions.repository-list.errors.too-long-sec-name',
       },
     },
   },

@@ -200,11 +200,6 @@ deployments:
 discovery-and-network:
   title: Odkrywanie i sieć
 functions:
-  repository-list:
-    errors:
-      req-name: Nazwa repozytorium jest wymagana.
-      invalid-url: Nieprawidłowy adres URL repozytorium. URL musi zaczynać się od prefiksu „http(s)”, „git” lub „ssh” i kończyć się sufiksem „.git”.
-      too-long-name: Nazwa repozytorium nie może być dłuższa niż 63 znaki.
   create-view:
     buttons:
       confirm: Stwórz
@@ -212,10 +207,10 @@ functions:
     errors:
       invalid: Co najmniej jedno pole jest puste lub niepoprawnie sformatowane.
       no-repository-found: Brak dostępnych repozytoriów. Najpierw utwórz nowe repozytorium.
+      req-base-dir: Katalog bazowy jest wymagany.
+      req-reference: Referencja jest wymagana.
       required-name: Nazwa funkcji jest wymagana.
       too-long: Nazwa funkcji nie może być dłuższa niż 63 znaki.
-      req-reference: Referencja jest wymagana.
-      req-base-dir: Katalog bazowy jest wymagany.
     inline-help:
       base-directory: Katalog z kodem funkcji i zależnościami
       reference: Referencja do źródła funkcji. Wybierz nazwę gałęzi lub zatwierdź wersję.
@@ -224,9 +219,9 @@ functions:
       source-type: 'Typ źródła kodu funkcji: edytor wbudowany (kod i zależności są dostarczane jako zwykły tekst) lub repozytorium Git (kod i zależności są pobierane z repozytorium Git)'
     labels:
       base-directory: Katalog bazowy
-      reference: Referencja
       git-repository: Repozytorium Git
       inline-editor: Edytor wbudowany
+      reference: Referencja
       repository: Repository
       runtime: Runtime
       source-type: Typ źródła
@@ -241,6 +236,19 @@ functions:
       buttons:
         confirm: Połącz
       title: Połącz repozytorium
+  repository-list:
+    errors:
+      invalid-url: Nieprawidłowy adres URL repozytorium. URL musi zaczynać się od prefiksu „http(s)”, „git” lub „ssh” i kończyć się sufiksem „.git”.
+      req-name: Nazwa repozytorium jest wymagana.
+      req-sec-name: Nazwa sekretu jest wymagana.
+      too-long-name: Nazwa repozytorium nie może być dłuższa niż 63 znaki.
+      too-long-sec-name: Nazwa sekretu nie może być dłuższa niż 63 znaki.
+    inline-help:
+      url: URL musi być prawidłowym adresem repozytorium Git, który zaczyna się od przedrostka „http(s)”, „git” lub „ssh” i kończy się sufiksem „.git”.
+    labels:
+      auth: Autoryzacja
+      secret-name: Nazwa sekretu
+      url: URL
   statuses:
     building: Budowanie
     deploying: Wdrażanie
