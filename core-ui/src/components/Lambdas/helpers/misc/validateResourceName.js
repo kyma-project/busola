@@ -1,10 +1,6 @@
 import { LAMBDAS_LIST } from 'components/Lambdas/constants';
 
-export function validateResourceName(
-  name = '',
-  errorMessages = LAMBDAS_LIST.CREATE_MODAL.INPUTS.NAME.ERRORS,
-  t,
-) {
+export function validateResourceName(name = '', errorMessages, t) {
   if (!errorMessages) {
     return '';
   }
