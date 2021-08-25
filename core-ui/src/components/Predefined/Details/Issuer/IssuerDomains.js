@@ -13,6 +13,7 @@ export function IssuerDomains(issuer) {
         headerRenderer={() => []}
         rowRenderer={domain => [domain]}
         showHeader={false}
+        hasExternalMargin={false}
         entries={issuer.spec.acme?.domains.include || []}
       />
       <GenericList
@@ -22,6 +23,7 @@ export function IssuerDomains(issuer) {
         headerRenderer={() => []}
         rowRenderer={domain => [domain]}
         showHeader={false}
+        hasExternalMargin={false}
         entries={issuer.spec.acme?.domains.exclude || []}
       />
     </div>
