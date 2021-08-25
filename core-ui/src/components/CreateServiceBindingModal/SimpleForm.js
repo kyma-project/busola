@@ -48,6 +48,7 @@ export function SimpleForm({ serviceBinding, setServiceBinding, namespaceId }) {
           input={
             <K8sResourceSelect
               compact
+              required
               value={serviceBinding.instanceName}
               resourceType={t('btp-instances.resource-type')}
               onSelect={instanceName =>

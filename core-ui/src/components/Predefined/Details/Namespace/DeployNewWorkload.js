@@ -1,7 +1,7 @@
 import React from 'react';
 import { Popover, Menu, Button } from 'fundamental-react';
 import { useGetList, useMicrofrontendContext } from 'react-shared';
-import { CreateDeploymentForm } from 'shared/components/CreateDeploymentForm/CreateDeploymentForm';
+import { CreateDeploymentModal } from 'shared/components/CreateDeploymentForm/CreateDeploymentModal';
 import CreateLambdaModal from 'components/Lambdas/LambdasList/Lambdas/CreateLambdaModal';
 import { useTranslation } from 'react-i18next';
 
@@ -46,7 +46,7 @@ export default function DeployNewWorkload({ namespaceName }) {
   ) : null;
 
   const deploymentModal = (
-    <CreateDeploymentForm
+    <CreateDeploymentModal
       namespaceId={namespaceName}
       modalOpeningComponent={
         <Menu.Item>{t('deployments.create-modal.title')}</Menu.Item>

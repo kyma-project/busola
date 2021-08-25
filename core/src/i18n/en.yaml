@@ -50,25 +50,24 @@ btp-instances:
   offering-name: Offering Name
   parameters: Instance Parameters
   plan-name: Plan Name
+  resource-type: Service Instance
   title: BTP Service Instances
-  resource-type: Service Instances
 btp-service-bindings:
-  resource-type: Service Binding
   binding-id: Binding ID
+  create:
+    external-name-placeholder: Defaults to the binding name if empty.
+    instance-parameters: Instance Parameters
+    secret-description: The Secret will be created if it doesn't exist.
+    title: Create $t(btp-service-bindings.resource-type)
   data: Binding Data
   external-name: External Name
   instance-id: Instance ID
   instance-name: Service Instance Name
   parameters: Instance Binding Parameters
+  resource-type: Service Binding
   secret: Secret
   secret-not-found: This Secret doesn't exist.
   title: BTP Service Bindings
-  create:
-    title: Create $t(btp-service-bindings.resource-type)
-    success: $t(btp-service-bindings.resource-type) created
-    failed: Failed to create the Service Binding
-    external-name-placeholder: Defaults to the binding name if empty.
-    instance-parameters: Instance Parameters
 catalog:
   menu-title: Catalog
   subtitle: Enrich your experience with additional services that are installed outside the cluster.
@@ -95,10 +94,10 @@ clusters:
     issuer-url: Issuer URL
     scopes: Scopes
   list:
-    title: Clusters
     no-clusters-found: No clusters found
     outdated:
       tooltip: Outdated parameter version may cause errors. Delete and re-add your cluster.
+    title: Clusters
   messages:
     error-kubeconfig: Error reading Kubeconfig
     missing-configuration-data: Configuration has been included properly. Please fill remaining required data.
@@ -130,14 +129,17 @@ common:
     edit-yaml: Edit YAML
     save: Save
   create-modal:
+    delete-confirm: Don't ask this again
+    delete-dialog: null
     editor-error: "Parse error: {{error}}, changes won't be saved."
+    information: You've switched off removal confirmations for all resources. You can switch them back on in Preferences.
+    message: Are you sure you want to remove {{type}} {{name}}?
+    messages:
+      failure: Failed to create the {{resourceType}}
+      success: '{{resourceType}} created'
     modes:
       advanced: Advanced
       simple: Simple
-  delete-dialog:
-    delete-confirm: Don't ask this again
-    information: You've switched off removal confirmations for all resources. You can switch them back on in Preferences.
-    message: Are you sure you want to remove {{type}} {{name}}?
     title: Remove {{name}}
   errors:
     no-permissions: You don't have enough permissions to view this content.
@@ -153,16 +155,18 @@ common:
   labels:
     hostname: Hostname
     name: Name
-    service: Service
     resource: Resource
+    service: Service
   messages:
+    cannot-load: 'Cannot load {{value}}: {{error.message}}'
+    choose: Choose {{value}}
     doesnt-exist: doesn't exist.
     loading-name: Loading name...
-    choose: Choose {{value}}
-    type-to-select: 'Start typing to select {{value}} from list.'
-    cannot-load: 'Cannot load {{value}}: {{error.message}}'
+    no-instances-found: No {{value}} found.
+    no-instances-found-namespace: No {{value}} found in this Namespace.
     not-found: '{{value}} not found.'
     parse-error: Parse error, changes will not be saved.
+    type-to-select: Start typing to select {{value}} from list.
   tooltips:
     copy-to-clipboard: Copy to clipboard
     download: Download

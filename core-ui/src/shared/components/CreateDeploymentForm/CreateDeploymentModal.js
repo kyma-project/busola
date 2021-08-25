@@ -14,7 +14,7 @@ import { SimpleForm } from './SimpleForm';
 import { AdvancedForm } from './AdvancedForm';
 import { useTranslation } from 'react-i18next';
 
-export function CreateDeploymentForm({ namespaceId, modalOpeningComponent }) {
+export function CreateDeploymentModal({ namespaceId, modalOpeningComponent }) {
   const { t } = useTranslation();
   const notification = useNotification();
   const postRequest = usePost();

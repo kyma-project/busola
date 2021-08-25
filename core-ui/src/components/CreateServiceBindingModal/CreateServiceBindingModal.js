@@ -28,7 +28,9 @@ export function CreateServiceBindingModal({ namespaceId }) {
       );
 
       notification.notifySuccess({
-        content: t('btp-service-bindings.create.success'),
+        content: t('common.create-modal.success', {
+          resourceType: t('btp-service-bindings.resource-type'),
+        }),
       });
       LuigiClient.linkManager()
         .fromContext('servicebindings')
@@ -36,15 +38,13 @@ export function CreateServiceBindingModal({ namespaceId }) {
     } catch (e) {
       console.error(e);
       notification.notifyError({
-        title: t('btp-service-bindings.create.failed'),
+        title: t('common.create-modal.failure', {
+          resourceType: t('btp-service-bindings.resource-type'),
+        }),
         content: e.message,
       });
       return false;
     }
-  };
-
-  const customValidityFunction = serviceBinding => {
-    return !!serviceBinding.instanceName;
   };
 
   return (
@@ -75,7 +75,6 @@ export function CreateServiceBindingModal({ namespaceId }) {
       toYaml={serviceBindingToYaml}
       fromYaml={yamlToServiceBinding}
       onCreate={createServiceBinding}
-      customValidityFunction={customValidityFunction}
     />
   );
 }

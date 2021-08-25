@@ -5,7 +5,7 @@ import {
   FormLabel,
   MessageStrip,
 } from 'fundamental-react';
-import { ControlledEditor, useTheme } from 'react-shared';
+import { ControlledEditor, useTheme, Tooltip } from 'react-shared';
 import { CreateModal } from 'shared/components/CreateModal/CreateModal';
 import './ServiceBindingAdvancedForm.scss';
 import { SimpleForm } from './SimpleForm';
@@ -47,6 +47,7 @@ export function AdvancedForm({
       <SimpleForm
         serviceBinding={serviceBinding}
         setServiceBinding={setServiceBinding}
+        namespaceId={namespaceId}
       />
       <CreateModal.Section>
         <FormFieldset>
@@ -72,7 +73,11 @@ export function AdvancedForm({
           />
           <CreateModal.FormField
             label={
-              <FormLabel>{t('btp-service-bindings.external-name')}</FormLabel>
+              <Tooltip
+                content={t('btp-service-bindings.create.secret-description')}
+              >
+                <FormLabel>{t('btp-service-bindings.secret')}</FormLabel>
+              </Tooltip>
             }
             input={
               <K8sResourceSelect
