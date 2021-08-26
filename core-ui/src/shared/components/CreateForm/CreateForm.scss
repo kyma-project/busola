@@ -1,11 +1,6 @@
-.create-modal {
-  .fd-dialog__body {
-    padding: 0;
-    min-width: 25rem;
-    width: 75vw;
-    height: 50vh;
-    max-height: calc(100vh - 8rem);
-  }
+.create-form {
+  height: 50vh;
+  min-width: 25rem;
 
   .dropdown {
     margin-top: unset;
