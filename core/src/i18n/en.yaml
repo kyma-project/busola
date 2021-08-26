@@ -55,7 +55,7 @@ btp-instances:
 btp-service-bindings:
   binding-id: Binding ID
   create:
-    external-name-placeholder: Defaults to the binding name if empty.List
+    external-name-placeholder: Defaults to the binding name if empty.
     secret-description: The Secret will be created if it doesn't exist.
     title: Create $t(btp-service-bindings.resource-type)
   data: Binding Data
