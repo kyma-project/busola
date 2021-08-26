@@ -256,13 +256,6 @@ export const CODE_AND_DEPENDENCIES_PANEL = {
 };
 
 export const REPOSITORY_CONFIG_PANEL = {
-  TITLE: 'Repository configuration',
-  EDIT_BUTTON: {
-    TEXT: 'Edit Configuration',
-  },
-  SAVE_BUTTON: {
-    TEXT: 'Save',
-  },
   ERRORS: {
     INVALID: 'At least one field is empty.',
     NO_CHANGES: 'No changes made.',

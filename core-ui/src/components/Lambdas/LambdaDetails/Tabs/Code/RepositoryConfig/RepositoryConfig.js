@@ -15,8 +15,8 @@ const ERRORS = {
   BASE_DIR: 'baseDir',
 };
 
-const saveText = REPOSITORY_CONFIG_PANEL.SAVE_BUTTON.TEXT;
-const editText = REPOSITORY_CONFIG_PANEL.EDIT_BUTTON.TEXT;
+const saveText = t('common.buttons.save');
+const editText = t('functions.details.buttons.edit-configuration');
 
 export default function RepositoryConfig({ lambda }) {
   const [isEditMode, setIsEditMode] = useState(false);
@@ -169,7 +169,7 @@ export default function RepositoryConfig({ lambda }) {
   return (
     <LayoutPanel className="fd-margin--md lambda-repository-config">
       <LayoutPanel.Header>
-        <LayoutPanel.Head title={REPOSITORY_CONFIG_PANEL.TITLE} />
+        <LayoutPanel.Head title={t('functions.repository.title')} />
         <LayoutPanel.Actions>
           {renderCancelButton()}
           {renderConfirmButton()}

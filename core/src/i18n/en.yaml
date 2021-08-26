@@ -244,6 +244,8 @@ dnsproviders:
     status: $t(common.headers.status)
   title: DNS Providers
 functions:
+  repository:
+    title: Repository configuration
   create-view:
     buttons:
       confirm: Create
