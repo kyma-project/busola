@@ -72,7 +72,7 @@ export function SecretForm({
         className="fd-margin-top--sm fd-margin-bottom--tiny"
         labels={annotations}
         onChange={setAnnotations}
-        type="Annotations"
+        type={t('secrets.labels.annotations')}
         i18n={i18n}
       />
     </>

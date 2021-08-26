@@ -41,6 +41,38 @@ api-rules:
     ns-no-services: No Services in this Namespace
   title: API Rules
 applications:
+  aria:
+    namespace: Choose namespace
+  buttons:
+    close: Close
+    connect: Connect Application
+    create: Create Namespace Binding
+    select-all: Select all
+  headers:
+    apis: APIs
+    description: Descritpion
+    events: Events
+  messages:
+    copy-url: 'Copy the following URL and use it at the external system that you would like to connect to:'
+    create-failed: Failed to create the Binding
+    created: API Rule created
+    dont-expose: This Application doesn't expose any Service or Events.
+    no-apis: There are no APIs
+    no-events: There are no events
+    no-matches-text: No Namespaces to bind
+    not-found: No services
+    show-namespaces: Show namespaces
+    some-apis: There are some APIs
+    some-events: There are some events
+  labels:
+    applications-and-events: Applications & Events
+    namespace: Namespace
+  placeholders:
+    namespace: Choose namespace...
+  subtitle:
+    connect-app: Connect Application
+    create-binding: $t(applications.buttons.create)
+    provided-services: Provided Services & Events
   title: Applications
 brokers:
   title: Brokers
@@ -161,6 +193,10 @@ common:
     save: Save
     search: Search
 config-maps:
+  errors:
+    cannot-create: Cannot create Config Map
+  messages:
+    created: Config Map created
   title: ConfigMaps
 configuration:
   title: Configuration
@@ -384,6 +420,7 @@ role-bindings:
   messages:
     created: Role Binding {{name}} created
   labels:
+    annotations: Annotations
     arrow: Show roles
     role: Role
     user: User
@@ -401,7 +438,10 @@ secrets:
   buttons:
     decode: Decode
     encode: Encode
+  created: Secret created
   data: Data
+  errors:
+    cannot-create: Cannot create Secret
   metadata: Metadata
   labels:
     type: Secret type

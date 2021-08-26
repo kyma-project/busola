@@ -2,8 +2,11 @@ import React from 'react';
 
 import { usePost } from 'react-shared';
 import { SecretForm } from './SecretForm';
+import { useTranslation } from 'react-i18next';
 
 export function SecretsCreate(props) {
+  const { t } = useTranslation();
+
   const postRequest = usePost();
   const {
     onCompleted,
@@ -21,11 +24,14 @@ export function SecretsCreate(props) {
   const onSubmit = async secretInput => {
     try {
       await postRequest(resourceUrl, secretInput);
-      onCompleted('Secret created');
+      onCompleted(t('secret.created'));
       refetchList();
     } catch (e) {
       console.warn(e);
-      onError('Cannot create secret', `Error: ${e.message}`);
+      onError(
+        t('secrets.errors.cannot-create'),
+        `${t('common.tooltips.error')}: ${e.message}`,
+      );
     }
   };
 

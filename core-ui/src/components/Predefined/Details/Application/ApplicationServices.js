@@ -1,8 +1,15 @@
 import React from 'react';
 import { GenericList } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 
 export default function ApplicationServices({ spec: applicationSpec }) {
-  const headerRenderer = () => ['Name', 'APIs', 'Events'];
+  const { t } = useTranslation();
+
+  const headerRenderer = () => [
+    t('common.headers.name'),
+    t('applications.headers.apis'),
+    t('applications.headers.events'),
+  ];
 
   const entries = applicationSpec.services.map(e => ({
     displayName: e.displayName,
@@ -15,12 +22,12 @@ export default function ApplicationServices({ spec: applicationSpec }) {
   return (
     <GenericList
       key="application-services"
-      title="Provided Services & Events"
+      title={t('applications.subtitle.provided-services')}
       textSearchProperties={['displayName']}
       entries={entries}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
-      notFoundMessage="No services"
+      notFoundMessage={t('applications.messages.not-found')}
     />
   );
 }

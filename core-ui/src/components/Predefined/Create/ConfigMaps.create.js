@@ -1,8 +1,11 @@
 import React from 'react';
 import { usePost } from 'react-shared';
 import { ConfigMapForm } from '../../../shared/components/ConfigMap/ConfigMapForm';
+import { useTranslation } from 'react-i18next';
 
 export const ConfigMapsCreate = props => {
+  const { t } = useTranslation();
+
   const postRequest = usePost();
   const {
     onCompleted,
@@ -18,11 +21,14 @@ export const ConfigMapsCreate = props => {
   const onSubmit = async configMapInput => {
     try {
       await postRequest(resourceUrl, configMapInput);
-      onCompleted('Config Map created');
+      onCompleted(t('config-maps.messages.created'));
       refetchList();
     } catch (e) {
       console.warn(e);
-      onError('Cannot create Config Map', `Error: ${e.message}`);
+      onError(
+        t('config-maps.errors.cannot-create'),
+        `${t('common.tooltips.error')}:${e.message}`,
+      );
     }
   };
 
