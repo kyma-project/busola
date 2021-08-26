@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Switch } from 'fundamental-react';
+import { useTranslation } from 'react-i18next';
 import { useDebouncedCallback } from 'use-debounce';
 
 import { Tooltip } from 'react-shared';
@@ -24,6 +25,7 @@ const DISABLED_CAUSES = {
 };
 
 export default function CodeAndDependencies({ lambda }) {
+  const { t } = useTranslation();
   const updateLambda = useUpdateLambda({
     lambda,
     type: UPDATE_TYPE.CODE_AND_DEPENDENCIES,
@@ -125,7 +127,7 @@ export default function CodeAndDependencies({ lambda }) {
       disabled={disabled}
       onClick={handleSave}
     >
-      {CODE_AND_DEPENDENCIES_PANEL.SAVE_BUTTON.TEXT}
+      {t('common.buttons.save')}
     </Button>
   );
 
@@ -146,7 +148,7 @@ export default function CodeAndDependencies({ lambda }) {
 
   const toggle = (
     <Switch compact onChange={onChangeToggle}>
-      {CODE_AND_DEPENDENCIES_PANEL.DIFF_TOGGLE}
+      {t('functions.details.buttons.diff_toggle')}
     </Switch>
   );
   const actions = (
@@ -164,7 +166,7 @@ export default function CodeAndDependencies({ lambda }) {
   const tabsData = [
     {
       id: 'function-code',
-      title: CODE_AND_DEPENDENCIES_PANEL.TABS.CODE,
+      title: t('functions.variable.header.source'),
       body: (
         <Editor
           id="lambda-code"
@@ -181,7 +183,7 @@ export default function CodeAndDependencies({ lambda }) {
     },
     {
       id: 'function-dependencies',
-      title: CODE_AND_DEPENDENCIES_PANEL.TABS.DEPENDENCIES,
+      title: t('functions.details.title.dependencies'),
       body: (
         <Editor
           id="lambda-dependencies"

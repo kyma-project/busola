@@ -274,8 +274,10 @@ functions:
       configuration: Configuration
       resources: Resources
       resources-replicas: Resources and replicas
+      dependencies: Dependencies
     buttons:
       edit-configuration: Edit Configuration
+      diff_toggle: Diff
   errors:
     server: Server error. Contact your cluster admin.
   pod-list:

@@ -213,6 +213,7 @@ export const RESOURCES_MANAGEMENT_PANEL = {
   },
 };
 
+//Remove after old Service catalog removal
 export const SERVICE_BINDINGS_PANEL = {
   LIST: {
     TITLE: 'Service Bindings',
@@ -245,19 +246,13 @@ export const SERVICE_BINDINGS_PANEL = {
 };
 
 export const CODE_AND_DEPENDENCIES_PANEL = {
-  TABS: {
-    CODE: 'Source',
-    DEPENDENCIES: 'Dependencies',
-  },
   SAVE_BUTTON: {
-    TEXT: 'Save',
     POPUP_MESSAGE: {
       EMPTY_SOURCE: 'Source cannot be empty.',
       INVALID_DEPS: 'Dependencies must be specified in a valid JSON format.',
       NO_CHANGES: 'No changes made.',
     },
   },
-  DIFF_TOGGLE: 'Diff',
 };
 
 export const REPOSITORY_CONFIG_PANEL = {
