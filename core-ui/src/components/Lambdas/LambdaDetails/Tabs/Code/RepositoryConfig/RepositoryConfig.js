@@ -15,9 +15,6 @@ const ERRORS = {
   BASE_DIR: 'baseDir',
 };
 
-const saveText = t('common.buttons.save');
-const editText = t('functions.details.buttons.edit-configuration');
-
 export default function RepositoryConfig({ lambda }) {
   const [isEditMode, setIsEditMode] = useState(false);
   const [isValid, setIsValid] = useState(true);
@@ -55,20 +52,20 @@ export default function RepositoryConfig({ lambda }) {
 
   useEffect(() => {
     if (errors.length) {
-      setEditStatus(REPOSITORY_CONFIG_PANEL.ERRORS.INVALID);
+      setEditStatus(t('functions.create-view.errors.one-field-invalid'));
       setIsValid(false);
     } else {
       if (
         referenceRef?.current?.value === lambda.spec.reference &&
         baseDirRef?.current?.value === lambda.spec.baseDir
       ) {
-        setEditStatus(REPOSITORY_CONFIG_PANEL.ERRORS.NO_CHANGES);
+        setEditStatus(t('functions.create-view.errors.no-changes'));
         setIsValid(false);
       } else {
         setIsValid(true);
       }
     }
-  }, [errors, setIsValid, setEditStatus, baseDirRef, referenceRef, lambda]);
+  }, [errors, setIsValid, setEditStatus, baseDirRef, referenceRef, lambda, t]);
 
   function validateReference(reference, setStatus) {
     if (!reference) {
@@ -108,7 +105,7 @@ export default function RepositoryConfig({ lambda }) {
         baseDir: baseDir,
       },
     });
-    setEditStatus(REPOSITORY_CONFIG_PANEL.ERRORS.NO_CHANGES);
+    setEditStatus(t('functions.create-view.errors.no-changes'));
   }
 
   function renderCancelButton() {
@@ -132,6 +129,8 @@ export default function RepositoryConfig({ lambda }) {
   }
 
   function renderConfirmButton() {
+    const saveText = t('common.buttons.save');
+    const editText = t('functions.details.buttons.edit-configuration');
     const button = (
       <Button
         glyph={isEditMode ? 'save' : 'edit'}
@@ -186,7 +185,7 @@ export default function RepositoryConfig({ lambda }) {
           <LayoutPanel className="has-box-shadow-none">
             <LayoutPanel.Header className="has-padding-none has-none-border-bottom">
               <LayoutPanel.Head
-                title={REPOSITORY_CONFIG_PANEL.INPUTS.REFERENCE.LABEL}
+                title={t('functions.create-view.labels.reference')}
                 description={
                   REPOSITORY_CONFIG_PANEL.INPUTS.REFERENCE.INLINE_HELP
                 }

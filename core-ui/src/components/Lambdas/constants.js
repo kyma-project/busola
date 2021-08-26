@@ -245,25 +245,9 @@ export const SERVICE_BINDINGS_PANEL = {
   },
 };
 
-export const CODE_AND_DEPENDENCIES_PANEL = {
-  SAVE_BUTTON: {
-    POPUP_MESSAGE: {
-      EMPTY_SOURCE: 'Source cannot be empty.',
-      INVALID_DEPS: 'Dependencies must be specified in a valid JSON format.',
-      NO_CHANGES: 'No changes made.',
-    },
-  },
-};
-
 export const REPOSITORY_CONFIG_PANEL = {
-  ERRORS: {
-    INVALID: 'At least one field is empty.',
-    NO_CHANGES: 'No changes made.',
-  },
-
   INPUTS: {
     REFERENCE: {
-      LABEL: 'Reference',
       INLINE_HELP: `Reference to the Function's source. Select a branch name or commit revision.`,
       PLACEHOLDER: 'Enter a branch name or commit revision (Required)',
       ERRORS: {

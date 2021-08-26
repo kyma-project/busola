@@ -251,8 +251,12 @@ functions:
       confirm: Create
       create: Create Function
     errors:
+      invalid-deps: Dependencies must be specified in a valid JSON format.
+      empty-source: Source cannot be empty.
+      no-changes: No changes made.
       invalid: At least one field is empty or incorrectly formatted.
       one-field-invalid: At least one field is invalid.
+      one-field-empty: At least one field is empty.
       no-repository-found: There are no Repositories available. Create a Repository first.
       req-base-dir: Base Directory is required.
       req-reference: Reference is required.

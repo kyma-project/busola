@@ -99,15 +99,15 @@ export default function CodeAndDependencies({ lambda }) {
     let message = '';
     switch (disabledCause) {
       case DISABLED_CAUSES.EMPTY_SOURCE: {
-        message = messages.EMPTY_SOURCE;
+        message = t('functions.create-view.errors.empty-source');
         break;
       }
       case DISABLED_CAUSES.INVALID_DEPS: {
-        message = messages.INVALID_DEPS;
+        message = t('functions.create-view.errors.invalid-deps');
         break;
       }
       case DISABLED_CAUSES.NO_CHANGES: {
-        message = messages.NO_CHANGES;
+        message = t('functions.create-view.errors.no-changes');
         break;
       }
       default:
