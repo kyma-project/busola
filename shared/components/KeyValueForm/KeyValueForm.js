@@ -48,7 +48,9 @@ export function KeyValueForm({
       counter[entry.key] = (counter[entry.key] || 0) + 1;
     }
     setKeyCounter(counter);
-    setData(fromEntries(entries));
+    const newData = fromEntries(entries);
+    prevData.current = newData;
+    setData(newData);
     setValid(Object.values(counter).every(c => c === 1));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [entries]);
