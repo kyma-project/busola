@@ -43,10 +43,35 @@ applications:
   title: Applications
 brokers:
   title: Brokers
+btp-instances:
+  external-name: External Name
+  instance-data: Service Instance Data
+  instance-id: Instance ID
+  offering-name: Offering Name
+  parameters: Instance Parameters
+  plan-name: Plan Name
+  title: BTP Service Instances
+btp-service-bindings:
+  binding-id: Binding ID
+  data: Binding Data
+  external-name: External Name
+  instance-id: Instance ID
+  instance-name: Service Instance Name
+  parameters: Instance Binding Parameters
+  secret: Secret
+  secret-not-found: This Secret doesn't exist.
+  title: BTP Service Bindings
 catalog:
   menu-title: Catalog
   subtitle: Enrich your experience with additional services that are installed outside the cluster.
   title: Service Catalog
+certificates:
+  title: Certificates
+  issuer: Issuer
+  state: State
+  expiration-date: Expiration Date
+  common-name: Common Name
+  refs: References
 cluster-addons:
   title: Cluster Addons
 cluster-role-bindings:
@@ -69,6 +94,7 @@ clusters:
     issuer-url: Issuer URL
     scopes: Scopes
   list:
+    title: Clusters
     no-clusters-found: No clusters found
     outdated:
       tooltip: Outdated parameter version may cause errors. Delete and re-add your cluster.
@@ -101,6 +127,12 @@ common:
     create: Create
     delete: Delete
     edit-yaml: Edit YAML
+    save: Save
+  create-modal:
+    editor-error: "Parse error: {{error}}, changes won't be saved."
+    modes:
+      advanced: Advanced
+      simple: Simple
   delete-dialog:
     delete-confirm: Don't ask this again
     information: You've switched off removal confirmations for all resources. You can switch them back on in Preferences.
@@ -164,6 +196,29 @@ daemon-sets:
     title: Tolerations
     toleration-seconds: Seconds
 deployments:
+  create-modal:
+    advanced:
+      cpu-limits: CPU Limits
+      cpu-requests: CPU Requests
+      expose-service: Expose separate Service
+      memory-limits: Memory Limits
+      memory-requests: Memory Requests
+      port: Port
+      port-placeholder: Enter the port exposed by the Service
+      runtime-profile: Runtime Profile
+      target-port: Target Port
+      target-port-placeholder: Enter the target port of the container
+    messages:
+      deployment-ok-service-bad: Deployment created, failed to create the Service
+      failure: Failed to create the Deployment
+      success: Deployment created
+    presets:
+      choose: Select preset
+      default: Default
+    simple:
+      docker-image: Docker Image
+      docker-image-placeholder: Enter Docker image tag, for example, bitnami/nginx
+    title: Create Deployment
   title: Deployments
 discovery-and-network:
   title: Discovery and Network
@@ -260,6 +315,14 @@ instances:
   title: Instances
 integration:
   title: Integration
+issuers:
+  title: Issuers
+  email: E-mail
+  state: Status
+  server: Server
+  domains:
+    included: Included Domains
+    excluded: Excluded Domains
 jobs:
   completion-time: Completion Time
   completions: Completions
@@ -295,6 +358,7 @@ namespaces:
       title: Resource Consumption
     title: Overview
     workloads:
+      deploy-new: Deploy new workload
       deployments: $t(deployments.title)
       error: 'Error while loading {{title}} data due to: {{message}}'
       pods: $t(pods.title)

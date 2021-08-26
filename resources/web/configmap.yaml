@@ -16,6 +16,14 @@ data:
                   }
               ]
             },
+            "BTP_SERVICE_CATALOG":{
+              "selectors":[
+                  {
+                    "type":"apiGroup",
+                    "apiGroup":"services.cloud.sap.com"
+                  }
+              ]
+            },
             "SERVICE_CATALOG_ADDONS":{
               "selectors":[
                   {
@@ -62,6 +70,14 @@ data:
                     "type":"apiGroup",
                     "apiGroup":"serverless.kyma-project.io"
                   }
+              ]
+            },
+            "CUSTOM_DOMAINS": {
+              "selectors":[
+                {
+                  "type": "apiGroup",
+                  "apiGroup": "dnsproviders.dns.gardener.cloud"
+                }
               ]
             },
             "OBSERVABILITY": {

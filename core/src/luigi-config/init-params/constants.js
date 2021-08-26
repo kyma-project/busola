@@ -1,11 +1,13 @@
 const DEFAULT_MODULES = {
   SERVICE_CATALOG: 'servicecatalog.k8s.io',
+  BTP_SERVICE_CATALOG: 'services.cloud.sap.com',
   SERVICE_CATALOG_ADDONS: 'servicecatalog.kyma-project.io',
   EVENTING: 'eventing.kyma-project.io',
   API_GATEWAY: 'gateway.kyma-project.io',
   APPLICATIONS: 'applicationconnector.kyma-project.io',
   ADDONS: 'addons.kyma-project.io',
   SERVERLESS: 'serverless.kyma-project.io',
+  CUSTOM_DOMAINS: 'dnsproviders.dns.gardener.cloud',
 };
 
 export const DEFAULT_FEATURES = {

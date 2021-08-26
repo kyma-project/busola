@@ -618,6 +618,76 @@ export function getStaticChildrenNodesForNamespace(
         requiredFeatures: [features.SERVICE_CATALOG],
       },
     },
+    {
+      category: i18next.t('service-management.title'),
+      pathSegment: 'btp-instances',
+      navigationContext: 'serviceinstances',
+      label: i18next.t('btp-instances.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/serviceInstances?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/services.cloud.sap.com/v1alpha1',
+          readOnly: false,
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+      context: {
+        requiredFeatures: [features.BTP_CATALOG],
+      },
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':instanceName',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/serviceInstances/:instanceName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/services.cloud.sap.com/v1alpha1',
+                }),
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: i18next.t('service-management.title'),
+      pathSegment: 'btp-service-bindings',
+      navigationContext: 'servicebindings',
+      label: i18next.t('btp-service-bindings.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/serviceBindings?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/services.cloud.sap.com/v1alpha1',
+          readOnly: false,
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+      context: {
+        requiredFeatures: [features.BTP_CATALOG],
+      },
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':bindingName',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/serviceBindings/:bindingName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/services.cloud.sap.com/v1alpha1',
+                }),
+            },
+          ],
+        },
+      ],
+    },
 
     //CONFIGURATION CATEGORY (NAMESPACE)
     {
@@ -984,6 +1054,80 @@ export function getStaticChildrenNodesForNamespace(
                   ],
                 },
               ],
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: i18next.t('configuration.title'),
+      resourceType: 'issuers',
+      pathSegment: 'issuers',
+      label: i18next.t('issuers.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/issuers?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/cert.gardener.cloud/v1alpha1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+      context: {
+        requiredFeatures: [features.CUSTOM_DOMAINS],
+      },
+
+      navigationContext: 'issuers',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':issuerName',
+              resourceType: 'issuers',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/issuers/:issuerName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/cert.gardener.cloud/v1alpha1',
+                }),
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: i18next.t('configuration.title'),
+      resourceType: 'certificates',
+      pathSegment: 'certificates',
+      label: i18next.t('certificates.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/certificates?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/cert.gardener.cloud/v1alpha1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+      context: {
+        requiredFeatures: [features.CUSTOM_DOMAINS],
+      },
+
+      navigationContext: 'certificates',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':certificateName',
+              resourceType: 'certificates',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/certificates/:certificateName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/cert.gardener.cloud/v1alpha1',
+                }),
             },
           ],
         },

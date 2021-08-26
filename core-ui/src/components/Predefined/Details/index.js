@@ -19,3 +19,7 @@ export * from './DaemonSet.details';
 export * from './DNSEntries.details';
 export * from './DNSProviders.details';
 export * from './StatefulSet/StatefulSets.details';
+export * from './Certificate/Certificate.details';
+export * from './Issuer/Issuer.details';
+export * from './ServiceInstance/ServiceInstance.details';
+export * from './ServiceBinding/ServiceBinding.details';
