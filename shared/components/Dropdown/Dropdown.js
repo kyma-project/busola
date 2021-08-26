@@ -28,7 +28,7 @@ export function Dropdown({
   }
   id = id || 'select-dropdown';
 
-  const selector = (
+  const select = (
     <Select
       id={id}
       data-testid={id}
@@ -45,11 +45,7 @@ export function Dropdown({
   return (
     <div className="dropdown">
       {label && <FormLabel htmlFor={id}>{label}</FormLabel>}
-      {inlineHelp ? (
-        <Tooltip content={inlineHelp}>{selector}</Tooltip>
-      ) : (
-        { selector }
-      )}
+      {inlineHelp ? <Tooltip content={inlineHelp}>{select}</Tooltip> : select}
     </div>
   );
 }
