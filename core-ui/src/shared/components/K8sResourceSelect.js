@@ -52,10 +52,10 @@ export function K8sResourceSelect({
       return {
         state: 'information',
         text: isNamespaced
-          ? t('common.messages.no-instances-found', {
+          ? t('common.messages.no-instances-found-namespace', {
               value: pluralResourceType,
             })
-          : t('common.messages.no-instances-found-namespace', {
+          : t('common.messages.no-instances-found', {
               value: pluralResourceType,
             }),
       };
