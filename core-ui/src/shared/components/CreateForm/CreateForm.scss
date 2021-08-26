@@ -1,6 +1,8 @@
 .create-form {
   height: 50vh;
   min-width: 25rem;
+  display: flex;
+  flex-direction: column;
 
   .dropdown {
     margin-top: unset;
@@ -22,5 +24,12 @@
 
   form > .fd-margin--sm + .fd-margin--sm {
     margin-top: -1em !important;
+  }
+
+  .simple-form,
+  .advanced-form {
+    // height: calc(100% - 73px);
+    overflow: auto;
+    flex-grow: 1;
   }
 }

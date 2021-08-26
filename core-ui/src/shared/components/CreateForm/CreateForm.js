@@ -31,7 +31,9 @@ export function CreateForm({
   const formsToDisplay = (
     <>
       {mode === ModeSelector.MODE_SIMPLE && (
-        <div onChange={onChange}>{simpleForm}</div>
+        <div onChange={onChange} className="simple-form">
+          {simpleForm}
+        </div>
       )}
       {mode === ModeSelector.MODE_YAML && (
         <Editor
@@ -44,10 +46,11 @@ export function CreateForm({
 
       {/* always keep the advanced form to ensure validation */}
       <form
+        className="advanced-form"
         onChange={onChange}
         ref={formElementRef}
         style={{
-          display: mode === ModeSelector.MODE_ADVANCED ? 'initial' : 'none',
+          display: mode === ModeSelector.MODE_ADVANCED ? null : 'none',
         }}
         onSubmit={onCreate}
       >
