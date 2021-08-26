@@ -5,8 +5,8 @@ import { useNotification } from 'react-shared';
 import { base64Decode, base64Encode } from 'shared/helpers';
 
 DecodeSecretSwitch.propTypes = {
-  entries: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
-  setEntries: PropTypes.func.isRequired,
+  secret: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
+  setSecret: PropTypes.func.isRequired,
   isEncoded: PropTypes.bool.isRequired,
   setEncoded: PropTypes.func.isRequired,
 };

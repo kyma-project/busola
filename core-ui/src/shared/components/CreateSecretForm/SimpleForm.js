@@ -2,12 +2,34 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormFieldset, FormLabel, FormInput } from 'fundamental-react';
 
-import { K8sNameInput, Tooltip } from 'react-shared';
+import { K8sNameInput, Tooltip, KeyValueForm } from 'react-shared';
 import { CreateModal } from 'shared/components/CreateModal/CreateModal';
 import { LabelsInput } from 'components/Lambdas/components';
+import { DecodeSecretSwitch } from './DecodeSecretSwitch';
 
-export function SimpleForm({ secret, setSecret }) {
+export function SimpleForm({ secret, setSecret, isEncoded, setEncoded }) {
   const { t, i18n } = useTranslation();
+
+  const setData = data => {
+    setSecret({ ...secret, data });
+  };
+
+  const secretDataContent = (
+    <KeyValueForm
+      data={secret.data}
+      setData={setData}
+      setValid={() => {}}
+      customHeaderAction={(secret, setSecret) => (
+        <DecodeSecretSwitch
+          secret={secret}
+          setSecret={setSecret}
+          isEncoded={isEncoded}
+          setEncoded={setEncoded}
+        />
+      )}
+      i18n={i18n}
+    />
+  );
 
   return (
     <CreateModal.Section>
@@ -56,6 +78,7 @@ export function SimpleForm({ secret, setSecret }) {
           }
         />
       </FormFieldset>
+      {secretDataContent}
     </CreateModal.Section>
   );
 }

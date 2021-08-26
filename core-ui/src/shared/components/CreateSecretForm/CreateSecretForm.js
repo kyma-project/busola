@@ -50,7 +50,14 @@ export function CreateSecretForm({ namespaceId, modalOpeningComponent }) {
   return (
     <CreateModal
       title={t('secrets.create-modal.title')}
-      simpleForm={<SimpleForm secret={secret} setSecret={setSecret} />}
+      simpleForm={
+        <SimpleForm
+          secret={secret}
+          setSecret={setSecret}
+          isEncoded={isEncoded}
+          setEncoded={setEncoded}
+        />
+      }
       advancedForm={
         <AdvancedForm
           secret={secret}

@@ -12,6 +12,7 @@ import { fromEntries, toEntries, readFromFile } from './helpers';
 import { v4 as uuid } from 'uuid';
 import './KeyValueForm.scss';
 import { useTranslation } from 'react-i18next';
+import * as _ from 'lodash';
 
 KeyValueForm.propTypes = {
   data: PropTypes.object.isRequired,
@@ -32,6 +33,14 @@ export function KeyValueForm({
 }) {
   const [entries, setEntries] = React.useState(toEntries(data));
   const [keyCounter, setKeyCounter] = React.useState({});
+  const prevData = React.useRef({});
+
+  React.useEffect(() => {
+    if (!_.isEqual(data, prevData.current)) {
+      setEntries(toEntries(data));
+      prevData.current = data;
+    }
+  }, [data]);
 
   React.useEffect(() => {
     const counter = {};

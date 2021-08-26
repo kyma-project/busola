@@ -1,36 +1,22 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { FormFieldset, FormLabel, FormInput } from 'fundamental-react';
+import { FormFieldset, FormLabel } from 'fundamental-react';
 
 import { CreateModal } from 'shared/components/CreateModal/CreateModal';
 import { LabelsInput } from 'components/Lambdas/components';
 import { SimpleForm } from './SimpleForm';
-import { DecodeSecretSwitch } from './DecodeSecretSwitch';
 
 export function AdvancedForm({ secret, setSecret, isEncoded, setEncoded }) {
   const { t, i18n } = useTranslation();
 
-  const setData = ({ key, value }) => {
-    setSecret({ ...secret, data: { ...secret.data, [key]: value } });
-  };
-
-  const additionalFields = Object.keys(secret.data).map(key => (
-    <CreateModal.FormField
-      label={<FormLabel> {key} </FormLabel>}
-      input={
-        <FormInput
-          value={secret.data[key]}
-          onChange={e => {
-            setData({ key, value: e.target.value });
-          }}
-        />
-      }
-    />
-  ));
-
   return (
     <>
-      <SimpleForm secret={secret} setSecret={setSecret} />
+      <SimpleForm
+        secret={secret}
+        setSecret={setSecret}
+        isEncoded={isEncoded}
+        setEncoded={setEncoded}
+      />
 
       <CreateModal.Section>
         <FormFieldset>
@@ -47,18 +33,6 @@ export function AdvancedForm({ secret, setSecret, isEncoded, setEncoded }) {
             }
           />
         </FormFieldset>
-
-        {secret.data && Object.keys(secret.data)?.length ? (
-          <>
-            <DecodeSecretSwitch
-              secret={secret}
-              setSecret={setSecret}
-              isEncoded={isEncoded}
-              setEncoded={setEncoded}
-            />
-            {additionalFields}
-          </>
-        ) : null}
       </CreateModal.Section>
     </>
   );
