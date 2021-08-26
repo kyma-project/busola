@@ -33,6 +33,7 @@ export * from './components/SideDrawer/SideDrawer';
 export * from './components/ResourcesList/ResourcesList';
 export * from './components/ResourceDetails/ResourceDetails';
 export * from './components/ReadableCreationTimestamp/ReadableCreationTimestamp';
+export * from './components/FormattedDate/FormattedDate';
 export * from './components/KeyValueForm/KeyValueForm';
 export * from './components/MainFrameRedirection/MainFrameRedirection';
 export * from './components/TileButton/TileButton';

@@ -65,6 +65,13 @@ catalog:
   menu-title: Catalog
   subtitle: Enrich your experience with additional services that are installed outside the cluster.
   title: Service Catalog
+certificates:
+  title: Certificates
+  issuer: Issuer
+  state: State
+  expiration-date: Expiration Date
+  common-name: Common Name
+  refs: References
 cluster-addons:
   title: Cluster Addons
 cluster-role-bindings:
@@ -355,6 +362,14 @@ instances:
   title: Instances
 integration:
   title: Integration
+issuers:
+  title: Issuers
+  email: E-mail
+  state: Status
+  server: Server
+  domains:
+    included: Included Domains
+    excluded: Excluded Domains
 jobs:
   completion-time: Completion Time
   completions: Completions
