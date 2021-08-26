@@ -3,18 +3,20 @@ import { ModalWithForm } from 'react-shared';
 import { Button } from 'fundamental-react';
 import SecretData from 'shared/components/Secret/SecretData';
 import { EditSecretForm } from './EditSecretForm';
+import { useTranslation } from 'react-i18next';
 
 export const SecretsDetails = ({ DefaultRenderer, ...otherParams }) => {
+  const { t } = useTranslation();
   const Secret = resource => <SecretData key="secret-data" secret={resource} />;
 
   const headerActions = [
     secret => (
       <ModalWithForm
         key="edit-secret-modal"
-        title="Edit secret"
+        title={t('secrets.title-edit-secret')}
         modalOpeningComponent={
           <Button className="fd-margin-end--tiny" option="transparent">
-            Edit
+            {t('common.buttons.edit')}
           </Button>
         }
         confirmText="Update"

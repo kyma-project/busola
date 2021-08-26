@@ -41,7 +41,9 @@ export default function DeployNewWorkload({ namespaceName }) {
       repositories={repositories || []}
       serverDataError={serverDataError}
       serverDataLoading={serverDataLoading}
-      modalOpeningComponent={<Menu.Item>Create Function</Menu.Item>}
+      modalOpeningComponent={
+        <Menu.Item>{t('namespaces.buttons.create-function')}</Menu.Item>
+      }
     />
   ) : null;
 

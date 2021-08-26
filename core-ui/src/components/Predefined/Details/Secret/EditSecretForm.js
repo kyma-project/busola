@@ -2,8 +2,11 @@ import React from 'react';
 import { useUpdate } from 'react-shared';
 import { SecretForm } from '../../Create/Secrets/SecretForm';
 import { createPatch } from 'rfc6902';
+import { useTranslation } from 'react-i18next';
 
 export function EditSecretForm(props) {
+  const { t } = useTranslation();
+
   const patchRequest = useUpdate();
   const { secret, onCompleted, onError, resourceUrl, ...formProps } = props;
 
@@ -15,10 +18,13 @@ export function EditSecretForm(props) {
     };
     try {
       await patchRequest(resourceUrl, createPatch(secret, mergedSecret));
-      onCompleted('Secret updated');
+      onCompleted(t('secrets.messages.created'));
     } catch (e) {
       console.warn(e);
-      onError('Cannot update Secret', `Error: ${e.message}`);
+      onError(
+        t('secrets.errors.cannot-create'),
+        `${t('common.tooltips.error')} ${e.message}`,
+      );
     }
   };
 

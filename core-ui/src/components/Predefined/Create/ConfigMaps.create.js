@@ -27,7 +27,7 @@ export const ConfigMapsCreate = props => {
       console.warn(e);
       onError(
         t('config-maps.errors.cannot-create'),
-        `${t('common.tooltips.error')}:${e.message}`,
+        `${t('common.tooltips.error')} ${e.message}`,
       );
     }
   };

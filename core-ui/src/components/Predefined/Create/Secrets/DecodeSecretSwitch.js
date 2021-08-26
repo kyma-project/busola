@@ -34,8 +34,8 @@ export function DecodeSecretSwitch({
       setEncoded(!isEncoded);
     } catch (e) {
       notification.notifyError({
-        title: t('secrets.error.failed-to-decode'),
-        content: t('secrets.error.failed-to-decode-long') + e.message,
+        title: t('secrets.errors.failed-to-decode'),
+        content: t('secrets.errors.failed-to-decode-long') + e.message,
       });
     }
   };

@@ -43,24 +43,29 @@ api-rules:
 applications:
   aria:
     namespace: Choose namespace
+  bindings: Bindings
   buttons:
     close: Close
     connect: Connect Application
-    create: Create Namespace Binding
+    create: $t(applications.subtitle.create-binding)
     select-all: Select all
   headers:
     apis: APIs
     description: Descritpion
     events: Events
+    service-and-event: Service & event bindings
   messages:
+    binding-deleted: Binding deleted
+    binding-not-found: No bindings
     copy-url: 'Copy the following URL and use it at the external system that you would like to connect to:'
     create-failed: Failed to create the Binding
-    created: API Rule created
+    created: Binding created
     dont-expose: This Application doesn't expose any Service or Events.
     no-apis: There are no APIs
+    no-bound-service: No bound services found.
     no-events: There are no events
     no-matches-text: No Namespaces to bind
-    not-found: No services
+    service-not-found: No services
     show-namespaces: Show namespaces
     some-apis: There are some APIs
     some-events: There are some events
@@ -71,7 +76,10 @@ applications:
     namespace: Choose namespace...
   subtitle:
     connect-app: Connect Application
-    create-binding: $t(applications.buttons.create)
+    create-binding: Create Namespace Binding
+    bound-to: Services and Events bound to  '{{namespace}}'
+    edit-binding: Edit Service Class Binding in '{{namespace}}'
+    namespace-bindings: Namespace Bindings
     provided-services: Provided Services & Events
   title: Applications
 brokers:
@@ -152,7 +160,9 @@ common:
     cancel: Cancel
     create: Create
     delete: Delete
+    edit: Edit
     edit-yaml: Edit YAML
+    ok: OK
     save: Save
   create-modal:
     editor-error: "Parse error: {{error}}, changes won't be saved."
@@ -193,10 +203,16 @@ common:
     save: Save
     search: Search
 config-maps:
+  buttons:
+    update: Update
   errors:
-    cannot-create: Cannot create Config Map
+    cannot-create: Cannot create ConfigMap
+    cannot-update: Cannot create ConfigMap
   messages:
-    created: Config Map created
+    created: ConfigMap created
+    updated: ConfigMap updated
+  subtitle:
+    edit-config-map: Edit ConfigMap
   title: ConfigMaps
 configuration:
   title: Configuration
@@ -213,6 +229,28 @@ cron-jobs:
   schedule: Schedule
   title: CronJobs
 custom-resource-definitions:
+  headers:
+    description: Description
+    json-path: JSON Path
+    kind: Kind
+    list-kind: List Kind
+    plural: Plural
+    scope: Scope
+    singular: Singular
+    short-names: Short Names
+    type: Type
+    value: Value
+  messages:
+    no-entries: No entries found because the version is not served
+  status:
+    not-served: Not Served
+    served: Served
+    storage: Storage
+  subtitle:
+    additional-columns: Additional Printer Columns
+    names: Names
+    schema: Schema
+    version: Version
   title: CustomResourceDefinitions
 daemon-sets:
   images: Images
@@ -353,6 +391,8 @@ machine-info:
   pods-capacity: Pods capacity
   title: Machine info
 namespaces:
+  buttons:
+    create-function: Create Function
   create-modal:
     apply-limits: Apply limits per container
     apply-memory-quotas: Apply Total Memory Quotas
@@ -377,6 +417,10 @@ namespaces:
     create: Select this option to disable Istio to mediate all communication between the Pods in your Namespace.
     memory-examples: Use plain value in bytes (128974848) or suffix equivalents (like 129e6, 129M, 123Mi).
     total-memory-limit: Define constraints that limit total memory consumption in your Namespace.
+    usage-of-memory-limits: This Namespace uses {{valueText}} of {{maxText}} its memory limits.
+    usage-of-memory-requests: This Namespace uses {{valueText}} of {{maxText}} its memory requests.
+    no-resources: There are no {{resourceType}} in this Namespace
+    healthy-resources: '{{value}}/{{total}} {{resourceType}} are healthy.'
 no-permissions:
   title: No Permissions
 node-details:
@@ -405,6 +449,27 @@ oauth2-clients:
 observability:
   title: Observability
 pods:
+  buttons:
+    view-logs: View Logs
+  headers:
+    type: Type
+    pod-ip: Pod IP
+    volume-name: Volume Name
+  labels:
+    constainers: Containers
+    filter-timeframe: 'Filter timeframe by:'
+    image: Image
+    image-pull-policy: Image pull policy
+    init-constainers: Init containers
+    ports: Ports
+    reverse-logs: Reverse logs
+    save-to-file: Save to a file
+    show-timestamps: Show timestamps
+    volumes: Volumes
+  message:
+    failed-to-download: Failed to download the Logs
+    no-logs-available: No logs avaliable for the '{{containerName}}' container.
+    type-not-found: '{{type}} not found.'
   node: Node
   restarts: Restarts
   title: Pods
@@ -419,6 +484,8 @@ role-bindings:
     cannot-create: Cannot create Role Binding
   messages:
     created: Role Binding {{name}} created
+  headers:
+    kind: Kind
   labels:
     annotations: Annotations
     arrow: Show roles
@@ -433,6 +500,10 @@ role-bindings:
   tooltip:
     no-found: No Roles found
 roles:
+  headers:
+    api-groups: API Groups
+    resources: Resources
+    verbs: Verbs
   title: Roles
 secrets:
   buttons:
@@ -442,13 +513,15 @@ secrets:
   data: Data
   errors:
     cannot-create: Cannot create Secret
+    cannot-update: Cannot update Secret
+    failed-to-decode: Failed to decode the Secret data
+    failed-to-decode-long: "Some of the secret data couldn't be decoded. Correct them and try again:"
   metadata: Metadata
   labels:
     type: Secret type
   title: Secrets
-  error:
-    failed-to-decode: Failed to decode the Secret data
-    failed-to-decode-long: "Some of the secret data couldn't be decoded. Correct them and try again:"
+  title-edit-secret: Edit secret
+  updated: Secret updated
 service-management:
   title: Service Management
 services:
