@@ -19,6 +19,7 @@ export function CreateSecretForm({ namespaceId, modalOpeningComponent }) {
   const notification = useNotification();
   const postRequest = usePost();
   const [secret, setSecret] = React.useState(createSecretTemplate(namespaceId));
+  const [isEncoded, setEncoded] = React.useState(false);
 
   modalOpeningComponent = modalOpeningComponent || (
     <Button glyph="add">{t('secrets.create-modal.title')}</Button>
@@ -28,7 +29,7 @@ export function CreateSecretForm({ namespaceId, modalOpeningComponent }) {
     try {
       await postRequest(
         `/api/v1/namespaces/${namespaceId}/secrets/`,
-        secretToYaml(secret),
+        secretToYaml({ secret, isEncoded }),
       );
       notification.notifySuccess({
         content: t('secrets.create-modal.messages.success'),
@@ -50,12 +51,19 @@ export function CreateSecretForm({ namespaceId, modalOpeningComponent }) {
     <CreateModal
       title={t('secrets.create-modal.title')}
       simpleForm={<SimpleForm secret={secret} setSecret={setSecret} />}
-      advancedForm={<AdvancedForm secret={secret} setSecret={setSecret} />}
+      advancedForm={
+        <AdvancedForm
+          secret={secret}
+          setSecret={setSecret}
+          isEncoded={isEncoded}
+          setEncoded={setEncoded}
+        />
+      }
       modalOpeningComponent={modalOpeningComponent}
       resource={secret}
       setResource={setSecret}
       onClose={() => setSecret(createSecretTemplate(namespaceId))}
-      toYaml={secretToYaml}
+      toYaml={secret => secretToYaml({ secret, isEncoded })}
       fromYaml={yamlToSecret}
       onCreate={createSecret}
       presets={createPresets(namespaceId, t)}

@@ -5,8 +5,9 @@ import { FormFieldset, FormLabel, FormInput } from 'fundamental-react';
 import { CreateModal } from 'shared/components/CreateModal/CreateModal';
 import { LabelsInput } from 'components/Lambdas/components';
 import { SimpleForm } from './SimpleForm';
+import { DecodeSecretSwitch } from './DecodeSecretSwitch';
 
-export function AdvancedForm({ secret, setSecret }) {
+export function AdvancedForm({ secret, setSecret, isEncoded, setEncoded }) {
   const { t, i18n } = useTranslation();
 
   const setData = ({ key, value }) => {
@@ -47,9 +48,17 @@ export function AdvancedForm({ secret, setSecret }) {
           />
         </FormFieldset>
 
-        {secret.data && Object.keys(secret.data)?.length
-          ? additionalFields
-          : null}
+        {secret.data && Object.keys(secret.data)?.length ? (
+          <>
+            <DecodeSecretSwitch
+              secret={secret}
+              setSecret={setSecret}
+              isEncoded={isEncoded}
+              setEncoded={setEncoded}
+            />
+            {additionalFields}
+          </>
+        ) : null}
       </CreateModal.Section>
     </>
   );

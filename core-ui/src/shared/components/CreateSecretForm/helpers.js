@@ -1,6 +1,13 @@
 import * as jp from 'jsonpath';
 
-export function secretToYaml(secret) {
+import { base64Encode } from 'shared/helpers';
+
+export const mapObjectValues = (fn, obj) =>
+  Object.fromEntries(
+    Object.entries(obj).map(([key, value]) => [key, fn(value)]),
+  );
+
+export function secretToYaml({ secret, isEncoded }) {
   return {
     apiVersion: 'v1',
     kind: 'Secret',
@@ -11,11 +18,11 @@ export function secretToYaml(secret) {
       labels: secret.labels,
       annotations: secret.annotations,
     },
-    data: secret.data,
+    data: isEncoded ? secret.data : mapObjectValues(base64Encode, secret.data),
   };
 }
 
-export function yamlToSecret(yaml, prevSecret) {
+export function yamlToSecret(yaml) {
   return {
     name: jp.value(yaml, '$.metadata.name') || '',
     namespace: jp.value(yaml, '$.metadata.namespace') || '',
