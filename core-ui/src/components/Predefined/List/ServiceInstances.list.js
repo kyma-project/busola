@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { BTPResourceStatus } from 'shared/components/BTPResourceStatus';
+import { CreateServiceInstanceModal } from 'shared/components/CreateServiceInstanceModal/CreateServiceInstanceModal';
 
 export const ServiceInstancesList = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
@@ -33,6 +34,9 @@ export const ServiceInstancesList = ({ DefaultRenderer, ...otherParams }) => {
         'spec.servicePlanName',
         'spec.externalName',
       ]}
+      listHeaderActions={
+        <CreateServiceInstanceModal namespaceId={otherParams.namespace} />
+      }
       {...otherParams}
     />
   );

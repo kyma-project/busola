@@ -6,7 +6,7 @@ import './ServiceBindingAdvancedForm.scss';
 import { SimpleForm } from './SimpleForm';
 import { K8sResourceSelect } from '../../shared/components/K8sResourceSelect';
 import { useTranslation } from 'react-i18next';
-import { JSONSection } from './JSONInputSection';
+import { JSONSection } from '../../shared/components/CreateModal/JSONInputSection.js';
 
 export function AdvancedForm({
   serviceBinding,
