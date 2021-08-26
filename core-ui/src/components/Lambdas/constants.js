@@ -139,23 +139,7 @@ export const REPOSITORY_AUTH = {
   KEY: 'SSH key',
 };
 
-export const LOGS_AND_METRICS = {
-  LOGS: {
-    SPLIT_VIEW: {
-      TITLE: 'Logs',
-    },
-    MODAL: {
-      TITLE: 'Logs from Function "{lambdaName}"',
-    },
-  },
-};
 export const SERVICE_URL = `/api/v1/namespaces/{namespace}/services/{name}`;
-
-export const MODALS = {
-  CREATE_BINDING: {
-    CREATE_BUTTON_POPUP_MESSAGE: 'At least one event must be marked.',
-  },
-};
 
 export const RESOURCES_MANAGEMENT_PANEL = {
   TITLE: 'Resources and replicas',
