@@ -196,6 +196,24 @@ deployments:
   title: Deploymenty
 discovery-and-network:
   title: Odkrywanie i sieć
+dnsentries:
+  headers:
+    dns-name: Nazwa DNS
+    provider: Dostawca
+    provider-type: Typ dostawcy
+    spec: Specyfikacja
+    status: $t(common.headers.status)
+    targets: Cele
+    ttl: TTL
+  title: Wpisy DNS
+dnsproviders:
+  domains: Domeny
+  headers:
+    exclude: Wykluczone domeny
+    include: Zawarte domeny
+    type: Typ
+    status: $t(common.headers.status)
+  title: Dostawcy DNS
 functions:
   title: Funkcje
   variable:
