@@ -935,6 +935,80 @@ export function getStaticChildrenNodesForNamespace(
     },
     {
       category: i18next.t('configuration.title'),
+      resourceType: 'dnsentries',
+      pathSegment: 'dnsentries',
+      navigationContext: 'dnsentries',
+      label: i18next.t('dnsentries.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/DNSEntries?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/dns.gardener.cloud/v1alpha1',
+          hasDetailsView: true,
+        }),
+      keepSelectedForChildren: true,
+      viewGroup: coreUIViewGroupName,
+      context: {
+        requiredFeatures: [features.CUSTOM_DOMAINS],
+      },
+      children: [
+        {
+          pathSegment: 'details',
+          resourceType: 'dnsentries',
+          children: [
+            {
+              pathSegment: ':dnsentryName',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/DNSEntries/:dnsentryName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/dns.gardener.cloud/v1alpha1',
+                }),
+              viewGroup: coreUIViewGroupName,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: i18next.t('configuration.title'),
+      resourceType: 'dnsproviders',
+      pathSegment: 'dnsproviders',
+      navigationContext: 'dnsproviders',
+      label: i18next.t('dnsproviders.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/DNSProviders?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/dns.gardener.cloud/v1alpha1',
+          hasDetailsView: true,
+        }),
+      keepSelectedForChildren: true,
+      viewGroup: coreUIViewGroupName,
+      context: {
+        requiredFeatures: [features.CUSTOM_DOMAINS],
+      },
+      children: [
+        {
+          pathSegment: 'details',
+          resourceType: 'dnsproviders',
+          children: [
+            {
+              pathSegment: ':dnsproviderName',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/DNSProviders/:dnsproviderName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/dns.gardener.cloud/v1alpha1',
+                }),
+              viewGroup: coreUIViewGroupName,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: i18next.t('configuration.title'),
       pathSegment: 'customresourcedefinitions',
       resourceType: 'customresourcedefinitions',
       navigationContext: 'customresourcedefinitions',
@@ -980,6 +1054,80 @@ export function getStaticChildrenNodesForNamespace(
                   ],
                 },
               ],
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: i18next.t('configuration.title'),
+      resourceType: 'issuers',
+      pathSegment: 'issuers',
+      label: i18next.t('issuers.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/issuers?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/cert.gardener.cloud/v1alpha1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+      context: {
+        requiredFeatures: [features.CUSTOM_DOMAINS],
+      },
+
+      navigationContext: 'issuers',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':issuerName',
+              resourceType: 'issuers',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/issuers/:issuerName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/cert.gardener.cloud/v1alpha1',
+                }),
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: i18next.t('configuration.title'),
+      resourceType: 'certificates',
+      pathSegment: 'certificates',
+      label: i18next.t('certificates.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/certificates?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/cert.gardener.cloud/v1alpha1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+      context: {
+        requiredFeatures: [features.CUSTOM_DOMAINS],
+      },
+
+      navigationContext: 'certificates',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':certificateName',
+              resourceType: 'certificates',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/certificates/:certificateName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/cert.gardener.cloud/v1alpha1',
+                }),
             },
           ],
         },

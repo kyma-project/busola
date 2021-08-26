@@ -67,7 +67,7 @@ btp-service-bindings:
   instance-id: Instance ID
   instance-name: Service Instance Name
   parameters: Instance Binding Parameters
-  parameters-from: List of sources to populate parameters
+  parameters-from: Array of sources to populate parameters
   resource-type: Service Binding
   secret: Secret
   secret-not-found: This Secret doesn't exist.
@@ -76,6 +76,13 @@ catalog:
   menu-title: Catalog
   subtitle: Enrich your experience with additional services that are installed outside the cluster.
   title: Service Catalog
+certificates:
+  title: Certificates
+  issuer: Issuer
+  state: State
+  expiration-date: Expiration Date
+  common-name: Common Name
+  refs: References
 cluster-addons:
   title: Cluster Addons
 cluster-role-bindings:
@@ -237,6 +244,24 @@ deployments:
   title: Deployments
 discovery-and-network:
   title: Discovery and Network
+dnsentries:
+  headers:
+    dns-name: DNS Name
+    provider: Provider
+    provider-type: Provider Type
+    spec: Specification
+    status: $t(common.headers.status)
+    targets: Targets
+    ttl: TTL
+  title: DNS Entries
+dnsproviders:
+  domains: Domains
+  headers:
+    exclude: Excluded Domains
+    include: Included Domains
+    type: Type
+    status: $t(common.headers.status)
+  title: DNS Providers
 functions:
   title: Functions
   variable:
@@ -312,6 +337,14 @@ instances:
   title: Instances
 integration:
   title: Integration
+issuers:
+  title: Issuers
+  email: E-mail
+  state: Status
+  server: Server
+  domains:
+    included: Included Domains
+    excluded: Excluded Domains
 jobs:
   completion-time: Completion Time
   completions: Completions

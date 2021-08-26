@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import LuigiClient from '@luigi-project/client';
 
 export function getFeatureToggle(key) {
@@ -6,5 +6,12 @@ export function getFeatureToggle(key) {
 }
 
 export function useFeatureToggle(key) {
-  return useState(getFeatureToggle(key));
+  const [value, setValue] = useState(value);
+  const luigiValue = getFeatureToggle(key);
+
+  useEffect(() => {
+    setValue(luigiValue);
+  }, [luigiValue]);
+
+  return [value, setValue];
 }

@@ -6,7 +6,7 @@ import './ServiceBindingAdvancedForm.scss';
 import { SimpleForm } from './SimpleForm';
 import { K8sResourceSelect } from '../../shared/components/K8sResourceSelect';
 import { useTranslation } from 'react-i18next';
-import { JSONSection } from '../../shared/components/CreateModal/JSONInputSection.js';
+import { JSONSection } from '../../shared/components/CreateModal/JSONInputSection';
 
 export function AdvancedForm({
   serviceBinding,
@@ -72,7 +72,6 @@ export function AdvancedForm({
         setValue={parameters =>
           setServiceBinding({ ...serviceBinding, parameters })
         }
-        validate={parsed => !!parsed && typeof parsed === 'object'}
       />
       <JSONSection
         title={t('btp-service-bindings.parameters-from')}

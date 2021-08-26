@@ -4,12 +4,19 @@ import { ControlledEditor, useTheme } from 'react-shared';
 import { CreateModal } from 'shared/components/CreateModal/CreateModal';
 import { useTranslation } from 'react-i18next';
 
-export function JSONSection({ title, value, setValue, validate }) {
+const isNonEmptyObject = value => !!value && typeof value === 'object';
+
+export function JSONSection({
+  title,
+  value,
+  setValue,
+  validate = isNonEmptyObject,
+}) {
   const { t } = useTranslation();
   const { theme } = useTheme();
   const [areParamsValid, setParamsValid] = React.useState(true);
 
-  const isParseableToObject = value => {
+  const isValid = value => {
     try {
       const parsed = JSON.parse(value);
       return validate(parsed);
@@ -19,7 +26,7 @@ export function JSONSection({ title, value, setValue, validate }) {
   };
 
   const onEditorChange = (_, value) => {
-    if (isParseableToObject(value)) {
+    if (isValid(value)) {
       setValue(value);
       setParamsValid(true);
     } else {
