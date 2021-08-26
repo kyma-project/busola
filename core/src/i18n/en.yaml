@@ -278,7 +278,7 @@ functions:
       url: URL must be a valid Git repository address that starts with the "http(s)", "git", or "ssh" prefix and ends with the ".git" suffix.
     labels:
       auth: Authorization
-      secret-name: Secret name
+      secret-name: Secret Name
       url: URL
   statuses:
     building: Building
