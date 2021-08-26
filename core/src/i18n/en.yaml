@@ -251,7 +251,7 @@ functions:
     errors:
       invalid: At least one field is empty or incorrectly formatted.
       one-field-invalid: At least one field is invalid.
-      no-repository-found: There are no Repositories available. Create a new Repository first.
+      no-repository-found: There are no Repositories available. Create a Repository first.
       req-base-dir: Base Directory is required.
       req-reference: Reference is required.
       required-name: Function name is required.
