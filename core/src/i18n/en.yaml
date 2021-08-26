@@ -245,7 +245,7 @@ dnsproviders:
   title: DNS Providers
 functions:
   repository:
-    title: Repository configuration
+    title: Repository Configuration
   create-view:
     buttons:
       confirm: Create
