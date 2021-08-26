@@ -62,9 +62,7 @@ export function KeyValueForm({
   const { t } = useTranslation(null, { i18n });
   return (
     <section className="key-value-form">
-      <span className="fd-has-color-text-4">
-        {t('common.tooltips.k8s-name-input')}
-      </span>
+      <span className="fd-has-color-text-4"></span>
       <header className="fd-margin-top--sm fd-margin-bottom--sm">
         <Button
           className="add-entry"
@@ -96,27 +94,39 @@ export function KeyValueForm({
               <FormLabel htmlFor="value">Value</FormLabel>
             </div>
             <div className="grid-wrapper">
-              <FormInput
-                required
-                name="key"
-                placeholder="Key"
-                pattern={keyPattern}
-                onChange={e => {
-                  entry.key = e.target.value;
-                  setEntries([...entries]);
-                }}
-                value={entry.key}
-              />
-              <FormTextarea
-                className="value-textarea"
-                name="value"
-                placeholder="Value"
-                onChange={e => {
-                  entry.value = e.target.value;
-                  setEntries([...entries]);
-                }}
-                value={entry.value}
-              />
+              <Tooltip
+                className="fd-margin-end--tiny"
+                position="right"
+                content={t('common.tooltips.key')}
+              >
+                <FormInput
+                  required
+                  name="key"
+                  placeholder="Key"
+                  pattern={keyPattern}
+                  onChange={e => {
+                    entry.key = e.target.value;
+                    setEntries([...entries]);
+                  }}
+                  value={entry.key}
+                />
+              </Tooltip>
+              <Tooltip
+                className="fd-margin-end--tiny"
+                position="right"
+                content={t('common.tooltips.value')}
+              >
+                <FormTextarea
+                  className="value-textarea"
+                  name="value"
+                  placeholder="Value"
+                  onChange={e => {
+                    entry.value = e.target.value;
+                    setEntries([...entries]);
+                  }}
+                  value={entry.value}
+                />
+              </Tooltip>
               <Tooltip content={t('common.tooltips.read-file')}>
                 <Button
                   typeAttr="button"

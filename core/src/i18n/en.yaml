@@ -87,10 +87,10 @@ clusters:
     issuer-url: Issuer URL
     scopes: Scopes
   list:
-    title: Clusters
     no-clusters-found: No clusters found
     outdated:
       tooltip: Outdated parameter version may cause errors. Delete and re-add your cluster.
+    title: Clusters
   messages:
     error-kubeconfig: Error reading Kubeconfig
     missing-configuration-data: Configuration has been included properly. Please fill remaining required data.
@@ -156,10 +156,12 @@ common:
     duplicate-key: Duplicate key
     error: 'Error: '
     k8s-name-input: Name must contain lower case alphanumeric characters, can contain '-' (like 'my-name1').
+    key: Key must start and end with alphanumeric character, can contain '-', '_' or '.'
     key-value: key=value, must start and end with alphanumeric character, can contain '-', '_' or '.'
     read-file: Read file content as single value, with file name as a key.
     save: Save
     search: Search
+    value: Value must start and end with alphanumeric character, can contain '-', '_' or '.'
 config-maps:
   title: ConfigMaps
 configuration:
@@ -364,16 +366,17 @@ role-bindings:
 roles:
   title: Roles
 secrets:
-  title: Secrets
   create-modal:
-    title: Create Secret
     messages:
       failure: Failed to create the Secret
       success: Secret created
-    simple:
-      type: Type
     presets:
       default: Default
+    simple:
+      data: Data
+      type: Type
+    title: Create Secret
+  title: Secrets
 service-management:
   title: Service Management
 services:

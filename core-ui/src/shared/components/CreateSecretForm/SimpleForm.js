@@ -32,53 +32,61 @@ export function SimpleForm({ secret, setSecret, isEncoded, setEncoded }) {
   );
 
   return (
-    <CreateModal.Section>
-      <FormFieldset>
-        <CreateModal.FormField
-          label={<FormLabel required>{t('common.labels.name')}</FormLabel>}
-          input={
-            <K8sNameInput
-              showLabel={false}
-              compact
-              kind="Secret"
-              onChange={e => setSecret({ ...secret, name: e.target.value })}
-              value={secret.name}
-              i18n={i18n}
-            />
-          }
-        />
-        <CreateModal.FormField
-          label={
-            <FormLabel required>
-              {t('secrets.create-modal.simple.type')}
-            </FormLabel>
-          }
-          input={
-            <Tooltip content={t('')}>
-              <FormInput
-                required
+    <>
+      <CreateModal.Section>
+        <FormFieldset>
+          <CreateModal.FormField
+            label={<FormLabel required>{t('common.labels.name')}</FormLabel>}
+            input={
+              <K8sNameInput
+                showLabel={false}
                 compact
-                placeholder={t('secrets.create-modal.simple.type-placeholder')}
-                value={secret.type}
-                disabled={true}
+                kind="Secret"
+                onChange={e => setSecret({ ...secret, name: e.target.value })}
+                value={secret.name}
+                i18n={i18n}
               />
-            </Tooltip>
-          }
-        />
-        <CreateModal.FormField
-          label={<FormLabel>{t('common.headers.labels')}</FormLabel>}
-          input={
-            <LabelsInput
-              showFormLabel={false}
-              labels={secret.labels}
-              onChange={labels => setSecret({ ...secret, labels })}
-              i18n={i18n}
-              compact
-            />
-          }
-        />
-      </FormFieldset>
-      {secretDataContent}
-    </CreateModal.Section>
+            }
+          />
+          <CreateModal.FormField
+            label={
+              <FormLabel required>
+                {t('secrets.create-modal.simple.type')}
+              </FormLabel>
+            }
+            input={
+              <Tooltip content={t('')}>
+                <FormInput
+                  required
+                  compact
+                  placeholder={t(
+                    'secrets.create-modal.simple.type-placeholder',
+                  )}
+                  value={secret.type}
+                  disabled={true}
+                />
+              </Tooltip>
+            }
+          />
+          <CreateModal.FormField
+            label={<FormLabel>{t('common.headers.labels')}</FormLabel>}
+            input={
+              <LabelsInput
+                showFormLabel={false}
+                labels={secret.labels}
+                onChange={labels => setSecret({ ...secret, labels })}
+                i18n={i18n}
+                compact
+              />
+            }
+          />
+        </FormFieldset>
+      </CreateModal.Section>
+
+      <CreateModal.Section>
+        <FormLabel>{t('secrets.create-modal.simple.data')}</FormLabel>
+        {secretDataContent}
+      </CreateModal.Section>
+    </>
   );
 }
