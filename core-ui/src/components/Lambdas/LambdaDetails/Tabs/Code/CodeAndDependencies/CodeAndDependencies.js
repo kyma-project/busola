@@ -9,7 +9,6 @@ import { TabsWithActions } from 'components/Lambdas/components';
 import Editor from './Editor';
 
 import { useUpdateLambda, UPDATE_TYPE } from 'components/Lambdas/hooks';
-import { CODE_AND_DEPENDENCIES_PANEL } from 'components/Lambdas/constants';
 
 import './CodeAndDependencies.scss';
 import {
@@ -95,7 +94,6 @@ export default function CodeAndDependencies({ lambda }) {
   }
 
   function checkPopupMessage() {
-    const messages = CODE_AND_DEPENDENCIES_PANEL.SAVE_BUTTON.POPUP_MESSAGE;
     let message = '';
     switch (disabledCause) {
       case DISABLED_CAUSES.EMPTY_SOURCE: {

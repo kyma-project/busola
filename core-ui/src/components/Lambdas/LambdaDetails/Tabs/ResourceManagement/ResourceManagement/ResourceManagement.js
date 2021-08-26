@@ -210,7 +210,9 @@ export default function ResourcesManagement({ lambda }) {
     <LayoutPanel className="fd-margin--md lambda-resources-management">
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <LayoutPanel.Header>
-          <LayoutPanel.Head title={t('functions.details.resources-replicas')} />
+          <LayoutPanel.Head
+            title={t('functions.details.title.resources-replicas')}
+          />
           <LayoutPanel.Actions>
             {renderCancelButton()}
             {renderConfirmButton()}
