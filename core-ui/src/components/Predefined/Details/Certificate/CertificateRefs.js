@@ -20,7 +20,7 @@ export function CertificateRefs(certificate) {
       </FormItem>
       <FormItem>
         <FormLabel>Secret</FormLabel>
-        <Link onClick={() => goToSecret(certificate.status.secretRef)}>
+        <Link onClick={() => goToSecret(certificate.spec.secretRef)}>
           {certificate.spec.secretRef.name}
         </Link>
       </FormItem>

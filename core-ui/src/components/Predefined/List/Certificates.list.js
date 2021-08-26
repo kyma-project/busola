@@ -10,10 +10,9 @@ export const CertificatesList = ({ DefaultRenderer, ...otherParams }) => {
   const customColumns = [
     {
       header: t('certificates.issuer'),
-      value: certificate => {
-        console.log('issuerRef', certificate.status.issuerRef);
-        return <IssuerLink issuerRef={certificate.status.issuerRef} />;
-      },
+      value: certificate => (
+        <IssuerLink issuerRef={certificate.status.issuerRef} />
+      ),
     },
     {
       header: t('certificates.state'),
