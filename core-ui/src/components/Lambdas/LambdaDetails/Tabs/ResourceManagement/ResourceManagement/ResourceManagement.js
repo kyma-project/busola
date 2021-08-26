@@ -21,11 +21,6 @@ import {
 
 import './ResourceManagement.scss';
 
-const saveText = RESOURCES_MANAGEMENT_PANEL.EDIT_MODAL.OPEN_BUTTON.TEXT.SAVE;
-const editText = RESOURCES_MANAGEMENT_PANEL.EDIT_MODAL.OPEN_BUTTON.TEXT.EDIT;
-const popupMessage =
-  RESOURCES_MANAGEMENT_PANEL.EDIT_MODAL.CONFIRM_BUTTON.POPUP_MESSAGE;
-
 function getDefaultFormValues(lambda) {
   return {
     [inputNames.replicas.preset]: checkReplicasPreset(
@@ -176,6 +171,10 @@ export default function ResourcesManagement({ lambda }) {
     );
   }
 
+  const saveText = t('common.buttons.save');
+  const editText = t('functions.details.buttons.edit-configuration');
+  const popupMessage = t('functions.create-view.errors.one-field-invalid');
+
   function renderConfirmButton() {
     const disabled = isEditMode && !formState.isValid;
     const button = (
@@ -211,7 +210,7 @@ export default function ResourcesManagement({ lambda }) {
     <LayoutPanel className="fd-margin--md lambda-resources-management">
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <LayoutPanel.Header>
-          <LayoutPanel.Head title={RESOURCES_MANAGEMENT_PANEL.TITLE} />
+          <LayoutPanel.Head title={t('functions.details.resources-replicas')} />
           <LayoutPanel.Actions>
             {renderCancelButton()}
             {renderConfirmButton()}

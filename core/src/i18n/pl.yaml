@@ -206,6 +206,7 @@ functions:
       create: Stwórz Funkcję
     errors:
       invalid: Co najmniej jedno pole jest puste lub niepoprawnie sformatowane.
+      one-field-invalid: Co najmniej jedno pole jest nieprawidłowe.
       no-repository-found: Brak dostępnych repozytoriów. Najpierw utwórz nowe repozytorium.
       req-base-dir: Katalog bazowy jest wymagany.
       req-reference: Referencja jest wymagana.
@@ -226,10 +227,13 @@ functions:
       runtime: Runtime
       source-type: Typ źródła
   details:
+    buttons:
+      edit-configuration: Edytuj konfigurację
     title:
       code: Kod
       configuration: Konfiguracja
       resources: Zasoby
+      resources-replicas: Zasoby i repliki
   errors:
     server: Błąd serwera. Skontaktuj się z administratorem klastra.
   pod-list:

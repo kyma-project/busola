@@ -142,19 +142,6 @@ export const REPOSITORY_AUTH = {
 export const SERVICE_URL = `/api/v1/namespaces/{namespace}/services/{name}`;
 
 export const RESOURCES_MANAGEMENT_PANEL = {
-  TITLE: 'Resources and replicas',
-  EDIT_MODAL: {
-    OPEN_BUTTON: {
-      TEXT: {
-        EDIT: 'Edit Configuration',
-        SAVE: 'Save',
-      },
-    },
-    CONFIRM_BUTTON: {
-      TEXT: 'Save',
-      POPUP_MESSAGE: 'At least one field is invalid.',
-    },
-  },
   ERROR_MESSAGES: {
     CPU: {
       DEFAULT:

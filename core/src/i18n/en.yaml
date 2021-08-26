@@ -232,6 +232,7 @@ functions:
       create: Create Function
     errors:
       invalid: At least one field is empty or incorrectly formatted.
+      one-field-invalid: At least one field is invalid.
       no-repository-found: There are no Repositories available. Create a new Repository first.
       req-base-dir: Base Directory is required.
       req-reference: Reference is required.
@@ -242,7 +243,7 @@ functions:
       reference: Reference to the Function's source. Select a branch name or commit revision.
       repository: Repository that you want to use
       runtime: Runtime on which your Function will run
-      source-type: "Provide code and dependencies as plain text with inline editor, or fetch them from a Git repository"
+      source-type: 'Provide code and dependencies as plain text with inline editor, or fetch them from a Git repository'
     labels:
       base-directory: Base Directory
       git-repository: Git Repository
@@ -256,6 +257,9 @@ functions:
       code: Code
       configuration: Configuration
       resources: Resources
+      resources-replicas: Resources and replicas
+    buttons:
+      edit-configuration: Edit Configuration
   errors:
     server: Server error. Contact your cluster admin.
   pod-list:
