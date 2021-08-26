@@ -259,8 +259,6 @@ functions:
     inline-help:
       base-directory: Directory with your Function's code and dependencies
       reference: Reference to the Function's source. Select a branch name or commit revision.
-      repository: Repository that you want to use
-      runtime: Runtime on which your Function will run
       source-type: 'Provide code and dependencies as plain text with inline editor, or fetch them from a Git repository'
     labels:
       base-directory: Base Directory
@@ -294,7 +292,7 @@ functions:
       req-name: Repository name is required.
       req-sec-name: Secret name is required.
       too-long-name: Repository name cannot be longer than 63 characters.
-      too-long-sec-name: Repository name cannot be longer than 63 characters.
+      too-long-sec-name: Secret name cannot be longer than 63 characters.
     inline-help:
       auth: 'Basic: token or password / SSH key: authentication key / Public: no authentication'
       url: URL must be a valid Git repository address that starts with the "http(s)", "git", or "ssh" prefix and ends with the ".git" suffix.

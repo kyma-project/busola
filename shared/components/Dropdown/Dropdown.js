@@ -30,23 +30,36 @@ export function Dropdown({
 
   return (
     <div className="dropdown">
-      {label && (
-        <FormLabel htmlFor={id}>
-          {label}
-          {inlineHelp && <Tooltip content={inlineHelp} />}
-        </FormLabel>
+      {label && <FormLabel htmlFor={id}>{label}</FormLabel>}
+      {inlineHelp && (
+        <Tooltip content={inlineHelp}>
+          <Select
+            id={id}
+            data-testid={id}
+            aria-label={label}
+            options={options}
+            selectedKey={selectedKey}
+            onSelect={onSelect}
+            disabled={disabled}
+            ref={_ref}
+            {...fdSelectProps}
+          />
+        </Tooltip>
       )}
-      <Select
-        id={id}
-        data-testid={id}
-        aria-label={label}
-        options={options}
-        selectedKey={selectedKey}
-        onSelect={onSelect}
-        disabled={disabled}
-        ref={_ref}
-        {...fdSelectProps}
-      />
+
+      {!inlineHelp && (
+        <Select
+          id={id}
+          data-testid={id}
+          aria-label={label}
+          options={options}
+          selectedKey={selectedKey}
+          onSelect={onSelect}
+          disabled={disabled}
+          ref={_ref}
+          {...fdSelectProps}
+        />
+      )}
     </div>
   );
 }

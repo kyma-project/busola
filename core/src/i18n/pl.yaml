@@ -233,8 +233,6 @@ functions:
     inline-help:
       base-directory: Katalog z kodem funkcji i zależnościami
       reference: Referencja do źródła funkcji. Wybierz nazwę gałęzi lub zatwierdź wersję.
-      repository: Repozytorium, którego chcesz użyć
-      runtime: Środowisko wykonawcze, w którym będzie działać Twoja funkcja
       source-type: 'Typ źródła kodu funkcji: edytor wbudowany (kod i zależności są dostarczane jako zwykły tekst) lub repozytorium Git (kod i zależności są pobierane z repozytorium Git)'
     labels:
       base-directory: Katalog bazowy

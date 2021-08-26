@@ -205,7 +205,6 @@ export default function CreateLambdaForm({
         options={runtimeOptions}
         selectedKey={runtimeOptions[0].key}
         onSelect={(_, selected) => setRuntime(selected.key)}
-        inlineHelp={t('functions.create-view.inline-help.runtime')}
       />
 
       <Dropdown
@@ -230,7 +229,6 @@ export default function CreateLambdaForm({
               options={repositoryOptions}
               selectedKey={repositoryOptions[0].key}
               onSelect={(_, selected) => setRepositoryName(selected.key)}
-              inlineHelp={t('functions.create-view.inline-help.repository')}
             />
 
             <FormInput
