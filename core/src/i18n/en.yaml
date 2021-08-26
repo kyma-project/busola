@@ -225,6 +225,24 @@ deployments:
   title: Deployments
 discovery-and-network:
   title: Discovery and Network
+dnsentries:
+  headers:
+    dns-name: DNS Name
+    provider: Provider
+    provider-type: Provider Type
+    spec: Specification
+    status: $t(common.headers.status)
+    targets: Targets
+    ttl: TTL
+  title: DNS Entries
+dnsproviders:
+  domains: Domains
+  headers:
+    exclude: Excluded Domains
+    include: Included Domains
+    type: Type
+    status: $t(common.headers.status)
+  title: DNS Providers
 functions:
   create-view:
     buttons:
