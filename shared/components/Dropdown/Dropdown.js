@@ -28,37 +28,27 @@ export function Dropdown({
   }
   id = id || 'select-dropdown';
 
+  const select = (
+    <Select
+      id={id}
+      data-testid={id}
+      aria-label={label}
+      options={options}
+      selectedKey={selectedKey}
+      onSelect={onSelect}
+      disabled={disabled}
+      ref={_ref}
+      {...fdSelectProps}
+    />
+  );
+
   return (
     <div className="dropdown">
       {label && <FormLabel htmlFor={id}>{label}</FormLabel>}
-      {inlineHelp && (
-        <Tooltip content={inlineHelp}>
-          <Select
-            id={id}
-            data-testid={id}
-            aria-label={label}
-            options={options}
-            selectedKey={selectedKey}
-            onSelect={onSelect}
-            disabled={disabled}
-            ref={_ref}
-            {...fdSelectProps}
-          />
-        </Tooltip>
-      )}
-
-      {!inlineHelp && (
-        <Select
-          id={id}
-          data-testid={id}
-          aria-label={label}
-          options={options}
-          selectedKey={selectedKey}
-          onSelect={onSelect}
-          disabled={disabled}
-          ref={_ref}
-          {...fdSelectProps}
-        />
+      {inlineHelp ? (
+        <Tooltip content={inlineHelp}>{select}</Tooltip>
+      ) : (
+        { select }
       )}
     </div>
   );
