@@ -249,21 +249,21 @@ functions:
       confirm: Create
       create: Create Function
     errors:
-      memory-default: 'This value must be a fixed-point number with one of these suffixes: Gi, G, Mi, M, Ki, or K. For example, use 50Mi, 1000.5Ki, or 0.1G.'
-      memory-too-low: This value is too low. The minimum value is {{minValue}}.
-      memory-request-too-high: This value must be equal to or lower than the equivalent value for Limits.
-      memory-limits-too-low: This value must be equal to or greater than the equivalent value for Requests.
-      cpu-limits-too-low: This value must be equal to or greater than the equivalent value for Requests.
       cpu-default: This value must be expressed as a fixed-point number or in milicpu. For example, use 100m, 0.1, or 1.
+      cpu-limits-too-low: This value must be equal to or greater than the equivalent value for Requests.
       cpu-request-too-high: This value must be equal to or lower than the equivalent value for Limits.
       cpu-too-low: This value is too low. The minimum value is {{minValue}}.
-      min-replicas-too-high: Minimum number of replicas has to be equal to or lower than maximum.
-      min-replicas-positive: Minimum replicas must be a positive integer.
-      max-replicas-too-low: Maximum number of replicas has to be equal or greater than minimum.
-      max-replicas-positive: Maximum replicas must be a positive integer.
       empty-source: Source cannot be empty.
       invalid: At least one field is empty or incorrectly formatted.
       invalid-deps: Dependencies must be specified in a valid JSON format.
+      max-replicas-positive: Maximum replicas must be a positive integer.
+      max-replicas-too-low: Maximum number of replicas has to be equal or greater than minimum.
+      memory-default: 'This value must be a fixed-point number with one of these suffixes: Gi, G, Mi, M, Ki, or K. For example, use 50Mi, 1000.5Ki, or 0.1G.'
+      memory-limits-too-low: This value must be equal to or greater than the equivalent value for Requests.
+      memory-request-too-high: This value must be equal to or lower than the equivalent value for Limits.
+      memory-too-low: This value is too low. The minimum value is {{minValue}}.
+      min-replicas-positive: Minimum replicas must be a positive integer.
+      min-replicas-too-high: Minimum number of replicas has to be equal to or lower than maximum.
       no-changes: No changes made.
       no-repository-found: There are no Repositories available. Create a Repository first.
       one-field-empty: At least one field is empty.
@@ -289,31 +289,31 @@ functions:
       diff_toggle: Diff
       edit-configuration: Edit Configuration
     descriptions:
+      build-job: Choose one of the predefined values for build Job's resources or set your own values ​​by selecting the "Custom" option.
       limits: Maximum amount of compute resources allowed.
       maximum-replicas: Maximum number of running Replicas. Set it to 0 to disable the function.
       minimum-replicas: Minimum number of running Replicas.
-      runtime-profile: Choose one of the predefined values for Function's resources or set your own values ​​by selecting the "Custom" option.
-      build-job: Choose one of the predefined values for build Job's resources or set your own values ​​by selecting the "Custom" option.
       requests: Minimum amount of compute resources required.
+      runtime-profile: Choose one of the predefined values for Function's resources or set your own values ​​by selecting the "Custom" option.
     errors:
       req-reference: Reference is required.
     inline-help:
       function-reference: Reference to the Function's source. Select a branch name or commit revision.
     title:
-      limits: Limits
+      build-job: Build Job Profile
       code: Code
       configuration: Configuration
+      cpu: CPU
       dependencies: Dependencies
+      limits: Limits
       maximum-replicas: Maximum Replicas
+      memory: Memory
       minimum-replicas: Minimum Replicas
+      requests: Requests
       resources: Resources
       resources-replicas: Resources and Replicas
-      scaling-options: Scaling Options
       runtime-profile: Runtime Profile
-      build-job: Build Job Profile
-      requests: Requests
-      memory: Memory
-      cpu: CPU
+      scaling-options: Scaling Options
   errors:
     server: Server error. Contact your cluster admin.
   pod-list:
