@@ -27,7 +27,9 @@ export function CreateSecretForm({
   const notification = useNotification();
   const postRequest = usePost();
   const [secret, setSecret] = useState(
-    createSecretTemplate({ existingSecret, namespaceId }),
+    existingSecret
+      ? yamlToSecret(existingSecret)
+      : createSecretTemplate(namespaceId),
   );
   const [isEncoded, setEncoded] = useState(false);
   const microfrontendContext = useMicrofrontendContext();
@@ -59,16 +61,17 @@ export function CreateSecretForm({
   return (
     <CreateForm
       title={t('secrets.create-modal.title')}
+      editMode={!!existingSecret}
       simpleForm={
         <SimpleForm
+          editMode={!!existingSecret}
           secret={secret}
           setSecret={setSecret}
-          isEncoded={isEncoded}
-          setEncoded={setEncoded}
         />
       }
       advancedForm={
         <AdvancedForm
+          editMode={!!existingSecret}
           secret={secret}
           setSecret={setSecret}
           isEncoded={isEncoded}

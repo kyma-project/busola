@@ -33,18 +33,7 @@ export function yamlToSecret(yaml) {
   };
 }
 
-export function createSecretTemplate({ existingSecret, namespaceId }) {
-  if (existingSecret) {
-    const { metadata } = existingSecret;
-    return {
-      name: metadata.name,
-      namespace: metadata.namespace,
-      type: existingSecret.type,
-      labels: metadata.labels,
-      annotations: metadata.annotations,
-      data: existingSecret.data,
-    };
-  }
+export function createSecretTemplate(namespaceId) {
   return {
     name: '',
     namespace: namespaceId,
@@ -60,7 +49,7 @@ export function createPresets(namespaceId, translate, DNSExist) {
     ? [
         {
           name: translate('secrets.create-modal.presets.default'),
-          value: createSecretTemplate({ namespaceId }),
+          value: createSecretTemplate(namespaceId),
         },
         {
           name: 'Amazon Route53',
@@ -189,7 +178,7 @@ export function createPresets(namespaceId, translate, DNSExist) {
     : [
         {
           name: translate('secrets.create-modal.presets.default'),
-          value: createSecretTemplate({ namespaceId }),
+          value: createSecretTemplate(namespaceId),
         },
       ];
 }

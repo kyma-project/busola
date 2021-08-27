@@ -6,7 +6,7 @@ import { K8sNameInput, Tooltip } from 'react-shared';
 import { CreateForm } from 'shared/components/CreateForm/CreateForm';
 import { LabelsInput } from 'components/Lambdas/components';
 
-export function SimpleForm({ secret, setSecret }) {
+export function SimpleForm({ editMode, secret, setSecret }) {
   const { t, i18n } = useTranslation();
 
   return (
@@ -22,6 +22,7 @@ export function SimpleForm({ secret, setSecret }) {
                 kind="Secret"
                 onChange={e => setSecret({ ...secret, name: e.target.value })}
                 value={secret.name}
+                disabled={editMode}
                 i18n={i18n}
               />
             }

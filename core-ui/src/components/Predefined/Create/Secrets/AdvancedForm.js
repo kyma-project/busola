@@ -8,7 +8,13 @@ import { LabelsInput } from 'components/Lambdas/components';
 import { SimpleForm } from './SimpleForm';
 import { DecodeSecretSwitch } from './DecodeSecretSwitch';
 
-export function AdvancedForm({ secret, setSecret, isEncoded, setEncoded }) {
+export function AdvancedForm({
+  editMode,
+  secret,
+  setSecret,
+  isEncoded,
+  setEncoded,
+}) {
   const { t, i18n } = useTranslation();
 
   const setData = data => {
@@ -36,6 +42,7 @@ export function AdvancedForm({ secret, setSecret, isEncoded, setEncoded }) {
   return (
     <>
       <SimpleForm
+        editMode={editMode}
         secret={secret}
         setSecret={setSecret}
         isEncoded={isEncoded}
