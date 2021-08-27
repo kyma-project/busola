@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import LuigiClient from '@luigi-project/client';
 import { useTranslation } from 'react-i18next';
 import { Button } from 'fundamental-react';
 
-import { usePost, useNotification } from 'react-shared';
+import {
+  usePost,
+  useNotification,
+  useMicrofrontendContext,
+} from 'react-shared';
 import { CreateModal } from 'shared/components/CreateModal/CreateModal';
 import {
   secretToYaml,
@@ -18,8 +22,11 @@ export function CreateSecretForm({ namespaceId, modalOpeningComponent }) {
   const { t } = useTranslation();
   const notification = useNotification();
   const postRequest = usePost();
-  const [secret, setSecret] = React.useState(createSecretTemplate(namespaceId));
-  const [isEncoded, setEncoded] = React.useState(false);
+  const [secret, setSecret] = useState(createSecretTemplate(namespaceId));
+  const [isEncoded, setEncoded] = useState(false);
+  const microfrontendContext = useMicrofrontendContext();
+  const { features } = microfrontendContext;
+  const DNSExist = features?.CUSTOM_DOMAINS?.isEnabled;
 
   modalOpeningComponent = modalOpeningComponent || (
     <Button glyph="add">{t('secrets.create-modal.title')}</Button>
@@ -73,7 +80,7 @@ export function CreateSecretForm({ namespaceId, modalOpeningComponent }) {
       toYaml={secret => secretToYaml({ secret, isEncoded })}
       fromYaml={yamlToSecret}
       onCreate={createSecret}
-      presets={createPresets(namespaceId, t)}
+      presets={createPresets(namespaceId, t, DNSExist)}
     />
   );
 }

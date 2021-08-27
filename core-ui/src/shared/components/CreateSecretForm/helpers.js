@@ -44,134 +44,141 @@ export function createSecretTemplate(namespaceId) {
   };
 }
 
-export function createPresets(namespaceId, translate) {
-  return [
-    {
-      name: translate('secrets.create-modal.presets.default'),
-      value: createSecretTemplate(namespaceId),
-    },
-    {
-      name: 'Amazon Route53',
-      value: {
-        name: 'amazon-route53',
-        namespace: namespaceId,
-        type: 'Opaque',
-        labels: {},
-        annotations: {},
-        data: {
-          AWS_ACCESS_KEY_ID: '',
-          AWS_SECRET_ACCESS_KEY: '',
+export function createPresets(namespaceId, translate, DNSExist) {
+  return DNSExist
+    ? [
+        {
+          name: translate('secrets.create-modal.presets.default'),
+          value: createSecretTemplate(namespaceId),
         },
-      },
-    },
-    {
-      name: 'GoogleCloud DNS',
-      value: {
-        name: 'google-cloud-dns',
-        namespace: namespaceId,
-        type: 'Opaque',
-        labels: {},
-        annotations: {},
-        data: {
-          'serviceaccount.json': '',
+        {
+          name: 'Amazon Route53',
+          value: {
+            name: 'amazon-route53',
+            namespace: namespaceId,
+            type: 'Opaque',
+            labels: {},
+            annotations: {},
+            data: {
+              AWS_ACCESS_KEY_ID: '',
+              AWS_SECRET_ACCESS_KEY: '',
+            },
+          },
         },
-      },
-    },
-    {
-      name: 'AliCloud DNS',
-      value: {
-        name: 'ali-cloud-dns',
-        namespace: namespaceId,
-        type: 'Opaque',
-        labels: {},
-        annotations: {},
-        data: {
-          ACCESS_KEY_ID: '',
-          SECRET_ACCESS_KEY: '',
+        {
+          name: 'GoogleCloud DNS',
+          value: {
+            name: 'google-cloud-dns',
+            namespace: namespaceId,
+            type: 'Opaque',
+            labels: {},
+            annotations: {},
+            data: {
+              'serviceaccount.json': '',
+            },
+          },
         },
-      },
-    },
-    {
-      name: 'Azure DNS',
-      value: {
-        name: 'azure-dns',
-        namespace: namespaceId,
-        type: 'Opaque',
-        labels: {},
-        annotations: {},
-        data: {
-          AZURE_SUBSCRIPTION_ID: '',
-          AZURE_TENANT_ID: '',
-          AZURE_CLIENT_ID: '',
-          AZURE_CLIENT_SECRET: '',
+        {
+          name: 'AliCloud DNS',
+          value: {
+            name: 'ali-cloud-dns',
+            namespace: namespaceId,
+            type: 'Opaque',
+            labels: {},
+            annotations: {},
+            data: {
+              ACCESS_KEY_ID: '',
+              SECRET_ACCESS_KEY: '',
+            },
+          },
         },
-      },
-    },
-    {
-      name: 'OpenStack Designate',
-      value: {
-        name: 'openstack-designate',
-        namespace: namespaceId,
-        type: 'Opaque',
-        labels: {},
-        annotations: {},
-        data: {
-          OS_AUTH_URL: '',
-          OS_DOMAIN_NAME: '',
-          OS_PROJECT_NAME: '',
-          OS_USERNAME: '',
-          OS_PASSWORD: '',
-          OS_PROJECT_ID: '',
-          OS_REGION_NAME: '',
-          OS_TENANT_NAME: '',
-          OS_APPLICATION_CREDENTIAL_ID: '',
-          OS_APPLICATION_CREDENTIAL_NAME: '',
-          OS_APPLICATION_CREDENTIAL_SECRET: '',
-          OS_DOMAIN_ID: '',
-          OS_USER_DOMAIN_NAME: '',
-          OS_USER_DOMAIN_ID: '',
+        {
+          name: 'Azure DNS',
+          value: {
+            name: 'azure-dns',
+            namespace: namespaceId,
+            type: 'Opaque',
+            labels: {},
+            annotations: {},
+            data: {
+              AZURE_SUBSCRIPTION_ID: '',
+              AZURE_TENANT_ID: '',
+              AZURE_CLIENT_ID: '',
+              AZURE_CLIENT_SECRET: '',
+            },
+          },
         },
-      },
-    },
-    {
-      name: 'Cloudflare DNS',
-      value: {
-        name: 'cloudflare-dns',
-        namespace: namespaceId,
-        type: 'Opaque',
-        labels: {},
-        annotations: {},
-        data: {
-          CLOUDFLARE_API_TOKEN: '',
+        {
+          name: 'OpenStack Designate',
+          value: {
+            name: 'openstack-designate',
+            namespace: namespaceId,
+            type: 'Opaque',
+            labels: {},
+            annotations: {},
+            data: {
+              OS_AUTH_URL: '',
+              OS_DOMAIN_NAME: '',
+              OS_PROJECT_NAME: '',
+              OS_USERNAME: '',
+              OS_PASSWORD: '',
+              OS_PROJECT_ID: '',
+              OS_REGION_NAME: '',
+              OS_TENANT_NAME: '',
+              OS_APPLICATION_CREDENTIAL_ID: '',
+              OS_APPLICATION_CREDENTIAL_NAME: '',
+              OS_APPLICATION_CREDENTIAL_SECRET: '',
+              OS_DOMAIN_ID: '',
+              OS_USER_DOMAIN_NAME: '',
+              OS_USER_DOMAIN_ID: '',
+            },
+          },
         },
-      },
-    },
-    {
-      name: 'Infoblox',
-      value: {
-        name: 'infoblox',
-        namespace: namespaceId,
-        type: 'Opaque',
-        labels: {},
-        annotations: {},
-        data: {
-          USERNAME: '',
-          PASSWORD: '',
+        {
+          name: 'Cloudflare DNS',
+          value: {
+            name: 'cloudflare-dns',
+            namespace: namespaceId,
+            type: 'Opaque',
+            labels: {},
+            annotations: {},
+            data: {
+              CLOUDFLARE_API_TOKEN: '',
+            },
+          },
         },
-      },
-    },
-    {
-      name: 'Netlify DNS',
-      value: {
-        name: 'netlify-dns',
-        namespace: namespaceId,
-        type: 'Opaque',
-        labels: {},
-        annotations: {},
-        data: {
-          NETLIFY_AUTH_TOKEN: '',
+        {
+          name: 'Infoblox',
+          value: {
+            name: 'infoblox',
+            namespace: namespaceId,
+            type: 'Opaque',
+            labels: {},
+            annotations: {},
+            data: {
+              USERNAME: '',
+              PASSWORD: '',
+            },
+          },
         },
-      },
-    },
-  ];
+        {
+          name: 'Netlify DNS',
+          value: {
+            name: 'netlify-dns',
+            namespace: namespaceId,
+            type: 'Opaque',
+            labels: {},
+            annotations: {},
+            data: {
+              NETLIFY_AUTH_TOKEN: '',
+            },
+          },
+        },
+      ]
+    : [
+        {
+          name: translate('secrets.create-modal.presets.default'),
+          value: createSecretTemplate(namespaceId),
+        },
+      ];
 }
