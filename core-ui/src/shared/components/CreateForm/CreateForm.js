@@ -59,11 +59,7 @@ export function CreateForm({
           onSelect={preset => setResource(preset.value)}
         />
       )}
-      <ModeSelector
-        mode={mode}
-        setMode={setMode}
-        style={{ position: 'sticky' }}
-      />
+      <ModeSelector mode={mode} setMode={setMode} />
       {formsToDisplay}
     </div>
   );
