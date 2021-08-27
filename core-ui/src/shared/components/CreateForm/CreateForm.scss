@@ -30,5 +30,9 @@
   .advanced-form {
     overflow: auto;
     flex-grow: 1;
+
+    &.hidden {
+      display: none;
+    }
   }
 }

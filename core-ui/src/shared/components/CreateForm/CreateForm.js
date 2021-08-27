@@ -4,6 +4,7 @@ import { Editor } from './Editor/Editor';
 import './CreateForm.scss';
 import { CollapsibleSection } from './CollapsibleSection/CollapsibleSection';
 import { Presets } from './Presets';
+import classnames from 'classnames';
 
 export function CreateForm({
   title,
@@ -38,12 +39,11 @@ export function CreateForm({
 
       {/* always keep the advanced form to ensure validation */}
       <form
-        className="advanced-form"
+        className={classnames('advanced-form', {
+          hidden: mode !== ModeSelector.MODE_ADVANCED,
+        })}
         onChange={onChange}
         ref={formElementRef}
-        style={{
-          display: mode === ModeSelector.MODE_ADVANCED ? null : 'none',
-        }}
         onSubmit={onCreate}
       >
         {advancedForm}
