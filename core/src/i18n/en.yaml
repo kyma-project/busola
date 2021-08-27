@@ -66,12 +66,12 @@ catalog:
   subtitle: Enrich your experience with additional services that are installed outside the cluster.
   title: Service Catalog
 certificates:
-  title: Certificates
-  issuer: Issuer
-  state: State
-  expiration-date: Expiration Date
   common-name: Common Name
+  expiration-date: Expiration Date
+  issuer: Issuer
   refs: References
+  state: State
+  title: Certificates
 cluster-addons:
   title: Cluster Addons
 cluster-role-bindings:
@@ -240,8 +240,8 @@ dnsproviders:
   headers:
     exclude: Excluded Domains
     include: Included Domains
-    type: Type
     status: $t(common.headers.status)
+    type: Type
   title: DNS Providers
 functions:
   title: Functions
@@ -319,13 +319,13 @@ instances:
 integration:
   title: Integration
 issuers:
-  title: Issuers
-  email: E-mail
-  state: Status
-  server: Server
   domains:
-    included: Included Domains
     excluded: Excluded Domains
+    included: Included Domains
+  email: E-mail
+  server: Server
+  state: Status
+  title: Issuers
 jobs:
   completion-time: Completion Time
   completions: Completions
@@ -401,6 +401,7 @@ roles:
 secrets:
   create-modal:
     messages:
+      decoding-failed: 'Failed to decode the Secret data: {{error}}'
       failure: Failed to create the Secret
       success: Secret created
     presets:
@@ -409,6 +410,8 @@ secrets:
       data: Data
       type: Type
     title: Create Secret
+  decode: Decode
+  encode: Encode
   title: Secrets
 service-management:
   title: Service Management
