@@ -13,7 +13,7 @@ import { RESOURCES_MANAGEMENT_PANEL } from 'components/Lambdas/constants';
 import { parseCpu } from 'components/Lambdas/helpers/resources';
 import { CONFIG } from 'components/Lambdas/config';
 import {
-  schema,
+  prepareSchema,
   inputNames,
   checkReplicasPreset,
   checkResourcesPreset,
@@ -77,7 +77,7 @@ export default function ResourcesManagement({ lambda }) {
     setValue,
     triggerValidation,
   } = useForm({
-    validationSchema: schema,
+    validationSchema: prepareSchema(t),
     mode: 'onChange',
     defaultValues,
   });

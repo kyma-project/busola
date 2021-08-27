@@ -47,7 +47,7 @@ export function ErrorMessage({ errors = {}, field = '' }) {
   ) : null;
 }
 
-function prepareSchema() {
+export function prepareSchema(t) {
   const errorMessages = RESOURCES_MANAGEMENT_PANEL.ERROR_MESSAGES;
   const MIN_MEMORY_VALUE_ERROR = (type = 'function') =>
     formatMessage(errorMessages.MEMORY.TOO_LOW, {
@@ -90,7 +90,7 @@ function prepareSchema() {
       .string()
       .matches(CPU_REGEXP, {
         excludeEmptyString: true,
-        message: errorMessages.CPU.DEFAULT,
+        message: t('functions.create-view.errors.cpu-default'),
       })
       .test('matchFunctionMinRequestCPU', MIN_CPU_VALUE_ERROR(), function(arg) {
         return testMinCPU(arg);
@@ -329,10 +329,4 @@ export function checkResourcesPreset(functionResources, presets) {
 
 export function isCustomPreset(preset) {
   return preset === customPreset;
-}
-
-export let schema = prepareSchema();
-
-export function updateResourcesValidationSchema() {
-  schema = Object.assign(schema, prepareSchema());
 }

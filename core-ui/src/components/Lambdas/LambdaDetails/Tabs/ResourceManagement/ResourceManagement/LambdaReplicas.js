@@ -4,10 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Input } from './TableElements/Input';
 import { Row } from './TableElements/Row';
 
-import { RESOURCES_MANAGEMENT_PANEL } from 'components/Lambdas/constants';
 import { ErrorMessage, inputClassName, inputNames } from './shared';
-
-const replicasMode = RESOURCES_MANAGEMENT_PANEL.REPLICAS;
 
 export default function LambdaReplicas({
   disabledForm,
