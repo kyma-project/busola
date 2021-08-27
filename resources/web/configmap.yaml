@@ -72,6 +72,14 @@ data:
                   }
               ]
             },
+            "CUSTOM_DOMAINS": {
+              "selectors":[
+                {
+                  "type": "apiGroup",
+                  "apiGroup": "dnsproviders.dns.gardener.cloud"
+                }
+              ]
+            },
             "OBSERVABILITY": {
               "isEnabled": true,
               "config": {

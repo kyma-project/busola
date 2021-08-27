@@ -1,5 +1,5 @@
 import React from 'react';
-import { CreateModal } from 'shared/components/CreateModal/CreateModal';
+import { CreateForm } from 'shared/components/CreateForm/CreateForm';
 import { LabelsInput } from 'components/Lambdas/components';
 import { FormFieldset, FormLabel, FormInput } from 'fundamental-react';
 import { K8sNameInput, Tooltip } from 'react-shared';
@@ -9,9 +9,9 @@ export function SimpleForm({ deployment, setDeployment }) {
   const { t, i18n } = useTranslation();
 
   return (
-    <CreateModal.Section>
+    <CreateForm.Section>
       <FormFieldset>
-        <CreateModal.FormField
+        <CreateForm.FormField
           label={<FormLabel required>{t('common.labels.name')}</FormLabel>}
           input={
             <K8sNameInput
@@ -26,7 +26,7 @@ export function SimpleForm({ deployment, setDeployment }) {
             />
           }
         />
-        <CreateModal.FormField
+        <CreateForm.FormField
           label={<FormLabel>{t('common.headers.labels')}</FormLabel>}
           input={
             <LabelsInput
@@ -38,7 +38,7 @@ export function SimpleForm({ deployment, setDeployment }) {
             />
           }
         />
-        <CreateModal.FormField
+        <CreateForm.FormField
           label={
             <FormLabel required>
               {t('deployments.create-modal.simple.docker-image')}
@@ -61,6 +61,6 @@ export function SimpleForm({ deployment, setDeployment }) {
           }
         />
       </FormFieldset>
-    </CreateModal.Section>
+    </CreateForm.Section>
   );
 }

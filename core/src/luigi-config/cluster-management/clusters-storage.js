@@ -71,7 +71,7 @@ export async function checkClusterStorageType(originalStorage) {
 
 export async function getDefaultStorage() {
   return (
-    (await getBusolaClusterParams()).config.defaultStorage || 'sessionStorage'
+    (await getBusolaClusterParams()).config?.defaultStorage || 'sessionStorage'
   );
 }
 
