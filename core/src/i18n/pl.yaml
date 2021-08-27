@@ -214,8 +214,8 @@ dnsproviders:
   headers:
     exclude: Wykluczone domeny
     include: Zawarte domeny
-    type: Typ
     status: $t(common.headers.status)
+    type: Typ
   title: Dostawcy DNS
 functions:
   create-view:
@@ -224,8 +224,8 @@ functions:
       create: Stwórz Funkcję
     errors:
       invalid: Co najmniej jedno pole jest puste lub niepoprawnie sformatowane.
-      one-field-invalid: Co najmniej jedno pole jest nieprawidłowe.
       no-repository-found: Brak dostępnych repozytoriów. Najpierw utwórz nowe repozytorium.
+      one-field-invalid: Co najmniej jedno pole jest nieprawidłowe.
       req-base-dir: Katalog bazowy jest wymagany.
       req-reference: Referencja jest wymagana.
       required-name: Nazwa funkcji jest wymagana.

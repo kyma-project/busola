@@ -66,12 +66,12 @@ catalog:
   subtitle: Enrich your experience with additional services that are installed outside the cluster.
   title: Service Catalog
 certificates:
-  title: Certificates
-  issuer: Issuer
-  state: State
-  expiration-date: Expiration Date
   common-name: Common Name
+  expiration-date: Expiration Date
+  issuer: Issuer
   refs: References
+  state: State
+  title: Certificates
 cluster-addons:
   title: Cluster Addons
 cluster-role-bindings:
@@ -240,33 +240,42 @@ dnsproviders:
   headers:
     exclude: Excluded Domains
     include: Included Domains
-    type: Type
     status: $t(common.headers.status)
+    type: Type
   title: DNS Providers
 functions:
-  repository:
-    title: Repository Configuration
   create-view:
     buttons:
       confirm: Create
       create: Create Function
     errors:
-      invalid-deps: Dependencies must be specified in a valid JSON format.
+      memory-default: 'This value must be a fixed-point number with one of these suffixes: Gi, G, Mi, M, Ki, or K. For example, use 50Mi, 1000.5Ki, or 0.1G.'
+      memory-too-low: This value is too low. The minimum value is {{minValue}}.
+      memory-request-too-high: This value must be equal to or lower than the equivalent value for Limits.
+      memory-limits-too-low: This value must be equal to or greater than the equivalent value for Requests.
+      cpu-limits-too-low: This value must be equal to or greater than the equivalent value for Requests.
+      cpu-default: This value must be expressed as a fixed-point number or in milicpu. For example, use 100m, 0.1, or 1.
+      cpu-request-too-high: This value must be equal to or lower than the equivalent value for Limits.
+      cpu-too-low: This value is too low. The minimum value is {{minValue}}.
+      min-replicas-too-high: Minimum number of replicas has to be equal to or lower than maximum.
+      min-replicas-positive: Minimum replicas must be a positive integer.
+      max-replicas-too-low: Maximum number of replicas has to be equal or greater than minimum.
+      max-replicas-positive: Maximum replicas must be a positive integer.
       empty-source: Source cannot be empty.
-      no-changes: No changes made.
       invalid: At least one field is empty or incorrectly formatted.
-      one-field-invalid: At least one field is invalid.
-      one-field-empty: At least one field is empty.
+      invalid-deps: Dependencies must be specified in a valid JSON format.
+      no-changes: No changes made.
       no-repository-found: There are no Repositories available. Create a Repository first.
+      one-field-empty: At least one field is empty.
+      one-field-invalid: At least one field is invalid.
       req-base-dir: Base Directory is required.
       req-reference: Reference is required.
       required-name: Function name is required.
       too-long: Function name cannot be longer than 63 characters.
-      cpu-default: This value must be expressed as a fixed-point number or in milicpu. For example, use 100m, 0.1, or 1.
     inline-help:
       base-directory: Directory with your Function's code and dependencies
       reference: Reference to the Function's source. Select a branch name or commit revision.
-      source-type: 'Provide code and dependencies as plain text with inline editor, or fetch them from a Git repository'
+      source-type: Provide code and dependencies as plain text with inline editor, or fetch them from a Git repository
     labels:
       base-directory: Base Directory
       git-repository: Git Repository
@@ -276,31 +285,37 @@ functions:
       runtime: Runtime
       source-type: Source Type
   details:
-    title:
-      code: Code
-      configuration: Configuration
-      resources: Resources
-      resources-replicas: Resources and Replicas
-      dependencies: Dependencies
-      scaling-options: Scaling Options
-      minimum-replicas: Minimum Replicas
-      maximum-replicas: Maximum Replicas
+    buttons:
+      diff_toggle: Diff
+      edit-configuration: Edit Configuration
     descriptions:
       maximum-replicas: Maximum number of running Replicas. Set it to 0 to disable the function.
       minimum-replicas: Minimum number of running Replicas.
-    buttons:
-      edit-configuration: Edit Configuration
-      diff_toggle: Diff
-    inline-help:
-      function-reference: Reference to the Function's source. Select a branch name or commit revision.
+      runtime-profile: Choose one of the predefined values for Function's resources or set your own values ​​by selecting the "Custom" option.
+      build-job: Choose one of the predefined values for build Job's resources or set your own values ​​by selecting the "Custom" option.
     errors:
       req-reference: Reference is required.
+    inline-help:
+      function-reference: Reference to the Function's source. Select a branch name or commit revision.
+    title:
+      code: Code
+      configuration: Configuration
+      dependencies: Dependencies
+      maximum-replicas: Maximum Replicas
+      minimum-replicas: Minimum Replicas
+      resources: Resources
+      resources-replicas: Resources and Replicas
+      scaling-options: Scaling Options
+      runtime-profile: Runtime Profile
+      build-job: Build Job Profile
   errors:
     server: Server error. Contact your cluster admin.
   pod-list:
     buttons:
       view-logs: View Logs
     title: Replicas of the Function
+  repository:
+    title: Repository Configuration
   repository-list:
     create:
       buttons:
@@ -402,13 +417,13 @@ instances:
 integration:
   title: Integration
 issuers:
-  title: Issuers
-  email: E-mail
-  state: Status
-  server: Server
   domains:
-    included: Included Domains
     excluded: Excluded Domains
+    included: Included Domains
+  email: E-mail
+  server: Server
+  state: Status
+  title: Issuers
 jobs:
   completion-time: Completion Time
   completions: Completions

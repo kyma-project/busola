@@ -122,43 +122,7 @@ export const REPOSITORIES_LIST = {
 export const SERVICE_URL = `/api/v1/namespaces/{namespace}/services/{name}`;
 
 export const RESOURCES_MANAGEMENT_PANEL = {
-  ERROR_MESSAGES: {
-    CPU: {
-      DEFAULT:
-        'This value must be expressed as a fixed-point number or in milicpu. For example, use 100m, 0.1, or 1.',
-      TOO_LOW: 'This value is too low. The minimum value is {minValue}.',
-      REQUEST_TOO_HIGH:
-        'This value must be equal to or lower than the equivalent value for Limits.',
-      LIMITS_TOO_LOW:
-        'This value must be equal to or greater than the equivalent value for Requests.',
-    },
-    MEMORY: {
-      DEFAULT:
-        'This value must be a fixed-point number with one of these suffixes: Gi, G, Mi, M, Ki, or K. For example, use 50Mi, 1000.5Ki, or 0.1G.',
-      TOO_LOW: 'This value is too low. The minimum value is {minValue}.',
-      REQUEST_TOO_HIGH:
-        'This value must be equal to or lower than the equivalent value for Limits.',
-      LIMITS_TOO_LOW:
-        'This value must be equal to or greater than the equivalent value for Requests.',
-    },
-    MIN_REPLICAS_TOO_HIGH:
-      'Minimum number of replicas has to be equal to or lower than maximum.',
-    MIN_REPLICAS_POSITIVE: 'Minimum replicas must be a positive integer.',
-    MAX_REPLICAS_TOO_LOW:
-      'Maximum number of replicas has to be equal or greater than minimum.',
-    MAX_REPLICAS_POSITIVE: 'Maximum replicas must be a positive integer.',
-  },
   RESOURCES: {
-    TYPES: {
-      FUNCTION: {
-        TITLE: 'Runtime Profile',
-        DESCRIPTION: `Choose one of the predefined values for Function's resources or set your own values ​​by selecting the "Custom" option.`,
-      },
-      BUILD_JOB: {
-        TITLE: 'Build Job Profile',
-        DESCRIPTION: `Choose one of the predefined values for build Job's resources or set your own values ​​by selecting the "Custom" option.`,
-      },
-    },
     REQUESTS: {
       TITLE: 'Requests',
       DESCRIPTION: 'Minimum amount of compute resources required.',

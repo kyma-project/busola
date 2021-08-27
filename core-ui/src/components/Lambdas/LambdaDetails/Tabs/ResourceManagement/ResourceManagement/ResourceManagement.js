@@ -9,7 +9,6 @@ import LambdaReplicas from './LambdaReplicas';
 import LambdaResources from './LambdaResources';
 
 import { useUpdateLambda, UPDATE_TYPE } from 'components/Lambdas/hooks';
-import { RESOURCES_MANAGEMENT_PANEL } from 'components/Lambdas/constants';
 import { parseCpu } from 'components/Lambdas/helpers/resources';
 import { CONFIG } from 'components/Lambdas/config';
 import {
@@ -237,10 +236,10 @@ export default function ResourcesManagement({ lambda }) {
         <div className="lambda-resources-management__panel">
           <LayoutPanel.Header>
             <LayoutPanel.Head
-              title={RESOURCES_MANAGEMENT_PANEL.RESOURCES.TYPES.FUNCTION.TITLE}
-              description={
-                RESOURCES_MANAGEMENT_PANEL.RESOURCES.TYPES.FUNCTION.DESCRIPTION
-              }
+              title={t('functions.create-view.title.runtime-profile')}
+              description={t(
+                'functions.create-view.descriptions.runtime-profile',
+              )}
             />
           </LayoutPanel.Header>
           <LayoutPanel.Body>
@@ -259,10 +258,8 @@ export default function ResourcesManagement({ lambda }) {
         <div className="lambda-resources-management__panel">
           <LayoutPanel.Header>
             <LayoutPanel.Head
-              title={RESOURCES_MANAGEMENT_PANEL.RESOURCES.TYPES.BUILD_JOB.TITLE}
-              description={
-                RESOURCES_MANAGEMENT_PANEL.RESOURCES.TYPES.BUILD_JOB.DESCRIPTION
-              }
+              title={t('functions.create-view.title.build-job')}
+              description={t('functions.create-view.descriptions.build-job')}
             />
           </LayoutPanel.Header>
           <LayoutPanel.Body>
