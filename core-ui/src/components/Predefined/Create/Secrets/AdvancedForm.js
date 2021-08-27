@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { FormFieldset, FormLabel } from 'fundamental-react';
 import { KeyValueForm } from 'react-shared';
 
-import { CreateModal } from 'shared/components/CreateModal/CreateModal';
+import { CreateForm } from 'shared/components/CreateForm/CreateForm';
 import { LabelsInput } from 'components/Lambdas/components';
 import { SimpleForm } from './SimpleForm';
 import { DecodeSecretSwitch } from './DecodeSecretSwitch';
@@ -42,9 +42,9 @@ export function AdvancedForm({ secret, setSecret, isEncoded, setEncoded }) {
         setEncoded={setEncoded}
       />
 
-      <CreateModal.Section>
+      <CreateForm.Section>
         <FormFieldset>
-          <CreateModal.FormField
+          <CreateForm.FormField
             label={<FormLabel>{t('common.headers.annotations')}</FormLabel>}
             input={
               <LabelsInput
@@ -57,11 +57,11 @@ export function AdvancedForm({ secret, setSecret, isEncoded, setEncoded }) {
             }
           />
         </FormFieldset>
-      </CreateModal.Section>
-      <CreateModal.Section>
+      </CreateForm.Section>
+      <CreateForm.Section>
         <FormLabel>{t('secrets.create-modal.simple.data')}</FormLabel>
         {secretDataContent}
-      </CreateModal.Section>
+      </CreateForm.Section>
     </>
   );
 }

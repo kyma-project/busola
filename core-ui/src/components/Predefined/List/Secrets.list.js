@@ -1,5 +1,4 @@
 import React from 'react';
-import { CreateSecretForm } from '../../../shared/components/CreateSecretForm/CreateSecretForm';
 
 export const SecretsList = ({ DefaultRenderer, ...otherParams }) => {
   const customColumns = [
@@ -11,13 +10,5 @@ export const SecretsList = ({ DefaultRenderer, ...otherParams }) => {
     },
   ];
 
-  return (
-    <DefaultRenderer
-      customColumns={customColumns}
-      {...otherParams}
-      listHeaderActions={
-        <CreateSecretForm namespaceId={otherParams.namespace} />
-      }
-    />
-  );
+  return <DefaultRenderer customColumns={customColumns} {...otherParams} />;
 };

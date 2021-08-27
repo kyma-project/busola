@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { FormFieldset, FormLabel, FormInput } from 'fundamental-react';
 
 import { K8sNameInput, Tooltip } from 'react-shared';
-import { CreateModal } from 'shared/components/CreateModal/CreateModal';
+import { CreateForm } from 'shared/components/CreateForm/CreateForm';
 import { LabelsInput } from 'components/Lambdas/components';
 
 export function SimpleForm({ secret, setSecret }) {
@@ -11,9 +11,9 @@ export function SimpleForm({ secret, setSecret }) {
 
   return (
     <>
-      <CreateModal.Section>
+      <CreateForm.Section>
         <FormFieldset>
-          <CreateModal.FormField
+          <CreateForm.FormField
             label={<FormLabel required>{t('common.labels.name')}</FormLabel>}
             input={
               <K8sNameInput
@@ -26,7 +26,7 @@ export function SimpleForm({ secret, setSecret }) {
               />
             }
           />
-          <CreateModal.FormField
+          <CreateForm.FormField
             label={
               <FormLabel required>
                 {t('secrets.create-modal.simple.type')}
@@ -46,7 +46,7 @@ export function SimpleForm({ secret, setSecret }) {
               </Tooltip>
             }
           />
-          <CreateModal.FormField
+          <CreateForm.FormField
             label={<FormLabel>{t('common.headers.labels')}</FormLabel>}
             input={
               <LabelsInput
@@ -59,7 +59,7 @@ export function SimpleForm({ secret, setSecret }) {
             }
           />
         </FormFieldset>
-      </CreateModal.Section>
+      </CreateForm.Section>
     </>
   );
 }

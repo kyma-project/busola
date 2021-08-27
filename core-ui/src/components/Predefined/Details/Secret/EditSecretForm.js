@@ -1,6 +1,6 @@
 import React from 'react';
 import { useUpdate } from 'react-shared';
-import { SecretForm } from '../../Create/Secrets/SecretForm';
+import { CreateSecretForm } from '../../Create/Secrets/CreateSecretForm';
 import { createPatch } from 'rfc6902';
 
 export function EditSecretForm(props) {
@@ -22,5 +22,7 @@ export function EditSecretForm(props) {
     }
   };
 
-  return <SecretForm {...formProps} secret={secret} onSubmit={onSubmit} />;
+  return (
+    <CreateSecretForm {...formProps} secret={secret} onSubmit={onSubmit} />
+  );
 }

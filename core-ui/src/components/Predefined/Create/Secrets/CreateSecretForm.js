@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import LuigiClient from '@luigi-project/client';
 import { useTranslation } from 'react-i18next';
-import { Button } from 'fundamental-react';
 
 import {
   usePost,
   useNotification,
   useMicrofrontendContext,
 } from 'react-shared';
-import { CreateModal } from 'shared/components/CreateModal/CreateModal';
+import { CreateForm } from 'shared/components/CreateForm/CreateForm';
 import {
   secretToYaml,
   yamlToSecret,
@@ -18,7 +17,7 @@ import {
 import { SimpleForm } from './SimpleForm';
 import { AdvancedForm } from './AdvancedForm';
 
-export function CreateSecretForm({ namespaceId, modalOpeningComponent }) {
+export function CreateSecretForm({ namespaceId, formElementRef, onChange }) {
   const { t } = useTranslation();
   const notification = useNotification();
   const postRequest = usePost();
@@ -27,10 +26,6 @@ export function CreateSecretForm({ namespaceId, modalOpeningComponent }) {
   const microfrontendContext = useMicrofrontendContext();
   const { features } = microfrontendContext;
   const DNSExist = features?.CUSTOM_DOMAINS?.isEnabled;
-
-  modalOpeningComponent = modalOpeningComponent || (
-    <Button glyph="add">{t('secrets.create-modal.title')}</Button>
-  );
 
   const createSecret = async () => {
     try {
@@ -55,7 +50,7 @@ export function CreateSecretForm({ namespaceId, modalOpeningComponent }) {
   };
 
   return (
-    <CreateModal
+    <CreateForm
       title={t('secrets.create-modal.title')}
       simpleForm={
         <SimpleForm
@@ -73,14 +68,14 @@ export function CreateSecretForm({ namespaceId, modalOpeningComponent }) {
           setEncoded={setEncoded}
         />
       }
-      modalOpeningComponent={modalOpeningComponent}
       resource={secret}
       setResource={setSecret}
-      onClose={() => setSecret(createSecretTemplate(namespaceId))}
       toYaml={secret => secretToYaml({ secret, isEncoded })}
       fromYaml={yamlToSecret}
       onCreate={createSecret}
+      onChange={onChange}
       presets={createPresets(namespaceId, t, DNSExist)}
+      formElementRef={formElementRef}
     />
   );
 }
