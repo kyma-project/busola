@@ -1,5 +1,6 @@
 .create-modal__editor {
-  height: calc(100% - 73px);
+  flex-grow: 1;
+  overflow: hidden;
 
   .create-modal__editor__error {
     position: absolute;
