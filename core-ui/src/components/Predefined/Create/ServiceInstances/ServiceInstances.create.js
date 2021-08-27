@@ -1,6 +1,6 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
-import { CreateModal } from 'shared/components/CreateModal/CreateModal';
+import { CreateForm } from 'shared/components/CreateForm/CreateForm';
 import { Button } from 'fundamental-react';
 import { usePost, useNotification } from 'react-shared';
 import {
@@ -12,7 +12,11 @@ import { SimpleForm } from './SimpleForm';
 import { AdvancedForm } from './AdvancedForm.js';
 import { useTranslation } from 'react-i18next';
 
-export function CreateServiceInstanceModal({ namespaceId }) {
+export function ServiceInstancesCreate(props) {
+  return <ServiceInstancesForm namespaceId={props.namespace} {...props} />;
+}
+
+function ServiceInstancesForm({ namespaceId, formElementRef, onChange }) {
   const { t } = useTranslation();
   const notification = useNotification();
   const postRequest = usePost();
@@ -48,8 +52,7 @@ export function CreateServiceInstanceModal({ namespaceId }) {
   };
 
   return (
-    <CreateModal
-      title={t('btp-instances.create.title')}
+    <CreateForm
       simpleForm={
         <SimpleForm
           serviceInstance={serviceInstance}
@@ -73,6 +76,8 @@ export function CreateServiceInstanceModal({ namespaceId }) {
       toYaml={serviceInstanceToYaml}
       fromYaml={yamlToServiceInstance}
       onCreate={createServiceInstance}
+      onChange={onChange}
+      formElementRef={formElementRef}
     />
   );
 }

@@ -56,6 +56,7 @@ btp-instances:
     title: Create $t(btp-instances.resource-type)
     offering-name-description: SAP BTP service offering name
     plan-name-description: The plan name to use for the service instance
+    external-name-placeholder: Defaults to the instance name if empty.
 btp-service-bindings:
   binding-id: Binding ID
   create:

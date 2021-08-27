@@ -1,9 +1,9 @@
 import React from 'react';
 import { FormFieldset, FormInput, FormLabel } from 'fundamental-react';
-import { CreateModal } from 'shared/components/CreateModal/CreateModal';
+import { CreateForm } from 'shared/components/CreateForm/CreateForm';
 import { SimpleForm } from './SimpleForm';
 import { useTranslation } from 'react-i18next';
-import { JSONSection } from '../CreateModal/JSONInputSection';
+import { JSONSection } from 'shared/components/CreateForm/JSONInputSection';
 
 export function AdvancedForm({ serviceInstance, setServiceInstance }) {
   const { t } = useTranslation();
@@ -14,9 +14,9 @@ export function AdvancedForm({ serviceInstance, setServiceInstance }) {
         serviceInstance={serviceInstance}
         setServiceInstance={setServiceInstance}
       />
-      <CreateModal.Section>
+      <CreateForm.Section>
         <FormFieldset>
-          <CreateModal.FormField
+          <CreateForm.FormField
             label={<FormLabel>{t('btp-instances.external-name')}</FormLabel>}
             input={
               <FormInput
@@ -35,7 +35,7 @@ export function AdvancedForm({ serviceInstance, setServiceInstance }) {
             }
           />
         </FormFieldset>
-      </CreateModal.Section>
+      </CreateForm.Section>
       <JSONSection
         title={t('btp-instances.parameters')}
         value={serviceInstance.parameters}

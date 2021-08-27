@@ -1,12 +1,12 @@
 import React from 'react';
 import { FormFieldset, FormInput, FormLabel } from 'fundamental-react';
 import { Tooltip } from 'react-shared';
-import { CreateModal } from 'shared/components/CreateModal/CreateModal';
+import { CreateForm } from 'shared/components/CreateForm/CreateForm';
 import './ServiceBindingAdvancedForm.scss';
 import { SimpleForm } from './SimpleForm';
-import { K8sResourceSelect } from '../../shared/components/K8sResourceSelect';
+import { K8sResourceSelect } from '../../../../shared/components/K8sResourceSelect';
 import { useTranslation } from 'react-i18next';
-import { JSONSection } from '../../shared/components/CreateModal/JSONInputSection';
+import { JSONSection } from 'shared/components/CreateForm/JSONInputSection';
 
 export function AdvancedForm({
   serviceBinding,
@@ -22,9 +22,9 @@ export function AdvancedForm({
         setServiceBinding={setServiceBinding}
         namespaceId={namespaceId}
       />
-      <CreateModal.Section>
+      <CreateForm.Section>
         <FormFieldset>
-          <CreateModal.FormField
+          <CreateForm.FormField
             label={
               <FormLabel>{t('btp-service-bindings.external-name')}</FormLabel>
             }
@@ -44,7 +44,7 @@ export function AdvancedForm({
               />
             }
           />
-          <CreateModal.FormField
+          <CreateForm.FormField
             label={
               <Tooltip
                 content={t('btp-service-bindings.create.secret-description')}
@@ -65,7 +65,7 @@ export function AdvancedForm({
             }
           />
         </FormFieldset>
-      </CreateModal.Section>
+      </CreateForm.Section>
       <JSONSection
         title={t('btp-service-bindings.parameters')}
         value={serviceBinding.parameters}

@@ -3,16 +3,16 @@ import { FormFieldset, FormLabel } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { K8sNameInput } from 'react-shared';
 import { LabelsInput } from 'components/Lambdas/components';
-import { CreateModal } from 'shared/components/CreateModal/CreateModal';
-import { K8sResourceSelect } from '../../shared/components/K8sResourceSelect';
+import { CreateForm } from 'shared/components/CreateForm/CreateForm';
+import { K8sResourceSelect } from '../../../../shared/components/K8sResourceSelect';
 
 export function SimpleForm({ serviceBinding, setServiceBinding, namespaceId }) {
   const { t, i18n } = useTranslation();
 
   return (
-    <CreateModal.Section>
+    <CreateForm.Section>
       <FormFieldset>
-        <CreateModal.FormField
+        <CreateForm.FormField
           label={<FormLabel required>{t('common.labels.name')}</FormLabel>}
           input={
             <K8sNameInput
@@ -27,7 +27,7 @@ export function SimpleForm({ serviceBinding, setServiceBinding, namespaceId }) {
             />
           }
         />
-        <CreateModal.FormField
+        <CreateForm.FormField
           label={<FormLabel>{t('common.headers.labels')}</FormLabel>}
           input={
             <LabelsInput
@@ -41,7 +41,7 @@ export function SimpleForm({ serviceBinding, setServiceBinding, namespaceId }) {
             />
           }
         />
-        <CreateModal.FormField
+        <CreateForm.FormField
           label={
             <FormLabel required>{t('btp-instances.resource-type')}</FormLabel>
           }
@@ -59,6 +59,6 @@ export function SimpleForm({ serviceBinding, setServiceBinding, namespaceId }) {
           }
         />
       </FormFieldset>
-    </CreateModal.Section>
+    </CreateForm.Section>
   );
 }

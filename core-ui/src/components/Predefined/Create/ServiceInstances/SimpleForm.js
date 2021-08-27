@@ -3,15 +3,15 @@ import { FormFieldset, FormLabel, FormInput } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { K8sNameInput } from 'react-shared';
 import { LabelsInput } from 'components/Lambdas/components';
-import { CreateModal } from 'shared/components/CreateModal/CreateModal';
+import { CreateForm } from 'shared/components/CreateForm/CreateForm';
 
 export function SimpleForm({ serviceInstance, setServiceInstance }) {
   const { t, i18n } = useTranslation();
 
   return (
-    <CreateModal.Section>
+    <CreateForm.Section>
       <FormFieldset>
-        <CreateModal.FormField
+        <CreateForm.FormField
           label={<FormLabel required>{t('common.labels.name')}</FormLabel>}
           input={
             <K8sNameInput
@@ -26,7 +26,7 @@ export function SimpleForm({ serviceInstance, setServiceInstance }) {
             />
           }
         />
-        <CreateModal.FormField
+        <CreateForm.FormField
           label={<FormLabel>{t('common.headers.labels')}</FormLabel>}
           input={
             <LabelsInput
@@ -40,8 +40,10 @@ export function SimpleForm({ serviceInstance, setServiceInstance }) {
             />
           }
         />
-        <CreateModal.FormField
-          label={<FormLabel>{t('btp-instances.offering-name')}</FormLabel>}
+        <CreateForm.FormField
+          label={
+            <FormLabel required>{t('btp-instances.offering-name')}</FormLabel>
+          }
           input={
             <FormInput
               required
@@ -57,8 +59,8 @@ export function SimpleForm({ serviceInstance, setServiceInstance }) {
             />
           }
         />
-        <CreateModal.FormField
-          label={<FormLabel>{t('btp-instances.plan-name')}</FormLabel>}
+        <CreateForm.FormField
+          label={<FormLabel required>{t('btp-instances.plan-name')}</FormLabel>}
           input={
             <FormInput
               required
@@ -75,6 +77,6 @@ export function SimpleForm({ serviceInstance, setServiceInstance }) {
           }
         />
       </FormFieldset>
-    </CreateModal.Section>
+    </CreateForm.Section>
   );
 }

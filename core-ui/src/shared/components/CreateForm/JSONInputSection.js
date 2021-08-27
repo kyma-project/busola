@@ -1,7 +1,7 @@
 import React from 'react';
 import { MessageStrip } from 'fundamental-react';
 import { ControlledEditor, useTheme } from 'react-shared';
-import { CreateModal } from 'shared/components/CreateModal/CreateModal';
+import { CreateForm } from 'shared/components/CreateForm/CreateForm';
 import { useTranslation } from 'react-i18next';
 
 const isNonEmptyObject = value => !!value && typeof value === 'object';
@@ -35,7 +35,7 @@ export function JSONSection({
   };
 
   return (
-    <CreateModal.CollapsibleSection
+    <CreateForm.CollapsibleSection
       title={title}
       actions={
         !areParamsValid && (
@@ -52,6 +52,6 @@ export function JSONSection({
         value={value}
         onChange={onEditorChange}
       />
-    </CreateModal.CollapsibleSection>
+    </CreateForm.CollapsibleSection>
   );
 }

@@ -3,7 +3,6 @@ import LuigiClient from '@luigi-project/client';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'fundamental-react';
 import { BTPResourceStatus } from 'shared/components/BTPResourceStatus';
-import { CreateServiceBindingModal } from 'components/CreateServiceBindingModal/CreateServiceBindingModal';
 
 export const ServiceBindingsList = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
@@ -41,9 +40,6 @@ export const ServiceBindingsList = ({ DefaultRenderer, ...otherParams }) => {
       customColumns={customColumns}
       resourceName={t('btp-service-bindings.title')}
       textSearchProperties={['spec.serviceInstanceName', 'spec.externalName']}
-      listHeaderActions={
-        <CreateServiceBindingModal namespaceId={otherParams.namespace} />
-      }
       {...otherParams}
     />
   );
