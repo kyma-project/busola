@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useGetList, Spinner } from 'react-shared';
 import EventSubscriptions from 'shared/components/EventSubscriptions/EventSubscriptions';
-import { SERVERLESS_RESOURCE_KIND } from '../../../../constants';
 
 export default function EventSubscriptionsWrapper({ lambda, isActive }) {
   const subscriptionsUrl = `/apis/eventing.kyma-project.io/v1alpha1/namespaces/${lambda.metadata.namespace}/subscriptions`;
