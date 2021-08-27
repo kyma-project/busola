@@ -2,8 +2,11 @@ import React from 'react';
 import { Button } from 'fundamental-react';
 import { useGetList } from 'react-shared';
 import CreateLambdaModal from 'components/Lambdas/LambdasList/Lambdas/CreateLambdaModal';
+import { useTranslation } from 'react-i18next';
 
 export default function CreateNewFunction({ namespaceName }) {
+  const { t } = useTranslation();
+
   const {
     data: repositories,
     error: repositoriesError,
@@ -15,7 +18,7 @@ export default function CreateNewFunction({ namespaceName }) {
 
   const control = (
     <Button option="transparent" className="fd-margin-end--tiny" glyph="add">
-      Create Function
+      {t('functions.buttons.create-function')}
     </Button>
   );
 

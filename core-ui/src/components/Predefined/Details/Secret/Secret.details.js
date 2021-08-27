@@ -19,7 +19,7 @@ export const SecretsDetails = ({ DefaultRenderer, ...otherParams }) => {
             {t('common.buttons.edit')}
           </Button>
         }
-        confirmText="Update"
+        confirmText={t('common.buttons.update')}
         className="fd-dialog--xl-size modal-width--m"
         renderForm={props => (
           <EditSecretForm

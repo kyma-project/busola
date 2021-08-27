@@ -42,7 +42,7 @@ export default function DeployNewWorkload({ namespaceName }) {
       serverDataError={serverDataError}
       serverDataLoading={serverDataLoading}
       modalOpeningComponent={
-        <Menu.Item>{t('namespaces.buttons.create-function')}</Menu.Item>
+        <Menu.Item>{t('functions.buttons.create-function')}</Menu.Item>
       }
     />
   ) : null;

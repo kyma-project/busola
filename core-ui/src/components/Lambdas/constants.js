@@ -250,12 +250,6 @@ export const LAMBDA_DETAILS = {
       },
     },
   },
-  SOURCE_TYPE: {
-    TEXT: 'Source Type',
-  },
-  RUNTIME: {
-    TEXT: 'Runtime',
-  },
   REPOSITORY: {
     TEXT: 'Repository',
   },

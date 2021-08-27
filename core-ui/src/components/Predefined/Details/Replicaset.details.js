@@ -2,20 +2,23 @@ import React from 'react';
 import { StatusBadge } from 'react-shared';
 
 import { ResourcePods } from './ResourcePods';
+import { useTranslation } from 'react-i18next';
 
 export const ReplicasetsDetails = ({ DefaultRenderer, ...otherParams }) => {
+  const { t } = useTranslation();
+
   const customColumns = [
     {
-      header: 'Limits',
+      header: t('replica-sets.headers.limits'),
       value: resource => {
         const containers = resource.spec.template.spec.containers || [];
         return (
           <React.Fragment key="limits">
             {containers.map(c => (
               <React.Fragment key={c.name}>
-                CPU: {c.resources?.limits?.cpu}
+                {t('replica-sets.cpu')}: {c.resources?.limits?.cpu}
                 <br />
-                Memory: {c.resources?.limits?.memory}
+                {t('replica-sets.memory')}: {c.resources?.limits?.memory}
                 <br />
               </React.Fragment>
             ))}
@@ -24,16 +27,16 @@ export const ReplicasetsDetails = ({ DefaultRenderer, ...otherParams }) => {
       },
     },
     {
-      header: 'Requests',
+      header: t('replica-sets.headers.requests'),
       value: resource => {
         const containers = resource.spec.template.spec.containers || [];
         return (
           <React.Fragment key="requests">
             {containers.map(c => (
               <React.Fragment key={c.name}>
-                CPU: {c.resources?.requests?.cpu}
+                {t('replica-sets.cpu')}: {c.resources?.requests?.cpu}
                 <br />
-                Memory: {c.resources?.requests?.memory}
+                {t('replica-sets.memory')}: {c.resources?.requests?.memory}
                 <br />
               </React.Fragment>
             ))}
@@ -42,7 +45,7 @@ export const ReplicasetsDetails = ({ DefaultRenderer, ...otherParams }) => {
       },
     },
     {
-      header: 'Ready Replicas',
+      header: t('replica-sets.headers.replicas'),
       value: ({ status: { replicas, readyReplicas } }) => {
         const type = (readyReplicas || 0) < replicas ? 'warning' : 'success';
         const content = `${readyReplicas || 0} / ${replicas}`;

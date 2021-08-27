@@ -1,9 +1,13 @@
 ---
 addons:
+  addons-status: Addons Status
   errors:
     cannot-create: Cannot create Addons Configuration
+  headers:
+    url: URL
   messages:
     created: Addons Configuration {{name}} created
+  repository-urls: Repository URLs
   title: Addons
   urls: URLs
 api-rules:
@@ -48,6 +52,7 @@ applications:
     close: Close
     connect: Connect Application
     create: $t(applications.subtitle.create-binding)
+    create-app: $t(applications.subtitle.create-app)
     select-all: Select all
   headers:
     apis: APIs
@@ -55,8 +60,10 @@ applications:
     events: Events
     service-and-event: Service & event bindings
   messages:
+    app-created: Application {{applicationName}} created
     binding-deleted: Binding deleted
     binding-not-found: No bindings
+    cannot-create: Cannot create Application
     copy-url: 'Copy the following URL and use it at the external system that you would like to connect to:'
     create-failed: Failed to create the Binding
     created: Binding created
@@ -71,11 +78,15 @@ applications:
     some-events: There are some events
   labels:
     applications-and-events: Applications & Events
+    description: Description
     namespace: Namespace
   placeholders:
+    description: Specify a description for your Application
+    name: Specify a name for your Application
     namespace: Choose namespace...
   subtitle:
     connect-app: Connect Application
+    create-app: Create Application
     create-binding: Create Namespace Binding
     bound-to: Services and Events bound to  '{{namespace}}'
     edit-binding: Edit Service Class Binding in '{{namespace}}'
@@ -164,6 +175,7 @@ common:
     edit-yaml: Edit YAML
     ok: OK
     save: Save
+    update: Update
   create-modal:
     editor-error: "Parse error: {{error}}, changes won't be saved."
     modes:
@@ -291,6 +303,12 @@ deployments:
 discovery-and-network:
   title: Discovery and Network
 functions:
+  buttons:
+    connected-repositories: Connected repositories
+    create-function: Create Function
+  headers:
+    runtime: Runtime
+    source-type: Source Type
   title: Functions
   variable:
     buttons:
@@ -358,6 +376,10 @@ functions:
 generic-list:
   no-entries-found: No entries found
 git-repositories:
+  headers:
+    authentication: Authentication
+    secret: Secret
+    url: Repository URL
   title: Git Repositories
 instances:
   no-specific-plan-parameters:
@@ -391,8 +413,6 @@ machine-info:
   pods-capacity: Pods capacity
   title: Machine info
 namespaces:
-  buttons:
-    create-function: Create Function
   create-modal:
     apply-limits: Apply limits per container
     apply-memory-quotas: Apply Total Memory Quotas
@@ -476,6 +496,12 @@ pods:
 preferences:
   title: Preferences
 replica-sets:
+  cpu: CPU
+  headers:
+    limits: Limits
+    replicas: Ready Replicas
+    requests: Requests
+  memory: Memory
   title: ReplicaSets
 role-bindings:
   aria:
@@ -518,6 +544,7 @@ secrets:
     failed-to-decode-long: "Some of the secret data couldn't be decoded. Correct them and try again:"
   metadata: Metadata
   labels:
+    annotations: Annotations
     type: Secret type
   title: Secrets
   title-edit-secret: Edit secret
