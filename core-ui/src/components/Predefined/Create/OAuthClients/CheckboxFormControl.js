@@ -18,7 +18,6 @@ export default function CheckboxFormControl({
   onChange,
   required,
 }) {
-  console.log('availableValues', availableValues);
   const updateValues = (value, checked) => {
     if (checked) {
       values = [...values, value];
