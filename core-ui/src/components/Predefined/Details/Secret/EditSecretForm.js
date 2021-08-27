@@ -23,6 +23,10 @@ export function EditSecretForm(props) {
   };
 
   return (
-    <CreateSecretForm {...formProps} secret={secret} onSubmit={onSubmit} />
+    <CreateSecretForm
+      {...formProps}
+      existingSecret={secret}
+      onSubmit={onSubmit}
+    />
   );
 }

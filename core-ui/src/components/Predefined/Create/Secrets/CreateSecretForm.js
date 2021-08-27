@@ -17,11 +17,18 @@ import {
 import { SimpleForm } from './SimpleForm';
 import { AdvancedForm } from './AdvancedForm';
 
-export function CreateSecretForm({ namespaceId, formElementRef, onChange }) {
+export function CreateSecretForm({
+  namespaceId,
+  formElementRef,
+  onChange,
+  existingSecret,
+}) {
   const { t } = useTranslation();
   const notification = useNotification();
   const postRequest = usePost();
-  const [secret, setSecret] = useState(createSecretTemplate(namespaceId));
+  const [secret, setSecret] = useState(
+    createSecretTemplate({ existingSecret, namespaceId }),
+  );
   const [isEncoded, setEncoded] = useState(false);
   const microfrontendContext = useMicrofrontendContext();
   const { features } = microfrontendContext;
