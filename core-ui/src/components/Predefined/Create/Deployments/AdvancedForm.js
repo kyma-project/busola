@@ -1,5 +1,5 @@
 import React from 'react';
-import { CreateModal } from 'shared/components/CreateModal/CreateModal';
+import { CreateForm } from 'shared/components/CreateForm/CreateForm';
 import {
   FormFieldset,
   FormLabel,
@@ -57,7 +57,7 @@ export function AdvancedForm({ deployment, setDeployment }) {
   };
 
   const runtimeProfileForm = (
-    <CreateModal.CollapsibleSection
+    <CreateForm.CollapsibleSection
       title={t('deployments.create-modal.advanced.runtime-profile')}
     >
       <FormFieldset className="runtime-profile-form">
@@ -104,16 +104,16 @@ export function AdvancedForm({ deployment, setDeployment }) {
           />
         </FormItem>
       </FormFieldset>
-    </CreateModal.CollapsibleSection>
+    </CreateForm.CollapsibleSection>
   );
 
   const serviceForm = (
-    <CreateModal.CollapsibleSection
+    <CreateForm.CollapsibleSection
       title={t('services.labels.service')}
       actions={serviceActions}
     >
       <FormFieldset>
-        <CreateModal.FormField
+        <CreateForm.FormField
           label={
             <FormLabel required>
               {t('deployments.create-modal.advanced.port')}
@@ -135,7 +135,7 @@ export function AdvancedForm({ deployment, setDeployment }) {
             />
           }
         />
-        <CreateModal.FormField
+        <CreateForm.FormField
           label={
             <FormLabel required>
               {t('deployments.create-modal.advanced.target-port')}
@@ -160,7 +160,7 @@ export function AdvancedForm({ deployment, setDeployment }) {
           }
         />
       </FormFieldset>
-    </CreateModal.CollapsibleSection>
+    </CreateForm.CollapsibleSection>
   );
 
   return (
