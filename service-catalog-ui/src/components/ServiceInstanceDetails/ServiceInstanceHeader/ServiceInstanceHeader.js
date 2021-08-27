@@ -8,6 +8,8 @@ import {
   Spinner,
   useDelete,
   useNotification,
+  useMicrofrontendContext,
+  Tooltip,
 } from 'react-shared';
 import { isService } from 'helpers';
 import ServiceserviceClassInfo from '../ServiceInstanceInfo/ServiceInstanceInfo';
@@ -15,6 +17,9 @@ import ServiceserviceClassInfo from '../ServiceInstanceInfo/ServiceInstanceInfo'
 const ServiceInstanceHeader = ({ serviceInstance, servicePlan }) => {
   const deleteRequest = useDelete();
   const notificationManager = useNotification();
+  const { features } = useMicrofrontendContext();
+
+  const btpCatalogEnabled = features.BTP_CATALOG?.isEnabled;
 
   const classRef =
     serviceInstance.spec.serviceClassRef?.name ||
@@ -83,11 +88,23 @@ const ServiceInstanceHeader = ({ serviceInstance, servicePlan }) => {
     },
   ];
 
-  const actions = (
-    <Button type="negative" option="transparent" onClick={handleInstanceDelete}>
+  let actions = (
+    <Button
+      type="negative"
+      disabled={btpCatalogEnabled}
+      option="transparent"
+      onClick={handleInstanceDelete}
+    >
       {serviceInstanceConstants.delete}
     </Button>
   );
+  if (btpCatalogEnabled) {
+    actions = (
+      <Tooltip content="Service Catalog is in readonly mode.">
+        {actions}
+      </Tooltip>
+    );
+  }
 
   return (
     <PageHeader
