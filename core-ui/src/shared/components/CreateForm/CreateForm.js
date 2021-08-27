@@ -4,7 +4,6 @@ import { Editor } from './Editor/Editor';
 import './CreateForm.scss';
 import { CollapsibleSection } from './CollapsibleSection/CollapsibleSection';
 import { Presets } from './Presets';
-import { useTranslation } from 'react-i18next';
 
 export function CreateForm({
   title,
