@@ -9,7 +9,7 @@ export default function EventSubscriptionsWrapper({ lambda, isActive }) {
   const filterBySink = ({ spec }) => {
     const { name, namespace } = lambda.metadata;
     // match spec.sink with http://{lambdaName}.{namespace}.svc.cluster.local
-    const regex = `http:\/\/(.*?)\.${namespace}\.svc\.cluster\.local`;
+    const regex = `http://(.*?)\.${namespace}.svc.cluster.local`;
     const match = spec.sink.match(regex);
     return match && match[1] === name;
   };
