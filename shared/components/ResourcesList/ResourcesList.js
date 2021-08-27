@@ -281,7 +281,6 @@ function Resources({
         title={t('common.delete-dialog.title', {
           name: activeResource?.metadata.name,
         })}
-        compact
         actions={[
           <Button
             type="negative"
