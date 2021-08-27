@@ -1,6 +1,7 @@
 import React from 'react';
 import { StatusBadge } from 'react-shared';
 import { CreateDeploymentForm } from 'shared/components/CreateDeploymentForm/CreateDeploymentForm';
+import { useTranslation } from 'react-i18next';
 
 const getImages = deployment => {
   const images =
@@ -29,9 +30,11 @@ const getPodsCount = deployment => {
 };
 
 export const DeploymentsList = ({ DefaultRenderer, ...otherParams }) => {
+  const { t } = useTranslation();
+
   const customColumns = [
     {
-      header: 'Images',
+      header: t('deployments.headers.images'),
       value: deployment => {
         const images = getImages(deployment);
         const imagesString = images.join(', ');
@@ -39,7 +42,7 @@ export const DeploymentsList = ({ DefaultRenderer, ...otherParams }) => {
       },
     },
     {
-      header: 'Pods',
+      header: t('deployments.headers.pods'),
       value: deployment => {
         const podsCount = getPodsCount(deployment);
         const statusType = getStatusType(deployment);
@@ -47,7 +50,7 @@ export const DeploymentsList = ({ DefaultRenderer, ...otherParams }) => {
       },
     },
     {
-      header: 'Status',
+      header: t('common.headers.status'),
       value: deployment => {
         const status = getStatus(deployment);
         const statusType = getStatusType(deployment);

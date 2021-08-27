@@ -94,6 +94,8 @@ applications:
     provided-services: Provided Services & Events
   title: Applications
 brokers:
+  headers:
+    url: URL
   title: Brokers
 btp-instances:
   external-name: External Name
@@ -299,6 +301,9 @@ deployments:
       docker-image: Docker Image
       docker-image-placeholder: Enter Docker image tag, for example, bitnami/nginx
     title: Create Deployment
+  headers:
+    images: Images
+    pods: $t(pods.title)
   title: Deployments
 discovery-and-network:
   title: Discovery and Network
@@ -398,6 +403,12 @@ jobs:
     type: Type
   start-time: Start Time
   title: Jobs
+limit-ranges:
+  headers:
+    default: Default
+    default-request: Default Request
+    max: Max
+  title: Limit Ranges
 machine-info:
   architecture-cpus: Architecture & CPUs
   cpu-m: CPU (m)
@@ -417,6 +428,13 @@ namespaces:
     apply-limits: Apply limits per container
     apply-memory-quotas: Apply Total Memory Quotas
     disable-sidecar: Disable side-car injection
+  events:
+    headers:
+      created: Created
+      message: Message
+      object: Object
+      object-type: Object Type
+    title: Warnings
   overview:
     back: Back to Namespaces
     resources:
@@ -458,6 +476,8 @@ oauth2-clients:
     authorization-code: Authorization code
     implicit: Implicit
     refresh-token: Refresh token
+  headers:
+    secret: Secret
   labels:
     grand-types: Grant types
     response-types: Response types
@@ -498,11 +518,17 @@ preferences:
 replica-sets:
   cpu: CPU
   headers:
+    images: Images
     limits: Limits
     replicas: Ready Replicas
     requests: Requests
   memory: Memory
   title: ReplicaSets
+resource-quotas:
+  headers:
+    limits: Limits
+    requests: Requests
+  title: Resource Quotas
 role-bindings:
   aria:
     choose-role: Choose role
@@ -512,6 +538,7 @@ role-bindings:
     created: Role Binding {{name}} created
   headers:
     kind: Kind
+    role-name: Role Name
   labels:
     annotations: Annotations
     arrow: Show roles
@@ -542,6 +569,8 @@ secrets:
     cannot-update: Cannot update Secret
     failed-to-decode: Failed to decode the Secret data
     failed-to-decode-long: "Some of the secret data couldn't be decoded. Correct them and try again:"
+  headers:
+    type: Type
   metadata: Metadata
   labels:
     annotations: Annotations

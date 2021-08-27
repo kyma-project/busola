@@ -1,5 +1,6 @@
 import React from 'react';
 import { StatusBadge } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 
 const getImages = replicaSet => {
   const images =
@@ -22,9 +23,11 @@ const getStatusType = replicaSet => {
 };
 
 export const ReplicaSetsList = ({ DefaultRenderer, ...otherParams }) => {
+  const { t } = useTranslation();
+
   const customColumns = [
     {
-      header: 'Images',
+      header: t('replica-sets.headers.images'),
       value: replicaSet => {
         const images = getImages(replicaSet);
         const imagesString = images.join(', ');
@@ -32,7 +35,7 @@ export const ReplicaSetsList = ({ DefaultRenderer, ...otherParams }) => {
       },
     },
     {
-      header: 'Status',
+      header: t('common.headers.status'),
       value: replicaSet => {
         const status = getStatus(replicaSet);
         const statusType = getStatusType(replicaSet);
