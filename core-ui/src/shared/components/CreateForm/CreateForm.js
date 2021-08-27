@@ -15,7 +15,6 @@ export function CreateForm({
   advancedForm,
   resource,
   setResource,
-  onClose,
   onCreate,
   onChange,
   toYaml,
