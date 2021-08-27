@@ -5,15 +5,18 @@ import { useNotification } from 'react-shared';
 import { base64Decode, base64Encode } from 'shared/helpers';
 
 DecodeSecretSwitch.propTypes = {
-  secret: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
-  setSecret: PropTypes.func.isRequired,
+  entries: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
+  setEntries: PropTypes.func.isRequired,
   isEncoded: PropTypes.bool.isRequired,
   setEncoded: PropTypes.func.isRequired,
 };
+function applyOnEntries(fn, entries) {
+  return entries.map(e => ({ ...e, value: fn(e.value) }));
+}
 
 export function DecodeSecretSwitch({
-  secret,
-  setSecret,
+  entries,
+  setEntries,
   isEncoded,
   setEncoded,
 }) {
@@ -21,13 +24,9 @@ export function DecodeSecretSwitch({
 
   const onClick = () => {
     try {
-      let entries = secret.data;
-      for (const key in secret.data) {
-        entries[key] = isEncoded
-          ? base64Decode(entries[key])
-          : base64Encode(entries[key]);
-      }
-      setSecret({ ...secret, data: entries });
+      setEntries(
+        applyOnEntries(isEncoded ? base64Decode : base64Encode, entries),
+      );
       setEncoded(!isEncoded);
     } catch (e) {
       notification.notifyError({

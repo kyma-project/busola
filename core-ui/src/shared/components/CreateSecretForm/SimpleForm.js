@@ -19,10 +19,10 @@ export function SimpleForm({ secret, setSecret, isEncoded, setEncoded }) {
       data={secret.data}
       setData={setData}
       setValid={() => {}}
-      customHeaderAction={(secret, setSecret) => (
+      customHeaderAction={(entries, setEntries) => (
         <DecodeSecretSwitch
-          secret={secret}
-          setSecret={setSecret}
+          entries={entries}
+          setEntries={setEntries}
           isEncoded={isEncoded}
           setEncoded={setEncoded}
         />
