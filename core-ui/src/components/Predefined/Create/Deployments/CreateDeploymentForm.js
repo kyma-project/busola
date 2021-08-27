@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import LuigiClient from '@luigi-project/client';
 import { CreateForm } from 'shared/components/CreateForm/CreateForm';
-import { Button } from 'fundamental-react';
 import { usePost, useNotification } from 'react-shared';
 import {
   formatService,
@@ -23,7 +22,7 @@ export function CreateDeploymentForm({
   const { t } = useTranslation();
   const notification = useNotification();
   const postRequest = usePost();
-  const [deployment, setDeployment] = React.useState(
+  const [deployment, setDeployment] = useState(
     createDeploymentTemplate(namespaceId),
   );
 
