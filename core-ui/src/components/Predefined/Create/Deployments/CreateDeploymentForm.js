@@ -17,7 +17,6 @@ export function CreateDeploymentForm({
   namespaceId,
   formElementRef,
   onChange,
-  ...props
 }) {
   const { t } = useTranslation();
   const notification = useNotification();
@@ -76,7 +75,6 @@ export function CreateDeploymentForm({
       }
       resource={deployment}
       setResource={setDeployment}
-      onClose={() => setDeployment(createDeploymentTemplate(namespaceId))}
       toYaml={deploymentToYaml}
       fromYaml={yamlToDeployment}
       onCreate={createDeployment}
