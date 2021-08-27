@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 
 import { Button } from 'fundamental-react';
-import { Tooltip, useGetList, ModalWithForm } from 'react-shared';
+import {
+  Tooltip,
+  useGetList,
+  ModalWithForm,
+  useMicrofrontendContext,
+} from 'react-shared';
 
 import CreateServiceBindingForm from './CreateServiceBindingForm';
 import { SERVICE_BINDINGS_PANEL } from '../constants';
@@ -10,13 +15,17 @@ export default function CreateServiceBindingModal({
   serviceInstance,
   serviceBindings,
 }) {
+  const { features } = useMicrofrontendContext();
+  const btpCatalogEnabled = features.BTP_CATALOG?.isEnabled;
   const [popupModalMessage, setPopupModalMessage] = useState(null);
   const { data: usageKinds } = useGetList()(
     '/apis/servicecatalog.kyma-project.io/v1alpha1/usagekinds',
     {},
   );
   const shouldButtonBeDisabled =
-    !usageKinds || serviceInstance.status.lastConditionState !== 'Ready';
+    !usageKinds ||
+    serviceInstance.status.lastConditionState !== 'Ready' ||
+    btpCatalogEnabled;
 
   const button = (
     <Button glyph="add" option="transparent" disabled={shouldButtonBeDisabled}>
@@ -24,15 +33,18 @@ export default function CreateServiceBindingModal({
     </Button>
   );
 
+  const getTooltipContent = () => {
+    if (btpCatalogEnabled) {
+      return 'Service Catalog is in readonly mode.';
+    }
+    return !usageKinds
+      ? SERVICE_BINDINGS_PANEL.CREATE_MODAL.OPEN_BUTTON.NO_ENTRIES_POPUP_MESSAGE
+      : SERVICE_BINDINGS_PANEL.CREATE_MODAL.OPEN_BUTTON.NOT_READY_POPUP_MESSAGE;
+  };
+
   const modalOpeningComponent = shouldButtonBeDisabled ? (
     <Tooltip
-      content={
-        !usageKinds
-          ? SERVICE_BINDINGS_PANEL.CREATE_MODAL.OPEN_BUTTON
-              .NO_ENTRIES_POPUP_MESSAGE
-          : SERVICE_BINDINGS_PANEL.CREATE_MODAL.OPEN_BUTTON
-              .NOT_READY_POPUP_MESSAGE
-      }
+      content={getTooltipContent()}
       position="top"
       trigger="mouseenter"
       tippyProps={{
