@@ -133,12 +133,6 @@ export const REPOSITORIES_LIST = {
   },
 };
 
-export const REPOSITORY_AUTH = {
-  PUBLIC: 'Public',
-  BASIC: 'Basic',
-  KEY: 'SSH key',
-};
-
 export const SERVICE_URL = `/api/v1/namespaces/{namespace}/services/{name}`;
 
 export const RESOURCES_MANAGEMENT_PANEL = {
@@ -248,19 +242,10 @@ export const SERVICE_BINDINGS_PANEL = {
 export const REPOSITORY_CONFIG_PANEL = {
   INPUTS: {
     REFERENCE: {
-      INLINE_HELP: `Reference to the Function's source. Select a branch name or commit revision.`,
       PLACEHOLDER: 'Enter a branch name or commit revision (Required)',
-      ERRORS: {
-        EMPTY: 'Reference is required.',
-      },
     },
     BASE_DIR: {
-      LABEL: 'Base Directory',
-      INLINE_HELP: `Directory with Function's code and dependencies`,
       PLACEHOLDER: 'Enter a base directory (Required)',
-      ERRORS: {
-        EMPTY: 'Base Directory is required.',
-      },
     },
   },
 };

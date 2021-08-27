@@ -69,7 +69,7 @@ export default function RepositoryConfig({ lambda }) {
 
   function validateReference(reference, setStatus) {
     if (!reference) {
-      setStatus(REPOSITORY_CONFIG_PANEL.INPUTS.REFERENCE.ERRORS.EMPTY);
+      setStatus(t('functions.details.errors.req-reference'));
       addError(ERRORS.REFERENCE);
       return;
     }
@@ -79,7 +79,7 @@ export default function RepositoryConfig({ lambda }) {
 
   function validateBaseDir(baseDir, setStatus) {
     if (!baseDir) {
-      setStatus(REPOSITORY_CONFIG_PANEL.INPUTS.BASE_DIR.ERRORS.EMPTY);
+      setStatus(t('functions.details.errors.req-base-dir'));
       addError(ERRORS.BASE_DIR);
       return;
     }
@@ -186,9 +186,9 @@ export default function RepositoryConfig({ lambda }) {
             <LayoutPanel.Header className="has-padding-none has-none-border-bottom">
               <LayoutPanel.Head
                 title={t('functions.create-view.labels.reference')}
-                description={
-                  REPOSITORY_CONFIG_PANEL.INPUTS.REFERENCE.INLINE_HELP
-                }
+                description={t(
+                  'functions.details.inline-help.function-reference',
+                )}
               />
             </LayoutPanel.Header>
             <LayoutPanel.Body className="has-padding-none">
@@ -210,10 +210,10 @@ export default function RepositoryConfig({ lambda }) {
           <LayoutPanel className="has-box-shadow-none">
             <LayoutPanel.Header className="has-padding-none has-none-border-bottom">
               <LayoutPanel.Head
-                title={REPOSITORY_CONFIG_PANEL.INPUTS.BASE_DIR.LABEL}
-                description={
-                  REPOSITORY_CONFIG_PANEL.INPUTS.BASE_DIR.INLINE_HELP
-                }
+                title={t('functions.create-view.labels.base-directory')}
+                description={t(
+                  'functions.create-view.inline-help.base-directory',
+                )}
               />
             </LayoutPanel.Header>
             <LayoutPanel.Body className="has-padding-none">

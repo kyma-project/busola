@@ -284,6 +284,10 @@ functions:
     buttons:
       edit-configuration: Edit Configuration
       diff_toggle: Diff
+    inline-help:
+      function-reference: Reference to the Function's source. Select a branch name or commit revision.
+    errors:
+      req-reference: Reference is required.
   errors:
     server: Server error. Contact your cluster admin.
   pod-list:
