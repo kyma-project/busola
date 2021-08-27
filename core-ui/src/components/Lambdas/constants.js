@@ -1,20 +1,6 @@
 export const SERVERLESS_API_VERSION = 'serverless.kyma-project.io/v1alpha1';
 export const SERVERLESS_RESOURCE_KIND = 'Function';
 
-export const SERVERLESS_FUNCTION_REPLICAS_PRESET_LABEL =
-  'serverless.kyma-project.io/function-replicas-preset';
-export const SERVERLESS_FUNCTION_RESOURCES_PRESET_LABEL =
-  'serverless.kyma-project.io/function-resources-preset';
-export const SERVERLESS_BUILD_RESOURCES_PRESET_LABEL =
-  'serverless.kyma-project.io/build-resources-preset';
-export const SERVERLESS_PRESETS_LABELS = [
-  SERVERLESS_FUNCTION_REPLICAS_PRESET_LABEL,
-  SERVERLESS_FUNCTION_RESOURCES_PRESET_LABEL,
-  SERVERLESS_BUILD_RESOURCES_PRESET_LABEL,
-];
-
-export const REFETCH_LAMBDAS_TIMEOUT = 2000;
-
 export const ERRORS = {
   SERVER: 'functions.errors.server',
 };
@@ -161,23 +147,6 @@ export const RESOURCES_MANAGEMENT_PANEL = {
     MAX_REPLICAS_TOO_LOW:
       'Maximum number of replicas has to be equal or greater than minimum.',
     MAX_REPLICAS_POSITIVE: 'Maximum replicas must be a positive integer.',
-  },
-  REPLICAS: {
-    TITLE: 'Scaling Options',
-    PRESET: {
-      TITLE: 'Preset',
-      DESCRIPTION:
-        'Preset is a predefined set of values that you can customize.',
-    },
-    MIN_NUMBER: {
-      TITLE: 'Minimum replicas',
-      DESCRIPTION: 'Minimum number of running replicas.',
-    },
-    MAX_NUMBER: {
-      TITLE: 'Maximum replicas',
-      DESCRIPTION:
-        'Maximum number of running replicas. Set it to 0 to disable the function.',
-    },
   },
   RESOURCES: {
     TYPES: {

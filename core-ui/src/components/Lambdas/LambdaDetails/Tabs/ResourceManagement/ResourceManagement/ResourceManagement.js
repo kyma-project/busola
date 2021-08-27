@@ -221,7 +221,7 @@ export default function ResourcesManagement({ lambda }) {
         <div className="lambda-resources-management__panel">
           <LayoutPanel.Header>
             <LayoutPanel.Head
-              title={RESOURCES_MANAGEMENT_PANEL.REPLICAS.TITLE}
+              title={t('functions.details.title.scaling-options')}
             />
           </LayoutPanel.Header>
           <LayoutPanel.Body>

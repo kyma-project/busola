@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Input } from './TableElements/Input';
 import { Row } from './TableElements/Row';
@@ -13,12 +14,12 @@ export default function LambdaReplicas({
   register,
   errors,
   triggerValidation = () => void 0,
-  retriggerValidation = () => void 0,
 }) {
+  const { t } = useTranslation();
   const panels = [
     {
-      title: replicasMode.MIN_NUMBER.TITLE,
-      description: replicasMode.MIN_NUMBER.DESCRIPTION,
+      title: t('functions.details.title.minimum-replicas'),
+      description: t('functions.details.descriptions.minimum-replicas'),
       action: (
         <>
           <Input
@@ -38,8 +39,8 @@ export default function LambdaReplicas({
       ),
     },
     {
-      title: replicasMode.MAX_NUMBER.TITLE,
-      description: replicasMode.MAX_NUMBER.DESCRIPTION,
+      title: t('functions.details.title.maximum-replicas'),
+      description: t('functions.details.descriptions.maximum-replicas'),
       action: (
         <>
           <Input
