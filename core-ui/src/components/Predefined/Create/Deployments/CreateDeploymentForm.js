@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import LuigiClient from '@luigi-project/client';
-import { CreateModal } from 'shared/components/CreateModal/CreateModal';
-import { Button } from 'fundamental-react';
+import { CreateForm } from 'shared/components/CreateForm/CreateForm';
 import { usePost, useNotification } from 'react-shared';
 import {
   formatService,
@@ -14,16 +13,16 @@ import { SimpleForm } from './SimpleForm';
 import { AdvancedForm } from './AdvancedForm';
 import { useTranslation } from 'react-i18next';
 
-export function CreateDeploymentForm({ namespaceId, modalOpeningComponent }) {
+export function CreateDeploymentForm({
+  namespaceId,
+  formElementRef,
+  onChange,
+}) {
   const { t } = useTranslation();
   const notification = useNotification();
   const postRequest = usePost();
-  const [deployment, setDeployment] = React.useState(
+  const [deployment, setDeployment] = useState(
     createDeploymentTemplate(namespaceId),
-  );
-
-  modalOpeningComponent = modalOpeningComponent || (
-    <Button glyph="add">{t('deployments.create-modal.title')}</Button>
   );
 
   const createDeployment = async () => {
@@ -66,7 +65,7 @@ export function CreateDeploymentForm({ namespaceId, modalOpeningComponent }) {
   };
 
   return (
-    <CreateModal
+    <CreateForm
       title={t('deployments.create-modal.title')}
       simpleForm={
         <SimpleForm deployment={deployment} setDeployment={setDeployment} />
@@ -74,14 +73,14 @@ export function CreateDeploymentForm({ namespaceId, modalOpeningComponent }) {
       advancedForm={
         <AdvancedForm deployment={deployment} setDeployment={setDeployment} />
       }
-      modalOpeningComponent={modalOpeningComponent}
       resource={deployment}
       setResource={setDeployment}
-      onClose={() => setDeployment(createDeploymentTemplate(namespaceId))}
       toYaml={deploymentToYaml}
       fromYaml={yamlToDeployment}
       onCreate={createDeployment}
+      onChange={onChange}
       presets={createPresets(namespaceId, t)}
+      formElementRef={formElementRef}
     />
   );
 }
