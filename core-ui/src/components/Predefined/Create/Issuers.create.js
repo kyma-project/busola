@@ -49,7 +49,7 @@ function createPresets(namespaceId, t) {
   ];
 }
 
-export function IssuersCreate(props) {
+export function IssuersCreate({ onChange, formElementRef, namespace }) {
   const [issuer, setIssuer] = useState({});
   const { t } = useTranslation();
 
@@ -62,12 +62,11 @@ export function IssuersCreate(props) {
       advancedForm={'TODO'}
       resource={issuer}
       setResource={setIssuer}
-      onClose={() => {}}
       toYaml={issuerToYaml}
       fromYaml={yamlToIssuer}
       onCreate={createIssuer}
       onChange={onChange}
-      presets={createPresets(namespaceId, t)}
+      presets={createPresets(namespace, t)}
       formElementRef={formElementRef}
     />
   );
