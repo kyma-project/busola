@@ -280,14 +280,14 @@ functions:
       code: Code
       configuration: Configuration
       resources: Resources
-      resources-replicas: Resources and replicas
+      resources-replicas: Resources and Replicas
       dependencies: Dependencies
       scaling-options: Scaling Options
-      minimum-replicas: Minimum replicas
-      maximum-replicas: Maximum replicas
+      minimum-replicas: Minimum Replicas
+      maximum-replicas: Maximum Replicas
     descriptions:
-      maximum-replicas: Maximum number of running replicas. Set it to 0 to disable the function.
-      minimum-replicas: Minimum number of running replicas.
+      maximum-replicas: Maximum number of running Replicas. Set it to 0 to disable the function.
+      minimum-replicas: Minimum number of running Replicas.
     buttons:
       edit-configuration: Edit Configuration
       diff_toggle: Diff
