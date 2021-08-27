@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
-import LuigiClient from '@luigi-project/client';
-import { Dialog, Button } from 'fundamental-react';
 import { ModeSelector } from './ModeSelector/ModeSelector';
 import { Editor } from './Editor/Editor';
-import classnames from 'classnames';
 import './CreateForm.scss';
 import { CollapsibleSection } from './CollapsibleSection/CollapsibleSection';
 import { Presets } from './Presets';
@@ -22,10 +19,7 @@ export function CreateForm({
   presets,
   formElementRef,
 }) {
-  const { t } = useTranslation();
-  const [isOpen, setOpen] = useState(false);
   const [mode, setMode] = useState(ModeSelector.MODE_SIMPLE);
-  const [formValid, setFormValid] = useState(false);
 
   const formsToDisplay = (
     <>
