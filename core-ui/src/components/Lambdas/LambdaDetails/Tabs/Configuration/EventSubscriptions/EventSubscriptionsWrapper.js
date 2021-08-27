@@ -2,34 +2,25 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useGetList, Spinner } from 'react-shared';
 import EventSubscriptions from 'shared/components/EventSubscriptions/EventSubscriptions';
-import {
-  SERVERLESS_API_VERSION,
-  SERVERLESS_RESOURCE_KIND,
-} from '../../../../constants';
+import { SERVERLESS_RESOURCE_KIND } from '../../../../constants';
 
 export default function EventSubscriptionsWrapper({ lambda, isActive }) {
   const subscriptionsUrl = `/apis/eventing.kyma-project.io/v1alpha1/namespaces/${lambda.metadata.namespace}/subscriptions`;
 
-  const ownerRef = {
-    apiVersion: SERVERLESS_API_VERSION,
-    kind: SERVERLESS_RESOURCE_KIND,
-    name: lambda.metadata.name,
-    uid: lambda.metadata.uid,
+  const filterBySink = ({ spec }) => {
+    const { name, namespace } = lambda.metadata;
+    // match spec.sink with http://{lambdaName}.{namespace}.svc.cluster.local
+    const regex = `http:\/\/(.*?)\.${namespace}\.svc\.cluster\.local`;
+    const match = spec.sink.match(regex);
+    return match && match[1] === name;
   };
-
-  const filterByOwnerRef = ({ metadata }) =>
-    metadata.ownerReferences?.find(
-      ref =>
-        ref.kind === SERVERLESS_RESOURCE_KIND &&
-        ref.name === lambda.metadata.name,
-    );
 
   const {
     data: subscriptions = [],
     error,
     loading,
     silentRefetch,
-  } = useGetList(filterByOwnerRef)(subscriptionsUrl, {
+  } = useGetList(filterBySink)(subscriptionsUrl, {
     pollingInterval: 3000,
     skip: !isActive,
   });
@@ -39,7 +30,7 @@ export default function EventSubscriptionsWrapper({ lambda, isActive }) {
   return (
     <EventSubscriptions
       isLambda={true}
-      ownerRef={ownerRef}
+      ownerName={lambda.metadata.name}
       namespace={lambda.metadata.namespace}
       silentRefetch={silentRefetch}
       subscriptions={subscriptions || []}

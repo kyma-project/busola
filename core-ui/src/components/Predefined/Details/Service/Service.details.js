@@ -9,12 +9,6 @@ import { ServiceApiRules } from 'components/Lambdas/LambdaDetails/Tabs/Configura
 
 function EventSubscriptionsWrapper(service) {
   const subscriptionsUrl = `/apis/eventing.kyma-project.io/v1alpha1/namespaces/${service.metadata.namespace}/subscriptions`;
-  const ownerRef = {
-    apiVersion: service.apiVersion,
-    kind: service.kind,
-    name: service.metadata.name,
-    uid: service.metadata.uid,
-  };
 
   const filterByOwnerRef = ({ metadata }) =>
     metadata.ownerReferences?.find(
@@ -36,7 +30,7 @@ function EventSubscriptionsWrapper(service) {
     <EventSubscriptions
       key="event-subscriptions"
       isLambda={false}
-      ownerRef={ownerRef}
+      ownerName={service.metadata.name}
       namespace={service.metadata.namespace}
       silentRefetch={silentRefetch}
       subscriptions={subscriptions || []}
