@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { Button } from 'fundamental-react';
-import { useNotification } from 'react-shared';
 
+import { useNotification } from 'react-shared';
 import { base64Decode, base64Encode } from 'shared/helpers';
 
 DecodeSecretSwitch.propTypes = {
@@ -34,7 +34,7 @@ export function DecodeSecretSwitch({
       setEncoded(!isEncoded);
     } catch (e) {
       notification.notifyError({
-        content: t('secrets.create-modal.messages.decoding-failed', {
+        content: t('secrets.create-modal.messages.decoding-failure', {
           error: e.message,
         }),
       });

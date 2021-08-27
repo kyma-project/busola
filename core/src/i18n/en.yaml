@@ -401,8 +401,8 @@ roles:
 secrets:
   create-modal:
     messages:
-      decoding-failed: 'Failed to decode the Secret data: {{error}}'
-      failure: Failed to create the Secret
+      decoding-failure: 'Failed to decode the Secret data: {{error}}'
+      failure: 'Failed to create the Secret: {{error}}'
       success: Secret created
     presets:
       default: Default
@@ -411,6 +411,10 @@ secrets:
       type: Type
     title: Create Secret
   decode: Decode
+  edit-modal:
+    messages:
+      failure: 'Failed to update the Secret: {{error}}'
+      success: Secret updated
   encode: Encode
   title: Secrets
 service-management:

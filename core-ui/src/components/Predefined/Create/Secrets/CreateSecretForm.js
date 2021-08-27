@@ -22,6 +22,7 @@ export function CreateSecretForm({
   formElementRef,
   onChange,
   existingSecret,
+  onSubmit,
 }) {
   const { t } = useTranslation();
   const notification = useNotification();
@@ -31,7 +32,7 @@ export function CreateSecretForm({
       ? yamlToSecret(existingSecret)
       : createSecretTemplate(namespaceId),
   );
-  const [isEncoded, setEncoded] = useState(false);
+  const [isEncoded, setEncoded] = useState(!!existingSecret);
   const microfrontendContext = useMicrofrontendContext();
   const { features } = microfrontendContext;
   const DNSExist = features?.CUSTOM_DOMAINS?.isEnabled;
@@ -51,8 +52,9 @@ export function CreateSecretForm({
     } catch (e) {
       console.error(e);
       notification.notifyError({
-        title: t('secrets.create-modal.messages.failure'),
-        content: e.message,
+        content: t('secrets.create-modal.messages.failure', {
+          error: e.message,
+        }),
       });
       return false;
     }
@@ -82,7 +84,11 @@ export function CreateSecretForm({
       setResource={setSecret}
       toYaml={secret => secretToYaml({ secret, isEncoded })}
       fromYaml={yamlToSecret}
-      onCreate={createSecret}
+      onCreate={
+        onSubmit
+          ? () => onSubmit(secretToYaml({ secret, isEncoded }))
+          : createSecret
+      }
       onChange={onChange}
       presets={createPresets(namespaceId, t, DNSExist)}
       formElementRef={formElementRef}
