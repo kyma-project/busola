@@ -289,15 +289,18 @@ functions:
       diff_toggle: Diff
       edit-configuration: Edit Configuration
     descriptions:
+      limits: Maximum amount of compute resources allowed.
       maximum-replicas: Maximum number of running Replicas. Set it to 0 to disable the function.
       minimum-replicas: Minimum number of running Replicas.
       runtime-profile: Choose one of the predefined values for Function's resources or set your own values ​​by selecting the "Custom" option.
       build-job: Choose one of the predefined values for build Job's resources or set your own values ​​by selecting the "Custom" option.
+      requests: Minimum amount of compute resources required.
     errors:
       req-reference: Reference is required.
     inline-help:
       function-reference: Reference to the Function's source. Select a branch name or commit revision.
     title:
+      limits: Limits
       code: Code
       configuration: Configuration
       dependencies: Dependencies
@@ -308,6 +311,9 @@ functions:
       scaling-options: Scaling Options
       runtime-profile: Runtime Profile
       build-job: Build Job Profile
+      requests: Requests
+      memory: Memory
+      cpu: CPU
   errors:
     server: Server error. Contact your cluster admin.
   pod-list:

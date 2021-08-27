@@ -236,10 +236,8 @@ export default function ResourcesManagement({ lambda }) {
         <div className="lambda-resources-management__panel">
           <LayoutPanel.Header>
             <LayoutPanel.Head
-              title={t('functions.create-view.title.runtime-profile')}
-              description={t(
-                'functions.create-view.descriptions.runtime-profile',
-              )}
+              title={t('functions.details.title.runtime-profile')}
+              description={t('functions.details.descriptions.runtime-profile')}
             />
           </LayoutPanel.Header>
           <LayoutPanel.Body>
@@ -258,8 +256,8 @@ export default function ResourcesManagement({ lambda }) {
         <div className="lambda-resources-management__panel">
           <LayoutPanel.Header>
             <LayoutPanel.Head
-              title={t('functions.create-view.title.build-job')}
-              description={t('functions.create-view.descriptions.build-job')}
+              title={t('functions.details.title.build-job')}
+              description={t('functions.details.descriptions.build-job')}
             />
           </LayoutPanel.Header>
           <LayoutPanel.Body>

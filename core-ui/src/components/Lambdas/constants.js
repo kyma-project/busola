@@ -121,25 +121,6 @@ export const REPOSITORIES_LIST = {
 
 export const SERVICE_URL = `/api/v1/namespaces/{namespace}/services/{name}`;
 
-export const RESOURCES_MANAGEMENT_PANEL = {
-  RESOURCES: {
-    REQUESTS: {
-      TITLE: 'Requests',
-      DESCRIPTION: 'Minimum amount of compute resources required.',
-    },
-    LIMITS: {
-      TITLE: 'Limits',
-      DESCRIPTION: 'Maximum amount of compute resources allowed.',
-    },
-    MEMORY: {
-      TITLE: 'Memory',
-    },
-    CPU: {
-      TITLE: 'CPU',
-    },
-  },
-};
-
 //Remove after old Service catalog removal
 export const SERVICE_BINDINGS_PANEL = {
   LIST: {

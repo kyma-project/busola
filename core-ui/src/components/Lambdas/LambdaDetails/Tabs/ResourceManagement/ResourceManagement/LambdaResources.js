@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { LayoutPanel } from 'fundamental-react';
 import { Dropdown } from 'react-shared';
 
 import { Input } from './TableElements/Input';
 import { Row } from './TableElements/Row';
-import { RESOURCES_MANAGEMENT_PANEL } from 'components/Lambdas/constants';
 import { CONFIG } from 'components/Lambdas/config';
 import {
   ErrorMessage,
@@ -13,8 +13,6 @@ import {
   customPreset,
   isCustomPreset,
 } from './shared';
-
-const resourcesMode = RESOURCES_MANAGEMENT_PANEL.RESOURCES;
 
 export default function LambdaResources({
   disabledForm,
@@ -27,6 +25,7 @@ export default function LambdaResources({
   defaultPreset = customPreset,
 }) {
   const [currentPreset, setCurrentPreset] = useState(defaultPreset);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (disabledForm) {
@@ -100,13 +99,13 @@ export default function LambdaResources({
         <LayoutPanel className="has-box-shadow-none">
           <LayoutPanel.Header className="has-padding-none has-none-border-bottom">
             <LayoutPanel.Head
-              title={resourcesMode.REQUESTS.TITLE}
-              description={resourcesMode.REQUESTS.DESCRIPTION}
+              title={t('functions.details.title.requests')}
+              description={t('functions.details.descriptions.requests')}
             />
           </LayoutPanel.Header>
           <LayoutPanel.Body className="has-padding-none">
             <Row
-              title={resourcesMode.MEMORY.TITLE}
+              title={t('functions.details.title.memory')}
               action={
                 <>
                   <Input
@@ -115,7 +114,7 @@ export default function LambdaResources({
                     _ref={register}
                     id={inputNames.requests.memory}
                     name={inputNames.requests.memory}
-                    placeholder={resourcesMode.MEMORY.TITLE}
+                    placeholder={t('functions.details.title.memory')}
                     onChange={async () => {
                       await triggerValidation(inputNames.limits.memory);
                     }}
@@ -128,7 +127,7 @@ export default function LambdaResources({
               }
             />
             <Row
-              title={resourcesMode.CPU.TITLE}
+              title={t('functions.details.title.cpu')}
               action={
                 <>
                   <Input
@@ -137,7 +136,7 @@ export default function LambdaResources({
                     id={inputNames.requests.cpu}
                     name={inputNames.requests.cpu}
                     _ref={register}
-                    placeholder={resourcesMode.CPU.TITLE}
+                    placeholder={t('functions.details.title.cpu')}
                     onChange={async () => {
                       await triggerValidation(inputNames.limits.cpu);
                     }}
@@ -154,13 +153,13 @@ export default function LambdaResources({
         <LayoutPanel className="has-box-shadow-none">
           <LayoutPanel.Header className="has-padding-none has-none-border-bottom">
             <LayoutPanel.Head
-              title={resourcesMode.LIMITS.TITLE}
-              description={resourcesMode.LIMITS.DESCRIPTION}
+              title={t('functions.details.title.limits')}
+              description={t('functions.details.descriptions.limits')}
             />
           </LayoutPanel.Header>
           <LayoutPanel.Body className="has-padding-none">
             <Row
-              title={resourcesMode.MEMORY.TITLE}
+              title={t('functions.details.title.memory')}
               action={
                 <>
                   <Input
@@ -169,7 +168,7 @@ export default function LambdaResources({
                     id={inputNames.limits.memory}
                     name={inputNames.limits.memory}
                     _ref={register}
-                    placeholder={resourcesMode.MEMORY.TITLE}
+                    placeholder={t('functions.details.title.memory')}
                     onChange={async () => {
                       await triggerValidation(inputNames.requests.memory);
                     }}
@@ -182,7 +181,7 @@ export default function LambdaResources({
               }
             />
             <Row
-              title={resourcesMode.CPU.TITLE}
+              title={t('functions.details.title.cpu')}
               action={
                 <>
                   <Input
@@ -191,7 +190,7 @@ export default function LambdaResources({
                     disabled={disabledForm}
                     className={inputClassName}
                     _ref={register}
-                    placeholder={resourcesMode.CPU.TITLE}
+                    placeholder={t('functions.details.title.cpu')}
                     onChange={async () => {
                       await triggerValidation(inputNames.requests.cpu);
                     }}
