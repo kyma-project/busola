@@ -1,6 +1,5 @@
 import React from 'react';
 import { StatusBadge } from 'react-shared';
-import { CreateDeploymentModal } from 'shared/components/CreateDeploymentForm/CreateDeploymentModal';
 
 const getImages = deployment => {
   const images =
@@ -56,13 +55,5 @@ export const DeploymentsList = ({ DefaultRenderer, ...otherParams }) => {
     },
   ];
 
-  return (
-    <DefaultRenderer
-      customColumns={customColumns}
-      {...otherParams}
-      listHeaderActions={
-        <CreateDeploymentModal namespaceId={otherParams.namespace} />
-      }
-    />
-  );
+  return <DefaultRenderer customColumns={customColumns} {...otherParams} />;
 };

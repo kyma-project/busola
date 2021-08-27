@@ -1,7 +1,11 @@
 import React from 'react';
 import { Popover, Menu, Button } from 'fundamental-react';
-import { useGetList, useMicrofrontendContext } from 'react-shared';
-import { CreateDeploymentModal } from 'shared/components/CreateDeploymentForm/CreateDeploymentModal';
+import {
+  ModalWithForm,
+  useGetList,
+  useMicrofrontendContext,
+} from 'react-shared';
+import { CreateDeploymentForm } from '../../Create/Deployments/CreateDeploymentForm';
 import CreateLambdaModal from 'components/Lambdas/LambdasList/Lambdas/CreateLambdaModal';
 import { useTranslation } from 'react-i18next';
 
@@ -46,11 +50,14 @@ export default function DeployNewWorkload({ namespaceName }) {
   ) : null;
 
   const deploymentModal = (
-    <CreateDeploymentModal
-      namespaceId={namespaceName}
-      modalOpeningComponent={
-        <Menu.Item>{t('deployments.create-modal.title')}</Menu.Item>
-      }
+    <ModalWithForm
+      title="Create Deployment"
+      confirmText="Create"
+      className="add-deployment-modal fd-dialog--xl-size modal-width--m"
+      modalOpeningComponent={<Menu.Item>Create Deployment</Menu.Item>}
+      renderForm={props => (
+        <CreateDeploymentForm namespaceId={namespaceName} {...props} />
+      )}
     />
   );
 

@@ -1,11 +1,8 @@
-.create-modal {
-  .fd-dialog__body {
-    padding: 0;
-    min-width: 25rem;
-    width: 75vw;
-    height: 50vh;
-    max-height: calc(100vh - 8rem);
-  }
+.create-form {
+  height: 50vh;
+  min-width: 25rem;
+  display: flex;
+  flex-direction: column;
 
   .dropdown {
     margin-top: unset;
@@ -27,5 +24,15 @@
 
   form > .fd-margin--sm + .fd-margin--sm {
     margin-top: -1em !important;
+  }
+
+  .simple-form,
+  .advanced-form {
+    overflow: auto;
+    flex-grow: 1;
+
+    &.hidden {
+      display: none;
+    }
   }
 }
