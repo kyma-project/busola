@@ -1,13 +1,10 @@
 import React, { useState } from 'react';
-import LuigiClient from '@luigi-project/client';
-import { Dialog, Button } from 'fundamental-react';
 import { ModeSelector } from './ModeSelector/ModeSelector';
 import { Editor } from './Editor/Editor';
-import classnames from 'classnames';
 import './CreateForm.scss';
 import { CollapsibleSection } from './CollapsibleSection/CollapsibleSection';
 import { Presets } from './Presets';
-import { useTranslation } from 'react-i18next';
+import classnames from 'classnames';
 
 export function CreateForm({
   title,
@@ -22,10 +19,7 @@ export function CreateForm({
   presets,
   formElementRef,
 }) {
-  const { t } = useTranslation();
-  const [isOpen, setOpen] = useState(false);
   const [mode, setMode] = useState(ModeSelector.MODE_SIMPLE);
-  const [formValid, setFormValid] = useState(false);
 
   const formsToDisplay = (
     <>
@@ -45,12 +39,11 @@ export function CreateForm({
 
       {/* always keep the advanced form to ensure validation */}
       <form
-        className="advanced-form"
+        className={classnames('advanced-form', {
+          hidden: mode !== ModeSelector.MODE_ADVANCED,
+        })}
         onChange={onChange}
         ref={formElementRef}
-        style={{
-          display: mode === ModeSelector.MODE_ADVANCED ? null : 'none',
-        }}
         onSubmit={onCreate}
       >
         {advancedForm}
@@ -66,11 +59,7 @@ export function CreateForm({
           onSelect={preset => setResource(preset.value)}
         />
       )}
-      <ModeSelector
-        mode={mode}
-        setMode={setMode}
-        style={{ position: 'sticky' }}
-      />
+      <ModeSelector mode={mode} setMode={setMode} />
       {formsToDisplay}
     </div>
   );
