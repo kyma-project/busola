@@ -321,6 +321,7 @@ issuers:
   state: Status
   server: Server
   domains:
+    title: Domains
     included: Included Domains
     excluded: Excluded Domains
 jobs:
