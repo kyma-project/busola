@@ -71,14 +71,12 @@ export function AdvancedForm({ issuer, setIssuer }) {
           </FormFieldset>
         </CreateForm.CollapsibleSection>
         <CreateForm.CollapsibleSection
-          title={t('issuers.external-account-binding.title')}
+          title={t('issuers.external-account.title')}
         >
           <FormFieldset>
             <CreateForm.FormField
               label={
-                <FormLabel>
-                  {t('issuers.external-account-binding.key-id')}
-                </FormLabel>
+                <FormLabel>{t('issuers.external-account.key-id')}</FormLabel>
               }
               input={
                 <FormInput
@@ -96,11 +94,7 @@ export function AdvancedForm({ issuer, setIssuer }) {
           </FormFieldset>
           <FormFieldset>
             <CreateForm.FormField
-              label={
-                <FormLabel>
-                  {t('issuers.external-account-binding.secret-name')}
-                </FormLabel>
-              }
+              label={<FormLabel>{t('common.labels.name')}</FormLabel>}
               input={
                 <FormInput
                   compact
@@ -117,11 +111,7 @@ export function AdvancedForm({ issuer, setIssuer }) {
           </FormFieldset>
           <FormFieldset>
             <CreateForm.FormField
-              label={
-                <FormLabel>
-                  {t('issuers.external-account-binding.secret-namespace')}
-                </FormLabel>
-              }
+              label={<FormLabel>{t('common.labels.namespace')}</FormLabel>}
               input={
                 <FormInput
                   compact

@@ -128,8 +128,9 @@ common:
     delete: Delete
     edit-yaml: Edit YAML
     save: Save
-  create-modal:
+  create-form:
     editor-error: "Parse error: {{error}}, changes won't be saved."
+    choose-preset: Select preset
     modes:
       advanced: Advanced
       simple: Simple
@@ -152,6 +153,7 @@ common:
   labels:
     hostname: Hostname
     name: Name
+    namespace: Namespace
     service: Service
   messages:
     doesnt-exist: doesn't exist.
@@ -213,7 +215,6 @@ deployments:
       failure: Failed to create the Deployment
       success: Deployment created
     presets:
-      choose: Select preset
       default: Default
     simple:
       docker-image: Docker Image
@@ -320,10 +321,28 @@ issuers:
   email: E-mail
   state: Status
   server: Server
+  acme: ACME
+  ca: CA
   domains:
     title: Domains
-    included: Included Domains
-    excluded: Excluded Domains
+    included: Included domains
+    excluded: Excluded domains
+  type: Issuer Type
+  requests-per-day: Daily requests quota
+  skip-dns: Skip DNS challenge validation
+  auto-registration: Auto registration
+  private-key: Private key secret
+  external-account:
+    title: External account
+    key-id: CA key ID
+  create:
+    presets:
+      default: Default
+      ca: CA
+      acme: ACME
+    messages:
+      success: Issuer created
+      failure: Failed to create the issuer
 jobs:
   completion-time: Completion Time
   completions: Completions

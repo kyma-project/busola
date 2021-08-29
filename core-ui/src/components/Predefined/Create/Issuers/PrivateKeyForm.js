@@ -13,7 +13,7 @@ export function PrivateKeyForm({ issuer, setIssuer, disabled }) {
         <CreateForm.FormField
           label={
             <FormLabel required={!disabled}>
-              {t('issuers.private-key-name')}
+              {t('common.labels.name')}
             </FormLabel>
           }
           input={
@@ -33,7 +33,7 @@ export function PrivateKeyForm({ issuer, setIssuer, disabled }) {
         <CreateForm.FormField
           label={
             <FormLabel required={!disabled}>
-              {t('issuers.private-key-namespace')}
+              {t('common.labels.namespace')}
             </FormLabel>
           }
           input={

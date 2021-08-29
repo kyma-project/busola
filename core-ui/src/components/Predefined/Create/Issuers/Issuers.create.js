@@ -22,7 +22,6 @@ export function IssuersCreate({ onChange, formElementRef, namespace }) {
   const postRequest = usePost();
 
   const [issuer, setIssuer] = useState(createIssuerTemplate(namespace));
-  console.log('issuer', issuer);
 
   const createIssuer = async () => {
     let createdIssuer = null;
@@ -31,19 +30,20 @@ export function IssuersCreate({ onChange, formElementRef, namespace }) {
         `/apis/cert.gardener.cloud/v1alpha1/namespaces/${namespace}/issuers/`,
         issuerToYaml(issuer),
       );
-      console.log('created issuer', createdIssuer);
+      notification.notifySuccess({
+        content: t('issuers.create.messages.success'),
+      });
       LuigiClient.linkManager()
         .fromContext('namespace')
         .navigate(`/issuers/details/${issuer.name}`);
     } catch (e) {
       console.error(e);
       notification.notifyError({
-        title: t('issuers.messages.failure'),
+        title: t('issuers.create.messages.failure'),
         content: e.message,
       });
       return false;
     }
-    // const createdResourceUID = createdDeployment?.metadata?.uid;
   };
 
   return (

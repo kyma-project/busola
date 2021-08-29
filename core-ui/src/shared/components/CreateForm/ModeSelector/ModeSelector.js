@@ -9,11 +9,11 @@ export function ModeSelector({ mode, setMode }) {
   const modeButtons = [
     {
       mode: ModeSelector.MODE_SIMPLE,
-      label: t('common.create-modal.modes.simple'),
+      label: t('common.create-form.modes.simple'),
     },
     {
       mode: ModeSelector.MODE_ADVANCED,
-      label: t('common.create-modal.modes.advanced'),
+      label: t('common.create-form.modes.advanced'),
     },
     { mode: ModeSelector.MODE_YAML, label: 'YAML' },
   ];
