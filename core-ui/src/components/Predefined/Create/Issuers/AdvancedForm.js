@@ -13,7 +13,7 @@ import { PrivateKeyForm } from './PrivateKeyForm';
 import { SimpleForm } from './SimpleForm';
 
 export function AdvancedForm({ issuer, setIssuer }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   let issuerTypeFields;
   if (issuer.type === 'acme') {

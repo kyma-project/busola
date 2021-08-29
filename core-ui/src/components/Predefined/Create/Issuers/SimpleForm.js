@@ -7,7 +7,7 @@ import { CreateForm } from 'shared/components/CreateForm/CreateForm';
 import { PrivateKeyForm } from './PrivateKeyForm';
 
 export function SimpleForm({ issuer, setIssuer }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   let issuerTypeFields;
   if (issuer.type === 'ca') {
@@ -61,7 +61,6 @@ export function SimpleForm({ issuer, setIssuer }) {
                 required
                 onChange={e => setIssuer({ ...issuer, name: e.target.value })}
                 value={issuer.name}
-                i18n={i18n}
               />
             }
           />
