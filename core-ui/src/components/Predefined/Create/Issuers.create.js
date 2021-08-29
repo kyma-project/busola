@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import LuigiClient from '@luigi-project/client';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
@@ -9,6 +10,7 @@ import {
   Select,
   Checkbox,
 } from 'fundamental-react';
+import { usePost, useNotification } from 'react-shared';
 
 import { CreateForm } from 'shared/components/CreateForm/CreateForm';
 
@@ -113,6 +115,7 @@ function SimpleForm({ issuer, setIssuer }) {
             input={
               <FormInput
                 compact
+                required
                 onChange={e => setIssuer({ ...issuer, name: e.target.value })}
                 value={issuer.name}
                 i18n={i18n}
@@ -457,11 +460,34 @@ function createPresets(namespace, t) {
 }
 
 export function IssuersCreate({ onChange, formElementRef, namespace }) {
+  const { t } = useTranslation();
+  const notification = useNotification();
+  const postRequest = usePost();
+
   const [issuer, setIssuer] = useState(createIssuerTemplate(namespace));
   console.log('issuer', issuer);
-  const { t } = useTranslation();
 
-  const createIssuer = () => {};
+  const createIssuer = async () => {
+    let createdIssuer = null;
+    try {
+      createdIssuer = await postRequest(
+        `/apis/cert.gardener.cloud/v1alpha1/namespaces/${namespace}/issuers/`,
+        issuerToYaml(issuer),
+      );
+      console.log('created issuer', createdIssuer);
+      LuigiClient.linkManager()
+        .fromContext('namespace')
+        .navigate(`/issuers/details/${issuer.name}`);
+    } catch (e) {
+      console.error(e);
+      notification.notifyError({
+        title: t('issuers.messages.failure'),
+        content: e.message,
+      });
+      return false;
+    }
+    // const createdResourceUID = createdDeployment?.metadata?.uid;
+  };
 
   return (
     <CreateForm
