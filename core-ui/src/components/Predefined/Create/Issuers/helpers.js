@@ -64,7 +64,6 @@ export function issuerToYaml(issuer) {
   };
 }
 export function yamlToIssuer(yaml, prevIssuer) {
-  console.log('yamlToIssuer');
   let type = jp.value(yaml, '$.spec.ca')
     ? 'ca'
     : jp.value(yaml, '$.spec.acme')
