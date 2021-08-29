@@ -4,6 +4,7 @@ import {
   FormFieldset,
   FormLabel,
   FormInput,
+  FormTextarea,
   Checkbox,
 } from 'fundamental-react';
 
@@ -45,12 +46,15 @@ export function AdvancedForm({ issuer, setIssuer }) {
             <CreateForm.FormField
               label={<FormLabel>{t('issuers.domains.included')}</FormLabel>}
               input={
-                <FormInput
+                <FormTextarea
                   compact
                   onChange={e =>
-                    setIssuer({ ...issuer, includeDomains: e.target.value })
+                    setIssuer({
+                      ...issuer,
+                      includeDomains: e.target.value.split('\n'),
+                    })
                   }
-                  value={issuer.includeDomains}
+                  value={issuer.includeDomains.join('\n')}
                 />
               }
             />
@@ -59,12 +63,15 @@ export function AdvancedForm({ issuer, setIssuer }) {
             <CreateForm.FormField
               label={<FormLabel>{t('issuers.domains.excluded')}</FormLabel>}
               input={
-                <FormInput
+                <FormTextarea
                   compact
                   onChange={e =>
-                    setIssuer({ ...issuer, excludeDomains: e.target.value })
+                    setIssuer({
+                      ...issuer,
+                      excludeDomains: e.target.value.split('\n'),
+                    })
                   }
-                  value={issuer.excludeDomains}
+                  value={issuer.excludeDomains.join('\n')}
                 />
               }
             />

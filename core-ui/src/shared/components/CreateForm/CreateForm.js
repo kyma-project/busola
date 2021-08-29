@@ -53,12 +53,13 @@ export function CreateForm({
 
   const content = (
     <div className="create-form">
-      {presets?.length && (
+      {(presets?.length && (
         <Presets
           presets={presets}
           onSelect={preset => setResource(preset.value)}
         />
-      )}
+      )) ||
+        ''}
       <ModeSelector mode={mode} setMode={setMode} />
       {formsToDisplay}
     </div>

@@ -6,12 +6,7 @@ import { usePost, useNotification } from 'react-shared';
 
 import { CreateForm } from 'shared/components/CreateForm/CreateForm';
 
-import {
-  issuerToYaml,
-  yamlToIssuer,
-  createIssuerTemplate,
-  createPresets,
-} from './helpers';
+import { toYaml, fromYaml, createTemplate, createPresets } from './helpers';
 
 import { SimpleForm } from './SimpleForm';
 import { AdvancedForm } from './AdvancedForm';
@@ -21,14 +16,15 @@ export function IssuersCreate({ onChange, formElementRef, namespace }) {
   const notification = useNotification();
   const postRequest = usePost();
 
-  const [issuer, setIssuer] = useState(createIssuerTemplate(namespace));
+  const [issuer, setIssuer] = useState(createTemplate(namespace));
+  console.log(issuer);
 
   const createIssuer = async () => {
     let createdIssuer = null;
     try {
       createdIssuer = await postRequest(
         `/apis/cert.gardener.cloud/v1alpha1/namespaces/${namespace}/issuers/`,
-        issuerToYaml(issuer),
+        toYaml(issuer),
       );
       notification.notifySuccess({
         content: t('issuers.create.messages.success'),
@@ -53,8 +49,8 @@ export function IssuersCreate({ onChange, formElementRef, namespace }) {
       advancedForm={<AdvancedForm issuer={issuer} setIssuer={setIssuer} />}
       resource={issuer}
       setResource={setIssuer}
-      toYaml={issuerToYaml}
-      fromYaml={yamlToIssuer}
+      toYaml={toYaml}
+      fromYaml={fromYaml}
       onCreate={createIssuer}
       onChange={onChange}
       presets={createPresets(namespace, t)}

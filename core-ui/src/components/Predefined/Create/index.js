@@ -6,3 +6,4 @@ export * from './Secrets/Secrets.create.js';
 export * from './ConfigMaps.create.js';
 export * from './Deployments/Deployments.create.js';
 export * from './Issuers/Issuers.create.js';
+export * from './Certificates/Certificates.create.js';

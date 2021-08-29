@@ -1,6 +1,6 @@
 import * as jp from 'jsonpath';
 
-export function issuerToYaml(issuer) {
+export function toYaml(issuer) {
   let spec = {
     requestsPerDayQuota: issuer.requestsPerDayQuota || undefined,
   };
@@ -15,7 +15,9 @@ export function issuerToYaml(issuer) {
       },
     };
   } else if (issuer.type === 'acme') {
-    const hasDomains = issuer.includeDomains || issuer.excludeDomains;
+    const includeDomains = issuer.includeDomains.filter(domain => !!domain);
+    const excludeDomains = issuer.excludeDomains.filter(domain => !!domain);
+    const hasDomains = includeDomains.length || excludeDomains.length;
     const hasExternalAccount =
       issuer.externalAccountKeyId ||
       issuer.externalAccountSecretName ||
@@ -34,8 +36,8 @@ export function issuerToYaml(issuer) {
             },
         domains: hasDomains
           ? {
-              include: issuer.includeDomains || undefined,
-              exclude: issuer.excludeDomains || undefined,
+              include: includeDomains.length ? includeDomains : undefined,
+              exclude: excludeDomains.length ? excludeDomains : undefined,
             }
           : undefined,
         skipDNSChallengeValidation:
@@ -63,7 +65,7 @@ export function issuerToYaml(issuer) {
     spec,
   };
 }
-export function yamlToIssuer(yaml, prevIssuer) {
+export function fromYaml(yaml, prevIssuer) {
   let type = jp.value(yaml, '$.spec.ca')
     ? 'ca'
     : jp.value(yaml, '$.spec.acme')
@@ -77,8 +79,8 @@ export function yamlToIssuer(yaml, prevIssuer) {
     requestsPerDayQuota: jp.value(yaml, '$.spec.requestsPerDayQuota'),
     server: jp.value(yaml, '$.spec.acme.server') || '',
     email: jp.value(yaml, '$.spec.acme.email') || '',
-    includeDomains: jp.value(yaml, '$.spec.acme.domains.include') || '',
-    excludeDomains: jp.value(yaml, '$.spec.acme.domains.exclude') || '',
+    includeDomains: jp.value(yaml, '$.spec.acme.domains.include') || [],
+    excludeDomains: jp.value(yaml, '$.spec.acme.domains.exclude') || [],
     skipDNSChallengeValidation:
       jp.value(yaml, '$.spec.acme.skipDNSChallengeValidation') || false,
     privateKeyName:
@@ -96,7 +98,7 @@ export function yamlToIssuer(yaml, prevIssuer) {
   };
 }
 
-export function createIssuerTemplate(namespace) {
+export function createTemplate(namespace) {
   return {
     name: '',
     namespace,
@@ -108,8 +110,8 @@ export function createIssuerTemplate(namespace) {
     privateKeyNamespace: '',
     requestsPerDayQuota: 0,
     skipDNSChallengeValidation: false,
-    includeDomains: '',
-    excludeDomains: '',
+    includeDomains: [],
+    excludeDomains: [],
     externalAccountKeyId: '',
     externalAccountSecretName: '',
     externalAccountSecretNamespace: '',
@@ -120,19 +122,19 @@ export function createPresets(namespace, t) {
   return [
     {
       name: t('issuers.create.presets.default'),
-      value: createIssuerTemplate(namespace),
+      value: createTemplate(namespace),
     },
     {
       name: t('issuers.create.presets.ca'),
       value: {
-        ...createIssuerTemplate(namespace),
+        ...createTemplate(namespace),
         type: 'ca',
       },
     },
     {
       name: t('issuers.create.presets.acme'),
       value: {
-        ...createIssuerTemplate(namespace),
+        ...createTemplate(namespace),
         type: 'acme',
       },
     },
