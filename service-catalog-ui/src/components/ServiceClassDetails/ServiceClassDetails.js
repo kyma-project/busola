@@ -15,7 +15,7 @@ export default function ServiceClassDetails({
   serviceInstances,
   servicePlans,
 }) {
-  const { namespaceId } = useMicrofrontendContext();
+  const { namespaceId, features } = useMicrofrontendContext();
   const serviceClassDisplayName = getResourceDisplayName(serviceClass);
   const isActivated = serviceInstances?.length > 0;
 
@@ -25,9 +25,18 @@ export default function ServiceClassDetails({
       serviceClass.spec.externalMetadata.labels.provisionOnlyOnce,
     );
 
+  const btpCatalogEnabled = features.BTP_CATALOG?.isEnabled;
+
+  const tooltipContent = btpCatalogEnabled
+    ? 'Service Catalog is in readonly mode.'
+    : createInstanceConstants.provisionOnlyOnceInfo;
+
   const modalOpeningComponent = (
-    <Tooltip content={createInstanceConstants.provisionOnlyOnceInfo}>
-      <Button disabled={isProvisionedOnlyOnce && isActivated} glyph="add">
+    <Tooltip content={tooltipContent}>
+      <Button
+        disabled={(isProvisionedOnlyOnce && isActivated) || btpCatalogEnabled}
+        glyph="add"
+      >
         {isProvisionedOnlyOnce
           ? isActivated
             ? createInstanceConstants.buttonText.provisionOnlyOnceActive

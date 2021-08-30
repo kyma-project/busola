@@ -8,11 +8,14 @@ import {
   useGetList,
   useNotification,
   useDelete,
+  useMicrofrontendContext,
 } from 'react-shared';
 
 import { TextOverflowWrapper } from '../../ServiceInstanceList/ServiceInstanceTable/styled';
 
 const ServiceInstanceBindings = ({ serviceInstance }) => {
+  const { features } = useMicrofrontendContext();
+  const btpCatalogEnabled = features.BTP_CATALOG?.isEnabled;
   const filterBindingsForInstance = binding =>
     binding?.spec.instanceRef?.name === serviceInstance.metadata.name;
   const notification = useNotification();
@@ -93,12 +96,14 @@ const ServiceInstanceBindings = ({ serviceInstance }) => {
       },
     );
   }
-  const actions = [
-    {
-      name: 'Delete',
-      handler: handleResourceDelete,
-    },
-  ];
+  const actions = btpCatalogEnabled
+    ? []
+    : [
+        {
+          name: 'Delete',
+          handler: handleResourceDelete,
+        },
+      ];
 
   const createServiceBindingModal = (
     <CreateServiceBindingModal
