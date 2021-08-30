@@ -4,14 +4,10 @@ import { ControlledEditor, useTheme } from 'react-shared';
 import { CreateForm } from 'shared/components/CreateForm/CreateForm';
 import { useTranslation } from 'react-i18next';
 
-const isNonEmptyObject = value => !!value && typeof value === 'object';
+export const isObject = value =>
+  !!value && typeof value === 'object' && !Array.isArray(value);
 
-export function JSONSection({
-  title,
-  value,
-  setValue,
-  validate = isNonEmptyObject,
-}) {
+export function JSONSection({ title, value, setValue, validate = isObject }) {
   const { t } = useTranslation();
   const { theme } = useTheme();
   const [areParamsValid, setParamsValid] = React.useState(true);

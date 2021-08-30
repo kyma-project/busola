@@ -47,10 +47,10 @@ export function createServiceBindingTemplate(namespaceId) {
     parameters: `{
   
 }
-    `,
+`,
     parametersFrom: `[
   
 ]
-        `,
+`,
   };
 }

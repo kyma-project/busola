@@ -6,7 +6,10 @@ import './ServiceBindingAdvancedForm.scss';
 import { SimpleForm } from './SimpleForm';
 import { K8sResourceSelect } from '../../../../shared/components/K8sResourceSelect';
 import { useTranslation } from 'react-i18next';
-import { JSONSection } from 'shared/components/CreateForm/JSONInputSection';
+import {
+  isObject,
+  JSONSection,
+} from 'shared/components/CreateForm/JSONInputSection';
 
 export function AdvancedForm({
   serviceBinding,
@@ -14,6 +17,10 @@ export function AdvancedForm({
   namespaceId,
 }) {
   const { t } = useTranslation();
+
+  // must be an array of objects
+  const validateParametersFrom = value =>
+    Array.isArray(value) && value.every(isObject);
 
   return (
     <>
@@ -79,7 +86,7 @@ export function AdvancedForm({
         setValue={parametersFrom =>
           setServiceBinding({ ...serviceBinding, parametersFrom })
         }
-        validate={Array.isArray}
+        validate={validateParametersFrom}
       />
     </>
   );
