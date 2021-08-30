@@ -177,7 +177,6 @@ common:
     loading-name: Loading name...
     no-instances-found: No {{value}} found.
     no-instances-found-namespace: No {{value}} found in this Namespace.
-    not-found: '{{value}} not found.'
     parse-error: Parse error, changes will not be saved.
     type-to-select: Start typing to select {{value}} from list.
   tooltips:

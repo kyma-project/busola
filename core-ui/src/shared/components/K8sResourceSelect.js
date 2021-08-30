@@ -59,13 +59,6 @@ export function K8sResourceSelect({
               value: pluralResourceType,
             }),
       };
-    } else if (!!value && !resourceNames.includes(value)) {
-      return {
-        state: 'warning',
-        text: t('common.messages.not-found', {
-          value: `${resourceType} ${value}`,
-        }),
-      };
     } else return undefined;
   };
 
