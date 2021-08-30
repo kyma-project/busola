@@ -15,6 +15,9 @@ export function JSONSection({
   const { t } = useTranslation();
   const { theme } = useTheme();
   const [areParamsValid, setParamsValid] = React.useState(true);
+  const [editorValue, setEditorValue] = React.useState(value);
+
+  React.useEffect(() => setEditorValue(value), [value]);
 
   const isValid = value => {
     try {
@@ -26,9 +29,10 @@ export function JSONSection({
   };
 
   const onEditorChange = (_, value) => {
+    setEditorValue(value);
     if (isValid(value)) {
-      setValue(value);
       setParamsValid(true);
+      setValue(value);
     } else {
       setParamsValid(false);
     }
@@ -49,7 +53,7 @@ export function JSONSection({
         height="12em"
         language="json"
         theme={theme}
-        value={value}
+        value={editorValue}
         onChange={onEditorChange}
       />
     </CreateForm.CollapsibleSection>
