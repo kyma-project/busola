@@ -20,9 +20,8 @@ export function IssuersCreate({ onChange, formElementRef, namespace }) {
   console.log(issuer);
 
   const createIssuer = async () => {
-    let createdIssuer = null;
     try {
-      createdIssuer = await postRequest(
+      await postRequest(
         `/apis/cert.gardener.cloud/v1alpha1/namespaces/${namespace}/issuers/`,
         toYaml(issuer),
       );

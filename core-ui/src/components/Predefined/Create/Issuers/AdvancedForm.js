@@ -48,6 +48,7 @@ export function AdvancedForm({ issuer, setIssuer }) {
               input={
                 <FormTextarea
                   compact
+                  className="resize-vertical"
                   onChange={e =>
                     setIssuer({
                       ...issuer,
@@ -65,6 +66,7 @@ export function AdvancedForm({ issuer, setIssuer }) {
               input={
                 <FormTextarea
                   compact
+                  className="resize-vertical"
                   onChange={e =>
                     setIssuer({
                       ...issuer,
