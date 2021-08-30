@@ -44,6 +44,11 @@ applications:
 brokers:
   title: Brokers
 btp-instances:
+  create:
+    external-name-placeholder: Defaults to the instance name if empty.
+    offering-name-description: SAP BTP service offering name
+    plan-name-description: The plan name to use for the service instance
+    title: Create $t(btp-instances.resource-type)
   external-name: External Name
   instance-data: Service Instance Data
   instance-id: Instance ID
@@ -52,11 +57,6 @@ btp-instances:
   plan-name: Plan Name
   resource-type: Service Instance
   title: BTP Service Instances
-  create:
-    title: Create $t(btp-instances.resource-type)
-    offering-name-description: SAP BTP service offering name
-    plan-name-description: The plan name to use for the service instance
-    external-name-placeholder: Defaults to the instance name if empty.
 btp-service-bindings:
   binding-id: Binding ID
   create:
@@ -78,12 +78,12 @@ catalog:
   subtitle: Enrich your experience with additional services that are installed outside the cluster.
   title: Service Catalog
 certificates:
-  title: Certificates
-  issuer: Issuer
-  state: State
-  expiration-date: Expiration Date
   common-name: Common Name
+  expiration-date: Expiration Date
+  issuer: Issuer
   refs: References
+  state: State
+  title: Certificates
 cluster-addons:
   title: Cluster Addons
 cluster-role-bindings:
@@ -142,16 +142,17 @@ common:
     save: Save
   create-modal:
     delete-confirm: Don't ask this again
-    delete-dialog: null
     editor-error: "Parse error: {{error}}, changes won't be saved."
-    information: You've switched off removal confirmations for all resources. You can switch them back on in Preferences.
-    message: Are you sure you want to remove {{type}} {{name}}?
     messages:
       failure: Failed to create the {{resourceType}}
       success: '{{resourceType}} created'
     modes:
       advanced: Advanced
       simple: Simple
+  delete-dialog:
+    delete-confirm: Don't ask this again
+    information: You've switched off removal confirmations for all resources. You can switch them back on in Preferences.
+    message: Are you sure you want to remove {{type}} {{name}}?
     title: Remove {{name}}
   errors:
     no-permissions: You don't have enough permissions to view this content.
@@ -260,8 +261,8 @@ dnsproviders:
   headers:
     exclude: Excluded Domains
     include: Included Domains
-    type: Type
     status: $t(common.headers.status)
+    type: Type
   title: DNS Providers
 functions:
   title: Functions
@@ -339,13 +340,13 @@ instances:
 integration:
   title: Integration
 issuers:
-  title: Issuers
-  email: E-mail
-  state: Status
-  server: Server
   domains:
-    included: Included Domains
     excluded: Excluded Domains
+    included: Included Domains
+  email: E-mail
+  server: Server
+  state: Status
+  title: Issuers
 jobs:
   completion-time: Completion Time
   completions: Completions
