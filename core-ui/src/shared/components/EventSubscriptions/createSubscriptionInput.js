@@ -1,17 +1,10 @@
-export function createSubscriptionInput(
-  name,
-  namespace,
-  ownerRef,
-  sink,
-  eventType,
-) {
+export function createSubscriptionInput(name, namespace, sink, eventType) {
   return {
     apiVersion: 'eventing.kyma-project.io/v1alpha1',
     kind: 'Subscription',
     metadata: {
       name,
       namespace,
-      ownerReferences: [ownerRef],
     },
     spec: {
       sink,
