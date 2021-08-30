@@ -64,6 +64,7 @@ export function CreateForm({
               value.namespace = resource.namespace;
             }
             setResource(value);
+            onChange(new Event('input', { bubbles: true }));
           }}
         />
       )}
