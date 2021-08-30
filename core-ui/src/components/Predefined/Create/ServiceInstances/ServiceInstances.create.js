@@ -37,7 +37,7 @@ function ServiceInstancesForm({ namespaceId, formElementRef, onChange }) {
         }),
       });
       LuigiClient.linkManager()
-        .fromContext('serviceInstances')
+        .fromContext('serviceinstances')
         .navigate('details/' + serviceInstance.name);
     } catch (e) {
       console.error(e);
