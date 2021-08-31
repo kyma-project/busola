@@ -19,14 +19,6 @@ const navigateTo = path => () => {
     .navigate(path);
 };
 
-const tooltipContent = (value, total, resourceType) => {
-  if (total === 0) {
-    return `There are no ${resourceType} in this Namespace`;
-  } else {
-    return `${value}/${total} ${resourceType} are healthy.`;
-  }
-};
-
 const ResourceCircle = ({
   data,
   counter,
@@ -37,6 +29,20 @@ const ResourceCircle = ({
   onClick,
 }) => {
   const { t } = useTranslation();
+
+  const tooltipContent = (value, total, resourceType) => {
+    if (total === 0) {
+      return t('namespaces.tooltips.no-resources', {
+        resourceType: resourceType,
+      });
+    } else {
+      return t('namespaces.tooltips.healthy-resources', {
+        value: value,
+        total: total,
+        resourceType: resourceType,
+      });
+    }
+  };
 
   if (error) {
     return (

@@ -1,10 +1,15 @@
 ---
 addons:
+  addons-status: Addons Status
   errors:
     cannot-create: Cannot create Addons Configuration
+  headers:
+    url: URL
   messages:
     created: Addons Configuration {{name}} created
+  repository-urls: Repository URLs
   title: Addons
+  urls: URLs
 api-rules:
   access-strategies:
     buttons:
@@ -40,8 +45,57 @@ api-rules:
     ns-no-services: No Services in this Namespace
   title: API Rules
 applications:
+  aria:
+    namespace: Choose Namespace
+  bindings: Bindings
+  buttons:
+    close: Close
+    connect: Connect Application
+    create: $t(applications.subtitle.create-binding)
+    create-app: $t(applications.subtitle.create-app)
+    select-all: Select all
+  headers:
+    apis: APIs
+    description: Descritpion
+    events: Events
+    service-and-event: Service & event bindings
+  messages:
+    app-created: Application {{applicationName}} created
+    binding-deleted: Binding deleted
+    binding-not-found: No bindings
+    cannot-create: Cannot create Application
+    copy-url: 'Copy the following URL and use it at the external system that you would like to connect to:'
+    create-failed: Failed to create the Binding
+    created: Binding created
+    dont-expose: This Application doesn't expose any Service or events.
+    no-apis: There are no APIs
+    no-bound-service: No bound services found.
+    no-events: There are no events
+    no-matches-text: No Namespaces to bind
+    service-not-found: No services
+    show-namespaces: Show Namespaces
+    some-apis: There are some APIs
+    some-events: There are some events
+  labels:
+    applications-and-events: Applications & Events
+    description: Description
+    namespace: Namespace
+  placeholders:
+    description: Specify a description for your Application
+    name: Specify a name for your Application
+    namespace: Choose Namespace...
+  subtitle:
+    connect-app: Connect Application
+    create-app: Create Application
+    create-binding: Create Namespace Binding
+    bound-to: Services and events bound to  '{{namespace}}'
+    edit-binding: Edit ServiceClass Binding in '{{namespace}}'
+    namespace-bindings: Namespace Bindings
+    provided-services: Provided Services & Events
   title: Applications
 brokers:
+  headers:
+    url: URL
   title: Brokers
 btp-instances:
   external-name: External Name
@@ -50,7 +104,7 @@ btp-instances:
   offering-name: Offering Name
   parameters: Instance Parameters
   plan-name: Plan Name
-  title: BTP Service Instances
+  title: BTP ServiceInstances
 btp-service-bindings:
   binding-id: Binding ID
   data: Binding Data
@@ -87,7 +141,7 @@ clusters:
   common:
     api-server-address: API server address
     download-kubeconfig: Download kubeconfig
-    kubeconfig-download-error: Failed to download the Kubeconfig
+    kubeconfig-download-error: Failed to download the kubeconfig
     kubeconfig-not-present: Kubeconfig is missing on the Cluster
   labels:
     client-id: Client ID
@@ -99,9 +153,9 @@ clusters:
       tooltip: Outdated parameter version may cause errors. Delete and re-add your cluster.
     title: Clusters
   messages:
-    error-kubeconfig: Error reading Kubeconfig
+    error-kubeconfig: Error reading the kubeconfig
     missing-configuration-data: Configuration has been included properly. Please fill remaining required data.
-    upload-paste-kubeconfig: Upload or paste your Kubeconfig file
+    upload-paste-kubeconfig: Upload or paste your kubeconfig file
     wrong-configuration: Cannot apply configuration
   overview:
     title: Cluster Overview
@@ -126,8 +180,11 @@ common:
     cancel: Cancel
     create: Create
     delete: Delete
+    edit: Edit
     edit-yaml: Edit YAML
+    ok: OK
     save: Save
+    update: Update
   create-modal:
     editor-error: "Parse error: {{error}}, changes won't be saved."
     modes:
@@ -162,14 +219,24 @@ common:
     download: Download
     duplicate-key: Duplicate key
     error: 'Error: '
-    k8s-name-input: Name must contain lower case alphanumeric characters, can contain '-' (like 'my-name1').
-    key: Key must start and end with alphanumeric character, can contain '-', '_' or '.'
-    key-value: key=value, must start and end with alphanumeric character, can contain '-', '_' or '.'
-    read-file: Read file content as single value, with file name as a key.
+    k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' (e.g.: 'my-name1')."
+    key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
+    key-value: key=value, must start and end with an alphanumeric character, can contain '-', '_' or '.'.
+    read-file: Read file content as a single value, with file name as a key.
     save: Save
     search: Search
-    value: Value must start and end with alphanumeric character, can contain '-', '_' or '.'
+    value: Value must start and end with an alphanumeric character, can contain '-', '_' or '.'
 config-maps:
+  buttons:
+    update: Update
+  errors:
+    cannot-create: Cannot create ConfigMap
+    cannot-update: Cannot create ConfigMap
+  messages:
+    created: ConfigMap created
+    updated: ConfigMap updated
+  subtitle:
+    edit-config-map: Edit ConfigMap
   title: ConfigMaps
 configuration:
   title: Configuration
@@ -186,6 +253,28 @@ cron-jobs:
   schedule: Schedule
   title: CronJobs
 custom-resource-definitions:
+  headers:
+    description: Description
+    json-path: JSON Path
+    kind: Kind
+    list-kind: List Kind
+    plural: Plural
+    scope: Scope
+    singular: Singular
+    short-names: Short Names
+    type: Type
+    value: Value
+  messages:
+    no-entries: No entries found because the version is not served
+  status:
+    not-served: Not Served
+    served: Served
+    storage: Storage
+  subtitle:
+    additional-columns: Additional Printer Columns
+    names: Names
+    schema: Schema
+    version: Version
   title: CustomResourceDefinitions
 daemon-sets:
   images: Images
@@ -222,6 +311,9 @@ deployments:
       docker-image: Docker Image
       docker-image-placeholder: Enter Docker image tag, for example, bitnami/nginx
     title: Create Deployment
+  headers:
+    images: Images
+    pods: $t(pods.title)
   title: Deployments
 discovery-and-network:
   title: Discovery and Network
@@ -244,6 +336,12 @@ dnsproviders:
     type: Type
   title: DNS Providers
 functions:
+  buttons:
+    connected-repositories: Connected repositories
+    create-function: Create Function
+  headers:
+    runtime: Runtime
+    source-type: Source Type
   title: Functions
   variable:
     buttons:
@@ -265,10 +363,10 @@ functions:
     errors:
       duplicated: Duplicated variable name.
       empty: Variable is empty.
-      invalid: Variable name must contain alphanumeric characters, can contain '_', no blank spaces.
+      invalid: Variable name must consist of alphanumeric characters, can contain '_', no blank spaces.
       invalid-config: Select the ConfigMap name and key.
       invalid-secret: Select the secret name and key.
-      restricted: This variable name is restricted and cannot be used. Try a different one.
+      restricted: This variable name is restricted and cannot be used. Try a different name.
     form:
       config-map: $t(functions.variable.type.config-map)
       key: $t(functions.variable.header.key)
@@ -288,12 +386,12 @@ functions:
     popup-error: At least one variable has an incorrect name format, is restricted, duplicated, or empty.
     title:
       environment-variables: Environment Variables
-      injected-variables: Environment Variables Injected via Service Bindings
+      injected-variables: Environment Variables Injected via ServiceBindings
     tooltip:
       config-map: This variable comes from the "{resourceName}" ConfigMap.
       custom: This variable was provided by the user.
       secret: This variable comes from the "{resourceName}" Secret.
-      service-binding: This variable was injected by the Service Binding referencing Service Instance "{serviceInstanceName}".
+      service-binding: This variable was injected by the ServiceBinding referencing ServiceInstance "{serviceInstanceName}".
       text: This variable comes from a Resource. To get the value, follow the link.
     type:
       config-map: ConfigMap
@@ -301,20 +399,24 @@ functions:
       secret: Secret
       service-binding: Service Binding
     warnings:
-      override: This variable name is identical to the variable injected via Service Binding. Continue if you intend that they can override each other. Otherwise, choose another name.
+      override: This variable name is identical to the variable injected via ServiceBinding. Continue if you intend that they can override each other. Otherwise, choose another name.
       sbu-can-be-overridden:
-        by-both: This variable can be overridden by one of the custom variables or a variable injected by one of the Service Bindings.
+        by-both: This variable can be overridden by one of the custom variables or a variable injected by one of the ServiceBindings.
         by-custom-env: This variable can override or be overridden by one of the custom variables.
-        by-sbu: This variable can override or be overridden by a variable injected by one of the Service Bindings.
+        by-sbu: This variable can override or be overridden by a variable injected by one of the ServiceBindings.
       text: Warning
-      variable-can-override-sbu: This variable can override or be overridden by a variable injected by one of the created Service Bindings.
+      variable-can-override-sbu: This variable can override or be overridden by a variable injected by one of the created ServiceBindings.
 generic-list:
   no-entries-found: No entries found
 git-repositories:
+  headers:
+    authentication: Authentication
+    secret: Secret
+    url: Repository URL
   title: Git Repositories
 instances:
   no-specific-plan-parameters:
-    tooltip: The service provider did not define specific parameters for the selected plan. Refer to the documentation to learn about the required parameters, and define them as JSON in the editor.
+    tooltip: The service provider did not define specific parameters for the selected Plan. Refer to the documentation to learn about the required parameters, and define them as a JSON in the editor.
   title: Instances
 integration:
   title: Integration
@@ -337,6 +439,12 @@ jobs:
     type: Type
   start-time: Start Time
   title: Jobs
+limit-ranges:
+  headers:
+    default: Default
+    default-request: Default Request
+    max: Max
+  title: Limit Ranges
 machine-info:
   architecture-cpus: Architecture & CPUs
   cpu-m: CPU (m)
@@ -352,6 +460,17 @@ machine-info:
   pods-capacity: Pods capacity
   title: Machine info
 namespaces:
+  create-modal:
+    apply-limits: Apply limits per container
+    apply-memory-quotas: Apply Total Memory Quotas
+    disable-sidecar: Disable side-car injection
+  events:
+    headers:
+      created: Created
+      message: Message
+      object: Object
+      object-type: Object Type
+    title: Warnings
   overview:
     back: Back to Namespaces
     resources:
@@ -370,8 +489,12 @@ namespaces:
   tooltips:
     container-memory-limit: Define memory constraints for individual containers in your Namespace.
     create: Select this option to disable Istio to mediate all communication between the Pods in your Namespace.
-    memory-examples: Use plain value in bytes (128974848) or suffix equivalents (like 129e6, 129M, 123Mi).
+    memory-examples: 'Use plain value in bytes (128974848) or equivalent suffixes (e.g.: 129e6, 129M, 123Mi).'
     total-memory-limit: Define constraints that limit total memory consumption in your Namespace.
+    usage-of-memory-limits: This Namespace uses {{valueText}} of {{maxText}} its memory limits.
+    usage-of-memory-requests: This Namespace uses {{valueText}} of {{maxText}} its memory requests.
+    no-resources: There are no {{resourceType}} in this Namespace
+    healthy-resources: '{{value}}/{{total}} {{resourceType}} are healthy.'
 no-permissions:
   title: No Permissions
 node-details:
@@ -384,21 +507,97 @@ node-details:
   title-warnings: Warnings
 oauth2-clients:
   title: OAuth2 Clients
+  grand-types:
+    client-credentials: Client credentials
+    authorization-code: Authorization code
+    implicit: Implicit
+    refresh-token: Refresh token
+  headers:
+    secret: Secret
+  labels:
+    grand-types: Grant types
+    response-types: Response types
+    scope: Scope
+  response-types:
+    id-token: ID token
+    code: Code
+    token: Token
 observability:
   title: Observability
 pods:
+  buttons:
+    view-logs: View Logs
+  headers:
+    type: Type
+    pod-ip: Pod IP
+    volume-name: Volume Name
+  labels:
+    constainers: Containers
+    filter-timeframe: 'Filter timeframe by:'
+    image: Image
+    image-pull-policy: Image pull policy
+    init-constainers: Init containers
+    ports: Ports
+    reverse-logs: Reverse logs
+    save-to-file: Save to a file
+    show-timestamps: Show timestamps
+    volumes: Volumes
+  message:
+    failed-to-download: Failed to download the Logs.
+    no-logs-available: No logs avaliable for the '{{containerName}}' container.
+    type-not-found: '{{type}} not found.'
   node: Node
   restarts: Restarts
   title: Pods
 preferences:
   title: Preferences
 replica-sets:
+  cpu: CPU
+  headers:
+    images: Images
+    limits: Limits
+    replicas: Ready Replicas
+    requests: Requests
+  memory: Memory
   title: ReplicaSets
+resource-quotas:
+  headers:
+    limits: Limits
+    requests: Requests
+  title: Resource Quotas
 role-bindings:
+  aria:
+    choose-role: Choose role
+  errors:
+    cannot-create: Cannot create RoleBinding
+  messages:
+    created: RoleBinding {{name}} created
+  headers:
+    kind: Kind
+    role-name: Role Name
+  labels:
+    annotations: Annotations
+    arrow: Show roles
+    role: Role
+    user: User
+    user-group: User Group
+  placeholders:
+    choose-role: Choose role...
+    user-group: User group
+    user-name: User name
   title: RoleBindings
+  tooltip:
+    no-found: No Roles found
 roles:
+  headers:
+    api-groups: API Groups
+    resources: Resources
+    verbs: Verbs
   title: Roles
 secrets:
+  buttons:
+    decode: Decode
+    encode: Encode
   create-modal:
     messages:
       decoding-failure: 'Failed to decode the Secret data: {{error}}'
@@ -410,13 +609,20 @@ secrets:
       data: Data
       type: Type
     title: Create Secret
-  decode: Decode
+  data: Data
   edit-modal:
     messages:
       failure: 'Failed to update the Secret: {{error}}'
       success: Secret updated
-  encode: Encode
+  headers:
+    type: Type
+  metadata: Metadata
+  labels:
+    annotations: Annotations
+    type: Secret type
   title: Secrets
+  title-edit-secret: Edit Secret
+  updated: Secret updated
 service-management:
   title: Service Management
 services:

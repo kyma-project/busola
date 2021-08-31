@@ -3,21 +3,22 @@ import React from 'react';
 import LambdaDetailsWrapper from 'components/Lambdas/LambdaDetails/LambdaDetailsWrapper';
 import { prettySourceType } from 'components/Lambdas/helpers/lambdas';
 import { prettyRuntime } from 'components/Lambdas/helpers/runtime';
-import { LAMBDA_DETAILS } from 'components/Lambdas/constants';
 import { LambdaStatusBadge } from 'components/Lambdas/LambdaStatusBadge/LambdaStatusBadge';
+import { useTranslation } from 'react-i18next';
 
 export const FunctionsDetails = ({ DefaultRenderer, ...otherParams }) => {
+  const { t } = useTranslation();
   const customColumns = [
     {
-      header: 'Status',
+      header: t('common.headers.status'),
       value: resource => <LambdaStatusBadge status={resource.status} />,
     },
     {
-      header: LAMBDA_DETAILS.SOURCE_TYPE.TEXT,
+      header: t('functions.headers.source-type'),
       value: resource => prettySourceType(resource.spec.type),
     },
     {
-      header: LAMBDA_DETAILS.RUNTIME.TEXT,
+      header: t('functions.headers.runtime'),
       value: resource => prettyRuntime(resource.spec.runtime),
     },
   ];

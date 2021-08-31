@@ -4,12 +4,15 @@ import {
   useGetList,
   ReadableCreationTimestamp,
 } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 
 export const EventsList = ({ ...otherParams }) => {
   return <Events namespace={otherParams.namespace} />;
 };
 
 function Events({ namespace }) {
+  const { t } = useTranslation();
+
   const url = `/api/v1/namespaces/${namespace}/events`;
   const { loading = true, error, data: resources } = useGetList(
     e => e.type === 'Error' || e.type === 'Warning',
@@ -19,7 +22,12 @@ function Events({ namespace }) {
     return e1.metadata.creationTimestamp - e2.metadata.creationTimestamp;
   });
 
-  const headerRenderer = () => ['Message', 'Object', 'Object Type', 'Created'];
+  const headerRenderer = () => [
+    t('namespaces.events.headers.message'),
+    t('namespaces.events.headers.object'),
+    t('namespaces.events.headers.object-type'),
+    t('namespaces.events.headers.created'),
+  ];
 
   const rowRenderer = entry => [
     <p>{entry.message}</p>,
@@ -32,7 +40,7 @@ function Events({ namespace }) {
 
   return (
     <GenericList
-      title="Warnings"
+      title={t('namespaces.events.title')}
       textSearchProperties={textSearchProperties}
       entries={events || []}
       headerRenderer={headerRenderer}
