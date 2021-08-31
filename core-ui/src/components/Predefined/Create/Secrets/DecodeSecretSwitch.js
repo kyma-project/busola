@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useTranslation } from 'react-i18next';
 import { Button } from 'fundamental-react';
 
 import { useNotification } from 'react-shared';
@@ -24,8 +23,6 @@ export function DecodeSecretSwitch({
   setEncoded,
   i18n,
 }) {
-  const { t } = useTranslation();
-
   const notification = useNotification();
   const { t } = useTranslation(null, { i18n });
 
