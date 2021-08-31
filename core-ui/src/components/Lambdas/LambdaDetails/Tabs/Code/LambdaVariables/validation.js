@@ -2,13 +2,16 @@ import {
   VARIABLE_TYPE,
   VARIABLE_VALIDATION,
   ERROR_VARIABLE_VALIDATION,
+  ALL_KEYS,
 } from 'components/Lambdas/helpers/lambdaVariables';
 import { CONFIG } from 'components/Lambdas/config';
+import i18next from 'i18next';
 
 export function validateVariables(
   customVariables = [],
   customValueFromVariables = [],
   injectedVariables = [],
+  resources,
 ) {
   return [...customVariables, ...customValueFromVariables].map(
     (variable, _, array) => {
@@ -21,6 +24,7 @@ export function validateVariables(
         varValue: variable.value || variable.valueFrom,
         varType: variable.type,
         varDirty: variable.dirty,
+        resources,
       });
       return {
         ...variable,
@@ -77,6 +81,45 @@ export function validateVariable(variables = [], currentVariable = {}) {
   return true;
 }
 
+function isVariableTakeAll(varValue) {
+  return (
+    varValue?.secretKeyRef?.key === ALL_KEYS ||
+    varValue?.configMapKeyRef?.key === ALL_KEYS
+  );
+}
+
+function getTakeAllDuplicates(
+  varName,
+  varType,
+  varValue,
+  resources,
+  userVariables,
+  injectedVariables,
+  restrictedVariables,
+) {
+  // name of secret or configMap
+  const prop =
+    varType === VARIABLE_TYPE.SECRET ? 'secretKeyRef' : 'configMapKeyRef';
+  const resourceName = varValue[prop].name;
+  const choosenResource = resources.find(r => r.metadata.name === resourceName);
+  // names of data from secret or configMap
+  const resourceDataNames = Object.keys(choosenResource).map(
+    key => varName + key,
+  );
+
+  return [
+    ...resourceDataNames.filter(name =>
+      userVariables.map(n => n.name).includes(name),
+    ),
+    ...resourceDataNames.filter(name =>
+      injectedVariables.map(n => n.name).includes(name),
+    ),
+    ...resourceDataNames.filter(name =>
+      restrictedVariables.map(n => n.name).includes(name),
+    ),
+  ];
+}
+
 export function getValidationStatus({
   userVariables = [],
   injectedVariables = [],
@@ -86,7 +129,28 @@ export function getValidationStatus({
   varValue,
   varType,
   varDirty = false,
+  resources,
 }) {
+  console.log(i18next);
+  const isTakeAll = isVariableTakeAll(varValue);
+  if (isTakeAll) {
+    const duplicates = getTakeAllDuplicates(
+      varName,
+      varType,
+      varValue,
+      resources,
+      userVariables,
+      injectedVariables,
+      restrictedVariables,
+    );
+
+    if (duplicates.length) {
+      return `Some of the variables duplicate existing names: ${duplicates.join(
+        ', ',
+      )}.`;
+    }
+  }
+
   // empty
   if (!varName) {
     if (varDirty) {
@@ -99,7 +163,16 @@ export function getValidationStatus({
     return VARIABLE_VALIDATION.RESTRICTED;
   }
 
-  // invalidate
+  // name validation is different for takeAll
+  if (isTakeAll) {
+    const regex = /^[a-zA-Z]([a-zA-Z0-9_-]*)$/;
+    if (!varName || !regex.test(varName)) {
+      return VARIABLE_VALIDATION.INVALID;
+    }
+    // don't run next validations
+    return VARIABLE_VALIDATION.NONE;
+  }
+
   const regex = /^[a-zA-Z]([a-zA-Z0-9_]*)$/;
   if (!varName || !regex.test(varName)) {
     return VARIABLE_VALIDATION.INVALID;

@@ -16,6 +16,7 @@ export default function CustomVariableInput({
   onUpdateVariable,
   setValidity,
   setInvalidModalPopupMessage,
+  resources,
 }) {
   const { t } = useTranslation();
   const [variable, setVariable] = useState(currentVariable);
@@ -56,6 +57,7 @@ export default function CustomVariableInput({
       varName: name,
       varID: variable.id,
       varDirty: variable.dirty,
+      resources,
     });
     const newVariable = {
       ...variable,

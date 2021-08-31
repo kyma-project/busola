@@ -16,11 +16,17 @@ i18next
   .use(initReactI18next)
   .use(i18nextBackend)
   .init({
-    lng: false,
+    lng: 'en',
     fallbackLng: false,
     backend: {
       loadPath: '/i18n/{{lng}}.yaml',
       parse: data => yaml.load(data),
+    },
+    saveMissing: true,
+    missingKeyHandler: (_lngs, _ns, key) => {
+      if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+        alert(key);
+      }
     },
   });
 

@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import {
   VARIABLE_TYPE,
   newVariableModel,
+  ALL_KEYS,
 } from 'components/Lambdas/helpers/lambdaVariables';
 import { useUpdateLambda, UPDATE_TYPE } from 'components/Lambdas/hooks';
 
@@ -66,6 +67,7 @@ export default function VariableForm({
   customVariables,
   customValueFromVariables,
   injectedVariables,
+  isEdit,
 }) {
   const updateLambdaVariables = useUpdateLambda({
     lambda,
@@ -76,7 +78,7 @@ export default function VariableForm({
     variable || newVariableModel(EMPTY_VARIABLE[type]),
   );
   function prepareVariablesInput(variables, newVariable) {
-    return variables.map(variable => {
+    return variables.flatMap(variable => {
       if (newVariable.id === variable.id) {
         variable = {
           ...variable,
@@ -88,6 +90,27 @@ export default function VariableForm({
           name: variable.name,
           value: variable.value,
         };
+      } else {
+        const prop =
+          variable.type === VARIABLE_TYPE.SECRET
+            ? 'secretKeyRef'
+            : 'configMapKeyRef';
+        const isTakeAll = variable.valueFrom[prop].key === ALL_KEYS;
+        if (isTakeAll) {
+          const resourceName = variable.valueFrom[prop].name;
+          const choosenResource = resources.find(
+            r => r.metadata.name === resourceName,
+          );
+          return Object.keys(choosenResource).map(key => ({
+            name: variable.name + key,
+            valueFrom: {
+              [prop]: {
+                key,
+                name: resourceName,
+              },
+            },
+          }));
+        }
       }
       return {
         name: variable.name,
@@ -153,6 +176,7 @@ export default function VariableForm({
           setValidity={setValidity}
           setCustomValid={setCustomValid}
           setInvalidModalPopupMessage={setInvalidModalPopupMessage}
+          isEdit={isEdit}
         />
       )}
     </form>
