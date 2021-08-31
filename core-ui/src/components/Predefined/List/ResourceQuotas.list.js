@@ -1,15 +1,18 @@
 import React from 'react';
 import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 
 export const ResourceQuotasList = ({ DefaultRenderer, ...otherParams }) => {
+  const { t } = useTranslation();
+
   const customColumns = [
     {
-      header: 'Limits',
+      header: t('resource-quotas.headers.limits'),
       value: quota =>
         quota.spec.hard['limits.memory'] || EMPTY_TEXT_PLACEHOLDER,
     },
     {
-      header: 'Requests',
+      header: t('resource-quotas.headers.requests'),
       value: quota =>
         quota.spec.hard['requests.memory'] || EMPTY_TEXT_PLACEHOLDER,
     },
@@ -17,7 +20,7 @@ export const ResourceQuotasList = ({ DefaultRenderer, ...otherParams }) => {
 
   return (
     <DefaultRenderer
-      resourceName="Resource Quotas"
+      resourceName={t('resource-quotas.title')}
       customColumns={customColumns}
       {...otherParams}
     />

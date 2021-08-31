@@ -1,7 +1,13 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { Button } from 'fundamental-react';
-import { GenericList, handleDelete, useNotification } from 'react-shared';
+import {
+  GenericList,
+  handleDelete,
+  useNotification,
+  useMicrofrontendContext,
+  Tooltip,
+} from 'react-shared';
 
 import renderRow from './ServiceInstanceRowRenderer';
 
@@ -11,6 +17,8 @@ const ServiceInstanceTable = ({
   loading,
   type,
 }) => {
+  const { features } = useMicrofrontendContext();
+  const btpCatalogEnabled = features.BTP_CATALOG?.isEnabled;
   const notification = useNotification();
 
   function goToServiceCatalog() {
@@ -24,34 +32,44 @@ const ServiceInstanceTable = ({
 
   const rowRenderer = instance => renderRow(instance);
 
-  const actions = [
-    {
-      name: 'Delete Instance',
-      icon: 'delete',
-      handler: entry =>
-        handleDelete(
-          'Service Instance',
-          entry.metadata.uid,
-          entry.metadata.name,
-          notification,
-          () => deleteServiceInstance(entry.metadata.name),
-        ),
-    },
-  ];
+  const actions = btpCatalogEnabled
+    ? []
+    : [
+        {
+          name: 'Delete Instance',
+          icon: 'delete',
+          handler: entry =>
+            handleDelete(
+              'Service Instance',
+              entry.metadata.uid,
+              entry.metadata.name,
+              notification,
+              () => deleteServiceInstance(entry.metadata.name),
+            ),
+        },
+      ];
 
   const headerRenderer = () => ['Name', 'Service Class', 'Plan', 'Status'];
 
-  const addServiceInstanceButton = (
+  let addServiceInstanceButton = (
     <Button
       compact
       option="transparent"
       onClick={goToServiceCatalog}
       data-e2e-id="add-instance"
       glyph="add"
+      disabled={btpCatalogEnabled}
     >
       Add Instance
     </Button>
   );
+  if (btpCatalogEnabled) {
+    addServiceInstanceButton = (
+      <Tooltip content="Service Catalog is in readonly mode.">
+        {addServiceInstanceButton}
+      </Tooltip>
+    );
+  }
 
   return (
     <GenericList

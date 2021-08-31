@@ -88,10 +88,13 @@ const MemoryRequestsCircle = ({ resourceQuotas, isLoading }) => {
       valueText={valueText}
       max={totalRequests}
       maxText={maxText}
-      title="Memory requests"
+      title={t('namespaces.overview.resources.requests')}
       reversed={true}
       tooltip={{
-        content: `This Namespace uses ${valueText} of ${maxText} its memory requests.`,
+        content: t('namespaces.tooltips.usage-of-memory-requests', {
+          valueText: valueText,
+          maxText: maxText,
+        }),
         position: 'bottom',
       }}
     />
@@ -129,7 +132,10 @@ const MemoryLimitsCircle = ({ resourceQuotas, isLoading }) => {
       title={t('namespaces.overview.resources.limits')}
       reversed={true}
       tooltip={{
-        content: `This Namespace uses ${valueText} of ${maxText} its memory limits.`,
+        content: t('namespaces.tooltips.usage-of-memory-limits', {
+          valueText: valueText,
+          maxText: maxText,
+        }),
         position: 'bottom',
       }}
     />

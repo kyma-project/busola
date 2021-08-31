@@ -11,10 +11,13 @@ import {
   EMPTY_TEXT_PLACEHOLDER,
   useTheme,
 } from 'react-shared';
+import { useTranslation } from 'react-i18next';
+
 import { ComponentForList } from 'shared/getComponents';
 import './CustomResourceDefinitionVersions.scss';
 
 const CustomResources = ({ resource, namespace, version }) => {
+  const { t } = useTranslation();
   const { group, names } = resource.spec;
   const name = names.plural;
 
@@ -22,7 +25,7 @@ const CustomResources = ({ resource, namespace, version }) => {
     return (
       <GenericList
         title={prettifyNamePlural(undefined, name)}
-        notFoundMessage={'No entries found because the version is not served'}
+        notFoundMessage={t('custom-resource-definitions.messages.no-entries')}
         entries={[]}
         headerRenderer={() => []}
         rowRenderer={() => []}
@@ -69,7 +72,14 @@ const CustomResources = ({ resource, namespace, version }) => {
 };
 
 const AdditionalPrinterColumns = version => {
-  const headerRenderer = () => ['Name', 'Type', 'Description', 'JSON Path'];
+  const { t } = useTranslation();
+
+  const headerRenderer = () => [
+    t('common.headers.name'),
+    t('custom-resource-definitions.headers.type'),
+    t('custom-resource-definitions.headers.description'),
+    t('custom-resource-definitions.headers.json-path'),
+  ];
   const rowRenderer = entry => [
     entry.name,
     entry.type,
@@ -79,7 +89,7 @@ const AdditionalPrinterColumns = version => {
 
   return (
     <GenericList
-      title="Additional Printer Columns"
+      title={t('custom-resource-definitions.subtitle.additional-columns')}
       entries={version.additionalPrinterColumns || []}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
@@ -89,6 +99,8 @@ const AdditionalPrinterColumns = version => {
 };
 
 export const CustomResourceDefinitionVersions = resource => {
+  const { t } = useTranslation();
+
   const { editorTheme } = useTheme();
   const namespace = LuigiClient.getContext().namespaceId;
 
@@ -103,16 +115,22 @@ export const CustomResourceDefinitionVersions = resource => {
       {versions.map(version => (
         <LayoutPanel className="fd-margin--md">
           <LayoutPanel.Header>
-            <LayoutPanel.Head title={`Version ${version.name}`} />
+            <LayoutPanel.Head
+              title={`${t('custom-resource-definitions.subtitle.version')} ${
+                version.name
+              }`}
+            />
             <StatusBadge
               type={version.served ? 'positive' : 'informative'}
               className="version-status"
             >
-              {version.served ? 'Served' : 'Not Served'}
+              {version.served
+                ? t('custom-resource-definitions.status.served')
+                : t('custom-resource-definitions.status.not-served')}
             </StatusBadge>
             {version.storage && (
               <StatusBadge type="positive" className="version-status">
-                Storage
+                {t('custom-resource-definitions.status.storage')}
               </StatusBadge>
             )}
           </LayoutPanel.Header>
@@ -130,7 +148,9 @@ export const CustomResourceDefinitionVersions = resource => {
               className="fd-margin--md"
             >
               <LayoutPanel.Header>
-                <LayoutPanel.Head title="Schema" />
+                <LayoutPanel.Head
+                  title={t('custom-resource-definitions.subtitle.schema')}
+                />
               </LayoutPanel.Header>
               <LayoutPanel.Body>
                 <MonacoEditor

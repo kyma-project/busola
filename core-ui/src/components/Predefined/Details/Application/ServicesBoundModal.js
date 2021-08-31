@@ -3,16 +3,20 @@ import React from 'react';
 import { Link } from 'fundamental-react';
 import { Modal } from 'react-shared';
 import ServiceListItem from './ServiceListItem';
+import { useTranslation } from 'react-i18next';
 
 export default function ServicesBoundModal({ binding }) {
+  const { t } = useTranslation();
   const namespace = binding.metadata.namespace;
 
   const modalOpeningComponent = <Link className="fd-link">{namespace}</Link>;
 
   return (
     <Modal
-      confirmText="OK"
-      title={`Services and Events bound to '${namespace}'`}
+      confirmText={t('applications.button.ok')}
+      title={t('applications.subtitle.bound-to', {
+        namespace: namespace,
+      })}
       modalOpeningComponent={modalOpeningComponent}
     >
       <ul>
@@ -21,7 +25,9 @@ export default function ServicesBoundModal({ binding }) {
             <ServiceListItem service={s} />
           </li>
         ))}
-        {!binding.spec.services?.length && <p>No bound services found.</p>}
+        {!binding.spec.services?.length && (
+          <p>{t('applications.messages.no-bound-service')}</p>
+        )}
       </ul>
     </Modal>
   );

@@ -28,7 +28,7 @@ const DisableSidecarField = ({ onChange }) => {
             id="disable-istio"
             onChange={e => onChange(e.target.checked)}
           >
-            Disable side-car injection
+            {t('namespaces.create-modal.disable-sidecar')}
           </Checkbox>
         </Tooltip>
       </FormItem>
@@ -56,7 +56,7 @@ const MemoryQuotasCheckbox = ({ isCheckedRef, children }) => {
             onChange={e => setIsExpanded(e.target.checked)}
             aria-label="memory-quotas"
           >
-            Apply Total Memory Quotas
+            {t('namespaces.create-modal.apply-memory-quotas')}
           </Checkbox>
         </Tooltip>
 
@@ -147,7 +147,7 @@ const ContainerLimitsCheckbox = ({ isCheckedRef, children }) => {
             id="container-limits"
             onChange={e => setIsExpanded(e.target.checked)}
           >
-            Apply limits per container
+            {t('namespaces.create-modal.apply-limits')}
           </Checkbox>
         </Tooltip>
         {isExpanded && children}

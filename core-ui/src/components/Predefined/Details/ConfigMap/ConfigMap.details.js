@@ -3,8 +3,10 @@ import { ModalWithForm } from 'react-shared';
 import { Button } from 'fundamental-react';
 import { EditConfigMapForm } from './EditConfigMapForm';
 import { ReadonlyEditorPanel } from '../../../../shared/components/ReadonlyEditorPanel';
+import { useTranslation } from 'react-i18next';
 
 export const ConfigMapsDetails = ({ DefaultRenderer, ...otherParams }) => {
+  const { t } = useTranslation();
   const ConfigMapEditor = resource => {
     const { data } = resource;
     return Object.keys(data || {}).map(key => (
@@ -16,13 +18,13 @@ export const ConfigMapsDetails = ({ DefaultRenderer, ...otherParams }) => {
     configMap => (
       <ModalWithForm
         key="edit-config-map-modal"
-        title="Edit Config Map"
+        title={t('config-maps.subtitle.edit-config-map')}
         modalOpeningComponent={
           <Button className="fd-margin-end--tiny" option="transparent">
-            Edit
+            {t('common.buttons.edit')}
           </Button>
         }
-        confirmText="Update"
+        confirmText={t('config-maps.buttons.update')}
         className="fd-dialog--xl-size modal-width--m"
         renderForm={props => (
           <EditConfigMapForm

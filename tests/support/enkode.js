@@ -36,7 +36,7 @@ const DEFAULT_CONFIG = {
         },
       ],
     },
-    BTP_SERVICE_CATALOG: {
+    BTP_CATALOG: {
       selectors: [
         {
           type: 'apiGroup',

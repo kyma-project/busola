@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { FormItem, FormLabel } from 'fundamental-react';
 import CheckboxFormControl from './CheckboxFormControl';
-import { grantTypes, responseTypes, emptySpec, validateSpec } from './helpers';
+import { GrantTypes, ResponseTypes, emptySpec, validateSpec } from './helpers';
 import { createOAuthClient } from './createOAuthClient';
 
 export const OAuth2ClientsCreate = ({
@@ -68,7 +68,7 @@ export const OAuth2ClientsCreate = ({
       <FormItem className="clearfix">
         <CheckboxFormControl
           name="Response types"
-          availableValues={responseTypes}
+          availableValues={ResponseTypes()}
           values={spec.responseTypes}
           onChange={values => setSpec({ ...spec, responseTypes: values })}
         />
@@ -77,7 +77,7 @@ export const OAuth2ClientsCreate = ({
         <CheckboxFormControl
           required={true}
           name="Grant types"
-          availableValues={grantTypes}
+          availableValues={GrantTypes()}
           values={spec.grantTypes}
           onChange={values => setSpec({ ...spec, grantTypes: values })}
         />
