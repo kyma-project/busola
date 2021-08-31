@@ -42,6 +42,7 @@ export function AdvancedForm({ serviceInstance, setServiceInstance }) {
         setValue={parameters =>
           setServiceInstance({ ...serviceInstance, parameters })
         }
+        invalidValueMessage={t('btp-instances.create.params-invalid')}
         validate={parsed => !!parsed && typeof parsed === 'object'}
       />
     </>

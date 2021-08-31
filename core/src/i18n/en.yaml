@@ -47,6 +47,7 @@ btp-instances:
   create:
     external-name-placeholder: Defaults to the instance name if empty.
     offering-name-description: SAP BTP service offering name
+    params-invalid: Parameters must be an object.
     plan-name-description: The plan name to use for the service instance
     title: Create $t(btp-instances.resource-type)
   external-name: External Name
@@ -61,6 +62,8 @@ btp-service-bindings:
   binding-id: Binding ID
   create:
     external-name-placeholder: Defaults to the binding name if empty.
+    params-from-invalid: Parameters must be an array of objects.
+    params-invalid: Parameters must be an object.
     secret-description: The Secret will be created if it doesn't exist.
     title: Create $t(btp-service-bindings.resource-type)
   data: Binding Data
@@ -142,7 +145,7 @@ common:
     save: Save
   create-modal:
     delete-confirm: Don't ask this again
-    editor-error: "Parse error: {{error}}, changes won't be saved."
+    editor-error: 'Parse error: {{error}}, previous valid input will be used.'
     messages:
       failure: Failed to create the {{resourceType}}
       success: '{{resourceType}} created'
@@ -177,7 +180,7 @@ common:
     loading-name: Loading name...
     no-instances-found: No {{value}} found.
     no-instances-found-namespace: No {{value}} found in this Namespace.
-    parse-error: Parse error, changes will not be saved.
+    parse-error: Parse error, previous valid input will be used.
     type-to-select: Start typing to select {{value}} from list.
   tooltips:
     copy-to-clipboard: Copy to clipboard

@@ -7,10 +7,17 @@ import { useTranslation } from 'react-i18next';
 export const isObject = value =>
   !!value && typeof value === 'object' && !Array.isArray(value);
 
-export function JSONSection({ title, value, setValue, validate = isObject }) {
+export function JSONSection({
+  title,
+  value,
+  setValue,
+  invalidValueMessage,
+  validate = isObject,
+}) {
   const { t } = useTranslation();
   const { theme } = useTheme();
-  const [areParamsValid, setParamsValid] = React.useState(true);
+  const [isValueParseable, setValueParseable] = React.useState(true);
+  const [isValueValid, setValueValid] = React.useState(true);
   const [editorValue, setEditorValue] = React.useState(value);
 
   React.useEffect(() => setEditorValue(value), [value]);
@@ -18,8 +25,10 @@ export function JSONSection({ title, value, setValue, validate = isObject }) {
   const isValid = value => {
     try {
       const parsed = JSON.parse(value);
+      setValueParseable(true);
       return validate(parsed);
     } catch (_) {
+      setValueParseable(false);
       return false;
     }
   };
@@ -27,24 +36,23 @@ export function JSONSection({ title, value, setValue, validate = isObject }) {
   const onEditorChange = (_, value) => {
     setEditorValue(value);
     if (isValid(value)) {
-      setParamsValid(true);
+      setValueValid(true);
       setValue(value);
     } else {
-      setParamsValid(false);
+      setValueValid(false);
     }
   };
 
+  const actions = (!isValueParseable || !isValueValid) && (
+    <MessageStrip type="warning">
+      {!isValueParseable
+        ? t('common.messages.parse-error')
+        : invalidValueMessage}
+    </MessageStrip>
+  );
+
   return (
-    <CreateForm.CollapsibleSection
-      title={title}
-      actions={
-        !areParamsValid && (
-          <MessageStrip type="warning">
-            {t('common.messages.parse-error')}
-          </MessageStrip>
-        )
-      }
-    >
+    <CreateForm.CollapsibleSection title={title} actions={actions}>
       <ControlledEditor
         height="12em"
         language="json"

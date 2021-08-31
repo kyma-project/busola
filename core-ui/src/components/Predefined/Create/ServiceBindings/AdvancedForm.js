@@ -76,6 +76,7 @@ export function AdvancedForm({
       <JSONSection
         title={t('btp-service-bindings.parameters')}
         value={serviceBinding.parameters}
+        invalidValueMessage={t('btp-service-bindings.create.params-invalid')}
         setValue={parameters =>
           setServiceBinding({ ...serviceBinding, parameters })
         }
@@ -86,6 +87,9 @@ export function AdvancedForm({
         setValue={parametersFrom =>
           setServiceBinding({ ...serviceBinding, parametersFrom })
         }
+        invalidValueMessage={t(
+          'btp-service-bindings.create.params-from-invalid',
+        )}
         validate={validateParametersFrom}
       />
     </>
