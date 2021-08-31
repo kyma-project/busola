@@ -1,11 +1,16 @@
 import React from 'react';
-import { useUpdate } from 'react-shared';
-import { SecretForm } from '../../Create/Secrets/SecretForm';
 import { createPatch } from 'rfc6902';
+import { useTranslation } from 'react-i18next';
+
+import { useUpdate, useNotification } from 'react-shared';
+import { CreateSecretForm } from '../../Create/Secrets/CreateSecretForm';
 
 export function EditSecretForm(props) {
+  const { t } = useTranslation();
   const patchRequest = useUpdate();
-  const { secret, onCompleted, onError, resourceUrl, ...formProps } = props;
+  const notification = useNotification();
+
+  const { secret, resourceUrl, ...formProps } = props;
 
   const onSubmit = async secretInput => {
     const mergedSecret = {
@@ -15,12 +20,23 @@ export function EditSecretForm(props) {
     };
     try {
       await patchRequest(resourceUrl, createPatch(secret, mergedSecret));
-      onCompleted('Secret updated');
+      notification.notifySuccess({
+        content: t('secrets.edit-modal.messages.success'),
+      });
     } catch (e) {
       console.warn(e);
-      onError('Cannot update Secret', `Error: ${e.message}`);
+      notification.notifyError({
+        content: t('secrets.edit-modal.messages.failure', { error: e.message }),
+      });
     }
   };
 
-  return <SecretForm {...formProps} secret={secret} onSubmit={onSubmit} />;
+  return (
+    <CreateSecretForm
+      {...formProps}
+      existingSecret={secret}
+      onSubmit={onSubmit}
+      isEncoded={true}
+    />
+  );
 }
