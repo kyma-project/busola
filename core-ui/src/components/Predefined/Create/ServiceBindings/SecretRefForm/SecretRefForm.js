@@ -4,6 +4,7 @@ import { Button, Icon, MessageStrip } from 'fundamental-react';
 import { v4 as uuid } from 'uuid';
 import './SecretRefFrom.scss';
 import { base64Decode } from 'shared/helpers';
+import { useTranslation } from 'react-i18next';
 
 const isValidJSONObject = value => {
   try {
@@ -45,18 +46,21 @@ export function SecretRefForm({
   loading,
   error,
 }) {
+  const { t } = useTranslation();
+
   React.useEffect(() => {
     if (Array.isArray(refs)) {
       setRefsValid(refs.every(ref => !getRefValidation(ref, refs)));
     } else {
       setRefsValid(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refs]);
 
   if (!Array.isArray(refs)) {
     return (
       <MessageStrip type="error">
-        spec.parametersFrom must be an array.
+        {t('btp-service-bindings.create.ref-form.parametersFrom-must-be-array')}
       </MessageStrip>
     );
   }
@@ -91,11 +95,13 @@ export function SecretRefForm({
   const getRefValidation = (ref, otherRefs) => {
     try {
       if (!ref.secretKeyRef.name) {
-        return 'Choose a Secret.';
+        return t('btp-service-bindings.create.ref-form.choose-secret');
       } else if (!ref.secretKeyRef.key) {
-        return 'Choose Secret key.';
+        return t('btp-service-bindings.create.ref-form.choose-key');
       } else if (!isValidJSONObject(getSecretValue(ref))) {
-        return 'Secret data value must be a JSON object.';
+        return t(
+          'btp-service-bindings.create.ref-form.value-must-be-json-object',
+        );
       }
 
       const duplicates = otherRefs.filter(
@@ -105,28 +111,31 @@ export function SecretRefForm({
       );
 
       if (duplicates.length > 1) {
-        return 'This ref already exists.';
+        return t('btp-service-bindings.create.ref-form.duplicate-ref');
       }
     } catch (e) {
       console.warn(e);
-      return 'Ref is invalid.';
+      return t('btp-service-bindings.create.ref-form.invalid-ref');
     }
     return '';
   };
 
   const addRefButton = () => {
+    const text = t('common.buttons.add-new');
     if (loading || error) {
       return (
-        <Tooltip content={loading ? 'Loading...' : error.message}>
+        <Tooltip
+          content={loading ? t('common.headers.loading') : error.message}
+        >
           <Button glyph="add" disabled>
-            Add new
+            {text}
           </Button>
         </Tooltip>
       );
     }
     return (
       <Button glyph="add" onClick={addRef}>
-        Add new
+        {text}
       </Button>
     );
   };
@@ -161,7 +170,7 @@ export function SecretRefForm({
               options={secretNames}
               selectedKey={ref.secretKeyRef.name}
               onSelect={onSecretSelect(ref)}
-              placeholder="Choose secret..."
+              placeholder={t('btp-service-bindings.create.choose-secret')}
             />
             {ref.secretKeyRef.name ? (
               <Dropdown
@@ -169,11 +178,16 @@ export function SecretRefForm({
                 options={getSecretKeys(ref.secretKeyRef.name)}
                 selectedKey={ref.secretKeyRef.key}
                 onSelect={onKeySelect(ref)}
-                placeholder="Choose key..."
-                emptyListMessage="This Secret has no data."
+                placeholder={t('btp-service-bindings.create.choose-secret-key')}
+                emptyListMessage={t('btp-service-bindings.create.empty-secret')}
               />
             ) : (
-              <Dropdown disabled placeholder="Choose secret first." />
+              <Dropdown
+                disabled
+                placeholder={t(
+                  'btp-service-bindings.create.choose-secret-first',
+                )}
+              />
             )}
             <textarea
               disabled

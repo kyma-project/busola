@@ -59,6 +59,10 @@ applications:
     description: Descritpion
     events: Events
     service-and-event: Service & event bindings
+  labels:
+    applications-and-events: Applications & Events
+    description: Description
+    namespace: Namespace
   messages:
     app-created: Application {{applicationName}} created
     binding-deleted: Binding deleted
@@ -76,19 +80,15 @@ applications:
     show-namespaces: Show Namespaces
     some-apis: There are some APIs
     some-events: There are some events
-  labels:
-    applications-and-events: Applications & Events
-    description: Description
-    namespace: Namespace
   placeholders:
     description: Specify a description for your Application
     name: Specify a name for your Application
     namespace: Choose Namespace...
   subtitle:
+    bound-to: Services and events bound to  '{{namespace}}'
     connect-app: Connect Application
     create-app: Create Application
     create-binding: Create Namespace Binding
-    bound-to: Services and events bound to  '{{namespace}}'
     edit-binding: Edit ServiceClass Binding in '{{namespace}}'
     namespace-bindings: Namespace Bindings
     provided-services: Provided Services & Events
@@ -118,6 +118,16 @@ btp-service-bindings:
     external-name-placeholder: Defaults to the binding name if empty.
     params-from-invalid: Parameters must be an array of objects.
     params-invalid: Parameters must be an object.
+    ref-form:
+      choose-key: Choose Secret key.
+      choose-secret: Choose a Secret.
+      choose-secret-first: Choose the Secret first.
+      choose-secret-key: Choose Secret key
+      duplicate-ref: This ref already exists.
+      empty-secret: This Secret has no data
+      invalid-ref: Ref is invalid.
+      parametersFrom-must-be-array: spec.parametersFrom must be an array.
+      value-must-be-json-object: Secret data value must be a JSON object.
     secret-description: The Secret will be created if it doesn't exist.
     title: Create $t(btp-service-bindings.resource-type)
   data: Binding Data
@@ -192,6 +202,7 @@ clusters:
     title: Storage Type
 common:
   buttons:
+    add-new: Add new
     cancel: Cancel
     create: Create
     delete: Delete
@@ -286,8 +297,8 @@ custom-resource-definitions:
     list-kind: List Kind
     plural: Plural
     scope: Scope
-    singular: Singular
     short-names: Short Names
+    singular: Singular
     type: Type
     value: Value
   messages:
@@ -515,12 +526,12 @@ namespaces:
   tooltips:
     container-memory-limit: Define memory constraints for individual containers in your Namespace.
     create: Select this option to disable Istio to mediate all communication between the Pods in your Namespace.
+    healthy-resources: '{{value}}/{{total}} {{resourceType}} are healthy.'
     memory-examples: 'Use plain value in bytes (128974848) or equivalent suffixes (e.g.: 129e6, 129M, 123Mi).'
+    no-resources: There are no {{resourceType}} in this Namespace
     total-memory-limit: Define constraints that limit total memory consumption in your Namespace.
     usage-of-memory-limits: This Namespace uses {{valueText}} of {{maxText}} its memory limits.
     usage-of-memory-requests: This Namespace uses {{valueText}} of {{maxText}} its memory requests.
-    no-resources: There are no {{resourceType}} in this Namespace
-    healthy-resources: '{{value}}/{{total}} {{resourceType}} are healthy.'
 no-permissions:
   title: No Permissions
 node-details:
@@ -532,10 +543,9 @@ node-details:
   timestamp: Timestamp
   title-warnings: Warnings
 oauth2-clients:
-  title: OAuth2 Clients
   grand-types:
-    client-credentials: Client credentials
     authorization-code: Authorization code
+    client-credentials: Client credentials
     implicit: Implicit
     refresh-token: Refresh token
   headers:
@@ -545,17 +555,18 @@ oauth2-clients:
     response-types: Response types
     scope: Scope
   response-types:
-    id-token: ID token
     code: Code
+    id-token: ID token
     token: Token
+  title: OAuth2 Clients
 observability:
   title: Observability
 pods:
   buttons:
     view-logs: View Logs
   headers:
-    type: Type
     pod-ip: Pod IP
+    type: Type
     volume-name: Volume Name
   labels:
     constainers: Containers
@@ -596,8 +607,6 @@ role-bindings:
     choose-role: Choose role
   errors:
     cannot-create: Cannot create RoleBinding
-  messages:
-    created: RoleBinding {{name}} created
   headers:
     kind: Kind
     role-name: Role Name
@@ -607,6 +616,8 @@ role-bindings:
     role: Role
     user: User
     user-group: User Group
+  messages:
+    created: RoleBinding {{name}} created
   placeholders:
     choose-role: Choose role...
     user-group: User group
@@ -642,10 +653,10 @@ secrets:
       success: Secret updated
   headers:
     type: Type
-  metadata: Metadata
   labels:
     annotations: Annotations
     type: Secret type
+  metadata: Metadata
   title: Secrets
   title-edit-secret: Edit Secret
   updated: Secret updated
