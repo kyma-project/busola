@@ -5,6 +5,7 @@ import {
   useMicrofrontendContext,
   Dropdown,
 } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 
 import { ResourceNameInput, FormInput } from 'components/Lambdas/components';
 import { validateResourceName } from 'components/Lambdas/helpers/misc';
@@ -34,6 +35,7 @@ export default function RepositoryForm({
   formType = FORM_TYPE.CREATE,
 }) {
   const { namespaceId: namespace } = useMicrofrontendContext();
+  const { i18n } = useTranslation();
   const [errors, setErrors] = useState(
     repository ? [] : [ERRORS.REPOSITORY_URL],
   );
@@ -210,6 +212,7 @@ export default function RepositoryForm({
         id="authType"
         onSelect={(_, selected) => updateAuthType(selected)}
         selectedKey={authTypeOptions[0].key}
+        i18n={i18n}
       />
 
       {showSecretName && (

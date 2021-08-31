@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { LayoutPanel } from 'fundamental-react';
 import { Dropdown } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 
 import { Input } from './TableElements/Input';
 import { Row } from './TableElements/Row';
@@ -26,6 +27,7 @@ export default function LambdaResources({
   setValue = () => void 0,
   defaultPreset = customPreset,
 }) {
+  const { i18n } = useTranslation();
   const [currentPreset, setCurrentPreset] = useState(defaultPreset);
 
   useEffect(() => {
@@ -83,6 +85,7 @@ export default function LambdaResources({
                 id={inputNames.preset}
                 name={inputNames.preset}
                 onSelect={(_, selected) => onChangePreset(selected)}
+                i18n={i18n}
               />
             }
           />

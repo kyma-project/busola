@@ -1,5 +1,6 @@
 import React from 'react';
 import { Select, FormLabel } from 'fundamental-react';
+import { useTranslation } from 'react-i18next';
 
 import { Tooltip } from '../..';
 import './Dropdown.scss';
@@ -13,14 +14,16 @@ export function Dropdown({
   id,
   disabled = false,
   _ref,
-  emptyListMessage = 'No resources available',
+  emptyListMessage,
+  i18n,
   ...fdSelectProps
 }) {
+  const { t } = useTranslation(null, { i18n });
   if (!options || !options.length) {
     options = [
       {
         key: 'empty-list',
-        text: emptyListMessage,
+        text: emptyListMessage || t('components.dropdown.empty-list'),
       },
     ];
     selectedKey = options[0].key;

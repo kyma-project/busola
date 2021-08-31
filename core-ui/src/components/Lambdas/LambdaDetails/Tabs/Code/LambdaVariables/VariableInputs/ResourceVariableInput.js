@@ -22,7 +22,7 @@ export default function ResourceVariableInput({
   setValidity,
   setInvalidModalPopupMessage,
 }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [variable, setVariable] = useState(currentVariable);
   const [debouncedCallback] = useDebouncedCallback(newVariable => {
     onUpdateVariable(newVariable);
@@ -218,6 +218,7 @@ export default function ResourceVariableInput({
               selectedKey={
                 currentVariable?.valueFrom?.secretKeyRef?.name || null
               }
+              i18n={i18n}
             />
           </FormItem>
           <FormItem className="grid-input-fields">

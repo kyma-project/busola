@@ -226,6 +226,13 @@ common:
     save: Save
     search: Search
     value: Value must start and end with an alphanumeric character, can contain '-', '_' or '.'
+components:
+  dropdown:
+    empty-list: No resources available
+  error-panel:
+    error: An error occured. The component cannot be rendered.
+  file-input:
+    drag-file: Drag file here
 config-maps:
   buttons:
     update: Update

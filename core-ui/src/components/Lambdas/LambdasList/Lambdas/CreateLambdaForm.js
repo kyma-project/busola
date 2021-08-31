@@ -5,6 +5,7 @@ import {
   useMicrofrontendContext,
   Dropdown,
 } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 
 import {
   ResourceNameInput,
@@ -36,6 +37,7 @@ export default function CreateLambdaForm({
 }) {
   const { namespaceId: namespace } = useMicrofrontendContext();
   const createLambda = useCreateLambda({ redirect: true });
+  const { i18n } = useTranslation();
 
   const [errors, setErrors] = useState([]);
   const [nameStatus, setNameStatus] = useState('');
@@ -202,6 +204,7 @@ export default function CreateLambdaForm({
         selectedKey={runtimeOptions[0].key}
         onSelect={(_, selected) => setRuntime(selected.key)}
         inlineHelp={LAMBDAS_LIST.CREATE_MODAL.INPUTS.RUNTIME.INLINE_HELP}
+        i18n={i18n}
       />
 
       <Dropdown
@@ -211,6 +214,7 @@ export default function CreateLambdaForm({
         selectedKey={sourceTypeOptions[0].key}
         onSelect={(_, selected) => setSourceType(selected.key)}
         inlineHelp={LAMBDAS_LIST.CREATE_MODAL.INPUTS.SOURCE_TYPE.INLINE_HELP}
+        i18n={i18n}
       />
 
       {sourceType &&
@@ -229,6 +233,7 @@ export default function CreateLambdaForm({
               inlineHelp={
                 LAMBDAS_LIST.CREATE_MODAL.INPUTS.REPOSITORY.INLINE_HELP
               }
+              i18n={i18n}
             />
 
             <FormInput

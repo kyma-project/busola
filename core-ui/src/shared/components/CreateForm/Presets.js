@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Dropdown } from 'react-shared';
 
 export function Presets({ presets, onSelect }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const options = presets.map(({ name }) => ({
     key: name,
     text: name,
@@ -19,6 +19,7 @@ export function Presets({ presets, onSelect }) {
         e.stopPropagation();
         onSelect(presets.find(p => p.name === preset.key));
       }}
+      i18n={i18n}
     />
   );
 }

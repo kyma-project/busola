@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Icon } from 'fundamental-react';
 import classNames from 'classnames';
 import './FileInput.scss';
+import { useTranslation } from 'react-i18next';
 
 FileInput.propTypes = {
   fileInputChanged: PropTypes.func.isRequired,
@@ -17,9 +18,11 @@ export function FileInput({
   acceptedFileFormats,
   inputRef,
   required,
+  i18n,
 }) {
   const [fileName, setFileName] = useState('');
   const [draggingOverCounter, setDraggingCounter] = useState(0);
+  const { t } = useTranslation(null, { i18n });
 
   // needed for onDrag to fire
   function dragOver(e) {
@@ -66,7 +69,7 @@ export function FileInput({
       />
       <div>
         <Icon glyph="upload" ariaLabel="file upload" />
-        <p>Drag file here</p>
+        <p>{t('components.file-input.drag-file')}</p>
         {availableFormatsMessage && (
           <p className="file-input__secondary">{availableFormatsMessage}</p>
         )}

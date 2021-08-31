@@ -30,7 +30,7 @@ export default function AccessStrategyForm({
   handleFormChanged,
 }) {
   const selectedType = strategy.accessStrategies[0].handler;
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const deleteButtonWrapper = canDelete
     ? component => component
@@ -91,6 +91,7 @@ export default function AccessStrategyForm({
                 options={options}
                 selectedKey={selectedType}
                 onSelect={handleStrategyChange}
+                i18n={i18n}
               />
             </FormItem>
             <MethodsForm

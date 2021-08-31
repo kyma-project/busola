@@ -13,7 +13,7 @@ const ServicesDropdown = ({
   defaultValue,
   serviceName,
 }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   if (loading) {
     return t('api-rules.services.loading');
   }
@@ -67,6 +67,7 @@ const ServicesDropdown = ({
         onSelect={onSelect}
         selectedKey={defaultService}
         emptyListMessage={t('api-rules.services.ns-no-services')}
+        i18n={i18n}
       />
     </FormItem>
   );
