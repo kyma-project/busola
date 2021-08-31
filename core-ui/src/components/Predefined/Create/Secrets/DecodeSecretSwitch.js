@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useTranslation } from 'react-i18next';
 import { Button } from 'fundamental-react';
 
 import { useNotification } from 'react-shared';
 import { base64Decode, base64Encode } from 'shared/helpers';
+import { useTranslation } from 'react-i18next';
 
 DecodeSecretSwitch.propTypes = {
   entries: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
@@ -47,7 +47,7 @@ export function DecodeSecretSwitch({
       glyph={isEncoded ? 'show' : 'hide'}
       onClick={onClick}
     >
-      {isEncoded ? t('secrets.decode') : t('secrets.encode')}
+      {isEncoded ? t('secrets.buttons.decode') : t('secrets.buttons.encode')}
     </Button>
   );
 }

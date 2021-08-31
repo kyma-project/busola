@@ -9,8 +9,11 @@ import {
   Spinner,
   useMicrofrontendContext,
 } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 
 export function CustomResource({ params }) {
+  const { t } = useTranslation();
+
   const { namespaceId: namespace } = useMicrofrontendContext();
   const {
     customResourceDefinitionName,
@@ -36,7 +39,11 @@ export function CustomResource({ params }) {
       return typeof value === 'boolean' ? value.toString() : value;
     };
 
-    const headerRenderer = () => ['Name', 'Description', 'Value'];
+    const headerRenderer = () => [
+      t('common.headers.name'),
+      t('custom-resource-definitions.headers.description'),
+      t('custom-resource-definitions.headers.value'),
+    ];
     const rowRenderer = entry => [
       entry.name,
       entry.description || EMPTY_TEXT_PLACEHOLDER,
@@ -45,7 +52,7 @@ export function CustomResource({ params }) {
 
     return (
       <GenericList
-        title="Additional Printer Columns"
+        title={t('custom-resource-definitions.subtitle.additional-columns')}
         entries={version?.additionalPrinterColumns || []}
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}

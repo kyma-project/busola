@@ -2,6 +2,7 @@ import React from 'react';
 import { NamespaceStatus } from '../Details/Namespace/NamespaceStatus';
 import LuigiClient from '@luigi-project/client';
 import { getFeatureToggle } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 
 const FilterNamespaces = namespace => {
   const showHiddenNamespaces = getFeatureToggle('showHiddenNamespaces');
@@ -13,9 +14,10 @@ const FilterNamespaces = namespace => {
 };
 
 export const NamespacesList = ({ DefaultRenderer, ...otherParams }) => {
+  const { t } = useTranslation();
   const customColumns = [
     {
-      header: 'Status',
+      header: t('common.headers.status'),
       value: namespace => (
         <NamespaceStatus namespaceStatus={namespace.status} />
       ),

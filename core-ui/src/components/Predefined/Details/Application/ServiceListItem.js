@@ -1,8 +1,10 @@
 import React from 'react';
 import { Icon } from 'fundamental-react';
 import { Tooltip } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 
 export default function ServiceListItem({ service }) {
+  const { t } = useTranslation();
   const glyphType = toggle => (toggle ? 'accept' : 'decline');
 
   return (
@@ -11,21 +13,23 @@ export default function ServiceListItem({ service }) {
       placement="left"
       content={
         <>
-          APIs:{' '}
+          {t('applications.headers.apis')}:{' '}
           <Icon
             glyph={glyphType(service.hasAPIs)}
             ariaLabel={
-              service.hasAPIs ? 'There are some APIs' : 'There are no APIs'
+              service.hasAPIs
+                ? t('applications.messages.some-apis')
+                : t('applications.messages.no-apis')
             }
           />
           <br />
-          Events:
+          {t('applications.headers.events')}:
           <Icon
             glyph={glyphType(service.hasEvents)}
             ariaLabel={
               service.hasEvents
-                ? 'There are some events'
-                : 'There are no events'
+                ? t('applications.messages.some-events')
+                : t('applications.messages.no-events')
             }
           />
         </>

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import LuigiClient from '@luigi-project/client';
+import { useTranslation } from 'react-i18next';
 
 import { LayoutPanel, FormItem, FormLabel, Button } from 'fundamental-react';
 import './ContainersData.scss';
@@ -27,50 +28,67 @@ const getPorts = ports => {
   }
 };
 
-const ContainerComponent = ({ container }) => (
-  <>
-    <LayoutPanel.Header>
-      <LayoutPanel.Head title={container.name} />
-      <LayoutPanel.Actions>
-        <Button
-          aria-label={'view-logs-for-' + container.name}
-          onClick={() =>
-            LuigiClient.linkManager().navigate(`containers/${container.name}`)
-          }
-        >
-          View Logs
-        </Button>
-      </LayoutPanel.Actions>
-    </LayoutPanel.Header>
-    <LayoutPanel.Body>
-      <SecretComponent name="Name" value={container.name} />
-      {container.image && (
-        <SecretComponent name="Image" value={container.image} />
-      )}
-      {container.imagePullPolicy && (
-        <SecretComponent
-          name="Image pull policy"
-          value={container.imagePullPolicy}
-        />
-      )}
-      {container.ports && (
-        <SecretComponent name="Ports" value={getPorts(container.ports)} />
-      )}
-    </LayoutPanel.Body>
-  </>
-);
-
 ContainersData.propTypes = {
   containers: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default function ContainersData({ type, containers }) {
+  const { t } = useTranslation();
+
+  const ContainerComponent = ({ container }) => (
+    <>
+      <LayoutPanel.Header>
+        <LayoutPanel.Head title={container.name} />
+        <LayoutPanel.Actions>
+          <Button
+            aria-label={'view-logs-for-' + container.name}
+            onClick={() =>
+              LuigiClient.linkManager().navigate(`containers/${container.name}`)
+            }
+          >
+            {t('pods.buttons.view-logs')}
+          </Button>
+        </LayoutPanel.Actions>
+      </LayoutPanel.Header>
+      <LayoutPanel.Body>
+        <SecretComponent
+          name={t('common.headers.name')}
+          value={container.name}
+        />
+        {container.image && (
+          <SecretComponent
+            name={t('pods.labels.image')}
+            value={container.image}
+          />
+        )}
+        {container.imagePullPolicy && (
+          <SecretComponent
+            name={t('pods.labels.image-pull-policy')}
+            value={container.imagePullPolicy}
+          />
+        )}
+        {container.ports && (
+          <SecretComponent
+            name={t('pods.labels.ports')}
+            value={getPorts(container.ports)}
+          />
+        )}
+      </LayoutPanel.Body>
+    </>
+  );
+
   const Wrapper = ({ children }) => (
     <div className="container-wrapper">{children}</div>
   );
 
   if (!containers) {
-    return <Wrapper>{type} not found.</Wrapper>;
+    return (
+      <Wrapper>
+        {t('pods.message.type-not-found', {
+          type: type,
+        })}
+      </Wrapper>
+    );
   }
 
   return (

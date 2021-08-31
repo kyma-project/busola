@@ -15,11 +15,14 @@ import {
 import './CreateBindingModal.scss';
 import { BindableServicesList } from '../BindableServicesList';
 import { createApplicationBinding } from './createApplicationBinding';
+import { useTranslation } from 'react-i18next';
 
 export default function CreateBindingModal({
   application,
   alreadyBoundNamespaces,
 }) {
+  const { t } = useTranslation();
+
   const { hiddenNamespaces } = useMicrofrontendContext();
   const [servicesToBind, setServicesToBind] = React.useState([]);
   const [namespaceName, setNamespaceName] = React.useState('');
@@ -34,7 +37,7 @@ export default function CreateBindingModal({
 
   const modalOpeningComponent = (
     <Button glyph="add" option="transparent">
-      Create Namespace Binding
+      {t('applications.buttons.create')}
     </Button>
   );
 
@@ -49,11 +52,13 @@ export default function CreateBindingModal({
         `/apis/applicationconnector.kyma-project.io/v1alpha1/namespaces/${namespaceName}/applicationmappings`,
         applicationBinding,
       );
-      notification.notifySuccess({ content: 'Binding created' });
+      notification.notifySuccess({
+        content: t('applications.messages.created'),
+      });
     } catch (e) {
       console.warn(e);
       notification.notifyError({
-        title: 'Failed to create the Binding',
+        title: t('applications.messages.create-failed'),
         content: e.message,
       });
     }
@@ -66,30 +71,30 @@ export default function CreateBindingModal({
 
   return (
     <Modal
-      confirmText="Create"
-      cancelText="Cancel"
-      title="Create Namespace Binding"
+      confirmText={t('common.buttons.create')}
+      cancelText={t('common.buttons.cancel')}
+      title={t('applications.subtitle.create-binding')}
       modalOpeningComponent={modalOpeningComponent}
       onConfirm={createBinding}
       disabledConfirm={!namespaceName}
       onHide={() => setNamespaceName('')}
     >
       {error && error.message}
-      {loading && 'Loading...'}
+      {loading && t('common.headers.loading')}
       {data && (
         <FormFieldset>
-          <FormLabel required>Namespace</FormLabel>
+          <FormLabel required>{t('applications.labels.namespace')}</FormLabel>
           <ComboboxInput
             id="namespace-bindings-combobox"
-            ariaLabel="Choose namespace"
-            placeholder="Choose namespace..."
+            ariaLabel={t('applications.aria.namespace')}
+            placeholder={t('applications.labels.namespace')}
             className="namespace-combobox"
-            noMatchesText="No Namespaces to bind"
+            noMatchesText={t('applications.messages.no-matches-text')}
             options={namespaceNames.map(name => ({
               key: name,
               text: name,
             }))}
-            arrowLabel="Show namespaces"
+            arrowLabel={t('applications.messages.show-namespaces')}
             selectionType="auto-inline"
             onSelectionChange={(_, selected) =>
               setNamespaceName(

@@ -4,8 +4,10 @@ import { BindableServicesList } from './BindableServicesList';
 import { Button, FormFieldset } from 'fundamental-react';
 import { Modal, useUpdate } from 'react-shared';
 import { createPatch } from 'rfc6902';
+import { useTranslation } from 'react-i18next';
 
 export default function EditNamespaceBinding({ application, binding }) {
+  const { t } = useTranslation();
   const namespace = binding.metadata.namespace;
   const [servicesToBind, setServicesToBind] = React.useState([]);
   const patchRequest = useUpdate();
@@ -31,9 +33,11 @@ export default function EditNamespaceBinding({ application, binding }) {
 
   return (
     <Modal
-      confirmText="Edit"
-      cancelText="Cancel"
-      title={`Edit Service Class Binding in '${namespace}'`}
+      confirmText={t('common.buttons.edit')}
+      cancelText={t('common.buttons.cancel')}
+      title={t('applications.subtitle.edit-binding', {
+        namespace: namespace,
+      })}
       modalOpeningComponent={modalOpeningComponent}
       onConfirm={updateBinding}
       onShow={() => setServicesToBind(binding.spec.services)}

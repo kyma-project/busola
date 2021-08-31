@@ -1,12 +1,15 @@
 import React from 'react';
 import { Checkbox, FormLabel, FormItem, Switch } from 'fundamental-react';
 import ServiceListItem from './ServiceListItem';
+import { useTranslation } from 'react-i18next';
 
 export function BindableServicesList({
   services,
   availableServices,
   setServices,
 }) {
+  const { t } = useTranslation();
+
   if (!services) services = [];
   const [allServices, setAllServices] = React.useState(!services.length);
 
@@ -30,7 +33,7 @@ export function BindableServicesList({
 
   const noServicesMessage = (
     <p className="fd-has-color-status-4 fd-margin-top--sm fd-margin-bottom--sm">
-      This Application doesn't expose any Service or Events.
+      {t('applications.messages.dont-expose')}
     </p>
   );
 
@@ -41,7 +44,7 @@ export function BindableServicesList({
           checked={allServices}
           onChange={() => setAllServices(!allServices)}
         >
-          Select all
+          {t('applications.buttons.select-all')}
         </Switch>
       </FormItem>
       {!allServices && (
@@ -69,7 +72,7 @@ export function BindableServicesList({
   return (
     <>
       <FormLabel required className="fd-margin-top--sm">
-        Applications & Events
+        {t('applications.labels.applications-and-events')}
       </FormLabel>
       {servicesList?.length ? servicesForm : noServicesMessage}
     </>

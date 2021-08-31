@@ -4,15 +4,17 @@ import ApplicationServices from './ApplicationServices';
 import NamespaceBindings from './NamespaceBindings';
 import ConnectApplicationModal from './ConnectApplicationModal';
 import { ApplicationStatus } from './ApplicationStatus';
+import { useTranslation } from 'react-i18next';
 
 export const ApplicationsDetails = ({ DefaultRenderer, ...otherParams }) => {
+  const { t } = useTranslation();
   const customColumns = [
     {
-      header: 'Descritpion',
+      header: t('applications.headers.description'),
       value: app => app.spec.description || '-',
     },
     {
-      header: 'Status',
+      header: t('common.headers.status'),
       value: app => <ApplicationStatus application={app} />,
     },
   ];
