@@ -307,6 +307,7 @@ functions:
       variable-can-override-sbu: This variable can override or be overridden by a variable injected by one of the created Service Bindings.
 gateways:
   title: Gateways
+  selector: Selector
   servers:
     title: Servers
     port: Port
