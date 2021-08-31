@@ -9,24 +9,21 @@ import { ServiceApiRules } from 'components/Lambdas/LambdaDetails/Tabs/Configura
 
 function EventSubscriptionsWrapper(service) {
   const subscriptionsUrl = `/apis/eventing.kyma-project.io/v1alpha1/namespaces/${service.metadata.namespace}/subscriptions`;
-  const ownerRef = {
-    apiVersion: service.apiVersion,
-    kind: service.kind,
-    name: service.metadata.name,
-    uid: service.metadata.uid,
-  };
 
-  const filterByOwnerRef = ({ metadata }) =>
-    metadata.ownerReferences?.find(
-      ref => ref.kind === 'Service' && ref.name === service.metadata.name,
-    );
+  const filterBySink = ({ spec }) => {
+    const { name, namespace } = service.metadata;
+    // match spec.sink with http://{lambdaName}.{namespace}.svc.cluster.local
+    const regex = `http://(.*?).${namespace}.svc.cluster.local`;
+    const match = spec.sink.match(regex);
+    return match && match[1] === name;
+  };
 
   const {
     data: subscriptions = [],
     error,
     loading,
     silentRefetch,
-  } = useGetList(filterByOwnerRef)(subscriptionsUrl, {
+  } = useGetList(filterBySink)(subscriptionsUrl, {
     pollingInterval: 3000,
   });
 
@@ -36,7 +33,7 @@ function EventSubscriptionsWrapper(service) {
     <EventSubscriptions
       key="event-subscriptions"
       isLambda={false}
-      ownerRef={ownerRef}
+      ownerName={service.metadata.name}
       namespace={service.metadata.namespace}
       silentRefetch={silentRefetch}
       subscriptions={subscriptions || []}

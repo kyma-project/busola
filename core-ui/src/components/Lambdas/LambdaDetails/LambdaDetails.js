@@ -60,6 +60,7 @@ export default function LambdaDetails({ lambda }) {
               headerRenderer={defaultHeaderRenderer}
             />
             <EventSubscriptions
+              ownerName={lambda.metadata.name}
               isActive={selectedTabIndex === 1}
               lambda={lambda}
             />
