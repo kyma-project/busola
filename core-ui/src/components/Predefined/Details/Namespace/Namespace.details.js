@@ -7,8 +7,10 @@ import { NamespaceStatus } from './NamespaceStatus';
 import { NamespaceWorkloads } from './NamespaceWorkloads/NamespaceWorkloads';
 import { ResourcesUsage } from './ResourcesUsage';
 import './Namespace.details.scss';
+import { useTranslation } from 'react-i18next';
 
 export const NamespacesDetails = ({ DefaultRenderer, ...otherParams }) => {
+  const { t } = useTranslation();
   const microfrontendContext = useMicrofrontendContext();
   const { features } = microfrontendContext;
   const limitRangesParams = {
@@ -65,7 +67,7 @@ export const NamespacesDetails = ({ DefaultRenderer, ...otherParams }) => {
 
   const customColumns = [
     {
-      header: 'Status',
+      header: t('common.headers.status'),
       value: namespace => (
         <NamespaceStatus namespaceStatus={namespace.status} />
       ),
@@ -75,7 +77,7 @@ export const NamespacesDetails = ({ DefaultRenderer, ...otherParams }) => {
   return (
     <DefaultRenderer
       {...otherParams}
-      windowTitle="Overview"
+      windowTitle={t('namespaces.overview.title')}
       customColumns={customColumns}
       headerActions={headerActions}
     >

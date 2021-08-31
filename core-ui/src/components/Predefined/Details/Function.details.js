@@ -5,6 +5,7 @@ import LambdaDetailsWrapper from 'components/Lambdas/LambdaDetails/LambdaDetails
 import { prettySourceType } from 'components/Lambdas/helpers/lambdas';
 import { prettyRuntime } from 'components/Lambdas/helpers/runtime';
 import { LambdaStatusBadge } from 'components/Lambdas/LambdaStatusBadge/LambdaStatusBadge';
+import { useTranslation } from 'react-i18next';
 
 export const FunctionsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
@@ -14,11 +15,11 @@ export const FunctionsDetails = ({ DefaultRenderer, ...otherParams }) => {
       value: resource => <LambdaStatusBadge status={resource.status} />,
     },
     {
-      header: t('functions.create-view.labels.source-type'),
+      header: t('functions.headers.source-type'),
       value: resource => prettySourceType(resource.spec.type),
     },
     {
-      header: t('functions.create-view.labels.runtime'),
+      header: t('functions.headers.runtime'),
       value: resource => prettyRuntime(resource.spec.runtime),
     },
   ];

@@ -10,8 +10,11 @@ import {
   handleDelete,
   useNotification,
 } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 
 export default function NamespaceBindings(application) {
+  const { t } = useTranslation();
+
   const deleteRequest = useDelete();
   const notification = useNotification();
 
@@ -22,7 +25,10 @@ export default function NamespaceBindings(application) {
     pollingInterval: 3000,
   });
 
-  const headerRenderer = () => ['Name', 'Service & event bindings'];
+  const headerRenderer = () => [
+    t('common.headers.name'),
+    t('applications.headers.service-and-event'),
+  ];
   const totalBindingsCount = (spec.services || []).flatMap(s => s.entries)
     .length;
   const alreadyBoundNamespaces = data?.map(aM => aM.metadata.namespace) || [];
@@ -42,7 +48,7 @@ export default function NamespaceBindings(application) {
       name: 'Delete',
       handler: binding =>
         handleDelete(
-          'Bindings',
+          t('applications.bindings'),
           null,
           binding.metadata.name,
           notification,
@@ -53,7 +59,7 @@ export default function NamespaceBindings(application) {
           () => {
             silentRefetch();
             notification.notifySuccess({
-              content: 'Binding deleted',
+              content: t('applications.messages.binding-deleted'),
             });
           },
         ),
@@ -70,14 +76,14 @@ export default function NamespaceBindings(application) {
         />
       }
       actions={actions}
-      title="Namespace Bindings"
+      title={t('applications.subtitle.namespace-bindings')}
       showSearchField={false}
       entries={data || []}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       serverDataError={error}
       serverDataLoading={loading}
-      notFoundMessage="No bindings"
+      notFoundMessage={t('applications.messages.binding-not-found')}
     />
   );
 }

@@ -2,25 +2,28 @@ import React from 'react';
 import { CustomResourceDefinitionVersions } from './CustomResourceDefinitionVersions';
 
 import { GenericList, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 
 export const CustomResourceDefinitionsDetails = ({
   DefaultRenderer,
   ...otherParams
 }) => {
+  const { t } = useTranslation();
+
   const customColumns = [
     {
-      header: 'Scope',
+      header: t('custom-resource-definitions.headers.scope'),
       value: resource => resource.spec.scope,
     },
   ];
 
   const ResourceNames = resource => {
     const headerRenderer = () => [
-      'Kind',
-      'List Kind',
-      'Plural',
-      'Singular',
-      'Short Names',
+      t('custom-resource-definitions.headers.kind'),
+      t('custom-resource-definitions.headers.list-kind'),
+      t('custom-resource-definitions.headers.plural'),
+      t('custom-resource-definitions.headers.singular'),
+      t('custom-resource-definitions.headers.short-names'),
     ];
     const rowRenderer = entry => [
       entry.kind,
@@ -31,7 +34,7 @@ export const CustomResourceDefinitionsDetails = ({
     ];
     return (
       <GenericList
-        title="Names"
+        title={t('custom-resource-definitions.subtitle.names')}
         entries={resource.spec.names ? [resource.spec.names] : []}
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
