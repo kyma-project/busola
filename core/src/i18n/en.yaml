@@ -219,7 +219,7 @@ common:
     download: Download
     duplicate-key: Duplicate key
     error: 'Error: '
-    k8s-name-input: Name must consist of lowercase alphanumeric characters, can contain '-' (e.g.: 'my-name1').
+    k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' (e.g.: 'my-name1')."
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: key=value, must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     read-file: Read file content as a single value, with file name as a key.
@@ -489,7 +489,7 @@ namespaces:
   tooltips:
     container-memory-limit: Define memory constraints for individual containers in your Namespace.
     create: Select this option to disable Istio to mediate all communication between the Pods in your Namespace.
-    memory-examples: Use plain value in bytes (128974848) or equivalent suffixes (e.g.: 129e6, 129M, 123Mi).
+    memory-examples: 'Use plain value in bytes (128974848) or equivalent suffixes (e.g.: 129e6, 129M, 123Mi).'
     total-memory-limit: Define constraints that limit total memory consumption in your Namespace.
     usage-of-memory-limits: This Namespace uses {{valueText}} of {{maxText}} its memory limits.
     usage-of-memory-requests: This Namespace uses {{valueText}} of {{maxText}} its memory requests.
