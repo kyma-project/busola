@@ -1,6 +1,6 @@
 import React from 'react';
 import { Dropdown, Tooltip } from 'react-shared';
-import { Button, Icon } from 'fundamental-react';
+import { Button, Icon, MessageStrip } from 'fundamental-react';
 import { v4 as uuid } from 'uuid';
 import './SecretRefFrom.scss';
 import { base64Decode } from 'shared/helpers';
@@ -45,13 +45,25 @@ export function SecretRefForm({
   loading,
   error,
 }) {
+  React.useEffect(() => {
+    if (Array.isArray(refs)) {
+      setRefsValid(refs.every(ref => !getRefValidation(ref, refs)));
+    } else {
+      setRefsValid(false);
+    }
+  }, [refs]);
+
+  if (!Array.isArray(refs)) {
+    return (
+      <MessageStrip type="error">
+        spec.parametersFrom must be an array.
+      </MessageStrip>
+    );
+  }
+
   const secretNames = (secrets || [])
     .map(s => s.metadata.name)
     .map(n => ({ key: n, text: n }));
-
-  React.useEffect(() => {
-    setRefsValid(refs.every(ref => !getRefValidation(ref, refs)));
-  }, [refs]);
 
   const addRef = () => {
     setRefs([...refs, { secretKeyRef: { name: '', key: '' } }]);
@@ -77,22 +89,27 @@ export function SecretRefForm({
   };
 
   const getRefValidation = (ref, otherRefs) => {
-    if (!ref.secretKeyRef.name) {
-      return 'Choose a Secret.';
-    } else if (!ref.secretKeyRef.key) {
-      return 'Choose Secret key.';
-    } else if (!isValidJSONObject(getSecretValue(ref))) {
-      return 'Secret data value must be a JSON object.';
-    }
+    try {
+      if (!ref.secretKeyRef.name) {
+        return 'Choose a Secret.';
+      } else if (!ref.secretKeyRef.key) {
+        return 'Choose Secret key.';
+      } else if (!isValidJSONObject(getSecretValue(ref))) {
+        return 'Secret data value must be a JSON object.';
+      }
 
-    const duplicates = otherRefs.filter(
-      r =>
-        r.secretKeyRef.name === ref.secretKeyRef.name &&
-        r.secretKeyRef.key === ref.secretKeyRef.key,
-    );
+      const duplicates = otherRefs.filter(
+        r =>
+          r.secretKeyRef.name === ref.secretKeyRef.name &&
+          r.secretKeyRef.key === ref.secretKeyRef.key,
+      );
 
-    if (duplicates.length > 1) {
-      return 'This ref already exists.';
+      if (duplicates.length > 1) {
+        return 'This ref already exists.';
+      }
+    } catch (e) {
+      console.warn(e);
+      return 'Ref is invalid.';
     }
     return '';
   };
@@ -125,11 +142,13 @@ export function SecretRefForm({
     setRefs([...refs]);
   };
 
-  const renderRefs = refs.map(ref => ({
-    ...ref,
-    renderKey: uuid(),
-    validationMessage: getRefValidation(ref, refs),
-  }));
+  const renderRefs = refs
+    .filter(ref => ref.secretKeyRef)
+    .map(ref => ({
+      ...ref,
+      renderKey: uuid(),
+      validationMessage: getRefValidation(ref, refs),
+    }));
 
   return (
     <>
