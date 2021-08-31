@@ -65,6 +65,7 @@ export function toYaml(issuer) {
     spec,
   };
 }
+
 export function fromYaml(yaml, prevIssuer) {
   let type = jp.value(yaml, '$.spec.ca')
     ? 'ca'
@@ -116,27 +117,4 @@ export function createTemplate(namespace) {
     externalAccountSecretName: '',
     externalAccountSecretNamespace: '',
   };
-}
-
-export function createPresets(namespace, t) {
-  return [
-    {
-      name: t('issuers.create.presets.default'),
-      value: createTemplate(namespace),
-    },
-    {
-      name: t('issuers.create.presets.ca'),
-      value: {
-        ...createTemplate(namespace),
-        type: 'ca',
-      },
-    },
-    {
-      name: t('issuers.create.presets.acme'),
-      value: {
-        ...createTemplate(namespace),
-        type: 'acme',
-      },
-    },
-  ];
 }

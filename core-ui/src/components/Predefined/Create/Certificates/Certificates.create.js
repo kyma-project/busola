@@ -58,7 +58,6 @@ export function CertificatesCreate({ onChange, formElementRef, namespace }) {
       fromYaml={fromYaml}
       onCreate={createCertificate}
       onChange={onChange}
-      presets={() => []}
       formElementRef={formElementRef}
     />
   );

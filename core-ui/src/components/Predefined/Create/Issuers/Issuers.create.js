@@ -6,7 +6,7 @@ import { usePost, useNotification } from 'react-shared';
 
 import { CreateForm } from 'shared/components/CreateForm/CreateForm';
 
-import { toYaml, fromYaml, createTemplate, createPresets } from './helpers';
+import { toYaml, fromYaml, createTemplate } from './helpers';
 
 import { SimpleForm } from './SimpleForm';
 import { AdvancedForm } from './AdvancedForm';
@@ -52,7 +52,6 @@ export function IssuersCreate({ onChange, formElementRef, namespace }) {
       fromYaml={fromYaml}
       onCreate={createIssuer}
       onChange={onChange}
-      presets={createPresets(namespace, t)}
       formElementRef={formElementRef}
     />
   );
