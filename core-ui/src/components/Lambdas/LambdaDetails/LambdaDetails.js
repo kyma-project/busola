@@ -50,6 +50,7 @@ export default function LambdaDetails({ lambda }) {
           >
             <ApiRules lambda={lambda} isActive={selectedTabIndex === 1} />
             <EventSubscriptions
+              ownerName={lambda.metadata.name}
               isActive={selectedTabIndex === 1}
               lambda={lambda}
             />

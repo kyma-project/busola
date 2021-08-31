@@ -1,9 +1,6 @@
 export const FUNCTIONS_WINDOW_TITLE = 'Functions';
 export const FIRST_BREADCRUMB_NODE = 'Functions';
 
-export const SERVERLESS_API_VERSION = 'serverless.kyma-project.io/v1alpha1';
-export const SERVERLESS_RESOURCE_KIND = 'Function';
-
 export const SERVERLESS_FUNCTION_REPLICAS_PRESET_LABEL =
   'serverless.kyma-project.io/function-replicas-preset';
 export const SERVERLESS_FUNCTION_RESOURCES_PRESET_LABEL =
