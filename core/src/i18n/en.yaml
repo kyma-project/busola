@@ -162,6 +162,7 @@ common:
     no-permissions-header: Not enough permissions
     no-permissions-message: Contact your administrator to grant you access.
   headers:
+    annotations: Annotations
     created: Created
     labels: Labels
     loading: Loading...
@@ -188,10 +189,12 @@ common:
     duplicate-key: Duplicate key
     error: 'Error: '
     k8s-name-input: Name must contain lower case alphanumeric characters, can contain '-' (like 'my-name1').
+    key: Key must start and end with alphanumeric character, can contain '-', '_' or '.'
     key-value: key=value, must start and end with alphanumeric character, can contain '-', '_' or '.'
     read-file: Read file content as single value, with file name as a key.
     save: Save
     search: Search
+    value: Value must start and end with alphanumeric character, can contain '-', '_' or '.'
 config-maps:
   title: ConfigMaps
 configuration:
@@ -422,6 +425,23 @@ role-bindings:
 roles:
   title: Roles
 secrets:
+  create-modal:
+    messages:
+      decoding-failure: 'Failed to decode the Secret data: {{error}}'
+      failure: 'Failed to create the Secret: {{error}}'
+      success: Secret created
+    presets:
+      default: Default
+    simple:
+      data: Data
+      type: Type
+    title: Create Secret
+  decode: Decode
+  edit-modal:
+    messages:
+      failure: 'Failed to update the Secret: {{error}}'
+      success: Secret updated
+  encode: Encode
   title: Secrets
 service-management:
   title: Service Management

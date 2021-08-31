@@ -17,6 +17,7 @@ export function CreateForm({
   fromYaml,
   presets,
   formElementRef,
+  editMode,
 }) {
   const [mode, setMode] = useState(ModeSelector.MODE_SIMPLE);
 
@@ -55,7 +56,15 @@ export function CreateForm({
       {presets?.length && (
         <Presets
           presets={presets}
-          onSelect={preset => setResource(preset.value)}
+          onSelect={preset => {
+            const { value } = preset;
+            if (editMode) {
+              value.name = resource.name;
+              value.namespace = resource.namespace;
+            }
+            setResource(value);
+            onChange(new Event('input', { bubbles: true }));
+          }}
         />
       )}
       <ModeSelector mode={mode} setMode={setMode} />
