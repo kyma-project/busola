@@ -120,12 +120,12 @@ catalog:
   subtitle: Enrich your experience with additional services that are installed outside the cluster.
   title: Service Catalog
 certificates:
-  title: Certificates
-  issuer: Issuer
-  state: State
-  expiration-date: Expiration Date
   common-name: Common Name
+  expiration-date: Expiration Date
+  issuer: Issuer
   refs: References
+  state: State
+  title: Certificates
 cluster-addons:
   title: Cluster Addons
 cluster-role-bindings:
@@ -148,10 +148,10 @@ clusters:
     issuer-url: Issuer URL
     scopes: Scopes
   list:
-    title: Clusters
     no-clusters-found: No clusters found
     outdated:
       tooltip: Outdated parameter version may cause errors. Delete and re-add your cluster.
+    title: Clusters
   messages:
     error-kubeconfig: Error reading Kubeconfig
     missing-configuration-data: Configuration has been included properly. Please fill remaining required data.
@@ -200,6 +200,7 @@ common:
     no-permissions-header: Not enough permissions
     no-permissions-message: Contact your administrator to grant you access.
   headers:
+    annotations: Annotations
     created: Created
     labels: Labels
     loading: Loading...
@@ -219,10 +220,12 @@ common:
     duplicate-key: Duplicate key
     error: 'Error: '
     k8s-name-input: Name must contain lower case alphanumeric characters, can contain '-' (like 'my-name1').
+    key: Key must start and end with alphanumeric character, can contain '-', '_' or '.'
     key-value: key=value, must start and end with alphanumeric character, can contain '-', '_' or '.'
     read-file: Read file content as single value, with file name as a key.
     save: Save
     search: Search
+    value: Value must start and end with alphanumeric character, can contain '-', '_' or '.'
 config-maps:
   buttons:
     update: Update
@@ -329,8 +332,8 @@ dnsproviders:
   headers:
     exclude: Excluded Domains
     include: Included Domains
-    type: Type
     status: $t(common.headers.status)
+    type: Type
   title: DNS Providers
 functions:
   buttons:
@@ -418,13 +421,13 @@ instances:
 integration:
   title: Integration
 issuers:
-  title: Issuers
-  email: E-mail
-  state: Status
-  server: Server
   domains:
-    included: Included Domains
     excluded: Excluded Domains
+    included: Included Domains
+  email: E-mail
+  server: Server
+  state: Status
+  title: Issuers
 jobs:
   completion-time: Completion Time
   completions: Completions
@@ -595,13 +598,22 @@ secrets:
   buttons:
     decode: Decode
     encode: Encode
-  created: Secret created
+  create-modal:
+    messages:
+      decoding-failure: 'Failed to decode the Secret data: {{error}}'
+      failure: 'Failed to create the Secret: {{error}}'
+      success: Secret created
+    presets:
+      default: Default
+    simple:
+      data: Data
+      type: Type
+    title: Create Secret
   data: Data
-  errors:
-    cannot-create: Cannot create Secret
-    cannot-update: Cannot update Secret
-    failed-to-decode: Failed to decode the Secret data
-    failed-to-decode-long: "Some of the secret data couldn't be decoded. Correct them and try again:"
+  edit-modal:
+    messages:
+      failure: 'Failed to update the Secret: {{error}}'
+      success: Secret updated
   headers:
     type: Type
   metadata: Metadata
