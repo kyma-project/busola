@@ -122,9 +122,9 @@ btp-service-bindings:
       choose-key: Choose Secret key.
       choose-secret: Choose a Secret.
       choose-secret-first: Choose the Secret first.
-      choose-secret-key: Choose Secret key
+      choose-secret-key: Choose Secret key.
       duplicate-ref: This ref already exists.
-      empty-secret: This Secret has no data
+      empty-secret: This Secret has no data.
       invalid-ref: Ref is invalid.
       parametersFrom-must-be-array: spec.parametersFrom must be an array.
       value-must-be-json-object: Secret data value must be a JSON object.

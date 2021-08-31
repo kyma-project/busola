@@ -170,7 +170,9 @@ export function SecretRefForm({
               options={secretNames}
               selectedKey={ref.secretKeyRef.name}
               onSelect={onSecretSelect(ref)}
-              placeholder={t('btp-service-bindings.create.choose-secret')}
+              placeholder={t(
+                'btp-service-bindings.create.ref-form.choose-secret',
+              )}
             />
             {ref.secretKeyRef.name ? (
               <Dropdown
@@ -178,14 +180,18 @@ export function SecretRefForm({
                 options={getSecretKeys(ref.secretKeyRef.name)}
                 selectedKey={ref.secretKeyRef.key}
                 onSelect={onKeySelect(ref)}
-                placeholder={t('btp-service-bindings.create.choose-secret-key')}
-                emptyListMessage={t('btp-service-bindings.create.empty-secret')}
+                placeholder={t(
+                  'btp-service-bindings.create.ref-form.choose-secret-key',
+                )}
+                emptyListMessage={t(
+                  'btp-service-bindings.create.ref-form.empty-secret',
+                )}
               />
             ) : (
               <Dropdown
                 disabled
                 placeholder={t(
-                  'btp-service-bindings.create.choose-secret-first',
+                  'btp-service-bindings.create.ref-form.choose-secret-first',
                 )}
               />
             )}
