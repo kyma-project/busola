@@ -261,7 +261,7 @@ functions:
       invalid-deps: Dependencies must be specified in a valid JSON format.
       max-replicas-positive: Maximum replicas must be a positive integer.
       max-replicas-too-low: Maximum number of replicas has to be equal or greater than minimum.
-      memory-default: `This value must be a fixed-point number in one of the following units: Gi, G, Mi, M, Ki, or K. For example, 50Mi, 1000.5Ki, or 0.1G.`
+      memory-default: 'This value must be a fixed-point number in one of the following units: Gi, G, Mi, M, Ki, or K. For example, 50Mi, 1000.5Ki, or 0.1G.'
       memory-limits-too-low: This value must be equal to or greater than the equivalent value for Requests.
       memory-request-too-high: This value must be equal to or lower than the equivalent value for Limits.
       memory-too-low: This value is too low. The minimum value is {{minValue}}.
