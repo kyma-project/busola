@@ -25,7 +25,7 @@ i18next
     saveMissing: true,
     missingKeyHandler: (_lngs, _ns, key) => {
       if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
-        alert(key);
+        console.warn(key);
       }
     },
   });

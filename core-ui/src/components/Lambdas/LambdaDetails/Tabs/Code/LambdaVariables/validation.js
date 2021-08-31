@@ -131,7 +131,6 @@ export function getValidationStatus({
   varDirty = false,
   resources,
 }) {
-  console.log(i18next);
   const isTakeAll = isVariableTakeAll(varValue);
   if (isTakeAll) {
     const duplicates = getTakeAllDuplicates(
@@ -145,9 +144,9 @@ export function getValidationStatus({
     );
 
     if (duplicates.length) {
-      return `Some of the variables duplicate existing names: ${duplicates.join(
-        ', ',
-      )}.`;
+      return i18next.t('functions.variable.errors.duplicate-multiple-names', {
+        names: duplicates.join(', '),
+      });
     }
   }
 
