@@ -5,8 +5,7 @@ import { useGetList, k8sNamePattern } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 import pluralize from 'pluralize';
 
-K8sResourceSelect.propTypes = {
-  url: PropTypes.string.isRequired,
+const commonPropTypes = {
   onSelect: PropTypes.func.isRequired,
   resource: PropTypes.string,
   value: PropTypes.string.isRequired,
@@ -14,8 +13,33 @@ K8sResourceSelect.propTypes = {
   isNamespaced: PropTypes.bool,
 };
 
+K8sResourceSelectWithUseGetList.propTypes = {
+  url: PropTypes.string.isRequired,
+  ...commonPropTypes,
+};
+
+export function K8sResourceSelectWithUseGetList({ url, ...props }) {
+  const listCall = useGetList()(url, {
+    pollingInterval: 7000,
+  });
+
+  return <K8sResourceSelect {...props} {...listCall} />;
+}
+
+K8sResourceSelect.propTypes = {
+  data: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.arrayOf(PropTypes.object.isRequired),
+  ]),
+  loading: PropTypes.bool.isRequired,
+  erorr: PropTypes.object,
+  ...commonPropTypes,
+};
+
 export function K8sResourceSelect({
-  url,
+  data,
+  loading,
+  error,
   onSelect,
   resourceType,
   value,
@@ -26,10 +50,6 @@ export function K8sResourceSelect({
 
   resourceType = resourceType || t('common.labels.resource');
   const pluralResourceType = pluralize(resourceType);
-
-  const { data, loading, error } = useGetList()(url, {
-    pollingInterval: 7000,
-  });
 
   const resourceNames = (data || []).map(s => s.metadata.name);
   const options = resourceNames.map(name => ({ key: name, text: name }));

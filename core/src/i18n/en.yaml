@@ -71,7 +71,7 @@ btp-service-bindings:
   instance-id: Instance ID
   instance-name: Service Instance Name
   parameters: Instance Binding Parameters
-  parameters-from: Array of sources to populate parameters
+  parameters-from: Array of Secret references to populate the parameters
   resource-type: Service Binding
   secret: Secret
   secret-not-found: This Secret doesn't exist.

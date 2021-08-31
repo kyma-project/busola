@@ -15,7 +15,7 @@ export function serviceBindingToYaml(serviceBinding) {
       secretName: serviceBinding.secretName,
       // no try-catch, as params(from) passed here should be already parseable
       parameters: JSON.parse(serviceBinding.parameters),
-      parametersFrom: JSON.parse(serviceBinding.parametersFrom),
+      parametersFrom: serviceBinding.parametersFrom,
     },
   };
 }
@@ -29,10 +29,8 @@ export function yamlToServiceBinding(yaml) {
     externalName: jp.value(yaml, '$.spec.externalName') || '',
     secretName: jp.value(yaml, '$.spec.secretName') || '',
     parameters:
-      JSON.stringify(jp.value(yaml, '$.spec.parameters', null, 2) || {}) || '',
-    parametersFrom:
-      JSON.stringify(jp.value(yaml, '$.spec.parametersFrom', null, 2) || {}) ||
-      '',
+      JSON.stringify(jp.value(yaml, '$.spec.parameters' || {}), null, 2) || '',
+    parametersFrom: jp.value(yaml, '$.spec.parametersFrom') || [],
   };
 }
 
@@ -48,9 +46,6 @@ export function createServiceBindingTemplate(namespaceId) {
   
 }
 `,
-    parametersFrom: `[
-  
-]
-`,
+    parametersFrom: [],
   };
 }

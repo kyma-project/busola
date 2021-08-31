@@ -16,7 +16,12 @@ export function ServiceBindingsCreate(props) {
   return <ServiceBindingsForm namespaceId={props.namespace} {...props} />;
 }
 
-export function ServiceBindingsForm({ namespaceId, formElementRef, onChange }) {
+export function ServiceBindingsForm({
+  namespaceId,
+  formElementRef,
+  onChange,
+  setCustomValid,
+}) {
   const { t } = useTranslation();
   const notification = useNotification();
   const postRequest = usePost();
@@ -65,6 +70,7 @@ export function ServiceBindingsForm({ namespaceId, formElementRef, onChange }) {
           serviceBinding={serviceBinding}
           setServiceBinding={setServiceBinding}
           namespaceId={namespaceId}
+          setRefsValid={setCustomValid}
         />
       }
       modalOpeningComponent={

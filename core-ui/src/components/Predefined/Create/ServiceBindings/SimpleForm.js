@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { K8sNameInput } from 'react-shared';
 import { LabelsInput } from 'components/Lambdas/components';
 import { CreateForm } from 'shared/components/CreateForm/CreateForm';
-import { K8sResourceSelect } from '../../../../shared/components/K8sResourceSelect';
+import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSelect';
 
 export function SimpleForm({ serviceBinding, setServiceBinding, namespaceId }) {
   const { t, i18n } = useTranslation();
@@ -46,7 +46,7 @@ export function SimpleForm({ serviceBinding, setServiceBinding, namespaceId }) {
             <FormLabel required>{t('btp-instances.resource-type')}</FormLabel>
           }
           input={
-            <K8sResourceSelect
+            <K8sResourceSelectWithUseGetList
               compact
               required
               value={serviceBinding.instanceName}

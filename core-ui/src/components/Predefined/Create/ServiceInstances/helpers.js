@@ -27,7 +27,7 @@ export function yamlToServiceInstance(yaml) {
     serviceOfferingName: jp.value(yaml, '$.spec.serviceOfferingName') || '',
     servicePlanName: jp.value(yaml, '$.spec.servicePlanName') || '',
     parameters:
-      JSON.stringify(jp.value(yaml, '$.spec.parameters', null, 2) || {}) || '',
+      JSON.stringify(jp.value(yaml, '$.spec.parameters' || {}), null, 2) || '',
   };
 }
 
