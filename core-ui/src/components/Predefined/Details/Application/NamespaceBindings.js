@@ -62,6 +62,7 @@ export default function NamespaceBindings(application) {
               content: t('applications.messages.binding-deleted'),
             });
           },
+          t,
         ),
     },
   ];

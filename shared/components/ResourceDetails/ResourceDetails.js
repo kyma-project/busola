@@ -199,6 +199,7 @@ function Resource({
       notification,
       () => deleteResourceMutation(resourceUrl),
       () => navigateToList(resourceType),
+      t,
     );
   }
 

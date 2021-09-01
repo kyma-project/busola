@@ -128,7 +128,7 @@ export default function ApiRules({
       name: 'Delete',
       disabledHandler: apiRule => !!apiRule.ownerSubscription, // TODO what is this ownerSubscription?
       handler: apiRule => {
-        deleteApiRule(apiRule.metadata.name);
+        deleteApiRule(apiRule.metadata.name, t);
       },
     },
   ];

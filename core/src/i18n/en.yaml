@@ -233,6 +233,13 @@ components:
     error: An error occured. The component cannot be rendered.
   file-input:
     drag-file: Drag file here
+  generic-list:
+    acion-header:
+      messages:
+        confirmation: 'Are you sure you want to delete {{resourceType}} "{{name}}"?'
+        failure: 'Failed to delete the {{resourceType}}'
+        success: '{{resourceType}} deleted'
+        title: 'Delete {{resourceType}}'
 config-maps:
   buttons:
     update: Update

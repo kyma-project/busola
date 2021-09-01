@@ -8,6 +8,7 @@ import {
   useMicrofrontendContext,
   Tooltip,
 } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 
 import renderRow from './ServiceInstanceRowRenderer';
 
@@ -20,6 +21,7 @@ const ServiceInstanceTable = ({
   const { features } = useMicrofrontendContext();
   const btpCatalogEnabled = features.BTP_CATALOG?.isEnabled;
   const notification = useNotification();
+  const { t } = useTranslation();
 
   function goToServiceCatalog() {
     LuigiClient.linkManager()
@@ -45,6 +47,7 @@ const ServiceInstanceTable = ({
               entry.metadata.name,
               notification,
               () => deleteServiceInstance(entry.metadata.name),
+              t,
             ),
         },
       ];

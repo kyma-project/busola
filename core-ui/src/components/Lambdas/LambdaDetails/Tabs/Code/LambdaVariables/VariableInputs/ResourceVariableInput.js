@@ -239,6 +239,7 @@ export default function ResourceVariableInput({
               selectedKey={
                 currentVariable?.valueFrom?.secretKeyRef?.key || null
               }
+              i18n={i18n}
             />
           </FormItem>
         </>
@@ -267,6 +268,7 @@ export default function ResourceVariableInput({
               selectedKey={
                 currentVariable?.valueFrom?.configMapKeyRef?.name || null
               }
+              i18n={i18n}
             />
           </FormItem>
           <FormItem className="grid-input-fields">
@@ -287,6 +289,7 @@ export default function ResourceVariableInput({
               selectedKey={
                 currentVariable?.valueFrom?.configMapKeyRef?.key || null
               }
+              i18n={i18n}
             />
           </FormItem>
         </>

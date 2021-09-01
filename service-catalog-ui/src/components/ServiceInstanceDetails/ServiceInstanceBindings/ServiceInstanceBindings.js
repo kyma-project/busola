@@ -10,10 +10,13 @@ import {
   useDelete,
   useMicrofrontendContext,
 } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 
 import { TextOverflowWrapper } from '../../ServiceInstanceList/ServiceInstanceTable/styled';
 
 const ServiceInstanceBindings = ({ serviceInstance }) => {
+  const { t } = useTranslation();
+
   const { features } = useMicrofrontendContext();
   const btpCatalogEnabled = features.BTP_CATALOG?.isEnabled;
   const filterBindingsForInstance = binding =>
@@ -94,6 +97,7 @@ const ServiceInstanceBindings = ({ serviceInstance }) => {
           content: 'Service Binding Usage deleted',
         });
       },
+      t,
     );
   }
   const actions = btpCatalogEnabled
