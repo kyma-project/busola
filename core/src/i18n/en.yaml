@@ -21,7 +21,7 @@ api-rules:
     title: Access Strategies
     tooltips:
       delete: Define at least one access strategy.
-      path: Path can contain alphanumeric characters and '/', '.', '*', '?', '!', '-', '(', and ')'.
+      path: Path can contain alphanumeric characters and  '/', '.', '*', '?', '!', '-', '(', and ')'.
   buttons:
     create: Create API Rule
     edit: Edit API Rule "{{apiRuleName}}"
