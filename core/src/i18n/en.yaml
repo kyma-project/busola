@@ -88,7 +88,7 @@ applications:
     name: Specify a name for your Application
     namespace: Choose Namespace...
   subtitle:
-    bound-to: Services and events bound to  '{{namespace}}'
+    bound-to: Services and events bound to '{{namespace}}'
     connect-app: Connect Application
     create-app: Create Application
     create-binding: Create Namespace Binding
