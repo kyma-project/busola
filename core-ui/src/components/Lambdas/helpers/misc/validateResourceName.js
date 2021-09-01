@@ -1,24 +1,19 @@
-import { LAMBDAS_LIST } from 'components/Lambdas/constants';
-
-export function validateResourceName(
-  name = '',
-  errorMessages = LAMBDAS_LIST.CREATE_MODAL.INPUTS.NAME.ERRORS,
-) {
+export function validateResourceName(name = '', errorMessages, t) {
   if (!errorMessages) {
     return '';
   }
 
   if (!name) {
-    return errorMessages.EMPTY;
+    return t(errorMessages.EMPTY);
   }
 
   if (name.length > 63) {
-    return errorMessages.TOO_LONG;
+    return t(errorMessages.TOO_LONG);
   }
 
   const regex = /^[a-z]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$/;
   if (!regex.test(name)) {
-    return errorMessages.INVALID;
+    return t(errorMessages.INVALID);
   }
 
   return '';

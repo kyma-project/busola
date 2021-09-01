@@ -20,6 +20,19 @@ export const ServiceBindingsDetails = ({ DefaultRenderer, ...otherParams }) => {
     );
   };
 
+  const ServiceBindingParametersFrom = ({ spec }) => {
+    if (!spec.parametersFrom) return;
+
+    return (
+      <ReadonlyEditorPanel
+        title={t('btp-service-bindings.parameters-from')}
+        value={JSON.stringify(spec.parametersFrom, null, 2)}
+        key="instance-binding-parameters-from"
+        editorProps={{ language: 'json', height: '10em' }}
+      />
+    );
+  };
+
   const customColumns = [
     {
       header: t('common.headers.status'),
@@ -30,7 +43,11 @@ export const ServiceBindingsDetails = ({ DefaultRenderer, ...otherParams }) => {
   return (
     <DefaultRenderer
       customColumns={customColumns}
-      customComponents={[ServiceBindingData, ServiceBindingParameters]}
+      customComponents={[
+        ServiceBindingData,
+        ServiceBindingParameters,
+        ServiceBindingParametersFrom,
+      ]}
       {...otherParams}
     />
   );

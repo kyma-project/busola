@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import LuigiClient from '@luigi-project/client';
 
 import { CONFIG } from 'components/Lambdas/config';
-import { LOGS_AND_METRICS } from 'components/Lambdas/constants';
 
 const CMF_LOGS_PATH = '/home/logs';
 
@@ -15,6 +15,7 @@ function runFnOnContextUpdate(url, cleanupFn) {
 
 export const useLogsView = (uid, namespace, initialCollapse = true) => {
   const [logsViewExists, setLogViewExists] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const {
@@ -34,7 +35,7 @@ export const useLogsView = (uid, namespace, initialCollapse = true) => {
 
     let logsViewHandle;
     if (logsViewExists) {
-      logsViewHandle = openLogsView(linkManager, initialCollapse);
+      logsViewHandle = openLogsView(linkManager, initialCollapse, t);
     }
 
     const cleanup = () => {
@@ -51,7 +52,7 @@ export const useLogsView = (uid, namespace, initialCollapse = true) => {
     );
 
     return cleanup;
-  }, [namespace, uid, logsViewExists, initialCollapse]);
+  }, [namespace, uid, logsViewExists, initialCollapse, t]);
 };
 
 const checkLogsViewExists = async (manager, setViewExists) => {
@@ -64,9 +65,9 @@ const checkLogsViewExists = async (manager, setViewExists) => {
   }
 };
 
-const openLogsView = (manager, initialCollapse) => {
+const openLogsView = (manager, initialCollapse, t) => {
   return manager.openAsSplitView(CMF_LOGS_PATH, {
-    title: LOGS_AND_METRICS.LOGS.SPLIT_VIEW.TITLE,
+    title: t('common.headers.logs'),
     size: 40,
     collapsed: initialCollapse,
   });

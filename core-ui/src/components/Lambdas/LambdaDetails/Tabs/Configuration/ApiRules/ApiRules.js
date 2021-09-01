@@ -12,8 +12,8 @@ import ApiRulesListWrapper from 'components/ApiRules/ApiRulesList/ApiRulesListWr
 import { LAMBDA_PHASES } from 'components/Lambdas/constants';
 import { useGetGatewayDomain } from 'components/ApiRules/hooks/useGetGatewayDomain';
 import { getLambdaStatus } from 'components/Lambdas/helpers/lambdas/getLambdaStatus';
+import { useTranslation } from 'react-i18next';
 
-const headerRenderer = () => ['', 'Name', 'Host', 'Status'];
 const textSearchProperties = [
   'metadata.name',
   'service.host',
@@ -39,6 +39,14 @@ export default function ApiRules({ lambda, isActive }) {
   const disableExposeButton =
     getLambdaStatus(lambda.status).phase !== LAMBDA_PHASES.RUNNING.TYPE;
 
+  const { t } = useTranslation();
+  const headerRenderer = () => [
+    '',
+    t('common.headers.name'),
+    t('api-rules.list.headers.host'),
+    t('api-rules.list.headers.status'),
+  ];
+
   return (
     <ApiRulesListWrapper
       skipRequest={!isActive}
@@ -60,6 +68,13 @@ export function ServiceApiRules({ service }) {
   const { domain } = useGetGatewayDomain();
 
   const rowRenderer = apiRuleRowRenderer(domain);
+  const { t } = useTranslation();
+  const headerRenderer = () => [
+    '',
+    t('common.headers.name'),
+    t('api-rules.list.headers.host'),
+    t('api-rules.list.headers.status'),
+  ];
 
   return (
     <ApiRulesListWrapper

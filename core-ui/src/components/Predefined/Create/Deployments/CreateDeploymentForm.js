@@ -66,7 +66,6 @@ export function CreateDeploymentForm({
 
   return (
     <CreateForm
-      title={t('deployments.create-modal.title')}
       simpleForm={
         <SimpleForm deployment={deployment} setDeployment={setDeployment} />
       }
