@@ -59,6 +59,10 @@ applications:
     description: Descritpion
     events: Events
     service-and-event: Service & event bindings
+  labels:
+    applications-and-events: Applications & Events
+    description: Description
+    namespace: Namespace
   messages:
     app-created: Application {{applicationName}} created
     binding-deleted: Binding deleted
@@ -76,19 +80,15 @@ applications:
     show-namespaces: Show Namespaces
     some-apis: There are some APIs
     some-events: There are some events
-  labels:
-    applications-and-events: Applications & Events
-    description: Description
-    namespace: Namespace
   placeholders:
     description: Specify a description for your Application
     name: Specify a name for your Application
     namespace: Choose Namespace...
   subtitle:
+    bound-to: Services and events bound to  '{{namespace}}'
     connect-app: Connect Application
     create-app: Create Application
     create-binding: Create Namespace Binding
-    bound-to: Services and events bound to  '{{namespace}}'
     edit-binding: Edit ServiceClass Binding in '{{namespace}}'
     namespace-bindings: Namespace Bindings
     provided-services: Provided Services & Events
@@ -204,6 +204,7 @@ common:
     created: Created
     labels: Labels
     loading: Loading...
+    logs: Logs
     name: Name
     resources: Resources
     status: Status
@@ -213,6 +214,8 @@ common:
     service: Service
   messages:
     doesnt-exist: doesn't exist.
+    entry-not-found: Entry not found
+    error: 'Error: {{error}}'
     loading-name: Loading name...
   tooltips:
     copy-to-clipboard: Copy to clipboard
@@ -260,8 +263,8 @@ custom-resource-definitions:
     list-kind: List Kind
     plural: Plural
     scope: Scope
-    singular: Singular
     short-names: Short Names
+    singular: Singular
     type: Type
     value: Value
   messages:
@@ -339,9 +342,111 @@ functions:
   buttons:
     connected-repositories: Connected repositories
     create-function: Create Function
+  create-view:
+    buttons:
+      confirm: Create
+      create: Create a Function
+    errors:
+      cpu-default: This value must be a fixed-point number or in millicpu. For example, 0.1, 1, or 100m.
+      cpu-limits-too-low: This value must be equal to or greater than the equivalent value for Requests.
+      cpu-request-too-high: This value must be equal to or lower than the equivalent value for Limits.
+      cpu-too-low: This value is too low. The minimum value is {{minValue}}.
+      empty-source: Source cannot be empty.
+      invalid: At least one field is empty or incorrectly formatted.
+      invalid-deps: Dependencies must be specified in a valid JSON format.
+      max-replicas-positive: Maximum replicas must be a positive integer.
+      max-replicas-too-low: Maximum number of replicas has to be equal or greater than minimum.
+      memory-default: 'This value must be a fixed-point number in one of the following units: Gi, G, Mi, M, Ki, or K. For example, 50Mi, 1000.5Ki, or 0.1G.'
+      memory-limits-too-low: This value must be equal to or greater than the equivalent value for Requests.
+      memory-request-too-high: This value must be equal to or lower than the equivalent value for Limits.
+      memory-too-low: This value is too low. The minimum value is {{minValue}}.
+      min-replicas-positive: Minimum number of replicas must be a positive integer.
+      min-replicas-too-high: Minimum number of replicas has to be equal to or lower than maximum.
+      no-changes: No changes made.
+      no-repository-found: There are no Repositories available. Create a Repository.
+      one-field-empty: At least one field is empty.
+      one-field-invalid: At least one field is invalid.
+      req-base-dir: Base Directory is required.
+      req-reference: Reference is required.
+      required-name: Function name is required.
+      too-long: Function name cannot be longer than 63 characters.
+    inline-help:
+      base-directory: Directory with your Function's code and dependencies
+      reference: Reference to the Function's source. Select a branch name or commit revision.
+      source-type: Provide code and dependencies as plain text with inline editor, or fetch them from a Git repository
+    labels:
+      base-directory: Base Directory
+      git-repository: Git Repository
+      inline-editor: Inline Editor
+      reference: Reference
+      repository: Repository
+  details:
+    buttons:
+      diff_toggle: Diff
+      edit-configuration: Edit Configuration
+    descriptions:
+      build-job: Choose one of the predefined values for build Job's resources or set your own values ​​by selecting the "Custom" option.
+      limits: Maximum amount of compute resources allowed.
+      maximum-replicas: Maximum number of running Replicas. Set it to 0 to disable the function.
+      minimum-replicas: Minimum number of running Replicas.
+      requests: Minimum amount of compute resources required.
+      runtime-profile: Choose one of the predefined values for Function's resources or set your own values ​​by selecting the "Custom" option.
+    errors:
+      req-reference: Reference is required.
+    inline-help:
+      function-reference: Reference to the Function's source. Select a branch name or commit revision.
+    title:
+      build-job: Build Job Profile
+      code: Code
+      configuration: Configuration
+      cpu: CPU
+      dependencies: Dependencies
+      limits: Limits
+      maximum-replicas: Maximum Replicas
+      memory: Memory
+      minimum-replicas: Minimum Replicas
+      requests: Requests
+      resources: Resources
+      resources-replicas: Resources and Replicas
+      runtime-profile: Runtime Profile
+      scaling-options: Scaling Options
+  errors:
+    server: Server error. Contact your cluster admin.
   headers:
     runtime: Runtime
     source-type: Source Type
+  pod-list:
+    buttons:
+      view-logs: View Logs
+    title: Replicas of the Function
+  repository:
+    title: Repository Configuration
+  repository-list:
+    create:
+      buttons:
+        confirm: Connect
+      title: Connect Repository
+    errors:
+      invalid-url: Invalid Repository URL. The URL must start with the "http(s)", "git", or "ssh" prefix and end with the ".git" suffix.
+      req-name: Repository name is required.
+      req-sec-name: Secret name is required.
+      too-long-name: Repository name cannot be longer than 63 characters.
+      too-long-sec-name: Secret name cannot be longer than 63 characters.
+    inline-help:
+      auth: 'Basic: token or password / SSH key: authentication key / Public: no authentication'
+      url: URL must be a valid Git repository address that starts with the "http(s)", "git", or "ssh" prefix and ends with the ".git" suffix.
+    labels:
+      auth: Authorization
+      secret-name: Secret Name
+      url: URL
+  statuses:
+    building: Building
+    deploying: Deploying
+    failed: Failed
+    failed-message: Function couldn't be processed.
+    initializing: Initializing
+    new-revision-error: New Revision Error
+    running: Running
   title: Functions
   variable:
     buttons:
@@ -365,8 +470,8 @@ functions:
       empty: Variable is empty.
       invalid: Variable name must consist of alphanumeric characters, can contain '_', no blank spaces.
       invalid-config: Select the ConfigMap name and key.
-      invalid-secret: Select the secret name and key.
-      restricted: This variable name is restricted and cannot be used. Try a different name.
+      invalid-secret: Select the Secret name and key.
+      restricted: This variable name is restricted and cannot be used. Try a different one.
     form:
       config-map: $t(functions.variable.type.config-map)
       key: $t(functions.variable.header.key)
@@ -489,12 +594,12 @@ namespaces:
   tooltips:
     container-memory-limit: Define memory constraints for individual containers in your Namespace.
     create: Select this option to disable Istio to mediate all communication between the Pods in your Namespace.
+    healthy-resources: '{{value}}/{{total}} {{resourceType}} are healthy.'
     memory-examples: 'Use plain value in bytes (128974848) or equivalent suffixes (e.g.: 129e6, 129M, 123Mi).'
+    no-resources: There are no {{resourceType}} in this Namespace
     total-memory-limit: Define constraints that limit total memory consumption in your Namespace.
     usage-of-memory-limits: This Namespace uses {{valueText}} of {{maxText}} its memory limits.
     usage-of-memory-requests: This Namespace uses {{valueText}} of {{maxText}} its memory requests.
-    no-resources: There are no {{resourceType}} in this Namespace
-    healthy-resources: '{{value}}/{{total}} {{resourceType}} are healthy.'
 no-permissions:
   title: No Permissions
 node-details:
@@ -506,10 +611,9 @@ node-details:
   timestamp: Timestamp
   title-warnings: Warnings
 oauth2-clients:
-  title: OAuth2 Clients
   grand-types:
-    client-credentials: Client credentials
     authorization-code: Authorization code
+    client-credentials: Client credentials
     implicit: Implicit
     refresh-token: Refresh token
   headers:
@@ -519,17 +623,18 @@ oauth2-clients:
     response-types: Response types
     scope: Scope
   response-types:
-    id-token: ID token
     code: Code
+    id-token: ID token
     token: Token
+  title: OAuth2 Clients
 observability:
   title: Observability
 pods:
   buttons:
     view-logs: View Logs
   headers:
-    type: Type
     pod-ip: Pod IP
+    type: Type
     volume-name: Volume Name
   labels:
     constainers: Containers
@@ -570,8 +675,6 @@ role-bindings:
     choose-role: Choose role
   errors:
     cannot-create: Cannot create RoleBinding
-  messages:
-    created: RoleBinding {{name}} created
   headers:
     kind: Kind
     role-name: Role Name
@@ -581,6 +684,8 @@ role-bindings:
     role: Role
     user: User
     user-group: User Group
+  messages:
+    created: RoleBinding {{name}} created
   placeholders:
     choose-role: Choose role...
     user-group: User group
@@ -616,10 +721,10 @@ secrets:
       success: Secret updated
   headers:
     type: Type
-  metadata: Metadata
   labels:
     annotations: Annotations
     type: Secret type
+  metadata: Metadata
   title: Secrets
   title-edit-secret: Edit Secret
   updated: Secret updated
@@ -638,7 +743,7 @@ settings:
     confirmations: Confirmations
     description: Cluster interaction
     dontConfirmDelete: Delete without confirmation
-    showHiddenNamespaces: Show Hidden Namespaces
+    showHiddenNamespaces: Show hidden Namespaces
     title: Clusters
   interface:
     description: Theme, language

@@ -3,30 +3,22 @@ import { useForm } from 'react-hook-form';
 
 import { LayoutPanel, Button } from 'fundamental-react';
 import { Tooltip } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 
 import LambdaReplicas from './LambdaReplicas';
 import LambdaResources from './LambdaResources';
 
 import { useUpdateLambda, UPDATE_TYPE } from 'components/Lambdas/hooks';
-import {
-  BUTTONS,
-  RESOURCES_MANAGEMENT_PANEL,
-} from 'components/Lambdas/constants';
 import { parseCpu } from 'components/Lambdas/helpers/resources';
 import { CONFIG } from 'components/Lambdas/config';
 import {
-  schema,
+  prepareSchema,
   inputNames,
   checkReplicasPreset,
   checkResourcesPreset,
 } from './shared';
 
 import './ResourceManagement.scss';
-
-const saveText = RESOURCES_MANAGEMENT_PANEL.EDIT_MODAL.OPEN_BUTTON.TEXT.SAVE;
-const editText = RESOURCES_MANAGEMENT_PANEL.EDIT_MODAL.OPEN_BUTTON.TEXT.EDIT;
-const popupMessage =
-  RESOURCES_MANAGEMENT_PANEL.EDIT_MODAL.CONFIRM_BUTTON.POPUP_MESSAGE;
 
 function getDefaultFormValues(lambda) {
   return {
@@ -74,6 +66,7 @@ function getDefaultFormValues(lambda) {
 
 export default function ResourcesManagement({ lambda }) {
   const defaultValues = getDefaultFormValues(lambda);
+  const { t } = useTranslation();
 
   const {
     register,
@@ -83,7 +76,7 @@ export default function ResourcesManagement({ lambda }) {
     setValue,
     triggerValidation,
   } = useForm({
-    validationSchema: schema,
+    validationSchema: prepareSchema(t),
     mode: 'onChange',
     defaultValues,
   });
@@ -172,10 +165,14 @@ export default function ResourcesManagement({ lambda }) {
           retriggerValidation();
         }}
       >
-        {BUTTONS.CANCEL}
+        {t('common.buttons.cancel')}
       </Button>
     );
   }
+
+  const saveText = t('common.buttons.save');
+  const editText = t('functions.details.buttons.edit-configuration');
+  const popupMessage = t('functions.create-view.errors.one-field-invalid');
 
   function renderConfirmButton() {
     const disabled = isEditMode && !formState.isValid;
@@ -212,7 +209,9 @@ export default function ResourcesManagement({ lambda }) {
     <LayoutPanel className="fd-margin--md lambda-resources-management">
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <LayoutPanel.Header>
-          <LayoutPanel.Head title={RESOURCES_MANAGEMENT_PANEL.TITLE} />
+          <LayoutPanel.Head
+            title={t('functions.details.title.resources-replicas')}
+          />
           <LayoutPanel.Actions>
             {renderCancelButton()}
             {renderConfirmButton()}
@@ -221,7 +220,7 @@ export default function ResourcesManagement({ lambda }) {
         <div className="lambda-resources-management__panel">
           <LayoutPanel.Header>
             <LayoutPanel.Head
-              title={RESOURCES_MANAGEMENT_PANEL.REPLICAS.TITLE}
+              title={t('functions.details.title.scaling-options')}
             />
           </LayoutPanel.Header>
           <LayoutPanel.Body>
@@ -237,10 +236,8 @@ export default function ResourcesManagement({ lambda }) {
         <div className="lambda-resources-management__panel">
           <LayoutPanel.Header>
             <LayoutPanel.Head
-              title={RESOURCES_MANAGEMENT_PANEL.RESOURCES.TYPES.FUNCTION.TITLE}
-              description={
-                RESOURCES_MANAGEMENT_PANEL.RESOURCES.TYPES.FUNCTION.DESCRIPTION
-              }
+              title={t('functions.details.title.runtime-profile')}
+              description={t('functions.details.descriptions.runtime-profile')}
             />
           </LayoutPanel.Header>
           <LayoutPanel.Body>
@@ -259,10 +256,8 @@ export default function ResourcesManagement({ lambda }) {
         <div className="lambda-resources-management__panel">
           <LayoutPanel.Header>
             <LayoutPanel.Head
-              title={RESOURCES_MANAGEMENT_PANEL.RESOURCES.TYPES.BUILD_JOB.TITLE}
-              description={
-                RESOURCES_MANAGEMENT_PANEL.RESOURCES.TYPES.BUILD_JOB.DESCRIPTION
-              }
+              title={t('functions.details.title.build-job')}
+              description={t('functions.details.descriptions.build-job')}
             />
           </LayoutPanel.Header>
           <LayoutPanel.Body>
