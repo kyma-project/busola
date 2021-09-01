@@ -23,8 +23,8 @@ api-rules:
       delete: Define at least one access strategy.
       path: Path can contain alphanumeric characters and  '/', '.', '*', '?', '!', '-', '(', and ')'.
   buttons:
-    create: Create APIRule
-    edit: Edit APIRule "{{apiRuleName}}"
+    create: Create API Rule
+    edit: Edit API Rule "{{apiRuleName}}"
     expose: Expose {{type}}
   general-settings:
     title: General settings
@@ -34,16 +34,16 @@ api-rules:
       service-name: Service Name
       status: Status
   messages:
-    create-failed: Failed to create the APIRule.
-    created: APIRule created.
-    description: Expose Services outside the cluster with APIRules.
-    not-matching-results: Couldn't find APIRules matching this query.
-    updated: APIRule updated.
+    create-failed: Failed to create the API Rule.
+    created: API Rule created.
+    description: Expose Services outside the cluster with API Rules.
+    not-matching-results: Couldn't find API Rules matching this query.
+    updated: API Rule updated.
   services:
     error-load: Couldn't load service list.
     loading: Loading services...
     ns-no-services: No Services in this Namespace.
-  title: APIRules
+  title: API Rules
 applications:
   aria:
     namespace: Choose Namespace
