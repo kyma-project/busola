@@ -15,11 +15,6 @@ import * as SearchParams from '../../../Logs/SearchParams.reducer';
 import { shallow } from 'enzyme';
 import { FormInput } from 'fundamental-react';
 
-// @kyma-project/common is deprecated
-// jest.mock('@kyma-project/common', () => ({
-//   getApiUrl: () => 'kyma.local',
-// }));
-
 describe('Renders with minimal props', () => {
   const dispatch = jest.fn();
   const component = renderer.create(

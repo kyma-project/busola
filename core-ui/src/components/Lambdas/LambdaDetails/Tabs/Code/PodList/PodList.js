@@ -3,6 +3,7 @@ import LuigiClient from '@luigi-project/client';
 import { GenericList, useGetList } from 'react-shared';
 import { Link, Button } from 'fundamental-react';
 import './PodList.scss';
+import { useTranslation } from 'react-i18next';
 
 const navigateTo = path => _ =>
   LuigiClient.linkManager()
@@ -17,7 +18,12 @@ export default function PodList({ namespace, functionName, isActive }) {
     skip: !isActive,
   });
 
-  const headerRenderer = () => ['Name', 'Logs'];
+  const { t } = useTranslation();
+
+  const headerRenderer = () => [
+    t('common.headers.name'),
+    t('common.headers.logs'),
+  ];
 
   const rowRenderer = entry => [
     <Link
@@ -32,7 +38,7 @@ export default function PodList({ namespace, functionName, isActive }) {
       )}
       glyph="form"
     >
-      View logs
+      {t('functions.pod-list.buttons.view-logs')}
     </Button>,
   ];
 
@@ -41,7 +47,7 @@ export default function PodList({ namespace, functionName, isActive }) {
       className="pods-of-function"
       showSearchField={false}
       compact
-      title="Replicas of the Function"
+      title={t('functions.pod-list.title')}
       entries={pods || []}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
