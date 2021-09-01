@@ -1061,7 +1061,7 @@ export function getStaticChildrenNodesForNamespace(
     },
     {
       category: i18next.t('configuration.title'),
-      resourceType: 'gatewats',
+      resourceType: 'gateways',
       pathSegment: 'gateways',
       label: i18next.t('gateways.title'),
       viewUrl:
