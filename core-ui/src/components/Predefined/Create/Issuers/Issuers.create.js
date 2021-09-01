@@ -17,7 +17,6 @@ export function IssuersCreate({ onChange, formElementRef, namespace }) {
   const postRequest = usePost();
 
   const [issuer, setIssuer] = useState(createTemplate(namespace));
-  console.log(issuer);
 
   const createIssuer = async () => {
     try {

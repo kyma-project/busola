@@ -20,10 +20,9 @@ export function PrivateKeyForm({ issuer, setIssuer, disabled }) {
           input={
             <SecretRef
               resourceRef={issuer.privateKeySecretRef}
-              onChange={(e, privateKeySecretRef) => {
-                console.log('set private key', privateKeySecretRef);
-                setIssuer({ ...issuer, privateKeySecretRef });
-              }}
+              onChange={(e, privateKeySecretRef) =>
+                setIssuer({ ...issuer, privateKeySecretRef })
+              }
             />
           }
         />
