@@ -96,6 +96,7 @@ export const AddonsConfigurations = ({
   };
 
   const { i18n } = useTranslation();
+
   return (
     // although HTML spec assigns the role by default to a <form> element, @testing-library ignores it
     // eslint-disable-next-line jsx-a11y/no-redundant-roles
@@ -127,7 +128,7 @@ export const AddonsConfigurations = ({
           required
           htmlFor={`${resourceType}-urls`}
         >
-          URLs
+          {t('addons.urls')}
         </FormLabel>
         <section className="addons-urls-editor">
           <input

@@ -1,12 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'fundamental-react';
+
 import { useNotification } from 'react-shared';
 import { base64Decode, base64Encode } from 'shared/helpers';
-
-function applyOnEntries(fn, entries) {
-  return entries.map(e => ({ ...e, value: fn(e.value) }));
-}
+import { useTranslation } from 'react-i18next';
 
 DecodeSecretSwitch.propTypes = {
   entries: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
@@ -14,14 +12,19 @@ DecodeSecretSwitch.propTypes = {
   isEncoded: PropTypes.bool.isRequired,
   setEncoded: PropTypes.func.isRequired,
 };
+function applyOnEntries(fn, entries) {
+  return entries.map(e => ({ ...e, value: fn(e.value) }));
+}
 
 export function DecodeSecretSwitch({
   entries,
   setEntries,
   isEncoded,
   setEncoded,
+  i18n,
 }) {
   const notification = useNotification();
+  const { t } = useTranslation(null, { i18n });
 
   const onClick = () => {
     try {
@@ -31,10 +34,9 @@ export function DecodeSecretSwitch({
       setEncoded(!isEncoded);
     } catch (e) {
       notification.notifyError({
-        title: 'Failed to decode the Secret data',
-        content:
-          "Some of the secret data couldn't be decoded. Correct them and try again: " +
-          e.message,
+        content: t('secrets.create-modal.messages.decoding-failure', {
+          error: e.message,
+        }),
       });
     }
   };
@@ -45,7 +47,7 @@ export function DecodeSecretSwitch({
       glyph={isEncoded ? 'show' : 'hide'}
       onClick={onClick}
     >
-      {isEncoded ? 'Decode' : 'Encode'}
+      {isEncoded ? t('secrets.buttons.decode') : t('secrets.buttons.encode')}
     </Button>
   );
 }

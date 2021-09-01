@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { usePost } from 'react-shared';
 import {
@@ -20,6 +21,8 @@ export const RoleBindings = ({
   resourceUrl,
   refetchList,
 }) => {
+  const { t } = useTranslation();
+
   const [subject, setSubject] = useState('');
   const [isGroup, setGroup] = useState(false);
   const [role, setRole] = useState('');
@@ -49,11 +52,18 @@ export const RoleBindings = ({
 
     try {
       await request(resourceUrl, params);
-      onCompleted(`Role Binding ${name} created`);
+      onCompleted(
+        t('role-bindings.messages.created', {
+          name: name,
+        }),
+      );
       refetchList();
     } catch (err) {
       console.warn(err);
-      onError('Cannot create Role Binding', `Error: ${err.message}`);
+      onError(
+        t('role-bindings.errors.cannot-create'),
+        `${t('common.tooltips.error')} ${err.message}`,
+      );
     }
   };
 
@@ -69,22 +79,32 @@ export const RoleBindings = ({
     >
       <FormRadioGroup inline onChange={(_, item) => setGroup(item !== 'user')}>
         <FormRadioItem data="user" inputProps={{ defaultChecked: true }}>
-          User
+          {t('role-bindings.labels.user')}
         </FormRadioItem>
-        <FormRadioItem data="user-group">User Group</FormRadioItem>
+        <FormRadioItem data="user-group">
+          {t('role-bindings.labels.user-group')}
+        </FormRadioItem>
       </FormRadioGroup>
       <FormItem style={{ clear: 'both' }}>
-        <FormLabel required>{isGroup ? 'User group' : 'User name'}</FormLabel>
+        <FormLabel required>
+          {isGroup
+            ? t('role-bindings.labels.user-group')
+            : t('role-bindings.labels.user')}
+        </FormLabel>
         <FormInput
           type="text"
           value={subject}
-          placeholder={`User ${isGroup ? 'group' : 'name'}`}
+          placeholder={
+            isGroup
+              ? t('role-bindings.placeholders.user-group')
+              : t('role-bindings.placeholders.user-name')
+          }
           onChange={e => setSubject(e.target.value)}
           required
         />
       </FormItem>
       <FormItem>
-        <FormLabel required>Role</FormLabel>
+        <FormLabel required>{t('role-bindings.labels.role')}</FormLabel>
         <RoleCombobox
           setRole={setRole}
           setRoleKind={setRoleKind}

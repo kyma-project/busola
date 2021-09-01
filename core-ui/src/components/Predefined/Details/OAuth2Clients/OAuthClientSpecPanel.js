@@ -3,7 +3,12 @@ import PropTypes from 'prop-types';
 
 import { LayoutPanel, Token, FormItem, FormLabel } from 'fundamental-react';
 import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
-import { grantTypes, responseTypes } from './common';
+import {
+  GrantTypes,
+  ResponseTypes,
+} from 'components/Predefined/Create/OAuthClients/helpers';
+import { useTranslation } from 'react-i18next';
+
 import './OAuthClientSpecPanel.scss';
 
 OAuthClientSpecPanel.propTypes = { spec: PropTypes.object.isRequired };
@@ -27,23 +32,25 @@ const Tokens = ({ tokens }) => (
 );
 
 export default function OAuthClientSpecPanel({ spec }) {
+  const { t } = useTranslation();
+
   return (
     <LayoutPanel className="fd-margin--md oauth-client-panel">
       <LayoutPanel.Header>
         <LayoutPanel.Head title="Configuration" />
       </LayoutPanel.Header>
       <FormItem>
-        <FormLabel>Response types</FormLabel>
+        <FormLabel>{t('oauth2-clients.labels.response-types')}</FormLabel>
         <Tokens
-          tokens={(spec.responseTypes || []).map(v => responseTypes[v])}
+          tokens={(spec.responseTypes || []).map(v => ResponseTypes()[v])}
         />
       </FormItem>
       <FormItem>
-        <FormLabel>Grant types</FormLabel>
-        <Tokens tokens={spec.grantTypes.map(v => grantTypes[v])} />
+        <FormLabel>{t('oauth2-clients.labels.grand-types')}</FormLabel>
+        <Tokens tokens={spec.grantTypes.map(v => GrantTypes()[v])} />
       </FormItem>
       <FormItem>
-        <FormLabel>Scope</FormLabel>
+        <FormLabel>{t('oauth2-clients.labels.scope')}</FormLabel>
         <Tokens tokens={spec.scope.split(' ').filter(scope => scope)} />
       </FormItem>
     </LayoutPanel>

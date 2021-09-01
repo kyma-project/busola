@@ -13,7 +13,7 @@ export default function EventSubscriptions({
   subscriptions = [],
   subscriptionsUrl,
   silentRefetch = function() {},
-  ownerRef,
+  ownerName,
   namespace,
   isLambda = false,
   serverDataError,
@@ -24,12 +24,11 @@ export default function EventSubscriptions({
   const postRequest = usePost();
   const deleteRequest = useDelete();
   async function handleSubscriptionAdded(eventType) {
-    const name = `${ownerRef.name}-${randomNameGenerator()}`;
-    const sink = `http://${ownerRef.name}.${namespace}.svc.cluster.local`;
+    const name = `${ownerName}-${randomNameGenerator()}`;
+    const sink = `http://${ownerName}.${namespace}.svc.cluster.local`;
     const subscriptionInput = createSubscriptionInput(
       name,
       namespace,
-      ownerRef,
       sink,
       eventType,
     );
@@ -116,12 +115,6 @@ EventSubscriptions.propTypes = {
   serverDataLoading: PropTypes.bool,
   subscriptionsUrl: PropTypes.string.isRequired,
   silentRefetch: PropTypes.func,
-  ownerRef: PropTypes.shape({
-    name: PropTypes.string,
-    kind: PropTypes.string,
-    apiVersion: PropTypes.string,
-    uid: PropTypes.string,
-  }).isRequired,
   namespace: PropTypes.string.isRequired,
   isLambda: PropTypes.bool,
   notFoundMessage: PropTypes.string,

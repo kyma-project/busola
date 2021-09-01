@@ -1,17 +1,20 @@
 import React from 'react';
 import { StatusBadge } from 'react-shared';
-
-const statusColumn = {
-  header: 'Status',
-  value: addon => (
-    <StatusBadge autoResolveType>{addon.status?.phase}</StatusBadge>
-  ),
-};
+import { useTranslation } from 'react-i18next';
 
 export const AddonsConfigurationsList = ({
   DefaultRenderer,
   ...otherParams
 }) => {
+  const { t } = useTranslation();
+
+  const statusColumn = {
+    header: t('common.headers.status'),
+    value: addon => (
+      <StatusBadge autoResolveType>{addon.status?.phase}</StatusBadge>
+    ),
+  };
+
   const customColumns = [statusColumn];
   return <DefaultRenderer customColumns={customColumns} {...otherParams} />;
 };

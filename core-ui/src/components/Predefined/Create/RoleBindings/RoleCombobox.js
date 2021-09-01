@@ -2,10 +2,13 @@ import React from 'react';
 
 import { ComboboxInput } from 'fundamental-react';
 import { useGetList } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 
 import './RoleCombobox.scss';
 
 export const RoleCombobox = ({ setRole, setRoleKind, namespace }) => {
+  const { t } = useTranslation();
+
   const chooseRole = role => {
     setRoleKind(role.data?.roleKind);
     setRole(role.data?.roleName);
@@ -51,12 +54,12 @@ export const RoleCombobox = ({ setRole, setRoleKind, namespace }) => {
   return (
     <ComboboxInput
       id="role-combobox"
-      ariaLabel="Choose role"
-      placeholder="Choose role..."
+      ariaLabel={t('role-bindings.aria.choose-role')}
+      placeholder={t('role-bindings.placeholders.choose-role')}
       className="role-combobox"
-      noMatchesText="No Roles found"
+      noMatchesText={t('role-bindings.tooltip.no-found')}
       options={allRoles}
-      arrowLabel="Show roles"
+      arrowLabel={t('role-bindings.placeholders.choose-role')}
       selectionType="auto-inline"
       inputProps={{
         autoComplete: 'nope',

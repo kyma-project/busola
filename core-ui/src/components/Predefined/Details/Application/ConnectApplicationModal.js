@@ -2,8 +2,11 @@ import React from 'react';
 import { Button } from 'fundamental-react';
 import { Modal, usePost, useDelete, useSingleGet } from 'react-shared';
 import copyToCliboard from 'copy-to-clipboard';
+import { useTranslation } from 'react-i18next';
 
 function Actions({ close, textToCopy, canCopy }) {
+  const { t } = useTranslation();
+
   return [
     <Button
       disabled={!canCopy}
@@ -11,23 +14,24 @@ function Actions({ close, textToCopy, canCopy }) {
       onClick={() => copyToCliboard(textToCopy)}
       key="copy"
     >
-      Copy to clipboard
+      {t('common.tooltips.copy-to-clipboard')}
     </Button>,
     <Button onClick={close} key="close">
-      Close
+      {t('applications.buttons.close')}
     </Button>,
   ];
 }
 
 export default function ConnectApplicationModal({ applicationName }) {
   const [url, setUrl] = React.useState();
+  const { t } = useTranslation();
 
   const postRequest = usePost();
   const deleteTokenRequest = useDelete();
   const getRequest = useSingleGet();
 
   async function performUrlFetch() {
-    setUrl('Loading...');
+    setUrl(t('common.headers.loading'));
 
     const defaultNamespace = 'default'; // just use the default namespace
     const path = `/apis/applicationconnector.kyma-project.io/v1alpha1/namespaces/${defaultNamespace}/tokenrequests`;
@@ -73,17 +77,18 @@ export default function ConnectApplicationModal({ applicationName }) {
         <Actions
           close={onClose}
           textToCopy={url}
-          canCopy={url !== 'Loading...'}
+          canCopy={url !== t('common.headers.loading')}
         />
       )}
-      title="Connect Application"
+      title={t('applications.subtitle.connect-app')}
       modalOpeningComponent={
-        <Button className="fd-margin-end--sm">Connect Application</Button>
+        <Button className="fd-margin-end--sm">
+          {t('applications.buttons.connect')}
+        </Button>
       }
     >
       <p className="fd-has-color-status-4 fd-has-font-style-italic">
-        Copy the following URL and use it at the external system that you would
-        like to connect to:
+        {t('applications.messages.copy-url')}
       </p>
       <textarea
         readOnly
