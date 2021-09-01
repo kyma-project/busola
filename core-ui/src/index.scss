@@ -159,6 +159,11 @@ header.sticky {
   z-index: 1;
 }
 
+// add a little padding to placeholder and value of Combobox's input
+[role=combobox] .fd-input.fd-input-group__input{
+  padding-left: 8px !important;
+}
+
 .fd-form-item .fd-form-select {
   margin-top: 0.25rem; // to align with other inputs
 }
