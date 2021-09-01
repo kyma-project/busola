@@ -1,12 +1,12 @@
 ---
 addons:
-  addons-status: Addons status
+  addons-status: Addons Status
   errors:
-    cannot-create: Cannot create AddonsConfiguration
+    cannot-create: Cannot create the AddonsConfiguration.
   headers:
     url: URL
   messages:
-    created: AddonsConfiguration {{name}} created
+    created: AddonsConfiguration {{name}} created.
   repository-urls: Repository URLs
   title: Addons
   urls: URLs
@@ -15,10 +15,10 @@ api-rules:
     buttons:
       add: Add access strategy
     labels:
-      required-scope: Required scope
+      required-scope: Required Scope
     messages:
       one-method: This access strategy requires at least one method.
-    title: Access strategies
+    title: Access Strategies
     tooltips:
       delete: Define at least one access strategy.
       path: Path can contain alphanumeric characters and  '/', '.', '*', '?', '!', '-', '(', and ')'.
@@ -31,18 +31,18 @@ api-rules:
   list:
     headers:
       host: Host
-      service-name: Service name
+      service-name: Service Name
       status: Status
   messages:
-    create-failed: Failed to create the APIRule
-    created: APIRule created
+    create-failed: Failed to create the APIRule.
+    created: APIRule created.
     description: Expose Services outside the cluster with APIRules.
     not-matching-results: Couldn't find APIRules matching this query.
-    updated: APIRule updated
+    updated: APIRule updated.
   services:
-    error-load: Couldn't load service list
+    error-load: Couldn't load service list.
     loading: Loading services...
-    ns-no-services: No Services in this Namespace
+    ns-no-services: No Services in this Namespace.
   title: APIRules
 applications:
   aria:
@@ -58,40 +58,40 @@ applications:
     apis: APIs
     description: Descritpion
     events: Events
-    service-and-event: Service and event bindings
+    service-and-event: Service and Event Bindings
   labels:
-    applications-and-events: Applications and events
+    applications-and-events: Applications and Events
     description: Description
     namespace: Namespace
   messages:
-    app-created: Application {{applicationName}} created
-    binding-deleted: Binding deleted
-    binding-not-found: No bindings
-    cannot-create: Cannot create Application
+    app-created: Application {{applicationName}} created.
+    binding-deleted: Binding deleted.
+    binding-not-found: No bindings.
+    cannot-create: Cannot create the Application.
     copy-url: 'Copy the following URL and use it at the external system that you would like to connect to:'
-    create-failed: Failed to create the Binding
-    created: Binding created
+    create-failed: Failed to create the Binding.
+    created: Binding created.
     dont-expose: This Application doesn't expose any Services or events.
-    no-apis: There are no APIs
+    no-apis: There are no APIs.
     no-bound-service: No bound services found.
-    no-events: There are no events
-    no-matches-text: No Namespaces to bind
-    service-not-found: No services
-    show-namespaces: Show Namespaces
-    some-apis: There are some APIs
-    some-events: There are some events
+    no-events: There are no events.
+    no-matches-text: No Namespaces to bind.
+    service-not-found: No services.
+    show-namespaces: Show Namespaces.
+    some-apis: There are some APIs.
+    some-events: There are some events.
   placeholders:
-    description: Specify a description for your Application
-    name: Specify a name for your Application
-    namespace: Choose Namespace
+    description: Specify a description for your Application.
+    name: Specify a name for your Application.
+    namespace: Choose Namespace.
   subtitle:
-    bound-to: Services and events bound to  '{{namespace}}'
-    connect-app: Connect Application
-    create-app: Create Application
-    create-binding: Create Namespace Binding
-    edit-binding: Edit ServiceClass Binding in '{{namespace}}'
-    namespace-bindings: Namespace Bindings
-    provided-services: Provided Services and events
+    bound-to: Services and events bound to  '{{namespace}}'.
+    connect-app: Connect Application.
+    create-app: Create Application.
+    create-binding: Create Namespace Binding.
+    edit-binding: Edit ServiceClass Binding in '{{namespace}}'.
+    namespace-bindings: Namespace Bindings.
+    provided-services: Provided Services and events.
   title: Applications
 brokers:
   headers:
@@ -100,16 +100,16 @@ brokers:
 btp-instances:
   create:
     external-name-placeholder: Defaults to the instance name if empty.
-    offering-name-description: SAP BTP service offering name
+    offering-name-description: SAP BTP service offering name.
     params-invalid: Parameters must be an object.
-    plan-name-description: The plan name to use for the ServiceInstance
-    title: Create $t(btp-instances.resource-type)
-  external-name: External name
-  instance-data: ServiceInstance data
+    plan-name-description: The plan name to use for the ServiceInstance.
+    title: Create $t(btp-instances.resource-type).
+  external-name: External Name
+  instance-data: ServiceInstance Data
   instance-id: Instance ID
-  offering-name: Offering name
-  parameters: Instance parameters
-  plan-name: Plan name
+  offering-name: Offering Name
+  parameters: Instance Parameters
+  plan-name: Plan Name
   resource-type: ServiceInstance
   title: BTP ServiceInstances
 btp-service-bindings:
@@ -131,11 +131,11 @@ btp-service-bindings:
     secret-description: The Secret will be created if it doesn't exist.
     title: Create $t(btp-service-bindings.resource-type)
   data: Binding Data
-  external-name: External name
+  external-name: External Name
   instance-id: Instance ID
-  instance-name: ServiceInstance name
-  parameters: Instance binding parameters
-  parameters-from: Array of Secret references to populate the parameters
+  instance-name: ServiceInstance Name
+  parameters: Instance Binding Parameters
+  parameters-from: Array of Secret references to populate the parameters.
   resource-type: ServiceBinding
   secret: Secret
   secret-not-found: This Secret doesn't exist.
@@ -145,8 +145,8 @@ catalog:
   subtitle: Enrich your experience with additional services that are installed outside the cluster.
   title: Service Catalog
 certificates:
-  common-name: Common name
-  expiration-date: Expiration date
+  common-name: Common Name
+  expiration-date: Expiration Date
   issuer: Issuer
   refs: References
   state: State
@@ -159,7 +159,7 @@ cluster-roles:
   title: ClusterRoles
 clusters:
   add:
-    title: Add cluster
+    title: Add a Cluster
   buttons:
     apply-configuration: Apply configuration
     apply-kubeconfig: Apply kubeconfig
@@ -178,12 +178,12 @@ clusters:
       tooltip: Outdated parameter version may cause errors. Delete and re-add your cluster.
     title: Clusters
   messages:
-    error-kubeconfig: Error reading the kubeconfig
+    error-kubeconfig: Error reading the kubeconfig.
     missing-configuration-data: Configuration included properly. Fill the remaining required data.
     upload-paste-kubeconfig: Upload or paste your kubeconfig file.
-    wrong-configuration: Cannot apply configuration
+    wrong-configuration: Cannot apply the configuration.
   overview:
-    title: Cluster overview
+    title: Cluster Overview
     version: Version
   storage:
     changed-message: The chosen storage type has been overwritten by the cluster configuration from {{originalStorage}} to {{targetStorage}}.
@@ -199,7 +199,7 @@ clusters:
       localStorage: localStorage
       sessionStorage: sessionStorage
       unknown: Unknown
-    title: Storage type
+    title: Storage Type
 common:
   buttons:
     add-new: Add new
@@ -212,22 +212,22 @@ common:
     save: Save
     update: Update
   create-modal:
-    delete-confirm: Don't ask this again
+    delete-confirm: Don't ask this again.
     editor-error: 'Parse error: {{error}}, previous valid input will be used.'
     messages:
-      failure: Failed to create the {{resourceType}}
-      success: '{{resourceType}} created'
+      failure: Failed to create the {{resourceType}}.
+      success: '{{resourceType}} created.'
     modes:
       advanced: Advanced
       simple: Simple
   delete-dialog:
-    delete-confirm: Don't ask this again
+    delete-confirm: Don't ask this again.
     information: You've switched off removal confirmations for all resources. You can switch them back on in Preferences.
     message: Are you sure you want to remove {{type}} {{name}}?
-    title: Remove {{name}}
+    title: Remove {{name}}.
   errors:
     no-permissions: You don't have enough permissions to view this content.
-    no-permissions-header: Not enough permissions
+    no-permissions-header: Not enough permissions.
     no-permissions-message: Contact your administrator to grant you access.
   headers:
     annotations: Annotations
@@ -243,8 +243,8 @@ common:
     resource: Resource
     service: Service
   messages:
-    cannot-load: 'Cannot load {{value}}: {{error.message}}'
-    choose: Choose {{value}}
+    cannot-load: 'Cannot load {{value}}: {{error.message}}.'
+    choose: Choose {{value}}.
     doesnt-exist: doesn't exist.
     loading-name: Loading name...
     no-instances-found: No {{value}} found.
@@ -267,11 +267,11 @@ config-maps:
   buttons:
     update: Update
   errors:
-    cannot-create: Cannot create the ConfigMap
-    cannot-update: Cannot update the ConfigMap
+    cannot-create: Cannot create the ConfigMap.
+    cannot-update: Cannot update the ConfigMap.
   messages:
-    created: ConfigMap created
-    updated: ConfigMap updated
+    created: ConfigMap created.
+    updated: ConfigMap updated.
   subtitle:
     edit-config-map: Edit ConfigMap
   title: ConfigMaps
@@ -283,7 +283,7 @@ cron-jobs:
       allow: Allow concurrent executions.
       replace: No concurrent executions, replace the previous run with the new one.
       skip: No concurrent executions, skip the new run if the previous one hasn't finished yet.
-    title: Concurrency policy
+    title: Concurrency Policy
   last-job-execution: Last Job execution
   last-schedule-time: Last schedule time
   not-scheduled-yet: None scheduled yet
@@ -292,17 +292,17 @@ cron-jobs:
 custom-resource-definitions:
   headers:
     description: Description
-    json-path: JSON path
+    json-path: JSON Path
     kind: Kind
     list-kind: List Kind
     plural: Plural
     scope: Scope
-    short-names: Short names
+    short-names: Short Names
     singular: Singular
     type: Type
     value: Value
   messages:
-    no-entries: No entries found because the version is not served
+    no-entries: No entries found because the version is not served.
   status:
     not-served: Not served
     served: Served
@@ -315,7 +315,7 @@ custom-resource-definitions:
   title: CustomResourceDefinitions
 daemon-sets:
   images: Images
-  node-selector: Node selector
+  node-selector: Node Selector
   pods: $t(pods.title)
   title: DaemonSets
   tolerations:
@@ -333,20 +333,20 @@ deployments:
       memory-limits: Memory limits
       memory-requests: Memory requests
       port: Port
-      port-placeholder: Enter the port exposed by the Service
+      port-placeholder: Enter the port exposed by the Service.
       runtime-profile: Runtime profile
       target-port: Target port
-      target-port-placeholder: Enter the target port of the container
+      target-port-placeholder: Enter the target port of the container.
     messages:
-      deployment-ok-service-bad: Deployment created, failed to create the Service
-      failure: Failed to create the Deployment
-      success: Deployment created
+      deployment-ok-service-bad: Deployment created, failed to create the Service.
+      failure: Failed to create the Deployment.
+      success: Deployment created.
     presets:
-      choose: Select a preset
+      choose: Select a Preset
       default: Default
     simple:
-      docker-image: Docker image
-      docker-image-placeholder: Enter the Docker image tag, for example, bitnami/nginx
+      docker-image: Docker Image
+      docker-image-placeholder: Enter the Docker image tag, for example, bitnami/nginx.
     title: Create Deployment
   headers:
     images: Images
@@ -356,29 +356,29 @@ discovery-and-network:
   title: Discovery and Network
 dnsentries:
   headers:
-    dns-name: DNS name
+    dns-name: DNS Name
     provider: Provider
-    provider-type: Provider type
+    provider-type: Provider Type
     spec: Specification
     status: $t(common.headers.status)
     targets: Targets
     ttl: TTL
-  title: DNS entries
+  title: DNS Entries
 dnsproviders:
   domains: Domains
   headers:
-    exclude: Excluded domains
-    include: Included domains
+    exclude: Excluded Domains
+    include: Included Domains
     status: $t(common.headers.status)
     type: Type
-  title: DNS providers
+  title: DNS Providers
 functions:
   buttons:
     connected-repositories: Connected repositories
     create-function: Create Function
   headers:
     runtime: Runtime
-    source-type: Source type
+    source-type: Source Type
   title: Functions
   variable:
     buttons:
@@ -412,7 +412,7 @@ functions:
       value: $t(functions.variable.header.value)
     header:
       key: Key
-      name: Variable name
+      name: Variable Name
       source: Source
       value: Value
     not-found: This Function doesn't have any environment variables yet.
@@ -450,7 +450,7 @@ git-repositories:
     authentication: Authentication
     secret: Secret
     url: Repository URL
-  title: Git repositories
+  title: Git Repositories
 instances:
   no-specific-plan-parameters:
     tooltip: The service provider did not define specific parameters for the selected plan. Refer to the documentation to learn about the required parameters, and define them as a JSON in the editor.
@@ -459,29 +459,29 @@ integration:
   title: Integration
 issuers:
   domains:
-    excluded: Excluded domains
-    included: Included domains
+    excluded: Excluded Domains
+    included: Included Domains
   email: E-mail
   server: Server
   state: Status
   title: Issuers
 jobs:
-  completion-time: Completion time
+  completion-time: Completion Time
   completions: Completions
   conditions:
-    last-probe: Last probe
-    last-transition: Last transition
+    last-probe: Last Probe
+    last-transition: Last Transition
     status: Status
     title: Conditions
     type: Type
-  start-time: Start time
+  start-time: Start Time
   title: Jobs
 limit-ranges:
   headers:
     default: Default
-    default-request: Default request
+    default-request: Default Request
     max: Max
-  title: Limit ranges
+  title: Limit Ranges
 machine-info:
   architecture-cpus: Architecture and CPUs
   cpu-m: CPU (m)
@@ -506,12 +506,12 @@ namespaces:
       created: Created
       message: Message
       object: Object
-      object-type: Object type
+      object-type: Object Type
     title: Warnings
   overview:
     back: Back to Namespaces
     resources:
-      error: Error while loading memory consumption data
+      error: Error while loading memory consumption data.
       limits: Memory limits
       requests: Memory requests
       title: Resource consumption
@@ -521,63 +521,63 @@ namespaces:
       deployments: $t(deployments.title)
       error: 'Error while loading {{title}} data due to: {{message}}'
       pods: $t(pods.title)
-      title: Healthy resources
+      title: Healthy Resources
   title: Namespaces
   tooltips:
     container-memory-limit: Define memory constraints for individual containers in your Namespace.
     create: Select this option to disable Istio to mediate all communication between the Pods in your Namespace.
     healthy-resources: '{{value}}/{{total}} {{resourceType}} are healthy.'
     memory-examples: 'Use plain value in bytes (128974848) or equivalent suffixes (e.g.: 129e6, 129M, 123Mi).'
-    no-resources: There are no {{resourceType}} in this Namespace
+    no-resources: There are no {{resourceType}} in this Namespace.
     total-memory-limit: Define constraints that limit total memory consumption in your Namespace.
     usage-of-memory-limits: This Namespace uses {{valueText}} of {{maxText}} its memory limits.
     usage-of-memory-requests: This Namespace uses {{valueText}} of {{maxText}} its memory requests.
 no-permissions:
-  title: No permissions
+  title: No Permissions
 node-details:
   internal-ip: Internal IP
-  involved-object: Involved object
+  involved-object: Involved Object
   message: Message
-  name: Cluster overview - Nodes
+  name: Cluster Overview - Nodes
   pod-cidr: Pod CIDR
   timestamp: Timestamp
   title-warnings: Warnings
 oauth2-clients:
   grand-types:
-    authorization-code: Authorization code
-    client-credentials: Client credentials
+    authorization-code: Authorization Code
+    client-credentials: Client Credentials
     implicit: Implicit
-    refresh-token: Refresh token
+    refresh-token: Refresh Token
   headers:
     secret: Secret
   labels:
-    grand-types: Grant types
-    response-types: Response types
+    grand-types: Grant Types
+    response-types: Response Types
     scope: Scope
   response-types:
     code: Code
-    id-token: ID token
+    id-token: ID Token
     token: Token
-  title: OAuth2 clients
+  title: OAuth2 Clients
 observability:
   title: Observability
 pods:
   buttons:
-    view-logs: View logs
+    view-logs: View Logs
   headers:
     pod-ip: Pod IP
     type: Type
-    volume-name: Volume name
+    volume-name: Volume Name
   labels:
     constainers: Containers
     filter-timeframe: 'Filter timeframe by:'
     image: Image
-    image-pull-policy: Image pull policy
-    init-constainers: Init containers
+    image-pull-policy: Image Pull Policy
+    init-constainers: Init Containers
     ports: Ports
     reverse-logs: Reverse logs
     save-to-file: Save to a file
-    show-timestamps: Show timestamps
+    show-timestamps: Show Timestamps
     volumes: Volumes
   message:
     failed-to-download: Failed to download the logs.
@@ -593,7 +593,7 @@ replica-sets:
   headers:
     images: Images
     limits: Limits
-    replicas: Ready replicas
+    replicas: Ready Replicas
     requests: Requests
   memory: Memory
   title: ReplicaSets
@@ -604,20 +604,20 @@ resource-quotas:
   title: Resource Quotas
 role-bindings:
   aria:
-    choose-role: Choose role
+    choose-role: Choose Role
   errors:
-    cannot-create: Cannot create a RoleBinding
+    cannot-create: Cannot create a RoleBinding.
   headers:
     kind: Kind
-    role-name: Role name
+    role-name: Role Name
   labels:
     annotations: Annotations
-    arrow: Show roles
+    arrow: Show Roles
     role: Role
     user: User
-    user-group: User group
+    user-group: User Group
   messages:
-    created: RoleBinding {{name}} created
+    created: RoleBinding {{name}} created.
   placeholders:
     choose-role: Choose role...
     user-group: User group
@@ -637,9 +637,9 @@ secrets:
     encode: Encode
   create-modal:
     messages:
-      decoding-failure: 'Failed to decode the Secret data: {{error}}'
-      failure: 'Failed to create the Secret: {{error}}'
-      success: Secret created
+      decoding-failure: 'Failed to decode the Secret data: {{error}}.'
+      failure: 'Failed to create the Secret: {{error}}.'
+      success: Secret created.
     presets:
       default: Default
     simple:
@@ -649,13 +649,13 @@ secrets:
   data: Data
   edit-modal:
     messages:
-      failure: 'Failed to update the Secret: {{error}}'
-      success: Secret updated
+      failure: 'Failed to update the Secret: {{error}}.'
+      success: Secret updated.
   headers:
     type: Type
   labels:
     annotations: Annotations
-    type: Secret type
+    type: Secret Type
   metadata: Metadata
   title: Secrets
   title-edit-secret: Edit Secret
@@ -703,9 +703,9 @@ stateful-sets:
   title: StatefulSets
 top-nav:
   profile:
-    download-current-cluster-config: Download the current cluster config
+    download-current-cluster-config: Download the current cluster config.
     preferences: $t(preferences.title)
-    remove-current-cluster-config: Remove the current cluster config
+    remove-current-cluster-config: Remove the current cluster config.
 workloads:
   docker-image:
     tooltip: Enter a valid Docker image registry path.
