@@ -105,7 +105,7 @@ context('In-cluster eventing', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('View logs')
+      .contains('View Logs')
       .click();
 
     // it just doesn't work in cypress

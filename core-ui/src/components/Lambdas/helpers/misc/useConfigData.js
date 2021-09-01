@@ -2,8 +2,6 @@ import { useEffect } from 'react';
 import { useGet } from 'react-shared';
 import { WEBHOOK_ENVS, updateConfig } from 'components/Lambdas/config';
 
-import { updateResourcesValidationSchema } from 'components/Lambdas/LambdaDetails/Tabs/ResourceManagement/ResourceManagement/shared';
-
 export const useConfigData = () => {
   const {
     data: resource,
@@ -110,8 +108,6 @@ export const useConfigData = () => {
         updateConfig('buildJobResourcesPresets', buildJobPresets);
       }
     }
-
-    updateResourcesValidationSchema();
   }
 
   useEffect(() => {
