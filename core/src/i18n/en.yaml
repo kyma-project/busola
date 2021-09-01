@@ -311,7 +311,7 @@ custom-resource-definitions:
     served: Served
     storage: Storage
   subtitle:
-    additional-columns: Additional printer columns
+    additional-columns: Additional Printer Columns
     names: Names
     schema: Schema
     version: Version
@@ -330,15 +330,15 @@ daemon-sets:
 deployments:
   create-modal:
     advanced:
-      cpu-limits: CPU limits
-      cpu-requests: CPU requests
+      cpu-limits: CPU Limits
+      cpu-requests: CPU Requests
       expose-service: Expose a separate Service
-      memory-limits: Memory limits
-      memory-requests: Memory requests
+      memory-limits: Memory Limits
+      memory-requests: Memory Requests
       port: Port
       port-placeholder: Enter the port exposed by the Service.
-      runtime-profile: Runtime profile
-      target-port: Target port
+      runtime-profile: Runtime Profile
+      target-port: Target Port
       target-port-placeholder: Enter the target port of the container.
     messages:
       deployment-ok-service-bad: Deployment created, failed to create the Service.
@@ -489,19 +489,19 @@ functions:
     buttons:
       add: Add environment variable
       open:
-        config-map: ConfigMap variable
-        custom: Custom variable
-        secret: Secret variable
+        config-map: ConfigMap Variable
+        custom: Custom Variable
+        secret: Secret Variable
     create-modal:
       title:
-        config-map: Create ConfigMap variable
-        custom: Create custom variable
-        secret: Create Secret variable
+        config-map: Create ConfigMap Variable
+        custom: Create Custom Variable
+        secret: Create Secret Variable
     edit-modal:
       title:
-        config-map: Edit ConfigMap variable
-        custom: Edit Custom variable
-        secret: Edit Secret variable
+        config-map: Edit ConfigMap Variable
+        custom: Edit Custom Variable
+        secret: Edit Secret Variable
     errors:
       duplicated: Duplicated variable name.
       empty: Variable is empty.
@@ -527,7 +527,7 @@ functions:
       value: Variable value
     popup-error: At least one variable has an incorrect name format, is restricted, duplicated, or empty.
     title:
-      environment-variables: Environment variables
+      environment-variables: Environment Variables
       injected-variables: Environment variables injected by the ServiceBindings
     tooltip:
       config-map: This variable comes from the "{resourceName}" ConfigMap.
@@ -619,7 +619,7 @@ namespaces:
       error: Error while loading memory consumption data.
       limits: Memory limits
       requests: Memory requests
-      title: Resource consumption
+      title: Resource Consumption
     title: Overview
     workloads:
       deploy-new: Deploy a new workload
