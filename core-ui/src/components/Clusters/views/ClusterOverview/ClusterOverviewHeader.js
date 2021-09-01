@@ -18,7 +18,7 @@ export function ClusterOverviewHeader() {
   } = useGet('/version');
 
   function formatClusterVersion() {
-    if (versionLoading) return t('common.loading');
+    if (versionLoading) return t('common.headers.loading');
     if (versionError) return getErrorMessage(versionError);
     return version.gitVersion;
   }
