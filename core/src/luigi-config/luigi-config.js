@@ -34,6 +34,10 @@ export const i18n = i18next.use(i18nextBackend).init({
     loadPath: '/i18n/{{lng}}.yaml',
     parse: data => yaml.load(data),
   },
+  saveMissing: true,
+  missingKeyHandler: (_lngs, _ns, key) => {
+    console.warn(key);
+  },
 });
 
 export const NODE_PARAM_PREFIX = `~`;
