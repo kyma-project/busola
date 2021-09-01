@@ -1,12 +1,12 @@
 ---
 addons:
-  addons-status: Addons Status
+  addons-status: Addons status
   errors:
-    cannot-create: Cannot create Addons Configuration
+    cannot-create: Cannot create AddonsConfiguration
   headers:
     url: URL
   messages:
-    created: Addons Configuration {{name}} created
+    created: AddonsConfiguration {{name}} created
   repository-urls: Repository URLs
   title: Addons
   urls: URLs
@@ -18,32 +18,32 @@ api-rules:
       required-scope: Required scope
     messages:
       one-method: This access strategy requires at least one method.
-    title: Access Strategies
+    title: Access strategies
     tooltips:
       delete: Define at least one access strategy.
       path: Path can contain alphanumeric characters and  '/', '.', '*', '?', '!', '-', '(', and ')'.
   buttons:
-    create: Create API Rule
-    edit: Edit API Rule "{{apiRuleName}}"
+    create: Create APIRule
+    edit: Edit APIRule "{{apiRuleName}}"
     expose: Expose {{type}}
   general-settings:
-    title: General Settings
+    title: General settings
   list:
     headers:
       host: Host
-      service-name: Service Name
+      service-name: Service name
       status: Status
   messages:
-    create-failed: Failed to create the API Rule
-    created: API Rule created
-    description: Expose Services outside the cluster with API Rules.
-    not-matching-results: Couldn't find API Rules matching this query.
-    updated: API Rule updated
+    create-failed: Failed to create the APIRule
+    created: APIRule created
+    description: Expose Services outside the cluster with APIRules.
+    not-matching-results: Couldn't find APIRules matching this query.
+    updated: APIRule updated
   services:
     error-load: Couldn't load service list
     loading: Loading services...
     ns-no-services: No Services in this Namespace
-  title: API Rules
+  title: APIRules
 applications:
   aria:
     namespace: Choose Namespace
@@ -58,9 +58,9 @@ applications:
     apis: APIs
     description: Descritpion
     events: Events
-    service-and-event: Service & event bindings
+    service-and-event: Service and event bindings
   labels:
-    applications-and-events: Applications & Events
+    applications-and-events: Applications and events
     description: Description
     namespace: Namespace
   messages:
@@ -71,7 +71,7 @@ applications:
     copy-url: 'Copy the following URL and use it at the external system that you would like to connect to:'
     create-failed: Failed to create the Binding
     created: Binding created
-    dont-expose: This Application doesn't expose any Service or events.
+    dont-expose: This Application doesn't expose any Services or events.
     no-apis: There are no APIs
     no-bound-service: No bound services found.
     no-events: There are no events
@@ -83,7 +83,7 @@ applications:
   placeholders:
     description: Specify a description for your Application
     name: Specify a name for your Application
-    namespace: Choose Namespace...
+    namespace: Choose Namespace
   subtitle:
     bound-to: Services and events bound to  '{{namespace}}'
     connect-app: Connect Application
@@ -91,7 +91,7 @@ applications:
     create-binding: Create Namespace Binding
     edit-binding: Edit ServiceClass Binding in '{{namespace}}'
     namespace-bindings: Namespace Bindings
-    provided-services: Provided Services & Events
+    provided-services: Provided Services and events
   title: Applications
 brokers:
   headers:
@@ -102,16 +102,16 @@ btp-instances:
     external-name-placeholder: Defaults to the instance name if empty.
     offering-name-description: SAP BTP service offering name
     params-invalid: Parameters must be an object.
-    plan-name-description: The plan name to use for the service instance
+    plan-name-description: The plan name to use for the ServiceInstance
     title: Create $t(btp-instances.resource-type)
-  external-name: External Name
-  instance-data: Service Instance Data
+  external-name: External name
+  instance-data: ServiceInstance data
   instance-id: Instance ID
-  offering-name: Offering Name
-  parameters: Instance Parameters
-  plan-name: Plan Name
-  resource-type: Service Instance
-  title: BTP Service Instances
+  offering-name: Offering name
+  parameters: Instance parameters
+  plan-name: Plan name
+  resource-type: ServiceInstance
+  title: BTP ServiceInstances
 btp-service-bindings:
   binding-id: Binding ID
   create:
@@ -119,10 +119,10 @@ btp-service-bindings:
     params-from-invalid: Parameters must be an array of objects.
     params-invalid: Parameters must be an object.
     ref-form:
-      choose-key: Choose Secret key.
+      choose-key: Choose a Secret key.
       choose-secret: Choose a Secret.
       choose-secret-first: Choose the Secret first.
-      choose-secret-key: Choose Secret key.
+      choose-secret-key: Choose a Secret key.
       duplicate-ref: This ref already exists.
       empty-secret: This Secret has no data.
       invalid-ref: Ref is invalid.
@@ -131,22 +131,22 @@ btp-service-bindings:
     secret-description: The Secret will be created if it doesn't exist.
     title: Create $t(btp-service-bindings.resource-type)
   data: Binding Data
-  external-name: External Name
+  external-name: External name
   instance-id: Instance ID
-  instance-name: Service Instance Name
-  parameters: Instance Binding Parameters
+  instance-name: ServiceInstance name
+  parameters: Instance binding parameters
   parameters-from: Array of Secret references to populate the parameters
-  resource-type: Service Binding
+  resource-type: ServiceBinding
   secret: Secret
   secret-not-found: This Secret doesn't exist.
-  title: BTP Service Bindings
+  title: BTP ServiceBindings
 catalog:
   menu-title: Catalog
   subtitle: Enrich your experience with additional services that are installed outside the cluster.
   title: Service Catalog
 certificates:
-  common-name: Common Name
-  expiration-date: Expiration Date
+  common-name: Common name
+  expiration-date: Expiration date
   issuer: Issuer
   refs: References
   state: State
@@ -159,7 +159,7 @@ cluster-roles:
   title: ClusterRoles
 clusters:
   add:
-    title: Add Cluster
+    title: Add cluster
   buttons:
     apply-configuration: Apply configuration
     apply-kubeconfig: Apply kubeconfig
@@ -179,14 +179,14 @@ clusters:
     title: Clusters
   messages:
     error-kubeconfig: Error reading the kubeconfig
-    missing-configuration-data: Configuration has been included properly. Please fill remaining required data.
-    upload-paste-kubeconfig: Upload or paste your kubeconfig file
+    missing-configuration-data: Configuration included properly. Fill the remaining required data.
+    upload-paste-kubeconfig: Upload or paste your kubeconfig file.
     wrong-configuration: Cannot apply configuration
   overview:
-    title: Cluster Overview
+    title: Cluster overview
     version: Version
   storage:
-    changed-message: The chosen storage type has been overwritten by the Cluster configuration from {{originalStorage}} to {{targetStorage}}.
+    changed-message: The chosen storage type has been overwritten by the cluster configuration from {{originalStorage}} to {{targetStorage}}.
     choose-storage:
       label: Storage type configuration
     descriptions:
@@ -199,7 +199,7 @@ clusters:
       localStorage: localStorage
       sessionStorage: sessionStorage
       unknown: Unknown
-    title: Storage Type
+    title: Storage type
 common:
   buttons:
     add-new: Add new
@@ -250,7 +250,7 @@ common:
     no-instances-found: No {{value}} found.
     no-instances-found-namespace: No {{value}} found in this Namespace.
     parse-error: Parse error, previous valid input will be used.
-    type-to-select: Start typing to select {{value}} from list.
+    type-to-select: Start typing to select {{value}} from the list.
   tooltips:
     copy-to-clipboard: Copy to clipboard
     download: Download
@@ -267,8 +267,8 @@ config-maps:
   buttons:
     update: Update
   errors:
-    cannot-create: Cannot create ConfigMap
-    cannot-update: Cannot create ConfigMap
+    cannot-create: Cannot create the ConfigMap
+    cannot-update: Cannot update the ConfigMap
   messages:
     created: ConfigMap created
     updated: ConfigMap updated
@@ -281,9 +281,9 @@ cron-jobs:
   concurrency-policy:
     descriptions:
       allow: Allow concurrent executions.
-      replace: No concurrent executions, replace previous run with the new one.
-      skip: No concurrent executions, skip new run if the previous one hasn't finished yet.
-    title: Concurrency Policy
+      replace: No concurrent executions, replace the previous run with the new one.
+      skip: No concurrent executions, skip the new run if the previous one hasn't finished yet.
+    title: Concurrency policy
   last-job-execution: Last Job execution
   last-schedule-time: Last schedule time
   not-scheduled-yet: None scheduled yet
@@ -292,23 +292,23 @@ cron-jobs:
 custom-resource-definitions:
   headers:
     description: Description
-    json-path: JSON Path
+    json-path: JSON path
     kind: Kind
     list-kind: List Kind
     plural: Plural
     scope: Scope
-    short-names: Short Names
+    short-names: Short names
     singular: Singular
     type: Type
     value: Value
   messages:
     no-entries: No entries found because the version is not served
   status:
-    not-served: Not Served
+    not-served: Not served
     served: Served
     storage: Storage
   subtitle:
-    additional-columns: Additional Printer Columns
+    additional-columns: Additional printer columns
     names: Names
     schema: Schema
     version: Version
@@ -327,26 +327,26 @@ daemon-sets:
 deployments:
   create-modal:
     advanced:
-      cpu-limits: CPU Limits
-      cpu-requests: CPU Requests
-      expose-service: Expose separate Service
-      memory-limits: Memory Limits
-      memory-requests: Memory Requests
+      cpu-limits: CPU limits
+      cpu-requests: CPU requests
+      expose-service: Expose a separate Service
+      memory-limits: Memory limits
+      memory-requests: Memory requests
       port: Port
       port-placeholder: Enter the port exposed by the Service
-      runtime-profile: Runtime Profile
-      target-port: Target Port
+      runtime-profile: Runtime profile
+      target-port: Target port
       target-port-placeholder: Enter the target port of the container
     messages:
       deployment-ok-service-bad: Deployment created, failed to create the Service
       failure: Failed to create the Deployment
       success: Deployment created
     presets:
-      choose: Select preset
+      choose: Select a preset
       default: Default
     simple:
-      docker-image: Docker Image
-      docker-image-placeholder: Enter Docker image tag, for example, bitnami/nginx
+      docker-image: Docker image
+      docker-image-placeholder: Enter the Docker image tag, for example, bitnami/nginx
     title: Create Deployment
   headers:
     images: Images
@@ -356,53 +356,53 @@ discovery-and-network:
   title: Discovery and Network
 dnsentries:
   headers:
-    dns-name: DNS Name
+    dns-name: DNS name
     provider: Provider
-    provider-type: Provider Type
+    provider-type: Provider type
     spec: Specification
     status: $t(common.headers.status)
     targets: Targets
     ttl: TTL
-  title: DNS Entries
+  title: DNS entries
 dnsproviders:
   domains: Domains
   headers:
-    exclude: Excluded Domains
-    include: Included Domains
+    exclude: Excluded domains
+    include: Included domains
     status: $t(common.headers.status)
     type: Type
-  title: DNS Providers
+  title: DNS providers
 functions:
   buttons:
     connected-repositories: Connected repositories
     create-function: Create Function
   headers:
     runtime: Runtime
-    source-type: Source Type
+    source-type: Source type
   title: Functions
   variable:
     buttons:
       add: Add environment variable
       open:
-        config-map: ConfigMap Variable
-        custom: Custom Variable
-        secret: Secret Variable
+        config-map: ConfigMap variable
+        custom: Custom variable
+        secret: Secret variable
     create-modal:
       title:
-        config-map: Create ConfigMap Variable
-        custom: Create Custom Variable
-        secret: Create Secret Variable
+        config-map: Create ConfigMap variable
+        custom: Create custom variable
+        secret: Create Secret variable
     edit-modal:
       title:
-        config-map: Edit ConfigMap Variable
-        custom: Edit Custom Variable
-        secret: Edit Secret Variable
+        config-map: Edit ConfigMap variable
+        custom: Edit Custom variable
+        secret: Edit Secret variable
     errors:
       duplicated: Duplicated variable name.
       empty: Variable is empty.
       invalid: Variable name must consist of alphanumeric characters, can contain '_', no blank spaces.
       invalid-config: Select the ConfigMap name and key.
-      invalid-secret: Select the secret name and key.
+      invalid-secret: Select the Secret name and key.
       restricted: This variable name is restricted and cannot be used. Try a different name.
     form:
       config-map: $t(functions.variable.type.config-map)
@@ -412,7 +412,7 @@ functions:
       value: $t(functions.variable.header.value)
     header:
       key: Key
-      name: Variable Name
+      name: Variable name
       source: Source
       value: Value
     not-found: This Function doesn't have any environment variables yet.
@@ -422,21 +422,21 @@ functions:
       value: Variable value
     popup-error: At least one variable has an incorrect name format, is restricted, duplicated, or empty.
     title:
-      environment-variables: Environment Variables
-      injected-variables: Environment Variables Injected via ServiceBindings
+      environment-variables: Environment variables
+      injected-variables: Environment variables injected by the ServiceBindings
     tooltip:
       config-map: This variable comes from the "{resourceName}" ConfigMap.
       custom: This variable was provided by the user.
       secret: This variable comes from the "{resourceName}" Secret.
       service-binding: This variable was injected by the ServiceBinding referencing ServiceInstance "{serviceInstanceName}".
-      text: This variable comes from a Resource. To get the value, follow the link.
+      text: This variable comes from a resource. To get the value, follow the link.
     type:
       config-map: ConfigMap
       custom: Custom
       secret: Secret
-      service-binding: Service Binding
+      service-binding: ServiceBinding
     warnings:
-      override: This variable name is identical to the variable injected via ServiceBinding. Continue if you intend that they can override each other. Otherwise, choose another name.
+      override: This variable name is identical to the variable injected by the ServiceBinding. Continue if you intend that they can override each other. Otherwise, choose another name.
       sbu-can-be-overridden:
         by-both: This variable can be overridden by one of the custom variables or a variable injected by one of the ServiceBindings.
         by-custom-env: This variable can override or be overridden by one of the custom variables.
@@ -450,40 +450,40 @@ git-repositories:
     authentication: Authentication
     secret: Secret
     url: Repository URL
-  title: Git Repositories
+  title: Git repositories
 instances:
   no-specific-plan-parameters:
-    tooltip: The service provider did not define specific parameters for the selected Plan. Refer to the documentation to learn about the required parameters, and define them as a JSON in the editor.
+    tooltip: The service provider did not define specific parameters for the selected plan. Refer to the documentation to learn about the required parameters, and define them as a JSON in the editor.
   title: Instances
 integration:
   title: Integration
 issuers:
   domains:
-    excluded: Excluded Domains
-    included: Included Domains
+    excluded: Excluded domains
+    included: Included domains
   email: E-mail
   server: Server
   state: Status
   title: Issuers
 jobs:
-  completion-time: Completion Time
+  completion-time: Completion time
   completions: Completions
   conditions:
-    last-probe: Last Probe
-    last-transition: Last Transition
+    last-probe: Last probe
+    last-transition: Last transition
     status: Status
     title: Conditions
     type: Type
-  start-time: Start Time
+  start-time: Start time
   title: Jobs
 limit-ranges:
   headers:
     default: Default
-    default-request: Default Request
+    default-request: Default request
     max: Max
-  title: Limit Ranges
+  title: Limit ranges
 machine-info:
-  architecture-cpus: Architecture & CPUs
+  architecture-cpus: Architecture and CPUs
   cpu-m: CPU (m)
   cpu-usage: 'CPU usage:'
   cpus: CPUs
@@ -499,14 +499,14 @@ machine-info:
 namespaces:
   create-modal:
     apply-limits: Apply limits per container
-    apply-memory-quotas: Apply Total Memory Quotas
-    disable-sidecar: Disable side-car injection
+    apply-memory-quotas: Apply total memory quotas
+    disable-sidecar: Disable sidecar injection
   events:
     headers:
       created: Created
       message: Message
       object: Object
-      object-type: Object Type
+      object-type: Object type
     title: Warnings
   overview:
     back: Back to Namespaces
@@ -514,14 +514,14 @@ namespaces:
       error: Error while loading memory consumption data
       limits: Memory limits
       requests: Memory requests
-      title: Resource Consumption
+      title: Resource consumption
     title: Overview
     workloads:
-      deploy-new: Deploy new workload
+      deploy-new: Deploy a new workload
       deployments: $t(deployments.title)
       error: 'Error while loading {{title}} data due to: {{message}}'
       pods: $t(pods.title)
-      title: Healthy Resources
+      title: Healthy resources
   title: Namespaces
   tooltips:
     container-memory-limit: Define memory constraints for individual containers in your Namespace.
@@ -533,12 +533,12 @@ namespaces:
     usage-of-memory-limits: This Namespace uses {{valueText}} of {{maxText}} its memory limits.
     usage-of-memory-requests: This Namespace uses {{valueText}} of {{maxText}} its memory requests.
 no-permissions:
-  title: No Permissions
+  title: No permissions
 node-details:
   internal-ip: Internal IP
   involved-object: Involved object
   message: Message
-  name: Cluster Overview - Nodes
+  name: Cluster overview - Nodes
   pod-cidr: Pod CIDR
   timestamp: Timestamp
   title-warnings: Warnings
@@ -558,16 +558,16 @@ oauth2-clients:
     code: Code
     id-token: ID token
     token: Token
-  title: OAuth2 Clients
+  title: OAuth2 clients
 observability:
   title: Observability
 pods:
   buttons:
-    view-logs: View Logs
+    view-logs: View logs
   headers:
     pod-ip: Pod IP
     type: Type
-    volume-name: Volume Name
+    volume-name: Volume name
   labels:
     constainers: Containers
     filter-timeframe: 'Filter timeframe by:'
@@ -580,7 +580,7 @@ pods:
     show-timestamps: Show timestamps
     volumes: Volumes
   message:
-    failed-to-download: Failed to download the Logs.
+    failed-to-download: Failed to download the logs.
     no-logs-available: No logs avaliable for the '{{containerName}}' container.
     type-not-found: '{{type}} not found.'
   node: Node
@@ -593,7 +593,7 @@ replica-sets:
   headers:
     images: Images
     limits: Limits
-    replicas: Ready Replicas
+    replicas: Ready replicas
     requests: Requests
   memory: Memory
   title: ReplicaSets
@@ -606,16 +606,16 @@ role-bindings:
   aria:
     choose-role: Choose role
   errors:
-    cannot-create: Cannot create RoleBinding
+    cannot-create: Cannot create a RoleBinding
   headers:
     kind: Kind
-    role-name: Role Name
+    role-name: Role name
   labels:
     annotations: Annotations
     arrow: Show roles
     role: Role
     user: User
-    user-group: User Group
+    user-group: User group
   messages:
     created: RoleBinding {{name}} created
   placeholders:
@@ -675,7 +675,7 @@ settings:
     confirmations: Confirmations
     description: Cluster interaction
     dontConfirmDelete: Delete without confirmation
-    showHiddenNamespaces: Show Hidden Namespaces
+    showHiddenNamespaces: Show hidden Namespaces
     title: Clusters
   interface:
     description: Theme, language
@@ -703,9 +703,9 @@ stateful-sets:
   title: StatefulSets
 top-nav:
   profile:
-    download-current-cluster-config: Download current Cluster Config
+    download-current-cluster-config: Download the current cluster config
     preferences: $t(preferences.title)
-    remove-current-cluster-config: Remove current Cluster Config
+    remove-current-cluster-config: Remove the current cluster config
 workloads:
   docker-image:
     tooltip: Enter a valid Docker image registry path.
