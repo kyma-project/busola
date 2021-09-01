@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Switch } from 'fundamental-react';
+import { useTranslation } from 'react-i18next';
 import { useDebouncedCallback } from 'use-debounce';
 
 import { Tooltip } from 'react-shared';
@@ -8,7 +9,6 @@ import { TabsWithActions } from 'components/Lambdas/components';
 import Editor from './Editor';
 
 import { useUpdateLambda, UPDATE_TYPE } from 'components/Lambdas/hooks';
-import { CODE_AND_DEPENDENCIES_PANEL } from 'components/Lambdas/constants';
 
 import './CodeAndDependencies.scss';
 import {
@@ -24,6 +24,7 @@ const DISABLED_CAUSES = {
 };
 
 export default function CodeAndDependencies({ lambda }) {
+  const { t } = useTranslation();
   const updateLambda = useUpdateLambda({
     lambda,
     type: UPDATE_TYPE.CODE_AND_DEPENDENCIES,
@@ -93,19 +94,18 @@ export default function CodeAndDependencies({ lambda }) {
   }
 
   function checkPopupMessage() {
-    const messages = CODE_AND_DEPENDENCIES_PANEL.SAVE_BUTTON.POPUP_MESSAGE;
     let message = '';
     switch (disabledCause) {
       case DISABLED_CAUSES.EMPTY_SOURCE: {
-        message = messages.EMPTY_SOURCE;
+        message = t('functions.create-view.errors.empty-source');
         break;
       }
       case DISABLED_CAUSES.INVALID_DEPS: {
-        message = messages.INVALID_DEPS;
+        message = t('functions.create-view.errors.invalid-deps');
         break;
       }
       case DISABLED_CAUSES.NO_CHANGES: {
-        message = messages.NO_CHANGES;
+        message = t('functions.create-view.errors.no-changes');
         break;
       }
       default:
@@ -125,7 +125,7 @@ export default function CodeAndDependencies({ lambda }) {
       disabled={disabled}
       onClick={handleSave}
     >
-      {CODE_AND_DEPENDENCIES_PANEL.SAVE_BUTTON.TEXT}
+      {t('common.buttons.save')}
     </Button>
   );
 
@@ -146,7 +146,7 @@ export default function CodeAndDependencies({ lambda }) {
 
   const toggle = (
     <Switch compact onChange={onChangeToggle}>
-      {CODE_AND_DEPENDENCIES_PANEL.DIFF_TOGGLE}
+      {t('functions.details.buttons.diff_toggle')}
     </Switch>
   );
   const actions = (
@@ -164,7 +164,7 @@ export default function CodeAndDependencies({ lambda }) {
   const tabsData = [
     {
       id: 'function-code',
-      title: CODE_AND_DEPENDENCIES_PANEL.TABS.CODE,
+      title: t('functions.variable.header.source'),
       body: (
         <Editor
           id="lambda-code"
@@ -181,7 +181,7 @@ export default function CodeAndDependencies({ lambda }) {
     },
     {
       id: 'function-dependencies',
-      title: CODE_AND_DEPENDENCIES_PANEL.TABS.DEPENDENCIES,
+      title: t('functions.details.title.dependencies'),
       body: (
         <Editor
           id="lambda-dependencies"

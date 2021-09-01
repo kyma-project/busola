@@ -65,27 +65,6 @@ describe('serializeVariables', () => {
     const customValueFromVariable = customValueFromVariables[0];
     delete customValueFromVariable.id;
     expect(customValueFromVariable).toEqual(expectedCustomValueFromVariable);
-
-    //TODO bring back after injected variables fix
-    // const expectedInjectedVariables = [
-    //   {
-    //     type: VARIABLE_TYPE.BINDING_USAGE,
-    //     name: 'PREFIX_FOO',
-    //     value: 'foo',
-    //     validation: VARIABLE_VALIDATION.NONE,
-    //     serviceInstanceName: 'serviceInstanceName',
-    //   },
-    //   {
-    //     type: VARIABLE_TYPE.BINDING_USAGE,
-    //     name: 'PREFIX_BAR',
-    //     value: 'bar',
-    //     validation: VARIABLE_VALIDATION.NONE,
-    //     serviceInstanceName: 'serviceInstanceName',
-    //   },
-    // ];
-    // delete injectedVariables[0].id;
-    // delete injectedVariables[1].id;
-    // expect(injectedVariables).toEqual(expectedInjectedVariables);
   });
 
   test.skip('should return serialized variables with CAN_OVERRIDE_BY_CUSTOM_ENV warnings', () => {

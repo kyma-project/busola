@@ -5,7 +5,7 @@ import { MessageStrip, FormRadioGroup, FormRadioItem } from 'fundamental-react';
 
 export const AUTH_FORM_TOKEN = 'Token';
 export const AUTH_FORM_OIDC = 'OIDC';
-export const DEFAULT_SCOPE_VALUE = 'openid ';
+export const DEFAULT_SCOPE_VALUE = 'openid';
 
 const OIDCform = ({ auth, setAuth }) => {
   const { t } = useTranslation();

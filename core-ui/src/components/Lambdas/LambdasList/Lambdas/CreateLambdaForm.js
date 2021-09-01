@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { MessageStrip } from 'fundamental-react';
 import {
   randomNameGenerator,
@@ -60,22 +61,23 @@ export default function CreateLambdaForm({
     [setErrors],
   );
 
+  const { t } = useTranslation();
   useEffect(() => {
     if (isValid && errors.length) {
-      setInvalidModalPopupMessage(LAMBDAS_LIST.CREATE_MODAL.ERRORS.INVALID);
+      setInvalidModalPopupMessage(t('functions.create-view.errors.invalid'));
       setValid(false);
     } else if (!isValid && !errors.length) {
       setInvalidModalPopupMessage('');
       setValid(true);
     }
-  }, [isValid, errors, setValid, setInvalidModalPopupMessage]);
+  }, [isValid, errors, setValid, setInvalidModalPopupMessage, t]);
 
   useEffect(() => {
     if (sourceType) {
       if (!repositories.length) {
         addError(ERRORS.REPOSITORY_URL);
         setInvalidModalPopupMessage(
-          LAMBDAS_LIST.CREATE_MODAL.ERRORS.NO_REPOSITORY_FOUND,
+          t('functions.create-view.errors.no-repository-found'),
         );
       }
     } else {
@@ -87,6 +89,7 @@ export default function CreateLambdaForm({
     repositories,
     addError,
     removeError,
+    t,
   ]);
 
   function validateName(name) {
@@ -94,6 +97,7 @@ export default function CreateLambdaForm({
     const validationMessage = validateResourceName(
       name,
       LAMBDAS_LIST.CREATE_MODAL.INPUTS.NAME.ERRORS,
+      t,
     );
     if (validationMessage) {
       setNameStatus(validationMessage);
@@ -106,7 +110,7 @@ export default function CreateLambdaForm({
 
   function validateReference(reference, setStatus) {
     if (!reference) {
-      setStatus(LAMBDAS_LIST.CREATE_MODAL.INPUTS.REFERENCE.ERRORS.EMPTY);
+      setStatus(t('functions.create-view.errors.req-reference'));
       addError(ERRORS.REFERENCE);
       return;
     }
@@ -116,7 +120,7 @@ export default function CreateLambdaForm({
 
   function validateBaseDir(baseDir, setStatus) {
     if (!baseDir) {
-      setStatus(LAMBDAS_LIST.CREATE_MODAL.INPUTS.BASE_DIR.ERRORS.EMPTY);
+      setStatus(t('functions.create-view.errors.req-base-dir'));
       addError(ERRORS.BASE_DIR);
       return;
     }
@@ -166,7 +170,7 @@ export default function CreateLambdaForm({
   const sourceTypeOptions = LAMBDAS_LIST.CREATE_MODAL.INPUTS.SOURCE_TYPE.OPTIONS.map(
     sourceType => ({
       key: sourceType.KEY,
-      text: sourceType.VALUE,
+      text: t(sourceType.VALUE),
     }),
   );
   const repositoryOptions = repositories?.map(repository => ({
@@ -197,47 +201,41 @@ export default function CreateLambdaForm({
 
       <Dropdown
         id="function-runtime-dropdown"
-        label={LAMBDAS_LIST.CREATE_MODAL.INPUTS.RUNTIME.LABEL}
+        label={t('functions.headers.runtime')}
         options={runtimeOptions}
         selectedKey={runtimeOptions[0].key}
         onSelect={(_, selected) => setRuntime(selected.key)}
-        inlineHelp={LAMBDAS_LIST.CREATE_MODAL.INPUTS.RUNTIME.INLINE_HELP}
       />
 
       <Dropdown
         id="function-source-dropdown"
-        label={LAMBDAS_LIST.CREATE_MODAL.INPUTS.SOURCE_TYPE.LABEL}
+        label={t('functions.headers.source-type')}
         options={sourceTypeOptions}
         selectedKey={sourceTypeOptions[0].key}
         onSelect={(_, selected) => setSourceType(selected.key)}
-        inlineHelp={LAMBDAS_LIST.CREATE_MODAL.INPUTS.SOURCE_TYPE.INLINE_HELP}
+        inlineHelp={t('functions.create-view.inline-help.source-type')}
       />
 
       {sourceType &&
         (!repositories.length ? (
           <MessageStrip dismissible={false} type="information">
-            {LAMBDAS_LIST.CREATE_MODAL.ERRORS.NO_REPOSITORY_FOUND}
+            {t('functions.create-view.errors.no-repository-found')}
           </MessageStrip>
         ) : (
           <>
             <Dropdown
               id="function-repos-dropdown"
-              label={LAMBDAS_LIST.CREATE_MODAL.INPUTS.REPOSITORY.LABEL}
+              label={t('functions.create-view.labels.repository')}
               options={repositoryOptions}
               selectedKey={repositoryOptions[0].key}
               onSelect={(_, selected) => setRepositoryName(selected.key)}
-              inlineHelp={
-                LAMBDAS_LIST.CREATE_MODAL.INPUTS.REPOSITORY.INLINE_HELP
-              }
             />
 
             <FormInput
               _ref={referenceRef}
               required={true}
-              label={LAMBDAS_LIST.CREATE_MODAL.INPUTS.REFERENCE.LABEL}
-              inlineHelp={
-                LAMBDAS_LIST.CREATE_MODAL.INPUTS.REFERENCE.INLINE_HELP
-              }
+              label={t('functions.create-view.labels.reference')}
+              inlineHelp={t('functions.create-view.inline-help.reference')}
               id="reference"
               firstValue={'main'}
               placeholder={
@@ -249,8 +247,8 @@ export default function CreateLambdaForm({
             <FormInput
               _ref={baseDirRef}
               required={true}
-              label={LAMBDAS_LIST.CREATE_MODAL.INPUTS.BASE_DIR.LABEL}
-              inlineHelp={LAMBDAS_LIST.CREATE_MODAL.INPUTS.BASE_DIR.INLINE_HELP}
+              label={t('functions.create-view.labels.base-directory')}
+              inlineHelp={t('functions.create-view.inline-help.base-directory')}
               id="baseDir"
               firstValue={'/'}
               placeholder={
