@@ -262,7 +262,7 @@ export default function ResourceVariableInput({
           </FormItem>
           {takeAll && (
             <MessageStrip className="fd-margin-top--sm" type="information">
-              {t('functions.variable.form.name-will-become-prefix')}
+              {t('functions.variable.form.take-all-description')}
             </MessageStrip>
           )}
         </>

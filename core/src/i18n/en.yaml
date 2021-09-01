@@ -373,7 +373,7 @@ functions:
       config-map: $t(functions.variable.type.config-map)
       key: $t(functions.variable.header.key)
       name: Name
-      name-will-become-prefix: The name will become the variables prefix.
+      take-all-description: Mutliple single variables will be created, with "Name" as a common prefix.
       secret: $t(functions.variable.type.secret)
       value: $t(functions.variable.header.value)
     header:
