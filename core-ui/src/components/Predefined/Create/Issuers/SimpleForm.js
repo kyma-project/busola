@@ -28,6 +28,7 @@ export function SimpleForm({ issuer, setIssuer }) {
                 compact
                 value={issuer.server}
                 onChange={e => setIssuer({ ...issuer, server: e.target.value })}
+                placeholder={t('issuers.placeholders.server')}
               />
             }
           />
@@ -41,6 +42,7 @@ export function SimpleForm({ issuer, setIssuer }) {
                 compact
                 value={issuer.email}
                 onChange={e => setIssuer({ ...issuer, email: e.target.value })}
+                placeholder={t('issuers.placeholders.email')}
               />
             }
           />
@@ -61,6 +63,7 @@ export function SimpleForm({ issuer, setIssuer }) {
                 required
                 onChange={e => setIssuer({ ...issuer, name: e.target.value })}
                 value={issuer.name}
+                placeholder={t('issuers.placeholders.name')}
               />
             }
           />
@@ -78,6 +81,7 @@ export function SimpleForm({ issuer, setIssuer }) {
                   { key: 'acme', text: t('issuers.acme') },
                 ]}
                 selectedKey={issuer.type}
+                placeholder={t('issuers.placeholders.type')}
               ></Select>
             }
           />

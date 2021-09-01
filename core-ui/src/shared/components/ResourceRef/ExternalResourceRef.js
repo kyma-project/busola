@@ -2,6 +2,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormInput, ComboboxInput } from 'fundamental-react';
 
+import './ExternalResourceRef.scss';
+
 export function ExternalResourceRef({ resourceRef, onChange, resources }) {
   const { t } = useTranslation();
   const options = (resources || []).map((resource, index) => ({
@@ -17,7 +19,7 @@ export function ExternalResourceRef({ resourceRef, onChange, resources }) {
   };
 
   return (
-    <>
+    <div className="external-resource-ref">
       <ComboboxInput
         compact
         onChange={e => {
@@ -25,6 +27,7 @@ export function ExternalResourceRef({ resourceRef, onChange, resources }) {
         }}
         onSelectionChange={selectResource}
         placeholder={t('common.labels.name')}
+        formItemProps={{ className: 'name' }}
         inputProps={{ value: resourceRef.name }}
         options={options}
         optionRenderer={resource => (
@@ -34,14 +37,17 @@ export function ExternalResourceRef({ resourceRef, onChange, resources }) {
           </>
         )}
       />
-      <FormInput
-        compact
-        onChange={e =>
-          onChange(e, { ...resourceRef, namespace: e.target.value })
-        }
-        placeholder={t('common.labels.namespace')}
-        value={resourceRef.namespace}
-      />
-    </>
+      <div className="namespace fd-input-group--control fd-input-group">
+        <FormInput
+          compact
+          className="fd-input-group__input"
+          onChange={e =>
+            onChange(e, { ...resourceRef, namespace: e.target.value })
+          }
+          placeholder={t('common.labels.namespace')}
+          value={resourceRef.namespace}
+        />
+      </div>
+    </div>
   );
 }

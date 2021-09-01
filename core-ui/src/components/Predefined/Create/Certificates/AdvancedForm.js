@@ -62,6 +62,7 @@ export function AdvancedForm({ certificate, setCertificate }) {
                     })
                   }
                   value={certificate.secretName}
+                  placeholder={t('certificates.placeholders.secret-name')}
                 />
               }
             />

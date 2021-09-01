@@ -57,6 +57,7 @@ export function AdvancedForm({ issuer, setIssuer }) {
                     })
                   }
                   value={issuer.includeDomains.join('\n')}
+                  placeholder={t('issuers.placeholders.included-domains')}
                 />
               }
             />
@@ -75,6 +76,7 @@ export function AdvancedForm({ issuer, setIssuer }) {
                     })
                   }
                   value={issuer.excludeDomains.join('\n')}
+                  placeholder={t('issuers.placeholders.excluded-domains')}
                 />
               }
             />
@@ -98,6 +100,7 @@ export function AdvancedForm({ issuer, setIssuer }) {
                     })
                   }
                   value={issuer.externalAccountKeyId}
+                  placeholder={t('issuers.placeholders.key-id')}
                 />
               }
             />
@@ -136,6 +139,7 @@ export function AdvancedForm({ issuer, setIssuer }) {
                   setIssuer({ ...issuer, requestsPerDayQuota: +e.target.value })
                 }
                 value={issuer.requestsPerDayQuota}
+                placeholder={t('issuers.placeholders.requests-per-day')}
               />
             }
           />

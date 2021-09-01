@@ -121,11 +121,28 @@ catalog:
   title: Service Catalog
 certificates:
   common-name: Common Name
+  dns-names: DNS Names
   expiration-date: Expiration Date
   issuer: Issuer
   refs: References
   state: State
   title: Certificates
+  csr: CSR
+  with-csr: Use a CSR
+  renew: Trigger a renew
+  existing-secret: Use an existing secret
+  secret-name: Secret name
+  secret-ref: Secret to use
+  create:
+    messages:
+      success: Certificate created
+      failure: Failed to create the certificate
+  placeholders:
+    name: Certificate name
+    common-name: Certificate CN (max 64 characters)
+    dns-names: Additional domain names, one per line
+    csr: Base64 encoded Certificate Signing Request
+    secret-name: Requested secret name
 cluster-addons:
   title: Cluster Addons
 cluster-role-bindings:
@@ -441,13 +458,17 @@ issuers:
     key-id: CA key ID
     secret: Symmetric MAC Secret
   create:
-    presets:
-      default: Default
-      ca: CA
-      acme: ACME
     messages:
       success: Issuer created
       failure: Failed to create the issuer
+  placeholders:
+    name: Issuer Name
+    type: Select issuer type
+    server: ACME Server URL
+    email: Email address for user registration
+    included-domains: One domain per line
+    excluded-domains: One domain per line
+    key-id: ID of the CA that the external account is bound to
 jobs:
   completion-time: Completion Time
   completions: Completions

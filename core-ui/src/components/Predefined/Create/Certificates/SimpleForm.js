@@ -29,6 +29,8 @@ export function SimpleForm({ certificate, setCertificate }) {
                 setCertificate({ ...certificate, commonName: e.target.value })
               }
               value={certificate.commonName}
+              maxlength="64"
+              placeholder={t('certificates.placeholders.common-name')}
             />
           }
         />
@@ -47,6 +49,7 @@ export function SimpleForm({ certificate, setCertificate }) {
                 })
               }
               value={certificate.dnsNames.join('\n')}
+              placeholder={t('certificates.placeholders.dns-names')}
             />
           }
         />
@@ -68,6 +71,7 @@ export function SimpleForm({ certificate, setCertificate }) {
                 setCertificate({ ...certificate, csr: e.target.value })
               }
               value={certificate.csr}
+              placeholder={t('certificates.placeholders.csr')}
             />
           }
         />
@@ -89,6 +93,7 @@ export function SimpleForm({ certificate, setCertificate }) {
                   setCertificate({ ...certificate, name: e.target.value })
                 }
                 value={certificate.name}
+                placeholder={t('certificates.placeholders.name')}
               />
             }
           />
