@@ -12,13 +12,13 @@ context('Create a Deployment', () => {
 
   it('Create a Deployment', () => {
     cy.getIframeBody()
-      .contains('Deploy new workload')
+      .contains('Deploy a new workload')
       .click();
 
     cy.getIframeBody()
       .find('[role="menuitem"]')
       .contains('Create Deployment')
-      .click();
+      .click({ force: true });
 
     cy.getIframeBody()
       .find('[placeholder="Deployment name"]:visible')
@@ -42,7 +42,7 @@ context('Create a Deployment', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder^="Enter Docker image"]:visible')
+      .find('[placeholder^="Enter the Docker image"]:visible')
       .type(DOCKER_IMAGE);
 
     cy.getIframeBody()
