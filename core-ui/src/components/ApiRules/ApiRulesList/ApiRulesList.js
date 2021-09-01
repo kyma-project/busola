@@ -12,7 +12,6 @@ import { useDeleteApiRule } from '../hooks/useDeleteApiRule';
 
 import { PANEL } from '../constants';
 
-const defaultHeaderRenderer = () => ['Name', 'Host', 'Service', 'Status'];
 const defaultTextSearchProperties = [
   'metadata.name',
   'spec.service.host',
@@ -99,7 +98,7 @@ export default function ApiRules({
   redirectPath = undefined,
   redirectCtx = undefined,
   portForCreate = undefined,
-  headerRenderer = defaultHeaderRenderer,
+  headerRenderer,
   rowRenderer = defaultRowRenderer,
   textSearchProperties = defaultTextSearchProperties,
   apiRules = [],
@@ -173,7 +172,7 @@ export default function ApiRules({
         serverDataLoading={serverDataLoading}
         notFoundMessage={notFoundMessage}
         noSearchResultMessage={t(PANEL.LIST.ERRORS.NOT_MATCHING_SEARCH_QUERY)}
-        serverErrorMessage={ERRORS.SERVER}
+        serverErrorMessage={t(ERRORS.SERVER)}
       />
     </div>
   );
