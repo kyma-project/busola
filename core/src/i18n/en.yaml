@@ -85,7 +85,7 @@ applications:
     name: Specify a name for your Application.
     namespace: Choose Namespace.
   subtitle:
-    bound-to: Services and events bound to  '{{namespace}}'.
+    bound-to: Services and events bound to '{{namespace}}'.
     connect-app: Connect Application.
     create-app: Create Application.
     create-binding: Create Namespace Binding.
@@ -234,6 +234,7 @@ common:
     created: Created
     labels: Labels
     loading: Loading...
+    logs: Logs
     name: Name
     resources: Resources
     status: Status
@@ -246,6 +247,8 @@ common:
     cannot-load: 'Cannot load {{value}}: {{error.message}}.'
     choose: Choose {{value}}.
     doesnt-exist: doesn't exist.
+    entry-not-found: Entry not found
+    error: 'Error: {{error}}'
     loading-name: Loading name...
     no-instances-found: No {{value}} found.
     no-instances-found-namespace: No {{value}} found in this Namespace.
@@ -376,9 +379,111 @@ functions:
   buttons:
     connected-repositories: Connected repositories
     create-function: Create Function
+  create-view:
+    buttons:
+      confirm: Create
+      create: Create a Function
+    errors:
+      cpu-default: This value must be a fixed-point number or in millicpu. For example, 0.1, 1, or 100m.
+      cpu-limits-too-low: This value must be equal to or greater than the equivalent value for Requests.
+      cpu-request-too-high: This value must be equal to or lower than the equivalent value for Limits.
+      cpu-too-low: This value is too low. The minimum value is {{minValue}}.
+      empty-source: Source cannot be empty.
+      invalid: At least one field is empty or incorrectly formatted.
+      invalid-deps: Dependencies must be specified in a valid JSON format.
+      max-replicas-positive: Maximum replicas must be a positive integer.
+      max-replicas-too-low: Maximum number of replicas has to be equal or greater than minimum.
+      memory-default: 'This value must be a fixed-point number in one of the following units: Gi, G, Mi, M, Ki, or K. For example, 50Mi, 1000.5Ki, or 0.1G.'
+      memory-limits-too-low: This value must be equal to or greater than the equivalent value for Requests.
+      memory-request-too-high: This value must be equal to or lower than the equivalent value for Limits.
+      memory-too-low: This value is too low. The minimum value is {{minValue}}.
+      min-replicas-positive: Minimum number of replicas must be a positive integer.
+      min-replicas-too-high: Minimum number of replicas has to be equal to or lower than maximum.
+      no-changes: No changes made.
+      no-repository-found: There are no Repositories available. Create a Repository.
+      one-field-empty: At least one field is empty.
+      one-field-invalid: At least one field is invalid.
+      req-base-dir: Base Directory is required.
+      req-reference: Reference is required.
+      required-name: Function name is required.
+      too-long: Function name cannot be longer than 63 characters.
+    inline-help:
+      base-directory: Directory with your Function's code and dependencies
+      reference: Reference to the Function's source. Select a branch name or commit revision.
+      source-type: Provide code and dependencies as plain text with inline editor, or fetch them from a Git repository
+    labels:
+      base-directory: Base Directory
+      git-repository: Git Repository
+      inline-editor: Inline Editor
+      reference: Reference
+      repository: Repository
+  details:
+    buttons:
+      diff_toggle: Diff
+      edit-configuration: Edit Configuration
+    descriptions:
+      build-job: Choose one of the predefined values for build Job's resources or set your own values ​​by selecting the "Custom" option.
+      limits: Maximum amount of compute resources allowed.
+      maximum-replicas: Maximum number of running Replicas. Set it to 0 to disable the function.
+      minimum-replicas: Minimum number of running Replicas.
+      requests: Minimum amount of compute resources required.
+      runtime-profile: Choose one of the predefined values for Function's resources or set your own values ​​by selecting the "Custom" option.
+    errors:
+      req-reference: Reference is required.
+    inline-help:
+      function-reference: Reference to the Function's source. Select a branch name or commit revision.
+    title:
+      build-job: Build Job Profile
+      code: Code
+      configuration: Configuration
+      cpu: CPU
+      dependencies: Dependencies
+      limits: Limits
+      maximum-replicas: Maximum Replicas
+      memory: Memory
+      minimum-replicas: Minimum Replicas
+      requests: Requests
+      resources: Resources
+      resources-replicas: Resources and Replicas
+      runtime-profile: Runtime Profile
+      scaling-options: Scaling Options
+  errors:
+    server: Server error. Contact your cluster admin.
   headers:
     runtime: Runtime
     source-type: Source Type
+  pod-list:
+    buttons:
+      view-logs: View Logs
+    title: Replicas of the Function
+  repository:
+    title: Repository Configuration
+  repository-list:
+    create:
+      buttons:
+        confirm: Connect
+      title: Connect Repository
+    errors:
+      invalid-url: Invalid Repository URL. The URL must start with the "http(s)", "git", or "ssh" prefix and end with the ".git" suffix.
+      req-name: Repository name is required.
+      req-sec-name: Secret name is required.
+      too-long-name: Repository name cannot be longer than 63 characters.
+      too-long-sec-name: Secret name cannot be longer than 63 characters.
+    inline-help:
+      auth: 'Basic: token or password / SSH key: authentication key / Public: no authentication'
+      url: URL must be a valid Git repository address that starts with the "http(s)", "git", or "ssh" prefix and ends with the ".git" suffix.
+    labels:
+      auth: Authorization
+      secret-name: Secret Name
+      url: URL
+  statuses:
+    building: Building
+    deploying: Deploying
+    failed: Failed
+    failed-message: Function couldn't be processed.
+    initializing: Initializing
+    new-revision-error: New Revision Error
+    running: Running
   title: Functions
   variable:
     buttons:

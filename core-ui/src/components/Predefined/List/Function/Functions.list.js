@@ -41,7 +41,7 @@ export const FunctionsList = ({ DefaultRenderer, ...otherParams }) => {
     {
       header: t('functions.headers.source-type'),
       value: func => {
-        return prettySourceType(func.spec.type);
+        return prettySourceType(func.spec.type, t);
       },
     },
     {

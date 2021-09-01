@@ -5,7 +5,7 @@ export const sourceTypes = {
   git: FUNCTION_SOURCE_TYPE.GIT,
 };
 
-export const prettySourceType = sourceType =>
-  sourceTypes[sourceType] || sourceTypes[''];
+export const prettySourceType = (sourceType, t) =>
+  t(sourceTypes[sourceType]) || t(sourceTypes['']);
 
 export const isGitSourceType = sourceType => sourceType === 'git';
