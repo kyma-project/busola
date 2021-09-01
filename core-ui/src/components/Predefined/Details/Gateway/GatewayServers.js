@@ -13,7 +13,7 @@ function ServerHosts({ hosts }) {
   return (
     <ul>
       {hosts.map(host => (
-        <li>{host}</li>
+        <li key={host}>{host}</li>
       ))}
     </ul>
   );
