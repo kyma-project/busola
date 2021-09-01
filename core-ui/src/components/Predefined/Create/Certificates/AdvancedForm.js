@@ -1,12 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  FormFieldset,
-  FormLabel,
-  FormInput,
-  FormTextarea,
-  Switch,
-} from 'fundamental-react';
+import { FormFieldset, FormLabel, FormInput, Switch } from 'fundamental-react';
 
 import { SecretRef } from 'shared/components/ResourceRef/SecretRef';
 import { CreateForm } from 'shared/components/CreateForm/CreateForm';

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import LuigiClient from '@luigi-project/client';
-import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { usePost, useNotification } from 'react-shared';
 

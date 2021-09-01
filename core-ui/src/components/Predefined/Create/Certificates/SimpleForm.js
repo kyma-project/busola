@@ -6,7 +6,6 @@ import {
   FormInput,
   FormTextarea,
   Switch,
-  ComboboxInput,
 } from 'fundamental-react';
 
 import { CreateForm } from 'shared/components/CreateForm/CreateForm';
