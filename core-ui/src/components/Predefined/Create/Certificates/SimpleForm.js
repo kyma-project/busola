@@ -6,9 +6,11 @@ import {
   FormInput,
   FormTextarea,
   Switch,
+  ComboboxInput,
 } from 'fundamental-react';
 
 import { CreateForm } from 'shared/components/CreateForm/CreateForm';
+import { IssuerRef } from 'shared/components/ResourceRef/IssuerRef';
 
 export function SimpleForm({ certificate, setCertificate }) {
   const { t } = useTranslation();
@@ -112,34 +114,13 @@ export function SimpleForm({ certificate, setCertificate }) {
         {(certificate.withCSR && csrFields) || commonNameFields}
         <FormFieldset>
           <CreateForm.FormField
-            label={<FormLabel>{t('certificates.issuer-name')}</FormLabel>}
+            label={<FormLabel>{t('certificates.issuer')}</FormLabel>}
             input={
-              <FormInput
-                compact
-                onChange={e =>
-                  setCertificate({
-                    ...certificate,
-                    issuerRefName: e.target.value,
-                  })
+              <IssuerRef
+                resourceRef={certificate.issuerRef}
+                onChange={(e, issuerRef) =>
+                  setCertificate({ ...certificate, issuerRef })
                 }
-                value={certificate.issuerRefName}
-              />
-            }
-          />
-        </FormFieldset>
-        <FormFieldset>
-          <CreateForm.FormField
-            label={<FormLabel>{t('certificates.issuer-namespace')}</FormLabel>}
-            input={
-              <FormInput
-                compact
-                onChange={e =>
-                  setCertificate({
-                    ...certificate,
-                    issuerRefNamespace: e.target.value,
-                  })
-                }
-                value={certificate.issuerRefNamespace}
               />
             }
           />

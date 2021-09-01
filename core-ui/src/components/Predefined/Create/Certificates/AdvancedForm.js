@@ -8,9 +8,10 @@ import {
   Switch,
 } from 'fundamental-react';
 
-import { SimpleForm } from './SimpleForm';
-
+import { SecretRef } from 'shared/components/ResourceRef/SecretRef';
 import { CreateForm } from 'shared/components/CreateForm/CreateForm';
+
+import { SimpleForm } from './SimpleForm';
 
 export function AdvancedForm({ certificate, setCertificate }) {
   const { t } = useTranslation();
@@ -73,48 +74,20 @@ export function AdvancedForm({ certificate, setCertificate }) {
           </FormFieldset>
         )}
         {certificate.existingSecret && (
-          <>
-            <FormFieldset>
-              <CreateForm.FormField
-                label={
-                  <FormLabel>{t('certificates.secret-ref-name')}</FormLabel>
-                }
-                input={
-                  <FormInput
-                    compact
-                    onChange={e =>
-                      setCertificate({
-                        ...certificate,
-                        secretRefName: e.target.value,
-                      })
-                    }
-                    value={certificate.secretRefName}
-                  />
-                }
-              />
-            </FormFieldset>
-            <FormFieldset>
-              <CreateForm.FormField
-                label={
-                  <FormLabel>
-                    {t('certificates.secret-ref-namespace')}
-                  </FormLabel>
-                }
-                input={
-                  <FormInput
-                    compact
-                    onChange={e =>
-                      setCertificate({
-                        ...certificate,
-                        secretRefNamespace: e.target.value,
-                      })
-                    }
-                    value={certificate.secretRefNamespace}
-                  />
-                }
-              />
-            </FormFieldset>
-          </>
+          <FormFieldset>
+            <CreateForm.FormField
+              label={<FormLabel>{t('certificates.secret-ref')}</FormLabel>}
+              input={
+                <SecretRef
+                  labelSelector="cert.gardener.cloud/certificate=true"
+                  resourceRef={certificate.secretRef}
+                  onChange={(e, secretRef) =>
+                    setCertificate({ ...certificate, secretRef })
+                  }
+                />
+              }
+            />
+          </FormFieldset>
         )}
       </CreateForm.Section>
     </>

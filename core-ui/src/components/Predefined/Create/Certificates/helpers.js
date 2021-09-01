@@ -12,22 +12,12 @@ export function toYaml(cert) {
       commonName: cert.commonName || undefined,
       csr: cert.csr || undefined,
       dnsNames: cert.dnsNames.length ? cert.dnsNames : undefined,
-      issuerRef: cert.issuerRefName
-        ? {
-            name: cert.issuerRefName,
-            namespace: cert.issuerRefNamespace,
-          }
-        : undefined,
+      issuerRef: cert.issuerRef.name ? cert.issuerRef : undefined,
       renew: cert.renew || undefined,
       secreName:
         !cert.existingSecret && cert.secretName ? cert.secretName : undefined,
       secretRef:
-        cert.existingSecret && cert.secretRefName
-          ? {
-              name: cert.secretRefName,
-              namespace: cert.secretRefNamespace,
-            }
-          : undefined,
+        cert.existingSecret && cert.secretRef.name ? cert.secretRef : undefined,
     },
   };
 }
@@ -39,13 +29,17 @@ export function fromYaml(yaml, prevIssuer) {
     commonName: jp.value(yaml, '$.spec.commonName') || '',
     csr: jp.value(yaml, '$.spec.csr') || '',
     dnsNames: jp.value(yaml, '$.spec.dnsNames') || [],
-    issuerRefName: jp.value(yaml, '$.spec.issuerRef.name') || '',
-    issuerRefNamespace: jp.value(yaml, '$.spec.issuerRef.namespace') || '',
+    issuerRef: {
+      name: jp.value(yaml, '$.spec.issuerRef.name') || '',
+      namespace: jp.value(yaml, '$.spec.issuerRef.namespace') || '',
+    },
     renew: jp.value(yaml, '$.spec.renew') || false,
     existingSecret: !!jp.value(yaml, '$.spec.secretRef'),
     secretName: jp.value(yaml, '$.spec.secretName') || '',
-    secretRefName: jp.value(yaml, '$.spec.secretRef.name') || '',
-    secretRefNamepace: jp.value(yaml, '$.spec.secretRef.namespace') || '',
+    secretRef: {
+      name: jp.value(yaml, '$.spec.secretRef.name') || '',
+      namespace: jp.value(yaml, '$.spec.secretRef.namespace') || '',
+    },
   };
 }
 
@@ -57,12 +51,16 @@ export function createTemplate(namespace) {
     commonName: '',
     csr: '',
     dnsNames: [],
-    issuerName: '',
-    issuerNamespace: '',
+    issuerRef: {
+      name: '',
+      namespace: '',
+    },
     renew: false,
     existingSecret: false,
     secretName: '',
-    secretRefName: '',
-    secretRefNamepace: '',
+    secretRef: {
+      name: '',
+      namespace: '',
+    },
   };
 }
