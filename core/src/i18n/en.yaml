@@ -347,8 +347,8 @@ functions:
     buttons:
       add: Add environment variable
       open:
-        config-map: ConfigMap Variable
         custom: Custom Variable
+        config-map: ConfigMap Variable
         secret: Secret Variable
     create-modal:
       title:
