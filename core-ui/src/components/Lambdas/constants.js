@@ -76,8 +76,8 @@ export const LAMBDAS_LIST = {
 };
 
 export const FUNCTION_SOURCE_TYPE = {
-  INLINE: 'Inline editor',
-  GIT: 'Git repository',
+  INLINE: 'functions.create-view.labels.inline-editor',
+  GIT: 'functions.create-view.labels.git-repository',
 };
 
 export const REPOSITORIES_LIST = {

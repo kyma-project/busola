@@ -15,7 +15,7 @@ export const FunctionsDetails = ({ DefaultRenderer, ...otherParams }) => {
     },
     {
       header: t('functions.headers.source-type'),
-      value: resource => prettySourceType(resource.spec.type),
+      value: resource => prettySourceType(resource.spec.type, t),
     },
     {
       header: t('functions.headers.runtime'),
