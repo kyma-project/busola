@@ -12,7 +12,7 @@ export function ExternalResourceRef({ resourceRef, onChange, resources }) {
 
   const selectResource = (e, selected) => {
     if (selected.key > -1) {
-      onChange(e, { name: selected.name, namespace: selected.namespace });
+      onChange(e, { name: selected.text, namespace: selected.namespace });
     }
   };
 
@@ -23,13 +23,9 @@ export function ExternalResourceRef({ resourceRef, onChange, resources }) {
         onChange={e => {
           onChange(e, { ...resourceRef, name: e.target.value });
         }}
-        onSelectionChange={(e, selected, reason) => {
-          if (selected.key > -1) {
-            onChange(e, { name: selected.name, namespace: selected.namespace });
-          }
-        }}
+        onSelectionChange={selectResource}
         placeholder={t('common.labels.name')}
-        value={resourceRef.name}
+        inputProps={{ value: resourceRef.name }}
         options={options}
         optionRenderer={resource => (
           <>

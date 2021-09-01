@@ -335,6 +335,7 @@ issuers:
   external-account:
     title: External account
     key-id: CA key ID
+    secret: Symmetric MAC Secret
   create:
     presets:
       default: Default

@@ -8,10 +8,7 @@ export function toYaml(issuer) {
     spec = {
       ...spec,
       ca: {
-        privateKeySecretRef: {
-          name: issuer.privateKeyName,
-          namespace: issuer.privateKeyNamespace,
-        },
+        privateKeySecretRef: issuer.privateKeySecretRef,
       },
     };
   } else if (issuer.type === 'acme') {
@@ -19,21 +16,16 @@ export function toYaml(issuer) {
     const excludeDomains = issuer.excludeDomains.filter(domain => !!domain);
     const hasDomains = includeDomains.length || excludeDomains.length;
     const hasExternalAccount =
-      issuer.externalAccountKeyId ||
-      issuer.externalAccountSecretName ||
-      issuer.externalAccountSecretNamespace;
+      issuer.externalAccountKeyId || issuer.externalAccountSecretRef.name;
     spec = {
       ...spec,
       acme: {
         server: issuer.server,
         email: issuer.email,
         autoRegistration: issuer.autoRegistration,
-        privateKeySecretRef: issuer.autoRegistration
-          ? undefined
-          : {
-              name: issuer.privateKeyName,
-              namespace: issuer.privateKeyNamespace,
-            },
+        privateKeySecretRef: !issuer.autoRegistration
+          ? issuer.privateKeySecretRef
+          : undefined,
         domains: hasDomains
           ? {
               include: includeDomains.length ? includeDomains : undefined,
@@ -45,10 +37,7 @@ export function toYaml(issuer) {
         externalAccountBinding: hasExternalAccount
           ? {
               keyID: issuer.externalAccountKeyId,
-              keySecretRef: {
-                name: issuer.externalAccountSecretName,
-                namespace: issuer.externalAccountSecretNamespace,
-              },
+              keySecretRef: issuer.externalAccountSecretRef,
             }
           : undefined,
       },
@@ -67,11 +56,21 @@ export function toYaml(issuer) {
 }
 
 export function fromYaml(yaml, prevIssuer) {
-  let type = jp.value(yaml, '$.spec.ca')
-    ? 'ca'
-    : jp.value(yaml, '$.spec.acme')
-    ? 'acme'
-    : undefined;
+  let type;
+  let privateKeySecretRef;
+  if (jp.value(yaml, '$.spec.ca')) {
+    type = 'ca';
+    privateKeySecretRef = {
+      name: jp.value(yaml, '$.spec.ca.privateKeySecretRef.name'),
+      namespace: jp.value(yaml, '$.spec.ca.privateKeySecretRef.namespace'),
+    };
+  } else if (jp.value(yaml, '$.spec.acme')) {
+    type = 'acme';
+    privateKeySecretRef = {
+      name: jp.value(yaml, '$.spec.acme.privateKeySecretRef.name'),
+      namespace: jp.value(yaml, '$.spec.acme.privateKeySecretRef.namespace'),
+    };
+  }
 
   return {
     name: jp.value(yaml, '$.metadata.name') || '',
@@ -84,18 +83,7 @@ export function fromYaml(yaml, prevIssuer) {
     excludeDomains: jp.value(yaml, '$.spec.acme.domains.exclude') || [],
     skipDNSChallengeValidation:
       jp.value(yaml, '$.spec.acme.skipDNSChallengeValidation') || false,
-    privateKeyName:
-      (type === 'ca'
-        ? jp.value(yaml, '$.spec.ca.privateKeySecretRef.name')
-        : type === 'acme'
-        ? jp.value(yaml, '$.spec.acme.privateKeySecretRef.name')
-        : '') || '',
-    privateKeyNamespace:
-      (type === 'ca'
-        ? jp.value(yaml, '$.spec.ca.privateKeySecretRef.namespace')
-        : type === 'acme'
-        ? jp.value(yaml, '$.spec.acme.privateKeySecretRef.namespace')
-        : '') || '',
+    privateKeySecretRef,
   };
 }
 
@@ -107,14 +95,18 @@ export function createTemplate(namespace) {
     server: '',
     email: '',
     autoRegistration: true,
-    privateKeyName: '',
-    privateKeyNamespace: '',
+    privateKeySecretRef: {
+      name: '',
+      namespace: '',
+    },
     requestsPerDayQuota: 0,
     skipDNSChallengeValidation: false,
     includeDomains: [],
     excludeDomains: [],
     externalAccountKeyId: '',
-    externalAccountSecretName: '',
-    externalAccountSecretNamespace: '',
+    externalAccountSecretRef: {
+      name: '',
+      namespace: '',
+    },
   };
 }

@@ -9,6 +9,7 @@ import {
 } from 'fundamental-react';
 
 import { CreateForm } from 'shared/components/CreateForm/CreateForm';
+import { SecretRef } from 'shared/components/ResourceRef/SecretRef';
 
 import { PrivateKeyForm } from './PrivateKeyForm';
 import { SimpleForm } from './SimpleForm';
@@ -103,34 +104,15 @@ export function AdvancedForm({ issuer, setIssuer }) {
           </FormFieldset>
           <FormFieldset>
             <CreateForm.FormField
-              label={<FormLabel>{t('common.labels.name')}</FormLabel>}
-              input={
-                <FormInput
-                  compact
-                  onChange={e =>
-                    setIssuer({
-                      ...issuer,
-                      externalAccountSecretName: e.target.value,
-                    })
-                  }
-                  value={issuer.externalAccountSecretName}
-                />
+              label={
+                <FormLabel>{t('issuers.external-account.secret')}</FormLabel>
               }
-            />
-          </FormFieldset>
-          <FormFieldset>
-            <CreateForm.FormField
-              label={<FormLabel>{t('common.labels.namespace')}</FormLabel>}
               input={
-                <FormInput
-                  compact
-                  onChange={e =>
-                    setIssuer({
-                      ...issuer,
-                      externalAccountSecretNamespace: e.target.value,
-                    })
+                <SecretRef
+                  resourceRef={issuer.externalAccountSecretRef}
+                  onChange={(e, externalAccountSecretRef) =>
+                    setIssuer({ ...issuer, externalAccountSecretRef })
                   }
-                  value={issuer.externalAccountSecretNamespace}
                 />
               }
             />
