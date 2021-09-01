@@ -240,8 +240,6 @@ functions:
       inline-editor: Edytor wbudowany
       reference: Referencja
       repository: Repozytorium
-      runtime: Runtime
-      source-type: Typ źródła
   details:
     buttons:
       edit-configuration: Edytuj konfigurację

@@ -380,8 +380,6 @@ functions:
       inline-editor: Inline Editor
       reference: Reference
       repository: Repository
-      runtime: Runtime
-      source-type: Source Type
   details:
     buttons:
       diff_toggle: Diff

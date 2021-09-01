@@ -201,7 +201,7 @@ export default function CreateLambdaForm({
 
       <Dropdown
         id="function-runtime-dropdown"
-        label={t('functions.create-view.labels.runtime')}
+        label={t('functions.headers.runtime')}
         options={runtimeOptions}
         selectedKey={runtimeOptions[0].key}
         onSelect={(_, selected) => setRuntime(selected.key)}
@@ -209,7 +209,7 @@ export default function CreateLambdaForm({
 
       <Dropdown
         id="function-source-dropdown"
-        label={t('functions.create-view.labels.source-type')}
+        label={t('functions.headers.source-type')}
         options={sourceTypeOptions}
         selectedKey={sourceTypeOptions[0].key}
         onSelect={(_, selected) => setSourceType(selected.key)}
