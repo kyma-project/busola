@@ -103,7 +103,7 @@ function getTakeAllDuplicates(
   const resourceName = varValue[prop].name;
   const choosenResource = resources.find(r => r.metadata.name === resourceName);
   // names of data from secret or configMap
-  const resourceDataNames = Object.keys(choosenResource).map(
+  const resourceDataNames = Object.keys(choosenResource?.data || {}).map(
     key => varName + key,
   );
 

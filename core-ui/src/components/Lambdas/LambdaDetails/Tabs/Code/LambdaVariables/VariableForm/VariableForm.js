@@ -101,7 +101,7 @@ export default function VariableForm({
           const choosenResource = resources.find(
             r => r.metadata.name === resourceName,
           );
-          return Object.keys(choosenResource).map(key => ({
+          return Object.keys(choosenResource.data).map(key => ({
             name: variable.name + key,
             valueFrom: {
               [prop]: {
