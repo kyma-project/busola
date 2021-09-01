@@ -5,3 +5,4 @@ export * from './OAuthClients/OAuthClients.create.js';
 export * from './ConfigMaps.create.js';
 export * from './Deployments/Deployments.create.js';
 export * from './Secrets/Secrets.create.js';
+export * from './Gateways/Gateways.create.js';

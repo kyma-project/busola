@@ -87,6 +87,18 @@ CreateForm.FormField = function({ label, input }) {
   );
 };
 
+CreateForm.KeyValueFormField = function({ label, keyInput, valueInput }) {
+  return (
+    <div className="fd-row form-field">
+      <div className="fd-col fd-col-md--4 form-field__label">{label}</div>
+      <div className="fd-col fd-col-md--7">
+        {keyInput}
+        {valueInput}
+      </div>
+    </div>
+  );
+};
+
 CreateForm.Section = ({ children }) => (
   <div className="fd-margin--sm">{children}</div>
 );
