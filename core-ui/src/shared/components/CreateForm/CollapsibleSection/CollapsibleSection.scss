@@ -24,11 +24,10 @@
 
   .fd-message-strip {
     min-height: unset;
-    height: 20px;
     cursor: unset;
   }
 
   .fd-message-strip--warning:before {
-    top: 0.05rem;
+    top: 25%;
   }
 }

@@ -7,7 +7,6 @@ import { Presets } from './Presets';
 import classnames from 'classnames';
 
 export function CreateForm({
-  title,
   simpleForm,
   advancedForm,
   resource,
