@@ -155,19 +155,19 @@ certificates:
   csr: CSR
   with-csr: Use a CSR
   renew: Trigger a renew
-  existing-secret: Use an existing secret
+  existing-secret: Use the existing Secret
   secret-name: Secret name
   secret-ref: Secret to use
   create:
     messages:
-      success: Certificate created
-      failure: Failed to create the certificate
+      success: Certificate created.
+      failure: Failed to create the certificate.
   placeholders:
     name: Certificate name
     common-name: Certificate CN (max 64 characters)
     dns-names: Additional domain names, one per line
-    csr: Base64 encoded Certificate Signing Request
-    secret-name: Requested secret name
+    csr: Base64-encoded Certificate Signing Request
+    secret-name: Requested Secret name
 cluster-addons:
   title: Cluster Addons
 cluster-role-bindings:
@@ -595,15 +595,15 @@ issuers:
   requests-per-day: Daily requests quota
   skip-dns: Skip DNS challenge validation
   auto-registration: Auto registration
-  private-key: Private key secret
+  private-key: Private key Secret
   external-account:
     title: External account
     key-id: CA key ID
     secret: Symmetric MAC Secret
   create:
     messages:
-      success: Issuer created
-      failure: Failed to create the issuer
+      success: Issuer created.
+      failure: Failed to create the issuer.
   placeholders:
     name: Issuer Name
     type: Select issuer type
