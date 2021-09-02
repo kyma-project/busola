@@ -510,7 +510,7 @@ functions:
         by-custom-env: This variable can override or be overridden by one of the custom variables.
         by-sbu: This variable can override or be overridden by a variable injected by one of the ServiceBindings.
       text: Warning
-      variable-can-override-sbu: This variable can override or be overridden by a variable injected by one of the created Service Bindings.
+      variable-can-override-sbu: This variable can override or be overridden by a variable injected by one of the created ServiceBindings.
 gateways:
   title: Gateways
   selector: Selector
