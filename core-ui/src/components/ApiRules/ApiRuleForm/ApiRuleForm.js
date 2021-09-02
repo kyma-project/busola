@@ -33,8 +33,7 @@ import { SERVICES_URL, API_RULE_URL } from '../constants';
 import { formatMessage as injectVariables } from 'components/Lambdas/helpers/misc';
 import { GatewayDropdown } from './GatewayDropdown';
 import { HostDropdown, hasWildcard } from './HostDropdown';
-
-export const DEFAULT_GATEWAY = 'kyma-gateway.kyma-system.svc.cluster.local';
+import { getFirstAvailableHost } from './GatewayDropdown';
 
 const EMPTY_ACCESS_STRATEGY = {
   path: '',
@@ -85,11 +84,16 @@ export default function ApiRuleForm({
   React.useEffect(() => {
     if (defaultGatewayQuery.data) {
       setGateway(defaultGatewayQuery.data);
-      setHost(defaultGatewayQuery.data.spec.servers[0].hosts[0]);
+      setHost(getFirstAvailableHost(defaultGatewayQuery.data));
     }
   }, [defaultGatewayQuery.data]);
 
   React.useEffect(() => handleFormChanged(), [host]);
+
+  // as this modal uses refs instead of state, we can't rely on rerender
+  // when the value changes - but we need to refresh the MessageStrip when
+  // hostname changes.
+  const [, forceUpdate] = React.useReducer(x => x + 1, 0);
 
   const [rules, setRules] = useState(
     apiRule.spec.rules.map(r => ({ ...r, renderKey: uuid() })),
@@ -181,7 +185,7 @@ export default function ApiRuleForm({
           name: serviceName,
           port: parseInt(servicePort),
         },
-        gateway: DEFAULT_GATEWAY,
+        gateway: `${gateway.metadata.name}.${gateway.metadata.namespace}.svc.cluster.local`,
         rules: rules.map(({ renderKey, ...actualRule }) => actualRule),
       },
     };
@@ -266,14 +270,6 @@ export default function ApiRuleForm({
           <LayoutPanel className="fd-margin-bottom--sm">
             <LayoutPanel.Header>
               <LayoutPanel.Head title={t('api-rules.general-settings.title')} />
-              {formValues.hostname.current?.value && host && (
-                <LayoutPanel.Actions>
-                  <MessageStrip type="success">
-                    API Rule will be available at{' '}
-                    {resolveHost(formValues.hostname.current.value, host)}.
-                  </MessageStrip>
-                </LayoutPanel.Actions>
-              )}
             </LayoutPanel.Header>
             <LayoutPanel.Body>
               <FormItem>
@@ -300,7 +296,7 @@ export default function ApiRuleForm({
                 gateway={gateway}
                 setGateway={gateway => {
                   setGateway(gateway);
-                  setHost(null);
+                  setHost(getFirstAvailableHost(gateway));
                 }}
               />
               <HostDropdown gateway={gateway} host={host} setHost={setHost} />
@@ -316,9 +312,17 @@ export default function ApiRuleForm({
                     required
                     pattern="^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$"
                     ref={formValues.hostname}
+                    onChange={forceUpdate}
                   />
                 </Tooltip>
               </FormItem>
+              {host &&
+                (!hasWildcard(host) || formValues.hostname.current?.value) && (
+                  <MessageStrip type="success" className="fd-margin-top--sm">
+                    API Rule will be available at https://
+                    {resolveHost(formValues.hostname.current.value, host)}.
+                  </MessageStrip>
+                )}
             </LayoutPanel.Body>
           </LayoutPanel>
           <LayoutPanel>

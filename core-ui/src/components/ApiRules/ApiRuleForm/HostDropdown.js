@@ -7,7 +7,7 @@ export const hasWildcard = host => {
 
   // host may contain optional namespace prefix ({namespace}/{host})
   if (host.includes('/')) {
-    var [_namespace, host] = host.split('/');
+    host = host.split('/')[1];
   }
   return host.includes('*');
 };

@@ -2,6 +2,10 @@ import React from 'react';
 import { FormItem, FormLabel } from 'fundamental-react';
 import { Dropdown, useGetList } from 'react-shared';
 
+export const getFirstAvailableHost = gateway => {
+  return gateway.spec.servers[0].hosts[0];
+};
+
 function useGetGatewaysQuery(namespace) {
   const ownNamespaceQuery = useGetList()(
     `/apis/networking.istio.io/v1alpha3/namespaces/${namespace}/gateways`,
@@ -23,23 +27,31 @@ function useGetGatewaysQuery(namespace) {
 }
 
 export function GatewayDropdown({ namespace, gateway, setGateway }) {
-  const toString = gateway =>
+  const formatGateway = gateway =>
     gateway ? `${gateway.metadata.namespace}/${gateway.metadata.name}` : '';
 
-  const gatewaysQuery = useGetGatewaysQuery(namespace);
+  const { gateways, loading, error } = useGetGatewaysQuery(namespace);
 
-  const options = (gatewaysQuery.gateways || []).map(gateway => ({
-    key: toString(gateway),
-    text: toString(gateway),
+  const options = (gateways || []).map(gateway => ({
+    key: formatGateway(gateway),
+    text: formatGateway(gateway),
+    gateway,
   }));
 
-  const selectGateway = (_, selected) => {
-    const [namespace, name] = selected.text.split('/');
-    setGateway(
-      gatewaysQuery.gateways.find(
-        g => g.metadata.namespace === namespace && g.metadata.name === name,
-      ),
-    );
+  const getValidationState = () => {
+    if (error) {
+      return {
+        state: 'error',
+        text: error.message,
+      };
+    } else if (loading) {
+      return {
+        state: 'information',
+        text: 'Loading...',
+      };
+    } else {
+      return null;
+    }
   };
 
   return (
@@ -48,8 +60,9 @@ export function GatewayDropdown({ namespace, gateway, setGateway }) {
       <Dropdown
         id="gateway-dropdown"
         options={options}
-        selectedKey={toString(gateway)}
-        onSelect={selectGateway}
+        selectedKey={formatGateway(gateway)}
+        onSelect={(_, { gateway }) => setGateway(gateway)}
+        validationState={getValidationState()}
       />
     </FormItem>
   );
