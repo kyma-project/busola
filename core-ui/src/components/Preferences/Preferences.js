@@ -16,13 +16,25 @@ function Preferences() {
     {
       title: t('settings.interface.title'),
       description: t('settings.interface.description'),
-      icon: <Icon glyph="accelerated" size="xl" ariaLabel="Interface" />,
+      icon: (
+        <Icon
+          glyph="accelerated"
+          size="xl"
+          ariaLabel={t('settings.interface.title')}
+        />
+      ),
       id: 1,
     },
     {
       title: t('settings.clusters.title'),
       description: t('settings.clusters.description'),
-      icon: <Icon glyph="database" size="xl" ariaLabel="Clusters" />,
+      icon: (
+        <Icon
+          glyph="database"
+          size="xl"
+          ariaLabel={t('settings.clusters.title')}
+        />
+      ),
       id: 2,
     },
   ];
