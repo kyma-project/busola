@@ -410,15 +410,25 @@ gateways:
   create-modal:
     advanced:
       add-server: Add server
+      hosts: Hosts
       placeholders:
+        hosts: Hosts
         port:
           name: Port Name
           number: Port number
           protocol: Port protocol
+        tls:
+          mode: TLS Mode
+          credentialName: CredentialName
       port:
+        ports: Ports
         name: Port Name
         number: Port number
         protocol: Port protocol
+      tls:
+        tls: TLS
+        mode: TLS Mode
+        credentialName: CredentialName
     presets:
       default: Default
     simple:
