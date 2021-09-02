@@ -1,156 +1,70 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CreateForm } from 'shared/components/CreateForm/CreateForm';
 import { Button, FormFieldset, FormLabel, FormInput } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { newServer } from './helpers';
+import { PortsForm } from './PortsForm';
+import { TslForm } from './TslForm';
+import { HostsForm } from './HostsForm';
 import shortid from 'shortid';
 
-export function SingleServerForm({ server, setServers, isAdvanced }) {
+export function SingleServerForm({ index, server, setServers, isAdvanced }) {
   const { t } = useTranslation();
 
+  function deleteServer(server) {
+    setServers(servers => {
+      console.log(servers, server, server.id);
+      return servers.filter(oldServer => oldServer.id !== server.id);
+    });
+  }
+
+  const deleteButton = (
+    <Button
+      compact
+      glyph="delete"
+      onClick={() => deleteServer(server)}
+      option="transparent"
+      type="negative"
+    >
+      {t('gateways.create-modal.advanced.delete-server')}
+    </Button>
+  );
   return (
     <FormFieldset>
-      <CreateForm.CollapsibleSection
-        title={t('gateways.create-modal.advanced.port.ports')}
-        defaultOpen={!isAdvanced}
-      >
-        <CreateForm.FormField
-          label={
-            <FormLabel required>
-              {t('gateways.create-modal.advanced.port.number')}
-            </FormLabel>
-          }
-          input={
-            <FormInput
-              type="number"
-              required
-              compact
-              placeholder={t(
-                'gateways.create-modal.advanced.placeholders.port.number',
-              )}
-              value={server.port.number}
-              onChange={e =>
-                setServers({ port: { number: e.target.valueAsNumber || '' } })
-              }
-            />
-          }
-        />
+      {isAdvanced && (
+        <CreateForm.CollapsibleSection
+          title={`${t('gateways.create-modal.simple.server')} ${index}`}
+          actions={deleteButton}
+          defaultOpen
+        >
+          <PortsForm
+            index={index}
+            server={server}
+            setServers={setServers}
+            disabled={true}
+          />
+          <TslForm
+            index={index}
+            server={server}
+            setServers={setServers}
+            disabled={true}
+          />
+          <HostsForm
+            index={index}
+            server={server}
+            setServers={setServers}
+            disabled={true}
+          />
+        </CreateForm.CollapsibleSection>
+      )}
 
-        <CreateForm.FormField
-          label={
-            <FormLabel required>
-              {t('gateways.create-modal.advanced.port.name')}
-            </FormLabel>
-          }
-          input={
-            <FormInput
-              type="text"
-              required
-              compact
-              placeholder={t(
-                'gateways.create-modal.advanced.placeholders.port.name',
-              )}
-              value={server.port.name}
-              onChange={e =>
-                setServers({ port: { name: e.target.value || '' } })
-              }
-            />
-          }
-        />
-        <CreateForm.FormField
-          label={
-            <FormLabel required>
-              {t('gateways.create-modal.advanced.port.protocol')}
-            </FormLabel>
-          }
-          input={
-            <FormInput
-              type="text"
-              required
-              compact
-              placeholder={t(
-                'gateways.create-modal.advanced.placeholders.port.protocol',
-              )}
-              value={server.port.protocol}
-              onChange={e =>
-                setServers({ port: { protocol: e.target.value || '' } })
-              }
-            />
-          }
-        />
-      </CreateForm.CollapsibleSection>
-
-      <CreateForm.CollapsibleSection
-        title={t('gateways.create-modal.advanced.tls.tls')}
-        defaultOpen={!isAdvanced}
-      >
-        <CreateForm.FormField
-          label={
-            <FormLabel required>
-              {t('gateways.create-modal.advanced.tls.mode')}
-            </FormLabel>
-          }
-          input={
-            <FormInput
-              type="text"
-              required
-              compact
-              placeholder={t(
-                'gateways.create-modal.advanced.placeholders.tls.mode',
-              )}
-              value={server.tls.mode}
-              onChange={e =>
-                setServers({ tls: { mode: e.target.value || '' } })
-              }
-            />
-          }
-        />
-        <CreateForm.FormField
-          label={
-            <FormLabel required>
-              {t('gateways.create-modal.advanced.tls.credentialName')}
-            </FormLabel>
-          }
-          input={
-            <FormInput
-              type="text"
-              required
-              compact
-              placeholder={t(
-                'gateways.create-modal.advanced.placeholders.tls.credentialName',
-              )}
-              value={server.tls.credentialName}
-              onChange={e =>
-                setServers({ tls: { credentialName: e.target.value || '' } })
-              }
-            />
-          }
-        />
-      </CreateForm.CollapsibleSection>
-      <CreateForm.CollapsibleSection
-        title={t('gateways.create-modal.advanced.hosts')}
-        defaultOpen={!isAdvanced}
-      >
-        <CreateForm.FormField
-          label={
-            <FormLabel required>
-              {t('gateways.create-modal.advanced.hosts')}
-            </FormLabel>
-          }
-          input={
-            <FormInput
-              type="text"
-              required
-              compact
-              placeholder={t(
-                'gateways.create-modal.advanced.placeholders.hosts',
-              )}
-              value={server.hosts}
-              onChange={e => setServers({ hosts: e.target.value || '' })}
-            />
-          }
-        />
-      </CreateForm.CollapsibleSection>
+      {!isAdvanced && (
+        <>
+          <PortsForm index={index} server={server} setServers={setServers} />
+          <TslForm index={index} server={server} setServers={setServers} />
+          <HostsForm index={index} server={server} setServers={setServers} />
+        </>
+      )}
     </FormFieldset>
   );
 }
@@ -160,16 +74,16 @@ export function ServersForm({ gateway, setGateway, isAdvanced }) {
   const [servers, setServers] = useState(
     gateway.servers.map(server => ({ ...server, id: shortid.generate() })),
   );
-  // function onDeleteServer(server) {
-  //   let newServers = servers.filter(
-  //     oldServer => oldServer.id !== server.id,
-  //   );
-  //     setRules(rules => [...rules.slice(0, index), ...rules.slice(index + 1)]);
-
-  // }
+  useEffect(() => {
+    setGateway({
+      gateway,
+      servers: servers,
+    });
+  }, [servers]);
 
   function addServer() {
-    setServers([...servers, newServer()]);
+    // setServers([...servers, newServer()]);
+    setServers(servers => [...servers, newServer()]);
     // setValid(false);
   }
 
@@ -186,11 +100,13 @@ export function ServersForm({ gateway, setGateway, isAdvanced }) {
       actions={isAdvanced ? serversActions : null}
       defaultOpen
     >
-      {servers.map(server => {
+      {servers.map((server, index) => {
         return (
           <SingleServerForm
+            key={server.id}
+            index={index}
             server={server}
-            setGateway={setGateway}
+            setServers={setServers}
             isAdvanced={isAdvanced}
           />
         );

@@ -410,6 +410,7 @@ gateways:
   create-modal:
     advanced:
       add-server: Add server
+      delete-server: Delete server
       hosts: Hosts
       placeholders:
         hosts: Hosts
@@ -434,6 +435,7 @@ gateways:
     simple:
       selector: Selector
       servers: Servers
+      server: Server
 generic-list:
   no-entries-found: No entries found
 git-repositories:

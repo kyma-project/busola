@@ -1,24 +1,11 @@
 import * as jp from 'jsonpath';
 import shortid from 'shortid';
 
-export const EMPTY_SERVER = {
-  port: {
-    number: null,
-    name: '',
-    protocol: '',
-  },
-  tls: {
-    mode: '',
-    credentialName: '',
-  },
-  hosts: '',
-};
-
 export function newServer() {
   return {
     id: shortid.generate(),
     port: {
-      number: null,
+      number: 5,
       name: '',
       protocol: '',
     },
@@ -45,6 +32,7 @@ export function gatewayToYaml(gateway) {
     },
     spec: {
       selector: gateway.selector,
+      servers: gateway.servers,
     },
   };
 }
@@ -64,7 +52,7 @@ export function createGatewayTemplate(namespaceId) {
     namespace: namespaceId,
     selector: {},
     labels: {},
-    servers: [EMPTY_SERVER],
+    servers: [newServer()],
   };
 }
 
