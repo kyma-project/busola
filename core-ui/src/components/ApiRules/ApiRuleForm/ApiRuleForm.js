@@ -4,7 +4,13 @@ import { v4 as uuid } from 'uuid';
 import { createPatch } from 'rfc6902';
 import LuigiClient from '@luigi-project/client';
 import classNames from 'classnames';
-import { FormItem, FormLabel, LayoutPanel, Button } from 'fundamental-react';
+import {
+  FormItem,
+  LayoutPanel,
+  Button,
+  FormInput,
+  FormLabel,
+} from 'fundamental-react';
 import { supportedMethodsList } from '../accessStrategyTypes';
 import { useTranslation } from 'react-i18next';
 
@@ -16,15 +22,16 @@ import { EXCLUDED_SERVICES_LABELS } from 'components/ApiRules/constants';
 import { hasValidMethods } from 'components/ApiRules/accessStrategyTypes';
 import {
   useGetList,
+  useGet,
   useNotification,
   K8sNameInput,
-  InputWithSuffix,
   Tooltip,
   useMicrofrontendContext,
 } from 'react-shared';
 import { SERVICES_URL, API_RULE_URL } from '../constants';
 import { formatMessage as injectVariables } from 'components/Lambdas/helpers/misc';
-import { useGetGatewayDomain } from '../hooks/useGetGatewayDomain';
+import { GatewayDropdown } from './GatewayDropdown';
+import { HostDropdown } from './HostDropdown';
 
 export const DEFAULT_GATEWAY = 'kyma-gateway.kyma-system.svc.cluster.local';
 
@@ -61,16 +68,27 @@ export default function ApiRuleForm({
   headerTitle,
   breadcrumbItems,
 }) {
-  const {
-    domain,
-    error: domainError,
-    loading: domainLoading,
-  } = useGetGatewayDomain();
   const { namespaceId: namespace } = useMicrofrontendContext();
   const notification = useNotification();
   const { serviceName, port, openedInModal = false } =
     LuigiClient.getNodeParams() || {};
   const openedInModalBool = openedInModal.toString().toLowerCase() === 'true';
+
+  const defaultGatewayQuery = useGet(
+    '/apis/networking.istio.io/v1beta1/namespaces/kyma-system/gateways/kyma-gateway',
+  );
+
+  const [gateway, setGateway] = React.useState(null);
+  const [hostSuffix, setHostSuffix] = React.useState(null);
+
+  React.useEffect(() => {
+    if (defaultGatewayQuery.data) {
+      setGateway(defaultGatewayQuery.data);
+      setHostSuffix(
+        defaultGatewayQuery.data.spec.servers[0].hosts[0].replace('*', ''),
+      );
+    }
+  }, [defaultGatewayQuery]);
 
   const [rules, setRules] = useState(
     apiRule.spec.rules.map(r => ({ ...r, renderKey: uuid() })),
@@ -133,9 +151,9 @@ export default function ApiRuleForm({
   }
 
   async function save() {
-    if (domainError || domainLoading) {
-      return false;
-    }
+    // if (domainError || domainLoading) {
+    //   return false;
+    // }
     if (!formRef.current.checkValidity()) {
       return;
     }
@@ -149,7 +167,7 @@ export default function ApiRuleForm({
       },
       spec: {
         service: {
-          host: formValues.hostname.current.value + '.' + domain,
+          host: formValues.hostname.current.value + hostSuffix,
           name: serviceName,
           port: parseInt(servicePort),
         },
@@ -252,30 +270,6 @@ export default function ApiRuleForm({
                     i18n={i18n}
                   />
                 </FormItem>
-                <FormItem>
-                  <FormLabel htmlFor="hostname" required>
-                    {t('common.labels.hostname')}
-                  </FormLabel>
-
-                  {domainLoading ? (
-                    'Loading...'
-                  ) : (
-                    <Tooltip content={t('common.tooltips.k8s-name-input')}>
-                      <InputWithSuffix
-                        defaultValue={apiRule.spec.service.host.replace(
-                          `.${domain}`,
-                          '',
-                        )}
-                        id="hostname"
-                        suffix={'.' + domain}
-                        placeholder="Enter the hostname"
-                        required
-                        pattern="^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$"
-                        _ref={formValues.hostname}
-                      />
-                    </Tooltip>
-                  )}
-                </FormItem>
                 <ServicesDropdown
                   _ref={formValues.service}
                   defaultValue={apiRule.spec.service}
@@ -284,6 +278,35 @@ export default function ApiRuleForm({
                   error={error}
                   loading={loading}
                 />
+              </div>
+
+              <div className="api-rule-form__input-group api-rule-form__address">
+                <GatewayDropdown
+                  namespace={namespace}
+                  gateway={gateway}
+                  setGateway={setGateway}
+                />
+                <div className="host-data">
+                  <FormItem>
+                    <FormLabel htmlFor="hostname" required>
+                      {t('common.labels.hostname')}
+                    </FormLabel>
+                    <Tooltip content={t('common.tooltips.k8s-name-input')}>
+                      <FormInput
+                        id="hostname"
+                        placeholder="Enter the hostname"
+                        required
+                        pattern="^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$"
+                        ref={formValues.hostname}
+                      />
+                    </Tooltip>
+                  </FormItem>
+                  <HostDropdown
+                    gateway={gateway}
+                    host={hostSuffix}
+                    setHost={setHostSuffix}
+                  />
+                </div>
               </div>
             </LayoutPanel.Body>
           </LayoutPanel>
