@@ -595,15 +595,15 @@ issuers:
   requests-per-day: Daily requests quota
   skip-dns: Skip DNS challenge validation
   auto-registration: Auto registration
-  private-key: Private key secret
+  private-key: Private key Secret
   external-account:
     title: External account
     key-id: CA key ID
     secret: Symmetric MAC Secret
   create:
     messages:
-      success: Issuer created
-      failure: Failed to create the issuer
+      success: Issuer created.
+      failure: Failed to create the issuer.
   placeholders:
     name: Issuer Name
     type: Select issuer type
