@@ -8,6 +8,7 @@ import {
   Switch,
 } from 'fundamental-react';
 
+import { K8sNameInput } from 'react-shared';
 import { CreateForm } from 'shared/components/CreateForm/CreateForm';
 import { IssuerRef } from 'shared/components/ResourceRef/IssuerRef';
 
@@ -86,7 +87,7 @@ export function SimpleForm({ certificate, setCertificate }) {
           <CreateForm.FormField
             label={<FormLabel required>{t('common.labels.name')}</FormLabel>}
             input={
-              <FormInput
+              <K8sNameInput
                 compact
                 required
                 onChange={e =>

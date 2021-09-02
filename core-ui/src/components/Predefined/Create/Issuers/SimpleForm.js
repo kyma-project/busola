@@ -2,6 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormFieldset, FormLabel, FormInput, Select } from 'fundamental-react';
 
+import { K8sNameInput } from 'react-shared';
 import { CreateForm } from 'shared/components/CreateForm/CreateForm';
 
 import { PrivateKeyForm } from './PrivateKeyForm';
@@ -58,7 +59,7 @@ export function SimpleForm({ issuer, setIssuer }) {
           <CreateForm.FormField
             label={<FormLabel required>{t('common.labels.name')}</FormLabel>}
             input={
-              <FormInput
+              <K8sNameInput
                 compact
                 required
                 onChange={e => setIssuer({ ...issuer, name: e.target.value })}
