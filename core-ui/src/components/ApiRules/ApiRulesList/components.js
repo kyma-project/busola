@@ -28,13 +28,10 @@ export function GoToApiRuleDetails({ apiRule }) {
   );
 }
 
-export function CopiableApiRuleHost({ apiRule, domain }) {
+export function CopiableApiRuleHost({ apiRule }) {
   const { i18n } = useTranslation();
   return (
-    <CopiableLink
-      url={getApiRuleUrl(apiRule.spec.service, domain)}
-      i18n={i18n}
-    />
+    <CopiableLink url={`https://${apiRule.spec.service.host}`} i18n={i18n} />
   );
 }
 

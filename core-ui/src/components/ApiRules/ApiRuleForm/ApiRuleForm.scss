@@ -165,30 +165,13 @@
 .api-rule-form {
   .api-rule-form__form {
     padding: 32px;
-  }
-  &__input-group {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 1rem;
-    margin-bottom: 4px !important;
 
-    & .dropdown {
+    .dropdown {
       width: 100%;
     }
-  }
-  
-  &__address {
-    grid-template-columns: 1fr 1fr 1fr;
-    margin-bottom: 100px;
 
-    .host-data {
-      display: grid;
-      grid-template-columns: 2fr 5fr;
-      grid-column: 2 / span 2;
-
-      & > * {
-        display: inline-block;
-      }
+    .fd-layout-panel__body > *{
+      margin-bottom: 4px;
     }
   }
 }

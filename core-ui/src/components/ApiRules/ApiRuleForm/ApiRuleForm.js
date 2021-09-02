@@ -10,6 +10,7 @@ import {
   Button,
   FormInput,
   FormLabel,
+  MessageStrip,
 } from 'fundamental-react';
 import { supportedMethodsList } from '../accessStrategyTypes';
 import { useTranslation } from 'react-i18next';
@@ -31,7 +32,7 @@ import {
 import { SERVICES_URL, API_RULE_URL } from '../constants';
 import { formatMessage as injectVariables } from 'components/Lambdas/helpers/misc';
 import { GatewayDropdown } from './GatewayDropdown';
-import { HostDropdown } from './HostDropdown';
+import { HostDropdown, hasWildcard } from './HostDropdown';
 
 export const DEFAULT_GATEWAY = 'kyma-gateway.kyma-system.svc.cluster.local';
 
@@ -79,16 +80,16 @@ export default function ApiRuleForm({
   );
 
   const [gateway, setGateway] = React.useState(null);
-  const [hostSuffix, setHostSuffix] = React.useState(null);
+  const [host, setHost] = React.useState(null);
 
   React.useEffect(() => {
     if (defaultGatewayQuery.data) {
       setGateway(defaultGatewayQuery.data);
-      setHostSuffix(
-        defaultGatewayQuery.data.spec.servers[0].hosts[0].replace('*', ''),
-      );
+      setHost(defaultGatewayQuery.data.spec.servers[0].hosts[0]);
     }
-  }, [defaultGatewayQuery]);
+  }, [defaultGatewayQuery.data]);
+
+  React.useEffect(() => handleFormChanged(), [host]);
 
   const [rules, setRules] = useState(
     apiRule.spec.rules.map(r => ({ ...r, renderKey: uuid() })),
@@ -150,10 +151,19 @@ export default function ApiRuleForm({
     e.target.classList.toggle('is-invalid', !isValid);
   }
 
+  function resolveHost(lowestLevelDomain, host) {
+    // replace possible wildcard with lowest level domain
+    const resolvedHost = hasWildcard(host)
+      ? host.replace('*', lowestLevelDomain)
+      : host;
+
+    // host may be prefixed with namespace - get rid of it
+    return resolvedHost.includes('/')
+      ? resolvedHost.substring(resolvedHost.lastIndexOf('/') + 1)
+      : resolvedHost;
+  }
+
   async function save() {
-    // if (domainError || domainLoading) {
-    //   return false;
-    // }
     if (!formRef.current.checkValidity()) {
       return;
     }
@@ -167,7 +177,7 @@ export default function ApiRuleForm({
       },
       spec: {
         service: {
-          host: formValues.hostname.current.value + hostSuffix,
+          host: resolveHost(formValues.hostname.current.value, host),
           name: serviceName,
           port: parseInt(servicePort),
         },
@@ -256,61 +266,61 @@ export default function ApiRuleForm({
           <LayoutPanel className="fd-margin-bottom--sm">
             <LayoutPanel.Header>
               <LayoutPanel.Head title={t('api-rules.general-settings.title')} />
+              {formValues.hostname.current?.value && host && (
+                <LayoutPanel.Actions>
+                  <MessageStrip type="success">
+                    API Rule will be available at{' '}
+                    {resolveHost(formValues.hostname.current.value, host)}.
+                  </MessageStrip>
+                </LayoutPanel.Actions>
+              )}
             </LayoutPanel.Header>
             <LayoutPanel.Body>
-              <div className="api-rule-form__input-group">
-                <FormItem>
-                  <K8sNameInput
-                    _ref={formValues.name}
-                    id="apiRuleName"
-                    kind="API Rule"
-                    showHelp={!apiRule?.metadata.name}
-                    defaultValue={apiRule?.metadata.name}
-                    disabled={!!apiRule?.metadata.name}
-                    i18n={i18n}
-                  />
-                </FormItem>
-                <ServicesDropdown
-                  _ref={formValues.service}
-                  defaultValue={apiRule.spec.service}
-                  serviceName={serviceName}
-                  data={allServices}
-                  error={error}
-                  loading={loading}
+              <FormItem>
+                <K8sNameInput
+                  _ref={formValues.name}
+                  id="apiRuleName"
+                  kind="API Rule"
+                  showHelp={!apiRule?.metadata.name}
+                  defaultValue={apiRule?.metadata.name}
+                  disabled={!!apiRule?.metadata.name}
+                  i18n={i18n}
                 />
-              </div>
-
-              <div className="api-rule-form__input-group api-rule-form__address">
-                <GatewayDropdown
-                  namespace={namespace}
-                  gateway={gateway}
-                  setGateway={setGateway}
-                />
-                <div className="host-data">
-                  <FormItem>
-                    <FormLabel htmlFor="hostname" required>
-                      {t('common.labels.hostname')}
-                    </FormLabel>
-                    <Tooltip content={t('common.tooltips.k8s-name-input')}>
-                      <FormInput
-                        id="hostname"
-                        placeholder="Enter the hostname"
-                        required
-                        pattern="^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$"
-                        ref={formValues.hostname}
-                      />
-                    </Tooltip>
-                  </FormItem>
-                  <HostDropdown
-                    gateway={gateway}
-                    host={hostSuffix}
-                    setHost={setHostSuffix}
+              </FormItem>
+              <ServicesDropdown
+                _ref={formValues.service}
+                defaultValue={apiRule.spec.service}
+                serviceName={serviceName}
+                data={allServices}
+                error={error}
+                loading={loading}
+              />
+              <GatewayDropdown
+                namespace={namespace}
+                gateway={gateway}
+                setGateway={gateway => {
+                  setGateway(gateway);
+                  setHost(null);
+                }}
+              />
+              <HostDropdown gateway={gateway} host={host} setHost={setHost} />
+              <FormItem>
+                <FormLabel htmlFor="hostname" required>
+                  {t('common.labels.hostname')}
+                </FormLabel>
+                <Tooltip content={t('common.tooltips.k8s-name-input')}>
+                  <FormInput
+                    disabled={!hasWildcard(host)}
+                    id="hostname"
+                    placeholder="Enter the hostname"
+                    required
+                    pattern="^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$"
+                    ref={formValues.hostname}
                   />
-                </div>
-              </div>
+                </Tooltip>
+              </FormItem>
             </LayoutPanel.Body>
           </LayoutPanel>
-
           <LayoutPanel>
             <LayoutPanel.Header>
               <LayoutPanel.Head

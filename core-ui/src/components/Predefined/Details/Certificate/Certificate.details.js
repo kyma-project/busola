@@ -14,12 +14,15 @@ export function CertificatesDetails({ DefaultRenderer, ...otherParams }) {
     },
     {
       header: t('certificates.expiration-date'),
-      value: certificate => (
-        <FormattedDatetime
-          date={certificate.status.expirationDate}
-          lang={i18n.language}
-        />
-      ),
+      value: certificate => {
+        console.log(certificate.status);
+        return (
+          <FormattedDatetime
+            date={certificate.status.expirationDate}
+            lang={i18n.language}
+          />
+        );
+      },
     },
     {
       header: t('certificates.common-name'),
