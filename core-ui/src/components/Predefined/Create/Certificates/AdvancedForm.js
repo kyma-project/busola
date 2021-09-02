@@ -74,7 +74,7 @@ export function AdvancedForm({ certificate, setCertificate }) {
               label={<FormLabel>{t('certificates.secret-ref')}</FormLabel>}
               input={
                 <SecretRef
-                  labelSelector="cert.gardener.cloud/certificate=true"
+                  fieldSelector="type=kubernetes.io/tls"
                   resourceRef={certificate.secretRef}
                   onChange={(e, secretRef) =>
                     setCertificate({ ...certificate, secretRef })
