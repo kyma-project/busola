@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
+  Button,
   FormFieldset,
   FormLabel,
   FormInput,
@@ -11,9 +12,21 @@ import {
 import { K8sNameInput } from 'react-shared';
 import { CreateForm } from 'shared/components/CreateForm/CreateForm';
 import { IssuerRef } from 'shared/components/ResourceRef/IssuerRef';
+import { base64Decode, base64Encode } from 'shared/helpers';
+
+import './SimpleForm.scss';
 
 export function SimpleForm({ certificate, setCertificate }) {
   const { t } = useTranslation();
+
+  const setCSR = csr => {
+    if (certificate.csrIsEncoded) {
+      setCertificate({ ...certificate, csr });
+    } else {
+      const encodedCSR = base64Encode(csr);
+      setCertificate({ ...certificate, csr: encodedCSR });
+    }
+  };
 
   const commonNameFields = (
     <>
@@ -68,11 +81,17 @@ export function SimpleForm({ certificate, setCertificate }) {
               compact
               required
               className="resize-vertical"
-              onChange={e =>
-                setCertificate({ ...certificate, csr: e.target.value })
+              onChange={e => setCSR(e.target.value)}
+              value={
+                certificate.csrIsEncoded
+                  ? certificate.csr
+                  : base64Decode(certificate.csr)
               }
-              value={certificate.csr}
-              placeholder={t('certificates.placeholders.csr')}
+              placeholder={
+                certificate.csrIsEncoded
+                  ? t('certificates.placeholders.encoded-csr')
+                  : t('certificates.placeholders.csr')
+              }
             />
           }
         />
@@ -103,16 +122,36 @@ export function SimpleForm({ certificate, setCertificate }) {
           <CreateForm.FormField
             label={<FormLabel>{t('certificates.with-csr')}</FormLabel>}
             input={
-              <Switch
-                compact
-                onChange={e =>
-                  setCertificate({
-                    ...certificate,
-                    withCSR: !certificate.withCSR,
-                  })
-                }
-                checked={certificate.withCSR}
-              />
+              <div class="csr-header">
+                <Switch
+                  compact
+                  onChange={e =>
+                    setCertificate({
+                      ...certificate,
+                      withCSR: !certificate.withCSR,
+                    })
+                  }
+                  checked={certificate.withCSR}
+                />
+                {certificate.withCSR && (
+                  <Button
+                    compact
+                    className="csr-encode-toggle"
+                    option="transparent"
+                    glyph={certificate.csrIsEncoded ? 'show' : 'hide'}
+                    onClick={() =>
+                      setCertificate({
+                        ...certificate,
+                        csrIsEncoded: !certificate.csrIsEncoded,
+                      })
+                    }
+                  >
+                    {certificate.csrIsEncoded
+                      ? t('secrets.buttons.decode')
+                      : t('secrets.buttons.encode')}
+                  </Button>
+                )}
+              </div>
             }
           />
         </FormFieldset>
