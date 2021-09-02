@@ -19,6 +19,7 @@ export default function EventSubscriptions({
   serverDataError,
   serverDataLoading,
   notFoundMessage = EVENT_TRIGGERS_PANEL.LIST.ERRORS.RESOURCES_NOT_FOUND,
+  i18n,
 }) {
   const notificationManager = useNotification();
   const postRequest = usePost();
@@ -105,6 +106,7 @@ export default function EventSubscriptions({
         EVENT_TRIGGERS_PANEL.LIST.ERRORS.NOT_MATCHING_SEARCH_QUERY
       }
       serverErrorMessage={ERRORS.SERVER}
+      i18n={i18n}
     />
   );
 }

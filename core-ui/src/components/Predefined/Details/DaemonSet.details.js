@@ -5,7 +5,7 @@ import { GenericList, EMPTY_TEXT_PLACEHOLDER, StatusBadge } from 'react-shared';
 import { ResourcePods } from './ResourcePods.js';
 import { getPodsCount, getStatusType } from '../List/DaemonSets.list';
 
-const Tolerations = resource => {
+const Tolerations = ({ resource, i18n }) => {
   const { t } = useTranslation();
 
   const headerRenderer = () => [
@@ -34,11 +34,12 @@ const Tolerations = resource => {
       rowRenderer={rowRenderer}
       testid="daemon-set-tolerations"
       textSearchProperties={textSearchProperties}
+      i18n={i18n}
     />
   );
 };
 
-const Images = resource => {
+const Images = ({ resource, i18n }) => {
   const { t } = useTranslation();
 
   const getImages = daemonSet => {
@@ -61,6 +62,7 @@ const Images = resource => {
       rowRenderer={rowRenderer}
       testid="daemon-set-images"
       showHeader={false}
+      i18n={i18n}
     />
   );
 };
@@ -76,12 +78,16 @@ const customColumns = [
   },
 ];
 
-export const DaemonSetsDetails = ({ DefaultRenderer, ...otherParams }) => {
+export const DaemonSetsDetails = ({
+  DefaultRenderer,
+  i18n,
+  ...otherParams
+}) => {
   return (
     <DefaultRenderer
       customComponents={[
-        Tolerations,
-        Images,
+        resource => Tolerations({ resource, i18n }),
+        resource => Images({ resource, i18n }),
         resource => ResourcePods(resource, null, true),
       ]}
       customColumns={customColumns}

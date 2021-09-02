@@ -9,7 +9,7 @@ import ApiRulesWrapper from './Tabs/Configuration/ApiRules/ApiRules';
 
 import { LAMBDA_DETAILS } from 'components/Lambdas/constants';
 
-export default function LambdaDetails({ lambda }) {
+export default function LambdaDetails({ lambda, i18n }) {
   const microfrontendContext = useMicrofrontendContext();
   const { features } = microfrontendContext;
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
@@ -53,6 +53,7 @@ export default function LambdaDetails({ lambda }) {
               ownerName={lambda.metadata.name}
               isActive={selectedTabIndex === 1}
               lambda={lambda}
+              i18n={i18n}
             />
             <ServiceBindings
               lambda={lambda}

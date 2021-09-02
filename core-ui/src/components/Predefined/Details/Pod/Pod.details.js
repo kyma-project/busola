@@ -27,7 +27,7 @@ function goToSecretDetails(resourceKind, name) {
     .navigate(`${preperedResourceKind}s/details/${name}`);
 }
 
-export const PodsDetails = ({ DefaultRenderer, ...otherParams }) => {
+export const PodsDetails = ({ DefaultRenderer, i18n, ...otherParams }) => {
   const { t } = useTranslation();
   const customColumns = [
     {
@@ -67,6 +67,7 @@ export const PodsDetails = ({ DefaultRenderer, ...otherParams }) => {
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
         entries={resource.spec.volumes}
+        i18n={i18n}
       />
     );
   };

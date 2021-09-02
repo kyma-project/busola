@@ -240,6 +240,9 @@ components:
         failure: 'Failed to delete the {{resourceType}}'
         success: '{{resourceType}} deleted'
         title: 'Delete {{resourceType}}'
+    messages:
+      not-found: No entries found
+      no-search-results: Couldn't find resources matching this query
 config-maps:
   buttons:
     update: Update

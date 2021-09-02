@@ -10,7 +10,7 @@ import {
 import { sortByDisplayName } from 'helpers/sorting';
 import ServiceCatalogDetails from './ServiceClassDetails';
 
-export const ServiceClassDetailsContainer = ({ name }) => {
+export const ServiceClassDetailsContainer = ({ name, i18n }) => {
   const RESOURCE_TYPE_LOWERCASE = `serviceClass`;
   const { namespaceId } = useMicrofrontendContext();
 
@@ -55,11 +55,12 @@ export const ServiceClassDetailsContainer = ({ name }) => {
       serviceClass={serviceClass}
       serviceInstances={serviceInstances}
       servicePlans={servicePlans}
+      i18n={i18n}
     />
   );
 };
 
-export const ClusterServiceClassDetailsContainer = ({ name }) => {
+export const ClusterServiceClassDetailsContainer = ({ name, i18n }) => {
   const RESOURCE_TYPE_LOWERCASE = `clusterServiceClass`;
   const { namespaceId } = useMicrofrontendContext();
 
@@ -103,6 +104,7 @@ export const ClusterServiceClassDetailsContainer = ({ name }) => {
       serviceClass={serviceClass}
       serviceInstances={serviceInstances}
       servicePlans={servicePlans}
+      i18n={i18n}
     />
   );
 };

@@ -332,6 +332,7 @@ function Resources({
         extraHeaderContent={extraHeaderContent}
         testid={testid}
         currentlyEditedResourceUID={currentlyEditedResourceUID}
+        i18n={i18n}
       />
     </>
   );

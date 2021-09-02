@@ -21,7 +21,7 @@ import { ClusterStorageType } from './ClusterStorageType';
 export function ClusterList() {
   const { clusters, activeClusterName } = useMicrofrontendContext();
   const notification = useNotification();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   useShowNodeParamsError();
 
@@ -128,6 +128,7 @@ export function ClusterList() {
         actions={actions}
         extraHeaderContent={extraHeaderContent}
         noSearchResultMessage={t('clusters.list.no-clusters-found')}
+        i18n={i18n}
       />
     </>
   );

@@ -2,8 +2,10 @@ import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { Link } from 'fundamental-react';
 import { useGet, GenericList, ReadableCreationTimestamp } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 
 export function ClusterNodesWarnings({ nodesNames }) {
+  const { i18n } = useTranslation();
   const { data, loading, error } = useGet('/api/v1/events');
 
   const formatInvolvedObject = obj => {
@@ -58,6 +60,7 @@ export function ClusterNodesWarnings({ nodesNames }) {
       serverDataError={error}
       serverDataLoading={loading}
       pagination={{ itemsPerPage: 10, autoHide: true }}
+      i18n={i18n}
     />
   );
 }

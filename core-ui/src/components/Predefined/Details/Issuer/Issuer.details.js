@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { IssuerDomains } from './IssuerDomains';
 
-export function IssuersDetails({ DefaultRenderer, ...otherParams }) {
+export function IssuersDetails({ DefaultRenderer, i18n, ...otherParams }) {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -24,7 +24,7 @@ export function IssuersDetails({ DefaultRenderer, ...otherParams }) {
   return (
     <DefaultRenderer
       customColumns={customColumns}
-      customComponents={[IssuerDomains]}
+      customComponents={[resource => IssuerDomains({ issuer: resource, i18n })]}
       {...otherParams}
     ></DefaultRenderer>
   );

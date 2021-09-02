@@ -7,7 +7,7 @@ import {
   StatusBadge,
 } from 'react-shared';
 
-export function JobConditions(job) {
+export function JobConditions({ job, i18n }) {
   const { t } = useTranslation();
 
   const headerRenderer = () => [
@@ -44,6 +44,7 @@ export function JobConditions(job) {
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       entries={job.status.conditions || []}
+      i18n={i18n}
     />
   );
 }

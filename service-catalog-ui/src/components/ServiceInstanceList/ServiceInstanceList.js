@@ -63,7 +63,7 @@ const actions = (serviceInstancesExists, searchQuery, searchFn) => {
   ) : null;
 };
 
-export default function ServiceInstancesList() {
+export default function ServiceInstancesList({ i18n }) {
   const [searchQuery, setSearchQuery] = useState('');
   const { namespaceId } = useMicrofrontendContext();
   const sendDeleteRequest = useDelete();
@@ -137,6 +137,7 @@ export default function ServiceInstancesList() {
               )}
               deleteServiceInstance={handleDelete}
               type="services"
+              i18n={i18n}
             />
           </ServiceInstancesWrapper>
         </Tab>
@@ -166,6 +167,7 @@ export default function ServiceInstancesList() {
               )}
               deleteServiceInstance={handleDelete}
               type="addons"
+              i18n={i18n}
             />
           </ServiceInstancesWrapper>
         </Tab>

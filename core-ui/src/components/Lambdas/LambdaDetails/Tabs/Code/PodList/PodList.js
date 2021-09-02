@@ -2,6 +2,7 @@ import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { GenericList, useGetList } from 'react-shared';
 import { Link, Button } from 'fundamental-react';
+import { useTranslation } from 'react-i18next';
 import './PodList.scss';
 
 const navigateTo = path => _ =>
@@ -10,6 +11,7 @@ const navigateTo = path => _ =>
     .navigate(path);
 
 export default function PodList({ namespace, functionName, isActive }) {
+  const { i18n } = useTranslation();
   const labelSelectors = `serverless.kyma-project.io/function-name=${functionName},serverless.kyma-project.io/resource=deployment`;
   const resourceUrl = `/api/v1/namespaces/${namespace}/pods?labelSelector=${labelSelectors}`;
   const { data: pods, error, loading = true } = useGetList()(resourceUrl, {
@@ -47,6 +49,7 @@ export default function PodList({ namespace, functionName, isActive }) {
       rowRenderer={rowRenderer}
       serverDataError={error}
       serverDataLoading={loading}
+      i18n={i18n}
     />
   );
 }

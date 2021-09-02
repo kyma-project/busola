@@ -17,6 +17,7 @@ const ServiceInstanceTable = ({
   deleteServiceInstance,
   loading,
   type,
+  i18n,
 }) => {
   const { features } = useMicrofrontendContext();
   const btpCatalogEnabled = features.BTP_CATALOG?.isEnabled;
@@ -85,6 +86,7 @@ const ServiceInstanceTable = ({
       notFoundMessage="No Service Instances found"
       hasExternalMargin={false}
       textSearchProperties={['metadata.name']}
+      i18n={i18n}
     />
   );
 };

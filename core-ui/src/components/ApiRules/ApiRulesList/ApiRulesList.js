@@ -108,7 +108,7 @@ export default function ApiRules({
   disableExposeButton = false,
 }) {
   const deleteApiRule = useDeleteApiRule();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const actions = [
     {
@@ -174,6 +174,7 @@ export default function ApiRules({
         notFoundMessage={notFoundMessage}
         noSearchResultMessage={t(PANEL.LIST.ERRORS.NOT_MATCHING_SEARCH_QUERY)}
         serverErrorMessage={ERRORS.SERVER}
+        i18n={i18n}
       />
     </div>
   );

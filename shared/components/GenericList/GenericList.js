@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { LayoutPanel } from 'fundamental-react';
+import { useTranslation } from 'react-i18next';
 
 import { SearchInput } from './SearchInput';
 import { Pagination } from './Pagination/Pagination';
@@ -8,7 +9,6 @@ import { Spinner } from '../Spinner/Spinner';
 import { HeaderRenderer, RowRenderer, BodyFallback } from './components';
 
 import { filterEntries } from './helpers';
-import { MESSAGES } from './constants';
 import classnames from 'classnames';
 
 import PropTypes from 'prop-types';
@@ -43,7 +43,9 @@ export const GenericList = ({
   compact,
   className,
   currentlyEditedResourceUID,
+  i18n,
 }) => {
+  const { t } = useTranslation(null, { i18n });
   const [currentPage, setCurrentPage] = React.useState(
     pagination?.initialPage || 1,
   );
@@ -108,13 +110,13 @@ export const GenericList = ({
       if (searchQuery) {
         return (
           <BodyFallback>
-            <p>{noSearchResultMessage}</p>
+            <p>{t(noSearchResultMessage)}</p>
           </BodyFallback>
         );
       }
       return (
         <BodyFallback>
-          <p>{notFoundMessage}</p>
+          <p>{t(notFoundMessage)}</p>
         </BodyFallback>
       );
     }
@@ -236,8 +238,8 @@ GenericList.propTypes = {
 };
 
 GenericList.defaultProps = {
-  notFoundMessage: MESSAGES.NOT_FOUND,
-  noSearchResultMessage: MESSAGES.NO_SEARCH_RESULT,
+  notFoundMessage: 'components.generic-list.messages.not-found',
+  noSearchResultMessage: 'components.generic-list.messages.no-search-results',
   actions: [],
   textSearchProperties: ['name', 'description'],
   showSearchField: true,

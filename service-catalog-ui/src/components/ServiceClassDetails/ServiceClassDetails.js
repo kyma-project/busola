@@ -14,6 +14,7 @@ export default function ServiceClassDetails({
   serviceClass,
   serviceInstances,
   servicePlans,
+  i18n,
 }) {
   const { namespaceId, features } = useMicrofrontendContext();
   const serviceClassDisplayName = getResourceDisplayName(serviceClass);
@@ -67,7 +68,7 @@ export default function ServiceClassDetails({
           )}
         />
       </ServiceClassDetailsHeader>
-      <ServiceClassInstancesTable instanceList={serviceInstances} />
+      <ServiceClassInstancesTable instanceList={serviceInstances} i18n={i18n} />
     </>
   );
 }

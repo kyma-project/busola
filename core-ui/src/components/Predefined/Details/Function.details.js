@@ -6,7 +6,7 @@ import { prettyRuntime } from 'components/Lambdas/helpers/runtime';
 import { LambdaStatusBadge } from 'components/Lambdas/LambdaStatusBadge/LambdaStatusBadge';
 import { useTranslation } from 'react-i18next';
 
-export const FunctionsDetails = ({ DefaultRenderer, ...otherParams }) => {
+export const FunctionsDetails = ({ DefaultRenderer, i18n, ...otherParams }) => {
   const { t } = useTranslation();
   const customColumns = [
     {
@@ -24,7 +24,9 @@ export const FunctionsDetails = ({ DefaultRenderer, ...otherParams }) => {
   ];
 
   const Functions = (resource, resourceUrl) => {
-    return <LambdaDetailsWrapper key="lambdaDetails" lambda={resource} />;
+    return (
+      <LambdaDetailsWrapper key="lambdaDetails" lambda={resource} i18n={i18n} />
+    );
   };
   return (
     <DefaultRenderer

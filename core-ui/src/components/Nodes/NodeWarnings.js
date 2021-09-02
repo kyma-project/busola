@@ -17,7 +17,7 @@ export function NodeWarnings({ nodeName }) {
     .filter(e => e.type === 'Warning')
     .filter(e => e.source.host === nodeName);
 
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const headerRenderer = () => [
     t('node-details.message'),
     t('node-details.involved-object'),
@@ -40,6 +40,7 @@ export function NodeWarnings({ nodeName }) {
       serverDataError={error}
       serverDataLoading={loading}
       pagination={{ itemsPerPage: 10, autoHide: true }}
+      i18n={i18n}
     />
   );
 }

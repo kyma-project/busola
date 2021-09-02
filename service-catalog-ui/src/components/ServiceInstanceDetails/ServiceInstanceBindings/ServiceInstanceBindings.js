@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 
 import { TextOverflowWrapper } from '../../ServiceInstanceList/ServiceInstanceTable/styled';
 
-const ServiceInstanceBindings = ({ serviceInstance }) => {
+const ServiceInstanceBindings = ({ serviceInstance, i18n }) => {
   const { t } = useTranslation();
 
   const { features } = useMicrofrontendContext();
@@ -211,6 +211,7 @@ const ServiceInstanceBindings = ({ serviceInstance }) => {
         'serviceBinding.metadata.name',
         'serviceBindingUsage.spec.usedBy.name',
       ]}
+      i18n={i18n}
     />
   );
 };

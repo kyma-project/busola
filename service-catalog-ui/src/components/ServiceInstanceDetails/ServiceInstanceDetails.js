@@ -14,6 +14,7 @@ const ServiceInstanceBindingsWrapper = ({
   serviceInstance,
   servicePlanRef,
   serviceClassRef,
+  i18n,
 }) => {
   const planUrl = servicePlanRef?.isClusterWide
     ? `/apis/servicecatalog.k8s.io/v1beta1/clusterserviceplans/${servicePlanRef.ref}`
@@ -29,13 +30,13 @@ const ServiceInstanceBindingsWrapper = ({
 
   if (!servicePlan || !serviceClass) return null;
   return servicePlan.spec.bindable || serviceClass.spec.bindable ? (
-    <ServiceInstanceBindings serviceInstance={serviceInstance} />
+    <ServiceInstanceBindings serviceInstance={serviceInstance} i18n={i18n} />
   ) : (
     <EmptyList>{SERVICE_BINDINGS_PANEL.NOT_BINDABLE}</EmptyList>
   );
 };
 
-export default function ServiceInstanceDetails({ match }) {
+export default function ServiceInstanceDetails({ match, i18n }) {
   const { namespaceId } = useMicrofrontendContext();
   const { data: serviceInstance, loading = true, error } = useGet(
     `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${namespaceId}/serviceinstances/${match.params.name}`,
@@ -97,6 +98,7 @@ export default function ServiceInstanceDetails({ match }) {
           serviceInstance={serviceInstance}
           servicePlanRef={servicePlanRef}
           serviceClassRef={serviceClassRef}
+          i18n={i18n}
         />
       )}
     </>

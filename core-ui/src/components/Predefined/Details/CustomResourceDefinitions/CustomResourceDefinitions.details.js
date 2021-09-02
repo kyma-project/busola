@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 export const CustomResourceDefinitionsDetails = ({
   DefaultRenderer,
+  i18n,
   ...otherParams
 }) => {
   const { t } = useTranslation();
@@ -39,6 +40,7 @@ export const CustomResourceDefinitionsDetails = ({
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
         testid="crd-names"
+        i18n={i18n}
       />
     );
   };
@@ -46,7 +48,10 @@ export const CustomResourceDefinitionsDetails = ({
   return (
     <DefaultRenderer
       customColumns={customColumns}
-      customComponents={[ResourceNames, CustomResourceDefinitionVersions]}
+      customComponents={[
+        ResourceNames,
+        resource => CustomResourceDefinitionVersions({ resource, i18n }),
+      ]}
       {...otherParams}
     ></DefaultRenderer>
   );

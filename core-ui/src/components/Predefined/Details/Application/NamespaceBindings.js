@@ -13,7 +13,7 @@ import {
 import { useTranslation } from 'react-i18next';
 
 export default function NamespaceBindings(application) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const deleteRequest = useDelete();
   const notification = useNotification();
@@ -85,6 +85,7 @@ export default function NamespaceBindings(application) {
       serverDataError={error}
       serverDataLoading={loading}
       notFoundMessage={t('applications.messages.binding-not-found')}
+      i18n={i18n}
     />
   );
 }
