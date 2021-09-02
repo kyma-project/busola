@@ -3,7 +3,7 @@ import { useMicrofrontendContext, Tabs, Tab } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
 import CodeTab from './Tabs/Code/CodeTab';
-import ResourceManagementTab from './Tabs/ResourceManagement/ResourceManagementTab';
+import ResourceManagement from './Tabs/ResourceManagement/ResourceManagement';
 import EventSubscriptionsWrapper from './Tabs/Configuration/EventSubscriptions/EventSubscriptionsWrapper';
 import ServiceBindingsWrapper from './Tabs/Configuration/ServiceBindings/ServiceBindingsWrapper';
 import ApiRulesWrapper from './Tabs/Configuration/ApiRules/ApiRules';
@@ -75,7 +75,7 @@ export default function LambdaDetails({ lambda }) {
           id="lambda-resources"
           title={t('functions.details.title.resources')}
         >
-          <ResourceManagementTab lambda={lambda} />
+          <ResourceManagement lambda={lambda} />
         </Tab>
       </Tabs>
     </>
