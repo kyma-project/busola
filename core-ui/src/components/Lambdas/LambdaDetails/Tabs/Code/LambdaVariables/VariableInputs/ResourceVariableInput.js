@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
-import { FormItem, FormInput, FormLabel } from 'fundamental-react';
+import {
+  FormItem,
+  FormInput,
+  FormLabel,
+  MessageStrip,
+} from 'fundamental-react';
 import { Dropdown } from 'react-shared';
 
 import {
+  ALL_KEYS,
   VARIABLE_TYPE,
   VARIABLE_VALIDATION,
 } from 'components/Lambdas/helpers/lambdaVariables';
@@ -21,6 +27,7 @@ export default function ResourceVariableInput({
   onUpdateVariable,
   setValidity,
   setInvalidModalPopupMessage,
+  isEdit,
 }) {
   const { t } = useTranslation();
   const [variable, setVariable] = useState(currentVariable);
@@ -57,6 +64,8 @@ export default function ResourceVariableInput({
   }
 
   const [selectedResource, setSelectedResource] = useState(getInitResource());
+  const [takeAll, setTakeAll] = useState(false);
+
   useEffect(() => {
     setValidity(false);
   }, [setValidity]);
@@ -67,7 +76,7 @@ export default function ResourceVariableInput({
 
   useEffect(() => {
     const validate = validateVariable(variables, variable);
-    setValidity(validate);
+    setValidity(validate && variable.validation === VARIABLE_VALIDATION.NONE);
     if (!validate) {
       setInvalidModalPopupMessage(t('functions.variable.popup-error'));
     }
@@ -91,6 +100,7 @@ export default function ResourceVariableInput({
       varDirty: variable.dirty,
       varType: variable.type,
       varValue: variable.valueFrom,
+      resources,
     });
     const newVariable = {
       ...variable,
@@ -112,6 +122,7 @@ export default function ResourceVariableInput({
       varDirty: variable.dirty,
       varType: variable.type,
       varValue: valueFrom,
+      resources,
     });
     const newVariable = {
       ...variable,
@@ -162,7 +173,9 @@ export default function ResourceVariableInput({
         message = t('functions.variable.warnings.override');
         break;
       default:
-        return null;
+        className = 'fd-has-color-status-3';
+        message = validation;
+        break;
     }
     return <span className={className}>{message}</span>;
   }
@@ -178,6 +191,12 @@ export default function ResourceVariableInput({
       text: key,
     }),
   );
+  if (!isEdit && resourceKeysOptions.length > 1) {
+    resourceKeysOptions.unshift({
+      key: ALL_KEYS,
+      text: t('functions.variable.form.all-keys'),
+    });
+  }
 
   return (
     <div className="resource-variable-form">
@@ -228,6 +247,7 @@ export default function ResourceVariableInput({
               id={`variableKeyFromSecret-${currentVariable.id}`}
               options={resourceKeysOptions}
               onSelect={(_, selected) => {
+                setTakeAll(selected.key === ALL_KEYS);
                 onChangeValueFrom({
                   secretKeyRef: {
                     ...currentVariable.valueFrom.secretKeyRef,
@@ -240,6 +260,11 @@ export default function ResourceVariableInput({
               }
             />
           </FormItem>
+          {takeAll && (
+            <MessageStrip className="fd-margin-top--sm" type="information">
+              {t('functions.variable.form.take-all-description')}
+            </MessageStrip>
+          )}
         </>
       )}
 
