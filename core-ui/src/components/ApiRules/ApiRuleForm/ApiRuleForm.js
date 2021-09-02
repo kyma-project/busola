@@ -23,17 +23,42 @@ import { EXCLUDED_SERVICES_LABELS } from 'components/ApiRules/constants';
 import { hasValidMethods } from 'components/ApiRules/accessStrategyTypes';
 import {
   useGetList,
-  useGet,
   useNotification,
   K8sNameInput,
+  useGet,
   Tooltip,
   useMicrofrontendContext,
 } from 'react-shared';
 import { SERVICES_URL, API_RULE_URL } from '../constants';
 import { formatMessage as injectVariables } from 'components/Lambdas/helpers/misc';
 import { GatewayDropdown } from './GatewayDropdown';
-import { HostDropdown, hasWildcard } from './HostDropdown';
-import { getFirstAvailableHost } from './GatewayDropdown';
+import { HostDropdown } from './HostDropdown';
+
+const getFirstAvailableHost = gateway => {
+  return gateway.spec.servers[0].hosts[0];
+};
+
+const hasWildcard = host => {
+  if (!host) return false;
+
+  // host may contain optional namespace prefix ({namespace}/{host})
+  if (host.includes('/')) {
+    host = host.split('/')[1];
+  }
+  return host.includes('*');
+};
+
+const resolveHost = (lowestLevelDomain, firstLevelDomains) => {
+  // replace possible wildcard with lowest level domain
+  const resolvedHost = hasWildcard(firstLevelDomains)
+    ? firstLevelDomains.replace('*', lowestLevelDomain)
+    : firstLevelDomains;
+
+  // host may be prefixed with namespace - get rid of it
+  return resolvedHost.includes('/')
+    ? resolvedHost.substring(resolvedHost.lastIndexOf('/') + 1)
+    : resolvedHost;
+};
 
 const EMPTY_ACCESS_STRATEGY = {
   path: '',
@@ -90,9 +115,9 @@ export default function ApiRuleForm({
 
   React.useEffect(() => handleFormChanged(), [host]);
 
-  // as this modal uses refs instead of state, we can't rely on rerender
-  // when the value changes - but we need to refresh the MessageStrip when
-  // hostname changes.
+  // as this modal uses refs instead of state, we can't rely on
+  // rerender when the value changes - but we need to refresh the
+  // MessageStrip when hostname is changed.
   const [, forceUpdate] = React.useReducer(x => x + 1, 0);
 
   const [rules, setRules] = useState(
@@ -153,18 +178,6 @@ export default function ApiRuleForm({
     // current element validity
     const isValid = e.target.checkValidity();
     e.target.classList.toggle('is-invalid', !isValid);
-  }
-
-  function resolveHost(lowestLevelDomain, host) {
-    // replace possible wildcard with lowest level domain
-    const resolvedHost = hasWildcard(host)
-      ? host.replace('*', lowestLevelDomain)
-      : host;
-
-    // host may be prefixed with namespace - get rid of it
-    return resolvedHost.includes('/')
-      ? resolvedHost.substring(resolvedHost.lastIndexOf('/') + 1)
-      : resolvedHost;
   }
 
   async function save() {

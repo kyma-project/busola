@@ -2,16 +2,6 @@ import React from 'react';
 import { FormItem, FormLabel } from 'fundamental-react';
 import { Dropdown } from 'react-shared';
 
-export const hasWildcard = host => {
-  if (!host) return false;
-
-  // host may contain optional namespace prefix ({namespace}/{host})
-  if (host.includes('/')) {
-    host = host.split('/')[1];
-  }
-  return host.includes('*');
-};
-
 export function HostDropdown({ gateway, host, setHost }) {
   const filterUnique = (e, i, arr) => arr.indexOf(e) === i;
 

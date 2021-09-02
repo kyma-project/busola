@@ -2,10 +2,6 @@ import React from 'react';
 import { FormItem, FormLabel } from 'fundamental-react';
 import { Dropdown, useGetList } from 'react-shared';
 
-export const getFirstAvailableHost = gateway => {
-  return gateway.spec.servers[0].hosts[0];
-};
-
 function useGetGatewaysQuery(namespace) {
   const ownNamespaceQuery = useGetList()(
     `/apis/networking.istio.io/v1alpha3/namespaces/${namespace}/gateways`,
