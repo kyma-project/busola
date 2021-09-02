@@ -28,6 +28,9 @@ i18next
         console.warn(key);
       }
     },
+    interpolation: {
+      escapeValue: false, // react already handles the escaping
+    },
   });
 
 ReactDOM.render(

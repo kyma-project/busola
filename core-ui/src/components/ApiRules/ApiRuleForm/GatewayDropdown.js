@@ -1,6 +1,7 @@
 import React from 'react';
 import { FormItem, FormLabel } from 'fundamental-react';
 import { Dropdown, useGetList } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 
 function useGetGatewaysQuery(namespace) {
   const ownNamespaceQuery = useGetList()(
@@ -23,6 +24,7 @@ function useGetGatewaysQuery(namespace) {
 }
 
 export function GatewayDropdown({ namespace, gateway, setGateway }) {
+  const { t } = useTranslation();
   const formatGateway = gateway =>
     gateway ? `${gateway.metadata.namespace}/${gateway.metadata.name}` : '';
 
@@ -38,12 +40,12 @@ export function GatewayDropdown({ namespace, gateway, setGateway }) {
     if (error) {
       return {
         state: 'error',
-        text: error.message,
+        text: t('common.messages.error', { error: error.message }),
       };
     } else if (loading) {
       return {
         state: 'information',
-        text: 'Loading...',
+        text: t('common.headers.loading'),
       };
     } else {
       return null;
@@ -52,7 +54,7 @@ export function GatewayDropdown({ namespace, gateway, setGateway }) {
 
   return (
     <FormItem>
-      <FormLabel>Gateway</FormLabel>
+      <FormLabel>{t('api-rules.gateway')}</FormLabel>
       <Dropdown
         id="gateway-dropdown"
         options={options}

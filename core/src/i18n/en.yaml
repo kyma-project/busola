@@ -39,11 +39,13 @@ api-rules:
     description: Expose Services outside the cluster with API Rules.
     not-matching-results: Couldn't find API Rules matching this query.
     updated: API Rule updated.
+    will-be-available-at: API Rule will be available at {{address}}.
   services:
     error-load: Couldn't load service list.
     loading: Loading services...
     ns-no-services: No Services in this Namespace.
   title: API Rules
+  gateway: Gateway
 applications:
   aria:
     namespace: Choose Namespace

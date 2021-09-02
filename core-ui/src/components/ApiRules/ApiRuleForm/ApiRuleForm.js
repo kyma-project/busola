@@ -332,8 +332,11 @@ export default function ApiRuleForm({
               {host &&
                 (!hasWildcard(host) || formValues.hostname.current?.value) && (
                   <MessageStrip type="success" className="fd-margin-top--sm">
-                    API Rule will be available at https://
-                    {resolveHost(formValues.hostname.current.value, host)}.
+                    {t('api-rules.messages.will-be-available-at', {
+                      address:
+                        'https://' +
+                        resolveHost(formValues.hostname.current.value, host),
+                    })}
                   </MessageStrip>
                 )}
             </LayoutPanel.Body>
