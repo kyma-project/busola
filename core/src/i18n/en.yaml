@@ -418,6 +418,7 @@ gateways:
           name: Port Name
           number: Port number
           protocol: Port protocol
+          target-port: Target port
         tls:
           mode: TLS Mode
           credentialName: CredentialName
@@ -426,6 +427,7 @@ gateways:
         name: Port Name
         number: Port number
         protocol: Port protocol
+        target-port: Target port
       tls:
         tls: TLS
         mode: TLS Mode

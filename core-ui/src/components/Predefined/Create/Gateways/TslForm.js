@@ -1,15 +1,37 @@
 import React from 'react';
 import { CreateForm } from 'shared/components/CreateForm/CreateForm';
-import { FormLabel, FormInput } from 'fundamental-react';
+import { Dropdown, FormLabel, FormInput } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
+import { TSL_MODE } from './helpers';
 
 export const TslForm = ({ disabled = false, index, server, setServers }) => {
   const { t } = useTranslation();
+
+  const setTslValue = (server, variableName, value) => {
+    const newValue = server;
+    if (value === null) {
+      delete newValue.port[variableName];
+    } else {
+      newValue.tsl[variableName] = value;
+    }
+
+    setServers(servers => [
+      ...servers.slice(0, index),
+      newValue,
+      ...servers.slice(index + 1, servers.length),
+    ]);
+  };
+
+  const resourceOptions = TSL_MODE.map(mode => ({
+    key: mode,
+    text: mode,
+  }));
+  console.log('resourceOptions', resourceOptions);
   return (
     <CreateForm.CollapsibleSection
       title={t('gateways.create-modal.advanced.tls.tls')}
       defaultOpen
-      disabled
+      disabled={disabled}
     >
       <CreateForm.FormField
         label={
@@ -18,15 +40,18 @@ export const TslForm = ({ disabled = false, index, server, setServers }) => {
           </FormLabel>
         }
         input={
-          <FormInput
-            type="text"
-            required
-            compact
+          <Dropdown
             placeholder={t(
-              'gateways.create-modal.advanced.placeholders.tls.mode',
+              'gateways.create-modal.placeholders.advanced.tls.mode',
             )}
-            value={server.tls.mode}
-            onChange={e => setServers({ tls: { mode: e.target.value || '' } })}
+            compact
+            id={`tsl-mode`}
+            options={resourceOptions}
+            onSelect={(_, selected) => {
+              setTslValue(server, 'tsl', selected.key);
+            }}
+            selectedKey={''}
+            // selectedKey={server.tls?.mode}
           />
         }
       />

@@ -9,7 +9,7 @@ export const HostsForm = ({ disabled = false, index, server, setServers }) => {
     <CreateForm.CollapsibleSection
       title={t('gateways.create-modal.advanced.hosts')}
       defaultOpen
-      disabled
+      disabled={disabled}
     >
       <CreateForm.FormField
         label={

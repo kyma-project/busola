@@ -1,6 +1,14 @@
 import * as jp from 'jsonpath';
 import shortid from 'shortid';
 
+export const TSL_MODE = [
+  'PASSTHROUGH',
+  'SIMPLE',
+  'MUTUAL',
+  'AUTO_PASSTHROUGH',
+  'ISTIO_MUTUAL',
+];
+
 export function newServer() {
   return {
     id: shortid.generate(),
@@ -18,10 +26,6 @@ export function newServer() {
 }
 
 export function gatewayToYaml(gateway) {
-  if (!gateway.labels.app) {
-    gateway.labels.app = gateway.name;
-  }
-
   return {
     apiVersion: 'networking.istio.io/v1alpha3',
     kind: 'Gateway',

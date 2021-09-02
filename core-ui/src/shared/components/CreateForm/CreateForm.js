@@ -79,22 +79,11 @@ export function CreateForm({
 CreateForm.CollapsibleSection = CollapsibleSection;
 
 CreateForm.FormField = function({ label, input }) {
+  console.log('label', label, 'input', input);
   return (
     <div className="fd-row form-field">
       <div className="fd-col fd-col-md--4 form-field__label">{label}</div>
       <div className="fd-col fd-col-md--7">{input}</div>
-    </div>
-  );
-};
-
-CreateForm.KeyValueFormField = function({ label, keyInput, valueInput }) {
-  return (
-    <div className="fd-row form-field">
-      <div className="fd-col fd-col-md--4 form-field__label">{label}</div>
-      <div className="fd-col fd-col-md--7">
-        {keyInput}
-        {valueInput}
-      </div>
     </div>
   );
 };
