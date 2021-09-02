@@ -818,3 +818,18 @@ workloads:
   docker-image:
     tooltip: Enter a valid Docker image registry path.
   title: Workloads
+event-subscription:
+  create:
+    labels:
+      calculate-from-cmp: Calculate from components
+      calculate-event-type: Calculate Event Type
+      application-name: Application name
+      event-name: Event name
+      event-version: Event version
+      enter-event-type: Enter Event Type
+      event-type: Event Type
+    notifications:
+      created: Subscription created
+      failed: Failed to create the Subscription
+      removed: Subscription removed
+      failed-delete: Failed to delete the Subscription

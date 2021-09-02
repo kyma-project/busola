@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 
 import { GenericList, usePost, useNotification, useDelete } from 'react-shared';
@@ -20,6 +21,7 @@ export default function EventSubscriptions({
   serverDataLoading,
   notFoundMessage = EVENT_TRIGGERS_PANEL.LIST.ERRORS.RESOURCES_NOT_FOUND,
 }) {
+  const { t } = useTranslation();
   const notificationManager = useNotification();
   const postRequest = usePost();
   const deleteRequest = useDelete();
@@ -37,12 +39,12 @@ export default function EventSubscriptions({
       await postRequest(`${subscriptionsUrl}/${name}`, subscriptionInput);
       silentRefetch();
       notificationManager.notifySuccess({
-        content: 'Subscription created',
+        content: t('event-subscription.create.notifications.created'),
       });
     } catch (err) {
       console.error(err);
       notificationManager.notifyError({
-        title: 'Failed to create the Subscription',
+        title: t('event-subscription.create.notifications.failed'),
         content: err.message,
         autoClose: false,
       });
@@ -54,12 +56,12 @@ export default function EventSubscriptions({
       await deleteRequest(`${subscriptionsUrl}/${s.metadata.name}`); //TODO use selfLink which is not there; why?
       silentRefetch();
       notificationManager.notifySuccess({
-        content: 'Subscription removed',
+        content: t('event-subscription.create.notifications.removed'),
       });
     } catch (err) {
       console.error(err);
       notificationManager.notifyError({
-        title: 'Failed to delete the Subscription',
+        title: t('event-subscription.create.notifications.failed-delete'),
         content: err.message,
         autoClose: false,
       });
