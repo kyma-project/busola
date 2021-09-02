@@ -231,6 +231,7 @@ common:
   create-form:
     delete-confirm: Don't ask this again.
     editor-error: 'Parse error: {{error}}, previous valid input will be used.'
+    choose-preset: Select a Preset
     messages:
       failure: Failed to create the {{resourceType}}.
       success: '{{resourceType}} created.'
@@ -363,7 +364,6 @@ deployments:
       failure: Failed to create the Deployment.
       success: Deployment created.
     presets:
-      choose: Select a Preset
       default: Default
     simple:
       docker-image: Docker Image
