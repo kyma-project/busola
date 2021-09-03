@@ -92,6 +92,7 @@ export default function ServiceInstanceDetails({ match, i18n }) {
       <ServiceInstanceHeader
         serviceInstance={serviceInstance}
         servicePlan={servicePlanRef}
+        i18n={i18n}
       />
       {serviceInstance && servicePlanRef && (
         <ServiceInstanceBindingsWrapper

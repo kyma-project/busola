@@ -9,7 +9,11 @@ InstanceParametersModal.propTypes = {
   servicePlan: PropTypes.shape({ externalName: PropTypes.string }).isRequired,
 };
 
-export default function InstanceParametersModal({ parameters, servicePlan }) {
+export default function InstanceParametersModal({
+  parameters,
+  servicePlan,
+  i18n,
+}) {
   if (!parameters) return servicePlan.externalName;
 
   const formattedPlan = JSON.stringify(parameters, null, 2);
@@ -25,6 +29,7 @@ export default function InstanceParametersModal({ parameters, servicePlan }) {
       modalOpeningComponent={modalOpeningComponent}
       title={serviceInstanceConstants.instanceParameters}
       confirmText="Close"
+      i18n={i18n}
     >
       <pre>{formattedPlan}</pre>
     </Modal>

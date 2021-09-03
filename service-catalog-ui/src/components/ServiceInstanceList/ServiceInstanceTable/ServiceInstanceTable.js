@@ -33,7 +33,7 @@ const ServiceInstanceTable = ({
 
   if (loading) return 'Loading...';
 
-  const rowRenderer = instance => renderRow(instance);
+  const rowRenderer = instance => renderRow({ instance, i18n });
 
   const actions = btpCatalogEnabled
     ? []

@@ -66,6 +66,7 @@ export default function ServiceClassDetails({
               }
             />
           )}
+          i18n={i18n}
         />
       </ServiceClassDetailsHeader>
       <ServiceClassInstancesTable instanceList={serviceInstances} i18n={i18n} />

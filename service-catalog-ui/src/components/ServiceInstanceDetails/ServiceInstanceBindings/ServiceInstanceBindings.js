@@ -113,6 +113,7 @@ const ServiceInstanceBindings = ({ serviceInstance, i18n }) => {
     <CreateServiceBindingModal
       serviceInstance={serviceInstance}
       serviceBindings={bindingsRequest.data}
+      i18n={i18n}
     />
   );
 

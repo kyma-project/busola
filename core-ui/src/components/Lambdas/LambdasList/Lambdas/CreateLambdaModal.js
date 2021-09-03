@@ -12,6 +12,7 @@ export default function CreateLambdaModal({
   serverDataError,
   serverDataLoading,
   modalOpeningComponent,
+  i18n,
 }) {
   const [invalidModalPopupMessage, setInvalidModalPopupMessage] = useState('');
 
@@ -42,6 +43,7 @@ export default function CreateLambdaModal({
           setInvalidModalPopupMessage={setInvalidModalPopupMessage}
         />
       )}
+      i18n={i18n}
     />
   );
 }

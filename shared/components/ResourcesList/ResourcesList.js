@@ -271,6 +271,7 @@ function Resources({
             {...props}
           />
         )}
+        i18n={i18n}
       />
     ));
 

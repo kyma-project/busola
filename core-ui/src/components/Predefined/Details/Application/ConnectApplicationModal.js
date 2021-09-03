@@ -24,7 +24,7 @@ function Actions({ close, textToCopy, canCopy }) {
 
 export default function ConnectApplicationModal({ applicationName }) {
   const [url, setUrl] = React.useState();
-  const { t } = useTranslation();
+  const { i18n, t } = useTranslation();
 
   const postRequest = usePost();
   const deleteTokenRequest = useDelete();
@@ -86,6 +86,7 @@ export default function ConnectApplicationModal({ applicationName }) {
           {t('applications.buttons.connect')}
         </Button>
       }
+      i18n={i18n}
     >
       <p className="fd-has-color-status-4 fd-has-font-style-italic">
         {t('applications.messages.copy-url')}

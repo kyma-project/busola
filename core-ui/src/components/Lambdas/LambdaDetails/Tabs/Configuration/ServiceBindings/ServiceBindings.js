@@ -87,6 +87,7 @@ export default function ServiceBindings({
     <CreateServiceBindingModal
       lambda={lambda}
       serviceBindingsCombined={serviceBindingsCombined}
+      i18n={i18n}
     />
   );
 

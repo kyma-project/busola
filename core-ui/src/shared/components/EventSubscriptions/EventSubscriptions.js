@@ -85,6 +85,7 @@ export default function EventSubscriptions({
     <CreateEventSubscriptionModal
       isLambda={isLambda}
       onSubmit={handleSubscriptionAdded}
+      i18n={i18n}
     />
   );
 

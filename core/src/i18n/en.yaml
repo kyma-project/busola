@@ -251,6 +251,9 @@ components:
   label-selector-input:
     click-to-delete: Click to delete
     enter-key-value: 'Enter {{type}} key=value'
+  modal:
+    title: Modal
+    confirm-text: Confirm
 config-maps:
   buttons:
     update: Update

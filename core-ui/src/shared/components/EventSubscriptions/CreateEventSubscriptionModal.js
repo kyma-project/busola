@@ -10,6 +10,7 @@ import { EVENT_TRIGGERS_PANEL } from '../../constants';
 export default function CreateEventSubscriptionModal({
   isLambda = false,
   onSubmit,
+  i18n,
 }) {
   const button = (
     <Button glyph="add" option="transparent">
@@ -34,6 +35,7 @@ export default function CreateEventSubscriptionModal({
           onSubmit={onSubmit}
         />
       )}
+      i18n={i18n}
     />
   );
 }

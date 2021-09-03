@@ -18,6 +18,7 @@ export default function VariableModal({
   confirmText,
   alwaysOpen,
   onModalOpenStateChange,
+  i18n,
 }) {
   const [invalidModalPopupMessage, setInvalidModalPopupMessage] = useState('');
 
@@ -45,6 +46,7 @@ export default function VariableModal({
           formType={FORM_TYPE.CREATE}
         />
       )}
+      i18n={i18n}
     />
   );
 }
