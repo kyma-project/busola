@@ -193,8 +193,8 @@ common:
   delete-dialog:
     delete-confirm: Don't ask this again
     information: You've switched off removal confirmations for all resources. You can switch them back on in Preferences.
-    message: Are you sure you want to remove {{type}} {{name}}?
-    title: Remove {{name}}
+    message: Are you sure you want to delete {{type}} {{name}}?
+    title: Delete {{name}}
   errors:
     no-permissions: You don't have enough permissions to view this content.
     no-permissions-header: Not enough permissions
@@ -261,6 +261,15 @@ components:
   resource-not-found:
     messages:
       not-found: Such {{resource}} doesn't exist
+  resources-list:
+    create: Create {{resourceType}}
+    messages:
+      delete:
+        success: '{{resourceType}} deleted'
+        failure: 'Failed to delete the {{resourceType}}: {{error}}'
+      update:
+        success: '{{resourceType}} updated'
+        failure: 'Failed to update the {{resourceType}}: {{error}}'
 config-maps:
   buttons:
     update: Update
