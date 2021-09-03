@@ -244,6 +244,8 @@ components:
     messages:
       not-found: No entries found
       no-search-results: Couldn't find resources matching this query
+  k8s-name-input:
+    placeholder: '{{resourceType}} name'
   key-value-form:
     add-entry: Add data entry
     key: Key
