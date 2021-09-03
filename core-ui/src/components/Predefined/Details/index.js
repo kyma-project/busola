@@ -23,3 +23,4 @@ export * from './Certificate/Certificate.details';
 export * from './Issuer/Issuer.details';
 export * from './ServiceInstance/ServiceInstance.details';
 export * from './ServiceBinding/ServiceBinding.details';
+export * from './Gateway/Gateway.details';
