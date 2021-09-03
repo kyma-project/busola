@@ -10,7 +10,6 @@ Busola project consists of the following UI projects:
 
 - [`Core`](./core) - The main frame
 - [`Service-Catalog-UI`](./service-catalog-ui) - The UI layer for Service Catalog, Instances and Brokers
-- [`Log UI`](./logging) - The logs view
 - [`Backend`](./backend) - A kind of a proxy between Busola and the Kubernetes cluster
 - [`Tests`](./tests) - Acceptance and end-to-end tests
 
