@@ -551,6 +551,16 @@ functions:
         by-sbu: This variable can override or be overridden by a variable injected by one of the ServiceBindings.
       text: Warning
       variable-can-override-sbu: This variable can override or be overridden by a variable injected by one of the created ServiceBindings.
+gateways:
+  title: Gateways
+  selector: Selector
+  servers:
+    title: Servers
+    port: Port
+    hosts: Hosts
+    name: Name
+    tls: TLS Mode
+    secret: TLS Secret
 generic-list:
   no-entries-found: No entries found
 git-repositories:
