@@ -935,6 +935,80 @@ export function getStaticChildrenNodesForNamespace(
     },
     {
       category: i18next.t('configuration.title'),
+      resourceType: 'dnsentries',
+      pathSegment: 'dnsentries',
+      navigationContext: 'dnsentries',
+      label: i18next.t('dnsentries.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/DNSEntries?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/dns.gardener.cloud/v1alpha1',
+          hasDetailsView: true,
+        }),
+      keepSelectedForChildren: true,
+      viewGroup: coreUIViewGroupName,
+      context: {
+        requiredFeatures: [features.CUSTOM_DOMAINS],
+      },
+      children: [
+        {
+          pathSegment: 'details',
+          resourceType: 'dnsentries',
+          children: [
+            {
+              pathSegment: ':dnsentryName',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/DNSEntries/:dnsentryName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/dns.gardener.cloud/v1alpha1',
+                }),
+              viewGroup: coreUIViewGroupName,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: i18next.t('configuration.title'),
+      resourceType: 'dnsproviders',
+      pathSegment: 'dnsproviders',
+      navigationContext: 'dnsproviders',
+      label: i18next.t('dnsproviders.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/DNSProviders?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/dns.gardener.cloud/v1alpha1',
+          hasDetailsView: true,
+        }),
+      keepSelectedForChildren: true,
+      viewGroup: coreUIViewGroupName,
+      context: {
+        requiredFeatures: [features.CUSTOM_DOMAINS],
+      },
+      children: [
+        {
+          pathSegment: 'details',
+          resourceType: 'dnsproviders',
+          children: [
+            {
+              pathSegment: ':dnsproviderName',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/DNSProviders/:dnsproviderName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/dns.gardener.cloud/v1alpha1',
+                }),
+              viewGroup: coreUIViewGroupName,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: i18next.t('configuration.title'),
       pathSegment: 'customresourcedefinitions',
       resourceType: 'customresourcedefinitions',
       navigationContext: 'customresourcedefinitions',
@@ -980,6 +1054,43 @@ export function getStaticChildrenNodesForNamespace(
                   ],
                 },
               ],
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: i18next.t('configuration.title'),
+      resourceType: 'gateways',
+      pathSegment: 'gateways',
+      label: i18next.t('gateways.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/gateways?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/networking.istio.io/v1beta1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+      context: {
+        requiredFeatures: [features.CUSTOM_DOMAINS],
+      },
+
+      navigationContext: 'gateways',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':gatewayName',
+              resourceType: 'gateways',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/gateways/:gatewayName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/networking.istio.io/v1beta1',
+                }),
             },
           ],
         },

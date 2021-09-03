@@ -15,7 +15,7 @@ describe('DecodeSecretSwitch', () => {
       />,
     );
 
-    fireEvent.click(getByText('Encode'));
+    fireEvent.click(getByText('secrets.buttons.encode'));
     expect(setEntries).toHaveBeenCalledWith([
       { key: 'test-key', value: btoa('test-value') },
     ]);
@@ -34,7 +34,7 @@ describe('DecodeSecretSwitch', () => {
       />,
     );
 
-    fireEvent.click(getByText('Decode'));
+    fireEvent.click(getByText('secrets.buttons.decode'));
     expect(setEntries).toHaveBeenCalledWith([
       { key: 'test-key', value: 'test-value' },
     ]);

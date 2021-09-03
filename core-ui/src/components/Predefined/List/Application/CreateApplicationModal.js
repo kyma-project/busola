@@ -30,6 +30,7 @@ export function CreateApplicationForm({
   onCompleted,
   onError,
 }) {
+  const { i18n, t } = useTranslation();
   // https://github.com/kubernetes/kubernetes/blob/v1.10.1/staging/src/k8s.io/apimachinery/pkg/util/validation/validation.go
   const applicationNameRegex =
     '^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]).)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9])$';
@@ -46,14 +47,20 @@ export function CreateApplicationForm({
         '/apis/applicationconnector.kyma-project.io/v1alpha1/applications',
         applicationInput,
       );
-      onCompleted(`Application ${application.name} created`);
+      onCompleted(
+        t('applications.messages.created', {
+          applicationName: application.name,
+        }),
+      );
     } catch (e) {
       console.warn(e);
-      onError('Cannot create application', `Error: ${e.message}`);
+      onError(
+        t('applications.messages.cannot-create'),
+        `${t('common.tooltips.error')} ${e.message}`,
+      );
     }
   }
 
-  const { i18n } = useTranslation();
   return (
     <form
       onChange={onChange}
@@ -66,16 +73,16 @@ export function CreateApplicationForm({
           inputKey="name"
           required
           inputProps={{ pattern: applicationNameRegex }}
-          label="Name"
-          placeholder="Specify a name for your Application"
+          label={t('common.headers.name')}
+          placeholder={t('applications.placeholders.name')}
           onChange={e =>
             setApplication({ ...application, name: e.target.value })
           }
         />
         <TextFormItem
           inputKey="description"
-          label="Description"
-          placeholder="Specify a description for your Application"
+          label={t('applications.labels.description')}
+          placeholder={t('applications.placeholders.description')}
           onChange={e =>
             setApplication({ ...application, description: e.target.value })
           }
@@ -91,11 +98,14 @@ export function CreateApplicationForm({
 }
 
 export default function CreateApplicationModal() {
+  const { t } = useTranslation();
   return (
     <ModalWithForm
-      title="Create Application"
-      modalOpeningComponent={<Button glyph="add">Create Application</Button>}
-      confirmText="Create"
+      title={t('applications.subtitle.create-app')}
+      modalOpeningComponent={
+        <Button glyph="add">{t('applications.buttons.create-app')}</Button>
+      }
+      confirmText={t('common.buttons.create')}
       renderForm={props => <CreateApplicationForm {...props} />}
     />
   );

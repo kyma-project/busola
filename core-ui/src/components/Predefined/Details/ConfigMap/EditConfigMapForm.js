@@ -2,8 +2,11 @@ import React from 'react';
 import { useUpdate } from 'react-shared';
 import { createPatch } from 'rfc6902';
 import { ConfigMapForm } from '../../../../shared/components/ConfigMap/ConfigMapForm';
+import { useTranslation } from 'react-i18next';
 
 export function EditConfigMapForm(props) {
+  const { t } = useTranslation();
+
   const patchRequest = useUpdate();
   const { configMap, onCompleted, onError, resourceUrl, ...formProps } = props;
 
@@ -15,10 +18,13 @@ export function EditConfigMapForm(props) {
     };
     try {
       await patchRequest(resourceUrl, createPatch(configMap, mergedConfigMap));
-      onCompleted('Config Map updated');
+      onCompleted(t('config-maps.messages.updated'));
     } catch (e) {
       console.warn(e);
-      onError('Cannot update Config Map', `Error: ${e.message}`);
+      onError(
+        t('config-maps.messages.updated'),
+        `${t('commons.tooltip.error')} ${e.message}`,
+      );
     }
   };
 

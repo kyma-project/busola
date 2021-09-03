@@ -14,6 +14,8 @@ import {
   SearchInput,
   useNotification,
 } from 'react-shared';
+import { useTranslation } from 'react-i18next';
+
 import './ContainersLogs.scss';
 
 const HOUR_IN_SECONDS = 3600;
@@ -21,6 +23,8 @@ const MAX_TIMEFRAME_IN_SECONDS = Number.MAX_SAFE_INTEGER;
 const DEFAULT_TIMEFRAME = HOUR_IN_SECONDS * 6;
 
 export const ContainersLogs = ({ params }) => {
+  const { t } = useTranslation();
+
   useWindowTitle('Logs');
   const notification = useNotification();
   const [searchQuery, setSearchQuery] = useState('');
@@ -134,7 +138,7 @@ export const ContainersLogs = ({ params }) => {
     } catch (e) {
       console.error(e);
       notification.notifyError({
-        title: 'Failed to download the Logs',
+        title: t('pods.message.failed-to-download'),
         content: e.message,
       });
     }
@@ -148,7 +152,9 @@ export const ContainersLogs = ({ params }) => {
     if (data.length === 0)
       return (
         <div className="empty-logs">
-          No logs avaliable for the '{containerName}' container.
+          {t('pods.message.no-logs-available', {
+            containerName: containerName,
+          })}
         </div>
       );
 
@@ -180,7 +186,7 @@ export const ContainersLogs = ({ params }) => {
           <LayoutPanel.Head title="Logs" className="logs-title" />
           <LayoutPanel.Actions className="logs-actions">
             <FormLabel htmlFor="context-chooser">
-              Filter timeframe by:
+              {t('pods.labels.filter-timeframe')}
             </FormLabel>
             <Select
               options={logTimeframeOptions}
@@ -194,21 +200,21 @@ export const ContainersLogs = ({ params }) => {
               compact
               onChange={onSwitchChange}
             >
-              Show timestamps
+              {t('pods.labels.show-timestamps')}
             </Switch>
             <Switch
               disabled={!logsToSave?.length}
               compact
               onChange={onReverseChange}
             >
-              Reverse logs
+              {t('pods.labels.reverse-logs')}
             </Switch>
             <Button
               disabled={!logsToSave?.length}
               className="logs-download"
               onClick={() => saveToFile(params.podName, params.containerName)}
             >
-              Save to a file
+              {t('pods.labels.save-to-file')}
             </Button>
             <SearchInput
               disabled={!logsToSave?.length}

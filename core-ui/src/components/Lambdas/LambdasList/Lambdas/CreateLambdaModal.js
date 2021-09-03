@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Button } from 'fundamental-react';
 
 import { ModalWithForm } from 'react-shared';
 import CreateLambdaForm from './CreateLambdaForm';
-
-import { LAMBDAS_LIST } from 'components/Lambdas/constants';
 
 export default function CreateLambdaModal({
   repositories = [],
@@ -14,6 +13,7 @@ export default function CreateLambdaModal({
   modalOpeningComponent,
 }) {
   const [invalidModalPopupMessage, setInvalidModalPopupMessage] = useState('');
+  const { t } = useTranslation();
 
   const defaultModalOpeningComponent = (
     <Button
@@ -21,17 +21,17 @@ export default function CreateLambdaModal({
       option="transparent"
       disabled={Boolean(serverDataError || serverDataLoading)}
     >
-      {LAMBDAS_LIST.CREATE_MODAL.OPEN_BUTTON.TEXT}
+      {t('functions.create-view.buttons.create')}
     </Button>
   );
 
   return (
     <ModalWithForm
-      title={LAMBDAS_LIST.CREATE_MODAL.TITLE}
+      title={t('functions.create-view.buttons.create')}
       modalOpeningComponent={
         modalOpeningComponent || defaultModalOpeningComponent
       }
-      confirmText={LAMBDAS_LIST.CREATE_MODAL.CONFIRM_BUTTON.TEXT}
+      confirmText={t('functions.create-view.buttons.confirm')}
       invalidPopupMessage={invalidModalPopupMessage}
       id="create-lambda-modal"
       className="lambdas-list__create-lambda-modal"

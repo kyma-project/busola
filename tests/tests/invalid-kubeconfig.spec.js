@@ -6,7 +6,7 @@ context('Invalid kubeconfig', () => {
     cy.visit(`${config.clusterAddress}/clusters`);
     cy.get('[data-testid=app-switcher]').click();
 
-    cy.get('[data-testid=addcluster]').click();
+    cy.get('[data-testid=addacluster]').click();
 
     cy.getIframeBody()
       .find('#textarea-kubeconfig')
@@ -18,14 +18,14 @@ context('Invalid kubeconfig', () => {
 
     cy.getIframeBody()
       .find('[role=alert][aria-label="invalid-kubeconfig"]')
-      .shouldHaveTrimmedText('Error reading Kubeconfig');
+      .shouldHaveTrimmedText('Error reading the kubeconfig.');
   });
 
   it('Use wrong kubeconfig - from file', () => {
     cy.visit(`${config.clusterAddress}/clusters`);
     cy.get('[data-testid=app-switcher]').click();
 
-    cy.get('[data-testid=addcluster]').click();
+    cy.get('[data-testid=addacluster]').click();
 
     cy.getIframeBody()
       .contains('Drag file here')
@@ -33,6 +33,6 @@ context('Invalid kubeconfig', () => {
 
     cy.getIframeBody()
       .find('[role=alert][aria-label="invalid-kubeconfig"]')
-      .shouldHaveTrimmedText('Error reading Kubeconfig');
+      .shouldHaveTrimmedText('Error reading the kubeconfig.');
   });
 });

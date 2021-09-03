@@ -5,6 +5,7 @@ import { PodStatus } from './PodStatus';
 import ContainersData from './ContainersData';
 import LuigiClient from '@luigi-project/client';
 import { Link } from 'fundamental-react';
+import { useTranslation } from 'react-i18next';
 
 function toSnakeCase(inputString) {
   return inputString
@@ -27,19 +28,24 @@ function goToSecretDetails(resourceKind, name) {
 }
 
 export const PodsDetails = ({ DefaultRenderer, ...otherParams }) => {
+  const { t } = useTranslation();
   const customColumns = [
     {
-      header: 'Pod IP',
+      header: t('pods.headers.pod-ip'),
       value: pod => pod.status.podIP,
     },
     {
-      header: 'Status',
+      header: t('common.headers.status'),
       value: pod => <PodStatus pod={pod} />,
     },
   ];
 
   const VolumesList = resource => {
-    const headerRenderer = _ => ['Volume Name', 'Type', 'Name'];
+    const headerRenderer = _ => [
+      t('pods.headers.volume-name'),
+      t('pods.headers.type'),
+      t('common.headers.name'),
+    ];
     const rowRenderer = volume => {
       const volumeType = Object.keys(volume).find(key => key !== 'name');
       return [
@@ -57,7 +63,7 @@ export const PodsDetails = ({ DefaultRenderer, ...otherParams }) => {
     return (
       <GenericList
         key="volumes"
-        title="Volumes"
+        title={t('pods.labels.volumes')}
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
         entries={resource.spec.volumes}
@@ -68,14 +74,14 @@ export const PodsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const Containers = resource => (
     <ContainersData
       key="containers"
-      type="Containers"
+      type={t('pods.labels.constainers')}
       containers={resource.spec.containers}
     />
   );
   const InitContainers = resource => (
     <ContainersData
       key="init-containers"
-      type="Init containers"
+      type={t('pods.labels.init-constainers')}
       containers={resource.spec.initContainers}
     />
   );

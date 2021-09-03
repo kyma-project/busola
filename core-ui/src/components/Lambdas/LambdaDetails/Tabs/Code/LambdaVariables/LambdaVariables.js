@@ -207,7 +207,7 @@ export default function LambdaEnvs({
     <VariableStatus validation={variable.validation} />,
   ];
 
-  const editEnvsModal = (
+  const addEnvModal = (
     <>
       <CreateVariable
         lambda={lambda}
@@ -221,8 +221,8 @@ export default function LambdaEnvs({
   );
 
   const entries = [
-    ...validateVariables(customVariables, [], injectedVariables),
-    ...validateVariables(customValueFromVariables, [], injectedVariables),
+    ...validateVariables(customVariables, [], injectedVariables, []),
+    ...validateVariables(customValueFromVariables, [], injectedVariables, []),
   ];
 
   function prepareVariablesInput(newVariables) {
@@ -245,7 +245,7 @@ export default function LambdaEnvs({
       oldVariable => oldVariable.id !== variable.id,
     );
 
-    newVariables = validateVariables(newVariables, [], injectedVariables);
+    newVariables = validateVariables(newVariables, [], injectedVariables, []);
     const preparedVariable = prepareVariablesInput(newVariables);
 
     updateLambdaVariables({
@@ -284,7 +284,7 @@ export default function LambdaEnvs({
         showSearchField={true}
         showSearchSuggestion={false}
         textSearchProperties={textSearchProperties}
-        extraHeaderContent={editEnvsModal}
+        extraHeaderContent={addEnvModal}
         actions={actions}
         entries={entries}
         headerRenderer={headerRenderer}

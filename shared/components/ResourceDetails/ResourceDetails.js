@@ -99,6 +99,7 @@ export function ResourceDetails(props) {
           updateResourceMutation={updateResourceMutation}
           silentRefetch={silentRefetch}
           resource={resource}
+          i18n={props.i18n}
           {...props}
         />
       )}
@@ -116,9 +117,7 @@ function Resource({
   resourceType,
   updateResourceMutation,
   deleteResourceMutation,
-  namespace,
   resourceName,
-  filter,
   headerActions,
   resourceHeaderActions,
   windowTitle,

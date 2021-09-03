@@ -3,10 +3,12 @@ import React from 'react';
 import SecretData from 'shared/components/Secret/SecretData';
 import OAuthClientSpecPanel from './OAuthClientSpecPanel';
 import { OAuth2ClientStatus } from 'shared/components/OAuth2ClientStatus/OAuth2ClientStatus';
+import { useTranslation } from 'react-i18next';
 
 import { useGet } from 'react-shared';
 
 function SecretComponent({ namespaceName, secretName }) {
+  const { t } = useTranslation();
   const { data: secret, error, loading = true } = useGet(
     `/api/v1/namespaces/${namespaceName}/secrets/${secretName}`,
     {
@@ -14,13 +16,15 @@ function SecretComponent({ namespaceName, secretName }) {
     },
   );
 
-  if (loading) return 'Loading...';
-  if (error) return `Error: ${error.message}`;
+  if (loading) return t('common.headers.loading');
+  if (error) return `${t('common.tooltips.error')} ${error.message}`;
 
   return <SecretData secret={secret} />;
 }
 
 export const OAuth2ClientsDetails = ({ DefaultRenderer, ...otherParams }) => {
+  const { t } = useTranslation();
+
   const Secret = resource => (
     <SecretComponent
       key="secret"
@@ -33,7 +37,7 @@ export const OAuth2ClientsDetails = ({ DefaultRenderer, ...otherParams }) => {
   );
 
   const statusColumn = {
-    header: 'Status',
+    header: t('common.headers.status'),
     value: client => <OAuth2ClientStatus client={client} />,
   };
 

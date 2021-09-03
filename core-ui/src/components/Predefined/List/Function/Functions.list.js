@@ -7,8 +7,11 @@ import { prettySourceType } from 'components/Lambdas/helpers/lambdas';
 import { prettyRuntime } from 'components/Lambdas/helpers/runtime';
 import { LambdaStatusBadge } from 'components/Lambdas/LambdaStatusBadge/LambdaStatusBadge';
 import CreateNewFunction from './CreateNewFunction';
+import { useTranslation } from 'react-i18next';
 
 export const FunctionsList = ({ DefaultRenderer, ...otherParams }) => {
+  const { t } = useTranslation();
+
   const microfrontendContext = useMicrofrontendContext();
   const { features } = microfrontendContext;
 
@@ -20,7 +23,7 @@ export const FunctionsList = ({ DefaultRenderer, ...otherParams }) => {
 
   const headerActions = features?.SERVERLESS?.isEnabled ? (
     <Button option="transparent" onClick={goToGitRepositories}>
-      Connected repositories
+      {t('functions.buttons.connected-repositories')}
     </Button>
   ) : null;
 
@@ -30,19 +33,19 @@ export const FunctionsList = ({ DefaultRenderer, ...otherParams }) => {
 
   const customColumns = [
     {
-      header: 'Runtime',
+      header: t('functions.headers.runtime'),
       value: func => {
         return prettyRuntime(func.spec.runtime);
       },
     },
     {
-      header: 'Source Type',
+      header: t('functions.headers.source-type'),
       value: func => {
-        return prettySourceType(func.spec.type);
+        return prettySourceType(func.spec.type, t);
       },
     },
     {
-      header: 'Status',
+      header: t('common.headers.status'),
       value: resource => <LambdaStatusBadge status={resource.status} />,
     },
   ];

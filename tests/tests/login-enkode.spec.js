@@ -104,7 +104,7 @@ context('Login - enkode link', () => {
 
     cy.getIframeBody()
       .contains(
-        'Configuration has been included properly. Please fill remaining required data.',
+        'Configuration included properly. Fill the remaining required data.',
       )
       .should('be.visible');
 
@@ -137,7 +137,7 @@ context('Login - enkode link', () => {
 
     cy.getIframeBody()
       .contains(
-        'Configuration has been included properly. Please fill remaining required data.',
+        'Configuration included properly. Fill the remaining required data.',
       )
       .should('be.visible');
 
