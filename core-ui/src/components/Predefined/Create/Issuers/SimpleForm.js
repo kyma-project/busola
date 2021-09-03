@@ -59,6 +59,7 @@ export function SimpleForm({ issuer, setIssuer }) {
               <K8sNameInput
                 compact
                 required
+                showLabel={false}
                 onChange={e => setIssuer({ ...issuer, name: e.target.value })}
                 value={issuer.name}
                 placeholder={t('issuers.placeholders.name')}

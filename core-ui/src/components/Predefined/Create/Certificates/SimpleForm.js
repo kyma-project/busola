@@ -109,6 +109,7 @@ export function SimpleForm({ certificate, setCertificate }) {
               <K8sNameInput
                 compact
                 required
+                showLabel={false}
                 onChange={e =>
                   setCertificate({ ...certificate, name: e.target.value })
                 }
