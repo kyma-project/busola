@@ -10,7 +10,6 @@ Busola project consists of the following UI projects:
 
 - [`Core`](./core) - The main frame
 - [`Service-Catalog-UI`](./service-catalog-ui) - The UI layer for Service Catalog, Instances and Brokers
-- [`Log UI`](./logging) - The logs view
 - [`Backend`](./backend) - A kind of a proxy between Busola and the Kubernetes cluster
 - [`Tests`](./tests) - Acceptance and end-to-end tests
 
@@ -55,7 +54,6 @@ The apps you started run at the following addresses:
 
 - `Core` - [http://localhost:8080](http://localhost:8080)
 - `Core-UI` - [http://localhost:8889](http://localhost:8889)
-- `Log UI` - [http://localhost:4400](http://localhost:4400)
 - `Service-Catalog-UI` - [http://localhost:8000](http://localhost:8000)
 - `Backend` - [http://localhost:3001](http://localhost:3001)
 
