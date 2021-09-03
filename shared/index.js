@@ -26,7 +26,6 @@ export { TextFormItem } from './components/TextFormItem/TextFormItem';
 export { Tabs } from './components/Tabs/Tabs';
 export { Tab } from './components/Tabs/Tab.js';
 export { LabelSelectorInput } from './components/LabelSelectorInput/LabelSelectorInput';
-export { LogsLink } from './components/LogsLink/LogsLink';
 export { CircleProgress } from './components/CircleProgress/CircleProgress';
 export { ErrorPanel } from './components/ErrorPanel/ErrorPanel';
 export * from './components/SideDrawer/SideDrawer';
