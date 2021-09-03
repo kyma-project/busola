@@ -160,6 +160,8 @@ cluster-roles:
 clusters:
   add:
     title: Add a Cluster
+    errors:
+      failed-to-add-cluster: Failed to add a cluster
   buttons:
     apply-configuration: Apply configuration
     apply-kubeconfig: Apply kubeconfig
@@ -845,13 +847,12 @@ event-subscription:
       enter-event-type: Enter Event type
       event-type: Event type
     notifications:
-      failed-to-add-cluster: Failed to add a cluster
       created: Subscription created
       failed: Failed to create the Subscription
       removed: Subscription removed
       failed-delete: Failed to delete the Subscription
-    errors:
-      invalid: The eventType field must have a proper value.
-      subscriptions-not-found: There are no Event Subscriptions yet.
-      not-matching-search-query: Couldn't find Event Subscriptions matching this query.
-      server: Server error. Contact your cluster admin.
+  errors:
+    invalid: The eventType field must have a proper value.
+    subscriptions-not-found: There are no Event Subscriptions yet.
+    not-matching-search-query: Couldn't find Event Subscriptions matching this query.
+    server: Server error. Contact your cluster admin.

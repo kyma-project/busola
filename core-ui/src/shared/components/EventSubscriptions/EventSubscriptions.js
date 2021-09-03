@@ -68,7 +68,7 @@ export default function EventSubscriptions({
 
   const actions = [
     {
-      name: t('commons.buttons.delete'),
+      name: t('common.buttons.delete'),
       handler: handleSubscriptionDelete,
     },
   ];

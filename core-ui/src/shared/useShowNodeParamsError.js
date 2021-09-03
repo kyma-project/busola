@@ -12,10 +12,8 @@ export function useShowNodeParamsError() {
     function showError({ error, errorDescription }) {
       const description = errorDescription ? ` (${errorDescription})` : '';
       notification.notifyError({
-        title: t(
-          'event-subscription.create.notifications.failed-to-add-cluster',
-        ),
-        content: `Error: ${error}${description}`,
+        title: t('clusters.add.errors.failed-to-add-cluster'),
+        content: `${t('common.tooltips.error')}${error}${description}`,
       });
     }
 
