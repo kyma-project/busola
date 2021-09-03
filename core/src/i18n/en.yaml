@@ -236,10 +236,10 @@ components:
   generic-list:
     acion-header:
       messages:
-        confirmation: 'Are you sure you want to delete {{resourceType}} "{{name}}"?'
+        confirmation: Are you sure you want to delete {{resourceType}} "{{name}}"?
         failure: 'Failed to delete the {{resourceType}}: {{error}}'
         success: '{{resourceType}} deleted'
-      title: 'Delete {{resourceType}}'
+      title: Delete {{resourceType}}
     messages:
       not-found: No entries found
       no-search-results: Couldn't find resources matching this query
@@ -250,7 +250,7 @@ components:
     value: Value
   label-selector-input:
     click-to-delete: Click to delete
-    enter-key-value: 'Enter {{type}} key=value'
+    enter-key-value: Enter {{type}} key=value
   modal:
     title: Modal
     confirm-text: Confirm
@@ -258,6 +258,9 @@ components:
     messages:
       success: '{{resourceType}} updated'
       failure: 'Failed to update the {{resourceType}}: {{error}}'
+  resource-not-found:
+    messages:
+      not-found: Such {{resource}} doesn't exist
 config-maps:
   buttons:
     update: Update

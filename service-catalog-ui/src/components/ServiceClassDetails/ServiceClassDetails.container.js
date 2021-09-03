@@ -93,6 +93,7 @@ export const ClusterServiceClassDetailsContainer = ({ name, i18n }) => {
       <ResourceNotFound
         resource="Cluster Service Class"
         breadcrumbs={breadcrumbItems}
+        i18n
       />
     );
   }

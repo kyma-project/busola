@@ -78,6 +78,7 @@ export function ResourceDetails(props) {
         <ResourceNotFound
           resource={prettifyNameSingular(undefined, props.resourceType)}
           breadcrumbs={breadcrumbItems}
+          i18n={props.i18n}
         />
       );
     }
@@ -86,6 +87,7 @@ export function ResourceDetails(props) {
         resource={prettifyNameSingular(undefined, props.resourceType)}
         breadcrumbs={breadcrumbItems}
         customMessage={getErrorMessage(error)}
+        i18n={props.i18n}
       />
     );
   }
@@ -99,6 +101,7 @@ export function ResourceDetails(props) {
           updateResourceMutation={updateResourceMutation}
           silentRefetch={silentRefetch}
           resource={resource}
+          i18n={props.i18n}
           {...props}
         />
       )}

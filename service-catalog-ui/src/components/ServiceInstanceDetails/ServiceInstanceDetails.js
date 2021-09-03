@@ -64,6 +64,7 @@ export default function ServiceInstanceDetails({ match, i18n }) {
       <ResourceNotFound
         resource="Service Instance"
         breadcrumbs={breadcrumbItems}
+        i18n={i18n}
       />
     );
   }
