@@ -13,16 +13,20 @@ const nameAndValueRegexp = '[a-z0-9A-Z]([a-z0-9A-Z-_\\.]{0,61}[a-z0-9A-Z])?';
 const pattern = `^((${domainRegexp})/)?${nameAndValueRegexp}=(${nameAndValueRegexp})?$`;
 export const labelRegexp = new RegExp(pattern);
 
-export const Label = ({ text, onClick }) => (
-  <Token
-    title="Click to remove"
-    className="label-selector__label"
-    onClick={onClick}
-    buttonLabel="Remove"
-  >
-    {text}
-  </Token>
-);
+export const Label = ({ text, onClick, i18n }) => {
+  const { t } = useTranslation(null, { i18n });
+
+  return (
+    <Token
+      title={t('components.label-selector-input.click-to-delete')}
+      className="label-selector__label"
+      onClick={onClick}
+      buttonLabel={t('common.buttons.delete')}
+    >
+      {text}
+    </Token>
+  );
+};
 
 export const NonRemovableLabel = ({ text }) => (
   <Token readOnly buttonLabel="" className="label-selector__label">
@@ -117,13 +121,21 @@ export const LabelSelectorInput = ({
             ))}
 
             {createLabelsToDisplay(labels).map(l => (
-              <Label key={l} text={l} onClick={() => deleteLabel(l)} />
+              <Label
+                key={l}
+                text={l}
+                onClick={() => deleteLabel(l)}
+                i18n={i18n}
+              />
             ))}
             <input
               ref={inputRef}
               className={inputClassNames}
               type="text"
-              placeholder={`Enter ${type} key=value`}
+              placeholder={t(
+                'components.label-selector-input.enter-key-value',
+                { type },
+              )}
               onKeyDown={handleKeyDown}
               onBlur={handleOutOfFocus}
               data-ignore-visual-validation

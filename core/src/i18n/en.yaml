@@ -248,6 +248,9 @@ components:
     key: Key
     read-value: Read value from file
     value: Value
+  label-selector-input:
+    click-to-delete: Click to delete
+    enter-key-value: 'Enter {{type}} key=value'
 config-maps:
   buttons:
     update: Update
