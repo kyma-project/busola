@@ -23,7 +23,7 @@ const MAX_TIMEFRAME_IN_SECONDS = Number.MAX_SAFE_INTEGER;
 const DEFAULT_TIMEFRAME = HOUR_IN_SECONDS * 6;
 
 export const ContainersLogs = ({ params }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   useWindowTitle('Logs');
   const notification = useNotification();
@@ -223,6 +223,7 @@ export const ContainersLogs = ({ params }) => {
               handleQueryChange={setSearchQuery}
               showSuggestion={false}
               onKeyDown={changeSelectedLog}
+              i18n={i18n}
             />
           </LayoutPanel.Actions>
         </LayoutPanel.Header>

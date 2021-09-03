@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Menu, Button } from 'fundamental-react';
+import { useTranslation } from 'react-i18next';
 
 import 'core-js/es/array/flat-map';
 
@@ -29,7 +30,9 @@ export function SearchInput({
   showSearchControl = true,
   disabled = false,
   onKeyDown,
+  i18n,
 }) {
+  const { t } = useTranslation(null, { i18n });
   const [isSearchHidden, setSearchHidden] = React.useState(true);
   const searchInputRef = React.useRef();
 
@@ -96,7 +99,7 @@ export function SearchInput({
               aria-label="search-input"
               ref={searchInputRef}
               type="text"
-              placeholder="Search"
+              placeholder={t('common.tooltips.search')}
               value={searchQuery}
               onBlur={() => setSearchHidden(true)}
               onFocus={() => setSearchHidden(false)}

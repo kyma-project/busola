@@ -79,6 +79,7 @@ export const GenericList = ({
           showSuggestion={showSearchSuggestion}
           showSearchControl={showSearchControl}
           disabled={!entries.length}
+          i18n={i18n}
         />
       )}
       {extraHeaderContent}
