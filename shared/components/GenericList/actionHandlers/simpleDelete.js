@@ -6,7 +6,7 @@ function displayConfirmationMessage({ entityType, entityName, t }) {
   return new Promise(resolve => {
     LuigiClient.uxManager()
       .showConfirmationModal({
-        header: t('components.generic-list.acion-header.messages.title', {
+        header: t('components.generic-list.acion-header.title', {
           resourceType: prettifyNameSingular(entityType),
         }),
         body: t('components.generic-list.acion-header.messages.confirmation', {

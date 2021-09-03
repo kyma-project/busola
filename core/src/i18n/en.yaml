@@ -239,10 +239,15 @@ components:
         confirmation: 'Are you sure you want to delete {{resourceType}} "{{name}}"?'
         failure: 'Failed to delete the {{resourceType}}'
         success: '{{resourceType}} deleted'
-        title: 'Delete {{resourceType}}'
+      title: 'Delete {{resourceType}}'
     messages:
       not-found: No entries found
       no-search-results: Couldn't find resources matching this query
+  key-value-form:
+    add-entry: Add data entry
+    key: Key
+    read-value: Read value from file
+    value: Value
 config-maps:
   buttons:
     update: Update

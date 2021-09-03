@@ -73,7 +73,7 @@ export function KeyValueForm({
           typeAttr="button"
           onClick={addEntry}
         >
-          Add data entry
+          {t('components.key-value-form.add-entry')}
         </Button>
         {customHeaderAction && customHeaderAction(entries, setEntries)}
       </header>
@@ -82,7 +82,7 @@ export function KeyValueForm({
           <li role="row" className="fd-margin-top--tiny" key={entry.renderId}>
             <div className="grid-wrapper">
               <FormLabel htmlFor="key" required>
-                Key
+                {t('components.key-value-form.key')}
                 {keyCounter[entry.key] > 1 && (
                   <Tooltip
                     className="fd-margin-end--tiny"
@@ -93,7 +93,9 @@ export function KeyValueForm({
                   </Tooltip>
                 )}
               </FormLabel>
-              <FormLabel htmlFor="value">Value</FormLabel>
+              <FormLabel htmlFor="value">
+                {t('components.key-value-form.value')}
+              </FormLabel>
             </div>
             <div className="grid-wrapper">
               <Tooltip
@@ -104,7 +106,7 @@ export function KeyValueForm({
                 <FormInput
                   required
                   name="key"
-                  placeholder="Key"
+                  placeholder={t('components.key-value-form.key')}
                   pattern={keyPattern}
                   onChange={e => {
                     entry.key = e.target.value;
@@ -121,7 +123,7 @@ export function KeyValueForm({
                 <FormTextarea
                   className="value-textarea"
                   name="value"
-                  placeholder="Value"
+                  placeholder={t('components.key-value-form.value')}
                   onChange={e => {
                     entry.value = e.target.value;
                     setEntries([...entries]);
@@ -142,7 +144,7 @@ export function KeyValueForm({
                     })
                   }
                 >
-                  Read value from file
+                  {t('components.key-value-form.read-value')}
                 </Button>
               </Tooltip>
               <Button
