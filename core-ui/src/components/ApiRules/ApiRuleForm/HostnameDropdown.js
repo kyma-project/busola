@@ -3,7 +3,7 @@ import { FormItem, FormLabel } from 'fundamental-react';
 import { Dropdown } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
-export function HostDropdown({ gateway, host, setHost }) {
+export function HostnameDropdown({ gateway, hostname, setHostname }) {
   const { t } = useTranslation();
   const filterUnique = (e, i, arr) => arr.indexOf(e) === i;
 
@@ -17,9 +17,9 @@ export function HostDropdown({ gateway, host, setHost }) {
       <Dropdown
         id="host-dropdown"
         options={options}
-        selectedKey={host}
+        selectedKey={hostname}
         disabled={!gateway}
-        onSelect={(_, selected) => setHost(selected.key)}
+        onSelect={(_, selected) => setHostname(selected.key)}
       />
     </FormItem>
   );

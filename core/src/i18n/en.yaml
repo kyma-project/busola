@@ -45,7 +45,11 @@ api-rules:
     loading: Loading services...
     ns-no-services: No Services in this Namespace.
   title: API Rules
-  gateway: Gateway
+  form:
+    gateway: Gateway
+    subdomain: Subdomain
+    hostname: Hostname
+    subdomain-placeholder: Subdomain will replace the '*' part of the $t(api-rules.form.hostname) field.
 applications:
   aria:
     namespace: Choose Namespace

@@ -54,7 +54,7 @@ export function GatewayDropdown({ namespace, gateway, setGateway }) {
 
   return (
     <FormItem>
-      <FormLabel>{t('api-rules.gateway')}</FormLabel>
+      <FormLabel>{t('api-rules.form.gateway')}</FormLabel>
       <Dropdown
         id="gateway-dropdown"
         options={options}

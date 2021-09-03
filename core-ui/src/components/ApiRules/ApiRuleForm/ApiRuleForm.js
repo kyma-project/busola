@@ -32,29 +32,29 @@ import {
 import { SERVICES_URL, API_RULE_URL } from '../constants';
 import { formatMessage as injectVariables } from 'components/Lambdas/helpers/misc';
 import { GatewayDropdown } from './GatewayDropdown';
-import { HostDropdown } from './HostDropdown';
+import { HostnameDropdown } from './HostnameDropdown';
 
 const getFirstAvailableHost = gateway => {
   return gateway.spec.servers[0].hosts[0];
 };
 
-const hasWildcard = host => {
-  if (!host) return false;
+const hasWildcard = hostname => {
+  if (!hostname) return false;
 
-  // host may contain optional namespace prefix ({namespace}/{host})
-  if (host.includes('/')) {
-    host = host.split('/')[1];
+  // hostname may contain optional namespace prefix ({namespace}/{hostname})
+  if (hostname.includes('/')) {
+    hostname = hostname.split('/')[1];
   }
-  return host.includes('*');
+  return hostname.includes('*');
 };
 
-const resolveHost = (lowestLevelDomain, firstLevelDomains) => {
+const resolveFinalHost = (subdomain, hostname) => {
   // replace possible wildcard with lowest level domain
-  const resolvedHost = hasWildcard(firstLevelDomains)
-    ? firstLevelDomains.replace('*', lowestLevelDomain)
-    : firstLevelDomains;
+  const resolvedHost = hasWildcard(hostname)
+    ? hostname.replace('*', subdomain)
+    : hostname;
 
-  // host may be prefixed with namespace - get rid of it
+  // hostname may be prefixed with namespace - get rid of it
   return resolvedHost.includes('/')
     ? resolvedHost.substring(resolvedHost.lastIndexOf('/') + 1)
     : resolvedHost;
@@ -104,16 +104,16 @@ export default function ApiRuleForm({
   );
 
   const [gateway, setGateway] = React.useState(null);
-  const [host, setHost] = React.useState(null);
+  const [hostname, setHostname] = React.useState(null);
 
   React.useEffect(() => {
     if (defaultGatewayQuery.data) {
       setGateway(defaultGatewayQuery.data);
-      setHost(getFirstAvailableHost(defaultGatewayQuery.data));
+      setHostname(getFirstAvailableHost(defaultGatewayQuery.data));
     }
   }, [defaultGatewayQuery.data]);
 
-  React.useEffect(() => handleFormChanged(), [host]);
+  React.useEffect(() => handleFormChanged(), [hostname]);
 
   // as this modal uses refs instead of state, we can't rely on
   // rerender when the value changes - but we need to refresh the
@@ -194,7 +194,7 @@ export default function ApiRuleForm({
       },
       spec: {
         service: {
-          host: resolveHost(formValues.hostname.current.value, host),
+          host: resolveFinalHost(formValues.hostname.current.value, hostname),
           name: serviceName,
           port: parseInt(servicePort),
         },
@@ -309,19 +309,23 @@ export default function ApiRuleForm({
                 gateway={gateway}
                 setGateway={gateway => {
                   setGateway(gateway);
-                  setHost(getFirstAvailableHost(gateway));
+                  setHostname(getFirstAvailableHost(gateway));
                 }}
               />
-              <HostDropdown gateway={gateway} host={host} setHost={setHost} />
+              <HostnameDropdown
+                gateway={gateway}
+                hostname={hostname}
+                setHostname={setHostname}
+              />
               <FormItem>
-                <FormLabel htmlFor="hostname" required>
-                  {t('common.labels.hostname')}
+                <FormLabel htmlFor="subdomain" required>
+                  {t('api-rules.form.subdomain')}
                 </FormLabel>
                 <Tooltip content={t('common.tooltips.k8s-name-input')}>
                   <FormInput
-                    disabled={!hasWildcard(host)}
-                    id="hostname"
-                    placeholder="Enter the hostname"
+                    disabled={!hasWildcard(hostname)}
+                    id="subdomain"
+                    placeholder={t('api-rules.form.subdomain-placeholder')}
                     required
                     pattern="^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$"
                     ref={formValues.hostname}
@@ -329,13 +333,17 @@ export default function ApiRuleForm({
                   />
                 </Tooltip>
               </FormItem>
-              {host &&
-                (!hasWildcard(host) || formValues.hostname.current?.value) && (
+              {hostname &&
+                (!hasWildcard(hostname) ||
+                  formValues.hostname.current?.value) && (
                   <MessageStrip type="success" className="fd-margin-top--sm">
                     {t('api-rules.messages.will-be-available-at', {
                       address:
                         'https://' +
-                        resolveHost(formValues.hostname.current.value, host),
+                        resolveFinalHost(
+                          formValues.hostname.current.value,
+                          hostname,
+                        ),
                     })}
                   </MessageStrip>
                 )}
