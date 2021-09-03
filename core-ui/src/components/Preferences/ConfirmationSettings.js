@@ -25,7 +25,9 @@ export default function ConfirmationSettings() {
       </span>
       <div>
         <Switch
-          inputProps={{ 'aria-label': 'toggle-hidden-namespaces' }}
+          inputProps={{
+            'aria-label': t('settings.clusters.dontConfirmDelete'),
+          }}
           className="fd-has-display-inline-block fd-margin-begin--tiny"
           checked={dontConfirmDelete}
           onChange={toggleValue}

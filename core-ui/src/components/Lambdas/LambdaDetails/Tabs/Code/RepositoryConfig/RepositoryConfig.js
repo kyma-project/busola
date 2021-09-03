@@ -3,9 +3,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import { LayoutPanel, Button } from 'fundamental-react';
 import { Tooltip } from 'react-shared';
 import { FormInput } from 'components/Lambdas/components';
+import { useTranslation } from 'react-i18next';
 
 import { useUpdateLambda, UPDATE_TYPE } from 'components/Lambdas/hooks';
-import { BUTTONS, REPOSITORY_CONFIG_PANEL } from 'components/Lambdas/constants';
+import { REPOSITORY_CONFIG_PANEL } from 'components/Lambdas/constants';
 
 import './RepositoryConfig.scss';
 
@@ -13,9 +14,6 @@ const ERRORS = {
   REFERENCE: 'reference',
   BASE_DIR: 'baseDir',
 };
-
-const saveText = REPOSITORY_CONFIG_PANEL.SAVE_BUTTON.TEXT;
-const editText = REPOSITORY_CONFIG_PANEL.EDIT_BUTTON.TEXT;
 
 export default function RepositoryConfig({ lambda }) {
   const [isEditMode, setIsEditMode] = useState(false);
@@ -32,6 +30,8 @@ export default function RepositoryConfig({ lambda }) {
 
   const baseDirCompRef = useRef(null);
   const baseDirRef = useRef('');
+
+  const { t } = useTranslation();
 
   function clearValues() {
     referenceCompRef.current &&
@@ -52,24 +52,24 @@ export default function RepositoryConfig({ lambda }) {
 
   useEffect(() => {
     if (errors.length) {
-      setEditStatus(REPOSITORY_CONFIG_PANEL.ERRORS.INVALID);
+      setEditStatus(t('functions.create-view.errors.one-field-invalid'));
       setIsValid(false);
     } else {
       if (
         referenceRef?.current?.value === lambda.spec.reference &&
         baseDirRef?.current?.value === lambda.spec.baseDir
       ) {
-        setEditStatus(REPOSITORY_CONFIG_PANEL.ERRORS.NO_CHANGES);
+        setEditStatus(t('functions.create-view.errors.no-changes'));
         setIsValid(false);
       } else {
         setIsValid(true);
       }
     }
-  }, [errors, setIsValid, setEditStatus, baseDirRef, referenceRef, lambda]);
+  }, [errors, setIsValid, setEditStatus, baseDirRef, referenceRef, lambda, t]);
 
   function validateReference(reference, setStatus) {
     if (!reference) {
-      setStatus(REPOSITORY_CONFIG_PANEL.INPUTS.REFERENCE.ERRORS.EMPTY);
+      setStatus(t('functions.details.errors.req-reference'));
       addError(ERRORS.REFERENCE);
       return;
     }
@@ -79,7 +79,7 @@ export default function RepositoryConfig({ lambda }) {
 
   function validateBaseDir(baseDir, setStatus) {
     if (!baseDir) {
-      setStatus(REPOSITORY_CONFIG_PANEL.INPUTS.BASE_DIR.ERRORS.EMPTY);
+      setStatus(t('functions.details.errors.req-base-dir'));
       addError(ERRORS.BASE_DIR);
       return;
     }
@@ -105,7 +105,7 @@ export default function RepositoryConfig({ lambda }) {
         baseDir: baseDir,
       },
     });
-    setEditStatus(REPOSITORY_CONFIG_PANEL.ERRORS.NO_CHANGES);
+    setEditStatus(t('functions.create-view.errors.no-changes'));
   }
 
   function renderCancelButton() {
@@ -123,12 +123,14 @@ export default function RepositoryConfig({ lambda }) {
           clearValues();
         }}
       >
-        {BUTTONS.CANCEL}
+        {t('common.buttons.cancel')}
       </Button>
     );
   }
 
   function renderConfirmButton() {
+    const saveText = t('common.buttons.save');
+    const editText = t('functions.details.buttons.edit-configuration');
     const button = (
       <Button
         glyph={isEditMode ? 'save' : 'edit'}
@@ -166,7 +168,7 @@ export default function RepositoryConfig({ lambda }) {
   return (
     <LayoutPanel className="fd-margin--md lambda-repository-config">
       <LayoutPanel.Header>
-        <LayoutPanel.Head title={REPOSITORY_CONFIG_PANEL.TITLE} />
+        <LayoutPanel.Head title={t('functions.repository.title')} />
         <LayoutPanel.Actions>
           {renderCancelButton()}
           {renderConfirmButton()}
@@ -183,10 +185,10 @@ export default function RepositoryConfig({ lambda }) {
           <LayoutPanel className="has-box-shadow-none">
             <LayoutPanel.Header className="has-padding-none has-none-border-bottom">
               <LayoutPanel.Head
-                title={REPOSITORY_CONFIG_PANEL.INPUTS.REFERENCE.LABEL}
-                description={
-                  REPOSITORY_CONFIG_PANEL.INPUTS.REFERENCE.INLINE_HELP
-                }
+                title={t('functions.create-view.labels.reference')}
+                description={t(
+                  'functions.details.inline-help.function-reference',
+                )}
               />
             </LayoutPanel.Header>
             <LayoutPanel.Body className="has-padding-none">
@@ -208,10 +210,10 @@ export default function RepositoryConfig({ lambda }) {
           <LayoutPanel className="has-box-shadow-none">
             <LayoutPanel.Header className="has-padding-none has-none-border-bottom">
               <LayoutPanel.Head
-                title={REPOSITORY_CONFIG_PANEL.INPUTS.BASE_DIR.LABEL}
-                description={
-                  REPOSITORY_CONFIG_PANEL.INPUTS.BASE_DIR.INLINE_HELP
-                }
+                title={t('functions.create-view.labels.base-directory')}
+                description={t(
+                  'functions.create-view.inline-help.base-directory',
+                )}
               />
             </LayoutPanel.Header>
             <LayoutPanel.Body className="has-padding-none">

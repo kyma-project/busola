@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { useMicrofrontendContext, Tabs, Tab } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 
 import CodeTab from './Tabs/Code/CodeTab';
-import ResourceManagementTab from './Tabs/ResourceManagement/ResourceManagementTab';
+import ResourceManagement from './Tabs/ResourceManagement/ResourceManagement';
 import EventSubscriptionsWrapper from './Tabs/Configuration/EventSubscriptions/EventSubscriptionsWrapper';
 import ServiceBindingsWrapper from './Tabs/Configuration/ServiceBindings/ServiceBindingsWrapper';
 import ApiRulesWrapper from './Tabs/Configuration/ApiRules/ApiRules';
-
-import { LAMBDA_DETAILS } from 'components/Lambdas/constants';
 
 export default function LambdaDetails({ lambda }) {
   const microfrontendContext = useMicrofrontendContext();
@@ -32,13 +31,20 @@ export default function LambdaDetails({ lambda }) {
     features?.EVENTING?.isEnabled ||
     catalogEnabled;
 
+  const { t } = useTranslation();
+  const defaultHeaderRenderer = () => [
+    t('common.headers.name'),
+    t('api-rules.list.headers.host'),
+    t('common.labels.service'),
+    t('api-rules.list.headers.status'),
+  ];
   return (
     <>
       <Tabs className="lambda-details-tabs" callback={setSelectedTabIndex}>
         <Tab
           key="lambda-code"
           id="lambda-code"
-          title={LAMBDA_DETAILS.TABS.CODE.TITLE}
+          title={t('functions.details.title.code')}
         >
           <CodeTab lambda={lambda} isActive={selectedTabIndex === 0} />
         </Tab>
@@ -46,9 +52,13 @@ export default function LambdaDetails({ lambda }) {
           <Tab
             key="lambda-configuration"
             id="lambda-configuration"
-            title={LAMBDA_DETAILS.TABS.CONFIGURATION.TITLE}
+            title={t('functions.details.title.configuration')}
           >
-            <ApiRules lambda={lambda} isActive={selectedTabIndex === 1} />
+            <ApiRules
+              lambda={lambda}
+              isActive={selectedTabIndex === 1}
+              headerRenderer={defaultHeaderRenderer}
+            />
             <EventSubscriptions
               ownerName={lambda.metadata.name}
               isActive={selectedTabIndex === 1}
@@ -63,9 +73,9 @@ export default function LambdaDetails({ lambda }) {
         <Tab
           key="lambda-resources"
           id="lambda-resources"
-          title={LAMBDA_DETAILS.TABS.RESOURCE_MANAGEMENT.TITLE}
+          title={t('functions.details.title.resources')}
         >
-          <ResourceManagementTab lambda={lambda} />
+          <ResourceManagement lambda={lambda} />
         </Tab>
       </Tabs>
     </>
