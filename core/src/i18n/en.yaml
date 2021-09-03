@@ -838,14 +838,14 @@ event-subscription:
     title: Add Event Subscription
     labels:
       calculate-from-cmp: Calculate from components
-      calculate-event-type: Calculate Event Type
+      calculate-event-type: Calculate Event type
       application-name: Application name
       event-name: Event name
       event-version: Event version
-      enter-event-type: Enter Event Type
-      event-type: Event Type
+      enter-event-type: Enter Event type
+      event-type: Event type
     notifications:
-      failed-to-add-cluster: Failed to add cluster
+      failed-to-add-cluster: Failed to add a cluster
       created: Subscription created
       failed: Failed to create the Subscription
       removed: Subscription removed
