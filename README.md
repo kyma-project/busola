@@ -54,7 +54,6 @@ The apps you started run at the following addresses:
 
 - `Core` - [http://localhost:8080](http://localhost:8080)
 - `Core-UI` - [http://localhost:8889](http://localhost:8889)
-- `Log UI` - [http://localhost:4400](http://localhost:4400)
 - `Service-Catalog-UI` - [http://localhost:8000](http://localhost:8000)
 - `Backend` - [http://localhost:3001](http://localhost:3001)
 
