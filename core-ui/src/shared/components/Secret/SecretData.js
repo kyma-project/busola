@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 
 import { Button, LayoutPanel, FormItem, FormLabel } from 'fundamental-react';
@@ -19,6 +20,7 @@ SecretData.propTypes = {
 };
 
 export default function SecretData({ secret }) {
+  const { t } = useTranslation();
   const [isEncoded, setEncoded] = React.useState(true);
   const [isCollapsed, setCollapsed] = React.useState(true);
   const [showExpandButton, setShowExpandButton] = React.useState(false);
@@ -73,7 +75,7 @@ export default function SecretData({ secret }) {
   return (
     <LayoutPanel className="fd-margin--md secret-panel">
       <LayoutPanel.Header>
-        <LayoutPanel.Head title={'Data'} />
+        <LayoutPanel.Head title={t('secrets.data')} />
         <LayoutPanel.Actions>
           {showExpandButton && (
             <Button
@@ -82,7 +84,9 @@ export default function SecretData({ secret }) {
               disabled={!secret?.data}
               onClick={() => setCollapsed(!isCollapsed)}
             >
-              {isCollapsed ? 'Expand all' : 'Collapse all'}
+              {isCollapsed
+                ? t('secrets.buttons.expand')
+                : t('secrets.buttons.collapse')}
             </Button>
           )}
           <Button
@@ -93,7 +97,9 @@ export default function SecretData({ secret }) {
               return isEncoded ? encode() : decode();
             }}
           >
-            {isEncoded ? 'Decode' : 'Encode'}
+            {isEncoded
+              ? t('secrets.buttons.decode')
+              : t('secrets.buttons.encode')}
           </Button>
         </LayoutPanel.Actions>
       </LayoutPanel.Header>
