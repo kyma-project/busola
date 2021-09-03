@@ -1,8 +1,8 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 
 import { GenericList, usePost, useNotification, useDelete } from 'react-shared';
-import { EVENT_TRIGGERS_PANEL, ERRORS } from '../../constants';
 import CreateEventSubscriptionModal from './CreateEventSubscriptionModal';
 import { randomNameGenerator } from 'react-shared';
 import { createSubscriptionInput } from './createSubscriptionInput';
@@ -18,8 +18,8 @@ export default function EventSubscriptions({
   isLambda = false,
   serverDataError,
   serverDataLoading,
-  notFoundMessage = EVENT_TRIGGERS_PANEL.LIST.ERRORS.RESOURCES_NOT_FOUND,
 }) {
+  const { t } = useTranslation();
   const notificationManager = useNotification();
   const postRequest = usePost();
   const deleteRequest = useDelete();
@@ -37,12 +37,12 @@ export default function EventSubscriptions({
       await postRequest(`${subscriptionsUrl}/${name}`, subscriptionInput);
       silentRefetch();
       notificationManager.notifySuccess({
-        content: 'Subscription created',
+        content: t('event-subscription.create.notifications.created'),
       });
     } catch (err) {
       console.error(err);
       notificationManager.notifyError({
-        title: 'Failed to create the Subscription',
+        title: t('event-subscription.create.notifications.failed'),
         content: err.message,
         autoClose: false,
       });
@@ -54,12 +54,12 @@ export default function EventSubscriptions({
       await deleteRequest(`${subscriptionsUrl}/${s.metadata.name}`); //TODO use selfLink which is not there; why?
       silentRefetch();
       notificationManager.notifySuccess({
-        content: 'Subscription removed',
+        content: t('event-subscription.create.notifications.removed'),
       });
     } catch (err) {
       console.error(err);
       notificationManager.notifyError({
-        title: 'Failed to delete the Subscription',
+        title: t('event-subscription.create.notifications.failed-delete'),
         content: err.message,
         autoClose: false,
       });
@@ -68,12 +68,16 @@ export default function EventSubscriptions({
 
   const actions = [
     {
-      name: 'Delete',
+      name: t('common.buttons.delete'),
       handler: handleSubscriptionDelete,
     },
   ];
 
-  const headerRenderer = _ => ['Event Type', 'Name', 'Protocol'];
+  const headerRenderer = _ => [
+    t('event-subscription.create.labels.calculate-event-type'),
+    t('common.labels.name'),
+    t('common.labels.protocol'),
+  ];
   const rowRenderer = subscription => [
     subscription.spec.filter.filters[0]?.eventType.value,
     subscription.metadata.name,
@@ -89,7 +93,7 @@ export default function EventSubscriptions({
 
   return (
     <GenericList
-      title={EVENT_TRIGGERS_PANEL.LIST.TITLE}
+      title={t('event-subscription.title')}
       showSearchField={true}
       textSearchProperties={textSearchProperties}
       showSearchSuggestion={false}
@@ -100,11 +104,11 @@ export default function EventSubscriptions({
       rowRenderer={rowRenderer}
       serverDataError={serverDataError}
       serverDataLoading={serverDataLoading}
-      notFoundMessage={notFoundMessage}
-      noSearchResultMessage={
-        EVENT_TRIGGERS_PANEL.LIST.ERRORS.NOT_MATCHING_SEARCH_QUERY
-      }
-      serverErrorMessage={ERRORS.SERVER}
+      notFoundMessage={t('event-subscription.errors.subscriptions-not-found')}
+      noSearchResultMessage={t(
+        'event-subscription.errors.not-matching-search-query',
+      )}
+      serverErrorMessage={t('event-subscription.errors.server')}
     />
   );
 }

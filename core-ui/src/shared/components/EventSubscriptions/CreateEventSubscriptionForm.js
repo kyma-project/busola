@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   FormItem,
   FormLabel,
@@ -16,6 +17,7 @@ export default function CreateEventSubscriptionForm({
   onSubmit = _ => void 0,
   onChange,
 }) {
+  const { t } = useTranslation();
   const eventAppInput = useRef(),
     eventTypeInput = useRef(),
     eventVersionInput = useRef();
@@ -56,13 +58,9 @@ export default function CreateEventSubscriptionForm({
             size="m"
             className="icon"
             glyph="process"
-            ariaLabel="Calculate from components"
+            ariaLabel={t('event-subscription.create.labels.calculate-from-cmp')}
           />
-          Calculate
-          <span className="fd-has-font-style-italic fd-has-margin">
-            {' '}
-            Event Type{' '}
-          </span>
+          {t('event-subscription.create.labels.calculate-event-type')}
         </h2>
 
         <FormItem>
@@ -71,7 +69,7 @@ export default function CreateEventSubscriptionForm({
             required
             className="fd-has-display-block"
           >
-            Application name
+            {t('event-subscription.create.labels.application-name')}
           </FormLabel>
           <FormInput
             ref={eventAppInput}
@@ -86,12 +84,12 @@ export default function CreateEventSubscriptionForm({
             required
             className="fd-has-display-block"
           >
-            Event name
+            {t('event-subscription.create.labels.event-name')}
           </FormLabel>
           <FormInput
             onChange={calculateEventType}
             ref={eventTypeInput}
-            placeholder="Event name"
+            placeholder={t('event-subscription.create.labels.event-name')}
             id="event_type"
           />
         </FormItem>
@@ -101,12 +99,12 @@ export default function CreateEventSubscriptionForm({
             required
             className="fd-has-display-block"
           >
-            Event version
+            {t('event-subscription.create.labels.event-version')}
           </FormLabel>
           <FormInput
             onChange={calculateEventType}
             ref={eventVersionInput}
-            placeholder="Event Version"
+            placeholder={t('event-subscription.create.labels.event-version')}
             id="event_version"
             defaultValue="v1"
           />
@@ -121,11 +119,7 @@ export default function CreateEventSubscriptionForm({
             glyph="edit"
             ariaLabel="Fill manually"
           />
-          Enter
-          <span className="fd-has-font-style-italic fd-has-margin">
-            {' '}
-            Event Type{' '}
-          </span>
+          {t('event-subscription.create.labels.enter-event-type')}
         </h2>
         <FormItem>
           <FormLabel
@@ -133,7 +127,7 @@ export default function CreateEventSubscriptionForm({
             required
             className="fd-has-display-block"
           >
-            Event Type
+            {t('event-subscription.create.labels.event-type')}
           </FormLabel>
           <InputWithPrefix
             prefix={EVENT_TYPE_PREFIX}
