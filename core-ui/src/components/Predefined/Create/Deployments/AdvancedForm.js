@@ -1,6 +1,7 @@
 import React from 'react';
 import { CreateForm } from 'shared/components/CreateForm/CreateForm';
 import {
+  Checkbox,
   FormFieldset,
   FormLabel,
   FormInput,
@@ -24,16 +25,14 @@ export function AdvancedForm({ deployment, setDeployment }) {
   };
 
   const serviceActions = (
-    <label>
-      {t('deployments.create-modal.advanced.expose-service')}{' '}
-      <input
-        type="checkbox"
-        checked={deployment.serviceData.create}
-        onChange={() =>
-          setServiceData({ create: !deployment.serviceData.create })
-        }
-      />
-    </label>
+    <Checkbox
+      compact
+      checked={deployment.serviceData.create}
+      onChange={(e, checked) => setServiceData({ create: checked })}
+      dir="rtl"
+    >
+      {t('deployments.create-modal.advanced.expose-service')}
+    </Checkbox>
   );
 
   const setLimits = limits => {
