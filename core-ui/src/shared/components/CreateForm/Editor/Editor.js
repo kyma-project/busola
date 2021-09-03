@@ -39,7 +39,7 @@ export function Editor({ resource, setResource }) {
   };
 
   return (
-    <div className="create-modal__editor">
+    <div className="create-form__editor">
       <ControlledEditor
         height="100%"
         language="yaml"
@@ -51,9 +51,9 @@ export function Editor({ resource, setResource }) {
         }
       />
       {error && (
-        <div className="create-modal__editor__error">
+        <div className="create-form__editor__error">
           <MessageStrip type="error" className="fd-margin--sm">
-            {t('common.create-modal.editor-error', { error })}
+            {t('common.create-form.editor-error', { error })}
           </MessageStrip>
         </div>
       )}

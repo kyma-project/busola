@@ -1,0 +1,13 @@
+.csr-header {
+	display: flex;
+
+	&:before {
+		content: '';
+		order: 1;
+		flex-grow: 1;
+	}
+}
+.csr-encode-toggle {
+	order: 2;
+	margin-top: -1.5rem;
+}
