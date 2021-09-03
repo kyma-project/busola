@@ -76,11 +76,6 @@ const defaultConfig = {
     'PYTHON_PATH',
   ],
   triggerSubscriber: defaultTriggerSubscriber,
-  logging: {
-    deploymentContainerName: 'function',
-    jobContainerName: 'executor',
-    repoFetcherContainerName: 'repo-fetcher',
-  },
   defaultLambdaCodeAndDeps: defaultCodeAndDeps,
 
   functionReplicasDefaultPreset: 'S',
