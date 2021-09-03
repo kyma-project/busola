@@ -553,13 +553,14 @@ functions:
       variable-can-override-sbu: This variable can override or be overridden by a variable injected by one of the created ServiceBindings.
 gateways:
   create-modal:
+    title: Create Gateway
     advanced:
       add-server: Add server
       delete-server: Delete server
       enable-tls: Enable TLS
       hosts: Hosts
       placeholders:
-        hosts: Enter the hosts
+        hosts: 'Enter the hosts #e.g. *.api.mydomain.com'
         port:
           name: Enter the name
           number: Enter the port number
@@ -578,6 +579,8 @@ gateways:
         tls: TLS
         mode: TLS Mode
         credentialName: Credential Name
+    messages:
+      success: Gateway created.
     presets:
       default: Default
     simple:

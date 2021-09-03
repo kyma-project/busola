@@ -1,7 +1,8 @@
 import React from 'react';
 import { CreateForm } from 'shared/components/CreateForm/CreateForm';
-import { FormLabel, FormInput } from 'fundamental-react';
+import { FormLabel, FormInput, Select } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
+import { PROTOCOLS } from './helpers';
 
 export const PortsForm = ({ disabled = false, index, server, setServers }) => {
   const { t } = useTranslation();
@@ -55,18 +56,20 @@ export const PortsForm = ({ disabled = false, index, server, setServers }) => {
           </FormLabel>
         }
         input={
-          <FormInput
-            type="text"
-            required
+          <Select
             compact
+            onSelect={(_, selected) => {
+              setPortValue(server, 'protocol', selected.key);
+            }}
+            selectedKey={server.port?.protocol || ''}
+            options={PROTOCOLS.map(mode => ({
+              key: mode,
+              text: mode,
+            }))}
             placeholder={t(
               'gateways.create-modal.advanced.placeholders.port.protocol',
             )}
-            value={server.port.protocol}
-            onChange={e =>
-              setPortValue(server, 'protocol', e.target.value || '')
-            }
-          />
+          ></Select>
         }
       />
       <CreateForm.FormField

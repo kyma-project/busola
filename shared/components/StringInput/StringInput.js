@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import classNames from 'classnames';
+import classnames from 'classnames';
 import { Token } from 'fundamental-react';
 
 export const SingleString = ({ text, onClick }) => (
@@ -18,6 +18,7 @@ export const StringInput = ({
   onChange,
   regexp = /^[A-z_-]+$/,
   required,
+  compact,
   placeholder = 'Enter multiple values separated by comma',
   ...props
 }) => {
@@ -64,11 +65,13 @@ export const StringInput = ({
   function deleteString(string) {
     onChange(stringList.filter(s => s !== string));
   }
-
+  const inputClassName = classnames('fd-input', 'label-selector__input', {
+    'fd-input--compact': compact,
+  });
   return (
     <div className="fd-form-group">
       <div
-        className={classNames(['label-selector', { 'is-invalid': !isValid }])}
+        className={classnames(['label-selector', { 'is-invalid': !isValid }])}
       >
         {!!stringList.length &&
           stringList.map(s => (
@@ -76,7 +79,7 @@ export const StringInput = ({
           ))}
         <input
           ref={inputRef}
-          className="fd-input label-selector__input"
+          className={inputClassName}
           type="text"
           placeholder={placeholder}
           onKeyDown={handleKeyDown}

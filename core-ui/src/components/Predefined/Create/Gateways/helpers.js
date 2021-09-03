@@ -2,12 +2,31 @@ import * as jp from 'jsonpath';
 import shortid from 'shortid';
 
 export const TSL_MODE = [
-  'PASSTHROUGH',
+  // 'PASSTHROUGH',
   'SIMPLE',
-  'MUTUAL',
-  'AUTO_PASSTHROUGH',
-  'ISTIO_MUTUAL',
+  // 'MUTUAL',
+  // 'AUTO_PASSTHROUGH',
+  // 'ISTIO_MUTUAL',
 ];
+
+export const PROTOCOLS = [
+  'HTTP',
+  // 'HTTP2',
+  'HTTPS',
+  // 'GRPC',
+  // 'HTTP2',
+  // 'MONGO',
+  'TCP',
+];
+
+export function validateSpec(gateway) {
+  let isValid = true;
+  if (Object.keys(gateway.selector).length === 0) isValid = false;
+  gateway.servers.forEach(server => {
+    if (!server.hosts.length) isValid = false;
+  });
+  return isValid;
+}
 
 export function newServer() {
   return {
@@ -15,7 +34,7 @@ export function newServer() {
     port: {
       number: 5,
       name: '',
-      protocol: '',
+      protocol: 'HTTP',
     },
     isTls: false,
     hosts: [],

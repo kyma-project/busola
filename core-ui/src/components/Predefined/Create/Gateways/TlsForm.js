@@ -18,7 +18,6 @@ export const TlsForm = ({ disabled = false, index, server, setServers }) => {
           [variableName]: value,
         },
       };
-      // .tls[variableName] = value;
     }
 
     setServers(servers => [

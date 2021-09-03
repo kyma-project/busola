@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { CreateForm } from 'shared/components/CreateForm/CreateForm';
 import { Button, FormFieldset } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
-import { newServer } from './helpers';
+import { newServer, validateSpec } from './helpers';
 import { PortsForm } from './PortsForm';
 import { TlsForm } from './TlsForm';
 import { HostsForm } from './HostsForm';
@@ -12,9 +12,9 @@ export function SingleServerForm({ index, server, setServers, isAdvanced }) {
   const { t } = useTranslation();
 
   function deleteServer(server) {
-    setServers(servers => {
-      return servers.filter(oldServer => oldServer.id !== server.id);
-    });
+    setServers(servers =>
+      servers.filter(oldServer => oldServer.id !== server.id),
+    );
   }
 
   const deleteButton = (
@@ -67,7 +67,7 @@ export function SingleServerForm({ index, server, setServers, isAdvanced }) {
   );
 }
 
-export function ServersForm({ gateway, setGateway, isAdvanced }) {
+export function ServersForm({ gateway, setGateway, isAdvanced, setValid }) {
   const { t } = useTranslation();
   const [servers, setServers] = useState(
     (gateway.servers || []).map(server => ({
@@ -80,12 +80,14 @@ export function ServersForm({ gateway, setGateway, isAdvanced }) {
       ...gateway,
       servers: servers,
     });
+
+    setValid(validateSpec(gateway));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [servers]);
 
   function addServer() {
     setServers(servers => [...servers, newServer()]);
-    // setValid(false);
+    setValid(false);
   }
 
   const serversActions = (

@@ -12,12 +12,16 @@ import { SimpleForm } from './SimpleForm';
 import { AdvancedForm } from './AdvancedForm';
 import { useTranslation } from 'react-i18next';
 
-export function CreateGatewayForm({ namespaceId, formElementRef, onChange }) {
+export function CreateGatewayForm({
+  namespaceId,
+  formElementRef,
+  onChange,
+  setCustomValid,
+}) {
   const { t } = useTranslation();
   const notification = useNotification();
   const postRequest = usePost();
   const [gateway, setGateway] = useState(createGatewayTemplate(namespaceId));
-  console.log('gateway', gateway);
   const createGateway = async () => {
     try {
       await postRequest(
@@ -43,8 +47,20 @@ export function CreateGatewayForm({ namespaceId, formElementRef, onChange }) {
   return (
     <CreateForm
       title={t('gateways.create-modal.title')}
-      simpleForm={<SimpleForm gateway={gateway} setGateway={setGateway} />}
-      advancedForm={<AdvancedForm gateway={gateway} setGateway={setGateway} />}
+      simpleForm={
+        <SimpleForm
+          gateway={gateway}
+          setGateway={setGateway}
+          setValid={setCustomValid}
+        />
+      }
+      advancedForm={
+        <AdvancedForm
+          gateway={gateway}
+          setGateway={setGateway}
+          setValid={setCustomValid}
+        />
+      }
       resource={gateway}
       setResource={setGateway}
       toYaml={gatewayToYaml}

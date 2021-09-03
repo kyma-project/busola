@@ -6,8 +6,14 @@ import { K8sNameInput } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 import { GatewaySelectorInput } from './GatewaySelectorInput/GatewaySelectorInput';
 import { ServersForm } from './ServersForm';
+import { validateSpec } from './helpers';
 
-export function SimpleForm({ gateway, setGateway, isAdvanced = false }) {
+export function SimpleForm({
+  gateway,
+  setGateway,
+  isAdvanced = false,
+  setValid,
+}) {
   const { t, i18n } = useTranslation();
 
   return (
@@ -51,7 +57,10 @@ export function SimpleForm({ gateway, setGateway, isAdvanced = false }) {
                 required
                 labels={gateway.selector}
                 type={t('gateways.create-modal.simple.selector')}
-                onChange={selector => setGateway({ ...gateway, selector })}
+                onChange={selector => {
+                  setGateway({ ...gateway, selector });
+                  setValid(validateSpec({ ...gateway, selector }));
+                }}
                 i18n={i18n}
                 compact
               />
@@ -62,6 +71,7 @@ export function SimpleForm({ gateway, setGateway, isAdvanced = false }) {
       <ServersForm
         gateway={gateway}
         setGateway={setGateway}
+        setValid={setValid}
         isAdvanced={isAdvanced}
       />
     </>
