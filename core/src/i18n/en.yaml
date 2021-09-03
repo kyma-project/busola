@@ -202,6 +202,7 @@ clusters:
     title: Storage Type
 common:
   buttons:
+    add: Add
     add-new: Add new
     cancel: Cancel
     create: Create
@@ -243,6 +244,7 @@ common:
     name: Name
     resource: Resource
     service: Service
+    protocol: Protocol
   messages:
     cannot-load: 'Cannot load {{value}}: {{error.message}}.'
     choose: Choose {{value}}.
@@ -743,6 +745,8 @@ secrets:
   buttons:
     decode: Decode
     encode: Encode
+    expand: Expand all
+    collapse: Collapse all
   create-modal:
     messages:
       decoding-failure: 'Failed to decode the Secret data: {{error}}.'
@@ -819,7 +823,9 @@ workloads:
     tooltip: Enter a valid Docker image registry path.
   title: Workloads
 event-subscription:
+  title: Event Subscriptions
   create:
+    title: Add Event Subscription
     labels:
       calculate-from-cmp: Calculate from components
       calculate-event-type: Calculate Event Type
@@ -829,7 +835,13 @@ event-subscription:
       enter-event-type: Enter Event Type
       event-type: Event Type
     notifications:
+      failed-to-add-cluster: Failed to add cluster
       created: Subscription created
       failed: Failed to create the Subscription
       removed: Subscription removed
       failed-delete: Failed to delete the Subscription
+    errors:
+      invalid: The eventType field must have a proper value.
+      subscriptions-not-found: There are no Event Subscriptions yet.
+      not-matching-search-query: Couldn't find Event Subscriptions matching this query.
+      server: Server error. Contact your cluster admin.
