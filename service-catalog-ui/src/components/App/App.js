@@ -38,32 +38,24 @@ const App = () => {
         <Route
           exact
           path="/catalog/ServiceClass/:name"
-          render={withTitle(CATALOG_TITLE, ({ match }) =>
-            RoutedServiceClassDetails({ match, i18n }),
-          )}
+          render={withTitle(CATALOG_TITLE, RoutedServiceClassDetails)}
         />
 
         <Route
           exact
           path="/catalog/ClusterServiceClass/:name"
-          render={withTitle(CATALOG_TITLE, ({ match }) =>
-            RoutedClusterServiceClassDetails({ match, i18n }),
-          )}
+          render={withTitle(CATALOG_TITLE, RoutedClusterServiceClassDetails)}
         />
 
         <Route
           exact
           path="/instances"
-          render={withTitle(INSTANCES_TITLE, () =>
-            ServiceInstancesList({ i18n }),
-          )}
+          render={withTitle(INSTANCES_TITLE, ServiceInstancesList)}
         />
         <Route
           exact
           path="/instances/details/:name"
-          render={withTitle(INSTANCES_TITLE, ({ match }) =>
-            ServiceInstancesDetails({ match, i18n }),
-          )}
+          render={withTitle(INSTANCES_TITLE, ServiceInstancesDetails)}
         />
         <Route exact path="" component={MainFrameRedirection} />
       </Switch>
@@ -71,12 +63,12 @@ const App = () => {
   );
 };
 
-const RoutedServiceClassDetails = ({ match, i18n }) => (
-  <ServiceClassDetailsContainer name={match.params.name} i18n={i18n} />
+const RoutedServiceClassDetails = ({ match }) => (
+  <ServiceClassDetailsContainer name={match.params.name} />
 );
 
-const RoutedClusterServiceClassDetails = ({ match, i18n }) => (
-  <ClusterServiceClassDetailsContainer name={match.params.name} i18n={i18n} />
+const RoutedClusterServiceClassDetails = ({ match }) => (
+  <ClusterServiceClassDetailsContainer name={match.params.name} />
 );
 
 export default App;
