@@ -93,6 +93,7 @@ export function CustomResource({ params }) {
       customComponents={[
         resource => AdditionalPrinterColumns({ resource, i18n }),
       ]}
+      i18n={i18n}
     />
   );
 }

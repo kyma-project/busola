@@ -42,10 +42,10 @@ export async function handleDelete(
     }
   } catch (e) {
     notificationManager.notifyError({
-      title: t('components.generic-list.acion-header.messages.failure', {
+      content: t('components.generic-list.acion-header.messages.failure', {
         resourceType: prettifyNameSingular(entityType),
+        error: e.message,
       }),
-      content: e.message,
     });
   }
 }

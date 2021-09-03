@@ -49,8 +49,8 @@ function ApiRules(service) {
   return <ServiceApiRules key="api-rules" service={service} />;
 }
 
-export const ServicesDetails = ({ DefaultRenderer, i18n, ...otherParams }) => {
-  const { t } = useTranslation();
+export const ServicesDetails = ({ DefaultRenderer, ...otherParams }) => {
+  const { t, i18n } = useTranslation();
   const microfrontendContext = useMicrofrontendContext();
   const { features } = microfrontendContext;
   const customComponents = [];

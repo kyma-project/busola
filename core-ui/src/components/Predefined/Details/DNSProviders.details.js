@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 
 import { GenericList, StatusBadge } from 'react-shared';
 
-const Domains = ({ resource, i18n }) => {
-  const { t } = useTranslation();
+const Domains = resource => {
+  const { t, i18n } = useTranslation();
 
   const headerRenderer = () => [t('dnsproviders.domains')];
 
@@ -41,11 +41,7 @@ const Domains = ({ resource, i18n }) => {
   );
 };
 
-export const DNSProvidersDetails = ({
-  DefaultRenderer,
-  i18n,
-  ...otherParams
-}) => {
+export const DNSProvidersDetails = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -65,7 +61,7 @@ export const DNSProvidersDetails = ({
 
   return (
     <DefaultRenderer
-      customComponents={[resource => Domains({ resource, i18n })]}
+      customComponents={[Domains]}
       customColumns={customColumns}
       {...otherParams}
     ></DefaultRenderer>

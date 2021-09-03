@@ -100,8 +100,8 @@ const AdditionalPrinterColumns = ({ version, i18n }) => {
   );
 };
 
-export const CustomResourceDefinitionVersions = ({ resource, i18n }) => {
-  const { t } = useTranslation();
+export const CustomResourceDefinitionVersions = resource => {
+  const { t, i18n } = useTranslation();
 
   const { editorTheme } = useTheme();
   const namespace = LuigiClient.getContext().namespaceId;

@@ -49,6 +49,7 @@ ResourceDetails.defaultProps = {
 };
 
 export function ResourceDetails(props) {
+  console.log('aaaaaaaaaa', props);
   if (!props.resourceUrl) {
     return <></>; // wait for the context update
   }
@@ -179,13 +180,17 @@ function Resource({
       await updateResourceMutation(resourceUrl, diff);
       silentRefetch();
       notification.notifySuccess({
-        content: `${prettifiedResourceName} updated`,
+        content: t('components.resource-details.messages.success', {
+          resourceType: prettifiedResourceName,
+        }),
       });
     } catch (e) {
       console.error(e);
       notification.notifyError({
-        title: `Failed to update the ${prettifiedResourceName}`,
-        content: e.message,
+        content: t('components.resource-details.messages.failure', {
+          resourceType: prettifiedResourceName,
+          error: e.message,
+        }),
       });
       throw e;
     }

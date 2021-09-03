@@ -2,8 +2,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { GenericList } from 'react-shared';
 
-export function IssuerDomains({ issuer, i18n }) {
-  const { t } = useTranslation();
+export function IssuerDomains(issuer) {
+  const { t, i18n } = useTranslation();
   return (
     <div className="panel-grid">
       <GenericList

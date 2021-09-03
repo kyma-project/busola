@@ -6,8 +6,8 @@ import { prettyRuntime } from 'components/Lambdas/helpers/runtime';
 import { LambdaStatusBadge } from 'components/Lambdas/LambdaStatusBadge/LambdaStatusBadge';
 import { useTranslation } from 'react-i18next';
 
-export const FunctionsDetails = ({ DefaultRenderer, i18n, ...otherParams }) => {
-  const { t } = useTranslation();
+export const FunctionsDetails = ({ DefaultRenderer, ...otherParams }) => {
+  const { t, i18n } = useTranslation();
   const customColumns = [
     {
       header: t('common.headers.status'),

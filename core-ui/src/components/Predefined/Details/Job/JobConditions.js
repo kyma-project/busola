@@ -7,8 +7,8 @@ import {
   StatusBadge,
 } from 'react-shared';
 
-export function JobConditions({ job, i18n }) {
-  const { t } = useTranslation();
+export function JobConditions(job) {
+  const { t, i18n } = useTranslation();
 
   const headerRenderer = () => [
     t('jobs.conditions.type'),

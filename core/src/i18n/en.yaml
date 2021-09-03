@@ -237,7 +237,7 @@ components:
     acion-header:
       messages:
         confirmation: 'Are you sure you want to delete {{resourceType}} "{{name}}"?'
-        failure: 'Failed to delete the {{resourceType}}'
+        failure: 'Failed to delete the {{resourceType}}: {{error}}'
         success: '{{resourceType}} deleted'
       title: 'Delete {{resourceType}}'
     messages:
@@ -254,6 +254,10 @@ components:
   modal:
     title: Modal
     confirm-text: Confirm
+  resource-details:
+    messages:
+      success: '{{resourceType}} updated'
+      failure: 'Failed to update the {{resourceType}}: {{error}}'
 config-maps:
   buttons:
     update: Update

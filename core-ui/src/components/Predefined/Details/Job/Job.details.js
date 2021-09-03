@@ -10,7 +10,7 @@ import { ResourcePods } from '../ResourcePods';
 import { JobCompletions } from './JobCompletions';
 import { JobConditions } from './JobConditions';
 
-export function JobsDetails({ DefaultRenderer, i18n, ...otherParams }) {
+export function JobsDetails({ DefaultRenderer, ...otherParams }) {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -44,10 +44,7 @@ export function JobsDetails({ DefaultRenderer, i18n, ...otherParams }) {
     },
   ];
 
-  const customComponents = [
-    resource => JobConditions({ job: resource, i18n }),
-    ResourcePods,
-  ];
+  const customComponents = [JobConditions, ResourcePods];
 
   return (
     <DefaultRenderer

@@ -6,10 +6,9 @@ import { useTranslation } from 'react-i18next';
 
 export const CustomResourceDefinitionsDetails = ({
   DefaultRenderer,
-  i18n,
   ...otherParams
 }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const customColumns = [
     {
@@ -48,10 +47,7 @@ export const CustomResourceDefinitionsDetails = ({
   return (
     <DefaultRenderer
       customColumns={customColumns}
-      customComponents={[
-        ResourceNames,
-        resource => CustomResourceDefinitionVersions({ resource, i18n }),
-      ]}
+      customComponents={[ResourceNames, CustomResourceDefinitionVersions]}
       {...otherParams}
     ></DefaultRenderer>
   );
