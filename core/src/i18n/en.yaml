@@ -411,27 +411,28 @@ gateways:
     advanced:
       add-server: Add server
       delete-server: Delete server
+      enable-tls: Enable TLS
       hosts: Hosts
       placeholders:
-        hosts: Hosts
+        hosts: Enter the hosts
         port:
-          name: Port Name
-          number: Port number
-          protocol: Port protocol
-          target-port: Target port
+          name: Enter the name
+          number: Enter the port number
+          protocol: Enter the protocol
+          target-port: Enter the target port
         tls:
-          mode: TLS Mode
-          credentialName: CredentialName
+          mode: Select TLS Mode
+          credentialName: Enter the credential name
       port:
         ports: Ports
-        name: Port Name
-        number: Port number
-        protocol: Port protocol
+        name: Name
+        number: Number
+        protocol: Protocol
         target-port: Target port
       tls:
         tls: TLS
         mode: TLS Mode
-        credentialName: CredentialName
+        credentialName: Credential Name
     presets:
       default: Default
     simple:

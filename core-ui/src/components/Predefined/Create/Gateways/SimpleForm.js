@@ -41,13 +41,14 @@ export function SimpleForm({ gateway, setGateway, isAdvanced = false }) {
           />
           <CreateForm.FormField
             label={
-              <FormLabel>
+              <FormLabel required>
                 {t('gateways.create-modal.simple.selector')}
               </FormLabel>
             }
             input={
               <GatewaySelectorInput
                 showFormLabel={false}
+                required
                 labels={gateway.selector}
                 type={t('gateways.create-modal.simple.selector')}
                 onChange={selector => setGateway({ ...gateway, selector })}

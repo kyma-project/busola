@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { CreateForm } from 'shared/components/CreateForm/CreateForm';
-import { Button, FormFieldset, FormLabel, FormInput } from 'fundamental-react';
+import { Button, FormFieldset } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { newServer } from './helpers';
 import { PortsForm } from './PortsForm';
-import { TslForm } from './TslForm';
+import { TlsForm } from './TlsForm';
 import { HostsForm } from './HostsForm';
 import shortid from 'shortid';
 
@@ -13,7 +13,6 @@ export function SingleServerForm({ index, server, setServers, isAdvanced }) {
 
   function deleteServer(server) {
     setServers(servers => {
-      console.log(servers, server, server.id);
       return servers.filter(oldServer => oldServer.id !== server.id);
     });
   }
@@ -30,7 +29,7 @@ export function SingleServerForm({ index, server, setServers, isAdvanced }) {
     </Button>
   );
   return (
-    <FormFieldset>
+    <FormFieldset className="servers-form">
       {isAdvanced && (
         <CreateForm.CollapsibleSection
           title={`${t('gateways.create-modal.simple.server')} ${index}`}
@@ -43,7 +42,7 @@ export function SingleServerForm({ index, server, setServers, isAdvanced }) {
             setServers={setServers}
             disabled={true}
           />
-          <TslForm
+          <TlsForm
             index={index}
             server={server}
             setServers={setServers}
@@ -59,11 +58,10 @@ export function SingleServerForm({ index, server, setServers, isAdvanced }) {
       )}
 
       {!isAdvanced && (
-        <>
+        <div className="servers-form">
           <PortsForm index={index} server={server} setServers={setServers} />
-          <TslForm index={index} server={server} setServers={setServers} />
           <HostsForm index={index} server={server} setServers={setServers} />
-        </>
+        </div>
       )}
     </FormFieldset>
   );
@@ -72,17 +70,20 @@ export function SingleServerForm({ index, server, setServers, isAdvanced }) {
 export function ServersForm({ gateway, setGateway, isAdvanced }) {
   const { t } = useTranslation();
   const [servers, setServers] = useState(
-    gateway.servers.map(server => ({ ...server, id: shortid.generate() })),
+    (gateway.servers || []).map(server => ({
+      ...server,
+      id: shortid.generate(),
+    })),
   );
   useEffect(() => {
     setGateway({
-      gateway,
+      ...gateway,
       servers: servers,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [servers]);
 
   function addServer() {
-    // setServers([...servers, newServer()]);
     setServers(servers => [...servers, newServer()]);
     // setValid(false);
   }
@@ -92,7 +93,6 @@ export function ServersForm({ gateway, setGateway, isAdvanced }) {
       {t('gateways.create-modal.advanced.add-server')}
     </Button>
   );
-  console.log('servers', servers);
 
   return (
     <CreateForm.CollapsibleSection

@@ -17,11 +17,8 @@ export function newServer() {
       name: '',
       protocol: '',
     },
-    tls: {
-      mode: '',
-      credentialName: '',
-    },
-    hosts: '',
+    isTls: false,
+    hosts: [],
   };
 }
 
@@ -46,6 +43,7 @@ export function yamlToGateway(yaml, prevGateway) {
     name: jp.value(yaml, '$.metadata.name') || '',
     namespace: jp.value(yaml, '$.metadata.namespace') || '',
     selector: jp.value(yaml, '$.spec.selector') || {},
+    servers: jp.value(yaml, '$.spec.servers') || {},
     labels: jp.value(yaml, '$.metadata.labels') || {},
   };
 }
@@ -86,7 +84,7 @@ export function createPresets(namespaceId, translate) {
               mode: 'SIMPLE',
               credentialName: '',
             },
-            hosts: '',
+            hosts: [],
           },
         ],
       },
