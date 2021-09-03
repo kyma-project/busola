@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import {
   randomNameGenerator,
@@ -49,6 +50,8 @@ export default function RepositoryForm({
   const authTypeRef = useRef('');
   const secretNameRef = useRef('');
 
+  const { t } = useTranslation();
+
   const addError = useCallback(
     (...newErrors) => setErrors(oldErrors => [...oldErrors, ...newErrors]),
     [setErrors],
@@ -61,10 +64,10 @@ export default function RepositoryForm({
 
   useEffect(() => {
     if (isValid && errors.length) {
-      setInvalidModalPopupMessage(REPOSITORIES_LIST.MODAL_ERROR);
+      setInvalidModalPopupMessage(t('functions.create-view.errors.invalid'));
       setValidity(false);
     }
-  }, [isValid, errors, setValidity, setInvalidModalPopupMessage]);
+  }, [isValid, errors, setValidity, setInvalidModalPopupMessage, t]);
 
   useEffect(() => {
     if (showSecretName) {
@@ -79,8 +82,8 @@ export default function RepositoryForm({
   useEffect(() => {
     const validationMessage = validateResourceName(
       name,
-      repositoryNames,
       REPOSITORIES_LIST.MODAL_INPUTS.NAME.ERRORS,
+      t,
     );
     if (validationMessage) {
       setNameStatus(validationMessage);
@@ -89,28 +92,28 @@ export default function RepositoryForm({
     }
     setNameStatus('');
     removeError(ERRORS.NAME);
-  }, [setNameStatus, repositoryNames, name, addError, removeError]);
+  }, [setNameStatus, repositoryNames, name, addError, removeError, t]);
 
   useEffect(() => {
     if (errors.length) {
-      setInvalidModalPopupMessage(REPOSITORIES_LIST.MODAL_ERROR);
+      setInvalidModalPopupMessage(t('functions.create-view.errors.invalid'));
       setValidity(false);
     } else {
       setInvalidModalPopupMessage('');
       setValidity(true);
     }
-  }, [errors, setValidity, setInvalidModalPopupMessage]);
+  }, [errors, setValidity, setInvalidModalPopupMessage, t]);
 
   function validateRepositoryUrl(url, setStatus) {
     if (!url) {
-      setStatus(REPOSITORIES_LIST.MODAL_INPUTS.URL.ERRORS.EMPTY);
+      setStatus(t('functions.repository-list.errors.req-name'));
       addError(ERRORS.REPOSITORY_URL);
       return;
     }
 
     const isCorrectUrl = isGitUrl(url);
     if (!isCorrectUrl) {
-      setStatus(REPOSITORIES_LIST.MODAL_INPUTS.URL.ERRORS.INVALID);
+      setStatus(t('functions.repository-list.errors.invalid-url'));
       addError(ERRORS.REPOSITORY_URL);
       return;
     }
@@ -122,8 +125,8 @@ export default function RepositoryForm({
   function validateSecretName(secretName, setStatus) {
     const validationMessage = validateResourceName(
       secretName,
-      [],
       REPOSITORIES_LIST.MODAL_INPUTS.SECRET_NAME.ERRORS,
+      t,
     );
     if (validationMessage) {
       setStatus(validationMessage);
@@ -197,8 +200,8 @@ export default function RepositoryForm({
       <FormInput
         _ref={urlRef}
         required={true}
-        label={REPOSITORIES_LIST.MODAL_INPUTS.URL.LABEL}
-        inlineHelp={REPOSITORIES_LIST.MODAL_INPUTS.URL.INLINE_HELP}
+        label={t('functions.repository-list.labels.url')}
+        inlineHelp={t('functions.repository-list.inline-help.url')}
         id="repositoryUrl"
         placeholder={REPOSITORIES_LIST.MODAL_INPUTS.URL.PLACEHOLDER}
         validate={validateRepositoryUrl}
@@ -206,8 +209,8 @@ export default function RepositoryForm({
       />
 
       <Dropdown
-        label={REPOSITORIES_LIST.MODAL_INPUTS.AUTH_TYPE.LABEL}
-        inlineHelp={REPOSITORIES_LIST.MODAL_INPUTS.AUTH_TYPE.INLINE_HELP}
+        label={t('functions.repository-list.labels.auth')}
+        inlineHelp={t('functions.repository-list.inline-help.auth')}
         options={authTypeOptions}
         id="authType"
         onSelect={(_, selected) => updateAuthType(selected)}
@@ -219,8 +222,8 @@ export default function RepositoryForm({
         <FormInput
           _ref={secretNameRef}
           required={true}
-          label={REPOSITORIES_LIST.MODAL_INPUTS.SECRET_NAME.LABEL}
-          inlineHelp={REPOSITORIES_LIST.MODAL_INPUTS.SECRET_NAME.INLINE_HELP}
+          label={t('functions.repository-list.labels.secret-name')}
+          inlineHelp={'common.tooltips.k8s-name-input'}
           id="secretName"
           placeholder={REPOSITORIES_LIST.MODAL_INPUTS.SECRET_NAME.PLACEHOLDER}
           validate={validateSecretName}

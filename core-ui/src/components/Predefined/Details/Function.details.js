@@ -1,13 +1,13 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import LambdaDetailsWrapper from 'components/Lambdas/LambdaDetails/LambdaDetailsWrapper';
 import { prettySourceType } from 'components/Lambdas/helpers/lambdas';
 import { prettyRuntime } from 'components/Lambdas/helpers/runtime';
 import { LambdaStatusBadge } from 'components/Lambdas/LambdaStatusBadge/LambdaStatusBadge';
-import { useTranslation } from 'react-i18next';
 
 export const FunctionsDetails = ({ DefaultRenderer, ...otherParams }) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const customColumns = [
     {
       header: t('common.headers.status'),
@@ -15,7 +15,7 @@ export const FunctionsDetails = ({ DefaultRenderer, ...otherParams }) => {
     },
     {
       header: t('functions.headers.source-type'),
-      value: resource => prettySourceType(resource.spec.type),
+      value: resource => prettySourceType(resource.spec.type, t),
     },
     {
       header: t('functions.headers.runtime'),
@@ -23,10 +23,8 @@ export const FunctionsDetails = ({ DefaultRenderer, ...otherParams }) => {
     },
   ];
 
-  const Functions = (resource, resourceUrl) => {
-    return (
-      <LambdaDetailsWrapper key="lambdaDetails" lambda={resource} i18n={i18n} />
-    );
+  const Functions = resource => {
+    return <LambdaDetailsWrapper key="lambdaDetails" lambda={resource} />;
   };
   return (
     <DefaultRenderer

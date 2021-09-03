@@ -34,7 +34,9 @@ export default function NamespaceSettings() {
         </span>
         <div>
           <Switch
-            inputProps={{ 'aria-label': 'toggle-hidden-namespaces' }}
+            inputProps={{
+              'aria-label': t('settings.clusters.showHiddenNamespaces'),
+            }}
             className="fd-has-display-inline-block fd-margin-begin--tiny"
             checked={showHiddenNamespaces}
             onChange={toggleVisibility}

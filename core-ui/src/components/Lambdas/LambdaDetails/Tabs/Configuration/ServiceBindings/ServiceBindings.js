@@ -8,6 +8,7 @@ import {
   useMicrofrontendContext,
 } from 'react-shared';
 import { Link } from 'fundamental-react';
+import { useTranslation } from 'react-i18next';
 
 import CreateServiceBindingModal from './CreateServiceBindingModal';
 import { SERVICE_BINDINGS_PANEL, ERRORS } from 'components/Lambdas/constants';
@@ -24,7 +25,7 @@ export default function ServiceBindings({
   serverDataError,
   serverDataLoading,
 }) {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const notification = useNotification();
   const { namespaceId } = useMicrofrontendContext();
 
@@ -108,7 +109,7 @@ export default function ServiceBindings({
       noSearchResultMessage={
         SERVICE_BINDINGS_PANEL.LIST.ERRORS.NOT_MATCHING_SEARCH_QUERY
       }
-      serverErrorMessage={ERRORS.SERVER}
+      serverErrorMessage={t(ERRORS.SERVER)}
       i18n={i18n}
     />
   );

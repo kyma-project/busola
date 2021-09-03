@@ -45,6 +45,7 @@ export default function EditVariable({
       customValueFromVariables={customValueFromVariables}
       injectedVariables={injectedVariables}
       i18n={i18n}
+      isEdit
     />
   );
   return variableModal;

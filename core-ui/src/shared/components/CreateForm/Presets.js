@@ -11,7 +11,7 @@ export function Presets({ presets, onSelect }) {
 
   return (
     <Dropdown
-      placeholder={t('deployments.create-modal.presets.choose')}
+      placeholder={t('common.create-form.choose-preset')}
       compact
       options={options}
       selectedKey={''}

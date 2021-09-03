@@ -12,14 +12,13 @@ import {
 import { useTranslation } from 'react-i18next';
 
 export function CustomResource({ params }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const { namespaceId: namespace } = useMicrofrontendContext();
   const {
     customResourceDefinitionName,
     resourceVersion,
     resourceName,
-    i18n,
   } = params;
   const { data, loading } = useGet(
     `/apis/apiextensions.k8s.io/v1/customresourcedefinitions/${customResourceDefinitionName}`,
@@ -33,7 +32,7 @@ export function CustomResource({ params }) {
   const versions = data?.spec?.versions;
   const version = versions?.find(version => version.name === resourceVersion);
 
-  const AdditionalPrinterColumns = ({ resource, i18n }) => {
+  const AdditionalPrinterColumns = ({ resource }) => {
     const getJsonPath = (resource, jsonPath) => {
       const value =
         jp.value(resource, jsonPath.substring(1)) || EMPTY_TEXT_PLACEHOLDER;
@@ -90,9 +89,7 @@ export function CustomResource({ params }) {
       resourceName={resourceName}
       namespace={namespace}
       breadcrumbs={breadcrumbs}
-      customComponents={[
-        resource => AdditionalPrinterColumns({ resource, i18n }),
-      ]}
+      customComponents={[AdditionalPrinterColumns]}
       i18n={i18n}
     />
   );

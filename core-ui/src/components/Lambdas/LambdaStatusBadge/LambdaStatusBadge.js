@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { StatusBadge } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 
 import {
   LAMBDA_PHASES,
@@ -8,12 +9,12 @@ import {
 } from 'components/Lambdas/constants';
 
 import { statusType } from 'components/Lambdas/helpers/lambdas';
-import { formatMessage } from 'components/Lambdas/helpers/misc';
 import { getLambdaStatus } from '../helpers/lambdas/getLambdaStatus';
 
 export function LambdaStatusBadge({ status }) {
   const translatedStatus = getLambdaStatus(status);
   const statusPhase = translatedStatus.phase;
+  const { t } = useTranslation();
 
   const texts = LAMBDA_PHASES[statusPhase];
   let badgeType = statusType(statusPhase);
@@ -24,15 +25,15 @@ export function LambdaStatusBadge({ status }) {
   let tooltipText;
 
   if (LAMBDA_ERROR_PHASES.includes(statusPhase)) {
-    const formattedError = formatMessage(LAMBDA_PHASES.ERROR_SUFFIX, {
+    const formattedError = t('common.messages.error', {
       error: translatedStatus.message,
     });
-    tooltipText = `${texts.MESSAGE} ${formattedError}`;
+    tooltipText = `${t(texts.MESSAGE)} ${formattedError}`;
   }
 
   return (
     <StatusBadge tooltipContent={tooltipText} type={badgeType}>
-      {texts.TITLE}
+      {t(texts.TITLE)}
     </StatusBadge>
   );
 }

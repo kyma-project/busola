@@ -10,16 +10,19 @@ export function CertificatesDetails({ DefaultRenderer, ...otherParams }) {
   const customColumns = [
     {
       header: t('certificates.state'),
-      value: certificate => certificate.status.state,
+      value: certificate => certificate.status?.state,
     },
     {
       header: t('certificates.expiration-date'),
-      value: certificate => (
-        <FormattedDatetime
-          date={certificate.status.expirationDate}
-          lang={i18n.language}
-        />
-      ),
+      value: certificate =>
+        certificate.status?.expirationDate ? (
+          <FormattedDatetime
+            date={certificate.status.expirationDate}
+            lang={i18n.language}
+          />
+        ) : (
+          '-'
+        ),
     },
     {
       header: t('certificates.common-name'),

@@ -19,6 +19,7 @@ export default function VariableModal({
   alwaysOpen,
   onModalOpenStateChange,
   i18n,
+  isEdit,
 }) {
   const [invalidModalPopupMessage, setInvalidModalPopupMessage] = useState('');
 
@@ -44,6 +45,7 @@ export default function VariableModal({
           injectedVariables={injectedVariables}
           setInvalidModalPopupMessage={setInvalidModalPopupMessage}
           formType={FORM_TYPE.CREATE}
+          isEdit={isEdit}
         />
       )}
       i18n={i18n}

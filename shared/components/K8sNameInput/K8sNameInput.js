@@ -74,3 +74,5 @@ K8sNameInput.propTypes = {
   showHelp: PropTypes.bool,
   required: PropTypes.bool,
 };
+
+export const k8sNamePattern = pattern;
