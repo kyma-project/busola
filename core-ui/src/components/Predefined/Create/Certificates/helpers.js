@@ -1,6 +1,15 @@
 import * as jp from 'jsonpath';
 
 export function toYaml(cert) {
+  const csrData = cert.withCSR
+    ? {
+        csr: cert.csr || undefined,
+      }
+    : {
+        commonName: cert.commonName || undefined,
+        dnsNames: cert.dnsNames.length ? cert.dnsNames : undefined,
+      };
+
   return {
     apiVersion: 'cert.gardener.cloud/v1alpha1',
     kind: 'Certificate',
@@ -9,9 +18,7 @@ export function toYaml(cert) {
       namespace: cert.namespace,
     },
     spec: {
-      commonName: cert.commonName || undefined,
-      csr: cert.csr || undefined,
-      dnsNames: cert.dnsNames.length ? cert.dnsNames : undefined,
+      ...csrData,
       issuerRef: cert.issuerRef.name ? cert.issuerRef : undefined,
       renew: cert.renew || undefined,
       secreName:

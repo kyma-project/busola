@@ -19,6 +19,7 @@ export function PrivateKeyForm({ issuer, setIssuer, disabled }) {
           }
           input={
             <SecretRef
+              fieldSelector="type=kubernetes.io/tls"
               resourceRef={issuer.privateKeySecretRef}
               onChange={(e, privateKeySecretRef) =>
                 setIssuer({ ...issuer, privateKeySecretRef })

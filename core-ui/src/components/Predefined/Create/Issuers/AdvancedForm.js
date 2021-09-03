@@ -112,7 +112,6 @@ export function AdvancedForm({ issuer, setIssuer }) {
               }
               input={
                 <SecretRef
-                  fieldSelector="type=kubernetes.io/tls"
                   resourceRef={issuer.externalAccountSecretRef}
                   onChange={(e, externalAccountSecretRef) =>
                     setIssuer({ ...issuer, externalAccountSecretRef })
