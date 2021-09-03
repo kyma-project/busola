@@ -12,7 +12,6 @@ import { useTranslation } from 'react-i18next';
 
 import CreateServiceBindingModal from './CreateServiceBindingModal';
 import { SERVICE_BINDINGS_PANEL, ERRORS } from 'components/Lambdas/constants';
-import { useTranslation } from 'react-i18next';
 
 import './ServiceBindings.scss';
 

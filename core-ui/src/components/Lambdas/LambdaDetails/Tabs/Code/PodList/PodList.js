@@ -4,7 +4,6 @@ import { GenericList, useGetList } from 'react-shared';
 import { Link, Button } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import './PodList.scss';
-import { useTranslation } from 'react-i18next';
 
 const navigateTo = path => _ =>
   LuigiClient.linkManager()
@@ -12,15 +11,13 @@ const navigateTo = path => _ =>
     .navigate(path);
 
 export default function PodList({ namespace, functionName, isActive }) {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   const labelSelectors = `serverless.kyma-project.io/function-name=${functionName},serverless.kyma-project.io/resource=deployment`;
   const resourceUrl = `/api/v1/namespaces/${namespace}/pods?labelSelector=${labelSelectors}`;
   const { data: pods, error, loading = true } = useGetList()(resourceUrl, {
     pollingInterval: 4000,
     skip: !isActive,
   });
-
-  const { t } = useTranslation();
 
   const headerRenderer = () => [
     t('common.headers.name'),

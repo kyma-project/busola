@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { useTranslation } from 'react-i18next';
 import { MessageStrip } from 'fundamental-react';
 import {
   randomNameGenerator,
@@ -38,7 +37,7 @@ export default function CreateLambdaForm({
 }) {
   const { namespaceId: namespace } = useMicrofrontendContext();
   const createLambda = useCreateLambda({ redirect: true });
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [errors, setErrors] = useState([]);
   const [nameStatus, setNameStatus] = useState('');
@@ -63,7 +62,6 @@ export default function CreateLambdaForm({
     [setErrors],
   );
 
-  const { t } = useTranslation();
   useEffect(() => {
     if (isValid && errors.length) {
       setInvalidModalPopupMessage(t('functions.create-view.errors.invalid'));

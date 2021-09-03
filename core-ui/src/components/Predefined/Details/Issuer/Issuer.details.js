@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { IssuerDomains } from './IssuerDomains';
 
 export function IssuersDetails({ DefaultRenderer, ...otherParams }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const customColumns = [
     {

@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import {
   randomNameGenerator,
@@ -36,7 +35,7 @@ export default function RepositoryForm({
   formType = FORM_TYPE.CREATE,
 }) {
   const { namespaceId: namespace } = useMicrofrontendContext();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [errors, setErrors] = useState(
     repository ? [] : [ERRORS.REPOSITORY_URL],
   );
@@ -49,8 +48,6 @@ export default function RepositoryForm({
   const urlRef = useRef('');
   const authTypeRef = useRef('');
   const secretNameRef = useRef('');
-
-  const { t } = useTranslation();
 
   const addError = useCallback(
     (...newErrors) => setErrors(oldErrors => [...oldErrors, ...newErrors]),

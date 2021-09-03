@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
 import { LayoutPanel } from 'fundamental-react';
 import { Dropdown } from 'react-shared';
 import { useTranslation } from 'react-i18next';
@@ -25,9 +24,8 @@ export default function LambdaResources({
   setValue = () => void 0,
   defaultPreset = customPreset,
 }) {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [currentPreset, setCurrentPreset] = useState(defaultPreset);
-  const { t } = useTranslation();
 
   useEffect(() => {
     if (disabledForm) {
