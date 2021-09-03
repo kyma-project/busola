@@ -43,7 +43,7 @@ export default function LambdaResources({
     key: preset,
   }));
   presetOptions.push({
-    text: 'Custom',
+    text: t('functions.variable.type.custom'),
     key: customPreset,
   });
 

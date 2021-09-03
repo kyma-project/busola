@@ -12,7 +12,7 @@ import {
 import { useTranslation } from 'react-i18next';
 
 export function CustomResource({ params }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const { namespaceId: namespace } = useMicrofrontendContext();
   const {
@@ -89,6 +89,7 @@ export function CustomResource({ params }) {
       namespace={namespace}
       breadcrumbs={breadcrumbs}
       customComponents={[AdditionalPrinterColumns]}
+      i18n={i18n}
     />
   );
 }
