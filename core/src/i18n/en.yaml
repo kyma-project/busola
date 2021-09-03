@@ -178,6 +178,7 @@ clusters:
 common:
   buttons:
     cancel: Cancel
+    copy: Copy
     create: Create
     delete: Delete
     edit: Edit
@@ -270,6 +271,9 @@ components:
       update:
         success: '{{resourceType}} updated'
         failure: 'Failed to update the {{resourceType}}: {{error}}'
+  string-input:
+    remove: Click to remove
+    placeholder: Enter multiple values separated by comma
 config-maps:
   buttons:
     update: Update
