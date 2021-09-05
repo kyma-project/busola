@@ -102,8 +102,9 @@ common:
     delete: Usuń
     edit-yaml: Edytuj YAML
     save: Zapisz
-  create-modal:
+  create-form:
     editor-error: 'Błąd parsowania: {{error}}, zmiany nie zostaną zapisane.'
+    choose-preset: Wybierz jedną z predefiniowanych wartości
     modes:
       advanced: Zaawansowane
       simple: Minimalne
@@ -190,7 +191,6 @@ deployments:
       failure: Nie udało się dodać deploymentu
       success: Dodano deployment
     presets:
-      choose: Wybierz jedną z predefiniowanych wartości
       default: Domyślny
     simple:
       docker-image: Obraz dockerowy

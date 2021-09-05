@@ -146,11 +146,29 @@ catalog:
   title: Service Catalog
 certificates:
   common-name: Common Name
+  dns-names: DNS Names
   expiration-date: Expiration Date
   issuer: Issuer
   refs: References
   state: State
   title: Certificates
+  csr: CSR
+  with-csr: Use a CSR
+  renew: Trigger a renew
+  existing-secret: Use the existing Secret
+  secret-name: Secret name
+  secret-ref: Secret to use
+  create:
+    messages:
+      success: Certificate created.
+      failure: Failed to create the certificate.
+  placeholders:
+    name: Certificate name
+    common-name: Certificate CN (max 64 characters)
+    dns-names: Additional domain names, one per line
+    csr: Plain text Certificate Signing Request
+    encoded-csr: Base64-encoded Certificate Signing Request
+    secret-name: Requested Secret name
 cluster-addons:
   title: Cluster Addons
 cluster-role-bindings:
@@ -214,9 +232,10 @@ common:
     ok: OK
     save: Save
     update: Update
-  create-modal:
+  create-form:
     delete-confirm: Don't ask this again.
     editor-error: 'Parse error: {{error}}, previous valid input will be used.'
+    choose-preset: Select a Preset
     messages:
       failure: Failed to create the {{resourceType}}.
       success: '{{resourceType}} created.'
@@ -244,6 +263,7 @@ common:
   labels:
     hostname: Hostname
     name: Name
+    namespace: Namespace
     resource: Resource
     service: Service
     protocol: Protocol
@@ -349,7 +369,6 @@ deployments:
       failure: Failed to create the Deployment.
       success: Deployment created.
     presets:
-      choose: Select a Preset
       default: Default
     simple:
       docker-image: Docker Image
@@ -615,13 +634,37 @@ instances:
 integration:
   title: Integration
 issuers:
-  domains:
-    excluded: Excluded Domains
-    included: Included Domains
-  email: E-mail
-  server: Server
-  state: Status
   title: Issuers
+  email: E-mail
+  state: Status
+  server: Server
+  acme: ACME
+  ca: CA
+  domains:
+    title: Domains
+    included: Included domains
+    excluded: Excluded domains
+  type: Issuer Type
+  requests-per-day: Daily requests quota
+  skip-dns: Skip DNS challenge validation
+  auto-registration: Auto registration
+  private-key: Private key Secret
+  external-account:
+    title: External account
+    key-id: CA key ID
+    secret: Symmetric MAC Secret
+  create:
+    messages:
+      success: Issuer created.
+      failure: Failed to create the issuer.
+  placeholders:
+    name: Issuer Name
+    type: Select issuer type
+    server: ACME Server URL
+    email: Email address for user registration
+    included-domains: One domain per line
+    excluded-domains: One domain per line
+    key-id: ID of the CA that the external account is bound to
 jobs:
   completion-time: Completion Time
   completions: Completions

@@ -8,3 +8,5 @@ export * from './ServiceBindings/ServiceBindings.create';
 export * from './ServiceInstances/ServiceInstances.create';
 export * from './Secrets/Secrets.create.js';
 export * from './Gateways/Gateways.create.js';
+export * from './Issuers/Issuers.create.js';
+export * from './Certificates/Certificates.create.js';
