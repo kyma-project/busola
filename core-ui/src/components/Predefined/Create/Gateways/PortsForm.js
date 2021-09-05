@@ -61,7 +61,9 @@ export const PortsForm = ({ disabled = false, index, server, setServers }) => {
             compact
             onSelect={(_, selected) => {
               setPortValue(server, 'protocol', selected.key);
-              if (selected.key === 'HTTPS') {
+              if (selected.key === 'HTTP') {
+                switchTLS(server, false, setServers, index);
+              } else {
                 switchTLS(server, true, setServers, index);
               }
             }}

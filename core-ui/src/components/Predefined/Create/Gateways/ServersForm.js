@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { CreateForm } from 'shared/components/CreateForm/CreateForm';
 import { Button, FormFieldset } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
@@ -6,7 +6,6 @@ import { newServer, validateSpec } from './helpers';
 import { PortsForm } from './PortsForm';
 import { TlsForm } from './TlsForm';
 import { HostsForm } from './HostsForm';
-import shortid from 'shortid';
 
 export function SingleServerForm({ index, server, setServers, isAdvanced }) {
   const { t } = useTranslation();
@@ -68,14 +67,16 @@ export function SingleServerForm({ index, server, setServers, isAdvanced }) {
   );
 }
 
-export function ServersForm({ gateway, setGateway, isAdvanced, setValid }) {
+export function ServersForm({
+  gateway,
+  setGateway,
+  servers,
+  setServers,
+  isAdvanced,
+  setValid,
+}) {
   const { t } = useTranslation();
-  const [servers, setServers] = useState(
-    (gateway.servers || []).map(server => ({
-      ...server,
-      id: shortid.generate(),
-    })),
-  );
+
   useEffect(() => {
     setGateway({
       ...gateway,
@@ -103,19 +104,15 @@ export function ServersForm({ gateway, setGateway, isAdvanced, setValid }) {
       actions={isAdvanced ? serversActions : null}
       defaultOpen
     >
-      {servers.map((server, index) => {
-        console.log('server', server);
-
-        return (
-          <SingleServerForm
-            key={server.id}
-            index={index}
-            server={server}
-            setServers={setServers}
-            isAdvanced={isAdvanced}
-          />
-        );
-      })}
+      {servers.map((server, index) => (
+        <SingleServerForm
+          key={server.id}
+          index={index}
+          server={server}
+          setServers={setServers}
+          isAdvanced={isAdvanced}
+        />
+      ))}
     </CreateForm.CollapsibleSection>
   );
 }

@@ -50,7 +50,6 @@ export function gatewayToYaml(gateway) {
     return server;
   });
 
-  console.log('gatewayToYaml servers', servers);
   return {
     apiVersion: 'networking.istio.io/v1alpha3',
     kind: 'Gateway',

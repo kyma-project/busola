@@ -11,6 +11,8 @@ import { validateSpec } from './helpers';
 export function SimpleForm({
   gateway,
   setGateway,
+  servers,
+  setServers,
   isAdvanced = false,
   setValid,
 }) {
@@ -71,6 +73,8 @@ export function SimpleForm({
       <ServersForm
         gateway={gateway}
         setGateway={setGateway}
+        servers={servers}
+        setServers={setServers}
         setValid={setValid}
         isAdvanced={isAdvanced}
       />

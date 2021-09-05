@@ -70,11 +70,14 @@ export const TlsForm = ({ disabled = false, index, server, setServers }) => {
     >
       <CreateForm.FormField
         label={
-          <FormLabel>{t('gateways.create-modal.advanced.tls.mode')}</FormLabel>
+          <FormLabel required={server.isTls}>
+            {t('gateways.create-modal.advanced.tls.mode')}
+          </FormLabel>
         }
         input={
           <Select
             compact
+            required={server.isTls}
             onSelect={(_, selected) => {
               setTlsValue(server, 'mode', selected.key, setServers, index);
             }}
@@ -89,7 +92,7 @@ export const TlsForm = ({ disabled = false, index, server, setServers }) => {
       />
       <CreateForm.FormField
         label={
-          <FormLabel>
+          <FormLabel required={server.isTls}>
             {t('gateways.create-modal.advanced.tls.credentialName')}
           </FormLabel>
         }
@@ -97,6 +100,7 @@ export const TlsForm = ({ disabled = false, index, server, setServers }) => {
           <FormInput
             type="text"
             disabled={!server.isTls}
+            required={server.isTls}
             compact
             placeholder={t(
               'gateways.create-modal.advanced.placeholders.tls.credentialName',
