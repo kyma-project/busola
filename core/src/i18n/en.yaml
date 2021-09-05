@@ -564,7 +564,7 @@ gateways:
       enable-tls: Enable TLS
       hosts: Hosts
       placeholders:
-        hosts: 'Enter the hosts #e.g. *.api.mydomain.com'
+        hosts: 'Enter the hosts e.g. *.api.mydomain.com'
         port:
           name: Enter the name
           number: Enter the port number

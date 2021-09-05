@@ -41,7 +41,7 @@ export const HostsForm = ({ disabled = false, index, server, setServers }) => {
               placeholder={t(
                 'gateways.create-modal.advanced.placeholders.hosts',
               )}
-              id={`hosts-${disabled ? 'simple' : 'advanced'}`}
+              id={`hosts-${disabled ? 'simple' : 'advanced'}${server.id}`}
             />
           </Tooltip>
         }

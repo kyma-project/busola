@@ -3,6 +3,7 @@ import { CreateForm } from 'shared/components/CreateForm/CreateForm';
 import { FormLabel, FormInput, Select } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { PROTOCOLS } from './helpers';
+import { switchTLS } from './TlsForm';
 
 export const PortsForm = ({ disabled = false, index, server, setServers }) => {
   const { t } = useTranslation();
@@ -60,6 +61,9 @@ export const PortsForm = ({ disabled = false, index, server, setServers }) => {
             compact
             onSelect={(_, selected) => {
               setPortValue(server, 'protocol', selected.key);
+              if (selected.key === 'HTTPS') {
+                switchTLS(server, true, setServers, index);
+              }
             }}
             selectedKey={server.port?.protocol || ''}
             options={PROTOCOLS.map(mode => ({

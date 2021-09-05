@@ -42,6 +42,15 @@ export function newServer() {
 }
 
 export function gatewayToYaml(gateway) {
+  const servers = gateway.servers;
+
+  servers.map(server => {
+    delete server.isTls;
+    delete server.id;
+    return server;
+  });
+
+  console.log('gatewayToYaml servers', servers);
   return {
     apiVersion: 'networking.istio.io/v1alpha3',
     kind: 'Gateway',
@@ -52,7 +61,7 @@ export function gatewayToYaml(gateway) {
     },
     spec: {
       selector: gateway.selector,
-      servers: gateway.servers,
+      servers: servers,
     },
   };
 }

@@ -60,6 +60,7 @@ export function SingleServerForm({ index, server, setServers, isAdvanced }) {
       {!isAdvanced && (
         <div className="servers-form">
           <PortsForm index={index} server={server} setServers={setServers} />
+          <TlsForm index={index} server={server} setServers={setServers} />
           <HostsForm index={index} server={server} setServers={setServers} />
         </div>
       )}
@@ -103,6 +104,8 @@ export function ServersForm({ gateway, setGateway, isAdvanced, setValid }) {
       defaultOpen
     >
       {servers.map((server, index) => {
+        console.log('server', server);
+
         return (
           <SingleServerForm
             key={server.id}
