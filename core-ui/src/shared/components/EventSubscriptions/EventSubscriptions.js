@@ -18,6 +18,7 @@ export default function EventSubscriptions({
   isLambda = false,
   serverDataError,
   serverDataLoading,
+  i18n,
 }) {
   const { t } = useTranslation();
   const notificationManager = useNotification();
@@ -88,6 +89,7 @@ export default function EventSubscriptions({
     <CreateEventSubscriptionModal
       isLambda={isLambda}
       onSubmit={handleSubscriptionAdded}
+      i18n={i18n}
     />
   );
 
@@ -109,6 +111,7 @@ export default function EventSubscriptions({
         'event-subscription.errors.not-matching-search-query',
       )}
       serverErrorMessage={t('event-subscription.errors.server')}
+      i18n={i18n}
     />
   );
 }

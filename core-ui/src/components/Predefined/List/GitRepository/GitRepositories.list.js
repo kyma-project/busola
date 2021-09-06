@@ -6,10 +6,10 @@ import { Link } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
 export const GitRepositoriesList = ({ DefaultRenderer, ...otherParams }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const listActions = (
-    <CreateNewRepository namespaceName={otherParams.resourceName} />
+    <CreateNewRepository namespaceName={otherParams.resourceName} i18n={i18n} />
   );
 
   const customColumns = [

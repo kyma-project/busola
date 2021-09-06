@@ -8,7 +8,7 @@ import { ServiceInstanceStatus } from '../../../shared/ServiceInstanceStatus';
 
 import { Link, LinkButton } from './styled';
 
-const ServiceClassInstancesTable = ({ instanceList }) => {
+const ServiceClassInstancesTable = ({ instanceList, i18n }) => {
   if (!instanceList) return <Spinner />;
 
   function goToServiceInstanceDetails(instanceName) {
@@ -43,6 +43,7 @@ const ServiceClassInstancesTable = ({ instanceList }) => {
       entries={instanceList}
       notFoundMessage={serviceClassConstants.emptyInstancesListMessage}
       title="Service Instances"
+      i18n={i18n}
     />
   );
 };

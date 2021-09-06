@@ -13,7 +13,7 @@ export default function CreateVariable({
   customValueFromVariables,
   injectedVariables,
 }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const addNewVariableButton = (
     <Button glyph="add" typeAttr="button">
@@ -52,7 +52,7 @@ export default function CreateVariable({
     resources: configmaps,
   };
   function openModalWithProps(props) {
-    setCurrentModal(<VariableModal {...props} {...commonProps} />);
+    setCurrentModal(<VariableModal {...props} {...commonProps} i18n={i18n} />);
   }
 
   return (

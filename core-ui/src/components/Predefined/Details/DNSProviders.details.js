@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { GenericList, StatusBadge } from 'react-shared';
 
 const Domains = resource => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const headerRenderer = () => [t('dnsproviders.domains')];
 
@@ -24,6 +24,7 @@ const Domains = resource => {
         testid="daemon-set-images"
         showHeader={false}
         hasExternalMargin={false}
+        i18n={i18n}
       />
 
       <GenericList
@@ -34,6 +35,7 @@ const Domains = resource => {
         testid="domains-exclude"
         showHeader={false}
         hasExternalMargin={false}
+        i18n={i18n}
       />
     </div>
   );

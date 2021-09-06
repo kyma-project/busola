@@ -6,7 +6,7 @@ import { ResourcePods } from './ResourcePods.js';
 import { getPodsCount, getStatusType } from '../List/DaemonSets.list';
 
 const Tolerations = resource => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const headerRenderer = () => [
     t('daemon-sets.tolerations.key'),
@@ -34,12 +34,13 @@ const Tolerations = resource => {
       rowRenderer={rowRenderer}
       testid="daemon-set-tolerations"
       textSearchProperties={textSearchProperties}
+      i18n={i18n}
     />
   );
 };
 
 const Images = resource => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const getImages = daemonSet => {
     const images =
@@ -61,6 +62,7 @@ const Images = resource => {
       rowRenderer={rowRenderer}
       testid="daemon-set-images"
       showHeader={false}
+      i18n={i18n}
     />
   );
 };
