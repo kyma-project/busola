@@ -23,8 +23,8 @@ api-rules:
       delete: Define at least one access strategy.
       path: Path can contain alphanumeric characters and  '/', '.', '*', '?', '!', '-', '(', and ')'.
   buttons:
-    create: Create API Rule
-    edit: Edit API Rule "{{apiRuleName}}"
+    create: Create APIRule
+    edit: Edit APIRule "{{apiRuleName}}"
     expose: Expose {{type}}
   form:
     gateway: Gateway
@@ -40,11 +40,11 @@ api-rules:
       status: Status
   messages:
     create-failed: Failed to create the API Rule.
-    created: API Rule created.
-    description: Expose Services outside the cluster with API Rules.
-    not-matching-results: Couldn't find API Rules matching this query.
-    updated: API Rule updated.
-    will-be-available-at: API Rule will be available at {{address}}.
+    created: APIRule created.
+    description: Expose Services outside the cluster with APIRules.
+    not-matching-results: Couldn't find APIRules matching this query.
+    updated: APIRule updated.
+    will-be-available-at: APIRule will be available at {{address}}.
   services:
     error-load: Couldn't load service list.
     loading: Loading services...
