@@ -5,7 +5,7 @@ import CreateLambdaModal from 'components/Lambdas/LambdasList/Lambdas/CreateLamb
 import { useTranslation } from 'react-i18next';
 
 export default function CreateNewFunction({ namespaceName }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const {
     data: repositories,
@@ -28,6 +28,7 @@ export default function CreateNewFunction({ namespaceName }) {
       serverDataError={repositoriesError}
       serverDataLoading={repositoriesLoading}
       modalOpeningComponent={control}
+      i18n={i18n}
     />
   );
 }

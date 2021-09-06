@@ -6,6 +6,7 @@ import './Modal.scss';
 import { Dialog as FdModal, Button } from 'fundamental-react';
 import { Tooltip } from '../Tooltip/Tooltip';
 import { Spinner } from '../Spinner/Spinner';
+import { useTranslation } from 'react-i18next';
 
 Modal.propTypes = {
   title: PropTypes.any,
@@ -24,8 +25,8 @@ Modal.propTypes = {
 };
 
 Modal.defaultProps = {
-  title: 'Modal',
-  confirmText: 'Confirm',
+  title: 'components.modal.title',
+  confirmText: 'components.modal.confirm-text',
   actions: null,
   type: 'default',
   disabledConfirm: false,
@@ -47,7 +48,9 @@ export function Modal({
   tooltipData,
   children,
   className,
+  i18n,
 }) {
+  const { t } = useTranslation(null, { i18n });
   const [show, setShow] = React.useState(false);
   function onOpen() {
     if (onShow) {
@@ -83,7 +86,7 @@ export function Modal({
         <Spinner />
       </div>
     ) : (
-      confirmText
+      t(confirmText)
     );
 
     const confirmButton = (
@@ -134,7 +137,7 @@ export function Modal({
       <FdModal
         className={classNames('custom-modal', className)}
         type={type}
-        title={title}
+        title={t(title)}
         show={show}
         onClose={onClose}
         actions={modalActions()}

@@ -1,16 +1,20 @@
 import LuigiClient from '@luigi-project/client';
 import { prettifyNameSingular } from '../../..';
+import { useTranslation } from 'react-i18next';
 
-function displayConfirmationMessage(entityType, entityName) {
+function displayConfirmationMessage({ entityType, entityName, t }) {
   return new Promise(resolve => {
     LuigiClient.uxManager()
       .showConfirmationModal({
-        header: `Remove ${entityType}`,
-        body: `Are you sure you want to delete ${prettifyNameSingular(
-          entityType,
-        )} "${entityName}"?`,
-        buttonConfirm: 'Delete',
-        buttonDismiss: 'Cancel',
+        header: t('components.generic-list.acion-header.title', {
+          resourceType: prettifyNameSingular(entityType),
+        }),
+        body: t('components.generic-list.acion-header.messages.confirmation', {
+          resourceType: prettifyNameSingular(entityType),
+          name: entityName,
+        }),
+        buttonConfirm: t('common.buttons.delete'),
+        buttonDismiss: t('common.buttons.cancel'),
       })
       .then(() => resolve(true))
       .catch(_e => resolve(false));
@@ -24,57 +28,24 @@ export async function handleDelete(
   notificationManager,
   deleteRequestFn,
   callback = () => {},
+  t,
 ) {
   try {
-    if (await displayConfirmationMessage(entityType, entityName)) {
+    if (await displayConfirmationMessage({ entityType, entityName, t })) {
       await deleteRequestFn(entityId, entityName);
       callback();
       notificationManager.notifySuccess({
-        content: `${prettifyNameSingular(entityType)} deleted`,
+        content: t('components.generic-list.acion-header.messages.success', {
+          resourceType: prettifyNameSingular(entityType),
+        }),
       });
     }
   } catch (e) {
     notificationManager.notifyError({
-      title: `Failed to delete the ${prettifyNameSingular(entityType)}`,
-      content: e.message,
+      content: t('components.generic-list.acion-header.messages.failure', {
+        resourceType: prettifyNameSingular(entityType),
+        error: e.message,
+      }),
     });
   }
-}
-
-export function easyHandleDelete(
-  entityType,
-  entityName,
-  deleteRequestFn,
-  deleteRequestParam,
-  deleteRequestName,
-  notificationManager,
-  callback = () => {},
-) {
-  return displayConfirmationMessage(entityType, entityName)
-    .then(async shouldDelete => {
-      if (shouldDelete) {
-        try {
-          const result = await deleteRequestFn(deleteRequestParam);
-          const isSuccess =
-            result.data &&
-            (deleteRequestName ? result.data[deleteRequestName] : true);
-          if (isSuccess) {
-            notificationManager.notifySuccess({
-              content: `${entityName} deleted`,
-            });
-            callback();
-          } else {
-            throw Error();
-          }
-        } catch (e) {
-          throw e;
-        }
-      }
-    })
-    .catch(e => {
-      notificationManager.notifyError({
-        title: `Failed to delete the Resource`,
-        content: e.message,
-      });
-    });
 }

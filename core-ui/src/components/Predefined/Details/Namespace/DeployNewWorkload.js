@@ -10,7 +10,7 @@ import CreateLambdaModal from 'components/Lambdas/LambdasList/Lambdas/CreateLamb
 import { useTranslation } from 'react-i18next';
 
 export default function DeployNewWorkload({ namespaceName }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const microfrontendContext = useMicrofrontendContext();
   const { features } = microfrontendContext;
 
@@ -48,6 +48,7 @@ export default function DeployNewWorkload({ namespaceName }) {
       modalOpeningComponent={
         <Menu.Item>{t('functions.buttons.create-function')}</Menu.Item>
       }
+      i18n={i18n}
     />
   ) : null;
 
@@ -60,6 +61,7 @@ export default function DeployNewWorkload({ namespaceName }) {
       renderForm={props => (
         <CreateDeploymentForm namespaceId={namespaceName} {...props} />
       )}
+      i18n={i18n}
     />
   );
 

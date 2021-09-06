@@ -146,13 +146,17 @@ function Resources({
       await updateResourceMutation(url, diff);
       silentRefetch();
       notification.notifySuccess({
-        content: `${prettifiedResourceName} updated`,
+        content: t('components.resources-list.messages.update.success', {
+          resourceType: prettifiedResourceName,
+        }),
       });
     } catch (e) {
       console.error(e);
       notification.notifyError({
-        title: `Failed to update the ${prettifiedResourceName}`,
-        content: e.message,
+        content: t('components.resources-list.messages.update.failure', {
+          resourceType: prettifiedResourceName,
+          error: e.message,
+        }),
       });
       throw e;
     }
@@ -169,13 +173,17 @@ function Resources({
     try {
       await deleteResourceMutation(url);
       notification.notifySuccess({
-        content: `${prettifiedResourceName} deleted`,
+        content: t('components.resources-list.messages.delete.success', {
+          resourceType: prettifiedResourceName,
+        }),
       });
     } catch (e) {
       console.error(e);
       notification.notifyError({
-        title: `Failed to delete the ${prettifiedResourceName}`,
-        content: e.message,
+        content: t('components.resources-list.messages.delete.failure', {
+          resourceType: prettifiedResourceName,
+          error: e.message,
+        }),
       });
       throw e;
     }
@@ -253,13 +261,17 @@ function Resources({
     listHeaderActions ||
     (CreateResourceForm && (
       <ModalWithForm
-        title={`Create ${prettifiedResourceName}`}
+        title={t('components.resources-list.create', {
+          resourceType: prettifiedResourceName,
+        })}
         modalOpeningComponent={
           <Button glyph="add" option="transparent">
-            Create {prettifiedResourceName}
+            {t('components.resources-list.create', {
+              resourceType: prettifiedResourceName,
+            })}
           </Button>
         }
-        confirmText="Create"
+        confirmText={t('common.buttons.create')}
         id={`add-${resourceType}-modal`}
         className="fd-dialog--xl-size modal-width--m"
         renderForm={props => (
@@ -271,6 +283,7 @@ function Resources({
             {...props}
           />
         )}
+        i18n={i18n}
       />
     ));
 
@@ -332,6 +345,7 @@ function Resources({
         extraHeaderContent={extraHeaderContent}
         testid={testid}
         currentlyEditedResourceUID={currentlyEditedResourceUID}
+        i18n={i18n}
       />
     </>
   );

@@ -24,9 +24,9 @@ export default function ServiceBindings({
   serverDataError,
   serverDataLoading,
 }) {
+  const { t, i18n } = useTranslation();
   const notification = useNotification();
   const { namespaceId } = useMicrofrontendContext();
-  const { t } = useTranslation();
 
   const deleteServiceBindingUsage = useDelete();
   const serviceBindingsWithUsages = serviceBindingsCombined.filter(
@@ -91,6 +91,7 @@ export default function ServiceBindings({
     <CreateServiceBindingModal
       lambda={lambda}
       serviceBindingsCombined={serviceBindingsCombined}
+      i18n={i18n}
     />
   );
 
@@ -112,6 +113,7 @@ export default function ServiceBindings({
         SERVICE_BINDINGS_PANEL.LIST.ERRORS.NOT_MATCHING_SEARCH_QUERY
       }
       serverErrorMessage={t(ERRORS.SERVER)}
+      i18n={i18n}
     />
   );
 }

@@ -6,6 +6,7 @@ import {
   FormInput,
   MessageStrip,
 } from 'fundamental-react';
+import { useTranslation } from 'react-i18next';
 
 import { useCreateServiceBindingUsage, Checkbox, Dropdown } from 'react-shared';
 import { SERVICE_BINDINGS_PANEL } from 'components/Lambdas/constants';
@@ -27,6 +28,7 @@ export default function CreateServiceBindingForm({
   setValidity = () => void 0,
 }) {
   const createServiceBindingUsageSet = useCreateServiceBindingUsage();
+  const { i18n } = useTranslation();
 
   const [existingInstanceName, setExistingInstanceName] = useState(
     availableServiceInstances[0].metadata.name,
@@ -138,6 +140,7 @@ export default function CreateServiceBindingForm({
             setExistingInstanceName(selected.key);
           }}
           selectedKey={existingInstanceName}
+          i18n={i18n}
         />
       </FormItem>
 
@@ -175,6 +178,7 @@ export default function CreateServiceBindingForm({
                   setExistingSecretName(selected.key);
                 }}
                 selectedKey={existingSecretName}
+                i18n={i18n}
               />
             </FormItem>
           ) : null}

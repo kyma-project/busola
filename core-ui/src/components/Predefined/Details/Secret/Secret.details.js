@@ -6,7 +6,7 @@ import { EditSecretForm } from './EditSecretForm';
 import { useTranslation } from 'react-i18next';
 
 export const SecretsDetails = ({ DefaultRenderer, ...otherParams }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const Secret = resource => <SecretData key="secret-data" secret={resource} />;
 
   const headerActions = [
@@ -29,6 +29,7 @@ export const SecretsDetails = ({ DefaultRenderer, ...otherParams }) => {
             {...props}
           />
         )}
+        i18n={i18n}
       />
     ),
   ];

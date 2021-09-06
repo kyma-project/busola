@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Dialog, Button } from 'fundamental-react';
 import LuigiClient from '@luigi-project/client';
+import { useTranslation } from 'react-i18next';
 import { useNotification } from '../../contexts/NotificationContext';
 import { Tooltip } from '../Tooltip/Tooltip';
 import CustomPropTypes from '../../typechecking/CustomPropTypes';
@@ -40,8 +41,10 @@ export const ModalWithForm = ({
   className,
   onModalOpenStateChange,
   alwaysOpen,
+  i18n,
   ...props
 }) => {
+  const { t } = useTranslation(null, { i18n });
   const [isOpen, setOpen] = useState(alwaysOpen || false);
   const [isValid, setValid] = useState(false);
   const [customValid, setCustomValid] = useState(true);
@@ -128,7 +131,7 @@ export const ModalWithForm = ({
         onClick={handleFormSubmit}
         option="emphasized"
       >
-        {confirmText}
+        {t(confirmText)}
       </Button>
     );
 
@@ -226,7 +229,7 @@ ModalWithForm.propTypes = {
 
 ModalWithForm.defaultProps = {
   performRefetch: () => {},
-  confirmText: 'Create',
+  confirmText: 'common.buttons.create',
   invalidPopupMessage: '',
   onModalOpenStateChange: () => {},
   alwaysOpen: false,

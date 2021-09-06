@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next';
 import { ComponentForList } from 'shared/getComponents';
 import './CustomResourceDefinitionVersions.scss';
 
-const CustomResources = ({ resource, namespace, version }) => {
+const CustomResources = ({ resource, namespace, version, i18n }) => {
   const { t } = useTranslation();
   const { group, names } = resource.spec;
   const name = names.plural;
@@ -29,6 +29,7 @@ const CustomResources = ({ resource, namespace, version }) => {
         entries={[]}
         headerRenderer={() => []}
         rowRenderer={() => []}
+        i18n={i18n}
       />
     );
   }
@@ -71,7 +72,7 @@ const CustomResources = ({ resource, namespace, version }) => {
   return <ComponentForList name={name} params={params} />;
 };
 
-const AdditionalPrinterColumns = version => {
+const AdditionalPrinterColumns = ({ version, i18n }) => {
   const { t } = useTranslation();
 
   const headerRenderer = () => [
@@ -94,12 +95,13 @@ const AdditionalPrinterColumns = version => {
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       testid="crd-additional-printer-columns"
+      i18n={i18n}
     />
   );
 };
 
 export const CustomResourceDefinitionVersions = resource => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const { editorTheme } = useTheme();
   const namespace = LuigiClient.getContext().namespaceId;
@@ -138,9 +140,11 @@ export const CustomResourceDefinitionVersions = resource => {
             resource={resource}
             version={version}
             namespace={namespace}
+            i18n={i18n}
           />
           <AdditionalPrinterColumns
-            additionalPrinterColumns={version.additionalPrinterColumns}
+            version={version.additionalPrinterColumns}
+            i18n={i18n}
           />
           {version.schema && (
             <LayoutPanel

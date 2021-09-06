@@ -21,7 +21,7 @@ export default function CreateBindingModal({
   application,
   alreadyBoundNamespaces,
 }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const { hiddenNamespaces } = useMicrofrontendContext();
   const [servicesToBind, setServicesToBind] = React.useState([]);
@@ -78,6 +78,7 @@ export default function CreateBindingModal({
       onConfirm={createBinding}
       disabledConfirm={!namespaceName}
       onHide={() => setNamespaceName('')}
+      i18n={i18n}
     >
       {error && error.message}
       {loading && t('common.headers.loading')}

@@ -3,6 +3,7 @@ import Grid from 'styled-components-grid';
 import { Button } from 'fundamental-react';
 import { Modal } from 'react-shared';
 import { List, Item, Bold, Text, SecretKey, CenterVertically } from './styled';
+import { useTranslation } from 'react-i18next';
 
 class SecretDataModal extends React.Component {
   constructor(props) {
@@ -42,6 +43,7 @@ class SecretDataModal extends React.Component {
   };
 
   render() {
+    const { i18n } = useTranslation();
     const { title, data, prefix, modalOpeningComponent } = this.props;
     const { encoded } = this.state;
 
@@ -72,6 +74,7 @@ class SecretDataModal extends React.Component {
         confirmText="Close"
         modalOpeningComponent={modalOpeningComponent}
         actions={actions}
+        i18n={i18n}
       >
         {content}
       </Modal>
