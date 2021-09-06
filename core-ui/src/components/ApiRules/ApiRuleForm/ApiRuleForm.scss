@@ -16,7 +16,7 @@
 .access-strategy--form {
   display: flex;
   justify-content: space-between;
-  
+
   .dropdown {
     margin-top: 0;
   }
@@ -165,11 +165,14 @@
 .api-rule-form {
   .api-rule-form__form {
     padding: 32px;
-  }
-  &__input-group {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-gap: 0.5rem;
+
+    .dropdown {
+      width: 100%;
+    }
+
+    .fd-layout-panel__body > * {
+      margin-bottom: 4px;
+    }
   }
 }
 
