@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormInput, FormLabel, FormTextarea } from 'fundamental-react';
+import { FormInput, FormLabel } from 'fundamental-react';
 
 import { CreateForm } from 'shared/components/CreateForm/CreateForm';
 import { SimpleForm } from './SimpleForm';
