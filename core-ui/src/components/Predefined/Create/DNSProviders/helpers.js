@@ -10,7 +10,10 @@ export function dnsProviderToYaml(dnsProvider) {
       labels: dnsProvider.labels,
     },
     spec: {
-      domains: dnsProvider.domains,
+      domains: {
+        include: dnsProvider.domains?.include?.filter(d => d) || [],
+        exclude: dnsProvider.domains?.exclude?.filter(d => d) || [],
+      },
       secretRef: dnsProvider.secretRef,
       defaultTTL: dnsProvider.defaultTTL,
     },
@@ -36,7 +39,10 @@ export function createDNSProviderTemplate(namespaceId) {
     name: '',
     namespace: namespaceId,
     labels: {},
-    domains: [],
+    domains: {
+      include: [],
+      exclude: [],
+    },
     defaultTTL: 600,
     secretRef: { name: '', namespace: namespaceId },
   };

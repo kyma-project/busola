@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import LuigiClient from '@luigi-project/client';
-
 import { usePost, useNotification } from 'react-shared';
 import { CreateForm } from 'shared/components/CreateForm/CreateForm';
 import {
@@ -10,6 +9,7 @@ import {
 } from './helpers';
 import { SimpleForm } from './SimpleForm';
 import { AdvancedForm } from './AdvancedForm';
+import './CreateDNSProviderForm.scss';
 
 export function CreateDNSProviderForm({
   namespaceId,
@@ -45,6 +45,7 @@ export function CreateDNSProviderForm({
 
   return (
     <CreateForm
+      className="dns-provider-form"
       simpleForm={
         <SimpleForm dnsProvider={dnsProvider} setDNSProvider={setDNSProvider} />
       }
