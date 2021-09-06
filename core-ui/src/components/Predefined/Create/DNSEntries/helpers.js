@@ -8,6 +8,7 @@ export function dnsEntryToYaml(dnsEntry) {
       name: dnsEntry.name,
       namespace: dnsEntry.namespace,
       labels: dnsEntry.labels,
+      annotations: dnsEntry.annotations,
     },
     spec: {
       dnsName: dnsEntry.dnsName,
@@ -23,6 +24,7 @@ export function yamlToDNSEntry(yaml) {
     name: jp.value(yaml, '$.metadata.name') || '',
     namespace: jp.value(yaml, '$.metadata.namespace') || '',
     labels: jp.value(yaml, '$.metadata.labels') || {},
+    annotations: jp.value(yaml, '$.metadata.annotations') || {},
     dnsName: jp.value(yaml, '$.spec.dnsName') || '',
     targets: jp.value(yaml, '$.spec.targets') || [],
     text: jp.value(yaml, '$.spec.text') || [],
@@ -35,6 +37,7 @@ export function createDNSEntryTemplate(namespaceId) {
     name: '',
     namespace: namespaceId,
     labels: {},
+    annotations: {},
     dnsName: '',
     targets: [],
     text: [],

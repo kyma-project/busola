@@ -40,6 +40,21 @@ export function SimpleForm({ dnsEntry, setDNSEntry }) {
             }
           />
           <CreateForm.FormField
+            label={<FormLabel>{t('common.headers.annotations')}</FormLabel>}
+            input={
+              <LabelsInput
+                showFormLabel={false}
+                labels={dnsEntry.annotations}
+                onChange={annotations =>
+                  setDNSEntry({ ...dnsEntry, annotations })
+                }
+                i18n={i18n}
+                type={t('common.headers.annotations')}
+                compact
+              />
+            }
+          />
+          <CreateForm.FormField
             label={<FormLabel required>Targets</FormLabel>}
             required
             input={

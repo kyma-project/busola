@@ -8,6 +8,7 @@ export function dnsProviderToYaml(dnsProvider) {
       name: dnsProvider.name,
       namespace: dnsProvider.namespace,
       labels: dnsProvider.labels,
+      annotations: dnsProvider.annotations,
     },
     spec: {
       domains: {
@@ -16,6 +17,7 @@ export function dnsProviderToYaml(dnsProvider) {
       },
       secretRef: dnsProvider.secretRef,
       defaultTTL: dnsProvider.defaultTTL,
+      type: dnsProvider.type,
     },
   };
 }
@@ -25,12 +27,14 @@ export function yamlToDNSProvider(yaml) {
     name: jp.value(yaml, '$.metadata.name') || '',
     namespace: jp.value(yaml, '$.metadata.namespace') || '',
     labels: jp.value(yaml, '$.metadata.labels') || {},
+    annotations: jp.value(yaml, '$.metadata.annotations') || {},
     domains: jp.value(yaml, '$.spec.domains') || '',
     secretRef: jp.value(yaml, '$.spec.secretRef') || {
       name: '',
       namespace: '',
     },
-    defaultTTL: jp.value(yaml, '$.spec.defaultTTL') || '',
+    defaultTTL: jp.value(yaml, '$.spec.defaultTTL') || 600,
+    type: jp.value(yaml, '$.spec.type') || '',
   };
 }
 
@@ -39,11 +43,13 @@ export function createDNSProviderTemplate(namespaceId) {
     name: '',
     namespace: namespaceId,
     labels: {},
+    annotations: {},
     domains: {
       include: [],
       exclude: [],
     },
     defaultTTL: 600,
     secretRef: { name: '', namespace: namespaceId },
+    type: '',
   };
 }
