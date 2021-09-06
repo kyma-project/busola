@@ -7,11 +7,9 @@ import {
   ApiRuleServiceInfo,
 } from 'components/ApiRules/ApiRulesList/components';
 import ApiRuleStatus from 'components/ApiRules/ApiRuleStatus/ApiRuleStatus';
-import { useGetGatewayDomain as getGatewayDomain } from 'components/ApiRules/hooks/useGetGatewayDomain';
 import { useTranslation } from 'react-i18next';
 
 export const ApiRulesList = ({ DefaultRenderer, ...otherParams }) => {
-  const { domain } = getGatewayDomain();
   const { t } = useTranslation();
   const createApiRule = (
     <Button
@@ -39,9 +37,7 @@ export const ApiRulesList = ({ DefaultRenderer, ...otherParams }) => {
   const customColumns = [
     {
       header: t('api-rules.list.headers.host'),
-      value: apiRule => (
-        <CopiableApiRuleHost apiRule={apiRule} domain={domain} />
-      ),
+      value: apiRule => <CopiableApiRuleHost apiRule={apiRule} />,
     },
     {
       header: t('api-rules.list.headers.service-name'),

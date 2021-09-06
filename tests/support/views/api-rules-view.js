@@ -14,7 +14,7 @@ Cypress.Commands.add('createApiRule', (ApiRuleName, ApiRuleHost) => {
 
   cy.getModalBody().within($modal => {
     cy.get('[placeholder="API Rule name"]').type(ApiRuleName);
-    cy.get('[placeholder="Enter the hostname"]').type(ApiRuleHost); //the host is ocupied by another virtualservice
+    cy.get('[placeholder^="Subdomain will replace the"]').type(ApiRuleHost); //the host is ocupied by another virtualservice
     cy.get('[data-testid=service]').click();
     cy.get('li[role="option"]')
       .contains(ApiRuleName + ' (port: 80)')
