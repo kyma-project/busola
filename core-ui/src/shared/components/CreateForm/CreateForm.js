@@ -18,6 +18,7 @@ export function CreateForm({
   presets,
   formElementRef,
   editMode,
+  className,
 }) {
   const [mode, setMode] = useState(ModeSelector.MODE_SIMPLE);
 
@@ -52,7 +53,7 @@ export function CreateForm({
   );
 
   const content = (
-    <div className="create-form">
+    <div className={classnames('create-form', className)}>
       {presets?.length && (
         <Presets
           presets={presets}
@@ -77,9 +78,9 @@ export function CreateForm({
 
 CreateForm.CollapsibleSection = CollapsibleSection;
 
-CreateForm.FormField = function({ label, input }) {
+CreateForm.FormField = function({ label, input, className }) {
   return (
-    <div className="fd-row form-field">
+    <div className={classnames('fd-row form-field', className)}>
       <div className="fd-col fd-col-md--4 form-field__label">{label}</div>
       <div className="fd-col fd-col-md--7">{input}</div>
     </div>
