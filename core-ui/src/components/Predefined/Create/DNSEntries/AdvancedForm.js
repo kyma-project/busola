@@ -49,7 +49,7 @@ export function AdvancedForm({ dnsEntry, setDNSEntry }) {
               })
             }
             value={dnsEntry.text.join('\n')}
-            placeholder="Text records, on per line"
+            placeholder="Text records, one per line"
           />
         }
       />
