@@ -14,7 +14,7 @@ export default function LambdaDetailsWrapper({ lambda }) {
   if (!lambda) {
     content = <>{t('common.messages.entry-not-found')}</>;
   } else {
-    content = <LambdaDetails lambda={lambda}/>;
+    content = <LambdaDetails lambda={lambda} />;
   }
 
   return <div className="lambda-details">{content}</div>;
