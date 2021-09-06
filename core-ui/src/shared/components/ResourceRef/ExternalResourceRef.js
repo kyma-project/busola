@@ -32,7 +32,7 @@ export function ExternalResourceRef({ resourceRef, onChange, resources }) {
         options={options}
         optionRenderer={resource => (
           <>
-            <span class="fd-list__title">{resource.text}</span>
+            <span className="fd-list__title">{resource.text}</span>
             <span className="fd-list__secondary">{resource.namespace}</span>
           </>
         )}
