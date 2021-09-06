@@ -26,6 +26,11 @@ api-rules:
     create: Create API Rule
     edit: Edit API Rule "{{apiRuleName}}"
     expose: Expose {{type}}
+  form:
+    gateway: Gateway
+    hostname: Hostname
+    subdomain: Subdomain
+    subdomain-placeholder: Subdomain will replace the '*' part of the $t(api-rules.form.hostname) value.
   general-settings:
     title: General settings
   list:
@@ -39,6 +44,7 @@ api-rules:
     description: Expose Services outside the cluster with API Rules.
     not-matching-results: Couldn't find API Rules matching this query.
     updated: API Rule updated.
+    will-be-available-at: API Rule will be available at {{address}}.
   services:
     error-load: Couldn't load service list.
     loading: Loading services...
