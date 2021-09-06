@@ -62,12 +62,16 @@ export default function ServiceBindings({
     }
   }
 
-  const actions = [
-    {
-      name: 'Delete',
-      handler: handleServiceBindingUsageDelete,
-    },
-  ];
+  const { features } = useMicrofrontendContext();
+  const btpCatalogEnabled = features.BTP_CATALOG?.isEnabled;
+  const actions = btpCatalogEnabled
+    ? []
+    : [
+        {
+          name: 'Delete',
+          handler: handleServiceBindingUsageDelete,
+        },
+      ];
   const rowRenderer = ({ secret, serviceBinding, serviceBindingUsage }) => [
     <Link
       className="fd-link"

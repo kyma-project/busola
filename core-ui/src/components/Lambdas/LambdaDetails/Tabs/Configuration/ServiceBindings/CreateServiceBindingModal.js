@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 
 import { Button, MessageStrip } from 'fundamental-react';
-import { Spinner, Tooltip, useGetList } from 'react-shared';
+import {
+  Spinner,
+  Tooltip,
+  useGetList,
+  useMicrofrontendContext,
+} from 'react-shared';
 
 import { ModalWithForm } from 'react-shared';
 import CreateServiceBindingForm from './CreateServiceBindingForm';
@@ -125,13 +130,33 @@ export default function CreateServiceBindingModal({
     fallbackContent = <Spinner />;
   }
 
+  const { features } = useMicrofrontendContext();
+  const btpCatalogEnabled = features.BTP_CATALOG?.isEnabled;
+
   const button = (
-    <Button glyph="add" option="transparent" disabled={!hasAnyInstances}>
+    <Button
+      glyph="add"
+      option="transparent"
+      disabled={!hasAnyInstances || btpCatalogEnabled}
+    >
       {SERVICE_BINDINGS_PANEL.CREATE_MODAL.OPEN_BUTTON.TEXT}
     </Button>
   );
   const modalOpeningComponent = hasAnyInstances ? (
-    button
+    btpCatalogEnabled ? (
+      <Tooltip
+        content="Service Catalog is in readonly mode."
+        position="top"
+        trigger="mouseenter"
+        tippyProps={{
+          distance: 16,
+        }}
+      >
+        {button}
+      </Tooltip>
+    ) : (
+      button
+    )
   ) : (
     <Tooltip
       content={
