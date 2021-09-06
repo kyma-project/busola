@@ -1,30 +1,28 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Button } from 'fundamental-react';
 import { ModalWithForm } from 'react-shared';
 
 import CreateEventSubscriptionForm from './CreateEventSubscriptionForm';
 
-import { EVENT_TRIGGERS_PANEL } from '../../constants';
-
 export default function CreateEventSubscriptionModal({
   isLambda = false,
   onSubmit,
 }) {
+  const { t } = useTranslation();
   const button = (
     <Button glyph="add" option="transparent">
-      {EVENT_TRIGGERS_PANEL.ADD_MODAL.OPEN_BUTTON.TEXT}
+      {t('event-subscription.create.title')}
     </Button>
   );
 
   return (
     <ModalWithForm
-      title={EVENT_TRIGGERS_PANEL.ADD_MODAL.TITLE}
+      title={t('event-subscription.create.title')}
       modalOpeningComponent={button}
-      confirmText={EVENT_TRIGGERS_PANEL.ADD_MODAL.CONFIRM_BUTTON.TEXT}
-      invalidPopupMessage={
-        EVENT_TRIGGERS_PANEL.ADD_MODAL.CONFIRM_BUTTON.INVALID_POPUP_MESSAGE
-      }
+      confirmText={t('common.buttons.add')}
+      invalidPopupMessage={t('event-subscription.errors.invalid')}
       id="add-event-trigger-modal"
       className="fd-dialog--xl-size"
       renderForm={props => (
