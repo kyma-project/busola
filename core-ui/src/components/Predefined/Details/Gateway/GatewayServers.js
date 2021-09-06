@@ -33,7 +33,7 @@ export function GatewayServers(gateway) {
   const rowRenderer = server => [
     <ServerPort port={server.port} />,
     <ServerHosts hosts={server.hosts} />,
-    server.name || '-',
+    server.port.name || '-',
     server.tls?.mode || '-',
     server.tls?.credentialName || '-',
   ];
