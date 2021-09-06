@@ -10,3 +10,4 @@ export * from './Secrets/Secrets.create.js';
 export * from './Gateways/Gateways.create.js';
 export * from './Issuers/Issuers.create.js';
 export * from './Certificates/Certificates.create.js';
+export * from './DNSEntries/DNSEntries.create.js';

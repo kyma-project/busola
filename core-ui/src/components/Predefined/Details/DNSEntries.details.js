@@ -4,14 +4,15 @@ import { useTranslation } from 'react-i18next';
 import { LayoutPanel, FormItem, FormLabel } from 'fundamental-react';
 import { StatusBadge } from 'react-shared';
 
-const RowComponent = ({ name, value }) => (
-  <FormItem className="item-wrapper">
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 3fr' }}>
-      <FormLabel className="form-label">{name}:</FormLabel>
-      <div>{value}</div>
-    </div>
-  </FormItem>
-);
+const RowComponent = ({ name, value }) =>
+  value ? (
+    <FormItem className="item-wrapper">
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 3fr' }}>
+        <FormLabel className="form-label">{name}:</FormLabel>
+        <div>{value}</div>
+      </div>
+    </FormItem>
+  ) : null;
 
 const Provider = resource => {
   const { t } = useTranslation();
@@ -24,11 +25,11 @@ const Provider = resource => {
       <LayoutPanel.Body>
         <RowComponent
           name={t('dnsentries.headers.provider')}
-          value={resource.status.provider}
+          value={resource.status?.provider}
         />
         <RowComponent
           name={t('dnsentries.headers.provider-type')}
-          value={resource.status.providerType}
+          value={resource.status?.providerType}
         />
       </LayoutPanel.Body>
     </LayoutPanel>
@@ -40,7 +41,10 @@ const Spec = resource => {
   if (!(resource.spec.dnsName || resource.spec.targets || resource.spec.ttl)) {
     return null;
   }
-  const targets = resource.spec.targets.toString().replaceAll(',', ', ');
+
+  const targets = (resource.spec?.targets || [])
+    .toString()
+    .replaceAll(',', ', ');
   return (
     <LayoutPanel className="fd-margin--md">
       <LayoutPanel.Header>
@@ -77,7 +81,9 @@ export const DNSEntriesDetails = ({ DefaultRenderer, ...otherParams }) => {
     {
       header: t('dnsentries.headers.status'),
       value: dnsentry => (
-        <StatusBadge autoResolveType>{dnsentry.status?.state}</StatusBadge>
+        <StatusBadge autoResolveType>
+          {dnsentry.status?.state || 'UNKNOWN'}
+        </StatusBadge>
       ),
     },
   ];
