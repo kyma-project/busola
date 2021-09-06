@@ -9,9 +9,8 @@ import {
   createPresets,
 } from './helpers';
 import { SimpleForm } from './SimpleForm';
-import { AdvancedForm } from './AdvancedForm';
 import { useTranslation } from 'react-i18next';
-import shortid from 'shortid';
+import './CreateGatewayForm.scss';
 
 export function CreateGatewayForm({
   namespaceId,
@@ -23,12 +22,6 @@ export function CreateGatewayForm({
   const notification = useNotification();
   const postRequest = usePost();
   const [gateway, setGateway] = useState(createGatewayTemplate(namespaceId));
-  const [servers, setServers] = useState(
-    (gateway.servers || []).map(server => ({
-      ...server,
-      id: shortid.generate(),
-    })),
-  );
 
   const createGateway = async () => {
     try {
@@ -59,17 +52,14 @@ export function CreateGatewayForm({
         <SimpleForm
           gateway={gateway}
           setGateway={setGateway}
-          servers={servers}
-          setServers={setServers}
           setValid={setCustomValid}
         />
       }
       advancedForm={
-        <AdvancedForm
+        <SimpleForm
           gateway={gateway}
           setGateway={setGateway}
-          servers={servers}
-          setServers={setServers}
+          isAdvanced={true}
           setValid={setCustomValid}
         />
       }

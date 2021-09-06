@@ -7,15 +7,20 @@ import { useTranslation } from 'react-i18next';
 import { GatewaySelectorInput } from './GatewaySelectorInput/GatewaySelectorInput';
 import { ServersForm } from './ServersForm';
 import { validateSpec } from './helpers';
+import shortid from 'shortid';
 
 export function SimpleForm({
   gateway,
   setGateway,
-  servers,
-  setServers,
   isAdvanced = false,
   setValid,
 }) {
+  gateway.servers.forEach(server => {
+    if (!server.id) {
+      server.id = shortid.generate();
+    }
+  });
+
   const { t, i18n } = useTranslation();
 
   return (
@@ -73,8 +78,6 @@ export function SimpleForm({
       <ServersForm
         gateway={gateway}
         setGateway={setGateway}
-        servers={servers}
-        setServers={setServers}
         setValid={setValid}
         isAdvanced={isAdvanced}
       />

@@ -1,7 +1,7 @@
 import * as jp from 'jsonpath';
 import shortid from 'shortid';
 
-export const TSL_MODE = [
+export const TSL_MODES = [
   // 'PASSTHROUGH',
   'SIMPLE',
   // 'MUTUAL',
@@ -32,11 +32,10 @@ export function newServer() {
   return {
     id: shortid.generate(),
     port: {
-      number: 5,
+      number: 80,
       name: '',
       protocol: 'HTTP',
     },
-    isTls: false,
     hosts: [],
   };
 }
@@ -44,10 +43,8 @@ export function newServer() {
 export function gatewayToYaml(gateway) {
   const servers = gateway.servers;
 
-  servers.map(server => {
-    delete server.isTls;
+  servers.forEach(server => {
     delete server.id;
-    return server;
   });
 
   return {
@@ -66,13 +63,15 @@ export function gatewayToYaml(gateway) {
 }
 
 export function yamlToGateway(yaml, prevGateway) {
-  return {
+  const gateway = {
     name: jp.value(yaml, '$.metadata.name') || '',
     namespace: jp.value(yaml, '$.metadata.namespace') || '',
     selector: jp.value(yaml, '$.spec.selector') || {},
-    servers: jp.value(yaml, '$.spec.servers') || {},
+    servers: jp.value(yaml, '$.spec.servers') || [],
     labels: jp.value(yaml, '$.metadata.labels') || {},
   };
+  gateway.servers.forEach(server => (server.id = shortid.generate()));
+  return gateway;
 }
 
 export function createGatewayTemplate(namespaceId) {

@@ -7,13 +7,17 @@ import { PortsForm } from './PortsForm';
 import { TlsForm } from './TlsForm';
 import { HostsForm } from './HostsForm';
 
-export function SingleServerForm({ index, server, setServers, isAdvanced }) {
+export function SingleServerForm({
+  server,
+  index,
+  setServers,
+  servers,
+  isAdvanced,
+}) {
   const { t } = useTranslation();
 
   function deleteServer(server) {
-    setServers(servers =>
-      servers.filter(oldServer => oldServer.id !== server.id),
-    );
+    setServers(servers.filter(oldServer => oldServer.id !== server.id));
   }
 
   const deleteButton = (
@@ -31,25 +35,25 @@ export function SingleServerForm({ index, server, setServers, isAdvanced }) {
     <FormFieldset className="servers-form">
       {isAdvanced && (
         <CreateForm.CollapsibleSection
-          title={`${t('gateways.create-modal.simple.server')} ${index}`}
+          title={`${t('gateways.create-modal.simple.server')} ${index + 1}`}
           actions={deleteButton}
           defaultOpen
         >
           <PortsForm
-            index={index}
             server={server}
+            servers={servers}
             setServers={setServers}
             disabled={true}
           />
           <TlsForm
-            index={index}
             server={server}
+            servers={servers}
             setServers={setServers}
             disabled={true}
           />
           <HostsForm
-            index={index}
             server={server}
+            servers={servers}
             setServers={setServers}
             disabled={true}
           />
@@ -58,38 +62,34 @@ export function SingleServerForm({ index, server, setServers, isAdvanced }) {
 
       {!isAdvanced && (
         <div className="servers-form">
-          <PortsForm index={index} server={server} setServers={setServers} />
-          <TlsForm index={index} server={server} setServers={setServers} />
-          <HostsForm index={index} server={server} setServers={setServers} />
+          <PortsForm
+            server={server}
+            servers={servers}
+            setServers={setServers}
+          />
+          <TlsForm server={server} servers={servers} setServers={setServers} />
+          <HostsForm
+            server={server}
+            servers={servers}
+            setServers={setServers}
+          />
         </div>
       )}
     </FormFieldset>
   );
 }
 
-export function ServersForm({
-  gateway,
-  setGateway,
-  servers,
-  setServers,
-  isAdvanced,
-  setValid,
-}) {
+export function ServersForm({ gateway, setGateway, isAdvanced, setValid }) {
   const { t } = useTranslation();
 
   useEffect(() => {
-    setGateway({
-      ...gateway,
-      servers: servers,
-    });
-
     setValid(validateSpec(gateway));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [servers]);
+  }, [gateway.servers]);
 
   function addServer() {
-    setServers(servers => [...servers, newServer()]);
-    setValid(false);
+    setGateway({ ...gateway, servers: [...gateway.servers, newServer()] });
+    setValid(false); //todo wywal
   }
 
   const serversActions = (
@@ -104,12 +104,13 @@ export function ServersForm({
       actions={isAdvanced ? serversActions : null}
       defaultOpen
     >
-      {servers.map((server, index) => (
+      {gateway.servers.map((server, index) => (
         <SingleServerForm
           key={server.id}
           index={index}
           server={server}
-          setServers={setServers}
+          servers={gateway.servers}
+          setServers={servers => setGateway({ ...gateway, servers })}
           isAdvanced={isAdvanced}
         />
       ))}

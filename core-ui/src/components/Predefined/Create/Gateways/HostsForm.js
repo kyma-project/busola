@@ -4,17 +4,18 @@ import { FormLabel } from 'fundamental-react';
 import { StringInput, Tooltip } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
-export const HostsForm = ({ disabled = false, index, server, setServers }) => {
+export const HostsForm = ({
+  disabled = false,
+  server,
+  servers,
+  setServers,
+}) => {
   const { t } = useTranslation();
   const setValue = (server, value) => {
     const newPortValue = server;
     newPortValue.hosts = value;
 
-    setServers(servers => [
-      ...servers.slice(0, index),
-      newPortValue,
-      ...servers.slice(index + 1, servers.length),
-    ]);
+    setServers([...servers]);
   };
   return (
     <CreateForm.CollapsibleSection

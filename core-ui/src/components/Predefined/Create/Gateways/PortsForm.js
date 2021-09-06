@@ -5,7 +5,12 @@ import { useTranslation } from 'react-i18next';
 import { PROTOCOLS } from './helpers';
 import { switchTLS } from './TlsForm';
 
-export const PortsForm = ({ disabled = false, index, server, setServers }) => {
+export const PortsForm = ({
+  disabled = false,
+  server,
+  servers,
+  setServers,
+}) => {
   const { t } = useTranslation();
 
   const setPortValue = (server, variableName, value) => {
@@ -16,11 +21,7 @@ export const PortsForm = ({ disabled = false, index, server, setServers }) => {
       newPortValue.port[variableName] = value;
     }
 
-    setServers(servers => [
-      ...servers.slice(0, index),
-      newPortValue,
-      ...servers.slice(index + 1, servers.length),
-    ]);
+    setServers([...servers]);
   };
 
   return (
@@ -62,9 +63,9 @@ export const PortsForm = ({ disabled = false, index, server, setServers }) => {
             onSelect={(_, selected) => {
               setPortValue(server, 'protocol', selected.key);
               if (selected.key === 'HTTP') {
-                switchTLS(server, false, setServers, index);
+                switchTLS(server, false, servers, setServers);
               } else {
-                switchTLS(server, true, setServers, index);
+                switchTLS(server, true, servers, setServers);
               }
             }}
             selectedKey={server.port?.protocol || ''}

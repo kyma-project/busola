@@ -2,51 +2,34 @@ import React from 'react';
 import { CreateForm } from 'shared/components/CreateForm/CreateForm';
 import { Checkbox, Select, FormLabel, FormInput } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
-import { TSL_MODE } from './helpers';
+import { TSL_MODES } from './helpers';
 
-const setTlsValue = (server, variableName, value, setServers, index) => {
-  let newValue = server;
+const setTlsValue = (server, variableName, value, servers, setServers) => {
   if (value === null) {
-    delete newValue.port[variableName];
+    delete server.port[variableName];
   } else {
-    newValue = {
-      ...newValue,
-      tls: {
-        ...server.tls,
-        [variableName]: value,
-      },
-    };
+    if (!server.tls) {
+      server.tls = {};
+    }
+    server.tls[variableName] = value;
   }
-
-  setServers(servers => [
-    ...servers.slice(0, index),
-    newValue,
-    ...servers.slice(index + 1, servers.length),
-  ]);
+  setServers([...servers]);
 };
 
-export const switchTLS = (server, value, setServers, index) => {
-  let newValue = server;
-  if (value === false) {
-    delete newValue.tls;
+export const switchTLS = (server, hasTLS, servers, setServers) => {
+  if (hasTLS) {
+    server.tls = {};
+  } else {
+    delete server.tls;
   }
 
-  newValue = {
-    ...newValue,
-    isTls: value,
-  };
-
-  setServers(servers => [
-    ...servers.slice(0, index),
-    newValue,
-    ...servers.slice(index + 1, servers.length),
-  ]);
+  setServers([...servers]);
 };
 
-export const TlsForm = ({ disabled = false, index, server, setServers }) => {
+export const TlsForm = ({ disabled = false, server, servers, setServers }) => {
   const { t } = useTranslation();
 
-  const resourceOptions = TSL_MODE.map(mode => ({
+  const resourceOptions = TSL_MODES.map(mode => ({
     key: mode,
     text: mode,
   }));
@@ -58,9 +41,9 @@ export const TlsForm = ({ disabled = false, index, server, setServers }) => {
       actions={
         <Checkbox
           compact
-          checked={server.isTls}
-          onChange={(e, checked) =>
-            switchTLS(server, checked, setServers, index)
+          checked={!!server.tls}
+          onChange={(_, checked) =>
+            switchTLS(server, checked, servers, setServers)
           }
           dir="rtl"
         >
@@ -70,20 +53,20 @@ export const TlsForm = ({ disabled = false, index, server, setServers }) => {
     >
       <CreateForm.FormField
         label={
-          <FormLabel required={server.isTls}>
+          <FormLabel required={!!server.tls}>
             {t('gateways.create-modal.advanced.tls.mode')}
           </FormLabel>
         }
         input={
           <Select
             compact
-            required={server.isTls}
+            required={!!server.tls}
             onSelect={(_, selected) => {
-              setTlsValue(server, 'mode', selected.key, setServers, index);
+              setTlsValue(server, 'mode', selected.key, servers, setServers);
             }}
             selectedKey={server.tls?.mode || ''}
             options={resourceOptions}
-            disabled={!server.isTls}
+            disabled={!server.tls}
             placeholder={t(
               'gateways.create-modal.advanced.placeholders.tls.mode',
             )}
@@ -92,15 +75,15 @@ export const TlsForm = ({ disabled = false, index, server, setServers }) => {
       />
       <CreateForm.FormField
         label={
-          <FormLabel required={server.isTls}>
+          <FormLabel required={!!server.tls}>
             {t('gateways.create-modal.advanced.tls.credentialName')}
           </FormLabel>
         }
         input={
           <FormInput
             type="text"
-            disabled={!server.isTls}
-            required={server.isTls}
+            disabled={!server.tls}
+            required={!!server.tls}
             compact
             placeholder={t(
               'gateways.create-modal.advanced.placeholders.tls.credentialName',
@@ -111,8 +94,8 @@ export const TlsForm = ({ disabled = false, index, server, setServers }) => {
                 server,
                 'credentialName',
                 e.target.value || '',
+                servers,
                 setServers,
-                index,
               )
             }
           />
