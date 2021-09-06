@@ -3,8 +3,8 @@ import React from 'react';
 import { StatusBadge } from 'react-shared';
 
 export function CertificateStatus({ status }) {
-  const getStatusType = status => {
-    switch (status) {
+  const getStatusType = () => {
+    switch (status.state) {
       case 'Pending':
         return 'informative';
       case 'Error':
@@ -20,5 +20,9 @@ export function CertificateStatus({ status }) {
     return '-';
   }
 
-  return <StatusBadge type={getStatusType(status)}>{status}</StatusBadge>;
+  return (
+    <StatusBadge type={getStatusType()} tooltipContent={status.message}>
+      {status.state}
+    </StatusBadge>
+  );
 }

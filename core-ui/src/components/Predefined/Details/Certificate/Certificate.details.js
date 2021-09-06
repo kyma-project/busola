@@ -11,9 +11,7 @@ export function CertificatesDetails({ DefaultRenderer, ...otherParams }) {
   const customColumns = [
     {
       header: t('certificates.state'),
-      value: certificate => (
-        <CertificateStatus status={certificate.status?.state} />
-      ),
+      value: certificate => <CertificateStatus status={certificate.status} />,
     },
     {
       header: t('certificates.expiration-date'),

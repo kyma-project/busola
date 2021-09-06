@@ -13,7 +13,7 @@ export const IssuersList = ({ DefaultRenderer, ...otherParams }) => {
     },
     {
       header: t('issuers.state'),
-      value: issuer => <IssuerStatus status={issuer.status.state} />,
+      value: issuer => <IssuerStatus status={issuer.status} />,
     },
   ];
 

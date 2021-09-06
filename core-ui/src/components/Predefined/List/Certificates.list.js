@@ -10,6 +10,10 @@ export const CertificatesList = ({ DefaultRenderer, ...otherParams }) => {
 
   const customColumns = [
     {
+      header: t('certificates.common-name'),
+      value: certificate => certificate.status?.commonName || '-',
+    },
+    {
       header: t('certificates.issuer'),
       value: certificate => (
         <IssuerLink issuerRef={certificate.status?.issuerRef} />
@@ -29,9 +33,7 @@ export const CertificatesList = ({ DefaultRenderer, ...otherParams }) => {
     },
     {
       header: t('certificates.state'),
-      value: certificate => (
-        <CertificateStatus status={certificate.status?.state} />
-      ),
+      value: certificate => <CertificateStatus status={certificate.status} />,
     },
   ];
 
