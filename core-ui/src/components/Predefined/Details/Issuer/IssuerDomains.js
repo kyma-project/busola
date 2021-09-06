@@ -14,7 +14,7 @@ export function IssuerDomains(issuer) {
         rowRenderer={domain => [domain]}
         showHeader={false}
         hasExternalMargin={false}
-        entries={issuer.spec.acme?.domains.include || []}
+        entries={issuer.spec.acme?.domains?.include || []}
       />
       <GenericList
         key="excluded-domains"
@@ -24,7 +24,7 @@ export function IssuerDomains(issuer) {
         rowRenderer={domain => [domain]}
         showHeader={false}
         hasExternalMargin={false}
-        entries={issuer.spec.acme?.domains.exclude || []}
+        entries={issuer.spec.acme?.domains?.exclude || []}
       />
     </div>
   );

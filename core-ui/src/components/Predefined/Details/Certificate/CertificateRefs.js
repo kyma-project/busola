@@ -16,13 +16,21 @@ export function CertificateRefs(certificate) {
       </LayoutPanel.Header>
       <FormItem>
         <FormLabel>Issuer</FormLabel>
-        <IssuerLink issuerRef={certificate.status.issuerRef} />
+        {certificate.status?.issuerRef ? (
+          <IssuerLink issuerRef={certificate.status.issuerRef} />
+        ) : (
+          '-'
+        )}
       </FormItem>
       <FormItem>
         <FormLabel>Secret</FormLabel>
-        <Link onClick={() => goToSecret(certificate.spec.secretRef)}>
-          {certificate.spec.secretRef.name}
-        </Link>
+        {certificate.spec.secretRef ? (
+          <Link onClick={() => goToSecret(certificate.spec.secretRef)}>
+            {certificate.spec.secretRef.name}
+          </Link>
+        ) : (
+          '-'
+        )}
       </FormItem>
     </LayoutPanel>
   );
