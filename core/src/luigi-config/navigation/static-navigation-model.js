@@ -1068,7 +1068,7 @@ export function getStaticChildrenNodesForNamespace(
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/gateways?' +
         toSearchParamsString({
-          resourceApiPath: '/apis/networking.istio.io/v1beta1',
+          resourceApiPath: '/apis/networking.istio.io/v1alpha3',
           hasDetailsView: true,
         }),
       viewGroup: coreUIViewGroupName,
