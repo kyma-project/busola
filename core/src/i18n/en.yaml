@@ -583,15 +583,15 @@ gateways:
       enable-tls: Enable TLS
       hosts: Hosts
       placeholders:
-        hosts: 'Enter the hosts e.g. *.api.mydomain.com'
+        hosts: 'Enter the hosts, for example, *.api.mydomain.com.'
         port:
-          name: Enter the name
-          number: Enter the port number
-          protocol: Enter the protocol
-          target-port: Enter the target port
+          name: Enter the name.
+          number: Enter the port number.
+          protocol: Enter the protocol.
+          target-port: Enter the target port.
         tls:
           mode: Select TLS Mode
-          credentialName: Enter the credential name
+          credentialName: Enter the credential name.
       port:
         ports: Ports
         name: Name
