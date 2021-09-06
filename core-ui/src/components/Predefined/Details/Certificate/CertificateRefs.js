@@ -1,10 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { LayoutPanel, Link, FormItem, FormLabel } from 'fundamental-react';
+import { LayoutPanel, FormItem, FormLabel } from 'fundamental-react';
 
-import { goToSecret } from './helpers';
 import { IssuerLink } from './IssuerLink';
 import { SecretLink } from './SecretLink';
+
 import './CertificateRefs.scss';
 
 export function CertificateRefs(certificate) {
