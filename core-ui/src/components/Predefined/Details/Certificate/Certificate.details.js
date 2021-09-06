@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { FormattedDatetime } from 'react-shared';
 
 import { CertificateRefs } from './CertificateRefs';
+import { CertificateStatus } from './CertificateStatus';
 
 export function CertificatesDetails({ DefaultRenderer, ...otherParams }) {
   const { t, i18n } = useTranslation();
@@ -10,7 +11,9 @@ export function CertificatesDetails({ DefaultRenderer, ...otherParams }) {
   const customColumns = [
     {
       header: t('certificates.state'),
-      value: certificate => certificate.status?.state,
+      value: certificate => (
+        <CertificateStatus status={certificate.status?.state} />
+      ),
     },
     {
       header: t('certificates.expiration-date'),

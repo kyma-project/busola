@@ -2,6 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { IssuerDomains } from './IssuerDomains';
+import { IssuerStatus } from './IssuerStatus';
 
 export function IssuersDetails({ DefaultRenderer, ...otherParams }) {
   const { t } = useTranslation();
@@ -9,15 +10,15 @@ export function IssuersDetails({ DefaultRenderer, ...otherParams }) {
   const customColumns = [
     {
       header: t('issuers.email'),
-      value: issuer => issuer.spec.acme?.email,
+      value: issuer => issuer.spec.acme?.email || '-',
     },
     {
       header: t('issuers.state'),
-      value: issuer => issuer.status.state,
+      value: issuer => <IssuerStatus status={issuer.status.state} />,
     },
     {
       header: t('issuers.server'),
-      value: issuer => issuer.spec.acme?.server,
+      value: issuer => issuer.spec.acme?.server || '-',
     },
   ];
 

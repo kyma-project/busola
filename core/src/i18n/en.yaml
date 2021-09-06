@@ -150,7 +150,7 @@ certificates:
   expiration-date: Expiration Date
   issuer: Issuer
   refs: References
-  state: State
+  state: Status
   title: Certificates
   csr: CSR
   with-csr: Use a CSR

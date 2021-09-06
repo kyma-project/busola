@@ -4,6 +4,7 @@ import { LayoutPanel, Link, FormItem, FormLabel } from 'fundamental-react';
 
 import { goToSecret } from './helpers';
 import { IssuerLink } from './IssuerLink';
+import { SecretLink } from './SecretLink';
 import './CertificateRefs.scss';
 
 export function CertificateRefs(certificate) {
@@ -16,21 +17,11 @@ export function CertificateRefs(certificate) {
       </LayoutPanel.Header>
       <FormItem>
         <FormLabel>Issuer</FormLabel>
-        {certificate.status?.issuerRef ? (
-          <IssuerLink issuerRef={certificate.status.issuerRef} />
-        ) : (
-          '-'
-        )}
+        <IssuerLink issuerRef={certificate.status?.issuerRef} />
       </FormItem>
       <FormItem>
         <FormLabel>Secret</FormLabel>
-        {certificate.spec.secretRef ? (
-          <Link onClick={() => goToSecret(certificate.spec.secretRef)}>
-            {certificate.spec.secretRef.name}
-          </Link>
-        ) : (
-          '-'
-        )}
+        <SecretLink secretRef={certificate.spec?.secretRef} />
       </FormItem>
     </LayoutPanel>
   );
