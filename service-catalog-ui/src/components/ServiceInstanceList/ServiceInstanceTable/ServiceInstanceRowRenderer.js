@@ -72,7 +72,7 @@ const ServiceClassName = ({ instance }) => {
   );
 };
 
-const Plan = ({ instance }) => {
+const Plan = ({ instance, i18n }) => {
   const planDisplayName =
     instance.spec.servicePlanExternalName ||
     instance.spec.clusterServicePlanExternalName;
@@ -99,6 +99,7 @@ const Plan = ({ instance }) => {
             </ServicePlanButton>
           }
           confirmText="Close"
+          i18n={i18n}
         >
           <JSONCode data-e2e-id="service-plan-content">
             {JSON.stringify(instance.spec.parameters, null, 2)}
@@ -114,11 +115,11 @@ const Plan = ({ instance }) => {
   );
 };
 
-export default function renderRow(instance) {
+export default function renderRow({ instance, i18n }) {
   return [
     <ServiceInstanceName instance={instance} />,
     <ServiceClassName instance={instance} />,
-    <Plan instance={instance} />,
+    <Plan instance={instance} i18n={i18n} />,
     <ServiceInstanceStatus instance={instance} />,
   ];
 }

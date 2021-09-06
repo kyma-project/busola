@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { GenericList } from 'react-shared';
 
 export function IssuerDomains(issuer) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   return (
     <div className="panel-grid">
       <GenericList
@@ -15,6 +15,7 @@ export function IssuerDomains(issuer) {
         showHeader={false}
         hasExternalMargin={false}
         entries={issuer.spec.acme?.domains?.include || []}
+        i18n={i18n}
       />
       <GenericList
         key="excluded-domains"
@@ -25,6 +26,7 @@ export function IssuerDomains(issuer) {
         showHeader={false}
         hasExternalMargin={false}
         entries={issuer.spec.acme?.domains?.exclude || []}
+        i18n={i18n}
       />
     </div>
   );

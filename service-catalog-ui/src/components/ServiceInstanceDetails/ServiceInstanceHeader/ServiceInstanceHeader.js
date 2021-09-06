@@ -14,7 +14,7 @@ import {
 import { isService } from 'helpers';
 import ServiceserviceClassInfo from '../ServiceInstanceInfo/ServiceInstanceInfo';
 
-const ServiceInstanceHeader = ({ serviceInstance, servicePlan }) => {
+const ServiceInstanceHeader = ({ serviceInstance, servicePlan, i18n }) => {
   const deleteRequest = useDelete();
   const notificationManager = useNotification();
   const { features } = useMicrofrontendContext();
@@ -117,6 +117,7 @@ const ServiceInstanceHeader = ({ serviceInstance, servicePlan }) => {
         serviceClass={serviceClass}
         serviceInstance={serviceInstance}
         servicePlan={servicePlan}
+        i18n={i18n}
       />
     </PageHeader>
   );

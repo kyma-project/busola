@@ -14,6 +14,7 @@ import { SERVICE_BINDINGS_PANEL } from '../constants';
 export default function CreateServiceBindingModal({
   serviceInstance,
   serviceBindings,
+  i18n,
 }) {
   const { features } = useMicrofrontendContext();
   const btpCatalogEnabled = features.BTP_CATALOG?.isEnabled;
@@ -77,6 +78,7 @@ export default function CreateServiceBindingModal({
       id="create-service-binding-modal"
       renderForm={renderForm}
       invalidPopupMessage={popupModalMessage}
+      i18n={i18n}
     />
   );
 }

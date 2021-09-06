@@ -11,6 +11,7 @@ const ServiceInstanceInfo = ({
   serviceInstance,
   serviceClass,
   servicePlan,
+  i18n,
 }) => {
   const goToServiceClassDetails = name => {
     const target = `catalog/${serviceClass.kind}/${name}`;
@@ -70,6 +71,7 @@ const ServiceInstanceInfo = ({
             <InstanceParametersModal
               servicePlan={servicePlan}
               parameters={serviceInstance.spec.parameters}
+              i18n={i18n}
             />
           }
         </div>

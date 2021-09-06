@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormItem, FormLabel } from 'fundamental-react';
+import { useTranslation } from 'react-i18next';
 
 import { CustomPropTypes, Dropdown } from 'react-shared';
 import { getResourceDisplayName } from 'helpers';
@@ -11,6 +12,8 @@ const SERVICE_PLAN_SHAPE = PropTypes.shape({
 });
 
 export const PlanColumnContent = ({ onPlanChange, dropdownRef, allPlans }) => {
+  const { i18n } = useTranslation();
+
   const options = allPlans.map(plan => ({
     key: plan.metadata.name,
     text: getResourceDisplayName(plan),
@@ -30,6 +33,7 @@ export const PlanColumnContent = ({ onPlanChange, dropdownRef, allPlans }) => {
         onSelect={(_, selected) => onPlanChange(selected.key)}
         selectedKey={selectedPlan}
         emptyListMessage="No Plans available for this Service Class"
+        i18n={i18n}
       ></Dropdown>
     </FormItem>
   );

@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { useTranslation } from 'react-i18next';
 import { MessageStrip } from 'fundamental-react';
 import {
   randomNameGenerator,
   useMicrofrontendContext,
   Dropdown,
 } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 
 import {
   ResourceNameInput,
@@ -37,6 +37,7 @@ export default function CreateLambdaForm({
 }) {
   const { namespaceId: namespace } = useMicrofrontendContext();
   const createLambda = useCreateLambda({ redirect: true });
+  const { t, i18n } = useTranslation();
 
   const [errors, setErrors] = useState([]);
   const [nameStatus, setNameStatus] = useState('');
@@ -61,7 +62,6 @@ export default function CreateLambdaForm({
     [setErrors],
   );
 
-  const { t } = useTranslation();
   useEffect(() => {
     if (isValid && errors.length) {
       setInvalidModalPopupMessage(t('functions.create-view.errors.invalid'));
@@ -205,6 +205,7 @@ export default function CreateLambdaForm({
         options={runtimeOptions}
         selectedKey={runtimeOptions[0].key}
         onSelect={(_, selected) => setRuntime(selected.key)}
+        i18n={i18n}
       />
 
       <Dropdown
@@ -213,6 +214,7 @@ export default function CreateLambdaForm({
         options={sourceTypeOptions}
         selectedKey={sourceTypeOptions[0].key}
         onSelect={(_, selected) => setSourceType(selected.key)}
+        i18n={i18n}
         inlineHelp={t('functions.create-view.inline-help.source-type')}
       />
 
@@ -229,6 +231,7 @@ export default function CreateLambdaForm({
               options={repositoryOptions}
               selectedKey={repositoryOptions[0].key}
               onSelect={(_, selected) => setRepositoryName(selected.key)}
+              i18n={i18n}
             />
 
             <FormInput

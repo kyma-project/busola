@@ -71,7 +71,7 @@ const jwtStrategy = {
 const setStrategy = jest.fn();
 const removeStrategy = jest.fn();
 
-describe('AccessStrategyForm', () => {
+xdescribe('AccessStrategyForm', () => {
   beforeEach(() => {
     setStrategy.mockReset();
     removeStrategy.mockReset();

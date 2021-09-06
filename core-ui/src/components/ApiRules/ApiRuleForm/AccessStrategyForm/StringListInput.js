@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 import { FormInput, FormLabel } from 'fundamental-react';
 import { StringInput } from 'react-shared';
@@ -12,6 +13,7 @@ const StringListInput = ({
   isEditMode,
   placeholder,
 }) => {
+  const { i18n } = useTranslation();
   return (
     <div className="string-list-input">
       <FormLabel htmlFor={label}>{label}</FormLabel>
@@ -22,6 +24,7 @@ const StringListInput = ({
           regexp={regexp}
           placeholder={placeholder}
           id={label}
+          i18n={i18n}
         />
       ) : (
         (list && list.length && (

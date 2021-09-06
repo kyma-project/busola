@@ -1,27 +1,33 @@
 import React, { useState, useRef, useEffect } from 'react';
 import classnames from 'classnames';
 import { Token } from 'fundamental-react';
+import { useTranslation } from 'react-i18next';
 
-export const SingleString = ({ text, onClick }) => (
-  <Token
-    title="Click to remove"
-    className="label-selector__label"
-    onClick={onClick}
-    buttonLabel=""
-  >
-    {text}
-  </Token>
-);
+export const SingleString = ({ text, onClick, i18n }) => {
+  const { t } = useTranslation(null, { i18n });
+  return (
+    <Token
+      title={t('components.string-input.remove')}
+      className="label-selector__label"
+      onClick={onClick}
+      buttonLabel=""
+    >
+      {text}
+    </Token>
+  );
+};
 
 export const StringInput = ({
   stringList = {},
   onChange,
   regexp = /^[A-z_-]+$/,
   required,
+  placeholder = 'components.string-input.placeholder',
   compact,
-  placeholder = 'Enter multiple values separated by comma',
+  i18n,
   ...props
 }) => {
+  const { t } = useTranslation(null, { i18n });
   const [isValid, setValid] = useState(true);
   const inputRef = useRef(null);
 
@@ -75,13 +81,18 @@ export const StringInput = ({
       >
         {!!stringList.length &&
           stringList.map(s => (
-            <SingleString key={s} text={s} onClick={() => deleteString(s)} />
+            <SingleString
+              key={s}
+              text={s}
+              onClick={() => deleteString(s)}
+              i18n={i18n}
+            />
           ))}
         <input
           ref={inputRef}
           className={inputClassName}
           type="text"
-          placeholder={placeholder}
+          placeholder={t(placeholder)}
           onKeyDown={handleKeyDown}
           onBlur={handleOutOfFocus}
           data-ignore-visual-validation

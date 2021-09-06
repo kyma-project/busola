@@ -8,6 +8,7 @@ import {
   useMicrofrontendContext,
   Tooltip,
 } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 
 import renderRow from './ServiceInstanceRowRenderer';
 
@@ -16,10 +17,12 @@ const ServiceInstanceTable = ({
   deleteServiceInstance,
   loading,
   type,
+  i18n,
 }) => {
   const { features } = useMicrofrontendContext();
   const btpCatalogEnabled = features.BTP_CATALOG?.isEnabled;
   const notification = useNotification();
+  const { t } = useTranslation();
 
   function goToServiceCatalog() {
     LuigiClient.linkManager()
@@ -30,7 +33,7 @@ const ServiceInstanceTable = ({
 
   if (loading) return 'Loading...';
 
-  const rowRenderer = instance => renderRow(instance);
+  const rowRenderer = instance => renderRow({ instance, i18n });
 
   const actions = btpCatalogEnabled
     ? []
@@ -45,6 +48,7 @@ const ServiceInstanceTable = ({
               entry.metadata.name,
               notification,
               () => deleteServiceInstance(entry.metadata.name),
+              t,
             ),
         },
       ];
@@ -82,6 +86,7 @@ const ServiceInstanceTable = ({
       notFoundMessage="No Service Instances found"
       hasExternalMargin={false}
       textSearchProperties={['metadata.name']}
+      i18n={i18n}
     />
   );
 };

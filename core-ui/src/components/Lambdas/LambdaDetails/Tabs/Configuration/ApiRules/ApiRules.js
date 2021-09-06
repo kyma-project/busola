@@ -10,7 +10,6 @@ import {
 import ApiRulesListWrapper from 'components/ApiRules/ApiRulesList/ApiRulesListWrapper';
 
 import { LAMBDA_PHASES } from 'components/Lambdas/constants';
-import { useGetGatewayDomain } from 'components/ApiRules/hooks/useGetGatewayDomain';
 import { getLambdaStatus } from 'components/Lambdas/helpers/lambdas/getLambdaStatus';
 import { useTranslation } from 'react-i18next';
 
@@ -20,10 +19,10 @@ const textSearchProperties = [
   'status.apiRuleStatus.code',
 ];
 
-const apiRuleRowRenderer = domain => apiRule => ({
+const rowRenderer = apiRule => ({
   cells: [
     <GoToApiRuleDetails apiRule={apiRule} />,
-    <CopiableApiRuleHost apiRule={apiRule} domain={domain} />,
+    <CopiableApiRuleHost apiRule={apiRule} />,
     <ApiRuleStatus apiRule={apiRule} />,
   ],
   collapseContent: <ApiRuleAccessStrategiesList apiRule={apiRule} />,
@@ -32,10 +31,6 @@ const apiRuleRowRenderer = domain => apiRule => ({
 });
 
 export default function ApiRules({ lambda, isActive }) {
-  const { domain } = useGetGatewayDomain();
-
-  const rowRenderer = apiRuleRowRenderer(domain);
-
   const disableExposeButton =
     getLambdaStatus(lambda.status).phase !== LAMBDA_PHASES.RUNNING.TYPE;
 
@@ -65,9 +60,6 @@ export default function ApiRules({ lambda, isActive }) {
 }
 
 export function ServiceApiRules({ service }) {
-  const { domain } = useGetGatewayDomain();
-
-  const rowRenderer = apiRuleRowRenderer(domain);
   const { t } = useTranslation();
   const headerRenderer = () => [
     '',

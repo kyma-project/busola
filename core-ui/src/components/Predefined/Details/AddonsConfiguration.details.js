@@ -3,7 +3,7 @@ import { GenericList, StatusBadge } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
 const RepositoryUrls = addon => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const headerRenderer = _ => [
     t('addons.headers.url'),
@@ -27,6 +27,7 @@ const RepositoryUrls = addon => {
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       entries={addon.status.repositories || []}
+      i18n={i18n}
     />
   );
 };

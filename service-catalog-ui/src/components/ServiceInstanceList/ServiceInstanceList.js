@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import LuigiClient from '@luigi-project/client';
+import { useTranslation } from 'react-i18next';
 
 import {
   Tab,
@@ -64,6 +65,7 @@ const actions = (serviceInstancesExists, searchQuery, searchFn) => {
 };
 
 export default function ServiceInstancesList() {
+  const { i18n } = useTranslation();
   const [searchQuery, setSearchQuery] = useState('');
   const { namespaceId } = useMicrofrontendContext();
   const sendDeleteRequest = useDelete();
@@ -137,6 +139,7 @@ export default function ServiceInstancesList() {
               )}
               deleteServiceInstance={handleDelete}
               type="services"
+              i18n={i18n}
             />
           </ServiceInstancesWrapper>
         </Tab>
@@ -166,6 +169,7 @@ export default function ServiceInstancesList() {
               )}
               deleteServiceInstance={handleDelete}
               type="addons"
+              i18n={i18n}
             />
           </ServiceInstancesWrapper>
         </Tab>
