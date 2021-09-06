@@ -6,11 +6,13 @@ import {
   useMicrofrontendContext,
   ResourceNotFound,
 } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 
 import { sortByDisplayName } from 'helpers/sorting';
 import ServiceCatalogDetails from './ServiceClassDetails';
 
 export const ServiceClassDetailsContainer = ({ name }) => {
+  const { i18n } = useTranslation();
   const RESOURCE_TYPE_LOWERCASE = `serviceClass`;
   const { namespaceId } = useMicrofrontendContext();
 
@@ -55,11 +57,13 @@ export const ServiceClassDetailsContainer = ({ name }) => {
       serviceClass={serviceClass}
       serviceInstances={serviceInstances}
       servicePlans={servicePlans}
+      i18n={i18n}
     />
   );
 };
 
 export const ClusterServiceClassDetailsContainer = ({ name }) => {
+  const { i18n } = useTranslation();
   const RESOURCE_TYPE_LOWERCASE = `clusterServiceClass`;
   const { namespaceId } = useMicrofrontendContext();
 
@@ -92,6 +96,7 @@ export const ClusterServiceClassDetailsContainer = ({ name }) => {
       <ResourceNotFound
         resource="Cluster Service Class"
         breadcrumbs={breadcrumbItems}
+        i18n
       />
     );
   }
@@ -103,6 +108,7 @@ export const ClusterServiceClassDetailsContainer = ({ name }) => {
       serviceClass={serviceClass}
       serviceInstances={serviceInstances}
       servicePlans={servicePlans}
+      i18n={i18n}
     />
   );
 };

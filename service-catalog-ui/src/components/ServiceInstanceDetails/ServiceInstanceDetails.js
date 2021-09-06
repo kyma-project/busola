@@ -9,11 +9,13 @@ import ServiceInstanceHeader from './ServiceInstanceHeader/ServiceInstanceHeader
 import ServiceInstanceBindings from './ServiceInstanceBindings/ServiceInstanceBindings';
 import { EmptyList } from './styled';
 import { SERVICE_BINDINGS_PANEL } from './ServiceInstanceBindings/constants';
+import { useTranslation } from 'react-i18next';
 
 const ServiceInstanceBindingsWrapper = ({
   serviceInstance,
   servicePlanRef,
   serviceClassRef,
+  i18n,
 }) => {
   const planUrl = servicePlanRef?.isClusterWide
     ? `/apis/servicecatalog.k8s.io/v1beta1/clusterserviceplans/${servicePlanRef.ref}`
@@ -29,13 +31,14 @@ const ServiceInstanceBindingsWrapper = ({
 
   if (!servicePlan || !serviceClass) return null;
   return servicePlan.spec.bindable || serviceClass.spec.bindable ? (
-    <ServiceInstanceBindings serviceInstance={serviceInstance} />
+    <ServiceInstanceBindings serviceInstance={serviceInstance} i18n={i18n} />
   ) : (
     <EmptyList>{SERVICE_BINDINGS_PANEL.NOT_BINDABLE}</EmptyList>
   );
 };
 
 export default function ServiceInstanceDetails({ match }) {
+  const { i18n } = useTranslation();
   const { namespaceId } = useMicrofrontendContext();
   const { data: serviceInstance, loading = true, error } = useGet(
     `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${namespaceId}/serviceinstances/${match.params.name}`,
@@ -63,6 +66,7 @@ export default function ServiceInstanceDetails({ match }) {
       <ResourceNotFound
         resource="Service Instance"
         breadcrumbs={breadcrumbItems}
+        i18n={i18n}
       />
     );
   }
@@ -91,12 +95,14 @@ export default function ServiceInstanceDetails({ match }) {
       <ServiceInstanceHeader
         serviceInstance={serviceInstance}
         servicePlan={servicePlanRef}
+        i18n={i18n}
       />
       {serviceInstance && servicePlanRef && (
         <ServiceInstanceBindingsWrapper
           serviceInstance={serviceInstance}
           servicePlanRef={servicePlanRef}
           serviceClassRef={serviceClassRef}
+          i18n={i18n}
         />
       )}
     </>

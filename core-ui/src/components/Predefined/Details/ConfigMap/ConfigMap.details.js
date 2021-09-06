@@ -6,7 +6,7 @@ import { ReadonlyEditorPanel } from '../../../../shared/components/ReadonlyEdito
 import { useTranslation } from 'react-i18next';
 
 export const ConfigMapsDetails = ({ DefaultRenderer, ...otherParams }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const ConfigMapEditor = resource => {
     const { data } = resource;
     return Object.keys(data || {}).map(key => (
@@ -24,7 +24,6 @@ export const ConfigMapsDetails = ({ DefaultRenderer, ...otherParams }) => {
             {t('common.buttons.edit')}
           </Button>
         }
-        confirmText={t('config-maps.buttons.update')}
         className="fd-dialog--xl-size modal-width--m"
         renderForm={props => (
           <EditConfigMapForm
@@ -34,6 +33,7 @@ export const ConfigMapsDetails = ({ DefaultRenderer, ...otherParams }) => {
             {...props}
           />
         )}
+        i18n={i18n}
       />
     ),
   ];

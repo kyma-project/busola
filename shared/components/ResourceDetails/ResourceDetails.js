@@ -78,6 +78,7 @@ export function ResourceDetails(props) {
         <ResourceNotFound
           resource={prettifyNameSingular(undefined, props.resourceType)}
           breadcrumbs={breadcrumbItems}
+          i18n={props.i18n}
         />
       );
     }
@@ -86,6 +87,7 @@ export function ResourceDetails(props) {
         resource={prettifyNameSingular(undefined, props.resourceType)}
         breadcrumbs={breadcrumbItems}
         customMessage={getErrorMessage(error)}
+        i18n={props.i18n}
       />
     );
   }
@@ -178,13 +180,17 @@ function Resource({
       await updateResourceMutation(resourceUrl, diff);
       silentRefetch();
       notification.notifySuccess({
-        content: `${prettifiedResourceName} updated`,
+        content: t('components.resource-details.messages.success', {
+          resourceType: prettifiedResourceName,
+        }),
       });
     } catch (e) {
       console.error(e);
       notification.notifyError({
-        title: `Failed to update the ${prettifiedResourceName}`,
-        content: e.message,
+        content: t('components.resource-details.messages.failure', {
+          resourceType: prettifiedResourceName,
+          error: e.message,
+        }),
       });
       throw e;
     }
@@ -198,6 +204,7 @@ function Resource({
       notification,
       () => deleteResourceMutation(resourceUrl),
       () => navigateToList(resourceType),
+      t,
     );
   }
 

@@ -107,7 +107,7 @@ export default function ApiRules({
   disableExposeButton = false,
 }) {
   const deleteApiRule = useDeleteApiRule();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const actions = [
     {
@@ -127,7 +127,7 @@ export default function ApiRules({
       name: 'Delete',
       disabledHandler: apiRule => !!apiRule.ownerSubscription, // TODO what is this ownerSubscription?
       handler: apiRule => {
-        deleteApiRule(apiRule.metadata.name);
+        deleteApiRule(apiRule.metadata.name, t);
       },
     },
   ];
@@ -173,6 +173,7 @@ export default function ApiRules({
         notFoundMessage={notFoundMessage}
         noSearchResultMessage={t(PANEL.LIST.ERRORS.NOT_MATCHING_SEARCH_QUERY)}
         serverErrorMessage={t(ERRORS.SERVER)}
+        i18n={i18n}
       />
     </div>
   );

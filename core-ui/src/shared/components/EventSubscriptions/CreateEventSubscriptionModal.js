@@ -9,6 +9,7 @@ import CreateEventSubscriptionForm from './CreateEventSubscriptionForm';
 export default function CreateEventSubscriptionModal({
   isLambda = false,
   onSubmit,
+  i18n,
 }) {
   const { t } = useTranslation();
   const button = (
@@ -32,6 +33,7 @@ export default function CreateEventSubscriptionModal({
           onSubmit={onSubmit}
         />
       )}
+      i18n={i18n}
     />
   );
 }

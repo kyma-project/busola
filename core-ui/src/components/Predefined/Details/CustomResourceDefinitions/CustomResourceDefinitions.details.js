@@ -8,7 +8,7 @@ export const CustomResourceDefinitionsDetails = ({
   DefaultRenderer,
   ...otherParams
 }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const customColumns = [
     {
@@ -39,6 +39,7 @@ export const CustomResourceDefinitionsDetails = ({
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
         testid="crd-names"
+        i18n={i18n}
       />
     );
   };

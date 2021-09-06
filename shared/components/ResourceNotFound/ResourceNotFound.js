@@ -1,15 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { LayoutPanel } from 'fundamental-react';
+import { useTranslation } from 'react-i18next';
 
 import { PageHeader } from '../PageHeader/PageHeader';
 
-export const ResourceNotFound = ({ resource, breadcrumbs, customMessage }) => {
+export const ResourceNotFound = ({
+  resource,
+  breadcrumbs,
+  customMessage,
+  i18n,
+}) => {
+  const { t } = useTranslation(null, { i18n });
   return (
     <>
       <PageHeader title="" breadcrumbItems={breadcrumbs} />
       <LayoutPanel className="fd-has-padding-regular fd-margin--md">
-        {customMessage ? customMessage : `Such ${resource} doesn't exist.`}
+        {customMessage
+          ? customMessage
+          : t('components.resource-not-found.messages.not-found', { resource })}
       </LayoutPanel>
     </>
   );

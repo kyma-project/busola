@@ -32,7 +32,7 @@ export function CustomResource({ params }) {
   const versions = data?.spec?.versions;
   const version = versions?.find(version => version.name === resourceVersion);
 
-  const AdditionalPrinterColumns = resource => {
+  const AdditionalPrinterColumns = ({ resource }) => {
     const getJsonPath = (resource, jsonPath) => {
       const value =
         jp.value(resource, jsonPath.substring(1)) || EMPTY_TEXT_PLACEHOLDER;
@@ -57,6 +57,7 @@ export function CustomResource({ params }) {
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
         testid="cr-additional-printer-columns"
+        i18n={i18n}
       />
     );
   };

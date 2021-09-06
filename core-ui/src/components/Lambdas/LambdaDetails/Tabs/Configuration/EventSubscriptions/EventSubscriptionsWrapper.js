@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useGetList, Spinner } from 'react-shared';
 import EventSubscriptions from 'shared/components/EventSubscriptions/EventSubscriptions';
 
-export default function EventSubscriptionsWrapper({ lambda, isActive }) {
+export default function EventSubscriptionsWrapper({ lambda, isActive, i18n }) {
   const subscriptionsUrl = `/apis/eventing.kyma-project.io/v1alpha1/namespaces/${lambda.metadata.namespace}/subscriptions`;
 
   const filterBySink = ({ spec }) => {
@@ -36,6 +36,7 @@ export default function EventSubscriptionsWrapper({ lambda, isActive }) {
       subscriptionsUrl={subscriptionsUrl}
       serverDataError={error || false}
       serverDataLoading={loading || false}
+      i18n={i18n}
     />
   );
 }

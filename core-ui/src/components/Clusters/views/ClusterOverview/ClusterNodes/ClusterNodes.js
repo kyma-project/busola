@@ -2,6 +2,7 @@ import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { Pagination, Spinner, ErrorPanel } from 'react-shared';
 import { LayoutPanel, Link } from 'fundamental-react';
+import { useTranslation } from 'react-i18next';
 import { useNodesQuery } from 'components/Nodes/nodeQueries';
 import { NodeResources } from '../../../../Nodes/NodeResources/NodeResources';
 import { ClusterNodesWarnings } from './NodeWarningsList';
@@ -23,6 +24,7 @@ const NodeHeader = ({ nodeName }) => {
 
 export function ClusterNodes() {
   const { nodes, error, loading } = useNodesQuery();
+  const { i18n } = useTranslation();
   const itemsPerPage = 8;
   const [currentPage, setCurrentPage] = React.useState(1);
 
@@ -35,7 +37,7 @@ export function ClusterNodes() {
   return (
     <>
       {loading && <Spinner compact={true} />}
-      {error && <ErrorPanel error={error} title="Metrics" />}
+      {error && <ErrorPanel error={error} title="Metrics" i18n={i18n} />}
       <div className="cluster-overview__nodes">
         {pagedNodes.map(node => (
           <NodeResources

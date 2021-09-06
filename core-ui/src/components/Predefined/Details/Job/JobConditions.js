@@ -8,7 +8,7 @@ import {
 } from 'react-shared';
 
 export function JobConditions(job) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const headerRenderer = () => [
     t('jobs.conditions.type'),
@@ -44,6 +44,7 @@ export function JobConditions(job) {
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       entries={job.status.conditions || []}
+      i18n={i18n}
     />
   );
 }

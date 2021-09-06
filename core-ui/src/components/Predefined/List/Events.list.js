@@ -6,11 +6,11 @@ import {
 } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
-export const EventsList = ({ ...otherParams }) => {
-  return <Events namespace={otherParams.namespace} />;
+export const EventsList = ({ i18n, ...otherParams }) => {
+  return <Events namespace={otherParams.namespace} i18n={i18n} />;
 };
 
-function Events({ namespace }) {
+function Events({ namespace, i18n }) {
   const { t } = useTranslation();
 
   const url = `/api/v1/namespaces/${namespace}/events`;
@@ -49,6 +49,7 @@ function Events({ namespace }) {
       serverErrorMessage={error?.message}
       serverDataLoading={loading}
       pagination={{ itemsPerPage: 10, autoHide: true }}
+      i18n={i18n}
     />
   );
 }
