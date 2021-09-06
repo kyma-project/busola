@@ -45,19 +45,6 @@ export function SimpleForm({ dnsEntry, setDNSEntry }) {
             }
           />
           <CreateForm.FormField
-            label={<FormLabel>DNS Name</FormLabel>}
-            input={
-              <FormInput
-                compact
-                value={dnsEntry.dnsName}
-                onChange={e =>
-                  setDNSEntry({ ...dnsEntry, dnsName: e.target.value })
-                }
-                placeholder="Enter DNS Name"
-              />
-            }
-          />
-          <CreateForm.FormField
             label={<FormLabel required>Targets</FormLabel>}
             required
             input={
