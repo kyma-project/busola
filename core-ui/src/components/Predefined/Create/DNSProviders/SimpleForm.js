@@ -68,7 +68,7 @@ export function SimpleForm({ dnsProvider, setDNSProvider }) {
                   })
                 }
                 value={dnsProvider.domains?.join('\n') || ''}
-                placeholder="Target records (CNAME or A records), one per line"
+                placeholder="Selection of usable domains, one per line"
               />
             }
           />
