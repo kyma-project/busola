@@ -1,11 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  FormFieldset,
-  FormLabel,
-  FormInput,
-  FormTextarea,
-} from 'fundamental-react';
+import { FormFieldset, FormLabel, FormTextarea } from 'fundamental-react';
 import { K8sNameInput } from 'react-shared';
 import { CreateForm } from 'shared/components/CreateForm/CreateForm';
 import { LabelsInput } from 'components/Lambdas/components';

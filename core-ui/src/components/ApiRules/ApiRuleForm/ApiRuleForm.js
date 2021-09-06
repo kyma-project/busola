@@ -4,7 +4,14 @@ import { v4 as uuid } from 'uuid';
 import { createPatch } from 'rfc6902';
 import LuigiClient from '@luigi-project/client';
 import classNames from 'classnames';
-import { FormItem, FormLabel, LayoutPanel, Button } from 'fundamental-react';
+import {
+  FormItem,
+  LayoutPanel,
+  Button,
+  FormInput,
+  FormLabel,
+  MessageStrip,
+} from 'fundamental-react';
 import { supportedMethodsList } from '../accessStrategyTypes';
 import { useTranslation } from 'react-i18next';
 
@@ -18,15 +25,40 @@ import {
   useGetList,
   useNotification,
   K8sNameInput,
-  InputWithSuffix,
+  useGet,
   Tooltip,
   useMicrofrontendContext,
 } from 'react-shared';
 import { SERVICES_URL, API_RULE_URL } from '../constants';
 import { formatMessage as injectVariables } from 'components/Lambdas/helpers/misc';
-import { useGetGatewayDomain } from '../hooks/useGetGatewayDomain';
+import { GatewayDropdown } from './GatewayDropdown';
+import { HostnameDropdown } from './HostnameDropdown';
 
-export const DEFAULT_GATEWAY = 'kyma-gateway.kyma-system.svc.cluster.local';
+const getFirstAvailableHost = gateway => {
+  return gateway.spec.servers[0].hosts[0];
+};
+
+const hasWildcard = hostname => {
+  if (!hostname) return false;
+
+  // hostname may contain optional namespace prefix ({namespace}/{hostname})
+  if (hostname.includes('/')) {
+    hostname = hostname.split('/')[1];
+  }
+  return hostname.includes('*');
+};
+
+const resolveFinalHost = (subdomain, hostname) => {
+  // replace possible wildcard with lowest level domain
+  const resolvedHost = hasWildcard(hostname)
+    ? hostname.replace('*', subdomain)
+    : hostname;
+
+  // hostname may be prefixed with namespace - get rid of it
+  return resolvedHost.includes('/')
+    ? resolvedHost.substring(resolvedHost.lastIndexOf('/') + 1)
+    : resolvedHost;
+};
 
 const EMPTY_ACCESS_STRATEGY = {
   path: '',
@@ -61,16 +93,32 @@ export default function ApiRuleForm({
   headerTitle,
   breadcrumbItems,
 }) {
-  const {
-    domain,
-    error: domainError,
-    loading: domainLoading,
-  } = useGetGatewayDomain();
   const { namespaceId: namespace } = useMicrofrontendContext();
   const notification = useNotification();
   const { serviceName, port, openedInModal = false } =
     LuigiClient.getNodeParams() || {};
   const openedInModalBool = openedInModal.toString().toLowerCase() === 'true';
+
+  const defaultGatewayQuery = useGet(
+    '/apis/networking.istio.io/v1beta1/namespaces/kyma-system/gateways/kyma-gateway',
+  );
+
+  const [gateway, setGateway] = React.useState(null);
+  const [hostname, setHostname] = React.useState(null);
+
+  React.useEffect(() => {
+    if (defaultGatewayQuery.data) {
+      setGateway(defaultGatewayQuery.data);
+      setHostname(getFirstAvailableHost(defaultGatewayQuery.data));
+    }
+  }, [defaultGatewayQuery.data]);
+
+  React.useEffect(() => handleFormChanged(), [hostname]);
+
+  // as this modal uses refs instead of state, we can't rely on
+  // rerender when the value changes - but we need to refresh the
+  // MessageStrip when hostname is changed.
+  const [, forceUpdate] = React.useReducer(x => x + 1, 0);
 
   const [rules, setRules] = useState(
     apiRule.spec.rules.map(r => ({ ...r, renderKey: uuid() })),
@@ -133,9 +181,6 @@ export default function ApiRuleForm({
   }
 
   async function save() {
-    if (domainError || domainLoading) {
-      return false;
-    }
     if (!formRef.current.checkValidity()) {
       return;
     }
@@ -149,11 +194,11 @@ export default function ApiRuleForm({
       },
       spec: {
         service: {
-          host: formValues.hostname.current.value + '.' + domain,
+          host: resolveFinalHost(formValues.hostname.current.value, hostname),
           name: serviceName,
           port: parseInt(servicePort),
         },
-        gateway: DEFAULT_GATEWAY,
+        gateway: `${gateway.metadata.name}.${gateway.metadata.namespace}.svc.cluster.local`,
         rules: rules.map(({ renderKey, ...actualRule }) => actualRule),
       },
     };
@@ -240,54 +285,70 @@ export default function ApiRuleForm({
               <LayoutPanel.Head title={t('api-rules.general-settings.title')} />
             </LayoutPanel.Header>
             <LayoutPanel.Body>
-              <div className="api-rule-form__input-group">
-                <FormItem>
-                  <K8sNameInput
-                    _ref={formValues.name}
-                    id="apiRuleName"
-                    kind="API Rule"
-                    showHelp={!apiRule?.metadata.name}
-                    defaultValue={apiRule?.metadata.name}
-                    disabled={!!apiRule?.metadata.name}
-                    i18n={i18n}
-                  />
-                </FormItem>
-                <FormItem>
-                  <FormLabel htmlFor="hostname" required>
-                    {t('common.labels.hostname')}
-                  </FormLabel>
-
-                  {domainLoading ? (
-                    'Loading...'
-                  ) : (
-                    <Tooltip content={t('common.tooltips.k8s-name-input')}>
-                      <InputWithSuffix
-                        defaultValue={apiRule.spec.service.host.replace(
-                          `.${domain}`,
-                          '',
-                        )}
-                        id="hostname"
-                        suffix={'.' + domain}
-                        placeholder="Enter the hostname"
-                        required
-                        pattern="^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$"
-                        _ref={formValues.hostname}
-                      />
-                    </Tooltip>
-                  )}
-                </FormItem>
-                <ServicesDropdown
-                  _ref={formValues.service}
-                  defaultValue={apiRule.spec.service}
-                  serviceName={serviceName}
-                  data={allServices}
-                  error={error}
-                  loading={loading}
+              <FormItem>
+                <K8sNameInput
+                  _ref={formValues.name}
+                  id="apiRuleName"
+                  kind="API Rule"
+                  showHelp={!apiRule?.metadata.name}
+                  defaultValue={apiRule?.metadata.name}
+                  disabled={!!apiRule?.metadata.name}
+                  i18n={i18n}
                 />
-              </div>
+              </FormItem>
+              <ServicesDropdown
+                _ref={formValues.service}
+                defaultValue={apiRule.spec.service}
+                serviceName={serviceName}
+                data={allServices}
+                error={error}
+                loading={loading}
+              />
+              <GatewayDropdown
+                namespace={namespace}
+                gateway={gateway}
+                setGateway={gateway => {
+                  setGateway(gateway);
+                  setHostname(getFirstAvailableHost(gateway));
+                }}
+              />
+              <HostnameDropdown
+                gateway={gateway}
+                hostname={hostname}
+                setHostname={setHostname}
+              />
+              <FormItem>
+                <FormLabel htmlFor="subdomain" required>
+                  {t('api-rules.form.subdomain')}
+                </FormLabel>
+                <Tooltip content={t('common.tooltips.k8s-name-input')}>
+                  <FormInput
+                    disabled={!hasWildcard(hostname)}
+                    id="subdomain"
+                    placeholder={t('api-rules.form.subdomain-placeholder')}
+                    required
+                    pattern="^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$"
+                    ref={formValues.hostname}
+                    onChange={forceUpdate}
+                  />
+                </Tooltip>
+              </FormItem>
+              {hostname &&
+                (!hasWildcard(hostname) ||
+                  formValues.hostname.current?.value) && (
+                  <MessageStrip type="success" className="fd-margin-top--sm">
+                    {t('api-rules.messages.will-be-available-at', {
+                      address:
+                        'https://' +
+                        resolveFinalHost(
+                          formValues.hostname.current.value,
+                          hostname,
+                        ),
+                    })}
+                  </MessageStrip>
+                )}
             </LayoutPanel.Body>
           </LayoutPanel>
-
           <LayoutPanel>
             <LayoutPanel.Header>
               <LayoutPanel.Head
