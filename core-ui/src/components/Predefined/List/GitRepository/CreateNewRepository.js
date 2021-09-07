@@ -2,7 +2,7 @@ import React from 'react';
 import { useGetList } from 'react-shared';
 
 import { CreateRepositoryModal } from 'components/Lambdas/LambdasList/Repositories/RepositoryModal';
-export default function CreateNewRepository({ namespaceName }) {
+export default function CreateNewRepository({ namespaceName, i18n }) {
   const {
     data: repositories,
     error: repositoriesError,
@@ -21,6 +21,7 @@ export default function CreateNewRepository({ namespaceName }) {
       repositoryNames={repositoryNames}
       serverDataError={serverDataError || false}
       serverDataLoading={serverDataLoading || false}
+      i18n={i18n}
     />
   );
 

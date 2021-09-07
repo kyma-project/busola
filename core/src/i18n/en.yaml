@@ -26,6 +26,11 @@ api-rules:
     create: Create API Rule
     edit: Edit API Rule "{{apiRuleName}}"
     expose: Expose {{type}}
+  form:
+    gateway: Gateway
+    hostname: Hostname
+    subdomain: Subdomain
+    subdomain-placeholder: Subdomain will replace the '*' part of the $t(api-rules.form.hostname) value.
   general-settings:
     title: General settings
   list:
@@ -39,6 +44,7 @@ api-rules:
     description: Expose Services outside the cluster with API Rules.
     not-matching-results: Couldn't find API Rules matching this query.
     updated: API Rule updated.
+    will-be-available-at: API Rule will be available at {{address}}.
   services:
     error-load: Couldn't load service list.
     loading: Loading services...
@@ -160,15 +166,27 @@ certificates:
   secret-ref: Secret to use
   create:
     messages:
-      success: Certificate created.
       failure: Failed to create the certificate.
+      success: Certificate created.
+  csr: CSR
+  dns-names: DNS Names
+  existing-secret: Use the existing Secret
+  expiration-date: Expiration Date
+  issuer: Issuer
   placeholders:
-    name: Certificate name
     common-name: Certificate CN (max 64 characters)
-    dns-names: Additional domain names, one per line
     csr: Plain text Certificate Signing Request
+    dns-names: Additional domain names, one per line
     encoded-csr: Base64-encoded Certificate Signing Request
+    name: Certificate name
     secret-name: Requested Secret name
+  refs: References
+  renew: Trigger a renew
+  secret-name: Secret name
+  secret-ref: Secret to use
+  state: State
+  title: Certificates
+  with-csr: Use a CSR
 cluster-addons:
   title: Cluster Addons
 cluster-role-bindings:
@@ -177,9 +195,9 @@ cluster-roles:
   title: ClusterRoles
 clusters:
   add:
-    title: Add a Cluster
     errors:
       failed-to-add-cluster: Failed to add a cluster
+    title: Add a Cluster
   buttons:
     apply-configuration: Apply configuration
     apply-kubeconfig: Apply kubeconfig
@@ -225,6 +243,7 @@ common:
     add: Add
     add-new: Add new
     cancel: Cancel
+    copy: Copy
     create: Create
     delete: Delete
     edit: Edit
@@ -233,9 +252,9 @@ common:
     save: Save
     update: Update
   create-form:
+    choose-preset: Select a Preset
     delete-confirm: Don't ask this again.
     editor-error: 'Parse error: {{error}}, previous valid input will be used.'
-    choose-preset: Select a Preset
     messages:
       failure: Failed to create the {{resourceType}}.
       success: '{{resourceType}} created.'
@@ -245,8 +264,8 @@ common:
   delete-dialog:
     delete-confirm: Don't ask this again.
     information: You've switched off removal confirmations for all resources. You can switch them back on in Preferences.
-    message: Are you sure you want to remove {{type}} {{name}}?
-    title: Remove {{name}}.
+    message: Are you sure you want to delete {{type}} {{name}}?
+    title: Delete {{name}}.
   errors:
     no-permissions: You don't have enough permissions to view this content.
     no-permissions-header: Not enough permissions.
@@ -264,9 +283,9 @@ common:
     hostname: Hostname
     name: Name
     namespace: Namespace
+    protocol: Protocol
     resource: Resource
     service: Service
-    protocol: Protocol
   messages:
     cannot-load: 'Cannot load {{value}}: {{error.message}}.'
     choose: Choose {{value}}.
@@ -290,6 +309,55 @@ common:
     save: Save
     search: Search
     value: Value must start and end with an alphanumeric character, can contain '-', '_' or '.'
+components:
+  dropdown:
+    empty-list: No resources available
+  error-panel:
+    error: An error occured. The component cannot be rendered.
+  file-input:
+    drag-file: Drag file here
+  generic-list:
+    acion-header:
+      messages:
+        confirmation: Are you sure you want to delete {{resourceType}} "{{name}}"?
+        failure: 'Failed to delete the {{resourceType}}: {{error}}'
+        success: '{{resourceType}} deleted'
+      title: Delete {{resourceType}}
+    messages:
+      no-search-results: Couldn't find resources matching this query.
+      not-found: No entries found
+  k8s-name-input:
+    placeholder: '{{resourceType}} name'
+  key-value-form:
+    add-entry: Add data entry
+    key: Key
+    read-value: Read value from file
+    value: Value
+  label-selector-input:
+    click-to-delete: Click to delete
+    enter-key-value: Enter {{type}} key=value
+  modal:
+    confirm-text: Confirm
+    title: Modal
+  resource-details:
+    messages:
+      failure: 'Failed to update the {{resourceType}}: {{error}}'
+      success: '{{resourceType}} updated'
+  resource-not-found:
+    messages:
+      not-found: Such {{resource}} doesn't exist
+  resources-list:
+    create: Create {{resourceType}}
+    messages:
+      delete:
+        failure: 'Failed to delete the {{resourceType}}: {{error}}'
+        success: '{{resourceType}} deleted'
+      update:
+        failure: 'Failed to update the {{resourceType}}: {{error}}'
+        success: '{{resourceType}} updated'
+  string-input:
+    placeholder: Enter multiple values separated by comma
+    remove: Click to remove
 config-maps:
   buttons:
     update: Update
@@ -398,6 +466,28 @@ dnsproviders:
     status: $t(common.headers.status)
     type: Type
   title: DNS Providers
+event-subscription:
+  create:
+    labels:
+      application-name: Application name
+      calculate-event-type: Calculate Event type
+      calculate-from-cmp: Calculate from components
+      enter-event-type: Enter Event type
+      event-name: Event name
+      event-type: Event type
+      event-version: Event version
+    notifications:
+      created: Subscription created
+      failed: Failed to create the Subscription
+      failed-delete: Failed to delete the Subscription
+      removed: Subscription removed
+    title: Add Event Subscription
+  errors:
+    invalid: The eventType field must have a proper value.
+    not-matching-search-query: Couldn't find Event Subscriptions matching this query.
+    server: Server error. Contact your cluster admin.
+    subscriptions-not-found: There are no Event Subscriptions yet.
+  title: Event Subscriptions
 functions:
   buttons:
     connected-repositories: Connected repositories
@@ -526,20 +616,20 @@ functions:
         custom: Edit Custom Variable
         secret: Edit Secret Variable
     errors:
+      duplicate-multiple-names: 'Some of the variables duplicate the existing names: {{names}}.'
       duplicated: Duplicated variable name.
       empty: Variable is empty.
       invalid: Variable name must consist of alphanumeric characters, can contain '_', no blank spaces.
       invalid-config: Select the ConfigMap name and key.
       invalid-secret: Select the Secret name and key.
       restricted: This variable name is restricted and cannot be used. Try a different name.
-      duplicate-multiple-names: 'Some of the variables duplicate the existing names: {{names}}.'
     form:
       all-keys: <All keys>
       config-map: $t(functions.variable.type.config-map)
       key: $t(functions.variable.header.key)
       name: Name
-      take-all-description: Multiple single variables will be created with "Name" as a common prefix.
       secret: $t(functions.variable.type.secret)
+      take-all-description: Multiple single variables will be created with "Name" as a common prefix.
       value: $t(functions.variable.header.value)
     header:
       key: Key
@@ -576,49 +666,49 @@ functions:
       variable-can-override-sbu: This variable can override or be overridden by a variable injected by one of the created ServiceBindings.
 gateways:
   create-modal:
-    title: Create Gateway
     advanced:
       add-server: Add server
       delete-server: Delete server
       enable-tls: Enable TLS
       hosts: Hosts
       placeholders:
-        hosts: 'Enter the hosts, for example, *.api.mydomain.com.'
+        hosts: Enter the hosts, for example, *.api.mydomain.com.
         port:
           name: Enter the name.
           number: Enter the port number.
           protocol: Enter the protocol.
           target-port: Enter the target port.
         tls:
-          mode: Select TLS Mode
           credentialName: Enter the credential name.
+          mode: Select TLS Mode
       port:
-        ports: Ports
         name: Name
         number: Number
+        ports: Ports
         protocol: Protocol
         target-port: Target port
       tls:
-        tls: TLS
-        mode: TLS Mode
         credentialName: Credential Name
+        mode: TLS Mode
+        tls: TLS
     messages:
       success: Gateway created.
     presets:
       default: Default
     simple:
       selector: Selector
-      servers: Servers
       server: Server
-  title: Gateways
+      servers: Servers
+    title: Create Gateway
   selector: Selector
   servers:
-    title: Servers
-    port: Port
     hosts: Hosts
     name: Name
-    tls: TLS Mode
+    port: Port
     secret: TLS Secret
+    title: Servers
+    tls: TLS Mode
+  title: Gateways
 generic-list:
   no-entries-found: No entries found
 git-repositories:
@@ -634,37 +724,37 @@ instances:
 integration:
   title: Integration
 issuers:
-  title: Issuers
-  email: E-mail
-  state: Status
-  server: Server
   acme: ACME
-  ca: CA
-  domains:
-    title: Domains
-    included: Included domains
-    excluded: Excluded domains
-  type: Issuer Type
-  requests-per-day: Daily requests quota
-  skip-dns: Skip DNS challenge validation
   auto-registration: Auto registration
-  private-key: Private key Secret
-  external-account:
-    title: External account
-    key-id: CA key ID
-    secret: Symmetric MAC Secret
+  ca: CA
   create:
     messages:
-      success: Issuer created.
       failure: Failed to create the issuer.
+      success: Issuer created.
+  domains:
+    excluded: Excluded domains
+    included: Included domains
+    title: Domains
+  email: E-mail
+  external-account:
+    key-id: CA key ID
+    secret: Symmetric MAC Secret
+    title: External account
   placeholders:
-    name: Issuer Name
-    type: Select issuer type
-    server: ACME Server URL
     email: Email address for user registration
-    included-domains: One domain per line
     excluded-domains: One domain per line
+    included-domains: One domain per line
     key-id: ID of the CA that the external account is bound to
+    name: Issuer Name
+    server: ACME Server URL
+    type: Select issuer type
+  private-key: Private key Secret
+  requests-per-day: Daily requests quota
+  server: Server
+  skip-dns: Skip DNS challenge validation
+  state: Status
+  title: Issuers
+  type: Issuer Type
 jobs:
   completion-time: Completion Time
   completions: Completions
@@ -833,10 +923,10 @@ roles:
   title: Roles
 secrets:
   buttons:
+    collapse: Collapse all
     decode: Decode
     encode: Encode
     expand: Expand all
-    collapse: Collapse all
   create-modal:
     messages:
       decoding-failure: 'Failed to decode the Secret data: {{error}}.'
@@ -912,25 +1002,3 @@ workloads:
   docker-image:
     tooltip: Enter a valid Docker image registry path.
   title: Workloads
-event-subscription:
-  title: Event Subscriptions
-  create:
-    title: Add Event Subscription
-    labels:
-      calculate-from-cmp: Calculate from components
-      calculate-event-type: Calculate Event type
-      application-name: Application name
-      event-name: Event name
-      event-version: Event version
-      enter-event-type: Enter Event type
-      event-type: Event type
-    notifications:
-      created: Subscription created
-      failed: Failed to create the Subscription
-      removed: Subscription removed
-      failed-delete: Failed to delete the Subscription
-  errors:
-    invalid: The eventType field must have a proper value.
-    subscriptions-not-found: There are no Event Subscriptions yet.
-    not-matching-search-query: Couldn't find Event Subscriptions matching this query.
-    server: Server error. Contact your cluster admin.

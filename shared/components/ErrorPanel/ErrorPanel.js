@@ -1,8 +1,10 @@
 import React from 'react';
 import { LayoutPanel } from 'fundamental-react';
 import { getErrorMessage } from '../..';
+import { useTranslation } from 'react-i18next';
 
-export const ErrorPanel = ({ error, title }) => {
+export const ErrorPanel = ({ error, title, i18n }) => {
+  const { t } = useTranslation(null, { i18n });
   return (
     <LayoutPanel className="fd-margin--md">
       <LayoutPanel.Header>
@@ -13,10 +15,7 @@ export const ErrorPanel = ({ error, title }) => {
           fontSize: '18px',
         }}
       >
-        {getErrorMessage(
-          error,
-          'An error occured. The component cannot be rendered.',
-        )}
+        {getErrorMessage(error, t('components.error-panel.error'))}
       </LayoutPanel.Body>
     </LayoutPanel>
   );

@@ -7,7 +7,7 @@ import EventSubscriptions from 'shared/components/EventSubscriptions/EventSubscr
 import './Service.details.scss';
 import { ServiceApiRules } from 'components/Lambdas/LambdaDetails/Tabs/Configuration/ApiRules/ApiRules';
 
-function EventSubscriptionsWrapper(service) {
+function EventSubscriptionsWrapper({ service, i18n }) {
   const subscriptionsUrl = `/apis/eventing.kyma-project.io/v1alpha1/namespaces/${service.metadata.namespace}/subscriptions`;
 
   const filterBySink = ({ spec }) => {
@@ -40,6 +40,7 @@ function EventSubscriptionsWrapper(service) {
       subscriptionsUrl={subscriptionsUrl}
       serverDataError={error || false}
       serverDataLoading={loading || false}
+      i18n={i18n}
     />
   );
 }
@@ -49,12 +50,14 @@ function ApiRules(service) {
 }
 
 export const ServicesDetails = ({ DefaultRenderer, ...otherParams }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const microfrontendContext = useMicrofrontendContext();
   const { features } = microfrontendContext;
   const customComponents = [];
   if (features?.EVENTING?.isEnabled) {
-    customComponents.push(EventSubscriptionsWrapper);
+    customComponents.push(resource =>
+      EventSubscriptionsWrapper({ service: resource, i18n }),
+    );
   }
   if (features?.API_GATEWAY?.isEnabled) {
     customComponents.push(ApiRules);

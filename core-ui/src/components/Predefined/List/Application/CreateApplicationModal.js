@@ -98,7 +98,7 @@ export function CreateApplicationForm({
 }
 
 export default function CreateApplicationModal() {
-  const { t } = useTranslation();
+  const { i18n, t } = useTranslation();
   return (
     <ModalWithForm
       title={t('applications.subtitle.create-app')}
@@ -107,6 +107,7 @@ export default function CreateApplicationModal() {
       }
       confirmText={t('common.buttons.create')}
       renderForm={props => <CreateApplicationForm {...props} />}
+      i18n={i18n}
     />
   );
 }

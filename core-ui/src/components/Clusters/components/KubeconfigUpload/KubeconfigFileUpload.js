@@ -1,7 +1,10 @@
 import React from 'react';
 import { FileInput } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 
 export function KubeconfigFileUpload({ onKubeconfigTextAdded }) {
+  const { i18n } = useTranslation();
+
   const readFile = file => {
     return new Promise(resolve => {
       const reader = new FileReader();
@@ -19,6 +22,7 @@ export function KubeconfigFileUpload({ onKubeconfigTextAdded }) {
     <FileInput
       fileInputChanged={onKubeconfigFileUploaded}
       acceptedFileFormats=".yaml"
+      i18n={i18n}
     />
   );
 }

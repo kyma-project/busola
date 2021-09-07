@@ -28,7 +28,7 @@ function goToSecretDetails(resourceKind, name) {
 }
 
 export const PodsDetails = ({ DefaultRenderer, ...otherParams }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const customColumns = [
     {
       header: t('pods.headers.pod-ip'),
@@ -67,6 +67,7 @@ export const PodsDetails = ({ DefaultRenderer, ...otherParams }) => {
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
         entries={resource.spec.volumes}
+        i18n={i18n}
       />
     );
   };

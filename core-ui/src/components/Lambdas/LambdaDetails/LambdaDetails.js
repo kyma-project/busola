@@ -31,7 +31,7 @@ export default function LambdaDetails({ lambda }) {
     features?.EVENTING?.isEnabled ||
     catalogEnabled;
 
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const defaultHeaderRenderer = () => [
     t('common.headers.name'),
     t('api-rules.list.headers.host'),
@@ -63,6 +63,7 @@ export default function LambdaDetails({ lambda }) {
               ownerName={lambda.metadata.name}
               isActive={selectedTabIndex === 1}
               lambda={lambda}
+              i18n={i18n}
             />
             <ServiceBindings
               lambda={lambda}

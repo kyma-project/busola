@@ -12,6 +12,7 @@ import {
   useCreateServiceBindingUsage,
   Dropdown,
 } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 
 import { SERVICE_BINDINGS_PANEL } from '../constants';
 
@@ -28,6 +29,7 @@ const ApplicationsDropdown = ({
   setSelectedResource,
   selectedUsageKind,
   setSelectedUsageKind,
+  i18n,
 }) => {
   const { data: resources } = useGetList()(
     `/apis/${selectedUsageKind.spec.resource.group}/${selectedUsageKind.spec.resource.version}/namespaces/${serviceInstance.metadata.namespace}/${selectedUsageKind.spec.resource.kind}s`,
@@ -60,6 +62,7 @@ const ApplicationsDropdown = ({
             usageKinds.find(u => u.metadata.name === selected.key),
           );
         }}
+        i18n={i18n}
       />
       <Dropdown
         id="resources-dropdown"
@@ -77,6 +80,7 @@ const ApplicationsDropdown = ({
             resources.find(r => r.metadata.name === selected.key),
           );
         }}
+        i18n={i18n}
       />
     </>
   );
@@ -92,6 +96,7 @@ export default function CreateServiceBindingForm({
   setCustomValid = () => void 0,
 }) {
   const createServiceBindingUsageSet = useCreateServiceBindingUsage();
+  const { i18n } = useTranslation();
 
   const [envPrefix, setEnvPrefix] = useState('');
 
@@ -184,6 +189,7 @@ export default function CreateServiceBindingForm({
           setSelectedResource={setSelectedResource}
           selectedUsageKind={selectedUsageKind}
           setSelectedUsageKind={setSelectedUsageKind}
+          i18n={i18n}
         />
       </FormItem>
 
@@ -222,6 +228,7 @@ export default function CreateServiceBindingForm({
                 }))}
                 selectedKey={existingBinding}
                 onSelect={(_, selected) => setExistingBinding(selected.key)}
+                i18n={i18n}
               />
             </FormItem>
           ) : null}

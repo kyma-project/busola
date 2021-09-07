@@ -10,7 +10,7 @@ export function useDeleteApiRule() {
 
   const deleteAPIRule = useDelete();
 
-  async function handleResourceDelete(name) {
+  async function handleResourceDelete(name, t) {
     return await handleDelete(
       'apirules',
       null,
@@ -24,6 +24,7 @@ export function useDeleteApiRule() {
           }),
         ),
       () => {},
+      t,
     );
   }
 
