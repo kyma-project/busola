@@ -29,7 +29,7 @@ export function CustomResource({ params }) {
 
   if (loading) return <Spinner />;
 
-  const AdditionalPrinterColumns = ({ resource }) => {
+  const AdditionalPrinterColumns = resource => {
     const versions = data?.spec?.versions;
     const version = versions?.find(version => version.name === resourceVersion);
     const getJsonPath = (resource, jsonPath) => {
