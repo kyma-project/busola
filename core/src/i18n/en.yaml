@@ -152,15 +152,22 @@ catalog:
   title: Service Catalog
 certificates:
   common-name: Common Name
+  dns-names: DNS Names
+  expiration-date: Expiration Date
+  issuer: Issuer
+  refs: References
+  state: Status
+  title: Certificates
+  csr: CSR
+  with-csr: Use a CSR
+  renew: Trigger a renew
+  existing-secret: Use the existing Secret
+  secret-name: Secret name
+  secret-ref: Secret to use
   create:
     messages:
       failure: Failed to create the certificate.
       success: Certificate created.
-  csr: CSR
-  dns-names: DNS Names
-  existing-secret: Use the existing Secret
-  expiration-date: Expiration Date
-  issuer: Issuer
   placeholders:
     common-name: Certificate CN (max 64 characters)
     csr: Plain text Certificate Signing Request
@@ -168,13 +175,6 @@ certificates:
     encoded-csr: Base64-encoded Certificate Signing Request
     name: Certificate name
     secret-name: Requested Secret name
-  refs: References
-  renew: Trigger a renew
-  secret-name: Secret name
-  secret-ref: Secret to use
-  state: State
-  title: Certificates
-  with-csr: Use a CSR
 cluster-addons:
   title: Cluster Addons
 cluster-role-bindings:
