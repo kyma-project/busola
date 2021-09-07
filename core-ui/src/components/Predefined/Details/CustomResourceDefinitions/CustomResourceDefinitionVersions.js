@@ -91,7 +91,7 @@ const AdditionalPrinterColumns = ({ version, i18n }) => {
   return (
     <GenericList
       title={t('custom-resource-definitions.subtitle.additional-columns')}
-      entries={version.additionalPrinterColumns || []}
+      entries={version}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       testid="crd-additional-printer-columns"
