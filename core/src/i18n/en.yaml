@@ -169,7 +169,6 @@ certificates:
       failure: Failed to create the certificate.
       success: Certificate created.
   csr: CSR
-  dns-names: DNS Names
   existing-secret: Use the existing Secret
   expiration-date: Expiration Date
   issuer: Issuer
