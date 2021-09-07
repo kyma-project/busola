@@ -1,4 +1,5 @@
 import { randomNamesGenerator } from './randomNamesGenerator/randomNamesGenerator';
+import pluralize from 'pluralize';
 
 export function formatMessage(message = '', variables = {}) {
   const serializedVariables = {};
@@ -55,7 +56,7 @@ export const prettifyNamePlural = (resourceName, resourceType) => {
 
 export const prettifyNameSingular = (resourceName, resourceType) => {
   const resources = prettifyNamePlural(resourceName, resourceType);
-  return resources.slice(0, -1);
+  return pluralize(resources, 1);
 };
 
 export const getErrorMessage = (error, message = null) => {
