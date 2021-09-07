@@ -8,7 +8,9 @@ export const DNSEntriesList = ({ DefaultRenderer, ...otherParams }) => {
     {
       header: t('dnsentries.headers.status'),
       value: dnsprovider => (
-        <StatusBadge autoResolveType>{dnsprovider.status?.state}</StatusBadge>
+        <StatusBadge autoResolveType>
+          {dnsprovider.status?.state || 'UNKNOWN'}
+        </StatusBadge>
       ),
     },
   ];

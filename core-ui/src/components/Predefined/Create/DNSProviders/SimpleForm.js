@@ -5,6 +5,7 @@ import { K8sNameInput } from 'react-shared';
 import { CreateForm } from 'shared/components/CreateForm/CreateForm';
 import { LabelsInput } from 'components/Lambdas/components';
 import { SecretRef } from 'shared/components/ResourceRef/SecretRef';
+import { ProviderTypeDropdown } from './ProviderTypeDropdown';
 
 export function SimpleForm({ dnsProvider, setDNSProvider }) {
   const { t, i18n } = useTranslation();
@@ -36,6 +37,30 @@ export function SimpleForm({ dnsProvider, setDNSProvider }) {
               onChange={labels => setDNSProvider({ ...dnsProvider, labels })}
               i18n={i18n}
               compact
+            />
+          }
+        />
+        <CreateForm.FormField
+          label={<FormLabel>{t('common.headers.annotations')}</FormLabel>}
+          input={
+            <LabelsInput
+              showFormLabel={false}
+              labels={dnsProvider.annotations}
+              onChange={annotations =>
+                setDNSProvider({ ...dnsProvider, annotations })
+              }
+              i18n={i18n}
+              type={t('common.headers.annotations')}
+              compact
+            />
+          }
+        />
+        <CreateForm.FormField
+          label={<FormLabel>Type</FormLabel>}
+          input={
+            <ProviderTypeDropdown
+              type={dnsProvider.type}
+              setType={type => setDNSProvider({ ...dnsProvider, type })}
             />
           }
         />
