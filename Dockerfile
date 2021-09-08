@@ -1,6 +1,6 @@
 # ---- Base Alpine with Node ----
 FROM alpine:3.13.5 AS builder
-RUN apk add --update nodejs npm
+RUN apk add --update npm
 
 WORKDIR /app
 
@@ -24,7 +24,7 @@ RUN cd /app/service-catalog-ui && make test && make build
 RUN cd /app/core-ui && make test && make build
 
 # ---- Serve ----
-FROM alpine:3.14.0
+FROM alpine:3.14.2
 WORKDIR /app
 
 RUN apk --no-cache upgrade &&\
