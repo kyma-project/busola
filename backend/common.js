@@ -72,12 +72,10 @@ export const handleRequest = async (req, res) => {
   req.pipe(k8sRequest);
 
   function throwInternalServerError(originalError) {
-    console.error(
-      'Throwing an Internal server error with reason:',
-      originalError,
-    );
-    res.statusMessage = 'Internal server error';
-    res.statusCode = 500;
+    console.error('Target k8s API Server:', targetApiServer.href);
+    console.error('Throwing an Bad Gateway error with reason:', originalError);
+    res.statusMessage = 'Bad Gateway';
+    res.statusCode = 502;
     res.end(Buffer.from(JSON.stringify({ message: originalError })));
   }
 };

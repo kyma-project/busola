@@ -67,8 +67,9 @@ context('Test Custom Resource Definitions (Namespace Wide)', () => {
       .find('[data-testid=customresourcedefinitions_customresourcedefinitions]')
       .click();
 
+    cy.wait(10000);
     cy.getIframeBody()
-      .find('[role="search"] [aria-label="search-input"]')
+      .find('[role="search"] [aria-label="search-input"]', { timeout: 7000 })
       .type('applications', { force: true }); // use force to skip clicking (the table could re-render between the click and the typing)
 
     cy.getIframeBody()

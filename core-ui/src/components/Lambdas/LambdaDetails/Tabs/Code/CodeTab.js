@@ -1,4 +1,5 @@
 import React from 'react';
+import { useMicrofrontendContext } from 'react-shared';
 
 import CodeAndDependencies from './CodeAndDependencies/CodeAndDependencies';
 import RepositoryConfig from './RepositoryConfig/RepositoryConfig';
@@ -23,6 +24,16 @@ export default function CodeTab({ lambda, isActive }) {
     lambdaVariables: lambda?.spec?.env,
     bindingUsages: serviceBindingsWithUsages || [],
   });
+  const microfrontendContext = useMicrofrontendContext();
+  const { features } = microfrontendContext;
+  const catalogEnabled =
+    features?.SERVICE_CATALOG?.isEnabled &&
+    features?.SERVICE_CATALOG_ADDONS?.isEnabled;
+
+  const InjectedBindingVariables = catalogEnabled
+    ? InjectedVariables
+    : () => null;
+
   return (
     <>
       {isGitSourceType(lambda?.spec?.type) ? (
@@ -36,7 +47,7 @@ export default function CodeTab({ lambda, isActive }) {
         customValueFromVariables={customValueFromVariables}
         injectedVariables={injectedVariables}
       />
-      <InjectedVariables
+      <InjectedBindingVariables
         lambda={lambda}
         customVariables={customVariables}
         customValueFromVariables={customValueFromVariables}
