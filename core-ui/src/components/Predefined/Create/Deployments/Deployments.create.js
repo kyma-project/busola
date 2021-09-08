@@ -62,12 +62,12 @@ export function DeploymentsCreate({ formElementRef, namespace, onChange }) {
     createDeploymentTemplate(namespace),
   );
 
-  const renderEditor = ({ defaultEditor }) => (
+  const renderEditor = ({ defaultEditor, Editor }) => (
     <>
       <FormLabel>Deployment</FormLabel>
       {defaultEditor}
       <FormLabel>Service</FormLabel>
-      <p>service editor</p>
+      <Editor resource={deployment} setResource={setDeployment} />
     </>
   );
 
@@ -87,13 +87,19 @@ export function DeploymentsCreate({ formElementRef, namespace, onChange }) {
         required
         yamlPath="$.metadata.name"
         label={t('common.labels.name')}
-        input={(value, setValue) => (
+        input={(value, _) => (
           <K8sNameInput
             kind="Deployment"
             compact
             required
             showLabel={false}
-            onChange={e => setValue(e.target.value)}
+            onChange={e => {
+              const name = e.target.value;
+              jp.value(deployment, '$.metadata.name', name);
+              jp.value(deployment, '$.spec.selector.matchLabels.app', name); // match labels
+              jp.value(deployment, `$.spec.template.metadata.labels.app`, name); // pod labels
+              setDeployment({ ...deployment });
+            }}
             value={value}
             i18n={i18n}
           />

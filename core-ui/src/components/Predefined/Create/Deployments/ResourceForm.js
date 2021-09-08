@@ -108,7 +108,9 @@ export function ResourceForm({
     });
 
   let editor = <Editor resource={resource} setResource={setResource} />;
-  editor = renderEditor ? renderEditor({ defaultEditor: editor }) : editor;
+  editor = renderEditor
+    ? renderEditor({ defaultEditor: editor, Editor })
+    : editor;
 
   return (
     <div className="create-form">
