@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import LuigiClient from '@luigi-project/client';
 
 import { usePost, useNotification } from 'react-shared';
@@ -12,6 +13,7 @@ import { SimpleForm } from './SimpleForm';
 import { AdvancedForm } from './AdvancedForm';
 
 export function CreateDNSEntryForm({ namespaceId, formElementRef, onChange }) {
+  const { t } = useTranslation();
   const notification = useNotification();
   const postRequest = usePost();
   const [dnsEntry, setDNSEntry] = useState(createDNSEntryTemplate(namespaceId));
@@ -23,7 +25,7 @@ export function CreateDNSEntryForm({ namespaceId, formElementRef, onChange }) {
         dnsEntryToYaml(dnsEntry),
       );
       notification.notifySuccess({
-        content: 'DNS Entry created',
+        content: t('dnsentries.messages.created'),
       });
       LuigiClient.linkManager()
         .fromContext('namespace')
@@ -31,7 +33,7 @@ export function CreateDNSEntryForm({ namespaceId, formElementRef, onChange }) {
     } catch (e) {
       console.error(e);
       notification.notifyError({
-        content: 'Cannot create DNS Entry:' + e.message,
+        content: t('dnsentries.messages.cannot-create') + e.message,
       });
       return false;
     }
