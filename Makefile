@@ -66,7 +66,6 @@ ifeq ($(JOB_TYPE), postsubmit)
 else
 	@echo "Image signing skipped"
 endif
-
 	docker tag $(LOCAL_IMG_NAME) $(LOCAL_IMG):latest
 	docker push $(LOCAL_IMG):latest
 	cosign version
