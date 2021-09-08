@@ -72,6 +72,7 @@ export const handleRequest = async (req, res) => {
   req.pipe(k8sRequest);
 
   function throwInternalServerError(originalError) {
+    console.error('Target k8s API Server:', targetApiServer);
     console.error(
       'Throwing an Internal server error with reason:',
       originalError,
