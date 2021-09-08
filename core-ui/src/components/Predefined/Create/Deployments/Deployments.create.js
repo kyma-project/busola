@@ -1,10 +1,11 @@
 import React from 'react';
 import { LabelsInput } from 'components/Lambdas/components';
 import { useTranslation } from 'react-i18next';
-import { K8sNameInput } from 'react-shared';
+import { K8sNameInput, usePost } from 'react-shared';
 import { ResourceForm } from './ResourceForm';
 import { Button, FormFieldset, FormItem, FormLabel } from 'fundamental-react';
 import * as jp from 'jsonpath';
+import './AdvancedForm.scss';
 
 function createContainerTemplate() {
   return {
@@ -54,36 +55,33 @@ export function createDeploymentTemplate(namespaceId) {
 }
 
 export function DeploymentsCreate({ formElementRef, namespace, onChange }) {
+  const postRequest = usePost();
   const { t, i18n } = useTranslation();
 
   const [deployment, setDeployment] = React.useState(
     createDeploymentTemplate(namespace),
   );
 
-  const createDeployment = async () => {
-    console.log('create');
-  };
-
-  // React.useEffect(() => {
-  //   if (deployment?.metadata?.name) {
-  //     jp.value(
-  //       deployment,
-  //       '$.spec.selector.matchLabels.app',
-  //       deployment.metadata.name,
-  //     );
-  //   }
-  // }, [deployment]);
+  const renderEditor = ({ defaultEditor }) => (
+    <>
+      <FormLabel>Deployment</FormLabel>
+      {defaultEditor}
+      <FormLabel>Service</FormLabel>
+      <p>service editor</p>
+    </>
+  );
 
   return (
     <ResourceForm
       kind="Deployment"
-      apiGroup="/api/v1/namespaces"
       resource={deployment}
       setResource={setDeployment}
-      onCreate={createDeployment}
       onChange={onChange}
       formElementRef={formElementRef}
-      namespaceId={namespace}
+      createFn={async () =>
+        postRequest(`/api/v1/namespaces/${namespace}/deployments/`, deployment)
+      }
+      renderEditor={renderEditor}
     >
       <ResourceForm.FormField
         required
@@ -97,6 +95,7 @@ export function DeploymentsCreate({ formElementRef, namespace, onChange }) {
             showLabel={false}
             onChange={e => setValue(e.target.value)}
             value={value}
+            i18n={i18n}
           />
         )}
       />
@@ -195,99 +194,99 @@ function Containers({ containers, setContainers }) {
   };
 
   return containers.map((container, i) => (
-    <React.Fragment key={i}>
-      <ResourceForm.CollapsibleSection
-        title={container.name || 'Container ' + (i + 1)}
-        actions={
-          <Button glyph="delete" compact onClick={() => removeContainer(i)} />
-        }
-      >
-        <ResourceForm.FormField
-          label="Name"
-          value={container.name}
-          setValue={name => {
-            container.name = name;
-            setContainers([...containers]);
-          }}
-          required
-          input={(value, onChange) => (
-            <ResourceForm.Input required value={value} setValue={onChange} />
-          )}
-        />
-        <ResourceForm.FormField
-          label="Image"
-          value={container.image}
-          setValue={image => {
-            container.image = image;
-            setContainers([...containers]);
-          }}
-          required
-          input={(value, onChange) => (
-            <ResourceForm.Input required value={value} setValue={onChange} />
-          )}
-        />
+    <ResourceForm.CollapsibleSection
+      key={i}
+      title={container.name || 'Container ' + (i + 1)}
+      actions={
+        <Button glyph="delete" compact onClick={() => removeContainer(i)} />
+      }
+    >
+      <ResourceForm.FormField
+        label="Name"
+        value={container.name}
+        setValue={name => {
+          container.name = name;
+          setContainers([...containers]);
+        }}
+        required
+        input={(value, onChange) => (
+          <ResourceForm.Input required value={value} setValue={onChange} />
+        )}
+      />
+      <ResourceForm.FormField
+        label="Image"
+        value={container.image}
+        setValue={image => {
+          container.image = image;
+          setContainers([...containers]);
+        }}
+        required
+        input={(value, onChange) => (
+          <ResourceForm.Input required value={value} setValue={onChange} />
+        )}
+        className="fd-margin-bottom--md"
+      />
 
-        <ResourceForm.CollapsibleSection
-          title={t('deployments.create-modal.advanced.runtime-profile')}
-        >
-          <FormFieldset className="runtime-profile-form">
-            <FormItem>
-              <FormLabel required>
-                {t('deployments.create-modal.advanced.memory-requests')}
-              </FormLabel>
-              <ResourceForm.Input
-                required
-                value={jp.value(container, '$.resources.requests.memory') || ''}
-                setValue={memory => {
-                  jp.value(container, '$.resources.requests.memory', memory);
-                  setContainers([...containers]);
-                }}
-              />
-            </FormItem>
-            <FormItem>
-              <FormLabel required>
-                {t('deployments.create-modal.advanced.memory-limits')}
-              </FormLabel>
-              <ResourceForm.Input
-                required
-                value={jp.value(container, '$.resources.limits.memory') || ''}
-                setValue={memory => {
-                  jp.value(container, '$.resources.limits.memory', memory);
-                  setContainers([...containers]);
-                }}
-              />
-            </FormItem>
-          </FormFieldset>
-          <FormFieldset className="runtime-profile-form">
-            <FormItem>
-              <FormLabel required>
-                {t('deployments.create-modal.advanced.cpu-requests')}
-              </FormLabel>
-              <ResourceForm.Input
-                required
-                value={jp.value(container, '$.resources.requests.cpu') || ''}
-                setValue={cpu => {
-                  jp.value(container, '$.resources.requests.cpu', cpu);
-                  setContainers([...containers]);
-                }}
-              />
-            </FormItem>
-            <FormItem>
-              <FormLabel required>
-                {t('deployments.create-modal.advanced.cpu-limits')}
-              </FormLabel>
-              <ResourceForm.Input
-                required
-                value={jp.value(container, '$.resources.limits.cpu') || ''}
-                setValue={cpu => {
-                  jp.value(container, '$.resources.limits.cpu', cpu);
-                  setContainers([...containers]);
-                }}
-              />
-            </FormItem>
-          </FormFieldset>
-        </ResourceForm.CollapsibleSection>
+      <ResourceForm.CollapsibleSection
+        title={t('deployments.create-modal.advanced.runtime-profile')}
+      >
+        <FormFieldset className="runtime-profile-form">
+          <FormItem>
+            <FormLabel required>
+              {t('deployments.create-modal.advanced.memory-requests')}
+            </FormLabel>
+            <ResourceForm.Input
+              required
+              value={jp.value(container, '$.resources.requests.memory') || ''}
+              setValue={memory => {
+                jp.value(container, '$.resources.requests.memory', memory);
+                setContainers([...containers]);
+              }}
+            />
+          </FormItem>
+          <FormItem>
+            <FormLabel required>
+              {t('deployments.create-modal.advanced.memory-limits')}
+            </FormLabel>
+            <ResourceForm.Input
+              required
+              value={jp.value(container, '$.resources.limits.memory') || ''}
+              setValue={memory => {
+                jp.value(container, '$.resources.limits.memory', memory);
+                setContainers([...containers]);
+              }}
+            />
+          </FormItem>
+        </FormFieldset>
+        <FormFieldset className="runtime-profile-form">
+          <FormItem>
+            <FormLabel required>
+              {t('deployments.create-modal.advanced.cpu-requests')}
+            </FormLabel>
+            <ResourceForm.Input
+              required
+              value={jp.value(container, '$.resources.requests.cpu') || ''}
+              setValue={cpu => {
+                jp.value(container, '$.resources.requests.cpu', cpu);
+                setContainers([...containers]);
+              }}
+            />
+          </FormItem>
+          <FormItem>
+            <FormLabel required>
+              {t('deployments.create-modal.advanced.cpu-limits')}
+            </FormLabel>
+            <ResourceForm.Input
+              required
+              value={jp.value(container, '$.resources.limits.cpu') || ''}
+              setValue={cpu => {
+                jp.value(container, '$.resources.limits.cpu', cpu);
+                setContainers([...containers]);
+              }}
+            />
+          </FormItem>
+        </FormFieldset>
       </ResourceForm.CollapsibleSection>
-    </React.Fragment>
+    </ResourceForm.CollapsibleSection>
   ));
 }

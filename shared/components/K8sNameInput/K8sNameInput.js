@@ -40,7 +40,7 @@ export const K8sNameInput = ({
       type="text"
       id={id}
       defaultValue={defaultValue}
-      placeholder={t('components.k8s-name-input.placeholder', {
+      placeholder={i18n.t('components.k8s-name-input.placeholder', {
         resourceType: kind,
       })}
       aria-required={required ? 'true' : 'false'}

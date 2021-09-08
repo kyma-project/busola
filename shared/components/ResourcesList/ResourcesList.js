@@ -2,11 +2,8 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import jsyaml from 'js-yaml';
 import {
-  FormFieldset,
-  FormItem,
   Link,
   Button,
-  Dialog,
   Checkbox,
   MessageBox,
   MessageStrip,
@@ -273,7 +270,7 @@ function Resources({
         }
         confirmText={t('common.buttons.create')}
         id={`add-${resourceType}-modal`}
-        className="fd-dialog--xl-size modal-width--m"
+        className="fd-dialog--xl-size modal-width--m create-resource-modal"
         renderForm={props => (
           <CreateResourceForm
             resourceType={resourceType}

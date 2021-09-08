@@ -1,7 +1,7 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { FormInput, FormLabel } from 'fundamental-react';
-import { Tooltip, usePost, useNotification } from 'react-shared';
+import { Tooltip, useNotification } from 'react-shared';
 import classnames from 'classnames';
 import { CollapsibleSection2 } from 'shared/components/CreateForm/CollapsibleSection/CollapsibleSection';
 import * as jp from 'jsonpath';
@@ -61,20 +61,16 @@ export function ResourceForm({
   onChange,
   formElementRef,
   children,
-  apiGroup,
-  namespaceId,
+  renderEditor,
+  createFn,
 }) {
-  const postRequest = usePost();
   const notification = useNotification();
   const [mode, setMode] = React.useState(ModeSelector.MODE_SIMPLE);
 
   if (!onCreate) {
     onCreate = async () => {
       try {
-        await postRequest(
-          `${apiGroup}/${namespaceId}/${pluralize(kind)}/`,
-          resource,
-        );
+        await createFn();
         notification.notifySuccess({
           content: kind + 'created',
         });
@@ -111,6 +107,9 @@ export function ResourceForm({
       });
     });
 
+  let editor = <Editor resource={resource} setResource={setResource} />;
+  editor = renderEditor ? renderEditor({ defaultEditor: editor }) : editor;
+
   return (
     <div className="create-form">
       <ModeSelector mode={mode} setMode={setMode} />
@@ -119,11 +118,7 @@ export function ResourceForm({
           {renderFormChildren(children, false)}
         </div>
       )}
-      {mode === ModeSelector.MODE_YAML && (
-        <>
-          <Editor resource={resource} setResource={setResource} />
-        </>
-      )}
+      {mode === ModeSelector.MODE_YAML && editor}
       {/* always keep the advanced form to ensure validation */}
       <form
         className={classnames('advanced-form', {
