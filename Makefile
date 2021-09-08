@@ -16,6 +16,7 @@ validate:
 	# npm run conflict-check
 	npm run lint-check
 	npm run test-shared-lib
+	cosign version
 	# npm run markdownlint
 
 .PHONY: validate-libraries
