@@ -20,7 +20,7 @@ ResourceForm.Label = ({ required, tooltipContent, children }) => {
   }
 };
 
-ResourceForm.Input = ({ value, setValue, required, props }) => (
+ResourceForm.Input = ({ value, setValue, required, ...props }) => (
   <FormInput
     compact
     required={required}
@@ -113,7 +113,7 @@ export function ResourceForm({
     : editor;
 
   return (
-    <div className="create-form">
+    <form className="create-form" ref={formElementRef} onSubmit={onCreate}>
       <ModeSelector mode={mode} setMode={setMode} />
       {mode === ModeSelector.MODE_SIMPLE && (
         <div onChange={onChange} className="simple-form">
@@ -122,16 +122,14 @@ export function ResourceForm({
       )}
       {mode === ModeSelector.MODE_YAML && editor}
       {/* always keep the advanced form to ensure validation */}
-      <form
+      <div
         className={classnames('advanced-form', {
           hidden: mode !== ModeSelector.MODE_ADVANCED,
         })}
         onChange={onChange}
-        ref={formElementRef}
-        onSubmit={onCreate}
       >
         {renderFormChildren(children, true)}
-      </form>
-    </div>
+      </div>
+    </form>
   );
 }

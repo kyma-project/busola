@@ -6,6 +6,7 @@ import { ResourceForm } from './ResourceForm';
 import { Button, FormFieldset, FormItem, FormLabel } from 'fundamental-react';
 import * as jp from 'jsonpath';
 import './AdvancedForm.scss';
+import './Deployments.create.scss';
 
 function createContainerTemplate() {
   return {
@@ -63,12 +64,14 @@ export function DeploymentsCreate({ formElementRef, namespace, onChange }) {
   );
 
   const renderEditor = ({ defaultEditor, Editor }) => (
-    <>
-      <FormLabel>Deployment</FormLabel>
-      {defaultEditor}
-      <FormLabel>Service</FormLabel>
-      <Editor resource={deployment} setResource={setDeployment} />
-    </>
+    <div className="double-editor">
+      <ResourceForm.CollapsibleSection title="Deployment" defaultOpen>
+        {defaultEditor}
+      </ResourceForm.CollapsibleSection>
+      <ResourceForm.CollapsibleSection title="Service">
+        <Editor resource={deployment} setResource={setDeployment} />
+      </ResourceForm.CollapsibleSection>
+    </div>
   );
 
   return (
@@ -79,7 +82,10 @@ export function DeploymentsCreate({ formElementRef, namespace, onChange }) {
       onChange={onChange}
       formElementRef={formElementRef}
       createFn={async () =>
-        postRequest(`/api/v1/namespaces/${namespace}/deployments/`, deployment)
+        postRequest(
+          `/apis/apps/v1/namespaces/${namespace}/deployments/`,
+          deployment,
+        )
       }
       renderEditor={renderEditor}
     >
@@ -96,6 +102,11 @@ export function DeploymentsCreate({ formElementRef, namespace, onChange }) {
             onChange={e => {
               const name = e.target.value;
               jp.value(deployment, '$.metadata.name', name);
+              jp.value(
+                deployment,
+                '$.spec.template.spec.containers[0].name',
+                name,
+              );
               jp.value(deployment, '$.spec.selector.matchLabels.app', name); // match labels
               jp.value(deployment, `$.spec.template.metadata.labels.app`, name); // pod labels
               setDeployment({ ...deployment });
@@ -147,7 +158,14 @@ export function DeploymentsCreate({ formElementRef, namespace, onChange }) {
         yamlPath="$.spec.template.spec.containers[0].image"
         label="Docker image"
         input={(value, setValue) => (
-          <ResourceForm.Input required setValue={setValue} value={value} />
+          <ResourceForm.Input
+            required
+            setValue={setValue}
+            value={value}
+            placeholder={t(
+              'deployments.create-modal.simple.docker-image-placeholder',
+            )}
+          />
         )}
       />
       <ResourceForm.CollapsibleSection

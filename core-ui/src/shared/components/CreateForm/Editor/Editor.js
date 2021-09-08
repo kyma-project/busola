@@ -41,7 +41,6 @@ export function Editor({ resource, setResource }) {
   return (
     <div className="create-form__editor">
       <ControlledEditor
-        height="100%"
         language="yaml"
         theme={editorTheme}
         value={textResource.current}

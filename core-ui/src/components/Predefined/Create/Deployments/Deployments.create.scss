@@ -1,0 +1,11 @@
+.double-editor {
+  --fixed-width: 200px;
+
+  .content {
+    height: var(--fixed-width);
+
+    & > * {
+      height: var(--fixed-width);
+    }
+  }
+}
