@@ -16,7 +16,6 @@ validate:
 	# npm run conflict-check
 	npm run lint-check
 	npm run test-shared-lib
-	cosign version
 	# npm run markdownlint
 
 .PHONY: validate-libraries
@@ -49,6 +48,7 @@ build-image-local:
 push-image:
 	docker tag $(IMG_NAME) $(IMG):$(TAG)
 	docker push $(IMG):$(TAG)
+	cosign version
 ifeq ($(JOB_TYPE), postsubmit)
 	@echo "Sign image with Cosign"
 	cosign version
