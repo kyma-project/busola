@@ -9,8 +9,9 @@ var logger = require('pino-http')({
       Object.keys(req.raw).forEach(k => {
         if (k.startsWith('headers')) {
           req[k] = req.raw[k];
-          req[k]['authorization'] = '';
-          req[k]['x-cluster-certificate-authority-data'] = '';
+          // removes it also from request data
+          // req[k]['authorization'] = '';
+          // req[k]['x-cluster-certificate-authority-data'] = '';
         }
       });
       return req;
