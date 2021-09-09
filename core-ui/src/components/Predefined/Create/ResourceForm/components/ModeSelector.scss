@@ -1,0 +1,11 @@
+.mode-selector > .fd-segmented-button {
+    display: flex;
+    justify-content: space-between;
+  
+    & > button {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+  }
+  

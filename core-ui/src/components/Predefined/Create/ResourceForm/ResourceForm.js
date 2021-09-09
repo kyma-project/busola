@@ -1,59 +1,18 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
-import { FormInput, FormLabel } from 'fundamental-react';
-import { Tooltip, useNotification } from 'react-shared';
-import classnames from 'classnames';
-import { CollapsibleSection2 } from 'shared/components/CreateForm/CollapsibleSection/CollapsibleSection';
+import { useNotification } from 'react-shared';
 import * as jp from 'jsonpath';
 import pluralize from 'pluralize';
-import { ModeSelector } from 'shared/components/CreateForm/ModeSelector/ModeSelector';
-import { Editor } from 'shared/components/CreateForm/Editor/Editor';
-import 'shared/components/CreateForm/CreateForm.scss';
+import { ModeSelector } from './components/ModeSelector';
+import { Editor } from './components/Editor';
+import { Presets } from './components/Presets';
+import * as FormComponents from './components/FormComponents';
 import './ResourceForm.scss';
-import { Presets } from 'shared/components/CreateForm/Presets';
 
-ResourceForm.Label = ({ required, tooltipContent, children }) => {
-  const label = <FormLabel required={required}>{children}</FormLabel>;
-
-  if (tooltipContent) {
-    return <Tooltip content={tooltipContent}>{label}</Tooltip>;
-  } else {
-    return label;
-  }
-};
-
-ResourceForm.Input = ({ value, setValue, required, ...props }) => (
-  <FormInput
-    compact
-    required={required}
-    value={value}
-    onChange={e => setValue(e.target.value)}
-    {...props}
-  />
-);
-
-ResourceForm.CollapsibleSection = CollapsibleSection2;
-
-ResourceForm.FormField = function({
-  label,
-  input,
-  className,
-  required,
-  tooltipContent,
-  value,
-  setValue,
-}) {
-  return (
-    <div className={classnames('fd-row form-field', className)}>
-      <div className="fd-col fd-col-md--4 form-field__label">
-        <ResourceForm.Label required={required} tooltipContent={tooltipContent}>
-          {label}
-        </ResourceForm.Label>
-      </div>
-      <div className="fd-col fd-col-md--7">{input(value, setValue)}</div>
-    </div>
-  );
-};
+ResourceForm.Label = FormComponents.Label;
+ResourceForm.Input = FormComponents.Input;
+ResourceForm.CollapsibleSection = FormComponents.CollapsibleSection;
+ResourceForm.FormField = FormComponents.FormField;
 
 export function ResourceForm({
   kind,

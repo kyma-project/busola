@@ -5,22 +5,30 @@ import { MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import './Editor.scss';
 
-export function Editor({ resource, setResource }) {
+export function Editor({ resource, setResource, readonly }) {
   const { t } = useTranslation();
   const [error, setError] = React.useState('');
   const { editorTheme } = useTheme();
   // don't useState, as it's value needs to be referenced in onEditorBlur
   // using useState value in onEditorBlur results in stale closure
   const textResource = React.useRef(jsyaml.dump(resource, { noRefs: true }));
+  const isEditing = React.useRef(false);
 
   React.useEffect(() => {
-    textResource.current = jsyaml.dump(resource, { noRefs: true });
+    if (!isEditing.current) {
+      textResource.current = jsyaml.dump(resource, { noRefs: true });
+    }
   }, [resource]);
 
   const handleChange = (_, text) => {
     textResource.current = text;
     try {
-      jsyaml.load(text);
+      const parsed = jsyaml.load(text);
+      if (typeof parsed !== 'object' || !parsed) {
+        setError('An object is required');
+        return;
+      }
+      setResource(parsed);
       setError(null);
     } catch ({ message }) {
       // get the message until the newline
@@ -28,27 +36,25 @@ export function Editor({ resource, setResource }) {
     }
   };
 
-  const onEditorBlur = () => {
-    let parsed;
-    try {
-      parsed = jsyaml.load(textResource.current);
-    } catch (_) {}
-    if (parsed) {
-      setResource(parsed);
-    }
+  const options = {
+    readOnly: readonly,
+    minimap: {
+      enabled: false,
+    },
   };
 
   return (
     <div className="create-form__editor">
       <ControlledEditor
-        height="100%"
         language="yaml"
         theme={editorTheme}
         value={textResource.current}
         onChange={handleChange}
-        editorDidMount={(_, editor) =>
-          editor.onDidBlurEditorWidget(onEditorBlur)
-        }
+        editorDidMount={(_, editor) => {
+          editor.onDidFocusEditorText(() => (isEditing.current = true));
+          editor.onDidBlurEditorText(() => (isEditing.current = false));
+        }}
+        options={options}
       />
       {error && (
         <div className="create-form__editor__error">

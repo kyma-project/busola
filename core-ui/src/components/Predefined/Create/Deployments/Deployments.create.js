@@ -3,7 +3,7 @@ import LuigiClient from '@luigi-project/client';
 import { LabelsInput } from 'components/Lambdas/components';
 import { useTranslation } from 'react-i18next';
 import { K8sNameInput, usePost, useNotification } from 'react-shared';
-import { ResourceForm } from './ResourceForm';
+import { ResourceForm } from './../ResourceForm/ResourceForm';
 import {
   Button,
   FormFieldset,
@@ -46,7 +46,7 @@ export function DeploymentsCreate({
     ).length;
 
     setCustomValid(hasAnyContainers);
-  }, [deployment]);
+  }, [deployment, setCustomValid]);
 
   const serviceActions = (
     <Checkbox
