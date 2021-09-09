@@ -445,7 +445,7 @@ dnsentries:
   placeholders:
     targets: Target records (CNAME or A records), one per line
     text: Text records, one per line
-    ttl: Enter time to live
+    ttl: Enter the time to live.
     dns-name: Enter DNS Name
   headers:
     dns-name: DNS Name
@@ -468,7 +468,7 @@ dnsproviders:
   placeholders:
     provider-type: Choose Provider Type
     include-domains: Domains that should be observed, one per line
-    default-ttl: Enter default time to live"
+    default-ttl: Enter the default time to live.
     exclude-domains: Domains that should be ignored, one per line
   domains: Domains
   headers:
