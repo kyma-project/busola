@@ -55,7 +55,7 @@ export default function DeployNewWorkload({ namespaceName }) {
   const deploymentModal = (
     <ModalWithForm
       title="Create Deployment"
-      confirmText="Create"
+      confirmText={t('common.buttons.create')}
       className="add-deployment-modal fd-dialog--xl-size modal-size--l"
       modalOpeningComponent={<Menu.Item>Create Deployment</Menu.Item>}
       renderForm={props => (

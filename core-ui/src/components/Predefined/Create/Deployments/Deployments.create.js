@@ -15,6 +15,7 @@ import {
   createServiceTemplate,
 } from './templates';
 import { Containers } from './Containers';
+import pluralize from 'pluralize';
 
 export function DeploymentsCreate({
   formElementRef,
@@ -55,10 +56,16 @@ export function DeploymentsCreate({
 
   const renderEditor = ({ defaultEditor, Editor }) => (
     <div className="double-editor">
-      <ResourceForm.CollapsibleSection title="Deployment" defaultOpen>
+      <ResourceForm.CollapsibleSection
+        title={t('deployments.name_singular')}
+        defaultOpen
+      >
         {defaultEditor}
       </ResourceForm.CollapsibleSection>
-      <ResourceForm.CollapsibleSection title="Service" actions={serviceActions}>
+      <ResourceForm.CollapsibleSection
+        title={t('services.name_singular')}
+        actions={serviceActions}
+      >
         <Editor
           resource={service}
           setResource={setService}
@@ -90,7 +97,9 @@ export function DeploymentsCreate({
       console.error(e);
       notification.notifyError({
         title: t('deployments.create-modal.messages.failure'),
-        content: e.message,
+        content: t('common.buttons.create-form.messages.failure', {
+          resourceType: t('deployments.name_singular'),
+        }),
       });
       return false;
     }
@@ -99,7 +108,9 @@ export function DeploymentsCreate({
         await postRequest(`/api/v1/namespaces/${namespace}/services`, service);
       }
       notification.notifySuccess({
-        content: t('deployments.create-modal.messages.success'),
+        content: t('common.buttons.create-form.messages.success', {
+          resourceType: t('deployments.name_singular'),
+        }),
       });
       LuigiClient.linkManager()
         .fromContext('namespace')
@@ -115,7 +126,7 @@ export function DeploymentsCreate({
 
   return (
     <ResourceForm
-      kind="deployment"
+      pluralKind="deployments"
       resource={deployment}
       setResource={setDeployment}
       onChange={onChange}
@@ -123,7 +134,7 @@ export function DeploymentsCreate({
       onCreate={onCreate}
       renderEditor={renderEditor}
       presets={createPresets(namespace, t)}
-      onPresetSelected={({ value }) => {
+      onPresetSelected={value => {
         setDeployment(value.deployment);
         setCreateService(!!value.service);
         if (value.service) {
@@ -151,7 +162,7 @@ export function DeploymentsCreate({
         required
         simple
         propertyPath="$.spec.template.spec.containers[0].image"
-        label="Docker image"
+        label={t('deployments.create-modal.simple.docker-image')}
         input={(value, setValue) => (
           <ResourceForm.Input
             required

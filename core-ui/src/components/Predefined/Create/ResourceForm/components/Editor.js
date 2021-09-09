@@ -25,7 +25,7 @@ export function Editor({ resource, setResource, readonly }) {
     try {
       const parsed = jsyaml.load(text);
       if (typeof parsed !== 'object' || !parsed) {
-        setError('An object is required');
+        setError(t('common.create-form.object-required'));
         return;
       }
       setResource(parsed);

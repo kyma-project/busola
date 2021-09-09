@@ -16,7 +16,7 @@ function SingleContainerSection({ container, containers, setContainers }) {
   return (
     <>
       <ResourceForm.FormField
-        label="Name"
+        label={t('common.headers.name')}
         value={container.name}
         setValue={name => {
           container.name = name;
@@ -28,7 +28,7 @@ function SingleContainerSection({ container, containers, setContainers }) {
         )}
       />
       <ResourceForm.FormField
-        label="Image"
+        label={t('deployments.create-modal.simple.docker-image')}
         value={container.image}
         setValue={image => {
           container.image = image;
@@ -119,7 +119,7 @@ export function Containers({ value: containers, setValue: setContainers }) {
   if (!containers.length) {
     return (
       <MessageStrip type="warning">
-        At least one container is required.
+        {t('deployments.create-modal.advanced.one-container-required')}
       </MessageStrip>
     );
   }
@@ -137,7 +137,9 @@ export function Containers({ value: containers, setValue: setContainers }) {
   return containers.map((container, i) => (
     <ResourceForm.CollapsibleSection
       key={i}
-      title={'Container ' + (container.name || i + 1)}
+      title={t('deployments.create-modal.advanced.container-header', {
+        name: container.name || i + 1,
+      })}
       actions={
         <Button
           glyph="delete"

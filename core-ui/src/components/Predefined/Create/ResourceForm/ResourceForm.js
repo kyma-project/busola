@@ -1,8 +1,8 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { useNotification } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
-import pluralize from 'pluralize';
 import { ModeSelector } from './components/ModeSelector';
 import { Editor } from './components/Editor';
 import { Presets } from './components/Presets';
@@ -15,7 +15,7 @@ ResourceForm.CollapsibleSection = FormComponents.CollapsibleSection;
 ResourceForm.FormField = FormComponents.FormField;
 
 export function ResourceForm({
-  kind,
+  pluralKind,
   resource,
   setResource,
   onCreate,
@@ -28,22 +28,28 @@ export function ResourceForm({
   onPresetSelected,
 }) {
   const notification = useNotification();
+  const { t } = useTranslation();
   const [mode, setMode] = React.useState(ModeSelector.MODE_SIMPLE);
 
   if (!onCreate) {
     onCreate = async () => {
+      const kindTranslation = t(`${pluralKind}.name_singular`);
       try {
         await createFn();
         notification.notifySuccess({
-          content: kind + 'created',
+          content: t('common.buttons.create-form.messages.success', {
+            resourceType: kindTranslation,
+          }),
         });
         LuigiClient.linkManager()
           .fromContext('namespace')
-          .navigate(`/${pluralize(kind)}/details/${resource.metadata.name}`);
+          .navigate(`/${pluralKind}/details/${resource.metadata.name}`);
       } catch (e) {
         console.error(e);
         notification.notifyError({
-          content: 'cannot create' + kind + ': ' + e.message,
+          content: t('common.buttons.create-form.messages.failure', {
+            resourceType: kindTranslation,
+          }),
         });
         return false;
       }

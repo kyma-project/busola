@@ -62,7 +62,7 @@ applications:
     select-all: Select all
   headers:
     apis: APIs
-    description: Descritpion
+    description: Description
     events: Events
     service-and-event: Service and Event Bindings
   labels:
@@ -241,7 +241,7 @@ common:
     update: Update
   create-form:
     choose-preset: Select a Preset
-    delete-confirm: Don't ask this again.
+    object-required: 'An object is required'
     editor-error: 'Parse error: {{error}}, previous valid input will be used.'
     messages:
       failure: Failed to create the {{resourceType}}.
@@ -408,6 +408,7 @@ daemon-sets:
     title: Tolerations
     toleration-seconds: Seconds
 deployments:
+  name_singular: Deployment
   create-modal:
     advanced:
       cpu-limits: CPU Limits
@@ -420,10 +421,10 @@ deployments:
       runtime-profile: Runtime Profile
       target-port: Target Port
       target-port-placeholder: Enter the target port of the container.
+      one-container-required: At least one container is required.
+      container-header: Container {{name}}
     messages:
       deployment-ok-service-bad: Deployment created, failed to create the Service.
-      failure: Failed to create the Deployment.
-      success: Deployment created.
     presets:
       default: Default
     simple:
@@ -943,6 +944,7 @@ secrets:
 service-management:
   title: Service Management
 services:
+  name_singular: Service
   cluster-ip: Cluster IP
   external-ips: External IPs
   labels:

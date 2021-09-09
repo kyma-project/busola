@@ -132,7 +132,7 @@ export const ModalWithForm = ({
         onClick={handleFormSubmit}
         option="emphasized"
       >
-        {t(confirmText)}
+        {confirmText}
       </Button>
     );
 
