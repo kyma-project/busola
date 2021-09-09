@@ -72,8 +72,8 @@ const CustomResources = ({ resource, namespace, version, i18n }) => {
   return <ComponentForList name={name} params={params} />;
 };
 
-const AdditionalPrinterColumns = ({ version, i18n }) => {
-  const { t } = useTranslation();
+const AdditionalPrinterColumns = ({ additionalPrinterColumns }) => {
+  const { t, i18n } = useTranslation();
 
   const headerRenderer = () => [
     t('common.headers.name'),
@@ -91,7 +91,7 @@ const AdditionalPrinterColumns = ({ version, i18n }) => {
   return (
     <GenericList
       title={t('custom-resource-definitions.subtitle.additional-columns')}
-      entries={version.additionalPrinterColumns || []}
+      entries={additionalPrinterColumns}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       testid="crd-additional-printer-columns"
@@ -143,8 +143,7 @@ export const CustomResourceDefinitionVersions = resource => {
             i18n={i18n}
           />
           <AdditionalPrinterColumns
-            version={version.additionalPrinterColumns}
-            i18n={i18n}
+            additionalPrinterColumns={version?.additionalPrinterColumns || []}
           />
           {version.schema && (
             <LayoutPanel
