@@ -39,17 +39,19 @@ export function ResourceForm({
       try {
         await createFn();
         notification.notifySuccess({
-          content: t('common.buttons.create-form.messages.success', {
+          content: t('common.create-form.messages.success', {
             resourceType: kindTranslation,
           }),
         });
         LuigiClient.linkManager()
           .fromContext('namespace')
-          .navigate(`/${pluralKind}/details/${resource.metadata.name}`);
+          .navigate(
+            `/${pluralKind.toLowerCase()}/details/${resource.metadata.name}`,
+          );
       } catch (e) {
         console.error(e);
         notification.notifyError({
-          content: t('common.buttons.create-form.messages.failure', {
+          content: t('common.create-form.messages.failure', {
             resourceType: kindTranslation,
           }),
         });

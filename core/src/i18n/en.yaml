@@ -461,11 +461,13 @@ dnsentries:
     cannot-create: 'Failed to create the DNS Entry:'
   title: DNS Entries
 dnsproviders:
+  name_singular: DNS Provider
   labels:
     exclude-domains: Exclude Domains
     default-ttl: Default TTL
     secret-reference: Secret Reference
     include-domains: Include Domains
+    type: Type
   placeholders:
     provider-type: Choose Provider Type
     include-domains: Domains that should be observed, one per line

@@ -96,7 +96,7 @@ export function DeploymentsCreate({
       console.error(e);
       notification.notifyError({
         title: t('deployments.create-modal.messages.failure'),
-        content: t('common.buttons.create-form.messages.failure', {
+        content: t('common.create-form.messages.failure', {
           resourceType: t('deployments.name_singular'),
         }),
       });
@@ -107,7 +107,7 @@ export function DeploymentsCreate({
         await postRequest(`/api/v1/namespaces/${namespace}/services`, service);
       }
       notification.notifySuccess({
-        content: t('common.buttons.create-form.messages.success', {
+        content: t('common.create-form.messages.success', {
           resourceType: t('deployments.name_singular'),
         }),
       });

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { postRequest } from 'react-shared';
+import { usePost } from 'react-shared';
 import { ResourceForm } from '../ResourceForm/ResourceForm';
 import { createDNSProviderTemplate } from './templates';
 import { K8sNameInput } from 'react-shared';
@@ -12,6 +12,7 @@ export function DNSProvidersCreate({ formElementRef, namespace, onChange }) {
   const [dnsProvider, setDNSProvider] = React.useState(
     createDNSProviderTemplate(namespace),
   );
+  const postRequest = usePost();
   const { t, i18n } = useTranslation();
 
   return (
@@ -34,7 +35,7 @@ export function DNSProvidersCreate({ formElementRef, namespace, onChange }) {
         label={t('common.labels.name')}
         input={(value, setValue) => (
           <K8sNameInput
-            kind={t('dnsProviders.name_plural')}
+            kind={t('dnsproviders.name_singular')}
             compact
             required
             showLabel={false}
@@ -75,7 +76,7 @@ export function DNSProvidersCreate({ formElementRef, namespace, onChange }) {
       />
       <ResourceForm.FormField
         propertyPath="$.spec.secretRef"
-        label={'secret ref'}
+        label={t('dnsproviders.labels.secret-reference')}
         input={(value, setValue) => (
           <SecretRef
             id="secret-ref-input"
@@ -85,22 +86,22 @@ export function DNSProvidersCreate({ formElementRef, namespace, onChange }) {
         )}
       />
       <ResourceForm.FormField
-        propertyPath="$.type"
-        label={'todo'}
+        propertyPath="$.spec.type"
+        label={t('dnsproviders.labels.type')}
         input={(value, setValue) => (
           <ProviderTypeDropdown type={value} setType={setValue} />
         )}
       />
       <ResourceForm.TextArea
-        propertyPath="$.domains.include"
-        label={'todo'}
-        placeholder="Domains that should be observed, one per line"
+        propertyPath="$.spec.domains.include"
+        label={t('dnsproviders.labels.include-domains')}
+        placeholder={t('dnsproviders.placeholders.include-domains')}
       />
       <ResourceForm.TextArea
         advanced
-        propertyPath="$.domains.exclude"
-        label={'todo'}
-        placeholder="Domains that should be ignored, one per line"
+        propertyPath="$.spec.domains.exclude"
+        label={t('dnsproviders.labels.exclude-domains')}
+        placeholder={t('dnsproviders.placeholders.exclude-domains')}
       />
     </ResourceForm>
   );

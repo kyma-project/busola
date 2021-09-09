@@ -152,8 +152,9 @@ export function TextArea({
           compact
           required={required}
           value={value?.join('\n') || ''}
-          onChange={e => setValue(e.target.value.split('\n').filter(d => d))}
+          onChange={e => setValue(e.target.value.split('\n'))}
           className="resize-vertical"
+          onBlur={() => setValue(value.filter(d => d))}
           {...inputProps}
         />
       )}
