@@ -63,9 +63,9 @@ export const GenericList = ({
     setFilteredEntries(
       filterEntries([...entries], searchQuery, textSearchProperties),
     );
-  }, [searchQuery, setFilteredEntries, entries]);
+  }, [searchQuery, setFilteredEntries, entries, setCurrentPage]);
 
-  React.useEffect(() => setCurrentPage(1), [searchQuery]);
+  React.useEffect(() => setCurrentPage(1), [setCurrentPage]);
 
   const headerActions = (
     <>

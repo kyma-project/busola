@@ -29,9 +29,9 @@ export function CustomResource({ params }) {
 
   if (loading) return <Spinner />;
 
+  const versions = data?.spec?.versions;
+  const version = versions?.find(version => version.name === resourceVersion);
   const AdditionalPrinterColumns = resource => {
-    const versions = data?.spec?.versions;
-    const version = versions?.find(version => version.name === resourceVersion);
     const getJsonPath = (resource, jsonPath) => {
       const value =
         jp.value(resource, jsonPath.substring(1)) || EMPTY_TEXT_PLACEHOLDER;
