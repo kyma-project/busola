@@ -3,19 +3,14 @@ const url = require('url');
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
-var logger = require('pino-http')({
+const logger = require('pino-http')({
   serializers: {
-    req(req) {
-      Object.keys(req.raw).forEach(k => {
-        if (k.startsWith('headers')) {
-          req[k] = req.raw[k];
-          // removes it also from request data
-          // req[k]['authorization'] = '';
-          // req[k]['x-cluster-certificate-authority-data'] = '';
-        }
-      });
-      return req;
-    },
+    req: req => ({
+      id: req.id,
+      method: req.method,
+      url: req.url,
+      cluster_url: req.headers['x-cluster-url'],
+    }),
   },
 });
 
