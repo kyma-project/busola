@@ -15,7 +15,7 @@ import {
   createServiceTemplate,
 } from './templates';
 import { Containers } from './Containers';
-import pluralize from 'pluralize';
+import plralize from 'pluralize';
 
 export function DeploymentsCreate({
   formElementRef,

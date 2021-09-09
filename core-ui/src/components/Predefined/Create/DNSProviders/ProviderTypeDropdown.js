@@ -25,6 +25,7 @@ export function ProviderTypeDropdown({ type, setType }) {
       selectedKey={type}
       onSelect={(_, selected) => setType(selected.key)}
       placeholder="Choose Provider Type"
+      fullWidth
     />
   );
 }

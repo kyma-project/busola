@@ -1,11 +1,12 @@
 import React from 'react';
 
-import { FormInput, FormLabel, Icon } from 'fundamental-react';
-import { Tooltip } from 'react-shared';
+import { FormInput, FormLabel, FormTextarea, Icon } from 'fundamental-react';
+import { Tooltip, K8sNameInput } from 'react-shared';
 import classnames from 'classnames';
 import * as jp from 'jsonpath';
 
 import './FormComponents.scss';
+import { useTranslation } from 'react-i18next';
 
 export function CollapsibleSection({
   disabled = false,
@@ -99,5 +100,65 @@ export function FormField({
       </div>
       <div className="fd-col fd-col-md--7">{input(value, setValue)}</div>
     </div>
+  );
+}
+
+// export function ResourceNameField({ kind, value, setValue, inputProps, fieldProps }) {
+//   const { t, i18n } = useTranslation();
+
+//   const onChange = (value, defaultSetValue) =>
+//     setValue ? setValue(value) : defaultSetValue(value);
+//   return (
+//     <FormField
+//       required
+//       propertyPath="$.metadata.name"
+//       label={t('common.labels.name')}
+//       input={(value, defaultSetValue) => {
+//         console.log(value)
+//         return (
+//           <K8sNameInput
+//             kind={kind}
+//             compact
+//             required
+//             showLabel={false}
+//             onChange={e => onChange(e.target.value, defaultSetValue)}
+//             value={value}
+//             i18n={i18n}
+//             {...inputProps}
+//           />
+//         );
+//       }}
+//       {...fieldProps}
+//     />
+//   );
+// }
+
+export function TextArea({
+  value,
+  setValue,
+  label,
+  tooltipContent,
+  required,
+  ...props
+}) {
+  // don't pass those props to textarea element
+  const { advanced, simple, propertyPath, ...inputProps } = props;
+
+  return (
+    <FormField
+      label={label}
+      input={() => (
+        <FormTextarea
+          compact
+          required={required}
+          value={value?.join('\n') || ''}
+          onChange={e => setValue(e.target.value.split('\n').filter(d => d))}
+          className="resize-vertical"
+          {...inputProps}
+        />
+      )}
+      required={required}
+      tooltipContent={tooltipContent}
+    />
   );
 }

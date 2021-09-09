@@ -13,6 +13,8 @@ ResourceForm.Label = FormComponents.Label;
 ResourceForm.Input = FormComponents.Input;
 ResourceForm.CollapsibleSection = FormComponents.CollapsibleSection;
 ResourceForm.FormField = FormComponents.FormField;
+ResourceForm.TextArea = FormComponents.TextArea;
+// ResourceForm.ResourceNameField = FormComponents.ResourceNameField;
 
 export function ResourceForm({
   pluralKind,
@@ -33,7 +35,7 @@ export function ResourceForm({
 
   if (!onCreate) {
     onCreate = async () => {
-      const kindTranslation = t(`${pluralKind}.name_singular`);
+      const kindTranslation = t(`${pluralKind.toLowerCase()}.name_singular`);
       try {
         await createFn();
         notification.notifySuccess({
