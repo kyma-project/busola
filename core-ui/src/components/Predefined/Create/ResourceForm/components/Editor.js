@@ -44,7 +44,7 @@ export function Editor({ resource, setResource, readonly }) {
   };
 
   return (
-    <div className="create-form__editor">
+    <div className="resource-form__editor">
       <ControlledEditor
         language="yaml"
         theme={editorTheme}
@@ -57,7 +57,7 @@ export function Editor({ resource, setResource, readonly }) {
         options={options}
       />
       {error && (
-        <div className="create-form__editor__error">
+        <div className="resource-form__editor__error">
           <MessageStrip type="error" className="fd-margin--sm">
             {t('common.create-form.editor-error', { error })}
           </MessageStrip>

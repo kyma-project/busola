@@ -1,6 +1,12 @@
-.create-form__editor {
-  .create-form__editor__error {
-    position: absolute;
-    bottom: 0px;
+.resource-form__editor {
+  position: relative;
+  .resource-form__editor__error {
+    inset: 0;
+
+    & > * {
+      bottom: 0;
+      left: 50px;
+      position: absolute;
+    }
   }
 }
