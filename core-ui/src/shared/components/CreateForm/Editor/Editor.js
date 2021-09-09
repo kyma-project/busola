@@ -24,6 +24,10 @@ export function Editor({ resource, setResource, readonly }) {
     textResource.current = text;
     try {
       const parsed = jsyaml.load(text);
+      if (typeof parsed !== 'object' || !parsed) {
+        setError('An object is required');
+        return;
+      }
       setResource(parsed);
       setError(null);
     } catch ({ message }) {

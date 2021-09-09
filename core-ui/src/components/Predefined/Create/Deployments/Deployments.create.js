@@ -1,7 +1,8 @@
 import React from 'react';
+import LuigiClient from '@luigi-project/client';
 import { LabelsInput } from 'components/Lambdas/components';
 import { useTranslation } from 'react-i18next';
-import { K8sNameInput, usePost } from 'react-shared';
+import { K8sNameInput, usePost, useNotification } from 'react-shared';
 import { ResourceForm } from './ResourceForm';
 import {
   Button,
@@ -12,130 +13,14 @@ import {
   MessageStrip,
 } from 'fundamental-react';
 import * as jp from 'jsonpath';
-import './AdvancedForm.scss';
 import './Deployments.create.scss';
 
-function createContainerTemplate() {
-  return {
-    name: '',
-    image: '',
-    resources: {
-      requests: {
-        memory: '64Mi',
-        cpu: '50m',
-      },
-      limits: {
-        memory: '128Mi',
-        cpu: '100m',
-      },
-    },
-  };
-}
-
-export function createDeploymentTemplate(namespaceId) {
-  return {
-    apiVersion: 'apps/v1',
-    kind: 'Deployment',
-    metadata: {
-      name: '',
-      namespace: namespaceId,
-      labels: {},
-    },
-    spec: {
-      replicas: 1,
-      selector: {
-        matchLabels: {
-          app: '',
-        },
-      },
-      template: {
-        metadata: {
-          labels: {
-            app: '',
-          },
-        },
-        spec: {
-          containers: [createContainerTemplate()],
-        },
-      },
-    },
-  };
-}
-
-const createPresets = (namespace, translate) => [
-  {
-    name: translate('deployments.create-modal.presets.default'),
-    value: createDeploymentTemplate(namespace),
-  },
-  {
-    name: 'Echo server',
-    value: {
-      apiVersion: 'apps/v1',
-      kind: 'Deployment',
-      metadata: {
-        name: 'echo-server',
-        namespace,
-        labels: {},
-      },
-      spec: {
-        replicas: 1,
-        selector: {
-          matchLabels: {
-            app: 'echo-server',
-          },
-        },
-        template: {
-          metadata: {
-            labels: {
-              app: 'echo-server',
-            },
-          },
-          spec: {
-            containers: [
-              {
-                name: 'echo-server',
-                image: 'ealen/echo-server',
-                resources: {
-                  requests: {
-                    memory: '64Mi',
-                    cpu: '50m',
-                  },
-                  limits: {
-                    memory: '128Mi',
-                    cpu: '100m',
-                  },
-                },
-              },
-            ],
-          },
-        },
-      },
-    },
-  },
-];
-
-function createServiceTemplate(namespace) {
-  return {
-    apiVersion: 'v1',
-    kind: 'Service',
-    metadata: {
-      name: '',
-      namespace,
-    },
-    spec: {
-      selector: {
-        app: '',
-      },
-      ports: [
-        {
-          protocol: 'TCP',
-          port: 80,
-          targetPort: 8080,
-        },
-      ],
-    },
-  };
-}
+import {
+  createContainerTemplate,
+  createDeploymentTemplate,
+  createPresets,
+  createServiceTemplate,
+} from './templates';
 
 export function DeploymentsCreate({
   formElementRef,
@@ -143,8 +28,9 @@ export function DeploymentsCreate({
   onChange,
   setCustomValid,
 }) {
-  const postRequest = usePost();
   const { t, i18n } = useTranslation();
+  const notification = useNotification();
+  const postRequest = usePost();
 
   const [deployment, setDeployment] = React.useState(
     createDeploymentTemplate(namespace),
@@ -152,7 +38,7 @@ export function DeploymentsCreate({
   const [service, setService] = React.useState(
     createServiceTemplate(namespace),
   );
-  const [addService, setAddService] = React.useState(false);
+  const [createService, setCreateService] = React.useState(false);
 
   React.useEffect(() => {
     const hasAnyContainers = !!(
@@ -165,8 +51,8 @@ export function DeploymentsCreate({
   const serviceActions = (
     <Checkbox
       compact
-      checked={addService}
-      onChange={(_, checked) => setAddService(checked)}
+      checked={createService}
+      onChange={(_, checked) => setCreateService(checked)}
       dir="rtl"
     >
       {t('deployments.create-modal.advanced.expose-service')}
@@ -182,7 +68,7 @@ export function DeploymentsCreate({
         <Editor
           resource={service}
           setResource={setService}
-          readonly={!addService}
+          readonly={!createService}
         />
       </ResourceForm.CollapsibleSection>
     </div>
@@ -200,6 +86,39 @@ export function DeploymentsCreate({
     setService({ ...service });
   };
 
+  const onCreate = async () => {
+    try {
+      await postRequest(
+        `/apis/apps/v1/namespaces/${namespace}/deployments/`,
+        deployment,
+      );
+    } catch (e) {
+      console.error(e);
+      notification.notifyError({
+        title: t('deployments.create-modal.messages.failure'),
+        content: e.message,
+      });
+      return false;
+    }
+    try {
+      if (createService) {
+        await postRequest(`/api/v1/namespaces/${namespace}/services`, service);
+      }
+      notification.notifySuccess({
+        content: t('deployments.create-modal.messages.success'),
+      });
+      LuigiClient.linkManager()
+        .fromContext('namespace')
+        .navigate(`/deployments/details/${deployment.metadata.name}`);
+    } catch (e) {
+      console.error(e);
+      notification.notifyError({
+        title: t('deployments.create-modal.messages.deployment-ok-service-bad'),
+        content: e.message,
+      });
+    }
+  };
+
   return (
     <ResourceForm
       kind="deployment"
@@ -207,12 +126,7 @@ export function DeploymentsCreate({
       setResource={setDeployment}
       onChange={onChange}
       formElementRef={formElementRef}
-      createFn={async () =>
-        postRequest(
-          `/apis/apps/v1/namespaces/${namespace}/deployments/`,
-          deployment,
-        )
-      }
+      onCreate={onCreate}
       renderEditor={renderEditor}
       presets={createPresets(namespace, t)}
     >
@@ -229,6 +143,22 @@ export function DeploymentsCreate({
             onChange={e => handleNameChange(e.target.value)}
             value={value}
             i18n={i18n}
+          />
+        )}
+      />
+      <ResourceForm.FormField
+        required
+        simple
+        propertyPath="$.spec.template.spec.containers[0].image"
+        label="Docker image"
+        input={(value, setValue) => (
+          <ResourceForm.Input
+            required
+            setValue={setValue}
+            value={value}
+            placeholder={t(
+              'deployments.create-modal.simple.docker-image-placeholder',
+            )}
           />
         )}
       />
@@ -261,22 +191,6 @@ export function DeploymentsCreate({
           />
         )}
       />
-      <ResourceForm.FormField
-        required
-        simple
-        propertyPath="$.spec.template.spec.containers[0].image"
-        label="Docker image"
-        input={(value, setValue) => (
-          <ResourceForm.Input
-            required
-            setValue={setValue}
-            value={value}
-            placeholder={t(
-              'deployments.create-modal.simple.docker-image-placeholder',
-            )}
-          />
-        )}
-      />
       <ResourceForm.CollapsibleSection
         advanced
         title="Containers"
@@ -288,32 +202,22 @@ export function DeploymentsCreate({
             glyph="add"
             compact
             onClick={() => {
-              const containers =
-                jp.value(deployment, '$.spec.template.spec.containers') || [];
-              containers.push(createContainerTemplate());
-              jp.value(
-                deployment,
-                '$.spec.template.spec.containers',
-                containers,
-              );
+              const path = '$.spec.template.spec.containers';
+              const nextContainers = [
+                ...(jp.value(deployment, path) || []),
+                createContainerTemplate(),
+              ];
+              jp.value(deployment, path, nextContainers);
+
               setDeployment({ ...deployment });
-              setTimeout(() => {
-                // todo
-                onChange(new Event('input', { bubbles: true }));
-              });
+              onChange(new Event('input', { bubbles: true }));
             }}
           >
             Add Container
           </Button>
         }
       >
-        <Containers
-          containers={deployment?.spec?.template?.spec?.containers || []}
-          setContainers={containers => {
-            jp.value(deployment, '$.spec.template.spec.containers', containers);
-            setDeployment({ ...deployment });
-          }}
-        />
+        <Containers propertyPath="$.spec.template.spec.containers" />
       </ResourceForm.CollapsibleSection>
       <ResourceForm.CollapsibleSection
         advanced
@@ -333,7 +237,7 @@ export function DeploymentsCreate({
               placeholder={t(
                 'deployments.create-modal.advanced.port-placeholder',
               )}
-              disabled={!addService}
+              disabled={!createService}
               value={value}
               onChange={e => setValue(e.target.valueAsNumber)}
             />
@@ -350,7 +254,7 @@ export function DeploymentsCreate({
               placeholder={t(
                 'deployments.create-modal.advanced.target-port-placeholder',
               )}
-              disabled={!addService}
+              disabled={!createService}
               value={value}
               onChange={e => setValue(e.target.valueAsNumber)}
             />
@@ -458,12 +362,14 @@ function SingleContainerSection({ container, containers, setContainers }) {
   );
 }
 
-function Containers({ containers, setContainers }) {
+function Containers({ value: containers, setValue: setContainers }) {
   const { t } = useTranslation();
 
   const removeContainer = index => {
     setContainers(containers.filter((_, i) => index !== i));
   };
+
+  containers = containers || [];
 
   if (!containers.length) {
     return (
