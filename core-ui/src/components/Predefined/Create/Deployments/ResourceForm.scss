@@ -1,0 +1,15 @@
+.create-form {
+  height: 50vh;
+  min-width: 25rem;
+  display: flex;
+  flex-direction: column;
+
+  form {
+    overflow: auto;
+    flex-grow: 1;
+  }
+
+  &.hidden {
+    display: none;
+  }
+}

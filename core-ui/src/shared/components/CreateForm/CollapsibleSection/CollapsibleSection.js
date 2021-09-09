@@ -65,13 +65,13 @@ export function CollapsibleSection2({
       {open && (
         <div className="content">
           {React.Children.map(children, child => {
-            if (!child.yamlPath) {
+            if (!child.props.propertyPath) {
               return child;
             }
             return React.cloneElement(child, {
-              value: jp.value(resource, child.props.yamlPath),
+              value: jp.value(resource, child.props.propertyPath),
               setValue: value => {
-                jp.value(resource, child.props.yamlPath, value);
+                jp.value(resource, child.props.propertyPath, value);
                 setResource({ ...resource });
               },
             });

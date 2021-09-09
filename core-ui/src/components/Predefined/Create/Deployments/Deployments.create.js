@@ -3,7 +3,13 @@ import { LabelsInput } from 'components/Lambdas/components';
 import { useTranslation } from 'react-i18next';
 import { K8sNameInput, usePost } from 'react-shared';
 import { ResourceForm } from './ResourceForm';
-import { Button, FormFieldset, FormItem, FormLabel } from 'fundamental-react';
+import {
+  Button,
+  FormFieldset,
+  FormItem,
+  FormLabel,
+  Checkbox,
+} from 'fundamental-react';
 import * as jp from 'jsonpath';
 import './AdvancedForm.scss';
 import './Deployments.create.scss';
@@ -55,6 +61,29 @@ export function createDeploymentTemplate(namespaceId) {
   };
 }
 
+function createServiceTemplate(namespace) {
+  return {
+    apiVersion: 'v1',
+    kind: 'Service',
+    metadata: {
+      name: '',
+      namespace,
+    },
+    spec: {
+      selector: {
+        app: '',
+      },
+      ports: [
+        {
+          protocol: 'TCP',
+          port: 80,
+          targetPort: 8080,
+        },
+      ],
+    },
+  };
+}
+
 export function DeploymentsCreate({ formElementRef, namespace, onChange }) {
   const postRequest = usePost();
   const { t, i18n } = useTranslation();
@@ -62,21 +91,52 @@ export function DeploymentsCreate({ formElementRef, namespace, onChange }) {
   const [deployment, setDeployment] = React.useState(
     createDeploymentTemplate(namespace),
   );
+  const [service, setService] = React.useState(
+    createServiceTemplate(namespace),
+  );
+  const [addService, setAddService] = React.useState(true);
+
+  const serviceActions = (
+    <Checkbox
+      compact
+      checked={addService}
+      onChange={(_, checked) => setAddService(checked)}
+      dir="rtl"
+    >
+      {t('deployments.create-modal.advanced.expose-service')}
+    </Checkbox>
+  );
 
   const renderEditor = ({ defaultEditor, Editor }) => (
     <div className="double-editor">
       <ResourceForm.CollapsibleSection title="Deployment" defaultOpen>
         {defaultEditor}
       </ResourceForm.CollapsibleSection>
-      <ResourceForm.CollapsibleSection title="Service">
-        <Editor resource={deployment} setResource={setDeployment} />
+      <ResourceForm.CollapsibleSection title="Service" actions={serviceActions}>
+        <Editor
+          resource={service}
+          setResource={setService}
+          readonly={!addService}
+        />
       </ResourceForm.CollapsibleSection>
     </div>
   );
 
+  const handleNameChange = name => {
+    jp.value(deployment, '$.metadata.name', name);
+    jp.value(deployment, '$.spec.template.spec.containers[0].name', name);
+    jp.value(deployment, '$.spec.selector.matchLabels.app', name); // match labels
+    jp.value(deployment, `$.spec.template.metadata.labels.app`, name); // pod labels
+    setDeployment({ ...deployment });
+
+    jp.value(service, '$.metadata.name', name);
+    jp.value(service, '$.spec.selector.app', name);
+    setService({ ...service });
+  };
+
   return (
     <ResourceForm
-      kind="Deployment"
+      kind="deployment"
       resource={deployment}
       setResource={setDeployment}
       onChange={onChange}
@@ -91,33 +151,22 @@ export function DeploymentsCreate({ formElementRef, namespace, onChange }) {
     >
       <ResourceForm.FormField
         required
-        yamlPath="$.metadata.name"
+        propertyPath="$.metadata.name"
         label={t('common.labels.name')}
-        input={(value, _) => (
+        input={value => (
           <K8sNameInput
             kind="Deployment"
             compact
             required
             showLabel={false}
-            onChange={e => {
-              const name = e.target.value;
-              jp.value(deployment, '$.metadata.name', name);
-              jp.value(
-                deployment,
-                '$.spec.template.spec.containers[0].name',
-                name,
-              );
-              jp.value(deployment, '$.spec.selector.matchLabels.app', name); // match labels
-              jp.value(deployment, `$.spec.template.metadata.labels.app`, name); // pod labels
-              setDeployment({ ...deployment });
-            }}
+            onChange={e => handleNameChange(e.target.value)}
             value={value}
             i18n={i18n}
           />
         )}
       />
       <ResourceForm.FormField
-        yamlPath="$.metadata.labels"
+        propertyPath="$.metadata.labels"
         label={t('common.headers.labels')}
         input={(value, setValue) => (
           <LabelsInput
@@ -131,7 +180,7 @@ export function DeploymentsCreate({ formElementRef, namespace, onChange }) {
       />
       <ResourceForm.FormField
         advanced
-        yamlPath="$.metadata.annotations"
+        propertyPath="$.metadata.annotations"
         label={t('common.headers.annotations')}
         input={(value, setValue) => (
           <LabelsInput
@@ -146,16 +195,21 @@ export function DeploymentsCreate({ formElementRef, namespace, onChange }) {
       <ResourceForm.FormField
         required
         simple
-        yamlPath="$.spec.template.spec.containers[0].name"
+        propertyPath="$.spec.template.spec.containers[0].name"
         label="Container name"
         input={(value, setValue) => (
-          <ResourceForm.Input required setValue={setValue} value={value} />
+          <ResourceForm.Input
+            required
+            setValue={setValue}
+            value={value}
+            placeholder="Name of the first container"
+          />
         )}
       />
       <ResourceForm.FormField
         required
         simple
-        yamlPath="$.spec.template.spec.containers[0].image"
+        propertyPath="$.spec.template.spec.containers[0].image"
         label="Docker image"
         input={(value, setValue) => (
           <ResourceForm.Input
@@ -206,6 +260,48 @@ export function DeploymentsCreate({ formElementRef, namespace, onChange }) {
           }}
         />
       </ResourceForm.CollapsibleSection>
+      <ResourceForm.CollapsibleSection
+        advanced
+        title="Service"
+        resource={service}
+        setResource={setService}
+        actions={serviceActions}
+      >
+        <ResourceForm.FormField
+          advanced
+          propertyPath="$.spec.ports[0].port"
+          label={t('deployments.create-modal.advanced.port')}
+          input={(value, setValue) => (
+            <ResourceForm.Input
+              type="number"
+              required
+              placeholder={t(
+                'deployments.create-modal.advanced.port-placeholder',
+              )}
+              disabled={!addService}
+              value={value}
+              onChange={e => setValue(e.target.valueAsNumber)}
+            />
+          )}
+        />
+        <ResourceForm.FormField
+          advanced
+          propertyPath="$.spec.ports[0].targetPort"
+          label={t('deployments.create-modal.advanced.port')}
+          input={(value, setValue) => (
+            <ResourceForm.Input
+              type="number"
+              required
+              placeholder={t(
+                'deployments.create-modal.advanced.target-port-placeholder',
+              )}
+              disabled={!addService}
+              value={value}
+              onChange={e => setValue(e.target.valueAsNumber)}
+            />
+          )}
+        />
+      </ResourceForm.CollapsibleSection>
     </ResourceForm>
   );
 }
@@ -220,7 +316,7 @@ function Containers({ containers, setContainers }) {
   return containers.map((container, i) => (
     <ResourceForm.CollapsibleSection
       key={i}
-      title={container.name || 'Container ' + (i + 1)}
+      title={'Container ' + (container.name || i + 1)}
       actions={
         <Button glyph="delete" compact onClick={() => removeContainer(i)} />
       }

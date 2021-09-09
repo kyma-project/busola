@@ -9,6 +9,7 @@ import pluralize from 'pluralize';
 import { ModeSelector } from 'shared/components/CreateForm/ModeSelector/ModeSelector';
 import { Editor } from 'shared/components/CreateForm/Editor/Editor';
 import 'shared/components/CreateForm/CreateForm.scss';
+import './ResourceForm.scss';
 
 ResourceForm.Label = ({ required, tooltipContent, children }) => {
   const label = <FormLabel required={required}>{children}</FormLabel>;
@@ -54,7 +55,7 @@ ResourceForm.FormField = function({
 };
 
 export function ResourceForm({
-  kind, //todo
+  kind,
   resource,
   setResource,
   onCreate,
@@ -95,13 +96,13 @@ export function ResourceForm({
       if (child.props.advanced && !isAdvanced) {
         return null;
       }
-      if (!child.props.yamlPath) {
+      if (!child.props.propertyPath) {
         return child;
       }
       return React.cloneElement(child, {
-        value: jp.value(resource, child.props.yamlPath),
+        value: jp.value(resource, child.props.propertyPath),
         setValue: value => {
-          jp.value(resource, child.props.yamlPath, value);
+          jp.value(resource, child.props.propertyPath, value);
           setResource({ ...resource });
         },
       });
@@ -113,23 +114,25 @@ export function ResourceForm({
     : editor;
 
   return (
-    <form className="create-form" ref={formElementRef} onSubmit={onCreate}>
+    <div className="create-form">
       <ModeSelector mode={mode} setMode={setMode} />
-      {mode === ModeSelector.MODE_SIMPLE && (
-        <div onChange={onChange} className="simple-form">
-          {renderFormChildren(children, false)}
+      <form ref={formElementRef} onSubmit={onCreate}>
+        {mode === ModeSelector.MODE_SIMPLE && (
+          <div onChange={onChange} className="simple-form">
+            {renderFormChildren(children, false)}
+          </div>
+        )}
+        {mode === ModeSelector.MODE_YAML && editor}
+        {/* always keep the advanced form to ensure validation */}
+        <div
+          className={classnames('advanced-form', {
+            hidden: mode !== ModeSelector.MODE_ADVANCED,
+          })}
+          onChange={onChange}
+        >
+          {renderFormChildren(children, true)}
         </div>
-      )}
-      {mode === ModeSelector.MODE_YAML && editor}
-      {/* always keep the advanced form to ensure validation */}
-      <div
-        className={classnames('advanced-form', {
-          hidden: mode !== ModeSelector.MODE_ADVANCED,
-        })}
-        onChange={onChange}
-      >
-        {renderFormChildren(children, true)}
-      </div>
-    </form>
+      </form>
+    </div>
   );
 }

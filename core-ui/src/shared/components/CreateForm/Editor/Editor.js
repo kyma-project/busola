@@ -5,7 +5,7 @@ import { MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import './Editor.scss';
 
-export function Editor({ resource, setResource }) {
+export function Editor({ resource, setResource, readonly }) {
   const { t } = useTranslation();
   const [error, setError] = React.useState('');
   const { editorTheme } = useTheme();
@@ -38,6 +38,13 @@ export function Editor({ resource, setResource }) {
     }
   };
 
+  const options = {
+    readOnly: readonly,
+    minimap: {
+      enabled: false,
+    },
+  };
+
   return (
     <div className="create-form__editor">
       <ControlledEditor
@@ -48,6 +55,7 @@ export function Editor({ resource, setResource }) {
         editorDidMount={(_, editor) =>
           editor.onDidBlurEditorWidget(onEditorBlur)
         }
+        options={options}
       />
       {error && (
         <div className="create-form__editor__error">
