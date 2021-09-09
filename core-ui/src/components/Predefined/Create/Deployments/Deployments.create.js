@@ -15,7 +15,6 @@ import {
   createServiceTemplate,
 } from './templates';
 import { Containers } from './Containers';
-import plralize from 'pluralize';
 
 export function DeploymentsCreate({
   formElementRef,
@@ -148,7 +147,7 @@ export function DeploymentsCreate({
         label={t('common.labels.name')}
         input={value => (
           <K8sNameInput
-            kind="Deployment"
+            kind={t('deployments.name_singular')}
             compact
             required
             showLabel={false}

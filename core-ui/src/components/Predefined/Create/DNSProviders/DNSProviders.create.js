@@ -34,7 +34,7 @@ export function DNSProvidersCreate({ formElementRef, namespace, onChange }) {
         label={t('common.labels.name')}
         input={(value, setValue) => (
           <K8sNameInput
-            kind="Deployment"
+            kind={t('dnsProviders.name_plural')}
             compact
             required
             showLabel={false}
@@ -76,16 +76,13 @@ export function DNSProvidersCreate({ formElementRef, namespace, onChange }) {
       <ResourceForm.FormField
         propertyPath="$.spec.secretRef"
         label={'secret ref'}
-        input={(value, setValue) => {
-          console.log(value, setValue);
-          return (
-            <SecretRef
-              id="secret-ref-input"
-              resourceRef={value || {}}
-              onChange={(_, secretRef) => setValue(secretRef)}
-            />
-          );
-        }}
+        input={(value, setValue) => (
+          <SecretRef
+            id="secret-ref-input"
+            resourceRef={value || {}}
+            onChange={(_, secretRef) => setValue(secretRef)}
+          />
+        )}
       />
       <ResourceForm.FormField
         propertyPath="$.type"

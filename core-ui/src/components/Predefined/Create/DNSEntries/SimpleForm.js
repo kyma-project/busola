@@ -55,7 +55,9 @@ export function SimpleForm({ dnsEntry, setDNSEntry }) {
             }
           />
           <CreateForm.FormField
-            label={<FormLabel required>Targets</FormLabel>}
+            label={
+              <FormLabel required>{t('dnsentries.labels.targets')}</FormLabel>
+            }
             required
             input={
               <FormTextarea
@@ -69,7 +71,7 @@ export function SimpleForm({ dnsEntry, setDNSEntry }) {
                   })
                 }
                 value={dnsEntry.targets.join('\n')}
-                placeholder="Target records (CNAME or A records), one per line"
+                placeholder={t('dnsentries.placeholders.targets')}
               />
             }
           />

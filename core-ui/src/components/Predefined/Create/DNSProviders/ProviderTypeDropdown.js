@@ -1,7 +1,9 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Dropdown } from 'react-shared';
 
 export function ProviderTypeDropdown({ type, setType }) {
+  const { t } = useTranslation();
   const providers = {
     'alicloud-dns': 'Alicloud DNS provider',
     'aws-route53': 'AWS Route 53 provider',
@@ -24,7 +26,7 @@ export function ProviderTypeDropdown({ type, setType }) {
       options={options}
       selectedKey={type}
       onSelect={(_, selected) => setType(selected.key)}
-      placeholder="Choose Provider Type"
+      placeholder={t('dnsproviders.placeholders.provider-type')}
       fullWidth
     />
   );

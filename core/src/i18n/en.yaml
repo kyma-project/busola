@@ -438,6 +438,16 @@ deployments:
 discovery-and-network:
   title: Discovery and Network
 dnsentries:
+  labels:
+    ttl: TTL
+    dns-name: DNS Name
+    text: Text
+    targets: Targets
+  placeholders:
+    targets: Target records (CNAME or A records), one per line
+    text: Text records, one per line
+    ttl: Enter the time to live.
+    dns-name: Enter DNS Name
   headers:
     dns-name: DNS Name
     provider: Provider
@@ -446,14 +456,30 @@ dnsentries:
     status: $t(common.headers.status)
     targets: Targets
     ttl: TTL
+  messages:
+    created: DNS Entry created
+    cannot-create: 'Failed to create the DNS Entry:'
   title: DNS Entries
 dnsproviders:
+  labels:
+    exclude-domains: Exclude Domains
+    default-ttl: Default TTL
+    secret-reference: Secret Reference
+    include-domains: Include Domains
+  placeholders:
+    provider-type: Choose Provider Type
+    include-domains: Domains that should be observed, one per line
+    default-ttl: Enter the default time to live.
+    exclude-domains: Domains that should be ignored, one per line
   domains: Domains
   headers:
     exclude: Excluded Domains
     include: Included Domains
     status: $t(common.headers.status)
     type: Type
+  messages:
+    created: DNS Provider created
+    cannot-create: 'Failed to create the DNS Provider:'
   title: DNS Providers
 event-subscription:
   create:
