@@ -457,7 +457,7 @@ dnsentries:
     ttl: TTL
   messages:
     created: DNS Entry created
-    cannot-create: 'Cannot create DNS Entry:'
+    cannot-create: 'Failed to create the DNS Entry:'
   title: DNS Entries
 dnsproviders:
   labels:
@@ -478,7 +478,7 @@ dnsproviders:
     type: Type
   messages:
     created: DNS Provider created
-    cannot-create: 'Cannot create DNS Provider:'
+    cannot-create: 'Failed to create the DNS Provider:'
   title: DNS Providers
 event-subscription:
   create:
