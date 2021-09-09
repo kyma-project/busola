@@ -25,6 +25,7 @@ export function ResourceForm({
   renderEditor,
   createFn,
   presets,
+  onPresetSelected,
 }) {
   const notification = useNotification();
   const [mode, setMode] = React.useState(ModeSelector.MODE_SIMPLE);
@@ -53,7 +54,11 @@ export function ResourceForm({
     <Presets
       presets={presets}
       onSelect={({ value }) => {
-        setResource(value);
+        if (onPresetSelected) {
+          onPresetSelected(value);
+        } else {
+          setResource(value);
+        }
         onChange(new Event('input', { bubbles: true }));
       }}
     />
