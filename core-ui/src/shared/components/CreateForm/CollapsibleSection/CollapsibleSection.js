@@ -37,6 +37,7 @@ export function CollapsibleSection({
 export function CollapsibleSection2({
   disabled = false,
   defaultOpen,
+  canChangeState = true,
   title,
   actions,
   children,
@@ -49,6 +50,7 @@ export function CollapsibleSection2({
 
   const toggle = e => {
     // ignore events from actions
+    if (!canChangeState) return;
     if (disabled) return;
     if (!actionsRef.current?.contains(e.target)) setOpen(!open);
   };
@@ -57,7 +59,9 @@ export function CollapsibleSection2({
     <div className="create-modal__collapsible-section">
       <header onClick={toggle}>
         <div>
-          {!disabled && <Icon ariaHidden glyph={iconGlyph} />}
+          {!disabled && canChangeState && (
+            <Icon className="control-icon" ariaHidden glyph={iconGlyph} />
+          )}
           {title}
         </div>
         <div ref={actionsRef}>{actions}</div>

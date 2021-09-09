@@ -12,29 +12,23 @@ export function Editor({ resource, setResource, readonly }) {
   // don't useState, as it's value needs to be referenced in onEditorBlur
   // using useState value in onEditorBlur results in stale closure
   const textResource = React.useRef(jsyaml.dump(resource, { noRefs: true }));
+  const isEditing = React.useRef(false);
 
   React.useEffect(() => {
-    textResource.current = jsyaml.dump(resource, { noRefs: true });
+    if (!isEditing.current) {
+      textResource.current = jsyaml.dump(resource, { noRefs: true });
+    }
   }, [resource]);
 
   const handleChange = (_, text) => {
     textResource.current = text;
     try {
-      jsyaml.load(text);
+      const parsed = jsyaml.load(text);
+      setResource(parsed);
       setError(null);
     } catch ({ message }) {
       // get the message until the newline
       setError(message.substr(0, message.indexOf('\n')));
-    }
-  };
-
-  const onEditorBlur = () => {
-    let parsed;
-    try {
-      parsed = jsyaml.load(textResource.current);
-    } catch (_) {}
-    if (parsed) {
-      setResource(parsed);
     }
   };
 
@@ -52,9 +46,10 @@ export function Editor({ resource, setResource, readonly }) {
         theme={editorTheme}
         value={textResource.current}
         onChange={handleChange}
-        editorDidMount={(_, editor) =>
-          editor.onDidBlurEditorWidget(onEditorBlur)
-        }
+        editorDidMount={(_, editor) => {
+          editor.onDidFocusEditorText(() => (isEditing.current = true));
+          editor.onDidBlurEditorText(() => (isEditing.current = false));
+        }}
         options={options}
       />
       {error && (

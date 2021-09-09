@@ -10,6 +10,7 @@ import { ModeSelector } from 'shared/components/CreateForm/ModeSelector/ModeSele
 import { Editor } from 'shared/components/CreateForm/Editor/Editor';
 import 'shared/components/CreateForm/CreateForm.scss';
 import './ResourceForm.scss';
+import { Presets } from 'shared/components/CreateForm/Presets';
 
 ResourceForm.Label = ({ required, tooltipContent, children }) => {
   const label = <FormLabel required={required}>{children}</FormLabel>;
@@ -64,6 +65,7 @@ export function ResourceForm({
   children,
   renderEditor,
   createFn,
+  presets,
 }) {
   const notification = useNotification();
   const [mode, setMode] = React.useState(ModeSelector.MODE_SIMPLE);
@@ -87,6 +89,16 @@ export function ResourceForm({
       }
     };
   }
+
+  const presetsSelector = presets?.length && (
+    <Presets
+      presets={presets}
+      onSelect={({ value }) => {
+        setResource(value);
+        onChange(new Event('input', { bubbles: true }));
+      }}
+    />
+  );
 
   const renderFormChildren = (children, isAdvanced) =>
     React.Children.map(children, child => {
@@ -114,7 +126,8 @@ export function ResourceForm({
     : editor;
 
   return (
-    <div className="create-form">
+    <article className="resource-form">
+      {presetsSelector}
       <ModeSelector mode={mode} setMode={setMode} />
       <form ref={formElementRef} onSubmit={onCreate}>
         {mode === ModeSelector.MODE_SIMPLE && (
@@ -125,14 +138,13 @@ export function ResourceForm({
         {mode === ModeSelector.MODE_YAML && editor}
         {/* always keep the advanced form to ensure validation */}
         <div
-          className={classnames('advanced-form', {
-            hidden: mode !== ModeSelector.MODE_ADVANCED,
-          })}
+          className="advanced-form"
           onChange={onChange}
+          hidden={mode !== ModeSelector.MODE_ADVANCED}
         >
           {renderFormChildren(children, true)}
         </div>
       </form>
-    </div>
+    </article>
   );
 }

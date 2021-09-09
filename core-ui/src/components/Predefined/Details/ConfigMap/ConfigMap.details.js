@@ -24,7 +24,7 @@ export const ConfigMapsDetails = ({ DefaultRenderer, ...otherParams }) => {
             {t('common.buttons.edit')}
           </Button>
         }
-        className="fd-dialog--xl-size modal-width--m"
+        className="fd-dialog--xl-size modal-size--l"
         renderForm={props => (
           <EditConfigMapForm
             configMap={configMap}

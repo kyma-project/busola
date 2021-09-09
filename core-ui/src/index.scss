@@ -106,9 +106,10 @@ body {
   }
 }
 
-.modal-width--m {
+.modal-size--l {
   .fd-dialog__content {
-    width: 70vw;
+    width: 80vw;
+    height: 80vw;
     min-width: unset;
   }
 }
@@ -290,9 +291,9 @@ input[type='checkbox'] {
   position: absolute !important;
 }
 
-.modal-width--m {
+.modal-size--l {
   .fd-dialog__content {
-    width: 70vw;
+    width: 80vw;
     min-width: unset;
   }
 }

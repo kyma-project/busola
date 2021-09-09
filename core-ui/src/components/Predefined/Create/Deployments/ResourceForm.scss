@@ -1,6 +1,5 @@
-.create-form {
-  height: 50vh;
-  min-width: 25rem;
+.resource-form {
+  height: 100%;
   display: flex;
   flex-direction: column;
 
@@ -9,7 +8,11 @@
     flex-grow: 1;
   }
 
-  &.hidden {
-    display: none;
+  & > .dropdown {
+    width: 100%;
+  }
+  
+  .fd-row {
+    margin: 0; // override fd's margin: 0 -.25rem;
   }
 }

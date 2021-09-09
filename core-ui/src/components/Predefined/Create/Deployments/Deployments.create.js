@@ -9,6 +9,7 @@ import {
   FormItem,
   FormLabel,
   Checkbox,
+  MessageStrip,
 } from 'fundamental-react';
 import * as jp from 'jsonpath';
 import './AdvancedForm.scss';
@@ -61,6 +62,58 @@ export function createDeploymentTemplate(namespaceId) {
   };
 }
 
+const createPresets = (namespace, translate) => [
+  {
+    name: translate('deployments.create-modal.presets.default'),
+    value: createDeploymentTemplate(namespace),
+  },
+  {
+    name: 'Echo server',
+    value: {
+      apiVersion: 'apps/v1',
+      kind: 'Deployment',
+      metadata: {
+        name: 'echo-server',
+        namespace,
+        labels: {},
+      },
+      spec: {
+        replicas: 1,
+        selector: {
+          matchLabels: {
+            app: 'echo-server',
+          },
+        },
+        template: {
+          metadata: {
+            labels: {
+              app: 'echo-server',
+            },
+          },
+          spec: {
+            containers: [
+              {
+                name: 'echo-server',
+                image: 'ealen/echo-server',
+                resources: {
+                  requests: {
+                    memory: '64Mi',
+                    cpu: '50m',
+                  },
+                  limits: {
+                    memory: '128Mi',
+                    cpu: '100m',
+                  },
+                },
+              },
+            ],
+          },
+        },
+      },
+    },
+  },
+];
+
 function createServiceTemplate(namespace) {
   return {
     apiVersion: 'v1',
@@ -84,7 +137,12 @@ function createServiceTemplate(namespace) {
   };
 }
 
-export function DeploymentsCreate({ formElementRef, namespace, onChange }) {
+export function DeploymentsCreate({
+  formElementRef,
+  namespace,
+  onChange,
+  setCustomValid,
+}) {
   const postRequest = usePost();
   const { t, i18n } = useTranslation();
 
@@ -94,7 +152,15 @@ export function DeploymentsCreate({ formElementRef, namespace, onChange }) {
   const [service, setService] = React.useState(
     createServiceTemplate(namespace),
   );
-  const [addService, setAddService] = React.useState(true);
+  const [addService, setAddService] = React.useState(false);
+
+  React.useEffect(() => {
+    const hasAnyContainers = !!(
+      jp.value(deployment, '$.spec.template.spec.containers') || []
+    ).length;
+
+    setCustomValid(hasAnyContainers);
+  }, [deployment]);
 
   const serviceActions = (
     <Checkbox
@@ -148,6 +214,7 @@ export function DeploymentsCreate({ formElementRef, namespace, onChange }) {
         )
       }
       renderEditor={renderEditor}
+      presets={createPresets(namespace, t)}
     >
       <ResourceForm.FormField
         required
@@ -166,6 +233,7 @@ export function DeploymentsCreate({ formElementRef, namespace, onChange }) {
         )}
       />
       <ResourceForm.FormField
+        advanced
         propertyPath="$.metadata.labels"
         label={t('common.headers.labels')}
         input={(value, setValue) => (
@@ -189,20 +257,7 @@ export function DeploymentsCreate({ formElementRef, namespace, onChange }) {
             labels={value}
             onChange={labels => setValue(labels)}
             i18n={i18n}
-          />
-        )}
-      />
-      <ResourceForm.FormField
-        required
-        simple
-        propertyPath="$.spec.template.spec.containers[0].name"
-        label="Container name"
-        input={(value, setValue) => (
-          <ResourceForm.Input
-            required
-            setValue={setValue}
-            value={value}
-            placeholder="Name of the first container"
+            type={t('common.headers.annotations')}
           />
         )}
       />
@@ -287,7 +342,7 @@ export function DeploymentsCreate({ formElementRef, namespace, onChange }) {
         <ResourceForm.FormField
           advanced
           propertyPath="$.spec.ports[0].targetPort"
-          label={t('deployments.create-modal.advanced.port')}
+          label={t('deployments.create-modal.advanced.target-port')}
           input={(value, setValue) => (
             <ResourceForm.Input
               type="number"
@@ -306,21 +361,11 @@ export function DeploymentsCreate({ formElementRef, namespace, onChange }) {
   );
 }
 
-function Containers({ containers, setContainers }) {
+function SingleContainerSection({ container, containers, setContainers }) {
   const { t } = useTranslation();
 
-  const removeContainer = index => {
-    setContainers(containers.filter((_, i) => index !== i));
-  };
-
-  return containers.map((container, i) => (
-    <ResourceForm.CollapsibleSection
-      key={i}
-      title={'Container ' + (container.name || i + 1)}
-      actions={
-        <Button glyph="delete" compact onClick={() => removeContainer(i)} />
-      }
-    >
+  return (
+    <>
       <ResourceForm.FormField
         label="Name"
         value={container.name}
@@ -344,11 +389,13 @@ function Containers({ containers, setContainers }) {
         input={(value, onChange) => (
           <ResourceForm.Input required value={value} setValue={onChange} />
         )}
-        className="fd-margin-bottom--md"
+        className="fd-margin-bottom--sm"
       />
 
       <ResourceForm.CollapsibleSection
         title={t('deployments.create-modal.advanced.runtime-profile')}
+        canChangeState={false}
+        defaultOpen
       >
         <FormFieldset className="runtime-profile-form">
           <FormItem>
@@ -407,6 +454,53 @@ function Containers({ containers, setContainers }) {
           </FormItem>
         </FormFieldset>
       </ResourceForm.CollapsibleSection>
+    </>
+  );
+}
+
+function Containers({ containers, setContainers }) {
+  const { t } = useTranslation();
+
+  const removeContainer = index => {
+    setContainers(containers.filter((_, i) => index !== i));
+  };
+
+  if (!containers.length) {
+    return (
+      <MessageStrip type="warning">
+        At least one container is required.
+      </MessageStrip>
+    );
+  }
+
+  if (containers.length === 1) {
+    return (
+      <SingleContainerSection
+        container={containers[0]}
+        containers={containers}
+        setContainers={setContainers}
+      />
+    );
+  }
+
+  return containers.map((container, i) => (
+    <ResourceForm.CollapsibleSection
+      key={i}
+      title={'Container ' + (container.name || i + 1)}
+      actions={
+        <Button
+          glyph="delete"
+          type="negative"
+          compact
+          onClick={() => removeContainer(i)}
+        />
+      }
+    >
+      <SingleContainerSection
+        container={container}
+        containers={containers}
+        setContainers={setContainers}
+      />
     </ResourceForm.CollapsibleSection>
   ));
 }
