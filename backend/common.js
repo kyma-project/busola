@@ -3,6 +3,16 @@ const url = require('url');
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
+const logger = require('pino-http')({
+  serializers: {
+    req: req => ({
+      id: req.id,
+      method: req.method,
+      url: req.url,
+      cluster_url: req.headers['x-cluster-url'],
+    }),
+  },
+});
 
 // https://github.tools.sap/sgs/SAP-Global-Trust-List/blob/master/approved.pem
 const certs = fs.readFileSync('certs.pem', 'utf8');
@@ -27,11 +37,12 @@ const workaroundForNodeMetrics = req => {
 };
 
 export const handleRequest = async (req, res) => {
+  logger(req, res);
   let headersData;
   try {
     headersData = extractHeadersData(req);
   } catch (e) {
-    console.warn('Headers error:', e.message);
+    req.log.error('Headers error:', e.message);
     res.status(400).send('Headers are missing or in a wrong format.');
     return;
   }
@@ -72,11 +83,10 @@ export const handleRequest = async (req, res) => {
   req.pipe(k8sRequest);
 
   function throwInternalServerError(originalError) {
-    console.error('Target k8s API Server:', targetApiServer.href);
-    console.error('Throwing an Bad Gateway error with reason:', originalError);
+    req.log.warn(originalError);
     res.statusMessage = 'Bad Gateway';
     res.statusCode = 502;
-    res.end(Buffer.from(JSON.stringify({ message: originalError })));
+    res.end();
   }
 };
 
