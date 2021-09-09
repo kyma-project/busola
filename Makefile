@@ -48,6 +48,13 @@ build-image-local:
 push-image:
 	docker tag $(IMG_NAME) $(IMG):$(TAG)
 	docker push $(IMG):$(TAG)
+ifeq ($(JOB_TYPE), postsubmit)
+	@echo "Sign image with Cosign"
+	cosign version
+	cosign sign -key ${KMS_KEY_URL} $(REPO)$(IMG):$(TAG)
+else
+	@echo "Image signing skipped"
+endif
 
 push-image-local:
 	docker tag $(LOCAL_IMG_NAME) $(LOCAL_IMG):$(TAG)
