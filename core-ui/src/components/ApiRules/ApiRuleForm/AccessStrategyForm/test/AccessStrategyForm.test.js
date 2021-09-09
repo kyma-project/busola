@@ -126,7 +126,7 @@ describe('AccessStrategyForm', () => {
         handleFormChanged={() => {}}
       />,
     );
-    // debug()
+   
     const requiredScope = queryByLabelText(
       'api-rules.access-strategies.labels.required-scope',
     );
