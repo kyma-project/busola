@@ -31,8 +31,7 @@ export function CustomResource({ params }) {
 
   const versions = data?.spec?.versions;
   const version = versions?.find(version => version.name === resourceVersion);
-
-  const AdditionalPrinterColumns = ({ resource }) => {
+  const AdditionalPrinterColumns = resource => {
     const getJsonPath = (resource, jsonPath) => {
       const value =
         jp.value(resource, jsonPath.substring(1)) || EMPTY_TEXT_PLACEHOLDER;
