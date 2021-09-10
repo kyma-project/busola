@@ -19,6 +19,30 @@ import { NoPermissions } from 'components/NoPermissions/NoPermissions';
 import { AddCluster } from 'components/Clusters/views/AddCluster/AddCluster';
 import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
 import { NodeDetails } from 'components/Nodes/NodeDetails/NodeDetails';
+import * as Sentry from '@sentry/react';
+import { Integrations } from '@sentry/tracing';
+
+function useSentry() {
+  const { busolaClusterParams } = useMicrofrontendContext();
+
+  try {
+    const feature = busolaClusterParams?.config?.features?.SENTRY;
+    if (feature && feature.isEnabled && feature.config?.dsn) {
+      Sentry.init({
+        dsn: feature.config.dsn,
+        integrations: [new Integrations.BrowserTracing()],
+
+        // We recommend adjusting this value in production, or using tracesSampler
+        // for finer control
+        tracesSampleRate: 1.0,
+      });
+    } else {
+      console.log(feature);
+    }
+  } catch (e) {
+    console.warn('Sentry not enabled due to error', e);
+  }
+}
 
 export default function App() {
   const { cluster, language } = useMicrofrontendContext();
@@ -26,6 +50,9 @@ export default function App() {
   useEffect(() => {
     i18n.changeLanguage(language);
   }, [language, i18n]);
+
+  useSentry();
+
   return (
     // force rerender on cluster change
     <Switch key={cluster?.name}>
