@@ -5,7 +5,6 @@ import classnames from 'classnames';
 import * as jp from 'jsonpath';
 import './FormComponents.scss';
 import { useTranslation } from 'react-i18next';
-import { LabelsInput } from 'components/Lambdas/components';
 
 export function CollapsibleSection({
   disabled = false,
@@ -16,6 +15,7 @@ export function CollapsibleSection({
   children,
   resource,
   setResource,
+  className,
 }) {
   const [open, setOpen] = React.useState(defaultOpen);
   const actionsRef = React.useRef();
@@ -28,8 +28,13 @@ export function CollapsibleSection({
     if (!actionsRef.current?.contains(e.target)) setOpen(!open);
   };
 
+  const classNames = classnames(
+    'resource-form__collapsible-section',
+    className,
+  );
+
   return (
-    <div className="resource-form__collapsible-section">
+    <div className={classNames}>
       <header onClick={toggle}>
         <div>
           {!disabled && canChangeState && (
@@ -102,7 +107,13 @@ export function FormField({
   );
 }
 
-export function K8sNameField({ kind, value, setValue, customOnChange }) {
+export function K8sNameField({
+  kind,
+  value,
+  setValue,
+  customOnChange,
+  className,
+}) {
   const { t, i18n } = useTranslation();
 
   const onChange = value =>
@@ -111,6 +122,7 @@ export function K8sNameField({ kind, value, setValue, customOnChange }) {
   return (
     <FormField
       required
+      className={className}
       propertyPath="$.metadata.name"
       label={t('common.labels.name')}
       input={() => {
@@ -134,11 +146,12 @@ export function TextArrayInput({
   value,
   setValue,
   label,
-  addLabel,
   tooltipContent,
   required,
   ...props
 }) {
+  const { t } = useTranslation();
+
   const addValue = () => setValue([...value, '']);
 
   const removeValue = index => setValue(value.filter((_, i) => i !== index));
@@ -155,7 +168,7 @@ export function TextArrayInput({
       title={label}
       actions={
         <Button compact glyph="add" onClick={addValue}>
-          {addLabel}
+          {t('common.buttons.add')}
         </Button>
       }
     >
@@ -179,25 +192,61 @@ export function TextArrayInput({
   );
 }
 
-export function KeyValueField({ label, value, setValue, className }) {
-  const { i18n } = useTranslation();
+export function KeyValueField({
+  label,
+  value,
+  setValue,
+  keyProps = {
+    required: true,
+    pattern: '([A-Za-z0-9][-A-Za-z0-9_./]*)?[A-Za-z0-9]',
+  },
+  className,
+}) {
+  const { t } = useTranslation();
+
+  const addValue = () => setValue({ ...value, '': '' });
+
+  const removeValue = key => {
+    delete value[key];
+    setValue({ ...value });
+  };
+
+  const onChange = (k, v, prevKey) => {
+    if (prevKey !== undefined) delete value[prevKey];
+    value[k] = v;
+    setValue({ ...value });
+  };
 
   return (
-    <FormField
-      advanced
-      propertyPath="$.metadata.labels"
-      label={label}
-      input={() => (
-        <LabelsInput
-          compact
-          showFormLabel={false}
-          labels={value}
-          onChange={labels => setValue(labels)}
-          i18n={i18n}
-          type={label}
-        />
-      )}
+    <CollapsibleSection
+      title={label}
+      actions={
+        <Button compact glyph="add" onClick={addValue}>
+          {t('common.buttons.add')}
+        </Button>
+      }
       className={className}
-    />
+    >
+      <ul className="text-array-input__list">
+        {Object.entries(value || {}).map(([key, value]) => (
+          <li key={key}>
+            <FormInput
+              defaultValue={key}
+              onBlur={e => onChange(e.target.value, value, key)}
+              {...keyProps}
+            />
+            <FormInput
+              value={value}
+              onChange={e => onChange(key, e.target.value)}
+            />
+            <Button
+              glyph="delete"
+              type="negative"
+              onClick={() => removeValue(key)}
+            />
+          </li>
+        ))}
+      </ul>
+    </CollapsibleSection>
   );
 }

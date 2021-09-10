@@ -244,7 +244,7 @@ common:
     object-required: 'An object is required'
     editor-error: 'Parse error: {{error}}, previous valid input will be used.'
     messages:
-      failure: Failed to create the {{resourceType}}.
+      failure: 'Failed to create the {{resourceType}}: {{error}}.'
       success: '{{resourceType}} created.'
     modes:
       advanced: Advanced
@@ -463,7 +463,6 @@ dnsentries:
 dnsproviders:
   name_singular: DNS Provider
   labels:
-    add-domain: Add Domain
     exclude-domains: Exclude Domains
     default-ttl: Default TTL
     secret-reference: Secret Reference

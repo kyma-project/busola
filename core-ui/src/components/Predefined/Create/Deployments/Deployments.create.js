@@ -98,6 +98,7 @@ export function DeploymentsCreate({
         title: t('deployments.create-modal.messages.failure'),
         content: t('common.create-form.messages.failure', {
           resourceType: t('deployments.name_singular'),
+          error: e.message,
         }),
       });
       return false;
@@ -151,12 +152,12 @@ export function DeploymentsCreate({
         advanced
         propertyPath="$.metadata.labels"
         label={t('common.headers.labels')}
+        className="fd-margin-top--sm"
       />
       <ResourceForm.KeyValueField
         advanced
         propertyPath="$.metadata.annotations"
         label={t('common.headers.annotations')}
-        className="fd-margin-bottom--sm"
       />
 
       <ResourceForm.FormField

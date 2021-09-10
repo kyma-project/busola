@@ -69,7 +69,7 @@ export function createPresets(namespace, translate) {
             name: 'echo-server',
             namespace,
             labels: {
-              'app.kubernetes.io/name': '',
+              'app.kubernetes.io/name': 'echo-server',
             },
           },
           spec: {
@@ -110,7 +110,7 @@ export function createPresets(namespace, translate) {
             name: 'httpbin',
             namespace,
             labels: {
-              'app.kubernetes.io/name': '',
+              'app.kubernetes.io/name': 'httpbin',
             },
           },
           spec: {

@@ -54,6 +54,7 @@ export function ResourceForm({
         notification.notifyError({
           content: t('common.create-form.messages.failure', {
             resourceType: nameSingular,
+            error: e.message,
           }),
         });
         return false;

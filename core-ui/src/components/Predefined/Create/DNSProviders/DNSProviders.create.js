@@ -94,14 +94,12 @@ export function DNSProvidersCreate({
       <ResourceForm.TextArrayInput
         propertyPath="$.spec.domains.include"
         label={t('dnsproviders.labels.include-domains')}
-        addLabel={t('dnsproviders.labels.add-domain')}
         placeholder={t('dnsproviders.placeholders.include-domains')}
       />
       <ResourceForm.TextArrayInput
         advanced
         propertyPath="$.spec.domains.exclude"
         label={t('dnsproviders.labels.exclude-domains')}
-        addLabel={t('dnsproviders.labels.add-domain')}
         placeholder={t('dnsproviders.placeholders.exclude-domains')}
       />
     </ResourceForm>
