@@ -65,7 +65,9 @@ export function SimpleForm({ dnsProvider, setDNSProvider }) {
           }
         />
         <CreateForm.FormField
-          label={<FormLabel>Secret Reference</FormLabel>}
+          label={
+            <FormLabel>{t('dnsproviders.labels.secret-reference')}</FormLabel>
+          }
           required
           input={
             <SecretRef
@@ -78,7 +80,9 @@ export function SimpleForm({ dnsProvider, setDNSProvider }) {
           }
         />
         <CreateForm.FormField
-          label={<FormLabel>Include Domains</FormLabel>}
+          label={
+            <FormLabel>{t('dnsproviders.labels.include-domains')}</FormLabel>
+          }
           required
           input={
             <FormTextarea
@@ -94,7 +98,7 @@ export function SimpleForm({ dnsProvider, setDNSProvider }) {
                 })
               }
               value={dnsProvider.domains?.include?.join('\n') || ''}
-              placeholder="Domains that should be observed, one per line"
+              placeholder={t('dnsproviders.placeholders.include-domains')}
             />
           }
         />

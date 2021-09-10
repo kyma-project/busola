@@ -1,15 +1,17 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { FormInput, FormLabel, FormTextarea } from 'fundamental-react';
 
 import { CreateForm } from 'shared/components/CreateForm/CreateForm';
 import { SimpleForm } from './SimpleForm';
 
 export function AdvancedForm({ dnsEntry, setDNSEntry }) {
+  const { t } = useTranslation();
   return (
     <>
       <SimpleForm dnsEntry={dnsEntry} setDNSEntry={setDNSEntry} />
       <CreateForm.FormField
-        label={<FormLabel>TTL</FormLabel>}
+        label={<FormLabel>{t('dnsentries.labels.ttl')}</FormLabel>}
         input={
           <FormInput
             compact
@@ -18,12 +20,12 @@ export function AdvancedForm({ dnsEntry, setDNSEntry }) {
             onChange={e =>
               setDNSEntry({ ...dnsEntry, ttl: e.target.valueAsNumber })
             }
-            placeholder="Enter time to live"
+            placeholder={t('dnsentries.placeholders.ttl')}
           />
         }
       />
       <CreateForm.FormField
-        label={<FormLabel>DNS Name</FormLabel>}
+        label={<FormLabel>{t('dnsentries.labels.dns-name')}</FormLabel>}
         input={
           <FormInput
             compact
@@ -31,12 +33,12 @@ export function AdvancedForm({ dnsEntry, setDNSEntry }) {
             onChange={e =>
               setDNSEntry({ ...dnsEntry, dnsName: e.target.value })
             }
-            placeholder="Enter DNS Name"
+            placeholder={t('dnsentries.placeholders.dns-name')}
           />
         }
       />
       <CreateForm.FormField
-        label={<FormLabel required>Text</FormLabel>}
+        label={<FormLabel required>{t('dnsentries.labels.text')}</FormLabel>}
         required
         input={
           <FormTextarea
@@ -49,7 +51,7 @@ export function AdvancedForm({ dnsEntry, setDNSEntry }) {
               })
             }
             value={dnsEntry.text.join('\n')}
-            placeholder="Text records, one per line"
+            placeholder={t('dnsentries.placeholders.text')}
           />
         }
       />
