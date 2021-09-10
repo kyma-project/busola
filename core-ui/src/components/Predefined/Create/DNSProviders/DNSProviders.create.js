@@ -6,12 +6,23 @@ import { createDNSProviderTemplate } from './templates';
 import { ProviderTypeDropdown } from './ProviderTypeDropdown';
 import { SecretRef } from 'shared/components/ResourceRef/SecretRef';
 
-export function DNSProvidersCreate({ formElementRef, namespace, onChange }) {
+export function DNSProvidersCreate({
+  formElementRef,
+  namespace,
+  onChange,
+  setCustomValid,
+}) {
   const [dnsProvider, setDNSProvider] = React.useState(
     createDNSProviderTemplate(namespace),
   );
   const postRequest = usePost();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
+
+  React.useEffect(() => {
+    const isTypeSet = dnsProvider?.spec?.type;
+
+    setCustomValid(isTypeSet);
+  }, [dnsProvider?.spec?.type]);
 
   return (
     <ResourceForm
@@ -56,6 +67,7 @@ export function DNSProvidersCreate({ formElementRef, namespace, onChange }) {
       <ResourceForm.FormField
         propertyPath="$.spec.type"
         label={t('dnsproviders.labels.type')}
+        required
         input={(value, setValue) => (
           <ProviderTypeDropdown type={value} setType={setValue} />
         )}

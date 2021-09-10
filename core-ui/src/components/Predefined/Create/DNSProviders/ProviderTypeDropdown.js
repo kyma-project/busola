@@ -28,6 +28,7 @@ export function ProviderTypeDropdown({ type, setType }) {
       onSelect={(_, selected) => setType(selected.key)}
       placeholder={t('dnsproviders.placeholders.provider-type')}
       fullWidth
+      fdSelectProps={{ required: true }}
     />
   );
 }
