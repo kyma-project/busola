@@ -2,13 +2,74 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ResourceForm } from './../ResourceForm/ResourceForm';
 import * as jp from 'jsonpath';
+import { Dropdown } from 'react-shared';
 import {
   Button,
   FormFieldset,
+  FormInput,
   FormItem,
   FormLabel,
   MessageStrip,
 } from 'fundamental-react';
+import './Containers.scss';
+
+function MemoryInput({ label, value = '', setValue }) {
+  const units = ['', 'K', 'Ki', 'M', 'Mi', 'G', 'Gi', 'Ti', 'T'];
+  const options = units.map(e => ({
+    key: e,
+    text: e,
+  }));
+
+  value = value.toString();
+  const numericValue = value.match(/^\d*(\.\d*)?/)[0];
+  const unit = value.replace(numericValue, '');
+  const selectedUnit = units.includes(unit) ? unit : '';
+
+  return (
+    <FormItem>
+      <FormLabel required>{label}</FormLabel>
+      <div className="memory-input">
+        <FormInput
+          compact
+          type="number"
+          min="0"
+          required
+          value={numericValue}
+          onChange={e => setValue(e.target.value + selectedUnit)}
+        />
+        <Dropdown
+          compact
+          options={options}
+          selectedKey={selectedUnit}
+          onSelect={(_, { text }) => setValue(numericValue.toString() + text)}
+        />
+      </div>
+    </FormItem>
+  );
+}
+
+function CpuInput({ label, value = '', setValue }) {
+  value = value.toString();
+  if (value.endsWith('m')) {
+    value = value.replace(/m/, '');
+  } else {
+    // convert from full units to milis
+    value *= 1000;
+  }
+
+  return (
+    <FormItem>
+      <FormLabel required>{label} (m)</FormLabel>
+      <ResourceForm.Input
+        type="number"
+        min="0"
+        required
+        value={value}
+        setValue={value => setValue(value + 'm')}
+      />
+    </FormItem>
+  );
+}
 
 function SingleContainerSection({ container, containers, setContainers }) {
   const { t } = useTranslation();
@@ -47,60 +108,40 @@ function SingleContainerSection({ container, containers, setContainers }) {
         defaultOpen
       >
         <FormFieldset className="runtime-profile-form">
-          <FormItem>
-            <FormLabel required>
-              {t('deployments.create-modal.advanced.memory-requests')}
-            </FormLabel>
-            <ResourceForm.Input
-              required
-              value={jp.value(container, '$.resources.requests.memory') || ''}
-              setValue={memory => {
-                jp.value(container, '$.resources.requests.memory', memory);
-                setContainers([...containers]);
-              }}
-            />
-          </FormItem>
-          <FormItem>
-            <FormLabel required>
-              {t('deployments.create-modal.advanced.memory-limits')}
-            </FormLabel>
-            <ResourceForm.Input
-              required
-              value={jp.value(container, '$.resources.limits.memory') || ''}
-              setValue={memory => {
-                jp.value(container, '$.resources.limits.memory', memory);
-                setContainers([...containers]);
-              }}
-            />
-          </FormItem>
+          <MemoryInput
+            label={t('deployments.create-modal.advanced.memory-requests')}
+            value={jp.value(container, '$.resources.requests.memory') || ''}
+            setValue={memory => {
+              jp.value(container, '$.resources.requests.memory', memory);
+              setContainers([...containers]);
+            }}
+          />
+          <MemoryInput
+            label={t('deployments.create-modal.advanced.memory-limits')}
+            value={jp.value(container, '$.resources.limits.memory') || ''}
+            setValue={memory => {
+              jp.value(container, '$.resources.limits.memory', memory);
+              setContainers([...containers]);
+            }}
+          />
         </FormFieldset>
         <FormFieldset className="runtime-profile-form">
-          <FormItem>
-            <FormLabel required>
-              {t('deployments.create-modal.advanced.cpu-requests')}
-            </FormLabel>
-            <ResourceForm.Input
-              required
-              value={jp.value(container, '$.resources.requests.cpu') || ''}
-              setValue={cpu => {
-                jp.value(container, '$.resources.requests.cpu', cpu);
-                setContainers([...containers]);
-              }}
-            />
-          </FormItem>
-          <FormItem>
-            <FormLabel required>
-              {t('deployments.create-modal.advanced.cpu-limits')}
-            </FormLabel>
-            <ResourceForm.Input
-              required
-              value={jp.value(container, '$.resources.limits.cpu') || ''}
-              setValue={cpu => {
-                jp.value(container, '$.resources.limits.cpu', cpu);
-                setContainers([...containers]);
-              }}
-            />
-          </FormItem>
+          <CpuInput
+            label={t('deployments.create-modal.advanced.cpu-requests')}
+            value={jp.value(container, '$.resources.requests.cpu') || ''}
+            setValue={cpu => {
+              jp.value(container, '$.resources.requests.cpu', cpu);
+              setContainers([...containers]);
+            }}
+          />
+          <CpuInput
+            label={t('deployments.create-modal.advanced.cpu-limits')}
+            value={jp.value(container, '$.resources.limits.cpu') || ''}
+            setValue={cpu => {
+              jp.value(container, '$.resources.limits.cpu', cpu);
+              setContainers([...containers]);
+            }}
+          />
         </FormFieldset>
       </ResourceForm.CollapsibleSection>
     </>

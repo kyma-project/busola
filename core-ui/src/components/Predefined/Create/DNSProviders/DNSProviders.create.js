@@ -26,7 +26,7 @@ export function DNSProvidersCreate({
       jp.value(dnsProvider, '$.spec.secretRef.namespace');
 
     setCustomValid(isTypeSet && isSecretRefSet);
-  }, [dnsProvider]);
+  }, [dnsProvider, setCustomValid]);
 
   return (
     <ResourceForm
