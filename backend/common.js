@@ -11,6 +11,10 @@ const logger = require('pino-http')({
       method: req.method,
       url: req.url,
       cluster_url: req.headers['x-cluster-url'],
+      code: req.code,
+      stack: req.stack,
+      type: req.type,
+      msg: req.msg,
     }),
   },
 });
