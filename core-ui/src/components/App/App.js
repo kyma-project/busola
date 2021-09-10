@@ -23,10 +23,10 @@ import * as Sentry from '@sentry/react';
 import { Integrations } from '@sentry/tracing';
 
 function useSentry() {
-  const { busolaClusterParams } = useMicrofrontendContext();
-
+  const { features } = useMicrofrontendContext();
+  console.log('feats', features);
   try {
-    const feature = busolaClusterParams?.config?.features?.SENTRY;
+    const feature = features?.SENTRY;
     if (feature && feature.isEnabled && feature.config?.dsn) {
       Sentry.init({
         dsn: feature.config.dsn,
