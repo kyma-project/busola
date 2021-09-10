@@ -648,6 +648,7 @@ functions:
     header:
       key: Key
       name: Variable Name
+      owner: Owner Reference
       source: Source
       value: Value
     not-found: This Function doesn't have any environment variables yet.
