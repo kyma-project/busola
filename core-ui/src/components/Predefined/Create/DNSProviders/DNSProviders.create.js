@@ -20,15 +20,18 @@ export function DNSProvidersCreate({
   const { t } = useTranslation();
 
   React.useEffect(() => {
-    const isTypeSet = dnsProvider?.spec?.type;
+    const isTypeSet = jp.value(dnsProvider, '$.spec.type');
+    const isSecretRefSet =
+      jp.value(dnsProvider, '$.spec.secretRef.name') &&
+      jp.value(dnsProvider, '$.spec.secretRef.namespace');
 
-    setCustomValid(isTypeSet);
-  }, [dnsProvider?.spec?.type]);
+    setCustomValid(isTypeSet && isSecretRefSet);
+  }, [dnsProvider]);
 
   return (
     <ResourceForm
       pluralKind="dnsProviders"
-      singularName={t(`$dnsproviders.name_singular`)}
+      singularName={t('dnsproviders.name_singular')}
       resource={dnsProvider}
       setResource={setDNSProvider}
       onChange={onChange}
@@ -64,6 +67,7 @@ export function DNSProvidersCreate({
         label={t('common.headers.annotations')}
       />
       <ResourceForm.FormField
+        required
         propertyPath="$.spec.secretRef"
         label={t('dnsproviders.labels.secret-reference')}
         input={(value, setValue) => (

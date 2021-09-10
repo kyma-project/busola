@@ -741,6 +741,7 @@ instances:
 integration:
   title: Integration
 issuers:
+  name_singular: Issuer
   acme: ACME
   auto-registration: Auto registration
   ca: CA

@@ -1,53 +1,39 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { FormInput, ComboboxInput } from 'fundamental-react';
-
-import './ExternalResourceRef.scss';
+import { Dropdown } from 'react-shared';
 
 export function ExternalResourceRef({ resourceRef, onChange, resources }) {
-  const { t } = useTranslation();
-  const options = (resources || []).map((resource, index) => ({
-    key: index,
-    text: resource.metadata.name,
-    namespace: resource.metadata.namespace,
+  const { t, i18n } = useTranslation();
+
+  const format = resource => {
+    if (!resource) return null;
+    return `${resource.namespace}/${resource.name}`;
+  };
+
+  const options = (resources || []).map(resource => ({
+    key: format(resource.metadata),
+    text: format(resource.metadata),
+    resource,
   }));
 
   const selectResource = (e, selected) => {
-    if (selected.key > -1) {
-      onChange(e, { name: selected.text, namespace: selected.namespace });
-    }
+    onChange(e, {
+      name: selected.resource.metadata.name,
+      namespace: selected.resource.metadata.namespace,
+    });
   };
 
   return (
     <div className="external-resource-ref">
-      <ComboboxInput
+      <Dropdown
         compact
-        onChange={e => {
-          onChange(e, { ...resourceRef, name: e.target.value });
-        }}
-        onSelectionChange={selectResource}
+        onSelect={selectResource}
         placeholder={t('common.labels.name')}
-        formItemProps={{ className: 'name' }}
-        inputProps={{ value: resourceRef.name }}
+        selectedKey={format(resourceRef)}
         options={options}
-        optionRenderer={resource => (
-          <>
-            <span className="fd-list__title">{resource.text}</span>
-            <span className="fd-list__secondary">{resource.namespace}</span>
-          </>
-        )}
+        fullWidth
+        i18n={i18n}
       />
-      <div className="namespace fd-input-group--control fd-input-group">
-        <FormInput
-          compact
-          className="fd-input-group__input"
-          onChange={e =>
-            onChange(e, { ...resourceRef, namespace: e.target.value })
-          }
-          placeholder={t('common.labels.namespace')}
-          value={resourceRef.namespace}
-        />
-      </div>
     </div>
   );
 }
