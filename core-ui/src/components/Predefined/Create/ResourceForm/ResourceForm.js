@@ -14,7 +14,8 @@ ResourceForm.Input = FormComponents.Input;
 ResourceForm.CollapsibleSection = FormComponents.CollapsibleSection;
 ResourceForm.FormField = FormComponents.FormField;
 ResourceForm.TextArea = FormComponents.TextArea;
-// ResourceForm.ResourceNameField = FormComponents.ResourceNameField;
+ResourceForm.K8sNameField = FormComponents.K8sNameField;
+ResourceForm.KeyValueField = FormComponents.KeyValueField;
 
 export function ResourceForm({
   pluralKind, // used for the request path
@@ -33,8 +34,6 @@ export function ResourceForm({
   const notification = useNotification();
   const { t } = useTranslation();
   const [mode, setMode] = React.useState(ModeSelector.MODE_SIMPLE);
-
-  translationKind = translationKind || pluralKind;
 
   if (!onCreate) {
     onCreate = async () => {

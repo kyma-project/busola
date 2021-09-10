@@ -1,8 +1,7 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
-import { LabelsInput } from 'components/Lambdas/components';
 import { useTranslation } from 'react-i18next';
-import { K8sNameInput, usePost, useNotification } from 'react-shared';
+import { usePost, useNotification } from 'react-shared';
 import { ResourceForm } from './../ResourceForm/ResourceForm';
 import { Button, Checkbox } from 'fundamental-react';
 import * as jp from 'jsonpath';
@@ -142,22 +141,22 @@ export function DeploymentsCreate({
         }
       }}
     >
-      <ResourceForm.FormField
-        required
+      <ResourceForm.K8sNameField
         propertyPath="$.metadata.name"
-        label={t('common.labels.name')}
-        input={value => (
-          <K8sNameInput
-            kind={t('deployments.name_singular')}
-            compact
-            required
-            showLabel={false}
-            onChange={e => handleNameChange(e.target.value)}
-            value={value}
-            i18n={i18n}
-          />
-        )}
+        kind={t('deployments.name_singular')}
+        customOnChange={handleNameChange}
       />
+      <ResourceForm.KeyValueField
+        advanced
+        propertyPath="$.metadata.labels"
+        label={t('common.headers.labels')}
+      />
+      <ResourceForm.KeyValueField
+        advanced
+        propertyPath="$.metadata.annotations"
+        label={t('common.headers.annotations')}
+      />
+
       <ResourceForm.FormField
         required
         simple
@@ -171,36 +170,6 @@ export function DeploymentsCreate({
             placeholder={t(
               'deployments.create-modal.simple.docker-image-placeholder',
             )}
-          />
-        )}
-      />
-      <ResourceForm.FormField
-        advanced
-        propertyPath="$.metadata.labels"
-        label={t('common.headers.labels')}
-        input={(value, setValue) => (
-          <LabelsInput
-            compact
-            showFormLabel={false}
-            labels={value}
-            onChange={labels => setValue(labels)}
-            i18n={i18n}
-          />
-        )}
-      />
-      <ResourceForm.FormField
-        advanced
-        className="fd-margin-bottom--sm"
-        propertyPath="$.metadata.annotations"
-        label={t('common.headers.annotations')}
-        input={(value, setValue) => (
-          <LabelsInput
-            compact
-            showFormLabel={false}
-            labels={value}
-            onChange={labels => setValue(labels)}
-            i18n={i18n}
-            type={t('common.headers.annotations')}
           />
         )}
       />

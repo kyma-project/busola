@@ -1,12 +1,11 @@
 import React from 'react';
-
 import { FormInput, FormLabel, FormTextarea, Icon } from 'fundamental-react';
 import { Tooltip, K8sNameInput } from 'react-shared';
 import classnames from 'classnames';
 import * as jp from 'jsonpath';
-
 import './FormComponents.scss';
 import { useTranslation } from 'react-i18next';
+import { LabelsInput } from 'components/Lambdas/components';
 
 export function CollapsibleSection({
   disabled = false,
@@ -103,35 +102,33 @@ export function FormField({
   );
 }
 
-// export function ResourceNameField({ kind, value, setValue, inputProps, fieldProps }) {
-//   const { t, i18n } = useTranslation();
+export function K8sNameField({ kind, value, setValue, customOnChange }) {
+  const { t, i18n } = useTranslation();
 
-//   const onChange = (value, defaultSetValue) =>
-//     setValue ? setValue(value) : defaultSetValue(value);
-//   return (
-//     <FormField
-//       required
-//       propertyPath="$.metadata.name"
-//       label={t('common.labels.name')}
-//       input={(value, defaultSetValue) => {
-//         console.log(value)
-//         return (
-//           <K8sNameInput
-//             kind={kind}
-//             compact
-//             required
-//             showLabel={false}
-//             onChange={e => onChange(e.target.value, defaultSetValue)}
-//             value={value}
-//             i18n={i18n}
-//             {...inputProps}
-//           />
-//         );
-//       }}
-//       {...fieldProps}
-//     />
-//   );
-// }
+  const onChange = value =>
+    customOnChange ? customOnChange(value) : setValue(value);
+
+  return (
+    <FormField
+      required
+      propertyPath="$.metadata.name"
+      label={t('common.labels.name')}
+      input={() => {
+        return (
+          <K8sNameInput
+            kind={kind}
+            compact
+            required
+            showLabel={false}
+            onChange={e => onChange(e.target.value)}
+            value={value}
+            i18n={i18n}
+          />
+        );
+      }}
+    />
+  );
+}
 
 export function TextArea({
   value,
@@ -154,12 +151,35 @@ export function TextArea({
           value={value?.join('\n') || ''}
           onChange={e => setValue(e.target.value.split('\n'))}
           className="resize-vertical"
+          // remove empty entries on blur
           onBlur={() => setValue(value.filter(d => d))}
           {...inputProps}
         />
       )}
       required={required}
       tooltipContent={tooltipContent}
+    />
+  );
+}
+
+export function KeyValueField({ label, value, setValue }) {
+  const { i18n } = useTranslation();
+
+  return (
+    <FormField
+      advanced
+      propertyPath="$.metadata.labels"
+      label={label}
+      input={() => (
+        <LabelsInput
+          compact
+          showFormLabel={false}
+          labels={value}
+          onChange={labels => setValue(labels)}
+          i18n={i18n}
+          type={label}
+        />
+      )}
     />
   );
 }
