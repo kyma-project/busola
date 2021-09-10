@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormInput, FormLabel, FormTextarea, Icon } from 'fundamental-react';
+import { FormInput, FormLabel, Button, Icon } from 'fundamental-react';
 import { Tooltip, K8sNameInput } from 'react-shared';
 import classnames from 'classnames';
 import * as jp from 'jsonpath';
@@ -130,39 +130,56 @@ export function K8sNameField({ kind, value, setValue, customOnChange }) {
   );
 }
 
-export function TextArea({
+export function TextArrayInput({
   value,
   setValue,
   label,
+  addLabel,
   tooltipContent,
   required,
   ...props
 }) {
-  // don't pass those props to textarea element
-  const { advanced, simple, propertyPath, ...inputProps } = props;
+  const addValue = () => setValue([...value, '']);
+
+  const removeValue = index => setValue(value.filter((_, i) => i !== index));
+
+  const onChange = (e, index) => {
+    value[index] = e.target.value;
+    setValue([...value]);
+  };
 
   return (
-    <FormField
-      label={label}
-      input={() => (
-        <FormTextarea
-          compact
-          required={required}
-          value={value?.join('\n') || ''}
-          onChange={e => setValue(e.target.value.split('\n'))}
-          className="resize-vertical"
-          // remove empty entries on blur
-          onBlur={() => setValue(value.filter(d => d))}
-          {...inputProps}
-        />
-      )}
-      required={required}
-      tooltipContent={tooltipContent}
-    />
+    <CollapsibleSection
+      canChangeState={false}
+      defaultOpen
+      title={label}
+      actions={
+        <Button compact glyph="add" onClick={addValue}>
+          {addLabel}
+        </Button>
+      }
+    >
+      <ul className="text-array-input__list">
+        {(value || []).map((entry, i) => (
+          <li key={i}>
+            <FormInput
+              value={entry}
+              onChange={e => onChange(e, i)}
+              {...props}
+            />
+            <Button
+              glyph="delete"
+              type="negative"
+              onClick={() => removeValue(i)}
+            />
+          </li>
+        ))}
+      </ul>
+    </CollapsibleSection>
   );
 }
 
-export function KeyValueField({ label, value, setValue }) {
+export function KeyValueField({ label, value, setValue, className }) {
   const { i18n } = useTranslation();
 
   return (
@@ -180,6 +197,7 @@ export function KeyValueField({ label, value, setValue }) {
           type={label}
         />
       )}
+      className={className}
     />
   );
 }

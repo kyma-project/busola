@@ -463,6 +463,7 @@ dnsentries:
 dnsproviders:
   name_singular: DNS Provider
   labels:
+    add-domain: Add Domain
     exclude-domains: Exclude Domains
     default-ttl: Default TTL
     secret-reference: Secret Reference
@@ -470,9 +471,9 @@ dnsproviders:
     type: Type
   placeholders:
     provider-type: Choose Provider Type
-    include-domains: Domains that should be observed, one per line
+    include-domains: Domain that should be observed
     default-ttl: Enter the default time to live.
-    exclude-domains: Domains that should be ignored, one per line
+    exclude-domains: Domain that should be ignored
   domains: Domains
   headers:
     exclude: Excluded Domains

@@ -31,3 +31,15 @@
     top: 25%;
   }
 }
+
+.text-array-input__list li {
+  display: flex;
+
+  input {
+    margin-right: 16px;
+  }
+
+  button {
+    margin-top: 4px;
+  }
+}

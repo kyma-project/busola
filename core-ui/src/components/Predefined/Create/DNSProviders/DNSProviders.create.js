@@ -25,7 +25,11 @@ export function DNSProvidersCreate({
       jp.value(dnsProvider, '$.spec.secretRef.name') &&
       jp.value(dnsProvider, '$.spec.secretRef.namespace');
 
-    setCustomValid(isTypeSet && isSecretRefSet);
+    const domains = jp.value(dnsProvider, '$.spec.domains.include');
+    const hasAtLeastOneIncludeDomain =
+      Array.isArray(domains) && domains.some(e => e.length);
+
+    setCustomValid(isTypeSet && isSecretRefSet && hasAtLeastOneIncludeDomain);
   }, [dnsProvider, setCustomValid]);
 
   return (
@@ -85,16 +89,19 @@ export function DNSProvidersCreate({
         input={(value, setValue) => (
           <ProviderTypeDropdown type={value} setType={setValue} />
         )}
+        className="fd-margin-bottom--sm"
       />
-      <ResourceForm.TextArea
+      <ResourceForm.TextArrayInput
         propertyPath="$.spec.domains.include"
         label={t('dnsproviders.labels.include-domains')}
+        addLabel={t('dnsproviders.labels.add-domain')}
         placeholder={t('dnsproviders.placeholders.include-domains')}
       />
-      <ResourceForm.TextArea
+      <ResourceForm.TextArrayInput
         advanced
         propertyPath="$.spec.domains.exclude"
         label={t('dnsproviders.labels.exclude-domains')}
+        addLabel={t('dnsproviders.labels.add-domain')}
         placeholder={t('dnsproviders.placeholders.exclude-domains')}
       />
     </ResourceForm>

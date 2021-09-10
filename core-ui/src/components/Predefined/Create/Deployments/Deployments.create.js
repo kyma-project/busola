@@ -156,6 +156,7 @@ export function DeploymentsCreate({
         advanced
         propertyPath="$.metadata.annotations"
         label={t('common.headers.annotations')}
+        className="fd-margin-bottom--sm"
       />
 
       <ResourceForm.FormField

@@ -13,7 +13,7 @@ ResourceForm.Label = FormComponents.Label;
 ResourceForm.Input = FormComponents.Input;
 ResourceForm.CollapsibleSection = FormComponents.CollapsibleSection;
 ResourceForm.FormField = FormComponents.FormField;
-ResourceForm.TextArea = FormComponents.TextArea;
+ResourceForm.TextArrayInput = FormComponents.TextArrayInput;
 ResourceForm.K8sNameField = FormComponents.K8sNameField;
 ResourceForm.KeyValueField = FormComponents.KeyValueField;
 
