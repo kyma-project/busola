@@ -126,6 +126,7 @@ export function DeploymentsCreate({
   return (
     <ResourceForm
       pluralKind="deployments"
+      singularName={t(`deployments.name_singular`)}
       resource={deployment}
       setResource={setDeployment}
       onChange={onChange}

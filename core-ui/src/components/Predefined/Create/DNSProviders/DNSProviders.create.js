@@ -18,6 +18,7 @@ export function DNSProvidersCreate({ formElementRef, namespace, onChange }) {
   return (
     <ResourceForm
       pluralKind="dnsProviders"
+      singularName={t(`$dnsproviders.name_singular`)}
       resource={dnsProvider}
       setResource={setDNSProvider}
       onChange={onChange}

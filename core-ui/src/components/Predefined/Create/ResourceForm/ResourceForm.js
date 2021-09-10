@@ -17,7 +17,8 @@ ResourceForm.TextArea = FormComponents.TextArea;
 // ResourceForm.ResourceNameField = FormComponents.ResourceNameField;
 
 export function ResourceForm({
-  pluralKind,
+  pluralKind, // used for the request path
+  nameSingular,
   resource,
   setResource,
   onCreate,
@@ -33,14 +34,15 @@ export function ResourceForm({
   const { t } = useTranslation();
   const [mode, setMode] = React.useState(ModeSelector.MODE_SIMPLE);
 
+  translationKind = translationKind || pluralKind;
+
   if (!onCreate) {
     onCreate = async () => {
-      const kindTranslation = t(`${pluralKind.toLowerCase()}.name_singular`);
       try {
         await createFn();
         notification.notifySuccess({
           content: t('common.create-form.messages.success', {
-            resourceType: kindTranslation,
+            resourceType: nameSingular,
           }),
         });
         LuigiClient.linkManager()
@@ -52,7 +54,7 @@ export function ResourceForm({
         console.error(e);
         notification.notifyError({
           content: t('common.create-form.messages.failure', {
-            resourceType: kindTranslation,
+            resourceType: nameSingular,
           }),
         });
         return false;
