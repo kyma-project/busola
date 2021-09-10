@@ -5,6 +5,7 @@ import { ResourceForm } from '../ResourceForm/ResourceForm';
 import { createDNSProviderTemplate } from './templates';
 import { ProviderTypeDropdown } from './ProviderTypeDropdown';
 import { SecretRef } from 'shared/components/ResourceRef/SecretRef';
+import * as jp from 'jsonpath';
 
 export function DNSProvidersCreate({
   formElementRef,
@@ -42,6 +43,15 @@ export function DNSProvidersCreate({
       <ResourceForm.K8sNameField
         propertyPath="$.metadata.name"
         kind={t('dnsproviders.name_singular')}
+        customOnChange={name => {
+          jp.value(dnsProvider, '$.metadata.name', name);
+          jp.value(
+            dnsProvider,
+            "$.metadata.labels['app.kubernetes.io/name']",
+            name,
+          );
+          setDNSProvider({ ...dnsProvider });
+        }}
       />
       <ResourceForm.KeyValueField
         advanced

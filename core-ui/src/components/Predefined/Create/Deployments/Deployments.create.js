@@ -21,7 +21,7 @@ export function DeploymentsCreate({
   onChange,
   setCustomValid,
 }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const notification = useNotification();
   const postRequest = usePost();
 
@@ -75,6 +75,7 @@ export function DeploymentsCreate({
 
   const handleNameChange = name => {
     jp.value(deployment, '$.metadata.name', name);
+    jp.value(deployment, "$.metadata.labels['app.kubernetes.io/name']", name);
     jp.value(deployment, '$.spec.template.spec.containers[0].name', name);
     jp.value(deployment, '$.spec.selector.matchLabels.app', name); // match labels
     jp.value(deployment, `$.spec.template.metadata.labels.app`, name); // pod labels

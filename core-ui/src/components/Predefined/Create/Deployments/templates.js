@@ -2,15 +2,19 @@ export function createContainerTemplate() {
   return {
     name: '',
     image: '',
-    resources: {
-      requests: {
-        memory: '64Mi',
-        cpu: '50m',
-      },
-      limits: {
-        memory: '128Mi',
-        cpu: '100m',
-      },
+    resources: createResourcesTemplate(),
+  };
+}
+
+function createResourcesTemplate() {
+  return {
+    requests: {
+      memory: '64Mi',
+      cpu: '50m',
+    },
+    limits: {
+      memory: '128Mi',
+      cpu: '100m',
     },
   };
 }
@@ -22,7 +26,9 @@ export function createDeploymentTemplate(namespaceId) {
     metadata: {
       name: '',
       namespace: namespaceId,
-      labels: {},
+      labels: {
+        'app.kubernetes.io/name': '',
+      },
     },
     spec: {
       replicas: 1,
@@ -62,7 +68,9 @@ export function createPresets(namespace, translate) {
           metadata: {
             name: 'echo-server',
             namespace,
-            labels: {},
+            labels: {
+              'app.kubernetes.io/name': '',
+            },
           },
           spec: {
             replicas: 1,
@@ -82,16 +90,7 @@ export function createPresets(namespace, translate) {
                   {
                     name: 'echo-server',
                     image: 'ealen/echo-server',
-                    resources: {
-                      requests: {
-                        memory: '64Mi',
-                        cpu: '50m',
-                      },
-                      limits: {
-                        memory: '128Mi',
-                        cpu: '100m',
-                      },
-                    },
+                    resources: createResourcesTemplate(),
                   },
                 ],
               },
@@ -110,7 +109,9 @@ export function createPresets(namespace, translate) {
           metadata: {
             name: 'httpbin',
             namespace,
-            labels: {},
+            labels: {
+              'app.kubernetes.io/name': '',
+            },
           },
           spec: {
             replicas: 1,
@@ -130,16 +131,7 @@ export function createPresets(namespace, translate) {
                   {
                     name: 'httpbin',
                     image: 'kennethreitz/httpbin',
-                    resources: {
-                      requests: {
-                        memory: '64Mi',
-                        cpu: '50m',
-                      },
-                      limits: {
-                        memory: '128Mi',
-                        cpu: '100m',
-                      },
-                    },
+                    resources: createResourcesTemplate(),
                   },
                 ],
               },
