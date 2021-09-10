@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import LuigiClient from '@luigi-project/client';
 import { usePost, useNotification } from 'react-shared';
 import { CreateForm } from 'shared/components/CreateForm/CreateForm';
@@ -16,6 +17,7 @@ export function CreateDNSProviderForm({
   formElementRef,
   onChange,
 }) {
+  const { t } = useTranslation();
   const notification = useNotification();
   const postRequest = usePost();
   const [dnsProvider, setDNSProvider] = useState(
@@ -29,7 +31,7 @@ export function CreateDNSProviderForm({
         dnsProviderToYaml(dnsProvider),
       );
       notification.notifySuccess({
-        content: 'DNS Provider created',
+        content: t('dnsproviders.messages.created'),
       });
       LuigiClient.linkManager()
         .fromContext('namespace')
@@ -37,7 +39,7 @@ export function CreateDNSProviderForm({
     } catch (e) {
       console.error(e);
       notification.notifyError({
-        content: 'Cannot create DNS Provider:' + e.message,
+        content: t('dnsproviders.messages.cannot-create') + e.message,
       });
       return false;
     }
