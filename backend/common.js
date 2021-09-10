@@ -4,6 +4,7 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const logger = require('pino-http')({
+  autoLogging: process.env.NODE_ENV === 'production', //to disable the automatic "request completed" and "request errored" logging.
   serializers: {
     req: req => ({
       id: req.id,
