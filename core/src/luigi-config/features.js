@@ -1,7 +1,7 @@
 const resolvers = {
   //leave the structure for the future when we add new options
   apiGroup: (selector, data) =>
-    data.crds.some(crd => crd.includes(selector.apiGroup)),
+    data?.crds.some(crd => crd.includes(selector.apiGroup)),
 };
 
 async function resolveSelector(selector, data) {

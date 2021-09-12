@@ -57,13 +57,9 @@ export async function reloadNavigation() {
 
 async function createClusterManagementNodes() {
   const activeClusterName = getActiveClusterName();
-  const busolaClusterParams = await getBusolaClusterParams();
 
-  const features = busolaClusterParams?.config?.features;
-  const sentryFeature = {
-    ...features?.SENTRY,
-    isEnabled: resolveFeatureAvailability(features?.SENTRY),
-  };
+  const { features = {} } = (await getActiveCluster()) || {};
+  await resolveFeatures(features, null);
 
   const clusterManagementNode = {
     pathSegment: 'clusters',
@@ -97,7 +93,7 @@ async function createClusterManagementNodes() {
       activeClusterName: getActiveClusterName(),
       language: i18next.language,
       busolaClusterParams,
-      features: { SENTRY: sentryFeature },
+      features,
     },
   };
   const clusters = await getClusters();
