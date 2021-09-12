@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ResourceForm } from './../ResourceForm/ResourceForm';
 import * as jp from 'jsonpath';
-import { Dropdown } from 'react-shared';
+import { Dropdown, K8sNameInput } from 'react-shared';
 import {
   Button,
   FormFieldset,
@@ -72,7 +72,7 @@ function CpuInput({ label, value = '', setValue }) {
 }
 
 function SingleContainerSection({ container, containers, setContainers }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   return (
     <>
@@ -85,7 +85,15 @@ function SingleContainerSection({ container, containers, setContainers }) {
         }}
         required
         input={(value, onChange) => (
-          <ResourceForm.Input required value={value} setValue={onChange} />
+          <K8sNameInput
+            value={value}
+            onChange={onChange}
+            compact
+            required
+            showLabel={false}
+            i18n={i18n}
+            kind={t('deployments.create-modal.advanced.image')}
+          />
         )}
       />
       <ResourceForm.FormField
@@ -97,7 +105,14 @@ function SingleContainerSection({ container, containers, setContainers }) {
         }}
         required
         input={(value, onChange) => (
-          <ResourceForm.Input required value={value} setValue={onChange} />
+          <ResourceForm.Input
+            required
+            value={value}
+            setValue={onChange}
+            placeholder={t(
+              'deployments.create-modal.simple.docker-image-placeholder',
+            )}
+          />
         )}
         className="fd-margin-bottom--sm"
       />

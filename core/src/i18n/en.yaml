@@ -315,7 +315,7 @@ components:
       no-search-results: Couldn't find resources matching this query.
       not-found: No entries found
   k8s-name-input:
-    placeholder: '{{resourceType}} name'
+    placeholder: '{{resourceType}} Name'
   key-value-form:
     add-entry: Add data entry
     key: Key
@@ -411,6 +411,7 @@ deployments:
   name_singular: Deployment
   create-modal:
     advanced:
+      image: Image
       cpu-limits: CPU Limits
       cpu-requests: CPU Requests
       expose-service: Expose a separate Service

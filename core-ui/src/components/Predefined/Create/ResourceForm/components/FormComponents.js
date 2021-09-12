@@ -35,7 +35,7 @@ export function CollapsibleSection({
 
   return (
     <div className={classNames}>
-      <header onClick={toggle}>
+      <header onClick={toggle} aria-label={`expand ${title}`}>
         <div>
           {!disabled && canChangeState && (
             <Icon className="control-icon" ariaHidden glyph={iconGlyph} />
@@ -234,10 +234,12 @@ export function KeyValueField({
               defaultValue={key}
               onBlur={e => onChange(e.target.value, value, key)}
               {...keyProps}
+              placeholder="Enter key"
             />
             <FormInput
               value={value}
               onChange={e => onChange(key, e.target.value)}
+              placeholder="Enter value"
             />
             <Button
               glyph="delete"
