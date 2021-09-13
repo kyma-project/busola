@@ -13,7 +13,6 @@ export function ExternalResourceRef({ resourceRef, onChange, resources }) {
   }));
 
   const selectResource = (e, selected) => {
-    console.log(selected.key);
     if (selected.key !== -1) {
       onChange(e, { name: selected.text, namespace: selected.namespace });
     }
