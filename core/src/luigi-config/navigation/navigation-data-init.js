@@ -92,7 +92,7 @@ async function createClusterManagementNodes() {
       clusters: await getClusters(),
       activeClusterName: getActiveClusterName(),
       language: i18next.language,
-      busolaClusterParams,
+      busolaClusterParams: await getBusolaClusterParams(),
       features,
     },
   };
