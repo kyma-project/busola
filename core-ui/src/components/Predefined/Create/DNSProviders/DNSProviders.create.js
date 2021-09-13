@@ -50,7 +50,7 @@ export function DNSProvidersCreate({
       <ResourceForm.K8sNameField
         propertyPath="$.metadata.name"
         kind={t('dnsproviders.name_singular')}
-        customOnChange={name => {
+        customSetValue={name => {
           jp.value(dnsProvider, '$.metadata.name', name);
           jp.value(
             dnsProvider,

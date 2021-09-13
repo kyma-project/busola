@@ -146,7 +146,7 @@ export function DeploymentsCreate({
       <ResourceForm.K8sNameField
         propertyPath="$.metadata.name"
         kind={t('deployments.name_singular')}
-        customOnChange={handleNameChange}
+        customSetValue={handleNameChange}
       />
       <ResourceForm.KeyValueField
         advanced

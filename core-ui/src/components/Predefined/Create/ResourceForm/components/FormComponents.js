@@ -111,13 +111,13 @@ export function K8sNameField({
   kind,
   value,
   setValue,
-  customOnChange,
+  customSetValue,
   className,
 }) {
   const { t, i18n } = useTranslation();
 
   const onChange = value =>
-    customOnChange ? customOnChange(value) : setValue(value);
+    customSetValue ? customSetValue(value) : setValue(value);
 
   return (
     <FormField
