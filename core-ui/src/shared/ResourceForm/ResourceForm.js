@@ -102,7 +102,7 @@ export function ResourceForm({
     : editor;
 
   return (
-    <article className="resource-form">
+    <section className="resource-form">
       {presetsSelector}
       <ModeSelector mode={mode} setMode={setMode} />
       <form ref={formElementRef} onSubmit={onCreate}>
@@ -121,6 +121,6 @@ export function ResourceForm({
           {renderFormChildren(children, true)}
         </div>
       </form>
-    </article>
+    </section>
   );
 }
