@@ -1,5 +1,5 @@
 import React from 'react';
-import { useMicrofrontendContext } from 'react-shared';
+import { useGetList, useMicrofrontendContext } from 'react-shared';
 
 import CodeAndDependencies from './CodeAndDependencies/CodeAndDependencies';
 import RepositoryConfig from './RepositoryConfig/RepositoryConfig';
@@ -16,6 +16,13 @@ export default function CodeTab({ lambda, isActive }) {
   const serviceBindingsWithUsages = (serviceBindingsCombined || []).filter(
     ({ serviceBindingUsage }) => serviceBindingUsage,
   );
+
+  const { data: configmaps } = useGetList()(
+    `/api/v1/namespaces/${lambda.metadata.namespace}/configmaps`,
+  );
+  const { data: secrets } = useGetList()(
+    `/api/v1/namespaces/${lambda.metadata.namespace}/secrets`,
+  );
   const {
     customVariables,
     customValueFromVariables,
@@ -23,6 +30,8 @@ export default function CodeTab({ lambda, isActive }) {
   } = serializeVariables({
     lambdaVariables: lambda?.spec?.env,
     bindingUsages: serviceBindingsWithUsages || [],
+    secrets: secrets,
+    configmaps: configmaps,
   });
   const microfrontendContext = useMicrofrontendContext();
   const { features } = microfrontendContext;
@@ -43,6 +52,8 @@ export default function CodeTab({ lambda, isActive }) {
       )}
       <LambdaVariables
         lambda={lambda}
+        secrets={secrets}
+        configmaps={configmaps}
         customVariables={customVariables}
         customValueFromVariables={customValueFromVariables}
         injectedVariables={injectedVariables}
