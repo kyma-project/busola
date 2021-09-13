@@ -27,7 +27,8 @@ describe('serializeVariables', () => {
   test('should return serialized variables', () => {
     const lambdaVariables = lambdaMock.spec.env;
     const bindingUsages = [serviceBindingUsageMock];
-
+    const configmaps = [];
+    const secrets = [];
     const {
       customVariables,
       customValueFromVariables,
@@ -35,6 +36,8 @@ describe('serializeVariables', () => {
     } = serializeVariables({
       lambdaVariables,
       bindingUsages,
+      secrets,
+      configmaps,
     });
 
     const expectedCustomVariable = {
@@ -52,6 +55,7 @@ describe('serializeVariables', () => {
       name: 'PICO',
       dirty: true,
       name: 'PICO',
+      owners: [],
       type: 'SECRET',
       validation: 'NONE',
       valueFrom: {
