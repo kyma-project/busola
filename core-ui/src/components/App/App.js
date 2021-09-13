@@ -30,10 +30,8 @@ function useSentry() {
     if (feature && feature.isEnabled && feature.config?.dsn) {
       Sentry.init({
         dsn: feature.config.dsn,
+        release: 'busola', //todo
         integrations: [new Integrations.BrowserTracing()],
-
-        // We recommend adjusting this value in production, or using tracesSampler
-        // for finer control
         tracesSampleRate: 1.0,
       });
     } else {

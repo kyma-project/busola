@@ -85,6 +85,7 @@ async function createClusterManagementNodes() {
         hideSideNav: true,
         pathSegment: 'remove',
         async onNodeActivation() {
+          die();
           await deleteActiveCluster();
           return false;
         },
