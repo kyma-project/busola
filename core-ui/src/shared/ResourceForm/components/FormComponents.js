@@ -150,9 +150,9 @@ export function TextArrayInput({
   required,
   ...props
 }) {
-  const { t } = useTranslation();
+  const [newValue, setNewValue] = React.useState('');
 
-  const addValue = () => setValue([...value, '']);
+  const addValue = newValue => setValue([...value, newValue]);
 
   const removeValue = index => setValue(value.filter((_, i) => i !== index));
 
@@ -161,19 +161,10 @@ export function TextArrayInput({
     setValue([...value]);
   };
 
-  const { propertyPath, ...otherProps } = props;
+  const { propertyPath, simple, advanced, ...otherProps } = props;
 
   return (
-    <CollapsibleSection
-      canChangeState={false}
-      defaultOpen
-      title={label}
-      actions={
-        <Button compact glyph="add" onClick={addValue}>
-          {t('common.buttons.add')}
-        </Button>
-      }
-    >
+    <CollapsibleSection title={label}>
       <ul className="text-array-input__list">
         {(value || []).map((entry, i) => (
           <li key={i}>
@@ -189,6 +180,21 @@ export function TextArrayInput({
             />
           </li>
         ))}
+        <li>
+          <FormInput
+            value={newValue}
+            onChange={e => setNewValue(e.target.value)}
+            onBlur={e => {
+              const newValue = e.target.value;
+              if (newValue) {
+                addValue(newValue);
+                setNewValue('');
+              }
+            }}
+            className="new-value"
+            {...otherProps}
+          />
+        </li>
       </ul>
     </CollapsibleSection>
   );
