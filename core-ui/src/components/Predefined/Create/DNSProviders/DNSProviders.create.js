@@ -1,6 +1,5 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { usePost } from 'react-shared';
 import { ResourceForm } from '../../../../shared/ResourceForm/ResourceForm';
 import { createDNSProviderTemplate } from './templates';
 import { ProviderTypeDropdown } from './ProviderTypeDropdown';
@@ -16,7 +15,6 @@ export function DNSProvidersCreate({
   const [dnsProvider, setDNSProvider] = React.useState(
     createDNSProviderTemplate(namespace),
   );
-  const postRequest = usePost();
   const { t } = useTranslation();
 
   React.useEffect(() => {
@@ -40,12 +38,7 @@ export function DNSProvidersCreate({
       setResource={setDNSProvider}
       onChange={onChange}
       formElementRef={formElementRef}
-      createFn={async () =>
-        postRequest(
-          `/apis/dns.gardener.cloud/v1alpha1/namespaces/${namespace}/dnsproviders/`,
-          dnsProvider,
-        )
-      }
+      createUrl={`/apis/dns.gardener.cloud/v1alpha1/namespaces/${namespace}/dnsproviders/`}
     >
       <ResourceForm.K8sNameField
         propertyPath="$.metadata.name"

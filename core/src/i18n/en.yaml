@@ -425,7 +425,7 @@ deployments:
       one-container-required: At least one container is required.
       container-header: Container {{name}}
     messages:
-      deployment-ok-service-bad: Deployment created, failed to create the Service.
+      deployment-ok-service-bad: 'Deployment created, failed to create the Service: {{error}}.'
     presets:
       default: Default
     simple:

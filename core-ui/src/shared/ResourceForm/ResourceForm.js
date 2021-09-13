@@ -1,13 +1,11 @@
 import React from 'react';
-import LuigiClient from '@luigi-project/client';
-import { useNotification } from 'react-shared';
-import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 import { ModeSelector } from './components/ModeSelector';
 import { Editor } from './components/Editor';
 import { Presets } from './components/Presets';
 import * as FormComponents from './components/FormComponents';
 import './ResourceForm.scss';
+import { useCreateResource } from './useCreateResource';
 
 ResourceForm.Label = FormComponents.Label;
 ResourceForm.Input = FormComponents.Input;
@@ -19,48 +17,27 @@ ResourceForm.KeyValueField = FormComponents.KeyValueField;
 
 export function ResourceForm({
   pluralKind, // used for the request path
-  nameSingular,
+  singularName,
   resource,
   setResource,
-  onCreate,
   onChange,
   formElementRef,
   children,
   renderEditor,
-  createFn,
+  createUrl,
   presets,
   onPresetSelected,
+  afterCreatedFn,
 }) {
-  const notification = useNotification();
-  const { t } = useTranslation();
-  const [mode, setMode] = React.useState(ModeSelector.MODE_SIMPLE);
+  const createResource = useCreateResource(
+    singularName,
+    pluralKind,
+    resource,
+    createUrl,
+    afterCreatedFn,
+  );
 
-  if (!onCreate) {
-    onCreate = async () => {
-      try {
-        await createFn();
-        notification.notifySuccess({
-          content: t('common.create-form.messages.success', {
-            resourceType: nameSingular,
-          }),
-        });
-        LuigiClient.linkManager()
-          .fromContext('namespace')
-          .navigate(
-            `/${pluralKind.toLowerCase()}/details/${resource.metadata.name}`,
-          );
-      } catch (e) {
-        console.error(e);
-        notification.notifyError({
-          content: t('common.create-form.messages.failure', {
-            resourceType: nameSingular,
-            error: e.message,
-          }),
-        });
-        return false;
-      }
-    };
-  }
+  const [mode, setMode] = React.useState(ModeSelector.MODE_SIMPLE);
 
   const presetsSelector = presets?.length && (
     <Presets
@@ -105,7 +82,7 @@ export function ResourceForm({
     <section className="resource-form">
       {presetsSelector}
       <ModeSelector mode={mode} setMode={setMode} />
-      <form ref={formElementRef} onSubmit={onCreate}>
+      <form ref={formElementRef} onSubmit={createResource}>
         {mode === ModeSelector.MODE_SIMPLE && (
           <div onChange={onChange} className="simple-form">
             {renderFormChildren(children, false)}

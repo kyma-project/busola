@@ -86,40 +86,19 @@ export function DeploymentsCreate({
     setService({ ...service });
   };
 
-  const onCreate = async () => {
-    try {
-      await postRequest(
-        `/apis/apps/v1/namespaces/${namespace}/deployments/`,
-        deployment,
-      );
-    } catch (e) {
-      console.error(e);
-      notification.notifyError({
-        title: t('deployments.create-modal.messages.failure'),
-        content: t('common.create-form.messages.failure', {
-          resourceType: t('deployments.name_singular'),
-          error: e.message,
-        }),
-      });
-      return false;
-    }
+  const afterCreatedFn = async defaultAfterCreatedFn => {
     try {
       if (createService) {
         await postRequest(`/api/v1/namespaces/${namespace}/services`, service);
       }
-      notification.notifySuccess({
-        content: t('common.create-form.messages.success', {
-          resourceType: t('deployments.name_singular'),
-        }),
-      });
-      LuigiClient.linkManager()
-        .fromContext('namespace')
-        .navigate(`/deployments/details/${deployment.metadata.name}`);
+      defaultAfterCreatedFn();
     } catch (e) {
       console.error(e);
       notification.notifyError({
-        title: t('deployments.create-modal.messages.deployment-ok-service-bad'),
-        content: e.message,
+        content: t(
+          'deployments.create-modal.messages.deployment-ok-service-bad',
+          { error: e.message },
+        ),
       });
     }
   };
@@ -132,7 +111,7 @@ export function DeploymentsCreate({
       setResource={setDeployment}
       onChange={onChange}
       formElementRef={formElementRef}
-      onCreate={onCreate}
+      afterCreatedFn={afterCreatedFn}
       renderEditor={renderEditor}
       presets={createPresets(namespace, t)}
       onPresetSelected={value => {
@@ -142,6 +121,7 @@ export function DeploymentsCreate({
           setService(value.service);
         }
       }}
+      createUrl={`/apis/apps/v1/namespaces/${namespace}/deployments/`}
     >
       <ResourceForm.K8sNameField
         propertyPath="$.metadata.name"
