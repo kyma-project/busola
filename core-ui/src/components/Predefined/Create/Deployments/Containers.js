@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ResourceForm } from './../ResourceForm/ResourceForm';
+import { ResourceForm } from '../../../../shared/ResourceForm/ResourceForm';
 import * as jp from 'jsonpath';
 import { Dropdown, K8sNameInput } from 'react-shared';
 import {

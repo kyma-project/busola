@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { usePost } from 'react-shared';
-import { ResourceForm } from '../ResourceForm/ResourceForm';
+import { ResourceForm } from '../../../../shared/ResourceForm/ResourceForm';
 import { createDNSProviderTemplate } from './templates';
 import { ProviderTypeDropdown } from './ProviderTypeDropdown';
 import { SecretRef } from 'shared/components/ResourceRef/SecretRef';

@@ -2,7 +2,7 @@ import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { useTranslation } from 'react-i18next';
 import { usePost, useNotification } from 'react-shared';
-import { ResourceForm } from './../ResourceForm/ResourceForm';
+import { ResourceForm } from '../../../../shared/ResourceForm/ResourceForm';
 import { Button, Checkbox } from 'fundamental-react';
 import * as jp from 'jsonpath';
 import './Deployments.create.scss';
