@@ -79,8 +79,8 @@ function SingleContainerSection({ container, containers, setContainers }) {
       <ResourceForm.FormField
         label={t('common.headers.name')}
         value={container.name}
-        setValue={name => {
-          container.name = name;
+        setValue={e => {
+          container.name = e.target.value;
           setContainers([...containers]);
         }}
         required
@@ -104,11 +104,11 @@ function SingleContainerSection({ container, containers, setContainers }) {
           setContainers([...containers]);
         }}
         required
-        input={(value, onChange) => (
+        input={(value, setValue) => (
           <ResourceForm.Input
             required
             value={value}
-            setValue={onChange}
+            setValue={setValue}
             placeholder={t(
               'deployments.create-modal.simple.docker-image-placeholder',
             )}
@@ -194,7 +194,7 @@ export function Containers({ value: containers, setValue: setContainers }) {
     <ResourceForm.CollapsibleSection
       key={i}
       title={t('deployments.create-modal.advanced.container-header', {
-        name: container.name || i + 1,
+        name: container?.name || i + 1,
       })}
       actions={
         <Button
@@ -206,7 +206,7 @@ export function Containers({ value: containers, setValue: setContainers }) {
       }
     >
       <SingleContainerSection
-        container={container}
+        container={container || {}}
         containers={containers}
         setContainers={setContainers}
       />
