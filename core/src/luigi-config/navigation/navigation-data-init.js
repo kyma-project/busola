@@ -58,7 +58,14 @@ export async function reloadNavigation() {
 async function createClusterManagementNodes() {
   const activeClusterName = getActiveClusterName();
 
-  const { features = {} } = (await getActiveCluster()) || {};
+  let features;
+  const activeCluster = await getActiveCluster();
+  if (activeCluster) {
+    features = activeCluster.features || {};
+  } else {
+    features = (await getBusolaClusterParams()).config?.features || {};
+  }
+
   await resolveFeatures(features, null);
 
   const clusterManagementNode = {
