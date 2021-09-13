@@ -24,6 +24,7 @@ import { useSentry } from '../../hooks/useSentry';
 export default function App() {
   const { cluster, language } = useMicrofrontendContext();
   const { t, i18n } = useTranslation();
+
   useEffect(() => {
     i18n.changeLanguage(language);
   }, [language, i18n]);
@@ -31,76 +32,73 @@ export default function App() {
   useSentry();
 
   return (
-    <>
-      <button onClick={() => null()}>die</button>
-      {/* // force rerender on cluster change */}
-      <Switch key={cluster?.name}>
-        <Route
-          path="/no-permissions"
-          exact
-          component={withTitle(t('no-permissions.title'), NoPermissions)}
-        />
-        <Route
-          path="/overview"
-          exact
-          component={withTitle(t('clusters.overview.title'), ClusterOverview)}
-        />
-        <Route path="/overview/nodes/:nodeName" component={RoutedNodeDetails} />
-        <Route
-          path="/clusters"
-          exact
-          component={withTitle(t('clusters.list.title'), ClusterList)}
-        />
-        <Route
-          path="/clusters/add"
-          exact
-          component={withTitle(t('clusters.add.title'), AddCluster)}
-        />
-        <Route path="/preferences" render={Preferences} />
-        <Route
-          exact
-          path="/apirules/create"
-          render={withTitle(t('api-rules.title'), CreateApiRule)}
-        />
+    // force rerender on cluster change
+    <Switch key={cluster?.name}>
+      <Route
+        path="/no-permissions"
+        exact
+        component={withTitle(t('no-permissions.title'), NoPermissions)}
+      />
+      <Route
+        path="/overview"
+        exact
+        component={withTitle(t('clusters.overview.title'), ClusterOverview)}
+      />
+      <Route path="/overview/nodes/:nodeName" component={RoutedNodeDetails} />
+      <Route
+        path="/clusters"
+        exact
+        component={withTitle(t('clusters.list.title'), ClusterList)}
+      />
+      <Route
+        path="/clusters/add"
+        exact
+        component={withTitle(t('clusters.add.title'), AddCluster)}
+      />
+      <Route path="/preferences" render={Preferences} />
+      <Route
+        exact
+        path="/apirules/create"
+        render={withTitle(t('api-rules.title'), CreateApiRule)}
+      />
 
-        <Route
-          exact
-          path="/apirules/edit/:apiName"
-          render={withTitle(t('api-rules.title'), RoutedEditApiRule)}
-        />
+      <Route
+        exact
+        path="/apirules/edit/:apiName"
+        render={withTitle(t('api-rules.title'), RoutedEditApiRule)}
+      />
 
-        <Route
-          exact
-          path="/namespaces/:namespaceId/pods/:podName/containers/:containerName"
-          component={RoutedContainerDetails}
-        />
+      <Route
+        exact
+        path="/namespaces/:namespaceId/pods/:podName/containers/:containerName"
+        component={RoutedContainerDetails}
+      />
 
-        <Route
-          exact
-          path="/customresourcedefinitions/:customResourceDefinitionName/:resourceVersion/:resourceName"
-          component={RoutedCustomResourceDetails}
-        />
+      <Route
+        exact
+        path="/customresourcedefinitions/:customResourceDefinitionName/:resourceVersion/:resourceName"
+        component={RoutedCustomResourceDetails}
+      />
 
-        <Route
-          exact
-          path="/namespaces/:namespaceId/:resourceType/:resourceName"
-          component={RoutedResourceDetails}
-        />
-        <Route
-          exact
-          path="/namespaces/:namespaceId/:resourceType"
-          component={RoutedResourcesList}
-        />
-        <Route
-          exact
-          path="/:resourceType/:resourceName"
-          component={RoutedResourceDetails}
-        />
+      <Route
+        exact
+        path="/namespaces/:namespaceId/:resourceType/:resourceName"
+        component={RoutedResourceDetails}
+      />
+      <Route
+        exact
+        path="/namespaces/:namespaceId/:resourceType"
+        component={RoutedResourcesList}
+      />
+      <Route
+        exact
+        path="/:resourceType/:resourceName"
+        component={RoutedResourceDetails}
+      />
 
-        <Route exact path="/:resourceType" component={RoutedResourcesList} />
-        <Route exact path="" component={MainFrameRedirection} />
-      </Switch>
-    </>
+      <Route exact path="/:resourceType" component={RoutedResourcesList} />
+      <Route exact path="" component={MainFrameRedirection} />
+    </Switch>
   );
 }
 

@@ -7,20 +7,24 @@ export function useSentry() {
   const { features } = useMicrofrontendContext();
   const [dsn, setDsn] = React.useState();
 
+  const initSentry = dsn => {
+    Sentry.init({
+      dsn,
+      release: 'busola',
+      integrations: [new Integrations.BrowserTracing()],
+      tracesSampleRate: 1.0,
+    });
+  };
+
   try {
-    const feature = features?.SENTRY;
-    if (feature && feature.isEnabled && feature.config?.dsn) {
-      if (feature.config?.dsn !== dsn) {
-        setDsn(feature.config?.dsn);
-        Sentry.init({
-          dsn: feature.config.dsn,
-          release: 'busola',
-          integrations: [new Integrations.BrowserTracing()],
-          tracesSampleRate: 1.0,
-        });
+    const feature = features?.SENTRY || {};
+    if (feature.isEnabled && feature.config?.dsn) {
+      const nextDsn = feature.config.dsn;
+
+      if (nextDsn !== dsn) {
+        setDsn(nextDsn);
+        initSentry(nextDsn);
       }
-    } else {
-      console.log(feature);
     }
   } catch (e) {
     console.warn('Sentry not enabled due to error', e);

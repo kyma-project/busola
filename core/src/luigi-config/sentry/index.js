@@ -9,8 +9,7 @@ export async function initSentry() {
   const sentryFeature = features.SENTRY;
   const isSentryEnabled = await resolveFeatureAvailability(sentryFeature, null);
 
-  console.log('core sentry', isSentryEnabled, sentryFeature.config.dsn);
-  if (isSentryEnabled && sentryFeature.config.dsn) {
+  if (isSentryEnabled && sentryFeature.config?.dsn) {
     Sentry.init({
       dsn: sentryFeature.config.dsn,
 
