@@ -19,28 +19,7 @@ import { NoPermissions } from 'components/NoPermissions/NoPermissions';
 import { AddCluster } from 'components/Clusters/views/AddCluster/AddCluster';
 import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
 import { NodeDetails } from 'components/Nodes/NodeDetails/NodeDetails';
-import * as Sentry from '@sentry/react';
-import { Integrations } from '@sentry/tracing';
-
-function useSentry() {
-  const { features } = useMicrofrontendContext();
-  console.log('feats', features);
-  try {
-    const feature = features?.SENTRY;
-    if (feature && feature.isEnabled && feature.config?.dsn) {
-      Sentry.init({
-        dsn: feature.config.dsn,
-        release: 'busola', //todo
-        integrations: [new Integrations.BrowserTracing()],
-        tracesSampleRate: 1.0,
-      });
-    } else {
-      console.log(feature);
-    }
-  } catch (e) {
-    console.warn('Sentry not enabled due to error', e);
-  }
-}
+import { useSentry } from '../../hooks/useSentry';
 
 export default function App() {
   const { cluster, language } = useMicrofrontendContext();
