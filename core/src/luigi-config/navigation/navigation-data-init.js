@@ -66,7 +66,7 @@ async function createClusterManagementNodes() {
     features = (await getBusolaClusterParams()).config?.features || {};
   }
 
-  await resolveFeatures(features, null);
+  features = await resolveFeatures(features, null);
 
   const clusterManagementNode = {
     pathSegment: 'clusters',
@@ -325,10 +325,10 @@ export async function getNavigationData(authData) {
     const params = await getActiveCluster();
     const activeClusterName = params.currentContext.cluster.name;
 
-    const { navigation = {}, hiddenNamespaces = [], features = {} } =
+    let { navigation = {}, hiddenNamespaces = [], features = {} } =
       params?.config || {};
 
-    await resolveFeatures(features, {
+    features = await resolveFeatures(features, {
       authData,
       crds,
     });

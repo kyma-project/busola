@@ -30,10 +30,10 @@ export async function resolveFeatureAvailability(feature, data) {
 }
 
 export async function resolveFeatures(features, data) {
-  for (const featureName in features) {
-    features[featureName].isEnabled = await resolveFeatureAvailability(
-      features[featureName],
-      data,
-    );
-  }
+  return await Promise.all(
+    Object.values(features).map(async feature => ({
+      ...feature,
+      isEnabled: await resolveFeatureAvailability(feature, data),
+    })),
+  );
 }
