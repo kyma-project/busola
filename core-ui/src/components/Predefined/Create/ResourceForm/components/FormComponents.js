@@ -161,6 +161,8 @@ export function TextArrayInput({
     setValue([...value]);
   };
 
+  const { propertyPath, ...otherProps } = props;
+
   return (
     <CollapsibleSection
       canChangeState={false}
@@ -178,7 +180,7 @@ export function TextArrayInput({
             <FormInput
               value={entry}
               onChange={e => onChange(e, i)}
-              {...props}
+              {...otherProps}
             />
             <Button
               glyph="delete"
