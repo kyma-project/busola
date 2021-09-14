@@ -29,6 +29,18 @@ export function GoToApiRuleDetails({ apiRule }) {
 
 export function CopiableApiRuleHost({ apiRule }) {
   const { i18n } = useTranslation();
+  let hostname = apiRule.spec.service.host;
+  const regex = /^(?=.{1,254}$)((?=[a-z0-9-]{1,63}\.)(xn--+)?[a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,63}$/i;
+  const isFQDN = hostname.match(regex);
+  console.log('isFQDN', isFQDN);
+  const [gatewayName, gatewayNamespace] = apiRule.spec.gateway.split('.', 2);
+
+  console.log('gatewayName', gatewayName, 'gatewayNamespace', gatewayNamespace);
+  //get gateway
+  if (!isFQDN) {
+    // hostname = `${hostname}.${apiRule.spec.gateway}`
+  }
+  console.log('hostname', hostname);
   return (
     <CopiableLink url={`https://${apiRule.spec.service.host}`} i18n={i18n} />
   );
