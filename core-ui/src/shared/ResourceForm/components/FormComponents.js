@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState, createRef } from 'react';
 import { FormInput, FormLabel, Button, Icon } from 'fundamental-react';
 import { Tooltip, K8sNameInput } from 'react-shared';
 import classnames from 'classnames';
@@ -145,147 +145,162 @@ export function K8sNameField({
   );
 }
 
-export function TextArrayInput({
+export function MultiInput({
   value,
   setValue,
   label,
   tooltipContent,
   required,
+  toInternal,
+  toExternal,
+  inputs,
+  className,
   ...props
 }) {
-  const [newValue, setNewValue] = React.useState('');
+  const [internalValue, setInternalValue] = useState([]);
+  const refs = Array(internalValue.length)
+    .fill()
+    .map(() => inputs.map(() => createRef()));
 
-  const addValue = newValue => setValue([...value, newValue]);
+  useEffect(() => {
+    if (!internalValue.length || internalValue[internalValue.length - 1]) {
+      setInternalValue([...internalValue, null]);
+    }
+  }, [internalValue]);
 
-  const removeValue = index => setValue(value.filter((_, i) => i !== index));
+  useEffect(() => {
+    setInternalValue([...toInternal(value), null]);
+  }, [value]);
 
-  const onChange = (e, index) => {
-    value[index] = e.target.value;
-    setValue([...value]);
+  const isLast = index => index === internalValue.length - 1;
+
+  const updateValue = val => setValue(toExternal(val));
+
+  const removeValue = index => {
+    internalValue.splice(index, 1);
+    updateValue(internalValue);
   };
 
-  const { propertyPath, simple, advanced, ...otherProps } = props;
+  const setEntry = (newVal, index) => {
+    internalValue[index] = newVal;
+    setInternalValue([...internalValue]);
+  };
+
+  const focus = ref => {
+    if (ref) {
+      ref.current.focus();
+    }
+  };
 
   return (
-    <CollapsibleSection title={label}>
+    <CollapsibleSection title={label} className={className} {...props}>
       <ul className="text-array-input__list">
-        {(value || []).map((entry, i) => (
-          <li key={i}>
-            <FormInput
-              value={entry}
-              onChange={e => onChange(e, i)}
-              {...otherProps}
-            />
-            <Button
-              glyph="delete"
-              type="negative"
-              onClick={() => removeValue(i)}
-            />
-          </li>
-        ))}
-        <li>
-          <FormInput
-            value={newValue}
-            onChange={e => setNewValue(e.target.value)}
-            onBlur={e => {
-              const newValue = e.target.value;
-              if (newValue) {
-                addValue(newValue);
-                setNewValue('');
-              }
-            }}
-            className="new-value"
-            {...otherProps}
-          />
-        </li>
+        {internalValue.map((entry, index) => {
+          return (
+            <li key={index}>
+              {inputs.map((input, inputIndex) =>
+                input({
+                  index,
+                  value: entry,
+                  setValue: entry => setEntry(entry, index),
+                  ref: refs[index]?.[inputIndex],
+                  onBlur: () => updateValue(internalValue),
+                  focus: (e, target) => {
+                    if (e.key === 'Enter') {
+                      if (typeof target === 'undefined') {
+                        focus(refs[index + 1][0]);
+                      } else {
+                        focus(refs[index][target]);
+                      }
+                    } else if (e.key === 'ArrowDown') {
+                      focus(refs[index + 1][0]);
+                    } else if (e.key === 'ArrowUp') {
+                      focus(refs[index - 1][0]);
+                    }
+                  },
+                }),
+              )}
+              <Button
+                className={classnames({ hidden: isLast(index) })}
+                glyph="delete"
+                type="negative"
+                onClick={() => removeValue(index)}
+              />
+            </li>
+          );
+        })}
       </ul>
     </CollapsibleSection>
   );
 }
 
+export function TextArrayInput(props) {
+  return (
+    <MultiInput
+      toInternal={value => value || []}
+      toExternal={value => value.filter(val => !!val)}
+      inputs={[
+        ({ value, setValue, ref, onBlur, focus }) => (
+          <FormInput
+            value={value || ''}
+            ref={ref}
+            onChange={e => setValue(e.target.value)}
+            onKeyDown={e => focus(e)}
+            onBlur={onBlur}
+          />
+        ),
+      ]}
+      {...props}
+    />
+  );
+}
+
 export function KeyValueField({
-  label,
-  value,
-  setValue,
   keyProps = {
-    required: true,
     pattern: '([A-Za-z0-9][-A-Za-z0-9_./]*)?[A-Za-z0-9]',
   },
-  className,
+  ...props
 }) {
   const { t } = useTranslation();
-  const [newEntryKey, setNewEntryKey] = React.useState('');
-  const [newEntryValue, setNewEntryValue] = React.useState('');
-
-  const removeValue = key => {
-    delete value[key];
-    setValue({ ...value });
-  };
-
-  const onChange = (k, v, prevKey) => {
-    if (prevKey !== undefined) delete value[prevKey];
-    value[k] = v;
-    setValue({ ...value });
-  };
-
-  const clearNewEntry = () => {
-    setNewEntryKey('');
-    setNewEntryValue('');
-  };
-
-  const hasKeylessEntry = Object.keys(value || {}).some(k => !k);
 
   return (
-    <CollapsibleSection title={label} className={className}>
-      <ul className="text-array-input__list">
-        {Object.entries(value || {}).map(([key, value]) => {
-          if (!key) return null;
-          return (
-            <li key={key}>
-              <FormInput
-                required
-                defaultValue={key}
-                onBlur={e => onChange(e.target.value, value, key)}
-                {...keyProps}
-                placeholder={t('components.key-value-field.enter-key')}
-              />
-              <FormInput
-                value={value}
-                onChange={e => onChange(key, e.target.value)}
-                placeholder={t('components.key-value-field.enter-value')}
-              />
-              <Button
-                glyph="delete"
-                type="negative"
-                onClick={() => removeValue(key)}
-              />
-            </li>
-          );
-        })}
-
-        {!hasKeylessEntry && (
-          <li key="new-entry">
-            <FormInput
-              value={newEntryKey}
-              onChange={e => setNewEntryKey(e.target.value)}
-              onBlur={e => {
-                if (e.target.value) {
-                  onChange(e.target.value, newEntryValue);
-                  clearNewEntry();
-                }
-              }}
-              pattern={keyProps.pattern}
-              placeholder={t('components.key-value-field.enter-key')}
-            />
-            <FormInput
-              className="new-value"
-              value={newEntryValue}
-              onChange={e => setNewEntryValue(e.target.value)}
-              placeholder={t('components.key-value-field.enter-value')}
-            />
-          </li>
-        )}
-      </ul>
-    </CollapsibleSection>
+    <MultiInput
+      toInternal={value =>
+        Object.entries(value).map(([key, val]) => ({ key, val }))
+      }
+      toExternal={value => {
+        const target = value
+          .filter(entry => !!entry?.key)
+          .reduce((acc, entry) => ({ ...acc, [entry.key]: entry.val }), {});
+        console.log('target', target);
+        return target;
+      }}
+      inputs={[
+        ({ value, setValue, ref, onBlur, focus }) => (
+          <FormInput
+            value={value?.key || ''}
+            ref={ref}
+            onChange={e =>
+              setValue({ val: value?.val || '', key: e.target.value })
+            }
+            onKeyDown={e => focus(e, 1)}
+            onBlur={onBlur}
+            {...keyProps}
+            placeholder={t('components.key-value-field.enter-key')}
+          />
+        ),
+        ({ value, setValue, ref, onBlur, focus }) => (
+          <FormInput
+            value={value?.val || ''}
+            ref={ref}
+            onChange={e => setValue({ ...value, val: e.target.value })}
+            onKeyDown={e => focus(e)}
+            onBlur={onBlur}
+            placeholder={t('components.key-value-field.enter-value')}
+          />
+        ),
+      ]}
+      {...props}
+    />
   );
 }
