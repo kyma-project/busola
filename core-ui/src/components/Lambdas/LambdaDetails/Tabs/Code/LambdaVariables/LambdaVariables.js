@@ -2,12 +2,7 @@ import React from 'react';
 import LuigiClient from '@luigi-project/client';
 
 import { Icon, InfoLabel } from 'fundamental-react';
-import {
-  EMPTY_TEXT_PLACEHOLDER,
-  GenericList,
-  Tooltip,
-  useGetList,
-} from 'react-shared';
+import { EMPTY_TEXT_PLACEHOLDER, GenericList, Tooltip } from 'react-shared';
 
 import CreateVariable from './CreateVariable/CreateVariable';
 import EditVariable from './EditVariable/EditVariable';
@@ -170,8 +165,27 @@ function VariableValue({ variable }) {
   return value;
 }
 
+function VariableOwner({ variable }) {
+  if (!variable.owners?.length) return EMPTY_TEXT_PLACEHOLDER;
+
+  return (
+    <>
+      {variable.owners.map((owner, index) => {
+        const className = index > 0 ? 'fd-margin-top--sm' : '';
+        return (
+          <div key={owner.name} className={className}>
+            {owner.name} ({owner.kind})
+          </div>
+        );
+      })}
+    </>
+  );
+}
+
 export default function LambdaEnvs({
   lambda,
+  secrets,
+  configmaps,
   customVariables,
   customValueFromVariables,
   injectedVariables,
@@ -182,6 +196,7 @@ export default function LambdaEnvs({
     t('functions.variable.header.name'),
     '',
     t('functions.variable.header.value'),
+    t('functions.variable.header.owner'),
     t('functions.variable.header.source'),
     t('functions.variable.header.key'),
     '',
@@ -192,16 +207,11 @@ export default function LambdaEnvs({
     type: UPDATE_TYPE.VARIABLES,
   });
 
-  const { data: configmaps } = useGetList()(
-    `/api/v1/namespaces/${lambda.metadata.namespace}/configmaps`,
-  );
-  const { data: secrets } = useGetList()(
-    `/api/v1/namespaces/${lambda.metadata.namespace}/secrets`,
-  );
   const rowRenderer = variable => [
     <span>{variable.name}</span>,
     <span className="sap-icon--arrow-right" />,
     <VariableValue variable={variable} />,
+    <VariableOwner variable={variable} />,
     <VariableSource variable={variable} />,
     <VariableKey variable={variable} />,
     <VariableStatus validation={variable.validation} />,
