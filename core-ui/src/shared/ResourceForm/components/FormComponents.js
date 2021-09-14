@@ -195,46 +195,44 @@ export function MultiInput({
   return (
     <CollapsibleSection title={label} className={className} {...props}>
       <ul className="text-array-input__list">
-        {internalValue.map((entry, index) => {
-          return (
-            <li key={index}>
-              {inputs.map((input, inputIndex) =>
-                input({
-                  index,
-                  value: entry,
-                  setValue: entry => setEntry(entry, index),
-                  ref: refs[index]?.[inputIndex],
-                  onBlur: () => updateValue(internalValue),
-                  focus: (e, target) => {
-                    if (e.key === 'Enter') {
-                      if (typeof target === 'undefined') {
-                        focus(refs[index + 1][0]);
-                      } else {
-                        focus(refs[index][target]);
-                      }
-                    } else if (e.key === 'ArrowDown') {
+        {internalValue.map((entry, index) => (
+          <li key={index}>
+            {inputs.map((input, inputIndex) =>
+              input({
+                index,
+                value: entry,
+                setValue: entry => setEntry(entry, index),
+                ref: refs[index]?.[inputIndex],
+                onBlur: () => updateValue(internalValue),
+                focus: (e, target) => {
+                  if (e.key === 'Enter') {
+                    if (typeof target === 'undefined') {
                       focus(refs[index + 1][0]);
-                    } else if (e.key === 'ArrowUp') {
-                      focus(refs[index - 1][0]);
+                    } else {
+                      focus(refs[index][target]);
                     }
-                  },
-                }),
-              )}
-              <Button
-                className={classnames({ hidden: isLast(index) })}
-                glyph="delete"
-                type="negative"
-                onClick={() => removeValue(index)}
-              />
-            </li>
-          );
-        })}
+                  } else if (e.key === 'ArrowDown') {
+                    focus(refs[index + 1][0]);
+                  } else if (e.key === 'ArrowUp') {
+                    focus(refs[index - 1][0]);
+                  }
+                },
+              }),
+            )}
+            <Button
+              className={classnames({ hidden: isLast(index) })}
+              glyph="delete"
+              type="negative"
+              onClick={() => removeValue(index)}
+            />
+          </li>
+        ))}
       </ul>
     </CollapsibleSection>
   );
 }
 
-export function TextArrayInput(props) {
+export function TextArrayInput({ inputProps, ...props }) {
   return (
     <MultiInput
       toInternal={value => value || []}
@@ -247,6 +245,7 @@ export function TextArrayInput(props) {
             onChange={e => setValue(e.target.value)}
             onKeyDown={e => focus(e)}
             onBlur={onBlur}
+            {...inputProps}
           />
         ),
       ]}
