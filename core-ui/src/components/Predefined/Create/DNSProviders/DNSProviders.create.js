@@ -25,7 +25,7 @@ export function DNSProvidersCreate({
 
     const domains = jp.value(dnsProvider, '$.spec.domains.include');
     const hasAtLeastOneIncludeDomain =
-      Array.isArray(domains) && domains.some(e => e.length);
+      Array.isArray(domains) && domains.some(e => e?.length);
 
     setCustomValid(isTypeSet && isSecretRefSet && hasAtLeastOneIncludeDomain);
   }, [dnsProvider, setCustomValid]);
