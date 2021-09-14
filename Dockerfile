@@ -19,9 +19,9 @@ RUN make resolve
 RUN make lint
 RUN make pull-licenses
 
-RUN cd /app/core &&  make build
-RUN cd /app/service-catalog-ui &&  make build
-RUN cd /app/core-ui &&  make build
+RUN cd /app/core && make test && make build
+RUN cd /app/service-catalog-ui && make test && make build
+RUN cd /app/core-ui && make test && make build
 
 # ---- Serve ----
 FROM alpine:3.14.2
