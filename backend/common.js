@@ -57,7 +57,7 @@ export const handleRequest = async (req, res) => {
   try {
     filters.forEach(filter => filter(req, headersData));
   } catch (e) {
-    req.log.error(e.message);
+    req.log.error('Filters rejected the request:', e.message);
     res.sendStatus(400);
     return;
   }
