@@ -265,7 +265,7 @@ export function KeyValueField({
   return (
     <MultiInput
       toInternal={value =>
-        Object.entries(value).map(([key, val]) => ({ key, val }))
+        Object.entries(value || {}).map(([key, val]) => ({ key, val }))
       }
       toExternal={value => {
         const target = value
