@@ -13,6 +13,11 @@ export function useSentry() {
       release: 'busola',
       integrations: [new Integrations.BrowserTracing()],
       tracesSampleRate: 1.0,
+      debug: true,
+      beforeSend: (e, hint) => {
+        console.log(e, hint);
+        return e;
+      },
     });
   };
 
