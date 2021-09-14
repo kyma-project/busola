@@ -4,6 +4,8 @@ import { VARIABLE_TYPE, VARIABLE_VALIDATION } from './constants';
 export function serializeVariables({
   lambdaVariables = [],
   bindingUsages = [],
+  secrets = [],
+  configmaps = [],
 }) {
   const bindingUsageVariableNames = [];
   let bindingUsageVariables = bindingUsages.flatMap(bindingUsage => {
@@ -24,14 +26,17 @@ export function serializeVariables({
       variable.valueFrom && Object.keys(variable.valueFrom).length;
 
     let typeOfValueFromVariable;
+    let owners;
+
     if (variable.valueFrom?.configMapKeyRef) {
       typeOfValueFromVariable = VARIABLE_TYPE.CONFIG_MAP;
+      owners = getOwner(variable, configmaps, 'configMapKeyRef');
     } else if (variable.valueFrom?.secretKeyRef) {
       typeOfValueFromVariable = VARIABLE_TYPE.SECRET;
+      owners = getOwner(variable, secrets, 'secretKeyRef');
     } else {
       typeOfValueFromVariable = VARIABLE_TYPE.CUSTOM;
     }
-
     if (isValueFromVariable) {
       customVariablesNames.push(variable.name);
       customValueFromVariables.push(
@@ -41,12 +46,14 @@ export function serializeVariables({
             name: variable.name,
             valueFrom: variable.valueFrom,
           },
-          additionalProps: { dirty: true },
+          additionalProps: {
+            dirty: true,
+            owners: owners,
+          },
         }),
       );
       return;
     }
-
     customVariablesNames.push(variable.name);
     customVariables.push(
       newVariableModel({
@@ -127,4 +134,25 @@ export function retrieveVariablesFromBindingUsage(binding) {
       },
     },
   }));
+}
+
+function getOwner(variable, resources, resourceValueFromType) {
+  if (!resources) return [];
+  const filteredResources = (resources || []).filter(
+    resource =>
+      resource.metadata.name === variable.valueFrom[resourceValueFromType].name,
+  );
+  if (
+    !filteredResources?.length ||
+    !filteredResources[0].metadata.ownerReferences
+  )
+    return [];
+  let owners = [];
+  filteredResources[0].metadata.ownerReferences.forEach(owner => {
+    owners.push({
+      name: owner.name,
+      kind: owner.kind,
+    });
+  });
+  return owners;
 }
