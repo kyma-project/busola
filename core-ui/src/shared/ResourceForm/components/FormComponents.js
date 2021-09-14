@@ -211,8 +211,8 @@ export function KeyValueField({
   className,
 }) {
   const { t } = useTranslation();
-
-  const addValue = () => setValue({ ...value, '': '' });
+  const [newEntryKey, setNewEntryKey] = React.useState('');
+  const [newEntryValue, setNewEntryValue] = React.useState('');
 
   const removeValue = key => {
     delete value[key];
@@ -225,37 +225,63 @@ export function KeyValueField({
     setValue({ ...value });
   };
 
+  const clearNewEntry = () => {
+    setNewEntryKey('');
+    setNewEntryValue('');
+  };
+
+  const hasKeylessEntry = Object.keys(value || {}).some(k => !k);
+
   return (
-    <CollapsibleSection
-      title={label}
-      actions={
-        <Button compact glyph="add" onClick={addValue}>
-          {t('common.buttons.add')}
-        </Button>
-      }
-      className={className}
-    >
+    <CollapsibleSection title={label} className={className}>
       <ul className="text-array-input__list">
-        {Object.entries(value || {}).map(([key, value]) => (
-          <li key={key}>
+        {Object.entries(value || {}).map(([key, value]) => {
+          if (!key) return null;
+          return (
+            <li key={key}>
+              <FormInput
+                required
+                defaultValue={key}
+                onBlur={e => onChange(e.target.value, value, key)}
+                {...keyProps}
+                placeholder={t('components.key-value-field.enter-key')}
+              />
+              <FormInput
+                value={value}
+                onChange={e => onChange(key, e.target.value)}
+                placeholder={t('components.key-value-field.enter-value')}
+              />
+              <Button
+                glyph="delete"
+                type="negative"
+                onClick={() => removeValue(key)}
+              />
+            </li>
+          );
+        })}
+
+        {!hasKeylessEntry && (
+          <li key="new-entry">
             <FormInput
-              defaultValue={key}
-              onBlur={e => onChange(e.target.value, value, key)}
-              {...keyProps}
-              placeholder="Enter key"
+              value={newEntryKey}
+              onChange={e => setNewEntryKey(e.target.value)}
+              onBlur={e => {
+                if (e.target.value) {
+                  onChange(e.target.value, newEntryValue);
+                  clearNewEntry();
+                }
+              }}
+              pattern={keyProps.pattern}
+              placeholder={t('components.key-value-field.enter-key')}
             />
             <FormInput
-              value={value}
-              onChange={e => onChange(key, e.target.value)}
-              placeholder="Enter value"
-            />
-            <Button
-              glyph="delete"
-              type="negative"
-              onClick={() => removeValue(key)}
+              className="new-value"
+              value={newEntryValue}
+              onChange={e => setNewEntryValue(e.target.value)}
+              placeholder={t('components.key-value-field.enter-value')}
             />
           </li>
-        ))}
+        )}
       </ul>
     </CollapsibleSection>
   );

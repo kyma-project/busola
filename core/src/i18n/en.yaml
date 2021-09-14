@@ -298,6 +298,9 @@ common:
     search: Search
     value: Value must start and end with an alphanumeric character, can contain '-', '_' or '.'
 components:
+  key-value-field:
+    enter-key: Enter Key
+    enter-value: Enter Value
   dropdown:
     empty-list: No resources available
   error-panel:
