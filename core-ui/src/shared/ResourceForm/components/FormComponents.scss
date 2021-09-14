@@ -1,5 +1,7 @@
 .resource-form__collapsible-section {
   background: var(--sapNeutralBackground);
+  display: flex;
+  flex-direction: column;
 
   header {
     display: flex;
@@ -20,6 +22,7 @@
   .content {
     padding: 16px;
     background: var(--sapPageHeader_Background);
+    flex-grow: 1;
   }
 
   .fd-message-strip {

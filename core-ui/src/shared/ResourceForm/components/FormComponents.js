@@ -31,6 +31,9 @@ export function CollapsibleSection({
   const classNames = classnames(
     'resource-form__collapsible-section',
     className,
+    {
+      collapsed: !open,
+    },
   );
 
   return (
