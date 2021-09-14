@@ -211,9 +211,9 @@ export function MultiInput({
                     } else {
                       focus(refs[index][target]);
                     }
-                  } else if (e.key === 'ArrowDown') {
+                  } else if (e.key === 'ArrowDown' && index < refs.length - 1) {
                     focus(refs[index + 1][0]);
-                  } else if (e.key === 'ArrowUp') {
+                  } else if (e.key === 'ArrowUp' && index > 0) {
                     focus(refs[index - 1][0]);
                   }
                 },
