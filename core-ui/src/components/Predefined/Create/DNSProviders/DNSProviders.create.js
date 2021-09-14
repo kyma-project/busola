@@ -53,16 +53,6 @@ export function DNSProvidersCreate({
           setDNSProvider({ ...dnsProvider });
         }}
       />
-      <ResourceForm.KeyValueField
-        advanced
-        propertyPath="$.metadata.labels"
-        label={t('common.headers.labels')}
-      />
-      <ResourceForm.KeyValueField
-        advanced
-        propertyPath="$.metadata.annotations"
-        label={t('common.headers.annotations')}
-      />
       <ResourceForm.FormField
         required
         propertyPath="$.spec.secretRef"
@@ -83,6 +73,16 @@ export function DNSProvidersCreate({
           <ProviderTypeDropdown type={value} setType={setValue} />
         )}
         className="fd-margin-bottom--sm"
+      />
+      <ResourceForm.KeyValueField
+        advanced
+        propertyPath="$.metadata.labels"
+        label={t('common.headers.labels')}
+      />
+      <ResourceForm.KeyValueField
+        advanced
+        propertyPath="$.metadata.annotations"
+        label={t('common.headers.annotations')}
       />
       <ResourceForm.TextArrayInput
         propertyPath="$.spec.domains.include"
