@@ -8,6 +8,13 @@ data:
       "config": {
         "defaultStorage": "localStorage",
         "features":{
+            "SENTRY": {
+              "isEnabled": true,
+              "selectors": [],
+              "config": {
+                "dsn": ""
+              }
+            },
             "SERVICE_CATALOG":{
               "selectors":[
                   {
