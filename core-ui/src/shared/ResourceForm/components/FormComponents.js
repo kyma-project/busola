@@ -5,7 +5,6 @@ import classnames from 'classnames';
 import * as jp from 'jsonpath';
 import './FormComponents.scss';
 import { useTranslation } from 'react-i18next';
-import PropTypes from 'prop-types';
 
 export function CollapsibleSection({
   disabled = false,
@@ -269,17 +268,21 @@ export function KeyValueField({
       toInternal={value =>
         Object.entries(value).map(([key, val]) => ({ key, val }))
       }
-      toExternal={value =>
-        value
+      toExternal={value => {
+        const target = value
           .filter(entry => !!entry?.key)
-          .reduce((acc, entry) => ({ ...acc, [entry.key]: entry.val }), {})
-      }
+          .reduce((acc, entry) => ({ ...acc, [entry.key]: entry.val }), {});
+        console.log('target', target);
+        return target;
+      }}
       inputs={[
         ({ value, setValue, ref, onBlur, focus }) => (
           <FormInput
             value={value?.key || ''}
             ref={ref}
-            onChange={e => setValue({ ...value, key: e.target.value })}
+            onChange={e =>
+              setValue({ val: value.val || '', key: e.target.value })
+            }
             onKeyDown={e => focus(e, 1)}
             onBlur={onBlur}
             {...keyProps}
