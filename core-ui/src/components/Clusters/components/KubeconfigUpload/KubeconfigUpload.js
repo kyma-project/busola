@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { KubeconfigFileUpload } from './KubeconfigFileUpload';
 import { KubeconfigTextArea } from './KubeconfigTextArea/KubeconfigTextArea';
 import jsyaml from 'js-yaml';
+import { useTheme } from 'react-shared';
 
 export function KubeconfigUpload({
   handleKubeconfigAdded,
@@ -13,6 +14,7 @@ export function KubeconfigUpload({
   const [kubeconfigs, setKubeconfigs] = React.useState({
     text: jsyaml.dump(kubeconfigFromParams),
   });
+  const { editorTheme } = useTheme();
 
   const parseKubeconfig = text => {
     try {
@@ -41,10 +43,22 @@ export function KubeconfigUpload({
       <KubeconfigFileUpload
         onKubeconfigTextAdded={onKubeconfigTextAdded('upload')}
       />
+      {/*
       <p>or</p>
       <KubeconfigTextArea
         onKubeconfigTextAdded={onKubeconfigTextAdded('text')}
         kubeconfigFromParams={kubeconfigFromParams}
+      />
+      */}
+      <ControlledEditor
+        height="100%"
+        language="yaml"
+        theme={editorTheme}
+        value={textResource.current}
+        onChange={handleChange}
+        editorDidMount={(_, editor) =>
+          editor.onDidBlurEditorWidget(onEditorBlur)
+        }
       />
       {showParseError && (
         <MessageStrip
