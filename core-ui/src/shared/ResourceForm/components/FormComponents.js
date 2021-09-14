@@ -150,10 +150,6 @@ export function TextArrayInput({
   required,
   ...props
 }) {
-  const [newValue, setNewValue] = React.useState('');
-
-  const addValue = newValue => setValue([...value, newValue]);
-
   const removeValue = index => setValue(value.filter((_, i) => i !== index));
 
   const onChange = (e, index) => {
@@ -163,38 +159,28 @@ export function TextArrayInput({
 
   const { propertyPath, simple, advanced, ...otherProps } = props;
 
+  const values = [...(value || []), ''];
+
   return (
     <CollapsibleSection title={label}>
       <ul className="text-array-input__list">
-        {(value || []).map((entry, i) => (
+        {values.map((entry, i) => (
           <li key={i}>
             <FormInput
               value={entry}
               onChange={e => onChange(e, i)}
               {...otherProps}
+              className={i === values.length - 1 ? 'new-value' : ''}
             />
-            <Button
-              glyph="delete"
-              type="negative"
-              onClick={() => removeValue(i)}
-            />
+            {i !== values.length - 1 && (
+              <Button
+                glyph="delete"
+                type="negative"
+                onClick={() => removeValue(i)}
+              />
+            )}
           </li>
         ))}
-        <li>
-          <FormInput
-            value={newValue}
-            onChange={e => setNewValue(e.target.value)}
-            onBlur={e => {
-              const newValue = e.target.value;
-              if (newValue) {
-                addValue(newValue);
-                setNewValue('');
-              }
-            }}
-            className="new-value"
-            {...otherProps}
-          />
-        </li>
       </ul>
     </CollapsibleSection>
   );
