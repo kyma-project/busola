@@ -2,7 +2,7 @@ import React from 'react';
 import LuigiClient from '@luigi-project/client';
 
 import { Link } from 'fundamental-react';
-import { CopiableLink } from 'react-shared';
+import { CopiableLink, useGet } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
 import AccessStrategies from 'components/ApiRules/AccessStrategies/AccessStrategies';
@@ -19,6 +19,15 @@ function navigateToService(apiRule) {
     .navigate(`services/details/${apiRule.spec.service.name}`);
 }
 
+function getGatewayHost(gateway) {
+  const properServer = gateway.spec.servers.filter(
+    server => server.port.protocol === 'HTTPS',
+  );
+  if (!properServer?.length || !properServer[0].hosts?.length) return null;
+  const properHost = properServer[0].hosts[0].replace('*.', '');
+  return properHost;
+}
+
 export function GoToApiRuleDetails({ apiRule }) {
   return (
     <Link className="fd-link" onClick={() => goToApiRuleDetails(apiRule)}>
@@ -28,22 +37,22 @@ export function GoToApiRuleDetails({ apiRule }) {
 }
 
 export function CopiableApiRuleHost({ apiRule }) {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   let hostname = apiRule.spec.service.host;
   const regex = /^(?=.{1,254}$)((?=[a-z0-9-]{1,63}\.)(xn--+)?[a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,63}$/i;
   const isFQDN = hostname.match(regex);
-  console.log('isFQDN', isFQDN);
   const [gatewayName, gatewayNamespace] = apiRule.spec.gateway.split('.', 2);
+  const gatewayUrl = `/apis/networking.istio.io/v1alpha3/namespaces/${gatewayNamespace}/gateways/${gatewayName}`;
 
-  console.log('gatewayName', gatewayName, 'gatewayNamespace', gatewayNamespace);
-  //get gateway
+  const { data: gateway, error, loading } = useGet(gatewayUrl, {});
+
   if (!isFQDN) {
-    // hostname = `${hostname}.${apiRule.spec.gateway}`
+    if (loading) return t('common.headers.loading');
+    if (error) return `${t('common.tooltips.error')} ${error.message}`;
+    hostname = `${hostname}.${getGatewayHost(gateway)}`;
   }
-  console.log('hostname', hostname);
-  return (
-    <CopiableLink url={`https://${apiRule.spec.service.host}`} i18n={i18n} />
-  );
+
+  return <CopiableLink url={`https://${hostname}`} i18n={i18n} />;
 }
 
 export function ApiRuleServiceInfo({ apiRule, withName = true }) {
