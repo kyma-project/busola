@@ -157,6 +157,7 @@ export function MultiInput({
   className,
   ...props
 }) {
+  const valueRef = useRef(null); // for deep comparison
   const [internalValue, setInternalValue] = useState([]);
   const refs = Array(internalValue.length)
     .fill()
@@ -171,6 +172,19 @@ export function MultiInput({
   useEffect(() => {
     setInternalValue([...toInternal(value), null]);
   }, [value]);
+
+  // diff by stringify, as useEffect won't fire for the same object ref
+  if (
+    typeof value === 'object' &&
+    JSON.stringify(valueRef.current) !== JSON.stringify(value)
+  ) {
+    valueRef.current = value
+      ? Array.isArray(value)
+        ? [...value]
+        : { ...value }
+      : value;
+    setInternalValue([...toInternal(valueRef.current), null]);
+  }
 
   const isLast = index => index === internalValue.length - 1;
 
@@ -261,19 +275,16 @@ export function KeyValueField({
   ...props
 }) {
   const { t } = useTranslation();
-
   return (
     <MultiInput
       toInternal={value =>
         Object.entries(value || {}).map(([key, val]) => ({ key, val }))
       }
-      toExternal={value => {
-        const target = value
+      toExternal={value =>
+        value
           .filter(entry => !!entry?.key)
-          .reduce((acc, entry) => ({ ...acc, [entry.key]: entry.val }), {});
-        console.log('target', target);
-        return target;
-      }}
+          .reduce((acc, entry) => ({ ...acc, [entry.key]: entry.val }), {})
+      }
       inputs={[
         ({ value, setValue, ref, onBlur, focus }) => (
           <FormInput
