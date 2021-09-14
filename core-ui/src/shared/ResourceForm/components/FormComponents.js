@@ -281,7 +281,7 @@ export function KeyValueField({
             value={value?.key || ''}
             ref={ref}
             onChange={e =>
-              setValue({ val: value.val || '', key: e.target.value })
+              setValue({ val: value?.val || '', key: e.target.value })
             }
             onKeyDown={e => focus(e, 1)}
             onBlur={onBlur}
