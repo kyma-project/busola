@@ -171,7 +171,7 @@ export function MultiInput({
 
   useEffect(() => {
     setInternalValue([...toInternal(value), null]);
-  }, [value]);
+  }, [value, toInternal]);
 
   // diff by stringify, as useEffect won't fire for the same object ref
   if (

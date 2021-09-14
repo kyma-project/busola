@@ -33,37 +33,25 @@ context('Create a Deployment', () => {
       .find('[aria-label="expand Labels"]')
       .click();
 
-    // we can't test key-value form, as cypress insists the 'value' input is disabled
-    // cy.getIframeBody()
-    //   .contains('Add')
-    //   .first()
-    //   .click();
+    cy.getIframeBody()
+      .find('[placeholder="Enter Key"]')
+      .eq(1)
+      .type('app');
 
-    // cy.getIframeBody()
-    //   .find('[placeholder="Enter key"]')
-    //   .eq(1)
-    //   .type('app');
+    cy.getIframeBody()
+      .find('[placeholder="Enter Value"]')
+      .eq(1)
+      .type(DEPLOYMENT_NAME);
 
-    // cy.getIframeBody()
-    //   .find('[placeholder="Enter value"]')
-    //   .eq(1)
-    //   .type(DEPLOYMENT_NAME);
-    //   return;
+    cy.getIframeBody()
+      .find('[placeholder="Enter Key"]')
+      .eq(2)
+      .type('example');
 
-    // cy.getIframeBody()
-    //   .contains('Add')
-    //   .first()
-    //   .click();
-
-    // cy.getIframeBody()
-    //   .find('[placeholder="Enter key"]')
-    //   .eq()
-    //   .type('example');
-
-    // cy.getIframeBody()
-    //   .find('[placeholder="Enter value"]')
-    //   .eq(1)
-    //   .type(DEPLOYMENT_NAME);
+    cy.getIframeBody()
+      .find('[placeholder="Enter Value"]')
+      .eq(2)
+      .type(DEPLOYMENT_NAME);
 
     cy.getIframeBody()
       .find('[placeholder^="Enter the Docker image"]:visible')
