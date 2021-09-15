@@ -1,6 +1,7 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import './AddCluster.scss';
+import { Dialog, Wizard } from 'fundamental-react';
 
 import {
   PageHeader,
@@ -19,7 +20,7 @@ import {
 import { ClusterConfiguration } from '../../components/ClusterConfiguration';
 import { ChooseStorage } from './ChooseStorage';
 
-export function AddCluster() {
+export function AddCluster({ show }) {
   const { busolaClusterParams } = useMicrofrontendContext();
   const [kubeconfig, setKubeconfig] = React.useState(null);
   const [initParams, setInitParams] = React.useState(null);
@@ -62,6 +63,7 @@ export function AddCluster() {
   }, [encodedParams, initParams]);
 
   function handleKubeconfigAdded(kubeconfig) {
+    console.log('handleKubeconfigAdded', kubeconfig);
     if (!kubeconfig) {
       setKubeconfig(null);
       return;
@@ -72,61 +74,44 @@ export function AddCluster() {
     const hasAuth = hasKubeconfigAuth(kubeconfig, contextName);
 
     // skip config
-    if (hasOneContext && hasAuth) {
-      try {
-        addCluster({
-          kubeconfig,
-          config: { ...initParams?.config, storage },
-          currentContext: getContext(kubeconfig, contextName),
-        });
-      } catch (e) {
-        notification.notifyError({
-          title: t('clusters.messages.wrong-configuration'),
-          content: t('common.tooltips.error') + e.message,
-        });
-        console.warn(e);
-      }
-    } else {
-      // show additional configuration
-      setKubeconfig(kubeconfig);
-    }
+    // if (hasOneContext && hasAuth) {
+    // try {
+    // addCluster({
+    // kubeconfig,
+    // config: { ...initParams?.config, storage },
+    // currentContext: getContext(kubeconfig, contextName),
+    // });
+    // } catch (e) {
+    // notification.notifyError({
+    // title: t('clusters.messages.wrong-configuration'),
+    // content: t('common.tooltips.error') + e.message,
+    // });
+    // console.warn(e);
+    // }
+    // } else {
+    // show additional configuration
+    setKubeconfig(kubeconfig);
+    // }
   }
 
   return (
-    <>
-      <PageHeader
-        title={t('clusters.add.title')}
-        description={t('clusters.messages.upload-paste-kubeconfig')}
-        breadcrumbItems={[
-          {
-            name: 'Clusters',
-            path: '/clusters',
-            fromAbsolutePath: true,
-          },
-        ]}
-      />
-      <section className="add-cluster-form fd-margin-top--lg">
-        {!kubeconfig && (
-          <>
-            <ChooseStorage storage={storage} setStorage={setStorage} />
-            <KubeconfigUpload
-              handleKubeconfigAdded={handleKubeconfigAdded}
-              kubeconfigFromParams={initParams?.kubeconfig}
-              storage={storage}
-              setStorage={setStorage}
-            />
-          </>
-        )}
-        {kubeconfig && (
-          <ClusterConfiguration
-            kubeconfig={kubeconfig}
-            auth={{ type: AUTH_FORM_TOKEN }}
-            initParams={initParams}
+    <Dialog show={show}>
+      <Wizard style={{ width: '500px', height: '500px' }}>
+        <Wizard.Step
+          title="Choose Configuration"
+          indicator="1"
+          valid={!!kubeconfig}
+        >
+          <ChooseStorage storage={storage} setStorage={setStorage} />
+          <KubeconfigUpload
+            handleKubeconfigAdded={handleKubeconfigAdded}
+            kubeconfigFromParams={initParams?.kubeconfig}
             storage={storage}
-            goBack={() => setKubeconfig(false)}
+            setStorage={setStorage}
           />
-        )}
-      </section>
-    </>
+        </Wizard.Step>
+        <Wizard.Step title="Verify Configuration" indicator="2"></Wizard.Step>
+      </Wizard>
+    </Dialog>
   );
 }

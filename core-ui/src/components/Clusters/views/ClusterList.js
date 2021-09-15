@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import LuigiClient from '@luigi-project/client';
 import jsyaml from 'js-yaml';
 import { saveAs } from 'file-saver';
-import { Link, Button, Icon } from 'fundamental-react';
+import { Link, Button, Icon, Wizard, Dialog } from 'fundamental-react';
 import { useShowNodeParamsError } from 'shared/useShowNodeParamsError';
 import {
   useMicrofrontendContext,
@@ -17,11 +17,40 @@ import { setCluster, deleteCluster } from './../shared';
 import { areParamsCompatible } from '../params-version';
 import './ClusterList.scss';
 import { ClusterStorageType } from './ClusterStorageType';
+import styles from 'fundamental-styles/dist/message-page.css';
+import { AddCluster as AddClusterDialog } from './AddCluster/AddCluster';
+
+function NoClusters({ onClick }) {
+  return (
+    <div className="fd-message-page" style={{ height: '100vh' }}>
+      <div className="fd-message-page__container">
+        <div className="fd-message-page__icon-container">
+          <svg role="presentation" style={{ width: '160px', height: '160px' }}>
+            <use xlinkHref="#sapIllus-Dialog-NoData"></use>
+          </svg>
+        </div>
+        <div role="status" aria-live="polite" class="fd-message-page__content">
+          <div class="fd-message-page__title">
+            You've not added any clusters yet.
+          </div>
+          <div class="fd-message-page__subtitle">
+            Would you like to add one now?
+          </div>
+          <div class="fd-message-page__actions">
+            <Button onClick={onClick}>Add Cluster</Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export function ClusterList() {
   const { clusters, activeClusterName } = useMicrofrontendContext();
   const notification = useNotification();
   const { t, i18n } = useTranslation();
+
+  const [showAdd, setShowAdd] = useState(false);
 
   useShowNodeParamsError();
 
@@ -115,6 +144,15 @@ export function ClusterList() {
       {t('clusters.add.title')}
     </Button>
   );
+
+  if (!entries.length) {
+    return (
+      <>
+        <AddClusterDialog show={showAdd} onClose={() => setShowAdd(false)} />
+        <NoClusters onClick={() => setShowAdd(true)} />
+      </>
+    );
+  }
 
   return (
     <>
