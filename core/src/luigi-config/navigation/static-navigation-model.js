@@ -6,7 +6,7 @@ import {
   getActiveClusterName,
   getClusters,
 } from './../cluster-management/cluster-management';
-import { hasPermissionsFor } from './permissions';
+import { hasPermissionsFor, hasWildcardPermission } from './permissions';
 
 export const coreUIViewGroupName = '_core_ui_';
 export const catalogViewGroupName = '_catalog_';
@@ -1509,7 +1509,7 @@ function checkSingleNode(node, apiGroups, permissionSet, removeNode) {
   const apiPath = new URL(node.viewUrl).searchParams.get('resourceApiPath');
   if (!apiPath) return;
 
-  if (apiGroups) {
+  if (hasWildcardPermission(permissionSet)) {
     // we have '*' in permissions, just check if this resource exists
     const version = apiPath.replace(/^\/apis\//, '').replace(/^\/api\//, '');
     const listForVersion = apiGroups.find(g =>

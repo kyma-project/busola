@@ -309,6 +309,7 @@ export async function getNavigationData(authData) {
     features = await resolveFeatures(features, {
       authData,
       apiGroups,
+      permissionSet,
     });
 
     const nodes = [
