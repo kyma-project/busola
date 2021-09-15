@@ -26,7 +26,7 @@ export function CreateGatewayForm({
   const createGateway = async () => {
     try {
       await postRequest(
-        `/apis/networking.istio.io/v1alpha1/namespaces/${namespaceId}/gateways/`,
+        `/apis/networking.istio.io/v1alpha3/namespaces/${namespaceId}/gateways/`,
         gatewayToYaml(gateway),
       );
       notification.notifySuccess({

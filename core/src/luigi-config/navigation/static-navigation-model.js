@@ -1068,7 +1068,7 @@ export function getStaticChildrenNodesForNamespace(
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/gateways?' +
         toSearchParamsString({
-          resourceApiPath: '/apis/networking.istio.io/v1alpha1',
+          resourceApiPath: '/apis/networking.istio.io/v1alpha3',
           hasDetailsView: true,
         }),
       viewGroup: coreUIViewGroupName,
@@ -1518,7 +1518,6 @@ function checkSingleNode(node, apiGroups, permissionSet, removeNode) {
     if (
       !listForVersion?.resources.find(res => res.name === node.resourceType)
     ) {
-      console.log('rm', version, node.resourceType);
       removeNode();
     }
   } else {

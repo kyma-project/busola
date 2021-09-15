@@ -5,11 +5,11 @@ import { useTranslation } from 'react-i18next';
 
 function useGetGatewaysQuery(namespace) {
   const ownNamespaceQuery = useGetList()(
-    `/apis/networking.istio.io/v1alpha1/namespaces/${namespace}/gateways`,
+    `/apis/networking.istio.io/v1alpha3/namespaces/${namespace}/gateways`,
     { pollingInterval: 8000 },
   );
   const kymaSystemNamespaceQuery = useGetList()(
-    '/apis/networking.istio.io/v1alpha1/namespaces/kyma-system/gateways',
+    '/apis/networking.istio.io/v1alpha3/namespaces/kyma-system/gateways',
     { pollingInterval: 9000, skip: namespace === 'kyma-system' },
   );
 
