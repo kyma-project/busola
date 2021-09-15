@@ -102,8 +102,8 @@ export async function fetchBusolaInitData(auth) {
     .then(res => [
       CORE_GROUP,
       ...res.groups.flatMap(group =>
-        group.versions.map(v => ({
-          groupVersion: v.groupVersion,
+        group.versions.map(version => ({
+          groupVersion: version.groupVersion,
           prefix: '/apis/',
         })),
       ),

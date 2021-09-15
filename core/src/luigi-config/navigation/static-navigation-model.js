@@ -1511,9 +1511,11 @@ function checkSingleNode(node, apiGroups, permissionSet, removeNode) {
 
   if (hasWildcardPermission(permissionSet)) {
     // we have '*' in permissions, just check if this resource exists
-    const version = apiPath.replace(/^\/apis\//, '').replace(/^\/api\//, '');
+    const groupVersion = apiPath
+      .replace(/^\/apis\//, '')
+      .replace(/^\/api\//, '');
     const listForVersion = apiGroups.find(g =>
-      g.groupVersion.includes(version),
+      g.groupVersion.includes(groupVersion),
     );
     if (
       !listForVersion?.resources.find(res => res.name === node.resourceType)
