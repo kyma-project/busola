@@ -4,45 +4,43 @@ import { useTranslation } from 'react-i18next';
 import { KubeconfigFileUpload } from './KubeconfigFileUpload';
 import { KubeconfigTextArea } from './KubeconfigTextArea/KubeconfigTextArea';
 import jsyaml from 'js-yaml';
-import { useTheme } from 'react-shared';
+import { ControlledEditor, useTheme } from 'react-shared';
 
 export function KubeconfigUpload({
+  onKubeconfig,
   handleKubeconfigAdded,
   kubeconfigFromParams,
 }) {
-  const [showParseError, setShowParseError] = React.useState(false);
+  // const [showParseError, setShowParseError] = React.useState(false);
+  const [error, setError] = React.useState('');
+  const [kubeconfig, setKubeconfig] = React.useState('');
   const [kubeconfigs, setKubeconfigs] = React.useState({
     text: jsyaml.dump(kubeconfigFromParams),
   });
   const { editorTheme } = useTheme();
-
-  const parseKubeconfig = text => {
-    try {
-      const parsed = jsyaml.load(text);
-      if (!parsed || typeof parsed !== 'object') {
-        throw Error('Kubeconfig must be an object.');
-      }
-      return parsed;
-    } catch (e) {
-      console.warn(e);
-      return null;
-    }
-  };
-
-  const onKubeconfigTextAdded = source => text => {
-    const kubeconfig = parseKubeconfig(text);
-    setShowParseError(!kubeconfig);
-    setKubeconfigs({ ...kubeconfigs, [source]: kubeconfig });
-    handleKubeconfigAdded(kubeconfig);
-  };
-
   const { t } = useTranslation();
+
+  const updateKubeconfig = text => {
+    try {
+      jsyaml.load(text);
+      setKubeconfig(text);
+      setError(null);
+      onKubeconfig(text);
+    } catch ({ message }) {
+      // get the message until the newline
+      setError(message.substr(0, message.indexOf('\n')));
+      onKubeconfig(null);
+    }
+    // const kubeconfig = parseKubeconfig(text);
+    // setShowParseError(!kubeconfig);
+    // setKubeconfigs({ ...kubeconfigs, [source]: kubeconfig });
+    // // handleKubeconfigAdded(kubeconfig);
+    // setKubeconfig(kubeconfig);
+  };
 
   return (
     <>
-      <KubeconfigFileUpload
-        onKubeconfigTextAdded={onKubeconfigTextAdded('upload')}
-      />
+      <KubeconfigFileUpload onKubeconfigTextAdded={updateKubeconfig} />
       {/*
       <p>or</p>
       <KubeconfigTextArea
@@ -51,22 +49,24 @@ export function KubeconfigUpload({
       />
       */}
       <ControlledEditor
-        height="100%"
+        height="400px"
         language="yaml"
         theme={editorTheme}
-        value={textResource.current}
-        onChange={handleChange}
-        editorDidMount={(_, editor) =>
-          editor.onDidBlurEditorWidget(onEditorBlur)
-        }
+        value={kubeconfig}
+        onChange={(e, text) => updateKubeconfig(text)}
       />
-      {showParseError && (
+      {/*showParseError && (
         <MessageStrip
           aria-label="invalid-kubeconfig"
           className="fd-margin-top--sm"
           type="error"
         >
           {t('clusters.messages.error-kubeconfig')}
+        </MessageStrip>
+      )*/}
+      {error && (
+        <MessageStrip type="error" className="fd-margin--sm">
+          {t('common.create-form.editor-error', { error })}
         </MessageStrip>
       )}
     </>

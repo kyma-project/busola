@@ -20,7 +20,7 @@ import {
 import { ClusterConfiguration } from '../../components/ClusterConfiguration';
 import { ChooseStorage } from './ChooseStorage';
 
-export function AddCluster({ show }) {
+export function AddCluster({ show, onCancel }) {
   const { busolaClusterParams } = useMicrofrontendContext();
   const [kubeconfig, setKubeconfig] = React.useState(null);
   const [initParams, setInitParams] = React.useState(null);
@@ -88,22 +88,27 @@ export function AddCluster({ show }) {
     // });
     // console.warn(e);
     // }
-    // } else {
+    // } else
     // show additional configuration
     setKubeconfig(kubeconfig);
     // }
   }
 
   return (
-    <Dialog show={show}>
-      <Wizard style={{ width: '500px', height: '500px' }}>
+    <Dialog
+      show={show}
+      className="add-cluster-dialog"
+      title={t('clusters.add.title')}
+    >
+      <Wizard onCancel={onCancel} headerSize="sm" contentSize="sm">
         <Wizard.Step
           title="Choose Configuration"
           indicator="1"
           valid={!!kubeconfig}
         >
-          <ChooseStorage storage={storage} setStorage={setStorage} />
+          {/*<ChooseStorage storage={storage} setStorage={setStorage} />*/}
           <KubeconfigUpload
+            onKubeconfig={setKubeconfig}
             handleKubeconfigAdded={handleKubeconfigAdded}
             kubeconfigFromParams={initParams?.kubeconfig}
             storage={storage}

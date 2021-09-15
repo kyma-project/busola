@@ -1,3 +1,13 @@
+.add-cluster-dialog {
+  .fd-dialog__body {
+    padding: 0;
+  }
+  .fd-dialog__footer {
+    display: none;
+  }
+}
+
+/*
 .add-cluster-form {
 max-width: 400px;
     margin: 0 auto;
@@ -13,3 +23,4 @@ max-width: 400px;
         width: 100%;
     }
 }
+*/

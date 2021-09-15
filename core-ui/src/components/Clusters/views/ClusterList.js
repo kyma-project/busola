@@ -22,10 +22,10 @@ import { AddCluster as AddClusterDialog } from './AddCluster/AddCluster';
 
 function NoClusters({ onClick }) {
   return (
-    <div className="fd-message-page" style={{ height: '100vh' }}>
+    <section className="empty-cluster-list fd-message-page">
       <div className="fd-message-page__container">
         <div className="fd-message-page__icon-container">
-          <svg role="presentation" style={{ width: '160px', height: '160px' }}>
+          <svg role="presentation" className="fd-message-page__icon">
             <use xlinkHref="#sapIllus-Dialog-NoData"></use>
           </svg>
         </div>
@@ -41,7 +41,7 @@ function NoClusters({ onClick }) {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
 
@@ -148,7 +148,7 @@ export function ClusterList() {
   if (!entries.length) {
     return (
       <>
-        <AddClusterDialog show={showAdd} onClose={() => setShowAdd(false)} />
+        <AddClusterDialog show={showAdd} onCancel={() => setShowAdd(false)} />
         <NoClusters onClick={() => setShowAdd(true)} />
       </>
     );
