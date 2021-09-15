@@ -1,5 +1,5 @@
 import React from 'react';
-import { GenericList } from 'react-shared';
+import { ControlledBy, GenericList } from 'react-shared';
 
 import { PodStatus } from './PodStatus';
 import ContainersData from './ContainersData';
@@ -37,6 +37,15 @@ export const PodsDetails = ({ DefaultRenderer, ...otherParams }) => {
     {
       header: t('common.headers.status'),
       value: pod => <PodStatus pod={pod} />,
+    },
+    {
+      header: t('common.headers.owner'),
+      value: pod => (
+        <ControlledBy
+          ownerReferences={pod.metadata.ownerReferences}
+          namespace={pod.metadata.namespace}
+        />
+      ),
     },
   ];
 

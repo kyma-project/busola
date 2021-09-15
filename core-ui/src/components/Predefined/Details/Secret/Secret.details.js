@@ -1,5 +1,5 @@
 import React from 'react';
-import { ModalWithForm } from 'react-shared';
+import { ControlledBy, ModalWithForm } from 'react-shared';
 import { Button } from 'fundamental-react';
 import SecretData from 'shared/components/Secret/SecretData';
 import { EditSecretForm } from './EditSecretForm';
@@ -33,10 +33,22 @@ export const SecretsDetails = ({ DefaultRenderer, ...otherParams }) => {
       />
     ),
   ];
+  const customColumns = [
+    {
+      header: t('common.headers.owner'),
+      value: deployment => (
+        <ControlledBy
+          ownerReferences={deployment.metadata.ownerReferences}
+          namespace={deployment.metadata.namespace}
+        />
+      ),
+    },
+  ];
 
   return (
     <DefaultRenderer
       customComponents={[Secret]}
+      customColumns={customColumns}
       resourceHeaderActions={headerActions}
       {...otherParams}
     />

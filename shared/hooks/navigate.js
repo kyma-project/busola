@@ -12,6 +12,18 @@ export function navigateToFixedPathResourceDetails(resourceType, resourceName) {
     .navigate(`${resourceType}/details/${resourceName}`);
 }
 
+export function navigateToCustomResourceDefinitionDetails(
+  resourceType,
+  apiVersion,
+  resourceName,
+) {
+  LuigiClient.linkManager()
+    .fromContext('namespace')
+    .navigate(
+      `customresourcedefinitions/details/${resourceType}.${apiVersion}/${resourceName}`,
+    );
+}
+
 function navigateToNamespaceDetails(namespaceName) {
   LuigiClient.linkManager()
     .fromContext('cluster')

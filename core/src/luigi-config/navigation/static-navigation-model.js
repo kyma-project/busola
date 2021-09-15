@@ -620,7 +620,7 @@ export function getStaticChildrenNodesForNamespace(
     },
     {
       category: i18next.t('service-management.title'),
-      pathSegment: 'btp-instances',
+      pathSegment: 'serviceinstances',
       navigationContext: 'serviceinstances',
       label: i18next.t('btp-instances.title'),
       viewUrl:
@@ -655,7 +655,7 @@ export function getStaticChildrenNodesForNamespace(
     },
     {
       category: i18next.t('service-management.title'),
-      pathSegment: 'btp-service-bindings',
+      pathSegment: 'servicebindings',
       navigationContext: 'servicebindings',
       label: i18next.t('btp-service-bindings.title'),
       viewUrl:
@@ -841,7 +841,7 @@ export function getStaticChildrenNodesForNamespace(
     },
     {
       category: i18next.t('configuration.title'),
-      pathSegment: 'role-bindings',
+      pathSegment: 'rolebindings',
       resourceType: 'rolebindings',
       navigationContext: 'rolebindings',
       label: i18next.t('role-bindings.title'),
@@ -1381,7 +1381,7 @@ export function getStaticRootNodes(
       ],
     },
     {
-      pathSegment: 'cluster-role-bindings',
+      pathSegment: 'clusterrolebindings',
       resourceType: 'clusterrolebindings',
       navigationContext: 'clusterrolebindings',
       label: i18next.t('cluster-role-bindings.title'),
