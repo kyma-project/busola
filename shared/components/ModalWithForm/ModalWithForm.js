@@ -84,6 +84,7 @@ export const ModalWithForm = ({
 
   function handleFormChanged(e) {
     setTimeout(() => checkAllForms());
+    if (!e) return;
     if (e.target) {
       if (e.target.getAttribute('data-ignore-visual-validation')) {
         return;
@@ -131,7 +132,7 @@ export const ModalWithForm = ({
         onClick={handleFormSubmit}
         option="emphasized"
       >
-        {t(confirmText)}
+        {confirmText}
       </Button>
     );
 

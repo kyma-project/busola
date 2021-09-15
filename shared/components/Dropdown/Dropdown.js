@@ -1,6 +1,7 @@
 import React from 'react';
 import { Select, FormLabel } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
+import classnames from 'classnames';
 
 import { Tooltip } from '../..';
 import './Dropdown.scss';
@@ -11,6 +12,7 @@ export function Dropdown({
   selectedKey,
   onSelect,
   inlineHelp = '',
+  fullWidth,
   id,
   disabled = false,
   _ref,
@@ -45,8 +47,12 @@ export function Dropdown({
     />
   );
 
+  const classNames = classnames('dropdown', {
+    'dropdown--full-width': fullWidth,
+  });
+
   return (
-    <div className="dropdown">
+    <div className={classNames}>
       {label && <FormLabel htmlFor={id}>{label}</FormLabel>}
       {inlineHelp ? <Tooltip content={inlineHelp}>{select}</Tooltip> : select}
     </div>

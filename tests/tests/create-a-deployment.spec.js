@@ -21,25 +21,37 @@ context('Create a Deployment', () => {
       .click({ force: true });
 
     cy.getIframeBody()
-      .find('[placeholder="Deployment name"]:visible')
+      .find('[placeholder="Deployment Name"]:visible')
       .clear()
       .type(DEPLOYMENT_NAME);
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Labels key=value"]:visible')
-      .type(`app=${DEPLOYMENT_NAME}`);
-
-    cy.getIframeBody()
-      .contains('label', 'Labels')
+      .contains('Advanced')
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Labels key=value"]:visible')
-      .type(`example=${DEPLOYMENT_NAME}`);
+      .find('[aria-label="expand Labels"]')
+      .click();
 
     cy.getIframeBody()
-      .contains('label', 'Labels')
-      .click();
+      .find('[placeholder="Enter Key"]')
+      .eq(1)
+      .type('app');
+
+    cy.getIframeBody()
+      .find('[placeholder="Enter Value"]')
+      .eq(1)
+      .type(DEPLOYMENT_NAME);
+
+    cy.getIframeBody()
+      .find('[placeholder="Enter Key"]')
+      .eq(2)
+      .type('example');
+
+    cy.getIframeBody()
+      .find('[placeholder="Enter Value"]')
+      .eq(2)
+      .type(DEPLOYMENT_NAME);
 
     cy.getIframeBody()
       .find('[placeholder^="Enter the Docker image"]:visible')
@@ -50,32 +62,34 @@ context('Create a Deployment', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('Runtime Profile')
-      .click();
-
-    cy.getIframeBody()
       .contains('label', 'Memory Requests')
-      .next('input')
+      .next()
+      .find('input')
       .clear()
-      .type('16Mi');
+      .type('16');
 
     cy.getIframeBody()
       .contains('label', 'Memory Limits')
-      .next('input')
+      .next()
+      .find('input')
       .clear()
-      .type('32Mi');
+      .type('32');
 
     cy.getIframeBody()
-      .contains('label', 'CPU Requests')
+      .contains('label', 'CPU Requests (m)')
       .next('input')
       .clear()
-      .type('10m');
+      .type('10');
 
     cy.getIframeBody()
-      .contains('label', 'CPU Limits')
+      .contains('label', 'CPU Limits (m)')
       .next('input')
       .clear()
-      .type('20m');
+      .type('20');
+
+    cy.getIframeBody()
+      .contains('Expose a separate Service')
+      .click();
 
     cy.getIframeBody()
       .contains('button', 'Create')
