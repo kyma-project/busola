@@ -4,7 +4,7 @@ const localIpFilter = (_req, headersData) => {
 
   const host = headersData.targetApiServer.host || '';
 
-  if (localIpRegex.test(host)) {
+  if (localIpRegex.test(host) || host.endsWith('.cluster.local')) {
     throw Error('Local IP addresses are not allowed.');
   }
 };
