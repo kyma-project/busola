@@ -2,6 +2,13 @@
   "config": {
     "defaultStorage": "localStorage",
     "features": {
+      "SENTRY": {
+        "isEnabled": true,
+        "selectors": [],
+        "config": {
+          "dsn": ""
+        }
+      },
       "BTP_CATALOG": {
         "selectors": [
           {

@@ -57,6 +57,16 @@ export async function reloadNavigation() {
 async function createClusterManagementNodes() {
   const activeClusterName = getActiveClusterName();
 
+  let features;
+  const activeCluster = await getActiveCluster();
+  if (activeCluster) {
+    features = activeCluster.features || {};
+  } else {
+    features = (await getBusolaClusterParams()).config?.features || {};
+  }
+
+  features = await resolveFeatures(features, null);
+
   const clusterManagementNode = {
     pathSegment: 'clusters',
     hideFromNav: true,
@@ -89,6 +99,7 @@ async function createClusterManagementNodes() {
       activeClusterName: getActiveClusterName(),
       language: i18next.language,
       busolaClusterParams: await getBusolaClusterParams(),
+      features,
     },
   };
   const clusters = await getClusters();
@@ -292,10 +303,10 @@ export async function getNavigationData(authData) {
     const params = await getActiveCluster();
     const activeClusterName = params.currentContext.cluster.name;
 
-    const { navigation = {}, hiddenNamespaces = [], features = {} } =
+    let { navigation = {}, hiddenNamespaces = [], features = {} } =
       params?.config || {};
 
-    await resolveFeatures(features, {
+    features = await resolveFeatures(features, {
       authData,
       apiGroups,
     });
