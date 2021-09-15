@@ -1,5 +1,5 @@
 {
-  "defaultCommandTimeout": 3000,
+  "defaultCommandTimeout": 10000,
   "execTimeout": 3000,
   "taskTimeout": 3000,
   "pageLoadTimeout": 5000,

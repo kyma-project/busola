@@ -48,7 +48,7 @@ export function gatewayToYaml(gateway) {
   });
 
   return {
-    apiVersion: 'networking.istio.io/v1alpha3',
+    apiVersion: 'networking.istio.io/v1alpha1',
     kind: 'Gateway',
     metadata: {
       name: gateway.name,

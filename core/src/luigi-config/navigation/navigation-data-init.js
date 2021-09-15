@@ -36,7 +36,6 @@ import { saveLocation } from './previous-location';
 import { NODE_PARAM_PREFIX } from '../luigi-config';
 
 let selfSubjectRulesReview;
-let crds = [];
 
 export async function addClusterNodes() {
   const config = Luigi.getConfig();
@@ -234,25 +233,6 @@ export async function createNavigation() {
   };
 }
 
-async function fetchNavigationData(authData, permissionSet) {
-  if (
-    hasPermissionsFor(
-      'apiextensions.k8s.io',
-      'customresourcedefinitions',
-      permissionSet,
-    )
-  ) {
-    const res = await fetchBusolaInitData(authData);
-    crds = res.crds.map(crd => crd.name);
-    return { ...res, crds };
-  } else {
-    // as we may not be able to make CRDs call, apiGroups call shall suffice
-    const apiGroups = [...new Set(permissionSet.flatMap(p => p.apiGroups))];
-    crds = apiGroups;
-    return { crds: apiGroups, apiPaths: null };
-  }
-}
-
 async function getObservabilityNodes(authData, enabledFeatures) {
   let links =
     // take the Config Params at first
@@ -307,10 +287,8 @@ export async function getNavigationData(authData) {
     );
     selfSubjectRulesReview = permissionSet;
 
-    const { crds, apiPaths } = await fetchNavigationData(
-      authData,
-      permissionSet,
-    );
+    const apiGroups = await fetchBusolaInitData(authData);
+
     const params = await getActiveCluster();
     const activeClusterName = params.currentContext.cluster.name;
 
@@ -319,7 +297,7 @@ export async function getNavigationData(authData) {
 
     await resolveFeatures(features, {
       authData,
-      crds,
+      apiGroups,
     });
 
     const nodes = [
@@ -337,7 +315,7 @@ export async function getNavigationData(authData) {
             children: async function() {
               const staticNodes = getStaticRootNodes(
                 getChildrenNodesForNamespace,
-                apiPaths,
+                apiGroups,
                 permissionSet,
                 features,
               );
@@ -359,7 +337,6 @@ export async function getNavigationData(authData) {
         context: {
           authData,
           groups,
-          crds,
           features,
           hiddenNamespaces,
           cluster: params.currentContext.cluster,
@@ -413,10 +390,14 @@ async function getNamespaces() {
   return createNamespacesList(namespaces);
 }
 
-async function getChildrenNodesForNamespace(apiPaths, permissionSet, features) {
+async function getChildrenNodesForNamespace(
+  apiGroups,
+  permissionSet,
+  features,
+) {
   const { navigation = {} } = (await getActiveCluster()).config;
   const staticNodes = getStaticChildrenNodesForNamespace(
-    apiPaths,
+    apiGroups,
     permissionSet,
     features,
   );

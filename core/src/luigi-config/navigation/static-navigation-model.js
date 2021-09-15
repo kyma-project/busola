@@ -51,7 +51,7 @@ async function downloadKubeconfig() {
 }
 
 export function getStaticChildrenNodesForNamespace(
-  apiPaths,
+  apiGroups,
   permissionSet,
   features,
 ) {
@@ -1068,7 +1068,7 @@ export function getStaticChildrenNodesForNamespace(
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/gateways?' +
         toSearchParamsString({
-          resourceApiPath: '/apis/networking.istio.io/v1alpha3',
+          resourceApiPath: '/apis/networking.istio.io/v1alpha1',
           hasDetailsView: true,
         }),
       viewGroup: coreUIViewGroupName,
@@ -1171,13 +1171,13 @@ export function getStaticChildrenNodesForNamespace(
       ],
     },
   ];
-  filterNodesByAvailablePaths(nodes, apiPaths, permissionSet);
+  filterNodesByAvailablePaths(nodes, apiGroups, permissionSet);
   return nodes;
 }
 
 export function getStaticRootNodes(
   namespaceChildrenNodesResolver,
-  apiPaths,
+  apiGroups,
   permissionSet,
   features,
 ) {
@@ -1227,7 +1227,7 @@ export function getStaticRootNodes(
           keepSelectedForChildren: false,
           children: async () =>
             await namespaceChildrenNodesResolver(
-              apiPaths,
+              apiGroups,
               permissionSet,
               features,
             ),
@@ -1481,7 +1481,7 @@ export function getStaticRootNodes(
       onNodeActivation: downloadKubeconfig,
     },
   ];
-  filterNodesByAvailablePaths(nodes, apiPaths, permissionSet);
+  filterNodesByAvailablePaths(nodes, apiGroups, permissionSet);
   return nodes;
 }
 
@@ -1492,26 +1492,33 @@ function extractApiGroup(apiPath) {
   return apiPath.split('/')[2];
 }
 
-function filterNodesByAvailablePaths(nodes, apiPaths, permissionSet) {
+function filterNodesByAvailablePaths(nodes, apiGroups, permissionSet) {
   for (let i = nodes.length - 1; i >= 0; i--) {
     const node = nodes[i];
     if (typeof node.children === 'object') {
-      filterNodesByAvailablePaths(node.children, apiPaths, permissionSet);
+      filterNodesByAvailablePaths(node.children, apiGroups, permissionSet);
     }
 
     const removeNode = () => nodes.splice(i, 1);
-    checkSingleNode(node, apiPaths, permissionSet, removeNode);
+    checkSingleNode(node, apiGroups, permissionSet, removeNode);
   }
 }
 
-function checkSingleNode(node, apiPaths, permissionSet, removeNode) {
+function checkSingleNode(node, apiGroups, permissionSet, removeNode) {
   if (!node.viewUrl || !node.resourceType) return;
   const apiPath = new URL(node.viewUrl).searchParams.get('resourceApiPath');
   if (!apiPath) return;
 
-  if (apiPaths) {
+  if (apiGroups) {
     // we have '*' in permissions, just check if this resource exists
-    if (!apiPaths.includes(apiPath)) {
+    const version = apiPath.replace(/^\/apis\//, '').replace(/^\/api\//, '');
+    const listForVersion = apiGroups.find(g =>
+      g.groupVersion.includes(version),
+    );
+    if (
+      !listForVersion?.resources.find(res => res.name === node.resourceType)
+    ) {
+      console.log('rm', version, node.resourceType);
       removeNode();
     }
   } else {
