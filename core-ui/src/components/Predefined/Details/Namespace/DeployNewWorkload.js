@@ -5,7 +5,7 @@ import {
   useGetList,
   useMicrofrontendContext,
 } from 'react-shared';
-import { CreateDeploymentForm } from '../../Create/Deployments/CreateDeploymentForm';
+import { DeploymentsCreate } from '../../Create/Deployments/Deployments.create';
 import CreateLambdaModal from 'components/Lambdas/LambdasList/Lambdas/CreateLambdaModal';
 import { useTranslation } from 'react-i18next';
 
@@ -55,11 +55,11 @@ export default function DeployNewWorkload({ namespaceName }) {
   const deploymentModal = (
     <ModalWithForm
       title="Create Deployment"
-      confirmText="Create"
-      className="add-deployment-modal fd-dialog--xl-size modal-width--m"
+      confirmText={t('common.buttons.create')}
+      className="add-deployment-modal fd-dialog--xl-size modal-size--l"
       modalOpeningComponent={<Menu.Item>Create Deployment</Menu.Item>}
       renderForm={props => (
-        <CreateDeploymentForm namespaceId={namespaceName} {...props} />
+        <DeploymentsCreate {...props} namespace={namespaceName} />
       )}
       i18n={i18n}
     />

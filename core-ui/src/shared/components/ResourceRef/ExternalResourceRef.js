@@ -6,14 +6,14 @@ import './ExternalResourceRef.scss';
 
 export function ExternalResourceRef({ resourceRef, onChange, resources }) {
   const { t } = useTranslation();
-  const options = (resources || []).map((resource, index) => ({
-    key: index,
+  const options = (resources || []).map(resource => ({
+    key: `${resource.metadata.namespace}/${resource.metadata.name}`,
     text: resource.metadata.name,
     namespace: resource.metadata.namespace,
   }));
 
   const selectResource = (e, selected) => {
-    if (selected.key > -1) {
+    if (selected.key !== -1) {
       onChange(e, { name: selected.text, namespace: selected.namespace });
     }
   };
@@ -21,6 +21,8 @@ export function ExternalResourceRef({ resourceRef, onChange, resources }) {
   return (
     <div className="external-resource-ref">
       <ComboboxInput
+        id="external-resource-ref"
+        ariaLabel={t('common.labels.name')}
         compact
         onChange={e => {
           onChange(e, { ...resourceRef, name: e.target.value });
