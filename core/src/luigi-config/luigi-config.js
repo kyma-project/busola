@@ -17,6 +17,7 @@ import {
   saveCARequired,
   setActiveClusterIfPresentInUrl,
 } from './cluster-management/cluster-management';
+import { initSentry } from './sentry';
 
 import {
   createNavigation,
@@ -81,6 +82,8 @@ async function luigiAfterInit() {
 
 (async () => {
   handleResetEndpoint();
+
+  await initSentry();
 
   await i18n;
 
