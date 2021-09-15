@@ -8,7 +8,7 @@ import { CreateForm } from 'shared/components/CreateForm/CreateForm';
 import { PrivateKeyForm } from './PrivateKeyForm';
 
 export function SimpleForm({ issuer, setIssuer }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const caFields = (
     <CreateForm.Section>
@@ -63,6 +63,8 @@ export function SimpleForm({ issuer, setIssuer }) {
                 onChange={e => setIssuer({ ...issuer, name: e.target.value })}
                 value={issuer.name}
                 placeholder={t('issuers.placeholders.name')}
+                i18n={i18n}
+                kind={t('issuers.name_singular')}
               />
             }
           />

@@ -20,7 +20,7 @@ context('Create Namespace', () => {
     cy.task('getNamespace').then(a => {
       cy.getIframeBody()
         .find('[role=dialog]')
-        .find("input[placeholder='Namespace name']")
+        .find("input[placeholder='Namespace Name']")
         .should('be.visible')
         .type(a);
     });
