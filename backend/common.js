@@ -3,6 +3,8 @@ const url = require('url');
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
+import { filters } from './request-filters';
+
 const logger = require('pino-http')({
   autoLogging: process.env.NODE_ENV === 'production', //to disable the automatic "request completed" and "request errored" logging.
   serializers: {
@@ -49,6 +51,14 @@ export const handleRequest = async (req, res) => {
   } catch (e) {
     req.log.error('Headers error:', e.message);
     res.status(400).send('Headers are missing or in a wrong format.');
+    return;
+  }
+
+  try {
+    filters.forEach(filter => filter(req, headersData));
+  } catch (e) {
+    req.log.error('Filters rejected the request: ' + e.message);
+    res.sendStatus(400);
     return;
   }
 
