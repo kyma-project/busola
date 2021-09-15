@@ -19,13 +19,18 @@ import { NoPermissions } from 'components/NoPermissions/NoPermissions';
 import { AddCluster } from 'components/Clusters/views/AddCluster/AddCluster';
 import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
 import { NodeDetails } from 'components/Nodes/NodeDetails/NodeDetails';
+import { useSentry } from '../../hooks/useSentry';
 
 export default function App() {
   const { cluster, language } = useMicrofrontendContext();
   const { t, i18n } = useTranslation();
+
   useEffect(() => {
     i18n.changeLanguage(language);
   }, [language, i18n]);
+
+  useSentry();
+
   return (
     // force rerender on cluster change
     <Switch key={cluster?.name}>
