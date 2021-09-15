@@ -77,7 +77,7 @@
         "selectors":[
           {
             "type": "apiGroup",
-            "apiGroup": "dnsproviders.dns.gardener.cloud"
+            "apiGroup": "dns.gardener.cloud"
           }
         ]
       },
