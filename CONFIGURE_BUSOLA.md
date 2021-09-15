@@ -17,8 +17,10 @@ By default, Busola is delivered with the following default settings:
 
 If you have the required authorizations and access to the kubeconfig, you can change the settings for the Busola cluster configuration and the target cluster configuration.
 
-With the `feature` toggles, you can switch each Busola feature on or off.
-There are two kinds of features:
+With the `feature` toggles, you can switch each Busola feature on or off and configure them to fit your needs.
+Features comprise the following elements:
 
-- KUBECONFIG_ID: If enabled, and if a kubeconfig ID is defined, it pulls the kubeconfig from the service specified at `config.kubeconfigUrl`.
-- The remaining features, which contain the `apiGroup` selector. They enable and disable navigation nodes on the UI and some functionalities. For example, if `API_GATEWAY` is enabled, the `API Rules` node is displayed, and the Function details allow exposing a Function with API rules.
+- `FEATURE_ID`: Unique identifier, as defined in the Busola source code
+- `selector`: The k8s resources that can activate the feature
+- `isActive`: Activates or deactivates the feature, overwriting the status set by `selector`
+- `config`: Provides additional configuration options as needed for each feature. For details, see the README in the specific component or feature.
