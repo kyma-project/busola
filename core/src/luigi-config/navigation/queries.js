@@ -93,8 +93,8 @@ export function fetchPermissions(auth, namespace = '*') {
 
 export async function fetchBusolaInitData(auth) {
   const CORE_GROUP = {
-    groupVersion: 'api/v1',
-    prefix: '/',
+    groupVersion: 'v1',
+    prefix: '/api/',
   };
 
   const groups = await failFastFetch(config.backendAddress + '/apis', auth)
@@ -109,15 +109,13 @@ export async function fetchBusolaInitData(auth) {
       ),
     ]);
 
-  return (
-    await Promise.all(
-      groups.map(({ groupVersion, prefix }) =>
-        failFastFetch(config.backendAddress + prefix + groupVersion, auth)
-          .then(res => res.json())
-          .then(list => ({ ...list, groupVersion })),
-      ),
-    )
-  ).flatMap(a => a);
+  const groupRequests = groups.map(({ prefix, groupVersion }) =>
+    failFastFetch(config.backendAddress + prefix + groupVersion, auth)
+      .then(res => res.json())
+      .then(list => ({ ...list, groupVersion })),
+  );
+
+  return await Promise.all(groupRequests);
 }
 
 export function fetchNamespaces(auth) {
