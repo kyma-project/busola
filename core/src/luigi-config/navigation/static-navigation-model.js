@@ -738,7 +738,7 @@ export function getStaticChildrenNodesForNamespace(
     },
     {
       category: i18next.t('configuration.title'),
-      pathSegment: 'config-maps',
+      pathSegment: 'configmaps',
       resourceType: 'configmaps',
       navigationContext: 'configmaps',
       label: i18next.t('config-maps.title'),
@@ -1339,7 +1339,7 @@ export function getStaticRootNodes(
     },
     {
       category: i18next.t('configuration.title'),
-      pathSegment: 'cluster-roles',
+      pathSegment: 'clusterroles',
       navigationContext: 'clusterroles',
       resourceType: 'clusterroles',
       label: i18next.t('cluster-roles.title'),
