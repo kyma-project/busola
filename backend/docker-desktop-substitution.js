@@ -10,8 +10,6 @@ if (isDockerDesktopCluster && !isDocker) {
 export function handleDockerDesktopSubsitution(url) {
   if (isSubstitutionEnabled && url.hostname === '0.0.0.0') {
     url.hostname = 'host.docker.internal';
-    // url.host = `${url.hostname}:${url.port}`;
-    // url.href = `${url.protocol}//${url.host}${url.path}`;
   }
   return url;
 }
