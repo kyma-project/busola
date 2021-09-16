@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { ControlledByKind } from 'react-shared';
 
 export const ServicesList = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
@@ -33,6 +34,12 @@ export const ServicesList = ({ DefaultRenderer, ...otherParams }) => {
   };
 
   const customColumns = [
+    {
+      header: t('common.headers.owner'),
+      value: service => (
+        <ControlledByKind ownerReferences={service.metadata.ownerReferences} />
+      ),
+    },
     {
       header: t('services.type'),
       value: service => service.spec.type,

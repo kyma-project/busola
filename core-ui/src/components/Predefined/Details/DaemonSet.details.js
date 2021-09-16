@@ -1,7 +1,12 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { GenericList, EMPTY_TEXT_PLACEHOLDER, StatusBadge } from 'react-shared';
+import {
+  ControlledBy,
+  GenericList,
+  EMPTY_TEXT_PLACEHOLDER,
+  StatusBadge,
+} from 'react-shared';
 import { ResourcePods } from './ResourcePods.js';
 import { getPodsCount, getStatusType } from '../List/DaemonSets.list';
 
@@ -67,18 +72,26 @@ const Images = resource => {
   );
 };
 
-const customColumns = [
-  {
-    header: 'Status',
-    value: resource => {
-      const podsCount = getPodsCount(resource);
-      const statusType = getStatusType(resource);
-      return <StatusBadge type={statusType}>{podsCount}</StatusBadge>;
-    },
-  },
-];
-
 export const DaemonSetsDetails = ({ DefaultRenderer, ...otherParams }) => {
+  const { t } = useTranslation();
+
+  const customColumns = [
+    {
+      header: t('common.headers.owner'),
+      value: resource => (
+        <ControlledBy ownerReferences={resource.metadata.ownerReferences} />
+      ),
+    },
+    {
+      header: t('common.headers.status'),
+      value: resource => {
+        const podsCount = getPodsCount(resource);
+        const statusType = getStatusType(resource);
+        return <StatusBadge type={statusType}>{podsCount}</StatusBadge>;
+      },
+    },
+  ];
+
   return (
     <DefaultRenderer
       customComponents={[

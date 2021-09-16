@@ -14,11 +14,9 @@ export const PodsList = ({ DefaultRenderer, ...otherParams }) => {
   let customColumns = [
     {
       header: t('common.headers.owner'),
-      value: deployment => {
+      value: pod => {
         return (
-          <ControlledByKind
-            ownerReferences={deployment.metadata.ownerReferences}
-          />
+          <ControlledByKind ownerReferences={pod.metadata.ownerReferences} />
         );
       },
     },

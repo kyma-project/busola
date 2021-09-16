@@ -33,14 +33,12 @@ export const SecretsDetails = ({ DefaultRenderer, ...otherParams }) => {
       />
     ),
   ];
+
   const customColumns = [
     {
       header: t('common.headers.owner'),
-      value: deployment => (
-        <ControlledBy
-          ownerReferences={deployment.metadata.ownerReferences}
-          namespace={deployment.metadata.namespace}
-        />
+      value: secret => (
+        <ControlledBy ownerReferences={secret.metadata.ownerReferences} />
       ),
     },
   ];

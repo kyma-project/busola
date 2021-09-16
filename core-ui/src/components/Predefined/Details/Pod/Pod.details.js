@@ -41,10 +41,7 @@ export const PodsDetails = ({ DefaultRenderer, ...otherParams }) => {
     {
       header: t('common.headers.owner'),
       value: pod => (
-        <ControlledBy
-          ownerReferences={pod.metadata.ownerReferences}
-          namespace={pod.metadata.namespace}
-        />
+        <ControlledBy ownerReferences={pod.metadata.ownerReferences} />
       ),
     },
   ];

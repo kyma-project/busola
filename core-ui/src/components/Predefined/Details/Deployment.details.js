@@ -10,10 +10,7 @@ export const DeploymentsDetails = ({ DefaultRenderer, ...otherParams }) => {
     {
       header: t('common.headers.owner'),
       value: deployment => (
-        <ControlledBy
-          ownerReferences={deployment.metadata.ownerReferences}
-          namespace={deployment.metadata.namespace}
-        />
+        <ControlledBy ownerReferences={deployment.metadata.ownerReferences} />
       ),
     },
   ];
