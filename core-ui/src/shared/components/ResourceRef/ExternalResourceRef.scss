@@ -1,12 +1,12 @@
 .external-resource-ref {
-    display: flex;
+  display: flex;
 
-    .name {
-        flex-grow: 1;
-        margin-right: .5rem;
-    }
+  .name {
+    flex-grow: 1;
+    margin-right: 0.5rem;
+  }
 
-    .namespace {
-        width: 40%;
-    }
+  .namespace {
+    width: 40%;
+  }
 }
