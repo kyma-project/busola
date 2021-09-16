@@ -95,3 +95,7 @@ docker run -p 3001:3001 -e DOCKER_DESKTOP_CLUSTER=true busola/local:latest
 `0.0.0.0` will be automatically replaced with `host.docker.internal`.
 
 - For Linux, run Busola with `--net=host` (omitting the `-p` parameter).
+
+```bash
+docker run --net=host busola/local:latest
+```
