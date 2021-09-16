@@ -14,7 +14,7 @@ Cypress.Commands.add(
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Function name"]')
+      .find('[placeholder="Function Name"]')
       .clear()
       .type(functionName);
 

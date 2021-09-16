@@ -62,7 +62,7 @@ applications:
     select-all: Select all
   headers:
     apis: APIs
-    description: Descritpion
+    description: Description
     events: Events
     service-and-event: Service and Event Bindings
   labels:
@@ -241,10 +241,10 @@ common:
     update: Update
   create-form:
     choose-preset: Select a Preset
-    delete-confirm: Don't ask this again.
+    object-required: 'An object is required'
     editor-error: 'Parse error: {{error}}, previous valid input will be used.'
     messages:
-      failure: Failed to create the {{resourceType}}.
+      failure: 'Failed to create the {{resourceType}}: {{error}}.'
       success: '{{resourceType}} created.'
     modes:
       advanced: Advanced
@@ -299,6 +299,9 @@ common:
     search: Search
     value: Value must start and end with an alphanumeric character, can contain '-', '_' or '.'
 components:
+  key-value-field:
+    enter-key: Enter Key
+    enter-value: Enter Value
   dropdown:
     empty-list: No resources available
   error-panel:
@@ -316,7 +319,7 @@ components:
       no-search-results: Couldn't find resources matching this query.
       not-found: No entries found
   k8s-name-input:
-    placeholder: '{{resourceType}} name'
+    placeholder: '{{resourceType}} Name'
   key-value-form:
     add-entry: Add data entry
     key: Key
@@ -409,8 +412,10 @@ daemon-sets:
     title: Tolerations
     toleration-seconds: Seconds
 deployments:
+  name_singular: Deployment
   create-modal:
     advanced:
+      image: Image
       cpu-limits: CPU Limits
       cpu-requests: CPU Requests
       expose-service: Expose a separate Service
@@ -421,10 +426,10 @@ deployments:
       runtime-profile: Runtime Profile
       target-port: Target Port
       target-port-placeholder: Enter the target port of the container.
+      one-container-required: At least one container is required.
+      container-header: Container {{name}}
     messages:
-      deployment-ok-service-bad: Deployment created, failed to create the Service.
-      failure: Failed to create the Deployment.
-      success: Deployment created.
+      deployment-ok-service-bad: 'Deployment created, failed to create the Service: {{error}}.'
     presets:
       default: Default
     simple:
@@ -461,16 +466,18 @@ dnsentries:
     cannot-create: 'Failed to create the DNS Entry:'
   title: DNS Entries
 dnsproviders:
+  name_singular: DNS Provider
   labels:
     exclude-domains: Exclude Domains
     default-ttl: Default TTL
     secret-reference: Secret Reference
     include-domains: Include Domains
+    type: Type
   placeholders:
     provider-type: Choose Provider Type
-    include-domains: Domains that should be observed, one per line
+    include-domains: Domain that should be observed
     default-ttl: Enter the default time to live.
-    exclude-domains: Domains that should be ignored, one per line
+    exclude-domains: Domain that should be ignored
   domains: Domains
   headers:
     exclude: Excluded Domains
@@ -740,6 +747,7 @@ instances:
 integration:
   title: Integration
 issuers:
+  name_singular: Issuer
   acme: ACME
   auto-registration: Auto registration
   ca: CA
@@ -971,6 +979,7 @@ secrets:
 service-management:
   title: Service Management
 services:
+  name_singular: Service
   cluster-ip: Cluster IP
   external-ips: External IPs
   labels:

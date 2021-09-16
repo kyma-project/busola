@@ -20,7 +20,6 @@ export function Presets({ presets, onSelect }) {
         onSelect(presets.find(p => p.name === preset.key));
       }}
       i18n={i18n}
-      fullWidth
     />
   );
 }
