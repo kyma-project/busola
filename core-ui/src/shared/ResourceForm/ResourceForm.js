@@ -14,6 +14,7 @@ ResourceForm.FormField = FormComponents.FormField;
 ResourceForm.TextArrayInput = FormComponents.TextArrayInput;
 ResourceForm.K8sNameField = FormComponents.K8sNameField;
 ResourceForm.KeyValueField = FormComponents.KeyValueField;
+ResourceForm.ItemArray = FormComponents.ItemArray;
 
 export function ResourceForm({
   pluralKind, // used for the request path
@@ -61,7 +62,7 @@ export function ResourceForm({
       if (child.props.advanced && !isAdvanced) {
         return null;
       }
-      if (!child.props.propertyPath) {
+      if (!child.props?.propertyPath) {
         return child;
       }
       return React.cloneElement(child, {

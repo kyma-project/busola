@@ -687,6 +687,7 @@ functions:
       text: Warning
       variable-can-override-sbu: This variable can override or be overridden by a variable injected by one of the created ServiceBindings.
 gateways:
+  name_singular: Gateway
   create-modal:
     advanced:
       add-server: Add server

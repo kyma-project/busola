@@ -33,6 +33,14 @@
   .fd-message-strip--warning:before {
     top: 25%;
   }
+
+  &.required .title::after {
+    content: '*';
+    font-size: var(--sapFontSize);
+    font-weight: 700;
+    color: var(--sapField_RequiredColor);
+    margin-left: 4px;
+  }
 }
 
 .text-array-input__list li {

@@ -1,5 +1,11 @@
 import React, { useEffect, useRef, useState, createRef } from 'react';
-import { FormInput, FormLabel, Button, Icon } from 'fundamental-react';
+import {
+  FormInput,
+  FormLabel,
+  Button,
+  Icon,
+  MessageStrip,
+} from 'fundamental-react';
 import { Tooltip, K8sNameInput } from 'react-shared';
 import classnames from 'classnames';
 import * as jp from 'jsonpath';
@@ -16,9 +22,10 @@ export function CollapsibleSection({
   resource,
   setResource,
   className,
+  required,
 }) {
-  const [open, setOpen] = React.useState(defaultOpen);
-  const actionsRef = React.useRef();
+  const [open, setOpen] = useState(defaultOpen);
+  const actionsRef = useRef();
   const iconGlyph = open ? 'navigation-down-arrow' : 'navigation-right-arrow';
 
   const toggle = e => {
@@ -33,13 +40,14 @@ export function CollapsibleSection({
     className,
     {
       collapsed: !open,
+      required,
     },
   );
 
   return (
     <div className={classNames}>
       <header onClick={toggle} aria-label={`expand ${title}`}>
-        <div>
+        <div className="title">
           {!disabled && canChangeState && (
             <Icon className="control-icon" ariaHidden glyph={iconGlyph} />
           )}
@@ -50,7 +58,7 @@ export function CollapsibleSection({
       {open && (
         <div className="content">
           {React.Children.map(children, child => {
-            if (!child.props.propertyPath) {
+            if (!child.props?.propertyPath) {
               return child;
             }
             return React.cloneElement(child, {
@@ -207,7 +215,12 @@ export function MultiInput({
   };
 
   return (
-    <CollapsibleSection title={label} className={className} {...props}>
+    <CollapsibleSection
+      title={label}
+      className={className}
+      required={required}
+      {...props}
+    >
       <ul className="text-array-input__list">
         {internalValue.map((entry, index) => (
           <li key={index}>
@@ -275,6 +288,7 @@ export function KeyValueField({
   ...props
 }) {
   const { t } = useTranslation();
+
   return (
     <MultiInput
       toInternal={value =>
@@ -312,5 +326,67 @@ export function KeyValueField({
       ]}
       {...props}
     />
+  );
+}
+
+export function ItemArray({
+  value: values,
+  setValue: setValues,
+  listTitle,
+  nameSingular,
+  atLeastOneRequiredMessage,
+  itemRenderer,
+  newResourceTemplateFn,
+}) {
+  const { t } = useTranslation();
+
+  values = values || [];
+
+  const remove = index => setValues(values.filter((_, i) => index !== i));
+
+  if (!values.length) {
+    return (
+      <MessageStrip type="warning">{atLeastOneRequiredMessage}</MessageStrip>
+    );
+  }
+
+  const renderAllItems = () =>
+    values.map((current, i) => (
+      <CollapsibleSection
+        key={i}
+        title={`${nameSingular} ${current?.name || i + 1}`}
+        actions={
+          <Button
+            glyph="delete"
+            type="negative"
+            compact
+            onClick={() => remove(i)}
+          />
+        }
+      >
+        {itemRenderer(current, values, setValues)}
+      </CollapsibleSection>
+    ));
+
+  const content =
+    values.length === 1
+      ? itemRenderer(values[0], values, setValues)
+      : renderAllItems();
+
+  return (
+    <CollapsibleSection
+      title={listTitle}
+      actions={
+        <Button
+          glyph="add"
+          compact
+          onClick={() => setValues([...values, newResourceTemplateFn()])}
+        >
+          {t('common.buttons.add')} {nameSingular}
+        </Button>
+      }
+    >
+      {content}
+    </CollapsibleSection>
   );
 }
