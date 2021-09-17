@@ -91,11 +91,11 @@ When the k3d cluster's API server is exposed on `0.0.0.0` address on you machine
 - For Docker Desktop for Mac and Windows, pass `DOCKER_DESKTOP_CLUSTER=true` on dockerized Busola startup. This way, `0.0.0.0` is automatically replaced with `host.docker.internal`.
 
   ```bash
-  docker run -p 3001:3001 -e DOCKER_DESKTOP_CLUSTER=true busola/local:latest
+  docker run --rm -it -p 3001:3001 -e DOCKER_DESKTOP_CLUSTER=true --pid=host --name busola eu.gcr.io/kyma-project/busola:latest
   ```
 
 - For Linux, run Busola with `--net=host` (omitting the `-p` parameter).
 
   ```bash
-  docker run --net=host busola/local:latest
+  docker run --rm -it --net=host --pid=host --name busola eu.gcr.io/kyma-project/busola:latest
   ```
