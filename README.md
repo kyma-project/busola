@@ -93,7 +93,6 @@ Due to the fact the k3d cluster's API server is exposed on `0.0.0.0` address, co
 docker run -p 3001:3001 -e DOCKER_DESKTOP_CLUSTER=true busola/local:latest
 ```
 
-`0.0.0.0` will be automatically replaced with `host.docker.internal`.
 
 - For Linux, run Busola with `--net=host` (omitting the `-p` parameter).
 
