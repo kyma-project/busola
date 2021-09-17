@@ -90,12 +90,12 @@ When the k3d cluster's API server is exposed on `0.0.0.0` address on you machine
 
 - For Docker Desktop for Mac and Windows, pass `DOCKER_DESKTOP_CLUSTER=true` on dockerized Busola startup.
 
-```bash
-   docker run -p 3001:3001 -e DOCKER_DESKTOP_CLUSTER=true busola/local:latest
-```
+  ```bash
+  docker run -p 3001:3001 -e DOCKER_DESKTOP_CLUSTER=true busola/local:latest
+  ```
 
 - For Linux, run Busola with `--net=host` (omitting the `-p` parameter).
 
-```bash
-   docker run --net=host busola/local:latest
-```
+  ```bash
+  docker run --net=host busola/local:latest
+  ```
