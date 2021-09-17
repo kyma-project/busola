@@ -82,7 +82,8 @@ For the information on how to run tests and configure them, go to the [`tests`](
 
 > **TIP:** To solve most of the problems with Busola development, clear the browser cache or do a hard refresh of the website.
 
-## Busola in Docker against a k3d cluster
+## Symptom
+You are experiencing connectivity problems with Busola in Docker against a k3d cluster.
 
 Due to the fact the k3d cluster's API server is exposed on `0.0.0.0` address, connectivity problems may occur.
 
