@@ -83,16 +83,16 @@ For the information on how to run tests and configure them, go to the [`tests`](
 > **TIP:** To solve most of the problems with Busola development, clear the browser cache or do a hard refresh of the website.
 
 ## Symptom
+
 You are experiencing connectivity problems with Busola in Docker against a k3d cluster.
 
-Due to the fact the k3d cluster's API server is exposed on `0.0.0.0` address, connectivity problems may occur.
+When the k3d cluster's API server is exposed on `0.0.0.0` address on you machine, Busola in Docker interprets `0.0.0.0` as its internal Docker address, routing the requests to wrong endpoint.
 
 - For Docker Desktop for Mac and Windows, pass `DOCKER_DESKTOP_CLUSTER=true` on dockerized Busola startup.
 
 ```bash
-docker run -p 3001:3001 -e DOCKER_DESKTOP_CLUSTER=true busola/local:latest
+   docker run -p 3001:3001 -e DOCKER_DESKTOP_CLUSTER=true busola/local:latest
 ```
-
 
 - For Linux, run Busola with `--net=host` (omitting the `-p` parameter).
 
