@@ -214,3 +214,18 @@ export async function generateWithKubeconfigId(kubeconfigIdAddress) {
   };
   return { params: await encoder.compress(params), kubeconfig };
 }
+
+export function mockParamsEnabled() {
+  const requestData = {
+    method: 'GET',
+    url: '/assets/config/config.json*',
+  };
+  const configMock = JSON.stringify({
+    config: {
+      features: {
+        INIT_PARAMS: { isEnabled: true },
+      },
+    },
+  });
+  cy.intercept(requestData, configMock);
+}
