@@ -88,7 +88,7 @@ You are experiencing connectivity problems with Busola in Docker against a k3d c
 
 When the k3d cluster's API server is exposed on `0.0.0.0` address on you machine, Busola in Docker interprets `0.0.0.0` as its internal Docker address, routing the requests to wrong endpoint.
 
-- For Docker Desktop for Mac and Windows, pass `DOCKER_DESKTOP_CLUSTER=true` on dockerized Busola startup.
+- For Docker Desktop for Mac and Windows, pass `DOCKER_DESKTOP_CLUSTER=true` on dockerized Busola startup. This way, `0.0.0.0` is automatically replaced with `host.docker.internal`.
 
   ```bash
   docker run -p 3001:3001 -e DOCKER_DESKTOP_CLUSTER=true busola/local:latest
