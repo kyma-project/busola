@@ -6,7 +6,7 @@ import { HostsForm } from './HostsForm';
 
 export function SingleServerForm({ server, setServers, servers }) {
   return (
-    <FormFieldset className="servers-form">
+    <FormFieldset>
       <PortsForm server={server} servers={servers} setServers={setServers} />
       <TlsForm server={server} servers={servers} setServers={setServers} />
       <HostsForm server={server} servers={servers} setServers={setServers} />

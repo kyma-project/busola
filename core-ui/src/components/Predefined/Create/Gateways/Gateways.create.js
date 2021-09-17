@@ -4,6 +4,7 @@ import { ResourceForm } from '../../../../shared/ResourceForm/ResourceForm';
 import * as jp from 'jsonpath';
 import { createGatewayTemplate, createPresets, newServer } from './templates';
 import { SingleServerForm } from './ServersForm';
+import { validateGateway } from './helpers';
 
 export function GatewaysCreate({
   formElementRef,
@@ -16,11 +17,8 @@ export function GatewaysCreate({
   const [gateway, setGateway] = useState(createGatewayTemplate(namespace));
 
   React.useEffect(() => {
-    const hasAtLeastOneServer = gateway?.spec?.servers?.length;
-    const hasSelector = Object.keys(gateway?.spec?.selector || {}).length;
-
-    setCustomValid(hasAtLeastOneServer && hasSelector);
-  }, [gateway]);
+    setCustomValid(validateGateway(gateway));
+  }, [gateway, setCustomValid]);
 
   const handleNameChange = name => {
     jp.value(gateway, '$.metadata.name', name);

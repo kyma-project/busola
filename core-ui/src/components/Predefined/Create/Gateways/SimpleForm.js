@@ -6,7 +6,6 @@ import { K8sNameInput } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 import { GatewaySelectorInput } from './GatewaySelectorInput/GatewaySelectorInput';
 import { ServersForm } from './ServersForm';
-import { validateSpec } from './helpers';
 import shortid from 'shortid';
 
 export function SimpleForm({
@@ -66,7 +65,6 @@ export function SimpleForm({
                 type={t('gateways.create-modal.simple.selector')}
                 onChange={selector => {
                   setGateway({ ...gateway, selector });
-                  setValid(validateSpec({ ...gateway, selector }));
                 }}
                 i18n={i18n}
                 compact
