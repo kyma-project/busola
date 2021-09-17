@@ -18,6 +18,10 @@ export const LAMBDA_PHASES = {
     TYPE: 'DEPLOYING',
     TITLE: 'functions.statuses.deploying',
   },
+  UNHEALTHY: {
+    TYPE: 'UNHEALTHY',
+    TITLE: 'functions.statuses.unhealthy',
+  },
   RUNNING: {
     TYPE: 'RUNNING',
     TITLE: 'functions.statuses.running',
