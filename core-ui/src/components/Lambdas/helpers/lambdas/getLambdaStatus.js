@@ -8,6 +8,20 @@ function hasTrueType(conditionType, conditions) {
   return cond;
 }
 
+function hasUnknownTypeWithReason(conditionType, conditions, reason) {
+  let cond = false;
+  conditions.forEach(condition => {
+    if (
+      condition.type === conditionType &&
+      condition.status === 'Unknown' &&
+      condition.reason === reason
+    ) {
+      cond = true;
+    }
+  });
+  return cond;
+}
+
 function getReason({ conditionType }) {
   switch (conditionType) {
     case 'ConfigurationReady':
@@ -37,6 +51,11 @@ export function getLambdaStatus(status) {
     return { phase: 'INITIALIZING', reason: null, message: null };
   }
   const functionIsRunning = hasTrueType('Running', status.conditions);
+  const functionIsUnhealthy = hasUnknownTypeWithReason(
+    'Running',
+    status.conditions,
+    'MinReplicasNotAvailable',
+  );
   const functionConfigCreated = hasTrueType(
     'ConfigurationReady',
     status.conditions,
@@ -66,6 +85,8 @@ export function getLambdaStatus(status) {
     if (functionJobFinished) {
       if (functionIsRunning) {
         phase = 'RUNNING';
+      } else if (functionIsUnhealthy) {
+        phase = 'UNHEALTHY';
       } else {
         phase = 'DEPLOYING';
       }
