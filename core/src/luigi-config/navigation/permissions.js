@@ -26,14 +26,6 @@ export function hasWildcardPermission(permissionSet) {
   );
 }
 
-export function hasPermissionsForApiGroup(apiGroup, permissionSet) {
-  const permissionsForApiGroup = permissionSet.filter(
-    p => p.apiGroups.includes(apiGroup) || p.apiGroups[0] === '*',
-  );
-
-  return !!permissionsForApiGroup.length;
-}
-
 export function hasPermissionsFor(
   apiGroup,
   resourceType,

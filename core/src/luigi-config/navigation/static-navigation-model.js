@@ -1514,12 +1514,8 @@ function checkSingleNode(node, apiGroups, permissionSet, removeNode) {
     const groupVersion = apiPath
       .replace(/^\/apis\//, '')
       .replace(/^\/api\//, '');
-    const listForVersion = apiGroups.find(g =>
-      g.groupVersion.includes(groupVersion),
-    );
-    if (
-      !listForVersion?.resources.find(res => res.name === node.resourceType)
-    ) {
+
+    if (!apiGroups.find(g => g.includes(groupVersion))) {
       removeNode();
     }
   } else {

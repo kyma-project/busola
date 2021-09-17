@@ -1,20 +1,7 @@
-import { hasPermissionsForApiGroup } from './navigation/permissions';
-
 const resolvers = {
   //leave the structure for the future when we add new options
-  apiGroup: (selector, data) => {
-    if (!data) return false;
-
-    const resourceExists = data.apiGroups.find(g =>
-      g.groupVersion.includes(selector.apiGroup),
-    );
-    const hasPermissions = hasPermissionsForApiGroup(
-      selector.apiGroup,
-      data.permissionSet,
-    );
-
-    return resourceExists && hasPermissions;
-  },
+  apiGroup: (selector, data) =>
+    data?.apiGroups.find(g => g.includes(selector.apiGroup)),
 };
 
 async function resolveSelector(selector, data) {

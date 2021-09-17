@@ -34,11 +34,11 @@ const decodeHeaderToBuffer = headerValue => {
     : null;
 };
 
-// for some mysterious reason, request for node metrics (edit: for metrics in general)
+// for some mysterious reason, request for node metrics
 // comes with "Connection: Upgrade" header, causing
 // "invalid upgrade response: status code 200" error
 const workaroundForNodeMetrics = req => {
-  if (req.originalUrl.includes('apis/metrics.k8s.io')) {
+  if (req.originalUrl.includes('apis/metrics.k8s.io/v1beta1/nodes')) {
     req.headers['connection'] = 'close';
   }
 };
