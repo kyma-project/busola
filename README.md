@@ -97,5 +97,5 @@ docker run -p 3001:3001 -e DOCKER_DESKTOP_CLUSTER=true busola/local:latest
 - For Linux, run Busola with `--net=host` (omitting the `-p` parameter).
 
 ```bash
-docker run --net=host busola/local:latest
+   docker run --net=host busola/local:latest
 ```
