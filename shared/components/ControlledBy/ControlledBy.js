@@ -1,50 +1,42 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import LuigiClient from '@luigi-project/client';
 import { EMPTY_TEXT_PLACEHOLDER } from '../../constants/constants';
 import { Link } from 'fundamental-react';
 import {
+  useMicrofrontendContext,
   navigateToClusterResourceDetails,
   navigateToFixedPathResourceDetails,
   navigateToCustomResourceDefinitionDetails,
 } from '../..';
 
-const DEFAULT_VIEWS = [
-  'addonsconfigurations',
-  'apirules',
-  'certificates',
-  'functions',
-  'configmaps',
-  'cronjobs',
-  'daemonsets',
-  'deployments',
-  'dnsentries',
-  'dnsproviders',
-  'gateways',
-  'gitrepositories',
-  'issuers',
-  'jobs',
-  'oauth2clients',
-  'pods',
-  'replicasets',
-  'rolebindings',
-  'roles',
-  'secrets',
-  'servicebindings',
-  'serviceinstances',
-  'services',
-  'statefulsets',
-];
-
-const DEFAULT_CLUSTER_VIEWS = [
-  'applications',
-  'clusteraddonsconfigurations',
-  'clusterrolebindings',
-  'clusterroles',
-  'namespaces',
-];
-
 const GoToDetailsLink = ({ resource, name, apiVersion }) => {
+  const { cluster, namespaceId } = useMicrofrontendContext();
+  const activeClusterName = cluster?.name;
+  const namespacedViewPath = `/cluster/${activeClusterName}/namespaces/${namespaceId}/${resource}/details/${name}`;
+  const clusterWideViewPath = `/cluster/${activeClusterName}/${resource}/details/${name}`;
+
+  const [viewPath, setViewPath] = useState('');
+
+  useEffect(() => {
+    const checkIfPathExists = async () => {
+      try {
+        const namespacedViewExists = await LuigiClient.linkManager().pathExists(
+          namespacedViewPath,
+        );
+        const clusterWideViewExists = await LuigiClient.linkManager().pathExists(
+          clusterWideViewPath,
+        );
+        if (namespacedViewExists) setViewPath('namespace');
+        else if (clusterWideViewExists) setViewPath('cluster');
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    checkIfPathExists();
+  }, []);
+
   if (!resource) return null;
-  if (DEFAULT_VIEWS.includes(resource)) {
+  if (viewPath === 'namespace') {
     return (
       <Link
         className="fd-link"
@@ -55,7 +47,7 @@ const GoToDetailsLink = ({ resource, name, apiVersion }) => {
         ({name})
       </Link>
     );
-  } else if (DEFAULT_CLUSTER_VIEWS.includes(resource)) {
+  } else if (viewPath === 'cluster') {
     return (
       <Link
         className="fd-link"
