@@ -16,9 +16,9 @@ const setTlsValue = (server, variableName, value, servers, setServers) => {
   setServers([...servers]);
 };
 
-export const switchTLS = (server, hasTLS, servers, setServers) => {
-  if (hasTLS) {
-    server.tls = {};
+export const switchTLS = (server, tlsOn, servers, setServers) => {
+  if (tlsOn) {
+    server.tls = { ...server.tls };
   } else {
     delete server.tls;
   }
@@ -42,9 +42,7 @@ export const TlsForm = ({ disabled = false, server, servers, setServers }) => {
         <Checkbox
           compact
           checked={!!server.tls}
-          onChange={(_, checked) =>
-            switchTLS(server, checked, servers, setServers)
-          }
+          onChange={() => switchTLS(server, !server.tls, servers, setServers)}
           dir="rtl"
         >
           {t('gateways.create-modal.advanced.enable-tls')}

@@ -45,7 +45,7 @@ export function createPresets(namespace, translate) {
           name: 'httpbin-gateway',
           namespace,
           labels: {
-            'app.kubernetes.io/name': '',
+            'app.kubernetes.io/name': 'httpbin-gateway',
           },
         },
         spec: {

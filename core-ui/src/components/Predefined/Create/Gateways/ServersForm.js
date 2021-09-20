@@ -16,7 +16,6 @@ export function SingleServerForm({ server, setServers, servers }) {
 }
 
 export function SingleServerInput({ value: servers, setValue: setServers }) {
-  console.log(servers, setServers);
   return (
     <ResourceForm.CollapsibleSection
       title="Server"
@@ -26,7 +25,7 @@ export function SingleServerInput({ value: servers, setValue: setServers }) {
       <SingleServerForm
         server={servers?.[0]}
         servers={servers}
-        setValue={setServers}
+        setServers={setServers}
       />
     </ResourceForm.CollapsibleSection>
   );

@@ -233,17 +233,14 @@ export function MultiInput({
                 onBlur: () => updateValue(internalValue),
                 focus: (e, target) => {
                   if (e.key === 'Enter') {
-                    console.log('Enter');
                     if (typeof target === 'undefined') {
                       focus(refs[index + 1][0]);
                     } else {
                       focus(refs[index][target]);
                     }
                   } else if (e.key === 'ArrowDown') {
-                    console.log('ArrowDown');
                     focus(refs[index + 1]?.[0]);
                   } else if (e.key === 'ArrowUp') {
-                    console.log('ArrowUp');
                     focus(refs[index - 1]?.[0]);
                   }
                 },
