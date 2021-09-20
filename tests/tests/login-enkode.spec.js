@@ -10,11 +10,14 @@ import {
   generateParamsWithDisabledFeatures,
   generateUnsupportedVersionParams,
   generateWithKubeconfigId,
+  mockParamsEnabled,
 } from '../support/enkode';
 
 const SYSTEM_NAMESPACE = 'kyma-system';
 
-context('Login - enkode link', () => {
+context('Login - enkode link, init params enabled', () => {
+  beforeEach(mockParamsEnabled);
+
   it('Unmodified kubeconfig with default hidden namespaces', () => {
     // we don't expect version alerts here
     Cypress.on('window:alert', alertContent =>
@@ -243,5 +246,21 @@ context('Login - enkode link', () => {
         );
       },
     );
+  });
+});
+
+context('Login - enkode link, params should be disabled by default', () => {
+  it('Ignore init params', () => {
+    cy.wrap(generateDefaultParams()).then(params => {
+      const url = `${config.clusterAddress}/clusters?init=${params}`;
+
+      cy.visit(url);
+
+      // wait for a while before checking the url
+      cy.wait(2000);
+
+      // url shouldn't change
+      cy.url().should('equal', url);
+    });
   });
 });

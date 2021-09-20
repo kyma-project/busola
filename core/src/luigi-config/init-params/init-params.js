@@ -12,6 +12,7 @@ import * as constants from './constants';
 import { hasNonOidcAuth } from '../auth/auth';
 import { applyKubeconfigIdIfPresent } from './../kubeconfig-id';
 import { getDefaultStorage } from '../cluster-management/clusters-storage';
+import { getBusolaClusterParams } from '../busola-cluster-params';
 
 const getEncoder = async () => {
   const createEncoder = (await import('json-url')).default;
@@ -22,7 +23,15 @@ function hasExactlyOneContext(kubeconfig) {
   return kubeconfig?.contexts?.length === 1;
 }
 
+async function areInitParamsEnabled() {
+  return (await getBusolaClusterParams()).config?.features?.INIT_PARAMS
+    ?.isEnabled;
+}
+
 export async function saveQueryParamsIfPresent() {
+  if (!(await areInitParamsEnabled())) {
+    return;
+  }
   try {
     await setupFromParams();
   } catch (e) {

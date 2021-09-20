@@ -279,6 +279,7 @@ functions:
     initializing: Inicjowanie
     new-revision-error: Błąd nowej wersji
     running: Działanie
+    unhealthy: Niedysponowany
   title: Funkcje
   variable:
     buttons:
