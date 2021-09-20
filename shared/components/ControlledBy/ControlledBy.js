@@ -8,6 +8,29 @@ import {
   navigateToFixedPathResourceDetails,
   navigateToCustomResourceDefinitionDetails,
 } from '../..';
+import shortid from 'shortid';
+
+function pathExists(path) {
+  const pathId = shortid.generate();
+
+  return new Promise(resolve => {
+    LuigiClient.addCustomMessageListener(
+      'busola.pathExists.answer',
+      (msg, listenerId) => {
+        if (msg.pathId === pathId) {
+          resolve(msg.exists);
+          LuigiClient.removeCustomMessageListener(listenerId);
+        }
+      },
+    );
+
+    LuigiClient.sendCustomMessage({
+      id: 'busola.pathExists',
+      path,
+      pathId,
+    });
+  });
+}
 
 const GoToDetailsLink = ({ resource, name, apiVersion }) => {
   const { cluster, namespaceId } = useMicrofrontendContext();
@@ -19,21 +42,16 @@ const GoToDetailsLink = ({ resource, name, apiVersion }) => {
 
   useEffect(() => {
     const checkIfPathExists = async () => {
-      try {
-        const namespacedViewExists = await LuigiClient.linkManager().pathExists(
-          namespacedViewPath,
-        );
-        const clusterWideViewExists = await LuigiClient.linkManager().pathExists(
-          clusterWideViewPath,
-        );
-        if (namespacedViewExists) setViewPath('namespace');
-        else if (clusterWideViewExists) setViewPath('cluster');
-      } catch (e) {
-        console.log(e);
+      if (await pathExists(namespacedViewPath)) {
+        setViewPath('namespace');
+      } else if (await pathExists(clusterWideViewPath)) {
+        setViewPath('cluster');
       }
     };
-    checkIfPathExists();
-  }, []);
+    if (resource && !viewPath) {
+      checkIfPathExists();
+    }
+  }, [name, resource]);
 
   if (!resource) return null;
   if (viewPath === 'namespace') {

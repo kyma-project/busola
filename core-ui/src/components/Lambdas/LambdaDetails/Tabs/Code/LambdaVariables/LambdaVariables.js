@@ -170,7 +170,7 @@ function VariableValue({ variable }) {
   return value;
 }
 
-export default function LambdaEnvs({
+export default function LambdaVariables({
   lambda,
   secrets,
   configmaps,
