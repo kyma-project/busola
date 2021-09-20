@@ -43,7 +43,7 @@ async function setupFromParams() {
   const searchParams = new URL(location).searchParams;
   const encodedParams = searchParams.get('init');
   const kubeconfigId = searchParams.get('kubeconfigID');
-  if (!areParamsEnabled && !kubeconfigId) {
+  if (!(await areInitParamsEnabled()) && !kubeconfigId) {
     return;
   }
 
