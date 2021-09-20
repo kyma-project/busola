@@ -234,7 +234,7 @@ clusters:
     kubeconfig: Choose configuration
     update: Update configuration
     storage: Storage mode
-    info: We don't store the kubeconfig file on server, it remains in the browser.
+    info: We don't store the kubeconfig file on the server, it remains in the browser.
     incomplete: It looks like your kubeconfig is incomplete. Please fill the additional fields.
 common:
   buttons:
