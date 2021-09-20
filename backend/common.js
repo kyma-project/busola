@@ -1,8 +1,8 @@
 const https = require('https');
-const url = require('url');
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
+import { handleDockerDesktopSubsitution } from './docker-desktop-substitution';
 import { filters } from './request-filters';
 
 const logger = require('pino-http')({
@@ -49,7 +49,7 @@ export const handleRequest = async (req, res) => {
   try {
     headersData = extractHeadersData(req);
   } catch (e) {
-    req.log.error('Headers error:', e.message);
+    req.log.error('Headers error:' + e.message);
     res.status(400).send('Headers are missing or in a wrong format.');
     return;
   }
@@ -122,7 +122,9 @@ function extractHeadersData(req) {
   const clientCAHeader = 'x-client-certificate-data';
   const clientKeyDataHeader = 'x-client-key-data';
 
-  const targetApiServer = url.parse(req.headers[urlHeader]);
+  const targetApiServer = handleDockerDesktopSubsitution(
+    new URL(req.headers[urlHeader]),
+  );
   const ca = decodeHeaderToBuffer(req.headers[caHeader]) || certs;
   const cert = decodeHeaderToBuffer(req.headers[clientCAHeader]);
   const key = decodeHeaderToBuffer(req.headers[clientKeyDataHeader]);
