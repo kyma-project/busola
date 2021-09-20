@@ -99,7 +99,7 @@ export function AuthForm({
         type="warning"
         className="fd-margin-top--sm fd-margin-bottom--sm"
       >
-        {t('clusters.add.incomplete')}
+        {t('clusters.wizard.incomplete')}
       </MessageStrip>
       <FormRadioGroup
         className="fd-margin-bottom--sm"

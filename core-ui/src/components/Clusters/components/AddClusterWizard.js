@@ -84,7 +84,7 @@ export function AddClusterWizard({
       }
     >
       <Wizard.Step
-        title="Choose Configuration"
+        title={t('clusters.wizard.kubeconfig')}
         branching={!kubeconfig}
         indicator="1"
         valid={!!kubeconfig}
@@ -93,7 +93,7 @@ export function AddClusterWizard({
           type="information"
           className="fd-margin-top--sm fd-margin-bottom--sm"
         >
-          {t('clusters.add.info')}
+          {t('clusters.wizard.info')}
         </MessageStrip>
         <KubeconfigUpload
           kubeconfig={kubeconfig}
@@ -103,7 +103,7 @@ export function AddClusterWizard({
 
       {kubeconfig && (!hasAuth || !hasOneContext) && (
         <Wizard.Step
-          title="Update Configuration"
+          title={t('clusters.wizard.update')}
           indicator="2"
           valid={authValid}
         >
@@ -120,9 +120,8 @@ export function AddClusterWizard({
       )}
 
       <Wizard.Step
-        title="Complete"
+        title={t('clusters.wizard.storage')}
         indicator="2"
-        nextLabel="Create cluster"
         valid={false}
       >
         <ChooseStorage storage={storage} setStorage={setStorage} />
