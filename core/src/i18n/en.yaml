@@ -628,6 +628,7 @@ functions:
     initializing: Initializing
     new-revision-error: New Revision Error
     running: Running
+    unhealthy: Unhealthy
   title: Functions
   variable:
     buttons:

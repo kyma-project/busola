@@ -29,6 +29,10 @@ if (isDocker) {
   app.use(handleRequest);
 }
 
+process.on('SIGINT', function() {
+  process.exit();
+});
+
 server.listen(port, address, () => {
   console.log(`Busola backend server started @ ${port}!`);
 });

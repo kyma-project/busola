@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
 import config from '../config';
-import { generateDefaultParams } from '../support/enkode';
+import { generateDefaultParams, mockParamsEnabled } from '../support/enkode';
 
 const configMock = {
   data: {
@@ -53,6 +53,8 @@ context('Cluster configuration', () => {
   });
 
   it('Init params config override target cluster config', () => {
+    mockParamsEnabled();
+
     cy.intercept(requestData, configMock);
     cy.wrap(generateDefaultParams()).then(params => {
       cy.visit(`${config.clusterAddress}/clusters?init=${params}`);
