@@ -2,6 +2,9 @@
   "config": {
     "defaultStorage": "localStorage",
     "features": {
+      "INIT_PARAMS": {
+        "isEnabled": false
+      },
       "SENTRY": {
         "isEnabled": true,
         "selectors": [],
