@@ -1,4 +1,3 @@
-import shortid from 'shortid';
 import { VARIABLE_TYPE, VARIABLE_VALIDATION } from './constants';
 
 export function newVariableModel({
