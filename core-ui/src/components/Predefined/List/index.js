@@ -27,3 +27,4 @@ export * from './Issuers.list';
 export * from './ServiceInstances.list';
 export * from './ServiceBindings.list';
 export * from './Gateways.list';
+export * from './ConfigMaps.list';

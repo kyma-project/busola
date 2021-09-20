@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
 import { BTPResourceStatus } from 'shared/components/BTPResourceStatus';
 import { ServiceBindingData } from './ServiceBindingData';
+import { ControlledBy } from 'react-shared';
 
 export const ServiceBindingsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
@@ -34,6 +35,12 @@ export const ServiceBindingsDetails = ({ DefaultRenderer, ...otherParams }) => {
   };
 
   const customColumns = [
+    {
+      header: t('common.headers.owner'),
+      value: resource => (
+        <ControlledBy ownerReferences={resource.metadata.ownerReferences} />
+      ),
+    },
     {
       header: t('common.headers.status'),
       value: resource => <BTPResourceStatus status={resource.status} />,

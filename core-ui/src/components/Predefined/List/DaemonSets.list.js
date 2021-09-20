@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Labels, StatusBadge } from 'react-shared';
+import { ControlledByKind, Labels, StatusBadge } from 'react-shared';
 
 const isStatusOk = daemonSet => {
   const allPods =
@@ -22,6 +22,12 @@ export const DaemonSetsList = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
 
   const customColumns = [
+    {
+      header: t('common.headers.owner'),
+      value: resource => (
+        <ControlledByKind ownerReferences={resource.metadata.ownerReferences} />
+      ),
+    },
     {
       header: t('daemon-sets.node-selector'),
       value: resource => (
