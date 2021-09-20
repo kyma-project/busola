@@ -84,7 +84,7 @@ function SingleContainerSection({ container, containers, setContainers }) {
           setContainers([...containers]);
         }}
         required
-        input={(value, onChange) => (
+        input={({ value, onChange }) => (
           <K8sNameInput
             value={value}
             onChange={onChange}
@@ -104,7 +104,7 @@ function SingleContainerSection({ container, containers, setContainers }) {
           setContainers([...containers]);
         }}
         required
-        input={(value, setValue) => (
+        input={({ value, setValue }) => (
           <ResourceForm.Input
             required
             value={value}

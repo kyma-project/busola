@@ -144,7 +144,7 @@ export function DeploymentsCreate({
         simple
         propertyPath="$.spec.template.spec.containers[0].image"
         label={t('deployments.create-modal.simple.docker-image')}
-        input={(value, setValue) => (
+        input={({ value, setValue }) => (
           <ResourceForm.Input
             required
             setValue={setValue}
@@ -194,7 +194,7 @@ export function DeploymentsCreate({
           advanced
           propertyPath="$.spec.ports[0].port"
           label={t('deployments.create-modal.advanced.port')}
-          input={(value, setValue) => (
+          input={({ value, setValue }) => (
             <ResourceForm.Input
               type="number"
               required
@@ -211,7 +211,7 @@ export function DeploymentsCreate({
           advanced
           propertyPath="$.spec.ports[0].targetPort"
           label={t('deployments.create-modal.advanced.target-port')}
-          input={(value, setValue) => (
+          input={({ value, setValue }) => (
             <ResourceForm.Input
               type="number"
               required

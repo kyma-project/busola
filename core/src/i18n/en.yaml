@@ -186,14 +186,19 @@ clusters:
     errors:
       failed-to-add-cluster: Failed to add a cluster
     title: Add a Cluster
+    info: We don't store the kubeconfig file on server, it remains in the browser.
   buttons:
     apply-configuration: Apply configuration
     apply-kubeconfig: Apply kubeconfig
+    verify-and-add: Verify & add
   common:
     api-server-address: API server address
     download-kubeconfig: Download kubeconfig
     kubeconfig-download-error: Failed to download the kubeconfig
     kubeconfig-not-present: Kubeconfig is missing on the Cluster
+  empty:
+    title: You've not added any clusters yet.
+    subtitle: Would you like to add one now?
   labels:
     client-id: Client ID
     issuer-url: Issuer URL

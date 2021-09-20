@@ -1,9 +1,7 @@
 .choose-storage {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 16px;
-
-  label {
-      align-self: center;
+  p {
+    margin-left: 2rem;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
   }
 }

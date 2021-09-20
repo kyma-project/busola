@@ -97,6 +97,7 @@ export function FormField({
   tooltipContent,
   value,
   setValue,
+  inputProps,
 }) {
   return (
     <div className={classnames('fd-row form-field', className)}>
@@ -105,7 +106,9 @@ export function FormField({
           {label}
         </Label>
       </div>
-      <div className="fd-col fd-col-md--7">{input(value, setValue)}</div>
+      <div className="fd-col fd-col-md--7">
+        {input({ value, setValue, required, ...inputProps })}
+      </div>
     </div>
   );
 }

@@ -2,7 +2,14 @@ import React, { useState } from 'react';
 import LuigiClient from '@luigi-project/client';
 import jsyaml from 'js-yaml';
 import { saveAs } from 'file-saver';
-import { Link, Button, Icon, Wizard, Dialog } from 'fundamental-react';
+import {
+  Link,
+  Button,
+  Icon,
+  Wizard,
+  Dialog,
+  MessagePage,
+} from 'fundamental-react';
 import { useShowNodeParamsError } from 'shared/useShowNodeParamsError';
 import {
   useMicrofrontendContext,
@@ -19,31 +26,6 @@ import './ClusterList.scss';
 import { ClusterStorageType } from './ClusterStorageType';
 import styles from 'fundamental-styles/dist/message-page.css';
 import { AddCluster as AddClusterDialog } from './AddCluster/AddCluster';
-
-function NoClusters({ onClick }) {
-  return (
-    <section className="empty-cluster-list fd-message-page">
-      <div className="fd-message-page__container">
-        <div className="fd-message-page__icon-container">
-          <svg role="presentation" className="fd-message-page__icon">
-            <use xlinkHref="#sapIllus-Dialog-NoData"></use>
-          </svg>
-        </div>
-        <div role="status" aria-live="polite" class="fd-message-page__content">
-          <div class="fd-message-page__title">
-            You've not added any clusters yet.
-          </div>
-          <div class="fd-message-page__subtitle">
-            Would you like to add one now?
-          </div>
-          <div class="fd-message-page__actions">
-            <Button onClick={onClick}>Add Cluster</Button>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
 
 export function ClusterList() {
   const { clusters, activeClusterName } = useMicrofrontendContext();
@@ -139,23 +121,42 @@ export function ClusterList() {
       option="transparent"
       glyph="add"
       className="fd-margin-begin--sm"
-      onClick={() => LuigiClient.linkManager().navigate('add')}
+      onClick={() => setShowAdd(true)}
     >
       {t('clusters.add.title')}
     </Button>
   );
 
+  const dialog = (
+    <AddClusterDialog show={showAdd} onCancel={() => setShowAdd(false)} />
+  );
+
   if (!entries.length) {
     return (
       <>
-        <AddClusterDialog show={showAdd} onCancel={() => setShowAdd(false)} />
-        <NoClusters onClick={() => setShowAdd(true)} />
+        {dialog}
+        <MessagePage
+          className="empty-cluster-list"
+          image={
+            <svg role="presentation" className="fd-message-page__icon">
+              <use xlinkHref="#sapIllus-Dialog-NoData"></use>
+            </svg>
+          }
+          title={t('clusters.empty.title')}
+          subtitle={t('clusters.empty.subtitle')}
+          actions={
+            <Button onClick={() => setShowAdd(true)}>
+              {t('clusters.add.title')}
+            </Button>
+          }
+        />
       </>
     );
   }
 
   return (
     <>
+      {dialog}
       <PageHeader title={t('clusters.overview.title')} />
       <GenericList
         textSearchProperties={textSearchProperties}

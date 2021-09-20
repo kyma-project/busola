@@ -57,7 +57,7 @@ export function DNSProvidersCreate({
         required
         propertyPath="$.spec.secretRef"
         label={t('dnsproviders.labels.secret-reference')}
-        input={(value, setValue) => (
+        input={({ value, setValue }) => (
           <SecretRef
             id="secret-ref-input"
             resourceRef={value || {}}
@@ -69,7 +69,7 @@ export function DNSProvidersCreate({
         propertyPath="$.spec.type"
         label={t('dnsproviders.labels.type')}
         required
-        input={(value, setValue) => (
+        input={({ value, setValue }) => (
           <ProviderTypeDropdown type={value} setType={setValue} />
         )}
         className="fd-margin-bottom--sm"
