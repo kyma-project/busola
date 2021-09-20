@@ -2,7 +2,6 @@ import React from 'react';
 import { MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { KubeconfigFileUpload } from './KubeconfigFileUpload';
-import { KubeconfigTextArea } from './KubeconfigTextArea/KubeconfigTextArea';
 import jsyaml from 'js-yaml';
 import { ControlledEditor, useTheme } from 'react-shared';
 

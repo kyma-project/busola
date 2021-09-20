@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { MessageStrip, FormRadioGroup, FormRadioItem } from 'fundamental-react';
+import { FormRadioGroup, FormRadioItem } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import './ChooseStorage.scss';
 

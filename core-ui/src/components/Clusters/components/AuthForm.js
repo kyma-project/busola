@@ -1,5 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { TextFormItem } from 'react-shared';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MessageStrip, FormRadioGroup, FormRadioItem } from 'fundamental-react';
 import * as jp from 'jsonpath';
@@ -100,8 +99,7 @@ export function AuthForm({
         type="warning"
         className="fd-margin-top--sm fd-margin-bottom--sm"
       >
-        It looks like your kubeconfig is incomplete. Please fill the additional
-        fields.
+        {t('clusters.add.incomplete')}
       </MessageStrip>
       <FormRadioGroup
         className="fd-margin-bottom--sm"

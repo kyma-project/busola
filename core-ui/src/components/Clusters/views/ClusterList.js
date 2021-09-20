@@ -1,16 +1,10 @@
 import React, { useState } from 'react';
-import LuigiClient from '@luigi-project/client';
 import jsyaml from 'js-yaml';
 import { saveAs } from 'file-saver';
-import {
-  Link,
-  Button,
-  Icon,
-  Wizard,
-  Dialog,
-  MessagePage,
-} from 'fundamental-react';
+import { useTranslation } from 'react-i18next';
+
 import { useShowNodeParamsError } from 'shared/useShowNodeParamsError';
+import { Link, Button, Icon, MessagePage } from 'fundamental-react';
 import {
   useMicrofrontendContext,
   PageHeader,
@@ -18,14 +12,13 @@ import {
   useNotification,
   Tooltip,
 } from 'react-shared';
-import { useTranslation } from 'react-i18next';
 
 import { setCluster, deleteCluster } from './../shared';
+import { AddClusterDialog } from '../components/AddClusterDialog';
 import { areParamsCompatible } from '../params-version';
-import './ClusterList.scss';
 import { ClusterStorageType } from './ClusterStorageType';
-import styles from 'fundamental-styles/dist/message-page.css';
-import { AddCluster as AddClusterDialog } from './AddCluster/AddCluster';
+
+import './ClusterList.scss';
 
 export function ClusterList() {
   const { clusters, activeClusterName } = useMicrofrontendContext();

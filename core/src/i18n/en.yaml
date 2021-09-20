@@ -187,6 +187,7 @@ clusters:
       failed-to-add-cluster: Failed to add a cluster
     title: Add a Cluster
     info: We don't store the kubeconfig file on server, it remains in the browser.
+    incomplete: It looks like your kubeconfig is incomplete. Please fill the additional fields.
   buttons:
     apply-configuration: Apply configuration
     apply-kubeconfig: Apply kubeconfig
