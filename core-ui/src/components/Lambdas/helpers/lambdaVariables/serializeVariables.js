@@ -150,6 +150,7 @@ function getOwner(variable, resources, resourceValueFromType) {
   let owners = [];
   filteredResources[0].metadata.ownerReferences.forEach(owner => {
     owners.push({
+      apiVersion: owner.apiVersion,
       name: owner.name,
       kind: owner.kind,
     });

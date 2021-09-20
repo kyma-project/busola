@@ -1,5 +1,5 @@
 import React from 'react';
-import { StatusBadge } from 'react-shared';
+import { ControlledByKind, StatusBadge } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
 const getImages = deployment => {
@@ -32,6 +32,16 @@ export const DeploymentsList = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
 
   const customColumns = [
+    {
+      header: t('common.headers.owner'),
+      value: deployment => {
+        return (
+          <ControlledByKind
+            ownerReferences={deployment.metadata.ownerReferences}
+          />
+        );
+      },
+    },
     {
       header: t('deployments.headers.images'),
       value: deployment => {

@@ -29,6 +29,10 @@ export { Tab } from './components/Tabs/Tab.js';
 export { LabelSelectorInput } from './components/LabelSelectorInput/LabelSelectorInput';
 export { CircleProgress } from './components/CircleProgress/CircleProgress';
 export { ErrorPanel } from './components/ErrorPanel/ErrorPanel';
+export {
+  ControlledByKind,
+  ControlledBy,
+} from './components/ControlledBy/ControlledBy';
 export * from './components/SideDrawer/SideDrawer';
 export * from './components/ResourcesList/ResourcesList';
 export * from './components/ResourceDetails/ResourceDetails';

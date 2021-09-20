@@ -1,6 +1,11 @@
 import React from 'react';
 import { InfoLabel, Icon, Token } from 'fundamental-react';
-import { Spinner, useGetList, useMicrofrontendContext } from 'react-shared';
+import {
+  ControlledBy,
+  Spinner,
+  useGetList,
+  useMicrofrontendContext,
+} from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
 import EventSubscriptions from 'shared/components/EventSubscriptions/EventSubscriptions';
@@ -76,6 +81,12 @@ export const ServicesDetails = ({ DefaultRenderer, ...otherParams }) => {
   };
 
   const customColumns = [
+    {
+      header: t('common.headers.owner'),
+      value: service => (
+        <ControlledBy ownerReferences={service.metadata.ownerReferences} />
+      ),
+    },
     {
       header: t('services.type'),
       value: service => service.spec.type,
