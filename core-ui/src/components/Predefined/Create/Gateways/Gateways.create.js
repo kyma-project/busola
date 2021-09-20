@@ -43,12 +43,12 @@ export function GatewaysCreate({
         propertyPath="$.metadata.name"
         kind={t('gateways.name_singular')}
         customSetValue={handleNameChange}
+        className="fd-margin-bottom--sm"
       />
       <ResourceForm.KeyValueField
         advanced
         propertyPath="$.metadata.labels"
         label={t('common.headers.labels')}
-        className="fd-margin-top--sm"
       />
       <ResourceForm.KeyValueField
         advanced
