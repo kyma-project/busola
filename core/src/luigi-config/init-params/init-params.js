@@ -29,9 +29,6 @@ async function areInitParamsEnabled() {
 }
 
 export async function saveQueryParamsIfPresent() {
-  if (!(await areInitParamsEnabled())) {
-    return;
-  }
   try {
     await setupFromParams();
   } catch (e) {
@@ -46,12 +43,15 @@ async function setupFromParams() {
   const searchParams = new URL(location).searchParams;
   const encodedParams = searchParams.get('init');
   const kubeconfigId = searchParams.get('kubeconfigID');
-  if (!encodedParams && !kubeconfigId) {
+  if (!areParamsEnabled && !kubeconfigId) {
     return;
   }
 
   const encoder = await getEncoder();
-  const decoded = encodedParams ? await encoder.decompress(encodedParams) : {};
+  const decoded =
+    encodedParams && (await areInitParamsEnabled())
+      ? await encoder.decompress(encodedParams)
+      : {};
 
   await applyKubeconfigIdIfPresent(kubeconfigId, decoded);
 
@@ -74,7 +74,7 @@ async function setupFromParams() {
     !isKubeconfigPresent ||
     (!isOidcAuthPresent && !hasNonOidcAuth(kubeconfigUser));
 
-  if (requireMoreInput) {
+  if (requireMoreInput && encodedParams) {
     navigateToAddCluster(encodedParams);
     return;
   }
