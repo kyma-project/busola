@@ -189,7 +189,7 @@ clusters:
   buttons:
     apply-configuration: Apply configuration
     apply-kubeconfig: Apply kubeconfig
-    verify-and-add: Verify & add
+    verify-and-add: Verify and Add
   common:
     api-server-address: API server address
     download-kubeconfig: Download kubeconfig
