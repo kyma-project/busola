@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { ResourceForm } from '../../../../shared/ResourceForm/ResourceForm';
 import * as jp from 'jsonpath';
 import { createGatewayTemplate, createPresets, newServer } from './templates';
-import { SingleServerForm } from './ServersForm';
+import { SingleServerForm, SingleServerInput } from './ServersForm';
 import { validateGateway } from './helpers';
 
 export function GatewaysCreate({
@@ -59,12 +59,7 @@ export function GatewaysCreate({
         propertyPath="$.spec.selector"
         label={t('gateways.create-modal.simple.selector')}
       />
-      {/* <SingleServerForm
-        simple
-        server={jp('$.spec.servers[0]') || {}}
-        servers={gateway.servers}
-        setServers={servers => setGateway({ ...gateway, servers })}
-      /> */}
+      <SingleServerInput simple propertyPath="$.spec.servers" />
       <ResourceForm.ItemArray
         advanced
         propertyPath="$.spec.servers"
