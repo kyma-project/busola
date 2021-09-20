@@ -89,6 +89,14 @@ export const communication = {
         type,
       });
     },
+    'busola.pathExists': async ({ path, pathId }) => {
+      const exists = await Luigi.navigation().pathExists(path);
+      Luigi.customMessages().sendToAll({
+        id: 'busola.pathExists.answer',
+        exists,
+        pathId,
+      });
+    },
   },
 };
 
