@@ -41,7 +41,7 @@ Cypress.Commands.add(
 
     cy.getIframeBody()
       .find('[role="status"]', { timeout: 60 * 1000 })
-      .should('have.text', 'DEPLOYING');
+      .should('not.have.text', 'BUILDING');
 
     cy.readFile(functionPath).then(body => {
       cy.getIframeBody()
@@ -79,7 +79,7 @@ Cypress.Commands.add(
 
     cy.getIframeBody()
       .find('[role="status"]', { timeout: 120 * 1000 })
-      .should('have.text', 'RUNNING');
+      .should('not.have.text', 'BUILDING');
 
     cy.getLeftNav()
       .contains('Workloads')
