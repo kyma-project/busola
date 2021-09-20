@@ -716,7 +716,7 @@ gateways:
         mode: TLS Mode
         tls: TLS
     messages:
-      success: Gateway created.
+      at-least-one-server-required: Gateway must have at least one server.
     presets:
       default: Default
     simple:

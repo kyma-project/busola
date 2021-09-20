@@ -56,19 +56,20 @@ export function ResourceForm({
 
   const renderFormChildren = (children, isAdvanced) =>
     React.Children.map(children, child => {
-      if (child.props.simple && isAdvanced) {
+      const childProps = child.props || {};
+      if (childProps.simple && isAdvanced) {
         return null;
       }
-      if (child.props.advanced && !isAdvanced) {
+      if (childProps.advanced && !isAdvanced) {
         return null;
       }
-      if (!child.props?.propertyPath) {
+      if (!childProps.propertyPath) {
         return child;
       }
       return React.cloneElement(child, {
-        value: jp.value(resource, child.props.propertyPath),
+        value: jp.value(resource, childProps.propertyPath),
         setValue: value => {
-          jp.value(resource, child.props.propertyPath, value);
+          jp.value(resource, childProps.propertyPath, value);
           setResource({ ...resource });
         },
       });

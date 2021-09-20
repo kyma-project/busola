@@ -288,7 +288,6 @@ export function KeyValueField({
   ...props
 }) {
   const { t } = useTranslation();
-
   return (
     <MultiInput
       toInternal={value =>

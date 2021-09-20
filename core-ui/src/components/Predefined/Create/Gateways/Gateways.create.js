@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ResourceForm } from '../../../../shared/ResourceForm/ResourceForm';
+import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import * as jp from 'jsonpath';
 import { createGatewayTemplate, createPresets, newServer } from './templates';
 import { SingleServerForm, SingleServerInput } from './ServersForm';
 import { validateGateway } from './helpers';
+import { MessageStrip } from 'fundamental-react';
 
 export function GatewaysCreate({
   formElementRef,
@@ -59,13 +60,21 @@ export function GatewaysCreate({
         propertyPath="$.spec.selector"
         label={t('gateways.create-modal.simple.selector')}
       />
-      <SingleServerInput simple propertyPath="$.spec.servers" />
+      {jp.value(gateway, '$.spec.servers.length') ? (
+        <SingleServerInput simple propertyPath="$.spec.servers" />
+      ) : (
+        <MessageStrip simple type="warning">
+          {t('gateways.create-modal.messages.at-least-one-server-required')}
+        </MessageStrip>
+      )}
       <ResourceForm.ItemArray
         advanced
         propertyPath="$.spec.servers"
-        listTitle="Servers"
-        nameSingular="Server"
-        atLeastOneRequiredMessage="gateway must have at least one server"
+        listTitle={t('gateways.create-modal.simple.servers')}
+        nameSingular={t('gateways.create-modal.simple.server')}
+        atLeastOneRequiredMessage={t(
+          'gateways.create-modal.messages.at-least-one-server-required',
+        )}
         itemRenderer={(current, allValues, setAllValues) => (
           <SingleServerForm
             server={current}

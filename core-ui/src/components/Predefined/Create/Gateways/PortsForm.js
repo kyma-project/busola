@@ -44,7 +44,7 @@ export const PortsForm = ({
             placeholder={t(
               'gateways.create-modal.advanced.placeholders.port.number',
             )}
-            value={server.port.number}
+            value={server.port?.number}
             onChange={e =>
               setPortValue(server, 'number', e.target.valueAsNumber || '')
             }
@@ -93,7 +93,7 @@ export const PortsForm = ({
             placeholder={t(
               'gateways.create-modal.advanced.placeholders.port.name',
             )}
-            value={server.port.name}
+            value={server.port?.name}
             onChange={e => setPortValue(server, 'name', e.target.value || '')}
           />
         }
@@ -112,7 +112,7 @@ export const PortsForm = ({
             placeholder={t(
               'gateways.create-modal.advanced.placeholders.port.target-port',
             )}
-            value={server.port.targetPort}
+            value={server.port?.targetPort}
             onChange={e =>
               setPortValue(server, 'targetPort', e.target.valueAsNumber || null)
             }

@@ -13,7 +13,7 @@ export const HostsForm = ({ server, servers, setServers }) => {
   return (
     <ResourceForm.TextArrayInput
       advanced
-      value={server.hosts}
+      value={server.hosts || []}
       setValue={setValue}
       label={t('gateways.create-modal.advanced.hosts')}
       inputProps={{

@@ -5,7 +5,11 @@ import { TlsForm } from './TlsForm';
 import { HostsForm } from './HostsForm';
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 
-export function SingleServerForm({ server, setServers, servers }) {
+export function SingleServerForm({
+  server = { port: {} },
+  setServers,
+  servers = [],
+}) {
   return (
     <FormFieldset>
       <PortsForm server={server} servers={servers} setServers={setServers} />
