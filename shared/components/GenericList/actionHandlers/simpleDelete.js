@@ -1,6 +1,5 @@
 import LuigiClient from '@luigi-project/client';
 import { prettifyNameSingular } from '../../..';
-import { useTranslation } from 'react-i18next';
 
 function displayConfirmationMessage({ entityType, entityName, t }) {
   return new Promise(resolve => {

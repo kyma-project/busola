@@ -10,11 +10,13 @@ const breadcrumbs = [
 
 describe('ResourceNotFound', () => {
   it('Renders resource type and breadcrumb', () => {
-    const { queryByText } = render(
+    const { queryByText, debug } = render(
       <ResourceNotFound resource="Resource" breadcrumbs={breadcrumbs} />,
     );
-
-    expect(queryByText("Such Resource doesn't exists.")).toBeInTheDocument();
+    debug();
+    expect(
+      queryByText('components.resource-not-found.messages.not-found'),
+    ).toBeInTheDocument();
 
     expect(queryByText(breadcrumbs[0].name)).toBeInTheDocument();
     expect(queryByText(breadcrumbs[1].name)).toBeInTheDocument();

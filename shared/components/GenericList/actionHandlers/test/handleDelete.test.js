@@ -13,6 +13,8 @@ jest.mock('@luigi-project/client', () => ({
   }),
 }));
 
+const t = jest.fn(key => key);
+
 describe('simpleDelete', () => {
   it('Calls delete function and custom callback with valid parameters', async () => {
     mockModal.mockImplementation(() => new Promise(resolve => resolve()));
@@ -30,11 +32,12 @@ describe('simpleDelete', () => {
       notificationManager,
       deleteFunction,
       customCallback,
+      t,
     );
 
     expect(mockModal).toHaveBeenCalled();
     expect(mockModal.mock.calls[0][0].body).toBe(
-      `Are you sure you want to delete ${type} "${name}"?`,
+      'components.generic-list.acion-header.messages.confirmation',
     );
 
     expect(deleteFunction).toHaveBeenCalledWith(id, name);
@@ -60,6 +63,7 @@ describe('simpleDelete', () => {
       notificationManager,
       deleteFunction,
       customCallback,
+      t,
     );
 
     expect(deleteFunction).not.toHaveBeenCalled();
@@ -85,6 +89,7 @@ describe('simpleDelete', () => {
       notificationManager,
       deleteFunction,
       customCallback,
+      t,
     );
 
     expect(notificationManager.notifyError).toHaveBeenCalled();

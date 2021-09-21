@@ -3,10 +3,9 @@ import 'core-js/es/array/flat-map';
 import { render, fireEvent, queryByText } from '@testing-library/react';
 
 import { GenericList } from '../GenericList';
-import { MESSAGES } from '../constants';
 
 describe('GenericList', () => {
-  const defaultNotFoundText = MESSAGES.NOT_FOUND;
+  const defaultNotFoundText = 'components.generic-list.messages.not-found';
 
   const mockHeaderRenderer = entries => ['Id', 'Name', 'description'];
   const mockEntryRenderer = entry => [entry.id, entry.name, entry.description];
@@ -242,7 +241,6 @@ describe('GenericList', () => {
         showHeader={false}
       />,
     );
-
     const foundRows = queryAllByRole('row');
     expect(foundRows).toHaveLength(1);
     expect(queryByText(foundRows[0], defaultNotFoundText)).toBeInTheDocument();
