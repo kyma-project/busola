@@ -58,7 +58,7 @@ export async function failFastFetch(input, auth, init = {}) {
 export async function checkIfClusterRequiresCA(auth) {
   try {
     // try to fetch without CA (requiresCA is undefined)
-    await failFastFetch(config.backendAddress, auth);
+    await failFastFetch(config.backendAddress + '/api', auth);
     return false;
   } catch (_) {
     // if it fails, use CA
@@ -91,19 +91,17 @@ export function fetchPermissions(auth, namespace = '*') {
     .then(res => res.status.resourceRules);
 }
 
-export function fetchBusolaInitData(auth) {
-  const crdsUrl = `${config.backendAddress}/apis/apiextensions.k8s.io/v1/customresourcedefinitions`;
-  const crdsQuery = failFastFetch(crdsUrl, auth)
+export async function fetchBusolaInitData(auth) {
+  const CORE_GROUP = 'v1';
+
+  return await failFastFetch(config.backendAddress + '/apis', auth)
     .then(res => res.json())
-    .then(data => ({ crds: data.items.map(crd => crd.metadata) }));
-
-  const apiPathsQuery = failFastFetch(config.backendAddress, auth)
-    .then(res => res.json())
-    .then(data => ({ apiPaths: data.paths }));
-
-  const promises = [crdsQuery, apiPathsQuery];
-
-  return Promise.all(promises).then(res => Object.assign(...res));
+    .then(res => [
+      CORE_GROUP,
+      ...res.groups.flatMap(group =>
+        group.versions.map(version => version.groupVersion),
+      ),
+    ]);
 }
 
 export function fetchNamespaces(auth) {
