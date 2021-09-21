@@ -1,6 +1,7 @@
 import React from 'react';
 import { CreateForm } from 'shared/components/CreateForm/CreateForm';
-import { Checkbox, Select, FormLabel, FormInput } from 'fundamental-react';
+import { Checkbox, FormLabel, FormInput } from 'fundamental-react';
+import { Select } from 'shared/components/Select/Select';
 import { useTranslation } from 'react-i18next';
 import { TSL_MODES } from './helpers';
 import { Tooltip } from 'react-shared';
@@ -83,7 +84,8 @@ export const TlsForm = ({ disabled = false, server, servers, setServers }) => {
             placeholder={t(
               'gateways.create-modal.advanced.placeholders.tls.mode',
             )}
-          ></Select>
+            fullWidth
+          />
         }
       />
       <CreateForm.FormField

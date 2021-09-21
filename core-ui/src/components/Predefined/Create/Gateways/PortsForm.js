@@ -1,6 +1,7 @@
 import React from 'react';
 import { CreateForm } from 'shared/components/CreateForm/CreateForm';
-import { FormLabel, FormInput, Select } from 'fundamental-react';
+import { FormLabel, FormInput } from 'fundamental-react';
+import { Select } from 'shared/components/Select/Select';
 import { useTranslation } from 'react-i18next';
 import { PROTOCOLS } from './helpers';
 import { switchTLS } from './TlsForm';
@@ -76,7 +77,8 @@ export const PortsForm = ({
             placeholder={t(
               'gateways.create-modal.advanced.placeholders.port.protocol',
             )}
-          ></Select>
+            fullWidth
+          />
         }
       />
       <CreateForm.FormField

@@ -14,11 +14,14 @@ import {
 import './Containers.scss';
 
 function MemoryInput({ label, value = '', setValue }) {
-  const units = ['', 'K', 'Ki', 'M', 'Mi', 'G', 'Gi', 'Ti', 'T'];
-  const options = units.map(e => ({
-    key: e,
-    text: e,
-  }));
+  const units = ['K', 'Ki', 'M', 'Mi', 'G', 'Gi', 'Ti', 'T'];
+  const options = [
+    { key: '', text: 'B' },
+    ...units.map(e => ({
+      key: e,
+      text: e,
+    })),
+  ];
 
   value = value.toString();
   const numericValue = value.match(/^\d*(\.\d*)?/)[0];
@@ -41,7 +44,7 @@ function MemoryInput({ label, value = '', setValue }) {
           compact
           options={options}
           selectedKey={selectedUnit}
-          onSelect={(_, { text }) => setValue(numericValue.toString() + text)}
+          onSelect={(_, { key }) => setValue(numericValue.toString() + key)}
         />
       </div>
     </FormItem>
