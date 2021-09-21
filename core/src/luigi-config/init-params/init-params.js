@@ -55,10 +55,7 @@ async function setupFromParams() {
   }
 
   const encoder = await getEncoder();
-  const decoded =
-    encodedParams && (await areInitParamsEnabled())
-      ? await encoder.decompress(encodedParams)
-      : {};
+  const decoded = encodedParams ? await encoder.decompress(encodedParams) : {};
 
   await applyKubeconfigIdIfPresent(kubeconfigId, decoded);
 
