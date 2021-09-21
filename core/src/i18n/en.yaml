@@ -275,6 +275,7 @@ common:
     loading: Loading...
     logs: Logs
     name: Name
+    owner: Controlled By
     resources: Resources
     status: Status
   labels:
@@ -666,7 +667,7 @@ functions:
     header:
       key: Key
       name: Variable Name
-      owner: Source Owner Reference
+      owner: Source Controlled By
       source: Source
       value: Value
     not-found: This Function doesn't have any environment variables yet.
