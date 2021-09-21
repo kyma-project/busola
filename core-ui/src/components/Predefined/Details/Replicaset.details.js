@@ -1,5 +1,5 @@
 import React from 'react';
-import { StatusBadge } from 'react-shared';
+import { ControlledBy, StatusBadge } from 'react-shared';
 
 import { ResourcePods } from './ResourcePods';
 import { useTranslation } from 'react-i18next';
@@ -8,6 +8,12 @@ export const ReplicasetsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
 
   const customColumns = [
+    {
+      header: t('common.headers.owner'),
+      value: resource => (
+        <ControlledBy ownerReferences={resource.metadata.ownerReferences} />
+      ),
+    },
     {
       header: t('replica-sets.headers.limits'),
       value: resource => {

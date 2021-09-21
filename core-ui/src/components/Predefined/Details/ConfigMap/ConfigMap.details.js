@@ -1,5 +1,5 @@
 import React from 'react';
-import { ModalWithForm } from 'react-shared';
+import { ControlledBy, ModalWithForm } from 'react-shared';
 import { Button } from 'fundamental-react';
 import { EditConfigMapForm } from './EditConfigMapForm';
 import { ReadonlyEditorPanel } from '../../../../shared/components/ReadonlyEditorPanel';
@@ -38,9 +38,19 @@ export const ConfigMapsDetails = ({ DefaultRenderer, ...otherParams }) => {
     ),
   ];
 
+  const customColumns = [
+    {
+      header: t('common.headers.owner'),
+      value: secret => (
+        <ControlledBy ownerReferences={secret.metadata.ownerReferences} />
+      ),
+    },
+  ];
+
   return (
     <DefaultRenderer
       customComponents={[ConfigMapEditor]}
+      customColumns={customColumns}
       resourceHeaderActions={headerActions}
       {...otherParams}
     />
