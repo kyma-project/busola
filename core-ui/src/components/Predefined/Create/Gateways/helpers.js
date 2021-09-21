@@ -6,15 +6,7 @@ export const TSL_MODES = [
   // 'ISTIO_MUTUAL',
 ];
 
-export const PROTOCOLS = [
-  'HTTP',
-  // 'HTTP2',
-  'HTTPS',
-  // 'GRPC',
-  // 'HTTP2',
-  // 'MONGO',
-  'TCP',
-];
+export const PROTOCOLS = ['HTTP', 'HTTP2', 'HTTPS', 'GRPC', 'MONGO', 'TCP'];
 
 export function validateGateway(gateway) {
   const hasServer = gateway?.spec?.servers?.length;

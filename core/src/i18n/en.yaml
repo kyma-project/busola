@@ -724,6 +724,7 @@ gateways:
       selector: Selector
       server: Server
       servers: Servers
+      https-requires-tls: HTTPS port requires TLS.
     title: Create Gateway
   selector: Selector
   servers:
