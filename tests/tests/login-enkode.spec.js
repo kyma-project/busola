@@ -265,13 +265,15 @@ context('Login - enkode link, params should be disabled by default', () => {
   });
 
   it('Enkode + kubeconfigID: works with init params disabled', () => {
-    const kubeconfigIdAddress = 'http://localhost:3030';
+    const kubeconfigIdAddress =
+      'https://kyma-env-broker.cp.dev.kyma.cloud.sap/kubeconfig';
+
     cy.wrap(generateWithKubeconfigId(kubeconfigIdAddress)).then(
       ({ params, kubeconfig }) => {
         cy.intercept(
           {
             method: 'GET',
-            url: 'https://kyma-env-broker.cp.dev.kyma.cloud.sap/kubeconfig/*',
+            url: `${kubeconfigIdAddress}/*`,
           },
           kubeconfig,
         );
