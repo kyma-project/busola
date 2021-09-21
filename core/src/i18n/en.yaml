@@ -240,7 +240,7 @@ clusters:
     update: Update configuration
     storage: Storage mode
     info: We don't store the kubeconfig file on the server, it remains in the browser.
-    incomplete: It looks like your kubeconfig is incomplete. Please fill the additional fields.
+    incomplete: It looks like your kubeconfig is incomplete. Fill out the additional fields.
     auth:
       token: Token
       issuer-url: Issuer URL
