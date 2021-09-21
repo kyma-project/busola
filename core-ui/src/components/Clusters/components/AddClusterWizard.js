@@ -1,11 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Button, Wizard, MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import { useNotification, useMicrofrontendContext } from 'react-shared';
 
-import { hasKubeconfigAuth, getContext, addCluster } from '../shared';
+import { hasKubeconfigAuth, getUser, getContext, addCluster } from '../shared';
 import { AuthForm } from './AuthForm';
 import { KubeconfigUpload } from './KubeconfigUpload/KubeconfigUpload';
 import { ContextChooser } from './ContextChooser/ContextChooser';
@@ -31,6 +31,16 @@ export function AddClusterWizard({
 
   const authFormRef = useRef();
 
+  useEffect(() => {
+    if (kubeconfig) {
+      if (getUser(kubeconfig)?.token) {
+        setStorage('sessionStorage');
+      } else {
+        setStorage('localStorage');
+      }
+    }
+  }, [kubeconfig]);
+
   function updateKubeconfig(kubeconfig) {
     if (!kubeconfig) {
       setKubeconfig(null);
@@ -47,7 +57,6 @@ export function AddClusterWizard({
     setHasAuth(hasAuth);
 
     setKubeconfig(kubeconfig);
-    // }
   }
 
   const onComplete = () => {

@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MessageStrip, FormRadioGroup, FormRadioItem } from 'fundamental-react';
 import * as jp from 'jsonpath';
-import { createLoginCommand } from './oidc-params';
+import { createLoginCommand, tryParseOIDCparams } from './oidc-params';
 
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
+import { getUser } from '../shared';
 
 export const AUTH_FORM_TOKEN = 'Token';
 export const AUTH_FORM_OIDC = 'OIDC';
@@ -18,16 +19,14 @@ function getUserIndex(kubeconfig) {
 
 const OIDCform = ({ resource, setResource, ...props }) => {
   const { t } = useTranslation();
-  const [auth, setAuth] = useState({});
+  const [auth, setAuth] = useState(tryParseOIDCparams(getUser(resource)) || {});
 
   const userIndex = getUserIndex(resource);
-  console.log('userIndex', userIndex);
 
   return (
     <ResourceForm.Wrapper
       resource={auth}
       setResource={auth => {
-        console.log('auth', auth);
         jp.value(
           resource,
           `$.users[${userIndex}].user.exec`,
@@ -83,9 +82,12 @@ export function AuthForm({
   setResource,
   ...props
 }) {
-  const [authType, setAuthType] = useState(AUTH_FORM_TOKEN);
+  const hasToken = getUser(resource)?.token;
+  const hasOidc = getUser(resource)?.exec?.args?.[0] === 'oidc-login';
+  const [authType, setAuthType] = useState(
+    hasOidc ? AUTH_FORM_OIDC : AUTH_FORM_TOKEN,
+  );
   const { t } = useTranslation();
-  console.log('AuthForm::getUserIndex', resource);
   const userIndex = getUserIndex(resource);
 
   return (
