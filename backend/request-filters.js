@@ -9,4 +9,27 @@ const localIpFilter = (_req, headersData) => {
   }
 };
 
-export const filters = [localIpFilter];
+const pathWhitelistFilter = req => {
+  const path = req.originalUrl.replace(/^\/backend/, '');
+
+  // list comes from "/" call to API server
+  const whitelist = [
+    '/.well-known',
+    '/api',
+    '/apis',
+    '/healthz',
+    '/livez',
+    '/logs',
+    '/metrics',
+    '/openapi',
+    '/openid',
+    '/readyz',
+    '/version',
+  ];
+
+  if (!whitelist.some(e => path.startsWith(e))) {
+    throw Error(`Path ${path} is not whitelisted.`);
+  }
+};
+
+export const filters = [localIpFilter, pathWhitelistFilter];
