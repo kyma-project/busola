@@ -267,6 +267,7 @@ export function TextArrayInput({ inputProps, ...props }) {
       inputs={[
         ({ value, setValue, ref, onBlur, focus }) => (
           <FormInput
+            compact
             value={value || ''}
             ref={ref}
             onChange={e => setValue(e.target.value)}
@@ -301,6 +302,7 @@ export function KeyValueField({
       inputs={[
         ({ value, setValue, ref, onBlur, focus }) => (
           <FormInput
+            compact
             value={value?.key || ''}
             ref={ref}
             onChange={e =>
@@ -314,6 +316,7 @@ export function KeyValueField({
         ),
         ({ value, setValue, ref, onBlur, focus }) => (
           <FormInput
+            compact
             value={value?.val || ''}
             ref={ref}
             onChange={e => setValue({ ...value, val: e.target.value })}
