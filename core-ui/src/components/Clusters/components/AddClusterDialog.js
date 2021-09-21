@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next';
 
 import { AddClusterWizard } from './AddClusterWizard';
 
+import './AddClusterDialog.scss';
+
 export function AddClusterDialog({ show, onCancel }) {
   const [kubeconfig, setKubeconfig] = useState(undefined);
   const { t } = useTranslation();

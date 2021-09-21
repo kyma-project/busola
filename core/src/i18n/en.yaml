@@ -189,7 +189,7 @@ clusters:
   buttons:
     apply-configuration: Apply configuration
     apply-kubeconfig: Apply kubeconfig
-    verify-and-add: Verify and Add
+    verify-and-add: Add Cluster
   common:
     api-server-address: API server address
     download-kubeconfig: Download kubeconfig
@@ -217,6 +217,10 @@ clusters:
     version: Version
   storage:
     changed-message: The chosen storage type has been overwritten by the cluster configuration from {{originalStorage}} to {{targetStorage}}.
+    info: |
+      Where would you want to store cluster information.
+      Based on the kubeconfig type you have we've chosen the best storage mode.
+      If you're concerned about security you can change the location.
     choose-storage:
       label: Storage type configuration
     descriptions:
@@ -231,11 +235,17 @@ clusters:
       unknown: Unknown
     title: Storage Type
   wizard:
+    context: Current context
     kubeconfig: Choose configuration
     update: Update configuration
     storage: Storage mode
     info: We don't store the kubeconfig file on the server, it remains in the browser.
     incomplete: It looks like your kubeconfig is incomplete. Please fill the additional fields.
+    auth:
+      token: Token
+      issuer-url: Issuer URL
+      client-id: Client ID
+      scopes: Scopes
 common:
   buttons:
     add: Add

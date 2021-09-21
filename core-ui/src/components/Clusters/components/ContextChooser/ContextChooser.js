@@ -22,7 +22,7 @@ export function ContextChooser(params) {
       <ResourceForm.FormField
         required
         propertyPath='$["current-context"]'
-        label={t('clusters.context')}
+        label={t('clusters.wizard.context')}
         input={({ value, setValue }) => (
           <Select
             id="context-chooser"

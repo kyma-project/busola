@@ -1,0 +1,25 @@
+.add-cluster-dialog {
+  .fd-dialog__content {
+    min-height: 90vh;
+  }
+
+  .fd-dialog__body {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .fd-dialog__footer {
+    display: none;
+  }
+
+  .fd-wizard {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+  .fd-wizard__content {
+    padding-bottom: 16px;
+    flex-grow: 1;
+    overflow: auto;
+  }
+}

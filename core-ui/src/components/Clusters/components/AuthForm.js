@@ -41,19 +41,19 @@ const OIDCform = ({ resource, setResource, ...props }) => {
       <ResourceForm.FormField
         required
         propertyPath="$.issuerUrl"
-        label={t('clusters.auth.issuer-url')}
+        label={t('clusters.wizard.auth.issuer-url')}
         input={ResourceForm.Input}
       />
       <ResourceForm.FormField
         required
         propertyPath="$.clientId"
-        label={t('clusters.auth.client-id')}
+        label={t('clusters.wizard.auth.client-id')}
         input={ResourceForm.Input}
       />
       <ResourceForm.FormField
         required
         propertyPath="$.scope"
-        label={t('clusters.auth.scopes')}
+        label={t('clusters.wizard.auth.scopes')}
         input={ResourceForm.Input}
       />
     </ResourceForm.Wrapper>
@@ -69,7 +69,7 @@ const TokenForm = props => {
       <ResourceForm.FormField
         required
         propertyPath={`$.users[${userIndex}].user.token`}
-        label={t('clusters.auth.token')}
+        label={t('clusters.wizard.auth.token')}
         input={ResourceForm.Input}
       />
     </ResourceForm.Wrapper>
