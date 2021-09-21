@@ -1,4 +1,3 @@
-import shortid from 'shortid';
 import { VARIABLE_TYPE, VARIABLE_VALIDATION } from './constants';
 
 export function newVariableModel({
@@ -7,9 +6,11 @@ export function newVariableModel({
   validation = VARIABLE_VALIDATION.NONE,
   additionalProps = {},
 }) {
+  const id = `${type}/${variable.name || ''}`;
+
   return type === VARIABLE_TYPE.CUSTOM
     ? {
-        id: shortid.generate(),
+        id,
         type,
         name: variable.name || '',
         value: variable.value || '',
@@ -17,7 +18,7 @@ export function newVariableModel({
         ...additionalProps,
       }
     : {
-        id: shortid.generate(),
+        id,
         type,
         name: variable.name || '',
         valueFrom: variable.valueFrom || {},

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StatusBadge } from 'react-shared';
+import { ControlledByKind, StatusBadge } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
 const getImages = replicaSet => {
@@ -26,6 +26,14 @@ export const ReplicaSetsList = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
 
   const customColumns = [
+    {
+      header: t('common.headers.owner'),
+      value: replicaSet => (
+        <ControlledByKind
+          ownerReferences={replicaSet.metadata.ownerReferences}
+        />
+      ),
+    },
     {
       header: t('replica-sets.headers.images'),
       value: replicaSet => {
