@@ -161,7 +161,7 @@ export function DeploymentsCreate({
         defaultOpen
         resource={deployment}
         setResource={setDeployment}
-        actions={
+        actions={setOpen => (
           <Button
             glyph="add"
             compact
@@ -175,11 +175,12 @@ export function DeploymentsCreate({
 
               setDeployment({ ...deployment });
               onChange(new Event('input', { bubbles: true }));
+              setOpen(true);
             }}
           >
             Add Container
           </Button>
-        }
+        )}
       >
         <Containers propertyPath="$.spec.template.spec.containers" />
       </ResourceForm.CollapsibleSection>

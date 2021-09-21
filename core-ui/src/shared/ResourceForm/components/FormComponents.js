@@ -53,7 +53,9 @@ export function CollapsibleSection({
           )}
           {title}
         </div>
-        <div ref={actionsRef}>{actions}</div>
+        <div ref={actionsRef}>
+          {typeof actions === 'function' ? actions(setOpen) : actions}
+        </div>
       </header>
       {open && (
         <div className="content">
@@ -378,15 +380,18 @@ export function ItemArray({
   return (
     <CollapsibleSection
       title={listTitle}
-      actions={
+      actions={setOpen => (
         <Button
           glyph="add"
           compact
-          onClick={() => setValues([...values, newResourceTemplateFn()])}
+          onClick={() => {
+            setValues([...values, newResourceTemplateFn()]);
+            setOpen(true);
+          }}
         >
           {t('common.buttons.add')} {nameSingular}
         </Button>
-      }
+      )}
     >
       {content}
     </CollapsibleSection>
