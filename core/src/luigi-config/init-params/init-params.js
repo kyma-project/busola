@@ -20,7 +20,7 @@ const getEncoder = async () => {
 };
 
 function hasExactlyOneContext(kubeconfig) {
-  return kubeconfig?.contexts?.length === 1;
+  return kubeconfig && kubeconfig?.contexts?.length === 1;
 }
 
 async function areInitParamsEnabled() {
@@ -43,7 +43,14 @@ async function setupFromParams() {
   const searchParams = new URL(location).searchParams;
   const encodedParams = searchParams.get('init');
   const kubeconfigId = searchParams.get('kubeconfigID');
-  if (!(await areInitParamsEnabled()) && !kubeconfigId) {
+
+  // neither params nor kk-id
+  if (!encodedParams && !kubeconfigId) {
+    return;
+  }
+
+  // no kk-id, params present but disabled
+  if (encodedParams && !(await areInitParamsEnabled()) && !kubeconfigId) {
     return;
   }
 
