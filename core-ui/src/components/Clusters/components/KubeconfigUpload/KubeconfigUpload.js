@@ -29,21 +29,17 @@ export function KubeconfigUpload({
     }
   };
 
-  const onEditorBlur = getValue => {
-    updateKubeconfig(getValue());
-  };
-
   return (
     <>
       <KubeconfigFileUpload onKubeconfigTextAdded={updateKubeconfig} />
+      <p>or paste your kubeconfig:</p>
       <ControlledEditor
         height="400px"
         language="yaml"
         theme={editorTheme}
         value={configString}
-        // onChange={(e, text) => updateKubeconfig(text)}
-        editorDidMount={(params, editor) =>
-          editor.onDidBlurEditorWidget(() => onEditorBlur(params))
+        editorDidMount={(getValue, editor) =>
+          editor.onDidBlurEditorWidget(() => updateKubeconfig(getValue()))
         }
       />
       {error && (

@@ -54,8 +54,9 @@ export function getUser(
   kubeconfig,
   contextName = kubeconfig['current-context'],
 ) {
-  const context = kubeconfig.contexts.find(c => c.name === contextName).context;
-  return kubeconfig.users.find(u => u.name === context.user).user;
+  const context = kubeconfig?.contexts?.find(c => c.name === contextName)
+    .context;
+  return kubeconfig?.users?.find(u => u.name === context.user).user;
 }
 
 export function hasKubeconfigAuth(

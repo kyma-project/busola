@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MessageStrip, FormRadioGroup, FormRadioItem } from 'fundamental-react';
+import { MessageStrip, Switch } from 'fundamental-react';
 import * as jp from 'jsonpath';
 import { createLoginCommand, tryParseOIDCparams } from './oidc-params';
 
@@ -19,9 +19,10 @@ function getUserIndex(kubeconfig) {
 
 const OIDCform = ({ resource, setResource, ...props }) => {
   const { t } = useTranslation();
+
   const [auth, setAuth] = useState(tryParseOIDCparams(getUser(resource)) || {});
 
-  const userIndex = getUserIndex(resource);
+  const userIndex = getUserIndex(props.resource);
 
   return (
     <ResourceForm.Wrapper
@@ -82,13 +83,11 @@ export function AuthForm({
   setResource,
   ...props
 }) {
-  const hasToken = getUser(resource)?.token;
-  const hasOidc = getUser(resource)?.exec?.args?.[0] === 'oidc-login';
-  const [authType, setAuthType] = useState(
-    hasOidc ? AUTH_FORM_OIDC : AUTH_FORM_TOKEN,
-  );
   const { t } = useTranslation();
-  const userIndex = getUserIndex(resource);
+
+  const [useOidc, setUseOidc] = useState(
+    getUser(resource)?.exec?.args?.[0] === 'oidc-login',
+  );
 
   return (
     <ResourceForm.Wrapper
@@ -103,30 +102,20 @@ export function AuthForm({
       >
         {t('clusters.wizard.incomplete')}
       </MessageStrip>
-      <FormRadioGroup
-        className="fd-margin-bottom--sm"
-        inline
-        onChange={(_, type) => {
-          const user = resource.users[userIndex];
-          resource.users[userIndex] = { name: user.name };
-          setResource(resource);
-          setAuthType(type);
-        }}
-      >
-        <FormRadioItem
-          inputProps={{ defaultChecked: authType === AUTH_FORM_TOKEN }}
-          data={AUTH_FORM_TOKEN}
+      {!useOidc && <TokenForm />}
+      {!useOidc && (
+        <MessageStrip
+          type="information"
+          className="fd-margin-top--sm fd-margin-bottom--sm"
         >
-          Token
-        </FormRadioItem>
-        <FormRadioItem
-          inputProps={{ defaultChecked: authType === AUTH_FORM_OIDC }}
-          data={AUTH_FORM_OIDC}
-        >
-          OIDC provider
-        </FormRadioItem>
-      </FormRadioGroup>
-      {authType === AUTH_FORM_OIDC ? <OIDCform /> : <TokenForm />}
+          here is how to get it
+        </MessageStrip>
+      )}
+      <ResourceForm.FormField
+        label="I'm using an OIDC provider instead"
+        input={() => <Switch compact onChange={() => setUseOidc(!useOidc)} />}
+      />
+      {useOidc && <OIDCform />}
     </ResourceForm.Wrapper>
   );
 }

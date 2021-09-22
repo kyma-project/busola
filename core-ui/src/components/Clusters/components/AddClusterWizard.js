@@ -48,10 +48,7 @@ export function AddClusterWizard({
     }
 
     const hasOneContext = kubeconfig?.contexts?.length === 1;
-    const hasAuth = hasKubeconfigAuth(
-      kubeconfig,
-      kubeconfig['current-context'],
-    );
+    const hasAuth = hasKubeconfigAuth(kubeconfig);
 
     setHasOneContext(hasOneContext);
     setHasAuth(hasAuth);
@@ -83,13 +80,15 @@ export function AddClusterWizard({
       headerSize="md"
       contentSize="md"
       footerProps={
-        lastStep && {
-          children: (
-            <Button compact option="emphasized" onClick={onComplete}>
-              {t('clusters.buttons.verify-and-add')}
-            </Button>
-          ),
-        }
+        lastStep
+          ? {
+              children: (
+                <Button compact option="emphasized" onClick={onComplete}>
+                  {t('clusters.buttons.verify-and-add')}
+                </Button>
+              ),
+            }
+          : {}
       }
     >
       <Wizard.Step

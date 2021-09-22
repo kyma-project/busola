@@ -196,7 +196,7 @@ clusters:
     kubeconfig-download-error: Failed to download the kubeconfig
     kubeconfig-not-present: Kubeconfig is missing on the Cluster
   empty:
-    title: You've not added any clusters yet.
+    title: You haven't added any clusters yet.
     subtitle: Would you like to add one now?
   labels:
     client-id: Client ID
@@ -236,11 +236,11 @@ clusters:
     title: Storage Type
   wizard:
     context: Current context
-    kubeconfig: Choose configuration
-    update: Update configuration
-    storage: Storage mode
+    kubeconfig: Provide Kubeconfig
+    update: Provide Authentication
+    storage: Privacy Options
     info: We don't store the kubeconfig file on the server, it remains in the browser.
-    incomplete: It looks like your kubeconfig is incomplete. Fill out the additional fields.
+    incomplete: We couldn't find enough authentication information in your kubeconfig file. You can enter it manually.
     auth:
       token: Token
       issuer-url: Issuer URL
