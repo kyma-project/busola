@@ -1,11 +1,13 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { usePost, useNotification } from 'react-shared';
-import { ResourceForm } from '../../../../shared/ResourceForm/ResourceForm';
 import { Button, Checkbox } from 'fundamental-react';
 import * as jp from 'jsonpath';
-import './Deployments.create.scss';
 
+import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
+import * as Inputs from 'shared/ResourceForm/components/Inputs';
+
+import './Deployments.create.scss';
 import {
   createContainerTemplate,
   createDeploymentTemplate,
@@ -144,15 +146,9 @@ export function DeploymentsCreate({
         simple
         propertyPath="$.spec.template.spec.containers[0].image"
         label={t('deployments.create-modal.simple.docker-image')}
-        input={({ value, setValue }) => (
-          <ResourceForm.Input
-            required
-            setValue={setValue}
-            value={value}
-            placeholder={t(
-              'deployments.create-modal.simple.docker-image-placeholder',
-            )}
-          />
+        input={Inputs.Text}
+        placeholder={t(
+          'deployments.create-modal.simple.docker-image-placeholder',
         )}
       />
       <ResourceForm.CollapsibleSection
@@ -192,36 +188,22 @@ export function DeploymentsCreate({
       >
         <ResourceForm.FormField
           advanced
+          required
+          disabled={!createService}
           propertyPath="$.spec.ports[0].port"
           label={t('deployments.create-modal.advanced.port')}
-          input={({ value, setValue }) => (
-            <ResourceForm.Input
-              type="number"
-              required
-              placeholder={t(
-                'deployments.create-modal.advanced.port-placeholder',
-              )}
-              disabled={!createService}
-              value={value}
-              onChange={e => setValue(e.target.valueAsNumber)}
-            />
-          )}
+          input={Inputs.Number}
+          placeholder={t('deployments.create-modal.advanced.port-placeholder')}
         />
         <ResourceForm.FormField
           advanced
+          required
+          disabled={!createService}
           propertyPath="$.spec.ports[0].targetPort"
           label={t('deployments.create-modal.advanced.target-port')}
-          input={({ value, setValue }) => (
-            <ResourceForm.Input
-              type="number"
-              required
-              placeholder={t(
-                'deployments.create-modal.advanced.target-port-placeholder',
-              )}
-              disabled={!createService}
-              value={value}
-              onChange={e => setValue(e.target.valueAsNumber)}
-            />
+          input={Inputs.Number}
+          placeholder={t(
+            'deployments.create-modal.advanced.target-port-placeholder',
           )}
         />
       </ResourceForm.CollapsibleSection>

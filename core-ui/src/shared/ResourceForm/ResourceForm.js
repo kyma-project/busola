@@ -156,7 +156,6 @@ ResourceForm.Single = SingleForm;
 ResourceForm.Wrapper = ResourceFormWrapper;
 
 ResourceForm.Label = FormComponents.Label;
-ResourceForm.Input = FormComponents.Input;
 ResourceForm.CollapsibleSection = FormComponents.CollapsibleSection;
 ResourceForm.FormField = FormComponents.FormField;
 ResourceForm.TextArrayInput = FormComponents.TextArrayInput;
