@@ -92,6 +92,7 @@ const useGetHook = processDataFn =>
 export const useGetStream = path => {
   const lastAuthData = React.useRef(null);
   const initialPath = React.useRef(true);
+  const timeoutRef = React.useRef();
   const [data, setData] = React.useState([]);
   const [error, setError] = React.useState(null);
   const { authData } = useMicrofrontendContext();
@@ -113,6 +114,12 @@ export const useGetStream = path => {
     if (!authData) return;
 
     try {
+      // browsers close the connection after a minute (only on a cluster!), erroring with:
+      // FF: TypeError: Error in body stream
+      // Chrome: TypeError: network error
+      // Safari: The operation couldn’t be completed. (kCFErrorDomainCFNetwork error 303.)
+      // reset the connection a little before
+      timeoutRef.current = setTimeout(refetchData, 55 * 1000);
       const response = await fetch({ relativeUrl: path });
       if (!authData) return;
       readerRef.current = response.body.getReader();
@@ -134,13 +141,6 @@ export const useGetStream = path => {
 
               processData(value);
 
-              // browsers close the connection after a minute (only on a cluster!), erroring with:
-              // FF: TypeError: Error in body stream
-              // Chrome: TypeError: network error
-              // Safari: The operation couldn’t be completed. (kCFErrorDomainCFNetwork error 303.)
-              // reset the connection a little before
-              setTimeout(refetchData, 55 * 1000);
-
               return push();
             } catch (e) {
               processError(e);
@@ -154,17 +154,24 @@ export const useGetStream = path => {
     }
   };
 
-  function cancelReader() {
+  const cancelTimeout = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+  };
+
+  const cancelReader = () => {
     if (readerRef.current) {
       readerRef.current.cancel();
     }
-  }
+  };
 
-  function refetchData() {
+  const refetchData = () => {
+    cancelTimeout();
     cancelReader();
     setData([]);
     fetchData();
-  }
+  };
 
   React.useEffect(() => {
     // without this logs are duplicated
@@ -176,7 +183,6 @@ export const useGetStream = path => {
     refetchData();
   }, [path]);
 
-  React.useEffect(_ => cancelReader, [path]);
   React.useEffect(_ => cancelReader, []);
   React.useEffect(() => {
     if (
