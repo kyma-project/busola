@@ -64,8 +64,9 @@ export const PortsForm = ({
             onSelect={(_, selected) => {
               setPortValue(server, 'protocol', selected.key);
 
-              // HTTPS requires TLS, turn it on
               if (selected.key === 'HTTPS') {
+                setPortValue(server, 'port', 443);
+                // HTTPS requires TLS, turn it on
                 switchTLS(server, true, servers, setServers);
               }
             }}
