@@ -1,9 +1,10 @@
-import React from 'react';
-import LuigiClient from '@luigi-project/client';
+import React, { useState } from 'react';
 import jsyaml from 'js-yaml';
 import { saveAs } from 'file-saver';
-import { Link, Button, Icon } from 'fundamental-react';
+import { useTranslation } from 'react-i18next';
+
 import { useShowNodeParamsError } from 'shared/useShowNodeParamsError';
+import { Link, Button, Icon, MessagePage } from 'fundamental-react';
 import {
   useMicrofrontendContext,
   PageHeader,
@@ -11,17 +12,20 @@ import {
   useNotification,
   Tooltip,
 } from 'react-shared';
-import { useTranslation } from 'react-i18next';
 
 import { setCluster, deleteCluster } from './../shared';
+import { AddClusterDialog } from '../components/AddClusterDialog';
 import { areParamsCompatible } from '../params-version';
-import './ClusterList.scss';
 import { ClusterStorageType } from './ClusterStorageType';
+
+import './ClusterList.scss';
 
 export function ClusterList() {
   const { clusters, activeClusterName } = useMicrofrontendContext();
   const notification = useNotification();
   const { t, i18n } = useTranslation();
+
+  const [showAdd, setShowAdd] = useState(false);
 
   useShowNodeParamsError();
 
@@ -110,14 +114,42 @@ export function ClusterList() {
       option="transparent"
       glyph="add"
       className="fd-margin-begin--sm"
-      onClick={() => LuigiClient.linkManager().navigate('add')}
+      onClick={() => setShowAdd(true)}
     >
       {t('clusters.add.title')}
     </Button>
   );
 
+  const dialog = (
+    <AddClusterDialog show={showAdd} onCancel={() => setShowAdd(false)} />
+  );
+
+  if (!entries.length) {
+    return (
+      <>
+        {dialog}
+        <MessagePage
+          className="empty-cluster-list"
+          image={
+            <svg role="presentation" className="fd-message-page__icon">
+              <use xlinkHref="#sapIllus-Dialog-NoData"></use>
+            </svg>
+          }
+          title={t('clusters.empty.title')}
+          subtitle={t('clusters.empty.subtitle')}
+          actions={
+            <Button onClick={() => setShowAdd(true)}>
+              {t('clusters.add.title')}
+            </Button>
+          }
+        />
+      </>
+    );
+  }
+
   return (
     <>
+      {dialog}
       <PageHeader title={t('clusters.overview.title')} />
       <GenericList
         textSearchProperties={textSearchProperties}
