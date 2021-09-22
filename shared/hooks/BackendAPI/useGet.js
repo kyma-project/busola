@@ -183,7 +183,10 @@ export const useGetStream = path => {
     refetchData();
   }, [path]);
 
-  React.useEffect(_ => cancelReader, []);
+  React.useEffect(_ => {
+    cancelTimeout();
+    cancelReader();
+  }, []);
   React.useEffect(() => {
     if (
       authData &&
