@@ -118,7 +118,6 @@ function SingleContainerSection({
         placeholder={t(
           'deployments.create-modal.simple.docker-image-placeholder',
         )}
-        className="fd-margin-bottom--sm"
       />
 
       <ResourceForm.CollapsibleSection
