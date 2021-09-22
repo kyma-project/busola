@@ -11,6 +11,9 @@ import {
   FormLabel,
   MessageStrip,
 } from 'fundamental-react';
+
+import * as Inputs from 'shared/ResourceForm/components/Inputs';
+
 import './Containers.scss';
 
 function MemoryInput({ label, propertyPath, container, setContainer }) {
@@ -70,8 +73,7 @@ function CpuInput({ label, propertyPath, container, setContainer }) {
   return (
     <FormItem>
       <FormLabel required>{label} (m)</FormLabel>
-      <ResourceForm.Input
-        type="number"
+      <Inputs.Number
         min="0"
         required
         value={value}
@@ -112,7 +114,7 @@ function SingleContainerSection({
         className="fd-margin-bottom--sm"
         propertyPath="$.image"
         label={t('deployments.create-modal.simple.docker-image')}
-        input={ResourceForm.Input}
+        input={Inputs.Text}
         placeholder={t(
           'deployments.create-modal.simple.docker-image-placeholder',
         )}
