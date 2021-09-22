@@ -97,7 +97,10 @@ export function createPresets(namespace, translate) {
             },
           },
         },
-        service: createServiceTemplate(namespace),
+        service: createServiceTemplate(namespace, 'echo-server', {
+          port: 3000,
+          targetPort: 80,
+        }),
       },
     },
     {
@@ -138,27 +141,31 @@ export function createPresets(namespace, translate) {
             },
           },
         },
-        service: createServiceTemplate(namespace),
+        service: createServiceTemplate(namespace, 'httpbin', {
+          port: 80,
+          targetPort: 80,
+        }),
       },
     },
   ];
 }
 
-export function createServiceTemplate(namespace) {
+export function createServiceTemplate(namespace, name = '', port = {}) {
   return {
     apiVersion: 'v1',
     kind: 'Service',
     metadata: {
-      name: '',
+      name,
       namespace,
     },
     spec: {
-      selector: {},
+      selector: { app: name },
       ports: [
         {
           protocol: 'TCP',
-          port: 8080,
-          targetPort: 80,
+          port: 80,
+          targetPort: 8080,
+          ...port,
         },
       ],
     },

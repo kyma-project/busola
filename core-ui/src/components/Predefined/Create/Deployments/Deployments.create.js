@@ -130,13 +130,13 @@ export function DeploymentsCreate({
       <ResourceForm.KeyValueField
         advanced
         propertyPath="$.metadata.labels"
-        label={t('common.headers.labels')}
+        title={t('common.headers.labels')}
         className="fd-margin-top--sm"
       />
       <ResourceForm.KeyValueField
         advanced
         propertyPath="$.metadata.annotations"
-        label={t('common.headers.annotations')}
+        title={t('common.headers.annotations')}
       />
 
       <ResourceForm.FormField
@@ -161,7 +161,7 @@ export function DeploymentsCreate({
         defaultOpen
         resource={deployment}
         setResource={setDeployment}
-        actions={
+        actions={setOpen => (
           <Button
             glyph="add"
             compact
@@ -175,11 +175,12 @@ export function DeploymentsCreate({
 
               setDeployment({ ...deployment });
               onChange(new Event('input', { bubbles: true }));
+              setOpen(true);
             }}
           >
             Add Container
           </Button>
-        }
+        )}
       >
         <Containers propertyPath="$.spec.template.spec.containers" />
       </ResourceForm.CollapsibleSection>

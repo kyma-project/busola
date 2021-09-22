@@ -1,8 +1,10 @@
 import React from 'react';
 import { CreateForm } from 'shared/components/CreateForm/CreateForm';
-import { Checkbox, Select, FormLabel, FormInput } from 'fundamental-react';
+import { Checkbox, FormLabel, FormInput } from 'fundamental-react';
+import { Select } from 'shared/components/Select/Select';
 import { useTranslation } from 'react-i18next';
 import { TSL_MODES } from './helpers';
+import { Tooltip } from 'react-shared';
 
 const setTlsValue = (server, variableName, value, servers, setServers) => {
   if (value === null) {
@@ -16,9 +18,9 @@ const setTlsValue = (server, variableName, value, servers, setServers) => {
   setServers([...servers]);
 };
 
-export const switchTLS = (server, hasTLS, servers, setServers) => {
-  if (hasTLS) {
-    server.tls = {};
+export const switchTLS = (server, tlsOn, servers, setServers) => {
+  if (tlsOn) {
+    server.tls = { ...server.tls };
   } else {
     delete server.tls;
   }
@@ -33,23 +35,35 @@ export const TlsForm = ({ disabled = false, server, servers, setServers }) => {
     key: mode,
     text: mode,
   }));
+
+  const requireTLS = server?.port?.protocol === 'HTTPS';
+
+  let switchTLSCheckbox = (
+    <Checkbox
+      compact
+      checked={requireTLS || !!server.tls}
+      disabled={requireTLS}
+      onChange={() => switchTLS(server, !server.tls, servers, setServers)}
+      dir="rtl"
+    >
+      {t('gateways.create-modal.advanced.enable-tls')}
+    </Checkbox>
+  );
+
+  if (requireTLS) {
+    switchTLSCheckbox = (
+      <Tooltip content={t('gateways.create-modal.simple.https-requires-tls')}>
+        {switchTLSCheckbox}
+      </Tooltip>
+    );
+  }
+
   return (
     <CreateForm.CollapsibleSection
       title={t('gateways.create-modal.advanced.tls.tls')}
       defaultOpen
       disabled={disabled}
-      actions={
-        <Checkbox
-          compact
-          checked={!!server.tls}
-          onChange={(_, checked) =>
-            switchTLS(server, checked, servers, setServers)
-          }
-          dir="rtl"
-        >
-          {t('gateways.create-modal.advanced.enable-tls')}
-        </Checkbox>
-      }
+      actions={switchTLSCheckbox}
     >
       <CreateForm.FormField
         label={
@@ -70,7 +84,8 @@ export const TlsForm = ({ disabled = false, server, servers, setServers }) => {
             placeholder={t(
               'gateways.create-modal.advanced.placeholders.tls.mode',
             )}
-          ></Select>
+            fullWidth
+          />
         }
       />
       <CreateForm.FormField

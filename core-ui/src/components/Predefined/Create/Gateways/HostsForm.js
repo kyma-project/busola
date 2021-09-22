@@ -1,52 +1,27 @@
 import React from 'react';
-import { CreateForm } from 'shared/components/CreateForm/CreateForm';
-import { FormLabel } from 'fundamental-react';
-import { StringInput, Tooltip } from 'react-shared';
 import { useTranslation } from 'react-i18next';
+import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 
-export const HostsForm = ({
-  disabled = false,
-  server,
-  servers,
-  setServers,
-}) => {
+export const HostsForm = ({ server, servers, setServers }) => {
   const { t } = useTranslation();
-  const setValue = (server, value) => {
-    const newPortValue = server;
-    newPortValue.hosts = value;
 
+  const setValue = hosts => {
+    server.hosts = hosts;
     setServers([...servers]);
   };
+
   return (
-    <CreateForm.CollapsibleSection
+    <ResourceForm.TextArrayInput
+      advanced
+      required
+      tooltipContent={`At least one host exposed by the gateway, in FQDN format with optional wildcard character in the left-most component.`}
+      value={server.hosts || []}
+      setValue={setValue}
       title={t('gateways.create-modal.advanced.hosts')}
+      inputProps={{
+        placeholder: t('gateways.create-modal.advanced.placeholders.hosts'),
+      }}
       defaultOpen
-      disabled={disabled}
-    >
-      <CreateForm.FormField
-        label={
-          <FormLabel required>
-            {t('gateways.create-modal.advanced.hosts')}
-          </FormLabel>
-        }
-        input={
-          <Tooltip
-            content={t('gateways.create-modal.advanced.placeholders.hosts')}
-          >
-            <StringInput
-              required
-              compact
-              stringList={server.hosts || []}
-              onChange={hosts => setValue(server, hosts || [])}
-              regexp={/^[^, ]+$/}
-              placeholder={t(
-                'gateways.create-modal.advanced.placeholders.hosts',
-              )}
-              id={`hosts-${disabled ? 'simple' : 'advanced'}${server.id}`}
-            />
-          </Tooltip>
-        }
-      />
-    </CreateForm.CollapsibleSection>
+    />
   );
 };

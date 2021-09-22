@@ -1,5 +1,11 @@
 import React, { useEffect, useRef, useState, createRef } from 'react';
-import { FormInput, FormLabel, Button, Icon } from 'fundamental-react';
+import {
+  FormInput,
+  FormLabel,
+  Button,
+  Icon,
+  MessageStrip,
+} from 'fundamental-react';
 import { Tooltip, K8sNameInput } from 'react-shared';
 import classnames from 'classnames';
 import * as jp from 'jsonpath';
@@ -16,9 +22,10 @@ export function CollapsibleSection({
   resource,
   setResource,
   className,
+  required,
 }) {
-  const [open, setOpen] = React.useState(defaultOpen);
-  const actionsRef = React.useRef();
+  const [open, setOpen] = useState(defaultOpen);
+  const actionsRef = useRef();
   const iconGlyph = open ? 'navigation-down-arrow' : 'navigation-right-arrow';
 
   const toggle = e => {
@@ -33,24 +40,27 @@ export function CollapsibleSection({
     className,
     {
       collapsed: !open,
+      required,
     },
   );
 
   return (
     <div className={classNames}>
       <header onClick={toggle} aria-label={`expand ${title}`}>
-        <div>
+        <div className="title">
           {!disabled && canChangeState && (
             <Icon className="control-icon" ariaHidden glyph={iconGlyph} />
           )}
           {title}
         </div>
-        <div ref={actionsRef}>{actions}</div>
+        <div ref={actionsRef}>
+          {typeof actions === 'function' ? actions(setOpen) : actions}
+        </div>
       </header>
       {open && (
         <div className="content">
           {React.Children.map(children, child => {
-            if (!child.props.propertyPath) {
+            if (!child.props?.propertyPath) {
               return child;
             }
             return React.cloneElement(child, {
@@ -148,6 +158,7 @@ export function K8sNameField({
 export function MultiInput({
   value,
   setValue,
+  title,
   label,
   tooltipContent,
   required,
@@ -207,41 +218,54 @@ export function MultiInput({
   };
 
   return (
-    <CollapsibleSection title={label} className={className} {...props}>
-      <ul className="text-array-input__list">
-        {internalValue.map((entry, index) => (
-          <li key={index}>
-            {inputs.map((input, inputIndex) =>
-              input({
-                index,
-                value: entry,
-                setValue: entry => setEntry(entry, index),
-                ref: refs[index]?.[inputIndex],
-                onBlur: () => updateValue(internalValue),
-                focus: (e, target) => {
-                  if (e.key === 'Enter') {
-                    if (typeof target === 'undefined') {
-                      focus(refs[index + 1][0]);
-                    } else {
-                      focus(refs[index][target]);
+    <CollapsibleSection
+      title={title}
+      className={className}
+      required={required}
+      {...props}
+    >
+      <div className="fd-row form-field">
+        <div className="fd-col fd-col-md--4">
+          <Label required={required} tooltipContent={tooltipContent}>
+            {title || label}
+          </Label>
+        </div>
+        <ul className="text-array-input__list fd-col fd-col-md--7">
+          {internalValue.map((entry, index) => (
+            <li key={index}>
+              {inputs.map((input, inputIndex) =>
+                input({
+                  index,
+                  value: entry,
+                  setValue: entry => setEntry(entry, index),
+                  ref: refs[index]?.[inputIndex],
+                  onBlur: () => updateValue(internalValue),
+                  focus: (e, target) => {
+                    if (e.key === 'Enter') {
+                      if (typeof target === 'undefined') {
+                        focus(refs[index + 1][0]);
+                      } else {
+                        focus(refs[index][target]);
+                      }
+                    } else if (e.key === 'ArrowDown') {
+                      focus(refs[index + 1]?.[0]);
+                    } else if (e.key === 'ArrowUp') {
+                      focus(refs[index - 1]?.[0]);
                     }
-                  } else if (e.key === 'ArrowDown') {
-                    focus(refs[index + 1]?.[0]);
-                  } else if (e.key === 'ArrowUp') {
-                    focus(refs[index - 1]?.[0]);
-                  }
-                },
-              }),
-            )}
-            <Button
-              className={classnames({ hidden: isLast(index) })}
-              glyph="delete"
-              type="negative"
-              onClick={() => removeValue(index)}
-            />
-          </li>
-        ))}
-      </ul>
+                  },
+                }),
+              )}
+              <Button
+                compact
+                className={classnames({ hidden: isLast(index) })}
+                glyph="delete"
+                type="negative"
+                onClick={() => removeValue(index)}
+              />
+            </li>
+          ))}
+        </ul>
+      </div>
     </CollapsibleSection>
   );
 }
@@ -254,6 +278,7 @@ export function TextArrayInput({ inputProps, ...props }) {
       inputs={[
         ({ value, setValue, ref, onBlur, focus }) => (
           <FormInput
+            compact
             value={value || ''}
             ref={ref}
             onChange={e => setValue(e.target.value)}
@@ -288,6 +313,7 @@ export function KeyValueField({
       inputs={[
         ({ value, setValue, ref, onBlur, focus }) => (
           <FormInput
+            compact
             value={value?.key || ''}
             ref={ref}
             onChange={e =>
@@ -301,6 +327,7 @@ export function KeyValueField({
         ),
         ({ value, setValue, ref, onBlur, focus }) => (
           <FormInput
+            compact
             value={value?.val || ''}
             ref={ref}
             onChange={e => setValue({ ...value, val: e.target.value })}
@@ -310,7 +337,74 @@ export function KeyValueField({
           />
         ),
       ]}
+      tooltipContent={t('common.tooltips.key-value')}
       {...props}
     />
+  );
+}
+
+export function ItemArray({
+  value: values,
+  setValue: setValues,
+  listTitle,
+  nameSingular,
+  atLeastOneRequiredMessage,
+  itemRenderer,
+  newResourceTemplateFn,
+}) {
+  const { t } = useTranslation();
+
+  values = values || [];
+
+  const remove = index => setValues(values.filter((_, i) => index !== i));
+
+  if (!values.length) {
+    return (
+      <MessageStrip type="warning">{atLeastOneRequiredMessage}</MessageStrip>
+    );
+  }
+
+  const renderAllItems = () =>
+    values.map((current, i) => (
+      <CollapsibleSection
+        key={i}
+        title={`${nameSingular} ${current?.name || i + 1}`}
+        actions={
+          <Button
+            compact
+            glyph="delete"
+            type="negative"
+            compact
+            onClick={() => remove(i)}
+          />
+        }
+      >
+        {itemRenderer(current, values, setValues)}
+      </CollapsibleSection>
+    ));
+
+  const content =
+    values.length === 1
+      ? itemRenderer(values[0], values, setValues)
+      : renderAllItems();
+
+  return (
+    <CollapsibleSection
+      title={listTitle}
+      actions={setOpen => (
+        <Button
+          glyph="add"
+          compact
+          onClick={() => {
+            setValues([...values, newResourceTemplateFn()]);
+            setOpen(true);
+          }}
+        >
+          {t('common.buttons.add')} {nameSingular}
+        </Button>
+      )}
+    >
+      {content}
+    </CollapsibleSection>
   );
 }
