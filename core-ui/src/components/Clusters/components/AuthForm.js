@@ -5,24 +5,19 @@ import * as jp from 'jsonpath';
 import { createLoginCommand, tryParseOIDCparams } from './oidc-params';
 
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
-import { getUser } from '../shared';
+import * as Inputs from 'shared/ResourceForm/components/Inputs';
+import { getUser, getUserIndex } from '../shared';
 
 export const AUTH_FORM_TOKEN = 'Token';
 export const AUTH_FORM_OIDC = 'OIDC';
 export const DEFAULT_SCOPE_VALUE = 'openid';
-
-function getUserIndex(kubeconfig) {
-  const contextName = kubeconfig['current-context'];
-  const { context } = kubeconfig.contexts.find(c => c.name === contextName);
-  return kubeconfig.users.findIndex(u => u.name === context.user);
-}
 
 const OIDCform = ({ resource, setResource, ...props }) => {
   const { t } = useTranslation();
 
   const [auth, setAuth] = useState(tryParseOIDCparams(getUser(resource)) || {});
 
-  const userIndex = getUserIndex(props.resource);
+  const userIndex = getUserIndex(resource);
 
   return (
     <ResourceForm.Wrapper
@@ -42,35 +37,35 @@ const OIDCform = ({ resource, setResource, ...props }) => {
         required
         propertyPath="$.issuerUrl"
         label={t('clusters.wizard.auth.issuer-url')}
-        input={ResourceForm.Input}
+        input={Inputs.Text}
       />
       <ResourceForm.FormField
         required
         propertyPath="$.clientId"
         label={t('clusters.wizard.auth.client-id')}
-        input={ResourceForm.Input}
+        input={Inputs.Text}
       />
       <ResourceForm.FormField
         required
         propertyPath="$.scope"
         label={t('clusters.wizard.auth.scopes')}
-        input={ResourceForm.Input}
+        input={Inputs.Text}
       />
     </ResourceForm.Wrapper>
   );
 };
 
-const TokenForm = props => {
+const TokenForm = ({ resource, ...props }) => {
   const { t } = useTranslation();
-  const userIndex = getUserIndex(props.resource);
+  const userIndex = getUserIndex(resource);
 
   return (
-    <ResourceForm.Wrapper {...props}>
+    <ResourceForm.Wrapper resource={resource} {...props}>
       <ResourceForm.FormField
         required
         propertyPath={`$.users[${userIndex}].user.token`}
         label={t('clusters.wizard.auth.token')}
-        input={ResourceForm.Input}
+        input={Inputs.Text}
       />
     </ResourceForm.Wrapper>
   );
@@ -108,7 +103,7 @@ export function AuthForm({
           type="information"
           className="fd-margin-top--sm fd-margin-bottom--sm"
         >
-          here is how to get it
+          {t('clusters.wizard.token-info')}
         </MessageStrip>
       )}
       <ResourceForm.FormField

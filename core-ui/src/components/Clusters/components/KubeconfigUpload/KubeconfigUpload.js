@@ -5,6 +5,8 @@ import { KubeconfigFileUpload } from './KubeconfigFileUpload';
 import jsyaml from 'js-yaml';
 import { ControlledEditor, useTheme } from 'react-shared';
 
+import './KubeconfigUpload.scss';
+
 export function KubeconfigUpload({
   onKubeconfig,
   handleKubeconfigAdded,
@@ -32,7 +34,9 @@ export function KubeconfigUpload({
   return (
     <>
       <KubeconfigFileUpload onKubeconfigTextAdded={updateKubeconfig} />
-      <p>or paste your kubeconfig:</p>
+      <p className="editor-label fd-margin-bottom--sm fd-margin-top--sm">
+        {t('clusters.wizard.editor-label')}
+      </p>
       <ControlledEditor
         height="400px"
         language="yaml"

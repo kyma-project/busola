@@ -230,8 +230,8 @@ clusters:
       unknown: Unknown storage type
     labels:
       inMemory: In memory
-      localStorage: localStorage
-      sessionStorage: sessionStorage
+      localStorage: Local storage
+      sessionStorage: Session storage
       unknown: Unknown
     title: Storage Type
   wizard:
@@ -241,6 +241,8 @@ clusters:
     storage: Privacy Options
     info: We don't store the kubeconfig file on the server, it remains in the browser.
     incomplete: We couldn't find enough authentication information in your kubeconfig file. You can enter it manually.
+    editor-label: 'or paste your kubeconfig:'
+    token-info: Consult your authorization provider for information how to aquire the token.
     auth:
       token: Token
       issuer-url: Issuer URL
