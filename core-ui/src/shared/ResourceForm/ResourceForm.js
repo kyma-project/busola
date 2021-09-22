@@ -7,13 +7,63 @@ import * as FormComponents from './components/FormComponents';
 import './ResourceForm.scss';
 import { useCreateResource } from './useCreateResource';
 
-ResourceForm.Label = FormComponents.Label;
-ResourceForm.Input = FormComponents.Input;
-ResourceForm.CollapsibleSection = FormComponents.CollapsibleSection;
-ResourceForm.FormField = FormComponents.FormField;
-ResourceForm.TextArrayInput = FormComponents.TextArrayInput;
-ResourceForm.K8sNameField = FormComponents.K8sNameField;
-ResourceForm.KeyValueField = FormComponents.KeyValueField;
+function ResourceFormWrapper({ resource, setResource, children, ...props }) {
+  return React.Children.map(children, child => {
+    if (!child) {
+      return null;
+    } else if (!child.props.propertyPath) {
+      return React.cloneElement(child, {
+        resource,
+        setResource,
+        ...props,
+      });
+    } else {
+      return React.cloneElement(child, {
+        value: jp.value(resource, child.props.propertyPath),
+        setValue: value => {
+          jp.value(resource, child.props.propertyPath, value);
+          setResource({ ...resource });
+        },
+        ...props,
+      });
+    }
+  });
+}
+
+function SingleForm({
+  formElementRef,
+  createResource,
+  children,
+  resource,
+  setResource,
+  onValid,
+  ...props
+}) {
+  return (
+    <form
+      ref={formElementRef}
+      onSubmit={createResource}
+      onChange={() => {
+        if (onValid) {
+          setTimeout(() => {
+            onValid(formElementRef.current?.checkValidity());
+          });
+        }
+      }}
+      {...props}
+    >
+      <div>
+        <ResourceFormWrapper
+          resource={resource}
+          setResource={setResource}
+          formElementRef={formElementRef}
+        >
+          {children}
+        </ResourceFormWrapper>
+      </div>
+    </form>
+  );
+}
 
 export function ResourceForm({
   pluralKind, // used for the request path
@@ -101,3 +151,13 @@ export function ResourceForm({
     </section>
   );
 }
+
+ResourceForm.Single = SingleForm;
+ResourceForm.Wrapper = ResourceFormWrapper;
+
+ResourceForm.Label = FormComponents.Label;
+ResourceForm.CollapsibleSection = FormComponents.CollapsibleSection;
+ResourceForm.FormField = FormComponents.FormField;
+ResourceForm.TextArrayInput = FormComponents.TextArrayInput;
+ResourceForm.K8sNameField = FormComponents.K8sNameField;
+ResourceForm.KeyValueField = FormComponents.KeyValueField;
