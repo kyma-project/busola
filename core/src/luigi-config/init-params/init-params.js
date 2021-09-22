@@ -20,7 +20,7 @@ const getEncoder = async () => {
 };
 
 function hasExactlyOneContext(kubeconfig) {
-  return kubeconfig?.contexts?.length === 1;
+  return kubeconfig && kubeconfig?.contexts?.length === 1;
 }
 
 async function areInitParamsEnabled() {
@@ -29,9 +29,6 @@ async function areInitParamsEnabled() {
 }
 
 export async function saveQueryParamsIfPresent() {
-  if (!(await areInitParamsEnabled())) {
-    return;
-  }
   try {
     await setupFromParams();
   } catch (e) {
@@ -46,7 +43,14 @@ async function setupFromParams() {
   const searchParams = new URL(location).searchParams;
   const encodedParams = searchParams.get('init');
   const kubeconfigId = searchParams.get('kubeconfigID');
+
+  // neither params nor kk-id
   if (!encodedParams && !kubeconfigId) {
+    return;
+  }
+
+  // no kk-id, params present but disabled
+  if (encodedParams && !(await areInitParamsEnabled()) && !kubeconfigId) {
     return;
   }
 
@@ -74,7 +78,7 @@ async function setupFromParams() {
     !isKubeconfigPresent ||
     (!isOidcAuthPresent && !hasNonOidcAuth(kubeconfigUser));
 
-  if (requireMoreInput) {
+  if (requireMoreInput && encodedParams) {
     navigateToAddCluster(encodedParams);
     return;
   }

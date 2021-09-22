@@ -263,4 +263,25 @@ context('Login - enkode link, params should be disabled by default', () => {
       cy.url().should('equal', url);
     });
   });
+
+  it('Enkode + kubeconfigID: works with init params disabled', () => {
+    const kubeconfigIdAddress =
+      'https://kyma-env-broker.cp.dev.kyma.cloud.sap/kubeconfig';
+
+    cy.wrap(generateWithKubeconfigId(kubeconfigIdAddress)).then(
+      ({ params, kubeconfig }) => {
+        cy.intercept(
+          {
+            method: 'GET',
+            url: `${kubeconfigIdAddress}/*`,
+          },
+          kubeconfig,
+        );
+        cy.visit(
+          `${config.clusterAddress}/clusters?init=${params}&kubeconfigID=tests`,
+        );
+        cy.url().should('match', /namespaces$/);
+      },
+    );
+  });
 });
