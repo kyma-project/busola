@@ -130,13 +130,13 @@ export function DeploymentsCreate({
       <ResourceForm.KeyValueField
         advanced
         propertyPath="$.metadata.labels"
-        label={t('common.headers.labels')}
+        title={t('common.headers.labels')}
         className="fd-margin-top--sm"
       />
       <ResourceForm.KeyValueField
         advanced
         propertyPath="$.metadata.annotations"
-        label={t('common.headers.annotations')}
+        title={t('common.headers.annotations')}
       />
 
       <ResourceForm.FormField

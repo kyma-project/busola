@@ -728,6 +728,7 @@ gateways:
     title: Create Gateway
   selector: Selector
   servers:
+    selector-tooltip: One or more labels that indicate a set of pods on which the gateway configuration should be applied. By default workloads are searched across all namespaces based on label selectors.
     hosts: Hosts
     name: Name
     port: Port

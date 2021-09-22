@@ -13,9 +13,11 @@ export const HostsForm = ({ server, servers, setServers }) => {
   return (
     <ResourceForm.TextArrayInput
       advanced
+      required
+      tooltipContent={`At least one host exposed by the gateway, in FQDN format with optional wildcard character in the left-most component.`}
       value={server.hosts || []}
       setValue={setValue}
-      label={t('gateways.create-modal.advanced.hosts')}
+      title={t('gateways.create-modal.advanced.hosts')}
       inputProps={{
         placeholder: t('gateways.create-modal.advanced.placeholders.hosts'),
       }}

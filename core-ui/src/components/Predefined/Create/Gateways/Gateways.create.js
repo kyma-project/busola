@@ -48,17 +48,18 @@ export function GatewaysCreate({
       <ResourceForm.KeyValueField
         advanced
         propertyPath="$.metadata.labels"
-        label={t('common.headers.labels')}
+        title={t('common.headers.labels')}
       />
       <ResourceForm.KeyValueField
         advanced
         propertyPath="$.metadata.annotations"
-        label={t('common.headers.annotations')}
+        title={t('common.headers.annotations')}
       />
       <ResourceForm.KeyValueField
         required
         propertyPath="$.spec.selector"
-        label={t('gateways.create-modal.simple.selector')}
+        title={t('gateways.create-modal.simple.selector')}
+        tooltipContent={t('gateways.create-modal.selector-tooltip')}
       />
       {jp.value(gateway, '$.spec.servers.length') ? (
         <SingleServerInput simple propertyPath="$.spec.servers" />

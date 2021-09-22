@@ -158,6 +158,7 @@ export function K8sNameField({
 export function MultiInput({
   value,
   setValue,
+  title,
   label,
   tooltipContent,
   required,
@@ -218,45 +219,53 @@ export function MultiInput({
 
   return (
     <CollapsibleSection
-      title={label}
+      title={title}
       className={className}
       required={required}
       {...props}
     >
-      <ul className="text-array-input__list">
-        {internalValue.map((entry, index) => (
-          <li key={index}>
-            {inputs.map((input, inputIndex) =>
-              input({
-                index,
-                value: entry,
-                setValue: entry => setEntry(entry, index),
-                ref: refs[index]?.[inputIndex],
-                onBlur: () => updateValue(internalValue),
-                focus: (e, target) => {
-                  if (e.key === 'Enter') {
-                    if (typeof target === 'undefined') {
-                      focus(refs[index + 1][0]);
-                    } else {
-                      focus(refs[index][target]);
+      <div className="fd-row form-field">
+        <div className="fd-col fd-col-md--4">
+          <Label required={required} tooltipContent={tooltipContent}>
+            {title || label}
+          </Label>
+        </div>
+        <ul className="text-array-input__list fd-col fd-col-md--7">
+          {internalValue.map((entry, index) => (
+            <li key={index}>
+              {inputs.map((input, inputIndex) =>
+                input({
+                  index,
+                  value: entry,
+                  setValue: entry => setEntry(entry, index),
+                  ref: refs[index]?.[inputIndex],
+                  onBlur: () => updateValue(internalValue),
+                  focus: (e, target) => {
+                    if (e.key === 'Enter') {
+                      if (typeof target === 'undefined') {
+                        focus(refs[index + 1][0]);
+                      } else {
+                        focus(refs[index][target]);
+                      }
+                    } else if (e.key === 'ArrowDown') {
+                      focus(refs[index + 1]?.[0]);
+                    } else if (e.key === 'ArrowUp') {
+                      focus(refs[index - 1]?.[0]);
                     }
-                  } else if (e.key === 'ArrowDown') {
-                    focus(refs[index + 1]?.[0]);
-                  } else if (e.key === 'ArrowUp') {
-                    focus(refs[index - 1]?.[0]);
-                  }
-                },
-              }),
-            )}
-            <Button
-              className={classnames({ hidden: isLast(index) })}
-              glyph="delete"
-              type="negative"
-              onClick={() => removeValue(index)}
-            />
-          </li>
-        ))}
-      </ul>
+                  },
+                }),
+              )}
+              <Button
+                compact
+                className={classnames({ hidden: isLast(index) })}
+                glyph="delete"
+                type="negative"
+                onClick={() => removeValue(index)}
+              />
+            </li>
+          ))}
+        </ul>
+      </div>
     </CollapsibleSection>
   );
 }
@@ -328,6 +337,7 @@ export function KeyValueField({
           />
         ),
       ]}
+      tooltipContent={t('common.tooltips.key-value')}
       {...props}
     />
   );
@@ -361,6 +371,7 @@ export function ItemArray({
         title={`${nameSingular} ${current?.name || i + 1}`}
         actions={
           <Button
+            compact
             glyph="delete"
             type="negative"
             compact
