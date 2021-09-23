@@ -28,6 +28,8 @@ export function CollapsibleSection({
   const actionsRef = useRef();
   const iconGlyph = open ? 'navigation-down-arrow' : 'navigation-right-arrow';
 
+  useEffect(() => setOpen(defaultOpen), [defaultOpen]);
+
   const toggle = e => {
     // ignore events from actions
     if (!canChangeState) return;
@@ -60,6 +62,9 @@ export function CollapsibleSection({
       {open && (
         <div className="content">
           {React.Children.map(children, child => {
+            if (!child) {
+              return null;
+            }
             if (!child.props?.propertyPath) {
               return child;
             }
@@ -138,12 +143,14 @@ export function K8sNameField({
       className={className}
       propertyPath="$.metadata.name"
       label={t('common.labels.name')}
+      tooltipContent={t('common.tooltips.k8s-name-input')}
       input={() => {
         return (
           <K8sNameInput
             kind={kind}
             compact
             required
+            showHelp={false}
             showLabel={false}
             onChange={e => onChange(e.target.value)}
             value={value}
@@ -224,7 +231,7 @@ export function MultiInput({
       required={required}
       {...props}
     >
-      <div className="fd-row form-field">
+      <div className="fd-row form-field multi-input">
         <div className="fd-col fd-col-md--4">
           <Label required={required} tooltipContent={tooltipContent}>
             {title || label}
@@ -347,6 +354,7 @@ export function ItemArray({
   value: values,
   setValue: setValues,
   listTitle,
+  entryTitle,
   nameSingular,
   atLeastOneRequiredMessage,
   itemRenderer,
@@ -365,23 +373,26 @@ export function ItemArray({
   }
 
   const renderAllItems = () =>
-    values.map((current, i) => (
-      <CollapsibleSection
-        key={i}
-        title={`${nameSingular} ${current?.name || i + 1}`}
-        actions={
-          <Button
-            compact
-            glyph="delete"
-            type="negative"
-            compact
-            onClick={() => remove(i)}
-          />
-        }
-      >
-        {itemRenderer(current, values, setValues)}
-      </CollapsibleSection>
-    ));
+    values.map((current, i) => {
+      const name = typeof entryTitle === 'function' && entryTitle(current);
+      return (
+        <CollapsibleSection
+          key={i}
+          title={`${nameSingular} ${name || i + 1}`}
+          actions={
+            <Button
+              compact
+              glyph="delete"
+              type="negative"
+              compact
+              onClick={() => remove(i)}
+            />
+          }
+        >
+          {itemRenderer(current, values, setValues)}
+        </CollapsibleSection>
+      );
+    });
 
   const content =
     values.length === 1

@@ -13,5 +13,11 @@ export function GatewaysList({ DefaultRenderer, ...otherParams }) {
     },
   ];
 
-  return <DefaultRenderer customColumns={customColumns} {...otherParams} />;
+  return (
+    <DefaultRenderer
+      customColumns={customColumns}
+      description={t('gateways.description')}
+      {...otherParams}
+    />
+  );
 }

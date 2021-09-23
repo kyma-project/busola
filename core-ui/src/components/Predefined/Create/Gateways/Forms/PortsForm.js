@@ -1,10 +1,10 @@
 import React from 'react';
-import { CreateForm } from 'shared/components/CreateForm/CreateForm';
-import { FormLabel, FormInput } from 'fundamental-react';
+import { FormInput } from 'fundamental-react';
 import { Select } from 'shared/components/Select/Select';
 import { useTranslation } from 'react-i18next';
-import { PROTOCOLS } from './helpers';
+import { PROTOCOLS, DEFAULT_PORTS } from './../helpers';
 import { switchTLS } from './TlsForm';
+import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 
 export const PortsForm = ({
   disabled = false,
@@ -15,31 +15,33 @@ export const PortsForm = ({
   const { t } = useTranslation();
 
   const setPortValue = (server, variableName, value) => {
-    const newPortValue = server;
-    if (value === null) {
-      delete newPortValue.port[variableName];
-    } else {
-      newPortValue.port[variableName] = value;
-    }
-
+    server.port[variableName] = value;
     setServers([...servers]);
   };
 
+  const onProtocolSelect = (_, selected) => {
+    setPortValue(server, 'protocol', selected.key);
+
+    if (DEFAULT_PORTS[selected.key]) {
+      setPortValue(server, 'number', DEFAULT_PORTS[selected.key]);
+    }
+
+    switchTLS(server, selected.key === 'HTTPS', servers, setServers);
+  };
+
   return (
-    <CreateForm.CollapsibleSection
+    <ResourceForm.CollapsibleSection
       title={t('gateways.create-modal.advanced.port.ports')}
       defaultOpen
       disabled={disabled}
     >
-      <CreateForm.FormField
-        label={
-          <FormLabel required>
-            {t('gateways.create-modal.advanced.port.number')}
-          </FormLabel>
-        }
-        input={
+      <ResourceForm.FormField
+        required
+        label={t('gateways.create-modal.advanced.port.number')}
+        input={() => (
           <FormInput
             type="number"
+            min={0}
             required
             compact
             placeholder={t(
@@ -50,26 +52,16 @@ export const PortsForm = ({
               setPortValue(server, 'number', e.target.valueAsNumber || '')
             }
           />
-        }
+        )}
       />
-      <CreateForm.FormField
-        label={
-          <FormLabel required>
-            {t('gateways.create-modal.advanced.port.protocol')}
-          </FormLabel>
-        }
-        input={
+      <ResourceForm.FormField
+        required
+        tooltipContent={t('gateways.create-modal.tooltips.protocol')}
+        label={t('gateways.create-modal.advanced.port.protocol')}
+        input={() => (
           <Select
             compact
-            onSelect={(_, selected) => {
-              setPortValue(server, 'protocol', selected.key);
-
-              if (selected.key === 'HTTPS') {
-                setPortValue(server, 'port', 443);
-                // HTTPS requires TLS, turn it on
-                switchTLS(server, true, servers, setServers);
-              }
-            }}
+            onSelect={onProtocolSelect}
             selectedKey={server.port?.protocol || ''}
             options={PROTOCOLS.map(mode => ({
               key: mode,
@@ -80,15 +72,11 @@ export const PortsForm = ({
             )}
             fullWidth
           />
-        }
+        )}
       />
-      <CreateForm.FormField
-        label={
-          <FormLabel required>
-            {t('gateways.create-modal.advanced.port.name')}
-          </FormLabel>
-        }
-        input={
+      <ResourceForm.FormField
+        label={t('gateways.create-modal.advanced.port.name')}
+        input={() => (
           <FormInput
             type="text"
             required
@@ -99,16 +87,13 @@ export const PortsForm = ({
             value={server.port?.name}
             onChange={e => setPortValue(server, 'name', e.target.value || '')}
           />
-        }
+        )}
       />
 
-      <CreateForm.FormField
-        label={
-          <FormLabel>
-            {t('gateways.create-modal.advanced.port.target-port')}
-          </FormLabel>
-        }
-        input={
+      <ResourceForm.FormField
+        tooltipContent={t('gateways.create-modal.tooltips.target-port')}
+        label={t('gateways.create-modal.advanced.port.target-port')}
+        input={() => (
           <FormInput
             type="number"
             compact
@@ -120,8 +105,8 @@ export const PortsForm = ({
               setPortValue(server, 'targetPort', e.target.valueAsNumber || null)
             }
           />
-        }
+        )}
       />
-    </CreateForm.CollapsibleSection>
+    </ResourceForm.CollapsibleSection>
   );
 };

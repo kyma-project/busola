@@ -4,6 +4,7 @@ import { ComboboxInput } from 'fundamental-react';
 import { useGetList, k8sNamePattern } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 import pluralize from 'pluralize';
+import './K8sResourceSelect.scss';
 
 const commonPropTypes = {
   onSelect: PropTypes.func.isRequired,
@@ -83,16 +84,21 @@ export function K8sResourceSelect({
   };
 
   return (
-    <ComboboxInput
-      compact
-      required={required}
-      placeholder={t('common.messages.type-to-select', { value: resourceType })}
-      id="k8s-resource-dropdown"
-      ariaLabel={t('common.messages.choose', { value: resourceType })}
-      options={options}
-      onSelectionChange={(_, selected) => onSelect(selected.text)}
-      validationState={getValidationState()}
-      inputProps={{ pattern: k8sNamePattern, value }}
-    />
+    <div class="combobox--full-width">
+      <ComboboxInput
+        compact
+        required={required}
+        placeholder={t('common.messages.type-to-select', {
+          value: resourceType,
+        })}
+        id="k8s-resource-dropdown"
+        ariaLabel={t('common.messages.choose', { value: resourceType })}
+        options={options}
+        onChange={alert}
+        onSelectionChange={(_, selected) => onSelect(selected.text)}
+        validationState={getValidationState()}
+        inputProps={{ pattern: k8sNamePattern, value }}
+      />
+    </div>
   );
 }

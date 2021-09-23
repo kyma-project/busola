@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import * as jp from 'jsonpath';
 import { createGatewayTemplate, createPresets, newServer } from './templates';
-import { SingleServerForm, SingleServerInput } from './ServersForm';
+import { SingleServerForm, SingleServerInput } from './Forms/ServersForm';
 import { validateGateway } from './helpers';
 import { MessageStrip } from 'fundamental-react';
 
@@ -59,7 +59,7 @@ export function GatewaysCreate({
         required
         propertyPath="$.spec.selector"
         title={t('gateways.create-modal.simple.selector')}
-        tooltipContent={t('gateways.create-modal.selector-tooltip')}
+        tooltipContent={t('gateways.create-modal.tooltips.selector')}
       />
       {jp.value(gateway, '$.spec.servers.length') ? (
         <SingleServerInput simple propertyPath="$.spec.servers" />
@@ -73,6 +73,7 @@ export function GatewaysCreate({
         propertyPath="$.spec.servers"
         listTitle={t('gateways.create-modal.simple.servers')}
         nameSingular={t('gateways.create-modal.simple.server')}
+        entryTitle={server => server?.port?.name}
         atLeastOneRequiredMessage={t(
           'gateways.create-modal.messages.at-least-one-server-required',
         )}
