@@ -734,6 +734,8 @@ gateways:
         http-redirect-description: Enable 301 redirect for all HTTP connections.
         private-key: Private Key
         server-certificate: Server Certificate
+        max-protocol-version: Max Protocol Version
+        min-protocol-version: Min Protocol Version
         messages:
           at-least-one-server-required: Gateway must have at least one server.
           invalid-tls-warning: TLS Server of mode SIMPLE or MUTUAL require either credential name or private key and server certificate pair.

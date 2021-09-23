@@ -43,6 +43,7 @@ export function CollapsibleSection({
     {
       collapsed: !open,
       required,
+      disabled,
     },
   );
 

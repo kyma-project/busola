@@ -15,6 +15,12 @@
     }
   }
 
+  &.disabled {
+    header {
+      cursor: unset;
+    }
+  }
+
   &:last-child > header {
     border-bottom: 1px solid var(--sapList_GroupHeaderBorderColor);
   }

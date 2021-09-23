@@ -82,6 +82,7 @@ export function GatewaysCreate({
             server={current}
             servers={allValues}
             setServers={setAllValues}
+            advanced
           />
         )}
         newResourceTemplateFn={newServer}

@@ -7,7 +7,7 @@ import {
 } from 'fundamental-react';
 import { Select } from 'shared/components/Select/Select';
 import { useTranslation } from 'react-i18next';
-import { TSL_MODES, validateTLS } from './../helpers';
+import { TSL_MODES, TLS_VERSIONS, validateTLS } from './../helpers';
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSelect';
 import { useMicrofrontendContext } from 'react-shared';
@@ -38,7 +38,7 @@ export const switchTLS = (server, tlsOn, servers, setServers) => {
 const filterMatchingSecrets = secret =>
   secret.type === 'Opaque' && 'key' in secret.data && 'cert' in secret.data;
 
-export const TlsForm = ({ server, servers, setServers }) => {
+export const TlsForm = ({ server, servers, setServers, advanced }) => {
   const { t } = useTranslation();
   const { namespaceId: namespace } = useMicrofrontendContext();
 
@@ -46,6 +46,12 @@ export const TlsForm = ({ server, servers, setServers }) => {
     key: mode,
     text: mode,
   }));
+
+  const tlsVersions = Object.entries(TLS_VERSIONS).map(([key, text]) => ({
+    key,
+    text,
+  }));
+  console.log(TLS_VERSIONS);
 
   const mode = server.tls?.mode;
   const hasTls = server?.port?.protocol === 'HTTPS';
@@ -79,32 +85,36 @@ export const TlsForm = ({ server, servers, setServers }) => {
           />
         )}
       />
-      <ResourceForm.FormField
-        label={t('gateways.create-modal.advanced.tls.http-redirect')}
-        input={() => (
-          <div className="fd-display-flex fd-justify-between">
-            <FormLabel>
-              {t(
-                'gateways.create-modal.advanced.tls.http-redirect-description',
-              )}
-            </FormLabel>
-            <Checkbox
-              compact
-              checked={server.httpsRedirect}
-              ariaLabel={t('gateways.create-modal.advanced.tls.http-redirect')}
-              onChange={() =>
-                setTlsValue(
-                  server,
-                  'httpsRedirect',
-                  !server.httpsRedirect,
-                  servers,
-                  setServers,
-                )
-              }
-            />
-          </div>
-        )}
-      />
+      {advanced && (
+        <ResourceForm.FormField
+          label={t('gateways.create-modal.advanced.tls.http-redirect')}
+          input={() => (
+            <div className="fd-display-flex fd-justify-between">
+              <FormLabel>
+                {t(
+                  'gateways.create-modal.advanced.tls.http-redirect-description',
+                )}
+              </FormLabel>
+              <Checkbox
+                compact
+                checked={server.httpsRedirect}
+                ariaLabel={t(
+                  'gateways.create-modal.advanced.tls.http-redirect',
+                )}
+                onChange={() =>
+                  setTlsValue(
+                    server,
+                    'httpsRedirect',
+                    !server.httpsRedirect,
+                    servers,
+                    setServers,
+                  )
+                }
+              />
+            </div>
+          )}
+        />
+      )}
       <ResourceForm.FormField
         tooltipContent={t('gateways.create-modal.tooltips.credential-name')}
         label={t('gateways.create-modal.advanced.tls.credentialName')}
@@ -137,7 +147,6 @@ export const TlsForm = ({ server, servers, setServers }) => {
       />
       <ResourceForm.FormField
         tooltipContent={t('gateways.create-modal.tooltips.server-certificate')}
-        required
         label={t('gateways.create-modal.advanced.tls.server-certificate')}
         input={() => (
           <FormInput
@@ -160,7 +169,6 @@ export const TlsForm = ({ server, servers, setServers }) => {
       />
       <ResourceForm.FormField
         tooltipContent={t('gateways.create-modal.tooltips.private-key')}
-        required
         label={t('gateways.create-modal.advanced.tls.private-key')}
         input={() => (
           <FormInput
@@ -204,10 +212,62 @@ export const TlsForm = ({ server, servers, setServers }) => {
           />
         )}
       />
+
       {!validateTLS(server) && (
-        <MessageStrip type="warning" className="fd-margin-top--sm">
-          {t('gateways.create-modal.advanced.tls.messages.invalid-tls-warning')}
-        </MessageStrip>
+        <div className="fd-col">
+          <MessageStrip
+            type="warning"
+            className="fd-col-md--11 fd-margin-top--sm"
+          >
+            {t(
+              'gateways.create-modal.advanced.tls.messages.invalid-tls-warning',
+            )}
+          </MessageStrip>
+        </div>
+      )}
+      {advanced && (
+        <>
+          <ResourceForm.FormField
+            label={t('gateways.create-modal.advanced.tls.min-protocol-version')}
+            input={() => (
+              <Select
+                compact
+                onSelect={(_, selected) =>
+                  setTlsValue(
+                    server,
+                    'minProtocolVersion',
+                    selected.key,
+                    servers,
+                    setServers,
+                  )
+                }
+                selectedKey={server.tls?.minProtocolVersion || 'TLS_AUTO'}
+                options={tlsVersions}
+                fullWidth
+              />
+            )}
+          />
+          <ResourceForm.FormField
+            label={t('gateways.create-modal.advanced.tls.max-protocol-version')}
+            input={() => (
+              <Select
+                compact
+                onSelect={(_, selected) =>
+                  setTlsValue(
+                    server,
+                    'maxProtocolVersion',
+                    selected.key,
+                    servers,
+                    setServers,
+                  )
+                }
+                selectedKey={server.tls?.maxProtocolVersion || 'TLS_AUTO'}
+                options={tlsVersions}
+                fullWidth
+              />
+            )}
+          />
+        </>
       )}
     </ResourceForm.CollapsibleSection>
   );

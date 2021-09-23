@@ -9,11 +9,17 @@ export function SingleServerForm({
   server = { port: {} },
   setServers,
   servers = [],
+  advanced,
 }) {
   return (
     <FormFieldset>
       <PortsForm server={server} servers={servers} setServers={setServers} />
-      <TlsForm server={server} servers={servers} setServers={setServers} />
+      <TlsForm
+        server={server}
+        servers={servers}
+        setServers={setServers}
+        advanced={advanced}
+      />
       <HostsForm server={server} servers={servers} setServers={setServers} />
     </FormFieldset>
   );
