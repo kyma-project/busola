@@ -6,21 +6,17 @@ import { switchTLS } from './TlsForm';
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/components/Inputs';
 
-export const PortsForm = ({ server, servers, setServers }) => {
+export const PortsForm = ({ server = {}, servers, setServers }) => {
   const { t } = useTranslation();
 
-  const setPortValue = (server, variableName, value) => {
-    server.port[variableName] = value;
-    setServers([...servers]);
-  };
-
   const onProtocolSelect = (_, selected) => {
-    setPortValue(server, 'protocol', selected.key);
+    server.protocol = selected.key;
 
     if (DEFAULT_PORTS[selected.key]) {
-      setPortValue(server, 'number', DEFAULT_PORTS[selected.key]);
+      server.number = DEFAULT_PORTS[selected.key];
     }
 
+    setServers([...servers]);
     switchTLS(server, selected.key === 'HTTPS', servers, setServers);
   };
 

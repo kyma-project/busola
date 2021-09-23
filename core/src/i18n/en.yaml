@@ -692,6 +692,7 @@ gateways:
   name_singular: Gateway
   description: Gateway describes a load balancer operating at the edge of the mesh receiving incoming or outgoing HTTP/TCP connections.
   create-modal:
+    at-least-one-server-required: Gateway must have at least one server.
     tooltips:
       ca-certificates: The path to a file containing certificate authority certificates to use in verifying a presented client side certificate.
       selector: One or more labels that indicate a set of pods on which the gateway configuration should be applied. By default workloads are searched across all namespaces based on label selectors.
@@ -700,6 +701,7 @@ gateways:
       private-key: The path to the file holding the server’s private key.
       server-certificate: The path to the file holding the server-side TLS certificate to use.
       credential-name: 'The name of the Secret that holds the TLS certs including the CA certificates. The secret (of type generic) should contain the following keys and values: key: <privateKey> and cert: <serverCert>. For mutual TLS, cacert: <CACertificate> can be provided in the same secret or a separate secret named <secret>-cacert. Secret of type tls for server certificates along with ca.crt key for CA certificates is also supported.'
+      hosts: At least one host exposed by the gateway, in FQDN format with optional wildcard character in the left-most component.
     advanced:
       add-server: Add server
       delete-server: Delete server
@@ -737,7 +739,6 @@ gateways:
         max-protocol-version: Max Protocol Version
         min-protocol-version: Min Protocol Version
         messages:
-          at-least-one-server-required: Gateway must have at least one server.
           invalid-tls-warning: TLS Server of mode SIMPLE or MUTUAL require either credential name or private key and server certificate pair.
     presets:
       default: Default

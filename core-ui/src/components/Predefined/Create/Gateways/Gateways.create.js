@@ -64,8 +64,8 @@ export function GatewaysCreate({
       {jp.value(gateway, '$.spec.servers.length') ? (
         <SingleServerInput simple propertyPath="$.spec.servers" />
       ) : (
-        <MessageStrip simple type="warning">
-          {t('gateways.create-modal.messages.at-least-one-server-required')}
+        <MessageStrip simple type="warning" className="fd-margin-top--sm">
+          {t('gateways.create-modal.at-least-one-server-required')}
         </MessageStrip>
       )}
       <ResourceForm.ItemArray
@@ -75,7 +75,7 @@ export function GatewaysCreate({
         nameSingular={t('gateways.create-modal.simple.server')}
         entryTitle={server => server?.port?.name}
         atLeastOneRequiredMessage={t(
-          'gateways.create-modal.messages.at-least-one-server-required',
+          'gateways.create-modal.at-least-one-server-required',
         )}
         itemRenderer={(current, allValues, setAllValues) => (
           <SingleServerForm

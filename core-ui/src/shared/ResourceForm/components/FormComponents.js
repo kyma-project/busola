@@ -351,12 +351,6 @@ export function ItemArray({
 
   const remove = index => setValues(values.filter((_, i) => index !== i));
 
-  if (!values.length) {
-    return (
-      <MessageStrip type="warning">{atLeastOneRequiredMessage}</MessageStrip>
-    );
-  }
-
   const renderAllItems = () =>
     values.map((current, i) => {
       const name = typeof entryTitle === 'function' && entryTitle(current);
@@ -400,6 +394,9 @@ export function ItemArray({
       )}
     >
       {content}
+      {!values.length && (
+        <MessageStrip type="warning">{atLeastOneRequiredMessage}</MessageStrip>
+      )}
     </CollapsibleSection>
   );
 }

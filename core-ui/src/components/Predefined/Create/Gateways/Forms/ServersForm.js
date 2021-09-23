@@ -5,22 +5,12 @@ import { TlsForm } from './TlsForm';
 import { HostsForm } from './HostsForm';
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 
-export function SingleServerForm({
-  server = { port: {} },
-  setServers,
-  servers = [],
-  advanced,
-}) {
+export function SingleServerForm(props) {
   return (
     <FormFieldset>
-      <PortsForm server={server} servers={servers} setServers={setServers} />
-      <TlsForm
-        server={server}
-        servers={servers}
-        setServers={setServers}
-        advanced={advanced}
-      />
-      <HostsForm server={server} servers={servers} setServers={setServers} />
+      <PortsForm {...props} />
+      <TlsForm {...props} />
+      <HostsForm {...props} />
     </FormFieldset>
   );
 }

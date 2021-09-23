@@ -1,6 +1,5 @@
 import React from 'react';
 import { Checkbox, FormLabel, MessageStrip } from 'fundamental-react';
-import { Select } from 'shared/components/Select/Select';
 import { useTranslation } from 'react-i18next';
 import { TSL_MODES, TLS_VERSIONS, validateTLS } from './../helpers';
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
@@ -9,14 +8,7 @@ import { useMicrofrontendContext } from 'react-shared';
 import * as Inputs from 'shared/ResourceForm/components/Inputs';
 
 const setTlsValue = (server, variableName, value, servers, setServers) => {
-  if (value === null) {
-    delete server.port[variableName];
-  } else {
-    if (!server.tls) {
-      server.tls = { mode: 'SIMPLE' };
-    }
-    server.tls[variableName] = value;
-  }
+  server.tls[variableName] = value;
   setServers([...servers]);
 };
 
@@ -34,7 +26,7 @@ export const switchTLS = (server, tlsOn, servers, setServers) => {
 const filterMatchingSecrets = secret =>
   secret.type === 'Opaque' && 'key' in secret.data && 'cert' in secret.data;
 
-export const TlsForm = ({ server, servers, setServers, advanced }) => {
+export const TlsForm = ({ server = {}, servers, setServers, advanced }) => {
   const { t } = useTranslation();
   const { namespaceId: namespace } = useMicrofrontendContext();
 
@@ -70,16 +62,9 @@ export const TlsForm = ({ server, servers, setServers, advanced }) => {
         tooltipContent={t('gateways.create-modal.advanced.mode-tooltip')}
         required={!!server.tls}
         label={t('gateways.create-modal.advanced.tls.mode')}
-        input={() => (
-          <Select
-            compact
-            onSelect={(_, selected) =>
-              setTlsValue(server, 'mode', selected.key, servers, setServers)
-            }
-            selectedKey={mode}
-            options={resourceOptions}
-            fullWidth
-          />
+        propertyPath="$.tls.mode"
+        input={props => (
+          <ResourceForm.Select options={resourceOptions} {...props} />
         )}
       />
       {advanced && (

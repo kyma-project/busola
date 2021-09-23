@@ -1,8 +1,5 @@
-import shortid from 'shortid';
-
 export function newServer() {
   return {
-    id: shortid.generate(),
     port: {
       number: 80,
       name: '',

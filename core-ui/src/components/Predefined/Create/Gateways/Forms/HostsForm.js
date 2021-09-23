@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 
-export const HostsForm = ({ server, servers, setServers }) => {
+export const HostsForm = ({ server = {}, servers, setServers }) => {
   const { t } = useTranslation();
 
   const setValue = hosts => {
@@ -14,7 +14,7 @@ export const HostsForm = ({ server, servers, setServers }) => {
     <ResourceForm.TextArrayInput
       advanced
       required
-      tooltipContent={`At least one host exposed by the gateway, in FQDN format with optional wildcard character in the left-most component.`}
+      tooltipContent={t('gateways.create-modal.tooltips.hosts')}
       value={server.hosts || []}
       setValue={setValue}
       title={t('gateways.create-modal.advanced.hosts')}
