@@ -6,7 +6,7 @@ import {
   Icon,
   MessageStrip,
 } from 'fundamental-react';
-import { Select as _Select } from 'shared/components/Select/Select';
+import { Select as WrappedSelect } from 'shared/components/Select/Select';
 import { Tooltip, K8sNameInput } from 'react-shared';
 import classnames from 'classnames';
 import './FormComponents.scss';
@@ -403,7 +403,7 @@ export function ItemArray({
 
 export function Select({ value, setValue, defaultKey, options, ...props }) {
   return (
-    <_Select
+    <WrappedSelect
       compact
       onSelect={(_, selected) => setValue(selected.key)}
       selectedKey={value || defaultKey}
