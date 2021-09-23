@@ -13,8 +13,9 @@ describe('ResourceNotFound', () => {
     const { queryByText } = render(
       <ResourceNotFound resource="Resource" breadcrumbs={breadcrumbs} />,
     );
-
-    expect(queryByText("Such Resource doesn't exists.")).toBeInTheDocument();
+    expect(
+      queryByText('components.resource-not-found.messages.not-found'),
+    ).toBeInTheDocument();
 
     expect(queryByText(breadcrumbs[0].name)).toBeInTheDocument();
     expect(queryByText(breadcrumbs[1].name)).toBeInTheDocument();
