@@ -1,5 +1,5 @@
 # ---- Base Alpine with Node ----
-FROM alpine:3.13.6 AS builder
+FROM alpine:3.14.2 AS builder
 RUN apk add --update nodejs npm
 
 WORKDIR /app
