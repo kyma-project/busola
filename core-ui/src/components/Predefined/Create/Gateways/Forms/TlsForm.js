@@ -1,16 +1,12 @@
 import React from 'react';
-import {
-  Checkbox,
-  FormLabel,
-  FormInput,
-  MessageStrip,
-} from 'fundamental-react';
+import { Checkbox, FormLabel, MessageStrip } from 'fundamental-react';
 import { Select } from 'shared/components/Select/Select';
 import { useTranslation } from 'react-i18next';
 import { TSL_MODES, TLS_VERSIONS, validateTLS } from './../helpers';
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSelect';
 import { useMicrofrontendContext } from 'react-shared';
+import * as Inputs from 'shared/ResourceForm/components/Inputs';
 
 const setTlsValue = (server, variableName, value, servers, setServers) => {
   if (value === null) {
@@ -55,18 +51,20 @@ export const TlsForm = ({ server, servers, setServers, advanced }) => {
   const mode = server.tls?.mode;
   const hasTls = server?.port?.protocol === 'HTTPS';
 
+  const panelActions = !hasTls && (
+    <MessageStrip type="information">
+      {t('gateways.create-modal.advanced.tls.disabled-for-non-https')}
+    </MessageStrip>
+  );
+
   return (
     <ResourceForm.CollapsibleSection
       title={t('gateways.create-modal.advanced.tls.tls')}
       defaultOpen={hasTls}
       disabled={!hasTls}
-      actions={
-        !hasTls && (
-          <MessageStrip type="information">
-            {t('gateways.create-modal.advanced.tls.disabled-for-non-https')}
-          </MessageStrip>
-        )
-      }
+      actions={panelActions}
+      resource={server}
+      setResource={() => setServers([...servers])}
     >
       <ResourceForm.FormField
         tooltipContent={t('gateways.create-modal.advanced.mode-tooltip')}
@@ -147,71 +145,57 @@ export const TlsForm = ({ server, servers, setServers, advanced }) => {
       <ResourceForm.FormField
         tooltipContent={t('gateways.create-modal.tooltips.server-certificate')}
         label={t('gateways.create-modal.advanced.tls.server-certificate')}
-        input={() => (
-          <FormInput
-            compact
-            placeholder={t(
-              'gateways.create-modal.advanced.placeholders.tls.server-certificate',
-            )}
-            value={server.tls?.serverCertificate || ''}
-            onChange={e =>
-              setTlsValue(
-                server,
-                'serverCertificate',
-                e.target.value || '',
-                servers,
-                setServers,
-              )
-            }
-          />
+        propertyPath="$.tls.serverCertificate"
+        placeholder={t(
+          'gateways.create-modal.advanced.placeholders.tls.server-certificate',
         )}
+        input={Inputs.Text}
       />
       <ResourceForm.FormField
         tooltipContent={t('gateways.create-modal.tooltips.private-key')}
         label={t('gateways.create-modal.advanced.tls.private-key')}
-        input={() => (
-          <FormInput
-            compact
+        propertyPath="$.tls.privateKey"
+        placeholder={t(
+          'gateways.create-modal.advanced.placeholders.tls.private-key',
+        )}
+        input={Inputs.Text}
+      />
+      {advanced && (
+        <>
+          <ResourceForm.FormField
+            tooltipContent={t('gateways.create-modal.tooltips.ca-certificates')}
+            required={mode === 'MUTUAL'}
+            label={t('gateways.create-modal.advanced.tls.ca-certificates')}
+            propertyPath="$.tls.caCertificates"
             placeholder={t(
               'gateways.create-modal.advanced.placeholders.tls.private-key',
             )}
-            value={server.tls?.privateKey || ''}
-            onChange={e =>
-              setTlsValue(
-                server,
-                'privateKey',
-                e.target.value || '',
-                servers,
-                setServers,
-              )
-            }
+            input={Inputs.Text}
           />
-        )}
-      />
-      <ResourceForm.FormField
-        tooltipContent={t('gateways.create-modal.tooltips.ca-certificates')}
-        required={mode === 'MUTUAL'}
-        label={t('gateways.create-modal.advanced.tls.ca-certificates')}
-        input={() => (
-          <FormInput
-            compact
-            placeholder={t(
-              'gateways.create-modal.advanced.placeholders.tls.ca-certificates',
+          <ResourceForm.FormField
+            label={t('gateways.create-modal.advanced.tls.min-protocol-version')}
+            propertyPath="$.tls.minProtocolVersion"
+            input={props => (
+              <ResourceForm.Select
+                options={tlsVersions}
+                defaultKey="TLS_AUTO"
+                {...props}
+              />
             )}
-            value={server.tls?.caCertificates || ''}
-            onChange={e =>
-              setTlsValue(
-                server,
-                'caCertificates',
-                e.target.value || '',
-                servers,
-                setServers,
-              )
-            }
           />
-        )}
-      />
-
+          <ResourceForm.FormField
+            label={t('gateways.create-modal.advanced.tls.max-protocol-version')}
+            propertyPath="$.tls.maxProtocolVersion"
+            input={props => (
+              <ResourceForm.Select
+                options={tlsVersions}
+                defaultKey="TLS_AUTO"
+                {...props}
+              />
+            )}
+          />
+        </>
+      )}
       {!validateTLS(server) && (
         <div className="fd-col">
           <MessageStrip
@@ -223,50 +207,6 @@ export const TlsForm = ({ server, servers, setServers, advanced }) => {
             )}
           </MessageStrip>
         </div>
-      )}
-      {advanced && (
-        <>
-          <ResourceForm.FormField
-            label={t('gateways.create-modal.advanced.tls.min-protocol-version')}
-            input={() => (
-              <Select
-                compact
-                onSelect={(_, selected) =>
-                  setTlsValue(
-                    server,
-                    'minProtocolVersion',
-                    selected.key,
-                    servers,
-                    setServers,
-                  )
-                }
-                selectedKey={server.tls?.minProtocolVersion || 'TLS_AUTO'}
-                options={tlsVersions}
-                fullWidth
-              />
-            )}
-          />
-          <ResourceForm.FormField
-            label={t('gateways.create-modal.advanced.tls.max-protocol-version')}
-            input={() => (
-              <Select
-                compact
-                onSelect={(_, selected) =>
-                  setTlsValue(
-                    server,
-                    'maxProtocolVersion',
-                    selected.key,
-                    servers,
-                    setServers,
-                  )
-                }
-                selectedKey={server.tls?.maxProtocolVersion || 'TLS_AUTO'}
-                options={tlsVersions}
-                fullWidth
-              />
-            )}
-          />
-        </>
       )}
     </ResourceForm.CollapsibleSection>
   );

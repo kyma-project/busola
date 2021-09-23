@@ -7,10 +7,21 @@ import * as FormComponents from './components/FormComponents';
 import './ResourceForm.scss';
 import { useCreateResource } from './useCreateResource';
 
-function ResourceFormWrapper({ resource, setResource, children, ...props }) {
+export function ResourceFormWrapper({
+  resource,
+  setResource,
+  children,
+  ...props
+}) {
   return React.Children.map(children, child => {
     if (!child) {
       return null;
+    } else if (child.type === React.Fragment) {
+      return (
+        <ResourceFormWrapper resource={resource} setResource={setResource}>
+          {child.props.children}
+        </ResourceFormWrapper>
+      );
     } else if (!child.props.propertyPath) {
       return React.cloneElement(child, {
         resource,
@@ -52,15 +63,13 @@ function SingleForm({
       }}
       {...props}
     >
-      <div>
-        <ResourceFormWrapper
-          resource={resource}
-          setResource={setResource}
-          formElementRef={formElementRef}
-        >
-          {children}
-        </ResourceFormWrapper>
-      </div>
+      <ResourceFormWrapper
+        resource={resource}
+        setResource={setResource}
+        formElementRef={formElementRef}
+      >
+        {children}
+      </ResourceFormWrapper>
     </form>
   );
 }
@@ -105,6 +114,9 @@ export function ResourceForm({
 
   const renderFormChildren = (children, isAdvanced) =>
     React.Children.map(children, child => {
+      if (!child) {
+        return null;
+      }
       const childProps = child.props || {};
       if (childProps.simple && isAdvanced) {
         return null;
@@ -163,3 +175,4 @@ ResourceForm.TextArrayInput = FormComponents.TextArrayInput;
 ResourceForm.K8sNameField = FormComponents.K8sNameField;
 ResourceForm.KeyValueField = FormComponents.KeyValueField;
 ResourceForm.ItemArray = FormComponents.ItemArray;
+ResourceForm.Select = FormComponents.Select;

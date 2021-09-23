@@ -1,17 +1,12 @@
 import React from 'react';
-import { FormInput } from 'fundamental-react';
 import { Select } from 'shared/components/Select/Select';
 import { useTranslation } from 'react-i18next';
 import { PROTOCOLS, DEFAULT_PORTS } from './../helpers';
 import { switchTLS } from './TlsForm';
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
+import * as Inputs from 'shared/ResourceForm/components/Inputs';
 
-export const PortsForm = ({
-  disabled = false,
-  server,
-  servers,
-  setServers,
-}) => {
+export const PortsForm = ({ server, servers, setServers }) => {
   const { t } = useTranslation();
 
   const setPortValue = (server, variableName, value) => {
@@ -33,25 +28,16 @@ export const PortsForm = ({
     <ResourceForm.CollapsibleSection
       title={t('gateways.create-modal.advanced.port.ports')}
       defaultOpen
-      disabled={disabled}
+      resource={server}
+      setResource={() => setServers([...servers])}
     >
       <ResourceForm.FormField
         required
         label={t('gateways.create-modal.advanced.port.number')}
-        input={() => (
-          <FormInput
-            type="number"
-            min={0}
-            required
-            compact
-            placeholder={t(
-              'gateways.create-modal.advanced.placeholders.port.number',
-            )}
-            value={server.port?.number}
-            onChange={e =>
-              setPortValue(server, 'number', e.target.valueAsNumber || '')
-            }
-          />
+        propertyPath="$.port.number"
+        input={Inputs.Port}
+        placeholder={t(
+          'gateways.create-modal.advanced.placeholders.port.number',
         )}
       />
       <ResourceForm.FormField
@@ -75,37 +61,21 @@ export const PortsForm = ({
         )}
       />
       <ResourceForm.FormField
+        required
         label={t('gateways.create-modal.advanced.port.name')}
-        input={() => (
-          <FormInput
-            type="text"
-            required
-            compact
-            placeholder={t(
-              'gateways.create-modal.advanced.placeholders.port.name',
-            )}
-            value={server.port?.name}
-            onChange={e => setPortValue(server, 'name', e.target.value || '')}
-          />
-        )}
+        propertyPath="$.port.name"
+        input={Inputs.Text}
+        placeholder={t('gateways.create-modal.advanced.placeholders.port.name')}
       />
 
       <ResourceForm.FormField
         tooltipContent={t('gateways.create-modal.tooltips.target-port')}
         label={t('gateways.create-modal.advanced.port.target-port')}
-        input={() => (
-          <FormInput
-            type="number"
-            compact
-            placeholder={t(
-              'gateways.create-modal.advanced.placeholders.port.target-port',
-            )}
-            value={server.port?.targetPort}
-            onChange={e =>
-              setPortValue(server, 'targetPort', e.target.valueAsNumber || null)
-            }
-          />
+        propertyPath="$.port.targetPort"
+        placeholder={t(
+          'gateways.create-modal.advanced.placeholders.port.target-port',
         )}
+        input={Inputs.Port}
       />
     </ResourceForm.CollapsibleSection>
   );

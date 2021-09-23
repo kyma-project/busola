@@ -193,7 +193,7 @@ export function DeploymentsCreate({
           disabled={!createService}
           propertyPath="$.spec.ports[0].port"
           label={t('deployments.create-modal.advanced.port')}
-          input={Inputs.Number}
+          input={Inputs.Port}
           placeholder={t('deployments.create-modal.advanced.port-placeholder')}
         />
         <ResourceForm.FormField
@@ -202,7 +202,7 @@ export function DeploymentsCreate({
           disabled={!createService}
           propertyPath="$.spec.ports[0].targetPort"
           label={t('deployments.create-modal.advanced.target-port')}
-          input={Inputs.Number}
+          input={Inputs.Port}
           placeholder={t(
             'deployments.create-modal.advanced.target-port-placeholder',
           )}

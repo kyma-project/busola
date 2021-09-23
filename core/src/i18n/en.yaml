@@ -730,7 +730,7 @@ gateways:
         tls: TLS
         ca-certificates: CA Certificate
         http-redirect: HTTP Redirect
-        disabled-for-non-https: TLS settings disabled for non-HTTPS protocol.
+        disabled-for-non-https: TLS settings are not available for a non-HTTPS protocol.
         http-redirect-description: Enable 301 redirect for all HTTP connections.
         private-key: Private Key
         server-certificate: Server Certificate

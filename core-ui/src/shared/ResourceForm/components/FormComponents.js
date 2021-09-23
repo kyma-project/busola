@@ -6,11 +6,12 @@ import {
   Icon,
   MessageStrip,
 } from 'fundamental-react';
+import { Select as _Select } from 'shared/components/Select/Select';
 import { Tooltip, K8sNameInput } from 'react-shared';
 import classnames from 'classnames';
-import * as jp from 'jsonpath';
 import './FormComponents.scss';
 import { useTranslation } from 'react-i18next';
+import { ResourceFormWrapper } from '../ResourceForm';
 
 export function CollapsibleSection({
   disabled = false,
@@ -62,21 +63,9 @@ export function CollapsibleSection({
       </header>
       {open && (
         <div className="content">
-          {React.Children.map(children, child => {
-            if (!child) {
-              return null;
-            }
-            if (!child.props?.propertyPath) {
-              return child;
-            }
-            return React.cloneElement(child, {
-              value: jp.value(resource, child.props.propertyPath),
-              setValue: value => {
-                jp.value(resource, child.props.propertyPath, value);
-                setResource({ ...resource });
-              },
-            });
-          })}
+          <ResourceFormWrapper resource={resource} setResource={setResource}>
+            {children}
+          </ResourceFormWrapper>
         </div>
       )}
     </div>
@@ -329,6 +318,7 @@ export function KeyValueField({
         ),
         ({ value, setValue, ref, onBlur, focus }) => (
           <FormInput
+            compact
             key="value"
             value={value?.val || ''}
             ref={ref}
@@ -411,5 +401,18 @@ export function ItemArray({
     >
       {content}
     </CollapsibleSection>
+  );
+}
+
+export function Select({ value, setValue, defaultKey, options, ...props }) {
+  return (
+    <_Select
+      compact
+      onSelect={(_, selected) => setValue(selected.key)}
+      selectedKey={value || defaultKey}
+      options={options}
+      fullWidth
+      {...props}
+    />
   );
 }

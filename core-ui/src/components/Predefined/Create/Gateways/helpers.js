@@ -17,11 +17,11 @@ export const DEFAULT_PORTS = {
 };
 
 export const TLS_VERSIONS = {
-  TLS_AUTO: 'Automatically choose the optimal TLS version.',
-  TLSV1_0: 'TLS version 1.0',
-  TLSV1_1: 'TLS version 1.1',
-  TLSV1_2: 'TLS version 1.2',
-  TLSV1_3: 'TLS version 1.3',
+  TLS_AUTO: 'Auto',
+  TLSV1_0: 'TLS v1.0',
+  TLSV1_1: 'TLS v1.1',
+  TLSV1_2: 'TLS v1.2',
+  TLSV1_3: 'TLS v1.3',
 };
 
 export function validateTLS(server) {
