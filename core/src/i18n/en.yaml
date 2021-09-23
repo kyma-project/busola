@@ -282,8 +282,8 @@ common:
     entry-not-found: Entry not found
     error: 'Error: {{error}}'
     loading-name: Loading name...
-    no-instances-found: No {{value}} found.
-    no-instances-found-namespace: No {{value}} found in this Namespace.
+    no-instances-found: No matching {{value}} found.
+    no-instances-found-namespace: No matching {{value}} found in this Namespace.
     parse-error: Parse error, previous valid input will be used.
     type-to-select: Start typing to select {{value}} from the list.
   tooltips:
@@ -714,7 +714,6 @@ gateways:
           protocol: Enter the protocol.
           target-port: Enter the target port.
         tls:
-          credentialName: Enter the credential name.
           mode: Select TLS Mode
           private-key: Enter the private key path.
           server-certificate: Enter the certificate path.
@@ -968,6 +967,7 @@ roles:
     verbs: Verbs
   title: Roles
 secrets:
+  name_singular: Secret
   buttons:
     collapse: Collapse all
     decode: Decode

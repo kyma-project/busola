@@ -34,6 +34,10 @@ export const switchTLS = (server, tlsOn, servers, setServers) => {
   setServers([...servers]);
 };
 
+// generic Secret is type=Opaque
+const filterMatchingSecrets = secret =>
+  secret.type === 'Opaque' && 'key' in secret.data && 'cert' in secret.data;
+
 export const TlsForm = ({ server, servers, setServers }) => {
   const { t } = useTranslation();
   const { namespaceId: namespace } = useMicrofrontendContext();
@@ -107,26 +111,28 @@ export const TlsForm = ({ server, servers, setServers }) => {
         input={() => (
           <K8sResourceSelectWithUseGetList
             url={`/api/v1/namespaces/${namespace}/secrets`}
-            onSelect={console.log}
-            resourceType="SECRET"
+            filter={filterMatchingSecrets}
+            onSelect={secretName =>
+              setTlsValue(
+                server,
+                'credentialName',
+                secretName,
+                servers,
+                setServers,
+              )
+            }
+            onChange={e =>
+              setTlsValue(
+                server,
+                'credentialName',
+                e.target.value,
+                servers,
+                setServers,
+              )
+            }
+            resourceType={t('secrets.name_singular')}
             value={server.tls?.credentialName || ''}
           />
-          // <FormInput
-          //   compact
-          //   placeholder={t(
-          //     'gateways.create-modal.advanced.placeholders.tls.credentialName',
-          //   )}
-          //   value={server.tls?.credentialName || ''}
-          //   onChange={e =>
-          //     setTlsValue(
-          //       server,
-          //       'credentialName',
-          //       e.target.value || '',
-          //       servers,
-          //       setServers,
-          //     )
-          //   }
-          // />
         )}
       />
       <ResourceForm.FormField
