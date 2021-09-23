@@ -5,6 +5,7 @@ import { handleRequest, serveStaticApp, serveMonaco } from './common';
 import { requestLogger } from './utils/other';
 
 const app = express();
+app.disable('x-powered-by');
 app.use(express.raw({ type: '*/*', limit: '100mb' }));
 if (process.env.NODE_ENV === 'development') {
   app.use(cors({ origin: '*' }));
