@@ -17,7 +17,7 @@ export function hasNonOidcAuth(user) {
 
 function updateLuigiAuth(auth) {
   if (!Luigi.getConfig()) {
-    throw Error('Cannot updateLuigiAuth, Luigi config is not set.');
+    throw Error('Cannot updateLuigiAuth, luigi config is not set.');
   }
   Luigi.getConfig().auth = auth;
   Luigi.configChanged();

@@ -2,11 +2,16 @@ const https = require('https');
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
+const uuid = require('uuid').v4;
 import { handleDockerDesktopSubsitution } from './docker-desktop-substitution';
 import { filters } from './request-filters';
 
 const logger = require('pino-http')({
   autoLogging: process.env.NODE_ENV === 'production', //to disable the automatic "request completed" and "request errored" logging.
+  genReqId: req => {
+    req.id = uuid();
+    return req.id;
+  },
   serializers: {
     req: req => ({
       id: req.id,
@@ -58,7 +63,7 @@ export const handleRequest = async (req, res) => {
     filters.forEach(filter => filter(req, headersData));
   } catch (e) {
     req.log.error('Filters rejected the request: ' + e.message);
-    res.sendStatus(400);
+    res.status(400).send('Request ID: ' + req.id);
     return;
   }
 
@@ -99,9 +104,7 @@ export const handleRequest = async (req, res) => {
 
   function throwInternalServerError(originalError) {
     req.log.warn(originalError);
-    res.statusMessage = 'Bad Gateway';
-    res.statusCode = 502;
-    res.end();
+    res.status(502).send('Request ID: ' + req.id);
   }
 };
 
