@@ -196,8 +196,8 @@ clusters:
     kubeconfig-download-error: Failed to download the kubeconfig
     kubeconfig-not-present: Kubeconfig is missing on the Cluster
   empty:
-    title: You haven't added any clusters yet.
-    subtitle: Would you like to add one now?
+    title: Looks like there aren't any clusters yet.
+    subtitle: Let's add one now!
   labels:
     client-id: Client ID
     issuer-url: Issuer URL
@@ -217,10 +217,11 @@ clusters:
     version: Version
   storage:
     changed-message: The chosen storage type has been overwritten by the cluster configuration from {{originalStorage}} to {{targetStorage}}.
-    info: |
-      Where would you want to store cluster information.
-      Based on the kubeconfig type you have we've chosen the best storage mode.
-      If you're concerned about security you can change the location.
+    info: >
+      Now you can choose where we store your cluster configuration.
+      Based on your kubeconfig type, we recomment the pre-selected storage mode.
+      Of course, you can choose whateer you prefer for convenience and security.
+      None of the options stores information on the server.
     choose-storage:
       label: Storage type configuration
     descriptions:
@@ -239,9 +240,12 @@ clusters:
     kubeconfig: Provide Kubeconfig
     update: Provide Authentication
     storage: Privacy Options
-    info: We don't store the kubeconfig file on the server, it remains in the browser.
+    intro: To add a cluster, all you have to do is provide the cluster configuration – called “kubeconfig” in the Kubernetes world.
+    storage-info: |
+      Don't worry, we don't store your kubeconfig file on the server. The information stays in your browser.
+      You can choose your privacy options in the last step.
     incomplete: We couldn't find enough authentication information in your kubeconfig file. You can enter it manually.
-    editor-label: 'or paste your kubeconfig:'
+    editor-label: 'or paste your kubeconfig here:'
     token-info: Consult your authorization provider for information how to aquire the token.
     auth:
       token: Token

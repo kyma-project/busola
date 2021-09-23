@@ -11,6 +11,8 @@ import { KubeconfigUpload } from './KubeconfigUpload/KubeconfigUpload';
 import { ContextChooser } from './ContextChooser/ContextChooser';
 import { ChooseStorage } from './ChooseStorage';
 
+import './AddClusterWizard.scss';
+
 export function AddClusterWizard({
   kubeconfig,
   setKubeconfig,
@@ -97,11 +99,12 @@ export function AddClusterWizard({
         indicator="1"
         valid={!!kubeconfig}
       >
+        <p>{t('clusters.wizard.intro')}</p>
         <MessageStrip
           type="information"
-          className="fd-margin-top--sm fd-margin-bottom--sm"
+          className="add-cluster__kubeconfig-info fd-margin-top--sm fd-margin-bottom--sm"
         >
-          {t('clusters.wizard.info')}
+          {t('clusters.wizard.storage-info')}
         </MessageStrip>
         <KubeconfigUpload
           kubeconfig={kubeconfig}
