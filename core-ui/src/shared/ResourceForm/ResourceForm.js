@@ -162,3 +162,4 @@ ResourceForm.FormField = FormComponents.FormField;
 ResourceForm.TextArrayInput = FormComponents.TextArrayInput;
 ResourceForm.K8sNameField = FormComponents.K8sNameField;
 ResourceForm.KeyValueField = FormComponents.KeyValueField;
+ResourceForm.ItemArray = FormComponents.ItemArray;

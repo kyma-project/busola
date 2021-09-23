@@ -379,7 +379,6 @@ export function ItemArray({
               compact
               glyph="delete"
               type="negative"
-              compact
               onClick={() => remove(i)}
             />
           }

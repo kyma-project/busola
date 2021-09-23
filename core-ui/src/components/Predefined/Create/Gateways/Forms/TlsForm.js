@@ -51,7 +51,6 @@ export const TlsForm = ({ server, servers, setServers, advanced }) => {
     key,
     text,
   }));
-  console.log(TLS_VERSIONS);
 
   const mode = server.tls?.mode;
   const hasTls = server?.port?.protocol === 'HTTPS';
