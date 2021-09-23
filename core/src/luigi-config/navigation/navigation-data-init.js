@@ -174,11 +174,6 @@ export async function createNavigation() {
               },
             },
             {
-              icon: 'log',
-              label: i18next.t('top-nav.profile.remove-current-cluster-config'),
-              link: `/clusters/remove`,
-            },
-            {
               icon: 'download',
               label: i18next.t(
                 'top-nav.profile.download-current-cluster-config',
@@ -225,10 +220,6 @@ export async function createNavigation() {
       showMainAppEntry: false,
       items: [
         ...clusterNodes,
-        {
-          title: i18next.t('clusters.add.title'),
-          link: '/clusters/add',
-        },
         {
           title: i18next.t('clusters.overview.title'),
           link: '/clusters',
