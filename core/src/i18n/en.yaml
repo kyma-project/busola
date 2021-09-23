@@ -1043,7 +1043,6 @@ stateful-sets:
   title: StatefulSets
 top-nav:
   profile:
-    download-current-cluster-config: Download the current cluster config
     preferences: $t(preferences.title)
 workloads:
   docker-image:

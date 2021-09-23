@@ -173,16 +173,6 @@ export async function createNavigation() {
                 size: 'm',
               },
             },
-            {
-              icon: 'download',
-              label: i18next.t(
-                'top-nav.profile.download-current-cluster-config',
-              ),
-              link: `/cluster/${encodeURIComponent(
-                activeClusterName,
-              )}/download-kubeconfig`,
-              testId: 'download-current-cluster-config',
-            },
           ],
         },
       }
