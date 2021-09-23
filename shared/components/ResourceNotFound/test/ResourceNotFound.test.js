@@ -10,10 +10,9 @@ const breadcrumbs = [
 
 describe('ResourceNotFound', () => {
   it('Renders resource type and breadcrumb', () => {
-    const { queryByText, debug } = render(
+    const { queryByText } = render(
       <ResourceNotFound resource="Resource" breadcrumbs={breadcrumbs} />,
     );
-    debug();
     expect(
       queryByText('components.resource-not-found.messages.not-found'),
     ).toBeInTheDocument();
