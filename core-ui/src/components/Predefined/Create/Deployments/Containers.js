@@ -11,9 +11,12 @@ import {
   FormLabel,
   MessageStrip,
 } from 'fundamental-react';
+
+import * as Inputs from 'shared/ResourceForm/components/Inputs';
+
 import './Containers.scss';
 
-function MemoryInput({ label, value = '', setValue }) {
+function MemoryInput({ label, propertyPath, container, setContainer }) {
   const units = ['K', 'Ki', 'M', 'Mi', 'G', 'Gi', 'Ti', 'T'];
   const options = [
     { key: '', text: 'B' },
@@ -23,10 +26,15 @@ function MemoryInput({ label, value = '', setValue }) {
     })),
   ];
 
-  value = value.toString();
+  const value = jp.value(container, propertyPath).toString() || '';
   const numericValue = value.match(/^\d*(\.\d*)?/)[0];
   const unit = value.replace(numericValue, '');
   const selectedUnit = units.includes(unit) ? unit : '';
+
+  const setValue = val => {
+    jp.value(container, propertyPath, val);
+    setContainer(container);
+  };
 
   return (
     <FormItem>
@@ -51,8 +59,8 @@ function MemoryInput({ label, value = '', setValue }) {
   );
 }
 
-function CpuInput({ label, value = '', setValue }) {
-  value = value.toString();
+function CpuInput({ label, propertyPath, container, setContainer }) {
+  let value = jp.value(container, propertyPath).toString() || '';
   if (value.endsWith('m')) {
     value = value.replace(/m/, '');
   } else {
@@ -60,11 +68,15 @@ function CpuInput({ label, value = '', setValue }) {
     value *= 1000;
   }
 
+  const setValue = val => {
+    jp.value(container, propertyPath, val);
+    setContainer(container);
+  };
+
   return (
     <FormItem>
       <FormLabel required>{label} (m)</FormLabel>
-      <ResourceForm.Input
-        type="number"
+      <Inputs.Number
         min="0"
         required
         value={value}
@@ -74,23 +86,24 @@ function CpuInput({ label, value = '', setValue }) {
   );
 }
 
-function SingleContainerSection({ container, containers, setContainers }) {
+function SingleContainerSection({
+  container,
+  setContainer,
+  containers,
+  setContainers,
+}) {
   const { t, i18n } = useTranslation();
 
   return (
-    <>
+    <ResourceForm.Wrapper resource={container} setResource={setContainer}>
       <ResourceForm.FormField
-        label={t('common.headers.name')}
-        value={container.name}
-        setValue={e => {
-          container.name = e.target.value;
-          setContainers([...containers]);
-        }}
         required
-        input={(value, onChange) => (
+        label={t('common.headers.name')}
+        propertyPath="$.name"
+        input={({ value, setValue }) => (
           <K8sNameInput
             value={value}
-            onChange={onChange}
+            onChange={e => setValue(e.target.value)}
             compact
             required
             showLabel={false}
@@ -100,24 +113,14 @@ function SingleContainerSection({ container, containers, setContainers }) {
         )}
       />
       <ResourceForm.FormField
-        label={t('deployments.create-modal.simple.docker-image')}
-        value={container.image}
-        setValue={image => {
-          container.image = image;
-          setContainers([...containers]);
-        }}
         required
-        input={(value, setValue) => (
-          <ResourceForm.Input
-            required
-            value={value}
-            setValue={setValue}
-            placeholder={t(
-              'deployments.create-modal.simple.docker-image-placeholder',
-            )}
-          />
-        )}
         className="fd-margin-bottom--sm"
+        propertyPath="$.image"
+        label={t('deployments.create-modal.simple.docker-image')}
+        input={Inputs.Text}
+        placeholder={t(
+          'deployments.create-modal.simple.docker-image-placeholder',
+        )}
       />
 
       <ResourceForm.CollapsibleSection
@@ -128,41 +131,33 @@ function SingleContainerSection({ container, containers, setContainers }) {
         <FormFieldset className="runtime-profile-form">
           <MemoryInput
             label={t('deployments.create-modal.advanced.memory-requests')}
-            value={jp.value(container, '$.resources.requests.memory') || ''}
-            setValue={memory => {
-              jp.value(container, '$.resources.requests.memory', memory);
-              setContainers([...containers]);
-            }}
+            propertyPath="$.resources.requests.memory"
+            container={container}
+            setContainer={setContainer}
           />
           <MemoryInput
             label={t('deployments.create-modal.advanced.memory-limits')}
-            value={jp.value(container, '$.resources.limits.memory') || ''}
-            setValue={memory => {
-              jp.value(container, '$.resources.limits.memory', memory);
-              setContainers([...containers]);
-            }}
+            propertyPath="$.resources.limits.memory"
+            container={container}
+            setContainer={setContainer}
           />
         </FormFieldset>
         <FormFieldset className="runtime-profile-form">
           <CpuInput
             label={t('deployments.create-modal.advanced.cpu-requests')}
-            value={jp.value(container, '$.resources.requests.cpu') || ''}
-            setValue={cpu => {
-              jp.value(container, '$.resources.requests.cpu', cpu);
-              setContainers([...containers]);
-            }}
+            propertyPath="$.resources.requests.cpu"
+            container={container}
+            setContainer={setContainer}
           />
           <CpuInput
             label={t('deployments.create-modal.advanced.cpu-limits')}
-            value={jp.value(container, '$.resources.limits.cpu') || ''}
-            setValue={cpu => {
-              jp.value(container, '$.resources.limits.cpu', cpu);
-              setContainers([...containers]);
-            }}
+            propertyPath="$.resources.limits.cpu"
+            container={container}
+            setContainer={setContainer}
           />
         </FormFieldset>
       </ResourceForm.CollapsibleSection>
-    </>
+    </ResourceForm.Wrapper>
   );
 }
 
@@ -187,8 +182,10 @@ export function Containers({ value: containers, setValue: setContainers }) {
     return (
       <SingleContainerSection
         container={containers[0]}
-        containers={containers}
-        setContainers={setContainers}
+        setContainer={newContainer => {
+          containers.splice(0, 1, newContainer);
+          setContainers(containers);
+        }}
       />
     );
   }
@@ -210,8 +207,10 @@ export function Containers({ value: containers, setValue: setContainers }) {
     >
       <SingleContainerSection
         container={container || {}}
-        containers={containers}
-        setContainers={setContainers}
+        setContainer={newContainer => {
+          containers.splice(i, 1, newContainer);
+          setContainers(containers);
+        }}
       />
     </ResourceForm.CollapsibleSection>
   ));
