@@ -247,6 +247,7 @@ clusters:
     incomplete: We couldn't find enough authentication information in your kubeconfig file. You can enter it manually.
     editor-label: 'or paste your kubeconfig here:'
     token-info: Consult your authorization provider for information how to aquire the token.
+    not-an-object: kubeconfig is not an object
     auth:
       token: Token
       issuer-url: Issuer URL

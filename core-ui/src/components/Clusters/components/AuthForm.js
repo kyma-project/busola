@@ -63,7 +63,7 @@ const TokenForm = ({ resource, ...props }) => {
     <ResourceForm.Wrapper resource={resource} {...props}>
       <ResourceForm.FormField
         required
-        propertyPath={`$.users[${userIndex}].user.token`}
+        propertyPath={`$.users[${userIndex || 0}].user.token`}
         label={t('clusters.wizard.auth.token')}
         input={Inputs.Text}
       />

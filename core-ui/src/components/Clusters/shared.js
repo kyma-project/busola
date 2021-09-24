@@ -51,18 +51,17 @@ export function getContext(kubeconfig, contextName) {
 }
 
 export function getUserIndex(kubeconfig) {
-  console.log('getUserIndex', kubeconfig);
   const contextName = kubeconfig?.['current-context'];
   const context = kubeconfig?.contexts?.find(c => c.name === contextName)
     .context;
-  return kubeconfig?.users?.findIndex(u => u.name === context.user);
+  return kubeconfig?.users?.findIndex(u => u.name === context?.user);
 }
 
 export function getUser(kubeconfig) {
   const contextName = kubeconfig?.['current-context'];
   const context = kubeconfig?.contexts?.find(c => c.name === contextName)
     .context;
-  return kubeconfig?.users?.find(u => u.name === context.user).user;
+  return kubeconfig?.users?.find(u => u.name === context?.user)?.user;
 }
 
 export function hasKubeconfigAuth(kubeconfig) {

@@ -115,6 +115,16 @@ context('Login - enkode link, init params enabled', () => {
       .contains('Drag file here')
       .attachFile('kubeconfig.yaml', { subjectType: 'drag-n-drop' });
 
+    cy.getIframeBody()
+      .contains('Next')
+      .click();
+
+    cy.getIframeBody()
+      .contains('Add Cluster')
+      .click();
+
+    cy.wait(500);
+
     cy.url().should('match', /namespaces$/);
 
     cy.getLeftNav()
@@ -132,26 +142,30 @@ context('Login - enkode link, init params enabled', () => {
     });
 
     cy.getIframeBody()
-      .find('[role=alert]')
-      .contains(
-        'It looks like your kubeconfig is incomplete. Please fill the additional fields.',
-      )
-      .should('be.visible');
+      .contains('Next')
+      .click();
 
     cy.getIframeBody()
+      .find('[role=alert]')
       .contains(
-        'Configuration included properly. Fill the remaining required data.',
+        "We couldn't find enough authentication information in your kubeconfig file.",
       )
       .should('be.visible');
 
     cy.wrap(generateParamsAndToken()).then(({ token }) => {
       cy.getIframeBody()
-        .find('[placeholder="Token"]')
+        .contains('Token')
+        .parent()
+        .next()
         .type(token);
     });
 
     cy.getIframeBody()
-      .contains('Apply configuration')
+      .contains('Next')
+      .click();
+
+    cy.getIframeBody()
+      .contains('Add Cluster')
       .click();
 
     cy.url().should('match', /namespaces$/);

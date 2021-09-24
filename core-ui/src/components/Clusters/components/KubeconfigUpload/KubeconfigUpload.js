@@ -23,8 +23,12 @@ export function KubeconfigUpload({
   const updateKubeconfig = text => {
     try {
       const config = jsyaml.load(text);
-      setKubeconfig(config);
-      setError(null);
+      if (typeof config !== 'object') {
+        setError(t('clusters.wizard.not-an-object'));
+      } else {
+        setKubeconfig(config);
+        setError(null);
+      }
     } catch ({ message }) {
       // get the message until the newline
       setError(message.substr(0, message.indexOf('\n')));

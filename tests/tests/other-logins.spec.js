@@ -2,6 +2,7 @@
 import 'cypress-file-upload';
 import config from '../config';
 import { loadKubeconfig } from '../support/loadKubeconfigFile';
+import jsyaml from 'js-yaml';
 
 context('Other login options', () => {
   it('Kubeconfig and token separately', () => {
@@ -16,30 +17,40 @@ context('Other login options', () => {
         .click();
 
       cy.getIframeBody()
-        .find('#textarea-kubeconfig')
-        // "paste" command doesn't work here
-        .then(subj => subj.val(JSON.stringify(kubeconfig)))
-        // trigger onchange
-        .type(' ')
-        .click();
+        .contains('Drag file here')
+        .attachFile(
+          {
+            fileContent: jsyaml.dump(kubeconfig),
+            filePath: 'kubeconfig.yaml',
+          },
+          {
+            subjectType: 'drag-n-drop',
+          },
+        );
 
       cy.getIframeBody()
-        .contains('Apply kubeconfig')
+        .contains('Next')
         .click();
 
       cy.getIframeBody()
         .find('[role=alert]')
         .contains(
-          'It looks like your kubeconfig is incomplete. Please fill the additional fields.',
+          "We couldn't find enough authentication information in your kubeconfig file.",
         )
         .should('be.visible');
 
       cy.getIframeBody()
-        .find('[placeholder="Token"]')
+        .contains('Token')
+        .parent()
+        .next()
         .type(token);
 
       cy.getIframeBody()
-        .contains('Apply configuration')
+        .contains('Next')
+        .click();
+
+      cy.getIframeBody()
+        .contains('Add Cluster')
         .click();
 
       cy.url().should('match', /namespaces$/);
