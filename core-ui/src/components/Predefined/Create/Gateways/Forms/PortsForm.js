@@ -10,10 +10,10 @@ export const PortsForm = ({ server = {}, servers, setServers }) => {
   const { t } = useTranslation();
 
   const onProtocolSelect = (_, selected) => {
-    server.protocol = selected.key;
+    server.port.protocol = selected.key;
 
     if (DEFAULT_PORTS[selected.key]) {
-      server.number = DEFAULT_PORTS[selected.key];
+      server.port.number = DEFAULT_PORTS[selected.key];
     }
 
     setServers([...servers]);
