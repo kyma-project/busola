@@ -40,19 +40,19 @@ function SingleForm({
   ...props
 }) {
   return (
-    <form
-      ref={formElementRef}
-      onSubmit={createResource}
-      onChange={() => {
-        if (onValid) {
-          setTimeout(() => {
-            onValid(formElementRef.current?.checkValidity());
-          });
-        }
-      }}
-      {...props}
-    >
-      <div>
+    <section className="resource-form">
+      <form
+        ref={formElementRef}
+        onSubmit={createResource}
+        onChange={() => {
+          if (onValid) {
+            setTimeout(() => {
+              onValid(formElementRef.current?.checkValidity());
+            });
+          }
+        }}
+        {...props}
+      >
         <ResourceFormWrapper
           resource={resource}
           setResource={setResource}
@@ -60,8 +60,8 @@ function SingleForm({
         >
           {children}
         </ResourceFormWrapper>
-      </div>
-    </form>
+      </form>
+    </section>
   );
 }
 
