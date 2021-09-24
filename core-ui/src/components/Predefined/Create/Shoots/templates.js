@@ -127,10 +127,9 @@ export function createShootTemplate(namespace) {
           },
         ],
       },
-      //   purpose: 'development',
+      purpose: 'evaluation',
       region: 'europe-west1',
       secretBindingName: 'gardener',
-      //   seedName: 'gcp-eu1',
     },
   };
 }

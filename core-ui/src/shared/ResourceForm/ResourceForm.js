@@ -7,7 +7,12 @@ import * as FormComponents from './components/FormComponents';
 import './ResourceForm.scss';
 import { useCreateResource } from './useCreateResource';
 
-function ResourceFormWrapper({ resource, setResource, children, ...props }) {
+export function ResourceFormWrapper({
+  resource,
+  setResource,
+  children,
+  ...props
+}) {
   return React.Children.map(children, child => {
     if (!child) {
       return null;
@@ -161,3 +166,5 @@ ResourceForm.FormField = FormComponents.FormField;
 ResourceForm.TextArrayInput = FormComponents.TextArrayInput;
 ResourceForm.K8sNameField = FormComponents.K8sNameField;
 ResourceForm.KeyValueField = FormComponents.KeyValueField;
+ResourceForm.ItemArray = FormComponents.ItemArray;
+ResourceForm.Select = FormComponents.Select;

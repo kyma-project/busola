@@ -1,10 +1,17 @@
 import React, { useEffect, useRef, useState, createRef } from 'react';
-import { FormInput, FormLabel, Button, Icon } from 'fundamental-react';
+import {
+  FormInput,
+  FormLabel,
+  Button,
+  Icon,
+  MessageStrip,
+} from 'fundamental-react';
+import { Select as WrappedSelect } from 'shared/components/Select/Select';
 import { Tooltip, K8sNameInput } from 'react-shared';
 import classnames from 'classnames';
-import * as jp from 'jsonpath';
 import './FormComponents.scss';
 import { useTranslation } from 'react-i18next';
+import { ResourceFormWrapper } from '../ResourceForm';
 
 export function CollapsibleSection({
   disabled = false,
@@ -16,10 +23,13 @@ export function CollapsibleSection({
   resource,
   setResource,
   className,
+  required,
 }) {
-  const [open, setOpen] = React.useState(defaultOpen);
-  const actionsRef = React.useRef();
+  const [open, setOpen] = useState(defaultOpen);
+  const actionsRef = useRef();
   const iconGlyph = open ? 'navigation-down-arrow' : 'navigation-right-arrow';
+
+  useEffect(() => setOpen(defaultOpen), [defaultOpen]);
 
   const toggle = e => {
     // ignore events from actions
@@ -33,34 +43,29 @@ export function CollapsibleSection({
     className,
     {
       collapsed: !open,
+      required,
+      disabled,
     },
   );
 
   return (
     <div className={classNames}>
       <header onClick={toggle} aria-label={`expand ${title}`}>
-        <div>
+        <div className="title">
           {!disabled && canChangeState && (
             <Icon className="control-icon" ariaHidden glyph={iconGlyph} />
           )}
           {title}
         </div>
-        <div ref={actionsRef}>{actions}</div>
+        <div ref={actionsRef}>
+          {typeof actions === 'function' ? actions(setOpen) : actions}
+        </div>
       </header>
       {open && (
         <div className="content">
-          {React.Children.map(children, child => {
-            if (!child.props.propertyPath) {
-              return child;
-            }
-            return React.cloneElement(child, {
-              value: jp.value(resource, child.props.propertyPath),
-              setValue: value => {
-                jp.value(resource, child.props.propertyPath, value);
-                setResource({ ...resource });
-              },
-            });
-          })}
+          <ResourceFormWrapper resource={resource} setResource={setResource}>
+            {children}
+          </ResourceFormWrapper>
         </div>
       )}
     </div>
@@ -121,12 +126,14 @@ export function K8sNameField({
       className={className}
       propertyPath="$.metadata.name"
       label={t('common.labels.name')}
+      tooltipContent={t('common.tooltips.k8s-name-input')}
       input={() => {
         return (
           <K8sNameInput
             kind={kind}
             compact
             required
+            showHelp={false}
             showLabel={false}
             onChange={e => onChange(e.target.value)}
             value={value}
@@ -141,6 +148,7 @@ export function K8sNameField({
 export function MultiInput({
   value,
   setValue,
+  title,
   label,
   tooltipContent,
   required,
@@ -200,41 +208,54 @@ export function MultiInput({
   };
 
   return (
-    <CollapsibleSection title={label} className={className} {...props}>
-      <ul className="text-array-input__list">
-        {internalValue.map((entry, index) => (
-          <li key={index}>
-            {inputs.map((input, inputIndex) =>
-              input({
-                index,
-                value: entry,
-                setValue: entry => setEntry(entry, index),
-                ref: refs[index]?.[inputIndex],
-                onBlur: () => updateValue(internalValue),
-                focus: (e, target) => {
-                  if (e.key === 'Enter') {
-                    if (typeof target === 'undefined') {
-                      focus(refs[index + 1][0]);
-                    } else {
-                      focus(refs[index][target]);
+    <CollapsibleSection
+      title={title}
+      className={className}
+      required={required}
+      {...props}
+    >
+      <div className="fd-row form-field multi-input">
+        <div className="fd-col fd-col-md--4">
+          <Label required={required} tooltipContent={tooltipContent}>
+            {title || label}
+          </Label>
+        </div>
+        <ul className="text-array-input__list fd-col fd-col-md--7">
+          {internalValue.map((entry, index) => (
+            <li key={index}>
+              {inputs.map((input, inputIndex) =>
+                input({
+                  index,
+                  value: entry,
+                  setValue: entry => setEntry(entry, index),
+                  ref: refs[index]?.[inputIndex],
+                  onBlur: () => updateValue(internalValue),
+                  focus: (e, target) => {
+                    if (e.key === 'Enter') {
+                      if (typeof target === 'undefined') {
+                        focus(refs[index + 1][0]);
+                      } else {
+                        focus(refs[index][target]);
+                      }
+                    } else if (e.key === 'ArrowDown') {
+                      focus(refs[index + 1]?.[0]);
+                    } else if (e.key === 'ArrowUp') {
+                      focus(refs[index - 1]?.[0]);
                     }
-                  } else if (e.key === 'ArrowDown') {
-                    focus(refs[index + 1]?.[0]);
-                  } else if (e.key === 'ArrowUp') {
-                    focus(refs[index - 1]?.[0]);
-                  }
-                },
-              }),
-            )}
-            <Button
-              className={classnames({ hidden: isLast(index) })}
-              glyph="delete"
-              type="negative"
-              onClick={() => removeValue(index)}
-            />
-          </li>
-        ))}
-      </ul>
+                  },
+                }),
+              )}
+              <Button
+                compact
+                className={classnames({ hidden: isLast(index) })}
+                glyph="delete"
+                type="negative"
+                onClick={() => removeValue(index)}
+              />
+            </li>
+          ))}
+        </ul>
+      </div>
     </CollapsibleSection>
   );
 }
@@ -247,6 +268,7 @@ export function TextArrayInput({ inputProps, ...props }) {
       inputs={[
         ({ value, setValue, ref, onBlur, focus }) => (
           <FormInput
+            compact
             value={value || ''}
             ref={ref}
             onChange={e => setValue(e.target.value)}
@@ -281,6 +303,7 @@ export function KeyValueField({
       inputs={[
         ({ value, setValue, ref, onBlur, focus }) => (
           <FormInput
+            compact
             key="key"
             value={value?.key || ''}
             ref={ref}
@@ -295,6 +318,7 @@ export function KeyValueField({
         ),
         ({ value, setValue, ref, onBlur, focus }) => (
           <FormInput
+            compact
             key="value"
             value={value?.val || ''}
             ref={ref}
@@ -305,6 +329,104 @@ export function KeyValueField({
           />
         ),
       ]}
+      tooltipContent={t('common.tooltips.key-value')}
+      {...props}
+    />
+  );
+}
+
+export function ItemArray({
+  value: values,
+  setValue: setValues,
+  listTitle,
+  entryTitle,
+  nameSingular,
+  atLeastOneRequiredMessage,
+  itemRenderer,
+  newResourceTemplateFn,
+}) {
+  const { t } = useTranslation();
+
+  values = values || [];
+
+  const remove = index => setValues(values.filter((_, i) => index !== i));
+
+  const renderAllItems = () =>
+    values.map((current, i) => {
+      const name = typeof entryTitle === 'function' && entryTitle(current);
+      return (
+        <CollapsibleSection
+          key={i}
+          title={`${nameSingular} ${name || i + 1}`}
+          actions={
+            <Button
+              compact
+              glyph="delete"
+              type="negative"
+              onClick={() => remove(i)}
+            />
+          }
+        >
+          {itemRenderer(current, values, setValues)}
+        </CollapsibleSection>
+      );
+    });
+
+  const content =
+    values.length === 1
+      ? itemRenderer(values[0], values, setValues)
+      : renderAllItems();
+
+  return (
+    <CollapsibleSection
+      title={listTitle}
+      actions={setOpen => (
+        <Button
+          glyph="add"
+          compact
+          onClick={() => {
+            setValues([...values, newResourceTemplateFn()]);
+            setOpen(true);
+          }}
+        >
+          {t('common.buttons.add')} {nameSingular}
+        </Button>
+      )}
+    >
+      {content}
+      {!values.length && (
+        <MessageStrip type="warning">{atLeastOneRequiredMessage}</MessageStrip>
+      )}
+    </CollapsibleSection>
+  );
+}
+
+export function Select({
+  value,
+  setValue,
+  defaultKey,
+  options,
+  fromArray,
+  onSelect,
+  ...props
+}) {
+  if (fromArray) {
+    options = fromArray.map(e => ({ key: e, text: e }));
+  }
+
+  return (
+    <WrappedSelect
+      compact
+      onSelect={(_, selected) => {
+        if (onSelect) {
+          onSelect && onSelect(selected.key);
+        } else {
+          setValue(selected.key);
+        }
+      }}
+      selectedKey={value || defaultKey}
+      options={options}
+      fullWidth
       {...props}
     />
   );

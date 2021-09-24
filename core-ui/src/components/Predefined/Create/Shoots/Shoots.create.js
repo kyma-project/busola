@@ -1,8 +1,26 @@
 import React from 'react';
+import { useGet } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import { createShootTemplate } from './templates';
+import { PROVIDERS, PURPOSES } from './helpers';
 import * as jp from 'jsonpath';
+
+function useGetK8sVersions(cloudProfileName) {
+  const { data, loading, error } = useGet(
+    '/apis/core.gardener.cloud/v1beta1/cloudprofiles',
+  );
+
+  const unique = (v, i, arr) => arr.indexOf(v) === i;
+
+  const versions =
+    data?.items
+      .find(p => p.metadata.name === cloudProfileName)
+      ?.spec.kubernetes.versions.map(v => v.version)
+      .filter(unique) || [];
+
+  return { versions, loading, error };
+}
 
 export function ShootsCreate({
   formElementRef,
@@ -12,6 +30,11 @@ export function ShootsCreate({
 }) {
   const [shoot, setShoot] = React.useState(createShootTemplate(namespace));
   const { t } = useTranslation();
+  const { versions, loading, error } = useGetK8sVersions(
+    shoot?.spec?.cloudProfileName,
+  );
+
+  console.log({ versions, loading, error });
 
   React.useEffect(() => {
     setCustomValid(true);
@@ -36,15 +59,43 @@ export function ShootsCreate({
           setShoot({ ...shoot });
         }}
       />
+      <ResourceForm.FormField
+        required
+        propertyPath="$.spec.cloudProfileName"
+        label={t('shoots.provider')}
+        input={props => (
+          <ResourceForm.Select
+            fromArray={PROVIDERS}
+            onSelect={provider => {
+              jp.value(shoot, '$.spec.cloudProfileName', provider);
+              jp.value(shoot, '$.spec.provider.type', provider);
+              setShoot({ ...shoot });
+            }}
+            {...props}
+          />
+        )}
+      />
+      <ResourceForm.FormField
+        required
+        propertyPath="$.spec.kubernetes.version"
+        label={t('common.headers.version')}
+        input={props => <ResourceForm.Select fromArray={versions} {...props} />}
+      />
+      <ResourceForm.FormField
+        required
+        propertyPath="$.spec.purpose"
+        label={t('shoots.purpose')}
+        input={props => <ResourceForm.Select fromArray={PURPOSES} {...props} />}
+      />
       <ResourceForm.KeyValueField
         advanced
         propertyPath="$.metadata.labels"
-        label={t('common.headers.labels')}
+        title={t('common.headers.labels')}
       />
       <ResourceForm.KeyValueField
         advanced
         propertyPath="$.metadata.annotations"
-        label={t('common.headers.annotations')}
+        title={t('common.headers.annotations')}
       />
     </ResourceForm>
   );

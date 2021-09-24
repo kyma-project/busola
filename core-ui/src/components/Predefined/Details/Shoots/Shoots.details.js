@@ -9,8 +9,16 @@ export const ShootsDetails = ({ DefaultRenderer, ...otherParams }) => {
 
   const customColumns = [
     {
+      header: t('shoots.provider'),
+      value: shoot => shoot.spec.provider.type,
+    },
+    {
       header: t('common.headers.version'),
       value: shoot => shoot.spec.kubernetes.version,
+    },
+    {
+      header: t('shoots.purpose'),
+      value: shoot => shoot.spec.purpose || 'unknown',
     },
     {
       header: t('common.headers.created-by'),

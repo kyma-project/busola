@@ -1061,6 +1061,8 @@ gardener:
 shoots:
   name_singular: Shoot
   title: Shoots
+  provider: Provider
+  purpose: Purpose
   hibernation:
     hibernation-schedule: Hibernation Schedule
     start: Start
