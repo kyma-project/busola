@@ -148,7 +148,7 @@ context('Login - enkode link, init params enabled', () => {
     cy.getIframeBody()
       .find('[role=alert]')
       .contains(
-        "We couldn't find enough authentication information in your kubeconfig file.",
+        "We couldn't find enough authentication information in your kubeconfig.",
       )
       .should('be.visible');
 
