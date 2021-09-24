@@ -47,7 +47,7 @@ export function ShootHibernationSchedule(shoot) {
   const actions = [
     {
       name: t('common.buttons.delete'),
-      handler: schedule => {
+      handler: schedule => () =>
         handleDelete(
           t('shoots.hibernation.hibernation-schedule'),
           null,
@@ -56,8 +56,7 @@ export function ShootHibernationSchedule(shoot) {
           () => deleteSchedule(schedule),
           () => {},
           t,
-        );
-      },
+        ),
     },
   ];
 
@@ -66,7 +65,7 @@ export function ShootHibernationSchedule(shoot) {
       title={t('shoots.hibernation.hibernation-schedule')}
       showSearchField={false}
       showSearchSuggestion={false}
-      entries={hibernation.schedules}
+      entries={hibernation.schedules || []}
       headerRenderer={headerRenderer}
       extraHeaderContent={<HibernationBadge enabled={hibernation.enabled} />}
       rowRenderer={rowRenderer}

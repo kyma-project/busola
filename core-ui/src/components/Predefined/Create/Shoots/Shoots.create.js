@@ -30,11 +30,9 @@ export function ShootsCreate({
 }) {
   const [shoot, setShoot] = React.useState(createShootTemplate(namespace));
   const { t } = useTranslation();
-  const { versions, loading, error } = useGetK8sVersions(
+  const { versions /*loading, error*/ } = useGetK8sVersions(
     shoot?.spec?.cloudProfileName,
   );
-
-  console.log({ versions, loading, error });
 
   React.useEffect(() => {
     setCustomValid(true);
