@@ -31,7 +31,6 @@ export function AddCluster() {
       const params = await decompressParams(encodedParams);
       setInitParams(params);
       if (Object.keys(params.kubeconfig || {}).length) {
-        console.log('set kubeconfig on params');
         setKubeconfig(params.kubeconfig);
       }
       notification.notifySuccess(
