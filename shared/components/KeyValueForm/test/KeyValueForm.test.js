@@ -21,11 +21,11 @@ describe('KeyValueForm', () => {
     expect(queryAllByRole('row')).toHaveLength(1);
 
     // add entry
-    fireEvent.click(getByText('Add data entry'));
+    fireEvent.click(getByText('components.key-value-form.add-entry'));
     expect(queryAllByRole('row')).toHaveLength(2);
 
     // add entry, expect duplicate key
-    fireEvent.click(getByText('Add data entry'));
+    fireEvent.click(getByText('components.key-value-form.add-entry'));
     expect(getAllByLabelText('Duplicate key')).toHaveLength(2);
     expect(setValid).toHaveBeenCalledWith(false);
 
@@ -41,9 +41,13 @@ describe('KeyValueForm', () => {
     const { getByPlaceholderText } = render(
       <KeyValueForm data={{ a: 'b' }} setData={setData} setValid={jest.fn()} />,
     );
-    fireEvent.change(getByPlaceholderText('Key'), { target: { value: 'c' } });
+    fireEvent.change(getByPlaceholderText('components.key-value-form.key'), {
+      target: { value: 'c' },
+    });
     expect(setData).toHaveBeenCalledWith({ c: 'b' });
-    fireEvent.change(getByPlaceholderText('Value'), { target: { value: 'd' } });
+    fireEvent.change(getByPlaceholderText('components.key-value-form.value'), {
+      target: { value: 'd' },
+    });
     expect(setData).toHaveBeenCalledWith({ c: 'd' });
   });
 
@@ -56,7 +60,7 @@ describe('KeyValueForm', () => {
       <KeyValueForm data={{ a: 'b' }} setData={setData} setValid={jest.fn()} />,
     );
 
-    fireEvent.click(getByText('Read value from file'));
+    fireEvent.click(getByText('components.key-value-form.read-value'));
 
     await wait(() =>
       expect(setData).toHaveBeenLastCalledWith({

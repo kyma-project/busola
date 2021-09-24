@@ -244,9 +244,9 @@ clusters:
     storage-info: |
       Don't worry, we don't store your kubeconfig file on the server. The information stays in your browser.
       You can choose your privacy options in the last step.
-    incomplete: We couldn't find enough authentication information in your kubeconfig file. You can enter it manually.
+    incomplete: We couldn't find enough authentication information in your kubeconfig. You can enter it manually.
     editor-label: 'or paste your kubeconfig here:'
-    token-info: Consult your authorization provider for information how to aquire the token.
+    token-info: If you don't know how to get your token, ask your authentication provider.
     not-an-object: kubeconfig is not an object
     auth:
       token: Token
