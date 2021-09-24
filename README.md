@@ -3,7 +3,6 @@
 ## Overview
 
 Busola is a web-based UI for managing resources within Kyma or any Kubernetes cluster. It consists of separate frontend applications.
-blah
 
 ### Components
 
