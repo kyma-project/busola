@@ -12,13 +12,9 @@ export function ShootsList({ DefaultRenderer, ...otherParams }) {
     },
     {
       header: t('common.headers.created-by'),
-      value: shoot => {
-        console.log(shoot);
-        return (
-          shoot.metadata.annotations?.['gardener.cloud/created-by'] ||
-          EMPTY_TEXT_PLACEHOLDER
-        );
-      },
+      value: shoot =>
+        shoot.metadata.annotations?.['gardener.cloud/created-by'] ||
+        EMPTY_TEXT_PLACEHOLDER,
     },
   ];
 

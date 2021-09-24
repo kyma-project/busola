@@ -27,6 +27,11 @@ export function ShootHibernationSchedule(shoot) {
   const hibernation = shoot.spec.hibernation;
   const deleteSchedule = useDeleteHibernationSchedule(shoot);
 
+  // hibernation may be undefined just after the cluster is created
+  if (!hibernation) {
+    return null;
+  }
+
   const headerRenderer = () => [
     t('shoots.hibernation.start'),
     t('shoots.hibernation.end'),
