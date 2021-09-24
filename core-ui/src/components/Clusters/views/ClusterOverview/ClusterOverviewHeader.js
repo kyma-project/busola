@@ -25,7 +25,7 @@ export function ClusterOverviewHeader() {
 
   return (
     <PageHeader title={t('clusters.overview.title')}>
-      <PageHeader.Column title={t('clusters.overview.version')}>
+      <PageHeader.Column title={t('common.headers.version')}>
         {formatClusterVersion()}
       </PageHeader.Column>
       <PageHeader.Column title={t('clusters.common.api-server-address')}>

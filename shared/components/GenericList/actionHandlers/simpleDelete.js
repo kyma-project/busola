@@ -3,15 +3,24 @@ import { prettifyNameSingular } from '../../..';
 
 function displayConfirmationMessage({ entityType, entityName, t }) {
   return new Promise(resolve => {
+    const body = entityName
+      ? t('components.generic-list.acion-header.messages.confirmation', {
+          resourceType: prettifyNameSingular(entityType),
+          name: entityName,
+        })
+      : t(
+          'components.generic-list.acion-header.messages.confirmation-type-only',
+          {
+            resourceType: prettifyNameSingular(entityType),
+          },
+        );
+
     LuigiClient.uxManager()
       .showConfirmationModal({
         header: t('components.generic-list.acion-header.title', {
           resourceType: prettifyNameSingular(entityType),
         }),
-        body: t('components.generic-list.acion-header.messages.confirmation', {
-          resourceType: prettifyNameSingular(entityType),
-          name: entityName,
-        }),
+        body,
         buttonConfirm: t('common.buttons.delete'),
         buttonDismiss: t('common.buttons.cancel'),
       })

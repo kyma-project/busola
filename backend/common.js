@@ -39,11 +39,20 @@ const decodeHeaderToBuffer = headerValue => {
     : null;
 };
 
-// for some mysterious reason, request for node metrics
+// for some mysterious reason, request for:
+// * metrics
+// * Gardener shoots
 // comes with "Connection: Upgrade" header, causing
 // "invalid upgrade response: status code 200" error
-const workaroundForNodeMetrics = req => {
-  if (req.originalUrl.includes('apis/metrics.k8s.io/v1beta1/nodes')) {
+const workaroundForUnexpectedConnectionUpgrade = req => {
+  const urlFragmentsToMatch = [
+    'apis/metrics.k8s.io/',
+    'core.gardener.cloud/v1beta1',
+  ];
+
+  if (
+    urlFragmentsToMatch.find(fragment => req.originalUrl.includes(fragment))
+  ) {
     req.headers['connection'] = 'close';
   }
 };
@@ -80,7 +89,7 @@ export const handleRequest = async (req, res) => {
     cert,
     key,
   };
-  workaroundForNodeMetrics(req);
+  workaroundForUnexpectedConnectionUpgrade(req);
 
   const k8sRequest = https.request(options, function(k8sResponse) {
     if (

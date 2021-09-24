@@ -1,5 +1,5 @@
 import React from 'react';
-import { CronJobSchedule } from 'shared/components/CronJob/CronJobSchedule';
+import { CronSchedule } from 'shared/components/CronJobSchedule';
 import { CronJobConcurrencyPolicy } from './CronJobConcurrencyPolicy';
 import { CronJobJobs } from './CronJobJobs.js';
 import { CronJobLastScheduleTime } from '../../../../shared/components/CronJob/CronJobLastScheduleTime';
@@ -12,7 +12,7 @@ export const CronJobsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const customColumns = [
     {
       header: t('cron-jobs.schedule'),
-      value: resource => <CronJobSchedule schedule={resource.spec.schedule} />,
+      value: resource => <CronSchedule schedule={resource.spec.schedule} />,
     },
     {
       header: t('cron-jobs.last-schedule-time'),

@@ -7,6 +7,10 @@ export function ShootsList({ DefaultRenderer, ...otherParams }) {
 
   const customColumns = [
     {
+      header: t('common.headers.version'),
+      value: shoot => shoot.spec.kubernetes.version,
+    },
+    {
       header: t('common.headers.created-by'),
       value: shoot => {
         console.log(shoot);

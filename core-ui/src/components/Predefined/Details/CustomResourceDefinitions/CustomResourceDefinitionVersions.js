@@ -118,9 +118,7 @@ export const CustomResourceDefinitionVersions = resource => {
         <LayoutPanel className="fd-margin--md">
           <LayoutPanel.Header>
             <LayoutPanel.Head
-              title={`${t('custom-resource-definitions.subtitle.version')} ${
-                version.name
-              }`}
+              title={`${t('common.headers.version')} ${version.name}`}
             />
             <StatusBadge
               type={version.served ? 'positive' : 'informative'}

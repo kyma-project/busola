@@ -214,7 +214,6 @@ clusters:
     wrong-configuration: Cannot apply the configuration.
   overview:
     title: Cluster Overview
-    version: Version
   storage:
     changed-message: The chosen storage type has been overwritten by the cluster configuration from {{originalStorage}} to {{targetStorage}}.
     info: >
@@ -296,6 +295,7 @@ common:
     resources: Resources
     status: Status
     created-by: Created By
+    version: Version
   labels:
     hostname: Hostname
     name: Name
@@ -314,6 +314,8 @@ common:
     no-instances-found-namespace: No {{value}} found in this Namespace.
     parse-error: Parse error, previous valid input will be used.
     type-to-select: Start typing to select {{value}} from the list.
+    enabled: Enabled
+    disabled: Disabled
   tooltips:
     copy-to-clipboard: Copy to clipboard
     download: Download
@@ -340,6 +342,7 @@ components:
     acion-header:
       messages:
         confirmation: Are you sure you want to delete {{resourceType}} "{{name}}"?
+        confirmation-type-only: Are you sure you want to delete this {{resourceType}}?
         failure: 'Failed to delete the {{resourceType}}: {{error}}'
         success: '{{resourceType}} deleted'
       title: Delete {{resourceType}}
@@ -426,7 +429,6 @@ custom-resource-definitions:
     additional-columns: Additional Printer Columns
     names: Names
     schema: Schema
-    version: Version
   title: CustomResourceDefinitions
 daemon-sets:
   images: Images
@@ -1057,4 +1059,11 @@ workloads:
 gardener:
   title: Gardener
 shoots:
+  name_singular: Shoot
   title: Shoots
+  hibernation:
+    hibernation-schedule: Hibernation Schedule
+    start: Start
+    end: End
+    location: Location
+    no-schedules: No hibernation schedules.

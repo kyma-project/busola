@@ -3,7 +3,7 @@ import { Tooltip } from 'react-shared';
 import { toString as cRonstrue } from 'cronstrue/i18n';
 import { useTranslation } from 'react-i18next';
 
-export function CronJobSchedule({ schedule }) {
+export function CronSchedule({ schedule }) {
   const { i18n } = useTranslation();
 
   return (

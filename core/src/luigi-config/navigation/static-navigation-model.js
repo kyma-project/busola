@@ -1171,8 +1171,14 @@ export function getStaticChildrenNodesForNamespace(
       ],
     },
 
+    //GARDENER
     {
-      category: i18next.t('gardener.title'),
+      category: {
+        label: i18next.t('gardener.title'),
+        icon: 'soccor',
+        order: 1, //todo
+        collapsible: true,
+      },
       resourceType: 'shoots',
       pathSegment: 'shoots',
       label: i18next.t('shoots.title'),
