@@ -12,6 +12,14 @@
           "dsn": ""
         }
       },
+      "GARDENER": {
+        "selectors": [
+          {
+            "type": "apiGroup",
+            "apiGroup": "core.gardener.cloud"
+          }
+        ]
+      },
       "BTP_CATALOG": {
         "selectors": [
           {

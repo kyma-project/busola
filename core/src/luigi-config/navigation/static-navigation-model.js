@@ -1170,6 +1170,44 @@ export function getStaticChildrenNodesForNamespace(
         },
       ],
     },
+
+    {
+      category: i18next.t('gardener.title'),
+      resourceType: 'shoots',
+      pathSegment: 'shoots',
+      label: i18next.t('shoots.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/shoots?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/core.gardener.cloud/v1beta1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+      context: {
+        requiredFeatures: [features.GARDENER],
+      },
+
+      navigationContext: 'shoots',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':shootName',
+              resourceType: 'shoots',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/shoots/:shootName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/core.gardener.cloud/v1beta1',
+                }),
+            },
+          ],
+        },
+      ],
+    },
   ];
   filterNodesByAvailablePaths(nodes, apiGroups, permissionSet);
   return nodes;
@@ -1521,6 +1559,8 @@ function checkSingleNode(node, apiGroups, permissionSet, removeNode) {
   } else {
     // we need to filter through permissions to check the node availability
     const apiGroup = extractApiGroup(apiPath);
+    if (node.resourceType === 'shoots') {
+    }
     if (!hasPermissionsFor(apiGroup, node.resourceType, permissionSet)) {
       removeNode();
     }

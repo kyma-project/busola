@@ -18,6 +18,14 @@ data:
                 "dsn": ""
               }
             },
+            "GARDENER": {
+              "selectors": [
+                {
+                  "type": "apiGroup",
+                  "apiGroup": "core.gardener.cloud"
+                }
+              ]
+            },
             "SERVICE_CATALOG":{
               "selectors":[
                   {
