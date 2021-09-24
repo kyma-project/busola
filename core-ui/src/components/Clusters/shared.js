@@ -36,7 +36,7 @@ export function getContext(kubeconfig, contextName) {
   const contexts = kubeconfig.contexts;
   const currentContextName = contextName || kubeconfig['current-context'];
   if (contexts.length === 0 || !currentContextName) {
-    // no contexts or no context choosen, just take first cluster and user
+    // no contexts or no context chosen, just take first cluster and user
     return {
       cluster: kubeconfig.clusters[0],
       user: kubeconfig.users[0],
@@ -50,11 +50,24 @@ export function getContext(kubeconfig, contextName) {
   }
 }
 
-export function hasKubeconfigAuth(kubeconfig, contextName) {
+export function getUserIndex(kubeconfig) {
+  const contextName = kubeconfig?.['current-context'];
+  const context = kubeconfig?.contexts?.find(c => c.name === contextName)
+    .context;
+  return kubeconfig?.users?.findIndex(u => u.name === context?.user);
+}
+
+export function getUser(kubeconfig) {
+  const contextName = kubeconfig?.['current-context'];
+  const context = kubeconfig?.contexts?.find(c => c.name === contextName)
+    .context;
+  return kubeconfig?.users?.find(u => u.name === context?.user)?.user;
+}
+
+export function hasKubeconfigAuth(kubeconfig) {
   try {
-    const context = kubeconfig.contexts.find(c => c.name === contextName)
-      .context;
-    const user = kubeconfig.users.find(u => u.name === context.user).user;
+    const contextName = kubeconfig?.['current-context'];
+    const user = getUser(kubeconfig, contextName);
 
     const token = user.token;
     const clientCA = user['client-certificate-data'];

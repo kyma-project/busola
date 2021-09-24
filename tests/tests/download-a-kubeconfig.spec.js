@@ -11,15 +11,6 @@ context('Download a Kubeconfig', () => {
     cy.goToNamespaceDetails();
   });
 
-  it('Download a Kubeconfig from the top nav', () => {
-    cy.readFile(KUBECONFIG_PATH).should('not.exist');
-    cy.get('[data-testid=luigi-topnav-profile]').click();
-    cy.get('[data-testid=download-current-cluster-config]').click();
-
-    cy.readFile(KUBECONFIG_PATH).should('exist');
-    cy.task('removeFile', KUBECONFIG_PATH);
-  });
-
   it('Download a Kubeconfig from the Clusters list', () => {
     cy.readFile(KUBECONFIG_PATH).should('not.exist');
     cy.get('[data-testid=app-switcher]').click();
