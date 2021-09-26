@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormInput, ComboboxInput } from 'fundamental-react';
+import { Dropdown } from 'react-shared';
 
 import './ExternalResourceRef.scss';
 
@@ -11,7 +12,14 @@ export function ExternalResourceRef({ resourceRef, onChange, resources }) {
     text: resource.metadata.name,
     namespace: resource.metadata.namespace,
   }));
-
+  const namespaces = (resources || []).map(resource => ({
+    key: `${resource.metadata.namespace}`,
+    text: resource.metadata.namespace,
+  }));
+  console.log('namespaces', namespaces);
+  const namespaces2 = [...new Set(namespaces)];
+  console.log('namespaces2', namespaces2);
+  // [...new Set(data.map(item => item.group))];
   const selectResource = (e, selected) => {
     if (selected.key !== -1) {
       onChange(e, { name: selected.text, namespace: selected.namespace });
@@ -51,5 +59,17 @@ export function ExternalResourceRef({ resourceRef, onChange, resources }) {
         />
       </div>
     </div>
+    // <Dropdown
+    //   id="external-resource-dropdown"
+    //   compact
+    //   fullWidth
+    //   options={options}
+    //   // selectedKey={formatGateway(gateway)}
+    //   onSelect={(e, { name }) => {
+    //     console.log('onSelect', e, name)
+    //     onChange(e, { ...resourceRef, name: e.target.value })
+    //   }}
+    // // validationState={getValidationState()}
+    // />
   );
 }

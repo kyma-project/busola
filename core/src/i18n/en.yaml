@@ -802,6 +802,16 @@ issuers:
   skip-dns: Skip DNS challenge validation
   state: Status
   title: Issuers
+  tooltips:
+    email: Email is the email address to use for user registration.
+    issuer-type: Certification authority used
+    requests: RequestsPerDayQuota is the maximum number of certificate requests per days allowed for this issuer
+    secret-ref-acme: PrivateKeySecretRef is the secret ref to the ACME private key.
+    secret-ref-ca: PrivateKeySecretRef is the secret ref to the CA secret.
+    secret-ref-name: Name is unique within a namespace to reference a secret resource.
+    secret-ref-namespace: Namespace defines the space within which the secret name must be unique.
+    server: Server is the URL of the ACME server.
+    skip-dns: SkipDNSChallengeValidation marks that this issuer does not validate DNS challenges. In this case no DNS entries/records are created for a DNS Challenge and DNS propagation is not checked.
   type: Issuer Type
 jobs:
   completion-time: Completion Time
