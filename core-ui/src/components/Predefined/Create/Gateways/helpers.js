@@ -25,7 +25,7 @@ export const TLS_VERSIONS = {
 };
 
 export function validateTLS(server) {
-  if (!server?.tls) return false;
+  if (!server?.tls) return true;
 
   const { mode, credentialName, privateKey, serverCertificate } = server.tls;
 
