@@ -28,6 +28,7 @@ export function useCreateResource(
   };
 
   return async () => {
+    console.log('yeah');
     try {
       await postRequest(createUrl, resource);
       if (afterCreatedFn) {

@@ -1,7 +1,12 @@
 import React from 'react';
 import { Checkbox, FormLabel, MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
-import { TSL_MODES, TLS_VERSIONS, validateTLS } from './../helpers';
+import {
+  TSL_MODES,
+  TLS_VERSIONS,
+  validateTLS,
+  isTLSProtocol,
+} from './../helpers';
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSelect';
 import { useMicrofrontendContext } from 'react-shared';
@@ -41,7 +46,7 @@ export const TlsForm = ({ server = {}, servers, setServers, advanced }) => {
   }));
 
   const mode = server.tls?.mode;
-  const hasTls = server?.port?.protocol === 'HTTPS';
+  const hasTls = isTLSProtocol(server?.port?.protocol);
 
   const panelActions = !hasTls && (
     <MessageStrip type="information">
