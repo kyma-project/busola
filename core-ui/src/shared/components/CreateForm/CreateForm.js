@@ -31,6 +31,7 @@ export function CreateForm({
       )}
       {mode === ModeSelector.MODE_YAML && (
         <Editor
+          formElementRef={formElementRef}
           resource={toYaml(resource)}
           setResource={yaml => {
             setResource(fromYaml(yaml, resource));
