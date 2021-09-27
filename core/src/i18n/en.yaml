@@ -189,11 +189,15 @@ clusters:
   buttons:
     apply-configuration: Apply configuration
     apply-kubeconfig: Apply kubeconfig
+    verify-and-add: Add Cluster
   common:
     api-server-address: API server address
     download-kubeconfig: Download kubeconfig
     kubeconfig-download-error: Failed to download the kubeconfig
     kubeconfig-not-present: Kubeconfig is missing on the Cluster
+  empty:
+    title: Looks like there aren't any clusters yet.
+    subtitle: Let's add one now!
   labels:
     client-id: Client ID
     issuer-url: Issuer URL
@@ -213,6 +217,11 @@ clusters:
     version: Version
   storage:
     changed-message: The chosen storage type has been overwritten by the cluster configuration from {{originalStorage}} to {{targetStorage}}.
+    info: >
+      Now you can choose where we store your cluster configuration.
+      Based on your kubeconfig type, we recomment the pre-selected storage mode.
+      Of course, you can choose whateer you prefer for convenience and security.
+      None of the options stores information on the server.
     choose-storage:
       label: Storage type configuration
     descriptions:
@@ -222,10 +231,28 @@ clusters:
       unknown: Unknown storage type
     labels:
       inMemory: In memory
-      localStorage: localStorage
-      sessionStorage: sessionStorage
+      localStorage: Local storage
+      sessionStorage: Session storage
       unknown: Unknown
     title: Storage Type
+  wizard:
+    context: Current context
+    kubeconfig: Provide Kubeconfig
+    update: Provide Authentication
+    storage: Privacy Options
+    intro: To add a cluster, all you have to do is provide the cluster configuration – called “kubeconfig” in the Kubernetes world.
+    storage-info: |
+      Don't worry, we don't store your kubeconfig file on the server. The information stays in your browser.
+      You can choose your privacy options in the last step.
+    incomplete: We couldn't find enough authentication information in your kubeconfig. You can enter it manually.
+    editor-label: 'or paste your kubeconfig here:'
+    token-info: If you don't know how to get your token, ask your authentication provider.
+    not-an-object: kubeconfig is not an object
+    auth:
+      token: Token
+      issuer-url: Issuer URL
+      client-id: Client ID
+      scopes: Scopes
 common:
   buttons:
     add: Add
@@ -1021,9 +1048,7 @@ stateful-sets:
   title: StatefulSets
 top-nav:
   profile:
-    download-current-cluster-config: Download the current cluster config.
     preferences: $t(preferences.title)
-    remove-current-cluster-config: Remove the current cluster config.
 workloads:
   docker-image:
     tooltip: Enter a valid Docker image registry path.

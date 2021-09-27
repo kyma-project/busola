@@ -1,43 +1,30 @@
-import React from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import LuigiClient from '@luigi-project/client';
+import { useTranslation } from 'react-i18next';
+
+import { useNotification } from 'react-shared';
+
+import { AddClusterWizard } from '../../components/AddClusterWizard';
+import { decompressParams } from '../../shared';
+
 import './AddCluster.scss';
 
-import {
-  PageHeader,
-  useNotification,
-  useMicrofrontendContext,
-} from 'react-shared';
-import { useTranslation } from 'react-i18next';
-import { AUTH_FORM_TOKEN } from '../../components/AuthForm';
-import { KubeconfigUpload } from '../../components/KubeconfigUpload/KubeconfigUpload';
-import {
-  decompressParams,
-  hasKubeconfigAuth,
-  getContext,
-  addCluster,
-} from '../../shared';
-import { ClusterConfiguration } from '../../components/ClusterConfiguration';
-import { ChooseStorage } from './ChooseStorage';
-
 export function AddCluster() {
-  const { busolaClusterParams } = useMicrofrontendContext();
-  const [kubeconfig, setKubeconfig] = React.useState(null);
-  const [initParams, setInitParams] = React.useState(null);
-  const [storage, setStorage] = React.useState(
-    busolaClusterParams?.config.defaultStorage || 'localStorage',
-  );
+  const { t } = useTranslation();
   const notification = useNotification();
-  const isMounted = React.useRef();
 
-  React.useEffect(() => {
+  const [kubeconfig, setKubeconfig] = useState(undefined);
+  const [initParams, setInitParams] = useState(null);
+  const isMounted = useRef();
+
+  const encodedParams = LuigiClient.getNodeParams().init;
+
+  useEffect(() => {
     isMounted.current = true;
     return _ => (isMounted.current = false);
   }, []);
 
-  const encodedParams = LuigiClient.getNodeParams().init;
-  const { t } = useTranslation();
-
-  React.useEffect(() => {
+  useEffect(() => {
     if (!isMounted.current) return; // avoid state updates on onmounted component
     if (!encodedParams || initParams) return;
     async function setKubeconfigIfPresentInParams() {
@@ -58,75 +45,16 @@ export function AddCluster() {
       );
     }
     setKubeconfigIfPresentInParams();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [encodedParams, initParams]);
-
-  function handleKubeconfigAdded(kubeconfig) {
-    if (!kubeconfig) {
-      setKubeconfig(null);
-      return;
-    }
-
-    const hasOneContext = kubeconfig.contexts?.length === 1;
-    const contextName = kubeconfig.contexts && kubeconfig.contexts[0]?.name;
-    const hasAuth = hasKubeconfigAuth(kubeconfig, contextName);
-
-    // skip config
-    if (hasOneContext && hasAuth) {
-      try {
-        addCluster({
-          kubeconfig,
-          config: { ...initParams?.config, storage },
-          currentContext: getContext(kubeconfig, contextName),
-        });
-      } catch (e) {
-        notification.notifyError({
-          title: t('clusters.messages.wrong-configuration'),
-          content: t('common.tooltips.error') + e.message,
-        });
-        console.warn(e);
-      }
-    } else {
-      // show additional configuration
-      setKubeconfig(kubeconfig);
-    }
-  }
+  }, [encodedParams, initParams, notification, t]);
 
   return (
-    <>
-      <PageHeader
-        title={t('clusters.add.title')}
-        description={t('clusters.messages.upload-paste-kubeconfig')}
-        breadcrumbItems={[
-          {
-            name: 'Clusters',
-            path: '/clusters',
-            fromAbsolutePath: true,
-          },
-        ]}
-      />
-      <section className="add-cluster-form fd-margin-top--lg">
-        {!kubeconfig && (
-          <>
-            <ChooseStorage storage={storage} setStorage={setStorage} />
-            <KubeconfigUpload
-              handleKubeconfigAdded={handleKubeconfigAdded}
-              kubeconfigFromParams={initParams?.kubeconfig}
-              storage={storage}
-              setStorage={setStorage}
-            />
-          </>
-        )}
-        {kubeconfig && (
-          <ClusterConfiguration
-            kubeconfig={kubeconfig}
-            auth={{ type: AUTH_FORM_TOKEN }}
-            initParams={initParams}
-            storage={storage}
-            goBack={() => setKubeconfig(false)}
-          />
-        )}
-      </section>
-    </>
+    <AddClusterWizard
+      kubeconfig={kubeconfig}
+      setKubeconfig={setKubeconfig}
+      onCancel={() => {
+        LuigiClient.linkManager().navigate('/clusters');
+      }}
+      config={initParams?.config}
+    />
   );
 }
