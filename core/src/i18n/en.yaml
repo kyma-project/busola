@@ -724,17 +724,17 @@ gateways:
       ca-certificates: The path to a file containing certificate authority (CA) certificates, which verify a presented client-side certificate.
       selector: One or more labels that indicate a set of pods on which the gateway configuration is applied. By default, workloads are searched across all namespaces based on label selectors.
       protocol: The protocol exposed on the port. TLS implies that the connection is routed based on the SNI header to the destination, without terminating the TLS connection.
-      target-port: The port number on the endpoint where the traffic will be received.
+      target-port: The port number on the endpoint where the traffic is received.
       private-key: The path to the file holding the server’s private key.
-      server-certificate: The path to the file holding the server-side TLS certificate to use.
-      credential-name: 'The name of the Secret that holds the TLS certs including the CA certificates. The secret (of type generic) must contain the following keys and values: key: <privateKey> and cert: <serverCert>. For mutual TLS (mTLS), cacert: <CACertificate> can be provided in the same secret or a separate secret named <secret>-cacert. Secret of type tls for server certificates along with ca.crt key for CA certificates is also supported.'
+      server-certificate: The path to the file holding the server-side TLS certificate you want to use.
+      credential-name: 'The name of the Secret that holds the TLS certs including the CA certificates. The secret (of type generic) should contain the following keys and values: key: <privateKey> and cert: <serverCert>. For mutual TLS, cacert: <CACertificate> can be provided in the same secret or a separate secret named <secret>-cacert. Secret of type tls for server certificates along with ca.crt key for CA certificates is also supported.'
       hosts: At least one host exposed by the gateway, in FQDN format with optional wildcard character in the left-most component.
     advanced:
       add-server: Add server
       delete-server: Delete server
       enable-tls: Enable TLS
       hosts: Hosts
-      mode-tooltip: Indicates whether connections to the port should be secured using TLS.
+      mode-tooltip: Indicates whether connections to the port are secured using TLS.
       placeholders:
         hosts: Enter the hosts, for example, *.api.mydomain.com.
         port:
