@@ -1,8 +1,9 @@
 import React from 'react';
-import LuigiClient from '@luigi-project/client';
-import { CreateForm } from 'shared/components/CreateForm/CreateForm';
+import { useTranslation } from 'react-i18next';
 import { Button } from 'fundamental-react';
-import { usePost, useNotification } from 'react-shared';
+
+import { CreateForm } from 'shared/components/CreateForm/CreateForm';
+import { useCreateResource } from 'shared/ResourceForm/useCreateResource';
 import {
   serviceInstanceToYaml,
   yamlToServiceInstance,
@@ -10,7 +11,6 @@ import {
 } from './helpers.js';
 import { SimpleForm } from './SimpleForm';
 import { AdvancedForm } from './AdvancedForm.js';
-import { useTranslation } from 'react-i18next';
 
 export function ServiceInstancesCreate(props) {
   return <ServiceInstancesForm namespaceId={props.namespace} {...props} />;
@@ -18,38 +18,16 @@ export function ServiceInstancesCreate(props) {
 
 function ServiceInstancesForm({ namespaceId, formElementRef, onChange }) {
   const { t } = useTranslation();
-  const notification = useNotification();
-  const postRequest = usePost();
   const [serviceInstance, setServiceInstance] = React.useState(
     createServiceInstanceTemplate(namespaceId),
   );
 
-  const createServiceInstance = async () => {
-    try {
-      await postRequest(
-        `/apis/services.cloud.sap.com/v1alpha1/namespaces/${namespaceId}/serviceinstances/`,
-        serviceInstanceToYaml(serviceInstance),
-      );
-
-      notification.notifySuccess({
-        content: t('common.create-form.messages.success', {
-          resourceType: t('btp-instances.resource-type'),
-        }),
-      });
-      LuigiClient.linkManager()
-        .fromContext('serviceinstances')
-        .navigate('details/' + serviceInstance.name);
-    } catch (e) {
-      console.error(e);
-      notification.notifyError({
-        title: t('common.create-modal.messages.failure', {
-          resourceType: t('btp-instances.resource-type'),
-        }),
-        content: e.message,
-      });
-      return false;
-    }
-  };
+  const createServiceInstance = useCreateResource(
+    'Service Instance',
+    'serviceinstances',
+    serviceInstanceToYaml(serviceInstance),
+    `/apis/services.cloud.sap.com/v1alpha1/namespaces/${namespaceId}/serviceinstances/`,
+  );
 
   return (
     <CreateForm

@@ -1,8 +1,9 @@
 import React from 'react';
-import LuigiClient from '@luigi-project/client';
-import { CreateForm } from 'shared/components/CreateForm/CreateForm';
 import { Button } from 'fundamental-react';
-import { usePost, useNotification } from 'react-shared';
+import { useTranslation } from 'react-i18next';
+
+import { CreateForm } from 'shared/components/CreateForm/CreateForm';
+import { useCreateResource } from 'shared/ResourceForm/useCreateResource';
 import {
   serviceBindingToYaml,
   yamlToServiceBinding,
@@ -10,7 +11,6 @@ import {
 } from './helpers';
 import { SimpleForm } from './SimpleForm';
 import { AdvancedForm } from './AdvancedForm';
-import { useTranslation } from 'react-i18next';
 
 export function ServiceBindingsCreate(props) {
   return <ServiceBindingsForm namespaceId={props.namespace} {...props} />;
@@ -23,38 +23,16 @@ export function ServiceBindingsForm({
   setCustomValid,
 }) {
   const { t } = useTranslation();
-  const notification = useNotification();
-  const postRequest = usePost();
   const [serviceBinding, setServiceBinding] = React.useState(
     createServiceBindingTemplate(namespaceId),
   );
 
-  const createServiceBinding = async () => {
-    try {
-      await postRequest(
-        `/apis/services.cloud.sap.com/v1alpha1/namespaces/${namespaceId}/servicebindings/`,
-        serviceBindingToYaml(serviceBinding),
-      );
-
-      notification.notifySuccess({
-        content: t('common.create-form.messages.success', {
-          resourceType: t('btp-service-bindings.resource-type'),
-        }),
-      });
-      LuigiClient.linkManager()
-        .fromContext('servicebindings')
-        .navigate('details/' + serviceBinding.name);
-    } catch (e) {
-      console.error(e);
-      notification.notifyError({
-        title: t('common.create-modal.messages.failure', {
-          resourceType: t('btp-service-bindings.resource-type'),
-        }),
-        content: e.message,
-      });
-      return false;
-    }
-  };
+  const createServiceBinding = useCreateResource(
+    'Service Binding',
+    'servicebindings',
+    serviceBindingToYaml(serviceBinding),
+    `/apis/services.cloud.sap.com/v1alpha1/namespaces/${namespaceId}/servicebindings/`,
+  );
 
   return (
     <CreateForm
