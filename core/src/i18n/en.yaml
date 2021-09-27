@@ -734,7 +734,7 @@ gateways:
       delete-server: Delete server
       enable-tls: Enable TLS
       hosts: Hosts
-      mode-tooltip: Indicates whether connections to the port should be secured using TLS.
+      mode-tooltip: Indicates whether connections to the port are secured using TLS.
       placeholders:
         hosts: Enter the hosts, for example, *.api.mydomain.com.
         port:
