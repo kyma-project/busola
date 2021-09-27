@@ -56,7 +56,7 @@ Busola configuration is the product of gathering and merging the configurations 
 - Built-in, hardcoded defaults.
 - Busola cluster configuration, available on Busola cluster in Config Map "busola/busola-config" under the key "config". This data is mounted to Busola `web` pod, and during the local development [config.json](core/src/assets/config/config.json) file is used.
 - Target cluster configuration, available on target cluster in Config Map "kube-system/busola-config" under the key "config". Busola performs a request for that resource during the bootstrap proceess.
-- Configuration from init params. Init params are disabled by default - they can be switched on by setting the `isEnabled` property of `INIT_PARAMS` feature to _true_.
+- Configuration from initiation parameters. By default, init parameters are disabled. To switch them on, set the feature `INIT_PARAMS` to `isEnabled=true`.
 
 The sources above are listed in order of precedence, with init params having the highest priority over the others. Resulting configuration is a product of merging the configurations from individual sources.
 
