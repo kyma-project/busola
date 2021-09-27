@@ -17,11 +17,7 @@ export function SingleServerForm(props) {
 
 export function SingleServerInput({ value: servers, setValue: setServers }) {
   return (
-    <ResourceForm.CollapsibleSection
-      title="Server"
-      defaultOpen
-      canChangeState={false}
-    >
+    <ResourceForm.CollapsibleSection title="Server" defaultOpen>
       <SingleServerForm
         server={servers?.[0]}
         servers={servers}

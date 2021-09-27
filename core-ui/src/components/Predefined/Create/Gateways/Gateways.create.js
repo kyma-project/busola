@@ -28,6 +28,21 @@ export function GatewaysCreate({
     setGateway({ ...gateway });
   };
 
+  const selectorField = () => {
+    const commonProps = {
+      required: true,
+      propertyPath: '$.spec.selector',
+      title: t('gateways.create-modal.simple.selector'),
+      tooltipContent: t('gateways.create-modal.tooltips.selector'),
+    };
+    return (
+      <>
+        <ResourceForm.KeyValueField simple defaultOpen {...commonProps} />
+        <ResourceForm.KeyValueField advanced {...commonProps} />
+      </>
+    );
+  };
+
   return (
     <ResourceForm
       pluralKind="gateways"
@@ -55,12 +70,7 @@ export function GatewaysCreate({
         propertyPath="$.metadata.annotations"
         title={t('common.headers.annotations')}
       />
-      <ResourceForm.KeyValueField
-        required
-        propertyPath="$.spec.selector"
-        title={t('gateways.create-modal.simple.selector')}
-        tooltipContent={t('gateways.create-modal.tooltips.selector')}
-      />
+      {selectorField()}
       {jp.value(gateway, '$.spec.servers.length') ? (
         <SingleServerInput simple propertyPath="$.spec.servers" />
       ) : (

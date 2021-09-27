@@ -119,6 +119,9 @@ export function ResourceForm({
       if (!child) {
         return null;
       }
+      if (child.type === React.Fragment) {
+        return renderFormChildren(child.props.children, isAdvanced);
+      }
       const childProps = child.props || {};
       if (childProps.simple && isAdvanced) {
         return null;
