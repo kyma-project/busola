@@ -98,6 +98,7 @@ export const useGetStream = path => {
   const { authData } = useMicrofrontendContext();
   const fetch = useFetch();
   const readerRef = React.useRef(null);
+  const abortController = React.useRef(new AbortController());
 
   const processError = error => {
     console.error(error);
@@ -120,7 +121,7 @@ export const useGetStream = path => {
       // Safari: The operation couldn’t be completed. (kCFErrorDomainCFNetwork error 303.)
       // reset the connection a little before
       timeoutRef.current = setTimeout(refetchData, 55 * 1000);
-      const response = await fetch({ relativeUrl: path });
+      const response = await fetch({ relativeUrl: path, abortController });
       if (!authData) return;
       readerRef.current = response.body.getReader();
 
@@ -150,9 +151,14 @@ export const useGetStream = path => {
         },
       });
     } catch (e) {
-      processError(e);
+      if (!e.toString().includes('abort')) processError(e);
     }
   };
+
+  function abort() {
+    abortController.current.abort();
+    abortController.current = new AbortController();
+  }
 
   const cancelTimeout = () => {
     if (timeoutRef.current) {
@@ -169,16 +175,17 @@ export const useGetStream = path => {
   const refetchData = () => {
     cancelTimeout();
     cancelReader();
+    abort();
     setData([]);
     fetchData();
   };
 
   React.useEffect(() => {
-    // without this logs are duplicated
     if (initialPath.current) {
       initialPath.current = false;
       return;
     }
+    // without this logs are duplicated
     setData([]);
     refetchData();
   }, [path]);
@@ -186,6 +193,7 @@ export const useGetStream = path => {
   React.useEffect(_ => {
     cancelTimeout();
     cancelReader();
+    abort();
   }, []);
   React.useEffect(() => {
     if (
