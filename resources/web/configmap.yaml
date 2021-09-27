@@ -6,7 +6,7 @@ data:
   config.json: >
     {
       "config": {
-        "defaultStorage": "localStorage",
+        "storage": "localStorage",
         "features":{
             "INIT_PARAMS": {
               "isEnabled": false
