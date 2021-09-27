@@ -32,7 +32,7 @@ function ServiceInstancesForm({ namespaceId, formElementRef, onChange }) {
       );
 
       notification.notifySuccess({
-        content: t('common.create-modal.messages.success', {
+        content: t('common.create-form.messages.success', {
           resourceType: t('btp-instances.resource-type'),
         }),
       });

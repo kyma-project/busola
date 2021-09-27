@@ -37,7 +37,7 @@ export function ServiceBindingsForm({
       );
 
       notification.notifySuccess({
-        content: t('common.create-modal.messages.success', {
+        content: t('common.create-form.messages.success', {
           resourceType: t('btp-service-bindings.resource-type'),
         }),
       });
