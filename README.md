@@ -58,7 +58,6 @@ Busola configuration is the product of gathering and merging the configurations 
 - Target cluster configuration, available on target cluster in Config Map "kube-system/busola-config" under the key "config". Busola performs a request for that resource during the bootstrap proceess.
 - Configuration from initiation parameters. By default, init parameters are disabled. To switch them on, set the feature `INIT_PARAMS` to `isEnabled=true`.
 
-The sources above are listed in order of precedence, with init params having the highest priority over the others. Resulting configuration is a product of merging the configurations from individual sources.
 
 ### Change the Configuration
 
