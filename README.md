@@ -51,7 +51,7 @@ Busola is delivered with the following default settings:
 
 ### Configuration sources
 
-By default the configuration is gathered from four sources:
+Busola configuration is the product of gathering and merging the configurations from several individual sources. The following list presents the sources in the order of precedence, with init params having the highest priority over the others:```
 
 - Built-in, hardcoded defaults.
 - Busola cluster configuration, available on Busola cluster in Config Map "busola/busola-config" under the key "config". This data is mounted to Busola `web` pod, and during the local development [config.json](core/src/assets/config/config.json) file is used.
