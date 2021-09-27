@@ -766,7 +766,7 @@ gateways:
         max-protocol-version: Max Protocol Version
         min-protocol-version: Min Protocol Version
         messages:
-          invalid-tls-warning: TLS Server of mode SIMPLE or MUTUAL require either credential name or private key and server certificate pair.
+          invalid-tls-warning: TLS Server of mode SIMPLE or MUTUAL needs either credential name, or private key and server certificate pair.
     presets:
       default: Default
     simple:
