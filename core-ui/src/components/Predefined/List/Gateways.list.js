@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
+import { Link } from 'react-shared';
 import { GatewaySelector } from '../Details/Gateway/GatewaySelector';
 
 export function GatewaysList({ DefaultRenderer, ...otherParams }) {
@@ -13,5 +13,22 @@ export function GatewaysList({ DefaultRenderer, ...otherParams }) {
     },
   ];
 
-  return <DefaultRenderer customColumns={customColumns} {...otherParams} />;
+  const description = (
+    <span>
+      <Link
+        className="fd-link fd-link"
+        url="https://istio.io/latest/docs/reference/config/networking/gateway/"
+        text="Gateway" // no translations here
+      />
+      {t('gateways.description')}
+    </span>
+  );
+
+  return (
+    <DefaultRenderer
+      customColumns={customColumns}
+      description={description}
+      {...otherParams}
+    />
+  );
 }

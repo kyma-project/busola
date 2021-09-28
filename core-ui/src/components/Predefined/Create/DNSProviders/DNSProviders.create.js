@@ -77,16 +77,16 @@ export function DNSProvidersCreate({
       <ResourceForm.KeyValueField
         advanced
         propertyPath="$.metadata.labels"
-        label={t('common.headers.labels')}
+        title={t('common.headers.labels')}
       />
       <ResourceForm.KeyValueField
         advanced
         propertyPath="$.metadata.annotations"
-        label={t('common.headers.annotations')}
+        title={t('common.headers.annotations')}
       />
       <ResourceForm.TextArrayInput
         propertyPath="$.spec.domains.include"
-        label={t('dnsproviders.labels.include-domains')}
+        title={t('dnsproviders.labels.include-domains')}
         inputProps={{
           placeholder: t('dnsproviders.placeholders.include-domains'),
         }}
@@ -94,7 +94,7 @@ export function DNSProvidersCreate({
       <ResourceForm.TextArrayInput
         advanced
         propertyPath="$.spec.domains.exclude"
-        label={t('dnsproviders.labels.exclude-domains')}
+        title={t('dnsproviders.labels.exclude-domains')}
         inputProps={{
           placeholder: t('dnsproviders.placeholders.exclude-domains'),
         }}
