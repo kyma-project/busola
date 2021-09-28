@@ -197,6 +197,8 @@ export const useGetStream = path => {
     cancelReader();
     abort();
     return () => {
+      cancelTimeout();
+      cancelReader();
       abort();
     };
   }, []);
