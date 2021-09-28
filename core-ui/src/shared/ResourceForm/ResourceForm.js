@@ -51,26 +51,28 @@ function SingleForm({
   ...props
 }) {
   return (
-    <form
-      ref={formElementRef}
-      onSubmit={createResource}
-      onChange={() => {
-        if (onValid) {
-          setTimeout(() => {
-            onValid(formElementRef.current?.checkValidity());
-          });
-        }
-      }}
-      {...props}
-    >
-      <ResourceFormWrapper
-        resource={resource}
-        setResource={setResource}
-        formElementRef={formElementRef}
+    <section className="resource-form">
+      <form
+        ref={formElementRef}
+        onSubmit={createResource}
+        onChange={() => {
+          if (onValid) {
+            setTimeout(() => {
+              onValid(formElementRef.current?.checkValidity());
+            });
+          }
+        }}
+        {...props}
       >
-        {children}
-      </ResourceFormWrapper>
-    </form>
+        <ResourceFormWrapper
+          resource={resource}
+          setResource={setResource}
+          formElementRef={formElementRef}
+        >
+          {children}
+        </ResourceFormWrapper>
+      </form>
+    </section>
   );
 }
 
@@ -116,6 +118,9 @@ export function ResourceForm({
     React.Children.map(children, child => {
       if (!child) {
         return null;
+      }
+      if (child.type === React.Fragment) {
+        return renderFormChildren(child.props.children, isAdvanced);
       }
       const childProps = child.props || {};
       if (childProps.simple && isAdvanced) {

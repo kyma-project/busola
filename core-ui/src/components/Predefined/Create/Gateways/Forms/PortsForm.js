@@ -1,7 +1,7 @@
 import React from 'react';
 import { Select } from 'shared/components/Select/Select';
 import { useTranslation } from 'react-i18next';
-import { PROTOCOLS, DEFAULT_PORTS } from './../helpers';
+import { PROTOCOLS, DEFAULT_PORTS, isTLSProtocol } from './../helpers';
 import { switchTLS } from './TlsForm';
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/components/Inputs';
@@ -17,7 +17,8 @@ export const PortsForm = ({ server = {}, servers, setServers }) => {
     }
 
     setServers([...servers]);
-    switchTLS(server, selected.key === 'HTTPS', servers, setServers);
+
+    switchTLS(server, isTLSProtocol(selected.key), servers, setServers);
   };
 
   return (

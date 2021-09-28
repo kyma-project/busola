@@ -471,9 +471,7 @@ stateful-sets:
   title: Zestawy stanowe
 top-nav:
   profile:
-    download-current-cluster-config: Pobierz konfigurację klastra
     preferences: $t(preferences.title)
-    remove-current-cluster-config: Usuń bieżącą konfigurację
 workloads:
   docker-image:
     tooltip: Wprowadź poprawną ścieżkę rejestru obrazu Dockera.

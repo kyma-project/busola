@@ -2,57 +2,57 @@ import React from 'react';
 import { MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { KubeconfigFileUpload } from './KubeconfigFileUpload';
-import { KubeconfigTextArea } from './KubeconfigTextArea/KubeconfigTextArea';
 import jsyaml from 'js-yaml';
+import { ControlledEditor, useTheme } from 'react-shared';
+
+import './KubeconfigUpload.scss';
 
 export function KubeconfigUpload({
+  onKubeconfig,
   handleKubeconfigAdded,
   kubeconfigFromParams,
+  kubeconfig,
+  setKubeconfig,
 }) {
-  const [showParseError, setShowParseError] = React.useState(false);
-  const [kubeconfigs, setKubeconfigs] = React.useState({
-    text: jsyaml.dump(kubeconfigFromParams),
-  });
+  const [error, setError] = React.useState('');
+  const { editorTheme } = useTheme();
+  const { t } = useTranslation();
 
-  const parseKubeconfig = text => {
+  const configString = jsyaml.dump(kubeconfig, { noRefs: true }) || undefined;
+
+  const updateKubeconfig = text => {
     try {
-      const parsed = jsyaml.load(text);
-      if (!parsed || typeof parsed !== 'object') {
-        throw Error('Kubeconfig must be an object.');
+      const config = jsyaml.load(text);
+      if (typeof config !== 'object') {
+        setError(t('clusters.wizard.not-an-object'));
+      } else {
+        setKubeconfig(config);
+        setError(null);
       }
-      return parsed;
-    } catch (e) {
-      console.warn(e);
-      return null;
+    } catch ({ message }) {
+      // get the message until the newline
+      setError(message.substr(0, message.indexOf('\n')));
     }
   };
 
-  const onKubeconfigTextAdded = source => text => {
-    const kubeconfig = parseKubeconfig(text);
-    setShowParseError(!kubeconfig);
-    setKubeconfigs({ ...kubeconfigs, [source]: kubeconfig });
-    handleKubeconfigAdded(kubeconfig);
-  };
-
-  const { t } = useTranslation();
-
   return (
     <>
-      <KubeconfigFileUpload
-        onKubeconfigTextAdded={onKubeconfigTextAdded('upload')}
+      <KubeconfigFileUpload onKubeconfigTextAdded={updateKubeconfig} />
+      <p className="editor-label fd-margin-bottom--sm fd-margin-top--sm">
+        {t('clusters.wizard.editor-label')}
+      </p>
+      <ControlledEditor
+        height="400px"
+        language="yaml"
+        theme={editorTheme}
+        value={configString}
+        editorDidMount={(getValue, editor) =>
+          editor.onDidBlurEditorWidget(() => updateKubeconfig(getValue()))
+        }
       />
-      <p>or</p>
-      <KubeconfigTextArea
-        onKubeconfigTextAdded={onKubeconfigTextAdded('text')}
-        kubeconfigFromParams={kubeconfigFromParams}
-      />
-      {showParseError && (
-        <MessageStrip
-          aria-label="invalid-kubeconfig"
-          className="fd-margin-top--sm"
-          type="error"
-        >
-          {t('clusters.messages.error-kubeconfig')}
+      {error && (
+        <MessageStrip type="error" className="fd-margin-top--sm">
+          {t('common.create-form.editor-error', { error })}
         </MessageStrip>
       )}
     </>

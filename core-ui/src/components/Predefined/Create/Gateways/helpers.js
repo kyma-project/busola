@@ -6,7 +6,15 @@ export const TSL_MODES = [
   'ISTIO_MUTUAL',
 ];
 
-export const PROTOCOLS = ['HTTP', 'HTTP2', 'HTTPS', 'GRPC', 'MONGO', 'TCP'];
+export const PROTOCOLS = [
+  'HTTP',
+  'HTTP2',
+  'HTTPS',
+  'GRPC',
+  'MONGO',
+  'TCP',
+  'TLS',
+];
 
 export const DEFAULT_PORTS = {
   HTTP: 80,
@@ -14,6 +22,7 @@ export const DEFAULT_PORTS = {
   HTTPS: 443,
   GRPC: 32767,
   MONGO: 27017,
+  TLS: 443,
 };
 
 export const TLS_VERSIONS = {
@@ -24,8 +33,12 @@ export const TLS_VERSIONS = {
   TLSV1_3: 'TLS v1.3',
 };
 
+export function isTLSProtocol(protocol) {
+  return protocol === 'HTTPS' || protocol === 'TLS';
+}
+
 export function validateTLS(server) {
-  if (!server?.tls) return false;
+  if (!server?.tls) return true;
 
   const { mode, credentialName, privateKey, serverCertificate } = server.tls;
 

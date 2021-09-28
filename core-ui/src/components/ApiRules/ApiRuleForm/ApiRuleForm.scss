@@ -138,7 +138,7 @@
   align-items: baseline;
 
   grid-gap: 12px;
-  .fd-form-label,
+  .fd-for-label,
   .fd-input {
     display: inline-block;
   }
@@ -154,15 +154,15 @@
   }
 }
 
-.fd-form-item {
-  .fd-form-label,
-  .fd-form-label {
-    line-height: 23px;
-    height: 23px;
-  }
-}
-
 .api-rule-form {
+  .fd-form-item {
+    .fd-form-label,
+    .fd-form-label {
+      line-height: 23px;
+      height: 23px;
+    }
+  }
+
   .api-rule-form__form {
     padding: 32px;
 
