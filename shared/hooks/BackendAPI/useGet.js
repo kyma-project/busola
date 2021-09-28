@@ -156,6 +156,8 @@ export const useGetStream = path => {
   };
 
   function abort() {
+    //if there is no reader, then it means that the call is pending, abort it
+    if (readerRef.current) return;
     abortController.current.abort();
     abortController.current = new AbortController();
   }
@@ -194,7 +196,11 @@ export const useGetStream = path => {
     cancelTimeout();
     cancelReader();
     abort();
+    return () => {
+      abort();
+    };
   }, []);
+
   React.useEffect(() => {
     if (
       authData &&
