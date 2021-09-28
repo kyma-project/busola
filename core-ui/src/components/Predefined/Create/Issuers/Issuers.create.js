@@ -8,7 +8,7 @@ import {
 } from './templates';
 import { IssuerTypeDropdown } from './IssuerTypeDropdown';
 import { SecretRef } from 'shared/components/ResourceRef/SecretRef';
-import { Checkbox, FormLabel } from 'fundamental-react';
+import { Checkbox } from 'fundamental-react';
 import * as jp from 'jsonpath';
 import * as Inputs from 'shared/ResourceForm/components/Inputs';
 
