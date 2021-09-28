@@ -19,6 +19,9 @@
     "test-shared-lib": "cd shared && jest",
     "copy-themes": "gulp copy-themes"
   },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
   "dependencies": {
     "@luigi-project/client": "^1.14.3",
     "@sap-theming/theming-base-content": "^11.1.28",
