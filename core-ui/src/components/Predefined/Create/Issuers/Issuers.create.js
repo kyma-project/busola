@@ -129,9 +129,18 @@ export function IssuersCreate({ onChange, formElementRef, namespace }) {
           actions={
             <Checkbox
               compact
-              checked={issuer.autoRegistration}
+              checked={issuer.spec.acme?.autoRegistration}
               onChange={(e, checked) =>
-                setIssuer({ ...issuer, autoRegistration: checked })
+                setIssuer({
+                  ...issuer,
+                  spec: {
+                    ...issuer.spec,
+                    acme: {
+                      ...issuer.spec.acme,
+                      autoRegistration: checked,
+                    },
+                  },
+                })
               }
               dir="rtl"
             >
