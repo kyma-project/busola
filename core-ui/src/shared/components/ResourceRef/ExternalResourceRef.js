@@ -17,6 +17,7 @@ export function ExternalResourceRef({
   tooltipContent,
   actions,
   className,
+  defaultOpen = false,
 }) {
   const { t } = useTranslation();
 
@@ -51,6 +52,7 @@ export function ExternalResourceRef({
       tooltipContent={tooltipContent}
       actions={actions}
       className={className}
+      defaultOpen={defaultOpen}
     >
       <div className={classnames('fd-row form-field')}>
         <div className="fd-col fd-col-md--4 form-field__label">

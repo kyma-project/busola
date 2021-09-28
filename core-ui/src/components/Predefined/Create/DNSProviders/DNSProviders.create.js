@@ -54,18 +54,6 @@ export function DNSProvidersCreate({
         }}
       />
       <ResourceForm.FormField
-        required
-        propertyPath="$.spec.secretRef"
-        label={t('dnsproviders.labels.secret-reference')}
-        input={({ value, setValue }) => (
-          <SecretRef
-            id="secret-ref-input"
-            resourceRef={value || {}}
-            onChange={(_, secretRef) => setValue(secretRef)}
-          />
-        )}
-      />
-      <ResourceForm.FormField
         propertyPath="$.spec.type"
         label={t('dnsproviders.labels.type')}
         required
@@ -73,6 +61,19 @@ export function DNSProvidersCreate({
           <ProviderTypeDropdown type={value} setType={setValue} />
         )}
         className="fd-margin-bottom--sm"
+      />
+      <SecretRef
+        className={'fd-margin-top--sm'}
+        id="secretRef"
+        resourceRef={jp.value(dnsProvider, '$.spec.secretRef') || {}}
+        title={t('dnsproviders.labels.secret-reference')}
+        onChange={secretRef => {
+          jp.value(dnsProvider, '$.spec.secretRef', secretRef);
+          setDNSProvider({
+            ...dnsProvider,
+            spec: { ...dnsProvider.spec, secretRef },
+          });
+        }}
       />
       <ResourceForm.KeyValueField
         advanced

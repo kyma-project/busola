@@ -46,7 +46,7 @@ export function IssuersCreate({ onChange, formElementRef, namespace }) {
       return (
         <SecretRef
           className={'fd-margin-top--sm'}
-          id="secret-ref-input"
+          id="secret-ref-ca-input"
           resourceRef={jp.value(issuer, '$.spec.ca.privateKeySecretRef') || {}}
           title={t('issuers.private-key')}
           tooltipContent={t('issuers.tooltips.secret-ref-ca')}
@@ -116,7 +116,7 @@ export function IssuersCreate({ onChange, formElementRef, namespace }) {
         />,
         <SecretRef
           advanced
-          id="secret-ref-input"
+          id="secret-ref-acme-input"
           resourceRef={
             jp.value(issuer, '$.spec.acme.privateKeySecretRef') || {}
           }
@@ -181,7 +181,7 @@ export function IssuersCreate({ onChange, formElementRef, namespace }) {
           />
           <SecretRef
             advanced
-            id="secret-ref-input"
+            id="externalAccountBinding"
             resourceRef={
               jp.value(
                 issuer,

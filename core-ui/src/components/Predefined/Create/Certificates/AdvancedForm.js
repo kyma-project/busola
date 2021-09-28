@@ -6,13 +6,18 @@ import { SecretRef } from 'shared/components/ResourceRef/SecretRef';
 import { CreateForm } from 'shared/components/CreateForm/CreateForm';
 
 import { SimpleForm } from './SimpleForm';
+import * as jp from 'jsonpath';
 
 export function AdvancedForm({ certificate, setCertificate }) {
   const { t } = useTranslation();
 
   return (
     <>
-      <SimpleForm certificate={certificate} setCertificate={setCertificate} />
+      <SimpleForm
+        certificate={certificate}
+        setCertificate={setCertificate}
+        isAdvanced={true}
+      />
       <CreateForm.Section>
         <FormFieldset>
           <CreateForm.FormField
@@ -69,20 +74,17 @@ export function AdvancedForm({ certificate, setCertificate }) {
           </FormFieldset>
         )}
         {certificate.existingSecret && (
-          <FormFieldset>
-            <CreateForm.FormField
-              label={<FormLabel>{t('certificates.secret-ref')}</FormLabel>}
-              input={
-                <SecretRef
-                  fieldSelector="type=kubernetes.io/tls"
-                  resourceRef={certificate.secretRef}
-                  onChange={(e, secretRef) =>
-                    setCertificate({ ...certificate, secretRef })
-                  }
-                />
-              }
-            />
-          </FormFieldset>
+          <SecretRef
+            className={'fd-margin-top--sm'}
+            id="secretRef"
+            fieldSelector="type=kubernetes.io/tls"
+            resourceRef={jp.value(certificate, '$.secretRef') || {}}
+            title={t('certificates.secret-ref')}
+            onChange={secretRef => {
+              jp.value(certificate, '$.secretRef', secretRef);
+              setCertificate({ ...certificate, secretRef });
+            }}
+          />
         )}
       </CreateForm.Section>
     </>
