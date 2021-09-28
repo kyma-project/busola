@@ -27,7 +27,10 @@ const useGetHook = processDataFn =>
       }
 
       try {
-        const response = await fetch({ relativeUrl: path, abortController });
+        const response = await fetch({
+          relativeUrl: path,
+          abortController: abortController.current,
+        });
         const payload = await response.json();
 
         if (abortController.current.signal.aborted) return;
@@ -121,7 +124,10 @@ export const useGetStream = path => {
       // Safari: The operation couldn’t be completed. (kCFErrorDomainCFNetwork error 303.)
       // reset the connection a little before
       timeoutRef.current = setTimeout(refetchData, 55 * 1000);
-      const response = await fetch({ relativeUrl: path, abortController });
+      const response = await fetch({
+        relativeUrl: path,
+        abortController: abortController.current,
+      });
       if (!authData) return;
       readerRef.current = response.body.getReader();
 
@@ -171,13 +177,18 @@ export const useGetStream = path => {
   const cancelReader = () => {
     if (readerRef.current) {
       readerRef.current.cancel();
+      readerRef.current = null;
     }
   };
 
-  const refetchData = () => {
+  const cancelOldData = () => {
     cancelTimeout();
     cancelReader();
     abort();
+  };
+
+  const refetchData = () => {
+    cancelOldData();
     setData([]);
     fetchData();
   };
@@ -193,13 +204,9 @@ export const useGetStream = path => {
   }, [path]);
 
   React.useEffect(_ => {
-    cancelTimeout();
-    cancelReader();
-    abort();
+    cancelOldData();
     return () => {
-      cancelTimeout();
-      cancelReader();
-      abort();
+      cancelOldData();
     };
   }, []);
 

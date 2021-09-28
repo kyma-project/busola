@@ -19,7 +19,7 @@ export const useFetch = () => {
         ...(init?.headers || {}),
         ...createHeaders(authData, cluster.cluster, config.requiresCA),
       },
-      signal: abortController?.current?.signal || abortController?.signal,
+      signal: abortController?.signal,
     };
 
     try {
