@@ -80,12 +80,15 @@ export function AddClusterWizard({
       navigationType="tabs"
       headerSize="md"
       contentSize="md"
+      className="add-cluster-wizard"
     >
       <Wizard.Step
         title={t('clusters.wizard.kubeconfig')}
         branching={!kubeconfig}
         indicator="1"
         valid={!!kubeconfig}
+        previousLabel={t('clusters.buttons.previous-step')}
+        nextLabel={t('clusters.buttons.next-step')}
       >
         <p>{t('clusters.wizard.intro')}</p>
         <MessageStrip
@@ -105,6 +108,8 @@ export function AddClusterWizard({
           title={t('clusters.wizard.update')}
           indicator="2"
           valid={authValid}
+          previousLabel={t('clusters.buttons.previous-step')}
+          nextLabel={t('clusters.buttons.next-step')}
         >
           <ResourceForm.Single
             formElementRef={authFormRef}
@@ -122,6 +127,7 @@ export function AddClusterWizard({
         title={t('clusters.wizard.storage')}
         indicator="2"
         valid={!!storage}
+        previousLabel={t('clusters.buttons.previous-step')}
         nextLabel={t('clusters.buttons.verify-and-add')}
       >
         <ChooseStorage storage={storage} setStorage={setStorage} />

@@ -190,6 +190,8 @@ clusters:
     apply-configuration: Apply configuration
     apply-kubeconfig: Apply kubeconfig
     verify-and-add: Add Cluster
+    next-step: Next step
+    previous-step: Previous step
   common:
     api-server-address: API server address
     download-kubeconfig: Download kubeconfig
