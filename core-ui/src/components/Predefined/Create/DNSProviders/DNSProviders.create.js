@@ -86,17 +86,19 @@ export function DNSProvidersCreate({
       />
       <ResourceForm.TextArrayInput
         propertyPath="$.spec.domains.include"
-        title={t('dnsproviders.labels.include-domains')}
+        title={t('domains.include.label')}
+        tooltipContent={t('domains.include.tooltip')}
         inputProps={{
-          placeholder: t('dnsproviders.placeholders.include-domains'),
+          placeholder: t('domains.include.placeholder'),
         }}
       />
       <ResourceForm.TextArrayInput
         advanced
         propertyPath="$.spec.domains.exclude"
-        title={t('dnsproviders.labels.exclude-domains')}
+        title={t('domains.exclude.label')}
+        tooltipContent={t('domains.exclude.tooltip')}
         inputProps={{
-          placeholder: t('dnsproviders.placeholders.exclude-domains'),
+          placeholder: t('domains.exclude.placeholder'),
         }}
       />
     </ResourceForm>

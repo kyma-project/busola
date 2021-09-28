@@ -83,8 +83,11 @@ export function Title({
   canChangeState,
   iconGlyph,
 }) {
+  const classNames = classnames('title', {
+    'tooltip-cursor': tooltipContent,
+  });
   const component = (
-    <div className="title">
+    <div className="title" className={classNames}>
       {!disabled && canChangeState && (
         <Icon className="control-icon" ariaHidden glyph={iconGlyph} />
       )}
@@ -99,7 +102,14 @@ export function Title({
   }
 }
 export function Label({ required, tooltipContent, children }) {
-  const label = <FormLabel required={required}>{children}</FormLabel>;
+  const label = (
+    <FormLabel
+      required={required}
+      className={tooltipContent ? 'tooltip-cursor' : ''}
+    >
+      {children}
+    </FormLabel>
+  );
 
   if (tooltipContent) {
     return <Tooltip content={tooltipContent}>{label}</Tooltip>;
@@ -287,11 +297,12 @@ export function MultiInput({
   );
 }
 
-export function TextArrayInput({ inputProps, ...props }) {
+export function TextArrayInput({ inputProps, tooltipContent, ...props }) {
   return (
     <MultiInput
       toInternal={value => value || []}
       toExternal={value => value.filter(val => !!val)}
+      tooltipContent={tooltipContent}
       inputs={[
         ({ value, setValue, ref, onBlur, focus }) => (
           <FormInput

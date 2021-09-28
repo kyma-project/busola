@@ -121,7 +121,7 @@ export function IssuersCreate({ onChange, formElementRef, namespace }) {
             jp.value(issuer, '$.spec.acme.privateKeySecretRef') || {}
           }
           title={t('issuers.private-key')}
-          tooltipContent={t('issuers.tooltips.secret-ref-ca')}
+          tooltipContent={t('issuers.tooltips.secret-ref-acme')}
           onChange={value => {
             jp.value(issuer, '$.spec.acme.privateKeySecretRef', value);
             setIssuer({ ...issuer });
@@ -149,19 +149,20 @@ export function IssuersCreate({ onChange, formElementRef, namespace }) {
           }
         />,
         <ResourceForm.TextArrayInput
-          advanced
           propertyPath="$.spec.acme.domains.include"
-          title={t('dnsproviders.labels.include-domains')}
+          title={t('domains.include.label')}
+          tooltipContent={t('domains.include.tooltip')}
           inputProps={{
-            placeholder: t('dnsproviders.placeholders.include-domains'),
+            placeholder: t('domains.include.placeholder'),
           }}
         />,
         <ResourceForm.TextArrayInput
           advanced
           propertyPath="$.spec.acme.domains.exclude"
-          title={t('dnsproviders.labels.exclude-domains')}
+          title={t('domains.exclude.label')}
+          tooltipContent={t('domains.exclude.tooltip')}
           inputProps={{
-            placeholder: t('dnsproviders.placeholders.exclude-domains'),
+            placeholder: t('domains.exclude.placeholder'),
           }}
         />,
         <ResourceForm.CollapsibleSection
@@ -169,9 +170,10 @@ export function IssuersCreate({ onChange, formElementRef, namespace }) {
           title={t('issuers.external-account.title')}
           resource={issuer}
           setResource={setIssuer}
+          tooltipContent={t('issuers.tooltips.external-account-binding')}
         >
           <ResourceForm.FormField
-            propertyPath="$.spec.externalAccountKeyId"
+            propertyPath="$.spec.acme.externalAccountBinding.keyID"
             label={t('issuers.external-account.key-id')}
             input={Inputs.Text}
             placeholder={t('issuers.placeholders.key-id')}
@@ -181,12 +183,19 @@ export function IssuersCreate({ onChange, formElementRef, namespace }) {
             advanced
             id="secret-ref-input"
             resourceRef={
-              jp.value(issuer, '$.spec.acme.privateKeySecretRef') || {}
+              jp.value(
+                issuer,
+                '$.spec.acme.externalAccountBinding.keySecretRef',
+              ) || {}
             }
             title={t('issuers.external-account.secret')}
-            // tooltipContent={t('issuers.tooltips.secret-ref-ca')}
+            tooltipContent={t('issuers.tooltips.key-secret-ref')}
             onChange={value => {
-              jp.value(issuer, '$.spec.acme.privateKeySecretRef', value);
+              jp.value(
+                issuer,
+                '$.spec.acme.externalAccountBinding.keySecretRef',
+                value,
+              );
               setIssuer({ ...issuer });
             }}
           />
@@ -202,7 +211,7 @@ export function IssuersCreate({ onChange, formElementRef, namespace }) {
       setResource={setIssuer}
       onChange={onChange}
       formElementRef={formElementRef}
-      createUrl={`/apis/dns.gardener.cloud/v1alpha1/namespaces/${namespace}/issuers/`}
+      createUrl={`/apis/cert.gardener.cloud/v1alpha1/namespaces/${namespace}/issuers/`}
     >
       <ResourceForm.K8sNameField
         propertyPath="$.metadata.name"
