@@ -315,7 +315,7 @@ common:
     type-to-select: Start typing to select {{value}} from the list.
   placeholders:
     secret-ref-name: Select name
-    secret-ref-namespace: Select namespace
+    secret-ref-namespace: Select Namespace
   tooltips:
     copy-to-clipboard: Copy to clipboard
     download: Download
@@ -478,11 +478,11 @@ domains:
   exclude:
     label: Exclude Domains
     placeholder: Domain that should be ignored
-    tooltip: Exclude are domain names for which certificate requests are forbidden (including any subdomains) for example, *.api.mydomain.com.
+    tooltip: The domains (including subdomains) for which certificate requests are forbidden, for example, *.api.mydomain.com.
   include:
     label: Include Domains
     placeholder: Domain that should be observed
-    tooltip: Include are domain names for which certificate requests are allowed (including any subdomains) for example, *.api.mydomain.com.
+    tooltip: The domains (including subdomains) for which certificate requests are allowed, for example, *.api.mydomain.com.
 dnsentries:
   labels:
     ttl: TTL
