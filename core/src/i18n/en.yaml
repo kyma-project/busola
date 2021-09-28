@@ -846,7 +846,7 @@ issuers:
     secret-ref-acme: PrivateKeySecretRef is the secret ref to the ACME private key.
     secret-ref-ca: PrivateKeySecretRef is the secret ref to the CA secret.
     server: Server is the URL of the ACME server.
-    skip-dns: SkipDNSChallengeValidation marks that this issuer does not validate DNS challenges. In this case no DNS entries/records are created for a DNS Challenge and DNS propagation is not checked.
+    skip-dns: SkipDNSChallengeValidation marks that this issuer does not validate DNS challenges. In this case, no DNS entries/records are created for a DNS Challenge, and DNS propagation is not checked.
   type: Issuer Type
 jobs:
   completion-time: Completion Time
