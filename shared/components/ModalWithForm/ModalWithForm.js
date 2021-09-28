@@ -52,6 +52,8 @@ export const ModalWithForm = ({
   const jsonSchemaFormRef = useRef(null);
   const notificationManager = useNotification();
 
+  confirmText = confirmText || t('common.buttons.create');
+
   useEffect(() => {
     if (!alwaysOpen) setOpenStatus(opened); // if alwaysOpen===true we can ignore the 'opened' prop
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -230,7 +232,6 @@ ModalWithForm.propTypes = {
 
 ModalWithForm.defaultProps = {
   performRefetch: () => {},
-  confirmText: 'common.buttons.create',
   invalidPopupMessage: '',
   onModalOpenStateChange: () => {},
   alwaysOpen: false,

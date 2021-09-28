@@ -4,9 +4,11 @@ import { ComboboxInput } from 'fundamental-react';
 import { useGetList, k8sNamePattern } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 import pluralize from 'pluralize';
+import './K8sResourceSelect.scss';
 
 const commonPropTypes = {
   onSelect: PropTypes.func.isRequired,
+  onChange: PropTypes.func,
   resource: PropTypes.string,
   value: PropTypes.string.isRequired,
   required: PropTypes.bool,
@@ -18,8 +20,8 @@ K8sResourceSelectWithUseGetList.propTypes = {
   ...commonPropTypes,
 };
 
-export function K8sResourceSelectWithUseGetList({ url, ...props }) {
-  const listCall = useGetList()(url, {
+export function K8sResourceSelectWithUseGetList({ url, filter, ...props }) {
+  const listCall = useGetList(filter)(url, {
     pollingInterval: 7000,
   });
 
@@ -32,7 +34,7 @@ K8sResourceSelect.propTypes = {
     PropTypes.arrayOf(PropTypes.object.isRequired),
   ]),
   loading: PropTypes.bool.isRequired,
-  erorr: PropTypes.object,
+  error: PropTypes.object,
   ...commonPropTypes,
 };
 
@@ -41,6 +43,7 @@ export function K8sResourceSelect({
   loading,
   error,
   onSelect,
+  onChange,
   resourceType,
   value,
   required,
@@ -83,16 +86,21 @@ export function K8sResourceSelect({
   };
 
   return (
-    <ComboboxInput
-      compact
-      required={required}
-      placeholder={t('common.messages.type-to-select', { value: resourceType })}
-      id="k8s-resource-dropdown"
-      ariaLabel={t('common.messages.choose', { value: resourceType })}
-      options={options}
-      onSelectionChange={(_, selected) => onSelect(selected.text)}
-      validationState={getValidationState()}
-      inputProps={{ pattern: k8sNamePattern, value }}
-    />
+    <div className="combobox--full-width">
+      <ComboboxInput
+        compact
+        required={required}
+        placeholder={t('common.messages.type-to-select', {
+          value: resourceType,
+        })}
+        id="k8s-resource-dropdown"
+        ariaLabel={t('common.messages.choose', { value: resourceType })}
+        options={options}
+        onChange={onChange}
+        onSelectionChange={(_, selected) => onSelect(selected.text)}
+        validationState={getValidationState()}
+        inputProps={{ pattern: k8sNamePattern, value }}
+      />
+    </div>
   );
 }
