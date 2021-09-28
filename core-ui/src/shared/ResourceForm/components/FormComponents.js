@@ -87,7 +87,7 @@ export function Title({
     'tooltip-cursor': tooltipContent,
   });
   const component = (
-    <div className="title" className={classNames}>
+    <div className={classNames}>
       {!disabled && canChangeState && (
         <Icon className="control-icon" ariaHidden glyph={iconGlyph} />
       )}
