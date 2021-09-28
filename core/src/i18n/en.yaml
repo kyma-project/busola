@@ -717,7 +717,7 @@ functions:
       variable-can-override-sbu: This variable can override or be overridden by a variable injected by one of the created ServiceBindings.
 gateways:
   name_singular: Gateway
-  description: Gateway describes a load balancer that operates at the edge of the mesh and receives incoming or outgoing HTTP/TCP connections.
+  description: ' describes a load balancer that operates at the edge of the mesh and receives incoming or outgoing HTTP/TCP connections.'
   create-modal:
     at-least-one-server-required: Gateway must have at least one server.
     tooltips:

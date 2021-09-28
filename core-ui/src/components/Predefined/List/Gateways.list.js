@@ -13,10 +13,23 @@ export function GatewaysList({ DefaultRenderer, ...otherParams }) {
     },
   ];
 
+  const description = (
+    <span>
+      <a
+        href="https://istio.io/latest/docs/reference/config/networking/gateway/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Gateway
+      </a>
+      {t('gateways.description')}
+    </span>
+  );
+
   return (
     <DefaultRenderer
       customColumns={customColumns}
-      description={t('gateways.description')}
+      description={description}
       {...otherParams}
     />
   );
