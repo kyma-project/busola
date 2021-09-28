@@ -14,8 +14,6 @@ import * as Inputs from 'shared/ResourceForm/components/Inputs';
 
 export function IssuersCreate({ onChange, formElementRef, namespace }) {
   const { t } = useTranslation();
-  // const notification = useNotification();
-  // const postRequest = usePost();
 
   const [issuer, setIssuer] = useState(createIssuerTemplate(namespace));
   const [issuerType, setIssuerType] = useState('');
@@ -38,7 +36,7 @@ export function IssuersCreate({ onChange, formElementRef, namespace }) {
         ...issuerTypeObject,
       },
     });
-    console.log('lolo2', issuer);
+    console.log('lolo3', issuer);
     // eslint-disable-next-line
   }, [issuerType, setIssuerType]);
 
@@ -46,20 +44,16 @@ export function IssuersCreate({ onChange, formElementRef, namespace }) {
     if (!issuerType || issuerType !== 'ca') return <></>;
     if (issuerType === 'ca') {
       return (
-        <ResourceForm.FormField
-          required
-          propertyPath="$.spec.ca.privateKeySecretRef"
+        <SecretRef
+          className={'fd-margin-top--sm'}
+          id="secret-ref-input"
+          resourceRef={jp.value(issuer, '$.spec.ca.privateKeySecretRef') || {}}
+          title={t('issuers.private-key')}
           tooltipContent={t('issuers.tooltips.secret-ref-ca')}
-          label={t('issuers.private-key')}
-          input={({ value, setValue }) => (
-            <SecretRef
-              id="secret-ref-input"
-              resourceRef={value || {}}
-              onChange={(_, privateKeySecretRef) =>
-                setValue(privateKeySecretRef)
-              }
-            />
-          )}
+          onChange={value => {
+            jp.value(issuer, '$.spec.ca.privateKeySecretRef', value);
+            setIssuer({ ...issuer });
+          }}
         />
       );
     }
@@ -71,6 +65,7 @@ export function IssuersCreate({ onChange, formElementRef, namespace }) {
       return [
         <ResourceForm.FormField
           label={t('issuers.server')}
+          key={t('issuers.server')}
           propertyPath="$.spec.acme.server"
           tooltipContent={t('issuers.tooltips.server')}
           required
@@ -79,6 +74,7 @@ export function IssuersCreate({ onChange, formElementRef, namespace }) {
         />,
         <ResourceForm.FormField
           label={t('issuers.email')}
+          key={t('issuers.email')}
           propertyPath="$.spec.acme.email"
           tooltipContent={t('issuers.tooltips.email')}
           required
@@ -96,12 +92,15 @@ export function IssuersCreate({ onChange, formElementRef, namespace }) {
         <ResourceForm.FormField
           advanced
           label={t('issuers.skip-dns')}
+          key={t('issuers.skip-dns')}
           propertyPath="$.spec.skipDNSChallengeValidation"
           tooltipContent={t('issuers.tooltips.skip-dns')}
+          className={'fd-margin-bottom--sm'}
           input={() => (
             <Checkbox
               compact
               checked={issuer.spec.skipDNSChallengeValidation}
+              ariaLabel={t('issuers.skip-dns')}
               onChange={() =>
                 setIssuer({
                   ...issuer,
@@ -115,6 +114,74 @@ export function IssuersCreate({ onChange, formElementRef, namespace }) {
             />
           )}
         />,
+        <SecretRef
+          advanced
+          id="secret-ref-input"
+          resourceRef={
+            jp.value(issuer, '$.spec.acme.privateKeySecretRef') || {}
+          }
+          title={t('issuers.private-key')}
+          tooltipContent={t('issuers.tooltips.secret-ref-ca')}
+          onChange={value => {
+            jp.value(issuer, '$.spec.acme.privateKeySecretRef', value);
+            setIssuer({ ...issuer });
+          }}
+          actions={
+            <Checkbox
+              compact
+              checked={issuer.autoRegistration}
+              onChange={(e, checked) =>
+                setIssuer({ ...issuer, autoRegistration: checked })
+              }
+              dir="rtl"
+            >
+              {t('issuers.auto-registration')}
+            </Checkbox>
+          }
+        />,
+        <ResourceForm.TextArrayInput
+          advanced
+          propertyPath="$.spec.acme.domains.include"
+          title={t('dnsproviders.labels.include-domains')}
+          inputProps={{
+            placeholder: t('dnsproviders.placeholders.include-domains'),
+          }}
+        />,
+        <ResourceForm.TextArrayInput
+          advanced
+          propertyPath="$.spec.acme.domains.exclude"
+          title={t('dnsproviders.labels.exclude-domains')}
+          inputProps={{
+            placeholder: t('dnsproviders.placeholders.exclude-domains'),
+          }}
+        />,
+        <ResourceForm.CollapsibleSection
+          advanced
+          title={t('issuers.external-account.title')}
+          resource={issuer}
+          setResource={setIssuer}
+        >
+          <ResourceForm.FormField
+            propertyPath="$.spec.externalAccountKeyId"
+            label={t('issuers.external-account.key-id')}
+            input={Inputs.Text}
+            placeholder={t('issuers.placeholders.key-id')}
+            className={'fd-margin-bottom--sm'}
+          />
+          <SecretRef
+            advanced
+            id="secret-ref-input"
+            resourceRef={
+              jp.value(issuer, '$.spec.acme.privateKeySecretRef') || {}
+            }
+            title={t('issuers.external-account.secret')}
+            // tooltipContent={t('issuers.tooltips.secret-ref-ca')}
+            onChange={value => {
+              jp.value(issuer, '$.spec.acme.privateKeySecretRef', value);
+              setIssuer({ ...issuer });
+            }}
+          />
+        </ResourceForm.CollapsibleSection>,
       ];
     }
   };
@@ -139,10 +206,10 @@ export function IssuersCreate({ onChange, formElementRef, namespace }) {
       />
       <ResourceForm.FormField
         label={t('issuers.type')}
+        key={t('issuers.type')}
         required
         value={issuerType}
         setValue={type => {
-          console.log('setIssuerType', type);
           setIssuerType(type);
         }}
         input={({ value, setValue }) => (
@@ -151,21 +218,21 @@ export function IssuersCreate({ onChange, formElementRef, namespace }) {
         tooltipContent={t('issuers.tooltips.issuer-type')}
       />
 
-      {issuerCAFields()}
       {issuerSimpleACMEFields()}
 
       <ResourceForm.FormField
         advanced
         required
         label={t('issuers.requests-per-day')}
+        key={t('issuers.requests-per-day')}
         propertyPath="$.spec.requestsPerDayQuota"
         tooltipContent={t('issuers.tooltips.requests')}
         placeholder={t('issuers.placeholders.requests-per-day')}
         input={Inputs.Number}
-        className={issuerType === 'acme' ? '' : 'fd-margin-bottom--sm'}
       />
 
-      {/* {issuerAdvancedACMEFields()} */}
+      {issuerAdvancedACMEFields()}
+      {issuerCAFields()}
     </ResourceForm>
   );
 }

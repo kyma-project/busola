@@ -286,6 +286,9 @@ common:
     no-instances-found-namespace: No matching {{value}} found in this Namespace.
     parse-error: Parse error, previous valid input will be used.
     type-to-select: Start typing to select {{value}} from the list.
+  placeholders:
+    secret-ref-name: Select name
+    secret-ref-namespace: Select namespace
   tooltips:
     copy-to-clipboard: Copy to clipboard
     download: Download
@@ -297,6 +300,8 @@ common:
     read-file: Read file content as a single value, with file name as a key.
     save: Save
     search: Search
+    secret-ref-name: Name is unique within a namespace to reference a secret resource.
+    secret-ref-namespace: Namespace defines the space within which the secret name must be unique.
     value: Value must start and end with an alphanumeric character, can contain '-', '_' or '.'
 components:
   key-value-field:
@@ -808,8 +813,6 @@ issuers:
     requests: RequestsPerDayQuota is the maximum number of certificate requests per days allowed for this issuer
     secret-ref-acme: PrivateKeySecretRef is the secret ref to the ACME private key.
     secret-ref-ca: PrivateKeySecretRef is the secret ref to the CA secret.
-    secret-ref-name: Name is unique within a namespace to reference a secret resource.
-    secret-ref-namespace: Namespace defines the space within which the secret name must be unique.
     server: Server is the URL of the ACME server.
     skip-dns: SkipDNSChallengeValidation marks that this issuer does not validate DNS challenges. In this case no DNS entries/records are created for a DNS Challenge and DNS propagation is not checked.
   type: Issuer Type

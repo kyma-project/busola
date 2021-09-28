@@ -24,6 +24,7 @@ export function CollapsibleSection({
   setResource,
   className,
   required,
+  tooltipContent,
 }) {
   const [open, setOpen] = useState(defaultOpen);
   const actionsRef = useRef();
@@ -51,12 +52,15 @@ export function CollapsibleSection({
   return (
     <div className={classNames}>
       <header onClick={toggle} aria-label={`expand ${title}`}>
-        <div className="title">
-          {!disabled && canChangeState && (
-            <Icon className="control-icon" ariaHidden glyph={iconGlyph} />
-          )}
-          {title}
-        </div>
+        {
+          <Title
+            tooltipContent={tooltipContent}
+            title={title}
+            disabled={disabled}
+            canChangeState={canChangeState}
+            iconGlyph={iconGlyph}
+          />
+        }
         <div ref={actionsRef}>
           {typeof actions === 'function' ? actions(setOpen) : actions}
         </div>
@@ -72,6 +76,28 @@ export function CollapsibleSection({
   );
 }
 
+export function Title({
+  tooltipContent,
+  title,
+  disabled,
+  canChangeState,
+  iconGlyph,
+}) {
+  const component = (
+    <div className="title">
+      {!disabled && canChangeState && (
+        <Icon className="control-icon" ariaHidden glyph={iconGlyph} />
+      )}
+      {title}
+    </div>
+  );
+
+  if (tooltipContent) {
+    return <Tooltip content={tooltipContent}>{component}</Tooltip>;
+  } else {
+    return component;
+  }
+}
 export function Label({ required, tooltipContent, children }) {
   const label = <FormLabel required={required}>{children}</FormLabel>;
 
