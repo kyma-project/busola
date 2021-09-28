@@ -79,19 +79,9 @@ export function AddClusterWizard({
       onCancel={onCancel}
       onComplete={onComplete}
       onStepChange={(e, step, index, count) => setLastStep(index === count - 1)}
+      navigationType="tabs"
       headerSize="md"
       contentSize="md"
-      footerProps={
-        lastStep
-          ? {
-              children: (
-                <Button compact option="emphasized" onClick={onComplete}>
-                  {t('clusters.buttons.verify-and-add')}
-                </Button>
-              ),
-            }
-          : {}
-      }
     >
       <Wizard.Step
         title={t('clusters.wizard.kubeconfig')}
@@ -133,7 +123,8 @@ export function AddClusterWizard({
       <Wizard.Step
         title={t('clusters.wizard.storage')}
         indicator="2"
-        valid={false}
+        valid={!!storage}
+        nextLabel={t('clusters.buttons.verify-and-add')}
       >
         <ChooseStorage storage={storage} setStorage={setStorage} />
       </Wizard.Step>
