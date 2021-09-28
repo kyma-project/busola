@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Button, Wizard, MessageStrip } from 'fundamental-react';
+import { Wizard, MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
@@ -26,7 +26,6 @@ export function AddClusterWizard({
   const [hasAuth, setHasAuth] = useState(false);
   const [authValid, setAuthValid] = useState(false);
   const [hasOneContext, setHasOneContext] = useState(false);
-  const [lastStep, setLastStep] = useState(false);
   const [storage, setStorage] = useState(
     busolaClusterParams?.config.storage || 'localStorage',
   );
@@ -78,7 +77,6 @@ export function AddClusterWizard({
     <Wizard
       onCancel={onCancel}
       onComplete={onComplete}
-      onStepChange={(e, step, index, count) => setLastStep(index === count - 1)}
       navigationType="tabs"
       headerSize="md"
       contentSize="md"
