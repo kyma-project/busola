@@ -23,3 +23,10 @@
 body.lui-semiCollapsible {
   background: var(--sapBackgroundColor);
 }
+.fd-shellbar {
+  display: none;
+}
+.fd-app__sidebar,
+.iframeContainer {
+  top: 0 !important;
+}
