@@ -160,7 +160,7 @@ certificates:
   title: Certificates
   csr: CSR
   with-csr: Use a CSR
-  renew: Trigger a renew
+  renew: Trigger a renewal
   existing-secret: Use the existing Secret
   secret-name: Secret name
   secret-ref: Secret to use
