@@ -90,7 +90,7 @@ export function DNSProvidersCreate({
         required
         propertyPath="$.spec.domains.include"
         title={t('domains.include.label')}
-        tooltipContent={t('domains.include.tooltip')}
+        tooltipContent={t('dnsproviders.tooltips.included-domains')}
         inputProps={{
           placeholder: t('domains.include.placeholder'),
         }}
@@ -99,7 +99,7 @@ export function DNSProvidersCreate({
         advanced
         propertyPath="$.spec.domains.exclude"
         title={t('domains.exclude.label')}
-        tooltipContent={t('domains.exclude.tooltip')}
+        tooltipContent={t('dnsproviders.tooltips.excluded-domains')}
         inputProps={{
           placeholder: t('domains.exclude.placeholder'),
         }}
