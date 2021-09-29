@@ -21,9 +21,9 @@ RUN make resolve
 RUN make lint
 RUN make pull-licenses
 
-RUN cd /app/core && make test && make build-docker
-RUN cd /app/service-catalog-ui && make test && make build
-RUN cd /app/core-ui && make test && make build
+RUN cd /app/core && make build-docker
+RUN cd /app/service-catalog-ui && make build
+RUN cd /app/core-ui && make build
 RUN cd /app/backend && npm run build
 
 # ---- Serve ----
@@ -32,7 +32,8 @@ WORKDIR /app
 
 RUN apk --no-cache upgrade && \
     apk --no-cache add nginx && \
-    apk add --update nodejs npm
+    apk add --update nodejs npm && \
+    apk add --update jq
 WORKDIR /app
 
 COPY --from=builder /app/core/src /app/core
@@ -44,7 +45,9 @@ COPY --from=builder /app/backend/package* /app/
 RUN npm ci --only=production
 
 # use sessionStorage as default
-RUN sed -i 's/"storage": "localStorage",/"storage": "sessionStorage",/g' core/assets/config/config.json 
+RUN sed -i 's/"storage": "localStorage",/"storage": "sessionStorage",/g' core/assets/config/config.json
+RUN jq '.config.features.INIT_PARAMS.isEnabled = true' core/assets/config/config.json >> core/assets/config/config_new.json
+RUN mv -f core/assets/config/config_new.json core/assets/config/config.json
 
 EXPOSE 3001
 ENV NODE_ENV=production ADDRESS=0.0.0.0 IS_DOCKER=true
