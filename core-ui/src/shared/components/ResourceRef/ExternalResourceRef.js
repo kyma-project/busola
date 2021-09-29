@@ -18,8 +18,9 @@ export function ExternalResourceRef({
   tooltipContent,
   actions,
   className,
+  isAdvanced,
   required = false,
-  defaultOpen = false,
+  defaultOpen = undefined,
 }) {
   const { t } = useTranslation();
 
@@ -47,14 +48,14 @@ export function ExternalResourceRef({
       resource => resourceRef.namespace === resource.namespace,
     );
   }
-
+  const open = defaultOpen === undefined ? !isAdvanced : defaultOpen;
   return (
     <CollapsibleSection
       title={title}
       tooltipContent={tooltipContent}
       actions={actions}
       className={className}
-      defaultOpen={defaultOpen}
+      defaultOpen={open}
       required={required}
     >
       <div className={classnames('fd-row form-field')}>
@@ -64,7 +65,7 @@ export function ExternalResourceRef({
             tooltipContent={t('common.tooltips.secret-ref-namespace')}
           >
             {labelPrefix + ' '}
-            {t('common.lowercase.namespace')}
+            {t('common.labels.namespace')}
           </Label>
         </div>
         <div className="fd-col fd-col-md--7">

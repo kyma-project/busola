@@ -130,7 +130,6 @@ export function FormField({
   tooltipContent,
   ...props
 }) {
-  console.log('...props', props);
   return (
     <div className={classnames('fd-row form-field', className)}>
       <div className="fd-col fd-col-md--4 form-field__label">
@@ -193,6 +192,8 @@ export function MultiInput({
   toExternal,
   inputs,
   className,
+  isAdvanced,
+  defaultOpen,
   ...props
 }) {
   const valueRef = useRef(null); // for deep comparison
@@ -243,12 +244,14 @@ export function MultiInput({
       ref.current.focus();
     }
   };
+  const open = defaultOpen === undefined ? !isAdvanced : defaultOpen;
 
   return (
     <CollapsibleSection
       title={title}
       className={className}
       required={required}
+      defaultOpen={open}
       {...props}
     >
       <div className="fd-row form-field multi-input">
@@ -297,9 +300,17 @@ export function MultiInput({
   );
 }
 
-export function TextArrayInput({ inputProps, tooltipContent, ...props }) {
+export function TextArrayInput({
+  defaultOpen,
+  inputProps,
+  isAdvanced,
+  tooltipContent,
+  ...props
+}) {
   return (
     <MultiInput
+      defaultOpen={defaultOpen}
+      isAdvanced={isAdvanced}
       toInternal={value => value || []}
       toExternal={value => value.filter(val => !!val)}
       tooltipContent={tooltipContent}
@@ -322,6 +333,8 @@ export function TextArrayInput({ inputProps, tooltipContent, ...props }) {
 }
 
 export function KeyValueField({
+  defaultOpen,
+  isAdvanced,
   keyProps = {
     pattern: '([A-Za-z0-9][-A-Za-z0-9_./]*)?[A-Za-z0-9]',
   },
@@ -330,6 +343,8 @@ export function KeyValueField({
   const { t } = useTranslation();
   return (
     <MultiInput
+      defaultOpen={defaultOpen}
+      isAdvanced={isAdvanced}
       toInternal={value =>
         Object.entries(value || {}).map(([key, val]) => ({ key, val }))
       }

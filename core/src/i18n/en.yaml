@@ -300,15 +300,12 @@ common:
     issuer: Issuer
     name: Name
     namespace: Namespace
-    lowercase-name: name
-    lowercase-namespace: namespace
     protocol: Protocol
     resource: Resource
     secret: Secret
     service: Service
   lowercase:
     name: name
-    namespace: namespace
   messages:
     cannot-load: 'Cannot load {{value}}: {{error.message}}.'
     choose: Choose {{value}}.

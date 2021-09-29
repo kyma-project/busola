@@ -8,7 +8,6 @@ export function IssuerTypeDropdown({ type, setType }) {
     { key: 'ca', text: t('issuers.ca') },
     { key: 'acme', text: t('issuers.acme') },
   ];
-  console.log('!!type', type);
   return (
     <Dropdown
       compact

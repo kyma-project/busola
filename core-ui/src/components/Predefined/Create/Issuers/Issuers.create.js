@@ -17,17 +17,14 @@ export function IssuersCreate({ onChange, formElementRef, namespace }) {
 
   const [issuer, setIssuer] = useState(createIssuerTemplate(namespace));
   const [issuerType, setIssuerType] = useState('');
-  console.log('issuer', issuer);
-  console.log('issuerType', issuerType);
+
   React.useEffect(() => {
     let issuerTypeObject = {};
     if (issuerType === 'ca') issuerTypeObject = createCATypeTemplate();
     else if (issuerType === 'acme') issuerTypeObject = createACMETypeTemplate();
     const spec = jp.value(issuer, '$.spec') || [];
-    console.log('lolo1', spec, issuerType);
     delete spec.ca;
     delete spec.acme;
-    console.log('lolo2', spec, issuerType);
 
     setIssuer({
       ...issuer,
@@ -36,7 +33,6 @@ export function IssuersCreate({ onChange, formElementRef, namespace }) {
         ...issuerTypeObject,
       },
     });
-    console.log('lolo3', issuer);
     // eslint-disable-next-line
   }, [issuerType, setIssuerType]);
 
@@ -46,7 +42,6 @@ export function IssuersCreate({ onChange, formElementRef, namespace }) {
       return (
         <SecretRef
           required
-          defaultOpen
           className={'fd-margin-top--sm'}
           id="secret-ref-ca-input"
           resourceRef={jp.value(issuer, '$.spec.ca.privateKeySecretRef') || {}}
@@ -151,6 +146,17 @@ export function IssuersCreate({ onChange, formElementRef, namespace }) {
           }
         />,
         <ResourceForm.TextArrayInput
+          simple
+          propertyPath="$.spec.acme.domains.include"
+          title={t('domains.include.label')}
+          tooltipContent={t('domains.include.tooltip')}
+          inputProps={{
+            placeholder: t('domains.include.placeholder'),
+          }}
+          className={'fd-margin-top--sm'}
+        />,
+        <ResourceForm.TextArrayInput
+          advanced
           propertyPath="$.spec.acme.domains.include"
           title={t('domains.include.label')}
           tooltipContent={t('domains.include.tooltip')}
