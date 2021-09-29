@@ -1,6 +1,6 @@
 function createAuthHeaders(auth) {
   if (auth.token) {
-    return { Authorization: `Bearer ${auth.token}` };
+    return { 'X-K8s-Authorization': `Bearer ${auth.token}` };
   } else if (auth['client-certificate-data'] && auth['client-key-data']) {
     return {
       'X-Client-Certificate-Data': auth['client-certificate-data'],
