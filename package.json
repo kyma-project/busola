@@ -48,8 +48,7 @@
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
     "rfc6902": "^4.0.1",
-    "semver": "^7.3.5",
-    "yaml-sort": "^1.1.0"
+    "semver": "^7.3.5"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^4.2.4",
@@ -75,7 +74,8 @@
     "react-scripts": "3.4.0",
     "react-test-renderer": "^16.9.0",
     "waait": "^1.0.5",
-    "webpack-cli": "^4.7.2"
+    "webpack-cli": "^4.7.2",
+    "yaml-sort": "^1.1.0"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx,json,html,css,scss,yaml,md}": "prettier --write",

@@ -49,6 +49,15 @@ Busola is delivered with the following default settings:
 | `navigation.externalNodes` | A nested list of links to external websites. `category`, `icon`: a category name and optional icon / `children`: a list of pairs (label and link) | category: `Learn more` / children: `Kyma Documentation`, `Our Slack`, `Github`                                                                                                                          |
 | `version`                  | Configuration version. Don’t edit this. Can be empty.                                                                                             | the most recent release                                                                                                                                                                                 |
 
+### Configuration sources
+
+Busola configuration is the product of gathering and merging the configurations from several individual sources. The following list presents the sources in the order of precedence, with init params having the highest priority over the others:
+
+- Built-in, hardcoded defaults.
+- Busola cluster configuration, available on the Busola cluster in ConfigMap "busola/busola-config" under the key "config". This data is mounted to the Busola `web` pod, and during the local development, the [config.json](core/src/assets/config/config.json) file is used.
+- Target cluster configuration, available on the target cluster in ConfigMap "kube-system/busola-config" under the key "config". Busola performs a request for that resource during the bootstrap process.
+- Configuration from initialisation parameters. By default, init parameters are disabled. To switch them on, set the feature `INIT_PARAMS` to `isEnabled=true`.
+
 ### Change the Configuration
 
 If you have the required authorizations and access to the kubeconfig, you can change the settings for the Busola cluster configuration and the target cluster configuration.
