@@ -845,7 +845,7 @@ issuers:
   title: Issuers
   tooltips:
     email: The email address to use for user registration.
-    excluded-domains: The domains (including subdomains) for which certificate requests are forbidden, $t(domains.example).
+    excluded-domains: The domains (including subdomains) for which certificate requests are forbidden, for example, $t(domains.example).
     external-account-binding: ACMEExternalAccountBinding is a reference to a CA external account of the ACME server.
     included-domains: The domains (including subdomains) for which certificate requests are allowed, for example, $t(domains.example).
     issuer-type: Certification authority used
