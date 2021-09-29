@@ -149,7 +149,7 @@ export function IssuersCreate({ onChange, formElementRef, namespace }) {
           simple
           propertyPath="$.spec.acme.domains.include"
           title={t('domains.include.label')}
-          tooltipContent={t('dnsproviders.tooltips.included-domains')}
+          tooltipContent={t('issuers.tooltips.included-domains')}
           inputProps={{
             placeholder: t('domains.include.placeholder'),
           }}
@@ -159,7 +159,7 @@ export function IssuersCreate({ onChange, formElementRef, namespace }) {
           advanced
           propertyPath="$.spec.acme.domains.include"
           title={t('domains.include.label')}
-          tooltipContent={t('dnsproviders.tooltips.included-domains')}
+          tooltipContent={t('issuers.tooltips.included-domains')}
           inputProps={{
             placeholder: t('domains.include.placeholder'),
           }}
@@ -168,7 +168,7 @@ export function IssuersCreate({ onChange, formElementRef, namespace }) {
           advanced
           propertyPath="$.spec.acme.domains.exclude"
           title={t('domains.exclude.label')}
-          tooltipContent={t('dnsproviders.tooltips.excluded-domains')}
+          tooltipContent={t('issuers.tooltips.excluded-domains')}
           inputProps={{
             placeholder: t('domains.exclude.placeholder'),
           }}
