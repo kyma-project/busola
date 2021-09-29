@@ -7,10 +7,21 @@ import * as FormComponents from './components/FormComponents';
 import './ResourceForm.scss';
 import { useCreateResource } from './useCreateResource';
 
-function ResourceFormWrapper({ resource, setResource, children, ...props }) {
+export function ResourceFormWrapper({
+  resource,
+  setResource,
+  children,
+  ...props
+}) {
   return React.Children.map(children, child => {
     if (!child) {
       return null;
+    } else if (child.type === React.Fragment) {
+      return (
+        <ResourceFormWrapper resource={resource} setResource={setResource}>
+          {child.props.children}
+        </ResourceFormWrapper>
+      );
     } else if (!child.props.propertyPath) {
       return React.cloneElement(child, {
         resource,
@@ -105,19 +116,26 @@ export function ResourceForm({
 
   const renderFormChildren = (children, isAdvanced) =>
     React.Children.map(children, child => {
-      if (child.props.simple && isAdvanced) {
+      if (!child) {
         return null;
       }
-      if (child.props.advanced && !isAdvanced) {
+      if (child.type === React.Fragment) {
+        return renderFormChildren(child.props.children, isAdvanced);
+      }
+      const childProps = child.props || {};
+      if (childProps.simple && isAdvanced) {
         return null;
       }
-      if (!child.props.propertyPath) {
+      if (childProps.advanced && !isAdvanced) {
+        return null;
+      }
+      if (!childProps.propertyPath) {
         return child;
       }
       return React.cloneElement(child, {
-        value: jp.value(resource, child.props.propertyPath),
+        value: jp.value(resource, childProps.propertyPath),
         setValue: value => {
-          jp.value(resource, child.props.propertyPath, value);
+          jp.value(resource, childProps.propertyPath, value);
           setResource({ ...resource });
         },
       });
@@ -161,3 +179,5 @@ ResourceForm.FormField = FormComponents.FormField;
 ResourceForm.TextArrayInput = FormComponents.TextArrayInput;
 ResourceForm.K8sNameField = FormComponents.K8sNameField;
 ResourceForm.KeyValueField = FormComponents.KeyValueField;
+ResourceForm.ItemArray = FormComponents.ItemArray;
+ResourceForm.Select = FormComponents.Select;

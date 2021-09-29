@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: busola
-          image: eu.gcr.io/kyma-project/busola-web:PR-413
+          image: eu.gcr.io/kyma-project/busola-web:PR-429
           imagePullPolicy: Always
           resources:
             requests:
@@ -36,7 +36,7 @@ spec:
       volumes:
         - name: config
           configMap:
-            name: busola-web-config
+            name: busola-config
             items:
-              - key: config.json
+              - key: config
                 path: config.json
