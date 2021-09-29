@@ -14,9 +14,11 @@ export function ExternalResourceRef({
   onChange,
   resources,
   title,
+  labelPrefix,
   tooltipContent,
   actions,
   className,
+  required = false,
   defaultOpen = false,
 }) {
   const { t } = useTranslation();
@@ -53,14 +55,16 @@ export function ExternalResourceRef({
       actions={actions}
       className={className}
       defaultOpen={defaultOpen}
+      required={required}
     >
       <div className={classnames('fd-row form-field')}>
         <div className="fd-col fd-col-md--4 form-field__label">
           <Label
-            required
+            required={required}
             tooltipContent={t('common.tooltips.secret-ref-namespace')}
           >
-            {t('common.labels.namespace')}
+            {labelPrefix + ' '}
+            {t('common.lowercase.namespace')}
           </Label>
         </div>
         <div className="fd-col fd-col-md--7">
@@ -83,8 +87,12 @@ export function ExternalResourceRef({
       </div>
       <div className={classnames('fd-row form-field')}>
         <div className="fd-col fd-col-md--4 form-field__label">
-          <Label required tooltipContent={t('common.tooltips.secret-ref-name')}>
-            {t('common.labels.name')}
+          <Label
+            required={required}
+            tooltipContent={t('common.tooltips.secret-ref-name')}
+          >
+            {labelPrefix + ' '}
+            {t('common.lowercase.name')}
           </Label>
         </div>
         <div className="fd-col fd-col-md--7">

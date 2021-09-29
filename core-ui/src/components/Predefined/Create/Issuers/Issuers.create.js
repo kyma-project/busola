@@ -45,6 +45,8 @@ export function IssuersCreate({ onChange, formElementRef, namespace }) {
     if (issuerType === 'ca') {
       return (
         <SecretRef
+          required
+          defaultOpen
           className={'fd-margin-top--sm'}
           id="secret-ref-ca-input"
           resourceRef={jp.value(issuer, '$.spec.ca.privateKeySecretRef') || {}}

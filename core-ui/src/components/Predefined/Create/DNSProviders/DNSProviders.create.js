@@ -63,6 +63,7 @@ export function DNSProvidersCreate({
         className="fd-margin-bottom--sm"
       />
       <SecretRef
+        required
         className={'fd-margin-top--sm'}
         id="secretRef"
         resourceRef={jp.value(dnsProvider, '$.spec.secretRef') || {}}
@@ -86,6 +87,7 @@ export function DNSProvidersCreate({
         title={t('common.headers.annotations')}
       />
       <ResourceForm.TextArrayInput
+        required
         propertyPath="$.spec.domains.include"
         title={t('domains.include.label')}
         tooltipContent={t('domains.include.tooltip')}
