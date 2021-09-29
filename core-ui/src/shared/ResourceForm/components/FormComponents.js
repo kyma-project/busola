@@ -15,7 +15,8 @@ import { ResourceFormWrapper } from '../ResourceForm';
 
 export function CollapsibleSection({
   disabled = false,
-  defaultOpen,
+  defaultOpen = undefined,
+  isAdvanced,
   canChangeState = true,
   title,
   actions,
@@ -26,7 +27,9 @@ export function CollapsibleSection({
   required,
   tooltipContent,
 }) {
-  const [open, setOpen] = useState(defaultOpen);
+  const [open, setOpen] = useState(
+    defaultOpen === undefined ? !isAdvanced : defaultOpen,
+  );
   const actionsRef = useRef();
   const iconGlyph = open ? 'navigation-down-arrow' : 'navigation-right-arrow';
 
@@ -128,6 +131,7 @@ export function FormField({
   required,
   disabled,
   tooltipContent,
+  isAdvanced,
   ...props
 }) {
   return (
@@ -317,6 +321,7 @@ export function TextArrayInput({
       inputs={[
         ({ value, setValue, ref, onBlur, focus }) => (
           <FormInput
+            key={`form-${value}`}
             compact
             value={value || ''}
             ref={ref}

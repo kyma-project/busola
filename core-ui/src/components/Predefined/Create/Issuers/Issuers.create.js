@@ -44,6 +44,7 @@ export function IssuersCreate({ onChange, formElementRef, namespace }) {
           required
           className={'fd-margin-top--sm'}
           id="secret-ref-ca-input"
+          key="secret-ref-ca-input"
           resourceRef={jp.value(issuer, '$.spec.ca.privateKeySecretRef') || {}}
           title={t('issuers.private-key')}
           tooltipContent={t('issuers.tooltips.secret-ref-ca')}
@@ -114,6 +115,7 @@ export function IssuersCreate({ onChange, formElementRef, namespace }) {
         <SecretRef
           advanced
           id="secret-ref-acme-input"
+          key="secret-ref-acme-input"
           resourceRef={
             jp.value(issuer, '$.spec.acme.privateKeySecretRef') || {}
           }
@@ -146,6 +148,7 @@ export function IssuersCreate({ onChange, formElementRef, namespace }) {
           }
         />,
         <ResourceForm.TextArrayInput
+          key="domains-simple-include"
           simple
           propertyPath="$.spec.acme.domains.include"
           title={t('domains.include.label')}
@@ -156,6 +159,7 @@ export function IssuersCreate({ onChange, formElementRef, namespace }) {
           className={'fd-margin-top--sm'}
         />,
         <ResourceForm.TextArrayInput
+          key="domains-include"
           advanced
           propertyPath="$.spec.acme.domains.include"
           title={t('domains.include.label')}
@@ -165,6 +169,7 @@ export function IssuersCreate({ onChange, formElementRef, namespace }) {
           }}
         />,
         <ResourceForm.TextArrayInput
+          key="domains-exclude"
           advanced
           propertyPath="$.spec.acme.domains.exclude"
           title={t('domains.exclude.label')}
@@ -175,6 +180,7 @@ export function IssuersCreate({ onChange, formElementRef, namespace }) {
         />,
         <ResourceForm.CollapsibleSection
           advanced
+          key={'external-account'}
           title={t('issuers.external-account.title')}
           resource={issuer}
           setResource={setIssuer}
@@ -190,6 +196,7 @@ export function IssuersCreate({ onChange, formElementRef, namespace }) {
           <SecretRef
             advanced
             id="externalAccountBinding"
+            key="externalAccountBinding"
             resourceRef={
               jp.value(
                 issuer,
