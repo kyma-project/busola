@@ -1,119 +1,59 @@
-import * as jp from 'jsonpath';
-import shortid from 'shortid';
-
 export const TSL_MODES = [
-  // 'PASSTHROUGH',
   'SIMPLE',
-  // 'MUTUAL',
-  // 'AUTO_PASSTHROUGH',
-  // 'ISTIO_MUTUAL',
+  'PASSTHROUGH',
+  'MUTUAL',
+  'AUTO_PASSTHROUGH',
+  'ISTIO_MUTUAL',
 ];
 
 export const PROTOCOLS = [
   'HTTP',
-  // 'HTTP2',
+  'HTTP2',
   'HTTPS',
-  // 'GRPC',
-  // 'HTTP2',
-  // 'MONGO',
+  'GRPC',
+  'MONGO',
   'TCP',
+  'TLS',
 ];
 
-export function validateSpec(gateway) {
-  let isValid = true;
-  if (Object.keys(gateway.selector).length === 0) isValid = false;
-  gateway.servers.forEach(server => {
-    if (!server.hosts.length) isValid = false;
-  });
-  return isValid;
+export const DEFAULT_PORTS = {
+  HTTP: 80,
+  HTTP2: 80,
+  HTTPS: 443,
+  GRPC: 32767,
+  MONGO: 27017,
+  TLS: 443,
+};
+
+export const TLS_VERSIONS = {
+  TLS_AUTO: 'Auto',
+  TLSV1_0: 'TLS v1.0',
+  TLSV1_1: 'TLS v1.1',
+  TLSV1_2: 'TLS v1.2',
+  TLSV1_3: 'TLS v1.3',
+};
+
+export function isTLSProtocol(protocol) {
+  return protocol === 'HTTPS' || protocol === 'TLS';
 }
 
-export function newServer() {
-  return {
-    id: shortid.generate(),
-    port: {
-      number: 80,
-      name: '',
-      protocol: 'HTTP',
-    },
-    hosts: [],
-  };
+export function validateTLS(server) {
+  if (!server?.tls) return true;
+
+  const { mode, credentialName, privateKey, serverCertificate } = server.tls;
+
+  const hasSecret = !!credentialName;
+  const hasKeyAndCertificate = !!privateKey && !!serverCertificate;
+
+  const isSimpleOrMutual = mode === 'SIMPLE' || mode === 'MUTUAL';
+  return !isSimpleOrMutual || hasSecret || hasKeyAndCertificate;
 }
 
-export function gatewayToYaml(gateway) {
-  const servers = gateway.servers;
+export function validateGateway(gateway) {
+  const hasServer = gateway?.spec?.servers?.length;
+  const hasSelector = Object.keys(gateway?.spec?.selector || {}).length;
+  const serversHaveHosts = gateway?.spec?.servers?.every(s => s?.hosts?.length);
+  const tlsValid = gateway?.spec?.servers?.every(validateTLS);
 
-  servers.forEach(server => {
-    delete server.id;
-  });
-
-  return {
-    apiVersion: 'networking.istio.io/v1alpha3',
-    kind: 'Gateway',
-    metadata: {
-      name: gateway.name,
-      namespace: gateway.namespace,
-      labels: gateway.labels,
-    },
-    spec: {
-      selector: gateway.selector,
-      servers: servers,
-    },
-  };
-}
-
-export function yamlToGateway(yaml, prevGateway) {
-  const gateway = {
-    name: jp.value(yaml, '$.metadata.name') || '',
-    namespace: jp.value(yaml, '$.metadata.namespace') || '',
-    selector: jp.value(yaml, '$.spec.selector') || {},
-    servers: jp.value(yaml, '$.spec.servers') || [],
-    labels: jp.value(yaml, '$.metadata.labels') || {},
-  };
-  gateway.servers.forEach(server => (server.id = shortid.generate()));
-  return gateway;
-}
-
-export function createGatewayTemplate(namespaceId) {
-  return {
-    name: '',
-    namespace: namespaceId,
-    selector: {},
-    labels: {},
-    servers: [newServer()],
-  };
-}
-
-export function createPresets(namespaceId, translate) {
-  return [
-    {
-      name: translate('gateways.create-modal.presets.default'),
-      value: createGatewayTemplate(namespaceId),
-    },
-    {
-      name: 'ingressgateway',
-      value: {
-        name: 'httpbin-gateway',
-        namespace: namespaceId,
-        selector: {
-          istio: 'ingressgateway',
-        },
-        labels: {},
-        servers: [
-          {
-            port: {
-              number: 443,
-              name: 'https',
-              protocol: 'HTTPS',
-            },
-            tls: {
-              mode: 'SIMPLE',
-              credentialName: '',
-            },
-            hosts: [],
-          },
-        ],
-      },
-    },
-  ];
+  return hasServer && hasSelector && serversHaveHosts && tlsValid;
 }

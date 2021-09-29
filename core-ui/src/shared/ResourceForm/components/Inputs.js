@@ -23,3 +23,7 @@ export function Number({ value, setValue, ...props }) {
     />
   );
 }
+
+export function Port({ ...props }) {
+  return <Number min={0} max={65535} {...props} />;
+}
