@@ -5,7 +5,7 @@ import { HttpError } from '../../../../shared/hooks/BackendAPI/config';
 export async function failFastFetch(input, auth, init = {}) {
   function createAuthHeaders(auth) {
     if (auth.token) {
-      return { Authorization: `Bearer ${auth.token}` };
+      return { 'X-K8s-Authorization': `Bearer ${auth.token}` };
     } else if (
       auth &&
       auth['client-certificate-data'] &&

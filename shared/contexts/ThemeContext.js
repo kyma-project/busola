@@ -46,12 +46,13 @@ export const ThemeProvider = ({ children, env }) => {
   }, [theme]);
 
   useEffect(() => {
-    window.parent.postMessage({ msg: 'busola.getCurrentTheme' }, '*'); // send a message to the parent app and expect a response shorly
-    const messageListenerId = addEventListener('message', event => {
+    window.parent.postMessage({ msg: 'busola.getCurrentTheme' }, '*'); // send a message to the parent app and expect a response shortly
+    const changeTheme = event => {
       if (event.data.msg === 'busola.getCurrentTheme.response')
         setTheme(event.data.name);
-    });
-    return _ => removeEventListener(messageListenerId);
+    };
+    addEventListener('message', changeTheme);
+    return _ => removeEventListener('message', changeTheme);
   }, []);
 
   useEffect(() => {

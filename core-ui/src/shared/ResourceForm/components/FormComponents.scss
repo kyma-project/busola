@@ -15,6 +15,12 @@
     }
   }
 
+  &.disabled {
+    header {
+      cursor: unset;
+    }
+  }
+
   &:last-child > header {
     border-bottom: 1px solid var(--sapList_GroupHeaderBorderColor);
   }
@@ -32,6 +38,14 @@
 
   .fd-message-strip--warning:before {
     top: 25%;
+  }
+
+  &.required .title::after {
+    content: '*';
+    font-size: var(--sapFontSize);
+    font-weight: 700;
+    color: var(--sapField_RequiredColor);
+    margin-left: 4px;
   }
 }
 
@@ -53,4 +67,12 @@
   .new-value {
     margin-right: 52px;
   }
+
+  .fd-button--negative {
+    top: -1px;
+  }
+}
+
+.multi-input > .fd-col {
+  padding-top: 0;
 }

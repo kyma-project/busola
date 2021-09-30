@@ -9,7 +9,6 @@ body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
-  background-color: #f3f4f5;
 
   .tippy-popper[aria-hidden='true'] {
     display: none;
@@ -374,4 +373,16 @@ input[type='checkbox'] {
 
 .fd-textarea.resize-vertical {
   resize: vertical;
+}
+
+.fd-display-flex {
+  display: flex;
+}
+
+.fd-justify-between {
+  justify-content: space-between;
+}
+
+.fd-link {
+  cursor: pointer;
 }
