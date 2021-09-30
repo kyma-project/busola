@@ -13,7 +13,7 @@ export default function ServicesBoundModal({ binding }) {
 
   return (
     <Modal
-      confirmText={t('applications.button.ok')}
+      confirmText={t('common.buttons.ok')}
       title={t('applications.subtitle.bound-to', {
         namespace: namespace,
       })}
