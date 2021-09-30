@@ -47,7 +47,6 @@ export function AddCluster() {
       onCancel={() => {
         LuigiClient.linkManager().navigate('/clusters');
       }}
-      config={}
     />
   );
 }
