@@ -27,7 +27,7 @@ export function IssuersCreate({
 
   React.useEffect(() => {
     setCustomValid(validateIssuer(issuer, issuerType));
-  }, [issuer, setCustomValid]);
+  }, [issuer, issuerType, setCustomValid]);
 
   React.useEffect(() => {
     let issuerTypeObject = {};
