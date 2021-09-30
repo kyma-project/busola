@@ -123,7 +123,7 @@ export function SimpleForm({ certificate, setCertificate }) {
           <CreateForm.FormField
             label={<FormLabel>{t('certificates.with-csr')}</FormLabel>}
             input={
-              <div class="csr-header">
+              <div className="csr-header">
                 <Switch
                   compact
                   onChange={e =>
