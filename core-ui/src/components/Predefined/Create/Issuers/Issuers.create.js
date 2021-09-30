@@ -5,6 +5,7 @@ import {
   createIssuerTemplate,
   createCATypeTemplate,
   createACMETypeTemplate,
+  createExternalAccountBinding,
 } from './templates';
 import { validateIssuer } from './helpers';
 
@@ -195,11 +196,33 @@ export function IssuersCreate({
           tooltipContent={t('issuers.tooltips.external-account-binding')}
         >
           <ResourceForm.FormField
-            propertyPath="$.spec.acme.externalAccountBinding.keyID"
             label={t('issuers.external-account.key-id')}
             input={Inputs.Text}
             placeholder={t('issuers.placeholders.key-id')}
             className={'fd-margin-bottom--sm'}
+            value={jp.value(issuer, '$.spec.acme.externalAccountBinding.keyID')}
+            setValue={value => {
+              const externalAccountBinding = createExternalAccountBinding({
+                keySecretRef: jp.value(
+                  issuer,
+                  '$.spec.acme.externalAccountBinding.keySecretRef',
+                ),
+                keyId: value,
+              });
+              if (
+                externalAccountBinding.keyID ||
+                externalAccountBinding.keySecretRef
+              ) {
+                jp.value(
+                  issuer,
+                  '$.spec.acme.externalAccountBinding',
+                  externalAccountBinding,
+                );
+              } else {
+                delete issuer.spec.acme.externalAccountBinding;
+              }
+              setIssuer({ ...issuer });
+            }}
           />
           <SecretRef
             advanced
@@ -214,11 +237,26 @@ export function IssuersCreate({
             title={t('issuers.external-account.secret')}
             tooltipContent={t('issuers.tooltips.key-secret-ref')}
             onChange={value => {
-              jp.value(
-                issuer,
-                '$.spec.acme.externalAccountBinding.keySecretRef',
-                value,
-              );
+              const externalAccountBinding = createExternalAccountBinding({
+                keySecretRef: value,
+                keyId: jp.value(
+                  issuer,
+                  '$.spec.acme.externalAccountBinding.keyID',
+                ),
+              });
+              if (
+                externalAccountBinding.keyID ||
+                externalAccountBinding.keySecretRef
+              ) {
+                jp.value(
+                  issuer,
+                  '$.spec.acme.externalAccountBinding',
+                  externalAccountBinding,
+                );
+              } else {
+                delete issuer.spec.acme.externalAccountBinding;
+              }
+
               setIssuer({ ...issuer });
             }}
           />

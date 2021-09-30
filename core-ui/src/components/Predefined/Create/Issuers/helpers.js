@@ -20,8 +20,24 @@ export function validateIssuer(issuer, issuerType) {
       ? isAutoRegistrationSet
       : jp.value(issuer, '$.spec.acme.privateKeySecretRef.name') &&
         jp.value(issuer, '$.spec.acme.privateKeySecretRef.namespace');
-
-    return isRequestSet && isServerSet && isEmailSet && isSecretRefSet;
+    const isExternalAccountBindingValid =
+      (jp.value(issuer, '$.spec.acme.externalAccountBinding.keyID') &&
+        jp.value(
+          issuer,
+          '$.spec.acme.externalAccountBinding.keySecretRef.name',
+        ) &&
+        jp.value(
+          issuer,
+          '$.spec.acme.externalAccountBinding.keySecretRef.namespace',
+        )) ||
+      !jp.value(issuer, '$.spec.acme.externalAccountBinding');
+    return (
+      isRequestSet &&
+      isServerSet &&
+      isEmailSet &&
+      isSecretRefSet &&
+      isExternalAccountBindingValid
+    );
   }
   return false;
 }

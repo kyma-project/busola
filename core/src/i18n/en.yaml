@@ -835,6 +835,7 @@ issuers:
     email: Email address for user registration
     key-id: ID of the CA that the external account is bound to
     name: Issuer Name
+    requests-per-day: Daily requests quota
     server: ACME Server URL
     type: Select issuer type
   private-key: Private key Secret

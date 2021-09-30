@@ -22,7 +22,7 @@ export function ExternalResourceRef({
   required = false,
   defaultOpen = undefined,
 }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const resourceNamespaces = [
     ...new Set((resources || []).map(resource => resource.metadata.namespace)),
@@ -83,6 +83,7 @@ export function ExternalResourceRef({
                 namespace: selected.key,
               });
             }}
+            i18n={i18n}
           />
         </div>
       </div>
@@ -111,6 +112,7 @@ export function ExternalResourceRef({
                 namespace: selected.namespace,
               });
             }}
+            i18n={i18n}
           />
         </div>
       </div>
