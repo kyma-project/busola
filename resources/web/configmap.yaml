@@ -8,6 +8,14 @@ data:
       "config": {
         "storage": "localStorage",
         "features":{
+          "SSO_LOGIN": {
+            "isEnabled": false,
+              "config": {
+                "issuerUrl": "",
+                "scope": "email",
+                "clientId": "",
+              }
+            },
             "INIT_PARAMS": {
               "isEnabled": false
             },
