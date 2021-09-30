@@ -28,9 +28,5 @@ export function createACMETypeTemplate() {
       email: '',
       autoRegistration: true,
     },
-    // privateKeySecretRef:{
-    //   name: '',
-    //   namespace: '',
-    // }
   };
 }

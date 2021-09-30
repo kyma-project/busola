@@ -6,17 +6,28 @@ import {
   createCATypeTemplate,
   createACMETypeTemplate,
 } from './templates';
+import { validateIssuer } from './helpers';
+
 import { IssuerTypeDropdown } from './IssuerTypeDropdown';
 import { SecretRef } from 'shared/components/ResourceRef/SecretRef';
 import { Checkbox } from 'fundamental-react';
 import * as jp from 'jsonpath';
 import * as Inputs from 'shared/ResourceForm/components/Inputs';
 
-export function IssuersCreate({ onChange, formElementRef, namespace }) {
+export function IssuersCreate({
+  onChange,
+  formElementRef,
+  namespace,
+  setCustomValid,
+}) {
   const { t } = useTranslation();
 
   const [issuer, setIssuer] = useState(createIssuerTemplate(namespace));
   const [issuerType, setIssuerType] = useState('');
+
+  React.useEffect(() => {
+    setCustomValid(validateIssuer(issuer, issuerType));
+  }, [issuer, setCustomValid]);
 
   React.useEffect(() => {
     let issuerTypeObject = {};
@@ -125,22 +136,19 @@ export function IssuersCreate({ onChange, formElementRef, namespace }) {
             jp.value(issuer, '$.spec.acme.privateKeySecretRef', value);
             setIssuer({ ...issuer });
           }}
+          required={!jp.value(issuer, '$.spec.acme.autoRegistration')}
           actions={
             <Checkbox
               compact
-              checked={issuer.spec.acme?.autoRegistration}
-              onChange={(e, checked) =>
-                setIssuer({
-                  ...issuer,
-                  spec: {
-                    ...issuer.spec,
-                    acme: {
-                      ...issuer.spec.acme,
-                      autoRegistration: checked,
-                    },
-                  },
-                })
-              }
+              checked={jp.value(issuer, '$.spec.acme.autoRegistration')}
+              onChange={e => {
+                jp.value(
+                  issuer,
+                  '$.spec.acme.autoRegistration',
+                  e.target.checked,
+                );
+                setIssuer({ ...issuer });
+              }}
               dir="rtl"
             >
               {t('issuers.auto-registration')}

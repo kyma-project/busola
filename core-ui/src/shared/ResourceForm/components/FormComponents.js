@@ -321,7 +321,7 @@ export function TextArrayInput({
       inputs={[
         ({ value, setValue, ref, onBlur, focus }) => (
           <FormInput
-            key={`form-${value}`}
+            key={`form-${props.title}`}
             compact
             value={value || ''}
             ref={ref}
