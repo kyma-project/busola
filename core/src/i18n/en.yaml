@@ -13,7 +13,7 @@ addons:
 api-rules:
   access-strategies:
     buttons:
-      add: Add access strategy
+      add: Add Access Strategy
     labels:
       required-scope: Required Scope
     messages:
@@ -187,14 +187,14 @@ clusters:
       failed-to-add-cluster: Failed to add a cluster
     title: Add a Cluster
   buttons:
-    apply-configuration: Apply configuration
+    apply-configuration: Apply Configuration
     apply-kubeconfig: Apply kubeconfig
     verify-and-add: Add Cluster
-    next-step: Next step
-    previous-step: Previous step
+    next-step: Next Step
+    previous-step: Previous Step
   common:
     api-server-address: API server address
-    download-kubeconfig: Download kubeconfig
+    download-kubeconfig: Download Kubeconfig
     kubeconfig-download-error: Failed to download the kubeconfig
     kubeconfig-not-present: Kubeconfig is missing on the Cluster
   empty:
@@ -258,7 +258,7 @@ clusters:
 common:
   buttons:
     add: Add
-    add-new: Add new
+    add-new: Add New
     cancel: Cancel
     copy: Copy
     create: Create
@@ -541,7 +541,7 @@ event-subscription:
   title: Event Subscriptions
 functions:
   buttons:
-    connected-repositories: Connected repositories
+    connected-repositories: Connected Repositories
     create-function: Create Function
   create-view:
     buttons:
@@ -652,7 +652,7 @@ functions:
   title: Functions
   variable:
     buttons:
-      add: Add environment variable
+      add: Add Environment Variable
       open:
         config-map: ConfigMap Variable
         custom: Custom Variable
@@ -1001,10 +1001,10 @@ roles:
 secrets:
   name_singular: Secret
   buttons:
-    collapse: Collapse all
+    collapse: Collapse All
     decode: Decode
     encode: Encode
-    expand: Expand all
+    expand: Expand All
   create-modal:
     messages:
       decoding-failure: 'Failed to decode the Secret data: {{error}}.'
