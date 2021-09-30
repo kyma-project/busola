@@ -1,10 +1,7 @@
 import LuigiClient from '@luigi-project/client';
 
-import createEncoder from 'json-url';
 import { tryParseOIDCparams } from './components/oidc-params';
 import { PARAMS_VERSION } from 'react-shared';
-
-const encoder = createEncoder('lzma');
 
 export function setCluster(clusterName) {
   LuigiClient.sendCustomMessage({
@@ -27,10 +24,6 @@ export function deleteCluster(clusterName) {
     clusterName,
   });
 }
-
-export const decompressParams = async initParams => {
-  return await encoder.decompress(initParams);
-};
 
 export function getContext(kubeconfig, contextName) {
   const contexts = kubeconfig.contexts;
