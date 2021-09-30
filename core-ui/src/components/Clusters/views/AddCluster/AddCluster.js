@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import { useNotification } from 'react-shared';
 
 import { AddClusterWizard } from '../../components/AddClusterWizard';
-import { decompressParams } from '../../shared';
 
 import './AddCluster.scss';
 
@@ -28,11 +27,6 @@ export function AddCluster() {
     if (!isMounted.current) return; // avoid state updates on onmounted component
     if (!encodedParams || initParams) return;
     async function setKubeconfigIfPresentInParams() {
-      const params = await decompressParams(encodedParams);
-      setInitParams(params);
-      if (Object.keys(params.kubeconfig || {}).length) {
-        setKubeconfig(params.kubeconfig);
-      }
       notification.notifySuccess(
         {
           title: t('clusters.messages.missing-configuration-data'),
