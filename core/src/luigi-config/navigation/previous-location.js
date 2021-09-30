@@ -1,6 +1,7 @@
 const PREVIOUS_LOCATION_KEY = 'busola.location';
 
 export const saveLocation = location => {
+  console.log('save location', location);
   localStorage.setItem(PREVIOUS_LOCATION_KEY, location);
 };
 
@@ -25,8 +26,12 @@ export const saveCurrentLocation = () => {
 
 export const tryRestorePreviousLocation = () => {
   const prevLocation = localStorage.getItem(PREVIOUS_LOCATION_KEY);
+  console.log('restore location', prevLocation);
   if (prevLocation) {
     localStorage.removeItem(PREVIOUS_LOCATION_KEY);
-    Luigi.navigation().navigate(prevLocation);
+    // this is absolutely lame, but it won't work without setTimeout
+    setTimeout(() => {
+      Luigi.navigation().navigate(prevLocation);
+    });
   }
 };

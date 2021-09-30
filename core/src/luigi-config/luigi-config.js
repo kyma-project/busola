@@ -27,6 +27,7 @@ import { setTheme, getTheme } from './utils/theme';
 import { readFeatureToggles } from './utils/feature-toggles';
 import { loadTargetClusterConfig } from './utils/target-cluster-config';
 import { checkClusterStorageType } from './cluster-management/clusters-storage';
+import { createSSOAuth, getSSOAuthData, isSSOEnabled } from './auth/sso';
 
 export const i18n = i18next.use(i18nextBackend).init({
   lng: localStorage.getItem('busola.language') || 'en',
@@ -87,6 +88,24 @@ async function luigiAfterInit() {
 
   await i18n;
 
+  if ((await isSSOEnabled()) && !getSSOAuthData()) {
+    Luigi.setConfig({
+      auth: await createSSOAuth({
+        locationpathname: location.pathname + location.search,
+      }),
+      lifecycleHooks: {
+        luigiAfterInit: () => {
+          console.log(Luigi.auth());
+          // location.reload();
+        },
+      },
+    });
+  } else {
+    await initializeBusola();
+  }
+})();
+
+async function initializeBusola() {
   await setActiveClusterIfPresentInUrl();
 
   await saveQueryParamsIfPresent();
@@ -113,7 +132,7 @@ async function luigiAfterInit() {
   };
   Luigi.setConfig(luigiConfig);
   setTheme(getTheme());
-})();
+}
 
 window.addEventListener(
   'message',

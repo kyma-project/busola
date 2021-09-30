@@ -11,9 +11,18 @@ function createAuthHeaders(auth) {
   }
 }
 
-export function createHeaders(authData, cluster, requiresCA) {
+function createSSOHeader(ssoData) {
+  if (ssoData) {
+    return { Authorization: 'Bearer ' + ssoData.idToken };
+  } else {
+    return null;
+  }
+}
+
+export function createHeaders(authData, cluster, requiresCA, ssoData) {
   return {
     ...createAuthHeaders(authData),
+    ...createSSOHeader(ssoData),
     'X-Cluster-Url': cluster?.server,
     'X-Cluster-Certificate-Authority-Data': requiresCA
       ? cluster['certificate-authority-data']

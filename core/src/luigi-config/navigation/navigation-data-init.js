@@ -34,6 +34,7 @@ import {
 import { getFeatureToggle } from '../utils/feature-toggles';
 import { saveLocation } from './previous-location';
 import { NODE_PARAM_PREFIX } from '../luigi-config';
+import { getSSOAuthData } from '../auth/sso';
 
 let selfSubjectRulesReview;
 
@@ -329,6 +330,7 @@ export async function getNavigationData(authData) {
         ],
         context: {
           authData,
+          ssoData: getSSOAuthData(),
           groups,
           features,
           hiddenNamespaces,
