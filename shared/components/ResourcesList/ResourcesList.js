@@ -11,7 +11,6 @@ import {
 import { createPatch } from 'rfc6902';
 import LuigiClient from '@luigi-project/client';
 
-import './ResourcesList.scss';
 import {
   YamlEditorProvider,
   GenericList,
