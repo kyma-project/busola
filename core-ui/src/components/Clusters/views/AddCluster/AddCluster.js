@@ -13,7 +13,6 @@ export function AddCluster() {
   const notification = useNotification();
 
   const [kubeconfig, setKubeconfig] = useState(undefined);
-  const [initParams, setInitParams] = useState(null);
   const isMounted = useRef();
 
   const encodedParams = LuigiClient.getNodeParams().init;
