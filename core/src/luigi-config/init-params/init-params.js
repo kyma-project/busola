@@ -9,24 +9,8 @@ import {
   showIncompatibleParamsWarning,
 } from './params-version';
 import * as constants from './constants';
-import { hasNonOidcAuth } from '../auth/auth';
 import { applyKubeconfigIdIfPresent } from './../kubeconfig-id';
 import { getDefaultStorage } from '../cluster-management/clusters-storage';
-import { getBusolaClusterParams } from '../busola-cluster-params';
-
-const getEncoder = async () => {
-  const createEncoder = (await import('json-url')).default;
-  return createEncoder('lzma');
-};
-
-function hasExactlyOneContext(kubeconfig) {
-  return kubeconfig && kubeconfig?.contexts?.length === 1;
-}
-
-async function areInitParamsEnabled() {
-  return (await getBusolaClusterParams()).config?.features?.INIT_PARAMS
-    ?.isEnabled;
-}
 
 export async function saveQueryParamsIfPresent() {
   try {
@@ -41,47 +25,26 @@ export async function saveQueryParamsIfPresent() {
 
 async function setupFromParams() {
   const searchParams = new URL(location).searchParams;
-  const encodedParams = searchParams.get('init');
   const kubeconfigId = searchParams.get('kubeconfigID');
 
   // neither params nor kk-id
-  if (!encodedParams && !kubeconfigId) {
+  if (!kubeconfigId) {
     return;
   }
 
   // no kk-id, params present but disabled
-  if (encodedParams && !(await areInitParamsEnabled()) && !kubeconfigId) {
+  if (!kubeconfigId) {
     return;
   }
 
-  const encoder = await getEncoder();
-  const decoded = encodedParams ? await encoder.decompress(encodedParams) : {};
+  const decoded = {};
 
   await applyKubeconfigIdIfPresent(kubeconfigId, decoded);
-
-  if (!hasExactlyOneContext(decoded.kubeconfig)) {
-    navigateToAddCluster(encodedParams);
-    return;
-  }
 
   if (!areParamsCompatible(decoded.config?.version)) {
     showIncompatibleParamsWarning(decoded?.config?.version);
   }
 
-  const isKubeconfigPresent = !!Object.keys(decoded.kubeconfig || {}).length;
-  const kubeconfigUser =
-    decoded.kubeconfig?.users && decoded.kubeconfig?.users[0].user;
-
-  const isOidcAuthPresent = kubeconfigUser?.exec;
-
-  const requireMoreInput =
-    !isKubeconfigPresent ||
-    (!isOidcAuthPresent && !hasNonOidcAuth(kubeconfigUser));
-
-  if (requireMoreInput && encodedParams) {
-    navigateToAddCluster(encodedParams);
-    return;
-  }
   const params = {
     ...decoded,
     config: {
@@ -111,10 +74,4 @@ async function setupFromParams() {
     (preselectedNamespace ? `/${preselectedNamespace}/details` : '');
 
   saveLocation(targetLocation);
-}
-
-function navigateToAddCluster(encodedParams) {
-  // Luigi navigate doesn't work here. Simulate the Luigi's nodeParams by adding the `~`
-  window.location.href =
-    window.location.origin + '/clusters/add?~init=' + encodedParams;
 }
