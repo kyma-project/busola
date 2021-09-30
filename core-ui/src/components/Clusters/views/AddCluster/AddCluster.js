@@ -24,7 +24,7 @@ export function AddCluster() {
 
   useEffect(() => {
     if (!isMounted.current) return; // avoid state updates on onmounted component
-    if (!encodedParams || initParams) return;
+    if (!encodedParams) return;
     async function setKubeconfigIfPresentInParams() {
       notification.notifySuccess(
         {
@@ -38,7 +38,7 @@ export function AddCluster() {
       );
     }
     setKubeconfigIfPresentInParams();
-  }, [encodedParams, initParams, notification, t]);
+  }, [encodedParams, notification, t]);
 
   return (
     <AddClusterWizard
@@ -47,7 +47,7 @@ export function AddCluster() {
       onCancel={() => {
         LuigiClient.linkManager().navigate('/clusters');
       }}
-      config={initParams?.config}
+      config={}
     />
   );
 }
