@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import LuigiClient from '@luigi-project/client';
 import { useTranslation } from 'react-i18next';
-import { usePost, useNotification } from 'react-shared';
 import { Button, FormTextarea, Switch } from 'fundamental-react';
 import * as jp from 'jsonpath';
 
@@ -17,8 +15,6 @@ import './CreateCertificate.scss';
 
 export function CertificatesCreate({ onChange, formElementRef, namespace }) {
   const { t } = useTranslation();
-  const notification = useNotification();
-  const postRequest = usePost();
 
   const [certificate, setCertificate] = useState(createTemplate(namespace));
   const [withCSR, setWithCSR] = useState(false);
@@ -75,15 +71,10 @@ export function CertificatesCreate({ onChange, formElementRef, namespace }) {
                 compact
                 className="csr-encode-toggle"
                 option="transparent"
-                glyph={certificate.csrIsEncoded ? 'show' : 'hide'}
-                onClick={() =>
-                  setCertificate({
-                    ...certificate,
-                    csrIsEncoded: !certificate.csrIsEncoded,
-                  })
-                }
+                glyph={csrIsEncoded ? 'show' : 'hide'}
+                onClick={() => setCsrIsEncoded(!csrIsEncoded)}
               >
-                {certificate.csrIsEncoded
+                {csrIsEncoded
                   ? t('secrets.buttons.decode')
                   : t('secrets.buttons.encode')}
               </Button>

@@ -1,5 +1,3 @@
-import * as jp from 'jsonpath';
-
 export function createTemplate(namespace) {
   return {
     apiVersion: 'cert.gardener.cloud/v1alpha1',
