@@ -105,6 +105,42 @@ export function DeploymentsCreate({
     }
   };
 
+  const imagePullSecretField = (
+    <ResourceForm.FormField
+      simple
+      tooltipContent={t(
+        'deployments.create-modal.simple.image-pull-secret-tooltip',
+      )}
+      label={t('deployments.create-modal.simple.image-pull-secret')}
+      input={() => (
+        <K8sResourceSelectWithUseGetList
+          url={`/api/v1/namespaces/${namespace}/secrets`}
+          onSelect={secretName => {
+            jp.value(
+              deployment,
+              '$.spec.template.spec.imagePullSecrets[0].name',
+              secretName,
+            );
+            setDeployment({ ...deployment });
+          }}
+          onChange={e => {
+            const secretName = e.target.value;
+            jp.value(
+              deployment,
+              '$.spec.template.spec.imagePullSecrets[0].name',
+              secretName,
+            );
+            setDeployment({ ...deployment });
+          }}
+          resourceType={t('secrets.name_singular')}
+          value={jp.value(
+            deployment,
+            '$.spec.template.spec.imagePullSecrets[0].name',
+          )}
+        />
+      )}
+    />
+  );
   return (
     <ResourceForm
       pluralKind="deployments"
@@ -114,7 +150,7 @@ export function DeploymentsCreate({
       onChange={onChange}
       formElementRef={formElementRef}
       afterCreatedFn={afterCreatedFn}
-      renderEditor={renderEditor}
+      renderEditor={null}
       presets={createPresets(namespace, t)}
       onPresetSelected={value => {
         setDeployment(value.deployment);
@@ -153,26 +189,16 @@ export function DeploymentsCreate({
         )}
       />
 
-      <ResourceForm.FormField
-        tooltipContent={t(
-          'deployments.create-modal.simple.image-pull-secret-tooltip',
-        )}
-        label={t('deployments.create-modal.simple.image-pull-secret')}
-        input={() => (
-          <K8sResourceSelectWithUseGetList
-            url={`/api/v1/namespaces/${namespace}/secrets`}
-            onSelect={secretName => {
-              jp.value(
-                deployment,
-                '$.spec.template.spec.imagePullSecrets[0].name',
-                secretName,
-              );
-              setDeployment({ ...deployment });
-            }}
-            resourceType={t('secrets.name_singular')}
-          />
-        )}
-      />
+      {imagePullSecretField}
+
+      <ResourceForm.CollapsibleSection
+        advanced
+        title={t('deployments.create-modal.simple.image-pull-secret')}
+        resource={deployment}
+        setResource={setDeployment}
+      >
+        {imagePullSecretField}
+      </ResourceForm.CollapsibleSection>
 
       <ResourceForm.CollapsibleSection
         advanced
