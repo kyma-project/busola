@@ -5,6 +5,7 @@ import { useGetList, k8sNamePattern } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 import pluralize from 'pluralize';
 import './K8sResourceSelect.scss';
+import { Select } from '../ResourceForm/components/FormComponents';
 
 const commonPropTypes = {
   onSelect: PropTypes.func.isRequired,
@@ -48,6 +49,7 @@ export function K8sResourceSelect({
   value,
   required,
   isNamespaced = true,
+  allowTyping = true,
 }) {
   const { t } = useTranslation();
 
@@ -85,7 +87,7 @@ export function K8sResourceSelect({
     } else return undefined;
   };
 
-  return (
+  return allowTyping ? (
     <div className="combobox--full-width">
       <ComboboxInput
         compact
@@ -102,5 +104,12 @@ export function K8sResourceSelect({
         inputProps={{ pattern: k8sNamePattern, value }}
       />
     </div>
+  ) : (
+    <Select
+      value={value}
+      setValue={onSelect}
+      defaultKey={value}
+      options={options}
+    />
   );
 }

@@ -114,15 +114,8 @@ export function DeploymentsCreate({
       label={t('deployments.create-modal.simple.image-pull-secret')}
       input={() => (
         <K8sResourceSelectWithUseGetList
+          allowTyping={false}
           url={`/api/v1/namespaces/${namespace}/secrets`}
-          onSelect={secretName => {
-            jp.value(
-              deployment,
-              '$.spec.template.spec.imagePullSecrets[0].name',
-              secretName,
-            );
-            setDeployment({ ...deployment });
-          }}
           onChange={e => {
             const secretName = e.target.value;
             jp.value(
