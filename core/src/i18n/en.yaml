@@ -161,7 +161,7 @@ certificates:
   title: Certificates
   csr: CSR
   with-csr: Use a CSR
-  renew: Trigger a renew
+  renew: Trigger a renewal
   existing-secret: Use the existing Secret
   secret-name: Secret name
   secret-ref: Secret to use
@@ -308,11 +308,15 @@ common:
     status: Status
   labels:
     hostname: Hostname
+    issuer: Issuer
     name: Name
     namespace: Namespace
     protocol: Protocol
     resource: Resource
+    secret: Secret
     service: Service
+  lowercase:
+    name: name
   messages:
     cannot-load: 'Cannot load {{value}}: {{error.message}}.'
     choose: Choose {{value}}.
@@ -324,6 +328,9 @@ common:
     no-instances-found-namespace: No matching {{value}} found in this Namespace.
     parse-error: Parse error, previous valid input will be used.
     type-to-select: Start typing to select {{value}} from the list.
+  placeholders:
+    secret-ref-name: Select name
+    secret-ref-namespace: Select Namespace
   tooltips:
     copy-to-clipboard: Copy to clipboard
     download: Download
@@ -335,6 +342,8 @@ common:
     read-file: Read file content as a single value, with file name as a key.
     save: Save
     search: Search
+    secret-ref-name: Unique name within a Namespace to refer to a Secret resource.
+    secret-ref-namespace: Namespace defines the space within which the secret name must be unique.
     value: Value must start and end with an alphanumeric character, can contain '-', '_' or '.'
 components:
   key-value-field:
@@ -480,6 +489,14 @@ deployments:
   title: Deployments
 discovery-and-network:
   title: Discovery and Network
+domains:
+  example: for example, *.api.mydomain.com
+  exclude:
+    label: Exclude Domains
+    placeholder: Domain that is forbidden
+  include:
+    label: Include Domains
+    placeholder: Domain that is allowed
 dnsentries:
   labels:
     ttl: TTL
@@ -506,16 +523,12 @@ dnsentries:
 dnsproviders:
   name_singular: DNS Provider
   labels:
-    exclude-domains: Exclude Domains
     default-ttl: Default TTL
     secret-reference: Secret Reference
-    include-domains: Include Domains
     type: Type
   placeholders:
     provider-type: Choose Provider Type
-    include-domains: Domain that should be observed
     default-ttl: Enter the default time to live.
-    exclude-domains: Domain that should be ignored
   domains: Domains
   headers:
     exclude: Excluded Domains
@@ -526,6 +539,9 @@ dnsproviders:
     created: DNS Provider created
     cannot-create: 'Failed to create the DNS Provider:'
   title: DNS Providers
+  tooltips:
+    excluded-domains: The selection of forbidden domains (by default, all zones and domains in those zones are served), $t(domains.example).
+    included-domains: The selection of allowed domains (by default, all zones and domains in those zones are served), $t(domains.example).
 event-subscription:
   create:
     labels:
@@ -747,7 +763,7 @@ gateways:
       hosts: Hosts
       mode-tooltip: Indicates whether connections to the port are secured using TLS.
       placeholders:
-        hosts: Enter the hosts, for example, *.api.mydomain.com.
+        hosts: Enter the hosts, $t(domains.example).
         port:
           name: Enter the name.
           number: Enter the port number.
@@ -825,13 +841,12 @@ issuers:
   external-account:
     key-id: CA key ID
     secret: Symmetric MAC Secret
-    title: External account
+    title: External account binding
   placeholders:
     email: Email address for user registration
-    excluded-domains: One domain per line
-    included-domains: One domain per line
     key-id: ID of the CA that the external account is bound to
     name: Issuer Name
+    requests-per-day: Daily requests quota
     server: ACME Server URL
     type: Select issuer type
   private-key: Private key Secret
@@ -840,6 +855,18 @@ issuers:
   skip-dns: Skip DNS challenge validation
   state: Status
   title: Issuers
+  tooltips:
+    email: The email address to use for user registration.
+    excluded-domains: The domains (including subdomains) for which certificate requests are forbidden, $t(domains.example).
+    external-account-binding: ACMEExternalAccountBinding is a reference to a CA external account of the ACME server.
+    included-domains: The domains (including subdomains) for which certificate requests are allowed, $t(domains.example).
+    issuer-type: Certification authority used
+    key-secret-ref: keySecretRef is the secret ref to the Secret that holds the symmetric MAC key of the External Account Binding with data key 'hmacKey'. The secret key stored in the Secret **must** be un-padded, base64 URL encoded data.
+    requests: RequestsPerDayQuota is the maximum number of certificate requests per days allowed for this issuer
+    secret-ref-acme: PrivateKeySecretRef is the secret ref to the ACME private key.
+    secret-ref-ca: PrivateKeySecretRef is the secret ref to the CA secret.
+    server: Server is the URL of the ACME server.
+    skip-dns: SkipDNSChallengeValidation marks that this issuer does not validate DNS challenges. In this case, no DNS entries/records are created for a DNS Challenge, and DNS propagation is not checked.
   type: Issuer Type
 jobs:
   completion-time: Completion Time

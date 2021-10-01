@@ -67,12 +67,12 @@ export const handleRequest = async (req, res) => {
     return;
   }
 
-  const { targetApiServer, ca, cert, key } = headersData;
+  const { targetApiServer, ca, cert, key, authorization } = headersData;
 
   const options = {
     hostname: targetApiServer.hostname,
     path: req.originalUrl.replace(/^\/backend/, ''),
-    headers: req.headers,
+    headers: { ...req.headers, authorization },
     body: req.body,
     method: req.method,
     port: targetApiServer.port || 443,
@@ -124,6 +124,7 @@ function extractHeadersData(req) {
   const caHeader = 'x-cluster-certificate-authority-data';
   const clientCAHeader = 'x-client-certificate-data';
   const clientKeyDataHeader = 'x-client-key-data';
+  const authorizationHeader = 'x-k8s-authorization';
 
   const targetApiServer = handleDockerDesktopSubsitution(
     new URL(req.headers[urlHeader]),
@@ -131,13 +132,15 @@ function extractHeadersData(req) {
   const ca = decodeHeaderToBuffer(req.headers[caHeader]) || certs;
   const cert = decodeHeaderToBuffer(req.headers[clientCAHeader]);
   const key = decodeHeaderToBuffer(req.headers[clientKeyDataHeader]);
+  const authorization = req.headers[authorizationHeader];
 
   delete req.headers[urlHeader];
   delete req.headers[caHeader];
   delete req.headers[clientCAHeader];
   delete req.headers[clientKeyDataHeader];
+  delete req.headers[authorizationHeader];
 
   delete req.headers.host; // remove host in order not to confuse APIServer
 
-  return { targetApiServer, ca, cert, key };
+  return { targetApiServer, ca, cert, key, authorization };
 }
