@@ -4,7 +4,6 @@ import {
   getCurrentContextNamespace,
 } from '../cluster-management/cluster-management';
 import { saveLocation } from '../navigation/previous-location';
-import { showIncompatibleParamsWarning } from './params-version';
 import * as constants from './constants';
 import { applyKubeconfigIdIfPresent } from './../kubeconfig-id';
 import { getDefaultStorage } from '../cluster-management/clusters-storage';
