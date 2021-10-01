@@ -6,6 +6,7 @@ import * as jp from 'jsonpath';
 
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/components/Inputs';
+import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSelect';
 
 import './Deployments.create.scss';
 import {
@@ -151,6 +152,28 @@ export function DeploymentsCreate({
           'deployments.create-modal.simple.docker-image-placeholder',
         )}
       />
+
+      <ResourceForm.FormField
+        tooltipContent={t(
+          'deployments.create-modal.simple.image-pull-secret-tooltip',
+        )}
+        label={t('deployments.create-modal.simple.image-pull-secret')}
+        input={() => (
+          <K8sResourceSelectWithUseGetList
+            url={`/api/v1/namespaces/${namespace}/secrets`}
+            onSelect={secretName => {
+              jp.value(
+                deployment,
+                '$.spec.template.spec.imagePullSecrets[0].name',
+                secretName,
+              );
+              setDeployment({ ...deployment });
+            }}
+            resourceType={t('secrets.name_singular')}
+          />
+        )}
+      />
+
       <ResourceForm.CollapsibleSection
         advanced
         title="Containers"
