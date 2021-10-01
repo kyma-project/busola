@@ -22,6 +22,7 @@
     "smoke-tests.spec.js",
     "test-crds.spec.js",
     "invalid-kubeconfig.spec.js",
+    "login-kubeconfigID.spec.js",
     "other-logins.spec.js",
     "cluster-configuration.spec.js",
     "run-after.spec.js"
