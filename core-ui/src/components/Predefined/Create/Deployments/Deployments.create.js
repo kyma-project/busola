@@ -116,8 +116,7 @@ export function DeploymentsCreate({
         <K8sResourceSelectWithUseGetList
           allowTyping={false}
           url={`/api/v1/namespaces/${namespace}/secrets`}
-          onChange={e => {
-            const secretName = e.target.value;
+          onSelect={secretName => {
             jp.value(
               deployment,
               '$.spec.template.spec.imagePullSecrets[0].name',
