@@ -4,13 +4,12 @@ import { saveAs } from 'file-saver';
 import { useTranslation } from 'react-i18next';
 
 import { useShowNodeParamsError } from 'shared/useShowNodeParamsError';
-import { Link, Button, Icon, MessagePage } from 'fundamental-react';
+import { Link, Button, MessagePage } from 'fundamental-react';
 import {
   useMicrofrontendContext,
   PageHeader,
   GenericList,
   useNotification,
-  Tooltip,
 } from 'react-shared';
 
 import { setCluster, deleteCluster } from './../shared';
