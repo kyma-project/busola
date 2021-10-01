@@ -15,7 +15,8 @@ import { ResourceFormWrapper } from '../ResourceForm';
 
 export function CollapsibleSection({
   disabled = false,
-  defaultOpen,
+  defaultOpen = undefined,
+  isAdvanced,
   canChangeState = true,
   title,
   actions,
@@ -24,8 +25,11 @@ export function CollapsibleSection({
   setResource,
   className,
   required,
+  tooltipContent,
 }) {
-  const [open, setOpen] = useState(defaultOpen);
+  const [open, setOpen] = useState(
+    defaultOpen === undefined ? !isAdvanced : defaultOpen,
+  );
   const actionsRef = useRef();
   const iconGlyph = open ? 'navigation-down-arrow' : 'navigation-right-arrow';
 
@@ -51,12 +55,15 @@ export function CollapsibleSection({
   return (
     <div className={classNames}>
       <header onClick={toggle} aria-label={`expand ${title}`}>
-        <div className="title">
-          {!disabled && canChangeState && (
-            <Icon className="control-icon" ariaHidden glyph={iconGlyph} />
-          )}
-          {title}
-        </div>
+        {
+          <Title
+            tooltipContent={tooltipContent}
+            title={title}
+            disabled={disabled}
+            canChangeState={canChangeState}
+            iconGlyph={iconGlyph}
+          />
+        }
         <div ref={actionsRef}>
           {typeof actions === 'function' ? actions(setOpen) : actions}
         </div>
@@ -72,8 +79,40 @@ export function CollapsibleSection({
   );
 }
 
+export function Title({
+  tooltipContent,
+  title,
+  disabled,
+  canChangeState,
+  iconGlyph,
+}) {
+  const classNames = classnames('title', {
+    'tooltip-cursor': tooltipContent,
+  });
+  const component = (
+    <div className={classNames}>
+      {!disabled && canChangeState && (
+        <Icon className="control-icon" ariaHidden glyph={iconGlyph} />
+      )}
+      {title}
+    </div>
+  );
+
+  if (tooltipContent) {
+    return <Tooltip content={tooltipContent}>{component}</Tooltip>;
+  } else {
+    return component;
+  }
+}
 export function Label({ required, tooltipContent, children }) {
-  const label = <FormLabel required={required}>{children}</FormLabel>;
+  const label = (
+    <FormLabel
+      required={required}
+      className={tooltipContent ? 'tooltip-cursor' : ''}
+    >
+      {children}
+    </FormLabel>
+  );
 
   if (tooltipContent) {
     return <Tooltip content={tooltipContent}>{label}</Tooltip>;
@@ -92,6 +131,7 @@ export function FormField({
   required,
   disabled,
   tooltipContent,
+  isAdvanced,
   ...props
 }) {
   return (
@@ -156,6 +196,8 @@ export function MultiInput({
   toExternal,
   inputs,
   className,
+  isAdvanced,
+  defaultOpen,
   ...props
 }) {
   const valueRef = useRef(null); // for deep comparison
@@ -206,12 +248,14 @@ export function MultiInput({
       ref.current.focus();
     }
   };
+  const open = defaultOpen === undefined ? !isAdvanced : defaultOpen;
 
   return (
     <CollapsibleSection
       title={title}
       className={className}
       required={required}
+      defaultOpen={open}
       {...props}
     >
       <div className="fd-row form-field multi-input">
@@ -260,14 +304,24 @@ export function MultiInput({
   );
 }
 
-export function TextArrayInput({ inputProps, ...props }) {
+export function TextArrayInput({
+  defaultOpen,
+  inputProps,
+  isAdvanced,
+  tooltipContent,
+  ...props
+}) {
   return (
     <MultiInput
+      defaultOpen={defaultOpen}
+      isAdvanced={isAdvanced}
       toInternal={value => value || []}
       toExternal={value => value.filter(val => !!val)}
+      tooltipContent={tooltipContent}
       inputs={[
         ({ value, setValue, ref, onBlur, focus }) => (
           <FormInput
+            key={`form-${props.title}`}
             compact
             value={value || ''}
             ref={ref}
@@ -284,6 +338,8 @@ export function TextArrayInput({ inputProps, ...props }) {
 }
 
 export function KeyValueField({
+  defaultOpen,
+  isAdvanced,
   keyProps = {
     pattern: '([A-Za-z0-9][-A-Za-z0-9_./]*)?[A-Za-z0-9]',
   },
@@ -292,6 +348,8 @@ export function KeyValueField({
   const { t } = useTranslation();
   return (
     <MultiInput
+      defaultOpen={defaultOpen}
+      isAdvanced={isAdvanced}
       toInternal={value =>
         Object.entries(value || {}).map(([key, val]) => ({ key, val }))
       }

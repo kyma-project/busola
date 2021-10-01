@@ -13,6 +13,7 @@ import { K8sNameInput } from 'react-shared';
 import { CreateForm } from 'shared/components/CreateForm/CreateForm';
 import { IssuerRef } from 'shared/components/ResourceRef/IssuerRef';
 import { base64Decode, base64Encode } from 'shared/helpers';
+import * as jp from 'jsonpath';
 
 import './SimpleForm.scss';
 
@@ -123,7 +124,7 @@ export function SimpleForm({ certificate, setCertificate }) {
           <CreateForm.FormField
             label={<FormLabel>{t('certificates.with-csr')}</FormLabel>}
             input={
-              <div class="csr-header">
+              <div className="csr-header">
                 <Switch
                   compact
                   onChange={e =>
@@ -157,19 +158,17 @@ export function SimpleForm({ certificate, setCertificate }) {
           />
         </FormFieldset>
         {(certificate.withCSR && csrFields) || commonNameFields}
-        <FormFieldset>
-          <CreateForm.FormField
-            label={<FormLabel>{t('certificates.issuer')}</FormLabel>}
-            input={
-              <IssuerRef
-                resourceRef={certificate.issuerRef}
-                onChange={(e, issuerRef) =>
-                  setCertificate({ ...certificate, issuerRef })
-                }
-              />
-            }
-          />
-        </FormFieldset>
+        <IssuerRef
+          className={'fd-margin-top--sm'}
+          id="issuerRef"
+          defaultOpen
+          resourceRef={jp.value(certificate, '$.issuerRef') || {}}
+          title={t('certificates.issuer')}
+          onChange={issuerRef => {
+            jp.value(certificate, '$.issuerRef', issuerRef);
+            setCertificate({ ...certificate, issuerRef });
+          }}
+        />
       </CreateForm.Section>
     </>
   );
