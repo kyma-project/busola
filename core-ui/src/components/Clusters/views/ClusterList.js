@@ -15,7 +15,6 @@ import {
 
 import { setCluster, deleteCluster } from './../shared';
 import { AddClusterDialog } from '../components/AddClusterDialog';
-import { areParamsCompatible } from '../params-version';
 import { ClusterStorageType } from './ClusterStorageType';
 
 import './ClusterList.scss';
@@ -82,15 +81,6 @@ export function ClusterList() {
       >
         {entry.currentContext.cluster.name}
       </Link>
-      {!areParamsCompatible(entry.config?.version) && (
-        <Tooltip content={t('clusters.list.outdated.tooltip')}>
-          <Icon
-            ariaLabel="version incompatible warning"
-            className="params-warning-icon"
-            glyph="message-warning"
-          />
-        </Tooltip>
-      )}
     </>,
     entry.currentContext.cluster.cluster.server,
     <ClusterStorageType clusterConfig={entry.config} />,

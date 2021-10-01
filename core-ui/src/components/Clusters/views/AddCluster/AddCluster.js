@@ -1,8 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
 import LuigiClient from '@luigi-project/client';
-import { useTranslation } from 'react-i18next';
-
-import { useNotification } from 'react-shared';
 
 import { AddClusterWizard } from '../../components/AddClusterWizard';
 

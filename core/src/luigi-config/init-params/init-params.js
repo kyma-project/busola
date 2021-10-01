@@ -4,10 +4,7 @@ import {
   getCurrentContextNamespace,
 } from '../cluster-management/cluster-management';
 import { saveLocation } from '../navigation/previous-location';
-import {
-  areParamsCompatible,
-  showIncompatibleParamsWarning,
-} from './params-version';
+import { showIncompatibleParamsWarning } from './params-version';
 import * as constants from './constants';
 import { applyKubeconfigIdIfPresent } from './../kubeconfig-id';
 import { getDefaultStorage } from '../cluster-management/clusters-storage';
@@ -40,10 +37,6 @@ async function setupFromParams() {
   const decoded = {};
 
   await applyKubeconfigIdIfPresent(kubeconfigId, decoded);
-
-  if (!areParamsCompatible(decoded.config?.version)) {
-    showIncompatibleParamsWarning(decoded?.config?.version);
-  }
 
   const params = {
     ...decoded,

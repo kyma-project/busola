@@ -1,6 +1,6 @@
 import { getBusolaClusterParams } from './busola-cluster-params';
 import { resolveFeatureAvailability } from './features';
-import { DEFAULT_FEATURES, PARAMS_VERSION } from './init-params/constants';
+import { DEFAULT_FEATURES } from './init-params/constants';
 
 function join(path, fileName) {
   if (!path.endsWith('/')) {
@@ -23,7 +23,6 @@ export async function applyKubeconfigIdIfPresent(kubeconfigId, initParams) {
   const kubeconfigIdFeature = {
     ...DEFAULT_FEATURES,
     ...clusterParams.config?.features,
-    ...initParams.config?.features,
   }['KUBECONFIG_ID'];
 
   if (!(await resolveFeatureAvailability(kubeconfigIdFeature))) {
@@ -41,10 +40,4 @@ export async function applyKubeconfigIdIfPresent(kubeconfigId, initParams) {
   }
 
   initParams.kubeconfig = payload;
-  if (!initParams.config?.version) {
-    initParams.config = {
-      ...initParams.config,
-      version: PARAMS_VERSION,
-    };
-  }
 }
