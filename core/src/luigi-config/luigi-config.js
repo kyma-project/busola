@@ -44,7 +44,7 @@ export const i18n = i18next.use(i18nextBackend).init({
 
 export const NODE_PARAM_PREFIX = `~`;
 
-async function luigiAfterInit() {
+export async function luigiAfterInit() {
   Luigi.ux().hideAppLoadingIndicator();
 
   const params = await getActiveCluster();
@@ -90,22 +90,14 @@ async function luigiAfterInit() {
 
   if ((await isSSOEnabled()) && !getSSOAuthData()) {
     Luigi.setConfig({
-      auth: await createSSOAuth({
-        locationpathname: location.pathname + location.search,
-      }),
-      lifecycleHooks: {
-        luigiAfterInit: () => {
-          console.log(Luigi.auth());
-          // location.reload();
-        },
-      },
+      auth: await createSSOAuth(),
     });
   } else {
     await initializeBusola();
   }
 })();
 
-async function initializeBusola() {
+export async function initializeBusola() {
   await setActiveClusterIfPresentInUrl();
 
   await saveQueryParamsIfPresent();

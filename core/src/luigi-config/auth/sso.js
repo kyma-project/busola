@@ -1,6 +1,7 @@
-import { saveCurrentLocation } from '../navigation/previous-location';
+import { saveLocation } from '../navigation/previous-location';
 import { getBusolaClusterParams } from './../busola-cluster-params';
 import { resolveFeatureAvailability } from './../features';
+import { initializeBusola, luigiAfterInit } from './../luigi-config';
 
 export function setSSOAuthData(data) {
   sessionStorage.setItem('SSO', JSON.stringify(data));
@@ -19,7 +20,7 @@ async function importOpenIdConnect() {
   return (await import('@luigi-project/plugin-auth-oidc')).default;
 }
 
-export async function createSSOAuth({ locationpathname }) {
+export async function createSSOAuth() {
   try {
     const ssoFeature = (await getBusolaClusterParams()).config.features
       .SSO_LOGIN;
@@ -27,14 +28,12 @@ export async function createSSOAuth({ locationpathname }) {
     const { issuerUrl, clientId, scope } = ssoFeature.config;
 
     const OpenIdConnect = await importOpenIdConnect();
-    console.log('create sso auth');
 
-    if (locationpathname !== '/') {
-      console.log('loc', locationpathname);
-      saveCurrentLocation(locationpathname);
-    } else {
-      console.log('not save', locationpathname);
+    const locationpathname = location.pathname + location.search;
+    if (locationpathname !== '/' && !locationpathname.startsWith('/?code')) {
+      saveLocation(locationpathname);
     }
+
     return {
       use: 'openIdConnect',
       openIdConnect: {
@@ -45,27 +44,19 @@ export async function createSSOAuth({ locationpathname }) {
         response_type: 'code',
         response_mode: 'query',
         loadUserInfo: false,
-        userInfoFn: (_, authData) => {
+        userInfoFn: async (_, authData) => {
           setSSOAuthData(authData);
-          location.reload();
+          await initializeBusola();
+          await luigiAfterInit();
           return Promise.resolve({});
         },
       },
 
       events: {
-        onLogout: () => {
-          console.log('onLogout');
-        },
-        onAuthExpired: () => {
-          console.log('onAuthExpired');
-        },
         onAuthError: (_config, err) => {
           window.location.href = '/clusters' + convertToURLsearch(err);
           return false; // return false to prevent OIDC plugin navigation
         },
-        // onAuthSuccessful: (_config, data) => {
-        //   console.log(data);
-        // },
       },
       storage: 'none',
     };
