@@ -9,36 +9,13 @@ import { AddClusterWizard } from '../../components/AddClusterWizard';
 import './AddCluster.scss';
 
 export function AddCluster() {
-  const { t } = useTranslation();
-  const notification = useNotification();
-
   const [kubeconfig, setKubeconfig] = useState(undefined);
   const isMounted = useRef();
-
-  const encodedParams = LuigiClient.getNodeParams().init;
 
   useEffect(() => {
     isMounted.current = true;
     return _ => (isMounted.current = false);
   }, []);
-
-  useEffect(() => {
-    if (!isMounted.current) return; // avoid state updates on onmounted component
-    if (!encodedParams) return;
-    async function setKubeconfigIfPresentInParams() {
-      notification.notifySuccess(
-        {
-          title: t('clusters.messages.missing-configuration-data'),
-          type: 'info',
-          icon: '',
-          buttonConfirm: false,
-          buttonDismiss: 'Ok',
-        },
-        7500,
-      );
-    }
-    setKubeconfigIfPresentInParams();
-  }, [encodedParams, notification, t]);
 
   return (
     <AddClusterWizard
