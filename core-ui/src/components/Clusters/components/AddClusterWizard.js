@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Button, Wizard, MessageStrip } from 'fundamental-react';
+import { Wizard, MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
@@ -26,7 +26,6 @@ export function AddClusterWizard({
   const [hasAuth, setHasAuth] = useState(false);
   const [authValid, setAuthValid] = useState(false);
   const [hasOneContext, setHasOneContext] = useState(false);
-  const [lastStep, setLastStep] = useState(false);
   const [storage, setStorage] = useState(
     busolaClusterParams?.config.storage || 'localStorage',
   );
@@ -78,26 +77,18 @@ export function AddClusterWizard({
     <Wizard
       onCancel={onCancel}
       onComplete={onComplete}
-      onStepChange={(e, step, index, count) => setLastStep(index === count - 1)}
+      navigationType="tabs"
       headerSize="md"
       contentSize="md"
-      footerProps={
-        lastStep
-          ? {
-              children: (
-                <Button compact option="emphasized" onClick={onComplete}>
-                  {t('clusters.buttons.verify-and-add')}
-                </Button>
-              ),
-            }
-          : {}
-      }
+      className="add-cluster-wizard"
     >
       <Wizard.Step
         title={t('clusters.wizard.kubeconfig')}
         branching={!kubeconfig}
         indicator="1"
         valid={!!kubeconfig}
+        previousLabel={t('clusters.buttons.previous-step')}
+        nextLabel={t('clusters.buttons.next-step')}
       >
         <p>{t('clusters.wizard.intro')}</p>
         <MessageStrip
@@ -117,6 +108,8 @@ export function AddClusterWizard({
           title={t('clusters.wizard.update')}
           indicator="2"
           valid={authValid}
+          previousLabel={t('clusters.buttons.previous-step')}
+          nextLabel={t('clusters.buttons.next-step')}
         >
           <ResourceForm.Single
             formElementRef={authFormRef}
@@ -133,7 +126,9 @@ export function AddClusterWizard({
       <Wizard.Step
         title={t('clusters.wizard.storage')}
         indicator="2"
-        valid={false}
+        valid={!!storage}
+        previousLabel={t('clusters.buttons.previous-step')}
+        nextLabel={t('clusters.buttons.verify-and-add')}
       >
         <ChooseStorage storage={storage} setStorage={setStorage} />
       </Wizard.Step>
