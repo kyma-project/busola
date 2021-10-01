@@ -142,7 +142,7 @@ export function DeploymentsCreate({
       onChange={onChange}
       formElementRef={formElementRef}
       afterCreatedFn={afterCreatedFn}
-      renderEditor={null}
+      renderEditor={renderEditor}
       presets={createPresets(namespace, t)}
       onPresetSelected={value => {
         setDeployment(value.deployment);

@@ -319,6 +319,7 @@ common:
     no-instances-found-namespace: No matching {{value}} found in this Namespace.
     parse-error: Parse error, previous valid input will be used.
     type-to-select: Start typing to select {{value}} from the list.
+    click-to-select: Select {{value}} from the list.
   placeholders:
     secret-ref-name: Select name
     secret-ref-namespace: Select Namespace

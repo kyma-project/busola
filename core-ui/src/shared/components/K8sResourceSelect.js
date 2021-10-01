@@ -50,6 +50,7 @@ export function K8sResourceSelect({
   required,
   isNamespaced = true,
   allowTyping = true,
+  ...props
 }) {
   const { t } = useTranslation();
 
@@ -106,6 +107,9 @@ export function K8sResourceSelect({
     </div>
   ) : (
     <Select
+      placeholder={t('common.messages.click-to-select', {
+        value: resourceType,
+      })}
       value={value}
       setValue={onSelect}
       defaultKey={value}
