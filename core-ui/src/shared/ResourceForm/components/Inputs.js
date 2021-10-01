@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormInput } from 'fundamental-react';
+import { FormInput, Switch as FRSwitch } from 'fundamental-react';
 
 export function Text({ value, setValue, ...props }) {
   return (
@@ -19,6 +19,17 @@ export function Number({ value, setValue, ...props }) {
       type="number"
       value={value}
       onChange={e => setValue(e.target.valueAsNumber)}
+      {...props}
+    />
+  );
+}
+
+export function Switch({ value, setValue, ...props }) {
+  return (
+    <FRSwitch
+      compact
+      onChange={e => setValue(!value)}
+      checked={value}
       {...props}
     />
   );

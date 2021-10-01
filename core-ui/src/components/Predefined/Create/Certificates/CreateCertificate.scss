@@ -1,0 +1,21 @@
+.csr-header {
+  display: flex;
+
+  &:before {
+    content: '';
+    order: 1;
+    flex-grow: 1;
+  }
+
+  .fd-form-label {
+    display: none;
+  }
+
+  .fd-switch {
+    margin-top: 0;
+  }
+
+  .csr-encode-toggle {
+    order: 2;
+  }
+}

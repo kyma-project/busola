@@ -151,6 +151,7 @@ catalog:
   subtitle: Enrich your experience with additional services that are installed outside the cluster.
   title: Service Catalog
 certificates:
+  name_singular: Certificate
   common-name: Common Name
   dns-names: DNS Names
   expiration-date: Expiration Date
@@ -175,6 +176,16 @@ certificates:
     encoded-csr: Base64-encoded Certificate Signing Request
     name: Certificate name
     secret-name: Requested Secret name
+  tooltips:
+    common-name: Common Name is the primary domain name of the certificate.
+    csr: Certificate signing request is an alternative way to provide Common Name, DNSNames and other information.
+    with-csr: Enable to use a Certificate Signing Request instead of providing domain names manually.
+    dns-names: DNS Names are the optional additional domain names of the certificate.
+    renew: Trigger a certificate renewal if enabled.
+    issuer: Certificate Issuer. If no issuer is given, default issuer will be used.
+    existing-secret: Use an exising secret for storing the certificate if enabled. Otherwise a new secret will be created.
+    secret-name: Name of the secret object to use for storing the certificate.
+    secret-ref: Reference of the existing secret object to use for storing the certificate.
 cluster-addons:
   title: Cluster Addons
 cluster-role-bindings:
