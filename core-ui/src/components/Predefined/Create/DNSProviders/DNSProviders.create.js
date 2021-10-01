@@ -54,18 +54,6 @@ export function DNSProvidersCreate({
         }}
       />
       <ResourceForm.FormField
-        required
-        propertyPath="$.spec.secretRef"
-        label={t('dnsproviders.labels.secret-reference')}
-        input={({ value, setValue }) => (
-          <SecretRef
-            id="secret-ref-input"
-            resourceRef={value || {}}
-            onChange={(_, secretRef) => setValue(secretRef)}
-          />
-        )}
-      />
-      <ResourceForm.FormField
         propertyPath="$.spec.type"
         label={t('dnsproviders.labels.type')}
         required
@@ -73,6 +61,20 @@ export function DNSProvidersCreate({
           <ProviderTypeDropdown type={value} setType={setValue} />
         )}
         className="fd-margin-bottom--sm"
+      />
+      <SecretRef
+        required
+        className={'fd-margin-top--sm'}
+        id="secretRef"
+        resourceRef={jp.value(dnsProvider, '$.spec.secretRef') || {}}
+        title={t('dnsproviders.labels.secret-reference')}
+        onChange={secretRef => {
+          jp.value(dnsProvider, '$.spec.secretRef', secretRef);
+          setDNSProvider({
+            ...dnsProvider,
+            spec: { ...dnsProvider.spec, secretRef },
+          });
+        }}
       />
       <ResourceForm.KeyValueField
         advanced
@@ -85,18 +87,21 @@ export function DNSProvidersCreate({
         title={t('common.headers.annotations')}
       />
       <ResourceForm.TextArrayInput
+        required
         propertyPath="$.spec.domains.include"
-        title={t('dnsproviders.labels.include-domains')}
+        title={t('domains.include.label')}
+        tooltipContent={t('dnsproviders.tooltips.included-domains')}
         inputProps={{
-          placeholder: t('dnsproviders.placeholders.include-domains'),
+          placeholder: t('domains.include.placeholder'),
         }}
       />
       <ResourceForm.TextArrayInput
         advanced
         propertyPath="$.spec.domains.exclude"
-        title={t('dnsproviders.labels.exclude-domains')}
+        title={t('domains.exclude.label')}
+        tooltipContent={t('dnsproviders.tooltips.excluded-domains')}
         inputProps={{
-          placeholder: t('dnsproviders.placeholders.exclude-domains'),
+          placeholder: t('domains.exclude.placeholder'),
         }}
       />
     </ResourceForm>
