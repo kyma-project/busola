@@ -4,7 +4,7 @@ import config from '../config';
 import { loadKubeconfig } from '../support/loadKubeconfigFile';
 
 context('Login - kubeconfigID', () => {
-  it('kubeconfigID parameter works', () => {
+  it('Adds cluster by kubeconfigID', () => {
     const kubeconfigIdAddress =
       'https://kyma-env-broker.cp.dev.kyma.cloud.sap/kubeconfig';
     const kubeconfig = loadKubeconfig();
