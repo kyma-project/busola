@@ -20,17 +20,27 @@ async function importOpenIdConnect() {
   return (await import('@luigi-project/plugin-auth-oidc')).default;
 }
 
-export async function createSSOAuth() {
+export async function createSSOAuth(callback) {
   try {
+    console.log('init sso auth');
     const ssoFeature = (await getBusolaClusterParams()).config.features
       .SSO_LOGIN;
+
+    if (!(await isSSOEnabled())) {
+      callback();
+      return null;
+    }
 
     const { issuerUrl, clientId, scope } = ssoFeature.config;
 
     const OpenIdConnect = await importOpenIdConnect();
 
     const locationpathname = location.pathname + location.search;
-    if (locationpathname !== '/' && !locationpathname.startsWith('/?code')) {
+    if (
+      locationpathname !== '/' &&
+      locationpathname !== '/clusters' &&
+      !locationpathname.startsWith('/?code')
+    ) {
       saveLocation(locationpathname);
     }
 
@@ -45,15 +55,16 @@ export async function createSSOAuth() {
         response_mode: 'query',
         loadUserInfo: false,
         userInfoFn: async (_, authData) => {
+          console.log('sso logged in');
           setSSOAuthData(authData);
-          await initializeBusola();
-          await luigiAfterInit();
+          callback();
           return Promise.resolve({});
         },
       },
 
       events: {
         onAuthError: (_config, err) => {
+          console.log('sso err', err);
           window.location.href = '/clusters' + convertToURLsearch(err);
           return false; // return false to prevent OIDC plugin navigation
         },

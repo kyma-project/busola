@@ -30,11 +30,13 @@ import {
   deleteActiveCluster,
   saveActiveClusterName,
   getCurrentContextNamespace,
+  saveCARequired,
 } from '../cluster-management/cluster-management';
 import { getFeatureToggle } from '../utils/feature-toggles';
-import { saveLocation } from './previous-location';
+import { saveLocation, tryRestorePreviousLocation } from './previous-location';
 import { NODE_PARAM_PREFIX } from '../luigi-config';
 import { getSSOAuthData } from '../auth/sso';
+import { showAlert } from '../utils/showAlert';
 
 let selfSubjectRulesReview;
 
@@ -202,6 +204,22 @@ export async function createNavigation() {
     return true;
   };
 
+  const nodes =
+    isClusterSelected && getAuthData()
+      ? await getNavigationData(getAuthData())
+      : await createClusterManagementNodes();
+
+  setTimeout(async () => {
+    console.log('initial nav');
+
+    if (await getActiveCluster()) {
+      tryRestorePreviousLocation();
+    } else {
+      Luigi.navigation().navigate('/clusters');
+    }
+    // this should run after luigi sets up the navigation
+  }, 100);
+
   return {
     preloadViewGroups: false,
     nodeAccessibilityResolver: node =>
@@ -219,10 +237,7 @@ export async function createNavigation() {
       ],
     },
     ...optionsForCurrentCluster,
-    nodes:
-      isClusterSelected && getAuthData()
-        ? await getNavigationData(getAuthData())
-        : await createClusterManagementNodes(),
+    nodes,
   };
 }
 
@@ -266,6 +281,8 @@ async function getObservabilityNodes(authData, enabledFeatures) {
 }
 
 export async function getNavigationData(authData) {
+  await saveCARequired();
+
   const activeCluster = await getActiveCluster();
 
   const { kubeconfig } = activeCluster;
@@ -357,7 +374,7 @@ export async function getNavigationData(authData) {
             ? ':' + err.originalMessage
             : ''
         })`;
-      Luigi.ux().showAlert({
+      showAlert({
         text: errorNotification,
         type: 'error',
       });
@@ -373,7 +390,7 @@ async function getNamespaces() {
   try {
     namespaces = await fetchNamespaces(getAuthData());
   } catch (e) {
-    Luigi.ux().showAlert({
+    showAlert({
       text: `Cannot fetch namespaces: ${e.message}`,
       type: 'error',
     });

@@ -28,6 +28,7 @@ import { readFeatureToggles } from './utils/feature-toggles';
 import { loadTargetClusterConfig } from './utils/target-cluster-config';
 import { checkClusterStorageType } from './cluster-management/clusters-storage';
 import { createSSOAuth, getSSOAuthData, isSSOEnabled } from './auth/sso';
+import { showAlert } from './utils/showAlert';
 
 export const i18n = i18next.use(i18nextBackend).init({
   lng: localStorage.getItem('busola.language') || 'en',
@@ -44,75 +45,48 @@ export const i18n = i18next.use(i18nextBackend).init({
 
 export const NODE_PARAM_PREFIX = `~`;
 
-export async function luigiAfterInit() {
-  Luigi.ux().hideAppLoadingIndicator();
-
-  const params = await getActiveCluster();
-  const isClusterChoosen = !!params;
-
-  // save location, as we'll be logged out in a moment
-  if (!getAuthData()) {
-    saveCurrentLocation();
-    return;
-  }
-
-  readFeatureToggles(['dontConfirmDelete', 'showHiddenNamespaces']);
-
-  if (!isClusterChoosen) {
-    if (!window.location.pathname.startsWith('/clusters')) {
-      Luigi.navigation().navigate('/clusters');
-    }
-  } else {
-    try {
-      if (getAuthData() && !hasNonOidcAuth(params.currentContext?.user?.user)) {
-        await saveCARequired();
-        await loadTargetClusterConfig();
-        await checkClusterStorageType(params.config.storage);
-        await addClusterNodes();
-      }
-    } catch (e) {
-      console.warn(e);
-      Luigi.ux().showAlert({
-        text: 'Cannot load navigation nodes',
-        type: 'error',
-      });
-    }
-    tryRestorePreviousLocation();
-  }
+async function ssoLogin() {
+  return new Promise(async resolve => {
+    Luigi.setConfig({
+      auth: await createSSOAuth(resolve),
+      lifecycleHooks: {
+        luigiAfterInit: Luigi.ux().hideAppLoadingIndicator(),
+      },
+    });
+  });
 }
 
-(async () => {
-  handleResetEndpoint();
+async function clusterLogin() {
+  return new Promise(async resolve => {
+    const params = await getActiveCluster();
 
-  await initSentry();
+    const kubeconfigUser = params?.currentContext.user.user;
+    if (hasNonOidcAuth(kubeconfigUser)) {
+      setAuthData(kubeconfigUser);
+      resolve();
+      return;
+    }
 
-  await i18n;
+    const luigiConfig = {
+      auth: await createAuth(resolve, kubeconfigUser),
+    };
+    Luigi.setConfig(luigiConfig);
+  });
+}
 
-  if ((await isSSOEnabled()) && !getSSOAuthData()) {
-    Luigi.setConfig({
-      auth: await createSSOAuth(),
-    });
-  } else {
-    await initializeBusola();
-  }
-})();
-
-export async function initializeBusola() {
+async function initializeBusola() {
+  console.log('init busola');
   await setActiveClusterIfPresentInUrl();
-
-  await saveQueryParamsIfPresent();
-
   const params = await getActiveCluster();
 
-  const kubeconfigUser = params?.currentContext.user.user;
-  if (hasNonOidcAuth(kubeconfigUser)) {
-    setAuthData(kubeconfigUser);
+  if (params) {
     await saveCARequired();
     await loadTargetClusterConfig();
+    await checkClusterStorageType(params.config.storage);
   }
+  initTheme();
 
   const luigiConfig = {
-    auth: await createAuth(kubeconfigUser),
     communication,
     navigation: await createNavigation(),
     routing: {
@@ -120,21 +94,47 @@ export async function initializeBusola() {
       skipRoutingForUrlPatterns: [/access_token=/, /id_token=/],
     },
     settings: createSettings(params),
-    lifecycleHooks: { luigiAfterInit },
   };
   Luigi.setConfig(luigiConfig);
-  setTheme(getTheme());
 }
 
-window.addEventListener(
-  'message',
-  event => {
-    if (event.data.msg === 'busola.getCurrentTheme') {
-      event.source.postMessage(
-        { msg: 'busola.getCurrentTheme.response', name: getTheme() },
-        event.origin,
-      );
-    }
-  },
-  false,
-);
+function initTheme() {
+  setTheme(getTheme());
+
+  window.addEventListener(
+    'message',
+    event => {
+      if (event.data.msg === 'busola.getCurrentTheme') {
+        event.source.postMessage(
+          { msg: 'busola.getCurrentTheme.response', name: getTheme() },
+          event.origin,
+        );
+      }
+    },
+    false,
+  );
+}
+
+(async () => {
+  console.log('start');
+  handleResetEndpoint();
+
+  await initSentry();
+
+  await i18n;
+
+  await saveQueryParamsIfPresent();
+
+  readFeatureToggles(['dontConfirmDelete', 'showHiddenNamespaces']);
+
+  // save location, as we'll may be logged out in a moment
+  saveCurrentLocation();
+
+  await ssoLogin();
+  console.log('weree loggeeed siwh sso', getSSOAuthData());
+
+  await clusterLogin();
+  console.log('weree loggeeed to cluster', getAuthData());
+
+  await initializeBusola();
+})();

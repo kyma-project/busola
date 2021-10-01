@@ -37,6 +37,8 @@ export async function failFastFetch(input, auth, init = {}) {
     const cluster = params.currentContext.cluster.cluster;
     const requiresCA = params.config?.requiresCA;
 
+    console.log('requires ca?', input, params.config?.requiresCA);
+
     return {
       ...createSSOHeader(),
       ...createAuthHeaders(auth),
@@ -48,7 +50,7 @@ export async function failFastFetch(input, auth, init = {}) {
     };
   }
 
-  init.headers = await createHeaders(auth);
+  init.headers = await createHeaders(auth, input);
 
   const response = await fetch(input, init);
   if (response.ok) {
