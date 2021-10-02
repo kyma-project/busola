@@ -15,6 +15,7 @@ export function Dropdown({
   fullWidth,
   id,
   disabled = false,
+  placeholder,
   _ref,
   emptyListMessage,
   i18n,
@@ -41,6 +42,7 @@ export function Dropdown({
       options={options}
       selectedKey={selectedKey}
       onSelect={onSelect}
+      placeholder={placeholder || label}
       disabled={disabled}
       ref={_ref}
       {...fdSelectProps}

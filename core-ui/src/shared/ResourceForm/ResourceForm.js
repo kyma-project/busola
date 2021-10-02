@@ -123,6 +123,7 @@ export function ResourceForm({
         return renderFormChildren(child.props.children, isAdvanced);
       }
       const childProps = child.props || {};
+
       if (childProps.simple && isAdvanced) {
         return null;
       }
@@ -130,9 +131,12 @@ export function ResourceForm({
         return null;
       }
       if (!childProps.propertyPath) {
-        return child;
+        return React.cloneElement(child, {
+          isAdvanced: isAdvanced,
+        });
       }
       return React.cloneElement(child, {
+        isAdvanced: isAdvanced,
         value: jp.value(resource, childProps.propertyPath),
         setValue: value => {
           jp.value(resource, childProps.propertyPath, value);
