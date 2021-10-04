@@ -1,6 +1,6 @@
 import { getBusolaClusterParams } from './busola-cluster-params';
 import { resolveFeatureAvailability } from './features';
-import { DEFAULT_FEATURES } from './init-params/constants';
+import { DEFAULT_FEATURES } from './kubeconfig-id/constants';
 
 function join(path, fileName) {
   if (!path.endsWith('/')) {
@@ -14,10 +14,6 @@ async function importJsYaml() {
 }
 
 export async function applyKubeconfigIdIfPresent(kubeconfigId, initParams) {
-  if (!kubeconfigId) {
-    return;
-  }
-
   const clusterParams = await getBusolaClusterParams();
 
   const kubeconfigIdFeature = {
