@@ -27,25 +27,15 @@ async function setupFromParams() {
     return;
   }
 
-  const decoded = {};
-
   await applyKubeconfigIdIfPresent(kubeconfigId, decoded);
 
   const params = {
-    ...decoded,
     config: {
-      ...decoded.config,
-      hiddenNamespaces:
-        decoded.config?.hiddenNamespaces || constants.DEFAULT_HIDDEN_NAMESPACES,
+      hiddenNamespaces: constants.DEFAULT_HIDDEN_NAMESPACES,
       features: {
         ...constants.DEFAULT_FEATURES,
-        ...(decoded.config?.features || {}),
       },
       storage: await getDefaultStorage(),
-    },
-    currentContext: {
-      cluster: decoded.kubeconfig.clusters[0],
-      user: decoded.kubeconfig.users[0],
     },
   };
 
