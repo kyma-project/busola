@@ -28,3 +28,4 @@ export * from './ServiceInstances.list';
 export * from './ServiceBindings.list';
 export * from './Gateways.list';
 export * from './ConfigMaps.list';
+export * from './ServiceAccount/ServiceAccounts.list';
