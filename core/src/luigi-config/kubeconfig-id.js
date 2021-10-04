@@ -13,7 +13,11 @@ async function importJsYaml() {
   return (await import('js-yaml')).default;
 }
 
-export async function applyKubeconfigIdIfPresent(kubeconfigId, initParams) {
+export async function getKubeconfigById(kubeconfigId) {
+  if (!kubeconfigId) {
+    return null;
+  }
+
   const clusterParams = await getBusolaClusterParams();
 
   const kubeconfigIdFeature = {
@@ -22,7 +26,7 @@ export async function applyKubeconfigIdIfPresent(kubeconfigId, initParams) {
   }['KUBECONFIG_ID'];
 
   if (!(await resolveFeatureAvailability(kubeconfigIdFeature))) {
-    return;
+    return null;
   }
 
   const jsyaml = await importJsYaml();
@@ -35,5 +39,5 @@ export async function applyKubeconfigIdIfPresent(kubeconfigId, initParams) {
     throw Error(payload.Error);
   }
 
-  initParams.kubeconfig = payload;
+  return payload;
 }

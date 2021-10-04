@@ -7,9 +7,7 @@ context('Login - kubeconfigID', () => {
   it('Adds cluster by kubeconfigID', () => {
     const kubeconfigIdAddress =
       'https://kyma-env-broker.cp.dev.kyma.cloud.sap/kubeconfig';
-    const kubeconfig = loadKubeconfig();
-
-    ({ kubeconfig }) => {
+    cy.wrap(loadKubeconfig()).then(kubeconfig => {
       cy.intercept(
         {
           method: 'GET',
@@ -19,6 +17,6 @@ context('Login - kubeconfigID', () => {
       );
       cy.visit(`${config.clusterAddress}/clusters?kubeconfigID=tests`);
       cy.url().should('match', /namespaces$/);
-    };
+    });
   });
 });

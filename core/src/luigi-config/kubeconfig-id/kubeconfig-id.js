@@ -5,8 +5,26 @@ import {
 } from '../cluster-management/cluster-management';
 import { saveLocation } from '../navigation/previous-location';
 import * as constants from './constants';
-import { applyKubeconfigIdIfPresent } from '../kubeconfig-id';
+import { getKubeconfigById } from '../kubeconfig-id';
 import { getDefaultStorage } from '../cluster-management/clusters-storage';
+
+export function getContext(kubeconfig) {
+  const contexts = kubeconfig.contexts;
+  const currentContextName = kubeconfig['current-context'];
+  if (contexts.length === 0 || !currentContextName) {
+    // no contexts or no context chosen, just take first cluster and user
+    return {
+      cluster: kubeconfig.clusters[0],
+      user: kubeconfig.users[0],
+    };
+  } else {
+    const { context } = contexts.find(c => c.name === currentContextName);
+    return {
+      cluster: kubeconfig.clusters.find(c => c.name === context.cluster),
+      user: kubeconfig.users.find(u => u.name === context.user),
+    };
+  }
+}
 
 export async function saveQueryParamsIfPresent() {
   try {
@@ -23,12 +41,7 @@ async function setupFromParams() {
   const searchParams = new URL(location).searchParams;
   const kubeconfigId = searchParams.get('kubeconfigID');
 
-  if (!kubeconfigId) {
-    return;
-  }
-
-  await applyKubeconfigIdIfPresent(kubeconfigId, decoded);
-
+  const kubeconfig = await getKubeconfigById(kubeconfigId);
   const params = {
     config: {
       hiddenNamespaces: constants.DEFAULT_HIDDEN_NAMESPACES,
@@ -37,6 +50,8 @@ async function setupFromParams() {
       },
       storage: await getDefaultStorage(),
     },
+    kubeconfig,
+    currentContext: getContext(kubeconfig),
   };
 
   await saveClusterParams(params);
