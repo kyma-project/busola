@@ -135,13 +135,17 @@ export function ResourceForm({
           isAdvanced: isAdvanced,
         });
       }
+
+      const valueSetter = value => {
+        jp.value(resource, childProps.propertyPath, value);
+        setResource({ ...resource });
+      };
       return React.cloneElement(child, {
         isAdvanced: isAdvanced,
         value: jp.value(resource, childProps.propertyPath),
-        setValue: value => {
-          jp.value(resource, childProps.propertyPath, value);
-          setResource({ ...resource });
-        },
+        setValue: child.props.setValue
+          ? value => child.props.setValue(value, valueSetter)
+          : valueSetter,
       });
     });
 

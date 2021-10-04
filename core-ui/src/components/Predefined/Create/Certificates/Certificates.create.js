@@ -35,7 +35,7 @@ export function CertificatesCreate({ onChange, formElementRef, namespace }) {
       <ResourceForm.K8sNameField
         propertyPath="$.metadata.name"
         kind={t('certificates.name_singular')}
-        customSetValue={name => {
+        setValue={name => {
           jp.value(certificate, '$.metadata.name', name);
           jp.value(
             certificate,
@@ -138,17 +138,11 @@ export function CertificatesCreate({ onChange, formElementRef, namespace }) {
           />
         </>
       )}
-      <ResourceForm.FormField
+      <IssuerRef
         advanced
-        label={t('certificates.issuer')}
+        title={t('certificates.issuer')}
         tooltipContent={t('certificates.tooltips.issuer')}
         propertyPath="$.spec.issuerRef"
-        input={({ value, setValue }) => (
-          <IssuerRef
-            resourceRef={value || {}}
-            onChange={(e, issuerRef) => setValue(issuerRef)}
-          />
-        )}
       />
       <ResourceForm.FormField
         advanced
@@ -182,18 +176,12 @@ export function CertificatesCreate({ onChange, formElementRef, namespace }) {
         />
       )}
       {existingSecret && (
-        <ResourceForm.FormField
+        <SecretRef
           advanced
-          label={t('certificates.secret-ref')}
+          title={t('certificates.secret-ref')}
           tooltipContent={t('certificates.tooltips.secret-ref')}
+          fieldSelector="type=kubernetes.io/tls"
           propertyPath="$.spec.secretRef"
-          input={({ value, setValue }) => (
-            <SecretRef
-              fieldSelector="type=kubernetes.io/tls"
-              resourceRef={value || {}}
-              onChange={(e, secretRef) => setValue(value)}
-            />
-          )}
         />
       )}
     </ResourceForm>

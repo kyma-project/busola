@@ -148,17 +148,8 @@ export function FormField({
   );
 }
 
-export function K8sNameField({
-  kind,
-  value,
-  setValue,
-  customSetValue,
-  className,
-}) {
+export function K8sNameField({ kind, value, setValue, className }) {
   const { t, i18n } = useTranslation();
-
-  const onChange = value =>
-    customSetValue ? customSetValue(value) : setValue(value);
 
   return (
     <FormField
@@ -175,7 +166,7 @@ export function K8sNameField({
             required
             showHelp={false}
             showLabel={false}
-            onChange={e => onChange(e.target.value)}
+            onChange={e => setValue(e.target.value)}
             value={value}
             i18n={i18n}
           />

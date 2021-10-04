@@ -10,8 +10,7 @@ import {
 import './ExternalResourceRef.scss';
 
 export function ExternalResourceRef({
-  resourceRef,
-  onChange,
+  value,
   resources,
   title,
   labelPrefix,
@@ -19,6 +18,8 @@ export function ExternalResourceRef({
   actions,
   className,
   isAdvanced,
+  propertyPath,
+  setValue,
   required = false,
   defaultOpen = undefined,
 }) {
@@ -43,9 +44,9 @@ export function ExternalResourceRef({
   }));
 
   let filteredResourcesOptions = allResourcesOptions;
-  if (resourceRef.namespace?.length) {
+  if (value?.namespace?.length) {
     filteredResourcesOptions = allResourcesOptions.filter(
-      resource => resourceRef.namespace === resource.namespace,
+      resource => value?.namespace === resource.namespace,
     );
   }
   const open = defaultOpen === undefined ? !isAdvanced : defaultOpen;
@@ -75,10 +76,9 @@ export function ExternalResourceRef({
             fullWidth
             options={namespacesOptions}
             placeholder={t('common.placeholders.secret-ref-namespace')}
-            selectedKey={resourceRef.namespace}
+            selectedKey={value?.namespace}
             onSelect={(e, selected) => {
-              onChange({
-                ...resourceRef,
+              setValue({
                 name: undefined,
                 namespace: selected.key,
               });
@@ -104,10 +104,9 @@ export function ExternalResourceRef({
             fullWidth
             options={filteredResourcesOptions}
             placeholder={t('common.placeholders.secret-ref-name')}
-            selectedKey={resourceRef.name}
+            selectedKey={value?.name}
             onSelect={(e, selected) => {
-              onChange({
-                ...resourceRef,
+              setValue({
                 name: selected.key,
                 namespace: selected.namespace,
               });
