@@ -6,7 +6,7 @@ import { parseOIDCParams } from '../auth/oidc-params';
 import {
   DEFAULT_HIDDEN_NAMESPACES,
   DEFAULT_FEATURES,
-} from '../init-params/constants';
+} from '../kubeconfig-id/constants';
 import { getBusolaClusterParams } from '../busola-cluster-params';
 import {
   getTargetClusterConfig,

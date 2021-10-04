@@ -1,7 +1,6 @@
 import LuigiClient from '@luigi-project/client';
 
 import { tryParseOIDCparams } from './components/oidc-params';
-import { PARAMS_VERSION } from 'react-shared';
 
 export function setCluster(clusterName) {
   LuigiClient.sendCustomMessage({
@@ -11,7 +10,6 @@ export function setCluster(clusterName) {
 }
 
 export function addCluster(params) {
-  params.config.version = PARAMS_VERSION;
   LuigiClient.sendCustomMessage({
     id: 'busola.addCluster',
     params,

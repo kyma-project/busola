@@ -5,7 +5,7 @@ import {
 } from '../cluster-management/cluster-management';
 import { saveLocation } from '../navigation/previous-location';
 import * as constants from './constants';
-import { applyKubeconfigIdIfPresent } from './../kubeconfig-id';
+import { applyKubeconfigIdIfPresent } from '../kubeconfig-id';
 import { getDefaultStorage } from '../cluster-management/clusters-storage';
 
 export async function saveQueryParamsIfPresent() {
@@ -23,12 +23,6 @@ async function setupFromParams() {
   const searchParams = new URL(location).searchParams;
   const kubeconfigId = searchParams.get('kubeconfigID');
 
-  // neither params nor kk-id
-  if (!kubeconfigId) {
-    return;
-  }
-
-  // no kk-id, params present but disabled
   if (!kubeconfigId) {
     return;
   }
