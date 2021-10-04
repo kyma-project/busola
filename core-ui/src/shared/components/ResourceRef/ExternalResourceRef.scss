@@ -1,12 +1,11 @@
 .external-resource-ref {
-  display: flex;
-
-  .name {
-    flex-grow: 1;
-    margin-right: 0.5rem;
+  .fd-popover {
+    width: 100%;
   }
+}
 
-  .namespace {
-    width: 40%;
+.external-resource-popover {
+  b {
+    font-weight: bold;
   }
 }

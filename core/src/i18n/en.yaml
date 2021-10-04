@@ -313,6 +313,8 @@ common:
     issuer: Issuer
     name: Name
     namespace: Namespace
+    resource-name: '{{resource}} $t(common.labels.name)'
+    resource-namespace: '{{resource}} $t(common.labels.namespace)'
     protocol: Protocol
     resource: Resource
     secret: Secret

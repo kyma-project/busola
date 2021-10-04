@@ -1,11 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Dropdown } from 'react-shared';
+import { ComboboxInput } from 'fundamental-react';
 import classnames from 'classnames';
-import {
-  CollapsibleSection,
-  Label,
-} from 'shared/ResourceForm/components/FormComponents';
+
+import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
+import { CollapsibleSection } from 'shared/ResourceForm/components/FormComponents';
 
 import './ExternalResourceRef.scss';
 
@@ -23,7 +22,7 @@ export function ExternalResourceRef({
   required = false,
   defaultOpen = undefined,
 }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const resourceNamespaces = [
     ...new Set((resources || []).map(resource => resource.metadata.namespace)),
@@ -55,66 +54,52 @@ export function ExternalResourceRef({
       title={title}
       tooltipContent={tooltipContent}
       actions={actions}
-      className={className}
+      className={classnames('external-resource-ref', className)}
       defaultOpen={open}
       required={required}
     >
-      <div className={classnames('fd-row form-field')}>
-        <div className="fd-col fd-col-md--4 form-field__label">
-          <Label
-            required={required}
-            tooltipContent={t('common.tooltips.secret-ref-namespace')}
-          >
-            {labelPrefix + ' '}
-            {t('common.labels.namespace')}
-          </Label>
-        </div>
-        <div className="fd-col fd-col-md--7">
-          <Dropdown
-            id="external-resource-dropdown"
+      <ResourceForm.FormField
+        required={required}
+        label={t('common.labels.resource-namespace', { resource: labelPrefix })}
+        tooltipContent={t('common.tooltips.secret-ref-namespace')}
+        input={() => (
+          <ComboboxInput
             compact
-            fullWidth
+            showAllEntries
+            searchFullString
             options={namespacesOptions}
             placeholder={t('common.placeholders.secret-ref-namespace')}
-            selectedKey={value?.namespace}
-            onSelect={(e, selected) => {
+            value={value?.namespace}
+            onSelect={e => {
               setValue({
                 name: undefined,
-                namespace: selected.key,
+                namespace: e.target.value,
               });
             }}
-            i18n={i18n}
           />
-        </div>
-      </div>
-      <div className={classnames('fd-row form-field')}>
-        <div className="fd-col fd-col-md--4 form-field__label">
-          <Label
-            required={required}
-            tooltipContent={t('common.tooltips.secret-ref-name')}
-          >
-            {labelPrefix + ' '}
-            {t('common.lowercase.name')}
-          </Label>
-        </div>
-        <div className="fd-col fd-col-md--7">
-          <Dropdown
-            id="external-resource-dropdown"
+        )}
+      />
+      <ResourceForm.FormField
+        required={required}
+        label={t('common.labels.resource-name', { resource: labelPrefix })}
+        tooltipContent={t('common.tooltips.secret-ref-name')}
+        input={() => (
+          <ComboboxInput
             compact
-            fullWidth
+            showAllEntries
+            searchFullString
             options={filteredResourcesOptions}
             placeholder={t('common.placeholders.secret-ref-name')}
-            selectedKey={value?.name}
-            onSelect={(e, selected) => {
+            value={value?.name}
+            onSelect={e => {
               setValue({
-                name: selected.key,
-                namespace: selected.namespace,
+                name: e.target.value,
+                namespace: value.namespace,
               });
             }}
-            i18n={i18n}
           />
-        </div>
-      </div>
+        )}
+      />
     </CollapsibleSection>
   );
 }
