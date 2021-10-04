@@ -414,6 +414,8 @@ cron-jobs:
   not-scheduled-yet: None scheduled yet
   schedule: Schedule
   title: CronJobs
+service-accounts:
+  title: Service Accounts
 custom-resource-definitions:
   headers:
     description: Description
