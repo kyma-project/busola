@@ -88,7 +88,7 @@ export function K8sResourceSelect({
     } else return undefined;
   };
 
-  return allowTyping ? (
+  return (
     <div className="combobox--full-width">
       <ComboboxInput
         compact
@@ -105,15 +105,5 @@ export function K8sResourceSelect({
         inputProps={{ pattern: k8sNamePattern, value }}
       />
     </div>
-  ) : (
-    <Select
-      placeholder={t('common.messages.click-to-select', {
-        value: resourceType,
-      })}
-      value={value}
-      setValue={onSelect}
-      defaultKey={value}
-      options={options}
-    />
   );
 }
