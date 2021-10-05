@@ -7,6 +7,7 @@ import { saveLocation } from '../navigation/previous-location';
 import * as constants from './constants';
 import { getKubeconfigById } from '../kubeconfig-id';
 import { getDefaultStorage } from '../cluster-management/clusters-storage';
+import i18next from 'i18next';
 
 export function getContext(kubeconfig) {
   const contexts = kubeconfig.contexts;
@@ -30,9 +31,7 @@ export async function saveQueryParamsIfPresent() {
   try {
     await setupFromParams();
   } catch (e) {
-    alert(
-      `Error loading init params, configuration not changed (Error: ${e.message}).`,
-    );
+    alert(i18next.t('kubeconfig-id.error', { error: e.message }));
     console.warn(e);
   }
 }

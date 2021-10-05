@@ -19,4 +19,21 @@ context('Login - kubeconfigID', () => {
       cy.url().should('match', /namespaces$/);
     });
   });
+
+  it('Gracefully fails on invalid input', () => {
+    const kubeconfigIdAddress =
+      'https://kyma-env-broker.cp.dev.kyma.cloud.sap/kubeconfig';
+    cy.intercept(
+      {
+        method: 'GET',
+        url: `${kubeconfigIdAddress}/*`,
+      },
+      `a:
+c:d`,
+    );
+    cy.visit(`${config.clusterAddress}/clusters?kubeconfigID=tests`);
+    Cypress.on('window:alert', alertContent =>
+      expect(alertContent).to.include('Error loading kubeconfig ID'),
+    );
+  });
 });
