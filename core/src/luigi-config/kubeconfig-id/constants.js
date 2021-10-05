@@ -46,5 +46,3 @@ export const DEFAULT_HIDDEN_NAMESPACES = [
   'kubernetes-dashboard',
   'serverless-system',
 ];
-
-export const PARAMS_VERSION = '2.0'; // make sure to sync it in shared
