@@ -169,6 +169,8 @@ certificates:
     messages:
       failure: Failed to create the certificate.
       success: Certificate created.
+  messages:
+    decode-error: 'Failed to decode the CSR: {{message}}.'
   placeholders:
     common-name: Certificate CN (max 64 characters)
     csr: Plain text Certificate Signing Request

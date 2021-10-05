@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, FormTextarea, Switch } from 'fundamental-react';
+import { Button, FormTextarea, Switch, MessageStrip } from 'fundamental-react';
 import * as jp from 'jsonpath';
 
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
@@ -20,14 +20,18 @@ export function CertificatesCreate({ onChange, formElementRef, namespace }) {
   const [withCSR, setWithCSR] = useState(false);
   const [existingSecret, setExistingSecret] = useState(false);
   const [csrIsEncoded, setCsrIsEncoded] = useState(false);
+  const [decodeError, setDecodeError] = useState(null);
 
   const csrValue = value => {
     if (csrIsEncoded) {
       return value;
     } else {
       try {
-        return base64Decode(value);
+        setDecodeError(null);
+        return base64Decode(value || '');
       } catch (e) {
+        setDecodeError(e.message);
+        setCsrIsEncoded(true);
         return '';
       }
     }
@@ -125,24 +129,33 @@ export function CertificatesCreate({ onChange, formElementRef, namespace }) {
             tooltipContent={t('certificates.tooltips.csr')}
             propertyPath="$.spec.csr"
             input={({ value, setValue }) => (
-              <FormTextarea
-                compact
-                required
-                className="resize-vertical"
-                onChange={e =>
-                  setValue(
+              <>
+                <FormTextarea
+                  compact
+                  required
+                  className="resize-vertical"
+                  onChange={e =>
+                    setValue(
+                      csrIsEncoded
+                        ? e.target.value
+                        : base64Encode(e.target.value),
+                    )
+                  }
+                  value={csrValue(value)}
+                  placeholder={
                     csrIsEncoded
-                      ? e.target.value
-                      : base64Encode(e.target.value),
-                  )
-                }
-                value={csrValue(value)}
-                placeholder={
-                  csrIsEncoded
-                    ? t('certificates.placeholders.encoded-csr')
-                    : t('certificates.placeholders.csr')
-                }
-              />
+                      ? t('certificates.placeholders.encoded-csr')
+                      : t('certificates.placeholders.csr')
+                  }
+                />
+                {decodeError && (
+                  <MessageStrip type="error">
+                    {t('certificates.messages.decode-error', {
+                      message: decodeError,
+                    })}
+                  </MessageStrip>
+                )}
+              </>
             )}
           />
         </>
