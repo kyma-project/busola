@@ -42,6 +42,10 @@ async function setupFromParams() {
   const kubeconfigId = searchParams.get('kubeconfigID');
 
   const kubeconfig = await getKubeconfigById(kubeconfigId);
+  if (!kubeconfig) {
+    return null;
+  }
+
   const params = {
     config: {
       hiddenNamespaces: constants.DEFAULT_HIDDEN_NAMESPACES,
