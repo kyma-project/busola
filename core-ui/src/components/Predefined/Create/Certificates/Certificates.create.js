@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, FormTextarea, Switch } from 'fundamental-react';
 import * as jp from 'jsonpath';
@@ -21,11 +21,46 @@ export function CertificatesCreate({ onChange, formElementRef, namespace }) {
   const [existingSecret, setExistingSecret] = useState(false);
   const [csrIsEncoded, setCsrIsEncoded] = useState(false);
 
+  const csrValue = value => {
+    if (csrIsEncoded) {
+      return value;
+    } else {
+      try {
+        return base64Decode(value);
+      } catch (e) {
+        return '';
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (withCSR) {
+      jp.value(certificate, '$.spec.commonName', undefined);
+      jp.value(certificate, '$.spec.dnsNames', undefined);
+    } else {
+      jp.value(certificate, '$.spec.csr', undefined);
+    }
+    setCertificate(certificate);
+  }, [withCSR]);
+
+  useEffect(() => {
+    if (existingSecret) {
+      jp.value(certificate, '$.spec.secretRef.name', undefined);
+    } else {
+      jp.value(certificate, '$.spec.secretRef', undefined);
+    }
+    setCertificate(certificate);
+  }, [existingSecret]);
+
+  useEffect(() => {
+    setWithCSR(!!jp.value(certificate, '$.spec.csr'));
+    setExistingSecret(!!jp.value(certificate, '$.spec.secretRef'));
+  }, [certificate]);
+
   return (
     <ResourceForm
       pluralKind="certificates"
       singularName={t('certificates.name_singular')}
-      title={t('certificates.create.title')}
       resource={certificate}
       setResource={setCertificate}
       onChange={onChange}
@@ -89,29 +124,26 @@ export function CertificatesCreate({ onChange, formElementRef, namespace }) {
             label={t('certificates.csr')}
             tooltipContent={t('certificates.tooltips.csr')}
             propertyPath="$.spec.csr"
-            input={({ value, setValue }) => {
-              console.log('CSR', value);
-              return (
-                <FormTextarea
-                  compact
-                  required
-                  className="resize-vertical"
-                  onChange={e =>
-                    setValue(
-                      csrIsEncoded
-                        ? e.target.value
-                        : base64Encode(e.target.value),
-                    )
-                  }
-                  value={csrIsEncoded ? value : base64Decode(value || '')}
-                  placeholder={
+            input={({ value, setValue }) => (
+              <FormTextarea
+                compact
+                required
+                className="resize-vertical"
+                onChange={e =>
+                  setValue(
                     csrIsEncoded
-                      ? t('certificates.placeholders.encoded-csr')
-                      : t('certificates.placeholders.csr')
-                  }
-                />
-              );
-            }}
+                      ? e.target.value
+                      : base64Encode(e.target.value),
+                  )
+                }
+                value={csrValue(value)}
+                placeholder={
+                  csrIsEncoded
+                    ? t('certificates.placeholders.encoded-csr')
+                    : t('certificates.placeholders.csr')
+                }
+              />
+            )}
           />
         </>
       )}
