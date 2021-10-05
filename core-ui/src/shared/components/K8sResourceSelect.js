@@ -5,7 +5,6 @@ import { useGetList, k8sNamePattern } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 import pluralize from 'pluralize';
 import './K8sResourceSelect.scss';
-import { Select } from '../ResourceForm/components/FormComponents';
 
 const commonPropTypes = {
   onSelect: PropTypes.func.isRequired,
@@ -49,8 +48,6 @@ export function K8sResourceSelect({
   value,
   required,
   isNamespaced = true,
-  allowTyping = true,
-  ...props
 }) {
   const { t } = useTranslation();
 

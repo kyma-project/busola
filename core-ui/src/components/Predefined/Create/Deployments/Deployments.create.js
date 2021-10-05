@@ -59,18 +59,18 @@ export function DeploymentsCreate({
       <ResourceForm.CollapsibleSection
         title={t('deployments.name_singular')}
         defaultOpen
+        resource={deployment}
+        setResource={setDeployment}
       >
         {defaultEditor}
       </ResourceForm.CollapsibleSection>
       <ResourceForm.CollapsibleSection
         title={t('services.name_singular')}
         actions={serviceActions}
+        resource={service}
+        setResource={setService}
       >
-        <Editor
-          resource={service}
-          setResource={setService}
-          readonly={!createService}
-        />
+        <Editor readonly={!createService} />
       </ResourceForm.CollapsibleSection>
     </div>
   );
@@ -105,34 +105,6 @@ export function DeploymentsCreate({
     }
   };
 
-  const imagePullSecretField = (
-    <ResourceForm.FormField
-      simple
-      tooltipContent={t(
-        'deployments.create-modal.simple.image-pull-secret-tooltip',
-      )}
-      label={t('deployments.create-modal.simple.image-pull-secret')}
-      input={() => (
-        <K8sResourceSelectWithUseGetList
-          allowTyping={false}
-          url={`/api/v1/namespaces/${namespace}/secrets`}
-          onSelect={secretName => {
-            jp.value(
-              deployment,
-              '$.spec.template.spec.imagePullSecrets[0].name',
-              secretName,
-            );
-            setDeployment({ ...deployment });
-          }}
-          resourceType={t('secrets.name_singular')}
-          value={jp.value(
-            deployment,
-            '$.spec.template.spec.imagePullSecrets[0].name',
-          )}
-        />
-      )}
-    />
-  );
   return (
     <ResourceForm
       pluralKind="deployments"
@@ -181,15 +153,36 @@ export function DeploymentsCreate({
         )}
       />
 
-      {imagePullSecretField}
-
       <ResourceForm.CollapsibleSection
         advanced
         title={t('deployments.create-modal.simple.image-pull-secret')}
         resource={deployment}
         setResource={setDeployment}
       >
-        {imagePullSecretField}
+        <ResourceForm.FormField
+          tooltipContent={t(
+            'deployments.create-modal.simple.image-pull-secret-tooltip',
+          )}
+          label={t('deployments.create-modal.simple.image-pull-secret')}
+          input={() => (
+            <K8sResourceSelectWithUseGetList
+              url={`/api/v1/namespaces/${namespace}/secrets`}
+              onSelect={secretName => {
+                jp.value(
+                  deployment,
+                  '$.spec.template.spec.imagePullSecrets[0].name',
+                  secretName,
+                );
+                setDeployment({ ...deployment });
+              }}
+              resourceType={t('secrets.name_singular')}
+              value={jp.value(
+                deployment,
+                '$.spec.template.spec.imagePullSecrets[0].name',
+              )}
+            />
+          )}
+        />
       </ResourceForm.CollapsibleSection>
 
       <ResourceForm.CollapsibleSection
