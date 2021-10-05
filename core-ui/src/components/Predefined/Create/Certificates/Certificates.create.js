@@ -45,6 +45,7 @@ export function CertificatesCreate({ onChange, formElementRef, namespace }) {
       jp.value(certificate, '$.spec.csr', undefined);
     }
     setCertificate(certificate);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [withCSR]);
 
   useEffect(() => {
@@ -54,6 +55,7 @@ export function CertificatesCreate({ onChange, formElementRef, namespace }) {
       jp.value(certificate, '$.spec.secretRef', undefined);
     }
     setCertificate(certificate);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [existingSecret]);
 
   useEffect(() => {
