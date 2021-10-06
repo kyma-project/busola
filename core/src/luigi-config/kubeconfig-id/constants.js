@@ -29,7 +29,7 @@ export const DEFAULT_FEATURES = {
       kubeconfigUrl: 'https://kyma-env-broker.cp.dev.kyma.cloud.sap/kubeconfig',
     },
   },
-  REMOTE_CLUSTER_ONLY: {
+  ADD_CLUSTER_DISABLED: {
     isEnabled: false,
     config: {
       cockpitUrl: 'https://account.staging.hanavlab.ondemand.com/cockpit',

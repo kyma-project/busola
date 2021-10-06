@@ -32,7 +32,7 @@ export function ClusterList() {
     return null;
   }
 
-  const canAddCluster = !features.REMOTE_CLUSTER_ONLY?.isEnabled;
+  const canAddCluster = !features.ADD_CLUSTER_DISABLED?.isEnabled;
 
   const styleActiveCluster = entry => {
     return entry.currentContext.cluster.name === activeClusterName
@@ -118,7 +118,7 @@ export function ClusterList() {
 
   if (!entries.length) {
     const btpCockpitUrl =
-      features.REMOTE_CLUSTER_ONLY?.config?.cockpitUrl ||
+      features.ADD_CLUSTER_DISABLED?.config?.cockpitUrl ||
       'https://account.staging.hanavlab.ondemand.com/cockpit';
     const subtitle = canAddCluster ? (
       t('clusters.empty.subtitle')

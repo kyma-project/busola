@@ -83,7 +83,7 @@ async function createClusterManagementNodes(features) {
     },
   ];
 
-  if (!features.REMOTE_CLUSTER_ONLY?.isEnabled) {
+  if (!features.ADD_CLUSTER_DISABLED?.isEnabled) {
     const addClusterNode = [
       {
         hideSideNav: true,
