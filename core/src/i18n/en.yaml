@@ -475,7 +475,7 @@ deployments:
       docker-image: Docker Image
       docker-image-placeholder: Enter the Docker image tag, for example, bitnami/nginx.
       image-pull-secret: Image Pull Secret
-      image-pull-secret-tooltip: The secret for authorization to the private docker repository.
+      image-pull-secret-tooltip: The secret for authorization to the private Docker repository.
     title: Create Deployment
   headers:
     images: Images
