@@ -22,10 +22,6 @@ module.exports = env => {
             rootMode: 'root',
           },
         },
-        {
-          test: /\.json$/,
-          loader: 'json-loader',
-        },
       ],
     },
     plugins: [
