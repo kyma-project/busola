@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, FormTextarea, Switch, MessageStrip } from 'fundamental-react';
+import { Button, FormTextarea, Switch } from 'fundamental-react';
 import * as jp from 'jsonpath';
 
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
