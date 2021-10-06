@@ -88,6 +88,9 @@ export function K8sResourceSelect({
   return (
     <div className="combobox--full-width">
       <ComboboxInput
+        showAllEntries
+        searchFullString
+        selectionType="auto-inline"
         compact
         required={required}
         placeholder={t('common.messages.type-to-select', {
