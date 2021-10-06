@@ -23,6 +23,12 @@ module.exports = env => {
           },
         },
       ],
+      loaders: [
+        {
+          test: /\.json$/,
+          loader: 'json-loader',
+        },
+      ],
     },
     plugins: [
       new CopyWebpackPlugin([
