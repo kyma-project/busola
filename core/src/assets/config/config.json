@@ -3,7 +3,7 @@
     "defaultStorage": "localStorage",
     "features": {
       "DISABLE_ADD_CLUSTER": {
-        "isEnabled": true
+        "isEnabled": false
       },
       "SENTRY": {
         "isEnabled": true,
