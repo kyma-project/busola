@@ -10,6 +10,7 @@ import {
   PageHeader,
   GenericList,
   useNotification,
+  Link as ExternalLink,
 } from 'react-shared';
 
 import { setCluster, deleteCluster } from './../shared';
@@ -31,7 +32,7 @@ export function ClusterList() {
     return null;
   }
 
-  const canAddCluster = !features.DISABLE_ADD_CLUSTER?.isEnabled;
+  const canAddCluster = !features.REMOTE_CLUSTER_ONLY?.isEnabled;
 
   const styleActiveCluster = entry => {
     return entry.currentContext.cluster.name === activeClusterName
@@ -116,6 +117,22 @@ export function ClusterList() {
   );
 
   if (!entries.length) {
+    const btpCockpitUrl =
+      features.REMOTE_CLUSTER_ONLY?.config?.cockpitUrl ||
+      'https://account.staging.hanavlab.ondemand.com/cockpit';
+    const subtitle = canAddCluster ? (
+      t('clusters.empty.subtitle')
+    ) : (
+      <span>
+        {t('clusters.empty.go-to-btp-cockpit-before')}{' '}
+        <ExternalLink
+          className="fd-link"
+          url={btpCockpitUrl}
+          text="BTP Cockpit"
+        />{' '}
+        {t('clusters.empty.go-to-btp-cockpit-after')}
+      </span>
+    );
     return (
       <>
         {dialog}
@@ -127,11 +144,13 @@ export function ClusterList() {
             </svg>
           }
           title={t('clusters.empty.title')}
-          subtitle={t('clusters.empty.subtitle')}
+          subtitle={subtitle}
           actions={
-            <Button onClick={() => setShowAdd(true)}>
-              {t('clusters.add.title')}
-            </Button>
+            canAddCluster && (
+              <Button onClick={() => setShowAdd(true)}>
+                {t('clusters.add.title')}
+              </Button>
+            )
           }
         />
       </>

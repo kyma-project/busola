@@ -2,8 +2,11 @@
   "config": {
     "defaultStorage": "localStorage",
     "features": {
-      "DISABLE_ADD_CLUSTER": {
-        "isEnabled": false
+      "REMOTE_CLUSTER_ONLY": {
+        "isEnabled": false,
+        "config": {
+          "cockpitUrl": "https://account.staging.hanavlab.ondemand.com/cockpit"
+        }
       },
       "SENTRY": {
         "isEnabled": true,

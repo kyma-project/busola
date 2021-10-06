@@ -14,6 +14,7 @@ import {
 } from './static-navigation-model';
 import { navigationPermissionChecker } from './permissions';
 import { getFeatures, resolveFeatureAvailability } from '../features';
+import { showAlert } from '../utils/showAlert';
 
 import {
   hideDisabledNodes,
@@ -34,7 +35,6 @@ import {
 import { getFeatureToggle } from '../utils/feature-toggles';
 import { saveLocation } from './previous-location';
 import { NODE_PARAM_PREFIX } from '../luigi-config';
-import { showAlert } from '../utils/showAlert';
 
 async function createAppSwitcher() {
   const activeClusterName = getActiveClusterName();
@@ -83,7 +83,7 @@ async function createClusterManagementNodes(features) {
     },
   ];
 
-  if (!features.DISABLE_ADD_CLUSTER?.isEnabled) {
+  if (!features.REMOTE_CLUSTER_ONLY?.isEnabled) {
     const addClusterNode = [
       {
         hideSideNav: true,
