@@ -334,6 +334,8 @@ common:
     no-instances-found-namespace: No matching {{value}} found in this Namespace.
     parse-error: Parse error, previous valid input will be used.
     type-to-select: Start typing to select {{value}} from the list.
+    resource-namespace-error: Requested namespace not found.
+    resource-name-error: Requested resource with this name not found in the selected namespace.
   placeholders:
     secret-ref-name: Select name
     secret-ref-namespace: Select Namespace

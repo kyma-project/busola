@@ -161,14 +161,15 @@ export function CertificatesCreate({ onChange, formElementRef, namespace }) {
                       ? t('certificates.placeholders.encoded-csr')
                       : t('certificates.placeholders.csr')
                   }
+                  validationState={
+                    decodeError && {
+                      state: 'error',
+                      text: t('certificates.messages.decode-error', {
+                        message: decodeError,
+                      }),
+                    }
+                  }
                 />
-                {decodeError && (
-                  <MessageStrip type="error">
-                    {t('certificates.messages.decode-error', {
-                      message: decodeError,
-                    })}
-                  </MessageStrip>
-                )}
               </>
             )}
           />
@@ -198,6 +199,7 @@ export function CertificatesCreate({ onChange, formElementRef, namespace }) {
         title={t('certificates.issuer')}
         tooltipContent={t('certificates.tooltips.issuer')}
         propertyPath="$.spec.issuerRef"
+        currentNamespace={namespace}
       />
       <ResourceForm.FormField
         advanced
@@ -235,6 +237,7 @@ export function CertificatesCreate({ onChange, formElementRef, namespace }) {
           tooltipContent={t('certificates.tooltips.secret-ref')}
           fieldSelector="type=kubernetes.io/tls"
           propertyPath="$.spec.secretRef"
+          currentNamespace={namespace}
         />
       )}
     </ResourceForm>

@@ -2,6 +2,9 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ComboboxInput } from 'fundamental-react';
 import classnames from 'classnames';
+import LuigiClient from '@luigi-project/client';
+
+import { useGetList, getFeatureToggle } from 'react-shared';
 
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import { CollapsibleSection } from 'shared/ResourceForm/components/FormComponents';
@@ -21,23 +24,28 @@ export function ExternalResourceRef({
   setValue,
   required = false,
   defaultOpen = undefined,
+  currentNamespace,
 }) {
   const { t } = useTranslation();
+  const namespacesUrl = '/api/v1/namespaces';
+  const { data: namespaces } = useGetList()(namespacesUrl);
 
-  const resourceNamespaces = [
-    ...new Set((resources || []).map(resource => resource.metadata.namespace)),
-  ];
-  const namespacesOptions = resourceNamespaces.map(namespace => ({
-    key: namespace,
-    text: namespace,
-  }));
-  namespacesOptions.unshift({
-    key: '',
-    text: 'All namespaces',
-  });
+  const showHiddenNamespaces = getFeatureToggle('showHiddenNamespaces');
+  const hiddenNamespaces = LuigiClient.getContext().hiddenNamespaces;
+
+  const namespacesOptions = (namespaces || [])
+    .filter(ns =>
+      showHiddenNamespaces
+        ? true
+        : !hiddenNamespaces.includes(ns.metadata.name),
+    )
+    .map(ns => ({
+      key: ns.metadata.name,
+      text: ns.metadata.name,
+    }));
 
   const allResourcesOptions = (resources || []).map(resource => ({
-    key: `${resource.metadata.namespace}/${resource.metadata.name}`,
+    key: resource.metadata.name,
     text: resource.metadata.name,
     namespace: resource.metadata.namespace,
   }));
@@ -47,7 +55,19 @@ export function ExternalResourceRef({
     filteredResourcesOptions = allResourcesOptions.filter(
       resource => value?.namespace === resource.namespace,
     );
+  } else if (currentNamespace) {
+    filteredResourcesOptions = allResourcesOptions.filter(
+      resource => currentNamespace === resource.namespace,
+    );
   }
+
+  const namespaceValid =
+    !value?.namespace ||
+    namespacesOptions.find(ns => ns.key === value.namespace);
+  const nameValid =
+    !value?.name ||
+    filteredResourcesOptions.find(res => res.key === value.name);
+
   const open = defaultOpen === undefined ? !isAdvanced : defaultOpen;
   return (
     <CollapsibleSection
@@ -71,12 +91,19 @@ export function ExternalResourceRef({
             options={namespacesOptions}
             placeholder={t('common.placeholders.secret-ref-namespace')}
             value={value?.namespace}
+            selectedKey={value?.namespace}
             onSelect={e => {
               setValue({
                 name: undefined,
                 namespace: e.target.value,
               });
             }}
+            validationState={
+              !namespaceValid && {
+                state: 'error',
+                text: t('common.messages.resource-namespace-error'),
+              }
+            }
           />
         )}
       />
@@ -92,13 +119,20 @@ export function ExternalResourceRef({
             selectionType="auto-inline"
             options={filteredResourcesOptions}
             placeholder={t('common.placeholders.secret-ref-name')}
-            value={value?.name}
+            value={value?.namespace}
+            selectedKey={value?.name}
             onSelect={e => {
               setValue({
                 name: e.target.value,
-                namespace: value.namespace,
+                namespace: value?.namespace,
               });
             }}
+            validationState={
+              !nameValid && {
+                state: 'error',
+                text: t('common.messages.resource-name-error'),
+              }
+            }
           />
         )}
       />
