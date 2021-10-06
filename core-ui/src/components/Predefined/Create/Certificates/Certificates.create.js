@@ -50,7 +50,7 @@ export function CertificatesCreate({ onChange, formElementRef, namespace }) {
 
   useEffect(() => {
     if (existingSecret) {
-      jp.value(certificate, '$.spec.secretRef.name', undefined);
+      jp.value(certificate, '$.spec.secretName', undefined);
     } else {
       jp.value(certificate, '$.spec.secretRef', undefined);
     }
@@ -59,8 +59,20 @@ export function CertificatesCreate({ onChange, formElementRef, namespace }) {
   }, [existingSecret]);
 
   useEffect(() => {
-    setWithCSR(!!jp.value(certificate, '$.spec.csr'));
-    setExistingSecret(!!jp.value(certificate, '$.spec.secretRef'));
+    if (jp.value(certificate, '$.spec.csr')) {
+      setWithCSR(true);
+    } else {
+      setDecodeError(null);
+      if (jp.value(certificate, '$.spec.commonName')) {
+        setWithCSR(false);
+      }
+    }
+
+    if (jp.value(certificate, '$.spec.secretRef')) {
+      setExistingSecret(true);
+    } else if (jp.value(certificate, '$.spec.secretName')) {
+      setExistingSecret(false);
+    }
   }, [certificate]);
 
   return (
@@ -170,18 +182,14 @@ export function CertificatesCreate({ onChange, formElementRef, namespace }) {
             tooltipContent={t('certificates.tooltips.common-name')}
             input={Inputs.Text}
             propertyPath="$.spec.commonName"
-            inputProps={{
-              maxlength: 64,
-              placeholder: t('certificates.placeholders.common-name'),
-            }}
+            maxLength={64}
+            placeholder={t('certificates.placeholders.common-name')}
           />
           <ResourceForm.TextArrayInput
             advanced
             propertyPath="$.spec.dnsNames"
             title={t('certificates.dns-names')}
-            inputProps={{
-              placeholder: t('certificates.placeholders.dns-names'),
-            }}
+            placeholder={t('certificates.placeholders.dns-names')}
           />
         </>
       )}
@@ -215,11 +223,9 @@ export function CertificatesCreate({ onChange, formElementRef, namespace }) {
           advanced
           label={t('certificates.secret-name')}
           tooltipContent={t('certificates.tooltips.secret-name')}
-          propertyPath="$.spec.secretRef.name"
+          propertyPath="$.spec.secretName"
           input={Inputs.Text}
-          inputProps={{
-            placeholder: t('certificates.placeholders.secret-name'),
-          }}
+          placeholder={t('certificates.placeholders.secret-name')}
         />
       )}
       {existingSecret && (

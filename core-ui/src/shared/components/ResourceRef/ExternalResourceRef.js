@@ -37,12 +37,12 @@ export function ExternalResourceRef({
   });
 
   const allResourcesOptions = (resources || []).map(resource => ({
-    key: resource.metadata.name,
+    key: `${resource.metadata.namespace}/${resource.metadata.name}`,
     text: resource.metadata.name,
     namespace: resource.metadata.namespace,
   }));
 
-  let filteredResourcesOptions = allResourcesOptions;
+  let filteredResourcesOptions = [];
   if (value?.namespace?.length) {
     filteredResourcesOptions = allResourcesOptions.filter(
       resource => value?.namespace === resource.namespace,
@@ -67,6 +67,7 @@ export function ExternalResourceRef({
             compact
             showAllEntries
             searchFullString
+            selectionType="auto-inline"
             options={namespacesOptions}
             placeholder={t('common.placeholders.secret-ref-namespace')}
             value={value?.namespace}
@@ -88,6 +89,7 @@ export function ExternalResourceRef({
             compact
             showAllEntries
             searchFullString
+            selectionType="auto-inline"
             options={filteredResourcesOptions}
             placeholder={t('common.placeholders.secret-ref-name')}
             value={value?.name}
