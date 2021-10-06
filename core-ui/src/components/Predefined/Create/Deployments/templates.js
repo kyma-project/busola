@@ -44,6 +44,7 @@ export function createDeploymentTemplate(namespaceId) {
           },
         },
         spec: {
+          imagePullSecrets: [],
           containers: [createContainerTemplate()],
         },
       },
