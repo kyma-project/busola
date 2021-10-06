@@ -75,7 +75,7 @@ export const TlsForm = ({ server = {}, servers, setServers, advanced }) => {
       {advanced && (
         <ResourceForm.FormField
           label={t('gateways.create-modal.advanced.tls.http-redirect')}
-          tooltip={t(
+          tooltipContent={t(
             'gateways.create-modal.advanced.tls.http-redirect-description',
           )}
           input={() => (
