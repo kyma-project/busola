@@ -1,6 +1,16 @@
 import React, { useState } from 'react';
 import LuigiClient from '@luigi-project/client';
 import { useTranslation } from 'react-i18next';
+import * as jp from 'jsonpath';
+import { Button, FormInput } from 'fundamental-react';
+import { Tooltip } from 'react-shared';
+
+import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
+import {
+  MultiInput,
+  K8sNameField,
+  KeyValueField,
+} from 'shared/ResourceForm/components/FormComponents';
 
 import {
   usePost,
@@ -21,17 +31,16 @@ export function CreateSecretForm({
   namespaceId,
   formElementRef,
   onChange,
-  existingSecret,
+  secret: existingSecret,
   onSubmit,
 }) {
   const { t } = useTranslation();
+  const [secret, setSecret] = useState(
+    existingSecret || createSecretTemplate(namespaceId),
+  );
+  /*
   const notification = useNotification();
   const postRequest = usePost();
-  const [secret, setSecret] = useState(
-    existingSecret
-      ? yamlToSecret(existingSecret)
-      : createSecretTemplate(namespaceId),
-  );
   const [isEncoded, setEncoded] = useState(!!existingSecret);
   const microfrontendContext = useMicrofrontendContext();
   const { features } = microfrontendContext;
@@ -93,5 +102,76 @@ export function CreateSecretForm({
       presets={createPresets(namespaceId, t, DNSExist)}
       formElementRef={formElementRef}
     />
+  );
+  */
+  return (
+    <ResourceForm resource={secret} setResource={setSecret}>
+      <K8sNameField
+        propertyPath="$.metadata.name"
+        kind={t('secrets.name_singular')}
+        setValue={name => {
+          jp.value(secret, '$.metadata.name', name);
+          jp.value(secret, "$.metadata.labels['app.kubernetes.io/name']", name);
+          setSecret(secret);
+        }}
+      />
+      {/*
+      <KeyValueField
+        advanced
+        propertyPath="$.metadata.labels"
+        title={t('common.headers.labels')}
+        className="fd-margin-top--sm"
+      />
+      <KeyValueField
+        advanced
+        propertyPath="$.metadata.annotations"
+        title={t('common.headers.annotations')}
+      />
+      */}
+      <MultiInput
+        propertyPath="$.metadata.data"
+        toInternal={value =>
+          Object.entries(value || {}).map(([key, val]) => ({ key, val }))
+        }
+        toExternal={value =>
+          value
+            .filter(entry => !!entry?.key)
+            .reduce((acc, entry) => ({ ...acc, [entry.key]: entry.val }), {})
+        }
+        inputs={[
+          ({ value, setValue, ref, onBlur, focus }) => (
+            <FormInput
+              compact
+              key="key"
+              value={value?.key || ''}
+              ref={ref}
+              onChange={e =>
+                setValue({ val: value?.val || '', key: e.target.value })
+              }
+              onKeyDown={e => focus(e, 1)}
+              onBlur={onBlur}
+              placeholder={t('components.key-value-field.enter-key')}
+            />
+          ),
+          ({ value, setValue, ref, onBlur, focus }) => (
+            <FormInput
+              compact
+              key="value"
+              value={value?.val || ''}
+              ref={ref}
+              onChange={e => setValue({ ...value, val: e.target.value })}
+              onKeyDown={e => focus(e)}
+              onBlur={onBlur}
+              placeholder={t('components.key-value-field.enter-value')}
+            />
+          ),
+          () => (
+            <Tooltip content={t('common.tooltips.read-file')}>
+              <Button>{t('components.key-value-form.read-value')}</Button>
+            </Tooltip>
+          ),
+        ]}
+      />
+    </ResourceForm>
   );
 }

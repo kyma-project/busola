@@ -200,6 +200,24 @@ export function MultiInput({
   defaultOpen,
   ...props
 }) {
+  console.log(
+    'MultiInput',
+    {
+      value,
+      setValue,
+      title,
+      label,
+      tooltipContent,
+      required,
+      toInternal,
+      toExternal,
+      inputs,
+      className,
+      isAdvanced,
+      defaultOpen,
+    },
+    props,
+  );
   const valueRef = useRef(null); // for deep comparison
   const [internalValue, setInternalValue] = useState([]);
   const refs = Array(internalValue.length)

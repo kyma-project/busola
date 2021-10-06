@@ -34,7 +34,7 @@ export function EditSecretForm(props) {
   return (
     <CreateSecretForm
       {...formProps}
-      existingSecret={secret}
+      secret={secret}
       onSubmit={onSubmit}
       isEncoded={true}
     />
