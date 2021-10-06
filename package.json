@@ -51,8 +51,7 @@
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
     "rfc6902": "^4.0.1",
-    "semver": "^7.3.5",
-    "json-loader": "^0.5.7"
+    "semver": "^7.3.5"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^4.2.4",
@@ -70,6 +69,7 @@
     "husky": "^2.4.1",
     "jest": "^24.8.0",
     "jsdom-worker-fix": "^0.1.8",
+    "json-loader": "^0.5.7",
     "lerna": "^4.0.0",
     "lint-staged": "^10.4.0",
     "node-sass": "^4.14.1",

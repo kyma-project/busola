@@ -8,6 +8,12 @@ module.exports = env => {
     entry: {
       luigiConfig: './src/luigi-config/luigi-config.js',
     },
+    loaders: [
+      {
+        test: /\.json$/,
+        loader: 'json-loader',
+      },
+    ],
     output: {
       filename: '[name].bundle.js',
       path: path.resolve(__dirname, 'src/assets'),
@@ -21,12 +27,6 @@ module.exports = env => {
           options: {
             rootMode: 'root',
           },
-        },
-      ],
-      loaders: [
-        {
-          test: /\.json$/,
-          loader: 'json-loader',
         },
       ],
     },
