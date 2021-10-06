@@ -9,10 +9,9 @@ async function getBusolaVersion() {
 }
 
 export async function createSettings(params) {
-  const version = await getBusolaVersion();
   return {
     responsiveNavigation: 'Fiori3',
-    sideNavFooterText: 'Version: ' + version,
+    sideNavFooterText: 'Version: ' + (await getBusolaVersion()),
     header: {
       logo: getTheme() === 'hcw' ? 'assets/logo-black.svg' : 'assets/logo.svg',
       title: params?.currentContext.cluster.name || 'Busola',
