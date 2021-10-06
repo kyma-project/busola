@@ -13,7 +13,7 @@
     "install:apps": "gulp install:apps",
     "start": "./scripts/pre-start-warning.sh && lerna exec --parallel -- npm run start:kyma",
     "start:api": "./scripts/pre-start-warning.sh && lerna exec --parallel -- npm run start:kyma:api",
-    "lint-check": "prettier --config ./.prettierrc --ignore-path ./.prettierignore --check '**/*.{ts,tsx,js,jsx,json,html,css,yaml,md}'",
+    "lint-check": "prettier --config ./.prettierrc --ignore-path ./.prettierignore --check '**/*.{ts,tsx,js,jsx,html,css,yaml,md}'",
     "lint-fix": "prettier --config ./.prettierrc --ignore-path ./.prettierignore --write '**/*.{ts,tsx,js,jsx,json,html,css,yaml,md}'",
     "lint-staged": "lint-staged",
     "test-shared-lib": "cd shared && jest",
