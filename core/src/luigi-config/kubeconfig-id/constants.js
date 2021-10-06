@@ -29,6 +29,7 @@ export const DEFAULT_FEATURES = {
       kubeconfigUrl: 'https://kyma-env-broker.cp.dev.kyma.cloud.sap/kubeconfig',
     },
   },
+  CLUSTER_SWITCHING: { isEnabled: true },
 };
 
 export const DEFAULT_HIDDEN_NAMESPACES = [

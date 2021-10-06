@@ -211,7 +211,7 @@ export async function createNavigation() {
       items: [
         ...clusterNodes,
         {
-          title: i18next.t('clusters.overview.title'),
+          title: i18next.t('clusters.overview.title-all-clusters'),
           link: '/clusters',
           testId: 'clusters-overview',
         },

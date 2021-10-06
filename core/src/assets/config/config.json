@@ -2,6 +2,9 @@
   "config": {
     "defaultStorage": "localStorage",
     "features": {
+      "CLUSTER_SWITCHING": {
+        "isEnabled": true
+      },
       "SENTRY": {
         "isEnabled": true,
         "selectors": [],

@@ -139,7 +139,7 @@ export function ClusterList() {
   return (
     <>
       {dialog}
-      <PageHeader title={t('clusters.overview.title')} />
+      <PageHeader title={t('clusters.overview.title-all-clusters')} />
       <GenericList
         textSearchProperties={textSearchProperties}
         showSearchSuggestion={false}
