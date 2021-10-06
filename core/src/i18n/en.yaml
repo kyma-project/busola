@@ -1106,3 +1106,5 @@ workloads:
   docker-image:
     tooltip: Enter a valid Docker image registry path.
   title: Workloads
+kubeconfig-id:
+  error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})."
