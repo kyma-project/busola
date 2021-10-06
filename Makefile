@@ -39,10 +39,12 @@ release-local: build-image-local push-image-local
 
 build-image: 
 	sed -i '/version/c\   \"version\" : \"$(TAG)\",' core/src/assets/config/version.json
+	cat core/src/assets/config/version.json
 	docker build -t $(IMG_NAME) -f Dockerfile .
 
 build-image-local:
 	sed -i '/version/c\   \"version\" : \"$(TAG)\",' core/src/assets/config/version.json
+	cat core/src/assets/config/version.json
 	docker build -t $(LOCAL_IMG_NAME) -f Dockerfile.local .
 
 push-image:
