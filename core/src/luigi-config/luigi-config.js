@@ -18,10 +18,10 @@ import {
   setActiveClusterIfPresentInUrl,
 } from './cluster-management/cluster-management';
 import { initSentry } from './sentry';
-
+import { showAlert } from './utils/showAlert';
 import {
   createNavigation,
-  addClusterNodes,
+  reloadNavigation,
 } from './navigation/navigation-data-init';
 import { setTheme, getTheme } from './utils/theme';
 import { readFeatureToggles } from './utils/feature-toggles';
@@ -67,11 +67,11 @@ async function luigiAfterInit() {
         await saveCARequired();
         await loadTargetClusterConfig();
         await checkClusterStorageType(params.config.storage);
-        await addClusterNodes();
+        await reloadNavigation();
       }
     } catch (e) {
       console.warn(e);
-      Luigi.ux().showAlert({
+      showAlert({
         text: 'Cannot load navigation nodes',
         type: 'error',
       });

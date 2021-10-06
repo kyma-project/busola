@@ -8,8 +8,8 @@ data:
       "config": {
         "storage": "localStorage",
         "features":{
-            "CLUSTER_SWITCHING": {
-              "isEnabled": true
+            "DISABLE_ADD_CLUSTER": {
+              "isEnabled": false
             },
             "SENTRY": {
               "isEnabled": true,

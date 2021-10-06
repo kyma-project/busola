@@ -19,7 +19,7 @@ import { ClusterStorageType } from './ClusterStorageType';
 import './ClusterList.scss';
 
 export function ClusterList() {
-  const { clusters, activeClusterName } = useMicrofrontendContext();
+  const { clusters, activeClusterName, features } = useMicrofrontendContext();
   const notification = useNotification();
   const { t, i18n } = useTranslation();
 
@@ -30,6 +30,8 @@ export function ClusterList() {
   if (!clusters) {
     return null;
   }
+
+  const canAddCluster = !features.DISABLE_ADD_CLUSTER?.isEnabled;
 
   const styleActiveCluster = entry => {
     return entry.currentContext.cluster.name === activeClusterName
@@ -98,7 +100,7 @@ export function ClusterList() {
     },
   ];
 
-  const extraHeaderContent = (
+  const extraHeaderContent = canAddCluster && (
     <Button
       option="transparent"
       glyph="add"
