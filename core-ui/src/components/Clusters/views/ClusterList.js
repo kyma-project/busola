@@ -96,7 +96,8 @@ export function ClusterList() {
       handler: e => downloadKubeconfig(e),
     },
     {
-      name: 'Delete',
+      name: t('common.buttons.delete'),
+      icon: 'delete',
       handler: e => deleteCluster(e.currentContext.cluster.name),
     },
   ];

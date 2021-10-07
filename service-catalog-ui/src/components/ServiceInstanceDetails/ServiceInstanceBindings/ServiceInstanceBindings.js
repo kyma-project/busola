@@ -104,7 +104,8 @@ const ServiceInstanceBindings = ({ serviceInstance, i18n }) => {
     ? []
     : [
         {
-          name: 'Delete',
+          name: t('common.buttons.delete'),
+          icon: 'delete',
           handler: handleResourceDelete,
         },
       ];
