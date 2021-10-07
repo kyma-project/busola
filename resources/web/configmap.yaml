@@ -8,8 +8,11 @@ data:
       "config": {
         "storage": "localStorage",
         "features":{
-            "INIT_PARAMS": {
-              "isEnabled": false
+            "ADD_CLUSTER_DISABLED": {
+              "isEnabled": false,
+              "config": {
+                "cockpitUrl": "https://account.staging.hanavlab.ondemand.com/cockpit"
+              }
             },
             "SENTRY": {
               "isEnabled": true,

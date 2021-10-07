@@ -14,7 +14,7 @@ export async function createSettings(params) {
     sideNavFooterText: 'Version: ' + (await getBusolaVersion()),
     header: {
       logo: getTheme() === 'hcw' ? 'assets/logo-black.svg' : 'assets/logo.svg',
-      title: params?.currentContext.cluster.name || 'Busola',
+      title: params?.currentContext.cluster.name || '',
       favicon: 'favicon.ico',
     },
     appLoadingIndicator: {
