@@ -4,18 +4,16 @@ import { saveAs } from 'file-saver';
 import { useTranslation } from 'react-i18next';
 
 import { useShowNodeParamsError } from 'shared/useShowNodeParamsError';
-import { Link, Button, Icon, MessagePage } from 'fundamental-react';
+import { Link, Button, MessagePage } from 'fundamental-react';
 import {
   useMicrofrontendContext,
   PageHeader,
   GenericList,
   useNotification,
-  Tooltip,
 } from 'react-shared';
 
 import { setCluster, deleteCluster } from './../shared';
 import { AddClusterDialog } from '../components/AddClusterDialog';
-import { areParamsCompatible } from '../params-version';
 import { ClusterStorageType } from './ClusterStorageType';
 
 import './ClusterList.scss';
@@ -82,15 +80,6 @@ export function ClusterList() {
       >
         {entry.currentContext.cluster.name}
       </Link>
-      {!areParamsCompatible(entry.config?.version) && (
-        <Tooltip content={t('clusters.list.outdated.tooltip')}>
-          <Icon
-            ariaLabel="version incompatible warning"
-            className="params-warning-icon"
-            glyph="message-warning"
-          />
-        </Tooltip>
-      )}
     </>,
     entry.currentContext.cluster.cluster.server,
     <ClusterStorageType clusterConfig={entry.config} />,
@@ -104,7 +93,8 @@ export function ClusterList() {
       handler: e => downloadKubeconfig(e),
     },
     {
-      name: 'Delete',
+      name: t('common.buttons.delete'),
+      icon: 'delete',
       handler: e => deleteCluster(e.currentContext.cluster.name),
     },
   ];

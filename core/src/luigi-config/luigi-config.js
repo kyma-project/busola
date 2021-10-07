@@ -10,7 +10,7 @@ import { getAuthData, setAuthData } from './auth/auth-storage';
 import { communication } from './communication';
 import { createSettings } from './settings';
 import { createAuth, hasNonOidcAuth } from './auth/auth.js';
-import { saveQueryParamsIfPresent } from './init-params/init-params.js';
+import { saveQueryParamsIfPresent } from './kubeconfig-id/kubeconfig-id.js';
 import {
   getActiveCluster,
   handleResetEndpoint,
@@ -93,7 +93,8 @@ async function initializeBusola() {
       nodeParamPrefix: NODE_PARAM_PREFIX,
       skipRoutingForUrlPatterns: [/access_token=/, /id_token=/],
     },
-    settings: createSettings(params),
+    settings: await createSettings(params),
+    lifecycleHooks: { luigiAfterInit },
   };
   Luigi.setConfig(luigiConfig);
 }
