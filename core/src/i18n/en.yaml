@@ -200,8 +200,7 @@ clusters:
   empty:
     title: Looks like there aren't any clusters yet.
     subtitle: Let's add one now!
-    go-to-btp-cockpit-before: 'Go to'
-    go-to-btp-cockpit-after: 'to view your clusters.'
+    go-to-btp-cockpit: 'To view your clusters, go to'
   labels:
     client-id: Client ID
     issuer-url: Issuer URL

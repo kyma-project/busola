@@ -121,17 +121,17 @@ export function ClusterList() {
     const btpCockpitUrl =
       features.ADD_CLUSTER_DISABLED?.config?.cockpitUrl ||
       'https://account.staging.hanavlab.ondemand.com/cockpit';
+
     const subtitle = canAddCluster ? (
       t('clusters.empty.subtitle')
     ) : (
-      <span>
-        {t('clusters.empty.go-to-btp-cockpit-before')}{' '}
+      <span className="cluster-disabled-subtitle">
+        {t('clusters.empty.go-to-btp-cockpit')}{' '}
         <ExternalLink
           className="fd-link"
           url={btpCockpitUrl}
           text="BTP Cockpit"
-        />{' '}
-        {t('clusters.empty.go-to-btp-cockpit-after')}
+        />
       </span>
     );
     return (
