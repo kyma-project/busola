@@ -10,7 +10,7 @@ import { getAuthData, setAuthData } from './auth/auth-storage';
 import { communication } from './communication';
 import { createSettings } from './settings';
 import { createAuth, hasNonOidcAuth } from './auth/auth.js';
-import { saveQueryParamsIfPresent } from './init-params/init-params.js';
+import { saveQueryParamsIfPresent } from './kubeconfig-id/kubeconfig-id.js';
 import {
   getActiveCluster,
   handleResetEndpoint,
