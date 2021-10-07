@@ -1,5 +1,5 @@
 import React from 'react';
-import { Checkbox, FormLabel, MessageStrip } from 'fundamental-react';
+import { Switch, MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import {
   TSL_MODES,
@@ -75,30 +75,23 @@ export const TlsForm = ({ server = {}, servers, setServers, advanced }) => {
       {advanced && (
         <ResourceForm.FormField
           label={t('gateways.create-modal.advanced.tls.http-redirect')}
+          tooltipContent={t(
+            'gateways.create-modal.advanced.tls.http-redirect-description',
+          )}
           input={() => (
-            <div className="fd-display-flex fd-justify-between">
-              <FormLabel>
-                {t(
-                  'gateways.create-modal.advanced.tls.http-redirect-description',
-                )}
-              </FormLabel>
-              <Checkbox
-                compact
-                checked={server.httpsRedirect}
-                ariaLabel={t(
-                  'gateways.create-modal.advanced.tls.http-redirect',
-                )}
-                onChange={() =>
-                  setTlsValue(
-                    server,
-                    'httpsRedirect',
-                    !server.httpsRedirect,
-                    servers,
-                    setServers,
-                  )
-                }
-              />
-            </div>
+            <Switch
+              compact
+              onChange={() =>
+                setTlsValue(
+                  server,
+                  'httpsRedirect',
+                  !server.tls?.httpsRedirect,
+                  servers,
+                  setServers,
+                )
+              }
+              checked={server.httpsRedirect}
+            />
           )}
         />
       )}

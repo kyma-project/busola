@@ -111,7 +111,8 @@ export default function ApiRules({
 
   const actions = [
     {
-      name: 'Edit',
+      name: t('common.buttons.edit'),
+      icon: 'edit',
       disabledHandler: apiRule => !!apiRule.ownerSubscription, // TODO what is this ownerSubscription?
       handler: apiRule => {
         return editApiRuleModal(
@@ -124,7 +125,8 @@ export default function ApiRules({
       },
     },
     {
-      name: 'Delete',
+      name: t('common.buttons.delete'),
+      icon: 'delete',
       disabledHandler: apiRule => !!apiRule.ownerSubscription, // TODO what is this ownerSubscription?
       handler: apiRule => {
         deleteApiRule(apiRule.metadata.name, t);

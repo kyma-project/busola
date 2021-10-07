@@ -256,7 +256,8 @@ export default function LambdaVariables({
 
   const actions = [
     {
-      name: 'Edit',
+      name: t('common.buttons.edit'),
+      icon: 'edit',
       component: variable => (
         <EditVariable
           lambda={lambda}
@@ -270,7 +271,8 @@ export default function LambdaVariables({
       ),
     },
     {
-      name: 'Delete',
+      name: t('common.buttons.delete'),
+      icon: 'delete',
       handler: variable => onDeleteVariables(variable),
     },
   ];

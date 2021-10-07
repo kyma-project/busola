@@ -13,10 +13,8 @@ resolve:
 
 .PHONY: validate
 validate:
-	# npm run conflict-check
 	npm run lint-check
 	npm run test-shared-lib
-	# npm run markdownlint
 
 .PHONY: validate-libraries
 validate-libraries:
@@ -40,9 +38,11 @@ release: build-image push-image
 release-local: build-image-local push-image-local
 
 build-image: 
+	sed -i '/version/c\   \"version\" : \"$(TAG)\"' core/src/assets/version.json
 	docker build -t $(IMG_NAME) -f Dockerfile .
 
 build-image-local:
+	sed -i '/version/c\   \"version\" : \"$(TAG)\",' core/src/assets/version.json
 	docker build -t $(LOCAL_IMG_NAME) -f Dockerfile.local .
 
 push-image:

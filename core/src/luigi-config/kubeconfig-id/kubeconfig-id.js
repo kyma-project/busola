@@ -6,7 +6,6 @@ import {
 import { saveLocation } from '../navigation/previous-location';
 import * as constants from './constants';
 import { getKubeconfigById } from '../kubeconfig-id';
-import { getDefaultStorage } from '../cluster-management/clusters-storage';
 import i18next from 'i18next';
 
 export function getContext(kubeconfig) {
@@ -51,7 +50,8 @@ async function setupFromParams() {
       features: {
         ...constants.DEFAULT_FEATURES,
       },
-      storage: await getDefaultStorage(),
+      // use sessionStorage for kubeconfigID clusters
+      storage: 'sessionStorage',
     },
     kubeconfig,
     currentContext: getContext(kubeconfig),
