@@ -136,7 +136,7 @@ export async function getActiveCluster() {
 
   console.log('1', clusters[clusterName].config);
   clusters[clusterName] = await mergeParams(clusters[clusterName]);
-  console.log('1', clusters[clusterName].config);
+  console.log('2', clusters[clusterName].config);
   return clusters[clusterName];
 }
 
