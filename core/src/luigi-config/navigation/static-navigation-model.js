@@ -1185,7 +1185,7 @@ export function getStaticRootNodes(
   const nodes = [
     {
       pathSegment: 'overview',
-      label: i18next.t('clusters.overview.title'),
+      label: i18next.t('clusters.overview.title-current-cluster'),
       icon: 'database',
       viewUrl: config.coreUIModuleUrl + '/overview',
       viewGroup: coreUIViewGroupName,

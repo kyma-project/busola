@@ -24,7 +24,7 @@ export function ClusterOverviewHeader() {
   }
 
   return (
-    <PageHeader title={t('clusters.overview.title')}>
+    <PageHeader title={t('clusters.overview.title-current-cluster')}>
       <PageHeader.Column title={t('clusters.overview.version')}>
         {formatClusterVersion()}
       </PageHeader.Column>

@@ -25,6 +25,7 @@
     "login-kubeconfigID.spec.js",
     "other-logins.spec.js",
     "cluster-configuration.spec.js",
+    "add-cluster-disabled.spec.js",
     "run-after.spec.js"
   ]
 }

@@ -49,6 +49,17 @@ async function importOpenIdConnect() {
   return (await import('@luigi-project/plugin-auth-oidc')).default;
 }
 
+async function canReuseAuth({ issuerUrl, clientId, scope }) {
+  const ssoFeature = (await getBusolaClusterParams()).config.features.SSO_LOGIN;
+
+  return (
+    ssoFeature.config.issuerUrl === issuerUrl &&
+    ssoFeature.config.clientId === clientId &&
+    ssoFeature.config.scope === scope &&
+    getSSOAuthData()
+  );
+}
+
 async function createAuth(callback, kubeconfigUser) {
   if (hasNonOidcAuth(kubeconfigUser)) {
     await callback();
@@ -60,15 +71,8 @@ async function createAuth(callback, kubeconfigUser) {
   }
   try {
     const { issuerUrl, clientId, scope } = parseOIDCParams(kubeconfigUser);
-    const ssoFeature = (await getBusolaClusterParams()).config.features
-      .SSO_LOGIN;
 
-    const a = ssoFeature.config.issuerUrl === issuerUrl;
-    const b = ssoFeature.config.clientId === clientId;
-    const c = ssoFeature.config.scope === scope;
-
-    if (a && b && c && getSSOAuthData()) {
-      console.log('kube auth done EARLY');
+    if (await canReuseAuth({ issuerUrl, clientId, scope })) {
       setAuthData({ token: getSSOAuthData().idToken });
       await callback();
       return;

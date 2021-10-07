@@ -37,6 +37,12 @@ export const DEFAULT_FEATURES = {
       clientId: 'd0316c58-b0fe-45cd-9960-0fea0708355a',
     },
   },
+  ADD_CLUSTER_DISABLED: {
+    isEnabled: false,
+    config: {
+      cockpitUrl: 'https://account.staging.hanavlab.ondemand.com/cockpit',
+    },
+  },
 };
 
 export const DEFAULT_HIDDEN_NAMESPACES = [

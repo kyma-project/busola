@@ -5,7 +5,6 @@ import { getSSOAuthData } from '../auth/sso';
 
 export async function failFastFetch(input, auth, init = {}) {
   function createAuthHeaders(auth) {
-    console.log(auth);
     if (auth.token) {
       return {
         'X-K8s-Authorization': `Bearer ${auth.token}`,

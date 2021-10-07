@@ -2,10 +2,13 @@ import i18next from 'i18next';
 import i18nextBackend from 'i18next-http-backend';
 import yaml from 'js-yaml';
 
-import { saveCurrentLocation } from './navigation/previous-location';
+import {
+  saveCurrentLocation,
+  tryRestorePreviousLocation,
+} from './navigation/previous-location';
 import { communication } from './communication';
 import { createSettings } from './settings';
-import { clusterLogin } from './auth/auth';
+import { clusterLogin, hasNonOidcAuth } from './auth/auth';
 import { saveQueryParamsIfPresent } from './kubeconfig-id/kubeconfig-id.js';
 import {
   getActiveCluster,
@@ -16,11 +19,13 @@ import {
 import { initSentry } from './sentry';
 
 import { createNavigation } from './navigation/navigation-data-init';
-import { setTheme, getTheme } from './utils/theme';
+import { initTheme } from './utils/theme';
 import { readFeatureToggles } from './utils/feature-toggles';
 import { loadTargetClusterConfig } from './utils/target-cluster-config';
 import { checkClusterStorageType } from './cluster-management/clusters-storage';
 import { ssoLogin } from './auth/sso';
+import { showAlert } from './utils/showAlert';
+import { getAuthData } from './auth/auth-storage';
 
 const luigiAfterInit = () => Luigi.ux().hideAppLoadingIndicator();
 
@@ -41,47 +46,58 @@ export const NODE_PARAM_PREFIX = `~`;
 
 async function initializeBusola() {
   await setActiveClusterIfPresentInUrl();
-  const params = await getActiveCluster();
+  const activeCluster = await getActiveCluster();
+  console.log(activeCluster);
 
-  if (params) {
-    await saveCARequired();
-    await loadTargetClusterConfig();
-    await checkClusterStorageType(params.config.storage);
-  }
-  initTheme();
-
-  const luigiConfig = {
+  const a = await createNavigation();
+  console.log('a', a);
+  const s = await createSettings(activeCluster);
+  console.log('s', s);
+  Luigi.setConfig({
     communication,
-    navigation: await createNavigation(),
+    navigation: a,
     routing: {
       nodeParamPrefix: NODE_PARAM_PREFIX,
       skipRoutingForUrlPatterns: [/access_token=/, /id_token=/],
     },
-    settings: await createSettings(params),
+    settings: s,
     lifecycleHooks: { luigiAfterInit },
-  };
-  Luigi.setConfig(luigiConfig);
-}
+  });
+  console.log('2');
 
-function initTheme() {
-  setTheme(getTheme());
+  await new Promise(resolve => setTimeout(resolve, 100));
 
-  window.addEventListener(
-    'message',
-    event => {
-      if (event.data.msg === 'busola.getCurrentTheme') {
-        event.source.postMessage(
-          { msg: 'busola.getCurrentTheme.response', name: getTheme() },
-          event.origin,
-        );
+  if (!activeCluster) {
+    if (!window.location.pathname.startsWith('/clusters')) {
+      Luigi.navigation().navigate('/clusters');
+    }
+  } else {
+    try {
+      console.log('auth data powinno być?', getAuthData());
+      if (
+        getAuthData() &&
+        !hasNonOidcAuth(activeCluster.currentContext?.user?.user)
+      ) {
+        console.log(saveCARequired);
+        await saveCARequired();
+        await loadTargetClusterConfig();
+        await checkClusterStorageType(activeCluster.config.storage);
       }
-    },
-    false,
-  );
+    } catch (e) {
+      console.warn(e);
+      showAlert({
+        text: 'Cannot load navigation nodes',
+        type: 'error',
+      });
+    }
+
+    tryRestorePreviousLocation();
+  }
 }
 
 (async () => {
   handleResetEndpoint();
+  initTheme();
 
   await initSentry();
 

@@ -1,7 +1,6 @@
 import { saveLocation } from '../navigation/previous-location';
 import { getBusolaClusterParams } from './../busola-cluster-params';
 import { resolveFeatureAvailability } from './../features';
-import { initializeBusola, luigiAfterInit } from './../luigi-config';
 
 export function setSSOAuthData(data) {
   sessionStorage.setItem('SSO', JSON.stringify(data));
