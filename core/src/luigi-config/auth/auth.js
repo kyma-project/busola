@@ -6,7 +6,7 @@ import {
 import { convertToURLsearch } from '../communication';
 import { parseOIDCParams } from './oidc-params';
 import { getBusolaClusterParams } from '../busola-cluster-params';
-import { getSSOAuthData } from './sso';
+import { getSSOAuthData, isSSOEnabled } from './sso';
 
 export let groups;
 
@@ -41,7 +41,7 @@ export async function reloadAuth() {
     updateLuigiAuth(null);
   } else {
     // we need to use OIDC flow
-    updateLuigiAuth(createAuth(kubeconfigUser));
+    updateLuigiAuth(createAuth(() => {}, kubeconfigUser));
   }
 }
 
@@ -49,37 +49,11 @@ async function importOpenIdConnect() {
   return (await import('@luigi-project/plugin-auth-oidc')).default;
 }
 
-async function canReuseAuth({ issuerUrl, clientId, scope }) {
-  const ssoFeature = (await getBusolaClusterParams()).config.features.SSO_LOGIN;
-
-  return (
-    ssoFeature.config.issuerUrl === issuerUrl &&
-    ssoFeature.config.clientId === clientId &&
-    ssoFeature.config.scope === scope &&
-    getSSOAuthData()
-  );
-}
-
 async function createAuth(callback, kubeconfigUser) {
-  if (hasNonOidcAuth(kubeconfigUser)) {
-    await callback();
-    return null;
-  }
-  if (!kubeconfigUser?.exec) {
-    await callback();
-    return null;
-  }
   try {
     const { issuerUrl, clientId, scope } = parseOIDCParams(kubeconfigUser);
 
-    if (await canReuseAuth({ issuerUrl, clientId, scope })) {
-      setAuthData({ token: getSSOAuthData().idToken });
-      await callback();
-      return;
-    }
-
     const OpenIdConnect = await importOpenIdConnect();
-    console.log('create kube auth');
 
     return {
       use: 'openIdConnect',
@@ -90,15 +64,12 @@ async function createAuth(callback, kubeconfigUser) {
         scope: scope || 'openid',
         response_type: 'code',
         response_mode: 'query',
-        redirect_uri: '/',
         post_logout_redirect_uri: './logout.html',
         userInfoFn: async (_, authData) => {
-          console.log('kube auth done');
-          console.log('set auth data', authData, authData.idToken);
           setAuthData({ token: authData.idToken });
           groups = authData.profile?.['http://k8s/groups'];
 
-          await callback();
+          callback();
           return Promise.resolve({
             name: authData.profile?.name || '',
             email: authData.profile?.email || '',
@@ -113,7 +84,7 @@ async function createAuth(callback, kubeconfigUser) {
           console.log('onAuthExpired');
         },
         onAuthError: (_config, err) => {
-          console.log('kube auth err', err);
+          console.log('cluster auth err', err);
           saveActiveClusterName(null);
           window.location.href = '/clusters' + convertToURLsearch(err);
           return false; // return false to prevent OIDC plugin navigation
@@ -132,14 +103,16 @@ export async function clusterLogin(luigiAfterInit) {
     const params = await getActiveCluster();
 
     const kubeconfigUser = params?.currentContext.user.user;
-    if (hasNonOidcAuth(kubeconfigUser)) {
+    if (hasNonOidcAuth(kubeconfigUser) || !kubeconfigUser?.exec) {
       setAuthData(kubeconfigUser);
       resolve();
       return;
     }
 
+    // remove SSO data
     Luigi.auth().store.removeAuthData();
     Luigi.unload();
+
     Luigi.setConfig({
       auth: await createAuth(resolve, kubeconfigUser),
       lifecycleHooks: { luigiAfterInit },

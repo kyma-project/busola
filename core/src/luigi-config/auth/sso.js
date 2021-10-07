@@ -2,12 +2,14 @@ import { saveLocation } from '../navigation/previous-location';
 import { getBusolaClusterParams } from './../busola-cluster-params';
 import { resolveFeatureAvailability } from './../features';
 
+const SSO_KEY = 'SSO';
+
 export function setSSOAuthData(data) {
-  sessionStorage.setItem('SSO', JSON.stringify(data));
+  sessionStorage.setItem(SSO_KEY, JSON.stringify(data));
 }
 
 export function getSSOAuthData() {
-  return JSON.parse(sessionStorage.getItem('SSO') || 'null');
+  return JSON.parse(sessionStorage.getItem(SSO_KEY) || 'null');
 }
 
 export async function isSSOEnabled() {
@@ -29,11 +31,8 @@ async function createSSOAuth(callback) {
     const OpenIdConnect = await importOpenIdConnect();
 
     const locationpathname = location.pathname + location.search;
-    if (
-      locationpathname !== '/' &&
-      locationpathname !== '/clusters' &&
-      !locationpathname.startsWith('/?code')
-    ) {
+
+    if (!locationpathname.startsWith('/?code')) {
       saveLocation(locationpathname);
     }
 
@@ -48,7 +47,6 @@ async function createSSOAuth(callback) {
         response_mode: 'query',
         loadUserInfo: false,
         userInfoFn: async (_, authData) => {
-          console.log('sso logged in');
           setSSOAuthData(authData);
           callback();
           return Promise.resolve({});
@@ -75,6 +73,7 @@ export async function ssoLogin(luigiAfterInit) {
   if (!(await isSSOEnabled()) || getSSOAuthData()) {
     return;
   }
+
   return new Promise(async resolve => {
     Luigi.setConfig({
       auth: await createSSOAuth(resolve),

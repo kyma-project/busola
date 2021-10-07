@@ -36,6 +36,8 @@ import {
 import { getFeatureToggle } from '../utils/feature-toggles';
 import { saveLocation } from './previous-location';
 import { NODE_PARAM_PREFIX } from '../luigi-config';
+import { loadTargetClusterConfig } from '../utils/target-cluster-config';
+import { checkClusterStorageType } from '../cluster-management/clusters-storage';
 
 async function createAppSwitcher() {
   const activeClusterName = getActiveClusterName();
@@ -166,22 +168,22 @@ async function createNavigationForNoCluster() {
 
 export async function createNavigation() {
   try {
-    await saveCARequired();
-    const activeCluster = await getActiveCluster();
     const authData = getAuthData();
-
-    if (!activeCluster || !authData) {
+    if (!(await getActiveCluster()) || !authData) {
       return await createNavigationForNoCluster();
     }
 
-    const preselectedNamespace = getCurrentContextNamespace(
-      activeCluster.kubeconfig,
-    );
+    await saveCARequired();
+    await loadTargetClusterConfig();
+
+    const activeCluster = await getActiveCluster();
+
+    await checkClusterStorageType(activeCluster.config.storage);
 
     // we assume all users can make SelfSubjectRulesReview request
     const permissionSet = await fetchPermissions(
       authData,
-      preselectedNamespace,
+      getCurrentContextNamespace(activeCluster.kubeconfig),
     );
 
     const apiGroups = await fetchBusolaInitData(authData);

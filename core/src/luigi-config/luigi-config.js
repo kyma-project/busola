@@ -47,50 +47,26 @@ export const NODE_PARAM_PREFIX = `~`;
 async function initializeBusola() {
   await setActiveClusterIfPresentInUrl();
   const activeCluster = await getActiveCluster();
-  console.log(activeCluster);
 
-  const a = await createNavigation();
-  console.log('a', a);
-  const s = await createSettings(activeCluster);
-  console.log('s', s);
   Luigi.setConfig({
     communication,
-    navigation: a,
+    navigation: await createNavigation(),
     routing: {
       nodeParamPrefix: NODE_PARAM_PREFIX,
       skipRoutingForUrlPatterns: [/access_token=/, /id_token=/],
     },
-    settings: s,
+    settings: await createSettings(activeCluster),
     lifecycleHooks: { luigiAfterInit },
   });
-  console.log('2');
 
+  // make sure Luigi config is set - luigiAfterInit will not be fired
+  // if we had already used Luigi.setConfig in sso/cluster login
   await new Promise(resolve => setTimeout(resolve, 100));
-
-  if (!activeCluster) {
+  if (!(await getActiveCluster())) {
     if (!window.location.pathname.startsWith('/clusters')) {
       Luigi.navigation().navigate('/clusters');
     }
   } else {
-    try {
-      console.log('auth data powinno być?', getAuthData());
-      if (
-        getAuthData() &&
-        !hasNonOidcAuth(activeCluster.currentContext?.user?.user)
-      ) {
-        console.log(saveCARequired);
-        await saveCARequired();
-        await loadTargetClusterConfig();
-        await checkClusterStorageType(activeCluster.config.storage);
-      }
-    } catch (e) {
-      console.warn(e);
-      showAlert({
-        text: 'Cannot load navigation nodes',
-        type: 'error',
-      });
-    }
-
     tryRestorePreviousLocation();
   }
 }
@@ -110,14 +86,12 @@ async function initializeBusola() {
   // save location, as we'll may be logged out in a moment
   saveCurrentLocation();
 
-  console.log('sso login');
   await ssoLogin(luigiAfterInit);
-  console.log('LOGGED WITH SSO');
+
+  // workaround for luigi issue
   await new Promise(resolve => setTimeout(resolve, 500));
 
-  console.log('start cluster login');
   await clusterLogin(luigiAfterInit);
-  console.log('end cluster login');
 
   await initializeBusola();
 })();
