@@ -134,9 +134,7 @@ export async function getActiveCluster() {
       clusters[clusterName].config.features.SSO_LOGIN;
   }
 
-  console.log('1', clusters[clusterName].config);
   clusters[clusterName] = await mergeParams(clusters[clusterName]);
-  console.log('2', clusters[clusterName].config);
   return clusters[clusterName];
 }
 
