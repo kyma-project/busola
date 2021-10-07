@@ -68,7 +68,8 @@ export default function ServiceBindings({
     ? []
     : [
         {
-          name: 'Delete',
+          name: t('common.buttons.delete'),
+          icon: 'delete',
           handler: handleServiceBindingUsageDelete,
         },
       ];

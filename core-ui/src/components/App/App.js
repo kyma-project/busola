@@ -56,11 +56,7 @@ export default function App() {
         component={withTitle(t('clusters.add.title'), AddCluster)}
       />
       <Route path="/preferences" render={Preferences} />
-      <Route
-        exact
-        path="/apirules/create"
-        render={withTitle(t('api-rules.title'), CreateApiRule)}
-      />
+      <Route exact path="/apirules/create" component={CreateApiRule} />
 
       <Route
         exact
