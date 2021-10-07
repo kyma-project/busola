@@ -182,7 +182,7 @@ certificates:
     common-name: Common Name is the primary domain name of the Certificate.
     csr: Certificate Signing Request is an alternative way to provide Common Name, DNS Names, and other information.
     with-csr: Enable to use a Certificate Signing Request instead of providing domain names manually.
-    dns-names: DNS Names are the optional additional domain names of the Certificate.
+    dns-names: DNS Names are the optional additional domain names of the certificate.
     renew: Trigger a certificate renewal if enabled.
     issuer: Certificate issuer. If no issuer is given, the default issuer is used.
     existing-secret: Use an existing Secret for storing the certificate if enabled. Otherwise a new Secret will be created.
