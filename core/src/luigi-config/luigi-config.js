@@ -108,7 +108,7 @@ async function luigiAfterInit() {
       nodeParamPrefix: NODE_PARAM_PREFIX,
       skipRoutingForUrlPatterns: [/access_token=/, /id_token=/],
     },
-    settings: createSettings(params),
+    settings: await createSettings(params),
     lifecycleHooks: { luigiAfterInit },
   };
   Luigi.setConfig(luigiConfig);
