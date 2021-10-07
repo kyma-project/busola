@@ -200,6 +200,7 @@ clusters:
   empty:
     title: Looks like there aren't any clusters yet.
     subtitle: Let's add one now!
+    go-to-btp-cockpit: 'To view your clusters, go to'
   labels:
     client-id: Client ID
     issuer-url: Issuer URL
@@ -208,14 +209,14 @@ clusters:
     no-clusters-found: No clusters found
     outdated:
       tooltip: Outdated parameter version may cause errors. Delete and re-add your cluster.
-    title: Clusters
   messages:
     error-kubeconfig: Error reading the kubeconfig.
     missing-configuration-data: Configuration included properly. Fill the remaining required data.
     upload-paste-kubeconfig: Upload or paste your kubeconfig file.
     wrong-configuration: Cannot apply the configuration.
   overview:
-    title: Cluster Overview
+    title-current-cluster: Cluster Overview
+    title-all-clusters: Clusters Overview
     version: Version
   storage:
     changed-message: The chosen storage type has been overwritten by the cluster configuration from {{originalStorage}} to {{targetStorage}}.
