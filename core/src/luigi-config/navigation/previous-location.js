@@ -1,7 +1,7 @@
 const PREVIOUS_LOCATION_KEY = 'busola.location';
 
 export const saveLocation = location => {
-  sessionStorage.setItem(PREVIOUS_LOCATION_KEY, location);
+  localStorage.setItem(PREVIOUS_LOCATION_KEY, location);
 };
 
 function hasQueryParams() {
@@ -25,12 +25,9 @@ export const saveCurrentLocation = () => {
 };
 
 export const tryRestorePreviousLocation = () => {
-  const prevLocation = sessionStorage.getItem(PREVIOUS_LOCATION_KEY);
-  sessionStorage.removeItem(PREVIOUS_LOCATION_KEY);
-
+  const prevLocation = localStorage.getItem(PREVIOUS_LOCATION_KEY);
   if (prevLocation) {
-    setTimeout(() => {
-      Luigi.navigation().navigate(prevLocation);
-    });
+    localStorage.removeItem(PREVIOUS_LOCATION_KEY);
+    Luigi.navigation().navigate(prevLocation);
   }
 };

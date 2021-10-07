@@ -8,13 +8,11 @@ import {
 } from './navigation/previous-location';
 import { communication } from './communication';
 import { createSettings } from './settings';
-import { clusterLogin, hasNonOidcAuth } from './auth/auth';
+import { clusterLogin } from './auth/auth';
 import { saveQueryParamsIfPresent } from './kubeconfig-id/kubeconfig-id.js';
 import {
   getActiveCluster,
-  getActiveClusterName,
   handleResetEndpoint,
-  saveCARequired,
   setActiveClusterIfPresentInUrl,
 } from './cluster-management/cluster-management';
 import { initSentry } from './sentry';
@@ -55,8 +53,8 @@ async function initializeBusola() {
     lifecycleHooks: { luigiAfterInit },
   });
 
-  // make sure Luigi config is set - luigiAfterInit will not be fired
-  // if we had already used Luigi.setConfig in sso/cluster login
+  // make sure Luigi config is set - we can't use luigiAfterInit as it won't
+  // be fired if we had already ran Luigi.setConfig during sso/cluster login
   await new Promise(resolve => setTimeout(resolve, 100));
   if (!(await getActiveCluster())) {
     if (!window.location.pathname.startsWith('/clusters')) {
@@ -69,13 +67,14 @@ async function initializeBusola() {
 
 (async () => {
   handleResetEndpoint();
-  initTheme();
-
-  await setActiveClusterIfPresentInUrl();
 
   await initSentry();
 
   await i18n;
+
+  initTheme();
+
+  await setActiveClusterIfPresentInUrl();
 
   await saveQueryParamsIfPresent();
 

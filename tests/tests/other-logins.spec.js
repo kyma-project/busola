@@ -5,7 +5,7 @@ import { loadKubeconfig } from '../support/loadKubeconfigFile';
 import jsyaml from 'js-yaml';
 
 context('Other login options', () => {
-  it.only('Kubeconfig and token separately', () => {
+  it('Kubeconfig and token separately', () => {
     cy.wrap(loadKubeconfig()).then(kubeconfig => {
       const token = kubeconfig.users[0].user.token;
       kubeconfig.users[0].user.token = null;

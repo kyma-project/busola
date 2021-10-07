@@ -1,4 +1,3 @@
-import { saveLocation } from '../navigation/previous-location';
 import { getBusolaClusterParams } from './../busola-cluster-params';
 import { resolveFeatureAvailability } from './../features';
 
@@ -27,14 +26,7 @@ async function createSSOAuth(callback) {
       .SSO_LOGIN;
 
     const { issuerUrl, clientId, scope } = ssoFeature.config;
-
     const OpenIdConnect = await importOpenIdConnect();
-
-    const locationpathname = location.pathname + location.search;
-
-    if (!locationpathname.startsWith('/?code')) {
-      saveLocation(locationpathname);
-    }
 
     return {
       use: 'openIdConnect',
@@ -52,10 +44,9 @@ async function createSSOAuth(callback) {
           return Promise.resolve({});
         },
       },
-
       events: {
         onAuthError: (_config, err) => {
-          console.log('sso err', err);
+          console.warn('sso err', err);
           window.location.href = '/clusters' + convertToURLsearch(err);
           return false; // return false to prevent OIDC plugin navigation
         },

@@ -5,8 +5,6 @@ import {
 } from './../cluster-management/cluster-management';
 import { convertToURLsearch } from '../communication';
 import { parseOIDCParams } from './oidc-params';
-import { getBusolaClusterParams } from '../busola-cluster-params';
-import { getSSOAuthData, isSSOEnabled } from './sso';
 
 export let groups;
 
@@ -84,7 +82,6 @@ async function createAuth(callback, kubeconfigUser) {
           console.log('onAuthExpired');
         },
         onAuthError: (_config, err) => {
-          console.log('cluster auth err', err);
           saveActiveClusterName(null);
           window.location.href = '/clusters' + convertToURLsearch(err);
           return false; // return false to prevent OIDC plugin navigation
@@ -103,6 +100,8 @@ export async function clusterLogin(luigiAfterInit) {
     const params = await getActiveCluster();
 
     const kubeconfigUser = params?.currentContext.user.user;
+
+    // don't create auth for non OIDC user
     if (hasNonOidcAuth(kubeconfigUser) || !kubeconfigUser?.exec) {
       setAuthData(kubeconfigUser);
       resolve();

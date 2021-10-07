@@ -92,7 +92,7 @@ export async function saveClusterParams(params) {
 export async function saveCARequired() {
   const clusters = clusterStorage.load();
   const cluster = clusters[getActiveClusterName()];
-  if (cluster && cluster.config.requiresCA === undefined) {
+  if (cluster.config.requiresCA === undefined) {
     cluster.config = {
       ...cluster.config,
       requiresCA: await checkIfClusterRequiresCA(getAuthData()),
@@ -127,12 +127,6 @@ export async function getActiveCluster() {
     ...clusters[clusterName].config.features,
     ...targetClusterConfig.features,
   };
-
-  // target cluster can't override SSO login
-  if (clusters[clusterName].config.features.SSO_LOGIN) {
-    clusters[clusterName].config.features.SSO_LOGIN =
-      clusters[clusterName].config.features.SSO_LOGIN;
-  }
 
   clusters[clusterName] = await mergeParams(clusters[clusterName]);
   return clusters[clusterName];
