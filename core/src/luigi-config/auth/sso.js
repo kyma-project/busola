@@ -14,7 +14,6 @@ export function getSSOAuthData() {
 
 export async function isSSOEnabled() {
   const features = (await getBusolaClusterParams()).config?.features || {};
-  console.log('sso enabled', features);
   return await resolveFeatureAvailability(features.SSO_LOGIN, null);
 }
 
