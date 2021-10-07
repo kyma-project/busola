@@ -42,7 +42,7 @@ build-image:
 	docker build -t $(IMG_NAME) -f Dockerfile .
 
 build-image-local:
-	sed -i '/version/c\   \"version\" : \"$(TAG)\",' core/src/assets/version.json
+	sed -i '/version/c\   \"version\" : \"$(TAG)\"' core/src/assets/version.json
 	docker build -t $(LOCAL_IMG_NAME) -f Dockerfile.local .
 
 push-image:
