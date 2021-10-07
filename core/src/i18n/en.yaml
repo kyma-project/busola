@@ -184,7 +184,7 @@ certificates:
     with-csr: Enable to use a Certificate Signing Request instead of providing domain names manually.
     dns-names: DNS Names are the optional additional domain names of the Certificate.
     renew: Trigger a certificate renewal if enabled.
-    issuer: Certificate Issuer. If no issuer is given, default issuer will be used.
+    issuer: Certificate issuer. If no issuer is given, the default issuer is used.
     existing-secret: Use an existing Secret for storing the certificate if enabled. Otherwise a new Secret will be created.
     secret-name: Name of the Secret object to use for storing the certificate.
     secret-ref: Reference of the existing Secret object to use for storing the certificate.
