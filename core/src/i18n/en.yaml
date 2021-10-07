@@ -493,10 +493,13 @@ dnsentries:
     ttl: TTL
     dns-name: DNS Name
     text: Text
+    target: Target
     targets: Targets
+    use-cname: Use CNAME
   name_singular: DNS Entry
   placeholders:
-    targets: Target records (CNAME or A records), one per line
+    target: Target record
+    targets: Targets records
     text: Text records, one per line
     ttl: Enter the time to live.
     dns-name: Enter DNS Name

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 
-export function DNSProviderRef({ required, domain, onChange, ...props }) {
+export function DNSNameRef({ required, domain, onChange, ...props }) {
   const { t } = useTranslation();
   const url = `/apis/dns.gardener.cloud/v1alpha1/dnsproviders`;
   const { data: providers } = useGetList()(url);

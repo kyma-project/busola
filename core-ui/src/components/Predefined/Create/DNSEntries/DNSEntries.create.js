@@ -3,8 +3,9 @@ import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
-import { DNSProviderRef } from 'shared/components/ResourceRef/DNSProviderRef';
 import * as Inputs from 'shared/ResourceForm/components/Inputs';
+import { DNSNameRef } from './DNSNameRef';
+import { TargetRef } from './TargetRef';
 import { createDNSEntryTemplate } from './helpers';
 
 export function DNSEntriesCreate({
@@ -15,6 +16,7 @@ export function DNSEntriesCreate({
 }) {
   const { t } = useTranslation();
   const [dnsEntry, setDnsEntry] = useState(createDNSEntryTemplate(namespace));
+  const [withCNAME, setWithCNAME] = useState(false);
 
   React.useEffect(() => {
     // setCustomValid(validateDnsEntry(dnsEntry));
@@ -32,7 +34,7 @@ export function DNSEntriesCreate({
     >
       <ResourceForm.K8sNameField
         propertyPath="$.metadata.name"
-        kind={t('name_singular.name_singular')}
+        kind={t('dnsentries.name_singular')}
         customSetValue={name => {
           jp.value(dnsEntry, '$.metadata.name', name);
           jp.value(
@@ -44,13 +46,27 @@ export function DNSEntriesCreate({
         }}
       />
 
-      <DNSProviderRef
+      <DNSNameRef
         required
-        id="dns-provider-ref"
+        id="dns-name-ref"
         domain={dnsEntry.spec.dnsName}
         onChange={domain => {
           jp.value(dnsEntry, '$.spec.dnsName', domain);
           const spec = { ...dnsEntry.spec, dnsName: domain };
+          setDnsEntry({ ...dnsEntry, ...spec });
+        }}
+      />
+      <TargetRef
+        simple
+        required
+        id="targets-ref"
+        dnsEntry={dnsEntry}
+        setResource={setDnsEntry}
+        withCNAME={withCNAME}
+        setWithCNAME={setWithCNAME}
+        onChange={target => {
+          jp.value(dnsEntry, '$.spec.targets', target ? [target] : []);
+          const spec = { ...dnsEntry.spec, targets: target ? [target] : [] };
           setDnsEntry({ ...dnsEntry, ...spec });
         }}
       />
