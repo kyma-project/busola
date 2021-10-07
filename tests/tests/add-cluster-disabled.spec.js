@@ -25,7 +25,7 @@ context('Add Cluster disabled', () => {
     cy.visit(config.clusterAddress);
 
     cy.getIframeBody()
-      .contains(/Go to BTP Cockpit to view your clusters./)
+      .contains(/To view your clusters, go to BTP Cockpit/)
       .should('be.visible');
 
     cy.get('button')
