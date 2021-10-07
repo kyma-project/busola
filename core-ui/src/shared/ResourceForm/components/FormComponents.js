@@ -137,9 +137,12 @@ export function FormField({
   return (
     <div className={classnames('fd-row form-field', className)}>
       <div className="fd-col fd-col-md--4 form-field__label">
-        <Label required={required && !disabled} tooltipContent={tooltipContent}>
-          {label}
-        </Label>
+        <Label required={required && !disabled}>{label}</Label>
+        {tooltipContent && (
+          <Tooltip delay={0} content={tooltipContent}>
+            <Icon glyph="question-mark" />
+          </Tooltip>
+        )}
       </div>
       <div className="fd-col fd-col-md--7">
         {input({ required, disabled, ...props })}

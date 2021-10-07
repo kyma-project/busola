@@ -12,6 +12,7 @@ import { clusterLogin, hasNonOidcAuth } from './auth/auth';
 import { saveQueryParamsIfPresent } from './kubeconfig-id/kubeconfig-id.js';
 import {
   getActiveCluster,
+  getActiveClusterName,
   handleResetEndpoint,
   saveCARequired,
   setActiveClusterIfPresentInUrl,
@@ -21,11 +22,7 @@ import { initSentry } from './sentry';
 import { createNavigation } from './navigation/navigation-data-init';
 import { initTheme } from './utils/theme';
 import { readFeatureToggles } from './utils/feature-toggles';
-import { loadTargetClusterConfig } from './utils/target-cluster-config';
-import { checkClusterStorageType } from './cluster-management/clusters-storage';
 import { ssoLogin } from './auth/sso';
-import { showAlert } from './utils/showAlert';
-import { getAuthData } from './auth/auth-storage';
 
 const luigiAfterInit = () => Luigi.ux().hideAppLoadingIndicator();
 
@@ -45,7 +42,6 @@ export const i18n = i18next.use(i18nextBackend).init({
 export const NODE_PARAM_PREFIX = `~`;
 
 async function initializeBusola() {
-  await setActiveClusterIfPresentInUrl();
   const activeCluster = await getActiveCluster();
 
   Luigi.setConfig({
@@ -74,6 +70,8 @@ async function initializeBusola() {
 (async () => {
   handleResetEndpoint();
   initTheme();
+
+  await setActiveClusterIfPresentInUrl();
 
   await initSentry();
 
