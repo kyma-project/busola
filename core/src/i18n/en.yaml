@@ -180,7 +180,7 @@ certificates:
     secret-name: Requested Secret name
   tooltips:
     common-name: Common Name is the primary domain name of the Certificate.
-    csr: Certificate Signing Request is an alternative way to provide Common Name, DNS Names, and other information.
+    csr: Certificate Signing Request is an alternative way to provide common name, DNS names, and other information.
     with-csr: Enable to use a Certificate Signing Request instead of providing domain names manually.
     dns-names: DNS Names are the optional additional domain names of the certificate.
     renew: Trigger a certificate renewal if enabled.
