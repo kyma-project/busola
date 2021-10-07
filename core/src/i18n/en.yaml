@@ -167,7 +167,7 @@ certificates:
   secret-ref: Secret to use
   create:
     messages:
-      failure: Failed to create the certificate.
+      failure: Failed to create the Certificate.
       success: Certificate created.
   messages:
     decode-error: 'Failed to decode the CSR: {{message}}.'
@@ -179,15 +179,15 @@ certificates:
     name: Certificate name
     secret-name: Requested Secret name
   tooltips:
-    common-name: Common Name is the primary domain name of the certificate.
-    csr: Certificate signing request is an alternative way to provide Common Name, DNSNames and other information.
+    common-name: Common Name is the primary domain name of the Certificate.
+    csr: Certificate signing request is an alternative way to provide Common Name, DNS Names, and other information.
     with-csr: Enable to use a Certificate Signing Request instead of providing domain names manually.
-    dns-names: DNS Names are the optional additional domain names of the certificate.
+    dns-names: DNS Names are the optional additional domain names of the Certificate.
     renew: Trigger a certificate renewal if enabled.
     issuer: Certificate Issuer. If no issuer is given, default issuer will be used.
-    existing-secret: Use an exising secret for storing the certificate if enabled. Otherwise a new secret will be created.
-    secret-name: Name of the secret object to use for storing the certificate.
-    secret-ref: Reference of the existing secret object to use for storing the certificate.
+    existing-secret: Use an exising Secret for storing the certificate if enabled. Otherwise a new secret will be created.
+    secret-name: Name of the Secret object to use for storing the certificate.
+    secret-ref: Reference of the existing Secret object to use for storing the certificate.
 cluster-addons:
   title: Cluster Addons
 cluster-role-bindings:
@@ -334,8 +334,8 @@ common:
     no-instances-found-namespace: No matching {{value}} found in this Namespace.
     parse-error: Parse error, previous valid input will be used.
     type-to-select: Start typing to select {{value}} from the list.
-    resource-namespace-error: Requested namespace not found.
-    resource-name-error: Requested resource with this name not found in the selected namespace.
+    resource-namespace-error: Requested Namespace not found.
+    resource-name-error: Requested resource with this name not found in the selected Namespace.
     click-to-select: Select {{value}} from the list.
   placeholders:
     secret-ref-name: Select name
