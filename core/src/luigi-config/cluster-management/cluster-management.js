@@ -128,7 +128,15 @@ export async function getActiveCluster() {
     ...targetClusterConfig.features,
   };
 
+  // target cluster can't override SSO login
+  if (clusters[clusterName].config.features.SSO_LOGIN) {
+    clusters[clusterName].config.features.SSO_LOGIN =
+      clusters[clusterName].config.features.SSO_LOGIN;
+  }
+
+  console.log('1', clusters[clusterName].config);
   clusters[clusterName] = await mergeParams(clusters[clusterName]);
+  console.log('1', clusters[clusterName].config);
   return clusters[clusterName];
 }
 
