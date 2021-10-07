@@ -167,7 +167,7 @@ certificates:
   secret-ref: Secret to use
   create:
     messages:
-      failure: Failed to create the Certificate.
+      failure: Failed to create the certificate.
       success: Certificate created.
   messages:
     decode-error: 'Failed to decode the CSR: {{message}}.'
