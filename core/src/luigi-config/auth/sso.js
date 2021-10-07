@@ -20,16 +20,10 @@ async function importOpenIdConnect() {
   return (await import('@luigi-project/plugin-auth-oidc')).default;
 }
 
-export async function createSSOAuth(callback) {
+async function createSSOAuth(callback) {
   try {
-    console.log('init sso auth');
     const ssoFeature = (await getBusolaClusterParams()).config.features
       .SSO_LOGIN;
-
-    if (!(await isSSOEnabled())) {
-      callback();
-      return null;
-    }
 
     const { issuerUrl, clientId, scope } = ssoFeature.config;
 
@@ -75,4 +69,17 @@ export async function createSSOAuth(callback) {
     console.warn(e);
     alert('Cannot setup Busola SSO auth: ' + e.message);
   }
+}
+
+export async function ssoLogin(luigiAfterInit) {
+  // don't run login flow if we already have authData
+  if (!(await isSSOEnabled()) || getSSOAuthData()) {
+    return;
+  }
+  return new Promise(async resolve => {
+    Luigi.setConfig({
+      auth: await createSSOAuth(resolve),
+      lifecycleHooks: { luigiAfterInit },
+    });
+  });
 }

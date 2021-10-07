@@ -16,9 +16,6 @@ data:
                 "clientId": "",
               }
             },
-            "INIT_PARAMS": {
-              "isEnabled": false
-            },
             "SENTRY": {
               "isEnabled": true,
               "selectors": [],

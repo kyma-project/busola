@@ -5,6 +5,7 @@ import { getSSOAuthData } from '../auth/sso';
 
 export async function failFastFetch(input, auth, init = {}) {
   function createAuthHeaders(auth) {
+    console.log(auth);
     if (auth.token) {
       return {
         'X-K8s-Authorization': `Bearer ${auth.token}`,
@@ -36,8 +37,6 @@ export async function failFastFetch(input, auth, init = {}) {
     const params = await getActiveCluster();
     const cluster = params.currentContext.cluster.cluster;
     const requiresCA = params.config?.requiresCA;
-
-    console.log('requires ca?', input, params.config?.requiresCA);
 
     return {
       ...createSSOHeader(),
