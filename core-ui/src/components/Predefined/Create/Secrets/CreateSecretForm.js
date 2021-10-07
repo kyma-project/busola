@@ -1,31 +1,25 @@
 import React, { useState } from 'react';
-import LuigiClient from '@luigi-project/client';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
-import { Button, FormInput } from 'fundamental-react';
+import { Button, FormInput, FormTextarea } from 'fundamental-react';
 import { Tooltip } from 'react-shared';
-
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
-import {
-  MultiInput,
-  K8sNameField,
-  KeyValueField,
-} from 'shared/ResourceForm/components/FormComponents';
 
 import {
   usePost,
   useNotification,
   useMicrofrontendContext,
 } from 'react-shared';
-import { CreateForm } from 'shared/components/CreateForm/CreateForm';
+import { base64Decode, base64Encode } from 'shared/helpers';
+import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import {
-  secretToYaml,
-  yamlToSecret,
-  createSecretTemplate,
-  createPresets,
-} from './helpers';
-import { SimpleForm } from './SimpleForm';
-import { AdvancedForm } from './AdvancedForm';
+  MultiInput,
+  K8sNameField,
+} from 'shared/ResourceForm/components/FormComponents';
+import { CreateForm } from 'shared/components/CreateForm/CreateForm';
+
+import { createSecretTemplate, createPresets, readFromFile } from './helpers';
+
+import './CreateSecretForm.scss';
 
 export function CreateSecretForm({
   namespaceId,
@@ -38,14 +32,31 @@ export function CreateSecretForm({
   const [secret, setSecret] = useState(
     existingSecret || createSecretTemplate(namespaceId),
   );
+  const [valuesEncoded, setValuesEncoded] = useState(false);
   /*
   const notification = useNotification();
   const postRequest = usePost();
   const [isEncoded, setEncoded] = useState(!!existingSecret);
+  */
   const microfrontendContext = useMicrofrontendContext();
   const { features } = microfrontendContext;
   const DNSExist = features?.CUSTOM_DOMAINS?.isEnabled;
 
+  const dataValue = value => {
+    if (valuesEncoded) {
+      return value;
+    } else {
+      try {
+        // setDecodeError(null);
+        return base64Decode(value || '');
+      } catch (e) {
+        // setDecodeError(e.message);
+        setValuesEncoded(true);
+        return '';
+      }
+    }
+  };
+  /*
   const createSecret = async () => {
     try {
       await postRequest(
@@ -105,7 +116,12 @@ export function CreateSecretForm({
   );
   */
   return (
-    <ResourceForm resource={secret} setResource={setSecret}>
+    <ResourceForm
+      className="create-secret-form"
+      resource={secret}
+      setResource={setSecret}
+      presets={createPresets(namespaceId, t, DNSExist)}
+    >
       <K8sNameField
         propertyPath="$.metadata.name"
         kind={t('secrets.name_singular')}
@@ -129,7 +145,10 @@ export function CreateSecretForm({
       />
       */}
       <MultiInput
+        fullWidth
         propertyPath="$.metadata.data"
+        title="<<Data>>"
+        label="<<Entry>>"
         toInternal={value =>
           Object.entries(value || {}).map(([key, val]) => ({ key, val }))
         }
@@ -154,22 +173,54 @@ export function CreateSecretForm({
             />
           ),
           ({ value, setValue, ref, onBlur, focus }) => (
-            <FormInput
+            <FormTextarea
               compact
               key="value"
-              value={value?.val || ''}
+              value={dataValue(value?.val || '')}
               ref={ref}
-              onChange={e => setValue({ ...value, val: e.target.value })}
+              onChange={e =>
+                setValue({
+                  ...value,
+                  val: valuesEncoded
+                    ? e.target.value
+                    : base64Encode(e.target.value),
+                })
+              }
               onKeyDown={e => focus(e)}
               onBlur={onBlur}
               placeholder={t('components.key-value-field.enter-value')}
+              className="value-textarea"
             />
           ),
-          () => (
+          ({ setValue }) => (
             <Tooltip content={t('common.tooltips.read-file')}>
-              <Button>{t('components.key-value-form.read-value')}</Button>
+              <Button
+                compact
+                onClick={() =>
+                  readFromFile().then(result =>
+                    setValue({
+                      key: result.name,
+                      val: base64Encode(result.content),
+                    }),
+                  )
+                }
+              >
+                {t('components.key-value-form.read-value')}
+              </Button>
             </Tooltip>
           ),
+        ]}
+        actions={[
+          <Button
+            compact
+            option="transparent"
+            glyph={valuesEncoded ? 'show' : 'hide'}
+            onClick={() => setValuesEncoded(!valuesEncoded)}
+          >
+            {valuesEncoded
+              ? t('secrets.buttons.decode')
+              : t('secrets.buttons.encode')}
+          </Button>,
         ]}
       />
     </ResourceForm>

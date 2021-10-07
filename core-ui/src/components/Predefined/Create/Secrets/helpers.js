@@ -2,36 +2,26 @@ import * as jp from 'jsonpath';
 
 import { base64Encode } from 'shared/helpers';
 
+export function readFromFile() {
+  return new Promise(resolve => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.addEventListener('change', e => {
+      const file = e.target.files[0];
+      if (!file) resolve(null);
+      const reader = new FileReader();
+      reader.readAsText(file);
+      reader.onload = e =>
+        resolve({ name: file.name, content: e.target.result });
+    });
+    input.click();
+  });
+}
+
 export const mapObjectValues = (fn, obj) =>
   Object.fromEntries(
     Object.entries(obj).map(([key, value]) => [key, fn(value)]),
   );
-
-export function secretToYaml({ secret, isEncoded }) {
-  return {
-    apiVersion: 'v1',
-    kind: 'Secret',
-    type: secret.type,
-    metadata: {
-      name: secret.name,
-      namespace: secret.namespace,
-      labels: secret.labels,
-      annotations: secret.annotations,
-    },
-    data: isEncoded ? secret.data : mapObjectValues(base64Encode, secret.data),
-  };
-}
-
-export function yamlToSecret(yaml) {
-  return {
-    name: jp.value(yaml, '$.metadata.name') || '',
-    namespace: jp.value(yaml, '$.metadata.namespace') || '',
-    type: jp.value(yaml, '$.type') || '',
-    labels: jp.value(yaml, '$.metadata.labels') || {},
-    annotations: jp.value(yaml, '$.metadata.annotations') || {},
-    data: jp.value(yaml, '$.data') || '',
-  };
-}
 
 export function createSecretTemplate(namespaceId) {
   return {
