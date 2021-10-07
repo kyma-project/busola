@@ -140,7 +140,7 @@ export function FormField({
         <Label required={required && !disabled}>{label}</Label>
         {tooltipContent && (
           <Tooltip delay={0} content={tooltipContent}>
-            <Icon glyph="message-information" />
+            <Icon glyph="question-mark" />
           </Tooltip>
         )}
       </div>
