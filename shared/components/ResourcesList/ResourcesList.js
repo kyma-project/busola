@@ -204,7 +204,8 @@ function Resources({
     ? []
     : [
         {
-          name: 'Edit',
+          name: t('common.buttons.edit'),
+          icon: 'edit',
           handler: resource => {
             setEditedSpec(
               resource,
@@ -214,7 +215,8 @@ function Resources({
           },
         },
         {
-          name: 'Delete',
+          name: t('common.buttons.delete'),
+          icon: 'delete',
           handler: handleResourceDelete,
         },
       ];

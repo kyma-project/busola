@@ -1,17 +1,18 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Dropdown } from 'react-shared';
+import { ComboboxInput } from 'fundamental-react';
 import classnames from 'classnames';
-import {
-  CollapsibleSection,
-  Label,
-} from 'shared/ResourceForm/components/FormComponents';
+import LuigiClient from '@luigi-project/client';
+
+import { useGetList, getFeatureToggle } from 'react-shared';
+
+import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
+import { CollapsibleSection } from 'shared/ResourceForm/components/FormComponents';
 
 import './ExternalResourceRef.scss';
 
 export function ExternalResourceRef({
-  resourceRef,
-  onChange,
+  value,
   resources,
   title,
   labelPrefix,
@@ -19,22 +20,29 @@ export function ExternalResourceRef({
   actions,
   className,
   isAdvanced,
+  propertyPath,
+  setValue,
   required = false,
   defaultOpen = undefined,
+  currentNamespace,
 }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
+  const namespacesUrl = '/api/v1/namespaces';
+  const { data: namespaces } = useGetList()(namespacesUrl);
 
-  const resourceNamespaces = [
-    ...new Set((resources || []).map(resource => resource.metadata.namespace)),
-  ];
-  const namespacesOptions = resourceNamespaces.map(namespace => ({
-    key: namespace,
-    text: namespace,
-  }));
-  namespacesOptions.unshift({
-    key: '',
-    text: 'All namespaces',
-  });
+  const showHiddenNamespaces = getFeatureToggle('showHiddenNamespaces');
+  const hiddenNamespaces = LuigiClient.getContext().hiddenNamespaces;
+
+  const namespacesOptions = (namespaces || [])
+    .filter(ns =>
+      showHiddenNamespaces
+        ? true
+        : !hiddenNamespaces.includes(ns.metadata.name),
+    )
+    .map(ns => ({
+      key: ns.metadata.name,
+      text: ns.metadata.name,
+    }));
 
   const allResourcesOptions = (resources || []).map(resource => ({
     key: resource.metadata.name,
@@ -42,80 +50,92 @@ export function ExternalResourceRef({
     namespace: resource.metadata.namespace,
   }));
 
-  let filteredResourcesOptions = allResourcesOptions;
-  if (resourceRef.namespace?.length) {
+  let filteredResourcesOptions = [];
+  if (value?.namespace?.length) {
     filteredResourcesOptions = allResourcesOptions.filter(
-      resource => resourceRef.namespace === resource.namespace,
+      resource => value?.namespace === resource.namespace,
+    );
+  } else if (currentNamespace) {
+    filteredResourcesOptions = allResourcesOptions.filter(
+      resource => currentNamespace === resource.namespace,
     );
   }
+
+  const namespaceValid =
+    !value?.namespace ||
+    namespacesOptions.find(ns => ns.key === value.namespace);
+  const nameValid =
+    !value?.name ||
+    filteredResourcesOptions.find(res => res.key === value.name);
+
   const open = defaultOpen === undefined ? !isAdvanced : defaultOpen;
   return (
     <CollapsibleSection
       title={title}
       tooltipContent={tooltipContent}
       actions={actions}
-      className={className}
+      className={classnames('external-resource-ref', className)}
       defaultOpen={open}
       required={required}
     >
-      <div className={classnames('fd-row form-field')}>
-        <div className="fd-col fd-col-md--4 form-field__label">
-          <Label
-            required={required}
-            tooltipContent={t('common.tooltips.secret-ref-namespace')}
-          >
-            {labelPrefix + ' '}
-            {t('common.labels.namespace')}
-          </Label>
-        </div>
-        <div className="fd-col fd-col-md--7">
-          <Dropdown
-            id="external-resource-dropdown"
+      <ResourceForm.FormField
+        required={required}
+        label={t('common.labels.resource-namespace', { resource: labelPrefix })}
+        tooltipContent={t('common.tooltips.secret-ref-namespace')}
+        input={() => (
+          <ComboboxInput
             compact
-            fullWidth
+            showAllEntries
+            searchFullString
+            selectionType="auto-inline"
             options={namespacesOptions}
             placeholder={t('common.placeholders.secret-ref-namespace')}
-            selectedKey={resourceRef.namespace}
-            onSelect={(e, selected) => {
-              onChange({
-                ...resourceRef,
+            value={value?.namespace}
+            selectedKey={value?.namespace}
+            onSelect={e => {
+              setValue({
                 name: undefined,
-                namespace: selected.key,
+                namespace: e.target.value,
               });
             }}
-            i18n={i18n}
+            validationState={
+              !namespaceValid && {
+                state: 'error',
+                text: t('common.messages.resource-namespace-error'),
+              }
+            }
           />
-        </div>
-      </div>
-      <div className={classnames('fd-row form-field')}>
-        <div className="fd-col fd-col-md--4 form-field__label">
-          <Label
-            required={required}
-            tooltipContent={t('common.tooltips.secret-ref-name')}
-          >
-            {labelPrefix + ' '}
-            {t('common.lowercase.name')}
-          </Label>
-        </div>
-        <div className="fd-col fd-col-md--7">
-          <Dropdown
-            id="external-resource-dropdown"
+        )}
+      />
+      <ResourceForm.FormField
+        required={required}
+        label={t('common.labels.resource-name', { resource: labelPrefix })}
+        tooltipContent={t('common.tooltips.secret-ref-name')}
+        input={() => (
+          <ComboboxInput
             compact
-            fullWidth
+            showAllEntries
+            searchFullString
+            selectionType="auto-inline"
             options={filteredResourcesOptions}
             placeholder={t('common.placeholders.secret-ref-name')}
-            selectedKey={resourceRef.name}
-            onSelect={(e, selected) => {
-              onChange({
-                ...resourceRef,
-                name: selected.key,
-                namespace: selected.namespace,
+            value={value?.namespace}
+            selectedKey={value?.name}
+            onSelect={e => {
+              setValue({
+                name: e.target.value,
+                namespace: value?.namespace,
               });
             }}
-            i18n={i18n}
+            validationState={
+              !nameValid && {
+                state: 'error',
+                text: t('common.messages.resource-name-error'),
+              }
+            }
           />
-        </div>
-      </div>
+        )}
+      />
     </CollapsibleSection>
   );
 }
