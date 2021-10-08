@@ -57,6 +57,24 @@ export function DNSEntriesCreate({
         }}
       />
       <ResourceForm.CollapsibleSection
+        simple
+        title="Targets"
+        defaultOpen
+        resource={dnsEntry}
+        setResource={setDnsEntry}
+        propertyPath="$.spec.targets"
+      >
+        <TargetsRef
+          advanced={false}
+          value={dnsEntry}
+          setValue={targets => {
+            jp.value(dnsEntry, '$.spec.targets', targets);
+            setDnsEntry(dnsEntry);
+          }}
+        />
+      </ResourceForm.CollapsibleSection>
+
+      <ResourceForm.CollapsibleSection
         advanced
         title="Targets"
         defaultOpen
@@ -81,6 +99,7 @@ export function DNSEntriesCreate({
         )}
       >
         <TargetsRef
+          advanced={true}
           value={dnsEntry}
           setValue={targets => {
             jp.value(dnsEntry, '$.spec.targets', targets);

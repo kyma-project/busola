@@ -1,5 +1,3 @@
-import * as jp from 'jsonpath';
-
 export function createDNSEntryTemplate(namespaceId) {
   return {
     apiVersion: 'dns.gardener.cloud/v1alpha1',
@@ -12,7 +10,7 @@ export function createDNSEntryTemplate(namespaceId) {
     },
     spec: {
       dnsName: '',
-      targets: [],
+      targets: [''],
       text: [],
       ttl: 600,
     },
