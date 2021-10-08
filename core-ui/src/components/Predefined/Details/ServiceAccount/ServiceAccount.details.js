@@ -6,7 +6,7 @@ import { ServiceAccountTokenStatus } from 'shared/components/ServiceAccountToken
 const ServiceAccountSecrets = serviceAccount => {
   const namespace = serviceAccount.metadata.namespace;
   const listKey = 'service-account-secrets';
-  const title = 'secretsList';
+  const title = 'Secrets';
   const filterBySecret = secret =>
     serviceAccount.secrets.find(
       ({ name: secretName }) => secret.metadata.name === secretName,
@@ -26,7 +26,7 @@ const ServiceAccountSecrets = serviceAccount => {
 const ServiceAccountImagePullSecrets = serviceAccount => {
   const namespace = serviceAccount.metadata.namespace;
   const listKey = 'service-account-imagepullsecrets';
-  const title = 'imagePullSecretsList';
+  const title = 'Image Pull Secrets';
   const filterBySecret = secret =>
     serviceAccount.imagePullSecrets.find(
       ({ name: secretName }) => secret.metadata.name === secretName,

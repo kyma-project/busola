@@ -39,6 +39,7 @@ export const GenericSecrets = ({
         showTitle: true,
         filter,
         customListActions,
+        title,
       }}
     />
   );
