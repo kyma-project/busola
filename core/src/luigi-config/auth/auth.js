@@ -62,7 +62,6 @@ async function createAuth(callback, kubeconfigUser) {
         scope: scope || 'openid',
         response_type: 'code',
         response_mode: 'query',
-        post_logout_redirect_uri: './logout.html',
         userInfoFn: async (_, authData) => {
           setAuthData({ token: authData.idToken });
           groups = authData.profile?.['http://k8s/groups'];

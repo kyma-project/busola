@@ -15,7 +15,6 @@ export const saveCurrentLocation = () => {
   if (
     !window.location.hash &&
     window.location.pathname !== '/' &&
-    window.location.pathname !== '/clusters' &&
     !hasQueryParams()
   ) {
     const location = window.location.pathname;

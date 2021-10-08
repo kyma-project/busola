@@ -12,7 +12,7 @@
       },
       "KUBECONFIG_ID": {
         "config": {
-          "kubeconfigUrl": "http://localhost:3020"
+          "kubeconfigUrl": "https://kyma-env-broker.cp.dev.kyma.cloud.sap/kubeconfig"
         }
       },
       "ADD_CLUSTER_DISABLED": {
