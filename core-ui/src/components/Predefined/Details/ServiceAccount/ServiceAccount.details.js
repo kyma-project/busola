@@ -18,6 +18,7 @@ const ServiceAccountSecrets = serviceAccount => {
       filter={filterBySecret}
       listKey={listKey}
       title={title}
+      allowKubeconfigDownload
     />
   ) : null;
 };

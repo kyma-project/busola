@@ -438,6 +438,7 @@ service-accounts:
   list:
     headers:
       auto-mount-token: Auto-mount token
+      download-kubeconfig: Download Kubeconfig
 custom-resource-definitions:
   headers:
     description: Description
