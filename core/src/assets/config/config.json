@@ -3,7 +3,7 @@
     "defaultStorage": "localStorage",
     "features": {
       "SSO_LOGIN": {
-        "isEnabled": false,
+        "isEnabled": true,
         "config": {
           "issuerUrl": "https://apskyxzcl.accounts400.ondemand.com",
           "scope": "email",
@@ -12,7 +12,7 @@
       },
       "KUBECONFIG_ID": {
         "config": {
-          "kubeconfigUrl": "https://kyma-env-broker.cp.dev.kyma.cloud.sap/kubeconfig"
+          "kubeconfigUrl": "http://localhost:3020"
         }
       },
       "ADD_CLUSTER_DISABLED": {

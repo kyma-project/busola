@@ -34,10 +34,11 @@ export function initTheme() {
     'message',
     event => {
       if (event.data.msg === 'busola.getCurrentTheme') {
-        event.source.postMessage(
-          { msg: 'busola.getCurrentTheme.response', name: getTheme() },
-          event.origin,
-        );
+        event.source &&
+          event.source.postMessage(
+            { msg: 'busola.getCurrentTheme.response', name: getTheme() },
+            event.origin,
+          );
       }
     },
     false,
