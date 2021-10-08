@@ -7,6 +7,7 @@ import {
   getClusters,
 } from './../cluster-management/cluster-management';
 import { hasPermissionsFor, hasWildcardPermission } from './permissions';
+import { showAlert } from '../utils/showAlert';
 
 export const coreUIViewGroupName = '_core_ui_';
 export const catalogViewGroupName = '_catalog_';
@@ -27,7 +28,7 @@ async function downloadKubeconfig() {
     try {
       const { kubeconfig } = clusters[clusterName];
       if (!kubeconfig) {
-        Luigi.ux().showAlert({
+        showAlert({
           text: `Failed to dowload the Kubeconfig due to: Kubeconfig is missing on the Cluster`,
           type: 'error',
         });
@@ -40,7 +41,7 @@ async function downloadKubeconfig() {
       saveAs(blob, 'kubeconfig.yaml');
     } catch (e) {
       console.error(e);
-      Luigi.ux().showAlert({
+      showAlert({
         text: `Failed to dowload the Kubeconfig due to: ${e.message}`,
         type: 'error',
       });
@@ -1218,7 +1219,7 @@ export function getStaticRootNodes(
   const nodes = [
     {
       pathSegment: 'overview',
-      label: i18next.t('clusters.overview.title'),
+      label: i18next.t('clusters.overview.title-current-cluster'),
       icon: 'database',
       viewUrl: config.coreUIModuleUrl + '/overview',
       viewGroup: coreUIViewGroupName,

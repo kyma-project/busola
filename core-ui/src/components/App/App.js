@@ -42,13 +42,19 @@ export default function App() {
       <Route
         path="/overview"
         exact
-        component={withTitle(t('clusters.overview.title'), ClusterOverview)}
+        component={withTitle(
+          t('clusters.overview.title-current-cluster'),
+          ClusterOverview,
+        )}
       />
       <Route path="/overview/nodes/:nodeName" component={RoutedNodeDetails} />
       <Route
         path="/clusters"
         exact
-        component={withTitle(t('clusters.list.title'), ClusterList)}
+        component={withTitle(
+          t('clusters.overview.title-all-clusters'),
+          ClusterList,
+        )}
       />
       <Route
         path="/clusters/add"
@@ -56,11 +62,7 @@ export default function App() {
         component={withTitle(t('clusters.add.title'), AddCluster)}
       />
       <Route path="/preferences" render={Preferences} />
-      <Route
-        exact
-        path="/apirules/create"
-        render={withTitle(t('api-rules.title'), CreateApiRule)}
-      />
+      <Route exact path="/apirules/create" component={CreateApiRule} />
 
       <Route
         exact

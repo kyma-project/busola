@@ -39,13 +39,15 @@ export default function NamespaceBindings(application) {
 
   const actions = [
     {
-      name: 'Edit',
+      name: t('common.buttons.edit'),
+      icon: 'edit',
       component: binding => (
         <EditNamespaceBinding binding={binding} application={application} />
       ),
     },
     {
-      name: 'Delete',
+      name: t('common.buttons.delete'),
+      icon: 'delete',
       handler: binding =>
         handleDelete(
           t('applications.bindings'),
