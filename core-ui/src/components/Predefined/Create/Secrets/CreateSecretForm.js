@@ -1,7 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
-import { Button, FormInput, FormTextarea } from 'fundamental-react';
+import {
+  Button,
+  FormInput,
+  FormTextarea,
+  ComboboxInput,
+} from 'fundamental-react';
 import { Tooltip } from 'react-shared';
 
 import {
@@ -14,10 +19,16 @@ import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import {
   MultiInput,
   K8sNameField,
+  KeyValueField,
 } from 'shared/ResourceForm/components/FormComponents';
 import { CreateForm } from 'shared/components/CreateForm/CreateForm';
 
-import { createSecretTemplate, createPresets, readFromFile } from './helpers';
+import {
+  createSecretTemplate,
+  createPresets,
+  readFromFile,
+  getSecretDef,
+} from './helpers';
 
 import './CreateSecretForm.scss';
 
@@ -33,6 +44,12 @@ export function CreateSecretForm({
     existingSecret || createSecretTemplate(namespaceId),
   );
   const [valuesEncoded, setValuesEncoded] = useState(false);
+  const [lockedKeys, setLockedKeys] = useState([]);
+
+  useEffect(() => {
+    const def = getSecretDef(secret.type);
+    setLockedKeys(def?.data);
+  }, [secret]);
   /*
   const notification = useNotification();
   const postRequest = usePost();
@@ -131,7 +148,6 @@ export function CreateSecretForm({
           setSecret(secret);
         }}
       />
-      {/*
       <KeyValueField
         advanced
         propertyPath="$.metadata.labels"
@@ -143,12 +159,25 @@ export function CreateSecretForm({
         propertyPath="$.metadata.annotations"
         title={t('common.headers.annotations')}
       />
-      */}
+      <KeyValueField
+        propertyPath="$.type"
+        title={t('secrets.create-modal.simple.type')}
+        className="fd-margin-top--sm"
+        input={({ value, setValue }) => (
+          <ComboboxInput
+            required
+            compact
+            placeholder={t('secrets.create-modal.simple.type-placeholder')}
+            value={secret.type}
+            selectedKey={secret.type}
+          />
+        )}
+      />
       <MultiInput
         fullWidth
-        propertyPath="$.metadata.data"
+        propertyPath="$.data"
         title="<<Data>>"
-        label="<<Entry>>"
+        lockedKeys={lockedKeys}
         toInternal={value =>
           Object.entries(value || {}).map(([key, val]) => ({ key, val }))
         }

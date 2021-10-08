@@ -1,6 +1,21 @@
-import * as jp from 'jsonpath';
+import * as components from '../';
 
-import { base64Encode } from 'shared/helpers';
+const secretDefs = Object.values(components)
+  .filter(component => component.secrets)
+  .map(component => component.secrets)
+  .flat();
+console.log('secretDefs', secretDefs);
+
+export function getSecretDef(type) {
+  return secretDefs.find(secret => secret.type === type);
+}
+
+export function getSecretTypes() {
+  const types = secretDefs
+    .map(secret => secret.type)
+    .filter(type => type !== 'Opaque');
+  return Array.from(new Set(types));
+}
 
 export function readFromFile() {
   return new Promise(resolve => {
@@ -25,16 +40,35 @@ export const mapObjectValues = (fn, obj) =>
 
 export function createSecretTemplate(namespaceId) {
   return {
-    name: '',
-    namespace: namespaceId,
     type: 'Opaque',
-    labels: {},
-    annotations: {},
+    metadata: {
+      name: '',
+      namespace: namespaceId,
+      labels: {},
+      annotations: {},
+    },
     data: {},
   };
 }
 
-export function createPresets(namespaceId, translate, DNSExist) {
+export function createPresets(namespaceId, t) {
+  return [
+    {
+      name: t('secrets.create-modal.presets.default'),
+      value: createSecretTemplate(namespaceId),
+    },
+    ...secretDefs.map(({ title, name, type, data, ...value }) => ({
+      name: title || name || type,
+      value: {
+        ...createSecretTemplate(namespaceId),
+        ...value,
+        name,
+        type,
+        data: data?.reduce((acc, key) => ({ ...acc, [key]: '' }), {}),
+      },
+    })),
+  ];
+  /*
   return DNSExist
     ? [
         {
@@ -171,4 +205,5 @@ export function createPresets(namespaceId, translate, DNSExist) {
           value: createSecretTemplate(namespaceId),
         },
       ];
+  */
 }

@@ -114,7 +114,10 @@ export function ResourceForm({
         } else {
           setResource(value);
         }
-        onChange(new Event('input', { bubbles: true }));
+
+        if (onChange) {
+          onChange(new Event('input', { bubbles: true }));
+        }
       }}
     />
   );

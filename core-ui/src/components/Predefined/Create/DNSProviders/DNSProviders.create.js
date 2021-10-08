@@ -6,7 +6,7 @@ import { ProviderTypeDropdown } from './ProviderTypeDropdown';
 import { SecretRef } from 'shared/components/ResourceRef/SecretRef';
 import * as jp from 'jsonpath';
 
-export function DNSProvidersCreate({
+function DNSProvidersCreate({
   formElementRef,
   namespace,
   onChange,
@@ -107,3 +107,74 @@ export function DNSProvidersCreate({
     </ResourceForm>
   );
 }
+DNSProvidersCreate.secrets = [
+  {
+    title: 'Amazon Route53',
+    type: 'Opaque',
+    name: 'amazon-route53',
+    data: ['AWS_ACCESS_KEY_ID', 'AWS_SECRET_ACCESS_KEY'],
+  },
+  {
+    title: 'GoogleCloud DNS',
+    type: 'Opaque',
+    name: 'google-cloud-dns',
+    data: ['serviceaccount.json'],
+  },
+  {
+    title: 'AliCloud DNS',
+    type: 'Opaque',
+    name: 'ali-cloud-dns',
+    data: ['ACCESS_KEY_ID', 'SECRET_ACCESS_KEY'],
+  },
+  {
+    title: 'Azure DNS',
+    type: 'Opaque',
+    name: 'azure-dns',
+    data: [
+      'AZURE_SUBSCRIPTION_ID',
+      'AZURE_TENANT_ID',
+      'AZURE_CLIENT_ID',
+      'AZURE_CLIENT_SECRET',
+    ],
+  },
+  {
+    title: 'OpenStack Designate',
+    name: 'openstack-designate',
+    type: 'Opaque',
+    data: [
+      'OS_AUTH_URL',
+      'OS_DOMAIN_NAME',
+      'OS_PROJECT_NAME',
+      'OS_USERNAME',
+      'OS_PASSWORD',
+      'OS_PROJECT_ID',
+      'OS_REGION_NAME',
+      'OS_TENANT_NAME',
+      'OS_APPLICATION_CREDENTIAL_ID',
+      'OS_APPLICATION_CREDENTIAL_NAME',
+      'OS_APPLICATION_CREDENTIAL_SECRET',
+      'OS_DOMAIN_ID',
+      'OS_USER_DOMAIN_NAME',
+      'OS_USER_DOMAIN_ID',
+    ],
+  },
+  {
+    title: 'Cloudflare DNS',
+    type: 'Opaque',
+    name: 'cloudflare-dns',
+    data: ['CLOUDFLARE_API_TOKEN'],
+  },
+  {
+    title: 'Infoblox',
+    type: 'Opaque',
+    name: 'infoblox',
+    data: ['USERNAME', 'PASSWORD'],
+  },
+  {
+    title: 'Netlify DNS',
+    type: 'Opaque',
+    name: 'netlify-dns',
+    data: ['NETLIFY_AUTH_TOKEN'],
+  },
+];
+export { DNSProvidersCreate };

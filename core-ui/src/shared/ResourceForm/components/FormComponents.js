@@ -199,6 +199,7 @@ export function MultiInput({
   isAdvanced,
   defaultOpen,
   fullWidth = false,
+  isLocked = () => false,
   ...props
 }) {
   console.log(
@@ -319,7 +320,9 @@ export function MultiInput({
               )}
               <Button
                 compact
-                className={classnames({ hidden: isLast(index) })}
+                className={classnames({
+                  hidden: isLast(index) || isLocked(entry),
+                })}
                 glyph="delete"
                 type="negative"
                 onClick={() => removeValue(index)}
