@@ -8,13 +8,13 @@ export const ServiceAccountTokenStatus = ({ token }) => {
   const accountTokenValues = token
     ? {
         type: 'warning',
-        tooltipContent: 'inform',
-        status: 'enabled',
+        tooltipContent: t('service-accounts.auto-mount-token.description'),
+        status: t('service-accounts.auto-mount-token.enabled'),
       }
     : {
         type: 'info',
         tooltipContent: '',
-        status: 'disabled',
+        status: t('service-accounts.auto-mount-token.disabled'),
       };
 
   return (
