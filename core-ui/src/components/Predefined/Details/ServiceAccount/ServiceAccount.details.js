@@ -14,6 +14,7 @@ const ServiceAccountSecrets = serviceAccount => {
 
   return serviceAccount.secrets ? (
     <GenericSecrets
+      key={listKey}
       namespace={namespace}
       filter={filterBySecret}
       listKey={listKey}
@@ -34,6 +35,7 @@ const ServiceAccountImagePullSecrets = serviceAccount => {
 
   return serviceAccount.imagePullSecrets ? (
     <GenericSecrets
+      key={listKey}
       namespace={namespace}
       filter={filterBySecret}
       listKey={listKey}
