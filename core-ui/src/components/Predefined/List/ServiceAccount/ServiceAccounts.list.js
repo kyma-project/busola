@@ -6,10 +6,10 @@ export const ServiceAccountsList = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
   const customColumns = [
     {
-      header: t('api-rules.list.headers.host'),
+      header: t('service-accounts.list.headers.auto-mount-token'),
       value: value => (
         <StatusBadge type="info">
-          {value.automountServiceAccountToken ? 'true' : 'false'}
+          {value.automountServiceAccountToken ? 'enabled' : 'disabled'}
         </StatusBadge>
       ),
     },

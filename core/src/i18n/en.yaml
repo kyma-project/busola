@@ -417,6 +417,9 @@ cron-jobs:
   title: CronJobs
 service-accounts:
   title: Service Accounts
+  list:
+    headers:
+      auto-mount-token: Auto-mount token
 custom-resource-definitions:
   headers:
     description: Description
