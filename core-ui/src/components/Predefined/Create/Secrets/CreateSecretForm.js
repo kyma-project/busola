@@ -28,6 +28,7 @@ import {
   createPresets,
   readFromFile,
   getSecretDef,
+  getSecretTypes,
 } from './helpers';
 
 import './CreateSecretForm.scss';
@@ -46,10 +47,16 @@ export function CreateSecretForm({
   const [valuesEncoded, setValuesEncoded] = useState(false);
   const [lockedKeys, setLockedKeys] = useState([]);
 
+  const type = secret?.type;
+
   useEffect(() => {
-    const def = getSecretDef(secret.type);
-    setLockedKeys(def?.data);
-  }, [secret]);
+    const def = getSecretDef(type);
+    setLockedKeys(def?.data || []);
+    setSecret({
+      ...def?.data.reduce((acc, key) => ({ ...acc, [key]: '' }), {}),
+      ...secret.data,
+    });
+  }, [type]);
   /*
   const notification = useNotification();
   const postRequest = usePost();
@@ -159,7 +166,7 @@ export function CreateSecretForm({
         propertyPath="$.metadata.annotations"
         title={t('common.headers.annotations')}
       />
-      <KeyValueField
+      <ResourceForm.FormField
         propertyPath="$.type"
         title={t('secrets.create-modal.simple.type')}
         className="fd-margin-top--sm"
@@ -168,6 +175,7 @@ export function CreateSecretForm({
             required
             compact
             placeholder={t('secrets.create-modal.simple.type-placeholder')}
+            options={getSecretTypes().map(type => ({ key: type, text: type }))}
             value={secret.type}
             selectedKey={secret.type}
           />
@@ -177,7 +185,7 @@ export function CreateSecretForm({
         fullWidth
         propertyPath="$.data"
         title="<<Data>>"
-        lockedKeys={lockedKeys}
+        isEntryLocked={entry => true}
         toInternal={value =>
           Object.entries(value || {}).map(([key, val]) => ({ key, val }))
         }
@@ -190,6 +198,7 @@ export function CreateSecretForm({
           ({ value, setValue, ref, onBlur, focus }) => (
             <FormInput
               compact
+              disabled={lockedKeys.includes(value?.key)}
               key="key"
               value={value?.key || ''}
               ref={ref}

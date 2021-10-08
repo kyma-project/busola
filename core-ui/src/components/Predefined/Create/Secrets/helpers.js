@@ -11,9 +11,7 @@ export function getSecretDef(type) {
 }
 
 export function getSecretTypes() {
-  const types = secretDefs
-    .map(secret => secret.type)
-    .filter(type => type !== 'Opaque');
+  const types = secretDefs.map(secret => secret.type);
   return Array.from(new Set(types));
 }
 
