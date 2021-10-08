@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { StatusBadge } from 'react-shared';
 import { GenericSecrets } from './GenericSecrets';
+import { ServiceAccountTokenStatus } from 'shared/components/ServiceAccountTokenStatus';
 
 const ServiceAccountSecrets = serviceAccount => {
   const namespace = serviceAccount.metadata.namespace;
@@ -12,15 +12,16 @@ const ServiceAccountSecrets = serviceAccount => {
       ({ name: secretName }) => secret.metadata.name === secretName,
     );
 
-  return (
+  return serviceAccount.secrets ? (
     <GenericSecrets
       namespace={namespace}
       filter={filterBySecret}
       listKey={listKey}
       title={title}
     />
-  );
+  ) : null;
 };
+
 const ServiceAccountImagePullSecrets = serviceAccount => {
   const namespace = serviceAccount.metadata.namespace;
   const listKey = 'service-account-imagepullsecrets';
@@ -30,14 +31,14 @@ const ServiceAccountImagePullSecrets = serviceAccount => {
       ({ name: secretName }) => secret.metadata.name === secretName,
     );
 
-  return (
+  return serviceAccount.imagePullSecrets ? (
     <GenericSecrets
       namespace={namespace}
       filter={filterBySecret}
       listKey={listKey}
       title={title}
     />
-  );
+  ) : null;
 };
 
 export const ServiceAccountsDetails = ({ DefaultRenderer, ...otherParams }) => {
@@ -45,13 +46,11 @@ export const ServiceAccountsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const customColumns = [
     {
       header: t('service-accounts.list.headers.auto-mount-token'),
-      value: value => {
-        return (
-          <StatusBadge type="info">
-            {value.automountServiceAccountToken ? 'enabled' : 'disabled'}
-          </StatusBadge>
-        );
-      },
+      value: value => (
+        <ServiceAccountTokenStatus
+          token={value.automountServiceAccountToken}
+        ></ServiceAccountTokenStatus>
+      ),
     },
   ];
   return (

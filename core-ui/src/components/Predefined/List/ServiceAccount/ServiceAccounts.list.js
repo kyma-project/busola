@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { StatusBadge } from 'react-shared';
+import { ServiceAccountTokenStatus } from 'shared/components/ServiceAccountTokenStatus';
 
 export const ServiceAccountsList = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
@@ -8,9 +8,9 @@ export const ServiceAccountsList = ({ DefaultRenderer, ...otherParams }) => {
     {
       header: t('service-accounts.list.headers.auto-mount-token'),
       value: value => (
-        <StatusBadge type="info">
-          {value.automountServiceAccountToken ? 'enabled' : 'disabled'}
-        </StatusBadge>
+        <ServiceAccountTokenStatus
+          accountToken={value.automountServiceAccountToken}
+        ></ServiceAccountTokenStatus>
       ),
     },
   ];
