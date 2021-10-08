@@ -40,6 +40,8 @@ export const i18n = i18next.use(i18nextBackend).init({
 export const NODE_PARAM_PREFIX = `~`;
 
 async function initializeBusola() {
+  initTheme();
+
   const activeCluster = await getActiveCluster();
 
   Luigi.setConfig({
@@ -71,8 +73,6 @@ async function initializeBusola() {
   await initSentry();
 
   await i18n;
-
-  initTheme();
 
   await setActiveClusterIfPresentInUrl();
 
