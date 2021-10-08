@@ -17,7 +17,7 @@ async function resolveSelector(selector, data) {
 
 export async function resolveFeatureAvailability(feature, data) {
   try {
-    if (feature?.isEnabled === false) {
+    if (!feature || feature.isEnabled === false) {
       return false;
     }
     for (const selector of feature.selectors || []) {
