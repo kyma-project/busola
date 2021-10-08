@@ -17,7 +17,7 @@ export const GenericSecrets = ({
 
   const customListActions = allowKubeconfigDownload && [
     {
-      name: t('service-accounts.list.headers.download-kubeconfig'),
+      name: t('service-accounts.headers.download-kubeconfig'),
       icon: 'download',
       disabledHandler: secret =>
         secret.type !== 'kubernetes.io/service-account-token',

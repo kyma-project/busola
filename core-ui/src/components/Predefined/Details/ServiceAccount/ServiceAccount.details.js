@@ -49,8 +49,8 @@ export const ServiceAccountsDetails = ({ DefaultRenderer, ...otherParams }) => {
       header: t('service-accounts.list.headers.auto-mount-token'),
       value: value => (
         <ServiceAccountTokenStatus
-          token={value.automountServiceAccountToken}
-        ></ServiceAccountTokenStatus>
+          automount={value.automountServiceAccountToken}
+        />
       ),
     },
   ];

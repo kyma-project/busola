@@ -2,10 +2,10 @@ import React from 'react';
 import { StatusBadge } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
-export const ServiceAccountTokenStatus = ({ token }) => {
+export const ServiceAccountTokenStatus = ({ automount }) => {
   const { t } = useTranslation();
 
-  const accountTokenValues = token
+  const accountTokenValues = automount
     ? {
         type: 'warning',
         tooltipContent: t('service-accounts.auto-mount-token.description'),

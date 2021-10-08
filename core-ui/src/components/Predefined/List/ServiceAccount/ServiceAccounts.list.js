@@ -6,11 +6,11 @@ export const ServiceAccountsList = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
   const customColumns = [
     {
-      header: t('service-accounts.list.headers.auto-mount-token'),
+      header: t('service-accounts.headers.auto-mount-token'),
       value: value => (
         <ServiceAccountTokenStatus
-          accountToken={value.automountServiceAccountToken}
-        ></ServiceAccountTokenStatus>
+          automount={value.automountServiceAccountToken}
+        />
       ),
     },
   ];
