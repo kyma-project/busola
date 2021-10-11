@@ -7,19 +7,14 @@ import classnames from 'classnames';
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import { Label } from 'shared/ResourceForm/components/FormComponents';
 
+import './TargetsRef.scss';
+
 export function TargetsInput({
   value,
   setValue,
-  title,
-  label,
-  tooltipContent,
   toInternal,
   toExternal,
   inputs,
-  className,
-  isAdvanced,
-  defaultOpen,
-  ...props
 }) {
   const [internalValue, setInternalValue] = useState([]);
 
@@ -54,14 +49,12 @@ export function TargetsInput({
 
   return (
     <div className="fd-row form-field multi-input">
-      <div className="fd-col fd-col-md--4">
-        <Label tooltipContent={tooltipContent}>Use CNAME</Label>
-      </div>
-      <ul className="text-array-input__list fd-col fd-col-md--7">
+      <ul className="text-array-input__list fd-col fd-col-md--12">
         {internalValue.map((entry, index) => (
           <li key={index}>
             {inputs.map(input =>
               input({
+                index,
                 value: entry,
                 setValue: entry => setEntry(entry, index),
               }),
@@ -80,14 +73,9 @@ export function TargetsInput({
   );
 }
 
-export function TargetsRef({
-  value: dnsEntry,
-  setValue: setTargets,
-  advanced,
-}) {
+export function TargetsRef({ value: dnsEntry, setValue: setTargets }) {
   const { t } = useTranslation();
-  const { data: services, loading } = useGetList()(`/api/v1/services`);
-  if (loading) return <></>;
+  const { data: services } = useGetList()(`/api/v1/services`);
 
   const targets = dnsEntry.spec.targets || [];
   const loadBalancers = services?.filter(
@@ -104,8 +92,6 @@ export function TargetsRef({
 
   return (
     <TargetsInput
-      defaultOpen
-      isAdvanced={false}
       toInternal={value =>
         value?.map(target => ({ target, isCname: isCname(target) })) || []
       }
@@ -115,37 +101,52 @@ export function TargetsRef({
           .map(target => target.target)
           .filter(t => !!t)
       }
-      // tooltipContent={'ddd'}
       value={targets}
       setValue={setTargets}
       inputs={[
-        ({ value, setValue }) => (
-          <>
-            <Label></Label>
-            <Switch
-              compact
-              onChange={e => setValue({ ...value, isCname: !value?.isCname })}
-              checked={value?.isCname}
-            />
-          </>
+        ({ value, setValue, index }) => (
+          <div className="fd-col fd-col-md--4">
+            <div className="fd-row form-field multi-input">
+              <div className="fd-col fd-col-md--5">
+                <Label tooltipContent={t('dnsentries.tooltips.use-cname')}>
+                  {t('dnsentries.use-cname')}
+                </Label>
+              </div>
+              <div className="fd-col fd-col-md--7">
+                <Switch
+                  key={`targets-switch-${index}`}
+                  compact
+                  onChange={e =>
+                    setValue({ ...value, isCname: !value?.isCname })
+                  }
+                  checked={value?.isCname}
+                />
+              </div>
+            </div>
+          </div>
         ),
-        ({ value, setValue }) => {
+        ({ value, setValue, index }) => {
           if (value?.isCname) {
             return (
-              <FormInput
-                key={`form-`}
-                compact
-                value={value?.target || ''}
-                onChange={e => setValue({ ...value, target: e.target.value })}
-              />
+              <div className="fd-col fd-col-md--7">
+                <FormInput
+                  key={`targets-input-${index}`}
+                  compact
+                  value={value?.target || ''}
+                  onChange={e => setValue({ ...value, target: e.target.value })}
+                />
+              </div>
             );
           } else {
             return (
-              <ResourceForm.Select
-                options={IPs}
-                value={value?.target}
-                setValue={key => setValue({ ...value, target: key })}
-              />
+              <div className="fd-col fd-col-md--7">
+                <ResourceForm.Select
+                  key={`taregts-select-${index}`}
+                  options={IPs}
+                  value={value?.target}
+                  setValue={key => setValue({ ...value, target: key })}
+                />
+              </div>
             );
           }
         },

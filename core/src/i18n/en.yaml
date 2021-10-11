@@ -503,6 +503,10 @@ dnsentries:
     text: Text records, one per line
     ttl: Enter the time to live.
     dns-name: Enter DNS Name
+  tooltips:
+    targets: Target records (CNAME or A records)
+    use-cname: Target must be an A record, or CNAME
+  use-cname: Use CNAME
   headers:
     dns-name: DNS Name
     provider: Provider
