@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button } from 'fundamental-react';
 import * as jp from 'jsonpath';
 
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
@@ -49,64 +48,23 @@ export function DNSEntriesCreate({
       <DNSNameRef
         required
         id="dns-name-ref"
-        domain={dnsEntry.spec.dnsName}
+        domain={dnsEntry?.spec.dnsName}
         onChange={domain => {
           jp.value(dnsEntry, '$.spec.dnsName', domain);
           const spec = { ...dnsEntry.spec, dnsName: domain };
           setDnsEntry({ ...dnsEntry, ...spec });
         }}
       />
-      <ResourceForm.CollapsibleSection
-        simple
-        title="Targets"
-        defaultOpen
-        resource={dnsEntry}
-        setResource={setDnsEntry}
-        propertyPath="$.spec.targets"
-      >
-        <TargetsRef
-          advanced={false}
-          value={dnsEntry}
-          setValue={targets => {
-            jp.value(dnsEntry, '$.spec.targets', targets);
-            setDnsEntry(dnsEntry);
-          }}
-        />
-      </ResourceForm.CollapsibleSection>
+      <TargetsRef
+        advanced={false}
+        dnsEntry={dnsEntry}
+        setDnsEntry={setDnsEntry}
+        setTargets={targets => {
+          jp.value(dnsEntry, '$.spec.targets', targets);
+          setDnsEntry(dnsEntry);
+        }}
+      />
 
-      <ResourceForm.CollapsibleSection
-        advanced
-        title="Targets"
-        defaultOpen
-        resource={dnsEntry}
-        setResource={setDnsEntry}
-        propertyPath="$.spec.targets"
-        actions={setOpen => (
-          <Button
-            glyph="add"
-            compact
-            onClick={() => {
-              const path = '$.spec.targets';
-              const nextContainers = [...(jp.value(dnsEntry, path) || []), ''];
-              jp.value(dnsEntry, path, nextContainers);
-              setDnsEntry({ ...dnsEntry });
-              onChange(new Event('input', { bubbles: true }));
-              setOpen(true);
-            }}
-          >
-            Add Target
-          </Button>
-        )}
-      >
-        <TargetsRef
-          advanced={true}
-          value={dnsEntry}
-          setValue={targets => {
-            jp.value(dnsEntry, '$.spec.targets', targets);
-            setDnsEntry(dnsEntry);
-          }}
-        />
-      </ResourceForm.CollapsibleSection>
       <ResourceForm.KeyValueField
         advanced
         propertyPath="$.metadata.labels"

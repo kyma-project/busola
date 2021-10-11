@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useGetList } from 'react-shared';
 import { Button, Switch, FormInput } from 'fundamental-react';
 import classnames from 'classnames';
+import { useGetList, Spinner } from 'react-shared';
 
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import { Label } from 'shared/ResourceForm/components/FormComponents';
@@ -73,11 +73,12 @@ export function TargetsInput({
   );
 }
 
-export function TargetsRef({ value: dnsEntry, setValue: setTargets }) {
+export function TargetsRef({ dnsEntry, setTargets, setDnsEntry }) {
   const { t } = useTranslation();
-  const { data: services } = useGetList()(`/api/v1/services`);
+  const { data: services, loading } = useGetList()(`/api/v1/services`);
+  if (loading) return <Spinner />;
 
-  const targets = dnsEntry.spec.targets || [];
+  const targets = dnsEntry?.spec.targets || [];
   const loadBalancers = services?.filter(
     service => service.spec.type === 'LoadBalancer',
   );
@@ -91,66 +92,76 @@ export function TargetsRef({ value: dnsEntry, setValue: setTargets }) {
   };
 
   return (
-    <TargetsInput
-      toInternal={value =>
-        value?.map(target => ({ target, isCname: isCname(target) })) || []
-      }
-      toExternal={value =>
-        value
-          ?.filter(v => !!v)
-          .map(target => target.target)
-          .filter(t => !!t)
-      }
-      value={targets}
-      setValue={setTargets}
-      inputs={[
-        ({ value, setValue, index }) => (
-          <div className="fd-col fd-col-md--4">
-            <div className="fd-row form-field multi-input">
-              <div className="fd-col fd-col-md--5">
-                <Label tooltipContent={t('dnsentries.tooltips.use-cname')}>
-                  {t('dnsentries.use-cname')}
-                </Label>
-              </div>
-              <div className="fd-col fd-col-md--7">
-                <Switch
-                  key={`targets-switch-${index}`}
-                  compact
-                  onChange={e =>
-                    setValue({ ...value, isCname: !value?.isCname })
-                  }
-                  checked={value?.isCname}
-                />
+    <ResourceForm.CollapsibleSection
+      title="Targets"
+      defaultOpen
+      resource={dnsEntry}
+      setResource={setDnsEntry}
+      propertyPath="$.spec.targets"
+    >
+      <TargetsInput
+        toInternal={value =>
+          value?.map(target => ({ target, isCname: isCname(target) })) || []
+        }
+        toExternal={value =>
+          value
+            ?.filter(v => !!v)
+            .map(target => target.target)
+            .filter(t => !!t)
+        }
+        value={targets}
+        setValue={setTargets}
+        inputs={[
+          ({ value, setValue, index }) => (
+            <div className="fd-col fd-col-md--4">
+              <div className="fd-row form-field multi-input">
+                <div className="fd-col fd-col-md--5">
+                  <Label tooltipContent={t('dnsentries.tooltips.use-cname')}>
+                    {t('dnsentries.use-cname')}
+                  </Label>
+                </div>
+                <div className="fd-col fd-col-md--7">
+                  <Switch
+                    key={`targets-switch-${index}`}
+                    compact
+                    onChange={e =>
+                      setValue({ ...value, isCname: !value?.isCname })
+                    }
+                    checked={value?.isCname}
+                  />
+                </div>
               </div>
             </div>
-          </div>
-        ),
-        ({ value, setValue, index }) => {
-          if (value?.isCname) {
-            return (
-              <div className="fd-col fd-col-md--7">
-                <FormInput
-                  key={`targets-input-${index}`}
-                  compact
-                  value={value?.target || ''}
-                  onChange={e => setValue({ ...value, target: e.target.value })}
-                />
-              </div>
-            );
-          } else {
-            return (
-              <div className="fd-col fd-col-md--7">
-                <ResourceForm.Select
-                  key={`taregts-select-${index}`}
-                  options={IPs}
-                  value={value?.target}
-                  setValue={key => setValue({ ...value, target: key })}
-                />
-              </div>
-            );
-          }
-        },
-      ]}
-    />
+          ),
+          ({ value, setValue, index }) => {
+            if (value?.isCname) {
+              return (
+                <div className="fd-col fd-col-md--7">
+                  <FormInput
+                    key={`targets-input-${index}`}
+                    compact
+                    value={value?.target || ''}
+                    onChange={e =>
+                      setValue({ ...value, target: e.target.value })
+                    }
+                  />
+                </div>
+              );
+            } else {
+              return (
+                <div className="fd-col fd-col-md--7">
+                  <ResourceForm.Select
+                    key={`taregts-select-${index}`}
+                    options={IPs}
+                    value={value?.target}
+                    setValue={key => setValue({ ...value, target: key })}
+                  />
+                </div>
+              );
+            }
+          },
+        ]}
+      />
+    </ResourceForm.CollapsibleSection>
   );
 }
