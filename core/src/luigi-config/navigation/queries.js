@@ -1,11 +1,14 @@
 import { config } from './../config';
 import { getActiveCluster } from './../cluster-management/cluster-management';
 import { HttpError } from '../../../../shared/hooks/BackendAPI/config';
+import { getSSOAuthData } from '../auth/sso';
 
 export async function failFastFetch(input, auth, init = {}) {
   function createAuthHeaders(auth) {
     if (auth.token) {
-      return { 'X-K8s-Authorization': `Bearer ${auth.token}` };
+      return {
+        'X-K8s-Authorization': `Bearer ${auth.token}`,
+      };
     } else if (
       auth &&
       auth['client-certificate-data'] &&
@@ -20,12 +23,22 @@ export async function failFastFetch(input, auth, init = {}) {
     }
   }
 
+  function createSSOHeader() {
+    const ssoData = getSSOAuthData();
+    if (ssoData) {
+      return { Authorization: 'Bearer ' + ssoData.idToken };
+    } else {
+      return null;
+    }
+  }
+
   async function createHeaders(auth) {
     const params = await getActiveCluster();
     const cluster = params.currentContext.cluster.cluster;
     const requiresCA = params.config?.requiresCA;
 
     return {
+      ...createSSOHeader(),
       ...createAuthHeaders(auth),
       'Content-Type': 'application/json',
       'X-Cluster-Url': cluster?.server,
@@ -35,7 +48,7 @@ export async function failFastFetch(input, auth, init = {}) {
     };
   }
 
-  init.headers = await createHeaders(auth);
+  init.headers = await createHeaders(auth, input);
 
   const response = await fetch(input, init);
   if (response.ok) {

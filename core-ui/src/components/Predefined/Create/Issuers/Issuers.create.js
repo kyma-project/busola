@@ -57,13 +57,9 @@ export function IssuersCreate({
           className={'fd-margin-top--sm'}
           id="secret-ref-ca-input"
           key="secret-ref-ca-input"
-          resourceRef={jp.value(issuer, '$.spec.ca.privateKeySecretRef') || {}}
+          propertyPath="$.spec.ca.privateKeySecretRef"
           title={t('issuers.private-key')}
           tooltipContent={t('issuers.tooltips.secret-ref-ca')}
-          onChange={value => {
-            jp.value(issuer, '$.spec.ca.privateKeySecretRef', value);
-            setIssuer({ ...issuer });
-          }}
         />
       );
     }
@@ -128,15 +124,9 @@ export function IssuersCreate({
           advanced
           id="secret-ref-acme-input"
           key="secret-ref-acme-input"
-          resourceRef={
-            jp.value(issuer, '$.spec.acme.privateKeySecretRef') || {}
-          }
+          propertyPath="$.spec.acme.privateKeySecretRef"
           title={t('issuers.private-key')}
           tooltipContent={t('issuers.tooltips.secret-ref-acme')}
-          onChange={value => {
-            jp.value(issuer, '$.spec.acme.privateKeySecretRef', value);
-            setIssuer({ ...issuer });
-          }}
           required={!jp.value(issuer, '$.spec.acme.autoRegistration')}
           actions={
             <Checkbox
@@ -228,15 +218,10 @@ export function IssuersCreate({
             advanced
             id="externalAccountBinding"
             key="externalAccountBinding"
-            resourceRef={
-              jp.value(
-                issuer,
-                '$.spec.acme.externalAccountBinding.keySecretRef',
-              ) || {}
-            }
+            propertyPath="$.spec.acme.externalAccountBinding.keySecretRef"
             title={t('issuers.external-account.secret')}
             tooltipContent={t('issuers.tooltips.key-secret-ref')}
-            onChange={value => {
+            setValue={value => {
               const externalAccountBinding = createExternalAccountBinding({
                 keySecretRef: value,
                 keyId: jp.value(
@@ -277,7 +262,7 @@ export function IssuersCreate({
       <ResourceForm.K8sNameField
         propertyPath="$.metadata.name"
         kind={t('issuers.name_singular')}
-        customSetValue={name => {
+        setValue={name => {
           jp.value(issuer, '$.metadata.name', name);
           jp.value(issuer, "$.metadata.labels['app.kubernetes.io/name']", name);
           setIssuer({ ...issuer });
