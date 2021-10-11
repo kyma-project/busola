@@ -1,64 +1,82 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useGetList } from 'react-shared';
-import { Button, MessageStrip, Switch } from 'fundamental-react';
+import { Button, Switch, FormInput } from 'fundamental-react';
+import classnames from 'classnames';
 
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
-import * as Inputs from 'shared/ResourceForm/components/Inputs';
+import { Label } from 'shared/ResourceForm/components/FormComponents';
 
-function SingleTargetSection({ target, setTarget, IPs }) {
-  console.log(IPs, target, target && !IPs?.find(ip => ip.key === target));
-  const [withCNAME, setWithCNAME] = useState(
-    target && !IPs?.find(ip => ip.key === target),
-  );
-  const { t } = useTranslation();
+export function TargetsInput({
+  value,
+  setValue,
+  title,
+  label,
+  tooltipContent,
+  toInternal,
+  toExternal,
+  inputs,
+  className,
+  isAdvanced,
+  defaultOpen,
+  ...props
+}) {
+  const [internalValue, setInternalValue] = useState([]);
+
+  useEffect(() => {
+    if (
+      !internalValue.length ||
+      internalValue[internalValue.length - 1]?.target
+    ) {
+      setInternalValue([...internalValue, null]);
+    }
+  }, [internalValue]);
+
+  useEffect(() => {
+    setInternalValue([...toInternal(value), null]);
+  }, [value, toInternal]);
+
+  const isLast = index => index === internalValue.length - 1;
+
+  const updateValue = val => setValue(toExternal(val));
+
+  const removeValue = index => {
+    internalValue.splice(index, 1);
+    setInternalValue([...internalValue]);
+    updateValue(internalValue);
+  };
+
+  const setEntry = (newVal, index) => {
+    internalValue[index] = newVal;
+    setInternalValue([...internalValue]);
+    updateValue(internalValue);
+  };
 
   return (
-    <ResourceForm.Wrapper resource={target} setResource={setTarget}>
-      <ResourceForm.FormField
-        required
-        label={t('common.headers.name')}
-        propertyPath={''}
-        input={() => (
-          <>
-            <ResourceForm.FormField
-              label={t('dnsentries.labels.use-cname')}
-              input={() => (
-                <Switch
-                  compact
-                  onChange={() => setWithCNAME(!withCNAME)}
-                  checked={withCNAME}
-                />
-              )}
-            />
-            {withCNAME ? (
-              <ResourceForm.FormField
-                required
-                label={t('dnsentries.labels.target')}
-                tooltipContent={t('dnsentries.labels.target')}
-                placeholder={t('dnsentries.placeholders.target')}
-                setValue={value => {
-                  setTarget(value);
-                }}
-                input={Inputs.Text}
-              />
-            ) : (
-              <ResourceForm.FormField
-                required
-                label={t('dnsentries.labels.target')}
-                value={target}
-                setValue={value => {
-                  setTarget(value);
-                }}
-                input={props => (
-                  <ResourceForm.Select options={IPs} {...props} />
-                )}
-              />
+    <div className="fd-row form-field multi-input">
+      <div className="fd-col fd-col-md--4">
+        <Label tooltipContent={tooltipContent}>Use CNAME</Label>
+      </div>
+      <ul className="text-array-input__list fd-col fd-col-md--7">
+        {internalValue.map((entry, index) => (
+          <li key={index}>
+            {inputs.map(input =>
+              input({
+                value: entry,
+                setValue: entry => setEntry(entry, index),
+              }),
             )}
-          </>
-        )}
-      />
-    </ResourceForm.Wrapper>
+            <Button
+              compact
+              className={classnames({ hidden: isLast(index) })}
+              glyph="delete"
+              type="negative"
+              onClick={() => removeValue(index)}
+            />
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 
@@ -80,57 +98,58 @@ export function TargetsRef({
     text: `${lb.spec.clusterIP} (${lb.metadata.name})`,
   }));
 
-  const removeTarget = index => {
-    setTargets(targets.filter((_, i) => index !== i));
+  const isCname = value => {
+    return !IPs?.find(ip => value === ip.key);
   };
 
-  if (!targets.length) {
-    return (
-      <MessageStrip type="warning">
-        {t('deployments.create-modal.advanced.one-target-required')}
-      </MessageStrip>
-    );
-  }
-
-  if (!advanced) {
-    return targets?.map((target, i) => (
-      <SingleTargetSection
-        IPs={IPs}
-        target={target || ''}
-        setTarget={newTarget => {
-          targets.splice(i, 1, newTarget);
-          setTargets(targets);
-        }}
-      />
-    ));
-  } else {
-    return targets?.map((target, i) => (
-      <ResourceForm.CollapsibleSection
-        defaultOpen
-        key={i}
-        title={t('deployments.create-modal.advanced.target-header', {
-          name: target || i + 1,
-        })}
-        actions={
-          i !== 0 ? (
-            <Button
-              glyph="delete"
-              type="negative"
+  return (
+    <TargetsInput
+      defaultOpen
+      isAdvanced={false}
+      toInternal={value =>
+        value?.map(target => ({ target, isCname: isCname(target) })) || []
+      }
+      toExternal={value =>
+        value
+          ?.filter(v => !!v)
+          .map(target => target.target)
+          .filter(t => !!t)
+      }
+      // tooltipContent={'ddd'}
+      value={targets}
+      setValue={setTargets}
+      inputs={[
+        ({ value, setValue }) => (
+          <>
+            <Label></Label>
+            <Switch
               compact
-              onClick={() => removeTarget(i)}
+              onChange={e => setValue({ ...value, isCname: !value?.isCname })}
+              checked={value?.isCname}
             />
-          ) : null
-        }
-      >
-        <SingleTargetSection
-          IPs={IPs}
-          target={target || ''}
-          setTarget={newTarget => {
-            targets.splice(i, 1, newTarget);
-            setTargets(targets);
-          }}
-        />
-      </ResourceForm.CollapsibleSection>
-    ));
-  }
+          </>
+        ),
+        ({ value, setValue }) => {
+          if (value?.isCname) {
+            return (
+              <FormInput
+                key={`form-`}
+                compact
+                value={value?.target || ''}
+                onChange={e => setValue({ ...value, target: e.target.value })}
+              />
+            );
+          } else {
+            return (
+              <ResourceForm.Select
+                options={IPs}
+                value={value?.target}
+                setValue={key => setValue({ ...value, target: key })}
+              />
+            );
+          }
+        },
+      ]}
+    />
+  );
 }

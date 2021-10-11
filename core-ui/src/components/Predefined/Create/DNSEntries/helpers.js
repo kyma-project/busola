@@ -10,7 +10,7 @@ export function createDNSEntryTemplate(namespaceId) {
     },
     spec: {
       dnsName: '',
-      targets: [''],
+      targets: [],
       text: [],
       ttl: 600,
     },
