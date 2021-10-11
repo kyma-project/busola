@@ -15,6 +15,8 @@ const match = (entry, query) => {
   );
 };
 
+const matchArray = (array, query) => array.find(e => match(e, query));
+
 const isPrimitive = type => {
   return (
     type === null || (typeof type !== 'function' && typeof type !== 'object')
@@ -29,7 +31,7 @@ const flattenProperties = (obj, prefix = '') =>
     if (isPrimitive(value)) {
       properties[prefixedKey] = value && value.toString();
     } else if (Array.isArray(value)) {
-      properties[prefixedKey] = JSON.stringify(value);
+      properties[prefixedKey] = value;
     } else {
       Object.assign(properties, flattenProperties(value, prefixedKey));
     }
@@ -48,6 +50,8 @@ export const getEntryMatches = (entry, query, searchProperties) => {
       ?.flatMap(property => {
         if (property === 'metadata.labels' && entry.metadata?.labels) {
           return getLabelStrings(entry).filter(label => match(label, query));
+        } else if (Array.isArray(flattenedEntry[property])) {
+          return matchArray(flattenedEntry[property], query);
         } else if (match(flattenedEntry[property], query)) {
           return flattenedEntry[property];
         } else {
