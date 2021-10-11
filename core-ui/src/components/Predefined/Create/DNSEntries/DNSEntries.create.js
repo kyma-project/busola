@@ -6,6 +6,7 @@ import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/components/Inputs';
 import { DNSNameRef } from './DNSNameRef';
 import { TargetsRef } from './TargetsRef';
+import { TextRef } from './TextRef';
 import { createDNSEntryTemplate } from './helpers';
 
 export function DNSEntriesCreate({
@@ -61,6 +62,13 @@ export function DNSEntriesCreate({
         setDnsEntry={setDnsEntry}
         setTargets={targets => {
           jp.value(dnsEntry, '$.spec.targets', targets);
+          setDnsEntry(dnsEntry);
+        }}
+      />
+      <TextRef
+        text={dnsEntry?.spec.text}
+        setText={text => {
+          jp.value(dnsEntry, '$.spec.text', text);
           setDnsEntry(dnsEntry);
         }}
       />

@@ -498,13 +498,12 @@ dnsentries:
     use-cname: Use CNAME
   name_singular: DNS Entry
   placeholders:
-    target: Target record
-    targets: Targets records
-    text: Text records, one per line
     ttl: Enter the time to live.
     dns-name: Enter DNS Name
   tooltips:
     use-cname: Target must be an A record, or a CNAME record.
+    targets: Targets records, either target ot text are required.
+    text: Text records, either target or text are required.
   use-cname: Use CNAME
   headers:
     dns-name: DNS Name
