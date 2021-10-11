@@ -3,9 +3,8 @@ import { getTheme } from './utils/theme';
 async function getBusolaVersion() {
   return await fetch('/assets/version.json')
     .then(response => response.json())
-    .then(json => {
-      return json.version;
-    });
+    .then(json => json.version)
+    .catch(() => 'unknown');
 }
 
 export async function createSettings(params) {
