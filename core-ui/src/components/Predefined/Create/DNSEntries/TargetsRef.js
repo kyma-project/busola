@@ -42,9 +42,13 @@ export function TargetsInput({
   };
 
   const setEntry = (newVal, index) => {
+    setInternalEntry(newVal, index);
+    updateValue(internalValue);
+  };
+
+  const setInternalEntry = (newVal, index) => {
     internalValue[index] = newVal;
     setInternalValue([...internalValue]);
-    updateValue(internalValue);
   };
 
   return (
@@ -57,6 +61,7 @@ export function TargetsInput({
                 index: i,
                 value: entry,
                 setValue: entry => setEntry(entry, index),
+                setInternalValue: entry => setInternalEntry(entry, index),
               }),
             )}
             <Button
@@ -114,7 +119,7 @@ export function TargetsRef({ dnsEntry, setTargets, setDnsEntry }) {
         value={targets}
         setValue={setTargets}
         inputs={[
-          ({ value, setValue, index }) => (
+          ({ value, index, setInternalValue }) => (
             <div className="fd-col fd-col-md--4" key={index}>
               <div className="fd-row form-field multi-input">
                 <div className="fd-col fd-col-md--5">
@@ -127,7 +132,7 @@ export function TargetsRef({ dnsEntry, setTargets, setDnsEntry }) {
                     key={`targets-switch-${index}`}
                     compact
                     onChange={e =>
-                      setValue({ ...value, isCname: !value?.isCname })
+                      setInternalValue({ ...value, isCname: !value?.isCname })
                     }
                     checked={value?.isCname}
                   />
