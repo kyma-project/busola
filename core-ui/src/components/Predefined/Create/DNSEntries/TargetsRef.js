@@ -152,7 +152,7 @@ export function TargetsRef({ dnsEntry, setTargets, setDnsEntry }) {
             } else {
               return (
                 <div className="fd-col fd-col-md--7" key={index}>
-                  <ResourceForm.Select
+                  <ResourceForm.ComboboxInput
                     key={`targets-select-${index}`}
                     options={IPs}
                     value={value?.target}

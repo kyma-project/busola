@@ -25,7 +25,7 @@ export function DNSNameRef({ required, domain, onChange, ...props }) {
       setValue={onChange}
       defaultKey={domain}
       input={props => (
-        <ResourceForm.Select options={includedDomains} {...props} />
+        <ResourceForm.ComboboxInput options={includedDomains} {...props} />
       )}
     />
   );

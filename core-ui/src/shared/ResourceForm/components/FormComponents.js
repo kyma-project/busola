@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState, createRef } from 'react';
 import {
+  ComboboxInput as FdComboboxInput,
   FormInput,
   FormLabel,
   Button,
@@ -140,7 +141,7 @@ export function FormField({
         <Label required={required && !disabled}>{label}</Label>
         {tooltipContent && (
           <Tooltip delay={0} content={tooltipContent}>
-            <Icon glyph="question-mark" />
+            <Icon ariaLabel="Tooltip" glyph="question-mark" />
           </Tooltip>
         )}
       </div>
@@ -465,6 +466,31 @@ export function Select({ value, setValue, defaultKey, options, ...props }) {
       selectedKey={value || defaultKey}
       options={options}
       fullWidth
+      {...props}
+    />
+  );
+}
+
+export function ComboboxInput({
+  value,
+  setValue,
+  defaultKey,
+  options,
+  id,
+  ...props
+}) {
+  return (
+    <FdComboboxInput
+      ariaLabel="Combobox input"
+      arrowLabel="Combobox input arrow"
+      id={id || 'combobox-input'}
+      compact
+      showAllEntries
+      searchFullString
+      selectionType="auto-inline"
+      onSelectionChange={(_, selected) => setValue(selected?.key)}
+      selectedKey={value || defaultKey}
+      options={options}
       {...props}
     />
   );
