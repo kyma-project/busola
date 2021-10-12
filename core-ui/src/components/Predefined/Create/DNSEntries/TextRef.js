@@ -9,7 +9,6 @@ export function TextRef({ text, setText }) {
   return (
     <ResourceForm.TextArrayInput
       key="text-ref-input"
-      isAdvanced={true}
       defaultOpen={false}
       propertyPath="$.spec.text"
       title={t('dnsentries.labels.text')}

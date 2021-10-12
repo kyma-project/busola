@@ -35,8 +35,17 @@ export function DNSEntriesCreate({
   }, [configmap, namespace, setDnsEntry]);
 
   useEffect(() => {
-    // setCustomValid(validateDnsEntry(dnsEntry));
+    setCustomValid(validateDnsEntry(dnsEntry));
   }, [dnsEntry, setDnsEntry, setCustomValid]);
+
+  const validateDnsEntry = entry => {
+    const isNameValid = !!entry?.metadata.name;
+    const isTtlValid = !!entry?.spec.ttl && typeof entry?.spec.ttl === 'number';
+    const isDnsNameValid = !!entry?.spec.dnsName;
+    // it doesnt work
+    // const hasTargetsorText = !!entry?.spec.targets?.length || !!entry?.spec.text?.length;
+    return isNameValid && isTtlValid && isDnsNameValid;
+  };
 
   return (
     <ResourceForm
@@ -72,8 +81,16 @@ export function DNSEntriesCreate({
           setDnsEntry({ ...dnsEntry, ...spec });
         }}
       />
+
+      <ResourceForm.FormField
+        required
+        propertyPath="$.spec.ttl"
+        label={t('dnsentries.labels.ttl')}
+        input={Inputs.Number}
+        placeholder={t('dnsentries.placeholders.ttl')}
+      ></ResourceForm.FormField>
+
       <TargetsRef
-        advanced={false}
         dnsEntry={dnsEntry}
         setDnsEntry={setDnsEntry}
         setTargets={targets => {
@@ -81,7 +98,9 @@ export function DNSEntriesCreate({
           setDnsEntry(dnsEntry);
         }}
       />
+
       <TextRef
+        advanced={true}
         text={dnsEntry?.spec.text}
         setText={text => {
           jp.value(dnsEntry, '$.spec.text', text);
@@ -95,18 +114,12 @@ export function DNSEntriesCreate({
         title={t('common.headers.labels')}
         className="fd-margin-top--sm"
       />
+
       <ResourceForm.KeyValueField
         advanced
         propertyPath="$.metadata.annotations"
         title={t('common.headers.annotations')}
       />
-      <ResourceForm.FormField
-        advanced
-        propertyPath="$.spec.ttl"
-        label={t('dnsentries.labels.ttl')}
-        input={Inputs.Number}
-        placeholder={t('dnsentries.placeholders.ttl')}
-      ></ResourceForm.FormField>
     </ResourceForm>
   );
 }
