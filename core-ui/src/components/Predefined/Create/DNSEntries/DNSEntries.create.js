@@ -59,7 +59,7 @@ export function DNSEntriesCreate({
       <ResourceForm.K8sNameField
         propertyPath="$.metadata.name"
         kind={t('dnsentries.name_singular')}
-        customSetValue={name => {
+        setValue={name => {
           jp.value(dnsEntry, '$.metadata.name', name);
           jp.value(
             dnsEntry,
@@ -86,7 +86,20 @@ export function DNSEntriesCreate({
         label={t('dnsentries.labels.ttl')}
         input={Inputs.Number}
         placeholder={t('dnsentries.placeholders.ttl')}
-      ></ResourceForm.FormField>
+      />
+
+      <ResourceForm.KeyValueField
+        advanced
+        propertyPath="$.metadata.labels"
+        title={t('common.headers.labels')}
+        className="fd-margin-top--sm"
+      />
+
+      <ResourceForm.KeyValueField
+        advanced
+        propertyPath="$.metadata.annotations"
+        title={t('common.headers.annotations')}
+      />
 
       <TargetsRef
         dnsEntry={dnsEntry}
@@ -104,19 +117,6 @@ export function DNSEntriesCreate({
           jp.value(dnsEntry, '$.spec.text', text);
           setDnsEntry({ ...dnsEntry });
         }}
-      />
-
-      <ResourceForm.KeyValueField
-        advanced
-        propertyPath="$.metadata.labels"
-        title={t('common.headers.labels')}
-        className="fd-margin-top--sm"
-      />
-
-      <ResourceForm.KeyValueField
-        advanced
-        propertyPath="$.metadata.annotations"
-        title={t('common.headers.annotations')}
       />
     </ResourceForm>
   );
