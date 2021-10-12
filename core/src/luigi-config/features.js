@@ -1,3 +1,6 @@
+import { getBusolaClusterParams } from './busola-cluster-params';
+import { getActiveCluster } from './cluster-management/cluster-management';
+
 const resolvers = {
   //leave the structure for the future when we add new options
   apiGroup: (selector, data) =>
@@ -14,7 +17,7 @@ async function resolveSelector(selector, data) {
 
 export async function resolveFeatureAvailability(feature, data) {
   try {
-    if (feature?.isEnabled === false) {
+    if (!feature || feature.isEnabled === false) {
       return false;
     }
     for (const selector of feature.selectors || []) {
@@ -29,7 +32,7 @@ export async function resolveFeatureAvailability(feature, data) {
   }
 }
 
-export async function resolveFeatures(features, data) {
+async function resolveFeatures(features, data) {
   const entries = await Promise.all(
     Object.entries(features).map(async ([name, feature]) => [
       name,
@@ -40,4 +43,12 @@ export async function resolveFeatures(features, data) {
     ]),
   );
   return Object.fromEntries(entries);
+}
+
+export async function getFeatures(data = null) {
+  const rawFeatures =
+    (await getActiveCluster())?.features ||
+    (await getBusolaClusterParams())?.config?.features;
+
+  return await resolveFeatures(rawFeatures || {}, data);
 }

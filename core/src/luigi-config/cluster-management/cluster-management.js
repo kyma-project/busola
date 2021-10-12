@@ -4,13 +4,9 @@ import { reloadAuth, hasNonOidcAuth } from '../auth/auth';
 import { saveLocation } from '../navigation/previous-location';
 import { parseOIDCParams } from '../auth/oidc-params';
 import {
-  areParamsCompatible,
-  showIncompatibleParamsWarning,
-} from '../init-params/params-version';
-import {
   DEFAULT_HIDDEN_NAMESPACES,
   DEFAULT_FEATURES,
-} from '../init-params/constants';
+} from '../kubeconfig-id/constants';
 import { getBusolaClusterParams } from '../busola-cluster-params';
 import {
   getTargetClusterConfig,
@@ -44,10 +40,6 @@ export async function setCluster(clusterName) {
   const params = clusters[clusterName];
 
   const originalStorage = clusters[clusterName].config.storage;
-
-  if (!areParamsCompatible(params?.config?.version)) {
-    showIncompatibleParamsWarning(params?.config?.version);
-  }
 
   saveActiveClusterName(clusterName);
   try {

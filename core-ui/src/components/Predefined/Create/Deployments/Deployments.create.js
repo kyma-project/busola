@@ -6,6 +6,7 @@ import * as jp from 'jsonpath';
 
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/components/Inputs';
+import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSelect';
 
 import './Deployments.create.scss';
 import {
@@ -58,18 +59,18 @@ export function DeploymentsCreate({
       <ResourceForm.CollapsibleSection
         title={t('deployments.name_singular')}
         defaultOpen
+        resource={deployment}
+        setResource={setDeployment}
       >
         {defaultEditor}
       </ResourceForm.CollapsibleSection>
       <ResourceForm.CollapsibleSection
         title={t('services.name_singular')}
         actions={serviceActions}
+        resource={service}
+        setResource={setService}
       >
-        <Editor
-          resource={service}
-          setResource={setService}
-          readonly={!createService}
-        />
+        <Editor readonly={!createService} />
       </ResourceForm.CollapsibleSection>
     </div>
   );
@@ -127,7 +128,7 @@ export function DeploymentsCreate({
       <ResourceForm.K8sNameField
         propertyPath="$.metadata.name"
         kind={t('deployments.name_singular')}
-        customSetValue={handleNameChange}
+        setValue={handleNameChange}
       />
       <ResourceForm.KeyValueField
         advanced
@@ -151,6 +152,39 @@ export function DeploymentsCreate({
           'deployments.create-modal.simple.docker-image-placeholder',
         )}
       />
+
+      <ResourceForm.CollapsibleSection
+        advanced
+        title={t('deployments.create-modal.simple.image-pull-secret')}
+        resource={deployment}
+        setResource={setDeployment}
+      >
+        <ResourceForm.FormField
+          tooltipContent={t(
+            'deployments.create-modal.simple.image-pull-secret-tooltip',
+          )}
+          label={t('deployments.create-modal.simple.image-pull-secret')}
+          input={() => (
+            <K8sResourceSelectWithUseGetList
+              url={`/api/v1/namespaces/${namespace}/secrets`}
+              onSelect={secretName => {
+                jp.value(
+                  deployment,
+                  '$.spec.template.spec.imagePullSecrets[0].name',
+                  secretName,
+                );
+                setDeployment({ ...deployment });
+              }}
+              resourceType={t('secrets.name_singular')}
+              value={jp.value(
+                deployment,
+                '$.spec.template.spec.imagePullSecrets[0].name',
+              )}
+            />
+          )}
+        />
+      </ResourceForm.CollapsibleSection>
+
       <ResourceForm.CollapsibleSection
         advanced
         title="Containers"

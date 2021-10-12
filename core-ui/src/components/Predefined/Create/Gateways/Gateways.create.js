@@ -57,7 +57,7 @@ export function GatewaysCreate({
       <ResourceForm.K8sNameField
         propertyPath="$.metadata.name"
         kind={t('gateways.name_singular')}
-        customSetValue={handleNameChange}
+        setValue={handleNameChange}
         className="fd-margin-bottom--sm"
       />
       <ResourceForm.KeyValueField

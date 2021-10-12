@@ -69,10 +69,14 @@ export const handleRequest = async (req, res) => {
 
   const { targetApiServer, ca, cert, key, authorization } = headersData;
 
+  const headers = authorization
+    ? { ...req.headers, authorization }
+    : req.headers;
+
   const options = {
     hostname: targetApiServer.hostname,
     path: req.originalUrl.replace(/^\/backend/, ''),
-    headers: { ...req.headers, authorization },
+    headers,
     body: req.body,
     method: req.method,
     port: targetApiServer.port || 443,

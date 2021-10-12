@@ -277,6 +277,9 @@ input[type='checkbox'] {
   .fd-list--dropdown {
     max-width: 100% !important;
   }
+  .fd-form-message {
+    max-width: 100%;
+  }
 }
 .fd-popover__popper {
   max-height: 200px !important;
@@ -385,4 +388,8 @@ input[type='checkbox'] {
 
 .fd-link {
   cursor: pointer;
+}
+
+.fd-popover__popper b {
+  font-weight: bold;
 }

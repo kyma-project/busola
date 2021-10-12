@@ -69,7 +69,6 @@
     "husky": "^2.4.1",
     "jest": "^24.8.0",
     "jsdom-worker-fix": "^0.1.8",
-    "json-url": "^2.6.0",
     "lerna": "^4.0.0",
     "lint-staged": "^10.4.0",
     "node-sass": "^4.14.1",
