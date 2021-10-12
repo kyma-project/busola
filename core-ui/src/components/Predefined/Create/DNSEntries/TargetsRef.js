@@ -52,9 +52,9 @@ export function TargetsInput({
       <ul className="text-array-input__list fd-col fd-col-md--12">
         {internalValue.map((entry, index) => (
           <li key={index}>
-            {inputs.map(input =>
+            {inputs.map((input, i) =>
               input({
-                index,
+                index: i,
                 value: entry,
                 setValue: entry => setEntry(entry, index),
               }),
@@ -115,7 +115,7 @@ export function TargetsRef({ dnsEntry, setTargets, setDnsEntry }) {
         setValue={setTargets}
         inputs={[
           ({ value, setValue, index }) => (
-            <div className="fd-col fd-col-md--4">
+            <div className="fd-col fd-col-md--4" key={index}>
               <div className="fd-row form-field multi-input">
                 <div className="fd-col fd-col-md--5">
                   <Label tooltipContent={t('dnsentries.tooltips.use-cname')}>
@@ -138,7 +138,7 @@ export function TargetsRef({ dnsEntry, setTargets, setDnsEntry }) {
           ({ value, setValue, index }) => {
             if (value?.isCname) {
               return (
-                <div className="fd-col fd-col-md--7">
+                <div className="fd-col fd-col-md--7" key={index}>
                   <FormInput
                     key={`targets-input-${index}`}
                     compact
@@ -151,9 +151,9 @@ export function TargetsRef({ dnsEntry, setTargets, setDnsEntry }) {
               );
             } else {
               return (
-                <div className="fd-col fd-col-md--7">
+                <div className="fd-col fd-col-md--7" key={index}>
                   <ResourceForm.Select
-                    key={`taregts-select-${index}`}
+                    key={`targets-select-${index}`}
                     options={IPs}
                     value={value?.target}
                     setValue={key => setValue({ ...value, target: key })}

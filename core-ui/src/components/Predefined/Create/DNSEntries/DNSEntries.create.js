@@ -39,12 +39,11 @@ export function DNSEntriesCreate({
   }, [dnsEntry, setDnsEntry, setCustomValid]);
 
   const validateDnsEntry = entry => {
-    const isNameValid = !!entry?.metadata.name;
     const isTtlValid = !!entry?.spec.ttl && typeof entry?.spec.ttl === 'number';
     const isDnsNameValid = !!entry?.spec.dnsName;
-    // it doesnt work
-    // const hasTargetsorText = !!entry?.spec.targets?.length || !!entry?.spec.text?.length;
-    return isNameValid && isTtlValid && isDnsNameValid;
+    const hasTargetsorText =
+      !!entry?.spec.targets?.length || !!entry?.spec.text?.length;
+    return isTtlValid && isDnsNameValid && hasTargetsorText;
   };
 
   return (
@@ -95,7 +94,7 @@ export function DNSEntriesCreate({
         setDnsEntry={setDnsEntry}
         setTargets={targets => {
           jp.value(dnsEntry, '$.spec.targets', targets);
-          setDnsEntry(dnsEntry);
+          setDnsEntry({ ...dnsEntry });
         }}
       />
 
@@ -104,7 +103,7 @@ export function DNSEntriesCreate({
         text={dnsEntry?.spec.text}
         setText={text => {
           jp.value(dnsEntry, '$.spec.text', text);
-          setDnsEntry(dnsEntry);
+          setDnsEntry({ ...dnsEntry });
         }}
       />
 
