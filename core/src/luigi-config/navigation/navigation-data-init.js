@@ -38,6 +38,7 @@ import { saveLocation } from './previous-location';
 import { NODE_PARAM_PREFIX } from '../luigi-config';
 import { loadTargetClusterConfig } from '../utils/target-cluster-config';
 import { checkClusterStorageType } from '../cluster-management/clusters-storage';
+import { getSSOAuthData } from '../auth/sso';
 
 async function createAppSwitcher() {
   const activeClusterName = getActiveClusterName();
@@ -111,6 +112,7 @@ async function createClusterManagementNodes(features) {
       language: i18next.language,
       busolaClusterParams: await getBusolaClusterParams(),
       features,
+      ssoData: getSSOAuthData(),
     },
   };
 
@@ -364,6 +366,7 @@ export async function createNavigationNodes(
         config: activeCluster.config,
         kubeconfig: activeCluster.kubeconfig,
         language: i18next.language,
+        ssoData: getSSOAuthData(),
       },
     },
   ];
