@@ -524,9 +524,12 @@ dnsentries:
     target-a: Enter the A record Target.
     target-cname: Enter the CNAME record Target.
   tooltips:
-    use-cname: Target must be an A record, or a CNAME record.
+    use-cname: Switch to CNAME record.
+    use-a: Switch to A record.
+    target: Target must be an A record, or a CNAME record.
     targets: Targets records, either target ot text are required.
-    text: Text records, either target or text are required.
+    text: Text record must be a string.
+    texts: Text records, either target or text are required.
   use-cname: Use CNAME
   headers:
     dns-name: DNS Name

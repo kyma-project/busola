@@ -13,7 +13,8 @@ export function TextRef({ text, setText }) {
       defaultOpen={false}
       propertyPath="$.spec.text"
       title={t('dnsentries.labels.text')}
-      sectionTooltipContent={t('dnsentries.tooltips.text')}
+      tooltipContent={t('dnsentries.tooltips.text')}
+      sectionTooltipContent={t('dnsentries.tooltips.texts')}
       inputProps={{
         placeholder: t('dnsentries.tooltips.text'),
       }}
