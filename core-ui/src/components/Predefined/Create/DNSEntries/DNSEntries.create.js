@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useGet } from 'react-shared';
 import * as jp from 'jsonpath';
 
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
@@ -7,7 +8,10 @@ import * as Inputs from 'shared/ResourceForm/components/Inputs';
 import { DNSNameRef } from './DNSNameRef';
 import { TargetsRef } from './TargetsRef';
 import { TextRef } from './TextRef';
-import { createDNSEntryTemplate } from './helpers';
+import {
+  createDNSEntryTemplate,
+  createDNSEntryTemplateForGardener,
+} from './helpers';
 
 export function DNSEntriesCreate({
   onChange,
@@ -17,8 +21,19 @@ export function DNSEntriesCreate({
 }) {
   const { t } = useTranslation();
   const [dnsEntry, setDnsEntry] = useState(createDNSEntryTemplate(namespace));
+  const {
+    data,
+  } = useGet(`/api/v1/namespaces/kube-system/configmaps/shoot-info`, {
+    pollingInterval: 0,
+  });
 
-  React.useEffect(() => {
+  useEffect(() => {
+    if (data) {
+      setDnsEntry(createDNSEntryTemplateForGardener(namespace));
+    }
+  }, [data, namespace, setDnsEntry]);
+
+  useEffect(() => {
     // setCustomValid(validateDnsEntry(dnsEntry));
   }, [dnsEntry, setDnsEntry, setCustomValid]);
 
@@ -86,7 +101,6 @@ export function DNSEntriesCreate({
       />
       <ResourceForm.FormField
         advanced
-        required
         propertyPath="$.spec.ttl"
         label={t('dnsentries.labels.ttl')}
         input={Inputs.Number}

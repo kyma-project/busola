@@ -16,3 +16,9 @@ export function createDNSEntryTemplate(namespaceId) {
     },
   };
 }
+
+export function createDNSEntryTemplateForGardener(namespaceId) {
+  const dnsEntry = createDNSEntryTemplate(namespaceId);
+  dnsEntry.metadata.annotations = { 'dns.gardener.cloud/class': 'garden' };
+  return dnsEntry;
+}
