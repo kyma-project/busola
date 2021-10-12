@@ -6,7 +6,7 @@ import { Icon } from 'fundamental-react';
 function VerbStatus({ rule, verb }) {
   const hasVerb = rule.verbs?.includes(verb) || rule.verbs?.includes('*');
 
-  return hasVerb ? <Icon glyph="accept" /> : null;
+  return hasVerb ? <Icon glyph="accept" ariaHidden /> : null;
 }
 
 export const Rules = resource => {
@@ -63,6 +63,7 @@ export const Rules = resource => {
 
   return (
     <GenericList
+      key="rules"
       className="rules-list"
       title={t('roles.headers.rules')}
       textSearchProperties={textSearchProperties}
