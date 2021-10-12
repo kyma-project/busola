@@ -477,6 +477,7 @@ export function ComboboxInput({
   defaultKey,
   options,
   id,
+  placeholder,
   ...props
 }) {
   return (
@@ -488,8 +489,11 @@ export function ComboboxInput({
       showAllEntries
       searchFullString
       selectionType="auto-inline"
-      onSelectionChange={(_, selected) => setValue(selected?.key)}
-      selectedKey={value || defaultKey}
+      onSelectionChange={(_, selected) =>
+        setValue(selected?.key !== -1 ? selected?.key : selected?.text)
+      }
+      selectedKey={defaultKey}
+      placeholder={defaultKey || placeholder}
       options={options}
       {...props}
     />

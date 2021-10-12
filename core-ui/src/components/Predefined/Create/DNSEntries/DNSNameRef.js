@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 
-export function DNSNameRef({ required, domain, onChange, ...props }) {
+export function DNSNameRef({ required, domain, onChange }) {
   const { t } = useTranslation();
   const url = `/apis/dns.gardener.cloud/v1alpha1/dnsproviders`;
   const { data: providers } = useGetList()(url);
@@ -24,6 +24,7 @@ export function DNSNameRef({ required, domain, onChange, ...props }) {
       propertyPath="$.spec.dnsName"
       setValue={onChange}
       defaultKey={domain}
+      placeholder={t('dnsentries.placeholders.dns-name')}
       input={props => (
         <ResourceForm.ComboboxInput options={includedDomains} {...props} />
       )}

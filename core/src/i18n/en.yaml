@@ -520,7 +520,7 @@ dnsentries:
   name_singular: DNS Entry
   placeholders:
     ttl: Enter the time to live.
-    dns-name: Enter DNS Name
+    dns-name: Enter the DNS Name.
   tooltips:
     use-cname: Target must be an A record, or a CNAME record.
     targets: Targets records, either target ot text are required.
