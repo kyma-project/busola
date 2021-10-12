@@ -21,17 +21,18 @@ export function DNSEntriesCreate({
 }) {
   const { t } = useTranslation();
   const [dnsEntry, setDnsEntry] = useState(createDNSEntryTemplate(namespace));
-  const {
-    data,
-  } = useGet(`/api/v1/namespaces/kube-system/configmaps/shoot-info`, {
-    pollingInterval: 0,
-  });
+  const { data: configmap } = useGet(
+    `/api/v1/namespaces/kube-system/configmaps/shoot-info`,
+    {
+      pollingInterval: 0,
+    },
+  );
 
   useEffect(() => {
-    if (data) {
+    if (configmap) {
       setDnsEntry(createDNSEntryTemplateForGardener(namespace));
     }
-  }, [data, namespace, setDnsEntry]);
+  }, [configmap, namespace, setDnsEntry]);
 
   useEffect(() => {
     // setCustomValid(validateDnsEntry(dnsEntry));
