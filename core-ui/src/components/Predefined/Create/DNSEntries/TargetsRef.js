@@ -93,11 +93,13 @@ export function TargetsRef({ dnsEntry, setTargets, setDnsEntry }) {
 
   return (
     <ResourceForm.CollapsibleSection
-      title="Targets"
+      title={t('dnsentries.labels.targets')}
+      required
       defaultOpen
       resource={dnsEntry}
       setResource={setDnsEntry}
       propertyPath="$.spec.targets"
+      tooltipContent={t('dnsentries.tooltips.targets')}
     >
       <TargetsInput
         toInternal={value =>

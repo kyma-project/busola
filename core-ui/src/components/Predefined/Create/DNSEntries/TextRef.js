@@ -9,10 +9,11 @@ export function TextRef({ text, setText }) {
   return (
     <ResourceForm.TextArrayInput
       key="text-ref-input"
+      required
       defaultOpen={false}
       propertyPath="$.spec.text"
       title={t('dnsentries.labels.text')}
-      tooltipContent={t('dnsentries.tooltips.text')}
+      sectionTooltipContent={t('dnsentries.tooltips.text')}
       inputProps={{
         placeholder: t('dnsentries.tooltips.text'),
       }}

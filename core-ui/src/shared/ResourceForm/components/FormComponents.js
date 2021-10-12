@@ -191,6 +191,7 @@ export function MultiInput({
   title,
   label,
   tooltipContent,
+  sectionTooltipContent,
   required,
   toInternal,
   toExternal,
@@ -256,6 +257,7 @@ export function MultiInput({
       className={className}
       required={required}
       defaultOpen={open}
+      tooltipContent={sectionTooltipContent}
       {...props}
     >
       <div className="fd-row form-field multi-input">
@@ -309,6 +311,7 @@ export function TextArrayInput({
   inputProps,
   isAdvanced,
   tooltipContent,
+  sectionTooltipContent,
   ...props
 }) {
   return (
@@ -318,6 +321,7 @@ export function TextArrayInput({
       toInternal={value => value || []}
       toExternal={value => value.filter(val => !!val)}
       tooltipContent={tooltipContent}
+      sectionTooltipContent={sectionTooltipContent}
       inputs={[
         ({ value, setValue, ref, onBlur, focus }) => (
           <FormInput
