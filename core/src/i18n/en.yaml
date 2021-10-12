@@ -1048,6 +1048,7 @@ roles:
     resource-names: Resource Names
     resources: Resources
     verbs: Verbs
+    custom: Custom
   title: Roles
 secrets:
   name_singular: Secret
