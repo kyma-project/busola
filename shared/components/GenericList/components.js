@@ -69,7 +69,7 @@ const DefaultRowRenderer = ({
   isBeingEdited = false,
 }) => {
   const cells = rowRenderer.map((cell, id) => {
-    if (cell.content) {
+    if (cell?.content) {
       const { content, ...props } = cell;
       return (
         <td className="fd-table__cell" key={id} {...props}>
