@@ -76,8 +76,7 @@ export function DNSEntriesCreate({
         domain={dnsEntry?.spec.dnsName}
         onChange={domain => {
           jp.value(dnsEntry, '$.spec.dnsName', domain);
-          const spec = { ...dnsEntry.spec, dnsName: domain };
-          setDnsEntry({ ...dnsEntry, ...spec });
+          setDnsEntry({ ...dnsEntry });
         }}
       />
 

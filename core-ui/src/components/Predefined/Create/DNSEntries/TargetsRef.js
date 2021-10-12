@@ -143,6 +143,7 @@ export function TargetsRef({ dnsEntry, setTargets, setDnsEntry }) {
                     key={`targets-input-${index}`}
                     compact
                     value={value?.target || ''}
+                    placeholder={t('dnsentries.placeholders.target-cname')}
                     onChange={e =>
                       setValue({ ...value, target: e.target.value })
                     }
@@ -155,7 +156,9 @@ export function TargetsRef({ dnsEntry, setTargets, setDnsEntry }) {
                   <ResourceForm.ComboboxInput
                     key={`targets-select-${index}`}
                     options={IPs}
+                    defaultKey={value?.target}
                     value={value?.target}
+                    placeholder={t('dnsentries.placeholders.target-a')}
                     setValue={key => setValue({ ...value, target: key })}
                   />
                 </div>

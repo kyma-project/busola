@@ -23,10 +23,15 @@ export function DNSNameRef({ required, domain, onChange }) {
       label={t('dnsentries.labels.dns-name')}
       propertyPath="$.spec.dnsName"
       setValue={onChange}
+      value={domain}
       defaultKey={domain}
       placeholder={t('dnsentries.placeholders.dns-name')}
       input={props => (
-        <ResourceForm.ComboboxInput options={includedDomains} {...props} />
+        <ResourceForm.ComboboxInput
+          key="dns-name-select"
+          options={includedDomains}
+          {...props}
+        />
       )}
     />
   );
