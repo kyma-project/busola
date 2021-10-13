@@ -29,6 +29,20 @@ export const DEFAULT_FEATURES = {
       kubeconfigUrl: 'https://kyma-env-broker.cp.dev.kyma.cloud.sap/kubeconfig',
     },
   },
+  SSO_LOGIN: {
+    isEnabled: false,
+    config: {
+      issuerUrl: 'https://apskyxzcl.accounts400.ondemand.com',
+      scope: 'email',
+      clientId: 'd0316c58-b0fe-45cd-9960-0fea0708355a',
+    },
+  },
+  ADD_CLUSTER_DISABLED: {
+    isEnabled: false,
+    config: {
+      cockpitUrl: 'https://account.staging.hanavlab.ondemand.com/cockpit',
+    },
+  },
 };
 
 export const DEFAULT_HIDDEN_NAMESPACES = [

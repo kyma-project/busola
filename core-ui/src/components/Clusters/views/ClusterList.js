@@ -10,6 +10,7 @@ import {
   PageHeader,
   GenericList,
   useNotification,
+  Link as ExternalLink,
 } from 'react-shared';
 
 import { setCluster, deleteCluster } from './../shared';
@@ -19,7 +20,7 @@ import { ClusterStorageType } from './ClusterStorageType';
 import './ClusterList.scss';
 
 export function ClusterList() {
-  const { clusters, activeClusterName } = useMicrofrontendContext();
+  const { clusters, activeClusterName, features } = useMicrofrontendContext();
   const notification = useNotification();
   const { t, i18n } = useTranslation();
 
@@ -30,6 +31,8 @@ export function ClusterList() {
   if (!clusters) {
     return null;
   }
+
+  const canAddCluster = !features.ADD_CLUSTER_DISABLED?.isEnabled;
 
   const styleActiveCluster = entry => {
     return entry.currentContext.cluster.name === activeClusterName
@@ -93,12 +96,13 @@ export function ClusterList() {
       handler: e => downloadKubeconfig(e),
     },
     {
-      name: 'Delete',
+      name: t('common.buttons.delete'),
+      icon: 'delete',
       handler: e => deleteCluster(e.currentContext.cluster.name),
     },
   ];
 
-  const extraHeaderContent = (
+  const extraHeaderContent = canAddCluster && (
     <Button
       option="transparent"
       glyph="add"
@@ -114,6 +118,22 @@ export function ClusterList() {
   );
 
   if (!entries.length) {
+    const btpCockpitUrl =
+      features.ADD_CLUSTER_DISABLED?.config?.cockpitUrl ||
+      'https://account.staging.hanavlab.ondemand.com/cockpit';
+
+    const subtitle = canAddCluster ? (
+      t('clusters.empty.subtitle')
+    ) : (
+      <span className="cluster-disabled-subtitle">
+        {t('clusters.empty.go-to-btp-cockpit')}{' '}
+        <ExternalLink
+          className="fd-link"
+          url={btpCockpitUrl}
+          text="BTP Cockpit"
+        />
+      </span>
+    );
     return (
       <>
         {dialog}
@@ -125,11 +145,13 @@ export function ClusterList() {
             </svg>
           }
           title={t('clusters.empty.title')}
-          subtitle={t('clusters.empty.subtitle')}
+          subtitle={subtitle}
           actions={
-            <Button onClick={() => setShowAdd(true)}>
-              {t('clusters.add.title')}
-            </Button>
+            canAddCluster && (
+              <Button onClick={() => setShowAdd(true)}>
+                {t('clusters.add.title')}
+              </Button>
+            )
           }
         />
       </>
@@ -139,7 +161,7 @@ export function ClusterList() {
   return (
     <>
       {dialog}
-      <PageHeader title={t('clusters.overview.title')} />
+      <PageHeader title={t('clusters.overview.title-all-clusters')} />
       <GenericList
         textSearchProperties={textSearchProperties}
         showSearchSuggestion={false}

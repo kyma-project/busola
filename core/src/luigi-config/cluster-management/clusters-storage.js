@@ -1,5 +1,6 @@
 import i18next from 'i18next';
 import { getBusolaClusterParams } from '../busola-cluster-params';
+import { showAlert } from '../utils/showAlert';
 import { getActiveCluster, getActiveClusterName } from './cluster-management';
 
 const CLUSTERS_KEY = 'busola.clusters';
@@ -57,7 +58,7 @@ export async function checkClusterStorageType(originalStorage) {
     await save(clusters);
 
     if (originalStorage) {
-      Luigi.ux().showAlert({
+      showAlert({
         text: i18next.t('clusters.storage.changed-message', {
           originalStorage,
           targetStorage,
