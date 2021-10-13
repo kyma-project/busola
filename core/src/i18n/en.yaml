@@ -438,7 +438,9 @@ service-accounts:
   auto-mount-token:
     enabled: enabled
     disabled: disabled
-    description: Automount is discouraged, as a Pod with injected token will have the same permissions as the Service Account.
+    descriptions:
+      enabled: For security reasons, don't use automount if you don't need it.
+      disabled: For security reasons, don't enable automount if you don't need it.
   headers:
     auto-mount-token: Automount Token
     download-kubeconfig: Download Kubeconfig
