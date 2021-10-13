@@ -1129,3 +1129,8 @@ workloads:
   title: Workloads
 kubeconfig-id:
   error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})."
+legal:
+  legal-disclosure: Legal Disclosure
+  privacy: Privacy
+  copyright: Copyright
+  trademark: Trademark
