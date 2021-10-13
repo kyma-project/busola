@@ -151,6 +151,7 @@ catalog:
   subtitle: Enrich your experience with additional services that are installed outside the cluster.
   title: Service Catalog
 certificates:
+  name_singular: Certificate
   common-name: Common Name
   dns-names: DNS Names
   expiration-date: Expiration Date
@@ -168,6 +169,8 @@ certificates:
     messages:
       failure: Failed to create the certificate.
       success: Certificate created.
+  messages:
+    decode-error: 'Failed to decode the CSR: {{message}}.'
   placeholders:
     common-name: Certificate CN (max 64 characters)
     csr: Plain text Certificate Signing Request
@@ -175,6 +178,16 @@ certificates:
     encoded-csr: Base64-encoded Certificate Signing Request
     name: Certificate name
     secret-name: Requested Secret name
+  tooltips:
+    common-name: Common Name is the primary domain name of the certificate.
+    csr: Certificate Signing Request is an alternative way to provide common name, DNS names, and other information.
+    with-csr: Enable to use a Certificate Signing Request instead of providing domain names manually.
+    dns-names: DNS Names are the optional additional domain names of the certificate.
+    renew: Trigger a certificate renewal if enabled.
+    issuer: Certificate issuer. If no issuer is given, the default issuer is used.
+    existing-secret: Use an existing Secret for storing the certificate if enabled. Otherwise a new Secret will be created.
+    secret-name: Name of the Secret object to use for storing the certificate.
+    secret-ref: Reference of the existing Secret object to use for storing the certificate.
 cluster-addons:
   title: Cluster Addons
 cluster-role-bindings:
@@ -200,6 +213,7 @@ clusters:
   empty:
     title: Looks like there aren't any clusters yet.
     subtitle: Let's add one now!
+    go-to-btp-cockpit: 'To view your clusters, go to'
   labels:
     client-id: Client ID
     issuer-url: Issuer URL
@@ -208,14 +222,14 @@ clusters:
     no-clusters-found: No clusters found
     outdated:
       tooltip: Outdated parameter version may cause errors. Delete and re-add your cluster.
-    title: Clusters
   messages:
     error-kubeconfig: Error reading the kubeconfig.
     missing-configuration-data: Configuration included properly. Fill the remaining required data.
     upload-paste-kubeconfig: Upload or paste your kubeconfig file.
     wrong-configuration: Cannot apply the configuration.
   overview:
-    title: Cluster Overview
+    title-current-cluster: Cluster Overview
+    title-all-clusters: Clusters Overview
     version: Version
   storage:
     changed-message: The chosen storage type has been overwritten by the cluster configuration from {{originalStorage}} to {{targetStorage}}.
@@ -302,6 +316,8 @@ common:
     issuer: Issuer
     name: Name
     namespace: Namespace
+    resource-name: '{{resource}} $t(common.labels.name)'
+    resource-namespace: '{{resource}} $t(common.labels.namespace)'
     protocol: Protocol
     resource: Resource
     secret: Secret
@@ -319,6 +335,9 @@ common:
     no-instances-found-namespace: No matching {{value}} found in this Namespace.
     parse-error: Parse error, previous valid input will be used.
     type-to-select: Start typing to select {{value}} from the list.
+    resource-namespace-error: Requested Namespace not found.
+    resource-name-error: Requested resource with this name not found in the selected Namespace.
+    click-to-select: Select {{value}} from the list.
   placeholders:
     secret-ref-name: Select name
     secret-ref-namespace: Select Namespace
@@ -473,6 +492,8 @@ deployments:
     simple:
       docker-image: Docker Image
       docker-image-placeholder: Enter the Docker image tag, for example, bitnami/nginx.
+      image-pull-secret: Image Pull Secret
+      image-pull-secret-tooltip: The secret for authorization to the private Docker repository.
     title: Create Deployment
   headers:
     images: Images
@@ -1106,3 +1127,5 @@ workloads:
   docker-image:
     tooltip: Enter a valid Docker image registry path.
   title: Workloads
+kubeconfig-id:
+  error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})."

@@ -43,7 +43,7 @@ function DNSProvidersCreate({
       <ResourceForm.K8sNameField
         propertyPath="$.metadata.name"
         kind={t('dnsproviders.name_singular')}
-        customSetValue={name => {
+        setValue={name => {
           jp.value(dnsProvider, '$.metadata.name', name);
           jp.value(
             dnsProvider,
@@ -66,15 +66,8 @@ function DNSProvidersCreate({
         required
         className={'fd-margin-top--sm'}
         id="secretRef"
-        resourceRef={jp.value(dnsProvider, '$.spec.secretRef') || {}}
+        propertyPath="$.spec.secretRef"
         title={t('dnsproviders.labels.secret-reference')}
-        onChange={secretRef => {
-          jp.value(dnsProvider, '$.spec.secretRef', secretRef);
-          setDNSProvider({
-            ...dnsProvider,
-            spec: { ...dnsProvider.spec, secretRef },
-          });
-        }}
       />
       <ResourceForm.KeyValueField
         advanced
