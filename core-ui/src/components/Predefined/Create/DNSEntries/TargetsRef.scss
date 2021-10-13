@@ -1,14 +1,26 @@
 .resource-form__collapsible-section {
   margin-top: 1rem;
-  .multi-input .fd-col {
-    padding-top: 0;
 
-    li .fd-col {
+  .multi-input {
+    .fd-col {
       padding-top: 0;
+
+      li .fd-col {
+        padding-top: 0;
+      }
+
+      .fd-button--negative {
+        top: -0.25rem;
+      }
     }
 
-    .fd-button--negative {
-      top: -0.25rem;
+    &__row {
+      margin-top: 0.5rem;
+
+      @media (max-width: 1200px) {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
     }
   }
 }

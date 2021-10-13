@@ -126,20 +126,18 @@ export function TargetsRef({ dnsEntry, setTargets, setDnsEntry }) {
         setValue={setTargets}
         inputs={[
           ({ value, index, setInternalValue }) => (
-            <div className="fd-col fd-col-md--4" key={index}>
-              <div className="fd-row form-field multi-input">
-                <div className="fd-col fd-col-md--5">
-                  <Label
-                    tooltipContent={
-                      value?.isCname
-                        ? t('dnsentries.tooltips.use-a')
-                        : t('dnsentries.tooltips.use-cname')
-                    }
-                  >
-                    {t('dnsentries.use-cname')}
-                  </Label>
-                </div>
-                <div className="fd-col fd-col-md--3">
+            <div className="fd-col fd-col-md--3" key={index}>
+              <div className="fd-row form-field multi-input__row">
+                <Label
+                  tooltipContent={
+                    value?.isCname
+                      ? t('dnsentries.tooltips.use-a')
+                      : t('dnsentries.tooltips.use-cname')
+                  }
+                >
+                  {t('dnsentries.use-cname')}
+                </Label>
+                <div>
                   <Switch
                     key={`targets-switch-${index}`}
                     compact
@@ -155,7 +153,7 @@ export function TargetsRef({ dnsEntry, setTargets, setDnsEntry }) {
           ({ value, setValue, index }) => {
             if (value?.isCname) {
               return (
-                <div className="fd-col fd-col-md--8" key={index}>
+                <div className="fd-col fd-col-md--9" key={index}>
                   <FormInput
                     key={`targets-input-${index}`}
                     compact
@@ -169,7 +167,7 @@ export function TargetsRef({ dnsEntry, setTargets, setDnsEntry }) {
               );
             } else {
               return (
-                <div className="fd-col fd-col-md--8" key={index}>
+                <div className="fd-col fd-col-md--9" key={index}>
                   <ResourceForm.ComboboxInput
                     key={`targets-select-${index}`}
                     options={IPs}
