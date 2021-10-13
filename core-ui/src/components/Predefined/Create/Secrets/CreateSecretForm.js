@@ -53,7 +53,6 @@ export function CreateSecretForm({
   );
 
   useEffect(() => {
-    console.log('type changed?');
     setLockedKeys(currentDef?.data || []);
     setSecret({
       ...secret,
@@ -100,7 +99,6 @@ export function CreateSecretForm({
         setValue={name => {
           jp.value(secret, '$.metadata.name', name);
           jp.value(secret, "$.metadata.labels['app.kubernetes.io/name']", name);
-          console.log('name::setSecret', secret);
           setSecret({ ...secret });
         }}
       />
