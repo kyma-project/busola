@@ -39,11 +39,6 @@ COPY --from=builder /app/service-catalog-ui/build /app/service-catalog
 COPY --from=builder /app/nginx/nginx.conf /etc/nginx/
 COPY --from=builder /app/nginx/mime.types /etc/nginx/
 
-# # licenses
-# COPY --from=builder /app/core/licenses/ /app/licenses/
-# COPY --from=builder /app/core-ui/licenses/ /app/licenses/
-# COPY --from=builder /app/service-catalog-ui/licenses/ /app/licenses/
-
 
 RUN touch /var/run/nginx.pid && \
   chown -R nginx:nginx /var/run/nginx.pid

@@ -1,6 +1,6 @@
 import { getBusolaClusterParams } from './busola-cluster-params';
 import { resolveFeatureAvailability } from './features';
-import { DEFAULT_FEATURES, PARAMS_VERSION } from './init-params/constants';
+import { DEFAULT_FEATURES } from './kubeconfig-id/constants';
 
 function join(path, fileName) {
   if (!path.endsWith('/')) {
@@ -13,9 +13,9 @@ async function importJsYaml() {
   return (await import('js-yaml')).default;
 }
 
-export async function applyKubeconfigIdIfPresent(kubeconfigId, initParams) {
+export async function getKubeconfigById(kubeconfigId) {
   if (!kubeconfigId) {
-    return;
+    return null;
   }
 
   const clusterParams = await getBusolaClusterParams();
@@ -23,11 +23,10 @@ export async function applyKubeconfigIdIfPresent(kubeconfigId, initParams) {
   const kubeconfigIdFeature = {
     ...DEFAULT_FEATURES,
     ...clusterParams.config?.features,
-    ...initParams.config?.features,
   }['KUBECONFIG_ID'];
 
   if (!(await resolveFeatureAvailability(kubeconfigIdFeature))) {
-    return;
+    return null;
   }
 
   const jsyaml = await importJsYaml();
@@ -40,11 +39,5 @@ export async function applyKubeconfigIdIfPresent(kubeconfigId, initParams) {
     throw Error(payload.Error);
   }
 
-  initParams.kubeconfig = payload;
-  if (!initParams.config?.version) {
-    initParams.config = {
-      ...initParams.config,
-      version: PARAMS_VERSION,
-    };
-  }
+  return payload;
 }

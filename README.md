@@ -51,12 +51,11 @@ Busola is delivered with the following default settings:
 
 ### Configuration sources
 
-Busola configuration is the product of gathering and merging the configurations from several individual sources. The following list presents the sources in the order of precedence, with init params having the highest priority over the others:
+Busola configuration is the product of gathering and merging the configurations from several individual sources. The following list presents the sources in the order of precedence:
 
 - Built-in, hardcoded defaults.
 - Busola cluster configuration, available on the Busola cluster in ConfigMap "busola/busola-config" under the key "config". This data is mounted to the Busola `web` pod, and during the local development, the [config.json](core/src/assets/config/config.json) file is used.
 - Target cluster configuration, available on the target cluster in ConfigMap "kube-system/busola-config" under the key "config". Busola performs a request for that resource during the bootstrap process.
-- Configuration from initialisation parameters. By default, init parameters are disabled. To switch them on, set the feature `INIT_PARAMS` to `isEnabled=true`.
 
 ### Change the Configuration
 
@@ -84,7 +83,7 @@ Use the following command to run Busola with the [`core`](./core) and all other 
 npm run start
 ```
 
-After a while, open the [http://localhost:8080](http://localhost:8080) address in your browser, and add your **init params** to the address to make it look like `http://localhost:8080?init=yourInitParams`. You can generate the params with [this generator](http://enkode.surge.sh/).
+After a while, open the [http://localhost:8080](http://localhost:8080) address in your browser, and provide your kubeconfig in the Add Cluster wizard.
 
 Once you started Busola locally, you can begin the development. All modules have the hot-reload feature enabled, therefore, you can edit the code in real-time and see the changes in your browser.
 
