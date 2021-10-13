@@ -840,6 +840,8 @@ issuers:
     requests-per-day: Daily requests quota
     server: ACME Server URL
     type: Select issuer type
+  presets:
+    default: Default
   private-key: Private key Secret
   requests-per-day: Daily requests quota
   server: Server
