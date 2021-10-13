@@ -1,6 +1,6 @@
 import { getTheme } from './utils/theme';
 
-export async function createSettings(params) {
+export function createSettings(params) {
   return {
     responsiveNavigation: 'Fiori3',
     header: {
