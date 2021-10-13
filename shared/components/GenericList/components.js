@@ -68,11 +68,22 @@ const DefaultRowRenderer = ({
   compact,
   isBeingEdited = false,
 }) => {
-  const cells = rowRenderer.map((cell, id) => (
-    <td className="fd-table__cell" key={id}>
-      {cell}
-    </td>
-  ));
+  const cells = rowRenderer.map((cell, id) => {
+    if (cell?.content) {
+      const { content, ...props } = cell;
+      return (
+        <td className="fd-table__cell" key={id} {...props}>
+          {content}
+        </td>
+      );
+    } else {
+      return (
+        <td className="fd-table__cell" key={id}>
+          {cell}
+        </td>
+      );
+    }
+  });
   const actionsCell = (
     <td className="fd-table__cell">
       <ListActions
