@@ -23,10 +23,7 @@ import { readFeatureToggles } from './utils/feature-toggles';
 import { ssoLogin } from './auth/sso';
 import { setNavFooterText } from './nav-footer';
 
-const luigiAfterInit = async () => {
-  Luigi.ux().hideAppLoadingIndicator();
-  await setNavFooterText();
-};
+const luigiAfterInit = () => Luigi.ux().hideAppLoadingIndicator();
 
 export const i18n = i18next.use(i18nextBackend).init({
   lng: localStorage.getItem('busola.language') || 'en',
@@ -62,6 +59,8 @@ async function initializeBusola() {
   // make sure Luigi config is set - we can't use luigiAfterInit as it won't
   // be fired if we had already ran Luigi.setConfig during sso/cluster login
   await new Promise(resolve => setTimeout(resolve, 100));
+
+  await setNavFooterText();
   if (!(await getActiveCluster())) {
     if (!window.location.pathname.startsWith('/clusters')) {
       Luigi.navigation().navigate('/clusters');
