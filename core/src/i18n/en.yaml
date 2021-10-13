@@ -1051,9 +1051,13 @@ role-bindings:
     no-found: No Roles found
 roles:
   headers:
+    rules: Rules
     api-groups: API Groups
+    non-resource-urls: Non-resource URLs
+    resource-names: Resource Names
     resources: Resources
     verbs: Verbs
+    custom: Custom
   title: Roles
 secrets:
   name_singular: Secret

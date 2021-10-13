@@ -816,7 +816,6 @@ export function getStaticChildrenNodesForNamespace(
         toSearchParamsString({
           resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
           hasDetailsView: true,
-          readOnly: true,
         }),
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
@@ -832,7 +831,6 @@ export function getStaticChildrenNodesForNamespace(
                 '/namespaces/:namespaceId/Roles/:roleName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
-                  readOnly: true,
                 }),
               viewGroup: coreUIViewGroupName,
             },
@@ -1384,7 +1382,6 @@ export function getStaticRootNodes(
         toSearchParamsString({
           resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
           hasDetailsView: true,
-          readOnly: true,
         }),
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
@@ -1400,7 +1397,6 @@ export function getStaticRootNodes(
                 '/ClusterRoles/:roleName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
-                  readOnly: true,
                 }),
               viewGroup: coreUIViewGroupName,
             },
