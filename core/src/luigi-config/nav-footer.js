@@ -26,7 +26,7 @@ export async function setNavFooterText() {
           .map(([key, value]) => {
             const text = i18next.t('legal.' + key);
             const link = value[language] || value.default;
-            return `<li><a href="${link}">${text}</a></li>`;
+            return `<li><a href="${link}" target="_blank" rel="noopener noreferrer">${text}</a></li>`;
           })
           .join('')}
       </ul>
