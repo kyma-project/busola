@@ -3,6 +3,9 @@ import { getBusolaClusterParams } from './busola-cluster-params';
 
 // setting sideNavFooterText of Luigi settings won't allow HTML
 export async function setNavFooterText() {
+  const targetElement = document.querySelector('.fd-side-nav');
+  if (!targetElement) return;
+
   const language = i18next.language;
   const version = await getBusolaVersion();
   const feature = (await getBusolaClusterParams()).config?.features
@@ -25,7 +28,7 @@ export async function setNavFooterText() {
       <p>Version: ${version}</p>
     </span>
   </span>`;
-  document.querySelector('.fd-side-nav').appendChild(div);
+  targetElement.appendChild(div);
 }
 
 async function getBusolaVersion() {

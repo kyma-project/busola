@@ -39,6 +39,7 @@ import { NODE_PARAM_PREFIX } from '../luigi-config';
 import { loadTargetClusterConfig } from '../utils/target-cluster-config';
 import { checkClusterStorageType } from '../cluster-management/clusters-storage';
 import { getSSOAuthData } from '../auth/sso';
+import { setNavFooterText } from '../nav-footer';
 
 async function createAppSwitcher() {
   const activeClusterName = getActiveClusterName();
@@ -66,6 +67,11 @@ async function createAppSwitcher() {
 export async function reloadNavigation() {
   const navigation = await createNavigation();
   Luigi.setConfig({ ...Luigi.getConfig(), navigation });
+
+  // wait for Luigi to update DOM
+  setTimeout(async () => {
+    await setNavFooterText();
+  }, 100);
 }
 
 async function createClusterManagementNodes(features) {
