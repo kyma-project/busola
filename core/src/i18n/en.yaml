@@ -1060,9 +1060,6 @@ secrets:
       success: Secret created.
     presets:
       default: Default
-    simple:
-      data: Data
-      type: Type
     title: Create Secret
   data: Data
   edit-modal:
@@ -1077,6 +1074,7 @@ secrets:
   metadata: Metadata
   title: Secrets
   title-edit-secret: Edit Secret
+  type: Type
   updated: Secret updated
 service-management:
   title: Service Management

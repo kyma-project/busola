@@ -5,7 +5,7 @@ import { CreateSecretForm } from './CreateSecretForm';
 function SecretsCreate(props) {
   return <CreateSecretForm namespaceId={props.namespace} {...props} />;
 }
-SecretsCreate.secrets = [
+SecretsCreate.secrets = (t, context) => [
   {
     type: 'kubernetes.io/service-account-token',
     data: ['ca.crt', 'namespace', 'token'],

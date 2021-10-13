@@ -9,11 +9,7 @@ import {
 } from 'fundamental-react';
 import { Tooltip } from 'react-shared';
 
-import {
-  usePost,
-  useNotification,
-  useMicrofrontendContext,
-} from 'react-shared';
+import { useMicrofrontendContext } from 'react-shared';
 import { base64Decode, base64Encode } from 'shared/helpers';
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import {
@@ -21,14 +17,12 @@ import {
   K8sNameField,
   KeyValueField,
 } from 'shared/ResourceForm/components/FormComponents';
-import { CreateForm } from 'shared/components/CreateForm/CreateForm';
 
 import {
   createSecretTemplate,
   createPresets,
   readFromFile,
-  getSecretDef,
-  getSecretTypes,
+  getSecretDefs,
 } from './helpers';
 
 import './CreateSecretForm.scss';
@@ -45,106 +39,60 @@ export function CreateSecretForm({
     existingSecret || createSecretTemplate(namespaceId),
   );
   const [valuesEncoded, setValuesEncoded] = useState(false);
+  const [decodeErrors, setDecodeErrors] = useState({});
   const [lockedKeys, setLockedKeys] = useState([]);
 
+  const microfrontendContext = useMicrofrontendContext();
+
+  const secretDefs = getSecretDefs(t, microfrontendContext);
   const type = secret?.type;
+  const currentDef =
+    type === 'Opaque' ? {} : secretDefs.find(def => def.type === type);
+  const secretTypes = Array.from(
+    new Set(secretDefs.map(secret => secret.type)),
+  );
 
   useEffect(() => {
-    const def = getSecretDef(type);
-    setLockedKeys(def?.data || []);
+    console.log('type changed?');
+    setLockedKeys(currentDef?.data || []);
     setSecret({
-      ...def?.data.reduce((acc, key) => ({ ...acc, [key]: '' }), {}),
-      ...secret.data,
+      ...secret,
+      data: {
+        ...(currentDef?.data || []).reduce(
+          (acc, key) => ({ ...acc, [key]: '' }),
+          {},
+        ),
+        ...(secret.data || {}),
+      },
     });
-  }, [type]);
-  /*
-  const notification = useNotification();
-  const postRequest = usePost();
-  const [isEncoded, setEncoded] = useState(!!existingSecret);
-  */
-  const microfrontendContext = useMicrofrontendContext();
-  const { features } = microfrontendContext;
-  const DNSExist = features?.CUSTOM_DOMAINS?.isEnabled;
+  }, [type]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const toggleDecodeValues = () => {
+    setDecodeErrors({});
+    setValuesEncoded(!valuesEncoded);
+  };
 
   const dataValue = value => {
     if (valuesEncoded) {
-      return value;
+      return value?.val;
     } else {
       try {
-        // setDecodeError(null);
-        return base64Decode(value || '');
+        return base64Decode(value?.val || '');
       } catch (e) {
-        // setDecodeError(e.message);
+        decodeErrors[value.key] = e.message;
+        setDecodeErrors(decodeErrors);
         setValuesEncoded(true);
         return '';
       }
     }
   };
-  /*
-  const createSecret = async () => {
-    try {
-      await postRequest(
-        `/api/v1/namespaces/${namespaceId}/secrets/`,
-        secretToYaml({ secret, isEncoded }),
-      );
-      notification.notifySuccess({
-        content: t('secrets.create-modal.messages.success'),
-      });
-      LuigiClient.linkManager()
-        .fromContext('namespace')
-        .navigate(`/secrets/details/${secret.name}`);
-    } catch (e) {
-      console.error(e);
-      notification.notifyError({
-        content: t('secrets.create-modal.messages.failure', {
-          error: e.message,
-        }),
-      });
-      return false;
-    }
-  };
 
-  return (
-    <CreateForm
-      title={t('secrets.create-modal.title')}
-      editMode={!!existingSecret}
-      simpleForm={
-        <SimpleForm
-          editMode={!!existingSecret}
-          secret={secret}
-          setSecret={setSecret}
-        />
-      }
-      advancedForm={
-        <AdvancedForm
-          editMode={!!existingSecret}
-          secret={secret}
-          setSecret={setSecret}
-          isEncoded={isEncoded}
-          setEncoded={setEncoded}
-        />
-      }
-      resource={secret}
-      setResource={setSecret}
-      toYaml={secret => secretToYaml({ secret, isEncoded })}
-      fromYaml={yamlToSecret}
-      onCreate={
-        onSubmit
-          ? () => onSubmit(secretToYaml({ secret, isEncoded }))
-          : createSecret
-      }
-      onChange={onChange}
-      presets={createPresets(namespaceId, t, DNSExist)}
-      formElementRef={formElementRef}
-    />
-  );
-  */
   return (
     <ResourceForm
       className="create-secret-form"
       resource={secret}
       setResource={setSecret}
-      presets={createPresets(namespaceId, t, DNSExist)}
+      presets={createPresets(secretDefs, namespaceId, t)}
     >
       <K8sNameField
         propertyPath="$.metadata.name"
@@ -152,7 +100,8 @@ export function CreateSecretForm({
         setValue={name => {
           jp.value(secret, '$.metadata.name', name);
           jp.value(secret, "$.metadata.labels['app.kubernetes.io/name']", name);
-          setSecret(secret);
+          console.log('name::setSecret', secret);
+          setSecret({ ...secret });
         }}
       />
       <KeyValueField
@@ -168,24 +117,24 @@ export function CreateSecretForm({
       />
       <ResourceForm.FormField
         propertyPath="$.type"
-        title={t('secrets.create-modal.simple.type')}
-        className="fd-margin-top--sm"
+        label={t('secrets.type')}
         input={({ value, setValue }) => (
           <ComboboxInput
             required
             compact
-            placeholder={t('secrets.create-modal.simple.type-placeholder')}
-            options={getSecretTypes().map(type => ({ key: type, text: type }))}
+            placeholder={t('secrets.placeholders.type')}
+            options={secretTypes.map(type => ({ key: type, text: type }))}
             value={secret.type}
             selectedKey={secret.type}
+            onSelect={e => setValue(e.target.value)}
           />
         )}
       />
       <MultiInput
         fullWidth
         propertyPath="$.data"
-        title="<<Data>>"
-        isEntryLocked={entry => true}
+        title={t('secrets.data')}
+        isEntryLocked={entry => (currentDef?.data || []).includes(entry.key)}
         toInternal={value =>
           Object.entries(value || {}).map(([key, val]) => ({ key, val }))
         }
@@ -214,7 +163,7 @@ export function CreateSecretForm({
             <FormTextarea
               compact
               key="value"
-              value={dataValue(value?.val || '')}
+              value={dataValue(value)}
               ref={ref}
               onChange={e =>
                 setValue({
@@ -228,16 +177,26 @@ export function CreateSecretForm({
               onBlur={onBlur}
               placeholder={t('components.key-value-field.enter-value')}
               className="value-textarea"
+              validationState={
+                value?.key &&
+                decodeErrors[value.key] && {
+                  state: 'error',
+                  text: t('secrets.messages.decode-error', {
+                    message: decodeErrors[value.key],
+                  }),
+                }
+              }
             />
           ),
-          ({ setValue }) => (
+          ({ value, setValue }) => (
             <Tooltip content={t('common.tooltips.read-file')}>
               <Button
                 compact
+                className="read-from-file"
                 onClick={() =>
                   readFromFile().then(result =>
                     setValue({
-                      key: result.name,
+                      key: value?.key || result.name,
                       val: base64Encode(result.content),
                     }),
                   )
@@ -253,7 +212,7 @@ export function CreateSecretForm({
             compact
             option="transparent"
             glyph={valuesEncoded ? 'show' : 'hide'}
-            onClick={() => setValuesEncoded(!valuesEncoded)}
+            onClick={toggleDecodeValues}
           >
             {valuesEncoded
               ? t('secrets.buttons.decode')

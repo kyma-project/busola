@@ -193,8 +193,10 @@ export function MultiInput({
   isAdvanced,
   defaultOpen,
   fullWidth = false,
+  isEntryLocked = () => false,
   ...props
 }) {
+  /*
   console.log(
     'MultiInput',
     {
@@ -213,6 +215,7 @@ export function MultiInput({
     },
     props,
   );
+  */
   const valueRef = useRef(null); // for deep comparison
   const [internalValue, setInternalValue] = useState([]);
   const refs = Array(internalValue.length)
@@ -313,7 +316,9 @@ export function MultiInput({
               )}
               <Button
                 compact
-                className={classnames({ hidden: isLast(index) })}
+                className={classnames({
+                  hidden: isLast(index) || isEntryLocked(entry),
+                })}
                 glyph="delete"
                 type="negative"
                 onClick={() => removeValue(index)}
