@@ -92,6 +92,7 @@ function Resources({
   createResourceForm: CreateResourceForm,
   hasDetailsView,
   fixedPath,
+  title,
   showTitle,
   filter,
   listHeaderActions,
@@ -104,6 +105,7 @@ function Resources({
   i18n,
   textSearchProperties = [],
   omitColumnsIds = [],
+  customListActions = [],
 }) {
   useWindowTitle(windowTitle || prettifyNamePlural(resourceName, resourceType));
   const { t } = useTranslation(['translation'], { i18n });
@@ -219,6 +221,7 @@ function Resources({
           icon: 'delete',
           handler: handleResourceDelete,
         },
+        ...customListActions,
       ];
 
   const headerRenderer = () => [
@@ -325,7 +328,9 @@ function Resources({
       </MessageBox>
       <GenericList
         title={
-          showTitle ? prettifyNamePlural(resourceName, resourceType) : null
+          showTitle
+            ? title || prettifyNamePlural(resourceName, resourceType)
+            : null
         }
         textSearchProperties={[
           'metadata.name',

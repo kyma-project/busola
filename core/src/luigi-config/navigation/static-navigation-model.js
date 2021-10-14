@@ -1169,6 +1169,40 @@ export function getStaticChildrenNodesForNamespace(
         },
       ],
     },
+    {
+      category: i18next.t('configuration.title'),
+      resourceType: 'serviceaccounts',
+      pathSegment: 'serviceaccounts',
+      label: 'Service Accounts',
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/ServiceAccounts?' +
+        toSearchParamsString({
+          resourceApiPath: '/api/v1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+
+      navigationContext: 'serviceaccounts',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':serviceAccountName',
+              resourceType: 'serviceaccounts',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/ServiceAccounts/:serviceAccountName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/api/v1',
+                }),
+            },
+          ],
+        },
+      ],
+    },
   ];
   filterNodesByAvailablePaths(nodes, apiGroups, permissionSet);
   return nodes;
