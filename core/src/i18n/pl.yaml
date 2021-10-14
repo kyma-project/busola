@@ -232,9 +232,7 @@ functions:
     inline-help:
       base-directory: Katalog z kodem funkcji i zależnościami
       reference: Referencja do źródła funkcji. Wybierz nazwę gałęzi lub zatwierdź wersję.
-      source-type: >-
-        Typ źródła kodu funkcji: edytor wbudowany (kod i zależności są dostarczane jako zwykły tekst) lub repozytorium
-        Git (kod i zależności są pobierane z repozytorium Git)
+      source-type: 'Typ źródła kodu funkcji: edytor wbudowany (kod i zależności są dostarczane jako zwykły tekst) lub repozytorium Git (kod i zależności są pobierane z repozytorium Git)'
     labels:
       base-directory: Katalog bazowy
       git-repository: Repozytorium Git
@@ -261,17 +259,13 @@ functions:
         confirm: Połącz
       title: Połącz repozytorium
     errors:
-      invalid-url: >-
-        Nieprawidłowy adres URL repozytorium. URL musi zaczynać się od prefiksu „http(s)”, „git” lub „ssh” i kończyć się
-        sufiksem „.git”.
+      invalid-url: Nieprawidłowy adres URL repozytorium. URL musi zaczynać się od prefiksu „http(s)”, „git” lub „ssh” i kończyć się sufiksem „.git”.
       req-name: Nazwa repozytorium jest wymagana.
       req-sec-name: Nazwa Sekretu jest wymagana.
       too-long-name: Nazwa repozytorium nie może być dłuższa niż 63 znaki.
       too-long-sec-name: Nazwa Sekretu nie może być dłuższa niż 63 znaki.
     inline-help:
-      url: >-
-        URL musi być prawidłowym adresem repozytorium Git, który zaczyna się od przedrostka „http(s)”, „git” lub „ssh” i
-        kończy się sufiksem „.git”.
+      url: URL musi być prawidłowym adresem repozytorium Git, który zaczyna się od przedrostka „http(s)”, „git” lub „ssh” i kończy się sufiksem „.git”.
     labels:
       auth: Autoryzacja
       secret-name: Nazwa Sekretu
@@ -334,9 +328,7 @@ functions:
       config-map: 'Ta zmienna pochodzi z Mapy Konfiguracji: "{resourceName}".'
       custom: Ta zmienna została wprowadzona przez użytkownika.
       secret: 'Ta zmienna pochodzi z Sekretu: "{resourceName}".'
-      service-binding: >-
-        Ta zmienna została wstrzyknięta przez Service Binding odwołujący się do instancji serwisu:
-        "{serviceInstanceName}".
+      service-binding: 'Ta zmienna została wstrzyknięta przez Service Binding odwołujący się do instancji serwisu: "{serviceInstanceName}".'
       text: Ta zmienna pochodzi z zasobu. Aby uzyskać wartość, kliknij link.
     type:
       config-map: Mapa Konfiguracji
@@ -344,28 +336,20 @@ functions:
       secret: Sekret
       service-binding: Service Binding
     warnings:
-      override: >-
-        Ta nazwa zmiennej jest identyczna ze zmienną wstrzykniętą przez Service Binding. Kontynuuj, jeśli chcesz, aby
-        mogły się wzajemnie nadpisywać. W przeciwnym razie wybierz inną nazwę.
+      override: Ta nazwa zmiennej jest identyczna ze zmienną wstrzykniętą przez Service Binding. Kontynuuj, jeśli chcesz, aby mogły się wzajemnie nadpisywać. W przeciwnym razie wybierz inną nazwę.
       sbu-can-be-overridden:
-        by-both: >-
-          Ta zmienna może być nadpisana przez jedną z niestandardowych zmiennych lub przez zmienną wstrzykniętą przez
-          jeden z Service Bindingów.
+        by-both: Ta zmienna może być nadpisana przez jedną z niestandardowych zmiennych lub przez zmienną wstrzykniętą przez jeden z Service Bindingów.
         by-custom-env: Ta zmienną może nadpisać lub być nadpisana przez jedną z niestandardowych zmiennych.
         by-sbu: Ta zmienna może nadpisać lub być nadpisana przez zmienną wstrzykniętą przez jeden z Service Bindingów.
       text: Ostrzeżenie
-      variable-can-override-sbu: >-
-        Ta zmienna może nadpisać lub być nadpisana przez zmienną wstrzykniętą przez jeden ze stworzonych Service
-        Bindingów.
+      variable-can-override-sbu: Ta zmienna może nadpisać lub być nadpisana przez zmienną wstrzykniętą przez jeden ze stworzonych Service Bindingów.
 generic-list:
   no-entries-found: Nie znaleziono wpisów
 git-repositories:
   title: Repozytoria Git
 instances:
   no-specific-plan-parameters:
-    tooltip: >-
-      Usługodawca nie określił konkretnych parametrów dla wybranego planu. Zapoznaj się z dokumentacją, aby poznać
-      wymagane parametry i zdefiniuj je jako JSON w edytorze.
+    tooltip: Usługodawca nie określił konkretnych parametrów dla wybranego planu. Zapoznaj się z dokumentacją, aby poznać wymagane parametry i zdefiniuj je jako JSON w edytorze.
   title: Instancje
 integration:
   title: Integracja
@@ -412,9 +396,7 @@ namespaces:
   title: Przestrzenie Nazw
   tooltips:
     container-memory-limit: Zdefiniuj ograniczenia pamięci dla poszczególnych kontenerów w swojej Przestrzeni Nazw.
-    create: >-
-      Wybierz tę opcję, aby wyłączyć Istio, aby pośredniczyć w całej komunikacji między podami w Twojej Przestrzeni
-      Nazw.
+    create: Wybierz tę opcję, aby wyłączyć Istio, aby pośredniczyć w całej komunikacji między podami w Twojej Przestrzeni Nazw.
     memory-examples: Użyj zwykłej wartości w bajtach (128974848) lub odpowiednich przyrostków (takich jak 129e6, 129M, 123Mi).
     total-memory-limit: Zdefiniuj ograniczenia, które ograniczają całkowite zużycie pamięci w Twojej Przestrzeni Nazw.
 no-permissions:
