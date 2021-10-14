@@ -47,8 +47,7 @@ Cypress.Commands.add(
       cy.getIframeBody()
         .find('textarea[aria-roledescription="editor"]')
         .filter(':visible')
-        .focus() // https://stackoverflow.com/questions/57378083/cy-clear-not-clearing-input-field-properly-cypress/61101054
-        .clear()
+        .type('{selectall}{backspace}{selectall}{backspace}')
         .paste({
           pastePayload: body,
         });
@@ -62,8 +61,7 @@ Cypress.Commands.add(
       cy.getIframeBody()
         .find('textarea[aria-roledescription="editor"]')
         .filter(':visible')
-        .focus() // https://stackoverflow.com/questions/57378083/cy-clear-not-clearing-input-field-properly-cypress/61101054
-        .clear()
+        .type('{selectall}{backspace}{selectall}{backspace}')
         .paste({
           pastePayload: JSON.stringify(body),
         });
