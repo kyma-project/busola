@@ -540,7 +540,7 @@ dnsentries:
     target: Target must be an A record, or a CNAME record.
     targets: Target records, either target or text are required.
     text: Text record must be a string.
-    texts: Text records, either target or text are required.
+    texts: You must provide either target or text.
   use-cname: Use CNAME
   headers:
     dns-name: DNS Name
