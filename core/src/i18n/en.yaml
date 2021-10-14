@@ -521,7 +521,7 @@ dnsentries:
   placeholders:
     ttl: Enter the time to live.
     dns-name: Enter the DNS Name.
-    target-a: Enter the A record Target.
+    target-a: Enter the A record target.
     target-cname: Enter the CNAME record Target.
   tooltips:
     use-cname: Switch to CNAME record.
