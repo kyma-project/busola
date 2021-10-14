@@ -433,6 +433,17 @@ cron-jobs:
   not-scheduled-yet: None scheduled yet
   schedule: Schedule
   title: CronJobs
+service-accounts:
+  title: Service Accounts
+  auto-mount-token:
+    enabled: enabled
+    disabled: disabled
+    descriptions:
+      enabled: For security reasons, don't use automount if you don't need it.
+      disabled: For security reasons, don't enable automount if you don't need it.
+  headers:
+    auto-mount-token: Automount Token
+    download-kubeconfig: Download Kubeconfig
 custom-resource-definitions:
   headers:
     description: Description
