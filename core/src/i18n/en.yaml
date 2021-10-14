@@ -527,9 +527,9 @@ dnsentries:
     use-cname: Switch to CNAME record.
     use-a: Switch to A record.
     target: Target must be an A record, or a CNAME record.
-    targets: Targets records, either target or text are required.
+    targets: Target records, either target or text are required.
     text: Text record must be a string.
-    texts: Text records, either target or text, are required.
+    texts: Text records, either target or text are required.
   use-cname: Use CNAME
   headers:
     dns-name: DNS Name
