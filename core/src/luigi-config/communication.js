@@ -63,8 +63,8 @@ export const communication = {
         pathname + newParamsString,
       );
     },
-    'busola.reload': ({ type }) => {
-      if (type === 'sso') {
+    'busola.reload': ({ reason }) => {
+      if (reason === 'sso-expiration') {
         setSSOAuthData(null);
       }
       location.reload();
