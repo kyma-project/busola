@@ -538,7 +538,7 @@ dnsentries:
     use-cname: Switch to CNAME record.
     use-a: Switch to A record.
     target: Target must be an A record, or a CNAME record.
-    targets: Target records, either target or text are required.
+    targets: You must provide either target or text.
     text: Text record must be a string.
     texts: You must provide either target or text.
   use-cname: Use CNAME
