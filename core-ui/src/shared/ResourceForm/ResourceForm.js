@@ -189,3 +189,4 @@ ResourceForm.K8sNameField = FormComponents.K8sNameField;
 ResourceForm.KeyValueField = FormComponents.KeyValueField;
 ResourceForm.ItemArray = FormComponents.ItemArray;
 ResourceForm.Select = FormComponents.Select;
+ResourceForm.ComboboxInput = FormComponents.ComboboxInput;
