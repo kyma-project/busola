@@ -12,6 +12,7 @@ export const useFetch = () => {
 
   return async ({ relativeUrl, abortController, init }) => {
     checkForTokenExpiration(authData?.token);
+    checkForTokenExpiration(ssoData?.idToken, { type: 'sso' });
 
     init = {
       ...init,

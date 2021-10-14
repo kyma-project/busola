@@ -72,10 +72,9 @@ export async function ssoLogin(luigiAfterInit) {
     const expirationTimestamp = parseJWT(token).exp;
     const secondsLeft = new Date(expirationTimestamp) - Date.now() / 1000;
     if (secondsLeft > timeout) {
-      console.log('jeszcze czas');
       return;
     } else {
-      console.log('relogin');
+      // we require a new token
       sessionStorage.removeItem(SSO_KEY);
     }
   }
