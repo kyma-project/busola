@@ -8,6 +8,26 @@ data:
       "config": {
         "storage": "localStorage",
         "features":{
+          "LEGAL_LINKS": {
+            "config": {
+              "legal-disclosure": {
+                "default": "https://www.sap.com/corporate/en/legal/impressum.html",
+                "de": "https://www.sap.com/corporate/de/legal/impressum.html"
+              },
+              "privacy": {
+                "default":
+                  "https://help.sap.com/viewer/82bdf2271c6041f79387c122147cf774/Cloud/en-US"
+              },
+              "copyright": {
+                "default": "https://www.sap.com/corporate/en/legal/copyright.html",
+                "de": "https://www.sap.com/corporate/de/legal/copyright.html"
+              },
+              "trademark": {
+                "default": "https://www.sap.com/corporate/en/legal/trademark.html",
+                "de": "https://www.sap.com/corporate/de/legal/trademark.html"
+              }
+            }
+          },
           "SSO_LOGIN": {
             "isEnabled": false,
               "config": {
