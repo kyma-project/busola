@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState, createRef } from 'react';
 import {
+  ComboboxInput as FdComboboxInput,
   FormInput,
   FormLabel,
   Button,
@@ -140,7 +141,7 @@ export function FormField({
         <Label required={required && !disabled}>{label}</Label>
         {tooltipContent && (
           <Tooltip delay={0} content={tooltipContent}>
-            <Icon glyph="question-mark" />
+            <Icon ariaLabel="Tooltip" glyph="question-mark" />
           </Tooltip>
         )}
       </div>
@@ -185,6 +186,7 @@ export function MultiInput({
   title,
   label,
   tooltipContent,
+  sectionTooltipContent,
   required,
   toInternal,
   toExternal,
@@ -250,6 +252,7 @@ export function MultiInput({
       className={className}
       required={required}
       defaultOpen={open}
+      tooltipContent={sectionTooltipContent}
       {...props}
     >
       <div className="fd-row form-field multi-input">
@@ -303,6 +306,7 @@ export function TextArrayInput({
   inputProps,
   isAdvanced,
   tooltipContent,
+  sectionTooltipContent,
   ...props
 }) {
   return (
@@ -312,6 +316,7 @@ export function TextArrayInput({
       toInternal={value => value || []}
       toExternal={value => value.filter(val => !!val)}
       tooltipContent={tooltipContent}
+      sectionTooltipContent={sectionTooltipContent}
       inputs={[
         ({ value, setValue, ref, onBlur, focus }) => (
           <FormInput
@@ -461,6 +466,35 @@ export function Select({ value, setValue, defaultKey, options, ...props }) {
       selectedKey={value || defaultKey}
       options={options}
       fullWidth
+      {...props}
+    />
+  );
+}
+
+export function ComboboxInput({
+  value,
+  setValue,
+  defaultKey,
+  options,
+  id,
+  placeholder,
+  ...props
+}) {
+  return (
+    <FdComboboxInput
+      ariaLabel="Combobox input"
+      arrowLabel="Combobox input arrow"
+      id={id || 'combobox-input'}
+      compact
+      showAllEntries
+      searchFullString
+      selectionType="auto-inline"
+      onSelectionChange={(_, selected) =>
+        setValue(selected?.key !== -1 ? selected?.key : selected?.text)
+      }
+      selectedKey={defaultKey}
+      placeholder={defaultKey || placeholder}
+      options={options}
       {...props}
     />
   );
