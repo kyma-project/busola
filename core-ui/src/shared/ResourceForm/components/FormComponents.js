@@ -1,4 +1,10 @@
-import React, { useEffect, useRef, useState, createRef } from 'react';
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  createRef,
+  useCallback,
+} from 'react';
 import {
   ComboboxInput as FdComboboxInput,
   FormInput,
@@ -208,9 +214,11 @@ export function MultiInput({
     }
   }, [internalValue]);
 
+  const toInternalCallback = useCallback(toInternal, []);
+
   useEffect(() => {
-    setInternalValue([...toInternal(value), null]);
-  }, [value, toInternal]);
+    setInternalValue([...toInternalCallback(value), null]);
+  }, [value, toInternalCallback]);
 
   // diff by stringify, as useEffect won't fire for the same object ref
   if (

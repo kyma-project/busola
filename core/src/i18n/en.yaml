@@ -1,4 +1,3 @@
----
 addons:
   addons-status: Addons Status
   errors:
@@ -902,6 +901,11 @@ jobs:
   title: Jobs
 kubeconfig-id:
   error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})."
+legal:
+  copyright: Copyright
+  legal-disclosure: Legal Disclosure
+  privacy: Privacy
+  trademark: Trademark
 limit-ranges:
   headers:
     default: Default

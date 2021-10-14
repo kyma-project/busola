@@ -1,4 +1,3 @@
----
 addons:
   errors:
     cannot-create: Nie można utworzyć konfiguracji dodatków
@@ -103,8 +102,8 @@ common:
     edit-yaml: Edytuj YAML
     save: Zapisz
   create-form:
-    editor-error: 'Błąd parsowania: {{error}}, zmiany nie zostaną zapisane.'
     choose-preset: Wybierz jedną z predefiniowanych wartości
+    editor-error: 'Błąd parsowania: {{error}}, zmiany nie zostaną zapisane.'
     modes:
       advanced: Zaawansowane
       simple: Minimalne
