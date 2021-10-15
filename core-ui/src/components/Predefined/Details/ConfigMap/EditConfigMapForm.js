@@ -1,8 +1,9 @@
 import React from 'react';
 import { useUpdate } from 'react-shared';
 import { createPatch } from 'rfc6902';
-import { ConfigMapForm } from '../../../../shared/components/ConfigMap/ConfigMapForm';
 import { useTranslation } from 'react-i18next';
+
+import { ConfigMapForm } from '../../Create/ConfigMaps/ConfigMapForm';
 
 export function EditConfigMapForm(props) {
   const { t } = useTranslation();

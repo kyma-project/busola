@@ -1,7 +1,9 @@
 import React from 'react';
 import { usePost } from 'react-shared';
-import { ConfigMapForm } from '../../../shared/components/ConfigMap/ConfigMapForm';
 import { useTranslation } from 'react-i18next';
+
+// import { ConfigMapForm } from 'shared/components/ConfigMap/ConfigMapForm';
+import { ConfigMapForm } from './ConfigMapForm';
 
 export const ConfigMapsCreate = props => {
   const { t } = useTranslation();
