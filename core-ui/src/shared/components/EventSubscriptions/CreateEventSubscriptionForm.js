@@ -7,10 +7,10 @@ import {
   FormFieldset,
   Icon,
 } from 'fundamental-react';
-import { InputWithPrefix } from 'react-shared';
+import { InputWithPrefix, useGet } from 'react-shared';
 import './CreateEventSubscriptionForm.scss';
 
-const EVENT_TYPE_PREFIX = 'sap.kyma.custom.';
+const DEFAULT_EVENT_TYPE_PREFIX = 'sap.kyma.custom.lololo.';
 
 export default function CreateEventSubscriptionForm({
   formElementRef,
@@ -18,6 +18,18 @@ export default function CreateEventSubscriptionForm({
   onChange,
 }) {
   const { t } = useTranslation();
+
+  const {
+    data: configMap,
+  } = useGet('/api/v1/namespaces/kyma-system/configmaps/eventing', {
+    pollingInterval: 3000000,
+  });
+  let eventTypePrefix =
+    configMap?.data?.eventTypePrefix || DEFAULT_EVENT_TYPE_PREFIX;
+  eventTypePrefix = eventTypePrefix.endsWith('.')
+    ? eventTypePrefix
+    : eventTypePrefix + '.';
+
   const eventAppInput = useRef(),
     eventTypeInput = useRef(),
     eventVersionInput = useRef();
@@ -28,7 +40,7 @@ export default function CreateEventSubscriptionForm({
 
   async function handleSubmit(e) {
     e.preventDefault();
-    onSubmit(EVENT_TYPE_PREFIX + eventTypeFinalInput.current.value);
+    onSubmit(eventTypePrefix + eventTypeFinalInput.current.value);
   }
 
   async function calculateEventType() {
@@ -130,7 +142,7 @@ export default function CreateEventSubscriptionForm({
             {t('event-subscription.create.labels.event-type')}
           </FormLabel>
           <InputWithPrefix
-            prefix={EVENT_TYPE_PREFIX}
+            prefix={eventTypePrefix}
             _ref={eventTypeFinalInput}
             onChange={handleEventTypeManualChange}
             required
