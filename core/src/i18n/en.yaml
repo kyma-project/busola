@@ -319,6 +319,7 @@ common:
     resource-namespace: '{{resource}} $t(common.labels.namespace)'
     secret: Secret
     service: Service
+    version: Version
   lowercase:
     name: name
   messages:
@@ -1078,9 +1079,6 @@ secrets:
       success: Secret created.
     presets:
       default: Default
-    simple:
-      data: Data
-      type: Type
     title: Create Secret
   data: Data
   edit-modal:
@@ -1094,8 +1092,11 @@ secrets:
     type: Secret Type
   metadata: Metadata
   name_singular: Secret
+  placeholders:
+    type: Type of Secret
   title: Secrets
   title-edit-secret: Edit Secret
+  type: Type
   updated: Secret updated
 service-accounts:
   auto-mount-token:
