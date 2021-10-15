@@ -319,6 +319,7 @@ common:
     resource-namespace: '{{resource}} $t(common.labels.namespace)'
     secret: Secret
     service: Service
+    version: Version
   lowercase:
     name: name
   messages:
