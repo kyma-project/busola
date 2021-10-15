@@ -12,7 +12,7 @@ import {
   getStaticChildrenNodesForNamespace,
   getStaticRootNodes,
 } from './static-navigation-model';
-import { navigationPermissionChecker } from './permissions';
+import { navigationPermissionChecker, hasAnyRoleBound } from './permissions';
 import { getFeatures, resolveFeatureAvailability } from '../features';
 import { showAlert } from '../utils/showAlert';
 
@@ -237,6 +237,11 @@ export async function createNavigation() {
       }
       return true;
     };
+
+    if (!hasAnyRoleBound(permissionSet)) {
+      const error = i18next.t('common.errors.no-permissions-no-role');
+      saveLocation(`/no-permissions?${NODE_PARAM_PREFIX}error=${error}`);
+    }
 
     return {
       preloadViewGroups: false,
