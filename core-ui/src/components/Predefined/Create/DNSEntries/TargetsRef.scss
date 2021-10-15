@@ -16,11 +16,7 @@
 
     &__row {
       margin-top: 0.5rem;
-
-      @media (max-width: 1200px) {
-        display: grid;
-        grid-template-columns: 1fr;
-      }
+      display: inline;
     }
   }
 }

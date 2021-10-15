@@ -112,20 +112,16 @@ export function Title({
   }
 }
 export function Label({ required, tooltipContent, children }) {
-  const label = (
-    <FormLabel
-      required={required}
-      className={tooltipContent ? 'tooltip-cursor' : ''}
-    >
-      {children}
-    </FormLabel>
+  return (
+    <>
+      <FormLabel required={required}>{children}</FormLabel>
+      {tooltipContent && (
+        <Tooltip delay={0} content={tooltipContent}>
+          <Icon ariaLabel="Tooltip" glyph="question-mark" />
+        </Tooltip>
+      )}
+    </>
   );
-
-  if (tooltipContent) {
-    return <Tooltip content={tooltipContent}>{label}</Tooltip>;
-  } else {
-    return label;
-  }
 }
 
 export function FormField({
@@ -144,12 +140,9 @@ export function FormField({
   return (
     <div className={classnames('fd-row form-field', className)}>
       <div className="fd-col fd-col-md--4 form-field__label">
-        <Label required={required && !disabled}>{label}</Label>
-        {tooltipContent && (
-          <Tooltip delay={0} content={tooltipContent}>
-            <Icon ariaLabel="Tooltip" glyph="question-mark" />
-          </Tooltip>
-        )}
+        <Label required={required && !disabled} tooltipContent={tooltipContent}>
+          {label}
+        </Label>
       </div>
       <div className="fd-col fd-col-md--7">
         {input({ required, disabled, ...props })}
