@@ -38,8 +38,8 @@
   &--info {
     background-color: var(--sapInformativeElementColor, #0a6ed1);
   }
+}
 
-  &.has-tooltip {
-    cursor: help;
-  }
+.has-tooltip {
+  cursor: help;
 }

@@ -80,8 +80,8 @@
     "yaml-sort": "^1.1.0"
   },
   "lint-staged": {
-    "*.{ts,tsx,js,jsx,json,html,css,scss,yaml,md}": "prettier --write",
-    "core/src/i18n/*.yaml": "yaml-sort -i --lineWidth 120"
+    "core/src/i18n/*.yaml": "yaml-sort --lineWidth=-1  -i",
+    "*.{ts,tsx,js,jsx,json,html,css,scss,yaml,md}": "prettier --write"
   },
   "husky": {
     "hooks": {

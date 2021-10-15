@@ -1,4 +1,3 @@
----
 addons:
   addons-status: Addons Status
   errors:
@@ -151,26 +150,19 @@ catalog:
   subtitle: Enrich your experience with additional services that are installed outside the cluster.
   title: Service Catalog
 certificates:
-  name_singular: Certificate
   common-name: Common Name
-  dns-names: DNS Names
-  expiration-date: Expiration Date
-  issuer: Issuer
-  refs: References
-  state: Status
-  title: Certificates
-  csr: CSR
-  with-csr: Use a CSR
-  renew: Trigger a renewal
-  existing-secret: Use the existing Secret
-  secret-name: Secret name
-  secret-ref: Secret to use
   create:
     messages:
       failure: Failed to create the certificate.
       success: Certificate created.
+  csr: CSR
+  dns-names: DNS Names
+  existing-secret: Use the existing Secret
+  expiration-date: Expiration Date
+  issuer: Issuer
   messages:
     decode-error: 'Failed to decode the CSR: {{message}}.'
+  name_singular: Certificate
   placeholders:
     common-name: Certificate CN (max 64 characters)
     csr: Plain text Certificate Signing Request
@@ -178,16 +170,23 @@ certificates:
     encoded-csr: Base64-encoded Certificate Signing Request
     name: Certificate name
     secret-name: Requested Secret name
+  refs: References
+  renew: Trigger a renewal
+  secret-name: Secret name
+  secret-ref: Secret to use
+  state: Status
+  title: Certificates
   tooltips:
     common-name: Common Name is the primary domain name of the certificate.
     csr: Certificate Signing Request is an alternative way to provide common name, DNS names, and other information.
-    with-csr: Enable to use a Certificate Signing Request instead of providing domain names manually.
     dns-names: DNS Names are the optional additional domain names of the certificate.
-    renew: Trigger a certificate renewal if enabled.
-    issuer: Certificate issuer. If no issuer is given, the default issuer is used.
     existing-secret: Use an existing Secret for storing the certificate if enabled. Otherwise a new Secret will be created.
+    issuer: Certificate issuer. If no issuer is given, the default issuer is used.
+    renew: Trigger a certificate renewal if enabled.
     secret-name: Name of the Secret object to use for storing the certificate.
     secret-ref: Reference of the existing Secret object to use for storing the certificate.
+    with-csr: Enable to use a Certificate Signing Request instead of providing domain names manually.
+  with-csr: Use a CSR
 cluster-addons:
   title: Cluster Addons
 cluster-role-bindings:
@@ -202,18 +201,18 @@ clusters:
   buttons:
     apply-configuration: Apply Configuration
     apply-kubeconfig: Apply kubeconfig
-    verify-and-add: Add Cluster
     next-step: Next Step
     previous-step: Previous Step
+    verify-and-add: Add Cluster
   common:
     api-server-address: API server address
     download-kubeconfig: Download Kubeconfig
     kubeconfig-download-error: Failed to download the kubeconfig
     kubeconfig-not-present: Kubeconfig is missing on the Cluster
   empty:
-    title: Looks like there aren't any clusters yet.
+    go-to-btp-cockpit: To view your clusters, go to
     subtitle: Let's add one now!
-    go-to-btp-cockpit: 'To view your clusters, go to'
+    title: Looks like there aren't any clusters yet.
   labels:
     client-id: Client ID
     issuer-url: Issuer URL
@@ -228,16 +227,11 @@ clusters:
     upload-paste-kubeconfig: Upload or paste your kubeconfig file.
     wrong-configuration: Cannot apply the configuration.
   overview:
-    title-current-cluster: Cluster Overview
     title-all-clusters: Clusters Overview
+    title-current-cluster: Cluster Overview
     version: Version
   storage:
     changed-message: The chosen storage type has been overwritten by the cluster configuration from {{originalStorage}} to {{targetStorage}}.
-    info: >
-      Now you can choose where we store your cluster configuration.
-      Based on your kubeconfig type, we recomment the pre-selected storage mode.
-      Of course, you can choose whateer you prefer for convenience and security.
-      None of the options stores information on the server.
     choose-storage:
       label: Storage type configuration
     descriptions:
@@ -245,6 +239,8 @@ clusters:
       localStorage: Cluster data is persisted between browser reloads.
       sessionStorage: Cluster data is cleared when the page session ends.
       unknown: Unknown storage type
+    info: |
+      Now you can choose where we store your cluster configuration. Based on your kubeconfig type, we recomment the pre-selected storage mode. Of course, you can choose whateer you prefer for convenience and security. None of the options stores information on the server.
     labels:
       inMemory: In memory
       localStorage: Local storage
@@ -252,23 +248,23 @@ clusters:
       unknown: Unknown
     title: Storage Type
   wizard:
+    auth:
+      client-id: Client ID
+      issuer-url: Issuer URL
+      scopes: Scopes
+      token: Token
     context: Current context
-    kubeconfig: Provide Kubeconfig
-    update: Provide Authentication
-    storage: Privacy Options
+    editor-label: 'or paste your kubeconfig here:'
+    incomplete: We couldn't find enough authentication information in your kubeconfig. You can enter it manually.
     intro: To add a cluster, all you have to do is provide the cluster configuration – called “kubeconfig” in the Kubernetes world.
+    kubeconfig: Provide Kubeconfig
+    not-an-object: kubeconfig is not an object
+    storage: Privacy Options
     storage-info: |
       Don't worry, we don't store your kubeconfig file on the server. The information stays in your browser.
       You can choose your privacy options in the last step.
-    incomplete: We couldn't find enough authentication information in your kubeconfig. You can enter it manually.
-    editor-label: 'or paste your kubeconfig here:'
     token-info: If you don't know how to get your token, ask your authentication provider.
-    not-an-object: kubeconfig is not an object
-    auth:
-      token: Token
-      issuer-url: Issuer URL
-      client-id: Client ID
-      scopes: Scopes
+    update: Provide Authentication
 common:
   buttons:
     add: Add
@@ -284,7 +280,6 @@ common:
     update: Update
   create-form:
     choose-preset: Select a Preset
-    object-required: 'An object is required'
     editor-error: 'Parse error: {{error}}, previous valid input will be used.'
     messages:
       failure: 'Failed to create the {{resourceType}}: {{error}}.'
@@ -292,6 +287,7 @@ common:
     modes:
       advanced: Advanced
       simple: Simple
+    object-required: An object is required
   delete-dialog:
     delete-confirm: Don't ask this again.
     information: You've switched off removal confirmations for all resources. You can switch them back on in Preferences.
@@ -316,10 +312,10 @@ common:
     issuer: Issuer
     name: Name
     namespace: Namespace
-    resource-name: '{{resource}} $t(common.labels.name)'
-    resource-namespace: '{{resource}} $t(common.labels.namespace)'
     protocol: Protocol
     resource: Resource
+    resource-name: '{{resource}} $t(common.labels.name)'
+    resource-namespace: '{{resource}} $t(common.labels.namespace)'
     secret: Secret
     service: Service
   lowercase:
@@ -327,6 +323,7 @@ common:
   messages:
     cannot-load: 'Cannot load {{value}}: {{error.message}}.'
     choose: Choose {{value}}.
+    click-to-select: Select {{value}} from the list.
     doesnt-exist: doesn't exist.
     entry-not-found: Entry not found
     error: 'Error: {{error}}'
@@ -334,10 +331,9 @@ common:
     no-instances-found: No matching {{value}} found.
     no-instances-found-namespace: No matching {{value}} found in this Namespace.
     parse-error: Parse error, previous valid input will be used.
-    type-to-select: Start typing to select {{value}} from the list.
-    resource-namespace-error: Requested Namespace not found.
     resource-name-error: Requested resource with this name not found in the selected Namespace.
-    click-to-select: Select {{value}} from the list.
+    resource-namespace-error: Requested Namespace not found.
+    type-to-select: Start typing to select {{value}} from the list.
   placeholders:
     secret-ref-name: Select name
     secret-ref-namespace: Select Namespace
@@ -356,9 +352,6 @@ common:
     secret-ref-namespace: Namespace defines the space within which the secret name must be unique.
     value: Value must start and end with an alphanumeric character, can contain '-', '_' or '.'
 components:
-  key-value-field:
-    enter-key: Enter Key
-    enter-value: Enter Value
   dropdown:
     empty-list: No resources available
   error-panel:
@@ -377,6 +370,9 @@ components:
       not-found: No entries found
   k8s-name-input:
     placeholder: '{{resourceType}} Name'
+  key-value-field:
+    enter-key: Enter Key
+    enter-value: Enter Value
   key-value-form:
     add-entry: Add data entry
     key: Key
@@ -469,22 +465,21 @@ daemon-sets:
     title: Tolerations
     toleration-seconds: Seconds
 deployments:
-  name_singular: Deployment
   create-modal:
     advanced:
-      image: Image
+      container-header: Container {{name}}
       cpu-limits: CPU Limits
       cpu-requests: CPU Requests
       expose-service: Expose a separate Service
+      image: Image
       memory-limits: Memory Limits
       memory-requests: Memory Requests
+      one-container-required: At least one container is required.
       port: Port
       port-placeholder: Enter the port exposed by the Service.
       runtime-profile: Runtime Profile
       target-port: Target Port
       target-port-placeholder: Enter the target port of the container.
-      one-container-required: At least one container is required.
-      container-header: Container {{name}}
     messages:
       deployment-ok-service-bad: 'Deployment created, failed to create the Service: {{error}}.'
     presets:
@@ -498,28 +493,11 @@ deployments:
   headers:
     images: Images
     pods: $t(pods.title)
+  name_singular: Deployment
   title: Deployments
 discovery-and-network:
   title: Discovery and Network
-domains:
-  example: for example, *.api.mydomain.com
-  exclude:
-    label: Exclude Domains
-    placeholder: Domain that is forbidden
-  include:
-    label: Include Domains
-    placeholder: Domain that is allowed
 dnsentries:
-  labels:
-    ttl: TTL
-    dns-name: DNS Name
-    text: Text
-    targets: Targets
-  placeholders:
-    targets: Target records (CNAME or A records), one per line
-    text: Text records, one per line
-    ttl: Enter the time to live.
-    dns-name: Enter DNS Name
   headers:
     dns-name: DNS Name
     provider: Provider
@@ -528,32 +506,61 @@ dnsentries:
     status: $t(common.headers.status)
     targets: Targets
     ttl: TTL
-  messages:
-    created: DNS Entry created
-    cannot-create: 'Failed to create the DNS Entry:'
-  title: DNS Entries
-dnsproviders:
-  name_singular: DNS Provider
   labels:
-    default-ttl: Default TTL
-    secret-reference: Secret Reference
-    type: Type
+    dns-name: DNS Name
+    target: Target
+    targets: Targets
+    text: Text
+    ttl: TTL
+    use-cname: Use CNAME
+  messages:
+    cannot-create: 'Failed to create the DNS Entry:'
+    created: DNS Entry created
+  name_singular: DNS Entry
   placeholders:
-    provider-type: Choose Provider Type
-    default-ttl: Enter the default time to live.
+    dns-name: Enter the DNS Name.
+    target-a: Enter the A record target.
+    target-cname: Enter the CNAME record target.
+    ttl: Enter the time to live.
+  title: DNS Entries
+  tooltips:
+    target: Target must be an A record, or a CNAME record.
+    targets: You must provide either target or text.
+    text: Text record must be a string.
+    texts: You must provide either target or text.
+    use-a: Switch to A record.
+    use-cname: Switch to CNAME record.
+  use-cname: Use CNAME
+dnsproviders:
   domains: Domains
   headers:
     exclude: Excluded Domains
     include: Included Domains
     status: $t(common.headers.status)
     type: Type
+  labels:
+    default-ttl: Default TTL
+    secret-reference: Secret Reference
+    type: Type
   messages:
-    created: DNS Provider created
     cannot-create: 'Failed to create the DNS Provider:'
+    created: DNS Provider created
+  name_singular: DNS Provider
+  placeholders:
+    default-ttl: Enter the default time to live.
+    provider-type: Choose Provider Type
   title: DNS Providers
   tooltips:
     excluded-domains: The selection of forbidden domains (by default, all zones and domains in those zones are served), $t(domains.example).
     included-domains: The selection of allowed domains (by default, all zones and domains in those zones are served), $t(domains.example).
+domains:
+  example: for example, *.api.mydomain.com
+  exclude:
+    label: Exclude Domains
+    placeholder: Domain that is forbidden
+  include:
+    label: Include Domains
+    placeholder: Domain that is allowed
 event-subscription:
   create:
     labels:
@@ -755,19 +762,7 @@ functions:
       text: Warning
       variable-can-override-sbu: This variable can override or be overridden by a variable injected by one of the created ServiceBindings.
 gateways:
-  name_singular: Gateway
-  description: ' describes a load balancer that operates at the edge of the mesh and receives incoming or outgoing HTTP/TCP connections.'
   create-modal:
-    at-least-one-server-required: Gateway must have at least one server.
-    tooltips:
-      ca-certificates: The path to a file containing certificate authority (CA) certificates, which verify a presented client-side certificate.
-      selector: One or more labels that indicate a set of pods on which the gateway configuration is applied. By default, workloads are searched across all namespaces based on label selectors.
-      protocol: The protocol exposed on the port. TLS implies that the connection is routed based on the SNI header to the destination, without terminating the TLS connection.
-      target-port: The port number on the endpoint where the traffic is received.
-      private-key: The path to the file holding the server’s private key.
-      server-certificate: The path to the file holding the server-side TLS certificate you want to use.
-      credential-name: The name of the Secret. Required properties are key and cert; for mutual TLS (mTLS), caceert is also required. Alternatively, you can use a Secret of type tls for server certificates along with a ca.crt key for CA certificates.
-      hosts: At least one host exposed by the gateway, in FQDN format with optional wildcard character in the left-most component.
     advanced:
       add-server: Add server
       delete-server: Delete server
@@ -782,10 +777,10 @@ gateways:
           protocol: Enter the protocol.
           target-port: Enter the target port.
         tls:
+          ca-certificates: Enter the CA certificates path.
           mode: Select TLS Mode
           private-key: Enter the private key path.
           server-certificate: Enter the certificate path.
-          ca-certificates: Enter the CA certificates path.
       port:
         name: Name
         number: Number
@@ -793,19 +788,20 @@ gateways:
         protocol: Protocol
         target-port: Target port
       tls:
-        credentialName: Credential Name
-        mode: TLS Mode
-        tls: TLS
         ca-certificates: CA Certificate
-        http-redirect: HTTP Redirect
+        credentialName: Credential Name
         disabled-for-non-https: TLS settings are not available for a non-HTTPS protocol.
+        http-redirect: HTTP Redirect
         http-redirect-description: Enable 301 redirect for all HTTP connections.
-        private-key: Private Key
-        server-certificate: Server Certificate
         max-protocol-version: Max Protocol Version
-        min-protocol-version: Min Protocol Version
         messages:
           invalid-tls-warning: TLS Server of mode SIMPLE or MUTUAL needs either credential name, or private key and server certificate pair.
+        min-protocol-version: Min Protocol Version
+        mode: TLS Mode
+        private-key: Private Key
+        server-certificate: Server Certificate
+        tls: TLS
+    at-least-one-server-required: Gateway must have at least one server.
     presets:
       default: Default
     simple:
@@ -813,6 +809,17 @@ gateways:
       server: Server
       servers: Servers
     title: Create Gateway
+    tooltips:
+      ca-certificates: The path to a file containing certificate authority (CA) certificates, which verify a presented client-side certificate.
+      credential-name: The name of the Secret. Required properties are key and cert; for mutual TLS (mTLS), caceert is also required. Alternatively, you can use a Secret of type tls for server certificates along with a ca.crt key for CA certificates.
+      hosts: At least one host exposed by the gateway, in FQDN format with optional wildcard character in the left-most component.
+      private-key: The path to the file holding the server’s private key.
+      protocol: The protocol exposed on the port. TLS implies that the connection is routed based on the SNI header to the destination, without terminating the TLS connection.
+      selector: One or more labels that indicate a set of pods on which the gateway configuration is applied. By default, workloads are searched across all namespaces based on label selectors.
+      server-certificate: The path to the file holding the server-side TLS certificate you want to use.
+      target-port: The port number on the endpoint where the traffic is received.
+  description: ' describes a load balancer that operates at the edge of the mesh and receives incoming or outgoing HTTP/TCP connections.'
+  name_singular: Gateway
   selector: Selector
   servers:
     hosts: Hosts
@@ -837,7 +844,6 @@ instances:
 integration:
   title: Integration
 issuers:
-  name_singular: Issuer
   acme: ACME
   auto-registration: Auto registration
   ca: CA
@@ -854,6 +860,7 @@ issuers:
     key-id: CA key ID
     secret: Symmetric MAC Secret
     title: External account binding
+  name_singular: Issuer
   placeholders:
     email: Email address for user registration
     key-id: ID of the CA that the external account is bound to
@@ -891,6 +898,13 @@ jobs:
     type: Type
   start-time: Start Time
   title: Jobs
+kubeconfig-id:
+  error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})."
+legal:
+  copyright: Copyright
+  legal-disclosure: Legal Disclosure
+  privacy: Privacy
+  trademark: Trademark
 limit-ranges:
   headers:
     default: Default
@@ -1043,11 +1057,14 @@ role-bindings:
 roles:
   headers:
     api-groups: API Groups
+    custom: Custom
+    non-resource-urls: Non-resource URLs
+    resource-names: Resource Names
     resources: Resources
+    rules: Rules
     verbs: Verbs
   title: Roles
 secrets:
-  name_singular: Secret
   buttons:
     collapse: Collapse All
     decode: Decode
@@ -1072,20 +1089,21 @@ secrets:
     annotations: Annotations
     type: Secret Type
   metadata: Metadata
+  name_singular: Secret
+  placeholders:
+    type: Type of Secret
   title: Secrets
   title-edit-secret: Edit Secret
   type: Type
   updated: Secret updated
-  placeholders:
-    type: Type of Secret
 service-management:
   title: Service Management
 services:
-  name_singular: Service
   cluster-ip: Cluster IP
   external-ips: External IPs
   labels:
     service: Service
+  name_singular: Service
   ports: Ports
   title: Services
   type: Service Type
@@ -1127,5 +1145,3 @@ workloads:
   docker-image:
     tooltip: Enter a valid Docker image registry path.
   title: Workloads
-kubeconfig-id:
-  error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})."

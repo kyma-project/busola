@@ -816,7 +816,6 @@ export function getStaticChildrenNodesForNamespace(
         toSearchParamsString({
           resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
           hasDetailsView: true,
-          readOnly: true,
         }),
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
@@ -832,7 +831,6 @@ export function getStaticChildrenNodesForNamespace(
                 '/namespaces/:namespaceId/Roles/:roleName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
-                  readOnly: true,
                 }),
               viewGroup: coreUIViewGroupName,
             },
@@ -1171,6 +1169,40 @@ export function getStaticChildrenNodesForNamespace(
         },
       ],
     },
+    {
+      category: i18next.t('configuration.title'),
+      resourceType: 'serviceaccounts',
+      pathSegment: 'serviceaccounts',
+      label: 'Service Accounts',
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/ServiceAccounts?' +
+        toSearchParamsString({
+          resourceApiPath: '/api/v1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+
+      navigationContext: 'serviceaccounts',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':serviceAccountName',
+              resourceType: 'serviceaccounts',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/ServiceAccounts/:serviceAccountName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/api/v1',
+                }),
+            },
+          ],
+        },
+      ],
+    },
   ];
   filterNodesByAvailablePaths(nodes, apiGroups, permissionSet);
   return nodes;
@@ -1350,7 +1382,6 @@ export function getStaticRootNodes(
         toSearchParamsString({
           resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
           hasDetailsView: true,
-          readOnly: true,
         }),
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
@@ -1366,7 +1397,6 @@ export function getStaticRootNodes(
                 '/ClusterRoles/:roleName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
-                  readOnly: true,
                 }),
               viewGroup: coreUIViewGroupName,
             },
