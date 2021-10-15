@@ -86,13 +86,14 @@ export function ApplicationServiceDetails({ applicationName, serviceName }) {
   const rowRenderer = e => [
     e.name || EMPTY_TEXT_PLACEHOLDER,
     e.accessLabel || EMPTY_TEXT_PLACEHOLDER,
-    (
+    (e.centralGatewayUrl && (
       <CopiableText compact i18n={i18n} textToCopy={e.centralGatewayUrl}>
         <Tooltip content={e.centralGatewayUrl}>
           <p className="central-gateway-url">{e.centralGatewayUrl}</p>
         </Tooltip>
       </CopiableText>
-    ) || EMPTY_TEXT_PLACEHOLDER,
+    )) ||
+      EMPTY_TEXT_PLACEHOLDER,
   ];
 
   return (
