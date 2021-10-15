@@ -60,7 +60,7 @@ Cypress.Commands.add(
     cy.readFile(dependenciesPath).then(body => {
       cy.getIframeBody()
         .find('textarea[aria-roledescription="editor"]')
-        .filter(':visible'
+        .filter(':visible')
         // cy.clear sometimes fails, removing only the first character - use this as a workaround
         .type('{selectall}{backspace}{selectall}{backspace}')
         .paste({
