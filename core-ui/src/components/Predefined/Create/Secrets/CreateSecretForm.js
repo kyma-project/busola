@@ -89,8 +89,13 @@ export function CreateSecretForm({
   return (
     <ResourceForm
       className="create-secret-form"
+      pluralKind="secrets"
+      singularName={t('secrets.name_singular')}
       resource={secret}
       setResource={setSecret}
+      onChange={onChange}
+      formElementRef={formElementRef}
+      createUrl={`/api/v1/namespaces/${namespaceId}/secrets/`}
       presets={createPresets(secretDefs, namespaceId, t)}
     >
       <K8sNameField
@@ -106,7 +111,6 @@ export function CreateSecretForm({
         advanced
         propertyPath="$.metadata.labels"
         title={t('common.headers.labels')}
-        className="fd-margin-top--sm"
       />
       <KeyValueField
         advanced

@@ -1076,6 +1076,8 @@ secrets:
   title-edit-secret: Edit Secret
   type: Type
   updated: Secret updated
+  placeholders:
+    type: Type of Secret
 service-management:
   title: Service Management
 services:
