@@ -111,6 +111,7 @@ export function TargetsRef({ dnsEntry, setTargets, setDnsEntry }) {
       setResource={setDnsEntry}
       propertyPath="$.spec.targets"
       tooltipContent={t('dnsentries.tooltips.targets')}
+      className="targets-ref"
     >
       <TargetsInput
         toInternal={value =>
