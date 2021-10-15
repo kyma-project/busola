@@ -21,6 +21,7 @@ import { createNavigation } from './navigation/navigation-data-init';
 import { initTheme } from './utils/theme';
 import { readFeatureToggles } from './utils/feature-toggles';
 import { ssoLogin } from './auth/sso';
+import { setNavFooterText } from './nav-footer';
 
 const luigiAfterInit = () => Luigi.ux().hideAppLoadingIndicator();
 
@@ -51,13 +52,15 @@ async function initializeBusola() {
       nodeParamPrefix: NODE_PARAM_PREFIX,
       skipRoutingForUrlPatterns: [/access_token=/, /id_token=/],
     },
-    settings: await createSettings(activeCluster),
+    settings: createSettings(activeCluster),
     lifecycleHooks: { luigiAfterInit },
   });
 
   // make sure Luigi config is set - we can't use luigiAfterInit as it won't
   // be fired if we had already ran Luigi.setConfig during sso/cluster login
   await new Promise(resolve => setTimeout(resolve, 100));
+
+  await setNavFooterText();
   if (!(await getActiveCluster())) {
     if (!window.location.pathname.startsWith('/clusters')) {
       Luigi.navigation().navigate('/clusters');
