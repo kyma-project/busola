@@ -19,11 +19,12 @@ export default function CreateEventSubscriptionForm({
 }) {
   const { t } = useTranslation();
 
-  const {
-    data: configMap,
-  } = useGet('/api/v1/namespaces/kyma-system/configmaps/eventing', {
-    pollingInterval: 3000000,
-  });
+  const { data: configMap } = useGet(
+    '/api/v1/namespaces/kyma-system/configmaps/eventing',
+    {
+      pollingInterval: 3000000,
+    },
+  );
   let eventTypePrefix =
     configMap?.data?.eventTypePrefix || DEFAULT_EVENT_TYPE_PREFIX;
   eventTypePrefix = eventTypePrefix.endsWith('.')
