@@ -1,4 +1,3 @@
----
 addons:
   addons-status: Addons Status
   errors:
@@ -301,6 +300,7 @@ common:
     no-permissions: You don't have enough permissions to view this content.
     no-permissions-header: Not enough permissions.
     no-permissions-message: Contact your administrator to grant you access.
+    no-permissions-no-role: You have no role assigned.
   headers:
     annotations: Annotations
     created: Created
@@ -872,6 +872,8 @@ issuers:
     requests-per-day: Daily requests quota
     server: ACME Server URL
     type: Select issuer type
+  presets:
+    default: Default
   private-key: Private key Secret
   requests-per-day: Daily requests quota
   server: Server
@@ -904,6 +906,11 @@ jobs:
   title: Jobs
 kubeconfig-id:
   error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})."
+legal:
+  copyright: Copyright
+  legal-disclosure: Legal Disclosure
+  privacy: Privacy
+  trademark: Trademark
 limit-ranges:
   headers:
     default: Default
