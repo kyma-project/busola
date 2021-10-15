@@ -200,6 +200,8 @@ export function MultiInput({
   className,
   isAdvanced,
   defaultOpen,
+  fullWidth = false,
+  isEntryLocked = () => false,
   ...props
 }) {
   const valueRef = useRef(null); // for deep comparison
@@ -254,6 +256,13 @@ export function MultiInput({
   };
   const open = defaultOpen === undefined ? !isAdvanced : defaultOpen;
 
+  const listClasses = classnames({
+    'text-array-input__list': true,
+    'fd-col': true,
+    'fd-col-md--7': !fullWidth,
+    'fd-col-md--12': fullWidth,
+  });
+
   return (
     <CollapsibleSection
       title={title}
@@ -264,12 +273,14 @@ export function MultiInput({
       {...props}
     >
       <div className="fd-row form-field multi-input">
-        <div className="fd-col fd-col-md--4">
-          <Label required={required} tooltipContent={tooltipContent}>
-            {title || label}
-          </Label>
-        </div>
-        <ul className="text-array-input__list fd-col fd-col-md--7">
+        {!fullWidth && (
+          <div className="fd-col fd-col-md--4">
+            <Label required={required} tooltipContent={tooltipContent}>
+              {title || label}
+            </Label>
+          </div>
+        )}
+        <ul className={listClasses}>
           {internalValue.map((entry, index) => (
             <li key={index}>
               {inputs.map((input, inputIndex) =>
@@ -296,7 +307,9 @@ export function MultiInput({
               )}
               <Button
                 compact
-                className={classnames({ hidden: isLast(index) })}
+                className={classnames({
+                  hidden: isLast(index) || isEntryLocked(entry),
+                })}
                 glyph="delete"
                 type="negative"
                 onClick={() => removeValue(index)}
