@@ -61,7 +61,7 @@ applications:
     create-app: $t(applications.subtitle.create-app)
     select-all: Select all
   headers:
-    access-label: Access Labels
+    access-label: Access Label
     central-gateway-url: Central Gateway URL
     service: Service
     apis: APIs
