@@ -297,7 +297,7 @@ common:
     no-permissions: You don't have enough permissions to view this content.
     no-permissions-header: Not enough permissions.
     no-permissions-message: Contact your administrator to grant you access.
-    no-permissions-no-role: It looks like you have no role assigned.
+    no-permissions-no-role: You have no role assigned.
   headers:
     annotations: Annotations
     created: Created
