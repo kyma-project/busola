@@ -36,12 +36,17 @@ export function ApplicationServiceDetails({ applicationName, serviceName }) {
     { name: '' },
   ];
 
+  const service = application?.spec.services?.find(
+    service => service.name === serviceName,
+  );
+
   if (loading) return <Spinner />;
+
   if (error) {
     if (error.code === 404) {
       return (
         <ResourceNotFound
-          resource="Application Service"
+          resource="Application"
           breadcrumbs={breadcrumbItems}
           i18n={i18n}
         />
@@ -49,7 +54,7 @@ export function ApplicationServiceDetails({ applicationName, serviceName }) {
     }
     return (
       <ResourceNotFound
-        resource="Application Service"
+        resource="Application"
         breadcrumbs={breadcrumbItems}
         customMessage={getErrorMessage(error)}
         i18n={i18n}
@@ -57,9 +62,16 @@ export function ApplicationServiceDetails({ applicationName, serviceName }) {
     );
   }
 
-  const service = application?.spec.services?.find(
-    service => service.name === serviceName,
-  );
+  if (!service) {
+    return (
+      <ResourceNotFound
+        resource="Application Service"
+        breadcrumbs={breadcrumbItems}
+        i18n={i18n}
+      />
+    );
+  }
+
   const APIs = service?.entries?.filter(t => t.type === 'API');
   const events = service?.entries?.filter(t => t.type === 'Events');
 
