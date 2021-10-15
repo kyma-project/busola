@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ResourceForm } from '../../../../shared/ResourceForm/ResourceForm';
 import {
+  createPresets,
   createIssuerTemplate,
   createCATypeTemplate,
   createACMETypeTemplate,
@@ -31,22 +32,12 @@ export function IssuersCreate({
   }, [issuer, issuerType, setCustomValid]);
 
   React.useEffect(() => {
-    let issuerTypeObject = {};
-    if (issuerType === 'ca') issuerTypeObject = createCATypeTemplate();
-    else if (issuerType === 'acme') issuerTypeObject = createACMETypeTemplate();
-    const spec = jp.value(issuer, '$.spec') || [];
-    delete spec.ca;
-    delete spec.acme;
+    if (issuer.spec.ca) setIssuerType('ca');
+    else if (issuer.spec.acme) setIssuerType('acme');
+    else setIssuerType('');
 
-    setIssuer({
-      ...issuer,
-      spec: {
-        ...spec,
-        ...issuerTypeObject,
-      },
-    });
     // eslint-disable-next-line
-  }, [issuerType, setIssuerType]);
+  }, [issuer, setIssuer]);
 
   const issuerCAFields = () => {
     if (!issuerType || issuerType !== 'ca') return <></>;
@@ -257,6 +248,7 @@ export function IssuersCreate({
       setResource={setIssuer}
       onChange={onChange}
       formElementRef={formElementRef}
+      presets={createPresets(namespace, t)}
       createUrl={`/apis/cert.gardener.cloud/v1alpha1/namespaces/${namespace}/issuers/`}
     >
       <ResourceForm.K8sNameField
@@ -274,7 +266,20 @@ export function IssuersCreate({
         required
         value={issuerType}
         setValue={type => {
-          setIssuerType(type);
+          let issuerTypeObject = {};
+          if (type === 'ca') issuerTypeObject = createCATypeTemplate();
+          else if (type === 'acme') issuerTypeObject = createACMETypeTemplate();
+          const spec = jp.value(issuer, '$.spec') || [];
+          delete spec.ca;
+          delete spec.acme;
+
+          setIssuer({
+            ...issuer,
+            spec: {
+              ...spec,
+              ...issuerTypeObject,
+            },
+          });
         }}
         input={({ value, setValue }) => (
           <IssuerTypeDropdown type={value} setType={setValue} />
