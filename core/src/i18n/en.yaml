@@ -343,7 +343,7 @@ common:
     download: Download
     duplicate-key: Duplicate key
     error: 'Error: '
-    k8s-name-input: 'Name must consist of lowercase alphanumeric characters, can contain ''-'' (e.g.: ''my-name1'').'
+    k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' (e.g.: 'my-name1')."
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: key=value, must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     read-file: Read file content as a single value, with file name as a key.
@@ -902,7 +902,7 @@ jobs:
   start-time: Start Time
   title: Jobs
 kubeconfig-id:
-  error: 'Couldn''t load kubeconfig ID; configuration not changed (Error: ${{error}}).'
+  error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})."
 legal:
   copyright: Copyright
   legal-disclosure: Legal Disclosure
@@ -1149,13 +1149,13 @@ workloads:
   docker-image:
     tooltip: Enter a valid Docker image registry path.
   title: Workloads
-￼      disabled: For security reasons, don't enable automount if you don't need it.
-￼      enabled: For security reasons, don't use automount if you don't need it.
-￼    auto-mount-token: Automount Token
-￼    descriptions: null
-￼    disabled: disabled
-￼    download-kubeconfig: Download Kubeconfig
-￼    enabled: enabled
-￼  auto-mount-token: null
-￼  headers: null
-￼  title: Service Accounts
+￼     disabled: For security reasons, don't enable automount if you don't need it.
+￼     enabled: For security reasons, don't use automount if you don't need it.
+￼   auto-mount-token: Automount Token
+￼   descriptions: null
+￼   disabled: disabled
+￼   download-kubeconfig: Download Kubeconfig
+￼   enabled: enabled
+￼ auto-mount-token: null
+￼ headers: null
+￼ title: Service Accounts
