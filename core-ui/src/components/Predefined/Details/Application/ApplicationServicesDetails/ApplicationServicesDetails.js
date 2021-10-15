@@ -15,7 +15,7 @@ import {
 
 export function ApplicationServiceDetails({ applicationName, serviceName }) {
   useWindowTitle('Application Service');
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const resourceUrl = `/apis/applicationconnector.kyma-project.io/v1alpha1/applications/${applicationName}`;
 
   const { loading = true, error, data: application } = useGet(resourceUrl, {
@@ -24,7 +24,7 @@ export function ApplicationServiceDetails({ applicationName, serviceName }) {
 
   const breadcrumbItems = [
     {
-      name: 'Applications',
+      name: t('applications.title'),
       path: '/',
       fromContext: 'applications',
     },
@@ -46,7 +46,7 @@ export function ApplicationServiceDetails({ applicationName, serviceName }) {
     if (error.code === 404) {
       return (
         <ResourceNotFound
-          resource="Application"
+          resource={t('applications.title')}
           breadcrumbs={breadcrumbItems}
           i18n={i18n}
         />
@@ -54,7 +54,7 @@ export function ApplicationServiceDetails({ applicationName, serviceName }) {
     }
     return (
       <ResourceNotFound
-        resource="Application"
+        resource={t('applications.title')}
         breadcrumbs={breadcrumbItems}
         customMessage={getErrorMessage(error)}
         i18n={i18n}
@@ -65,7 +65,7 @@ export function ApplicationServiceDetails({ applicationName, serviceName }) {
   if (!service) {
     return (
       <ResourceNotFound
-        resource="Application Service"
+        resource={t('applications.headers.service')}
         breadcrumbs={breadcrumbItems}
         i18n={i18n}
       />
@@ -75,7 +75,11 @@ export function ApplicationServiceDetails({ applicationName, serviceName }) {
   const APIs = service?.entries?.filter(t => t.type === 'API');
   const events = service?.entries?.filter(t => t.type === 'Events');
 
-  const headerRenderer = () => ['Name', 'Access Label', 'Central Gateway URL'];
+  const headerRenderer = () => [
+    t('common.headers.name'),
+    t('applications.headers.access-label'),
+    t('applications.headers.central-gateway-url'),
+  ];
   const rowRenderer = e => [
     e.name || EMPTY_TEXT_PLACEHOLDER,
     e.accessLabel || EMPTY_TEXT_PLACEHOLDER,
@@ -93,23 +97,23 @@ export function ApplicationServiceDetails({ applicationName, serviceName }) {
 
           <GenericList
             key="application-service-apis"
-            title={'APIs'}
+            title={t('applications.headers.apis')}
             textSearchProperties={['name', 'accessLabel', 'centralGatewayUrl']}
             entries={APIs}
             headerRenderer={headerRenderer}
             rowRenderer={rowRenderer}
-            notFoundMessage={'Not Found'}
+            notFoundMessage={t('applications.messages.no-apis')}
             i18n={i18n}
           />
 
           <GenericList
             key="application-service-events"
-            title={'Events'}
+            title={t('applications.headers.events')}
             textSearchProperties={['name', 'accessLabel', 'centralGatewayUrl']}
             entries={events}
             headerRenderer={headerRenderer}
             rowRenderer={rowRenderer}
-            notFoundMessage={'Not Found'}
+            notFoundMessage={t('applications.messages.no-events')}
             i18n={i18n}
           />
         </>
