@@ -68,6 +68,7 @@ export const StatusBadge = ({
 
   const badgeElement = (
     <ObjectStatus
+      ariaLabel="Status"
       role="status"
       inverted
       status={type}
