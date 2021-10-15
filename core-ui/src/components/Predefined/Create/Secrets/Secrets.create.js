@@ -9,6 +9,11 @@ SecretsCreate.secrets = (t, context) => [
   {
     type: 'kubernetes.io/service-account-token',
     data: [],
+    metadata: {
+      annotations: {
+        'kubernetes.io/service-account.name': '',
+      },
+    },
   },
   {
     type: 'kubernetes.io/dockercfg',

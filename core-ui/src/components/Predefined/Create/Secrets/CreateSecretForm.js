@@ -118,6 +118,7 @@ export function CreateSecretForm({
         title={t('common.headers.annotations')}
       />
       <ResourceForm.FormField
+        required
         propertyPath="$.type"
         label={t('secrets.type')}
         input={({ value, setValue }) => (
