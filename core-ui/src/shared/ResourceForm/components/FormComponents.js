@@ -452,6 +452,7 @@ export function DataField({ encodable = false, ...props }) {
     <KeyValueField
       fullWidth
       readableFromFile
+      className="resource-form__data-field"
       title={t('data')}
       input={({ value, setValue, ...props }) => (
         <FormTextarea
