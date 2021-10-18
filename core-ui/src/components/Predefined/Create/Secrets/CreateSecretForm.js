@@ -100,7 +100,12 @@ export function CreateSecretForm({
           />
         )}
       />
-      <DataField encodable propertyPath="$.data" lockedKeys={lockedKeys} />
+      <DataField
+        defaultOpen
+        encodable
+        propertyPath="$.data"
+        lockedKeys={lockedKeys}
+      />
     </ResourceForm>
   );
 }

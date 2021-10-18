@@ -14,7 +14,7 @@ export function createConfigMapTemplate(namespace) {
 
 export function createPresets(defs, namespaceId, t) {
   if (!defs.length) {
-    return [];
+    return null;
   }
 
   return [

@@ -61,7 +61,7 @@ export function ConfigMapForm({
         propertyPath="$.metadata.annotations"
         title={t('common.headers.annotations')}
       />
-      <DataField propertyPath="$.data" />
+      <DataField defaultOpen propertyPath="$.data" />
     </ResourceForm>
   );
 }
