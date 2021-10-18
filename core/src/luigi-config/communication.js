@@ -12,6 +12,7 @@ import { reloadNavigation } from './navigation/navigation-data-init';
 import { reloadAuth } from './auth/auth';
 import { setFeatureToggle } from './utils/feature-toggles';
 import { setTheme } from './utils/theme';
+import { setSSOAuthData } from './auth/sso';
 
 export const communication = {
   customMessagesListeners: {
@@ -62,7 +63,12 @@ export const communication = {
         pathname + newParamsString,
       );
     },
-    'busola.reload': () => location.reload(),
+    'busola.reload': ({ reason }) => {
+      if (reason === 'sso-expiration') {
+        setSSOAuthData(null);
+      }
+      location.reload();
+    },
     'busola.addCluster': async ({ params }) => {
       await saveClusterParams(params);
       setCluster(params.currentContext.cluster.name);

@@ -14,7 +14,6 @@ export function TextRef({ text, setText }) {
       propertyPath="$.spec.text"
       title={t('dnsentries.labels.text')}
       tooltipContent={t('dnsentries.tooltips.text')}
-      sectionTooltipContent={t('dnsentries.tooltips.texts')}
       inputProps={{
         placeholder: t('dnsentries.tooltips.text'),
       }}

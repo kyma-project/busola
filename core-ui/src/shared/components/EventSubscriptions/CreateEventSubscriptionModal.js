@@ -25,7 +25,6 @@ export default function CreateEventSubscriptionModal({
       confirmText={t('common.buttons.add')}
       invalidPopupMessage={t('event-subscription.errors.invalid')}
       id="add-event-trigger-modal"
-      className="fd-dialog--xl-size"
       renderForm={props => (
         <CreateEventSubscriptionForm
           {...props}

@@ -60,6 +60,9 @@ applications:
     create-app: $t(applications.subtitle.create-app)
     select-all: Select all
   headers:
+    access-label: Access Label
+    central-gateway-url: Central Gateway URL
+    service: Service
     apis: APIs
     description: Description
     events: Events
@@ -322,6 +325,7 @@ common:
     resource-namespace: '{{resource}} $t(common.labels.namespace)'
     secret: Secret
     service: Service
+    version: Version
   lowercase:
     name: name
   messages:
@@ -531,10 +535,8 @@ dnsentries:
     ttl: Enter the time to live.
   title: DNS Entries
   tooltips:
-    target: Target must be an A record, or a CNAME record.
-    targets: You must provide either target or text.
-    text: Text record must be a string.
-    texts: You must provide either target or text.
+    target: Target must be an A record, or a CNAME record. Provide either target or text.
+    text: Text record must be a string. Provide either target or text.
     use-a: Switch to A record.
     use-cname: Switch to CNAME record.
   use-cname: Use CNAME

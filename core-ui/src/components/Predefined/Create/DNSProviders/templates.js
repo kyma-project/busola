@@ -21,3 +21,9 @@ export function createDNSProviderTemplate(namespace) {
     },
   };
 }
+
+export const createDNSProviderTemplateForGardener = namespace => {
+  const dnsProvider = createDNSProviderTemplate(namespace);
+  dnsProvider.metadata.annotations = { 'dns.gardener.cloud/class': 'garden' };
+  return dnsProvider;
+};

@@ -1,5 +1,6 @@
 import { getBusolaClusterParams } from './../busola-cluster-params';
 import { resolveFeatureAvailability } from './../features';
+import parseJWT from 'jwt-decode';
 
 const SSO_KEY = 'SSO';
 
@@ -61,8 +62,21 @@ async function createSSOAuth(callback) {
 
 export async function ssoLogin(luigiAfterInit) {
   // don't run login flow if we already have authData
-  if (!(await isSSOEnabled()) || getSSOAuthData()) {
+  if (!(await isSSOEnabled())) {
     return;
+  }
+
+  const token = getSSOAuthData()?.idToken;
+  if (token) {
+    const timeout = 30; // s
+    const expirationTimestamp = parseJWT(token).exp;
+    const secondsLeft = new Date(expirationTimestamp) - Date.now() / 1000;
+    if (secondsLeft > timeout) {
+      return;
+    } else {
+      // we require a new token
+      sessionStorage.removeItem(SSO_KEY);
+    }
   }
 
   return new Promise(async resolve => {
