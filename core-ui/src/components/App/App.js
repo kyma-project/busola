@@ -8,6 +8,7 @@ import {
   useMicrofrontendContext,
   MainFrameRedirection,
 } from 'react-shared';
+import { ApplicationServiceDetails } from 'components/Predefined/Details/Application/ApplicationServicesDetails/ApplicationServicesDetails';
 import CreateApiRule from '../ApiRules/CreateApiRule/CreateApiRule';
 import EditApiRule from 'components/ApiRules/EditApiRule/EditApiRule';
 import { ContainersLogs } from 'components/Predefined/Details/Pod/ContainersLogs';
@@ -66,6 +67,12 @@ export default function App() {
 
       <Route
         exact
+        path="/applications/:name/:serviceName"
+        component={RoutedApplicationServiceDetails}
+      />
+
+      <Route
+        exact
         path="/apirules/edit/:apiName"
         render={withTitle(t('api-rules.title'), RoutedEditApiRule)}
       />
@@ -101,6 +108,18 @@ export default function App() {
       <Route exact path="/:resourceType" component={RoutedResourcesList} />
       <Route exact path="" component={MainFrameRedirection} />
     </Switch>
+  );
+}
+
+function RoutedApplicationServiceDetails({ match }) {
+  const applicationName = decodeURIComponent(match.params.name);
+  const serviceName = decodeURIComponent(match.params.serviceName);
+
+  return (
+    <ApplicationServiceDetails
+      applicationName={applicationName}
+      serviceName={serviceName}
+    />
   );
 }
 
