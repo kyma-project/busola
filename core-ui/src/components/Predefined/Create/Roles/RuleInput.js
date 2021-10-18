@@ -12,6 +12,8 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
 
   const isNamespaced = !!namespaceId;
 
+  console.log(permissionSet);
+
   return (
     <ResourceFormWrapper
       isAdvanced={isAdvanced}

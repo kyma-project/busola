@@ -60,9 +60,12 @@ applications:
     create-app: $t(applications.subtitle.create-app)
     select-all: Select all
   headers:
+    access-label: Access Label
     apis: APIs
+    central-gateway-url: Central Gateway URL
     description: Description
     events: Events
+    service: Service
     service-and-event: Service and Event Bindings
   labels:
     applications-and-events: Applications and Events
@@ -1063,11 +1066,11 @@ roles:
     non-resource-urls: Non-resource URLs
     resource-names: Resource Names
     resources: Resources
-    rules: Rules
     rule: Rule
+    rules: Rules
     verbs: Verbs
-  title: Roles
   name_singular: Role
+  title: Roles
 secrets:
   buttons:
     collapse: Collapse All
