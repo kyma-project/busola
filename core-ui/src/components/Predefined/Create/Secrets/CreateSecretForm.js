@@ -19,13 +19,13 @@ export function CreateSecretForm({
   namespaceId,
   formElementRef,
   onChange,
-  secret: existingSecret,
+  secret: initialSecret,
   onSubmit,
   resourceUrl,
 }) {
   const { t } = useTranslation();
   const [secret, setSecret] = useState(
-    existingSecret || createSecretTemplate(namespaceId),
+    initialSecret || createSecretTemplate(namespaceId),
   );
   const [lockedKeys, setLockedKeys] = useState([]);
 
@@ -59,6 +59,7 @@ export function CreateSecretForm({
       pluralKind="secrets"
       singularName={t('secrets.name_singular')}
       resource={secret}
+      initialResource={initialSecret}
       setResource={setSecret}
       onChange={onChange}
       formElementRef={formElementRef}

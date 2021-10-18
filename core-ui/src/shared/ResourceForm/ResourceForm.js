@@ -84,6 +84,7 @@ export function ResourceForm({
   pluralKind, // used for the request path
   singularName,
   resource,
+  initialResource,
   setResource,
   onChange,
   formElementRef,
@@ -99,6 +100,7 @@ export function ResourceForm({
     singularName,
     pluralKind,
     resource,
+    initialResource,
     createUrl,
     afterCreatedFn,
   );

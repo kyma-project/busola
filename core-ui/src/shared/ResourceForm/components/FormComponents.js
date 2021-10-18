@@ -497,7 +497,7 @@ export function KeyValueField({
   );
 }
 
-export function DataField({ encodable = false, title, ...props }) {
+export function DataField({ title, ...props }) {
   const { t } = useTranslation();
 
   return (

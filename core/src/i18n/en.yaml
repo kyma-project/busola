@@ -282,8 +282,10 @@ common:
     choose-preset: Select a Preset
     editor-error: 'Parse error: {{error}}, previous valid input will be used.'
     messages:
-      failure: 'Failed to create the {{resourceType}}: {{error}}.'
-      success: '{{resourceType}} created.'
+      create-failure: 'Failed to create the {{resourceType}}: {{error}}.'
+      create-success: '{{resourceType}} created.'
+      patch-failure: 'Failed to update the {{resourceType}}: {{error}}.'
+      patch-success: '{{resourceType}} updated.'
     modes:
       advanced: Advanced
       simple: Simple

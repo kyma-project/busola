@@ -17,7 +17,6 @@ export function ConfigMapForm({
   onChange,
   setCustomValid,
   configMap: initialConfigMap,
-  onSubmit,
   readonlyName,
   resourceUrl,
 }) {
@@ -32,6 +31,7 @@ export function ConfigMapForm({
       pluralKind="configmaps"
       singularName={t('config-maps.name_singular')}
       resource={configMap}
+      initialResource={initialConfigMap}
       setResource={setConfigMap}
       onChange={onChange}
       formElementRef={formElementRef}
