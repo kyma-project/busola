@@ -13,9 +13,11 @@ export async function setNavFooterText() {
   const feature = (await getBusolaClusterParams()).config?.features
     ?.LEGAL_LINKS;
 
+  const versionText = i18next.t('common.labels.version');
+
   targetElement.innerHTML = `
     <ul>
-      ${Object.entries(feature.config || {})
+      ${Object.entries(feature?.config || {})
         .map(([key, value]) => {
           const text = i18next.t('legal.' + key);
           const link = value[language] || value.default;
@@ -23,7 +25,7 @@ export async function setNavFooterText() {
         })
         .join('')}
     </ul>
-    <p>Version: ${version}</p>`;
+    <p>${versionText}: ${version}</p>`;
 }
 
 async function getBusolaVersion() {
