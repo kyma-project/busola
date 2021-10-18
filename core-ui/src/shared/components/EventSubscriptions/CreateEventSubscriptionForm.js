@@ -10,7 +10,7 @@ import {
 import { InputWithPrefix, useGet } from 'react-shared';
 import './CreateEventSubscriptionForm.scss';
 
-const DEFAULT_EVENT_TYPE_PREFIX = 'sap.kyma.custom.lololo.';
+const DEFAULT_EVENT_TYPE_PREFIX = 'sap.kyma.custom.';
 
 export default function CreateEventSubscriptionForm({
   formElementRef,
