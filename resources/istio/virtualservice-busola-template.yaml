@@ -4,7 +4,7 @@ metadata:
   name: busola
 spec:
   hosts:
-    - %DOMAIN%
+    - $DOMAIN
   gateways:
     - kyma-system/kyma-gateway
   http:
@@ -14,8 +14,8 @@ spec:
             prefix: '/backend'
       route:
         - destination:
-            host: backend.%NAMESPACE%.svc.cluster.local
+            host: backend.$NAMESPACE.svc.cluster.local
     - name: 'web-route'
       route:
         - destination:
-            host: web.%NAMESPACE%.svc.cluster.local
+            host: web.$NAMESPACE.svc.cluster.local
