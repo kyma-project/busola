@@ -1,11 +1,7 @@
-import * as components from '../';
+import { getResourceDefs } from 'shared/helpers/getResourceDefs';
 
-export function getSecretDefs(t, context) {
-  return Object.values(components)
-    .filter(component => component.secrets)
-    .map(component => component.secrets(t, context))
-    .flat();
-}
+export const getSecretDefs = (t, context) =>
+  getResourceDefs('secrets', t, context);
 
 export const mapObjectValues = (fn, obj) =>
   Object.fromEntries(

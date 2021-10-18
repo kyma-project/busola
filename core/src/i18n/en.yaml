@@ -415,6 +415,8 @@ config-maps:
     created: ConfigMap created.
     updated: ConfigMap updated.
   name_singular: Config Map
+  presets:
+    default: Default
   subtitle:
     edit-config-map: Edit ConfigMap
   title: ConfigMaps
