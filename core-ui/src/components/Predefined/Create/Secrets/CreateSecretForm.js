@@ -20,7 +20,6 @@ export function CreateSecretForm({
   formElementRef,
   onChange,
   secret: initialSecret,
-  onSubmit,
   resourceUrl,
 }) {
   const { t } = useTranslation();
