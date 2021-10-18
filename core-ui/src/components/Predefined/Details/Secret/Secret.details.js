@@ -20,7 +20,7 @@ export const SecretsDetails = ({ DefaultRenderer, ...otherParams }) => {
           </Button>
         }
         confirmText={t('common.buttons.update')}
-        className="fd-dialog--xl-size modal-size--l"
+        className="modal-size--l"
         renderForm={props => (
           <CreateSecretForm
             secret={secret}

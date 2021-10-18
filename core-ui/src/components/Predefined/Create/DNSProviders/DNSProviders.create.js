@@ -1,10 +1,15 @@
-import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
-import { createDNSProviderTemplate } from './templates';
-import { ProviderTypeDropdown } from './ProviderTypeDropdown';
-import { SecretRef } from 'shared/components/ResourceRef/SecretRef';
+import React, { useEffect } from 'react';
 import * as jp from 'jsonpath';
+import { useTranslation } from 'react-i18next';
+import { useGet } from 'react-shared';
+
+import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
+import { SecretRef } from 'shared/components/ResourceRef/SecretRef';
+import {
+  createDNSProviderTemplate,
+  createDNSProviderTemplateForGardener,
+} from './templates';
+import { ProviderTypeDropdown } from './ProviderTypeDropdown';
 
 function DNSProvidersCreate({
   formElementRef,
@@ -12,12 +17,24 @@ function DNSProvidersCreate({
   onChange,
   setCustomValid,
 }) {
+  const { t } = useTranslation();
   const [dnsProvider, setDNSProvider] = React.useState(
     createDNSProviderTemplate(namespace),
   );
-  const { t } = useTranslation();
+  const { data: configmap } = useGet(
+    `/api/v1/namespaces/kube-system/configmaps/shoot-info`,
+    {
+      pollingInterval: 0,
+    },
+  );
 
-  React.useEffect(() => {
+  useEffect(() => {
+    if (configmap) {
+      setDNSProvider(createDNSProviderTemplateForGardener(namespace));
+    }
+  }, [configmap, namespace, setDNSProvider]);
+
+  useEffect(() => {
     const isTypeSet = jp.value(dnsProvider, '$.spec.type');
     const isSecretRefSet =
       jp.value(dnsProvider, '$.spec.secretRef.name') &&
