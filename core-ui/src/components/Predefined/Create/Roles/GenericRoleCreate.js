@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import * as jp from 'jsonpath';
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import { createRuleTemplate, validateRole } from './helpers';
+import * as Inputs from 'shared/ResourceForm/components/Inputs';
 import { RuleInput } from './RuleInput';
+import { RuleTitle } from './RuleTitle';
 
 export function GenericRoleCreate({
   onChange,
@@ -31,19 +32,20 @@ export function GenericRoleCreate({
       formElementRef={formElementRef}
       createUrl={createUrl}
     >
-      <ResourceForm.K8sNameField
+      <ResourceForm.FormField
+        required
+        label={t('common.labels.name')}
+        placeholder={t('components.k8s-name-input.placeholder', {
+          resourceType: t('roles.name_singular'),
+        })}
+        input={Inputs.Text}
         propertyPath="$.metadata.name"
-        kind={t('roles.name_singular')}
-        setValue={name => {
-          jp.value(role, '$.metadata.name', name);
-          jp.value(role, "$.metadata.labels['app.kubernetes.io/name']", name);
-          setRole({ ...role });
-        }}
       />
 
       <ResourceForm.ItemArray
         propertyPath="$.rules"
         listTitle={t('roles.headers.rules')}
+        entryTitle={(rule, i) => <RuleTitle rule={rule} i={i} />}
         nameSingular={t('roles.headers.rule')}
         itemRenderer={(current, allValues, setAllValues, isAdvanced) => (
           <RuleInput

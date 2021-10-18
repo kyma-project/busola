@@ -5,6 +5,7 @@ import {
   ResourceForm,
   ResourceFormWrapper,
 } from 'shared/ResourceForm/ResourceForm';
+import { InvalidRoleError } from './InvalidRoleError';
 
 export function RuleInput({ rule, rules, setRules, isAdvanced }) {
   const { namespaceId, permissionSet } = useMicrofrontendContext();
@@ -27,24 +28,32 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
     >
       <ResourceForm.TextArrayInput
         title={t('roles.headers.api-groups')}
-        placeholder={t('roles.headers.api-groups')}
         propertyPath="$.apiGroups"
+        inputProps={{
+          placeholder: t('roles.headers.api-groups'),
+        }}
       />
       <ResourceForm.TextArrayInput
         title={t('roles.headers.resources')}
-        placeholder={t('roles.headers.resources')}
         propertyPath="$.resources"
+        inputProps={{
+          placeholder: t('roles.headers.resources'),
+        }}
       />
       <ResourceForm.TextArrayInput
         title={t('roles.headers.verbs')}
-        placeholder={t('roles.headers.verbs')}
         propertyPath="$.verbs"
+        inputProps={{
+          placeholder: t('roles.headers.verbs'),
+        }}
       />
       {isAdvanced && (
         <ResourceForm.TextArrayInput
           title={t('roles.headers.resource-names')}
-          placeholder={t('roles.headers.resource-names')}
           propertyPath="$.resourceNames"
+          inputProps={{
+            placeholder: t('roles.headers.resource-names'),
+          }}
         />
       )}
       {isAdvanced && !isNamespaced && (
@@ -52,8 +61,12 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
           title={t('roles.headers.non-resource-urls')}
           placeholder={t('roles.headers.non-resource-urls')}
           propertyPath="$.nonResourceURLs"
+          inputProps={{
+            placeholder: t('roles.headers.non-resource-urls'),
+          }}
         />
       )}
+      <InvalidRoleError rule={rule} />
     </ResourceFormWrapper>
   );
 }

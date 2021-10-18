@@ -1,7 +1,7 @@
 import LuigiClient from '@luigi-project/client';
 import { useNotification } from 'react-shared';
 import { useTranslation } from 'react-i18next';
-import { usePost } from 'react-shared';
+import { usePost, useMicrofrontendContext } from 'react-shared';
 
 export function useCreateResource(
   singularName,
@@ -12,6 +12,7 @@ export function useCreateResource(
 ) {
   const { t } = useTranslation();
   const notification = useNotification();
+  const { namespaceId } = useMicrofrontendContext();
   const postRequest = usePost();
 
   const defaultAfterCreatedFn = () => {
@@ -20,11 +21,15 @@ export function useCreateResource(
         resourceType: singularName,
       }),
     });
-    LuigiClient.linkManager()
-      .fromContext('namespace')
-      .navigate(
-        `/${pluralKind.toLowerCase()}/details/${resource.metadata.name}`,
-      );
+    if (namespaceId) {
+      LuigiClient.linkManager()
+        .fromContext('namespace')
+        .navigate(
+          `/${pluralKind.toLowerCase()}/details/${resource.metadata.name}`,
+        );
+    } else {
+      LuigiClient.linkManager().navigate(`details/${resource.metadata.name}`);
+    }
   };
 
   return async () => {

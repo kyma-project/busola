@@ -378,6 +378,7 @@ export async function createNavigationNodes(
         kubeconfig: activeCluster.kubeconfig,
         language: i18next.language,
         ssoData: getSSOAuthData(),
+        permissionSet,
       },
     },
   ];

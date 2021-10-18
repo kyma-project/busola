@@ -428,11 +428,15 @@ export function ItemArray({
 
   const renderAllItems = () =>
     values.map((current, i) => {
-      const name = typeof entryTitle === 'function' && entryTitle(current);
+      const name = typeof entryTitle === 'function' && entryTitle(current, i);
       return (
         <CollapsibleSection
           key={i}
-          title={`${nameSingular} ${name || i + 1}`}
+          title={
+            <>
+              {nameSingular} {name || i + 1}
+            </>
+          }
           actions={
             <Button
               compact
@@ -465,6 +469,7 @@ export function ItemArray({
           {t('common.buttons.add')} {nameSingular}
         </Button>
       )}
+      {...props}
     >
       {content}
       {atLeastOneRequiredMessage && !values.length && (
