@@ -415,12 +415,16 @@ export function ItemArray({
   atLeastOneRequiredMessage,
   itemRenderer,
   newResourceTemplateFn,
+  ...props
 }) {
   const { t } = useTranslation();
 
   values = values || [];
 
   const remove = index => setValues(values.filter((_, i) => index !== i));
+
+  const renderItem = item =>
+    itemRenderer(item, values, setValues, props.isAdvanced);
 
   const renderAllItems = () =>
     values.map((current, i) => {
@@ -438,15 +442,13 @@ export function ItemArray({
             />
           }
         >
-          {itemRenderer(current, values, setValues)}
+          {renderItem(current)}
         </CollapsibleSection>
       );
     });
 
   const content =
-    values.length === 1
-      ? itemRenderer(values[0], values, setValues)
-      : renderAllItems();
+    values.length === 1 ? renderItem(values[0]) : renderAllItems();
 
   return (
     <CollapsibleSection
@@ -463,9 +465,10 @@ export function ItemArray({
           {t('common.buttons.add')} {nameSingular}
         </Button>
       )}
+      {...props}
     >
       {content}
-      {!values.length && (
+      {atLeastOneRequiredMessage && !values.length && (
         <MessageStrip type="warning">{atLeastOneRequiredMessage}</MessageStrip>
       )}
     </CollapsibleSection>

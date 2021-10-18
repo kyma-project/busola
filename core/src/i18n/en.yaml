@@ -1064,8 +1064,10 @@ roles:
     resource-names: Resource Names
     resources: Resources
     rules: Rules
+    rule: Rule
     verbs: Verbs
   title: Roles
+  name_singular: Role
 secrets:
   buttons:
     collapse: Collapse All
