@@ -1305,6 +1305,7 @@ export function getStaticRootNodes(
             {
               pathSegment: ':name',
               resourceType: 'applications',
+              navigationContext: 'application',
               viewUrl:
                 config.coreUIModuleUrl +
                 '/Applications/:name?' +
@@ -1313,6 +1314,20 @@ export function getStaticRootNodes(
                     '/apis/applicationconnector.kyma-project.io/v1alpha1',
                 }),
               viewGroup: coreUIViewGroupName,
+              children: [
+                {
+                  pathSegment: ':serviceName',
+                  resourceType: 'applications',
+                  viewUrl:
+                    config.coreUIModuleUrl +
+                    '/Applications/:name/:serviceName?' +
+                    toSearchParamsString({
+                      resourceApiPath:
+                        '/apis/applicationconnector.kyma-project.io/v1alpha1',
+                    }),
+                  viewGroup: coreUIViewGroupName,
+                },
+              ],
             },
           ],
         },
