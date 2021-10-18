@@ -119,29 +119,6 @@ body {
   }
 }
 
-.fd-dialog--xl-size {
-  .modal-demo-bg {
-    min-width: 1036px;
-  }
-
-  .fd-dialog__body {
-    max-height: calc(100vh - 184px);
-  }
-
-  @media (max-width: 1100px) {
-    .modal-demo-bg {
-      min-width: 100%;
-      padding: 0 32px;
-    }
-
-    .fd-dialog,
-    .fd-dialog__content,
-    .fd-dialog__body {
-      min-width: 100%;
-    }
-  }
-}
-
 .action-bar-wrapper {
   @media (min-width: 500px) {
     display: flex;

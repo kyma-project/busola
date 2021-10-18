@@ -322,6 +322,7 @@ common:
     resource-namespace: '{{resource}} $t(common.labels.namespace)'
     secret: Secret
     service: Service
+    version: Version
   lowercase:
     name: name
   messages:
@@ -528,10 +529,8 @@ dnsentries:
     ttl: Enter the time to live.
   title: DNS Entries
   tooltips:
-    target: Target must be an A record, or a CNAME record.
-    targets: You must provide either target or text.
-    text: Text record must be a string.
-    texts: You must provide either target or text.
+    target: Target must be an A record, or a CNAME record. Provide either target or text.
+    text: Text record must be a string. Provide either target or text.
     use-a: Switch to A record.
     use-cname: Switch to CNAME record.
   use-cname: Use CNAME
@@ -1083,9 +1082,6 @@ secrets:
       success: Secret created.
     presets:
       default: Default
-    simple:
-      data: Data
-      type: Type
     title: Create Secret
   data: Data
   edit-modal:
@@ -1099,8 +1095,11 @@ secrets:
     type: Secret Type
   metadata: Metadata
   name_singular: Secret
+  placeholders:
+    type: Type of Secret
   title: Secrets
   title-edit-secret: Edit Secret
+  type: Type
   updated: Secret updated
 service-accounts:
   auto-mount-token:
