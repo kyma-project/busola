@@ -1,9 +1,15 @@
 import React from 'react';
+import { Link } from 'fundamental-react';
 import { GenericList } from 'react-shared';
 import { useTranslation } from 'react-i18next';
+import LuigiClient from '@luigi-project/client';
 
 export default function ApplicationServices({ spec: applicationSpec }) {
   const { t, i18n } = useTranslation();
+
+  const navigateToDetails = resourceName => {
+    LuigiClient.linkManager().navigate(resourceName);
+  };
 
   const headerRenderer = () => [
     t('common.headers.name'),
@@ -12,7 +18,11 @@ export default function ApplicationServices({ spec: applicationSpec }) {
   ];
 
   const entries = applicationSpec.services.map(e => ({
-    displayName: e.displayName,
+    displayName: (
+      <Link className="fd-link" onClick={_ => navigateToDetails(e.name)}>
+        {e.displayName}
+      </Link>
+    ),
     eventsCount: e.entries.filter(t => t.type === 'Events').length,
     apisCount: e.entries.filter(t => t.type === 'API').length,
   }));
