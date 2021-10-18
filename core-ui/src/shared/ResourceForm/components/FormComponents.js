@@ -364,6 +364,8 @@ export function TextArrayInput({
 }
 
 export function KeyValueField({
+  actions = [],
+  encodable = false,
   defaultOpen,
   isAdvanced,
   input = Inputs.Text,
@@ -375,6 +377,46 @@ export function KeyValueField({
   ...props
 }) {
   const { t } = useTranslation();
+
+  const [valuesEncoded, setValuesEncoded] = useState(false);
+  const [decodeErrors, setDecodeErrors] = useState({});
+
+  const toggleEncoding = () => {
+    setDecodeErrors({});
+    setValuesEncoded(!valuesEncoded);
+  };
+
+  const dataValue = value => {
+    if (!encodable || valuesEncoded) {
+      return value?.val || '';
+    } else {
+      try {
+        return base64Decode(value?.val || '');
+      } catch (e) {
+        decodeErrors[value?.key] = e.message;
+        setDecodeErrors({ ...decodeErrors });
+        setValuesEncoded(true);
+        return '';
+      }
+    }
+  };
+
+  if (encodable) {
+    actions = [
+      ...actions,
+      <Button
+        compact
+        option="transparent"
+        glyph={valuesEncoded ? 'show' : 'hide'}
+        onClick={toggleEncoding}
+      >
+        {valuesEncoded
+          ? t('secrets.buttons.decode')
+          : t('secrets.buttons.encode')}
+      </Button>,
+    ];
+  }
+
   return (
     <MultiInput
       defaultOpen={defaultOpen}
@@ -391,6 +433,7 @@ export function KeyValueField({
         ({ value, setValue, ref, onBlur, focus }) => (
           <FormInput
             compact
+            disabled={lockedKeys.includes(value?.key)}
             key="key"
             value={value?.key || ''}
             ref={ref}
@@ -407,10 +450,22 @@ export function KeyValueField({
           input({
             key: 'value',
             onKeyDown: e => focus(e),
-            value: value?.val || '',
-            onChange: e => setValue({ ...value, val: e.target.value }),
+            value: dataValue(value),
             placeholder: t('components.key-value-field.enter-value'),
-            setValue,
+            setValue: val =>
+              setValue({
+                ...value,
+                val: valuesEncoded || !encodable ? val : base64Encode(val),
+              }),
+            validationState:
+              value?.key && decodeErrors[value.key]
+                ? {
+                    state: 'error',
+                    text: t('secrets.messages.decode-error', {
+                      message: decodeErrors[value.key],
+                    }),
+                  }
+                : undefined,
             ...props,
           }),
         ({ value, setValue }) =>
@@ -435,61 +490,30 @@ export function KeyValueField({
             <></>
           ),
       ]}
+      actions={actions}
       tooltipContent={t('common.tooltips.key-value')}
       {...props}
     />
   );
 }
 
-export function DataField({ encodable = false, ...props }) {
-  const [valuesEncoded, setValuesEncoded] = useState(false);
-  const [decodeErrors, setDecodeErrors] = useState({});
-
+export function DataField({ encodable = false, title, ...props }) {
   const { t } = useTranslation();
 
-  const dataValue = value => {
-    if (!encodable || valuesEncoded) {
-      return value?.val;
-    } else {
-      try {
-        return base64Decode(value?.val || '');
-      } catch (e) {
-        decodeErrors[value.key] = e.message;
-        setDecodeErrors(decodeErrors);
-        setValuesEncoded(true);
-        return '';
-      }
-    }
-  };
   return (
     <KeyValueField
       fullWidth
       readableFromFile
       className="resource-form__data-field"
-      title={t('data')}
+      title={title || t('common.labels.data')}
       input={({ value, setValue, ...props }) => (
         <FormTextarea
+          compact
           key="value"
-          value={dataValue(value)}
-          onChange={e =>
-            setValue({
-              ...value,
-              val: valuesEncoded
-                ? e.target.value
-                : base64Encode(e.target.value),
-            })
-          }
+          value={value}
+          onChange={e => setValue(e.target.value)}
           placeholder={t('components.key-value-field.enter-value')}
           className="value-textarea"
-          validationState={
-            value?.key &&
-            decodeErrors[value.key] && {
-              state: 'error',
-              text: t('secrets.messages.decode-error', {
-                message: decodeErrors[value.key],
-              }),
-            }
-          }
           {...props}
         />
       )}

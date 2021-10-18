@@ -309,6 +309,7 @@ common:
     resources: Resources
     status: Status
   labels:
+    data: Data
     hostname: Hostname
     issuer: Issuer
     name: Name
@@ -413,6 +414,7 @@ config-maps:
   messages:
     created: ConfigMap created.
     updated: ConfigMap updated.
+  name_singular: Config Map
   subtitle:
     edit-config-map: Edit ConfigMap
   title: ConfigMaps
