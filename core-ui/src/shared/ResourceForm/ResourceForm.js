@@ -154,7 +154,6 @@ export function ResourceForm({
         setValue: child.props.setValue
           ? value => child.props.setValue(value, valueSetter)
           : valueSetter,
-        isAdvanced: isAdvanced,
       });
     });
 

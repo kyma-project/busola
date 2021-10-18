@@ -465,7 +465,6 @@ export function ItemArray({
           {t('common.buttons.add')} {nameSingular}
         </Button>
       )}
-      {...props}
     >
       {content}
       {atLeastOneRequiredMessage && !values.length && (
