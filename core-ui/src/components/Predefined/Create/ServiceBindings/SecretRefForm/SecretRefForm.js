@@ -6,6 +6,8 @@ import './SecretRefFrom.scss';
 import { base64Decode } from 'shared/helpers';
 import { useTranslation } from 'react-i18next';
 
+import { MultiInput } from 'shared/ResourceForm/components/FormComponents';
+
 const isValidJSONObject = value => {
   try {
     const parsed = JSON.parse(value);
@@ -41,7 +43,7 @@ const RefValidationMessage = ({ message }) => {
 export function SecretRefForm({
   refs,
   setRefs,
-  setRefsValid,
+  setRefsValid = () => {},
   secrets,
   loading,
   error,
@@ -159,6 +161,8 @@ export function SecretRefForm({
       validationMessage: getRefValidation(ref, refs),
     }));
 
+  return <MultiInput inputs={[]} />;
+  /*
   return (
     <>
       <ul className="secret-ref-form">
@@ -210,4 +214,5 @@ export function SecretRefForm({
       <div className="ref-button-wrapper">{addRefButton()}</div>
     </>
   );
+  */
 }

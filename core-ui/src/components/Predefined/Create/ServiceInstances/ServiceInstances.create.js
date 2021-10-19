@@ -87,8 +87,10 @@ export function ServiceInstancesCreate({
       >
         <Editor
           propertyPath="$.spec.parameters"
+          language="json"
           validate={parsed => !!parsed && typeof parsed === 'object'}
           invalidValueMessage={t('btp-instances.create.params-invalid')}
+          height="10em"
         />
       </CollapsibleSection>
     </ResourceForm>
