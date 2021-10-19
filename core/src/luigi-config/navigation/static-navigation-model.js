@@ -53,7 +53,7 @@ async function downloadKubeconfig() {
 
 export function getStaticChildrenNodesForNamespace(
   apiGroups,
-  permissionSet,
+  resourceRules,
   features,
 ) {
   const encodedClusterName = encodeURIComponent(getActiveClusterName());
@@ -62,7 +62,7 @@ export function getStaticChildrenNodesForNamespace(
       link: `/cluster/${encodedClusterName}/namespaces`,
       label: i18next.t('namespaces.overview.back'),
       icon: 'nav-back',
-      hideFromNav: !hasPermissionsFor('', 'namespaces', permissionSet, [
+      hideFromNav: !hasPermissionsFor('', 'namespaces', resourceRules, [
         'list',
       ]),
     },
@@ -1204,14 +1204,14 @@ export function getStaticChildrenNodesForNamespace(
       ],
     },
   ];
-  filterNodesByAvailablePaths(nodes, apiGroups, permissionSet);
+  filterNodesByAvailablePaths(nodes, apiGroups, resourceRules);
   return nodes;
 }
 
 export function getStaticRootNodes(
   namespaceChildrenNodesResolver,
   apiGroups,
-  permissionSet,
+  resourceRules,
   features,
 ) {
   const nodes = [
@@ -1261,7 +1261,7 @@ export function getStaticRootNodes(
           children: async () =>
             await namespaceChildrenNodesResolver(
               apiGroups,
-              permissionSet,
+              resourceRules,
               features,
             ),
           defaultChildNode: 'details',
@@ -1418,13 +1418,6 @@ export function getStaticRootNodes(
           ],
         },
       ],
-      requiredPermissions: [
-        {
-          apiGroup: 'rbac.authorization.k8s.io',
-          resource: 'clusterrolebindings',
-          verbs: ['create'],
-        },
-      ],
     },
     {
       pathSegment: 'clusterrolebindings',
@@ -1527,7 +1520,7 @@ export function getStaticRootNodes(
       onNodeActivation: downloadKubeconfig,
     },
   ];
-  filterNodesByAvailablePaths(nodes, apiGroups, permissionSet);
+  filterNodesByAvailablePaths(nodes, apiGroups, resourceRules);
   return nodes;
 }
 
@@ -1538,24 +1531,24 @@ function extractApiGroup(apiPath) {
   return apiPath.split('/')[2];
 }
 
-function filterNodesByAvailablePaths(nodes, apiGroups, permissionSet) {
+function filterNodesByAvailablePaths(nodes, apiGroups, resourceRules) {
   for (let i = nodes.length - 1; i >= 0; i--) {
     const node = nodes[i];
     if (typeof node.children === 'object') {
-      filterNodesByAvailablePaths(node.children, apiGroups, permissionSet);
+      filterNodesByAvailablePaths(node.children, apiGroups, resourceRules);
     }
 
     const removeNode = () => nodes.splice(i, 1);
-    checkSingleNode(node, apiGroups, permissionSet, removeNode);
+    checkSingleNode(node, apiGroups, resourceRules, removeNode);
   }
 }
 
-function checkSingleNode(node, apiGroups, permissionSet, removeNode) {
+function checkSingleNode(node, apiGroups, resourceRules, removeNode) {
   if (!node.viewUrl || !node.resourceType) return;
   const apiPath = new URL(node.viewUrl).searchParams.get('resourceApiPath');
   if (!apiPath) return;
 
-  if (hasWildcardPermission(permissionSet)) {
+  if (hasWildcardPermission(resourceRules)) {
     // we have '*' in permissions, just check if this resource exists
     const groupVersion = apiPath
       .replace(/^\/apis\//, '')
@@ -1567,7 +1560,7 @@ function checkSingleNode(node, apiGroups, permissionSet, removeNode) {
   } else {
     // we need to filter through permissions to check the node availability
     const apiGroup = extractApiGroup(apiPath);
-    if (!hasPermissionsFor(apiGroup, node.resourceType, permissionSet)) {
+    if (!hasPermissionsFor(apiGroup, node.resourceType, resourceRules)) {
       removeNode();
     }
   }

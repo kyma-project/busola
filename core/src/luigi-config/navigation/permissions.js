@@ -57,7 +57,7 @@ export function hasPermissionsFor(
   return !!matchingPermission || !!wildcardPermission;
 }
 
-export function hasAnyRoleBound(permissionSet) {
+export function hasAnyRoleBound(resourceRules) {
   const ssrr = {
     apiGroups: ['authorization.k8s.io'],
     resources: ['selfsubjectaccessreviews', 'selfsubjectrulesreviews'],
@@ -68,9 +68,9 @@ export function hasAnyRoleBound(permissionSet) {
     !_.isEqual(permission, ssrr);
 
   // leave out ssrr permission, as it's always there
-  permissionSet = permissionSet.filter(filterSelfSubjectRulesReview);
+  resourceRules = resourceRules.filter(filterSelfSubjectRulesReview);
 
-  const verbs = permissionSet.flatMap(p => p.verbs);
+  const verbs = resourceRules.flatMap(p => p.verbs);
 
   const usefulVerbs = [
     'get',

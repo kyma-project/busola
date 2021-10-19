@@ -499,24 +499,27 @@ export function ComboboxInput({
   options,
   id,
   placeholder,
+  className,
   ...props
 }) {
   return (
-    <FdComboboxInput
-      ariaLabel="Combobox input"
-      arrowLabel="Combobox input arrow"
-      id={id || 'combobox-input'}
-      compact
-      showAllEntries
-      searchFullString
-      selectionType="auto-inline"
-      onSelectionChange={(_, selected) =>
-        setValue(selected?.key !== -1 ? selected?.key : selected?.text)
-      }
-      selectedKey={defaultKey}
-      placeholder={defaultKey || placeholder}
-      options={options}
-      {...props}
-    />
+    <div className={classnames('resource-form-combobox', className)}>
+      <FdComboboxInput
+        ariaLabel="Combobox input"
+        arrowLabel="Combobox input arrow"
+        id={id || 'combobox-input'}
+        compact
+        showAllEntries
+        searchFullString
+        selectionType="manual"
+        onSelectionChange={(_, selected) =>
+          setValue(selected?.key !== -1 ? selected?.key : selected?.text)
+        }
+        selectedKey={defaultKey}
+        placeholder={defaultKey || placeholder}
+        options={options}
+        {...props}
+      />
+    </div>
   );
 }

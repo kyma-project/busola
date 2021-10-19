@@ -101,7 +101,7 @@ export function fetchPermissions(auth, namespace = '*') {
     body: JSON.stringify(ssrr),
   })
     .then(res => res.json())
-    .then(res => res.status.resourceRules);
+    .then(res => res.status);
 }
 
 export async function fetchBusolaInitData(auth) {
