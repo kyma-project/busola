@@ -1,18 +1,8 @@
 import config from '../config';
 
 Cypress.Commands.add('loginAndSelectCluster', () => {
-  cy.visit(`${config.clusterAddress}/clusters`)
-    .getIframeBody()
-    .contains('Add a Cluster')
-    .click();
-
-  cy.getIframeBody()
-    .contains('Drag file here')
-    .attachFile('kubeconfig.yaml', { subjectType: 'drag-n-drop' });
-
-  cy.getIframeBody()
-    .contains('Next Step')
-    .click();
+  cy.visit(`${config.clusterAddress}/clusters`);
+  cy.wait(10000);
 
   cy.getIframeBody().then($body => {
     //OIDC login flow
@@ -61,6 +51,18 @@ Cypress.Commands.add('loginAndSelectCluster', () => {
         .click();
     }
   });
+
+  cy.getIframeBody()
+    .contains('Add a Cluster')
+    .click();
+
+  cy.getIframeBody()
+    .contains('Drag file here')
+    .attachFile('kubeconfig.yaml', { subjectType: 'drag-n-drop' });
+
+  cy.getIframeBody()
+    .contains('Next Step')
+    .click();
 
   cy.url().should('match', /namespaces$/);
   cy.getIframeBody()
