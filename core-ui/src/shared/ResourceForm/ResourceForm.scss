@@ -16,6 +16,10 @@
     margin: 0; // override fd's margin: 0 -.25rem;
   }
 
+  .fd-row + .resource-form__collapsible-section {
+    margin-top: 1rem;
+  }
+
   .fd-switch {
     margin-top: -1.4rem;
   }

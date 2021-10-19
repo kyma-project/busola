@@ -1,11 +1,14 @@
 import React from 'react';
 import * as jp from 'jsonpath';
+import classnames from 'classnames';
+
 import { ModeSelector } from './components/ModeSelector';
 import { Editor } from './components/Editor';
 import { Presets } from './components/Presets';
 import * as FormComponents from './components/FormComponents';
-import './ResourceForm.scss';
 import { useCreateResource } from './useCreateResource';
+
+import './ResourceForm.scss';
 
 export function ResourceFormWrapper({
   resource,
@@ -48,10 +51,11 @@ function SingleForm({
   resource,
   setResource,
   onValid,
+  className,
   ...props
 }) {
   return (
-    <section className="resource-form">
+    <section className={classnames('resource-form', className)}>
       <form
         ref={formElementRef}
         onSubmit={createResource}
@@ -89,6 +93,7 @@ export function ResourceForm({
   presets,
   onPresetSelected,
   afterCreatedFn,
+  className,
 }) {
   const createResource = useCreateResource(
     singularName,
@@ -109,7 +114,10 @@ export function ResourceForm({
         } else {
           setResource(value);
         }
-        onChange(new Event('input', { bubbles: true }));
+
+        if (onChange) {
+          onChange(new Event('input', { bubbles: true }));
+        }
       }}
     />
   );
@@ -155,7 +163,7 @@ export function ResourceForm({
     : editor;
 
   return (
-    <section className="resource-form">
+    <section className={classnames('resource-form', className)}>
       {presetsSelector}
       <ModeSelector mode={mode} setMode={setMode} />
       <form ref={formElementRef} onSubmit={createResource}>
@@ -189,3 +197,4 @@ ResourceForm.K8sNameField = FormComponents.K8sNameField;
 ResourceForm.KeyValueField = FormComponents.KeyValueField;
 ResourceForm.ItemArray = FormComponents.ItemArray;
 ResourceForm.Select = FormComponents.Select;
+ResourceForm.ComboboxInput = FormComponents.ComboboxInput;
