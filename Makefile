@@ -60,6 +60,7 @@ push-image-local:
 	docker tag $(LOCAL_IMG_NAME) $(LOCAL_IMG):$(TAG)
 	docker push $(LOCAL_IMG):$(TAG)
 	if [[ $(TAG) != PR-* ]]
+	then
 		docker tag $(LOCAL_IMG_NAME) $(LOCAL_IMG):latest
 		docker push $(LOCAL_IMG):latest
 	endif
