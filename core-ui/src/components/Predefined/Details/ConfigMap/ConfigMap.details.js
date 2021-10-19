@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ControlledBy, ModalWithForm } from 'react-shared';
 
-import { ConfigMapForm } from '../../Create/ConfigMaps/ConfigMapForm';
+import { ConfigMapsCreate } from '../../Create/ConfigMaps/ConfigMaps.create';
 import { ReadonlyEditorPanel } from '../../../../shared/components/ReadonlyEditorPanel';
 
 export const ConfigMapsDetails = ({ DefaultRenderer, ...otherParams }) => {
@@ -29,7 +29,7 @@ export const ConfigMapsDetails = ({ DefaultRenderer, ...otherParams }) => {
         confirmText={t('common.buttons.edit')}
         className="modal-size--l"
         renderForm={props => (
-          <ConfigMapForm
+          <ConfigMapsCreate
             configMap={configMap}
             resourceUrl={otherParams.resourceUrl}
             readonlyName={true}
