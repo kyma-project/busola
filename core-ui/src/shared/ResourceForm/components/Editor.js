@@ -5,7 +5,13 @@ import { MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import './Editor.scss';
 
-export function Editor({ resource, setResource, readonly }) {
+export function Editor({
+  resource,
+  setResource,
+  readonly,
+  language = 'yaml',
+  ...props
+}) {
   const { t } = useTranslation();
   const [error, setError] = React.useState('');
   const { editorTheme } = useTheme();
@@ -16,7 +22,11 @@ export function Editor({ resource, setResource, readonly }) {
 
   React.useEffect(() => {
     if (!isEditing.current) {
-      textResource.current = jsyaml.dump(resource, { noRefs: true });
+      if (language === 'yaml') {
+        textResource.current = jsyaml.dump(resource, { noRefs: true });
+      } else if (language === 'json') {
+        textResource.current = JSON.stringify(resource);
+      }
     }
   }, [resource]);
 
@@ -46,7 +56,7 @@ export function Editor({ resource, setResource, readonly }) {
   return (
     <div className="resource-form__editor">
       <ControlledEditor
-        language="yaml"
+        language={language}
         theme={editorTheme}
         value={textResource.current}
         onChange={handleChange}
@@ -55,6 +65,7 @@ export function Editor({ resource, setResource, readonly }) {
           editor.onDidBlurEditorText(() => (isEditing.current = false));
         }}
         options={options}
+        {...props}
       />
       {error && (
         <div className="resource-form__editor__error">
