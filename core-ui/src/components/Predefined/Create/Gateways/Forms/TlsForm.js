@@ -27,7 +27,7 @@ export const switchTLS = (server, tlsOn, servers, setServers) => {
   setServers([...servers]);
 };
 
-// generic Secret is type=Opaque
+// generic Secret is type=kubernetes.io/tls
 const filterMatchingSecrets = secret => secret.type === 'kubernetes.io/tls';
 
 export const TlsForm = ({ server = {}, servers, setServers, advanced }) => {
