@@ -420,7 +420,7 @@ config-maps:
   messages:
     created: ConfigMap created.
     updated: ConfigMap updated.
-  name_singular: Config Map
+  name_singular: ConfigMap
   presets:
     default: Default
   subtitle:
