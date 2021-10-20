@@ -286,8 +286,10 @@ common:
     choose-preset: Select a Preset
     editor-error: 'Parse error: {{error}}, previous valid input will be used.'
     messages:
-      failure: 'Failed to create the {{resourceType}}: {{error}}.'
-      success: '{{resourceType}} created.'
+      create-failure: 'Failed to create the {{resourceType}}: {{error}}.'
+      create-success: '{{resourceType}} created.'
+      patch-failure: 'Failed to update the {{resourceType}}: {{error}}.'
+      patch-success: '{{resourceType}} updated.'
     modes:
       advanced: Advanced
       simple: Simple
@@ -313,6 +315,7 @@ common:
     resources: Resources
     status: Status
   labels:
+    data: Data
     hostname: Hostname
     issuer: Issuer
     name: Name
@@ -420,6 +423,9 @@ config-maps:
   messages:
     created: ConfigMap created.
     updated: ConfigMap updated.
+  name_singular: ConfigMap
+  presets:
+    default: Default
   subtitle:
     edit-config-map: Edit ConfigMap
   title: ConfigMaps

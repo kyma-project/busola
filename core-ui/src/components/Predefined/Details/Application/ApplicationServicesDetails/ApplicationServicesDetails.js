@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import {
   GenericList,
   PageHeader,
-  YamlEditorProvider,
   useGet,
   ResourceNotFound,
   getErrorMessage,
@@ -97,7 +96,7 @@ export function ApplicationServiceDetails({ applicationName, serviceName }) {
   ];
 
   return (
-    <YamlEditorProvider i18n={i18n}>
+    <>
       {application && (
         <>
           <PageHeader
@@ -128,6 +127,6 @@ export function ApplicationServiceDetails({ applicationName, serviceName }) {
           />
         </>
       )}
-    </YamlEditorProvider>
+    </>
   );
 }

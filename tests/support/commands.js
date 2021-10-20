@@ -1,5 +1,4 @@
 import 'cypress-file-upload';
-import config from '../config';
 
 Cypress.Commands.add(
   'shouldHaveTrimmedText',

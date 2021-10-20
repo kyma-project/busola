@@ -1,4 +1,6 @@
 import React from 'react';
+import * as jp from 'jsonpath';
+
 import { Button } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
@@ -26,6 +28,12 @@ export function ServiceBindingsForm({
   const [serviceBinding, setServiceBinding] = React.useState(
     createServiceBindingTemplate(namespaceId),
   );
+
+  React.useEffect(() => {
+    const hasInstanceName = jp.value(serviceBinding, '$.instanceName');
+
+    setCustomValid(hasInstanceName);
+  }, [serviceBinding, setCustomValid]);
 
   const createServiceBinding = useCreateResource(
     'Service Binding',
