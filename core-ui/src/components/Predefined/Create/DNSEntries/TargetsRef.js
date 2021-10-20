@@ -84,6 +84,24 @@ export function TargetsInput({
   );
 }
 
+const getExternalIPs = loadBalancer => {
+  if (loadBalancer.status.loadBalancer?.ingress) {
+    return loadBalancer.status.loadBalancer?.ingress.map(endpoint => ({
+      key: endpoint.ip || endpoint.hostname,
+      text: `${endpoint.ip || endpoint.hostname} (${
+        loadBalancer.metadata.name
+      })`,
+    }));
+  } else if (loadBalancer.spec.externalIPs?.length) {
+    return loadBalancer.spec.externalIPs.map(ip => ({
+      key: ip,
+      text: `${ip} (${loadBalancer.metadata.name})`,
+    }));
+  } else {
+    return '-';
+  }
+};
+
 export function TargetsRef({ dnsEntry, setTargets, setDnsEntry }) {
   const { t } = useTranslation();
   const { data: services, loading } = useGetList()(`/api/v1/services`);
@@ -91,12 +109,12 @@ export function TargetsRef({ dnsEntry, setTargets, setDnsEntry }) {
 
   const targets = dnsEntry?.spec.targets || [];
   const loadBalancers = services?.filter(
-    service => service.spec.type === 'LoadBalancer',
+    service =>
+      service.spec.type === 'LoadBalancer' &&
+      service.status.loadBalancer?.ingress,
   );
-  const IPs = (loadBalancers || []).map(lb => ({
-    key: lb.spec.clusterIP,
-    text: `${lb.spec.clusterIP} (${lb.metadata.name})`,
-  }));
+
+  const IPs = (loadBalancers || []).flatMap(lb => getExternalIPs(lb));
 
   const isCname = value => {
     return !IPs?.find(ip => value === ip.key);
