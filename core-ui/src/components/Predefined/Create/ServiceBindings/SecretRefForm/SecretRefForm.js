@@ -31,7 +31,7 @@ export function SecretRefForm({
   value: secretRefs,
   setValue: setSecretRefs,
 }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const secretNames = (secrets || [])
     .map(s => s.metadata.name)
@@ -113,6 +113,7 @@ export function SecretRefForm({
               focus(e);
             }}
             placeholder={t('btp-service-bindings.placeholders.choose-secret')}
+            i18n={i18n}
           />
         ),
         ({ value, setValue, ref, onBlur, focus }) =>
@@ -134,6 +135,7 @@ export function SecretRefForm({
               emptyListMessage={t(
                 'btp-service-bindings.placeholders.empty-secret',
               )}
+              i18n={i18n}
             />
           ) : (
             <Dropdown
@@ -143,6 +145,7 @@ export function SecretRefForm({
               placeholder={t(
                 'btp-service-bindings.placeholder.choose-secret-first',
               )}
+              i18n={i18n}
             />
           ),
       ]}
