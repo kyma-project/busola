@@ -260,6 +260,16 @@ export function IssuersCreate({
           setIssuer({ ...issuer });
         }}
       />
+      <ResourceForm.KeyValueField
+        advanced
+        propertyPath="$.metadata.labels"
+        title={t('common.headers.labels')}
+      />
+      <ResourceForm.KeyValueField
+        advanced
+        propertyPath="$.metadata.annotations"
+        title={t('common.headers.annotations')}
+      />
       <ResourceForm.FormField
         label={t('issuers.type')}
         key={t('issuers.type')}
@@ -287,16 +297,6 @@ export function IssuersCreate({
         tooltipContent={t('issuers.tooltips.issuer-type')}
       />
 
-      <ResourceForm.KeyValueField
-        advanced
-        propertyPath="$.metadata.labels"
-        title={t('common.headers.labels')}
-      />
-      <ResourceForm.KeyValueField
-        advanced
-        propertyPath="$.metadata.annotations"
-        title={t('common.headers.annotations')}
-      />
       {issuerSimpleACMEFields()}
 
       <ResourceForm.FormField
