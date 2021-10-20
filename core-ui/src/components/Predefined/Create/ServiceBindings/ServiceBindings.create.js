@@ -3,10 +3,7 @@ import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 
 import { useGetList } from 'react-shared';
-import {
-  K8sResourceSelect,
-  K8sResourceSelectWithUseGetList,
-} from 'shared/components/K8sResourceSelect';
+import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSelect';
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import { Editor } from 'shared/ResourceForm/components/Editor';
 import {
@@ -16,6 +13,7 @@ import {
   CollapsibleSection,
 } from 'shared/ResourceForm/components/FormComponents';
 import * as Inputs from 'shared/ResourceForm/components/Inputs';
+
 import { createServiceBindingTemplate } from './helpers';
 import { SecretRefForm } from './SecretRefForm/SecretRefForm';
 

@@ -1,11 +1,11 @@
 import React from 'react';
-import { Dropdown, Tooltip } from 'react-shared';
-import { Icon, FormTextarea } from 'fundamental-react';
-import './SecretRefFrom.scss';
-import { base64Decode } from 'shared/helpers';
 import { useTranslation } from 'react-i18next';
 
+import { Dropdown } from 'react-shared';
+import { base64Decode } from 'shared/helpers';
 import { MultiInput } from 'shared/ResourceForm/components/FormComponents';
+
+import './SecretRefFrom.scss';
 
 const isValidJSONObject = value => {
   try {
@@ -22,21 +22,6 @@ const tryBase64Decode = value => {
   } catch (_) {
     return '';
   }
-};
-
-const RefValidationMessage = ({ message }) => {
-  return message ? (
-    <Tooltip className="validation-message" content={message} delay={[0, 0]}>
-      <Icon
-        size="l"
-        className="ref-validation-icon"
-        glyph="message-warning"
-        ariaLabel="ref warning message"
-      />
-    </Tooltip>
-  ) : (
-    <div className="validation-message" />
-  );
 };
 
 export function SecretRefForm({
@@ -103,7 +88,6 @@ export function SecretRefForm({
 
   return (
     <MultiInput
-      // fullWidth
       toInternal={value =>
         (Array.isArray(value) ? value : []).map(val => val.secretKeyRef)
       }
@@ -114,7 +98,6 @@ export function SecretRefForm({
       setValue={setSecretRefs}
       className="secret-ref-form"
       title={t('btp-service-bindings.parameters-from')}
-      required
       sectionTooltipContent={t('btp-service-bindings.tooltips.parameters-from')}
       inputs={[
         ({ value, setValue, ref, onBlur, focus }) => (
