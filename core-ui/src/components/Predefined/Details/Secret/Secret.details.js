@@ -2,7 +2,7 @@ import React from 'react';
 import { ControlledBy, ModalWithForm } from 'react-shared';
 import { Button } from 'fundamental-react';
 import SecretData from 'shared/components/Secret/SecretData';
-import { CreateSecretForm } from '../../Create/Secrets/CreateSecretForm';
+import { SecretsCreate } from '../../Create/Secrets/Secrets.create';
 import { useTranslation } from 'react-i18next';
 
 export const SecretsDetails = ({ DefaultRenderer, ...otherParams }) => {
@@ -22,7 +22,7 @@ export const SecretsDetails = ({ DefaultRenderer, ...otherParams }) => {
         confirmText={t('common.buttons.update')}
         className="modal-size--l"
         renderForm={props => (
-          <CreateSecretForm
+          <SecretsCreate
             secret={secret}
             resourceUrl={otherParams.resourceUrl}
             readonlyName={true}
