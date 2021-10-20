@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useSingleGet } from 'react-shared';
+import { useMicrofrontendContext } from 'react-shared';
 
-export function useResourcesForApiGroups(apiGroups = [], groupVersions) {
+export function useResourcesForApiGroups(apiGroups = []) {
   const [cache, setCache] = useState({});
   const fetch = useSingleGet();
+  const { groupVersions } = useMicrofrontendContext();
 
   const findMatchingGroupVersions = apiGroup => {
     // core api group
@@ -35,6 +37,7 @@ export function useResourcesForApiGroups(apiGroups = [], groupVersions) {
         }
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [apiGroups]);
 
   return cache;

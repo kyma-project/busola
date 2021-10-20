@@ -38,10 +38,10 @@ const verbs = [
   '*',
 ];
 
-const extractApiGroup = apiGroupWithVersion => {
+const extractApiGroup = groupVersion => {
   // handle core ('') group
-  if (apiGroupWithVersion === 'v1') return '';
-  const [apiGroup, _version] = apiGroupWithVersion.split('/');
+  if (groupVersion === 'v1') return '';
+  const [apiGroup] = groupVersion.split('/');
   return apiGroup;
 };
 
@@ -56,13 +56,17 @@ export function RuleInput({
   const { t } = useTranslation();
 
   const EMPTY_STRING_KEY = 'core-api-group';
-
-  const apiGroupsOptions = unique(groupVersions.map(extractApiGroup)).map(g =>
+  // introduce special option for '' apiGroup - Combobox doesn't accept empty string key
+  const apiGroupsInputOptions = unique(
+    groupVersions.map(extractApiGroup),
+  ).map(g =>
     g === ''
       ? { key: EMPTY_STRING_KEY, text: t('roles.core-api-group') }
       : { key: g, text: g },
   );
 
+  // there's no endpoint for "all resources" - add just a '*' and specific resources
+  // for already choosen apiGroups
   const availableResources = unique([
     ...rule.apiGroups
       .flatMap(apiGroup => resourcesCache[apiGroup] || [])
@@ -74,17 +78,12 @@ export function RuleInput({
     <ResourceFormWrapper
       isAdvanced={isAdvanced}
       resource={rule}
-      setResource={r => {
-        rule.verbs = r.verbs;
-        rule.apiGroups = r.apiGroups;
-        rule.resources = r.resources;
-        setRules([...rules]);
-      }}
+      setResource={() => setRules([...rules])}
     >
       <ResourceForm.ComboboxArrayInput
         title={t('roles.headers.api-groups')}
         propertyPath="$.apiGroups"
-        options={apiGroupsOptions}
+        options={apiGroupsInputOptions}
         emptyStringKey={EMPTY_STRING_KEY}
       />
       <ResourceForm.ComboboxArrayInput

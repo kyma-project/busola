@@ -650,6 +650,12 @@ export function ComboboxArrayInput({
   placeholder =
     placeholder || t('common.messages.type-to-select', { value: title });
 
+  /*
+    as original Combobox (and React's 'input' element) doesn't like '' for a key,
+    we replace it with 'emptyStringKey' internal MultiInput state
+
+    {key: '', text: 'empty'} -> {key: emptyStringKey, text: 'empty'}
+  */
   const toInternal = values =>
     (values || []).map(v => (emptyStringKey && v === '' ? emptyStringKey : v));
   const toExternal = values =>
@@ -676,7 +682,8 @@ export function ComboboxArrayInput({
             selectedKey={value}
             typedValue={value || ''}
             setValue={selected =>
-              setValue(selected.key === -1 ? selected.text : selected.key)
+              // fallback on selected.text if no entry is found
+              setValue(selected.key !== -1 ? selected.key : selected.text)
             }
             options={options}
             onKeyDown={focus}
