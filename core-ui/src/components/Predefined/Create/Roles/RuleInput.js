@@ -6,69 +6,69 @@ import {
   ResourceFormWrapper,
 } from 'shared/ResourceForm/ResourceForm';
 import { InvalidRoleError } from './InvalidRoleError';
-import { MultiInput } from 'shared/ResourceForm/components/FormComponents';
-import { FormInput } from 'fundamental-react';
 
-function ComboboxArrayInput({
-  defaultOpen,
-  inputProps,
-  isAdvanced,
-  tooltipContent,
-  sectionTooltipContent,
-  options,
-  ...props
-}) {
-  return (
-    <MultiInput
-      defaultOpen={defaultOpen}
-      isAdvanced={isAdvanced}
-      toInternal={value => value || []}
-      toExternal={value => value.filter(val => !!val)}
-      tooltipContent={tooltipContent}
-      sectionTooltipContent={sectionTooltipContent}
-      inputs={[
-        ({ value, setValue, ref, onBlur, focus }) => (
-          <ResourceForm.ComboboxInput
-            key={`form-${props.title}`}
-            compact
-            value={value || ''}
-            defaultKey={value || ''}
-            ref={ref}
-            setValue={setValue}
-            options={options}
-            onKeyDown={focus}
-            onBlur={onBlur}
-          />
-        ),
-      ]}
-      {...props}
-    />
-  );
+function unique(arr) {
+  return [...new Set(arr)];
 }
 
-export function RuleInput({ rule, rules, setRules, isAdvanced }) {
-  const { namespaceId, ssrrStatus } = useMicrofrontendContext();
+const nonResourceUrls = [
+  '/healthz/ready',
+  '/api',
+  '/api/*',
+  '/apis',
+  '/apis/*',
+  '/healthz',
+  '/livez',
+  '/openapi',
+  '/openapi/*',
+  '/readyz',
+  '/version',
+  '/version/',
+];
+
+const verbs = [
+  'get',
+  'list',
+  'watch',
+  'create',
+  'update',
+  'patch',
+  'delete',
+  'deletecollection',
+  '*',
+];
+
+const extractApiGroup = apiGroupWithVersion => {
+  // handle core ('') group
+  if (apiGroupWithVersion === 'v1') return '';
+  const [apiGroup, _version] = apiGroupWithVersion.split('/');
+  return apiGroup;
+};
+
+export function RuleInput({
+  rule,
+  rules,
+  setRules,
+  isAdvanced,
+  resourcesCache,
+}) {
+  const { namespaceId, groupVersions } = useMicrofrontendContext();
   const { t } = useTranslation();
 
-  const isNamespaced = !!namespaceId;
-  const { resourceRules, nonResourceRules } = ssrrStatus;
+  const EMPTY_STRING_KEY = 'core-api-group';
 
-  const flatUnique = (arr, property) => [
-    ...new Set(arr.flatMap(r => r[property])),
-  ];
+  const apiGroupsOptions = unique(groupVersions.map(extractApiGroup)).map(g =>
+    g === ''
+      ? { key: EMPTY_STRING_KEY, text: t('roles.core-api-group') }
+      : { key: g, text: g },
+  );
 
-  const nonResourceUrls = flatUnique(nonResourceRules, 'nonResourceURLs');
-  let apiGroups = flatUnique(resourceRules, 'apiGroups');
-
-  let resources = flatUnique(resourceRules, 'resources');
-  if (rule.apiGroups?.length && !rule.apiGroups.includes('*')) {
-    const t = resourceRules.filter(r =>
-      r.apiGroups.find(r2 => rule.apiGroups.includes(r2)),
-    );
-    resources = flatUnique(t, 'resources');
-
-    console.log(t, resources);
-  }
+  const availableResources = unique([
+    ...rule.apiGroups
+      .flatMap(apiGroup => resourcesCache[apiGroup] || [])
+      .map(r => r.name),
+    '*',
+  ]);
 
   return (
     <ResourceFormWrapper
@@ -81,29 +81,21 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
         setRules([...rules]);
       }}
     >
-      <ComboboxArrayInput
+      <ResourceForm.ComboboxArrayInput
         title={t('roles.headers.api-groups')}
         propertyPath="$.apiGroups"
-        inputProps={{
-          placeholder: t('roles.headers.api-groups'),
-        }}
-        options={apiGroups.map(i => ({ key: i, text: i }))}
-        isAdvanced={isAdvanced}
+        options={apiGroupsOptions}
+        emptyStringKey={EMPTY_STRING_KEY}
       />
-      <ComboboxArrayInput
+      <ResourceForm.ComboboxArrayInput
         title={t('roles.headers.resources')}
         propertyPath="$.resources"
-        inputProps={{
-          placeholder: t('roles.headers.resources'),
-        }}
-        options={resources.map(i => ({ key: i, text: i }))}
+        options={availableResources.map(i => ({ key: i, text: i }))}
       />
-      <ResourceForm.TextArrayInput
+      <ResourceForm.ComboboxArrayInput
         title={t('roles.headers.verbs')}
         propertyPath="$.verbs"
-        inputProps={{
-          placeholder: t('roles.headers.verbs'),
-        }}
+        options={verbs.map(i => ({ key: i, text: i }))}
       />
       {isAdvanced && (
         <ResourceForm.TextArrayInput
@@ -114,14 +106,10 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
           }}
         />
       )}
-      {isAdvanced && !isNamespaced && (
-        <ComboboxArrayInput
+      {isAdvanced && !namespaceId && (
+        <ResourceForm.ComboboxArrayInput
           title={t('roles.headers.non-resource-urls')}
-          placeholder={t('roles.headers.non-resource-urls')}
           propertyPath="$.nonResourceURLs"
-          inputProps={{
-            placeholder: t('roles.headers.non-resource-urls'),
-          }}
           options={nonResourceUrls.map(i => ({ key: i, text: i }))}
         />
       )}

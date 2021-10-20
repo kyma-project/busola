@@ -375,6 +375,7 @@ export async function createNavigationNodes(features, apiGroups, ssrrStatus) {
         language: i18next.language,
         ssoData: getSSOAuthData(),
         ssrrStatus,
+        groupVersions: apiGroups,
       },
     },
   ];

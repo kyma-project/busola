@@ -5,6 +5,8 @@ import { createRuleTemplate, validateRole } from './helpers';
 import * as Inputs from 'shared/ResourceForm/components/Inputs';
 import { RuleInput } from './RuleInput';
 import { RuleTitle } from './RuleTitle';
+import { useResourcesForApiGroups } from './useResourcesForApiGroups';
+import { useMicrofrontendContext } from 'react-shared';
 
 export function GenericRoleCreate({
   onChange,
@@ -17,6 +19,12 @@ export function GenericRoleCreate({
 }) {
   const { t } = useTranslation();
   const [role, setRole] = useState(createTemplate());
+  const { groupVersions } = useMicrofrontendContext();
+
+  const resourcesCache = useResourcesForApiGroups(
+    role?.rules?.flatMap(r => r.apiGroups),
+    groupVersions,
+  );
 
   useEffect(() => {
     setCustomValid(validateRole(role));
@@ -53,6 +61,7 @@ export function GenericRoleCreate({
             rules={allValues}
             setRules={setAllValues}
             isAdvanced={isAdvanced}
+            resourcesCache={resourcesCache}
           />
         )}
         newResourceTemplateFn={createRuleTemplate}

@@ -243,7 +243,7 @@ export function MultiInput({
   };
 
   const focus = ref => {
-    if (ref) {
+    if (ref?.current) {
       ref.current.focus();
     }
   };
@@ -499,6 +499,7 @@ export function ComboboxInput({
   options,
   id,
   placeholder,
+  typedValue,
   className,
   ...props
 }) {
@@ -512,14 +513,69 @@ export function ComboboxInput({
         showAllEntries
         searchFullString
         selectionType="manual"
-        onSelectionChange={(_, selected) =>
-          setValue(selected?.key !== -1 ? selected?.key : selected?.text)
-        }
-        selectedKey={defaultKey}
-        placeholder={defaultKey || placeholder}
+        onSelectionChange={(_, selected) => setValue(selected)}
+        typedValue={typedValue}
+        selectedKey={defaultKey === -1 ? defaultKey : ''}
+        placeholder={placeholder}
         options={options}
         {...props}
       />
     </div>
+  );
+}
+
+export function ComboboxArrayInput({
+  title,
+  defaultOpen,
+  placeholder,
+  inputProps,
+  isAdvanced,
+  tooltipContent,
+  sectionTooltipContent,
+  options,
+  emptyStringKey,
+  ...props
+}) {
+  const { t } = useTranslation();
+
+  placeholder =
+    placeholder || t('common.messages.type-to-select', { value: title });
+
+  const toInternal = values =>
+    (values || []).map(v => (emptyStringKey && v === '' ? emptyStringKey : v));
+  const toExternal = values =>
+    values
+      .filter(val => !!val || (emptyStringKey && val === ''))
+      .map(v => (emptyStringKey && v === emptyStringKey ? '' : v));
+
+  return (
+    <MultiInput
+      title={title}
+      defaultOpen={defaultOpen}
+      isAdvanced={isAdvanced}
+      toInternal={toInternal}
+      toExternal={toExternal}
+      tooltipContent={tooltipContent}
+      sectionTooltipContent={sectionTooltipContent}
+      inputs={[
+        ({ value, setValue, ref, onBlur, focus }) => (
+          <ComboboxInput
+            key={`form-${title}`}
+            placeholder={placeholder}
+            compact
+            ref={ref}
+            selectedKey={value}
+            typedValue={value || ''}
+            setValue={selected =>
+              setValue(selected.key === -1 ? selected.text : selected.key)
+            }
+            options={options}
+            onKeyDown={focus}
+            onBlur={onBlur}
+          />
+        ),
+      ]}
+      {...props}
+    />
   );
 }

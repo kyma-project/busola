@@ -1063,6 +1063,7 @@ role-bindings:
   tooltip:
     no-found: No Roles found
 roles:
+  core-api-group: Core API group ("")
   headers:
     api-groups: API Groups
     custom: Custom
