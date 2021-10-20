@@ -189,7 +189,7 @@ export async function createNavigation() {
     await checkClusterStorageType(activeCluster.config.storage);
 
     // we assume all users can make SelfSubjectRulesReview request
-    const ssrrStatus = await fetchPermissions(
+    const permissionSet = await fetchPermissions(
       authData,
       getCurrentContextNamespace(activeCluster.kubeconfig),
     );
@@ -237,7 +237,7 @@ export async function createNavigation() {
       return true;
     };
 
-    if (!hasAnyRoleBound(ssrrStatus.resourceRules)) {
+    if (!hasAnyRoleBound(permissionSet)) {
       const error = i18next.t('common.errors.no-permissions-no-role');
       saveLocation(`/no-permissions?${NODE_PARAM_PREFIX}error=${error}`);
     }
@@ -245,11 +245,10 @@ export async function createNavigation() {
     return {
       preloadViewGroups: false,
       nodeAccessibilityResolver: node =>
-        isNodeEnabled(node) &&
-        navigationPermissionChecker(node, ssrrStatus.resourceRules),
+        isNodeEnabled(node) && navigationPermissionChecker(node, permissionSet),
       appSwitcher: await createAppSwitcher(),
       ...optionsForCurrentCluster,
-      nodes: await createNavigationNodes(features, apiGroups, ssrrStatus),
+      nodes: await createNavigationNodes(features, apiGroups, permissionSet),
     };
   } catch (err) {
     saveActiveClusterName(null);
@@ -315,7 +314,11 @@ async function getObservabilityNodes(authData, enabledFeatures) {
   return navNodes.filter(n => n);
 }
 
-export async function createNavigationNodes(features, apiGroups, ssrrStatus) {
+export async function createNavigationNodes(
+  features,
+  apiGroups,
+  permissionSet,
+) {
   const authData = getAuthData();
   const activeCluster = await getActiveCluster();
 
@@ -333,7 +336,7 @@ export async function createNavigationNodes(features, apiGroups, ssrrStatus) {
     const staticNodes = getStaticRootNodes(
       getChildrenNodesForNamespace,
       apiGroups,
-      ssrrStatus.resourceRules,
+      permissionSet,
       features,
     );
     const observabilitySection = await getObservabilityNodes(
@@ -374,7 +377,7 @@ export async function createNavigationNodes(features, apiGroups, ssrrStatus) {
         kubeconfig: activeCluster.kubeconfig,
         language: i18next.language,
         ssoData: getSSOAuthData(),
-        ssrrStatus,
+        permissionSet,
         groupVersions: apiGroups,
       },
     },
@@ -401,13 +404,13 @@ async function getNamespaces() {
 
 async function getChildrenNodesForNamespace(
   apiGroups,
-  resourceRules,
+  permissionSet,
   features,
 ) {
   const { navigation = {} } = (await getActiveCluster()).config;
   const staticNodes = getStaticChildrenNodesForNamespace(
     apiGroups,
-    resourceRules,
+    permissionSet,
     features,
   );
 
