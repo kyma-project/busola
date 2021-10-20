@@ -40,9 +40,9 @@ export function ServiceBindingsCreate({
 
   return (
     <ResourceForm
-      className="create-service-instance-form"
-      pluralKind="serviceinstances"
-      singularName={t('btp-instances.name_singular')}
+      className="create-service-binding-form"
+      pluralKind="servicebindings"
+      singularName={t('btp-service-bindings.name_singular')}
       resource={serviceBinding}
       setResource={setServiceBinding}
       onChange={onChange}
@@ -51,7 +51,7 @@ export function ServiceBindingsCreate({
     >
       <K8sNameField
         propertyPath="$.metadata.name"
-        kind={t('btp-instances.name_singular')}
+        kind={t('btp-service-bindings.name_singular')}
         setValue={name => {
           jp.value(serviceBinding, '$.metadata.name', name);
           jp.value(
@@ -75,25 +75,27 @@ export function ServiceBindingsCreate({
       <FormField
         required
         propertyPath="$.spec.serviceInstanceName"
-        label={t('btp-instances.resource-type')}
+        label={t('btp-service-bindings.instance-name')}
         input={({ value, setValue }) => (
           <K8sResourceSelectWithUseGetList
             compact
             required
             value={value}
-            resourceType={t('btp-instances.resource-type')}
+            resourceType={t('btp-service-bindings.resource-type')}
             onSelect={setValue}
             url={`/apis/services.cloud.sap.com/v1alpha1/namespaces/${namespace}/serviceinstances/`}
           />
         )}
       />
       <FormField
+        advanced
         label={t('btp-service-bindings.external-name')}
         propertyPath="$.spec.externalName"
         input={Inputs.Text}
         placeholder={t('btp-service-bindings.create.external-name-placeholder')}
       />
       <FormField
+        advanced
         label={t('btp-service-bindings.secret')}
         tooltipContent={t('btp-service-bindings.create.secret-description')}
         propertyPath="$.spec.secretName"
@@ -125,6 +127,7 @@ export function ServiceBindingsCreate({
         />
       </CollapsibleSection>
       <SecretRefForm
+        advanced
         propertyPath="$.spec.parametersFrom"
         secrets={secrets}
         loading={loading}
