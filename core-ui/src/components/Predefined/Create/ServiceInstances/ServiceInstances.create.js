@@ -63,21 +63,23 @@ export function ServiceInstancesCreate({
         label={t('btp-instances.offering-name')}
         propertyPath="$.spec.serviceOfferingName"
         input={Inputs.Text}
-        placeholder={t('btp-instances.create.offering-name-description')}
+        placeholder={t('btp-instances.placeholders.offering-name')}
+        tooltipContent={t('btp-instances.tooltips.offering-name')}
       />
       <FormField
         required
         label={t('btp-instances.plan-name')}
         propertyPath="$.spec.servicePlanName"
         input={Inputs.Text}
-        placeholder={t('btp-instances.create.plan-name-description')}
+        placeholder={t('btp-instances.placeholders.plan-name')}
+        tooltipContent={t('btp-instances.tooltips.plan-name')}
       />
       <FormField
         advanced
         label={t('btp-instances.external-name')}
         propertyPath="$.spec.externalName"
         input={Inputs.Text}
-        placeholder={t('btp-instances.create.external-name-placeholder')}
+        placeholder={t('btp-instances.placeholders.external-name')}
       />
       <CollapsibleSection
         advanced
@@ -89,7 +91,7 @@ export function ServiceInstancesCreate({
           propertyPath="$.spec.parameters"
           language="json"
           validate={parsed => !!parsed && typeof parsed === 'object'}
-          invalidValueMessage={t('btp-instances.create.params-invalid')}
+          invalidValueMessage={t('btp-instances.messages.params-invalid')}
           height="10em"
         />
       </CollapsibleSection>

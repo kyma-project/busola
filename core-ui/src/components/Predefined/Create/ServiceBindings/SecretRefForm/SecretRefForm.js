@@ -68,37 +68,42 @@ export function SecretRefForm({
     return secret?.data ? tryBase64Decode(secret.data[ref.key]) : '';
   };
 
-  const getRefValidation = (ref, otherRefs) => {
+  const getRefValidationMessage = ref => {
     try {
-      if (!ref) {
-        return '';
-      } else if (!ref.name) {
-        return t('btp-service-bindings.create.ref-form.choose-secret');
-      } else if (!ref.key) {
-        return t('btp-service-bindings.create.ref-form.choose-key');
-      } else if (!isValidJSONObject(getSecretValue(ref))) {
-        return t(
-          'btp-service-bindings.create.ref-form.value-must-be-json-object',
-        );
+      if (ref?.key && !isValidJSONObject(getSecretValue(ref))) {
+        return t('btp-service-bindings.messages.value-must-be-json-object');
       }
 
-      const duplicates = otherRefs.filter(
-        r => r.name === ref.name && r.key === ref.key,
-      );
+      const duplicates = secretRefs.filter(r => {
+        console.log('filter', r, ref);
+        return (
+          r.secretKeyRef.name === ref.name && r.secretKeyRef.key === ref.key
+        );
+      });
+      console.log('duplicates', duplicates);
 
       if (duplicates.length > 1) {
-        return t('btp-service-bindings.create.ref-form.duplicate-ref');
+        return t('btp-service-bindings.messages.duplicate-ref');
       }
     } catch (e) {
       console.warn(e);
-      return t('btp-service-bindings.create.ref-form.invalid-ref');
+      return t('btp-service-bindings.messages.invalid-ref');
     }
     return '';
+  };
+  const getRefValidation = ref => {
+    const message = getRefValidationMessage(ref);
+    return message
+      ? {
+          state: 'error',
+          text: message,
+        }
+      : undefined;
   };
 
   return (
     <MultiInput
-      fullWidth
+      // fullWidth
       toInternal={value =>
         (Array.isArray(value) ? value : []).map(val => val.secretKeyRef)
       }
@@ -109,11 +114,9 @@ export function SecretRefForm({
       setValue={setSecretRefs}
       className="secret-ref-form"
       title={t('btp-service-bindings.parameters-from')}
+      required
+      sectionTooltipContent={t('btp-service-bindings.tooltips.parameters-from')}
       inputs={[
-        ({ value }) => {
-          const validationMessage = getRefValidation(value, secretRefs);
-          return <RefValidationMessage message={validationMessage} />;
-        },
         ({ value, setValue, ref, onBlur, focus }) => (
           <Dropdown
             compact
@@ -126,9 +129,7 @@ export function SecretRefForm({
               onBlur();
               focus(e);
             }}
-            placeholder={t(
-              'btp-service-bindings.create.ref-form.choose-secret',
-            )}
+            placeholder={t('btp-service-bindings.placeholders.choose-secret')}
           />
         ),
         ({ value, setValue, ref, onBlur, focus }) =>
@@ -143,11 +144,12 @@ export function SecretRefForm({
                 onBlur();
                 focus(e);
               }}
+              validationState={getRefValidation(value)}
               placeholder={t(
-                'btp-service-bindings.create.ref-form.choose-secret-key',
+                'btp-service-bindings.placeholders.choose-secret-key',
               )}
               emptyListMessage={t(
-                'btp-service-bindings.create.ref-form.empty-secret',
+                'btp-service-bindings.placeholders.empty-secret',
               )}
             />
           ) : (
@@ -156,18 +158,10 @@ export function SecretRefForm({
               disabled
               className="secret-key-dropdown"
               placeholder={t(
-                'btp-service-bindings.create.ref-form.choose-secret-first',
+                'btp-service-bindings.placeholder.choose-secret-first',
               )}
             />
           ),
-        ({ value }) => (
-          <FormTextarea
-            compact
-            disabled
-            className="secret-content"
-            value={getSecretValue(value)}
-          />
-        ),
       ]}
     />
   );

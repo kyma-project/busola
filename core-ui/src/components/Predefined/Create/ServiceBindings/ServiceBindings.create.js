@@ -101,25 +101,15 @@ export function ServiceBindingsCreate({
         label={t('btp-service-bindings.external-name')}
         propertyPath="$.spec.externalName"
         input={Inputs.Text}
-        placeholder={t('btp-service-bindings.create.external-name-placeholder')}
+        placeholder={t('btp-service-bindings.placeholders.external-name')}
       />
       <FormField
         advanced
         label={t('btp-service-bindings.secret')}
-        tooltipContent={t('btp-service-bindings.create.secret-description')}
         propertyPath="$.spec.secretName"
-        input={({ value, setValue }) => (
-          <K8sResourceSelect
-            compact
-            data={secrets}
-            loading={loading}
-            error={error}
-            value={value}
-            resourceType={t('btp-service-bindings.secret')}
-            onSelect={setValue}
-            url={`/api/v1/namespaces/${namespace}/secrets`}
-          />
-        )}
+        tooltipContent={t('btp-service-bindings.tooltips.secret')}
+        input={Inputs.Text}
+        placeholder={t('btp-service-bindings.placeholders.secret')}
       />
       <CollapsibleSection
         advanced
@@ -131,7 +121,9 @@ export function ServiceBindingsCreate({
           propertyPath="$.spec.parameters"
           language="json"
           validate={parsed => !!parsed && typeof parsed === 'object'}
-          invalidValueMessage={t('btp-service-bindings.create.params-invalid')}
+          invalidValueMessage={t(
+            'btp-service-bindings.messages.params-invalid',
+          )}
           height="10em"
         />
       </CollapsibleSection>
