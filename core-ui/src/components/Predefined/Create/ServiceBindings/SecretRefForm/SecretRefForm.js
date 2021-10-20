@@ -1,7 +1,6 @@
 import React from 'react';
 import { Dropdown, Tooltip } from 'react-shared';
-import { Button, Icon, MessageStrip } from 'fundamental-react';
-import { v4 as uuid } from 'uuid';
+import { Icon, FormTextarea } from 'fundamental-react';
 import './SecretRefFrom.scss';
 import { base64Decode } from 'shared/helpers';
 import { useTranslation } from 'react-i18next';
@@ -27,7 +26,7 @@ const tryBase64Decode = value => {
 
 const RefValidationMessage = ({ message }) => {
   return message ? (
-    <Tooltip className="validation-message" content={message}>
+    <Tooltip className="validation-message" content={message} delay={[0, 0]}>
       <Icon
         size="l"
         className="ref-validation-icon"
@@ -41,43 +40,17 @@ const RefValidationMessage = ({ message }) => {
 };
 
 export function SecretRefForm({
-  refs,
-  setRefs,
-  setRefsValid = () => {},
   secrets,
   loading,
   error,
+  value: secretRefs,
+  setValue: setSecretRefs,
 }) {
   const { t } = useTranslation();
-
-  React.useEffect(() => {
-    if (Array.isArray(refs)) {
-      setRefsValid(refs.every(ref => !getRefValidation(ref, refs)));
-    } else {
-      setRefsValid(false);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [refs]);
-
-  if (!Array.isArray(refs)) {
-    return (
-      <MessageStrip type="error">
-        {t('btp-service-bindings.create.ref-form.parametersFrom-must-be-array')}
-      </MessageStrip>
-    );
-  }
 
   const secretNames = (secrets || [])
     .map(s => s.metadata.name)
     .map(n => ({ key: n, text: n }));
-
-  const addRef = () => {
-    setRefs([...refs, { secretKeyRef: { name: '', key: '' } }]);
-  };
-
-  const removeRef = index => {
-    setRefs(refs.filter((_, i) => i !== index));
-  };
 
   const getSecretKeys = secretName => {
     const secret = secrets.find(s => s.metadata.name === secretName);
@@ -88,17 +61,20 @@ export function SecretRefForm({
   };
 
   const getSecretValue = ref => {
-    const secret = secrets.find(s => s.metadata.name === ref.secretKeyRef.name);
-    return secret?.data
-      ? tryBase64Decode(secret.data[ref.secretKeyRef.key])
-      : '';
+    if (!ref?.name) {
+      return '';
+    }
+    const secret = secrets.find(s => s.metadata.name === ref.name);
+    return secret?.data ? tryBase64Decode(secret.data[ref.key]) : '';
   };
 
   const getRefValidation = (ref, otherRefs) => {
     try {
-      if (!ref.secretKeyRef.name) {
+      if (!ref) {
+        return '';
+      } else if (!ref.name) {
         return t('btp-service-bindings.create.ref-form.choose-secret');
-      } else if (!ref.secretKeyRef.key) {
+      } else if (!ref.key) {
         return t('btp-service-bindings.create.ref-form.choose-key');
       } else if (!isValidJSONObject(getSecretValue(ref))) {
         return t(
@@ -107,9 +83,7 @@ export function SecretRefForm({
       }
 
       const duplicates = otherRefs.filter(
-        r =>
-          r.secretKeyRef.name === ref.secretKeyRef.name &&
-          r.secretKeyRef.key === ref.secretKeyRef.key,
+        r => r.name === ref.name && r.key === ref.key,
       );
 
       if (duplicates.length > 1) {
@@ -122,97 +96,79 @@ export function SecretRefForm({
     return '';
   };
 
-  const addRefButton = () => {
-    const text = t('common.buttons.add-new');
-    if (loading || error) {
-      return (
-        <Tooltip
-          content={loading ? t('common.headers.loading') : error.message}
-        >
-          <Button glyph="add" disabled>
-            {text}
-          </Button>
-        </Tooltip>
-      );
-    }
-    return (
-      <Button glyph="add" onClick={addRef}>
-        {text}
-      </Button>
-    );
-  };
-
-  const onSecretSelect = ref => (_, selected) => {
-    ref.secretKeyRef.name = selected.text;
-    ref.secretKeyRef.key = '';
-    setRefs([...refs]);
-  };
-
-  const onKeySelect = ref => (_, selected) => {
-    ref.secretKeyRef.key = selected.text;
-    setRefs([...refs]);
-  };
-
-  const renderRefs = refs
-    .filter(ref => ref.secretKeyRef)
-    .map(ref => ({
-      ...ref,
-      renderKey: uuid(),
-      validationMessage: getRefValidation(ref, refs),
-    }));
-
-  return <MultiInput inputs={[]} />;
-  /*
   return (
-    <>
-      <ul className="secret-ref-form">
-        {renderRefs.map((ref, index) => (
-          <li key={ref.renderKey}>
-            <RefValidationMessage message={ref.validationMessage} />
+    <MultiInput
+      fullWidth
+      toInternal={value =>
+        (Array.isArray(value) ? value : []).map(val => val.secretKeyRef)
+      }
+      toExternal={value =>
+        value.filter(val => !!val).map(val => ({ secretKeyRef: val }))
+      }
+      value={secretRefs}
+      setValue={setSecretRefs}
+      className="secret-ref-form"
+      title={t('btp-service-bindings.parameters-from')}
+      inputs={[
+        ({ value }) => {
+          const validationMessage = getRefValidation(value, secretRefs);
+          return <RefValidationMessage message={validationMessage} />;
+        },
+        ({ value, setValue, ref, onBlur, focus }) => (
+          <Dropdown
+            compact
+            className="secret-name-dropdown"
+            options={secretNames}
+            selectedKey={value?.name}
+            ref={ref}
+            onSelect={(e, selected) => {
+              setValue({ name: selected.key });
+              onBlur();
+              focus(e);
+            }}
+            placeholder={t(
+              'btp-service-bindings.create.ref-form.choose-secret',
+            )}
+          />
+        ),
+        ({ value, setValue, ref, onBlur, focus }) =>
+          value?.name ? (
             <Dropdown
-              id="secret-dropdown"
-              options={secretNames}
-              selectedKey={ref.secretKeyRef.name}
-              onSelect={onSecretSelect(ref)}
+              compact
+              className="secret-key-dropdown"
+              options={getSecretKeys(value.name)}
+              selectedKey={value.key}
+              onSelect={(e, selected) => {
+                setValue({ ...value, key: selected.key });
+                onBlur();
+                focus(e);
+              }}
               placeholder={t(
-                'btp-service-bindings.create.ref-form.choose-secret',
+                'btp-service-bindings.create.ref-form.choose-secret-key',
+              )}
+              emptyListMessage={t(
+                'btp-service-bindings.create.ref-form.empty-secret',
               )}
             />
-            {ref.secretKeyRef.name ? (
-              <Dropdown
-                id="secret-dropdown"
-                options={getSecretKeys(ref.secretKeyRef.name)}
-                selectedKey={ref.secretKeyRef.key}
-                onSelect={onKeySelect(ref)}
-                placeholder={t(
-                  'btp-service-bindings.create.ref-form.choose-secret-key',
-                )}
-                emptyListMessage={t(
-                  'btp-service-bindings.create.ref-form.empty-secret',
-                )}
-              />
-            ) : (
-              <Dropdown
-                disabled
-                placeholder={t(
-                  'btp-service-bindings.create.ref-form.choose-secret-first',
-                )}
-              />
-            )}
-            <textarea
+          ) : (
+            <Dropdown
+              compact
               disabled
-              value={ref.secretKeyRef.key && getSecretValue(ref)}
+              className="secret-key-dropdown"
+              placeholder={t(
+                'btp-service-bindings.create.ref-form.choose-secret-first',
+              )}
             />
-            <Button
-              glyph="delete"
-              type="negative"
-              onClick={() => removeRef(index)}
-            />
-          </li>
-        ))}
-      </ul>
-      <div className="ref-button-wrapper">{addRefButton()}</div>
-    </>
+          ),
+        ({ value }) => (
+          <FormTextarea
+            compact
+            disabled
+            className="secret-content"
+            value={getSecretValue(value)}
+          />
+        ),
+      ]}
+    />
   );
-  */
 }

@@ -38,48 +38,6 @@ export function ServiceBindingsCreate({
     },
   );
 
-  /*
-  const createServiceBinding = useCreateResource(
-    'Service Binding',
-    'servicebindings',
-    serviceBindingToYaml(serviceBinding),
-    `/apis/services.cloud.sap.com/v1alpha1/namespaces/${namespaceId}/servicebindings/`,
-  );
-
-  return (
-    <CreateForm
-      simpleForm={
-        <SimpleForm
-          serviceBinding={serviceBinding}
-          setServiceBinding={setServiceBinding}
-          namespaceId={namespaceId}
-        />
-      }
-      advancedForm={
-        <AdvancedForm
-          serviceBinding={serviceBinding}
-          setServiceBinding={setServiceBinding}
-          namespaceId={namespaceId}
-          setRefsValid={setCustomValid}
-        />
-      }
-      modalOpeningComponent={
-        <Button glyph="add">{t('btp-service-bindings.create.title')}</Button>
-      }
-      resource={serviceBinding}
-      setResource={setServiceBinding}
-      onClose={() =>
-        setServiceBinding(createServiceBindingTemplate(namespaceId))
-      }
-      toYaml={serviceBindingToYaml}
-      fromYaml={yamlToServiceBinding}
-      onCreate={createServiceBinding}
-      onChange={onChange}
-      formElementRef={formElementRef}
-    />
-  );
-  */
-
   return (
     <ResourceForm
       className="create-service-instance-form"
@@ -166,41 +124,12 @@ export function ServiceBindingsCreate({
           height="10em"
         />
       </CollapsibleSection>
-      <SecretRefForm />
-      {/*
-      <FormField
-        required
-        label={t('btp-instances.offering-name')}
-        propertyPath='$.spec.serviceOfferingName'
-        input={Inputs.Text}
-        placeholder={t('btp-instances.create.offering-name-description')}
+      <SecretRefForm
+        propertyPath="$.spec.parametersFrom"
+        secrets={secrets}
+        loading={loading}
+        error={error}
       />
-      <FormField
-        required
-        label={t('btp-instances.plan-name')}
-        propertyPath='$.spec.servicePlanName'
-        input={Inputs.Text}
-        placeholder={t('btp-instances.create.plan-name-description')}
-      />
-      <FormField
-        advanced
-        label={t('btp-instances.external-name')}
-        propertyPath='$.spec.externalName'
-        input={Inputs.Text}
-        placeholder={t('btp-instances.create.external-name-placeholder')}
-      />
-      <CollapsibleSection
-        title={t('btp-instances.parameters')}
-        resource={serviceInstance}
-        setResource={setServiceInstance}
-      >
-        <JSONField
-          propertyPath='$.spec.parameters'
-          validate={parsed => !!parsed && typeof parsed === 'object'} 
-          invalidValueMessage={t('btp-instances.create.params-invalid')}
-        />
-      </CollapsibleSection>
-      */}
     </ResourceForm>
   );
 }
