@@ -80,3 +80,14 @@
 .tooltip-cursor {
   cursor: help;
 }
+.resource-form__data-field {
+  .value-textarea {
+    resize: vertical;
+    height: 26px;
+  }
+
+  .read-from-file {
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+}
