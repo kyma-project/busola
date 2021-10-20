@@ -100,7 +100,7 @@ export const TlsForm = ({ server = {}, servers, setServers, advanced }) => {
         label={t('gateways.create-modal.advanced.tls.credentialName')}
         input={() => (
           <K8sResourceSelectWithUseGetList
-            url={`/api/v1/namespaces/${namespace}/secrets`}
+            url={`/api/v1/namespaces/istio-system/secrets`}
             filter={filterMatchingSecrets}
             onSelect={secretName =>
               setTlsValue(
