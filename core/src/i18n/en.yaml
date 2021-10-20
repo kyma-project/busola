@@ -143,6 +143,7 @@ btp-service-bindings:
   external-name: External Name
   instance-id: Instance ID
   instance-name: ServiceInstance Name
+  name_singular: BTP Service Binding
   parameters: Instance Binding Parameters
   parameters-from: Array of Secret references to populate the parameters.
   resource-type: ServiceBinding
