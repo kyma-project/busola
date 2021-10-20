@@ -59,7 +59,7 @@ endif
 push-image-local:
 	docker tag $(LOCAL_IMG_NAME) $(LOCAL_IMG):$(TAG)
 	docker push $(LOCAL_IMG):$(TAG)
-	ifeq (,$(findstring PR-,$(TAG)))
+	ifeq ($(findstring PR-,$(TAG)))
 		# Not found
 		docker tag $(LOCAL_IMG_NAME) $(LOCAL_IMG):latest
 		docker push $(LOCAL_IMG):latest
