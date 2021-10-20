@@ -38,6 +38,15 @@ export function ServiceBindingsCreate({
     },
   );
 
+  React.useEffect(() => {
+    const hasInstanceName = jp.value(
+      serviceBinding,
+      '$.spec.serviceInstanceName',
+    );
+
+    setCustomValid(hasInstanceName);
+  }, [serviceBinding, setCustomValid]);
+
   return (
     <ResourceForm
       className="create-service-binding-form"
