@@ -1,4 +1,5 @@
 import rbacRulesMatched from './rbac-rules-matcher';
+import _ from 'lodash';
 
 export function navigationPermissionChecker(
   nodeToCheckPermissionsFor,
@@ -54,4 +55,33 @@ export function hasPermissionsFor(
   }
 
   return !!matchingPermission || !!wildcardPermission;
+}
+
+export function hasAnyRoleBound(permissionSet) {
+  const ssrr = {
+    apiGroups: ['authorization.k8s.io'],
+    resources: ['selfsubjectaccessreviews', 'selfsubjectrulesreviews'],
+    verbs: ['create'],
+  };
+
+  const filterSelfSubjectRulesReview = permission =>
+    !_.isEqual(permission, ssrr);
+
+  // leave out ssrr permission, as it's always there
+  permissionSet = permissionSet.filter(filterSelfSubjectRulesReview);
+
+  const verbs = permissionSet.flatMap(p => p.verbs);
+
+  const usefulVerbs = [
+    'get',
+    'list',
+    'watch',
+    'create',
+    'update',
+    'patch',
+    'delete',
+    '*',
+  ];
+
+  return verbs.some(v => usefulVerbs.includes(v));
 }

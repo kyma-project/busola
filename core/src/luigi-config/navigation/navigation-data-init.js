@@ -12,7 +12,7 @@ import {
   getStaticChildrenNodesForNamespace,
   getStaticRootNodes,
 } from './static-navigation-model';
-import { navigationPermissionChecker } from './permissions';
+import { navigationPermissionChecker, hasAnyRoleBound } from './permissions';
 import { getFeatures, resolveFeatureAvailability } from '../features';
 import { showAlert } from '../utils/showAlert';
 
@@ -38,6 +38,8 @@ import { saveLocation } from './previous-location';
 import { NODE_PARAM_PREFIX } from '../luigi-config';
 import { loadTargetClusterConfig } from '../utils/target-cluster-config';
 import { checkClusterStorageType } from '../cluster-management/clusters-storage';
+import { getSSOAuthData } from '../auth/sso';
+import { setNavFooterText } from '../nav-footer';
 
 async function createAppSwitcher() {
   const activeClusterName = getActiveClusterName();
@@ -65,6 +67,11 @@ async function createAppSwitcher() {
 export async function reloadNavigation() {
   const navigation = await createNavigation();
   Luigi.setConfig({ ...Luigi.getConfig(), navigation });
+
+  // wait for Luigi to update DOM
+  setTimeout(async () => {
+    await setNavFooterText();
+  }, 100);
 }
 
 async function createClusterManagementNodes(features) {
@@ -111,6 +118,7 @@ async function createClusterManagementNodes(features) {
       language: i18next.language,
       busolaClusterParams: await getBusolaClusterParams(),
       features,
+      ssoData: getSSOAuthData(),
     },
   };
 
@@ -229,6 +237,11 @@ export async function createNavigation() {
       }
       return true;
     };
+
+    if (!hasAnyRoleBound(permissionSet)) {
+      const error = i18next.t('common.errors.no-permissions-no-role');
+      saveLocation(`/no-permissions?${NODE_PARAM_PREFIX}error=${error}`);
+    }
 
     return {
       preloadViewGroups: false,
@@ -364,6 +377,7 @@ export async function createNavigationNodes(
         config: activeCluster.config,
         kubeconfig: activeCluster.kubeconfig,
         language: i18next.language,
+        ssoData: getSSOAuthData(),
       },
     },
   ];

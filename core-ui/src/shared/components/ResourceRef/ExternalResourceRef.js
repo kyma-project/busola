@@ -84,6 +84,9 @@ export function ExternalResourceRef({
         tooltipContent={t('common.tooltips.secret-ref-namespace')}
         input={() => (
           <ComboboxInput
+            id="secret-namespace-combobox"
+            ariaLabel="Secret namespace Combobox"
+            arrowLabel="Secret namespace Combobox arrow"
             compact
             showAllEntries
             searchFullString
@@ -99,10 +102,12 @@ export function ExternalResourceRef({
               });
             }}
             validationState={
-              !namespaceValid && {
-                state: 'error',
-                text: t('common.messages.resource-namespace-error'),
-              }
+              namespaceValid
+                ? null
+                : {
+                    state: 'error',
+                    text: t('common.messages.resource-namespace-error'),
+                  }
             }
           />
         )}
@@ -113,6 +118,9 @@ export function ExternalResourceRef({
         tooltipContent={t('common.tooltips.secret-ref-name')}
         input={() => (
           <ComboboxInput
+            id="secret-name-combobox"
+            ariaLabel="Secret name Combobox"
+            arrowLabel="Secret name Combobox arrow"
             compact
             showAllEntries
             searchFullString
@@ -128,10 +136,12 @@ export function ExternalResourceRef({
               });
             }}
             validationState={
-              !nameValid && {
-                state: 'error',
-                text: t('common.messages.resource-name-error'),
-              }
+              nameValid
+                ? null
+                : {
+                    state: 'error',
+                    text: t('common.messages.resource-name-error'),
+                  }
             }
           />
         )}

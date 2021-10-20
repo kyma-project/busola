@@ -1,7 +1,15 @@
-import React, { useEffect, useRef, useState, createRef } from 'react';
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  createRef,
+  useCallback,
+} from 'react';
 import {
+  ComboboxInput as FdComboboxInput,
   FormInput,
   FormLabel,
+  FormTextarea,
   Button,
   Icon,
   MessageStrip,
@@ -9,9 +17,14 @@ import {
 import { Select as WrappedSelect } from 'shared/components/Select/Select';
 import { Tooltip, K8sNameInput } from 'react-shared';
 import classnames from 'classnames';
-import './FormComponents.scss';
 import { useTranslation } from 'react-i18next';
+
+import { base64Decode, base64Encode, readFromFile } from 'shared/helpers';
+
 import { ResourceFormWrapper } from '../ResourceForm';
+
+import './FormComponents.scss';
+import * as Inputs from './Inputs';
 
 export function CollapsibleSection({
   disabled = false,
@@ -105,20 +118,16 @@ export function Title({
   }
 }
 export function Label({ required, tooltipContent, children }) {
-  const label = (
-    <FormLabel
-      required={required}
-      className={tooltipContent ? 'tooltip-cursor' : ''}
-    >
-      {children}
-    </FormLabel>
+  return (
+    <>
+      <FormLabel required={required}>{children}</FormLabel>
+      {tooltipContent && (
+        <Tooltip delay={0} content={tooltipContent}>
+          <Icon ariaLabel="Tooltip" glyph="question-mark" />
+        </Tooltip>
+      )}
+    </>
   );
-
-  if (tooltipContent) {
-    return <Tooltip content={tooltipContent}>{label}</Tooltip>;
-  } else {
-    return label;
-  }
 }
 
 export function FormField({
@@ -137,12 +146,9 @@ export function FormField({
   return (
     <div className={classnames('fd-row form-field', className)}>
       <div className="fd-col fd-col-md--4 form-field__label">
-        <Label required={required && !disabled}>{label}</Label>
-        {tooltipContent && (
-          <Tooltip delay={0} content={tooltipContent}>
-            <Icon glyph="question-mark" />
-          </Tooltip>
-        )}
+        <Label required={required && !disabled} tooltipContent={tooltipContent}>
+          {label}
+        </Label>
       </div>
       <div className="fd-col fd-col-md--7">
         {input({ required, disabled, ...props })}
@@ -185,6 +191,7 @@ export function MultiInput({
   title,
   label,
   tooltipContent,
+  sectionTooltipContent,
   required,
   toInternal,
   toExternal,
@@ -192,6 +199,8 @@ export function MultiInput({
   className,
   isAdvanced,
   defaultOpen,
+  fullWidth = false,
+  isEntryLocked = () => false,
   ...props
 }) {
   const valueRef = useRef(null); // for deep comparison
@@ -206,9 +215,11 @@ export function MultiInput({
     }
   }, [internalValue]);
 
+  const toInternalCallback = useCallback(toInternal, []);
+
   useEffect(() => {
-    setInternalValue([...toInternal(value), null]);
-  }, [value, toInternal]);
+    setInternalValue([...toInternalCallback(value), null]);
+  }, [value, toInternalCallback]);
 
   // diff by stringify, as useEffect won't fire for the same object ref
   if (
@@ -244,21 +255,31 @@ export function MultiInput({
   };
   const open = defaultOpen === undefined ? !isAdvanced : defaultOpen;
 
+  const listClasses = classnames({
+    'text-array-input__list': true,
+    'fd-col': true,
+    'fd-col-md--7': !fullWidth,
+    'fd-col-md--12': fullWidth,
+  });
+
   return (
     <CollapsibleSection
       title={title}
       className={className}
       required={required}
       defaultOpen={open}
+      tooltipContent={sectionTooltipContent}
       {...props}
     >
       <div className="fd-row form-field multi-input">
-        <div className="fd-col fd-col-md--4">
-          <Label required={required} tooltipContent={tooltipContent}>
-            {title || label}
-          </Label>
-        </div>
-        <ul className="text-array-input__list fd-col fd-col-md--7">
+        {!fullWidth && (
+          <div className="fd-col fd-col-md--4">
+            <Label required={required} tooltipContent={tooltipContent}>
+              {title || label}
+            </Label>
+          </div>
+        )}
+        <ul className={listClasses}>
           {internalValue.map((entry, index) => (
             <li key={index}>
               {inputs.map((input, inputIndex) =>
@@ -285,7 +306,9 @@ export function MultiInput({
               )}
               <Button
                 compact
-                className={classnames({ hidden: isLast(index) })}
+                className={classnames({
+                  hidden: isLast(index) || isEntryLocked(entry),
+                })}
                 glyph="delete"
                 type="negative"
                 onClick={() => removeValue(index)}
@@ -303,6 +326,7 @@ export function TextArrayInput({
   inputProps,
   isAdvanced,
   tooltipContent,
+  sectionTooltipContent,
   ...props
 }) {
   return (
@@ -312,6 +336,7 @@ export function TextArrayInput({
       toInternal={value => value || []}
       toExternal={value => value.filter(val => !!val)}
       tooltipContent={tooltipContent}
+      sectionTooltipContent={sectionTooltipContent}
       inputs={[
         ({ value, setValue, ref, onBlur, focus }) => (
           <FormInput
@@ -332,14 +357,59 @@ export function TextArrayInput({
 }
 
 export function KeyValueField({
+  actions = [],
+  encodable = false,
   defaultOpen,
   isAdvanced,
+  input = Inputs.Text,
   keyProps = {
     pattern: '([A-Za-z0-9][-A-Za-z0-9_./]*)?[A-Za-z0-9]',
   },
+  readableFromFile = false,
+  lockedKeys = [],
   ...props
 }) {
   const { t } = useTranslation();
+
+  const [valuesEncoded, setValuesEncoded] = useState(false);
+  const [decodeErrors, setDecodeErrors] = useState({});
+
+  const toggleEncoding = () => {
+    setDecodeErrors({});
+    setValuesEncoded(!valuesEncoded);
+  };
+
+  const dataValue = value => {
+    if (!encodable || valuesEncoded) {
+      return value?.val || '';
+    } else {
+      try {
+        return base64Decode(value?.val || '');
+      } catch (e) {
+        decodeErrors[value?.key] = e.message;
+        setDecodeErrors({ ...decodeErrors });
+        setValuesEncoded(true);
+        return '';
+      }
+    }
+  };
+
+  if (encodable) {
+    actions = [
+      ...actions,
+      <Button
+        compact
+        option="transparent"
+        glyph={valuesEncoded ? 'show' : 'hide'}
+        onClick={toggleEncoding}
+      >
+        {valuesEncoded
+          ? t('secrets.buttons.decode')
+          : t('secrets.buttons.encode')}
+      </Button>,
+    ];
+  }
+
   return (
     <MultiInput
       defaultOpen={defaultOpen}
@@ -356,6 +426,7 @@ export function KeyValueField({
         ({ value, setValue, ref, onBlur, focus }) => (
           <FormInput
             compact
+            disabled={lockedKeys.includes(value?.key)}
             key="key"
             value={value?.key || ''}
             ref={ref}
@@ -368,20 +439,77 @@ export function KeyValueField({
             placeholder={t('components.key-value-field.enter-key')}
           />
         ),
-        ({ value, setValue, ref, onBlur, focus }) => (
-          <FormInput
-            compact
-            key="value"
-            value={value?.val || ''}
-            ref={ref}
-            onChange={e => setValue({ ...value, val: e.target.value })}
-            onKeyDown={e => focus(e)}
-            onBlur={onBlur}
-            placeholder={t('components.key-value-field.enter-value')}
-          />
-        ),
+        ({ focus, value, setValue, ...props }) =>
+          input({
+            key: 'value',
+            onKeyDown: e => focus(e),
+            value: dataValue(value),
+            placeholder: t('components.key-value-field.enter-value'),
+            setValue: val =>
+              setValue({
+                ...value,
+                val: valuesEncoded || !encodable ? val : base64Encode(val),
+              }),
+            validationState:
+              value?.key && decodeErrors[value.key]
+                ? {
+                    state: 'error',
+                    text: t('secrets.messages.decode-error', {
+                      message: decodeErrors[value.key],
+                    }),
+                  }
+                : undefined,
+            ...props,
+          }),
+        ({ value, setValue }) =>
+          readableFromFile ? (
+            <Tooltip content={t('common.tooltips.read-file')}>
+              <Button
+                compact
+                className="read-from-file"
+                onClick={() =>
+                  readFromFile().then(result =>
+                    setValue({
+                      key: value?.key || result.name,
+                      val: base64Encode(result.content),
+                    }),
+                  )
+                }
+              >
+                {t('components.key-value-form.read-value')}
+              </Button>
+            </Tooltip>
+          ) : (
+            <></>
+          ),
       ]}
+      actions={actions}
       tooltipContent={t('common.tooltips.key-value')}
+      {...props}
+    />
+  );
+}
+
+export function DataField({ title, ...props }) {
+  const { t } = useTranslation();
+
+  return (
+    <KeyValueField
+      fullWidth
+      readableFromFile
+      className="resource-form__data-field"
+      title={title || t('common.labels.data')}
+      input={({ value, setValue, ...props }) => (
+        <FormTextarea
+          compact
+          key="value"
+          value={value}
+          onChange={e => setValue(e.target.value)}
+          placeholder={t('components.key-value-field.enter-value')}
+          className="value-textarea"
+          {...props}
+        />
+      )}
       {...props}
     />
   );
@@ -461,6 +589,35 @@ export function Select({ value, setValue, defaultKey, options, ...props }) {
       selectedKey={value || defaultKey}
       options={options}
       fullWidth
+      {...props}
+    />
+  );
+}
+
+export function ComboboxInput({
+  value,
+  setValue,
+  defaultKey,
+  options,
+  id,
+  placeholder,
+  ...props
+}) {
+  return (
+    <FdComboboxInput
+      ariaLabel="Combobox input"
+      arrowLabel="Combobox input arrow"
+      id={id || 'combobox-input'}
+      compact
+      showAllEntries
+      searchFullString
+      selectionType="auto-inline"
+      onSelectionChange={(_, selected) =>
+        setValue(selected?.key !== -1 ? selected?.key : selected?.text)
+      }
+      selectedKey={defaultKey}
+      placeholder={defaultKey || placeholder}
+      options={options}
       {...props}
     />
   );

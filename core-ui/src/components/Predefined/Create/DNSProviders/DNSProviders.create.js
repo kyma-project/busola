@@ -1,23 +1,40 @@
-import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
-import { createDNSProviderTemplate } from './templates';
-import { ProviderTypeDropdown } from './ProviderTypeDropdown';
-import { SecretRef } from 'shared/components/ResourceRef/SecretRef';
+import React, { useEffect } from 'react';
 import * as jp from 'jsonpath';
+import { useTranslation } from 'react-i18next';
+import { useGet } from 'react-shared';
 
-export function DNSProvidersCreate({
+import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
+import { SecretRef } from 'shared/components/ResourceRef/SecretRef';
+import {
+  createDNSProviderTemplate,
+  createDNSProviderTemplateForGardener,
+} from './templates';
+import { ProviderTypeDropdown } from './ProviderTypeDropdown';
+
+function DNSProvidersCreate({
   formElementRef,
   namespace,
   onChange,
   setCustomValid,
 }) {
+  const { t } = useTranslation();
   const [dnsProvider, setDNSProvider] = React.useState(
     createDNSProviderTemplate(namespace),
   );
-  const { t } = useTranslation();
+  const { data: configmap } = useGet(
+    `/api/v1/namespaces/kube-system/configmaps/shoot-info`,
+    {
+      pollingInterval: 0,
+    },
+  );
 
-  React.useEffect(() => {
+  useEffect(() => {
+    if (configmap) {
+      setDNSProvider(createDNSProviderTemplateForGardener(namespace));
+    }
+  }, [configmap, namespace, setDNSProvider]);
+
+  useEffect(() => {
     const isTypeSet = jp.value(dnsProvider, '$.spec.type');
     const isSecretRefSet =
       jp.value(dnsProvider, '$.spec.secretRef.name') &&
@@ -100,3 +117,79 @@ export function DNSProvidersCreate({
     </ResourceForm>
   );
 }
+DNSProvidersCreate.secrets = (t, { features } = {}) => {
+  if (!features?.CUSTOM_DOMAINS?.isEnabled) {
+    return [];
+  }
+  return [
+    {
+      title: 'Amazon Route53',
+      type: 'Opaque',
+      name: 'amazon-route53',
+      data: ['AWS_ACCESS_KEY_ID', 'AWS_SECRET_ACCESS_KEY'],
+    },
+    {
+      title: 'GoogleCloud DNS',
+      type: 'Opaque',
+      name: 'google-cloud-dns',
+      data: ['serviceaccount.json'],
+    },
+    {
+      title: 'AliCloud DNS',
+      type: 'Opaque',
+      name: 'ali-cloud-dns',
+      data: ['ACCESS_KEY_ID', 'SECRET_ACCESS_KEY'],
+    },
+    {
+      title: 'Azure DNS',
+      type: 'Opaque',
+      name: 'azure-dns',
+      data: [
+        'AZURE_SUBSCRIPTION_ID',
+        'AZURE_TENANT_ID',
+        'AZURE_CLIENT_ID',
+        'AZURE_CLIENT_SECRET',
+      ],
+    },
+    {
+      title: 'OpenStack Designate',
+      name: 'openstack-designate',
+      type: 'Opaque',
+      data: [
+        'OS_AUTH_URL',
+        'OS_DOMAIN_NAME',
+        'OS_PROJECT_NAME',
+        'OS_USERNAME',
+        'OS_PASSWORD',
+        'OS_PROJECT_ID',
+        'OS_REGION_NAME',
+        'OS_TENANT_NAME',
+        'OS_APPLICATION_CREDENTIAL_ID',
+        'OS_APPLICATION_CREDENTIAL_NAME',
+        'OS_APPLICATION_CREDENTIAL_SECRET',
+        'OS_DOMAIN_ID',
+        'OS_USER_DOMAIN_NAME',
+        'OS_USER_DOMAIN_ID',
+      ],
+    },
+    {
+      title: 'Cloudflare DNS',
+      type: 'Opaque',
+      name: 'cloudflare-dns',
+      data: ['CLOUDFLARE_API_TOKEN'],
+    },
+    {
+      title: 'Infoblox',
+      type: 'Opaque',
+      name: 'infoblox',
+      data: ['USERNAME', 'PASSWORD'],
+    },
+    {
+      title: 'Netlify DNS',
+      type: 'Opaque',
+      name: 'netlify-dns',
+      data: ['NETLIFY_AUTH_TOKEN'],
+    },
+  ];
+};
+export { DNSProvidersCreate };

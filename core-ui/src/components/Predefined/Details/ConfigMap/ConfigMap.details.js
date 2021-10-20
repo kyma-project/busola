@@ -1,9 +1,11 @@
 import React from 'react';
-import { ControlledBy, ModalWithForm } from 'react-shared';
 import { Button } from 'fundamental-react';
-import { EditConfigMapForm } from './EditConfigMapForm';
-import { ReadonlyEditorPanel } from '../../../../shared/components/ReadonlyEditorPanel';
 import { useTranslation } from 'react-i18next';
+
+import { ControlledBy, ModalWithForm } from 'react-shared';
+
+import { ConfigMapsCreate } from '../../Create/ConfigMaps/ConfigMaps.create';
+import { ReadonlyEditorPanel } from '../../../../shared/components/ReadonlyEditorPanel';
 
 export const ConfigMapsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const { t, i18n } = useTranslation();
@@ -25,9 +27,9 @@ export const ConfigMapsDetails = ({ DefaultRenderer, ...otherParams }) => {
           </Button>
         }
         confirmText={t('common.buttons.edit')}
-        className="fd-dialog--xl-size modal-size--l"
+        className="modal-size--l"
         renderForm={props => (
-          <EditConfigMapForm
+          <ConfigMapsCreate
             configMap={configMap}
             resourceUrl={otherParams.resourceUrl}
             readonlyName={true}
