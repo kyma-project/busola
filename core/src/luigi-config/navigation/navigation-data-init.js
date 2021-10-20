@@ -194,13 +194,13 @@ export async function createNavigation() {
       getCurrentContextNamespace(activeCluster.kubeconfig),
     );
 
-    const apiGroups = await fetchBusolaInitData(authData);
+    const groupVersions = await fetchBusolaInitData(authData);
 
     const activeClusterName = activeCluster.currentContext.cluster.name;
 
     const features = await getFeatures({
       authData,
-      apiGroups,
+      groupVersions,
     });
 
     const optionsForCurrentCluster = {
@@ -248,7 +248,11 @@ export async function createNavigation() {
         isNodeEnabled(node) && navigationPermissionChecker(node, permissionSet),
       appSwitcher: await createAppSwitcher(),
       ...optionsForCurrentCluster,
-      nodes: await createNavigationNodes(features, apiGroups, permissionSet),
+      nodes: await createNavigationNodes(
+        features,
+        groupVersions,
+        permissionSet,
+      ),
     };
   } catch (err) {
     saveActiveClusterName(null);
@@ -316,7 +320,7 @@ async function getObservabilityNodes(authData, enabledFeatures) {
 
 export async function createNavigationNodes(
   features,
-  apiGroups,
+  groupVersions,
   permissionSet,
 ) {
   const authData = getAuthData();
@@ -335,7 +339,7 @@ export async function createNavigationNodes(
   const clusterChildren = async () => {
     const staticNodes = getStaticRootNodes(
       getChildrenNodesForNamespace,
-      apiGroups,
+      groupVersions,
       permissionSet,
       features,
     );
@@ -377,8 +381,7 @@ export async function createNavigationNodes(
         kubeconfig: activeCluster.kubeconfig,
         language: i18next.language,
         ssoData: getSSOAuthData(),
-        permissionSet,
-        groupVersions: apiGroups,
+        groupVersions,
       },
     },
   ];
@@ -403,13 +406,13 @@ async function getNamespaces() {
 }
 
 async function getChildrenNodesForNamespace(
-  apiGroups,
+  groupVersions,
   permissionSet,
   features,
 ) {
   const { navigation = {} } = (await getActiveCluster()).config;
   const staticNodes = getStaticChildrenNodesForNamespace(
-    apiGroups,
+    groupVersions,
     permissionSet,
     features,
   );

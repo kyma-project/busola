@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSingleGet } from 'react-shared';
 
-export function useResourcesForApiGroups(apiGroups, groupVersions) {
+export function useResourcesForApiGroups(apiGroups = [], groupVersions) {
   const [cache, setCache] = useState({});
   const fetch = useSingleGet();
 

@@ -52,7 +52,7 @@ async function downloadKubeconfig() {
 }
 
 export function getStaticChildrenNodesForNamespace(
-  apiGroups,
+  groupVersions,
   permissionSet,
   features,
 ) {
@@ -1204,13 +1204,13 @@ export function getStaticChildrenNodesForNamespace(
       ],
     },
   ];
-  filterNodesByAvailablePaths(nodes, apiGroups, permissionSet);
+  filterNodesByAvailablePaths(nodes, groupVersions, permissionSet);
   return nodes;
 }
 
 export function getStaticRootNodes(
   namespaceChildrenNodesResolver,
-  apiGroups,
+  groupVersions,
   permissionSet,
   features,
 ) {
@@ -1260,7 +1260,7 @@ export function getStaticRootNodes(
           keepSelectedForChildren: false,
           children: async () =>
             await namespaceChildrenNodesResolver(
-              apiGroups,
+              groupVersions,
               permissionSet,
               features,
             ),
@@ -1520,7 +1520,7 @@ export function getStaticRootNodes(
       onNodeActivation: downloadKubeconfig,
     },
   ];
-  filterNodesByAvailablePaths(nodes, apiGroups, permissionSet);
+  filterNodesByAvailablePaths(nodes, groupVersions, permissionSet);
   return nodes;
 }
 
@@ -1531,19 +1531,19 @@ function extractApiGroup(apiPath) {
   return apiPath.split('/')[2];
 }
 
-function filterNodesByAvailablePaths(nodes, apiGroups, permissionSet) {
+function filterNodesByAvailablePaths(nodes, groupVersions, permissionSet) {
   for (let i = nodes.length - 1; i >= 0; i--) {
     const node = nodes[i];
     if (typeof node.children === 'object') {
-      filterNodesByAvailablePaths(node.children, apiGroups, permissionSet);
+      filterNodesByAvailablePaths(node.children, groupVersions, permissionSet);
     }
 
     const removeNode = () => nodes.splice(i, 1);
-    checkSingleNode(node, apiGroups, permissionSet, removeNode);
+    checkSingleNode(node, groupVersions, permissionSet, removeNode);
   }
 }
 
-function checkSingleNode(node, apiGroups, permissionSet, removeNode) {
+function checkSingleNode(node, groupVersions, permissionSet, removeNode) {
   if (!node.viewUrl || !node.resourceType) return;
   const apiPath = new URL(node.viewUrl).searchParams.get('resourceApiPath');
   if (!apiPath) return;
@@ -1554,7 +1554,7 @@ function checkSingleNode(node, apiGroups, permissionSet, removeNode) {
       .replace(/^\/apis\//, '')
       .replace(/^\/api\//, '');
 
-    if (!apiGroups.find(g => g.includes(groupVersion))) {
+    if (!groupVersions.find(g => g.includes(groupVersion))) {
       removeNode();
     }
   } else {
