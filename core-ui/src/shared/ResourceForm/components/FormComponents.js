@@ -249,7 +249,7 @@ export function MultiInput({
   };
 
   const focus = ref => {
-    if (ref?.current) {
+    if (ref?.current?.focus) {
       ref.current.focus();
     }
   };
@@ -292,7 +292,7 @@ export function MultiInput({
                   focus: (e, target) => {
                     if (e.key === 'Enter') {
                       if (typeof target === 'undefined') {
-                        focus(refs[index + 1][0]);
+                        focus(refs[index + 1]?.[0]);
                       } else {
                         focus(refs[index][target]);
                       }
@@ -338,9 +338,9 @@ export function TextArrayInput({
       tooltipContent={tooltipContent}
       sectionTooltipContent={sectionTooltipContent}
       inputs={[
-        ({ value, setValue, ref, onBlur, focus }) => (
+        ({ value, setValue, ref, onBlur, focus, index }) => (
           <FormInput
-            key={`form-${props.title}`}
+            key={index}
             compact
             value={value || ''}
             ref={ref}
@@ -479,9 +479,7 @@ export function KeyValueField({
                 {t('components.key-value-form.read-value')}
               </Button>
             </Tooltip>
-          ) : (
-            <></>
-          ),
+          ) : null,
       ]}
       actions={actions}
       tooltipContent={t('common.tooltips.key-value')}
@@ -659,10 +657,13 @@ export function ComboboxArrayInput({
     {key: '', text: 'empty'} -> {key: emptyStringKey, text: 'empty'}
   */
   const toInternal = values =>
-    (values || []).map(v => (emptyStringKey && v === '' ? emptyStringKey : v));
+    (values || [])
+      .filter(v => v || (emptyStringKey && v === ''))
+      .map(v => (emptyStringKey && v === '' ? emptyStringKey : v));
+
   const toExternal = values =>
     values
-      .filter(val => !!val || (emptyStringKey && val === ''))
+      .filter(val => !!val)
       .map(v => (emptyStringKey && v === emptyStringKey ? '' : v));
 
   return (
@@ -675,9 +676,9 @@ export function ComboboxArrayInput({
       tooltipContent={tooltipContent}
       sectionTooltipContent={sectionTooltipContent}
       inputs={[
-        ({ value, setValue, ref, onBlur, focus }) => (
+        ({ value, setValue, ref, onBlur, focus, index }) => (
           <ComboboxInput
-            key={`form-${title}`}
+            key={index}
             placeholder={placeholder}
             compact
             _ref={ref}
