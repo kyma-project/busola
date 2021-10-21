@@ -623,7 +623,7 @@ export function ComboboxInput({
         ref={_ref}
         showAllEntries
         searchFullString
-        selectionType="manual"
+        selectionType="auto-inline"
         onSelectionChange={(_, selected) => setValue(selected)}
         typedValue={typedValue}
         selectedKey={defaultKey === -1 ? defaultKey : ''}
@@ -683,6 +683,7 @@ export function ComboboxArrayInput({
             _ref={ref}
             selectedKey={value}
             typedValue={value || ''}
+            selectionType="manual"
             setValue={selected =>
               // fallback on selected.text if no entry is found
               setValue(selected.key !== -1 ? selected.key : selected.text)
