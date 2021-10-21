@@ -10,7 +10,7 @@ export function ServiceBindingList(instance) {
     hasDetailsView: true,
     fixedPath: true,
     resourceUrl: `/apis/services.cloud.sap.com/v1alpha1/namespaces/${namespace}/servicebindings`,
-    resourceType: 'btp-service-bindings',
+    resourceType: 'servicebindings',
     namespace,
     isCompact: true,
     showTitle: true,
