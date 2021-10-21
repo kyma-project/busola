@@ -11,7 +11,7 @@ export const ServiceBindingsList = ({ DefaultRenderer, ...otherParams }) => {
   const navigateToInstance = instanceName =>
     LuigiClient.linkManager()
       .fromContext('namespace')
-      .navigate(`/btp-instances/details/${instanceName}`);
+      .navigate(`/serviceinstances/details/${instanceName}`);
 
   const customColumns = [
     {
