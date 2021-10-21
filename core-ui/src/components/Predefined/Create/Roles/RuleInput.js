@@ -85,16 +85,19 @@ export function RuleInput({
         propertyPath="$.apiGroups"
         options={apiGroupsInputOptions}
         emptyStringKey={EMPTY_STRING_KEY}
+        defaultOpen
       />
       <ResourceForm.ComboboxArrayInput
         title={t('roles.headers.resources')}
         propertyPath="$.resources"
         options={availableResources.map(i => ({ key: i, text: i }))}
+        defaultOpen
       />
       <ResourceForm.ComboboxArrayInput
         title={t('roles.headers.verbs')}
         propertyPath="$.verbs"
         options={verbs.map(i => ({ key: i, text: i }))}
+        defaultOpen
       />
       {isAdvanced && (
         <ResourceForm.TextArrayInput

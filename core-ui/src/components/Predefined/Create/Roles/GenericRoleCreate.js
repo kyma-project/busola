@@ -47,7 +47,17 @@ export function GenericRoleCreate({
         input={Inputs.Text}
         propertyPath="$.metadata.name"
       />
-
+      <ResourceForm.KeyValueField
+        advanced
+        propertyPath="$.metadata.labels"
+        title={t('common.headers.labels')}
+        className="fd-margin-top--sm"
+      />
+      <ResourceForm.KeyValueField
+        advanced
+        propertyPath="$.metadata.annotations"
+        title={t('common.headers.annotations')}
+      />
       <ResourceForm.ItemArray
         propertyPath="$.rules"
         listTitle={t('roles.headers.rules')}
