@@ -124,7 +124,12 @@ export function FunctionsCreate({
         options={sourceTypeOptions}
       />
       {func?.spec?.type === 'git' && !repositories.length && (
-        <MessageStrip dismissible={false} type="warning">
+        <MessageStrip
+          advanced
+          className="fd-margin-top--sm"
+          dismissible={false}
+          type="warning"
+        >
           {t('functions.create-view.errors.no-repository-found')}
         </MessageStrip>
       )}
