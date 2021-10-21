@@ -61,11 +61,11 @@ applications:
     select-all: Select all
   headers:
     access-label: Access Label
-    central-gateway-url: Central Gateway URL
-    service: Service
     apis: APIs
+    central-gateway-url: Central Gateway URL
     description: Description
     events: Events
+    service: Service
     service-and-event: Service and Event Bindings
   labels:
     applications-and-events: Applications and Events
@@ -1050,6 +1050,8 @@ role-bindings:
   headers:
     kind: Kind
     role-name: Role Name
+    role-ref: Role Ref
+    role-subjects: Role Subjects
   labels:
     annotations: Annotations
     arrow: Show Roles

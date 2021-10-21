@@ -47,7 +47,9 @@ export const Rules = resource => {
     })),
     rule.verbs?.filter(v => !standardVerbs.includes(v)).join(', ') ||
       EMPTY_TEXT_PLACEHOLDER,
-    displayArrayValue(rule.apiGroups),
+    displayArrayValue(
+      rule.apiGroups.map(apiGroup => (apiGroup ? apiGroup : 'core ("")')),
+    ),
     displayArrayValue(rule.resources),
     displayArrayValue(rule.resourceNames),
     displayArrayValue(rule.nonResourceURLs),
@@ -67,7 +69,7 @@ export const Rules = resource => {
       className="rules-list"
       title={t('roles.headers.rules')}
       textSearchProperties={textSearchProperties}
-      entries={resource.rules}
+      entries={resource.rules || []}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       i18n={i18n}
