@@ -12,6 +12,7 @@ export function RuleTitle({ rule, i }) {
       position="right"
       className="fd-margin-end--tiny"
       content={tooltipContent}
+      delay={0}
     >
       <Icon
         className=" fd-color--warning"

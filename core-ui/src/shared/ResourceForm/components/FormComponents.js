@@ -610,6 +610,7 @@ export function ComboboxInput({
   placeholder,
   typedValue,
   className,
+  _ref,
   ...props
 }) {
   return (
@@ -619,6 +620,7 @@ export function ComboboxInput({
         arrowLabel="Combobox input arrow"
         id={id || 'combobox-input'}
         compact
+        ref={_ref}
         showAllEntries
         searchFullString
         selectionType="manual"
@@ -678,7 +680,7 @@ export function ComboboxArrayInput({
             key={`form-${title}`}
             placeholder={placeholder}
             compact
-            ref={ref}
+            _ref={ref}
             selectedKey={value}
             typedValue={value || ''}
             setValue={selected =>
