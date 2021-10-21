@@ -1,0 +1,21 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: busola
+spec:
+  hosts:
+    - $DOMAIN
+  gateways:
+    - kyma-system/kyma-gateway
+  http:
+    - name: 'backend-route'
+      match:
+        - uri:
+            prefix: '/backend'
+      route:
+        - destination:
+            host: backend.$NAMESPACE.svc.cluster.local
+    - name: 'web-route'
+      route:
+        - destination:
+            host: web.$NAMESPACE.svc.cluster.local
