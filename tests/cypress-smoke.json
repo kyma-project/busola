@@ -17,9 +17,9 @@
   "testFiles": [
     "run-before.spec.js",
     "create-a-deployment.spec.js",
-    "download-a-kubeconfig.spec.js",
     "test-cluster-overview.spec.js",
     "smoke-tests.spec.js",
+    "login-kubeconfigID.spec.js",
     "run-after.spec.js"
   ]
 }
