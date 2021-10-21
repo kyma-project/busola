@@ -122,8 +122,8 @@ btp-instances:
   resource-type: ServiceInstance
   title: BTP ServiceInstances
   tooltips:
-    offering-name: The name of the SAP BTP service offering. You can find it in the BTP Cockpit in the Service Marketplace.
-    plan-name: The plan to use for the service instance. You can find it in the BTP Cockpit in the Service Marketplace.
+    offering-name: You find the name of the SAP BTP service offering in the BTP Cockpit in the Service Marketplace.
+    plan-name: You find the plan to be used for the service instance in the BTP Cockpit in the Service Marketplace.
 btp-service-bindings:
   binding-id: Binding ID
   data: Binding Data
@@ -143,14 +143,14 @@ btp-service-bindings:
     choose-secret-first: Choose the Secret first
     choose-secret-key: Choose a Secret key
     empty-secret: This Secret has no data
-    external-name: Defaults to the binding name if empty
-    secret: Credentials secret name
+    external-name: Defaults to the ServiceBinding name if empty
+    secret: Credentials Secret name
   resource-type: ServiceBinding
   secret: Secret
   title: BTP ServiceBindings
   tooltips:
-    parameters-from: Secret references to populate the parameters from.
-    secret: The name of the secret where the credentials are stored, defaults to the binding name if not specified.
+    parameters-from: Secret references to populate the parameters.
+    secret: The name of the secret where the credentials are stored, defaults to the ServiceBinding name if not specified.
     secret-not-found: This Secret doesn't exist.
 catalog:
   menu-title: Catalog
