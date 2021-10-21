@@ -1,16 +1,11 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
-import CreateNewRepository from './CreateNewRepository';
 import { StatusBadge } from 'react-shared';
 import { Link } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
 export const GitRepositoriesList = ({ DefaultRenderer, ...otherParams }) => {
-  const { t, i18n } = useTranslation();
-
-  const listActions = (
-    <CreateNewRepository namespaceName={otherParams.resourceName} i18n={i18n} />
-  );
+  const { t } = useTranslation();
 
   const customColumns = [
     {
@@ -44,11 +39,5 @@ export const GitRepositoriesList = ({ DefaultRenderer, ...otherParams }) => {
     },
   ];
 
-  return (
-    <DefaultRenderer
-      listHeaderActions={listActions}
-      customColumns={customColumns}
-      {...otherParams}
-    />
-  );
+  return <DefaultRenderer customColumns={customColumns} {...otherParams} />;
 };
