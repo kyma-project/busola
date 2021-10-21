@@ -9,7 +9,6 @@ import {
 } from './../helpers';
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSelect';
-import { useMicrofrontendContext } from 'react-shared';
 import * as Inputs from 'shared/ResourceForm/components/Inputs';
 
 const setTlsValue = (server, variableName, value, servers, setServers) => {
@@ -32,7 +31,6 @@ const filterMatchingSecrets = secret => secret.type === 'kubernetes.io/tls';
 
 export const TlsForm = ({ server = {}, servers, setServers, advanced }) => {
   const { t } = useTranslation();
-  const { namespaceId: namespace } = useMicrofrontendContext();
 
   const resourceOptions = TSL_MODES.map(mode => ({
     key: mode,
