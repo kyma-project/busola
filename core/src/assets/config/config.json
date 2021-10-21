@@ -23,7 +23,7 @@
         }
       },
       "SSO_LOGIN": {
-        "isEnabled": false,
+        "isEnabled": true,
         "config": {
           "issuerUrl": "https://apskyxzcl.accounts400.ondemand.com",
           "scope": "openid",
