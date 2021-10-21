@@ -9,8 +9,5 @@ spec:
     - port: 8080
       name: http-web
       targetPort: 8080
-    - port: 6080
-      name: status-port-web
-      targetPort: 6080
   selector:
     app: busola

@@ -9,7 +9,6 @@ import {
 } from './../helpers';
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSelect';
-import { useMicrofrontendContext } from 'react-shared';
 import * as Inputs from 'shared/ResourceForm/components/Inputs';
 
 const setTlsValue = (server, variableName, value, servers, setServers) => {
@@ -27,13 +26,13 @@ export const switchTLS = (server, tlsOn, servers, setServers) => {
   setServers([...servers]);
 };
 
-// generic Secret is type=Opaque
+// generic Secret either type=Opaque and have cert data or type=kubernetes.io/tls
 const filterMatchingSecrets = secret =>
-  secret.type === 'Opaque' && 'key' in secret.data && 'cert' in secret.data;
+  secret.type === 'kubernetes.io/tls' ||
+  (secret.type === 'Opaque' && 'key' in secret.data && 'cert' in secret.data);
 
 export const TlsForm = ({ server = {}, servers, setServers, advanced }) => {
   const { t } = useTranslation();
-  const { namespaceId: namespace } = useMicrofrontendContext();
 
   const resourceOptions = TSL_MODES.map(mode => ({
     key: mode,
@@ -100,7 +99,7 @@ export const TlsForm = ({ server = {}, servers, setServers, advanced }) => {
         label={t('gateways.create-modal.advanced.tls.credentialName')}
         input={() => (
           <K8sResourceSelectWithUseGetList
-            url={`/api/v1/namespaces/${namespace}/secrets`}
+            url={`/api/v1/namespaces/istio-system/secrets`}
             filter={filterMatchingSecrets}
             onSelect={secretName =>
               setTlsValue(
