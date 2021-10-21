@@ -1,0 +1,24 @@
+{
+  "defaultCommandTimeout": 3000,
+  "execTimeout": 3000,
+  "taskTimeout": 3000,
+  "pageLoadTimeout": 5000,
+  "requestTimeout": 3000,
+  "responseTimeout": 3000,
+  "fixturesFolder": "fixtures",
+  "integrationFolder": "tests",
+  "supportFile": "support/index.js",
+  "pluginsFile": "plugins",
+  "chromeWebSecurity": false,
+  "viewportWidth": 1500,
+  "viewportHeight": 1500,
+  "videoCompression": false,
+  "experimentalInteractiveRunEvents": true,
+  "testFiles": [
+    "run-before.spec.js",
+    "create-a-deployment.spec.js",
+    "test-cluster-overview.spec.js",
+    "smoke-tests.spec.js",
+    "run-after.spec.js"
+  ]
+}
