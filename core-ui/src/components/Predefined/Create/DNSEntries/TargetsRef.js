@@ -97,8 +97,6 @@ const getExternalIPs = loadBalancer => {
       key: ip,
       text: `${ip} (${loadBalancer.metadata.name})`,
     }));
-  } else {
-    return '-';
   }
 };
 
