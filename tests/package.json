@@ -1,6 +1,6 @@
 {
-  "name": "ui-tests",
-  "description": "Smoke tests for Busola",
+  "name": "ui-integration-tests",
+  "description": "UI Integration tests for Busola",
   "scripts": {
     "start": "$(npm bin)/cypress open",
     "start:local": "CYPRESS_LOCAL_DEV=true $(npm bin)/cypress open",
@@ -12,6 +12,6 @@
     "js-yaml": "^4.1.0"
   },
   "optionalDependencies": {
-    "cypress": "^8.5.0"
+    "cypress": "^8.6.0"
   }
 }

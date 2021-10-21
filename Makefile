@@ -59,5 +59,10 @@ endif
 push-image-local:
 	docker tag $(LOCAL_IMG_NAME) $(LOCAL_IMG):$(TAG)
 	docker push $(LOCAL_IMG):$(TAG)
+ifeq ($(JOB_TYPE), postsubmit)
+	@echo "Tag image with latest"
 	docker tag $(LOCAL_IMG_NAME) $(LOCAL_IMG):latest
 	docker push $(LOCAL_IMG):latest
+else
+	@echo "Image tagging with latest skipped"
+endif
