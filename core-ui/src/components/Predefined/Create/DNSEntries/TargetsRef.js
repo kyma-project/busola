@@ -109,7 +109,8 @@ export function TargetsRef({ dnsEntry, setTargets, setDnsEntry }) {
   const loadBalancers = services?.filter(
     service =>
       service.spec.type === 'LoadBalancer' &&
-      service.status.loadBalancer?.ingress,
+      (service.status.loadBalancer?.ingress ||
+        service.spec.externalIPs?.length),
   );
 
   const IPs = (loadBalancers || []).flatMap(lb => getExternalIPs(lb));
