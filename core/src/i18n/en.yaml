@@ -195,6 +195,7 @@ cluster-addons:
 cluster-role-bindings:
   title: ClusterRoleBindings
 cluster-roles:
+  name_singular: Cluster Role
   title: ClusterRoles
 clusters:
   add:
@@ -335,6 +336,7 @@ common:
     doesnt-exist: doesn't exist.
     entry-not-found: Entry not found
     error: 'Error: {{error}}'
+    fill-required-data: Fill the remaining required data.
     loading-name: Loading name...
     no-instances-found: No matching {{value}} found.
     no-instances-found-namespace: No matching {{value}} found in this Namespace.
@@ -342,6 +344,7 @@ common:
     resource-name-error: Requested resource with this name not found in the selected Namespace.
     resource-namespace-error: Requested Namespace not found.
     type-to-select: Start typing to select {{value}} from the list.
+    validation-error: Validation error.
   placeholders:
     secret-ref-name: Select name
     secret-ref-namespace: Select Namespace
@@ -1067,14 +1070,19 @@ role-bindings:
   tooltip:
     no-found: No Roles found
 roles:
+  core-api-group: core ("")
   headers:
     api-groups: API Groups
     custom: Custom
     non-resource-urls: Non-resource URLs
     resource-names: Resource Names
     resources: Resources
+    rule: Rule
     rules: Rules
     verbs: Verbs
+  messages:
+    invalid: Rules cannot apply to both regular resources and non-resource URLs.
+  name_singular: Role
   title: Roles
 secrets:
   buttons:

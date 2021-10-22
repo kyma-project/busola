@@ -370,3 +370,7 @@ input[type='checkbox'] {
 .fd-popover__popper b {
   font-weight: bold;
 }
+
+.fd-color--warning {
+  color: var(--sapCriticalColor) !important;
+}
