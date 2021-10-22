@@ -1053,6 +1053,8 @@ role-bindings:
   headers:
     kind: Kind
     role-name: Role Name
+    role-ref: Role Reference
+    subjects: Role Subjects
   labels:
     annotations: Annotations
     arrow: Show Roles
@@ -1069,7 +1071,6 @@ role-bindings:
   tooltip:
     no-found: No Roles found
 roles:
-  core-api-group: core ("")
   headers:
     api-groups: API Groups
     custom: Custom
