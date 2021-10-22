@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "busola"
+  },
+  "targets": {
+    "busola": {
+      "hosting": {
+        "prod": [
+          "busola"
+        ]
+      }
+    }
+  }
+}

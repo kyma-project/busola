@@ -1,0 +1,18 @@
+{
+  "hosting": {
+    "target": "prod",
+    "cleanUrls": true,
+    "trailingSlash": true,
+    "public": "service-catalog-ui/public",
+    "rewrites": [
+      {
+        "source": "/backend",
+        "run": {
+          "serviceId": "busola-backend-main",
+          "region": "europe-west3"
+        }
+      }
+    ],
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
+  }
+}
