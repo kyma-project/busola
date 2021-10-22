@@ -3,7 +3,7 @@
     "default": "sap-se-cx-kyma-swinka"
   },
   "targets": {
-    "busola": {
+    "sap-se-cx-kyma-swinka": {
       "hosting": {
         "prod": [
           "busola"
