@@ -1051,7 +1051,7 @@ role-bindings:
     kind: Kind
     role-name: Role Name
     role-ref: Role Reference
-    role-subjects: Role Subjects
+    subjects: Role Subjects
   labels:
     annotations: Annotations
     arrow: Show Roles
