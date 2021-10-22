@@ -60,9 +60,7 @@ export function RuleInput({
   const apiGroupsInputOptions = unique(
     groupVersions.map(extractApiGroup),
   ).map(g =>
-    g === ''
-      ? { key: EMPTY_STRING_KEY, text: t('roles.core-api-group') }
-      : { key: g, text: g },
+    g === '' ? { key: EMPTY_STRING_KEY, text: '(core)' } : { key: g, text: g },
   );
 
   // there's no endpoint for "all resources" - add just a '*' and specific resources
