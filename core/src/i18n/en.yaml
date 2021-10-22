@@ -344,7 +344,7 @@ common:
     resource-name-error: Requested resource with this name not found in the selected Namespace.
     resource-namespace-error: Requested Namespace not found.
     type-to-select: Start typing to select {{value}} from the list.
-    validation-error: Validation error
+    validation-error: Validation error. 
   placeholders:
     secret-ref-name: Select name
     secret-ref-namespace: Select Namespace
