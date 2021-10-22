@@ -17,7 +17,7 @@ import {
 } from 'components/Lambdas/helpers/runtime';
 import { CONFIG } from 'components/Lambdas/config';
 
-import { createFunctionTemplate, createPresets } from './helpers';
+import { createFunctionTemplate } from './helpers';
 
 export function FunctionsCreate({
   namespace,
@@ -29,8 +29,6 @@ export function FunctionsCreate({
   const [func, setFunc] = useState(createFunctionTemplate(namespace));
   const {
     data: repositories,
-    // error: repositoriesError,
-    // loading: repositoriesLoading = true,
   } = useGetList()(
     `/apis/serverless.kyma-project.io/v1alpha1/namespaces/${namespace}/gitrepositories`,
     { pollingInterval: 10000 },
@@ -84,7 +82,7 @@ export function FunctionsCreate({
       jp.value(func, '$.spec.baseDir', '/');
     }
     setFunc({ ...func });
-  }, [type]); //eslint-disable-line react-hooks/exhaustive-deps
+  }, [type]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (!type) {
@@ -95,7 +93,7 @@ export function FunctionsCreate({
       );
       jp.value(func, '$.spec.deps', getDefaultDependencies(name, runtime));
     }
-  }, [runtime]);
+  }, [runtime]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <ResourceForm
@@ -107,7 +105,6 @@ export function FunctionsCreate({
       onChange={onChange}
       formElementRef={formElementRef}
       createUrl={resourceUrl}
-      // presets={createPresets(namespace, t)}
     >
       <K8sNameField
         propertyPath="$.metadata.name"
