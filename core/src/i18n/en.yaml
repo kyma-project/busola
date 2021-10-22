@@ -1052,9 +1052,8 @@ role-bindings:
     cannot-create: Cannot create a RoleBinding.
   headers:
     kind: Kind
-    role-name: Role Name
     role-ref: Role Reference
-    subjects: Role Subjects
+    subjects: Subjects
   labels:
     annotations: Annotations
     arrow: Show Roles
