@@ -4,8 +4,9 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'fundamental-react';
 import { Tooltip } from 'react-shared';
 
-const BindingsList = ({ DefaultRenderer, ...otherParams }) => {
+function BindingsList({ ...params }) {
   const { t } = useTranslation();
+  const { DefaultRenderer } = params;
 
   const navigateToRole = role => {
     if (role.kind === 'ClusterRole') {
@@ -89,18 +90,15 @@ const BindingsList = ({ DefaultRenderer, ...otherParams }) => {
     <DefaultRenderer
       customColumns={customColumns}
       textSearchProperties={textSearchProperties}
-      {...otherParams}
+      {...params}
     />
   );
-};
+}
 
-export const RoleBindingsList = ({ DefaultRenderer, ...otherParams }) => {
-  return <BindingsList DefaultRenderer={DefaultRenderer} {...otherParams} />;
-};
+export function RoleBindingsList({ ...params }) {
+  return <BindingsList {...params} />;
+}
 
-export const ClusterRoleBindingsList = ({
-  DefaultRenderer,
-  ...otherParams
-}) => {
-  return <BindingsList DefaultRenderer={DefaultRenderer} {...otherParams} />;
-};
+export function ClusterRoleBindingsList({ ...params }) {
+  return <BindingsList {...params} />;
+}
