@@ -1050,7 +1050,7 @@ role-bindings:
   headers:
     kind: Kind
     role-name: Role Name
-    role-ref: Role Ref
+    role-ref: Role Reference
     role-subjects: Role Subjects
   labels:
     annotations: Annotations
