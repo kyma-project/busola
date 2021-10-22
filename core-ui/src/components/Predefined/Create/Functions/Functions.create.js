@@ -11,7 +11,11 @@ import {
   KeyValueField,
   FormField,
 } from 'shared/ResourceForm/components/FormComponents';
-import { functionAvailableLanguages } from 'components/Lambdas/helpers/runtime';
+import {
+  functionAvailableLanguages,
+  getDefaultDependencies,
+} from 'components/Lambdas/helpers/runtime';
+import { CONFIG } from 'components/Lambdas/config';
 
 import { createFunctionTemplate, createPresets } from './helpers';
 
@@ -32,7 +36,9 @@ export function FunctionsCreate({
     { pollingInterval: 10000 },
   );
 
+  const name = jp.value(func, '$.metadata.name');
   const type = jp.value(func, '$.spec.type');
+  const runtime = jp.value(func, '$.spec.runtime');
 
   const runtimeOptions = Object.entries(functionAvailableLanguages).map(
     ([runtime, lang]) => ({
@@ -59,8 +65,12 @@ export function FunctionsCreate({
 
   useEffect(() => {
     if (!type) {
-      jp.value(func, '$.spec.source', '');
-      jp.value(func, '$.spec.deps', '');
+      jp.value(
+        func,
+        '$.spec.source',
+        CONFIG.defaultLambdaCodeAndDeps[runtime].code,
+      );
+      jp.value(func, '$.spec.deps', getDefaultDependencies(name, runtime));
       jp.value(func, '$.spec.reference', undefined);
       jp.value(func, '$.spec.baseDir', undefined);
     } else if (type === 'git') {
@@ -76,6 +86,17 @@ export function FunctionsCreate({
     setFunc({ ...func });
   }, [type]); //eslint-disable-line react-hooks/exhaustive-deps
 
+  useEffect(() => {
+    if (!type) {
+      jp.value(
+        func,
+        '$.spec.source',
+        CONFIG.defaultLambdaCodeAndDeps[runtime].code,
+      );
+      jp.value(func, '$.spec.deps', getDefaultDependencies(name, runtime));
+    }
+  }, [runtime]);
+
   return (
     <ResourceForm
       className="create-function-form"
@@ -86,7 +107,7 @@ export function FunctionsCreate({
       onChange={onChange}
       formElementRef={formElementRef}
       createUrl={resourceUrl}
-      presets={createPresets(namespace, t)}
+      // presets={createPresets(namespace, t)}
     >
       <K8sNameField
         propertyPath="$.metadata.name"
@@ -108,8 +129,7 @@ export function FunctionsCreate({
         title={t('common.headers.annotations')}
       />
       <FormField
-        advanced
-        required
+        zrquired
         propertyPath="$.spec.runtime"
         label={t('functions.headers.runtime')}
         input={Inputs.Dropdown}

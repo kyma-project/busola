@@ -6,6 +6,7 @@ import {
   useMicrofrontendContext,
 } from 'react-shared';
 import { DeploymentsCreate } from '../../Create/Deployments/Deployments.create';
+import { FunctionsCreate } from '../../Create/Functions/Functions.create';
 import CreateLambdaModal from 'components/Lambdas/LambdasList/Lambdas/CreateLambdaModal';
 import { useTranslation } from 'react-i18next';
 
@@ -40,24 +41,28 @@ export default function DeployNewWorkload({ namespaceName }) {
   const serverDataLoading = functionsLoading || repositoriesLoading;
 
   const lambdaModal = functionsExist ? (
-    <CreateLambdaModal
-      functionNames={functionNames || []}
-      repositories={repositories || []}
-      serverDataError={serverDataError}
-      serverDataLoading={serverDataLoading}
+    <ModalWithForm
+      title={t('functions.create-view.title')}
+      confirmText={t('common.buttons.create')}
+      className="add-deployment-modal modal-size--l"
       modalOpeningComponent={
-        <Menu.Item>{t('functions.buttons.create-function')}</Menu.Item>
+        <Menu.Item>{t('functions.create-view.title')}</Menu.Item>
       }
+      renderForm={props => (
+        <FunctionsCreate {...props} namespace={namespaceName} />
+      )}
       i18n={i18n}
     />
   ) : null;
 
   const deploymentModal = (
     <ModalWithForm
-      title="Create Deployment"
+      title={t('deployments.create-modal.title')}
       confirmText={t('common.buttons.create')}
       className="add-deployment-modal modal-size--l"
-      modalOpeningComponent={<Menu.Item>Create Deployment</Menu.Item>}
+      modalOpeningComponent={
+        <Menu.Item>{t('deployments.create-modal.title')}</Menu.Item>
+      }
       renderForm={props => (
         <DeploymentsCreate {...props} namespace={namespaceName} />
       )}

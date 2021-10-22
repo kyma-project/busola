@@ -61,11 +61,11 @@ applications:
     select-all: Select all
   headers:
     access-label: Access Label
-    central-gateway-url: Central Gateway URL
-    service: Service
     apis: APIs
+    central-gateway-url: Central Gateway URL
     description: Description
     events: Events
+    service: Service
     service-and-event: Service and Event Bindings
   labels:
     applications-and-events: Applications and Events
@@ -634,6 +634,7 @@ functions:
       inline-editor: Inline Editor
       reference: Reference
       repository: Repository
+    title: Create Function
   details:
     buttons:
       diff_toggle: Diff
