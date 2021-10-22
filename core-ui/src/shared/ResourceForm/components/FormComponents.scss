@@ -80,6 +80,12 @@
 .tooltip-cursor {
   cursor: help;
 }
+
+.resource-form-combobox {
+  width: 100%;
+  margin-right: 16px;
+}
+
 .resource-form__data-field {
   .value-textarea {
     resize: vertical;

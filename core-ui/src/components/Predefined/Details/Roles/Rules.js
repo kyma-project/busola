@@ -10,23 +10,31 @@ function VerbStatus({ rule, verb }) {
 }
 
 export const Rules = resource => {
+  const isNamespaced = resource.metadata.namespace;
   const { t, i18n } = useTranslation();
 
-  const headerRenderer = () => [
-    'Get',
-    'List',
-    'Watch',
-    'Create',
-    'Update',
-    'Patch',
-    'Delete',
-    'DeleteCollection',
-    t('roles.headers.custom'),
-    t('roles.headers.api-groups'),
-    t('roles.headers.resources'),
-    t('roles.headers.resource-names'),
-    t('roles.headers.non-resource-urls'),
-  ];
+  const headerRenderer = () => {
+    const commonFields = [
+      'Get',
+      'List',
+      'Watch',
+      'Create',
+      'Update',
+      'Patch',
+      'Delete',
+      'DeleteCollection',
+      t('roles.headers.custom'),
+      t('roles.headers.api-groups'),
+      t('roles.headers.resources'),
+      t('roles.headers.resource-names'),
+    ];
+
+    if (isNamespaced) {
+      return commonFields;
+    } else {
+      return [...commonFields, t('roles.headers.non-resource-urls')];
+    }
+  };
 
   const standardVerbs = [
     'get',
@@ -40,20 +48,27 @@ export const Rules = resource => {
   ];
 
   const displayArrayValue = v => v?.join(', ') || EMPTY_TEXT_PLACEHOLDER;
-  const rowRenderer = rule => [
-    ...standardVerbs.map(verb => ({
-      content: <VerbStatus rule={rule} verb={verb} />,
-      style: { textAlign: 'center' },
-    })),
-    rule.verbs?.filter(v => !standardVerbs.includes(v)).join(', ') ||
-      EMPTY_TEXT_PLACEHOLDER,
-    displayArrayValue(
-      rule.apiGroups.map(apiGroup => (apiGroup ? apiGroup : 'core ("")')),
-    ),
-    displayArrayValue(rule.resources),
-    displayArrayValue(rule.resourceNames),
-    displayArrayValue(rule.nonResourceURLs),
-  ];
+  const rowRenderer = rule => {
+    const commonFields = [
+      ...standardVerbs.map(verb => ({
+        content: <VerbStatus rule={rule} verb={verb} />,
+        style: { textAlign: 'center' },
+      })),
+      rule.verbs?.filter(v => !standardVerbs.includes(v)).join(', ') ||
+        EMPTY_TEXT_PLACEHOLDER,
+      displayArrayValue(
+        rule.apiGroups.map(apiGroup => (apiGroup ? apiGroup : '""')),
+      ),
+      displayArrayValue(rule.resources),
+      displayArrayValue(rule.resourceNames),
+    ];
+
+    if (isNamespaced) {
+      return commonFields;
+    } else {
+      return [...commonFields, displayArrayValue(rule.nonResourceURLs)];
+    }
+  };
 
   const textSearchProperties = [
     'verbs',
