@@ -3,6 +3,7 @@ import LuigiClient from '@luigi-project/client';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'fundamental-react';
 import { Tooltip } from 'react-shared';
+import { forEach } from 'core-js/fn/array';
 
 const navigateToClusterRole = roleName =>
   LuigiClient.linkManager()
@@ -71,12 +72,28 @@ const getColumns = t => {
   ];
 };
 
+const textSearchProperties = [
+  'roleRef.name',
+  (entry, query) => {
+    const matchingSubject = entry.subjects?.find(subject =>
+      subject.name.toLowerCase().includes(query.toLowerCase()),
+    );
+    return matchingSubject?.name || null;
+  },
+];
+
 export const RoleBindingsList = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
 
   const customColumns = getColumns(t);
 
-  return <DefaultRenderer customColumns={customColumns} {...otherParams} />;
+  return (
+    <DefaultRenderer
+      customColumns={customColumns}
+      textSearchProperties={textSearchProperties}
+      {...otherParams}
+    />
+  );
 };
 
 export const ClusterRoleBindingsList = ({
@@ -87,5 +104,11 @@ export const ClusterRoleBindingsList = ({
 
   const customColumns = getColumns(t);
 
-  return <DefaultRenderer customColumns={customColumns} {...otherParams} />;
+  return (
+    <DefaultRenderer
+      customColumns={customColumns}
+      textSearchProperties={textSearchProperties}
+      {...otherParams}
+    />
+  );
 };
