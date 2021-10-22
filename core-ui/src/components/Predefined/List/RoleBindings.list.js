@@ -3,7 +3,6 @@ import LuigiClient from '@luigi-project/client';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'fundamental-react';
 import { Tooltip } from 'react-shared';
-import { forEach } from 'core-js/fn/array';
 
 const navigateToClusterRole = roleName =>
   LuigiClient.linkManager()
