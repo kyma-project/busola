@@ -2,6 +2,7 @@ import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'fundamental-react';
+import { Tooltip } from 'react-shared';
 
 const navigateToClusterRole = roleName =>
   LuigiClient.linkManager()
@@ -13,18 +14,45 @@ const navigateToRole = roleName =>
     .fromContext('namespace')
     .navigate(`/roles/details/${roleName}`);
 
-export const RoleBindingsList = ({ DefaultRenderer, ...otherParams }) => {
-  const { t } = useTranslation();
+const navigate = (roleName, kind) => {
+  if (kind === 'ClusterRole') {
+    navigateToClusterRole(roleName);
+  } else {
+    navigateToRole(roleName);
+  }
+};
 
-  const navigate = (roleName, kind) => {
-    if (kind === 'ClusterRole') {
-      navigateToClusterRole(roleName);
-    } else {
-      navigateToRole(roleName);
-    }
-  };
+const getSubject = subject => (
+  <div>
+    {subject.name}{' '}
+    <Tooltip content={subject.kind}>({subject.kind?.slice(0, 1)})</Tooltip>
+  </div>
+);
 
-  const customColumns = [
+const getSubjectWithLink = subject => (
+  <div>
+    <Link
+      className="fd-link"
+      onClick={() =>
+        LuigiClient.linkManager()
+          .fromContext('namespaces')
+          .navigate(`/serviceaccounts/details/${subject}`)
+      } //fix
+    >
+      {subject.name}
+    </Link>
+    <Tooltip content={subject.kind}> (SA)</Tooltip>
+  </div>
+);
+
+const getAllSubjects = binding => {
+  return binding.subjects?.map(s =>
+    s.kind === 'ServiceAccount' ? getSubjectWithLink(s) : getSubject(s),
+  );
+};
+
+const getColumns = t => {
+  return [
     {
       header: t('role-bindings.headers.role-name'),
       value: binding => (
@@ -36,7 +64,17 @@ export const RoleBindingsList = ({ DefaultRenderer, ...otherParams }) => {
         </Link>
       ),
     },
+    {
+      header: 'Subjects',
+      value: binding => getAllSubjects(binding),
+    },
   ];
+};
+
+export const RoleBindingsList = ({ DefaultRenderer, ...otherParams }) => {
+  const { t } = useTranslation();
+
+  const customColumns = getColumns(t);
 
   return <DefaultRenderer customColumns={customColumns} {...otherParams} />;
 };
@@ -46,19 +84,8 @@ export const ClusterRoleBindingsList = ({
   ...otherParams
 }) => {
   const { t } = useTranslation();
-  const customColumns = [
-    {
-      header: t('role-bindings.headers.role-name'),
-      value: binding => (
-        <Link
-          className="fd-link"
-          onClick={() => navigateToClusterRole(binding.roleRef.name)}
-        >
-          {binding.roleRef.name}
-        </Link>
-      ),
-    },
-  ];
+
+  const customColumns = getColumns(t);
 
   return <DefaultRenderer customColumns={customColumns} {...otherParams} />;
 };
