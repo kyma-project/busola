@@ -1,0 +1,39 @@
+.replay__parent {
+  position: relative;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.replay__parent--recording {
+  border: 2px solid red;
+}
+
+.replay__button {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+
+  height: 35px;
+  width: 35px;
+
+  border-radius: 50%;
+  background: red;
+  border: 1px solid white;
+  cursor: pointer;
+  z-index: 100000;
+}
+
+.replay__button--recording {
+  background-color: white;
+  border: 1px solid red;
+  display: flex;
+  place-items: center;
+}
+
+.replay__button--recording::after {
+  content: '';
+  width: 12px;
+  height: 12px;
+  background-color: red;
+  margin: 0 auto;
+}

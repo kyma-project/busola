@@ -1,28 +1,28 @@
 import { useFetch } from './useFetch';
+import { useRecorder } from '../../contexts/ReplayContext/ReplayContext';
 
 const useMutation = method => {
   return options => {
     const fetch = useFetch();
+    const { register } = useRecorder();
 
     return async (relativeUrl, data) => {
-      try {
-        const response = await fetch({
-          relativeUrl,
-          init: {
-            method,
-            headers: {
-              'Content-Type': 'application/json-patch+json',
-              Accept: 'application/json',
-            },
-            body: JSON.stringify(data),
+      const response = await fetch({
+        relativeUrl,
+        init: {
+          method,
+          headers: {
+            'Content-Type': 'application/json-patch+json',
+            Accept: 'application/json',
           },
-        });
+          body: JSON.stringify(data),
+        },
+      });
 
-        if (typeof options?.refetch === 'function') options.refetch();
-        return await response.json();
-      } catch (e) {
-        throw e;
-      }
+      if (typeof options?.refetch === 'function') options.refetch();
+      const result = await response.json();
+      register({ method, result });
+      return result;
     };
   };
 };
