@@ -193,6 +193,7 @@ certificates:
 cluster-addons:
   title: Cluster Addons
 cluster-role-bindings:
+  name_singular: ClusterRoleBinding
   title: ClusterRoleBindings
 cluster-roles:
   name_singular: Cluster Role
@@ -1046,10 +1047,6 @@ resource-quotas:
     requests: Requests
   title: Resource Quotas
 role-bindings:
-  aria:
-    choose-role: Choose Role
-  errors:
-    cannot-create: Cannot create a RoleBinding.
   headers:
     kind: Kind
     role-name: Role Name
@@ -1057,19 +1054,14 @@ role-bindings:
     subjects: Role Subjects
   labels:
     annotations: Annotations
-    arrow: Show Roles
     role: Role
     user: User
     user-group: User Group
-  messages:
-    created: RoleBinding {{name}} created.
+  name_singular: RoleBinding
   placeholders:
-    choose-role: Choose role...
     user-group: User group
     user-name: User name
   title: RoleBindings
-  tooltip:
-    no-found: No Roles found
 roles:
   headers:
     api-groups: API Groups
