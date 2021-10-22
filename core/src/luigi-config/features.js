@@ -4,7 +4,7 @@ import { getActiveCluster } from './cluster-management/cluster-management';
 const resolvers = {
   //leave the structure for the future when we add new options
   apiGroup: (selector, data) =>
-    data?.apiGroups.find(g => g.includes(selector.apiGroup)),
+    data?.groupVersions.find(g => g.includes(selector.apiGroup)),
 };
 
 async function resolveSelector(selector, data) {
