@@ -1,6 +1,6 @@
 {
   "projects": {
-    "default": "busola"
+    "default": "sap-se-cx-kyma-swinka"
   },
   "targets": {
     "busola": {
