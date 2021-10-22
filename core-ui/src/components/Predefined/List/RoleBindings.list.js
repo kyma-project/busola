@@ -22,7 +22,9 @@ const BindingsList = ({ DefaultRenderer, ...otherParams }) => {
   const getSubject = subject => (
     <div>
       {subject.name}{' '}
-      <Tooltip content={subject.kind}>({subject.kind?.slice(0, 1)})</Tooltip>
+      <Tooltip delay={0} content={subject.kind}>
+        ({subject.kind?.slice(0, 1)})
+      </Tooltip>
     </div>
   );
 
@@ -40,7 +42,10 @@ const BindingsList = ({ DefaultRenderer, ...otherParams }) => {
       >
         {subject.name}
       </Link>
-      <Tooltip content={subject.kind}> (SA)</Tooltip>
+      <Tooltip delay={0} content={subject.kind}>
+        {' '}
+        (SA)
+      </Tooltip>
     </div>
   );
 
