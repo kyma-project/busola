@@ -61,11 +61,11 @@ applications:
     select-all: Select all
   headers:
     access-label: Access Label
-    central-gateway-url: Central Gateway URL
-    service: Service
     apis: APIs
+    central-gateway-url: Central Gateway URL
     description: Description
     events: Events
+    service: Service
     service-and-event: Service and Event Bindings
   labels:
     applications-and-events: Applications and Events
@@ -350,7 +350,7 @@ common:
     download: Download
     duplicate-key: Duplicate key
     error: 'Error: '
-    k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' (e.g.: 'my-name1')."
+    k8s-name-input: 'Name must consist of lowercase alphanumeric characters, can contain ''-'' (e.g.: ''my-name1'').'
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: key=value, must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     read-file: Read file content as a single value, with file name as a key.
@@ -910,7 +910,7 @@ jobs:
   start-time: Start Time
   title: Jobs
 kubeconfig-id:
-  error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})."
+  error: 'Couldn''t load kubeconfig ID; configuration not changed (Error: ${{error}}).'
 legal:
   copyright: Copyright
   legal-disclosure: Legal Disclosure
@@ -1049,7 +1049,8 @@ role-bindings:
     cannot-create: Cannot create a RoleBinding.
   headers:
     kind: Kind
-    role-name: Role Name
+    role-ref: Role Reference
+    subjects: Subjects
   labels:
     annotations: Annotations
     arrow: Show Roles

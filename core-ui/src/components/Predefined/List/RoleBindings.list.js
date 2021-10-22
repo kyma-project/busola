@@ -59,7 +59,7 @@ const BindingsList = ({ DefaultRenderer, ...otherParams }) => {
 
   const customColumns = [
     {
-      header: t('role-bindings.headers.role-name'),
+      header: t('role-bindings.headers.role-ref'),
       value: binding => (
         <Link
           className="fd-link"
@@ -70,7 +70,7 @@ const BindingsList = ({ DefaultRenderer, ...otherParams }) => {
       ),
     },
     {
-      header: 'Subjects',
+      header: t('role-bindings.headers.subjects'),
       value: binding => getAllSubjects(binding),
     },
   ];
