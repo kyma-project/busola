@@ -7,6 +7,10 @@
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       {
+        "source": "/core-ui/**",
+        "destination": "/core-ui/index.html"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }
