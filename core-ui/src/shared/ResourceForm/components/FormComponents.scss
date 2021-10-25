@@ -40,12 +40,20 @@
     top: 25%;
   }
 
-  &.required .title::after {
+  &.required .title-content::after {
     content: '*';
     font-size: var(--sapFontSize);
     font-weight: 700;
     color: var(--sapField_RequiredColor);
     margin-left: 4px;
+  }
+
+  .title-content {
+    margin-right: 0.5rem;
+  }
+
+  .info-tooltip {
+    cursor: help;
   }
 }
 
@@ -75,15 +83,6 @@
 
 .multi-input > .fd-col {
   padding-top: 0;
-}
-
-.tooltip-cursor {
-  cursor: help;
-}
-
-.resource-form-combobox {
-  width: 100%;
-  margin-right: 16px;
 }
 
 .resource-form__data-field {

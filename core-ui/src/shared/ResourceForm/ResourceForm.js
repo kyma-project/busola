@@ -159,7 +159,7 @@ export function ResourceForm({
       });
     });
 
-  let editor = <Editor resource={resource} setResource={setResource} />;
+  let editor = <Editor value={resource} setValue={setResource} />;
   editor = renderEditor
     ? renderEditor({ defaultEditor: editor, Editor })
     : editor;
