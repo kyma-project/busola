@@ -320,6 +320,7 @@ common:
     status: Status
   labels:
     data: Data
+    default-preset: Default
     hostname: Hostname
     issuer: Issuer
     name: Name
@@ -428,8 +429,6 @@ config-maps:
     created: ConfigMap created.
     updated: ConfigMap updated.
   name_singular: ConfigMap
-  presets:
-    default: Default
   subtitle:
     edit-config-map: Edit ConfigMap
   title: ConfigMaps
@@ -439,14 +438,28 @@ cron-jobs:
   concurrency-policy:
     descriptions:
       allow: Allow concurrent executions.
+      forbid: No concurrent executions, skip the new run if the previous one hasn't finished yet.
       replace: No concurrent executions, replace the previous run with the new one.
-      skip: No concurrent executions, skip the new run if the previous one hasn't finished yet.
+    label: Concurrency Policy
     title: Concurrency Policy
+  description: CronJobs are meant for performing regular scheduled actions. A CronJob object is like one line of a crontab file. It runs a job periodically on a given schedule.
+  failed-jobs-history-limit: Failed Jobs History Limit
   last-job-execution: Last Job execution
   last-schedule-time: Last schedule time
+  name_singular: CronJob
   not-scheduled-yet: None scheduled yet
+  placeholders:
+    failed-jobs-history-limit: The number of failed finished jobs to retain.
+    starting-deadline: Optional deadline in seconds.
+    successful-jobs-history-limit: The number of successful finished jobs to retain.
   schedule: Schedule
+  starting-deadline: Starting Deadline
+  successful-jobs-history-limit: Successful Jobs History Limit
+  suspend: Suspend
   title: CronJobs
+  tooltips:
+    starting-deadline: Optional deadline in seconds for starting the job if it misses scheduled time for any reason. Missed jobs executions will be counted as failed ones.
+    suspend: This flag tells the controller to suspend subsequent executions, it does not apply to already started executions. Defaults to false.
 custom-resource-definitions:
   headers:
     description: Description
@@ -500,8 +513,6 @@ deployments:
       target-port-placeholder: Enter the target port of the container.
     messages:
       deployment-ok-service-bad: 'Deployment created, failed to create the Service: {{error}}.'
-    presets:
-      default: Default
     simple:
       docker-image: Docker Image
       docker-image-placeholder: Enter the Docker image tag, for example, bitnami/nginx.
@@ -818,8 +829,6 @@ gateways:
         server-certificate: Server Certificate
         tls: TLS
     at-least-one-server-required: Gateway must have at least one server.
-    presets:
-      default: Default
     simple:
       selector: Selector
       server: Server
@@ -884,8 +893,6 @@ issuers:
     requests-per-day: Daily requests quota
     server: ACME Server URL
     type: Select issuer type
-  presets:
-    default: Default
   private-key: Private key Secret
   requests-per-day: Daily requests quota
   server: Server
@@ -1098,8 +1105,6 @@ secrets:
       decoding-failure: 'Failed to decode the Secret data: {{error}}.'
       failure: 'Failed to create the Secret: {{error}}.'
       success: Secret created.
-    presets:
-      default: Default
     title: Create Secret
   data: Data
   edit-modal:
