@@ -5,30 +5,45 @@ import { MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import './Editor.scss';
 
-export function Editor({ resource, setResource, readonly }) {
+export function Editor({
+  value,
+  setValue,
+  readonly,
+  language = 'yaml',
+  ...props
+}) {
   const { t } = useTranslation();
   const [error, setError] = React.useState('');
   const { editorTheme } = useTheme();
   // don't useState, as it's value needs to be referenced in onEditorBlur
   // using useState value in onEditorBlur results in stale closure
-  const textResource = React.useRef(jsyaml.dump(resource, { noRefs: true }));
+  const textResource = React.useRef(jsyaml.dump(value, { noRefs: true }));
   const isEditing = React.useRef(false);
 
   React.useEffect(() => {
     if (!isEditing.current) {
-      textResource.current = jsyaml.dump(resource, { noRefs: true });
+      if (language === 'yaml') {
+        textResource.current = jsyaml.dump(value, { noRefs: true });
+      } else if (language === 'json') {
+        textResource.current = JSON.stringify(value);
+      }
     }
-  }, [resource]);
+  }, [value, language]);
 
   const handleChange = (_, text) => {
     textResource.current = text;
     try {
-      const parsed = jsyaml.load(text);
+      let parsed = {};
+      if (language === 'yaml') {
+        parsed = jsyaml.load(text);
+      } else if (language === 'json') {
+        parsed = JSON.parse(text);
+      }
       if (typeof parsed !== 'object' || !parsed) {
         setError(t('common.create-form.object-required'));
         return;
       }
-      setResource(parsed);
+      setValue(parsed);
       setError(null);
     } catch ({ message }) {
       // get the message until the newline
@@ -46,7 +61,7 @@ export function Editor({ resource, setResource, readonly }) {
   return (
     <div className="resource-form__editor">
       <ControlledEditor
-        language="yaml"
+        language={language}
         theme={editorTheme}
         value={textResource.current}
         onChange={handleChange}
@@ -55,6 +70,7 @@ export function Editor({ resource, setResource, readonly }) {
           editor.onDidBlurEditorText(() => (isEditing.current = false));
         }}
         options={options}
+        {...props}
       />
       {error && (
         <div className="resource-form__editor__error">
