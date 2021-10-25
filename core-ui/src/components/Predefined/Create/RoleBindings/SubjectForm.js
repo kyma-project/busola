@@ -1,7 +1,5 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ComboboxInput } from 'fundamental-react';
-import { useGetList } from 'react-shared';
 
 import { FormFieldset } from 'fundamental-react';
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
@@ -46,11 +44,6 @@ export function SingleSubjectForm({
     setSubjects([...subjects]);
   };
 
-  const setNamespace = namespace => {
-    subject.namespace = namespace;
-    setSubjects([...subjects]);
-  };
-
   const setServiceAccount = ({ name, namespace }) => {
     if (name) {
       subject.name = name;
@@ -60,13 +53,6 @@ export function SingleSubjectForm({
     }
     setSubjects([...subjects]);
   };
-  const namespacesUrl = '/api/v1/namespaces';
-  const { data: namespaces } = useGetList()(namespacesUrl);
-
-  const namespacesOptions = (namespaces || []).map(ns => ({
-    key: ns.metadata.name,
-    text: ns.metadata.name,
-  }));
 
   return (
     <FormFieldset>
