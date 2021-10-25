@@ -7,7 +7,7 @@
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       {
-        "source": "/backend",
+        "source": "/backend/**",
         "run": {
           "serviceId": "busola-backend-main",
           "region": "europe-west3"
