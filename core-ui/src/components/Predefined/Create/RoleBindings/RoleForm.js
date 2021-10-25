@@ -6,13 +6,10 @@ import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import { useGetList } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
-// import './RoleCombobox.scss';
-
 export const RoleForm = ({ binding, setBinding, namespace }) => {
   const { t } = useTranslation();
 
   const handleRoleChange = role => {
-    console.log('handleRoleChange', role);
     const newRole = {
       kind: role.data?.roleKind,
       name: role.data?.roleName,
@@ -70,6 +67,8 @@ export const RoleForm = ({ binding, setBinding, namespace }) => {
       input={props => (
         <ComboboxInput
           id="role"
+          ariaLabel="Role Combobox"
+          arrowLabel="Role Combobox arrow"
           required
           compact
           showAllEntries

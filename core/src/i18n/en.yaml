@@ -358,6 +358,8 @@ common:
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: key=value, must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     read-file: Read file content as a single value, with file name as a key.
+    resource-ref-name: Unique name within a Namespace to refer to a {{resource}} resource.
+    resource-ref-namespace: Namespace defines the space within which the {{resource}} name must be unique.
     save: Save
     search: Search
     secret-ref-name: Unique name within a Namespace to refer to a Secret resource.
@@ -1049,6 +1051,7 @@ resource-quotas:
 role-bindings:
   create-modal:
     api-group: API Group
+    at-least-one-subject-required: '{{resource}} must have at least one subject.'
     group-name: Group Name
     kind: Kind
     role: Role
@@ -1064,7 +1067,7 @@ role-bindings:
     subjects: Role Subjects
   labels:
     annotations: Annotations
-    role: Role
+    service-account: ServiceAccount
   name_singular: RoleBinding
   placeholders:
     api-group: API Group
@@ -1129,6 +1132,7 @@ service-accounts:
   headers:
     auto-mount-token: Automount Token
     download-kubeconfig: Download Kubeconfig
+  service-account: Service Account
   title: Service Accounts
 service-management:
   title: Service Management

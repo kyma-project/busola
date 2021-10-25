@@ -1,22 +1,28 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { ComboboxInput } from 'fundamental-react';
+import { useGetList } from 'react-shared';
 
 import { FormFieldset } from 'fundamental-react';
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/components/Inputs';
 import { Select } from 'shared/components/Select/Select';
+import { ServiceAccountRef } from 'shared/components/ResourceRef/ServiceAccountRef';
 
-import { DEFAULT_APIGROUP, newSubject, SUBJECT_KINDS } from './templates';
+import { DEFAULT_APIGROUP, SUBJECT_KINDS } from './templates';
 
-export function SingleSubjectForm({ subject = {}, subjects, setSubjects }) {
+export function SingleSubjectForm({
+  subject = {},
+  subjects,
+  setSubjects,
+  index,
+}) {
   const { t } = useTranslation();
-  console.log('subject', subject, 'subjects', subjects);
-  const onKindSelect = (_, selected) => {
-    // subject = newSubject(selected.key);
+
+  const setKind = (_, selected) => {
     subject.kind = selected.key;
     switch (subject.kind) {
       case 'Group':
-        console.log();
         delete subject.namespace;
         subject.name = '';
         subject.apiGroup = DEFAULT_APIGROUP;
@@ -31,16 +37,37 @@ export function SingleSubjectForm({ subject = {}, subjects, setSubjects }) {
         delete subject.namespace;
         subject.name = '';
         subject.apiGroup = DEFAULT_APIGROUP;
-        break;
     }
-    // console.log('new subject', subject, newSubject(selected.key), subjects)
     setSubjects([...subjects]);
-    console.log('new subjects!!', subjects);
   };
+
   const setName = name => {
     subject.name = name;
     setSubjects([...subjects]);
   };
+
+  const setNamespace = namespace => {
+    subject.namespace = namespace;
+    setSubjects([...subjects]);
+  };
+
+  const setServiceAccount = ({ name, namespace }) => {
+    if (name) {
+      subject.name = name;
+    }
+    if (namespace) {
+      subject.namespace = namespace;
+    }
+    setSubjects([...subjects]);
+  };
+  const namespacesUrl = '/api/v1/namespaces';
+  const { data: namespaces } = useGetList()(namespacesUrl);
+
+  const namespacesOptions = (namespaces || []).map(ns => ({
+    key: ns.metadata.name,
+    text: ns.metadata.name,
+  }));
+
   return (
     <FormFieldset>
       <ResourceForm.FormField
@@ -50,7 +77,7 @@ export function SingleSubjectForm({ subject = {}, subjects, setSubjects }) {
         input={() => (
           <Select
             compact
-            onSelect={onKindSelect}
+            onSelect={setKind}
             selectedKey={subject.kind || ''}
             options={SUBJECT_KINDS.map(kind => ({
               key: kind,
@@ -60,6 +87,7 @@ export function SingleSubjectForm({ subject = {}, subjects, setSubjects }) {
           />
         )}
       />
+
       {subject.kind === 'User' && (
         <ResourceForm.FormField
           required
@@ -70,6 +98,7 @@ export function SingleSubjectForm({ subject = {}, subjects, setSubjects }) {
           placeholder={t('role-bindings.placeholders.user.name')}
         />
       )}
+
       {subject.kind === 'Group' && (
         <ResourceForm.FormField
           required
@@ -80,15 +109,30 @@ export function SingleSubjectForm({ subject = {}, subjects, setSubjects }) {
           placeholder={t('role-bindings.placeholders.group.name')}
         />
       )}
-      <ResourceForm.FormField
-        required
-        disabled
-        label={t('role-bindings.create-modal.api-group')}
-        value={subject.apiGroup || []}
-        // setValue={setName}
-        input={Inputs.Text}
-        placeholder={t('role-bindings.placeholders.api-group')}
-      />
+
+      {(subject.kind === 'Group' || subject.kind === 'User') && (
+        <ResourceForm.FormField
+          required
+          disabled
+          label={t('role-bindings.create-modal.api-group')}
+          value={subject.apiGroup || []}
+          input={Inputs.Text}
+          placeholder={t('role-bindings.placeholders.api-group')}
+        />
+      )}
+
+      {subject.kind === 'ServiceAccount' && (
+        <ServiceAccountRef
+          advanced
+          title={t('service-accounts.service-account')}
+          value={{
+            name: subject.name || '',
+            namespace: subject.namespace || '',
+          }}
+          setValue={setServiceAccount}
+          index={index}
+        />
+      )}
     </FormFieldset>
   );
 }
@@ -104,6 +148,7 @@ export function SingleSubjectInput({ value: subjects, setValue: setSubjects }) {
         subject={subjects?.[0]}
         subjects={subjects}
         setSubjects={setSubjects}
+        index={0}
       />
     </ResourceForm.CollapsibleSection>
   );

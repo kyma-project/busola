@@ -73,7 +73,9 @@ export function RoleBindings({
         <SingleSubjectInput simple propertyPath="$.subjects" />
       ) : (
         <MessageStrip simple type="warning" className="fd-margin-top--sm">
-          {t('gateways.create-modal.at-least-one-server-required')}
+          {t('role-bindings.create-modal.at-least-one-subject-required', {
+            resource: resourceData.singularName,
+          })}
         </MessageStrip>
       )}
       <ResourceForm.ItemArray
@@ -83,13 +85,15 @@ export function RoleBindings({
         nameSingular={t('role-bindings.create-modal.subject')}
         entryTitle={subject => subject?.name}
         atLeastOneRequiredMessage={t(
-          'gateways.create-modal.at-least-one-server-required',
+          'role-bindings.create-modal.at-least-one-subject-required',
+          { resource: resourceData.singularName },
         )}
-        itemRenderer={(current, allValues, setAllValues) => (
+        itemRenderer={(current, allValues, setAllValues, index) => (
           <SingleSubjectForm
             subject={current}
             subjects={allValues}
             setSubjects={setAllValues}
+            index={index}
             advanced
           />
         )}

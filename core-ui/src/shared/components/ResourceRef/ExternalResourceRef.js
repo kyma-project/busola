@@ -25,7 +25,9 @@ export function ExternalResourceRef({
   required = false,
   defaultOpen = undefined,
   currentNamespace,
+  index,
 }) {
+  console.log('value', value, 'index', index);
   const { t } = useTranslation();
   const namespacesUrl = '/api/v1/namespaces';
   const { data: namespaces } = useGetList()(namespacesUrl);
@@ -81,10 +83,12 @@ export function ExternalResourceRef({
       <ResourceForm.FormField
         required={required}
         label={t('common.labels.resource-namespace', { resource: labelPrefix })}
-        tooltipContent={t('common.tooltips.secret-ref-namespace')}
+        tooltipContent={t('common.tooltips.resource-ref-namespace', {
+          resource: labelPrefix,
+        })}
         input={() => (
           <ComboboxInput
-            id="secret-namespace-combobox"
+            id={`secret-namespace-combobox-${index}`}
             ariaLabel="Secret namespace Combobox"
             arrowLabel="Secret namespace Combobox arrow"
             compact
@@ -95,6 +99,7 @@ export function ExternalResourceRef({
             placeholder={t('common.placeholders.secret-ref-namespace')}
             value={value?.namespace}
             selectedKey={value?.namespace}
+            defaultKey={value?.namespace}
             onSelect={e => {
               setValue({
                 name: undefined,
@@ -115,10 +120,12 @@ export function ExternalResourceRef({
       <ResourceForm.FormField
         required={required}
         label={t('common.labels.resource-name', { resource: labelPrefix })}
-        tooltipContent={t('common.tooltips.secret-ref-name')}
+        tooltipContent={t('common.tooltips.resource-ref-name', {
+          resource: labelPrefix,
+        })}
         input={() => (
           <ComboboxInput
-            id="secret-name-combobox"
+            id={`secret-name-combobox-${index}`}
             ariaLabel="Secret name Combobox"
             arrowLabel="Secret name Combobox arrow"
             compact
@@ -129,6 +136,7 @@ export function ExternalResourceRef({
             placeholder={t('common.placeholders.secret-ref-name')}
             value={value?.namespace}
             selectedKey={value?.name}
+            defaultKey={value?.name}
             onSelect={e => {
               setValue({
                 name: e.target.value,

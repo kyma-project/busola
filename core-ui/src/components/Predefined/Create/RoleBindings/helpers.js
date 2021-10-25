@@ -1,14 +1,11 @@
 export function validateSubject(subject) {
-  // if (!server?.tls) return true;
-
-  // const { mode, credentialName, privateKey, serverCertificate } = server.tls;
-
-  // const hasSecret = !!credentialName;
-  // const hasKeyAndCertificate = !!privateKey && !!serverCertificate;
-
-  // const isSimpleOrMutual = mode === 'SIMPLE' || mode === 'MUTUAL';
-  // return !isSimpleOrMutual || hasSecret || hasKeyAndCertificate;
-  return true;
+  const hasGroup =
+    subject.kind === 'Group' && !!subject.name && !!subject.apiGroup;
+  const hasUser =
+    subject.kind === 'User' && !!subject.name && !!subject.apiGroup;
+  const hasAccount =
+    subject.kind === 'ServiceAccount' && !!subject.name && !!subject.namespace;
+  return hasGroup || hasUser || hasAccount;
 }
 
 export function validateBinding(binding) {
