@@ -249,7 +249,7 @@ export function MultiInput({
   };
 
   const focus = ref => {
-    if (ref) {
+    if (ref?.current?.focus) {
       ref.current.focus();
     }
   };
@@ -292,7 +292,7 @@ export function MultiInput({
                   focus: (e, target) => {
                     if (e.key === 'Enter') {
                       if (typeof target === 'undefined') {
-                        focus(refs[index + 1][0]);
+                        focus(refs[index + 1]?.[0]);
                       } else {
                         focus(refs[index][target]);
                       }
@@ -338,9 +338,9 @@ export function TextArrayInput({
       tooltipContent={tooltipContent}
       sectionTooltipContent={sectionTooltipContent}
       inputs={[
-        ({ value, setValue, ref, onBlur, focus }) => (
+        ({ value, setValue, ref, onBlur, focus, index }) => (
           <FormInput
-            key={`form-${props.title}`}
+            key={index}
             compact
             value={value || ''}
             ref={ref}
@@ -479,9 +479,7 @@ export function KeyValueField({
                 {t('components.key-value-form.read-value')}
               </Button>
             </Tooltip>
-          ) : (
-            <></>
-          ),
+          ) : null,
       ]}
       actions={actions}
       tooltipContent={t('common.tooltips.key-value')}
@@ -524,6 +522,7 @@ export function ItemArray({
   atLeastOneRequiredMessage,
   itemRenderer,
   newResourceTemplateFn,
+  ...props
 }) {
   const { t } = useTranslation();
 
@@ -531,13 +530,20 @@ export function ItemArray({
 
   const remove = index => setValues(values.filter((_, i) => index !== i));
 
+  const renderItem = item =>
+    itemRenderer(item, values, setValues, props.isAdvanced);
+
   const renderAllItems = () =>
     values.map((current, i) => {
-      const name = typeof entryTitle === 'function' && entryTitle(current);
+      const name = typeof entryTitle === 'function' && entryTitle(current, i);
       return (
         <CollapsibleSection
           key={i}
-          title={`${nameSingular} ${name || i + 1}`}
+          title={
+            <>
+              {nameSingular} {name || i + 1}
+            </>
+          }
           actions={
             <Button
               compact
@@ -547,15 +553,13 @@ export function ItemArray({
             />
           }
         >
-          {itemRenderer(current, values, setValues)}
+          {renderItem(current)}
         </CollapsibleSection>
       );
     });
 
   const content =
-    values.length === 1
-      ? itemRenderer(values[0], values, setValues)
-      : renderAllItems();
+    values.length === 1 ? renderItem(values[0]) : renderAllItems();
 
   return (
     <CollapsibleSection
@@ -572,9 +576,10 @@ export function ItemArray({
           {t('common.buttons.add')} {nameSingular}
         </Button>
       )}
+      {...props}
     >
       {content}
-      {!values.length && (
+      {atLeastOneRequiredMessage && !values.length && (
         <MessageStrip type="warning">{atLeastOneRequiredMessage}</MessageStrip>
       )}
     </CollapsibleSection>
@@ -601,23 +606,95 @@ export function ComboboxInput({
   options,
   id,
   placeholder,
+  typedValue,
+  className,
+  _ref,
   ...props
 }) {
   return (
-    <FdComboboxInput
-      ariaLabel="Combobox input"
-      arrowLabel="Combobox input arrow"
-      id={id || 'combobox-input'}
-      compact
-      showAllEntries
-      searchFullString
-      selectionType="auto-inline"
-      onSelectionChange={(_, selected) =>
-        setValue(selected?.key !== -1 ? selected?.key : selected?.text)
-      }
-      selectedKey={defaultKey}
-      placeholder={defaultKey || placeholder}
-      options={options}
+    <div className={classnames('resource-form-combobox', className)}>
+      <FdComboboxInput
+        ariaLabel="Combobox input"
+        arrowLabel="Combobox input arrow"
+        id={id || 'combobox-input'}
+        compact
+        ref={_ref}
+        showAllEntries
+        searchFullString
+        selectionType="auto-inline"
+        onSelectionChange={(_, selected) => setValue(selected)}
+        typedValue={typedValue}
+        selectedKey={defaultKey === -1 ? defaultKey : ''}
+        placeholder={placeholder}
+        options={options}
+        {...props}
+      />
+    </div>
+  );
+}
+
+export function ComboboxArrayInput({
+  title,
+  defaultOpen,
+  placeholder,
+  inputProps,
+  isAdvanced,
+  tooltipContent,
+  sectionTooltipContent,
+  options,
+  emptyStringKey,
+  ...props
+}) {
+  const { t } = useTranslation();
+
+  placeholder =
+    placeholder || t('common.messages.type-to-select', { value: title });
+
+  /*
+    as original Combobox (and React's 'input' element) doesn't like '' for a key,
+    we replace it with 'emptyStringKey' internal MultiInput state
+
+    {key: '', text: 'empty'} -> {key: emptyStringKey, text: 'empty'}
+  */
+  const toInternal = values =>
+    (values || [])
+      .filter(v => v || (emptyStringKey && v === ''))
+      .map(v => (emptyStringKey && v === '' ? emptyStringKey : v));
+
+  const toExternal = values =>
+    values
+      .filter(val => !!val)
+      .map(v => (emptyStringKey && v === emptyStringKey ? '' : v));
+
+  return (
+    <MultiInput
+      title={title}
+      defaultOpen={defaultOpen}
+      isAdvanced={isAdvanced}
+      toInternal={toInternal}
+      toExternal={toExternal}
+      tooltipContent={tooltipContent}
+      sectionTooltipContent={sectionTooltipContent}
+      inputs={[
+        ({ value, setValue, ref, onBlur, focus, index }) => (
+          <ComboboxInput
+            key={index}
+            placeholder={placeholder}
+            compact
+            _ref={ref}
+            selectedKey={value}
+            typedValue={value || ''}
+            selectionType="manual"
+            setValue={selected =>
+              // fallback on selected.text if no entry is found
+              setValue(selected.key !== -1 ? selected.key : selected.text)
+            }
+            options={options}
+            onKeyDown={focus}
+            onBlur={onBlur}
+          />
+        ),
+      ]}
       {...props}
     />
   );

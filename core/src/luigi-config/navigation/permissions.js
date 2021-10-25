@@ -30,10 +30,10 @@ export function hasWildcardPermission(permissionSet) {
 export function hasPermissionsFor(
   apiGroup,
   resourceType,
-  permissionSet,
+  groupVersions,
   verbs = [],
 ) {
-  const permissionsForApiGroup = permissionSet.filter(
+  const permissionsForApiGroup = groupVersions.filter(
     p => p.apiGroups.includes(apiGroup) || p.apiGroups[0] === '*',
   );
   const matchingPermission = permissionsForApiGroup.find(p =>
