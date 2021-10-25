@@ -535,7 +535,6 @@ export function ItemArray({
 
   const renderAllItems = () =>
     values.map((current, i) => {
-      console.log('i', i);
       const name = typeof entryTitle === 'function' && entryTitle(current, i);
       return (
         <CollapsibleSection

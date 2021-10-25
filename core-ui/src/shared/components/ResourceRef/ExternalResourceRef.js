@@ -28,7 +28,6 @@ export function ExternalResourceRef({
   currentNamespace,
   index,
 }) {
-  console.log('value', value, 'index', index);
   const { t } = useTranslation();
   const namespacesUrl = '/api/v1/namespaces';
   const { data: namespaces, loading: namespacesLoading } = useGetList()(
@@ -107,7 +106,6 @@ export function ExternalResourceRef({
             selectedKey={value?.namespace}
             defaultKey={value?.namespace}
             onSelect={e => {
-              console.log(e);
               setValue({
                 name: undefined,
                 namespace: e.target.value,

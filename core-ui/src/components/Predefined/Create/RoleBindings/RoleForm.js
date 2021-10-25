@@ -24,14 +24,14 @@ export const RoleForm = ({ binding, setBinding, namespace }) => {
     data: roles,
     loading: rolesLoading = true,
     error: rolesError,
-  } = useGetList(() => !!namespace)(rolesUrl, { pollingInterval: 3000 });
+  } = useGetList(() => !!namespace)(rolesUrl);
 
   const clusterRolesUrl = '/apis/rbac.authorization.k8s.io/v1/clusterroles';
   const {
     data: clusterRoles,
     loading: clusterRolesLoading = true,
     error: clusterRolesError,
-  } = useGetList()(clusterRolesUrl, { pollingInterval: 3000 });
+  } = useGetList()(clusterRolesUrl);
 
   if (rolesLoading || clusterRolesLoading) return 'Loading...';
   if (rolesError) return rolesError.message;
