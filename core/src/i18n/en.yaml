@@ -110,7 +110,7 @@ btp-instances:
   instance-data: ServiceInstance Data
   instance-id: Instance ID
   messages:
-    params-invalid: Parameters must be an object.
+    params-invalid: Invalid parameters. Provide a valid JSON object.
   name_singular: BTP Service Instance
   offering-name: Offering Name
   parameters: Instance Parameters
