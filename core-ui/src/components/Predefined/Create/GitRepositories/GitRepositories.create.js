@@ -13,6 +13,7 @@ import {
 } from 'shared/ResourceForm/components/FormComponents';
 
 // import { createFunctionTemplate, createPresets } from './helpers';
+import { REPOSITORIES_LIST } from 'components/Lambdas/constants';
 
 export function GitRepositoriesCreate({
   namespace,
@@ -77,6 +78,13 @@ export function GitRepositoriesCreate({
   }, [type]); //eslint-disable-line react-hooks/exhaustive-deps
   */
 
+  const authTypeOptions = REPOSITORIES_LIST.MODAL_INPUTS.AUTH_TYPE.OPTIONS.map(
+    option => ({
+      key: option.KEY,
+      text: option.VALUE,
+    }),
+  );
+
   return (
     <ResourceForm
       className="create-function-form"
@@ -119,15 +127,16 @@ export function GitRepositoriesCreate({
         // placeholder={t('functions.placeholders.reference')}
         input={Inputs.Text}
       />
-      {/*
       <FormField
-        advanced
         required
-        propertyPath="$.spec.runtime"
-        label={t('functions.headers.runtime')}
+        propertyPath="$.spec.url"
+        label={t('functions.repository-list.labels.auth')}
+        // tooltipContent={t('functions.create-view.inline-help.reference')}
+        // placeholder={t('functions.placeholders.reference')}
         input={Inputs.Dropdown}
-        options={runtimeOptions}
+        options={authTypeOptions}
       />
+      {/*
       <FormField
         advanced
         required
@@ -167,6 +176,13 @@ export function GitRepositoriesCreate({
             label={t('functions.create-view.labels.base-directory')}
             tooltipContent={t(
               'functions.create-view.inline-help.base-directory',
+  const authTypeOptions = REPOSITORIES_LIST.MODAL_INPUTS.AUTH_TYPE.OPTIONS.map(
+    option => ({
+      key: option.KEY,
+      text: option.VALUE,
+    }),
+  );
+
             )}
             placeholder={t('functions.placeholders.base-directory')}
             input={Inputs.Text}
