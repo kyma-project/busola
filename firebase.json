@@ -1,13 +1,9 @@
 {
-    "hosting": {
-      "target": "prod",
-      "cleanUrls": true,
-      "trailingSlash": true,
-      "public": "service-catalog-ui/public",
-      "ignore": [
-        "firebase.json",
-        "**/.*",
-        "**/node_modules/**"
-      ]
-    }
+  "hosting": {
+    "target": "prod",
+    "cleanUrls": true,
+    "trailingSlash": true,
+    "public": "build",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
   }
+}
