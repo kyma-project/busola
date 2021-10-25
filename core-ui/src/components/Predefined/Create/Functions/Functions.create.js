@@ -24,6 +24,7 @@ export function FunctionsCreate({
   formElementRef,
   onChange,
   resourceUrl,
+  setCustomValid,
 }) {
   const { t } = useTranslation();
   const [func, setFunc] = useState(createFunctionTemplate(namespace));
@@ -60,6 +61,10 @@ export function FunctionsCreate({
     key: repository.metadata.name,
     text: `${repository.metadata.name} (${repository.spec.url})`,
   }));
+
+  useEffect(() => {
+    setCustomValid(true);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (!type) {
