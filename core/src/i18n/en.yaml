@@ -1062,9 +1062,8 @@ role-bindings:
     user-name: User Name
   headers:
     kind: Kind
-    role-name: Role Name
     role-ref: Role Reference
-    subjects: Role Subjects
+    subjects: Subjects
   labels:
     annotations: Annotations
     service-account: ServiceAccount
