@@ -14,6 +14,7 @@ import './ExternalResourceRef.scss';
 export function ExternalResourceRef({
   value,
   resources,
+  loading,
   title,
   labelPrefix,
   tooltipContent,
@@ -30,7 +31,9 @@ export function ExternalResourceRef({
   console.log('value', value, 'index', index);
   const { t } = useTranslation();
   const namespacesUrl = '/api/v1/namespaces';
-  const { data: namespaces } = useGetList()(namespacesUrl);
+  const { data: namespaces, loading: namespacesLoading } = useGetList()(
+    namespacesUrl,
+  );
 
   const showHiddenNamespaces = getFeatureToggle('showHiddenNamespaces');
   const hiddenNamespaces = LuigiClient.getContext().hiddenNamespaces;
@@ -46,7 +49,9 @@ export function ExternalResourceRef({
       text: ns.metadata.name,
     }));
 
-  const allResourcesOptions = (resources || []).map(resource => ({
+  if (loading || namespacesLoading) return null;
+
+  const allResourcesOptions = resources.map(resource => ({
     key: resource.metadata.name,
     text: resource.metadata.name,
     namespace: resource.metadata.namespace,
@@ -71,6 +76,7 @@ export function ExternalResourceRef({
     filteredResourcesOptions.find(res => res.key === value.name);
 
   const open = defaultOpen === undefined ? !isAdvanced : defaultOpen;
+
   return (
     <CollapsibleSection
       title={title}
@@ -101,6 +107,7 @@ export function ExternalResourceRef({
             selectedKey={value?.namespace}
             defaultKey={value?.namespace}
             onSelect={e => {
+              console.log(e);
               setValue({
                 name: undefined,
                 namespace: e.target.value,

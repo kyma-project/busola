@@ -6,11 +6,14 @@ import { ExternalResourceRef } from './ExternalResourceRef';
 
 export function ServiceAccountRef(props) {
   const { t } = useTranslation();
-  const { data: serviceaccounts } = useGetList()('/api/v1/serviceaccounts/');
+  const { data: serviceaccounts, loading } = useGetList()(
+    '/api/v1/serviceaccounts/',
+  );
 
   return (
     <ExternalResourceRef
       resources={serviceaccounts}
+      loading={loading}
       labelPrefix={t('role-bindings.labels.service-account')}
       {...props}
     />
