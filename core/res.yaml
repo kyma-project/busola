@@ -1,0 +1,108 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: i-need-to-go-to-uni-today
+  namespace: default
+  labels:
+    app.kubernetes.io/name: i-need-to-go-to-uni-today
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: i-need-to-go-to-uni-today
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: i-need-to-go-to-uni-today
+    spec:
+      containers:
+        - name: i-need-to-go-to-uni-today
+          image: nginx
+          resources:
+            limits:
+              cpu: 100m
+              memory: 128Mi
+            requests:
+              cpu: 50m
+              memory: 64Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: Always
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: i-need-to-go-to-uni-today
+  namespace: default
+spec:
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  selector:
+    app: i-need-to-go-to-uni-today
+  clusterIP: 100.71.59.164
+  clusterIPs:
+    - 100.71.59.164
+  type: ClusterIP
+  sessionAffinity: None
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: i-need-to-go-to-uni-today
+  namespace: default
+  labels:
+    a: b
+    app.kubernetes.io/name: i-need-to-go-to-uni-today
+  annotations:
+    deployment.kubernetes.io/revision: '1'
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: i-need-to-go-to-uni-today
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: i-need-to-go-to-uni-today
+    spec:
+      containers:
+        - name: i-need-to-go-to-uni-today
+          image: nginx
+          resources:
+            limits:
+              cpu: 100m
+              memory: 128Mi
+            requests:
+              cpu: 50m
+              memory: 64Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: Always
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600

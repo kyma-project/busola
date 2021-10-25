@@ -31,17 +31,14 @@ export function ResultPanel({ result, showResult, close }) {
         <Button compact>Close</Button>,
       ]}
       show={showResult}
-      onClose={e => {
-        if (!e.isDefaultPrevented) {
-          close();
-        }
-      }}
+      onClose={close}
     >
       <MonacoEditor
         theme={editorTheme}
         height="20em"
         value={result}
         options={options}
+        language="yaml"
       />
     </MessageBox>
   );
