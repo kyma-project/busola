@@ -24,7 +24,6 @@ export function RoleBindings({
 
   const handleNameChange = name => {
     jp.value(binding, '$.metadata.name', name);
-    // jp.value(binding, "$.metadata.labels['app.kubernetes.io/name']", name);
 
     setBinding({ ...binding });
   };
@@ -48,7 +47,6 @@ export function RoleBindings({
       setResource={setBinding}
       onChange={onChange}
       formElementRef={formElementRef}
-      // presets={createPresets(namespace, t)}
       createUrl={resourceData.createUrl}
     >
       <ResourceForm.K8sNameField
@@ -81,8 +79,8 @@ export function RoleBindings({
       <ResourceForm.ItemArray
         advanced
         propertyPath="$.subjects"
-        listTitle={t('gateways.create-modal.simple.servers')}
-        nameSingular={t('gateways.create-modal.simple.server')}
+        listTitle={t('role-bindings.create-modal.subjects')}
+        nameSingular={t('role-bindings.create-modal.subject')}
         entryTitle={subject => subject?.name}
         atLeastOneRequiredMessage={t(
           'gateways.create-modal.at-least-one-server-required',

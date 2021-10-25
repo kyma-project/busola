@@ -1,21 +1,35 @@
+export const SUBJECT_KINDS = ['Group', 'ServiceAccount', 'User'];
+export const DEFAULT_APIGROUP = 'rbac.authorization.k8s.io';
 const GROUP_SUBJECT = {
   kind: 'Group',
   name: '',
-  apiGroup: '',
+  apiGroup: DEFAULT_APIGROUP,
 };
 const SERVICE_ACCOUNT_SUBJECT = {
   kind: 'ServiceAccount',
   name: '',
-  apiGroup: '',
+  namespace: '',
 };
 const USER_SUBJECT = {
   kind: 'User',
   name: '',
-  apiGroup: '',
+  apiGroup: DEFAULT_APIGROUP,
 };
 
-export function newSubject() {
-  return USER_SUBJECT;
+export function newSubject(kind) {
+  console.log('add newSubject', kind);
+  switch (kind) {
+    case 'Group':
+      console.log('case Group');
+      return GROUP_SUBJECT;
+    case 'ServiceAccount':
+      console.log('case ServiceAccount');
+      return SERVICE_ACCOUNT_SUBJECT;
+    case 'User':
+    default:
+      console.log('case default and user');
+      return USER_SUBJECT;
+  }
 }
 
 export function createBindingTemplate(namespace) {

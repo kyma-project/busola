@@ -66,9 +66,10 @@ export const RoleForm = ({ binding, setBinding, namespace }) => {
   return (
     <ResourceForm.FormField
       required
-      label={t('role-bindings.labels.role')}
+      label={t('role-bindings.create-modal.role')}
       input={props => (
         <ComboboxInput
+          id="role"
           required
           compact
           showAllEntries
