@@ -11,6 +11,10 @@
         "destination": "/core-ui/index.html"
       },
       {
+        "source": "/service-catalog-ui/**",
+        "destination": "/core-ui/index.html"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }
