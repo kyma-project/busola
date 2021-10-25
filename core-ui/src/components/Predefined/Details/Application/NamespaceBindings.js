@@ -34,7 +34,7 @@ export default function NamespaceBindings(application) {
   const alreadyBoundNamespaces = data?.map(aM => aM.metadata.namespace) || [];
   const rowRenderer = binding => [
     <ServicesBoundModal binding={binding} />,
-    `${binding.spec.services?.length || 0}/${totalBindingsCount}`,
+    `${binding.spec?.services?.length || 0}/${totalBindingsCount}`,
   ];
 
   const actions = [

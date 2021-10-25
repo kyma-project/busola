@@ -21,12 +21,12 @@ export default function ServicesBoundModal({ binding }) {
       i18n={i18n}
     >
       <ul>
-        {binding.spec.services?.map(s => (
+        {binding.spec?.services?.map(s => (
           <li key={s.id}>
             <ServiceListItem service={s} />
           </li>
         ))}
-        {!binding.spec.services?.length && (
+        {!binding.spec?.services?.length && (
           <p>{t('applications.messages.no-bound-service')}</p>
         )}
       </ul>
