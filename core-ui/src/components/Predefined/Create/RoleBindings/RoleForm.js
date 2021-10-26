@@ -9,14 +9,15 @@ import { useTranslation } from 'react-i18next';
 export const RoleForm = ({ binding, setBinding, namespace }) => {
   const { t } = useTranslation();
 
-  const handleRoleChange = role => {
+  const handleRoleChange = (role, reason) => {
     const newRole = {
       kind: role.data?.roleKind,
       name: role.data?.roleName,
     };
-
-    jp.value(binding, '$.roleRef', newRole);
-    setBinding({ ...binding });
+    if (reason !== 'inputChange') {
+      jp.value(binding, '$.roleRef', newRole);
+      setBinding({ ...binding });
+    }
   };
 
   const rolesUrl = `/apis/rbac.authorization.k8s.io/v1/namespaces/${namespace}/roles`;
@@ -79,7 +80,12 @@ export const RoleForm = ({ binding, setBinding, namespace }) => {
           options={allRoles}
           selectedKey={selectedRole}
           selectionType="auto-inline"
-          onSelect={e => handleRoleChange(e.target.value)}
+          onSelectionChange={(_, selected, reason) =>
+            handleRoleChange(selected, reason)
+          }
+          inputProps={{
+            autoComplete: 'nope',
+          }}
           {...props}
         />
       )}
