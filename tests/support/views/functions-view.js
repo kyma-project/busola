@@ -14,21 +14,24 @@ Cypress.Commands.add(
       .click();
 
     cy.getIframeBody()
+      .contains('Advanced')
+      .click();
+
+    cy.getIframeBody()
+      .find('.advanced-form')
       .find('[placeholder="Function Name"]')
       .clear()
       .type(functionName);
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Labels key=value"]')
-      .type('app=' + functionName);
-
-    cy.getIframeBody()
-      .contains('label', 'Labels')
+      .find('.advanced-form')
+      .contains('Labels')
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Labels key=value"]')
-      .type('example=' + functionName);
+      .find('[placeholder="Enter Key"]')
+      .last()
+      .type(`example{enter}${functionName}`);
 
     cy.getIframeBody()
       .contains('label', 'Labels')
