@@ -323,6 +323,7 @@ export function TextArrayInput({
   isAdvanced,
   tooltipContent,
   sectionTooltipContent,
+  placeholder,
   ...props
 }) {
   return (
@@ -336,6 +337,7 @@ export function TextArrayInput({
       inputs={[
         ({ value, setValue, ref, onBlur, focus, index }) => (
           <FormInput
+            placeholder={index === 0 ? placeholder : ''}
             key={index}
             compact
             value={value || ''}

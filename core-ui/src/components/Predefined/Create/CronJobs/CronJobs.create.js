@@ -1,6 +1,5 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Checkbox } from 'fundamental-react';
 import * as jp from 'jsonpath';
 
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
@@ -11,7 +10,8 @@ import {
   createCronJobTemplate,
   createPresets,
 } from './templates';
-// import { Containers } from './Containers';
+import { SingleContainerForm, SingleContainerInput } from './Containers';
+import { MessageStrip } from 'fundamental-react';
 
 export function CronJobsCreate({
   formElementRef,
@@ -26,11 +26,14 @@ export function CronJobsCreate({
   );
 
   React.useEffect(() => {
-    const hasAnyContainers = !!(
+    const containers =
       jp.value(cronJob, '$.spec.jobTemplate.spec.template.spec.containers') ||
-      []
-    ).length;
-    setCustomValid(hasAnyContainers);
+      [];
+
+    const hasAnyContainers = !!containers.length;
+    const areContinersValid = containers.every(c => c.command?.length > 0);
+
+    setCustomValid(hasAnyContainers && areContinersValid);
   }, [cronJob, setCustomValid]);
 
   const concurrencyPolicyOptions = [
@@ -49,6 +52,16 @@ export function CronJobsCreate({
       )})`,
     },
   ];
+
+  // const concurrencyPolicyOptions = ['Allow', 'Forbid', 'Replace'].map(p => ({
+  //   key: p,
+  //   text: p,
+  // }));
+
+  const restartPolicyOptions = ['Never', 'OnFailure'].map(p => ({
+    key: p,
+    text: p,
+  }));
 
   return (
     <ResourceForm
@@ -76,7 +89,6 @@ export function CronJobsCreate({
       />
       <ResourceForm.FormField
         advanced
-        required
         propertyPath="$.spec.concurrencyPolicy"
         label={t('cron-jobs.concurrency-policy.label')}
         input={Inputs.Dropdown}
@@ -87,8 +99,8 @@ export function CronJobsCreate({
         propertyPath="$.spec.startingDeadlineSeconds"
         label={t('cron-jobs.starting-deadline')}
         input={Inputs.Number}
-        placeholder={t('cron-jobs.placeholders.starting-deadline')}
-        tooltipContent={t('cron-jobs.tooltips.starting-deadline')}
+        placeholder={t('cron-jobs.create-modal.placeholders.starting-deadline')}
+        tooltipContent={t('cron-jobs.create-modal.tooltips.starting-deadline')}
         min={0}
       />
       <ResourceForm.FormField
@@ -96,7 +108,7 @@ export function CronJobsCreate({
         propertyPath="$.spec.suspend"
         label={t('cron-jobs.suspend')}
         input={Inputs.Switch}
-        tooltipContent={t('cron-jobs.tooltips.suspend')}
+        tooltipContent={t('cron-jobs.create-modal.tooltips.suspend')}
       />
       <ResourceForm.FormField
         advanced
@@ -104,7 +116,9 @@ export function CronJobsCreate({
         label={t('cron-jobs.successful-jobs-history-limit')}
         input={Inputs.Number}
         min={0}
-        placeholder={t('cron-jobs.placeholders.successful-jobs-history-limit')}
+        placeholder={t(
+          'cron-jobs.create-modal.placeholders.successful-jobs-history-limit',
+        )}
       />
       <ResourceForm.FormField
         advanced
@@ -112,7 +126,16 @@ export function CronJobsCreate({
         label={t('cron-jobs.failed-jobs-history-limit')}
         input={Inputs.Number}
         min={0}
-        placeholder={t('cron-jobs.placeholders.failed-jobs-history-limit')}
+        placeholder={t(
+          'cron-jobs.create-modal.placeholders.failed-jobs-history-limit',
+        )}
+      />
+      <ResourceForm.FormField
+        advanced
+        propertyPath="$.spec.jobTemplate.spec.template.spec.restartPolicy"
+        label={t('cron-jobs.restart-policy')}
+        input={Inputs.Dropdown}
+        options={restartPolicyOptions}
       />
       <ResourceForm.KeyValueField
         advanced
@@ -125,36 +148,38 @@ export function CronJobsCreate({
         propertyPath="$.metadata.annotations"
         title={t('common.headers.annotations')}
       />
-      {/* 
-      <ResourceForm.CollapsibleSection
+      {jp.value(
+        cronJob,
+        '$.spec.jobTemplate.spec.template.spec.containers.length',
+      ) ? (
+        <SingleContainerInput
+          simple
+          propertyPath="$.spec.jobTemplate.spec.template.spec.containers"
+        />
+      ) : (
+        <MessageStrip simple type="warning" className="fd-margin-top--sm">
+          {t('cron-jobs.create-modal.at-least-one-container-required')}
+        </MessageStrip>
+      )}
+      <ResourceForm.ItemArray
         advanced
-        title="Containers"
-        defaultOpen
-        resource={cronJob}
-        setResource={setCronJob}
-        actions={setOpen => (
-          <Button
-            glyph="add"
-            compact
-            onClick={() => {
-              const path = '$.spec.template.spec.containers';
-              const nextContainers = [
-                ...(jp.value(cronJob, path) || []),
-                createContainerTemplate(),
-              ];
-              jp.value(cronJob, path, nextContainers);
-
-              setCronJob({ ...cronJob });
-              onChange(new Event('input', { bubbles: true }));
-              setOpen(true);
-            }}
-          >
-            Add Container
-          </Button>
+        propertyPath="$.spec.jobTemplate.spec.template.spec.containers"
+        listTitle={t('cron-jobs.create-modal.containers')}
+        nameSingular={t('cron-jobs.create-modal.container')}
+        entryTitle={container => container?.name}
+        atLeastOneRequiredMessage={t(
+          'cron-jobs.create-modal.at-least-one-container-required',
         )}
-      >
-        <Containers propertyPath="$.spec.template.spec.containers" />
-      </ResourceForm.CollapsibleSection> */}
+        itemRenderer={(current, allValues, setAllValues) => (
+          <SingleContainerForm
+            container={current}
+            containers={allValues}
+            setContainers={setAllValues}
+            advanced
+          />
+        )}
+        newResourceTemplateFn={createContainerTemplate}
+      />
     </ResourceForm>
   );
 }

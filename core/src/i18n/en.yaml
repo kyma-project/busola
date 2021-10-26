@@ -435,6 +435,7 @@ config-maps:
 configuration:
   title: Configuration
 cron-jobs:
+  command: Command
   concurrency-policy:
     descriptions:
       allow: Allow concurrent executions.
@@ -442,24 +443,33 @@ cron-jobs:
       replace: No concurrent executions, replace the previous run with the new one.
     label: Concurrency Policy
     title: Concurrency Policy
+  create-modal:
+    at-least-one-container-required: CronJob must have at least one container.
+    container: Container
+    containers: Containers
+    placeholders:
+      command: Command to run in a container.
+      docker-image: Enter the Docker image tag, for example, 'busybox'.
+      failed-jobs-history-limit: The number of failed finished jobs to retain.
+      starting-deadline: Optional deadline in seconds.
+      successful-jobs-history-limit: The number of successful finished jobs to retain.
+    tooltips:
+      starting-deadline: Optional deadline in seconds for starting the job if it misses scheduled time for any reason. Missed jobs executions will be counted as failed ones.
+      suspend: This flag tells the controller to suspend subsequent executions, it does not apply to already started executions. Defaults to false.
   description: CronJobs are meant for performing regular scheduled actions. A CronJob object is like one line of a crontab file. It runs a job periodically on a given schedule.
+  docker-image: Docker Image
   failed-jobs-history-limit: Failed Jobs History Limit
+  image-pull-policy: Image Pull Policy
   last-job-execution: Last Job execution
   last-schedule-time: Last schedule time
   name_singular: CronJob
   not-scheduled-yet: None scheduled yet
-  placeholders:
-    failed-jobs-history-limit: The number of failed finished jobs to retain.
-    starting-deadline: Optional deadline in seconds.
-    successful-jobs-history-limit: The number of successful finished jobs to retain.
+  restart-policy: Restart Policy
   schedule: Schedule
   starting-deadline: Starting Deadline
   successful-jobs-history-limit: Successful Jobs History Limit
   suspend: Suspend
   title: CronJobs
-  tooltips:
-    starting-deadline: Optional deadline in seconds for starting the job if it misses scheduled time for any reason. Missed jobs executions will be counted as failed ones.
-    suspend: This flag tells the controller to suspend subsequent executions, it does not apply to already started executions. Defaults to false.
 custom-resource-definitions:
   headers:
     description: Description
