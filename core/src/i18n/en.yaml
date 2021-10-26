@@ -304,6 +304,7 @@ common:
     message: Are you sure you want to delete {{type}} {{name}}?
     title: Delete {{name}}.
   errors:
+    error: Error
     no-permissions: You don't have enough permissions to view this content.
     no-permissions-header: Not enough permissions.
     no-permissions-message: Contact your administrator to grant you access.
@@ -435,6 +436,7 @@ config-maps:
 configuration:
   title: Configuration
 cron-jobs:
+  args: Args
   command: Command
   concurrency-policy:
     descriptions:
@@ -447,16 +449,30 @@ cron-jobs:
     at-least-one-container-required: CronJob must have at least one container.
     container: Container
     containers: Containers
+    day-of-month: Day of Month
+    day-of-week: Day of Week
+    hour: Hour
+    minute: Minute
+    month: Month
     placeholders:
+      args: Arguments to the entrypoint.
       command: Command to run in a container.
       docker-image: Enter the Docker image tag, for example, 'busybox'.
       failed-jobs-history-limit: The number of failed finished jobs to retain.
       starting-deadline: Optional deadline in seconds.
       successful-jobs-history-limit: The number of successful finished jobs to retain.
+    presets:
+      node-js: NodeJS
     tooltips:
+      args: Docker image CMD is used if arguments are not provided.
+      day-of-month: 1 to 31
+      day-of-week: 0 to 7 (0 and 7 represent Sunday) or three-letter day abbreviations (like MON, TUE)
+      hour: 0 to 23 (always UTC)
+      minute: 0 to 59
+      month: 1 to 12
       starting-deadline: Optional deadline in seconds for starting the job if it misses scheduled time for any reason. Missed jobs executions will be counted as failed ones.
       suspend: This flag tells the controller to suspend subsequent executions, it does not apply to already started executions. Defaults to false.
-  description: CronJobs are meant for performing regular scheduled actions. A CronJob object is like one line of a crontab file. It runs a job periodically on a given schedule.
+  description: CronJobs are meant for performing regular scheduled actions. A CronJob object is like one line of a crontab file, running a job periodically on a given schedule.
   docker-image: Docker Image
   failed-jobs-history-limit: Failed Jobs History Limit
   image-pull-policy: Image Pull Policy

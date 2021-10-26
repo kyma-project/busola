@@ -74,5 +74,40 @@ export function createPresets(namespace, translate) {
         concurrencyPolicy: 'Allow',
       },
     },
+    {
+      name: translate('cron-jobs.create-modal.presets.node-js'),
+      value: {
+        apiVersion: 'batch/v1beta1',
+        kind: 'CronJob',
+        metadata: {
+          name: 'node-js',
+          namespace,
+        },
+        spec: {
+          schedule: '*/2 * * * *',
+          jobTemplate: {
+            spec: {
+              template: {
+                spec: {
+                  containers: [
+                    {
+                      name: 'node-js',
+                      image: 'node:14-alpine',
+                      imagePullPolicy: 'IfNotPresent',
+                      command: [
+                        'node',
+                        '-e',
+                        'console.log(new Date().toString())',
+                      ],
+                    },
+                  ],
+                  restartPolicy: 'OnFailure',
+                },
+              },
+            },
+          },
+        },
+      },
+    },
   ];
 }

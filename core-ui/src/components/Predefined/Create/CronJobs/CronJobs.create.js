@@ -12,6 +12,7 @@ import {
 } from './templates';
 import { SingleContainerForm, SingleContainerInput } from './Containers';
 import { MessageStrip } from 'fundamental-react';
+import { isCronExpressionValid, ScheduleSection } from './ScheduleEditor';
 
 export function CronJobsCreate({
   formElementRef,
@@ -30,10 +31,13 @@ export function CronJobsCreate({
       jp.value(cronJob, '$.spec.jobTemplate.spec.template.spec.containers') ||
       [];
 
-    const hasAnyContainers = !!containers.length;
-    const areContinersValid = containers.every(c => c.command?.length > 0);
+    const areContainersValid =
+      !!containers.length &&
+      containers.every(c => c.command?.length > 0 || c.args?.length > 0);
 
-    setCustomValid(hasAnyContainers && areContinersValid);
+    setCustomValid(
+      areContainersValid && isCronExpressionValid(cronJob?.spec?.schedule),
+    );
   }, [cronJob, setCustomValid]);
 
   const concurrencyPolicyOptions = [
@@ -137,6 +141,7 @@ export function CronJobsCreate({
         input={Inputs.Dropdown}
         options={restartPolicyOptions}
       />
+      <ScheduleSection propertyPath="$.spec.schedule" />
       <ResourceForm.KeyValueField
         advanced
         propertyPath="$.metadata.labels"
