@@ -644,6 +644,7 @@ functions:
       inline-editor: Inline Editor
       reference: Reference
       repository: Repository
+    title: Create Function
   details:
     buttons:
       diff_toggle: Diff
@@ -679,6 +680,7 @@ functions:
   headers:
     runtime: Runtime
     source-type: Source Type
+  name_singular: Function
   pod-list:
     buttons:
       view-logs: View Logs
