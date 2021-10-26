@@ -526,8 +526,8 @@ export function ItemArray({
 
   const remove = index => setValues(values.filter((_, i) => index !== i));
 
-  const renderItem = item =>
-    itemRenderer(item, values, setValues, props.isAdvanced);
+  const renderItem = (item, index) =>
+    itemRenderer(item, values, setValues, index, props.isAdvanced);
 
   const renderAllItems = () =>
     values.map((current, i) => {
@@ -549,13 +549,13 @@ export function ItemArray({
             />
           }
         >
-          {renderItem(current)}
+          {renderItem(current, i)}
         </CollapsibleSection>
       );
     });
 
   const content =
-    values.length === 1 ? renderItem(values[0]) : renderAllItems();
+    values.length === 1 ? renderItem(values[0], 0) : renderAllItems();
 
   return (
     <CollapsibleSection
