@@ -205,6 +205,7 @@ export function MultiInput({
 }) {
   const valueRef = useRef(null); // for deep comparison
   const [internalValue, setInternalValue] = useState([]);
+  const [keys, setKeys] = useState(1);
   const refs = Array(internalValue.length)
     .fill()
     .map(() => inputs.map(() => createRef()));
@@ -239,6 +240,7 @@ export function MultiInput({
   const updateValue = val => setValue(toExternal(val));
 
   const removeValue = index => {
+    setKeys(keys * -1);
     internalValue.splice(index, 1);
     updateValue(internalValue);
   };
@@ -284,7 +286,7 @@ export function MultiInput({
             <li key={index}>
               {inputs.map((input, inputIndex) =>
                 input({
-                  index,
+                  index: (index + 1) * keys,
                   value: entry,
                   setValue: entry => setEntry(entry, index),
                   ref: refs[index]?.[inputIndex],
