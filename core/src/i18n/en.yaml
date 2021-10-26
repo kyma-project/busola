@@ -457,6 +457,7 @@ cron-jobs:
     hour: Hour
     minute: Minute
     month: Month
+    parse-error: Error parsing CRON expression.
     placeholders:
       args: Arguments to the entrypoint.
       command: Command to run in a container.

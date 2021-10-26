@@ -14,20 +14,6 @@ export function Text({ value, setValue, ...props }) {
   );
 }
 
-export function Dropdown({ value, setValue, ...props }) {
-  const { i18n } = useTranslation();
-  return (
-    <BusolaDropown
-      compact
-      fullWidth
-      selectedKey={value}
-      onSelect={(_, selected) => setValue(selected.key)}
-      i18n={i18n}
-      {...props}
-    />
-  );
-}
-
 export function Number({ value, setValue, ...props }) {
   return (
     <FormInput

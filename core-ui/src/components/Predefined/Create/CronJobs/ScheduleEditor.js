@@ -5,6 +5,7 @@ import { toString as cRonstrue } from 'cronstrue/i18n';
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import { MessageStrip } from 'fundamental-react';
 import * as Inputs from 'shared/ResourceForm/components/Inputs';
+import './ScheduleEditor.scss';
 
 function readableSchedule(schedule, i18n) {
   try {
@@ -18,7 +19,7 @@ function readableSchedule(schedule, i18n) {
 export function isCronExpressionValid(schedule) {
   try {
     parse(schedule);
-    return true;
+    return schedule.split(/\s+/g).filter(e => e).length === 5;
   } catch (_) {
     return false;
   }
@@ -51,7 +52,17 @@ function TimeInput({ entries, index, name, setSchedule }) {
 
 function ScheduleEditor({ schedule, setSchedule }) {
   const { t } = useTranslation();
-  const entries = (schedule || '').split(' ');
+
+  const presets = {
+    '@yearly': '0 0 1 1 *',
+    '@monthly': '0 0 1 * *',
+    '@weekly': '0 0 * * 0',
+    '@hourly': '0 * * * *',
+  };
+
+  const entries = (presets[schedule] || schedule || '')
+    .split(/\s+/g)
+    .filter(e => e);
 
   return (
     <>
@@ -96,7 +107,7 @@ function ScheduleEditor({ schedule, setSchedule }) {
       </div>
       {!isCronExpressionValid(schedule) && (
         <MessageStrip type="error" className="fd-margin-top--sm">
-          Error parsing CRON expression.
+          {t('cron-jobs.create-modal.parse-error')}
         </MessageStrip>
       )}
     </>

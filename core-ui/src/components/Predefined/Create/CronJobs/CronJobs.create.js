@@ -146,7 +146,6 @@ export function CronJobsCreate({
         advanced
         propertyPath="$.metadata.labels"
         title={t('common.headers.labels')}
-        className="fd-margin-top--sm"
       />
       <ResourceForm.KeyValueField
         advanced
