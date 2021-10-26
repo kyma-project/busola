@@ -79,7 +79,7 @@ export const RoleForm = ({ binding, setBinding, namespace }) => {
           options={allRoles}
           selectedKey={selectedRole}
           selectionType="auto-inline"
-          onSelectionChange={(_, selected) => handleRoleChange(selected)}
+          onSelect={e => handleRoleChange(e.target.value)}
           {...props}
         />
       )}
