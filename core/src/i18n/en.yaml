@@ -197,6 +197,7 @@ certificates:
 cluster-addons:
   title: Cluster Addons
 cluster-role-bindings:
+  name_singular: ClusterRoleBinding
   title: ClusterRoleBindings
 cluster-roles:
   name_singular: Cluster Role
@@ -363,6 +364,8 @@ common:
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: key=value, must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     read-file: Read file content as a single value, with file name as a key.
+    resource-ref-name: Unique name within a Namespace to refer to a {{resource}} resource.
+    resource-ref-namespace: Namespace defines the space within which the {{resource}} name must be unique.
     save: Save
     search: Search
     secret-ref-name: Unique name within a Namespace to refer to a Secret resource.
@@ -678,6 +681,7 @@ functions:
       inline-editor: Inline Editor
       reference: Reference
       repository: Repository
+    title: Create Function
   details:
     buttons:
       diff_toggle: Diff
@@ -713,6 +717,7 @@ functions:
   headers:
     runtime: Runtime
     source-type: Source Type
+  name_singular: Function
   pod-list:
     buttons:
       view-logs: View Logs
@@ -1083,29 +1088,32 @@ resource-quotas:
     requests: Requests
   title: Resource Quotas
 role-bindings:
-  aria:
-    choose-role: Choose Role
-  errors:
-    cannot-create: Cannot create a RoleBinding.
+  create-modal:
+    api-group: API Group
+    at-least-one-subject-required: '{{resource}} must have at least one subject.'
+    group-name: Group Name
+    kind: Kind
+    role: Role
+    subject: Subject
+    subjects: Subjects
+    tooltips:
+      kind: Being part of the JWT token, you must set User and Groups at the OIDC level if you use an OIDC provider.
+    user-name: User Name
   headers:
     kind: Kind
     role-ref: Role Reference
     subjects: Subjects
   labels:
     annotations: Annotations
-    arrow: Show Roles
-    role: Role
-    user: User
-    user-group: User Group
-  messages:
-    created: RoleBinding {{name}} created.
+    service-account: Service Account
+  name_singular: RoleBinding
   placeholders:
-    choose-role: Choose role...
-    user-group: User group
-    user-name: User name
+    api-group: API Group
+    group:
+      name: User group
+    user:
+      name: User name
   title: RoleBindings
-  tooltip:
-    no-found: No Roles found
 roles:
   headers:
     api-groups: API Groups
@@ -1160,6 +1168,7 @@ service-accounts:
   headers:
     auto-mount-token: Automount Token
     download-kubeconfig: Download Kubeconfig
+  service-account: Service Account
   title: Service Accounts
 service-management:
   title: Service Management

@@ -201,6 +201,7 @@ export function MultiInput({
 }) {
   const valueRef = useRef(null); // for deep comparison
   const [internalValue, setInternalValue] = useState([]);
+  const [keys, setKeys] = useState(1);
   const refs = Array(internalValue.length)
     .fill()
     .map(() => inputs.map(() => createRef()));
@@ -235,6 +236,11 @@ export function MultiInput({
   const updateValue = val => setValue(toExternal(val));
 
   const removeValue = index => {
+    /* 
+      Removing one of the inputs decreases the next inputs keys by one, so the last input has the previous input value instead of being empty.
+      We force rerender by changing keys.
+    */
+    setKeys(keys * -1);
     internalValue.splice(index, 1);
     updateValue(internalValue);
   };
@@ -280,7 +286,7 @@ export function MultiInput({
             <li key={index}>
               {inputs.map((input, inputIndex) =>
                 input({
-                  index,
+                  index: (index + 1) * keys,
                   value: entry,
                   setValue: entry => setEntry(entry, index),
                   ref: refs[index]?.[inputIndex],
@@ -528,8 +534,8 @@ export function ItemArray({
 
   const remove = index => setValues(values.filter((_, i) => index !== i));
 
-  const renderItem = item =>
-    itemRenderer(item, values, setValues, props.isAdvanced);
+  const renderItem = (item, index) =>
+    itemRenderer(item, values, setValues, index, props.isAdvanced);
 
   const renderAllItems = () =>
     values.map((current, i) => {
@@ -551,13 +557,13 @@ export function ItemArray({
             />
           }
         >
-          {renderItem(current)}
+          {renderItem(current, i)}
         </CollapsibleSection>
       );
     });
 
   const content =
-    values.length === 1 ? renderItem(values[0]) : renderAllItems();
+    values.length === 1 ? renderItem(values[0], 0) : renderAllItems();
 
   return (
     <CollapsibleSection

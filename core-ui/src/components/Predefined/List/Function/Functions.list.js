@@ -6,7 +6,6 @@ import { useMicrofrontendContext } from 'react-shared';
 import { prettySourceType } from 'components/Lambdas/helpers/lambdas';
 import { prettyRuntime } from 'components/Lambdas/helpers/runtime';
 import { LambdaStatusBadge } from 'components/Lambdas/LambdaStatusBadge/LambdaStatusBadge';
-import CreateNewFunction from './CreateNewFunction';
 import { useTranslation } from 'react-i18next';
 
 export const FunctionsList = ({ DefaultRenderer, ...otherParams }) => {
@@ -26,10 +25,6 @@ export const FunctionsList = ({ DefaultRenderer, ...otherParams }) => {
       {t('functions.buttons.connected-repositories')}
     </Button>
   ) : null;
-
-  const listActions = (
-    <CreateNewFunction namespaceName={otherParams.namespace} />
-  );
 
   const customColumns = [
     {
@@ -53,7 +48,6 @@ export const FunctionsList = ({ DefaultRenderer, ...otherParams }) => {
   return (
     <DefaultRenderer
       customHeaderActions={headerActions}
-      listHeaderActions={listActions}
       customColumns={customColumns}
       {...otherParams}
     />
