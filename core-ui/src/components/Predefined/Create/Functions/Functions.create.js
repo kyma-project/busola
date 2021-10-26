@@ -23,7 +23,6 @@ export function FunctionsCreate({
   namespace,
   formElementRef,
   onChange,
-  resourceUrl,
   setCustomValid,
 }) {
   const { t } = useTranslation();
@@ -109,7 +108,7 @@ export function FunctionsCreate({
       setResource={setFunc}
       onChange={onChange}
       formElementRef={formElementRef}
-      createUrl={resourceUrl}
+      createUrl={`/apis/serverless.kyma-project.io/v1alpha1/namespaces/${namespace}/functions`}
     >
       <K8sNameField
         propertyPath="$.metadata.name"
@@ -131,7 +130,7 @@ export function FunctionsCreate({
         title={t('common.headers.annotations')}
       />
       <FormField
-        zrquired
+        required
         propertyPath="$.spec.runtime"
         label={t('functions.headers.runtime')}
         input={Inputs.Dropdown}
