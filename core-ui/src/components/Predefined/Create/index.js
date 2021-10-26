@@ -14,3 +14,4 @@ export * from './Certificates/Certificates.create.js';
 export * from './DNSEntries/DNSEntries.create.js';
 export * from './Functions/Functions.create.js';
 export * from './Roles/Roles.create.js';
+export * from './Jobs/Jobs.create.js';

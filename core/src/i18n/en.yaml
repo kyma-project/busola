@@ -919,6 +919,7 @@ jobs:
     status: Status
     title: Conditions
     type: Type
+  name-singular: Job
   start-time: Start Time
   title: Jobs
 kubeconfig-id:
