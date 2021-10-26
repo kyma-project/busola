@@ -99,30 +99,26 @@ export function Title({
   canChangeState,
   iconGlyph,
 }) {
-  const classNames = classnames('title', {
-    'tooltip-cursor': tooltipContent,
-  });
-  const component = (
-    <div className={classNames}>
+  return (
+    <div className="title">
       {!disabled && canChangeState && (
         <Icon className="control-icon" ariaHidden glyph={iconGlyph} />
       )}
-      {title}
+      <span class="title-content">{title}</span>
+      {tooltipContent && (
+        <Tooltip className="info-tooltip" delay={0} content={tooltipContent}>
+          <Icon ariaLabel="Tooltip" glyph="question-mark" />
+        </Tooltip>
+      )}
     </div>
   );
-
-  if (tooltipContent) {
-    return <Tooltip content={tooltipContent}>{component}</Tooltip>;
-  } else {
-    return component;
-  }
 }
 export function Label({ required, tooltipContent, children }) {
   return (
     <>
       <FormLabel required={required}>{children}</FormLabel>
       {tooltipContent && (
-        <Tooltip delay={0} content={tooltipContent}>
+        <Tooltip className="info-tooltip" delay={0} content={tooltipContent}>
           <Icon ariaLabel="Tooltip" glyph="question-mark" />
         </Tooltip>
       )}
@@ -530,8 +526,8 @@ export function ItemArray({
 
   const remove = index => setValues(values.filter((_, i) => index !== i));
 
-  const renderItem = item =>
-    itemRenderer(item, values, setValues, props.isAdvanced);
+  const renderItem = (item, index) =>
+    itemRenderer(item, values, setValues, index, props.isAdvanced);
 
   const renderAllItems = () =>
     values.map((current, i) => {
@@ -553,13 +549,13 @@ export function ItemArray({
             />
           }
         >
-          {renderItem(current)}
+          {renderItem(current, i)}
         </CollapsibleSection>
       );
     });
 
   const content =
-    values.length === 1 ? renderItem(values[0]) : renderAllItems();
+    values.length === 1 ? renderItem(values[0], 0) : renderAllItems();
 
   return (
     <CollapsibleSection

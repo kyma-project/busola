@@ -106,48 +106,52 @@ brokers:
     url: URL
   title: Brokers
 btp-instances:
-  create:
-    external-name-placeholder: Defaults to the instance name if empty.
-    offering-name-description: SAP BTP service offering name.
-    params-invalid: Parameters must be an object.
-    plan-name-description: The plan name to use for the ServiceInstance.
-    title: Create $t(btp-instances.resource-type).
   external-name: External Name
   instance-data: ServiceInstance Data
   instance-id: Instance ID
+  messages:
+    params-invalid: Invalid parameters. Provide a valid JSON object.
+  name_singular: BTP Service Instance
   offering-name: Offering Name
   parameters: Instance Parameters
+  placeholders:
+    external-name: Defaults to the instance name if empty.
+    offering-name: SAP BTP service offering name.
+    plan-name: The plan name to use for the ServiceInstance.
   plan-name: Plan Name
   resource-type: ServiceInstance
   title: BTP ServiceInstances
+  tooltips:
+    offering-name: You find the name of the SAP BTP service offering in the BTP Cockpit in the Service Marketplace.
+    plan-name: You find the plan to be used for the service instance in the BTP Cockpit in the Service Marketplace.
 btp-service-bindings:
   binding-id: Binding ID
-  create:
-    external-name-placeholder: Defaults to the binding name if empty.
-    params-from-invalid: Parameters must be an array of objects.
-    params-invalid: Parameters must be an object.
-    ref-form:
-      choose-key: Choose a Secret key.
-      choose-secret: Choose a Secret.
-      choose-secret-first: Choose the Secret first.
-      choose-secret-key: Choose a Secret key.
-      duplicate-ref: This ref already exists.
-      empty-secret: This Secret has no data.
-      invalid-ref: Ref is invalid.
-      parametersFrom-must-be-array: spec.parametersFrom must be an array.
-      value-must-be-json-object: Secret data value must be a JSON object.
-    secret-description: The Secret will be created if it doesn't exist.
-    title: Create $t(btp-service-bindings.resource-type)
   data: Binding Data
   external-name: External Name
   instance-id: Instance ID
   instance-name: ServiceInstance Name
-  parameters: Instance Binding Parameters
-  parameters-from: Array of Secret references to populate the parameters.
+  messages:
+    duplicate-ref: This ref already exists.
+    invalid-ref: Ref is invalid.
+    params-invalid: Parameters must be an object.
+    value-must-be-json-object: Secret data value must be a JSON object.
+  name_singular: BTP Service Binding
+  parameters: Parameters
+  parameters-from: Parameters from Secrets
+  placeholders:
+    choose-secret: Choose a Secret
+    choose-secret-first: Choose the Secret first
+    choose-secret-key: Choose a Secret key
+    empty-secret: This Secret has no data
+    external-name: Defaults to the ServiceBinding name if empty
+    secret: Credentials Secret name
   resource-type: ServiceBinding
   secret: Secret
-  secret-not-found: This Secret doesn't exist.
   title: BTP ServiceBindings
+  tooltips:
+    parameters-from: Secret references to populate the parameters.
+    secret: The name of the secret where the credentials are stored, defaults to the ServiceBinding name if not specified.
+    secret-not-found: This Secret doesn't exist.
 catalog:
   menu-title: Catalog
   subtitle: Enrich your experience with additional services that are installed outside the cluster.
@@ -193,6 +197,7 @@ certificates:
 cluster-addons:
   title: Cluster Addons
 cluster-role-bindings:
+  name_singular: ClusterRoleBinding
   title: ClusterRoleBindings
 cluster-roles:
   name_singular: Cluster Role
@@ -357,6 +362,8 @@ common:
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: key=value, must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     read-file: Read file content as a single value, with file name as a key.
+    resource-ref-name: Unique name within a Namespace to refer to a {{resource}} resource.
+    resource-ref-namespace: Namespace defines the space within which the {{resource}} name must be unique.
     save: Save
     search: Search
     secret-ref-name: Unique name within a Namespace to refer to a Secret resource.
@@ -1046,29 +1053,32 @@ resource-quotas:
     requests: Requests
   title: Resource Quotas
 role-bindings:
-  aria:
-    choose-role: Choose Role
-  errors:
-    cannot-create: Cannot create a RoleBinding.
+  create-modal:
+    api-group: API Group
+    at-least-one-subject-required: '{{resource}} must have at least one subject.'
+    group-name: Group Name
+    kind: Kind
+    role: Role
+    subject: Subject
+    subjects: Subjects
+    tooltips:
+      kind: Being part of the JWT token, you must set User and Groups at the OIDC level if you use an OIDC provider.
+    user-name: User Name
   headers:
     kind: Kind
     role-ref: Role Reference
     subjects: Subjects
   labels:
     annotations: Annotations
-    arrow: Show Roles
-    role: Role
-    user: User
-    user-group: User Group
-  messages:
-    created: RoleBinding {{name}} created.
+    service-account: Service Account
+  name_singular: RoleBinding
   placeholders:
-    choose-role: Choose role...
-    user-group: User group
-    user-name: User name
+    api-group: API Group
+    group:
+      name: User group
+    user:
+      name: User name
   title: RoleBindings
-  tooltip:
-    no-found: No Roles found
 roles:
   headers:
     api-groups: API Groups
@@ -1125,6 +1135,7 @@ service-accounts:
   headers:
     auto-mount-token: Automount Token
     download-kubeconfig: Download Kubeconfig
+  service-account: Service Account
   title: Service Accounts
 service-management:
   title: Service Management

@@ -57,7 +57,9 @@ export const Rules = resource => {
       rule.verbs?.filter(v => !standardVerbs.includes(v)).join(', ') ||
         EMPTY_TEXT_PLACEHOLDER,
       displayArrayValue(
-        rule.apiGroups.map(apiGroup => (apiGroup ? apiGroup : '(core)')),
+        (rule.apiGroups || []).map(apiGroup =>
+          apiGroup ? apiGroup : '(core)',
+        ),
       ),
       displayArrayValue(rule.resources),
       displayArrayValue(rule.resourceNames),

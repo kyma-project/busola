@@ -48,7 +48,9 @@ export function ServiceBindingData({ metadata, spec, status }) {
             {spec.secretName}
           </Link>
         ) : (
-          <Tooltip content={t('btp-service-bindings.secret-not-found')}>
+          <Tooltip
+            content={t('btp-service-bindings.tooltips.secret-not-found')}
+          >
             {spec.secretName}
           </Tooltip>
         ),
