@@ -240,6 +240,10 @@ export function MultiInput({
   const updateValue = val => setValue(toExternal(val));
 
   const removeValue = index => {
+    /* 
+      Removing one of the inputs decreases the next inputs keys by one, so the last input has the previous input value instead of being empty.
+      We force rerender by changing keys.
+    */
     setKeys(keys * -1);
     internalValue.splice(index, 1);
     updateValue(internalValue);
