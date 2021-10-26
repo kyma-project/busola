@@ -35,7 +35,7 @@ export function ResultPanel({ result, showResult, close }) {
     >
       <MonacoEditor
         theme={editorTheme}
-        height="20em"
+        height="100%"
         value={result}
         options={options}
         language="yaml"
