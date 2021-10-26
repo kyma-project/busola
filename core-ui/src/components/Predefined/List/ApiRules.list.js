@@ -8,6 +8,7 @@ import {
 } from 'components/ApiRules/ApiRulesList/components';
 import ApiRuleStatus from 'components/ApiRules/ApiRuleStatus/ApiRuleStatus';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-shared';
 
 export const ApiRulesList = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
@@ -49,11 +50,23 @@ export const ApiRulesList = ({ DefaultRenderer, ...otherParams }) => {
     },
   ];
 
+  const description = (
+    <span>
+      <Link
+        className="fd-link fd-link"
+        url="https://kyma-project.io/docs/kyma/latest/05-technical-reference/00-custom-resources/apix-01-apirule/#documentation-content"
+        text="APIRule"
+      />
+      {t('api-rules.description')}
+    </span>
+  );
+
   return (
     <DefaultRenderer
       customColumns={customColumns}
       listHeaderActions={createApiRule}
       resourceName={t('api-rules.title')}
+      description={description}
       {...otherParams}
     />
   );
