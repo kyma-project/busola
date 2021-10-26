@@ -1062,7 +1062,7 @@ role-bindings:
     subject: Subject
     subjects: Subjects
     tooltips:
-      kind: User and Groups are not K8s resources, they are part of the JWT token if you plan to use an OIDC provider with your cluster. Make sure those are set correctly at the OIDC level.
+      kind: Being part of the JWT token, you must set User and Groups at the OIDC level if you use an OIDC provider.
     user-name: User Name
   headers:
     kind: Kind
@@ -1070,7 +1070,7 @@ role-bindings:
     subjects: Subjects
   labels:
     annotations: Annotations
-    service-account: ServiceAccount
+    service-account: Service Account
   name_singular: RoleBinding
   placeholders:
     api-group: API Group

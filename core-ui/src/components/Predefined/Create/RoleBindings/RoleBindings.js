@@ -7,6 +7,7 @@ import { SingleSubjectForm, SingleSubjectInput } from './SubjectForm';
 import { validateBinding } from './helpers';
 import { MessageStrip } from 'fundamental-react';
 import { RoleForm } from './RoleForm.js';
+import * as Inputs from 'shared/ResourceForm/components/Inputs';
 
 export function RoleBindings({
   formElementRef,
@@ -35,7 +36,7 @@ export function RoleBindings({
         createUrl: `/apis/rbac.authorization.k8s.io/v1/namespaces/${namespace}/rolebindings/`,
       }
     : {
-        pluralKind: 'clusterrolebindings:',
+        pluralKind: 'clusterrolebindings',
         singularName: t(`cluster-role-bindings.name_singular`),
         createUrl: '/apis/rbac.authorization.k8s.io/v1/clusterrolebindings/',
       };
@@ -49,10 +50,14 @@ export function RoleBindings({
       formElementRef={formElementRef}
       createUrl={resourceData.createUrl}
     >
-      <ResourceForm.K8sNameField
+      <ResourceForm.FormField
+        required
+        label={t('common.labels.name')}
+        placeholder={t('components.k8s-name-input.placeholder', {
+          resourceType: resourceData.singularName,
+        })}
+        input={Inputs.Text}
         propertyPath="$.metadata.name"
-        kind={resourceData.singularName}
-        setValue={handleNameChange}
       />
       <ResourceForm.KeyValueField
         advanced

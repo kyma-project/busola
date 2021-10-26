@@ -24,7 +24,7 @@ export const RoleForm = ({ binding, setBinding, namespace }) => {
     data: roles,
     loading: rolesLoading = true,
     error: rolesError,
-  } = useGetList(() => !!namespace)(rolesUrl);
+  } = useGetList()(rolesUrl, { skip: !namespace });
 
   const clusterRolesUrl = '/apis/rbac.authorization.k8s.io/v1/clusterroles';
   const {
@@ -32,8 +32,8 @@ export const RoleForm = ({ binding, setBinding, namespace }) => {
     loading: clusterRolesLoading = true,
     error: clusterRolesError,
   } = useGetList()(clusterRolesUrl);
-
-  if (rolesLoading || clusterRolesLoading) return 'Loading...';
+  if ((!namespace ? false : rolesLoading) || clusterRolesLoading)
+    return 'Loading...';
   if (rolesError) return rolesError.message;
   if (clusterRolesError) return clusterRolesError.message;
 
