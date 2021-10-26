@@ -20,6 +20,19 @@ export function ResultPanel({ result, showResult, close }) {
       title="Recording Result"
       actions={[
         <Button
+          option="emphasized"
+          compact
+          onClick={e => {
+            e.preventDefault();
+            copyToCliboard(`cat <<EOF | kubectl apply -f -
+${result}
+EOF
+`);
+          }}
+        >
+          Copy kubectl command
+        </Button>,
+        <Button
           compact
           onClick={e => {
             e.preventDefault();
