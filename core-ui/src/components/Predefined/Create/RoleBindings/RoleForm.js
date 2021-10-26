@@ -1,61 +1,21 @@
 import React from 'react';
-import * as jp from 'jsonpath';
 
 import { ComboboxInput } from 'fundamental-react';
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
-import { useGetList } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
-export const RoleForm = ({ binding, setBinding, namespace }) => {
+export const RoleForm = ({
+  loading,
+  error,
+  allRoles,
+  binding,
+  handleRoleChange,
+}) => {
   const { t } = useTranslation();
 
-  const handleRoleChange = (role, reason) => {
-    const newRole = {
-      kind: role.data?.roleKind,
-      name: role.data?.roleName,
-    };
-    if (reason !== 'inputChange') {
-      jp.value(binding, '$.roleRef', newRole);
-      setBinding({ ...binding });
-    }
-  };
+  if (loading) return 'Loading...';
+  if (error) return error.message;
 
-  const rolesUrl = `/apis/rbac.authorization.k8s.io/v1/namespaces/${namespace}/roles`;
-  const {
-    data: roles,
-    loading: rolesLoading = true,
-    error: rolesError,
-  } = useGetList()(rolesUrl, { skip: !namespace });
-
-  const clusterRolesUrl = '/apis/rbac.authorization.k8s.io/v1/clusterroles';
-  const {
-    data: clusterRoles,
-    loading: clusterRolesLoading = true,
-    error: clusterRolesError,
-  } = useGetList()(clusterRolesUrl);
-  if ((!namespace ? false : rolesLoading) || clusterRolesLoading)
-    return 'Loading...';
-  if (rolesError) return rolesError.message;
-  if (clusterRolesError) return clusterRolesError.message;
-
-  const rolesNames = (roles || []).map(role => ({
-    key: `role-${role.metadata.name}`,
-    text: `${role.metadata.name} (R)`,
-    data: {
-      roleKind: 'Role',
-      roleName: role.metadata.name,
-    },
-  }));
-  const clusterRolesNames = (clusterRoles || []).map(role => ({
-    key: `clusterrole-${role.metadata.name}`,
-    text: `${role.metadata.name} (CR)`,
-    data: {
-      roleKind: 'ClusterRole',
-      roleName: role.metadata.name,
-    },
-  }));
-
-  const allRoles = [...rolesNames, ...clusterRolesNames];
   const selectedRole =
     binding?.roleRef?.kind && binding?.roleRef?.name
       ? `${binding?.roleRef?.kind?.toLowerCase()}-${binding?.roleRef?.name}`
@@ -80,9 +40,7 @@ export const RoleForm = ({ binding, setBinding, namespace }) => {
           options={allRoles}
           selectedKey={selectedRole}
           selectionType="auto-inline"
-          onSelectionChange={(_, selected, reason) =>
-            handleRoleChange(selected, reason)
-          }
+          onSelectionChange={(_, selected) => handleRoleChange(selected)}
           inputProps={{
             autoComplete: 'nope',
           }}
