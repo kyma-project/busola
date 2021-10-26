@@ -23,12 +23,6 @@ export function RoleBindings({
     setCustomValid(validateBinding(binding));
   }, [binding, setCustomValid]);
 
-  const handleNameChange = name => {
-    jp.value(binding, '$.metadata.name', name);
-
-    setBinding({ ...binding });
-  };
-
   const resourceData = namespace
     ? {
         pluralKind: 'rolebindings',
