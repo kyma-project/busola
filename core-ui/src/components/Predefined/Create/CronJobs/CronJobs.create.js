@@ -7,12 +7,23 @@ import * as Inputs from 'shared/ResourceForm/components/Inputs';
 
 import {
   createContainerTemplate,
-  createCronJobTemplate,
+  createEmptyCronJobTemplate,
   createPresets,
 } from './templates';
 import { SingleContainerForm, SingleContainerInput } from './Containers';
 import { MessageStrip } from 'fundamental-react';
-import { isCronExpressionValid, ScheduleSection } from './ScheduleEditor';
+import { isCronExpressionValid, ScheduleSection } from './ScheduleSection';
+
+function isCronJobValid(cronJob) {
+  const containers =
+    jp.value(cronJob, '$.spec.jobTemplate.spec.template.spec.containers') || [];
+
+  const areContainersValid =
+    !!containers.length &&
+    containers.every(c => c.command?.length > 0 || c.args?.length > 0);
+
+  return areContainersValid && isCronExpressionValid(cronJob?.spec?.schedule);
+}
 
 export function CronJobsCreate({
   formElementRef,
@@ -23,44 +34,17 @@ export function CronJobsCreate({
   const { t } = useTranslation();
 
   const [cronJob, setCronJob] = React.useState(
-    createCronJobTemplate(namespace),
+    createEmptyCronJobTemplate(namespace),
   );
 
   React.useEffect(() => {
-    const containers =
-      jp.value(cronJob, '$.spec.jobTemplate.spec.template.spec.containers') ||
-      [];
-
-    const areContainersValid =
-      !!containers.length &&
-      containers.every(c => c.command?.length > 0 || c.args?.length > 0);
-
-    setCustomValid(
-      areContainersValid && isCronExpressionValid(cronJob?.spec?.schedule),
-    );
+    setCustomValid(isCronJobValid(cronJob));
   }, [cronJob, setCustomValid]);
 
-  const concurrencyPolicyOptions = [
-    {
-      key: 'Allow',
-      text: `Allow (${t('cron-jobs.concurrency-policy.descriptions.allow')})`,
-    },
-    {
-      key: 'Forbid',
-      text: `Forbid (${t('cron-jobs.concurrency-policy.descriptions.forbid')})`,
-    },
-    {
-      key: 'Replace',
-      text: `Replace (${t(
-        'cron-jobs.concurrency-policy.descriptions.replace',
-      )})`,
-    },
-  ];
-
-  // const concurrencyPolicyOptions = ['Allow', 'Forbid', 'Replace'].map(p => ({
-  //   key: p,
-  //   text: p,
-  // }));
+  const concurrencyPolicyOptions = ['Allow', 'Forbid', 'Replace'].map(p => ({
+    key: p,
+    text: p,
+  }));
 
   const restartPolicyOptions = ['Never', 'OnFailure'].map(p => ({
     key: p,
@@ -96,6 +80,7 @@ export function CronJobsCreate({
         propertyPath="$.spec.concurrencyPolicy"
         label={t('cron-jobs.concurrency-policy.label')}
         input={Inputs.Dropdown}
+        defaultKey="Allow"
         options={concurrencyPolicyOptions}
       />
       <ResourceForm.FormField

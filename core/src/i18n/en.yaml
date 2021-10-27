@@ -466,7 +466,8 @@ cron-jobs:
       starting-deadline: Optional deadline in seconds.
       successful-jobs-history-limit: The number of successful finished jobs to retain.
     presets:
-      node-js: NodeJS
+      daily: Daily
+      weekly: Weekly
     tooltips:
       args: Docker image CMD is used if arguments are not provided.
       day-of-month: 1 to 31

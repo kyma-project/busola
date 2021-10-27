@@ -5,7 +5,13 @@ import { toString as cRonstrue } from 'cronstrue/i18n';
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import { MessageStrip } from 'fundamental-react';
 import * as Inputs from 'shared/ResourceForm/components/Inputs';
-import './ScheduleEditor.scss';
+
+const presets = {
+  '@yearly': '0 0 1 1 *',
+  '@monthly': '0 0 1 * *',
+  '@weekly': '0 0 * * 0',
+  '@hourly': '0 * * * *',
+};
 
 function readableSchedule(schedule, i18n) {
   try {
@@ -19,7 +25,10 @@ function readableSchedule(schedule, i18n) {
 export function isCronExpressionValid(schedule) {
   try {
     parse(schedule);
-    return schedule.split(/\s+/g).filter(e => e).length === 5;
+    return (
+      Object.keys(presets).includes(schedule) ||
+      schedule.split(' ').filter(e => e).length === 5
+    );
   } catch (_) {
     return false;
   }
@@ -53,58 +62,21 @@ function TimeInput({ entries, index, name, setSchedule }) {
 function ScheduleEditor({ schedule, setSchedule }) {
   const { t } = useTranslation();
 
-  const presets = {
-    '@yearly': '0 0 1 1 *',
-    '@monthly': '0 0 1 * *',
-    '@weekly': '0 0 * * 0',
-    '@hourly': '0 * * * *',
-  };
+  const entries = (presets[schedule] || schedule || '').split(' ');
 
-  const entries = (presets[schedule] || schedule || '')
-    .split(/\s+/g)
-    .filter(e => e);
+  const inputNames = ['minute', 'hour', 'day-of-month', 'month', 'day-of-week'];
 
   return (
     <>
-      <ResourceForm.FormField
-        required
-        label={t('cron-jobs.schedule')}
-        input={() => (
-          <Inputs.Text value={schedule} setValue={setSchedule} required />
-        )}
-      />
-      <div className="schedule-editor">
+      {inputNames.map((name, i) => (
         <TimeInput
           entries={entries}
-          index={0}
-          name="minute"
+          index={i}
+          key={i}
+          name={name}
           setSchedule={setSchedule}
         />
-        <TimeInput
-          entries={entries}
-          index={1}
-          name="hour"
-          setSchedule={setSchedule}
-        />
-        <TimeInput
-          entries={entries}
-          index={2}
-          name="day-of-month"
-          setSchedule={setSchedule}
-        />
-        <TimeInput
-          entries={entries}
-          index={3}
-          name="month"
-          setSchedule={setSchedule}
-        />
-        <TimeInput
-          entries={entries}
-          index={4}
-          name="day-of-week"
-          setSchedule={setSchedule}
-        />
-      </div>
+      ))}
       {!isCronExpressionValid(schedule) && (
         <MessageStrip type="error" className="fd-margin-top--sm">
           {t('cron-jobs.create-modal.parse-error')}
