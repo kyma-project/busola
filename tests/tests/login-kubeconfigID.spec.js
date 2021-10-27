@@ -5,8 +5,7 @@ import { loadKubeconfig } from '../support/loadKubeconfigFile';
 
 context('Login - kubeconfigID', () => {
   it('Adds cluster by kubeconfigID', () => {
-    const kubeconfigIdAddress =
-      'https://kyma-env-broker.cp.dev.kyma.cloud.sap/kubeconfig';
+    const kubeconfigIdAddress = `${config.clusterAddress}/kubeconfig`;
     cy.wrap(loadKubeconfig()).then(kubeconfig => {
       cy.intercept(
         {
@@ -21,8 +20,7 @@ context('Login - kubeconfigID', () => {
   });
 
   it('Gracefully fails on invalid input', () => {
-    const kubeconfigIdAddress =
-      'https://kyma-env-broker.cp.dev.kyma.cloud.sap/kubeconfig';
+    const kubeconfigIdAddress = `${config.clusterAddress}/kubeconfig`;
     cy.intercept(
       {
         method: 'GET',
