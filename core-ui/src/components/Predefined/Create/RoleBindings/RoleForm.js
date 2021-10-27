@@ -12,7 +12,6 @@ export const RoleForm = ({
   handleRoleChange,
 }) => {
   const { t } = useTranslation();
-
   if (loading) return 'Loading...';
   if (error) return error.message;
 
@@ -39,11 +38,8 @@ export const RoleForm = ({
           })}
           options={allRoles}
           selectedKey={selectedRole}
-          selectionType="auto-inline"
+          selectionType="manual"
           onSelectionChange={(_, selected) => handleRoleChange(selected)}
-          inputProps={{
-            autoComplete: 'nope',
-          }}
           {...props}
         />
       )}
