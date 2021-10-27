@@ -30,11 +30,13 @@ export default function ServicesBoundModal({ binding, appSpec }) {
           ))}
         {/* ApplicationMapping spec is not empty */}
         {binding.spec?.services?.length &&
-          binding.spec?.services?.map(s => (
-            <li key={s.id}>
-              <ServiceListItem service={s} />
-            </li>
-          ))}
+          appSpec.services
+            ?.filter(svc => binding.spec.services.find(s => s.id === svc.id))
+            .map(s => (
+              <li key={s.id}>
+                <ServiceListItem service={s} />
+              </li>
+            ))}
 
         {binding.spec?.services?.length && !binding.spec?.services?.length && (
           <p>{t('applications.messages.no-bound-service')}</p>

@@ -35,8 +35,9 @@ export default function NamespaceBindings(application) {
 
   const rowRenderer = binding => [
     <ServicesBoundModal binding={binding} appSpec={spec} />,
-    `${binding.spec?.services?.length ||
-      totalBindingsCount}/${totalBindingsCount}`,
+    `${
+      binding.spec?.services?.length === 0 ? 0 : totalBindingsCount
+    }/${totalBindingsCount}`,
   ];
 
   const actions = [

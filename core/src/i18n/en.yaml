@@ -94,8 +94,8 @@ applications:
     namespace: Choose Namespace.
   subtitle:
     bound-to: Services and events bound to '{{namespace}}'.
-    connect-app: Connect Application.
-    create-app: Create Application.
+    connect-app: Connect Application
+    create-app: Create Application
     create-binding: Create Namespace Binding
     edit-binding: Edit ServiceClass Binding in '{{namespace}}'.
     namespace-bindings: Namespace Bindings
