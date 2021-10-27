@@ -11,7 +11,9 @@ export function BindableServicesList({
   const { t } = useTranslation();
 
   if (!services) services = [];
-  const [allServices, setAllServices] = React.useState(!services.length);
+  const [allServices, setAllServices] = React.useState(
+    services.length === 0 || services.length === availableServices.length,
+  );
 
   const [servicesList, setServicesList] = React.useState(
     availableServices.map(s => ({

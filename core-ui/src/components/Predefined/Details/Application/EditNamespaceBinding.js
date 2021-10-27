@@ -41,7 +41,7 @@ export default function EditNamespaceBinding({ application, binding }) {
       })}
       modalOpeningComponent={modalOpeningComponent}
       onConfirm={updateBinding}
-      onShow={() => setServicesToBind(binding?.spec.services)}
+      onShow={() => setServicesToBind(binding.spec?.services)}
       i18n={i18n}
     >
       <FormFieldset>
