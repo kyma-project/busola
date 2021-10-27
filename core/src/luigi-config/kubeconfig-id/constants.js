@@ -26,7 +26,7 @@ export const DEFAULT_FEATURES = {
   ),
   KUBECONFIG_ID: {
     config: {
-      kubeconfigUrl: '',
+      kubeconfigUrl: '/kubeconfig',
     },
   },
   SSO_LOGIN: {
