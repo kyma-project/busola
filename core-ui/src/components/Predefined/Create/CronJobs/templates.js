@@ -42,6 +42,9 @@ export function createPresets(namespace, translate) {
         metadata: {
           name: 'hello',
           namespace,
+          labels: {
+            'app.kubernetes.io/name': 'hello',
+          },
         },
         spec: {
           schedule: '*/1 * * * *',
