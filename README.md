@@ -42,7 +42,6 @@ Busola is delivered with the following default settings:
 
 | Parameter                  | Comment                                                                                                                                           | Default Value                                                                                                                                                                                           |
 | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `kubeconfig`               | The kubeconfig as JSON                                                                                                                            | `null`                                                                                                                                                                                                  |
 | `hiddenNamespaces`         | A list of Namespace names that are considered system, and are hidden by default.                                                                  | default list: `istio-system`, `kube-public`, `kube-system`, `kyma-backup`, `kyma-installer`, `kyma-integration`, `kyma-system`, `natss`, `kube-node-lease`, `kubernetes-dashboard`, `serverless-system` |
 | `features`                 | Switches a set of Busola features on and off. Use selectors to configure conditions for the features. To switch them off, set `isEnabled=false`.  | `isEnabled=true`                                                                                                                                                                                        |
 | `navigation.disabledNodes` | Array of IDs of navigation nodes that are hidden from navigation. Format: `<category>.<nodeName>` or `<namespace>.<category>.<nodeName>`)         | empty                                                                                                                                                                                                   |
@@ -114,6 +113,16 @@ When developing new features in Busola UI, adhere to the following rules. This w
 ### Run tests
 
 For the information on how to run tests and configure them, go to the [`tests`](tests) directory.
+
+## Busola in Docker: adding a cluster via kubeconfig ID
+
+In case of Busola in Docker, you can mount your kubeconfig as a bind mount for Busola container.
+
+```bash
+docker run --rm -it -p 3001:3001 -v ./my-kubeconfig.yaml:/app/kubeconfig/my-kubeconfig.yaml --pid=host --name busola eu.gcr.io/kyma-project/busola:latest
+```
+
+When you open Busola in your browser, go to `http://localhost:3001?kubeconfigID=<your file name here>`. Busola will try to download that file and add it for your Busola instance.
 
 ## Troubleshooting
 

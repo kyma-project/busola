@@ -33,6 +33,7 @@ export async function getKubeconfigById(kubeconfigId) {
 
   const url = join(kubeconfigIdFeature.config.kubeconfigUrl, kubeconfigId);
   const responseText = await fetch(url).then(res => res.text());
+  console.log('responseText', responseText);
   const payload = jsyaml.load(responseText);
 
   if (payload.Error) {
