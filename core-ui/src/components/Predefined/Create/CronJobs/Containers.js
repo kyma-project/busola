@@ -14,7 +14,7 @@ export function SingleContainerForm({
 }) {
   const { t } = useTranslation();
 
-  const options = ['IfNotPresent', 'Always', 'Never'].map(o => ({
+  const imagePullPolicyOptions = ['IfNotPresent', 'Always', 'Never'].map(o => ({
     key: o,
     text: o,
   }));
@@ -42,7 +42,7 @@ export function SingleContainerForm({
           propertyPath="$.imagePullPolicy"
           label={t('cron-jobs.image-pull-policy')}
           input={Inputs.Dropdown}
-          options={options}
+          options={imagePullPolicyOptions}
         />
       )}
       <ResourceForm.TextArrayInput

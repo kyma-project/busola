@@ -18,8 +18,6 @@ export function createEmptyCronJobTemplate(namespace) {
           },
         },
       },
-      successfulJobsHistoryLimit: 3,
-      failedJobsHistoryLimit: 1,
       concurrencyPolicy: 'Allow',
     },
   };
@@ -79,8 +77,6 @@ function createCronJobTemplate(namespace, schedule) {
         },
       },
     },
-    successfulJobsHistoryLimit: 3,
-    failedJobsHistoryLimit: 1,
     concurrencyPolicy: 'Allow',
   };
 }

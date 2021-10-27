@@ -462,9 +462,9 @@ cron-jobs:
       args: Arguments to the entrypoint.
       command: Command to run in a container.
       docker-image: Enter the Docker image tag, for example, 'busybox'.
-      failed-jobs-history-limit: The number of failed finished jobs to retain.
+      failed-jobs-history-limit: The number of failed finished jobs to retain. Defaults to 1.
       starting-deadline: Optional deadline in seconds.
-      successful-jobs-history-limit: The number of successful finished jobs to retain.
+      successful-jobs-history-limit: The number of successful finished jobs to retain. Defaults to 3.
     presets:
       daily: Daily
       weekly: Weekly
