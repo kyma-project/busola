@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 
@@ -33,11 +33,9 @@ export function CronJobsCreate({
 }) {
   const { t } = useTranslation();
 
-  const [cronJob, setCronJob] = React.useState(
-    createEmptyCronJobTemplate(namespace),
-  );
+  const [cronJob, setCronJob] = useState(createEmptyCronJobTemplate(namespace));
 
-  React.useEffect(() => {
+  useEffect(() => {
     setCustomValid(isCronJobValid(cronJob));
   }, [cronJob, setCustomValid]);
 
