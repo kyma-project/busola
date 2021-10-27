@@ -469,7 +469,8 @@ cron-jobs:
       daily: Daily
       weekly: Weekly
     tooltips:
-      args: Docker image CMD is used if arguments are not provided.
+      args: Docker image CMD is used if arguments are not provided. Provide either args or command.
+      command: The docker image's ENTRYPOINT is used if this is not provided. Provide either args or command.
       day-of-month: 1 to 31
       day-of-week: 0 to 7 (0 and 7 represent Sunday) or three-letter day abbreviations (like MON, TUE)
       hour: 0 to 23 (always UTC)

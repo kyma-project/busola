@@ -46,12 +46,15 @@ export function SingleContainerForm({
         />
       )}
       <ResourceForm.TextArrayInput
+        required
         propertyPath="$.command"
         title={t('cron-jobs.command')}
         placeholder={t('cron-jobs.create-modal.placeholders.command')}
+        tooltipContent={t('cron-jobs.create-modal.tooltips.command')}
       />
       {advanced && (
         <ResourceForm.TextArrayInput
+          required
           propertyPath="$.args"
           title={t('cron-jobs.args')}
           placeholder={t('cron-jobs.create-modal.placeholders.args')}
