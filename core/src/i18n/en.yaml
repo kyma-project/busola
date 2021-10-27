@@ -96,10 +96,10 @@ applications:
     bound-to: Services and events bound to '{{namespace}}'.
     connect-app: Connect Application.
     create-app: Create Application.
-    create-binding: Create Namespace Binding.
+    create-binding: Create Namespace Binding
     edit-binding: Edit ServiceClass Binding in '{{namespace}}'.
-    namespace-bindings: Namespace Bindings.
-    provided-services: Provided Services and events.
+    namespace-bindings: Namespace Bindings
+    provided-services: Provided Services and events
   title: Applications
 brokers:
   headers:

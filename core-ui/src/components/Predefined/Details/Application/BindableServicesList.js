@@ -49,7 +49,7 @@ export function BindableServicesList({
       </FormItem>
       {!allServices && (
         <ul>
-          {servicesList.map(service => {
+          {servicesList.map((service, index) => {
             return (
               <li key={service.id} className="fd-has-display-flex">
                 <Checkbox
@@ -59,6 +59,7 @@ export function BindableServicesList({
                     service.isChecked = !service.isChecked;
                     setServicesList([...servicesList]);
                   }}
+                  aria-label={'service-' + index}
                 />
                 <ServiceListItem service={service} />
               </li>
