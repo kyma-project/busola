@@ -7,7 +7,7 @@ import * as Inputs from 'shared/ResourceForm/components/Inputs';
 
 import {
   createContainerTemplate,
-  createEmptyCronJobTemplate,
+  createCronJobTemplate,
   createPresets,
 } from './templates';
 import { SingleContainerForm, SingleContainerInput } from './Containers';
@@ -33,7 +33,7 @@ export function CronJobsCreate({
 }) {
   const { t } = useTranslation();
 
-  const [cronJob, setCronJob] = useState(createEmptyCronJobTemplate(namespace));
+  const [cronJob, setCronJob] = useState(createCronJobTemplate(namespace));
 
   useEffect(() => {
     setCustomValid(isCronJobValid(cronJob));

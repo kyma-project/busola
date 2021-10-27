@@ -1,4 +1,4 @@
-export function createEmptyCronJobTemplate(namespace) {
+export function createCronJobTemplate(namespace) {
   return {
     apiVersion: 'batch/v1beta1',
     kind: 'CronJob',
@@ -35,48 +35,40 @@ export function createContainerTemplate() {
 export function createPresets(namespace, translate) {
   return [
     {
-      name: translate('cron-jobs.create-modal.presets.daily'),
-      value: createCronJobTemplate(namespace, '0 0 * * *'),
-    },
-    {
-      name: translate('cron-jobs.create-modal.presets.weekly'),
-      value: createCronJobTemplate(namespace, '0 0 * * 1'),
-    },
-  ];
-}
-
-function createCronJobTemplate(namespace, schedule) {
-  return {
-    apiVersion: 'batch/v1beta1',
-    kind: 'CronJob',
-    metadata: {
-      name: 'hello',
-      namespace,
-    },
-    spec: {
-      schedule,
-      jobTemplate: {
+      name: translate('common.labels.default-preset'),
+      value: {
+        apiVersion: 'batch/v1beta1',
+        kind: 'CronJob',
+        metadata: {
+          name: 'hello',
+          namespace,
+        },
         spec: {
-          template: {
+          schedule: '*/1 * * * *',
+          jobTemplate: {
             spec: {
-              containers: [
-                {
-                  name: 'hello',
-                  image: 'busybox',
-                  imagePullPolicy: 'IfNotPresent',
-                  command: [
-                    '/bin/sh',
-                    '-c',
-                    'date; echo Hello from the Kubernetes cluster',
+              template: {
+                spec: {
+                  containers: [
+                    {
+                      name: 'hello',
+                      image: 'busybox',
+                      imagePullPolicy: 'IfNotPresent',
+                      command: [
+                        '/bin/sh',
+                        '-c',
+                        'date; echo Hello from the Kubernetes cluster',
+                      ],
+                    },
                   ],
+                  restartPolicy: 'OnFailure',
                 },
-              ],
-              restartPolicy: 'OnFailure',
+              },
             },
           },
         },
+        concurrencyPolicy: 'Allow',
       },
     },
-    concurrencyPolicy: 'Allow',
-  };
+  ];
 }

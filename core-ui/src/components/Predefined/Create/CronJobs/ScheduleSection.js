@@ -5,6 +5,7 @@ import { toString as cRonstrue } from 'cronstrue/i18n';
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import { MessageStrip } from 'fundamental-react';
 import * as Inputs from 'shared/ResourceForm/components/Inputs';
+import { Presets } from 'shared/ResourceForm/components/Presets';
 
 const presets = {
   '@yearly': '0 0 1 1 *',
@@ -89,9 +90,41 @@ function ScheduleEditor({ schedule, setSchedule }) {
 
 export function ScheduleSection({ value: schedule, setValue: setSchedule }) {
   const { t, i18n } = useTranslation();
+
+  const schedulePresets = [
+    {
+      name: t('cron-jobs.create-modal.presets.yearly'),
+      value: '0 0 1 1 *',
+    },
+    {
+      name: t('cron-jobs.create-modal.presets.monthly'),
+      value: '0 0 1 * *',
+    },
+    {
+      name: t('cron-jobs.create-modal.presets.weekly'),
+      value: '0 0 * * 0',
+    },
+    {
+      name: t('cron-jobs.create-modal.presets.daily'),
+      value: '0 0 * * *',
+    },
+    {
+      name: t('cron-jobs.create-modal.presets.hourly'),
+      value: '0 * * * *',
+    },
+  ];
+
+  const presets = (
+    <Presets
+      onSelect={({ value }) => setSchedule(value)}
+      presets={schedulePresets}
+    />
+  );
+
   return (
     <ResourceForm.CollapsibleSection
       title={`${t('cron-jobs.schedule')}: ${readableSchedule(schedule, i18n)}`}
+      actions={presets}
       defaultOpen
     >
       <ScheduleEditor schedule={schedule} setSchedule={setSchedule} />

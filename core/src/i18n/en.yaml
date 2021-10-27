@@ -467,7 +467,10 @@ cron-jobs:
       successful-jobs-history-limit: The number of successful finished jobs to retain. Defaults to 3.
     presets:
       daily: Daily
+      hourly: Hourly
+      monthly: Monthly
       weekly: Weekly
+      yearly: Yearly
     tooltips:
       args: Docker image CMD is used if arguments are not provided. Provide either args or command.
       command: The docker image's ENTRYPOINT is used if this is not provided. Provide either args or command.
