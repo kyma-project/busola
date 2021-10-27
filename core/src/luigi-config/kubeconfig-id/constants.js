@@ -26,7 +26,7 @@ export const DEFAULT_FEATURES = {
   ),
   KUBECONFIG_ID: {
     config: {
-      kubeconfigUrl: 'https://kyma-env-broker.cp.dev.kyma.cloud.sap/kubeconfig',
+      kubeconfigUrl: '',
     },
   },
   SSO_LOGIN: {

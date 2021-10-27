@@ -6,7 +6,7 @@ const uuid = require('uuid').v4;
 import { handleDockerDesktopSubsitution } from './docker-desktop-substitution';
 import { filters } from './request-filters';
 
-const logger = require('pino-http')({
+export const logger = require('pino-http')({
   autoLogging: process.env.NODE_ENV === 'production', //to disable the automatic "request completed" and "request errored" logging.
   genReqId: req => {
     req.id = uuid();
