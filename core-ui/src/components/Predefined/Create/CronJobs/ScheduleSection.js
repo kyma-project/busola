@@ -84,6 +84,12 @@ function ScheduleEditor({ schedule, setSchedule }) {
           {t('cron-jobs.create-modal.parse-error')}
         </MessageStrip>
       )}
+      <p
+        className="fd-margin-top--sm"
+        style={{ color: 'var(--sapNeutralTextColor)' }}
+      >
+        {t('cron-jobs.create-modal.schedule-description')}
+      </p>
     </>
   );
 }
