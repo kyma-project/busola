@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { Spinner } from 'react-shared';
 import { ComboboxInput } from 'fundamental-react';
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import { useTranslation } from 'react-i18next';
@@ -12,7 +13,7 @@ export const RoleForm = ({
   handleRoleChange,
 }) => {
   const { t } = useTranslation();
-  if (loading) return 'Loading...';
+  if (loading) return <Spinner compact={true} />;
   if (error) return error.message;
 
   const selectedRole =
