@@ -61,7 +61,7 @@ export function BindableServicesList({
                     service.isChecked = !service.isChecked;
                     setServicesList([...servicesList]);
                   }}
-                  aria-label={'service-' + index}
+                  aria-label={service.displayName + ' Chceckbox'}
                 />
                 <ServiceListItem service={service} />
               </li>
