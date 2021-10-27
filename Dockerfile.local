@@ -21,9 +21,9 @@ RUN make resolve
 RUN make lint
 RUN make pull-licenses
 
-RUN cd /app/core && make build-docker
-# RUN cd /app/service-catalog-ui && make test && make build
-RUN cd /app/core-ui && make build
+RUN cd /app/core && make test && make build-docker
+RUN cd /app/service-catalog-ui && make test && make build
+RUN cd /app/core-ui && make test && make build
 RUN cd /app/backend && npm run build
 
 # ---- Serve ----
@@ -37,7 +37,7 @@ WORKDIR /app
 
 COPY --from=builder /app/core/src /app/core
 COPY --from=builder /app/core-ui/build /app/core-ui
-# COPY --from=builder /app/service-catalog-ui/build /app/service-catalog-ui
+COPY --from=builder /app/service-catalog-ui/build /app/service-catalog-ui
 COPY --from=builder /app/backend/backend-production.js /app/backend-production.js
 COPY --from=builder /app/backend/certs.pem /app/certs.pem
 COPY --from=builder /app/backend/package* /app/
