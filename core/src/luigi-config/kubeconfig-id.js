@@ -27,6 +27,12 @@ export async function getKubeconfigById(kubeconfigId) {
     ...DEFAULT_FEATURES,
     ...clusterParams.config?.features,
   }['KUBECONFIG_ID'];
+  alert('1', Object.keys(DEFAULT_FEATURES).includes('KUBECONFIG_ID'));
+  alert(
+    '2',
+    Object.keys(clusterParams.config?.features || {}).includes('KUBECONFIG_ID'),
+  );
+  alert('3', kubeconfigIdFeature);
   console.log('resolved', JSON.stringify(kubeconfigIdFeature));
 
   if (!(await resolveFeatureAvailability(kubeconfigIdFeature))) {
