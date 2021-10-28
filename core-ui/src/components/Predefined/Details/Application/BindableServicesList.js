@@ -11,7 +11,9 @@ export function BindableServicesList({
   const { t } = useTranslation();
 
   if (!services) services = [];
-  const [allServices, setAllServices] = React.useState(!services.length);
+  const [allServices, setAllServices] = React.useState(
+    services.length === 0 || services.length === availableServices.length,
+  );
 
   const [servicesList, setServicesList] = React.useState(
     availableServices.map(s => ({
@@ -49,7 +51,7 @@ export function BindableServicesList({
       </FormItem>
       {!allServices && (
         <ul>
-          {servicesList.map(service => {
+          {servicesList.map((service, index) => {
             return (
               <li key={service.id} className="fd-has-display-flex">
                 <Checkbox
@@ -59,6 +61,7 @@ export function BindableServicesList({
                     service.isChecked = !service.isChecked;
                     setServicesList([...servicesList]);
                   }}
+                  aria-label={service.displayName + ' Chceckbox'}
                 />
                 <ServiceListItem service={service} />
               </li>
