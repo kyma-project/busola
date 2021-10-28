@@ -1,7 +1,11 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
-import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+import { EMPTY_TEXT_PLACEHOLDER, Tooltip } from 'react-shared';
 import { Link } from 'fundamental-react';
+
+const shortRoleKind = roleRefKind => {
+  return roleRefKind === 'ClusterRole' ? '(CR)' : '(R)';
+};
 
 export function RoleRef({ roleRef }) {
   if (!roleRef) {
@@ -21,8 +25,14 @@ export function RoleRef({ roleRef }) {
   };
 
   return (
-    <Link className="fd-link" onClick={() => navigateToRoleDetails()}>
-      {roleRef.kind + ' ' + roleRef.name}
-    </Link>
+    <div>
+      <Link className="fd-link" onClick={() => navigateToRoleDetails()}>
+        {roleRef.name}
+      </Link>
+      <Tooltip delay={0} content={roleRef.kind}>
+        {' '}
+        {shortRoleKind(roleRef.kind)}
+      </Tooltip>
+    </div>
   );
 }
