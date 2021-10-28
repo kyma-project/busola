@@ -1,104 +1,106 @@
 import React, { useEffect, useState } from 'react';
+import { useNotification } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
-import { MessageStrip } from 'fundamental-react';
+import LuigiClient from '@luigi-project/client';
 
-import { useGetList } from 'react-shared';
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/components/Inputs';
+import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSelect';
 import {
   K8sNameField,
   KeyValueField,
   FormField,
 } from 'shared/ResourceForm/components/FormComponents';
+import { isGitUrl } from 'components/Lambdas/helpers/repositories';
 
-// import { createFunctionTemplate, createPresets } from './helpers';
-import { REPOSITORIES_LIST } from 'components/Lambdas/constants';
+import { createRepositoryTemplate } from './helpers';
 
-export function GitRepositoriesCreate({
+function GitRepositoriesCreate({
   namespace,
   formElementRef,
   onChange,
   resourceUrl,
 }) {
   const { t } = useTranslation();
-  const [repository, setRepository] = useState({});
-  /*
-  const {
-    data: repositories,
-    // error: repositoriesError,
-    // loading: repositoriesLoading = true,
-  } = useGetList()(
-    `/apis/serverless.kyma-project.io/v1alpha1/namespaces/${namespace}/gitrepositories`,
-    { pollingInterval: 10000 },
+  const notification = useNotification();
+  const [repository, setRepository] = useState(
+    createRepositoryTemplate(namespace),
   );
 
-  const type = jp.value(func, '$.spec.type');
+  const authType = jp.value(repository, '$.spec.auth.type');
+  const url = jp.value(repository, '$.spec.url');
 
-  const runtimeOptions = Object.entries(functionAvailableLanguages).map(
-    ([runtime, lang]) => ({
-      key: runtime,
-      text: lang,
-    }),
-  );
+  useEffect(() => {
+    if (!authType) {
+      jp.value(repository, '$.spec.auth', undefined);
+      setRepository({ ...repository });
+    }
+  }, [authType]); //eslint-disable-line react-hooks/exhaustive-deps
 
-  const sourceTypeOptions = [
+  const authTypeOptions = [
     {
       key: '',
-      text: t('functions.create-view.labels.inline-editor'),
+      text: t('git-repositories.auth.public'),
     },
     {
-      key: 'git',
-      text: t('functions.create-view.labels.git-repository'),
+      key: 'basic',
+      text: t('git-repositories.auth.basic'),
+    },
+    {
+      key: 'key',
+      text: t('git-repositories.auth.ssh-key'),
     },
   ];
 
-  const repositoryOptions = repositories?.map(repository => ({
-    key: repository.metadata.name,
-    text: `${repository.metadata.name} (${repository.spec.url})`,
-  }));
-
-  useEffect(() => {
-    if (!type) {
-      jp.value(func, '$.spec.source', '');
-      jp.value(func, '$.spec.deps', '');
-      jp.value(func, '$.spec.reference', undefined);
-      jp.value(func, '$.spec.baseDir', undefined);
-    } else if (type === 'git') {
-      jp.value(
-        func,
-        '$.spec.source',
-        repositoryOptions.length ? repositoryOptions[0].key : undefined,
-      );
-      jp.value(func, '$.spec.deps', undefined);
-      jp.value(func, '$.spec.reference', 'main');
-      jp.value(func, '$.spec.baseDir', '/');
+  function validateRepositoryUrl() {
+    if (!url) {
+      return;
     }
-    setFunc({ ...func });
-  }, [type]); //eslint-disable-line react-hooks/exhaustive-deps
-  */
 
-  const authTypeOptions = REPOSITORIES_LIST.MODAL_INPUTS.AUTH_TYPE.OPTIONS.map(
-    option => ({
-      key: option.KEY,
-      text: option.VALUE,
-    }),
-  );
+    const isCorrectUrl = isGitUrl(url);
+    if (!isCorrectUrl) {
+      return t('functions.repository-list.errors.invalid-url');
+    }
+  }
+
+  const getUrlValidationState = () => {
+    const message = validateRepositoryUrl();
+    if (message) {
+      return {
+        state: 'error',
+        text: message,
+      };
+    } else {
+      return null;
+    }
+  };
 
   return (
     <ResourceForm
       className="create-function-form"
-      pluralKind="functions"
+      pluralKind="gitrepositories"
       singularName={t('git-repositories.name_singular')}
       resource={repository}
       setResource={setRepository}
       onChange={onChange}
       formElementRef={formElementRef}
       createUrl={resourceUrl}
+      afterCreatedFn={() => {
+        notification.notifySuccess({
+          content: t('common.create-form.messages.create-success', {
+            resourceType: t('git-repositories.name_singular'),
+          }),
+        });
+
+        LuigiClient.linkManager()
+          .fromContext('namespace')
+          .navigate('/gitrepositories');
+      }}
     >
       <K8sNameField
         propertyPath="$.metadata.name"
-        kind={t('functions.name_singular')}
+        kind={t('git-repositories.name_singular')}
         setValue={name => {
           jp.value(repository, '$.metadata.name', name);
           jp.value(
@@ -123,73 +125,50 @@ export function GitRepositoriesCreate({
         required
         propertyPath="$.spec.url"
         label={t('functions.repository-list.labels.url')}
-        // tooltipContent={t('functions.create-view.inline-help.reference')}
-        // placeholder={t('functions.placeholders.reference')}
+        tooltipContent={t('functions.repository-list.inline-help.url')}
+        placeholder={t('git-repositories.placeholders.url')}
         input={Inputs.Text}
+        validationState={getUrlValidationState()}
       />
       <FormField
         required
-        propertyPath="$.spec.url"
+        propertyPath="$.spec.auth.type"
         label={t('functions.repository-list.labels.auth')}
-        // tooltipContent={t('functions.create-view.inline-help.reference')}
-        // placeholder={t('functions.placeholders.reference')}
+        tooltipContent={t('functions.repository-list.inline-help.auth')}
         input={Inputs.Dropdown}
         options={authTypeOptions}
+        value={authType || ''}
       />
-      {/*
-      <FormField
-        advanced
-        required
-        propertyPath="$.spec.type"
-        label={t('functions.headers.source-type')}
-        input={Inputs.Dropdown}
-        options={sourceTypeOptions}
-      />
-      {func?.spec?.type === 'git' && !repositories.length && (
-        <MessageStrip advanced className='fd-margin-top--sm' dismissible={false} type="warning">
-          {t('functions.create-view.errors.no-repository-found')}
-        </MessageStrip>
+      {!!authType && (
+        <FormField
+          required
+          propertyPath="$.spec.auth.secretName"
+          label={t('functions.repository-list.labels.secret-name')}
+          tooltipContent={'git-repositories.tooltips.secret-name'}
+          input={({ value, setValue }) => (
+            <K8sResourceSelectWithUseGetList
+              compact
+              required
+              value={value}
+              resourceType={t('functions.repository-list.labels.secret-name')}
+              onSelect={setValue}
+              url={`/api/v1/namespaces/${namespace}/secrets`}
+            />
+          )}
+        />
       )}
-      {func?.spec?.type === 'git' && repositories.length && (
-        <>
-          <FormField
-            advanced
-            required
-            propertyPath="$.spec.source"
-            label={t('functions.create-view.labels.repository')}
-            input={Inputs.Dropdown}
-            options={repositoryOptions}
-          />
-          <FormField
-            advanced
-            required
-            propertyPath="$.spec.reference"
-            label={t('functions.create-view.labels.reference')}
-            tooltipContent={t('functions.create-view.inline-help.reference')}
-            placeholder={t('functions.placeholders.reference')}
-            input={Inputs.Text}
-          />
-          <FormField
-            advanced
-            required
-            propertyPath="$.spec.baseDir"
-            label={t('functions.create-view.labels.base-directory')}
-            tooltipContent={t(
-              'functions.create-view.inline-help.base-directory',
-  const authTypeOptions = REPOSITORIES_LIST.MODAL_INPUTS.AUTH_TYPE.OPTIONS.map(
-    option => ({
-      key: option.KEY,
-      text: option.VALUE,
-    }),
-  );
-
-            )}
-            placeholder={t('functions.placeholders.base-directory')}
-            input={Inputs.Text}
-          />
-        </>
-      )}
-      */}
     </ResourceForm>
   );
 }
+GitRepositoriesCreate.secrets = (t, context) => [
+  {
+    title: t('git-repositories.secret-basic'),
+    data: ['username', 'password'],
+  },
+  {
+    title: t('git-repositories.secret-ssh-key'),
+    data: ['key'],
+  },
+];
+
+export { GitRepositoriesCreate };

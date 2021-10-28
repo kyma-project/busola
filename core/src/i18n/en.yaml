@@ -853,11 +853,21 @@ gateways:
 generic-list:
   no-entries-found: No entries found
 git-repositories:
+  auth:
+    basic: Basic
+    public: Public
+    ssh-key: SSH Key
   headers:
     authentication: Authentication
     secret: Secret
     url: Repository URL
+  name_singular: Git Repository
+  placeholders:
+    secret-name: Enter a Secret name with credentials
+    url: Enter the URL address of your Git repository
   title: Git Repositories
+  tooltips:
+    secret-name: The name of the Secret with credentials used by the Function Controller to authenticate to the Git repository in order to fetch the Function's source code and dependencies
 instances:
   no-specific-plan-parameters:
     tooltip: The service provider did not define specific parameters for the selected plan. Refer to the documentation to learn about the required parameters, and define them as a JSON in the editor.
