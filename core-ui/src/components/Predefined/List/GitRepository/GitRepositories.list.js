@@ -39,5 +39,11 @@ export const GitRepositoriesList = ({ DefaultRenderer, ...otherParams }) => {
     },
   ];
 
-  return <DefaultRenderer customColumns={customColumns} {...otherParams} />;
+  return (
+    <DefaultRenderer
+      customColumns={customColumns}
+      createActionLabel={t('git-repositories.labels.create')}
+      {...otherParams}
+    />
+  );
 };

@@ -843,6 +843,7 @@ git-repositories:
     invalid-url: Invalid Repository URL. The URL must start with the "http(s)", "git", or "ssh" prefix and end with the ".git" suffix.
   labels:
     auth: Authentication
+    create: Connect Repository
     secret: Secret
     url: Repository URL
   name_singular: Git Repository
