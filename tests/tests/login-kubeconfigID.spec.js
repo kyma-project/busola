@@ -6,12 +6,30 @@ import { loadKubeconfig } from '../support/loadKubeconfigFile';
 const kubeconfigIdAddress = `${config.clusterAddress}/kubeconfig`;
 
 context('Login - kubeconfigID', () => {
-  it('Adds cluster by kubeconfigID', () => {
+  it('Uses custom kubeconfig URL', () => {
     cy.wrap(loadKubeconfig()).then(kubeconfig => {
+      const customKubeconfigUrl = 'http://example.com/kubeconfig';
       cy.intercept(
         {
           method: 'GET',
-          url: `${kubeconfigIdAddress}/*`,
+          url: '/assets/config/config.json*',
+        },
+        JSON.stringify({
+          config: {
+            features: {
+              KUBECONFIG_ID: {
+                config: {
+                  kubeconfigUrl: customKubeconfigUrl,
+                },
+              },
+            },
+          },
+        }),
+      );
+      cy.intercept(
+        {
+          method: 'GET',
+          url: `${customKubeconfigUrl}/*`,
         },
         kubeconfig,
       );
@@ -20,30 +38,12 @@ context('Login - kubeconfigID', () => {
     });
   });
 
-  it('Uses custom kubeconfig URL', () => {
-    const customKubeconfigUrl = 'http://example.com/kubeconfig';
-    const requestData = {
-      method: 'GET',
-      url: '/assets/config/config.json*',
-    };
-    const configMock = JSON.stringify({
-      config: {
-        features: {
-          KUBECONFIG_ID: {
-            config: {
-              kubeconfigUrl: customKubeconfigUrl,
-            },
-          },
-        },
-      },
-    });
-    cy.intercept(requestData, configMock);
-
+  it('Adds cluster by kubeconfigID', () => {
     cy.wrap(loadKubeconfig()).then(kubeconfig => {
       cy.intercept(
         {
           method: 'GET',
-          url: `${customKubeconfigUrl}/*`,
+          url: `${kubeconfigIdAddress}/*`,
         },
         kubeconfig,
       );

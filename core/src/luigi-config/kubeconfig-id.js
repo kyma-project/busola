@@ -20,11 +20,14 @@ export async function getKubeconfigById(kubeconfigId) {
   }
 
   const clusterParams = await getBusolaClusterParams();
+  console.log('default', JSON.stringify(DEFAULT_FEATURES));
+  console.log('cluster', JSON.stringify(clusterParams.config?.features));
 
   const kubeconfigIdFeature = {
     ...DEFAULT_FEATURES,
     ...clusterParams.config?.features,
   }['KUBECONFIG_ID'];
+  console.log('resolved', JSON.stringify(kubeconfigIdFeature));
 
   if (!(await resolveFeatureAvailability(kubeconfigIdFeature))) {
     return null;
