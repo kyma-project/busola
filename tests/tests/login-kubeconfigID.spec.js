@@ -6,38 +6,6 @@ import { loadKubeconfig } from '../support/loadKubeconfigFile';
 const kubeconfigIdAddress = `${config.clusterAddress}/kubeconfig`;
 
 context('Login - kubeconfigID', () => {
-  it.only('Uses custom kubeconfig URL', () => {
-    cy.wrap(loadKubeconfig()).then(kubeconfig => {
-      const customKubeconfigUrl = 'http://example.com/kubeconfig';
-      cy.intercept(
-        {
-          method: 'GET',
-          url: '/assets/config/config.json*',
-        },
-        JSON.stringify({
-          config: {
-            features: {
-              KUBECONFIG_ID: {
-                config: {
-                  kubeconfigUrl: customKubeconfigUrl,
-                },
-              },
-            },
-          },
-        }),
-      );
-      cy.intercept(
-        {
-          method: 'GET',
-          url: `${customKubeconfigUrl}/*`,
-        },
-        kubeconfig,
-      );
-      cy.visit(`${config.clusterAddress}/clusters?kubeconfigID=tests`);
-      cy.url().should('match', /namespaces$/);
-    });
-  });
-
   it('Adds cluster by kubeconfigID', () => {
     cy.wrap(loadKubeconfig()).then(kubeconfig => {
       cy.intercept(

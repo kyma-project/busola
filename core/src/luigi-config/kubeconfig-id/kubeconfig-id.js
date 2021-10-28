@@ -30,7 +30,6 @@ export async function saveQueryParamsIfPresent() {
   try {
     await setupFromParams();
   } catch (e) {
-    alert(e.message);
     alert(i18next.t('kubeconfig-id.error', { error: e.message }));
     console.warn(e);
   }
@@ -39,7 +38,7 @@ export async function saveQueryParamsIfPresent() {
 async function setupFromParams() {
   const searchParams = new URL(location).searchParams;
   const kubeconfigId = searchParams.get('kubeconfigID');
-  alert(kubeconfigId);
+
   const kubeconfig = await getKubeconfigById(kubeconfigId);
   if (!kubeconfig) {
     return null;
