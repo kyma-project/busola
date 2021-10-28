@@ -480,7 +480,7 @@ cron-jobs:
       hour: 0 to 23 (always UTC)
       minute: 0 to 59
       month: 1 to 12
-      starting-deadline: Optional deadline in seconds for starting the job if it misses scheduled time. Missed jobs executions will be counted as failed ones.
+      starting-deadline: Optional deadline in seconds for starting the job if it misses the scheduled time.
       suspend: If true, the controller suspends subsequent executions (default: false). It does not apply to started executions. 
   description: CronJobs are for regular scheduled actions. A CronJob object is like one line of a crontab file, running a job periodically on a given schedule.
   docker-image: Docker Image
