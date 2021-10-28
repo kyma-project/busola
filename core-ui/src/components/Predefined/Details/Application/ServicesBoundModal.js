@@ -32,8 +32,8 @@ export default function ServicesBoundModal({ binding, appSpec }) {
             ))}
 
         {/* ApplicationMapping spec is empty */}
-        {!binding.spec?.services?.length &&
-          binding.spec?.services?.length != 0 &&
+        {!binding.spec?.services &&
+          binding.spec?.services?.length !== 0 &&
           appSpec.services?.map(s => (
             <li key={s.id}>
               <ServiceListItem service={s} />
