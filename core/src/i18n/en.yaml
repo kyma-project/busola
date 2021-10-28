@@ -94,12 +94,12 @@ applications:
     namespace: Choose Namespace.
   subtitle:
     bound-to: Services and events bound to '{{namespace}}'.
-    connect-app: Connect Application.
-    create-app: Create Application.
-    create-binding: Create Namespace Binding.
+    connect-app: Connect Application
+    create-app: Create Application
+    create-binding: Create Namespace Binding
     edit-binding: Edit ServiceClass Binding in '{{namespace}}'.
-    namespace-bindings: Namespace Bindings.
-    provided-services: Provided Services and events.
+    namespace-bindings: Namespace Bindings
+    provided-services: Provided Services and events
   title: Applications
 brokers:
   headers:
@@ -305,6 +305,7 @@ common:
     message: Are you sure you want to delete {{type}} {{name}}?
     title: Delete {{name}}.
   errors:
+    error: Error
     no-permissions: You don't have enough permissions to view this content.
     no-permissions-header: Not enough permissions.
     no-permissions-message: Contact your administrator to grant you access.
@@ -321,6 +322,7 @@ common:
     status: Status
   labels:
     data: Data
+    default-preset: Default
     hostname: Hostname
     issuer: Issuer
     name: Name
@@ -431,24 +433,68 @@ config-maps:
     created: ConfigMap created.
     updated: ConfigMap updated.
   name_singular: ConfigMap
-  presets:
-    default: Default
   subtitle:
     edit-config-map: Edit ConfigMap
   title: ConfigMaps
 configuration:
   title: Configuration
 cron-jobs:
+  args: Args
+  command: Command
   concurrency-policy:
     descriptions:
       allow: Allow concurrent executions.
+      forbid: No concurrent executions, skip the new run if the previous one hasn't finished yet.
       replace: No concurrent executions, replace the previous run with the new one.
-      skip: No concurrent executions, skip the new run if the previous one hasn't finished yet.
+    label: Concurrency Policy
     title: Concurrency Policy
+  create-modal:
+    at-least-one-container-required: CronJob must have at least one container.
+    container: Container
+    containers: Containers
+    day-of-month: Day of Month
+    day-of-week: Day of Week
+    hour: Hour
+    minute: Minute
+    month: Month
+    parse-error: Error parsing CRON expression.
+    placeholders:
+      args: Arguments to the entrypoint.
+      command: Command to run in a container.
+      docker-image: Enter the Docker image tag, for example, 'busybox'.
+      failed-jobs-history-limit: 'The number of failed finished jobs to retain (default: 1).'
+      starting-deadline: Optional deadline in seconds.
+      successful-jobs-history-limit: 'The number of successful finished jobs to retain (default: 3).'
+    presets:
+      daily: Daily
+      hourly: Hourly
+      monthly: Monthly
+      weekly: Weekly
+      yearly: Yearly
+    schedule-description: You can specify ranges (like 1-4), multiple values (1, 2, 5), wildcard (*) or run the job every nth interval (*/3 for every 3rd interval).
+    tooltips:
+      args: Docker image CMD is used if arguments are not provided. Provide either args or command.
+      command: The docker image's ENTRYPOINT is used if this is not provided. Provide either args or command.
+      day-of-month: 1 to 31 or three-letter month abbreviations (like JAN, FEB)
+      day-of-week: 0 to 7 (0 and 7 represent Sunday) or three-letter day abbreviations (like MON, TUE)
+      hour: 0 to 23 (always UTC)
+      minute: 0 to 59
+      month: 1 to 12
+      starting-deadline: Optional deadline in seconds for starting the job if it misses the scheduled time.
+      suspend: 'If true, the controller suspends subsequent executions (default: false). It does not apply to started executions.'
+  description: CronJobs are for regular scheduled actions. A CronJob object is like one line of a crontab file, running a job periodically on a given schedule.
+  docker-image: Docker Image
+  failed-jobs-history-limit: Failed Jobs History Limit
+  image-pull-policy: Image Pull Policy
   last-job-execution: Last Job execution
   last-schedule-time: Last schedule time
+  name_singular: CronJob
   not-scheduled-yet: None scheduled yet
+  restart-policy: Restart Policy
   schedule: Schedule
+  starting-deadline: Starting Deadline
+  successful-jobs-history-limit: Successful Jobs History Limit
+  suspend: Suspend
   title: CronJobs
 custom-resource-definitions:
   headers:
@@ -503,8 +549,6 @@ deployments:
       target-port-placeholder: Enter the target port of the container.
     messages:
       deployment-ok-service-bad: 'Deployment created, failed to create the Service: {{error}}.'
-    presets:
-      default: Default
     simple:
       docker-image: Docker Image
       docker-image-placeholder: Enter the Docker image tag, for example, bitnami/nginx.
@@ -823,8 +867,6 @@ gateways:
         server-certificate: Server Certificate
         tls: TLS
     at-least-one-server-required: Gateway must have at least one server.
-    presets:
-      default: Default
     simple:
       selector: Selector
       server: Server
@@ -889,8 +931,6 @@ issuers:
     requests-per-day: Daily requests quota
     server: ACME Server URL
     type: Select issuer type
-  presets:
-    default: Default
   private-key: Private key Secret
   requests-per-day: Daily requests quota
   server: Server
@@ -1107,8 +1147,6 @@ secrets:
       decoding-failure: 'Failed to decode the Secret data: {{error}}.'
       failure: 'Failed to create the Secret: {{error}}.'
       success: Secret created.
-    presets:
-      default: Default
     title: Create Secret
   data: Data
   edit-modal:

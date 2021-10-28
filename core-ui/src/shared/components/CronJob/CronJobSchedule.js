@@ -10,7 +10,7 @@ export function CronJobSchedule({ schedule }) {
     tooltip = cRonstrue(schedule, { locale: i18n.language });
   } catch (e) {
     console.warn(`Schedule has a wrong type`, e);
-    tooltip = schedule;
+    tooltip = '';
   }
 
   return (
