@@ -89,3 +89,5 @@ backend/backend-production.*
 
 **/assets/**
 **/*.chunk.*
+
+**/public/**
