@@ -148,7 +148,7 @@ function GitRepositoriesCreate({
           required
           propertyPath="$.spec.auth.secretName"
           label={t('git-repositories.labels.secret')}
-          tooltipContent={'git-repositories.tooltips.secret'}
+          tooltipContent={t('git-repositories.tooltips.secret')}
           input={({ value, setValue }) => (
             <K8sResourceSelectWithUseGetList
               compact
