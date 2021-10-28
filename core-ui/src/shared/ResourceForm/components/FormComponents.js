@@ -104,7 +104,7 @@ export function Title({
       {!disabled && canChangeState && (
         <Icon className="control-icon" ariaHidden glyph={iconGlyph} />
       )}
-      <span class="title-content">{title}</span>
+      <span className="title-content">{title}</span>
       {tooltipContent && (
         <Tooltip className="info-tooltip" delay={0} content={tooltipContent}>
           <Icon ariaLabel="Tooltip" glyph="question-mark" />
@@ -329,6 +329,7 @@ export function TextArrayInput({
   isAdvanced,
   tooltipContent,
   sectionTooltipContent,
+  placeholder,
   ...props
 }) {
   return (
@@ -342,6 +343,7 @@ export function TextArrayInput({
       inputs={[
         ({ value, setValue, ref, onBlur, focus, index }) => (
           <FormInput
+            placeholder={Math.abs(index) === 1 ? placeholder : ''}
             key={index}
             compact
             value={value || ''}

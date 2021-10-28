@@ -20,7 +20,7 @@ export function Number({ value, setValue, ...props }) {
       compact
       type="number"
       value={value}
-      onChange={e => setValue(e.target.valueAsNumber)}
+      onChange={e => setValue(e.target.valueAsNumber || null)}
       {...props}
     />
   );
@@ -37,13 +37,13 @@ export function Switch({ value, setValue, ...props }) {
   );
 }
 
-export function Dropdown({ value, setValue, ...props }) {
+export function Dropdown({ value, defaultKey, setValue, ...props }) {
   const { i18n } = useTranslation();
   return (
     <BusolaDropown
       compact
       fullWidth
-      selectedKey={value}
+      selectedKey={value || defaultKey}
       onSelect={(_, selected) => setValue(selected.key)}
       i18n={i18n}
       {...props}
