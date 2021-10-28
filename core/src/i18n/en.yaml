@@ -358,7 +358,7 @@ common:
     download: Download
     duplicate-key: Duplicate key
     error: 'Error: '
-    k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' (e.g.: 'my-name1')."
+    k8s-name-input: 'Name must consist of lowercase alphanumeric characters, can contain ''-'' (e.g.: ''my-name1'').'
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: key=value, must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     read-file: Read file content as a single value, with file name as a key.
@@ -922,7 +922,7 @@ jobs:
   start-time: Start Time
   title: Jobs
 kubeconfig-id:
-  error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})."
+  error: 'Couldn''t load kubeconfig ID; configuration not changed (Error: ${{error}}).'
 legal:
   copyright: Copyright
   legal-disclosure: Legal Disclosure
@@ -1134,9 +1134,19 @@ service-accounts:
       enabled: For security reasons, don't use automount if you don't need it.
     disabled: disabled
     enabled: enabled
+  create-modal:
+    at-least-one-secret-required: '{{resource}} must have at least one secret.'
+    tooltips:
+      auto-mount-token: When set to true it automatically mounts the service account token, within each container of a given pod. For security reasons, don't enable automount if you don't need it.
+      image-pull-secrets: ImagePullSecrets is a list of references to secrets in the same namespace to use for pulling any images in pods that reference this ServiceAccount. ImagePullSecrets are distinct from Secrets because Secrets can be mounted in the pod, but ImagePullSecrets are only accessed by the kubelet.
+      secrets: Secrets is the list of secrets allowed to be used by pods running using this ServiceAccount.
   headers:
     auto-mount-token: Automount Token
     download-kubeconfig: Download Kubeconfig
+    image-pull-secrets: Image Pull Secrets
+    secret: Secret
+    secrets: Secrets
+  name_singular: Service Account
   service-account: Service Account
   title: Service Accounts
 service-management:
