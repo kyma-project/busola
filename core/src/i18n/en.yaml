@@ -471,7 +471,7 @@ cron-jobs:
       monthly: Monthly
       weekly: Weekly
       yearly: Yearly
-    schedule-description: You can also specify ranges (e.g. 1-4), multiple values (1, 2, 5) or run the job every nth interval (*/3 for every 3rd interval).
+    schedule-description: You can specify ranges (e.g. 1-4), multiple values (1, 2, 5) or run the job every nth interval (*/3 for every 3rd interval).
     tooltips:
       args: Docker image CMD is used if arguments are not provided. Provide either args or command.
       command: The docker image's ENTRYPOINT is used if this is not provided. Provide either args or command.
