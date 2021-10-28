@@ -26,11 +26,15 @@ export function ResourceFormWrapper({
         </ResourceFormWrapper>
       );
     } else if (!child.props.propertyPath) {
-      return React.cloneElement(child, {
-        resource,
-        setResource,
-        ...props,
-      });
+      if (typeof child.type === 'function') {
+        return React.cloneElement(child, {
+          resource,
+          setResource,
+          ...props,
+        });
+      } else {
+        return child;
+      }
     } else {
       return React.cloneElement(child, {
         value: jp.value(resource, child.props.propertyPath),

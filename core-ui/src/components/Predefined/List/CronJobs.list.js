@@ -24,6 +24,7 @@ export const CronJobsList = ({ DefaultRenderer, ...otherParams }) => {
     <DefaultRenderer
       customColumns={customColumns}
       resourceName={t('cron-jobs.title')}
+      description={t('cron-jobs.description')}
       {...otherParams}
     />
   );
