@@ -4,24 +4,6 @@ import { Modal, usePost, useDelete, useSingleGet } from 'react-shared';
 import copyToCliboard from 'copy-to-clipboard';
 import { useTranslation } from 'react-i18next';
 
-function Actions({ close, textToCopy, canCopy }) {
-  const { t } = useTranslation();
-
-  return [
-    <Button
-      disabled={!canCopy}
-      option="emphasized"
-      onClick={() => copyToCliboard(textToCopy)}
-      key="copy"
-    >
-      {t('common.tooltips.copy-to-clipboard')}
-    </Button>,
-    <Button onClick={close} key="close">
-      {t('applications.buttons.close')}
-    </Button>,
-  ];
-}
-
 export default function ConnectApplicationModal({ applicationName }) {
   const [url, setUrl] = React.useState();
   const { i18n, t } = useTranslation();
@@ -73,13 +55,19 @@ export default function ConnectApplicationModal({ applicationName }) {
   return (
     <Modal
       onShow={performUrlFetch}
-      actions={onClose => (
-        <Actions
-          close={onClose}
-          textToCopy={url}
-          canCopy={url !== t('common.headers.loading')}
-        />
-      )}
+      actions={onClose => [
+        <Button
+          disabled={url === t('common.headers.loading')}
+          option="emphasized"
+          onClick={() => copyToCliboard(url)}
+          key="copy"
+        >
+          {t('common.tooltips.copy-to-clipboard')}
+        </Button>,
+        <Button onClick={onClose} key="close">
+          {t('applications.buttons.close')}
+        </Button>,
+      ]}
       title={t('applications.subtitle.connect-app')}
       modalOpeningComponent={
         <Button className="fd-margin-end--sm">
