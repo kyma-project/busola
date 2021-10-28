@@ -1,2 +1,2 @@
 sessionStorage.removeItem('SSO');
-location.href = encodeURIComponent(location.origin);
+location.href = encodeURI(location.origin);
