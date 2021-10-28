@@ -129,7 +129,7 @@ btp-instances:
 btp-service-bindings:
   binding-id: Binding ID
   data: Binding Data
-  description: ' provide access details for an existing service instance.'
+  description: ' provides access details for an existing service instance.'
   external-name: External Name
   instance-id: Instance ID
   instance-name: ServiceInstance Name
