@@ -852,8 +852,8 @@ git-repositories:
     url: Enter the URL address of your Git repository
   title: Git Repositories
   tooltips:
-    auth: 'Basic: token or password / SSH key: authentication key / Public: no authentication'
-    secret: The name of the Secret with credentials used by the Function Controller to authenticate to the Git repository in order to fetch the Function's source code and dependencies
+    auth: 'Basic: token or password / SSH key: authentication key / Public: no authentication.'
+    secret: The name of the Secret with credentials used by the Function Controller to authenticate to the Git repository in order to fetch the Function's source code and dependencies.
     url: URL must be a valid Git repository address that starts with the "http(s)", "git", or "ssh" prefix and ends with the ".git" suffix.
 instances:
   no-specific-plan-parameters:
