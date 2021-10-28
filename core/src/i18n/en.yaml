@@ -482,7 +482,7 @@ cron-jobs:
       month: 1 to 12
       starting-deadline: Optional deadline in seconds for starting the job if it misses scheduled time for any reason. Missed jobs executions will be counted as failed ones.
       suspend: This flag tells the controller to suspend subsequent executions, it does not apply to already started executions. Defaults to false.
-  description: CronJobs are meant for performing regular scheduled actions. A CronJob object is like one line of a crontab file, running a job periodically on a given schedule.
+  description: CronJobs are for regular scheduled actions. A CronJob object is like one line of a crontab file, running a job periodically on a given schedule.
   docker-image: Docker Image
   failed-jobs-history-limit: Failed Jobs History Limit
   image-pull-policy: Image Pull Policy
