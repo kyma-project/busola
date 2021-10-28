@@ -358,7 +358,7 @@ common:
     download: Download
     duplicate-key: Duplicate key
     error: 'Error: '
-    k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' (e.g.: 'my-name1')."
+    k8s-name-input: 'Name must consist of lowercase alphanumeric characters, can contain ''-'' (e.g.: ''my-name1'').'
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: key=value, must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     read-file: Read file content as a single value, with file name as a key.
@@ -854,7 +854,7 @@ git-repositories:
   tooltips:
     auth: 'Basic: token or password / SSH key: authentication key / Public: no authentication.'
     secret: The name of the Secret with credentials used by the Function Controller to authenticate to the Git repository in order to fetch the Function's source code and dependencies.
-    url: URL must be a valid Git repository address that starts with the "http(s)", "git", or "ssh" prefix and ends with the ".git" suffix.
+    url: URL must be a valid Git repository address that starts with the "http(s)", "git", or "ssh" prefix.
 instances:
   no-specific-plan-parameters:
     tooltip: The service provider did not define specific parameters for the selected plan. Refer to the documentation to learn about the required parameters, and define them as a JSON in the editor.
@@ -919,7 +919,7 @@ jobs:
   start-time: Start Time
   title: Jobs
 kubeconfig-id:
-  error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})."
+  error: 'Couldn''t load kubeconfig ID; configuration not changed (Error: ${{error}}).'
 legal:
   copyright: Copyright
   legal-disclosure: Legal Disclosure

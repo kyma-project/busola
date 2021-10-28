@@ -12,9 +12,13 @@ import {
   KeyValueField,
   FormField,
 } from 'shared/ResourceForm/components/FormComponents';
-import { isGitUrl } from 'components/Lambdas/helpers/repositories';
 
 import { createRepositoryTemplate } from './helpers';
+
+function isGitUrl(str) {
+  var regex = /(?:git|ssh|https?|git@[-\w.]+):(\/\/)?(.*?)(\/?|#[-\d\w._]+?)$/;
+  return regex.test(str);
+}
 
 function GitRepositoriesCreate({
   namespace,
