@@ -30,6 +30,7 @@ export async function saveQueryParamsIfPresent() {
   try {
     await setupFromParams();
   } catch (e) {
+    alert(e.message);
     alert(i18next.t('kubeconfig-id.error', { error: e.message }));
     console.warn(e);
   }
