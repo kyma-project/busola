@@ -24,7 +24,7 @@ export const ServiceAccountsCreate = ({
 
   React.useEffect(() => {
     setCustomValid(validateServiceAccount(serviceAccount));
-  }, [imagePullSecrets, setCustomValid]);
+  }, [imagePullSecrets, setCustomValid]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleImageChange = images => {
     setImagePullSecrets([...images]);
