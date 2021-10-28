@@ -122,7 +122,7 @@ If you run Busola in Docker, you can mount your kubeconfig as a bind mount for B
 docker run --rm -it -p 3001:3001 -v <path to your kubeconfig>:/app/core/kubeconfig/<your kubeconfig file name> --pid=host --name busola eu.gcr.io/kyma-project/busola:latest
 ```
 
-When you open Busola in your browser, go to `http://localhost:3001?kubeconfigID=<your kubeconfig file name>`. Busola will try to download that file and add it for your Busola instance.
+When you open Busola in your browser, go to `http://localhost:3001?kubeconfigID={YOUR_KUBECONFIG_FILE_NAME}`. Busola will try to download that file and add it for your Busola instance.
 
 ## Troubleshooting
 
