@@ -6,7 +6,7 @@ import { loadKubeconfig } from '../support/loadKubeconfigFile';
 const kubeconfigIdAddress = `${config.clusterAddress}/kubeconfig`;
 
 context('Login - kubeconfigID', () => {
-  it('Uses custom kubeconfig URL', () => {
+  it.only('Uses custom kubeconfig URL', () => {
     cy.wrap(loadKubeconfig()).then(kubeconfig => {
       const customKubeconfigUrl = 'http://example.com/kubeconfig';
       cy.intercept(

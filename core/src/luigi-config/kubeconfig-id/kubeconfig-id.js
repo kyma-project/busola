@@ -38,7 +38,7 @@ export async function saveQueryParamsIfPresent() {
 async function setupFromParams() {
   const searchParams = new URL(location).searchParams;
   const kubeconfigId = searchParams.get('kubeconfigID');
-
+  alert(kubeconfigId);
   const kubeconfig = await getKubeconfigById(kubeconfigId);
   if (!kubeconfig) {
     return null;
