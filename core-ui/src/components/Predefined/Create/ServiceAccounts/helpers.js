@@ -3,8 +3,8 @@ export function validateSecret(secret) {
 }
 
 export function validateServiceAccount(serviceAccount) {
-  const hasSubjects = serviceAccount?.secrets?.length;
-  const subjectsValid = serviceAccount?.secrets?.every(validateSecret);
+  const hasServiceAccounts = serviceAccount?.secrets?.length;
+  const serviceAccountsValid = serviceAccount?.secrets?.every(validateSecret);
 
-  return hasSubjects && subjectsValid;
+  return !hasServiceAccounts || (hasServiceAccounts && serviceAccountsValid);
 }

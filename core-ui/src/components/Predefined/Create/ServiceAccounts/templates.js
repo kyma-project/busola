@@ -13,7 +13,6 @@ export function createServiceAccountTemplate(namespace) {
       name: '',
       namespace,
     },
-    secrets: [newSecret(namespace)],
     automountServiceAccountToken: false,
   };
 }

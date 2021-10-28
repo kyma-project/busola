@@ -11,7 +11,6 @@ export function SingleSecretForm({
   setSecrets,
   index,
   namespace,
-  defaultOpen = false,
 }) {
   const { t } = useTranslation();
 

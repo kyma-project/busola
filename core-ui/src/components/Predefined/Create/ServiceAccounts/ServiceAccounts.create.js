@@ -4,9 +4,9 @@ import { useGetList } from 'react-shared';
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import * as jp from 'jsonpath';
 import { createServiceAccountTemplate, newSecret } from './templates';
-import { SingleSecretForm, SingleSecretInput } from './SecretForm';
+import { SingleSecretForm } from './SecretForm';
 import { validateServiceAccount } from './helpers';
-import { MessageStrip, Switch } from 'fundamental-react';
+import { Switch } from 'fundamental-react';
 import * as Inputs from 'shared/ResourceForm/components/Inputs';
 
 export const ServiceAccountsCreate = ({
@@ -20,22 +20,26 @@ export const ServiceAccountsCreate = ({
   const [serviceAccount, setServiceAccount] = useState(
     createServiceAccountTemplate(namespace),
   );
+  const [imagePullSecrets, setImagePullSecrets] = useState([]);
 
   React.useEffect(() => {
     setCustomValid(validateServiceAccount(serviceAccount));
-  }, [serviceAccount, setCustomValid]);
+  }, [imagePullSecrets, setCustomValid]);
+
+  const handleImageChange = images => {
+    setImagePullSecrets([...images]);
+    const newImages = (images || []).map(image => {
+      return { name: image };
+    });
+    jp.value(serviceAccount, '$.imagePullSecrets', newImages);
+
+    if (!newImages.length) delete serviceAccount.imagePullSecrets;
+
+    setServiceAccount({ ...serviceAccount });
+  };
 
   const { data: secrets } = useGetList()(
     `/api/v1/namespaces/${namespace}/secrets`,
-  );
-  const serviceAccountSecrets = (secrets || []).filter(
-    secret => secret.type === 'kubernetes.io/service-account-token',
-  );
-  console.log(
-    'secrets',
-    secrets,
-    'serviceAccountSecrets',
-    serviceAccountSecrets,
   );
 
   return (
@@ -68,19 +72,6 @@ export const ServiceAccountsCreate = ({
         title={t('common.headers.annotations')}
       />
 
-      {jp.value(serviceAccount, '$.secrets.length') ? (
-        <SingleSecretInput
-          simple
-          propertyPath="$.secrets"
-          namespace={namespace}
-        />
-      ) : (
-        <MessageStrip simple type="warning" className="fd-margin-top--sm">
-          {t('service-accounts.create-modal.at-least-one-secret-required', {
-            resource: t('service-accounts.name_singular'),
-          })}
-        </MessageStrip>
-      )}
       <ResourceForm.ItemArray
         advanced
         propertyPath="$.secrets"
@@ -88,10 +79,7 @@ export const ServiceAccountsCreate = ({
         nameSingular={t('service-accounts.headers.secret')}
         tooltipContent={t('service-accounts.create-modal.tooltips.secrets')}
         entryTitle={subject => subject?.name}
-        atLeastOneRequiredMessage={t(
-          'service-accounts.create-modal.at-least-one-secret-required',
-          { resource: t('service-accounts.name_singular') },
-        )}
+        allowEmpty={true}
         itemRenderer={(current, allValues, setAllValues, index) => (
           <SingleSecretForm
             secret={current}
@@ -110,12 +98,13 @@ export const ServiceAccountsCreate = ({
         tooltipContent={t(
           'service-accounts.create-modal.tooltips.image-pull-secrets',
         )}
-        propertyPath="$.imagePullSecrets"
+        // propertyPath="$.imagePullSecrets"
+        value={imagePullSecrets}
+        setValue={value => handleImageChange(value)}
         options={(secrets || []).map(i => ({
           key: i.metadata.name,
           text: i.metadata.name,
         }))}
-        defaultOpen
       />
       <ResourceForm.FormField
         advanced

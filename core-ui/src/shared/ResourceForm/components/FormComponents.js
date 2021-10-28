@@ -522,6 +522,7 @@ export function ItemArray({
   entryTitle,
   nameSingular,
   atLeastOneRequiredMessage,
+  allowEmpty = false,
   itemRenderer,
   newResourceTemplateFn,
   ...props
@@ -561,7 +562,9 @@ export function ItemArray({
     });
 
   const content =
-    values.length === 1 ? renderItem(values[0], 0) : renderAllItems();
+    values.length === 1 && !allowEmpty
+      ? renderItem(values[0], 0)
+      : renderAllItems();
 
   return (
     <CollapsibleSection
