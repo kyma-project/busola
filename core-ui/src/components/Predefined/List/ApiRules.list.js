@@ -55,7 +55,7 @@ export const ApiRulesList = ({ DefaultRenderer, ...otherParams }) => {
       <Link
         className="fd-link fd-link"
         url="https://kyma-project.io/docs/kyma/latest/05-technical-reference/00-custom-resources/apix-01-apirule/#documentation-content"
-        text="APIRule"
+        text="API Rule"
       />
       {t('api-rules.description')}
     </span>
