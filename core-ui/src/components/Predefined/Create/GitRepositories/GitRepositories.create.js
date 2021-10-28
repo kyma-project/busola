@@ -60,7 +60,7 @@ function GitRepositoriesCreate({
 
     const isCorrectUrl = isGitUrl(url);
     if (!isCorrectUrl) {
-      return t('functions.repository-list.errors.invalid-url');
+      return t('git-repositories.errors.invalid-url');
     }
   }
 
@@ -124,8 +124,8 @@ function GitRepositoriesCreate({
       <FormField
         required
         propertyPath="$.spec.url"
-        label={t('functions.repository-list.labels.url')}
-        tooltipContent={t('functions.repository-list.inline-help.url')}
+        label={t('git-repositories.labels.url')}
+        tooltipContent={t('git-repositories.tooltips.url')}
         placeholder={t('git-repositories.placeholders.url')}
         input={Inputs.Text}
         validationState={getUrlValidationState()}
@@ -133,8 +133,8 @@ function GitRepositoriesCreate({
       <FormField
         required
         propertyPath="$.spec.auth.type"
-        label={t('functions.repository-list.labels.auth')}
-        tooltipContent={t('functions.repository-list.inline-help.auth')}
+        label={t('git-repositories.labels.auth')}
+        tooltipContent={t('git-repositories.tooltips.auth')}
         input={Inputs.Dropdown}
         options={authTypeOptions}
         value={authType || ''}
@@ -143,14 +143,14 @@ function GitRepositoriesCreate({
         <FormField
           required
           propertyPath="$.spec.auth.secretName"
-          label={t('functions.repository-list.labels.secret-name')}
-          tooltipContent={'git-repositories.tooltips.secret-name'}
+          label={t('git-repositories.labels.secret')}
+          tooltipContent={'git-repositories.tooltips.secret'}
           input={({ value, setValue }) => (
             <K8sResourceSelectWithUseGetList
               compact
               required
               value={value}
-              resourceType={t('functions.repository-list.labels.secret-name')}
+              resourceType={t('git-repositories.labels.secret')}
               onSelect={setValue}
               url={`/api/v1/namespaces/${namespace}/secrets`}
             />

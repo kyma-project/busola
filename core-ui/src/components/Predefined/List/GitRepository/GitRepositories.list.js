@@ -9,17 +9,17 @@ export const GitRepositoriesList = ({ DefaultRenderer, ...otherParams }) => {
 
   const customColumns = [
     {
-      header: t('git-repositories.headers.url'),
+      header: t('git-repositories.labels.url'),
       value: repo => repo.spec.url,
     },
     {
-      header: t('git-repositories.headers.authentication'),
+      header: t('git-repositories.labels.auth'),
       value: repo => (
         <StatusBadge type="info">{repo.spec.auth?.type || 'none'}</StatusBadge>
       ),
     },
     {
-      header: t('git-repositories.headers.secret'),
+      header: t('git-repositories.labels.secret'),
       value: repo => {
         if (!repo.spec.auth) return '-';
         const secretName = repo.spec.auth.secretName;
