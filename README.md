@@ -116,7 +116,7 @@ For the information on how to run tests and configure them, go to the [`tests`](
 
 ## Busola in Docker: adding a cluster via kubeconfig ID
 
-In case of Busola in Docker, you can mount your kubeconfig as a bind mount for Busola container.
+If you run Busola in Docker, you can mount your kubeconfig as a bind mount for Busola container. Execute the following command:
 
 ```bash
 docker run --rm -it -p 3001:3001 -v <path to your kubeconfig>:/app/core/kubeconfig/<your kubeconfig file name> --pid=host --name busola eu.gcr.io/kyma-project/busola:latest
