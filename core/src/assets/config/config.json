@@ -32,7 +32,7 @@
       },
       "KUBECONFIG_ID": {
         "config": {
-          "kubeconfigUrl": "https://kyma-env-broker.cp.dev.kyma.cloud.sap/kubeconfig"
+          "kubeconfigUrl": "/kubeconfig"
         }
       },
       "ADD_CLUSTER_DISABLED": {
