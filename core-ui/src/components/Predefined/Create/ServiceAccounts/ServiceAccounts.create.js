@@ -7,7 +7,6 @@ import { createServiceAccountTemplate, newSecret } from './templates';
 import { SingleSecretForm } from './SecretForm';
 import { validateServiceAccount } from './helpers';
 import { Switch } from 'fundamental-react';
-import * as Inputs from 'shared/ResourceForm/components/Inputs';
 
 export const ServiceAccountsCreate = ({
   formElementRef,
