@@ -1,13 +1,12 @@
-export function createCronJobTemplate(namespace) {
+export function createJobTemplate(namespace) {
   return {
-    apiVersion: 'batch/v1beta1',
-    kind: 'CronJob',
+    apiVersion: 'batch/v1',
+    kind: 'Job',
     metadata: {
       name: '',
       namespace,
     },
     spec: {
-      schedule: '* */1 * * *',
       jobTemplate: {
         spec: {
           template: {
@@ -23,6 +22,14 @@ export function createCronJobTemplate(namespace) {
   };
 }
 
+export function createCronJobTemplate(namespace) {
+  const jobTemplate = createJobTemplate(namespace);
+  jobTemplate.apiVersion = 'batch/v1beta1';
+  jobTemplate.kind = 'CronJob';
+  jobTemplate.spec = { ...jobTemplate.spec, schedule: '*/1 * * * *' };
+  return jobTemplate;
+}
+
 export function createContainerTemplate() {
   return {
     name: '',
@@ -32,13 +39,13 @@ export function createContainerTemplate() {
   };
 }
 
-export function createPresets(namespace, translate) {
+export function createJobPresets(namespace, translate) {
   return [
     {
       name: translate('common.labels.default-preset'),
       value: {
-        apiVersion: 'batch/v1beta1',
-        kind: 'CronJob',
+        apiVersion: 'batch/v1',
+        kind: 'Job',
         metadata: {
           name: 'hello',
           namespace,
@@ -47,7 +54,6 @@ export function createPresets(namespace, translate) {
           },
         },
         spec: {
-          schedule: '*/1 * * * *',
           jobTemplate: {
             spec: {
               template: {
@@ -74,4 +80,14 @@ export function createPresets(namespace, translate) {
       },
     },
   ];
+}
+
+export function createCronJobPresets(namespace, translate) {
+  const jobPresets = createJobPresets(namespace, translate);
+  return jobPresets.map(preset => {
+    preset.value.apiVersion = 'batch/v1beta1';
+    preset.value.kind = 'CronJob';
+    preset.value.spec = { ...preset.value.spec, schedule: '*/1 * * * *' };
+    return preset;
+  });
 }

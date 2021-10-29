@@ -4,10 +4,14 @@ import { useTranslation } from 'react-i18next';
 
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 
-import { createCronJobTemplate, createPresets } from './templates';
-import { SpecSection } from './SpecSection';
-import { isCronExpressionValid, ScheduleSection } from './ScheduleSection';
-import { ContainerSection, ContainersSection } from './ContainersSection';
+import {
+  createCronJobTemplate,
+  createJobPresets,
+  createCronJobPresets,
+} from '../templates';
+import { SpecSection } from '../SpecSection';
+import { isCronExpressionValid, ScheduleSection } from '../ScheduleSection';
+import { ContainerSection, ContainersSection } from '../ContainersSection';
 
 function isCronJobValid(cronJob) {
   const containers =
@@ -34,6 +38,8 @@ export function CronJobsCreate({
     setCustomValid(isCronJobValid(cronJob));
   }, [cronJob, setCustomValid]);
 
+  console.log(createJobPresets(namespace, t));
+
   return (
     <ResourceForm
       pluralKind="cronjobs"
@@ -42,7 +48,7 @@ export function CronJobsCreate({
       setResource={setCronJob}
       onChange={onChange}
       formElementRef={formElementRef}
-      presets={createPresets(namespace, t)}
+      presets={createCronJobPresets(namespace, t)}
       createUrl={`/apis/batch/v1beta1/namespaces/${namespace}/cronjobs`}
     >
       <ResourceForm.K8sNameField
