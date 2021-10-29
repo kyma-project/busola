@@ -4,9 +4,9 @@ import { useTranslation } from 'react-i18next';
 
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 
-import { createJobTemplate, createJobPresets } from '../templates';
-import { SpecSection } from '../SpecSection';
-import { ContainerSection, ContainersSection } from '../ContainersSection';
+import { createJobTemplate, createJobPresets } from './templates';
+import { SpecSection } from './SpecSection';
+import { ContainerSection, ContainersSection } from './ContainersSection';
 
 function isJobValid(job) {
   const containers = jp.value(job, '$.spec.template.spec.containers') || [];

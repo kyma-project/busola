@@ -8,10 +8,10 @@ import {
   createCronJobTemplate,
   createJobPresets,
   createCronJobPresets,
-} from '../templates';
-import { SpecSection } from '../SpecSection';
-import { isCronExpressionValid, ScheduleSection } from '../ScheduleSection';
-import { ContainerSection, ContainersSection } from '../ContainersSection';
+} from './templates';
+import { SpecSection } from './SpecSection';
+import { isCronExpressionValid, ScheduleSection } from './ScheduleSection';
+import { ContainerSection, ContainersSection } from './ContainersSection';
 
 const concurrencyPolicyOptions = ['Allow', 'Forbid', 'Replace'].map(p => ({
   key: p,
