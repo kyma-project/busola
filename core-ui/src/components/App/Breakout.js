@@ -262,15 +262,17 @@ export function Breakout() {
   const canvasRef = React.useRef(null);
   const [log, setLog] = React.useState([]);
 
-  let { data: pods } = useGetList()('/api/v1/namespaces/kyma-system/pods');
-  let { data: cms } = useGetList()('/api/v1/namespaces/kyma-system/configmaps');
-  let { data: secrets } = useGetList()(
+  const { data: pods } = useGetList()('/api/v1/namespaces/kyma-system/pods');
+  const { data: cms } = useGetList()(
+    '/api/v1/namespaces/kyma-system/configmaps',
+  );
+  const { data: secrets } = useGetList()(
     '/api/v1/namespaces/kyma-system/secrets',
   );
-  let { data: statefulSets } = useGetList()(
+  const { data: statefulSets } = useGetList()(
     '/apis/apps/v1/namespaces/kyma-system/statefulsets',
   );
-  let { data: replicasets } = useGetList()(
+  const { data: replicasets } = useGetList()(
     '/apis/apps/v1/namespaces/kyma-system/replicasets/',
   );
 
@@ -285,78 +287,69 @@ export function Breakout() {
       statefulSets &&
       replicasets
     ) {
-      const time = Date.now();
-
-      pods = pods.map(p => ({
-        ...p,
-        type: 'Pod',
-        delete: () =>
-          deleteRequest(
-            '/api/v1/namespaces/kyma-system/pods/' + p.metadata.name,
-          )
-            .then(() => setLog(log => [...log, 'del Po ' + p.metadata.name]))
-            .catch(console.log),
-      }));
-      cms = cms.map(cm => ({
-        ...cm,
-        type: 'ConfigMap',
-        delete: () =>
-          deleteRequest(
-            '/api/v1/namespaces/kyma-system/configmaps/' + cm.metadata.name,
-          )
-            .then(() => setLog(log => [...log, 'del CM ' + cm.metadata.name]))
-            .catch(console.log),
-      }));
-      secrets = secrets.map(s => ({
-        ...s,
-        type: 'Secret',
-        delete: () =>
-          deleteRequest(
-            '/api/v1/namespaces/kyma-system/secrets/' + s.metadata.name,
-          )
-            .then(() =>
-              setLog(log => [...log, 'del Secret ' + s.metadata.name]),
-            )
-            .catch(console.log),
-      }));
-      statefulSets = statefulSets.map(sS => ({
-        ...sS,
-        type: 'StatefulSet',
-        delete: () =>
-          deleteRequest(
-            '/apis/apps/v1/namespaces/kyma-system/statefulsets/' +
-              sS.metadata.name,
-          )
-            .then(() =>
-              setLog(log => [...log, 'del StatefulSet ' + sS.metadata.name]),
-            )
-            .catch(console.log),
-      }));
-      replicasets = replicasets.map(rS => ({
-        ...rS,
-        type: 'ReplicaSet',
-        delete: () =>
-          deleteRequest(
-            '/apis/apps/v1/namespaces/kyma-system/replicasets/' +
-              rS.metadata.name,
-          )
-            .then(() =>
-              setLog(log => [...log, 'del ReplicaSet ' + rS.metadata.name]),
-            )
-            .catch(console.log),
-      }));
-
       const resources = [
-        ...pods,
-        ...cms,
-        ...secrets,
-        ...statefulSets,
-        ...replicasets,
-        ...replicasets,
+        ...pods.map(p => ({
+          ...p,
+          type: 'Pod',
+          delete: () =>
+            deleteRequest(
+              '/api/v1/namespaces/kyma-system/pods/' + p.metadata.name,
+            )
+              .then(() => setLog(log => [...log, 'del Po ' + p.metadata.name]))
+              .catch(console.log),
+        })),
+        ...cms.map(cm => ({
+          ...cm,
+          type: 'ConfigMap',
+          delete: () =>
+            deleteRequest(
+              '/api/v1/namespaces/kyma-system/configmaps/' + cm.metadata.name,
+            )
+              .then(() => setLog(log => [...log, 'del CM ' + cm.metadata.name]))
+              .catch(console.log),
+        })),
+        ...secrets.map(s => ({
+          ...s,
+          type: 'Secret',
+          delete: () =>
+            deleteRequest(
+              '/api/v1/namespaces/kyma-system/secrets/' + s.metadata.name,
+            )
+              .then(() =>
+                setLog(log => [...log, 'del Secret ' + s.metadata.name]),
+              )
+              .catch(console.log),
+        })),
+        ...statefulSets.map(sS => ({
+          ...sS,
+          type: 'StatefulSet',
+          delete: () =>
+            deleteRequest(
+              '/apis/apps/v1/namespaces/kyma-system/statefulsets/' +
+                sS.metadata.name,
+            )
+              .then(() =>
+                setLog(log => [...log, 'del StatefulSet ' + sS.metadata.name]),
+              )
+              .catch(console.log),
+        })),
+        ...replicasets.map(rS => ({
+          ...rS,
+          type: 'ReplicaSet',
+          delete: () =>
+            deleteRequest(
+              '/apis/apps/v1/namespaces/kyma-system/replicasets/' +
+                rS.metadata.name,
+            )
+              .then(() =>
+                setLog(log => [...log, 'del ReplicaSet ' + rS.metadata.name]),
+              )
+              .catch(console.log),
+        })),
       ];
       shuffle(resources);
       init(canvasRef.current, resources);
-      run(time);
+      run(new Date());
     }
   }, [canvasRef.current, pods, cms, secrets, statefulSets]);
 
