@@ -1,18 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
+import { useTranslation } from 'react-i18next';
 
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 
-import {
-  createContainerTemplate,
-  createCronJobTemplate,
-  createPresets,
-} from './templates';
-import { SingleContainerForm, SingleContainerInput } from './Containers';
-import { MessageStrip } from 'fundamental-react';
+import { createCronJobTemplate, createPresets } from './templates';
+import { SpecSection } from './SpecSection';
 import { isCronExpressionValid, ScheduleSection } from './ScheduleSection';
-import { CronJobsSpecSection } from './CronJobsSpecSection';
+import { ContainerSection, ContainersSection } from './ContainersSection';
 
 function isCronJobValid(cronJob) {
   const containers =
@@ -69,51 +64,31 @@ export function CronJobsCreate({
         propertyPath="$.metadata.labels"
         title={t('common.headers.labels')}
       />
+
       <ResourceForm.KeyValueField
         advanced
         propertyPath="$.metadata.annotations"
         title={t('common.headers.annotations')}
       />
 
-      <CronJobsSpecSection
+      <SpecSection
         advanced
-        resource={cronJob.spec}
-        setResource={spec => setCronJob({ ...cronJob, spec })}
+        resource={cronJob}
+        setResource={job => setCronJob({ ...job })}
       />
 
       <ScheduleSection propertyPath="$.spec.schedule" />
 
-      {jp.value(
-        cronJob,
-        '$.spec.jobTemplate.spec.template.spec.containers.length',
-      ) ? (
-        <SingleContainerInput
-          simple
-          propertyPath="$.spec.jobTemplate.spec.template.spec.containers"
-        />
-      ) : (
-        <MessageStrip simple type="warning" className="fd-margin-top--sm">
-          {t('cron-jobs.create-modal.at-least-one-container-required')}
-        </MessageStrip>
-      )}
-      <ResourceForm.ItemArray
+      <ContainerSection
+        resource={cronJob}
+        setResource={job => setCronJob({ ...job })}
+        simple
+      />
+
+      <ContainersSection
+        resource={cronJob}
+        setResource={job => setCronJob({ ...job })}
         advanced
-        propertyPath="$.spec.jobTemplate.spec.template.spec.containers"
-        listTitle={t('cron-jobs.create-modal.containers')}
-        nameSingular={t('cron-jobs.create-modal.container')}
-        entryTitle={container => container?.name}
-        atLeastOneRequiredMessage={t(
-          'cron-jobs.create-modal.at-least-one-container-required',
-        )}
-        itemRenderer={(current, allValues, setAllValues) => (
-          <SingleContainerForm
-            container={current}
-            containers={allValues}
-            setContainers={setAllValues}
-            advanced
-          />
-        )}
-        newResourceTemplateFn={createContainerTemplate}
       />
     </ResourceForm>
   );

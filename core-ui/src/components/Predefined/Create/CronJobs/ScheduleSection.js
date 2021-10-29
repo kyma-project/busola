@@ -2,10 +2,11 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { parse } from '@datasert/cronjs-parser';
 import { toString as cRonstrue } from 'cronstrue/i18n';
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import { MessageStrip } from 'fundamental-react';
-import * as Inputs from 'shared/ResourceForm/components/Inputs';
+
+import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import { Presets } from 'shared/ResourceForm/components/Presets';
+import * as Inputs from 'shared/ResourceForm/components/Inputs';
 
 const presets = {
   '@yearly': '0 0 1 1 *',

@@ -1,9 +1,10 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
+
 import {
   ResourceForm,
   ResourceFormWrapper,
 } from 'shared/ResourceForm/ResourceForm';
-import { useTranslation } from 'react-i18next';
 import * as Inputs from 'shared/ResourceForm/components/Inputs';
 
 export function SingleContainerForm({

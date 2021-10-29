@@ -17,14 +17,14 @@ const restartPolicyOptions = ['Never', 'OnFailure'].map(p => ({
   text: p,
 }));
 
-export const CronJobsSpecSection = ({ resource, setResource }) => {
+export const SpecSection = ({ resource, setResource }) => {
   const { t } = useTranslation();
 
   return (
     <ResourceFormWrapper resource={resource} setResource={setResource}>
       <ResourceForm.FormField
         advanced
-        propertyPath="$.concurrencyPolicy"
+        propertyPath="$.spec.concurrencyPolicy"
         label={t('cron-jobs.concurrency-policy.label')}
         input={Inputs.Dropdown}
         defaultKey="Allow"
@@ -32,7 +32,7 @@ export const CronJobsSpecSection = ({ resource, setResource }) => {
       />
       <ResourceForm.FormField
         advanced
-        propertyPath="$.startingDeadlineSeconds"
+        propertyPath="$.spec.startingDeadlineSeconds"
         label={t('cron-jobs.starting-deadline')}
         input={Inputs.Number}
         placeholder={t('cron-jobs.create-modal.placeholders.starting-deadline')}
@@ -41,14 +41,14 @@ export const CronJobsSpecSection = ({ resource, setResource }) => {
       />
       <ResourceForm.FormField
         advanced
-        propertyPath="$.suspend"
+        propertyPath="$.spec.suspend"
         label={t('cron-jobs.suspend')}
         input={Inputs.Switch}
         tooltipContent={t('cron-jobs.create-modal.tooltips.suspend')}
       />
       <ResourceForm.FormField
         advanced
-        propertyPath="$.successfulJobsHistoryLimit"
+        propertyPath="$.spec.successfulJobsHistoryLimit"
         label={t('cron-jobs.successful-jobs-history-limit')}
         input={Inputs.Number}
         min={0}
@@ -58,7 +58,7 @@ export const CronJobsSpecSection = ({ resource, setResource }) => {
       />
       <ResourceForm.FormField
         advanced
-        propertyPath="$.failedJobsHistoryLimit"
+        propertyPath="$.spec.failedJobsHistoryLimit"
         label={t('cron-jobs.failed-jobs-history-limit')}
         input={Inputs.Number}
         min={0}
@@ -68,7 +68,7 @@ export const CronJobsSpecSection = ({ resource, setResource }) => {
       />
       <ResourceForm.FormField
         advanced
-        propertyPath="$.jobTemplate.spec.template.spec.restartPolicy"
+        propertyPath="$.spec.jobTemplate.spec.template.spec.restartPolicy"
         label={t('cron-jobs.restart-policy')}
         input={Inputs.Dropdown}
         options={restartPolicyOptions}
