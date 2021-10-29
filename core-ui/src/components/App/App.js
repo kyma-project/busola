@@ -21,6 +21,7 @@ import { AddCluster } from 'components/Clusters/views/AddCluster/AddCluster';
 import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
 import { NodeDetails } from 'components/Nodes/NodeDetails/NodeDetails';
 import { useSentry } from '../../hooks/useSentry';
+import { Breakout } from './Breakout';
 
 export default function App() {
   const { cluster, language } = useMicrofrontendContext();
@@ -35,6 +36,11 @@ export default function App() {
   return (
     // force rerender on cluster change
     <Switch key={cluster?.name}>
+      <Route
+        path="/breakout"
+        exact
+        component={withTitle(t('breakout'), Breakout)}
+      />
       <Route
         path="/no-permissions"
         exact

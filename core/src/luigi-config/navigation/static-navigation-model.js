@@ -1203,6 +1203,24 @@ export function getStaticChildrenNodesForNamespace(
         },
       ],
     },
+
+    {
+      category: {
+        label: 'Fun & Games',
+        icon: 'source-code',
+        collapsible: false,
+      },
+      pathSegment: '_workloads_category_placeholder_what_',
+    },
+    {
+      pathSegment: 'breakout',
+      label: 'Breakout',
+      icon: 'database',
+      viewUrl: config.coreUIModuleUrl + '/breakout',
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+      category: 'Fun & Games',
+    },
   ];
   filterNodesByAvailablePaths(nodes, groupVersions, permissionSet);
   return nodes;
