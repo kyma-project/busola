@@ -30,7 +30,7 @@ export function createGatewayTemplate(namespace) {
 export function createPresets(namespace, translate) {
   return [
     {
-      name: translate('gateways.create-modal.presets.default'),
+      name: translate('common.labels.default-preset'),
       value: createGatewayTemplate(namespace),
     },
     {
