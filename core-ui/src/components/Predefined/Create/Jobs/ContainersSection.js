@@ -19,7 +19,7 @@ export const ContainersSection = ({ resource, setResource }) => {
     <ResourceFormWrapper resource={resource} setResource={setResource}>
       <ResourceForm.ItemArray
         advanced
-        propertyPath="$.spec.jobTemplate.spec.template.spec.containers"
+        propertyPath="$.template.spec.containers"
         listTitle={t('cron-jobs.create-modal.containers')}
         nameSingular={t('cron-jobs.create-modal.container')}
         entryTitle={container => container?.name}
@@ -45,13 +45,10 @@ export const ContainerSection = ({ resource, setResource }) => {
 
   return (
     <ResourceFormWrapper resource={resource} setResource={setResource}>
-      {jp.value(
-        resource,
-        '$.spec.jobTemplate.spec.template.spec.containers.length',
-      ) ? (
+      {jp.value(resource, '$.template.spec.containers.length') ? (
         <SingleContainerInput
           simple
-          propertyPath="$.spec.jobTemplate.spec.template.spec.containers"
+          propertyPath="$.template.spec.containers"
         />
       ) : (
         <div className="job-container__message">
@@ -61,11 +58,9 @@ export const ContainerSection = ({ resource, setResource }) => {
               glyph="add"
               compact
               onClick={() => {
-                jp.value(
-                  resource,
-                  '$.spec.jobTemplate.spec.template.spec.containers',
-                  [createContainerTemplate()],
-                );
+                jp.value(resource, '$.template.spec.containers', [
+                  createContainerTemplate(),
+                ]);
                 setResource(resource);
               }}
             >

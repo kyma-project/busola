@@ -9,8 +9,7 @@ import { SpecSection } from '../SpecSection';
 import { ContainerSection, ContainersSection } from '../ContainersSection';
 
 function isJobValid(job) {
-  const containers =
-    jp.value(job, '$.spec.jobTemplate.spec.template.spec.containers') || [];
+  const containers = jp.value(job, '$.spec.template.spec.containers') || [];
 
   const areContainersValid =
     !!containers.length &&
@@ -68,19 +67,28 @@ export function JobsCreate({
 
       <SpecSection
         advanced
-        resource={job}
-        setResource={job => setJob({ ...job })}
+        resource={job.spec}
+        setResource={spec => {
+          jp.value(job, '$.spec', spec);
+          setJob({ ...job });
+        }}
       />
 
       <ContainerSection
-        resource={job}
-        setResource={job => setJob({ ...job })}
+        resource={job.spec}
+        setResource={spec => {
+          jp.value(job, '$.spec', spec);
+          setJob({ ...job });
+        }}
         simple
       />
 
       <ContainersSection
-        resource={job}
-        setResource={job => setJob({ ...job })}
+        resource={job.spec}
+        setResource={spec => {
+          jp.value(job, '$.spec', spec);
+          setJob({ ...job });
+        }}
         advanced
       />
     </ResourceForm>

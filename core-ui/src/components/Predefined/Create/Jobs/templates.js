@@ -7,6 +7,26 @@ export function createJobTemplate(namespace) {
       namespace,
     },
     spec: {
+      template: {
+        spec: {
+          containers: [createContainerTemplate()],
+          restartPolicy: 'OnFailure',
+        },
+      },
+    },
+  };
+}
+
+export function createCronJobTemplate(namespace) {
+  return {
+    apiVersion: 'batch/v1beta1',
+    kind: 'CronJob',
+    metadata: {
+      name: '',
+      namespace,
+    },
+    spec: {
+      schedule: '*/1 * * * *',
       jobTemplate: {
         spec: {
           template: {
@@ -20,14 +40,6 @@ export function createJobTemplate(namespace) {
       concurrencyPolicy: 'Allow',
     },
   };
-}
-
-export function createCronJobTemplate(namespace) {
-  const jobTemplate = createJobTemplate(namespace);
-  jobTemplate.apiVersion = 'batch/v1beta1';
-  jobTemplate.kind = 'CronJob';
-  jobTemplate.spec = { ...jobTemplate.spec, schedule: '*/1 * * * *' };
-  return jobTemplate;
 }
 
 export function createContainerTemplate() {
@@ -54,6 +66,45 @@ export function createJobPresets(namespace, translate) {
           },
         },
         spec: {
+          template: {
+            spec: {
+              containers: [
+                {
+                  name: 'hello',
+                  image: 'busybox',
+                  imagePullPolicy: 'IfNotPresent',
+                  command: [
+                    '/bin/sh',
+                    '-c',
+                    'date; echo Hello from the Kubernetes cluster',
+                  ],
+                },
+              ],
+              restartPolicy: 'OnFailure',
+            },
+          },
+        },
+      },
+    },
+  ];
+}
+
+export function createCronJobPresets(namespace, translate) {
+  return [
+    {
+      name: translate('common.labels.default-preset'),
+      value: {
+        apiVersion: 'batch/v1beta1',
+        kind: 'CronJob',
+        metadata: {
+          name: 'hello',
+          namespace,
+          labels: {
+            'app.kubernetes.io/name': 'hello',
+          },
+        },
+        spec: {
+          schedule: '*/1 * * * *',
           jobTemplate: {
             spec: {
               template: {
@@ -80,14 +131,4 @@ export function createJobPresets(namespace, translate) {
       },
     },
   ];
-}
-
-export function createCronJobPresets(namespace, translate) {
-  const jobPresets = createJobPresets(namespace, translate);
-  return jobPresets.map(preset => {
-    preset.value.apiVersion = 'batch/v1beta1';
-    preset.value.kind = 'CronJob';
-    preset.value.spec = { ...preset.value.spec, schedule: '*/1 * * * *' };
-    return preset;
-  });
 }
