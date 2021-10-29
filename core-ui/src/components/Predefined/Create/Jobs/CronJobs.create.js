@@ -4,11 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import * as Inputs from 'shared/ResourceForm/components/Inputs';
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
-import {
-  createCronJobTemplate,
-  createJobPresets,
-  createCronJobPresets,
-} from './templates';
+import { createCronJobTemplate, createCronJobPresets } from './templates';
 import { SpecSection } from './SpecSection';
 import { isCronExpressionValid, ScheduleSection } from './ScheduleSection';
 import { ContainerSection, ContainersSection } from './ContainersSection';
