@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { BTPResourceStatus } from 'shared/components/BTPResourceStatus';
+import { Link } from 'react-shared';
 
 export const ServiceInstancesList = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
@@ -24,6 +25,17 @@ export const ServiceInstancesList = ({ DefaultRenderer, ...otherParams }) => {
     },
   ];
 
+  const description = (
+    <span>
+      <Link
+        className="fd-link fd-link"
+        url="https://github.com/SAP/sap-btp-service-operator#step-1-create-a-service-instance"
+        text="BTP ServiceInstance"
+      />
+      {t('btp-instances.description')}
+    </span>
+  );
+
   return (
     <DefaultRenderer
       customColumns={customColumns}
@@ -33,6 +45,7 @@ export const ServiceInstancesList = ({ DefaultRenderer, ...otherParams }) => {
         'spec.servicePlanName',
         'spec.externalName',
       ]}
+      description={description}
       {...otherParams}
     />
   );
