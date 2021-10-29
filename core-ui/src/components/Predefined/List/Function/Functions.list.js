@@ -7,6 +7,7 @@ import { prettySourceType } from 'components/Lambdas/helpers/lambdas';
 import { prettyRuntime } from 'components/Lambdas/helpers/runtime';
 import { LambdaStatusBadge } from 'components/Lambdas/LambdaStatusBadge/LambdaStatusBadge';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-shared';
 
 export const FunctionsList = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
@@ -45,10 +46,22 @@ export const FunctionsList = ({ DefaultRenderer, ...otherParams }) => {
     },
   ];
 
+  const description = (
+    <span>
+      <Link
+        className="fd-link fd-link"
+        url="https://kyma-project.io/docs/kyma/latest/05-technical-reference/00-custom-resources/svls-01-function/#documentation-content/"
+        text="Function"
+      />
+      {t('functions.description')}
+    </span>
+  );
+
   return (
     <DefaultRenderer
       customHeaderActions={headerActions}
       customColumns={customColumns}
+      description={description}
       {...otherParams}
     />
   );

@@ -25,6 +25,7 @@ api-rules:
     create: Create API Rule
     edit: Edit API Rule "{{apiRuleName}}"
     expose: Expose {{type}}
+  description: ' allows to expose a service externally.'
   form:
     gateway: Gateway
     hostname: Hostname
@@ -106,6 +107,7 @@ brokers:
     url: URL
   title: Brokers
 btp-instances:
+  description: ' makes the functionality of a service available for consumption.'
   external-name: External Name
   instance-data: ServiceInstance Data
   instance-id: Instance ID
@@ -127,6 +129,7 @@ btp-instances:
 btp-service-bindings:
   binding-id: Binding ID
   data: Binding Data
+  description: ' provides access details for an existing service instance.'
   external-name: External Name
   instance-id: Instance ID
   instance-name: ServiceInstance Name
@@ -689,6 +692,7 @@ functions:
       reference: Reference
       repository: Repository
     title: Create Function
+  description: ' is a simple code snippet that you can run without provisioning or managing servers.'
   details:
     buttons:
       diff_toggle: Diff
