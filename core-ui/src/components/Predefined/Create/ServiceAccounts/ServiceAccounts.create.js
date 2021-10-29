@@ -24,7 +24,7 @@ export const ServiceAccountsCreate = ({
 
   React.useEffect(() => {
     setCustomValid(validateServiceAccount(serviceAccount));
-  }, [imagePullSecrets, setCustomValid]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [serviceAccount, setCustomValid]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleImageChange = images => {
     setImagePullSecrets([...images]);
@@ -52,14 +52,13 @@ export const ServiceAccountsCreate = ({
       formElementRef={formElementRef}
       createUrl={`/api/v1/namespaces/${namespace}/serviceaccounts/`}
     >
-      <ResourceForm.FormField
-        required
-        label={t('common.labels.name')}
-        placeholder={t('components.k8s-name-input.placeholder', {
-          resourceType: t(`service-accounts.name_singular`),
-        })}
-        input={Inputs.Text}
+      <ResourceForm.K8sNameField
         propertyPath="$.metadata.name"
+        kind={t('service-accounts.name_singular')}
+        setValue={name => {
+          jp.value(serviceAccount, '$.metadata.name', name);
+          setServiceAccount({ ...serviceAccount });
+        }}
       />
       <ResourceForm.KeyValueField
         advanced

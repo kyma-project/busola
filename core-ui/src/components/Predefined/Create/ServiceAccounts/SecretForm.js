@@ -15,14 +15,12 @@ export function SingleSecretForm({
   const { t } = useTranslation();
 
   const setSecret = ({ name, namespace }) => {
-    if (name) {
-      secret.name = name;
-    }
-    if (namespace) {
-      secret.namespace = namespace;
-    }
+    secret.name = name;
+    secret.namespace = namespace;
+
     setSecrets([...secrets]);
   };
+
   return (
     <FormFieldset>
       <SecretRef
