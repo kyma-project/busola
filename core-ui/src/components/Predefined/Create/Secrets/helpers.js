@@ -24,7 +24,7 @@ export function createSecretTemplate(namespaceId) {
 export function createPresets(secretDefs, namespaceId, t) {
   return [
     {
-      name: t('secrets.create-modal.presets.default'),
+      name: t('common.labels.default-preset'),
       value: createSecretTemplate(namespaceId),
     },
     ...secretDefs.map(({ title, name, type, data, ...value }) => ({
@@ -33,7 +33,7 @@ export function createPresets(secretDefs, namespaceId, t) {
         ...createSecretTemplate(namespaceId),
         ...value,
         name,
-        type,
+        type: type || 'Opaque',
         data: data?.reduce((acc, key) => ({ ...acc, [key]: '' }), {}),
       },
     })),

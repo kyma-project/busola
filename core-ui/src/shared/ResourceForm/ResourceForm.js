@@ -26,11 +26,15 @@ export function ResourceFormWrapper({
         </ResourceFormWrapper>
       );
     } else if (!child.props.propertyPath) {
-      return React.cloneElement(child, {
-        resource,
-        setResource,
-        ...props,
-      });
+      if (typeof child.type === 'function') {
+        return React.cloneElement(child, {
+          resource,
+          setResource,
+          ...props,
+        });
+      } else {
+        return child;
+      }
     } else {
       return React.cloneElement(child, {
         value: jp.value(resource, child.props.propertyPath),
@@ -152,7 +156,10 @@ export function ResourceForm({
       };
       return React.cloneElement(child, {
         isAdvanced: isAdvanced,
-        value: jp.value(resource, childProps.propertyPath),
+        value:
+          typeof child.props.value !== 'undefined'
+            ? child.props.value
+            : jp.value(resource, child.props.propertyPath),
         setValue: child.props.setValue
           ? value => child.props.setValue(value, valueSetter)
           : valueSetter,

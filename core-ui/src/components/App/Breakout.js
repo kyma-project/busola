@@ -351,7 +351,8 @@ export function Breakout() {
       init(canvasRef.current, resources);
       run(new Date());
     }
-  }, [canvasRef.current, pods, cms, secrets, statefulSets]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [canvasRef.current, pods, cms, secrets, statefulSets, replicasets]);
 
   return (
     <>

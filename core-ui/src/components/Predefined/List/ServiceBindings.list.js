@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'fundamental-react';
 import { BTPResourceStatus } from 'shared/components/BTPResourceStatus';
 import { ControlledByKind } from 'react-shared';
+import { Link as ReactSharedLink } from 'react-shared';
 
 export const ServiceBindingsList = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
@@ -42,11 +43,23 @@ export const ServiceBindingsList = ({ DefaultRenderer, ...otherParams }) => {
     },
   ];
 
+  const description = (
+    <span>
+      <ReactSharedLink
+        className="fd-link fd-link"
+        url="https://github.com/SAP/sap-btp-service-operator#step-2-create-a-service-binding"
+        text="BTP ServiceBinding"
+      />
+      {t('btp-service-bindings.description')}
+    </span>
+  );
+
   return (
     <DefaultRenderer
       customColumns={customColumns}
       resourceName={t('btp-service-bindings.title')}
       textSearchProperties={['spec.serviceInstanceName', 'spec.externalName']}
+      description={description}
       {...otherParams}
     />
   );

@@ -4,6 +4,7 @@ import { PortsForm } from './PortsForm';
 import { TlsForm } from './TlsForm';
 import { HostsForm } from './HostsForm';
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
+import { useTranslation } from 'react-i18next';
 
 export function SingleServerForm(props) {
   return (
@@ -16,8 +17,13 @@ export function SingleServerForm(props) {
 }
 
 export function SingleServerInput({ value: servers, setValue: setServers }) {
+  const { t } = useTranslation();
+
   return (
-    <ResourceForm.CollapsibleSection title="Server" defaultOpen>
+    <ResourceForm.CollapsibleSection
+      title={t('gateways.create-modal.simple.server')}
+      defaultOpen
+    >
       <SingleServerForm
         server={servers?.[0]}
         servers={servers}
