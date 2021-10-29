@@ -90,6 +90,7 @@ function Resources({
   namespace,
   customColumns,
   createResourceForm: CreateResourceForm,
+  createActionLabel,
   hasDetailsView,
   fixedPath,
   title,
@@ -261,14 +262,18 @@ function Resources({
     listHeaderActions ||
     (CreateResourceForm && (
       <ModalWithForm
-        title={t('components.resources-list.create', {
-          resourceType: prettifiedResourceName,
-        })}
+        title={
+          createActionLabel ||
+          t('components.resources-list.create', {
+            resourceType: prettifiedResourceName,
+          })
+        }
         modalOpeningComponent={
           <Button glyph="add" option="transparent">
-            {t('components.resources-list.create', {
-              resourceType: prettifiedResourceName,
-            })}
+            {createActionLabel ||
+              t('components.resources-list.create', {
+                resourceType: prettifiedResourceName,
+              })}
           </Button>
         }
         confirmText={t('common.buttons.create')}

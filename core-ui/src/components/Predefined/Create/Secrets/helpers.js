@@ -33,7 +33,7 @@ export function createPresets(secretDefs, namespaceId, t) {
         ...createSecretTemplate(namespaceId),
         ...value,
         name,
-        type,
+        type: type || 'Opaque',
         data: data?.reduce((acc, key) => ({ ...acc, [key]: '' }), {}),
       },
     })),
