@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
-import * as Inputs from 'shared/ResourceForm/components/Inputs';
 
 import {
   createContainerTemplate,
@@ -13,6 +12,7 @@ import {
 import { SingleContainerForm, SingleContainerInput } from './Containers';
 import { MessageStrip } from 'fundamental-react';
 import { isCronExpressionValid, ScheduleSection } from './ScheduleSection';
+import { CronJobsSpecSection } from './CronJobsSpecSection';
 
 function isCronJobValid(cronJob) {
   const containers =
@@ -39,16 +39,6 @@ export function CronJobsCreate({
     setCustomValid(isCronJobValid(cronJob));
   }, [cronJob, setCustomValid]);
 
-  const concurrencyPolicyOptions = ['Allow', 'Forbid', 'Replace'].map(p => ({
-    key: p,
-    text: p,
-  }));
-
-  const restartPolicyOptions = ['Never', 'OnFailure'].map(p => ({
-    key: p,
-    text: p,
-  }));
-
   return (
     <ResourceForm
       pluralKind="cronjobs"
@@ -73,58 +63,7 @@ export function CronJobsCreate({
           setCronJob({ ...cronJob });
         }}
       />
-      <ResourceForm.FormField
-        advanced
-        propertyPath="$.spec.concurrencyPolicy"
-        label={t('cron-jobs.concurrency-policy.label')}
-        input={Inputs.Dropdown}
-        defaultKey="Allow"
-        options={concurrencyPolicyOptions}
-      />
-      <ResourceForm.FormField
-        advanced
-        propertyPath="$.spec.startingDeadlineSeconds"
-        label={t('cron-jobs.starting-deadline')}
-        input={Inputs.Number}
-        placeholder={t('cron-jobs.create-modal.placeholders.starting-deadline')}
-        tooltipContent={t('cron-jobs.create-modal.tooltips.starting-deadline')}
-        min={0}
-      />
-      <ResourceForm.FormField
-        advanced
-        propertyPath="$.spec.suspend"
-        label={t('cron-jobs.suspend')}
-        input={Inputs.Switch}
-        tooltipContent={t('cron-jobs.create-modal.tooltips.suspend')}
-      />
-      <ResourceForm.FormField
-        advanced
-        propertyPath="$.spec.successfulJobsHistoryLimit"
-        label={t('cron-jobs.successful-jobs-history-limit')}
-        input={Inputs.Number}
-        min={0}
-        placeholder={t(
-          'cron-jobs.create-modal.placeholders.successful-jobs-history-limit',
-        )}
-      />
-      <ResourceForm.FormField
-        advanced
-        propertyPath="$.spec.failedJobsHistoryLimit"
-        label={t('cron-jobs.failed-jobs-history-limit')}
-        input={Inputs.Number}
-        min={0}
-        placeholder={t(
-          'cron-jobs.create-modal.placeholders.failed-jobs-history-limit',
-        )}
-      />
-      <ResourceForm.FormField
-        advanced
-        propertyPath="$.spec.jobTemplate.spec.template.spec.restartPolicy"
-        label={t('cron-jobs.restart-policy')}
-        input={Inputs.Dropdown}
-        options={restartPolicyOptions}
-      />
-      <ScheduleSection propertyPath="$.spec.schedule" />
+
       <ResourceForm.KeyValueField
         advanced
         propertyPath="$.metadata.labels"
@@ -135,6 +74,15 @@ export function CronJobsCreate({
         propertyPath="$.metadata.annotations"
         title={t('common.headers.annotations')}
       />
+
+      <CronJobsSpecSection
+        advanced
+        resource={cronJob.spec}
+        setResource={spec => setCronJob({ ...cronJob, spec })}
+      />
+
+      <ScheduleSection propertyPath="$.spec.schedule" />
+
       {jp.value(
         cronJob,
         '$.spec.jobTemplate.spec.template.spec.containers.length',
