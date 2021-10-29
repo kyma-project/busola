@@ -84,45 +84,6 @@ export const FUNCTION_SOURCE_TYPE = {
   GIT: 'functions.create-view.labels.git-repository',
 };
 
-export const REPOSITORIES_LIST = {
-  MODAL_INPUTS: {
-    NAME: {
-      ERRORS: {
-        EMPTY: 'functions.repository-list.errors.req-name',
-        INVALID: 'functions.repository-list.errors.invalid-url',
-        TOO_LONG: 'functions.repository-list.errors.too-long-name',
-      },
-    },
-    URL: {
-      PLACEHOLDER: 'Enter the URL address of your Git repository (Required)',
-    },
-    AUTH_TYPE: {
-      OPTIONS: [
-        {
-          VALUE: 'Public',
-          KEY: '',
-        },
-        {
-          VALUE: 'Basic',
-          KEY: 'basic',
-        },
-        {
-          VALUE: 'SSH key',
-          KEY: 'key',
-        },
-      ],
-    },
-    SECRET_NAME: {
-      PLACEHOLDER: 'Enter a Secret name with credentials (Required)',
-      ERRORS: {
-        INVALID: `common.tooltips.k8s-name-input`,
-        EMPTY: 'functions.repository-list.errors.req-sec-name',
-        TOO_LONG: 'functions.repository-list.errors.too-long-sec-name',
-      },
-    },
-  },
-};
-
 export const SERVICE_URL = `/api/v1/namespaces/{namespace}/services/{name}`;
 
 //Remove after old Service catalog removal
