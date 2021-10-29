@@ -16,3 +16,4 @@ export * from './DNSEntries/DNSEntries.create.js';
 export * from './Functions/Functions.create.js';
 export * from './GitRepositories/GitRepositories.create.js';
 export * from './Roles/Roles.create.js';
+export * from './ServiceAccounts/ServiceAccounts.create.js';

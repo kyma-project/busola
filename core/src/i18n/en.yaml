@@ -1174,9 +1174,19 @@ service-accounts:
       enabled: For security reasons, don't use automount if you don't need it.
     disabled: disabled
     enabled: enabled
+  create-modal:
+    at-least-one-secret-required: '{{resource}} must have at least one secret.'
+    tooltips:
+      auto-mount-token: When set to true, it automatically mounts the service account token within each container of a given pod. For security reasons, don't enable automount if you don't need it.
+      image-pull-secrets: ImagePullSecrets is a list of references to Secrets in the same Namespace to use for pulling any images in Pods that reference this ServiceAccount. ImagePullSecrets are distinct from Secrets because Secrets can be mounted in a Pod, but ImagePullSecrets are only accessed by the kubelet.
+      secrets: Secrets is the list of Secrets allowed to be used by running Pods using this ServiceAccount.
   headers:
     auto-mount-token: Automount Token
     download-kubeconfig: Download Kubeconfig
+    image-pull-secrets: Image Pull Secrets
+    secret: Secret
+    secrets: Secrets
+  name_singular: Service Account
   service-account: Service Account
   title: Service Accounts
 service-management:

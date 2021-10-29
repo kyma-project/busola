@@ -4,7 +4,7 @@ import { ComboboxInput } from 'fundamental-react';
 import classnames from 'classnames';
 import LuigiClient from '@luigi-project/client';
 
-import { useGetList, getFeatureToggle } from 'react-shared';
+import { useGetList, getFeatureToggle, Spinner } from 'react-shared';
 
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import { CollapsibleSection } from 'shared/ResourceForm/components/FormComponents';
@@ -26,6 +26,7 @@ export function ExternalResourceRef({
   required = false,
   defaultOpen = undefined,
   currentNamespace,
+  noSection,
   index,
 }) {
   const { t } = useTranslation();
@@ -48,7 +49,7 @@ export function ExternalResourceRef({
       text: ns.metadata.name,
     }));
 
-  if (loading || namespacesLoading) return null;
+  if (loading || namespacesLoading) return <Spinner compact={true} />;
 
   const allResourcesOptions = resources.map(resource => ({
     key: resource.metadata.name,
@@ -76,15 +77,8 @@ export function ExternalResourceRef({
 
   const open = defaultOpen === undefined ? !isAdvanced : defaultOpen;
 
-  return (
-    <CollapsibleSection
-      title={title}
-      tooltipContent={tooltipContent}
-      actions={actions}
-      className={classnames('external-resource-ref', className)}
-      defaultOpen={open}
-      required={required}
-    >
+  const content = () => {
+    return [
       <ResourceForm.FormField
         required={required}
         label={t('common.labels.resource-namespace', { resource: labelPrefix })}
@@ -121,7 +115,7 @@ export function ExternalResourceRef({
             }
           />
         )}
-      />
+      />,
       <ResourceForm.FormField
         required={required}
         label={t('common.labels.resource-name', { resource: labelPrefix })}
@@ -158,7 +152,21 @@ export function ExternalResourceRef({
             }
           />
         )}
-      />
+      />,
+    ];
+  };
+
+  if (noSection) return <>{content()}</>;
+  return (
+    <CollapsibleSection
+      title={title}
+      tooltipContent={tooltipContent}
+      actions={actions}
+      className={classnames('external-resource-ref', className)}
+      defaultOpen={open}
+      required={required}
+    >
+      {content()}
     </CollapsibleSection>
   );
 }
