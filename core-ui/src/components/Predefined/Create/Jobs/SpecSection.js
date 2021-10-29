@@ -15,37 +15,37 @@ export const SpecSection = ({ resource, setResource }) => {
       <ResourceForm.FormField
         advanced
         propertyPath="$.startingDeadlineSeconds"
-        label={t('cron-jobs.starting-deadline')}
+        label={t('jobs.create-modal.labels.starting-deadline')}
         input={Inputs.Number}
-        placeholder={t('cron-jobs.create-modal.placeholders.starting-deadline')}
-        tooltipContent={t('cron-jobs.create-modal.tooltips.starting-deadline')}
+        placeholder={t('jobs.create-modal.placeholders.starting-deadline')}
+        tooltipContent={t('jobs.create-modal.tooltips.starting-deadline')}
         min={0}
       />
       <ResourceForm.FormField
         advanced
         propertyPath="$.suspend"
-        label={t('cron-jobs.suspend')}
+        label={t('jobs.create-modal.labels.suspend')}
         input={Inputs.Switch}
-        tooltipContent={t('cron-jobs.create-modal.tooltips.suspend')}
+        tooltipContent={t('jobs.create-modal.tooltips.suspend')}
       />
       <ResourceForm.FormField
         advanced
         propertyPath="$.successfulJobsHistoryLimit"
-        label={t('cron-jobs.successful-jobs-history-limit')}
+        label={t('jobs.create-modal.labels.successful-jobs-history-limit')}
         input={Inputs.Number}
         min={0}
         placeholder={t(
-          'cron-jobs.create-modal.placeholders.successful-jobs-history-limit',
+          'jobs.create-modal.placeholders.successful-jobs-history-limit',
         )}
       />
       <ResourceForm.FormField
         advanced
         propertyPath="$.failedJobsHistoryLimit"
-        label={t('cron-jobs.failed-jobs-history-limit')}
+        label={t('jobs.create-modal.labels.failed-jobs-history-limit')}
         input={Inputs.Number}
         min={0}
         placeholder={t(
-          'cron-jobs.create-modal.placeholders.failed-jobs-history-limit',
+          'jobs.create-modal.placeholders.failed-jobs-history-limit',
         )}
       />
     </ResourceFormWrapper>

@@ -27,21 +27,21 @@ export function SingleContainerForm({
     >
       <ResourceForm.K8sNameField
         propertyPath="$.name"
-        kind={t('cron-jobs.create-modal.container')}
+        kind={t('jobs.create-modal.container')}
       />
       <ResourceForm.FormField
         required
         propertyPath="$.image"
-        label={t('cron-jobs.docker-image')}
+        label={t('jobs.create-modal.labels.docker-image')}
         input={Inputs.Text}
-        placeholder={t('cron-jobs.create-modal.placeholders.docker-image')}
+        placeholder={t('jobs.create-modal.placeholders.docker-image')}
       />
       {advanced && (
         <ResourceForm.FormField
           required
           className="fd-margin-bottom--sm"
           propertyPath="$.imagePullPolicy"
-          label={t('cron-jobs.image-pull-policy')}
+          label={t('jobs.create-modal.labels.image-pull-policy')}
           input={Inputs.Dropdown}
           options={imagePullPolicyOptions}
         />
@@ -49,17 +49,17 @@ export function SingleContainerForm({
       <ResourceForm.TextArrayInput
         required
         propertyPath="$.command"
-        title={t('cron-jobs.command')}
-        placeholder={t('cron-jobs.create-modal.placeholders.command')}
-        tooltipContent={t('cron-jobs.create-modal.tooltips.command')}
+        title={t('jobs.create-modal.labels.command')}
+        placeholder={t('jobs.create-modal.placeholders.command')}
+        tooltipContent={t('jobs.create-modal.tooltips.command')}
       />
       {advanced && (
         <ResourceForm.TextArrayInput
           required
           propertyPath="$.args"
-          title={t('cron-jobs.args')}
-          placeholder={t('cron-jobs.create-modal.placeholders.args')}
-          tooltipContent={t('cron-jobs.create-modal.tooltips.args')}
+          title={t('jobs.create-modal.labels.args')}
+          placeholder={t('jobs.create-modal.placeholders.args')}
+          tooltipContent={t('jobs.create-modal.tooltips.args')}
         />
       )}
     </ResourceFormWrapper>
@@ -74,7 +74,7 @@ export function SingleContainerInput({
 
   return (
     <ResourceForm.CollapsibleSection
-      title={t('cron-jobs.create-modal.container')}
+      title={t('jobs.create-modal.container')}
       defaultOpen
     >
       <SingleContainerForm

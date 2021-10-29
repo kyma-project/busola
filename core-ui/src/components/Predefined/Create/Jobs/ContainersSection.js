@@ -20,11 +20,11 @@ export const ContainersSection = ({ resource, setResource }) => {
       <ResourceForm.ItemArray
         advanced
         propertyPath="$.template.spec.containers"
-        listTitle={t('cron-jobs.create-modal.containers')}
-        nameSingular={t('cron-jobs.create-modal.container')}
+        listTitle={t('jobs.create-modal.containers')}
+        nameSingular={t('jobs.create-modal.container')}
         entryTitle={container => container?.name}
         atLeastOneRequiredMessage={t(
-          'cron-jobs.create-modal.at-least-one-container-required',
+          'jobs.create-modal.at-least-one-container-required',
         )}
         itemRenderer={(current, allValues, setAllValues) => (
           <SingleContainerForm
@@ -53,7 +53,7 @@ export const ContainerSection = ({ resource, setResource }) => {
       ) : (
         <div className="job-container__message">
           <MessageStrip simple type="warning" className="fd-margin-top--sm">
-            {t('cron-jobs.create-modal.at-least-one-container-required')}
+            {t('jobs.create-modal.at-least-one-container-required')}
             <Button
               glyph="add"
               compact
