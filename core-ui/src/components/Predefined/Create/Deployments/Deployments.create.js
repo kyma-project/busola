@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { usePost, useNotification } from 'react-shared';
 import { Button, Checkbox } from 'fundamental-react';
@@ -27,15 +27,13 @@ export function DeploymentsCreate({
   const notification = useNotification();
   const postRequest = usePost();
 
-  const [deployment, setDeployment] = React.useState(
+  const [deployment, setDeployment] = useState(
     createDeploymentTemplate(namespace),
   );
-  const [service, setService] = React.useState(
-    createServiceTemplate(namespace),
-  );
-  const [createService, setCreateService] = React.useState(false);
+  const [service, setService] = useState(createServiceTemplate(namespace));
+  const [createService, setCreateService] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const hasAnyContainers = !!(
       jp.value(deployment, '$.spec.template.spec.containers') || []
     ).length;
