@@ -3,10 +3,10 @@ import 'cypress-file-upload';
 import config from '../config';
 import { loadKubeconfig } from '../support/loadKubeconfigFile';
 
+const kubeconfigIdAddress = `${config.clusterAddress}/kubeconfig`;
+
 context('Login - kubeconfigID', () => {
   it('Adds cluster by kubeconfigID', () => {
-    const kubeconfigIdAddress =
-      'https://kyma-env-broker.cp.dev.kyma.cloud.sap/kubeconfig';
     cy.wrap(loadKubeconfig()).then(kubeconfig => {
       cy.intercept(
         {
@@ -21,8 +21,6 @@ context('Login - kubeconfigID', () => {
   });
 
   it('Gracefully fails on invalid input', () => {
-    const kubeconfigIdAddress =
-      'https://kyma-env-broker.cp.dev.kyma.cloud.sap/kubeconfig';
     cy.intercept(
       {
         method: 'GET',

@@ -34,8 +34,8 @@ context('Add Cluster disabled', () => {
   });
 
   it('User can add cluster via kubeconfig ID + does not display "Add cluster on overview', () => {
-    const kubeconfigIdAddress =
-      'https://kyma-env-broker.cp.dev.kyma.cloud.sap/kubeconfig';
+    const kubeconfigIdAddress = `${config.clusterAddress}/kubeconfig`;
+
     cy.wrap(loadKubeconfig()).then(kubeconfig => {
       cy.intercept(
         {

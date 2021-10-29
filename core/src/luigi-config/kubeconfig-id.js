@@ -1,3 +1,4 @@
+import i18next from 'i18next';
 import { getBusolaClusterParams } from './busola-cluster-params';
 import { resolveFeatureAvailability } from './features';
 import { DEFAULT_FEATURES } from './kubeconfig-id/constants';
@@ -34,6 +35,10 @@ export async function getKubeconfigById(kubeconfigId) {
   const url = join(kubeconfigIdFeature.config.kubeconfigUrl, kubeconfigId);
   const responseText = await fetch(url).then(res => res.text());
   const payload = jsyaml.load(responseText);
+
+  if (typeof payload !== 'object') {
+    throw Error(i18next.t('kubeconfig-id.must-be-an-object'));
+  }
 
   if (payload.Error) {
     throw Error(payload.Error);
