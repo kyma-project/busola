@@ -156,7 +156,10 @@ export function ResourceForm({
       };
       return React.cloneElement(child, {
         isAdvanced: isAdvanced,
-        value: jp.value(resource, childProps.propertyPath),
+        value:
+          typeof child.props.value !== 'undefined'
+            ? child.props.value
+            : jp.value(resource, child.props.propertyPath),
         setValue: child.props.setValue
           ? value => child.props.setValue(value, valueSetter)
           : valueSetter,
