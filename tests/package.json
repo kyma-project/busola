@@ -5,7 +5,8 @@
     "start": "$(npm bin)/cypress open",
     "start:local": "CYPRESS_LOCAL_DEV=true $(npm bin)/cypress open",
     "test": "$(npm bin)/cypress run --browser chrome",
-    "test:local": "CYPRESS_LOCAL_DEV=true $(npm bin)/cypress run --browser chrome"
+    "test:local": "CYPRESS_LOCAL_DEV=true $(npm bin)/cypress run --browser chrome",
+    "test:smoke-local-docker": "CYPRESS_DOMAIN=http://localhost:3001 $(npm bin)/cypress run --browser chrome -C cypress-smoke.json"
   },
   "devDependencies": {
     "cypress-file-upload": "^5.0.8",
@@ -13,5 +14,6 @@
   },
   "optionalDependencies": {
     "cypress": "^8.6.0"
-  }
+  },
+  "dependencies": {}
 }
