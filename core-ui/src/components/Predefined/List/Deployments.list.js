@@ -1,6 +1,7 @@
 import React from 'react';
 import { ControlledByKind, StatusBadge } from 'react-shared';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-shared';
 
 const getImages = deployment => {
   const images =
@@ -68,5 +69,22 @@ export const DeploymentsList = ({ DefaultRenderer, ...otherParams }) => {
     },
   ];
 
-  return <DefaultRenderer customColumns={customColumns} {...otherParams} />;
+  const description = (
+    <span>
+      <Link
+        className="fd-link fd-link"
+        url="https://kubernetes.io/docs/concepts/workloads/controllers/deployment/"
+        text="Deployment"
+      />
+      {t('deployments.description')}
+    </span>
+  );
+
+  return (
+    <DefaultRenderer
+      customColumns={customColumns}
+      description={description}
+      {...otherParams}
+    />
+  );
 };
