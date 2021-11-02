@@ -13,6 +13,8 @@ export * from './DNSProviders/DNSProviders.create.js';
 export * from './Certificates/Certificates.create.js';
 export * from './DNSEntries/DNSEntries.create.js';
 export * from './Functions/Functions.create.js';
+export * from './GitRepositories/GitRepositories.create.js';
 export * from './Roles/Roles.create.js';
+export * from './ServiceAccounts/ServiceAccounts.create.js';
 export * from './Jobs/CronJobs.create.js';
 export * from './Jobs/Jobs.create.js';
