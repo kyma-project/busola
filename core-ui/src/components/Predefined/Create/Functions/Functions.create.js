@@ -160,6 +160,7 @@ export function FunctionsCreate({
         label={t('functions.headers.source-type')}
         input={Inputs.Dropdown}
         options={sourceTypeOptions}
+        value={type || ''}
       />
       {func?.spec?.type === 'git' && !repositories.length && (
         <MessageStrip
