@@ -1,30 +1,25 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
-import CreateNewRepository from './CreateNewRepository';
 import { StatusBadge } from 'react-shared';
 import { Link } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
 export const GitRepositoriesList = ({ DefaultRenderer, ...otherParams }) => {
-  const { t, i18n } = useTranslation();
-
-  const listActions = (
-    <CreateNewRepository namespaceName={otherParams.resourceName} i18n={i18n} />
-  );
+  const { t } = useTranslation();
 
   const customColumns = [
     {
-      header: t('git-repositories.headers.url'),
+      header: t('git-repositories.labels.url'),
       value: repo => repo.spec.url,
     },
     {
-      header: t('git-repositories.headers.authentication'),
+      header: t('git-repositories.labels.auth'),
       value: repo => (
         <StatusBadge type="info">{repo.spec.auth?.type || 'none'}</StatusBadge>
       ),
     },
     {
-      header: t('git-repositories.headers.secret'),
+      header: t('git-repositories.labels.secret'),
       value: repo => {
         if (!repo.spec.auth) return '-';
         const secretName = repo.spec.auth.secretName;
@@ -46,8 +41,8 @@ export const GitRepositoriesList = ({ DefaultRenderer, ...otherParams }) => {
 
   return (
     <DefaultRenderer
-      listHeaderActions={listActions}
       customColumns={customColumns}
+      createActionLabel={t('git-repositories.labels.create')}
       {...otherParams}
     />
   );

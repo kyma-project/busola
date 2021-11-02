@@ -35,7 +35,7 @@ function SecretsCreate({
   const currentDef =
     type === 'Opaque' ? {} : secretDefs.find(def => def.type === type);
   const secretTypes = Array.from(
-    new Set(secretDefs.map(secret => secret.type)),
+    new Set(secretDefs.map(secret => secret.type || 'Opaque')),
   );
 
   useEffect(() => {

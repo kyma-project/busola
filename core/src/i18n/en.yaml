@@ -737,24 +737,6 @@ functions:
     title: Replicas of the Function
   repository:
     title: Repository Configuration
-  repository-list:
-    create:
-      buttons:
-        confirm: Connect
-      title: Connect Repository
-    errors:
-      invalid-url: Invalid Repository URL. The URL must start with the "http(s)", "git", or "ssh" prefix and end with the ".git" suffix.
-      req-name: Repository name is required.
-      req-sec-name: Secret name is required.
-      too-long-name: Repository name cannot be longer than 63 characters.
-      too-long-sec-name: Secret name cannot be longer than 63 characters.
-    inline-help:
-      auth: 'Basic: token or password / SSH key: authentication key / Public: no authentication'
-      url: URL must be a valid Git repository address that starts with the "http(s)", "git", or "ssh" prefix and ends with the ".git" suffix.
-    labels:
-      auth: Authorization
-      secret-name: Secret Name
-      url: URL
   statuses:
     building: Building
     deploying: Deploying
@@ -901,11 +883,26 @@ gateways:
 generic-list:
   no-entries-found: No entries found
 git-repositories:
-  headers:
-    authentication: Authentication
+  auth:
+    basic: Basic
+    public: Public
+    ssh-key: SSH Key
+  errors:
+    invalid-url: Invalid Repository URL. The URL must start with the "http(s)", "git", or "ssh" prefix and end with the ".git" suffix.
+  labels:
+    auth: Authentication
+    create: Connect Repository
     secret: Secret
     url: Repository URL
+  name_singular: Git Repository
+  placeholders:
+    secret: Enter a Secret name with credentials
+    url: Enter the URL address of your Git repository
   title: Git Repositories
+  tooltips:
+    auth: 'Basic: token or password / SSH key: authentication key / Public: no authentication.'
+    secret: The name of the Secret with credentials used by the Function Controller to authenticate to the Git repository in order to fetch the Function's source code and dependencies.
+    url: URL must be a valid Git repository address that starts with the "http(s)", "git", or "ssh" prefix.
 instances:
   no-specific-plan-parameters:
     tooltip: The service provider did not define specific parameters for the selected plan. Refer to the documentation to learn about the required parameters, and define them as a JSON in the editor.
@@ -1182,9 +1179,19 @@ service-accounts:
       enabled: For security reasons, don't use automount if you don't need it.
     disabled: disabled
     enabled: enabled
+  create-modal:
+    at-least-one-secret-required: '{{resource}} must have at least one secret.'
+    tooltips:
+      auto-mount-token: When set to true, it automatically mounts the service account token within each container of a given pod. For security reasons, don't enable automount if you don't need it.
+      image-pull-secrets: ImagePullSecrets is a list of references to Secrets in the same Namespace to use for pulling any images in Pods that reference this ServiceAccount. ImagePullSecrets are distinct from Secrets because Secrets can be mounted in a Pod, but ImagePullSecrets are only accessed by the kubelet.
+      secrets: Secrets is the list of Secrets allowed to be used by running Pods using this ServiceAccount.
   headers:
     auto-mount-token: Automount Token
     download-kubeconfig: Download Kubeconfig
+    image-pull-secrets: Image Pull Secrets
+    secret: Secret
+    secrets: Secrets
+  name_singular: Service Account
   service-account: Service Account
   title: Service Accounts
 service-management:
