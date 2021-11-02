@@ -46,6 +46,10 @@ RUN npm ci --only=production
 # use sessionStorage as default
 RUN sed -i 's/"storage": "localStorage",/"storage": "sessionStorage",/g' core/assets/config/config.json 
 
+ENV DOCKER_NODE_ENV=production
+ARG DOCKER_NODE_ENV
+RUN echo ${DOCKER_NODE_ENV}
+
 EXPOSE 3001
 ENV NODE_ENV=production ADDRESS=0.0.0.0 IS_DOCKER=true
 CMD ["node", "backend-production.js"]
