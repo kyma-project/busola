@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 
 import { createJobTemplate, createJobPresets } from './templates';
-import { SpecSection } from './SpecSection';
+import { JobSpecSection } from './SpecSection';
 import { ContainerSection, ContainersSection } from './ContainersSection';
 
 function isJobValid(job) {
@@ -65,7 +65,7 @@ export function JobsCreate({
         title={t('common.headers.annotations')}
       />
 
-      <SpecSection
+      <JobSpecSection
         advanced
         resource={job.spec}
         setResource={spec => {
