@@ -962,7 +962,7 @@ jobs:
     status: Status
     title: Conditions
     type: Type
-  description: ' a finite or batch task that runs to completion.'
+  description: ' is a finite or batch task that runs to completion.'
   start-time: Start Time
   title: Jobs
 kubeconfig-id:
