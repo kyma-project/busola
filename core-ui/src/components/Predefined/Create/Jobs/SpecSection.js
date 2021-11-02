@@ -31,6 +31,7 @@ export const CronJobSpecSection = ({ resource, setResource }) => {
         tooltipContent={t('jobs.create-modal.tooltips.starting-deadline')}
         min={0}
       />
+
       <ResourceForm.FormField
         advanced
         propertyPath="$.jobTemplate.spec.template.spec.suspend"
@@ -38,6 +39,7 @@ export const CronJobSpecSection = ({ resource, setResource }) => {
         input={Inputs.Switch}
         tooltipContent={t('jobs.create-modal.tooltips.suspend')}
       />
+
       <ResourceForm.FormField
         advanced
         propertyPath="$.jobTemplate.spec.template.spec.successfulJobsHistoryLimit"
@@ -48,6 +50,7 @@ export const CronJobSpecSection = ({ resource, setResource }) => {
           'jobs.create-modal.placeholders.successful-jobs-history-limit',
         )}
       />
+
       <ResourceForm.FormField
         advanced
         propertyPath="$.jobTemplate.spec.template.spec.failedJobsHistoryLimit"
@@ -84,6 +87,15 @@ export const JobSpecSection = ({ resource, setResource }) => {
 
   return (
     <ResourceFormWrapper resource={resource} setResource={setResource}>
+      <ResourceForm.FormField
+        advanced
+        propertyPath="$.parallelism"
+        label={t('jobs.create-modal.labels.parallelism')}
+        input={Inputs.Number}
+        placeholder={t('jobs.create-modal.placeholders.parallelism')}
+        min={0}
+      />
+
       <ResourceForm.FormField
         advanced
         propertyPath="$.suspend"

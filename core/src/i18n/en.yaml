@@ -449,11 +449,11 @@ cron-jobs:
     day-of-month: Day of Month
     day-of-week: Day of Week
     hour: Hour
+    labels:
+      concurrency-policy: Concurrency Policy
+      restart-policy: Restart Policy
     minute: Minute
     month: Month
-    labels:
-      restart-policy: Restart Policy
-      concurrency-policy: Concurrency Policy
     parse-error: Error parsing CRON expression.
     presets:
       daily: Daily
@@ -930,6 +930,14 @@ issuers:
     skip-dns: SkipDNSChallengeValidation marks that this issuer does not validate DNS challenges. In this case, no DNS entries/records are created for a DNS Challenge, and DNS propagation is not checked.
   type: Issuer Type
 jobs:
+  completion-time: Completion Time
+  completions: Completions
+  conditions:
+    last-probe: Last Probe
+    last-transition: Last Transition
+    status: Status
+    title: Conditions
+    type: Type
   create-modal:
     at-least-one-container-required: CronJob must have at least one container.
     container: Container
@@ -940,14 +948,16 @@ jobs:
       docker-image: Docker Image
       failed-jobs-history-limit: Failed Jobs History Limit
       image-pull-policy: Image Pull Policy
+      parallelism: Parallelism
       starting-deadline: Starting Deadline
-      suspend: Suspend
       successful-jobs-history-limit: Successful Jobs History Limit
+      suspend: Suspend
     placeholders:
       args: Arguments to the entrypoint.
       command: Command to run in a container.
       docker-image: Enter the Docker image tag, for example, 'busybox'.
       failed-jobs-history-limit: 'The number of failed finished jobs to retain (default: 1).'
+      parallelism: 'The maximum number of pods the job should run at any given time (default: 1).'
       starting-deadline: Optional deadline in seconds.
       successful-jobs-history-limit: 'The number of successful finished jobs to retain (default: 3).'
     tooltips:
@@ -955,14 +965,6 @@ jobs:
       command: The docker image's ENTRYPOINT is used if this is not provided. Provide either args or command.
       starting-deadline: Optional deadline in seconds for starting the job if it misses the scheduled time.
       suspend: 'If true, the controller suspends subsequent executions (default: false). It does not apply to started executions.'
-  completion-time: Completion Time
-  completions: Completions
-  conditions:
-    last-probe: Last Probe
-    last-transition: Last Transition
-    status: Status
-    title: Conditions
-    type: Type
   name-singular: Job
   start-time: Start Time
   title: Jobs
