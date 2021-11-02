@@ -11,6 +11,7 @@ import {
   KeyValueField,
   FormField,
 } from 'shared/ResourceForm/components/FormComponents';
+import { RuntimeResources } from 'shared/ResourceForm/components/RuntimeResources';
 import {
   functionAvailableLanguages,
   getDefaultDependencies,
@@ -37,6 +38,8 @@ export function FunctionsCreate({
   const name = jp.value(func, '$.metadata.name');
   const type = jp.value(func, '$.spec.type');
   const runtime = jp.value(func, '$.spec.runtime');
+  const minReplicas = jp.value(func, '$.spec.minReplicas');
+  const maxReplicas = jp.value(func, '$.spec.maxReplicas');
 
   const runtimeOptions = Object.entries(functionAvailableLanguages).map(
     ([runtime, lang]) => ({
@@ -99,6 +102,20 @@ export function FunctionsCreate({
     }
   }, [runtime]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  useEffect(() => {
+    if (maxReplicas && maxReplicas < minReplicas) {
+      jp.value(func, '$.spec.maxReplicas', minReplicas);
+      setFunc({ ...func });
+    }
+  }, [minReplicas]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (maxReplicas && maxReplicas < minReplicas) {
+      jp.value(func, '$.spec.minReplicas', maxReplicas);
+      setFunc({ ...func });
+    }
+  }, [maxReplicas]); // eslint-disable-line react-hooks/exhaustive-deps
+
   return (
     <ResourceForm
       className="create-function-form"
@@ -154,6 +171,32 @@ export function FunctionsCreate({
           {t('functions.create-view.errors.no-repository-found')}
         </MessageStrip>
       )}
+      <FormField
+        advanced
+        required
+        propertyPath="$.spec.minReplicas"
+        label={t('functions.details.title.minimum-replicas')}
+        input={Inputs.Number}
+        min={1}
+      />
+      <FormField
+        advanced
+        required
+        propertyPath="$.spec.maxReplicas"
+        label={t('functions.details.title.maximum-replicas')}
+        input={Inputs.Number}
+        min={0}
+      />
+      <RuntimeResources
+        advanced
+        title={t('functions.details.title.runtime-profile')}
+        propertyPath="$.spec.resources"
+      />
+      <RuntimeResources
+        advanced
+        title={t('functions.details.title.build-job')}
+        propertyPath="$.spec.buildResources"
+      />
       {func?.spec?.type === 'git' && repositories.length && (
         <>
           <FormField
