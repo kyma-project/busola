@@ -12,7 +12,7 @@ RUN apk update && \
   apk add --no-cache curl make
 
 # Set env variables
-ENV PRODUCTION false
+ENV PRODUCTION true
 ENV CI true
 
 COPY . /app
@@ -47,5 +47,5 @@ RUN npm ci --only=production
 RUN sed -i 's/"storage": "localStorage",/"storage": "sessionStorage",/g' core/assets/config/config.json 
 
 EXPOSE 3001
-ENV NODE_ENV=local ADDRESS=0.0.0.0 IS_DOCKER=true
+ENV NODE_ENV=production ADDRESS=0.0.0.0 IS_DOCKER=true
 CMD ["node", "backend-production.js"]
