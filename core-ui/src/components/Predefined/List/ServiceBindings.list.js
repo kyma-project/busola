@@ -46,7 +46,7 @@ export const ServiceBindingsList = ({ DefaultRenderer, ...otherParams }) => {
   const description = (
     <span>
       <ReactSharedLink
-        className="fd-link fd-link"
+        className="fd-link"
         url="https://github.com/SAP/sap-btp-service-operator#step-2-create-a-service-binding"
         text="BTP ServiceBinding"
       />

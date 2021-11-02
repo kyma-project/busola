@@ -28,7 +28,7 @@ export const ServiceInstancesList = ({ DefaultRenderer, ...otherParams }) => {
   const description = (
     <span>
       <Link
-        className="fd-link fd-link"
+        className="fd-link"
         url="https://github.com/SAP/sap-btp-service-operator#step-1-create-a-service-instance"
         text="BTP ServiceInstance"
       />

@@ -16,7 +16,7 @@ export function GatewaysList({ DefaultRenderer, ...otherParams }) {
   const description = (
     <span>
       <Link
-        className="fd-link fd-link"
+        className="fd-link"
         url="https://istio.io/latest/docs/reference/config/networking/gateway/"
         text="Gateway" // no translations here
       />

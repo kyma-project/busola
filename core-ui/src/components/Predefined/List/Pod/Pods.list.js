@@ -55,7 +55,7 @@ export const PodsList = ({ DefaultRenderer, ...otherParams }) => {
   const description = (
     <span>
       <ReactSharedLink
-        className="fd-link fd-link"
+        className="fd-link"
         url="https://kubernetes.io/docs/concepts/workloads/pods/"
         text="Pod"
       />

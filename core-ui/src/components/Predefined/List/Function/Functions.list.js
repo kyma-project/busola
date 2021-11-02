@@ -49,7 +49,7 @@ export const FunctionsList = ({ DefaultRenderer, ...otherParams }) => {
   const description = (
     <span>
       <Link
-        className="fd-link fd-link"
+        className="fd-link"
         url="https://kyma-project.io/docs/kyma/latest/05-technical-reference/00-custom-resources/svls-01-function/#documentation-content/"
         text="Function"
       />

@@ -72,7 +72,7 @@ export const DeploymentsList = ({ DefaultRenderer, ...otherParams }) => {
   const description = (
     <span>
       <Link
-        className="fd-link fd-link"
+        className="fd-link"
         url="https://kubernetes.io/docs/concepts/workloads/controllers/deployment/"
         text="Deployment"
       />

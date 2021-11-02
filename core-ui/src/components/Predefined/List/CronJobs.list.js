@@ -24,7 +24,7 @@ export const CronJobsList = ({ DefaultRenderer, ...otherParams }) => {
   const description = (
     <span>
       <Link
-        className="fd-link fd-link"
+        className="fd-link"
         url="https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/"
         text="CronJob"
       />
