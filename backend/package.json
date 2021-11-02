@@ -7,7 +7,7 @@
     "start:kyma": "npm run watch",
     "watch": "SSL_CERT_FILE=certs.pem NODE_ENV=development nodemon --exec babel-node index.js",
     "build": "webpack --mode=production",
-    "start": "SSL_CERT_FILE=certs.pem NODE_ENV=production node backend-production.js",
+    "start": "SSL_CERT_FILE=certs.pem node backend-production.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
