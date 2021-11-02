@@ -48,7 +48,7 @@ const ServiceInstanceTable = ({
               entry.metadata.name,
               notification,
               () => deleteServiceInstance(entry.metadata.name),
-              null,
+              () => {},
               t,
             ),
         },
