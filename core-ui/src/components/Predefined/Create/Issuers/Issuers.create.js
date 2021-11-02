@@ -40,7 +40,7 @@ export function IssuersCreate({
   }, [issuer, setIssuer]);
 
   const issuerCAFields = () => {
-    if (!issuerType || issuerType !== 'ca') return <></>;
+    if (!issuerType || issuerType !== 'ca') return undefined;
     if (issuerType === 'ca') {
       return (
         <SecretRef
@@ -57,7 +57,7 @@ export function IssuersCreate({
   };
 
   const issuerSimpleACMEFields = () => {
-    if (!issuerType || issuerType !== 'acme') return <></>;
+    if (!issuerType || issuerType !== 'acme') return undefined;
     if (issuerType === 'acme') {
       return [
         <ResourceForm.FormField
@@ -83,7 +83,7 @@ export function IssuersCreate({
   };
 
   const issuerAdvancedACMEFields = () => {
-    if (!issuerType || issuerType !== 'acme') return <></>;
+    if (!issuerType || issuerType !== 'acme') return undefined;
     if (issuerType === 'acme') {
       return [
         <ResourceForm.FormField

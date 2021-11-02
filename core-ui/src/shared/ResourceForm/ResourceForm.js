@@ -14,6 +14,7 @@ export function ResourceFormWrapper({
   resource,
   setResource,
   children,
+  isAdvanced,
   ...props
 }) {
   return React.Children.map(children, child => {
@@ -21,10 +22,18 @@ export function ResourceFormWrapper({
       return null;
     } else if (child.type === React.Fragment) {
       return (
-        <ResourceFormWrapper resource={resource} setResource={setResource}>
+        <ResourceFormWrapper
+          resource={resource}
+          setResource={setResource}
+          isAdvanced={isAdvanced}
+        >
           {child.props.children}
         </ResourceFormWrapper>
       );
+    } else if (child.props.simple && isAdvanced) {
+      return null;
+    } else if (child.props.advanced && !isAdvanced) {
+      return null;
     } else if (!child.props.propertyPath) {
       if (typeof child.type === 'function') {
         return React.cloneElement(child, {
@@ -36,14 +45,22 @@ export function ResourceFormWrapper({
         return child;
       }
     } else {
-      return React.cloneElement(child, {
-        value: jp.value(resource, child.props.propertyPath),
-        setValue: value => {
-          jp.value(resource, child.props.propertyPath, value);
-          setResource({ ...resource });
-        },
-        ...props,
-      });
+      const valueSetter = value => {
+        jp.value(resource, child.props.propertyPath, value);
+        setResource({ ...resource });
+      };
+
+      const value =
+        typeof child.props.value !== 'undefined'
+          ? child.props.value
+          : jp.value(resource, child.props.propertyPath) ||
+            child.props.defaultValue;
+
+      const setValue = child.props.setValue
+        ? value => child.props.setValue(value, valueSetter)
+        : valueSetter;
+
+      return React.cloneElement(child, { isAdvanced, value, setValue });
     }
   });
 }
@@ -128,44 +145,6 @@ export function ResourceForm({
     />
   );
 
-  const renderFormChildren = (children, isAdvanced) =>
-    React.Children.map(children, child => {
-      if (!child) {
-        return null;
-      }
-      if (child.type === React.Fragment) {
-        return renderFormChildren(child.props.children, isAdvanced);
-      }
-      const childProps = child.props || {};
-
-      if (childProps.simple && isAdvanced) {
-        return null;
-      }
-      if (childProps.advanced && !isAdvanced) {
-        return null;
-      }
-      if (!childProps.propertyPath) {
-        return React.cloneElement(child, {
-          isAdvanced: isAdvanced,
-        });
-      }
-
-      const valueSetter = value => {
-        jp.value(resource, childProps.propertyPath, value);
-        setResource({ ...resource });
-      };
-      return React.cloneElement(child, {
-        isAdvanced: isAdvanced,
-        value:
-          typeof child.props.value !== 'undefined'
-            ? child.props.value
-            : jp.value(resource, child.props.propertyPath),
-        setValue: child.props.setValue
-          ? value => child.props.setValue(value, valueSetter)
-          : valueSetter,
-      });
-    });
-
   let editor = <Editor value={resource} setValue={setResource} />;
   editor = renderEditor
     ? renderEditor({ defaultEditor: editor, Editor })
@@ -178,7 +157,13 @@ export function ResourceForm({
       <form ref={formElementRef} onSubmit={createResource}>
         {mode === ModeSelector.MODE_SIMPLE && (
           <div onChange={onChange} className="simple-form">
-            {renderFormChildren(children, false)}
+            <ResourceFormWrapper
+              resource={resource}
+              setResource={setResource}
+              isAdvanced={false}
+            >
+              {children}
+            </ResourceFormWrapper>
           </div>
         )}
         {mode === ModeSelector.MODE_YAML && editor}
@@ -188,7 +173,13 @@ export function ResourceForm({
           onChange={onChange}
           hidden={mode !== ModeSelector.MODE_ADVANCED}
         >
-          {renderFormChildren(children, true)}
+          <ResourceFormWrapper
+            resource={resource}
+            setResource={setResource}
+            isAdvanced={true}
+          >
+            {children}
+          </ResourceFormWrapper>
         </div>
       </form>
     </section>
@@ -205,6 +196,5 @@ ResourceForm.TextArrayInput = FormComponents.TextArrayInput;
 ResourceForm.K8sNameField = FormComponents.K8sNameField;
 ResourceForm.KeyValueField = FormComponents.KeyValueField;
 ResourceForm.ItemArray = FormComponents.ItemArray;
-ResourceForm.Select = FormComponents.Select;
 ResourceForm.ComboboxInput = FormComponents.ComboboxInput;
 ResourceForm.ComboboxArrayInput = FormComponents.ComboboxArrayInput;
