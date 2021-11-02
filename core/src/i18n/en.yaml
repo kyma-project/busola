@@ -485,7 +485,7 @@ cron-jobs:
       month: 1 to 12
       starting-deadline: Optional deadline in seconds for starting the job if it misses the scheduled time.
       suspend: 'If true, the controller suspends subsequent executions (default: false). It does not apply to started executions.'
-  description: CronJobs are for regular scheduled actions. A CronJob object is like one line of a crontab file, running a job periodically on a given schedule.
+  description: ' is for regular scheduled actions. A CronJob object is like one line of a crontab file, running a job periodically on a given schedule.'
   docker-image: Docker Image
   failed-jobs-history-limit: Failed Jobs History Limit
   image-pull-policy: Image Pull Policy
@@ -524,6 +524,7 @@ custom-resource-definitions:
     version: Version
   title: CustomResourceDefinitions
 daemon-sets:
+  description: ' ensures a copy of a Pod is running across a set of nodes in a cluster.'
   images: Images
   node-selector: Node Selector
   pods: $t(pods.title)
@@ -558,6 +559,7 @@ deployments:
       image-pull-secret: Image Pull Secret
       image-pull-secret-tooltip: The secret for authorization to the private Docker repository.
     title: Create Deployment
+  description: ' is a Kubernetes object that represents a replicated application running on your cluster.'
   headers:
     images: Images
     pods: $t(pods.title)
@@ -960,6 +962,7 @@ jobs:
     status: Status
     title: Conditions
     type: Type
+  description: ' a finite or batch task that runs to completion.'
   start-time: Start Time
   title: Jobs
 kubeconfig-id:
@@ -1058,6 +1061,7 @@ observability:
 pods:
   buttons:
     view-logs: View Logs
+  description: ' is the smallest and simplest Kubernetes object that represents a set of containers running on your cluster.'
   headers:
     pod-ip: Pod IP
     type: Type
@@ -1084,6 +1088,7 @@ preferences:
   title: Preferences
 replica-sets:
   cpu: CPU
+  description: ' maintains a stable set of replica Pods running at any given time.'
   headers:
     images: Images
     limits: Limits
@@ -1229,6 +1234,7 @@ settings:
   language: Language
   theme: Theme
 stateful-sets:
+  description: ' manages the deployment and scaling of a set of Pods.'
   replicas: Replicas
   title: StatefulSets
 top-nav:
