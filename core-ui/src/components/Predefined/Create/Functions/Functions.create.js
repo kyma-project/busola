@@ -17,6 +17,7 @@ import {
   getDefaultDependencies,
 } from 'components/Lambdas/helpers/runtime';
 import { CONFIG } from 'components/Lambdas/config';
+import { useConfigData } from 'components/Lambdas/helpers/misc/useConfigData';
 
 import { createFunctionTemplate } from './helpers';
 
@@ -26,6 +27,7 @@ export function FunctionsCreate({
   onChange,
   setCustomValid,
 }) {
+  useConfigData();
   const { t } = useTranslation();
   const [func, setFunc] = useState(createFunctionTemplate(namespace));
   const {
@@ -192,11 +194,13 @@ export function FunctionsCreate({
         advanced
         title={t('functions.details.title.runtime-profile')}
         propertyPath="$.spec.resources"
+        presets={CONFIG['functionResourcesPresets']}
       />
       <RuntimeResources
         advanced
         title={t('functions.details.title.build-job')}
         propertyPath="$.spec.buildResources"
+        presets={CONFIG['buildJobResourcesPresets']}
       />
       {func?.spec?.type === 'git' && repositories.length && (
         <>

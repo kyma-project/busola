@@ -11,6 +11,7 @@ import * as jp from 'jsonpath';
 import { Dropdown } from 'react-shared';
 
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
+import { Presets } from 'shared/ResourceForm/components/Presets';
 import * as Inputs from 'shared/ResourceForm/components/Inputs';
 
 function MemoryInput({ label, propertyPath, container = {}, setContainer }) {
@@ -83,14 +84,37 @@ function CpuInput({ label, propertyPath, container = {}, setContainer }) {
   );
 }
 
-export function RuntimeResources({ value, setValue, ...props }) {
+export function RuntimeResources({ value, setValue, presets, ...props }) {
   const { t } = useTranslation();
 
+  const mappedPresets = Object.entries(presets || {}).map(
+    ([preset, values]) => ({
+      name: `${preset} (${Object.entries(values)
+        .map(([t, v]) => `${t}: ${v}`)
+        .join(', ')})`,
+      value: {
+        limits: {
+          cpu: values.limitCpu,
+          memory: values.limitMemory,
+        },
+        requests: {
+          cpu: values.requestCpu,
+          memory: values.requestMemory,
+        },
+      },
+    }),
+  );
+
   return (
-    <ResourceForm.CollapsibleSection
-      // canChangeState={false}
-      {...props}
-    >
+    <ResourceForm.CollapsibleSection {...props}>
+      {presets && (
+        <FormFieldset className="runtime-profile-form-presets">
+          <Presets
+            presets={mappedPresets}
+            onSelect={preset => setValue(preset.value)}
+          />
+        </FormFieldset>
+      )}
       <FormFieldset className="runtime-profile-form">
         <MemoryInput
           label={t('deployments.create-modal.advanced.memory-requests')}
