@@ -160,9 +160,9 @@ export function FunctionsCreate({
         required
         propertyPath="$.spec.type"
         label={t('functions.headers.source-type')}
+        defaultValue=""
         input={Inputs.Dropdown}
         options={sourceTypeOptions}
-        value={type || ''}
       />
       {func?.spec?.type === 'git' && !repositories.length && (
         <MessageStrip
