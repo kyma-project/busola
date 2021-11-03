@@ -106,15 +106,17 @@ export function RuntimeResources({ value, setValue, presets, ...props }) {
   );
 
   return (
-    <ResourceForm.CollapsibleSection {...props}>
-      {presets && (
-        <FormFieldset className="runtime-profile-form-presets">
+    <ResourceForm.CollapsibleSection
+      actions={
+        presets && (
           <Presets
             presets={mappedPresets}
             onSelect={preset => setValue(preset.value)}
           />
-        </FormFieldset>
-      )}
+        )
+      }
+      {...props}
+    >
       <FormFieldset className="runtime-profile-form">
         <MemoryInput
           label={t('deployments.create-modal.advanced.memory-requests')}
