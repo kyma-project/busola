@@ -17,11 +17,6 @@ export function MemoryInput({ label, propertyPath, value = '', setValue }) {
   const unit = value.replace(numericValue, '');
   const selectedUnit = units.includes(unit) ? unit : '';
 
-  // const setValue = val => {
-  // jp.value(container, propertyPath, val);
-  // setContainer(container);
-  // };
-
   return (
     <div className="memory-input">
       <FormInput
