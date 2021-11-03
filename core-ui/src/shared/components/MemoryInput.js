@@ -1,6 +1,4 @@
 import React from 'react';
-// import * as jp from 'jsonpath';
-// import { FormInput, FormItem } from 'fundamental-react';
 import { FormInput } from 'fundamental-react';
 
 import { Dropdown } from 'react-shared';
@@ -18,11 +16,6 @@ export function MemoryInput({ label, propertyPath, value = '', setValue }) {
   const numericValue = value.match(/^\d*(\.\d*)?/)[0];
   const unit = value.replace(numericValue, '');
   const selectedUnit = units.includes(unit) ? unit : '';
-
-  // const setValue = val => {
-  // jp.value(container, propertyPath, val);
-  // setContainer(container);
-  // };
 
   return (
     <div className="memory-input">
