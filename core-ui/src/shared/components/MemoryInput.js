@@ -1,6 +1,4 @@
 import React from 'react';
-// import * as jp from 'jsonpath';
-// import { FormInput, FormItem } from 'fundamental-react';
 import { FormInput } from 'fundamental-react';
 
 import { Dropdown } from 'react-shared';
