@@ -2,6 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ControlledByKind } from 'react-shared';
 import { Link } from 'react-shared';
+import { Trans } from 'react-i18next';
 
 import { StatefulSetReplicas } from '../Details/StatefulSet/StatefulSetReplicas';
 
@@ -22,14 +23,12 @@ export const StatefulSetsList = ({ DefaultRenderer, ...otherParams }) => {
   ];
 
   const description = (
-    <span>
+    <Trans i18nKey="stateful-sets.description">
       <Link
         className="fd-link"
         url="https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/"
-        text="StatefulSet"
       />
-      {t('stateful-sets.description')}
-    </span>
+    </Trans>
   );
 
   return (

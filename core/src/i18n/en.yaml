@@ -25,7 +25,7 @@ api-rules:
     create: Create API Rule
     edit: Edit API Rule "{{apiRuleName}}"
     expose: Expose {{type}}
-  description: ' allows to expose a service externally.'
+  description: <0>API Rule</0> allows to expose a service externally.
   form:
     gateway: Gateway
     hostname: Hostname
@@ -107,7 +107,7 @@ brokers:
     url: URL
   title: Brokers
 btp-instances:
-  description: ' makes the functionality of a service available for consumption.'
+  description: ' <0>BTP ServiceInstance</0> makes the functionality of a service available for consumption.'
   external-name: External Name
   instance-data: ServiceInstance Data
   instance-id: Instance ID
@@ -129,7 +129,7 @@ btp-instances:
 btp-service-bindings:
   binding-id: Binding ID
   data: Binding Data
-  description: ' provides access details for an existing service instance.'
+  description: <0>BTP ServiceBinding</0> provides access details for an existing service instance.
   external-name: External Name
   instance-id: Instance ID
   instance-name: ServiceInstance Name
@@ -485,7 +485,7 @@ cron-jobs:
       month: 1 to 12
       starting-deadline: Optional deadline in seconds for starting the job if it misses the scheduled time.
       suspend: 'If true, the controller suspends subsequent executions (default: false). It does not apply to started executions.'
-  description: ' allows to perform tasks on a given schedule.'
+  description: <0>CronJob</0> allows to perform tasks on a given schedule.
   docker-image: Docker Image
   failed-jobs-history-limit: Failed Jobs History Limit
   image-pull-policy: Image Pull Policy
@@ -524,7 +524,7 @@ custom-resource-definitions:
     version: Version
   title: CustomResourceDefinitions
 daemon-sets:
-  description: ' ensures replicated Pods are running across a set of available nodes.'
+  description: <0>DaemonSet</0> ensures replicated Pods are running across a set of available nodes.
   images: Images
   node-selector: Node Selector
   pods: $t(pods.title)
@@ -559,7 +559,7 @@ deployments:
       image-pull-secret: Image Pull Secret
       image-pull-secret-tooltip: The secret for authorization to the private Docker repository.
     title: Create Deployment
-  description: ' is a Kubernetes object that represents a replicated application running on your cluster.'
+  description: <0>Deployment</0> is a Kubernetes object that represents a replicated application running on your cluster.
   headers:
     images: Images
     pods: $t(pods.title)
@@ -694,7 +694,7 @@ functions:
       reference: Reference
       repository: Repository
     title: Create Function
-  description: ' is a simple code snippet that you can run without provisioning or managing servers.'
+  description: <0>Function</0> is a simple code snippet that you can run without provisioning or managing servers.
   details:
     buttons:
       diff_toggle: Diff
@@ -869,7 +869,7 @@ gateways:
       selector: One or more labels that indicate a set of pods on which the gateway configuration is applied. By default, workloads are searched across all namespaces based on label selectors.
       server-certificate: The path to the file holding the server-side TLS certificate you want to use.
       target-port: The port number on the endpoint where the traffic is received.
-  description: ' describes a load balancer that operates at the edge of the mesh and receives incoming or outgoing HTTP/TCP connections.'
+  description: ' <0>Gateway</0> describes a load balancer that operates at the edge of the mesh and receives incoming or outgoing HTTP/TCP connections.'
   name_singular: Gateway
   selector: Selector
   servers:
@@ -962,7 +962,7 @@ jobs:
     status: Status
     title: Conditions
     type: Type
-  description: ' creates and supervises Pods until their successfull termination.'
+  description: <0>Job</0> creates and supervises Pods until their successful termination.
   start-time: Start Time
   title: Jobs
 kubeconfig-id:
@@ -1061,7 +1061,7 @@ observability:
 pods:
   buttons:
     view-logs: View Logs
-  description: ' is the smallest and simplest Kubernetes object that represents a set of containers running on your cluster.'
+  description: <0>Pod</0> is the smallest and simplest Kubernetes object that represents a set of containers running on your cluster.
   headers:
     pod-ip: Pod IP
     type: Type
@@ -1088,7 +1088,7 @@ preferences:
   title: Preferences
 replica-sets:
   cpu: CPU
-  description: ' maintains a number of replica Pods running at any given time.'
+  description: <0>ReplicaSet</0> maintains a number of replica Pods running at any given time.
   headers:
     images: Images
     limits: Limits
@@ -1234,7 +1234,7 @@ settings:
   language: Language
   theme: Theme
 stateful-sets:
-  description: ' is used for the management of Pods deployment and scaling.'
+  description: <0>StatefulSet</0> is used for the management of Pods deployment and scaling.
   replicas: Replicas
   title: StatefulSets
 top-nav:

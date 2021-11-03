@@ -2,6 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ControlledByKind, Labels, StatusBadge } from 'react-shared';
 import { Link } from 'react-shared';
+import { Trans } from 'react-i18next';
 
 const isStatusOk = daemonSet => {
   const allPods =
@@ -49,14 +50,12 @@ export const DaemonSetsList = ({ DefaultRenderer, ...otherParams }) => {
   ];
 
   const description = (
-    <span>
+    <Trans i18nKey="daemon-sets.description">
       <Link
         className="fd-link"
         url="https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/"
-        text="DaemonSet"
       />
-      {t('daemon-sets.description')}
-    </span>
+    </Trans>
   );
 
   return (

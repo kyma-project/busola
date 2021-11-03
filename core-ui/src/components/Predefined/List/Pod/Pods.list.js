@@ -4,6 +4,7 @@ import LuigiClient from '@luigi-project/client';
 import { useTranslation } from 'react-i18next';
 import { ControlledByKind } from 'react-shared';
 import { Link as ReactSharedLink } from 'react-shared';
+import { Trans } from 'react-i18next';
 
 import { PodStatus } from '../../Details/Pod/PodStatus';
 import PodRestarts from './PodRestarts';
@@ -53,14 +54,12 @@ export const PodsList = ({ DefaultRenderer, ...otherParams }) => {
   }
 
   const description = (
-    <span>
+    <Trans i18nKey="pods.description">
       <ReactSharedLink
         className="fd-link"
         url="https://kubernetes.io/docs/concepts/workloads/pods/"
-        text="Pod"
       />
-      {t('pods.description')}
-    </span>
+    </Trans>
   );
 
   return (

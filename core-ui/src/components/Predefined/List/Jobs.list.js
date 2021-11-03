@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-shared';
+import { Trans } from 'react-i18next';
 
 import { JobCompletions } from '../Details/Job/JobCompletions';
 
@@ -15,14 +16,12 @@ export const JobsList = ({ DefaultRenderer, ...otherParams }) => {
   ];
 
   const description = (
-    <span>
+    <Trans i18nKey="jobs.description">
       <Link
         className="fd-link"
         url="https://kubernetes.io/docs/concepts/workloads/controllers/job/"
-        text="Job"
       />
-      {t('jobs.description')}
-    </span>
+    </Trans>
   );
 
   return (
