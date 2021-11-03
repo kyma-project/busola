@@ -538,6 +538,7 @@ deployments:
   create-modal:
     advanced:
       container-header: Container {{name}}
+      containers: Containers
       cpu-limits: CPU Limits
       cpu-requests: CPU Requests
       expose-service: Expose a separate Service
@@ -548,6 +549,7 @@ deployments:
       port: Port
       port-placeholder: Enter the port exposed by the Service.
       runtime-profile: Runtime Profile
+      service: Service
       target-port: Target Port
       target-port-placeholder: Enter the target port of the container.
     messages:

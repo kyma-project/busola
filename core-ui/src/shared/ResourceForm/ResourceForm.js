@@ -39,6 +39,7 @@ export function ResourceFormWrapper({
         return React.cloneElement(child, {
           resource,
           setResource,
+          isAdvanced,
           ...props,
         });
       } else {

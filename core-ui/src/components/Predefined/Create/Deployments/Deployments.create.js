@@ -185,7 +185,7 @@ export function DeploymentsCreate({
 
       <ResourceForm.CollapsibleSection
         advanced
-        title="Containers"
+        title={t('deployments.create-modal.advanced.containers')}
         defaultOpen
         resource={deployment}
         setResource={setDeployment}
@@ -214,7 +214,7 @@ export function DeploymentsCreate({
       </ResourceForm.CollapsibleSection>
       <ResourceForm.CollapsibleSection
         advanced
-        title="Service"
+        title={t('deployments.create-modal.advanced.service')}
         resource={service}
         setResource={setService}
         actions={serviceActions}
