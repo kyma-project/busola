@@ -47,5 +47,5 @@ RUN npm ci --only=production
 RUN sed -i 's/"storage": "localStorage",/"storage": "sessionStorage",/g' core/assets/config/config.json 
 
 EXPOSE 3001
-ENV ADDRESS=0.0.0.0 IS_DOCKER=true
+ENV NODE_ENV=production ADDRESS=0.0.0.0 IS_DOCKER=true
 CMD ["node", "backend-production.js"]
