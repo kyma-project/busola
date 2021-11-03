@@ -485,7 +485,7 @@ cron-jobs:
       month: 1 to 12
       starting-deadline: Optional deadline in seconds for starting the job if it misses the scheduled time.
       suspend: 'If true, the controller suspends subsequent executions (default: false). It does not apply to started executions.'
-  description: ' is for regular scheduled actions. A CronJob object is like one line of a crontab file, running a job periodically on a given schedule.'
+  description: ' allows to perform tasks on a given schedule.'
   docker-image: Docker Image
   failed-jobs-history-limit: Failed Jobs History Limit
   image-pull-policy: Image Pull Policy
@@ -524,7 +524,7 @@ custom-resource-definitions:
     version: Version
   title: CustomResourceDefinitions
 daemon-sets:
-  description: ' ensures a copy of a Pod is running across a set of nodes in a cluster.'
+  description: ' ensures replicated Pods are running across a set of available nodes.'
   images: Images
   node-selector: Node Selector
   pods: $t(pods.title)
@@ -962,7 +962,7 @@ jobs:
     status: Status
     title: Conditions
     type: Type
-  description: ' is a finite or batch task that runs to completion.'
+  description: ' creates and supervises Pods until their successfull termination.'
   start-time: Start Time
   title: Jobs
 kubeconfig-id:
@@ -1088,7 +1088,7 @@ preferences:
   title: Preferences
 replica-sets:
   cpu: CPU
-  description: ' maintains a stable set of replica Pods running at any given time.'
+  description: ' maintains a number of replica Pods running at any given time.'
   headers:
     images: Images
     limits: Limits
@@ -1234,7 +1234,7 @@ settings:
   language: Language
   theme: Theme
 stateful-sets:
-  description: ' manages the deployment and scaling of a set of Pods.'
+  description: ' is used for the management of Pods deployment and scaling.'
   replicas: Replicas
   title: StatefulSets
 top-nav:
