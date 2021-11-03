@@ -19,7 +19,6 @@ export function KubeconfigUpload({
   const { t } = useTranslation();
 
   const configString = jsyaml.dump(kubeconfig, { noRefs: true }) || undefined;
-
   const updateKubeconfig = text => {
     try {
       const config = jsyaml.load(text);
@@ -49,6 +48,7 @@ export function KubeconfigUpload({
         editorDidMount={(getValue, editor) =>
           editor.onDidBlurEditorWidget(() => updateKubeconfig(getValue()))
         }
+        onChange={(_, value) => updateKubeconfig(value)}
       />
       {error && (
         <MessageStrip type="error" className="fd-margin-top--sm">
