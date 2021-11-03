@@ -78,14 +78,13 @@ export const ServiceAccountsCreate = ({
         tooltipContent={t('service-accounts.create-modal.tooltips.secrets')}
         entryTitle={subject => subject?.name}
         allowEmpty={true}
-        itemRenderer={(current, allValues, setAllValues, index) => (
+        itemRenderer={({ item, values, setValues, index }) => (
           <SingleSecretForm
-            secret={current}
-            secrets={allValues}
-            setSecrets={setAllValues}
+            secret={item}
+            secrets={values}
+            setSecrets={setValues}
             index={index}
             namespace={namespace}
-            advanced
           />
         )}
         newResourceTemplateFn={() => newSecret(namespace)}
