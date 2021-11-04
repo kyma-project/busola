@@ -17,11 +17,11 @@ const concurrencyPolicyOptions = ['Allow', 'Forbid', 'Replace'].map(p => ({
   text: p,
 }));
 
-export const CronJobSpecSection = ({ resource, setResource }) => {
+export const CronJobSpecSection = ({ value, setValue, ...props }) => {
   const { t } = useTranslation();
 
   return (
-    <ResourceFormWrapper resource={resource} setResource={setResource}>
+    <ResourceFormWrapper resource={value} setResource={setValue} {...props}>
       <ResourceForm.FormField
         advanced
         propertyPath="$.jobTemplate.spec.template.spec.startingDeadlineSeconds"
@@ -82,11 +82,11 @@ export const CronJobSpecSection = ({ resource, setResource }) => {
   );
 };
 
-export const JobSpecSection = ({ resource, setResource }) => {
+export const JobSpecSection = ({ value, setValue, ...props }) => {
   const { t } = useTranslation();
 
   return (
-    <ResourceFormWrapper resource={resource} setResource={setResource}>
+    <ResourceFormWrapper resource={value} setResource={setValue} {...props}>
       <ResourceForm.FormField
         advanced
         propertyPath="$.parallelism"

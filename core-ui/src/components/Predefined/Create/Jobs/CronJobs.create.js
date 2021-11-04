@@ -71,32 +71,18 @@ export function CronJobsCreate({
         title={t('common.headers.annotations')}
       />
 
-      <CronJobSpecSection
-        advanced
-        resource={cronJob.spec}
-        setResource={spec => {
-          jp.value(cronJob, '$.spec', spec);
-          setCronJob({ ...cronJob });
-        }}
-      />
+      <CronJobSpecSection advanced propertyPath="$.spec" />
+
       <ScheduleSection propertyPath="$.spec.schedule" />
 
       <ContainerSection
-        resource={cronJob.spec.jobTemplate.spec}
-        setResource={spec => {
-          jp.value(cronJob, '$.spec.jobTemplate.spec', spec);
-          setCronJob({ ...cronJob });
-        }}
         simple
+        propertyPath="$.spec.jobTemplate.spec.template.spec.containers"
       />
 
       <ContainersSection
-        resource={cronJob.spec.jobTemplate.spec}
-        setResource={spec => {
-          jp.value(cronJob, '$.spec.jobTemplate.spec', spec);
-          setCronJob({ ...cronJob });
-        }}
         advanced
+        propertyPath="$.spec.jobTemplate.spec.template.spec.containers"
       />
     </ResourceForm>
   );

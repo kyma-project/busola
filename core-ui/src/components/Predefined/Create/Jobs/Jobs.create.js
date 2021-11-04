@@ -65,31 +65,13 @@ export function JobsCreate({
         title={t('common.headers.annotations')}
       />
 
-      <JobSpecSection
-        advanced
-        resource={job.spec}
-        setResource={spec => {
-          jp.value(job, '$.spec', spec);
-          setJob({ ...job });
-        }}
-      />
+      <JobSpecSection advanced propertyPath="$.spec" />
 
-      <ContainerSection
-        resource={job.spec}
-        setResource={spec => {
-          jp.value(job, '$.spec', spec);
-          setJob({ ...job });
-        }}
-        simple
-      />
+      <ContainerSection simple propertyPath="$.spec.template.spec.containers" />
 
       <ContainersSection
-        resource={job.spec}
-        setResource={spec => {
-          jp.value(job, '$.spec', spec);
-          setJob({ ...job });
-        }}
         advanced
+        propertyPath="$.spec.template.spec.containers"
       />
     </ResourceForm>
   );

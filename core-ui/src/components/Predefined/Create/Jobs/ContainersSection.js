@@ -3,72 +3,58 @@ import * as jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
 import { Button, MessageStrip } from 'fundamental-react';
 
-import {
-  ResourceForm,
-  ResourceFormWrapper,
-} from 'shared/ResourceForm/ResourceForm';
-
+import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import { createContainerTemplate } from './templates';
 import { SingleContainerForm, SingleContainerInput } from './Containers';
 import './ContainersSection.scss';
 
-export const ContainersSection = ({ resource, setResource }) => {
+export const ContainersSection = ({ ...props }) => {
   const { t } = useTranslation();
 
   return (
-    <ResourceFormWrapper resource={resource} setResource={setResource}>
-      <ResourceForm.ItemArray
-        advanced
-        propertyPath="$.template.spec.containers"
-        listTitle={t('jobs.create-modal.containers')}
-        nameSingular={t('jobs.create-modal.container')}
-        entryTitle={container => container?.name}
-        atLeastOneRequiredMessage={t(
-          'jobs.create-modal.at-least-one-container-required',
-        )}
-        itemRenderer={(current, allValues, setAllValues) => (
-          <SingleContainerForm
-            container={current}
-            containers={allValues}
-            setContainers={setAllValues}
-            advanced
-          />
-        )}
-        newResourceTemplateFn={createContainerTemplate}
-      />
-    </ResourceFormWrapper>
+    <ResourceForm.ItemArray
+      advanced
+      listTitle={t('jobs.create-modal.containers')}
+      nameSingular={t('jobs.create-modal.container')}
+      entryTitle={container => container?.name}
+      atLeastOneRequiredMessage={t(
+        'jobs.create-modal.at-least-one-container-required',
+      )}
+      itemRenderer={({ item, values, setValues, isAdvanced }) => (
+        <SingleContainerForm
+          container={item}
+          containers={values}
+          setContainers={setValues}
+          isAdvanced={isAdvanced}
+        />
+      )}
+      newResourceTemplateFn={createContainerTemplate}
+      {...props}
+    />
   );
 };
 
-export const ContainerSection = ({ resource, setResource }) => {
+export const ContainerSection = ({ ...props }) => {
   const { t } = useTranslation();
+  const { value, setValue } = props;
 
-  return (
-    <ResourceFormWrapper resource={resource} setResource={setResource}>
-      {jp.value(resource, '$.template.spec.containers.length') ? (
-        <SingleContainerInput
-          simple
-          propertyPath="$.template.spec.containers"
-        />
-      ) : (
-        <div className="job-container__message">
-          <MessageStrip simple type="warning" className="fd-margin-top--sm">
-            {t('jobs.create-modal.at-least-one-container-required')}
-            <Button
-              glyph="add"
-              compact
-              onClick={() => {
-                jp.value(resource, '$.template.spec.containers', [
-                  createContainerTemplate(),
-                ]);
-                setResource(resource);
-              }}
-            >
-              Add container
-            </Button>
-          </MessageStrip>
-        </div>
-      )}
-    </ResourceFormWrapper>
+  return value?.length ? (
+    <SingleContainerInput simple {...props} />
+  ) : (
+    <div className="job-container__message">
+      <MessageStrip type="warning" className="fd-margin-top--sm">
+        {t('jobs.create-modal.at-least-one-container-required')}
+        <Button
+          glyph="add"
+          compact
+          onClick={() => {
+            jp.value(value, '$[0]', createContainerTemplate());
+            setValue(value);
+          }}
+        >
+          Add container
+        </Button>
+      </MessageStrip>
+    </div>
   );
 };

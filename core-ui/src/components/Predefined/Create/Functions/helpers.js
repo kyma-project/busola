@@ -15,6 +15,16 @@ export function createFunctionTemplate(namespace) {
     spec: {
       runtime: 'nodejs14',
       type: '',
+      minReplicas: 1,
+      maxReplicas: 5,
+      resources: {
+        limits: { cpu: '200m', memory: '256Mi' },
+        requests: { cpu: '100m', memory: '128Mi' },
+      },
+      buildResources: {
+        limits: { cpu: '1700m', memory: '1100Mi' },
+        requests: { cpu: '1100m', memory: '1100Mi' },
+      },
     },
   };
 }

@@ -11,7 +11,7 @@ export function SingleContainerForm({
   container,
   containers,
   setContainers,
-  advanced,
+  isAdvanced,
 }) {
   const { t } = useTranslation();
 
@@ -24,6 +24,7 @@ export function SingleContainerForm({
     <ResourceFormWrapper
       resource={container}
       setResource={() => setContainers([...containers])}
+      isAdvanced={isAdvanced}
     >
       <ResourceForm.K8sNameField
         propertyPath="$.name"
@@ -36,16 +37,15 @@ export function SingleContainerForm({
         input={Inputs.Text}
         placeholder={t('jobs.create-modal.placeholders.docker-image')}
       />
-      {advanced && (
-        <ResourceForm.FormField
-          required
-          className="fd-margin-bottom--sm"
-          propertyPath="$.imagePullPolicy"
-          label={t('jobs.create-modal.labels.image-pull-policy')}
-          input={Inputs.Dropdown}
-          options={imagePullPolicyOptions}
-        />
-      )}
+      <ResourceForm.FormField
+        required
+        advanced
+        className="fd-margin-bottom--sm"
+        propertyPath="$.imagePullPolicy"
+        label={t('cron-jobs.image-pull-policy')}
+        input={Inputs.Dropdown}
+        options={imagePullPolicyOptions}
+      />
       <ResourceForm.TextArrayInput
         required
         propertyPath="$.command"
@@ -53,15 +53,14 @@ export function SingleContainerForm({
         placeholder={t('jobs.create-modal.placeholders.command')}
         tooltipContent={t('jobs.create-modal.tooltips.command')}
       />
-      {advanced && (
-        <ResourceForm.TextArrayInput
-          required
-          propertyPath="$.args"
-          title={t('jobs.create-modal.labels.args')}
-          placeholder={t('jobs.create-modal.placeholders.args')}
-          tooltipContent={t('jobs.create-modal.tooltips.args')}
-        />
-      )}
+      <ResourceForm.TextArrayInput
+        required
+        advanced
+        propertyPath="$.args"
+        title={t('cron-jobs.args')}
+        placeholder={t('cron-jobs.create-modal.placeholders.args')}
+        tooltipContent={t('cron-jobs.create-modal.tooltips.args')}
+      />
     </ResourceFormWrapper>
   );
 }

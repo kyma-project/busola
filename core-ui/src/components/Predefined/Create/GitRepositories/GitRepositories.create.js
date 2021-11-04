@@ -139,9 +139,9 @@ function GitRepositoriesCreate({
         propertyPath="$.spec.auth.type"
         label={t('git-repositories.labels.auth')}
         tooltipContent={t('git-repositories.tooltips.auth')}
+        defaultValue=""
         input={Inputs.Dropdown}
         options={authTypeOptions}
-        value={authType || ''}
       />
       {!!authType && (
         <FormField

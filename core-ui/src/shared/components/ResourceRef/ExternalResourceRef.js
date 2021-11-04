@@ -21,7 +21,6 @@ export function ExternalResourceRef({
   actions,
   className,
   isAdvanced,
-  propertyPath,
   setValue,
   required = false,
   defaultOpen = undefined,
@@ -80,6 +79,7 @@ export function ExternalResourceRef({
   const content = () => {
     return [
       <ResourceForm.FormField
+        key="namespace-input"
         required={required}
         label={t('common.labels.resource-namespace', { resource: labelPrefix })}
         tooltipContent={t('common.tooltips.resource-ref-namespace', {
@@ -93,15 +93,14 @@ export function ExternalResourceRef({
             compact
             showAllEntries
             searchFullString
-            selectionType="auto-inline"
+            selectionType="manual"
             options={namespacesOptions}
             placeholder={t('common.placeholders.secret-ref-namespace')}
-            value={value?.namespace}
+            typedValue={value?.namespace || ''}
             selectedKey={value?.namespace}
-            defaultKey={value?.namespace}
             onSelect={e => {
               setValue({
-                name: undefined,
+                name: '',
                 namespace: e.target.value,
               });
             }}
@@ -117,6 +116,7 @@ export function ExternalResourceRef({
         )}
       />,
       <ResourceForm.FormField
+        key="name-input"
         required={required}
         label={t('common.labels.resource-name', { resource: labelPrefix })}
         tooltipContent={t('common.tooltips.resource-ref-name', {
@@ -130,12 +130,11 @@ export function ExternalResourceRef({
             compact
             showAllEntries
             searchFullString
-            selectionType="auto-inline"
+            selectionType="manual"
             options={filteredResourcesOptions}
             placeholder={t('common.placeholders.secret-ref-name')}
-            value={value?.namespace}
-            selectedKey={value?.name}
-            defaultKey={value?.name}
+            selectedKey={value?.name || ''}
+            typedValue={value?.name || ''}
             onSelect={e => {
               setValue({
                 name: e.target.value,

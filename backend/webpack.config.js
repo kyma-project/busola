@@ -22,4 +22,7 @@ module.exports = {
     path: path.resolve(__dirname, '.'),
     filename: 'backend-production.js',
   },
+  optimization: {
+    nodeEnv: false, //don't substitute process.env.NODE_ENV
+  },
 };
