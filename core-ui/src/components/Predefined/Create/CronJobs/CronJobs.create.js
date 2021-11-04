@@ -78,7 +78,7 @@ export function CronJobsCreate({
         propertyPath="$.spec.concurrencyPolicy"
         label={t('cron-jobs.concurrency-policy.label')}
         input={Inputs.Dropdown}
-        defaultKey="Allow"
+        defaultValue="Allow"
         options={concurrencyPolicyOptions}
       />
       <ResourceForm.FormField
@@ -157,12 +157,12 @@ export function CronJobsCreate({
         atLeastOneRequiredMessage={t(
           'cron-jobs.create-modal.at-least-one-container-required',
         )}
-        itemRenderer={(current, allValues, setAllValues) => (
+        itemRenderer={({ item, values, setValues, isAdvanced }) => (
           <SingleContainerForm
-            container={current}
-            containers={allValues}
-            setContainers={setAllValues}
-            advanced
+            container={item}
+            containers={values}
+            setContainers={setValues}
+            isAdvanced={isAdvanced}
           />
         )}
         newResourceTemplateFn={createContainerTemplate}

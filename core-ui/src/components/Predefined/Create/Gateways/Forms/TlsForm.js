@@ -31,7 +31,7 @@ const filterMatchingSecrets = secret =>
   secret.type === 'kubernetes.io/tls' ||
   (secret.type === 'Opaque' && 'key' in secret.data && 'cert' in secret.data);
 
-export const TlsForm = ({ server = {}, servers, setServers, advanced }) => {
+export const TlsForm = ({ server = {}, servers, setServers, isAdvanced }) => {
   const { t } = useTranslation();
 
   const resourceOptions = TSL_MODES.map(mode => ({
@@ -61,39 +61,38 @@ export const TlsForm = ({ server = {}, servers, setServers, advanced }) => {
       actions={panelActions}
       resource={server}
       setResource={() => setServers([...servers])}
+      isAdvanced={isAdvanced}
     >
       <ResourceForm.FormField
         tooltipContent={t('gateways.create-modal.advanced.mode-tooltip')}
         required={!!server.tls}
         label={t('gateways.create-modal.advanced.tls.mode')}
         propertyPath="$.tls.mode"
-        input={props => (
-          <ResourceForm.Select options={resourceOptions} {...props} />
+        input={Inputs.Dropdown}
+        options={resourceOptions}
+      />
+      <ResourceForm.FormField
+        advanced
+        label={t('gateways.create-modal.advanced.tls.http-redirect')}
+        tooltipContent={t(
+          'gateways.create-modal.advanced.tls.http-redirect-description',
+        )}
+        input={() => (
+          <Switch
+            compact
+            onChange={() =>
+              setTlsValue(
+                server,
+                'httpsRedirect',
+                !server.tls?.httpsRedirect,
+                servers,
+                setServers,
+              )
+            }
+            checked={server.httpsRedirect}
+          />
         )}
       />
-      {advanced && (
-        <ResourceForm.FormField
-          label={t('gateways.create-modal.advanced.tls.http-redirect')}
-          tooltipContent={t(
-            'gateways.create-modal.advanced.tls.http-redirect-description',
-          )}
-          input={() => (
-            <Switch
-              compact
-              onChange={() =>
-                setTlsValue(
-                  server,
-                  'httpsRedirect',
-                  !server.tls?.httpsRedirect,
-                  servers,
-                  setServers,
-                )
-              }
-              checked={server.httpsRedirect}
-            />
-          )}
-        />
-      )}
       <ResourceForm.FormField
         tooltipContent={t('gateways.create-modal.tooltips.credential-name')}
         label={t('gateways.create-modal.advanced.tls.credentialName')}
@@ -142,42 +141,33 @@ export const TlsForm = ({ server = {}, servers, setServers, advanced }) => {
         )}
         input={Inputs.Text}
       />
-      {advanced && (
-        <>
-          <ResourceForm.FormField
-            tooltipContent={t('gateways.create-modal.tooltips.ca-certificates')}
-            required={mode === 'MUTUAL'}
-            label={t('gateways.create-modal.advanced.tls.ca-certificates')}
-            propertyPath="$.tls.caCertificates"
-            placeholder={t(
-              'gateways.create-modal.advanced.placeholders.tls.private-key',
-            )}
-            input={Inputs.Text}
-          />
-          <ResourceForm.FormField
-            label={t('gateways.create-modal.advanced.tls.min-protocol-version')}
-            propertyPath="$.tls.minProtocolVersion"
-            input={props => (
-              <ResourceForm.Select
-                options={tlsVersions}
-                defaultKey="TLS_AUTO"
-                {...props}
-              />
-            )}
-          />
-          <ResourceForm.FormField
-            label={t('gateways.create-modal.advanced.tls.max-protocol-version')}
-            propertyPath="$.tls.maxProtocolVersion"
-            input={props => (
-              <ResourceForm.Select
-                options={tlsVersions}
-                defaultKey="TLS_AUTO"
-                {...props}
-              />
-            )}
-          />
-        </>
-      )}
+      <ResourceForm.FormField
+        advaced
+        tooltipContent={t('gateways.create-modal.tooltips.ca-certificates')}
+        required={mode === 'MUTUAL'}
+        label={t('gateways.create-modal.advanced.tls.ca-certificates')}
+        propertyPath="$.tls.caCertificates"
+        placeholder={t(
+          'gateways.create-modal.advanced.placeholders.tls.private-key',
+        )}
+        input={Inputs.Text}
+      />
+      <ResourceForm.FormField
+        advanced
+        label={t('gateways.create-modal.advanced.tls.min-protocol-version')}
+        propertyPath="$.tls.minProtocolVersion"
+        defaultValue="TLS_AUTO"
+        input={Inputs.Dropdown}
+        options={tlsVersions}
+      />
+      <ResourceForm.FormField
+        advanced
+        label={t('gateways.create-modal.advanced.tls.max-protocol-version')}
+        propertyPath="$.tls.maxProtocolVersion"
+        defaultValue="TLS_AUTO"
+        input={Inputs.Dropdown}
+        options={tlsVersions}
+      />
       {!validateTLS(server) && (
         <div className="fd-col">
           <MessageStrip
