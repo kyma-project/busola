@@ -148,12 +148,18 @@ function Resources({
     ? microfrontendContext.features?.PROTECTED_RESOURCES?.config.resources
     : [];
 
-  const protectedWarning = entry => {
-    const matchedRules = protectedResourceRules.filter(rule =>
+  const getEntryProtection = entry => {
+    return protectedResourceRules.filter(rule =>
       Object.entries(rule.match).every(
         ([pattern, value]) => jp.value(entry, pattern) === value,
       ),
     );
+  };
+
+  const isProtected = entry => !!getEntryProtection(entry).length;
+
+  const protectedWarning = entry => {
+    const matchedRules = getEntryProtection(entry);
 
     if (!matchedRules.length) {
       return <span />;
@@ -248,6 +254,7 @@ function Resources({
         {
           name: t('common.buttons.edit'),
           icon: 'edit',
+          disabledHandler: isProtected,
           handler: resource => {
             setEditedSpec(
               resource,
@@ -259,6 +266,7 @@ function Resources({
         {
           name: t('common.buttons.delete'),
           icon: 'delete',
+          disabledHandler: isProtected,
           handler: handleResourceDelete,
         },
         ...customListActions,
