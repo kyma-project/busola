@@ -956,7 +956,7 @@ jobs:
       successful-jobs-history-limit: Successful Jobs History Limit
       suspend: Suspend
     placeholders:
-      args: Arguments to the entrypoint.
+      args: Arguments to the ENTRYPOINT.
       command: Command to run in a container.
       docker-image: Enter the Docker image tag, for example, 'busybox'.
       failed-jobs-history-limit: 'The number of failed finished jobs to retain (default: 1).'
