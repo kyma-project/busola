@@ -965,7 +965,7 @@ jobs:
       successful-jobs-history-limit: 'The number of successful finished jobs to retain (default: 3).'
     tooltips:
       args: Docker image CMD is used if arguments are not provided. Provide either args or command.
-      command: The docker image's ENTRYPOINT is used if this is not provided. Provide either args or command.
+      command: The Docker image's ENTRYPOINT is used if this is not provided. Provide either args or command.
       starting-deadline: Optional deadline in seconds for starting the job if it misses the scheduled time.
       suspend: 'If true, the controller suspends subsequent executions (default: false). It does not apply to started executions.'
   name-singular: Job
