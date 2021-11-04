@@ -24,7 +24,7 @@ import {
 } from '../..';
 import CustomPropTypes from '../../typechecking/CustomPropTypes';
 import { handleDelete } from '../GenericList/actionHandlers/simpleDelete';
-import { useWindowTitle } from '../../hooks';
+import { useWindowTitle, useProtectedResources } from '../../hooks';
 
 ResourceDetails.propTypes = {
   customColumns: CustomPropTypes.customColumnsType,
@@ -52,7 +52,7 @@ export function ResourceDetails(props) {
   if (!props.resourceUrl) {
     return <></>; // wait for the context update
   }
-
+  // eslint-disable react-hooks/rules-of-hooks
   const {
     loading = true,
     error,
@@ -128,6 +128,8 @@ function Resource({
   i18n,
 }) {
   useWindowTitle(windowTitle || prettifyNamePlural(null, resourceType));
+  const { isProtected, protectedResourceWarning } = useProtectedResources(i18n);
+
   const { t } = useTranslation(['translation'], { i18n });
   const { setEditedYaml: setEditedSpec } = useYamlEditor();
   const notification = useNotification();
@@ -145,7 +147,9 @@ function Resource({
 
   const actions = readOnly ? null : (
     <>
+      {protectedResourceWarning(resource)}
       <Button
+        disabled={isProtected(resource)}
         className="fd-margin-end--tiny"
         onClick={() => openYaml(resource)}
         option="emphasized"
@@ -155,6 +159,7 @@ function Resource({
       {headerActions}
       {resourceHeaderActions.map(resourceAction => resourceAction(resource))}
       <Button
+        disabled={isProtected(resource)}
         onClick={handleResourceDelete}
         option="transparent"
         type="negative"

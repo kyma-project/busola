@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import jsyaml from 'js-yaml';
-import * as jp from 'jsonpath';
 import {
   Link,
   Button,
   Checkbox,
   MessageBox,
   MessageStrip,
-  Icon,
 } from 'fundamental-react';
 import { createPatch } from 'rfc6902';
 import LuigiClient from '@luigi-project/client';
@@ -31,10 +29,12 @@ import {
 import CustomPropTypes from '../../typechecking/CustomPropTypes';
 import { ModalWithForm } from '../ModalWithForm/ModalWithForm';
 import { ReadableCreationTimestamp } from '../ReadableCreationTimestamp/ReadableCreationTimestamp';
-import { useWindowTitle, useFeatureToggle } from '../../hooks';
+import {
+  useWindowTitle,
+  useFeatureToggle,
+  useProtectedResources,
+} from '../../hooks';
 import { useTranslation } from 'react-i18next';
-import { useMicrofrontendContext } from '../../contexts/MicrofrontendContext';
-import { Tooltip } from '../Tooltip/Tooltip';
 
 ResourcesList.propTypes = {
   customColumns: CustomPropTypes.customColumnsType,
@@ -115,7 +115,7 @@ function Resources({
   useWindowTitle(windowTitle || prettifyNamePlural(resourceName, resourceType));
   const { t } = useTranslation(['translation'], { i18n });
 
-  const microfrontendContext = useMicrofrontendContext();
+  const { isProtected, protectedResourceWarning } = useProtectedResources(i18n);
 
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [activeResource, setActiveResource] = useState(null);
@@ -142,45 +142,6 @@ function Resources({
   customColumns = customColumns.filter(col => !omitColumnsIds.includes(col.id));
 
   const withoutQueryString = path => path.split('?')[0];
-
-  const protectedResourceRules = microfrontendContext.features
-    ?.PROTECTED_RESOURCES?.isEnabled
-    ? microfrontendContext.features?.PROTECTED_RESOURCES?.config.resources
-    : [];
-
-  const getEntryProtection = entry => {
-    return protectedResourceRules.filter(rule =>
-      Object.entries(rule.match).every(
-        ([pattern, value]) => jp.value(entry, pattern) === value,
-      ),
-    );
-  };
-
-  const isProtected = entry => !!getEntryProtection(entry).length;
-
-  const protectedWarning = entry => {
-    const matchedRules = getEntryProtection(entry);
-
-    if (!matchedRules.length) {
-      return <span />;
-    }
-
-    const message = matchedRules
-      .map(rule => {
-        if (rule.message) {
-          return rule.message;
-        } else if (rule.messageSrc) {
-          return jp.value(entry, rule.messageSrc);
-        }
-      })
-      .join('\n');
-
-    return (
-      <Tooltip content={message} delay={0}>
-        <Icon className="fd-object-status--critical" glyph="message-warning" />
-      </Tooltip>
-    );
-  };
 
   const handleSaveClick = resourceData => async newYAML => {
     try {
@@ -304,7 +265,7 @@ function Resources({
       <Labels labels={entry.metadata.labels} shortenLongLabels />
     </div>,
     ...customColumns.map(col => col.value(entry)),
-    protectedWarning(entry),
+    protectedResourceWarning(entry),
   ];
 
   const extraHeaderContent =
