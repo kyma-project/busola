@@ -42,7 +42,7 @@ export function SingleContainerForm({
         advanced
         className="fd-margin-bottom--sm"
         propertyPath="$.imagePullPolicy"
-        label={t('cron-jobs.image-pull-policy')}
+        label={t('jobs.create-modal.labels.image-pull-policy')}
         input={Inputs.Dropdown}
         options={imagePullPolicyOptions}
       />
@@ -57,9 +57,9 @@ export function SingleContainerForm({
         required
         advanced
         propertyPath="$.args"
-        title={t('cron-jobs.args')}
-        placeholder={t('cron-jobs.create-modal.placeholders.args')}
-        tooltipContent={t('cron-jobs.create-modal.tooltips.args')}
+        title={t('jobs.create-modal.labels.args')}
+        placeholder={t('jobs.create-modal.placeholders.args')}
+        tooltipContent={t('jobs.create-modal.tooltips.args')}
       />
     </ResourceFormWrapper>
   );
