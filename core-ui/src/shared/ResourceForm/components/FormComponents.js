@@ -14,7 +14,6 @@ import {
   Icon,
   MessageStrip,
 } from 'fundamental-react';
-import { Select as WrappedSelect } from 'shared/components/Select/Select';
 import { Tooltip, K8sNameInput } from 'react-shared';
 import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
@@ -83,7 +82,11 @@ export function CollapsibleSection({
       </header>
       {open && (
         <div className="content">
-          <ResourceFormWrapper resource={resource} setResource={setResource}>
+          <ResourceFormWrapper
+            resource={resource}
+            setResource={setResource}
+            isAdvanced={isAdvanced}
+          >
             {children}
           </ResourceFormWrapper>
         </div>
@@ -137,6 +140,7 @@ export function FormField({
   disabled,
   tooltipContent,
   isAdvanced,
+  defaultValue,
   ...props
 }) {
   return (
@@ -527,6 +531,9 @@ export function ItemArray({
   allowEmpty = false,
   itemRenderer,
   newResourceTemplateFn,
+  simple,
+  advanced,
+  isAdvanced,
   ...props
 }) {
   const { t } = useTranslation();
@@ -536,7 +543,7 @@ export function ItemArray({
   const remove = index => setValues(values.filter((_, i) => index !== i));
 
   const renderItem = (item, index) =>
-    itemRenderer(item, values, setValues, index, props.isAdvanced);
+    itemRenderer({ item, values, setValues, index, isAdvanced });
 
   const renderAllItems = () =>
     values.map((current, i) => {
@@ -583,6 +590,7 @@ export function ItemArray({
           {t('common.buttons.add')} {nameSingular}
         </Button>
       )}
+      isAdvanced={isAdvanced}
       {...props}
     >
       {content}
@@ -590,19 +598,6 @@ export function ItemArray({
         <MessageStrip type="warning">{atLeastOneRequiredMessage}</MessageStrip>
       )}
     </CollapsibleSection>
-  );
-}
-
-export function Select({ value, setValue, defaultKey, options, ...props }) {
-  return (
-    <WrappedSelect
-      compact
-      onSelect={(_, selected) => setValue(selected.key)}
-      selectedKey={value || defaultKey}
-      options={options}
-      fullWidth
-      {...props}
-    />
   );
 }
 

@@ -1,8 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { FormFieldset } from 'fundamental-react';
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
+import {
+  ResourceForm,
+  ResourceFormWrapper,
+} from 'shared/ResourceForm/ResourceForm';
 import { SecretRef } from 'shared/components/ResourceRef/SecretRef';
 
 export function SingleSecretForm({
@@ -22,9 +24,8 @@ export function SingleSecretForm({
   };
 
   return (
-    <FormFieldset>
+    <ResourceFormWrapper>
       <SecretRef
-        advanced
         title={t('service-accounts.headers.secret')}
         tooltipContent={t('service-accounts.create-modal.tooltips.secrets')}
         fieldSelector="type=kubernetes.io/service-account-token"
@@ -37,7 +38,7 @@ export function SingleSecretForm({
         currentNamespace={namespace}
         noSection={true}
       />
-    </FormFieldset>
+    </ResourceFormWrapper>
   );
 }
 

@@ -132,13 +132,12 @@ export function RoleBindings({
           'role-bindings.create-modal.at-least-one-subject-required',
           { resource: resourceData.singularName },
         )}
-        itemRenderer={(current, allValues, setAllValues, index) => (
+        itemRenderer={({ item, values, setValues, index }) => (
           <SingleSubjectForm
-            subject={current}
-            subjects={allValues}
-            setSubjects={setAllValues}
+            subject={item}
+            subjects={values}
+            setSubjects={setValues}
             index={index}
-            advanced
           />
         )}
         newResourceTemplateFn={newSubject}

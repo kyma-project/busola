@@ -63,11 +63,11 @@ export function GenericRoleCreate({
         listTitle={t('roles.headers.rules')}
         entryTitle={(rule, i) => <RuleTitle rule={rule} i={i} />}
         nameSingular={t('roles.headers.rule')}
-        itemRenderer={(current, allValues, setAllValues, isAdvanced) => (
+        itemRenderer={({ item, values, setValues, isAdvanced }) => (
           <RuleInput
-            rule={current}
-            rules={allValues}
-            setRules={setAllValues}
+            rule={item}
+            rules={values}
+            setRules={setValues}
             isAdvanced={isAdvanced}
             resourcesCache={resourcesCache}
           />

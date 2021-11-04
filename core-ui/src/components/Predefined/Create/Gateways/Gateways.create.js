@@ -87,12 +87,12 @@ export function GatewaysCreate({
         atLeastOneRequiredMessage={t(
           'gateways.create-modal.at-least-one-server-required',
         )}
-        itemRenderer={(current, allValues, setAllValues) => (
+        itemRenderer={({ item, values, setValues, isAdvanced }) => (
           <SingleServerForm
-            server={current}
-            servers={allValues}
-            setServers={setAllValues}
-            advanced
+            server={item}
+            servers={values}
+            setServers={setValues}
+            isAdvanced={isAdvanced}
           />
         )}
         newResourceTemplateFn={newServer}

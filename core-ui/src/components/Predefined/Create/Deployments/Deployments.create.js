@@ -78,7 +78,7 @@ export function DeploymentsCreate({
     jp.value(deployment, "$.metadata.labels['app.kubernetes.io/name']", name);
     jp.value(deployment, '$.spec.template.spec.containers[0].name', name);
     jp.value(deployment, '$.spec.selector.matchLabels.app', name); // match labels
-    jp.value(deployment, `$.spec.template.metadata.labels.app`, name); // pod labels
+    jp.value(deployment, '$.spec.template.metadata.labels.app', name); // pod labels
     setDeployment({ ...deployment });
 
     jp.value(service, '$.metadata.name', name);
@@ -185,7 +185,7 @@ export function DeploymentsCreate({
 
       <ResourceForm.CollapsibleSection
         advanced
-        title="Containers"
+        title={t('deployments.create-modal.advanced.containers')}
         defaultOpen
         resource={deployment}
         setResource={setDeployment}
@@ -214,7 +214,7 @@ export function DeploymentsCreate({
       </ResourceForm.CollapsibleSection>
       <ResourceForm.CollapsibleSection
         advanced
-        title="Service"
+        title={t('deployments.create-modal.advanced.service')}
         resource={service}
         setResource={setService}
         actions={serviceActions}
