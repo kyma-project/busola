@@ -960,7 +960,7 @@ jobs:
       command: Command to run in a container.
       docker-image: Enter the Docker image tag, for example, 'busybox'.
       failed-jobs-history-limit: 'The number of failed finished jobs to retain (default: 1).'
-      parallelism: 'The maximum number of pods the job should run at any given time (default: 1).'
+      parallelism: 'The maximum number of Pods the job should run at any given time (default: 1).'
       starting-deadline: Optional deadline in seconds.
       successful-jobs-history-limit: 'The number of successful finished jobs to retain (default: 3).'
     tooltips:
