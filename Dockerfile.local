@@ -46,7 +46,7 @@ RUN npm ci --only=production
 # use sessionStorage as default
 RUN sed -i 's/"storage": "localStorage",/"storage": "sessionStorage",/g' core/assets/config/config.json 
 # enable OBSERVABILITY for production
-RUN cat <<< $(jq '.config.features.OBSERVABILITY.isEnabled = true' core/src/assets/config/config.json) > core/src/assets/config/config.json
+RUN cat <<< $(jq '.config.features.OBSERVABILITY.isEnabled = true' core/assets/config/config.json) > core/assets/config/config.json
 
 EXPOSE 3001
 ENV NODE_ENV=production ADDRESS=0.0.0.0 IS_DOCKER=true
