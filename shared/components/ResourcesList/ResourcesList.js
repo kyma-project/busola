@@ -214,13 +214,13 @@ function Resources({
     : [
         {
           name: t('common.buttons.edit'),
-          icon: 'edit',
-          disabledHandler: isProtected,
+          icon: entry => (isProtected(entry) ? 'show-edit' : 'edit'),
           handler: resource => {
             setEditedSpec(
               resource,
               resource.metadata.name + '.yaml',
               handleSaveClick(resource),
+              isProtected(resource),
             );
           },
         },

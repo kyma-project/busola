@@ -145,21 +145,24 @@ function Resource({
     { name: '' },
   ];
 
+  const protectedResource = isProtected(resource);
+
   const actions = readOnly ? null : (
     <>
       {protectedResourceWarning(resource)}
       <Button
-        disabled={isProtected(resource)}
         className="fd-margin-end--tiny"
         onClick={() => openYaml(resource)}
         option="emphasized"
       >
-        {t('common.buttons.edit-yaml')}
+        {protectedResource
+          ? t('common.buttons.view-yaml')
+          : t('common.buttons.edit-yaml')}
       </Button>
       {headerActions}
       {resourceHeaderActions.map(resourceAction => resourceAction(resource))}
       <Button
-        disabled={isProtected(resource)}
+        disabled={protectedResource}
         onClick={handleResourceDelete}
         option="transparent"
         type="negative"
@@ -174,6 +177,7 @@ function Resource({
       resource,
       resource.metadata.name + '.yaml',
       handleSaveClick(resource),
+      protectedResource,
     );
   };
 

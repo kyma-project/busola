@@ -33,6 +33,7 @@ export function EditorActions({
   onSave,
   saveDisabled,
   i18n,
+  readOnly,
 }) {
   const openSearch = () => {
     // focus is required for search control to appear
@@ -76,6 +77,11 @@ export function EditorActions({
         onClick={download}
         disabled={!editor}
       />
+      {readOnly && (
+        <span className={t('fd-object-status--critical')}>
+          {t('common.labels.read-only')}
+        </span>
+      )}
     </section>
   );
 }
