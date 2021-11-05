@@ -5,6 +5,8 @@ export const getConfigMapDefs = (t, context) =>
 
 export function createConfigMapTemplate(namespace) {
   return {
+    apiVersion: 'v1',
+    kind: 'ConfigMap',
     metadata: {
       namespace,
     },

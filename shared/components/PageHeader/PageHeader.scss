@@ -18,6 +18,15 @@
     // font-size: 14px;
     margin-top: 4px;
   }
+
+  .protected-resource-warning {
+    margin-right: 1rem;
+    align-self: center;
+
+    i {
+      font-size: 1.5rem;
+    }
+  }
 }
 
 .header-wrapper {
@@ -50,7 +59,7 @@
 
   .content-container {
     display: inline-block;
-    width:100%;
+    width: 100%;
   }
 
   .title {

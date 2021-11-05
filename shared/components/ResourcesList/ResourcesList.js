@@ -29,7 +29,11 @@ import {
 import CustomPropTypes from '../../typechecking/CustomPropTypes';
 import { ModalWithForm } from '../ModalWithForm/ModalWithForm';
 import { ReadableCreationTimestamp } from '../ReadableCreationTimestamp/ReadableCreationTimestamp';
-import { useWindowTitle, useFeatureToggle } from '../../hooks';
+import {
+  useWindowTitle,
+  useFeatureToggle,
+  useProtectedResources,
+} from '../../hooks';
 import { useTranslation } from 'react-i18next';
 
 ResourcesList.propTypes = {
@@ -110,6 +114,8 @@ function Resources({
 }) {
   useWindowTitle(windowTitle || prettifyNamePlural(resourceName, resourceType));
   const { t } = useTranslation(['translation'], { i18n });
+
+  const { isProtected, protectedResourceWarning } = useProtectedResources(i18n);
 
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [activeResource, setActiveResource] = useState(null);
@@ -208,18 +214,20 @@ function Resources({
     : [
         {
           name: t('common.buttons.edit'),
-          icon: 'edit',
+          icon: entry => (isProtected(entry) ? 'show-edit' : 'edit'),
           handler: resource => {
             setEditedSpec(
               resource,
               resource.metadata.name + '.yaml',
               handleSaveClick(resource),
+              isProtected(resource),
             );
           },
         },
         {
           name: t('common.buttons.delete'),
           icon: 'delete',
+          disabledHandler: isProtected,
           handler: handleResourceDelete,
         },
         ...customListActions,
@@ -230,6 +238,7 @@ function Resources({
     t('common.headers.created'),
     t('common.headers.labels'),
     ...customColumns.map(col => col.header),
+    '',
   ];
 
   const rowRenderer = entry => [
@@ -256,6 +265,7 @@ function Resources({
       <Labels labels={entry.metadata.labels} shortenLongLabels />
     </div>,
     ...customColumns.map(col => col.value(entry)),
+    protectedResourceWarning(entry),
   ];
 
   const extraHeaderContent =
