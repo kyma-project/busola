@@ -9,6 +9,7 @@ import {
 import ApiRuleStatus from 'components/ApiRules/ApiRuleStatus/ApiRuleStatus';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-shared';
+import { Trans } from 'react-i18next';
 
 export const ApiRulesList = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
@@ -51,14 +52,12 @@ export const ApiRulesList = ({ DefaultRenderer, ...otherParams }) => {
   ];
 
   const description = (
-    <span>
+    <Trans i18nKey="api-rules.description">
       <Link
-        className="fd-link fd-link"
+        className="fd-link"
         url="https://kyma-project.io/docs/kyma/latest/05-technical-reference/00-custom-resources/apix-01-apirule/#documentation-content"
-        text="API Rule"
       />
-      {t('api-rules.description')}
-    </span>
+    </Trans>
   );
 
   return (
