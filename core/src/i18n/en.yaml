@@ -332,7 +332,7 @@ common:
     name: Name
     namespace: Namespace
     protocol: Protocol
-    read-only: Read only mode
+    read-only: Read-only mode
     resource: Resource
     resource-name: '{{resource}} $t(common.labels.name)'
     resource-namespace: '{{resource}} $t(common.labels.namespace)'
