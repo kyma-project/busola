@@ -23,9 +23,8 @@ const getStatusType = deployment => {
 };
 
 const getPodsCount = deployment => {
-  return `${deployment.status.readyReplicas || 0} / ${
-    deployment.status.replicas
-  }`;
+  return `${deployment.status.readyReplicas || 0} / ${deployment.status
+    .replicas || 0}`;
 };
 
 export const DeploymentsList = ({ DefaultRenderer, ...otherParams }) => {
