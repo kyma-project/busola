@@ -25,7 +25,7 @@ api-rules:
     create: Create API Rule
     edit: Edit API Rule "{{apiRuleName}}"
     expose: Expose {{type}}
-  description: <0>API Rule</0> allows to expose a service externally.
+  description: <0>API Rule</0> allows for exposing a service externally.
   form:
     gateway: Gateway
     hostname: Hostname
@@ -107,7 +107,7 @@ brokers:
     url: URL
   title: Brokers
 btp-instances:
-  description: ' <0>BTP ServiceInstance</0> makes the functionality of a service available for consumption.'
+  description: ' <0>BTP Service Instance</0> makes the functionality of a service available for consumption.'
   external-name: External Name
   instance-data: ServiceInstance Data
   instance-id: Instance ID
@@ -129,7 +129,7 @@ btp-instances:
 btp-service-bindings:
   binding-id: Binding ID
   data: Binding Data
-  description: <0>BTP ServiceBinding</0> provides access details for an existing service instance.
+  description: <0>BTP Service Binding</0> provides access details for an existing service instance.
   external-name: External Name
   instance-id: Instance ID
   instance-name: ServiceInstance Name
@@ -473,7 +473,7 @@ cron-jobs:
       month: 1 to 12
       starting-deadline: Optional deadline in seconds for starting the job if it misses the scheduled time.
       suspend: 'If true, the controller suspends subsequent executions (default: false). It does not apply to started executions.'
-  description: <0>CronJob</0> allows to perform tasks on a given schedule.
+  description: <0>Cron Job</0> is a job that is run according to a specified schedule.
   docker-image: Docker Image
   failed-jobs-history-limit: Failed Jobs History Limit
   image-pull-policy: Image Pull Policy
@@ -508,7 +508,7 @@ custom-resource-definitions:
     version: Version
   title: CustomResourceDefinitions
 daemon-sets:
-  description: <0>DaemonSet</0> ensures replicated Pods are running across a set of available nodes.
+  description: <0>Daemon Set</0> ensures that replicated Pods are running across a set of available nodes.
   images: Images
   node-selector: Node Selector
   pods: $t(pods.title)
@@ -1102,7 +1102,7 @@ preferences:
   title: Preferences
 replica-sets:
   cpu: CPU
-  description: <0>ReplicaSet</0> maintains a number of replica Pods running at any given time.
+  description: <0>Replica Set</0> maintains a number of replica Pods running at any given time.
   headers:
     images: Images
     limits: Limits
