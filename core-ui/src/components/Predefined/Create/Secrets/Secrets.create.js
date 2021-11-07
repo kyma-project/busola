@@ -19,7 +19,7 @@ function SecretsCreate({
   namespaceId,
   formElementRef,
   onChange,
-  secret: initialSecret,
+  resource: initialSecret,
   resourceUrl,
 }) {
   const { t } = useTranslation();
@@ -109,6 +109,7 @@ function SecretsCreate({
     </ResourceForm>
   );
 }
+SecretsCreate.allowEdit = true;
 SecretsCreate.secrets = (t, context) => [
   {
     type: 'kubernetes.io/service-account-token',

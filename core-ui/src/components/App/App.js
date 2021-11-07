@@ -202,6 +202,13 @@ function RoutedResourceDetails({ match }) {
   };
 
   const rendererName = params.resourceType + 'Details';
+  const rendererNameForCreate = params.resourceType + 'Create';
 
-  return <ComponentForDetails name={rendererName} params={params} />;
+  return (
+    <ComponentForDetails
+      name={rendererName}
+      nameForCreate={rendererNameForCreate}
+      params={params}
+    />
+  );
 }

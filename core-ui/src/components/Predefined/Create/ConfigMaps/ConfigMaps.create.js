@@ -12,11 +12,11 @@ import {
 
 import { createConfigMapTemplate, createPresets } from './helpers';
 
-export function ConfigMapsCreate({
+function ConfigMapsCreate({
   formElementRef,
   onChange,
   setCustomValid,
-  configMap: initialConfigMap,
+  resource: initialConfigMap,
   readonlyName,
   resourceUrl,
 }) {
@@ -65,3 +65,5 @@ export function ConfigMapsCreate({
     </ResourceForm>
   );
 }
+ConfigMapsCreate.allowEdit = true;
+export { ConfigMapsCreate };

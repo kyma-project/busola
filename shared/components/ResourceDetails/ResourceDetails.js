@@ -25,6 +25,7 @@ import {
 import CustomPropTypes from '../../typechecking/CustomPropTypes';
 import { handleDelete } from '../GenericList/actionHandlers/simpleDelete';
 import { useWindowTitle, useProtectedResources } from '../../hooks';
+import { ModalWithForm } from '../ModalWithForm/ModalWithForm';
 
 ResourceDetails.propTypes = {
   customColumns: CustomPropTypes.customColumnsType,
@@ -51,8 +52,12 @@ ResourceDetails.defaultProps = {
 export function ResourceDetails(props) {
   if (!props.resourceUrl) {
     return <></>; // wait for the context update
+  } else {
+    return <ResourceDetailsRenderer {...props} />;
   }
-  // eslint-disable react-hooks/rules-of-hooks
+}
+
+function ResourceDetailsRenderer(props) {
   const {
     loading = true,
     error,
@@ -110,22 +115,25 @@ export function ResourceDetails(props) {
 }
 
 function Resource({
-  silentRefetch,
-  resource,
+  breadcrumbs,
   children,
+  createResourceForm: CreateResourceForm,
   customColumns,
   customComponents,
-  resourceUrl,
-  resourceType,
-  updateResourceMutation,
   deleteResourceMutation,
-  resourceName,
+  editActionLabel,
   headerActions,
-  resourceHeaderActions,
-  windowTitle,
-  readOnly,
-  breadcrumbs,
   i18n,
+  namespace,
+  readOnly,
+  resource,
+  resourceHeaderActions,
+  resourceName,
+  resourceType,
+  resourceUrl,
+  silentRefetch,
+  updateResourceMutation,
+  windowTitle,
 }) {
   useWindowTitle(windowTitle || prettifyNamePlural(null, resourceType));
   const { isProtected, protectedResourceWarning } = useProtectedResources(i18n);
@@ -147,18 +155,66 @@ function Resource({
 
   const protectedResource = isProtected(resource);
 
+  const editAction = () => {
+    if (protectedResource) {
+      return (
+        <Button
+          className="fd-margin-end--tiny"
+          onClick={() => openYaml(resource)}
+        >
+          {t('common.buttons.view-yaml')}
+        </Button>
+      );
+    } else if (!CreateResourceForm || !CreateResourceForm.allowEdit) {
+      return (
+        <Button
+          className="fd-margin-end--tiny"
+          onClick={() => openYaml(resource)}
+          option="emphasized"
+        >
+          {t('common.buttons.edit-yaml')}
+        </Button>
+      );
+    } else {
+      return (
+        <ModalWithForm
+          title={
+            editActionLabel ||
+            t('components.resource-details.edit', {
+              resourceType: prettifiedResourceName,
+            })
+          }
+          modalOpeningComponent={
+            <Button option="emphasized">
+              {editActionLabel ||
+                t('components.resource-details.edit', {
+                  resourceType: prettifiedResourceName,
+                })}
+            </Button>
+          }
+          confirmText={t('common.buttons.update')}
+          id={`edit-${resourceType}-modal`}
+          className="modal-size--l create-resource-modal"
+          renderForm={props => (
+            <CreateResourceForm
+              resource={resource}
+              resourceType={resourceType}
+              resourceUrl={resourceUrl}
+              namespace={namespace}
+              refetchList={silentRefetch}
+              {...props}
+            />
+          )}
+          i18n={i18n}
+        />
+      );
+    }
+  };
+
   const actions = readOnly ? null : (
     <>
       {protectedResourceWarning(resource)}
-      <Button
-        className="fd-margin-end--tiny"
-        onClick={() => openYaml(resource)}
-        option="emphasized"
-      >
-        {protectedResource
-          ? t('common.buttons.view-yaml')
-          : t('common.buttons.edit-yaml')}
-      </Button>
+      {editAction()}
       {headerActions}
       {resourceHeaderActions.map(resourceAction => resourceAction(resource))}
       <Button
