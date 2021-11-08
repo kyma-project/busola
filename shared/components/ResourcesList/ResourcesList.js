@@ -119,6 +119,7 @@ function Resources({
 
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [activeResource, setActiveResource] = useState(null);
+  const [showEditDialog, setShowEditDialog] = useState(false);
   const {
     setEditedYaml: setEditedSpec,
     closeEditor,
@@ -209,20 +210,27 @@ function Resources({
     }
   }
 
+  const handleResourceEdit = resource => {
+    if (isProtected(resource) || !CreateResourceForm?.allowEdit) {
+      setEditedSpec(
+        resource,
+        resource.metadata.name + '.yaml',
+        handleSaveClick(resource),
+        isProtected(resource),
+      );
+    } else {
+      setActiveResource(resource);
+      setShowEditDialog(true);
+    }
+  };
+
   const actions = readOnly
     ? []
     : [
         {
           name: t('common.buttons.edit'),
           icon: entry => (isProtected(entry) ? 'show-edit' : 'edit'),
-          handler: resource => {
-            setEditedSpec(
-              resource,
-              resource.metadata.name + '.yaml',
-              handleSaveClick(resource),
-              isProtected(resource),
-            );
-          },
+          handler: handleResourceEdit,
         },
         {
           name: t('common.buttons.delete'),
@@ -271,6 +279,23 @@ function Resources({
   const extraHeaderContent =
     listHeaderActions ||
     (CreateResourceForm && (
+      <Button
+        glyph="add"
+        option="transparent"
+        onClick={() => {
+          setActiveResource(undefined);
+          setShowEditDialog(true);
+        }}
+      >
+        {createActionLabel ||
+          t('components.resources-list.create', {
+            resourceType: prettifiedResourceName,
+          })}
+      </Button>
+    ));
+
+  return (
+    <>
       <ModalWithForm
         title={
           createActionLabel ||
@@ -278,19 +303,13 @@ function Resources({
             resourceType: prettifiedResourceName,
           })
         }
-        modalOpeningComponent={
-          <Button glyph="add" option="transparent">
-            {createActionLabel ||
-              t('components.resources-list.create', {
-                resourceType: prettifiedResourceName,
-              })}
-          </Button>
-        }
+        opened={showEditDialog}
         confirmText={t('common.buttons.create')}
         id={`add-${resourceType}-modal`}
         className="modal-size--l create-resource-modal"
         renderForm={props => (
           <CreateResourceForm
+            resource={activeResource}
             resourceType={resourceType}
             resourceUrl={resourceUrl}
             namespace={namespace}
@@ -299,11 +318,9 @@ function Resources({
           />
         )}
         i18n={i18n}
+        modalOpeningComponent={<></>}
+        customCloseAction={() => setShowEditDialog(false)}
       />
-    ));
-
-  return (
-    <>
       <MessageBox
         type="warning"
         title={t('common.delete-dialog.title', {
