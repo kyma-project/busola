@@ -23,6 +23,7 @@ export const K8sNameInput = ({
   required = true,
   defaultValue,
   i18n,
+  value,
   ...props
 }) => {
   const { t } = useTranslation(null, { i18n });
@@ -39,7 +40,7 @@ export const K8sNameInput = ({
       ref={_ref}
       type="text"
       id={id}
-      defaultValue={defaultValue}
+      defaultValue={defaultValue || value}
       placeholder={t('components.k8s-name-input.placeholder', {
         resourceType: kind,
       })}

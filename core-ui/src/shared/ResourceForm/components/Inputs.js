@@ -37,8 +37,25 @@ export function Switch({ value, setValue, ...props }) {
   );
 }
 
-export function Dropdown({ value, setValue, ...props }) {
-  const { i18n } = useTranslation();
+export function Dropdown({ value, setValue, error, loading, ...props }) {
+  const { t, i18n } = useTranslation();
+
+  const getValidationState = () => {
+    if (error) {
+      return {
+        state: 'error',
+        text: t('common.messages.error', { error: error.message }),
+      };
+    } else if (loading) {
+      return {
+        state: 'information',
+        text: t('common.headers.loading'),
+      };
+    } else {
+      return null;
+    }
+  };
+
   return (
     <BusolaDropown
       compact
@@ -46,6 +63,7 @@ export function Dropdown({ value, setValue, ...props }) {
       selectedKey={value}
       onSelect={(_, selected) => setValue(selected.key)}
       i18n={i18n}
+      validationState={getValidationState()}
       {...props}
     />
   );

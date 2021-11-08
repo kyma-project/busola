@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Dropdown } from 'react-shared';
 import { base64Decode } from 'shared/helpers';
-import { MultiInput } from 'shared/ResourceForm/components/FormComponents';
+import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 
 import './SecretRefFrom.scss';
 
@@ -87,7 +87,7 @@ export function SecretRefForm({
   };
 
   return (
-    <MultiInput
+    <ResourceForm.MultiInput
       toInternal={value =>
         (Array.isArray(value) ? value : []).map(val => val.secretKeyRef)
       }

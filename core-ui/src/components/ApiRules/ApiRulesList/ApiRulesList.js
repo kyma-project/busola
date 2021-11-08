@@ -19,68 +19,6 @@ const defaultTextSearchProperties = [
 ];
 const defaultRowRenderer = () => [];
 
-function editApiRuleModal(
-  apiRule,
-  inSubView = false,
-  redirectPath,
-  redirectCtx,
-  t,
-) {
-  if (!inSubView) {
-    LuigiClient.linkManager()
-      .fromContext('namespace')
-      .navigate(`apirules/edit/${apiRule.metadata.name}`);
-    return;
-  }
-
-  const formattedTitle = t(PANEL.EDIT_MODAL.TITLE, {
-    apiRuleName: apiRule.metadata.name,
-  });
-
-  LuigiClient.linkManager()
-    .fromContext('namespace')
-    .withParams({
-      serviceName: apiRule.spec.service.name,
-      port: apiRule.spec.service.port,
-      openedInModal: true,
-      redirectCtx: redirectCtx,
-      redirectPath: encodeURIComponent(redirectPath),
-    })
-    .openAsModal(`apirules/edit/${apiRule.metadata.name}`, {
-      title: formattedTitle,
-    });
-}
-
-function createApiRuleModal(
-  service,
-  inSubView = false,
-  redirectPath,
-  redirectCtx,
-  portForCreate,
-  t,
-) {
-  const context = service ? 'namespace' : 'namespaces';
-  if (!inSubView) {
-    LuigiClient.linkManager()
-      .fromContext(context)
-      .navigate(`apirules/create`);
-    return;
-  }
-
-  LuigiClient.linkManager()
-    .fromContext(context)
-    .withParams({
-      serviceName: service.metadata.name,
-      port: portForCreate,
-      openedInModal: true,
-      redirectCtx: redirectCtx,
-      redirectPath: encodeURIComponent(redirectPath),
-    })
-    .openAsModal(`apirules/create`, {
-      title: t(PANEL.CREATE_MODAL.TITLE),
-    });
-}
-
 function exposeButtonText(resourceType, t) {
   if (resourceType) {
     return t(PANEL.EXPOSE_BUTTON.TEXT, {
@@ -114,15 +52,15 @@ export default function ApiRules({
       name: t('common.buttons.edit'),
       icon: 'edit',
       disabledHandler: apiRule => !!apiRule.ownerSubscription, // TODO what is this ownerSubscription?
-      handler: apiRule => {
-        return editApiRuleModal(
-          apiRule,
-          inSubView,
-          redirectPath,
-          redirectCtx,
-          t,
-        );
-      },
+      // handler: apiRule => {
+      //   return editApiRuleModal(
+      //     apiRule,
+      //     inSubView,
+      //     redirectPath,
+      //     redirectCtx,
+      //     t,
+      //   );
+      // },
     },
     {
       name: t('common.buttons.delete'),
@@ -134,25 +72,25 @@ export default function ApiRules({
     },
   ];
 
-  const exposeServiceButton = (
-    <Button
-      glyph="add"
-      option="transparent"
-      onClick={() =>
-        createApiRuleModal(
-          service,
-          inSubView,
-          redirectPath,
-          redirectCtx,
-          portForCreate,
-          t,
-        )
-      }
-      disabled={disableExposeButton || !!(serverDataLoading || serverDataError)}
-    >
-      {exposeButtonText(resourceType, t)}
-    </Button>
-  );
+  // const exposeServiceButton = (
+  //   <Button
+  //     glyph="add"
+  //     option="transparent"
+  //     onClick={() =>
+  //       createApiRuleModal(
+  //         service,
+  //         inSubView,
+  //         redirectPath,
+  //         redirectCtx,
+  //         portForCreate,
+  //         t,
+  //       )
+  //     }
+  //     disabled={disableExposeButton || !!(serverDataLoading || serverDataError)}
+  //   >
+  //     {exposeButtonText(resourceType, t)}
+  //   </Button>
+  // );
 
   const notFoundMessage = formatMessage(PANEL.LIST.ERRORS.RESOURCES_NOT_FOUND, {
     resourceType: resourceType || 'Namespace',
@@ -165,7 +103,7 @@ export default function ApiRules({
         showSearchField={true}
         textSearchProperties={textSearchProperties}
         showSearchSuggestion={false}
-        extraHeaderContent={exposeServiceButton}
+        // extraHeaderContent={exposeServiceButton}
         actions={actions}
         entries={apiRules}
         headerRenderer={headerRenderer}

@@ -1,5 +1,3 @@
-export const EXCLUDED_SERVICES_LABELS = ['serving.knative.dev/revision'];
-
 export const TOOLBAR = {
   TITLE: 'api-rules.title',
   DESCRIPTION: 'api-rules.messages.description',

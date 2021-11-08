@@ -19,7 +19,6 @@ import './ApiRuleForm.scss';
 import ApiRuleFormHeader from './ApiRuleFormHeader/ApiRuleFormHeader';
 import ServicesDropdown from './ServicesDropdown/ServicesDropdown';
 import AccessStrategyForm from './AccessStrategyForm/AccessStrategyForm';
-import { EXCLUDED_SERVICES_LABELS } from 'components/ApiRules/constants';
 import { hasValidMethods } from 'components/ApiRules/accessStrategyTypes';
 import {
   useGetList,
@@ -132,16 +131,7 @@ export default function ApiRuleForm({
   }
 
   const filterServices = service => {
-    let show = true;
-    EXCLUDED_SERVICES_LABELS.forEach(excludedLabel => {
-      if (
-        service?.metadata?.labels &&
-        Object.keys(service?.metadata?.labels).includes([excludedLabel])
-      ) {
-        show = false;
-      }
-    });
-    return show;
+    return true;
   };
 
   const { data: allServices, error, loading = true } = useGetList(
