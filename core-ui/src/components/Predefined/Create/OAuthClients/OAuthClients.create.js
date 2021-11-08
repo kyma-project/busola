@@ -11,12 +11,6 @@ import {
 } from 'shared/ResourceForm/components/FormComponents';
 
 import { FormRadioGroup, Checkbox } from 'fundamental-react';
-// import { useGetList, usePost, StringInput, K8sNameInput } from 'react-shared';
-
-// import { FormItem, FormLabel } from 'fundamental-react';
-// import CheckboxFormControl from './CheckboxFormControl';
-// import { GrantTypes, ResponseTypes, emptySpec, validateSpec } from './helpers';
-// import { createOAuthClient } from './createOAuthClient';
 import { createOAuth2ClientTemplate } from './helpers';
 
 function Checkboxes({ value, setValue, options, inline }) {
@@ -84,6 +78,7 @@ export const OAuth2ClientsCreate = ({
             "$.metadata.labels['app.kubernetes.io/name']",
             name,
           );
+          jp.value(oAuth2Client, '$.spec.secretName', name);
           setOAuth2Client({ ...oAuth2Client });
         }}
       />
@@ -98,6 +93,7 @@ export const OAuth2ClientsCreate = ({
         title={t('common.headers.annotations')}
       />
       <ResourceForm.FormField
+        required
         propertyPath="$.spec.responseTypes"
         label={t('oauth2-clients.labels.response-types')}
         input={Checkboxes}
@@ -117,6 +113,7 @@ export const OAuth2ClientsCreate = ({
         ]}
       />
       <ResourceForm.FormField
+        required
         propertyPath="$.spec.grantTypes"
         label={t('oauth2-clients.labels.grant-types')}
         input={Checkboxes}
@@ -140,6 +137,13 @@ export const OAuth2ClientsCreate = ({
         ]}
       />
       <ResourceForm.FormField
+        advanced
+        propertyPath="$.spec.secretName"
+        label={t('oauth2-clients.labels.secret-name')}
+        input={Inputs.Text}
+      />
+      <ResourceForm.FormField
+        advanced
         propertyPath="$.spec.tokenEndpointAuthMethod"
         label={t('oauth2-clients.labels.auth-method')}
         input={Inputs.Dropdown}
@@ -163,11 +167,30 @@ export const OAuth2ClientsCreate = ({
         ]}
       />
       <TextArrayInput
+        advanced
         title={t('oauth2-clients.labels.scope')}
         label={t('oauth2-clients.labels.scope')}
         propertyPath="$.spec.scope"
         toInternal={value => value?.split(/,/) || []}
         toExternal={value => value.filter(Boolean).join(',')}
+      />
+      <TextArrayInput
+        advanced
+        title={t('oauth2-clients.labels.redirect-uris')}
+        label={t('oauth2-clients.labels.redirect-uris')}
+        propertyPath="$.spec.redirectUris"
+      />
+      <TextArrayInput
+        advanced
+        title={t('oauth2-clients.labels.post-logout-redirect-uris')}
+        label={t('oauth2-clients.labels.post-logout-redirect-uris')}
+        propertyPath="$.spec.postLogoutRedirectUris"
+      />
+      <TextArrayInput
+        advanced
+        title={t('oauth2-clients.labels.audience')}
+        label={t('oauth2-clients.labels.audience')}
+        propertyPath="$.spec.audience"
       />
     </ResourceForm>
   );

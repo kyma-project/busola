@@ -50,7 +50,7 @@ export function createOAuth2ClientTemplate(namespace) {
     spec: {
       grantTypes: [],
       scope: '',
-      tokenEndpointAuthMethod: 'none',
+      tokenEndpointAuthMethod: 'client_secret_basic',
     },
   };
   // name: '',
