@@ -1,12 +1,20 @@
-import React from 'react';
-
-import { useGetList, usePost, StringInput, K8sNameInput } from 'react-shared';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import * as jp from 'jsonpath';
 
-import { FormItem, FormLabel } from 'fundamental-react';
-import CheckboxFormControl from './CheckboxFormControl';
-import { GrantTypes, ResponseTypes, emptySpec, validateSpec } from './helpers';
-import { createOAuthClient } from './createOAuthClient';
+import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
+import {
+  K8sNameField,
+  KeyValueField,
+} from 'shared/ResourceForm/components/FormComponents';
+
+// import { useGetList, usePost, StringInput, K8sNameInput } from 'react-shared';
+
+// import { FormItem, FormLabel } from 'fundamental-react';
+// import CheckboxFormControl from './CheckboxFormControl';
+// import { GrantTypes, ResponseTypes, emptySpec, validateSpec } from './helpers';
+// import { createOAuthClient } from './createOAuthClient';
+import { createOAuth2ClientTemplate } from './helpers';
 
 export const OAuth2ClientsCreate = ({
   namespace,
@@ -14,10 +22,55 @@ export const OAuth2ClientsCreate = ({
   onChange,
   onCompleted,
   onError,
+  resource: initialOAuth2Client,
   resourceUrl,
   refetchList,
   setCustomValid,
 }) => {
+  const { t } = useTranslation();
+
+  const [oAuth2Client, setOAuth2Client] = useState(
+    initialOAuth2Client || createOAuth2ClientTemplate(namespace),
+  );
+
+  return (
+    <ResourceForm
+      className="create-oauth2-client-form"
+      pluralKind="oauth2clients"
+      singularName={t('oauth2-clients.name_singular')}
+      resource={oAuth2Client}
+      initialResource={initialOAuth2Client}
+      setResource={setOAuth2Client}
+      onChange={onChange}
+      formElementRef={formElementRef}
+      createUrl={resourceUrl}
+    >
+      <K8sNameField
+        propertyPath="$.metadata.name"
+        kind={t('oauth2-clients.name_singular')}
+        setValue={name => {
+          jp.value(oAuth2Client, '$.metadata.name', name);
+          jp.value(
+            oAuth2Client,
+            "$.metadata.labels['app.kubernetes.io/name']",
+            name,
+          );
+          setOAuth2Client({ ...oAuth2Client });
+        }}
+      />
+      <KeyValueField
+        advanced
+        propertyPath="$.metadata.labels"
+        title={t('common.headers.labels')}
+      />
+      <KeyValueField
+        advanced
+        propertyPath="$.metadata.annotations"
+        title={t('common.headers.annotations')}
+      />
+    </ResourceForm>
+  );
+  /*
   const postRequest = usePost();
   const [spec, setSpec] = React.useState(emptySpec);
   const [useCustomSecret, setUseCustomSecret] = React.useState(false);
@@ -121,4 +174,5 @@ export const OAuth2ClientsCreate = ({
       )}
     </form>
   );
+    */
 };

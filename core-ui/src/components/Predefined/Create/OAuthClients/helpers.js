@@ -39,10 +39,22 @@ export function validateSpec(spec) {
   return grantTypes.length >= 1 && !!scope;
 }
 
-export const emptySpec = {
-  name: '',
-  scope: '',
-  responseTypes: [],
-  grantTypes: [],
-  secretName: '',
-};
+export function createOAuth2ClientTemplate(namespace) {
+  return {
+    apiVersion: 'hydra.ory.sh/v1alpha1',
+    kind: 'OAuth2Client',
+    metadata: {
+      name: '',
+      namespace,
+    },
+    spec: {
+      grantTypes: [],
+      scope: '',
+    },
+  };
+  // name: '',
+  // scope: '',
+  // responseTypes: [],
+  // grantTypes: [],
+  // secretName: '',
+}
