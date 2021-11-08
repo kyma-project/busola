@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from 'fundamental-react';
 
-export const Link = ({ url, text, className }) => {
+export const Link = ({ url, text, className, children }) => {
   return (
     <a
       className={className}
@@ -10,7 +10,7 @@ export const Link = ({ url, text, className }) => {
       target="_blank"
       rel="noopener noreferrer"
     >
-      {text || url}
+      {text || children || url}
       <Icon
         glyph="inspect"
         size="s"

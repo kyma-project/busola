@@ -11,6 +11,7 @@ export function YamlContent({
   title,
   onSave,
   saveDisabled,
+  readOnly,
   i18n,
 }) {
   const [editor, setEditor] = React.useState(null);
@@ -34,6 +35,7 @@ export function YamlContent({
         title={title}
         onSave={onSave}
         saveDisabled={saveDisabled}
+        readOnly={readOnly}
         i18n={i18n}
       />
       <ControlledEditor
@@ -43,7 +45,7 @@ export function YamlContent({
         value={val}
         onChange={(_, text) => setChangedYamlFn(text)}
         editorDidMount={(_, editor) => setEditor(editor)}
-        options={{ minimap: { enabled: false } }}
+        options={{ minimap: { enabled: false }, readOnly }}
       />
     </>
   );

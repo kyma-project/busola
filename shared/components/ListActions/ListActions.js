@@ -24,7 +24,7 @@ const StandaloneAction = ({ action, entry, compact }) => {
       onClick={() => action.handler(entry)}
       className="list-actions__standalone"
       option="transparent"
-      glyph={icon}
+      glyph={typeof icon === 'function' ? icon(entry) : icon}
       aria-label={action.name}
       typeAttr="button"
       compact={compact}

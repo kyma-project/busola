@@ -47,7 +47,7 @@ async function resolveFeatures(features, data) {
 
 export async function getFeatures(data = null) {
   const rawFeatures =
-    (await getActiveCluster())?.features ||
+    (await getActiveCluster())?.config?.features ||
     (await getBusolaClusterParams())?.config?.features;
 
   return await resolveFeatures(rawFeatures || {}, data);
