@@ -3,11 +3,14 @@ import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
+import { TextArrayInput } from 'shared/ResourceForm/components/FormComponents';
+import * as Inputs from 'shared/ResourceForm/components/Inputs';
 import {
   K8sNameField,
   KeyValueField,
 } from 'shared/ResourceForm/components/FormComponents';
 
+import { FormRadioGroup, Checkbox } from 'fundamental-react';
 // import { useGetList, usePost, StringInput, K8sNameInput } from 'react-shared';
 
 // import { FormItem, FormLabel } from 'fundamental-react';
@@ -15,6 +18,32 @@ import {
 // import { GrantTypes, ResponseTypes, emptySpec, validateSpec } from './helpers';
 // import { createOAuthClient } from './createOAuthClient';
 import { createOAuth2ClientTemplate } from './helpers';
+
+function Checkboxes({ value, setValue, options, inline }) {
+  const updateValue = (key, checked) => {
+    if (checked) {
+      setValue([...(value || []), key]);
+    } else {
+      setValue(value.filter(v => v !== key));
+    }
+  };
+
+  return (
+    <FormRadioGroup inline={inline} className="inline-radio-group">
+      {options.map(({ key, text }) => (
+        <Checkbox
+          compact
+          key={key}
+          value={key}
+          checked={value?.includes(key)}
+          onChange={e => updateValue(key, e.target.checked)}
+        >
+          {text}
+        </Checkbox>
+      ))}
+    </FormRadioGroup>
+  );
+}
 
 export const OAuth2ClientsCreate = ({
   namespace,
@@ -67,6 +96,78 @@ export const OAuth2ClientsCreate = ({
         advanced
         propertyPath="$.metadata.annotations"
         title={t('common.headers.annotations')}
+      />
+      <ResourceForm.FormField
+        propertyPath="$.spec.responseTypes"
+        label={t('oauth2-clients.labels.response-types')}
+        input={Checkboxes}
+        options={[
+          {
+            key: 'id_token',
+            text: t('oauth2-clients.response-types.id-token'),
+          },
+          {
+            key: 'code',
+            text: t('oauth2-clients.response-types.code'),
+          },
+          {
+            key: 'token',
+            text: t('oauth2-clients.response-types.token'),
+          },
+        ]}
+      />
+      <ResourceForm.FormField
+        propertyPath="$.spec.grantTypes"
+        label={t('oauth2-clients.labels.grant-types')}
+        input={Checkboxes}
+        options={[
+          {
+            key: 'client_credentials',
+            text: t('oauth2-clients.grant-types.client-credentials'),
+          },
+          {
+            key: 'authorization_code',
+            text: t('oauth2-clients.grant-types.authorization-code'),
+          },
+          {
+            key: 'implicit',
+            text: t('oauth2-clients.grant-types.implicit'),
+          },
+          {
+            key: 'refresh_token',
+            text: t('oauth2-clients.grant-types.refresh-token'),
+          },
+        ]}
+      />
+      <ResourceForm.FormField
+        propertyPath="$.spec.tokenEndpointAuthMethod"
+        label={t('oauth2-clients.labels.auth-method')}
+        input={Inputs.Dropdown}
+        options={[
+          {
+            key: 'none',
+            text: t('oauth2-clients.auth-methods.none'),
+          },
+          {
+            key: 'client_secret_basic',
+            text: t('oauth2-clients.auth-methods.client_secret_basic'),
+          },
+          {
+            key: 'client_secret_post',
+            text: t('oauth2-clients.auth-methods.client_secret_post'),
+          },
+          {
+            key: 'private_key_jwt',
+            text: t('oauth2-clients.auth-methods.private_key_jwt'),
+          },
+        ]}
+      />
+      <TextArrayInput
+        title={t('oauth2-clients.labels.scope')}
+        label={t('oauth2-clients.labels.scope')}
+        propertyPath="$.spec.scope"
+        toInternal={value => value?.split(/,/) || []}
+        toExternal={value => value.filter(Boolean).join(',')}
       />
     </ResourceForm>
   );

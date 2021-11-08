@@ -1056,7 +1056,7 @@ node-details:
   timestamp: Timestamp
   title-warnings: Warnings
 oauth2-clients:
-  grand-types:
+  grant-types:
     authorization-code: Authorization Code
     client-credentials: Client Credentials
     implicit: Implicit
@@ -1064,7 +1064,7 @@ oauth2-clients:
   headers:
     secret: Secret
   labels:
-    grand-types: Grant Types
+    grant-types: Grant Types
     response-types: Response Types
     scope: Scope
   response-types:
