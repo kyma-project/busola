@@ -5,39 +5,13 @@ import * as jp from 'jsonpath';
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import { TextArrayInput } from 'shared/ResourceForm/components/FormComponents';
 import * as Inputs from 'shared/ResourceForm/components/Inputs';
+import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSelect';
 import {
   K8sNameField,
   KeyValueField,
 } from 'shared/ResourceForm/components/FormComponents';
 
-import { FormRadioGroup, Checkbox } from 'fundamental-react';
 import { createOAuth2ClientTemplate } from './helpers';
-
-function Checkboxes({ value, setValue, options, inline }) {
-  const updateValue = (key, checked) => {
-    if (checked) {
-      setValue([...(value || []), key]);
-    } else {
-      setValue(value.filter(v => v !== key));
-    }
-  };
-
-  return (
-    <FormRadioGroup inline={inline} className="inline-radio-group">
-      {options.map(({ key, text }) => (
-        <Checkbox
-          compact
-          key={key}
-          value={key}
-          checked={value?.includes(key)}
-          onChange={e => updateValue(key, e.target.checked)}
-        >
-          {text}
-        </Checkbox>
-      ))}
-    </FormRadioGroup>
-  );
-}
 
 export const OAuth2ClientsCreate = ({
   namespace,
@@ -104,7 +78,7 @@ export const OAuth2ClientsCreate = ({
         required
         propertyPath="$.spec.responseTypes"
         label={t('oauth2-clients.labels.response-types')}
-        input={Checkboxes}
+        input={Inputs.Checkboxes}
         options={[
           {
             key: 'id_token',
@@ -124,7 +98,7 @@ export const OAuth2ClientsCreate = ({
         required
         propertyPath="$.spec.grantTypes"
         label={t('oauth2-clients.labels.grant-types')}
-        input={Checkboxes}
+        input={Inputs.Checkboxes}
         options={[
           {
             key: 'client_credentials',
@@ -156,7 +130,16 @@ export const OAuth2ClientsCreate = ({
         propertyPath="$.spec.secretName"
         label={t('oauth2-clients.labels.secret-name')}
         tooltipContent={t('oauth2-clients.tooltips.secret-name')}
-        input={Inputs.Text}
+        input={({ value, setValue }) => (
+          <K8sResourceSelectWithUseGetList
+            compact
+            required
+            value={value}
+            resourceType={t('oauth2-clients.labels.secret')}
+            onSelect={setValue}
+            url={`/api/v1/namespaces/${namespace}/secrets`}
+          />
+        )}
       />
       <ResourceForm.FormField
         advanced
