@@ -21,9 +21,9 @@ api-rules:
       required-scope: Required Scope
     messages:
       one-method: This access strategy requires at least one method.
+      one-strategy-required: At least one strategy is required.
     title: Access Strategies
     tooltips:
-      delete: Define at least one access strategy.
       path: Path can contain alphanumeric characters and  '/', '.', '*', '?', '!', '-', '(', and ')'.
   buttons:
     create: Create API Rule
@@ -38,6 +38,10 @@ api-rules:
     subdomain-placeholder: Subdomain will replace the '*' part of the $t(api-rules.form.hostname) value.
   general-settings:
     title: General settings
+  jwt:
+    idp-presets: IDP Presets
+    jwks-uri: JWKs URI
+    trusted-issuer: Trusted issuer URL
   list:
     headers:
       host: Host
@@ -48,11 +52,16 @@ api-rules:
     created: API Rule created.
     description: Expose Services outside the cluster with API Rules.
     not-matching-results: Couldn't find API Rules matching this query.
+    one-rule-required: At least one rule is required.
     updated: API Rule updated.
     will-be-available-at: API Rule will be available at {{address}}.
   name_singular: API Rule
   placeholders:
     methods: Select HTTP request method.
+    path: Enter the path.
+    subdomain: Subdomain part of Api Rule address.
+  rule: Rule
+  rules: Rules
   services:
     error-load: Couldn't load service list.
     loading: Loading services...

@@ -7,8 +7,14 @@ import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import { createApiRuleTemplate, createRuleTemplate } from './templates';
 import { useServicesQuery, ServiceDropdown } from './ServiceDropdown';
 import { useGatewaysQuery, GatewayDropdown } from './GatewayDropdown';
-import { HostAndSubdomain } from './HostDropdown';
+import { HostAndSubdomain } from './HostAndSubdomain';
 import { RuleForm, SingleRuleInput } from './Rules';
+import {
+  findGateway,
+  getGatewayHosts,
+  hasWildcard,
+  validateApiRule,
+} from './helpers';
 
 export function ApiRulesCreate({
   formElementRef,
@@ -17,18 +23,31 @@ export function ApiRulesCreate({
   setCustomValid,
 }) {
   const { t } = useTranslation();
+  // queries are moved up here so that the network calls are not doubled
   const servicesQuery = useServicesQuery(namespace);
   const gatewaysQuery = useGatewaysQuery(namespace);
+
   const [subdomain, setSubdomain] = useState('');
   const [apiRule, setApiRule] = useState(createApiRuleTemplate(namespace));
 
   useEffect(() => {
-    const hasValidService =
-      jp.value(apiRule, '$.spec.service.name') &&
-      jp.value(apiRule, '$.spec.service.port');
-
-    setCustomValid(hasValidService);
+    setCustomValid(validateApiRule(apiRule));
   }, [apiRule, setCustomValid]);
+
+  useEffect(() => {
+    const gateway = findGateway(apiRule?.spec?.gateway, gatewaysQuery.data);
+    const firstAvailableHost = gateway && getGatewayHosts(gateway)[0];
+    if (firstAvailableHost) {
+      jp.value(
+        apiRule,
+        '$.spec.service.host',
+        hasWildcard(firstAvailableHost)
+          ? firstAvailableHost.replace('*', subdomain)
+          : firstAvailableHost,
+      );
+      setApiRule({ ...apiRule });
+    }
+  }, [apiRule?.spec?.gateway]);
 
   const handleNameChange = name => {
     jp.value(apiRule, '$.metadata.name', name);
@@ -83,12 +102,9 @@ export function ApiRulesCreate({
       <ResourceForm.ItemArray
         advanced
         propertyPath="$.spec.rules"
-        listTitle={t('Rules')} //todo
-        nameSingular={t('Rule')} //todo
-        atLeastOneRequiredMessage={t(
-          //todo
-          'gateways.create-modal.at-least-one-server-required',
-        )}
+        listTitle={t('api-rules.rules')}
+        nameSingular={t('api-rules.rule')}
+        atLeastOneRequiredMessage={t('api-rules.messages.one-rule-required')}
         itemRenderer={({ item, values, setValues }) => (
           <RuleForm
             rule={item}

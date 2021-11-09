@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/components/Inputs';
 import { JwtStrategyConfig } from './JwtStrategyConfig';
-import { merge } from 'lodash';
 import { createAccessStrategyTemplate } from './templates';
 
 const accessStrategyOptions = [
@@ -43,7 +42,6 @@ function SingleAccessStrategyInput({
         input={Inputs.Dropdown}
         options={accessStrategyOptions}
       />
-      {/*todo required  */}
       {accessStrategy?.handler === 'oauth2_introspection' && (
         <ResourceForm.TextArrayInput
           required
@@ -51,7 +49,6 @@ function SingleAccessStrategyInput({
           title={t('Required scope')}
         />
       )}
-      {/*todo required  */}
       {accessStrategy?.handler === 'jwt' && (
         <JwtStrategyConfig propertyPath="$.config" />
       )}
@@ -72,11 +69,10 @@ export function AccessStrategyForm(props) {
         <ResourceForm.ItemArray
           advanced
           propertyPath="$.accessStrategies"
-          listTitle={t('Access Strategies')} //todo
-          nameSingular={t('Access Strategy')} //todo
+          listTitle={t('api-rules.access-strategies.title')}
+          nameSingular={t('api-rules.access-strategies.labels.access-strategy')}
           atLeastOneRequiredMessage={t(
-            //todo
-            'dupsko',
+            'api-rules.access-strategies.messages.one-strategy-required',
           )}
           itemRenderer={({
             item: accessStrategy,
@@ -85,10 +81,7 @@ export function AccessStrategyForm(props) {
           }) => (
             <SingleAccessStrategyInput
               value={accessStrategy}
-              setValue={updatedAccessStrategy => {
-                merge(accessStrategy, updatedAccessStrategy); // todo
-                setAccessStrategies([...accessStrategies]);
-              }}
+              setValue={() => setAccessStrategies([...accessStrategies])}
             />
           )}
           newResourceTemplateFn={createAccessStrategyTemplate}

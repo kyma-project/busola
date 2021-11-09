@@ -37,7 +37,7 @@ const getFirstAvailableHost = gateway => {
   return gateway.spec.servers[0].hosts[0];
 };
 
-const hasWildcard = hostname => {
+export const hasWildcard = hostname => {
   if (!hostname) return false;
 
   // hostname may contain optional namespace prefix ({namespace}/{hostname})

@@ -23,12 +23,13 @@ export function GatewayDropdown({
   const { data: gateways, error, loading } = gatewaysQuery;
 
   useEffect(() => {
+    // try to set kyma-system/kyma-gateway as default
     if (gateways && !gateway) {
       const findKymaGateway = ({ metadata }) =>
         metadata.namespace === 'kyma-system' &&
         metadata.name === 'kyma-gateway';
 
-      const kymaGateway = gatewaysQuery.data.find(findKymaGateway);
+      const kymaGateway = gateways.find(findKymaGateway);
       if (kymaGateway) {
         setGateway(formatGateway(kymaGateway));
       }
@@ -44,19 +45,17 @@ export function GatewayDropdown({
   }));
 
   return (
-    <>
-      <FormField
-        advanced
-        required
-        propertyPath="$.spec.service"
-        label={t('api-rules.form.gateway')}
-        selectedKey={gateway}
-        setValue={setGateway}
-        input={Inputs.Dropdown}
-        options={dropdownOptions}
-        loading={loading}
-        error={error}
-      />
-    </>
+    <FormField
+      advanced
+      required
+      propertyPath="$.spec.service"
+      label={t('api-rules.form.gateway')}
+      selectedKey={gateway}
+      setValue={setGateway}
+      input={Inputs.Dropdown}
+      options={dropdownOptions}
+      loading={loading}
+      error={error}
+    />
   );
 }

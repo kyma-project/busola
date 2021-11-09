@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/components/Inputs';
-import { merge } from 'lodash'; // todo object.assing
 import { AccessStrategyForm } from './AccessStrategyForm';
 
 const methodOptions = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD'].map(
@@ -16,15 +15,10 @@ const methodOptions = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD'].map(
 export function RuleForm({ rule, rules, setRules, isAdvanced }) {
   const { t } = useTranslation();
 
-  const setRule = newRule => {
-    merge(rule, newRule); //todo
-    setRules([...rules]);
-  };
-
   return (
     <ResourceForm.Wrapper
       resource={rule}
-      setResource={setRule}
+      setResource={() => setRules([...rules])}
       isAdvanced={isAdvanced}
     >
       <ResourceForm.FormField
@@ -33,6 +27,8 @@ export function RuleForm({ rule, rules, setRules, isAdvanced }) {
         label={t('api-rules.access-strategies.labels.path')}
         tooltipContent={t('api-rules.access-strategies.tooltips.path')}
         input={Inputs.Text}
+        placeholder={t('api-rules.placeholders.path')}
+        pattern="^[a-z0-9\/\(\)\?.!*\-]+"
       />
       <AccessStrategyForm />
       <ResourceForm.SelectArrayInput
@@ -55,7 +51,7 @@ export function SingleRuleInput({
 
   return (
     <ResourceForm.CollapsibleSection
-      title={t('Rules')}
+      title={t('api-rules.rules')}
       defaultOpen={defaultOpen}
     >
       <RuleForm

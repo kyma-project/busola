@@ -19,13 +19,13 @@ export function JwtStrategyConfig(props) {
   const { t } = useTranslation();
 
   const toInternal = config => {
-    const l = Math.max(
+    const count = Math.max(
       config?.jwks_urls?.length || 0,
       config?.trusted_issuers?.length || 0,
     );
 
     const internal = [];
-    for (let i = 0; i < l; i++) {
+    for (let i = 0; i < count; i++) {
       internal.push({
         jwksUri: config?.jwks_urls?.[i] || '',
         trustedIssuer: config?.trusted_issuers?.[i] || '',
@@ -45,27 +45,28 @@ export function JwtStrategyConfig(props) {
   return (
     <ResourceForm.MultiInput
       required
-      title={t('IDP Presets')}
+      title={t('api-rules.jwt.idp-presets')}
       toInternal={toInternal}
       toExternal={toExternal}
-      tooltipContent={'todo'}
       inputs={[
         ({ value, setValue, ref, onBlur, focus, index }) => (
           <FormInput
             key={index + '--jwksUri'}
             compact
+            type="url"
             value={value?.jwksUri || ''}
             ref={ref}
             onChange={e => setValue({ ...value, jwksUri: e.target.value })}
             onKeyDown={e => focus(e)}
             onBlur={onBlur}
-            placeholder={t('JWKs URI')}
+            placeholder={t('api-rules.jwt.jwks-uri')}
           />
         ),
         ({ value, setValue, ref, onBlur, focus, index }) => (
           <FormInput
             key={index + '--trustedIssuer'}
             compact
+            type="url"
             value={value?.trustedIssuer || ''}
             ref={ref}
             onChange={e =>
@@ -73,7 +74,7 @@ export function JwtStrategyConfig(props) {
             }
             onKeyDown={e => focus(e)}
             onBlur={onBlur}
-            placeholder={t('Trusted issuer URL')}
+            placeholder={t('api-rules.jwt.trusted-issuer')}
           />
         ),
       ]}

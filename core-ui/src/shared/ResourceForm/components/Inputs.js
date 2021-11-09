@@ -61,7 +61,7 @@ export function Dropdown({ value, setValue, error, loading, ...props }) {
       compact
       fullWidth
       selectedKey={value}
-      onSelect={(_, selected) => setValue(selected.key)}
+      onSelect={(_, selected) => setValue(selected.key, selected)}
       i18n={i18n}
       validationState={getValidationState()}
       {...props}

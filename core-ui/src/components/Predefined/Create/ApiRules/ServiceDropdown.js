@@ -4,9 +4,9 @@ import { useGetList } from 'react-shared';
 import { FormField } from 'shared/ResourceForm/components/FormComponents';
 import * as Inputs from 'shared/ResourceForm/components/Inputs';
 
-const EXCLUDED_SERVICES_LABEL_KEYS = ['serving.knative.dev/revision'];
-
 export function useServicesQuery(namespace) {
+  const EXCLUDED_SERVICES_LABEL_KEYS = ['serving.knative.dev/revision'];
+
   const isNotExcluded = labelKey =>
     !EXCLUDED_SERVICES_LABEL_KEYS.includes(labelKey);
 
@@ -30,19 +30,14 @@ export function ServiceDropdown({
   const { t } = useTranslation();
   const { data: services, error, loading } = servicesQuery;
 
-  const toKey = (name, port) => name + ' ' + port;
-
-  const fromKey = nameAndPort => {
-    const [name, port] = nameAndPort.split(' ');
-    return [name, parseInt(port)];
-  };
-
   const dropdownOptions = (services || []).flatMap(svc => {
     const name = svc.metadata.name;
 
     return svc.spec.ports.map(({ port }) => ({
-      key: toKey(name, port),
+      key: name + ' ' + port,
       text: `${name} (port: ${port})`,
+      name,
+      port,
     }));
   });
 
@@ -53,10 +48,8 @@ export function ServiceDropdown({
       propertyPath="$.spec.service"
       label={t('common.labels.service')}
       placeholder={t('api-rules.services.placeholder')}
-      value={service?.name + ' ' + service?.port}
       selectedKey={service?.name + ' ' + service?.port}
-      setValue={nameAndPort => {
-        const [name, port] = fromKey(nameAndPort);
+      setValue={(_, { name, port }) => {
         setService({
           ...service,
           name,
