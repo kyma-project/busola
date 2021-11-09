@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 
@@ -55,6 +55,14 @@ export const OAuth2ClientsCreate = ({
   const [oAuth2Client, setOAuth2Client] = useState(
     initialOAuth2Client || createOAuth2ClientTemplate(namespace),
   );
+
+  useEffect(() => {
+    const responseTypes = jp.value(oAuth2Client, '$.spec.responseTypes');
+    const grantTypes = jp.value(oAuth2Client, '$.spec.grantTypes');
+    const scope = jp.value(oAuth2Client, '$.spec.scope');
+
+    setCustomValid(responseTypes?.length && grantTypes?.length && scope);
+  }, [oAuth2Client]);
 
   return (
     <ResourceForm
@@ -199,109 +207,4 @@ export const OAuth2ClientsCreate = ({
       />
     </ResourceForm>
   );
-  /*
-  const postRequest = usePost();
-  const [spec, setSpec] = React.useState(emptySpec);
-  const [useCustomSecret, setUseCustomSecret] = React.useState(false);
-
-  const { data } = useGetList()(`/api/v1/namespaces/${namespace}/secrets/`, {
-    pollingInterval: 3000,
-  });
-  const secretNames = data?.map(s => s.metadata.name) || [];
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  React.useEffect(() => setCustomValid(validateSpec(spec)), [
-    spec,
-    useCustomSecret,
-  ]);
-
-  async function handleFormSubmit(e) {
-    e.preventDefault();
-    if (!useCustomSecret) {
-      spec.secretName = spec.name;
-    }
-    const input = createOAuthClient(namespace, spec);
-    try {
-      await postRequest(resourceUrl, input);
-      refetchList();
-      onCompleted(`OAuth2 Client ${spec.name} created`);
-    } catch (e) {
-      onError('Cannot create OAuth2 Client', `Error: ${e.message}`);
-    }
-  }
-
-  const { i18n } = useTranslation();
-  return (
-    <form
-      ref={formElementRef}
-      onChange={onChange}
-      onSubmit={handleFormSubmit}
-      noValidate
-    >
-      <FormItem>
-        <K8sNameInput
-          value={spec.name}
-          label="Name"
-          kind="Client"
-          onChange={e => setSpec({ ...spec, name: e.target.value })}
-          i18n={i18n}
-        />
-      </FormItem>
-      <FormItem className="clearfix">
-        <CheckboxFormControl
-          name="Response types"
-          availableValues={ResponseTypes()}
-          values={spec.responseTypes}
-          onChange={values => setSpec({ ...spec, responseTypes: values })}
-        />
-      </FormItem>
-      <FormItem className="clearfix">
-        <CheckboxFormControl
-          required={true}
-          name="Grant types"
-          availableValues={GrantTypes()}
-          values={spec.grantTypes}
-          onChange={values => setSpec({ ...spec, grantTypes: values })}
-        />
-      </FormItem>
-      <FormItem>
-        <FormLabel htmlFor="scope" required className="fd-has-display-block">
-          Scopes
-        </FormLabel>
-        <StringInput
-          stringList={spec.scope.split(' ').filter(scope => scope)}
-          onChange={scope => setSpec({ ...spec, scope: scope.join(' ') })}
-          id="scope"
-          required
-          i18n={i18n}
-        />
-      </FormItem>
-      <p
-        className="link fd-has-display-block fd-margin-top--sm"
-        onClick={() => setUseCustomSecret(!useCustomSecret)}
-      >
-        {useCustomSecret
-          ? 'Create secret with the same name as client.'
-          : 'Define custom secret name for this client.'}
-      </p>
-      {useCustomSecret && (
-        <>
-          <FormItem>
-            <K8sNameInput
-              label="Secret name"
-              kind="Secret"
-              onChange={e => setSpec({ ...spec, secretName: e.target.value })}
-              value={spec.secretName}
-              i18n={i18n}
-            />
-          </FormItem>
-          <p className="fd-has-display-block fd-has-color-status-4">
-            {secretNames?.includes(spec.secretName) &&
-              `Secret "${spec.secretName}" exists and will be used for this client.`}
-          </p>
-        </>
-      )}
-    </form>
-  );
-    */
 };
