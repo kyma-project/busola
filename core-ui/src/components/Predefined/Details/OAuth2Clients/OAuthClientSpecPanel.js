@@ -42,16 +42,22 @@ export default function OAuthClientSpecPanel({ spec }) {
       <FormItem>
         <FormLabel>{t('oauth2-clients.labels.response-types')}</FormLabel>
         <Tokens
-          tokens={(spec.responseTypes || []).map(v => ResponseTypes()[v])}
+          tokens={(spec.responseTypes || []).map(v =>
+            t(`oauth2-clients.response-types.${v}`),
+          )}
         />
       </FormItem>
       <FormItem>
-        <FormLabel>{t('oauth2-clients.labels.grand-types')}</FormLabel>
-        <Tokens tokens={spec.grantTypes.map(v => GrantTypes()[v])} />
+        <FormLabel>{t('oauth2-clients.labels.grant-types')}</FormLabel>
+        <Tokens
+          tokens={spec.grantTypes.map(v =>
+            t(`oauth2-clients.grant-types.${v}`),
+          )}
+        />
       </FormItem>
       <FormItem>
         <FormLabel>{t('oauth2-clients.labels.scope')}</FormLabel>
-        <Tokens tokens={spec.scope.split(' ').filter(scope => scope)} />
+        <Tokens tokens={spec.scope.split(/ +/).filter(scope => scope)} />
       </FormItem>
     </LayoutPanel>
   );

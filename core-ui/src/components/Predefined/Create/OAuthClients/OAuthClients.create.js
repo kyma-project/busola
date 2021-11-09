@@ -36,7 +36,7 @@ const OAuth2ClientsCreate = ({
     const scope = jp.value(oAuth2Client, '$.spec.scope');
 
     setCustomValid(responseTypes?.length && grantTypes?.length && scope);
-  }, [oAuth2Client]);
+  }, [oAuth2Client]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <ResourceForm
@@ -79,20 +79,10 @@ const OAuth2ClientsCreate = ({
         propertyPath="$.spec.responseTypes"
         label={t('oauth2-clients.labels.response-types')}
         input={Inputs.Checkboxes}
-        options={[
-          {
-            key: 'id_token',
-            text: t('oauth2-clients.response-types.id-token'),
-          },
-          {
-            key: 'code',
-            text: t('oauth2-clients.response-types.code'),
-          },
-          {
-            key: 'token',
-            text: t('oauth2-clients.response-types.token'),
-          },
-        ]}
+        options={['id_token', 'code', 'token'].map(type => ({
+          key: type,
+          text: t(`oauth2-clients.response-types.${type}`),
+        }))}
       />
       <ResourceForm.FormField
         required
@@ -100,23 +90,14 @@ const OAuth2ClientsCreate = ({
         label={t('oauth2-clients.labels.grant-types')}
         input={Inputs.Checkboxes}
         options={[
-          {
-            key: 'client_credentials',
-            text: t('oauth2-clients.grant-types.client-credentials'),
-          },
-          {
-            key: 'authorization_code',
-            text: t('oauth2-clients.grant-types.authorization-code'),
-          },
-          {
-            key: 'implicit',
-            text: t('oauth2-clients.grant-types.implicit'),
-          },
-          {
-            key: 'refresh_token',
-            text: t('oauth2-clients.grant-types.refresh-token'),
-          },
-        ]}
+          'client_credentials',
+          'authorization_code',
+          'implicit',
+          'refresh_token',
+        ].map(type => ({
+          key: type,
+          text: t(`oauth2-clients.grant-types.${type}`),
+        }))}
       />
       <ResourceForm.FormField
         advanced
@@ -169,8 +150,8 @@ const OAuth2ClientsCreate = ({
         required
         propertyPath="$.spec.scope"
         title={t('oauth2-clients.labels.scope')}
-        toInternal={value => value?.split(/,/) || []}
-        toExternal={value => value.filter(Boolean).join(',')}
+        toInternal={value => value?.split(/ +/) || []}
+        toExternal={value => value.filter(Boolean).join(' ')}
       />
       <TextArrayInput
         advanced

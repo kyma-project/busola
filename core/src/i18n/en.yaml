@@ -1062,10 +1062,10 @@ oauth2-clients:
     none: None
     private_key_jwt: Private Key / JWT
   grant-types:
-    authorization-code: Authorization Code
-    client-credentials: Client Credentials
+    authorization_code: Authorization Code
+    client_credentials: Client Credentials
     implicit: Implicit
-    refresh-token: Refresh Token
+    refresh_token: Refresh Token
   headers:
     secret: Secret
   labels:
@@ -1082,7 +1082,7 @@ oauth2-clients:
   name_singular: OAuth2 Client
   response-types:
     code: Code
-    id-token: ID Token
+    id_token: ID Token
     token: Token
   secret: OAuth2 Client Credentials
   title: OAuth2 Clients
