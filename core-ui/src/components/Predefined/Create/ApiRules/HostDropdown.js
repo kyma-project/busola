@@ -13,20 +13,7 @@ const hasWildcard = hostname => {
   return hostname.includes('*');
 };
 
-// const resolveFinalHost = (subdomain, hostname) => {
-//   // replace possible wildcard with lowest level domain
-//   const resolvedHost = hasWildcard(hostname)
-//     ? hostname.replace('*', subdomain)
-//     : hostname;
-
-//   // hostname may be prefixed with namespace - get rid of it
-//   return resolvedHost.includes('/')
-//     ? resolvedHost.substring(resolvedHost.lastIndexOf('/') + 1)
-//     : resolvedHost;
-// };
-
-function getSelectedHost(host, gateway) {
-  const hosts = gateway?.spec.servers.flatMap(s => s.hosts) || [];
+function getSelectedHost(host, hosts) {
   if (hosts.includes(host)) {
     // console.log('no wildcard', host);
     // match no wildcard host
@@ -54,10 +41,16 @@ export function HostAndSubdomain({
 
   const [gatewayNamespace, gatewayName] = (gatewayStr || '/').split('/');
 
-  const gateway = (gatewaysQuery.data || []).find(
+  const choosenGateway = (gatewaysQuery.data || []).find(
     ({ metadata }) =>
       metadata.name === gatewayName && metadata.namespace === gatewayNamespace,
   );
+  const hosts = (choosenGateway?.spec.servers.flatMap(s => s.hosts) || [])
+    .filter(filterUnique)
+    // hostname may be prefixed with namespace - get rid of it
+    .map(host =>
+      host.includes('/') ? host.substring(host.lastIndexOf('/') + 1) : host,
+    );
 
   // // choose first available host when gateways load
   useEffect(() => {
@@ -71,16 +64,14 @@ export function HostAndSubdomain({
 
   // choose first host when gateway changes
   useEffect(() => {
-    if (gateway) {
-      setHost((gateway.spec.servers.flatMap(s => s.hosts) || [])[0]);
+    if (choosenGateway) {
+      setHost((choosenGateway.spec.servers.flatMap(s => s.hosts) || [])[0]);
     }
-  }, [gateway]);
+  }, [choosenGateway]);
 
-  const hostOptions = (gateway?.spec.servers.flatMap(s => s.hosts) || [])
-    .filter(filterUnique)
-    .map(host => ({ text: host, key: host }));
+  const hostOptions = hosts.map(host => ({ text: host, key: host }));
 
-  const selectedHost = getSelectedHost(host, gateway);
+  const selectedHost = getSelectedHost(host, hosts);
 
   return (
     <>
@@ -113,6 +104,7 @@ export function HostAndSubdomain({
         input={Inputs.Text}
         disabled={!hasWildcard(selectedHost)}
         placeholder={t('Subdomain part of Api Rule address.')}
+        pattern="^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$"
       />
     </>
   );

@@ -17,6 +17,9 @@ export function ResourceFormWrapper({
   isAdvanced,
   ...props
 }) {
+  if (!resource) {
+    return children;
+  }
   return React.Children.map(children, child => {
     if (!child) {
       return null;

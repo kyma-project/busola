@@ -30,11 +30,18 @@ export function ServiceDropdown({
   const { t } = useTranslation();
   const { data: services, error, loading } = servicesQuery;
 
+  const toKey = (name, port) => name + ' ' + port;
+
+  const fromKey = nameAndPort => {
+    const [name, port] = nameAndPort.split(' ');
+    return [name, parseInt(port)];
+  };
+
   const dropdownOptions = (services || []).flatMap(svc => {
     const name = svc.metadata.name;
 
     return svc.spec.ports.map(({ port }) => ({
-      key: name + ' ' + port,
+      key: toKey(name, port),
       text: `${name} (port: ${port})`,
     }));
   });
@@ -49,7 +56,7 @@ export function ServiceDropdown({
       value={service?.name + ' ' + service?.port}
       selectedKey={service?.name + ' ' + service?.port}
       setValue={nameAndPort => {
-        const [name, port] = nameAndPort.split(' ');
+        const [name, port] = fromKey(nameAndPort);
         setService({
           ...service,
           name,

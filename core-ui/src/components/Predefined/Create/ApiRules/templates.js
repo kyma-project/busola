@@ -8,28 +8,27 @@ export function createApiRuleTemplate(namespace) {
     },
     spec: {
       gateway: '',
-      rules: [createAccessStrategyTemplate()],
+      rules: [createRuleTemplate()],
       service: {
         host: '',
         name: '',
         port: '',
       },
-      // host: 'aa.nkyma.kyma-prow.shoot.canary.k8s-hana.ondemand.com',
-      // name: 'kubernetes',
-      // port: 443,
     },
+  };
+}
+
+export function createRuleTemplate() {
+  return {
+    accessStrategies: [createAccessStrategyTemplate()],
+    methods: ['GET'],
+    path: '/.*',
   };
 }
 
 export function createAccessStrategyTemplate() {
   return {
-    accessStrategies: [
-      {
-        config: {},
-        handler: 'allow',
-      },
-    ],
-    methods: ['GET'],
-    path: '/.*',
+    handler: 'allow',
+    config: {},
   };
 }

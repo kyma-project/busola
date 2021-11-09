@@ -4,10 +4,7 @@ import * as jp from 'jsonpath';
 
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 
-import {
-  createApiRuleTemplate,
-  createAccessStrategyTemplate,
-} from './templates';
+import { createApiRuleTemplate, createRuleTemplate } from './templates';
 import { useServicesQuery, ServiceDropdown } from './ServiceDropdown';
 import { useGatewaysQuery, GatewayDropdown } from './GatewayDropdown';
 import { HostAndSubdomain } from './HostDropdown';
@@ -70,24 +67,6 @@ export function ApiRulesCreate({
         gatewayStr={jp.value(apiRule, '$.spec.gateway')}
         gatewaysQuery={gatewaysQuery}
       />
-
-      {/* <FormItem>
-        <FormLabel htmlFor="subdomain" required>
-          {t('api-rules.form.subdomain')}
-        </FormLabel>
-        <Tooltip content={t('common.tooltips.k8s-name-input')}>
-          <FormInput
-            disabled={!hasWildcard(hostname)}
-            id="subdomain"
-            placeholder={t('api-rules.form.subdomain-placeholder')}
-            required
-            pattern="^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$"
-            ref={formValues.hostname}
-            onChange={forceUpdate}
-          />
-        </Tooltip>
-      </FormItem> */}
-
       <ResourceForm.KeyValueField
         advanced
         propertyPath="$.metadata.labels"
@@ -110,10 +89,15 @@ export function ApiRulesCreate({
           //todo
           'gateways.create-modal.at-least-one-server-required',
         )}
-        itemRenderer={({ item, values, setValues, isAdvanced }) => (
-          <RuleForm rule={item} rules={values} setRules={setValues} />
+        itemRenderer={({ item, values, setValues }) => (
+          <RuleForm
+            rule={item}
+            rules={values}
+            setRules={setValues}
+            isAdvanced
+          />
         )}
-        newResourceTemplateFn={createAccessStrategyTemplate}
+        newResourceTemplateFn={createRuleTemplate}
       />
     </ResourceForm>
   );

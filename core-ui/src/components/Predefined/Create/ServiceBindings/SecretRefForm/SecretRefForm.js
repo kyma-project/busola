@@ -59,13 +59,9 @@ export function SecretRefForm({
         return t('btp-service-bindings.messages.value-must-be-json-object');
       }
 
-      const duplicates = secretRefs.filter(r => {
-        console.log('filter', r, ref);
-        return (
-          r.secretKeyRef.name === ref.name && r.secretKeyRef.key === ref.key
-        );
-      });
-      console.log('duplicates', duplicates);
+      const duplicates = secretRefs.filter(
+        r => r.secretKeyRef.name === ref.name && r.secretKeyRef.key === ref.key,
+      );
 
       if (duplicates.length > 1) {
         return t('btp-service-bindings.messages.duplicate-ref');
