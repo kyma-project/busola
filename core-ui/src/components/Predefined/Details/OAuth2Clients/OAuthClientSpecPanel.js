@@ -3,10 +3,6 @@ import PropTypes from 'prop-types';
 
 import { LayoutPanel, Token, FormItem, FormLabel } from 'fundamental-react';
 import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
-import {
-  GrantTypes,
-  ResponseTypes,
-} from 'components/Predefined/Create/OAuthClients/helpers';
 import { useTranslation } from 'react-i18next';
 
 import './OAuthClientSpecPanel.scss';
