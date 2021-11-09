@@ -1084,6 +1084,7 @@ oauth2-clients:
     code: Code
     id-token: ID Token
     token: Token
+  secret: OAuth2 Client Credentials
   title: OAuth2 Clients
   tooltips:
     audience: Audience is a whitelist defining the audiences this client is allowed to request tokens for.

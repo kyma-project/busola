@@ -13,7 +13,7 @@ import {
 
 import { createOAuth2ClientTemplate } from './helpers';
 
-export const OAuth2ClientsCreate = ({
+const OAuth2ClientsCreate = ({
   namespace,
   formElementRef,
   onChange,
@@ -191,3 +191,10 @@ export const OAuth2ClientsCreate = ({
     </ResourceForm>
   );
 };
+OAuth2ClientsCreate.secrets = (t, context) => [
+  {
+    title: t('oauth2-clients.secret'),
+    data: ['client_id', 'client_secret'],
+  },
+];
+export { OAuth2ClientsCreate };
