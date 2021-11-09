@@ -1056,6 +1056,11 @@ node-details:
   timestamp: Timestamp
   title-warnings: Warnings
 oauth2-clients:
+  auth-methods:
+    client_secret_basic: Client Secret / Basic
+    client_secret_post: Client Secret / POST
+    none: None
+    private_key_jwt: Private Key / JWT
   grant-types:
     authorization-code: Authorization Code
     client-credentials: Client Credentials
@@ -1064,14 +1069,26 @@ oauth2-clients:
   headers:
     secret: Secret
   labels:
+    audience: Audience
+    auth-method: Token Endpoint Authentication Method
+    client-name: Client Name
     grant-types: Grant Types
+    post-logout-redirect-uris: Post-Logout Redirect URIs
+    redirect-uris: Redirect URIs
     response-types: Response Types
     scope: Scope
+    secret-name: Secret Name
+    uris: URIs
+  name_singular: OAuth2 Client
   response-types:
     code: Code
     id-token: ID Token
     token: Token
   title: OAuth2 Clients
+  tooltips:
+    audience: Audience is a whitelist defining the audiences this client is allowed to request tokens for.
+    client-name: Client name is the human-readable string name of the client to be presented to the end-user during authorization.
+    secret-name: Secret name points to the K8s secret that contains this client's ID and password.
 observability:
   title: Observability
 pods:

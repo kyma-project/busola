@@ -138,8 +138,16 @@ export const OAuth2ClientsCreate = ({
       />
       <ResourceForm.FormField
         advanced
+        propertyPath="$.spec.clientName"
+        label={t('oauth2-clients.labels.client-name')}
+        tooltipContent={t('oauth2-clients.tooltips.client-name')}
+        input={Inputs.Text}
+      />
+      <ResourceForm.FormField
+        advanced
         propertyPath="$.spec.secretName"
         label={t('oauth2-clients.labels.secret-name')}
+        tooltipContent={t('oauth2-clients.tooltips.secret-name')}
         input={Inputs.Text}
       />
       <ResourceForm.FormField
@@ -167,30 +175,27 @@ export const OAuth2ClientsCreate = ({
         ]}
       />
       <TextArrayInput
-        advanced
-        title={t('oauth2-clients.labels.scope')}
-        label={t('oauth2-clients.labels.scope')}
+        required
         propertyPath="$.spec.scope"
+        title={t('oauth2-clients.labels.scope')}
         toInternal={value => value?.split(/,/) || []}
         toExternal={value => value.filter(Boolean).join(',')}
       />
       <TextArrayInput
         advanced
-        title={t('oauth2-clients.labels.redirect-uris')}
-        label={t('oauth2-clients.labels.redirect-uris')}
         propertyPath="$.spec.redirectUris"
+        title={t('oauth2-clients.labels.redirect-uris')}
       />
       <TextArrayInput
         advanced
-        title={t('oauth2-clients.labels.post-logout-redirect-uris')}
-        label={t('oauth2-clients.labels.post-logout-redirect-uris')}
         propertyPath="$.spec.postLogoutRedirectUris"
+        title={t('oauth2-clients.labels.post-logout-redirect-uris')}
       />
       <TextArrayInput
         advanced
-        title={t('oauth2-clients.labels.audience')}
-        label={t('oauth2-clients.labels.audience')}
         propertyPath="$.spec.audience"
+        title={t('oauth2-clients.labels.audience')}
+        tooltipContent={t('oauth2-clients.tooltips.audience')}
       />
     </ResourceForm>
   );
