@@ -158,7 +158,7 @@ btp-service-bindings:
     secret: The name of the secret where the credentials are stored, defaults to the ServiceBinding name if not specified.
     secret-not-found: This Secret doesn't exist.
 catalog:
-  description: <0>Service Catalog</0> provides an easy way to access services that the Service Brokers manage and use them in an application.
+  description: <0>Service Catalog</0> provides an easy way to access services that the Service Brokers manage, and to use them in an application.
   menu-title: Catalog
   subtitle: Enrich your experience with additional services that are installed outside the cluster.
   title: Service Catalog
