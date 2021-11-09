@@ -1,5 +1,6 @@
 addons:
   addons-status: Addons Status
+  description: <0>Addons Configuration</0> defines Namespace-scoped addons that provide all information required to convert Helm charts into Service Classes in Service Catalog.
   errors:
     cannot-create: Cannot create the AddonsConfiguration.
   headers:
@@ -80,6 +81,7 @@ applications:
     create: $t(applications.subtitle.create-binding)
     create-app: $t(applications.subtitle.create-app)
     select-all: Select all
+  description: <0>Application</0> represents an external solution connected to Kyma.
   headers:
     access-label: Access Label
     apis: APIs
@@ -176,6 +178,7 @@ btp-service-bindings:
     secret: The name of the secret where the credentials are stored, defaults to the ServiceBinding name if not specified.
     secret-not-found: This Secret doesn't exist.
 catalog:
+  description: <0>Service Catalog</0> provides an easy way to access services that the Service Brokers manage, and to use them in an application.
   menu-title: Catalog
   subtitle: Enrich your experience with additional services that are installed outside the cluster.
   title: Service Catalog
@@ -218,6 +221,7 @@ certificates:
     with-csr: Enable to use a Certificate Signing Request instead of providing domain names manually.
   with-csr: Use a CSR
 cluster-addons:
+  description: <0>Cluster Addons Configuration</0> defines cluster-wide addons that provide all information required to convert Helm charts into Service Classes in Service Catalog.
   title: Cluster Addons
 cluster-role-bindings:
   name_singular: ClusterRoleBinding
@@ -1234,6 +1238,7 @@ service-management:
   title: Service Management
 services:
   cluster-ip: Cluster IP
+  description: <0>Service</0> enables access to an application running on a set of Pods.
   external-ips: External IPs
   labels:
     service: Service
