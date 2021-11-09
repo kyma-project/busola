@@ -46,7 +46,7 @@ function SingleAccessStrategyInput({
         <ResourceForm.TextArrayInput
           required
           propertyPath="$.config.required_scope"
-          title={t('Required scope')}
+          title={t('api-rules.oauth.required-scope')}
         />
       )}
       {accessStrategy?.handler === 'jwt' && (
@@ -61,32 +61,27 @@ export function AccessStrategyForm(props) {
 
   return (
     <ResourceForm.Wrapper {...props}>
-      <>
-        <SingleAccessStrategyInput
-          simple
-          propertyPath="$.accessStrategies[0]"
-        />
-        <ResourceForm.ItemArray
-          advanced
-          propertyPath="$.accessStrategies"
-          listTitle={t('api-rules.access-strategies.title')}
-          nameSingular={t('api-rules.access-strategies.labels.access-strategy')}
-          atLeastOneRequiredMessage={t(
-            'api-rules.access-strategies.messages.one-strategy-required',
-          )}
-          itemRenderer={({
-            item: accessStrategy,
-            values: accessStrategies,
-            setValues: setAccessStrategies,
-          }) => (
-            <SingleAccessStrategyInput
-              value={accessStrategy}
-              setValue={() => setAccessStrategies([...accessStrategies])}
-            />
-          )}
-          newResourceTemplateFn={createAccessStrategyTemplate}
-        />
-      </>
+      <SingleAccessStrategyInput simple propertyPath="$.accessStrategies[0]" />
+      <ResourceForm.ItemArray
+        advanced
+        propertyPath="$.accessStrategies"
+        listTitle={t('api-rules.access-strategies.title')}
+        nameSingular={t('api-rules.access-strategies.labels.access-strategy')}
+        atLeastOneRequiredMessage={t(
+          'api-rules.access-strategies.messages.one-strategy-required',
+        )}
+        itemRenderer={({
+          item: accessStrategy,
+          values: accessStrategies,
+          setValues: setAccessStrategies,
+        }) => (
+          <SingleAccessStrategyInput
+            value={accessStrategy}
+            setValue={() => setAccessStrategies([...accessStrategies])}
+          />
+        )}
+        newResourceTemplateFn={createAccessStrategyTemplate}
+      />
     </ResourceForm.Wrapper>
   );
 }

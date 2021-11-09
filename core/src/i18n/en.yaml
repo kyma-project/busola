@@ -56,6 +56,8 @@ api-rules:
     updated: API Rule updated.
     will-be-available-at: API Rule will be available at {{address}}.
   name_singular: API Rule
+  oauth:
+    required-scope: Required scope
   placeholders:
     methods: Select HTTP request method.
     path: Enter the path.
@@ -66,7 +68,7 @@ api-rules:
     error-load: Couldn't load service list.
     loading: Loading services...
     ns-no-services: No Services in this Namespace.
-    placeholder: Choose service to expose.
+    placeholder: Choose the service to expose.
   title: API Rules
 applications:
   aria:
