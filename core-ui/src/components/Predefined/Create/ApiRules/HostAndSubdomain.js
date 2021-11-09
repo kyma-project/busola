@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormField } from 'shared/ResourceForm/components/FormComponents';
 import * as Inputs from 'shared/ResourceForm/components/Inputs';

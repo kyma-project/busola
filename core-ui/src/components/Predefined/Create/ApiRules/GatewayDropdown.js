@@ -34,6 +34,7 @@ export function GatewayDropdown({
         setGateway(formatGateway(kymaGateway));
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gateways]);
 
   const formatGateway = gateway =>

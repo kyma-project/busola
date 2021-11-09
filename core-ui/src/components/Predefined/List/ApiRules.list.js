@@ -1,11 +1,8 @@
 import React from 'react';
-import { Button } from 'fundamental-react';
-import LuigiClient from '@luigi-project/client';
-import { PANEL } from '../../ApiRules/constants';
 import {
   CopiableApiRuleHost,
   ApiRuleServiceInfo,
-} from 'components/ApiRules/ApiRulesList/components';
+} from 'components/ApiRules/components';
 import ApiRuleStatus from 'components/ApiRules/ApiRuleStatus/ApiRuleStatus';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-shared';

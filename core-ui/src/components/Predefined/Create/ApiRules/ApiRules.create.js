@@ -47,6 +47,7 @@ export function ApiRulesCreate({
       );
       setApiRule({ ...apiRule });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [apiRule?.spec?.gateway]);
 
   const handleNameChange = name => {
