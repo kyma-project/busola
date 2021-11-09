@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/components/Inputs';
 import { JwtStrategyConfig } from './JwtStrategyConfig';
+import { merge } from 'lodash';
 
 const accessStrategyOptions = [
   {
@@ -31,8 +32,13 @@ const methodOptions = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD'].map(
   }),
 );
 
-export function RuleForm({ rule, setRule }) {
+export function RuleForm({ rule, rules, setRules }) {
   const { t } = useTranslation();
+
+  const setRule = newRule => {
+    merge(rule, newRule);
+    setRules([...rules]);
+  };
 
   return (
     <ResourceForm.Wrapper resource={rule} setResource={setRule}>
@@ -75,20 +81,18 @@ export function RuleForm({ rule, setRule }) {
 }
 
 export function SingleRuleInput({
-  value: rule,
-  setValue: setRule,
+  value: rules,
+  setValue: setRules,
   defaultOpen,
 }) {
   const { t } = useTranslation();
 
   return (
     <ResourceForm.CollapsibleSection
-      title={t('api-rules.access-strategies.labels.access-strategy')}
-      resource={rule}
-      setResource={setRule}
+      title={t('Rules')}
       defaultOpen={defaultOpen}
     >
-      <RuleForm rule={rule} setRule={setRule} />
+      <RuleForm rule={rules[0]} rules={rules} setRules={setRules} />
     </ResourceForm.CollapsibleSection>
   );
 }

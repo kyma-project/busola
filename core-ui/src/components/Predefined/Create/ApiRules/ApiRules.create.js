@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
-import * as Inputs from 'shared/ResourceForm/components/Inputs';
 
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 
@@ -11,8 +10,8 @@ import {
 } from './templates';
 import { useServicesQuery, ServiceDropdown } from './ServiceDropdown';
 import { useGatewaysQuery, GatewayDropdown } from './GatewayDropdown';
-import { HostDropdown as HostAndSubdomain } from './HostDropdown';
-import { SingleAccessStrategy, SingleRuleInput } from './Rules';
+import { HostAndSubdomain } from './HostDropdown';
+import { RuleForm, SingleRuleInput } from './Rules';
 
 export function ApiRulesCreate({
   formElementRef,
@@ -23,6 +22,7 @@ export function ApiRulesCreate({
   const { t } = useTranslation();
   const servicesQuery = useServicesQuery(namespace);
   const gatewaysQuery = useGatewaysQuery(namespace);
+  const [subdomain, setSubdomain] = useState('');
   const [apiRule, setApiRule] = useState(createApiRuleTemplate(namespace));
 
   useEffect(() => {
@@ -64,6 +64,8 @@ export function ApiRulesCreate({
         gatewaysQuery={gatewaysQuery}
       />
       <HostAndSubdomain
+        subdomain={subdomain}
+        setSubdomain={setSubdomain}
         propertyPath="$.spec.service.host"
         gatewayStr={jp.value(apiRule, '$.spec.gateway')}
         gatewaysQuery={gatewaysQuery}
@@ -98,26 +100,21 @@ export function ApiRulesCreate({
         title={t('common.headers.annotations')}
       />
 
-      <SingleRuleInput simple defaultOpen propertyPath="$.spec.rules[0]" />
-      {/* <ResourceForm.ItemArray
+      <SingleRuleInput simple defaultOpen propertyPath="$.spec.rules" />
+      <ResourceForm.ItemArray
         advanced
         propertyPath="$.spec.rules"
-        listTitle={t('gateways.create-modal.simple.servers')} //todo
-        nameSingular={t('gateways.create-modal.simple.server')} //todo
+        listTitle={t('Rules')} //todo
+        nameSingular={t('Rule')} //todo
         atLeastOneRequiredMessage={t(
           //todo
           'gateways.create-modal.at-least-one-server-required',
         )}
         itemRenderer={({ item, values, setValues, isAdvanced }) => (
-          <SingleAccessStrategy
-            accessStrategy={item}
-            accessStrategies={values}
-            setAccessStrategies={setValues}
-            isAdvanced={isAdvanced}
-          />
+          <RuleForm rule={item} rules={values} setRules={setValues} />
         )}
         newResourceTemplateFn={createAccessStrategyTemplate}
-      /> */}
+      />
     </ResourceForm>
   );
 }

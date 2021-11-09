@@ -13,31 +13,41 @@ const hasWildcard = hostname => {
   return hostname.includes('*');
 };
 
-const resolveFinalHost = (subdomain, hostname) => {
-  // replace possible wildcard with lowest level domain
-  const resolvedHost = hasWildcard(hostname)
-    ? hostname.replace('*', subdomain)
-    : hostname;
+// const resolveFinalHost = (subdomain, hostname) => {
+//   // replace possible wildcard with lowest level domain
+//   const resolvedHost = hasWildcard(hostname)
+//     ? hostname.replace('*', subdomain)
+//     : hostname;
 
-  // hostname may be prefixed with namespace - get rid of it
-  return resolvedHost.includes('/')
-    ? resolvedHost.substring(resolvedHost.lastIndexOf('/') + 1)
-    : resolvedHost;
-};
+//   // hostname may be prefixed with namespace - get rid of it
+//   return resolvedHost.includes('/')
+//     ? resolvedHost.substring(resolvedHost.lastIndexOf('/') + 1)
+//     : resolvedHost;
+// };
 
-function getSubdomainAndHost(host, gateway) {
-  if (hasWildcard(host)) {
-    return [null, host];
+function getSelectedHost(host, gateway) {
+  const hosts = gateway?.spec.servers.flatMap(s => s.hosts) || [];
+  if (hosts.includes(host)) {
+    // console.log('no wildcard', host);
+    // match no wildcard host
+    return host;
   } else {
-    return [null, host];
+    // original host has a wildcard
+    const hostMatch = hosts
+      .filter(hasWildcard)
+      .map(h => h.replace('*', ''))
+      .find(h => host.endsWith(h));
+    return hostMatch ? '*' + hostMatch : '';
   }
 }
 
-export function HostDropdown({
+export function HostAndSubdomain({
   gatewayStr,
   gatewaysQuery,
   value: host,
   setValue: setHost,
+  subdomain,
+  setSubdomain,
 }) {
   const { t } = useTranslation();
   const filterUnique = (e, i, arr) => arr.indexOf(e) === i;
@@ -70,7 +80,7 @@ export function HostDropdown({
     .filter(filterUnique)
     .map(host => ({ text: host, key: host }));
 
-  const [subdomain, selectedHost] = getSubdomainAndHost(host, gateway);
+  const selectedHost = getSelectedHost(host, gateway);
 
   return (
     <>
@@ -81,7 +91,7 @@ export function HostDropdown({
         selectedKey={selectedHost}
         setValue={newHost => {
           if (hasWildcard(newHost)) {
-            console.log('i co teraz, host', host, 'new', newHost);
+            setHost(newHost.replace('*', subdomain));
           } else {
             setHost(newHost);
           }
@@ -95,9 +105,13 @@ export function HostDropdown({
         advanced
         required
         label={t('api-rules.form.subdomain')}
-        setValue={console.log}
+        value={subdomain}
+        setValue={newSubdomain => {
+          setSubdomain(newSubdomain);
+          setHost(host.replace('*', newSubdomain));
+        }}
         input={Inputs.Text}
-        disabled={!hasWildcard(host)}
+        disabled={!hasWildcard(selectedHost)}
         placeholder={t('Subdomain part of Api Rule address.')}
       />
     </>

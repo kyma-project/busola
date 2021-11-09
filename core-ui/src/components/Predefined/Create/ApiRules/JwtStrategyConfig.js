@@ -45,9 +45,10 @@ export function JwtStrategyConfig(props) {
   return (
     <ResourceForm.MultiInput
       required
-      title={t('idk')}
+      title={t('IDP Presets')}
       toInternal={toInternal}
       toExternal={toExternal}
+      tooltipContent={'todo'}
       inputs={[
         ({ value, setValue, ref, onBlur, focus, index }) => (
           <FormInput
@@ -58,6 +59,7 @@ export function JwtStrategyConfig(props) {
             onChange={e => setValue({ ...value, jwksUri: e.target.value })}
             onKeyDown={e => focus(e)}
             onBlur={onBlur}
+            placeholder={t('JWKs URI')}
           />
         ),
         ({ value, setValue, ref, onBlur, focus, index }) => (
@@ -71,6 +73,7 @@ export function JwtStrategyConfig(props) {
             }
             onKeyDown={e => focus(e)}
             onBlur={onBlur}
+            placeholder={t('Trusted issuer URL')}
           />
         ),
       ]}

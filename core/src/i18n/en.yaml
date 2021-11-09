@@ -52,7 +52,7 @@ api-rules:
     will-be-available-at: API Rule will be available at {{address}}.
   name_singular: API Rule
   placeholders:
-    methods: HTTP request method.
+    methods: Select HTTP request method.
   services:
     error-load: Couldn't load service list.
     loading: Loading services...
