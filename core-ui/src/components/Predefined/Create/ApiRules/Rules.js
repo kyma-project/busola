@@ -31,10 +31,10 @@ export function RuleForm({ rule, rules, setRules, isAdvanced }) {
         pattern="^[a-z0-9\/\(\)\?.!*\-]+"
       />
       <AccessStrategyForm />
-      <ResourceForm.SelectArrayInput
+      <ResourceForm.FormField
         propertyPath="$.methods"
-        placeholder={t('api-rules.placeholders.methods')}
-        title={t('api-rules.access-strategies.labels.methods')}
+        input={Inputs.Checkboxes}
+        label={t('api-rules.access-strategies.labels.methods')}
         options={methodOptions}
       />
     </ResourceForm.Wrapper>

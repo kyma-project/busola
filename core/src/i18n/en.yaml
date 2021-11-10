@@ -60,7 +60,6 @@ api-rules:
   oauth:
     required-scope: Required scope
   placeholders:
-    methods: Select HTTP request method.
     path: Enter the path.
     subdomain: Subdomain part of Api Rule address.
   rule: Rule

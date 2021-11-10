@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormField } from 'shared/ResourceForm/components/FormComponents';
 import * as Inputs from 'shared/ResourceForm/components/Inputs';
@@ -35,6 +35,15 @@ export function HostAndSubdomain({
   const selectedHost = getSelectedHost(host, hosts);
 
   const hostOptions = hosts.map(host => ({ text: host, key: host }));
+
+  // change subdomain if YAML host changes
+  useEffect(() => {
+    if (hasWildcard(selectedHost)) {
+      const hostSuffix = selectedHost.replace('*', '');
+      const possiblyNewSubdomain = host.replace(hostSuffix, '');
+      setSubdomain(possiblyNewSubdomain);
+    }
+  }, [selectedHost]);
 
   return (
     <>
