@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import * as jp from 'jsonpath';
 import classnames from 'classnames';
 
@@ -15,11 +15,29 @@ export function ResourceFormWrapper({
   setResource,
   children,
   isAdvanced,
+  setCustomValid,
   ...props
 }) {
+  useEffect(() => {
+    if (setCustomValid) {
+      const valid = React.Children.toArray(children)
+        .filter(child => child.props.validate)
+        .every(child => {
+          if (child.props.propertyPath) {
+            const value = jp.value(resource, child.props.propertyPath);
+            return child.props.validate(value);
+          } else {
+            return child.props.validate(resource);
+          }
+        });
+      setCustomValid(valid);
+    }
+  }, [resource, children, setCustomValid]);
+
   if (!resource) {
     return children;
   }
+
   return React.Children.map(children, child => {
     if (!child) {
       return null;
@@ -77,6 +95,7 @@ function SingleForm({
   setResource,
   onValid,
   className,
+  setCustomValid,
   ...props
 }) {
   return (
@@ -97,6 +116,7 @@ function SingleForm({
           resource={resource}
           setResource={setResource}
           formElementRef={formElementRef}
+          setCustomValid={setCustomValid}
         >
           {children}
         </ResourceFormWrapper>
@@ -111,6 +131,7 @@ export function ResourceForm({
   resource,
   initialResource,
   setResource,
+  setCustomValid,
   onChange,
   formElementRef,
   children,
@@ -181,6 +202,7 @@ export function ResourceForm({
             resource={resource}
             setResource={setResource}
             isAdvanced={true}
+            setCustomValid={setCustomValid}
           >
             {children}
           </ResourceFormWrapper>

@@ -1,5 +1,10 @@
 import React from 'react';
-import { FormInput, Switch as FRSwitch } from 'fundamental-react';
+import {
+  FormInput,
+  Switch as FRSwitch,
+  FormRadioGroup,
+  Checkbox,
+} from 'fundamental-react';
 import { Dropdown as BusolaDropown } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
@@ -66,6 +71,32 @@ export function Dropdown({ value, setValue, error, loading, ...props }) {
       validationState={getValidationState()}
       {...props}
     />
+  );
+}
+
+export function Checkboxes({ value, setValue, options, inline, ...props }) {
+  const updateValue = (key, checked) => {
+    if (checked) {
+      setValue([...(value || []), key]);
+    } else {
+      setValue(value.filter(v => v !== key));
+    }
+  };
+
+  return (
+    <FormRadioGroup inline={inline} className="inline-radio-group" {...props}>
+      {options.map(({ key, text }) => (
+        <Checkbox
+          compact
+          key={key}
+          value={key}
+          checked={value?.includes(key)}
+          onChange={e => updateValue(key, e.target.checked)}
+        >
+          {text}
+        </Checkbox>
+      ))}
+    </FormRadioGroup>
   );
 }
 
