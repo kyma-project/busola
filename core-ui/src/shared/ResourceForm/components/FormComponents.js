@@ -116,6 +116,7 @@ export function Title({
     </div>
   );
 }
+
 export function Label({ required, tooltipContent, children }) {
   return (
     <>
@@ -330,19 +331,17 @@ export function MultiInput({
 export function TextArrayInput({
   defaultOpen,
   inputProps,
-  isAdvanced,
-  tooltipContent,
   sectionTooltipContent,
   placeholder,
+  toInternal = value => value || [],
+  toExternal = value => value.filter(val => !!val),
   ...props
 }) {
   return (
     <MultiInput
       defaultOpen={defaultOpen}
-      isAdvanced={isAdvanced}
-      toInternal={value => value || []}
-      toExternal={value => value.filter(val => !!val)}
-      tooltipContent={tooltipContent}
+      toInternal={toInternal}
+      toExternal={toExternal}
       sectionTooltipContent={sectionTooltipContent}
       inputs={[
         ({ value, setValue, ref, onBlur, focus, index }) => (
