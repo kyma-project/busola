@@ -39,9 +39,6 @@ Cypress.Commands.add('createApiRule', (ApiRuleName, ApiRuleHost) => {
     .click();
 
   cy.getIframeBody()
-    .contains('Select HTTP request method.')
-    .click();
-  cy.getIframeBody()
     .contains('POST')
     .click();
 

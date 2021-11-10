@@ -43,6 +43,7 @@ export function HostAndSubdomain({
       const possiblyNewSubdomain = host.replace(hostSuffix, '');
       setSubdomain(possiblyNewSubdomain);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedHost]);
 
   return (
