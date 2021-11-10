@@ -105,6 +105,7 @@ applications:
     provided-services: Provided Services and events
   title: Applications
 brokers:
+  description: <0>Service Broker</0> provides a set of managed services that a third party offers and maintains.
   headers:
     url: URL
   title: Brokers
@@ -896,6 +897,7 @@ git-repositories:
     secret: The name of the Secret with credentials used by the Function Controller to authenticate to the Git repository in order to fetch the Function's source code and dependencies.
     url: URL must be a valid Git repository address that starts with the "http(s)", "git", or "ssh" prefix.
 instances:
+  description: <0>Service Instance</0> is a provisioned instance of a service that can be consumed by an application.
   no-specific-plan-parameters:
     tooltip: The service provider did not define specific parameters for the selected plan. Refer to the documentation to learn about the required parameters, and define them as a JSON in the editor.
   title: Instances
