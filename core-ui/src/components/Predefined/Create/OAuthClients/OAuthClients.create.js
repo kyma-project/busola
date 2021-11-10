@@ -153,11 +153,13 @@ const OAuth2ClientsCreate = ({
         advanced
         propertyPath="$.spec.redirectUris"
         title={t('oauth2-clients.labels.redirect-uris')}
+        inputProps={{ type: 'url' }}
       />
       <TextArrayInput
         advanced
         propertyPath="$.spec.postLogoutRedirectUris"
         title={t('oauth2-clients.labels.post-logout-redirect-uris')}
+        inputProps={{ type: 'url' }}
       />
       <TextArrayInput
         advanced
