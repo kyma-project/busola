@@ -2,11 +2,11 @@ addons:
   addons-status: Addons Status
   description: <0>Addons Configuration</0> defines Namespace-scoped addons that provide all information required to convert Helm charts into Service Classes in Service Catalog.
   errors:
-    cannot-create: Cannot create the AddonsConfiguration.
+    cannot-create: Cannot create the Addons Configuration.
   headers:
     url: URL
   messages:
-    created: AddonsConfiguration {{name}} created.
+    created: Addons Configuration {{name}} created.
   repository-urls: Repository URLs
   title: Addons
   urls: URLs
@@ -112,7 +112,7 @@ brokers:
 btp-instances:
   description: ' <0>BTP Service Instance</0> makes the functionality of a service available for consumption.'
   external-name: External Name
-  instance-data: ServiceInstance Data
+  instance-data: Service Instance Data
   instance-id: Instance ID
   messages:
     params-invalid: Invalid parameters. Provide a valid JSON object.
@@ -122,10 +122,10 @@ btp-instances:
   placeholders:
     external-name: Defaults to the instance name if empty.
     offering-name: SAP BTP service offering name.
-    plan-name: The plan name to use for the ServiceInstance.
+    plan-name: The plan name to use for the Service Instance.
   plan-name: Plan Name
-  resource-type: ServiceInstance
-  title: BTP ServiceInstances
+  resource-type: Service Instance
+  title: BTP Service Instances
   tooltips:
     offering-name: You find the name of the SAP BTP service offering in the BTP Cockpit in the Service Marketplace.
     plan-name: You find the plan to be used for the service instance in the BTP Cockpit in the Service Marketplace.
@@ -135,7 +135,7 @@ btp-service-bindings:
   description: <0>BTP Service Binding</0> provides access details for an existing service instance.
   external-name: External Name
   instance-id: Instance ID
-  instance-name: ServiceInstance Name
+  instance-name: Service Instance Name
   messages:
     duplicate-ref: This ref already exists.
     invalid-ref: Ref is invalid.
@@ -149,14 +149,14 @@ btp-service-bindings:
     choose-secret-first: Choose the Secret first
     choose-secret-key: Choose a Secret key
     empty-secret: This Secret has no data
-    external-name: Defaults to the ServiceBinding name if empty
+    external-name: Defaults to the Service Binding name if empty
     secret: Credentials Secret name
-  resource-type: ServiceBinding
+  resource-type: Service Binding
   secret: Secret
-  title: BTP ServiceBindings
+  title: BTP Service Bindings
   tooltips:
     parameters-from: Secret references to populate the parameters.
-    secret: The name of the secret where the credentials are stored, defaults to the ServiceBinding name if not specified.
+    secret: The name of the secret where the credentials are stored, defaults to the Service Binding name if not specified.
     secret-not-found: This Secret doesn't exist.
 catalog:
   description: <0>Service Catalog</0> provides an easy way to access services that the Service Brokers manage, and to use them in an application.
@@ -205,11 +205,11 @@ cluster-addons:
   description: <0>Cluster Addons Configuration</0> defines cluster-wide addons that provide all information required to convert Helm charts into Service Classes in Service Catalog.
   title: Cluster Addons
 cluster-role-bindings:
-  name_singular: ClusterRoleBinding
-  title: ClusterRoleBindings
+  name_singular: Cluster Role Binding
+  title: Cluster Role Bindings
 cluster-roles:
   name_singular: Cluster Role
-  title: ClusterRoles
+  title: Cluster Roles
 clusters:
   add:
     errors:
@@ -437,15 +437,15 @@ config-maps:
   buttons:
     update: Update
   errors:
-    cannot-create: Cannot create the ConfigMap.
-    cannot-update: Cannot update the ConfigMap.
+    cannot-create: Cannot create the Config Map.
+    cannot-update: Cannot update the Config Map.
   messages:
-    created: ConfigMap created.
-    updated: ConfigMap updated.
-  name_singular: ConfigMap
+    created: Config Map created.
+    updated: Config Map updated.
+  name_singular: Config Map
   subtitle:
-    edit-config-map: Edit ConfigMap
-  title: ConfigMaps
+    edit-config-map: Edit Config Map
+  title: Config Maps
 configuration:
   title: Configuration
 cron-jobs:
@@ -486,10 +486,10 @@ cron-jobs:
   image-pull-policy: Image Pull Policy
   last-job-execution: Last Job execution
   last-schedule-time: Last schedule time
-  name_singular: CronJob
+  name_singular: Cron Job
   not-scheduled-yet: None scheduled yet
   schedule: Schedule
-  title: CronJobs
+  title: Cron Jobs
 custom-resource-definitions:
   headers:
     description: Description
@@ -513,13 +513,13 @@ custom-resource-definitions:
     names: Names
     schema: Schema
     version: Version
-  title: CustomResourceDefinitions
+  title: Custom Resource Definitions
 daemon-sets:
   description: <0>Daemon Set</0> ensures that replicated Pods are running across a set of available nodes.
   images: Images
   node-selector: Node Selector
   pods: $t(pods.title)
-  title: DaemonSets
+  title: Daemon Sets
   tolerations:
     effect: Effect
     key: Key
@@ -744,17 +744,17 @@ functions:
     buttons:
       add: Add Environment Variable
       open:
-        config-map: ConfigMap Variable
+        config-map: Config Map Variable
         custom: Custom Variable
         secret: Secret Variable
     create-modal:
       title:
-        config-map: Create ConfigMap Variable
+        config-map: Create Config Map Variable
         custom: Create Custom Variable
         secret: Create Secret Variable
     edit-modal:
       title:
-        config-map: Edit ConfigMap Variable
+        config-map: Edit Config Map Variable
         custom: Edit Custom Variable
         secret: Edit Secret Variable
     errors:
@@ -762,7 +762,7 @@ functions:
       duplicated: Duplicated variable name.
       empty: Variable is empty.
       invalid: Variable name must consist of alphanumeric characters, can contain '_', no blank spaces.
-      invalid-config: Select the ConfigMap name and key.
+      invalid-config: Select the Config Map name and key.
       invalid-secret: Select the Secret name and key.
       restricted: This variable name is restricted and cannot be used. Try a different name.
     form:
@@ -787,26 +787,26 @@ functions:
     popup-error: At least one variable has an incorrect name format, is restricted, duplicated, or empty.
     title:
       environment-variables: Environment Variables
-      injected-variables: Environment variables injected by the ServiceBindings
+      injected-variables: Environment variables injected by the Service Bindings
     tooltip:
-      config-map: This variable comes from the "{resourceName}" ConfigMap.
+      config-map: This variable comes from the "{resourceName}" Config Map.
       custom: This variable was provided by the user.
       secret: This variable comes from the "{resourceName}" Secret.
-      service-binding: This variable was injected by the ServiceBinding referencing ServiceInstance "{serviceInstanceName}".
+      service-binding: This variable was injected by the Service Binding referencing Service Instance "{serviceInstanceName}".
       text: This variable comes from a resource. To get the value, follow the link.
     type:
-      config-map: ConfigMap
+      config-map: Config Map
       custom: Custom
       secret: Secret
-      service-binding: ServiceBinding
+      service-binding: Service Binding
     warnings:
-      override: This variable name is identical to the variable injected by the ServiceBinding. Continue if you intend that they can override each other. Otherwise, choose another name.
+      override: This variable name is identical to the variable injected by the Service Binding. Continue if you intend that they can override each other. Otherwise, choose another name.
       sbu-can-be-overridden:
-        by-both: This variable can be overridden by one of the custom variables or a variable injected by one of the ServiceBindings.
+        by-both: This variable can be overridden by one of the custom variables or a variable injected by one of the Service Bindings.
         by-custom-env: This variable can override or be overridden by one of the custom variables.
-        by-sbu: This variable can override or be overridden by a variable injected by one of the ServiceBindings.
+        by-sbu: This variable can override or be overridden by a variable injected by one of the Service Bindings.
       text: Warning
-      variable-can-override-sbu: This variable can override or be overridden by a variable injected by one of the created ServiceBindings.
+      variable-can-override-sbu: This variable can override or be overridden by a variable injected by one of the created Service Bindings.
 gateways:
   create-modal:
     advanced:
@@ -957,7 +957,7 @@ jobs:
     title: Conditions
     type: Type
   create-modal:
-    at-least-one-container-required: CronJob must have at least one container.
+    at-least-one-container-required: Cron Job must have at least one container.
     container: Container
     containers: Containers
     labels:
@@ -1146,8 +1146,8 @@ replica-sets:
     replicas: Ready Replicas
     requests: Requests
   memory: Memory
-  name_singular: ReplicaSet
-  title: ReplicaSets
+  name_singular: Replica Set
+  title: Replica Sets
 resource-quotas:
   headers:
     limits: Limits
@@ -1172,14 +1172,14 @@ role-bindings:
   labels:
     annotations: Annotations
     service-account: Service Account
-  name_singular: RoleBinding
+  name_singular: Role Binding
   placeholders:
     api-group: API Group
     group:
       name: User group
     user:
       name: User name
-  title: RoleBindings
+  title: Role Bindings
 roles:
   headers:
     api-groups: API Groups
@@ -1235,8 +1235,8 @@ service-accounts:
     at-least-one-secret-required: '{{resource}} must have at least one secret.'
     tooltips:
       auto-mount-token: When set to true, it automatically mounts the service account token within each container of a given pod. For security reasons, don't enable automount if you don't need it.
-      image-pull-secrets: ImagePullSecrets is a list of references to Secrets in the same Namespace to use for pulling any images in Pods that reference this ServiceAccount. ImagePullSecrets are distinct from Secrets because Secrets can be mounted in a Pod, but ImagePullSecrets are only accessed by the kubelet.
-      secrets: Secrets is the list of Secrets allowed to be used by running Pods using this ServiceAccount.
+      image-pull-secrets: ImagePullSecrets is a list of references to Secrets in the same Namespace to use for pulling any images in Pods that reference this Service Account. ImagePullSecrets are distinct from Secrets because Secrets can be mounted in a Pod, but ImagePullSecrets are only accessed by the kubelet.
+      secrets: Secrets is the list of Secrets allowed to be used by running Pods using this Service Account.
   headers:
     auto-mount-token: Automount Token
     download-kubeconfig: Download Kubeconfig
@@ -1289,7 +1289,7 @@ settings:
 stateful-sets:
   description: <0>Stateful Set</0> is used for the management of Pods' deployment and scaling.
   replicas: Replicas
-  title: StatefulSets
+  title: Stateful Sets
 top-nav:
   profile:
     preferences: $t(preferences.title)
