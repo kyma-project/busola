@@ -1118,7 +1118,7 @@ replica-sets:
       min-ready-seconds: Minimum number of seconds
       replicas: Replicas
     tooltips:
-      min-ready-seconds: Minimum number of seconds for which a newly created pod should be ready without any of its container crashing, for it to be considered available.
+      min-ready-seconds: Minimum number of seconds for which a newly created Pod should be ready without any of its containers crashing in order to be considered available.
       replicas: Replicas is the number of desired replicas.
   description: <0>Replica Set</0> maintains a number of replica Pods running at any given time.
   headers:
