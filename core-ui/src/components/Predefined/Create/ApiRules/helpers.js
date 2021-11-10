@@ -32,13 +32,12 @@ export function getGatewayHosts(gateway) {
 }
 
 function validateAccessStrategy(accessStrategy) {
-  if (accessStrategy?.handler === 'jwt') {
-    return (
-      accessStrategy?.jwks_urls?.length > 0 &&
-      accessStrategy?.trusted_issuers?.length > 0
-    );
-  } else if (accessStrategy?.handler === 'oauth2_introspection') {
-    return accessStrategy?.required_scope?.length > 0;
+  const config = accessStrategy?.config;
+
+  if (config?.handler === 'jwt') {
+    return config?.jwks_urls?.length > 0 && config?.trusted_issuers?.length > 0;
+  } else if (config?.handler === 'oauth2_introspection') {
+    return config?.required_scope?.length > 0;
   } else {
     return true;
   }
