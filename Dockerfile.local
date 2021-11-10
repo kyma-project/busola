@@ -32,7 +32,7 @@ WORKDIR /app
 
 RUN apk --no-cache upgrade && \
     apk --no-cache add nginx && \
-    apk add --update nodejs npm
+    apk add --update nodejs npm jq
 WORKDIR /app
 
 COPY --from=builder /app/core/src /app/core
@@ -45,6 +45,8 @@ RUN npm ci --only=production
 
 # use sessionStorage as default
 RUN sed -i 's/"storage": "localStorage",/"storage": "sessionStorage",/g' core/assets/config/config.json 
+# enable OBSERVABILITY for production
+RUN cat core/assets/config/config.json | jq '.config.features.OBSERVABILITY.isEnabled = true' | tee core/assets/config/config.json > /dev/null
 
 EXPOSE 3001
 ENV NODE_ENV=production ADDRESS=0.0.0.0 IS_DOCKER=true
