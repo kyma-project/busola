@@ -90,7 +90,7 @@ export function K8sResourceSelect({
       <ComboboxInput
         showAllEntries
         searchFullString
-        selectionType="auto-inline"
+        selectionType="manual"
         compact
         required={required}
         placeholder={t('common.messages.type-to-select', {
