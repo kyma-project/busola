@@ -6,15 +6,19 @@ import CodeTab from './Tabs/Code/CodeTab';
 import ResourceManagement from './Tabs/ResourceManagement/ResourceManagement';
 import EventSubscriptionsWrapper from './Tabs/Configuration/EventSubscriptions/EventSubscriptionsWrapper';
 import ServiceBindingsWrapper from './Tabs/Configuration/ServiceBindings/ServiceBindingsWrapper';
+import { ApiRulesList } from 'components/ApiRules/ApiRulesList';
 
 export default function LambdaDetails({ lambda }) {
   const microfrontendContext = useMicrofrontendContext();
   const { features } = microfrontendContext;
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
+  const ApiRules = features?.API_GATEWAY?.isEnabled ? ApiRulesList : () => null;
+
   const EventSubscriptions = features?.EVENTING?.isEnabled
     ? EventSubscriptionsWrapper
     : () => null;
+
   const catalogEnabled =
     features?.SERVICE_CATALOG?.isEnabled &&
     features?.SERVICE_CATALOG_ADDONS?.isEnabled;
@@ -44,6 +48,10 @@ export default function LambdaDetails({ lambda }) {
             id="lambda-configuration"
             title={t('functions.details.title.configuration')}
           >
+            <ApiRules
+              resourceName={lambda.metadata.name}
+              namespace={lambda.metadata.namespace}
+            />
             <EventSubscriptions
               ownerName={lambda.metadata.name}
               isActive={selectedTabIndex === 1}

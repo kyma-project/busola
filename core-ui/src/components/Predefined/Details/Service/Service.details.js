@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 
 import EventSubscriptions from 'shared/components/EventSubscriptions/EventSubscriptions';
 import './Service.details.scss';
+import { ApiRulesList } from 'components/ApiRules/ApiRulesList';
 
 function EventSubscriptionsWrapper({ service, i18n }) {
   const subscriptionsUrl = `/apis/eventing.kyma-project.io/v1alpha1/namespaces/${service.metadata.namespace}/subscriptions`;
@@ -59,6 +60,15 @@ export const ServicesDetails = ({ DefaultRenderer, ...otherParams }) => {
       EventSubscriptionsWrapper({ service: resource, i18n }),
     );
   }
+  if (features?.API_GATEWAY?.isEnabled) {
+    customComponents.push(service => (
+      <ApiRulesList
+        resourceName={service.metadata.name}
+        namespace={service.metadata.namespace}
+      />
+    ));
+  }
+
   const getExternalIPs = service => {
     if (service.status.loadBalancer?.ingress) {
       return service.status.loadBalancer?.ingress.map(
