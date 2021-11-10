@@ -21,6 +21,7 @@ export function ApiRulesCreate({
   namespace,
   onChange,
   setCustomValid,
+  serviceName,
 }) {
   const { t } = useTranslation();
   // queries are moved up here so that the network calls are not doubled
@@ -30,10 +31,27 @@ export function ApiRulesCreate({
   const [subdomain, setSubdomain] = useState('');
   const [apiRule, setApiRule] = useState(createApiRuleTemplate(namespace));
 
+  // validation
   useEffect(() => {
     setCustomValid(validateApiRule(apiRule));
   }, [apiRule, setCustomValid]);
 
+  // preselect service name when services list loads
+  useEffect(() => {
+    if (servicesQuery.data && serviceName) {
+      const service = servicesQuery.data.find(
+        svc => svc.metadata.name === serviceName,
+      );
+      if (service) {
+        jp.value(apiRule, '$.spec.service.name', serviceName);
+        jp.value(apiRule, '$.spec.service.port', service.spec.ports[0]?.port);
+        setApiRule({ ...apiRule });
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gatewaysQuery.loading]);
+
+  // set first available host when gateway changes
   useEffect(() => {
     const gateway = findGateway(apiRule?.spec?.gateway, gatewaysQuery.data);
     const firstAvailableHost = gateway && getGatewayHosts(gateway)[0];
@@ -75,6 +93,7 @@ export function ApiRulesCreate({
       <ServiceDropdown
         propertyPath="$.spec.service"
         servicesQuery={servicesQuery}
+        preselectServiceName={serviceName}
       />
       <GatewayDropdown
         propertyPath="$.spec.gateway"

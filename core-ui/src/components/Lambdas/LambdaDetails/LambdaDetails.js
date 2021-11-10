@@ -49,7 +49,7 @@ export default function LambdaDetails({ lambda }) {
             title={t('functions.details.title.configuration')}
           >
             <ApiRules
-              resourceName={lambda.metadata.name}
+              serviceName={lambda.metadata.name}
               namespace={lambda.metadata.namespace}
             />
             <EventSubscriptions
