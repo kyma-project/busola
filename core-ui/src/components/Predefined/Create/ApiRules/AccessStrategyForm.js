@@ -44,7 +44,6 @@ function SingleAccessStrategyInput({
       />
       {accessStrategy?.handler === 'oauth2_introspection' && (
         <ResourceForm.TextArrayInput
-          required
           propertyPath="$.config.required_scope"
           title={t('api-rules.oauth.required-scope')}
         />
