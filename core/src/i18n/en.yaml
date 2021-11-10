@@ -125,7 +125,7 @@ btp-instances:
     plan-name: The plan name to use for the ServiceInstance.
   plan-name: Plan Name
   resource-type: ServiceInstance
-  title: BTP ServiceInstances
+  title: BTP Service Instances
   tooltips:
     offering-name: You find the name of the SAP BTP service offering in the BTP Cockpit in the Service Marketplace.
     plan-name: You find the plan to be used for the service instance in the BTP Cockpit in the Service Marketplace.
@@ -153,7 +153,7 @@ btp-service-bindings:
     secret: Credentials Secret name
   resource-type: ServiceBinding
   secret: Secret
-  title: BTP ServiceBindings
+  title: BTP Service Bindings
   tooltips:
     parameters-from: Secret references to populate the parameters.
     secret: The name of the secret where the credentials are stored, defaults to the ServiceBinding name if not specified.
@@ -206,10 +206,10 @@ cluster-addons:
   title: Cluster Addons
 cluster-role-bindings:
   name_singular: ClusterRoleBinding
-  title: ClusterRoleBindings
+  title: Cluster Role Bindings
 cluster-roles:
   name_singular: Cluster Role
-  title: ClusterRoles
+  title: Cluster Roles
 clusters:
   add:
     errors:
@@ -445,7 +445,7 @@ config-maps:
   name_singular: ConfigMap
   subtitle:
     edit-config-map: Edit ConfigMap
-  title: ConfigMaps
+  title: Config Maps
 configuration:
   title: Configuration
 cron-jobs:
@@ -489,7 +489,7 @@ cron-jobs:
   name_singular: CronJob
   not-scheduled-yet: None scheduled yet
   schedule: Schedule
-  title: CronJobs
+  title: Cron Jobs
 custom-resource-definitions:
   headers:
     description: Description
@@ -513,13 +513,13 @@ custom-resource-definitions:
     names: Names
     schema: Schema
     version: Version
-  title: CustomResourceDefinitions
+  title: Custom Resource Definitions
 daemon-sets:
   description: <0>Daemon Set</0> ensures that replicated Pods are running across a set of available nodes.
   images: Images
   node-selector: Node Selector
   pods: $t(pods.title)
-  title: DaemonSets
+  title: Daemon Sets
   tolerations:
     effect: Effect
     key: Key
@@ -1117,7 +1117,7 @@ replica-sets:
     replicas: Ready Replicas
     requests: Requests
   memory: Memory
-  title: ReplicaSets
+  title: Replica Sets
 resource-quotas:
   headers:
     limits: Limits
@@ -1149,7 +1149,7 @@ role-bindings:
       name: User group
     user:
       name: User name
-  title: RoleBindings
+  title: Role Bindings
 roles:
   headers:
     api-groups: API Groups
@@ -1259,7 +1259,7 @@ settings:
 stateful-sets:
   description: <0>Stateful Set</0> is used for the management of Pods' deployment and scaling.
   replicas: Replicas
-  title: StatefulSets
+  title: Stateful Sets
 top-nav:
   profile:
     preferences: $t(preferences.title)
