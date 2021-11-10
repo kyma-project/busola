@@ -1,6 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ControlledByKind } from 'react-shared';
+import { Link } from 'react-shared';
+import { Trans } from 'react-i18next';
 
 export const ServicesList = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
@@ -58,5 +60,20 @@ export const ServicesList = ({ DefaultRenderer, ...otherParams }) => {
     },
   ];
 
-  return <DefaultRenderer customColumns={customColumns} {...otherParams} />;
+  const description = (
+    <Trans i18nKey="services.description">
+      <Link
+        className="fd-link"
+        url="https://kubernetes.io/docs/concepts/services-networking/service/"
+      />
+    </Trans>
+  );
+
+  return (
+    <DefaultRenderer
+      customColumns={customColumns}
+      description={description}
+      {...otherParams}
+    />
+  );
 };

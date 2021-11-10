@@ -113,7 +113,7 @@
         ]
       },
       "CUSTOM_DOMAINS": {
-        "selectors":[
+        "selectors": [
           {
             "type": "apiGroup",
             "apiGroup": "dns.gardener.cloud"
