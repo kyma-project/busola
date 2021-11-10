@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { usePost, useNotification } from 'react-shared';
-import { Button, Checkbox } from 'fundamental-react';
+import { Checkbox } from 'fundamental-react';
 import * as jp from 'jsonpath';
 
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/components/Inputs';
-import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSelect';
 
 import './Deployments.create.scss';
 import {
@@ -15,7 +14,10 @@ import {
   createPresets,
   createServiceTemplate,
 } from './templates';
-import { Containers } from './Containers';
+import {
+  SimpleContainersView,
+  AdvancedContainersView,
+} from 'shared/components/Deployment/ContainersViews';
 
 export function DeploymentsCreate({
   formElementRef,
@@ -140,78 +142,21 @@ export function DeploymentsCreate({
         title={t('common.headers.annotations')}
       />
 
-      <ResourceForm.FormField
-        required
+      <SimpleContainersView
         simple
-        propertyPath="$.spec.template.spec.containers[0].image"
-        label={t('deployments.create-modal.simple.docker-image')}
-        input={Inputs.Text}
-        placeholder={t(
-          'deployments.create-modal.simple.docker-image-placeholder',
-        )}
+        resource={deployment}
+        setResource={setDeployment}
       />
 
-      <ResourceForm.CollapsibleSection
+      <AdvancedContainersView
         advanced
-        title={t('deployments.create-modal.simple.image-pull-secret')}
         resource={deployment}
         setResource={setDeployment}
-      >
-        <ResourceForm.FormField
-          tooltipContent={t(
-            'deployments.create-modal.simple.image-pull-secret-tooltip',
-          )}
-          label={t('deployments.create-modal.simple.image-pull-secret')}
-          input={() => (
-            <K8sResourceSelectWithUseGetList
-              url={`/api/v1/namespaces/${namespace}/secrets`}
-              onSelect={secretName => {
-                jp.value(
-                  deployment,
-                  '$.spec.template.spec.imagePullSecrets[0].name',
-                  secretName,
-                );
-                setDeployment({ ...deployment });
-              }}
-              resourceType={t('secrets.name_singular')}
-              value={jp.value(
-                deployment,
-                '$.spec.template.spec.imagePullSecrets[0].name',
-              )}
-            />
-          )}
-        />
-      </ResourceForm.CollapsibleSection>
+        onChange={onChange}
+        namespace={namespace}
+        createContainerTemplate={createContainerTemplate}
+      />
 
-      <ResourceForm.CollapsibleSection
-        advanced
-        title={t('deployments.create-modal.advanced.containers')}
-        defaultOpen
-        resource={deployment}
-        setResource={setDeployment}
-        actions={setOpen => (
-          <Button
-            glyph="add"
-            compact
-            onClick={() => {
-              const path = '$.spec.template.spec.containers';
-              const nextContainers = [
-                ...(jp.value(deployment, path) || []),
-                createContainerTemplate(),
-              ];
-              jp.value(deployment, path, nextContainers);
-
-              setDeployment({ ...deployment });
-              onChange(new Event('input', { bubbles: true }));
-              setOpen(true);
-            }}
-          >
-            Add Container
-          </Button>
-        )}
-      >
-        <Containers propertyPath="$.spec.template.spec.containers" />
-      </ResourceForm.CollapsibleSection>
       <ResourceForm.CollapsibleSection
         advanced
         title={t('deployments.create-modal.advanced.service')}

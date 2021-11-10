@@ -1,0 +1,21 @@
+.double-editor {
+  --fixed-width: 200px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  .resource-form__collapsible-section {
+    flex-basis: 0;
+    flex-grow: 1;
+
+    &.collapsed {
+      flex-grow: 0;
+    }
+  }
+}
+
+.runtime-profile-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 16px;
+}

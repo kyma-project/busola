@@ -19,3 +19,4 @@ export * from './Roles/Roles.create.js';
 export * from './ServiceAccounts/ServiceAccounts.create.js';
 export * from './Jobs/CronJobs.create.js';
 export * from './Jobs/Jobs.create.js';
+export * from './ReplicaSets/ReplicaSets.create.js';

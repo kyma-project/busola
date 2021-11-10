@@ -10,12 +10,7 @@ import { RuntimeResources } from 'shared/ResourceForm/components/RuntimeResource
 
 import './Containers.scss';
 
-function SingleContainerSection({
-  container,
-  setContainer,
-  containers,
-  setContainers,
-}) {
+function SingleContainerSection({ container, setContainer }) {
   const { t, i18n } = useTranslation();
 
   return (
