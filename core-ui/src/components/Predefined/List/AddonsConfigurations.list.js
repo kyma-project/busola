@@ -34,7 +34,7 @@ export const GenericAddonsConfigurationsList = ({
     />
   );
 };
-// cluster-addons.description
+
 export function AddonsConfigurationsList(props) {
   return (
     <GenericAddonsConfigurationsList
