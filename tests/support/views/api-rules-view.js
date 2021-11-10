@@ -46,6 +46,7 @@ Cypress.Commands.add('createApiRule', (ApiRuleName, ApiRuleHost) => {
     .click();
 
   cy.getIframeBody()
+    .find('[role=dialog]')
     .contains('button', 'Create')
     .click();
 });

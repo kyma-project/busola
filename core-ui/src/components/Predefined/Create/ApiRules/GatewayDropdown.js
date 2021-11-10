@@ -22,6 +22,9 @@ export function GatewayDropdown({
   const { t } = useTranslation();
   const { data: gateways, error, loading } = gatewaysQuery;
 
+  const formatGatewayKey = gateway =>
+    `${gateway.metadata.name}.${gateway.metadata.namespace}.svc.cluster.local`;
+
   useEffect(() => {
     // try to set kyma-system/kyma-gateway as default
     if (gateways && !gateway) {
@@ -31,18 +34,15 @@ export function GatewayDropdown({
 
       const kymaGateway = gateways.find(findKymaGateway);
       if (kymaGateway) {
-        setGateway(formatGateway(kymaGateway));
+        setGateway(formatGatewayKey(kymaGateway));
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gateways]);
 
-  const formatGateway = gateway =>
-    `${gateway.metadata.namespace}/${gateway.metadata.name}`;
-
   const dropdownOptions = (gateways || []).map(gateway => ({
-    key: formatGateway(gateway),
-    text: formatGateway(gateway),
+    key: formatGatewayKey(gateway),
+    text: `${gateway.metadata.namespace}/${gateway.metadata.name}`,
   }));
 
   return (

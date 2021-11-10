@@ -14,7 +14,8 @@ export function hasWildcard(host) {
 
 // find gateway by name in format {namespace}/{name}
 export function findGateway(gatewayStr, allGateways) {
-  const [gatewayNamespace, gatewayName] = (gatewayStr || '/').split('/');
+  gatewayStr = gatewayStr.replace('.svc.cluster.local', '');
+  const [gatewayName, gatewayNamespace] = (gatewayStr || '.').split('.');
 
   return (allGateways || []).find(
     ({ metadata }) =>
