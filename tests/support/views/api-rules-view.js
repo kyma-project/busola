@@ -55,7 +55,7 @@ Cypress.Commands.add('checkApiRuleStatus', ApiRuleName => {
 
   cy.getLeftNav()
     .contains('API Rules')
-    .click();
+    .click({ force: true });
 
   cy.getIframeBody()
     .find('[aria-label="open-search"]')
