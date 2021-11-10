@@ -30,14 +30,6 @@ const OAuth2ClientsCreate = ({
     initialOAuth2Client || createOAuth2ClientTemplate(namespace),
   );
 
-  useEffect(() => {
-    const responseTypes = jp.value(oAuth2Client, '$.spec.responseTypes');
-    const grantTypes = jp.value(oAuth2Client, '$.spec.grantTypes');
-    const scope = jp.value(oAuth2Client, '$.spec.scope');
-
-    setCustomValid(responseTypes?.length && grantTypes?.length && scope);
-  }, [oAuth2Client]); // eslint-disable-line react-hooks/exhaustive-deps
-
   return (
     <ResourceForm
       className="create-oauth2-client-form"
@@ -49,6 +41,7 @@ const OAuth2ClientsCreate = ({
       onChange={onChange}
       formElementRef={formElementRef}
       createUrl={resourceUrl}
+      setCustomValid={setCustomValid}
     >
       <K8sNameField
         propertyPath="$.metadata.name"
@@ -77,6 +70,7 @@ const OAuth2ClientsCreate = ({
       <ResourceForm.FormField
         required
         propertyPath="$.spec.responseTypes"
+        validate={val => val?.length}
         label={t('oauth2-clients.labels.response-types')}
         input={Inputs.Checkboxes}
         options={['id_token', 'code', 'token'].map(type => ({
@@ -87,6 +81,7 @@ const OAuth2ClientsCreate = ({
       <ResourceForm.FormField
         required
         propertyPath="$.spec.grantTypes"
+        validate={val => val?.length}
         label={t('oauth2-clients.labels.grant-types')}
         input={Inputs.Checkboxes}
         options={[
@@ -149,6 +144,7 @@ const OAuth2ClientsCreate = ({
       <TextArrayInput
         required
         propertyPath="$.spec.scope"
+        validate={val => !!val}
         title={t('oauth2-clients.labels.scope')}
         toInternal={value => value?.split(/ +/) || []}
         toExternal={value => value.filter(Boolean).join(' ')}

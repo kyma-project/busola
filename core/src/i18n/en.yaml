@@ -1077,6 +1077,7 @@ oauth2-clients:
     redirect-uris: Redirect URIs
     response-types: Response Types
     scope: Scope
+    secret: Secret
     secret-name: Secret Name
     uris: URIs
   name_singular: OAuth2 Client
