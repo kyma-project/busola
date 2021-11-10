@@ -14,6 +14,11 @@ export function ApiRulesList({ resourceName, namespace }) {
   };
 
   return (
-    <ComponentForList name="apiRulesList" params={params} key="api-rules" />
+    <ComponentForList
+      name="apiRulesList"
+      params={params}
+      key="api-rules"
+      nameForCreate="ApiRulesCreate"
+    />
   );
 }
