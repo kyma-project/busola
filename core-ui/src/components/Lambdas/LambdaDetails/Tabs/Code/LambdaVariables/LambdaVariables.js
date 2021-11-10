@@ -206,16 +206,14 @@ export default function LambdaVariables({
   ];
 
   const addEnvModal = (
-    <>
-      <CreateVariable
-        lambda={lambda}
-        secrets={secrets}
-        configmaps={configmaps}
-        customVariables={customVariables}
-        customValueFromVariables={customValueFromVariables}
-        injectedVariables={injectedVariables}
-      />
-    </>
+    <CreateVariable
+      lambda={lambda}
+      secrets={secrets}
+      configmaps={configmaps}
+      customVariables={customVariables}
+      customValueFromVariables={customValueFromVariables}
+      injectedVariables={injectedVariables}
+    />
   );
 
   const entries = [
