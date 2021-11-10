@@ -1110,6 +1110,16 @@ preferences:
   title: Preferences
 replica-sets:
   cpu: CPU
+  create-modal:
+    labels:
+      min-ready-seconds: Minimum ready seconds
+      replicas: Replicas
+    placeholders:
+      min-ready-seconds: Minimum number of seconds
+      replicas: Replicas
+    tooltips:
+      min-ready-seconds: Minimum number of seconds for which a newly created pod should be ready without any of its container crashing, for it to be considered available.
+      replicas: Replicas is the number of desired replicas.
   description: <0>Replica Set</0> maintains a number of replica Pods running at any given time.
   headers:
     images: Images
@@ -1117,6 +1127,7 @@ replica-sets:
     replicas: Ready Replicas
     requests: Requests
   memory: Memory
+  name_singular: ReplicaSet
   title: ReplicaSets
 resource-quotas:
   headers:
