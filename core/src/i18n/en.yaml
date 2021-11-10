@@ -1096,7 +1096,7 @@ oauth2-clients:
   tooltips:
     audience: Audience is a whitelist defining the audiences this client is allowed to request tokens for.
     client-name: Client name is the human-readable string name of the client to be presented to the end-user during authorization.
-    secret-name: Secret name points to the K8s secret that contains this client's ID and password.
+    secret-name: Secret name points to the K8s Secret that contains this client's ID and password.
 observability:
   title: Observability
 pods:
