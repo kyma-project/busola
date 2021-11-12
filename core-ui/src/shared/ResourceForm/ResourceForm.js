@@ -224,5 +224,3 @@ ResourceForm.KeyValueField = FormComponents.KeyValueField;
 ResourceForm.ItemArray = FormComponents.ItemArray;
 ResourceForm.ComboboxInput = FormComponents.ComboboxInput;
 ResourceForm.ComboboxArrayInput = FormComponents.ComboboxArrayInput;
-ResourceForm.SelectArrayInput = FormComponents.SelectArrayInput;
-ResourceForm.MultiInput = FormComponents.MultiInput;

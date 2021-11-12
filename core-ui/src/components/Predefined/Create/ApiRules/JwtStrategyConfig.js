@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import { FormInput } from 'fundamental-react';
+import { MultiInput } from 'shared/ResourceForm/components/FormComponents';
 
 /*
 config:
@@ -43,7 +43,7 @@ export function JwtStrategyConfig(props) {
   };
 
   return (
-    <ResourceForm.MultiInput
+    <MultiInput
       required
       title={t('api-rules.jwt.idp-presets')}
       toInternal={toInternal}
