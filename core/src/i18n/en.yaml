@@ -1039,6 +1039,7 @@ namespaces:
     apply-limits: Apply limits per container
     apply-memory-quotas: Apply total memory quotas
     disable-sidecar: Disable sidecar injection
+  description: <0>Namespace</0> helps to maintain and divide resources in a cluster.
   events:
     headers:
       created: Created
