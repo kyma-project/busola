@@ -40,7 +40,7 @@ export const K8sNameInput = ({
       ref={_ref}
       type="text"
       id={id}
-      defaultValue={defaultValue || value}
+      defaultValue={value || defaultValue}
       placeholder={t('components.k8s-name-input.placeholder', {
         resourceType: kind,
       })}
