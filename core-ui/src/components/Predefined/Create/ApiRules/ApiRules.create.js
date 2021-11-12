@@ -48,8 +48,7 @@ export function ApiRulesCreate({
         setApiRule({ ...apiRule });
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [servicesQuery.loading]);
+  }, [servicesQuery.loading]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // set first available host when gateway changes
   useEffect(() => {
@@ -65,8 +64,7 @@ export function ApiRulesCreate({
       );
       setApiRule({ ...apiRule });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [apiRule?.spec?.gateway]);
+  }, [apiRule?.spec?.gateway]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleNameChange = name => {
     jp.value(apiRule, '$.metadata.name', name);

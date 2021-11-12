@@ -37,8 +37,7 @@ export function GatewayDropdown({
         setGateway(formatGatewayKey(kymaGateway));
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [gateways]);
+  }, [gateways]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const dropdownOptions = (gateways || []).map(gateway => ({
     key: formatGatewayKey(gateway),
