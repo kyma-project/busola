@@ -5,30 +5,18 @@ import * as Inputs from 'shared/ResourceForm/components/Inputs';
 import { JwtStrategyConfig } from './JwtStrategyConfig';
 import { createAccessStrategyTemplate } from './templates';
 
-const accessStrategyOptions = [
-  {
-    key: 'allow',
-    text: 'Allow',
-  },
-  {
-    key: 'noop',
-    text: 'noop',
-  },
-  {
-    key: 'jwt',
-    text: 'JWT',
-  },
-  {
-    key: 'oauth2_introspection',
-    text: 'OAuth2',
-  },
-];
+const accessStrategies = ['allow', 'noop', 'jwt', 'oauth2_introspection'];
 
 function SingleAccessStrategyInput({
   value: accessStrategy,
   setValue: setAccessStrategy,
 }) {
   const { t } = useTranslation();
+
+  const accessStrategyOptions = accessStrategies.map(aS => ({
+    key: aS,
+    text: t(`api-rules.access-strategies.labels.${aS}`),
+  }));
 
   return (
     <ResourceForm.Wrapper
