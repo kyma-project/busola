@@ -10,7 +10,7 @@ export function ApiRulesList({ serviceName, namespace }) {
     namespace,
     isCompact: true,
     showTitle: true,
-    serviceName,
+    createFormProps: { serviceName },
     filter: apiRule => apiRule.spec.service.name === serviceName,
   };
 

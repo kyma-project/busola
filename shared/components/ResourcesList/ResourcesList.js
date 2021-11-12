@@ -111,7 +111,7 @@ function Resources({
   textSearchProperties = [],
   omitColumnsIds = [],
   customListActions = [],
-  ...props
+  createFormProps,
 }) {
   useWindowTitle(windowTitle || prettifyNamePlural(resourceName, resourceType));
   const { t } = useTranslation(['translation'], { i18n });
@@ -290,14 +290,14 @@ function Resources({
         confirmText={t('common.buttons.create')}
         id={`add-${resourceType}-modal`}
         className="modal-size--l create-resource-modal"
-        renderForm={formProps => (
+        renderForm={props => (
           <CreateResourceForm
             resourceType={resourceType}
             resourceUrl={resourceUrl}
             namespace={namespace}
             refetchList={silentRefetch}
-            {...formProps}
             {...props}
+            {...createFormProps}
           />
         )}
         i18n={i18n}

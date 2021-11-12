@@ -49,7 +49,7 @@ export function ApiRulesCreate({
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [gatewaysQuery.loading]);
+  }, [servicesQuery.loading]);
 
   // set first available host when gateway changes
   useEffect(() => {
