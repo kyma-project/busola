@@ -20,7 +20,7 @@ api-rules:
       handler: Handler
       jwt: JWT
       methods: Methods
-      noop: Noop
+      noop: noop
       oauth2_introspection: OAuth2
       path: Path
       required-scope: Required Scope
