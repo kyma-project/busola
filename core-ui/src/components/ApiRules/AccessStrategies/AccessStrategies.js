@@ -46,8 +46,8 @@ export default function AccessStrategies({
 
   const headerRenderer = () => [
     t('api-rules.access-strategies.labels.path'),
-    t('api-rules.access-strategies.labels.methods'),
     t('api-rules.access-strategies.labels.types'),
+    t('api-rules.access-strategies.labels.methods'),
   ];
 
   return (
