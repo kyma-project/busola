@@ -1,8 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { LayoutPanel, Token, FormItem, FormLabel } from 'fundamental-react';
+import {
+  LayoutPanel,
+  Token,
+  FormItem,
+  FormLabel,
+  Link,
+} from 'fundamental-react';
 import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+import LuigiClient from '@luigi-project/client';
 import { useTranslation } from 'react-i18next';
 
 import './OAuthClientSpecPanel.scss';
@@ -84,7 +91,15 @@ export default function OAuthClientSpecPanel({ spec }) {
       {spec?.secretName ? (
         <FormItem>
           <FormLabel>{t('oauth2-clients.labels.secret')}</FormLabel>
-          {spec.secretName}
+          <Link
+            onClick={() =>
+              LuigiClient.linkManager()
+                .fromContext('namespace')
+                .navigate(`secrets/details/${spec.secretName}`)
+            }
+          >
+            {spec.secretName}
+          </Link>
         </FormItem>
       ) : null}
       {spec?.tokenEndpointAuthMethod ? (
