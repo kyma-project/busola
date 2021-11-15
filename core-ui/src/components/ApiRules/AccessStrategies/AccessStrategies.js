@@ -2,7 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 
 import { GenericList } from 'react-shared';
-import { InfoLabel } from 'fundamental-react';
+import { Icon, InfoLabel } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
 import accessStrategyTypes from '../accessStrategyTypes';
@@ -19,6 +19,17 @@ const rowRenderer = strategy => {
       {strategy.accessStrategies.map(ac => (
         <li key={ac.handler}>
           <InfoLabel modifier="filled">
+            <Icon
+              ariaLabel={accessStrategyTypes[ac.handler].displayName}
+              className="fd-margin-end--tiny"
+              glyph={
+                ac.handler === accessStrategyTypes.noop.value ||
+                ac.handler === accessStrategyTypes.allow.value
+                  ? 'unlocked'
+                  : 'locked'
+              }
+              size="s"
+            />
             {accessStrategyTypes[ac.handler].displayName}
           </InfoLabel>
         </li>
