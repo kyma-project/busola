@@ -15,12 +15,20 @@ api-rules:
     buttons:
       add: Add Access Strategy
     labels:
+      access-strategy: Access Strategy
+      allow: Allow
+      handler: Handler
+      jwt: JWT
+      methods: Methods
+      noop: noop
+      oauth2_introspection: OAuth2
+      path: Path
       required-scope: Required Scope
     messages:
       one-method: This access strategy requires at least one method.
+      one-strategy-required: At least one strategy is required.
     title: Access Strategies
     tooltips:
-      delete: Define at least one access strategy.
       path: Path can contain alphanumeric characters and  '/', '.', '*', '?', '!', '-', '(', and ')'.
   buttons:
     create: Create API Rule
@@ -29,11 +37,16 @@ api-rules:
   description: <0>API Rule</0> allows for exposing a service externally.
   form:
     gateway: Gateway
+    host: Host
     hostname: Hostname
     subdomain: Subdomain
     subdomain-placeholder: Subdomain will replace the '*' part of the $t(api-rules.form.hostname) value.
   general-settings:
     title: General settings
+  jwt:
+    idp-presets: IDP Presets
+    jwks-uri: JWKs URI
+    trusted-issuer: Trusted issuer URL
   list:
     headers:
       host: Host
@@ -44,12 +57,22 @@ api-rules:
     created: API Rule created.
     description: Expose Services outside the cluster with API Rules.
     not-matching-results: Couldn't find API Rules matching this query.
+    one-rule-required: At least one API Rule is required.
     updated: API Rule updated.
     will-be-available-at: API Rule will be available at {{address}}.
+  name_singular: API Rule
+  oauth:
+    required-scope: Required scope
+  placeholders:
+    path: Enter the path.
+    subdomain: Subdomain part of API Rule address.
+  rule: Rule
+  rules: Rules
   services:
     error-load: Couldn't load service list.
     loading: Loading services...
     ns-no-services: No Services in this Namespace.
+    placeholder: Choose the service to expose.
   title: API Rules
 applications:
   aria:
