@@ -29,3 +29,4 @@ export * from './ServiceBindings.list';
 export * from './Gateways.list';
 export * from './ConfigMaps.list';
 export * from './ServiceAccount/ServiceAccounts.list';
+export * from './Roles.list';
