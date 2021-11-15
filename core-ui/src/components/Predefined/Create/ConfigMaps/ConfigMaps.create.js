@@ -22,7 +22,7 @@ function ConfigMapsCreate({
 }) {
   const { namespaceId } = useMicrofrontendContext();
   const [configMap, setConfigMap] = useState(
-    initialConfigMap || createConfigMapTemplate(),
+    { ...initialConfigMap } || createConfigMapTemplate(),
   );
   const { t } = useTranslation();
 
@@ -37,8 +37,10 @@ function ConfigMapsCreate({
       formElementRef={formElementRef}
       presets={createPresets([], namespaceId, t)}
       createUrl={resourceUrl}
+      setCustomValid={setCustomValid}
     >
       <K8sNameField
+        disabled={!!initialConfigMap}
         propertyPath="$.metadata.name"
         kind={t('config-maps.name_singular')}
         setValue={name => {
@@ -50,6 +52,7 @@ function ConfigMapsCreate({
           );
           setConfigMap({ ...configMap });
         }}
+        validate={value => !!value}
       />
       <KeyValueField
         advanced

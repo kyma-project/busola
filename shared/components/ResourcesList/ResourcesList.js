@@ -212,17 +212,12 @@ function Resources({
   }
 
   const handleResourceEdit = resource => {
-    if (isProtected(resource) || !CreateResourceForm?.allowEdit) {
-      setEditedSpec(
-        resource,
-        resource.metadata.name + '.yaml',
-        handleSaveClick(resource),
-        isProtected(resource),
-      );
-    } else {
-      setActiveResource(resource);
-      setShowEditDialog(true);
-    }
+    setEditedSpec(
+      resource,
+      resource.metadata.name + '.yaml',
+      handleSaveClick(resource),
+      isProtected(resource),
+    );
   };
 
   const actions = readOnly

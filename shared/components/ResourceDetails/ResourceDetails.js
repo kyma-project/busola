@@ -185,7 +185,7 @@ function Resource({
             })
           }
           modalOpeningComponent={
-            <Button option="emphasized">
+            <Button className="fd-margin-end--tiny" option="emphasized">
               {editActionLabel ||
                 t('components.resource-details.edit', {
                   resourceType: prettifiedResourceName,

@@ -21,10 +21,11 @@ function SecretsCreate({
   onChange,
   resource: initialSecret,
   resourceUrl,
+  setCustomValid,
 }) {
   const { t } = useTranslation();
   const [secret, setSecret] = useState(
-    initialSecret || createSecretTemplate(namespaceId),
+    { ...initialSecret } || createSecretTemplate(namespaceId),
   );
   const [lockedKeys, setLockedKeys] = useState([]);
 
@@ -64,8 +65,10 @@ function SecretsCreate({
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       presets={createPresets(secretDefs, namespaceId, t)}
+      setCustomValid={setCustomValid}
     >
       <K8sNameField
+        disabled={!!initialSecret}
         propertyPath="$.metadata.name"
         kind={t('secrets.name_singular')}
         setValue={name => {
@@ -73,6 +76,7 @@ function SecretsCreate({
           jp.value(secret, "$.metadata.labels['app.kubernetes.io/name']", name);
           setSecret({ ...secret });
         }}
+        validate={value => !!value}
       />
       <KeyValueField
         advanced
