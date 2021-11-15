@@ -3,6 +3,8 @@ import LuigiClient from '@luigi-project/client';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'fundamental-react';
 import { Tooltip } from 'react-shared';
+import { Link as ReactSharedLink } from 'react-shared';
+import { Trans } from 'react-i18next';
 
 function BindingsList({ ...params }) {
   const { t } = useTranslation();
@@ -86,9 +88,19 @@ function BindingsList({ ...params }) {
     },
   ];
 
+  const description = (
+    <Trans i18nKey="cluster-role-bindings.description">
+      <ReactSharedLink
+        className="fd-link"
+        url="https://kubernetes.io/docs/reference/access-authn-authz/rbac/#rolebinding-and-clusterrolebinding"
+      />
+    </Trans>
+  );
+
   return (
     <DefaultRenderer
       customColumns={customColumns}
+      description={description}
       textSearchProperties={textSearchProperties}
       {...params}
     />

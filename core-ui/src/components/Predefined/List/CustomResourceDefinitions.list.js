@@ -1,5 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-shared';
+import { Trans } from 'react-i18next';
 
 export const CustomResourceDefinitionsList = ({
   DefaultRenderer,
@@ -19,9 +21,20 @@ export const CustomResourceDefinitionsList = ({
       value: crd => crd.spec.scope,
     },
   ];
+
+  const description = (
+    <Trans i18nKey="custom-resource-definitions.description">
+      <Link
+        className="fd-link"
+        url="https://kyma-project.io/docs/kyma/latest/05-technical-reference/00-custom-resources/"
+      />
+    </Trans>
+  );
+
   return (
     <DefaultRenderer
       filter={crd => filterCRDs(crd, namespace)}
+      description={description}
       customColumns={customColumns}
       {...otherParams}
     />

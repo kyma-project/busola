@@ -10,7 +10,10 @@ function GenericRolesList({
 }) {
   const description = (
     <Trans i18nKey={descriptionKey}>
-      <Link className="fd-link" url={documentationLink} />
+      <Link
+        className="fd-link"
+        url="https://kyma-project.io/docs/kyma/latest/04-operation-guides/security/sec-02-authorization-in-kyma/#user-authorization"
+      />
     </Trans>
   );
 
@@ -18,21 +21,11 @@ function GenericRolesList({
 }
 
 export function RolesList(props) {
-  return (
-    <GenericRolesList
-      descriptionKey="todo"
-      documentationLink="todo"
-      {...props}
-    />
-  );
+  return <GenericRolesList descriptionKey={'roles.description'} {...props} />;
 }
 
 export function ClusterRolesList(props) {
   return (
-    <GenericRolesList
-      descriptionKey="todo"
-      documentationLink="todo"
-      {...props}
-    />
+    <GenericRolesList descriptionKey="cluster-roles.description" {...props} />
   );
 }
