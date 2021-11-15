@@ -228,9 +228,11 @@ cluster-addons:
   description: <0>Cluster Addons Configuration</0> defines cluster-wide addons that provide all information required to convert Helm charts into Service Classes in Service Catalog.
   title: Cluster Addons
 cluster-role-bindings:
+  description: <0>Cluster Role Binding</0> assigns the permissions defined in a Cluster Role to a user.
   name_singular: Cluster Role Binding
   title: Cluster Role Bindings
 cluster-roles:
+  description: <0>Cluster Role</0> is a set of cluster-level resources and permissions that can be assigned to a user.
   name_singular: Cluster Role
   title: Cluster Roles
 clusters:
@@ -514,6 +516,7 @@ cron-jobs:
   schedule: Schedule
   title: Cron Jobs
 custom-resource-definitions:
+  description: <0>Custom Resource Definition</0> is an object used to define a custom resource that allows you to extend the Kubernetes API for use cases that are not directly covered by core Kubernetes.
   headers:
     description: Description
     json-path: JSON Path
@@ -1189,6 +1192,7 @@ role-bindings:
     tooltips:
       kind: Being part of the JWT token, you must set User and Groups at the OIDC level if you use an OIDC provider.
     user-name: User Name
+  description: <0>Role Binding</0> assigns the permissions within a Namespace to a user.
   headers:
     kind: Kind
     role-ref: Role Reference
@@ -1205,6 +1209,7 @@ role-bindings:
       name: User name
   title: Role Bindings
 roles:
+  description: <0>Role</0> is a set of resources and permissions within a Namespace that can be assigned to a user.
   headers:
     api-groups: API Groups
     custom: Custom
