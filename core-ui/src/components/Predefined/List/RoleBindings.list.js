@@ -6,9 +6,8 @@ import { Tooltip } from 'react-shared';
 import { Link as ReactSharedLink } from 'react-shared';
 import { Trans } from 'react-i18next';
 
-function BindingsList({ ...params }) {
+function BindingsList({ descriptionKey, DefaultRenderer, ...params }) {
   const { t } = useTranslation();
-  const { DefaultRenderer } = params;
 
   const navigateToRole = role => {
     if (role.kind === 'ClusterRole') {
@@ -89,10 +88,10 @@ function BindingsList({ ...params }) {
   ];
 
   const description = (
-    <Trans i18nKey="cluster-role-bindings.description">
+    <Trans i18nKey={descriptionKey}>
       <ReactSharedLink
         className="fd-link"
-        url="https://kubernetes.io/docs/reference/access-authn-authz/rbac/#rolebinding-and-clusterrolebinding"
+        url="https://kyma-project.io/docs/kyma/latest/04-operation-guides/security/sec-02-authorization-in-kyma/#role-binding"
       />
     </Trans>
   );
@@ -107,10 +106,17 @@ function BindingsList({ ...params }) {
   );
 }
 
-export function RoleBindingsList({ ...params }) {
-  return <BindingsList {...params} />;
+export function RoleBindingsList(props) {
+  return (
+    <BindingsList descriptionKey={'role-bindings.description'} {...props} />
+  );
 }
 
-export function ClusterRoleBindingsList({ ...params }) {
-  return <BindingsList {...params} />;
+export function ClusterRoleBindingsList(props) {
+  return (
+    <BindingsList
+      descriptionKey={'cluster-role-bindings.description'}
+      {...props}
+    />
+  );
 }

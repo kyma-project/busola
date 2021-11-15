@@ -1192,6 +1192,7 @@ role-bindings:
     tooltips:
       kind: Being part of the JWT token, you must set User and Groups at the OIDC level if you use an OIDC provider.
     user-name: User Name
+  description: <0>Role Binding</0> assigns the permissions within a Namespace to a user.
   headers:
     kind: Kind
     role-ref: Role Reference

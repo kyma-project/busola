@@ -2,12 +2,7 @@ import React from 'react';
 import { Link } from 'react-shared';
 import { Trans } from 'react-i18next';
 
-function GenericRolesList({
-  descriptionKey,
-  documentationLink,
-  DefaultRenderer,
-  ...otherParams
-}) {
+function GenericRolesList({ descriptionKey, DefaultRenderer, ...otherParams }) {
   const description = (
     <Trans i18nKey={descriptionKey}>
       <Link
@@ -26,6 +21,6 @@ export function RolesList(props) {
 
 export function ClusterRolesList(props) {
   return (
-    <GenericRolesList descriptionKey="cluster-roles.description" {...props} />
+    <GenericRolesList descriptionKey={'cluster-roles.description'} {...props} />
   );
 }
