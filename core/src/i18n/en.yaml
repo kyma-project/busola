@@ -57,7 +57,7 @@ api-rules:
     created: API Rule created.
     description: Expose Services outside the cluster with API Rules.
     not-matching-results: Couldn't find API Rules matching this query.
-    one-rule-required: At least one rule is required.
+    one-rule-required: At least one API Rule is required.
     updated: API Rule updated.
     will-be-available-at: API Rule will be available at {{address}}.
   name_singular: API Rule
