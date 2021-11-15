@@ -65,7 +65,7 @@ api-rules:
     required-scope: Required scope
   placeholders:
     path: Enter the path.
-    subdomain: Subdomain part of Api Rule address.
+    subdomain: Subdomain part of API Rule address.
   rule: Rule
   rules: Rules
   services:
