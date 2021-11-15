@@ -19,6 +19,7 @@ export function Dropdown({
   _ref,
   emptyListMessage,
   i18n,
+  className,
   ...fdSelectProps
 }) {
   const { t } = useTranslation(null, { i18n });
@@ -49,9 +50,13 @@ export function Dropdown({
     />
   );
 
-  const classNames = classnames('dropdown', {
-    'dropdown--full-width': fullWidth,
-  });
+  const classNames = classnames(
+    'dropdown',
+    {
+      'dropdown--full-width': fullWidth,
+    },
+    className,
+  );
 
   return (
     <div className={classNames}>
