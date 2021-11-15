@@ -15,7 +15,10 @@ api-rules:
     buttons:
       add: Add Access Strategy
     labels:
+      methods: Methods
+      path: Path
       required-scope: Required Scope
+      types: Types
     messages:
       one-method: This access strategy requires at least one method.
     title: Access Strategies

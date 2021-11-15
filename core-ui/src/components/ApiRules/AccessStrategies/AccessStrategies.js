@@ -11,7 +11,6 @@ import { ACCESS_STRATEGIES_PANEL } from 'components/ApiRules/constants';
 
 import './AccessStrategies.scss';
 
-const headerRenderer = () => ['Path', 'Types', 'Methods'];
 const textSearchProperties = ['path', 'accessStrategies', 'methods'];
 const rowRenderer = strategy => {
   return [
@@ -44,12 +43,19 @@ export default function AccessStrategies({
   compact = false,
 }) {
   const { t, i18n } = useTranslation();
+
+  const headerRenderer = () => [
+    t('api-rules.access-strategies.labels.path'),
+    t('api-rules.access-strategies.labels.methods'),
+    t('api-rules.access-strategies.labels.types'),
+  ];
+
   return (
     <div
       className={classNames('api-rules__access-strategies', {
         'api-rules__access-strategies--compact': compact,
       })}
-      aria-label="Access strategies"
+      aria-label={t('api-rules.access-strategies.title')}
     >
       <GenericList
         title={t(ACCESS_STRATEGIES_PANEL.LIST.TITLE)}
