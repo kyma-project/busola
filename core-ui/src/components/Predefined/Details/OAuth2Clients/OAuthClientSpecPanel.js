@@ -1,8 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { LayoutPanel, Token, FormItem, FormLabel } from 'fundamental-react';
+import {
+  LayoutPanel,
+  Token,
+  FormItem,
+  FormLabel,
+  Link,
+} from 'fundamental-react';
 import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+import LuigiClient from '@luigi-project/client';
 import { useTranslation } from 'react-i18next';
 
 import './OAuthClientSpecPanel.scss';
@@ -35,6 +42,12 @@ export default function OAuthClientSpecPanel({ spec }) {
       <LayoutPanel.Header>
         <LayoutPanel.Head title="Configuration" />
       </LayoutPanel.Header>
+      {spec?.clientName ? (
+        <FormItem>
+          <FormLabel>{t('oauth2-clients.labels.client-name')}</FormLabel>
+          {spec.clientName}
+        </FormItem>
+      ) : null}
       <FormItem>
         <FormLabel>{t('oauth2-clients.labels.response-types')}</FormLabel>
         <Tokens
@@ -55,6 +68,46 @@ export default function OAuthClientSpecPanel({ spec }) {
         <FormLabel>{t('oauth2-clients.labels.scope')}</FormLabel>
         <Tokens tokens={spec.scope.split(/ +/).filter(scope => scope)} />
       </FormItem>
+      {spec?.audience ? (
+        <FormItem>
+          <FormLabel>{t('oauth2-clients.labels.audience')}</FormLabel>
+          <Tokens tokens={spec.audience} />
+        </FormItem>
+      ) : null}
+      {spec?.redirectUris ? (
+        <FormItem>
+          <FormLabel>{t('oauth2-clients.labels.redirect-uris')}</FormLabel>
+          <Tokens tokens={spec.redirectUris} />
+        </FormItem>
+      ) : null}
+      {spec?.postLogoutRedirectUris ? (
+        <FormItem>
+          <FormLabel>
+            {t('oauth2-clients.labels.post-logout-redirect-uris')}
+          </FormLabel>
+          <Tokens tokens={spec.postLogoutRedirectUris} />
+        </FormItem>
+      ) : null}
+      {spec?.secretName ? (
+        <FormItem>
+          <FormLabel>{t('oauth2-clients.labels.secret')}</FormLabel>
+          <Link
+            onClick={() =>
+              LuigiClient.linkManager()
+                .fromContext('namespace')
+                .navigate(`secrets/details/${spec.secretName}`)
+            }
+          >
+            {spec.secretName}
+          </Link>
+        </FormItem>
+      ) : null}
+      {spec?.tokenEndpointAuthMethod ? (
+        <FormItem>
+          <FormLabel>{t('oauth2-clients.labels.auth-method')}</FormLabel>
+          {t(`oauth2-clients.auth-methods.${spec.tokenEndpointAuthMethod}`)}
+        </FormItem>
+      ) : null}
     </LayoutPanel>
   );
 }
