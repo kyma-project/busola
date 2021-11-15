@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import {
   CopiableApiRuleHost,
   ApiRuleServiceInfo,
-} from 'components/ApiRules/ApiRulesList/components';
+} from 'components/ApiRules/components';
 import ApiRuleStatus from 'components/ApiRules/ApiRuleStatus/ApiRuleStatus';
 import AccessStrategies from 'components/ApiRules/AccessStrategies/AccessStrategies';
 
