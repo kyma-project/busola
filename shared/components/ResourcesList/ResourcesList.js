@@ -111,6 +111,7 @@ function Resources({
   textSearchProperties = [],
   omitColumnsIds = [],
   customListActions = [],
+  createFormProps,
 }) {
   useWindowTitle(windowTitle || prettifyNamePlural(resourceName, resourceType));
   const { t } = useTranslation(['translation'], { i18n });
@@ -296,6 +297,7 @@ function Resources({
             namespace={namespace}
             refetchList={silentRefetch}
             {...props}
+            {...createFormProps}
           />
         )}
         i18n={i18n}

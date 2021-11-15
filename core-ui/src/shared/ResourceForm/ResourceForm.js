@@ -34,6 +34,10 @@ export function ResourceFormWrapper({
     }
   }, [resource, children, setCustomValid]);
 
+  if (!resource) {
+    return children;
+  }
+
   return React.Children.map(children, child => {
     if (!child) {
       return null;
