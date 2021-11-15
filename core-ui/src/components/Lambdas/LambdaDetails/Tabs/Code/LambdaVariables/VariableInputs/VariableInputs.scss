@@ -1,23 +1,24 @@
-
 .grid-input-fields {
-  display: grid;  grid-gap: 0.8em;
+  display: grid;
+  grid-gap: 0.8em;
   margin-top: 1em;
 
   .fd-form-label {
     text-align: right;
+  }
+  .fd-popover {
+    width: 100%;
   }
 }
 
 .custom-variable-form {
   .grid-input-fields {
     grid-template-columns: 50px auto;
-
   }
 }
 
 .resource-variable-form {
   .grid-input-fields {
     grid-template-columns: 120px auto;
-
   }
 }

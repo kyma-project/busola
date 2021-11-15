@@ -116,6 +116,7 @@ export function Title({
     </div>
   );
 }
+
 export function Label({ required, tooltipContent, children }) {
   return (
     <>
@@ -330,19 +331,17 @@ export function MultiInput({
 export function TextArrayInput({
   defaultOpen,
   inputProps,
-  isAdvanced,
-  tooltipContent,
   sectionTooltipContent,
   placeholder,
+  toInternal = value => value || [],
+  toExternal = value => value.filter(val => !!val),
   ...props
 }) {
   return (
     <MultiInput
       defaultOpen={defaultOpen}
-      isAdvanced={isAdvanced}
-      toInternal={value => value || []}
-      toExternal={value => value.filter(val => !!val)}
-      tooltipContent={tooltipContent}
+      toInternal={toInternal}
+      toExternal={toExternal}
       sectionTooltipContent={sectionTooltipContent}
       inputs={[
         ({ value, setValue, ref, onBlur, focus, index }) => (
@@ -694,6 +693,51 @@ export function ComboboxArrayInput({
             options={options}
             onKeyDown={focus}
             onBlur={onBlur}
+          />
+        ),
+      ]}
+      {...props}
+    />
+  );
+}
+
+export function SelectArrayInput({
+  title,
+  defaultOpen,
+  placeholder,
+  inputProps,
+  isAdvanced,
+  tooltipContent,
+  sectionTooltipContent,
+  options,
+  ...props
+}) {
+  const toInternal = values => (values || []).filter(v => v);
+
+  const toExternal = values => values.filter(val => !!val);
+
+  return (
+    <MultiInput
+      title={title}
+      defaultOpen={defaultOpen}
+      isAdvanced={isAdvanced}
+      toInternal={toInternal}
+      toExternal={toExternal}
+      tooltipContent={tooltipContent}
+      sectionTooltipContent={sectionTooltipContent}
+      inputs={[
+        ({ value, setValue, ref, onBlur, focus, index }) => (
+          <Inputs.Dropdown
+            key={index}
+            placeholder={placeholder}
+            compact
+            _ref={ref}
+            value={value}
+            setValue={setValue}
+            options={options}
+            onKeyDown={focus}
+            onBlur={onBlur}
+            className="fd-margin-end--sm"
           />
         ),
       ]}

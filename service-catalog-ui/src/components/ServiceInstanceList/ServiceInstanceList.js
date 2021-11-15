@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import LuigiClient from '@luigi-project/client';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-shared';
+import { Trans } from 'react-i18next';
 
 import {
   Tab,
@@ -97,10 +99,20 @@ export default function ServiceInstancesList() {
     );
   };
 
+  const description = (
+    <Trans i18nKey="instances.description">
+      <Link
+        className="fd-link"
+        url="https://github.com/SAP/sap-btp-service-operator#step-1-create-a-service-instance"
+      />
+    </Trans>
+  );
+
   return (
     <>
       <PageHeader
         title={serviceInstanceConstants.title}
+        description={description}
         isCatalog={true}
         actions={actions(
           serviceInstances.length > 0,
