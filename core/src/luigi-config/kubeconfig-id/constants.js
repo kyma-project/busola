@@ -43,6 +43,19 @@ export const DEFAULT_FEATURES = {
       cockpitUrl: 'https://account.staging.hanavlab.ondemand.com/cockpit',
     },
   },
+  PROTECTED_RESOURCES: {
+    isEnabled: true,
+    config: {
+      resources: [
+        {
+          match: {
+            "$.metadata.labels['serverless.kyma-project.io/managed-by']":
+              'function-controller',
+          },
+        },
+      ],
+    },
+  },
 };
 
 export const DEFAULT_HIDDEN_NAMESPACES = [

@@ -139,6 +139,19 @@ data:
                   }
                 ]
               }
+            },
+            "PROTECTED_RESOURCES": {
+              "isEnabled": true,
+              "config": {
+                "resources": [
+                  {
+                    "match": {
+                      "$.metadata.labels['serverless.kyma-project.io/managed-by']":
+                        'function-controller',
+                    },
+                  },
+                ],
+              },
             }
         }
       }
