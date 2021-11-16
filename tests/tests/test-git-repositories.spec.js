@@ -13,7 +13,7 @@ context('Test Git Repositories', () => {
     cy.goToNamespaceDetails();
   });
 
-  it('Git Repositories category should be present', () => {
+  it('Git Repositories node should be present', () => {
     cy.getLeftNav()
       .contains('Configuration')
       .click();
