@@ -73,6 +73,12 @@ export function ApiRulesCreate({
     setApiRule({ ...apiRule });
   };
 
+  const afterCreatedFn = async defaultAfterCreatedFn => {
+    if (!serviceName) {
+      defaultAfterCreatedFn();
+    }
+  };
+
   return (
     <ResourceForm
       pluralKind="apirules"
@@ -82,6 +88,7 @@ export function ApiRulesCreate({
       onChange={onChange}
       formElementRef={formElementRef}
       createUrl={`/apis/gateway.kyma-project.io/v1alpha1/namespaces/${namespace}/apirules`}
+      afterCreatedFn={afterCreatedFn}
     >
       <ResourceForm.K8sNameField
         propertyPath="$.metadata.name"
