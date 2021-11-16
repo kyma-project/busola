@@ -1,7 +1,7 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { Link } from 'fundamental-react';
-import { StatusBadge } from 'react-shared';
+import { StatusBadge, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
 export const GitRepositoriesDetails = ({ DefaultRenderer, ...otherParams }) => {
@@ -21,7 +21,7 @@ export const GitRepositoriesDetails = ({ DefaultRenderer, ...otherParams }) => {
     {
       header: t('git-repositories.labels.secret'),
       value: repo => {
-        if (!repo.spec.auth) return '-';
+        if (!repo.spec.auth) return EMPTY_TEXT_PLACEHOLDER;
         const secretName = repo.spec.auth.secretName;
         return (
           <Link
