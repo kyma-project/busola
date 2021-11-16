@@ -36,7 +36,8 @@ context('Test Git Repositories', () => {
       .find('[placeholder^="Enter the URL address"]')
       .filter(':visible', { log: false })
       .as('url-input');
-    // due to fundamental bug, input loses focus on revalidation, so we need to focus it mulitple times
+
+    // due to fundamental bug input loses focus on revalidation, so we need to focus it mulitple times
     cy.get('@url-input').type('h');
     cy.get('@url-input').type('ttps:');
     cy.get('@url-input').type('//test-repo');
@@ -44,11 +45,6 @@ context('Test Git Repositories', () => {
     // create
     cy.getIframeBody()
       .contains('button', 'Create')
-      .click();
-
-    // name
-    cy.getIframeBody()
-      .contains('test-repo')
       .click();
   });
 
@@ -66,7 +62,7 @@ context('Test Git Repositories', () => {
       .contains('Edit')
       .click();
 
-    // name
+    // name should be disabled for edit
     cy.getIframeBody()
       .find('[placeholder="Git Repository Name"]')
       .filter(':visible', { log: false })
@@ -78,7 +74,7 @@ context('Test Git Repositories', () => {
       .filter(':visible', { log: false })
       .type('-edited');
 
-    // edit authorization
+    // edit authorization (Public -> Basic)
     cy.getIframeBody()
       .contains('Public')
       .filter(':visible', { log: false })
@@ -88,6 +84,7 @@ context('Test Git Repositories', () => {
       .filter(':visible', { log: false })
       .click();
 
+    // fill secret
     cy.getIframeBody()
       .find('[placeholder^="Start typing to select Secret"]')
       .filter(':visible', { log: false })
@@ -126,10 +123,8 @@ context('Test Git Repositories', () => {
 
     // label
     cy.getIframeBody().contains('is-edited=yes');
-
     // url
-    cy.getIframeBody().contains('https://test-repo');
-
+    cy.getIframeBody().contains('https://test-repo-edited');
     // authorization
     cy.getIframeBody().contains(/basic/i);
   });
@@ -143,6 +138,8 @@ context('Test Git Repositories', () => {
     cy.getIframeBody().contains(REPOSITORY_NAME);
     // url
     cy.getIframeBody().contains('https://test-repo-edited');
+    // label
+    cy.getIframeBody().contains('is-edited=yes');
 
     // navigate to secret
     cy.getIframeBody()
