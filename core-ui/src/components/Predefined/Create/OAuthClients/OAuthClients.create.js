@@ -143,11 +143,13 @@ const OAuth2ClientsCreate = ({
       />
       <TextArrayInput
         required
+        defaultOpen
         propertyPath="$.spec.scope"
         validate={val => !!val}
         title={t('oauth2-clients.labels.scope')}
         toInternal={value => value?.split(/ +/) || []}
         toExternal={value => value.filter(Boolean).join(' ')}
+        placeholder={t('oauth2-clients.placeholders.scope')}
       />
       <TextArrayInput
         advanced
