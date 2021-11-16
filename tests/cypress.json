@@ -27,6 +27,7 @@
     "other-logins.spec.js",
     "cluster-configuration.spec.js",
     "add-cluster-disabled.spec.js",
+    "oauth2-smoke.spec.js",
     "run-after.spec.js"
   ]
 }
