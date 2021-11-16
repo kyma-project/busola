@@ -187,7 +187,7 @@ function RoutedResourceDetails({ match }) {
     namespace: match.params.namespaceId,
     readOnly: queryParams.get('readOnly') === 'true',
   };
-
+  console.log(match.params, match.params.resourceType);
   const rendererName = params.resourceType + 'Details';
   const rendererNameForCreate = params.resourceType + 'Create';
 

@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useNotification } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
-import LuigiClient from '@luigi-project/client';
+import { cloneDeep } from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/components/Inputs';
@@ -25,15 +24,25 @@ function GitRepositoriesCreate({
   formElementRef,
   onChange,
   resourceUrl,
+  setCustomValid,
+  resource: initialRepository,
 }) {
   const { t } = useTranslation();
-  const notification = useNotification();
   const [repository, setRepository] = useState(
-    createRepositoryTemplate(namespace),
+    initialRepository
+      ? cloneDeep(initialRepository)
+      : createRepositoryTemplate(namespace),
   );
 
   const authType = jp.value(repository, '$.spec.auth.type');
   const url = jp.value(repository, '$.spec.url');
+
+  useEffect(() => {
+    const isNameValid = !!jp.value(repository, '$.metadata.name');
+    const isUrlValid = isGitUrl(url);
+
+    setCustomValid(isNameValid && isUrlValid);
+  });
 
   useEffect(() => {
     if (!authType) {
@@ -87,23 +96,14 @@ function GitRepositoriesCreate({
       singularName={t('git-repositories.name_singular')}
       resource={repository}
       setResource={setRepository}
+      initialResource={initialRepository}
       onChange={onChange}
       formElementRef={formElementRef}
       createUrl={resourceUrl}
-      afterCreatedFn={() => {
-        notification.notifySuccess({
-          content: t('common.create-form.messages.create-success', {
-            resourceType: t('git-repositories.name_singular'),
-          }),
-        });
-
-        LuigiClient.linkManager()
-          .fromContext('namespace')
-          .navigate('/gitrepositories');
-      }}
     >
       <K8sNameField
         propertyPath="$.metadata.name"
+        disabled={!!initialRepository}
         kind={t('git-repositories.name_singular')}
         setValue={name => {
           jp.value(repository, '$.metadata.name', name);
@@ -164,6 +164,7 @@ function GitRepositoriesCreate({
     </ResourceForm>
   );
 }
+GitRepositoriesCreate.allowEdit = true;
 GitRepositoriesCreate.secrets = (t, context) => [
   {
     title: t('git-repositories.secret-basic'),
