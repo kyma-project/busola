@@ -441,6 +441,7 @@ components:
     confirm-text: Confirm
     title: Modal
   resource-details:
+    edit: Edit
     messages:
       failure: 'Failed to update the {{resourceType}}: {{error}}'
       success: '{{resourceType}} updated'
