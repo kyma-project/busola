@@ -1,7 +1,11 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
 
-const REPOSITORY_NAME = 'test-repo';
+const REPOSITORY_NAME =
+  'test-repo-' +
+  Math.random()
+    .toString()
+    .substr(2, 8);
 
 context('Test Git Repositories', () => {
   before(() => {
