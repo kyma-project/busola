@@ -70,7 +70,7 @@ context('Test Git Repositories', () => {
     cy.getIframeBody()
       .find('[placeholder="Git Repository Name"]')
       .filter(':visible', { log: false })
-      .should('be.disabled');
+      .should('have.attr', 'readonly');
 
     // edit url
     cy.getIframeBody()

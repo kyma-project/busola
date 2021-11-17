@@ -161,6 +161,8 @@ export function FormField({
 export function K8sNameField({ kind, value, setValue, className, ...props }) {
   const { t, i18n } = useTranslation();
 
+  const { isAdvanced, propertyPath, ...inputProps } = props;
+
   return (
     <FormField
       required
@@ -179,7 +181,7 @@ export function K8sNameField({ kind, value, setValue, className, ...props }) {
             onChange={e => setValue(e.target.value)}
             value={value}
             i18n={i18n}
-            {...props}
+            {...inputProps}
           />
         );
       }}
@@ -203,6 +205,7 @@ export function MultiInput({
   defaultOpen,
   fullWidth = false,
   isEntryLocked = () => false,
+  readOnly,
   ...props
 }) {
   const valueRef = useRef(null); // for deep comparison
@@ -313,6 +316,7 @@ export function MultiInput({
                 }),
               )}
               <Button
+                disabled={readOnly}
                 compact
                 className={classnames({
                   hidden: isLast(index) || isEntryLocked(entry),
@@ -336,6 +340,7 @@ export function TextArrayInput({
   placeholder,
   toInternal = value => value || [],
   toExternal = value => value.filter(val => !!val),
+  readOnly,
   ...props
 }) {
   return (
@@ -344,6 +349,7 @@ export function TextArrayInput({
       toInternal={toInternal}
       toExternal={toExternal}
       sectionTooltipContent={sectionTooltipContent}
+      readOnly={readOnly}
       inputs={[
         ({ value, setValue, ref, onBlur, focus, index }) => (
           <FormInput
@@ -355,6 +361,7 @@ export function TextArrayInput({
             onChange={e => setValue(e.target.value)}
             onKeyDown={e => focus(e)}
             onBlur={onBlur}
+            readOnly={readOnly}
             {...inputProps}
           />
         ),
@@ -534,6 +541,7 @@ export function ItemArray({
   simple,
   advanced,
   isAdvanced,
+  readOnly,
   ...props
 }) {
   const { t } = useTranslation();
@@ -562,6 +570,7 @@ export function ItemArray({
               glyph="delete"
               type="negative"
               onClick={() => remove(i)}
+              disabled={readOnly}
             />
           }
         >
@@ -586,6 +595,7 @@ export function ItemArray({
             setValues([...values, newResourceTemplateFn()]);
             setOpen(true);
           }}
+          disabled={readOnly}
         >
           {t('common.buttons.add')} {nameSingular}
         </Button>
