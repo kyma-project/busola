@@ -912,7 +912,7 @@ git-repositories:
     basic: Basic
     public: Public
     ssh-key: SSH Key
-  description: <0>Git Repository</0> provides a description of the kind of data and the format used to define and manage Git repositories that store the Function's source code and dependencies.
+  description: <0>Git Repository</0> is used to define and manage Git repositories that store the Function's source code and dependencies.
   errors:
     invalid-url: Invalid Repository URL. The URL must start with the "http(s)", "git", or "ssh" prefix and end with the ".git" suffix.
   labels:
