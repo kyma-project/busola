@@ -8,6 +8,7 @@ import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import { createJobTemplate, createJobPresets } from './templates';
 import { JobSpecSection } from './SpecSection';
 import { ContainerSection, ContainersSection } from './ContainersSection';
+import { MessageStrip } from 'fundamental-react';
 
 function isJobValid(job) {
   const isNameValid = jp.value(job, '$.metadata.name');
@@ -59,7 +60,7 @@ function JobsCreate({
           jp.value(job, "$.metadata.labels['app.kubernetes.io/name']", name);
           setJob({ ...job });
         }}
-        disabled={!!initialJob}
+        readOnly={!!initialJob}
       />
 
       <ResourceForm.KeyValueField
@@ -76,12 +77,20 @@ function JobsCreate({
 
       <JobSpecSection advanced propertyPath="$.spec" />
 
-      <ContainerSection simple propertyPath="$.spec.template.spec.containers" />
+      <ContainerSection
+        simple
+        propertyPath="$.spec.template.spec.containers"
+        readOnly={!!initialJob}
+      />
 
       <ContainersSection
         advanced
         propertyPath="$.spec.template.spec.containers"
+        readOnly={!!initialJob}
       />
+      <MessageStrip type="information" className="fd-margin-top--sm">
+        {t('jobs.create-modal.containers-readonly-in-edit')}
+      </MessageStrip>
     </ResourceForm>
   );
 }

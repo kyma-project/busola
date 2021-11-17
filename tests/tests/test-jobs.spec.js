@@ -9,7 +9,7 @@ const JOB_NAME =
 
 const SECOND_CONTAINER_NAME = JOB_NAME + '-node';
 
-function checkJobPod({ showLogsSelector, expectedLogs }) {
+function checkJobLogs({ showLogsSelector, expectedLogs }) {
   cy.getIframeBody()
     .find(showLogsSelector)
     .click();
@@ -133,11 +133,11 @@ context('Test Jobs', () => {
       .should('have.text', 'COMPLETED');
 
     // check logs
-    checkJobPod({
+    checkJobLogs({
       showLogsSelector: `[aria-label="view-logs-for-${JOB_NAME}"]`,
       expectedLogs: 'Busola test',
     });
-    checkJobPod({
+    checkJobLogs({
       showLogsSelector: `[aria-label="view-logs-for-${SECOND_CONTAINER_NAME}"]`,
       expectedLogs: 'Node image test',
     });
@@ -163,6 +163,14 @@ context('Test Jobs', () => {
     cy.getIframeBody()
       .contains('Advanced')
       .click();
+
+    // containers section should be readonly
+    cy.getIframeBody().contains('Containers are readonly in edit mode.');
+
+    cy.getIframeBody()
+      .contains('Add Container')
+      .filter(':visible', { log: false })
+      .should('be.disabled');
 
     // edit labels
     cy.getIframeBody()
