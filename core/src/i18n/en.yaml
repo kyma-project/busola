@@ -906,7 +906,7 @@ generic-list:
 git-repositories:
   auth:
     basic: Basic
-    public: PublicAfter a job is created, the containers are read-only.
+    public: Public
     ssh-key: SSH Key
   errors:
     invalid-url: Invalid Repository URL. The URL must start with the "http(s)", "git", or "ssh" prefix and end with the ".git" suffix.
