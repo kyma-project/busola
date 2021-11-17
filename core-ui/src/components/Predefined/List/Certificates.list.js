@@ -1,6 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormattedDatetime } from 'react-shared';
+import { Link } from 'react-shared';
+import { Trans } from 'react-i18next';
 
 import { IssuerLink } from '../Details/Certificate/IssuerLink';
 import { CertificateStatus } from '../Details/Certificate/CertificateStatus';
@@ -37,5 +39,20 @@ export const CertificatesList = ({ DefaultRenderer, ...otherParams }) => {
     },
   ];
 
-  return <DefaultRenderer customColumns={customColumns} {...otherParams} />;
+  const description = (
+    <Trans i18nKey="certificates.description">
+      <Link
+        className="fd-link"
+        url="https://cert-manager.io/docs/concepts/certificate/"
+      />
+    </Trans>
+  );
+
+  return (
+    <DefaultRenderer
+      customColumns={customColumns}
+      description={description}
+      {...otherParams}
+    />
+  );
 };

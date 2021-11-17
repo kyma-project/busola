@@ -194,6 +194,7 @@ certificates:
       failure: Failed to create the certificate.
       success: Certificate created.
   csr: CSR
+  description: <0>Certificate</0> provides a human readable definition of certificate signing request which is then processed by the indicated issuer.
   dns-names: DNS Names
   existing-secret: Use the existing Secret
   expiration-date: Expiration Date
@@ -463,6 +464,7 @@ components:
 config-maps:
   buttons:
     update: Update
+  description: <0>Config Map</0> is an object that allows for storing non-sensitive data in key-value pairs.
   errors:
     cannot-create: Cannot create the Config Map.
     cannot-update: Cannot update the Config Map.
@@ -589,6 +591,7 @@ deployments:
 discovery-and-network:
   title: Discovery and Network
 dnsentries:
+  description: <0>DNS Entry</0> is an object that represents the request to create an external DNS record.
   headers:
     dns-name: DNS Name
     provider: Provider
@@ -621,6 +624,7 @@ dnsentries:
     use-cname: Switch to CNAME record.
   use-cname: Use CNAME
 dnsproviders:
+  description: <0>DNS Provider</0> is used to specify and manage the configuration for the external DNS services.
   domains: Domains
   headers:
     exclude: Excluded Domains
@@ -908,6 +912,7 @@ git-repositories:
     basic: Basic
     public: Public
     ssh-key: SSH Key
+  description: <0>Git Repository</0> provides a description of the kind of data and the format used to define and manage Git repositories that store the Function's source code and dependencies.
   errors:
     invalid-url: Invalid Repository URL. The URL must start with the "http(s)", "git", or "ssh" prefix and end with the ".git" suffix.
   labels:
@@ -939,6 +944,7 @@ issuers:
     messages:
       failure: Failed to create the issuer.
       success: Issuer created.
+  description: <0>Issuer</0> is a Namespace resource responsible for provision of certificates.
   domains:
     excluded: Excluded domains
     included: Included domains
@@ -1096,6 +1102,7 @@ oauth2-clients:
     client_secret_post: Client Secret / POST
     none: None
     private_key_jwt: Private Key / JWT
+  description: <0>OAuth2 Client</0> allows for accessing the protected resources.
   grant-types:
     authorization_code: Authorization Code
     client_credentials: Client Credentials
@@ -1194,7 +1201,7 @@ role-bindings:
     tooltips:
       kind: Being part of the JWT token, you must set User and Groups at the OIDC level if you use an OIDC provider.
     user-name: User Name
-  description: <0>Role Binding</0> assigns the permissions within a Namespace to a user.
+  description: <0>Role Binding</0> assigns the permissions defined in a Role to a user.
   headers:
     kind: Kind
     role-ref: Role Reference
@@ -1211,7 +1218,7 @@ role-bindings:
       name: User name
   title: Role Bindings
 roles:
-  description: <0>Role</0> is a set of resources and permissions within a Namespace that can be assigned to a user.
+  description: <0>Role</0> is a set of permissions within a Namespace that can be assigned to a user.
   headers:
     api-groups: API Groups
     custom: Custom
@@ -1238,6 +1245,7 @@ secrets:
       success: Secret created.
     title: Create Secret
   data: Data
+  description: <0>Secret</0> is an object that allows for storing sensitive data in key-value pairs.
   edit-modal:
     messages:
       failure: 'Failed to update the Secret: {{error}}.'
@@ -1268,6 +1276,7 @@ service-accounts:
       auto-mount-token: When set to true, it automatically mounts the service account token within each container of a given pod. For security reasons, don't enable automount if you don't need it.
       image-pull-secrets: Image Pull Secrets is a list of references to Secrets in the same Namespace to use for pulling any images in Pods that reference this Service Account. Image Pull Secrets are distinct from Secrets because Secrets can be mounted in a Pod, but Image Pull Secrets are only accessed by the kubelet.
       secrets: Secrets is the list of Secrets allowed to be used by running Pods using this Service Account.
+  description: <0>Service Account</0> allows processes run on a Pod to communicate and authenticate to the API server.
   headers:
     auto-mount-token: Automount Token
     download-kubeconfig: Download Kubeconfig
