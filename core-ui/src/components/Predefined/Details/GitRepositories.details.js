@@ -1,10 +1,10 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
-import { StatusBadge, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 import { Link } from 'fundamental-react';
+import { StatusBadge, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
-export const GitRepositoriesList = ({ DefaultRenderer, ...otherParams }) => {
+export const GitRepositoriesDetails = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -39,11 +39,5 @@ export const GitRepositoriesList = ({ DefaultRenderer, ...otherParams }) => {
     },
   ];
 
-  return (
-    <DefaultRenderer
-      customColumns={customColumns}
-      createActionLabel={t('git-repositories.labels.create')}
-      {...otherParams}
-    />
-  );
+  return <DefaultRenderer {...otherParams} customColumns={customColumns} />;
 };

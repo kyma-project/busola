@@ -5,9 +5,6 @@ const CONFIG_MAP_NAME = 'test-configmap';
 const SECRET_NAME = 'test-secret';
 const USER_NAME = 'user@kyma.eu';
 const ROLE_NAME = 'view (CR)';
-const CLIENT_NAME = 'test-oauth-client';
-const GIT_REPOSITORY_URL = 'https://github.com/test/sample-function.git';
-const GIT_REPOSITORY_NAME = 'test-git-repository';
 
 context('Test configuration resources', () => {
   before(() => {
@@ -200,95 +197,5 @@ context('Test configuration resources', () => {
     cy.getLeftNav()
       .contains('Configuration')
       .click(); // close navigation tab after yourself
-  });
-
-  it('Create a OAuth2 Clients', () => {
-    cy.get('[data-testid=luigi-topnav-logo]').click();
-
-    cy.getLeftNav()
-      .contains('Namespaces')
-      .click();
-
-    cy.goToNamespaceDetails();
-
-    cy.getLeftNav()
-      .find('[data-testid=oauth2clients_oauthclients]')
-      .click();
-
-    cy.getIframeBody()
-      .contains('Create OAuth2 Client')
-      .click();
-
-    cy.getIframeBody()
-      .find('[placeholder="Client name"]')
-      .clear()
-      .type(CLIENT_NAME);
-
-    cy.getIframeBody()
-      .contains('label', 'ID token')
-      .prev('input')
-      .click({ force: true });
-
-    cy.getIframeBody()
-      .contains('label', 'Client credentials')
-      .prev('input')
-      .click({ force: true });
-
-    cy.getIframeBody()
-      .find('[placeholder="Enter multiple values separated by comma"]')
-      .clear()
-      .type(CLIENT_NAME);
-
-    cy.getIframeBody()
-      .contains('label', 'Scopes')
-      .click();
-
-    cy.getIframeBody()
-      .find('[role="dialog"]')
-      .contains('button', 'Create')
-      .click();
-
-    cy.getIframeBody()
-      .contains('a', CLIENT_NAME)
-      .click({ force: true });
-
-    cy.getIframeBody()
-      .contains(CLIENT_NAME)
-      .should('be.visible');
-  });
-
-  it('Create a Git Repository', () => {
-    cy.getLeftNav()
-      .find('[data-testid=gitrepositories_gitrepositories]')
-      .click();
-
-    cy.getIframeBody()
-      .contains('Connect Repository')
-      .click();
-
-    cy.getIframeBody()
-      .find('[placeholder="Repository name"]')
-      .clear()
-      .type(GIT_REPOSITORY_NAME);
-
-    cy.getIframeBody()
-      .find(
-        '[placeholder="Enter the URL address of your Git repository (Required)"]',
-      )
-      .clear()
-      .type(GIT_REPOSITORY_URL);
-
-    cy.getIframeBody()
-      .find('[role="dialog"]')
-      .contains('button', 'Connect')
-      .click();
-
-    cy.getIframeBody()
-      .find('td', GIT_REPOSITORY_NAME, { timeout: 5000 })
-      .should('be.visible');
-
-    cy.getIframeBody()
-      .contains(GIT_REPOSITORY_URL)
-      .should('be.visible');
   });
 });
