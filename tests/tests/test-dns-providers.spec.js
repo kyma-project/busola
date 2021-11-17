@@ -109,6 +109,7 @@ context('Test DNS Providers', () => {
       .type('is-edited');
 
     cy.getIframeBody()
+      .find('[role=dialog]')
       .find('[placeholder="Enter Value"]')
       .filterWithNoValue()
       .first()
@@ -143,8 +144,6 @@ context('Test DNS Providers', () => {
       .contains('button', 'Update')
       .click();
 
-    // label
-    cy.getIframeBody().contains('is-edited=yes');
     // indluded domain
     cy.getIframeBody().contains(PROVIDER_INCLUDED_DOMAIN_2);
     // excluded domain
