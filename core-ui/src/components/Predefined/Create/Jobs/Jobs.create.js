@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import * as jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
+import { cloneDeep } from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 
@@ -9,24 +10,30 @@ import { JobSpecSection } from './SpecSection';
 import { ContainerSection, ContainersSection } from './ContainersSection';
 
 function isJobValid(job) {
+  const isNameValid = jp.value(job, '$.metadata.name');
+
   const containers = jp.value(job, '$.spec.template.spec.containers') || [];
 
   const areContainersValid =
     !!containers.length &&
     containers.every(c => c.command?.length > 0 || c.args?.length > 0);
 
-  return areContainersValid;
+  return isNameValid && areContainersValid;
 }
 
-export function JobsCreate({
+function JobsCreate({
   formElementRef,
   namespace,
   onChange,
   setCustomValid,
+  resource: initialJob,
+  resourceUrl,
 }) {
   const { t } = useTranslation();
 
-  const [job, setJob] = useState(createJobTemplate(namespace));
+  const [job, setJob] = useState(
+    initialJob ? cloneDeep(initialJob) : createJobTemplate(namespace),
+  );
 
   useEffect(() => {
     setCustomValid(isJobValid(job));
@@ -38,10 +45,11 @@ export function JobsCreate({
       singularName={t(`jobs.name-singular`)}
       resource={job}
       setResource={setJob}
+      initialResource={initialJob}
       onChange={onChange}
       formElementRef={formElementRef}
       presets={createJobPresets(namespace, t)}
-      createUrl={`/apis/batch/v1/namespaces/${namespace}/jobs`}
+      createUrl={resourceUrl}
     >
       <ResourceForm.K8sNameField
         propertyPath="$.metadata.name"
@@ -51,6 +59,7 @@ export function JobsCreate({
           jp.value(job, "$.metadata.labels['app.kubernetes.io/name']", name);
           setJob({ ...job });
         }}
+        disabled={!!initialJob}
       />
 
       <ResourceForm.KeyValueField
@@ -76,3 +85,5 @@ export function JobsCreate({
     </ResourceForm>
   );
 }
+JobsCreate.allowEdit = true;
+export { JobsCreate };
