@@ -202,61 +202,6 @@ context('Test configuration resources', () => {
       .click(); // close navigation tab after yourself
   });
 
-  it('Create a OAuth2 Clients', () => {
-    cy.get('[data-testid=luigi-topnav-logo]').click();
-
-    cy.getLeftNav()
-      .contains('Namespaces')
-      .click();
-
-    cy.goToNamespaceDetails();
-
-    cy.getLeftNav()
-      .find('[data-testid=oauth2clients_oauthclients]')
-      .click();
-
-    cy.getIframeBody()
-      .contains('Create OAuth2 Client')
-      .click();
-
-    cy.getIframeBody()
-      .find('[placeholder="Client name"]')
-      .clear()
-      .type(CLIENT_NAME);
-
-    cy.getIframeBody()
-      .contains('label', 'ID token')
-      .prev('input')
-      .click({ force: true });
-
-    cy.getIframeBody()
-      .contains('label', 'Client credentials')
-      .prev('input')
-      .click({ force: true });
-
-    cy.getIframeBody()
-      .find('[placeholder="Enter multiple values separated by comma"]')
-      .clear()
-      .type(CLIENT_NAME);
-
-    cy.getIframeBody()
-      .contains('label', 'Scopes')
-      .click();
-
-    cy.getIframeBody()
-      .find('[role="dialog"]')
-      .contains('button', 'Create')
-      .click();
-
-    cy.getIframeBody()
-      .contains('a', CLIENT_NAME)
-      .click({ force: true });
-
-    cy.getIframeBody()
-      .contains(CLIENT_NAME)
-      .should('be.visible');
-  });
-
   it('Create a Git Repository', () => {
     cy.getLeftNav()
       .find('[data-testid=gitrepositories_gitrepositories]')
