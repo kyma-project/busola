@@ -16,7 +16,18 @@
   "experimentalInteractiveRunEvents": true,
   "testFiles": [
     "run-before.spec.js",
-
+    "create-a-deployment.spec.js",
+    "download-a-kubeconfig.spec.js",
+    "in-cluster-eventing.spec.js",
+    "test-cluster-overview.spec.js",
+    "smoke-tests.spec.js",
+    "test-crds.spec.js",
+    "test-git-repositories.spec.js",
+    "invalid-kubeconfig.spec.js",
+    "login-kubeconfigID.spec.js",
+    "other-logins.spec.js",
+    "cluster-configuration.spec.js",
+    "add-cluster-disabled.spec.js",
     "oauth2-smoke.spec.js",
     "run-after.spec.js"
   ]

@@ -158,7 +158,7 @@ export function FormField({
   );
 }
 
-export function K8sNameField({ kind, value, setValue, className }) {
+export function K8sNameField({ kind, value, setValue, className, ...props }) {
   const { t, i18n } = useTranslation();
 
   return (
@@ -179,6 +179,7 @@ export function K8sNameField({ kind, value, setValue, className }) {
             onChange={e => setValue(e.target.value)}
             value={value}
             i18n={i18n}
+            {...props}
           />
         );
       }}

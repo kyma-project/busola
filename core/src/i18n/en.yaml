@@ -24,6 +24,7 @@ api-rules:
       oauth2_introspection: OAuth2
       path: Path
       required-scope: Required Scope
+      types: Types
     messages:
       one-method: This access strategy requires at least one method.
       one-strategy-required: At least one strategy is required.
@@ -440,6 +441,7 @@ components:
     confirm-text: Confirm
     title: Modal
   resource-details:
+    edit: Edit
     messages:
       failure: 'Failed to update the {{resourceType}}: {{error}}'
       success: '{{resourceType}} updated'

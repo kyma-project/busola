@@ -5,8 +5,6 @@ const CONFIG_MAP_NAME = 'test-configmap';
 const SECRET_NAME = 'test-secret';
 const USER_NAME = 'user@kyma.eu';
 const ROLE_NAME = 'view (CR)';
-const GIT_REPOSITORY_URL = 'https://github.com/test/sample-function.git';
-const GIT_REPOSITORY_NAME = 'test-git-repository';
 
 context('Test configuration resources', () => {
   before(() => {
@@ -199,40 +197,5 @@ context('Test configuration resources', () => {
     cy.getLeftNav()
       .contains('Configuration')
       .click(); // close navigation tab after yourself
-  });
-
-  it('Create a Git Repository', () => {
-    cy.getLeftNav()
-      .find('[data-testid=gitrepositories_gitrepositories]')
-      .click();
-
-    cy.getIframeBody()
-      .contains('Connect Repository')
-      .click();
-
-    cy.getIframeBody()
-      .find('[placeholder="Repository name"]')
-      .clear()
-      .type(GIT_REPOSITORY_NAME);
-
-    cy.getIframeBody()
-      .find(
-        '[placeholder="Enter the URL address of your Git repository (Required)"]',
-      )
-      .clear()
-      .type(GIT_REPOSITORY_URL);
-
-    cy.getIframeBody()
-      .find('[role="dialog"]')
-      .contains('button', 'Connect')
-      .click();
-
-    cy.getIframeBody()
-      .find('td', GIT_REPOSITORY_NAME, { timeout: 5000 })
-      .should('be.visible');
-
-    cy.getIframeBody()
-      .contains(GIT_REPOSITORY_URL)
-      .should('be.visible');
   });
 });
