@@ -906,7 +906,7 @@ generic-list:
 git-repositories:
   auth:
     basic: Basic
-    public: Public
+    public: PublicAfter a job is created, the containers are read-only.
     ssh-key: SSH Key
   errors:
     invalid-url: Invalid Repository URL. The URL must start with the "http(s)", "git", or "ssh" prefix and end with the ".git" suffix.
@@ -988,7 +988,7 @@ jobs:
     at-least-one-container-required: Cron Job must have at least one container.
     container: Container
     containers: Containers
-    containers-readonly-in-edit: Containers are readonly in edit mode.
+    containers-readonly-in-edit: After a Job is created, the containers are read-only.
     labels:
       args: Args
       command: Command
