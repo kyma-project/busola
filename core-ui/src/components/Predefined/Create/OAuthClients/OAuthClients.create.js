@@ -56,6 +56,7 @@ const OAuth2ClientsCreate = ({
           jp.value(oAuth2Client, '$.spec.secretName', name);
           setOAuth2Client({ ...oAuth2Client });
         }}
+        readOnly={!!initialOAuth2Client}
       />
       <KeyValueField
         advanced
@@ -143,11 +144,13 @@ const OAuth2ClientsCreate = ({
       />
       <TextArrayInput
         required
+        defaultOpen
         propertyPath="$.spec.scope"
         validate={val => !!val}
         title={t('oauth2-clients.labels.scope')}
         toInternal={value => value?.split(/ +/) || []}
         toExternal={value => value.filter(Boolean).join(' ')}
+        placeholder={t('oauth2-clients.placeholders.scope')}
       />
       <TextArrayInput
         advanced
@@ -170,6 +173,7 @@ const OAuth2ClientsCreate = ({
     </ResourceForm>
   );
 };
+OAuth2ClientsCreate.allowEdit = true;
 OAuth2ClientsCreate.secrets = (t, context) => [
   {
     title: t('oauth2-clients.secret'),
