@@ -2,7 +2,7 @@
 import 'cypress-file-upload';
 
 const REPLICA_SET_NAME = 'test-replica-set';
-
+const DOCKER_IMAGE_TAG = 'bitnami/nginx';
 context('Create a Replica Set', () => {
   before(() => {
     cy.loginAndSelectCluster();
@@ -45,7 +45,7 @@ context('Create a Replica Set', () => {
         '[placeholder="Enter the Docker image tag, for example, bitnami/nginx."]',
       )
       .clear()
-      .type('bitnami/nginx');
+      .type(DOCKER_IMAGE_TAG);
 
     cy.getIframeBody()
       .find('[role="document"]')
@@ -55,17 +55,17 @@ context('Create a Replica Set', () => {
 
   it('Checks details view', () => {
     cy.getIframeBody()
-      .contains(REPLICA_SET_NAME)
+      .contains(`${REPLICA_SET_NAME}-`)
       .click();
 
-    cy.getIframeBody()
-      .contains(REPLICA_SET_NAME)
-      .should('be.visible');
-
-    cy.getIframeBody()
-      .contains('Containers')
+    cy.getIframeBody('Containers')
       .parent()
-      .contains(REPLICA_SET_NAME)
-      .should('be.visible');
+      .getIframeBody()
+      .contains(REPLICA_SET_NAME);
+
+    cy.getIframeBody('Containers')
+      .parent()
+      .getIframeBody()
+      .contains(DOCKER_IMAGE_TAG);
   });
 });
