@@ -88,6 +88,7 @@ export function CertificatesCreate({ onChange, formElementRef, namespace }) {
       <ResourceForm.K8sNameField
         propertyPath="$.metadata.name"
         kind={t('certificates.name_singular')}
+        data-cy="cert-name"
         setValue={name => {
           jp.value(certificate, '$.metadata.name', name);
           jp.value(
