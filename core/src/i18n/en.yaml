@@ -1278,7 +1278,7 @@ service-accounts:
       auto-mount-token: When set to true, it automatically mounts the service account token within each container of a given pod. For security reasons, don't enable automount if you don't need it.
       image-pull-secrets: Image Pull Secrets is a list of references to Secrets in the same Namespace to use for pulling any images in Pods that reference this Service Account. Image Pull Secrets are distinct from Secrets because Secrets can be mounted in a Pod, but Image Pull Secrets are only accessed by the kubelet.
       secrets: Secrets is the list of Secrets allowed to be used by running Pods using this Service Account.
-  description: <0>Service Account</0> allows processes run on a Pod to communicate and authenticate to the API server.
+  description: <0>Service Account</0> enables processes to run on a Pod to communicate and authenticate to the API server.
   headers:
     auto-mount-token: Automount Token
     download-kubeconfig: Download Kubeconfig
