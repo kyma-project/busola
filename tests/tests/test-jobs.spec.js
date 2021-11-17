@@ -141,9 +141,6 @@ context('Test Jobs', () => {
       expectedLogs: 'Node image test',
     });
 
-    // sometimes ControlledBy component still renders CRD(?) path instead of our predefined path - wait until it loads
-    cy.wait(500);
-
     // back to job
     cy.getIframeBody()
       .contains(`Job (${JOB_NAME})`)
