@@ -69,15 +69,14 @@ context('Test Jobs', () => {
       .filter(':visible', { log: false })
       .type('busybox');
 
+    // we can't edit Job's template, so we add 2 containers now
     cy.getIframeBody()
       .contains('Advanced')
       .click();
 
-    // we can't edit Job's template, so we add 2 containers now
     cy.getIframeBody()
       .contains('Add Container')
       .click();
-
     cy.getIframeBody()
       .contains('Container 2')
       .click();
@@ -88,11 +87,11 @@ context('Test Jobs', () => {
       .filter(':visible', { log: false })
       .type(SECOND_CONTAINER_NAME);
 
+    // job args
     cy.getIframeBody()
       .contains('Args')
       .click();
 
-    // job args
     cy.getIframeBody()
       .find('[placeholder^="Arguments to the"]')
       .filter(':visible', { log: false })
