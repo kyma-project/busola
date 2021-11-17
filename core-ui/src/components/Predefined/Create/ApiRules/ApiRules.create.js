@@ -101,7 +101,7 @@ function ApiRulesCreate({
         propertyPath="$.metadata.name"
         kind={t('api-rules.name_singular')}
         setValue={handleNameChange}
-        disabled={!!initialApiRule}
+        readOnly={!!initialApiRule}
         validate={value => !!value}
       />
       <ServiceDropdown

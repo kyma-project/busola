@@ -1,10 +1,11 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
 
-const random = Math.floor(Math.random() * 9999) + 1000;
 const FUNCTION_NAME = 'test-function';
 const API_RULE_NAME = 'test-api-rule';
-const API_RULE_HOST = API_RULE_NAME + '-' + random;
+const API_RULE_HOST = API_RULE_NAME + '-host';
+const API_RULE_PATH = '/test-path';
+const API_RULE_DEFAULT_PATH = '/.*';
 
 context('API Rules in the Function details view', () => {
   before(() => {
@@ -47,7 +48,7 @@ context('API Rules in the Function details view', () => {
     cy.getIframeBody()
       .find('[placeholder="Required scope"]')
       .filter(':visible', { log: false })
-      .type('read write');
+      .type('read');
 
     cy.getIframeBody()
       .contains('POST')
@@ -63,5 +64,73 @@ context('API Rules in the Function details view', () => {
     cy.getIframeBody()
       .contains(API_RULE_NAME)
       .click();
+
+    cy.getIframeBody()
+      .contains(API_RULE_DEFAULT_PATH)
+      .should('exist');
+
+    cy.getIframeBody()
+      .contains('OAuth2')
+      .should('exist');
+
+    cy.getIframeBody()
+      .contains(API_RULE_PATH)
+      .should('not.exist');
+
+    cy.getIframeBody()
+      .contains('Allow')
+      .should('not.exist');
+  });
+
+  it('Edit the API Rule', () => {
+    cy.getIframeBody()
+      .contains('Edit')
+      .click();
+
+    cy.getIframeBody().contains(API_RULE_NAME);
+
+    cy.getIframeBody()
+      .contains('Advanced')
+      .click();
+
+    cy.getIframeBody()
+      .contains('Add Rule')
+      .click();
+
+    cy.getIframeBody()
+      .contains('Rule 2')
+      .click();
+
+    cy.getIframeBody()
+      .find('[placeholder="Enter the path."]')
+      .filter(':visible', { log: false })
+      .type(API_RULE_PATH);
+
+    cy.getIframeBody()
+      .find('[role=dialog]')
+      .contains('button', 'Update')
+      .click();
+  });
+
+  it('Check the edited API Rule details', () => {
+    cy.getIframeBody()
+      .contains(API_RULE_NAME)
+      .click();
+
+    cy.getIframeBody()
+      .contains(API_RULE_DEFAULT_PATH)
+      .should('exist');
+
+    cy.getIframeBody()
+      .contains('OAuth2')
+      .should('exist');
+
+    cy.getIframeBody()
+      .contains(API_RULE_PATH)
+      .should('exist');
+
+    cy.getIframeBody()
+      .contains('Allow')
+      .should('exist');
   });
 });
