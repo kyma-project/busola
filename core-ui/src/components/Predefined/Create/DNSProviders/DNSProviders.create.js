@@ -5,7 +5,7 @@ import { useGet } from 'react-shared';
 import { cloneDeep } from 'lodash';
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import { SecretRef } from 'shared/components/ResourceRef/SecretRef';
-
+import { K8sNameField } from 'shared/ResourceForm/components/FormComponents';
 import {
   createDNSProviderTemplate,
   createDNSProviderTemplateForGardener,
@@ -18,6 +18,7 @@ function DNSProvidersCreate({
   onChange,
   setCustomValid,
   resource: initialDnsProvider,
+  resourceUrl,
 }) {
   const { t } = useTranslation();
 
@@ -63,12 +64,11 @@ function DNSProvidersCreate({
       setResource={setDNSProvider}
       onChange={onChange}
       formElementRef={formElementRef}
-      createUrl={`/apis/dns.gardener.cloud/v1alpha1/namespaces/${namespace}/dnsproviders/`}
+      createUrl={resourceUrl}
     >
-      <ResourceForm.K8sNameField
+      <K8sNameField
         propertyPath="$.metadata.name"
         kind={t('dnsproviders.name_singular')}
-        disabled={!!initialDnsProvider}
         setValue={name => {
           jp.value(dnsProvider, '$.metadata.name', name);
           jp.value(
@@ -78,6 +78,7 @@ function DNSProvidersCreate({
           );
           setDNSProvider({ ...dnsProvider });
         }}
+        readOnly={!!initialDnsProvider}
       />
       <ResourceForm.FormField
         propertyPath="$.spec.type"
