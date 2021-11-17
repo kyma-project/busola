@@ -29,23 +29,19 @@ context('Create a OAuth2 Client', () => {
       .click();
 
     cy.getIframeBody()
-      .find('.advanced-form')
       .find('[placeholder="OAuth2 Client Name"]')
       .clear()
       .type(CLIENT_NAME);
 
     cy.getIframeBody()
-      .find('.advanced-form')
       .contains('label', 'ID Token')
       .click();
 
     cy.getIframeBody()
-      .find('.advanced-form')
       .contains('label', 'Authorization Code')
       .click();
 
     cy.getIframeBody()
-      .find('.advanced-form')
       .find('[placeholder="OAuth2 scope"]')
       .clear()
       .type('openid{downarrow}');
@@ -100,27 +96,22 @@ context('Create a OAuth2 Client', () => {
       .click();
 
     cy.getIframeBody()
-      .find('.advanced-form')
       .contains('label', 'ID Token')
       .click();
 
     cy.getIframeBody()
-      .find('.advanced-form')
       .contains('label', 'Code')
       .click();
 
     cy.getIframeBody()
-      .find('.advanced-form')
       .contains('label', 'Authorization Code')
       .click();
 
     cy.getIframeBody()
-      .find('.advanced-form')
       .contains('label', 'Implicit')
       .click();
 
     cy.getIframeBody()
-      .find('.advanced-form')
       .find('[value="openid"]')
       .clear()
       .type('email{downarrow}');
