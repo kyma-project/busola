@@ -9,6 +9,10 @@ Cypress.Commands.add(
   },
 );
 
+Cypress.Commands.add('filterWithNoValue', { prevSubject: true }, $elements =>
+  $elements.filter((_, e) => !e.value),
+);
+
 Cypress.Commands.add('goToNamespaceDetails', () => {
   // // Go to the details of namespace
   cy.task('getNamespace').then(ns => {
