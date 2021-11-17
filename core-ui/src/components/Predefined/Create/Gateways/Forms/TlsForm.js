@@ -148,7 +148,7 @@ export const TlsForm = ({ server = {}, servers, setServers, isAdvanced }) => {
         label={t('gateways.create-modal.advanced.tls.ca-certificates')}
         propertyPath="$.tls.caCertificates"
         placeholder={t(
-          'gateways.create-modal.advanced.placeholders.tls.private-key',
+          'gateways.create-modal.advanced.placeholders.tls.ca-certificates',
         )}
         input={Inputs.Text}
       />
