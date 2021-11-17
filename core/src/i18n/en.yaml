@@ -944,7 +944,7 @@ issuers:
     messages:
       failure: Failed to create the issuer.
       success: Issuer created.
-  description: <0>Issuer</0> is a Namespace resource responsible for provision of certificates.
+  description: <0>Issuer</0> is a Namespace resource responsible for provisioning of certificates.
   domains:
     excluded: Excluded domains
     included: Included domains
