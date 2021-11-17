@@ -22,6 +22,7 @@
     "test-cluster-overview.spec.js",
     "smoke-tests.spec.js",
     "test-crds.spec.js",
+    "test-git-repositories.spec.js",
     "invalid-kubeconfig.spec.js",
     "login-kubeconfigID.spec.js",
     "other-logins.spec.js",
