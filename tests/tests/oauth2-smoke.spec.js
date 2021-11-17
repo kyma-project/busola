@@ -49,72 +49,42 @@ context('Create a OAuth2 Client', () => {
       .type('openid{downarrow}');
 
     cy.getIframeBody()
+      .contains('label', 'Scope')
+      .click();
+
+    cy.getIframeBody()
       .find('[role="dialog"]')
       .contains('button', 'Create')
       .click();
 
-    // cy.getIframeBody()
-    //   .contains('test-oauth2-client')
-    //   .click();
+    cy.getIframeBody()
+      .contains(CLIENT_NAME)
+      .click();
 
-    // cy.getIframeBody()
-    //   .find('span', 'ID Token', { timeout: 5000 })
-    //   .should('have.text', 'ID Token');
+    cy.getIframeBody()
+      .contains(CLIENT_NAME)
+      .should('be.visible');
 
-    cy.wait(4000);
+    cy.getIframeBody()
+      .contains('ID Token')
+      .should('be.visible');
+
+    cy.getIframeBody()
+      .contains('Authorization Code')
+      .should('be.visible');
+
+    cy.getIframeBody()
+      .contains('openid')
+      .should('be.visible');
+
+    cy.getIframeBody()
+      .contains('client_id')
+      .should('be.visible');
+
+    cy.getIframeBody()
+      .contains('client_secret')
+      .should('be.visible');
+
+    cy.wait(4000000);
   });
 });
-// it('Create a OAuth2 Clients', () => {
-//   cy.get('[data-testid=luigi-topnav-logo]').click();
-
-//   cy.getLeftNav()
-//     .contains('Namespaces')
-//     .click();
-
-//   cy.goToNamespaceDetails();
-
-//   cy.getLeftNav()
-//     .find('[data-testid=oauth2clients_oauthclients]')
-//     .click();
-
-//   cy.getIframeBody()
-//     .contains('Create OAuth2 Client')
-//     .click();
-
-//   cy.getIframeBody()
-//     .find('[placeholder="Client name"]')
-//     .clear()
-//     .type(CLIENT_NAME);
-
-//   cy.getIframeBody()
-//     .contains('label', 'ID token')
-//     .prev('input')
-//     .click({ force: true });
-
-//   cy.getIframeBody()
-//     .contains('label', 'Client credentials')
-//     .prev('input')
-//     .click({ force: true });
-
-//   cy.getIframeBody()
-//     .find('[placeholder="Enter multiple values separated by comma"]')
-//     .clear()
-//     .type(CLIENT_NAME);
-
-//   cy.getIframeBody()
-//     .contains('label', 'Scopes')
-//     .click();
-
-//   cy.getIframeBody()
-//     .find('[role="dialog"]')
-//     .contains('button', 'Create')
-//     .click();
-
-//   cy.getIframeBody()
-//     .contains('a', CLIENT_NAME)
-//     .click({ force: true });
-
-//   cy.getIframeBody()
-//     .contains(CLIENT_NAME)
-//     .should('be.visible');
-// });

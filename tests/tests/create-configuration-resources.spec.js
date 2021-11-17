@@ -5,7 +5,6 @@ const CONFIG_MAP_NAME = 'test-configmap';
 const SECRET_NAME = 'test-secret';
 const USER_NAME = 'user@kyma.eu';
 const ROLE_NAME = 'view (CR)';
-const CLIENT_NAME = 'test-oauth-client';
 const GIT_REPOSITORY_URL = 'https://github.com/test/sample-function.git';
 const GIT_REPOSITORY_NAME = 'test-git-repository';
 
