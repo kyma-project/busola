@@ -35,22 +35,24 @@ context('Create a Deployment', () => {
 
     cy.getIframeBody()
       .find('[placeholder="Enter Key"]')
-      .eq(1)
+      .filterWithNoValue()
       .type('app');
 
     cy.getIframeBody()
       .find('[placeholder="Enter Value"]')
-      .eq(1)
+      .filterWithNoValue()
+      .first()
       .type(DEPLOYMENT_NAME);
 
     cy.getIframeBody()
       .find('[placeholder="Enter Key"]')
-      .eq(2)
+      .filterWithNoValue()
       .type('example');
 
     cy.getIframeBody()
       .find('[placeholder="Enter Value"]')
-      .eq(2)
+      .filterWithNoValue()
+      .first()
       .type(DEPLOYMENT_NAME);
 
     cy.getIframeBody()
