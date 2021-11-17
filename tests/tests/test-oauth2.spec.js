@@ -9,7 +9,7 @@ context('Create a OAuth2 Client', () => {
     cy.goToNamespaceDetails();
   });
 
-  it('Create a OAuth2 Client', () => {
+  it('Navigate to OAuth2 Client', () => {
     cy.getLeftNav()
       .contains('Configuration')
       .click();
@@ -17,7 +17,9 @@ context('Create a OAuth2 Client', () => {
     cy.getLeftNav()
       .contains('OAuth2 Clients')
       .click();
+  });
 
+  it('Create a Client', () => {
     cy.getIframeBody()
       .contains('Create OAuth2 Client')
       .click();
@@ -34,7 +36,7 @@ context('Create a OAuth2 Client', () => {
 
     cy.getIframeBody()
       .find('.advanced-form')
-      .contains('label', 'Token')
+      .contains('label', 'ID Token')
       .click();
 
     cy.getIframeBody()
@@ -56,7 +58,9 @@ context('Create a OAuth2 Client', () => {
       .find('[role="dialog"]')
       .contains('button', 'Create')
       .click();
+  });
 
+  it('Checking details', () => {
     cy.getIframeBody()
       .contains(CLIENT_NAME)
       .click();
@@ -84,7 +88,68 @@ context('Create a OAuth2 Client', () => {
     cy.getIframeBody()
       .contains('client_secret')
       .should('be.visible');
+  });
 
-    cy.wait(4000000);
+  it('Edit client', () => {
+    cy.getIframeBody()
+      .contains('Edit')
+      .click();
+
+    cy.getIframeBody()
+      .contains('Advanced')
+      .click();
+
+    cy.getIframeBody()
+      .find('.advanced-form')
+      .contains('label', 'ID Token')
+      .click();
+
+    cy.getIframeBody()
+      .find('.advanced-form')
+      .contains('label', 'Code')
+      .click();
+
+    cy.getIframeBody()
+      .find('.advanced-form')
+      .contains('label', 'Authorization Code')
+      .click();
+
+    cy.getIframeBody()
+      .find('.advanced-form')
+      .contains('label', 'Implicit')
+      .click();
+
+    cy.getIframeBody()
+      .find('.advanced-form')
+      .find('[value="openid"]')
+      .clear()
+      .type('email{downarrow}');
+
+    cy.getIframeBody()
+      .find('[role="dialog"]')
+      .contains('button', 'Update')
+      .click();
+  });
+
+  it('Checking updates details', () => {
+    cy.getIframeBody()
+      .contains('Code')
+      .should('be.visible');
+
+    cy.getIframeBody()
+      .contains('Implicit')
+      .should('be.visible');
+
+    cy.getIframeBody()
+      .contains('email')
+      .should('be.visible');
+
+    cy.getIframeBody()
+      .contains('client_id')
+      .should('be.visible');
+
+    cy.getIframeBody()
+      .contains('client_secret')
+      .should('be.visible');
   });
 });
