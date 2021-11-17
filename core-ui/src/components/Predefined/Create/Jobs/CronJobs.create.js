@@ -8,6 +8,7 @@ import { createCronJobTemplate, createCronJobPresets } from './templates';
 import { CronJobSpecSection } from './SpecSection';
 import { isCronExpressionValid, ScheduleSection } from './ScheduleSection';
 import { ContainerSection, ContainersSection } from './ContainersSection';
+import * as _ from 'lodash';
 
 function isCronJobValid(cronJob) {
   const containers =
@@ -20,15 +21,18 @@ function isCronJobValid(cronJob) {
   return areContainersValid && isCronExpressionValid(cronJob?.spec?.schedule);
 }
 
-export function CronJobsCreate({
+function CronJobsCreate({
   formElementRef,
+  resource: initialCronJob,
   namespace,
   onChange,
   setCustomValid,
 }) {
   const { t } = useTranslation();
 
-  const [cronJob, setCronJob] = useState(createCronJobTemplate(namespace));
+  const [cronJob, setCronJob] = useState(
+    _.cloneDeep(initialCronJob) || createCronJobTemplate(namespace),
+  );
 
   useEffect(() => {
     setCustomValid(isCronJobValid(cronJob));
@@ -57,6 +61,7 @@ export function CronJobsCreate({
           );
           setCronJob({ ...cronJob });
         }}
+        readOnly={!!initialCronJob}
       />
 
       <ResourceForm.KeyValueField
@@ -77,13 +82,17 @@ export function CronJobsCreate({
 
       <ContainerSection
         simple
+        defaultOpen
         propertyPath="$.spec.jobTemplate.spec.template.spec.containers"
       />
 
       <ContainersSection
         advanced
+        defaultOpen
         propertyPath="$.spec.jobTemplate.spec.template.spec.containers"
       />
     </ResourceForm>
   );
 }
+CronJobsCreate.allowEdit = true;
+export { CronJobsCreate };
