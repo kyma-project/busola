@@ -56,6 +56,7 @@ const OAuth2ClientsCreate = ({
           jp.value(oAuth2Client, '$.spec.secretName', name);
           setOAuth2Client({ ...oAuth2Client });
         }}
+        readOnly={!!initialOAuth2Client}
       />
       <KeyValueField
         advanced
@@ -172,6 +173,7 @@ const OAuth2ClientsCreate = ({
     </ResourceForm>
   );
 };
+OAuth2ClientsCreate.allowEdit = true;
 OAuth2ClientsCreate.secrets = (t, context) => [
   {
     title: t('oauth2-clients.secret'),
