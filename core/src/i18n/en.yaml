@@ -1247,7 +1247,7 @@ secrets:
       success: Secret created.
     title: Create Secret
   data: Data
-  description: <0>Secret</0> is an object that allows for storing sensitive data in key-value pairs.
+  description: <0>Secret</0> is an object that stores sensitive data in key-value pairs.
   edit-modal:
     messages:
       failure: 'Failed to update the Secret: {{error}}.'
