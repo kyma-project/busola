@@ -1116,6 +1116,8 @@ oauth2-clients:
     secret-name: Secret Name
     uris: URIs
   name_singular: OAuth2 Client
+  placeholders:
+    scope: OAuth2 scope
   response-types:
     code: Code
     id_token: ID Token
