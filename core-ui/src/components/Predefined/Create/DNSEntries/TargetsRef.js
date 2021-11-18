@@ -106,14 +106,17 @@ export function TargetsRef({ dnsEntry, setTargets, setDnsEntry }) {
   if (loading) return <Spinner />;
 
   const targets = dnsEntry?.spec.targets || [];
+  console.log(services);
   const loadBalancers = services?.filter(
     service =>
       service.spec.type === 'LoadBalancer' &&
       (service.status.loadBalancer?.ingress ||
         service.spec.externalIPs?.length),
   );
+  console.log(loadBalancers);
 
   const IPs = (loadBalancers || []).flatMap(lb => getExternalIPs(lb));
+  console.log(IPs);
 
   const isCname = value => {
     return !IPs?.find(ip => value === ip.key);
@@ -152,7 +155,7 @@ export function TargetsRef({ dnsEntry, setTargets, setDnsEntry }) {
                       : t('dnsentries.tooltips.use-cname')
                   }
                 >
-                  {t('dnsentries.use-cname')}
+                  {t('dnsentries.labels.use-cname')}
                 </Label>
                 <div>
                   <Switch
@@ -168,13 +171,14 @@ export function TargetsRef({ dnsEntry, setTargets, setDnsEntry }) {
             </div>
           ),
           ({ value, setValue, index }) => {
+            console.log(value);
             if (value?.isCname) {
               return (
                 <div className="fd-col fd-col-md--9" key={index}>
                   <FormInput
                     key={`targets-input-${index}`}
                     compact
-                    value={value?.target || ''}
+                    value={value?.target?.text || ''}
                     placeholder={t('dnsentries.placeholders.target-cname')}
                     onChange={e =>
                       setValue({ ...value, target: e.target.value })
@@ -188,9 +192,10 @@ export function TargetsRef({ dnsEntry, setTargets, setDnsEntry }) {
                   <ResourceForm.ComboboxInput
                     key={`targets-select-${index}`}
                     options={IPs}
-                    defaultKey={value?.target}
-                    value={value?.target}
+                    defaultKey={value?.target?.key}
+                    typedValue={value?.target?.text}
                     placeholder={t('dnsentries.placeholders.target-a')}
+                    selectionType="manual"
                     setValue={key => setValue({ ...value, target: key })}
                   />
                 </div>
