@@ -8,7 +8,7 @@ import { createContainerTemplate } from './templates';
 import { SingleContainerForm, SingleContainerInput } from './Containers';
 import './ContainersSection.scss';
 
-export const ContainersSection = ({ ...props }) => {
+export const ContainersSection = ({ readOnly, ...props }) => {
   const { t } = useTranslation();
 
   return (
@@ -26,20 +26,22 @@ export const ContainersSection = ({ ...props }) => {
           containers={values}
           setContainers={setValues}
           isAdvanced={isAdvanced}
+          readOnly={readOnly}
         />
       )}
       newResourceTemplateFn={createContainerTemplate}
+      readOnly={readOnly}
       {...props}
     />
   );
 };
 
-export const ContainerSection = ({ ...props }) => {
+export const ContainerSection = ({ readOnly, ...props }) => {
   const { t } = useTranslation();
   const { value, setValue } = props;
 
   return value?.length ? (
-    <SingleContainerInput simple {...props} />
+    <SingleContainerInput simple readOnly={readOnly} {...props} />
   ) : (
     <div className="job-container__message">
       <MessageStrip type="warning" className="fd-margin-top--sm">
@@ -47,6 +49,7 @@ export const ContainerSection = ({ ...props }) => {
         <Button
           glyph="add"
           compact
+          disabled={readOnly}
           onClick={() => {
             jp.value(value, '$[0]', createContainerTemplate());
             setValue(value);

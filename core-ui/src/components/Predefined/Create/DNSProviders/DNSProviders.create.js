@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
 import { useGet } from 'react-shared';
-
+import { cloneDeep } from 'lodash';
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import { SecretRef } from 'shared/components/ResourceRef/SecretRef';
+import { K8sNameField } from 'shared/ResourceForm/components/FormComponents';
 import {
   createDNSProviderTemplate,
   createDNSProviderTemplateForGardener,
@@ -16,10 +17,15 @@ function DNSProvidersCreate({
   namespace,
   onChange,
   setCustomValid,
+  resource: initialDnsProvider,
+  resourceUrl,
 }) {
   const { t } = useTranslation();
-  const [dnsProvider, setDNSProvider] = React.useState(
-    createDNSProviderTemplate(namespace),
+
+  const [dnsProvider, setDNSProvider] = useState(
+    initialDnsProvider
+      ? cloneDeep(initialDnsProvider)
+      : createDNSProviderTemplate(namespace),
   );
   const { data: configmap } = useGet(
     `/api/v1/namespaces/kube-system/configmaps/shoot-info`,
@@ -30,9 +36,11 @@ function DNSProvidersCreate({
 
   useEffect(() => {
     if (configmap) {
-      setDNSProvider(createDNSProviderTemplateForGardener(namespace));
+      setDNSProvider(
+        createDNSProviderTemplateForGardener(namespace, initialDnsProvider),
+      );
     }
-  }, [configmap, namespace, setDNSProvider]);
+  }, [configmap, namespace, setDNSProvider]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     const isTypeSet = jp.value(dnsProvider, '$.spec.type');
@@ -52,12 +60,13 @@ function DNSProvidersCreate({
       pluralKind="dnsProviders"
       singularName={t('dnsproviders.name_singular')}
       resource={dnsProvider}
+      initialResource={initialDnsProvider}
       setResource={setDNSProvider}
       onChange={onChange}
       formElementRef={formElementRef}
-      createUrl={`/apis/dns.gardener.cloud/v1alpha1/namespaces/${namespace}/dnsproviders/`}
+      createUrl={resourceUrl}
     >
-      <ResourceForm.K8sNameField
+      <K8sNameField
         propertyPath="$.metadata.name"
         kind={t('dnsproviders.name_singular')}
         setValue={name => {
@@ -69,16 +78,21 @@ function DNSProvidersCreate({
           );
           setDNSProvider({ ...dnsProvider });
         }}
+        readOnly={!!initialDnsProvider}
       />
       <ResourceForm.FormField
         propertyPath="$.spec.type"
         label={t('dnsproviders.labels.type')}
         required
         input={({ value, setValue }) => (
-          <ProviderTypeDropdown type={value} setType={setValue} />
+          <ProviderTypeDropdown
+            type={value}
+            setType={setValue}
+            dnsProvider={dnsProvider}
+          />
         )}
-        className="fd-margin-bottom--sm"
       />
+
       <SecretRef
         required
         className={'fd-margin-top--sm'}
@@ -117,6 +131,7 @@ function DNSProvidersCreate({
     </ResourceForm>
   );
 }
+DNSProvidersCreate.allowEdit = true;
 DNSProvidersCreate.secrets = (t, { features } = {}) => {
   if (!features?.CUSTOM_DOMAINS?.isEnabled) {
     return [];
