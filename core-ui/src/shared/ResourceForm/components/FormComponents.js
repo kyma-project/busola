@@ -636,7 +636,7 @@ export function ComboboxInput({
         selectionType="auto-inline"
         onSelectionChange={(_, selected) => setValue(selected)}
         typedValue={typedValue}
-        selectedKey={defaultKey === -1 ? defaultKey : ''}
+        selectedKey={defaultKey !== -1 ? defaultKey : ''}
         placeholder={placeholder}
         options={options}
         {...props}

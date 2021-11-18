@@ -116,7 +116,7 @@ export function TargetsRef({ dnsEntry, setTargets, setDnsEntry }) {
   const IPs = (loadBalancers || []).flatMap(lb => getExternalIPs(lb));
 
   const isCname = value => {
-    return !!IPs?.find(ip => value === ip.key);
+    return !IPs?.find(ip => value === ip.key);
   };
 
   return (
@@ -174,7 +174,7 @@ export function TargetsRef({ dnsEntry, setTargets, setDnsEntry }) {
                   <FormInput
                     key={`targets-input-${index}`}
                     compact
-                    value={value?.target?.value || ''}
+                    value={value?.target || ''}
                     placeholder={t('dnsentries.placeholders.target-cname')}
                     onChange={e =>
                       setValue({ ...value, target: e.target.value })
@@ -188,11 +188,15 @@ export function TargetsRef({ dnsEntry, setTargets, setDnsEntry }) {
                   <ResourceForm.ComboboxInput
                     key={`targets-select-${index}`}
                     options={IPs}
-                    defaultKey={value?.target?.key}
-                    typedValue={value?.target?.value}
+                    defaultKey={value?.target}
                     placeholder={t('dnsentries.placeholders.target-a')}
-                    selectionType="manual"
-                    setValue={key => setValue({ ...value, target: key })}
+                    setValue={selected => {
+                      if (selected.key !== -1) {
+                        setValue({ ...value, target: selected.key });
+                      } else {
+                        setValue({ ...value, target: selected.text });
+                      }
+                    }}
                   />
                 </div>
               );
