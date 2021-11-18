@@ -106,17 +106,14 @@ export function TargetsRef({ dnsEntry, setTargets, setDnsEntry }) {
   if (loading) return <Spinner />;
 
   const targets = dnsEntry?.spec.targets || [];
-  console.log(services);
   const loadBalancers = services?.filter(
     service =>
       service.spec.type === 'LoadBalancer' &&
       (service.status.loadBalancer?.ingress ||
         service.spec.externalIPs?.length),
   );
-  console.log(loadBalancers);
 
   const IPs = (loadBalancers || []).flatMap(lb => getExternalIPs(lb));
-  console.log(IPs);
 
   const isCname = value => {
     return !!IPs?.find(ip => value === ip.key);
