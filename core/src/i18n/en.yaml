@@ -194,7 +194,7 @@ certificates:
       failure: Failed to create the certificate.
       success: Certificate created.
   csr: CSR
-  description: <0>Certificate</0> provides a human-readable definition of a certificate signing request, which is then processed by the indicated issuer.
+  description: <0>Certificate</0> provides a definition of a certificate that is then processed by the indicated issuer.
   dns-names: DNS Names
   existing-secret: Use the existing Secret
   expiration-date: Expiration Date
