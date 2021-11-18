@@ -19,10 +19,6 @@ context('API Rules in the Function details view', () => {
 
   it('Create an API Rule for the Function', () => {
     cy.getIframeBody()
-      .contains('Configuration')
-      .click();
-
-    cy.getIframeBody()
       .contains('Create API Rule')
       .click();
 
