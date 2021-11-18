@@ -1103,7 +1103,7 @@ oauth2-clients:
     client_secret_post: Client Secret / POST
     none: None
     private_key_jwt: Private Key / JWT
-  description: <0>OAuth2 Client</0> allows for accessing the protected resources.
+  description: <0>OAuth2 Client</0> allows an application to acquire an OAuth2 token to access protected resources.
   grant-types:
     authorization_code: Authorization Code
     client_credentials: Client Credentials
