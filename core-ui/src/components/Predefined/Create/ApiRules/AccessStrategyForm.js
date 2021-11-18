@@ -34,6 +34,9 @@ function SingleAccessStrategyInput({
         <ResourceForm.TextArrayInput
           propertyPath="$.config.required_scope"
           title={t('api-rules.oauth.required-scope')}
+          inputProps={{
+            placeholder: t('api-rules.oauth.required-scope'),
+          }}
         />
       )}
       {accessStrategy?.handler === 'jwt' && (

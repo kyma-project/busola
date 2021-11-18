@@ -14,7 +14,7 @@
     "js-yaml": "^4.1.0"
   },
   "optionalDependencies": {
-    "cypress": "^9.0.0"
+    "cypress": "^8.7.0"
   },
   "dependencies": {}
 }
