@@ -58,6 +58,15 @@ context('Create a Cron Job', () => {
       .type('*');
 
     cy.getIframeBody()
+      .contains('Command')
+      .click();
+
+    cy.getIframeBody()
+      .find('[placeholder="Command to run in a container."]')
+      .clear()
+      .type('ls -la');
+
+    cy.getIframeBody()
       .find('[placeholder="Container Name"]')
       .clear()
       .type('test-container');
@@ -68,15 +77,6 @@ context('Create a Cron Job', () => {
       )
       .clear()
       .type('busybox');
-
-    cy.getIframeBody()
-      .contains('Command')
-      .click();
-
-    cy.getIframeBody()
-      .find('[placeholder="Command to run in a container."]')
-      .clear()
-      .type('ls -la');
 
     cy.getIframeBody()
       .contains('IfNotPresent')
@@ -92,7 +92,7 @@ context('Create a Cron Job', () => {
       .click();
   });
 
-  it('Create Cron Job', () => {
+  it('Checking details', () => {
     cy.getIframeBody()
       .contains(CRON_JOB_NAME)
       .click();
@@ -103,6 +103,75 @@ context('Create a Cron Job', () => {
 
     cy.getIframeBody()
       .contains('0 0 1 * *')
+      .should('be.visible');
+  });
+
+  it('Edit Cron Job', () => {
+    cy.getIframeBody()
+      .contains('Edit')
+      .click();
+
+    cy.getIframeBody()
+      .contains('Advanced')
+      .click();
+
+    cy.getIframeBody()
+      .find('[placeholder="Hour"]')
+      .clear()
+      .type('*');
+
+    cy.getIframeBody()
+      .find('[placeholder="Day of Month"]')
+      .clear()
+      .type('*');
+
+    cy.getIframeBody()
+      .find('[placeholder="Month"]')
+      .clear()
+      .type('*');
+
+    cy.getIframeBody()
+      .contains('Command')
+      .click();
+
+    cy.getIframeBody()
+      .find('[placeholder="Command to run in a container."]')
+      .clear()
+      .type('ls');
+
+    cy.getIframeBody()
+      .find('[placeholder="Container Name"]')
+      .clear()
+      .type('test-busybox');
+
+    cy.getIframeBody()
+      .find(
+        '[placeholder="Enter the Docker image tag, for example, \'busybox\'."]',
+      )
+      .clear()
+      .type('busytest');
+
+    cy.getIframeBody()
+      .contains('Always')
+      .click();
+
+    cy.getIframeBody()
+      .contains('Never')
+      .click();
+
+    cy.getIframeBody()
+      .find('[role="dialog"]')
+      .contains('button', 'Update')
+      .click();
+  });
+
+  it('Checking updates details', () => {
+    cy.getIframeBody()
+      .contains(CRON_JOB_NAME)
+      .should('be.visible');
+
+    cy.getIframeBody()
+      .contains('0 * * * *')
       .should('be.visible');
   });
 });

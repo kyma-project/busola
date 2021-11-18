@@ -27,6 +27,7 @@ function CronJobsCreate({
   namespace,
   onChange,
   setCustomValid,
+  resourceUrl,
 }) {
   const { t } = useTranslation();
 
@@ -42,12 +43,13 @@ function CronJobsCreate({
     <ResourceForm
       pluralKind="cronjobs"
       singularName={t(`cron-jobs.name_singular`)}
+      initialResource={initialCronJob}
       resource={cronJob}
       setResource={setCronJob}
       onChange={onChange}
       formElementRef={formElementRef}
       presets={createCronJobPresets(namespace, t)}
-      createUrl={`/apis/batch/v1beta1/namespaces/${namespace}/cronjobs`}
+      createUrl={resourceUrl}
     >
       <ResourceForm.K8sNameField
         propertyPath="$.metadata.name"
