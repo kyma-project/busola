@@ -20,7 +20,7 @@ export const ConfigMapsList = ({ DefaultRenderer, ...otherParams }) => {
     <Trans i18nKey="config-maps.description">
       <Link
         className="fd-link"
-        url="https://kyma-project.io/docs/kyma/latest/05-technical-reference/00-configuration-parameters/svls-02-environment-variables#define-environment-variables-in-a-config-map"
+        url="https://kubernetes.io/docs/concepts/configuration/configmap/"
       />
     </Trans>
   );

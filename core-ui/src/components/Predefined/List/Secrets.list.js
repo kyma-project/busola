@@ -26,7 +26,7 @@ export const SecretsList = ({ DefaultRenderer, ...otherParams }) => {
     <Trans i18nKey="secrets.description">
       <Link
         className="fd-link"
-        url="https://kyma-project.io/docs/kyma/latest/03-tutorials/00-serverless/svls-09-log-into-private-packages-registry#create-a-secret"
+        url="https://kubernetes.io/docs/concepts/configuration/secret/"
       />
     </Trans>
   );
