@@ -8,6 +8,7 @@ import { createCronJobTemplate, createCronJobPresets } from './templates';
 import { CronJobSpecSection } from './SpecSection';
 import { isCronExpressionValid, ScheduleSection } from './ScheduleSection';
 import { ContainerSection, ContainersSection } from './ContainersSection';
+import * as _ from 'lodash';
 
 function isCronJobValid(cronJob) {
   const containers =
@@ -20,15 +21,19 @@ function isCronJobValid(cronJob) {
   return areContainersValid && isCronExpressionValid(cronJob?.spec?.schedule);
 }
 
-export function CronJobsCreate({
+function CronJobsCreate({
   formElementRef,
+  resource: initialCronJob,
   namespace,
   onChange,
   setCustomValid,
+  resourceUrl,
 }) {
   const { t } = useTranslation();
 
-  const [cronJob, setCronJob] = useState(createCronJobTemplate(namespace));
+  const [cronJob, setCronJob] = useState(
+    _.cloneDeep(initialCronJob) || createCronJobTemplate(namespace),
+  );
 
   useEffect(() => {
     setCustomValid(isCronJobValid(cronJob));
@@ -38,12 +43,13 @@ export function CronJobsCreate({
     <ResourceForm
       pluralKind="cronjobs"
       singularName={t(`cron-jobs.name_singular`)}
+      initialResource={initialCronJob}
       resource={cronJob}
       setResource={setCronJob}
       onChange={onChange}
       formElementRef={formElementRef}
       presets={createCronJobPresets(namespace, t)}
-      createUrl={`/apis/batch/v1beta1/namespaces/${namespace}/cronjobs`}
+      createUrl={resourceUrl}
     >
       <ResourceForm.K8sNameField
         propertyPath="$.metadata.name"
@@ -57,6 +63,7 @@ export function CronJobsCreate({
           );
           setCronJob({ ...cronJob });
         }}
+        readOnly={!!initialCronJob}
       />
 
       <ResourceForm.KeyValueField
@@ -77,13 +84,17 @@ export function CronJobsCreate({
 
       <ContainerSection
         simple
+        defaultOpen
         propertyPath="$.spec.jobTemplate.spec.template.spec.containers"
       />
 
       <ContainersSection
         advanced
+        defaultOpen
         propertyPath="$.spec.jobTemplate.spec.template.spec.containers"
       />
     </ResourceForm>
   );
 }
+CronJobsCreate.allowEdit = true;
+export { CronJobsCreate };
