@@ -43,8 +43,11 @@ const decodeHeaderToBuffer = headerValue => {
 // comes with "Connection: Upgrade" header, causing
 // "invalid upgrade response: status code 200" error
 const workaroundForNodeMetrics = req => {
+  console.log(req.originalUrl);
   if (req.originalUrl.includes('apis/metrics.k8s.io/v1beta1/nodes')) {
+    console.log('1', req.headers['connection']);
     req.headers['connection'] = 'close';
+    console.log('2', req.headers['connection']);
   }
 };
 
