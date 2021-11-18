@@ -42,7 +42,7 @@ Cypress.Commands.add('createSimpleFunction', functionName => {
 
   cy.getIframeBody()
     .find('[role="status"]', { timeout: 60 * 1000 })
-    .should('not.have.text', 'INITIALIZING');
+    .should('have.text', 'BUILDING');
 
   cy.getIframeBody()
     .find('[role="status"]', { timeout: 60 * 1000 })
