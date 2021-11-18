@@ -21,6 +21,7 @@
     "in-cluster-eventing.spec.js",
     "test-cluster-overview.spec.js",
     "smoke-tests.spec.js",
+    "test-jobs.spec.js",
     "test-crds.spec.js",
     "test-cron-jobs.spec.js",
     "test-git-repositories.spec.js",

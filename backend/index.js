@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const http = require('http');
 import { handleRequest, serveStaticApp, serveMonaco } from './common';
-import { requestLogger } from './utils/other';
+//import { requestLogger } from './utils/other'; //uncomment this to log the outgoing traffic
 
 const app = express();
 app.disable('x-powered-by');
