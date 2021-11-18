@@ -38,7 +38,7 @@ const GoToDetailsLink = ({ resource, name, apiVersion }) => {
   const namespacedViewPath = `/cluster/${activeClusterName}/namespaces/${namespaceId}/${resource}/details/${name}`;
   const clusterWideViewPath = `/cluster/${activeClusterName}/${resource}/details/${name}`;
 
-  const [viewPath, setViewPath] = useState('');
+  const [viewPath, setViewPath] = useState(null);
 
   useEffect(() => {
     const checkIfPathExists = async () => {
@@ -46,6 +46,8 @@ const GoToDetailsLink = ({ resource, name, apiVersion }) => {
         setViewPath('namespace');
       } else if (await pathExists(clusterWideViewPath)) {
         setViewPath('cluster');
+      } else {
+        setViewPath('');
       }
     };
     if (resource && !viewPath) {
@@ -53,7 +55,7 @@ const GoToDetailsLink = ({ resource, name, apiVersion }) => {
     }
   }, [name, resource]);
 
-  if (!resource) return null;
+  if (!resource || viewPath === null) return null;
   if (viewPath === 'namespace') {
     return (
       <Link
