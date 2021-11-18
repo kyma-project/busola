@@ -40,7 +40,7 @@ function DNSProvidersCreate({
         createDNSProviderTemplateForGardener(namespace, initialDnsProvider),
       );
     }
-  }, [configmap, namespace, setDNSProvider]);
+  }, [configmap, namespace, setDNSProvider]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     const isTypeSet = jp.value(dnsProvider, '$.spec.type');
