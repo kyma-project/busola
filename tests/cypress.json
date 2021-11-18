@@ -26,6 +26,7 @@
     "test-crds.spec.js",
     "test-git-repositories.spec.js",
     "test-oauth2.spec.js",
+    "test-dns-providers.spec.js",
     "invalid-kubeconfig.spec.js",
     "login-kubeconfigID.spec.js",
     "other-logins.spec.js",
