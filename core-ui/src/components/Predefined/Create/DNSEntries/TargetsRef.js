@@ -197,6 +197,7 @@ export function TargetsRef({ dnsEntry, setTargets, setDnsEntry }) {
                         setValue({ ...value, target: selected.text });
                       }
                     }}
+                    selectionType="manual"
                   />
                 </div>
               );
