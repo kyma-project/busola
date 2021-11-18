@@ -119,7 +119,7 @@ export function TargetsRef({ dnsEntry, setTargets, setDnsEntry }) {
   console.log(IPs);
 
   const isCname = value => {
-    return !IPs?.find(ip => value === ip.key);
+    return !!IPs?.find(ip => value === ip.key);
   };
 
   return (
@@ -171,14 +171,13 @@ export function TargetsRef({ dnsEntry, setTargets, setDnsEntry }) {
             </div>
           ),
           ({ value, setValue, index }) => {
-            console.log(value);
             if (value?.isCname) {
               return (
                 <div className="fd-col fd-col-md--9" key={index}>
                   <FormInput
                     key={`targets-input-${index}`}
                     compact
-                    value={value?.target?.text || ''}
+                    value={value?.target?.value || ''}
                     placeholder={t('dnsentries.placeholders.target-cname')}
                     onChange={e =>
                       setValue({ ...value, target: e.target.value })
@@ -193,7 +192,7 @@ export function TargetsRef({ dnsEntry, setTargets, setDnsEntry }) {
                     key={`targets-select-${index}`}
                     options={IPs}
                     defaultKey={value?.target?.key}
-                    typedValue={value?.target?.text}
+                    typedValue={value?.target?.value}
                     placeholder={t('dnsentries.placeholders.target-a')}
                     selectionType="manual"
                     setValue={key => setValue({ ...value, target: key })}
