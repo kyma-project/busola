@@ -29,6 +29,7 @@
     "test-gateways.spec.js",
     "test-oauth2.spec.js",
     "test-dns-providers.spec.js",
+    "test-issuers.spec.js",
     "invalid-kubeconfig.spec.js",
     "login-kubeconfigID.spec.js",
     "other-logins.spec.js",
