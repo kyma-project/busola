@@ -2,7 +2,11 @@
 import 'cypress-file-upload';
 
 const REPLICA_SET_NAME = 'test-replica-set';
+const REPLICAS_AMOUNT = 2;
 const DOCKER_IMAGE_TAG = 'bitnami/nginx';
+
+const EDITED_REPLICAS_AMOUNT = 1;
+const EDITED_DOCKER_IMAGE_TAG = 'test-replica-set-image';
 context('Create a Replica Set', () => {
   before(() => {
     cy.loginAndSelectCluster();
@@ -33,19 +37,19 @@ context('Create a Replica Set', () => {
       .clear()
       .type(REPLICA_SET_NAME);
 
-    const replicasAmount = 1;
     cy.getIframeBody()
       .find('[placeholder="Replicas"]')
       .clear()
-      .type(replicasAmount)
-      .should('have.value', replicasAmount);
+      .type(REPLICAS_AMOUNT)
+      .should('have.value', REPLICAS_AMOUNT);
 
     cy.getIframeBody()
       .find(
         '[placeholder="Enter the Docker image tag, for example, bitnami/nginx."]',
       )
       .clear()
-      .type(DOCKER_IMAGE_TAG);
+      .type(DOCKER_IMAGE_TAG)
+      .should('have.value', DOCKER_IMAGE_TAG);
 
     cy.getIframeBody()
       .find('[role="document"]')
@@ -53,19 +57,75 @@ context('Create a Replica Set', () => {
       .click();
   });
 
-  it('Checks details view', () => {
+  it('Checks the details view', () => {
     cy.getIframeBody()
       .contains(`${REPLICA_SET_NAME}-`)
       .click();
 
-    cy.getIframeBody('Containers')
-      .parent()
-      .getIframeBody()
-      .contains(REPLICA_SET_NAME);
+    cy.getIframeBody().contains(`Name:${REPLICA_SET_NAME}`);
 
-    cy.getIframeBody('Containers')
-      .parent()
-      .getIframeBody()
-      .contains(DOCKER_IMAGE_TAG);
+    cy.getIframeBody().contains(`Image:${DOCKER_IMAGE_TAG}`);
+  });
+
+  it('Checks the list view', () => {
+    cy.getLeftNav()
+      .contains('Replica Sets')
+      .click();
+
+    cy.getIframeBody()
+      .contains(REPLICA_SET_NAME)
+      .click();
+
+    cy.getIframeBody().contains(REPLICA_SET_NAME);
+  });
+
+  it('Edits the Docker image and Replicas amount in the Replica set', () => {
+    cy.getIframeBody()
+      .contains('Edit')
+      .click();
+
+    cy.getIframeBody()
+      .contains('Advanced')
+      .click();
+
+    cy.getIframeBody()
+      .find(
+        '[placeholder="Enter the Docker image tag, for example, bitnami/nginx."]',
+      )
+      .clear()
+      .type(EDITED_DOCKER_IMAGE_TAG)
+      .should('have.value', EDITED_DOCKER_IMAGE_TAG);
+
+    cy.getIframeBody()
+      .find('[placeholder="Replicas"]')
+      .clear()
+      .type(EDITED_REPLICAS_AMOUNT)
+      .should('have.value', EDITED_REPLICAS_AMOUNT);
+
+    cy.getIframeBody()
+      .find('[role="document"]')
+      .contains('button', 'Update')
+      .click();
+
+    cy.reload();
+  });
+
+  it('Checks the new Docker image', () => {
+    cy.getIframeBody()
+      .contains('Replica Sets')
+      .click();
+
+    cy.getIframeBody().contains(EDITED_DOCKER_IMAGE_TAG);
+  });
+
+  it('Checks the new amout of Replicas', () => {
+    cy.getIframeBody()
+      .contains(REPLICA_SET_NAME)
+      .click();
+
+    cy.getIframeBody().contains(
+      `${EDITED_REPLICAS_AMOUNT} / ${EDITED_REPLICAS_AMOUNT}`,
+      { timeout: 12000 },
+    );
   });
 });
