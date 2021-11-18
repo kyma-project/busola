@@ -6,7 +6,7 @@ export function ApiRulesList({ serviceName, namespace }) {
     hasDetailsView: true,
     fixedPath: true,
     resourceUrl: `/apis/gateway.kyma-project.io/v1alpha1/namespaces/${namespace}/apirules`,
-    resourceType: 'api-rules',
+    resourceType: 'apirules',
     namespace,
     isCompact: true,
     showTitle: true,
@@ -18,7 +18,7 @@ export function ApiRulesList({ serviceName, namespace }) {
     <ComponentForList
       name="apiRulesList"
       params={params}
-      key="api-rules"
+      key="apirules"
       nameForCreate="ApiRulesCreate"
     />
   );
