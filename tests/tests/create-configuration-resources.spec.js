@@ -88,16 +88,6 @@ context('Test configuration resources', () => {
       .should('be.visible');
   });
 
-  it('Create a Roles list view', () => {
-    cy.getLeftNav()
-      .find('[data-testid=roles_roles]')
-      .click();
-
-    cy.getIframeBody()
-      .contains('h3', 'Roles')
-      .should('be.visible');
-  });
-
   it('Create a Role Binding', () => {
     cy.getLeftNav()
       .find('[data-testid=role-bindings_rolebindings]')
