@@ -204,7 +204,7 @@ export function CertificatesCreate({ onChange, formElementRef, namespace }) {
       />
       <ResourceForm.FormField
         advanced
-        label={t('certificates.renew')}
+        label={t('certificates.trigger-renew')}
         tooltipContent={t('certificates.tooltips.renew')}
         propertyPath="$.spec.renew"
         input={Inputs.Switch}
