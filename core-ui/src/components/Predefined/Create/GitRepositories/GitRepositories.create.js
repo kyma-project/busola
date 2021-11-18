@@ -103,7 +103,7 @@ function GitRepositoriesCreate({
     >
       <K8sNameField
         propertyPath="$.metadata.name"
-        disabled={!!initialRepository}
+        readOnly={!!initialRepository}
         kind={t('git-repositories.name_singular')}
         setValue={name => {
           jp.value(repository, '$.metadata.name', name);

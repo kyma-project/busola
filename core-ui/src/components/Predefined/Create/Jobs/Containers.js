@@ -12,6 +12,7 @@ export function SingleContainerForm({
   containers,
   setContainers,
   isAdvanced,
+  readOnly,
 }) {
   const { t } = useTranslation();
 
@@ -29,6 +30,7 @@ export function SingleContainerForm({
       <ResourceForm.K8sNameField
         propertyPath="$.name"
         kind={t('jobs.create-modal.container')}
+        readOnly={readOnly}
       />
       <ResourceForm.FormField
         required
@@ -36,6 +38,7 @@ export function SingleContainerForm({
         label={t('jobs.create-modal.labels.docker-image')}
         input={Inputs.Text}
         placeholder={t('jobs.create-modal.placeholders.docker-image')}
+        readOnly={readOnly}
       />
       <ResourceForm.FormField
         required
@@ -45,6 +48,7 @@ export function SingleContainerForm({
         label={t('jobs.create-modal.labels.image-pull-policy')}
         input={Inputs.Dropdown}
         options={imagePullPolicyOptions}
+        readOnly={readOnly}
       />
       <ResourceForm.TextArrayInput
         required
@@ -52,6 +56,7 @@ export function SingleContainerForm({
         title={t('jobs.create-modal.labels.command')}
         placeholder={t('jobs.create-modal.placeholders.command')}
         tooltipContent={t('jobs.create-modal.tooltips.command')}
+        readOnly={readOnly}
       />
       <ResourceForm.TextArrayInput
         required
@@ -60,6 +65,7 @@ export function SingleContainerForm({
         title={t('jobs.create-modal.labels.args')}
         placeholder={t('jobs.create-modal.placeholders.args')}
         tooltipContent={t('jobs.create-modal.tooltips.args')}
+        readOnly={readOnly}
       />
     </ResourceFormWrapper>
   );
@@ -68,6 +74,7 @@ export function SingleContainerForm({
 export function SingleContainerInput({
   value: containers,
   setValue: setContainers,
+  readOnly,
 }) {
   const { t } = useTranslation();
 
@@ -80,6 +87,7 @@ export function SingleContainerInput({
         container={containers?.[0]}
         containers={containers}
         setContainers={setContainers}
+        readOnly={readOnly}
       />
     </ResourceForm.CollapsibleSection>
   );
