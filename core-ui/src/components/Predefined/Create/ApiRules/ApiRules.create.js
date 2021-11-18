@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
+import * as _ from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 
@@ -16,10 +17,12 @@ import {
   validateApiRule,
 } from './helpers';
 
-export function ApiRulesCreate({
+function ApiRulesCreate({
   formElementRef,
   namespace,
   onChange,
+  resource: initialApiRule,
+  resourceUrl,
   setCustomValid,
   serviceName,
 }) {
@@ -29,7 +32,9 @@ export function ApiRulesCreate({
   const gatewaysQuery = useGatewaysQuery(namespace);
 
   const [subdomain, setSubdomain] = useState('');
-  const [apiRule, setApiRule] = useState(createApiRuleTemplate(namespace));
+  const [apiRule, setApiRule] = useState(
+    _.cloneDeep(initialApiRule) || createApiRuleTemplate(namespace),
+  );
 
   // validation
   useEffect(() => {
@@ -73,20 +78,31 @@ export function ApiRulesCreate({
     setApiRule({ ...apiRule });
   };
 
+  const afterCreatedFn = async defaultAfterCreatedFn => {
+    if (!serviceName) {
+      defaultAfterCreatedFn();
+    }
+  };
+
   return (
     <ResourceForm
       pluralKind="apirules"
       singularName={t(`api-rules.name_singular`)}
       resource={apiRule}
+      initialResource={initialApiRule}
       setResource={setApiRule}
       onChange={onChange}
       formElementRef={formElementRef}
-      createUrl={`/apis/gateway.kyma-project.io/v1alpha1/namespaces/${namespace}/apirules`}
+      createUrl={resourceUrl}
+      afterCreatedFn={afterCreatedFn}
+      setCustomValid={setCustomValid}
     >
       <ResourceForm.K8sNameField
         propertyPath="$.metadata.name"
         kind={t('api-rules.name_singular')}
         setValue={handleNameChange}
+        readOnly={!!initialApiRule}
+        validate={value => !!value}
       />
       <ServiceDropdown
         propertyPath="$.spec.service"
@@ -136,3 +152,6 @@ export function ApiRulesCreate({
     </ResourceForm>
   );
 }
+
+ApiRulesCreate.allowEdit = true;
+export { ApiRulesCreate };
