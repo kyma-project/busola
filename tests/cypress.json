@@ -23,6 +23,7 @@
     "smoke-tests.spec.js",
     "test-jobs.spec.js",
     "test-crds.spec.js",
+    "test-cron-jobs.spec.js",
     "test-git-repositories.spec.js",
     "test-gateways.spec.js",
     "test-oauth2.spec.js",
