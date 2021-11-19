@@ -25,8 +25,9 @@ export function GenericRoleCreate({
   );
 
   // dictionary of pairs (apiGroup: resources in that apiGroup)
+  const apiRules = role?.rules?.flatMap(r => r.apiGroups);
   const resourcesCache = useResourcesForApiGroups(
-    role?.rules?.flatMap(r => r.apiGroups),
+    apiRules ? [...new Set(apiRules)] : [],
   );
 
   useEffect(() => {
