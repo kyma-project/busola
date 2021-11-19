@@ -31,7 +31,7 @@ context('Test Daemon Sets', () => {
       .click();
   });
 
-  it(' Inspect Daemon Sets list', () => {
+  it('Inspect Daemon Sets list', () => {
     cy.getLeftNav()
       .contains('Workloads')
       .click();
