@@ -4,8 +4,6 @@ context('Test StatefulSets', () => {
   before(() => {
     cy.loginAndSelectCluster();
 
-    cy.wait(2000);
-
     cy.get('[data-testid="luigi-topnav-profile-btn"]').click();
     cy.contains('Preferences').click();
 
