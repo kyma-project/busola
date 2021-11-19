@@ -68,7 +68,7 @@ function SecretsCreate({
       setCustomValid={setCustomValid}
     >
       <K8sNameField
-        disabled={!!initialSecret}
+        readOnly={!!initialSecret}
         propertyPath="$.metadata.name"
         kind={t('secrets.name_singular')}
         setValue={name => {
