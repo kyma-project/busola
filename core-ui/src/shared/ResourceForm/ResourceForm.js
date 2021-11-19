@@ -75,7 +75,7 @@ export function ResourceFormWrapper({
       const value =
         typeof child.props.value !== 'undefined'
           ? child.props.value
-          : jp.value(resource, child.props.propertyPath) ||
+          : jp.value(resource, child.props.propertyPath) ??
             child.props.defaultValue;
 
       const setValue = child.props.setValue
