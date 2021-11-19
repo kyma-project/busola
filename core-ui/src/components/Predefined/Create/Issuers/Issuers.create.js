@@ -16,15 +16,19 @@ import { Checkbox } from 'fundamental-react';
 import * as jp from 'jsonpath';
 import * as Inputs from 'shared/ResourceForm/components/Inputs';
 
-export function IssuersCreate({
+function IssuersCreate({
   onChange,
   formElementRef,
   namespace,
+  resource: initialIssuer,
+  resourceUrl,
   setCustomValid,
 }) {
   const { t } = useTranslation();
 
-  const [issuer, setIssuer] = useState(createIssuerTemplate(namespace));
+  const [issuer, setIssuer] = useState(
+    initialIssuer || createIssuerTemplate(namespace),
+  );
   const [issuerType, setIssuerType] = useState('');
 
   React.useEffect(() => {
@@ -245,14 +249,16 @@ export function IssuersCreate({
       pluralKind="issuers"
       singularName={t('issuers.name_singular')}
       resource={issuer}
+      initialResource={initialIssuer}
       setResource={setIssuer}
       onChange={onChange}
       formElementRef={formElementRef}
       presets={createPresets(namespace, t)}
-      createUrl={`/apis/cert.gardener.cloud/v1alpha1/namespaces/${namespace}/issuers/`}
+      createUrl={resourceUrl}
     >
       <ResourceForm.K8sNameField
         propertyPath="$.metadata.name"
+        readOnly={!!initialIssuer}
         kind={t('issuers.name_singular')}
         setValue={name => {
           jp.value(issuer, '$.metadata.name', name);
@@ -315,3 +321,5 @@ export function IssuersCreate({
     </ResourceForm>
   );
 }
+IssuersCreate.allowEdit = true;
+export { IssuersCreate };
