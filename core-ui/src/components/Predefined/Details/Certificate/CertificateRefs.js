@@ -27,8 +27,7 @@ const Tokens = ({ tokens }) => (
 
 export function CertificateRefs(certificate) {
   const { t } = useTranslation();
-  // oauthclientspecpanel
-  console.log(certificate);
+
   return (
     <LayoutPanel className="fd-margin--md certificate-refs-panel">
       <LayoutPanel.Header>
@@ -39,16 +38,16 @@ export function CertificateRefs(certificate) {
         <IssuerLink issuerRef={certificate.status?.issuerRef} />
       </FormItem>
       <FormItem>
-        <FormLabel>{t('certificates.secret')}</FormLabel>
+        <FormLabel>{t('secrets.name_singular')}</FormLabel>
         <SecretLink secretRef={certificate.spec?.secretRef} />
       </FormItem>
       <FormItem>
         <FormLabel>{t('certificates.csr')}</FormLabel>
-        {certificate.spec?.csr ? certificate.spec.csr : '-'}
+        {certificate.spec?.csr ? certificate.spec.csr : EMPTY_TEXT_PLACEHOLDER}
       </FormItem>
       {certificate.metadata?.annotations ? (
         <FormItem>
-          <FormLabel>{t('certificates.annotations')}</FormLabel>
+          <FormLabel>{t('common.headers.annotations')}</FormLabel>
           <Labels
             labels={certificate.metadata?.annotations}
             shortenLongLabels
@@ -57,7 +56,7 @@ export function CertificateRefs(certificate) {
       ) : null}
       <FormItem>
         <FormLabel>{t('certificates.renew')}</FormLabel>
-        {certificate.spec?.renew ? 'yes' : '-'}
+        {certificate.spec?.renew ? t('common.yes') : EMPTY_TEXT_PLACEHOLDER}
       </FormItem>
       {certificate.spec?.dnsNames ? (
         <FormItem>

@@ -41,6 +41,29 @@ context('Add and remove a certificate', () => {
       .type(CERT_COMMON_NAME);
 
     cy.getIframeBody()
+      .find('[role=dialog]')
+      .contains('button', 'Create')
+      .click({ force: true });
+
+    cy.getIframeBody()
+      .contains('h3', CERT_NAME)
+      .should('be.visible');
+  });
+
+  it('Edits a certificate', () => {
+    cy.getLeftNav()
+      .contains('Certificates')
+      .click();
+
+    cy.getIframeBody()
+      .contains('a', CERT_NAME)
+      .click();
+
+    cy.getIframeBody()
+      .contains('button', 'Edit')
+      .click();
+
+    cy.getIframeBody()
       .contains('Advanced')
       .click();
 
@@ -59,12 +82,8 @@ context('Add and remove a certificate', () => {
 
     cy.getIframeBody()
       .find('[role=dialog]')
-      .contains('button', 'Create')
+      .contains('button', 'Update')
       .click({ force: true });
-
-    cy.getIframeBody()
-      .contains('h3', CERT_NAME)
-      .should('be.visible');
 
     cy.getIframeBody()
       .contains(`${ANNOTATION_KEY}=${ANNOTATION_VALUE}`)
@@ -75,8 +94,6 @@ context('Add and remove a certificate', () => {
     cy.getLeftNav()
       .contains('Certificates')
       .click();
-
-    cy.url().should('match', /certificates$/);
 
     cy.getIframeBody()
       .contains('a', CERT_NAME)

@@ -188,7 +188,6 @@ catalog:
   subtitle: Enrich your experience with additional services that are installed outside the cluster.
   title: Service Catalog
 certificates:
-  annotations: Annotations
   common-name: Common Name
   create:
     messages:
@@ -212,7 +211,6 @@ certificates:
     secret-name: Requested Secret name
   refs: References
   renew: Renew
-  secret: Secret
   secret-name: Secret name
   secret-ref: Secret to use
   state: Status
@@ -227,7 +225,6 @@ certificates:
     secret-name: Name of the Secret object to use for storing the certificate.
     secret-ref: Reference of the existing Secret object to use for storing the certificate.
     with-csr: Enable to use a Certificate Signing Request instead of providing domain names manually.
-  trigger-renew: Trigger a renewal
   with-csr: Use a CSR
 cluster-addons:
   description: <0>Cluster Addons Configuration</0> defines cluster-wide addons that provide all information required to convert Helm charts into Service Classes in Service Catalog.
@@ -411,6 +408,7 @@ common:
     secret-ref-name: Unique name within a Namespace to refer to a Secret resource.
     secret-ref-namespace: Namespace defines the space within which the secret name must be unique.
     value: Value must start and end with an alphanumeric character, can contain '-', '_' or '.'
+  'yes': 'yes'
 components:
   dropdown:
     empty-list: No resources available
