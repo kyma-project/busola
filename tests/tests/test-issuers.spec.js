@@ -23,7 +23,8 @@ context('Test Issuers', () => {
       .type(SECRET_NAME);
 
     cy.getIframeBody()
-      .contains('.fd-dialog__content button', 'Create')
+      .find('[role=dialog]')
+      .contains('button', 'Create')
       .click();
 
     cy.url().should('match', new RegExp(`/secrets/details/${SECRET_NAME}$`));
@@ -71,7 +72,8 @@ context('Test Issuers', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('.fd-dialog__content button', 'Create')
+      .find('[role=dialog]')
+      .contains('button', 'Create')
       .click();
 
     cy.url().should('match', new RegExp(`/issuers/details/${ISSUER_NAME}$`));
@@ -135,7 +137,7 @@ context('Test Issuers', () => {
     cy.url().should('match', /issuers$/);
 
     cy.getIframeBody()
-      .contains('.fd-table__row', ISSUER_NAME)
+      .contains('tr', ISSUER_NAME)
       .find('[aria-label="Delete"]')
       .click();
 
