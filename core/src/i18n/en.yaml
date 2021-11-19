@@ -613,7 +613,7 @@ dnsentries:
     created: DNS Entry created
   name_singular: DNS Entry
   placeholders:
-    dns-name: Enter the DNS Name.
+    dns-name: Select the DNS Name.
     target-a: Enter the A record target.
     target-cname: Enter the CNAME record target.
     ttl: Enter the time to live.
