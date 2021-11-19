@@ -7,9 +7,7 @@ const DAEMONSET_NAME = 'apiserver-proxy';
 context('Test Daemon Sets', () => {
   before(() => {
     cy.loginAndSelectCluster();
-  });
 
-  it('Change system preferences', () => {
     cy.get('[data-testid="luigi-topnav-profile-btn"]').click();
     cy.contains('Preferences').click();
 
