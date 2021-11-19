@@ -75,7 +75,7 @@ export function DNSEntriesCreate({
         id="dns-name-ref"
         domain={dnsEntry?.spec.dnsName}
         onChange={domain => {
-          jp.value(dnsEntry, '$.spec.dnsName', domain);
+          jp.value(dnsEntry, '$.spec.dnsName', domain.key);
           setDnsEntry({ ...dnsEntry });
         }}
       />
@@ -111,7 +111,8 @@ export function DNSEntriesCreate({
       />
 
       <TextRef
-        advanced={true}
+        advanced
+        required={false}
         text={dnsEntry?.spec.text}
         setText={text => {
           jp.value(dnsEntry, '$.spec.text', text);

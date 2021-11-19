@@ -100,10 +100,18 @@ const getExternalIPs = loadBalancer => {
   }
 };
 
+let memoizedServices = null;
 export function TargetsRef({ dnsEntry, setTargets, setDnsEntry }) {
   const { t } = useTranslation();
-  const { data: services, loading } = useGetList()(`/api/v1/services`);
-  if (loading) return <Spinner />;
+
+  const { data, loading } = useGetList()(`/api/v1/services`);
+  useEffect(() => {
+    if (data) {
+      memoizedServices = data;
+    }
+  }, [data]);
+  const services = memoizedServices || data;
+  if (loading && !services) return <Spinner />;
 
   const targets = dnsEntry?.spec.targets || [];
   const loadBalancers = services?.filter(
