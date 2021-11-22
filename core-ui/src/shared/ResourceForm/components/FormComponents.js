@@ -39,9 +39,7 @@ export function CollapsibleSection({
   required,
   tooltipContent,
 }) {
-  const [open, setOpen] = useState(
-    defaultOpen === undefined ? !isAdvanced : defaultOpen,
-  );
+  const [open, setOpen] = useState(defaultOpen);
   const actionsRef = useRef();
   const iconGlyph = open ? 'navigation-down-arrow' : 'navigation-right-arrow';
 
@@ -161,7 +159,7 @@ export function FormField({
 export function K8sNameField({ kind, value, setValue, className, ...props }) {
   const { t, i18n } = useTranslation();
 
-  const { isAdvanced, propertyPath, ...inputProps } = props;
+  const { isAdvanced, propertyPath, validate, ...inputProps } = props;
 
   return (
     <FormField
