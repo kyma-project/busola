@@ -3,7 +3,7 @@ import 'cypress-file-upload';
 
 const CRON_JOB_NAME = 'test-cron-job';
 
-context('Create a Cron Job', () => {
+context('Test Cron Job', () => {
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();

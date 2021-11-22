@@ -208,6 +208,7 @@ export function MultiInput({
   readOnly,
   ...props
 }) {
+  const { t } = useTranslation();
   const valueRef = useRef(null); // for deep comparison
   const [internalValue, setInternalValue] = useState([]);
   const [keys, setKeys] = useState(1);
@@ -324,6 +325,7 @@ export function MultiInput({
                 glyph="delete"
                 type="negative"
                 onClick={() => removeValue(index)}
+                ariaLabel={t('common.buttons.delete')}
               />
             </li>
           ))}
