@@ -3,7 +3,7 @@ import 'cypress-file-upload';
 
 const CLIENT_NAME = 'test-oauth2-client';
 
-context('Create a OAuth2 Client', () => {
+context('Test OAuth2 Client', () => {
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();

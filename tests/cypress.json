@@ -22,6 +22,7 @@
     "in-cluster-eventing.spec.js",
     "test-cluster-overview.spec.js",
     "smoke-tests.spec.js",
+    "test-cluster-role-bindings.spec.js",
     "test-jobs.spec.js",
     "test-replica-sets.spec.js",
     "test-crds.spec.js",
