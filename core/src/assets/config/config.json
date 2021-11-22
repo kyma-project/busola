@@ -133,7 +133,7 @@
               "path": "apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/kiali"
             },
             {
-              "label": "Tracing",
+              "label": "Jaeger",
               "path": "apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/tracing"
             }
           ]
