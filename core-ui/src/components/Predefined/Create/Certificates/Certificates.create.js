@@ -9,14 +9,26 @@ import { base64Decode, base64Encode } from 'shared/helpers';
 import { IssuerRef } from 'shared/components/ResourceRef/IssuerRef';
 import { SecretRef } from 'shared/components/ResourceRef/SecretRef';
 
+import { cloneDeep } from 'lodash';
+
 import { createTemplate } from './templates';
 
 import './CreateCertificate.scss';
 
-export function CertificatesCreate({ onChange, formElementRef, namespace }) {
+const CertificatesCreate = ({
+  onChange,
+  formElementRef,
+  namespace,
+  resource: initialCertificate,
+  resourceUrl,
+}) => {
   const { t } = useTranslation();
 
-  const [certificate, setCertificate] = useState(createTemplate(namespace));
+  const [certificate, setCertificate] = useState(
+    initialCertificate
+      ? cloneDeep(initialCertificate)
+      : createTemplate(namespace),
+  );
   const [withCSR, setWithCSR] = useState(false);
   const [existingSecret, setExistingSecret] = useState(false);
   const [csrIsEncoded, setCsrIsEncoded] = useState(false);
@@ -83,11 +95,13 @@ export function CertificatesCreate({ onChange, formElementRef, namespace }) {
       setResource={setCertificate}
       onChange={onChange}
       formElementRef={formElementRef}
-      createUrl={`/apis/cert.gardener.cloud/v1alpha1/namespaces/${namespace}/certificates/`}
+      initialResource={initialCertificate}
+      createUrl={resourceUrl}
     >
       <ResourceForm.K8sNameField
         propertyPath="$.metadata.name"
         kind={t('certificates.name_singular')}
+        data-cy="cert-name"
         setValue={name => {
           jp.value(certificate, '$.metadata.name', name);
           jp.value(
@@ -97,6 +111,7 @@ export function CertificatesCreate({ onChange, formElementRef, namespace }) {
           );
           setCertificate({ ...certificate });
         }}
+        readOnly={!!initialCertificate}
       />
       <ResourceForm.KeyValueField
         advanced
@@ -242,4 +257,7 @@ export function CertificatesCreate({ onChange, formElementRef, namespace }) {
       )}
     </ResourceForm>
   );
-}
+};
+
+CertificatesCreate.allowEdit = true;
+export { CertificatesCreate };
