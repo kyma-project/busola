@@ -15,6 +15,7 @@ const ServiceAccountsCreate = ({
   onChange,
   setCustomValid,
   resource: initialServiceAccounts,
+  resourceUrl,
 }) => {
   const { t } = useTranslation();
 
@@ -23,6 +24,7 @@ const ServiceAccountsCreate = ({
       createServiceAccountTemplate(namespace),
   );
   const [imagePullSecrets, setImagePullSecrets] = useState([]);
+  const [secrets, setSecrets] = useState([]);
 
   React.useEffect(() => {
     setCustomValid(validateServiceAccount(serviceAccount));
@@ -40,7 +42,7 @@ const ServiceAccountsCreate = ({
     setServiceAccount({ ...serviceAccount });
   };
 
-  const { data: secrets } = useGetList()(
+  const { data: data } = useGetList()(
     `/api/v1/namespaces/${namespace}/secrets`,
   );
 
@@ -52,7 +54,8 @@ const ServiceAccountsCreate = ({
       setResource={setServiceAccount}
       onChange={onChange}
       formElementRef={formElementRef}
-      createUrl={`/api/v1/namespaces/${namespace}/serviceaccounts/`}
+      createUrl={resourceUrl}
+      initialResource={initialServiceAccounts}
     >
       <ResourceForm.K8sNameField
         propertyPath="$.metadata.name"
@@ -74,24 +77,24 @@ const ServiceAccountsCreate = ({
         title={t('common.headers.annotations')}
       />
 
-      <ResourceForm.ItemArray
+      <ResourceForm.ComboboxArrayInput
         advanced
         propertyPath="$.secrets"
-        listTitle={t('service-accounts.headers.secrets')}
-        nameSingular={t('service-accounts.headers.secret')}
+        title={t('service-accounts.headers.secrets')}
         tooltipContent={t('service-accounts.create-modal.tooltips.secrets')}
-        entryTitle={subject => subject?.name}
-        allowEmpty={true}
-        itemRenderer={({ item, values, setValues, index }) => (
-          <SingleSecretForm
-            secret={item}
-            secrets={values}
-            setSecrets={setValues}
-            index={index}
-            namespace={namespace}
-          />
-        )}
-        newResourceTemplateFn={() => newSecret(namespace)}
+        setValue={secrets => {
+          setSecrets([...secrets]);
+          const newSecrets = (secrets || []).map(secrets => {
+            return { name: secrets };
+          });
+          jp.value(serviceAccount, '$.secrets', newSecrets);
+          setServiceAccount({ ...serviceAccount });
+        }}
+        toInternal={values => (values || []).map(value => value?.name)}
+        options={(data || []).map(i => ({
+          key: i.metadata.name,
+          text: i.metadata.name,
+        }))}
       />
       <ResourceForm.ComboboxArrayInput
         advanced
@@ -99,10 +102,10 @@ const ServiceAccountsCreate = ({
         tooltipContent={t(
           'service-accounts.create-modal.tooltips.image-pull-secrets',
         )}
-        // propertyPath="$.imagePullSecrets"
-        value={imagePullSecrets}
+        propertyPath="$.imagePullSecrets"
         setValue={value => handleImageChange(value)}
-        options={(secrets || []).map(i => ({
+        toInternal={values => (values || []).map(value => value?.name)}
+        options={(data || []).map(i => ({
           key: i.metadata.name,
           text: i.metadata.name,
         }))}
