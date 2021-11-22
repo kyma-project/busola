@@ -34,12 +34,11 @@ export function useResourcesForApiGroups(apiGroups = []) {
   useEffect(() => {
     if (previousApiGroupsList.current.length === apiGroups.length) return;
     previousApiGroupsList.current = apiGroups;
+    const cacheObject = apiGroups.reduce((a, v) => ({ ...a, [v]: [] }), {});
+    setCache(cacheObject);
     for (const apiGroup of apiGroups) {
-      if (!cache[apiGroup]) {
-        setCache({ ...cache, [apiGroup]: [] });
-        for (const groupVersion of findMatchingGroupVersions(apiGroup)) {
-          fetchApiGroup(groupVersion, apiGroup);
-        }
+      for (const groupVersion of findMatchingGroupVersions(apiGroup)) {
+        fetchApiGroup(groupVersion, apiGroup);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
