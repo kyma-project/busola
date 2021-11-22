@@ -7,17 +7,20 @@ import { createServiceAccountTemplate, newSecret } from './templates';
 import { SingleSecretForm } from './SecretForm';
 import { validateServiceAccount } from './helpers';
 import { Switch } from 'fundamental-react';
+import _ from 'lodash';
 
-export const ServiceAccountsCreate = ({
+const ServiceAccountsCreate = ({
   formElementRef,
   namespace,
   onChange,
   setCustomValid,
+  resource: initialServiceAccounts,
 }) => {
   const { t } = useTranslation();
 
   const [serviceAccount, setServiceAccount] = useState(
-    createServiceAccountTemplate(namespace),
+    _.cloneDeep(initialServiceAccounts) ||
+      createServiceAccountTemplate(namespace),
   );
   const [imagePullSecrets, setImagePullSecrets] = useState([]);
 
@@ -58,6 +61,7 @@ export const ServiceAccountsCreate = ({
           jp.value(serviceAccount, '$.metadata.name', name);
           setServiceAccount({ ...serviceAccount });
         }}
+        readOnly={!!initialServiceAccounts}
       />
       <ResourceForm.KeyValueField
         advanced
@@ -131,3 +135,5 @@ export const ServiceAccountsCreate = ({
     </ResourceForm>
   );
 };
+ServiceAccountsCreate.allowEdit = true;
+export { ServiceAccountsCreate };
