@@ -43,7 +43,7 @@ context('Add and remove a certificate', () => {
     cy.getIframeBody()
       .find('[role=dialog]')
       .contains('button', 'Create')
-      .click({ force: true });
+      .click();
 
     cy.getIframeBody()
       .contains('h3', CERT_NAME)
@@ -83,7 +83,7 @@ context('Add and remove a certificate', () => {
     cy.getIframeBody()
       .find('[role=dialog]')
       .contains('button', 'Update')
-      .click({ force: true });
+      .click();
 
     cy.getIframeBody()
       .contains(`${ANNOTATION_KEY}=${ANNOTATION_VALUE}`)
