@@ -1,38 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import {
-  LayoutPanel,
-  Token,
-  FormItem,
-  FormLabel,
-  Link,
-} from 'fundamental-react';
-import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+import { LayoutPanel, FormItem, FormLabel, Link } from 'fundamental-react';
 import LuigiClient from '@luigi-project/client';
+import { Tokens } from 'shared/components/Tokens';
 import { useTranslation } from 'react-i18next';
 
 import './OAuthClientSpecPanel.scss';
 
 OAuthClientSpecPanel.propTypes = { spec: PropTypes.object.isRequired };
-
-const Tokens = ({ tokens }) => (
-  <div>
-    {tokens.length
-      ? tokens.map(scope => (
-          <Token
-            key={scope}
-            style={{ marginTop: '4px' }}
-            buttonLabel=""
-            className="y-fd-token y-fd-token--no-button y-fd-token--gap fd-margin-end--tiny"
-            readOnly={true}
-          >
-            {scope}
-          </Token>
-        ))
-      : EMPTY_TEXT_PLACEHOLDER}
-  </div>
-);
 
 export default function OAuthClientSpecPanel({ spec }) {
   const { t } = useTranslation();
