@@ -25,7 +25,7 @@ function SecretsCreate({
 }) {
   const { t } = useTranslation();
   const [secret, setSecret] = useState(
-    { ...initialSecret } || createSecretTemplate(namespaceId),
+    initialSecret ? { ...initialSecret } : createSecretTemplate(namespaceId),
   );
   const [lockedKeys, setLockedKeys] = useState([]);
 

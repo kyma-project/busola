@@ -107,7 +107,7 @@ export function AdvancedContainersView({
               setOpen(true);
             }}
           >
-            Add Container
+            {t('deployments.create-modal.advanced.add-container')}
           </Button>
         )}
       >
