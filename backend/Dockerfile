@@ -1,5 +1,5 @@
 # ---- Base Alpine with Node ----
-FROM alpine:3.14.2 AS base
+FROM alpine:3.14.3 AS base
 # install node
 RUN apk add --update nodejs npm openssl nghttp2
 
