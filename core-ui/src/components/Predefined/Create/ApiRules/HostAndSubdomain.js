@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FormField } from 'shared/ResourceForm/components/FormComponents';
-import * as Inputs from 'shared/ResourceForm/components/Inputs';
+import { ResourceForm } from 'shared/ResourceForm';
+import * as Inputs from 'shared/ResourceForm/inputs';
 import { findGateway, getGatewayHosts, hasWildcard } from './helpers';
 
 function getSelectedHost(host, hosts) {
@@ -47,7 +47,7 @@ export function HostAndSubdomain({
 
   return (
     <>
-      <FormField
+      <ResourceForm.FormField
         advanced
         required
         label={t('api-rules.form.host')}
@@ -64,7 +64,7 @@ export function HostAndSubdomain({
         loading={gatewaysQuery.loading}
         error={gatewaysQuery.error}
       />
-      <FormField
+      <ResourceForm.FormField
         advanced
         required
         label={t('api-rules.form.subdomain')}

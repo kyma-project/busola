@@ -4,9 +4,9 @@ import { K8sNameInput } from 'react-shared';
 
 import { Button, MessageStrip } from 'fundamental-react';
 
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
-import * as Inputs from 'shared/ResourceForm/components/Inputs';
-import { RuntimeResources } from 'shared/ResourceForm/components/RuntimeResources';
+import { ResourceForm } from 'shared/ResourceForm';
+import * as Inputs from 'shared/ResourceForm/inputs';
+import { RuntimeResources } from 'shared/ResourceForm/fields';
 
 import './Containers.scss';
 

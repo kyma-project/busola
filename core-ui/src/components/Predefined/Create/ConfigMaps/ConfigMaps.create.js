@@ -3,12 +3,12 @@ import { useMicrofrontendContext } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
+import { ResourceForm } from 'shared/ResourceForm';
 import {
   K8sNameField,
   KeyValueField,
   DataField,
-} from 'shared/ResourceForm/components/FormComponents';
+} from 'shared/ResourceForm/fields';
 
 import { createConfigMapTemplate, createPresets } from './helpers';
 

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Wizard, MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
+import { ResourceForm } from 'shared/ResourceForm';
 import { useNotification, useMicrofrontendContext } from 'react-shared';
 
 import { hasKubeconfigAuth, getUser, getContext, addCluster } from '../shared';

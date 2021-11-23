@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
+import { ResourceForm } from 'shared/ResourceForm';
+import {
+  K8sNameField,
+  KeyValueField,
+  ItemArray,
+} from 'shared/ResourceForm/fields';
 import * as jp from 'jsonpath';
 import { createGatewayTemplate, createPresets, newServer } from './templates';
 import { SingleServerForm, SingleServerInput } from './Forms/ServersForm';
@@ -44,8 +49,8 @@ function GatewaysCreate({
     };
     return (
       <>
-        <ResourceForm.KeyValueField simple defaultOpen {...commonProps} />
-        <ResourceForm.KeyValueField advanced {...commonProps} />
+        <KeyValueField simple defaultOpen {...commonProps} />
+        <KeyValueField advanced {...commonProps} />
       </>
     );
   };
@@ -62,19 +67,19 @@ function GatewaysCreate({
       presets={createPresets(namespace, t)}
       createUrl={resourceUrl}
     >
-      <ResourceForm.K8sNameField
+      <K8sNameField
         propertyPath="$.metadata.name"
         kind={t('gateways.name_singular')}
         setValue={handleNameChange}
         className="fd-margin-bottom--sm"
         readOnly={!!initialGateway}
       />
-      <ResourceForm.KeyValueField
+      <KeyValueField
         advanced
         propertyPath="$.metadata.labels"
         title={t('common.headers.labels')}
       />
-      <ResourceForm.KeyValueField
+      <KeyValueField
         advanced
         propertyPath="$.metadata.annotations"
         title={t('common.headers.annotations')}
@@ -87,7 +92,7 @@ function GatewaysCreate({
           {t('gateways.create-modal.at-least-one-server-required')}
         </MessageStrip>
       )}
-      <ResourceForm.ItemArray
+      <ItemArray
         advanced
         propertyPath="$.spec.servers"
         listTitle={t('gateways.create-modal.simple.servers')}

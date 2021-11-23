@@ -3,8 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { useGet } from 'react-shared';
 import * as jp from 'jsonpath';
 
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
-import * as Inputs from 'shared/ResourceForm/components/Inputs';
+import { ResourceForm } from 'shared/ResourceForm';
+import * as Inputs from 'shared/ResourceForm/inputs';
+import {
+  K8sNameField,
+  KeyValueField,
+  TextArrayInput,
+} from 'shared/ResourceForm/fields';
 import { DNSNameRef } from './DNSNameRef';
 import { TargetsRef } from './TargetsRef';
 import {
@@ -55,7 +60,7 @@ export function DNSEntriesCreate({
       formElementRef={formElementRef}
       createUrl={`/apis/dns.gardener.cloud/v1alpha1/namespaces/${namespace}/dnsentries/`}
     >
-      <ResourceForm.K8sNameField
+      <K8sNameField
         propertyPath="$.metadata.name"
         kind={t('dnsentries.name_singular')}
         setValue={name => {
@@ -79,14 +84,14 @@ export function DNSEntriesCreate({
         placeholder={t('dnsentries.placeholders.ttl')}
       />
 
-      <ResourceForm.KeyValueField
+      <KeyValueField
         advanced
         propertyPath="$.metadata.labels"
         title={t('common.headers.labels')}
         className="fd-margin-top--sm"
       />
 
-      <ResourceForm.KeyValueField
+      <KeyValueField
         advanced
         propertyPath="$.metadata.annotations"
         title={t('common.headers.annotations')}
@@ -94,7 +99,7 @@ export function DNSEntriesCreate({
 
       <TargetsRef />
 
-      <ResourceForm.TextArrayInput
+      <TextArrayInput
         advanced
         propertyPath="$.spec.text"
         title={t('dnsentries.labels.text')}

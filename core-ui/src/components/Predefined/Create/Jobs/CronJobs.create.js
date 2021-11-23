@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import * as jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
 
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
+import { ResourceForm } from 'shared/ResourceForm';
+import { K8sNameField, KeyValueField } from 'shared/ResourceForm/fields';
 
 import { createCronJobTemplate, createCronJobPresets } from './templates';
 import { CronJobSpecSection } from './SpecSection';
@@ -51,7 +52,7 @@ function CronJobsCreate({
       presets={createCronJobPresets(namespace, t)}
       createUrl={resourceUrl}
     >
-      <ResourceForm.K8sNameField
+      <K8sNameField
         propertyPath="$.metadata.name"
         kind={t('cron-jobs.name_singular')}
         setValue={name => {
@@ -66,13 +67,13 @@ function CronJobsCreate({
         readOnly={!!initialCronJob}
       />
 
-      <ResourceForm.KeyValueField
+      <KeyValueField
         advanced
         propertyPath="$.metadata.labels"
         title={t('common.headers.labels')}
       />
 
-      <ResourceForm.KeyValueField
+      <KeyValueField
         advanced
         propertyPath="$.metadata.annotations"
         title={t('common.headers.annotations')}

@@ -2,15 +2,13 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
-import { Editor } from 'shared/ResourceForm/components/Editor';
+import { ResourceForm } from 'shared/ResourceForm';
 import {
+  Editor,
   K8sNameField,
   KeyValueField,
-  FormField,
-  CollapsibleSection,
-} from 'shared/ResourceForm/components/FormComponents';
-import * as Inputs from 'shared/ResourceForm/components/Inputs';
+} from 'shared/ResourceForm/fields';
+import * as Inputs from 'shared/ResourceForm/inputs';
 
 import { createServiceInstanceTemplate } from './helpers.js';
 
@@ -59,7 +57,7 @@ export function ServiceInstancesCreate({
         propertyPath="$.metadata.annotations"
         title={t('common.headers.annotations')}
       />
-      <FormField
+      <ResourceForm.FormField
         required
         label={t('btp-instances.offering-name')}
         propertyPath="$.spec.serviceOfferingName"
@@ -67,7 +65,7 @@ export function ServiceInstancesCreate({
         placeholder={t('btp-instances.placeholders.offering-name')}
         tooltipContent={t('btp-instances.tooltips.offering-name')}
       />
-      <FormField
+      <ResourceForm.FormField
         required
         label={t('btp-instances.plan-name')}
         propertyPath="$.spec.servicePlanName"
@@ -75,14 +73,14 @@ export function ServiceInstancesCreate({
         placeholder={t('btp-instances.placeholders.plan-name')}
         tooltipContent={t('btp-instances.tooltips.plan-name')}
       />
-      <FormField
+      <ResourceForm.FormField
         advanced
         label={t('btp-instances.external-name')}
         propertyPath="$.spec.externalName"
         input={Inputs.Text}
         placeholder={t('btp-instances.placeholders.external-name')}
       />
-      <CollapsibleSection
+      <ResourceForm.CollapsibleSection
         advanced
         title={t('btp-instances.parameters')}
         resource={serviceInstance}
@@ -95,7 +93,7 @@ export function ServiceInstancesCreate({
           invalidValueMessage={t('btp-instances.messages.params-invalid')}
           height="10em"
         />
-      </CollapsibleSection>
+      </ResourceForm.CollapsibleSection>
     </ResourceForm>
   );
 }

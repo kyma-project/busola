@@ -7,9 +7,9 @@ import {
   validateTLS,
   isTLSProtocol,
 } from './../helpers';
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
+import { ResourceForm } from 'shared/ResourceForm';
 import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSelect';
-import * as Inputs from 'shared/ResourceForm/components/Inputs';
+import * as Inputs from 'shared/ResourceForm/inputs';
 
 const setTlsValue = (server, variableName, value, servers, setServers) => {
   server.tls[variableName] = value;

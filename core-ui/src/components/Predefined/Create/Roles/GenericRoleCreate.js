@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
+import { ResourceForm } from 'shared/ResourceForm';
+import * as Inputs from 'shared/ResourceForm/inputs';
+import { KeyValueField, ItemArray } from 'shared/ResourceForm/fields';
 import { createRuleTemplate, validateRole } from './helpers';
-import * as Inputs from 'shared/ResourceForm/components/Inputs';
 import { RuleInput } from './RuleInput';
 import { RuleTitle } from './RuleTitle';
 import { useResourcesForApiGroups } from './useResourcesForApiGroups';
@@ -47,18 +48,18 @@ export function GenericRoleCreate({
         input={Inputs.Text}
         propertyPath="$.metadata.name"
       />
-      <ResourceForm.KeyValueField
+      <KeyValueField
         advanced
         propertyPath="$.metadata.labels"
         title={t('common.headers.labels')}
         className="fd-margin-top--sm"
       />
-      <ResourceForm.KeyValueField
+      <KeyValueField
         advanced
         propertyPath="$.metadata.annotations"
         title={t('common.headers.annotations')}
       />
-      <ResourceForm.ItemArray
+      <ItemArray
         propertyPath="$.rules"
         listTitle={t('roles.headers.rules')}
         entryTitle={(rule, i) => <RuleTitle rule={rule} i={i} />}

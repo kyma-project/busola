@@ -6,8 +6,7 @@ import LuigiClient from '@luigi-project/client';
 
 import { useGetList, getFeatureToggle, Spinner } from 'react-shared';
 
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
-import { CollapsibleSection } from 'shared/ResourceForm/components/FormComponents';
+import { ResourceForm } from 'shared/ResourceForm';
 
 import './ExternalResourceRef.scss';
 
@@ -157,7 +156,7 @@ export function ExternalResourceRef({
 
   if (noSection) return <>{content()}</>;
   return (
-    <CollapsibleSection
+    <ResourceForm.CollapsibleSection
       title={title}
       tooltipContent={tooltipContent}
       actions={actions}
@@ -166,6 +165,6 @@ export function ExternalResourceRef({
       required={required}
     >
       {content()}
-    </CollapsibleSection>
+    </ResourceForm.CollapsibleSection>
   );
 }

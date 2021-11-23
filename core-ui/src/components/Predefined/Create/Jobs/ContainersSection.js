@@ -3,7 +3,7 @@ import * as jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
 import { Button, MessageStrip } from 'fundamental-react';
 
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
+import { ItemArray } from 'shared/ResourceForm/fields';
 import { createContainerTemplate } from './templates';
 import { SingleContainerForm, SingleContainerInput } from './Containers';
 import './ContainersSection.scss';
@@ -12,7 +12,7 @@ export const ContainersSection = ({ readOnly, ...props }) => {
   const { t } = useTranslation();
 
   return (
-    <ResourceForm.ItemArray
+    <ItemArray
       advanced
       listTitle={t('jobs.create-modal.containers')}
       nameSingular={t('jobs.create-modal.container')}

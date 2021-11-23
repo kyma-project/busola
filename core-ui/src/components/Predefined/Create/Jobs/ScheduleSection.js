@@ -4,9 +4,8 @@ import { parse } from '@datasert/cronjs-parser';
 import { toString as cRonstrue } from 'cronstrue/i18n';
 import { MessageStrip } from 'fundamental-react';
 
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
-import { Presets } from 'shared/ResourceForm/components/Presets';
-import * as Inputs from 'shared/ResourceForm/components/Inputs';
+import { ResourceForm } from 'shared/ResourceForm';
+import * as Inputs from 'shared/ResourceForm/inputs';
 
 const presets = {
   '@yearly': '0 0 1 1 *',
@@ -122,7 +121,7 @@ export function ScheduleSection({ value: schedule, setValue: setSchedule }) {
   ];
 
   const presets = (
-    <Presets
+    <ResourceForm.Presets
       onSelect={({ value }) => setSchedule(value)}
       presets={schedulePresets}
     />
