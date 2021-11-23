@@ -4,9 +4,11 @@ import {
   Switch as FRSwitch,
   FormRadioGroup,
   Checkbox,
+  ComboboxInput as FdComboboxInput,
 } from 'fundamental-react';
 import { Dropdown as BusolaDropown } from 'react-shared';
 import { useTranslation } from 'react-i18next';
+import classnames from 'classnames';
 
 export function Text({ value, setValue, ...props }) {
   return (
@@ -102,4 +104,40 @@ export function Checkboxes({ value, setValue, options, inline, ...props }) {
 
 export function Port({ ...props }) {
   return <Number min={0} max={65535} {...props} />;
+}
+
+export function ComboboxInput({
+  value,
+  setValue,
+  defaultKey,
+  options,
+  id,
+  placeholder,
+  typedValue,
+  className,
+  _ref,
+  ...props
+}) {
+  return (
+    <div className={classnames('resource-form-combobox', className)}>
+      <FdComboboxInput
+        ariaLabel="Combobox input"
+        arrowLabel="Combobox input arrow"
+        id={id || 'combobox-input'}
+        compact
+        ref={_ref}
+        showAllEntries
+        searchFullString
+        selectionType="auto-inline"
+        onSelectionChange={(_, selected) =>
+          setValue(selected.key !== -1 ? selected.key : selected.text)
+        }
+        typedValue={value}
+        selectedKey={value}
+        placeholder={placeholder}
+        options={options}
+        {...props}
+      />
+    </div>
+  );
 }

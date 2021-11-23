@@ -1,32 +1,40 @@
 import React, { useEffect, useState } from 'react';
 import * as jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
+import { cloneDeep } from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 
 import { createJobTemplate, createJobPresets } from './templates';
 import { JobSpecSection } from './SpecSection';
 import { ContainerSection, ContainersSection } from './ContainersSection';
+import { MessageStrip } from 'fundamental-react';
 
 function isJobValid(job) {
+  const isNameValid = jp.value(job, '$.metadata.name');
+
   const containers = jp.value(job, '$.spec.template.spec.containers') || [];
 
   const areContainersValid =
     !!containers.length &&
     containers.every(c => c.command?.length > 0 || c.args?.length > 0);
 
-  return areContainersValid;
+  return isNameValid && areContainersValid;
 }
 
-export function JobsCreate({
+function JobsCreate({
   formElementRef,
   namespace,
   onChange,
   setCustomValid,
+  resource: initialJob,
+  resourceUrl,
 }) {
   const { t } = useTranslation();
 
-  const [job, setJob] = useState(createJobTemplate(namespace));
+  const [job, setJob] = useState(
+    initialJob ? cloneDeep(initialJob) : createJobTemplate(namespace),
+  );
 
   useEffect(() => {
     setCustomValid(isJobValid(job));
@@ -38,10 +46,11 @@ export function JobsCreate({
       singularName={t(`jobs.name-singular`)}
       resource={job}
       setResource={setJob}
+      initialResource={initialJob}
       onChange={onChange}
       formElementRef={formElementRef}
       presets={createJobPresets(namespace, t)}
-      createUrl={`/apis/batch/v1/namespaces/${namespace}/jobs`}
+      createUrl={resourceUrl}
     >
       <ResourceForm.K8sNameField
         propertyPath="$.metadata.name"
@@ -51,6 +60,7 @@ export function JobsCreate({
           jp.value(job, "$.metadata.labels['app.kubernetes.io/name']", name);
           setJob({ ...job });
         }}
+        readOnly={!!initialJob}
       />
 
       <ResourceForm.KeyValueField
@@ -67,12 +77,22 @@ export function JobsCreate({
 
       <JobSpecSection advanced propertyPath="$.spec" />
 
-      <ContainerSection simple propertyPath="$.spec.template.spec.containers" />
+      <ContainerSection
+        simple
+        propertyPath="$.spec.template.spec.containers"
+        readOnly={!!initialJob}
+      />
 
       <ContainersSection
         advanced
         propertyPath="$.spec.template.spec.containers"
+        readOnly={!!initialJob}
       />
+      <MessageStrip type="information" className="fd-margin-top--sm">
+        {t('jobs.create-modal.containers-readonly-in-edit')}
+      </MessageStrip>
     </ResourceForm>
   );
 }
+JobsCreate.allowEdit = true;
+export { JobsCreate };

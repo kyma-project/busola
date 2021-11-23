@@ -6,16 +6,23 @@ import { createGatewayTemplate, createPresets, newServer } from './templates';
 import { SingleServerForm, SingleServerInput } from './Forms/ServersForm';
 import { validateGateway } from './helpers';
 import { MessageStrip } from 'fundamental-react';
+import { cloneDeep } from 'lodash';
 
-export function GatewaysCreate({
+function GatewaysCreate({
   formElementRef,
   namespace,
   onChange,
   setCustomValid,
+  resource: initialGateway,
+  resourceUrl,
 }) {
   const { t } = useTranslation();
 
-  const [gateway, setGateway] = useState(createGatewayTemplate(namespace));
+  const [gateway, setGateway] = useState(
+    initialGateway
+      ? cloneDeep(initialGateway)
+      : createGatewayTemplate(namespace),
+  );
 
   React.useEffect(() => {
     setCustomValid(validateGateway(gateway));
@@ -49,16 +56,18 @@ export function GatewaysCreate({
       singularName={t(`gateways.name_singular`)}
       resource={gateway}
       setResource={setGateway}
+      initialResource={initialGateway}
       onChange={onChange}
       formElementRef={formElementRef}
       presets={createPresets(namespace, t)}
-      createUrl={`/apis/networking.istio.io/v1alpha3/namespaces/${namespace}/gateways/`}
+      createUrl={resourceUrl}
     >
       <ResourceForm.K8sNameField
         propertyPath="$.metadata.name"
         kind={t('gateways.name_singular')}
         setValue={handleNameChange}
         className="fd-margin-bottom--sm"
+        readOnly={!!initialGateway}
       />
       <ResourceForm.KeyValueField
         advanced
@@ -100,3 +109,6 @@ export function GatewaysCreate({
     </ResourceForm>
   );
 }
+
+GatewaysCreate.allowEdit = true;
+export { GatewaysCreate };

@@ -75,7 +75,7 @@ export function ResourceFormWrapper({
       const value =
         typeof child.props.value !== 'undefined'
           ? child.props.value
-          : jp.value(resource, child.props.propertyPath) ||
+          : jp.value(resource, child.props.propertyPath) ??
             child.props.defaultValue;
 
       const setValue = child.props.setValue
@@ -222,5 +222,4 @@ ResourceForm.TextArrayInput = FormComponents.TextArrayInput;
 ResourceForm.K8sNameField = FormComponents.K8sNameField;
 ResourceForm.KeyValueField = FormComponents.KeyValueField;
 ResourceForm.ItemArray = FormComponents.ItemArray;
-ResourceForm.ComboboxInput = FormComponents.ComboboxInput;
 ResourceForm.ComboboxArrayInput = FormComponents.ComboboxArrayInput;
