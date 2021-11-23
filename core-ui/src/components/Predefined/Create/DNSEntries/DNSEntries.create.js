@@ -7,7 +7,6 @@ import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/components/Inputs';
 import { DNSNameRef } from './DNSNameRef';
 import { TargetsRef } from './TargetsRef';
-import { TextRef } from './TextRef';
 import {
   createDNSEntryTemplate,
   createDNSEntryTemplateForGardener,
@@ -70,15 +69,7 @@ export function DNSEntriesCreate({
         }}
       />
 
-      <DNSNameRef
-        required
-        id="dns-name-ref"
-        domain={dnsEntry?.spec.dnsName}
-        onChange={domain => {
-          jp.value(dnsEntry, '$.spec.dnsName', domain.key);
-          setDnsEntry({ ...dnsEntry });
-        }}
-      />
+      <DNSNameRef required />
 
       <ResourceForm.FormField
         required
@@ -101,22 +92,15 @@ export function DNSEntriesCreate({
         title={t('common.headers.annotations')}
       />
 
-      <TargetsRef
-        dnsEntry={dnsEntry}
-        setDnsEntry={setDnsEntry}
-        setTargets={targets => {
-          jp.value(dnsEntry, '$.spec.targets', targets);
-          setDnsEntry({ ...dnsEntry });
-        }}
-      />
+      <TargetsRef />
 
-      <TextRef
+      <ResourceForm.TextArrayInput
         advanced
-        required={false}
-        text={dnsEntry?.spec.text}
-        setText={text => {
-          jp.value(dnsEntry, '$.spec.text', text);
-          setDnsEntry({ ...dnsEntry });
+        propertyPath="$.spec.text"
+        title={t('dnsentries.labels.text')}
+        tooltipContent={t('dnsentries.tooltips.text')}
+        inputProps={{
+          placeholder: t('dnsentries.tooltips.text'),
         }}
       />
     </ResourceForm>

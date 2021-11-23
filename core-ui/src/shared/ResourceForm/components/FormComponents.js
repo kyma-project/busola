@@ -6,7 +6,6 @@ import React, {
   useCallback,
 } from 'react';
 import {
-  ComboboxInput as FdComboboxInput,
   FormInput,
   FormLabel,
   FormTextarea,
@@ -613,40 +612,6 @@ export function ItemArray({
   );
 }
 
-export function ComboboxInput({
-  value,
-  setValue,
-  defaultKey,
-  options,
-  id,
-  placeholder,
-  typedValue,
-  className,
-  _ref,
-  ...props
-}) {
-  return (
-    <div className={classnames('resource-form-combobox', className)}>
-      <FdComboboxInput
-        ariaLabel="Combobox input"
-        arrowLabel="Combobox input arrow"
-        id={id || 'combobox-input'}
-        compact
-        ref={_ref}
-        showAllEntries
-        searchFullString
-        selectionType="auto-inline"
-        onSelectionChange={(_, selected) => setValue(selected)}
-        typedValue={typedValue}
-        selectedKey={defaultKey !== -1 ? defaultKey : ''}
-        placeholder={placeholder}
-        options={options}
-        {...props}
-      />
-    </div>
-  );
-}
-
 export function ComboboxArrayInput({
   title,
   defaultOpen,
@@ -691,7 +656,7 @@ export function ComboboxArrayInput({
       sectionTooltipContent={sectionTooltipContent}
       inputs={[
         ({ value, setValue, ref, onBlur, focus, index }) => (
-          <ComboboxInput
+          <Inputs.ComboboxInput
             key={index}
             placeholder={placeholder}
             compact
@@ -699,10 +664,7 @@ export function ComboboxArrayInput({
             selectedKey={value}
             typedValue={value || ''}
             selectionType="manual"
-            setValue={selected =>
-              // fallback on selected.text if no entry is found
-              setValue(selected.key !== -1 ? selected.key : selected.text)
-            }
+            setValue={setValue}
             options={options}
             onKeyDown={focus}
             onBlur={onBlur}
