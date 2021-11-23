@@ -1,7 +1,8 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
 
-const CRB_NAME = 'kyma-user-helm';
+const random = Math.floor(Math.random() * 9999) + 1000;
+const CRB_NAME = `test-crb-${random}`;
 const USER_NAME = 'test@kyma.eu';
 
 context('Test Cluster Role Bindings', () => {
