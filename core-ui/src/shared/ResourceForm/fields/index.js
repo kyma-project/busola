@@ -8,186 +8,20 @@ import React, {
 import {
   ComboboxInput as FdComboboxInput,
   FormInput,
-  FormLabel,
   FormTextarea,
   Button,
-  Icon,
   MessageStrip,
 } from 'fundamental-react';
-import { Tooltip, K8sNameInput } from 'react-shared';
+import { Tooltip } from 'react-shared';
 import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
 
 import { base64Decode, base64Encode, readFromFile } from 'shared/helpers';
 
-import { ResourceFormWrapper } from '../ResourceForm';
-
 import './FormComponents.scss';
 import * as Inputs from './Inputs';
 
-export function CollapsibleSection({
-  disabled = false,
-  defaultOpen = undefined,
-  isAdvanced,
-  canChangeState = true,
-  title,
-  actions,
-  children,
-  resource,
-  setResource,
-  className,
-  required,
-  tooltipContent,
-}) {
-  const [open, setOpen] = useState(
-    defaultOpen === undefined ? !isAdvanced : defaultOpen,
-  );
-  const actionsRef = useRef();
-  const iconGlyph = open ? 'navigation-down-arrow' : 'navigation-right-arrow';
-
-  useEffect(() => setOpen(defaultOpen), [defaultOpen]);
-
-  const toggle = e => {
-    // ignore events from actions
-    if (!canChangeState) return;
-    if (disabled) return;
-    if (!actionsRef.current?.contains(e.target)) setOpen(!open);
-  };
-
-  const classNames = classnames(
-    'resource-form__collapsible-section',
-    className,
-    {
-      collapsed: !open,
-      required,
-      disabled,
-    },
-  );
-
-  return (
-    <div className={classNames}>
-      <header onClick={toggle} aria-label={`expand ${title}`}>
-        {
-          <Title
-            tooltipContent={tooltipContent}
-            title={title}
-            disabled={disabled}
-            canChangeState={canChangeState}
-            iconGlyph={iconGlyph}
-          />
-        }
-        <div ref={actionsRef}>
-          {typeof actions === 'function' ? actions(setOpen) : actions}
-        </div>
-      </header>
-      {open && (
-        <div className="content">
-          <ResourceFormWrapper
-            resource={resource}
-            setResource={setResource}
-            isAdvanced={isAdvanced}
-          >
-            {children}
-          </ResourceFormWrapper>
-        </div>
-      )}
-    </div>
-  );
-}
-
-export function Title({
-  tooltipContent,
-  title,
-  disabled,
-  canChangeState,
-  iconGlyph,
-}) {
-  return (
-    <div className="title">
-      {!disabled && canChangeState && (
-        <Icon className="control-icon" ariaHidden glyph={iconGlyph} />
-      )}
-      <span className="title-content">{title}</span>
-      {tooltipContent && (
-        <Tooltip className="info-tooltip" delay={0} content={tooltipContent}>
-          <Icon ariaLabel="Tooltip" glyph="question-mark" />
-        </Tooltip>
-      )}
-    </div>
-  );
-}
-
-export function Label({ required, tooltipContent, children }) {
-  return (
-    <>
-      <FormLabel required={required}>{children}</FormLabel>
-      {tooltipContent && (
-        <Tooltip className="info-tooltip" delay={0} content={tooltipContent}>
-          <Icon ariaLabel="Tooltip" glyph="question-mark" />
-        </Tooltip>
-      )}
-    </>
-  );
-}
-
-export function FormField({
-  simple,
-  advanced,
-  propertyPath,
-  label,
-  input,
-  className,
-  required,
-  disabled,
-  tooltipContent,
-  isAdvanced,
-  defaultValue,
-  ...props
-}) {
-  return (
-    <div className={classnames('fd-row form-field', className)}>
-      <div className="fd-col fd-col-md--4 form-field__label">
-        <Label required={required && !disabled} tooltipContent={tooltipContent}>
-          {label}
-        </Label>
-      </div>
-      <div className="fd-col fd-col-md--7">
-        {input({ required, disabled, ...props })}
-      </div>
-    </div>
-  );
-}
-
-export function K8sNameField({ kind, value, setValue, className, ...props }) {
-  const { t, i18n } = useTranslation();
-
-  const { isAdvanced, propertyPath, ...inputProps } = props;
-
-  return (
-    <FormField
-      required
-      className={className}
-      propertyPath="$.metadata.name"
-      label={t('common.labels.name')}
-      tooltipContent={t('common.tooltips.k8s-name-input')}
-      input={() => {
-        return (
-          <K8sNameInput
-            kind={kind}
-            compact
-            required
-            showHelp={false}
-            showLabel={false}
-            onChange={e => setValue(e.target.value)}
-            value={value}
-            i18n={i18n}
-            {...inputProps}
-          />
-        );
-      }}
-    />
-  );
-}
+export * from './K8sNameField';
 
 export function MultiInput({
   value,
