@@ -56,26 +56,68 @@ context('Create a Role', () => {
       .find('[placeholder="Start typing to select Verbs from the list."]')
       .filter(':visible', { log: false })
       .eq(1)
-      .type('post')
+      .type('impersonate')
       .click();
 
     cy.getIframeBody()
       .contains('button', /^Create$/)
       .click();
   });
+
   it('Check the Role details', () => {
     cy.getIframeBody()
       .contains('h3', ROLE_NAME, { timeout: 7000 })
       .should('be.visible');
 
     cy.getIframeBody()
-      .find('td')
-      .eq(0)
+      .find('[data-testid=rules-list]')
+      .find('[data-testid=get]')
       .should('not.have.text', '-');
 
     cy.getIframeBody()
-      .find('td')
-      .eq(2)
+      .find('[data-testid=rules-list]')
+      .contains('td', 'impersonate');
+
+    cy.getIframeBody()
+      .find('[data-testid=rules-list]')
+      .find('[data-testid=watch]')
       .should('have.text', '-');
+  });
+
+  it('Edit the Role', () => {
+    cy.getIframeBody()
+      .contains('Edit')
+      .click();
+
+    cy.getIframeBody()
+      .find('[placeholder="Start typing to select Verbs from the list."]')
+      .filter(':visible', { log: false })
+      .eq(2)
+      .type('watch')
+      .click();
+
+    cy.getIframeBody()
+      .contains('button', 'Update')
+      .click();
+  });
+
+  it('Check the Role details after edit', () => {
+    cy.getIframeBody()
+      .contains('h3', ROLE_NAME, { timeout: 7000 })
+      .should('be.visible');
+
+    cy.getIframeBody()
+      .find('[data-testid=rules-list]')
+      .find('[data-testid=get]')
+      .should('not.have.text', '-');
+
+    cy.getIframeBody()
+      .find('[data-testid=rules-list]')
+      .contains('td', 'impersonate');
+
+    cy.getIframeBody()
+      .find('[data-testid=rules-list]')
+      .find('[data-testid=watch]')
+      .should('not.have.text', '-');
   });
 });
