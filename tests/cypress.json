@@ -22,6 +22,7 @@
     "in-cluster-eventing.spec.js",
     "test-cluster-overview.spec.js",
     "smoke-tests.spec.js",
+    "test-cluster-role-bindings.spec.js",
     "test-jobs.spec.js",
     "test-replica-sets.spec.js",
     "test-crds.spec.js",
@@ -31,6 +32,7 @@
     "test-oauth2.spec.js",
     "test-dns-providers.spec.js",
     "test-statefulsets.spec.js",
+    "test-secrets.spec.js",
     "test-issuers.spec.js",
     "test-daemon-sets.spec.js",
     "invalid-kubeconfig.spec.js",
@@ -38,6 +40,7 @@
     "other-logins.spec.js",
     "cluster-configuration.spec.js",
     "add-cluster-disabled.spec.js",
+    "certificates.spec.js",
     "run-after.spec.js"
   ]
 }

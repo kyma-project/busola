@@ -210,7 +210,7 @@ certificates:
     name: Certificate name
     secret-name: Requested Secret name
   refs: References
-  renew: Trigger a renewal
+  renew: Renew
   secret-name: Secret name
   secret-ref: Secret to use
   state: Status
@@ -408,6 +408,7 @@ common:
     secret-ref-name: Unique name within a Namespace to refer to a Secret resource.
     secret-ref-namespace: Namespace defines the space within which the secret name must be unique.
     value: Value must start and end with an alphanumeric character, can contain '-', '_' or '.'
+  'yes': 'yes'
 components:
   dropdown:
     empty-list: No resources available
@@ -613,7 +614,7 @@ dnsentries:
     created: DNS Entry created
   name_singular: DNS Entry
   placeholders:
-    dns-name: Enter the DNS Name.
+    dns-name: Select the DNS Name.
     target-a: Enter the A record target.
     target-cname: Enter the CNAME record target.
     ttl: Enter the time to live.
@@ -623,7 +624,6 @@ dnsentries:
     text: Text record must be a string. Provide either target or text.
     use-a: Switch to A record.
     use-cname: Switch to CNAME record.
-  use-cname: Use CNAME
 dnsproviders:
   description: <0>DNS Provider</0> is used to specify and manage the configuration for the external DNS services.
   domains: Domains
