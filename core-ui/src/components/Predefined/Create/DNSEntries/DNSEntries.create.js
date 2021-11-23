@@ -39,7 +39,7 @@ function DNSEntriesCreate({
     if (configmap && !initialDNSEntry) {
       setDnsEntry(createDNSEntryTemplateForGardener(namespace));
     }
-  }, [configmap, namespace, setDnsEntry]);
+  }, [configmap, namespace, setDnsEntry, initialDNSEntry]);
 
   useEffect(() => {
     setCustomValid(validateDnsEntry(dnsEntry));
