@@ -2,8 +2,6 @@ import React from 'react';
 import { Icon } from 'fundamental-react';
 import { Tooltip } from 'react-shared';
 
-import './FormComponents.scss';
-
 export function Title({
   tooltipContent,
   title,

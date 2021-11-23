@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next';
 
 import { KeyValueField } from './KeyValueField';
 
+import './DataField.scss';
+
 export function DataField({ title, ...props }) {
   const { t } = useTranslation();
 

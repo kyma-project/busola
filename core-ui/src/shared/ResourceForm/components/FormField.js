@@ -2,7 +2,6 @@ import React from 'react';
 import classnames from 'classnames';
 
 import { Label } from './Label';
-import './FormComponents.scss';
 
 export function FormField({
   simple,

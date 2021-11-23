@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import { Title } from './Title';
 import { ResourceFormWrapper } from './Wrapper';
 
-import './FormComponents.scss';
+import './CollapsibleSection.scss';
 
 export function CollapsibleSection({
   disabled = false,

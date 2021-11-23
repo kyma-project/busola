@@ -1,5 +1,3 @@
-import '../components/FormComponents.scss'; // TODO
-
 export * from './K8sNameField';
 export * from './MultiInput';
 export * from './TextArrayInput';

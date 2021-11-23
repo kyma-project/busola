@@ -8,7 +8,10 @@ import React, {
 import { Button } from 'fundamental-react';
 import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
+
 import { ResourceForm } from '..';
+
+import './MultiInput.scss';
 
 export function MultiInput({
   value,

@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react';
 import * as jp from 'jsonpath';
 
-import './ResourceForm.scss';
-
 export function ResourceFormWrapper({
   resource,
   setResource,

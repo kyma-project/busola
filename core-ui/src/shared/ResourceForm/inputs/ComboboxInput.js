@@ -2,6 +2,8 @@ import React from 'react';
 import classnames from 'classnames';
 import { ComboboxInput as FundamentalComboboxInput } from 'fundamental-react';
 
+import './ComboboxInput.scss';
+
 export function ComboboxInput({
   value,
   setValue,
