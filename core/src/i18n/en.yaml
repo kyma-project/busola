@@ -210,7 +210,7 @@ certificates:
     name: Certificate name
     secret-name: Requested Secret name
   refs: References
-  renew: Trigger a renewal
+  renew: Renew
   secret-name: Secret name
   secret-ref: Secret to use
   state: Status
@@ -408,6 +408,7 @@ common:
     secret-ref-name: Unique name within a Namespace to refer to a Secret resource.
     secret-ref-namespace: Namespace defines the space within which the secret name must be unique.
     value: Value must start and end with an alphanumeric character, can contain '-', '_' or '.'
+  'yes': 'yes'
 components:
   dropdown:
     empty-list: No resources available
