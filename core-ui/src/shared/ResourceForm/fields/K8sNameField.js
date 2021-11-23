@@ -2,8 +2,7 @@ import React from 'react';
 import { K8sNameInput } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
-import { FormField } from '../components';
-import './FormComponents.scss';
+import { ResourceForm } from '..';
 
 export function K8sNameField({ kind, value, setValue, className, ...props }) {
   const { t, i18n } = useTranslation();
@@ -11,7 +10,7 @@ export function K8sNameField({ kind, value, setValue, className, ...props }) {
   const { isAdvanced, propertyPath, ...inputProps } = props;
 
   return (
-    <FormField
+    <ResourceForm.FormField
       required
       className={className}
       propertyPath="$.metadata.name"

@@ -1,10 +1,10 @@
 import React from 'react';
 import classnames from 'classnames';
 
-import { ModeSelector } from './components/ModeSelector';
-import { Editor } from './components/Editor';
-import { Presets } from './components/Presets';
-import { useCreateResource } from './useCreateResource';
+import { ModeSelector } from './ModeSelector';
+import { Editor } from '../fields/Editor';
+import { Presets } from './Presets';
+import { useCreateResource } from '../useCreateResource';
 
 import { ResourceFormWrapper } from './Wrapper';
 

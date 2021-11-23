@@ -5,6 +5,7 @@ import { Label } from './components/Label';
 import { FormField } from './components/FormField';
 import { Title } from './components/Title';
 import { CollapsibleSection } from './components/CollapsibleSection';
+import { Presets } from './components/Presets';
 
 ResourceForm.Single = SingleForm;
 ResourceForm.Wrapper = ResourceFormWrapper;
@@ -12,12 +13,6 @@ ResourceForm.CollapsibleSection = CollapsibleSection;
 ResourceForm.Label = Label;
 ResourceForm.FormField = FormField;
 ResourceForm.Title = Title;
+ResourceForm.Presets = Presets;
 
 export { ResourceForm };
-
-// ResourceForm.TextArrayInput = FormComponents.TextArrayInput;
-// ResourceForm.ItemArray = FormComponents.ItemArray;
-// ResourceForm.ComboboxArrayInput = FormComponents.ComboboxArrayInput;
-// ResourceForm.KeyValueField = FormComponents.KeyValueField;
-
-// ResourceForm.K8sNameField = FormComponents.K8sNameField;
