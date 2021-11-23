@@ -194,6 +194,7 @@ certificates:
       failure: Failed to create the certificate.
       success: Certificate created.
   csr: CSR
+  description: <0>Certificate</0> provides a definition of a certificate that is then processed by the indicated issuer.
   dns-names: DNS Names
   existing-secret: Use the existing Secret
   expiration-date: Expiration Date
@@ -209,7 +210,7 @@ certificates:
     name: Certificate name
     secret-name: Requested Secret name
   refs: References
-  renew: Trigger a renewal
+  renew: Renew
   secret-name: Secret name
   secret-ref: Secret to use
   state: Status
@@ -407,6 +408,7 @@ common:
     secret-ref-name: Unique name within a Namespace to refer to a Secret resource.
     secret-ref-namespace: Namespace defines the space within which the secret name must be unique.
     value: Value must start and end with an alphanumeric character, can contain '-', '_' or '.'
+  'yes': 'yes'
 components:
   dropdown:
     empty-list: No resources available
@@ -463,6 +465,7 @@ components:
 config-maps:
   buttons:
     update: Update
+  description: <0>Config Map</0> is an object that allows for storing non-sensitive data in key-value pairs.
   errors:
     cannot-create: Cannot create the Config Map.
     cannot-update: Cannot update the Config Map.
@@ -557,6 +560,7 @@ daemon-sets:
 deployments:
   create-modal:
     advanced:
+      add-container: Add Container
       container-header: Container {{name}}
       containers: Containers
       cpu-limits: CPU Limits
@@ -589,6 +593,7 @@ deployments:
 discovery-and-network:
   title: Discovery and Network
 dnsentries:
+  description: <0>DNS Entry</0> is an object that represents the request to create an external DNS record.
   headers:
     dns-name: DNS Name
     provider: Provider
@@ -621,6 +626,7 @@ dnsentries:
     use-cname: Switch to CNAME record.
   use-cname: Use CNAME
 dnsproviders:
+  description: <0>DNS Provider</0> is used to specify and manage the configuration for the external DNS services.
   domains: Domains
   headers:
     exclude: Excluded Domains
@@ -908,6 +914,7 @@ git-repositories:
     basic: Basic
     public: Public
     ssh-key: SSH Key
+  description: <0>Git Repository</0> is used to define and manage Git repositories that store the Function's source code and dependencies.
   errors:
     invalid-url: Invalid Repository URL. The URL must start with the "http(s)", "git", or "ssh" prefix and end with the ".git" suffix.
   labels:
@@ -939,6 +946,7 @@ issuers:
     messages:
       failure: Failed to create the issuer.
       success: Issuer created.
+  description: <0>Issuer</0> is a Namespace resource responsible for provisioning of certificates.
   domains:
     excluded: Excluded domains
     included: Included domains
@@ -1097,6 +1105,7 @@ oauth2-clients:
     client_secret_post: Client Secret / POST
     none: None
     private_key_jwt: Private Key / JWT
+  description: <0>OAuth2 Client</0> allows an application to acquire an OAuth2 token to access protected resources.
   grant-types:
     authorization_code: Authorization Code
     client_credentials: Client Credentials
@@ -1197,7 +1206,7 @@ role-bindings:
     tooltips:
       kind: Being part of the JWT token, you must set User and Groups at the OIDC level if you use an OIDC provider.
     user-name: User Name
-  description: <0>Role Binding</0> assigns the permissions within a Namespace to a user.
+  description: <0>Role Binding</0> assigns the permissions defined in a Role to a user.
   headers:
     kind: Kind
     role-ref: Role Reference
@@ -1214,7 +1223,7 @@ role-bindings:
       name: User name
   title: Role Bindings
 roles:
-  description: <0>Role</0> is a set of resources and permissions within a Namespace that can be assigned to a user.
+  description: <0>Role</0> is a set of permissions within a Namespace that can be assigned to a user.
   headers:
     api-groups: API Groups
     custom: Custom
@@ -1241,6 +1250,7 @@ secrets:
       success: Secret created.
     title: Create Secret
   data: Data
+  description: <0>Secret</0> is an object that stores sensitive data in key-value pairs.
   edit-modal:
     messages:
       failure: 'Failed to update the Secret: {{error}}.'
@@ -1271,6 +1281,7 @@ service-accounts:
       auto-mount-token: When set to true, it automatically mounts the service account token within each container of a given pod. For security reasons, don't enable automount if you don't need it.
       image-pull-secrets: Image Pull Secrets is a list of references to Secrets in the same Namespace to use for pulling any images in Pods that reference this Service Account. Image Pull Secrets are distinct from Secrets because Secrets can be mounted in a Pod, but Image Pull Secrets are only accessed by the kubelet.
       secrets: Secrets is the list of Secrets allowed to be used by running Pods using this Service Account.
+  description: <0>Service Account</0> enables processes to run on a Pod to communicate and authenticate to the API server.
   headers:
     auto-mount-token: Automount Token
     download-kubeconfig: Download Kubeconfig
