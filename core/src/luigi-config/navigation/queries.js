@@ -75,7 +75,7 @@ export async function checkIfClusterRequiresCA(auth) {
     await failFastFetch(config.backendAddress + '/api', auth);
     return true;
   } catch (_) {
-    // if it fails, don't send CA
+    // if it fails, don't send CA anymore
     return false;
   }
 }
