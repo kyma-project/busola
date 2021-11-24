@@ -12,6 +12,7 @@ export function ServiceAccountRef(props) {
 
   return (
     <ExternalResourceRef
+      defaultOpen
       resources={serviceaccounts}
       loading={loading}
       labelPrefix={t('role-bindings.labels.service-account')}

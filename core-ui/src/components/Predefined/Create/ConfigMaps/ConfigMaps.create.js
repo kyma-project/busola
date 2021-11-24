@@ -40,7 +40,7 @@ function ConfigMapsCreate({
       setCustomValid={setCustomValid}
     >
       <K8sNameField
-        disabled={!!initialConfigMap}
+        readOnly={!!initialConfigMap}
         propertyPath="$.metadata.name"
         kind={t('config-maps.name_singular')}
         setValue={name => {

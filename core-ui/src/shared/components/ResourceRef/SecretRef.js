@@ -12,6 +12,7 @@ export function SecretRef({ fieldSelector, labelSelector, ...props }) {
 
   return (
     <ExternalResourceRef
+      defaultOpen={true}
       resources={secrets}
       loading={loading}
       labelPrefix={t('common.labels.secret')}
