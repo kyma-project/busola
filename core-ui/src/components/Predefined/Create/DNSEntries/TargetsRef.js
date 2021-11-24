@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Switch, FormInput } from 'fundamental-react';
+import { Button, Switch, FormInput, ComboboxInput } from 'fundamental-react';
 import classnames from 'classnames';
 import { useGetList, Spinner } from 'react-shared';
 
@@ -100,12 +100,19 @@ const getExternalIPs = loadBalancer => {
   }
 };
 
-export function TargetsRef({ dnsEntry, setTargets, setDnsEntry }) {
+let memoizedServices = null;
+export function TargetsRef({ resource: dnsEntry, setResource: setDnsEntry }) {
   const { t } = useTranslation();
-  const { data: services, loading } = useGetList()(`/api/v1/services`);
-  if (loading) return <Spinner />;
 
-  const targets = dnsEntry?.spec.targets || [];
+  const { data, loading } = useGetList()(`/api/v1/services`);
+  useEffect(() => {
+    if (data) {
+      memoizedServices = data;
+    }
+  }, [data]);
+  const services = memoizedServices || data;
+  if (loading && !services) return <Spinner />;
+
   const loadBalancers = services?.filter(
     service =>
       service.spec.type === 'LoadBalancer' &&
@@ -126,7 +133,6 @@ export function TargetsRef({ dnsEntry, setTargets, setDnsEntry }) {
       defaultOpen
       resource={dnsEntry}
       setResource={setDnsEntry}
-      propertyPath="$.spec.targets"
       className="targets-ref"
     >
       <TargetsInput
@@ -139,8 +145,7 @@ export function TargetsRef({ dnsEntry, setTargets, setDnsEntry }) {
             .map(target => target.target)
             .filter(t => !!t)
         }
-        value={targets}
-        setValue={setTargets}
+        propertyPath="$.spec.targets"
         inputs={[
           ({ value, index, setInternalValue }) => (
             <div className="fd-col fd-col-md--3" key={index}>
@@ -152,7 +157,7 @@ export function TargetsRef({ dnsEntry, setTargets, setDnsEntry }) {
                       : t('dnsentries.tooltips.use-cname')
                   }
                 >
-                  {t('dnsentries.use-cname')}
+                  {t('dnsentries.labels.use-cname')}
                 </Label>
                 <div>
                   <Switch
@@ -185,13 +190,24 @@ export function TargetsRef({ dnsEntry, setTargets, setDnsEntry }) {
             } else {
               return (
                 <div className="fd-col fd-col-md--9" key={index}>
-                  <ResourceForm.ComboboxInput
-                    key={`targets-select-${index}`}
+                  <ComboboxInput
+                    compact
+                    id={'targets-ref'}
+                    ariaLabel="Combobox input"
+                    arrowLabel="Combobox input arrow"
+                    showAllEntries
+                    searchFullString
                     options={IPs}
-                    defaultKey={value?.target}
-                    value={value?.target}
+                    selectedKey={value?.target}
+                    selectionType="manual"
                     placeholder={t('dnsentries.placeholders.target-a')}
-                    setValue={key => setValue({ ...value, target: key })}
+                    onSelectionChange={(_, selected) => {
+                      if (selected.key !== -1) {
+                        setValue({ ...value, target: selected.key });
+                      } else {
+                        setValue({ ...value, target: selected.text });
+                      }
+                    }}
                   />
                 </div>
               );
