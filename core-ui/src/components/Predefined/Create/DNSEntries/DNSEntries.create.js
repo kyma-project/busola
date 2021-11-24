@@ -41,19 +41,6 @@ function DNSEntriesCreate({
     }
   }, [configmap, namespace, setDnsEntry, initialDNSEntry]);
 
-  useEffect(() => {
-    setCustomValid(validateDnsEntry(dnsEntry));
-  }, [dnsEntry, setDnsEntry, setCustomValid]);
-
-  const validateDnsEntry = entry => {
-    const isNameValid = !!entry?.metadata?.name;
-    const isTtlValid = !!entry?.spec.ttl && typeof entry?.spec.ttl === 'number';
-    const isDnsNameValid = !!entry?.spec.dnsName;
-    const hasTargetsorText =
-      !!entry?.spec.targets?.length || !!entry?.spec.text?.length;
-    return isNameValid && isTtlValid && isDnsNameValid && hasTargetsorText;
-  };
-
   return (
     <ResourceForm
       pluralKind="dnsEntries"
@@ -64,6 +51,7 @@ function DNSEntriesCreate({
       formElementRef={formElementRef}
       initialResource={initialDNSEntry}
       createUrl={resourceUrl}
+      setCustomValid={setCustomValid}
     >
       <ResourceForm.K8sNameField
         propertyPath="$.metadata.name"
@@ -78,9 +66,10 @@ function DNSEntriesCreate({
           setDnsEntry({ ...dnsEntry });
         }}
         readOnly={initialDNSEntry}
+        validate={name => !!name}
       />
 
-      <DNSNameRef required />
+      <DNSNameRef required validate={entry => !!entry?.spec?.dnsName} />
 
       <ResourceForm.FormField
         required
@@ -88,6 +77,7 @@ function DNSEntriesCreate({
         label={t('dnsentries.labels.ttl')}
         input={Inputs.Number}
         placeholder={t('dnsentries.placeholders.ttl')}
+        validate={ttl => !!ttl && typeof ttl === 'number'}
       />
 
       <ResourceForm.KeyValueField
@@ -103,7 +93,11 @@ function DNSEntriesCreate({
         title={t('common.headers.annotations')}
       />
 
-      <TargetsRef />
+      <TargetsRef
+        validate={entry =>
+          !!entry?.spec.targets?.length || !!entry?.spec.text?.length
+        }
+      />
 
       <ResourceForm.TextArrayInput
         advanced
