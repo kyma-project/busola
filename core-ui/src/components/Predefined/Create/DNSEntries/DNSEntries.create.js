@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useGet } from 'react-shared';
 import * as jp from 'jsonpath';
+import { cloneDeep } from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/components/Inputs';
@@ -12,14 +13,21 @@ import {
   createDNSEntryTemplateForGardener,
 } from './helpers';
 
-export function DNSEntriesCreate({
+function DNSEntriesCreate({
   onChange,
   formElementRef,
   namespace,
   setCustomValid,
+  resource: initialDNSEntry,
+  resourceUrl,
 }) {
   const { t } = useTranslation();
-  const [dnsEntry, setDnsEntry] = useState(createDNSEntryTemplate(namespace));
+  const [dnsEntry, setDnsEntry] = useState(
+    initialDNSEntry
+      ? cloneDeep(initialDNSEntry)
+      : createDNSEntryTemplate(namespace),
+  );
+
   const { data: configmap } = useGet(
     `/api/v1/namespaces/kube-system/configmaps/shoot-info`,
     {
@@ -28,22 +36,10 @@ export function DNSEntriesCreate({
   );
 
   useEffect(() => {
-    if (configmap) {
+    if (configmap && !initialDNSEntry) {
       setDnsEntry(createDNSEntryTemplateForGardener(namespace));
     }
-  }, [configmap, namespace, setDnsEntry]);
-
-  useEffect(() => {
-    setCustomValid(validateDnsEntry(dnsEntry));
-  }, [dnsEntry, setDnsEntry, setCustomValid]);
-
-  const validateDnsEntry = entry => {
-    const isTtlValid = !!entry?.spec.ttl && typeof entry?.spec.ttl === 'number';
-    const isDnsNameValid = !!entry?.spec.dnsName;
-    const hasTargetsorText =
-      !!entry?.spec.targets?.length || !!entry?.spec.text?.length;
-    return isTtlValid && isDnsNameValid && hasTargetsorText;
-  };
+  }, [configmap, namespace, setDnsEntry, initialDNSEntry]);
 
   return (
     <ResourceForm
@@ -53,7 +49,9 @@ export function DNSEntriesCreate({
       setResource={setDnsEntry}
       onChange={onChange}
       formElementRef={formElementRef}
-      createUrl={`/apis/dns.gardener.cloud/v1alpha1/namespaces/${namespace}/dnsentries/`}
+      initialResource={initialDNSEntry}
+      createUrl={resourceUrl}
+      setCustomValid={setCustomValid}
     >
       <ResourceForm.K8sNameField
         propertyPath="$.metadata.name"
@@ -67,9 +65,11 @@ export function DNSEntriesCreate({
           );
           setDnsEntry({ ...dnsEntry });
         }}
+        readOnly={initialDNSEntry}
+        validate={name => !!name}
       />
 
-      <DNSNameRef required />
+      <DNSNameRef required validate={entry => !!entry?.spec?.dnsName} />
 
       <ResourceForm.FormField
         required
@@ -77,6 +77,7 @@ export function DNSEntriesCreate({
         label={t('dnsentries.labels.ttl')}
         input={Inputs.Number}
         placeholder={t('dnsentries.placeholders.ttl')}
+        validate={ttl => !!ttl && typeof ttl === 'number'}
       />
 
       <ResourceForm.KeyValueField
@@ -92,7 +93,11 @@ export function DNSEntriesCreate({
         title={t('common.headers.annotations')}
       />
 
-      <TargetsRef />
+      <TargetsRef
+        validate={entry =>
+          !!entry?.spec.targets?.length || !!entry?.spec.text?.length
+        }
+      />
 
       <ResourceForm.TextArrayInput
         advanced
@@ -106,3 +111,6 @@ export function DNSEntriesCreate({
     </ResourceForm>
   );
 }
+
+DNSEntriesCreate.allowEdit = true;
+export { DNSEntriesCreate };
