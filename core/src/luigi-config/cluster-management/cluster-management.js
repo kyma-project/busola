@@ -113,20 +113,9 @@ export async function getActiveCluster() {
   // add target cluster config
   clusters[clusterName].config = merge(
     {},
-    targetClusterConfig,
     clusters[clusterName].config,
+    targetClusterConfig.config,
   );
-
-  // init params can't override target cluster storage
-  if (targetClusterConfig.storage) {
-    clusters[clusterName].config.storage = targetClusterConfig.storage;
-  }
-
-  // merge keys of config.features
-  clusters[clusterName].config.features = {
-    ...clusters[clusterName].config.features,
-    ...targetClusterConfig.features,
-  };
 
   clusters[clusterName] = await mergeParams(clusters[clusterName]);
   return clusters[clusterName];
