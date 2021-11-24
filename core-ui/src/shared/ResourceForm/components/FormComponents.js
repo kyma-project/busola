@@ -6,7 +6,6 @@ import React, {
   useCallback,
 } from 'react';
 import {
-  ComboboxInput as FdComboboxInput,
   FormInput,
   FormLabel,
   FormTextarea,
@@ -39,9 +38,7 @@ export function CollapsibleSection({
   required,
   tooltipContent,
 }) {
-  const [open, setOpen] = useState(
-    defaultOpen === undefined ? !isAdvanced : defaultOpen,
-  );
+  const [open, setOpen] = useState(defaultOpen);
   const actionsRef = useRef();
   const iconGlyph = open ? 'navigation-down-arrow' : 'navigation-right-arrow';
 
@@ -116,6 +113,7 @@ export function Title({
     </div>
   );
 }
+
 export function Label({ required, tooltipContent, children }) {
   return (
     <>
@@ -157,8 +155,10 @@ export function FormField({
   );
 }
 
-export function K8sNameField({ kind, value, setValue, className }) {
+export function K8sNameField({ kind, value, setValue, className, ...props }) {
   const { t, i18n } = useTranslation();
+
+  const { isAdvanced, propertyPath, validate, ...inputProps } = props;
 
   return (
     <FormField
@@ -178,6 +178,7 @@ export function K8sNameField({ kind, value, setValue, className }) {
             onChange={e => setValue(e.target.value)}
             value={value}
             i18n={i18n}
+            {...inputProps}
           />
         );
       }}
@@ -201,8 +202,10 @@ export function MultiInput({
   defaultOpen,
   fullWidth = false,
   isEntryLocked = () => false,
+  readOnly,
   ...props
 }) {
+  const { t } = useTranslation();
   const valueRef = useRef(null); // for deep comparison
   const [internalValue, setInternalValue] = useState([]);
   const [keys, setKeys] = useState(1);
@@ -311,6 +314,7 @@ export function MultiInput({
                 }),
               )}
               <Button
+                disabled={readOnly}
                 compact
                 className={classnames({
                   hidden: isLast(index) || isEntryLocked(entry),
@@ -318,6 +322,7 @@ export function MultiInput({
                 glyph="delete"
                 type="negative"
                 onClick={() => removeValue(index)}
+                ariaLabel={t('common.buttons.delete')}
               />
             </li>
           ))}
@@ -330,20 +335,20 @@ export function MultiInput({
 export function TextArrayInput({
   defaultOpen,
   inputProps,
-  isAdvanced,
-  tooltipContent,
   sectionTooltipContent,
   placeholder,
+  toInternal = value => value || [],
+  toExternal = value => value.filter(val => !!val),
+  readOnly,
   ...props
 }) {
   return (
     <MultiInput
       defaultOpen={defaultOpen}
-      isAdvanced={isAdvanced}
-      toInternal={value => value || []}
-      toExternal={value => value.filter(val => !!val)}
-      tooltipContent={tooltipContent}
+      toInternal={toInternal}
+      toExternal={toExternal}
       sectionTooltipContent={sectionTooltipContent}
+      readOnly={readOnly}
       inputs={[
         ({ value, setValue, ref, onBlur, focus, index }) => (
           <FormInput
@@ -355,6 +360,7 @@ export function TextArrayInput({
             onChange={e => setValue(e.target.value)}
             onKeyDown={e => focus(e)}
             onBlur={onBlur}
+            readOnly={readOnly}
             {...inputProps}
           />
         ),
@@ -534,6 +540,7 @@ export function ItemArray({
   simple,
   advanced,
   isAdvanced,
+  readOnly,
   ...props
 }) {
   const { t } = useTranslation();
@@ -562,6 +569,7 @@ export function ItemArray({
               glyph="delete"
               type="negative"
               onClick={() => remove(i)}
+              disabled={readOnly}
             />
           }
         >
@@ -586,6 +594,7 @@ export function ItemArray({
             setValues([...values, newResourceTemplateFn()]);
             setOpen(true);
           }}
+          disabled={readOnly}
         >
           {t('common.buttons.add')} {nameSingular}
         </Button>
@@ -598,40 +607,6 @@ export function ItemArray({
         <MessageStrip type="warning">{atLeastOneRequiredMessage}</MessageStrip>
       )}
     </CollapsibleSection>
-  );
-}
-
-export function ComboboxInput({
-  value,
-  setValue,
-  defaultKey,
-  options,
-  id,
-  placeholder,
-  typedValue,
-  className,
-  _ref,
-  ...props
-}) {
-  return (
-    <div className={classnames('resource-form-combobox', className)}>
-      <FdComboboxInput
-        ariaLabel="Combobox input"
-        arrowLabel="Combobox input arrow"
-        id={id || 'combobox-input'}
-        compact
-        ref={_ref}
-        showAllEntries
-        searchFullString
-        selectionType="auto-inline"
-        onSelectionChange={(_, selected) => setValue(selected)}
-        typedValue={typedValue}
-        selectedKey={defaultKey === -1 ? defaultKey : ''}
-        placeholder={placeholder}
-        options={options}
-        {...props}
-      />
-    </div>
   );
 }
 
@@ -679,7 +654,7 @@ export function ComboboxArrayInput({
       sectionTooltipContent={sectionTooltipContent}
       inputs={[
         ({ value, setValue, ref, onBlur, focus, index }) => (
-          <ComboboxInput
+          <Inputs.ComboboxInput
             key={index}
             placeholder={placeholder}
             compact
@@ -687,13 +662,55 @@ export function ComboboxArrayInput({
             selectedKey={value}
             typedValue={value || ''}
             selectionType="manual"
-            setValue={selected =>
-              // fallback on selected.text if no entry is found
-              setValue(selected.key !== -1 ? selected.key : selected.text)
-            }
+            setValue={setValue}
             options={options}
             onKeyDown={focus}
             onBlur={onBlur}
+          />
+        ),
+      ]}
+      {...props}
+    />
+  );
+}
+
+export function SelectArrayInput({
+  title,
+  defaultOpen,
+  placeholder,
+  inputProps,
+  isAdvanced,
+  tooltipContent,
+  sectionTooltipContent,
+  options,
+  ...props
+}) {
+  const toInternal = values => (values || []).filter(v => v);
+
+  const toExternal = values => values.filter(val => !!val);
+
+  return (
+    <MultiInput
+      title={title}
+      defaultOpen={defaultOpen}
+      isAdvanced={isAdvanced}
+      toInternal={toInternal}
+      toExternal={toExternal}
+      tooltipContent={tooltipContent}
+      sectionTooltipContent={sectionTooltipContent}
+      inputs={[
+        ({ value, setValue, ref, onBlur, focus, index }) => (
+          <Inputs.Dropdown
+            key={index}
+            placeholder={placeholder}
+            compact
+            _ref={ref}
+            value={value}
+            setValue={setValue}
+            options={options}
+            onKeyDown={focus}
+            onBlur={onBlur}
+            className="fd-margin-end--sm"
           />
         ),
       ]}

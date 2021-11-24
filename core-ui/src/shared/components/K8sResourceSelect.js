@@ -90,7 +90,7 @@ export function K8sResourceSelect({
       <ComboboxInput
         showAllEntries
         searchFullString
-        selectionType="auto-inline"
+        selectionType="manual"
         compact
         required={required}
         placeholder={t('common.messages.type-to-select', {
@@ -98,6 +98,7 @@ export function K8sResourceSelect({
         })}
         id="k8s-resource-dropdown"
         ariaLabel={t('common.messages.choose', { value: resourceType })}
+        arrowLabel="Combobox input arrow"
         options={options}
         onChange={onChange}
         onSelectionChange={(_, selected) => onSelect(selected.text)}

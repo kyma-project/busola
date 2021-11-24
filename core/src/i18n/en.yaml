@@ -1,11 +1,12 @@
 addons:
   addons-status: Addons Status
+  description: <0>Addons Configuration</0> defines Namespace-scoped addons that provide all information required to convert Helm charts into Service Classes in Service Catalog.
   errors:
-    cannot-create: Cannot create the AddonsConfiguration.
+    cannot-create: Cannot create the Addons Configuration.
   headers:
     url: URL
   messages:
-    created: AddonsConfiguration {{name}} created.
+    created: Addons Configuration {{name}} created.
   repository-urls: Repository URLs
   title: Addons
   urls: URLs
@@ -14,25 +15,39 @@ api-rules:
     buttons:
       add: Add Access Strategy
     labels:
+      access-strategy: Access Strategy
+      allow: Allow
+      handler: Handler
+      jwt: JWT
+      methods: Methods
+      noop: noop
+      oauth2_introspection: OAuth2
+      path: Path
       required-scope: Required Scope
+      types: Types
     messages:
       one-method: This access strategy requires at least one method.
+      one-strategy-required: At least one strategy is required.
     title: Access Strategies
     tooltips:
-      delete: Define at least one access strategy.
       path: Path can contain alphanumeric characters and  '/', '.', '*', '?', '!', '-', '(', and ')'.
   buttons:
     create: Create API Rule
     edit: Edit API Rule "{{apiRuleName}}"
     expose: Expose {{type}}
-  description: ' allows to expose a service externally.'
+  description: <0>API Rule</0> allows for exposing a service externally.
   form:
     gateway: Gateway
+    host: Host
     hostname: Hostname
     subdomain: Subdomain
     subdomain-placeholder: Subdomain will replace the '*' part of the $t(api-rules.form.hostname) value.
   general-settings:
     title: General settings
+  jwt:
+    idp-presets: IDP Presets
+    jwks-uri: JWKs URI
+    trusted-issuer: Trusted issuer URL
   list:
     headers:
       host: Host
@@ -43,12 +58,22 @@ api-rules:
     created: API Rule created.
     description: Expose Services outside the cluster with API Rules.
     not-matching-results: Couldn't find API Rules matching this query.
+    one-rule-required: At least one API Rule is required.
     updated: API Rule updated.
     will-be-available-at: API Rule will be available at {{address}}.
+  name_singular: API Rule
+  oauth:
+    required-scope: Required scope
+  placeholders:
+    path: Enter the path.
+    subdomain: Subdomain part of API Rule address.
+  rule: Rule
+  rules: Rules
   services:
     error-load: Couldn't load service list.
     loading: Loading services...
     ns-no-services: No Services in this Namespace.
+    placeholder: Choose the service to expose.
   title: API Rules
 applications:
   aria:
@@ -60,6 +85,7 @@ applications:
     create: $t(applications.subtitle.create-binding)
     create-app: $t(applications.subtitle.create-app)
     select-all: Select all
+  description: <0>Application</0> represents an external solution connected to Kyma.
   headers:
     access-label: Access Label
     apis: APIs
@@ -103,13 +129,14 @@ applications:
     provided-services: Provided Services and events
   title: Applications
 brokers:
+  description: <0>Service Broker</0> provides a set of managed services that a third party offers and maintains.
   headers:
     url: URL
   title: Brokers
 btp-instances:
-  description: ' makes the functionality of a service available for consumption.'
+  description: ' <0>BTP Service Instance</0> makes the functionality of a service available for consumption.'
   external-name: External Name
-  instance-data: ServiceInstance Data
+  instance-data: Service Instance Data
   instance-id: Instance ID
   messages:
     params-invalid: Invalid parameters. Provide a valid JSON object.
@@ -119,20 +146,20 @@ btp-instances:
   placeholders:
     external-name: Defaults to the instance name if empty.
     offering-name: SAP BTP service offering name.
-    plan-name: The plan name to use for the ServiceInstance.
+    plan-name: The plan name to use for the Service Instance.
   plan-name: Plan Name
-  resource-type: ServiceInstance
-  title: BTP ServiceInstances
+  resource-type: Service Instance
+  title: BTP Service Instances
   tooltips:
     offering-name: You find the name of the SAP BTP service offering in the BTP Cockpit in the Service Marketplace.
     plan-name: You find the plan to be used for the service instance in the BTP Cockpit in the Service Marketplace.
 btp-service-bindings:
   binding-id: Binding ID
   data: Binding Data
-  description: ' provides access details for an existing service instance.'
+  description: <0>BTP Service Binding</0> provides access details for an existing service instance.
   external-name: External Name
   instance-id: Instance ID
-  instance-name: ServiceInstance Name
+  instance-name: Service Instance Name
   messages:
     duplicate-ref: This ref already exists.
     invalid-ref: Ref is invalid.
@@ -146,16 +173,17 @@ btp-service-bindings:
     choose-secret-first: Choose the Secret first
     choose-secret-key: Choose a Secret key
     empty-secret: This Secret has no data
-    external-name: Defaults to the ServiceBinding name if empty
+    external-name: Defaults to the Service Binding name if empty
     secret: Credentials Secret name
-  resource-type: ServiceBinding
+  resource-type: Service Binding
   secret: Secret
-  title: BTP ServiceBindings
+  title: BTP Service Bindings
   tooltips:
     parameters-from: Secret references to populate the parameters.
-    secret: The name of the secret where the credentials are stored, defaults to the ServiceBinding name if not specified.
+    secret: The name of the secret where the credentials are stored, defaults to the Service Binding name if not specified.
     secret-not-found: This Secret doesn't exist.
 catalog:
+  description: <0>Service Catalog</0> provides an easy way to access services that the Service Brokers manage, and to use them in an application.
   menu-title: Catalog
   subtitle: Enrich your experience with additional services that are installed outside the cluster.
   title: Service Catalog
@@ -166,6 +194,7 @@ certificates:
       failure: Failed to create the certificate.
       success: Certificate created.
   csr: CSR
+  description: <0>Certificate</0> provides a definition of a certificate that is then processed by the indicated issuer.
   dns-names: DNS Names
   existing-secret: Use the existing Secret
   expiration-date: Expiration Date
@@ -181,7 +210,7 @@ certificates:
     name: Certificate name
     secret-name: Requested Secret name
   refs: References
-  renew: Trigger a renewal
+  renew: Renew
   secret-name: Secret name
   secret-ref: Secret to use
   state: Status
@@ -198,13 +227,16 @@ certificates:
     with-csr: Enable to use a Certificate Signing Request instead of providing domain names manually.
   with-csr: Use a CSR
 cluster-addons:
+  description: <0>Cluster Addons Configuration</0> defines cluster-wide addons that provide all information required to convert Helm charts into Service Classes in Service Catalog.
   title: Cluster Addons
 cluster-role-bindings:
-  name_singular: ClusterRoleBinding
-  title: ClusterRoleBindings
+  description: <0>Cluster Role Binding</0> assigns the permissions defined in a Cluster Role to a user.
+  name_singular: Cluster Role Binding
+  title: Cluster Role Bindings
 cluster-roles:
+  description: <0>Cluster Role</0> is a set of cluster-level resources and permissions that can be assigned to a user.
   name_singular: Cluster Role
-  title: ClusterRoles
+  title: Cluster Roles
 clusters:
   add:
     errors:
@@ -290,6 +322,7 @@ common:
     ok: OK
     save: Save
     update: Update
+    view-yaml: View YAML
   create-form:
     choose-preset: Select a Preset
     editor-error: 'Parse error: {{error}}, previous valid input will be used.'
@@ -331,6 +364,7 @@ common:
     name: Name
     namespace: Namespace
     protocol: Protocol
+    read-only: Read-only mode
     resource: Resource
     resource-name: '{{resource}} $t(common.labels.name)'
     resource-namespace: '{{resource}} $t(common.labels.namespace)'
@@ -374,6 +408,7 @@ common:
     secret-ref-name: Unique name within a Namespace to refer to a Secret resource.
     secret-ref-namespace: Namespace defines the space within which the secret name must be unique.
     value: Value must start and end with an alphanumeric character, can contain '-', '_' or '.'
+  'yes': 'yes'
 components:
   dropdown:
     empty-list: No resources available
@@ -408,6 +443,7 @@ components:
     confirm-text: Confirm
     title: Modal
   resource-details:
+    edit: Edit
     messages:
       failure: 'Failed to update the {{resourceType}}: {{error}}'
       success: '{{resourceType}} updated'
@@ -429,45 +465,36 @@ components:
 config-maps:
   buttons:
     update: Update
+  description: <0>Config Map</0> is an object that allows for storing non-sensitive data in key-value pairs.
   errors:
-    cannot-create: Cannot create the ConfigMap.
-    cannot-update: Cannot update the ConfigMap.
+    cannot-create: Cannot create the Config Map.
+    cannot-update: Cannot update the Config Map.
   messages:
-    created: ConfigMap created.
-    updated: ConfigMap updated.
-  name_singular: ConfigMap
+    created: Config Map created.
+    updated: Config Map updated.
+  name_singular: Config Map
   subtitle:
-    edit-config-map: Edit ConfigMap
-  title: ConfigMaps
+    edit-config-map: Edit Config Map
+  title: Config Maps
 configuration:
   title: Configuration
 cron-jobs:
-  args: Args
-  command: Command
   concurrency-policy:
     descriptions:
       allow: Allow concurrent executions.
       forbid: No concurrent executions, skip the new run if the previous one hasn't finished yet.
       replace: No concurrent executions, replace the previous run with the new one.
-    label: Concurrency Policy
     title: Concurrency Policy
   create-modal:
-    at-least-one-container-required: CronJob must have at least one container.
-    container: Container
-    containers: Containers
     day-of-month: Day of Month
     day-of-week: Day of Week
     hour: Hour
+    labels:
+      concurrency-policy: Concurrency Policy
+      restart-policy: Restart Policy
     minute: Minute
     month: Month
     parse-error: Error parsing CRON expression.
-    placeholders:
-      args: Arguments to the entrypoint.
-      command: Command to run in a container.
-      docker-image: Enter the Docker image tag, for example, 'busybox'.
-      failed-jobs-history-limit: 'The number of failed finished jobs to retain (default: 1).'
-      starting-deadline: Optional deadline in seconds.
-      successful-jobs-history-limit: 'The number of successful finished jobs to retain (default: 3).'
     presets:
       daily: Daily
       hourly: Hourly
@@ -476,8 +503,6 @@ cron-jobs:
       yearly: Yearly
     schedule-description: You can specify ranges (like 1-4), multiple values (1, 2, 5), wildcard (*) or run the job every nth interval (*/3 for every 3rd interval).
     tooltips:
-      args: Docker image CMD is used if arguments are not provided. Provide either args or command.
-      command: The docker image's ENTRYPOINT is used if this is not provided. Provide either args or command.
       day-of-month: 1 to 31 or three-letter month abbreviations (like JAN, FEB)
       day-of-week: 0 to 7 (0 and 7 represent Sunday) or three-letter day abbreviations (like MON, TUE)
       hour: 0 to 23 (always UTC)
@@ -485,21 +510,18 @@ cron-jobs:
       month: 1 to 12
       starting-deadline: Optional deadline in seconds for starting the job if it misses the scheduled time.
       suspend: 'If true, the controller suspends subsequent executions (default: false). It does not apply to started executions.'
-  description: CronJobs are for regular scheduled actions. A CronJob object is like one line of a crontab file, running a job periodically on a given schedule.
+  description: <0>Cron Job</0> is a job that is run according to a specified schedule.
   docker-image: Docker Image
   failed-jobs-history-limit: Failed Jobs History Limit
   image-pull-policy: Image Pull Policy
   last-job-execution: Last Job execution
   last-schedule-time: Last schedule time
-  name_singular: CronJob
+  name_singular: Cron Job
   not-scheduled-yet: None scheduled yet
-  restart-policy: Restart Policy
   schedule: Schedule
-  starting-deadline: Starting Deadline
-  successful-jobs-history-limit: Successful Jobs History Limit
-  suspend: Suspend
-  title: CronJobs
+  title: Cron Jobs
 custom-resource-definitions:
+  description: <0>Custom Resource Definition</0> is an object used to define a custom resource that allows you to extend the Kubernetes API for use cases that are not directly covered by core Kubernetes.
   headers:
     description: Description
     json-path: JSON Path
@@ -522,12 +544,13 @@ custom-resource-definitions:
     names: Names
     schema: Schema
     version: Version
-  title: CustomResourceDefinitions
+  title: Custom Resource Definitions
 daemon-sets:
+  description: <0>Daemon Set</0> ensures that replicated Pods are running across a set of available nodes.
   images: Images
   node-selector: Node Selector
   pods: $t(pods.title)
-  title: DaemonSets
+  title: Daemon Sets
   tolerations:
     effect: Effect
     key: Key
@@ -537,6 +560,7 @@ daemon-sets:
 deployments:
   create-modal:
     advanced:
+      add-container: Add Container
       container-header: Container {{name}}
       containers: Containers
       cpu-limits: CPU Limits
@@ -560,6 +584,7 @@ deployments:
       image-pull-secret: Image Pull Secret
       image-pull-secret-tooltip: The secret for authorization to the private Docker repository.
     title: Create Deployment
+  description: <0>Deployment</0> is a Kubernetes object that represents a replicated application running on your cluster.
   headers:
     images: Images
     pods: $t(pods.title)
@@ -568,6 +593,7 @@ deployments:
 discovery-and-network:
   title: Discovery and Network
 dnsentries:
+  description: <0>DNS Entry</0> is an object that represents the request to create an external DNS record.
   headers:
     dns-name: DNS Name
     provider: Provider
@@ -588,7 +614,7 @@ dnsentries:
     created: DNS Entry created
   name_singular: DNS Entry
   placeholders:
-    dns-name: Enter the DNS Name.
+    dns-name: Select the DNS Name.
     target-a: Enter the A record target.
     target-cname: Enter the CNAME record target.
     ttl: Enter the time to live.
@@ -598,8 +624,8 @@ dnsentries:
     text: Text record must be a string. Provide either target or text.
     use-a: Switch to A record.
     use-cname: Switch to CNAME record.
-  use-cname: Use CNAME
 dnsproviders:
+  description: <0>DNS Provider</0> is used to specify and manage the configuration for the external DNS services.
   domains: Domains
   headers:
     exclude: Excluded Domains
@@ -694,7 +720,7 @@ functions:
       reference: Reference
       repository: Repository
     title: Create Function
-  description: ' is a simple code snippet that you can run without provisioning or managing servers.'
+  description: <0>Function</0> is a simple code snippet that you can run without provisioning or managing servers.
   details:
     buttons:
       diff_toggle: Diff
@@ -751,17 +777,17 @@ functions:
     buttons:
       add: Add Environment Variable
       open:
-        config-map: ConfigMap Variable
+        config-map: Config Map Variable
         custom: Custom Variable
         secret: Secret Variable
     create-modal:
       title:
-        config-map: Create ConfigMap Variable
+        config-map: Create Config Map Variable
         custom: Create Custom Variable
         secret: Create Secret Variable
     edit-modal:
       title:
-        config-map: Edit ConfigMap Variable
+        config-map: Edit Config Map Variable
         custom: Edit Custom Variable
         secret: Edit Secret Variable
     errors:
@@ -769,7 +795,7 @@ functions:
       duplicated: Duplicated variable name.
       empty: Variable is empty.
       invalid: Variable name must consist of alphanumeric characters, can contain '_', no blank spaces.
-      invalid-config: Select the ConfigMap name and key.
+      invalid-config: Select the Config Map name and key.
       invalid-secret: Select the Secret name and key.
       restricted: This variable name is restricted and cannot be used. Try a different name.
     form:
@@ -794,26 +820,26 @@ functions:
     popup-error: At least one variable has an incorrect name format, is restricted, duplicated, or empty.
     title:
       environment-variables: Environment Variables
-      injected-variables: Environment variables injected by the ServiceBindings
+      injected-variables: Environment variables injected by the Service Bindings
     tooltip:
-      config-map: This variable comes from the "{resourceName}" ConfigMap.
+      config-map: This variable comes from the "{resourceName}" Config Map.
       custom: This variable was provided by the user.
       secret: This variable comes from the "{resourceName}" Secret.
-      service-binding: This variable was injected by the ServiceBinding referencing ServiceInstance "{serviceInstanceName}".
+      service-binding: This variable was injected by the Service Binding referencing Service Instance "{serviceInstanceName}".
       text: This variable comes from a resource. To get the value, follow the link.
     type:
-      config-map: ConfigMap
+      config-map: Config Map
       custom: Custom
       secret: Secret
-      service-binding: ServiceBinding
+      service-binding: Service Binding
     warnings:
-      override: This variable name is identical to the variable injected by the ServiceBinding. Continue if you intend that they can override each other. Otherwise, choose another name.
+      override: This variable name is identical to the variable injected by the Service Binding. Continue if you intend that they can override each other. Otherwise, choose another name.
       sbu-can-be-overridden:
-        by-both: This variable can be overridden by one of the custom variables or a variable injected by one of the ServiceBindings.
+        by-both: This variable can be overridden by one of the custom variables or a variable injected by one of the Service Bindings.
         by-custom-env: This variable can override or be overridden by one of the custom variables.
-        by-sbu: This variable can override or be overridden by a variable injected by one of the ServiceBindings.
+        by-sbu: This variable can override or be overridden by a variable injected by one of the Service Bindings.
       text: Warning
-      variable-can-override-sbu: This variable can override or be overridden by a variable injected by one of the created ServiceBindings.
+      variable-can-override-sbu: This variable can override or be overridden by a variable injected by one of the created Service Bindings.
 gateways:
   create-modal:
     advanced:
@@ -869,7 +895,7 @@ gateways:
       selector: One or more labels that indicate a set of pods on which the gateway configuration is applied. By default, workloads are searched across all namespaces based on label selectors.
       server-certificate: The path to the file holding the server-side TLS certificate you want to use.
       target-port: The port number on the endpoint where the traffic is received.
-  description: ' describes a load balancer that operates at the edge of the mesh and receives incoming or outgoing HTTP/TCP connections.'
+  description: ' <0>Gateway</0> describes a load balancer that operates at the edge of the mesh and receives incoming or outgoing HTTP/TCP connections.'
   name_singular: Gateway
   selector: Selector
   servers:
@@ -887,6 +913,7 @@ git-repositories:
     basic: Basic
     public: Public
     ssh-key: SSH Key
+  description: <0>Git Repository</0> is used to define and manage Git repositories that store the Function's source code and dependencies.
   errors:
     invalid-url: Invalid Repository URL. The URL must start with the "http(s)", "git", or "ssh" prefix and end with the ".git" suffix.
   labels:
@@ -904,6 +931,7 @@ git-repositories:
     secret: The name of the Secret with credentials used by the Function Controller to authenticate to the Git repository in order to fetch the Function's source code and dependencies.
     url: URL must be a valid Git repository address that starts with the "http(s)", "git", or "ssh" prefix.
 instances:
+  description: <0>Service Instance</0> is a provisioned instance of a service that can be consumed by an application.
   no-specific-plan-parameters:
     tooltip: The service provider did not define specific parameters for the selected plan. Refer to the documentation to learn about the required parameters, and define them as a JSON in the editor.
   title: Instances
@@ -917,6 +945,7 @@ issuers:
     messages:
       failure: Failed to create the issuer.
       success: Issuer created.
+  description: <0>Issuer</0> is a Namespace resource responsible for provisioning of certificates.
   domains:
     excluded: Excluded domains
     included: Included domains
@@ -962,6 +991,36 @@ jobs:
     status: Status
     title: Conditions
     type: Type
+  create-modal:
+    at-least-one-container-required: Cron Job must have at least one container.
+    container: Container
+    containers: Containers
+    containers-readonly-in-edit: After a Job is created, the containers are read-only.
+    labels:
+      args: Args
+      command: Command
+      docker-image: Docker Image
+      failed-jobs-history-limit: Failed Jobs History Limit
+      image-pull-policy: Image Pull Policy
+      parallelism: Parallelism
+      starting-deadline: Starting Deadline
+      successful-jobs-history-limit: Successful Jobs History Limit
+      suspend: Suspend
+    placeholders:
+      args: Arguments to the ENTRYPOINT.
+      command: Command to run in a container.
+      docker-image: Enter the Docker image tag, for example, 'busybox'.
+      failed-jobs-history-limit: 'The number of failed finished jobs to retain (default: 1).'
+      parallelism: 'The maximum number of Pods the job should run at any given time (default: 1).'
+      starting-deadline: Optional deadline in seconds.
+      successful-jobs-history-limit: 'The number of successful finished jobs to retain (default: 3).'
+    tooltips:
+      args: Docker image CMD is used if arguments are not provided. Provide either args or command.
+      command: The Docker image's ENTRYPOINT is used if this is not provided. Provide either args or command.
+      starting-deadline: Optional deadline in seconds for starting the job if it misses the scheduled time.
+      suspend: 'If true, the controller suspends subsequent executions (default: false). It does not apply to started executions.'
+  description: <0>Job</0> creates and supervises Pods until their successful termination.
+  name-singular: Job
   start-time: Start Time
   title: Jobs
 kubeconfig-id:
@@ -997,6 +1056,7 @@ namespaces:
     apply-limits: Apply limits per container
     apply-memory-quotas: Apply total memory quotas
     disable-sidecar: Disable sidecar injection
+  description: <0>Namespace</0> helps to maintain and divide resources in a cluster.
   events:
     headers:
       created: Created
@@ -1039,27 +1099,50 @@ node-details:
   timestamp: Timestamp
   title-warnings: Warnings
 oauth2-clients:
-  grand-types:
-    authorization-code: Authorization Code
-    client-credentials: Client Credentials
+  auth-methods:
+    client_secret_basic: Client Secret / Basic
+    client_secret_post: Client Secret / POST
+    none: None
+    private_key_jwt: Private Key / JWT
+  description: <0>OAuth2 Client</0> allows an application to acquire an OAuth2 token to access protected resources.
+  grant-types:
+    authorization_code: Authorization Code
+    client_credentials: Client Credentials
     implicit: Implicit
-    refresh-token: Refresh Token
+    refresh_token: Refresh Token
   headers:
     secret: Secret
   labels:
-    grand-types: Grant Types
+    audience: Audience
+    auth-method: Token Endpoint Authentication Method
+    client-name: Client Name
+    grant-types: Grant Types
+    post-logout-redirect-uris: Post-Logout Redirect URIs
+    redirect-uris: Redirect URIs
     response-types: Response Types
     scope: Scope
+    secret: Secret
+    secret-name: Secret Name
+    uris: URIs
+  name_singular: OAuth2 Client
+  placeholders:
+    scope: OAuth2 scope
   response-types:
     code: Code
-    id-token: ID Token
+    id_token: ID Token
     token: Token
+  secret: OAuth2 Client Credentials
   title: OAuth2 Clients
+  tooltips:
+    audience: Audience is a whitelist defining the audiences this client is allowed to request tokens for.
+    client-name: Client name is the human-readable string name of the client to be presented to the end-user during authorization.
+    secret-name: Secret name points to the Kubernetes Secret that contains the client's ID and password.
 observability:
   title: Observability
 pods:
   buttons:
     view-logs: View Logs
+  description: <0>Pod</0> is the smallest and simplest Kubernetes object that represents a set of containers running on your cluster.
   headers:
     pod-ip: Pod IP
     type: Type
@@ -1086,13 +1169,25 @@ preferences:
   title: Preferences
 replica-sets:
   cpu: CPU
+  create-modal:
+    labels:
+      min-ready-seconds: Minimum ready seconds
+      replicas: Replicas
+    placeholders:
+      min-ready-seconds: Minimum number of seconds
+      replicas: Replicas
+    tooltips:
+      min-ready-seconds: Minimum number of seconds for which a newly created Pod should be ready without any of its containers crashing in order to be considered available.
+      replicas: Replicas is the number of desired replicas.
+  description: <0>Replica Set</0> maintains a number of replica Pods running at any given time.
   headers:
     images: Images
     limits: Limits
     replicas: Ready Replicas
     requests: Requests
   memory: Memory
-  title: ReplicaSets
+  name_singular: Replica Set
+  title: Replica Sets
 resource-quotas:
   headers:
     limits: Limits
@@ -1110,6 +1205,7 @@ role-bindings:
     tooltips:
       kind: Being part of the JWT token, you must set User and Groups at the OIDC level if you use an OIDC provider.
     user-name: User Name
+  description: <0>Role Binding</0> assigns the permissions defined in a Role to a user.
   headers:
     kind: Kind
     role-ref: Role Reference
@@ -1117,15 +1213,16 @@ role-bindings:
   labels:
     annotations: Annotations
     service-account: Service Account
-  name_singular: RoleBinding
+  name_singular: Role Binding
   placeholders:
     api-group: API Group
     group:
       name: User group
     user:
       name: User name
-  title: RoleBindings
+  title: Role Bindings
 roles:
+  description: <0>Role</0> is a set of permissions within a Namespace that can be assigned to a user.
   headers:
     api-groups: API Groups
     custom: Custom
@@ -1152,6 +1249,7 @@ secrets:
       success: Secret created.
     title: Create Secret
   data: Data
+  description: <0>Secret</0> is an object that stores sensitive data in key-value pairs.
   edit-modal:
     messages:
       failure: 'Failed to update the Secret: {{error}}.'
@@ -1180,8 +1278,9 @@ service-accounts:
     at-least-one-secret-required: '{{resource}} must have at least one secret.'
     tooltips:
       auto-mount-token: When set to true, it automatically mounts the service account token within each container of a given pod. For security reasons, don't enable automount if you don't need it.
-      image-pull-secrets: ImagePullSecrets is a list of references to Secrets in the same Namespace to use for pulling any images in Pods that reference this ServiceAccount. ImagePullSecrets are distinct from Secrets because Secrets can be mounted in a Pod, but ImagePullSecrets are only accessed by the kubelet.
-      secrets: Secrets is the list of Secrets allowed to be used by running Pods using this ServiceAccount.
+      image-pull-secrets: Image Pull Secrets is a list of references to Secrets in the same Namespace to use for pulling any images in Pods that reference this Service Account. Image Pull Secrets are distinct from Secrets because Secrets can be mounted in a Pod, but Image Pull Secrets are only accessed by the kubelet.
+      secrets: Secrets is the list of Secrets allowed to be used by running Pods using this Service Account.
+  description: <0>Service Account</0> enables processes to run on a Pod to communicate and authenticate to the API server.
   headers:
     auto-mount-token: Automount Token
     download-kubeconfig: Download Kubeconfig
@@ -1195,6 +1294,7 @@ service-management:
   title: Service Management
 services:
   cluster-ip: Cluster IP
+  description: <0>Service</0> enables access to an application running on a set of Pods.
   external-ips: External IPs
   labels:
     service: Service
@@ -1231,8 +1331,9 @@ settings:
   language: Language
   theme: Theme
 stateful-sets:
+  description: <0>Stateful Set</0> is used for the management of Pods' deployment and scaling.
   replicas: Replicas
-  title: StatefulSets
+  title: Stateful Sets
 top-nav:
   profile:
     preferences: $t(preferences.title)

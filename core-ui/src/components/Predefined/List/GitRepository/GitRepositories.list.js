@@ -1,8 +1,10 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
-import { StatusBadge } from 'react-shared';
+import { StatusBadge, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 import { Link } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
+import { Link as ReactSharedLink } from 'react-shared';
+import { Trans } from 'react-i18next';
 
 export const GitRepositoriesList = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
@@ -21,7 +23,7 @@ export const GitRepositoriesList = ({ DefaultRenderer, ...otherParams }) => {
     {
       header: t('git-repositories.labels.secret'),
       value: repo => {
-        if (!repo.spec.auth) return '-';
+        if (!repo.spec.auth) return EMPTY_TEXT_PLACEHOLDER;
         const secretName = repo.spec.auth.secretName;
         return (
           <Link
@@ -39,10 +41,20 @@ export const GitRepositoriesList = ({ DefaultRenderer, ...otherParams }) => {
     },
   ];
 
+  const description = (
+    <Trans i18nKey="git-repositories.description">
+      <ReactSharedLink
+        className="fd-link"
+        url="https://kyma-project.io/docs/kyma/latest/05-technical-reference/00-custom-resources/svls-02-gitrepository#documentation-content"
+      />
+    </Trans>
+  );
+
   return (
     <DefaultRenderer
       customColumns={customColumns}
       createActionLabel={t('git-repositories.labels.create')}
+      description={description}
       {...otherParams}
     />
   );

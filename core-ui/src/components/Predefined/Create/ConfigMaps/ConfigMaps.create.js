@@ -12,17 +12,17 @@ import {
 
 import { createConfigMapTemplate, createPresets } from './helpers';
 
-export function ConfigMapsCreate({
+function ConfigMapsCreate({
   formElementRef,
   onChange,
   setCustomValid,
-  configMap: initialConfigMap,
+  resource: initialConfigMap,
   readonlyName,
   resourceUrl,
 }) {
   const { namespaceId } = useMicrofrontendContext();
   const [configMap, setConfigMap] = useState(
-    initialConfigMap || createConfigMapTemplate(),
+    { ...initialConfigMap } || createConfigMapTemplate(),
   );
   const { t } = useTranslation();
 
@@ -37,8 +37,10 @@ export function ConfigMapsCreate({
       formElementRef={formElementRef}
       presets={createPresets([], namespaceId, t)}
       createUrl={resourceUrl}
+      setCustomValid={setCustomValid}
     >
       <K8sNameField
+        readOnly={!!initialConfigMap}
         propertyPath="$.metadata.name"
         kind={t('config-maps.name_singular')}
         setValue={name => {
@@ -50,6 +52,7 @@ export function ConfigMapsCreate({
           );
           setConfigMap({ ...configMap });
         }}
+        validate={value => !!value}
       />
       <KeyValueField
         advanced
@@ -65,3 +68,5 @@ export function ConfigMapsCreate({
     </ResourceForm>
   );
 }
+ConfigMapsCreate.allowEdit = true;
+export { ConfigMapsCreate };

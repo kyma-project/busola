@@ -46,6 +46,7 @@ export const DEFAULT_FEATURES = {
 };
 
 export const DEFAULT_HIDDEN_NAMESPACES = [
+  'compass-system',
   'istio-system',
   'knative-eventing',
   'knative-serving',

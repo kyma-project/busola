@@ -16,16 +16,17 @@ Cypress.Commands.add('getIframeBody', () => {
   );
 });
 
-Cypress.Commands.add('getModalBody', () => {
+Cypress.Commands.add('getModalIframeBody', () => {
   // get the iframe > document > body
   // and retry until the body element is not empty
-  cy.log('getModalBody');
+  cy.log('getModalIframeBody');
+
   return (
     cy
-      .get('.iframeModalCtn iframe', { log: false, timeout: 10000 })
-      .filter(':visible')
+      .get('.iframeModalCtn iframe', { log: false })
+      .filter(':visible', { log: false })
       .its('0.contentDocument.body', { log: false })
-      .should('not.be.empty')
+      .should('not.be.empty', { log: false })
       // wraps "body" DOM element to allow
       // chaining more Cypress commands, like ".find(...)"
       // https://on.cypress.io/wrap

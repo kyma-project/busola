@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import LuigiClient from '@luigi-project/client';
+import { Link } from 'react-shared';
+import { Trans } from 'react-i18next';
 
 import { instancesTabUtils } from 'helpers/instances-tab-utils';
 import {
@@ -119,10 +121,20 @@ export default function ServiceClassList() {
     searchQuery,
   );
 
+  const description = (
+    <Trans i18nKey="catalog.description">
+      <Link
+        className="fd-link"
+        url="https://kyma-project-docs-preview.netlify.app/components/service-catalog"
+      />
+    </Trans>
+  );
+
   return (
     <>
       <PageHeader
         title={t('catalog.title')}
+        description={description}
         isCatalog={true}
         actions={actions(
           allServiceClasses.length > 0,

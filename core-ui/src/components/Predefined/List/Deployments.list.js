@@ -1,6 +1,8 @@
 import React from 'react';
 import { ControlledByKind, StatusBadge } from 'react-shared';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-shared';
+import { Trans } from 'react-i18next';
 
 const getImages = deployment => {
   const images =
@@ -23,9 +25,8 @@ const getStatusType = deployment => {
 };
 
 const getPodsCount = deployment => {
-  return `${deployment.status.readyReplicas || 0} / ${
-    deployment.status.replicas
-  }`;
+  return `${deployment.status.readyReplicas || 0} / ${deployment.status
+    .replicas || 0}`;
 };
 
 export const DeploymentsList = ({ DefaultRenderer, ...otherParams }) => {
@@ -68,5 +69,20 @@ export const DeploymentsList = ({ DefaultRenderer, ...otherParams }) => {
     },
   ];
 
-  return <DefaultRenderer customColumns={customColumns} {...otherParams} />;
+  const description = (
+    <Trans i18nKey="deployments.description">
+      <Link
+        className="fd-link"
+        url="https://kubernetes.io/docs/concepts/workloads/controllers/deployment/"
+      />
+    </Trans>
+  );
+
+  return (
+    <DefaultRenderer
+      customColumns={customColumns}
+      description={description}
+      {...otherParams}
+    />
+  );
 };

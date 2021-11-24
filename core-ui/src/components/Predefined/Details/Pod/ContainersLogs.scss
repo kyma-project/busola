@@ -1,8 +1,8 @@
 .logs-wraper {
   height: 100vh;
   width: 100%;
-  display:flex;
-  flex-direction:column;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
 }
 
@@ -33,6 +33,7 @@
   height: 100%;
   overflow-y: scroll;
   padding: 0;
+  overflow-wrap: break-word;
 }
 
 .logs {
@@ -73,7 +74,8 @@
     margin-right: 10px;
   }
 
-  .generic-list-search, .logs-download  {
+  .generic-list-search,
+  .logs-download {
     margin-left: 15px;
   }
 }

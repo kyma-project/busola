@@ -9,8 +9,6 @@ import {
   MainFrameRedirection,
 } from 'react-shared';
 import { ApplicationServiceDetails } from 'components/Predefined/Details/Application/ApplicationServicesDetails/ApplicationServicesDetails';
-import CreateApiRule from '../ApiRules/CreateApiRule/CreateApiRule';
-import EditApiRule from 'components/ApiRules/EditApiRule/EditApiRule';
 import { ContainersLogs } from 'components/Predefined/Details/Pod/ContainersLogs';
 import { CustomResource } from 'components/Predefined/Details/CustomResourceDefinitions/CustomResources.details';
 import { ComponentForList, ComponentForDetails } from 'shared/getComponents';
@@ -69,18 +67,11 @@ export default function App() {
         component={withTitle(t('clusters.add.title'), AddCluster)}
       />
       <Route path="/preferences" render={Preferences} />
-      <Route exact path="/apirules/create" component={CreateApiRule} />
 
       <Route
         exact
         path="/applications/:name/:serviceName"
         component={RoutedApplicationServiceDetails}
-      />
-
-      <Route
-        exact
-        path="/apirules/edit/:apiName"
-        render={withTitle(t('api-rules.title'), RoutedEditApiRule)}
       />
 
       <Route
@@ -127,10 +118,6 @@ function RoutedApplicationServiceDetails({ match }) {
       serviceName={serviceName}
     />
   );
-}
-
-function RoutedEditApiRule({ match }) {
-  return <EditApiRule apiName={match.params.apiName} />;
 }
 
 function RoutedNodeDetails({ match }) {
@@ -208,6 +195,13 @@ function RoutedResourceDetails({ match }) {
   };
 
   const rendererName = params.resourceType + 'Details';
+  const rendererNameForCreate = params.resourceType + 'Create';
 
-  return <ComponentForDetails name={rendererName} params={params} />;
+  return (
+    <ComponentForDetails
+      name={rendererName}
+      nameForCreate={rendererNameForCreate}
+      params={params}
+    />
+  );
 }

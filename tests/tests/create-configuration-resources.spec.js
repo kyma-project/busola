@@ -5,9 +5,6 @@ const CONFIG_MAP_NAME = 'test-configmap';
 const SECRET_NAME = 'test-secret';
 const USER_NAME = 'user@kyma.eu';
 const ROLE_NAME = 'view (CR)';
-const CLIENT_NAME = 'test-oauth-client';
-const GIT_REPOSITORY_URL = 'https://github.com/test/sample-function.git';
-const GIT_REPOSITORY_NAME = 'test-git-repository';
 
 context('Test configuration resources', () => {
   before(() => {
@@ -91,16 +88,6 @@ context('Test configuration resources', () => {
       .should('be.visible');
   });
 
-  it('Create a Roles list view', () => {
-    cy.getLeftNav()
-      .find('[data-testid=roles_roles]')
-      .click();
-
-    cy.getIframeBody()
-      .contains('h3', 'Roles')
-      .should('be.visible');
-  });
-
   it('Create a Role Binding', () => {
     cy.getLeftNav()
       .find('[data-testid=role-bindings_rolebindings]')
@@ -154,141 +141,5 @@ context('Test configuration resources', () => {
       .find('tbody tr')
       .its('length')
       .should('be.gte', 1);
-  });
-
-  it('Create a ClusterRoleBinding', () => {
-    cy.getLeftNav()
-      .find('[data-testid=cluster-role-bindings_clusterrolebindings]')
-      .click();
-
-    cy.getIframeBody()
-      .contains('Create ClusterRoleBinding')
-      .click();
-
-    cy.getIframeBody()
-      .find('[placeholder="User name"]')
-      .clear()
-      .type(USER_NAME);
-
-    cy.getIframeBody()
-      .find('[placeholder="Choose role..."]')
-      .type(ROLE_NAME);
-
-    cy.getIframeBody()
-      .find('[role="dialog"]')
-      .contains('button', 'Create')
-      .click();
-
-    cy.getIframeBody()
-      .find('[role="search"] [aria-label="search-input"]')
-      .type(`${USER_NAME}-view`, { force: true }); // use force to skip clicking (the table could re-render between the click and the typing)
-
-    cy.getIframeBody()
-      .contains('tbody tr td a', `${USER_NAME}-view`)
-      .click({ force: true });
-
-    cy.getIframeBody()
-      .contains(`${USER_NAME}-view`)
-      .should('be.visible');
-
-    cy.getIframeBody()
-      .contains('button', 'Delete')
-      .click();
-
-    cy.get('[data-testid=luigi-modal-confirm]').click();
-
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click(); // close navigation tab after yourself
-  });
-
-  it('Create a OAuth2 Clients', () => {
-    cy.get('[data-testid=luigi-topnav-logo]').click();
-
-    cy.getLeftNav()
-      .contains('Namespaces')
-      .click();
-
-    cy.goToNamespaceDetails();
-
-    cy.getLeftNav()
-      .find('[data-testid=oauth2clients_oauthclients]')
-      .click();
-
-    cy.getIframeBody()
-      .contains('Create OAuth2 Client')
-      .click();
-
-    cy.getIframeBody()
-      .find('[placeholder="Client name"]')
-      .clear()
-      .type(CLIENT_NAME);
-
-    cy.getIframeBody()
-      .contains('label', 'ID token')
-      .prev('input')
-      .click({ force: true });
-
-    cy.getIframeBody()
-      .contains('label', 'Client credentials')
-      .prev('input')
-      .click({ force: true });
-
-    cy.getIframeBody()
-      .find('[placeholder="Enter multiple values separated by comma"]')
-      .clear()
-      .type(CLIENT_NAME);
-
-    cy.getIframeBody()
-      .contains('label', 'Scopes')
-      .click();
-
-    cy.getIframeBody()
-      .find('[role="dialog"]')
-      .contains('button', 'Create')
-      .click();
-
-    cy.getIframeBody()
-      .contains('a', CLIENT_NAME)
-      .click({ force: true });
-
-    cy.getIframeBody()
-      .contains(CLIENT_NAME)
-      .should('be.visible');
-  });
-
-  it('Create a Git Repository', () => {
-    cy.getLeftNav()
-      .find('[data-testid=gitrepositories_gitrepositories]')
-      .click();
-
-    cy.getIframeBody()
-      .contains('Connect Repository')
-      .click();
-
-    cy.getIframeBody()
-      .find('[placeholder="Repository name"]')
-      .clear()
-      .type(GIT_REPOSITORY_NAME);
-
-    cy.getIframeBody()
-      .find(
-        '[placeholder="Enter the URL address of your Git repository (Required)"]',
-      )
-      .clear()
-      .type(GIT_REPOSITORY_URL);
-
-    cy.getIframeBody()
-      .find('[role="dialog"]')
-      .contains('button', 'Connect')
-      .click();
-
-    cy.getIframeBody()
-      .find('td', GIT_REPOSITORY_NAME, { timeout: 5000 })
-      .should('be.visible');
-
-    cy.getIframeBody()
-      .contains(GIT_REPOSITORY_URL)
-      .should('be.visible');
   });
 });

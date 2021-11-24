@@ -42,9 +42,10 @@ export async function failFastFetch(input, auth, init = {}) {
       ...createAuthHeaders(auth),
       'Content-Type': 'application/json',
       'X-Cluster-Url': cluster?.server,
-      'X-Cluster-Certificate-Authority-Data': requiresCA
-        ? cluster['certificate-authority-data']
-        : undefined,
+      'X-Cluster-Certificate-Authority-Data':
+        requiresCA === true || requiresCA === undefined
+          ? cluster['certificate-authority-data']
+          : undefined,
     };
   }
 
@@ -70,12 +71,12 @@ export async function failFastFetch(input, auth, init = {}) {
 
 export async function checkIfClusterRequiresCA(auth) {
   try {
-    // try to fetch without CA (requiresCA is undefined)
+    // try to fetch with CA (if 'requiresCA' is undefined => send CA)
     await failFastFetch(config.backendAddress + '/api', auth);
-    return false;
-  } catch (_) {
-    // if it fails, use CA
     return true;
+  } catch (_) {
+    // if it fails, don't send CA anymore
+    return false;
   }
 }
 

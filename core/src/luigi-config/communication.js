@@ -32,7 +32,6 @@ export const communication = {
     },
     'busola.dontConfirmDelete': ({ value }) => {
       setFeatureToggle('dontConfirmDelete', value);
-      Luigi.configChanged();
     },
     'busola.refreshNavigation': () => {
       Luigi.configChanged('navigation.nodes');
