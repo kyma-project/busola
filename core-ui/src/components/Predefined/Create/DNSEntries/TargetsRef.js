@@ -4,8 +4,7 @@ import { Button, Switch, FormInput, ComboboxInput } from 'fundamental-react';
 import classnames from 'classnames';
 import { useGetList, Spinner } from 'react-shared';
 
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
-import { Label } from 'shared/ResourceForm/components/FormComponents';
+import { ResourceForm } from 'shared/ResourceForm';
 
 import './TargetsRef.scss';
 
@@ -55,9 +54,12 @@ export function TargetsInput({
   return (
     <div className="fd-row form-field multi-input">
       <div className="fd-col fd-col-md--3">
-        <Label required tooltipContent={t('dnsentries.tooltips.target')}>
+        <ResourceForm.Label
+          required
+          tooltipContent={t('dnsentries.tooltips.target')}
+        >
           {t('dnsentries.labels.target')}
-        </Label>
+        </ResourceForm.Label>
       </div>
       <ul className="text-array-input__list fd-col fd-col-md--8">
         {internalValue.map((entry, index) => (
@@ -150,7 +152,7 @@ export function TargetsRef({ resource: dnsEntry, setResource: setDnsEntry }) {
           ({ value, index, setInternalValue }) => (
             <div className="fd-col fd-col-md--3" key={index}>
               <div className="fd-row form-field multi-input__row">
-                <Label
+                <ResourceForm.Label
                   tooltipContent={
                     value?.isCname
                       ? t('dnsentries.tooltips.use-a')
@@ -158,7 +160,7 @@ export function TargetsRef({ resource: dnsEntry, setResource: setDnsEntry }) {
                   }
                 >
                   {t('dnsentries.labels.use-cname')}
-                </Label>
+                </ResourceForm.Label>
                 <div>
                   <Switch
                     key={`targets-switch-${index}`}

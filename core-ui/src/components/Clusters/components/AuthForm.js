@@ -4,8 +4,8 @@ import { MessageStrip, Switch } from 'fundamental-react';
 import * as jp from 'jsonpath';
 import { createLoginCommand, tryParseOIDCparams } from './oidc-params';
 
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
-import * as Inputs from 'shared/ResourceForm/components/Inputs';
+import { ResourceForm } from 'shared/ResourceForm';
+import * as Inputs from 'shared/ResourceForm/inputs';
 import { getUser, getUserIndex } from '../shared';
 
 export const AUTH_FORM_TOKEN = 'Token';

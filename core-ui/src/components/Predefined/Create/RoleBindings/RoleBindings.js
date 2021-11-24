@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import * as jp from 'jsonpath';
 import { createBindingTemplate, newSubject } from './templates';
 import { SingleSubjectForm, SingleSubjectInput } from './SubjectForm';
 import { validateBinding } from './helpers';
 import { MessageStrip } from 'fundamental-react';
 import { RoleForm } from './RoleForm.js';
-import * as Inputs from 'shared/ResourceForm/components/Inputs';
+import { ResourceForm } from 'shared/ResourceForm';
+import * as Inputs from 'shared/ResourceForm/inputs';
+import { KeyValueField, ItemArray } from 'shared/ResourceForm/fields';
 import { useGetList } from 'react-shared';
 import _ from 'lodash';
 
@@ -93,12 +94,12 @@ export function RoleBindings({
         propertyPath="$.metadata.name"
         readOnly={!!initialRoleBinding}
       />
-      <ResourceForm.KeyValueField
+      <KeyValueField
         advanced
         propertyPath="$.metadata.labels"
         title={t('common.headers.labels')}
       />
-      <ResourceForm.KeyValueField
+      <KeyValueField
         advanced
         propertyPath="$.metadata.annotations"
         title={t('common.headers.annotations')}
@@ -119,7 +120,7 @@ export function RoleBindings({
           })}
         </MessageStrip>
       )}
-      <ResourceForm.ItemArray
+      <ItemArray
         advanced
         defaultOpen
         propertyPath="$.subjects"

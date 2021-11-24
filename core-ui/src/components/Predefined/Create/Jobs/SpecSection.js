@@ -1,11 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import {
-  ResourceForm,
-  ResourceFormWrapper,
-} from 'shared/ResourceForm/ResourceForm';
-import * as Inputs from 'shared/ResourceForm/components/Inputs';
+import { ResourceForm } from 'shared/ResourceForm';
+import * as Inputs from 'shared/ResourceForm/inputs';
 
 const restartPolicyOptions = ['Never', 'OnFailure'].map(p => ({
   key: p,
@@ -21,7 +18,7 @@ export const CronJobSpecSection = ({ value, setValue, ...props }) => {
   const { t } = useTranslation();
 
   return (
-    <ResourceFormWrapper resource={value} setResource={setValue} {...props}>
+    <ResourceForm.Wrapper resource={value} setResource={setValue} {...props}>
       <ResourceForm.FormField
         advanced
         propertyPath="$.jobTemplate.spec.template.spec.startingDeadlineSeconds"
@@ -78,7 +75,7 @@ export const CronJobSpecSection = ({ value, setValue, ...props }) => {
         defaultKey="Allow"
         options={concurrencyPolicyOptions}
       />
-    </ResourceFormWrapper>
+    </ResourceForm.Wrapper>
   );
 };
 
@@ -86,7 +83,7 @@ export const JobSpecSection = ({ value, setValue, ...props }) => {
   const { t } = useTranslation();
 
   return (
-    <ResourceFormWrapper resource={value} setResource={setValue} {...props}>
+    <ResourceForm.Wrapper resource={value} setResource={setValue} {...props}>
       <ResourceForm.FormField
         advanced
         propertyPath="$.parallelism"
@@ -111,6 +108,6 @@ export const JobSpecSection = ({ value, setValue, ...props }) => {
         input={Inputs.Dropdown}
         options={restartPolicyOptions}
       />
-    </ResourceFormWrapper>
+    </ResourceForm.Wrapper>
   );
 };

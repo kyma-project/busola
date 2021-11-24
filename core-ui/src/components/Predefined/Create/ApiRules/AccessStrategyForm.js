@@ -1,7 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
-import * as Inputs from 'shared/ResourceForm/components/Inputs';
+import { ResourceForm } from 'shared/ResourceForm';
+import * as Inputs from 'shared/ResourceForm/inputs';
+import { TextArrayInput, ItemArray } from 'shared/ResourceForm/fields';
 import { JwtStrategyConfig } from './JwtStrategyConfig';
 import { createAccessStrategyTemplate } from './templates';
 
@@ -31,7 +32,7 @@ function SingleAccessStrategyInput({
         options={accessStrategyOptions}
       />
       {accessStrategy?.handler === 'oauth2_introspection' && (
-        <ResourceForm.TextArrayInput
+        <TextArrayInput
           propertyPath="$.config.required_scope"
           title={t('api-rules.oauth.required-scope')}
           inputProps={{
@@ -52,7 +53,7 @@ export function AccessStrategyForm(props) {
   return (
     <ResourceForm.Wrapper {...props}>
       <SingleAccessStrategyInput simple propertyPath="$.accessStrategies[0]" />
-      <ResourceForm.ItemArray
+      <ItemArray
         advanced
         propertyPath="$.accessStrategies"
         listTitle={t('api-rules.access-strategies.title')}

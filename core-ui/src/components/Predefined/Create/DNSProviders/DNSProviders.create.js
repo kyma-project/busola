@@ -3,9 +3,13 @@ import * as jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
 import { useGet } from 'react-shared';
 import { cloneDeep } from 'lodash';
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
+import { ResourceForm } from 'shared/ResourceForm';
 import { SecretRef } from 'shared/components/ResourceRef/SecretRef';
-import { K8sNameField } from 'shared/ResourceForm/components/FormComponents';
+import {
+  K8sNameField,
+  KeyValueField,
+  TextArrayInput,
+} from 'shared/ResourceForm/fields';
 import {
   createDNSProviderTemplate,
   createDNSProviderTemplateForGardener,
@@ -100,17 +104,17 @@ function DNSProvidersCreate({
         propertyPath="$.spec.secretRef"
         title={t('dnsproviders.labels.secret-reference')}
       />
-      <ResourceForm.KeyValueField
+      <KeyValueField
         advanced
         propertyPath="$.metadata.labels"
         title={t('common.headers.labels')}
       />
-      <ResourceForm.KeyValueField
+      <KeyValueField
         advanced
         propertyPath="$.metadata.annotations"
         title={t('common.headers.annotations')}
       />
-      <ResourceForm.TextArrayInput
+      <TextArrayInput
         required
         propertyPath="$.spec.domains.include"
         title={t('domains.include.label')}
@@ -119,7 +123,7 @@ function DNSProvidersCreate({
           placeholder: t('domains.include.placeholder'),
         }}
       />
-      <ResourceForm.TextArrayInput
+      <TextArrayInput
         advanced
         propertyPath="$.spec.domains.exclude"
         title={t('domains.exclude.label')}

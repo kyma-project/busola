@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormInput } from 'fundamental-react';
-import { MultiInput } from 'shared/ResourceForm/components/FormComponents';
+import { MultiInput } from 'shared/ResourceForm/fields';
 
 /*
 config:

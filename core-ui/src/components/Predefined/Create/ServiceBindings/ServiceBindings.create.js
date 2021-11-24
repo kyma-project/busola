@@ -4,15 +4,13 @@ import * as jp from 'jsonpath';
 
 import { useGetList } from 'react-shared';
 import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSelect';
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
-import { Editor } from 'shared/ResourceForm/components/Editor';
+import { ResourceForm } from 'shared/ResourceForm';
 import {
+  Editor,
   K8sNameField,
   KeyValueField,
-  FormField,
-  CollapsibleSection,
-} from 'shared/ResourceForm/components/FormComponents';
-import * as Inputs from 'shared/ResourceForm/components/Inputs';
+} from 'shared/ResourceForm/fields';
+import * as Inputs from 'shared/ResourceForm/inputs';
 
 import { createServiceBindingTemplate } from './helpers';
 import { SecretRefForm } from './SecretRefForm/SecretRefForm';
@@ -79,7 +77,7 @@ export function ServiceBindingsCreate({
         propertyPath="$.metadata.annotations"
         title={t('common.headers.annotations')}
       />
-      <FormField
+      <ResourceForm.FormField
         required
         propertyPath="$.spec.serviceInstanceName"
         label={t('btp-service-bindings.instance-name')}
@@ -94,14 +92,14 @@ export function ServiceBindingsCreate({
           />
         )}
       />
-      <FormField
+      <ResourceForm.FormField
         advanced
         label={t('btp-service-bindings.external-name')}
         propertyPath="$.spec.externalName"
         input={Inputs.Text}
         placeholder={t('btp-service-bindings.placeholders.external-name')}
       />
-      <FormField
+      <ResourceForm.FormField
         advanced
         label={t('btp-service-bindings.secret')}
         propertyPath="$.spec.secretName"
@@ -109,7 +107,7 @@ export function ServiceBindingsCreate({
         input={Inputs.Text}
         placeholder={t('btp-service-bindings.placeholders.secret')}
       />
-      <CollapsibleSection
+      <ResourceForm.CollapsibleSection
         advanced
         title={t('btp-service-bindings.parameters')}
         resource={serviceBinding}
@@ -124,7 +122,7 @@ export function ServiceBindingsCreate({
           )}
           height="10em"
         />
-      </CollapsibleSection>
+      </ResourceForm.CollapsibleSection>
       <SecretRefForm
         advanced
         propertyPath="$.spec.parametersFrom"
