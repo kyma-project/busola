@@ -7,7 +7,7 @@ import { ResourceForm } from '..';
 export function K8sNameField({ kind, value, setValue, className, ...props }) {
   const { t, i18n } = useTranslation();
 
-  const { isAdvanced, propertyPath, ...inputProps } = props;
+  const { isAdvanced, propertyPath, validate, ...inputProps } = props;
 
   return (
     <ResourceForm.FormField

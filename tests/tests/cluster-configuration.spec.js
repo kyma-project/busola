@@ -1,26 +1,27 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
-import config from '../config';
 
 const configMock = {
   data: {
     config: JSON.stringify({
-      navigation: {
-        disabledNodes: [],
-        externalNodes: [
-          {
-            category: 'Category from target cluster',
-            icon: 'course-book',
-            children: [
-              {
-                label: 'Example label',
-                link: 'http://test',
-              },
-            ],
-          },
-        ],
+      config: {
+        navigation: {
+          disabledNodes: [],
+          externalNodes: [
+            {
+              category: 'Category from target cluster',
+              icon: 'course-book',
+              children: [
+                {
+                  label: 'Example label',
+                  link: 'http://test',
+                },
+              ],
+            },
+          ],
+        },
+        storage: 'inMemory',
       },
-      storage: 'inMemory',
     }),
   },
 };

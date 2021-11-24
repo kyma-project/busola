@@ -20,9 +20,7 @@ export function CollapsibleSection({
   required,
   tooltipContent,
 }) {
-  const [open, setOpen] = useState(
-    defaultOpen === undefined ? !isAdvanced : defaultOpen,
-  );
+  const [open, setOpen] = useState(defaultOpen);
   const actionsRef = useRef();
   const iconGlyph = open ? 'navigation-down-arrow' : 'navigation-right-arrow';
 
