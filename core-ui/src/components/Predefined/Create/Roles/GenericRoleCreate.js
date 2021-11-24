@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { cloneDeep } from 'lodash';
+import * as jp from 'jsonpath';
+
 import { ResourceForm } from 'shared/ResourceForm';
-import * as Inputs from 'shared/ResourceForm/inputs';
-import { KeyValueField, ItemArray } from 'shared/ResourceForm/fields';
+import {
+  K8sNameField,
+  KeyValueField,
+  ItemArray,
+} from 'shared/ResourceForm/fields';
 import { createRuleTemplate, validateRole } from './helpers';
 import { RuleInput } from './RuleInput';
 import { RuleTitle } from './RuleTitle';
@@ -19,9 +25,7 @@ export function GenericRoleCreate({
   resource: initialRole,
 }) {
   const { t } = useTranslation();
-  const [role, setRole] = useState(
-    _.cloneDeep(initialRole) || createTemplate(),
-  );
+  const [role, setRole] = useState(cloneDeep(initialRole) || createTemplate());
 
   // dictionary of pairs (apiGroup: resources in that apiGroup)
   const apiRules = role?.rules?.flatMap(r => r.apiGroups);
