@@ -2,6 +2,7 @@ import React from 'react';
 
 import './Preferences.scss';
 import NamespaceSettings from './NamespaceSettings';
+import ProtectedSettings from './ProtectedSettings';
 import ThemeChooser from './ThemeChooser';
 import LanguageSettings from './LanguageSettings';
 import ConfirmationSettings from './ConfirmationSettings';
@@ -62,6 +63,7 @@ function Preferences() {
         <div>
           <NamespaceSettings />
           <ConfirmationSettings />
+          <ProtectedSettings />
         </div>
       </VerticalTabs.Content>
     </VerticalTabs>

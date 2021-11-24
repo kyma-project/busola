@@ -30,6 +30,15 @@ export const communication = {
     'busola.showHiddenNamespaces': ({ showHiddenNamespaces }) => {
       setFeatureToggle('showHiddenNamespaces', showHiddenNamespaces);
     },
+    'busola.disableResourceProtection': ({ disableResourceProtection }) => {
+      console.log(
+        'setFeatureToggle',
+        'disableResourceProtection',
+        disableResourceProtection,
+      );
+      setFeatureToggle('disableResourceProtection', disableResourceProtection);
+      Luigi.configChanged('navigation.nodes');
+    },
     'busola.dontConfirmDelete': ({ value }) => {
       setFeatureToggle('dontConfirmDelete', value);
     },

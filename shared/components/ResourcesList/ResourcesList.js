@@ -116,7 +116,13 @@ function Resources({
   useWindowTitle(windowTitle || prettifyNamePlural(resourceName, resourceType));
   const { t } = useTranslation(['translation'], { i18n });
 
-  const { isProtected, protectedResourceWarning } = useProtectedResources(i18n);
+  const [disableResourceProtection] = useFeatureToggle(
+    'disableResourceProtection',
+  );
+  const { isProtected, protectedResourceWarning } = useProtectedResources(
+    i18n,
+    disableResourceProtection,
+  );
 
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [activeResource, setActiveResource] = useState(null);
