@@ -196,7 +196,7 @@ export function TargetsRef({ resource: dnsEntry, setResource: setDnsEntry }) {
                     compact
                     id={'targets-ref'}
                     ariaLabel="Combobox input"
-                    arrowLabel="Combobox input arrow"
+                    arrowLabel={t('dnsentries.placeholders.target-a')}
                     showAllEntries
                     searchFullString
                     options={IPs}

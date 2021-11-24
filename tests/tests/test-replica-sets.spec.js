@@ -125,7 +125,7 @@ context('Create a Replica Set', () => {
 
     cy.getIframeBody().contains(
       `${EDITED_REPLICAS_AMOUNT} / ${EDITED_REPLICAS_AMOUNT}`,
-      { timeout: 12000 },
+      { timeout: 15 * 1000 },
     );
   });
 });
