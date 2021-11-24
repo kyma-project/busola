@@ -17,6 +17,7 @@
   "testFiles": [
     "run-before.spec.js",
     "create-a-deployment.spec.js",
+    "create-a-role.spec.js",
     "create-an-api-rule.spec.js",
     "download-a-kubeconfig.spec.js",
     "in-cluster-eventing.spec.js",

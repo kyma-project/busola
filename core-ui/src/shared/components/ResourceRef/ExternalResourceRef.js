@@ -74,8 +74,6 @@ export function ExternalResourceRef({
     !value?.name ||
     filteredResourcesOptions.find(res => res.key === value.name);
 
-  const open = defaultOpen === undefined ? !isAdvanced : defaultOpen;
-
   const content = () => {
     return [
       <ResourceForm.FormField
@@ -162,7 +160,8 @@ export function ExternalResourceRef({
       tooltipContent={tooltipContent}
       actions={actions}
       className={classnames('external-resource-ref', className)}
-      defaultOpen={open}
+      defaultOpen={defaultOpen}
+      isAdvanced={isAdvanced}
       required={required}
     >
       {content()}
