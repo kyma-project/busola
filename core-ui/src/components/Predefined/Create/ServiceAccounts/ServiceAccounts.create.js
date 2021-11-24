@@ -4,7 +4,6 @@ import { useGetList } from 'react-shared';
 import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
 import * as jp from 'jsonpath';
 import { createServiceAccountTemplate, newSecret } from './templates';
-import { SingleSecretForm } from './SecretForm';
 import { validateServiceAccount } from './helpers';
 import { Switch } from 'fundamental-react';
 import _ from 'lodash';
@@ -91,11 +90,16 @@ const ServiceAccountsCreate = ({
           setServiceAccount({ ...serviceAccount });
         }}
         toInternal={values => (values || []).map(value => value?.name)}
-        options={(data || []).map(i => ({
-          key: i.metadata.name,
-          text: i.metadata.name,
-        }))}
+        options={(data || [])
+          .filter(
+            secret => secret.type === 'kubernetes.io/service-account-token',
+          )
+          .map(i => ({
+            key: i.metadata.name,
+            text: i.metadata.name,
+          }))}
       />
+
       <ResourceForm.ComboboxArrayInput
         advanced
         title={t('service-accounts.headers.image-pull-secrets')}

@@ -24,7 +24,6 @@ export const GenericSecrets = ({
       handler: downloadKubeconfig,
     },
   ];
-
   return (
     <ComponentForList
       name={title}

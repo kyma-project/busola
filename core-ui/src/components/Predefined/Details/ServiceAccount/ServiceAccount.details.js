@@ -28,11 +28,13 @@ const ServiceAccountImagePullSecrets = serviceAccount => {
   const namespace = serviceAccount.metadata.namespace;
   const listKey = 'service-account-imagepullsecrets';
   const title = 'Image Pull Secrets';
-  const filterBySecret = secret =>
-    serviceAccount.imagePullSecrets.find(
+  const filterBySecret = secret => {
+    console.log(serviceAccount.imagePullSecrets);
+    return serviceAccount.imagePullSecrets.find(
       ({ name: secretName }) => secret.metadata.name === secretName,
     );
-
+  };
+  console.log(serviceAccount.imagePullSecrets);
   return serviceAccount.imagePullSecrets ? (
     <GenericSecrets
       key={listKey}
@@ -58,7 +60,14 @@ export const ServiceAccountsDetails = ({ DefaultRenderer, ...otherParams }) => {
   ];
   return (
     <DefaultRenderer
-      customComponents={[ServiceAccountSecrets, ServiceAccountImagePullSecrets]}
+      customComponents={[
+        ServiceAccountSecrets,
+        ServiceAccountImagePullSecrets,
+        resource => {
+          console.log(resource.imagePullSecrets);
+          return <p>test</p>;
+        },
+      ]}
       customColumns={customColumns}
       {...otherParams}
     />
