@@ -17,7 +17,6 @@ export function setPageSize(pageSize) {
 export const communicationEntry = {
   'busola.set-page-size': ({ pageSize }) => {
     setPageSize(pageSize);
-    console.log(pageSize);
 
     const config = Luigi.getConfig();
     // set context of all first-level nodes

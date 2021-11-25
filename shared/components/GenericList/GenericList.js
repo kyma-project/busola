@@ -62,12 +62,6 @@ export const GenericList = ({
     if (pagination) {
       // move back when the last item from the last page is deleted
       const pagesCount = Math.ceil(entries.length / pagination.itemsPerPage);
-      console.log(
-        currentPage,
-        pagesCount,
-        currentPage > pagesCount,
-        pagesCount > 0,
-      );
       if (currentPage > pagesCount && pagesCount > 0) {
         setCurrentPage(pagesCount);
       }
