@@ -176,7 +176,8 @@ Defualt settings:
 ```
 
 - **PROTECTED_RESOURCES** – is used to block the edit and delete functions based on the determined rules. If the resource meets the rule requirements, the resource becomes protected and cannot be edited/deleted.
-  Each resource must have a match field, which is the list of key-value pairs. The proper rule description is when the definition given in the key matches the value.  
+  Each resource must have a match field, which is the list of key-value pairs. The proper rule description is when the definition given in the key matches the value.
+
   Optionally you can provide a message parameter, which displays a simple message, or messageSrc, which is a yaml path where the message to be displayed is included. If neither message nor messageSrc is provided, a generic message will be used.
 
 Example:
