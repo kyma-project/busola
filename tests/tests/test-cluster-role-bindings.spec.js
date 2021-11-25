@@ -1,5 +1,4 @@
 /// <reference types="cypress" />
-import 'cypress-file-upload';
 
 const CRB_NAME = 'kyma-user-helm';
 const USER_NAME = 'test@kyma.eu';

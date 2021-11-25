@@ -50,6 +50,39 @@ context('Test Service Accounts', () => {
     cy.getIframeBody()
       .find('[role="presentation"]')
       .click();
+
+    cy.getIframeBody()
+      .find('[role="dialog"]')
+      .contains('button', 'Create')
+      .click();
     cy.wait(40000);
+  });
+
+  it('Checking details', () => {
+    cy.getIframeBody()
+      .contains(SERVICE_NAME)
+      .should('be.visible');
+
+    cy.getIframeBody()
+      .contains(`${SERVICE_NAME}-token`)
+      .should('be.visible');
+
+    cy.getIframeBody()
+      .contains('default-token')
+      .should('be.visible');
+
+    cy.getIframeBody()
+      .contains('ENABLED')
+      .should('be.visible');
+  });
+
+  it('Edit', () => {
+    cy.getIframeBody()
+      .contains('Edit')
+      .click();
+
+    cy.getIframeBody()
+      .contains('Advanced')
+      .click();
   });
 });
