@@ -87,7 +87,3 @@ Pagination.propTypes = {
   currentPage: PropTypes.number.isRequired,
   onChangePage: PropTypes.func.isRequired,
 };
-
-Pagination.defaultProps = {
-  itemsPerPage: 20,
-};

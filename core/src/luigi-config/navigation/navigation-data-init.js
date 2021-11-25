@@ -40,6 +40,7 @@ import { loadTargetClusterConfig } from '../utils/target-cluster-config';
 import { checkClusterStorageType } from '../cluster-management/clusters-storage';
 import { getSSOAuthData } from '../auth/sso';
 import { setNavFooterText } from '../nav-footer';
+import { AVAILABLE_PAGE_SIZES, getPageSize } from '../settings/page-size';
 
 async function createAppSwitcher() {
   const activeClusterName = getActiveClusterName();
@@ -119,6 +120,12 @@ async function createClusterManagementNodes(features) {
       busolaClusterParams: await getBusolaClusterParams(),
       features,
       ssoData: getSSOAuthData(),
+      settings: {
+        pagination: {
+          pageSize: getPageSize(),
+          AVAILABLE_PAGE_SIZES,
+        },
+      },
     },
   };
 
@@ -382,6 +389,12 @@ export async function createNavigationNodes(
         language: i18next.language,
         ssoData: getSSOAuthData(),
         groupVersions,
+        settings: {
+          pagination: {
+            pageSize: getPageSize(),
+            AVAILABLE_PAGE_SIZES,
+          },
+        },
       },
     },
   ];
