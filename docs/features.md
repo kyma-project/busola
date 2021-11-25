@@ -11,7 +11,7 @@ Below you can find a description of all the features that are available in Busol
 Default settings:
 
 ```bash
-"ADD_CLUSTER_DISABLED ":{
+**"ADD_CLUSTER_DISABLED"**:{
   "isEnabled": false,
       "config": {
       "cockpitUrl":"https://account.staging.hanavlab.ondemand.com/cockpit"
@@ -127,10 +127,10 @@ Default settings:
 
 ```bash
 "KUBECONFIG_ID": {
-	"isEnabled": true,
-	"config": {
-	  "kubeconfigUrl": "https://kyma-env-broker.cp.dev.kyma.cloud.sap/kubeconfig"
-	}
+ "isEnabled": true,
+ "config": {
+   "kubeconfigUrl": "https://kyma-env-broker.cp.dev.kyma.cloud.sap/kubeconfig"
+ }
 },
 ```
 
@@ -155,23 +155,23 @@ Defualt settings:
 
 ```bash
 "OBSERVABILITY": {
-	"isEnabled": true,
-	"config": {
-	  "links": [
-	    {
-	      "label": "Grafana",
-	      "path": "apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/monitoring-grafana"
-	    },
-	    {
-	      "label": "Kiali",
-	      "path": "apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/kiali"
-	    },
-	    {
-	      "label": "Tracing",
-	      "path": "apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/tracing"
-	    }
-	  ]
-	}
+ "isEnabled": true,
+ "config": {
+   "links": [
+     {
+       "label": "Grafana",
+       "path": "apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/monitoring-grafana"
+     },
+     {
+       "label": "Kiali",
+       "path": "apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/kiali"
+     },
+     {
+       "label": "Tracing",
+       "path": "apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/tracing"
+     }
+   ]
+ }
 }
 ```
 
@@ -288,11 +288,11 @@ Default settings:
 
 ```bash
 "SSO_LOGIN": {
-	"isEnabled": true,
-	"config": {
-	  "issuerUrl": "https://kymatest.accounts400.ondemand.com",
-	  "scope": "openid",
-	  "clientId": "9bd05ed7-a930-44e6-8c79-e6defeb7dec9"
-	}
+ "isEnabled": true,
+ "config": {
+   "issuerUrl": "https://kymatest.accounts400.ondemand.com",
+   "scope": "openid",
+   "clientId": "9bd05ed7-a930-44e6-8c79-e6defeb7dec9"
+ }
 },
 ```
