@@ -188,29 +188,27 @@ Example:
   "config": {
     "resources": [
       {
-        // matches a resource with label "foo" equal to "bar"
+        # matches a resource with label "foo" equal to "bar"
         "match": {
           "$.metadata.labels.foo": "bar"
         },
-        // message to display in the tooltip
+        # message to display in the tooltip
         "message": "This resource is protected"
       },
       {
-        // matches a resource with both label "foo" equal to "bar" and label
-        // "baz" equal to "qux"
+        # matches a resource with both label "foo" equal to "bar" and label "baz" equal to "qux"
         "match": {
           "$.metadata.labels.foo": "bar",
           "$.metadata.labels.baz": "qux"
         },
-        // source of the message to display in the tooltip
+        # source of the message to display in the tooltip
         "messageSrc": "$.metadata.annotations.protected-message"
       },
       {
         "match": {
           "$.metadata.labels.foo": "bar"
         }
-        // if neither "message" or "messageSrc" is given, a generic message
-        // will be used (from i18n files)
+        # if neither "message" or "messageSrc" is given, a generic message will be used (from i18n files)
       }
     ]
   }
