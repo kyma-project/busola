@@ -1,11 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import {
-  ResourceForm,
-  ResourceFormWrapper,
-} from 'shared/ResourceForm/ResourceForm';
-import * as Inputs from 'shared/ResourceForm/components/Inputs';
+import { ResourceForm } from 'shared/ResourceForm';
+import * as Inputs from 'shared/ResourceForm/inputs';
+import { K8sNameField, TextArrayInput } from 'shared/ResourceForm/fields';
 
 export function SingleContainerForm({
   container,
@@ -22,12 +20,12 @@ export function SingleContainerForm({
   }));
 
   return (
-    <ResourceFormWrapper
+    <ResourceForm.Wrapper
       resource={container}
       setResource={() => setContainers([...containers])}
       isAdvanced={isAdvanced}
     >
-      <ResourceForm.K8sNameField
+      <K8sNameField
         propertyPath="$.name"
         kind={t('jobs.create-modal.container')}
         readOnly={readOnly}
@@ -50,7 +48,7 @@ export function SingleContainerForm({
         options={imagePullPolicyOptions}
         readOnly={readOnly}
       />
-      <ResourceForm.TextArrayInput
+      <TextArrayInput
         required
         propertyPath="$.command"
         title={t('jobs.create-modal.labels.command')}
@@ -58,7 +56,7 @@ export function SingleContainerForm({
         tooltipContent={t('jobs.create-modal.tooltips.command')}
         readOnly={readOnly}
       />
-      <ResourceForm.TextArrayInput
+      <TextArrayInput
         required
         advanced
         propertyPath="$.args"
@@ -67,7 +65,7 @@ export function SingleContainerForm({
         tooltipContent={t('jobs.create-modal.tooltips.args')}
         readOnly={readOnly}
       />
-    </ResourceFormWrapper>
+    </ResourceForm.Wrapper>
   );
 }
 

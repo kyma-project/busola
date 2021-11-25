@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { useGetList } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
-import * as Inputs from 'shared/ResourceForm/components/Inputs';
+import { ResourceForm } from 'shared/ResourceForm';
+import * as Inputs from 'shared/ResourceForm/inputs';
 
 let memoizedProviders = null;
 export function DNSNameRef({ required, simple, advanced, ...props }) {

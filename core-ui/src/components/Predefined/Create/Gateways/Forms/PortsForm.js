@@ -3,8 +3,8 @@ import { Select } from 'shared/components/Select/Select';
 import { useTranslation } from 'react-i18next';
 import { PROTOCOLS, DEFAULT_PORTS, isTLSProtocol } from './../helpers';
 import { switchTLS } from './TlsForm';
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
-import * as Inputs from 'shared/ResourceForm/components/Inputs';
+import { ResourceForm } from 'shared/ResourceForm';
+import * as Inputs from 'shared/ResourceForm/inputs';
 
 export const PortsForm = ({ server = {}, servers, setServers }) => {
   const { t } = useTranslation();

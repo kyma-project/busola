@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 
 import { Button } from 'fundamental-react';
 
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
-import * as Inputs from 'shared/ResourceForm/components/Inputs';
+import { ResourceForm } from 'shared/ResourceForm';
+import * as Inputs from 'shared/ResourceForm/inputs';
 import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSelect';
 import { Containers } from './Containers';
 

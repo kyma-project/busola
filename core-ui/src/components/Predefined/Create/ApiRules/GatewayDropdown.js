@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useGetList } from 'react-shared';
-import { FormField } from 'shared/ResourceForm/components/FormComponents';
-import * as Inputs from 'shared/ResourceForm/components/Inputs';
+import { ResourceForm } from 'shared/ResourceForm';
+import * as Inputs from 'shared/ResourceForm/inputs';
 
 export function useGatewaysQuery(namespace) {
   const filterGateways = gateway =>
@@ -45,7 +45,7 @@ export function GatewayDropdown({
   }));
 
   return (
-    <FormField
+    <ResourceForm.FormField
       advanced
       required
       propertyPath="$.spec.service"

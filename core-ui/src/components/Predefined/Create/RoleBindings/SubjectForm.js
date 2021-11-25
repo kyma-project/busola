@@ -2,8 +2,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { FormFieldset } from 'fundamental-react';
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
-import * as Inputs from 'shared/ResourceForm/components/Inputs';
+import { ResourceForm } from 'shared/ResourceForm';
+import * as Inputs from 'shared/ResourceForm/inputs';
 import { Select } from 'shared/components/Select/Select';
 import { ServiceAccountRef } from 'shared/components/ResourceRef/ServiceAccountRef';
 

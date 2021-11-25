@@ -1,8 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useGetList } from 'react-shared';
-import { FormField } from 'shared/ResourceForm/components/FormComponents';
-import * as Inputs from 'shared/ResourceForm/components/Inputs';
+import { ResourceForm } from 'shared/ResourceForm';
+import * as Inputs from 'shared/ResourceForm/inputs';
 
 export function useServicesQuery(namespace) {
   const EXCLUDED_SERVICES_LABEL_KEYS = ['serving.knative.dev/revision'];
@@ -42,7 +42,7 @@ export function ServiceDropdown({
   });
 
   return (
-    <FormField
+    <ResourceForm.FormField
       advanced
       required
       propertyPath="$.spec.service"

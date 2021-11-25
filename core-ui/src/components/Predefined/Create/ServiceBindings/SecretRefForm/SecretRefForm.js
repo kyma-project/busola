@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Dropdown } from 'react-shared';
 import { base64Decode } from 'shared/helpers';
-import { MultiInput } from 'shared/ResourceForm/components/FormComponents';
+import { MultiInput } from 'shared/ResourceForm/fields';
 
 import './SecretRefFrom.scss';
 

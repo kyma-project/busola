@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import _ from 'lodash';
+import { cloneDeep } from 'lodash';
 import * as jp from 'jsonpath';
 
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
+import { ResourceForm } from 'shared/ResourceForm';
+import {
+  K8sNameField,
+  KeyValueField,
+  ItemArray,
+} from 'shared/ResourceForm/fields';
 import { createRuleTemplate, validateRole } from './helpers';
 import { RuleInput } from './RuleInput';
 import { RuleTitle } from './RuleTitle';
@@ -20,9 +25,7 @@ export function GenericRoleCreate({
   resource: initialRole,
 }) {
   const { t } = useTranslation();
-  const [role, setRole] = useState(
-    _.cloneDeep(initialRole) || createTemplate(),
-  );
+  const [role, setRole] = useState(cloneDeep(initialRole) || createTemplate());
 
   // dictionary of pairs (apiGroup: resources in that apiGroup)
   const apiRules = role?.rules?.flatMap(r => r.apiGroups);
@@ -46,7 +49,8 @@ export function GenericRoleCreate({
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
     >
-      <ResourceForm.K8sNameField
+      <K8sNameField
+        required
         readOnly={!!initialRole}
         propertyPath="$.metadata.name"
         kind={t('roles.name_singular')}
@@ -57,18 +61,18 @@ export function GenericRoleCreate({
         }}
         validate={value => !!value}
       />
-      <ResourceForm.KeyValueField
+      <KeyValueField
         advanced
         propertyPath="$.metadata.labels"
         title={t('common.headers.labels')}
         className="fd-margin-top--sm"
       />
-      <ResourceForm.KeyValueField
+      <KeyValueField
         advanced
         propertyPath="$.metadata.annotations"
         title={t('common.headers.annotations')}
       />
-      <ResourceForm.ItemArray
+      <ItemArray
         propertyPath="$.rules"
         listTitle={t('roles.headers.rules')}
         entryTitle={(rule, i) => <RuleTitle rule={rule} i={i} />}
