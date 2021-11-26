@@ -319,6 +319,8 @@ function IssuersCreate({
         tooltipContent={t('issuers.tooltips.requests')}
         placeholder={t('issuers.placeholders.requests-per-day')}
         input={Inputs.Number}
+        validate={requests => typeof requests === 'number' && requests >= 0}
+        min={0}
       />
 
       {issuerAdvancedACMEFields()}
