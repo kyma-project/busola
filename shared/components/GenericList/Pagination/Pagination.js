@@ -4,6 +4,19 @@ import { Icon } from 'fundamental-react';
 import './Pagination.scss';
 import classNames from 'classnames';
 
+const makePartitions = (currentPage, pagesCount) => {
+  const radius = 2;
+  return new Array(pagesCount)
+    .fill(0)
+    .map((_, i) => i)
+    .filter(
+      i =>
+        i < radius ||
+        i > pagesCount - radius - 1 ||
+        Math.abs(i - currentPage + 1) <= radius / 2,
+    );
+};
+
 const Link = ({ children, isInteractable, isCurrent, onClick, ...props }) => {
   const className = classNames('nav-link', {
     current: isCurrent,
@@ -30,9 +43,13 @@ export const Pagination = ({
 }) => {
   const pagesCount = Math.ceil(itemsTotal / itemsPerPage);
 
+  const partitions = makePartitions(currentPage, pagesCount);
+
   return (
-    <div style={{ display: 'flex', justifyContent: 'center' }}>
-      <span className="fd-has-color-status-4">{itemsTotal} items</span>
+    <div className="pagination">
+      <span className="fd-has-color-status-4 fd-margin-end--sm">
+        {itemsTotal} items
+      </span>
 
       <Link
         isInteractable={currentPage !== 1}
@@ -42,15 +59,17 @@ export const Pagination = ({
         <Icon ariaLabel="previous page icon" glyph="navigation-left-arrow" />
       </Link>
 
-      {[...Array(pagesCount)].map((_, i) => (
-        <Link
-          key={i}
-          isInteractable={i + 1 !== currentPage}
-          isCurrent={i + 1 === currentPage}
-          onClick={() => onChangePage(i + 1)}
-        >
-          {i + 1}
-        </Link>
+      {partitions.map((current, i) => (
+        <React.Fragment key={i}>
+          {i > 0 && current - partitions[i - 1] > 1 && '...'}
+          <Link
+            isInteractable={current + 1 !== currentPage}
+            isCurrent={current + 1 === currentPage}
+            onClick={() => onChangePage(current + 1)}
+          >
+            {current + 1}
+          </Link>
+        </React.Fragment>
       ))}
 
       <Link
@@ -69,8 +88,4 @@ Pagination.propTypes = {
   itemsPerPage: PropTypes.number,
   currentPage: PropTypes.number.isRequired,
   onChangePage: PropTypes.func.isRequired,
-};
-
-Pagination.defaultProps = {
-  itemsPerPage: 20,
 };
