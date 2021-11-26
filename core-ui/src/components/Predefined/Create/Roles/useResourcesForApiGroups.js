@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSingleGet } from 'react-shared';
 import { useMicrofrontendContext } from 'react-shared';
 
@@ -6,6 +6,7 @@ export function useResourcesForApiGroups(apiGroups = []) {
   const [cache, setCache] = useState({});
   const fetch = useSingleGet();
   const { groupVersions } = useMicrofrontendContext();
+  const previousApiGroupsList = useRef([]);
 
   const findMatchingGroupVersions = apiGroup => {
     // core api group
@@ -21,7 +22,9 @@ export function useResourcesForApiGroups(apiGroups = []) {
       const json = await response.json();
       setCache(cache => ({
         ...cache,
-        [apiGroup]: [...cache[apiGroup], ...json.resources],
+        [apiGroup]: cache[apiGroup]
+          ? [...cache[apiGroup], ...json.resources]
+          : json.resources,
       }));
     } catch (e) {
       console.warn(e);
@@ -29,12 +32,13 @@ export function useResourcesForApiGroups(apiGroups = []) {
   };
 
   useEffect(() => {
+    if (previousApiGroupsList.current.length === apiGroups.length) return;
+    previousApiGroupsList.current = apiGroups;
+    const cacheObject = apiGroups.reduce((a, v) => ({ ...a, [v]: [] }), {});
+    setCache(cacheObject);
     for (const apiGroup of apiGroups) {
-      if (!cache[apiGroup]) {
-        setCache({ ...cache, [apiGroup]: [] });
-        for (const groupVersion of findMatchingGroupVersions(apiGroup)) {
-          fetchApiGroup(groupVersion, apiGroup);
-        }
+      for (const groupVersion of findMatchingGroupVersions(apiGroup)) {
+        fetchApiGroup(groupVersion, apiGroup);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

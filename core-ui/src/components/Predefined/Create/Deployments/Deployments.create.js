@@ -4,8 +4,9 @@ import { usePost, useNotification } from 'react-shared';
 import { Checkbox } from 'fundamental-react';
 import * as jp from 'jsonpath';
 
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
-import * as Inputs from 'shared/ResourceForm/components/Inputs';
+import { ResourceForm } from 'shared/ResourceForm';
+import * as Inputs from 'shared/ResourceForm/inputs';
+import { K8sNameField, KeyValueField } from 'shared/ResourceForm/fields';
 
 import './Deployments.create.scss';
 import {
@@ -125,18 +126,18 @@ export function DeploymentsCreate({
       }}
       createUrl={`/apis/apps/v1/namespaces/${namespace}/deployments/`}
     >
-      <ResourceForm.K8sNameField
+      <K8sNameField
         propertyPath="$.metadata.name"
         kind={t('deployments.name_singular')}
         setValue={handleNameChange}
       />
-      <ResourceForm.KeyValueField
+      <KeyValueField
         advanced
         propertyPath="$.metadata.labels"
         title={t('common.headers.labels')}
         className="fd-margin-top--sm"
       />
-      <ResourceForm.KeyValueField
+      <KeyValueField
         advanced
         propertyPath="$.metadata.annotations"
         title={t('common.headers.annotations')}

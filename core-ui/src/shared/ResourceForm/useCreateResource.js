@@ -42,7 +42,8 @@ export function useCreateResource(
     }
   };
 
-  return async () => {
+  return async e => {
+    e.preventDefault();
     try {
       if (initialResource) {
         const mergedResource = {

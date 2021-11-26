@@ -3,14 +3,10 @@ import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
 
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
-import * as Inputs from 'shared/ResourceForm/components/Inputs';
+import { ResourceForm } from 'shared/ResourceForm';
+import * as Inputs from 'shared/ResourceForm/inputs';
 import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSelect';
-import {
-  K8sNameField,
-  KeyValueField,
-  FormField,
-} from 'shared/ResourceForm/components/FormComponents';
+import { K8sNameField, KeyValueField } from 'shared/ResourceForm/fields';
 
 import { createRepositoryTemplate } from './helpers';
 
@@ -125,7 +121,7 @@ function GitRepositoriesCreate({
         propertyPath="$.metadata.annotations"
         title={t('common.headers.annotations')}
       />
-      <FormField
+      <ResourceForm.FormField
         required
         propertyPath="$.spec.url"
         label={t('git-repositories.labels.url')}
@@ -134,7 +130,7 @@ function GitRepositoriesCreate({
         input={Inputs.Text}
         validationState={getUrlValidationState()}
       />
-      <FormField
+      <ResourceForm.FormField
         required
         propertyPath="$.spec.auth.type"
         label={t('git-repositories.labels.auth')}
@@ -144,7 +140,7 @@ function GitRepositoriesCreate({
         options={authTypeOptions}
       />
       {!!authType && (
-        <FormField
+        <ResourceForm.FormField
           required
           propertyPath="$.spec.auth.secretName"
           label={t('git-repositories.labels.secret')}

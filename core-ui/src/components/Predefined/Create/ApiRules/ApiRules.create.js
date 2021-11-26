@@ -3,7 +3,12 @@ import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 import * as _ from 'lodash';
 
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
+import { ResourceForm } from 'shared/ResourceForm';
+import {
+  K8sNameField,
+  KeyValueField,
+  ItemArray,
+} from 'shared/ResourceForm/fields';
 
 import { createApiRuleTemplate, createRuleTemplate } from './templates';
 import { useServicesQuery, ServiceDropdown } from './ServiceDropdown';
@@ -97,7 +102,7 @@ function ApiRulesCreate({
       afterCreatedFn={afterCreatedFn}
       setCustomValid={setCustomValid}
     >
-      <ResourceForm.K8sNameField
+      <K8sNameField
         propertyPath="$.metadata.name"
         kind={t('api-rules.name_singular')}
         setValue={handleNameChange}
@@ -120,20 +125,20 @@ function ApiRulesCreate({
         gatewayStr={jp.value(apiRule, '$.spec.gateway')}
         gatewaysQuery={gatewaysQuery}
       />
-      <ResourceForm.KeyValueField
+      <KeyValueField
         advanced
         propertyPath="$.metadata.labels"
         title={t('common.headers.labels')}
         className="fd-margin-top--sm"
       />
-      <ResourceForm.KeyValueField
+      <KeyValueField
         advanced
         propertyPath="$.metadata.annotations"
         title={t('common.headers.annotations')}
       />
 
       <SingleRuleInput simple defaultOpen propertyPath="$.spec.rules" />
-      <ResourceForm.ItemArray
+      <ItemArray
         advanced
         propertyPath="$.spec.rules"
         listTitle={t('api-rules.rules')}

@@ -6,7 +6,11 @@ import { Icon } from 'fundamental-react';
 function VerbStatus({ rule, verb }) {
   const hasVerb = rule.verbs?.includes(verb) || rule.verbs?.includes('*');
 
-  return hasVerb ? <Icon glyph="accept" ariaHidden /> : EMPTY_TEXT_PLACEHOLDER;
+  return hasVerb ? (
+    <Icon glyph="accept" data-testid={verb} ariaHidden />
+  ) : (
+    <span data-testid={verb}>{EMPTY_TEXT_PLACEHOLDER}</span>
+  );
 }
 
 export const Rules = resource => {
@@ -90,6 +94,7 @@ export const Rules = resource => {
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       i18n={i18n}
+      testid="rules-list"
     />
   );
 };

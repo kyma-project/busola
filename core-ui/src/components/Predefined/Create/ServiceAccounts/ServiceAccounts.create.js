@@ -1,32 +1,38 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useGetList } from 'react-shared';
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
+import { ResourceForm } from 'shared/ResourceForm';
+import {
+  K8sNameField,
+  KeyValueField,
+  ComboboxArrayInput,
+} from 'shared/ResourceForm/fields';
 import * as jp from 'jsonpath';
-import { createServiceAccountTemplate, newSecret } from './templates';
-import { SingleSecretForm } from './SecretForm';
+import { createServiceAccountTemplate } from './templates';
 import { validateServiceAccount } from './helpers';
 import { Switch } from 'fundamental-react';
+import _ from 'lodash';
 
-export const ServiceAccountsCreate = ({
+const ServiceAccountsCreate = ({
   formElementRef,
   namespace,
   onChange,
   setCustomValid,
+  resource: initialServiceAccounts,
+  resourceUrl,
 }) => {
   const { t } = useTranslation();
 
   const [serviceAccount, setServiceAccount] = useState(
-    createServiceAccountTemplate(namespace),
+    _.cloneDeep(initialServiceAccounts) ||
+      createServiceAccountTemplate(namespace),
   );
-  const [imagePullSecrets, setImagePullSecrets] = useState([]);
 
   React.useEffect(() => {
     setCustomValid(validateServiceAccount(serviceAccount));
   }, [serviceAccount, setCustomValid]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleImageChange = images => {
-    setImagePullSecrets([...images]);
     const newImages = (images || []).map(image => {
       return { name: image };
     });
@@ -37,9 +43,7 @@ export const ServiceAccountsCreate = ({
     setServiceAccount({ ...serviceAccount });
   };
 
-  const { data: secrets } = useGetList()(
-    `/api/v1/namespaces/${namespace}/secrets`,
-  );
+  const { data } = useGetList()(`/api/v1/namespaces/${namespace}/secrets`);
 
   return (
     <ResourceForm
@@ -49,9 +53,10 @@ export const ServiceAccountsCreate = ({
       setResource={setServiceAccount}
       onChange={onChange}
       formElementRef={formElementRef}
-      createUrl={`/api/v1/namespaces/${namespace}/serviceaccounts/`}
+      createUrl={resourceUrl}
+      initialResource={initialServiceAccounts}
     >
-      <ResourceForm.K8sNameField
+      <K8sNameField
         propertyPath="$.metadata.name"
         kind={t('service-accounts.name_singular')}
         setValue={name => {
@@ -59,46 +64,49 @@ export const ServiceAccountsCreate = ({
           setServiceAccount({ ...serviceAccount });
         }}
       />
-      <ResourceForm.KeyValueField
+      <KeyValueField
         advanced
         propertyPath="$.metadata.labels"
         title={t('common.headers.labels')}
       />
-      <ResourceForm.KeyValueField
+      <KeyValueField
         advanced
         propertyPath="$.metadata.annotations"
         title={t('common.headers.annotations')}
       />
 
-      <ResourceForm.ItemArray
+      <ComboboxArrayInput
         advanced
         propertyPath="$.secrets"
-        listTitle={t('service-accounts.headers.secrets')}
-        nameSingular={t('service-accounts.headers.secret')}
+        title={t('service-accounts.headers.secrets')}
         tooltipContent={t('service-accounts.create-modal.tooltips.secrets')}
-        entryTitle={subject => subject?.name}
-        allowEmpty={true}
-        itemRenderer={({ item, values, setValues, index }) => (
-          <SingleSecretForm
-            secret={item}
-            secrets={values}
-            setSecrets={setValues}
-            index={index}
-            namespace={namespace}
-          />
-        )}
-        newResourceTemplateFn={() => newSecret(namespace)}
+        setValue={secrets => {
+          const newSecrets = (secrets || []).map(secrets => {
+            return { name: secrets };
+          });
+          jp.value(serviceAccount, '$.secrets', newSecrets);
+          setServiceAccount({ ...serviceAccount });
+        }}
+        toInternal={values => (values || []).map(value => value?.name)}
+        options={(data || [])
+          .filter(
+            secret => secret.type === 'kubernetes.io/service-account-token',
+          )
+          .map(i => ({
+            key: i.metadata.name,
+            text: i.metadata.name,
+          }))}
       />
-      <ResourceForm.ComboboxArrayInput
+      <ComboboxArrayInput
         advanced
         title={t('service-accounts.headers.image-pull-secrets')}
         tooltipContent={t(
           'service-accounts.create-modal.tooltips.image-pull-secrets',
         )}
-        // propertyPath="$.imagePullSecrets"
-        value={imagePullSecrets}
+        propertyPath="$.imagePullSecrets"
         setValue={value => handleImageChange(value)}
-        options={(secrets || []).map(i => ({
+        toInternal={values => (values || []).map(value => value?.name)}
+        options={(data || []).map(i => ({
           key: i.metadata.name,
           text: i.metadata.name,
         }))}
@@ -131,3 +139,5 @@ export const ServiceAccountsCreate = ({
     </ResourceForm>
   );
 };
+ServiceAccountsCreate.allowEdit = true;
+export { ServiceAccountsCreate };

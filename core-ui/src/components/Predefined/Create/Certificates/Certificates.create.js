@@ -3,8 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { Button, FormTextarea, Switch } from 'fundamental-react';
 import * as jp from 'jsonpath';
 
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
-import * as Inputs from 'shared/ResourceForm/components/Inputs';
+import { ResourceForm } from 'shared/ResourceForm';
+import * as Inputs from 'shared/ResourceForm/inputs';
+import {
+  K8sNameField,
+  KeyValueField,
+  TextArrayInput,
+} from 'shared/ResourceForm/fields';
 import { base64Decode, base64Encode } from 'shared/helpers';
 import { IssuerRef } from 'shared/components/ResourceRef/IssuerRef';
 import { SecretRef } from 'shared/components/ResourceRef/SecretRef';
@@ -98,7 +103,7 @@ const CertificatesCreate = ({
       initialResource={initialCertificate}
       createUrl={resourceUrl}
     >
-      <ResourceForm.K8sNameField
+      <K8sNameField
         propertyPath="$.metadata.name"
         kind={t('certificates.name_singular')}
         data-cy="cert-name"
@@ -113,13 +118,13 @@ const CertificatesCreate = ({
         }}
         readOnly={!!initialCertificate}
       />
-      <ResourceForm.KeyValueField
+      <KeyValueField
         advanced
         propertyPath="$.metadata.labels"
         title={t('common.headers.labels')}
         className="fd-margin-top--sm"
       />
-      <ResourceForm.KeyValueField
+      <KeyValueField
         advanced
         propertyPath="$.metadata.annotations"
         title={t('common.headers.annotations')}
@@ -201,7 +206,7 @@ const CertificatesCreate = ({
             maxLength={64}
             placeholder={t('certificates.placeholders.common-name')}
           />
-          <ResourceForm.TextArrayInput
+          <TextArrayInput
             advanced
             propertyPath="$.spec.dnsNames"
             title={t('certificates.dns-names')}

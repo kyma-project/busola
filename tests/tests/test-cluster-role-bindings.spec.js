@@ -1,5 +1,4 @@
 /// <reference types="cypress" />
-import 'cypress-file-upload';
 
 const random = Math.floor(Math.random() * 9999) + 1000;
 const CRB_NAME = `test-crb-${random}`;

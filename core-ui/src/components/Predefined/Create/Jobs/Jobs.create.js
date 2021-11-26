@@ -3,7 +3,8 @@ import * as jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
 import { cloneDeep } from 'lodash';
 
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
+import { ResourceForm } from 'shared/ResourceForm';
+import { K8sNameField, KeyValueField } from 'shared/ResourceForm/fields';
 
 import { createJobTemplate, createJobPresets } from './templates';
 import { JobSpecSection } from './SpecSection';
@@ -52,7 +53,7 @@ function JobsCreate({
       presets={createJobPresets(namespace, t)}
       createUrl={resourceUrl}
     >
-      <ResourceForm.K8sNameField
+      <K8sNameField
         propertyPath="$.metadata.name"
         kind={t('jobs.name-singular')}
         setValue={name => {
@@ -63,19 +64,19 @@ function JobsCreate({
         readOnly={!!initialJob}
       />
 
-      <ResourceForm.KeyValueField
+      <KeyValueField
         advanced
         propertyPath="$.metadata.labels"
         title={t('common.headers.labels')}
       />
 
-      <ResourceForm.KeyValueField
+      <KeyValueField
         advanced
         propertyPath="$.metadata.annotations"
         title={t('common.headers.annotations')}
       />
 
-      <JobSpecSection advanced propertyPath="$.spec" />
+      <JobSpecSection advanced propertyPath="$.spec" readOnly={!!initialJob} />
 
       <ContainerSection
         simple

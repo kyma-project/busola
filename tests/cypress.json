@@ -17,6 +17,7 @@
   "testFiles": [
     "run-before.spec.js",
     "create-a-deployment.spec.js",
+    "create-a-role.spec.js",
     "create-an-api-rule.spec.js",
     "download-a-kubeconfig.spec.js",
     "in-cluster-eventing.spec.js",
@@ -26,6 +27,7 @@
     "test-jobs.spec.js",
     "test-replica-sets.spec.js",
     "test-crds.spec.js",
+    "test-dns-entries.spec.js",
     "test-cron-jobs.spec.js",
     "test-git-repositories.spec.js",
     "test-gateways.spec.js",
@@ -33,6 +35,7 @@
     "test-dns-providers.spec.js",
     "test-statefulsets.spec.js",
     "test-secrets.spec.js",
+    "test-service-accounts.spec.js",
     "test-issuers.spec.js",
     "test-daemon-sets.spec.js",
     "invalid-kubeconfig.spec.js",
