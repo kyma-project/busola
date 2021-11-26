@@ -147,8 +147,7 @@ Example:
       "de": "https://www.sap.com/corporate/de/legal/impressum.html"
     },
     "privacy": {
-      "default":
-                  "https://help.sap.com/viewer/82bdf2271c6041f79387c122147cf774/Cloud/en-US"
+      "default": "https://help.sap.com/viewer/82bdf2271c6041f79387c122147cf774/Cloud/en-US"
     },
     "copyright": {
       "default": "https://www.sap.com/corporate/en/legal/copyright.html",
@@ -223,7 +222,7 @@ Example:
         "match": {
           "$.metadata.labels.foo": "bar"
         }
-        # if neither "message" or "messageSrc" is given, a generic message will be used (from i18n files)
+        # if neither "message" or "messageSrc" is given, a generic message will be used (from i18n files - key: common.protected-resource)
       }
     ]
   }

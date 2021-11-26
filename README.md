@@ -68,6 +68,8 @@ Features comprise the following elements:
 - `isActive`: Activates or deactivates the feature, overwriting the status set by `selector`
 - `config`: Provides additional configuration options as needed for each feature. For details, see the README in the specific component or feature.
 
+See the [Feature flags](docs/features.md) for more information.
+
 ## Usage
 
 See the [Development](#development) section.
