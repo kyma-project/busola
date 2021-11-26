@@ -43,9 +43,7 @@ const ServiceAccountsCreate = ({
     setServiceAccount({ ...serviceAccount });
   };
 
-  const { data: data } = useGetList()(
-    `/api/v1/namespaces/${namespace}/secrets`,
-  );
+  const { data } = useGetList()(`/api/v1/namespaces/${namespace}/secrets`);
 
   return (
     <ResourceForm
