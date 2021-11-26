@@ -40,7 +40,7 @@ import { loadTargetClusterConfig } from '../utils/target-cluster-config';
 import { checkClusterStorageType } from '../cluster-management/clusters-storage';
 import { getSSOAuthData } from '../auth/sso';
 import { setNavFooterText } from '../nav-footer';
-import { AVAILABLE_PAGE_SIZES, getPageSize } from '../settings/page-size';
+import { AVAILABLE_PAGE_SIZES, getPageSize } from '../settings/pagination';
 
 async function createAppSwitcher() {
   const activeClusterName = getActiveClusterName();
