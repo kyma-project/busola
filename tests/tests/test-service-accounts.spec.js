@@ -1,25 +1,26 @@
 /// <reference types="cypress" />
 
-const random = Math.floor(Math.random() * 9999) + 1000;
-const CRB_NAME = `test-crb-${random}`;
-const USER_NAME = 'test@kyma.eu';
+const SERVICE_NAME = 'test-sa-name';
 
-context('Test Cluster Role Bindings', () => {
+context('Test Service Accounts', () => {
   before(() => {
     cy.loginAndSelectCluster();
+    cy.goToNamespaceDetails();
   });
 
-  it('Create a ClusterRoleBinding', () => {
+  it('Navigate to Service Accounts', () => {
     cy.getLeftNav()
       .contains('Configuration')
       .click();
 
     cy.getLeftNav()
-      .contains('Cluster Role Bindings')
+      .contains('Service Accounts')
       .click();
+  });
 
+  it('Create a Client', () => {
     cy.getIframeBody()
-      .contains('Create Cluster Role Binding')
+      .contains('Create Service Account')
       .click();
 
     cy.getIframeBody()
@@ -27,23 +28,28 @@ context('Test Cluster Role Bindings', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Cluster Role Binding Name"]')
-      .type(CRB_NAME);
+      .find('[placeholder="Service Account Name"]')
+      .clear()
+      .type(SERVICE_NAME);
 
     cy.getIframeBody()
-      .find(
-        '[placeholder="Start typing to select Role Binding from the list."]',
-      )
-      .type('broker');
-
-    cy.getIframeBody()
-      .contains('helm-broker-h3')
+      .contains('Image Pull Secrets')
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="User name"]')
+      .find(
+        '[placeholder="Start typing to select Image Pull Secrets from the list."]',
+      )
       .clear()
-      .type(USER_NAME);
+      .type('default');
+
+    cy.getIframeBody()
+      .contains('default-token')
+      .click();
+
+    cy.getIframeBody()
+      .find('[role="presentation"]')
+      .click();
 
     cy.getIframeBody()
       .find('[role="dialog"]')
@@ -53,19 +59,19 @@ context('Test Cluster Role Bindings', () => {
 
   it('Checking details', () => {
     cy.getIframeBody()
-      .contains(CRB_NAME)
+      .contains(SERVICE_NAME)
       .should('be.visible');
 
     cy.getIframeBody()
-      .contains('User')
+      .contains(`${SERVICE_NAME}-token`)
       .should('be.visible');
 
     cy.getIframeBody()
-      .contains(USER_NAME)
+      .contains('default-token')
       .should('be.visible');
 
     cy.getIframeBody()
-      .contains('helm-broker-h3')
+      .contains('ENABLED')
       .should('be.visible');
   });
 
@@ -80,33 +86,21 @@ context('Test Cluster Role Bindings', () => {
 
     cy.getIframeBody()
       .find('[role="document"]')
-      .contains('User')
+      .contains('Labels')
       .click();
 
     cy.getIframeBody()
-      .contains('ServiceAccount')
-      .click();
+      .find('[placeholder="Enter Key"]')
+      .type('test.key');
 
     cy.getIframeBody()
-      .contains('Service Account Namespace')
-      .should('be.visible');
-
-    cy.getIframeBody()
-      .contains('Service Account Name')
-      .should('be.visible');
-
-    cy.getIframeBody()
-      .contains('ServiceAccount')
-      .click();
-
-    cy.getIframeBody()
-      .contains('Group')
-      .click();
-
-    cy.getIframeBody()
-      .find('[placeholder="User group"]')
+      .find('[index="1"]')
       .clear()
-      .type('test-group');
+      .type('test-value');
+
+    cy.getIframeBody()
+      .find('[role="presentation"]')
+      .click();
 
     cy.getIframeBody()
       .find('[role="dialog"]')
@@ -114,17 +108,17 @@ context('Test Cluster Role Bindings', () => {
       .click();
   });
 
-  it('Checking updates details', () => {
+  it('Checking updated details', () => {
     cy.getIframeBody()
-      .contains('Group')
+      .contains('DISABLED')
       .should('be.visible');
 
     cy.getIframeBody()
-      .contains('test-group')
+      .contains('test.key=test-value')
       .should('be.visible');
   });
 
-  it('Delete Cluster Role Binding', () => {
+  it('Delete Service Account', () => {
     cy.getIframeBody()
       .contains('button', 'Delete')
       .click();

@@ -40,6 +40,7 @@ export const GenericSecrets = ({
         filter,
         customListActions,
         title,
+        readOnly: true,
       }}
     />
   );
