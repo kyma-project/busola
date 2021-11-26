@@ -55,7 +55,6 @@ context('Test Service Accounts', () => {
       .find('[role="dialog"]')
       .contains('button', 'Create')
       .click();
-    cy.wait(40000);
   });
 
   it('Checking details', () => {
@@ -84,5 +83,46 @@ context('Test Service Accounts', () => {
     cy.getIframeBody()
       .contains('Advanced')
       .click();
+
+    cy.getIframeBody()
+      .find('[role="document"]')
+      .contains('Labels')
+      .click();
+
+    cy.getIframeBody()
+      .find('[placeholder="Enter Key"]')
+      .type('test.key');
+
+    cy.getIframeBody()
+      .find('[index="1"]')
+      .clear()
+      .type('test-value');
+
+    cy.getIframeBody()
+      .find('[role="presentation"]')
+      .click();
+
+    cy.getIframeBody()
+      .find('[role="dialog"]')
+      .contains('button', 'Update')
+      .click();
+  });
+
+  it('Checking updated details', () => {
+    cy.getIframeBody()
+      .contains('DISABLED')
+      .should('be.visible');
+
+    cy.getIframeBody()
+      .contains('test.key=test-value')
+      .should('be.visible');
+  });
+
+  it('Delete Service Account', () => {
+    cy.getIframeBody()
+      .contains('button', 'Delete')
+      .click();
+
+    cy.get('[data-testid=luigi-modal-confirm]').click();
   });
 });
