@@ -1,14 +1,25 @@
+.pagination {
+  display: flex;
+  justify-content: 'center';
+  align-items: baseline;
+}
+
 .nav-link {
   border: none;
   background: none;
   color: var(--sapNeutralColor);
+  font-size: var(--sapFontSize, 0.875rem);
+
+  i::before {
+    color: var(--sapBrandColor);
+    font-size: 80%;
+  }
 
   &.current {
     font-weight: bolder;
   }
 
   &.interactable {
-    text-decoration: underline;
     color: var(--sapBrandColor);
     cursor: pointer;
   }

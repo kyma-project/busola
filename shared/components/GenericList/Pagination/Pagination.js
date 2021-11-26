@@ -46,8 +46,10 @@ export const Pagination = ({
   const partitions = makePartitions(currentPage, pagesCount);
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center' }}>
-      <span className="fd-has-color-status-4">{itemsTotal} items</span>
+    <div className="pagination">
+      <span className="fd-has-color-status-4 fd-margin-end--sm">
+        {itemsTotal} items
+      </span>
 
       <Link
         isInteractable={currentPage !== 1}
