@@ -4,6 +4,7 @@ import './Preferences.scss';
 import NamespaceSettings from './NamespaceSettings';
 import ThemeChooser from './ThemeChooser';
 import LanguageSettings from './LanguageSettings';
+import OtherSettings from './OtherSettings';
 import ConfirmationSettings from './ConfirmationSettings';
 import { VerticalTabs, Tabs, Tab } from 'react-shared';
 import { useTranslation } from 'react-i18next';
@@ -55,6 +56,13 @@ function Preferences() {
             title={t('settings.language')}
           >
             <LanguageSettings />
+          </Tab>
+          <Tab
+            key="other-settings"
+            id="other-settings"
+            title={t('settings.other.title')}
+          >
+            <OtherSettings />
           </Tab>
         </Tabs>
       </VerticalTabs.Content>
