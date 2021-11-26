@@ -35,6 +35,7 @@
     "test-dns-providers.spec.js",
     "test-statefulsets.spec.js",
     "test-secrets.spec.js",
+    "test-service-accounts.spec.js",
     "test-issuers.spec.js",
     "test-daemon-sets.spec.js",
     "invalid-kubeconfig.spec.js",
