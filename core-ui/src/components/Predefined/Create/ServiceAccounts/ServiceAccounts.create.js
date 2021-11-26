@@ -5,12 +5,10 @@ import { ResourceForm } from 'shared/ResourceForm';
 import {
   K8sNameField,
   KeyValueField,
-  ItemArray,
   ComboboxArrayInput,
 } from 'shared/ResourceForm/fields';
 import * as jp from 'jsonpath';
-import { createServiceAccountTemplate, newSecret } from './templates';
-import { SingleSecretForm } from './SecretForm';
+import { createServiceAccountTemplate } from './templates';
 import { validateServiceAccount } from './helpers';
 import { Switch } from 'fundamental-react';
 import _ from 'lodash';
@@ -29,14 +27,12 @@ const ServiceAccountsCreate = ({
     _.cloneDeep(initialServiceAccounts) ||
       createServiceAccountTemplate(namespace),
   );
-  const [imagePullSecrets, setImagePullSecrets] = useState([]);
 
   React.useEffect(() => {
     setCustomValid(validateServiceAccount(serviceAccount));
   }, [serviceAccount, setCustomValid]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleImageChange = images => {
-    setImagePullSecrets([...images]);
     const newImages = (images || []).map(image => {
       return { name: image };
     });
