@@ -1,10 +1,10 @@
 ---
-title: Features
+title: Feature flags
 ---
 
-Below you can find a description of all the features that are available in Busola dashboard and their configuration examples:
+Below you can find a description of all the feature flags that are available in Busola dashboard and their configuration examples:
 
-> **TIP:** The features in the list are ordered alphabetically.
+> **TIP:** The list is ordered alphabetically.
 
 - **ADD_CLUSTER_DISABLED** – is used to enable or disable adding a cluster. If the function is enabled, you can only access your cluster in the BTP cockpit by adding it through the KUBECONFIG_ID feature. Link to the cockpit is configured under cockpitUrl.
 
@@ -87,7 +87,7 @@ Default settings:
 },
 ```
 
-- **CUSTOM_DOMAINS** – is responsible for displaying views of components such as DNS entries, DNS providers, gateways, issuers and certificates. Its functions can be visible only if all Custom Resource Defintions, defined in the selectors array, exist in a cluster.
+- **CUSTOM_DOMAINS** – is responsible for displaying views of DNS Entry, DNS Provider, Gateway, Issuer and Certificate. Its functions can be visible only if all Custom Resource Defintions, defined in the selectors array, exist in a cluster.
 
 Default settings:
 
@@ -134,14 +134,29 @@ Default settings:
 },
 ```
 
-- **LEGAL_LINKS** – is used to show or hide legal links. In config you can find the unchangeable keys (you cannot use legalDisclosure instead of legal-disclosure). The keys include the default link, which takes you to the default address, and a link that depends on your chosen language, for example:
+- **LEGAL_LINKS** – is used to show or hide legal links. You can find all available links in the below example.  
+In config you can find the unchangeable keys (you cannot use legalDisclosure instead of legal-disclosure). The keys include the default link, which takes you to the default address, and a link that depends on your chosen language.
+
+Example:
 
 ```bash
-"LEGAL_LINKS":{
+"LEGAL_LINKS": {
   "config": {
-    “legal-disclosure”: {
-      "default":" https://www.sap.com/corporate/en/legal/impressum.html",
-      "de":" https://www.sap.com/corporate/de/legal/impressum.html"
+    "legal-disclosure": {
+      "default": "https://www.sap.com/corporate/en/legal/impressum.html",
+      "de": "https://www.sap.com/corporate/de/legal/impressum.html"
+    },
+    "privacy": {
+      "default":
+                  "https://help.sap.com/viewer/82bdf2271c6041f79387c122147cf774/Cloud/en-US"
+    },
+    "copyright": {
+      "default": "https://www.sap.com/corporate/en/legal/copyright.html",
+      "de": "https://www.sap.com/corporate/de/legal/copyright.html"
+    },
+      "trademark": {
+        "default": "https://www.sap.com/corporate/en/legal/trademark.html",
+        "de": "https://www.sap.com/corporate/de/legal/trademark.html"
     }
   }
 },
