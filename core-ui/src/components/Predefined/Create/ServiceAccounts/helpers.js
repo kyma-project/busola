@@ -1,5 +1,5 @@
 export function validateSecret(secret) {
-  return !!secret.name && !!secret.namespace;
+  return !!secret.name;
 }
 
 export function validateServiceAccount(serviceAccount) {
