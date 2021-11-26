@@ -120,7 +120,7 @@ Default settings:
 },
 ```
 
-- **KUBECONFIG_ID** – is used to configure URL to which Busola sends a request to download a kubeconfig file. If we add kubeconfigID={your ID} to the Busola URL then Busola tries to download the kubeconfig from the {kubeconfigUrl}/{yourID} and, if succedded, will add a cluster.
+- **KUBECONFIG_ID** – is used to configure URL to which Busola sends a request to download a kubeconfig file. If we add `?kubeconfigID={your ID}` to the Busola URL then Busola tries to download the kubeconfig from the {kubeconfigUrl}/{yourID} and, if succedded, will add a cluster.
   You can introduce the whole address in the kubeconfigUrl which will also be read by Busola.
 
 Default settings:
