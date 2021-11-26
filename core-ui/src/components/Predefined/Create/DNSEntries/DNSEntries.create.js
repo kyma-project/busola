@@ -82,7 +82,8 @@ function DNSEntriesCreate({
         label={t('dnsentries.labels.ttl')}
         input={Inputs.Number}
         placeholder={t('dnsentries.placeholders.ttl')}
-        validate={ttl => !!ttl && typeof ttl === 'number'}
+        validate={ttl => typeof ttl === 'number' && ttl >= 0}
+        min={0}
       />
 
       <KeyValueField

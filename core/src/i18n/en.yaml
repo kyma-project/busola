@@ -1311,7 +1311,7 @@ settings:
     showHiddenNamespaces: Show hidden Namespaces
     title: Clusters
   interface:
-    description: Theme, language
+    description: Appearance, language
     themes:
       dark:
         description: Use in dimmed environments
@@ -1330,6 +1330,9 @@ settings:
         title: Light / Dark
     title: Interface
   language: Language
+  other:
+    default-page-size: Default Page Size
+    title: Other
   theme: Theme
 stateful-sets:
   description: <0>Stateful Set</0> is used for the management of Pods' deployment and scaling.
