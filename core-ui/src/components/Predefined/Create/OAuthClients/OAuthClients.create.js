@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
-import { TextArrayInput } from 'shared/ResourceForm/components/FormComponents';
-import * as Inputs from 'shared/ResourceForm/components/Inputs';
-import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSelect';
+import { ResourceForm } from 'shared/ResourceForm';
+import * as Inputs from 'shared/ResourceForm/inputs';
 import {
+  TextArrayInput,
   K8sNameField,
   KeyValueField,
-} from 'shared/ResourceForm/components/FormComponents';
+} from 'shared/ResourceForm/fields';
+import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSelect';
 
 import { createOAuth2ClientTemplate } from './helpers';
 

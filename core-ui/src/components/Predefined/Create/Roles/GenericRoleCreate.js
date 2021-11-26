@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
+import { cloneDeep } from 'lodash';
+import * as jp from 'jsonpath';
+
+import { ResourceForm } from 'shared/ResourceForm';
+import {
+  K8sNameField,
+  KeyValueField,
+  ItemArray,
+} from 'shared/ResourceForm/fields';
 import { createRuleTemplate, validateRole } from './helpers';
-import * as Inputs from 'shared/ResourceForm/components/Inputs';
 import { RuleInput } from './RuleInput';
 import { RuleTitle } from './RuleTitle';
 import { useResourcesForApiGroups } from './useResourcesForApiGroups';
@@ -13,15 +20,17 @@ export function GenericRoleCreate({
   setCustomValid,
   pluralKind,
   singularName,
-  createUrl,
+  resourceUrl,
   createTemplate,
+  resource: initialRole,
 }) {
   const { t } = useTranslation();
-  const [role, setRole] = useState(createTemplate());
+  const [role, setRole] = useState(cloneDeep(initialRole) || createTemplate());
 
   // dictionary of pairs (apiGroup: resources in that apiGroup)
+  const apiRules = role?.rules?.flatMap(r => r.apiGroups);
   const resourcesCache = useResourcesForApiGroups(
-    role?.rules?.flatMap(r => r.apiGroups),
+    apiRules ? [...new Set(apiRules)] : [],
   );
 
   useEffect(() => {
@@ -33,32 +42,37 @@ export function GenericRoleCreate({
       pluralKind={pluralKind}
       singularName={singularName}
       resource={role}
+      initialResource={initialRole}
       setResource={setRole}
       onChange={onChange}
       formElementRef={formElementRef}
-      createUrl={createUrl}
+      createUrl={resourceUrl}
+      setCustomValid={setCustomValid}
     >
-      <ResourceForm.FormField
+      <K8sNameField
         required
-        label={t('common.labels.name')}
-        placeholder={t('components.k8s-name-input.placeholder', {
-          resourceType: t('roles.name_singular'),
-        })}
-        input={Inputs.Text}
+        readOnly={!!initialRole}
         propertyPath="$.metadata.name"
+        kind={t('roles.name_singular')}
+        setValue={name => {
+          jp.value(role, '$.metadata.name', name);
+          jp.value(role, "$.metadata.labels['app.kubernetes.io/name']", name);
+          setRole({ ...role });
+        }}
+        validate={value => !!value}
       />
-      <ResourceForm.KeyValueField
+      <KeyValueField
         advanced
         propertyPath="$.metadata.labels"
         title={t('common.headers.labels')}
         className="fd-margin-top--sm"
       />
-      <ResourceForm.KeyValueField
+      <KeyValueField
         advanced
         propertyPath="$.metadata.annotations"
         title={t('common.headers.annotations')}
       />
-      <ResourceForm.ItemArray
+      <ItemArray
         propertyPath="$.rules"
         listTitle={t('roles.headers.rules')}
         entryTitle={(rule, i) => <RuleTitle rule={rule} i={i} />}

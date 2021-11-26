@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
+import { TextArrayInput } from 'shared/ResourceForm/fields';
 
 export const HostsForm = ({ server = {}, servers, setServers }) => {
   const { t } = useTranslation();
@@ -11,7 +11,7 @@ export const HostsForm = ({ server = {}, servers, setServers }) => {
   };
 
   return (
-    <ResourceForm.TextArrayInput
+    <TextArrayInput
       advanced
       required
       tooltipContent={t('gateways.create-modal.tooltips.hosts')}

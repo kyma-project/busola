@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ResourceForm } from '../../../../shared/ResourceForm/ResourceForm';
 import {
   createPresets,
   createIssuerTemplate,
@@ -14,7 +13,13 @@ import { IssuerTypeDropdown } from './IssuerTypeDropdown';
 import { SecretRef } from 'shared/components/ResourceRef/SecretRef';
 import { Checkbox } from 'fundamental-react';
 import * as jp from 'jsonpath';
-import * as Inputs from 'shared/ResourceForm/components/Inputs';
+import { ResourceForm } from 'shared/ResourceForm';
+import * as Inputs from 'shared/ResourceForm/inputs';
+import {
+  TextArrayInput,
+  KeyValueField,
+  K8sNameField,
+} from 'shared/ResourceForm/fields';
 
 function IssuersCreate({
   onChange,
@@ -141,7 +146,7 @@ function IssuersCreate({
             </Checkbox>
           }
         />,
-        <ResourceForm.TextArrayInput
+        <TextArrayInput
           key="domains-simple-include"
           simple
           propertyPath="$.spec.acme.domains.include"
@@ -152,7 +157,7 @@ function IssuersCreate({
           }}
           className={'fd-margin-top--sm'}
         />,
-        <ResourceForm.TextArrayInput
+        <TextArrayInput
           key="domains-include"
           advanced
           propertyPath="$.spec.acme.domains.include"
@@ -162,7 +167,7 @@ function IssuersCreate({
             placeholder: t('domains.include.placeholder'),
           }}
         />,
-        <ResourceForm.TextArrayInput
+        <TextArrayInput
           key="domains-exclude"
           advanced
           propertyPath="$.spec.acme.domains.exclude"
@@ -256,7 +261,7 @@ function IssuersCreate({
       presets={createPresets(namespace, t)}
       createUrl={resourceUrl}
     >
-      <ResourceForm.K8sNameField
+      <K8sNameField
         propertyPath="$.metadata.name"
         readOnly={!!initialIssuer}
         kind={t('issuers.name_singular')}
@@ -266,12 +271,12 @@ function IssuersCreate({
           setIssuer({ ...issuer });
         }}
       />
-      <ResourceForm.KeyValueField
+      <KeyValueField
         advanced
         propertyPath="$.metadata.labels"
         title={t('common.headers.labels')}
       />
-      <ResourceForm.KeyValueField
+      <KeyValueField
         advanced
         propertyPath="$.metadata.annotations"
         title={t('common.headers.annotations')}

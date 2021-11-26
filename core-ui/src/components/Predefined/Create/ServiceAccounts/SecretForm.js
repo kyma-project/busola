@@ -1,10 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import {
-  ResourceForm,
-  ResourceFormWrapper,
-} from 'shared/ResourceForm/ResourceForm';
+import { ResourceForm } from 'shared/ResourceForm';
 import { SecretRef } from 'shared/components/ResourceRef/SecretRef';
 
 export function SingleSecretForm({
@@ -24,7 +21,7 @@ export function SingleSecretForm({
   };
 
   return (
-    <ResourceFormWrapper>
+    <ResourceForm.Wrapper>
       <SecretRef
         title={t('service-accounts.headers.secret')}
         tooltipContent={t('service-accounts.create-modal.tooltips.secrets')}
@@ -38,7 +35,7 @@ export function SingleSecretForm({
         currentNamespace={namespace}
         noSection={true}
       />
-    </ResourceFormWrapper>
+    </ResourceForm.Wrapper>
   );
 }
 

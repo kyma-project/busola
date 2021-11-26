@@ -1,10 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMicrofrontendContext } from 'react-shared';
-import {
-  ResourceForm,
-  ResourceFormWrapper,
-} from 'shared/ResourceForm/ResourceForm';
+import { ResourceForm } from 'shared/ResourceForm';
+import { ComboboxArrayInput, TextArrayInput } from 'shared/ResourceForm/fields';
 import { InvalidRoleError } from './InvalidRoleError';
 
 function unique(arr) {
@@ -73,32 +71,32 @@ export function RuleInput({
   ]);
 
   return (
-    <ResourceFormWrapper
+    <ResourceForm.Wrapper
       isAdvanced={isAdvanced}
       resource={rule}
       setResource={() => setRules([...rules])}
     >
-      <ResourceForm.ComboboxArrayInput
+      <ComboboxArrayInput
         title={t('roles.headers.api-groups')}
         propertyPath="$.apiGroups"
         options={apiGroupsInputOptions}
         emptyStringKey={EMPTY_STRING_KEY}
         defaultOpen
       />
-      <ResourceForm.ComboboxArrayInput
+      <ComboboxArrayInput
         title={t('roles.headers.resources')}
         propertyPath="$.resources"
         options={availableResources.map(i => ({ key: i, text: i }))}
         defaultOpen
       />
-      <ResourceForm.ComboboxArrayInput
+      <ComboboxArrayInput
         title={t('roles.headers.verbs')}
         propertyPath="$.verbs"
         options={verbs.map(i => ({ key: i, text: i }))}
         defaultOpen
       />
       {isAdvanced && (
-        <ResourceForm.TextArrayInput
+        <TextArrayInput
           title={t('roles.headers.resource-names')}
           propertyPath="$.resourceNames"
           inputProps={{
@@ -107,13 +105,13 @@ export function RuleInput({
         />
       )}
       {isAdvanced && !namespaceId && (
-        <ResourceForm.ComboboxArrayInput
+        <ComboboxArrayInput
           title={t('roles.headers.non-resource-urls')}
           propertyPath="$.nonResourceURLs"
           options={nonResourceUrls.map(i => ({ key: i, text: i }))}
         />
       )}
       <InvalidRoleError rule={rule} />
-    </ResourceFormWrapper>
+    </ResourceForm.Wrapper>
   );
 }

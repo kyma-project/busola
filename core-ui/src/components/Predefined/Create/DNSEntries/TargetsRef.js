@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Switch, FormInput } from 'fundamental-react';
+import { Button, Switch, FormInput, ComboboxInput } from 'fundamental-react';
 import classnames from 'classnames';
 import { useGetList, Spinner } from 'react-shared';
 
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
-import { Label } from 'shared/ResourceForm/components/FormComponents';
+import { ResourceForm } from 'shared/ResourceForm';
 
 import './TargetsRef.scss';
 
@@ -55,9 +54,12 @@ export function TargetsInput({
   return (
     <div className="fd-row form-field multi-input">
       <div className="fd-col fd-col-md--3">
-        <Label required tooltipContent={t('dnsentries.tooltips.target')}>
+        <ResourceForm.Label
+          required
+          tooltipContent={t('dnsentries.tooltips.target')}
+        >
           {t('dnsentries.labels.target')}
-        </Label>
+        </ResourceForm.Label>
       </div>
       <ul className="text-array-input__list fd-col fd-col-md--8">
         {internalValue.map((entry, index) => (
@@ -100,12 +102,19 @@ const getExternalIPs = loadBalancer => {
   }
 };
 
-export function TargetsRef({ dnsEntry, setTargets, setDnsEntry }) {
+let memoizedServices = null;
+export function TargetsRef({ resource: dnsEntry, setResource: setDnsEntry }) {
   const { t } = useTranslation();
-  const { data: services, loading } = useGetList()(`/api/v1/services`);
-  if (loading) return <Spinner />;
 
-  const targets = dnsEntry?.spec.targets || [];
+  const { data, loading } = useGetList()(`/api/v1/services`);
+  useEffect(() => {
+    if (data) {
+      memoizedServices = data;
+    }
+  }, [data]);
+  const services = memoizedServices || data;
+  if (loading && !services) return <Spinner />;
+
   const loadBalancers = services?.filter(
     service =>
       service.spec.type === 'LoadBalancer' &&
@@ -126,7 +135,6 @@ export function TargetsRef({ dnsEntry, setTargets, setDnsEntry }) {
       defaultOpen
       resource={dnsEntry}
       setResource={setDnsEntry}
-      propertyPath="$.spec.targets"
       className="targets-ref"
     >
       <TargetsInput
@@ -139,21 +147,20 @@ export function TargetsRef({ dnsEntry, setTargets, setDnsEntry }) {
             .map(target => target.target)
             .filter(t => !!t)
         }
-        value={targets}
-        setValue={setTargets}
+        propertyPath="$.spec.targets"
         inputs={[
           ({ value, index, setInternalValue }) => (
             <div className="fd-col fd-col-md--3" key={index}>
               <div className="fd-row form-field multi-input__row">
-                <Label
+                <ResourceForm.Label
                   tooltipContent={
                     value?.isCname
                       ? t('dnsentries.tooltips.use-a')
                       : t('dnsentries.tooltips.use-cname')
                   }
                 >
-                  {t('dnsentries.use-cname')}
-                </Label>
+                  {t('dnsentries.labels.use-cname')}
+                </ResourceForm.Label>
                 <div>
                   <Switch
                     key={`targets-switch-${index}`}
@@ -185,13 +192,24 @@ export function TargetsRef({ dnsEntry, setTargets, setDnsEntry }) {
             } else {
               return (
                 <div className="fd-col fd-col-md--9" key={index}>
-                  <ResourceForm.ComboboxInput
-                    key={`targets-select-${index}`}
+                  <ComboboxInput
+                    compact
+                    id={'targets-ref'}
+                    ariaLabel="Combobox input"
+                    arrowLabel={t('dnsentries.placeholders.target-a')}
+                    showAllEntries
+                    searchFullString
                     options={IPs}
-                    defaultKey={value?.target}
-                    value={value?.target}
+                    selectedKey={value?.target}
+                    selectionType="manual"
                     placeholder={t('dnsentries.placeholders.target-a')}
-                    setValue={key => setValue({ ...value, target: key })}
+                    onSelectionChange={(_, selected) => {
+                      if (selected.key !== -1) {
+                        setValue({ ...value, target: selected.key });
+                      } else {
+                        setValue({ ...value, target: selected.text });
+                      }
+                    }}
                   />
                 </div>
               );

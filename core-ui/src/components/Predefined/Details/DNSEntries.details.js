@@ -18,7 +18,7 @@ const Provider = resource => {
   const { t } = useTranslation();
 
   return (
-    <LayoutPanel className="fd-margin--md">
+    <LayoutPanel key="provider-panel" className="fd-margin--md">
       <LayoutPanel.Header>
         <LayoutPanel.Head title={t('dnsentries.headers.provider')} />
       </LayoutPanel.Header>
@@ -46,7 +46,7 @@ const Spec = resource => {
     .toString()
     .replaceAll(',', ', ');
   return (
-    <LayoutPanel className="fd-margin--md">
+    <LayoutPanel key="specification-panel" className="fd-margin--md">
       <LayoutPanel.Header>
         <LayoutPanel.Head title={t('dnsentries.headers.spec')} />
       </LayoutPanel.Header>

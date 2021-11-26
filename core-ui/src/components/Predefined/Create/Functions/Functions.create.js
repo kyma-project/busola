@@ -4,14 +4,13 @@ import * as jp from 'jsonpath';
 import { MessageStrip } from 'fundamental-react';
 
 import { useGetList } from 'react-shared';
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
-import * as Inputs from 'shared/ResourceForm/components/Inputs';
+import { ResourceForm } from 'shared/ResourceForm';
+import * as Inputs from 'shared/ResourceForm/inputs';
 import {
   K8sNameField,
   KeyValueField,
-  FormField,
-} from 'shared/ResourceForm/components/FormComponents';
-import { RuntimeResources } from 'shared/ResourceForm/components/RuntimeResources';
+  RuntimeResources,
+} from 'shared/ResourceForm/fields';
 import {
   functionAvailableLanguages,
   getDefaultDependencies,
@@ -148,14 +147,14 @@ export function FunctionsCreate({
         propertyPath="$.metadata.annotations"
         title={t('common.headers.annotations')}
       />
-      <FormField
+      <ResourceForm.FormField
         required
         propertyPath="$.spec.runtime"
         label={t('functions.headers.runtime')}
         input={Inputs.Dropdown}
         options={runtimeOptions}
       />
-      <FormField
+      <ResourceForm.FormField
         advanced
         required
         propertyPath="$.spec.type"
@@ -174,7 +173,7 @@ export function FunctionsCreate({
           {t('functions.create-view.errors.no-repository-found')}
         </MessageStrip>
       )}
-      <FormField
+      <ResourceForm.FormField
         advanced
         required
         propertyPath="$.spec.minReplicas"
@@ -182,7 +181,7 @@ export function FunctionsCreate({
         input={Inputs.Number}
         min={1}
       />
-      <FormField
+      <ResourceForm.FormField
         advanced
         required
         propertyPath="$.spec.maxReplicas"
@@ -204,7 +203,7 @@ export function FunctionsCreate({
       />
       {func?.spec?.type === 'git' && repositories.length && (
         <>
-          <FormField
+          <ResourceForm.FormField
             advanced
             required
             propertyPath="$.spec.source"
@@ -212,7 +211,7 @@ export function FunctionsCreate({
             input={Inputs.Dropdown}
             options={repositoryOptions}
           />
-          <FormField
+          <ResourceForm.FormField
             advanced
             required
             propertyPath="$.spec.reference"
@@ -221,7 +220,7 @@ export function FunctionsCreate({
             placeholder={t('functions.placeholders.reference')}
             input={Inputs.Text}
           />
-          <FormField
+          <ResourceForm.FormField
             advanced
             required
             propertyPath="$.spec.baseDir"

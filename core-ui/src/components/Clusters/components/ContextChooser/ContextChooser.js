@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Select } from 'fundamental-react';
 
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
+import { ResourceForm } from 'shared/ResourceForm';
 
 import './ContextChooser.scss';
 

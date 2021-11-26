@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useGetList } from 'react-shared';
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
+import { ResourceForm } from 'shared/ResourceForm';
+import {
+  K8sNameField,
+  KeyValueField,
+  ItemArray,
+  ComboboxArrayInput,
+} from 'shared/ResourceForm/fields';
 import * as jp from 'jsonpath';
 import { createServiceAccountTemplate, newSecret } from './templates';
 import { validateServiceAccount } from './helpers';
@@ -56,7 +62,7 @@ const ServiceAccountsCreate = ({
       createUrl={resourceUrl}
       initialResource={initialServiceAccounts}
     >
-      <ResourceForm.K8sNameField
+      <K8sNameField
         propertyPath="$.metadata.name"
         kind={t('service-accounts.name_singular')}
         setValue={name => {
@@ -65,12 +71,12 @@ const ServiceAccountsCreate = ({
         }}
         readOnly={!!initialServiceAccounts}
       />
-      <ResourceForm.KeyValueField
+      <KeyValueField
         advanced
         propertyPath="$.metadata.labels"
         title={t('common.headers.labels')}
       />
-      <ResourceForm.KeyValueField
+      <KeyValueField
         advanced
         propertyPath="$.metadata.annotations"
         title={t('common.headers.annotations')}

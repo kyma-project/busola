@@ -6,8 +6,7 @@ import LuigiClient from '@luigi-project/client';
 
 import { useGetList, getFeatureToggle, Spinner } from 'react-shared';
 
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
-import { CollapsibleSection } from 'shared/ResourceForm/components/FormComponents';
+import { ResourceForm } from 'shared/ResourceForm';
 
 import './ExternalResourceRef.scss';
 
@@ -73,8 +72,6 @@ export function ExternalResourceRef({
   const nameValid =
     !value?.name ||
     filteredResourcesOptions.find(res => res.key === value.name);
-
-  const open = defaultOpen === undefined ? !isAdvanced : defaultOpen;
 
   const content = () => {
     return [
@@ -157,15 +154,16 @@ export function ExternalResourceRef({
 
   if (noSection) return <>{content()}</>;
   return (
-    <CollapsibleSection
+    <ResourceForm.CollapsibleSection
       title={title}
       tooltipContent={tooltipContent}
       actions={actions}
       className={classnames('external-resource-ref', className)}
-      defaultOpen={open}
+      defaultOpen={defaultOpen}
+      isAdvanced={isAdvanced}
       required={required}
     >
       {content()}
-    </CollapsibleSection>
+    </ResourceForm.CollapsibleSection>
   );
 }

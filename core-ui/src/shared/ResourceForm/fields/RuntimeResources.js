@@ -10,9 +10,8 @@ import * as jp from 'jsonpath';
 
 import { Dropdown } from 'react-shared';
 
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
-import { Presets } from 'shared/ResourceForm/components/Presets';
-import * as Inputs from 'shared/ResourceForm/components/Inputs';
+import { ResourceForm } from '..';
+import * as Inputs from '../inputs';
 
 function MemoryInput({ label, propertyPath, container = {}, setContainer }) {
   const units = ['K', 'Ki', 'M', 'Mi', 'G', 'Gi', 'Ti', 'T'];
@@ -109,7 +108,7 @@ export function RuntimeResources({ value, setValue, presets, ...props }) {
     <ResourceForm.CollapsibleSection
       actions={
         presets && (
-          <Presets
+          <ResourceForm.Presets
             presets={mappedPresets}
             onSelect={preset => setValue(preset.value)}
           />
