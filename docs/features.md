@@ -6,7 +6,7 @@ Below you can find a description of all the feature flags that are available in 
 
 > **TIP:** The list is ordered alphabetically.
 
-- **ADD_CLUSTER_DISABLED** – is used to enable or disable adding a cluster. If the function is enabled, you can only access your cluster in the BTP cockpit by adding it through the KUBECONFIG_ID feature. Link to the cockpit is configured under cockpitUrl.
+- **ADD_CLUSTER_DISABLED** – is used to enable or disable adding a cluster. If the function is enabled, you can only add your cluster in the BTP cockpit using the KUBECONFIG_ID feature. Link to the cockpit is configured under cockpitUrl.
 
 Default settings:
 
