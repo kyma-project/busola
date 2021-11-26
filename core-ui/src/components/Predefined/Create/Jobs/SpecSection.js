@@ -79,7 +79,7 @@ export const CronJobSpecSection = ({ value, setValue, ...props }) => {
   );
 };
 
-export const JobSpecSection = ({ value, setValue, ...props }) => {
+export const JobSpecSection = ({ value, setValue, readOnly, ...props }) => {
   const { t } = useTranslation();
 
   return (
@@ -107,6 +107,7 @@ export const JobSpecSection = ({ value, setValue, ...props }) => {
         label={t('cron-jobs.create-modal.labels.restart-policy')}
         input={Inputs.Dropdown}
         options={restartPolicyOptions}
+        readOnly={readOnly}
       />
     </ResourceForm.Wrapper>
   );
