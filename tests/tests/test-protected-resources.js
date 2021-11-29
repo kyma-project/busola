@@ -54,31 +54,26 @@ context('Test Protected Resources', () => {
       .contains('Cluster interaction')
       .click();
 
-    // cy.wait(5000);
     cy.getModalIframeBody()
       .contains('.preferences-row', 'Do not protect resources')
       .find('.fd-switch')
       .click();
 
-    cy.wait(5000);
     cy.get('[aria-label="close"]').click();
   });
 
   it("Don't protect a resource", () => {
-    cy.wait(2000);
-    cy.getLeftNav()
-      .contains('Deployments')
-      .click();
-
-    cy.wait(2000);
     cy.getIframeBody()
       .contains('tr', 'api-gateway')
       .find('[aria-label="Delete"]')
       .click();
 
-    cy.wait(2000);
     cy.getIframeBody()
       .contains('Delete api-gateway')
       .should('exist');
+
+    cy.getIframeBody()
+      .contains('button', 'Cancel')
+      .click();
   });
 });
