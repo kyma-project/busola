@@ -95,7 +95,10 @@ const DefaultRowRenderer = ({
     </td>
   );
   return (
-    <tr className={classNames('fd-table__row', { 'is-edited': isBeingEdited })}>
+    <tr
+      role="datarow"
+      className={classNames('fd-table__row', { 'is-edited': isBeingEdited })}
+    >
       {cells}
       {!!actions.length && actionsCell}
     </tr>

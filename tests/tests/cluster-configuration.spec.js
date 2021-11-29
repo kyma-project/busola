@@ -51,4 +51,42 @@ context('Cluster configuration', () => {
       .click();
     cy.contains('sessionStorage').should('be.visible');
   });
+
+  it('Test pagination', () => {
+    cy.loginAndSelectCluster();
+
+    cy.getLeftNav()
+      .contains('Configuration')
+      .click();
+
+    cy.getLeftNav()
+      .contains('Cluster Roles')
+      .click();
+
+    cy.getIframeBody()
+      .find('[role=datarow]')
+      .should('have.length', 20);
+
+    cy.get('[data-testid="luigi-topnav-profile-btn"]').click();
+
+    cy.contains('Preferences').click();
+
+    cy.getModalIframeBody()
+      .contains('Other')
+      .click();
+
+    cy.getModalIframeBody()
+      .contains('20')
+      .click();
+
+    cy.getModalIframeBody()
+      .contains('10')
+      .click();
+
+    cy.get('[aria-label="close"]').click();
+
+    cy.getIframeBody()
+      .find('[role=datarow]')
+      .should('have.length', 10);
+  });
 });

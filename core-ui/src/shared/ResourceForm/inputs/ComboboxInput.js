@@ -7,7 +7,7 @@ import './ComboboxInput.scss';
 export function ComboboxInput({
   value,
   setValue,
-  defaultKey,
+  selectedKey,
   options,
   id,
   placeholder,
@@ -30,8 +30,8 @@ export function ComboboxInput({
         onSelectionChange={(_, selected) =>
           setValue(selected.key !== -1 ? selected.key : selected.text)
         }
-        typedValue={value}
-        selectedKey={value}
+        typedValue={value || typedValue}
+        selectedKey={value || selectedKey}
         placeholder={placeholder}
         options={options}
         {...props}
