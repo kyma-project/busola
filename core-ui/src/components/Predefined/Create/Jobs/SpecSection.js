@@ -21,7 +21,7 @@ export const CronJobSpecSection = ({ value, setValue, ...props }) => {
     <ResourceForm.Wrapper resource={value} setResource={setValue} {...props}>
       <ResourceForm.FormField
         advanced
-        propertyPath="$.jobTemplate.spec.template.spec.startingDeadlineSeconds"
+        propertyPath="$.startingDeadlineSeconds"
         label={t('jobs.create-modal.labels.starting-deadline')}
         input={Inputs.Number}
         placeholder={t('jobs.create-modal.placeholders.starting-deadline')}
@@ -31,7 +31,7 @@ export const CronJobSpecSection = ({ value, setValue, ...props }) => {
 
       <ResourceForm.FormField
         advanced
-        propertyPath="$.jobTemplate.spec.template.spec.suspend"
+        propertyPath="$.suspend"
         label={t('jobs.create-modal.labels.suspend')}
         input={Inputs.Switch}
         tooltipContent={t('jobs.create-modal.tooltips.suspend')}
@@ -39,7 +39,7 @@ export const CronJobSpecSection = ({ value, setValue, ...props }) => {
 
       <ResourceForm.FormField
         advanced
-        propertyPath="$.jobTemplate.spec.template.spec.successfulJobsHistoryLimit"
+        propertyPath="$.successfulJobsHistoryLimit"
         label={t('jobs.create-modal.labels.successful-jobs-history-limit')}
         input={Inputs.Number}
         min={0}
@@ -50,7 +50,7 @@ export const CronJobSpecSection = ({ value, setValue, ...props }) => {
 
       <ResourceForm.FormField
         advanced
-        propertyPath="$.jobTemplate.spec.template.spec.failedJobsHistoryLimit"
+        propertyPath="$.failedJobsHistoryLimit"
         label={t('jobs.create-modal.labels.failed-jobs-history-limit')}
         input={Inputs.Number}
         min={0}
