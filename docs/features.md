@@ -88,7 +88,7 @@ The document lists and describes all the feature flags that are available in Kym
   },
   ```
 
-- **CUSTOM_DOMAINS** – is used to show or hide the DNS Entry, DNS Provider, Gateway, Issuer, and Certificate views. 
+- **CUSTOM_DOMAINS** – is used to show or hide the DNS Entry, DNS Provider, Gateway, Issuer, and Certificate views.  
    For the view to be shown, you must enable the feature. Moreover, all the CRDs defined in the selectors array must exist in a cluster.
 
   Default settings:
@@ -164,7 +164,7 @@ The document lists and describes all the feature flags that are available in Kym
   },
   ```
 
-   The link under the given key is selected based on your language code (de, en, pl, etc.). If the code is not available, the default link is used.
+  The link under the given key is selected based on your language code (de, en, pl, etc.). If the code is not available, the default link is used.
 
 - **OBSERVABILITY** – is used to render nodes in the navigation. The **label** parameter shows the name of the given service. The **path** parameter is used by Busola during the bootstrapping. Busola sends a request to the cluster address. The **path** value and the cluster must return the VirtualService object. If the object is found, you receive an address to which the node in the navigation leads.
 
@@ -265,7 +265,7 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
   },
   ```
 
-> **NOTE:** Both **SERVICE_CATALOG** and **SERVICE_CATALOG_ADDONS** features are used to determine if Service Bindings (in the **Configuration** tab) and environment variables injected by Service Bindings (in the **Code** Tab) are displayed in the Functions view.
+  > NOTE: **SERVICE_CATALOG** and **SERVICE_CATALOG_ADDONS** are also used to determine if Service Bindings (in the **Configuration** tab) and environment variables injected by Service Bindings (in the **Code** Tab) are displayed in the Functions view.
 
 - **SERVICE_CATALOG** – is used to show or hide the Service Catalog views (Catalog, Instances, and Brokers) and to define which CRDs are required for the view to be shown properly.  
   For the view to be shown, you must enable the feature. Moreover, all the CRDs defined in the selectors array must exist in a cluster.
