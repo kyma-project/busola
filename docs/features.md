@@ -88,7 +88,8 @@ The document lists and describes all the feature flags that are available in Kym
   },
   ```
 
-- **CUSTOM_DOMAINS** – is responsible for displaying views of DNS Entry, DNS Provider, Gateway, Issuer and Certificate. For the view to be shown, you must enable the feature. Moreover, all the CRDs defined in the selectors array must exist in a cluster.
+- **CUSTOM_DOMAINS** – is used to show or hide the DNS Entry, DNS Provider, Gateway, Issuer, and Certificate views. 
+   For the view to be shown, you must enable the feature. Moreover, all the CRDs defined in the selectors array must exist in a cluster.
 
   Default settings:
 
@@ -122,7 +123,7 @@ The document lists and describes all the feature flags that are available in Kym
   },
   ```
 
-- **KUBECONFIG_ID** – is used to configure the URL to which Busola sends a request to download a kubeconfig file. If you add `?kubeconfigID={your ID}` to the Busola URL, Busola tries to download the kubeconfig from the {kubeconfigUrl}/{yourID} . If the operation succeeds, Busola adds the kubeconfing file to the cluster.
+- **KUBECONFIG_ID** – is used to configure the URL to which Busola sends a request to download a kubeconfig file. If you add `?kubeconfigID={your ID}` to the Busola URL, Busola tries to download the kubeconfig from `{kubeconfigUrl}/{yourID}`. If the operation succeeds, Busola adds the kubeconfing file to the cluster.
   If you use a full address in the **kubeconfigUrl** field, Busola also reads it.
 
   Default settings:
@@ -137,7 +138,7 @@ The document lists and describes all the feature flags that are available in Kym
   ```
 
 - **LEGAL_LINKS** – is used to show or hide legal links. You can find the all available links in the below example.  
-  In **config** you can find the unchangeable keys (you cannot use **legalDisclosure** instead of **legal-disclosure**). The keys include the default link, which takes you to the default address, and a link that depends on your chosen language.
+  In **config** you can find the unchangeable keys (you cannot use **legalDisclosure** instead of **legal-disclosure**). The keys include both the default link, which takes you to the default address, and a link that depends on your chosen language.
 
   Example:
 
@@ -163,9 +164,9 @@ The document lists and describes all the feature flags that are available in Kym
   },
   ```
 
-A link under the given key is selected based on your language code (de, en, pl, etc.), If the code is not available, the default link is used.
+   The link under the given key is selected based on your language code (de, en, pl, etc.). If the code is not available, the default link is used.
 
-- **OBSERVABILITY** – is used to render nodes in the navigation. The **label** parameter shows the name of the given service. The **path** parameter is used by Busola during the bootstrapping. Busola sends a request to the cluster address. The **path** value and the cluster must return the VirtualService object. If the object is found you receive an address to which the node in the navigation leads.
+- **OBSERVABILITY** – is used to render nodes in the navigation. The **label** parameter shows the name of the given service. The **path** parameter is used by Busola during the bootstrapping. Busola sends a request to the cluster address. The **path** value and the cluster must return the VirtualService object. If the object is found, you receive an address to which the node in the navigation leads.
 
   Defualt settings:
 
@@ -192,9 +193,9 @@ A link under the given key is selected based on your language code (de, en, pl, 
   ```
 
 - **PROTECTED_RESOURCES** – is used to block the edit and delete functions based on the determined rules. If the resource meets the rule requirements, the resource becomes protected and cannot be edited/deleted.  
-  Each resource requires a **match** field, which includes a list of key-value pairs. The proper rule description is when the definition given in the key matches the value.
+  Each resource requires the **match** field, which includes a list of key-value pairs. The proper rule description is when the definition given in the key matches the value.
 
-  Optionally, you can provide a **message** parameter, which displays a simple message, or **messageSrc**, which is a yaml path where the message to be displayed is included. If neither message nor messageSrc is provided, a generic message will be used.
+  Optionally, you can provide the **message** parameter, which displays a simple message, or **messageSrc**, which is a yaml path where the message to be displayed is included. If neither **message** nor **messageSrc** is provided, a generic message is used.
 
   Example:
 
@@ -264,8 +265,7 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
   },
   ```
 
-  > NOTE:  
-  > **SERVICE_CATALOG** and **SERVICE_CATALOG_ADDONS** are also used to determine if Service Bindings (in the **Configuration** tab) and environment variables injected by Service Bindings (in the **Code** Tab) are displayed in the Functions view.
+> **NOTE:** Both **SERVICE_CATALOG** and **SERVICE_CATALOG_ADDONS** features are used to determine if Service Bindings (in the **Configuration** tab) and environment variables injected by Service Bindings (in the **Code** Tab) are displayed in the Functions view.
 
 - **SERVICE_CATALOG** – is used to show or hide the Service Catalog views (Catalog, Instances, and Brokers) and to define which CRDs are required for the view to be shown properly.  
   For the view to be shown, you must enable the feature. Moreover, all the CRDs defined in the selectors array must exist in a cluster.
