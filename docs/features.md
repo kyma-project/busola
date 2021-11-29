@@ -6,7 +6,7 @@ Below you can find a description of all the feature flags that are available in 
 
 > **TIP:** The list is ordered alphabetically.
 
-- **ADD_CLUSTER_DISABLED** – is used to enable or disable adding a cluster. If the function is enabled, you can only add your cluster from BTP cockpit using the KUBECONFIG_ID feature. Link to the cockpit is configured under cockpitUrl.
+- **ADD_CLUSTER_DISABLED** – is used to enable or disable adding a cluster. If the function is enabled, you can only add your cluster from BTP cockpit using the KUBECONFIG_ID feature. Link to the cockpit is configured under `cockpitUrl`.
 
 Default settings:
 
@@ -19,8 +19,8 @@ Default settings:
 },
 ```
 
-- **ADDONS** – is used to show or hide the Addons view as well as to define which Custom Resource Definitions (CRD) are required for the view to be shown properly.
-  For the view to be shown, the feature must be enabled and all CRDs, defined in the selectors array, must exist in a cluster.
+- **ADDONS** – is used to show or hide the Addons view as well as to define which Custom Resource Definitions (CRD) are required for the view to be shown properly.  
+  For the view to be shown, you must enable the feature and all the CRDs, defined in the selectors array, must exist in a cluster.
 
 Default settings:
 
@@ -36,8 +36,9 @@ Default settings:
 },
 ```
 
-- **API_GATEWAY** – is used to show or hide the Api Gateway view as well as to define which Custom Resource Definitions (CRD) are required for the view to be shown properly.
-  For the view to be shown, the feature must be enabled and all CRDs, defined in the selectors array, must exist in a cluster.
+- **API_GATEWAY** – is used to show or hide the Api Gateway view as well as to define which Custom Resource Definitions (CRD) are required for the view to be shown properly.  
+  It is also used to determine if the Api Gateway list should be displayed in the Function and Service details.  
+  For the view to be shown, you must enable the feature and all the CRDs, defined in the selectors array, must exist in a cluster.
 
 Default settings:
 
@@ -53,8 +54,8 @@ Default settings:
 },
 ```
 
-- **APPLICATIONS** – is used to show or hide the Applications view as well as to define which Custom Resource Definitions (CRD) are required for the view to be shown properly.
-  For the view to be shown, the feature must be enabled and all CRDs, defined in the selectors array, must exist in a cluster.
+- **APPLICATIONS** – is used to show or hide the Applications view as well as to define which Custom Resource Definitions (CRD) are required for the view to be shown properly.  
+  For the view to be shown, you must enable the feature and all the CRDs, defined in the selectors array, must exist in a cluster.
 
 Default settings:
 
@@ -70,8 +71,8 @@ Default settings:
 },
 ```
 
-- **BTP_CATALOG** – is used to show or hide the BTP Catalog view as well as to define which Custom Resource Definitions (CRD) are required for the view to be shown properly.
-  For the view to be shown, the feature must be enabled, and all CRDs, defined in the selectors array, must exist in a cluster.
+- **BTP_CATALOG** – is used to show or hide the BTP Catalog view as well as to define which Custom Resource Definitions (CRD) are required for the view to be shown properly.  
+  For the view to be shown, you must enable the feature and all the CRDs, defined in the selectors array, must exist in a cluster.
 
 Default settings:
 
@@ -103,8 +104,9 @@ Default settings:
 },
 ```
 
-- **EVENTING** – is used to show or hide the Eventing view as well as to define which Custom Resource Definitions (CRD) are required for the view to be shown properly.
-  For the view to be shown, the feature must be enabled and all CRDs, defined in the selectors array, must exist in a cluster.
+- **EVENTING** – is used to show or hide the Eventing view as well as to define which Custom Resource Definitions (CRD) are required for the view to be shown properly.  
+  It is also used to determine if the Event Subscriptions should be displayed in Function and Service details.  
+  For the view to be shown, you must enable the feature and all the CRDs, defined in the selectors array, must exist in a cluster.
 
 Default settings:
 
@@ -135,7 +137,7 @@ Default settings:
 ```
 
 - **LEGAL_LINKS** – is used to show or hide legal links. You can find all available links in the below example.  
-  In config you can find the unchangeable keys (you cannot use legalDisclosure instead of legal-disclosure). The keys include the default link, which takes you to the default address, and a link that depends on your chosen language.
+  In `config` you can find the unchangeable keys (you cannot use legalDisclosure instead of legal-disclosure). The keys include the default link, which takes you to the default address, and a link that depends on your chosen language.
 
 Example:
 
@@ -163,7 +165,7 @@ Example:
 
 A link under the given key will be selected based on your language code (de, en, pl, etc.), If the code is not available, the default link is used.
 
-- **OBSERVABILITY** – is used to render a few nodes in the navigation. The label shows the name of the given service. The path is used by Busola during the bootstrapping. Busola sends a request to the cluster address + the path and the cluster must return the virtualService object. If the object is found you receive an address to which the node in the navigation leads.
+- **OBSERVABILITY** – is used to render a few nodes in the navigation. The `label` shows the name of the given service. The `path` is used by Busola during the bootstrapping. Busola sends a request to the cluster address + the `path` and the cluster must return the VirtualService object. If the object is found you receive an address to which the node in the navigation leads.
 
 Defualt settings:
 
@@ -189,10 +191,10 @@ Defualt settings:
 }
 ```
 
-- **PROTECTED_RESOURCES** – is used to block the edit and delete functions based on the determined rules. If the resource meets the rule requirements, the resource becomes protected and cannot be edited/deleted.
+- **PROTECTED_RESOURCES** – is used to block the edit and delete functions based on the determined rules. If the resource meets the rule requirements, the resource becomes protected and cannot be edited/deleted.  
   Each resource must have a match field, which is the list of key-value pairs. The proper rule description is when the definition given in the key matches the value.
 
-  Optionally you can provide a message parameter, which displays a simple message, or messageSrc, which is a yaml path where the message to be displayed is included. If neither message nor messageSrc is provided, a generic message will be used.
+  Optionally, you can provide a `message` parameter, which displays a simple message, or `messageSrc`, which is a yaml path where the message to be displayed is included. If neither message nor messageSrc is provided, a generic message will be used.
 
 Example:
 
@@ -246,8 +248,8 @@ Default settings:
 },
 ```
 
-- **SERVERLESS** – is used to show or hide the Serverless view as well as to define which Custom Resource Definitions (CRD) are required for the view to be shown properly.
-  For the view to be shown, the feature must be enabled and all CRDs, defined in the selectors array, must exist in a cluster.
+- **SERVERLESS** – is used to show or hide the Serverless view as well as to define which Custom Resource Definitions (CRD) are required for the view to be shown properly.  
+  For the view to be shown, you must enable the feature and all the CRDs, defined in the selectors array, must exist in a cluster.
 
 Default settings:
 
@@ -263,8 +265,9 @@ Default settings:
 },
 ```
 
-- **SERVICE_CATALOG** – is used to show or hide the Service Catalog view as well as to define which Custom Resource Definitions (CRD) are required for the view to be shown properly.
-  For the view to be shown, the feature must be enabled and all CRDs, defined in the selectors array, must exist in a cluster.
+- **SERVICE_CATALOG** – is used to show or hide the Service Catalog views (Catalog, Instances, and Brokers) as well as to define which Custom Resource Definitions (CRD) are required for the view to be shown properly.  
+  SERVICE_CATALOG and SERVICE_CATALOG_ADDONS are also used to determine if Service Bindings (in Configuration tab) and environment variables injected by Service Bindings (in Code Tab) are displayed in the Functions view.  
+  For the view to be shown, you must enable the feature and all the CRDs, defined in the selectors array, must exist in a cluster.
 
 Default settings:
 
@@ -280,8 +283,9 @@ Default settings:
 },
 ```
 
-- **SERVICE_CATALOG_ADDONS** – is used to show or hide the Service Catalog Addons view as well as to define which Custom Resource Definitions (CRD) are required for the view to be shown properly.
-  For the view to be shown, the feature must be enabled and all CRDs, defined in the selectors array, must exist in a cluster.
+- **SERVICE_CATALOG_ADDONS** – is used to show or hide the Service Catalog Addons view as well as to define which Custom Resource Definitions (CRD) are required for the view to be shown properly.  
+  SERVICE_CATALOG and SERVICE_CATALOG_ADDONS are also used to determine if Service Bindings (in Configuration tab) and environment variables injected by Service Bindings (in Code Tab) are displayed in the Functions view.  
+  For the view to be shown, you must enable the feature and all the CRDs, defined in the selectors array, must exist in a cluster.
 
 Default settings:
 
