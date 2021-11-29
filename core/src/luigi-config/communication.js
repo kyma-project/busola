@@ -32,9 +32,6 @@ export const communication = {
     },
     'busola.disableResourceProtection': ({ disableResourceProtection }) => {
       setFeatureToggle('disableResourceProtection', disableResourceProtection);
-      // XXX this breaks tests :/
-      // Luigi.configChanged('navigation.nodes');
-      Luigi.elements().getMicrofrontendIframes()[0].src += '';
     },
     'busola.dontConfirmDelete': ({ value }) => {
       setFeatureToggle('dontConfirmDelete', value);
