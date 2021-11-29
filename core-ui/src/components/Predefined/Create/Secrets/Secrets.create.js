@@ -98,9 +98,10 @@ function SecretsCreate({
             compact
             placeholder={t('secrets.placeholders.type')}
             options={secretTypes.map(type => ({ key: type, text: type }))}
-            value={secret.type}
-            selectedKey={secret.type}
+            selectedKey={value}
+            typedValue={value}
             onSelect={e => setValue(e.target.value)}
+            disabled={!!initialSecret}
           />
         )}
       />

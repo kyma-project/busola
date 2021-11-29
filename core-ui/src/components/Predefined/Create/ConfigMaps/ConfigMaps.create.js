@@ -11,18 +11,18 @@ import {
 } from 'shared/ResourceForm/fields';
 
 import { createConfigMapTemplate, createPresets } from './helpers';
+import { cloneDeep } from 'lodash';
 
 function ConfigMapsCreate({
   formElementRef,
   onChange,
   setCustomValid,
   resource: initialConfigMap,
-  readonlyName,
   resourceUrl,
 }) {
   const { namespaceId } = useMicrofrontendContext();
   const [configMap, setConfigMap] = useState(
-    { ...initialConfigMap } || createConfigMapTemplate(),
+    initialConfigMap ? cloneDeep(initialConfigMap) : createConfigMapTemplate(),
   );
   const { t } = useTranslation();
 
