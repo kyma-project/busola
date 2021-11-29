@@ -76,7 +76,7 @@ function JobsCreate({
         title={t('common.headers.annotations')}
       />
 
-      <JobSpecSection advanced propertyPath="$.spec" />
+      <JobSpecSection advanced propertyPath="$.spec" readOnly={!!initialJob} />
 
       <ContainerSection
         simple

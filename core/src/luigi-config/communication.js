@@ -13,6 +13,7 @@ import { reloadAuth } from './auth/auth';
 import { setFeatureToggle } from './utils/feature-toggles';
 import { setTheme } from './utils/theme';
 import { setSSOAuthData } from './auth/sso';
+import { communicationEntry as pageSizeCommunicationEntry } from './settings/pagination';
 
 export const communication = {
   customMessagesListeners: {
@@ -105,6 +106,7 @@ export const communication = {
         pathId,
       });
     },
+    ...pageSizeCommunicationEntry,
   },
 };
 

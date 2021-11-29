@@ -14,7 +14,7 @@ import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import CustomPropTypes from '../../typechecking/CustomPropTypes';
 
-import { getErrorMessage } from '../..';
+import { getErrorMessage, useMicrofrontendContext } from '../..';
 import './GenericList.scss';
 
 export const GenericList = ({
@@ -45,6 +45,12 @@ export const GenericList = ({
   currentlyEditedResourceUID,
   i18n,
 }) => {
+  const { settings } = useMicrofrontendContext();
+  if (pagination) {
+    pagination.itemsPerPage =
+      pagination.itemsPerPage || settings.pagination.pageSize;
+  }
+
   const { t } = useTranslation(null, { i18n });
   const [currentPage, setCurrentPage] = React.useState(
     pagination?.initialPage || 1,
@@ -63,7 +69,7 @@ export const GenericList = ({
     setFilteredEntries(
       filterEntries([...entries], searchQuery, textSearchProperties),
     );
-  }, [searchQuery, setFilteredEntries, entries]);
+  }, [searchQuery, setFilteredEntries, entries, pagination?.itemsPerPage]);
 
   React.useEffect(() => setCurrentPage(1), [searchQuery]);
 
@@ -203,7 +209,7 @@ export const GenericList = ({
 GenericList.Actions = ListActions;
 
 const PaginationProps = PropTypes.shape({
-  itemsPerPage: PropTypes.number.isRequired,
+  itemsPerPage: PropTypes.number,
   initialPage: PropTypes.number,
   autoHide: PropTypes.bool,
 });

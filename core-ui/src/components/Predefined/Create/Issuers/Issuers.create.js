@@ -319,6 +319,7 @@ function IssuersCreate({
         tooltipContent={t('issuers.tooltips.requests')}
         placeholder={t('issuers.placeholders.requests-per-day')}
         input={Inputs.Number}
+        min={0}
       />
 
       {issuerAdvancedACMEFields()}
