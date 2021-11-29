@@ -9,6 +9,8 @@ export function MemoryInput({
   propertyPath,
   container = {},
   setContainer,
+  required,
+  ...otherProps
 }) {
   const units = ['K', 'Ki', 'M', 'Mi', 'G', 'Gi', 'Ti', 'T'];
   const options = [
@@ -31,22 +33,25 @@ export function MemoryInput({
 
   return (
     <FormItem>
-      <FormLabel required>{label}</FormLabel>
+      <FormLabel required={required}>{label}</FormLabel>
       <div className="memory-input">
         <FormInput
           compact
           type="number"
           min="0"
-          required
+          required={required}
           value={numericValue}
           step="any"
           onChange={e => setValue(e.target.value + selectedUnit)}
+          {...otherProps}
         />
         <Dropdown
           compact
           options={options}
+          required={required}
           selectedKey={selectedUnit}
           onSelect={(_, { key }) => setValue(numericValue.toString() + key)}
+          {...otherProps}
         />
       </div>
     </FormItem>

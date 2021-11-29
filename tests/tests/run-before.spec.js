@@ -31,28 +31,6 @@ context('Create Namespace', () => {
 
     cy.getIframeBody()
       .find('[role=dialog]')
-      .contains('Apply total memory quotas')
-      .click();
-
-    cy.getIframeBody()
-      .find('[role=dialog]')
-      .contains('label', 'Create additional resource')
-      .first()
-      .click();
-
-    cy.getIframeBody()
-      .find('[role=dialog]')
-      .contains('Select a Preset')
-      .first()
-      .click();
-
-    cy.getIframeBody()
-      .find('[class*=fd-list--dropdown]')
-      .contains('li', 'M (limits')
-      .click();
-
-    cy.getIframeBody()
-      .find('[role=dialog]')
       .contains('button', 'Create')
       .click();
 
@@ -61,10 +39,6 @@ context('Create Namespace', () => {
         .contains('h3', ns)
         .should('be.visible');
     });
-
-    cy.getIframeBody()
-      .contains('initial-limits')
-      .should('be.visible');
 
     cy.getIframeBody()
       .contains('button', 'Edit')

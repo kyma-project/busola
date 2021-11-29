@@ -1057,7 +1057,8 @@ namespaces:
     apply-limits: Apply limits per container
     apply-memory-quotas: Apply total memory quotas
     container-limits: Container limits
-    create-resource: Create additional resource
+    create-limit-range: Create Limit Range
+    create-resource-quota: Create Resource Quota
     disable-sidecar: Disable sidecar injection
     memory-limits: Memory limit
     memory-quotas: Memory quotas

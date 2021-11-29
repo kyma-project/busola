@@ -9,7 +9,7 @@ export const formatMemoryQuotas = ({ namespace, limits, requests }) => ({
   apiVersion: 'v1',
   kind: 'ResourceQuota',
   metadata: {
-    name: `${namespace}-initial-quotas`,
+    name: `${namespace}-quotas`,
     namespace,
   },
   spec: {
@@ -29,7 +29,7 @@ export const formatLimits = ({
   apiVersion: 'v1',
   kind: 'LimitRange',
   metadata: {
-    name: `${namespace}-initial-limits`,
+    name: `${namespace}-limits`,
     namespace,
   },
   spec: {

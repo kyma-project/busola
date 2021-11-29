@@ -114,15 +114,6 @@ const defaultConfig = {
     memory: '200Mi',
     cpu: '200m',
   },
-  namespaceContainerLimitsPreset: {
-    M: { max: '1100Mi', default: '511Mi', defaultRequest: '32Mi' },
-  },
-  namespaceMemoryQuotasPreset: {
-    M: {
-      limits: '3Gi',
-      requests: '2.8Gi',
-    },
-  },
 };
 
 function getConfigValue(field) {
@@ -154,12 +145,6 @@ function loadConfig() {
       getConfigValue('buildJobResourcesDefaultPreset') || '',
     buildJobResourcesPresets: getConfigValue('buildJobResourcesPresets') || {},
     buildJobMinResources: getConfigValue('buildJobMinResources') || {},
-
-    // Namespace resources
-    namespaceContainerLimitsPreset:
-      getConfigValue('namespaceContainerLimitsPreset') || {},
-    namespaceMemoryQuotasPreset:
-      getConfigValue('namespaceMemoryQuotasPreset') || {},
   };
 }
 

@@ -16,7 +16,7 @@ import {
 
 import './CreateNamespace.scss';
 import { LimitPresets, MemoryPresets } from './Presets';
-import { CONFIG } from 'components/Lambdas/config';
+import { CONFIG } from './config';
 
 const ISTIO_INJECTION_LABEL = 'istio-injection';
 const ISTIO_INJECTION_VALUE = 'disabled';
@@ -49,13 +49,7 @@ const NamespacesCreate = props => {
   const createLimitResource = useCreateResource(
     'LimitRange',
     'LimitRanges',
-    {
-      ...limits,
-      metadata: {
-        namespace: namespace.metadata.name,
-        name: `${namespace.metadata.name}-initial-limits`,
-      },
-    },
+    limits,
     null,
     `/api/v1/namespaces/${namespace.metadata.name}/limitranges`,
     () => {},
@@ -64,13 +58,7 @@ const NamespacesCreate = props => {
   const createMemoryResource = useCreateResource(
     'ResourceQuota',
     'ResourceQuotas',
-    {
-      ...memory,
-      metadata: {
-        namespace: namespace.metadata.name,
-        name: `${namespace.metadata.name}-initial-limits`,
-      },
-    },
+    memory,
     null,
     `/api/v1/namespaces/${namespace.metadata.name}/resourcequotas`,
     () => {},
@@ -104,8 +92,24 @@ const NamespacesCreate = props => {
     ) {
       setSidecar(false);
     }
-    // eslint-disable-next-line
-  }, [isSidecar]);
+  }, [isSidecar, setSidecar, namespace]);
+
+  useEffect(() => {
+    const name = namespace.metadata.name;
+
+    if (name) {
+      jp.value(memory, '$.metadata.name', `${name}-quotas`);
+      jp.value(memory, '$.metadata.namespace', `${name}`);
+      setMemory({ ...memory });
+    }
+
+    if (name) {
+      jp.value(limits, '$.metadata.name', `${name}-limits`);
+      jp.value(limits, '$.metadata.namespace', name);
+      setLimits({ ...limits });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [namespace.metadata.name]);
 
   async function afterNamespaceCreated() {
     if (!initialNamespace) {
@@ -184,14 +188,6 @@ const NamespacesCreate = props => {
         kind={t('common.labels.namespace')}
         readOnly={!!initialNamespace}
       />
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.labels"
-        title={t('common.headers.labels')}
-        className="fd-margin-top--sm"
-        lockedKeys={[ISTIO_INJECTION_LABEL]}
-        lockedValues={[ISTIO_INJECTION_LABEL]}
-      />
       <ResourceForm.FormField
         advanced
         label={t('namespaces.create-modal.disable-sidecar')}
@@ -207,6 +203,15 @@ const NamespacesCreate = props => {
       />
       <KeyValueField
         advanced
+        propertyPath="$.metadata.labels"
+        title={t('common.headers.labels')}
+        className="fd-margin-top--sm"
+        lockedKeys={[ISTIO_INJECTION_LABEL]}
+        lockedValues={[ISTIO_INJECTION_LABEL]}
+      />
+
+      <KeyValueField
+        advanced
         propertyPath="$.metadata.annotations"
         title={t('common.headers.annotations')}
       />
@@ -220,14 +225,18 @@ const NamespacesCreate = props => {
               <Checkbox
                 compact
                 checked={withMemory}
-                onChange={(_, checked) => setWithMemory(checked)}
+                onChange={() => setWithMemory(!withMemory)}
                 dir="rtl"
               >
-                {t('namespaces.create-modal.create-resource')}
+                {t('namespaces.create-modal.create-resource-quota')}
               </Checkbox>
               <MemoryPresets
-                presets={CONFIG['namespaceMemoryQuotasPreset']}
-                setValue={setMemory}
+                presets={CONFIG.NS_MEMORY_QUOTAS_PRESET}
+                setValue={val => {
+                  setMemory(val);
+                }}
+                disabled={!withMemory}
+                namespaceName={namespace.metadata.name}
               />
             </div>
           )}
@@ -238,12 +247,16 @@ const NamespacesCreate = props => {
               container={memory}
               setContainer={setMemory}
               propertyPath='$.spec.hard["limits.memory"]'
+              disabled={!withMemory}
+              required={withMemory}
             />
             <MemoryInput
               label={t('namespaces.overview.resources.requests')}
               container={memory}
               setContainer={setMemory}
               propertyPath='$.spec.hard["requests.memory"]'
+              disabled={!withMemory}
+              required={withMemory}
             />
           </FormFieldset>
         </ResourceForm.CollapsibleSection>
@@ -258,14 +271,18 @@ const NamespacesCreate = props => {
               <Checkbox
                 compact
                 checked={withLimits}
-                onChange={(_, checked) => setWithLimits(checked)}
+                onChange={() => setWithLimits(!withLimits)}
                 dir="rtl"
               >
-                {t('namespaces.create-modal.create-resource')}
+                {t('namespaces.create-modal.create-limit-range')}
               </Checkbox>
               <LimitPresets
-                presets={CONFIG['namespaceContainerLimitsPreset']}
-                setValue={setLimits}
+                presets={CONFIG.NS_CONTAINER_LIMITS_PRESET}
+                setValue={val => {
+                  setLimits(val);
+                }}
+                disabled={!withLimits}
+                namespaceName={namespace.metadata.name}
               />
             </div>
           )}
@@ -276,18 +293,27 @@ const NamespacesCreate = props => {
               container={limits}
               setContainer={setLimits}
               propertyPath="$.spec.limits[0].max.memory"
+              enableResource={setWithLimits}
+              disabled={!withLimits}
+              required={withLimits}
             />
             <MemoryInput
               label={t('limit-ranges.headers.default')}
               container={limits}
               setContainer={setLimits}
               propertyPath="$.spec.limits[0].default.memory"
+              enableResource={setWithLimits}
+              disabled={!withLimits}
+              required={withLimits}
             />
             <MemoryInput
               label={t('limit-ranges.headers.default-request')}
               container={limits}
               setContainer={setLimits}
               propertyPath="$.spec.limits[0].defaultRequest.memory"
+              enableResource={setWithLimits}
+              disabled={!withLimits}
+              required={withLimits}
             />
           </FormFieldset>
         </ResourceForm.CollapsibleSection>

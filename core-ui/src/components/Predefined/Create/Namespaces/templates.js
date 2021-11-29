@@ -9,14 +9,18 @@ export function createNamespaceTemplate() {
 }
 
 export function createMemoryQuotasTemplate(
-  { limits, requests } = { limits: '3Gi', requests: '2.8Gi' },
+  { limits, requests, namespaceName } = {
+    limits: '3Gi',
+    requests: '2.8Gi',
+    namespaceName: '',
+  },
 ) {
   return {
     apiVersion: 'v1',
     kind: 'ResourceQuota',
     metadata: {
-      name: '', //format:  `${namespace}-initial-quotas`,
-      namespace: '',
+      name: `${namespaceName}-quotas`,
+      namespace: namespaceName,
     },
     spec: {
       hard: {
@@ -28,18 +32,19 @@ export function createMemoryQuotasTemplate(
 }
 
 export function createLimitsTemplate(
-  { max, defaultVal, defaultRequest } = {
+  { max, defaultVal, defaultRequest, namespaceName } = {
     max: '1100Mi',
     defaultVal: '511Mi',
     defaultRequest: '32Mi',
+    namespaceName: '',
   },
 ) {
   return {
     apiVersion: 'v1',
     kind: 'LimitRange',
     metadata: {
-      name: '', //format: `${namespace}-initial-limits`,
-      namespace: '',
+      name: `${namespaceName}-limits`,
+      namespace: namespaceName,
     },
     spec: {
       limits: [
