@@ -1,6 +1,6 @@
 import i18next from 'i18next';
 import { NODE_PARAM_PREFIX } from './luigi-config';
-import { communicationEntries as clusterCommunicationCommunicationEntries } from './cluster-management/cluster-management';
+import { communicationEntries as clusterManagementCommunicationEntries } from './cluster-management/cluster-management';
 import { reloadNavigation } from './navigation/navigation-data-init';
 import { setFeatureToggle } from './utils/feature-toggles';
 import { setTheme } from './utils/theme';
@@ -78,7 +78,7 @@ export const communication = {
       });
     },
     ...pageSizeCommunicationEntry,
-    ...clusterCommunicationCommunicationEntries,
+    ...clusterManagementCommunicationEntries,
   },
 };
 
