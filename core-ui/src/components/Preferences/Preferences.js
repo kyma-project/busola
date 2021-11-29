@@ -41,7 +41,7 @@ function Preferences() {
     },
   ];
   return (
-    <VerticalTabs tabs={tabs} height="508px">
+    <VerticalTabs tabs={tabs} height="100vh">
       <VerticalTabs.Content id={1}>
         <Tabs className="fd-tabs fd-has-padding-left-regular">
           <Tab
