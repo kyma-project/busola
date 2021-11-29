@@ -1,47 +1,66 @@
+const NAME = `test-resource-${Math.floor(Math.random() * 9999) + 1000}`;
+
 context('Test Protected Resources', () => {
   before(() => {
     cy.loginAndSelectCluster();
+    cy.goToNamespaceDetails();
+  });
 
-    cy.get('[data-testid="luigi-topnav-profile-btn"]').click();
-    cy.contains('Preferences').click();
-
-    cy.getModalIframeBody()
-      .contains('Cluster interaction')
+  it('Create a protected resource', () => {
+    cy.getLeftNav()
+      .contains('Configuration')
       .click();
-
-    cy.getModalIframeBody()
-      .contains('.preferences-row', 'Show hidden Namespaces')
-      .find('.fd-switch')
-      .click();
-
-    cy.get('[aria-label="close"]').click();
 
     cy.getLeftNav()
-      .contains('Namespaces')
+      .contains('Config Maps')
       .click();
 
     cy.getIframeBody()
-      .contains('a', 'kyma-system')
+      .contains('Create Config Map')
+      .click();
+
+    cy.getIframeBody()
+      .find('[placeholder="Config Map Name"]:visible')
+      .type(NAME);
+
+    cy.getIframeBody()
+      .contains('Advanced')
+      .click();
+
+    cy.getIframeBody()
+      .find('[role=dialog]')
+      .contains('Labels')
+      .click();
+
+    cy.getIframeBody()
+      .find('[placeholder="Enter Key"]:visible')
+      .eq(1)
+      .type('protected');
+
+    cy.getIframeBody()
+      .find('[placeholder="Enter Value"]:visible')
+      .eq(1)
+      .type('true');
+
+    cy.getIframeBody()
+      .find('[role=dialog]')
+      .contains('button', 'Create')
       .click();
   });
 
   it('Protect a resource', () => {
     cy.getLeftNav()
-      .contains('Workloads')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Deployments')
+      .contains('Config Maps')
       .click();
 
     cy.getIframeBody()
-      .contains('tr', 'api-gateway')
+      .contains('tr', NAME)
       .find('[aria-label="Delete"]')
       .should('be.disabled')
       .click({ force: true });
 
     cy.getIframeBody()
-      .contains('Delete api-gateway')
+      .contains(`Delete ${NAME}`)
       .should('not.exist');
   });
 
@@ -64,12 +83,12 @@ context('Test Protected Resources', () => {
 
   it("Don't protect a resource", () => {
     cy.getIframeBody()
-      .contains('tr', 'api-gateway')
+      .contains('tr', NAME)
       .find('[aria-label="Delete"]')
       .click();
 
     cy.getIframeBody()
-      .contains('Delete api-gateway')
+      .contains(`Delete ${NAME}`)
       .should('exist');
 
     cy.getIframeBody()
