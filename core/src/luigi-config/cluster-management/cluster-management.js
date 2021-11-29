@@ -18,6 +18,21 @@ import * as clusterStorage from './clusters-storage';
 
 const CURRENT_CLUSTER_NAME_KEY = 'busola.current-cluster-name';
 
+const communicationChannel = new BroadcastChannel('busola.cluster-management');
+
+communicationChannel.onmessage = function({ data }) {
+  switch (data?.type) {
+    case 'busola.addCluster':
+      handleAddClusterRequest(data.params);
+      break;
+    case 'busola.deleteCluster':
+      handleDeleteClusterRequest(data.clusterName);
+      break;
+    default:
+      console.warn('Unknown event type: ', data?.type);
+  }
+};
+
 export async function setActiveClusterIfPresentInUrl() {
   const match = location.pathname.match(/^\/cluster\/(.*?)\//);
   if (match) {
@@ -198,3 +213,45 @@ export function handleResetEndpoint() {
     window.history.replaceState(null, window.document.title, '/clusters');
   }
 }
+
+async function handleAddClusterRequest(params) {
+  await saveClusterParams(params);
+  if (!params.silent) {
+    setCluster(params.currentContext.cluster.name);
+  } else {
+    // don't switch to cluster, but reload navigation to show it on list
+    await reloadNavigation();
+  }
+}
+
+async function handleDeleteClusterRequest(clusterName) {
+  await deleteCluster(clusterName);
+
+  const activeClusterName = getActiveClusterName();
+  if (activeClusterName === clusterName) {
+    await reloadAuth();
+    clearAuthData();
+    saveActiveClusterName(null);
+  }
+  await reloadNavigation();
+}
+
+export const communicationEntries = {
+  'busola.addCluster': async ({ params }) => {
+    await handleAddClusterRequest(params);
+
+    communicationChannel.postMessage({
+      type: 'busola.addCluster',
+      params: { ...params, silent: true },
+    });
+  },
+  'busola.deleteCluster': async ({ clusterName }) => {
+    await handleDeleteClusterRequest(clusterName);
+
+    communicationChannel.postMessage({
+      type: 'busola.deleteCluster',
+      clusterName,
+    });
+  },
+  'busola.setCluster': ({ clusterName }) => setCluster(clusterName),
+};

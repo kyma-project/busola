@@ -1,15 +1,7 @@
 import i18next from 'i18next';
 import { NODE_PARAM_PREFIX } from './luigi-config';
-import {
-  saveClusterParams,
-  deleteCluster,
-  saveActiveClusterName,
-  getActiveClusterName,
-  setCluster,
-} from './cluster-management/cluster-management';
-import { clearAuthData } from './auth/auth-storage';
+import { communicationEntries as clusterCommunicationCommunicationEntries } from './cluster-management/cluster-management';
 import { reloadNavigation } from './navigation/navigation-data-init';
-import { reloadAuth } from './auth/auth';
 import { setFeatureToggle } from './utils/feature-toggles';
 import { setTheme } from './utils/theme';
 import { setSSOAuthData } from './auth/sso';
@@ -69,24 +61,6 @@ export const communication = {
       }
       location.reload();
     },
-    'busola.addCluster': async ({ params }) => {
-      await saveClusterParams(params);
-      setCluster(params.currentContext.cluster.name);
-    },
-    'busola.deleteCluster': async ({ clusterName }) => {
-      await deleteCluster(clusterName);
-
-      const activeClusterName = getActiveClusterName();
-      if (activeClusterName === clusterName) {
-        await reloadAuth();
-        clearAuthData();
-        saveActiveClusterName(null);
-      }
-      await reloadNavigation();
-    },
-    'busola.setCluster': ({ clusterName }) => {
-      setCluster(clusterName);
-    },
     'busola.showMessage': ({ message, title, type }) => {
       Luigi.customMessages().sendToAll({
         id: 'busola.showMessage',
@@ -104,6 +78,7 @@ export const communication = {
       });
     },
     ...pageSizeCommunicationEntry,
+    ...clusterCommunicationCommunicationEntries,
   },
 };
 
