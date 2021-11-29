@@ -21,21 +21,23 @@ export default function ProtectedSettings() {
   };
 
   return (
-    <div className="preferences-row">
-      <span className="fd-has-color-status-4">
-        {t('settings.clusters.disableResourceProtection')}
-      </span>
-      <div>
-        <Switch
-          inputProps={{
-            'aria-label': t('settings.clusters.disableResourceProtection'),
-          }}
-          className="fd-has-display-inline-block fd-margin-begin--tiny"
-          checked={disableResourceProtection}
-          onChange={toggleDisableResourceProtection}
-          compact
-        />
+    <>
+      <div className="preferences-row">
+        <span className="fd-has-color-status-4">
+          {t('settings.clusters.disableResourceProtection')}
+        </span>
+        <div>
+          <Switch
+            compact
+            inputProps={{
+              'aria-label': t('settings.clusters.disableResourceProtection'),
+            }}
+            className="fd-has-display-inline-block fd-margin-begin--tiny"
+            checked={disableResourceProtection}
+            onChange={toggleDisableResourceProtection}
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 }

@@ -31,13 +31,10 @@ export const communication = {
       setFeatureToggle('showHiddenNamespaces', showHiddenNamespaces);
     },
     'busola.disableResourceProtection': ({ disableResourceProtection }) => {
-      console.log(
-        'setFeatureToggle',
-        'disableResourceProtection',
-        disableResourceProtection,
-      );
       setFeatureToggle('disableResourceProtection', disableResourceProtection);
-      Luigi.configChanged('navigation.nodes');
+      // XXX this breaks tests :/
+      // Luigi.configChanged('navigation.nodes');
+      Luigi.elements().getMicrofrontendIframes()[0].src += '';
     },
     'busola.dontConfirmDelete': ({ value }) => {
       setFeatureToggle('dontConfirmDelete', value);
