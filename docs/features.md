@@ -19,7 +19,7 @@ The document lists and describes all the feature flags that are available in Kym
   },
   ```
 
-- **ADDONS** – is used to show or hide the Addons view and to define which Custom Resource Definitions (CRDs) are required for the view to be shown properly.  
+- **ADDONS** – is used to show or hide the **Addons** view and to define which Custom Resource Definitions (CRDs) are required for the view to be shown properly.  
   For the view to be shown, you must enable the feature. Moreover, all the CRDs defined in the selectors array must exist in a cluster.
 
   Default settings:
@@ -36,8 +36,8 @@ The document lists and describes all the feature flags that are available in Kym
   },
   ```
 
-- **API_GATEWAY** – is used to show or hide the API Gateway view and to define which CRDs are required for the view to be shown properly.  
-  It is also used to determine if the API Gateway list should be displayed in the Function and Service details.  
+- **API_GATEWAY** – is used to show or hide the **API Gateway** view and to define which CRDs are required for the view to be shown properly.  
+  It is also used to determine if the **API Gateway** list should be displayed in the **Function** and **Service** details.  
   For the view to be shown, you must enable the feature. Moreover, all the CRDs defined in the selectors array must exist in a cluster.
 
   Default settings:
@@ -54,7 +54,7 @@ The document lists and describes all the feature flags that are available in Kym
   },
   ```
 
-- **APPLICATIONS** – is used to show or hide the Applications view and to define which CRDs are required for the view to be shown properly.  
+- **APPLICATIONS** – is used to show or hide the **Applications** view and to define which CRDs are required for the view to be shown properly.  
   For the view to be shown, you must enable the feature. Moreover, all the CRDs defined in the selectors array must exist in a cluster.
 
   Default settings:
@@ -71,7 +71,7 @@ The document lists and describes all the feature flags that are available in Kym
   },
   ```
 
-- **BTP_CATALOG** – is used to show or hide the BTP Catalog view and to define which CRDs are required for the view to be shown properly.  
+- **BTP_CATALOG** – is used to show or hide the **BTP Catalog** view and to define which CRDs are required for the view to be shown properly.  
   For the view to be shown, you must enable the feature. Moreover, all the CRDs defined in the selectors array must exist in a cluster.
 
   Default settings:
@@ -88,7 +88,7 @@ The document lists and describes all the feature flags that are available in Kym
   },
   ```
 
-- **CUSTOM_DOMAINS** – is used to show or hide the DNS Entry, DNS Provider, Gateway, Issuer, and Certificate views.  
+- **CUSTOM_DOMAINS** – is used to show or hide the **DNS Entry**, **DNS Provider**, **Gateway**, **Issuer**, and **Certificate** views.  
    For the view to be shown, you must enable the feature. Moreover, all the CRDs defined in the selectors array must exist in a cluster.
 
   Default settings:
@@ -105,8 +105,8 @@ The document lists and describes all the feature flags that are available in Kym
   },
   ```
 
-- **EVENTING** – is used to show or hide the Eventing view and to define which CRDs are required for the view to be shown properly.  
-  It is also used to determine if the Event Subscriptions should be displayed in Function and Service details.  
+- **EVENTING** – is used to show or hide the **Eventing** view and to define which CRDs are required for the view to be shown properly.  
+  It is also used to determine if the **Event Subscriptions** should be displayed in **Function** and **Service** details.  
   For the view to be shown, you must enable the feature. Moreover, all the CRDs defined in the selectors array must exist in a cluster.
 
   Default settings:
@@ -248,7 +248,7 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
   },
   ```
 
-- **SERVERLESS** – is used to show or hide the Serverless view and to define which CRDs are required for the view to be shown properly.  
+- **SERVERLESS** – is used to show or hide the **Serverless** view and to define which CRDs are required for the view to be shown properly.  
   For the view to be shown, you must enable the feature. Moreover, all the CRDs defined in the selectors array must exist in a cluster.
 
   Default settings:
@@ -265,9 +265,9 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
   },
   ```
 
-  > NOTE: Both **SERVICE_CATALOG** and **SERVICE_CATALOG_ADDONS** features are used to determine if Service Bindings (in the **Configuration** tab) and environment variables injected by Service Bindings (in the **Code** Tab) are displayed in the Functions view.
+  > NOTE: Both **SERVICE_CATALOG** and **SERVICE_CATALOG_ADDONS** features are used to determine if **Service Bindings** (in the **Configuration** tab) and environment variables injected by **Service Bindings** (in the **Code** Tab) are displayed in the **Functions** view.
 
-- **SERVICE_CATALOG** – is used to show or hide the Service Catalog views (Catalog, Instances, and Brokers) and to define which CRDs are required for the view to be shown properly.  
+- **SERVICE_CATALOG** – is used to show or hide the **Service Catalog** views (**Catalog**, **Instances**, and **Brokers**) and to define which CRDs are required for the view to be shown properly.  
   For the view to be shown, you must enable the feature. Moreover, all the CRDs defined in the selectors array must exist in a cluster.
 
   Default settings:
@@ -284,7 +284,7 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
   },
   ```
 
-- **SERVICE_CATALOG_ADDONS** – is used to show or hide the Service Catalog Addons view and to define which CRDs are required for the view to be shown properly.  
+- **SERVICE_CATALOG_ADDONS** – is used to show or hide the **Service Catalog Addons** view and to define which CRDs are required for the view to be shown properly.  
   For the view to be shown, you must enable the feature. Moreover, all the CRDs defined in the selectors array must exist in a cluster.
 
   Default settings:
