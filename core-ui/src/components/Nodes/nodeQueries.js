@@ -64,7 +64,7 @@ export function useNodesQuery() {
         nodes.items.map(n => ({
           name: n.metadata.name,
           creationTimestamp: n.metadata.creationTimestamp,
-          metrics: nodeMetrics ? getNodeMetrics(n) : [],
+          metrics: nodeMetrics ? getNodeMetrics(n) : {},
         })),
       );
     }
@@ -97,7 +97,7 @@ export function useNodeQuery(nodeName) {
     if (node) {
       setData({
         node,
-        metrics: nodeMetrics ? createUsageMetrics(node, nodeMetrics) : [],
+        metrics: nodeMetrics ? createUsageMetrics(node, nodeMetrics) : {},
       });
     }
   }, [node, nodeMetrics]);
