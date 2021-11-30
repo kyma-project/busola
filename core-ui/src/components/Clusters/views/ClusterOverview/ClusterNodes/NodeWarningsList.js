@@ -20,8 +20,6 @@ export function ClusterNodesWarnings({ nodesNames }) {
     .filter(e => e.type === 'Warning')
     .filter(e => nodesNames.includes(e.source.host));
 
-  console.log('warnings', warnings);
-
   const navigateToNodeDetails = nodeName => {
     LuigiClient.linkManager().navigate(`nodes/${nodeName}`);
   };
