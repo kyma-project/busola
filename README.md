@@ -65,7 +65,7 @@ Features comprise the following elements:
 
 - `FEATURE_ID`: Unique identifier, as defined in the Busola source code
 - `selector`: The k8s resources that can activate the feature
-- `isActive`: Activates or deactivates the feature, overwriting the status set by `selector`
+- `isEnabled`: Activates or deactivates the feature, overwriting the status set by `selector`
 - `config`: Provides additional configuration options as needed for each feature. For details, see the README in the specific component or feature.
 
 See the available Busola [feature flags](docs/features.md) for more information.
