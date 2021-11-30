@@ -8,31 +8,24 @@ export const ERRORS = {
 export const LAMBDA_PHASES = {
   INITIALIZING: {
     TYPE: 'INITIALIZING',
-    // TITLE: 'functions.statuses.initializing',
   },
   BUILDING: {
     TYPE: 'BUILDING',
-    // TITLE: 'functions.statuses.building',
   },
   DEPLOYING: {
     TYPE: 'DEPLOYING',
-    // TITLE: 'functions.statuses.deploying',
   },
   UNHEALTHY: {
     TYPE: 'UNHEALTHY',
-    // TITLE: 'functions.statuses.unhealthy',
   },
   RUNNING: {
     TYPE: 'RUNNING',
-    // TITLE: 'functions.statuses.running',
   },
   NEW_REVISION_ERROR: {
     TYPE: 'NEW REVISION ERROR',
-    // TITLE: 'functions.statuses.new-revision-error',
   },
   FAILED: {
     TYPE: 'FAILED',
-    // TITLE: 'functions.statuses.failed',
     MESSAGE: `functions.statuses.failed-message`,
   },
 };
