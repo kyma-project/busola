@@ -7,35 +7,37 @@ import './NodeResources.scss';
 
 export function NodeResources({ metrics, headerContent }) {
   const { t } = useTranslation();
-
-  if (!metrics) return 'NO METRICS';
-  const { cpu, memory } = metrics;
+  const { cpu, memory } = metrics || {};
   return (
     <LayoutPanel className="node-resources">
       <LayoutPanel.Header>{headerContent}</LayoutPanel.Header>
       <LayoutPanel.Body>
-        <CircleProgress
-          color="var(--sapIndicationColor_7)"
-          value={cpu.usage}
-          max={cpu.allocatable}
-          title={t('machine-info.cpu-m')}
-          reversed={true}
-          tooltip={{
-            content: `${t('machine-info.cpu-usage')} ${cpu.percentage}`,
-            position: 'right',
-          }}
-        />
-        <CircleProgress
-          color="var(--sapIndicationColor_6)"
-          value={memory.usage}
-          max={memory.allocatable}
-          title={t('machine-info.memory-gib')}
-          reversed={true}
-          tooltip={{
-            content: `${t('machine-info.memory-usage')} ${memory.percentage}`,
-            position: 'right',
-          }}
-        />
+        {cpu && (
+          <CircleProgress
+            color="var(--sapIndicationColor_7)"
+            value={cpu.usage}
+            max={cpu.allocatable}
+            title={t('machine-info.cpu-m')}
+            reversed={true}
+            tooltip={{
+              content: `${t('machine-info.cpu-usage')} ${cpu.percentage}`,
+              position: 'right',
+            }}
+          />
+        )}
+        {memory && (
+          <CircleProgress
+            color="var(--sapIndicationColor_6)"
+            value={memory.usage}
+            max={memory.allocatable}
+            title={t('machine-info.memory-gib')}
+            reversed={true}
+            tooltip={{
+              content: `${t('machine-info.memory-usage')} ${memory.percentage}`,
+              position: 'right',
+            }}
+          />
+        )}
       </LayoutPanel.Body>
     </LayoutPanel>
   );
