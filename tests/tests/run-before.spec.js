@@ -1,9 +1,6 @@
 /// <reference types="cypress" />
 import config from '../config';
 
-const busolaConfig =
-  '{ "config": { "features": { "PROTECTED_RESOURCES": { "isEnabled": true, "config": { "resources": [ { "match": { "$.metadata.labels.protected": "true" } } ] } } } } }';
-
 context('Create Namespace', () => {
   before(cy.loginAndSelectCluster);
 
