@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { StatusBadge } from 'react-shared';
 
 export function ClusterStorageType({ clusterConfig }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const storage = clusterConfig?.storage;
 
@@ -29,6 +29,8 @@ export function ClusterStorageType({ clusterConfig }) {
 
   return (
     <StatusBadge
+      i18n={i18n}
+      resourceKind={'node'}
       type={descriptions[storage] ? 'info' : 'warning'}
       tooltipContent={description.tooltip}
     >

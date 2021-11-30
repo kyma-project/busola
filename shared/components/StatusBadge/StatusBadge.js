@@ -1,4 +1,6 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
+
 import { ObjectStatus } from 'fundamental-react';
 import PropTypes from 'prop-types';
 import './StatusBadge.scss';
@@ -37,6 +39,47 @@ const resolveType = status => {
   }
 };
 
+// const translate = (i18n, value) => {
+//   const formattedValue = value.toString().toUpperCase();
+//   const variableNameFromValue = `status.${value.toString().toLowerCase().replace(/\s/g, '-')}`
+
+//   if (!i18n) return formattedValue;
+
+//   console.log(variableNameFromValue)
+//   const { t } = useTranslation(null, { i18n });
+//   return t([variableNameFromValue, 'status.fallback'],
+//     {
+//       fallback: formattedValue
+//     }
+//   );
+// }
+
+const translate = (i18n, resourceKind, variableName) => {
+  const fallbackValue = variableName.toString().toUpperCase();
+  const fullVariableName = `statuses.${resourceKind
+    .toString()
+    .toLowerCase()}.${variableName
+    .toString()
+    .toLowerCase()
+    .replace(/\s/g, '-')}`;
+
+  if (!i18n) return fallbackValue;
+
+  console.log(
+    'translate',
+    'resourceKind:',
+    resourceKind,
+    'variableName:',
+    variableName,
+    'fullVariableName: ',
+    fullVariableName,
+  );
+  const { t } = useTranslation(null, { i18n });
+  return t([fullVariableName, 'statuses.common.fallback'], {
+    fallback: fallbackValue,
+  });
+};
+
 const TYPE_FALLBACK = new Map([
   ['success', 'positive'],
   ['warning', 'critical'],
@@ -46,10 +89,12 @@ const TYPE_FALLBACK = new Map([
 export const StatusBadge = ({
   tooltipContent,
   type,
+  resourceKind = 'common',
   children: value = '',
   autoResolveType = false,
   tooltipProps = {},
   className,
+  i18n,
 }) => {
   if (autoResolveType) type = resolveType(value);
   else
@@ -75,7 +120,7 @@ export const StatusBadge = ({
       className={classes}
       style={{ whiteSpace: 'nowrap' }}
     >
-      {value.toString().toUpperCase()}
+      {translate(i18n, resourceKind, value)}
     </ObjectStatus>
   );
 

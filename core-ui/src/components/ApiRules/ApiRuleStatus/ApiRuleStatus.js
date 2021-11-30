@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { StatusBadge } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 
 ApiRuleStatus.propTypes = {
   code: PropTypes.oneOf(['OK', 'SKIPPED', 'ERROR']),
@@ -22,13 +23,20 @@ const resolveAPIRuleStatus = statusCode => {
 };
 
 export default function ApiRuleStatus({ apiRule }) {
+  const { i18n } = useTranslation();
+
   if (!apiRule.status?.APIRuleStatus) {
     return null;
   }
 
   const { code, desc } = apiRule.status.APIRuleStatus;
   return (
-    <StatusBadge type={resolveAPIRuleStatus(code)} tooltipContent={desc}>
+    <StatusBadge
+      i18n={i18n}
+      resourceKind={apiRule.kind}
+      type={resolveAPIRuleStatus(code)}
+      tooltipContent={desc}
+    >
       {code}
     </StatusBadge>
   );
