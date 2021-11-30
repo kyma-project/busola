@@ -1,7 +1,33 @@
 const NAME = `test-resource-${Math.floor(Math.random() * 9999) + 1000}`;
 
+const busolaConfig = JSON.stringify({
+  config: {
+    features: {
+      PROTECTED_RESOURCES: {
+        isEnabled: true,
+        config: {
+          resources: [{ match: { '$.metadata.labels.protected': 'true' } }],
+        },
+      },
+    },
+  },
+});
+
+const configMap = JSON.stringify({
+  kind: 'ConfigMap',
+  apiVersion: 'v1',
+  data: { config: busolaConfig },
+});
+
 context('Test Protected Resources', () => {
   before(() => {
+    cy.intercept(
+      {
+        method: 'GET',
+        url: /kube-public\/configmaps\/busola-config$/,
+      },
+      configMap,
+    );
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
   });

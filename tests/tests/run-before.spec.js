@@ -33,43 +33,4 @@ context('Create Namespace', () => {
       .contains('button', 'Create')
       .click();
   });
-
-  it('Delete old busola config', () => {
-    cy.url().then(url => cy.visit(`${url}/kube-public/configmaps`));
-
-    cy.on('fail', () => false);
-
-    cy.getIframeBody()
-      .contains('tr', 'busola-config')
-      .find('button[aria-label="Delete"]')
-      .click();
-
-    cy.getIframeBody()
-      .contains('button', 'Delete')
-      .click();
-  });
-
-  it('Create busola config', () => {
-    cy.getIframeBody()
-      .contains('Create Config Map')
-      .click();
-
-    cy.getIframeBody()
-      .find('[placeholder="Config Map Name"]:visible')
-      .type('busola-config');
-
-    cy.getIframeBody()
-      .find('[placeholder="Enter Key"]:visible')
-      .type('config');
-
-    cy.getIframeBody()
-      .find('[placeholder="Enter Value"]:visible')
-      .eq(0)
-      .type(busolaConfig, { parseSpecialCharSequences: false });
-
-    cy.getIframeBody()
-      .find('[role=dialog]')
-      .contains('button', 'Create')
-      .click();
-  });
 });
