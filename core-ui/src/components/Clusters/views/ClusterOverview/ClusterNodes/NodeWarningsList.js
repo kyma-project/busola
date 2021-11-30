@@ -5,14 +5,8 @@ import { useGet, GenericList, ReadableCreationTimestamp } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
 export function ClusterNodesWarnings({ nodesNames }) {
-  console.log('nodesNames', nodesNames);
-
   const { i18n } = useTranslation();
   const { data, loading, error } = useGet('/api/v1/events');
-
-  console.log('data', data);
-  console.log('loading', loading);
-  console.log('error', error);
 
   const formatInvolvedObject = obj => {
     if (obj.namespace) {
@@ -67,7 +61,7 @@ export function ClusterNodesWarnings({ nodesNames }) {
       rowRenderer={rowRenderer}
       serverDataError={error}
       serverDataLoading={loading}
-      pagination={{ itemsPerPage: 10, autoHide: true }}
+      pagination={{ autoHide: true }}
       i18n={i18n}
     />
   );
