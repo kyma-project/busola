@@ -8,6 +8,10 @@ export function ClusterNodesWarnings({ nodesNames }) {
   const { i18n } = useTranslation();
   const { data, loading, error } = useGet('/api/v1/events');
 
+  console.log('data', data);
+  console.log('loading', loading);
+  console.log('error', error);
+
   const formatInvolvedObject = obj => {
     if (obj.namespace) {
       return `${obj.kind} ${obj.namespace}/${obj.name}`;
@@ -19,6 +23,8 @@ export function ClusterNodesWarnings({ nodesNames }) {
   const warnings = data?.items
     .filter(e => e.type === 'Warning')
     .filter(e => nodesNames.includes(e.source.host));
+
+  console.log('warnings', warnings);
 
   const navigateToNodeDetails = nodeName => {
     LuigiClient.linkManager().navigate(`nodes/${nodeName}`);
