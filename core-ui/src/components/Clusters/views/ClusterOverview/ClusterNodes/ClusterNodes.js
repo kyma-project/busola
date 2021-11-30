@@ -37,7 +37,7 @@ export function ClusterNodes() {
   return (
     <>
       {loading && <Spinner compact={true} />}
-      {error & !nodes && (
+      {error && !nodes && (
         <ErrorPanel error={error} title="Metrics" i18n={i18n} />
       )}
       <div className="cluster-overview__nodes">
