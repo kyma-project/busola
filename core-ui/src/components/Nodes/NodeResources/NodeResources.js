@@ -40,7 +40,7 @@ export function NodeResources({ metrics, headerContent }) {
             />
           </>
         ) : (
-          t('clusters.overview.messages.no-metrics')
+          t('components.error-panel.error')
         )}
       </LayoutPanel.Body>
     </LayoutPanel>
