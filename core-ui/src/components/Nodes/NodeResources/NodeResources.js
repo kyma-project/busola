@@ -6,8 +6,10 @@ import { LayoutPanel } from 'fundamental-react';
 import './NodeResources.scss';
 
 export function NodeResources({ metrics, headerContent }) {
-  const { cpu, memory } = metrics;
   const { t } = useTranslation();
+
+  if (!metrics) return 'NO METRICS';
+  const { cpu, memory } = metrics;
   return (
     <LayoutPanel className="node-resources">
       <LayoutPanel.Header>{headerContent}</LayoutPanel.Header>

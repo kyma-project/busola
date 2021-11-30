@@ -94,10 +94,10 @@ export function useNodeQuery(nodeName) {
   } = useGet(`/api/v1/nodes/${nodeName}`, { pollingInterval: 3000 });
 
   React.useEffect(() => {
-    if (node && nodeMetrics) {
+    if (node) {
       setData({
         node,
-        metrics: createUsageMetrics(node, nodeMetrics),
+        metrics: nodeMetrics ? createUsageMetrics(node, nodeMetrics) : [],
       });
     }
   }, [node, nodeMetrics]);
