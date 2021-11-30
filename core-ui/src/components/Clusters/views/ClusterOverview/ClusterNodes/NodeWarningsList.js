@@ -5,6 +5,8 @@ import { useGet, GenericList, ReadableCreationTimestamp } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
 export function ClusterNodesWarnings({ nodesNames }) {
+  console.log('nodesNames', nodesNames);
+
   const { i18n } = useTranslation();
   const { data, loading, error } = useGet('/api/v1/events');
 
