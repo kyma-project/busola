@@ -68,10 +68,12 @@ export function DeploymentsCreate({
       <ResourceForm.CollapsibleSection
         title={t('services.name_singular')}
         actions={serviceActions}
-        resource={service}
-        setResource={setService}
       >
-        <Editor readonly={!createService} />
+        <Editor
+          readonly={!createService}
+          value={service}
+          setValue={setService}
+        />
       </ResourceForm.CollapsibleSection>
     </div>
   );
