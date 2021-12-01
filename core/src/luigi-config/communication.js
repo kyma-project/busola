@@ -31,6 +31,9 @@ export const communication = {
     'busola.showHiddenNamespaces': ({ showHiddenNamespaces }) => {
       setFeatureToggle('showHiddenNamespaces', showHiddenNamespaces);
     },
+    'busola.disableResourceProtection': ({ disableResourceProtection }) => {
+      setFeatureToggle('disableResourceProtection', disableResourceProtection);
+    },
     'busola.dontConfirmDelete': ({ value }) => {
       setFeatureToggle('dontConfirmDelete', value);
     },

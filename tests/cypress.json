@@ -24,6 +24,7 @@
     "in-cluster-eventing.spec.js",
     "test-cluster-overview.spec.js",
     "smoke-tests.spec.js",
+    "test-protected-resources.js",
     "test-cluster-role-bindings.spec.js",
     "test-jobs.spec.js",
     "test-replica-sets.spec.js",
@@ -45,6 +46,7 @@
     "cluster-configuration.spec.js",
     "add-cluster-disabled.spec.js",
     "certificates.spec.js",
+    "test.settings.spec.js",
     "run-after.spec.js"
   ]
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Dropdown } from 'react-shared';
 
-export function Presets({ presets, onSelect }) {
+export function Presets({ presets, onSelect, ...otherProps }) {
   const { t, i18n } = useTranslation();
   const options = presets.map(({ name }) => ({
     key: name,
@@ -20,6 +20,7 @@ export function Presets({ presets, onSelect }) {
         onSelect(presets.find(p => p.name === preset.key));
       }}
       i18n={i18n}
+      {...otherProps}
     />
   );
 }
