@@ -1060,7 +1060,7 @@ namespaces:
     create-limit-range: Create Limit Range
     create-resource-quota: Create Resource Quota
     disable-sidecar: Disable sidecar injection
-    memory-limits: Memory limit
+    memory-limits: Memory limits
     memory-quotas: Memory quotas
   description: <0>Namespace</0> helps to maintain and divide resources in a cluster.
   events:
