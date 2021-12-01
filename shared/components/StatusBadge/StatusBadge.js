@@ -43,11 +43,17 @@ const translate = (i18n, arrayOfVariableNames, fallbackValue) => {
   if (!i18n) return fallbackValue;
 
   const { t } = useTranslation(null, { i18n });
-  return t([...arrayOfVariableNames, 'statuses.common.fallback'], {
+  return t([...arrayOfVariableNames, 'common.statuses.fallback'], {
     fallback: fallbackValue,
   }).toUpperCase();
 };
 
+const prepareTranslationPath = (resourceKind, value, type) => {
+  return `${resourceKind.toString().toLowerCase()}.${type}.${value
+    .toString()
+    .toLowerCase()
+    .replace(/\s/g, '-')}`;
+};
 const TYPE_FALLBACK = new Map([
   ['success', 'positive'],
   ['warning', 'critical'],
@@ -71,22 +77,26 @@ export const StatusBadge = ({
     for (const key of TYPE_FALLBACK.keys()) {
       if (type === key) type = TYPE_FALLBACK.get(key);
     }
-  const i18nFullVariableName = `${resourceKind
-    .toString()
-    .toLowerCase()}.statuses.${value
-    .toString()
-    .toLowerCase()
-    .replace(/\s/g, '-')}`;
-  const tooltipVariableName = `${resourceKind
-    .toString()
-    .toLowerCase()}.tooltips.${value
-    .toString()
-    .toLowerCase()
-    .replace(/\s/g, '-')}`;
-  const commonTooltipVariableName = `commons.tooltips.${value
-    .toString()
-    .toLowerCase()
-    .replace(/\s/g, '-')}`;
+  const i18nFullVariableName = prepareTranslationPath(
+    resourceKind,
+    value,
+    'statuses',
+  );
+  const commonStatusVariableName = prepareTranslationPath(
+    'common',
+    value,
+    'statuses',
+  );
+  const tooltipVariableName = prepareTranslationPath(
+    resourceKind,
+    value,
+    'tooltips',
+  );
+  const commonTooltipVariableName = prepareTranslationPath(
+    'common',
+    value,
+    'tooltips',
+  );
   const fallbackValue = value.toString().toUpperCase();
 
   const classes = classNames(
@@ -109,19 +119,18 @@ export const StatusBadge = ({
     >
       {translate(
         i18n,
-        [i18nFullVariableName, 'common.statuses.fallback'],
+        [
+          i18nFullVariableName,
+          commonStatusVariableName,
+          'common.statuses.fallback',
+        ],
         fallbackValue,
       )}
     </ObjectStatus>
   );
   let content = translate(
     i18n,
-    [
-      tooltipVariableName,
-      commonTooltipVariableName,
-      i18nFullVariableName,
-      'commons.tooltips.fallback',
-    ],
+    [tooltipVariableName, commonTooltipVariableName, i18nFullVariableName],
     fallbackValue,
   );
   if (additionalContent) {

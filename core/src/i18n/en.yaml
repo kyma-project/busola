@@ -76,7 +76,7 @@ api-rules:
     placeholder: Choose the service to expose.
   statuses:
     error: ERROR
-    ok: OK <DEL>
+    ok: OK
     skipped: SKIPPED
   title: API Rules
 applications:
@@ -781,13 +781,13 @@ functions:
   repository:
     title: Repository Configuration
   statuses:
-    building: Building <del>
-    deploying: Deploying <del>
-    failed: Failed <del>
-    initializing: Initializing <del>
-    new-revision-error: New Revision Error <del>
-    running: Running <del>
-    unhealthy: Unhealthy <del>
+    building: Building
+    deploying: Deploying
+    failed: Failed
+    initializing: Initializing
+    new-revision-error: New Revision Error
+    running: Running
+    unhealthy: Unhealthy
   title: Functions
   tooltips:
     failed: Function couldn't be processed.
