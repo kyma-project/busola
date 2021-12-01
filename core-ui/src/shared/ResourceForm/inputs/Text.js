@@ -5,7 +5,7 @@ export function Text({ value, setValue, ...props }) {
   return (
     <FormInput
       compact
-      value={value}
+      value={value || ''}
       onChange={e => setValue(e.target.value)}
       {...props}
     />
