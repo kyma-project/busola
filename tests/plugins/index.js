@@ -1,5 +1,4 @@
 const fs = require('fs');
-const cypress = require('cypress');
 
 module.exports = (on, config) => {
   let namespaceName = process.env.NAMESPACE_NAME || null;
