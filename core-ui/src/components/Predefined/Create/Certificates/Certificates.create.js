@@ -276,7 +276,7 @@ const CertificatesCreate = ({
           fieldSelector="type=kubernetes.io/tls"
           propertyPath="$.spec.secretRef"
           currentNamespace={namespace}
-          validate={existingSecret => console.log(existingSecret)}
+          required
         />
       )}
     </ResourceForm>
