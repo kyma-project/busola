@@ -49,8 +49,8 @@ export function ResourceFormWrapper({
     } else if (!child.props.propertyPath) {
       if (typeof child.type === 'function') {
         return React.cloneElement(child, {
-          resource,
-          setResource,
+          resource: child.props.resource || resource,
+          setResource: child.props.setResource || setResource,
           isAdvanced,
           ...props,
         });
