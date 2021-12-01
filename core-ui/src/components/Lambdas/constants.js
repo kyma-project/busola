@@ -6,28 +6,13 @@ export const ERRORS = {
 };
 
 export const LAMBDA_PHASES = {
-  INITIALIZING: {
-    TYPE: 'INITIALIZING',
-  },
-  BUILDING: {
-    TYPE: 'BUILDING',
-  },
-  DEPLOYING: {
-    TYPE: 'DEPLOYING',
-  },
-  UNHEALTHY: {
-    TYPE: 'UNHEALTHY',
-  },
-  RUNNING: {
-    TYPE: 'RUNNING',
-  },
-  NEW_REVISION_ERROR: {
-    TYPE: 'NEW REVISION ERROR',
-  },
-  FAILED: {
-    TYPE: 'FAILED',
-    MESSAGE: `functions.statuses.failed-message`,
-  },
+  INITIALIZING: 'INITIALIZING',
+  BUILDING: 'BUILDING',
+  DEPLOYING: 'DEPLOYING',
+  UNHEALTHY: 'UNHEALTHY',
+  RUNNING: 'RUNNING',
+  NEW_REVISION_ERROR: 'NEW REVISION ERROR',
+  FAILED: 'FAILED',
 };
 
 export const PRETTY_RUNTIME_NODEJS12_NAME = 'Node.js 12';
@@ -35,10 +20,7 @@ export const PRETTY_RUNTIME_NODEJS14_NAME = 'Node.js 14';
 export const PRETTY_RUNTIME_PYTHON38_NAME = 'Python 3.8 - Deprecated';
 export const PRETTY_RUNTIME_PYTHON39_NAME = 'Python 3.9';
 
-export const LAMBDA_ERROR_PHASES = [
-  LAMBDA_PHASES.FAILED.TYPE,
-  LAMBDA_PHASES.NEW_REVISION_ERROR.TYPE,
-];
+export const LAMBDA_ERROR_PHASES = ['FAILED', 'NEW REVISION ERROR'];
 
 export const LAMBDAS_LIST = {
   CREATE_MODAL: {

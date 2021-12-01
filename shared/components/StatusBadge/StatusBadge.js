@@ -39,29 +39,21 @@ const resolveType = status => {
   }
 };
 
-const translate = (i18n, resourceKind, variableName) => {
-  const fallbackValue = variableName.toString().toUpperCase();
-  const fullVariableName = `statuses.${resourceKind
-    .toString()
-    .toLowerCase()}.${variableName
-    .toString()
-    .toLowerCase()
-    .replace(/\s/g, '-')}`;
-
+const translate = (i18n, arrayOfVariableNames, fallbackValue) => {
   if (!i18n) return fallbackValue;
 
   console.log(
     'translate',
+    'arrayOfVariableNames: ',
+    arrayOfVariableNames,
     'fallbackValue:',
     fallbackValue,
-    'fullVariableName: ',
-    fullVariableName,
   );
 
   const { t } = useTranslation(null, { i18n });
-  return t([fullVariableName, 'statuses.common.fallback'], {
+  return t([...arrayOfVariableNames, 'statuses.common.fallback'], {
     fallback: fallbackValue,
-  });
+  }).toUpperCase();
 };
 
 const TYPE_FALLBACK = new Map([
@@ -71,12 +63,14 @@ const TYPE_FALLBACK = new Map([
   ['info', 'informative'],
 ]);
 export const StatusBadge = ({
-  tooltipContent,
+  additionalContent,
+  tooltipContent, // deprecated
   type,
   resourceKind = 'common',
   children: value = '',
   autoResolveType = false,
   tooltipProps = {},
+  noTooltip = false,
   className,
   i18n,
 }) => {
@@ -85,12 +79,29 @@ export const StatusBadge = ({
     for (const key of TYPE_FALLBACK.keys()) {
       if (type === key) type = TYPE_FALLBACK.get(key);
     }
+  const i18nFullVariableName = `${resourceKind
+    .toString()
+    .toLowerCase()}.statuses.${value
+    .toString()
+    .toLowerCase()
+    .replace(/\s/g, '-')}`;
+  const tooltipVariableName = `${resourceKind
+    .toString()
+    .toLowerCase()}.tooltips.${value
+    .toString()
+    .toLowerCase()
+    .replace(/\s/g, '-')}`;
+  const commonTooltipVariableName = `commons.tooltips.${value
+    .toString()
+    .toLowerCase()
+    .replace(/\s/g, '-')}`;
+  const fallbackValue = value.toString().toUpperCase();
 
   const classes = classNames(
     'status-badge',
     {
       ['status-badge--' + type]: type,
-      'has-tooltip': tooltipContent,
+      'has-tooltip': !noTooltip,
     },
     className,
   );
@@ -104,20 +115,47 @@ export const StatusBadge = ({
       className={classes}
       style={{ whiteSpace: 'nowrap' }}
     >
-      {translate(i18n, resourceKind, value)}
+      {translate(
+        i18n,
+        [i18nFullVariableName, 'common.statuses.fallback'],
+        fallbackValue,
+      )}
     </ObjectStatus>
   );
+  let content = translate(
+    i18n,
+    [
+      tooltipVariableName,
+      commonTooltipVariableName,
+      i18nFullVariableName,
+      'commons.tooltips.fallback',
+    ],
+    fallbackValue,
+  );
+  if (additionalContent) {
+    content = `${content} ${additionalContent}`;
+  }
+  const statusElement = noTooltip ? (
+    badgeElement
+  ) : (
+    <Tooltip content={content} {...tooltipProps}>
+      {badgeElement}
+    </Tooltip>
+  );
 
+  // tooltipContent is DEPREATED. Remove after migration of all resources
+  // return (statusElement);
   return tooltipContent ? (
     <Tooltip content={tooltipContent} {...tooltipProps}>
       {badgeElement}
     </Tooltip>
   ) : (
-    badgeElement
+    statusElement
   );
 };
 
 StatusBadge.propTypes = {
+  additionalContent: PropTypes.node,
   tooltipContent: PropTypes.node,
   type: PropTypes.oneOf([
     'positive',
@@ -130,6 +168,9 @@ StatusBadge.propTypes = {
     'info',
   ]),
   autoResolveType: PropTypes.bool,
+  noTooltip: PropTypes.bool,
+  resourceKind: PropTypes.string,
   tooltipProps: PropTypes.object,
+  i18n: PropTypes.object,
   className: PropTypes.string,
 };

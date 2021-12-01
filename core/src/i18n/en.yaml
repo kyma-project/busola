@@ -74,6 +74,10 @@ api-rules:
     loading: Loading services...
     ns-no-services: No Services in this Namespace.
     placeholder: Choose the service to expose.
+  statuses:
+    error: ERROR
+    ok: OK <DEL>
+    skipped: SKIPPED
   title: API Rules
 applications:
   aria:
@@ -274,6 +278,11 @@ clusters:
     title-all-clusters: Clusters Overview
     title-current-cluster: Cluster Overview
     version: Version
+  statuses:
+    inmemory: IN MEMORY
+    localstorage: LOCAL STORAGE
+    sessionstorage: SESSION STORAGE
+    unknown: Unknown
   storage:
     changed-message: The chosen storage type has been overwritten by the cluster configuration from {{originalStorage}} to {{targetStorage}}.
     choose-storage:
@@ -291,6 +300,11 @@ clusters:
       sessionStorage: Session storage
       unknown: Unknown
     title: Storage Type
+  tooltips:
+    inmemory: Cluster data is cleared when you leave or refresh the page.
+    localstorage: Cluster data is persisted between browser reloads.
+    sessionstorage: Cluster data is cleared when the page session ends.
+    unknown: Unknown storage type
   wizard:
     auth:
       client-id: Client ID
@@ -393,6 +407,8 @@ common:
     secret-ref-name: Select name
     secret-ref-namespace: Select Namespace
   protected-resource: This resource is protected.
+  statuses:
+    fallback: '{{fallback}}'
   tooltips:
     copy-to-clipboard: Copy to clipboard
     download: Download
@@ -765,15 +781,16 @@ functions:
   repository:
     title: Repository Configuration
   statuses:
-    building: Building
-    deploying: Deploying
-    failed: Failed
-    failed-message: Function couldn't be processed.
-    initializing: Initializing
-    new-revision-error: New Revision Error
-    running: Running
-    unhealthy: Unhealthy
+    building: Building <del>
+    deploying: Deploying <del>
+    failed: Failed <del>
+    initializing: Initializing <del>
+    new-revision-error: New Revision Error <del>
+    running: Running <del>
+    unhealthy: Unhealthy <del>
   title: Functions
+  tooltips:
+    failed: Function couldn't be processed.
   variable:
     buttons:
       add: Add Environment Variable
@@ -1338,25 +1355,6 @@ stateful-sets:
   description: <0>Stateful Set</0> is used for the management of Pods' deployment and scaling.
   replicas: Replicas
   title: Stateful Sets
-statuses:
-  apirule:
-    error: ERROR
-    ok: OK
-    skipped: SKIPPED
-  common:
-    fallback: '{{fallback}}'
-  function:
-    building: BUILDING
-    deploying: DEPLOYING
-    failed: FAILED
-    initializing: INITIALIZING
-    new-revision-error: NEW REVISION ERROR
-    running: RUNNING
-    unhealthy: UNHEALTHY
-  node:
-    in-memory: IN MEMORY
-    local-storage: LOCAL STORAGE
-    session-storage: SESSION STORAGE
 top-nav:
   profile:
     preferences: $t(preferences.title)

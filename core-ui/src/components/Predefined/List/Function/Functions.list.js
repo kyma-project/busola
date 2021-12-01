@@ -45,7 +45,7 @@ export const FunctionsList = ({ DefaultRenderer, ...otherParams }) => {
       header: t('common.headers.status'),
       value: resource => (
         <LambdaStatusBadge
-          resourceKind={resource.kind}
+          resourceKind={otherParams.resourceType}
           status={resource.status}
         />
       ),

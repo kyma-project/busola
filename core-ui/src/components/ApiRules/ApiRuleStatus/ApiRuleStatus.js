@@ -33,9 +33,9 @@ export default function ApiRuleStatus({ apiRule }) {
   return (
     <StatusBadge
       i18n={i18n}
-      resourceKind={apiRule.kind}
+      resourceKind={'api-rules'}
       type={resolveAPIRuleStatus(code)}
-      tooltipContent={desc}
+      additionalContent={desc}
     >
       {code}
     </StatusBadge>
