@@ -171,44 +171,44 @@ context('Reduced permissions', () => {
 
   it('Download kubeconfig for Service Account', () => {
     // once again the navigation is broken, so clicking on anything with bring us to Cluster Overview
-    cy.reload();
+    // cy.reload();
 
-    cy.getLeftNav()
-      .contains('Namespaces')
-      .click();
-    cy.goToNamespaceDetails();
+    // cy.getLeftNav()
+    //   .contains('Namespaces')
+    //   .click();
+    // cy.goToNamespaceDetails();
 
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
+    // cy.getLeftNav()
+    //   .contains('Configuration')
+    //   .click();
 
-    cy.getLeftNav()
-      .contains('Service Accounts')
-      .click();
+    // cy.getLeftNav()
+    //   .contains('Service Accounts')
+    //   .click();
 
-    cy.getIframeBody()
-      .contains(SA_NAME)
-      .click();
+    // cy.getIframeBody()
+    //   .contains(SA_NAME)
+    //   .click();
 
-    cy.getIframeBody()
-      .find('[aria-label="Download Kubeconfig"]')
-      .click();
+    // cy.getIframeBody()
+    //   .find('[aria-label="Download Kubeconfig"]')
+    //   .click();
 
-    cy.task('listDownloads', Cypress.config('downloadsFolder')).then(
-      fileNames => {
-        const kubeconfigFileName = fileNames.find(name =>
-          name.includes(SA_NAME),
-        );
-        c = kubeconfigFileName;
-        cy.readFile(
-          Cypress.config('downloadsFolder') + '/' + kubeconfigFileName,
-        ).then(e => (kubeconfig = e));
-      },
-    );
+    // cy.task('listDownloads', Cypress.config('downloadsFolder')).then(
+    //   fileNames => {
+    //     const kubeconfigFileName = fileNames.find(name =>
+    //       name.includes(SA_NAME),
+    //     );
+    //     c = kubeconfigFileName;
+    //     cy.readFile(
+    //       Cypress.config('downloadsFolder') + '/' + kubeconfigFileName,
+    //     ).then(e => (kubeconfig = e));
+    //   },
+    // );
 
-    cy.get('[data-testid="app-switcher"]').click();
+    // cy.get('[data-testid="app-switcher"]').click();
 
-    cy.contains('Clusters Overview').click();
+    // cy.contains('Clusters Overview').click();
 
     cy.visit(`${config.clusterAddress}/clusters`);
     cy.getIframeBody()
@@ -216,18 +216,25 @@ context('Reduced permissions', () => {
       .click();
 
     // cy.getIframeBody()
-    //   .contains('Drag file here')
-    //   .attachFile(Cypress.config('downloadsFolder') + '/' + c, {
-    //     subjectType: 'drag-n-drop',
-    //   });
+    //   .find('#testarea')
+    //   .paste2(`1`);
+    cy.getIframeBody()
+      .find('.view-lines.monaco-mouse-cursor-text:visible')
+      .click()
+      .type(' {backspace}', { delay: 0 })
+      .paste({
+        pastePayload: '2222',
+      });
+
+    // cy.getIframeBody()
+    //   .find('.view-lines.monaco-mouse-cursor-text')
+    //   .type('bbb').paste({
+    //     pastePayload: 'ddd',
+    //   }).trigger('change');
 
     cy.getIframeBody()
-      .find('textarea[aria-roledescription="editor"]')
-      .filter(':visible')
-      .type('{selectall}{backspace}{selectall}{backspace}')
-      .paste({
-        pastePayload: 'aaaa',
-      });
+      .contains('Provide')
+      .click();
 
     // cy.getIframeBody()
     //   .contains('Next')
