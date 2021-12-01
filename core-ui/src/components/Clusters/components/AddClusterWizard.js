@@ -58,7 +58,6 @@ export function AddClusterWizard({
   }
 
   const onComplete = () => {
-    console.log('addclusterwizard', kubeconfig);
     try {
       const contextName = kubeconfig['current-context'];
       addCluster({

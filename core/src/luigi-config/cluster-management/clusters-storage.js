@@ -50,7 +50,9 @@ export async function save(clusters) {
 }
 
 export async function checkClusterStorageType(originalStorage) {
+  console.log('a');
   const targetStorage = (await getActiveCluster()).config.storage;
+  console.log('b');
   if (!!targetStorage && targetStorage !== originalStorage) {
     // move the cluster to the valid storage
     const clusters = load();
@@ -68,6 +70,7 @@ export async function checkClusterStorageType(originalStorage) {
       });
     }
   }
+  console.log('c');
 }
 
 export async function getDefaultStorage() {

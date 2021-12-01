@@ -197,38 +197,49 @@ context('Reduced permissions', () => {
         const kubeconfigFileName = fileNames.find(name =>
           name.includes(SA_NAME),
         );
-        console.log(fileNames, kubeconfigFileName, SA_NAME);
-        cy.readFile(
-          Cypress.config('downloadsFolder') + '/' + kubeconfigFileName,
-        ).then(e => {
-          cy.get('[data-testid="app-switcher"]').click();
+        const path =
+          Cypress.config('downloadsFolder') + '/' + kubeconfigFileName;
 
-          cy.contains('Clusters Overview').click();
-
-          cy.visit(`${config.clusterAddress}/clusters`);
-          cy.getIframeBody()
-            .contains('Add a Cluster')
-            .click();
-
-          console.log(e);
-
-          cy.getIframeBody()
-            .find('.view-lines.monaco-mouse-cursor-text')
-            .filter(':visible')
-            .click()
-            .type('aaaaaaaaa a a a{selectall}{backspace}{selectall}{backspace}')
-            .paste2(e);
-          //.type(e)
-
-          cy.getIframeBody()
-            .contains('Next')
-            .click();
-
-          cy.getIframeBody()
-            .contains('Add Cluster')
-            .click();
-        });
+        cy.readFile(path).then(e =>
+          cy.writeFile('fixtures/sa-kubeconfig.yaml', e),
+        );
       },
     );
+
+    cy.get('[data-testid="app-switcher"]').click();
+
+    // cy.contains('Clusters Overview').click();
+
+    cy.loginAndSelectCluster('sa-kubeconfig.yaml');
+  });
+
+  it('Inspect reduced permissions view', () => {
+    cy.getLeftNav()
+      .contains('Configuration')
+      .should('not.exist');
+
+    // once again the navigation is broken, so clicking on anything with bring us to Cluster Overview
+    cy.reload();
+
+    cy.goToNamespaceDetails();
+
+    // try
+    cy.getIframeBody()
+      .contains('Delete')
+      .click();
+
+    cy.get('[data-testid="luigi-modal-confirm"]').click();
+
+    cy.contains('Failed to delete the Namespace').should('be.visible');
+
+    cy.contains('Close').click();
+
+    cy.getLeftNav()
+      .contains('Workloads')
+      .click();
+
+    cy.getLeftNav()
+      .contains('Deployments')
+      .click();
   });
 });
