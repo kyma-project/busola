@@ -5,7 +5,7 @@ Object {
   "apiVersion": "v1",
   "kind": "LimitRange",
   "metadata": Object {
-    "name": "test-namespace-initial-limits",
+    "name": "test-namespace-limits",
     "namespace": "test-namespace",
   },
   "spec": Object {
@@ -32,7 +32,7 @@ Object {
   "apiVersion": "v1",
   "kind": "ResourceQuota",
   "metadata": Object {
-    "name": "test-namespace-initial-quotas",
+    "name": "test-namespace-quotas",
     "namespace": "test-namespace",
   },
   "spec": Object {

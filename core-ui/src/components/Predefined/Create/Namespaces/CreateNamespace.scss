@@ -25,3 +25,18 @@
     top: 0;
   }
 }
+
+.memory-limits,
+.container-limits {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 16px;
+  margin-top: 10px;
+}
+
+@media (min-width: 700px) {
+  .additional-resource {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
