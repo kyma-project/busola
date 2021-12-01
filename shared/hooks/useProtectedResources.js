@@ -5,10 +5,14 @@ import { useTranslation } from 'react-i18next';
 
 import { useMicrofrontendContext } from '../contexts/MicrofrontendContext';
 import { Tooltip } from '../components/Tooltip/Tooltip';
+import { useFeatureToggle } from './useFeatureToggle';
 
 export function useProtectedResources(i18n) {
   const { t } = useTranslation(['translation'], { i18n });
   const microfrontendContext = useMicrofrontendContext();
+  const [disableResourceProtection] = useFeatureToggle(
+    'disableResourceProtection',
+  );
 
   const protectedResourceRules = microfrontendContext.features
     ?.PROTECTED_RESOURCES?.isEnabled
@@ -23,12 +27,13 @@ export function useProtectedResources(i18n) {
     );
   };
 
-  const isProtected = entry => !!getEntryProtection(entry).length;
+  const isProtected = entry =>
+    !disableResourceProtection && !!getEntryProtection(entry).length;
 
   const protectedResourceWarning = entry => {
     const matchedRules = getEntryProtection(entry);
 
-    if (!matchedRules.length) {
+    if (disableResourceProtection || !matchedRules.length) {
       return <span />;
     }
 
