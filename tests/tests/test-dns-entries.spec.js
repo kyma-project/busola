@@ -47,10 +47,6 @@ context('Create a DNS Entry', () => {
       .type(DNS_NAME)
       .click();
 
-    cy.getIframeBody()
-      .contains('Advanced')
-      .click();
-
     // target
     cy.getIframeBody()
       .find('[aria-label^="Enter the A record"]:visible')
