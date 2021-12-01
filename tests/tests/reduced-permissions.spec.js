@@ -22,226 +22,213 @@ function chooseComboboxOption(selector, optionText) {
 
 context('Reduced permissions', () => {
   let namespace;
-  let kubeconfig;
-  let c;
 
-  // before(() => {
-  //   cy.loginAndSelectCluster();
-  //   cy.task('getNamespace').then(ns => (namespace = ns));
-  // });
+  before(() => {
+    cy.loginAndSelectCluster();
+    cy.task('getNamespace').then(ns => (namespace = ns));
+  });
 
-  // it('Create Cluster Role with reduced permissions', () => {
-  //   cy.getLeftNav()
-  //     .contains('Configuration')
-  //     .click();
-  //   cy.getLeftNav()
-  //     .contains('Cluster Roles')
-  //     .click();
+  it('Create Cluster Role with reduced permissions', () => {
+    cy.getLeftNav()
+      .contains('Configuration')
+      .click();
+    cy.getLeftNav()
+      .contains('Cluster Roles')
+      .click();
 
-  //   cy.getIframeBody()
-  //     .contains('Create Cluster Role')
-  //     .type(CR_NAME);
+    cy.getIframeBody()
+      .contains('Create Cluster Role')
+      .type(CR_NAME);
 
-  //   cy.getIframeBody()
-  //     .find('[placeholder="Role Name"]:visible')
-  //     .type(CR_NAME);
+    cy.getIframeBody()
+      .find('[placeholder="Role Name"]:visible')
+      .type(CR_NAME);
 
-  //   // api groups
-  //   chooseComboboxOption(
-  //     '[placeholder^="Start typing to select API"]:visible',
-  //     '(core)',
-  //   );
+    // api groups
+    chooseComboboxOption(
+      '[placeholder^="Start typing to select API"]:visible',
+      '(core)',
+    );
 
-  //   chooseComboboxOption(
-  //     '[placeholder^="Start typing to select API"]:visible',
-  //     'apps',
-  //   );
+    chooseComboboxOption(
+      '[placeholder^="Start typing to select API"]:visible',
+      'apps',
+    );
 
-  //   // resources
-  //   chooseComboboxOption(
-  //     '[placeholder^="Start typing to select Resources"]:visible',
-  //     'namespaces',
-  //   );
+    // resources
+    chooseComboboxOption(
+      '[placeholder^="Start typing to select Resources"]:visible',
+      'namespaces',
+    );
 
-  //   chooseComboboxOption(
-  //     '[placeholder^="Start typing to select Resources"]:visible',
-  //     'deployments',
-  //   );
+    chooseComboboxOption(
+      '[placeholder^="Start typing to select Resources"]:visible',
+      'deployments',
+    );
 
-  //   // verbs
-  //   chooseComboboxOption(
-  //     '[placeholder^="Start typing to select Verbs"]:visible',
-  //     'get',
-  //   );
+    // verbs
+    chooseComboboxOption(
+      '[placeholder^="Start typing to select Verbs"]:visible',
+      'get',
+    );
 
-  //   chooseComboboxOption(
-  //     '[placeholder^="Start typing to select Verbs"]:visible',
-  //     'list',
-  //   );
+    chooseComboboxOption(
+      '[placeholder^="Start typing to select Verbs"]:visible',
+      'list',
+    );
 
-  //   cy.getIframeBody()
-  //     .find('[role="dialog"]')
-  //     .contains('button', 'Create')
-  //     .click();
-  // });
+    cy.getIframeBody()
+      .find('[role="dialog"]')
+      .contains('button', 'Create')
+      .click();
+  });
 
-  // it('Create Service Account', () => {
-  //   // for some reason "Namespaces" node gets detached from DOM
-  //   cy.reload();
+  it('Create Service Account', () => {
+    // for some reason "Namespaces" node gets detached from DOM
+    cy.reload();
 
-  //   cy.getLeftNav()
-  //     .contains('Namespaces')
-  //     .click();
+    cy.getLeftNav()
+      .contains('Namespaces')
+      .click();
 
-  //   cy.goToNamespaceDetails();
+    cy.goToNamespaceDetails();
 
-  //   cy.getLeftNav()
-  //     .contains('Configuration')
-  //     .click();
+    cy.getLeftNav()
+      .contains('Configuration')
+      .click();
 
-  //   cy.getLeftNav()
-  //     .contains('Service Accounts')
-  //     .click();
+    cy.getLeftNav()
+      .contains('Service Accounts')
+      .click();
 
-  //   cy.getIframeBody()
-  //     .contains('Create Service Account')
-  //     .click();
+    cy.getIframeBody()
+      .contains('Create Service Account')
+      .click();
 
-  //   cy.getIframeBody()
-  //     .find('[placeholder="Service Account Name"]:visible')
-  //     .type(SA_NAME);
+    cy.getIframeBody()
+      .find('[placeholder="Service Account Name"]:visible')
+      .type(SA_NAME);
 
-  //   cy.getIframeBody()
-  //     .find('[role="dialog"]')
-  //     .contains('button', 'Create')
-  //     .click();
-  // });
+    cy.getIframeBody()
+      .find('[role="dialog"]')
+      .contains('button', 'Create')
+      .click();
+  });
 
-  // it('Create a ClusterRoleBinding for SA and CR', () => {
-  //   cy.getLeftNav()
-  //     .contains('Back to Namespaces')
-  //     .click();
+  it('Create a ClusterRoleBinding for SA and CR', () => {
+    cy.getLeftNav()
+      .contains('Back to Namespaces')
+      .click();
 
-  //   cy.getLeftNav()
-  //     .contains('Configuration')
-  //     .click();
+    cy.getLeftNav()
+      .contains('Configuration')
+      .click();
 
-  //   cy.getLeftNav()
-  //     .contains('Cluster Role Bindings')
-  //     .click();
+    cy.getLeftNav()
+      .contains('Cluster Role Bindings')
+      .click();
 
-  //   cy.getIframeBody()
-  //     .contains('Create Cluster Role Binding')
-  //     .click();
+    cy.getIframeBody()
+      .contains('Create Cluster Role Binding')
+      .click();
 
-  //   // subject type - select it first so the list starts loading
-  //   cy.getIframeBody()
-  //     .contains('User')
-  //     .click();
-  //   cy.getIframeBody()
-  //     .contains('ServiceAccount')
-  //     .click();
+    // subject type - select it first so the list starts loading
+    cy.getIframeBody()
+      .contains('User')
+      .click();
+    cy.getIframeBody()
+      .contains('ServiceAccount')
+      .click();
 
-  //   // name
-  //   cy.getIframeBody()
-  //     .find('[placeholder="Cluster Role Binding Name"]:visible')
-  //     .type(CRB_NAME);
+    // name
+    cy.getIframeBody()
+      .find('[placeholder="Cluster Role Binding Name"]:visible')
+      .type(CRB_NAME);
 
-  //   // role
-  //   cy.getIframeBody()
-  //     .find(
-  //       '[placeholder="Start typing to select Role Binding from the list."]:visible',
-  //     )
-  //     .type(CR_NAME);
-  //   cy.getIframeBody()
-  //     .contains(new RegExp(CR_NAME))
-  //     .click();
+    // role
+    cy.getIframeBody()
+      .find(
+        '[placeholder="Start typing to select Role Binding from the list."]:visible',
+      )
+      .type(CR_NAME);
+    cy.getIframeBody()
+      .contains(new RegExp(CR_NAME))
+      .click();
 
-  //   // service account namespace
-  //   chooseComboboxOption('[placeholder="Select Namespace"]:visible', namespace);
+    // service account namespace
+    chooseComboboxOption('[placeholder="Select Namespace"]:visible', namespace);
 
-  //   // service account name
-  //   chooseComboboxOption('[placeholder="Select name"]:visible', SA_NAME);
+    // service account name
+    chooseComboboxOption('[placeholder="Select name"]:visible', SA_NAME);
 
-  //   cy.getIframeBody()
-  //     .find('[role="dialog"]')
-  //     .contains('button', 'Create')
-  //     .click();
-  // });
+    cy.getIframeBody()
+      .find('[role="dialog"]')
+      .contains('button', 'Create')
+      .click();
+  });
 
   it('Download kubeconfig for Service Account', () => {
     // once again the navigation is broken, so clicking on anything with bring us to Cluster Overview
-    // cy.reload();
+    cy.reload();
 
-    // cy.getLeftNav()
-    //   .contains('Namespaces')
-    //   .click();
-    // cy.goToNamespaceDetails();
+    cy.getLeftNav()
+      .contains('Namespaces')
+      .click();
+    cy.goToNamespaceDetails();
 
-    // cy.getLeftNav()
-    //   .contains('Configuration')
-    //   .click();
-
-    // cy.getLeftNav()
-    //   .contains('Service Accounts')
-    //   .click();
-
-    // cy.getIframeBody()
-    //   .contains(SA_NAME)
-    //   .click();
-
-    // cy.getIframeBody()
-    //   .find('[aria-label="Download Kubeconfig"]')
-    //   .click();
-
-    // cy.task('listDownloads', Cypress.config('downloadsFolder')).then(
-    //   fileNames => {
-    //     const kubeconfigFileName = fileNames.find(name =>
-    //       name.includes(SA_NAME),
-    //     );
-    //     c = kubeconfigFileName;
-    //     cy.readFile(
-    //       Cypress.config('downloadsFolder') + '/' + kubeconfigFileName,
-    //     ).then(e => (kubeconfig = e));
-    //   },
-    // );
-
-    // cy.get('[data-testid="app-switcher"]').click();
-
-    // cy.contains('Clusters Overview').click();
-
-    cy.visit(`${config.clusterAddress}/clusters`);
-    cy.getIframeBody()
-      .contains('Add a Cluster')
+    cy.getLeftNav()
+      .contains('Configuration')
       .click();
 
-    // cy.getIframeBody()
-    //   .find('#testarea')
-    //   .paste2(`1`);
-    cy.getIframeBody()
-      .find('.view-lines.monaco-mouse-cursor-text:visible')
-      .click()
-      .type(' {backspace}', { delay: 0 })
-      .paste({
-        pastePayload: '2222',
-      });
-
-    // cy.getIframeBody()
-    //   .find('.view-lines.monaco-mouse-cursor-text')
-    //   .type('bbb').paste({
-    //     pastePayload: 'ddd',
-    //   }).trigger('change');
-
-    cy.getIframeBody()
-      .contains('Provide')
+    cy.getLeftNav()
+      .contains('Service Accounts')
       .click();
 
-    // cy.getIframeBody()
-    //   .contains('Next')
-    //   .click();
+    cy.getIframeBody()
+      .contains(SA_NAME)
+      .click();
 
-    // cy.getIframeBody()
-    //   .contains('Add Cluster')
-    //   .click();
+    cy.getIframeBody()
+      .find('[aria-label="Download Kubeconfig"]')
+      .click();
+
+    cy.task('listDownloads', Cypress.config('downloadsFolder')).then(
+      fileNames => {
+        const kubeconfigFileName = fileNames.find(name =>
+          name.includes(SA_NAME),
+        );
+        console.log(fileNames, kubeconfigFileName, SA_NAME);
+        cy.readFile(
+          Cypress.config('downloadsFolder') + '/' + kubeconfigFileName,
+        ).then(e => {
+          cy.get('[data-testid="app-switcher"]').click();
+
+          cy.contains('Clusters Overview').click();
+
+          cy.visit(`${config.clusterAddress}/clusters`);
+          cy.getIframeBody()
+            .contains('Add a Cluster')
+            .click();
+
+          console.log(e);
+
+          cy.getIframeBody()
+            .find('.view-lines.monaco-mouse-cursor-text')
+            .filter(':visible')
+            .click()
+            .type('aaaaaaaaa a a a{selectall}{backspace}{selectall}{backspace}')
+            .paste2(e);
+          //.type(e)
+
+          cy.getIframeBody()
+            .contains('Next')
+            .click();
+
+          cy.getIframeBody()
+            .contains('Add Cluster')
+            .click();
+        });
+      },
+    );
   });
 });
