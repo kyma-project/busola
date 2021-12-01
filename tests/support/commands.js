@@ -1,5 +1,7 @@
 import 'cypress-file-upload';
 
+const fs = require('fs');
+
 Cypress.Commands.add(
   'shouldHaveTrimmedText',
   { prevSubject: true },

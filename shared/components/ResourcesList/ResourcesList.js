@@ -221,7 +221,7 @@ function Resources({
   };
 
   const actions = readOnly
-    ? []
+    ? customListActions
     : [
         {
           name: t('common.buttons.edit'),

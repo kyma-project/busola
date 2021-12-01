@@ -1,4 +1,5 @@
 const fs = require('fs');
+const cypress = require('cypress');
 
 module.exports = (on, config) => {
   let namespaceName = process.env.NAMESPACE_NAME || null;
@@ -13,6 +14,9 @@ module.exports = (on, config) => {
     },
     getNamespace() {
       return namespaceName;
+    },
+    listDownloads(downloadsDirectory) {
+      return fs.readdirSync(downloadsDirectory);
     },
   });
   return config;
