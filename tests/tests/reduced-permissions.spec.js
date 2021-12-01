@@ -21,11 +21,8 @@ function chooseComboboxOption(selector, optionText) {
 }
 
 context('Reduced permissions', () => {
-  let namespace;
-
   before(() => {
     cy.loginAndSelectCluster();
-    cy.task('getNamespace').then(ns => (namespace = ns));
   });
 
   it('Create Cluster Role with reduced permissions', () => {
@@ -156,7 +153,12 @@ context('Reduced permissions', () => {
       .click();
 
     // service account namespace
-    chooseComboboxOption('[placeholder="Select Namespace"]:visible', namespace);
+    cy.task('getNamespace').then(namespace =>
+      chooseComboboxOption(
+        '[placeholder="Select Namespace"]:visible',
+        namespace,
+      ),
+    );
 
     // service account name
     chooseComboboxOption('[placeholder="Select name"]:visible', SA_NAME);
