@@ -44,7 +44,8 @@ context('Create a DNS Entry', () => {
     // dns name
     cy.getIframeBody()
       .find('[placeholder^="Select the DNS Name"]:visible')
-      .type(DNS_NAME);
+      .type(DNS_NAME)
+      .click();
 
     // target
     cy.getIframeBody()
