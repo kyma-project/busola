@@ -1338,21 +1338,6 @@ stateful-sets:
   description: <0>Stateful Set</0> is used for the management of Pods' deployment and scaling.
   replicas: Replicas
   title: Stateful Sets
-status:
-  building: BUILDING
-  deploying: DEPLOYING
-  error: ERROR
-  failed: FAILED
-  fallback: '{{fallback}}'
-  in-memory: IN MEMORY
-  initializing: INITIALIZING
-  local-storage: LOCAL STORAGE
-  new-revision-error: NEW REVISION ERROR
-  ok: OK
-  running: RUNNING
-  session-storage: SESSION STORAGE
-  skipped: SKIPPED
-  unhealthy: UNHEALTHY
 statuses:
   apirule:
     error: ERROR

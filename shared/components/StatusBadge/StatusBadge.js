@@ -39,21 +39,6 @@ const resolveType = status => {
   }
 };
 
-// const translate = (i18n, value) => {
-//   const formattedValue = value.toString().toUpperCase();
-//   const variableNameFromValue = `status.${value.toString().toLowerCase().replace(/\s/g, '-')}`
-
-//   if (!i18n) return formattedValue;
-
-//   console.log(variableNameFromValue)
-//   const { t } = useTranslation(null, { i18n });
-//   return t([variableNameFromValue, 'status.fallback'],
-//     {
-//       fallback: formattedValue
-//     }
-//   );
-// }
-
 const translate = (i18n, resourceKind, variableName) => {
   const fallbackValue = variableName.toString().toUpperCase();
   const fullVariableName = `statuses.${resourceKind
@@ -67,13 +52,12 @@ const translate = (i18n, resourceKind, variableName) => {
 
   console.log(
     'translate',
-    'resourceKind:',
-    resourceKind,
-    'variableName:',
-    variableName,
+    'fallbackValue:',
+    fallbackValue,
     'fullVariableName: ',
     fullVariableName,
   );
+
   const { t } = useTranslation(null, { i18n });
   return t([fullVariableName, 'statuses.common.fallback'], {
     fallback: fallbackValue,
