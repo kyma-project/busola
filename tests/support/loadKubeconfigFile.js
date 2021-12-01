@@ -5,9 +5,5 @@ export async function loadKubeconfig() {
     cy.fixture('kubeconfig.yaml').then(fileContent =>
       resolve(jsyaml.load(fileContent)),
     );
-
-    cy.fixture('kubeconfig-2.yaml').then(fileContent =>
-      resolve(jsyaml.load(fileContent)),
-    );
   });
 }
