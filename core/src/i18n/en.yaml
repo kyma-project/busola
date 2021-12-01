@@ -1312,6 +1312,7 @@ settings:
   clusters:
     confirmations: Confirmations
     description: Cluster interaction
+    disableResourceProtection: Allow for modification of protected resources
     dontConfirmDelete: Delete without confirmation
     showHiddenNamespaces: Show hidden Namespaces
     title: Clusters
