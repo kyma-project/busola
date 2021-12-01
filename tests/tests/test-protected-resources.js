@@ -100,7 +100,7 @@ context('Test Protected Resources', () => {
       .click();
 
     cy.getModalIframeBody()
-      .contains('.preferences-row', 'Do not protect resources')
+      .contains('.preferences-row', 'Allow modification of protected resources')
       .find('.fd-switch')
       .click();
 
