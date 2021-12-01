@@ -44,6 +44,7 @@
     "cluster-configuration.spec.js",
     "add-cluster-disabled.spec.js",
     "certificates.spec.js",
+    "test.settings.spec.js",
     "run-after.spec.js"
   ]
 }
