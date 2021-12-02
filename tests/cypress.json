@@ -14,9 +14,5 @@
   "viewportHeight": 1500,
   "videoCompression": false,
   "experimentalInteractiveRunEvents": true,
-  "testFiles": [
-    "run-before.spec.js",
-    "test-cluster-switch.spec.js",
-    "run-after.spec.js"
-  ]
+  "testFiles": ["test-cluster-switch.spec.js"]
 }

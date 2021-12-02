@@ -1,15 +1,7 @@
 import config from '../config';
 
 context('Test Cluster Switching', () => {
-  before(() => {
-    cy.loginAndSelectCluster();
-  });
-
-  it('Add second cluster', () => {
-    cy.get('[data-testid=app-switcher]').click();
-
-    cy.get('[data-testid=clusters-overview]').click();
-
+  it.only('Add second cluster', () => {
     cy.visit(`${config.clusterAddress}/clusters`)
       .getIframeBody()
       .contains('Add a Cluster')
@@ -18,8 +10,6 @@ context('Test Cluster Switching', () => {
     cy.getIframeBody()
       .contains('Drag file here')
       .attachFile('kubeconfig-2.yaml', { subjectType: 'drag-n-drop' });
-
-    cy.wait(40000);
 
     cy.getIframeBody()
       .contains('Next')
