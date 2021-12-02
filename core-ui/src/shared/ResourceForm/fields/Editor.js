@@ -56,8 +56,10 @@ export function Editor({
     minimap: {
       enabled: false,
     },
+    scrollbar: {
+      alwaysConsumeMouseWheel: false,
+    },
   };
-
   return (
     <div className="resource-form__editor">
       <ControlledEditor

@@ -167,6 +167,9 @@ export const CustomResourceDefinitionVersions = resource => {
                     minimap: {
                       enabled: false,
                     },
+                    scrollbar: {
+                      alwaysConsumeMouseWheel: false,
+                    },
                   }}
                 />
               </LayoutPanel.Body>
