@@ -48,7 +48,7 @@ function Events({ namespace, i18n }) {
       serverDataError={error}
       serverErrorMessage={error?.message}
       serverDataLoading={loading}
-      pagination={{ itemsPerPage: 10, autoHide: true }}
+      pagination={{ autoHide: true }}
       i18n={i18n}
     />
   );
