@@ -62,7 +62,18 @@ async function createAppSwitcher() {
     testId: 'clusters-overview',
   };
 
-  return { items: [...clusterNodes, clusterOverviewNode] };
+  const noClustersNode = {
+    title: 'No clusters available',
+    subTitle: 'No clusters available',
+    link: '#',
+  };
+
+  return {
+    items:
+      [...clusterNodes, clusterOverviewNode].length > 1
+        ? [...clusterNodes, clusterOverviewNode]
+        : [clusterOverviewNode, noClustersNode],
+  };
 }
 
 export async function reloadNavigation() {
