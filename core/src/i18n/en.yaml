@@ -1056,7 +1056,12 @@ namespaces:
   create-modal:
     apply-limits: Apply limits per container
     apply-memory-quotas: Apply total memory quotas
+    container-limits: Container limits
+    create-limit-range: Create limit range
+    create-resource-quota: Create resource quota
     disable-sidecar: Disable sidecar injection
+    memory-limits: Memory limits
+    memory-quotas: Memory quotas
   description: <0>Namespace</0> helps to maintain and divide resources in a cluster.
   events:
     headers:
@@ -1307,6 +1312,7 @@ settings:
   clusters:
     confirmations: Confirmations
     description: Cluster interaction
+    disableResourceProtection: Allow for modification of protected resources
     dontConfirmDelete: Delete without confirmation
     showHiddenNamespaces: Show hidden Namespaces
     title: Clusters
