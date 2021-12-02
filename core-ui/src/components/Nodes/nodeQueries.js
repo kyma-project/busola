@@ -52,7 +52,7 @@ export function useNodesQuery() {
   } = useGet('/api/v1/nodes', { pollingInterval: 5500 });
 
   React.useEffect(() => {
-    if (nodes && nodeMetrics) {
+    if (nodes) {
       const getNodeMetrics = node => {
         const metricsForNode = nodeMetrics.items.find(
           metrics => node.metadata.name === metrics.metadata.name,
@@ -64,7 +64,7 @@ export function useNodesQuery() {
         nodes.items.map(n => ({
           name: n.metadata.name,
           creationTimestamp: n.metadata.creationTimestamp,
-          metrics: getNodeMetrics(n),
+          metrics: nodeMetrics ? getNodeMetrics(n) : {},
         })),
       );
     }
@@ -94,10 +94,10 @@ export function useNodeQuery(nodeName) {
   } = useGet(`/api/v1/nodes/${nodeName}`, { pollingInterval: 3000 });
 
   React.useEffect(() => {
-    if (node && nodeMetrics) {
+    if (node) {
       setData({
         node,
-        metrics: createUsageMetrics(node, nodeMetrics),
+        metrics: nodeMetrics ? createUsageMetrics(node, nodeMetrics) : {},
       });
     }
   }, [node, nodeMetrics]);
