@@ -275,6 +275,7 @@ clusters:
       no-metrics: No metrics available for this node.
     title-all-clusters: Clusters Overview
     title-current-cluster: Cluster Overview
+    title-no-clusters-available: No clusters available
     version: Version
   storage:
     changed-message: The chosen storage type has been overwritten by the cluster configuration from {{originalStorage}} to {{targetStorage}}.

@@ -63,8 +63,8 @@ async function createAppSwitcher() {
   };
 
   const noClustersNode = {
-    title: 'No clusters available',
-    subTitle: 'No clusters available',
+    title: i18next.t('clusters.overview.title-no-clusters-available'),
+    subTitle: i18next.t('clusters.overview.title-no-clusters-available'),
     link: '#',
   };
 
