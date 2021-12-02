@@ -200,13 +200,14 @@ context('Reduced permissions', () => {
         tempKubeconfigPath =
           Cypress.config('downloadsFolder') + '/' + kubeconfigFileName;
 
-        cy.readFile(tempKubeconfigPath).then(e =>
-          cy.writeFile('fixtures/sa-kubeconfig.yaml', e),
-        );
+        cy.readFile(tempKubeconfigPath).then(e => {
+          // change kubeconfig cluster name
+          const name = e.match(/clusters:\n  - name: (.*)\n/)[1];
+          e = e.replaceAll(new RegExp(name, 'g'), 'sa-cluster');
+          cy.writeFile('fixtures/sa-kubeconfig.yaml', e);
+        });
       },
     );
-
-    cy.get('[data-testid="app-switcher"]').click();
 
     cy.loginAndSelectCluster('sa-kubeconfig.yaml');
   });
@@ -216,7 +217,7 @@ context('Reduced permissions', () => {
       .contains('Configuration')
       .should('not.exist');
 
-    // once again the navigation is broken, so clicking on anything with bring us to Cluster Overview
+    // navigation is broken again
     cy.reload();
 
     cy.goToNamespaceDetails();
@@ -242,7 +243,21 @@ context('Reduced permissions', () => {
   });
 
   it('Cleanup', () => {
-    cy.loginAndSelectCluster();
+    cy.get('[data-testid="app-switcher"]').click();
+
+    // 2 results: original cluster and "Clusters Overview" node, take first
+    cy.get('#appSwitcherPopover:visible')
+      .find('[role="button"]')
+      .first()
+      .click();
+
+    // wait until original cluster loads
+    cy.getIframeBody()
+      .contains('Cluster Overview')
+      .should('exist');
+
+    // yes, navigation is broken yet again
+    cy.reload();
 
     cy.getLeftNav()
       .contains('Configuration')
