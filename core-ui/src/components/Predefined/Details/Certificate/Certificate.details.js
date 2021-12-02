@@ -4,6 +4,7 @@ import { FormattedDatetime } from 'react-shared';
 
 import { CertificateRefs } from './CertificateRefs';
 import { CertificateStatus } from './CertificateStatus';
+import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 
 export function CertificatesDetails({ DefaultRenderer, ...otherParams }) {
   const { t, i18n } = useTranslation();
@@ -22,12 +23,15 @@ export function CertificatesDetails({ DefaultRenderer, ...otherParams }) {
             lang={i18n.language}
           />
         ) : (
-          '-'
+          EMPTY_TEXT_PLACEHOLDER
         ),
     },
     {
       header: t('certificates.common-name'),
-      value: certificate => certificate.spec.commonName,
+      value: certificate =>
+        certificate.spec?.commonName
+          ? certificate.spec.commonName
+          : EMPTY_TEXT_PLACEHOLDER,
     },
   ];
 
