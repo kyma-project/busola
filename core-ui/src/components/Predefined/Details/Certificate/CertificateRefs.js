@@ -12,7 +12,10 @@ export function CertificateRefs(certificate) {
   const { t } = useTranslation();
 
   return (
-    <LayoutPanel className="fd-margin--md certificate-refs-panel">
+    <LayoutPanel
+      className="fd-margin--md certificate-refs-panel"
+      key={'certificate-ref'}
+    >
       <LayoutPanel.Header>
         <LayoutPanel.Head title={t('certificates.refs')} />
       </LayoutPanel.Header>
