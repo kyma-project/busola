@@ -36,12 +36,12 @@ export default function App() {
       <Route
         path="/no-permissions"
         exact
-        component={withTitle(t('no-permissions.title'), NoPermissions)}
+        render={withTitle(t('no-permissions.title'), NoPermissions)}
       />
       <Route
         path="/overview"
         exact
-        component={withTitle(
+        render={withTitle(
           t('clusters.overview.title-current-cluster'),
           ClusterOverview,
         )}
@@ -50,7 +50,7 @@ export default function App() {
       <Route
         path="/clusters"
         exact
-        component={withTitle(
+        render={withTitle(
           t('clusters.overview.title-all-clusters'),
           ClusterList,
         )}
@@ -58,7 +58,7 @@ export default function App() {
       <Route
         path="/clusters/add"
         exact
-        component={withTitle(t('clusters.add.title'), AddCluster)}
+        render={withTitle(t('clusters.add.title'), AddCluster)}
       />
       <Route path="/preferences" render={Preferences} />
 
