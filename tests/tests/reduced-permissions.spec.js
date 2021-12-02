@@ -1,4 +1,5 @@
 /// <reference types="cypress" />
+import jsyaml from 'js-yaml';
 
 import { chooseComboboxOption } from '../support/helpers';
 
@@ -200,11 +201,14 @@ context('Reduced permissions', () => {
         tempKubeconfigPath =
           Cypress.config('downloadsFolder') + '/' + kubeconfigFileName;
 
-        cy.readFile(tempKubeconfigPath).then(e => {
+        cy.readFile(tempKubeconfigPath).then(kubeconfigStr => {
           // change kubeconfig cluster name
-          const name = e.match(/clusters:\n  - name: (.*)\n/)[1];
-          e = e.replaceAll(new RegExp(name, 'g'), 'sa-cluster');
-          cy.writeFile('fixtures/sa-kubeconfig.yaml', e);
+          const kubeconfig = jsyaml.load(kubeconfigStr);
+
+          kubeconfig.clusters[0].name = 'sa-cluster';
+          kubeconfig.contexts[0].context.cluster = 'sa-cluster';
+
+          cy.writeFile('fixtures/sa-kubeconfig.yaml', jsyaml.dump(kubeconfig));
         });
       },
     );
