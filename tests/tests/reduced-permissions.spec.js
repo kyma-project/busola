@@ -1,7 +1,10 @@
 /// <reference types="cypress" />
 import jsyaml from 'js-yaml';
 
-import { chooseComboboxOption } from '../support/helpers';
+import {
+  chooseComboboxOption,
+  deleteFromGenericList,
+} from '../support/helpers';
 
 const id = Math.random()
   .toString()
@@ -195,21 +198,29 @@ context('Reduced permissions', () => {
 
     cy.task('listDownloads', Cypress.config('downloadsFolder')).then(
       fileNames => {
-        const kubeconfigFileName = fileNames.find(name =>
-          name.includes(SA_NAME),
-        );
+        let kubeconfigFileName = fileNames.find(name => name.includes(SA_NAME));
+
+        // make sure we don't take temporary Chrome download file
+        kubeconfigFileName = kubeconfigFileName.replace('.crdownload', '');
+
         tempKubeconfigPath =
           Cypress.config('downloadsFolder') + '/' + kubeconfigFileName;
 
-        cy.readFile(tempKubeconfigPath).then(kubeconfigStr => {
-          // change kubeconfig cluster name
-          const kubeconfig = jsyaml.load(kubeconfigStr);
+        // make sure .crdownload is not here anymore
+        cy.wait(100)
+          .readFile(tempKubeconfigPath)
+          .then(kubeconfigStr => {
+            // change kubeconfig cluster name
+            const kubeconfig = jsyaml.load(kubeconfigStr);
 
-          kubeconfig.clusters[0].name = 'sa-cluster';
-          kubeconfig.contexts[0].context.cluster = 'sa-cluster';
+            kubeconfig.clusters[0].name = 'sa-cluster';
+            kubeconfig.contexts[0].context.cluster = 'sa-cluster';
 
-          cy.writeFile('fixtures/sa-kubeconfig.yaml', jsyaml.dump(kubeconfig));
-        });
+            cy.writeFile(
+              'fixtures/sa-kubeconfig.yaml',
+              jsyaml.dump(kubeconfig),
+            );
+          });
       },
     );
 
@@ -263,48 +274,29 @@ context('Reduced permissions', () => {
     // yes, navigation is broken yet again
     cy.reload();
 
+    // delete binding
     cy.getLeftNav()
       .contains('Configuration')
       .click();
-
     cy.getLeftNav()
       .contains('Cluster Role Bindings')
       .click();
+    deleteFromGenericList(CRB_NAME);
 
-    cy.getIframeBody()
-      .find('[aria-label="open-search"]')
-      .click();
-
-    cy.getIframeBody()
-      .find('[placeholder="Search"]')
-      .type(CRB_NAME);
-
-    cy.getIframeBody()
-      .find('[aria-label="Delete"]')
-      .click();
-
-    cy.getIframeBody()
-      .contains('button', 'Delete')
-      .click();
-
+    // delete role
     cy.getLeftNav()
       .contains('Cluster Roles')
       .click();
+    deleteFromGenericList(CR_NAME);
+
+    // remove cluster
+    cy.get('[data-testid="app-switcher"]').click();
+    cy.contains('Clusters Overview').click();
+    // todo add delete confirmation on clusters list (#649)
+    deleteFromGenericList('sa-cluster', false);
 
     cy.getIframeBody()
-      .find('[aria-label="open-search"]')
-      .click();
-
-    cy.getIframeBody()
-      .find('[placeholder="Search"]')
-      .type(CR_NAME);
-
-    cy.getIframeBody()
-      .find('[aria-label="Delete"]')
-      .click();
-
-    cy.getIframeBody()
-      .contains('button', 'Delete')
-      .click();
+      .contains(/No clusters found/)
+      .should('exist');
   });
 });
