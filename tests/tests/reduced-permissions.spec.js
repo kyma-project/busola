@@ -221,7 +221,7 @@ context('Reduced permissions', () => {
 
     cy.goToNamespaceDetails();
 
-    // try
+    // try to delete resource
     cy.getIframeBody()
       .contains('Delete')
       .click();
@@ -238,6 +238,54 @@ context('Reduced permissions', () => {
 
     cy.getLeftNav()
       .contains('Deployments')
+      .click();
+  });
+
+  it('Cleanup', () => {
+    cy.loginAndSelectCluster();
+
+    cy.getLeftNav()
+      .contains('Configuration')
+      .click();
+
+    cy.getLeftNav()
+      .contains('Cluster Role Bindings')
+      .click();
+
+    cy.getIframeBody()
+      .find('[aria-label="open-search"]')
+      .click();
+
+    cy.getIframeBody()
+      .find('[placeholder="Search"]')
+      .type(CRB_NAME);
+
+    cy.getIframeBody()
+      .find('[aria-label="Delete"]')
+      .click();
+
+    cy.getIframeBody()
+      .contains('button', 'Delete')
+      .click();
+
+    cy.getLeftNav()
+      .contains('Cluster Roles')
+      .click();
+
+    cy.getIframeBody()
+      .find('[aria-label="open-search"]')
+      .click();
+
+    cy.getIframeBody()
+      .find('[placeholder="Search"]')
+      .type(CR_NAME);
+
+    cy.getIframeBody()
+      .find('[aria-label="Delete"]')
+      .click();
+
+    cy.getIframeBody()
+      .contains('button', 'Delete')
       .click();
   });
 });
