@@ -21,6 +21,7 @@ import { createTemplate } from './templates';
 import './CreateCertificate.scss';
 
 const CertificatesCreate = ({
+  setCustomValid,
   onChange,
   formElementRef,
   namespace,
@@ -34,8 +35,10 @@ const CertificatesCreate = ({
       ? cloneDeep(initialCertificate)
       : createTemplate(namespace),
   );
-  const [withCSR, setWithCSR] = useState(false);
-  const [existingSecret, setExistingSecret] = useState(false);
+  const [withCSR, setWithCSR] = useState(!!jp.value(certificate, '$.spec.csr'));
+  const [existingSecret, setExistingSecret] = useState(
+    !!jp.value(certificate, '$.spec.secretRef'),
+  );
   const [csrIsEncoded, setCsrIsEncoded] = useState(false);
   const [decodeError, setDecodeError] = useState(null);
 
@@ -61,7 +64,7 @@ const CertificatesCreate = ({
     } else {
       jp.value(certificate, '$.spec.csr', undefined);
     }
-    setCertificate(certificate);
+    setCertificate({ ...certificate });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [withCSR]);
 
@@ -71,7 +74,7 @@ const CertificatesCreate = ({
     } else {
       jp.value(certificate, '$.spec.secretRef', undefined);
     }
-    setCertificate(certificate);
+    setCertificate({ ...certificate });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [existingSecret]);
 
@@ -90,6 +93,17 @@ const CertificatesCreate = ({
     } else if (jp.value(certificate, '$.spec.secretName')) {
       setExistingSecret(false);
     }
+    if (existingSecret) {
+      setCustomValid(
+        jp.value(certificate, '$.spec.secretRef.name') &&
+          jp.value(certificate, '$.spec.secretRef.namespace'),
+      );
+    }
+
+    if (!existingSecret) {
+      setCustomValid(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [certificate]);
 
   return (
@@ -258,6 +272,7 @@ const CertificatesCreate = ({
           fieldSelector="type=kubernetes.io/tls"
           propertyPath="$.spec.secretRef"
           currentNamespace={namespace}
+          required
         />
       )}
     </ResourceForm>
