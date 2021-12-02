@@ -5,15 +5,15 @@ export function ThemePreview({ theme }) {
   if (theme === 'light_dark') {
     return (
       <div className="double-theme">
-        <ThemePreview theme="light" />
         <ThemePreview theme="dark" />
+        <ThemePreview theme="light" />
       </div>
     );
   }
 
   // those are copied from https://sap.live.dxp.k8s.ondemand.com/projects
   return (
-    <div className="theme-container">
+    <div className="theme-wrapper">
       <svg
         viewBox="0 0 200 200"
         xmlns="http://www.w3.org/2000/svg"
