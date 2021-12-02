@@ -19,6 +19,7 @@ export function KeyValueField({
   },
   readableFromFile = false,
   lockedKeys = [],
+  lockedValues = [],
   ...props
 }) {
   const { t } = useTranslation();
@@ -97,6 +98,7 @@ export function KeyValueField({
             onKeyDown: e => focus(e),
             value: dataValue(value),
             placeholder: t('components.key-value-field.enter-value'),
+            disabled: lockedValues.includes(value?.key),
             setValue: val =>
               setValue({
                 ...value,
