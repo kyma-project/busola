@@ -3,12 +3,18 @@
 
   * {
     position: absolute;
-    left:0;
+    left: 0;
   }
 
-  & > :last-child {
-    clip-path: polygon(0 0, 100% 0, 0 100%); 
+  & > div:last-child {
+    svg {
+      clip-path: polygon(100% 0, 100% 100%, 0 100%);
+    }
   }
+}
+
+.theme-container {
+  position: relative;
 }
 
 .theme-preview {
