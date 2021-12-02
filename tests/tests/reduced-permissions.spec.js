@@ -21,8 +21,16 @@ function chooseComboboxOption(selector, optionText) {
 }
 
 context('Reduced permissions', () => {
+  let tempKubeconfigPath;
+
   before(() => {
     cy.loginAndSelectCluster();
+  });
+
+  after(() => {
+    if (tempKubeconfigPath) {
+      cy.task('removeFile', tempKubeconfigPath);
+    }
   });
 
   it('Create Cluster Role with reduced permissions', () => {
@@ -199,10 +207,10 @@ context('Reduced permissions', () => {
         const kubeconfigFileName = fileNames.find(name =>
           name.includes(SA_NAME),
         );
-        const path =
+        tempKubeconfigPath =
           Cypress.config('downloadsFolder') + '/' + kubeconfigFileName;
 
-        cy.readFile(path).then(e =>
+        cy.readFile(tempKubeconfigPath).then(e =>
           cy.writeFile('fixtures/sa-kubeconfig.yaml', e),
         );
       },
