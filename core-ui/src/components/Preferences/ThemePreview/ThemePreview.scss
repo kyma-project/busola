@@ -6,7 +6,7 @@
     left: 0;
   }
 
-  & > div:last-child {
+  & :last-child {
     svg {
       clip-path: polygon(100% 0, 100% 100%, 0 100%);
     }
