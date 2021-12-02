@@ -55,6 +55,5 @@ context('Test Cluster Switching', () => {
       .find('[data-testid="delete"]')
       .first()
       .click();
-    cy.wait(4000);
   });
 });
