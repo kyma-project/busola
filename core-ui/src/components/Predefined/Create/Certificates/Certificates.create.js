@@ -103,6 +103,7 @@ const CertificatesCreate = ({
     if (!existingSecret) {
       setCustomValid(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [certificate]);
 
   return (
