@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-import config from '../config';
+import { chooseComboboxOption } from '../support/helpers';
 
 const id = Math.random()
   .toString()
@@ -9,16 +9,6 @@ const id = Math.random()
 const SA_NAME = 'test-sa-' + id;
 const CR_NAME = 'test-cr-' + id;
 const CRB_NAME = 'test-crb-' + id;
-
-function chooseComboboxOption(selector, optionText) {
-  cy.getIframeBody()
-    .find(selector)
-    .filterWithNoValue()
-    .type(optionText);
-  cy.getIframeBody()
-    .contains(optionText)
-    .click();
-}
 
 context('Reduced permissions', () => {
   let tempKubeconfigPath;
