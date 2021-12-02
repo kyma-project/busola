@@ -19,6 +19,8 @@ context('Test Cluster Switching', () => {
       .contains('Drag file here')
       .attachFile('kubeconfig-2.yaml', { subjectType: 'drag-n-drop' });
 
+    cy.wait(40000);
+
     cy.getIframeBody()
       .contains('Next')
       .click();
