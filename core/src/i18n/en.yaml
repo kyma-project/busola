@@ -271,6 +271,8 @@ clusters:
     upload-paste-kubeconfig: Upload or paste your kubeconfig file.
     wrong-configuration: Cannot apply the configuration.
   overview:
+    messages:
+      no-metrics: No metrics available for this node.
     title-all-clusters: Clusters Overview
     title-current-cluster: Cluster Overview
     version: Version

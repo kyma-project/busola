@@ -39,7 +39,7 @@ export function NodeWarnings({ nodeName }) {
       rowRenderer={rowRenderer}
       serverDataError={error}
       serverDataLoading={loading}
-      pagination={{ itemsPerPage: 10, autoHide: true }}
+      pagination={{ autoHide: true }}
       i18n={i18n}
     />
   );
