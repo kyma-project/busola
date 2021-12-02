@@ -41,11 +41,13 @@ const resolveType = status => {
 
 const translate = (i18n, arrayOfVariableNames, fallbackValue) => {
   if (!i18n) return fallbackValue;
-
   const { t } = useTranslation(null, { i18n });
+
   return t([...arrayOfVariableNames, 'common.statuses.fallback'], {
     fallback: fallbackValue,
-  }).toUpperCase();
+  })
+    .toString()
+    .toUpperCase();
 };
 
 const prepareTranslationPath = (resourceKind, value, type) => {
@@ -115,6 +117,7 @@ export const StatusBadge = ({
       inverted
       status={type}
       className={classes}
+      data-testid={noTooltip ? 'no-tooltip' : 'has-tooltip'}
       style={{ whiteSpace: 'nowrap' }}
     >
       {translate(
