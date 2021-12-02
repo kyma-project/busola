@@ -20,14 +20,47 @@ context('Create Namespace', () => {
     cy.task('getNamespace').then(a => {
       cy.getIframeBody()
         .find('[role=dialog]')
-        .find("input[placeholder='Namespace Name']")
-        .should('be.visible')
+        .find("input[placeholder='Namespace Name']:visible")
         .type(a);
     });
 
     cy.getIframeBody()
       .find('[role=dialog]')
+      .contains('Advanced')
+      .click();
+
+    cy.getIframeBody()
+      .find('[role=dialog]')
       .contains('button', 'Create')
       .click();
+
+    cy.task('getNamespace').then(ns => {
+      cy.getIframeBody()
+        .contains('h3', ns)
+        .should('be.visible');
+    });
+
+    cy.getIframeBody()
+      .contains('button', 'Edit')
+      .click();
+
+    cy.getIframeBody()
+      .find('[role=dialog]')
+      .contains('Advanced')
+      .click();
+
+    cy.getIframeBody()
+      .find('[role=dialog]')
+      .find('label[class="fd-switch"]')
+      .click();
+
+    cy.getIframeBody()
+      .find('[role=dialog]')
+      .contains('button', 'Update')
+      .click();
+
+    cy.getIframeBody()
+      .contains('istio-injection=disabled')
+      .should('be.visible');
   });
 });

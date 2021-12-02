@@ -43,7 +43,10 @@ export function useCreateResource(
   };
 
   return async e => {
-    e.preventDefault();
+    if (e) {
+      e.preventDefault();
+    }
+
     try {
       if (initialResource) {
         const mergedResource = {
