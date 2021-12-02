@@ -103,11 +103,6 @@ const CertificatesCreate = ({
     if (!existingSecret) {
       setCustomValid(true);
     }
-    // setCustomValid(
-    //   (jp.value(certificate, '$.spec.secretRef.name') &&
-    //     jp.value(certificate, '$.spec.secretRef.namespace')) ||
-    //     jp.value(certificate, '$.spec.secretName'),
-    // );
   }, [certificate]);
 
   return (
