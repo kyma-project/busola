@@ -81,7 +81,11 @@ async function initializeBusola() {
 
   await saveQueryParamsIfPresent();
 
-  readFeatureToggles(['dontConfirmDelete', 'showHiddenNamespaces']);
+  readFeatureToggles([
+    'dontConfirmDelete',
+    'showHiddenNamespaces',
+    'disableResourceProtection',
+  ]);
 
   // save location, as we'll may be logged out in a moment
   saveCurrentLocation();
