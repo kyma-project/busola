@@ -5,6 +5,11 @@ import { Modal } from 'react-shared';
 import { List, Item, Bold, Text, SecretKey, CenterVertically } from './styled';
 import { useTranslation } from 'react-i18next';
 
+function SecretDataModalWrapper(props) {
+  const { i18n } = useTranslation();
+  return <SecretDataModal i18n={i18n} {...props} />;
+}
+
 class SecretDataModal extends React.Component {
   constructor(props) {
     super(props);
@@ -43,8 +48,7 @@ class SecretDataModal extends React.Component {
   };
 
   render() {
-    const { i18n } = useTranslation();
-    const { title, data, prefix, modalOpeningComponent } = this.props;
+    const { title, data, prefix, modalOpeningComponent, i18n } = this.props;
     const { encoded } = this.state;
 
     const items = this.populateItems(data, encoded);
@@ -82,4 +86,4 @@ class SecretDataModal extends React.Component {
   }
 }
 
-export default SecretDataModal;
+export default SecretDataModalWrapper;
