@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-shared';
+import { Link, ControlledBy } from 'react-shared';
 import { Trans } from 'react-i18next';
 
 import { JobCompletions } from '../Details/Job/JobCompletions';
@@ -12,6 +12,12 @@ export const JobsList = ({ DefaultRenderer, ...otherParams }) => {
     {
       header: t('jobs.completions'),
       value: job => <JobCompletions job={job} />,
+    },
+    {
+      header: t('common.headers.owner'),
+      value: job => (
+        <ControlledBy ownerReferences={job.metadata.ownerReferences} />
+      ),
     },
   ];
 
