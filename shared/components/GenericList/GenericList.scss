@@ -78,7 +78,8 @@
   }
 
   .fd-table .list-actions {
-    button {
+    > button,
+    > .actions-tooltip {
       margin-top: -12px;
       margin-bottom: -12px;
     }

@@ -35,9 +35,12 @@ const StandaloneAction = ({ action, entry, compact }) => {
   );
 
   return action.tooltip ? (
-    <Tooltip content={action.tooltip}> {actionButton} </Tooltip>
+    <Tooltip className="actions-tooltip" content={action.tooltip}>
+      {' '}
+      {actionButton}{' '}
+    </Tooltip>
   ) : (
-    <div> {actionButton} </div>
+    <> {actionButton} </>
   );
 };
 
