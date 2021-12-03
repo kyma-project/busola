@@ -39,3 +39,7 @@ body.lui-semiCollapsible {
 .lui-side-nav__footer--text p {
   margin: 0;
 }
+
+#app .iframeContainer {
+  overflow: hidden;
+}

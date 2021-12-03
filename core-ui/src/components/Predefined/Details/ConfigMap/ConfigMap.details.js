@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ControlledBy } from 'react-shared';
 
-import { ReadonlyEditorPanel } from '../../../../shared/components/ReadonlyEditorPanel';
+import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
 
 export const ConfigMapsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
