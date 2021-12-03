@@ -76,9 +76,9 @@ api-rules:
     ns-no-services: No Services in this Namespace.
     placeholder: Choose the service to expose.
   statuses:
-    error: ERROR
-    ok: OK
-    skipped: SKIPPED
+    error: Error
+    ok: Ok
+    skipped: Skipped
   title: API Rules
 applications:
   aria:
@@ -282,9 +282,9 @@ clusters:
     title-current-cluster: Cluster Overview
     version: Version
   statuses:
-    inmemory: IN MEMORY
-    localstorage: LOCAL STORAGE
-    sessionstorage: SESSION STORAGE
+    inmemory: In Memory
+    localstorage: Local Storage
+    sessionstorage: Session Storage
     unknown: Unknown
   storage:
     changed-message: The chosen storage type has been overwritten by the cluster configuration from {{originalStorage}} to {{targetStorage}}.
