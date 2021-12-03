@@ -7,3 +7,14 @@ export async function loadKubeconfig() {
     );
   });
 }
+
+export async function loadMultipleContextKubeconfig() {
+  const kubeconfig = await loadKubeconfig();
+  const newContext = { ...kubeconfig?.contexts[0] };
+  newContext.name += '-new';
+  const newKubeconfig = {
+    ...kubeconfig,
+    contexts: [...kubeconfig.contexts, newContext],
+  };
+  return newKubeconfig;
+}

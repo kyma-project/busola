@@ -41,6 +41,7 @@
     "test-daemon-sets.spec.js",
     "invalid-kubeconfig.spec.js",
     "login-kubeconfigID.spec.js",
+    "multiple-context-kubeconfig.spec.js",
     "other-logins.spec.js",
     "cluster-configuration.spec.js",
     "add-cluster-disabled.spec.js",
