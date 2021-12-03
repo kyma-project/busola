@@ -1,3 +1,4 @@
+aa: s
 addons:
   addons-status: Addons Status
   description: <0>Addons Configuration</0> defines Namespace-scoped addons that provide all information required to convert Helm charts into Service Classes in Service Catalog.
@@ -409,8 +410,6 @@ common:
     secret-ref-name: Select name
     secret-ref-namespace: Select Namespace
   protected-resource: This resource is protected.
-  statuses:
-    fallback: '{{fallback}}'
   tooltips:
     copy-to-clipboard: Copy to clipboard
     download: Download

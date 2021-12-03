@@ -42,12 +42,9 @@ const resolveType = status => {
 const translate = (i18n, arrayOfVariableNames, fallbackValue) => {
   if (!i18n) return fallbackValue;
   const { t } = useTranslation(null, { i18n });
-
-  return t([...arrayOfVariableNames, 'common.statuses.fallback'], {
-    fallback: fallbackValue,
-  })
-    .toString()
-    .toUpperCase();
+  return t([...arrayOfVariableNames, 'fallback'], {
+    fallback: 'fallbackValue',
+  });
 };
 
 const prepareTranslationPath = (resourceKind, value, type) => {
@@ -99,12 +96,10 @@ export const StatusBadge = ({
     value,
     'tooltips',
   );
-  const fallbackValue = value.toString().toUpperCase();
-
+  const fallbackValue = value.toString();
   const classes = classNames(
     'status-badge',
     {
-      ['status-badge--' + type]: type,
       'has-tooltip': !noTooltip,
     },
     className,
@@ -122,15 +117,12 @@ export const StatusBadge = ({
     >
       {translate(
         i18n,
-        [
-          i18nFullVariableName,
-          commonStatusVariableName,
-          'common.statuses.fallback',
-        ],
+        [i18nFullVariableName, commonStatusVariableName],
         fallbackValue,
       )}
     </ObjectStatus>
   );
+
   let content = translate(
     i18n,
     [tooltipVariableName, commonTooltipVariableName, i18nFullVariableName],
