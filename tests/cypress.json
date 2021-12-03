@@ -39,6 +39,7 @@
     "test-service-accounts.spec.js",
     "test-issuers.spec.js",
     "test-daemon-sets.spec.js",
+    "reduced-permissions.spec.js",
     "invalid-kubeconfig.spec.js",
     "login-kubeconfigID.spec.js",
     "multiple-context-kubeconfig.spec.js",
