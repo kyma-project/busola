@@ -1,21 +1,23 @@
 import React from 'react';
 import { useGet, GenericList, ReadableCreationTimestamp } from 'react-shared';
 import { useTranslation } from 'react-i18next';
+import { useMessageList, EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 
 export function NodeWarnings({ nodeName }) {
   const { data, loading, error } = useGet('/api/v1/events');
 
-  const formatInvolvedObject = obj => {
-    if (obj.namespace) {
-      return `${obj.kind} ${obj.namespace}/${obj.name}`;
-    } else {
-      return `${obj.kind} ${obj.name}`;
-    }
-  };
+  const {
+    displayType,
+    sortedItems,
+    formatInvolvedObject,
+    messageSelector,
+  } = useMessageList(data?.items);
 
-  const warnings = data?.items
-    .filter(e => e.type === 'Warning')
-    .filter(e => e.source.host === nodeName);
+  const hostEntries = sortedItems.filter(e => e.source.host === nodeName);
+  const entries =
+    displayType === EVENT_MESSAGE_TYPE.ALL
+      ? hostEntries
+      : hostEntries.filter(e => e.type === displayType.type);
 
   const { t, i18n } = useTranslation();
   const headerRenderer = () => [
@@ -31,10 +33,11 @@ export function NodeWarnings({ nodeName }) {
 
   return (
     <GenericList
-      title={t('node-details.title-warnings')}
+      title={t(`node-details.${displayType.label}`)}
+      extraHeaderContent={messageSelector}
       showSearchField={false}
       showSearchSuggestion={false}
-      entries={warnings || []}
+      entries={entries}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       serverDataError={error}

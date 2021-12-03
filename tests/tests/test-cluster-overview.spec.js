@@ -31,7 +31,7 @@ context('Test Cluster Overview', () => {
       .should('be.gte', 1);
 
     cy.getIframeBody()
-      .contains('Warnings')
+      .contains('All Messages')
       .should('be.visible');
   });
 
@@ -68,7 +68,7 @@ context('Test Cluster Overview', () => {
       .should('be.visible');
 
     cy.getIframeBody()
-      .contains('Warnings')
+      .contains('All Messages')
       .should('be.visible');
   });
 });

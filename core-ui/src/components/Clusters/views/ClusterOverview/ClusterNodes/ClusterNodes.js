@@ -4,7 +4,7 @@ import { Pagination, Spinner, ErrorPanel } from 'react-shared';
 import { LayoutPanel, Link } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { useNodesQuery } from 'components/Nodes/nodeQueries';
-import { NodeResources } from '../../../../Nodes/NodeResources/NodeResources';
+import { NodeResources } from 'components/Nodes/NodeResources/NodeResources';
 import { ClusterNodesWarnings } from './NodeWarningsList';
 import './ClusterNodes.scss';
 
@@ -59,7 +59,7 @@ export function ClusterNodes() {
           />
         </LayoutPanel.Footer>
       )}
-      <ClusterNodesWarnings nodesNames={nodes?.map(n => n.name) || []} />
+      <ClusterNodesWarnings />
     </>
   );
 }

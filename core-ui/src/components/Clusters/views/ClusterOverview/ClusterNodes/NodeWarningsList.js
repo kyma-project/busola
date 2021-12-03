@@ -3,22 +3,23 @@ import LuigiClient from '@luigi-project/client';
 import { Link } from 'fundamental-react';
 import { useGet, GenericList, ReadableCreationTimestamp } from 'react-shared';
 import { useTranslation } from 'react-i18next';
+import { useMessageList, EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 
-export function ClusterNodesWarnings({ nodesNames }) {
-  const { i18n } = useTranslation();
+export function ClusterNodesWarnings() {
+  const { i18n, t } = useTranslation();
   const { data, loading, error } = useGet('/api/v1/events');
 
-  const formatInvolvedObject = obj => {
-    if (obj.namespace) {
-      return `${obj.kind} ${obj.namespace}/${obj.name}`;
-    } else {
-      return `${obj.kind} ${obj.name}`;
-    }
-  };
+  const {
+    displayType,
+    sortedItems,
+    formatInvolvedObject,
+    messageSelector,
+  } = useMessageList(data?.items);
 
-  const warnings = data?.items
-    .filter(e => e.type === 'Warning')
-    .filter(e => nodesNames.includes(e.source.host));
+  const entries =
+    displayType === EVENT_MESSAGE_TYPE.ALL
+      ? sortedItems
+      : sortedItems.filter(e => e.type === displayType.type);
 
   const navigateToNodeDetails = nodeName => {
     LuigiClient.linkManager().navigate(`nodes/${nodeName}`);
@@ -52,9 +53,10 @@ export function ClusterNodesWarnings({ nodesNames }) {
 
   return (
     <GenericList
-      title="Warnings"
+      title={t(`node-details.${displayType.label}`)}
+      extraHeaderContent={messageSelector}
       textSearchProperties={searchProperties}
-      entries={warnings || []}
+      entries={entries}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       serverDataError={error}
