@@ -71,7 +71,7 @@ context('Test Service Accounts', () => {
       .should('be.visible');
 
     cy.getIframeBody()
-      .contains('ENABLED')
+      .contains('Enabled')
       .should('be.visible');
   });
 
@@ -110,7 +110,7 @@ context('Test Service Accounts', () => {
 
   it('Checking updated details', () => {
     cy.getIframeBody()
-      .contains('DISABLED')
+      .contains('Disabled')
       .should('be.visible');
 
     cy.getIframeBody()
