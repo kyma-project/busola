@@ -44,14 +44,14 @@ export function getContext(kubeconfig, contextName) {
 export function getUserIndex(kubeconfig) {
   const contextName = kubeconfig?.['current-context'];
   const context = kubeconfig?.contexts?.find(c => c.name === contextName)
-    .context;
+    ?.context;
   return kubeconfig?.users?.findIndex(u => u.name === context?.user);
 }
 
 export function getUser(kubeconfig) {
   const contextName = kubeconfig?.['current-context'];
   const context = kubeconfig?.contexts?.find(c => c.name === contextName)
-    .context;
+    ?.context;
   return kubeconfig?.users?.find(u => u.name === context?.user)?.user;
 }
 
