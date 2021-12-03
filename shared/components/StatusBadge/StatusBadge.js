@@ -44,7 +44,7 @@ const translate = (i18n, arrayOfVariableNames, fallbackValue) => {
   const { t } = useTranslation(null, { i18n });
   return t([...arrayOfVariableNames, 'fallback'], {
     fallback: 'fallbackValue',
-  });
+  }).toString();
 };
 
 const prepareTranslationPath = (resourceKind, value, type) => {

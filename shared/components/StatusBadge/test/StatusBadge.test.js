@@ -31,9 +31,9 @@ describe('StatusBadge', () => {
 
   it('renders status text with DEFAULT_STATUSES_PATH', () => {
     const DEFAULT_STATUSES_PATH =
-      'COMMON.STATUSES.INITIAL,COMMON.STATUSES.INITIAL,COMMON.STATUSES.FALLBACK,COMMON.STATUSES.FALLBACK';
+      'common.statuses.initial,common.statuses.initial,fallback';
     const { queryByRole } = render(
-      <StatusBadge i18n={{ a: 'a' }}>INITIAL</StatusBadge>,
+      <StatusBadge i18n={{ a: 'a' }}>Initial</StatusBadge>,
     );
     const status = queryByRole('status');
     expect(status).toBeInTheDocument();
@@ -43,10 +43,10 @@ describe('StatusBadge', () => {
   it('renders status text with RESOURCE_STATUSES_PATH', () => {
     const RESOURCE_KIND = 'resource';
     const RESOURCE_STATUSES_PATH =
-      'RESOURCE.STATUSES.INITIAL,COMMON.STATUSES.INITIAL,COMMON.STATUSES.FALLBACK,COMMON.STATUSES.FALLBACK';
+      'resource.statuses.initial,common.statuses.initial,fallback';
     const { queryByRole } = render(
       <StatusBadge i18n={{ a: 'a' }} resourceKind={RESOURCE_KIND}>
-        INITIAL
+        Initial
       </StatusBadge>,
     );
     const status = queryByRole('status');
@@ -57,7 +57,7 @@ describe('StatusBadge', () => {
   it('renders status text without tooltip', () => {
     const { getByTestId } = render(
       <StatusBadge i18n={{ a: 'a' }} noTooltip>
-        INITIAL
+        Initial
       </StatusBadge>,
     );
     const status = getByTestId('no-tooltip');
@@ -66,7 +66,7 @@ describe('StatusBadge', () => {
 
   it('renders status text with tooltip', () => {
     const { getByTestId } = render(
-      <StatusBadge i18n={{ a: 'a' }}>INITIAL</StatusBadge>,
+      <StatusBadge i18n={{ a: 'a' }}>Initial</StatusBadge>,
     );
     const status = getByTestId('has-tooltip');
     expect(status).toBeInTheDocument();
