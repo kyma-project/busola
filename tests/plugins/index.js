@@ -14,6 +14,9 @@ module.exports = (on, config) => {
     getNamespace() {
       return namespaceName;
     },
+    listDownloads(downloadsDirectory) {
+      return fs.readdirSync(downloadsDirectory);
+    },
   });
   return config;
 };
