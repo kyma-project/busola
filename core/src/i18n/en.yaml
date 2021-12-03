@@ -1,4 +1,3 @@
-aa: s
 addons:
   addons-status: Addons Status
   description: <0>Addons Configuration</0> defines Namespace-scoped addons that provide all information required to convert Helm charts into Service Classes in Service Catalog.

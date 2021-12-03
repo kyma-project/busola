@@ -33,7 +33,7 @@ export default function ApiRuleStatus({ apiRule }) {
   return (
     <StatusBadge
       i18n={i18n}
-      resourceKind={'api-rules'}
+      resourceKind="api-rules"
       type={resolveAPIRuleStatus(code)}
       additionalContent={desc}
     >
