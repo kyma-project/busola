@@ -49,6 +49,11 @@ export function KubeconfigUpload({
           editor.onDidBlurEditorWidget(() => updateKubeconfig(getValue()))
         }
         onChange={(_, value) => updateKubeconfig(value)}
+        options={{
+          scrollbar: {
+            alwaysConsumeMouseWheel: false,
+          },
+        }}
       />
       {error && (
         <MessageStrip type="error" className="fd-margin-top--sm">

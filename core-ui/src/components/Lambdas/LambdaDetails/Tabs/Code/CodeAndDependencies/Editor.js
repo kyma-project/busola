@@ -95,6 +95,11 @@ export default function Editor({
         language={language}
         theme={editorTheme}
         value={controlledValue}
+        options={{
+          scrollbar: {
+            alwaysConsumeMouseWheel: false,
+          },
+        }}
         onChange={handleControlledChange}
       />
     </div>

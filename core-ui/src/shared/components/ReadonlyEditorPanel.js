@@ -10,6 +10,9 @@ export function ReadonlyEditorPanel({ title, value, editorProps }) {
     minimap: {
       enabled: false,
     },
+    scrollbar: {
+      alwaysConsumeMouseWheel: false,
+    },
   };
 
   return (
