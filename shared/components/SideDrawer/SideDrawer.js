@@ -38,7 +38,12 @@ export const SideDrawer = ({
           language={'yaml'}
           theme={editorTheme}
           value={textToCopy}
-          options={{ readOnly: true }}
+          options={{
+            readOnly: true,
+            scrollbar: {
+              alwaysConsumeMouseWheel: false,
+            },
+          }}
         />
       </>
     );

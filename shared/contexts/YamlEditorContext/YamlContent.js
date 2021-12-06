@@ -45,7 +45,13 @@ export function YamlContent({
         value={val}
         onChange={(_, text) => setChangedYamlFn(text)}
         editorDidMount={(_, editor) => setEditor(editor)}
-        options={{ minimap: { enabled: false }, readOnly }}
+        options={{
+          minimap: { enabled: false },
+          readOnly,
+          scrollbar: {
+            alwaysConsumeMouseWheel: false,
+          },
+        }}
       />
     </>
   );

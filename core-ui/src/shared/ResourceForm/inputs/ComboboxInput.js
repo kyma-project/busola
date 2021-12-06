@@ -26,7 +26,7 @@ export function ComboboxInput({
         ref={_ref}
         showAllEntries
         searchFullString
-        selectionType="auto-inline"
+        selectionType="manual"
         onSelectionChange={(_, selected) =>
           setValue(selected.key !== -1 ? selected.key : selected.text)
         }
