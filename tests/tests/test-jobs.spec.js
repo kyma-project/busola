@@ -129,7 +129,7 @@ context('Test Jobs', () => {
     // status
     cy.getIframeBody()
       .find('[role="status"]', { timeout: 30 * 1000 })
-      .should('have.text', 'COMPLETED');
+      .should('have.text', 'Completed');
 
     // check logs
     checkJobLogs({
@@ -148,7 +148,7 @@ context('Test Jobs', () => {
       .click();
 
     // pod status
-    cy.getIframeBody().contains('COMPLETED');
+    cy.getIframeBody().contains('Completed');
   });
 
   it('Edit Job', () => {

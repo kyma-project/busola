@@ -11,7 +11,12 @@ export const FunctionsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const customColumns = [
     {
       header: t('common.headers.status'),
-      value: resource => <LambdaStatusBadge status={resource.status} />,
+      value: resource => (
+        <LambdaStatusBadge
+          resourceKind={otherParams.resourceType}
+          status={resource.status}
+        />
+      ),
     },
     {
       header: t('functions.headers.source-type'),

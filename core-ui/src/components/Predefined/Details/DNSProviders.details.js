@@ -54,7 +54,9 @@ export const DNSProvidersDetails = ({ DefaultRenderer, ...otherParams }) => {
     {
       header: t('dnsproviders.headers.status'),
       value: dnsprovider => (
-        <StatusBadge autoResolveType>{dnsprovider.status?.state}</StatusBadge>
+        <StatusBadge autoResolveType>
+          {dnsprovider.status?.state || 'unknown'}
+        </StatusBadge>
       ),
     },
   ];
