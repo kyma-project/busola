@@ -30,6 +30,6 @@ context('Clean up namespace', () => {
   it('Check if the namespace is terminated (step 2)', { retries: 3 }, () => {
     cy.getIframeBody()
       .find('tbody tr [role="status"]')
-      .should('have.text', 'TERMINATING');
+      .should('have.text', 'Terminating');
   });
 });
