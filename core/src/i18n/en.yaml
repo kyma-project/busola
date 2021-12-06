@@ -76,7 +76,7 @@ api-rules:
     placeholder: Choose the service to expose.
   statuses:
     error: Error
-    ok: Ok
+    ok: OK
     skipped: Skipped
   title: API Rules
 applications:
