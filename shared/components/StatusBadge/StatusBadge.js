@@ -8,6 +8,7 @@ import classNames from 'classnames';
 import { Tooltip } from '../Tooltip/Tooltip';
 
 const resolveType = status => {
+  console.log(status === 'OK');
   if (typeof status !== 'string') {
     console.warn(
       `'autoResolveType' prop requires 'children' prop to be a string.`,
@@ -17,12 +18,14 @@ const resolveType = status => {
 
   switch (status.toUpperCase()) {
     case 'INITIAL':
+    case 'PENDING':
       return 'informative';
 
     case 'READY':
     case 'RUNNING':
     case 'SUCCESS':
     case 'SUCCEEDED':
+    case 'OK':
       return 'positive';
 
     case 'UNKNOWN':
@@ -32,6 +35,7 @@ const resolveType = status => {
     case 'FAILED':
     case 'ERROR':
     case 'FAILURE':
+    case 'INVALID':
       return 'negative';
 
     default:
@@ -71,6 +75,7 @@ export const StatusBadge = ({
   className,
   i18n,
 }) => {
+  console.log(value);
   if (autoResolveType) type = resolveType(value);
   else
     for (const key of TYPE_FALLBACK.keys()) {

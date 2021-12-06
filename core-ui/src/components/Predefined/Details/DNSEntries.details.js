@@ -81,7 +81,11 @@ export const DNSEntriesDetails = ({ DefaultRenderer, ...otherParams }) => {
     {
       header: t('dnsentries.headers.status'),
       value: dnsentry => (
-        <StatusBadge autoResolveType>
+        <StatusBadge
+          autoResolveType
+          additionalContent={dnsentry.status?.message}
+          noTooltip={dnsentry.status?.state === 'Ready'}
+        >
           {dnsentry.status?.state || 'UNKNOWN'}
         </StatusBadge>
       ),

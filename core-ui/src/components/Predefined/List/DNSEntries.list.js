@@ -9,9 +9,13 @@ export const DNSEntriesList = ({ DefaultRenderer, ...otherParams }) => {
   const customColumns = [
     {
       header: t('dnsentries.headers.status'),
-      value: dnsprovider => (
-        <StatusBadge autoResolveType>
-          {dnsprovider.status?.state || 'UNKNOWN'}
+      value: dnsentry => (
+        <StatusBadge
+          autoResolveType
+          additionalContent={dnsentry.status?.message}
+          noTooltip={dnsentry.status?.state === 'Ready'}
+        >
+          {dnsentry.status?.state || 'UNKNOWN'}
         </StatusBadge>
       ),
     },
