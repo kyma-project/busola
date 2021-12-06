@@ -244,7 +244,7 @@ cluster-roles:
 clusters:
   add:
     errors:
-      failed-to-add-cluster: Failed to add a cluster
+      failed-to-add-cluster: Failed to connect a cluster
     title: Connect a Cluster
   buttons:
     apply-configuration: Apply Configuration
@@ -317,7 +317,7 @@ clusters:
     context: Current context
     editor-label: 'or paste your kubeconfig here:'
     incomplete: We couldn't find enough authentication information in your kubeconfig. You can enter it manually.
-    intro: To add a cluster, all you have to do is provide the cluster configuration – called “kubeconfig” in the Kubernetes world.
+    intro: To connect a cluster, all you have to do is provide the cluster configuration – called “kubeconfig” in the Kubernetes world.
     kubeconfig: Provide Kubeconfig
     not-an-object: kubeconfig is not an object
     storage: Privacy Options
