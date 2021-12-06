@@ -7,10 +7,11 @@ export function ResourceFormWrapper({
   children,
   isAdvanced,
   setCustomValid,
+  validationRef,
   ...props
 }) {
   useEffect(() => {
-    if (setCustomValid) {
+    if (validationRef) {
       const valid = React.Children.toArray(children)
         .filter(child => child.props.validate)
         .every(child => {
@@ -21,9 +22,9 @@ export function ResourceFormWrapper({
             return child.props.validate(resource);
           }
         });
-      setCustomValid(valid);
+      validationRef.current = validationRef.current && valid;
     }
-  }, [resource, children, setCustomValid]);
+  }, [resource, children, validationRef]);
 
   if (!resource) {
     return children;
@@ -33,11 +34,13 @@ export function ResourceFormWrapper({
     if (!child) {
       return null;
     } else if (child.type === React.Fragment) {
+    } else if (child.type === React.Fragment) {
       return (
         <ResourceFormWrapper
           resource={resource}
           setResource={setResource}
           isAdvanced={isAdvanced}
+          validationRef={validationRef}
         >
           {child.props.children}
         </ResourceFormWrapper>
@@ -51,6 +54,7 @@ export function ResourceFormWrapper({
         return React.cloneElement(child, {
           resource: child.props.resource || resource,
           setResource: child.props.setResource || setResource,
+          validationRef,
           isAdvanced,
           ...props,
         });

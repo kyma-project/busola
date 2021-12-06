@@ -1,13 +1,36 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Dialog, Button } from 'fundamental-react';
 import LuigiClient from '@luigi-project/client';
 import { useTranslation } from 'react-i18next';
 
-import { useNotification } from '../../contexts/NotificationContext';
-import { Tooltip } from '../Tooltip/Tooltip';
-import CustomPropTypes from '../../typechecking/CustomPropTypes';
-import { useCustomFormValidator } from '../../hooks/useCustomFormValidator';
+import { useNotification, Tooltip, CustomPropTypes } from 'react-shared';
+
+/* NOTE
+ * this is a copy of old shared/components/ModalWithForm. The primary reason is
+ * that service-catalog is soon to go away, so it was easier to just keep a
+ * service-catalog specific version, rather than updating service catalog to
+ * the changes.
+ */
+
+const isFormValid = (formRef, reportValidity = false) => {
+  if (!formRef || !formRef.current) return false;
+
+  if (reportValidity && typeof formRef.current.reportValidity === 'function') {
+    // for IE
+    formRef.current.reportValidity();
+  }
+
+  return formRef.current.checkValidity();
+};
+
+const isJsonSchemaFormValid = formRef => {
+  if (!formRef || !formRef.current) return true;
+
+  return formRef.current.state && formRef.current.state.errors
+    ? !formRef.current.state.errors.length
+    : true;
+};
 
 export const ModalWithForm = ({
   performRefetch,
@@ -29,28 +52,36 @@ export const ModalWithForm = ({
 }) => {
   const { t } = useTranslation(null, { i18n });
   const [isOpen, setOpen] = useState(alwaysOpen || false);
-
-  const {
-    isValid,
-    formElementRef,
-    setCustomValid,
-    revalidate,
-  } = useCustomFormValidator();
+  const [isValid, setValid] = useState(false);
+  const [customValid, setCustomValid] = useState(true);
+  const formElementRef = useRef(null);
+  const jsonSchemaFormRef = useRef(null);
   const notificationManager = useNotification();
 
   confirmText = confirmText || t('common.buttons.create');
 
   useEffect(() => {
     if (!alwaysOpen) setOpenStatus(opened); // if alwaysOpen===true we can ignore the 'opened' prop
-  }, [opened]); // eslint-disable-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [opened]);
 
   useEffect(() => {
     if (isOpen !== undefined) onModalOpenStateChange(isOpen);
-  }, [isOpen]); // eslint-disable-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
+
+  function checkAllForms(reportValidity = false) {
+    const _isEveryFormValid =
+      isFormValid(formElementRef, reportValidity) &&
+      isJsonSchemaFormValid(jsonSchemaFormRef);
+    if (isValid !== _isEveryFormValid) {
+      setValid(_isEveryFormValid);
+    }
+  }
 
   function setOpenStatus(status) {
     if (status) {
-      setTimeout(() => revalidate());
+      checkAllForms(false);
       LuigiClient.uxManager().addBackdrop();
     } else {
       LuigiClient.uxManager().removeBackdrop();
@@ -60,7 +91,7 @@ export const ModalWithForm = ({
   }
 
   function handleFormChanged(e) {
-    setTimeout(() => revalidate());
+    setTimeout(() => checkAllForms());
     if (!e) return;
     if (e.target) {
       if (e.target.getAttribute('data-ignore-visual-validation')) {
@@ -90,7 +121,9 @@ export const ModalWithForm = ({
   }
 
   function handleFormSubmit() {
-    if (isValid) {
+    const _isEveryFormValid =
+      isFormValid(formElementRef) && isJsonSchemaFormValid(jsonSchemaFormRef);
+    if (_isEveryFormValid) {
       formElementRef.current.dispatchEvent(
         new Event('submit', { cancelable: true }),
       );
@@ -99,7 +132,7 @@ export const ModalWithForm = ({
   }
 
   function renderConfirmButton() {
-    const disabled = !isValid;
+    const disabled = !isValid || !customValid;
     const button = (
       <Button
         disabled={disabled}
@@ -167,12 +200,19 @@ export const ModalWithForm = ({
         {isOpen &&
           renderForm({
             formElementRef,
+            jsonSchemaFormRef,
             isValid,
-            setCustomValid,
+            setCustomValid: isValid => {
+              // revalidate rest of the form
+              setValid(formElementRef.current.checkValidity());
+              setCustomValid(isValid);
+            },
+            setValid: setValid,
             onChange: handleFormChanged,
             onError: handleFormError,
             onCompleted: handleFormSuccess,
             performManualSubmit: handleFormSubmit,
+            setValidity: setValid,
             item: item,
           })}
       </Dialog>
