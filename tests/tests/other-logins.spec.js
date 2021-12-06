@@ -50,7 +50,8 @@ context('Other login options', () => {
         .click();
 
       cy.getIframeBody()
-        .contains('Connect a cluster')
+        .find('[role="dialog"]')
+        .contains('button', 'Connect a cluster')
         .click();
 
       cy.url().should('match', /namespaces$/);
