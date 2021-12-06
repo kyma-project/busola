@@ -47,10 +47,15 @@ export function AddClusterWizard({
       } else {
         setStorage('localStorage');
       }
-    }
-  }, [kubeconfig]);
 
-  function updateKubeconfig(kubeconfig) {
+      const hasValidAuth = hasAuth
+        ? true
+        : authFormRef.current?.checkValidity();
+      setAuthValid(!!hasValidAuth);
+    }
+  }, [kubeconfig, hasAuth]);
+
+  const updateKubeconfig = kubeconfig => {
     if (!kubeconfig) {
       setKubeconfig(null);
       return;
@@ -63,7 +68,7 @@ export function AddClusterWizard({
     setHasAuth(hasAuth);
 
     setKubeconfig(kubeconfig);
-  }
+  };
 
   const onComplete = () => {
     try {
@@ -81,6 +86,7 @@ export function AddClusterWizard({
       console.warn(e);
     }
   };
+
   return (
     <Wizard
       onCancel={onCancel}
