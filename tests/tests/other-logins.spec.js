@@ -50,7 +50,7 @@ context('Other login options', () => {
         .click();
 
       cy.getIframeBody()
-        .contains('Add Cluster')
+        .contains('Connect Cluster')
         .click();
 
       cy.url().should('match', /namespaces$/);

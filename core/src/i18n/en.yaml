@@ -245,13 +245,13 @@ clusters:
   add:
     errors:
       failed-to-add-cluster: Failed to add a cluster
-    title: Connect a cluster
+    title: Connect a Cluster
   buttons:
     apply-configuration: Apply Configuration
     apply-kubeconfig: Apply kubeconfig
     next-step: Next Step
     previous-step: Previous Step
-    verify-and-add: Connect cluster
+    verify-and-add: Connect Cluster
   common:
     api-server-address: API server address
     download-kubeconfig: Download Kubeconfig
