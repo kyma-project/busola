@@ -22,7 +22,7 @@ export function ApplicationStatus({ application }) {
   const status = getStatus(application);
   const statusType = getStatusType(application);
   const statusDescription = application.status?.installationStatus?.description;
-  console.log(statusDescription);
+
   return (
     <StatusBadge
       additionalContent={statusDescription}
