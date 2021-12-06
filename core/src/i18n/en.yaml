@@ -1102,13 +1102,18 @@ namespaces:
       error: 'Error while loading {{title}} data due to: {{message}}'
       pods: $t(pods.title)
       title: Healthy Resources
+  statuses:
+    active: Active
+    terminating: Terminating
   title: Namespaces
   tooltips:
+    active: The Namespace is available for use in the system.
     container-memory-limit: Define memory constraints for individual containers in your Namespace.
     create: Select this option to disable Istio to mediate all communication between the Pods in your Namespace.
     healthy-resources: '{{value}}/{{total}} {{resourceType}} are healthy.'
     memory-examples: 'Use plain value in bytes (128974848) or equivalent suffixes (e.g.: 129e6, 129M, 123Mi).'
     no-resources: There are no {{resourceType}} in this Namespace.
+    terminating: The Namespace is undergoing graceful termination.
     total-memory-limit: Define constraints that limit total memory consumption in your Namespace.
     usage-of-memory-limits: This Namespace uses {{valueText}} of {{maxText}} its memory limits.
     usage-of-memory-requests: This Namespace uses {{valueText}} of {{maxText}} its memory requests.
