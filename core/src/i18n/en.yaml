@@ -8,6 +8,9 @@ addons:
   messages:
     created: Addons Configuration {{name}} created.
   repository-urls: Repository URLs
+  statuses:
+    failed: Failed
+    ready: Ready
   title: Addons
   urls: URLs
 api-rules:
@@ -123,6 +126,10 @@ applications:
     description: Specify a description for your Application.
     name: Specify a name for your Application.
     namespace: Choose Namespace.
+  statuses:
+    deployed: Deployed
+    error: Error
+    provisioning: Provisioning
   subtitle:
     bound-to: Services and events bound to '{{namespace}}'.
     connect-app: Connect Application
@@ -132,6 +139,8 @@ applications:
     namespace-bindings: Namespace Bindings
     provided-services: Provided Services and events
   title: Applications
+  tooltips:
+    provisioning: The Application is being provisioned asynchronously.
 brokers:
   description: <0>Service Broker</0> provides a set of managed services that a third party offers and maintains.
   headers:

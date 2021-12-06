@@ -10,12 +10,14 @@ export const GenericAddonsConfigurationsList = ({
   DefaultRenderer,
   ...otherParams
 }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const statusColumn = {
     header: t('common.headers.status'),
     value: addon => (
-      <StatusBadge autoResolveType>{addon.status?.phase}</StatusBadge>
+      <StatusBadge resourceKind="addons" noTooltip autoResolveType i18n={i18n}>
+        {addon.status?.phase}
+      </StatusBadge>
     ),
   };
 
