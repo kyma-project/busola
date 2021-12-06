@@ -21,7 +21,7 @@ export function mockAddClusterDisabled() {
 context('Connect Cluster disabled', () => {
   beforeEach(mockAddClusterDisabled);
 
-  it('Does not display "Connect a Cluster" on landing page', () => {
+  it('Does not display "Connect Cluster" on landing page', () => {
     cy.visit(config.clusterAddress);
 
     cy.getIframeBody()
