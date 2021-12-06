@@ -34,7 +34,6 @@ export function ResourceFormWrapper({
     if (!child) {
       return null;
     } else if (child.type === React.Fragment) {
-    } else if (child.type === React.Fragment) {
       return (
         <ResourceFormWrapper
           resource={resource}
