@@ -249,7 +249,7 @@ clusters:
   buttons:
     apply-configuration: Apply configuration
     apply-kubeconfig: Apply kubeconfig
-    next-step: Next Step
+    next-step: Next step
     previous-step: Previous Step
     verify-and-add: Connect Cluster
   common:
