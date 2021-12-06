@@ -9,25 +9,13 @@ export function SingleForm({
   children,
   resource,
   setResource,
-  onValid,
   className,
   setCustomValid,
   ...props
 }) {
   return (
     <section className={classnames('resource-form', className)}>
-      <form
-        ref={formElementRef}
-        onSubmit={createResource}
-        onChange={() => {
-          if (onValid) {
-            setTimeout(() => {
-              onValid(formElementRef.current?.checkValidity());
-            });
-          }
-        }}
-        {...props}
-      >
+      <form ref={formElementRef} onSubmit={createResource} {...props}>
         <ResourceFormWrapper
           resource={resource}
           setResource={setResource}
