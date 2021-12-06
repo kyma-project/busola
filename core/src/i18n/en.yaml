@@ -245,7 +245,7 @@ clusters:
   add:
     errors:
       failed-to-add-cluster: Failed to connect a cluster
-    title: Connect a Cluster
+    title: Connect a cluster
   buttons:
     apply-configuration: Apply configuration
     apply-kubeconfig: Apply kubeconfig
