@@ -5,7 +5,7 @@ import { useGet, GenericList, ReadableCreationTimestamp } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 import { useMessageList, EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 
-export function ClusterNodesWarnings() {
+export function ClusterNodeMessages() {
   const { i18n, t } = useTranslation();
   const { data, loading, error } = useGet('/api/v1/events');
 
@@ -17,9 +17,9 @@ export function ClusterNodesWarnings() {
   } = useMessageList(data?.items);
 
   const entries =
-    displayType === EVENT_MESSAGE_TYPE.ALL
+    displayType === EVENT_MESSAGE_TYPE.ALL.key
       ? sortedItems
-      : sortedItems.filter(e => e.type === displayType.type);
+      : sortedItems.filter(e => e.type === displayType);
 
   const navigateToNodeDetails = nodeName => {
     LuigiClient.linkManager().navigate(`nodes/${nodeName}`);

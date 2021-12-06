@@ -3,7 +3,7 @@ import { useGet, GenericList, ReadableCreationTimestamp } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 import { useMessageList, EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 
-export function NodeWarnings({ nodeName }) {
+export function NodeMessages({ nodeName }) {
   const { data, loading, error } = useGet('/api/v1/events');
 
   const {
@@ -15,9 +15,9 @@ export function NodeWarnings({ nodeName }) {
 
   const hostEntries = sortedItems.filter(e => e.source.host === nodeName);
   const entries =
-    displayType === EVENT_MESSAGE_TYPE.ALL
+    displayType === EVENT_MESSAGE_TYPE.ALL.key
       ? hostEntries
-      : hostEntries.filter(e => e.type === displayType.type);
+      : hostEntries.filter(e => e.type === displayType);
 
   const { t, i18n } = useTranslation();
   const headerRenderer = () => [

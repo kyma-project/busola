@@ -5,9 +5,9 @@ import { Dropdown } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
 export const EVENT_MESSAGE_TYPE = {
-  ALL: { type: 'All', label: 'all' },
-  NORMAL: { type: 'Normal', label: 'normal' },
-  WARNING: { type: 'Warning', label: 'warnings' },
+  ALL: { key: 'All', text: 'all' },
+  NORMAL: { key: 'Normal', text: 'normal' },
+  WARNING: { key: 'Warning', text: 'warnings' },
 };
 
 export const RESOURCE_PATH = {
@@ -21,10 +21,11 @@ export const RESOURCE_PATH = {
   Function: 'functions',
   ServiceBroker: 'brokers',
   Certificate: 'certificates',
+  Node: 'nodes',
 };
 
 export const useMessageList = items => {
-  const [displayType, setDisplayType] = useState(EVENT_MESSAGE_TYPE.ALL);
+  const [displayType, setDisplayType] = useState(EVENT_MESSAGE_TYPE.ALL.key);
   const [sortedItems, setSortedItems] = useState([]);
   const { t } = useTranslation();
 
@@ -47,12 +48,25 @@ export const useMessageList = items => {
       .fromContext('cluster')
       .navigate(path);
   };
+  const navigateToNodeDetails = nodeName => {
+    LuigiClient.linkManager().navigate(`nodes/${nodeName}`);
+  };
+
   const formatInvolvedObject = obj => {
     const namespacePrefix = obj.namespace ? `${obj.namespace}/` : '';
     const text = `${obj.kind} ${namespacePrefix}/${obj.name}`;
     const isLink = !!RESOURCE_PATH[obj.kind];
     return isLink ? (
-      <Link className="fd-link" onClick={() => navigateToObjectDetails(obj)}>
+      <Link
+        className="fd-link"
+        onClick={() => {
+          if (obj.kind === 'Node') {
+            navigateToNodeDetails(obj.name);
+          } else {
+            navigateToObjectDetails(obj);
+          }
+        }}
+      >
         {text}
       </Link>
     ) : (
@@ -64,11 +78,13 @@ export const useMessageList = items => {
     <Dropdown
       compact
       options={Object.values(EVENT_MESSAGE_TYPE).map(el => ({
-        key: el,
-        text: t(`node-details.${el.label}`),
+        key: el.key,
+        text: t(`node-details.${el.text}`),
       }))}
       selectedKey={displayType}
-      onSelect={(_, { key }) => setDisplayType(key)}
+      onSelect={(_, { key }) => {
+        setDisplayType(key);
+      }}
     />
   );
 

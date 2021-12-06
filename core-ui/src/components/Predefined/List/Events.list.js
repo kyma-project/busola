@@ -43,9 +43,9 @@ function Events({ namespace, i18n }) {
   };
 
   const entries =
-    displayType === EVENT_MESSAGE_TYPE.ALL
+    displayType === EVENT_MESSAGE_TYPE.ALL.key
       ? sortedItems
-      : sortedItems.filter(e => e.type === displayType.type);
+      : sortedItems.filter(e => e.type === displayType);
 
   const headerRenderer = () => [
     t('namespaces.events.headers.message'),

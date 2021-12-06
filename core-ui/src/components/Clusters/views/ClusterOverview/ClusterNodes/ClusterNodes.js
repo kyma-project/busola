@@ -5,7 +5,7 @@ import { LayoutPanel, Link } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { useNodesQuery } from 'components/Nodes/nodeQueries';
 import { NodeResources } from 'components/Nodes/NodeResources/NodeResources';
-import { ClusterNodesWarnings } from './NodeWarningsList';
+import { ClusterNodeMessages } from './ClusterNodeMessages';
 import './ClusterNodes.scss';
 
 const NodeHeader = ({ nodeName }) => {
@@ -59,7 +59,7 @@ export function ClusterNodes() {
           />
         </LayoutPanel.Footer>
       )}
-      <ClusterNodesWarnings />
+      <ClusterNodeMessages />
     </>
   );
 }
