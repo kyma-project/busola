@@ -67,5 +67,5 @@ Cypress.Commands.add('checkApiRuleStatus', ApiRuleName => {
 
   cy.getIframeBody()
     .find('[role="status"]')
-    .should('have.text', 'Ok');
+    .should('have.text', 'OK');
 });
