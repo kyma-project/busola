@@ -78,7 +78,6 @@ api-rules:
     ns-no-services: No Services in this Namespace.
     placeholder: Choose the service to expose.
   statuses:
-    error: Error
     ok: OK
     skipped: Skipped
   title: API Rules
@@ -419,6 +418,8 @@ common:
     secret-ref-name: Select name
     secret-ref-namespace: Select Namespace
   protected-resource: This resource is protected.
+  statuses:
+    error: Error
   tooltips:
     copy-to-clipboard: Copy to clipboard
     download: Download
