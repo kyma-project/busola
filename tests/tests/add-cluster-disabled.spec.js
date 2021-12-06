@@ -23,7 +23,6 @@ context('Connect cluster disabled', () => {
 
   it('Does not display "Connect cluster" on landing page', () => {
     cy.visit(config.clusterAddress);
-    cy.wait(4000);
     cy.getIframeBody()
       .contains(/To view your clusters, go to BTP Cockpit/)
       .should('be.visible');
