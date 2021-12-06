@@ -7,7 +7,6 @@ import jsyaml from 'js-yaml';
 context('Multiple context kubeconfig', () => {
   it('User can choose different context with the multiple context kubeconfig', () => {
     cy.wrap(loadMultipleContextKubeconfig()).then(kubeconfig => {
-      console.log(kubeconfig);
 
       cy.visit(`${config.clusterAddress}/clusters`);
 
