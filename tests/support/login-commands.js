@@ -5,7 +5,7 @@ Cypress.Commands.add(
   (fileName = 'kubeconfig.yaml') => {
     cy.visit(`${config.clusterAddress}/clusters`)
       .getIframeBody()
-      .contains('Connect a Cluster')
+      .contains('Connect a cluster')
       .click();
 
     cy.getIframeBody()
@@ -17,7 +17,7 @@ Cypress.Commands.add(
       .click();
 
     cy.getIframeBody()
-      .contains('Connect Cluster')
+      .contains('Connect a cluster')
       .click();
 
     cy.url().should('match', /namespaces$/);

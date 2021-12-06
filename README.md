@@ -80,7 +80,7 @@ Use the following command to run Busola with the [`core`](./core) and all other 
 npm run start
 ```
 
-After a while, open the [http://localhost:8080](http://localhost:8080) address in your browser, and provide your kubeconfig in the Connect Cluster wizard.
+After a while, open the [http://localhost:8080](http://localhost:8080) address in your browser, and provide your kubeconfig in the Connect cluster wizard.
 
 Once you started Busola locally, you can begin the development. All modules have the hot-reload feature enabled, therefore, you can edit the code in real-time and see the changes in your browser.
 

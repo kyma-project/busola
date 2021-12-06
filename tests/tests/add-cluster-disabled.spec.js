@@ -18,10 +18,10 @@ export function mockAddClusterDisabled() {
   cy.intercept(requestData, configMock);
 }
 
-context('Connect Cluster disabled', () => {
+context('Connect cluster disabled', () => {
   beforeEach(mockAddClusterDisabled);
 
-  it('Does not display "Connect Cluster" on landing page', () => {
+  it('Does not display "Connect cluster" on landing page', () => {
     cy.visit(config.clusterAddress);
 
     cy.getIframeBody()
@@ -29,7 +29,7 @@ context('Connect Cluster disabled', () => {
       .should('be.visible');
 
     cy.get('button')
-      .contains(/Connect Cluster/)
+      .contains(/Connect a cluster/)
       .should('not.exist');
   });
 
@@ -52,7 +52,7 @@ context('Connect Cluster disabled', () => {
       cy.get('[data-testid=clusters-overview]').click();
 
       cy.get('button')
-        .contains(/Connect Cluster/)
+        .contains(/Connect a cluster/)
         .should('not.exist');
     });
   });
