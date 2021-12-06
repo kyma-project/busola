@@ -20,7 +20,10 @@ i18next
     fallbackLng: false,
     backend: {
       loadPath: '/i18n/{{lng}}.yaml',
-      parse: data => yaml.load(data),
+      parse: data => ({
+        ...yaml.load(data),
+        fallback: '{{fallback}}',
+      }),
     },
     saveMissing: true,
     missingKeyHandler: (_lngs, _ns, key) => {

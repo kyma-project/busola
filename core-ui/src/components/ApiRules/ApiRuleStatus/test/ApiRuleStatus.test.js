@@ -3,6 +3,12 @@ import { render } from '@testing-library/react';
 
 import ApiRuleStatus from '../ApiRuleStatus';
 
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: key => key,
+  }),
+}));
+
 describe('ApiRuleStatus', () => {
   it('Renders nothing if status is none', () => {
     const apiRule = { status: null };
