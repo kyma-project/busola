@@ -42,11 +42,11 @@ Cypress.Commands.add('createSimpleFunction', functionName => {
 
   cy.getIframeBody()
     .find('[role="status"]', { timeout: 60 * 1000 })
-    .should('have.text', 'BUILDING');
+    .should('have.text', 'Building');
 
   cy.getIframeBody()
     .find('[role="status"]', { timeout: 60 * 1000 })
-    .should('not.have.text', 'BUILDING');
+    .should('not.have.text', 'Building');
 });
 
 Cypress.Commands.add(
@@ -87,11 +87,11 @@ Cypress.Commands.add(
 
     cy.getIframeBody()
       .find('[role="status"]', { timeout: 60 * 1000 })
-      .should('not.have.text', 'BUILDING');
+      .should('not.have.text', 'Building');
 
     cy.getIframeBody()
       .find('[role="status"]', { timeout: 120 * 1000 })
-      .should('have.text', 'RUNNING');
+      .should('have.text', 'Running');
 
     cy.getLeftNav()
       .contains('Workloads')

@@ -62,7 +62,18 @@ async function createAppSwitcher() {
     testId: 'clusters-overview',
   };
 
-  return { items: [...clusterNodes, clusterOverviewNode] };
+  const noClustersNode = {
+    title: i18next.t('clusters.overview.title-no-clusters-available'),
+    subTitle: i18next.t('clusters.overview.title-no-clusters-available'),
+    link: '#',
+  };
+
+  return {
+    items:
+      [...clusterNodes, clusterOverviewNode].length > 1
+        ? [...clusterNodes, clusterOverviewNode]
+        : [clusterOverviewNode, noClustersNode],
+  };
 }
 
 export async function reloadNavigation() {
