@@ -13,7 +13,7 @@ context('Other login options', () => {
       cy.visit(`${config.clusterAddress}/clusters`);
 
       cy.getIframeBody()
-        .contains('Add a Cluster')
+        .contains('Connect a cluster')
         .click();
 
       cy.getIframeBody()
@@ -50,7 +50,8 @@ context('Other login options', () => {
         .click();
 
       cy.getIframeBody()
-        .contains('Add Cluster')
+        .find('[role="dialog"]')
+        .contains('button', 'Connect a cluster')
         .click();
 
       cy.url().should('match', /namespaces$/);
