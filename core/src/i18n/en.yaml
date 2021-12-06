@@ -251,7 +251,7 @@ clusters:
     apply-kubeconfig: Apply kubeconfig
     next-step: Next step
     previous-step: Previous Step
-    verify-and-add: Connect Cluster
+    verify-and-add: Connect a cluster
   common:
     api-server-address: API server address
     download-kubeconfig: Download Kubeconfig
