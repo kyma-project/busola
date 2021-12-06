@@ -2,6 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
+  ControlledBy,
   ReadableCreationTimestamp,
   EMPTY_TEXT_PLACEHOLDER,
 } from 'react-shared';
@@ -41,6 +42,12 @@ export function JobsDetails({ DefaultRenderer, ...otherParams }) {
         ) : (
           EMPTY_TEXT_PLACEHOLDER
         ),
+    },
+    {
+      header: t('common.headers.owner'),
+      value: job => (
+        <ControlledBy ownerReferences={job.metadata.ownerReferences} />
+      ),
     },
   ];
 
