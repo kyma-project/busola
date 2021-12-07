@@ -191,6 +191,8 @@ const ServiceInstanceBindings = ({ serviceInstance, i18n }) => {
           : 'success'
       }
       tooltipContent={serviceBindingUsage.status?.conditions[0].message}
+      resourceKind="instances"
+      i18n={i18n}
     >
       {serviceBindingUsage.status?.conditions[0].reason || 'ready'}
     </StatusBadge>,
