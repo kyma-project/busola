@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Button } from 'fundamental-react';
-import { Tooltip, ModalWithForm, useMicrofrontendContext } from 'react-shared';
+import { Tooltip, useMicrofrontendContext } from 'react-shared';
 
 import './ServiceClassDetails.scss';
 import { getResourceDisplayName, isStringValueEqualToTrue } from 'helpers';
@@ -9,6 +9,7 @@ import { createInstanceConstants } from 'helpers/constants';
 import CreateInstanceForm from './CreateInstanceForm/CreateInstanceForm';
 import ServiceClassDetailsHeader from './ServiceClassDetailsHeader/ServiceClassDetailsHeader';
 import ServiceClassInstancesTable from './ServiceClassInstancesTable/ServiceClassInstancesTable';
+import { ModalWithForm } from '../ModalWithForm/ModalWithForm';
 
 export default function ServiceClassDetails({
   serviceClass,
