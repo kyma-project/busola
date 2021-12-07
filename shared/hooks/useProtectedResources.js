@@ -21,7 +21,7 @@ export function useProtectedResources(i18n) {
 
   const getEntryProtection = entry => {
     return protectedResourceRules.filter(rule =>
-      Object.entries(rule.match).every(
+      Object.entries(rule?.match || {}).every(
         ([pattern, value]) => jp.value(entry, pattern) === value,
       ),
     );

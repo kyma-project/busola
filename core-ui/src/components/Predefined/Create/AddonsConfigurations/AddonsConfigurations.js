@@ -114,6 +114,7 @@ export const AddonsConfigurations = ({
             id={`${resourceType}-name`}
             kind={resourceType}
             i18n={i18n}
+            value={name}
           />
         </div>
 

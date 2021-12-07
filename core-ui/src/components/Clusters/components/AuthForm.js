@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MessageStrip, Switch } from 'fundamental-react';
 import * as jp from 'jsonpath';
@@ -75,10 +75,10 @@ const TokenForm = ({ resource, ...props }) => {
 };
 
 export function AuthForm({
-  onValid,
   formElementRef,
   resource,
   setResource,
+  revalidate,
   ...props
 }) {
   const { t } = useTranslation();
@@ -86,6 +86,10 @@ export function AuthForm({
   const [useOidc, setUseOidc] = useState(
     getUser(resource)?.exec?.args?.[0] === 'oidc-login',
   );
+
+  useEffect(() => {
+    revalidate();
+  }, [useOidc, revalidate]);
 
   return (
     <ResourceForm.Wrapper
@@ -110,7 +114,7 @@ export function AuthForm({
         </MessageStrip>
       )}
       <ResourceForm.FormField
-        label="I'm using an OIDC provider instead"
+        label={t('clusters.wizard.auth.using-oidc')}
         input={() => <Switch compact onChange={() => setUseOidc(!useOidc)} />}
       />
       {useOidc && <OIDCform />}
