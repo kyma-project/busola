@@ -1118,7 +1118,7 @@ namespaces:
     terminating: Terminating
   title: Namespaces
   tooltips:
-    active: The Namespace is available for the use.
+    active: The Namespace is available for use.
     container-memory-limit: Define memory constraints for individual containers in your Namespace.
     create: Select this option to disable Istio to mediate all communication between the Pods in your Namespace.
     healthy-resources: '{{value}}/{{total}} {{resourceType}} are healthy.'
