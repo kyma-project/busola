@@ -23,6 +23,7 @@ export function ContextChooser(params) {
         required
         propertyPath='$["current-context"]'
         label={t('clusters.wizard.context')}
+        validate={value => !!value}
         input={({ value, setValue }) => (
           <Select
             id="context-chooser"
