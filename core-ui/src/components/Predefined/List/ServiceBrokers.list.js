@@ -21,7 +21,6 @@ export const ServiceBrokersList = ({ DefaultRenderer, ...otherParams }) => {
             autoResolveType
             additionalContent={lastCondition?.message}
             i18n={i18n}
-            resourceKind="brokers"
           >
             {lastCondition?.type || status.lastConditionState}
           </StatusBadge>

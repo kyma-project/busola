@@ -8,9 +8,6 @@ addons:
   messages:
     created: Addons Configuration {{name}} created.
   repository-urls: Repository URLs
-  statuses:
-    failed: Failed
-    ready: Ready
   title: Addons
   urls: URLs
 api-rules:
@@ -127,7 +124,6 @@ applications:
     namespace: Choose Namespace.
   statuses:
     deployed: Deployed
-    error: Error
     provisioning: Provisioning
   subtitle:
     bound-to: Services and events bound to '{{namespace}}'.
@@ -144,9 +140,6 @@ brokers:
   description: <0>Service Broker</0> provides a set of managed services that a third party offers and maintains.
   headers:
     url: URL
-  statuses:
-    failed: Failed
-    ready: Ready
   title: Brokers
 btp-instances:
   description: ' <0>BTP Service Instance</0> makes the functionality of a service available for consumption.'
@@ -428,6 +421,8 @@ common:
   protected-resource: This resource is protected.
   statuses:
     error: Error
+    failed: Failed
+    ready: Ready
   tooltips:
     copy-to-clipboard: Copy to clipboard
     download: Download
@@ -802,7 +797,6 @@ functions:
   statuses:
     building: Building
     deploying: Deploying
-    failed: Failed
     initializing: Initializing
     new-revision-error: New Revision Error
     running: Running
