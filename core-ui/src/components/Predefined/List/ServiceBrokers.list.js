@@ -14,9 +14,17 @@ export const ServiceBrokersList = ({ DefaultRenderer, ...otherParams }) => {
     },
     {
       header: t('common.headers.status'),
-      value: ({ status }) => (
-        <StatusBadge autoResolveType>{status.lastConditionState}</StatusBadge>
-      ),
+      value: ({ status }) => {
+        const lastCondition = status.conditions[status.conditions.length - 1];
+        return (
+          <StatusBadge
+            autoResolveType
+            additionalContent={lastCondition?.message}
+          >
+            {lastCondition?.type || status.lastConditionState}
+          </StatusBadge>
+        );
+      },
     },
   ];
 
