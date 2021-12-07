@@ -321,6 +321,7 @@ clusters:
       issuer-url: Issuer URL
       scopes: Scopes
       token: Token
+      using-oidc: I'm using an OIDC provider instead
     context: Current context
     editor-label: 'or paste your kubeconfig here:'
     incomplete: We couldn't find enough authentication information in your kubeconfig. You can enter it manually.
