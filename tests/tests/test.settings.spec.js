@@ -51,6 +51,10 @@ context('Test app settings and preferences', () => {
       .contains('button', 'Create')
       .click();
 
+    cy.getIframeBody()
+      .contains('h3', NAME, { timeout: 5000 })
+      .should('be.visible');
+
     cy.getLeftNav()
       .contains('Config Maps')
       .click();
