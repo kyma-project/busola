@@ -9,12 +9,16 @@ const RepositoryUrls = addon => {
     t('addons.headers.url'),
     t('common.headers.status'),
   ];
+
   const rowRenderer = repo => [
     repo.url,
     <StatusBadge
+      resourceKind="addons"
       ariaLabel={t('addons.addons-status')}
-      tooltipContent={repo.message}
+      additionalContent={repo.message}
       autoResolveType
+      i18n={i18n}
+      noTooltip={repo.status === 'Ready'}
     >
       {repo.status}
     </StatusBadge>,

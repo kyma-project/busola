@@ -11,7 +11,8 @@
     border-radius: 4px;
   }
 
-  .monaco-editor, .monaco-diff-editor {
+  .monaco-editor,
+  .monaco-diff-editor {
     border-radius: 4px;
 
     > div {
@@ -20,6 +21,7 @@
   }
 
   .fd-panel-tabs__actions {
+    display: flex;
     position: absolute;
     top: 0;
     right: 0;

@@ -8,6 +8,9 @@ addons:
   messages:
     created: Addons Configuration {{name}} created.
   repository-urls: Repository URLs
+  statuses:
+    failed: Failed
+    ready: Ready
   title: Addons
   urls: URLs
 api-rules:
@@ -75,7 +78,6 @@ api-rules:
     ns-no-services: No Services in this Namespace.
     placeholder: Choose the service to expose.
   statuses:
-    error: Error
     ok: OK
     skipped: Skipped
   title: API Rules
@@ -123,6 +125,10 @@ applications:
     description: Specify a description for your Application.
     name: Specify a name for your Application.
     namespace: Choose Namespace.
+  statuses:
+    deployed: Deployed
+    error: Error
+    provisioning: Provisioning
   subtitle:
     bound-to: Services and events bound to '{{namespace}}'.
     connect-app: Connect Application
@@ -132,6 +138,8 @@ applications:
     namespace-bindings: Namespace Bindings
     provided-services: Provided Services and events
   title: Applications
+  tooltips:
+    provisioning: The Application is being provisioned asynchronously.
 brokers:
   description: <0>Service Broker</0> provides a set of managed services that a third party offers and maintains.
   headers:
@@ -411,6 +419,8 @@ common:
     secret-ref-name: Select name
     secret-ref-namespace: Select Namespace
   protected-resource: This resource is protected.
+  statuses:
+    error: Error
   tooltips:
     copy-to-clipboard: Copy to clipboard
     download: Download
@@ -1103,13 +1113,18 @@ namespaces:
       error: 'Error while loading {{title}} data due to: {{message}}'
       pods: $t(pods.title)
       title: Healthy Resources
+  statuses:
+    active: Active
+    terminating: Terminating
   title: Namespaces
   tooltips:
+    active: The Namespace is available for use.
     container-memory-limit: Define memory constraints for individual containers in your Namespace.
     create: Select this option to disable Istio to mediate all communication between the Pods in your Namespace.
     healthy-resources: '{{value}}/{{total}} {{resourceType}} are healthy.'
     memory-examples: 'Use plain value in bytes (128974848) or equivalent suffixes (e.g.: 129e6, 129M, 123Mi).'
     no-resources: There are no {{resourceType}} in this Namespace.
+    terminating: The Namespace is being terminated.
     total-memory-limit: Define constraints that limit total memory consumption in your Namespace.
     usage-of-memory-limits: This Namespace uses {{valueText}} of {{maxText}} its memory limits.
     usage-of-memory-requests: This Namespace uses {{valueText}} of {{maxText}} its memory requests.
