@@ -43,7 +43,6 @@ const resolveType = status => {
 };
 
 const translate = (i18n, arrayOfVariableNames, fallbackValue) => {
-  console.log('arrayOfVariableNames', arrayOfVariableNames);
   if (!i18n) return fallbackValue;
   const { t } = useTranslation(null, { i18n });
   return t([...arrayOfVariableNames, 'fallback'], {
