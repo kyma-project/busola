@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { StatusBadge } from 'react-shared';
 
 const isStatusOk = application => {
@@ -17,7 +18,19 @@ const getStatusType = application => {
 };
 
 export function ApplicationStatus({ application }) {
+  const { i18n } = useTranslation();
   const status = getStatus(application);
   const statusType = getStatusType(application);
-  return <StatusBadge type={statusType}>{status}</StatusBadge>;
+  const statusDescription = application.status?.installationStatus?.description;
+
+  return (
+    <StatusBadge
+      additionalContent={statusDescription}
+      i18n={i18n}
+      type={statusType}
+      resourceKind="applications"
+    >
+      {status}
+    </StatusBadge>
+  );
 }
