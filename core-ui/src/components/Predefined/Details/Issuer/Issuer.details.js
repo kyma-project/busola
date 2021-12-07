@@ -1,8 +1,8 @@
 import React from 'react';
+import { ResourceStatus } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
 import { IssuerDomains } from './IssuerDomains';
-import { IssuerStatus } from './IssuerStatus';
 
 export function IssuersDetails({ DefaultRenderer, ...otherParams }) {
   const { t } = useTranslation();
@@ -14,7 +14,9 @@ export function IssuersDetails({ DefaultRenderer, ...otherParams }) {
     },
     {
       header: t('issuers.state'),
-      value: issuer => <IssuerStatus status={issuer.status} />,
+      value: issuer => (
+        <ResourceStatus status={issuer.status} resourceKind="issuers" />
+      ),
     },
     {
       header: t('issuers.server'),

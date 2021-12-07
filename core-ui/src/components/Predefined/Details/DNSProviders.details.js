@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { GenericList, StatusBadge } from 'react-shared';
+import { GenericList, ResourceStatus } from 'react-shared';
 
 const Domains = resource => {
   const { t, i18n } = useTranslation();
@@ -54,13 +54,7 @@ export const DNSProvidersDetails = ({ DefaultRenderer, ...otherParams }) => {
     {
       header: t('dnsproviders.headers.status'),
       value: dnsprovider => (
-        <StatusBadge
-          autoResolveType
-          additionalContent={dnsprovider.status?.message}
-          noTooltip={dnsprovider.status?.state === 'Ready'}
-        >
-          {dnsprovider.status?.state || 'unknown'}
-        </StatusBadge>
+        <ResourceStatus status={dnsprovider.status} resourceKind="dnsEntries" />
       ),
     },
   ];

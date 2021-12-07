@@ -1,5 +1,5 @@
 import React from 'react';
-import { StatusBadge } from 'react-shared';
+import { ResourceStatus } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-shared';
 import { Trans } from 'react-i18next';
@@ -10,13 +10,7 @@ export const DNSEntriesList = ({ DefaultRenderer, ...otherParams }) => {
     {
       header: t('dnsentries.headers.status'),
       value: dnsentry => (
-        <StatusBadge
-          autoResolveType
-          additionalContent={dnsentry.status?.message}
-          noTooltip={dnsentry.status?.state === 'Ready'}
-        >
-          {dnsentry.status?.state || 'UNKNOWN'}
-        </StatusBadge>
+        <ResourceStatus status={dnsentry.status} resourceKind="dnsEntries" />
       ),
     },
   ];

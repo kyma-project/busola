@@ -1,9 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { FormattedDatetime } from 'react-shared';
+import { FormattedDatetime, ResourceStatus } from 'react-shared';
 
 import { CertificateRefs } from './CertificateRefs';
-import { CertificateStatus } from './CertificateStatus';
 import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 
 export function CertificatesDetails({ DefaultRenderer, ...otherParams }) {
@@ -12,7 +11,12 @@ export function CertificatesDetails({ DefaultRenderer, ...otherParams }) {
   const customColumns = [
     {
       header: t('certificates.state'),
-      value: certificate => <CertificateStatus status={certificate.status} />,
+      value: certificate => (
+        <ResourceStatus
+          status={certificate.status}
+          resourceKind="certificates"
+        />
+      ),
     },
     {
       header: t('certificates.expiration-date'),

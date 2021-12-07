@@ -1,5 +1,5 @@
 import React from 'react';
-import { StatusBadge } from 'react-shared';
+import { ResourceStatus } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-shared';
 import { Trans } from 'react-i18next';
@@ -16,13 +16,10 @@ export const DNSProvidersList = ({ DefaultRenderer, ...otherParams }) => {
     {
       header: t('dnsproviders.headers.status'),
       value: dnsprovider => (
-        <StatusBadge
-          autoResolveType
-          additionalContent={dnsprovider.status?.message}
-          noTooltip={dnsprovider.status?.state === 'Ready'}
-        >
-          {dnsprovider.status?.state || 'UNKNOWN'}
-        </StatusBadge>
+        <ResourceStatus
+          status={dnsprovider.status}
+          resourceKind="dnsProviders"
+        />
       ),
     },
   ];

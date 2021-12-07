@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { LayoutPanel, FormItem, FormLabel } from 'fundamental-react';
-import { StatusBadge } from 'react-shared';
+import { ResourceStatus } from 'react-shared';
 
 const RowComponent = ({ name, value }) =>
   value ? (
@@ -81,13 +81,7 @@ export const DNSEntriesDetails = ({ DefaultRenderer, ...otherParams }) => {
     {
       header: t('dnsentries.headers.status'),
       value: dnsentry => (
-        <StatusBadge
-          autoResolveType
-          additionalContent={dnsentry.status?.message}
-          noTooltip={dnsentry.status?.state === 'Ready'}
-        >
-          {dnsentry.status?.state || 'UNKNOWN'}
-        </StatusBadge>
+        <ResourceStatus status={dnsentry.status} resourceKind="dnsEntries" />
       ),
     },
   ];
