@@ -11,7 +11,9 @@ export function ResourceStatus({
 }) {
   const { t } = useTranslation(null, { i18n });
 
-  if (!status) {
+  const state = status?.state || status?.status || status?.phase;
+
+  if (!state) {
     return (
       <StatusBadge noTooltip {...props}>
         {t('common.statuses.unknown')}
@@ -23,11 +25,11 @@ export function ResourceStatus({
     <StatusBadge
       autoResolveType
       additionalContent={status.message}
-      noTooltip={status.state === readyStatus}
+      noTooltip={state === readyStatus}
       i18n={i18n}
       {...props}
     >
-      {status.state}
+      {state}
     </StatusBadge>
   );
 }

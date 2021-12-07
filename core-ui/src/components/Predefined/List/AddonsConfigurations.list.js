@@ -1,5 +1,5 @@
 import React from 'react';
-import { StatusBadge } from 'react-shared';
+import { ResourceStatus } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-shared';
 import { Trans } from 'react-i18next';
@@ -10,12 +10,12 @@ export const GenericAddonsConfigurationsList = ({
   DefaultRenderer,
   ...otherParams
 }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const statusColumn = {
     header: t('common.headers.status'),
     value: addon => (
-      <StatusBadge autoResolveType>{addon.status?.phase}</StatusBadge>
+      <ResourceStatus status={addon.status} resourceKind="addons" i18n={i18n} />
     ),
   };
 
