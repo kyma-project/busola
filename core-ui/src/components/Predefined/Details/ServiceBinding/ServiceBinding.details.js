@@ -43,7 +43,12 @@ export const ServiceBindingsDetails = ({ DefaultRenderer, ...otherParams }) => {
     },
     {
       header: t('common.headers.status'),
-      value: resource => <BTPResourceStatus status={resource.status} />,
+      value: resource => (
+        <BTPResourceStatus
+          status={resource.status}
+          resourceKind="btp-service-bindings"
+        />
+      ),
     },
   ];
 

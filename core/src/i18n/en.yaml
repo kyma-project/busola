@@ -156,6 +156,10 @@ btp-instances:
     plan-name: The plan name to use for the Service Instance.
   plan-name: Plan Name
   resource-type: Service Instance
+  statuses:
+    createfailed: Create Failed
+    notprovisioned: Not Provisioned
+    provisioned: Provisioned
   title: BTP Service Instances
   tooltips:
     offering-name: You find the name of the SAP BTP service offering in the BTP Cockpit in the Service Marketplace.
@@ -184,6 +188,10 @@ btp-service-bindings:
     secret: Credentials Secret name
   resource-type: Service Binding
   secret: Secret
+  statuses:
+    createfailed: Create Failed
+    notprovisioned: Not Provisioned
+    provisioned: Provisioned
   title: BTP Service Bindings
   tooltips:
     parameters-from: Secret references to populate the parameters.
