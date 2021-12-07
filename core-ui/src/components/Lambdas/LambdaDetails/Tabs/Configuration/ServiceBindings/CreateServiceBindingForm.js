@@ -25,7 +25,7 @@ export default function CreateServiceBindingForm({
   setPopupModalMessage = () => void 0,
   onChange,
   formElementRef,
-  setValidity = () => void 0,
+  setCustomValid = () => void 0,
 }) {
   const createServiceBindingUsageSet = useCreateServiceBindingUsage();
   const { i18n } = useTranslation();
@@ -39,8 +39,8 @@ export default function CreateServiceBindingForm({
   const [secrets, setSecrets] = useState([]);
 
   useEffect(() => {
-    setValidity(false);
-  }, [setValidity]);
+    setCustomValid(false);
+  }, [setCustomValid]);
 
   useEffect(() => {
     if (!existingInstanceName || !serviceBindings?.length) {
@@ -63,7 +63,7 @@ export default function CreateServiceBindingForm({
         SERVICE_BINDINGS_PANEL.CREATE_MODAL.CONFIRM_BUTTON.POPUP_MESSAGES
           .NO_SERVICE_INSTANCE_SELECTED,
       );
-      setValidity(false);
+      setCustomValid(false);
       return;
     }
 
@@ -72,16 +72,16 @@ export default function CreateServiceBindingForm({
         SERVICE_BINDINGS_PANEL.CREATE_MODAL.CONFIRM_BUTTON.POPUP_MESSAGES
           .NO_SECRET_SELECTED,
       );
-      setValidity(false);
+      setCustomValid(false);
       return;
     }
 
-    setValidity(true);
+    setCustomValid(true);
   }, [
     existingInstanceName,
     createCredentials,
     existingSecretName,
-    setValidity,
+    setCustomValid,
     setPopupModalMessage,
   ]);
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import classnames from 'classnames';
 
 import { ModeSelector } from './ModeSelector';
@@ -37,6 +37,15 @@ export function ResourceForm({
   );
 
   const [mode, setMode] = React.useState(ModeSelector.MODE_SIMPLE);
+
+  const validationRef = useRef(true);
+
+  useEffect(() => {
+    if (setCustomValid) {
+      setCustomValid(validationRef.current);
+    }
+    validationRef.current = true;
+  }, [resource, children, setCustomValid]);
 
   const presetsSelector = presets?.length && (
     <Presets
@@ -87,7 +96,7 @@ export function ResourceForm({
             resource={resource}
             setResource={setResource}
             isAdvanced={true}
-            setCustomValid={setCustomValid}
+            validationRef={validationRef}
           >
             {children}
           </ResourceFormWrapper>
