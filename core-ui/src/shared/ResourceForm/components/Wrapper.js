@@ -30,53 +30,55 @@ export function ResourceFormWrapper({
     return children;
   }
 
-  return React.Children.map(children, child => {
-    if (!child) {
-      return null;
-    } else if (child.type === React.Fragment) {
-      return (
-        <ResourceFormWrapper
-          resource={resource}
-          setResource={setResource}
-          isAdvanced={isAdvanced}
-          validationRef={validationRef}
-        >
-          {child.props.children}
-        </ResourceFormWrapper>
-      );
-    } else if (child.props.simple && isAdvanced) {
-      return null;
-    } else if (child.props.advanced && !isAdvanced) {
-      return null;
-    } else if (!child.props.propertyPath) {
-      if (typeof child.type === 'function') {
-        return React.cloneElement(child, {
-          resource: child.props.resource || resource,
-          setResource: child.props.setResource || setResource,
-          validationRef,
-          isAdvanced,
-          ...props,
-        });
+  return (
+    React.Children.map(children, child => {
+      if (!child) {
+        return null;
+      } else if (child.type === React.Fragment) {
+        return (
+          <ResourceFormWrapper
+            resource={resource}
+            setResource={setResource}
+            isAdvanced={isAdvanced}
+            validationRef={validationRef}
+          >
+            {child.props.children || 12}
+          </ResourceFormWrapper>
+        );
+      } else if (child.props.simple && isAdvanced) {
+        return null;
+      } else if (child.props.advanced && !isAdvanced) {
+        return null;
+      } else if (!child.props.propertyPath) {
+        if (typeof child.type === 'function') {
+          return React.cloneElement(child, {
+            resource: child.props.resource || resource,
+            setResource: child.props.setResource || setResource,
+            validationRef,
+            isAdvanced,
+            ...props,
+          });
+        } else {
+          return child;
+        }
       } else {
-        return child;
+        const valueSetter = value => {
+          jp.value(resource, child.props.propertyPath, value);
+          setResource({ ...resource });
+        };
+
+        const value =
+          typeof child.props.value !== 'undefined'
+            ? child.props.value
+            : jp.value(resource, child.props.propertyPath) ??
+              child.props.defaultValue;
+
+        const setValue = child.props.setValue
+          ? value => child.props.setValue(value, valueSetter)
+          : valueSetter;
+
+        return React.cloneElement(child, { isAdvanced, value, setValue });
       }
-    } else {
-      const valueSetter = value => {
-        jp.value(resource, child.props.propertyPath, value);
-        setResource({ ...resource });
-      };
-
-      const value =
-        typeof child.props.value !== 'undefined'
-          ? child.props.value
-          : jp.value(resource, child.props.propertyPath) ??
-            child.props.defaultValue;
-
-      const setValue = child.props.setValue
-        ? value => child.props.setValue(value, valueSetter)
-        : valueSetter;
-
-      return React.cloneElement(child, { isAdvanced, value, setValue });
-    }
-  });
+    }) || null
+  );
 }
