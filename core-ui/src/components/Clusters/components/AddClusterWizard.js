@@ -47,13 +47,8 @@ export function AddClusterWizard({
       } else {
         setStorage('localStorage');
       }
-
-      const hasValidAuth = hasAuth
-        ? true
-        : authFormRef.current?.checkValidity();
-      setAuthValid(!!hasValidAuth);
     }
-  }, [kubeconfig, hasAuth]);
+  }, [kubeconfig]);
 
   const updateKubeconfig = kubeconfig => {
     if (!kubeconfig) {
