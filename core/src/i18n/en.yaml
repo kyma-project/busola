@@ -188,10 +188,6 @@ btp-service-bindings:
     secret: Credentials Secret name
   resource-type: Service Binding
   secret: Secret
-  statuses:
-    createfailed: Create Failed
-    notprovisioned: Not Provisioned
-    provisioned: Provisioned
   title: BTP Service Bindings
   tooltips:
     parameters-from: Secret references to populate the parameters.

@@ -43,7 +43,7 @@ export const ServiceBindingsList = ({ DefaultRenderer, ...otherParams }) => {
       value: resource => (
         <BTPResourceStatus
           status={resource.status}
-          resourceKind="btp-service-bindings"
+          resourceKind="btp-instances"
         />
       ),
     },
