@@ -5,7 +5,7 @@ import { Link } from 'react-shared';
 import { Trans } from 'react-i18next';
 
 export const ServiceBrokersList = ({ DefaultRenderer, ...otherParams }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const customColumns = [
     {
@@ -20,6 +20,8 @@ export const ServiceBrokersList = ({ DefaultRenderer, ...otherParams }) => {
           <StatusBadge
             autoResolveType
             additionalContent={lastCondition?.message}
+            i18n={i18n}
+            resourceKind="brokers"
           >
             {lastCondition?.type || status.lastConditionState}
           </StatusBadge>

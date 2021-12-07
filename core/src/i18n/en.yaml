@@ -136,6 +136,9 @@ brokers:
   description: <0>Service Broker</0> provides a set of managed services that a third party offers and maintains.
   headers:
     url: URL
+  statuses:
+    failed: Failed
+    ready: Ready
   title: Brokers
 btp-instances:
   description: ' <0>BTP Service Instance</0> makes the functionality of a service available for consumption.'
