@@ -14,10 +14,11 @@ export function NodeMessages({ nodeName }) {
   } = useMessageList(data?.items);
 
   const hostEntries = sortedItems.filter(e => e.source.host === nodeName);
+  console.log(hostEntries);
   const entries =
-    displayType === EVENT_MESSAGE_TYPE.ALL.key
+    displayType.key === EVENT_MESSAGE_TYPE.ALL.key
       ? hostEntries
-      : hostEntries.filter(e => e.type === displayType);
+      : hostEntries.filter(e => e.type === displayType.key);
 
   const { t, i18n } = useTranslation();
   const headerRenderer = () => [
@@ -33,7 +34,7 @@ export function NodeMessages({ nodeName }) {
 
   return (
     <GenericList
-      title={t(`node-details.${displayType.label}`)}
+      title={t(`node-details.${displayType.text}`)}
       extraHeaderContent={messageSelector}
       showSearchField={false}
       showSearchSuggestion={false}

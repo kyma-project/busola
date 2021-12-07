@@ -25,7 +25,7 @@ export const RESOURCE_PATH = {
 };
 
 export const useMessageList = items => {
-  const [displayType, setDisplayType] = useState(EVENT_MESSAGE_TYPE.ALL.key);
+  const [displayType, setDisplayType] = useState(EVENT_MESSAGE_TYPE.ALL);
   const [sortedItems, setSortedItems] = useState([]);
   const { t } = useTranslation();
 
@@ -81,9 +81,11 @@ export const useMessageList = items => {
         key: el.key,
         text: t(`node-details.${el.text}`),
       }))}
-      selectedKey={displayType}
+      selectedKey={displayType.key}
       onSelect={(_, { key }) => {
-        setDisplayType(key);
+        setDisplayType(
+          Object.values(EVENT_MESSAGE_TYPE).find(type => type.key === key),
+        );
       }}
     />
   );

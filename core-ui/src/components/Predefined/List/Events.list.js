@@ -43,9 +43,9 @@ function Events({ namespace, i18n }) {
   };
 
   const entries =
-    displayType === EVENT_MESSAGE_TYPE.ALL.key
+    displayType.key === EVENT_MESSAGE_TYPE.ALL.key
       ? sortedItems
-      : sortedItems.filter(e => e.type === displayType);
+      : sortedItems.filter(e => e.type === displayType.key);
 
   const headerRenderer = () => [
     t('namespaces.events.headers.message'),
@@ -65,7 +65,7 @@ function Events({ namespace, i18n }) {
 
   return (
     <GenericList
-      title={t(`node-details.${displayType.label}`)}
+      title={t(`node-details.${displayType.text}`)}
       textSearchProperties={textSearchProperties}
       extraHeaderContent={messageSelector}
       entries={entries}

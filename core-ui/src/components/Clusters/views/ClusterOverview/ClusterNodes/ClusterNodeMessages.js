@@ -17,9 +17,9 @@ export function ClusterNodeMessages() {
   } = useMessageList(data?.items);
 
   const entries =
-    displayType === EVENT_MESSAGE_TYPE.ALL.key
+    displayType.key === EVENT_MESSAGE_TYPE.ALL.key
       ? sortedItems
-      : sortedItems.filter(e => e.type === displayType);
+      : sortedItems.filter(e => e.type === displayType.key);
 
   const navigateToNodeDetails = nodeName => {
     LuigiClient.linkManager().navigate(`nodes/${nodeName}`);
@@ -53,7 +53,7 @@ export function ClusterNodeMessages() {
 
   return (
     <GenericList
-      title={t(`node-details.${displayType.label}`)}
+      title={t(`node-details.${displayType.text}`)}
       extraHeaderContent={messageSelector}
       textSearchProperties={searchProperties}
       entries={entries}
