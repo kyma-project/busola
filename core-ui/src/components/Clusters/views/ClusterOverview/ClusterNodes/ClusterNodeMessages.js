@@ -53,7 +53,7 @@ export function ClusterNodeMessages() {
 
   return (
     <GenericList
-      title={t(`node-details.${displayType.text}`)}
+      title={t('node-details.messages')}
       extraHeaderContent={messageSelector}
       textSearchProperties={searchProperties}
       entries={entries}

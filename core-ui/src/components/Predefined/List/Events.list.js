@@ -65,7 +65,7 @@ function Events({ namespace, i18n }) {
 
   return (
     <GenericList
-      title={t(`node-details.${displayType.text}`)}
+      title={t('node-details.messages')}
       textSearchProperties={textSearchProperties}
       extraHeaderContent={messageSelector}
       entries={entries}

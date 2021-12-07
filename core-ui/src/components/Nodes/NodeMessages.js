@@ -34,7 +34,7 @@ export function NodeMessages({ nodeName }) {
 
   return (
     <GenericList
-      title={t(`node-details.${displayType.text}`)}
+      title={t('node-details.messages')}
       extraHeaderContent={messageSelector}
       showSearchField={false}
       showSearchSuggestion={false}

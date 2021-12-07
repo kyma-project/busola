@@ -1116,12 +1116,12 @@ namespaces:
 no-permissions:
   title: No Permissions
 node-details:
-  all: All Messages
+  all: All messages
+  information: Information
   internal-ip: Internal IP
   involved-object: Involved Object
-  message: Message
+  messages: Messages
   name: Cluster Overview - Nodes
-  normal: Normal Messages
   pod-cidr: Pod CIDR
   timestamp: Timestamp
   warnings: Warnings
