@@ -5,12 +5,16 @@ import { Link } from 'react-shared';
 import { Trans } from 'react-i18next';
 
 export const DNSEntriesList = ({ DefaultRenderer, ...otherParams }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const customColumns = [
     {
       header: t('dnsentries.headers.status'),
       value: dnsentry => (
-        <ResourceStatus status={dnsentry.status} resourceKind="dnsEntries" />
+        <ResourceStatus
+          status={dnsentry.status}
+          resourceKind="dnsEntries"
+          i18n={i18n}
+        />
       ),
     },
   ];

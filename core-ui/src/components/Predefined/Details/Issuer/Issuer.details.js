@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { IssuerDomains } from './IssuerDomains';
 
 export function IssuersDetails({ DefaultRenderer, ...otherParams }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const customColumns = [
     {
@@ -15,7 +15,11 @@ export function IssuersDetails({ DefaultRenderer, ...otherParams }) {
     {
       header: t('issuers.state'),
       value: issuer => (
-        <ResourceStatus status={issuer.status} resourceKind="issuers" />
+        <ResourceStatus
+          status={issuer.status}
+          resourceKind="issuers"
+          i18n={i18n}
+        />
       ),
     },
     {

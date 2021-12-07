@@ -42,7 +42,7 @@ const Domains = resource => {
 };
 
 export const DNSProvidersDetails = ({ DefaultRenderer, ...otherParams }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const customColumns = [
     {
@@ -54,7 +54,11 @@ export const DNSProvidersDetails = ({ DefaultRenderer, ...otherParams }) => {
     {
       header: t('dnsproviders.headers.status'),
       value: dnsprovider => (
-        <ResourceStatus status={dnsprovider.status} resourceKind="dnsEntries" />
+        <ResourceStatus
+          status={dnsprovider.status}
+          resourceKind="dnsEntries"
+          i18n={i18n}
+        />
       ),
     },
   ];

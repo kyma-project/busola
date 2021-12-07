@@ -75,13 +75,17 @@ const Spec = resource => {
 };
 
 export const DNSEntriesDetails = ({ DefaultRenderer, ...otherParams }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const customColumns = [
     {
       header: t('dnsentries.headers.status'),
       value: dnsentry => (
-        <ResourceStatus status={dnsentry.status} resourceKind="dnsEntries" />
+        <ResourceStatus
+          status={dnsentry.status}
+          resourceKind="dnsEntries"
+          i18n={i18n}
+        />
       ),
     },
   ];

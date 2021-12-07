@@ -38,6 +38,7 @@ export const CertificatesList = ({ DefaultRenderer, ...otherParams }) => {
         <ResourceStatus
           status={certificate.status}
           resourceKind="certificates"
+          i18n={i18n}
         />
       ),
     },

@@ -5,7 +5,7 @@ import { Link } from 'react-shared';
 import { Trans } from 'react-i18next';
 
 export const DNSProvidersList = ({ DefaultRenderer, ...otherParams }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const customColumns = [
     {
       header: t('dnsproviders.headers.type'),
@@ -19,6 +19,7 @@ export const DNSProvidersList = ({ DefaultRenderer, ...otherParams }) => {
         <ResourceStatus
           status={dnsprovider.status}
           resourceKind="dnsProviders"
+          i18n={i18n}
         />
       ),
     },

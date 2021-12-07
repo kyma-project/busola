@@ -8,7 +8,6 @@ import classNames from 'classnames';
 import { Tooltip } from '../Tooltip/Tooltip';
 
 const resolveType = status => {
-  console.log(status === 'OK');
   if (typeof status !== 'string') {
     console.warn(
       `'autoResolveType' prop requires 'children' prop to be a string.`,
@@ -44,10 +43,11 @@ const resolveType = status => {
 };
 
 const translate = (i18n, arrayOfVariableNames, fallbackValue) => {
+  console.log('arrayOfVariableNames', arrayOfVariableNames);
   if (!i18n) return fallbackValue;
   const { t } = useTranslation(null, { i18n });
   return t([...arrayOfVariableNames, 'fallback'], {
-    fallback: 'fallbackValue',
+    fallback: fallbackValue,
   }).toString();
 };
 
@@ -75,7 +75,6 @@ export const StatusBadge = ({
   className,
   i18n,
 }) => {
-  console.log(value);
   if (autoResolveType) type = resolveType(value);
   else
     for (const key of TYPE_FALLBACK.keys()) {

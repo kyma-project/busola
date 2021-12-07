@@ -4,7 +4,7 @@ import { Link, ResourceStatus } from 'react-shared';
 import { Trans } from 'react-i18next';
 
 export const IssuersList = ({ DefaultRenderer, ...otherParams }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const customColumns = [
     {
@@ -14,7 +14,11 @@ export const IssuersList = ({ DefaultRenderer, ...otherParams }) => {
     {
       header: t('issuers.state'),
       value: issuer => (
-        <ResourceStatus status={issuer.status} resourceKind="issuers" />
+        <ResourceStatus
+          status={issuer.status}
+          resourceKind="issuers"
+          i18n={i18n}
+        />
       ),
     },
   ];
