@@ -62,27 +62,13 @@ function GitRepositoriesCreate({
     },
   ];
 
-  function validateRepositoryUrl() {
-    if (!url) {
-      return;
-    }
-
-    const isCorrectUrl = isGitUrl(url);
-    if (!isCorrectUrl) {
-      return t('git-repositories.errors.invalid-url');
-    }
-  }
-
   const getUrlValidationState = () => {
-    const message = validateRepositoryUrl();
-    if (message) {
-      return {
-        state: 'error',
-        text: message,
-      };
-    } else {
-      return null;
-    }
+    return url && !isGitUrl(url)
+      ? {
+          state: 'error',
+          text: t('git-repositories.errors.invalid-url'),
+        }
+      : {};
   };
 
   return (
