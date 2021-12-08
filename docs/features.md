@@ -154,7 +154,7 @@ The document lists and describes all the feature flags that are available in Kym
   },
   ```
 
-- **LEGAL_LINKS** – is used to show or hide legal links. You can find the all available links in the below example.
+- **LEGAL_LINKS** – is used to show or hide legal links. You can find the all available links in the following example.
   In **config** you can find the unchangeable keys (you cannot use **legalDisclosure** instead of **legal-disclosure**). The keys include both the default link, which takes you to the default address, and a link that depends on your chosen language.
 
   Example:
