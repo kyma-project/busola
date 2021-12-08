@@ -9,9 +9,6 @@ addons:
   messages:
     created: Addons Configuration {{name}} created.
   repository-urls: Repository URLs
-  statuses:
-    failed: Failed
-    ready: Ready
   title: Addons
   urls: URLs
 api-rules:
@@ -128,7 +125,6 @@ applications:
     namespace: Choose Namespace.
   statuses:
     deployed: Deployed
-    error: Error
     provisioning: Provisioning
   subtitle:
     bound-to: Services and events bound to '{{namespace}}'.
@@ -162,6 +158,10 @@ btp-instances:
     plan-name: The plan name to use for the Service Instance.
   plan-name: Plan Name
   resource-type: Service Instance
+  statuses:
+    createfailed: Create Failed
+    notprovisioned: Not Provisioned
+    provisioned: Provisioned
   title: BTP Service Instances
   tooltips:
     offering-name: You find the name of the SAP BTP service offering in the BTP Cockpit in the Service Marketplace.
@@ -423,6 +423,8 @@ common:
   protected-resource: This resource is protected.
   statuses:
     error: Error
+    failed: Failed
+    ready: Ready
   tooltips:
     copy-to-clipboard: Copy to clipboard
     download: Download
@@ -797,7 +799,6 @@ functions:
   statuses:
     building: Building
     deploying: Deploying
-    failed: Failed
     initializing: Initializing
     new-revision-error: New Revision Error
     running: Running
@@ -966,6 +967,16 @@ instances:
   description: <0>Service Instance</0> is a provisioned instance of a service that can be consumed by an application.
   no-specific-plan-parameters:
     tooltip: The service provider did not define specific parameters for the selected plan. Refer to the documentation to learn about the required parameters, and define them as a JSON in the editor.
+  statuses:
+    deprovisionedsuccessfully: Deprovisioned Successfully
+    deprovisionrequestinflight: Deprovision Request In Flight
+    instanceupdatedsuccessfully: Instance Updated Successfully
+    orphanmitigationsuccessful: Orphan Mitigation Successful
+    provisioncallfailed: Provision Call Failed
+    provisionedsuccessfully: Provisioned Successfully
+    provisioning: Provisioning
+    provisionrequestinflight: Provision Request In Flight
+    updateinstancerequestinflight: Update Instance Request In Flight
   title: Instances
 integration:
   title: Integration

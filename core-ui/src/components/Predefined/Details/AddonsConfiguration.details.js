@@ -13,7 +13,6 @@ const RepositoryUrls = addon => {
   const rowRenderer = repo => [
     repo.url,
     <StatusBadge
-      resourceKind="addons"
       ariaLabel={t('addons.addons-status')}
       additionalContent={repo.message}
       autoResolveType

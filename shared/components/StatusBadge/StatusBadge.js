@@ -42,9 +42,7 @@ const resolveType = status => {
 const translate = (i18n, arrayOfVariableNames, fallbackValue) => {
   if (!i18n) return fallbackValue;
   const { t } = useTranslation(null, { i18n });
-  return t([...arrayOfVariableNames, 'fallback'], {
-    fallback: 'fallbackValue',
-  }).toString();
+  return t(arrayOfVariableNames, { defaultValue: fallbackValue });
 };
 
 const prepareTranslationPath = (resourceKind, value, type) => {
