@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { LayoutPanel, FormItem, FormLabel } from 'fundamental-react';
-import { StatusBadge } from 'react-shared';
+import { ResourceStatus } from 'react-shared';
 
 const RowComponent = ({ name, value }) =>
   value ? (
@@ -75,15 +75,17 @@ const Spec = resource => {
 };
 
 export const DNSEntriesDetails = ({ DefaultRenderer, ...otherParams }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const customColumns = [
     {
       header: t('dnsentries.headers.status'),
       value: dnsentry => (
-        <StatusBadge autoResolveType>
-          {dnsentry.status?.state || 'UNKNOWN'}
-        </StatusBadge>
+        <ResourceStatus
+          status={dnsentry.status}
+          resourceKind="dnsentries"
+          i18n={i18n}
+        />
       ),
     },
   ];
