@@ -426,7 +426,7 @@ common:
     download: Download
     duplicate-key: Duplicate key
     error: 'Error: '
-    k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' (e.g.: 'my-name1')."
+    k8s-name-input: 'Name must consist of lowercase alphanumeric characters, can contain ''-'' (e.g.: ''my-name1'').'
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: key=value, must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     read-file: Read file content as a single value, with file name as a key.
@@ -618,7 +618,13 @@ deployments:
     images: Images
     pods: $t(pods.title)
   name_singular: Deployment
+  statuses:
+    error: Error
+    running: Running
   title: Deployments
+  tooltips:
+    error: Some of the Pods have failed
+    running: All the Pods are running correctly
 discovery-and-network:
   title: Discovery and Network
 dnsentries:
@@ -1054,7 +1060,7 @@ jobs:
   start-time: Start Time
   title: Jobs
 kubeconfig-id:
-  error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})."
+  error: 'Couldn''t load kubeconfig ID; configuration not changed (Error: ${{error}}).'
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
 legal:
   copyright: Copyright
@@ -1206,7 +1212,34 @@ pods:
     type-not-found: '{{type}} not found.'
   node: Node
   restarts: Restarts
+  statuses:
+    completed: Completed
+    containercreating: Container Creating
+    containersnotinitialized: Containers Not Initialized
+    containersnotready: Container Not Ready
+    crashloopbackoff: Crash Loop Back-off
+    createcontainerconfigerror: Create Container Config Error
+    createcontainererror: Create Container Error
+    dockerdaemonnotready: Docker Daemon Not Ready
+    errimageneverpull: Image Never Pulled
+    errimagepull: Image Pull Error
+    error: Error
+    evicted: Evicted
+    imageinspecterror: Image Inspect Error
+    imagepullbackoff: Image Pull Back-off
+    invalidimagename: Invalid Image Name
+    networkpluginnotready: Network Plugin Not Ready
+    podinitializing: Pod initializing
+    poststarthookerror: Post-start Hook Error
+    registryunavailable: Registry Unavailable
+    runcontainererror: Run Container Error
+    running: Running
+    terminated: Terminated
+    terminating: Terminating
   title: Pods
+  tooltips:
+    error: Pod failed to start
+    running: Pod is running correctly
 preferences:
   title: Preferences
 replica-sets:
@@ -1229,7 +1262,13 @@ replica-sets:
     requests: Requests
   memory: Memory
   name_singular: Replica Set
+  statuses:
+    error: Error
+    running: Running
   title: Replica Sets
+  tooltips:
+    error: Some of the Pods have failed
+    running: All the Pods are running correctly
 resource-quotas:
   headers:
     limits: Limits

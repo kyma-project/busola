@@ -43,7 +43,7 @@ const translate = (i18n, arrayOfVariableNames, fallbackValue) => {
   if (!i18n) return fallbackValue;
   const { t } = useTranslation(null, { i18n });
   return t([...arrayOfVariableNames, 'fallback'], {
-    fallback: 'fallbackValue',
+    fallback: fallbackValue,
   }).toString();
 };
 
@@ -136,7 +136,7 @@ export const StatusBadge = ({
     </Tooltip>
   );
 
-  // tooltipContent is DEPREATED. Remove after migration of all resources
+  // tooltipContent is DEPRECATED. Remove after migration of all resources
   // return (statusElement);
   return tooltipContent ? (
     <Tooltip content={tooltipContent} {...tooltipProps}>
