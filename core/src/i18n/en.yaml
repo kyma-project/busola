@@ -272,6 +272,7 @@ clusters:
   labels:
     client-id: Client ID
     issuer-url: Issuer URL
+    kyma-version: Kyma Version
     scopes: Scopes
   list:
     no-clusters-found: No clusters found
