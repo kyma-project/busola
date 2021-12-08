@@ -164,6 +164,10 @@ context('Create a Deployment', () => {
       .type('label-value');
 
     cy.getIframeBody()
+      .contains('Expose a separate Service')
+      .should('not.exist');
+
+    cy.getIframeBody()
       .contains('button', 'Update')
       .click();
 
