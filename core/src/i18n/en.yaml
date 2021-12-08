@@ -8,9 +8,6 @@ addons:
   messages:
     created: Addons Configuration {{name}} created.
   repository-urls: Repository URLs
-  statuses:
-    failed: Failed
-    ready: Ready
   title: Addons
   tooltips:
     failed: One of the repositories failed.
@@ -128,7 +125,6 @@ applications:
     namespace: Choose Namespace.
   statuses:
     deployed: Deployed
-    error: Error
     provisioning: Provisioning
   subtitle:
     bound-to: Services and events bound to '{{namespace}}'.
@@ -162,6 +158,10 @@ btp-instances:
     plan-name: The plan name to use for the Service Instance.
   plan-name: Plan Name
   resource-type: Service Instance
+  statuses:
+    createfailed: Create Failed
+    notprovisioned: Not Provisioned
+    provisioned: Provisioned
   title: BTP Service Instances
   tooltips:
     offering-name: You find the name of the SAP BTP service offering in the BTP Cockpit in the Service Marketplace.
@@ -422,6 +422,7 @@ common:
   protected-resource: This resource is protected.
   statuses:
     error: Error
+    failed: Failed
     invalid: Invalid
     ok: OK
     pending: Pending
@@ -432,7 +433,7 @@ common:
     download: Download
     duplicate-key: Duplicate key
     error: 'Error: '
-    k8s-name-input: 'Name must consist of lowercase alphanumeric characters, can contain ''-'' (e.g.: ''my-name1'').'
+    k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' (e.g.: 'my-name1')."
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: key=value, must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     read-file: Read file content as a single value, with file name as a key.
@@ -805,7 +806,6 @@ functions:
   statuses:
     building: Building
     deploying: Deploying
-    failed: Failed
     initializing: Initializing
     new-revision-error: New Revision Error
     running: Running
@@ -974,6 +974,16 @@ instances:
   description: <0>Service Instance</0> is a provisioned instance of a service that can be consumed by an application.
   no-specific-plan-parameters:
     tooltip: The service provider did not define specific parameters for the selected plan. Refer to the documentation to learn about the required parameters, and define them as a JSON in the editor.
+  statuses:
+    deprovisionedsuccessfully: Deprovisioned Successfully
+    deprovisionrequestinflight: Deprovision Request In Flight
+    instanceupdatedsuccessfully: Instance Updated Successfully
+    orphanmitigationsuccessful: Orphan Mitigation Successful
+    provisioncallfailed: Provision Call Failed
+    provisionedsuccessfully: Provisioned Successfully
+    provisioning: Provisioning
+    provisionrequestinflight: Provision Request In Flight
+    updateinstancerequestinflight: Update Instance Request In Flight
   title: Instances
 integration:
   title: Integration
@@ -1065,7 +1075,7 @@ jobs:
   start-time: Start Time
   title: Jobs
 kubeconfig-id:
-  error: 'Couldn''t load kubeconfig ID; configuration not changed (Error: ${{error}}).'
+  error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})."
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
 legal:
   copyright: Copyright
