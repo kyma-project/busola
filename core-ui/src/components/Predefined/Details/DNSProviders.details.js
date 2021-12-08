@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { GenericList, StatusBadge } from 'react-shared';
+import { GenericList, ResourceStatus } from 'react-shared';
 
 const Domains = resource => {
   const { t, i18n } = useTranslation();
@@ -42,7 +42,7 @@ const Domains = resource => {
 };
 
 export const DNSProvidersDetails = ({ DefaultRenderer, ...otherParams }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const customColumns = [
     {
@@ -54,9 +54,11 @@ export const DNSProvidersDetails = ({ DefaultRenderer, ...otherParams }) => {
     {
       header: t('dnsproviders.headers.status'),
       value: dnsprovider => (
-        <StatusBadge autoResolveType>
-          {dnsprovider.status?.state || 'unknown'}
-        </StatusBadge>
+        <ResourceStatus
+          status={dnsprovider.status}
+          resourceKind="dnsproviders"
+          i18n={i18n}
+        />
       ),
     },
   ];
