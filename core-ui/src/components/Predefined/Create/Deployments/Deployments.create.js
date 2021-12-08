@@ -122,7 +122,7 @@ function DeploymentsCreate({
       onChange={onChange}
       formElementRef={formElementRef}
       afterCreatedFn={afterCreatedFn}
-      renderEditor={renderEditor}
+      renderEditor={!initialDeployment ? renderEditor : null}
       presets={createPresets(namespace, t)}
       onPresetSelected={value => {
         setDeployment(value.deployment);
@@ -171,34 +171,38 @@ function DeploymentsCreate({
         createContainerTemplate={createContainerTemplate}
       />
 
-      <ResourceForm.CollapsibleSection
-        advanced
-        title={t('deployments.create-modal.advanced.service')}
-        resource={service}
-        setResource={setService}
-        actions={serviceActions}
-      >
-        <ResourceForm.FormField
+      {!initialDeployment && (
+        <ResourceForm.CollapsibleSection
           advanced
-          required
-          disabled={!createService}
-          propertyPath="$.spec.ports[0].port"
-          label={t('deployments.create-modal.advanced.port')}
-          input={Inputs.Port}
-          placeholder={t('deployments.create-modal.advanced.port-placeholder')}
-        />
-        <ResourceForm.FormField
-          advanced
-          required
-          disabled={!createService}
-          propertyPath="$.spec.ports[0].targetPort"
-          label={t('deployments.create-modal.advanced.target-port')}
-          input={Inputs.Port}
-          placeholder={t(
-            'deployments.create-modal.advanced.target-port-placeholder',
-          )}
-        />
-      </ResourceForm.CollapsibleSection>
+          title={t('deployments.create-modal.advanced.service')}
+          resource={service}
+          setResource={setService}
+          actions={serviceActions}
+        >
+          <ResourceForm.FormField
+            advanced
+            required
+            disabled={!createService}
+            propertyPath="$.spec.ports[0].port"
+            label={t('deployments.create-modal.advanced.port')}
+            input={Inputs.Port}
+            placeholder={t(
+              'deployments.create-modal.advanced.port-placeholder',
+            )}
+          />
+          <ResourceForm.FormField
+            advanced
+            required
+            disabled={!createService}
+            propertyPath="$.spec.ports[0].targetPort"
+            label={t('deployments.create-modal.advanced.target-port')}
+            input={Inputs.Port}
+            placeholder={t(
+              'deployments.create-modal.advanced.target-port-placeholder',
+            )}
+          />
+        </ResourceForm.CollapsibleSection>
+      )}
     </ResourceForm>
   );
 }
