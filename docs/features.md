@@ -123,6 +123,23 @@ The document lists and describes all the feature flags that are available in Kym
   },
   ```
 
+- **ISTIO** - is used to show or hide the Istio-related views and to define which APIs are required for the views to be shown properly.
+  For the view to be shown, you must enable the feature. Moreover, all the APIs listed in the selectors array must be available in a cluster.
+
+  Default settings:
+
+  ```bash
+  "ISTIO": {
+    "isEnabled": true,
+    "selectors": [
+      {
+        "type": "apiGroup",
+        "apiGroup": "networking.istio.io"
+      }
+    ]
+  },
+  ```
+
 - **KUBECONFIG_ID** – is used to configure the URL to which Busola sends a request to download a kubeconfig file. If you add `?kubeconfigID={your ID}` to the Busola URL, Busola tries to download the kubeconfig from `{kubeconfigUrl}/{yourID}`. If the operation succeeds, Busola adds the kubeconfing file to the cluster.
   If you use a full address in the **kubeconfigUrl** field, Busola also reads it.
 
@@ -318,20 +335,3 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
  }
 },
 ```
-
-- **ISTIO** - is used to show or hide the Istio-related views and to define which APIs are required for the views to be shown properly.
-  For the view to be shown, you must enable the feature. Moreover, all the APIs listed in the selectors array must be available in a cluster.
-
-  Default settings:
-
-  ```bash
-  "ISTIO": {
-    "isEnabled": true,
-    "selectors": [
-      {
-        "type": "apiGroup",
-        "apiGroup": "networking.istio.io"
-      }
-    ]
-  },
-  ```
