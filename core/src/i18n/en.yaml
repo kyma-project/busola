@@ -656,7 +656,7 @@ dnsentries:
     deleting: The DNS records are now being deleted.
     invalid: A conflict exists with another DNS entry or owner.
     pending: The DNS entry update is batched or in progress.
-    stale: The DNS entry is existing but there is a problem with the provider.
+    stale: The DNS entry exists, but there is an issue with the provider.
     target: Target must be an A record, or a CNAME record. Provide either target or text.
     text: Text record must be a string. Provide either target or text.
     use-a: Switch to A record.
