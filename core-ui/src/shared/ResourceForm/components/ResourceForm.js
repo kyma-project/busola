@@ -26,6 +26,7 @@ export function ResourceForm({
   onPresetSelected,
   afterCreatedFn,
   className,
+  onlyYaml = false,
 }) {
   const createResource = useCreateResource(
     singularName,
@@ -36,7 +37,9 @@ export function ResourceForm({
     afterCreatedFn,
   );
 
-  const [mode, setMode] = React.useState(ModeSelector.MODE_SIMPLE);
+  const [mode, setMode] = React.useState(
+    onlyYaml ? ModeSelector.MODE_YAML : ModeSelector.MODE_SIMPLE,
+  );
 
   const validationRef = useRef(true);
 
@@ -72,7 +75,7 @@ export function ResourceForm({
   return (
     <section className={classnames('resource-form', className)}>
       {presetsSelector}
-      <ModeSelector mode={mode} setMode={setMode} />
+      {onlyYaml ? null : <ModeSelector mode={mode} setMode={setMode} />}
       <form ref={formElementRef} onSubmit={createResource}>
         {mode === ModeSelector.MODE_SIMPLE && (
           <div onChange={onChange} className="simple-form">
