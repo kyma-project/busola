@@ -9,6 +9,7 @@ const RepositoryUrls = addon => {
     t('addons.headers.url'),
     t('common.headers.status'),
   ];
+
   const rowRenderer = repo => [
     repo.url,
     <ResourceStatus status={repo} resourceKind="repositories" i18n={i18n} />,

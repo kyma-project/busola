@@ -8,6 +8,9 @@ addons:
   messages:
     created: Addons Configuration {{name}} created.
   repository-urls: Repository URLs
+  statuses:
+    failed: Failed
+    ready: Ready
   title: Addons
   urls: URLs
 api-rules:
@@ -121,6 +124,10 @@ applications:
     description: Specify a description for your Application.
     name: Specify a name for your Application.
     namespace: Choose Namespace.
+  statuses:
+    deployed: Deployed
+    error: Error
+    provisioning: Provisioning
   subtitle:
     bound-to: Services and events bound to '{{namespace}}'.
     connect-app: Connect Application
@@ -130,6 +137,8 @@ applications:
     namespace-bindings: Namespace Bindings
     provided-services: Provided Services and events
   title: Applications
+  tooltips:
+    provisioning: The Application is being provisioned asynchronously.
 brokers:
   description: <0>Service Broker</0> provides a set of managed services that a third party offers and maintains.
   headers:
@@ -312,6 +321,7 @@ clusters:
       issuer-url: Issuer URL
       scopes: Scopes
       token: Token
+      using-oidc: I'm using an OIDC provider instead
     context: Current context
     editor-label: 'or paste your kubeconfig here:'
     incomplete: We couldn't find enough authentication information in your kubeconfig. You can enter it manually.
@@ -1112,26 +1122,33 @@ namespaces:
       error: 'Error while loading {{title}} data due to: {{message}}'
       pods: $t(pods.title)
       title: Healthy Resources
+  statuses:
+    active: Active
+    terminating: Terminating
   title: Namespaces
   tooltips:
+    active: The Namespace is available for use.
     container-memory-limit: Define memory constraints for individual containers in your Namespace.
     create: Select this option to disable Istio to mediate all communication between the Pods in your Namespace.
     healthy-resources: '{{value}}/{{total}} {{resourceType}} are healthy.'
     memory-examples: 'Use plain value in bytes (128974848) or equivalent suffixes (e.g.: 129e6, 129M, 123Mi).'
     no-resources: There are no {{resourceType}} in this Namespace.
+    terminating: The Namespace is being terminated.
     total-memory-limit: Define constraints that limit total memory consumption in your Namespace.
     usage-of-memory-limits: This Namespace uses {{valueText}} of {{maxText}} its memory limits.
     usage-of-memory-requests: This Namespace uses {{valueText}} of {{maxText}} its memory requests.
 no-permissions:
   title: No Permissions
 node-details:
+  all: All messages
+  information: Information
   internal-ip: Internal IP
   involved-object: Involved Object
-  message: Message
+  messages: Messages
   name: Cluster Overview - Nodes
   pod-cidr: Pod CIDR
   timestamp: Timestamp
-  title-warnings: Warnings
+  warnings: Warnings
 oauth2-clients:
   auth-methods:
     client_secret_basic: Client Secret / Basic

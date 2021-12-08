@@ -5,6 +5,12 @@ import {
   ReadableCreationTimestamp,
 } from 'react-shared';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'fundamental-react';
+import {
+  useMessageList,
+  EVENT_MESSAGE_TYPE,
+  RESOURCE_PATH,
+} from 'hooks/useMessageList';
 
 export const EventsList = ({ i18n, ...otherParams }) => {
   return <Events namespace={otherParams.namespace} i18n={i18n} />;
@@ -14,13 +20,32 @@ function Events({ namespace, i18n }) {
   const { t } = useTranslation();
 
   const url = `/api/v1/namespaces/${namespace}/events`;
-  const { loading = true, error, data: resources } = useGetList(
-    e => e.type === 'Error' || e.type === 'Warning',
-  )(url, { pollingInterval: 3300 });
-
-  const events = resources?.sort((e1, e2) => {
-    return e1.metadata.creationTimestamp - e2.metadata.creationTimestamp;
+  const { loading = true, error, data: items } = useGetList()(url, {
+    pollingInterval: 3300,
   });
+
+  const {
+    displayType,
+    sortedItems,
+    messageSelector,
+    navigateToObjectDetails,
+  } = useMessageList(items);
+
+  const formatInvolvedObject = obj => {
+    const isLink = !!RESOURCE_PATH[obj.kind];
+    return isLink ? (
+      <Link className="fd-link" onClick={() => navigateToObjectDetails(obj)}>
+        {obj.name}
+      </Link>
+    ) : (
+      obj.name
+    );
+  };
+
+  const entries =
+    displayType.key === EVENT_MESSAGE_TYPE.ALL.key
+      ? sortedItems
+      : sortedItems.filter(e => e.type === displayType.key);
 
   const headerRenderer = () => [
     t('namespaces.events.headers.message'),
@@ -31,7 +56,7 @@ function Events({ namespace, i18n }) {
 
   const rowRenderer = entry => [
     <p>{entry.message}</p>,
-    <p>{entry.involvedObject.name}</p>,
+    formatInvolvedObject(entry.involvedObject),
     <p>{entry.involvedObject.kind}</p>,
     <ReadableCreationTimestamp timestamp={entry.metadata.creationTimestamp} />,
   ];
@@ -40,9 +65,10 @@ function Events({ namespace, i18n }) {
 
   return (
     <GenericList
-      title={t('namespaces.events.title')}
+      title={t('node-details.messages')}
       textSearchProperties={textSearchProperties}
-      entries={events || []}
+      extraHeaderContent={messageSelector}
+      entries={entries}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       serverDataError={error}

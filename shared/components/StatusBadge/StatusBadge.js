@@ -126,18 +126,15 @@ export const StatusBadge = ({
     </ObjectStatus>
   );
 
-  let content = translate(
+  const content = translate(
     i18n,
     [tooltipVariableName, commonTooltipVariableName, i18nFullVariableName],
     fallbackValue,
   );
-  if (additionalContent) {
-    content = `${content} ${additionalContent}`;
-  }
   const statusElement = noTooltip ? (
     badgeElement
   ) : (
-    <Tooltip content={content} {...tooltipProps}>
+    <Tooltip content={additionalContent || content} {...tooltipProps}>
       {badgeElement}
     </Tooltip>
   );

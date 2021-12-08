@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Title } from 'fundamental-react';
-import { NodeWarnings } from '../NodeWarnings';
+import { NodeMessages } from '../NodeMessages';
 import { useNodeQuery } from '../nodeQueries';
 import { NodeDetailsHeader } from '../NodeDetailsHeader';
 import { MachineInfo } from '../MachineInfo/MachineInfo';
@@ -34,7 +34,7 @@ export function NodeDetails({ nodeName }) {
               capacity={data.node.status.capacity}
             />
           </div>
-          <NodeWarnings nodeName={nodeName} />
+          <NodeMessages nodeName={nodeName} />
         </>
       )}
     </div>
