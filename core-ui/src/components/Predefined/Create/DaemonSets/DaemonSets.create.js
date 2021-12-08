@@ -26,7 +26,7 @@ function DaemonSetsCreate({
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
-      onlyYaml
+      yamlOnly
     />
   );
 }

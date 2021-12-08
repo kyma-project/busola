@@ -26,7 +26,7 @@ function StatefulSetsCreate({
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
-      onlyYaml
+      yamlOnly
     />
   );
 }

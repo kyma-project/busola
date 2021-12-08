@@ -19,7 +19,7 @@ function PodsCreate({ formElementRef, onChange, setCustomValid, resourceUrl }) {
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
-      onlyYaml
+      yamlOnly
     />
   );
 }

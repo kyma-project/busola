@@ -24,7 +24,7 @@ function ServicesCreate({
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
-      onlyYaml
+      yamlOnly
     />
   );
 }
