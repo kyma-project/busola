@@ -39,12 +39,7 @@ context('Test Git Repositories', () => {
     cy.getIframeBody()
       .find('[placeholder^="Enter the URL address"]')
       .filter(':visible', { log: false })
-      .as('url-input');
-
-    // due to fundamental bug input loses focus on revalidation, so we need to focus it mulitple times
-    cy.get('@url-input').type('h');
-    cy.get('@url-input').type('ttps:');
-    cy.get('@url-input').type('//test-repo');
+      .type('https://test-repo');
 
     // create
     cy.getIframeBody()
