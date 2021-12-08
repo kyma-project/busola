@@ -17,12 +17,14 @@ const resolveType = status => {
 
   switch (status.toUpperCase()) {
     case 'INITIAL':
+    case 'PENDING':
       return 'informative';
 
     case 'READY':
     case 'RUNNING':
     case 'SUCCESS':
     case 'SUCCEEDED':
+    case 'OK':
       return 'positive';
 
     case 'UNKNOWN':
@@ -32,6 +34,7 @@ const resolveType = status => {
     case 'FAILED':
     case 'ERROR':
     case 'FAILURE':
+    case 'INVALID':
       return 'negative';
 
     default:
@@ -42,9 +45,7 @@ const resolveType = status => {
 const translate = (i18n, arrayOfVariableNames, fallbackValue) => {
   if (!i18n) return fallbackValue;
   const { t } = useTranslation(null, { i18n });
-  return t([...arrayOfVariableNames, 'fallback'], {
-    fallback: 'fallbackValue',
-  }).toString();
+  return t(arrayOfVariableNames, { defaultValue: fallbackValue });
 };
 
 const prepareTranslationPath = (resourceKind, value, type) => {
@@ -123,15 +124,20 @@ export const StatusBadge = ({
     </ObjectStatus>
   );
 
-  const content = translate(
+  let content = translate(
     i18n,
     [tooltipVariableName, commonTooltipVariableName, i18nFullVariableName],
     fallbackValue,
   );
+
+  if (additionalContent) {
+    content = `${content}: ${additionalContent}`;
+  }
+
   const statusElement = noTooltip ? (
     badgeElement
   ) : (
-    <Tooltip content={additionalContent || content} {...tooltipProps}>
+    <Tooltip content={content} {...tooltipProps}>
       {badgeElement}
     </Tooltip>
   );
