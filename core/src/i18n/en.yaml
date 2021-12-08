@@ -973,7 +973,7 @@ instances:
     provisioncallfailed: Provision Call Failed
     provisionedsuccessfully: Provisioned Successfully
     provisioning: Provisioning
-    provisionrequestunflight: Provision Request In Flight
+    provisionrequestinflight: Provision Request In Flight
     updateinstancerequestinflight: Update Instance Request In Flight
   title: Instances
 integration:
