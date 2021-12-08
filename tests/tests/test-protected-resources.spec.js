@@ -1,4 +1,5 @@
 const NAME = `test-resource-${Math.floor(Math.random() * 9999) + 1000}`;
+const IMAGE = 'nginx:latest';
 
 const busolaConfig = JSON.stringify({
   config: {
@@ -6,7 +7,18 @@ const busolaConfig = JSON.stringify({
       PROTECTED_RESOURCES: {
         isEnabled: true,
         config: {
-          resources: [{ match: { '$.metadata.labels.protected': 'true' } }],
+          resources: [
+            {
+              match: { '$.metadata.labels.protected': 'true' },
+            },
+            {
+              match: {
+                '$.metadata.ownerReferences[0].kind':
+                  '^[a-zA-Z]([a-zA-Z0-9_-]*)$',
+              },
+              regex: true,
+            },
+          ],
         },
       },
     },
@@ -90,6 +102,43 @@ context('Test Protected Resources', () => {
       .should('not.exist');
   });
 
+  it('Create a protected Pod controlled by Deployment', () => {
+    cy.getLeftNav()
+      .contains('Workloads')
+      .click();
+
+    cy.getLeftNav()
+      .contains('Deployments')
+      .click();
+
+    cy.getIframeBody()
+      .contains('Create Deployment')
+      .click();
+
+    cy.getIframeBody()
+      .find('[placeholder="Deployment Name"]:visible')
+      .clear()
+      .type(NAME);
+
+    cy.getIframeBody()
+      .find('[placeholder^="Enter the Docker image"]:visible')
+      .type(IMAGE);
+
+    cy.getIframeBody()
+      .find('[role=dialog]')
+      .contains('button', 'Create')
+      .click();
+  });
+
+  it('Check if Pod is protected', () => {
+    cy.url().should('match', new RegExp(`\/deployments\/details\/${NAME}$`));
+
+    cy.getIframeBody()
+      .contains('tr', NAME)
+      .find('[aria-label="Delete"]')
+      .should('be.disabled');
+  });
+
   it('Change protection setting', () => {
     cy.get('[data-testid="luigi-topnav-profile-btn"]').click();
 
@@ -111,6 +160,14 @@ context('Test Protected Resources', () => {
   });
 
   it("Don't protect a resource", () => {
+    cy.getLeftNav()
+      .contains('Configuration')
+      .click();
+
+    cy.getLeftNav()
+      .contains('Config Maps')
+      .click();
+
     cy.getIframeBody()
       .contains('tr', NAME)
       .find('[aria-label="Delete"]')

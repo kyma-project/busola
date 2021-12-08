@@ -5,7 +5,7 @@ import { Link } from 'react-shared';
 import { Trans } from 'react-i18next';
 
 export const ServiceBrokersList = ({ DefaultRenderer, ...otherParams }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const customColumns = [
     {
@@ -14,9 +14,18 @@ export const ServiceBrokersList = ({ DefaultRenderer, ...otherParams }) => {
     },
     {
       header: t('common.headers.status'),
-      value: ({ status }) => (
-        <StatusBadge autoResolveType>{status.lastConditionState}</StatusBadge>
-      ),
+      value: ({ status }) => {
+        const lastCondition = status.conditions[status.conditions.length - 1];
+        return (
+          <StatusBadge
+            autoResolveType
+            additionalContent={lastCondition?.message}
+            i18n={i18n}
+          >
+            {lastCondition?.type || status.lastConditionState}
+          </StatusBadge>
+        );
+      },
     },
   ];
 
