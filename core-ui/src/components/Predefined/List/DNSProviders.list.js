@@ -18,7 +18,7 @@ export const DNSProvidersList = ({ DefaultRenderer, ...otherParams }) => {
       value: dnsprovider => (
         <ResourceStatus
           status={dnsprovider.status}
-          resourceKind="dnsProviders"
+          resourceKind="dnsproviders"
           i18n={i18n}
         />
       ),
