@@ -653,7 +653,7 @@ dnsentries:
     ttl: Enter the time to live.
   title: DNS Entries
   tooltips:
-    deleting: The deletion of the DNS records is in progress.
+    deleting: The DNS records are now being deleted.
     invalid: There is a conflict with another DNS entry or owner.
     pending: The update of the DNS entry is batched or in progress.
     stale: The DNS entry is existing but there is a problem with the provider.
