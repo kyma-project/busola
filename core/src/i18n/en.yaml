@@ -432,7 +432,7 @@ common:
     copy-to-clipboard: Copy to clipboard
     download: Download
     duplicate-key: Duplicate key
-    error: 'Error: '
+    error: Error
     k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' (e.g.: 'my-name1')."
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: key=value, must start and end with an alphanumeric character, can contain '-', '_' or '.'.
