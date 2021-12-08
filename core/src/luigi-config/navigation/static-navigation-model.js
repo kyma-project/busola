@@ -1091,7 +1091,7 @@ export function getStaticChildrenNodesForNamespace(
       viewGroup: coreUIViewGroupName,
       keepSelectedForChildren: true,
       context: {
-        requiredFeatures: [features.CUSTOM_DOMAINS],
+        requiredFeatures: [features.ISTIO],
       },
 
       navigationContext: 'gateways',
