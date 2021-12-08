@@ -12,7 +12,7 @@ export const DNSEntriesList = ({ DefaultRenderer, ...otherParams }) => {
       value: dnsentry => (
         <ResourceStatus
           status={dnsentry.status}
-          resourceKind="dnsEntries"
+          resourceKind="dnsentries"
           i18n={i18n}
         />
       ),
