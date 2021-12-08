@@ -1115,6 +1115,43 @@ export function getStaticChildrenNodesForNamespace(
     },
     {
       category: i18next.t('configuration.title'),
+      resourceType: 'virtualservices',
+      pathSegment: 'virtualservices',
+      label: i18next.t('virtualservices.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/virtualservices?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/networking.istio.io/v1alpha3',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+      context: {
+        requiredFeatures: [features.ISTIO],
+      },
+
+      navigationContext: 'virtualservices',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':virtualserviceName',
+              resourceType: 'virtualservices',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/virtualservices/:virtualserviceName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/networking.istio.io/v1beta1',
+                }),
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: i18next.t('configuration.title'),
       resourceType: 'issuers',
       pathSegment: 'issuers',
       label: i18next.t('issuers.title'),
