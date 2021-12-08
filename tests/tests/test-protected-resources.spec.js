@@ -136,12 +136,7 @@ context('Test Protected Resources', () => {
     cy.getIframeBody()
       .contains('tr', NAME)
       .find('[aria-label="Delete"]')
-      .should('be.disabled')
-      .click({ force: true });
-
-    cy.getIframeBody()
-      .contains(`Delete ${NAME}`)
-      .should('not.exist');
+      .should('be.disabled');
   });
 
   it('Change protection setting', () => {
