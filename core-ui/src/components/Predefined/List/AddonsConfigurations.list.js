@@ -15,7 +15,7 @@ export const GenericAddonsConfigurationsList = ({
   const statusColumn = {
     header: t('common.headers.status'),
     value: addon => (
-      <StatusBadge resourceKind="addons" noTooltip autoResolveType i18n={i18n}>
+      <StatusBadge noTooltip autoResolveType i18n={i18n}>
         {addon.status?.phase}
       </StatusBadge>
     ),
