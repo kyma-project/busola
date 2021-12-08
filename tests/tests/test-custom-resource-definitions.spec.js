@@ -22,16 +22,25 @@ context('Test Create Resource Definitions', () => {
     cy.getIframeBody()
       .contains('Create Custom Resource Definition')
       .click();
-    loadRandomCRD().then(CRB_TEST => {
-      cy.getIframeBody()
-        .find('[role="document"]')
-        .contains('group')
-        .click()
-        .type(
-          '{selectall}{backspace}{selectall}{backspace}{selectall}{backspace}',
-        );
 
-      cy.wait(40000);
-    });
+    // cy.getIframeBody()
+    //   .contains('group')
+    //   .click()
+    //   .type(
+    //     '{selectall}{backspace}{selectall}{backspace}{selectall}{backspace}',
+    //   );
+    cy.wait(4000),
+      loadRandomCRD().then(CRB_TEST => {
+        cy.log(CRB_TEST);
+        const CRB_2 = JSON.stringify(CRB_TEST);
+        cy.log(`test: ${CRB_2}`);
+        cy.getIframeBody()
+          .find('[role="presentation"],[class="view-lines"]')
+          .first()
+          .click()
+          .type(CRB_2, { parseSpecialCharSequences: false });
+
+        cy.wait(40000);
+      });
   });
 });

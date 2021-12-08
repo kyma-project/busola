@@ -1,7 +1,7 @@
 import jsyaml from 'js-yaml';
 
 export async function loadCRD() {
-  return new Promise(resolve => {
+  return await new Promise(resolve => {
     cy.fixture('test-customresourcedefinisions.yaml').then(fileContent =>
       resolve(jsyaml.load(fileContent)),
     );
@@ -17,5 +17,5 @@ export async function loadRandomCRD() {
   newCRD.metadata.name = name;
   newCRD.spec.names.plural = random;
 
-  return await newCRD;
+  return newCRD;
 }
