@@ -585,6 +585,7 @@ custom-resource-definitions:
 daemon-sets:
   description: <0>Daemon Set</0> ensures that replicated Pods are running across a set of available nodes.
   images: Images
+  name_singular: Daemon Set
   node-selector: Node Selector
   pods: $t(pods.title)
   title: Daemon Sets
@@ -1226,6 +1227,7 @@ pods:
     failed-to-download: Failed to download the logs.
     no-logs-available: No logs avaliable for the '{{containerName}}' container.
     type-not-found: '{{type}} not found.'
+  name_singular: Pod
   node: Node
   restarts: Restarts
   title: Pods
@@ -1400,6 +1402,7 @@ settings:
   theme: Theme
 stateful-sets:
   description: <0>Stateful Set</0> is used for the management of Pods' deployment and scaling.
+  name_singular: Stateful Set
   replicas: Replicas
   title: Stateful Sets
 top-nav:
