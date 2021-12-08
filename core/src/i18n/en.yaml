@@ -9,6 +9,8 @@ addons:
     created: Addons Configuration {{name}} created.
   repository-urls: Repository URLs
   title: Addons
+  tooltips:
+    failed: One of the repositories failed.
   urls: URLs
 api-rules:
   access-strategies:
@@ -75,7 +77,6 @@ api-rules:
     ns-no-services: No Services in this Namespace.
     placeholder: Choose the service to expose.
   statuses:
-    ok: OK
     skipped: Skipped
   title: API Rules
 applications:
@@ -422,13 +423,17 @@ common:
   statuses:
     error: Error
     failed: Failed
+    invalid: Invalid
+    ok: OK
+    pending: Pending
     ready: Ready
+    unknown: Unknown
   tooltips:
     copy-to-clipboard: Copy to clipboard
     download: Download
     duplicate-key: Duplicate key
-    error: 'Error: '
-    k8s-name-input: 'Name must consist of lowercase alphanumeric characters, can contain ''-'' (e.g.: ''my-name1'').'
+    error: Error
+    k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' (e.g.: 'my-name1')."
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: key=value, must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     read-file: Read file content as a single value, with file name as a key.
@@ -651,6 +656,10 @@ dnsentries:
     ttl: Enter the time to live.
   title: DNS Entries
   tooltips:
+    deleting: The DNS records are now being deleted.
+    invalid: A conflict exists with another DNS entry or owner.
+    pending: The DNS entry update is batched or in progress.
+    stale: The DNS entry exists, but there is an issue with the provider.
     target: Target must be an A record, or a CNAME record. Provide either target or text.
     text: Text record must be a string. Provide either target or text.
     use-a: Switch to A record.
@@ -1065,7 +1074,7 @@ jobs:
   start-time: Start Time
   title: Jobs
 kubeconfig-id:
-  error: 'Couldn''t load kubeconfig ID; configuration not changed (Error: ${{error}}).'
+  error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})."
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
 legal:
   copyright: Copyright
