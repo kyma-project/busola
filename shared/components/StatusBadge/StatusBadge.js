@@ -133,7 +133,7 @@ export const StatusBadge = ({
   );
 
   if (additionalContent) {
-    content = `${content} ${additionalContent}`;
+    content = `${content}: ${additionalContent}`;
   }
 
   const statusElement = noTooltip ? (
