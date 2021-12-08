@@ -12,7 +12,7 @@ const RepositoryUrls = addon => {
 
   const rowRenderer = repo => [
     repo.url,
-    <ResourceStatus status={repo} resourceKind="repositories" i18n={i18n} />,
+    <ResourceStatus status={repo} i18n={i18n} />,
   ];
 
   return (
