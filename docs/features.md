@@ -195,7 +195,7 @@ The document lists and describes all the feature flags that are available in Kym
 - **PROTECTED_RESOURCES** – is used to block the edit and delete functions based on the determined rules. If the resource meets the rule requirements, the resource becomes protected and cannot be edited/deleted.  
   Each resource requires the **match** field, which includes a list of key-value pairs. The proper rule description is when the definition given in the key matches the value.
 
-  You can set the **regex** parameter to `true` in order to switch comparison mode from **standard** to **regex**.
+  To switch comparison mode from **standard** to **regex**, set the **regex** parameter to `true`.
 
   Optionally, you can provide the **message** parameter, which displays a simple message, or **messageSrc**, which is a yaml path where the message to be displayed is included. If neither **message** nor **messageSrc** is provided, a generic message is used.
 
