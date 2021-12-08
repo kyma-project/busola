@@ -42,7 +42,7 @@ export function ResourceFormWrapper({
             isAdvanced={isAdvanced}
             validationRef={validationRef}
           >
-            {child.props.children || 12}
+            {child.props.children}
           </ResourceFormWrapper>
         );
       } else if (child.props.simple && isAdvanced) {
