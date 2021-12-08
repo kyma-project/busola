@@ -8,7 +8,7 @@ export const AddonsConfigurationsCreate = ({ resourceType, ...props }) => {
   return (
     <AddonsConfigurations
       resourceType={resourceType}
-      kind={t('addons.configuration')}
+      kind={t('addons.singular_name')}
       {...props}
     />
   );
@@ -23,7 +23,7 @@ export const ClusterAddonsConfigurationsCreate = ({
   return (
     <AddonsConfigurations
       resourceType={resourceType}
-      kind={t('cluster-addons.configuration')}
+      kind={t('cluster-addons.singular_name')}
       {...props}
     />
   );

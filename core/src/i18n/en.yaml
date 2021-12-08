@@ -1,6 +1,5 @@
 addons:
   addons-status: Addons Status
-  configuration: Addons Configuration
   description: <0>Addons Configuration</0> defines Namespace-scoped addons that provide all information required to convert Helm charts into Service Classes in Service Catalog.
   errors:
     cannot-create: Cannot create the Addons Configuration.
@@ -9,6 +8,7 @@ addons:
   messages:
     created: Addons Configuration {{name}} created.
   repository-urls: Repository URLs
+  singular_name: Addons Configuration
   title: Addons
   urls: URLs
 api-rules:
@@ -240,8 +240,8 @@ certificates:
     with-csr: Enable to use a Certificate Signing Request instead of providing domain names manually.
   with-csr: Use a CSR
 cluster-addons:
-  configuration: Cluster Addons Configuration
   description: <0>Cluster Addons Configuration</0> defines cluster-wide addons that provide all information required to convert Helm charts into Service Classes in Service Catalog.
+  singular_name: Cluster Addons Configuration
   title: Cluster Addons
 cluster-role-bindings:
   description: <0>Cluster Role Binding</0> assigns the permissions defined in a Cluster Role to a user.
