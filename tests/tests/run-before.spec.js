@@ -5,24 +5,18 @@ context('Create Namespace', () => {
   before(cy.loginAndSelectCluster);
 
   it('Create Namespace', () => {
-    // generate random namespace name if it wasn't provided as env
-    cy.task('getNamespace').then(ns => {
-      if (!ns) {
-        const random = Math.floor(Math.random() * 9999) + 1000;
-        cy.task('setNamespace', `a-busola-test-${random}`);
-      }
-    });
+    cy.getLeftNav()
+      .contains('Namespaces')
+      .click();
 
     cy.getIframeBody()
       .contains('Create Namespace')
       .click();
 
-    cy.task('getNamespace').then(a => {
-      cy.getIframeBody()
-        .find('[role=dialog]')
-        .find("input[placeholder='Namespace Name']:visible")
-        .type(a);
-    });
+    cy.getIframeBody()
+      .find('[role=dialog]')
+      .find("input[placeholder='Namespace Name']:visible")
+      .type(Cypress.env('NAMESPACE_NAME'));
 
     cy.getIframeBody()
       .find('[role=dialog]')
@@ -34,11 +28,9 @@ context('Create Namespace', () => {
       .contains('button', 'Create')
       .click();
 
-    cy.task('getNamespace').then(ns => {
-      cy.getIframeBody()
-        .contains('h3', ns)
-        .should('be.visible');
-    });
+    cy.getIframeBody()
+      .contains('h3', Cypress.env('NAMESPACE_NAME'))
+      .should('be.visible');
 
     cy.getIframeBody()
       .contains('button', 'Edit')

@@ -15,11 +15,13 @@ Cypress.Commands.add('filterWithNoValue', { prevSubject: true }, $elements =>
 
 Cypress.Commands.add('goToNamespaceDetails', () => {
   // // Go to the details of namespace
-  cy.task('getNamespace').then(ns => {
-    cy.getIframeBody()
-      .contains('a', ns)
-      .click();
-  });
+  cy.getLeftNav()
+    .contains('Namespaces')
+    .click();
+
+  cy.getIframeBody()
+    .contains('a', Cypress.env('NAMESPACE_NAME'))
+    .click();
 
   return cy.end();
 });
