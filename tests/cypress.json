@@ -39,6 +39,7 @@
     "test-service-accounts.spec.js",
     "test-issuers.spec.js",
     "test-daemon-sets.spec.js",
+    "test-custom-resource-definitions.spec.js",
     "reduced-permissions.spec.js",
     "invalid-kubeconfig.spec.js",
     "login-kubeconfigID.spec.js",
