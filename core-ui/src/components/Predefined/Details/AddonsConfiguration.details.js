@@ -1,5 +1,5 @@
 import React from 'react';
-import { GenericList, StatusBadge } from 'react-shared';
+import { GenericList, ResourceStatus } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
 const RepositoryUrls = addon => {
@@ -12,16 +12,7 @@ const RepositoryUrls = addon => {
 
   const rowRenderer = repo => [
     repo.url,
-    <StatusBadge
-      resourceKind="addons"
-      ariaLabel={t('addons.addons-status')}
-      additionalContent={repo.message}
-      autoResolveType
-      i18n={i18n}
-      noTooltip={repo.status === 'Ready'}
-    >
-      {repo.status}
-    </StatusBadge>,
+    <ResourceStatus status={repo} i18n={i18n} />,
   ];
 
   return (
