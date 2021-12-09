@@ -11,75 +11,75 @@ The document lists and describes all the feature flags that are available in Kym
   Default settings:
 
   ```bash
-  "ADD_CLUSTER_DISABLED":{
+  "ADD_CLUSTER_DISABLED": {
     "isEnabled": false,
     "config": {
-      "cockpitUrl":"https://account.staging.hanavlab.ondemand.com/cockpit"
+      "cockpitUrl": "https://account.staging.hanavlab.ondemand.com/cockpit"
     }
   },
   ```
 
-- **ADDONS** – is used to show or hide the **Addons** view and to define which Custom Resource Definitions (CRDs) are required for the view to be shown properly.  
-  For the view to be shown, you must enable the feature. Moreover, all the CRDs defined in the selectors array must exist in a cluster.
+- **ADDONS** – is used to show or hide the **Addons** view and to define which APIs are required for the view to be shown properly.
+  For the view to be shown, you must enable the feature. Moreover, all the APIs listed in the selectors array must be available in a cluster.
 
   Default settings:
 
   ```bash
-  "ADDONS ":{
+  "ADDONS": {
     "isEnabled": true,
-    "selectors":[
+    "selectors": [
       {
-        "type":"apiGroup",
-        "apiGroup":"addons.kyma-project.io"
+        "type": "apiGroup",
+        "apiGroup": "addons.kyma-project.io"
       }
     ]
   },
   ```
 
-- **API_GATEWAY** – is used to show or hide the **API Gateway** view and to define which CRDs are required for the view to be shown properly.  
-  It is also used to determine if the **API Gateway** list should be displayed in the **Function** and **Service** details.  
-  For the view to be shown, you must enable the feature. Moreover, all the CRDs defined in the selectors array must exist in a cluster.
+- **API_GATEWAY** – is used to show or hide the **API Gateway** view and to define which APIs are required for the view to be shown properly.
+  It is also used to determine if the **API Gateway** list should be displayed in the **Function** and **Service** details.
+  For the view to be shown, you must enable the feature. Moreover, all the APIs listed in the selectors array must be available in a cluster.
 
   Default settings:
 
   ```bash
-  "API_GATEWAY ":{
+  "API_GATEWAY": {
     "isEnabled": true,
-    "selectors":[
+    "selectors": [
       {
-        "type":"apiGroup",
-        "apiGroup":"gateway.kyma-project.io"
+        "type": "apiGroup",
+        "apiGroup": "gateway.kyma-project.io"
       }
     ]
   },
   ```
 
-- **APPLICATIONS** – is used to show or hide the **Applications** view and to define which CRDs are required for the view to be shown properly.  
-  For the view to be shown, you must enable the feature. Moreover, all the CRDs defined in the selectors array must exist in a cluster.
+- **APPLICATIONS** – is used to show or hide the **Applications** view and to define which APIs are required for the view to be shown properly.
+  For the view to be shown, you must enable the feature. Moreover, all the APIs listed in the selectors array must be available in a cluster.
 
   Default settings:
 
   ```bash
-  "APPLICATIONS":{
+  "APPLICATIONS": {
     "isEnabled": true,
-    "selectors":[
+    "selectors": [
       {
-        "type":"apiGroup",
-        "apiGroup":"applicationconnector.kyma-project.io"
+        "type": "apiGroup",
+        "apiGroup": "applicationconnector.kyma-project.io"
       }
     ]
   },
   ```
 
-- **BTP_CATALOG** – is used to show or hide the **BTP Catalog** view and to define which CRDs are required for the view to be shown properly.  
-  For the view to be shown, you must enable the feature. Moreover, all the CRDs defined in the selectors array must exist in a cluster.
+- **BTP_CATALOG** – is used to show or hide the **BTP Catalog** view and to define which APIs are required for the view to be shown properly.
+  For the view to be shown, you must enable the feature. Moreover, all the APIs listed in the selectors array must be available in a cluster.
 
   Default settings:
 
   ```bash
-  "BTP_CATALOG":{
+  "BTP_CATALOG": {
     "isEnabled": true,
-    "selectors":[
+    "selectors": [
       {
         "type":"apiGroup",
         "apiGroup":"services.cloud.sap.com"
@@ -88,8 +88,8 @@ The document lists and describes all the feature flags that are available in Kym
   },
   ```
 
-- **CUSTOM_DOMAINS** – is used to show or hide the **DNS Entry**, **DNS Provider**, **Gateway**, **Issuer**, and **Certificate** views.  
-   For the view to be shown, you must enable the feature. Moreover, all the CRDs defined in the selectors array must exist in a cluster.
+- **CUSTOM_DOMAINS** – is used to show or hide the **DNS Entry**, **DNS Provider**, **Gateway**, **Issuer**, and **Certificate** views.
+  For the view to be shown, you must enable the feature. Moreover, all the APIs listed in the selectors array must be available in a cluster.
 
   Default settings:
 
@@ -105,19 +105,36 @@ The document lists and describes all the feature flags that are available in Kym
   },
   ```
 
-- **EVENTING** – is used to show or hide the **Eventing** view and to define which CRDs are required for the view to be shown properly.  
-  It is also used to determine if the **Event Subscriptions** should be displayed in **Function** and **Service** details.  
-  For the view to be shown, you must enable the feature. Moreover, all the CRDs defined in the selectors array must exist in a cluster.
+- **EVENTING** – is used to show or hide the **Eventing** view and to define which APIs are required for the view to be shown properly.
+  It is also used to determine if the **Event Subscriptions** should be displayed in **Function** and **Service** details.
+  For the view to be shown, you must enable the feature. Moreover, all the APIs listed in the selectors array must be available in a cluster.
 
   Default settings:
 
   ```bash
-  "EVENTING ":{
+  "EVENTING": {
     "isEnabled": true,
-    "selectors":[
+    "selectors": [
       {
-        "type":"apiGroup",
-        "apiGroup":"eventing.kyma-project.io"
+        "type": "apiGroup",
+        "apiGroup": "eventing.kyma-project.io"
+      }
+    ]
+  },
+  ```
+
+- **ISTIO** - is used to show or hide the Istio-related views and to define which APIs are required for the views to be shown properly.
+  For the view to be shown, you must enable the feature. Moreover, all the APIs listed in the selectors array must be available in a cluster.
+
+  Default settings:
+
+  ```bash
+  "ISTIO": {
+    "isEnabled": true,
+    "selectors": [
+      {
+        "type": "apiGroup",
+        "apiGroup": "networking.istio.io"
       }
     ]
   },
@@ -137,7 +154,7 @@ The document lists and describes all the feature flags that are available in Kym
   },
   ```
 
-- **LEGAL_LINKS** – is used to show or hide legal links. You can find the all available links in the below example.  
+- **LEGAL_LINKS** – is used to show or hide legal links. You can find the all available links in the following example.
   In **config** you can find the unchangeable keys (you cannot use **legalDisclosure** instead of **legal-disclosure**). The keys include both the default link, which takes you to the default address, and a link that depends on your chosen language.
 
   Example:
@@ -192,7 +209,7 @@ The document lists and describes all the feature flags that are available in Kym
   }
   ```
 
-- **PROTECTED_RESOURCES** – is used to block the edit and delete functions based on the determined rules. If the resource meets the rule requirements, the resource becomes protected and cannot be edited/deleted.  
+- **PROTECTED_RESOURCES** – is used to block the edit and delete functions based on the determined rules. If the resource meets the rule requirements, the resource becomes protected and cannot be edited/deleted.
   Each resource requires the **match** field, which includes a list of key-value pairs. The proper rule description is when the definition given in the key matches the value.
 
   To switch comparison mode from **standard** to **regex**, set the **regex** parameter to `true`.
@@ -203,7 +220,7 @@ The document lists and describes all the feature flags that are available in Kym
 
   ```bash
   "PROTECTED_RESOURCES": {
-    "isEnabled":true,
+    "isEnabled": true,
     "config": {
       "resources": [
         {
@@ -244,27 +261,27 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
   Default settings:
 
   ```bash
-  "SENTRY ":{
+  "SENTRY": {
     "isEnabled": false,
-    "selectors":[ ],
+    "selectors": [],
     "config": {
-      "dsn":""
+      "dsn": ""
     }
   },
   ```
 
-- **SERVERLESS** – is used to show or hide the **Serverless** view and to define which CRDs are required for the view to be shown properly.  
-  For the view to be shown, you must enable the feature. Moreover, all the CRDs defined in the selectors array must exist in a cluster.
+- **SERVERLESS** – is used to show or hide the **Serverless** view and to define which APIs are required for the view to be shown properly.
+  For the view to be shown, you must enable the feature. Moreover, all the APIs listed in the selectors array must be available in a cluster.
 
   Default settings:
 
   ```bash
-  "SERVERLESS ":{
+  "SERVERLESS": {
     "isEnabled": true,
-    "selectors":[
+    "selectors": [
       {
-        "type":"apiGroup",
-        "apiGroup":"serverless.kyma-project.io"
+        "type": "apiGroup",
+        "apiGroup": "serverless.kyma-project.io"
       }
     ]
   },
@@ -272,35 +289,35 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
 
   > NOTE: Both **SERVICE_CATALOG** and **SERVICE_CATALOG_ADDONS** features are used to determine if **Service Bindings** (in the **Configuration** tab) and environment variables injected by **Service Bindings** (in the **Code** Tab) are displayed in the **Functions** view.
 
-- **SERVICE_CATALOG** – is used to show or hide the **Service Catalog** views (**Catalog**, **Instances**, and **Brokers**) and to define which CRDs are required for the view to be shown properly.  
-  For the view to be shown, you must enable the feature. Moreover, all the CRDs defined in the selectors array must exist in a cluster.
+- **SERVICE_CATALOG** – is used to show or hide the **Service Catalog** views (**Catalog**, **Instances**, and **Brokers**) and to define which APIs are required for the view to be shown properly.
+  For the view to be shown, you must enable the feature. Moreover, all the APIs listed in the selectors array must be available in a cluster.
 
   Default settings:
 
   ```bash
-  "SERVICE_CATALOG":{
+  "SERVICE_CATALOG": {
     "isEnabled": true,
-    "selectors":[
+    "selectors": [
       {
-        "type":"apiGroup",
-        "apiGroup":"servicecatalog.k8s.io"
+        "type": "apiGroup",
+        "apiGroup": "servicecatalog.k8s.io"
       }
     ]
   },
   ```
 
-- **SERVICE_CATALOG_ADDONS** – is used to show or hide the **Service Catalog Addons** view and to define which CRDs are required for the view to be shown properly.  
-  For the view to be shown, you must enable the feature. Moreover, all the CRDs defined in the selectors array must exist in a cluster.
+- **SERVICE_CATALOG_ADDONS** – is used to show or hide the **Service Catalog Addons** view and to define which APIs are required for the view to be shown properly.
+  For the view to be shown, you must enable the feature. Moreover, all the APIs listed in the selectors array must be available in a cluster.
 
   Default settings:
 
   ```bash
-  "SERVICE_CATALOG_ADDONS ":{
+  "SERVICE_CATALOG_ADDONS": {
     "isEnabled": true,
-    "selectors":[
+    "selectors": [
       {
-        "type":"apiGroup",
-        "apiGroup":"servicecatalog.kyma-project.io"
+        "type": "apiGroup",
+        "apiGroup": "servicecatalog.kyma-project.io"
       }
     ]
   },
