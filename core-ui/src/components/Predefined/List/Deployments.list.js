@@ -56,7 +56,11 @@ export const DeploymentsList = ({ DefaultRenderer, ...otherParams }) => {
       value: deployment => {
         const podsCount = getPodsCount(deployment);
         const statusType = getStatusType(deployment);
-        return <StatusBadge type={statusType}>{podsCount}</StatusBadge>;
+        return (
+          <StatusBadge noTooltip type={statusType}>
+            {podsCount}
+          </StatusBadge>
+        );
       },
     },
     {
