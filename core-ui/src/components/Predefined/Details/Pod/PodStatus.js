@@ -1,5 +1,6 @@
 import React from 'react';
 import { StatusBadge } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 
 const calculatePodState = pod => {
   const containerStatuses = pod?.status?.containerStatuses;
@@ -43,10 +44,13 @@ const badgeType = status => {
 };
 
 export function PodStatus({ pod }) {
+  const { i18n } = useTranslation();
   const podState = calculatePodState(pod);
   return (
     <StatusBadge
-      tooltipContent={podState.message}
+      i18n={i18n}
+      additionalContent={podState.message}
+      resourceKind="pods"
       type={badgeType(podState.status)}
     >
       {podState.status}

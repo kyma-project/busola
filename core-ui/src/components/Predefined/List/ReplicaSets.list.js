@@ -25,7 +25,7 @@ const getStatusType = replicaSet => {
 };
 
 export const ReplicaSetsList = ({ DefaultRenderer, ...otherParams }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const customColumns = [
     {
@@ -49,7 +49,15 @@ export const ReplicaSetsList = ({ DefaultRenderer, ...otherParams }) => {
       value: replicaSet => {
         const status = getStatus(replicaSet);
         const statusType = getStatusType(replicaSet);
-        return <StatusBadge type={statusType}>{status}</StatusBadge>;
+        return (
+          <StatusBadge
+            i18n={i18n}
+            resourceKind="replica-sets"
+            type={statusType}
+          >
+            {status}
+          </StatusBadge>
+        );
       },
     },
   ];
