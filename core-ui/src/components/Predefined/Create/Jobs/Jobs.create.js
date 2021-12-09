@@ -44,7 +44,7 @@ function JobsCreate({
   return (
     <ResourceForm
       pluralKind="jobs"
-      singularName={t(`jobs.name-singular`)}
+      singularName={t(`jobs.name_singular`)}
       resource={job}
       setResource={setJob}
       initialResource={initialJob}
@@ -55,7 +55,7 @@ function JobsCreate({
     >
       <K8sNameField
         propertyPath="$.metadata.name"
-        kind={t('jobs.name-singular')}
+        kind={t('jobs.name_singular')}
         setValue={name => {
           jp.value(job, '$.metadata.name', name);
           jp.value(job, "$.metadata.labels['app.kubernetes.io/name']", name);

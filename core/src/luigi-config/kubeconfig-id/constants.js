@@ -8,6 +8,7 @@ const DEFAULT_MODULES = {
   ADDONS: 'addons.kyma-project.io',
   SERVERLESS: 'serverless.kyma-project.io',
   CUSTOM_DOMAINS: 'dns.gardener.cloud',
+  ISTIO: 'networking.istio.io',
 };
 
 export const DEFAULT_FEATURES = {

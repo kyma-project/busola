@@ -8,7 +8,10 @@ addons:
   messages:
     created: Addons Configuration {{name}} created.
   repository-urls: Repository URLs
+  singular_name: Addons Configuration
   title: Addons
+  tooltips:
+    failed: One of the repositories failed.
   urls: URLs
 api-rules:
   access-strategies:
@@ -75,7 +78,6 @@ api-rules:
     ns-no-services: No Services in this Namespace.
     placeholder: Choose the service to expose.
   statuses:
-    ok: OK
     skipped: Skipped
   title: API Rules
 applications:
@@ -240,6 +242,7 @@ certificates:
   with-csr: Use a CSR
 cluster-addons:
   description: <0>Cluster Addons Configuration</0> defines cluster-wide addons that provide all information required to convert Helm charts into Service Classes in Service Catalog.
+  singular_name: Cluster Addons Configuration
   title: Cluster Addons
 cluster-role-bindings:
   description: <0>Cluster Role Binding</0> assigns the permissions defined in a Cluster Role to a user.
@@ -422,12 +425,16 @@ common:
   statuses:
     error: Error
     failed: Failed
+    invalid: Invalid
+    ok: OK
+    pending: Pending
     ready: Ready
+    unknown: Unknown
   tooltips:
     copy-to-clipboard: Copy to clipboard
     download: Download
     duplicate-key: Duplicate key
-    error: 'Error: '
+    error: Error
     k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' (e.g.: 'my-name1')."
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: key=value, must start and end with an alphanumeric character, can contain '-', '_' or '.'.
@@ -579,6 +586,7 @@ custom-resource-definitions:
 daemon-sets:
   description: <0>Daemon Set</0> ensures that replicated Pods are running across a set of available nodes.
   images: Images
+  name_singular: Daemon Set
   node-selector: Node Selector
   pods: $t(pods.title)
   title: Daemon Sets
@@ -651,6 +659,10 @@ dnsentries:
     ttl: Enter the time to live.
   title: DNS Entries
   tooltips:
+    deleting: The DNS records are now being deleted.
+    invalid: A conflict exists with another DNS entry or owner.
+    pending: The DNS entry update is batched or in progress.
+    stale: The DNS entry exists, but there is an issue with the provider.
     target: Target must be an A record, or a CNAME record. Provide either target or text.
     text: Text record must be a string. Provide either target or text.
     use-a: Switch to A record.
@@ -1017,6 +1029,7 @@ issuers:
     included-domains: The domains (including subdomains) for which certificate requests are allowed, $t(domains.example).
     issuer-type: Certification authority used
     key-secret-ref: keySecretRef is the secret ref to the Secret that holds the symmetric MAC key of the External Account Binding with data key 'hmacKey'. The secret key stored in the Secret **must** be un-padded, base64 URL encoded data.
+    pending: The Issuer's update is batched or in progress.
     requests: RequestsPerDayQuota is the maximum number of certificate requests per days allowed for this issuer
     secret-ref-acme: PrivateKeySecretRef is the secret ref to the ACME private key.
     secret-ref-ca: PrivateKeySecretRef is the secret ref to the CA secret.
@@ -1061,7 +1074,7 @@ jobs:
       starting-deadline: Optional deadline in seconds for starting the job if it misses the scheduled time.
       suspend: 'If true, the controller suspends subsequent executions (default: false). It does not apply to started executions.'
   description: <0>Job</0> creates and supervises Pods until their successful termination.
-  name-singular: Job
+  name_singular: Job
   start-time: Start Time
   title: Jobs
 kubeconfig-id:
@@ -1110,6 +1123,7 @@ namespaces:
       object: Object
       object-type: Object Type
     title: Warnings
+  name_singular: Namespace
   overview:
     back: Back to Namespaces
     resources:
@@ -1215,6 +1229,7 @@ pods:
     failed-to-download: Failed to download the logs.
     no-logs-available: No logs avaliable for the '{{containerName}}' container.
     type-not-found: '{{type}} not found.'
+  name_singular: Pod
   node: Node
   restarts: Restarts
   title: Pods
@@ -1389,6 +1404,7 @@ settings:
   theme: Theme
 stateful-sets:
   description: <0>Stateful Set</0> is used for the management of Pods' deployment and scaling.
+  name_singular: Stateful Set
   replicas: Replicas
   title: Stateful Sets
 top-nav:
