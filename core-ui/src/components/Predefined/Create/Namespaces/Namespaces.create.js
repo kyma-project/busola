@@ -83,6 +83,7 @@ const NamespacesCreate = props => {
     }
     // eslint-disable-next-line
   }, [isSidecar]);
+
   useEffect(() => {
     // toggles 'Disable sidecar injection' when istio-injection label is deleted manually
     if (
@@ -146,7 +147,7 @@ const NamespacesCreate = props => {
   const renderEditor = ({ defaultEditor, Editor }) => (
     <div className="double-editor">
       <ResourceForm.CollapsibleSection
-        title={t('deployments.name_singular')}
+        title={t('namespaces.name_singular')}
         defaultOpen
         resource={namespace}
         setResource={setNamespace}
@@ -173,8 +174,8 @@ const NamespacesCreate = props => {
   return (
     <ResourceForm
       pluralKind="namespaces"
-      singularName={t('common.labels.namespace')}
-      renderEditor={renderEditor}
+      singularName={t('namespaces.name_singular')}
+      renderEditor={!initialNamespace ? renderEditor : null}
       resource={namespace}
       setResource={setNamespace}
       onChange={onChange}
