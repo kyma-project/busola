@@ -19,11 +19,9 @@ Cypress.Commands.add('goToNamespaceDetails', () => {
     .contains('Namespaces')
     .click();
 
-  cy.task('getNamespace').then(ns => {
-    cy.getIframeBody()
-      .contains('a', ns)
-      .click();
-  });
+  cy.getIframeBody()
+    .contains('a', Cypress.env('NAMESPACE_NAME'))
+    .click();
 
   return cy.end();
 });
