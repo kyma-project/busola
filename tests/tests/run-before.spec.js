@@ -13,6 +13,10 @@ context('Create Namespace', () => {
       }
     });
 
+    cy.getLeftNav()
+      .contains('Namespaces')
+      .click();
+
     cy.getIframeBody()
       .contains('Create Namespace')
       .click();

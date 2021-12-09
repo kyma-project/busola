@@ -28,17 +28,10 @@ function mockKymaSystemForbidden() {
   cy.intercept(requestData, { statusCode: 403 });
 }
 
-function fromClusterOverview() {
-  cy.loginAndSelectCluster();
-  cy.getLeftNav()
-    .contains('Cluster Overview')
-    .click();
-}
-
 context('Kyma Version', () => {
   it('No Kyma Version when feature is disabled', () => {
     mockShowKymaVersion(false);
-    fromClusterOverview();
+    cy.loginAndSelectCluster();
 
     cy.getIframeBody()
       .contains('Kyma:')
@@ -47,7 +40,7 @@ context('Kyma Version', () => {
 
   it('Enabled by configmap', () => {
     mockShowKymaVersion(true);
-    fromClusterOverview();
+    cy.loginAndSelectCluster();
 
     cy.getIframeBody()
       .contains('Kyma:')
@@ -60,7 +53,7 @@ context('Kyma Version', () => {
   it('Fails gracefully', () => {
     mockShowKymaVersion(true);
     mockKymaSystemForbidden();
-    fromClusterOverview();
+    cy.loginAndSelectCluster();
 
     cy.getIframeBody()
       .contains('Kyma: Unknown')

@@ -48,9 +48,9 @@ export async function setCluster(clusterName) {
     const preselectedNamespace = getCurrentContextNamespace(params.kubeconfig);
     const kubeconfigUser = params.currentContext.user.user;
 
-    const targetLocation =
-      `/cluster/${encodeURIComponent(clusterName)}/namespaces` +
-      (preselectedNamespace ? `/${preselectedNamespace}/details` : '');
+    const targetLocation = `/cluster/${encodeURIComponent(clusterName)}/${
+      preselectedNamespace ? `${preselectedNamespace}/details` : 'overview'
+    }`;
 
     if (hasNonOidcAuth(kubeconfigUser)) {
       setAuthData(kubeconfigUser);

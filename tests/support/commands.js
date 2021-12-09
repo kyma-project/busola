@@ -15,6 +15,10 @@ Cypress.Commands.add('filterWithNoValue', { prevSubject: true }, $elements =>
 
 Cypress.Commands.add('goToNamespaceDetails', () => {
   // // Go to the details of namespace
+  cy.getLeftNav()
+    .contains('Namespaces')
+    .click();
+
   cy.task('getNamespace').then(ns => {
     cy.getIframeBody()
       .contains('a', ns)

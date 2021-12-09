@@ -63,9 +63,9 @@ async function setupFromParams() {
   saveActiveClusterName(clusterName);
 
   const preselectedNamespace = getCurrentContextNamespace(params.kubeconfig);
-  const targetLocation =
-    `/cluster/${encodeURIComponent(clusterName)}/namespaces` +
-    (preselectedNamespace ? `/${preselectedNamespace}/details` : '');
+  const targetLocation = `/cluster/${encodeURIComponent(clusterName)}/${
+    preselectedNamespace ? `${preselectedNamespace}/details` : 'overview'
+  }`;
 
   saveLocation(targetLocation);
 }
