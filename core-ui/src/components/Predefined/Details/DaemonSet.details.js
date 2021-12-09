@@ -87,7 +87,11 @@ export const DaemonSetsDetails = ({ DefaultRenderer, ...otherParams }) => {
       value: resource => {
         const podsCount = getPodsCount(resource);
         const statusType = getStatusType(resource);
-        return <StatusBadge type={statusType}>{podsCount}</StatusBadge>;
+        return (
+          <StatusBadge type={statusType} noTooltip>
+            {podsCount}
+          </StatusBadge>
+        );
       },
     },
   ];

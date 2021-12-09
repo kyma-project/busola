@@ -142,7 +142,7 @@ export const StatusBadge = ({
     </Tooltip>
   );
 
-  // tooltipContent is DEPREATED. Remove after migration of all resources
+  // tooltipContent is DEPRECATED. Remove after migration of all resources
   // return (statusElement);
   return tooltipContent ? (
     <Tooltip content={tooltipContent} {...tooltipProps}>

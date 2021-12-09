@@ -54,7 +54,7 @@ context('Other login options', () => {
         .contains('button', 'Connect a cluster')
         .click();
 
-      cy.url().should('match', /namespaces$/);
+      cy.url().should('match', /overview$/);
       cy.getIframeBody()
         .find('thead')
         .should('be.visible');
@@ -63,7 +63,7 @@ context('Other login options', () => {
 
   it('Reset endpoint', () => {
     cy.loginAndSelectCluster();
-    cy.url().should('match', /namespaces$/);
+    cy.url().should('match', /overview$/);
 
     cy.visit(`${config.clusterAddress}/reset`);
     cy.url().should('match', /clusters$/);

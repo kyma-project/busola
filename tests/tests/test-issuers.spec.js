@@ -53,15 +53,13 @@ context('Test Issuers', () => {
       .filter(':visible')
       .click();
 
-    cy.task('getNamespace').then(ns => {
-      cy.getIframeBody()
-        .find('[placeholder="Select Namespace"]:visible')
-        .type(ns);
+    cy.getIframeBody()
+      .find('[placeholder="Select Namespace"]:visible')
+      .type(Cypress.env('NAMESPACE_NAME'));
 
-      cy.getIframeBody()
-        .contains('li', ns)
-        .click();
-    });
+    cy.getIframeBody()
+      .contains('li', Cypress.env('NAMESPACE_NAME'))
+      .click();
 
     cy.getIframeBody()
       .find('[placeholder="Select name"]:visible')
