@@ -8,6 +8,7 @@ addons:
   messages:
     created: Addons Configuration {{name}} created.
   repository-urls: Repository URLs
+  singular_name: Addons Configuration
   title: Addons
   tooltips:
     failed: One of the repositories failed.
@@ -241,6 +242,7 @@ certificates:
   with-csr: Use a CSR
 cluster-addons:
   description: <0>Cluster Addons Configuration</0> defines cluster-wide addons that provide all information required to convert Helm charts into Service Classes in Service Catalog.
+  singular_name: Cluster Addons Configuration
   title: Cluster Addons
 cluster-role-bindings:
   description: <0>Cluster Role Binding</0> assigns the permissions defined in a Cluster Role to a user.
@@ -587,6 +589,7 @@ custom-resource-definitions:
 daemon-sets:
   description: <0>Daemon Set</0> ensures that replicated Pods are running across a set of available nodes.
   images: Images
+  name_singular: Daemon Set
   node-selector: Node Selector
   pods: $t(pods.title)
   title: Daemon Sets
@@ -1074,7 +1077,7 @@ jobs:
       starting-deadline: Optional deadline in seconds for starting the job if it misses the scheduled time.
       suspend: 'If true, the controller suspends subsequent executions (default: false). It does not apply to started executions.'
   description: <0>Job</0> creates and supervises Pods until their successful termination.
-  name-singular: Job
+  name_singular: Job
   start-time: Start Time
   title: Jobs
 kubeconfig-id:
@@ -1123,6 +1126,7 @@ namespaces:
       object: Object
       object-type: Object Type
     title: Warnings
+  name_singular: Namespace
   overview:
     back: Back to Namespaces
     resources:
@@ -1228,6 +1232,7 @@ pods:
     failed-to-download: Failed to download the logs.
     no-logs-available: No logs avaliable for the '{{containerName}}' container.
     type-not-found: '{{type}} not found.'
+  name_singular: Pod
   node: Node
   restarts: Restarts
   title: Pods
@@ -1402,6 +1407,7 @@ settings:
   theme: Theme
 stateful-sets:
   description: <0>Stateful Set</0> is used for the management of Pods' deployment and scaling.
+  name_singular: Stateful Set
   replicas: Replicas
   title: Stateful Sets
 top-nav:

@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import './AddonsConfigurations.scss';
 
 export const AddonsConfigurations = ({
+  kind,
   formElementRef,
   onChange,
   onCompleted,
@@ -112,7 +113,7 @@ export const AddonsConfigurations = ({
           <K8sNameInput
             onChange={handleNameChanged}
             id={`${resourceType}-name`}
-            kind={resourceType}
+            kind={kind}
             i18n={i18n}
             value={name}
           />
