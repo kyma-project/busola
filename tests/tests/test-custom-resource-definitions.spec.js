@@ -45,9 +45,7 @@ context('Test Create Resource Definitions', () => {
       );
 
     loadRandomCRD().then(CRB_TEST => {
-      cy.log(CRB_TEST);
       const CRB_2 = JSON.stringify(CRB_TEST);
-      cy.log(`test: ${CRB_2}`);
       cy.getIframeBody()
         .find('[role="presentation"],[class="view-lines"]')
         .first()
@@ -81,7 +79,6 @@ context('Test Create Resource Definitions', () => {
     cy.getIframeBody()
       .contains(/namespaced/i)
       .should('be.visible');
-    cy.wait(4000);
   });
 
   it('Delete Cluster Role Binding', () => {
