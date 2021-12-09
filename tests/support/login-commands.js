@@ -21,7 +21,7 @@ Cypress.Commands.add(
       .contains('button', 'Connect a cluster')
       .click();
 
-    cy.url().should('match', /namespaces$/);
+    cy.url().should('match', /overview$/);
     cy.getIframeBody()
       .find('thead')
       .should('be.visible'); //wait for the namespaces XHR request to finish to continue running the tests. There's no <thead> while the request is pending.

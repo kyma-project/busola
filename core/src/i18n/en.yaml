@@ -390,6 +390,8 @@ common:
     default-preset: Default
     hostname: Hostname
     issuer: Issuer
+    kubernetes: Kubernetes
+    kyma: Kyma
     name: Name
     namespace: Namespace
     protocol: Protocol

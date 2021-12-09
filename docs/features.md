@@ -323,15 +323,23 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
   },
   ```
 
+- **SHOW_KYMA_VERSION** – configures if Kyma version should be visible on Cluster Overview page. Displayed version is the value of `reconciler.kyma-project.io/origin-version` label of `kyma-system` namespace. If the value of the label is missing or there is no `kyma-system` namespace, the `Unknown` version will be displayed.
+
+  ```bash
+  "SHOW_KYMA_VERSION": {
+  "isEnabled": true
+  },
+  ```
+
 - **SSO_LOGIN** – is used to configure data necessary for the SSO login such as an issuer address, client’s ID, and scopes.
 
-```bash
-"SSO_LOGIN": {
- "isEnabled": true,
- "config": {
-   "issuerUrl": "https://kymatest.accounts400.ondemand.com",
-   "scope": "openid",
-   "clientId": "9bd05ed7-a930-44e6-8c79-e6defeb7dec9"
- }
-},
-```
+  ```bash
+  "SSO_LOGIN": {
+  "isEnabled": true,
+  "config": {
+    "issuerUrl": "https://kymatest.accounts400.ondemand.com",
+    "scope": "openid",
+    "clientId": "9bd05ed7-a930-44e6-8c79-e6defeb7dec9"
+  }
+  },
+  ```

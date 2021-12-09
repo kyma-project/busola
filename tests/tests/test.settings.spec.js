@@ -135,10 +135,8 @@ context('Test app settings and preferences', () => {
 
       .should('be.visible');
 
-    cy.task('getNamespace').then(ns => {
-      cy.getIframeBody()
-        .contains(ns)
-        .click();
-    });
+    cy.getIframeBody()
+      .contains(Cypress.env('NAMESPACE_NAME'))
+      .click();
   });
 });

@@ -155,11 +155,9 @@ context('Reduced permissions', () => {
       .click();
 
     // service account namespace
-    cy.task('getNamespace').then(namespace =>
-      chooseComboboxOption(
-        '[placeholder="Select Namespace"]:visible',
-        namespace,
-      ),
+    chooseComboboxOption(
+      '[placeholder="Select Namespace"]:visible',
+      Cypress.env('NAMESPACE_NAME'),
     );
 
     // service account name
