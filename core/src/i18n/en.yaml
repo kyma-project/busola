@@ -285,12 +285,12 @@ clusters:
     upload-paste-kubeconfig: Upload or paste your kubeconfig file.
     wrong-configuration: Cannot apply the configuration.
   overview:
-    k8s-version: Kubernetes Version
     messages:
       no-metrics: No metrics available for this node.
     title-all-clusters: Clusters Overview
     title-current-cluster: Cluster Overview
     title-no-clusters-available: No clusters available
+    version: Version
   statuses:
     inmemory: In Memory
     localstorage: Local Storage
@@ -389,6 +389,8 @@ common:
     default-preset: Default
     hostname: Hostname
     issuer: Issuer
+    kubernetes: Kubernetes
+    kyma: Kyma
     name: Name
     namespace: Namespace
     protocol: Protocol

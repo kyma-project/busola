@@ -30,17 +30,19 @@ export function ClusterOverviewHeader() {
 
   return (
     <PageHeader title={t('clusters.overview.title-current-cluster')}>
-      <PageHeader.Column title={t('clusters.overview.k8s-version')}>
-        {formatClusterVersion()}
+      <PageHeader.Column title={t('clusters.overview.version')}>
+        <p>
+          {t('common.labels.kubernetes')}: {formatClusterVersion()}
+        </p>
+        {showKymaVersion && (
+          <p>
+            {t('common.labels.kyma')}: {kymaVersion}
+          </p>
+        )}
       </PageHeader.Column>
       <PageHeader.Column title={t('clusters.common.api-server-address')}>
         {cluster?.cluster.server}
       </PageHeader.Column>
-      {showKymaVersion && (
-        <PageHeader.Column title={t('clusters.labels.kyma-version')}>
-          {kymaVersion}
-        </PageHeader.Column>
-      )}
       <PageHeader.Column title={t('clusters.storage.title')}>
         <ClusterStorageType clusterConfig={config} />
       </PageHeader.Column>
