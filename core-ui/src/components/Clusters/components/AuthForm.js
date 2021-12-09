@@ -61,7 +61,6 @@ const OIDCform = ({ resource, setResource, ...props }) => {
 const TokenForm = ({ resource, ...props }) => {
   const { t } = useTranslation();
   const userIndex = getUserIndex(resource);
-
   return (
     <ResourceForm.Wrapper resource={resource} {...props}>
       <ResourceForm.FormField
@@ -91,6 +90,17 @@ export function AuthForm({
     revalidate();
   }, [useOidc, revalidate]);
 
+  const userIndex = getUserIndex(resource);
+
+  const switchAuthVariant = () => {
+    if (useOidc) {
+      jp.value(resource, `$.users[${userIndex}].user.exec`, undefined);
+    } else {
+      jp.value(resource, `$.users[${userIndex}].user.token`, undefined);
+    }
+    setUseOidc(!useOidc);
+  };
+
   return (
     <ResourceForm.Wrapper
       formEementRef={formElementRef}
@@ -115,7 +125,9 @@ export function AuthForm({
       )}
       <ResourceForm.FormField
         label={t('clusters.wizard.auth.using-oidc')}
-        input={() => <Switch compact onChange={() => setUseOidc(!useOidc)} />}
+        input={() => (
+          <Switch checked={useOidc} compact onChange={switchAuthVariant} />
+        )}
       />
       {useOidc && <OIDCform />}
     </ResourceForm.Wrapper>
