@@ -1,7 +1,7 @@
 import {
   saveClusterParams,
   saveActiveClusterName,
-  getCurrentContextNamespace,
+  getAfterLoginLocation,
 } from '../cluster-management/cluster-management';
 import { saveLocation } from '../navigation/previous-location';
 import * as constants from './constants';
@@ -62,10 +62,6 @@ async function setupFromParams() {
   const clusterName = params.currentContext.cluster.name;
   saveActiveClusterName(clusterName);
 
-  const preselectedNamespace = getCurrentContextNamespace(params.kubeconfig);
-  const targetLocation = `/cluster/${encodeURIComponent(clusterName)}/${
-    preselectedNamespace ? `${preselectedNamespace}/details` : 'overview'
-  }`;
-
+  const targetLocation = getAfterLoginLocation(clusterName, params.kubeconfig);
   saveLocation(targetLocation);
 }

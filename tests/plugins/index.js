@@ -18,6 +18,5 @@ module.exports = (on, config) => {
       return fs.readdirSync(downloadsDirectory);
     },
   });
-
   return config;
 };

@@ -35,6 +35,14 @@ export function getCurrentContextNamespace(kubeconfig) {
   return context?.context.namespace;
 }
 
+export function getAfterLoginLocation(clusterName, kubeconfig) {
+  const preselectedNamespace = getCurrentContextNamespace(kubeconfig);
+
+  return `/cluster/${encodeURIComponent(clusterName)}/${
+    preselectedNamespace ? `${preselectedNamespace}/details` : 'overview'
+  }`;
+}
+
 export async function setCluster(clusterName) {
   const clusters = await getClusters();
   const params = clusters[clusterName];
@@ -45,12 +53,12 @@ export async function setCluster(clusterName) {
   try {
     await reloadAuth();
 
-    const preselectedNamespace = getCurrentContextNamespace(params.kubeconfig);
     const kubeconfigUser = params.currentContext.user.user;
 
-    const targetLocation = `/cluster/${encodeURIComponent(clusterName)}/${
-      preselectedNamespace ? `${preselectedNamespace}/details` : 'overview'
-    }`;
+    const targetLocation = getAfterLoginLocation(
+      clusterName,
+      params.kubeconfig,
+    );
 
     if (hasNonOidcAuth(kubeconfigUser)) {
       setAuthData(kubeconfigUser);
