@@ -56,7 +56,7 @@ export const ReplicasetsDetails = ({ DefaultRenderer, ...otherParams }) => {
         const type = (readyReplicas || 0) < replicas ? 'warning' : 'success';
         const content = `${readyReplicas || 0} / ${replicas}`;
         return (
-          <StatusBadge key="replicas" type={type}>
+          <StatusBadge noTooltip key="replicas" type={type}>
             {content}
           </StatusBadge>
         );
