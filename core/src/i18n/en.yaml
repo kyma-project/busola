@@ -635,7 +635,7 @@ deployments:
     running: Running
   title: Deployments
   tooltips:
-    error: Some of the Pods have failed
+    error: At least one of the Pods has failed
     running: All the Pods are running correctly
 discovery-and-network:
   title: Discovery and Network
