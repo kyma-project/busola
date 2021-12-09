@@ -16,7 +16,7 @@ context('Test Cluster Overview', () => {
       .should('be.visible');
 
     cy.getIframeBody()
-      .contains('Kubernetes Version')
+      .contains('Version')
       .next('.content')
       .should('not.be.empty');
 

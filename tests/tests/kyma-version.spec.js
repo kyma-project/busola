@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
 
-function mockShowKymaVersionEnabled() {
+function mockShowKymaVersion(enabled) {
   const requestData = {
     method: 'GET',
     url: '/backend/api/v1/namespaces/kube-public/configmaps/busola-config',
@@ -11,7 +11,7 @@ function mockShowKymaVersionEnabled() {
       config: JSON.stringify({
         config: {
           features: {
-            SHOW_KYMA_VERSION: { isEnabled: true },
+            SHOW_KYMA_VERSION: { isEnabled: enabled },
           },
         },
       }),
@@ -36,20 +36,21 @@ function fromClusterOverview() {
 }
 
 context('Kyma Version', () => {
-  it('Disabled by default', () => {
+  it('No Kyma Version when feature is disabled', () => {
+    mockShowKymaVersion(false);
     fromClusterOverview();
 
     cy.getIframeBody()
-      .contains('Kyma Version')
+      .contains('Kyma:')
       .should('not.exist');
   });
 
   it('Enabled by configmap', () => {
-    mockShowKymaVersionEnabled();
+    mockShowKymaVersion(true);
     fromClusterOverview();
 
     cy.getIframeBody()
-      .contains('Kyma Version')
+      .contains('Kyma:')
       .should('exist')
       .parent()
       .contains('Unknown')
@@ -57,15 +58,12 @@ context('Kyma Version', () => {
   });
 
   it('Fails gracefully', () => {
-    mockShowKymaVersionEnabled();
+    mockShowKymaVersion(true);
     mockKymaSystemForbidden();
     fromClusterOverview();
 
     cy.getIframeBody()
-      .contains('Kyma Version')
-      .should('exist')
-      .parent()
-      .contains('Unknown')
+      .contains('Kyma: Unknown')
       .should('exist');
   });
 });
