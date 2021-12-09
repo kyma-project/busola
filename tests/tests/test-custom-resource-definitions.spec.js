@@ -81,7 +81,7 @@ context('Test Create Resource Definitions', () => {
       .should('be.visible');
   });
 
-  it('Delete Cluster Role Binding', () => {
+  it('Delete Create Resource Definitions', () => {
     cy.getIframeBody()
       .contains('button', 'Delete')
       .click();
