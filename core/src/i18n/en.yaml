@@ -1310,6 +1310,12 @@ secrets:
     decode: Decode
     encode: Encode
     expand: Expand All
+  certificate-panel:
+    expires: Expires
+    issuer: Issuer
+    subject: Subject
+    title: Certificate Data for {{name}}
+    valid-since: Valid Since
   create-modal:
     messages:
       decoding-failure: 'Failed to decode the Secret data: {{error}}.'

@@ -1,18 +1,12 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { LayoutPanel, FormItem, FormLabel } from 'fundamental-react';
+import { LayoutPanel } from 'fundamental-react';
 import { ResourceStatus } from 'react-shared';
+import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 
 const RowComponent = ({ name, value }) =>
-  value ? (
-    <FormItem className="item-wrapper">
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 3fr' }}>
-        <FormLabel className="form-label">{name}:</FormLabel>
-        <div>{value}</div>
-      </div>
-    </FormItem>
-  ) : null;
+  value ? <LayoutPanelRow name={name} value={value} /> : null;
 
 const Provider = resource => {
   const { t } = useTranslation();

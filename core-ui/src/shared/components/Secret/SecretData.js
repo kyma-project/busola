@@ -2,17 +2,20 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 
-import { Button, LayoutPanel, FormItem, FormLabel } from 'fundamental-react';
+import { Button, LayoutPanel } from 'fundamental-react';
+import { LayoutPanelRow } from '../LayoutPanelRow/LayoutPanelRow';
 import './SecretData.scss';
 import { base64Decode } from 'shared/helpers';
 
 const SecretComponent = ({ name, value, showEncoded, isCollapsed }) => (
-  <FormItem className="item-wrapper">
-    <FormLabel>{name}</FormLabel>
-    <pre className={isCollapsed ? 'show-more-expand' : 'show-more-collapse'}>
-      {showEncoded ? value : base64Decode(value)}
-    </pre>
-  </FormItem>
+  <LayoutPanelRow
+    name={name}
+    value={
+      <pre className={isCollapsed ? 'show-more-expand' : 'show-more-collapse'}>
+        {showEncoded ? value : base64Decode(value)}
+      </pre>
+    }
+  />
 );
 
 SecretData.propTypes = {
