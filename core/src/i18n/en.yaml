@@ -1293,7 +1293,7 @@ replica-sets:
     running: Running
   title: Replica Sets
   tooltips:
-    error: Some of the Pods have failed
+    error: At least one of the Pods has failed
     running: All the Pods are running correctly
 resource-quotas:
   headers:
