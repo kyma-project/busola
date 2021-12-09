@@ -10,7 +10,11 @@ export async function loadCRD() {
 
 export async function loadRandomCRD() {
   const CRD = await loadCRD();
-  const random = 'test-' + Math.random().toString();
+  const random =
+    'test-' +
+    Math.random()
+      .toString()
+      .substr(2, 8);
   const name = random + '.stable.example.com';
 
   const newCRD = { ...CRD };
