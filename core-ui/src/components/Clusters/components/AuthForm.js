@@ -58,13 +58,6 @@ const OIDCform = ({ resource, setResource, ...props }) => {
   );
 };
 
-const func = e => {
-  if (e.key === 'Enter') {
-    e.preventDefault();
-  }
-  console.log('dupa');
-};
-
 const TokenForm = ({ resource, ...props }) => {
   const { t } = useTranslation();
   const userIndex = getUserIndex(resource);
@@ -75,7 +68,6 @@ const TokenForm = ({ resource, ...props }) => {
         propertyPath={`$.users[${userIndex || 0}].user.token`}
         label={t('clusters.wizard.auth.token')}
         input={Inputs.Text}
-        onKeyDown={func}
       />
     </ResourceForm.Wrapper>
   );
@@ -133,7 +125,9 @@ export function AuthForm({
       )}
       <ResourceForm.FormField
         label={t('clusters.wizard.auth.using-oidc')}
-        input={() => <Switch compact onChange={switchAuthVariant} />}
+        input={() => (
+          <Switch checked={useOidc} compact onChange={switchAuthVariant} />
+        )}
       />
       {useOidc && <OIDCform />}
     </ResourceForm.Wrapper>

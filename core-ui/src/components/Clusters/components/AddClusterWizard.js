@@ -32,7 +32,6 @@ export function AddClusterWizard({
   const [storage, setStorage] = useState(
     busolaClusterParams?.config?.storage || 'localStorage',
   );
-
   const {
     isValid: authValid,
     formElementRef: authFormRef,
@@ -125,6 +124,9 @@ export function AddClusterWizard({
             resource={kubeconfig}
             setResource={setKubeconfig}
             setCustomValid={setCustomValid}
+            createResource={e => {
+              e.preventDefault();
+            }}
           >
             {!hasOneContext && <ContextChooser />}
             {!hasAuth && <AuthForm revalidate={revalidate} />}
