@@ -44,6 +44,7 @@ export const DEFAULT_FEATURES = {
       cockpitUrl: 'https://account.staging.hanavlab.ondemand.com/cockpit',
     },
   },
+  SHOW_KYMA_VERSION: { isEnabled: false },
 };
 
 export const DEFAULT_HIDDEN_NAMESPACES = [
