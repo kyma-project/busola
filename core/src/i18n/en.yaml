@@ -1352,6 +1352,7 @@ secrets:
     encode: Encode
     expand: Expand All
   certificate-panel:
+    expiration-warning: This certificate is expired.
     expires: Expires
     issuer: Issuer
     subject: Subject

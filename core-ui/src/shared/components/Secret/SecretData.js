@@ -61,7 +61,7 @@ export default function SecretData({ secret }) {
     }
 
     return (
-      <>
+      <LayoutPanel.Body>
         {Object.keys(secret.data).map(key => (
           <SecretComponent
             name={key}
@@ -71,7 +71,7 @@ export default function SecretData({ secret }) {
             isCollapsed={isCollapsed}
           />
         ))}
-      </>
+      </LayoutPanel.Body>
     );
   };
 

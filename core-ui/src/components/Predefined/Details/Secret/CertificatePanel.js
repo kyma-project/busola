@@ -2,18 +2,25 @@ import React from 'react';
 import { Icon, LayoutPanel } from 'fundamental-react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { useTranslation } from 'react-i18next';
+import { Tooltip } from 'react-shared';
 
 export function CertificatePanel({ name, certificate }) {
   const { t } = useTranslation();
   const { format: formatDate } = new Intl.DateTimeFormat('en');
 
   const expirationWarning = certificate.notAfter < new Date() && (
-    <Icon
-      className="fd-has-color-status-2"
-      ariaLabel="Warning"
-      glyph="message-warning"
-      size="s"
-    />
+    <Tooltip
+      delay={0}
+      position="right"
+      content={t('secrets.certificate-panel.expiration-warning')}
+    >
+      <Icon
+        className="fd-has-color-status-2"
+        ariaLabel="Warning"
+        glyph="message-warning"
+        size="s"
+      />
+    </Tooltip>
   );
 
   return (

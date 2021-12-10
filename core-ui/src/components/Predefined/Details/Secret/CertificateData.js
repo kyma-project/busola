@@ -1,10 +1,11 @@
 import React from 'react';
 import { X509Certificate } from '@peculiar/x509';
 import { CertificatePanel } from './CertificatePanel';
+import { base64Decode } from 'shared/helpers';
 
 function decodeCertificate(value) {
   try {
-    const certificateString = Buffer.from(value, 'base64').toString('ascii');
+    const certificateString = base64Decode(value);
     return new X509Certificate(certificateString);
   } catch (_) {
     return null;
