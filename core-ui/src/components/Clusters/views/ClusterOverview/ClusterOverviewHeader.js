@@ -7,6 +7,7 @@ import {
   getErrorMessage,
 } from 'react-shared';
 import { ClusterStorageType } from '../ClusterStorageType';
+import { useKymaVersionQuery } from './useKymaVersionQuery';
 
 export function ClusterOverviewHeader() {
   const { t } = useTranslation();
@@ -16,6 +17,10 @@ export function ClusterOverviewHeader() {
     error: versionError,
     loading: versionLoading,
   } = useGet('/version');
+  const { features } = useMicrofrontendContext();
+  const showKymaVersion = features.SHOW_KYMA_VERSION?.isEnabled;
+
+  const kymaVersion = useKymaVersionQuery({ skip: !showKymaVersion });
 
   function formatClusterVersion() {
     if (versionLoading) return t('common.headers.loading');
@@ -26,7 +31,18 @@ export function ClusterOverviewHeader() {
   return (
     <PageHeader title={t('clusters.overview.title-current-cluster')}>
       <PageHeader.Column title={t('clusters.overview.version')}>
-        {formatClusterVersion()}
+        {showKymaVersion ? (
+          <>
+            <p>
+              {t('common.labels.kubernetes')}: {formatClusterVersion()}
+            </p>
+            <p>
+              {t('common.labels.kyma')}: {kymaVersion}
+            </p>
+          </>
+        ) : (
+          kymaVersion
+        )}
       </PageHeader.Column>
       <PageHeader.Column title={t('clusters.common.api-server-address')}>
         {cluster?.cluster.server}

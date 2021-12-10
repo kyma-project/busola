@@ -16,7 +16,7 @@ context('Login - kubeconfigID', () => {
         kubeconfig,
       );
       cy.visit(`${config.clusterAddress}/clusters?kubeconfigID=tests`);
-      cy.url().should('match', /namespaces$/);
+      cy.url().should('match', /overview$/);
     });
   });
 

@@ -51,7 +51,7 @@ context('Multiple context kubeconfig', () => {
         .click();
 
       cy.getIframeBody()
-        .contains('Namespaces')
+        .contains('Cluster Overview')
         .should('exist');
 
       cy.get('[data-testid=luigi-topnav-title]')
