@@ -27,7 +27,11 @@ export function JobConditions(job) {
   };
   const rowRenderer = condition => {
     return [
-      <StatusBadge type={conditionTypeStatus(condition.type)}>
+      <StatusBadge
+        noTooltip={condition.type === 'Complete'}
+        additionalContent={condition.message}
+        type={conditionTypeStatus(condition.type)}
+      >
         {condition.type}
       </StatusBadge>,
       condition.status,

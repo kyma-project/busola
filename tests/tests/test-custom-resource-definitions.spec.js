@@ -52,8 +52,8 @@ context('Test Create Resource Definitions', () => {
         '{selectall}{backspace}{selectall}{backspace}{selectall}{backspace}',
       );
 
-    loadRandomCRD(CRD_PLURAL_NAME, CRD_NAME).then(CRD_TEST => {
-      const CRD = JSON.stringify(CRD_TEST);
+    cy.wrap(loadRandomCRD()).then(CRD_CONFIG => {
+      const CRD = JSON.stringify(CRD_CONFIG);
       cy.getIframeBody()
         .find('[role="presentation"],[class="view-lines"]')
         .first()

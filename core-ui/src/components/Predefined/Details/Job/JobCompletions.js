@@ -8,6 +8,7 @@ export function JobCompletions({ job }) {
   return (
     <StatusBadge
       type={statusType}
+      noTooltip
     >{`${succeeded} / ${completions}`}</StatusBadge>
   );
 }
