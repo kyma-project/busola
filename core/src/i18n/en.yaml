@@ -836,7 +836,10 @@ functions:
   title: Functions
   tooltips:
     building: Waiting for the image to be build.
+    deploying: Deploying function.
     failed: Function couldn't be processed.
+    running: Function created.
+    unhealthy: Waiting for the required number of replicas.
   variable:
     buttons:
       add: Add Environment Variable
