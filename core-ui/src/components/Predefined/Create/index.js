@@ -20,6 +20,7 @@ export * from './ServiceAccounts/ServiceAccounts.create.js';
 export * from './Jobs/CronJobs.create.js';
 export * from './Jobs/Jobs.create.js';
 export * from './ReplicaSets/ReplicaSets.create.js';
+export * from './CustomResourceDefinitions/CustomResourceDefinitons.create.js';
 export * from './StatefulSets/StatefulSets.create';
 export * from './DaemonSets/DaemonSets.create';
 export * from './Services/Services.create';
