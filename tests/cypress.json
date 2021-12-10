@@ -27,7 +27,6 @@
     "test-cluster-role-bindings.spec.js",
     "test-jobs.spec.js",
     "test-replica-sets.spec.js",
-    "test-crds.spec.js",
     "test-dns-entries.spec.js",
     "test-cron-jobs.spec.js",
     "test-git-repositories.spec.js",
