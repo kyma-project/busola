@@ -1,0 +1,20 @@
+.service-ports.fd-token {
+  display: inline-grid;
+  grid-auto-columns: auto;
+  grid-auto-flow: column;
+  grid-gap: 0.2em;
+  align-items: baseline;
+  margin: 0 4px 4px 0;
+
+  .name {
+    padding-right: 4px;
+  }
+
+  .fd-counter {
+    height: 80%;
+  }
+
+  *[class^='sap-icon-']::before {
+    font-size: 0.8em;
+  }
+}

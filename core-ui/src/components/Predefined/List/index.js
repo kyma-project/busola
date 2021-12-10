@@ -23,6 +23,7 @@ export * from './StatefulSets.list';
 export * from './DNSEntries.list';
 export * from './DNSProviders.list';
 export * from './Certificates.list';
+export * from './Ingresses.list';
 export * from './Issuers.list';
 export * from './ServiceInstances.list';
 export * from './ServiceBindings.list';
