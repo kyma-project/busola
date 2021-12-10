@@ -144,6 +144,8 @@ context('Test DNS Providers', () => {
       .contains('button', 'Update')
       .click();
 
+    cy.getIframeBody().contains('Included Domains');
+
     // indluded domain
     cy.getIframeBody().contains(PROVIDER_INCLUDED_DOMAIN_2);
     // excluded domain

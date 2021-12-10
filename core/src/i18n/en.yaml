@@ -390,6 +390,8 @@ common:
     default-preset: Default
     hostname: Hostname
     issuer: Issuer
+    kubernetes: Kubernetes
+    kyma: Kyma
     name: Name
     namespace: Namespace
     protocol: Protocol
@@ -628,7 +630,13 @@ deployments:
     images: Images
     pods: $t(pods.title)
   name_singular: Deployment
+  statuses:
+    error: Error
+    running: Running
   title: Deployments
+  tooltips:
+    error: At least one of the Pods has failed
+    running: All the Pods are running correctly
 discovery-and-network:
   title: Discovery and Network
 dnsentries:
@@ -1232,7 +1240,34 @@ pods:
   name_singular: Pod
   node: Node
   restarts: Restarts
+  statuses:
+    completed: Completed
+    containercreating: Container Creating
+    containersnotinitialized: Containers Not Initialized
+    containersnotready: Container Not Ready
+    crashloopbackoff: Crash Loop Back-off
+    createcontainerconfigerror: Create Container Config Error
+    createcontainererror: Create Container Error
+    dockerdaemonnotready: Docker Daemon Not Ready
+    errimageneverpull: Image Never Pulled
+    errimagepull: Image Pull Error
+    error: Error
+    evicted: Evicted
+    imageinspecterror: Image Inspect Error
+    imagepullbackoff: Image Pull Back-off
+    invalidimagename: Invalid Image Name
+    networkpluginnotready: Network Plugin Not Ready
+    podinitializing: Pod initializing
+    poststarthookerror: Post-start Hook Error
+    registryunavailable: Registry Unavailable
+    runcontainererror: Run Container Error
+    running: Running
+    terminated: Terminated
+    terminating: Terminating
   title: Pods
+  tooltips:
+    error: Pod failed to start
+    running: Pod is running correctly
 preferences:
   title: Preferences
 replica-sets:
@@ -1255,7 +1290,13 @@ replica-sets:
     requests: Requests
   memory: Memory
   name_singular: Replica Set
+  statuses:
+    error: Error
+    running: Running
   title: Replica Sets
+  tooltips:
+    error: At least one of the Pods has failed
+    running: All the Pods are running correctly
 resource-quotas:
   headers:
     limits: Limits

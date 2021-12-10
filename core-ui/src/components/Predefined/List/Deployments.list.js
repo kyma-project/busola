@@ -30,7 +30,7 @@ const getPodsCount = deployment => {
 };
 
 export const DeploymentsList = ({ DefaultRenderer, ...otherParams }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const customColumns = [
     {
@@ -56,7 +56,11 @@ export const DeploymentsList = ({ DefaultRenderer, ...otherParams }) => {
       value: deployment => {
         const podsCount = getPodsCount(deployment);
         const statusType = getStatusType(deployment);
-        return <StatusBadge type={statusType}>{podsCount}</StatusBadge>;
+        return (
+          <StatusBadge noTooltip type={statusType}>
+            {podsCount}
+          </StatusBadge>
+        );
       },
     },
     {
@@ -64,7 +68,15 @@ export const DeploymentsList = ({ DefaultRenderer, ...otherParams }) => {
       value: deployment => {
         const status = getStatus(deployment);
         const statusType = getStatusType(deployment);
-        return <StatusBadge type={statusType}>{status}</StatusBadge>;
+        return (
+          <StatusBadge
+            i18n={i18n}
+            resourceKind={otherParams.resourceType}
+            type={statusType}
+          >
+            {status}
+          </StatusBadge>
+        );
       },
     },
   ];
