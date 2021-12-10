@@ -3,13 +3,14 @@ import { ResourceForm } from 'shared/ResourceForm';
 import { createCustomResourceDefinitionsTemplate } from './templates';
 
 function CustomResourceDefinitionsCreate({
+  namespace,
   formElementRef,
   onChange,
   setCustomValid,
   resourceUrl,
 }) {
   const [customResourceDefinitions, setCustomResourceDefinitions] = useState(
-    createCustomResourceDefinitionsTemplate(),
+    createCustomResourceDefinitionsTemplate(namespace),
   );
 
   return (

@@ -1,4 +1,4 @@
-export function createCustomResourceDefinitionsTemplate() {
+export function createCustomResourceDefinitionsTemplate(namespace) {
   return {
     apiVersion: 'apiextensions.k8s.io/v1',
     kind: 'CustomResourceDefinition',
@@ -7,7 +7,7 @@ export function createCustomResourceDefinitionsTemplate() {
     },
     spec: {
       group: '',
-      scope: 'Namespaced',
+      scope: namespace ? 'Namespaced' : 'Cluster',
       versions: [
         {
           name: '',
