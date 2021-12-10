@@ -77,9 +77,10 @@ api-rules:
     loading: Loading services...
     ns-no-services: No Services in this Namespace.
     placeholder: Choose the service to expose.
-  statuses:
-    skipped: Skipped
   title: API Rules
+  tooltips:
+    ok: Resource created.
+    skipped: Skipped creating a resource.
 applications:
   aria:
     namespace: Choose Namespace
@@ -823,6 +824,7 @@ functions:
     unhealthy: Unhealthy
   title: Functions
   tooltips:
+    building: Waiting for the image to be build.
     failed: Function couldn't be processed.
   variable:
     buttons:
@@ -979,6 +981,7 @@ git-repositories:
   title: Git Repositories
   tooltips:
     auth: 'Basic: token or password / SSH key: authentication key / Public: no authentication.'
+    none: Authentication not required.
     secret: The name of the Secret with credentials used by the Function Controller to authenticate to the Git repository in order to fetch the Function's source code and dependencies.
     url: URL must be a valid Git repository address that starts with the "http(s)", "git", or "ssh" prefix.
 instances:

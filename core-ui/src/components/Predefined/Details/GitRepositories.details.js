@@ -15,7 +15,7 @@ export const GitRepositoriesDetails = ({ DefaultRenderer, ...otherParams }) => {
     {
       header: t('git-repositories.labels.auth'),
       value: repo => (
-        <StatusBadge noTooltip type="info">
+        <StatusBadge resourceKind="git-repositories" type="info">
           {repo.spec.auth?.type || 'none'}
         </StatusBadge>
       ),
