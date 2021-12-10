@@ -593,7 +593,7 @@ custom-resource-definitions:
   title: Custom Resource Definitions
   tooltips:
     not-served: This version is not served using REST APIs.
-    served: This version is not served using REST APIs.
+    served: This version is served using REST APIs.
     storage: Use this version when persisting custom resources to storage.
 daemon-sets:
   description: <0>Daemon Set</0> ensures that replicated Pods are running across a set of available nodes.
