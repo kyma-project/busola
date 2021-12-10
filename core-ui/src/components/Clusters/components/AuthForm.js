@@ -133,9 +133,7 @@ export function AuthForm({
       )}
       <ResourceForm.FormField
         label={t('clusters.wizard.auth.using-oidc')}
-        input={() => (
-          <Switch checked={useOidc} compact onChange={switchAuthVariant} />
-        )}
+        input={() => <Switch compact onChange={switchAuthVariant} />}
       />
       {useOidc && <OIDCform />}
     </ResourceForm.Wrapper>
