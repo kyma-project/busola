@@ -5,7 +5,7 @@ import { StatusBadge, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
 export const GitRepositoriesDetails = ({ DefaultRenderer, ...otherParams }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const customColumns = [
     {
@@ -15,7 +15,7 @@ export const GitRepositoriesDetails = ({ DefaultRenderer, ...otherParams }) => {
     {
       header: t('git-repositories.labels.auth'),
       value: repo => (
-        <StatusBadge resourceKind="git-repositories" type="info">
+        <StatusBadge i18n={i18n} resourceKind="git-repositories" type="info">
           {repo.spec.auth?.type || 'none'}
         </StatusBadge>
       ),
