@@ -8,18 +8,12 @@ export async function loadCRD() {
   });
 }
 
-export async function loadRandomCRD() {
+export async function loadRandomCRD(crdPluralName, crdName) {
   const CRD = await loadCRD();
-  const random =
-    'test-' +
-    Math.random()
-      .toString()
-      .substr(2, 8);
-  const name = random + '.stable.example.com';
-
   const newCRD = { ...CRD };
-  newCRD.metadata.name = name;
-  newCRD.spec.names.plural = random;
+
+  newCRD.metadata.name = crdName;
+  newCRD.spec.names.plural = crdPluralName;
 
   return newCRD;
 }
