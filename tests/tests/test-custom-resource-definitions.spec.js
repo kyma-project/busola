@@ -44,7 +44,7 @@ context('Test Create Resource Definitions', () => {
         '{selectall}{backspace}{selectall}{backspace}{selectall}{backspace}',
       );
 
-    loadRandomCRD().then(CRB_TEST => {
+    cy.wrap(loadRandomCRD()).then(CRB_TEST => {
       const CRB_2 = JSON.stringify(CRB_TEST);
       cy.getIframeBody()
         .find('[role="presentation"],[class="view-lines"]')
