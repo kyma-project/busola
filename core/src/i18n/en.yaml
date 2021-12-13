@@ -82,7 +82,7 @@ api-rules:
   title: API Rules
   tooltips:
     ok: Resource created.
-    skipped: Skipped creating a resource.
+    skipped: Skipped creating the resource.
 applications:
   aria:
     namespace: Choose Namespace
@@ -444,7 +444,7 @@ common:
     download: Download
     duplicate-key: Duplicate key
     error: Error
-    k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' (e.g.: 'my-name1')."
+    k8s-name-input: 'Name must consist of lowercase alphanumeric characters, can contain ''-'' (e.g.: ''my-name1'').'
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: key=value, must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     read-file: Read file content as a single value, with file name as a key.
@@ -837,8 +837,8 @@ functions:
     unhealthy: Unhealthy
   title: Functions
   tooltips:
-    building: Waiting for the image to be build.
-    deploying: Deploying function.
+    building: Waiting for the image to build.
+    deploying: Deploying the Function.
     failed: Function couldn't be processed.
     running: Function created.
     unhealthy: Waiting for the required number of replicas.
@@ -1110,7 +1110,7 @@ jobs:
   tooltips:
     complete: Job completed successfully.
 kubeconfig-id:
-  error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})."
+  error: 'Couldn''t load kubeconfig ID; configuration not changed (Error: ${{error}}).'
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
 legal:
   copyright: Copyright
