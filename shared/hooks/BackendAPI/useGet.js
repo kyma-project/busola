@@ -26,7 +26,7 @@ const useGetHook = processDataFn =>
       function processError(error) {
         if (!abortController.current.signal.aborted) {
           errorTolerancyCounter.current++;
-          if (errorTolerancyCounter.current > ERROR_TOLERANCY) {
+          if (errorTolerancyCounter.current > ERROR_TOLERANCY || !data) {
             console.error(error);
             setError(error);
           }
