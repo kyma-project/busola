@@ -124,9 +124,62 @@ context('Create a Deployment', () => {
     cy.getIframeBody()
       .contains('a', DEPLOYMENT_NAME, { timeout: 7000 })
       .should('be.visible');
+  });
+
+  it('Edit a deployment', () => {
+    cy.getLeftNav()
+      .contains('Workloads')
+      .click();
 
     cy.getLeftNav()
+      .find('[data-testid=deployments_deployments]')
+      .click();
+
+    cy.getIframeBody()
+      .contains('a', DEPLOYMENT_NAME, { timeout: 7000 })
+      .should('be.visible')
+      .click();
+
+    cy.getIframeBody()
+      .contains('Edit')
+      .click();
+
+    cy.getIframeBody()
+      .contains('Advanced')
+      .click();
+
+    cy.getIframeBody()
+      .find('[aria-label="expand Labels"]')
+      .click();
+
+    cy.getIframeBody()
+      .find('[placeholder="Enter Key"]')
+      .filterWithNoValue()
+      .type('label-key');
+
+    cy.getIframeBody()
+      .find('[placeholder="Enter Value"]')
+      .filterWithNoValue()
+      .first()
+      .type('label-value');
+
+    cy.getIframeBody()
+      .contains('Expose a separate Service')
+      .should('not.exist');
+
+    cy.getIframeBody()
+      .contains('button', 'Update')
+      .click();
+
+    cy.getIframeBody().contains('label-key=label-value');
+
+    // Close the left side nav tabs to not interfere with other tests
+    cy.getLeftNav()
       .contains('Discovery and Network')
+      .click();
+
+    cy.getLeftNav()
+      .contains('Workloads')
       .click();
   });
 });
