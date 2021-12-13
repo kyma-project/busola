@@ -5,10 +5,9 @@ import {
   ControlledBy,
   GenericList,
   EMPTY_TEXT_PLACEHOLDER,
-  StatusBadge,
 } from 'react-shared';
-import { ResourcePods } from './ResourcePods.js';
-import { getPodsCount, getStatusType } from '../List/DaemonSets.list';
+import { ResourcePods } from '../ResourcePods.js';
+import { DaemonSetStatus } from './DaemonSetStatus';
 
 const Tolerations = resource => {
   const { t, i18n } = useTranslation();
@@ -84,15 +83,7 @@ export const DaemonSetsDetails = ({ DefaultRenderer, ...otherParams }) => {
     },
     {
       header: t('common.headers.status'),
-      value: resource => {
-        const podsCount = getPodsCount(resource);
-        const statusType = getStatusType(resource);
-        return (
-          <StatusBadge type={statusType} noTooltip>
-            {podsCount}
-          </StatusBadge>
-        );
-      },
+      value: resource => <DaemonSetStatus daemonSet={resource} />,
     },
   ];
 

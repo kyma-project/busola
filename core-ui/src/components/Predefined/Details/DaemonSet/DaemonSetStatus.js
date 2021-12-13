@@ -2,11 +2,12 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { StatusBadge } from 'react-shared';
 
-export function StatefulSetReplicas({ set }) {
+export function DaemonSetStatus({ daemonSet }) {
   const { t } = useTranslation();
 
-  const current = set.status.currentReplicas || 0;
-  const total = set.spec.replicas || 0;
+  const current = daemonSet.status.numberReady || 0;
+  const total =
+    daemonSet.status.numberReady + (daemonSet.status.numberUnavailable || 0);
   const statusType = current === total ? 'success' : 'error';
 
   return (
@@ -14,8 +15,8 @@ export function StatefulSetReplicas({ set }) {
       type={statusType}
       tooltipContent={
         current === total
-          ? t('stateful-sets.tooltips.pods-running')
-          : t('stateful-sets.tooltips.pods-error')
+          ? t('daemon-sets.tooltips.pods-running')
+          : t('daemon-sets.tooltips.pods-error')
       }
     >{`${current} / ${total}`}</StatusBadge>
   );

@@ -15,7 +15,7 @@ export * from './AddonsConfiguration.details';
 export * from './CustomResourceDefinitions/CustomResourceDefinitions.details.js';
 export * from './Job/Job.details';
 export * from './CronJobs/CronJob.details';
-export * from './DaemonSet.details';
+export * from './DaemonSet/DaemonSet.details';
 export * from './DNSEntries.details';
 export * from './DNSProviders.details';
 export * from './StatefulSet/StatefulSets.details';

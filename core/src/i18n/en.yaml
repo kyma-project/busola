@@ -608,6 +608,9 @@ daemon-sets:
     operator: Operator
     title: Tolerations
     toleration-seconds: Seconds
+  tooltips:
+    pods-error: '---'
+    pods-running: '---'
 deployments:
   create-modal:
     advanced:
@@ -1107,6 +1110,8 @@ jobs:
   title: Jobs
   tooltips:
     complete: Job completed successfully.
+    completed: '---'
+    not-completed: '----'
 kubeconfig-id:
   error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})."
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
@@ -1472,6 +1477,9 @@ stateful-sets:
   name_singular: Stateful Set
   replicas: Replicas
   title: Stateful Sets
+  tooltips:
+    pods-error: '---'
+    pods-running: '---'
 top-nav:
   profile:
     preferences: $t(preferences.title)

@@ -14,7 +14,7 @@ export function CronJobConcurrencyPolicy({ concurrencyPolicy }) {
     <StatusBadge
       type="info"
       tooltipProps={{ position: 'bottom' }}
-      additionalContent={descriptions[concurrencyPolicy]}
+      tooltipContent={descriptions[concurrencyPolicy]}
     >
       {concurrencyPolicy}
     </StatusBadge>
