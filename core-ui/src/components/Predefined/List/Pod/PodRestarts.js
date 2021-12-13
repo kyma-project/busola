@@ -3,7 +3,7 @@ import { StatusBadge } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
 export default function PodRestarts({ statuses }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const restartCount = statuses?.reduce((acc, c) => acc + c.restartCount, 0);
   const type = restartCount ? 'warning' : 'success';
