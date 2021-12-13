@@ -2,6 +2,9 @@ import React from 'react';
 import { useMicrofrontendContext } from '../../contexts/MicrofrontendContext';
 import { useFetch } from './useFetch';
 
+const ERROR_TOLERANCY = 2;
+const fails = [0, 0, 1];
+
 const useGetHook = processDataFn =>
   function(path, { pollingInterval, onDataReceived, skip } = {}) {
     const lastAuthData = React.useRef(null);
@@ -12,6 +15,8 @@ const useGetHook = processDataFn =>
     const { authData } = useMicrofrontendContext();
     const fetch = useFetch();
     const abortController = React.useRef(new AbortController());
+    const b = React.useRef(0);
+    const errorTolerancyCounter = React.useRef(0);
 
     const refetch = (isSilent, currentData) => async () => {
       if (skip || !authData || abortController.current.signal.aborted) return;
@@ -21,12 +26,25 @@ const useGetHook = processDataFn =>
 
       function processError(error) {
         if (!abortController.current.signal.aborted) {
-          console.error(error);
-          setError(error);
+          errorTolerancyCounter.current++;
+          console.log(
+            'error caught, tolerancy is up',
+            errorTolerancyCounter.current,
+          );
+          if (errorTolerancyCounter.current > ERROR_TOLERANCY) {
+            console.error(error);
+            setError(error);
+          }
         }
       }
 
       try {
+        const isBAD = !!fails[b.current % fails.length];
+        console.log(b.current, 'should fail? ->', isBAD);
+        b.current++;
+        if (isBAD) {
+          throw Error('oh no');
+        }
         const response = await fetch({
           relativeUrl: path,
           abortController: abortController.current,
@@ -36,6 +54,8 @@ const useGetHook = processDataFn =>
         if (abortController.current.signal.aborted) return;
         if (typeof onDataReceived === 'function') onDataReceived(payload.items);
         if (error) setTimeout(_ => setError(null)); // bring back the data and clear the error once the connection started working again
+        console.log('success, tolerancy reset');
+        errorTolerancyCounter.current = 0;
         setTimeout(_ =>
           processDataFn(payload, currentData, setData, lastResourceVersion),
         );
