@@ -1,11 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
 import { ObjectStatus } from 'fundamental-react';
 import PropTypes from 'prop-types';
-import './StatusBadge.scss';
 import classNames from 'classnames';
-import { Tooltip } from '../Tooltip/Tooltip';
+
+import './StatusBadge.scss';
+import { TooltipBadge } from '../TooltipBadge/TooltipBadge';
 
 const resolveType = status => {
   if (typeof status !== 'string') {
@@ -54,12 +54,14 @@ const prepareTranslationPath = (resourceKind, value, type) => {
     .toLowerCase()
     .replace(/\s/g, '-')}`;
 };
+
 const TYPE_FALLBACK = new Map([
   ['success', 'positive'],
   ['warning', 'critical'],
   ['error', 'negative'],
   ['info', 'informative'],
 ]);
+
 export const StatusBadge = ({
   additionalContent,
   tooltipContent, // deprecated
@@ -137,17 +139,26 @@ export const StatusBadge = ({
   const statusElement = noTooltip ? (
     badgeElement
   ) : (
-    <Tooltip content={content} {...tooltipProps}>
-      {badgeElement}
-    </Tooltip>
+    <TooltipBadge
+      tooltipContent={content}
+      type={type}
+      tooltipProps={tooltipProps}
+      className={className}
+    >
+      {value}
+    </TooltipBadge>
   );
 
-  // tooltipContent is DEPRECATED. Remove after migration of all resources
-  // return (statusElement);
+  // tooltipContent is DEPRECATED. Use the TooltipBadge component if a Badge with a simple Tooltip is needed.
   return tooltipContent ? (
-    <Tooltip content={tooltipContent} {...tooltipProps}>
-      {badgeElement}
-    </Tooltip>
+    <TooltipBadge
+      tooltipContent={tooltipContent}
+      type={type}
+      tooltipProps={tooltipProps}
+      className={className}
+    >
+      {value}
+    </TooltipBadge>
   ) : (
     statusElement
   );

@@ -1,16 +1,16 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { StatusBadge } from 'react-shared';
+import { TooltipBadge } from 'react-shared';
 
 export function RunningPodsStatus({ running, expected }) {
   const { t } = useTranslation();
 
-  const statusType = running === expected ? 'success' : 'error';
+  const statusType = running === expected ? 'positive' : 'negative';
 
   return (
-    <StatusBadge
+    <TooltipBadge
       type={statusType}
       tooltipContent={t('common.tooltips.running-pods', { running, expected })}
-    >{`${running} / ${expected}`}</StatusBadge>
+    >{`${running} / ${expected}`}</TooltipBadge>
   );
 }

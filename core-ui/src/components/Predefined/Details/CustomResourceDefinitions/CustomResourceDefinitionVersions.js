@@ -125,11 +125,8 @@ export const CustomResourceDefinitionVersions = resource => {
             <StatusBadge
               type={version.served ? 'positive' : 'informative'}
               className="version-status"
-              tooltipContent={
-                version.served
-                  ? t('custom-resource-definitions.tooltips.served')
-                  : t('custom-resource-definitions.tooltips.not-served')
-              }
+              resourceKind="custom-resource-definitions"
+              i18n={i18n}
             >
               {version.served
                 ? t('custom-resource-definitions.status.served')
@@ -139,9 +136,8 @@ export const CustomResourceDefinitionVersions = resource => {
               <StatusBadge
                 type="positive"
                 className="version-status"
-                tooltipContent={t(
-                  'custom-resource-definitions.tooltips.storage',
-                )}
+                resourceKind="custom-resource-definitions"
+                i18n={i18n}
               >
                 {t('custom-resource-definitions.status.storage')}
               </StatusBadge>

@@ -11,7 +11,7 @@ export const OAuth2ClientStatus = ({ client }) => {
     return (
       <StatusBadge
         type="success"
-        tooltipContent={t('oauth2-clients.tooltips.ok')}
+        additionalContent={t('oauth2-clients.tooltips.ok')}
       >
         {t('common.buttons.ok')}
       </StatusBadge>

@@ -528,10 +528,6 @@ configuration:
   title: Configuration
 cron-jobs:
   concurrency-policy:
-    descriptions:
-      allow: Allow concurrent executions.
-      forbid: No concurrent executions, skip the new run if the previous one hasn't finished yet.
-      replace: No concurrent executions, replace the previous run with the new one.
     title: Concurrency Policy
   create-modal:
     day-of-month: Day of Month
@@ -568,6 +564,10 @@ cron-jobs:
   not-scheduled-yet: None scheduled yet
   schedule: Schedule
   title: Cron Jobs
+  tooltips:
+    allow: Allow concurrent executions.
+    forbid: No concurrent executions, skip the new run if the previous one hasn't finished yet.
+    replace: No concurrent executions, replace the previous run with the new one.
 custom-resource-definitions:
   description: <0>Custom Resource Definition</0> is an object used to define a custom resource that allows you to extend the Kubernetes API for use cases that are not directly covered by core Kubernetes.
   headers:
@@ -1109,6 +1109,8 @@ jobs:
   title: Jobs
   tooltips:
     complete: Job completed successfully.
+    completed: '---'
+    not-completed: '----'
 kubeconfig-id:
   error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})."
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
