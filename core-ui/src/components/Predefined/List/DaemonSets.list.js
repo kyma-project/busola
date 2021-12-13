@@ -26,7 +26,7 @@ export const DaemonSetsList = ({ DefaultRenderer, ...otherParams }) => {
       ),
     },
     {
-      header: t('daemon-sets.pods'),
+      header: t('common.headers.pods'),
       value: resource => <DaemonSetStatus daemonSet={resource} />,
     },
   ];

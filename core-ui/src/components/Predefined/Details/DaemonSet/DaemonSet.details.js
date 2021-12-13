@@ -82,7 +82,7 @@ export const DaemonSetsDetails = ({ DefaultRenderer, ...otherParams }) => {
       ),
     },
     {
-      header: t('common.headers.status'),
+      header: t('common.headers.pods'),
       value: resource => <DaemonSetStatus daemonSet={resource} />,
     },
   ];

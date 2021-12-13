@@ -1,8 +1,9 @@
 import React from 'react';
-import { ControlledBy, StatusBadge } from 'react-shared';
-
-import { ResourcePods } from './ResourcePods';
+import { ControlledBy } from 'react-shared';
 import { useTranslation } from 'react-i18next';
+
+import { ResourcePods } from '../ResourcePods';
+import { ReplicaSetStatus } from './ReplicaSetStatus';
 
 export const ReplicasetsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
@@ -51,16 +52,8 @@ export const ReplicasetsDetails = ({ DefaultRenderer, ...otherParams }) => {
       },
     },
     {
-      header: t('replica-sets.headers.replicas'),
-      value: ({ status: { replicas, readyReplicas } }) => {
-        const type = (readyReplicas || 0) < replicas ? 'warning' : 'success';
-        const content = `${readyReplicas || 0} / ${replicas}`;
-        return (
-          <StatusBadge noTooltip key="replicas" type={type}>
-            {content}
-          </StatusBadge>
-        );
-      },
+      header: t('common.headers.pods'),
+      value: resource => <ReplicaSetStatus replicaSet={resource} />,
     },
   ];
 

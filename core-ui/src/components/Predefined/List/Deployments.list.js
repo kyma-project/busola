@@ -3,6 +3,8 @@ import { ControlledByKind, StatusBadge } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-shared';
 import { Trans } from 'react-i18next';
+import { DeploymentsCreate } from '../Create';
+import { DeploymentStatus } from '../Details/Deployment/DeploymentStatus';
 
 const getImages = deployment => {
   const images =
@@ -52,32 +54,8 @@ export const DeploymentsList = ({ DefaultRenderer, ...otherParams }) => {
       },
     },
     {
-      header: t('deployments.headers.pods'),
-      value: deployment => {
-        const podsCount = getPodsCount(deployment);
-        const statusType = getStatusType(deployment);
-        return (
-          <StatusBadge noTooltip type={statusType}>
-            {podsCount}
-          </StatusBadge>
-        );
-      },
-    },
-    {
-      header: t('common.headers.status'),
-      value: deployment => {
-        const status = getStatus(deployment);
-        const statusType = getStatusType(deployment);
-        return (
-          <StatusBadge
-            i18n={i18n}
-            resourceKind={otherParams.resourceType}
-            type={statusType}
-          >
-            {status}
-          </StatusBadge>
-        );
-      },
+      header: t('common.headers.pods'),
+      value: deployment => <DeploymentStatus deployment={deployment} />,
     },
   ];
 
