@@ -394,6 +394,7 @@ common:
     kyma: Kyma
     name: Name
     namespace: Namespace
+    path: Path
     protocol: Protocol
     read-only: Read-only mode
     resource: Resource
@@ -427,10 +428,12 @@ common:
   statuses:
     error: Error
     failed: Failed
+    'false': 'false'
     invalid: Invalid
     ok: OK
     pending: Pending
     ready: Ready
+    'true': 'true'
     unknown: Unknown
   tooltips:
     copy-to-clipboard: Copy to clipboard
@@ -634,9 +637,65 @@ deployments:
     error: Error
     running: Running
   title: Deployments
-  tooltips:
-    error: At least one of the Pods has failed
-    running: All the Pods are running correctly
+destination-rules:
+  age: Age
+  description: <0>Destination Rule</0> defines policies that apply to traffic intended for a service after routing has occurred.
+  details:
+    alt-names: Subject Alt Names
+    base-ejection: Base Ejection Time
+    ca-certificates: Ca Certificates
+    client-certificate: Client Certificate
+    client-protocol: Use Client Protocol
+    connect-timeout: Connect Timeout
+    consecutive-5xx: Consecutive 5xx Errors
+    consecutive-failures: Consecutive Local Origin Failures
+    consistent-hash: Consistent Hash
+    credential-name: Credential Name
+    distribution: Distribution
+    enabled: Enabled
+    failover: Failover
+    failover-priority: Failover Priority
+    from: From
+    h2-upgrade: H2 Upgrade Policy
+    http-cookie: Http cookie
+    http-header: Http Header Name
+    http-max: Http2 Max Requests
+    http-pending: Http1 Max Pending Requests
+    http-query-parameter: Http Query Parameter Name
+    http-settings: HTTP Connection Pool Settings
+    idle-timeout: Idle Timeout
+    interval: Interval
+    lb-settings: Locality Lb Settings
+    load-balancer: Load Balancer
+    max-connections: Max Connections
+    max-ejection: Max Ejection Percent
+    max-per-connection: Max Requests Per Connections
+    max-retries: Max Retries
+    min-health: Min Health Percent
+    minimum-ring-size: Minimum Ring Size
+    outlier-detection: Outlier Detection
+    port-traffic-policy: Port {{port}} Traffic Policy
+    private-key: Private Key
+    probes: Probes
+    simple: Simple
+    skip-verify: Insecure Skip Verify
+    sni: SNI
+    source-ip: Use Source IP
+    split-errors: Split External Local Origin Errors
+    subset: Subset
+    subsets: Subsets
+    tcp-alive: TCP Keep Alive
+    tcp-settings: TCP Connection Pool Settings
+    time: Time
+    tls-settings: Client TLS Settings
+    to: To
+    traffic-policy: Traffic Policy
+    ttl: TTL
+  exported-to-namespaces: Exported to namespaces
+  host: Host
+  name_singular: Destination Rule
+  state: State
+  title: Destination Rules
 discovery-and-network:
   title: Discovery and Network
 dnsentries:
@@ -1161,6 +1220,8 @@ namespaces:
     total-memory-limit: Define constraints that limit total memory consumption in your Namespace.
     usage-of-memory-limits: This Namespace uses {{valueText}} of {{maxText}} its memory limits.
     usage-of-memory-requests: This Namespace uses {{valueText}} of {{maxText}} its memory requests.
+navigation-grouping:
+  title: Navigation Grouping
 no-permissions:
   title: No Permissions
 node-details:
