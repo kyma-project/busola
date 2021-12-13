@@ -2,6 +2,7 @@ import React from 'react';
 import { useMicrofrontendContext } from '../../contexts/MicrofrontendContext';
 import { useFetch } from './useFetch';
 
+// allow <n> consecutive requests to fail before displaying error
 const ERROR_TOLERANCY = 2;
 
 const useGetHook = processDataFn =>
