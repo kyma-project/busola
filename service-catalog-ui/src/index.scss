@@ -117,6 +117,14 @@ button {
   }
 }
 
+.fd-popover__popper {
+  max-height: 200px !important;
+  overflow-y: auto !important;
+  .fd-list--dropdown {
+    max-width: 100% !important;
+  }
+}
+
 @font-face {
   font-family: '72';
   src: url('~@sap-theming/theming-base-content/content/Base/baseLib/sap_base_fiori/fonts/72-Regular-full.woff')
