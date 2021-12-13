@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { usePost, useNotification } from 'react-shared';
 import { Checkbox } from 'fundamental-react';
 import * as jp from 'jsonpath';
+import * as _ from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
@@ -20,18 +21,22 @@ import {
   AdvancedContainersView,
 } from 'shared/components/Deployment/ContainersViews';
 
-export function DeploymentsCreate({
+function DeploymentsCreate({
   formElementRef,
   namespace,
   onChange,
   setCustomValid,
+  resource: initialDeployment,
+  resourceUrl,
 }) {
   const { t } = useTranslation();
   const notification = useNotification();
   const postRequest = usePost();
 
   const [deployment, setDeployment] = useState(
-    createDeploymentTemplate(namespace),
+    initialDeployment
+      ? _.cloneDeep(initialDeployment)
+      : createDeploymentTemplate(namespace),
   );
   const [service, setService] = useState(createServiceTemplate(namespace));
   const [createService, setCreateService] = useState(false);
@@ -117,7 +122,7 @@ export function DeploymentsCreate({
       onChange={onChange}
       formElementRef={formElementRef}
       afterCreatedFn={afterCreatedFn}
-      renderEditor={renderEditor}
+      renderEditor={!initialDeployment ? renderEditor : null}
       presets={createPresets(namespace, t)}
       onPresetSelected={value => {
         setDeployment(value.deployment);
@@ -126,12 +131,18 @@ export function DeploymentsCreate({
           setService(value.service);
         }
       }}
-      createUrl={`/apis/apps/v1/namespaces/${namespace}/deployments/`}
+      // create modal on a namespace details doesn't have the resourceUrl
+      createUrl={
+        resourceUrl || `/apis/apps/v1/namespaces/${namespace}/deployments/`
+      }
+      initialResource={initialDeployment}
     >
       <K8sNameField
+        readOnly={!!initialDeployment}
         propertyPath="$.metadata.name"
         kind={t('deployments.name_singular')}
         setValue={handleNameChange}
+        validate={value => !!value}
       />
       <KeyValueField
         advanced
@@ -160,34 +171,41 @@ export function DeploymentsCreate({
         createContainerTemplate={createContainerTemplate}
       />
 
-      <ResourceForm.CollapsibleSection
-        advanced
-        title={t('deployments.create-modal.advanced.service')}
-        resource={service}
-        setResource={setService}
-        actions={serviceActions}
-      >
-        <ResourceForm.FormField
+      {!initialDeployment && (
+        <ResourceForm.CollapsibleSection
           advanced
-          required
-          disabled={!createService}
-          propertyPath="$.spec.ports[0].port"
-          label={t('deployments.create-modal.advanced.port')}
-          input={Inputs.Port}
-          placeholder={t('deployments.create-modal.advanced.port-placeholder')}
-        />
-        <ResourceForm.FormField
-          advanced
-          required
-          disabled={!createService}
-          propertyPath="$.spec.ports[0].targetPort"
-          label={t('deployments.create-modal.advanced.target-port')}
-          input={Inputs.Port}
-          placeholder={t(
-            'deployments.create-modal.advanced.target-port-placeholder',
-          )}
-        />
-      </ResourceForm.CollapsibleSection>
+          title={t('deployments.create-modal.advanced.service')}
+          resource={service}
+          setResource={setService}
+          actions={serviceActions}
+        >
+          <ResourceForm.FormField
+            advanced
+            required
+            disabled={!createService}
+            propertyPath="$.spec.ports[0].port"
+            label={t('deployments.create-modal.advanced.port')}
+            input={Inputs.Port}
+            placeholder={t(
+              'deployments.create-modal.advanced.port-placeholder',
+            )}
+          />
+          <ResourceForm.FormField
+            advanced
+            required
+            disabled={!createService}
+            propertyPath="$.spec.ports[0].targetPort"
+            label={t('deployments.create-modal.advanced.target-port')}
+            input={Inputs.Port}
+            placeholder={t(
+              'deployments.create-modal.advanced.target-port-placeholder',
+            )}
+          />
+        </ResourceForm.CollapsibleSection>
+      )}
     </ResourceForm>
   );
 }
+
+DeploymentsCreate.allowEdit = true;
+export { DeploymentsCreate };
