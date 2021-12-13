@@ -82,7 +82,7 @@ api-rules:
   title: API Rules
   tooltips:
     ok: Resource created.
-    skipped: Skipped creating a resource.
+    skipped: Skipped creating the resource.
 applications:
   aria:
     namespace: Choose Namespace
@@ -837,8 +837,8 @@ functions:
     unhealthy: Unhealthy
   title: Functions
   tooltips:
-    building: Waiting for the image to be build.
-    deploying: Deploying function.
+    building: Waiting for the image to build.
+    deploying: Deploying the Function.
     failed: Function couldn't be processed.
     running: Function created.
     unhealthy: Waiting for the required number of replicas.
