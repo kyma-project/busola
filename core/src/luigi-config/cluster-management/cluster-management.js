@@ -39,7 +39,9 @@ export function getAfterLoginLocation(clusterName, kubeconfig) {
   const preselectedNamespace = getCurrentContextNamespace(kubeconfig);
 
   return `/cluster/${encodeURIComponent(clusterName)}/${
-    preselectedNamespace ? `${preselectedNamespace}/details` : 'overview'
+    preselectedNamespace
+      ? `namespaces/${preselectedNamespace}/details`
+      : 'overview'
   }`;
 }
 
