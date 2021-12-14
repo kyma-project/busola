@@ -46,27 +46,23 @@ context('Test Jobs', () => {
 
     // job name
     cy.getIframeBody()
-      .find('[placeholder="Job Name"]')
-      .filter(':visible', { log: false })
+      .find('[placeholder="Job Name"]:visible')
       .clear()
       .type(JOB_NAME);
 
     // job container name
     cy.getIframeBody()
-      .find('[placeholder="Container Name"]')
-      .filter(':visible', { log: false })
+      .find('[placeholder="Container Name"]:visible')
       .type(JOB_NAME);
 
     // job command
     cy.getIframeBody()
-      .find('[placeholder^="Command to run"]')
-      .filter(':visible', { log: false })
+      .find('[placeholder^="Command to run"]:visible')
       .type('/bin/sh{downarrow}-c{downarrow}echo "Busola test"');
 
     // job docker image
     cy.getIframeBody()
-      .find('[placeholder^="Enter the Docker image tag"]')
-      .filter(':visible', { log: false })
+      .find('[placeholder^="Enter the Docker image tag"]:visible')
       .type('busybox');
 
     // we can't edit Job's template, so we add 2 containers now
@@ -83,8 +79,7 @@ context('Test Jobs', () => {
 
     // job container name
     cy.getIframeBody()
-      .find('[placeholder="Container Name"]')
-      .filter(':visible', { log: false })
+      .find('[placeholder="Container Name"]:visible')
       .type(SECOND_CONTAINER_NAME);
 
     // job args
@@ -93,14 +88,12 @@ context('Test Jobs', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder^="Arguments to the"]')
-      .filter(':visible', { log: false })
+      .find('[placeholder^="Arguments to the"]:visible')
       .type('-e{downarrow}console.log("Node image test");');
 
     // job docker image
     cy.getIframeBody()
-      .find('[placeholder^="Enter the Docker image tag"]')
-      .filter(':visible', { log: false })
+      .find('[placeholder^="Enter the Docker image tag"]:visible')
       .type('node:14-alpine');
 
     // create
@@ -120,8 +113,8 @@ context('Test Jobs', () => {
       .click();
 
     // images for both containers
-    cy.getIframeBody().contains(/Image:busybox/);
-    cy.getIframeBody().contains(/Image:node:14-alpine/);
+    cy.getIframeBody().contains(/Imagebusybox/);
+    cy.getIframeBody().contains(/Imagenode:14-alpine/);
 
     // controlled-by
     cy.getIframeBody().contains(`Job (${JOB_NAME})`);
