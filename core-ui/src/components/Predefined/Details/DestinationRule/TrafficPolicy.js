@@ -57,6 +57,7 @@ export const TrafficPolicy = destinationRule => {
     <LayoutPanel
       className="fd-margin--md"
       key={'destination-rules-traffic-policy'}
+      data-testid={'traffic-policy'}
     >
       <LayoutPanel.Header>
         <LayoutPanel.Head

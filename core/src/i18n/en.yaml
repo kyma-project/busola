@@ -1103,6 +1103,8 @@ issuers:
     server: Server is the URL of the ACME server.
     skip-dns: SkipDNSChallengeValidation marks that this issuer does not validate DNS challenges. In this case, no DNS entries/records are created for a DNS Challenge, and DNS propagation is not checked.
   type: Issuer Type
+istio:
+  title: Istio
 jobs:
   completion-time: Completion Time
   completions: Completions
@@ -1220,8 +1222,6 @@ namespaces:
     total-memory-limit: Define constraints that limit total memory consumption in your Namespace.
     usage-of-memory-limits: This Namespace uses {{valueText}} of {{maxText}} its memory limits.
     usage-of-memory-requests: This Namespace uses {{valueText}} of {{maxText}} its memory requests.
-navigation-grouping:
-  title: Navigation Grouping
 no-permissions:
   title: No Permissions
 node-details:

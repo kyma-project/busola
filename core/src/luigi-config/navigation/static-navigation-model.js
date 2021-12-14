@@ -492,6 +492,91 @@ export function getStaticChildrenNodesForNamespace(
       ],
     },
 
+    // ISTIO
+    {
+      category: {
+        label: i18next.t('istio.title'),
+        icon: 'overview-chart',
+        collapsible: true,
+      },
+      pathSegment: '_istio_category_placeholder_',
+      hideFromNav: true,
+    },
+    {
+      category: i18next.t('istio.title'),
+      resourceType: 'gateways',
+      pathSegment: 'gateways',
+      label: i18next.t('gateways.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/gateways?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/networking.istio.io/v1alpha3',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+      context: {
+        requiredFeatures: [features.ISTIO],
+      },
+
+      navigationContext: 'gateways',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':gatewayName',
+              resourceType: 'gateways',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/gateways/:gatewayName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/networking.istio.io/v1beta1',
+                }),
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: i18next.t('istio.title'),
+      resourceType: 'destinationrules',
+      pathSegment: 'destinationrules',
+      label: i18next.t('destination-rules.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/destinationRules?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/networking.istio.io/v1alpha3',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+      context: {
+        requiredFeatures: [features.ISTIO],
+      },
+
+      navigationContext: 'destinationrules',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':destinationRuleName',
+              resourceType: 'destinationrules',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/destinationRules/:destinationRuleName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/networking.istio.io/v1beta1',
+                }),
+            },
+          ],
+        },
+      ],
+    },
+
     //SERVICE MANAGEMENT CATEGORY
     {
       category: {
@@ -1178,91 +1263,6 @@ export function getStaticChildrenNodesForNamespace(
                 '/namespaces/:namespaceId/ServiceAccounts/:serviceAccountName?' +
                 toSearchParamsString({
                   resourceApiPath: '/api/v1',
-                }),
-            },
-          ],
-        },
-      ],
-    },
-
-    // NETWORKING GROUPING
-    {
-      category: {
-        label: i18next.t('navigation-grouping.title'),
-        icon: 'internet-browser',
-        collapsible: true,
-      },
-      pathSegment: '_navigation_grouping_category_placeholder_',
-      hideFromNav: true,
-    },
-    {
-      category: i18next.t('navigation-grouping.title'),
-      resourceType: 'gateways',
-      pathSegment: 'gateways',
-      label: i18next.t('gateways.title'),
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/gateways?' +
-        toSearchParamsString({
-          resourceApiPath: '/apis/networking.istio.io/v1alpha3',
-          hasDetailsView: true,
-        }),
-      viewGroup: coreUIViewGroupName,
-      keepSelectedForChildren: true,
-      context: {
-        requiredFeatures: [features.ISTIO],
-      },
-
-      navigationContext: 'gateways',
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':gatewayName',
-              resourceType: 'gateways',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/gateways/:gatewayName?' +
-                toSearchParamsString({
-                  resourceApiPath: '/apis/networking.istio.io/v1beta1',
-                }),
-            },
-          ],
-        },
-      ],
-    },
-    {
-      category: i18next.t('navigation-grouping.title'),
-      resourceType: 'destinationrules',
-      pathSegment: 'destinationrules',
-      label: i18next.t('destination-rules.title'),
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/destinationRules?' +
-        toSearchParamsString({
-          resourceApiPath: '/apis/networking.istio.io/v1alpha3',
-          hasDetailsView: true,
-        }),
-      viewGroup: coreUIViewGroupName,
-      keepSelectedForChildren: true,
-      context: {
-        requiredFeatures: [features.CUSTOM_DOMAINS],
-      },
-
-      navigationContext: 'destinationrules',
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':destinationRuleName',
-              resourceType: 'destinationrules',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/destinationRules/:destinationRuleName?' +
-                toSearchParamsString({
-                  resourceApiPath: '/apis/networking.istio.io/v1beta1',
                 }),
             },
           ],
