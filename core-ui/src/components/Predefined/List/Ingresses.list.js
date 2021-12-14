@@ -1,6 +1,5 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ControlledByKind } from 'react-shared';
 import { Link } from 'react-shared';
 import { Trans } from 'react-i18next';
 
