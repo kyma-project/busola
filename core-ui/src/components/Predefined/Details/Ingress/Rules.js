@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { EMPTY_TEXT_PLACEHOLDER, GenericList } from 'react-shared';
 import { LayoutPanel } from 'fundamental-react';
@@ -17,10 +16,6 @@ const getPort = (serviceName, port) => {
 
 export const Rules = ({ rules }) => {
   const { t, i18n } = useTranslation();
-
-  const Wrapper = ({ children }) => (
-    <div className="rule-wrapper">{children}</div>
-  );
 
   const Backend = ({ backend }) => {
     if (backend.service) {
@@ -44,15 +39,12 @@ export const Rules = ({ rules }) => {
     }
   };
 
-  if (!rules) {
-    return <Wrapper>{t('ingresses.message.rules-not-found')}</Wrapper>;
-  }
   return (
     <>
       {rules.map(rule => (
         <LayoutPanel key={rule.host} className="fd-margin--md rule-panel">
           <LayoutPanel.Header>
-            <LayoutPanel.Head title={t('ingresses.labels.rule')} />
+            <LayoutPanel.Head title={t('ingresses.labels.rules')} />
           </LayoutPanel.Header>
           {rule.host && (
             <RowComponent name={t('ingresses.labels.host')} value={rule.host} />

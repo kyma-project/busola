@@ -988,6 +988,7 @@ ingresses:
     backend: Backend
     default-backend: Default backend
     host: Host
+    ingress-class-name: Ingress class name
     kind: Kind
     load-balancers: LoadBalancers
     path: Path
@@ -1000,6 +1001,7 @@ ingresses:
     service-name: Service name
   message:
     rules-not-found: Rules not found
+  name_singular: Ingress
   title: Ingresses
 instances:
   description: <0>Service Instance</0> is a provisioned instance of a service that can be consumed by an application.

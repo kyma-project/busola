@@ -1,0 +1,33 @@
+kind: Ingress
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: test-ingress
+  namespace: default
+spec:
+  defaultBackend:
+    resource:
+      apiGroup: core
+      kind: Service
+      name: web
+  rules:
+    - host: test.host
+      http:
+        paths:
+          - path: /test-path
+            pathType: Prefix
+            backend:
+              service:
+                name: web
+                port:
+                  number: 8080
+          - path: '/other-path'
+            pathType: Prefix
+            backend:
+              service:
+                name: web
+                port:
+                  number: 8080
+status:
+  loadBalancer:
+    ingress:
+      - ip: 255.255.255.0

@@ -6,9 +6,9 @@ import { DefaultBackendPanel } from './DefaultBackendPanel';
 export const IngressesDetails = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
 
-  const getLoadBalancer = service => {
-    if (service.status.loadBalancer?.ingress) {
-      return service.status.loadBalancer?.ingress
+  const getLoadBalancer = ingress => {
+    if (ingress.status.loadBalancer?.ingress) {
+      return ingress.status.loadBalancer?.ingress
         .map(endpoint => endpoint.ip || endpoint.hostname)
         .join(', ');
     } else {
@@ -21,6 +21,10 @@ export const IngressesDetails = ({ DefaultRenderer, ...otherParams }) => {
       header: t('ingresses.labels.load-balancers'),
       value: getLoadBalancer,
     },
+    {
+      header: t('ingresses.labels.ingress-class-name'),
+      value: ingress => ingress.spec.ingressClassName,
+    },
   ];
 
   const customComponents = [];
@@ -30,7 +34,9 @@ export const IngressesDetails = ({ DefaultRenderer, ...otherParams }) => {
       <DefaultBackendPanel backend={resource.spec.defaultBackend} />
     ) : null,
   );
-  customComponents.push(resource => <Rules rules={resource.spec.rules} />);
+  customComponents.push(resource =>
+    resource.spec.rules ? <Rules rules={resource.spec.rules} /> : null,
+  );
 
   return (
     <DefaultRenderer
