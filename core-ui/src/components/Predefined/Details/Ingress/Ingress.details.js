@@ -1,8 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import Rules from './Rules';
-
-import './Ingress.details.scss';
+import { Rules } from './Rules';
+import { DefaultBackendPanel } from './DefaultBackendPanel';
 
 export const IngressesDetails = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
@@ -24,10 +23,19 @@ export const IngressesDetails = ({ DefaultRenderer, ...otherParams }) => {
     },
   ];
 
+  const customComponents = [];
+
+  customComponents.push(resource =>
+    resource.spec.defaultBackend ? (
+      <DefaultBackendPanel backend={resource.spec.defaultBackend} />
+    ) : null,
+  );
+  customComponents.push(resource => <Rules rules={resource.spec.rules} />);
+
   return (
     <DefaultRenderer
       customColumns={customColumns}
-      customComponents={[resource => <Rules rules={resource.spec.rules} />]}
+      customComponents={customComponents}
       {...otherParams}
     />
   );

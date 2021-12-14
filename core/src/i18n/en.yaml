@@ -984,12 +984,20 @@ git-repositories:
 ingresses:
   description: <0>Ingress</0> exposes HTTP and HTTPS routes from outside the cluster to services within the cluster. Traffic routing is controlled by rules defined on the Ingress resource.
   labels:
+    apiGroup: ApiGroup
+    backend: Backend
+    default-backend: Default backend
     host: Host
+    kind: Kind
     load-balancers: LoadBalancers
     path: Path
     path-type: Path type
+    paths: Paths
     port: Port
-    rules: Rules
+    port-name: Port name
+    port-number: Port number
+    rule: Rule
+    service-name: Service name
   message:
     rules-not-found: Rules not found
   title: Ingresses
