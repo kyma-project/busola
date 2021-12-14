@@ -58,11 +58,11 @@ context('Test Secrets', () => {
     cy.getIframeBody().contains(SECRET_NAME);
 
     cy.getIframeBody()
-      .contains('.item-wrapper', SECRET2_KEY)
+      .contains('.layout-panel-row', SECRET2_KEY)
       .contains(btoa(SECRET2_VALUE));
 
     cy.getIframeBody()
-      .contains('.item-wrapper', SECRET_KEY)
+      .contains('.layout-panel-row', SECRET_KEY)
       .contains(btoa(SECRET_VALUE));
 
     cy.getIframeBody()
@@ -70,7 +70,7 @@ context('Test Secrets', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('.item-wrapper', SECRET_KEY)
+      .contains('.layout-panel-row', SECRET_KEY)
       .contains(SECRET_VALUE);
 
     cy.getIframeBody()
@@ -106,15 +106,15 @@ context('Test Secrets', () => {
 
   it('Inspect an updated secret', () => {
     cy.getIframeBody()
-      .contains('.item-wrapper', SECRET_KEY)
+      .contains('.layout-panel-row', SECRET_KEY)
       .contains(btoa(SECRET_VALUE2));
 
     cy.getIframeBody()
-      .contains('.item-wrapper', SECRET2_KEY)
+      .contains('.layout-panel-row', SECRET2_KEY)
       .should('not.exist');
 
     cy.getIframeBody()
-      .contains('.item-wrapper', SECRET3_KEY)
+      .contains('.layout-panel-row', SECRET3_KEY)
       .contains(btoa(SECRET3_VALUE));
   });
 
