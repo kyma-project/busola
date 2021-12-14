@@ -1454,7 +1454,25 @@ top-nav:
 virtualservices:
   description: <0>Virtual Service</0> describes a configuration affecting traffic routing.
   gateways: Gateways
+  headeroperations:
+    add: add
+    remove: remove
+    request: Request
+    response: Response
+    set: set
   hosts: Hosts
+  http-routes:
+    matches: Matches
+    route:
+      destination: Destination
+      headers: Header manipulation
+      weight: Weight
+    routes: Destinations
+    title: HTTP Route
+  match:
+    exact: exact
+    prefix: prefix
+    regex: regex
   title: Virtual Services
 workloads:
   docker-image:

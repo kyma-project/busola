@@ -1,12 +1,11 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+// import { useTranslation } from 'react-i18next';
 
-// import { GatewayServers } from './GatewayServers';
-// import { GatewaySelector } from './GatewaySelector';
+import { ServiceGateways } from './ServiceGateways';
+import { ServiceHosts } from './ServiceHosts';
+import { HttpRoutes } from './ServiceRoutesHttp';
 
 export function VirtualServicesDetails({ DefaultRenderer, ...otherParams }) {
-  const { t } = useTranslation();
-
   const customColumns = [
     // {
     // // header: t('gateways.selector'),
@@ -17,7 +16,7 @@ export function VirtualServicesDetails({ DefaultRenderer, ...otherParams }) {
   return (
     <DefaultRenderer
       customColumns={customColumns}
-      // customComponents={[GatewayServers]}
+      customComponents={[ServiceGateways, ServiceHosts, HttpRoutes]}
       {...otherParams}
     ></DefaultRenderer>
   );
