@@ -14,8 +14,8 @@ export function JobCompletions({ job }) {
       type={statusType}
       tooltipContent={
         succeeded === completions
-          ? t('jobs.tooltips.completed')
-          : t('jobs.tooltips.not-completed')
+          ? t('jobs.tooltips.complete')
+          : t('jobs.tooltips.not-complete')
       }
     >{`${succeeded} / ${completions}`}</TooltipBadge>
   );
