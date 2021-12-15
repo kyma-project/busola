@@ -7,7 +7,7 @@ import {
 } from 'react-shared';
 import { LayoutPanel, Link } from 'fundamental-react';
 import LuigiClient from '@luigi-project/client';
-import { RowComponent } from './RowComponent';
+import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import pluralize from 'pluralize';
 
 const getPort = (serviceName, port) => {
@@ -67,16 +67,22 @@ export const Rules = ({ rules }) => {
 
   return (
     <>
-      {rules.map(rule => (
-        <LayoutPanel key={rule.host} className="fd-margin--md rule-panel">
+      {rules.map((rule, i) => (
+        <LayoutPanel key={`rule.host${i}`} className="fd-margin--md rule-panel">
           <LayoutPanel.Header>
             <LayoutPanel.Head title={t('ingresses.labels.rules')} />
           </LayoutPanel.Header>
-          {rule.host && (
-            <RowComponent name={t('ingresses.labels.host')} value={rule.host} />
-          )}
+          <LayoutPanel.Body>
+            {rule.host && (
+              <LayoutPanelRow
+                name={t('ingresses.labels.host')}
+                value={rule.host}
+              />
+            )}
+          </LayoutPanel.Body>
           <GenericList
-            key="rules"
+            className="fd-margin-top--none"
+            key={`rules${i}`}
             title={t('ingresses.labels.paths')}
             showSearchField={false}
             headerRenderer={() => [

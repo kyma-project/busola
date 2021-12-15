@@ -997,7 +997,7 @@ ingresses:
     port: Port
     port-name: Port name
     port-number: Port number
-    rule: Rule
+    rules: Rules
     service-name: Service name
   message:
     rules-not-found: Rules not found
