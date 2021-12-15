@@ -27,7 +27,3 @@ spec:
                 name: web
                 port:
                   number: 8080
-status:
-  loadBalancer:
-    ingress:
-      - ip: 255.255.255.0
