@@ -1,7 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-shared';
-import { GatewaySelector } from '../Details/Gateway/GatewaySelector';
 import { Trans } from 'react-i18next';
 
 export function VirtualServicesList({ DefaultRenderer, ...otherParams }) {

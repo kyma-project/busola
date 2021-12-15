@@ -1122,7 +1122,7 @@ export function getStaticChildrenNodesForNamespace(
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/virtualservices?' +
         toSearchParamsString({
-          resourceApiPath: '/apis/networking.istio.io/v1alpha3',
+          resourceApiPath: '/apis/networking.istio.io/v1beta1',
           hasDetailsView: true,
         }),
       viewGroup: coreUIViewGroupName,

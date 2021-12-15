@@ -3,7 +3,7 @@ import React from 'react';
 
 import { ServiceGateways } from './ServiceGateways';
 import { ServiceHosts } from './ServiceHosts';
-import { HttpRoutes } from './ServiceRoutesHttp';
+import { HttpRoutes } from './HttpRoutes';
 
 export function VirtualServicesDetails({ DefaultRenderer, ...otherParams }) {
   const customColumns = [
