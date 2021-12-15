@@ -3,11 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { GenericList, Tooltip } from 'react-shared';
 import { LayoutPanel } from 'fundamental-react';
 
-function Destination({ destination }) {
-  const portString = destination.port ? `:${destination.port.number}` : '';
-  const subsetString = destination.subset ? ` (${destination.subset})` : '';
-  return `${destination.host}${portString}${subsetString}`;
-}
+import {
+  Destination,
+  RouteDestinations,
+  CommonMatchAttributes,
+} from './common';
 
 function Headers({ headers }) {
   const { t } = useTranslation();
@@ -107,8 +107,8 @@ function HttpMatchRequests({ matches }) {
   return (
     <GenericList
       title={t('virtualservices.http-routes.matches')}
-      headerRenderer={() => [t('virtualservices.http-routes.url')]}
-      rowRenderer={match => [<ServiceMatch match={match} />]}
+      headerRenderer={() => ['']}
+      rowRenderer={match => [<HttpMatchRequest match={match} />]}
       entries={matches}
       showHeader={false}
     />
@@ -119,19 +119,10 @@ function HttpRouteDestinations({ routes }) {
   const { t } = useTranslation();
 
   return (
-    <GenericList
-      title={t('virtualservices.http-routes.routes')}
-      headerRenderer={() => [
-        t('virtualservices.http-routes.route.destination'),
-        t('virtualservices.http-routes.route.weight'),
-        t('virtualservices.http-routes.route.headers'),
-      ]}
-      rowRenderer={route => [
-        <Destination destination={route.destination} />,
-        route.weight || '100',
-        <Headers headers={route.headers} />,
-      ]}
-      entries={routes}
+    <RouteDestinations
+      routes={routes}
+      headerRenderer={() => [t('virtualservices.http-routes.route.headers')]}
+      rowRenderer={route => [<Headers headers={route.headers} />]}
     />
   );
 }
@@ -322,7 +313,7 @@ export function StringMatch({ label, def, ignoreCase }) {
   return (
     <div>
       {label}
-      <Tooltip content={tooltip}>{operator}</Tooltip> {/* TODO tooltip? */}
+      <Tooltip content={tooltip}>{operator}</Tooltip>
       {value}
       {ignoreCase &&
         !def.regex &&
@@ -338,7 +329,7 @@ function StringMatchMap({ labelId, map }) {
   ));
 }
 
-function ServiceMatch({ match }) {
+function HttpMatchRequest({ match }) {
   const { t } = useTranslation();
 
   return (
@@ -380,36 +371,13 @@ function ServiceMatch({ match }) {
           map={match.withoutHeaders}
         />
       )}
-      {match.port && (
-        <div>
-          {t('virtualservices.http-routes.match.port')} = {match.port}
-        </div>
-      )}
-      {match.sourceLabels &&
-        Object.entries(match.sourceLabels).map(([label, value]) => (
-          <div>
-            {t('virtualservices.http-routes.match.source-label', { label })} ={' '}
-            {value}
-          </div>
-        ))}
-      {match.gateways && (
-        <div>
-          {t('virtualservices.http-routes.match.gateways')}{' '}
-          {match.gateways.join(', ')}
-        </div>
-      )}
       {match.queryParams && (
         <StringMatchMap
           labelId="virtualservices.http-routes.match.header"
           map={match.match.queryParams}
         />
       )}
-      {match.sourceNamespace && (
-        <div>
-          {t('virtualservices.http-routes.match.source-namespace')} ={' '}
-          {match.sourceNamespace}
-        </div>
-      )}
+      <CommonMatchAttributes match={match} />
     </>
   );
 }

@@ -4,6 +4,8 @@ import React from 'react';
 import { ServiceGateways } from './ServiceGateways';
 import { ServiceHosts } from './ServiceHosts';
 import { HttpRoutes } from './HttpRoutes';
+import { TlsRoutes } from './TlsRoutes';
+import { TcpRoutes } from './TcpRoutes';
 
 export function VirtualServicesDetails({ DefaultRenderer, ...otherParams }) {
   const customColumns = [
@@ -16,7 +18,13 @@ export function VirtualServicesDetails({ DefaultRenderer, ...otherParams }) {
   return (
     <DefaultRenderer
       customColumns={customColumns}
-      customComponents={[ServiceGateways, ServiceHosts, HttpRoutes]}
+      customComponents={[
+        ServiceGateways,
+        ServiceHosts,
+        HttpRoutes,
+        TlsRoutes,
+        TcpRoutes,
+      ]}
       {...otherParams}
     ></DefaultRenderer>
   );
