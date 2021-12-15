@@ -1,6 +1,5 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
-import wait from 'waait';
 import { loadRandomIngress } from '../support/loadIngress';
 
 const NAME =
