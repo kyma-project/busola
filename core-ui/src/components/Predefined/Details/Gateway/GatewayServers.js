@@ -1,6 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { GenericList } from 'react-shared';
+import { GenericList, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+import { Link } from 'fundamental-react';
+import LuigiClient from '@luigi-project/client';
 
 function ServerPort({ port }) {
   const number = port.targetPort
@@ -33,9 +35,23 @@ export function GatewayServers(gateway) {
   const rowRenderer = server => [
     <ServerPort port={server.port} />,
     <ServerHosts hosts={server.hosts} />,
-    server.port.name || '-',
-    server.tls?.mode || '-',
-    server.tls?.credentialName || '-',
+    server.port.name || EMPTY_TEXT_PLACEHOLDER,
+    server.tls?.mode || EMPTY_TEXT_PLACEHOLDER,
+    server.tls?.credentialName ? (
+      <Link
+        onClick={() =>
+          LuigiClient.linkManager()
+            .fromContext('cluster')
+            .navigate(
+              `namespaces/istio-system/secrets/details/${server.tls.credentialName}`,
+            )
+        }
+      >
+        {server.tls.credentialName}
+      </Link>
+    ) : (
+      EMPTY_TEXT_PLACEHOLDER
+    ),
   ];
 
   return (
