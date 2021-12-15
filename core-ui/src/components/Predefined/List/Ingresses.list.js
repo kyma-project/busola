@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-shared';
+import { EMPTY_TEXT_PLACEHOLDER, Link } from 'react-shared';
 import { Trans } from 'react-i18next';
 
 export const IngressesList = ({ DefaultRenderer, ...otherParams }) => {
@@ -12,7 +12,7 @@ export const IngressesList = ({ DefaultRenderer, ...otherParams }) => {
         .map(endpoint => endpoint.ip || endpoint.hostname)
         .join(', ');
     } else {
-      return '-';
+      return EMPTY_TEXT_PLACEHOLDER;
     }
   };
 
