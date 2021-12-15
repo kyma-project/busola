@@ -54,8 +54,46 @@ function CorsPolicy({ cors }) {
         />
       </LayoutPanel.Header>
       <dl>
-        <dd></dd>
-        <dt></dt>
+        {cors.allowOrigins.map(origin => (
+          <>
+            <dd>{t('virtualservices.http-routes.cors.allow-origin')}</dd>
+            <dt>
+              <StringMatch label="" def={origin} />
+            </dt>
+          </>
+        ))}
+        {cors.allowMethods?.map(method => (
+          <>
+            <dd>{t('virtualservices.http-routes.cors.allow-method')}</dd>
+            <dt>{method}</dt>
+          </>
+        ))}
+        {cors.allowHeaders?.map(header => (
+          <>
+            <dd>{t('virtualservices.http-routes.cors.allow-header')}</dd>
+            <dt>{header}</dt>
+          </>
+        ))}
+        {cors.exposeHeaders?.map(header => (
+          <>
+            <dd>{t('virtualservices.http-routes.cors.expose-header')}</dd>
+            <dt>{header}</dt>
+          </>
+        ))}
+        {cors.maxAge && (
+          <>
+            <dd>{t('virtualservices.http-routes.cors.max-age')}</dd>
+            <dt>{cors.maxAge}</dt>
+          </>
+        )}
+        <>
+          <dd>{t('virtualservices.http-routes.cors.allow-credentials')}</dd>
+          <dt>
+            {cors.allowCredentials
+              ? t('common.labels.yes')
+              : t('common.labels.no')}
+          </dt>
+        </>
       </dl>
     </LayoutPanel>
   );
