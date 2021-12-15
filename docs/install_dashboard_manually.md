@@ -27,9 +27,9 @@ The document describes how to install Kyma Dashboard with Istio Ingress. It also
   `./apply-resources-istio.sh busola.local.kyma.dev busola`
 
 - Wait a minute for the Dashboard to start.
-- Your Dashboard is available under your **{DOMAIN}** (https://busola.local.kyma.dev/)
+- The Dashboard is available under your **{DOMAIN}** (https://busola.local.kyma.dev/)
 
 2. Install Kyma Dashboard on a Kyma cluster
 
 Kyma cluster comes with the Istio already configured. All you need to do is to follow steps 1-4 from Istio Ingress section, to have your Dashboard installed.
-In case of k3d your **{DOMAIN}** must end with .local.kyma.dev.
+In case of k3d your **{DOMAIN}** must end with `.local.kyma.dev`.
