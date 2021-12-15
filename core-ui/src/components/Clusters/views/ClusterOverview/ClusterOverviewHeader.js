@@ -41,7 +41,7 @@ export function ClusterOverviewHeader() {
             </p>
           </>
         ) : (
-          kymaVersion
+          formatClusterVersion()
         )}
       </PageHeader.Column>
       <PageHeader.Column title={t('clusters.common.api-server-address')}>
