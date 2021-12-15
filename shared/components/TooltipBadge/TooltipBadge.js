@@ -24,7 +24,6 @@ export const TooltipBadge = ({
       status={type}
       className={classes}
       data-testid={'has-tooltip'}
-      style={{ whiteSpace: 'nowrap' }}
     >
       {children}
     </ObjectStatus>
