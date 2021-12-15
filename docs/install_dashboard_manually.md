@@ -8,7 +8,7 @@ The document describes how to install Kyma Dashboard with Istio Ingress. It also
 
 1. **Install Kyma Dashboard with Istio Ingress**
 
-> NOTE: To install Kyma Dashboard manually with Istio Ingress you need to have Istio configured on your cluster (https://istio.io/latest/docs/setup/getting-started/).
+> NOTE: To install Kyma Dashboard manually with Istio Ingress you need to have Istio configured on your cluster. See [Istio Getting Started](https://istio.io/latest/docs/setup/getting-started/) for more information.
 
 - Create Namespace for Kyma Dashboard:
 
