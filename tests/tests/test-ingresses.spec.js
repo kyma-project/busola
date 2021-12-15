@@ -45,12 +45,11 @@ context('Test Ingresses', () => {
     cy.wrap(loadRandomIngress(NAME, Cypress.env('NAMESPACE_NAME'))).then(
       INGRESS_CONFIG => {
         const INGRESS = JSON.stringify(INGRESS_CONFIG);
-        console.log('INGRESS', INGRESS);
         cy.getIframeBody()
           .find('[role="presentation"],[class="view-lines"]')
-          .first()
-          .click()
-          .type(INGRESS, { parseSpecialCharSequences: false });
+          .paste({
+            pastePayload: INGRESS,
+          });
       },
     );
 

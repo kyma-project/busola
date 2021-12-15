@@ -990,7 +990,7 @@ ingresses:
     host: Host
     ingress-class-name: Ingress class name
     kind: Kind
-    load-balancers: LoadBalancers
+    load-balancers: Load Balancers
     path: Path
     path-type: Path type
     paths: Paths
