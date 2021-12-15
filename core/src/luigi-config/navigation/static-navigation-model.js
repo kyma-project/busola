@@ -1222,33 +1222,34 @@ export function getStaticChildrenNodesForNamespace(
     },
     {
       category: i18next.t('configuration.title'),
+      pathSegment: 'subscriptions', // these two need to be subscriptions or eventsubscriptions
       resourceType: 'subscriptions',
-      pathSegment: 'subscriptions',
-      label: 'Event  Subscriptions',
+      navigationContext: 'eventsubscriptions',
+      label: 'Event  Subscriptions', //ok
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/Subscriptions?' +
+        '/namespaces/:namespaceId/Subscriptions?' + //problems with displaying
         toSearchParamsString({
-          resourceApiPath: '/apis/eventing.kyma-project.io/v1alpha1',
+          resourceApiPath: '/apis/eventing.kyma-project.io/v1alpha1', // ok
           hasDetailsView: true,
         }),
       viewGroup: coreUIViewGroupName,
       keepSelectedForChildren: true,
 
-      navigationContext: 'subscriptions',
       children: [
         {
           pathSegment: 'details',
           children: [
             {
-              pathSegment: ':eventSubscriptionName',
-              resourceType: 'subscriptions',
+              pathSegment: ':subscriptionName',
+              resourceType: 'eventsubscriptions',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/Subscriptions/:eventSubscriptionName?' +
+                '/namespaces/:namespaceId/EventSubscriptions/:subscriptionName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/eventing.kyma-project.io/v1alpha1',
                 }),
+              viewGroup: coreUIViewGroupName,
             },
           ],
         },
