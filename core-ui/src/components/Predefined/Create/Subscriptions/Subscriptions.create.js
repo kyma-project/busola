@@ -5,9 +5,11 @@ import { createTemplate } from './templates';
 import * as jp from 'jsonpath';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { useGet } from 'react-shared';
+import { useGetList } from 'react-shared';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { K8sNameField } from 'shared/ResourceForm/fields';
+import { ComboboxInput } from 'shared/ResourceForm/inputs';
 
 const DEFAULT_EVENT_TYPE_PREFIX = 'sap.kyma.custom.';
 
@@ -39,6 +41,12 @@ const SubscriptionsCreate = ({
   eventTypePrefix = eventTypePrefix.endsWith('.')
     ? eventTypePrefix
     : eventTypePrefix + '.';
+
+  const { services } = useGetList()(`/api/v1/namespaces/${namespace}/services`);
+  const { functions } = useGetList()(
+    `/apis/serverless.kyma-project.io/v1alpha1/namespaces/${namespace}/functions`,
+  );
+  console.log(functions);
 
   useEffect(() => {
     const eventTypeValue = `${eventTypePrefix}${appName}.${eventName}.${version}`;
@@ -87,27 +95,17 @@ const SubscriptionsCreate = ({
         value={version}
         setValue={version => setVersion(version)}
       />
-      <ComboboxArrayInput
+
+      <ResourceForm.FormField
         advanced
-        propertyPath="$.secrets"
-        title={t('service-accounts.headers.secrets')}
-        tooltipContent={t('service-accounts.create-modal.tooltips.secrets')}
-        setValue={secrets => {
-          const newSecrets = (secrets || []).map(secrets => {
-            return { name: secrets };
-          });
-          jp.value(serviceAccount, '$.secrets', newSecrets);
-          setServiceAccount({ ...serviceAccount });
-        }}
-        toInternal={values => (values || []).map(value => value?.name)}
-        options={(data || [])
-          .filter(
-            secret => secret.type === 'kubernetes.io/service-account-token',
-          )
-          .map(i => ({
-            key: i.metadata.name,
-            text: i.metadata.name,
-          }))}
+        required
+        label="functions"
+        defaultValue=""
+        input={Inputs.Dropdown}
+        options={(functions || []).map(i => ({
+          key: i.metadata.name,
+          text: i.metadata.name,
+        }))}
       />
     </ResourceForm>
   );
