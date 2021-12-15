@@ -639,7 +639,7 @@ deployments:
   title: Deployments
 destination-rules:
   age: Age
-  description: <0>Destination Rule</0> defines policies that apply to traffic intended for a service after routing has occurred.
+  description: <0>Destination Rule</0> specifies rules that apply to traffic intended for a service after routing.
   details:
     alt-names: Subject Alt Names
     base-ejection: Base Ejection Time
