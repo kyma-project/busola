@@ -108,22 +108,10 @@ export const StatusBadge = ({
     className,
   );
 
-  const badgeElement = (
-    <ObjectStatus
-      ariaLabel="Status"
-      role="status"
-      inverted
-      status={type}
-      className={classes}
-      data-testid={noTooltip ? 'no-tooltip' : 'has-tooltip'}
-      style={{ whiteSpace: 'nowrap' }}
-    >
-      {translate(
-        i18n,
-        [i18nFullVariableName, commonStatusVariableName],
-        fallbackValue,
-      )}
-    </ObjectStatus>
+  const badgeContent = translate(
+    i18n,
+    [i18nFullVariableName, commonStatusVariableName],
+    fallbackValue,
   );
 
   let content = translate(
@@ -136,32 +124,43 @@ export const StatusBadge = ({
     content = `${content}: ${additionalContent}`;
   }
 
-  const statusElement = noTooltip ? (
-    badgeElement
-  ) : (
-    <TooltipBadge
-      tooltipContent={content}
-      type={type}
-      tooltipProps={tooltipProps}
-      className={className}
-    >
-      {value}
-    </TooltipBadge>
-  );
-
   // tooltipContent is DEPRECATED. Use the TooltipBadge component if a Badge with a simple Tooltip is needed.
-  return tooltipContent ? (
-    <TooltipBadge
-      tooltipContent={tooltipContent}
-      type={type}
-      tooltipProps={tooltipProps}
-      className={className}
-    >
-      {value}
-    </TooltipBadge>
-  ) : (
-    statusElement
-  );
+  if (tooltipContent) {
+    return (
+      <TooltipBadge
+        tooltipContent={tooltipContent}
+        type={type}
+        tooltipProps={tooltipProps}
+        className={classes}
+      >
+        {badgeContent}
+      </TooltipBadge>
+    );
+  } else if (noTooltip) {
+    return (
+      <ObjectStatus
+        ariaLabel="Status"
+        role="status"
+        inverted
+        status={type}
+        className={classes}
+        data-testid={noTooltip ? 'no-tooltip' : 'has-tooltip'}
+      >
+        {badgeContent}
+      </ObjectStatus>
+    );
+  } else {
+    return (
+      <TooltipBadge
+        tooltipContent={content}
+        type={type}
+        tooltipProps={tooltipProps}
+        className={classes}
+      >
+        {badgeContent}
+      </TooltipBadge>
+    );
+  }
 };
 
 StatusBadge.propTypes = {
