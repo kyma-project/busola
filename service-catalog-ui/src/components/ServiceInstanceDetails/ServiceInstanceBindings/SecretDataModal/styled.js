@@ -1,14 +1,8 @@
 import styled from 'styled-components';
+import { Button as fdbutton } from 'fundamental-react';
 
-export const Button = styled.button`
-  color: #0a6ed1;
-  background: none;
-  border: none;
-  font-family: '72';
-  font-size: 14px;
-  font-weight: normal;
-  cursor: pointer;
-  padding: 9px 0;
+export const Button = styled(fdbutton)`
+  float: right;
 `;
 
 export const List = styled.ul`
