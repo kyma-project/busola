@@ -42,7 +42,7 @@ class SecretDataModal extends React.Component {
         <Grid.Unit size={0.55}>
           <CenterVertically>
             <Item data-e2e-id={`secret-${encoded ? 'encoded' : 'decoded'}`}>
-              {encoded ? this.randomizeAsterisks(data[key]) : value}
+              {encoded ? this.randomizeAsterisks(data[key]) : atob(value)}
             </Item>
           </CenterVertically>
         </Grid.Unit>
