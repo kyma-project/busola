@@ -1,14 +1,33 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { EMPTY_TEXT_PLACEHOLDER, GenericList } from 'react-shared';
-import { LayoutPanel } from 'fundamental-react';
+import {
+  EMPTY_TEXT_PLACEHOLDER,
+  GenericList,
+  GoToDetailsLink,
+} from 'react-shared';
+import { LayoutPanel, Link } from 'fundamental-react';
+import LuigiClient from '@luigi-project/client';
 import { RowComponent } from './RowComponent';
+import pluralize from 'pluralize';
 
 const getPort = (serviceName, port) => {
   if (port?.number) {
-    return port.name
-      ? `${port.name}:${port.number}`
-      : `${serviceName}:${port.number}`;
+    return port.name ? (
+      `${port.name}:${port.number}`
+    ) : (
+      <>
+        <Link
+          onClick={() =>
+            LuigiClient.linkManager()
+              .fromContext('namespace')
+              .navigate(`services/details/${serviceName}`)
+          }
+        >
+          {serviceName}
+        </Link>
+        :{port.number}
+      </>
+    );
   } else {
     return EMPTY_TEXT_PLACEHOLDER;
   }
@@ -30,7 +49,14 @@ export const Rules = ({ rules }) => {
             {t('ingresses.labels.kind')}: {backend.resource.kind}
           </p>
           <p>
-            {t('common.labels.name')}: {backend.resource.name}
+            {t('common.labels.name')}:{' '}
+            <GoToDetailsLink
+              resource={pluralize(
+                backend.resource.kind.toString().toLowerCase(),
+              )}
+              name={backend.resource.name}
+              noBrackets
+            />
           </p>
         </>
       );
