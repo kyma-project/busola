@@ -10,7 +10,7 @@ The document describes how to install Kyma Dashboard with Istio Ingress. It also
 
 > NOTE: To install Kyma Dashboard manually with Istio Ingress you need to have Istio configured on your cluster. See [Istio Getting Started](https://istio.io/latest/docs/setup/getting-started/) for more information.
 
-- Create Namespace for Kyma Dashboard:
+- Create a Namespace for Kyma Dashboard:
 
   `kubectl create namespace {NAMESPACE_NAME}`
 
