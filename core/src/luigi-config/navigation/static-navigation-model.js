@@ -577,7 +577,7 @@ export function getStaticChildrenNodesForNamespace(
       ],
     },
     {
-      category: i18next.t('configuration.title'),
+      category: i18next.t('istio.title'),
       resourceType: 'virtualservices',
       pathSegment: 'virtualservices',
       label: i18next.t('virtualservices.title'),
