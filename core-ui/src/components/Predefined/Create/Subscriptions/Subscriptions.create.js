@@ -1,12 +1,8 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { cloneDeep } from 'lodash';
-import { createTemplate } from './templates';
-import { useGet } from 'react-shared';
+import { createEventSubscriptionTemplate } from './templates';
 
 import { ResourceForm } from 'shared/ResourceForm';
-
-const DEFAULT_EVENT_TYPE_PREFIX = 'sap.kyma.custom.';
 
 const SubscriptionsCreate = ({
   onChange,
@@ -18,31 +14,21 @@ const SubscriptionsCreate = ({
   const t = useTranslation();
 
   const [eventSubscription, setEventSubscription] = useState(
-    cloneDeep(initialEventSubscription) || createTemplate(namespace),
+    createEventSubscriptionTemplate(namespace),
   );
-
-  const { data: configMap } = useGet(
-    '/api/v1/namespaces/kyma-system/configmaps/eventing',
-  );
-
-  let eventTypePrefix =
-    configMap?.data?.eventTypePrefix || DEFAULT_EVENT_TYPE_PREFIX;
-  eventTypePrefix = eventTypePrefix.endsWith('.')
-    ? eventTypePrefix
-    : eventTypePrefix + '.';
 
   return (
     <ResourceForm
       pluralKind="subscriptions"
-      singularName="eventsubscription"
       resource={eventSubscription}
+      singularName="eventsubscription"
       setResource={setEventSubscription}
       onChange={onChange}
       formElementRef={formElementRef}
       initialResource={initialEventSubscription}
       createUrl={resourceUrl}
-    ></ResourceForm>
+      onlyYaml
+    />
   );
 };
-SubscriptionsCreate.allowEdit = true;
 export { SubscriptionsCreate };
