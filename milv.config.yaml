@@ -9,4 +9,5 @@ files:
       external-links-to-ignore:
         [
           'https://www.first.org/cvss/calculator/3.0#CVSS:3.0/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:N',
+          'https://busola.local.kyma.dev/',
         ]
