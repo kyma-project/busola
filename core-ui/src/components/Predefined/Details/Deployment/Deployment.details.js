@@ -2,7 +2,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ControlledBy } from 'react-shared';
 
-import { ResourcePods } from './ResourcePods.js';
+import { ResourcePods } from '../ResourcePods.js';
+import { DeploymentStatus } from './DeploymentStatus';
 
 export const DeploymentsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
@@ -12,6 +13,10 @@ export const DeploymentsDetails = ({ DefaultRenderer, ...otherParams }) => {
       value: deployment => (
         <ControlledBy ownerReferences={deployment.metadata.ownerReferences} />
       ),
+    },
+    {
+      header: t('common.headers.pods'),
+      value: deployment => <DeploymentStatus deployment={deployment} />,
     },
   ];
   return (
