@@ -722,6 +722,7 @@ event-subscription:
       failed-delete: Failed to delete the Subscription
       removed: Subscription removed
     title: Add Event Subscription
+  description: <0>Event Subscription</0> is used to subscribe to events.
   errors:
     invalid: The eventType field must have a proper value.
     not-matching-search-query: Couldn't find Event Subscriptions matching this query.
