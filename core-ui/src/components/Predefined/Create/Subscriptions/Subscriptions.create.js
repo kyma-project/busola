@@ -22,7 +22,6 @@ const SubscriptionsCreate = ({
 }) => {
   const t = useTranslation();
 
-  // const [eventSink, setEvenkSink] = useState("https:")
   const [ownerName, setOwnerName] = useState(''); //checkbox for functions
   const [version, setVersion] = useState('');
   const [appName, setAppName] = useState('');
