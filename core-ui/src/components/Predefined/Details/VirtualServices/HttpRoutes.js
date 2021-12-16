@@ -9,24 +9,56 @@ import {
   CommonMatchAttributes,
 } from './common';
 
-function Headers({ headers }) {
+function InlineHeaders({ headers }) {
   const { t } = useTranslation();
   if (!headers?.request && !headers?.response) return '-';
   return (
     <>
       {headers.request && (
         <HeaderOperations
-          title={t('virtualservices.headeroperations.request')}
+          title={t('virtualservices.headers.request')}
           operations={headers.request}
         />
       )}
       {headers.response && (
         <HeaderOperations
-          title={t('virtualservices.headeroperations.response')}
+          title={t('virtualservices.headers.response')}
           operations={headers.response}
         />
       )}
     </>
+  );
+}
+
+function Headers({ headers }) {
+  const { t } = useTranslation();
+
+  return (
+    <LayoutPanel className="fd-margin--md">
+      <LayoutPanel.Header>
+        <LayoutPanel.Head title={t('virtualservices.headers.title')} />
+      </LayoutPanel.Header>
+      {headers.request && (
+        <LayoutPanel className="fd-margin--md">
+          <LayoutPanel.Header>
+            <LayoutPanel.Head title={t('virtualservices.headers.request')} />
+          </LayoutPanel.Header>
+          <LayoutPanel.Body>
+            <HeaderOperations operations={headers.request} />
+          </LayoutPanel.Body>
+        </LayoutPanel>
+      )}
+      {headers.response && (
+        <LayoutPanel className="fd-margin--md">
+          <LayoutPanel.Header>
+            <LayoutPanel.Head title={t('virtualservices.headers.response')} />
+          </LayoutPanel.Header>
+          <LayoutPanel.Body>
+            <HeaderOperations operations={headers.response} />
+          </LayoutPanel.Body>
+        </LayoutPanel>
+      )}
+    </LayoutPanel>
   );
 }
 
@@ -35,7 +67,7 @@ function Delegate({ delegate }) {
 
   return (
     <>
-      <dd>{t('virtualservices.delegate')}</dd>
+      <dd>{t('virtualservices.http-routes.delegate')}</dd>
       <dt>
         {delegate.namespace && `${delegate.namespace}/`} {delegate.name}
       </dt>
@@ -49,52 +81,52 @@ function CorsPolicy({ cors }) {
   return (
     <LayoutPanel className="fd-margin--md definition-list">
       <LayoutPanel.Header>
-        <LayoutPanel.Head
-          title={t('virtualservices.http-routes.cors-policy.title')}
-        />
+        <LayoutPanel.Head title={t('virtualservices.http-routes.cors.title')} />
       </LayoutPanel.Header>
-      <dl>
-        {cors.allowOrigins.map(origin => (
+      <LayoutPanel.Body>
+        <dl>
+          {cors.allowOrigins.map(origin => (
+            <>
+              <dd>{t('virtualservices.http-routes.cors.allow-origin')}</dd>
+              <dt>
+                <StringMatch label="" def={origin} />
+              </dt>
+            </>
+          ))}
+          {cors.allowMethods?.map(method => (
+            <>
+              <dd>{t('virtualservices.http-routes.cors.allow-method')}</dd>
+              <dt>{method}</dt>
+            </>
+          ))}
+          {cors.allowHeaders?.map(header => (
+            <>
+              <dd>{t('virtualservices.http-routes.cors.allow-header')}</dd>
+              <dt>{header}</dt>
+            </>
+          ))}
+          {cors.exposeHeaders?.map(header => (
+            <>
+              <dd>{t('virtualservices.http-routes.cors.expose-header')}</dd>
+              <dt>{header}</dt>
+            </>
+          ))}
+          {cors.maxAge && (
+            <>
+              <dd>{t('virtualservices.http-routes.cors.max-age')}</dd>
+              <dt>{cors.maxAge}</dt>
+            </>
+          )}
           <>
-            <dd>{t('virtualservices.http-routes.cors.allow-origin')}</dd>
+            <dd>{t('virtualservices.http-routes.cors.allow-credentials')}</dd>
             <dt>
-              <StringMatch label="" def={origin} />
+              {cors.allowCredentials
+                ? t('common.labels.yes')
+                : t('common.labels.no')}
             </dt>
           </>
-        ))}
-        {cors.allowMethods?.map(method => (
-          <>
-            <dd>{t('virtualservices.http-routes.cors.allow-method')}</dd>
-            <dt>{method}</dt>
-          </>
-        ))}
-        {cors.allowHeaders?.map(header => (
-          <>
-            <dd>{t('virtualservices.http-routes.cors.allow-header')}</dd>
-            <dt>{header}</dt>
-          </>
-        ))}
-        {cors.exposeHeaders?.map(header => (
-          <>
-            <dd>{t('virtualservices.http-routes.cors.expose-header')}</dd>
-            <dt>{header}</dt>
-          </>
-        ))}
-        {cors.maxAge && (
-          <>
-            <dd>{t('virtualservices.http-routes.cors.max-age')}</dd>
-            <dt>{cors.maxAge}</dt>
-          </>
-        )}
-        <>
-          <dd>{t('virtualservices.http-routes.cors.allow-credentials')}</dd>
-          <dt>
-            {cors.allowCredentials
-              ? t('common.labels.yes')
-              : t('common.labels.no')}
-          </dt>
-        </>
-      </dl>
+        </dl>
+      </LayoutPanel.Body>
     </LayoutPanel>
   );
 }
@@ -114,24 +146,24 @@ function HeaderOperations({ title, operations }) {
   const { t } = useTranslation();
   return (
     <>
-      <div class="header-operation-title">{title}</div>
+      {title && <div class="header-operation-title">{title}</div>}
       <ul>
         {operations.add &&
           Object.entries(operations.set).map(([header, val]) => (
             <li>
-              {t('virtualservices.headeroperations.add')} {header} = {val}
+              {t('virtualservices.headers.add')} {header} = {val}
             </li>
           ))}
         {operations.set &&
           Object.entries(operations.set).map(([header, val]) => (
             <li>
-              {t('virtualservices.headeroperations.set')} {header} = {val}
+              {t('virtualservices.headers.set')} {header} = {val}
             </li>
           ))}
         {operations.remove &&
           operations.remove.map(header => (
             <li>
-              {t('virtualservices.headeroperations.remove')} {header}
+              {t('virtualservices.headers.remove')} {header}
             </li>
           ))}
       </ul>
@@ -144,11 +176,12 @@ function HttpMatchRequests({ matches }) {
 
   return (
     <GenericList
-      title={t('virtualservices.http-routes.matches')}
+      title={t('virtualservices.matches.title')}
       headerRenderer={() => ['']}
       rowRenderer={match => [<HttpMatchRequest match={match} />]}
       entries={matches}
       showHeader={false}
+      showSearchField={false}
     />
   );
 }
@@ -160,7 +193,7 @@ function HttpRouteDestinations({ routes }) {
     <RouteDestinations
       routes={routes}
       headerRenderer={() => [t('virtualservices.http-routes.route.headers')]}
-      rowRenderer={route => [<Headers headers={route.headers} />]}
+      rowRenderer={route => [<InlineHeaders headers={route.headers} />]}
     />
   );
 }
@@ -175,46 +208,48 @@ function HttpRedirect({ redirect }) {
           title={t('virtualservices.http-routes.redirect.title')}
         />
       </LayoutPanel.Header>
-      <dl>
-        {redirect.uri && (
-          <>
-            <dd>{t('virtualservices.http-routes.redirect.uri')}</dd>
-            <dt>{redirect.uri}</dt>
-          </>
-        )}
-        {redirect.uri && (
-          <>
-            <dd>{t('virtualservices.http-routes.redirect.authority')}</dd>
-            <dt>{redirect.authority}</dt>
-          </>
-        )}
-        {redirect.port && (
-          <>
-            <dd>{t('virtualservices.http-routes.redirect.port')}</dd>
-            <dt>{redirect.authority}</dt>
-          </>
-        )}
-        {redirect.derivePort && (
-          <>
-            <dd>{t('virtualservices.http-routes.redirect.derive-port')}</dd>
-            <dt>
-              <RedirectPortSelection selection={redirect.authority} />
-            </dt>
-          </>
-        )}
-        {redirect.scheme && (
-          <>
-            <dd>{t('virtualservices.http-routes.redirect.scheme')}</dd>
-            <dt>{redirect.sheme}</dt>
-          </>
-        )}
-        {redirect.redirectCode && (
-          <>
-            <dd>{t('virtualservices.http-routes.redirect.scheme')}</dd>
-            <dt>{redirect.redirectCode}</dt>
-          </>
-        )}
-      </dl>
+      <LayoutPanel.Body>
+        <dl>
+          {redirect.uri && (
+            <>
+              <dd>{t('virtualservices.http-routes.redirect.uri')}</dd>
+              <dt>{redirect.uri}</dt>
+            </>
+          )}
+          {redirect.authority && (
+            <>
+              <dd>{t('virtualservices.http-routes.redirect.authority')}</dd>
+              <dt>{redirect.authority}</dt>
+            </>
+          )}
+          {redirect.port && (
+            <>
+              <dd>{t('virtualservices.http-routes.redirect.port')}</dd>
+              <dt>{redirect.authority}</dt>
+            </>
+          )}
+          {redirect.derivePort && (
+            <>
+              <dd>{t('virtualservices.http-routes.redirect.derive-port')}</dd>
+              <dt>
+                <RedirectPortSelection selection={redirect.authority} />
+              </dt>
+            </>
+          )}
+          {redirect.scheme && (
+            <>
+              <dd>{t('virtualservices.http-routes.redirect.scheme')}</dd>
+              <dt>{redirect.scheme}</dt>
+            </>
+          )}
+          {redirect.redirectCode && (
+            <>
+              <dd>{t('virtualservices.http-routes.redirect.scheme')}</dd>
+              <dt>{redirect.redirectCode}</dt>
+            </>
+          )}
+        </dl>
+      </LayoutPanel.Body>
     </LayoutPanel>
   );
 }
@@ -334,16 +369,16 @@ export function StringMatch({ label, def, ignoreCase }) {
   let tooltip;
   if (def.exact) {
     operator = '=';
-    tooltip = t('virtualservices.match.exact');
+    tooltip = t('virtualservices.matches.exact');
     value = def.exact;
   } else if (def.prefix) {
     operator = '^=';
     value = def.prefix;
-    tooltip = t('virtualservices.match.prefix');
+    tooltip = t('virtualservices.matches.prefix');
   } else if (def.regex) {
     operator = '~';
     value = def.regex;
-    tooltip = t('virtualservices.match.regex');
+    tooltip = t('virtualservices.matches.regex');
   } else {
     return '-';
   }
@@ -351,11 +386,11 @@ export function StringMatch({ label, def, ignoreCase }) {
   return (
     <div>
       {label}
-      <Tooltip content={tooltip}>{operator}</Tooltip>
+      <Tooltip className="match-operator" content={tooltip}>
+        {operator}
+      </Tooltip>
       {value}
-      {ignoreCase &&
-        !def.regex &&
-        t('virtualservices.http-routes.match.ignore-case')}
+      {ignoreCase && !def.regex && t('virtualservices.matches.ignore-case')}
     </div>
   );
 }
@@ -374,45 +409,45 @@ function HttpMatchRequest({ match }) {
     <>
       {match.uri && (
         <StringMatch
-          label={t('virtualservices.http-routes.match.uri')}
+          label={t('virtualservices.matches.uri')}
           def={match.uri}
           ignoreCase={match.ignoreUriCase}
         />
       )}
       {match.scheme && (
         <StringMatch
-          label={t('virtualservices.http-routes.match.scheme')}
+          label={t('virtualservices.matches.scheme')}
           def={match.scheme}
         />
       )}
       {match.method && (
         <StringMatch
-          label={t('virtualservices.http-routes.match.method')}
+          label={t('virtualservices.matches.method')}
           def={match.method}
         />
       )}
       {match.authority && (
         <StringMatch
-          label={t('virtualservices.http-routes.match.authority')}
+          label={t('virtualservices.matches.authority')}
           def={match.method}
         />
       )}
       {match.headers && (
         <StringMatchMap
-          labelId="virtualservices.http-routes.match.header"
+          labelId="virtualservices.matches.header"
           map={match.headers}
         />
       )}
       {match.withoutHeaders && (
         <StringMatchMap
-          labelId="virtualservices.http-routes.match.without-header"
+          labelId="virtualservices.matches.without-header"
           map={match.withoutHeaders}
         />
       )}
       {match.queryParams && (
         <StringMatchMap
-          labelId="virtualservices.http-routes.match.header"
-          map={match.match.queryParams}
+          labelId="virtualservices.matches.header"
+          map={match.queryParams}
         />
       )}
       <CommonMatchAttributes match={match} />
@@ -426,7 +461,7 @@ export function HttpRoutes(service) {
   if (!service.spec.http) return null;
 
   return service.spec.http.map(rule => (
-    <LayoutPanel className="fd-margin--md definition-list">
+    <LayoutPanel className="fd-margin--md definition-list http-route">
       <LayoutPanel.Header>
         <LayoutPanel.Head
           title={t('virtualservices.http-routes.title')}
@@ -465,16 +500,7 @@ export function HttpRoutes(service) {
       {rule.rewrite && <HttpRewrite rewrite={rule.rewrite} />}
       {rule.retries && <HttpRetry retries={rule.retries} />}
       {rule.corsPolicy && <CorsPolicy cors={rule.corsPolicy} />}
-      {rule.headers && (
-        <LayoutPanel>
-          <LayoutPanel.Header>
-            <LayoutPanel.Head
-              title={t('virtualservices.http-routes.headers')}
-            />
-          </LayoutPanel.Header>
-          <Headers headers={rule.headers} />
-        </LayoutPanel>
-      )}
+      {rule.headers && <Headers headers={rule.headers} />}
     </LayoutPanel>
   ));
 }

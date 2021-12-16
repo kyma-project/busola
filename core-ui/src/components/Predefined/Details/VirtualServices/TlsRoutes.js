@@ -11,12 +11,11 @@ function TlsMatchAttributesItem({ match }) {
   return (
     <>
       <div>
-        {t('virtualservices.tls-routes.match.sni-hosts')}{' '}
-        {match.sniHosts.join(', ')}
+        {t('virtualservices.matches.sni-hosts')} {match.sniHosts.join(', ')}
       </div>
       {match.destinationSubnets && (
         <div>
-          {t('virtualservices.tls-routes.match.destination-subnets')}
+          {t('virtualservices.matches.destination-subnets')}
           {match.destinationSubnets.join(', ')}
         </div>
       )}
@@ -30,7 +29,7 @@ function TlsMatchAttributes({ matches }) {
 
   return (
     <GenericList
-      title={t('virtualservices.tls-routes.matches')}
+      title={t('virtualservices.matches.title')}
       headerRenderer={() => ['']}
       rowRenderer={match => [<TlsMatchAttributesItem match={match} />]}
       entries={matches}

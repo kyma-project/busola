@@ -29,6 +29,7 @@ export function RouteDestinations({
         ...rowRenderer(route),
       ]}
       entries={routes}
+      showSearchField={false}
     />
   );
 }
@@ -40,25 +41,23 @@ export function CommonMatchAttributes({ match }) {
     <>
       {match.port && (
         <div>
-          {t('virtualservices.http-routes.match.port')} = {match.port}
+          {t('virtualservices.matches.port')} = {match.port}
         </div>
       )}
       {match.sourceLabels &&
         Object.entries(match.sourceLabels).map(([label, value]) => (
           <div>
-            {t('virtualservices.http-routes.match.source-label', { label })} ={' '}
-            {value}
+            {t('virtualservices.matches.source-label', { label })} = {value}
           </div>
         ))}
       {match.gateways && (
         <div>
-          {t('virtualservices.http-routes.match.gateways')}{' '}
-          {match.gateways.join(', ')}
+          {t('virtualservices.matches.gateways')} {match.gateways.join(', ')}
         </div>
       )}
       {match.sourceNamespace && (
         <div>
-          {t('virtualservices.http-routes.match.source-namespace')} ={' '}
+          {t('virtualservices.matches.source-namespace')} ={' '}
           {match.sourceNamespace}
         </div>
       )}

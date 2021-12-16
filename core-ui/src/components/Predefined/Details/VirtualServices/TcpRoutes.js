@@ -12,7 +12,7 @@ function L4MatchAttributesItem({ match }) {
     <>
       {match.destinationSubnets && (
         <div>
-          {t('virtualservices.tls-routes.match.destination-subnets')}
+          {t('virtualservices.matches.destination-subnets')}
           {match.destinationSubnets.join(', ')}
         </div>
       )}
@@ -26,7 +26,7 @@ function L4MatchAttributes({ matches }) {
 
   return (
     <GenericList
-      title={t('virtualservices.tls-routes.matches')}
+      title={t('virtualservices.matches.title')}
       headerRenderer={() => ['']}
       rowRenderer={match => [<L4MatchAttributesItem match={match} />]}
       entries={matches}

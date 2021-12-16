@@ -1456,26 +1456,71 @@ top-nav:
 virtualservices:
   description: <0>Virtual Service</0> describes a configuration affecting traffic routing.
   gateways: Gateways
-  headeroperations:
+  headers:
     add: add
     remove: remove
     request: Request
     response: Response
     set: set
+    title: Headers
   hosts: Hosts
   http-routes:
-    matches: Matches
+    cors:
+      allow-credentials: Allow Credential
+      allow-method: Allow Method
+      allow-origin: Allow Origin
+      expose-header: Expose Header
+      max-age: Max Age
+      title: CORS Policy
+    delegate: Delegate
+    fault:
+      abort: Abort Fault Injection
+      delay: Delay Fault Injection
+    mirror: Mirror
+    redirect:
+      authority: Authority
+      derivePort: Derive Port
+      port: Port
+      redirectCode: Redirect Code
+      scheme: Scheme
+      title: Redirect
+      uri: URI
+    rewrite:
+      authority: Authority
+      title: Rewrite
+      uri: URI
     route:
-      destination: Destination
       headers: Header manipulation
-      weight: Weight
-    routes: Destinations
+    timeout: Timeout
     title: HTTP Route
-  match:
+  matches:
+    authority: Authority
+    destination-subnets: Destination Subnets
     exact: Is exact
+    gateways: Gateways include
+    header: Header {{field}}
+    ignore-case: (ignore case)
+    method: Method
+    port: Port
     prefix: Starts with
     regex: Matches a regular expression
+    scheme: Scheme
+    sni-hosts: SNI Hosts
+    source-label: Source Label {{field}}
+    source-namespace: Source Namespace
+    title: Matches
+    uri: URI
+    without-header: Without header {{field}}
+  route:
+    destination: Destination
+    weight: Weight
+  routes: Destinations
+  tcp-routes:
+    title: TCP Routes
   title: Virtual Services
+  tls-routes:
+    matches: Matches
+    title: TLS Routes
 workloads:
   docker-image:
     tooltip: Enter a valid Docker image registry path.
