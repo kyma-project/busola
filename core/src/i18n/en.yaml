@@ -1606,6 +1606,7 @@ virtualservices:
     title: Matches
     uri: URI
     without-header: Without header {{field}}
+  name_singular: Virtual Service
   route:
     destination: Destination
     weight: Weight

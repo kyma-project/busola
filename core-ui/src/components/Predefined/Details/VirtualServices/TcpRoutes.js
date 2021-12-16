@@ -9,15 +9,15 @@ function L4MatchAttributesItem({ match }) {
   const { t } = useTranslation();
 
   return (
-    <>
+    <dl>
       {match.destinationSubnets && (
-        <div>
-          {t('virtualservices.matches.destination-subnets')}
-          {match.destinationSubnets.join(', ')}
-        </div>
+        <>
+          <dd>{t('virtualservices.matches.destination-subnets')}</dd>
+          <dt>{match.destinationSubnets.join(', ')}</dt>
+        </>
       )}
       <CommonMatchAttributes match={match} />
-    </>
+    </dl>
   );
 }
 

@@ -89,7 +89,7 @@ function CorsPolicy({ cors }) {
             <>
               <dd>{t('virtualservices.http-routes.cors.allow-origin')}</dd>
               <dt>
-                <StringMatch label="" def={origin} />
+                <StringMatch def={origin} />
               </dt>
             </>
           ))}
@@ -264,20 +264,22 @@ function HttpRewrite({ rewrite }) {
           title={t('virtualservices.http-routes.rewrite.title')}
         />
       </LayoutPanel.Header>
-      <dl>
-        {rewrite.uri && (
-          <>
-            <dd>{t('virtualservices.http-routes.rewrite.uri')}</dd>
-            <dt>{rewrite.uri}</dt>
-          </>
-        )}
-        {rewrite.authority && (
-          <>
-            <dd>{t('virtualservices.http-routes.rewrite.authority')}</dd>
-            <dt>{rewrite.authority}</dt>
-          </>
-        )}
-      </dl>
+      <LayoutPanel.Body>
+        <dl>
+          {rewrite.uri && (
+            <>
+              <dd>{t('virtualservices.http-routes.rewrite.uri')}</dd>
+              <dt>{rewrite.uri}</dt>
+            </>
+          )}
+          {rewrite.authority && (
+            <>
+              <dd>{t('virtualservices.http-routes.rewrite.authority')}</dd>
+              <dt>{rewrite.authority}</dt>
+            </>
+          )}
+        </dl>
+      </LayoutPanel.Body>
     </LayoutPanel>
   );
 }
@@ -361,7 +363,7 @@ function HttpFaultInjectionAbort({ abort }) {
   );
 }
 
-export function StringMatch({ label, def, ignoreCase }) {
+export function StringMatch({ def, ignoreCase }) {
   const { t } = useTranslation();
 
   let operator;
@@ -384,21 +386,29 @@ export function StringMatch({ label, def, ignoreCase }) {
   }
 
   return (
-    <div>
-      {label}
+    <>
       <Tooltip className="match-operator" content={tooltip}>
         {operator}
-      </Tooltip>
-      {value}
-      {ignoreCase && !def.regex && t('virtualservices.matches.ignore-case')}
-    </div>
+      </Tooltip>{' '}
+      {value}{' '}
+      {ignoreCase && !def.regex && (
+        <span className="ignore-case">
+          {t('virtualservices.matches.ignore-case')}
+        </span>
+      )}
+    </>
   );
 }
 
 function StringMatchMap({ labelId, map }) {
   const { t } = useTranslation();
   return Object.entries(map).map(([field, matchValue]) => (
-    <StringMatch label={t(labelId, { field })} def={matchValue} />
+    <>
+      <dd>{t(labelId, { field })}</dd>
+      <dt>
+        <StringMatch def={matchValue} />
+      </dt>
+    </>
   ));
 }
 
@@ -406,31 +416,38 @@ function HttpMatchRequest({ match }) {
   const { t } = useTranslation();
 
   return (
-    <>
+    <dl>
       {match.uri && (
-        <StringMatch
-          label={t('virtualservices.matches.uri')}
-          def={match.uri}
-          ignoreCase={match.ignoreUriCase}
-        />
+        <>
+          <dd>{t('virtualservices.matches.uri')}</dd>
+          <dt>
+            <StringMatch def={match.uri} ignoreCase={match.ignoreUriCase} />
+          </dt>
+        </>
       )}
       {match.scheme && (
-        <StringMatch
-          label={t('virtualservices.matches.scheme')}
-          def={match.scheme}
-        />
+        <>
+          <dd>{t('virtualservices.matches.scheme')}</dd>
+          <dt>
+            <StringMatch def={match.scheme} />
+          </dt>
+        </>
       )}
       {match.method && (
-        <StringMatch
-          label={t('virtualservices.matches.method')}
-          def={match.method}
-        />
+        <>
+          <dd>{t('virtualservices.matches.method')}</dd>
+          <dt>
+            <StringMatch def={match.method} />
+          </dt>
+        </>
       )}
       {match.authority && (
-        <StringMatch
-          label={t('virtualservices.matches.authority')}
-          def={match.method}
-        />
+        <>
+          <dd>{t('virtualservices.matches.authority')}</dd>
+          <dt>
+            <StringMatch def={match.method} />
+          </dt>
+        </>
       )}
       {match.headers && (
         <StringMatchMap
@@ -451,7 +468,7 @@ function HttpMatchRequest({ match }) {
         />
       )}
       <CommonMatchAttributes match={match} />
-    </>
+    </dl>
   );
 }
 

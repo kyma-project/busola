@@ -9,18 +9,17 @@ function TlsMatchAttributesItem({ match }) {
   const { t } = useTranslation();
 
   return (
-    <>
-      <div>
-        {t('virtualservices.matches.sni-hosts')} {match.sniHosts.join(', ')}
-      </div>
+    <dl>
+      <dd>{t('virtualservices.matches.sni-hosts')}</dd>
+      <dt>{match.sniHosts.join(', ')}</dt>
       {match.destinationSubnets && (
-        <div>
-          {t('virtualservices.matches.destination-subnets')}
-          {match.destinationSubnets.join(', ')}
-        </div>
+        <>
+          <dd>{t('virtualservices.matches.destination-subnets')}</dd>
+          <dt>{match.destinationSubnets.join(', ')}</dt>
+        </>
       )}
       <CommonMatchAttributes match={match} />
-    </>
+    </dl>
   );
 }
 

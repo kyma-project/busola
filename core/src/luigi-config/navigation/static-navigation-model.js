@@ -583,7 +583,7 @@ export function getStaticChildrenNodesForNamespace(
       label: i18next.t('virtualservices.title'),
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/virtualservices?' +
+        '/namespaces/:namespaceId/virtualServices?' +
         toSearchParamsString({
           resourceApiPath: '/apis/networking.istio.io/v1beta1',
           hasDetailsView: true,
@@ -604,7 +604,7 @@ export function getStaticChildrenNodesForNamespace(
               resourceType: 'virtualservices',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/virtualservices/:virtualserviceName?' +
+                '/namespaces/:namespaceId/virtualServices/:virtualserviceName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/networking.istio.io/v1beta1',
                 }),
