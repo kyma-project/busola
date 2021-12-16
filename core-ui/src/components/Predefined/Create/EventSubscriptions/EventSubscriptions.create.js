@@ -4,6 +4,7 @@ import { createEventSubscriptionTemplate } from './templates';
 
 import { ResourceForm } from 'shared/ResourceForm';
 
+//the name of the function cannot have 'Event' prefix otherwise 'create' button isn't displayed
 const SubscriptionsCreate = ({
   onChange,
   formElementRef,
