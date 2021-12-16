@@ -15,7 +15,9 @@ export const ConnectionPoolTCP = ({ tcp }) => {
         {tcp.maxConnections || EMPTY_TEXT_PLACEHOLDER}
       </FormItem>
       <FormItem>
-        <FormLabel>{t('destination-rules.details.connect-timeout')}</FormLabel>
+        <FormLabel>
+          {t('destination-rules.details.connection-timeout')}
+        </FormLabel>
         {tcp.connectTimeout || EMPTY_TEXT_PLACEHOLDER}
       </FormItem>
       {tcp.tcpKeepalive ? (
