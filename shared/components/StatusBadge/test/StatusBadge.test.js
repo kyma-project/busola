@@ -31,7 +31,7 @@ describe('StatusBadge', () => {
 
   it('renders status text with DEFAULT_STATUSES_PATH', () => {
     const DEFAULT_STATUSES_PATH =
-      'common.statuses.initial,common.statuses.initial,fallback';
+      'common.statuses.initialcommon.statuses.initial';
     const { queryByRole } = render(
       <StatusBadge i18n={{ a: 'a' }}>Initial</StatusBadge>,
     );
@@ -43,7 +43,7 @@ describe('StatusBadge', () => {
   it('renders status text with RESOURCE_STATUSES_PATH', () => {
     const RESOURCE_KIND = 'resource';
     const RESOURCE_STATUSES_PATH =
-      'resource.statuses.initial,common.statuses.initial,fallback';
+      'resource.statuses.initialcommon.statuses.initial';
     const { queryByRole } = render(
       <StatusBadge i18n={{ a: 'a' }} resourceKind={RESOURCE_KIND}>
         Initial

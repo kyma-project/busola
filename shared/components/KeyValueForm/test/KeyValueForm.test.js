@@ -1,7 +1,8 @@
 import React from 'react';
-import { render, fireEvent, wait } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import { KeyValueForm } from '../KeyValueForm';
 import * as helpers from '../helpers';
+import wait from 'waait';
 
 describe('KeyValueForm', () => {
   it('Adds and removes entries, showing proper warnings', () => {

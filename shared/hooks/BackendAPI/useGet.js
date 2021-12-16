@@ -2,6 +2,9 @@ import React from 'react';
 import { useMicrofrontendContext } from '../../contexts/MicrofrontendContext';
 import { useFetch } from './useFetch';
 
+// allow <n> consecutive requests to fail before displaying error
+const ERROR_TOLERANCY = 2;
+
 const useGetHook = processDataFn =>
   function(path, { pollingInterval, onDataReceived, skip } = {}) {
     const lastAuthData = React.useRef(null);
@@ -12,6 +15,7 @@ const useGetHook = processDataFn =>
     const { authData } = useMicrofrontendContext();
     const fetch = useFetch();
     const abortController = React.useRef(new AbortController());
+    const errorTolerancyCounter = React.useRef(0);
 
     const refetch = (isSilent, currentData) => async () => {
       if (skip || !authData || abortController.current.signal.aborted) return;
@@ -21,8 +25,11 @@ const useGetHook = processDataFn =>
 
       function processError(error) {
         if (!abortController.current.signal.aborted) {
-          console.error(error);
-          setError(error);
+          errorTolerancyCounter.current++;
+          if (errorTolerancyCounter.current > ERROR_TOLERANCY || !data) {
+            console.error(error);
+            setError(error);
+          }
         }
       }
 
@@ -36,6 +43,7 @@ const useGetHook = processDataFn =>
         if (abortController.current.signal.aborted) return;
         if (typeof onDataReceived === 'function') onDataReceived(payload.items);
         if (error) setTimeout(_ => setError(null)); // bring back the data and clear the error once the connection started working again
+        errorTolerancyCounter.current = 0;
         setTimeout(_ =>
           processDataFn(payload, currentData, setData, lastResourceVersion),
         );

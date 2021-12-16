@@ -3,17 +3,9 @@ import PropTypes from 'prop-types';
 import LuigiClient from '@luigi-project/client';
 import { useTranslation } from 'react-i18next';
 
-import { LayoutPanel, FormItem, FormLabel, Button } from 'fundamental-react';
+import { LayoutPanel, Button } from 'fundamental-react';
 import './ContainersData.scss';
-
-const SecretComponent = ({ name, value }) => (
-  <FormItem className="item-wrapper">
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
-      <FormLabel className="form-label">{name}:</FormLabel>
-      <div>{value}</div>
-    </div>
-  </FormItem>
-);
+import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 
 const getPorts = ports => {
   if (ports?.length) {
@@ -51,24 +43,24 @@ export default function ContainersData({ type, containers }) {
         </LayoutPanel.Actions>
       </LayoutPanel.Header>
       <LayoutPanel.Body>
-        <SecretComponent
+        <LayoutPanelRow
           name={t('common.headers.name')}
           value={container.name}
         />
         {container.image && (
-          <SecretComponent
+          <LayoutPanelRow
             name={t('pods.labels.image')}
             value={container.image}
           />
         )}
         {container.imagePullPolicy && (
-          <SecretComponent
+          <LayoutPanelRow
             name={t('pods.labels.image-pull-policy')}
             value={container.imagePullPolicy}
           />
         )}
         {container.ports && (
-          <SecretComponent
+          <LayoutPanelRow
             name={t('pods.labels.ports')}
             value={getPorts(container.ports)}
           />
