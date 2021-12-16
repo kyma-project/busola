@@ -1,8 +1,7 @@
 import React from 'react';
-import { ControlledByKind, StatusBadge } from 'react-shared';
-import { useTranslation } from 'react-i18next';
-import { Link } from 'react-shared';
-import { Trans } from 'react-i18next';
+import { ControlledByKind, Link } from 'react-shared';
+import { useTranslation, Trans } from 'react-i18next';
+import { DeploymentStatus } from '../Details/Deployment/DeploymentStatus';
 
 const getImages = deployment => {
   const images =
@@ -12,25 +11,8 @@ const getImages = deployment => {
   return images;
 };
 
-const isStatusOk = deployment => {
-  return deployment.status.readyReplicas === deployment.status.replicas;
-};
-
-const getStatus = deployment => {
-  return isStatusOk(deployment) ? 'running' : 'error';
-};
-
-const getStatusType = deployment => {
-  return isStatusOk(deployment) ? 'success' : 'error';
-};
-
-const getPodsCount = deployment => {
-  return `${deployment.status.readyReplicas || 0} / ${deployment.status
-    .replicas || 0}`;
-};
-
 export const DeploymentsList = ({ DefaultRenderer, ...otherParams }) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const customColumns = [
     {
@@ -52,32 +34,8 @@ export const DeploymentsList = ({ DefaultRenderer, ...otherParams }) => {
       },
     },
     {
-      header: t('deployments.headers.pods'),
-      value: deployment => {
-        const podsCount = getPodsCount(deployment);
-        const statusType = getStatusType(deployment);
-        return (
-          <StatusBadge noTooltip type={statusType}>
-            {podsCount}
-          </StatusBadge>
-        );
-      },
-    },
-    {
-      header: t('common.headers.status'),
-      value: deployment => {
-        const status = getStatus(deployment);
-        const statusType = getStatusType(deployment);
-        return (
-          <StatusBadge
-            i18n={i18n}
-            resourceKind={otherParams.resourceType}
-            type={statusType}
-          >
-            {status}
-          </StatusBadge>
-        );
-      },
+      header: t('common.headers.pods'),
+      value: deployment => <DeploymentStatus deployment={deployment} />,
     },
   ];
 

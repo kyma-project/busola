@@ -23,6 +23,7 @@ export { Dropdown } from './components/Dropdown/Dropdown';
 export { FileInput } from './components/FileInput/FileInput';
 export { ResourceNotFound } from './components/ResourceNotFound/ResourceNotFound';
 export { StatusBadge } from './components/StatusBadge/StatusBadge';
+export { TooltipBadge } from './components/TooltipBadge/TooltipBadge';
 export { ResourceStatus } from './components/ResourceStatus/ResourceStatus';
 export { TextFormItem } from './components/TextFormItem/TextFormItem';
 export { Tabs } from './components/Tabs/Tabs';

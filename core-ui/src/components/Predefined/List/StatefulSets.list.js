@@ -4,7 +4,7 @@ import { ControlledByKind } from 'react-shared';
 import { Link } from 'react-shared';
 import { Trans } from 'react-i18next';
 
-import { StatefulSetReplicas } from '../Details/StatefulSet/StatefulSetReplicas';
+import { StatefulSetPods } from '../Details/StatefulSet/StatefulSetPods';
 
 export const StatefulSetsList = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
@@ -17,8 +17,8 @@ export const StatefulSetsList = ({ DefaultRenderer, ...otherParams }) => {
       ),
     },
     {
-      header: t('stateful-sets.replicas'),
-      value: set => <StatefulSetReplicas key="replicas" set={set} />,
+      header: t('common.headers.pods'),
+      value: set => <StatefulSetPods key="replicas" set={set} />,
     },
   ];
 

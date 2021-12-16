@@ -1,24 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ControlledByKind, Labels, StatusBadge } from 'react-shared';
+import { ControlledByKind, Labels } from 'react-shared';
 import { Link } from 'react-shared';
 import { Trans } from 'react-i18next';
 
-const isStatusOk = daemonSet => {
-  const allPods =
-    daemonSet.status.numberReady + (daemonSet.status.numberUnavailable || 0);
-  return daemonSet.status.numberReady === allPods;
-};
-
-export const getStatusType = daemonSet => {
-  return isStatusOk(daemonSet) ? 'success' : 'error';
-};
-
-export const getPodsCount = daemonSet => {
-  const allPods =
-    daemonSet.status.numberReady + (daemonSet.status.numberUnavailable || 0);
-  return `${daemonSet.status.numberReady || 0} / ${allPods || 0}`;
-};
+import { DaemonSetStatus } from '../Details/DaemonSet/DaemonSetStatus';
 
 export const DaemonSetsList = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
@@ -40,16 +26,8 @@ export const DaemonSetsList = ({ DefaultRenderer, ...otherParams }) => {
       ),
     },
     {
-      header: t('daemon-sets.pods'),
-      value: resource => {
-        const podsCount = getPodsCount(resource);
-        const statusType = getStatusType(resource);
-        return (
-          <StatusBadge type={statusType} noTooltip>
-            {podsCount}
-          </StatusBadge>
-        );
-      },
+      header: t('common.headers.pods'),
+      value: resource => <DaemonSetStatus daemonSet={resource} />,
     },
   ];
 

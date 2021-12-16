@@ -125,14 +125,20 @@ export const CustomResourceDefinitionVersions = resource => {
             <StatusBadge
               type={version.served ? 'positive' : 'informative'}
               className="version-status"
-              noTooltip
+              resourceKind="custom-resource-definitions"
+              i18n={i18n}
             >
               {version.served
                 ? t('custom-resource-definitions.status.served')
                 : t('custom-resource-definitions.status.not-served')}
             </StatusBadge>
             {version.storage && (
-              <StatusBadge type="positive" className="version-status" noTooltip>
+              <StatusBadge
+                type="positive"
+                className="version-status"
+                resourceKind="custom-resource-definitions"
+                i18n={i18n}
+              >
                 {t('custom-resource-definitions.status.storage')}
               </StatusBadge>
             )}
