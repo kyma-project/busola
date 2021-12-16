@@ -26,3 +26,4 @@ export * from './ServiceBinding/ServiceBinding.details';
 export * from './Gateway/Gateway.details';
 export * from './ServiceAccount/ServiceAccount.details';
 export * from './GitRepositories.details';
+export * from './EventSubscriptions.details';

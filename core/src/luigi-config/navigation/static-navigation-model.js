@@ -808,7 +808,7 @@ export function getStaticChildrenNodesForNamespace(
       pathSegment: 'subscriptions',
       resourceType: 'subscriptions',
       navigationContext: 'eventsubscriptions',
-      label: 'Event  Subscriptions',
+      label: i18next.t('event-subscription.title'),
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/Subscriptions?' +
@@ -818,17 +818,16 @@ export function getStaticChildrenNodesForNamespace(
         }),
       viewGroup: coreUIViewGroupName,
       keepSelectedForChildren: true,
-
       children: [
         {
           pathSegment: 'details',
           children: [
             {
               pathSegment: ':subscriptionName',
-              resourceType: 'eventsubscriptions',
+              resourceType: 'subscriptions',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/EventSubscriptions/:subscriptionName?' +
+                '/namespaces/:namespaceId/Subscriptions/:subscriptionName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/eventing.kyma-project.io/v1alpha1',
                 }),
