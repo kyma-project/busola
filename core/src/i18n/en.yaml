@@ -401,6 +401,7 @@ common:
     kyma: Kyma
     name: Name
     namespace: Namespace
+    path: Path
     protocol: Protocol
     read-only: Read-only mode
     resource: Resource
@@ -434,10 +435,12 @@ common:
   statuses:
     error: Error
     failed: Failed
+    'false': 'false'
     invalid: Invalid
     ok: OK
     pending: Pending
     ready: Ready
+    'true': 'true'
     unknown: Unknown
   tooltips:
     copy-to-clipboard: Copy to clipboard
@@ -646,9 +649,65 @@ deployments:
     error: Error
     running: Running
   title: Deployments
-  tooltips:
-    error: At least one of the Pods has failed
-    running: All the Pods are running correctly
+destination-rules:
+  age: Age
+  description: <0>Destination Rule</0> specifies rules that apply to traffic intended for a service after routing.
+  details:
+    alt-names: Subject Alt Names
+    base-ejection: Base Ejection Time
+    ca-certificates: CA Certificates
+    client-certificate: Client Certificate
+    client-protocol: Use Client Protocol
+    connection-timeout: Connection Timeout
+    consecutive-5xx: Consecutive 5xx Errors
+    consecutive-failures: Consecutive Local Origin Failures
+    consistent-hash: Consistent Hash
+    credential-name: Credential Name
+    distribution: Distribution
+    enabled: Enabled
+    failover: Failover
+    failover-priority: Failover Priority
+    from: From
+    h2-upgrade: H2 Upgrade Policy
+    http-cookie: HTTP cookie
+    http-header: HTTP Header Name
+    http-max: HTTP2 Max Requests
+    http-pending: HTTP1 Max Pending Requests
+    http-query-parameter: HTTP Query Parameter Name
+    http-settings: HTTP Connection Pool Settings
+    idle-timeout: Idle Timeout
+    interval: Interval
+    lb-settings: Locality LB Settings
+    load-balancer: Load Balancer
+    max-connections: Max Connections
+    max-ejection: Max Ejection Percent
+    max-per-connection: Max Requests Per Connections
+    max-retries: Max Retries
+    min-health: Min Health Percent
+    minimum-ring-size: Minimum Ring Size
+    outlier-detection: Outlier Detection
+    port-traffic-policy: Port {{port}} Traffic Policy
+    private-key: Private Key
+    probes: Probes
+    simple: Simple
+    skip-verify: Insecure Skip Verify
+    sni: SNI
+    source-ip: Use Source IP
+    split-errors: Split External Local Origin Errors
+    subset: Subset
+    subsets: Subsets
+    tcp-alive: TCP Keep Alive
+    tcp-settings: TCP Connection Pool Settings
+    time: Time
+    tls-settings: Client TLS Settings
+    to: To
+    traffic-policy: Traffic Policy
+    ttl: TTL
+  exported-to-namespaces: Exported to Namespaces
+  host: Host
+  name_singular: Destination Rule
+  state: State
+  title: Destination Rules
 discovery-and-network:
   title: Discovery and Network
 dnsentries:
@@ -1066,6 +1125,8 @@ issuers:
     server: Server is the URL of the ACME server.
     skip-dns: SkipDNSChallengeValidation marks that this issuer does not validate DNS challenges. In this case, no DNS entries/records are created for a DNS Challenge, and DNS propagation is not checked.
   type: Issuer Type
+istio:
+  title: Istio
 jobs:
   completion-time: Completion Time
   completions: Completions

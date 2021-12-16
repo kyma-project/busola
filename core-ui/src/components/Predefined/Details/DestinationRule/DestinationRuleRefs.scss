@@ -1,0 +1,19 @@
+.destination-rule-refs-panel {
+  & > :first-child {
+    margin-bottom: 8px;
+  }
+
+  & > *:not(:first-child):not(.destination-rule-refs-panel) {
+    margin-left: 32px !important;
+    margin-right: 32px !important;
+
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    margin-bottom: 8px !important;
+  }
+
+  .fd-table {
+    grid-column-start: 1;
+    grid-column-end: 3;
+  }
+}
