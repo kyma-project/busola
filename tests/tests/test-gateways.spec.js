@@ -20,7 +20,7 @@ context('Test Gateways', () => {
 
   it('Gateways node should be present', () => {
     cy.getLeftNav()
-      .contains('Configuration')
+      .contains('Istio')
       .click();
 
     cy.getLeftNav()
