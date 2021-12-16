@@ -26,13 +26,13 @@ To install dependencies for the root and all UI projects, and to prepare symlink
 npm run bootstrap:ci
 ```
 
-Visit [Install Kyma Dashboard manually](docs/install_dashboard_manually.md) to learn how to install the Dashboard with Istio Ingress and how to install it on a Kyma cluster.
-
 > **NOTE:** The `npm run bootstrap:ci` command:
 >
 > - Installs root dependencies provided in the [`package.json`](./package.json) file.
 > - Installs dependencies for the [libraries](#components).
 > - Builds all the [libraries](#components).
+
+Visit [Install Kyma Dashboard manually](docs/install_dashboard_manually.md) to learn how to install the Dashboard with Istio Ingress and how to install it on a Kyma cluster.
 
 ## Configuration
 
