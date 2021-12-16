@@ -41,7 +41,6 @@ context('Test Ingresses', () => {
           });
       },
     );
-    cy.wait(5000);
 
     cy.getIframeBody()
       .find('[role="dialog"]')
