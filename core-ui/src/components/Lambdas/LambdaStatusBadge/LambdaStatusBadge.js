@@ -28,7 +28,6 @@ export function LambdaStatusBadge({ resourceKind, status }) {
     });
     tooltipText = formattedError;
   }
-
   return (
     <StatusBadge
       i18n={i18n}

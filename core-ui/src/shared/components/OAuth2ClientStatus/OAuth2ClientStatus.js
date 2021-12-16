@@ -9,7 +9,10 @@ export const OAuth2ClientStatus = ({ client }) => {
 
   if (!code) {
     return (
-      <StatusBadge type="success" noTooltip={true}>
+      <StatusBadge
+        type="success"
+        additionalContent={t('oauth2-clients.tooltips.ok')}
+      >
         {t('common.buttons.ok')}
       </StatusBadge>
     );
