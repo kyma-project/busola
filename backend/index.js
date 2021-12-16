@@ -2,7 +2,6 @@ const express = require('express');
 const cors = require('cors');
 const http = require('http');
 import { handleRequest, serveStaticApp, serveMonaco } from './common';
-//import { requestLogger } from './utils/other'; //uncomment this to log the outgoing traffic
 
 const app = express();
 app.disable('x-powered-by');
@@ -12,8 +11,6 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 const server = http.createServer(app);
-// requestLogger(require("http")); //uncomment this to log the outgoing traffic
-// requestLogger(require("https")); //uncomment this to log the outgoing traffic
 
 const port = process.env.PORT || 3001;
 const address = process.env.ADDRESS || 'localhost';
