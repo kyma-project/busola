@@ -24,8 +24,7 @@ export function ResourceStatus({
   return (
     <StatusBadge
       autoResolveType
-      additionalContent={status.message}
-      noTooltip={state === readyStatus}
+      additionalContent={state === readyStatus ? null : status.message}
       i18n={i18n}
       {...props}
     >

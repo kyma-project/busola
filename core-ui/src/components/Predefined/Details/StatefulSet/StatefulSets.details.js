@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { ControlledBy } from 'react-shared';
 
 import { ResourcePods } from '../ResourcePods';
-import { StatefulSetReplicas } from './StatefulSetReplicas';
+import { StatefulSetPods } from './StatefulSetPods';
 
 export function StatefulSetsDetails({ DefaultRenderer, ...otherParams }) {
   const { t } = useTranslation();
@@ -16,8 +16,8 @@ export function StatefulSetsDetails({ DefaultRenderer, ...otherParams }) {
       ),
     },
     {
-      header: t('stateful-sets.replicas'),
-      value: set => <StatefulSetReplicas key="replicas" set={set} />,
+      header: t('common.headers.pods'),
+      value: set => <StatefulSetPods key="replicas" set={set} />,
     },
   ];
 

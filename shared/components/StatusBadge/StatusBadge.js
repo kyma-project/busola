@@ -1,11 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
 import { ObjectStatus } from 'fundamental-react';
 import PropTypes from 'prop-types';
-import './StatusBadge.scss';
 import classNames from 'classnames';
-import { Tooltip } from '../Tooltip/Tooltip';
+
+import './StatusBadge.scss';
+import { TooltipBadge } from '../TooltipBadge/TooltipBadge';
 
 const resolveType = status => {
   if (typeof status !== 'string') {
@@ -54,12 +54,14 @@ const prepareTranslationPath = (resourceKind, value, type) => {
     .toLowerCase()
     .replace(/\s/g, '-')}`;
 };
+
 const TYPE_FALLBACK = new Map([
   ['success', 'positive'],
   ['warning', 'critical'],
   ['error', 'negative'],
   ['info', 'informative'],
 ]);
+
 export const StatusBadge = ({
   additionalContent,
   tooltipContent, // deprecated
@@ -106,22 +108,10 @@ export const StatusBadge = ({
     className,
   );
 
-  const badgeElement = (
-    <ObjectStatus
-      ariaLabel="Status"
-      role="status"
-      inverted
-      status={type}
-      className={classes}
-      data-testid={noTooltip ? 'no-tooltip' : 'has-tooltip'}
-      style={{ whiteSpace: 'nowrap' }}
-    >
-      {translate(
-        i18n,
-        [i18nFullVariableName, commonStatusVariableName],
-        fallbackValue,
-      )}
-    </ObjectStatus>
+  const badgeContent = translate(
+    i18n,
+    [i18nFullVariableName, commonStatusVariableName],
+    fallbackValue,
   );
 
   let content = translate(
@@ -134,23 +124,43 @@ export const StatusBadge = ({
     content = `${content}: ${additionalContent}`;
   }
 
-  const statusElement = noTooltip ? (
-    badgeElement
-  ) : (
-    <Tooltip content={content} {...tooltipProps}>
-      {badgeElement}
-    </Tooltip>
-  );
-
-  // tooltipContent is DEPRECATED. Remove after migration of all resources
-  // return (statusElement);
-  return tooltipContent ? (
-    <Tooltip content={tooltipContent} {...tooltipProps}>
-      {badgeElement}
-    </Tooltip>
-  ) : (
-    statusElement
-  );
+  // tooltipContent is DEPRECATED. Use the TooltipBadge component if a Badge with a simple Tooltip is needed.
+  if (tooltipContent) {
+    return (
+      <TooltipBadge
+        tooltipContent={tooltipContent}
+        type={type}
+        tooltipProps={tooltipProps}
+        className={classes}
+      >
+        {badgeContent}
+      </TooltipBadge>
+    );
+  } else if (noTooltip) {
+    return (
+      <ObjectStatus
+        ariaLabel="Status"
+        role="status"
+        inverted
+        status={type}
+        className={classes}
+        data-testid="no-tooltip"
+      >
+        {badgeContent}
+      </ObjectStatus>
+    );
+  } else {
+    return (
+      <TooltipBadge
+        tooltipContent={content}
+        type={type}
+        tooltipProps={tooltipProps}
+        className={classes}
+      >
+        {badgeContent}
+      </TooltipBadge>
+    );
+  }
 };
 
 StatusBadge.propTypes = {

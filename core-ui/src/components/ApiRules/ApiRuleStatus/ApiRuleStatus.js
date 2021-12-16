@@ -37,7 +37,6 @@ export default function ApiRuleStatus({ apiRule }) {
       resourceKind="api-rules"
       type={resolveAPIRuleStatus(code)}
       additionalContent={desc}
-      noTooltip={code === 'OK'}
     >
       {code}
     </StatusBadge>

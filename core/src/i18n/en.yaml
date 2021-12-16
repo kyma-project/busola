@@ -12,6 +12,8 @@ addons:
   title: Addons
   tooltips:
     failed: One of the repositories failed.
+    pending: Addon is being processed.
+    ready: Addon configured.
   urls: URLs
 api-rules:
   access-strategies:
@@ -77,9 +79,10 @@ api-rules:
     loading: Loading services...
     ns-no-services: No Services in this Namespace.
     placeholder: Choose the service to expose.
-  statuses:
-    skipped: Skipped
   title: API Rules
+  tooltips:
+    ok: Resource created.
+    skipped: Skipped creating the resource.
 applications:
   aria:
     namespace: Choose Namespace
@@ -167,6 +170,7 @@ btp-instances:
   tooltips:
     offering-name: You find the name of the SAP BTP service offering in the BTP Cockpit in the Service Marketplace.
     plan-name: You find the plan to be used for the service instance in the BTP Cockpit in the Service Marketplace.
+    provisioned: Provisioned successfully.
 btp-service-bindings:
   binding-id: Binding ID
   data: Binding Data
@@ -194,6 +198,7 @@ btp-service-bindings:
   title: BTP Service Bindings
   tooltips:
     parameters-from: Secret references to populate the parameters.
+    provisioned: Provisioned successfully.
     secret: The name of the secret where the credentials are stored, defaults to the Service Binding name if not specified.
     secret-not-found: This Secret doesn't exist.
 catalog:
@@ -235,6 +240,7 @@ certificates:
     dns-names: DNS Names are the optional additional domain names of the certificate.
     existing-secret: Use an existing Secret for storing the certificate if enabled. Otherwise a new Secret will be created.
     issuer: Certificate issuer. If no issuer is given, the default issuer is used.
+    ready: Certificate issued successfully.
     renew: Trigger a certificate renewal if enabled.
     secret-name: Name of the Secret object to use for storing the certificate.
     secret-ref: Reference of the existing Secret object to use for storing the certificate.
@@ -383,6 +389,7 @@ common:
     logs: Logs
     name: Name
     owner: Controlled By
+    pods: Pods
     resources: Resources
     status: Status
   labels:
@@ -395,6 +402,7 @@ common:
     name: Name
     namespace: Namespace
     'no': 'No'
+    path: Path
     protocol: Protocol
     read-only: Read-only mode
     resource: Resource
@@ -429,10 +437,12 @@ common:
   statuses:
     error: Error
     failed: Failed
+    'false': 'false'
     invalid: Invalid
     ok: OK
     pending: Pending
     ready: Ready
+    'true': 'true'
     unknown: Unknown
   tooltips:
     copy-to-clipboard: Copy to clipboard
@@ -445,6 +455,7 @@ common:
     read-file: Read file content as a single value, with file name as a key.
     resource-ref-name: Unique name within a Namespace to refer to a {{resource}} resource.
     resource-ref-namespace: Namespace defines the space within which the {{resource}} name must be unique.
+    running-pods: '{{running}} out of {{expected}} Pods are running'
     save: Save
     search: Search
     secret-ref-name: Unique name within a Namespace to refer to a Secret resource.
@@ -522,10 +533,6 @@ configuration:
   title: Configuration
 cron-jobs:
   concurrency-policy:
-    descriptions:
-      allow: Allow concurrent executions.
-      forbid: No concurrent executions, skip the new run if the previous one hasn't finished yet.
-      replace: No concurrent executions, replace the previous run with the new one.
     title: Concurrency Policy
   create-modal:
     day-of-month: Day of Month
@@ -562,6 +569,10 @@ cron-jobs:
   not-scheduled-yet: None scheduled yet
   schedule: Schedule
   title: Cron Jobs
+  tooltips:
+    allow: Allow concurrent executions.
+    forbid: No concurrent executions, skip the new run if the previous one hasn't finished yet.
+    replace: No concurrent executions, replace the previous run with the new one.
 custom-resource-definitions:
   description: <0>Custom Resource Definition</0> is an object used to define a custom resource that allows you to extend the Kubernetes API for use cases that are not directly covered by core Kubernetes.
   headers:
@@ -587,6 +598,10 @@ custom-resource-definitions:
     schema: Schema
     version: Version
   title: Custom Resource Definitions
+  tooltips:
+    not-served: This version is not served using REST APIs.
+    served: This version is served using REST APIs.
+    storage: Use this version when persisting custom resources to storage.
 daemon-sets:
   description: <0>Daemon Set</0> ensures that replicated Pods are running across a set of available nodes.
   images: Images
@@ -636,9 +651,65 @@ deployments:
     error: Error
     running: Running
   title: Deployments
-  tooltips:
-    error: At least one of the Pods has failed
-    running: All the Pods are running correctly
+destination-rules:
+  age: Age
+  description: <0>Destination Rule</0> specifies rules that apply to traffic intended for a service after routing.
+  details:
+    alt-names: Subject Alt Names
+    base-ejection: Base Ejection Time
+    ca-certificates: CA Certificates
+    client-certificate: Client Certificate
+    client-protocol: Use Client Protocol
+    connection-timeout: Connection Timeout
+    consecutive-5xx: Consecutive 5xx Errors
+    consecutive-failures: Consecutive Local Origin Failures
+    consistent-hash: Consistent Hash
+    credential-name: Credential Name
+    distribution: Distribution
+    enabled: Enabled
+    failover: Failover
+    failover-priority: Failover Priority
+    from: From
+    h2-upgrade: H2 Upgrade Policy
+    http-cookie: HTTP cookie
+    http-header: HTTP Header Name
+    http-max: HTTP2 Max Requests
+    http-pending: HTTP1 Max Pending Requests
+    http-query-parameter: HTTP Query Parameter Name
+    http-settings: HTTP Connection Pool Settings
+    idle-timeout: Idle Timeout
+    interval: Interval
+    lb-settings: Locality LB Settings
+    load-balancer: Load Balancer
+    max-connections: Max Connections
+    max-ejection: Max Ejection Percent
+    max-per-connection: Max Requests Per Connections
+    max-retries: Max Retries
+    min-health: Min Health Percent
+    minimum-ring-size: Minimum Ring Size
+    outlier-detection: Outlier Detection
+    port-traffic-policy: Port {{port}} Traffic Policy
+    private-key: Private Key
+    probes: Probes
+    simple: Simple
+    skip-verify: Insecure Skip Verify
+    sni: SNI
+    source-ip: Use Source IP
+    split-errors: Split External Local Origin Errors
+    subset: Subset
+    subsets: Subsets
+    tcp-alive: TCP Keep Alive
+    tcp-settings: TCP Connection Pool Settings
+    time: Time
+    tls-settings: Client TLS Settings
+    to: To
+    traffic-policy: Traffic Policy
+    ttl: TTL
+  exported-to-namespaces: Exported to Namespaces
+  host: Host
+  name_singular: Destination Rule
+  state: State
+  title: Destination Rules
 discovery-and-network:
   title: Discovery and Network
 dnsentries:
@@ -672,6 +743,7 @@ dnsentries:
     deleting: The DNS records are now being deleted.
     invalid: A conflict exists with another DNS entry or owner.
     pending: The DNS entry update is batched or in progress.
+    ready: The entry has been accepted and the DNS record created.
     stale: The DNS entry exists, but there is an issue with the provider.
     target: Target must be an A record, or a CNAME record. Provide either target or text.
     text: Text record must be a string. Provide either target or text.
@@ -700,6 +772,7 @@ dnsproviders:
   tooltips:
     excluded-domains: The selection of forbidden domains (by default, all zones and domains in those zones are served), $t(domains.example).
     included-domains: The selection of allowed domains (by default, all zones and domains in those zones are served), $t(domains.example).
+    ready: The entry has been accepted and the DNS record created.
 domains:
   example: for example, *.api.mydomain.com
   exclude:
@@ -825,7 +898,11 @@ functions:
     unhealthy: Unhealthy
   title: Functions
   tooltips:
+    building: Waiting for the image to build.
+    deploying: Deploying the Function.
     failed: Function couldn't be processed.
+    running: Function created.
+    unhealthy: Waiting for the required number of replicas.
   variable:
     buttons:
       add: Add Environment Variable
@@ -981,6 +1058,9 @@ git-repositories:
   title: Git Repositories
   tooltips:
     auth: 'Basic: token or password / SSH key: authentication key / Public: no authentication.'
+    basic: Basic access authentication required.
+    key: SSH key required.
+    none: Authentication not required.
     secret: The name of the Secret with credentials used by the Function Controller to authenticate to the Git repository in order to fetch the Function's source code and dependencies.
     url: URL must be a valid Git repository address that starts with the "http(s)", "git", or "ssh" prefix.
 instances:
@@ -1040,12 +1120,15 @@ issuers:
     issuer-type: Certification authority used
     key-secret-ref: keySecretRef is the secret ref to the Secret that holds the symmetric MAC key of the External Account Binding with data key 'hmacKey'. The secret key stored in the Secret **must** be un-padded, base64 URL encoded data.
     pending: The Issuer's update is batched or in progress.
+    ready: Ready to generate the certificate.
     requests: RequestsPerDayQuota is the maximum number of certificate requests per days allowed for this issuer
     secret-ref-acme: PrivateKeySecretRef is the secret ref to the ACME private key.
     secret-ref-ca: PrivateKeySecretRef is the secret ref to the CA secret.
     server: Server is the URL of the ACME server.
     skip-dns: SkipDNSChallengeValidation marks that this issuer does not validate DNS challenges. In this case, no DNS entries/records are created for a DNS Challenge, and DNS propagation is not checked.
   type: Issuer Type
+istio:
+  title: Istio
 jobs:
   completion-time: Completion Time
   completions: Completions
@@ -1087,6 +1170,9 @@ jobs:
   name_singular: Job
   start-time: Start Time
   title: Jobs
+  tooltips:
+    complete: Job completed.
+    not-complete: Job in progress.
 kubeconfig-id:
   error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})."
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
@@ -1213,6 +1299,7 @@ oauth2-clients:
   tooltips:
     audience: Audience is a whitelist defining the audiences this client is allowed to request tokens for.
     client-name: Client name is the human-readable string name of the client to be presented to the end-user during authorization.
+    ok: Authorization completed.
     secret-name: Secret name points to the Kubernetes Secret that contains the client's ID and password.
 observability:
   title: Observability
@@ -1269,6 +1356,7 @@ pods:
   title: Pods
   tooltips:
     error: Pod failed to start
+    no-restarts: None of the containers has restarted.
     running: Pod is running correctly
 preferences:
   title: Preferences
