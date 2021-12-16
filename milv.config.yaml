@@ -1,4 +1,5 @@
-external-links-to-ignore: ['localhost', 'kyma.local']
+external-links-to-ignore:
+  ['localhost', 'kyma.local', 'https://busola.local.kyma.dev']
 files-to-ignore: ['node_modules']
 timeout: 60
 request-repeats: 5
@@ -9,5 +10,4 @@ files:
       external-links-to-ignore:
         [
           'https://www.first.org/cvss/calculator/3.0#CVSS:3.0/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:N',
-          'https://busola.local.kyma.dev',
         ]
