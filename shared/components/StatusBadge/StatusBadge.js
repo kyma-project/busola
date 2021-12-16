@@ -144,7 +144,7 @@ export const StatusBadge = ({
         inverted
         status={type}
         className={classes}
-        data-testid={noTooltip ? 'no-tooltip' : 'has-tooltip'}
+        data-testid="no-tooltip"
       >
         {badgeContent}
       </ObjectStatus>
