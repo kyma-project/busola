@@ -29,6 +29,7 @@
     "test-jobs.spec.js",
     "test-replica-sets.spec.js",
     "test-destination-rules.spec.js",
+    "test-virtual-services.spec.js",
     "test-dns-entries.spec.js",
     "test-cron-jobs.spec.js",
     "test-git-repositories.spec.js",
