@@ -1,0 +1,24 @@
+.certificate-refs-panel {
+  & > :first-child {
+    margin-bottom: 8px;
+  }
+
+  & > *:not(:first-child) {
+    margin-left: 32px !important;
+    margin-right: 32px !important;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-bottom: 8px !important;
+    column-gap: 20px;
+  }
+
+  .fd-panel__footer {
+    word-break: break-word;
+  }
+}
+
+.filter-option {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
