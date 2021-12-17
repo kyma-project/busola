@@ -18,7 +18,7 @@ The document describes how to install Kyma Dashboard with Istio Ingress. It also
 
   `kubectl create namespace busola`
 
-- Go to `resources` and provide your **{DOMAIN}** and **{NAMESPACE}**.
+- Go to `resources` and provide your **{DOMAIN}** and **{NAMESPACE}**:
 
   `./apply-resources-istio.sh <DOMAIN> <NAMESPACE_NAME>`
 
@@ -27,7 +27,7 @@ The document describes how to install Kyma Dashboard with Istio Ingress. It also
   `./apply-resources-istio.sh busola.local.kyma.dev busola`
 
 - Wait a minute for the Dashboard to start.
-- The Dashboard is available under your **{DOMAIN}** (e.g. `https://busola.local.kyma.dev/`)
+- The Dashboard is available under your **{DOMAIN}** (e.g. `https://busola.local.kyma.dev/`).
 
 2. **Install Kyma Dashboard on a Kyma cluster**
 
