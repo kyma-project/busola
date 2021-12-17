@@ -17,6 +17,7 @@ const SubscriptionsCreate = ({
   return (
     <ResourceForm
       pluralKind="eventsubscriptions"
+      singularName="Event Subscription"
       resource={eventSubscription}
       setResource={setEventSubscription}
       onChange={onChange}

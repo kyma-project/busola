@@ -2,74 +2,74 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { GenericList, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 import { EventSubscriptionConditionStatus } from 'shared/components/EventSubscriptionConditionStatus';
-import { LayoutPanel, FormItem, FormLabel } from 'fundamental-react';
+import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
+import { LayoutPanel } from 'fundamental-react';
 import './EventFilters.scss';
 
-// const RepositoryUrls = addon => {
-//   const { t, i18n } = useTranslation();
+const EventSubscriptionConditions = eventSubscription => {
+  const { t, i18n } = useTranslation();
+  const conditions = eventSubscription?.status?.conditions;
+  const headerRenderer = _ => [
+    'lastTransitionTime',
+    'reason',
+    'status',
+    'type',
+  ];
 
-//   const headerRenderer = _ => [
-//     t('addons.headers.url'),
-//     t('common.headers.status'),
-//   ];
+  const rowRenderer = condition => [
+    condition.lastTransitionTime,
+    condition.reason,
+    condition.status,
+    condition.type,
+  ];
 
-//   const rowRenderer = repo => [repo.url, <div />];
-
-//   return (
-//     <GenericList
-//       key="repository-urls"
-//       title={t('addons.repository-urls')}
-//       headerRenderer={headerRenderer}
-//       rowRenderer={[]}
-//       entries={addon.status.repositories || []}
-//       i18n={i18n}
-//     />
-//   );
-// };
-
-const FilterOption = ({ filterOption, title }) => {
   return (
-    <div>
-      <LayoutPanel.Header>
-        <LayoutPanel.Head title={title} />
-      </LayoutPanel.Header>
-      <div className="filter-option">
-        <FormItem>
-          <FormLabel>property</FormLabel>
-          <p>
-            {filterOption?.property
-              ? filterOption?.property
-              : EMPTY_TEXT_PLACEHOLDER}
-          </p>
-        </FormItem>
-        <FormItem>
-          <FormLabel>type</FormLabel>
-          <p>
-            {filterOption?.type ? filterOption?.type : EMPTY_TEXT_PLACEHOLDER}
-          </p>
-        </FormItem>
-        <FormItem>
-          <FormLabel>value</FormLabel>
-          <p>
-            {filterOption?.value ? filterOption?.value : EMPTY_TEXT_PLACEHOLDER}
-          </p>
-        </FormItem>
-      </div>
-    </div>
+    <GenericList
+      key="repository-urls"
+      title="Conditions"
+      headerRenderer={headerRenderer}
+      rowRenderer={rowRenderer}
+      entries={conditions || []}
+      i18n={i18n}
+    />
   );
 };
+
+const FilterOption = ({ filterOption, title }) => (
+  <div>
+    <LayoutPanel.Header>
+      <LayoutPanel.Head title={title} />
+    </LayoutPanel.Header>
+    <LayoutPanelRow
+      name="property"
+      value={filterOption?.property || EMPTY_TEXT_PLACEHOLDER}
+    />
+    <LayoutPanelRow
+      name="type"
+      value={filterOption?.type || EMPTY_TEXT_PLACEHOLDER}
+    />
+    <LayoutPanelRow
+      name="value"
+      value={
+        filterOption?.value === ''
+          ? '""' // If it's equal "", that means the NATS backend is chosen.
+          : filterOption?.value || EMPTY_TEXT_PLACEHOLDER
+      }
+    />
+  </div>
+);
 
 const EventFilter = ({ filter }) => {
   return (
     <div>
-      <FilterOption title="eventSource" filterOption={filter.eventSource} />
-      <FilterOption title="eventType" filterOption={filter.eventType} />
+      <FilterOption title="Event Source" filterOption={filter?.eventSource} />
+      <FilterOption title="Event Type" filterOption={filter?.eventType} />
     </div>
   );
 };
 
 const EventSubscriptionsFilters = eventSubscription => {
-  const filters = eventSubscription?.spec.filter.filters;
+  const filters = eventSubscription?.spec?.filter?.filters || [];
   return (
     <LayoutPanel
       className="fd-margin--md certificate-refs-panel"
@@ -80,9 +80,9 @@ const EventSubscriptionsFilters = eventSubscription => {
       </LayoutPanel.Header>
 
       {filters.length > 0 ? (
-        filters.map(filter => <EventFilter filter={filter} />)
+        filters.map(filter => <EventFilter filter={filter} key={filter} />)
       ) : (
-        <p>xd</p>
+        <p>No entries found</p>
       )}
     </LayoutPanel>
   );
@@ -97,12 +97,21 @@ export const SubscriptionsDetails = ({ DefaultRenderer, ...otherParams }) => {
         <EventSubscriptionConditionStatus status={status} />
       ),
     },
+    {
+      header: 'Sink',
+      value: ({ spec }) => <p>{spec.sink}</p>,
+    },
   ];
 
   return (
     <DefaultRenderer
-      customComponents={[EventSubscriptionsFilters]}
+      customComponents={[
+        EventSubscriptionConditions,
+        EventSubscriptionsFilters,
+      ]}
       customColumns={customColumns}
+      resourceTitle="Event Subscriptions"
+      singularName="Event Subscription"
       {...otherParams}
     />
   );
