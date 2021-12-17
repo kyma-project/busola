@@ -51,6 +51,7 @@
     "add-cluster-disabled.spec.js",
     "certificates.spec.js",
     "test.settings.spec.js",
+    "test-ingresses.spec.js",
     "run-after.spec.js"
   ]
 }

@@ -34,6 +34,7 @@ export { ErrorPanel } from './components/ErrorPanel/ErrorPanel';
 export {
   ControlledByKind,
   ControlledBy,
+  GoToDetailsLink,
 } from './components/ControlledBy/ControlledBy';
 export * from './components/SideDrawer/SideDrawer';
 export * from './components/ResourcesList/ResourcesList';

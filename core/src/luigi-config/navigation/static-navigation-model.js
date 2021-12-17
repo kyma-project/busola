@@ -459,6 +459,40 @@ export function getStaticChildrenNodesForNamespace(
     },
     {
       category: i18next.t('discovery-and-network.title'),
+      pathSegment: 'ingresses',
+      resourceType: 'ingresses',
+      navigationContext: 'ingresses',
+      label: i18next.t('ingresses.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/Ingresses?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/networking.k8s.io/v1',
+          hasDetailsView: true,
+        }),
+      keepSelectedForChildren: true,
+      viewGroup: coreUIViewGroupName,
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':ingressName',
+              resourceType: 'ingresses',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/Ingresses/:ingressName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/networking.k8s.io/v1',
+                }),
+              viewGroup: coreUIViewGroupName,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: i18next.t('discovery-and-network.title'),
       pathSegment: 'services',
       resourceType: 'services',
       navigationContext: 'services',

@@ -1063,6 +1063,28 @@ git-repositories:
     none: Authentication not required.
     secret: The name of the Secret with credentials used by the Function Controller to authenticate to the Git repository in order to fetch the Function's source code and dependencies.
     url: URL must be a valid Git repository address that starts with the "http(s)", "git", or "ssh" prefix.
+ingresses:
+  description: <0>Ingress</0> describes the routing rules for traffic to services within a cluster. The routing is managed by the Ingress resource.
+  labels:
+    apiGroup: APIGroup
+    backend: Backend
+    default-backend: Default backend
+    host: Host
+    ingress-class-name: Ingress class name
+    kind: Kind
+    load-balancers: Load Balancers
+    path: Path
+    path-type: Path type
+    paths: Paths
+    port: Port
+    port-name: Port name
+    port-number: Port number
+    rules: Rules
+    service-name: Service name
+  message:
+    rules-not-found: Rules not found
+  name_singular: Ingress
+  title: Ingresses
 instances:
   description: <0>Service Instance</0> is a provisioned instance of a service that can be consumed by an application.
   no-specific-plan-parameters:
