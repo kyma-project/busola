@@ -43,7 +43,7 @@ export function TlsRoutes(service) {
   if (!service.spec.tls) return null;
 
   return service.spec.tls.map(rule => (
-    <LayoutPanel className="fd-margin--md definition-list">
+    <LayoutPanel className="fd-margin--md definition-list virual-service-route">
       <LayoutPanel.Header>
         <LayoutPanel.Head
           title={t('virtualservices.tls-routes.title')}

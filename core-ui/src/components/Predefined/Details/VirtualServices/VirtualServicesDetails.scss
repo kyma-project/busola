@@ -1,5 +1,13 @@
-.http-route {
+.virual-service-route {
   .match-operator {
     cursor: help;
+  }
+
+  .header-operation {
+    font-style: italic;
+  }
+
+  .header-operation-title {
+    font-weight: bold;
   }
 }

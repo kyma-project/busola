@@ -151,19 +151,28 @@ function HeaderOperations({ title, operations }) {
         {operations.add &&
           Object.entries(operations.set).map(([header, val]) => (
             <li>
-              {t('virtualservices.headers.add')} {header} = {val}
+              <span className="header-operation">
+                {t('virtualservices.headers.add')}
+              </span>{' '}
+              {header} = {val}
             </li>
           ))}
         {operations.set &&
           Object.entries(operations.set).map(([header, val]) => (
             <li>
-              {t('virtualservices.headers.set')} {header} = {val}
+              <span className="header-operation">
+                {t('virtualservices.headers.set')}
+              </span>{' '}
+              {header} = {val}
             </li>
           ))}
         {operations.remove &&
           operations.remove.map(header => (
             <li>
-              {t('virtualservices.headers.remove')} {header}
+              <span className="header-operation">
+                {t('virtualservices.headers.remove')}
+              </span>{' '}
+              {header}
             </li>
           ))}
       </ul>
@@ -478,7 +487,7 @@ export function HttpRoutes(service) {
   if (!service.spec.http) return null;
 
   return service.spec.http.map(rule => (
-    <LayoutPanel className="fd-margin--md definition-list http-route">
+    <LayoutPanel className="fd-margin--md definition-list virual-service-route">
       <LayoutPanel.Header>
         <LayoutPanel.Head
           title={t('virtualservices.http-routes.title')}

@@ -41,7 +41,7 @@ export function TcpRoutes(service) {
   if (!service.spec.tcp) return null;
 
   return service.spec.tcp.map(rule => (
-    <LayoutPanel className="fd-margin--md definition-list">
+    <LayoutPanel className="fd-margin--md definition-list virual-service-route">
       <LayoutPanel.Header>
         <LayoutPanel.Head
           title={t('virtualservices.tcp-routes.title')}
