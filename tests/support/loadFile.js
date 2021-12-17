@@ -17,3 +17,12 @@ export async function loadRandomCRD(crdPluralName, crdName) {
 
   return newCRD;
 }
+
+export async function loadSubscription(NAMESPACE) {
+  const CRD = await loadFile('test-eventsubscription.yaml');
+  const newCRD = { ...CRD };
+  console.log(newCRD);
+  newCRD.spec.sink = `http://in-cluster-eventing-publisher.${NAMESPACE}.svc.cluster.local`;
+  console.log(newCRD);
+  return newCRD;
+}

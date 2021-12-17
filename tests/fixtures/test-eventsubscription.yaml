@@ -2,7 +2,6 @@ apiVersion: eventing.kyma-project.io/v1alpha1
 kind: Subscription
 metadata:
   name: 'in-cluster-eventing-publisher-subscription'
-  namespace: default
   labels: { app.kubernetes.io/name: test }
 spec:
   filter:

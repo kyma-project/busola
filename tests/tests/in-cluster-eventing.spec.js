@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 import config from '../config';
 import 'cypress-file-upload';
-import { loadFile } from '../support/loadFile';
+import { loadSubscription } from '../support/loadFile';
 const NAMESPACE_NAME = config.namespace;
 
 const random = Math.floor(Math.random() * 9999) + 1000;
@@ -149,18 +149,15 @@ context('In-cluster eventing', () => {
         '{selectall}{backspace}{selectall}{backspace}{selectall}{backspace}',
       );
 
-    cy.wrap(loadFile('test-eventsubscription.yaml')).then(CONFIG => {
-      CONFIG.metadata.namespace = NAMESPACE_NAME;
-      CONFIG.spec.sink =
-        'http://in-cluster-eventing-publisher.' +
-        NAMESPACE_NAME +
-        '.svc.cluster.local';
-      const FUNCTION = JSON.stringify(CONFIG);
+    cy.wrap(loadSubscription(NAMESPACE_NAME)).then(CONFIG => {
+      const SUBSCRIPTION = JSON.stringify(CONFIG);
       cy.getIframeBody()
         .find('[role="presentation"],[class="view-lines"]')
         .first()
         .click()
-        .type(FUNCTION, { parseSpecialCharSequences: false });
+        .type(SUBSCRIPTION, { parseSpecialCharSequences: false });
+
+      cy.wait(4000);
     });
 
     cy.getIframeBody()
