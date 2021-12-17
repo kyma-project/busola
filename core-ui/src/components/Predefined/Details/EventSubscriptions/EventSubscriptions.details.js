@@ -1,6 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { GenericList, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+import {
+  GenericList,
+  EMPTY_TEXT_PLACEHOLDER,
+  FormattedDatetime,
+} from 'react-shared';
 import { EventSubscriptionConditionStatus } from 'shared/components/EventSubscriptionConditionStatus';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { LayoutPanel } from 'fundamental-react';
@@ -8,6 +12,7 @@ import './EventFilters.scss';
 
 const EventSubscriptionConditions = eventSubscription => {
   const { t, i18n } = useTranslation();
+
   const conditions = eventSubscription?.status?.conditions;
   const headerRenderer = _ => [
     'lastTransitionTime',
@@ -17,7 +22,10 @@ const EventSubscriptionConditions = eventSubscription => {
   ];
 
   const rowRenderer = condition => [
-    condition.lastTransitionTime,
+    <FormattedDatetime
+      date={condition.lastTransitionTime}
+      lang={i18n.language}
+    />,
     condition.reason,
     condition.status,
     condition.type,
