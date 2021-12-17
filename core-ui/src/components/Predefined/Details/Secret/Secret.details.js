@@ -2,12 +2,19 @@ import React from 'react';
 import { ControlledBy } from 'react-shared';
 import SecretData from 'shared/components/Secret/SecretData';
 import { useTranslation } from 'react-i18next';
+import { CertificateData } from './CertificateData';
 
 export const SecretsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
   const Secret = resource => <SecretData key="secret-data" secret={resource} />;
 
   const customColumns = [
+    {
+      header: t('secrets.headers.type'),
+      value: secret => {
+        return secret.type;
+      },
+    },
     {
       header: t('common.headers.owner'),
       value: secret => (
@@ -18,7 +25,7 @@ export const SecretsDetails = ({ DefaultRenderer, ...otherParams }) => {
 
   return (
     <DefaultRenderer
-      customComponents={[Secret]}
+      customComponents={[Secret, CertificateData]}
       customColumns={customColumns}
       {...otherParams}
     />

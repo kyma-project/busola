@@ -32,7 +32,12 @@ function pathExists(path) {
   });
 }
 
-const GoToDetailsLink = ({ resource, name, apiVersion }) => {
+export const GoToDetailsLink = ({
+  resource,
+  name,
+  apiVersion,
+  noBrackets = false,
+}) => {
   const { cluster, namespaceId } = useMicrofrontendContext();
   const activeClusterName = cluster?.name;
   const namespacedViewPath = `/cluster/${activeClusterName}/namespaces/${namespaceId}/${resource}/details/${name}`;
@@ -64,7 +69,7 @@ const GoToDetailsLink = ({ resource, name, apiVersion }) => {
           navigateToFixedPathResourceDetails(resource, name);
         }}
       >
-        ({name})
+        {noBrackets ? name : `(${name})`}
       </Link>
     );
   } else if (viewPath === 'cluster') {
@@ -75,11 +80,11 @@ const GoToDetailsLink = ({ resource, name, apiVersion }) => {
           navigateToClusterResourceDetails(resource, name);
         }}
       >
-        ({name})
+        {noBrackets ? name : `(${name})`}
       </Link>
     );
-  } else if (apiVersion === 'apps/v1') {
-    return <>({name})</>;
+  } else if (apiVersion === 'apps/v1' || !apiVersion) {
+    return <>{noBrackets ? name : `(${name})`}</>;
   } else {
     return (
       <Link
@@ -88,7 +93,7 @@ const GoToDetailsLink = ({ resource, name, apiVersion }) => {
           navigateToCustomResourceDefinitionDetails(resource, apiVersion, name);
         }}
       >
-        ({name})
+        {noBrackets ? name : `(${name})`}
       </Link>
     );
   }

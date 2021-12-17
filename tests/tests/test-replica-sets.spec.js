@@ -62,9 +62,9 @@ context('Create a Replica Set', () => {
       .contains(`${REPLICA_SET_NAME}-`)
       .click();
 
-    cy.getIframeBody().contains(`Name:${REPLICA_SET_NAME}`);
+    cy.getIframeBody().contains(`Name${REPLICA_SET_NAME}`);
 
-    cy.getIframeBody().contains(`Image:${DOCKER_IMAGE_TAG}`);
+    cy.getIframeBody().contains(`Image${DOCKER_IMAGE_TAG}`);
   });
 
   it('Checks the list view', () => {

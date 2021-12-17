@@ -64,9 +64,9 @@ context('Create a DNS Entry', () => {
   it('Inspect details', () => {
     cy.getIframeBody().contains(DNS_ENTRY_NAME);
 
-    cy.getIframeBody().contains(`DNS Name:${DNS_NAME}`);
+    cy.getIframeBody().contains(`DNS Name${DNS_NAME}`);
 
-    cy.getIframeBody().contains(`TTL:${TTL}`);
+    cy.getIframeBody().contains(`TTL${TTL}`);
   });
 
   it('Edit DNS Entry', () => {
@@ -80,8 +80,7 @@ context('Create a DNS Entry', () => {
 
     // name should be disabled for edit
     cy.getIframeBody()
-      .find('[placeholder="DNS Entry Name"]')
-      .filter(':visible', { log: false })
+      .find('[placeholder="DNS Entry Name"]:visible')
       .should('have.attr', 'readonly');
 
     // change from A to CNAME
@@ -98,7 +97,7 @@ context('Create a DNS Entry', () => {
       .contains('button', 'Update')
       .click();
 
-    cy.getIframeBody().contains(/Targets:.*, example\.com/);
+    cy.getIframeBody().contains(/Targets.*, example\.com/);
   });
 
   it('Inspect list', () => {

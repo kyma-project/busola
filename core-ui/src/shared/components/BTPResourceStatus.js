@@ -10,12 +10,7 @@ export function BTPResourceStatus({ status, resourceKind }) {
 
   if (status.ready === 'True' && lastCondition.type === 'Ready') {
     return (
-      <StatusBadge
-        type="positive"
-        i18n={i18n}
-        resourceKind={resourceKind}
-        noTooltip
-      >
+      <StatusBadge type="positive" i18n={i18n} resourceKind={resourceKind}>
         {lastCondition.reason}
       </StatusBadge>
     );

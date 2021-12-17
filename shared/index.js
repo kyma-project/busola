@@ -23,6 +23,7 @@ export { Dropdown } from './components/Dropdown/Dropdown';
 export { FileInput } from './components/FileInput/FileInput';
 export { ResourceNotFound } from './components/ResourceNotFound/ResourceNotFound';
 export { StatusBadge } from './components/StatusBadge/StatusBadge';
+export { TooltipBadge } from './components/TooltipBadge/TooltipBadge';
 export { ResourceStatus } from './components/ResourceStatus/ResourceStatus';
 export { TextFormItem } from './components/TextFormItem/TextFormItem';
 export { Tabs } from './components/Tabs/Tabs';
@@ -33,6 +34,7 @@ export { ErrorPanel } from './components/ErrorPanel/ErrorPanel';
 export {
   ControlledByKind,
   ControlledBy,
+  GoToDetailsLink,
 } from './components/ControlledBy/ControlledBy';
 export * from './components/SideDrawer/SideDrawer';
 export * from './components/ResourcesList/ResourcesList';
