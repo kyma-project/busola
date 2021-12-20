@@ -49,6 +49,16 @@ Cypress.Commands.add(
     cy.getIframeBody()
       .find('[role="status"]', { timeout: 60 * 1000 })
       .should('not.have.text', 'Building');
+
+    if (waitUntilRunning) {
+      cy.getIframeBody()
+        .find('[role="status"]', { timeout: 60 * 1000 })
+        .should('not.have.text', 'Deploying');
+
+      cy.getIframeBody()
+        .find('[role="status"]')
+        .should('have.text', 'Running');
+    }
   },
 );
 
