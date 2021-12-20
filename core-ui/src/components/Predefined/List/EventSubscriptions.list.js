@@ -10,9 +10,11 @@ export const SubscriptionsList = ({ DefaultRenderer, ...otherParams }) => {
   const customColumns = [
     {
       header: 'Status',
-      value: ({ status }) => (
-        <EventSubscriptionConditionStatus status={status} />
-      ),
+      value: ({ status }) => {
+        const lastCondition = status.conditions[status.conditions.length - 1];
+
+        return <EventSubscriptionConditionStatus condition={lastCondition} />;
+      },
     },
   ];
 

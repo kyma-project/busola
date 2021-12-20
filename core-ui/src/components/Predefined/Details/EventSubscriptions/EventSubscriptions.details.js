@@ -1,24 +1,26 @@
+import { LayoutPanel } from 'fundamental-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  GenericList,
   EMPTY_TEXT_PLACEHOLDER,
   FormattedDatetime,
+  GenericList,
 } from 'react-shared';
 import { EventSubscriptionConditionStatus } from 'shared/components/EventSubscriptionConditionStatus';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
-import { LayoutPanel } from 'fundamental-react';
 import './EventFilters.scss';
+import { Link } from 'fundamental-react';
+import { navigateToFixedPathResourceDetails } from 'react-shared';
 
 const EventSubscriptionConditions = eventSubscription => {
   const { t, i18n } = useTranslation();
 
   const conditions = eventSubscription?.status?.conditions;
   const headerRenderer = _ => [
-    'lastTransitionTime',
-    'reason',
-    'status',
-    'type',
+    'LastTransitionTime',
+    'Reason',
+    'Status',
+    'Type',
   ];
 
   const rowRenderer = condition => [
@@ -27,7 +29,7 @@ const EventSubscriptionConditions = eventSubscription => {
       lang={i18n.language}
     />,
     condition.reason,
-    condition.status,
+    <EventSubscriptionConditionStatus condition={condition} />,
     condition.type,
   ];
 
@@ -46,7 +48,7 @@ const EventSubscriptionConditions = eventSubscription => {
 const FilterOption = ({ filterOption, title }) => (
   <div>
     <LayoutPanel.Header>
-      <LayoutPanel.Head title={title} />
+      <LayoutPanel.Head title={title} className="layout-panel-title" />
     </LayoutPanel.Header>
     <LayoutPanelRow
       name="property"
@@ -107,7 +109,23 @@ export const SubscriptionsDetails = ({ DefaultRenderer, ...otherParams }) => {
     },
     {
       header: 'Sink',
-      value: ({ spec }) => <p>{spec.sink}</p>,
+      value: ({ spec }) => {
+        const index = spec?.sink.lastIndexOf('/') + 1;
+
+        const firstDot = spec?.sink.indexOf('.');
+        const serviceName = spec?.sink.substring(index, firstDot);
+        return spec?.sink ? (
+          <Link
+            onClick={() =>
+              navigateToFixedPathResourceDetails('services', serviceName)
+            }
+          >
+            {spec?.sink}
+          </Link>
+        ) : (
+          <p>{EMPTY_TEXT_PLACEHOLDER}</p>
+        );
+      },
     },
   ];
 
