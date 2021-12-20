@@ -39,6 +39,7 @@ const SubscriptionsCreate = ({
   eventTypePrefix = eventTypePrefix.endsWith('.')
     ? eventTypePrefix
     : eventTypePrefix + '.';
+  const [eventType, setEventType] = useState(eventTypePrefix);
 
   const { data: services } = useGetList()(
     `/api/v1/namespaces/${namespace}/services`,
@@ -50,8 +51,6 @@ const SubscriptionsCreate = ({
   const { data: applications } = useGetList()(
     `/apis/applicationconnector.kyma-project.io/v1alpha1/applications`,
   );
-
-  console.log('applications', applications);
 
   useEffect(() => {
     const eventTypeValue = `${eventTypePrefix}${appName}.${eventName}.${version}`;
@@ -91,6 +90,7 @@ const SubscriptionsCreate = ({
         readOnly={!!initialEventSubscription}
       />
       <ResourceForm.FormField
+        simple
         required
         label={t('event-subscription.create.labels.application-name')}
         setValue={applicationName => setAppName(applicationName)}
@@ -102,13 +102,16 @@ const SubscriptionsCreate = ({
         }))}
       />
       <ResourceForm.FormField
+        simple
         required
         label={t('event-subscription.create.labels.event-name')}
         setValue={eventName => setEventName(eventName)}
         value={eventName}
         input={Inputs.Text}
       />
+
       <ResourceForm.FormField
+        simple
         required
         label={t('event-subscription.create.labels.event-version')}
         value={version}
@@ -127,7 +130,13 @@ const SubscriptionsCreate = ({
           />
         )}
       />
-
+      <ResourceForm.FormField
+        required
+        label={t('event-subscription.create.labels.event-type')}
+        setValue={eventType => setEventType(eventType)}
+        value={eventType}
+        input={Inputs.Text}
+      />
       <ResourceForm.FormField
         advanced
         required
