@@ -27,7 +27,6 @@ export function ResourceForm({
   afterCreatedFn,
   className,
   onlyYaml = false,
-  withoutYaml = false,
 }) {
   const createResource = useCreateResource(
     singularName,
@@ -76,9 +75,7 @@ export function ResourceForm({
   return (
     <section className={classnames('resource-form', className)}>
       {presetsSelector}
-      {onlyYaml ? null : (
-        <ModeSelector mode={mode} setMode={setMode} withoutYaml={withoutYaml} />
-      )}
+      {onlyYaml ? null : <ModeSelector mode={mode} setMode={setMode} />}
       <form ref={formElementRef} onSubmit={createResource}>
         {mode === ModeSelector.MODE_SIMPLE && (
           <div onChange={onChange} className="simple-form">
@@ -91,7 +88,7 @@ export function ResourceForm({
             </ResourceFormWrapper>
           </div>
         )}
-        {mode === ModeSelector.MODE_YAML && !withoutYaml && editor}
+        {mode === ModeSelector.MODE_YAML && editor}
         {/* always keep the advanced form to ensure validation */}
         <div
           className="advanced-form"

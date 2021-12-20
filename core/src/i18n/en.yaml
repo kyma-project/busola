@@ -800,6 +800,7 @@ event-subscription:
     not-matching-search-query: Couldn't find Event Subscriptions matching this query.
     server: Server error. Contact your cluster admin.
     subscriptions-not-found: There are no Event Subscriptions yet.
+  singular_name: Event Subscription
   title: Event Subscriptions
 functions:
   buttons:

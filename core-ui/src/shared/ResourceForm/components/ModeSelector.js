@@ -6,28 +6,17 @@ import { useTranslation } from 'react-i18next';
 export function ModeSelector({ mode, setMode, withoutYaml }) {
   const { t } = useTranslation();
 
-  const modeButtons = !withoutYaml
-    ? [
-        {
-          mode: ModeSelector.MODE_SIMPLE,
-          label: t('common.create-form.modes.simple'),
-        },
-        {
-          mode: ModeSelector.MODE_ADVANCED,
-          label: t('common.create-form.modes.advanced'),
-        },
-        { mode: ModeSelector.MODE_YAML, label: 'YAML' },
-      ]
-    : [
-        {
-          mode: ModeSelector.MODE_SIMPLE,
-          label: t('common.create-form.modes.simple'),
-        },
-        {
-          mode: ModeSelector.MODE_ADVANCED,
-          label: t('common.create-form.modes.advanced'),
-        },
-      ];
+  const modeButtons = [
+    {
+      mode: ModeSelector.MODE_SIMPLE,
+      label: t('common.create-form.modes.simple'),
+    },
+    {
+      mode: ModeSelector.MODE_ADVANCED,
+      label: t('common.create-form.modes.advanced'),
+    },
+    { mode: ModeSelector.MODE_YAML, label: 'YAML' },
+  ];
 
   return (
     <div className="mode-selector">

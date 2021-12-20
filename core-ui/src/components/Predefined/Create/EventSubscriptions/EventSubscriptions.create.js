@@ -79,11 +79,10 @@ const SubscriptionsCreate = ({
       formElementRef={formElementRef}
       initialResource={initialEventSubscription}
       createUrl={resourceUrl}
-      withoutYaml={true}
     >
       <K8sNameField
         propertyPath="$.metadata.name"
-        kind="event subscription"
+        kind={t('event-subscription.singular_name')}
         setValue={name => {
           jp.value(eventSubscription, '$.metadata.name', name);
           setEventSubscription({ ...eventSubscription });
@@ -99,6 +98,17 @@ const SubscriptionsCreate = ({
         options={(applications || []).map(i => ({
           key: i.metadata.name,
           text: i.metadata.name,
+        }))}
+      />
+      <ResourceForm.FormField
+        required
+        label={t('event-subscription.create.labels.event-version')}
+        setValue={version => setVersion(version)}
+        value={version}
+        input={Inputs.Dropdown}
+        options={(versionOptions || []).map(i => ({
+          key: i,
+          text: i,
         }))}
       />
 
