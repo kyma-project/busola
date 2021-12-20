@@ -32,7 +32,7 @@ npm run bootstrap:ci
 > - Installs dependencies for the [libraries](#components).
 > - Builds all the [libraries](#components).
 
-Visit [Install Kyma Dashboard manually](docs/Install_Kyma_Dashboard_manually.md) to learn how to install the Dashboard with Istio Ingress and how to install it on a Kyma cluster.
+Read [Install Kyma Dashboard manually](docs/install_kyma_dashboard_manually.md) to learn how to install the Dashboard with Istio Ingress and how to install it on a Kyma cluster.
 
 ## Configuration
 
