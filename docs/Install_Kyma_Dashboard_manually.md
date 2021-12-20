@@ -31,5 +31,5 @@ The document describes how to install Kyma Dashboard with Istio Ingress. It also
 
 2. **Install Kyma Dashboard on a Kyma cluster**
 
-Kyma cluster comes with the Istio already configured. All you need to do is to follow all steps from Istio Ingress section, to have your Dashboard installed.
+Kyma cluster comes with the Istio already configured. All you need to do is to follow all steps from the Istio Ingress section, to have your Dashboard installed.
 In case of k3d your **{DOMAIN}** must end with `.local.kyma.dev`.
