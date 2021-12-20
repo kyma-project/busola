@@ -20,13 +20,18 @@ To run Kyma Dashboard manually on a cluster, you must install it together with I
    kubectl create namespace busola
    ```
 2. Go to the `resources` folder and run the `apply-resources-istio.sh` script that deploys Kyma Dashboard under the given domain along with the Services and configuration. When running the script, make sure to provide your domain and Namespace name:
+
    ```bash
    ./apply-resources-istio.sh {DOMAIN} {NAMESPACE_NAME}
    ```
+
    > **NOTE:** In the case of k3d, your domain must end with `.local.kyma.dev`.
-   > For example:
+
+   For example:
+
    ```bash
    ./apply-resources-istio.sh busola.local.kyma.dev busola
    ```
+
 3. Wait a minute for the Dashboard to start.
 4. The Dashboard is available under your domain (for example, `https://busola.local.kyma.dev/`).
