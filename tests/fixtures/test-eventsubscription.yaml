@@ -13,5 +13,5 @@ spec:
         eventType:
           property: type
           type: exact
-          value: sap.kyma.custom.test.v1
-  sink: 'http://in-cluster-eventing-publisher.default.svc.cluster.local'
+          value: sap.kyma.custom.nonexistingapp.order.created.v1
+  sink: ''
