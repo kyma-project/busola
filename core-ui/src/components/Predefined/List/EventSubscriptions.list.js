@@ -9,7 +9,7 @@ export const SubscriptionsList = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
   const customColumns = [
     {
-      header: 'Status',
+      header: t('common.headers.status'),
       value: ({ status }) => {
         const lastCondition = status.conditions[status.conditions.length - 1];
 

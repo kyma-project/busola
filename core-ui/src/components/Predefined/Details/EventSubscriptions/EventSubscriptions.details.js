@@ -17,10 +17,10 @@ const EventSubscriptionConditions = eventSubscription => {
 
   const conditions = eventSubscription?.status?.conditions;
   const headerRenderer = _ => [
-    'LastTransitionTime',
-    'Reason',
-    'Status',
-    'Type',
+    t('event-subscription.conditions.last-transition-time'),
+    t('event-subscription.conditions.reason'),
+    t('event-subscription.conditions.status'),
+    t('event-subscription.conditions.type'),
   ];
 
   const rowRenderer = condition => [
@@ -35,8 +35,8 @@ const EventSubscriptionConditions = eventSubscription => {
 
   return (
     <GenericList
-      key="repository-urls"
-      title="Conditions"
+      key="event-subscription-conditions"
+      title={t('event-subscription.conditions.title')}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       entries={conditions || []}
@@ -45,54 +45,69 @@ const EventSubscriptionConditions = eventSubscription => {
   );
 };
 
-const FilterOption = ({ filterOption, title }) => (
-  <div>
-    <LayoutPanel.Header>
-      <LayoutPanel.Head title={title} className="layout-panel-title" />
-    </LayoutPanel.Header>
-    <LayoutPanelRow
-      name="property"
-      value={filterOption?.property || EMPTY_TEXT_PLACEHOLDER}
-    />
-    <LayoutPanelRow
-      name="type"
-      value={filterOption?.type || EMPTY_TEXT_PLACEHOLDER}
-    />
-    <LayoutPanelRow
-      name="value"
-      value={
-        filterOption?.value === ''
-          ? '"" (Handled by the NATS backend)' // If it's equal "", that means the NATS backend is chosen.
-          : filterOption?.value || EMPTY_TEXT_PLACEHOLDER
-      }
-    />
-  </div>
-);
+const FilterOption = ({ filterOption, title }) => {
+  const { t } = useTranslation();
 
-const EventFilter = ({ filter }) => {
   return (
     <div>
-      <FilterOption title="Event Source" filterOption={filter?.eventSource} />
-      <FilterOption title="Event Type" filterOption={filter?.eventType} />
+      <LayoutPanel.Header>
+        <LayoutPanel.Head title={title} className="layout-panel-title" />
+      </LayoutPanel.Header>
+      <LayoutPanelRow
+        name={t('event-subscription.filters.property')}
+        value={filterOption?.property || EMPTY_TEXT_PLACEHOLDER}
+      />
+      <LayoutPanelRow
+        name={t('event-subscription.filters.type')}
+        value={filterOption?.type || EMPTY_TEXT_PLACEHOLDER}
+      />
+      <LayoutPanelRow
+        name={t('event-subscription.filters.value')}
+        value={
+          filterOption?.value === ''
+            ? '"" (Handled by the NATS backend)' // If it's equal "", that means the NATS backend is chosen.
+            : filterOption?.value || EMPTY_TEXT_PLACEHOLDER
+        }
+      />
+    </div>
+  );
+};
+
+const EventFilter = ({ filter }) => {
+  const { t } = useTranslation();
+  return (
+    <div>
+      <FilterOption
+        title={t('event-subscription.filters.event-source')}
+        filterOption={filter?.eventSource}
+      />
+      <FilterOption
+        title={t('event-subscription.filters.event-type')}
+        filterOption={filter?.eventType}
+      />
     </div>
   );
 };
 
 const EventSubscriptionsFilters = eventSubscription => {
+  const { t } = useTranslation();
   const filters = eventSubscription?.spec?.filter?.filters || [];
+
   return (
     <LayoutPanel
       className="fd-margin--md event-filters-panel"
       key={'event-subscription-filters'}
     >
       <LayoutPanel.Header>
-        <LayoutPanel.Head title="Filters" />
+        <LayoutPanel.Head title={t('event-subscription.filters.title')} />
       </LayoutPanel.Header>
 
       {filters.length > 0 ? (
         filters.map(filter => <EventFilter filter={filter} key={filter} />)
       ) : (
-        <p className="no-entries-message">No entries found</p>
+        <p className="no-entries-message">
+          {t('common.messages.no-entries-found')}
+        </p>
       )}
     </LayoutPanel>
   );
@@ -100,15 +115,16 @@ const EventSubscriptionsFilters = eventSubscription => {
 
 //the name of the function cannot have 'Event' prefix, becuase it doesn't show custom details view
 export const SubscriptionsDetails = ({ DefaultRenderer, ...otherParams }) => {
+  const { t } = useTranslation();
   const customColumns = [
     {
-      header: 'Status',
-      value: ({ status }) => (
-        <EventSubscriptionConditionStatus status={status} />
+      header: t('event-subscription.conditions.status'),
+      value: ({ condition }) => (
+        <EventSubscriptionConditionStatus condition={condition} />
       ),
     },
     {
-      header: 'Sink',
+      header: t('event-subscription.sink'),
       value: ({ spec }) => {
         const index = spec?.sink.lastIndexOf('/') + 1;
 
@@ -136,8 +152,8 @@ export const SubscriptionsDetails = ({ DefaultRenderer, ...otherParams }) => {
         EventSubscriptionsFilters,
       ]}
       customColumns={customColumns}
-      resourceTitle="Event Subscriptions"
-      singularName="Event Subscription"
+      resourceTitle={t('event-subscription.title')}
+      singularName={t('event-subscription.name_singular')}
       {...otherParams}
     />
   );
