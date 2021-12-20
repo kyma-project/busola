@@ -13,7 +13,12 @@ export const SubscriptionsList = ({ DefaultRenderer, ...otherParams }) => {
       value: ({ status }) => {
         const lastCondition = status.conditions[status.conditions.length - 1];
 
-        return <EventSubscriptionConditionStatus condition={lastCondition} />;
+        return (
+          <EventSubscriptionConditionStatus
+            condition={lastCondition}
+            isListView={true}
+          />
+        );
       },
     },
   ];
