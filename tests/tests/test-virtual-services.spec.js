@@ -38,20 +38,13 @@ context('Test Virtual Services', () => {
       .contains('Create Virtual Service')
       .click();
 
-    cy.getIframeBody()
-      .find('[role="presentation"],[class="view-lines"]')
-      .first()
-      .type(
-        '{selectall}{backspace}{selectall}{backspace}{selectall}{backspace}',
-      );
-
     cy.wrap(loadVirtualService()).then(config => {
       const configString = JSON.stringify(config);
       cy.getIframeBody()
-        .find('[role="presentation"],[class="view-lines"]')
+        .find('textarea[aria-roledescription="editor"]')
         .first()
-        .click()
-        .type(configString, { parseSpecialCharSequences: false });
+        .type('{selectall}{backspace}{selectall}{backspace}')
+        .paste({ pastePayload: configString });
     });
 
     cy.getIframeBody()

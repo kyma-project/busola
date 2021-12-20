@@ -34,11 +34,8 @@ context('Test Ingresses', () => {
         const INGRESS = JSON.stringify(INGRESS_CONFIG);
         cy.getIframeBody()
           .find('textarea[aria-roledescription="editor"]')
-          .filter(':visible')
           .type('{selectall}{backspace}{selectall}{backspace}')
-          .paste({
-            pastePayload: INGRESS,
-          });
+          .paste({ pastePayload: INGRESS });
       },
     );
 
