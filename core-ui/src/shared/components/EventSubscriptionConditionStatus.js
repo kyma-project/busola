@@ -14,12 +14,12 @@ export const EventSubscriptionConditionStatus = ({ condition }) => {
           type: 'success',
           text: 'Ready',
         };
-
   return (
     <StatusBadge
       type={statusBadgeProperties.type}
       additionalContent={condition?.message}
       i18n={i18n}
+      noTooltip={condition?.status !== 'False'}
     >
       {statusBadgeProperties.text}
     </StatusBadge>

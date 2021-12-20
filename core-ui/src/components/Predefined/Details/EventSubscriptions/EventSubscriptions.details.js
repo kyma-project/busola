@@ -25,12 +25,12 @@ const EventSubscriptionConditions = eventSubscription => {
 
   const rowRenderer = condition => [
     <FormattedDatetime
-      date={condition.lastTransitionTime}
+      date={condition?.lastTransitionTime}
       lang={i18n.language}
     />,
-    condition.reason,
+    condition?.reason || EMPTY_TEXT_PLACEHOLDER,
     <EventSubscriptionConditionStatus condition={condition} />,
-    condition.type,
+    condition?.type || EMPTY_TEXT_PLACEHOLDER,
   ];
 
   return (
@@ -62,7 +62,7 @@ const FilterOption = ({ filterOption, title }) => (
       name="value"
       value={
         filterOption?.value === ''
-          ? '""' // If it's equal "", that means the NATS backend is chosen.
+          ? '"" (Handled by the NATS backend)' // If it's equal "", that means the NATS backend is chosen.
           : filterOption?.value || EMPTY_TEXT_PLACEHOLDER
       }
     />
@@ -82,7 +82,7 @@ const EventSubscriptionsFilters = eventSubscription => {
   const filters = eventSubscription?.spec?.filter?.filters || [];
   return (
     <LayoutPanel
-      className="fd-margin--md certificate-refs-panel"
+      className="fd-margin--md event-filters-panel"
       key={'event-subscription-filters'}
     >
       <LayoutPanel.Header>
@@ -92,7 +92,7 @@ const EventSubscriptionsFilters = eventSubscription => {
       {filters.length > 0 ? (
         filters.map(filter => <EventFilter filter={filter} key={filter} />)
       ) : (
-        <p>No entries found</p>
+        <p className="no-entries-message">No entries found</p>
       )}
     </LayoutPanel>
   );
