@@ -14,7 +14,7 @@ context('API Rules in the Function details view', () => {
   });
 
   it('Create a simple Function', () => {
-    cy.createSimpleFunction(FUNCTION_NAME);
+    cy.createSimpleFunction(FUNCTION_NAME, true);
   });
 
   it('Create an API Rule for the Function', () => {

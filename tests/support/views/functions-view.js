@@ -1,53 +1,66 @@
-Cypress.Commands.add('createSimpleFunction', functionName => {
-  cy.getLeftNav()
-    .contains('Workloads')
-    .click();
+Cypress.Commands.add(
+  'createSimpleFunction',
+  (functionName, waitUntilRunning = false) => {
+    cy.getLeftNav()
+      .contains('Workloads')
+      .click();
 
-  cy.getLeftNav()
-    .contains('Functions')
-    .click();
+    cy.getLeftNav()
+      .contains('Functions')
+      .click();
 
-  cy.getIframeBody()
-    .contains('Create Function')
-    .click();
+    cy.getIframeBody()
+      .contains('Create Function')
+      .click();
 
-  cy.getIframeBody()
-    .contains('Advanced')
-    .click();
+    cy.getIframeBody()
+      .contains('Advanced')
+      .click();
 
-  cy.getIframeBody()
-    .find('.advanced-form')
-    .find('[placeholder="Function Name"]')
-    .clear()
-    .type(functionName);
+    cy.getIframeBody()
+      .find('.advanced-form')
+      .find('[placeholder="Function Name"]')
+      .clear()
+      .type(functionName);
 
-  cy.getIframeBody()
-    .find('.advanced-form')
-    .contains('Labels')
-    .click();
+    cy.getIframeBody()
+      .find('.advanced-form')
+      .contains('Labels')
+      .click();
 
-  cy.getIframeBody()
-    .find('[placeholder="Enter Key"]')
-    .last()
-    .type(`example{enter}${functionName}`);
+    cy.getIframeBody()
+      .find('[placeholder="Enter Key"]')
+      .last()
+      .type(`example{enter}${functionName}`);
 
-  cy.getIframeBody()
-    .contains('label', 'Labels')
-    .click();
+    cy.getIframeBody()
+      .contains('label', 'Labels')
+      .click();
 
-  cy.getIframeBody()
-    .find('[role="dialog"]')
-    .contains('button', 'Create')
-    .click();
+    cy.getIframeBody()
+      .find('[role="dialog"]')
+      .contains('button', 'Create')
+      .click();
 
-  cy.getIframeBody()
-    .find('[role="status"]', { timeout: 60 * 1000 })
-    .should('have.text', 'Building');
+    cy.getIframeBody()
+      .find('[role="status"]', { timeout: 60 * 1000 })
+      .should('have.text', 'Building');
 
-  cy.getIframeBody()
-    .find('[role="status"]', { timeout: 60 * 1000 })
-    .should('not.have.text', 'Building');
-});
+    cy.getIframeBody()
+      .find('[role="status"]', { timeout: 60 * 1000 })
+      .should('not.have.text', 'Building');
+
+    if (waitUntilRunning) {
+      cy.getIframeBody()
+        .find('[role="status"]', { timeout: 60 * 1000 })
+        .should('not.have.text', 'Deploying');
+
+      cy.getIframeBody()
+        .find('[role="status"]')
+        .should('have.text', 'Running');
+    }
+  },
+);
 
 Cypress.Commands.add(
   'createFunction',
