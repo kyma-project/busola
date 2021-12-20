@@ -79,6 +79,7 @@ const SubscriptionsCreate = ({
       formElementRef={formElementRef}
       initialResource={initialEventSubscription}
       createUrl={resourceUrl}
+      withoutYaml={true}
     >
       <K8sNameField
         propertyPath="$.metadata.name"
