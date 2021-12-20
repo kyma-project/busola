@@ -123,7 +123,9 @@ context('In-cluster eventing', () => {
     cy.getLeftNav()
       .contains('Event Subscriptions')
       .click();
+  });
 
+  it('Create Event Subscription', () => {
     cy.getIframeBody()
       .contains('Create Event Subscription')
       .click();
@@ -156,15 +158,37 @@ context('In-cluster eventing', () => {
         .first()
         .click()
         .type(SUBSCRIPTION, { parseSpecialCharSequences: false });
-
-      cy.wait(4000);
     });
 
     cy.getIframeBody()
       .find('[role="dialog"]')
       .contains('button', 'Create')
       .click();
+  });
 
-    cy.wait(40000);
+  it('Checking details', () => {
+    cy.getIframeBody()
+      .contains('in-cluster-eventing-publisher-subscription')
+      .should('be.visible');
+
+    cy.getIframeBody()
+      .contains('app.kubernetes.io/name=test')
+      .should('be.visible');
+
+    cy.getIframeBody()
+      .contains('Subscription active')
+      .should('be.visible');
+
+    cy.getIframeBody()
+      .contains(/ready/i)
+      .should('be.visible');
+  });
+
+  it('Delete Event Subscription', () => {
+    cy.getIframeBody()
+      .contains('button', 'Delete')
+      .click();
+
+    cy.get('[data-testid=luigi-modal-confirm]').click();
   });
 });
