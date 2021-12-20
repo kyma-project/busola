@@ -6,7 +6,7 @@ To run Kyma Dashboard manually on a cluster, you must install it together with I
 
 ## Prerequisites
 
-- Export KUBECONFIG as an environment variable that points to the kubeconfig file you want to use.
+- Export KUBECONFIG as an environment variable that points to the kubeconfig.
 - If you install Kyma Dashboard on a cluster other than the Kyma cluster, you must have [Istio configured](https://istio.io/latest/docs/setup/getting-started/). On Kyma clusters, Istio is already configured by default.
 
 ## Install Kyma Dashboard with Istio Ingress
