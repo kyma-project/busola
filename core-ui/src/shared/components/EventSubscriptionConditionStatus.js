@@ -3,18 +3,18 @@ import { useTranslation } from 'react-i18next';
 import { StatusBadge } from 'react-shared';
 
 export const EventSubscriptionConditionStatus = ({ condition, isListView }) => {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const statusBadgeProperties =
-    condition?.status === 'False'
+    condition?.status === 'True'
       ? {
-          type: 'error',
-          text: 'Error',
-          tooltipMessage: condition?.message,
+          type: 'success',
+          text: t('common.statuses.ready'),
+          tooltipMessage: condition?.type,
         }
       : {
-          type: 'success',
-          text: 'Ready',
-          tooltipMessage: condition?.type,
+          type: 'error',
+          text: t('common.statuses.error'),
+          tooltipMessage: condition?.message,
         };
   return (
     <StatusBadge

@@ -73,7 +73,7 @@ const FilterOption = ({ filterOption, title }) => {
   );
 };
 
-const EventFilter = ({ filter }) => {
+const EventFilters = ({ filter }) => {
   const { t } = useTranslation();
   return (
     <div>
@@ -103,7 +103,7 @@ const EventSubscriptionsFilters = eventSubscription => {
       </LayoutPanel.Header>
 
       {filters.length > 0 ? (
-        filters.map(filter => <EventFilter filter={filter} key={filter} />)
+        filters.map(filter => <EventFilters filter={filter} key={filter} />)
       ) : (
         <p className="no-entries-message">
           {t('common.messages.no-entries-found')}
@@ -119,9 +119,10 @@ export const SubscriptionsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const customColumns = [
     {
       header: t('event-subscription.conditions.status'),
-      value: ({ condition }) => (
-        <EventSubscriptionConditionStatus condition={condition} />
-      ),
+      value: ({ status }) => {
+        const lastCondition = status?.conditions[status?.conditions.length - 1];
+        return <EventSubscriptionConditionStatus condition={lastCondition} />;
+      },
     },
     {
       header: t('event-subscription.sink'),
