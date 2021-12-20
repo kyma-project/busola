@@ -130,7 +130,7 @@ const SubscriptionsCreate = ({
           />
         )}
       />
-      <ResourceForm.FormField
+      <ResourceForm.FormField //readonly for simple view, possible to paste or type something in advanced mode
         required
         label={t('event-subscription.create.labels.event-type')}
         setValue={eventType => setEventType(eventType)}
