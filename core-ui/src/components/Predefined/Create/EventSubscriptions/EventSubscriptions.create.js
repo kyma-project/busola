@@ -1,3 +1,4 @@
+import { ComboboxInput } from 'fundamental-react';
 import * as jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
 import React, { useEffect, useState } from 'react';
@@ -102,14 +103,29 @@ const SubscriptionsCreate = ({
       />
       <ResourceForm.FormField
         required
+        label={t('event-subscription.create.labels.event-name')}
+        setValue={eventName => setEventName(eventName)}
+        value={eventName}
+        input={Inputs.Text}
+      />
+      <ResourceForm.FormField
+        required
         label={t('event-subscription.create.labels.event-version')}
-        setValue={version => setVersion(version)}
         value={version}
-        input={Inputs.Dropdown}
-        options={(versionOptions || []).map(i => ({
-          key: i,
-          text: i,
-        }))}
+        input={({ value, setValue }) => (
+          <ComboboxInput
+            required
+            compact
+            placeholder={t('event-subscription.create.labels.event-version')}
+            options={versionOptions.map(version => ({
+              key: version,
+              text: version,
+            }))}
+            selectedKey={value}
+            typedValue={value}
+            onSelect={e => setVersion(e.target.value)}
+          />
+        )}
       />
 
       <ResourceForm.FormField
