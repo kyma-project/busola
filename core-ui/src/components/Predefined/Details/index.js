@@ -1,4 +1,4 @@
-export * from './ApiRules.details';
+export * from './ApiRule/ApiRules.details';
 export * from './Deployment/Deployment.details';
 export * from './Pod/Pod.details';
 export * from './ReplicaSet/Replicaset.details';
