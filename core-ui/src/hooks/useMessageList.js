@@ -53,7 +53,7 @@ export const useMessageList = items => {
   };
 
   const formatInvolvedObject = obj => {
-    const namespacePrefix = obj.namespace ? `${obj.namespace}/` : '';
+    const namespacePrefix = obj.namespace || '';
     const text = `${obj.kind} ${namespacePrefix}/${obj.name}`;
     const isLink = !!RESOURCE_PATH[obj.kind];
     return isLink ? (
