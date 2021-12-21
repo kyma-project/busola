@@ -431,7 +431,7 @@ common:
   placeholders:
     secret-ref-name: Select name
     secret-ref-namespace: Select Namespace
-  protected-resource: This resource is protected.
+  protected-resource: Resource protected. Go to Preferences to turn on the modification of protected resources.
   statuses:
     error: Error
     failed: Failed
