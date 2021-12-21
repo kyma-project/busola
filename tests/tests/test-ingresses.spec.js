@@ -29,6 +29,13 @@ context('Test Ingresses', () => {
       .contains('Create Ingress')
       .click();
 
+    cy.getIframeBody()
+      .find('[role="presentation"],[class="view-lines"]')
+      .first()
+      .type(
+        '{selectall}{backspace}{selectall}{backspace}{selectall}{backspace}',
+      );
+
     cy.wrap(loadRandomIngress(NAME, Cypress.env('NAMESPACE_NAME'))).then(
       INGRESS_CONFIG => {
         const INGRESS = JSON.stringify(INGRESS_CONFIG);
@@ -36,9 +43,7 @@ context('Test Ingresses', () => {
           .find('textarea[aria-roledescription="editor"]')
           .filter(':visible')
           .type('{selectall}{backspace}{selectall}{backspace}')
-          .paste({
-            pastePayload: INGRESS,
-          });
+          .type(INGRESS, { parseSpecialCharSequences: false });
       },
     );
 
@@ -46,13 +51,13 @@ context('Test Ingresses', () => {
       .find('[role="dialog"]')
       .contains('button', 'Create')
       .click();
-
-    cy.getIframeBody()
-      .contains('h3', NAME, { timeout: 5000 })
-      .should('be.visible');
   });
 
   it('Check Ingress details', () => {
+    cy.getIframeBody()
+      .contains(NAME, { timeout: 5000 })
+      .should('be.visible');
+
     cy.getIframeBody()
       .contains(/rules/i)
       .should('be.visible');
