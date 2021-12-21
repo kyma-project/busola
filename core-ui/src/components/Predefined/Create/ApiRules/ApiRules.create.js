@@ -52,6 +52,10 @@ function ApiRulesCreate({
       const service = servicesQuery.data.find(
         svc => svc.metadata.name === serviceName,
       );
+      console.log(
+        serviceName,
+        servicesQuery.data.map(s => s.metadata.name),
+      );
       if (service) {
         jp.value(apiRule, '$.spec.service.name', serviceName);
         jp.value(apiRule, '$.spec.service.port', service.spec.ports[0]?.port);

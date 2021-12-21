@@ -11,6 +11,8 @@ import './fiori-helpers.scss';
 import App from './components/App/App';
 // NOTE react-shared has to be imported after App for some unknown reason
 import { Microfrontend, Spinner } from 'react-shared';
+import { PluginRegistryProvider } from 'components/App/usePluginRegistry';
+import { BusolaComponentsContextProvider } from 'components/App/BusolaComponentsContext';
 
 i18next
   .use(initReactI18next)
@@ -38,11 +40,15 @@ i18next
 
 ReactDOM.render(
   <Microfrontend env={process.env}>
-    <BrowserRouter basename={process.env.PUBLIC_URL}>
-      <Suspense fallback={<Spinner />}>
-        <App />
-      </Suspense>
-    </BrowserRouter>
+    <BusolaComponentsContextProvider>
+      <PluginRegistryProvider>
+        <BrowserRouter basename={process.env.PUBLIC_URL}>
+          <Suspense fallback={<Spinner />}>
+            <App />
+          </Suspense>
+        </BrowserRouter>
+      </PluginRegistryProvider>
+    </BusolaComponentsContextProvider>
   </Microfrontend>,
   document.getElementById('root'),
 );

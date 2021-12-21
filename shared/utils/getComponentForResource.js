@@ -12,6 +12,7 @@ export const ComponentFor = ({
   PredefinedRenderersCollection,
   GenericRenderer,
   i18n,
+  busolaProps,
   ...componentProps
 }) => {
   const {
@@ -35,6 +36,8 @@ export const ComponentFor = ({
       DefaultRenderer={defaultRenderer}
       i18n={i18n}
       {...params}
+      busolaProps={busolaProps}
+      workaround={{ busolaProps }}
     />
   );
 };

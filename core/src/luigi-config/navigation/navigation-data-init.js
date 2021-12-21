@@ -9,12 +9,12 @@ import { getBusolaClusterParams } from '../busola-cluster-params';
 import { config } from '../config';
 import {
   coreUIViewGroupName,
-  getStaticChildrenNodesForNamespace,
   getStaticRootNodes,
 } from './static-navigation-model';
 import { navigationPermissionChecker, hasAnyRoleBound } from './permissions';
 import { getFeatures, resolveFeatureAvailability } from '../features';
 import { showAlert } from '../utils/showAlert';
+import { loadPlugins, loadViewPlugins } from './../plugins';
 
 import {
   hideDisabledNodes,
@@ -86,7 +86,7 @@ export async function reloadNavigation() {
   }, 100);
 }
 
-async function createClusterManagementNodes(features) {
+async function createClusterManagementNodes(features, plugins) {
   const activeClusterName = getActiveClusterName();
 
   const childrenNodes = [
@@ -130,6 +130,7 @@ async function createClusterManagementNodes(features) {
       language: i18next.language,
       busolaClusterParams: await getBusolaClusterParams(),
       features,
+      plugins,
       ssoData: getSSOAuthData(),
       settings: {
         pagination: {
@@ -169,7 +170,7 @@ async function createClusterManagementNodes(features) {
   return [clusterManagementNode, clusterNode, noPermissionsNode];
 }
 
-async function createNavigationForNoCluster() {
+async function createNavigationForNoCluster(plugins) {
   const features = await getFeatures();
 
   return {
@@ -188,15 +189,18 @@ async function createNavigationForNoCluster() {
     },
     preloadViewGroups: false,
     appSwitcher: await createAppSwitcher(),
-    nodes: await createClusterManagementNodes(features),
+    nodes: await createClusterManagementNodes(features, plugins),
   };
 }
 
 export async function createNavigation() {
+  const plugins = await loadPlugins();
+
   try {
     const authData = getAuthData();
+
     if (!(await getActiveCluster()) || !authData) {
-      return await createNavigationForNoCluster();
+      return await createNavigationForNoCluster(plugins);
     }
 
     await saveCARequired();
@@ -266,11 +270,12 @@ export async function createNavigation() {
         isNodeEnabled(node) && navigationPermissionChecker(node, permissionSet),
       appSwitcher: await createAppSwitcher(),
       ...optionsForCurrentCluster,
-      nodes: await createNavigationNodes(
+      nodes: await createNavigationNodes({
         features,
         groupVersions,
         permissionSet,
-      ),
+        plugins,
+      }),
     };
   } catch (err) {
     saveActiveClusterName(null);
@@ -336,16 +341,18 @@ async function getObservabilityNodes(authData, enabledFeatures) {
   return navNodes.filter(n => n);
 }
 
-export async function createNavigationNodes(
+async function createNavigationNodes({
   features,
   groupVersions,
   permissionSet,
-) {
+  plugins,
+}) {
   const authData = getAuthData();
   const activeCluster = await getActiveCluster();
 
   if (!activeCluster || !getAuthData()) {
-    return await createClusterManagementNodes(features);
+    // todo add plugins here
+    return await createClusterManagementNodes(features, plugins);
   }
 
   const activeClusterName = encodeURIComponent(
@@ -355,12 +362,12 @@ export async function createNavigationNodes(
     activeCluster?.config || {};
 
   const clusterChildren = async () => {
-    const staticNodes = getStaticRootNodes(
-      getChildrenNodesForNamespace,
+    const staticNodes = getStaticRootNodes({
       groupVersions,
       permissionSet,
       features,
-    );
+      viewPlugins: await loadViewPlugins(plugins),
+    });
     const observabilitySection = await getObservabilityNodes(
       authData,
       features,
@@ -400,6 +407,7 @@ export async function createNavigationNodes(
         language: i18next.language,
         ssoData: getSSOAuthData(),
         groupVersions,
+        plugins,
         settings: {
           pagination: {
             pageSize: getPageSize(),
@@ -409,7 +417,7 @@ export async function createNavigationNodes(
       },
     },
   ];
-  return [...nodes, ...(await createClusterManagementNodes(features))];
+  return [...nodes, ...(await createClusterManagementNodes(features, plugins))];
 }
 
 async function getNamespaces() {
@@ -427,20 +435,4 @@ async function getNamespaces() {
     });
     return [];
   }
-}
-
-async function getChildrenNodesForNamespace(
-  groupVersions,
-  permissionSet,
-  features,
-) {
-  const { navigation = {} } = (await getActiveCluster()).config;
-  const staticNodes = getStaticChildrenNodesForNamespace(
-    groupVersions,
-    permissionSet,
-    features,
-  );
-
-  hideDisabledNodes(navigation.disabledNodes, staticNodes, true);
-  return staticNodes;
 }

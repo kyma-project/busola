@@ -3,11 +3,14 @@ import { saveAs } from 'file-saver';
 
 import { config } from '../config';
 import {
+  getActiveCluster,
   getActiveClusterName,
   getClusters,
 } from './../cluster-management/cluster-management';
 import { hasPermissionsFor, hasWildcardPermission } from './permissions';
 import { showAlert } from '../utils/showAlert';
+import { createPluginNodes } from '../plugins';
+import { hideDisabledNodes } from './navigation-helpers';
 
 export const coreUIViewGroupName = '_core_ui_';
 export const catalogViewGroupName = '_catalog_';
@@ -16,7 +19,7 @@ async function importJsYaml() {
   return (await import('js-yaml')).default;
 }
 
-function toSearchParamsString(object) {
+export function toSearchParamsString(object) {
   return new URLSearchParams(object).toString();
 }
 async function downloadKubeconfig() {
@@ -51,11 +54,12 @@ async function downloadKubeconfig() {
   return false; // cancel Luigi navigation
 }
 
-export function getStaticChildrenNodesForNamespace(
+export function getStaticChildrenNodesForNamespace({
   groupVersions,
   permissionSet,
   features,
-) {
+  viewPlugins,
+}) {
   const encodedClusterName = encodeURIComponent(getActiveClusterName());
   const nodes = [
     {
@@ -1221,17 +1225,18 @@ export function getStaticChildrenNodesForNamespace(
         },
       ],
     },
+    ...createPluginNodes(viewPlugins, 'namespaced', coreUIViewGroupName),
   ];
   filterNodesByAvailablePaths(nodes, groupVersions, permissionSet);
   return nodes;
 }
 
-export function getStaticRootNodes(
-  namespaceChildrenNodesResolver,
+export function getStaticRootNodes({
   groupVersions,
   permissionSet,
   features,
-) {
+  viewPlugins,
+}) {
   const nodes = [
     {
       pathSegment: 'overview',
@@ -1277,11 +1282,12 @@ export function getStaticRootNodes(
           },
           keepSelectedForChildren: false,
           children: async () =>
-            await namespaceChildrenNodesResolver(
+            await getChildrenNodesForNamespace({
               groupVersions,
               permissionSet,
               features,
-            ),
+              viewPlugins,
+            }),
           defaultChildNode: 'details',
         },
       ],
@@ -1537,6 +1543,7 @@ export function getStaticRootNodes(
       hideFromNav: true,
       onNodeActivation: downloadKubeconfig,
     },
+    ...createPluginNodes(viewPlugins, 'clusterwide', coreUIViewGroupName),
   ];
   filterNodesByAvailablePaths(nodes, groupVersions, permissionSet);
   return nodes;
@@ -1582,4 +1589,22 @@ function checkSingleNode(node, groupVersions, permissionSet, removeNode) {
       removeNode();
     }
   }
+}
+
+async function getChildrenNodesForNamespace({
+  groupVersions,
+  permissionSet,
+  features,
+  viewPlugins,
+}) {
+  const { navigation = {} } = (await getActiveCluster()).config;
+  const staticNodes = getStaticChildrenNodesForNamespace({
+    groupVersions,
+    permissionSet,
+    features,
+    viewPlugins,
+  });
+
+  hideDisabledNodes(navigation.disabledNodes, staticNodes, true);
+  return staticNodes;
 }

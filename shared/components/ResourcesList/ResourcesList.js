@@ -112,7 +112,10 @@ function Resources({
   omitColumnsIds = [],
   customListActions = [],
   createFormProps,
+  workaround,
 }) {
+  //todo
+  const busolaProps = workaround.busolaProps;
   useWindowTitle(windowTitle || prettifyNamePlural(resourceName, resourceType));
   const { t } = useTranslation(['translation'], { i18n });
 
@@ -303,17 +306,20 @@ function Resources({
         confirmText={t('common.buttons.create')}
         id={`add-${resourceType}-modal`}
         className="modal-size--l create-resource-modal"
-        renderForm={props => (
-          <CreateResourceForm
-            resource={activeResource}
-            resourceType={resourceType}
-            resourceUrl={resourceUrl}
-            namespace={namespace}
-            refetchList={silentRefetch}
-            {...props}
-            {...createFormProps}
-          />
-        )}
+        renderForm={props => {
+          return (
+            <CreateResourceForm
+              resource={activeResource}
+              resourceType={resourceType}
+              resourceUrl={resourceUrl}
+              namespace={namespace}
+              refetchList={silentRefetch}
+              {...props}
+              {...createFormProps}
+              busolaProps={busolaProps}
+            />
+          );
+        }}
         i18n={i18n}
         modalOpeningComponent={<></>}
         customCloseAction={() => setShowEditDialog(false)}

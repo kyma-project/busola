@@ -19,7 +19,8 @@ import { AddCluster } from 'components/Clusters/views/AddCluster/AddCluster';
 import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
 import { NodeDetails } from 'components/Nodes/NodeDetails/NodeDetails';
 import { useSentry } from '../../hooks/useSentry';
-import { ExternalComponents } from './ExternalComponents';
+import { usePluginRegistry } from './usePluginRegistry';
+import { useBusolaComponents } from './BusolaComponentsContext';
 
 export default function App() {
   const { cluster, language } = useMicrofrontendContext();
@@ -31,7 +32,20 @@ export default function App() {
 
   useSentry();
 
-  return <ExternalComponents />;
+  const pr = usePluginRegistry();
+  const busolaProps = useBusolaComponents();
+
+  const pluginRoutes = pr
+    .getByTags(['route'])
+    .map(p => p.resolved)
+    .flatMap(resolved =>
+      resolved.createRoutes({
+        Route,
+        withTitle,
+        language,
+        busolaProps,
+      }),
+    );
 
   return (
     // force rerender on cluster change
@@ -64,6 +78,8 @@ export default function App() {
         render={withTitle(t('clusters.add.title'), AddCluster)}
       />
       <Route path="/preferences" render={Preferences} />
+
+      {pluginRoutes}
 
       <Route
         exact
