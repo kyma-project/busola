@@ -36,9 +36,8 @@ context('Test Ingresses', () => {
           .find('textarea[aria-roledescription="editor"]')
           .filter(':visible')
           .type('{selectall}{backspace}{selectall}{backspace}')
-          .paste({
-            pastePayload: INGRESS,
-          });
+          .type('{selectall}{backspace}{selectall}{backspace}')
+          .type(INGRESS, { parseSpecialCharSequences: false });
       },
     );
 
@@ -46,13 +45,13 @@ context('Test Ingresses', () => {
       .find('[role="dialog"]')
       .contains('button', 'Create')
       .click();
-
-    cy.getIframeBody()
-      .contains('h3', NAME, { timeout: 5000 })
-      .should('be.visible');
   });
 
   it('Check Ingress details', () => {
+    cy.getIframeBody()
+      .contains(NAME, { timeout: 5000 })
+      .should('be.visible');
+
     cy.getIframeBody()
       .contains(/rules/i)
       .should('be.visible');
