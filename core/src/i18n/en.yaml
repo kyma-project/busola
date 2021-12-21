@@ -1583,7 +1583,7 @@ virtualservices:
   hosts: Hosts
   http-routes:
     cors:
-      allow-credentials: Allow Credential
+      allow-credentials: Allow Credentials
       allow-method: Allow Method
       allow-origin: Allow Origin
       expose-header: Expose Header
