@@ -19,8 +19,8 @@ import { AddCluster } from 'components/Clusters/views/AddCluster/AddCluster';
 import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
 import { NodeDetails } from 'components/Nodes/NodeDetails/NodeDetails';
 import { useSentry } from '../../hooks/useSentry';
-import { usePluginRegistry } from './usePluginRegistry';
-import { useBusolaComponents } from './BusolaComponentsContext';
+import { usePluginRegistry } from '../../hooks/PluginRegistryContext';
+import { useBusolaComponents } from '../../hooks/BusolaComponentsContext';
 
 export default function App() {
   const { cluster, language } = useMicrofrontendContext();

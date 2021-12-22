@@ -8,7 +8,7 @@ import * as FormInputs from 'shared/ResourceForm/inputs';
 export const BusolaComponentsContext = createContext({});
 
 const CoreUIComponents = {
-  Tokens, // todo?
+  Tokens, // todo - how to group and pass the components in convenient way
   ResourceForm,
   FormFields,
   FormInputs,

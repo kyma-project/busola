@@ -5,18 +5,17 @@ import { useMicrofrontendContext } from 'react-shared';
 export const PluginRegistryContext = createContext({});
 
 export function PluginRegistryProvider({ children }) {
-  const { plugins: p } = useMicrofrontendContext();
-  const [plugins, setPlugins] = useState(p);
+  const microfrontendContext = useMicrofrontendContext();
+  const [plugins, setPlugins] = useState(microfrontendContext.plugins);
 
+  // todo make it actually reactive?
   useEffect(() => {
-    console.log('plugins changed');
-    // todo
     if (!plugins) {
-      setPlugins(p);
+      setPlugins(microfrontendContext.plugins);
     }
-  }, [p]);
+  }, [microfrontendContext.plugins]);
 
-  function loadPlugin(p) {
+  function startLoadingPlugin(p) {
     loadExternalModule(p.path)
       .then(resolved => {
         p.resolved = resolved;
@@ -35,7 +34,7 @@ export function PluginRegistryProvider({ children }) {
       if (plugin.resolved) {
         list.push(plugin);
       } else {
-        loadPlugin(plugin);
+        startLoadingPlugin(plugin);
       }
     }
     return list;

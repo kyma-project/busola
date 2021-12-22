@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 
 import { ComponentFor, ResourcesList, ResourceDetails } from 'react-shared';
 import * as PredefinedRenderers from 'components/Predefined';
-import { usePluginRegistry } from 'components/App/usePluginRegistry';
-import { useBusolaComponents } from 'components/App/BusolaComponentsContext';
+import { usePluginRegistry } from 'hooks/PluginRegistryContext';
+import { useBusolaComponents } from 'hooks/BusolaComponentsContext';
 
 function usePredefinedPluginsRenderers() {
   const flatMapToObject = arr =>

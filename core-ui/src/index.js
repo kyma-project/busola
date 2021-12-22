@@ -11,8 +11,8 @@ import './fiori-helpers.scss';
 import App from './components/App/App';
 // NOTE react-shared has to be imported after App for some unknown reason
 import { Microfrontend, Spinner } from 'react-shared';
-import { PluginRegistryProvider } from 'components/App/usePluginRegistry';
-import { BusolaComponentsContextProvider } from 'components/App/BusolaComponentsContext';
+import { PluginRegistryProvider } from 'hooks/PluginRegistryContext';
+import { BusolaComponentsContextProvider } from 'hooks/BusolaComponentsContext';
 
 i18next
   .use(initReactI18next)

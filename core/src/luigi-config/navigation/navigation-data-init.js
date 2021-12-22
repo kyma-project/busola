@@ -351,7 +351,6 @@ async function createNavigationNodes({
   const activeCluster = await getActiveCluster();
 
   if (!activeCluster || !getAuthData()) {
-    // todo add plugins here
     return await createClusterManagementNodes(features, plugins);
   }
 
