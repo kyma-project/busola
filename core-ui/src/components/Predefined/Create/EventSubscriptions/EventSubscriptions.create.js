@@ -5,12 +5,28 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useGet, useGetList } from 'react-shared';
 import { ResourceForm } from 'shared/ResourceForm';
-import { K8sNameField } from 'shared/ResourceForm/fields';
+import { K8sNameField, TextArrayInput } from 'shared/ResourceForm/fields';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { createEventSubscriptionTemplate } from './templates';
 
 const DEFAULT_EVENT_TYPE_PREFIX = 'sap.kyma.custom.';
 const versionOptions = ['v1', 'v2', 'v3', 'v4'];
+
+const getEventFilter = value => {
+  return {
+    eventSource: {
+      property: 'source',
+      type: 'exact',
+      value: '',
+    },
+    eventType: {
+      property: 'type',
+      type: 'exact',
+      value,
+    },
+  };
+};
+
 const SubscriptionsCreate = ({
   onChange,
   formElementRef,
@@ -24,7 +40,6 @@ const SubscriptionsCreate = ({
   const [version, setVersion] = useState('');
   const [appName, setAppName] = useState('');
   const [eventName, setEventName] = useState('');
-  const [isFunctionChosen, setIsFunctionChosen] = useState(true);
   const [eventSubscription, setEventSubscription] = useState(
     cloneDeep(initialEventSubscription) ||
       createEventSubscriptionTemplate(namespace),
@@ -41,11 +56,17 @@ const SubscriptionsCreate = ({
     : eventTypePrefix + '.';
   const [eventType, setEventType] = useState(eventTypePrefix);
 
-  const { data: services } = useGetList()(
-    `/api/v1/namespaces/${namespace}/services`,
-  );
+  const {
+    data: services,
+    error: servicesError,
+    loading: servicesLoading,
+  } = useGetList()(`/api/v1/namespaces/${namespace}/services`);
 
-  const { data: applications, error: applicationsError } = useGetList()(
+  const {
+    data: applications,
+    error: applicationsError,
+    loading: applicationsLoading,
+  } = useGetList()(
     `/apis/applicationconnector.kyma-project.io/v1alpha1/applications`,
   );
 
@@ -53,14 +74,14 @@ const SubscriptionsCreate = ({
     setEventType(`${eventTypePrefix}${appName}.${eventName}.${version}`);
     jp.value(
       eventSubscription,
-      '$.spec.filter.filters[0].evenType.value',
+      '$.spec.filter.filters[0].eventType.value',
       eventType,
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [appName, eventName, version]);
 
   useEffect(() => {
-    const sink = `http://${ownerName}.${namespace}.svc.cluster.local`;
+    const sink = `https://${ownerName}.${namespace}.svc.cluster.local`;
 
     jp.value(eventSubscription, '$.spec.sink', sink);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -98,6 +119,7 @@ const SubscriptionsCreate = ({
           text: i.metadata.name,
         }))}
         error={applicationsError}
+        loading={applicationsLoading}
       />
       <ResourceForm.FormField
         simple
@@ -128,38 +150,44 @@ const SubscriptionsCreate = ({
           />
         )}
       />
-      <ResourceForm.FormField //readonly for simple view, possible to paste or type something in advanced mode
+      <ResourceForm.FormField
         simple
         required
         label={t('event-subscription.create.labels.event-type')}
-        setValue={eventType => setEventType(eventType)}
-        value={eventType}
-        input={props => {
-          console.log(props);
-          return <Inputs.Text {...props}></Inputs.Text>;
-        }}
-        readOnly={true}
-      />
-      <ResourceForm.FormField //readonly for simple view, possible to paste or type something in advanced mode
-        advanced
-        required
-        label={t('event-subscription.create.labels.event-type')}
-        setValue={eventType => setEventType(eventType)}
         value={eventType}
         input={Inputs.Text}
+        readOnly={true}
       />
-
       <ResourceForm.FormField
-        advanced
         required
-        label="services"
+        label={t('services.name_singular')}
         setValue={serviceName => setOwnerName(serviceName)}
-        defaultValue=""
+        value={ownerName}
         input={Inputs.Dropdown}
         options={(services || []).map(i => ({
           key: i.metadata.name,
           text: i.metadata.name,
         }))}
+        error={servicesError}
+        loading={servicesLoading}
+      />
+      <TextArrayInput
+        advanced
+        required
+        defaultOpen
+        propertyPath="$.spec.filter.filters"
+        validate={val => !!val}
+        title={t('event-subscription.filters.title')}
+        toInternal={valueFromYaml => {
+          return valueFromYaml.map(obj => obj.eventType.value) || [];
+        }}
+        toExternal={valueFromComponent =>
+          valueFromComponent.reduce((accumulator, currentValue) => {
+            if (currentValue) accumulator.push(getEventFilter(currentValue));
+            return accumulator;
+          }, [])
+        }
+        placeholder="Event type"
       />
     </ResourceForm>
   );
