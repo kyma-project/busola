@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { createEventSubscriptionTemplate } from './templates';
 
 import { ResourceForm } from 'shared/ResourceForm';
+import { useTranslation } from 'react-i18next';
 
 //the name of the function cannot have 'Event' prefix otherwise 'create' button isn't displayed
 const SubscriptionsCreate = ({
@@ -14,10 +15,12 @@ const SubscriptionsCreate = ({
     createEventSubscriptionTemplate(namespace),
   );
 
+  const { t } = useTranslation();
+
   return (
     <ResourceForm
       pluralKind="eventsubscriptions"
-      singularName="Event Subscription"
+      singularName={t('event-subscription.name_singular')}
       resource={eventSubscription}
       setResource={setEventSubscription}
       onChange={onChange}

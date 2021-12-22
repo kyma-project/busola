@@ -3,7 +3,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   EMPTY_TEXT_PLACEHOLDER,
-  FormattedDatetime,
+  ReadableCreationTimestamp,
   GenericList,
 } from 'react-shared';
 import { EventSubscriptionConditionStatus } from 'shared/components/EventSubscriptionConditionStatus';
@@ -24,10 +24,7 @@ const EventSubscriptionConditions = eventSubscription => {
   ];
 
   const rowRenderer = condition => [
-    <FormattedDatetime
-      date={condition?.lastTransitionTime}
-      lang={i18n.language}
-    />,
+    <ReadableCreationTimestamp timestamp={condition?.lastTransitionTime} />,
     condition?.reason || EMPTY_TEXT_PLACEHOLDER,
     <EventSubscriptionConditionStatus condition={condition} />,
     condition?.type || EMPTY_TEXT_PLACEHOLDER,
