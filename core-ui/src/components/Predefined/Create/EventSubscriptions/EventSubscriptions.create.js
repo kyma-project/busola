@@ -5,7 +5,11 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useGet, useGetList } from 'react-shared';
 import { ResourceForm } from 'shared/ResourceForm';
-import { K8sNameField, TextArrayInput } from 'shared/ResourceForm/fields';
+import {
+  K8sNameField,
+  TextArrayInput,
+  KeyValueField,
+} from 'shared/ResourceForm/fields';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { createEventSubscriptionTemplate } from './templates';
 
@@ -36,14 +40,11 @@ const SubscriptionsCreate = ({
 }) => {
   const { t } = useTranslation();
 
-  const [ownerName, setOwnerName] = useState(''); //checkbox for functions
-  const [version, setVersion] = useState('');
-  const [appName, setAppName] = useState('');
-  const [eventName, setEventName] = useState('');
-  const [eventSubscription, setEventSubscription] = useState(
-    cloneDeep(initialEventSubscription) ||
-      createEventSubscriptionTemplate(namespace),
-  );
+  const getOwnerName = sink => {
+    const startIndex = sink.lastIndexOf('/') + 1;
+    const nextDot = sink.indexOf('.');
+    return sink.substr(startIndex, nextDot);
+  };
 
   const { data: configMap } = useGet(
     '/api/v1/namespaces/kyma-system/configmaps/eventing',
@@ -54,7 +55,45 @@ const SubscriptionsCreate = ({
   eventTypePrefix = eventTypePrefix.endsWith('.')
     ? eventTypePrefix
     : eventTypePrefix + '.';
-  const [eventType, setEventType] = useState(eventTypePrefix);
+
+  const spreadEventType = eventType => {
+    const eventTypeWithoutPrefix = eventType.substr(eventTypePrefix.length);
+    const appName = eventTypeWithoutPrefix.substr(
+      0,
+      eventTypeWithoutPrefix.indexOf('.'),
+    );
+    const lastDotIndex = eventTypeWithoutPrefix.lastIndexOf('.');
+    const eventName = eventTypeWithoutPrefix.substring(
+      appName.length + 1,
+      lastDotIndex,
+    );
+    const version = eventTypeWithoutPrefix.substr(lastDotIndex + 1);
+    setVersion(version);
+    setAppName(version);
+    setEventName(eventName);
+  };
+  const [version, setVersion] = useState('');
+  const [appName, setAppName] = useState('');
+  const [eventName, setEventName] = useState('');
+  const [eventSubscription, setEventSubscription] = useState(
+    cloneDeep(initialEventSubscription) ||
+      createEventSubscriptionTemplate(namespace, eventTypePrefix),
+  );
+  const [ownerName, setOwnerName] = useState(
+    getOwnerName(
+      getOwnerName(jp.value(eventSubscription, '$.spec.sink')) || '',
+    ),
+  );
+
+  const [eventType, setEventType] = useState(
+    jp.value(eventSubscription, '$.spec.filter.filters[0].eventType.value') ||
+      eventTypePrefix,
+  );
+  const [eventTypeValues, setEventTypeValues] = useState(
+    spreadEventType(eventType),
+  );
+
+  spreadEventType(eventType);
 
   const {
     data: services,
@@ -72,13 +111,14 @@ const SubscriptionsCreate = ({
 
   useEffect(() => {
     setEventType(`${eventTypePrefix}${appName}.${eventName}.${version}`);
+
     jp.value(
       eventSubscription,
       '$.spec.filter.filters[0].eventType.value',
       eventType,
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [appName, eventName, version]);
+  }, [eventTypeValues]);
 
   useEffect(() => {
     const sink = `https://${ownerName}.${namespace}.svc.cluster.local`;
@@ -108,6 +148,26 @@ const SubscriptionsCreate = ({
         readOnly={!!initialEventSubscription}
       />
       <ResourceForm.FormField
+        required
+        label={t('services.name_singular')}
+        setValue={serviceName => setOwnerName(serviceName)}
+        value={ownerName}
+        input={Inputs.Dropdown}
+        options={(services || []).map(i => ({
+          key: i.metadata.name,
+          text: i.metadata.name,
+        }))}
+        error={servicesError}
+        loading={servicesLoading}
+      />
+
+      <KeyValueField
+        advanced
+        propertyPath="$.metadata.labels"
+        title={t('common.headers.labels')}
+      />
+
+      <ResourceForm.FormField
         simple
         required
         label={t('event-subscription.create.labels.application-name')}
@@ -121,6 +181,7 @@ const SubscriptionsCreate = ({
         error={applicationsError}
         loading={applicationsLoading}
       />
+
       <ResourceForm.FormField
         simple
         required
@@ -158,19 +219,7 @@ const SubscriptionsCreate = ({
         input={Inputs.Text}
         readOnly={true}
       />
-      <ResourceForm.FormField
-        required
-        label={t('services.name_singular')}
-        setValue={serviceName => setOwnerName(serviceName)}
-        value={ownerName}
-        input={Inputs.Dropdown}
-        options={(services || []).map(i => ({
-          key: i.metadata.name,
-          text: i.metadata.name,
-        }))}
-        error={servicesError}
-        loading={servicesLoading}
-      />
+
       <TextArrayInput
         advanced
         required
@@ -187,7 +236,7 @@ const SubscriptionsCreate = ({
             return accumulator;
           }, [])
         }
-        placeholder="Event type"
+        placeholder="Event type value?"
       />
     </ResourceForm>
   );
