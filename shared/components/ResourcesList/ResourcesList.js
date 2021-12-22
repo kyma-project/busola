@@ -112,10 +112,8 @@ function Resources({
   omitColumnsIds = [],
   customListActions = [],
   createFormProps,
-  workaround,
+  busolaProps,
 }) {
-  //todo
-  const busolaProps = workaround.busolaProps;
   useWindowTitle(windowTitle || prettifyNamePlural(resourceName, resourceType));
   const { t } = useTranslation(['translation'], { i18n });
 

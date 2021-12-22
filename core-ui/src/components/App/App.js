@@ -19,33 +19,18 @@ import { AddCluster } from 'components/Clusters/views/AddCluster/AddCluster';
 import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
 import { NodeDetails } from 'components/Nodes/NodeDetails/NodeDetails';
 import { useSentry } from '../../hooks/useSentry';
-import { usePluginRegistry } from '../../hooks/PluginRegistryContext';
-import { useBusolaComponents } from '../../hooks/BusolaComponentsContext';
+import { usePluginRoutes } from '../../plugins/usePluginRoutes';
 
 export default function App() {
   const { cluster, language } = useMicrofrontendContext();
   const { t, i18n } = useTranslation();
+  const pluginRoutes = usePluginRoutes();
 
   useEffect(() => {
     i18n.changeLanguage(language);
   }, [language, i18n]);
 
   useSentry();
-
-  const pr = usePluginRegistry();
-  const busolaProps = useBusolaComponents();
-
-  const pluginRoutes = pr
-    .getByTags(['route'])
-    .map(p => p.resolved)
-    .flatMap(resolved =>
-      resolved.createRoutes({
-        Route,
-        withTitle,
-        language,
-        busolaProps,
-      }),
-    );
 
   return (
     // force rerender on cluster change

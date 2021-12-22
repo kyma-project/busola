@@ -30,14 +30,14 @@ export const ComponentFor = ({
     ? findByName(PredefinedRenderersCollection, nameForCreate) || null
     : null;
 
+  params.busolaProps = busolaProps;
+
   return (
     <Renderer
       createResourceForm={CreateFormRenderer}
       DefaultRenderer={defaultRenderer}
       i18n={i18n}
       {...params}
-      busolaProps={busolaProps}
-      workaround={{ busolaProps }}
     />
   );
 };

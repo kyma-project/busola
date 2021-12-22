@@ -39,8 +39,8 @@ export const ComponentForList = props => {
       }}
       GenericRenderer={ResourcesList}
       i18n={i18n}
-      {...props}
       busolaProps={busolaProps}
+      {...props}
     />
   );
 };
@@ -59,8 +59,8 @@ export const ComponentForDetails = props => {
       }}
       GenericRenderer={ResourceDetails}
       i18n={i18n}
-      {...props}
       busolaProps={busolaProps}
+      {...props}
     />
   );
 };
