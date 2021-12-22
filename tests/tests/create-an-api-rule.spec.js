@@ -26,6 +26,8 @@ context('API Rules in the Function details view', () => {
       .contains('Create API Rule')
       .click();
 
+    cy.getIframeBody().contains(`${FUNCTION_NAME} (port: 80)`);
+
     cy.getIframeBody()
       .find('[placeholder="API Rule Name"]')
       .filter(':visible', { log: false })
