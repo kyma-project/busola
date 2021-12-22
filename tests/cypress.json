@@ -17,6 +17,7 @@
   "testFiles": [
     "run-before.spec.js",
     "test-protected-resources.spec.js",
+    "test-service-accounts.spec.js",
     "run-after.spec.js"
   ]
 }
