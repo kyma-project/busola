@@ -14,7 +14,7 @@ context('API Rules in the Function details view', () => {
   });
 
   it('Create a simple Function', () => {
-    cy.createSimpleFunction(FUNCTION_NAME);
+    cy.createSimpleFunction(FUNCTION_NAME, true);
   });
 
   it('Create an API Rule for the Function', () => {
@@ -25,6 +25,8 @@ context('API Rules in the Function details view', () => {
     cy.getIframeBody()
       .contains('Create API Rule')
       .click();
+
+    cy.getIframeBody().contains(`${FUNCTION_NAME} (port: 80)`);
 
     cy.getIframeBody()
       .find('[placeholder="API Rule Name"]')
