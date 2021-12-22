@@ -44,11 +44,8 @@ const SubscriptionsCreate = ({
   const { data: services } = useGetList()(
     `/api/v1/namespaces/${namespace}/services`,
   );
-  const { data: functions } = useGetList()(
-    `/apis/serverless.kyma-project.io/v1alpha1/namespaces/${namespace}/functions`,
-  );
 
-  const { data: applications } = useGetList()(
+  const { data: applications, error: applicationsError } = useGetList()(
     `/apis/applicationconnector.kyma-project.io/v1alpha1/applications`,
   );
 
@@ -100,6 +97,7 @@ const SubscriptionsCreate = ({
           key: i.metadata.name,
           text: i.metadata.name,
         }))}
+        error={applicationsError}
       />
       <ResourceForm.FormField
         simple
@@ -136,7 +134,10 @@ const SubscriptionsCreate = ({
         label={t('event-subscription.create.labels.event-type')}
         setValue={eventType => setEventType(eventType)}
         value={eventType}
-        input={Inputs.Text}
+        input={props => {
+          console.log(props);
+          return <Inputs.Text {...props}></Inputs.Text>;
+        }}
         readOnly={true}
       />
       <ResourceForm.FormField //readonly for simple view, possible to paste or type something in advanced mode
@@ -148,18 +149,6 @@ const SubscriptionsCreate = ({
         input={Inputs.Text}
       />
 
-      <ResourceForm.FormField
-        advanced
-        required
-        label="functions"
-        setValue={functionName => setOwnerName(functionName)}
-        defaultValue=""
-        input={Inputs.Dropdown}
-        options={(functions || []).map(i => ({
-          key: i.metadata.name,
-          text: i.metadata.name,
-        }))}
-      />
       <ResourceForm.FormField
         advanced
         required
