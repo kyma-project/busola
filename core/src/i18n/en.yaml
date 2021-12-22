@@ -1449,6 +1449,9 @@ settings:
   other:
     default-page-size: Default Page Size
     title: Other
+  plugins:
+    description: Tools to extend Busola functionality
+    title: Plugins
   theme: Theme
 stateful-sets:
   description: <0>Stateful Set</0> is used for the management of Pods' deployment and scaling.

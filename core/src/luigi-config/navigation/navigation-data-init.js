@@ -14,7 +14,12 @@ import {
 import { navigationPermissionChecker, hasAnyRoleBound } from './permissions';
 import { getFeatures, resolveFeatureAvailability } from '../features';
 import { showAlert } from '../utils/showAlert';
-import { loadPlugins, loadViewPlugins } from './../plugins';
+import {
+  loadPlugins,
+  refreshPlugins,
+  loadViewPlugins,
+  uglySetPluginData,
+} from './../plugins';
 
 import {
   hideDisabledNodes,
@@ -194,7 +199,7 @@ async function createNavigationForNoCluster(plugins) {
 }
 
 export async function createNavigation() {
-  const plugins = await loadPlugins();
+  let plugins = await loadPlugins();
 
   try {
     const authData = getAuthData();
@@ -224,6 +229,9 @@ export async function createNavigation() {
       authData,
       groupVersions,
     });
+
+    uglySetPluginData({ groupVersions });
+    refreshPlugins(plugins);
 
     const optionsForCurrentCluster = {
       contextSwitcher: {

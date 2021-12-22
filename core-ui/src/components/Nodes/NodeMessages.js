@@ -14,7 +14,7 @@ export function NodeMessages({ nodeName }) {
   } = useMessageList(data?.items);
 
   const hostEntries = sortedItems.filter(e => e.source.host === nodeName);
-  console.log(hostEntries);
+
   const entries =
     displayType.key === EVENT_MESSAGE_TYPE.ALL.key
       ? hostEntries

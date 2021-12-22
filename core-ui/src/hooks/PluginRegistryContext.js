@@ -7,13 +7,31 @@ export const PluginRegistryContext = createContext({});
 export function PluginRegistryProvider({ children }) {
   const microfrontendContext = useMicrofrontendContext();
   const [plugins, setPlugins] = useState(microfrontendContext.plugins);
+  // const [resolved, setResolved] =
 
-  // todo make it actually reactive?
+  // todo!
   useEffect(() => {
+    if (!microfrontendContext.plugins) return;
     if (!plugins) {
       setPlugins(microfrontendContext.plugins);
+    } else {
+      let changed = false;
+      for (const plugin of microfrontendContext.plugins) {
+        const p = plugins.find(p => p.name === plugin.name);
+        if (
+          p.isEnabled !== plugin.isEnabled ||
+          p.isActive !== plugin.isActive
+        ) {
+          changed = true;
+          p.isEnabled = plugin.isEnabled;
+          p.isActive = plugin.isActive;
+        }
+      }
+      if (changed) {
+        setPlugins([...plugins]);
+      }
     }
-  }, [microfrontendContext.plugins]);
+  }, [microfrontendContext.plugins]); // eslint-disable-line react-hooks/exhaustive-deps
 
   function startLoadingPlugin(p) {
     loadExternalModule(p.path)
@@ -28,7 +46,9 @@ export function PluginRegistryProvider({ children }) {
 
   function getByTags(tags) {
     const targetPlugins =
-      plugins?.filter(p => p.tags.some(tag => tags.includes(tag))) || [];
+      plugins
+        ?.filter(p => p.isActive)
+        .filter(p => p.tags.some(tag => tags.includes(tag))) || [];
     const list = [];
     for (const plugin of targetPlugins) {
       if (plugin.resolved) {

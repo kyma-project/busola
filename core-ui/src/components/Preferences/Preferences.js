@@ -7,6 +7,7 @@ import ThemeChooser from './ThemeChooser';
 import LanguageSettings from './LanguageSettings';
 import OtherSettings from './OtherSettings';
 import ConfirmationSettings from './ConfirmationSettings';
+import PluginSettings from './PluginSettings.js';
 import { VerticalTabs, Tabs, Tab } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 import { Icon } from 'fundamental-react';
@@ -38,6 +39,18 @@ function Preferences() {
         />
       ),
       id: 2,
+    },
+    {
+      title: t('settings.plugins.title'),
+      description: t('settings.plugins.description'),
+      icon: (
+        <Icon
+          glyph="connected"
+          size="xl"
+          ariaLabel={t('settings.plugins.title')}
+        />
+      ),
+      id: 3,
     },
   ];
   return (
@@ -73,6 +86,9 @@ function Preferences() {
           <ConfirmationSettings />
           <ProtectedSettings />
         </div>
+      </VerticalTabs.Content>
+      <VerticalTabs.Content id={3}>
+        <PluginSettings />
       </VerticalTabs.Content>
     </VerticalTabs>
   );

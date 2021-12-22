@@ -14,6 +14,7 @@ import { setFeatureToggle } from './utils/feature-toggles';
 import { setTheme } from './utils/theme';
 import { setSSOAuthData } from './auth/sso';
 import { communicationEntry as pageSizeCommunicationEntry } from './settings/pagination';
+import { communicationEntries as pluginsCommunicationEntries } from './plugins';
 
 export const communication = {
   customMessagesListeners: {
@@ -107,6 +108,7 @@ export const communication = {
       });
     },
     ...pageSizeCommunicationEntry,
+    ...pluginsCommunicationEntries,
   },
 };
 
