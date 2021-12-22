@@ -3,7 +3,7 @@ import jsyaml from 'js-yaml';
 import { saveAs } from 'file-saver';
 
 export function useDownloadSecretKubeconfig() {
-  const { cluster } = useMicrofrontendContext();
+  const { cluster, namespaceId: namespace } = useMicrofrontendContext();
 
   const createKubeconfig = (cluster, name, token) => ({
     apiVersion: 'v1',
@@ -18,7 +18,11 @@ export function useDownloadSecretKubeconfig() {
     clusters: [cluster],
     contexts: [
       {
-        context: { cluster: cluster.name, user: name },
+        context: {
+          cluster: cluster.name,
+          user: name,
+          namespace,
+        },
         name: name,
       },
     ],

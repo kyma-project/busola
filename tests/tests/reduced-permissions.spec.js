@@ -155,11 +155,9 @@ context('Reduced permissions', () => {
       .click();
 
     // service account namespace
-    cy.task('getNamespace').then(namespace =>
-      chooseComboboxOption(
-        '[placeholder="Select Namespace"]:visible',
-        namespace,
-      ),
+    chooseComboboxOption(
+      '[placeholder="Select Namespace"]:visible',
+      Cypress.env('NAMESPACE_NAME'),
     );
 
     // service account name
@@ -224,18 +222,15 @@ context('Reduced permissions', () => {
       },
     );
 
-    cy.loginAndSelectCluster('sa-kubeconfig.yaml');
+    cy.loginAndSelectCluster(
+      'sa-kubeconfig.yaml',
+      new RegExp(`/namespaces/${Cypress.env('NAMESPACE_NAME')}/details`),
+    );
   });
 
   it('Inspect reduced permissions view', () => {
-    cy.getLeftNav()
-      .contains('Configuration')
-      .should('not.exist');
-
     // navigation is broken again
     cy.reload();
-
-    cy.goToNamespaceDetails();
 
     // try to delete resource
     cy.getIframeBody()
@@ -254,7 +249,15 @@ context('Reduced permissions', () => {
 
     cy.getLeftNav()
       .contains('Deployments')
+      .should('be.visible');
+
+    cy.getLeftNav()
+      .contains('Back to Namespaces')
       .click();
+
+    cy.getLeftNav()
+      .contains('Configuration')
+      .should('not.exist');
   });
 
   it('Cleanup', () => {

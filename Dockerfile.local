@@ -18,7 +18,7 @@ ENV CI true
 COPY . /app
 
 RUN make resolve
-RUN make lint
+RUN make validate
 RUN make pull-licenses
 
 RUN cd /app/core && make test && make build-docker

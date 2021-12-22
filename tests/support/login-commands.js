@@ -2,7 +2,7 @@ import config from '../config';
 
 Cypress.Commands.add(
   'loginAndSelectCluster',
-  (fileName = 'kubeconfig.yaml') => {
+  (fileName = 'kubeconfig.yaml', expectedLocation = /overview$/) => {
     cy.visit(`${config.clusterAddress}/clusters`)
       .getIframeBody()
       .contains('Connect a cluster')
@@ -21,7 +21,7 @@ Cypress.Commands.add(
       .contains('button', 'Connect a cluster')
       .click();
 
-    cy.url().should('match', /namespaces$/);
+    cy.url().should('match', expectedLocation);
     cy.getIframeBody()
       .find('thead')
       .should('be.visible'); //wait for the namespaces XHR request to finish to continue running the tests. There's no <thead> while the request is pending.

@@ -1,8 +1,8 @@
 import React from 'react';
-import { ControlledByKind, StatusBadge } from 'react-shared';
-import { useTranslation } from 'react-i18next';
-import { Link } from 'react-shared';
-import { Trans } from 'react-i18next';
+import { ControlledByKind, Link } from 'react-shared';
+import { useTranslation, Trans } from 'react-i18next';
+
+import { ReplicaSetStatus } from '../Details/ReplicaSet/ReplicaSetStatus';
 
 const getImages = replicaSet => {
   const images =
@@ -10,18 +10,6 @@ const getImages = replicaSet => {
       container => container.image,
     ) || [];
   return images;
-};
-
-const isStatusOk = replicaSet => {
-  return replicaSet.status.readyReplicas === replicaSet.status.replicas;
-};
-
-const getStatus = replicaSet => {
-  return isStatusOk(replicaSet) ? 'running' : 'error';
-};
-
-const getStatusType = replicaSet => {
-  return isStatusOk(replicaSet) ? 'success' : 'error';
 };
 
 export const ReplicaSetsList = ({ DefaultRenderer, ...otherParams }) => {
@@ -45,12 +33,8 @@ export const ReplicaSetsList = ({ DefaultRenderer, ...otherParams }) => {
       },
     },
     {
-      header: t('common.headers.status'),
-      value: replicaSet => {
-        const status = getStatus(replicaSet);
-        const statusType = getStatusType(replicaSet);
-        return <StatusBadge type={statusType}>{status}</StatusBadge>;
-      },
+      header: t('common.headers.pods'),
+      value: replicaSet => <ReplicaSetStatus replicaSet={replicaSet} />,
     },
   ];
 

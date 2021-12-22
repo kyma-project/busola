@@ -254,7 +254,6 @@ GenericList.defaultProps = {
   showRootHeader: true,
   showHeader: true,
   showSearchSuggestion: true,
-  showSearchControl: true,
   serverDataError: null,
   serverDataLoading: false,
   hasExternalMargin: true,

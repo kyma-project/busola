@@ -27,7 +27,12 @@ export function JobConditions(job) {
   };
   const rowRenderer = condition => {
     return [
-      <StatusBadge type={conditionTypeStatus(condition.type)}>
+      <StatusBadge
+        i18n={i18n}
+        resourceKind="jobs"
+        additionalContent={condition.message}
+        type={conditionTypeStatus(condition.type)}
+      >
         {condition.type}
       </StatusBadge>,
       condition.status,

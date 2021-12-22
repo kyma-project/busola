@@ -35,7 +35,7 @@ context('Cluster configuration', () => {
   it('Applies config from target cluster', () => {
     cy.intercept(requestData, configMock);
     cy.loginAndSelectCluster();
-    cy.url().should('match', /namespaces$/);
+    cy.url().should('match', /overview$/);
 
     // cluster storage message should be visible
     cy.contains(/The chosen storage type has been overwritten/).should(
