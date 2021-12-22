@@ -53,11 +53,11 @@ const SubscriptionsCreate = ({
   );
 
   useEffect(() => {
-    const eventTypeValue = `${eventTypePrefix}${appName}.${eventName}.${version}`;
+    setEventType(`${eventTypePrefix}${appName}.${eventName}.${version}`);
     jp.value(
       eventSubscription,
       '$.spec.filter.filters[0].evenType.value',
-      eventTypeValue,
+      eventType,
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [appName, eventName, version]);
@@ -131,12 +131,23 @@ const SubscriptionsCreate = ({
         )}
       />
       <ResourceForm.FormField //readonly for simple view, possible to paste or type something in advanced mode
+        simple
+        required
+        label={t('event-subscription.create.labels.event-type')}
+        setValue={eventType => setEventType(eventType)}
+        value={eventType}
+        input={Inputs.Text}
+        readOnly={true}
+      />
+      <ResourceForm.FormField //readonly for simple view, possible to paste or type something in advanced mode
+        advanced
         required
         label={t('event-subscription.create.labels.event-type')}
         setValue={eventType => setEventType(eventType)}
         value={eventType}
         input={Inputs.Text}
       />
+
       <ResourceForm.FormField
         advanced
         required
