@@ -1,46 +1,13 @@
 import { LayoutPanel } from 'fundamental-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  EMPTY_TEXT_PLACEHOLDER,
-  ReadableCreationTimestamp,
-  GenericList,
-} from 'react-shared';
+import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 import { EventSubscriptionConditionStatus } from 'shared/components/EventSubscriptionConditionStatus';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import './EventFilters.scss';
 import { Link } from 'fundamental-react';
 import { navigateToFixedPathResourceDetails } from 'react-shared';
-
-const EventSubscriptionConditions = eventSubscription => {
-  const { t, i18n } = useTranslation();
-
-  const conditions = eventSubscription?.status?.conditions;
-  const headerRenderer = _ => [
-    t('event-subscription.conditions.last-transition-time'),
-    t('event-subscription.conditions.reason'),
-    t('event-subscription.conditions.status'),
-    t('event-subscription.conditions.type'),
-  ];
-
-  const rowRenderer = condition => [
-    <ReadableCreationTimestamp timestamp={condition?.lastTransitionTime} />,
-    condition?.reason || EMPTY_TEXT_PLACEHOLDER,
-    <EventSubscriptionConditionStatus condition={condition} />,
-    condition?.type || EMPTY_TEXT_PLACEHOLDER,
-  ];
-
-  return (
-    <GenericList
-      key="event-subscription-conditions"
-      title={t('event-subscription.conditions.title')}
-      headerRenderer={headerRenderer}
-      rowRenderer={rowRenderer}
-      entries={conditions || []}
-      i18n={i18n}
-    />
-  );
-};
+import { EventSubscriptionConditions } from './EventSubscriptionConditions';
 
 const FilterOption = ({ filterOption, title }) => {
   const { t } = useTranslation();

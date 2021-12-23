@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { StatusBadge } from 'react-shared';
 
-export const EventSubscriptionConditionStatus = ({ condition, isListView }) => {
+export const EventSubscriptionConditionStatus = ({ condition }) => {
   const { t, i18n } = useTranslation();
   const statusBadgeProperties =
     condition?.status === 'True'
@@ -21,7 +21,6 @@ export const EventSubscriptionConditionStatus = ({ condition, isListView }) => {
       type={statusBadgeProperties.type}
       additionalContent={statusBadgeProperties.tooltipMessage}
       i18n={i18n}
-      noTooltip={condition?.status !== 'False' && !isListView}
     >
       {statusBadgeProperties.text}
     </StatusBadge>
