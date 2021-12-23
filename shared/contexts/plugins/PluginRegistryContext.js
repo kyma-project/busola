@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { loadExternalModule } from './ExternalModules';
-import { useMicrofrontendContext } from 'react-shared';
+import { useMicrofrontendContext } from './../MicrofrontendContext';
 
 export const PluginRegistryContext = createContext({});
 

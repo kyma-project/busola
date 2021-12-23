@@ -2,6 +2,7 @@ import React from 'react';
 import { ConfigProvider } from './ConfigContext';
 import { NotificationProvider } from './NotificationContext';
 import { MicrofrontendContextProvider } from './MicrofrontendContext';
+import { PluginRegistryProvider } from './plugins/PluginRegistryContext';
 import { ThemeProvider } from './ThemeContext';
 
 const withProvider = Provider => Component => props => (
@@ -11,6 +12,7 @@ const withProvider = Provider => Component => props => (
 );
 
 export const Microfrontend = [
+  PluginRegistryProvider,
   MicrofrontendContextProvider,
   ConfigProvider,
   ThemeProvider,

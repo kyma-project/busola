@@ -1,7 +1,6 @@
 import { Route } from 'react-router-dom';
-import { usePluginRegistry } from 'hooks/PluginRegistryContext';
 import { useBusolaComponents } from 'hooks/BusolaComponentsContext';
-import { useMicrofrontendContext } from 'react-shared';
+import { usePluginRegistry, useMicrofrontendContext } from 'react-shared';
 
 export function usePluginRoutes() {
   const { language } = useMicrofrontendContext();

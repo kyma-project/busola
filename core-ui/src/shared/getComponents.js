@@ -1,9 +1,13 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ComponentFor, ResourcesList, ResourceDetails } from 'react-shared';
+import {
+  ComponentFor,
+  ResourcesList,
+  ResourceDetails,
+  usePluginRegistry,
+} from 'react-shared';
 import * as PredefinedRenderers from 'components/Predefined';
-import { usePluginRegistry } from 'hooks/PluginRegistryContext';
 import { useBusolaComponents } from 'hooks/BusolaComponentsContext';
 
 function usePredefinedPluginsRenderers() {

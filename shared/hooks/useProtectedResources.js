@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useMicrofrontendContext } from '../contexts/MicrofrontendContext';
 import { Tooltip } from '../components/Tooltip/Tooltip';
 import { useFeatureToggle } from './useFeatureToggle';
+import { usePluginRegistry } from '..';
 
 export function useProtectedResources(i18n) {
   const { t } = useTranslation(['translation'], { i18n });
@@ -13,11 +14,19 @@ export function useProtectedResources(i18n) {
   const [disableResourceProtection] = useFeatureToggle(
     'disableResourceProtection',
   );
+  const { getByTags } = usePluginRegistry();
 
-  const protectedResourceRules = microfrontendContext.features
+  let protectedResourceRules = microfrontendContext.features
     ?.PROTECTED_RESOURCES?.isEnabled
     ? microfrontendContext.features?.PROTECTED_RESOURCES?.config.resources
     : [];
+
+  protectedResourceRules = [
+    ...protectedResourceRules,
+    ...getByTags(['protection-rules'])
+      .flatMap(plugin => plugin.config.protectedResourceRules)
+      .filter(Boolean),
+  ];
 
   const getEntryProtection = entry => {
     return protectedResourceRules.filter(rule =>
