@@ -16,7 +16,7 @@ export const EventSubscriptionConditionStatus = ({ condition }) => {
         };
   return (
     <StatusBadge
-      additinalContent={condition?.message}
+      additionalContent={condition?.message}
       resourceKind="event-subscription"
       type={statusBadgeProperties.type}
       i18n={i18n}
