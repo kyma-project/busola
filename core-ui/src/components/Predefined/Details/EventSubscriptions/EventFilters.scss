@@ -22,6 +22,10 @@
     display: grid;
     grid-template-columns: 1fr;
   }
+
+  :first-child.layout-panel-row {
+    margin-top: 20px;
+  }
 }
 
 .layout-panel-title {
