@@ -31,6 +31,14 @@ const getEventFilter = value => {
   };
 };
 
+const getServiceName = sink => {
+  if (typeof sink !== 'string') return '';
+
+  const startIndex = sink?.lastIndexOf('/') + 1;
+  const nextDot = sink?.indexOf('.');
+  return sink?.substring(startIndex, nextDot);
+};
+
 const SubscriptionsCreate = ({
   onChange,
   formElementRef,
@@ -39,14 +47,6 @@ const SubscriptionsCreate = ({
   resourceUrl,
 }) => {
   const { t } = useTranslation();
-
-  const getOwnerName = sink => {
-    if (typeof sink !== 'string') return '';
-
-    const startIndex = sink?.lastIndexOf('/') + 1;
-    const nextDot = sink?.indexOf('.');
-    return sink?.substring(startIndex, nextDot);
-  };
 
   const { data: configMap } = useGet(
     '/api/v1/namespaces/kyma-system/configmaps/eventing',
@@ -89,6 +89,20 @@ const SubscriptionsCreate = ({
     cloneDeep(initialEventSubscription) ||
       createEventSubscriptionTemplate(namespace, eventTypePrefix),
   );
+
+  const handleEventTypeValuesChange = changes => {
+    const newEventTypeValues = { ...firstEventTypeValues, ...changes };
+
+    jp.value(
+      eventSubscription,
+      '$.spec.filter.filters[0].eventType.value',
+      `${eventTypePrefix}${newEventTypeValues.appName}.${newEventTypeValues.eventName}.${newEventTypeValues.version}`,
+    );
+    jp.value(eventSubscription, '$.spec.filter.filters', [
+      ...jp.value(eventSubscription, '$.spec.filter.filters'),
+    ]);
+    setEventSubscription({ ...eventSubscription });
+  };
 
   const firstEventType = jp.value(
     eventSubscription,
@@ -141,7 +155,7 @@ const SubscriptionsCreate = ({
           );
           setEventSubscription({ ...eventSubscription });
         }}
-        value={getOwnerName(jp.value(eventSubscription, '$.spec.sink')) || ''}
+        value={getServiceName(jp.value(eventSubscription, '$.spec.sink')) || ''}
         input={Inputs.Dropdown}
         options={(services || []).map(i => ({
           key: i.metadata.name,
@@ -161,14 +175,7 @@ const SubscriptionsCreate = ({
         simple
         required
         label={t('event-subscription.create.labels.application-name')}
-        setValue={appName => {
-          jp.value(
-            eventSubscription,
-            '$.spec.filter.filters[0].eventType.value',
-            `${eventTypePrefix}${appName}.${firstEventTypeValues.eventName}.${firstEventTypeValues.version}`,
-          );
-          setEventSubscription({ ...eventSubscription });
-        }}
+        setValue={appName => handleEventTypeValuesChange({ appName })}
         value={firstEventTypeValues.appName}
         input={Inputs.Dropdown}
         options={(applications || []).map(i => ({
@@ -183,14 +190,7 @@ const SubscriptionsCreate = ({
         simple
         required
         label={t('event-subscription.create.labels.event-name')}
-        setValue={eventName => {
-          jp.value(
-            eventSubscription,
-            '$.spec.filter.filters[0].eventType.value',
-            `${eventTypePrefix}${firstEventTypeValues.appName}.${eventName}.${firstEventTypeValues.version}`,
-          );
-          setEventSubscription({ ...eventSubscription });
-        }}
+        setValue={eventName => handleEventTypeValuesChange({ eventName })}
         value={firstEventTypeValues.eventName}
         input={Inputs.Text}
         placeholder={t('event-subscription.create.labels.event-name')}
@@ -213,12 +213,7 @@ const SubscriptionsCreate = ({
             selectedKey={value}
             typedValue={value}
             onSelect={e => {
-              jp.value(
-                eventSubscription,
-                '$.spec.filter.filters[0].eventType.value',
-                `${eventTypePrefix}${firstEventTypeValues.appName}.${firstEventTypeValues.eventName}.${e.target.value}`,
-              );
-              setEventSubscription({ ...eventSubscription });
+              handleEventTypeValuesChange({ version: e.target.value });
             }}
           />
         )}
@@ -233,7 +228,7 @@ const SubscriptionsCreate = ({
       />
 
       <TextArrayInput
-        simple
+        advanced
         required
         defaultOpen
         propertyPath="$.spec.filter.filters"
@@ -247,7 +242,7 @@ const SubscriptionsCreate = ({
             .filter(Boolean)
             .map(value => getEventFilter(value)) || []
         }
-        placeholder="Event type value?"
+        placeholder={t('event-subscription.create.labels.event-type')}
       />
     </ResourceForm>
   );
