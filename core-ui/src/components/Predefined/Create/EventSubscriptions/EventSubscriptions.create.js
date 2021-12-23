@@ -1,7 +1,7 @@
 import { ComboboxInput } from 'fundamental-react';
 import * as jp from 'jsonpath';
-import { cloneDeep, spread } from 'lodash';
-import React, { useEffect, useState } from 'react';
+import { cloneDeep } from 'lodash';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useGet, useGetList } from 'react-shared';
 import { ResourceForm } from 'shared/ResourceForm';
@@ -45,7 +45,7 @@ const SubscriptionsCreate = ({
 
     const startIndex = sink?.lastIndexOf('/') + 1;
     const nextDot = sink?.indexOf('.');
-    return sink?.substr(startIndex, nextDot);
+    return sink?.substring(startIndex, nextDot);
   };
 
   const { data: configMap } = useGet(
@@ -59,6 +59,13 @@ const SubscriptionsCreate = ({
     : eventTypePrefix + '.';
 
   const spreadEventType = eventType => {
+    if (typeof eventType !== 'string')
+      return {
+        appName: '',
+        eventName: '',
+        version: '',
+      };
+
     const eventTypeWithoutPrefix = eventType.substr(eventTypePrefix.length);
     const appName = eventTypeWithoutPrefix.substr(
       0,
@@ -87,7 +94,6 @@ const SubscriptionsCreate = ({
     eventSubscription,
     '$.spec.filter.filters[0].eventType.value',
   );
-  console.log(getOwnerName(jp.value(eventSubscription, '$.spec.sink')));
   const firstEventTypeValues = spreadEventType(firstEventType);
 
   const {
@@ -187,6 +193,7 @@ const SubscriptionsCreate = ({
         }}
         value={firstEventTypeValues.eventName}
         input={Inputs.Text}
+        placeholder={t('event-subscription.create.labels.event-name')}
       />
 
       <ResourceForm.FormField
@@ -232,12 +239,13 @@ const SubscriptionsCreate = ({
         propertyPath="$.spec.filter.filters"
         validate={val => !!val}
         title={t('event-subscription.filters.title')}
-        toInternal={valueFromYaml => {
-          console.log(valueFromYaml);
-          return valueFromYaml.map(obj => obj.eventType.value) || [];
-        }}
+        toInternal={valueFromYaml =>
+          valueFromYaml?.map(obj => obj.eventType.value) || []
+        }
         toExternal={valueFromComponent =>
-          valueFromComponent.filter(Boolean).map(value => getEventFilter(value))
+          valueFromComponent
+            .filter(Boolean)
+            .map(value => getEventFilter(value)) || []
         }
         placeholder="Event type value?"
       />
