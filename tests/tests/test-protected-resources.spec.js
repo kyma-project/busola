@@ -134,7 +134,7 @@ context('Test Protected Resources', () => {
     cy.url().should('match', new RegExp(`\/deployments\/details\/${NAME}$`));
 
     cy.getIframeBody()
-      .contains('tr', NAME)
+      .contains('tr', NAME, { timeout: 5000 })
       .find('[aria-label="Delete"]')
       .should('be.disabled');
   });
