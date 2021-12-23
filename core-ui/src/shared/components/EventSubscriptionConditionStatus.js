@@ -9,17 +9,16 @@ export const EventSubscriptionConditionStatus = ({ condition }) => {
       ? {
           type: 'success',
           text: t('common.statuses.ready'),
-          tooltipMessage: condition?.type,
         }
       : {
           type: 'error',
           text: t('common.statuses.error'),
-          tooltipMessage: condition?.message,
         };
   return (
     <StatusBadge
+      additinalContent={condition?.message}
+      resourceKind="event-subscription"
       type={statusBadgeProperties.type}
-      additionalContent={statusBadgeProperties.tooltipMessage}
       i18n={i18n}
     >
       {statusBadgeProperties.text}

@@ -818,6 +818,8 @@ event-subscription:
   name_singular: Event Subscription
   sink: Sink
   title: Event Subscriptions
+  tooltips:
+    ready: Subscription is active
 functions:
   buttons:
     connected-repositories: Connected Repositories
