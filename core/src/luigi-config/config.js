@@ -14,5 +14,8 @@ export const config = {
   backendAddress: isLocalDev
     ? 'http://localhost:3001/backend'
     : location.origin + '/backend',
-  pluginsUrl: isLocalDev ? 'http://127.0.0.1:8099' : 'http://127.0.0.1:8099',
+  pluginsUrl: isLocalDev
+    ? 'http://127.0.0.1:8099'
+    : //todo
+      'https://raw.githubusercontent.com/Wawrzyn321/gardener-external-component/master',
 };

@@ -5,7 +5,7 @@ import { config } from '../config';
 
 const dependencies = {
   react: {}, // shouldn't be used in Luigi mainframe
-  'fundamental-react': {},
+  'fundamental-react': {}, // the same
   lodash: require('lodash'),
   jsonpath: require('jsonpath'),
 };
