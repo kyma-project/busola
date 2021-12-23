@@ -782,7 +782,7 @@ domains:
     placeholder: Domain that is allowed
 event-subscription:
   conditions:
-    last-transition-time: Last transition
+    last-transition: Last transition
     reason: Reason
     status: Status
     title: Conditions

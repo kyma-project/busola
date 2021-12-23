@@ -15,7 +15,7 @@ export function EventSubscriptionConditions(eventSubscription) {
     t('event-subscription.conditions.type'),
     t('event-subscription.conditions.status'),
     t('event-subscription.conditions.reason'),
-    t('event-subscription.conditions.last-transition-time'),
+    t('event-subscription.conditions.last-transition'),
   ];
 
   const rowRenderer = condition => [
