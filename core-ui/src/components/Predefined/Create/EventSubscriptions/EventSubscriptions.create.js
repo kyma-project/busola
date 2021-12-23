@@ -1,6 +1,6 @@
 import { ComboboxInput } from 'fundamental-react';
 import * as jp from 'jsonpath';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, spread } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useGet, useGetList } from 'react-shared';
@@ -41,9 +41,11 @@ const SubscriptionsCreate = ({
   const { t } = useTranslation();
 
   const getOwnerName = sink => {
-    const startIndex = sink.lastIndexOf('/') + 1;
-    const nextDot = sink.indexOf('.');
-    return sink.substr(startIndex, nextDot);
+    if (typeof sink !== 'string') return '';
+
+    const startIndex = sink?.lastIndexOf('/') + 1;
+    const nextDot = sink?.indexOf('.');
+    return sink?.substr(startIndex, nextDot);
   };
 
   const { data: configMap } = useGet(
@@ -58,7 +60,6 @@ const SubscriptionsCreate = ({
 
   const spreadEventType = eventType => {
     const eventTypeWithoutPrefix = eventType.substr(eventTypePrefix.length);
-    console.log({ eventTypeWithoutPrefix });
     const appName = eventTypeWithoutPrefix.substr(
       0,
       eventTypeWithoutPrefix.indexOf('.'),
@@ -69,9 +70,6 @@ const SubscriptionsCreate = ({
       lastDotIndex,
     );
     const version = eventTypeWithoutPrefix.substr(lastDotIndex + 1);
-    console.log({ appName });
-    console.log({ eventName });
-    console.log({ version });
 
     return {
       appName,
@@ -89,14 +87,8 @@ const SubscriptionsCreate = ({
     eventSubscription,
     '$.spec.filter.filters[0].eventType.value',
   );
-  const [eventTypeValues, setEventTypeValues] = useState(
-    spreadEventType(firstEventType),
-  );
-  const [ownerName, setOwnerName] = useState(
-    getOwnerName(
-      getOwnerName(jp.value(eventSubscription, '$.spec.sink')) || '',
-    ),
-  );
+  console.log(getOwnerName(jp.value(eventSubscription, '$.spec.sink')));
+  const firstEventTypeValues = spreadEventType(firstEventType);
 
   const {
     data: services,
@@ -111,24 +103,6 @@ const SubscriptionsCreate = ({
   } = useGetList()(
     `/apis/applicationconnector.kyma-project.io/v1alpha1/applications`,
   );
-
-  useEffect(() => {
-    const { appName, eventName, version } = eventTypeValues;
-    const eventType = `${eventTypePrefix}${appName}.${eventName}.${version}`;
-    jp.value(
-      eventSubscription,
-      '$.spec.filter.filters[0].eventType.value',
-      eventType,
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [{ ...eventTypeValues }]);
-
-  useEffect(() => {
-    const sink = `https://${ownerName}.${namespace}.svc.cluster.local`;
-
-    jp.value(eventSubscription, '$.spec.sink', sink);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ownerName]);
 
   return (
     <ResourceForm
@@ -153,8 +127,15 @@ const SubscriptionsCreate = ({
       <ResourceForm.FormField
         required
         label={t('services.name_singular')}
-        setValue={serviceName => setOwnerName(serviceName)}
-        value={ownerName}
+        setValue={serviceName => {
+          jp.value(
+            eventSubscription,
+            '$.spec.sink',
+            `https://${serviceName}.${namespace}.svc.cluster.local`,
+          );
+          setEventSubscription({ ...eventSubscription });
+        }}
+        value={getOwnerName(jp.value(eventSubscription, '$.spec.sink')) || ''}
         input={Inputs.Dropdown}
         options={(services || []).map(i => ({
           key: i.metadata.name,
@@ -174,10 +155,15 @@ const SubscriptionsCreate = ({
         simple
         required
         label={t('event-subscription.create.labels.application-name')}
-        setValue={appName =>
-          setEventTypeValues({ ...eventTypeValues, appName })
-        }
-        value={eventTypeValues.appName}
+        setValue={appName => {
+          jp.value(
+            eventSubscription,
+            '$.spec.filter.filters[0].eventType.value',
+            `${eventTypePrefix}${appName}.${firstEventTypeValues.eventName}.${firstEventTypeValues.version}`,
+          );
+          setEventSubscription({ ...eventSubscription });
+        }}
+        value={firstEventTypeValues.appName}
         input={Inputs.Dropdown}
         options={(applications || []).map(i => ({
           key: i.metadata.name,
@@ -191,10 +177,15 @@ const SubscriptionsCreate = ({
         simple
         required
         label={t('event-subscription.create.labels.event-name')}
-        setValue={eventName =>
-          setEventTypeValues({ ...eventTypeValues, eventName })
-        }
-        value={eventTypeValues.eventName}
+        setValue={eventName => {
+          jp.value(
+            eventSubscription,
+            '$.spec.filter.filters[0].eventType.value',
+            `${eventTypePrefix}${firstEventTypeValues.appName}.${eventName}.${firstEventTypeValues.version}`,
+          );
+          setEventSubscription({ ...eventSubscription });
+        }}
+        value={firstEventTypeValues.eventName}
         input={Inputs.Text}
       />
 
@@ -202,7 +193,7 @@ const SubscriptionsCreate = ({
         simple
         required
         label={t('event-subscription.create.labels.event-version')}
-        value={eventTypeValues.version}
+        value={firstEventTypeValues.version}
         input={({ value, setValue }) => (
           <ComboboxInput
             required
@@ -214,12 +205,14 @@ const SubscriptionsCreate = ({
             }))}
             selectedKey={value}
             typedValue={value}
-            onSelect={e =>
-              setEventTypeValues({
-                ...eventTypeValues,
-                version: e.target.value,
-              })
-            }
+            onSelect={e => {
+              jp.value(
+                eventSubscription,
+                '$.spec.filter.filters[0].eventType.value',
+                `${eventTypePrefix}${firstEventTypeValues.appName}.${firstEventTypeValues.eventName}.${e.target.value}`,
+              );
+              setEventSubscription({ ...eventSubscription });
+            }}
           />
         )}
       />
@@ -227,29 +220,24 @@ const SubscriptionsCreate = ({
         simple
         required
         label={t('event-subscription.create.labels.event-type')}
-        value={jp.value(
-          eventSubscription,
-          '$.spec.filter.filters[0].eventType.value',
-        )}
+        propertyPath={'$.spec.filter.filters[0].eventType.value'}
         input={Inputs.Text}
         readOnly={true}
       />
 
       <TextArrayInput
-        advanced
+        simple
         required
         defaultOpen
         propertyPath="$.spec.filter.filters"
         validate={val => !!val}
         title={t('event-subscription.filters.title')}
         toInternal={valueFromYaml => {
+          console.log(valueFromYaml);
           return valueFromYaml.map(obj => obj.eventType.value) || [];
         }}
         toExternal={valueFromComponent =>
-          valueFromComponent.reduce((accumulator, currentValue) => {
-            if (currentValue) accumulator.push(getEventFilter(currentValue));
-            return accumulator;
-          }, [])
+          valueFromComponent.filter(Boolean).map(value => getEventFilter(value))
         }
         placeholder="Event type value?"
       />
