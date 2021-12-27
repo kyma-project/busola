@@ -22,6 +22,7 @@ export const RESOURCE_PATH = {
   ServiceBroker: 'brokers',
   Certificate: 'certificates',
   Node: 'nodes',
+  Subscription: 'eventsubscriptions',
 };
 
 export const useMessageList = items => {
@@ -53,7 +54,7 @@ export const useMessageList = items => {
   };
 
   const formatInvolvedObject = obj => {
-    const namespacePrefix = obj.namespace || '';
+    const namespacePrefix = obj.namespace ? `${obj.namespace}` : '';
     const text = `${obj.kind} ${namespacePrefix}/${obj.name}`;
     const isLink = !!RESOURCE_PATH[obj.kind];
     return isLink ? (

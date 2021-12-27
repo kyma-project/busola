@@ -9,7 +9,6 @@ import {
 
 export function JobConditions(job) {
   const { t, i18n } = useTranslation();
-
   const headerRenderer = () => [
     t('jobs.conditions.type'),
     t('jobs.conditions.status'),

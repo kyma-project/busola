@@ -1,6 +1,7 @@
 /// <reference types="cypress" />
 import config from '../config';
 import 'cypress-file-upload';
+import { loadSubscription } from '../support/loadFile';
 const NAMESPACE_NAME = config.namespace;
 
 const random = Math.floor(Math.random() * 9999) + 1000;
@@ -112,5 +113,82 @@ context('In-cluster eventing', () => {
     // cy.getIframeBody()
     //   .contains('.logs', 'Event received')
     //   .should('be.visible');
+  });
+
+  it('Navigate to Event Subscription', () => {
+    cy.getLeftNav()
+      .contains('Configuration')
+      .click();
+
+    cy.getLeftNav()
+      .contains('Event Subscriptions')
+      .click();
+  });
+
+  it('Create Event Subscription', () => {
+    cy.getIframeBody()
+      .contains('Create Event Subscription')
+      .click();
+
+    cy.getIframeBody()
+      .find('[role="presentation"],[class="view-lines"]')
+      .first()
+      .type(
+        '{selectall}{backspace}{selectall}{backspace}{selectall}{backspace}',
+      );
+
+    cy.getIframeBody()
+      .find('[role="presentation"],[class="view-lines"]')
+      .first()
+      .type(
+        '{selectall}{backspace}{selectall}{backspace}{selectall}{backspace}',
+      );
+
+    cy.getIframeBody()
+      .find('[role="presentation"],[class="view-lines"]')
+      .first()
+      .type(
+        '{selectall}{backspace}{selectall}{backspace}{selectall}{backspace}',
+      );
+
+    cy.wrap(loadSubscription(Cypress.env('NAMESPACE_NAME'))).then(CONFIG => {
+      const SUBSCRIPTION = JSON.stringify(CONFIG);
+      cy.getIframeBody()
+        .find('[role="presentation"],[class="view-lines"]')
+        .first()
+        .click()
+        .type(SUBSCRIPTION, { parseSpecialCharSequences: false });
+    });
+
+    cy.getIframeBody()
+      .find('[role="dialog"]')
+      .contains('button', 'Create')
+      .click();
+  });
+
+  it('Checking details', () => {
+    cy.getIframeBody()
+      .contains('in-cluster-eventing-publisher-subscription')
+      .should('be.visible');
+
+    cy.getIframeBody()
+      .contains('app.kubernetes.io/name=test')
+      .should('be.visible');
+
+    cy.getIframeBody()
+      .contains('Subscription active')
+      .should('be.visible');
+
+    cy.getIframeBody()
+      .contains(/ready/i)
+      .should('be.visible');
+  });
+
+  it('Delete Event Subscription', () => {
+    cy.getIframeBody()
+      .contains('button', 'Delete')
+      .click();
+
+    cy.get('[data-testid=luigi-modal-confirm]').click();
   });
 });
