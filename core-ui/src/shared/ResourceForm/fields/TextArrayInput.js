@@ -23,16 +23,18 @@ export function TextArrayInput({
       sectionTooltipContent={sectionTooltipContent}
       readOnly={readOnly}
       inputs={[
-        ({ value, setValue, ref, onBlur, focus, index }) => (
+        ({ value, setValue, ref, updateValue, focus, index }) => (
           <FormInput
             placeholder={Math.abs(index) === 1 ? placeholder : ''}
             key={index}
             compact
             value={value || ''}
             ref={ref}
-            onChange={e => setValue(e.target.value)}
+            onChange={e => {
+              setValue(e.target.value);
+              updateValue();
+            }}
             onKeyDown={e => focus(e)}
-            onBlur={onBlur}
             readOnly={readOnly}
             {...inputProps}
           />

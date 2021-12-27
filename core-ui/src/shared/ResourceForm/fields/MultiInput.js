@@ -127,7 +127,7 @@ export function MultiInput({
                   value: entry,
                   setValue: entry => setEntry(entry, index),
                   ref: refs[index]?.[inputIndex],
-                  onBlur: () => updateValue(internalValue),
+                  updateValue: () => updateValue(internalValue),
                   focus: (e, target) => {
                     if (e.key === 'Enter') {
                       if (typeof target === 'undefined') {
