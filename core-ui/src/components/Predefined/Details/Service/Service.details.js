@@ -63,6 +63,7 @@ export const ServicesDetails = ({ DefaultRenderer, ...otherParams }) => {
   if (features?.API_GATEWAY?.isEnabled) {
     customComponents.push(service => (
       <ApiRulesList
+        key={service}
         serviceName={service.metadata.name}
         namespace={service.metadata.namespace}
       />

@@ -2,10 +2,17 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 
-import { GenericList, usePost, useNotification, useDelete } from 'react-shared';
+import {
+  GenericList,
+  usePost,
+  useNotification,
+  useDelete,
+  randomNameGenerator,
+  navigateToFixedPathResourceDetails,
+} from 'react-shared';
 import CreateEventSubscriptionModal from './CreateEventSubscriptionModal';
-import { randomNameGenerator } from 'react-shared';
 import { createSubscriptionInput } from './createSubscriptionInput';
+import { Link } from 'fundamental-react';
 
 const textSearchProperties = ['metadata.name', 'spec.protocol']; //TODO add filtering by eventType
 
@@ -81,7 +88,16 @@ export default function EventSubscriptions({
   ];
   const rowRenderer = subscription => [
     subscription.spec.filter.filters[0]?.eventType.value,
-    subscription.metadata.name,
+    <Link
+      onClick={() =>
+        navigateToFixedPathResourceDetails(
+          'eventsubscriptions',
+          subscription.metadata.name,
+        )
+      }
+    >
+      {subscription.metadata.name}
+    </Link>,
     subscription.spec.protocol || '-',
   ];
 
