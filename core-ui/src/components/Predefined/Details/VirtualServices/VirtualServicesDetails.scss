@@ -10,4 +10,14 @@
   .header-operation-title {
     font-weight: bold;
   }
+
+  .route-extras {
+    padding-top: 0;
+    padding-bottom: 0;
+
+    > dl:not(:empty) {
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
+  }
 }

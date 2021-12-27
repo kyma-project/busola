@@ -494,7 +494,7 @@ export function HttpRoutes(service) {
           description={rule.name}
         />
       </LayoutPanel.Header>
-      <LayoutPanel.Body>
+      <LayoutPanel.Body className="route-extras">
         <dl>
           {rule.timeout && (
             <>
