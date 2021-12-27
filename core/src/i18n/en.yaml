@@ -801,6 +801,9 @@ event-subscription:
       failed: Failed to create the Subscription
       failed-delete: Failed to delete the Subscription
       removed: Subscription removed
+    placeholders:
+      application-name: Choose application name
+      service: Choose service name
     title: Add Event Subscription
   description: <0>Event Subscription</0> is used to subscribe to events.
   errors:
@@ -817,6 +820,7 @@ event-subscription:
     type: Type
     value: Value
   name_singular: Event Subscription
+  singular_name: Event Subscription
   sink: Sink
   title: Event Subscriptions
   tooltips:

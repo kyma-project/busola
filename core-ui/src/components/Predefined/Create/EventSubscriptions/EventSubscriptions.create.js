@@ -166,6 +166,7 @@ const SubscriptionsCreate = ({
         }}
         value={getServiceName(jp.value(eventSubscription, '$.spec.sink')) || ''}
         input={Inputs.Dropdown}
+        placeholder={t('event-subscription.create.placeholders.service')}
         options={(services || []).map(i => ({
           key: i.metadata.name,
           text: i.metadata.name,
@@ -197,6 +198,9 @@ const SubscriptionsCreate = ({
         setValue={appName => handleEventTypeValuesChange({ appName })}
         value={firstEventTypeValues.appName}
         input={Inputs.Dropdown}
+        placeholder={t(
+          'event-subscription.create.placeholders.application-name',
+        )}
         options={(applications || []).map(i => ({
           key: i.metadata.name,
           text: i.metadata.name,
