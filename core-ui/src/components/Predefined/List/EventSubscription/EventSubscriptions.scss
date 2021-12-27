@@ -1,4 +1,7 @@
 .event-types-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  width: 600px;
   .fd-token {
     margin-bottom: 4px;
     margin-right: 4px;
@@ -7,4 +10,5 @@
     line-height: 1rem;
     padding: 0.25rem 0.4rem !important;
   }
+  margin: 0px !important;
 }
