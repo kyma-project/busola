@@ -16,7 +16,7 @@ context('Test Create Resource Definitions', () => {
     cy.goToNamespaceDetails();
   });
 
-  it.only('Navigate to Create Custom Resource Definition', () => {
+  it('Navigate to Create Custom Resource Definition', () => {
     cy.getLeftNav()
       .contains('Configuration')
       .click();
@@ -26,7 +26,7 @@ context('Test Create Resource Definitions', () => {
       .click();
   });
 
-  it.only('Create Custom Resource Definition', () => {
+  it('Create Custom Resource Definition', () => {
     cy.getIframeBody()
       .contains('Create Custom Resource Definition')
       .click();
@@ -34,13 +34,13 @@ context('Test Create Resource Definitions', () => {
     cy.wrap(loadRandomCRD(CRD_PLURAL_NAME, CRD_NAME)).then(CRD_CONFIG => {
       const CRD = JSON.stringify(CRD_CONFIG);
 
-      cy.log(CRD);
       cy.getIframeBody()
-        .find('[role="presentation"],[class="view-lines"]')
-        .first()
-        .click()
+        .find('textarea[aria-roledescription="editor"]')
         .clearMonaco()
-        .type(CRD, { parseSpecialCharSequences: false, delay: 0 });
+        .type(CRD, {
+          parseSpecialCharSequences: false,
+          waitForAnimations: false,
+        });
     });
 
     cy.getIframeBody()
@@ -49,7 +49,7 @@ context('Test Create Resource Definitions', () => {
       .click();
   });
 
-  it.only('Check Custom Resource Definitions list', () => {
+  it('Check Custom Resource Definitions list', () => {
     cy.getLeftNav()
       .find('[data-testid=customresourcedefinitions_customresourcedefinitions]')
       .click();
@@ -65,7 +65,7 @@ context('Test Create Resource Definitions', () => {
       .click({ force: true });
   });
 
-  it.only('Check Custom Resource Definition details', () => {
+  it('Check Custom Resource Definition details', () => {
     cy.getIframeBody()
       .contains(/served/i)
       .should('be.visible');
@@ -87,7 +87,7 @@ context('Test Create Resource Definitions', () => {
       .should('be.visible');
   });
 
-  it.only('Create Custom Resource', () => {
+  it('Create Custom Resource', () => {
     cy.getIframeBody()
       .contains('button', 'Create CronTab')
       .click();
@@ -97,11 +97,11 @@ context('Test Create Resource Definitions', () => {
 
       cy.getIframeBody()
         .find('[aria-label="Create CronTab"]')
-        .click()
+        .find('textarea[aria-roledescription="editor"]:visible')
         .clearMonaco()
         .type(CR, {
           parseSpecialCharSequences: false,
-          delay: 0,
+          waitForAnimations: false,
         });
 
       cy.getIframeBody()
@@ -115,7 +115,7 @@ context('Test Create Resource Definitions', () => {
     });
   });
 
-  it.only('Delete Custom Resource Definition', () => {
+  it('Delete Custom Resource Definition', () => {
     cy.getIframeBody()
       .contains('a', CRD_NAME)
       .click();
