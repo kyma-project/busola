@@ -811,10 +811,10 @@ event-subscription:
   filters:
     event-source: Event Source
     event-type: Event Type
-    property: property
+    property: Property
     title: Filters
-    type: type
-    value: value
+    type: Type
+    value: Value
   name_singular: Event Subscription
   sink: Sink
   title: Event Subscriptions
