@@ -160,7 +160,7 @@ context('In-cluster eventing', () => {
       .type(`${API_RULE_AND_FUNCTION_NAME}-subscription`);
 
     cy.getIframeBody()
-      .contains('Choose service name')
+      .contains('Choose Service Name')
       .click();
 
     cy.getIframeBody()
@@ -168,7 +168,7 @@ context('In-cluster eventing', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('Choose application name')
+      .contains('Choose Application Name')
       .click();
 
     cy.getIframeBody()
@@ -185,8 +185,6 @@ context('In-cluster eventing', () => {
       .clear()
       .type('v1');
 
-    cy.wait(40000);
-
     cy.getIframeBody()
       .find('[role="dialog"]')
       .contains('button', 'Create')
@@ -196,10 +194,6 @@ context('In-cluster eventing', () => {
   it('Checking details', () => {
     cy.getIframeBody()
       .contains('in-cluster-eventing-publisher-subscription')
-      .should('be.visible');
-
-    cy.getIframeBody()
-      .contains('app.kubernetes.io/name=test')
       .should('be.visible');
 
     cy.getIframeBody()
