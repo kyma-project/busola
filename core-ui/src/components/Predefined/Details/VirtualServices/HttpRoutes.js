@@ -93,24 +93,24 @@ function CorsPolicy({ cors }) {
               </dt>
             </>
           ))}
-          {cors.allowMethods?.map(method => (
+          {cors.allowMethods?.length && (
             <>
-              <dd>{t('virtualservices.http-routes.cors.allow-method')}</dd>
-              <dt>{method}</dt>
+              <dd>{t('virtualservices.http-routes.cors.allow-methods')}</dd>
+              <dt>{cors.allowMethods?.join(', ')}</dt>
             </>
-          ))}
-          {cors.allowHeaders?.map(header => (
+          )}
+          {cors.allowHeaders?.length && (
             <>
-              <dd>{t('virtualservices.http-routes.cors.allow-header')}</dd>
-              <dt>{header}</dt>
+              <dd>{t('virtualservices.http-routes.cors.allow-headers')}</dd>
+              <dt>{cors.allowHeaders.join(', ')}</dt>
             </>
-          ))}
-          {cors.exposeHeaders?.map(header => (
+          )}
+          {cors.exposeHeaders?.length && (
             <>
-              <dd>{t('virtualservices.http-routes.cors.expose-header')}</dd>
-              <dt>{header}</dt>
+              <dd>{t('virtualservices.http-routes.cors.expose-headers')}</dd>
+              <dt>{cors.exposeHeaders.join(', ')}</dt>
             </>
-          ))}
+          )}
           {cors.maxAge && (
             <>
               <dd>{t('virtualservices.http-routes.cors.max-age')}</dd>

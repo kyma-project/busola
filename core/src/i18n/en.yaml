@@ -1584,9 +1584,10 @@ virtualservices:
   http-routes:
     cors:
       allow-credentials: Allow Credentials
-      allow-method: Allow Method
+      allow-headers: Allow Headers
+      allow-methods: Allow Method
       allow-origin: Allow Origin
-      expose-header: Expose Header
+      expose-headers: Expose Headers
       max-age: Max Age
       title: CORS Policy
     delegate: Delegate
