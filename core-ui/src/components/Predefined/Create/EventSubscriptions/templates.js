@@ -8,6 +8,7 @@ export function createEventSubscriptionTemplate(namespace, eventTypePrefix) {
       labels: {},
     },
     spec: {
+      sink: '',
       filter: {
         filters: [
           {
@@ -24,7 +25,6 @@ export function createEventSubscriptionTemplate(namespace, eventTypePrefix) {
           },
         ],
       },
-      sink: '',
     },
   };
 }

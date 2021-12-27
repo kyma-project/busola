@@ -421,6 +421,7 @@ common:
     error: 'Error: {{error}}'
     fill-required-data: Fill the remaining required data.
     loading-name: Loading name...
+    no-entries-found: No entries found
     no-instances-found: No matching {{value}} found.
     no-instances-found-namespace: No matching {{value}} found in this Namespace.
     parse-error: Parse error, previous valid input will be used.
@@ -431,7 +432,7 @@ common:
   placeholders:
     secret-ref-name: Select name
     secret-ref-namespace: Select Namespace
-  protected-resource: This resource is protected.
+  protected-resource: Resource protected. Go to Preferences to turn on the modification of protected resources.
   statuses:
     error: Error
     failed: Failed
@@ -780,6 +781,12 @@ domains:
     label: Include Domains
     placeholder: Domain that is allowed
 event-subscription:
+  conditions:
+    last-transition: Last Transition
+    reason: Reason
+    status: Status
+    title: Conditions
+    type: Type
   create:
     labels:
       application-name: Application name
@@ -795,6 +802,7 @@ event-subscription:
       failed-delete: Failed to delete the Subscription
       removed: Subscription removed
     title: Add Event Subscription
+  description: <0>Event Subscription</0> is used to subscribe to events.
   errors:
     empty-event-types: You should add at least one Event Type.
     invalid: The eventType field must have a proper value.
@@ -802,9 +810,17 @@ event-subscription:
     server: Server error. Contact your cluster admin.
     subscriptions-not-found: There are no Event Subscriptions yet.
   filters:
+    event-source: Event Source
+    event-type: Event Type
+    property: Property
     title: Filters
-  singular_name: Event Subscription
+    type: Type
+    value: Value
+  name_singular: Event Subscription
+  sink: Sink
   title: Event Subscriptions
+  tooltips:
+    ready: Subscription is active
 functions:
   buttons:
     connected-repositories: Connected Repositories

@@ -13,7 +13,7 @@ export function ResourceFormWrapper({
   useEffect(() => {
     if (validationRef) {
       const valid = React.Children.toArray(children)
-        .filter(child => child.props.validate)
+        .filter(child => child?.props?.validate)
         .every(child => {
           if (child.props.propertyPath) {
             const value = jp.value(resource, child.props.propertyPath);

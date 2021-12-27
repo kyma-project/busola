@@ -2,14 +2,19 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 
-import { GenericList, usePost, useNotification, useDelete } from 'react-shared';
+import {
+  GenericList,
+  usePost,
+  useNotification,
+  useDelete,
+  randomNameGenerator,
+  navigateToFixedPathResourceDetails,
+  EMPTY_TEXT_PLACEHOLDER,
+} from 'react-shared';
 import CreateEventSubscriptionModal from './CreateEventSubscriptionModal';
-import { randomNameGenerator } from 'react-shared';
 import { createSubscriptionInput } from './createSubscriptionInput';
 import { Link } from 'fundamental-react';
-import { navigateToFixedPathResourceDetails } from 'react-shared';
 import './EventSubscriptions.scss';
-import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 
 const EventTypes = ({ filters }) => {
   return (

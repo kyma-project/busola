@@ -63,7 +63,7 @@ context('Test Service Accounts', () => {
       .should('be.visible');
 
     cy.getIframeBody()
-      .contains(`${SERVICE_NAME}-token`)
+      .contains(`${SERVICE_NAME}-token`, { timeout: 5000 })
       .should('be.visible');
 
     cy.getIframeBody()
