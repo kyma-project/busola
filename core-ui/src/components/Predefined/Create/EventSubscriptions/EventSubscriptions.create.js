@@ -31,26 +31,26 @@ const getEventFilter = value => {
   };
 };
 
-const getServiceName = sink => {
-  if (typeof sink !== 'string') return '';
-
-  const startIndex = sink?.lastIndexOf('/') + 1;
-  const nextDot = sink?.indexOf('.');
-  return sink?.substring(startIndex, nextDot);
-};
-
 const SubscriptionsCreate = ({
   onChange,
   formElementRef,
   namespace,
   resource: initialEventSubscription,
   resourceUrl,
+  serviceName,
 }) => {
   const { t } = useTranslation();
-
   const { data: configMap } = useGet(
     '/api/v1/namespaces/kyma-system/configmaps/eventing',
   );
+
+  const getServiceName = sink => {
+    if (typeof sink !== 'string') return '';
+
+    const startIndex = sink?.lastIndexOf('/') + 1;
+    const nextDot = sink?.indexOf('.');
+    return sink?.substring(startIndex, nextDot);
+  };
 
   let eventTypePrefix =
     configMap?.data?.eventTypePrefix || DEFAULT_EVENT_TYPE_PREFIX;
@@ -135,8 +135,9 @@ const SubscriptionsCreate = ({
   };
   return (
     <ResourceForm
-      pluralKind="subscriptions"
-      singularName="eventsubscription"
+      pluralKind="eventsubscription"
+      singularName={t('event-subscription.singular_name')}
+      navigationResourceName="eventsubscriptions"
       resource={eventSubscription}
       setResource={setEventSubscription}
       onChange={onChange}
@@ -164,8 +165,13 @@ const SubscriptionsCreate = ({
           );
           setEventSubscription({ ...eventSubscription });
         }}
-        value={getServiceName(jp.value(eventSubscription, '$.spec.sink')) || ''}
+        value={
+          serviceName ||
+          getServiceName(jp.value(eventSubscription, '$.spec.sink')) ||
+          ''
+        }
         input={Inputs.Dropdown}
+        placeholder={t('event-subscription.create.placeholders.service-name')}
         options={(services || []).map(i => ({
           key: i.metadata.name,
           text: i.metadata.name,
@@ -197,6 +203,9 @@ const SubscriptionsCreate = ({
         setValue={appName => handleEventTypeValuesChange({ appName })}
         value={firstEventTypeValues.appName}
         input={Inputs.Dropdown}
+        placeholder={t(
+          'event-subscription.create.placeholders.application-name',
+        )}
         options={(applications || []).map(i => ({
           key: i.metadata.name,
           text: i.metadata.name,
