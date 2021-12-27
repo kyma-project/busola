@@ -197,6 +197,9 @@ btp-service-bindings:
   resource-type: Service Binding
   secret: Secret
   title: BTP Service Bindings
+  statuses:
+    notprovisioned: Not Provisioned
+    provisioned: Provisioned
   tooltips:
     parameters-from: Secret references to populate the parameters.
     provisioned: Provisioned successfully.
@@ -448,7 +451,7 @@ common:
     download: Download
     duplicate-key: Duplicate key
     error: Error
-    k8s-name-input: 'Name must consist of lowercase alphanumeric characters, can contain ''-'' (e.g.: ''my-name1'').'
+    k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' (e.g.: 'my-name1')."
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: key=value, must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     read-file: Read file content as a single value, with file name as a key.
@@ -646,9 +649,6 @@ deployments:
     images: Images
     pods: $t(pods.title)
   name_singular: Deployment
-  statuses:
-    error: Error
-    running: Running
   title: Deployments
 destination-rules:
   age: Age
@@ -737,6 +737,9 @@ dnsentries:
     target-a: Enter the A record target.
     target-cname: Enter the CNAME record target.
     ttl: Enter the time to live.
+  statuses:
+    deleting: Deleting
+    stale: Error
   title: DNS Entries
   tooltips:
     deleting: The DNS records are now being deleted.
@@ -894,7 +897,7 @@ functions:
     initializing: Initializing
     new-revision-error: Error
     running: Running
-    unhealthy: Initializing
+    unhealthy: Pending
   title: Functions
   tooltips:
     building: Waiting for the image to build.
@@ -1197,7 +1200,7 @@ jobs:
     complete: Job completed.
     not-complete: Job in progress.
 kubeconfig-id:
-  error: 'Couldn''t load kubeconfig ID; configuration not changed (Error: ${{error}}).'
+  error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})."
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
 legal:
   copyright: Copyright
@@ -1363,7 +1366,6 @@ pods:
     dockerdaemonnotready: Pending
     errimageneverpull: Error
     errimagepull: Error
-    error: Error
     evicted: Evicted
     imageinspecterror: Error
     imagepullbackoff: Error
@@ -1424,9 +1426,6 @@ replica-sets:
     requests: Requests
   memory: Memory
   name_singular: Replica Set
-  statuses:
-    error: Error
-    running: Running
   title: Replica Sets
   tooltips:
     error: At least one of the Pods has failed
