@@ -1604,7 +1604,7 @@ virtualservices:
     cors:
       allow-credentials: Allow Credentials
       allow-headers: Allow Headers
-      allow-methods: Allow Method
+      allow-methods: Allow Methods
       allow-origin: Allow Origin
       expose-headers: Expose Headers
       max-age: Max Age
