@@ -1,21 +1,18 @@
 import React, { useState } from 'react';
 import * as jp from 'jsonpath';
 import { ResourceForm } from 'shared/ResourceForm';
-import { createTemplate } from './templates';
 import LuigiClient from '@luigi-project/client';
+import { useMicrofrontendContext } from 'react-shared';
+import { createTemplate } from './templates';
 
-const CRCreate = ({ onChange, formElementRef, crd }) => {
-  const namespace =
-    crd.spec.scope === 'Namespaced' && LuigiClient.getContext().namespaceId;
-
-  const [CR, setCR] = useState(createTemplate(namespace, crd));
+function CRCreate({ onChange, formElementRef, crd }) {
+  const { namespaceId } = useMicrofrontendContext();
+  const [CR, setCR] = useState(createTemplate(namespaceId, crd));
 
   const createResourceUrl = crd => {
     const currentVersion = crd.spec.versions.find(ver => ver.storage).name;
     const namespace =
-      crd.spec.scope === 'Namespaced'
-        ? `/namespaces/${LuigiClient.getContext().namespaceId}`
-        : '';
+      crd.spec.scope === 'Namespaced' ? `/namespaces/${namespaceId}` : '';
     return `/apis/${crd.spec.group}/${currentVersion}${namespace}/${crd.spec.names.plural}`;
   };
 
@@ -54,6 +51,6 @@ const CRCreate = ({ onChange, formElementRef, crd }) => {
       }
     />
   );
-};
+}
 
 export { CRCreate };
