@@ -8,8 +8,26 @@ import { randomNameGenerator } from 'react-shared';
 import { createSubscriptionInput } from './createSubscriptionInput';
 import { Link } from 'fundamental-react';
 import { navigateToFixedPathResourceDetails } from 'react-shared';
+import './EventSubscriptions.scss';
+import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 
-const textSearchProperties = ['metadata.name', 'spec.protocol']; //TODO add filtering by eventType
+const EventTypes = ({ filters }) => {
+  return (
+    <div className="event-types-wrapper ">
+      {filters.length > 0 ? (
+        filters?.map(filter => (
+          <span className="fd-token fd-token--read-only">
+            <span className="fd-token__text fd-has-font-size-small">
+              {filter.eventType.value}
+            </span>
+          </span>
+        ))
+      ) : (
+        <p>{EMPTY_TEXT_PLACEHOLDER}</p>
+      )}
+    </div>
+  );
+};
 
 export default function EventSubscriptions({
   subscriptions = [],
@@ -77,13 +95,13 @@ export default function EventSubscriptions({
   ];
 
   const headerRenderer = _ => [
-    t('event-subscription.create.labels.calculate-event-type'),
+    <p>Event Types</p>,
     t('common.headers.name'),
     t('common.headers.status'),
   ];
 
   const rowRenderer = subscription => [
-    subscription.spec.filter.filters[0]?.eventType.value,
+    <EventTypes filters={subscription.spec.filter.filters} />,
     <Link
       onClick={() =>
         navigateToFixedPathResourceDetails(
@@ -94,6 +112,7 @@ export default function EventSubscriptions({
     >
       {subscription.metadata.name}
     </Link>,
+    <p>Status label</p>,
   ];
 
   const createModal = (
@@ -108,7 +127,7 @@ export default function EventSubscriptions({
     <GenericList
       title={t('event-subscription.title')}
       showSearchField={true}
-      textSearchProperties={textSearchProperties}
+      textSearchProperties={['metadata.name']}
       showSearchSuggestion={false}
       extraHeaderContent={createModal}
       actions={actions}
