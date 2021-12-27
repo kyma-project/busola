@@ -33,18 +33,35 @@ context('In-cluster eventing', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('button', 'Add Event Subscription')
+      .contains('button', 'Create Event Subscription')
       .click();
 
     cy.getIframeBody()
-      .find(
-        '[placeholder="The Event Type value used to create the subscription"]',
-      )
-      .type('nonexistingapp.order.created.v1');
+      .find('[placeholder="Event Subscription Name"]:visible')
+      .clear()
+      .type(`${FUNCTION_NAME}-subscription`);
+
+    cy.getIframeBody()
+      .contains('Choose Application Name')
+      .click();
+
+    cy.getIframeBody()
+      .contains('mock-app')
+      .click();
+
+    cy.getIframeBody()
+      .find('[placeholder="Event name"]:visible')
+      .clear()
+      .type('order.created');
+
+    cy.getIframeBody()
+      .find('[placeholder="Event version"]:visible')
+      .clear()
+      .type('v1');
 
     cy.getIframeBody()
       .find('[role="dialog"]')
-      .contains('button', 'Add')
+      .contains('button', 'Create')
       .click();
   });
 
@@ -115,30 +132,6 @@ context('In-cluster eventing', () => {
     //   .should('be.visible');
   });
 
-  it('Create mock application', () => {
-    cy.getLeftNav()
-      .contains('Integration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Applications')
-      .click();
-
-    cy.getIframeBody()
-      .contains('Create Application')
-      .click();
-
-    cy.getIframeBody()
-      .find('[placeholder="Specify a name for your Application."]')
-      .clear()
-      .type('mock-app');
-
-    cy.getIframeBody()
-      .find('[role="dialog"]')
-      .contains('button', 'Create')
-      .click();
-  });
-
   it('Navigate to Event Subscription', () => {
     cy.getLeftNav()
       .contains('Configuration')
@@ -178,7 +171,7 @@ context('In-cluster eventing', () => {
     cy.getIframeBody()
       .find('[placeholder="Event name"]:visible')
       .clear()
-      .type('test-event');
+      .type('order.created');
 
     cy.getIframeBody()
       .find('[placeholder="Event version"]:visible')
@@ -189,6 +182,8 @@ context('In-cluster eventing', () => {
       .find('[role="dialog"]')
       .contains('button', 'Create')
       .click();
+
+    cy.wait(40000);
   });
 
   it('Checking details', () => {
