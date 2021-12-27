@@ -134,8 +134,11 @@ function Resource({
   silentRefetch,
   updateResourceMutation,
   windowTitle,
+  resourceTitle,
 }) {
-  useWindowTitle(windowTitle || prettifyNamePlural(null, resourceType));
+  useWindowTitle(
+    windowTitle || resourceTitle || prettifyNamePlural(null, resourceType),
+  );
   const { isProtected, protectedResourceWarning } = useProtectedResources(i18n);
 
   const { t } = useTranslation(['translation'], { i18n });
@@ -146,7 +149,7 @@ function Resource({
 
   const breadcrumbItems = breadcrumbs || [
     {
-      name: prettifyNamePlural(null, resourceType),
+      name: resourceTitle || prettifyNamePlural(null, resourceType),
       path: '/',
       fromContext: resourceType.toLowerCase(),
     },
@@ -262,7 +265,7 @@ function Resource({
 
   async function handleResourceDelete() {
     return handleDelete(
-      resourceType,
+      resourceTitle || resourceType,
       null,
       resourceName,
       notification,

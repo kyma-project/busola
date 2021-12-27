@@ -1,13 +1,12 @@
-import i18next from 'i18next';
 import { saveAs } from 'file-saver';
-
+import i18next from 'i18next';
 import { config } from '../config';
+import { showAlert } from '../utils/showAlert';
 import {
   getActiveClusterName,
   getClusters,
 } from './../cluster-management/cluster-management';
 import { hasPermissionsFor, hasWildcardPermission } from './permissions';
-import { showAlert } from '../utils/showAlert';
 
 export const coreUIViewGroupName = '_core_ui_';
 export const catalogViewGroupName = '_catalog_';
@@ -953,6 +952,40 @@ export function getStaticChildrenNodesForNamespace(
                 '/namespaces/:namespaceId/Secrets/:name?' +
                 toSearchParamsString({
                   resourceApiPath: '/api/v1',
+                }),
+              viewGroup: coreUIViewGroupName,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: i18next.t('configuration.title'),
+      pathSegment: 'eventsubscriptions',
+      resourceType: 'subscriptions',
+      navigationContext: 'subscriptions',
+      label: i18next.t('event-subscription.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/Subscriptions?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/eventing.kyma-project.io/v1alpha1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':subscriptionName',
+              resourceType: 'subscriptions',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/Subscriptions/:subscriptionName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/eventing.kyma-project.io/v1alpha1',
                 }),
               viewGroup: coreUIViewGroupName,
             },

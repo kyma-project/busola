@@ -31,5 +31,6 @@ export * from './Gateways.list';
 export * from './ConfigMaps.list';
 export * from './ServiceAccount/ServiceAccounts.list';
 export * from './Roles.list';
+export * from './EventSubscriptions.list';
 export * from './DestinationRules.list';
 export * from './VirtualServices.list';
