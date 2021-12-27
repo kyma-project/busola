@@ -6,6 +6,8 @@ import { GenericList, usePost, useNotification, useDelete } from 'react-shared';
 import CreateEventSubscriptionModal from './CreateEventSubscriptionModal';
 import { randomNameGenerator } from 'react-shared';
 import { createSubscriptionInput } from './createSubscriptionInput';
+import { Link } from 'fundamental-react';
+import { navigateToFixedPathResourceDetails } from 'react-shared';
 
 const textSearchProperties = ['metadata.name', 'spec.protocol']; //TODO add filtering by eventType
 
@@ -76,13 +78,22 @@ export default function EventSubscriptions({
 
   const headerRenderer = _ => [
     t('event-subscription.create.labels.calculate-event-type'),
-    t('common.labels.name'),
-    t('common.labels.protocol'),
+    t('common.headers.name'),
+    t('common.headers.status'),
   ];
+
   const rowRenderer = subscription => [
     subscription.spec.filter.filters[0]?.eventType.value,
-    subscription.metadata.name,
-    subscription.spec.protocol || '-',
+    <Link
+      onClick={() =>
+        navigateToFixedPathResourceDetails(
+          'eventsubscriptions',
+          subscription.metadata.name,
+        )
+      }
+    >
+      {subscription.metadata.name}
+    </Link>,
   ];
 
   const createModal = (

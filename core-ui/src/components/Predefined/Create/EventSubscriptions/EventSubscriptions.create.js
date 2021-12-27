@@ -1,4 +1,4 @@
-import { ComboboxInput } from 'fundamental-react';
+import { ComboboxInput, MessageStrip } from 'fundamental-react';
 import * as jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
 import React, { useState } from 'react';
@@ -115,7 +115,6 @@ const SubscriptionsCreate = ({
     error: servicesError,
     loading: servicesLoading,
   } = useGetList()(`/api/v1/namespaces/${namespace}/services`);
-
   const {
     data: applications,
     error: applicationsError,
@@ -124,6 +123,16 @@ const SubscriptionsCreate = ({
     `/apis/applicationconnector.kyma-project.io/v1alpha1/applications`,
   );
 
+  const handleNoResource = (resourceArray, name, error) => {
+    if (!resourceArray || name === '') return error;
+
+    const isResourceFound = (resourceArray || [])
+      ?.map(obj => obj.metadata.name)
+      .includes(name);
+
+    if (!isResourceFound)
+      return new Error(t('common.messages.entry-not-found'));
+  };
   return (
     <ResourceForm
       pluralKind="subscriptions"
@@ -161,7 +170,11 @@ const SubscriptionsCreate = ({
           key: i.metadata.name,
           text: i.metadata.name,
         }))}
-        error={servicesError}
+        error={handleNoResource(
+          services,
+          getServiceName(jp.value(eventSubscription, '$.spec.sink')),
+          servicesError,
+        )}
         loading={servicesLoading}
       />
 
@@ -169,6 +182,12 @@ const SubscriptionsCreate = ({
         advanced
         propertyPath="$.metadata.labels"
         title={t('common.headers.labels')}
+      />
+
+      <KeyValueField
+        advanced
+        propertyPath="$.metadata.annotations"
+        title={t('common.headers.annotations')}
       />
 
       <ResourceForm.FormField
@@ -182,7 +201,11 @@ const SubscriptionsCreate = ({
           key: i.metadata.name,
           text: i.metadata.name,
         }))}
-        error={applicationsError}
+        error={handleNoResource(
+          applications,
+          firstEventTypeValues.appName,
+          applicationsError,
+        )}
         loading={applicationsLoading}
       />
 
@@ -244,6 +267,16 @@ const SubscriptionsCreate = ({
         }
         placeholder={t('event-subscription.create.labels.event-type')}
       />
+      {(jp.value(eventSubscription, '$.spec.filter.filters') || []).length ===
+      0 ? (
+        <MessageStrip
+          advanced
+          type="warning"
+          className="fd-margin-top--sm fd-margin-bottom--sm"
+        >
+          {t('event-subscription.errors.empty-event-types')}
+        </MessageStrip>
+      ) : null}
     </ResourceForm>
   );
 };

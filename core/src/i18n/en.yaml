@@ -796,6 +796,7 @@ event-subscription:
       removed: Subscription removed
     title: Add Event Subscription
   errors:
+    empty-event-types: You should add at least one Event Type.
     invalid: The eventType field must have a proper value.
     not-matching-search-query: Couldn't find Event Subscriptions matching this query.
     server: Server error. Contact your cluster admin.
