@@ -115,6 +115,30 @@ context('In-cluster eventing', () => {
     //   .should('be.visible');
   });
 
+  it('Create mock application', () => {
+    cy.getLeftNav()
+      .contains('Integration')
+      .click();
+
+    cy.getLeftNav()
+      .contains('Applications')
+      .click();
+
+    cy.getIframeBody()
+      .contains('Create Application')
+      .click();
+
+    cy.getIframeBody()
+      .find('[placeholder="Specify a name for your Application."]')
+      .clear()
+      .type('mock-app');
+
+    cy.getIframeBody()
+      .find('[role="dialog"]')
+      .contains('button', 'Create')
+      .click();
+  });
+
   it('Navigate to Event Subscription', () => {
     cy.getLeftNav()
       .contains('Configuration')
@@ -131,34 +155,37 @@ context('In-cluster eventing', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[role="presentation"],[class="view-lines"]')
-      .first()
-      .type(
-        '{selectall}{backspace}{selectall}{backspace}{selectall}{backspace}',
-      );
+      .find('[placeholder="Event Subscription Name"]:visible')
+      .clear()
+      .type(`${API_RULE_AND_FUNCTION_NAME}-subscription`);
 
     cy.getIframeBody()
-      .find('[role="presentation"],[class="view-lines"]')
-      .first()
-      .type(
-        '{selectall}{backspace}{selectall}{backspace}{selectall}{backspace}',
-      );
+      .contains('Choose service name')
+      .click();
 
     cy.getIframeBody()
-      .find('[role="presentation"],[class="view-lines"]')
-      .first()
-      .type(
-        '{selectall}{backspace}{selectall}{backspace}{selectall}{backspace}',
-      );
+      .contains(API_RULE_AND_FUNCTION_NAME)
+      .click();
 
-    cy.wrap(loadSubscription(Cypress.env('NAMESPACE_NAME'))).then(CONFIG => {
-      const SUBSCRIPTION = JSON.stringify(CONFIG);
-      cy.getIframeBody()
-        .find('[role="presentation"],[class="view-lines"]')
-        .first()
-        .click()
-        .type(SUBSCRIPTION, { parseSpecialCharSequences: false });
-    });
+    cy.getIframeBody()
+      .contains('Choose application name')
+      .click();
+
+    cy.getIframeBody()
+      .contains('mock-app')
+      .click();
+
+    cy.getIframeBody()
+      .find('[placeholder="Event name"]:visible')
+      .clear()
+      .type('test-event');
+
+    cy.getIframeBody()
+      .find('[placeholder="Event version"]:visible')
+      .clear()
+      .type('v1');
+
+    cy.wait(40000);
 
     cy.getIframeBody()
       .find('[role="dialog"]')
