@@ -185,6 +185,7 @@ const SubscriptionsCreate = ({
           servicesError,
         )}
         loading={servicesLoading}
+        tooltipContent={t('event-subscription.tooltips.service-name')}
       />
 
       <KeyValueField
@@ -219,6 +220,7 @@ const SubscriptionsCreate = ({
           applicationsError,
         )}
         loading={applicationsLoading}
+        tooltipContent={t('event-subscription.tooltips.application-name')}
       />
 
       <ResourceForm.FormField
@@ -229,12 +231,14 @@ const SubscriptionsCreate = ({
         value={firstEventTypeValues.eventName}
         input={Inputs.Text}
         placeholder={t('event-subscription.create.labels.event-name')}
+        tooltipContent={t('event-subscription.tooltips.event-name')}
       />
 
       <ResourceForm.FormField
         simple
         required
         label={t('event-subscription.create.labels.event-version')}
+        tooltipContent={t('event-subscription.tooltips.event-version')}
         value={firstEventTypeValues.version}
         input={({ value, setValue }) => (
           <ComboboxInput
@@ -260,15 +264,17 @@ const SubscriptionsCreate = ({
         propertyPath={'$.spec.filter.filters[0].eventType.value'}
         input={Inputs.Text}
         readOnly={true}
+        tooltipContent={t('event-subscription.tooltips.event-type-simple')}
       />
 
       <TextArrayInput
         advanced
         required
         defaultOpen
+        tooltipContent={t('event-subscription.tooltips.event-type-advanced')}
         propertyPath="$.spec.filter.filters"
         validate={val => !!val}
-        title={t('event-subscription.filters.title')}
+        title={t('event-subscription.create.labels.event-type')}
         toInternal={valueFromYaml =>
           valueFromYaml?.map(obj => obj.eventType.value) || []
         }
