@@ -5,32 +5,24 @@ import * as jp from 'jsonpath';
 import { useGet, useGetList, useNotification } from 'react-shared';
 
 import { ResourceForm } from 'shared/ResourceForm';
-import { ComboboxInput, MessageStrip } from 'fundamental-react';
 import {
   K8sNameField,
   TextArrayInput,
   KeyValueField,
 } from 'shared/ResourceForm/fields';
+
 import * as Inputs from 'shared/ResourceForm/inputs';
+import { ComboboxInput, MessageStrip } from 'fundamental-react';
 import { createEventSubscriptionTemplate } from './templates';
+import {
+  getServiceName,
+  validateEventSubscription,
+  getEventFilter,
+  spreadEventType,
+} from './helpers';
 
 const DEFAULT_EVENT_TYPE_PREFIX = 'sap.kyma.custom.';
 const versionOptions = ['v1', 'v2', 'v3', 'v4'];
-
-const getEventFilter = value => {
-  return {
-    eventSource: {
-      property: 'source',
-      type: 'exact',
-      value: '',
-    },
-    eventType: {
-      property: 'type',
-      type: 'exact',
-      value,
-    },
-  };
-};
 
 const SubscriptionsCreate = ({
   onChange,
@@ -45,13 +37,6 @@ const SubscriptionsCreate = ({
   const { data: configMap } = useGet(
     '/api/v1/namespaces/kyma-system/configmaps/eventing',
   );
-  const getServiceName = sink => {
-    if (typeof sink !== 'string') return '';
-
-    const startIndex = sink?.lastIndexOf('/') + 1;
-    const nextDot = sink?.indexOf('.');
-    return sink?.substring(startIndex, nextDot);
-  };
 
   let eventTypePrefix =
     configMap?.data?.eventTypePrefix || DEFAULT_EVENT_TYPE_PREFIX;
@@ -59,37 +44,17 @@ const SubscriptionsCreate = ({
     ? eventTypePrefix
     : eventTypePrefix + '.';
 
-  const spreadEventType = eventType => {
-    if (typeof eventType !== 'string')
-      return {
-        appName: '',
-        eventName: '',
-        version: '',
-      };
-
-    const eventTypeWithoutPrefix = eventType.substr(eventTypePrefix.length);
-    const appName = eventTypeWithoutPrefix.substr(
-      0,
-      eventTypeWithoutPrefix.indexOf('.'),
-    );
-    const lastDotIndex = eventTypeWithoutPrefix.lastIndexOf('.');
-    const eventName = eventTypeWithoutPrefix.substring(
-      appName.length + 1,
-      lastDotIndex,
-    );
-    const version = eventTypeWithoutPrefix.substr(lastDotIndex + 1);
-
-    return {
-      appName,
-      eventName,
-      version,
-    };
-  };
-
   const [eventSubscription, setEventSubscription] = useState(
     cloneDeep(initialEventSubscription) ||
       createEventSubscriptionTemplate(namespace, eventTypePrefix),
   );
+
+  const firstEventType = jp.value(
+    eventSubscription,
+    '$.spec.filter.filters[0].eventType.value',
+  );
+  const firstEventTypeValues = spreadEventType(firstEventType, eventTypePrefix);
+
   const notification = useNotification();
 
   useEffect(() => {
@@ -102,6 +67,15 @@ const SubscriptionsCreate = ({
       setEventSubscription({ ...eventSubscription });
     }
   }, [serviceName]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    setCustomValid(
+      validateEventSubscription(
+        eventSubscription,
+        firstEventTypeValues.appName,
+      ),
+    );
+  }, [firstEventTypeValues.appName, eventSubscription, setCustomValid]);
 
   const handleEventTypeValuesChange = changes => {
     const newEventTypeValues = { ...firstEventTypeValues, ...changes };
@@ -116,24 +90,6 @@ const SubscriptionsCreate = ({
     ]);
     setEventSubscription({ ...eventSubscription });
   };
-
-  const firstEventType = jp.value(
-    eventSubscription,
-    '$.spec.filter.filters[0].eventType.value',
-  );
-  const firstEventTypeValues = spreadEventType(firstEventType);
-
-  const validateEventSubscription = () => {
-    const serviceName = getServiceName(
-      jp.value(eventSubscription, '$.spec.sink'),
-    );
-
-    return serviceName && firstEventTypeValues.appName;
-  };
-
-  useEffect(() => {
-    setCustomValid(validateEventSubscription());
-  }, [firstEventTypeValues.appName, eventSubscription, setCustomValid]);
 
   const {
     data: services,
@@ -164,6 +120,7 @@ const SubscriptionsCreate = ({
     if (!serviceName) {
       defaultAfterCreatedFn();
     } else {
+      //when serviceName is given,display notification and don't redirect
       notification.notifySuccess({
         content: t(
           initialEventSubscription
