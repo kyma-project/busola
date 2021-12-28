@@ -46,7 +46,7 @@ context('In-cluster eventing', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('mock-app')
+      .contains('test-mock-app')
       .click();
 
     cy.getIframeBody()

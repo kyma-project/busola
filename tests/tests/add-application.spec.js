@@ -3,7 +3,6 @@
 context('Test Adding Apliacton', () => {
   before(() => {
     cy.loginAndSelectCluster();
-    cy.goToNamespaceDetails();
   });
 
   it('Nawigate to Application', () => {
@@ -18,12 +17,12 @@ context('Test Adding Apliacton', () => {
 
   it('Create Appliction', () => {
     cy.getIframeBody()
-      .contains('Create Appliction')
+      .contains('Create Application')
       .click();
 
     cy.getIframeBody()
       .find('[placeholder="Specify a name for your Application.')
-      .type('mock-app');
+      .type('test-mock-app');
 
     cy.getIframeBody()
       .find('[role="dialog"]')
@@ -33,7 +32,7 @@ context('Test Adding Apliacton', () => {
 
   it('Check added application', () => {
     cy.getIframeBody()
-      .contains('mock-app')
+      .contains('test-mock-app')
       .should('be.visible');
   });
 });
