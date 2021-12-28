@@ -819,7 +819,7 @@ event-subscription:
     title: Filters
     type: Type
     value: Value
-  singular_name: Event Subscription
+  name_singular: Event Subscription
   sink: Sink
   title: Event Subscriptions
   tooltips:

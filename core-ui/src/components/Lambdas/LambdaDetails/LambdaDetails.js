@@ -6,7 +6,7 @@ import CodeTab from './Tabs/Code/CodeTab';
 import ResourceManagement from './Tabs/ResourceManagement/ResourceManagement';
 import ServiceBindingsWrapper from './Tabs/Configuration/ServiceBindings/ServiceBindingsWrapper';
 import { ApiRulesList } from 'components/ApiRules/ApiRulesList';
-import { EventSubscriptionsList } from 'shared/components/EventSubscriptions/EventSubscriptionsList';
+import { EventSubscriptionsList } from 'shared/components/EventSubscriptionsList';
 
 export default function LambdaDetails({ lambda }) {
   const microfrontendContext = useMicrofrontendContext();
@@ -30,7 +30,7 @@ export default function LambdaDetails({ lambda }) {
     features?.EVENTING?.isEnabled ||
     catalogEnabled;
 
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   return (
     <>

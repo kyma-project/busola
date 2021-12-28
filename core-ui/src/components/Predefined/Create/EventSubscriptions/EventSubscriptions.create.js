@@ -1,35 +1,28 @@
-import { ComboboxInput, MessageStrip } from 'fundamental-react';
-import * as jp from 'jsonpath';
+import React, { useState, useEffect } from 'react';
 import { cloneDeep } from 'lodash';
-import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useGet, useGetList } from 'react-shared';
+import * as jp from 'jsonpath';
+import { useGet, useGetList, useNotification } from 'react-shared';
+
 import { ResourceForm } from 'shared/ResourceForm';
 import {
   K8sNameField,
   TextArrayInput,
   KeyValueField,
 } from 'shared/ResourceForm/fields';
+
 import * as Inputs from 'shared/ResourceForm/inputs';
+import { ComboboxInput, MessageStrip } from 'fundamental-react';
 import { createEventSubscriptionTemplate } from './templates';
+import {
+  getServiceName,
+  validateEventSubscription,
+  getEventFilter,
+  spreadEventType,
+} from './helpers';
 
 const DEFAULT_EVENT_TYPE_PREFIX = 'sap.kyma.custom.';
 const versionOptions = ['v1', 'v2', 'v3', 'v4'];
-
-const getEventFilter = value => {
-  return {
-    eventSource: {
-      property: 'source',
-      type: 'exact',
-      value: '',
-    },
-    eventType: {
-      property: 'type',
-      type: 'exact',
-      value,
-    },
-  };
-};
 
 const SubscriptionsCreate = ({
   onChange,
@@ -38,19 +31,12 @@ const SubscriptionsCreate = ({
   resource: initialEventSubscription,
   resourceUrl,
   serviceName,
+  setCustomValid,
 }) => {
   const { t } = useTranslation();
   const { data: configMap } = useGet(
     '/api/v1/namespaces/kyma-system/configmaps/eventing',
   );
-
-  const getServiceName = sink => {
-    if (typeof sink !== 'string') return '';
-
-    const startIndex = sink?.lastIndexOf('/') + 1;
-    const nextDot = sink?.indexOf('.');
-    return sink?.substring(startIndex, nextDot);
-  };
 
   let eventTypePrefix =
     configMap?.data?.eventTypePrefix || DEFAULT_EVENT_TYPE_PREFIX;
@@ -58,37 +44,38 @@ const SubscriptionsCreate = ({
     ? eventTypePrefix
     : eventTypePrefix + '.';
 
-  const spreadEventType = eventType => {
-    if (typeof eventType !== 'string')
-      return {
-        appName: '',
-        eventName: '',
-        version: '',
-      };
-
-    const eventTypeWithoutPrefix = eventType.substr(eventTypePrefix.length);
-    const appName = eventTypeWithoutPrefix.substr(
-      0,
-      eventTypeWithoutPrefix.indexOf('.'),
-    );
-    const lastDotIndex = eventTypeWithoutPrefix.lastIndexOf('.');
-    const eventName = eventTypeWithoutPrefix.substring(
-      appName.length + 1,
-      lastDotIndex,
-    );
-    const version = eventTypeWithoutPrefix.substr(lastDotIndex + 1);
-
-    return {
-      appName,
-      eventName,
-      version,
-    };
-  };
-
   const [eventSubscription, setEventSubscription] = useState(
     cloneDeep(initialEventSubscription) ||
       createEventSubscriptionTemplate(namespace, eventTypePrefix),
   );
+
+  const firstEventType = jp.value(
+    eventSubscription,
+    '$.spec.filter.filters[0].eventType.value',
+  );
+  const firstEventTypeValues = spreadEventType(firstEventType, eventTypePrefix);
+
+  const notification = useNotification();
+
+  useEffect(() => {
+    if (serviceName) {
+      jp.value(
+        eventSubscription,
+        '$.spec.sink',
+        `https://${serviceName}.${namespace}.svc.cluster.local`,
+      );
+      setEventSubscription({ ...eventSubscription });
+    }
+  }, [serviceName]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    setCustomValid(
+      validateEventSubscription(
+        eventSubscription,
+        firstEventTypeValues.appName,
+      ),
+    );
+  }, [firstEventTypeValues.appName, eventSubscription, setCustomValid]);
 
   const handleEventTypeValuesChange = changes => {
     const newEventTypeValues = { ...firstEventTypeValues, ...changes };
@@ -104,17 +91,12 @@ const SubscriptionsCreate = ({
     setEventSubscription({ ...eventSubscription });
   };
 
-  const firstEventType = jp.value(
-    eventSubscription,
-    '$.spec.filter.filters[0].eventType.value',
-  );
-  const firstEventTypeValues = spreadEventType(firstEventType);
-
   const {
     data: services,
     error: servicesError,
     loading: servicesLoading,
   } = useGetList()(`/api/v1/namespaces/${namespace}/services`);
+
   const {
     data: applications,
     error: applicationsError,
@@ -124,7 +106,7 @@ const SubscriptionsCreate = ({
   );
 
   const handleNoResource = (resourceArray, name, error) => {
-    if (!resourceArray || name === '') return error;
+    if (error) return error;
 
     const isResourceFound = (resourceArray || [])
       ?.map(obj => obj.metadata.name)
@@ -133,10 +115,29 @@ const SubscriptionsCreate = ({
     if (!isResourceFound)
       return new Error(t('common.messages.entry-not-found'));
   };
+
+  const afterCreatedFn = async defaultAfterCreatedFn => {
+    if (!serviceName) {
+      defaultAfterCreatedFn();
+    } else {
+      //when serviceName is given,display notification and don't redirect
+      notification.notifySuccess({
+        content: t(
+          initialEventSubscription
+            ? 'common.create-form.messages.patch-success'
+            : 'common.create-form.messages.create-success',
+          {
+            resourceType: t(`event-subscription.name_singular`),
+          },
+        ),
+      });
+    }
+  };
+
   return (
     <ResourceForm
       pluralKind="eventsubscription"
-      singularName={t('event-subscription.singular_name')}
+      singularName={t('event-subscription.name_singular')}
       navigationResourceName="eventsubscriptions"
       resource={eventSubscription}
       setResource={setEventSubscription}
@@ -144,10 +145,12 @@ const SubscriptionsCreate = ({
       formElementRef={formElementRef}
       initialResource={initialEventSubscription}
       createUrl={resourceUrl}
+      afterCreatedFn={afterCreatedFn}
+      setCustomValid={setCustomValid}
     >
       <K8sNameField
         propertyPath="$.metadata.name"
-        kind={t('event-subscription.singular_name')}
+        kind={t('event-subscription.name_singular')}
         setValue={name => {
           jp.value(eventSubscription, '$.metadata.name', name);
           setEventSubscription({ ...eventSubscription });

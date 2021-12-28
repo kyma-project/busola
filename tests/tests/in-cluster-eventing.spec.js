@@ -166,7 +166,7 @@ context('In-cluster eventing', () => {
 
     cy.getIframeBody()
       .contains('mock-app')
-      .click();
+      .click({ force: true });
 
     cy.getIframeBody()
       .find('[placeholder="Event name"]:visible')
