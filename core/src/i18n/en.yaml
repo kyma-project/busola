@@ -448,7 +448,7 @@ common:
     download: Download
     duplicate-key: Duplicate key
     error: Error
-    k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' (e.g.: 'my-name1')."
+    k8s-name-input: 'Name must consist of lowercase alphanumeric characters, can contain ''-'' (e.g.: ''my-name1'').'
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: key=value, must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     read-file: Read file content as a single value, with file name as a key.
@@ -788,8 +788,8 @@ event-subscription:
       event-type: Event type
       event-version: Event version
     placeholders:
-      application-name: Choose Application Name
-      service-name: Choose Service Name
+      application-name: Choose an Application name
+      service-name: Choose a Service name
     title: Add Event Subscription
   description: <0>Event Subscription</0> is used to subscribe to events.
   errors:
@@ -1212,7 +1212,7 @@ jobs:
     complete: Job completed.
     not-complete: Job in progress.
 kubeconfig-id:
-  error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})."
+  error: 'Couldn''t load kubeconfig ID; configuration not changed (Error: ${{error}}).'
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
 legal:
   copyright: Copyright
