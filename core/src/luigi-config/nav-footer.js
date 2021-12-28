@@ -14,6 +14,7 @@ export async function setNavFooterText() {
     ?.LEGAL_LINKS;
 
   const versionText = i18next.t('common.labels.version');
+  const versionLink = checkVersionLink(version);
 
   targetElement.innerHTML = `
     <ul>
@@ -25,7 +26,7 @@ export async function setNavFooterText() {
         })
         .join('')}
     </ul>
-    <p>${versionText}: ${version}</p>`;
+    <p>${versionText}: <a href="${versionLink}" target="_blank" rel="noopener noreferrer">${version}</a></p>`;
 }
 
 async function getBusolaVersion() {
@@ -33,4 +34,14 @@ async function getBusolaVersion() {
     .then(response => response.json())
     .then(json => json.version)
     .catch(() => 'unknown');
+}
+
+function checkVersionLink(version) {
+  if (version !== 'dev') {
+    if (version.substring(0, 3) === 'PR-') {
+      return `https://github.com/kyma-project/busola/pull/${version.slice(3)}`;
+    } else return `https://github.com/kyma-project/busola/commit/${version}`;
+  } else {
+    return `https://github.com/kyma-project/busola`;
+  }
 }
