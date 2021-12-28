@@ -26,7 +26,7 @@ export async function setNavFooterText() {
         })
         .join('')}
     </ul>
-    <p>${versionText}:</p><a href="${versionLink}" target="_blank" rel="noopener noreferrer">${version}</a>`;
+    <p>${versionText}:</p><a href="${versionLink}" target="_blank" rel="noopener noreferrer" data-test-id="version-link">${version}</a>`;
 }
 
 async function getBusolaVersion() {
