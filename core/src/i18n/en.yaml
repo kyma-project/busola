@@ -790,17 +790,9 @@ event-subscription:
   create:
     labels:
       application-name: Application name
-      calculate-event-type: Calculate Event type
-      calculate-from-cmp: Calculate from components
-      enter-event-type: Enter Event type
       event-name: Event name
       event-type: Event type
       event-version: Event version
-    notifications:
-      created: Subscription created
-      failed: Failed to create the Subscription
-      failed-delete: Failed to delete the Subscription
-      removed: Subscription removed
     placeholders:
       application-name: Choose Application Name
       service-name: Choose Service Name
@@ -808,10 +800,6 @@ event-subscription:
   description: <0>Event Subscription</0> is used to subscribe to events.
   errors:
     empty-event-types: You should add at least one Event Type.
-    invalid: The eventType field must have a proper value.
-    not-matching-search-query: Couldn't find Event Subscriptions matching this query.
-    server: Server error. Contact your cluster admin.
-    subscriptions-not-found: There are no Event Subscriptions yet.
   filters:
     event-source: Event Source
     event-type: Event Type
