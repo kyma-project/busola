@@ -11,7 +11,7 @@ export function TextArrayInput({
   sectionTooltipContent,
   placeholder,
   toInternal = value => value || [],
-  toExternal = value => value.filter(val => !!val),
+  toExternal = value => value.filter(val => typeof val === 'string'),
   readOnly,
   ...props
 }) {
@@ -23,7 +23,16 @@ export function TextArrayInput({
       sectionTooltipContent={sectionTooltipContent}
       readOnly={readOnly}
       inputs={[
-        ({ value, setValue, ref, updateValue, focus, index }) => (
+        ({
+          value,
+          setValue,
+          ref,
+          updateValue,
+          focus,
+          index,
+          internalValue,
+          setMultiValue,
+        }) => (
           <FormInput
             placeholder={Math.abs(index) === 1 ? placeholder : ''}
             key={index}
@@ -35,6 +44,7 @@ export function TextArrayInput({
               updateValue();
             }}
             onKeyDown={e => focus(e)}
+            onBlur={() => setMultiValue(internalValue?.filter(val => !!val))}
             readOnly={readOnly}
             {...inputProps}
           />

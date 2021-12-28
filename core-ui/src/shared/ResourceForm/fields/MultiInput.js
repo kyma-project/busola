@@ -67,7 +67,9 @@ export function MultiInput({
 
   const isLast = index => index === internalValue.length - 1;
 
-  const updateValue = val => setValue(toExternal(val));
+  const updateValue = val => {
+    setValue(toExternal(val));
+  };
 
   const removeValue = index => {
     /* 
@@ -128,6 +130,8 @@ export function MultiInput({
                   setValue: entry => setEntry(entry, index),
                   ref: refs[index]?.[inputIndex],
                   updateValue: () => updateValue(internalValue),
+                  internalValue,
+                  setMultiValue: setValue,
                   focus: (e, target) => {
                     if (e.key === 'Enter') {
                       if (typeof target === 'undefined') {
