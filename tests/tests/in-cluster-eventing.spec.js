@@ -184,8 +184,6 @@ context('In-cluster eventing', () => {
       .find('[role="dialog"]')
       .contains('button', 'Create')
       .click();
-
-    cy.wait(40000);
   });
 
   it('Checking details', () => {
@@ -199,6 +197,46 @@ context('In-cluster eventing', () => {
 
     cy.getIframeBody()
       .contains(/ready/i)
+      .should('be.visible');
+  });
+
+  it('Edit Subscription', () => {
+    cy.getIframeBody()
+      .contains('Edit')
+      .click();
+
+    cy.getIframeBody()
+      .contains('Advanced')
+      .click();
+
+    cy.getIframeBody()
+      .find('[placeholder="Event type"]')
+      .clear()
+      .type('sap.kyma.custom.mock-app.order.canceled.v2');
+
+    cy.wait(4000);
+
+    cy.getIframeBody()
+      .find('[role="dialog"]')
+      .contains('button', 'Update')
+      .click();
+  });
+
+  it('Checking updates', () => {
+    cy.getIframeBody()
+      .contains('in-cluster-eventing-publisher-subscription')
+      .should('be.visible');
+
+    cy.getIframeBody()
+      .contains('Subscription active')
+      .should('be.visible');
+
+    cy.getIframeBody()
+      .contains(/ready/i)
+      .should('be.visible');
+
+    cy.getIframeBody()
+      .contains('order.canceled.v2')
       .should('be.visible');
   });
 
