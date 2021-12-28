@@ -66,16 +66,6 @@
             }
           ]
         }
-      },
-      "PROTECTED_RESOURCES": {
-        "isEnabled": true,
-        "config": {
-          "resources": [
-            {
-              "match": { "$.metadata.labels['applicationconnector.kyma-project.io/managed-by']": "compass-runtime-agent" }
-            }
-          ]
-        }
       }
     }
   }
