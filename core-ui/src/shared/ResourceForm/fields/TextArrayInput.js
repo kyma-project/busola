@@ -13,6 +13,7 @@ export function TextArrayInput({
   toInternal = value => value || [],
   toExternal = value => value.filter(val => typeof val === 'string'),
   readOnly,
+  customFormatFn,
   ...props
 }) {
   return (
@@ -44,7 +45,14 @@ export function TextArrayInput({
               updateValue();
             }}
             onKeyDown={e => focus(e)}
-            onBlur={() => setMultiValue(internalValue?.filter(val => !!val))}
+            onBlur={() => {
+              const fieldValue = internalValue?.filter(val => !!val);
+              setMultiValue(
+                typeof customFormatFn === 'function'
+                  ? customFormatFn(fieldValue)
+                  : fieldValue,
+              );
+            }}
             readOnly={readOnly}
             {...inputProps}
           />
