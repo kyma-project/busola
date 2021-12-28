@@ -29,13 +29,6 @@ context('Test Destination Rules', () => {
       .contains('Create Destination Rule')
       .click();
 
-    cy.getIframeBody()
-      .find('[role="presentation"],[class="view-lines"]')
-      .first()
-      .type(
-        '{selectall}{backspace}{selectall}{backspace}{selectall}{backspace}',
-      );
-
     cy.wrap(loadRandomDR(DR_NAME, Cypress.env('NAMESPACE_NAME'))).then(
       DR_CONFIG => {
         const DR = JSON.stringify(DR_CONFIG);
@@ -43,6 +36,7 @@ context('Test Destination Rules', () => {
           .find('[role="presentation"],[class="view-lines"]')
           .first()
           .click()
+          .clearMonaco()
           .type(DR, { parseSpecialCharSequences: false });
       },
     );
