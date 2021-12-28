@@ -181,4 +181,51 @@ context('Test Protected Resources', () => {
       .contains('button', 'Cancel')
       .click();
   });
+
+  it('Disallows connecting an Application on SKR', () => {
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/backend/api/v1/namespaces/kyma-system/configmaps/skr-configmap',
+      },
+      JSON.stringify({
+        kind: 'ConfigMap',
+        apiVersion: 'v1',
+        data: { 'is-managed-kyma-runtime': 'true' },
+      }),
+    );
+
+    cy.getLeftNav()
+      .contains('Back to Namespaces')
+      .click();
+
+    cy.getLeftNav()
+      .contains('Integration')
+      .click();
+
+    cy.getLeftNav()
+      .contains('Applications')
+      .click();
+
+    cy.getIframeBody()
+      .contains('Create Application')
+      .click();
+
+    cy.getIframeBody()
+      .find('[placeholder^="Specify a name for"]')
+      .type('non-protected');
+
+    cy.getIframeBody()
+      .find('[role=dialog]')
+      .contains('button', 'Create')
+      .click();
+
+    cy.getIframeBody()
+      .contains('non-protected')
+      .click();
+
+    cy.getIframeBody()
+      .contains('Connect Application')
+      .should('be.disabled');
+  });
 });
