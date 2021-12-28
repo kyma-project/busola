@@ -20,7 +20,7 @@ export function createTemplate(namespace, crd) {
 }
 
 const convert = (arg, currentPath, spec) => {
-  switch (arg.type) {
+  switch (arg?.type) {
     case 'object':
       // This version will only show the required fields
       if (arg.properties && arg.required) {
