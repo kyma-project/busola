@@ -53,12 +53,12 @@ export default function CreateBindingModal({
         applicationBinding,
       );
       notification.notifySuccess({
-        content: t('applications.messages.created'),
+        content: t('applications.messages.binding-created'),
       });
     } catch (e) {
       console.warn(e);
       notification.notifyError({
-        title: t('applications.messages.create-failed'),
+        title: t('applications.messages.binding-create-failed'),
         content: e.message,
       });
     }
