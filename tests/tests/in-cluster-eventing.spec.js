@@ -165,8 +165,10 @@ context('In-cluster eventing', () => {
       .click();
 
     cy.getIframeBody()
+      .find('[role="option"]')
       .contains('mock-app')
-      .click({ force: true });
+      .filter(':visible', { log: false })
+      .click();
 
     cy.getIframeBody()
       .find('[placeholder="Event name"]:visible')
