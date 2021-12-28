@@ -214,8 +214,6 @@ context('In-cluster eventing', () => {
       .clear()
       .type('sap.kyma.custom.test-mock-app.order.canceled.v2');
 
-    cy.wait(4000);
-
     cy.getIframeBody()
       .find('[role="dialog"]')
       .contains('button', 'Update')
