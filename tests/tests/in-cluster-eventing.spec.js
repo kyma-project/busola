@@ -42,7 +42,7 @@ context('In-cluster eventing', () => {
       .type(`${FUNCTION_NAME}-subscription`);
 
     cy.getIframeBody()
-      .contains('Choose Application Name')
+      .contains('Choose an Application name')
       .click();
 
     cy.getIframeBody()
@@ -153,7 +153,7 @@ context('In-cluster eventing', () => {
       .type(`${API_RULE_AND_FUNCTION_NAME}-subscription`);
 
     cy.getIframeBody()
-      .contains('Choose Service Name')
+      .contains('Choose a Service name')
       .click();
 
     cy.getIframeBody()
@@ -161,12 +161,12 @@ context('In-cluster eventing', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('Choose Application Name')
+      .contains('Choose an Application name')
       .click();
 
     cy.getIframeBody()
       .find('[role="option"]')
-      .contains('mock-app')
+      .contains('test-mock-app')
       .filter(':visible', { log: false })
       .click();
 
@@ -212,7 +212,7 @@ context('In-cluster eventing', () => {
     cy.getIframeBody()
       .find('[placeholder="Event type"]')
       .clear()
-      .type('sap.kyma.custom.mock-app.order.canceled.v2');
+      .type('sap.kyma.custom.test-mock-app.order.canceled.v2');
 
     cy.wait(4000);
 
