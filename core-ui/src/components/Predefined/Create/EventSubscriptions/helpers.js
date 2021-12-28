@@ -1,5 +1,4 @@
 import * as jp from 'jsonpath';
-import { useTranslation } from 'react-i18next';
 
 export const getServiceName = sink => {
   if (typeof sink !== 'string') return '';

@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import './Service.details.scss';
 import { ApiRulesList } from 'components/ApiRules/ApiRulesList';
-import { EventSubscriptionsList } from 'shared/components/EventSubscriptions/EventSubscriptionsList';
+import { EventSubscriptionsList } from 'shared/components/EventSubscriptionsList';
 
 export const ServicesDetails = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
