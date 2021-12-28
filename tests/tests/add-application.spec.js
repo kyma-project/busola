@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-context('Test Adding Apliacton', () => {
+context('Test Adding Application', () => {
   before(() => {
     cy.loginAndSelectCluster();
   });
@@ -21,7 +21,8 @@ context('Test Adding Apliacton', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Specify a name for your Application.')
+      .find('[placeholder="Specify a name for your Application."]')
+      .clear()
       .type('test-mock-app');
 
     cy.getIframeBody()
