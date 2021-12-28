@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { MonacoEditor } from 'react-shared';
 import LuigiClient from '@luigi-project/client';
 import { LayoutPanel } from 'fundamental-react';
@@ -15,6 +15,58 @@ import { useTranslation } from 'react-i18next';
 
 import { ComponentForList } from 'shared/getComponents';
 import './CustomResourceDefinitionVersions.scss';
+
+function ObjectProperty({
+  name,
+  def: { type, properties, description, ...constraints },
+  global,
+}) {
+  const [collapsed, setCollapsed] = useState(true);
+
+  return (
+    <li key={name} className="fd-margin--sm">
+      <div>
+        {collapsed && properties && (
+          <span onClick={() => setCollapsed(false)}>▶</span>
+        )}
+        {!collapsed && properties && (
+          <span onClick={() => setCollapsed(true)}>▼</span>
+        )}
+        <b style={{ fontWeight: 'bold' }}>{name}</b>:
+        {global.required?.includes(name) && (
+          <span style={{ color: '#f00' }}>*</span>
+        )}{' '}
+        {type}
+      </div>
+      {description && <div style={{ color: '#666' }}>{description}</div>}
+      {!collapsed && type === 'object' && properties && (
+        <ObjectField properties={properties} {...constraints} />
+      )}
+    </li>
+  );
+}
+function ObjectField({ properties, required, ...global }) {
+  console.log('ObjectField', properties, global);
+  return (
+    <ul>
+      {Object.entries(properties).map(([name, def]) => (
+        <ObjectProperty name={name} def={def} global={global} />
+      ))}
+    </ul>
+  );
+}
+
+function SchemaViewer({ schema }) {
+  const root = schema.openAPIV3Schema;
+  console.log('SchemaViewer', schema, root);
+
+  return (
+    <div>
+      <h3>{root.description}</h3>
+      <ObjectField {...root} />
+    </div>
+  );
+}
 
 const CustomResources = ({ resource, namespace, version, i18n }) => {
   const { t } = useTranslation();
@@ -163,6 +215,8 @@ export const CustomResourceDefinitionVersions = resource => {
                 />
               </LayoutPanel.Header>
               <LayoutPanel.Body>
+                {/* TODO tabs */}
+                <SchemaViewer schema={version.schema} />
                 <MonacoEditor
                   key={`crd-schema-editor-${version.name}`}
                   theme={editorTheme}
