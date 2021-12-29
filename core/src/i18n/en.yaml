@@ -115,6 +115,7 @@ applications:
     cannot-create: Cannot create the Application.
     connect-disabled: Connecting an Application is disabled for SKR runtime.
     copy-url: 'Copy the following URL and use it at the external system that you would like to connect to:'
+    create-disabled: Creating an Application is disabled for SKR runtime.
     create-failed: Failed to create the Application.
     created: Application created.
     dont-expose: This Application doesn't expose any Services or events.

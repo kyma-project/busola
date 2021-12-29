@@ -209,23 +209,6 @@ context('Test Protected Resources', () => {
 
     cy.getIframeBody()
       .contains('Create Application')
-      .click();
-
-    cy.getIframeBody()
-      .find('[placeholder^="Specify a name for"]')
-      .type('non-protected');
-
-    cy.getIframeBody()
-      .find('[role=dialog]')
-      .contains('button', 'Create')
-      .click();
-
-    cy.getIframeBody()
-      .contains('non-protected')
-      .click();
-
-    cy.getIframeBody()
-      .contains('Connect Application')
       .should('be.disabled');
   });
 });
