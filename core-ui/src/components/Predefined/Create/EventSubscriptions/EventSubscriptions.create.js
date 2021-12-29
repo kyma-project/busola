@@ -257,13 +257,14 @@ const SubscriptionsCreate = ({
         validate={val => !!val}
         title={t('event-subscription.create.labels.event-type')}
         toInternal={valueFromYaml =>
-          valueFromYaml?.map(obj => obj.eventType.value) || []
+          valueFromYaml?.map(obj => obj.eventType?.value) || []
         }
         toExternal={valueFromComponent =>
           valueFromComponent
-            .filter(Boolean)
+            ?.filter(Boolean)
             .map(value => getEventFilter(value)) || []
         }
+        customFormatFn={arr => arr.map(getEventFilter)}
         placeholder={t('event-subscription.create.labels.event-type')}
       />
       {(jp.value(eventSubscription, '$.spec.filter.filters') || []).length ===
