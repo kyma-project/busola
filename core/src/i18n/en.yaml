@@ -1474,6 +1474,30 @@ roles:
     invalid: Rules cannot apply to both regular resources and non-resource URLs.
   name_singular: Role
   title: Roles
+schema:
+  array-item: ({{name}} item)
+  array-items: Array items
+  constraints:
+    const: Const value
+    dependentRequired: Dependent required
+    enum: Allowed values
+    exclusiveMaximum: Exclusive maximum value
+    exclusiveMinimum: Exclusive minimum value
+    maxContains: Maximum "Contains" value
+    maxItems: Maximum items count
+    maxLength: Maximum length
+    maxProperties: Maximum properties count
+    maximum: Maximum value
+    minContains: Minimum "Contains" value
+    minItems: Mimimum items count
+    minLength: Minumum length
+    minProperties: Minimum properties count
+    minimum: Minimum value
+    multipleOf: Multiple of
+    pattern: Match pattern
+    uniqueItems: Unique items
+  object-properties: Object properties
+  required: Required
 secrets:
   buttons:
     collapse: Collapse All

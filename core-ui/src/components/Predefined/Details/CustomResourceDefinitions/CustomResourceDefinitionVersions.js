@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { MonacoEditor } from 'react-shared';
 import LuigiClient from '@luigi-project/client';
-import { LayoutPanel } from 'fundamental-react';
+import { LayoutPanel, Button, ButtonSegmented } from 'fundamental-react';
 import * as jp from 'jsonpath';
+import jsyaml from 'js-yaml';
 
 import {
   GenericList,
@@ -14,59 +15,8 @@ import {
 import { useTranslation } from 'react-i18next';
 
 import { ComponentForList } from 'shared/getComponents';
+import { SchemaViewer } from 'shared/components/SchemaViewer/SchemaViewer';
 import './CustomResourceDefinitionVersions.scss';
-
-function ObjectProperty({
-  name,
-  def: { type, properties, description, ...constraints },
-  global,
-}) {
-  const [collapsed, setCollapsed] = useState(true);
-
-  return (
-    <li key={name} className="fd-margin--sm">
-      <div>
-        {collapsed && properties && (
-          <span onClick={() => setCollapsed(false)}>▶</span>
-        )}
-        {!collapsed && properties && (
-          <span onClick={() => setCollapsed(true)}>▼</span>
-        )}
-        <b style={{ fontWeight: 'bold' }}>{name}</b>:
-        {global.required?.includes(name) && (
-          <span style={{ color: '#f00' }}>*</span>
-        )}{' '}
-        {type}
-      </div>
-      {description && <div style={{ color: '#666' }}>{description}</div>}
-      {!collapsed && type === 'object' && properties && (
-        <ObjectField properties={properties} {...constraints} />
-      )}
-    </li>
-  );
-}
-function ObjectField({ properties, required, ...global }) {
-  console.log('ObjectField', properties, global);
-  return (
-    <ul>
-      {Object.entries(properties).map(([name, def]) => (
-        <ObjectProperty name={name} def={def} global={global} />
-      ))}
-    </ul>
-  );
-}
-
-function SchemaViewer({ schema }) {
-  const root = schema.openAPIV3Schema;
-  console.log('SchemaViewer', schema, root);
-
-  return (
-    <div>
-      <h3>{root.description}</h3>
-      <ObjectField {...root} />
-    </div>
-  );
-}
 
 const CustomResources = ({ resource, namespace, version, i18n }) => {
   const { t } = useTranslation();
@@ -158,6 +108,8 @@ export const CustomResourceDefinitionVersions = resource => {
   const { editorTheme } = useTheme();
   const namespace = LuigiClient.getContext().namespaceId;
 
+  const [schemaMode, setSchemaMode] = useState('viewer');
+
   if (!resource) return null;
   const { versions } = resource.spec;
   const prettifySchema = schema => {
@@ -213,26 +165,72 @@ export const CustomResourceDefinitionVersions = resource => {
                 <LayoutPanel.Head
                   title={t('custom-resource-definitions.subtitle.schema')}
                 />
+                <LayoutPanel.Actions>
+                  <ButtonSegmented>
+                    <Button
+                      compact
+                      selected={schemaMode === 'viewer'}
+                      onClick={() => setSchemaMode('viewer')}
+                    >
+                      Viewer
+                    </Button>
+                    <Button
+                      compact
+                      selected={schemaMode === 'json'}
+                      onClick={() => setSchemaMode('json')}
+                    >
+                      JSON
+                    </Button>
+                    <Button
+                      compact
+                      selected={schemaMode === 'yaml'}
+                      onClick={() => setSchemaMode('yaml')}
+                    >
+                      YAML
+                    </Button>
+                  </ButtonSegmented>
+                </LayoutPanel.Actions>
               </LayoutPanel.Header>
               <LayoutPanel.Body>
-                {/* TODO tabs */}
-                <SchemaViewer schema={version.schema} />
-                <MonacoEditor
-                  key={`crd-schema-editor-${version.name}`}
-                  theme={editorTheme}
-                  language="json"
-                  height="20em"
-                  value={prettifySchema(version.schema)}
-                  options={{
-                    readOnly: true,
-                    minimap: {
-                      enabled: false,
-                    },
-                    scrollbar: {
-                      alwaysConsumeMouseWheel: false,
-                    },
-                  }}
-                />
+                {schemaMode === 'viewer' && (
+                  <SchemaViewer schema={version.schema} />
+                )}
+                {schemaMode === 'json' && (
+                  <MonacoEditor
+                    key={`crd-schema-editor-${version.name}`}
+                    theme={editorTheme}
+                    language="json"
+                    height="20em"
+                    value={prettifySchema(version.schema)}
+                    options={{
+                      readOnly: true,
+                      minimap: {
+                        enabled: false,
+                      },
+                      scrollbar: {
+                        alwaysConsumeMouseWheel: false,
+                      },
+                    }}
+                  />
+                )}
+                {schemaMode === 'yaml' && (
+                  <MonacoEditor
+                    key={`crd-schema-editor-${version.name}`}
+                    theme={editorTheme}
+                    language="yaml"
+                    height="20em"
+                    value={jsyaml.dump(version.schema, { noRefs: true })}
+                    options={{
+                      readOnly: true,
+                      minimap: {
+                        enabled: false,
+                      },
+                      scrollbar: {
+                        alwaysConsumeMouseWheel: false,
+                      },
+                    }}
+                  />
+                )}
               </LayoutPanel.Body>
             </LayoutPanel>
           )}

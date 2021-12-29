@@ -1,0 +1,25 @@
+.schema-viewer {
+  dl {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    grid-row-gap: 4px;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+
+    dt {
+      color: var(--sapContent_LabelColor);
+    }
+  }
+
+  .property-name {
+    font-weight: bold;
+  }
+
+  li {
+    margin-bottom: 0.5rem;
+  }
+
+  .expander {
+    cursor: pointer;
+  }
+}
