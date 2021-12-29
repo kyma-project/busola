@@ -9,28 +9,9 @@ import {
 import { ComponentForList } from 'shared/getComponents';
 
 import { Button } from 'fundamental-react';
+import { Categories } from 'shared/components/Categories';
 
 import { CRCreate } from './CRCreate';
-const Categories = ({ categories }) => {
-  return (
-    <div>
-      {categories ? (
-        categories.map(category => (
-          <span className="fd-token fd-token--readonly" key={category}>
-            <span
-              className="fd-token__text fd-has-font-size-small"
-              key={category}
-            >
-              {category}
-            </span>
-          </span>
-        ))
-      ) : (
-        <p>{EMPTY_TEXT_PLACEHOLDER}</p>
-      )}
-    </div>
-  );
-};
 
 const CommonCategoriesList = resource => {
   const resourceUrl = '/apis/apiextensions.k8s.io/v1/customresourcedefinitions';
