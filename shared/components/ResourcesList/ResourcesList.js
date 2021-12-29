@@ -112,6 +112,7 @@ function Resources({
   omitColumnsIds = [],
   customListActions = [],
   createFormProps,
+  pagination,
 }) {
   useWindowTitle(windowTitle || prettifyNamePlural(resourceName, resourceType));
   const { t } = useTranslation(['translation'], { i18n });
@@ -372,7 +373,7 @@ function Resources({
         rowRenderer={rowRenderer}
         serverDataError={error}
         serverDataLoading={loading}
-        pagination={{ autoHide: true }}
+        pagination={{ ...pagination, autoHide: true }}
         extraHeaderContent={extraHeaderContent}
         testid={testid}
         currentlyEditedResourceUID={currentlyEditedResourceUID}
