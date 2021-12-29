@@ -922,7 +922,7 @@ functions:
     building: Waiting for the image to build.
     deploying: Deploying the Function.
     failed: Function couldn't be processed.
-    initializing: Function is being initialized.
+    initializing: Initializing the Function.
     new-revision-error: New revision error.
     running: Function created.
     unhealthy: Waiting for the required number of replicas.
