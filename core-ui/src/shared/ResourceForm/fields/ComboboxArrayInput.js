@@ -47,7 +47,7 @@ export function ComboboxArrayInput({
       tooltipContent={tooltipContent}
       sectionTooltipContent={sectionTooltipContent}
       inputs={[
-        ({ value, setValue, ref, onBlur, focus, index }) => (
+        ({ value, setValue, ref, updateValue, focus, index }) => (
           <Inputs.ComboboxInput
             key={index}
             placeholder={placeholder}
@@ -59,7 +59,7 @@ export function ComboboxArrayInput({
             setValue={setValue}
             options={options}
             onKeyDown={focus}
-            onBlur={onBlur}
+            onBlur={updateValue}
           />
         ),
       ]}

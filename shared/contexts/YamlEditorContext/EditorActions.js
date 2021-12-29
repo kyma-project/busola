@@ -32,6 +32,7 @@ export function EditorActions({
   title,
   onSave,
   saveDisabled,
+  saveHidden,
   i18n,
   readOnly,
 }) {
@@ -56,15 +57,16 @@ export function EditorActions({
         tooltipContent={t('common.tooltips.search')}
         glyph="filter"
         onClick={openSearch}
-        className="fd-margin-end--sm"
         disabled={!editor}
       />
-      <ButtonWithTooltip
-        tooltipContent={t('common.tooltips.save')}
-        glyph="save"
-        onClick={onSave}
-        disabled={saveDisabled || !editor}
-      />
+      {!saveHidden && (
+        <ButtonWithTooltip
+          tooltipContent={t('common.tooltips.save')}
+          glyph="save"
+          onClick={onSave}
+          disabled={saveDisabled || !editor}
+        />
+      )}
       <ButtonWithTooltip
         tooltipContent={t('common.tooltips.copy-to-clipboard')}
         glyph="copy"
