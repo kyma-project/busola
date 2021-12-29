@@ -29,19 +29,13 @@ context('Test Ingresses', () => {
       .contains('Create Ingress')
       .click();
 
-    cy.getIframeBody()
-      .find('[role="presentation"],[class="view-lines"]')
-      .first()
-      .type(
-        '{selectall}{backspace}{selectall}{backspace}{selectall}{backspace}',
-      );
-
     cy.wrap(loadRandomIngress(NAME, Cypress.env('NAMESPACE_NAME'))).then(
       INGRESS_CONFIG => {
         const INGRESS = JSON.stringify(INGRESS_CONFIG);
         cy.getIframeBody()
           .find('textarea[aria-roledescription="editor"]')
-          .type('{selectall}{backspace}{selectall}{backspace}')
+          .filter(':visible')
+          .clearMonaco()
           .type(INGRESS, { parseSpecialCharSequences: false });
       },
     );

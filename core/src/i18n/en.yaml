@@ -410,7 +410,7 @@ common:
     resource-namespace: '{{resource}} $t(common.labels.namespace)'
     secret: Secret
     service: Service
-    version: Version
+    version: Kyma Dashboard Version
     'yes': 'Yes'
   lowercase:
     name: name
