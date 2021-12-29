@@ -32,7 +32,7 @@ export function ResourceForm({
   navigationResourceName,
 }) {
   const { i18n } = useTranslation();
-  const createResource = useCreateResource(
+  const createResource = useCreateResource({
     singularName,
     pluralKind,
     resource,
@@ -40,7 +40,7 @@ export function ResourceForm({
     createUrl,
     afterCreatedFn,
     navigationResourceName,
-  );
+  });
 
   const [mode, setMode] = React.useState(
     onlyYaml ? ModeSelector.MODE_YAML : ModeSelector.MODE_SIMPLE,

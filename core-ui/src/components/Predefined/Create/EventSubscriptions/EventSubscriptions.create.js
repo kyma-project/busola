@@ -105,17 +105,6 @@ const SubscriptionsCreate = ({
     `/apis/applicationconnector.kyma-project.io/v1alpha1/applications`,
   );
 
-  const handleNoResource = (resourceArray, name, error) => {
-    if (error) return error;
-
-    const isResourceFound = (resourceArray || [])
-      ?.map(obj => obj.metadata.name)
-      .includes(name);
-
-    if (!isResourceFound)
-      return new Error(t('common.messages.entry-not-found'));
-  };
-
   const afterCreatedFn = async defaultAfterCreatedFn => {
     if (!serviceName) {
       defaultAfterCreatedFn();
@@ -179,6 +168,7 @@ const SubscriptionsCreate = ({
           key: i.metadata.name,
           text: i.metadata.name,
         }))}
+        error={servicesError}
         loading={servicesLoading}
         tooltipContent={t('event-subscription.tooltips.service-name')}
       />
@@ -209,6 +199,7 @@ const SubscriptionsCreate = ({
           key: i.metadata.name,
           text: i.metadata.name,
         }))}
+        error={applicationsError}
         loading={applicationsLoading}
         tooltipContent={t('event-subscription.tooltips.application-name')}
       />
