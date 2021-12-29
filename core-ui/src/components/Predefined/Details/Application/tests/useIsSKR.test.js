@@ -8,7 +8,7 @@ jest.mock('react-shared', () => ({
   useGet: () => mockUseGet,
 }));
 
-function TestBed() {
+function Testbed() {
   const isSkr = useIsSKR();
 
   return isSkr ? 'SKR' : 'OS';
@@ -17,21 +17,21 @@ function TestBed() {
 describe('useIsSKR', () => {
   it('Configmap not found', () => {
     mockUseGet = { error: 'not found', data: null };
-    const { getByText } = render(<TestBed />);
+    const { getByText } = render(<Testbed />);
 
     expect(getByText('OS')).toBeInTheDocument();
   });
 
   it('Configmap found, value not set to true', () => {
     mockUseGet = { data: { data: { 'is-managed-kyma-runtime': 'false' } } };
-    const { getByText } = render(<TestBed />);
+    const { getByText } = render(<Testbed />);
 
     expect(getByText('OS')).toBeInTheDocument();
   });
 
   it('Configmap found, value set to true', () => {
     mockUseGet = { data: { data: { 'is-managed-kyma-runtime': 'true' } } };
-    const { getByText } = render(<TestBed />);
+    const { getByText } = render(<Testbed />);
 
     expect(getByText('SKR')).toBeInTheDocument();
   });
