@@ -1422,7 +1422,7 @@ pods:
     runcontainererror: Run container error.
     running: Pod is running correctly.
     terminated: Pod has terminated.
-    terminating: Pod is being terminated.
+    terminating: Terminating the Pod.
 preferences:
   title: Preferences
 replica-sets:
