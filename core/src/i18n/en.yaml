@@ -452,18 +452,18 @@ common:
     download: Download
     duplicate-key: Duplicate key
     error: Error
-    k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' (e.g.: 'my-name1')."
+    k8s-name-input: 'Name must consist of lowercase alphanumeric characters, can contain ''-'' (e.g.: ''my-name1'').'
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: key=value, must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     read-file: Read file content as a single value, with file name as a key.
     resource-ref-name: Unique name within a Namespace to refer to a {{resource}} resource.
     resource-ref-namespace: Namespace defines the space within which the {{resource}} name must be unique.
-    running-pods: '{{running}} out of {{expected}} Pods are running'
+    running-pods: '{{running}} out of {{expected}} Pods are running.'
     save: Save
     search: Search
     secret-ref-name: Unique name within a Namespace to refer to a Secret resource.
     secret-ref-namespace: Namespace defines the space within which the secret name must be unique.
-    value: Value must start and end with an alphanumeric character, can contain '-', '_' or '.'
+    value: Value must start and end with an alphanumeric character, can contain '-', '_' or '.'.
   'yes': 'yes'
 components:
   dropdown:
@@ -823,7 +823,7 @@ event-subscription:
   sink: Sink
   title: Event Subscriptions
   tooltips:
-    ready: Subscription is active
+    ready: Subscription is active.
 functions:
   buttons:
     connected-repositories: Connected Repositories
@@ -1219,7 +1219,7 @@ jobs:
     complete: Job completed.
     not-complete: Job in progress.
 kubeconfig-id:
-  error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})."
+  error: 'Couldn''t load kubeconfig ID; configuration not changed (Error: ${{error}}).'
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
 legal:
   copyright: Copyright
@@ -1403,23 +1403,23 @@ pods:
     containercreating: Container is being created.
     containersnotinitialized: Containers are not initialized.
     containersnotready: Containers are not ready.
-    crashloopbackoff: Pod is in a crashing loop
-    createcontainerconfigerror: Create container configuration error
-    createcontainererror: Create container error
+    crashloopbackoff: Pod is in a crashing loop.
+    createcontainerconfigerror: Create container configuration error.
+    createcontainererror: Create container error.
     dockerdaemonnotready: Docker Daemon is not ready.
-    errimageneverpull: Image has never been pulled
-    errimagepull: Image pull error
-    error: Pod failed to start
+    errimageneverpull: Image has never been pulled.
+    errimagepull: Image pull error.
+    error: Pod failed to start.
     evicted: Pod has been evicted.
-    imageinspecterror: Image inspect error
-    imagepullbackoff: Could not pull a container image
-    invalidimagename: Invalid image name
-    networkpluginnotready: Network plugin is not ready
+    imageinspecterror: Image inspect error.
+    imagepullbackoff: Could not pull a container image.
+    invalidimagename: Invalid image name.
+    networkpluginnotready: Network plugin is not ready.
     no-restarts: None of the containers has restarted.
     podinitializing: Pod is being initialized.
-    poststarthookerror: Post-start hook error
-    registryunavailable: Registry unavailable
-    runcontainererror: Run container error
+    poststarthookerror: Post-start hook error.
+    registryunavailable: Registry unavailable.
+    runcontainererror: Run container error.
     running: Pod is running correctly.
     terminated: Pod has terminated.
     terminating: Pod is being terminated.
@@ -1447,8 +1447,8 @@ replica-sets:
   name_singular: Replica Set
   title: Replica Sets
   tooltips:
-    error: At least one of the Pods has failed
-    running: All the Pods are running correctly
+    error: At least one of the Pods has failed.
+    running: All the Pods are running correctly.
 resource-quotas:
   headers:
     limits: Limits
