@@ -53,6 +53,7 @@ export * from './contexts/ConfigContext';
 export * from './contexts/NotificationContext';
 export * from './contexts/Microfrontend';
 export * from './contexts/YamlEditorContext/YamlEditorContext';
+export * from './contexts/YamlEditorContext/EditorActions';
 export * from './contexts/ThemeContext';
 export * from './utils/helpers';
 export * from './utils/handleSubscriptionArrayEvent';

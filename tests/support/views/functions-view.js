@@ -71,7 +71,7 @@ Cypress.Commands.add(
       cy.getIframeBody()
         .find('textarea[aria-roledescription="editor"]')
         .filter(':visible')
-        .type('{selectall}{backspace}{selectall}{backspace}')
+        .clearMonaco()
         .paste({
           pastePayload: body,
         });
@@ -86,7 +86,7 @@ Cypress.Commands.add(
         .find('textarea[aria-roledescription="editor"]')
         .filter(':visible')
         // cy.clear sometimes fails, removing only the first character - use this as a workaround
-        .type('{selectall}{backspace}{selectall}{backspace}')
+        .clearMonaco()
         .paste({
           pastePayload: JSON.stringify(body),
         });

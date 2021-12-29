@@ -1,15 +1,15 @@
 import jsyaml from 'js-yaml';
 
-export async function loadFile(FILE_NAME) {
+export async function loadCRD() {
   return await new Promise(resolve => {
-    cy.fixture(FILE_NAME).then(fileContent =>
+    cy.fixture('test-customresourcedefinisions.yaml').then(fileContent =>
       resolve(jsyaml.load(fileContent)),
     );
   });
 }
 
 export async function loadRandomCRD(crdPluralName, crdName) {
-  const CRD = await loadFile('test-customresourcedefinisions.yaml');
+  const CRD = await loadCRD();
   const newCRD = { ...CRD };
 
   newCRD.spec.group = `${crdPluralName}.example.com`;
@@ -19,16 +19,12 @@ export async function loadRandomCRD(crdPluralName, crdName) {
   return newCRD;
 }
 
-export async function loadSubscription(NAMESPACE) {
-  const SUB = await loadFile('test-eventsubscription.yaml');
-  const newSUB = { ...SUB };
-  newSUB.spec.sink = `http://in-cluster-eventing-publisher.${NAMESPACE}.svc.cluster.local`;
-  return newSUB;
-}
-
 export async function loadCRInstance(crdPluralName) {
-  const CR = await loadFile('test-custom-resource-instance.yaml');
-
+  const CR = await new Promise(resolve => {
+    cy.fixture('test-custom-resource-instance.yaml').then(fileContent =>
+      resolve(jsyaml.load(fileContent)),
+    );
+  });
   const newCR = { ...CR };
   newCR.metadata.namespace = Cypress.env('NAMESPACE_NAME');
   newCR.apiVersion = `${crdPluralName}.example.com/v1`;
