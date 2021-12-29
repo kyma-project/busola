@@ -169,7 +169,7 @@ btp-instances:
   title: BTP Service Instances
   tooltips:
     createfailed: Creation failed.
-    offering-name: You find the name of the SAP BTP service offering in the BTP Cockpit in the Service Marketplace.
+    offering-name: You can find the SAP BTP service offering name in the Service Marketplace of the BTP Cockpit.
     plan-name: You find the plan to be used for the service instance in the BTP Cockpit in the Service Marketplace.
     provisioned: Provisioned successfully.
 btp-service-bindings:
