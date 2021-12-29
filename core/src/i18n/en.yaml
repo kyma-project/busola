@@ -1628,7 +1628,7 @@ virtualservices:
       allow-credentials: Allow Credentials
       allow-headers: Allow Headers
       allow-methods: Allow Methods
-      allow-origin: Allow Origins
+      allow-origins: Allow Origins
       expose-headers: Expose Headers
       max-age: Max Age
       title: CORS Policy

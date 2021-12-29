@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { GenericList, Tooltip } from 'react-shared';
-import { LayoutPanel, Icon } from 'fundamental-react';
+import { GenericList } from 'react-shared';
+import { LayoutPanel } from 'fundamental-react';
 
 import {
   Destination,
@@ -85,13 +85,11 @@ function CorsPolicy({ cors }) {
       </LayoutPanel.Header>
       <LayoutPanel.Body>
         <dl>
+          <dd>{t('virtualservices.http-routes.cors.allow-origins')}</dd>
           {cors.allowOrigins.map(origin => (
-            <>
-              <dd>{t('virtualservices.http-routes.cors.allow-origin')}</dd>
-              <dt>
-                <StringMatch def={origin} />
-              </dt>
-            </>
+            <dt>
+              <StringMatch def={origin} />
+            </dt>
           ))}
           {cors.allowMethods?.length && (
             <>
