@@ -7,22 +7,22 @@ import {
   ModalWithForm,
 } from 'react-shared';
 import { ComponentForList } from 'shared/getComponents';
-
 import { Button } from 'fundamental-react';
-import { Categories } from 'shared/components/Categories';
+import { Categories } from 'shared/components/Categories/Categories';
 
 import { CRCreate } from './CRCreate';
 
 const CommonCategoriesList = resource => {
+  const { t } = useTranslation();
   const resourceUrl = '/apis/apiextensions.k8s.io/v1/customresourcedefinitions';
 
   const filterByCategories = crd => {
     return resource.spec.names.categories?.some(
       category =>
         category !== 'all' &&
-        crd.spec.names.categories?.includes(category) &&
         crd.metadata.name !== resource.metadata.name &&
-        crd.spec.scope === resource.spec.scope,
+        crd.spec.scope === resource.spec.scope &&
+        crd.spec.names.categories?.includes(category),
     );
   };
   return (
@@ -37,7 +37,7 @@ const CommonCategoriesList = resource => {
         isCompact: true,
         showTitle: true,
         filter: filterByCategories,
-        title: 'Related CRDs',
+        title: t('custom-resource-definitions.subtitle.common-crds'),
         pagination: { itemsPerPage: 5 },
       }}
     />
@@ -56,7 +56,7 @@ export const CustomResourceDefinitionsDetails = ({
       value: resource => resource.spec.scope,
     },
     {
-      header: 'Categories',
+      header: t('custom-resource-definitions.headers.categories'),
       value: ({ spec }) => <Categories categories={spec.names?.categories} />,
     },
   ];
