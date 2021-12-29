@@ -1400,7 +1400,7 @@ pods:
   title: Pods
   tooltips:
     completed: Pod has completed successfully.
-    containercreating: Container is being created.
+    containercreating: Creating the Container.
     containersnotinitialized: Containers are not initialized.
     containersnotready: Containers are not ready.
     crashloopbackoff: Pod is in a crashing loop.
