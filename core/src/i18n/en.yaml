@@ -1416,7 +1416,7 @@ pods:
     invalidimagename: Invalid image name.
     networkpluginnotready: Network plugin is not ready.
     no-restarts: None of the containers has restarted.
-    podinitializing: Pod is being initialized.
+    podinitializing: Initializing the Pod.
     poststarthookerror: Post-start hook error.
     registryunavailable: Registry unavailable.
     runcontainererror: Run container error.
