@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { GenericList, Tooltip } from 'react-shared';
-import { LayoutPanel } from 'fundamental-react';
+import { LayoutPanel, Icon } from 'fundamental-react';
 
 import {
   Destination,
@@ -96,19 +96,25 @@ function CorsPolicy({ cors }) {
           {cors.allowMethods?.length && (
             <>
               <dd>{t('virtualservices.http-routes.cors.allow-methods')}</dd>
-              <dt>{cors.allowMethods?.join(', ')}</dt>
+              {cors.allowMethods.map(method => (
+                <dt>{method}</dt>
+              ))}
             </>
           )}
           {cors.allowHeaders?.length && (
             <>
               <dd>{t('virtualservices.http-routes.cors.allow-headers')}</dd>
-              <dt>{cors.allowHeaders.join(', ')}</dt>
+              {cors.allowHeaders.map(header => (
+                <dt>{header}</dt>
+              ))}
             </>
           )}
           {cors.exposeHeaders?.length && (
             <>
               <dd>{t('virtualservices.http-routes.cors.expose-headers')}</dd>
-              <dt>{cors.exposeHeaders.join(', ')}</dt>
+              {cors.exposeHeaders.map(header => (
+                <dt>{header}</dt>
+              ))}
             </>
           )}
           {cors.maxAge && (
@@ -375,31 +381,24 @@ function HttpFaultInjectionAbort({ abort }) {
 export function StringMatch({ def, ignoreCase }) {
   const { t } = useTranslation();
 
-  let operator;
+  let label;
   let value;
-  let tooltip;
   if (def.exact) {
-    operator = '=';
-    tooltip = t('virtualservices.matches.exact');
+    label = t('virtualservices.matches.exact');
     value = def.exact;
   } else if (def.prefix) {
-    operator = '^=';
+    label = t('virtualservices.matches.prefix');
     value = def.prefix;
-    tooltip = t('virtualservices.matches.prefix');
   } else if (def.regex) {
-    operator = '~';
+    label = t('virtualservices.matches.regex');
     value = def.regex;
-    tooltip = t('virtualservices.matches.regex');
   } else {
     return '-';
   }
 
   return (
     <>
-      <Tooltip className="match-operator" content={tooltip}>
-        {operator}
-      </Tooltip>{' '}
-      {value}{' '}
+      <span class="match-type">{label}</span> {value}{' '}
       {ignoreCase && !def.regex && (
         <span className="ignore-case">
           {t('virtualservices.matches.ignore-case')}

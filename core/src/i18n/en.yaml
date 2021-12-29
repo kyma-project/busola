@@ -1633,17 +1633,17 @@ virtualservices:
   matches:
     authority: Authority
     destination-subnets: Destination Subnets
-    exact: Is exact
+    exact: is exactly
     gateways: Gateways
     header: Header {{field}}
     ignore-case: (ignore case)
     method: Method
     port: Port
-    prefix: Starts with
-    regex: Matches a regular expression
+    prefix: starts with
+    regex: matches
     scheme: Scheme
     sni-hosts: SNI Hosts
-    source-label: Source Label {{field}}
+    source-labels: Source Labels
     source-namespace: Source Namespace
     title: Matches
     uri: URI

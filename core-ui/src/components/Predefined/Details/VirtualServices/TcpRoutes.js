@@ -13,7 +13,9 @@ function L4MatchAttributesItem({ match }) {
       {match.destinationSubnets && (
         <>
           <dd>{t('virtualservices.matches.destination-subnets')}</dd>
-          <dt>{match.destinationSubnets.join(', ')}</dt>
+          {match.destinationSubnets.map(net => (
+            <dt>{net}</dt>
+          ))}
         </>
       )}
       <CommonMatchAttributes match={match} />

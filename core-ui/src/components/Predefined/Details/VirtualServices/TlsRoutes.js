@@ -11,11 +11,15 @@ function TlsMatchAttributesItem({ match }) {
   return (
     <dl>
       <dd>{t('virtualservices.matches.sni-hosts')}</dd>
-      <dt>{match.sniHosts.join(', ')}</dt>
+      {match.sniHosts.map(host => (
+        <dt>{host}</dt>
+      ))}
       {match.destinationSubnets && (
         <>
           <dd>{t('virtualservices.matches.destination-subnets')}</dd>
-          <dt>{match.destinationSubnets.join(', ')}</dt>
+          {match.destinationSubnets.map(net => (
+            <dt>{net}</dt>
+          ))}
         </>
       )}
       <CommonMatchAttributes match={match} />

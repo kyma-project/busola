@@ -45,17 +45,20 @@ export function CommonMatchAttributes({ match }) {
           <dt>{match.port}</dt>
         </>
       )}
-      {match.sourceLabels &&
-        Object.entries(match.sourceLabels).map(([label, value]) => (
-          <>
-            <dd>{t('virtualservices.matches.source-label', { label })}</dd>
+      {match.sourceLabels && (
+        <>
+          <dd>{t('virtualservices.matches.source-labels')}</dd>
+          {Object.entries(match.sourceLabels).map(([label, value]) => (
             <dt>{value}</dt>
-          </>
-        ))}
+          ))}
+        </>
+      )}
       {match.gateways && (
         <>
           <dd>{t('virtualservices.matches.gateways')}</dd>
-          <dt>{match.gateways.join(', ')}</dt>
+          {match.gateways.map(gateway => (
+            <dt>{gateway}</dt>
+          ))}
         </>
       )}
       {match.sourceNamespace && (
