@@ -122,7 +122,7 @@ export const StatusBadge = ({
 
   if (additionalContent) {
     // Remove the dot at the end of the sentence if we add a colon afterwards
-    if (content?.slice(-1) === '.') content = content?.slice(0, -1);
+    if (content?.endsWith('.')) content = content?.slice(0, -1);
     content = `${content}: ${additionalContent}`;
   }
 
