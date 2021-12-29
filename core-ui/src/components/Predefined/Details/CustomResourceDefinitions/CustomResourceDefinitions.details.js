@@ -6,9 +6,62 @@ import {
   EMPTY_TEXT_PLACEHOLDER,
   ModalWithForm,
 } from 'react-shared';
+import { ComponentForList } from 'shared/getComponents';
+
 import { Button } from 'fundamental-react';
 
 import { CRCreate } from './CRCreate';
+const Categories = ({ categories }) => {
+  return (
+    <div>
+      {categories ? (
+        categories.map(category => (
+          <span className="fd-token fd-token--readonly" key={category}>
+            <span
+              className="fd-token__text fd-has-font-size-small"
+              key={category}
+            >
+              {category}
+            </span>
+          </span>
+        ))
+      ) : (
+        <p>{EMPTY_TEXT_PLACEHOLDER}</p>
+      )}
+    </div>
+  );
+};
+
+const CommonCategoriesList = resource => {
+  const resourceUrl = '/apis/apiextensions.k8s.io/v1/customresourcedefinitions';
+
+  const filterByCategories = crd => {
+    return resource.spec.names.categories?.some(
+      category =>
+        category !== 'all' &&
+        crd.spec.names.categories?.includes(category) &&
+        crd.metadata.name !== resource.metadata.name &&
+        crd.spec.scope === resource.spec.scope,
+    );
+  };
+  return (
+    <ComponentForList
+      name="customResourceDefinitionsList"
+      key="common-categories-list"
+      params={{
+        hasDetailsView: true,
+        fixedPath: true,
+        resourceUrl,
+        resourceType: 'customresourcedefinitions',
+        isCompact: true,
+        showTitle: true,
+        filter: filterByCategories,
+        title: 'Related CRDs',
+        pagination: { itemsPerPage: 5 },
+      }}
+    />
+  );
+};
 
 export const CustomResourceDefinitionsDetails = ({
   DefaultRenderer,
@@ -20,6 +73,10 @@ export const CustomResourceDefinitionsDetails = ({
     {
       header: t('custom-resource-definitions.headers.scope'),
       value: resource => resource.spec.scope,
+    },
+    {
+      header: 'Categories',
+      value: ({ spec }) => <Categories categories={spec.names?.categories} />,
     },
   ];
 
@@ -55,7 +112,11 @@ export const CustomResourceDefinitionsDetails = ({
   return (
     <DefaultRenderer
       customColumns={customColumns}
-      customComponents={[ResourceNames, CustomResourceDefinitionVersions]}
+      customComponents={[
+        ResourceNames,
+        CustomResourceDefinitionVersions,
+        CommonCategoriesList,
+      ]}
       resourceHeaderActions={[
         crd => {
           return (

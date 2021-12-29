@@ -1,7 +1,27 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-shared';
+import { Link, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 import { Trans } from 'react-i18next';
+const Categories = ({ categories }) => {
+  return (
+    <div className="categories-wrapper">
+      {categories ? (
+        categories.map(category => (
+          <span className="fd-token fd-token--readonly" key={category}>
+            <span
+              className="fd-token__text fd-has-font-size-small"
+              key={category}
+            >
+              {category}
+            </span>
+          </span>
+        ))
+      ) : (
+        <p>{EMPTY_TEXT_PLACEHOLDER}</p>
+      )}
+    </div>
+  );
+};
 
 export const CustomResourceDefinitionsList = ({
   DefaultRenderer,
@@ -19,6 +39,10 @@ export const CustomResourceDefinitionsList = ({
     {
       header: t('custom-resource-definitions.headers.scope'),
       value: crd => crd.spec.scope,
+    },
+    {
+      header: 'Categories',
+      value: crd => <Categories categories={crd.spec.names?.categories} />,
     },
   ];
 
