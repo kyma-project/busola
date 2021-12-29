@@ -448,7 +448,7 @@ common:
     download: Download
     duplicate-key: Duplicate key
     error: Error
-    k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' (e.g.: 'my-name1')."
+    k8s-name-input: 'Name must consist of lowercase alphanumeric characters, can contain ''-'' (e.g.: ''my-name1'').'
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: key=value, must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     read-file: Read file content as a single value, with file name as a key.
@@ -1213,7 +1213,7 @@ jobs:
     complete: Job completed.
     not-complete: Job in progress.
 kubeconfig-id:
-  error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})."
+  error: 'Couldn''t load kubeconfig ID; configuration not changed (Error: ${{error}}).'
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
 legal:
   copyright: Copyright
@@ -1483,12 +1483,12 @@ schema:
     enum: Allowed values
     exclusiveMaximum: Exclusive maximum value
     exclusiveMinimum: Exclusive minimum value
-    maxContains: Maximum "Contains" value
+    maxContains: Maximum "contains" value
     maxItems: Maximum items count
     maxLength: Maximum length
     maxProperties: Maximum properties count
     maximum: Maximum value
-    minContains: Minimum "Contains" value
+    minContains: Minimum "contains" value
     minItems: Mimimum items count
     minLength: Minumum length
     minProperties: Minimum properties count
