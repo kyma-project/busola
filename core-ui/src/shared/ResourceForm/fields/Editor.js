@@ -10,6 +10,7 @@ export function Editor({
   setValue,
   readonly,
   language = 'yaml',
+  editorDidMount,
   ...props
 }) {
   const { t } = useTranslation();
@@ -68,6 +69,7 @@ export function Editor({
         value={textResource.current}
         onChange={handleChange}
         editorDidMount={(_, editor) => {
+          if (editorDidMount) editorDidMount(_, editor);
           editor.onDidFocusEditorText(() => (isEditing.current = true));
           editor.onDidBlurEditorText(() => (isEditing.current = false));
         }}
