@@ -38,7 +38,7 @@ async function getBusolaVersion() {
 
 function checkVersionLink(version) {
   if (version !== 'dev') {
-    if (version.substring(0, 3) === 'PR-') {
+    if (version.startsWith('PR-')) {
       return `https://github.com/kyma-project/busola/pull/${version.slice(3)}`;
     } else return `https://github.com/kyma-project/busola/commit/${version}`;
   } else {
