@@ -18,15 +18,15 @@ const FilterOption = ({ filterOption, title }) => {
         <LayoutPanel.Head title={title} className="layout-panel-title" />
       </LayoutPanel.Header>
       <LayoutPanelRow
-        name={t('event-subscription.filters.property')}
+        name={t('event-subscription.headers.filters.property')}
         value={filterOption?.property || EMPTY_TEXT_PLACEHOLDER}
       />
       <LayoutPanelRow
-        name={t('event-subscription.filters.type')}
+        name={t('event-subscription.headers.filters.type')}
         value={filterOption?.type || EMPTY_TEXT_PLACEHOLDER}
       />
       <LayoutPanelRow
-        name={t('event-subscription.filters.value')}
+        name={t('event-subscription.headers.filters.value')}
         value={
           filterOption?.value === ''
             ? '"" (Handled by the NATS backend)' // If it's equal "", that means the NATS backend is chosen.
@@ -42,11 +42,11 @@ const EventFilters = ({ filter }) => {
   return (
     <div>
       <FilterOption
-        title={t('event-subscription.filters.event-source')}
+        title={t('event-subscription.headers.filters.event-source')}
         filterOption={filter?.eventSource}
       />
       <FilterOption
-        title={t('event-subscription.filters.event-type')}
+        title={t('event-subscription.headers.filters.event-type')}
         filterOption={filter?.eventType}
       />
     </div>
@@ -63,7 +63,9 @@ const EventSubscriptionsFilters = eventSubscription => {
       key={'event-subscription-filters'}
     >
       <LayoutPanel.Header>
-        <LayoutPanel.Head title={t('event-subscription.filters.title')} />
+        <LayoutPanel.Head
+          title={t('event-subscription.headers.filters.title')}
+        />
       </LayoutPanel.Header>
 
       {filters.length > 0 ? (
@@ -82,7 +84,7 @@ export const SubscriptionsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
   const customColumns = [
     {
-      header: t('event-subscription.conditions.status'),
+      header: t('event-subscription.headers.conditions.status'),
       value: ({ status }) => {
         const lastCondition = status?.conditions[status?.conditions.length - 1];
         return <EventSubscriptionConditionStatus condition={lastCondition} />;
