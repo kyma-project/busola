@@ -1410,7 +1410,7 @@ pods:
     errimageneverpull: Image has never been pulled.
     errimagepull: Image pull error.
     error: Pod failed to start.
-    evicted: Pod has been evicted.
+    evicted: Pod has been removed.
     imageinspecterror: Image inspect error.
     imagepullbackoff: Could not pull a container image.
     invalidimagename: Invalid image name.
