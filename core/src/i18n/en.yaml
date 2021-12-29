@@ -919,7 +919,7 @@ functions:
     unhealthy: Pending
   title: Functions
   tooltips:
-    building: Waiting for the image to build.
+    building: Building the image.
     deploying: Deploying the Function.
     failed: Function couldn't be processed.
     initializing: Initializing the Function.
