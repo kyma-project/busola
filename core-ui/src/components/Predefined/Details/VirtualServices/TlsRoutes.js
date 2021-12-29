@@ -11,7 +11,7 @@ function TlsMatchAttributesItem({ match }) {
   return (
     <dl>
       <dd>{t('virtualservices.matches.sni-hosts')}</dd>
-      {match.sniHosts.map(host => (
+      {match.sniHosts?.map(host => (
         <dt>{host}</dt>
       ))}
       {match.destinationSubnets && (
