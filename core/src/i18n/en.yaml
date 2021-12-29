@@ -793,7 +793,7 @@ event-subscription:
     title: Add Event Subscription
   description: <0>Event Subscription</0> is used to subscribe to events.
   errors:
-    empty-event-types: You must provide at least one Event Type.
+    empty-event-types: You must provide at least one Event type.
   headers:
     conditions:
       last-transition: Last Transition
