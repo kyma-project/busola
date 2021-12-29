@@ -179,11 +179,6 @@ const SubscriptionsCreate = ({
           key: i.metadata.name,
           text: i.metadata.name,
         }))}
-        error={handleNoResource(
-          services,
-          getServiceName(jp.value(eventSubscription, '$.spec.sink')),
-          servicesError,
-        )}
         loading={servicesLoading}
         tooltipContent={t('event-subscription.tooltips.service-name')}
       />
@@ -214,11 +209,6 @@ const SubscriptionsCreate = ({
           key: i.metadata.name,
           text: i.metadata.name,
         }))}
-        error={handleNoResource(
-          applications,
-          firstEventTypeValues.appName,
-          applicationsError,
-        )}
         loading={applicationsLoading}
         tooltipContent={t('event-subscription.tooltips.application-name')}
       />
