@@ -743,7 +743,7 @@ dnsentries:
     stale: Error
   title: DNS Entries
   tooltips:
-    deleting: The DNS records are now being deleted.
+    deleting: Deleting the DNS records.
     invalid: A conflict exists with another DNS entry or owner.
     pending: The DNS entry update is batched or in progress.
     ready: The entry has been accepted and the DNS record created.
