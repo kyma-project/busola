@@ -46,7 +46,7 @@ context('In-cluster eventing', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('test-mock-app')
+      .contains(`test-mock-app-${Cypress.env('NAMESPACE_NAME')}`)
       .click();
 
     cy.getIframeBody()
@@ -166,7 +166,7 @@ context('In-cluster eventing', () => {
 
     cy.getIframeBody()
       .find('[role="option"]')
-      .contains('test-mock-app')
+      .contains(`test-mock-app-${Cypress.env('NAMESPACE_NAME')}`)
       .filter(':visible', { log: false })
       .click();
 
@@ -212,7 +212,11 @@ context('In-cluster eventing', () => {
     cy.getIframeBody()
       .find('[placeholder="Event type"]')
       .clear()
-      .type('sap.kyma.custom.test-mock-app.order.canceled.v2');
+      .type(
+        `sap.kyma.custom.test-mock-app-${Cypress.env(
+          'NAMESPACE_NAME',
+        )}.order.canceled.v2`,
+      );
 
     cy.getIframeBody()
       .find('[role="dialog"]')
