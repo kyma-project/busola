@@ -51,7 +51,12 @@ export function ResourceForm({
       setCustomValid(validationRef.current);
     }
     validationRef.current = true;
-  }, [resource, children, setCustomValid]);
+
+    // close search
+    if (actionsEditor) {
+      actionsEditor.trigger('', 'closeFindWidget');
+    }
+  }, [resource, children, setCustomValid, actionsEditor]);
 
   const convertedResource = jsyaml.dump(resource);
 
