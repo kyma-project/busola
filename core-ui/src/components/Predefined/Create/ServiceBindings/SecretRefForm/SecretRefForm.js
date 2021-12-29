@@ -96,7 +96,7 @@ export function SecretRefForm({
       title={t('btp-service-bindings.parameters-from')}
       sectionTooltipContent={t('btp-service-bindings.tooltips.parameters-from')}
       inputs={[
-        ({ value, setValue, ref, onBlur, focus }) => (
+        ({ value, setValue, ref, updateValue, focus }) => (
           <Dropdown
             compact
             className="secret-name-dropdown"
@@ -105,14 +105,14 @@ export function SecretRefForm({
             ref={ref}
             onSelect={(e, selected) => {
               setValue({ name: selected.key });
-              onBlur();
+              updateValue();
               focus(e);
             }}
             placeholder={t('btp-service-bindings.placeholders.choose-secret')}
             i18n={i18n}
           />
         ),
-        ({ value, setValue, ref, onBlur, focus }) =>
+        ({ value, setValue, ref, updateValue, focus }) =>
           value?.name ? (
             <Dropdown
               compact
@@ -121,7 +121,7 @@ export function SecretRefForm({
               selectedKey={value.key}
               onSelect={(e, selected) => {
                 setValue({ ...value, key: selected.key });
-                onBlur();
+                updateValue();
                 focus(e);
               }}
               validationState={getRefValidation(value)}

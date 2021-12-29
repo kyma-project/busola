@@ -148,10 +148,10 @@ const OAuth2ClientsCreate = ({
         propertyPath="$.spec.scope"
         validate={val => !!val}
         title={t('oauth2-clients.labels.scope')}
-        toInternal={valueFromYaml => valueFromYaml?.split(/ +/) || []}
-        toExternal={valueFromComponent =>
-          valueFromComponent.filter(Boolean).join(' ')
+        toInternal={value =>
+          typeof value === 'string' ? value.split(' ') : value
         }
+        customFormatFn={arr => arr.join(' ')}
         placeholder={t('oauth2-clients.placeholders.scope')}
       />
       <TextArrayInput
