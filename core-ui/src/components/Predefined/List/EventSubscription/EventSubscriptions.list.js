@@ -10,8 +10,14 @@ const EventTypes = ({ filters }) => {
     <div className="event-types-wrapper ">
       {filters.length > 0 ? (
         filters?.map(filter => (
-          <span className="fd-token fd-token--read-only">
-            <span className="fd-token__text fd-has-font-size-small">
+          <span
+            className="fd-token fd-token--read-only"
+            key={filter.eventType.value}
+          >
+            <span
+              className="fd-token__text fd-has-font-size-small"
+              key={filter.eventType.value}
+            >
               {filter.eventType.value}
             </span>
           </span>
