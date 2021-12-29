@@ -64,9 +64,9 @@ context('Test Virtual Services', () => {
       'kyma-gateway-application-connector.kyma-system.svc.cluster.local',
     );
     cy.getIframeBody().contains('host1.example.com');
-    cy.getIframeBody().contains('~ ^/uri-*regex?');
-    cy.getIframeBody().contains('= exact-uri');
-    cy.getIframeBody().contains('^= prefixed-uri (ignore case)');
+    cy.getIframeBody().contains('matches ^/uri-*regex?');
+    cy.getIframeBody().contains('is exactly exact-uri');
+    cy.getIframeBody().contains('starts with prefixed-uri (ignore case)');
     cy.getIframeBody().contains('TLS Route');
     cy.getIframeBody().contains('SNI Hosts');
     cy.getIframeBody().contains('TCP Route');
