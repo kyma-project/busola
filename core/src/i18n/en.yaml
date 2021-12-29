@@ -1613,7 +1613,7 @@ top-nav:
   profile:
     preferences: $t(preferences.title)
 virtualservices:
-  description: <0>Virtual Service</0> describes a configuration affecting traffic routing.
+  description: <0>Virtual Service</0> describes a configuration that affects traffic routing.
   gateways: Gateways
   headers:
     add: add
