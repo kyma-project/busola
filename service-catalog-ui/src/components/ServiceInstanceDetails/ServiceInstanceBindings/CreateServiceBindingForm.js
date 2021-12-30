@@ -56,7 +56,6 @@ export function CreateServiceBindingForm({
         <FormLabel className="fd-margin-top--tiny">Secret Name</FormLabel>
         <ComboboxWrapper>
           <ComboboxInput
-            required
             compact
             placeholder="Secret Name"
             options={(secrets || [])
