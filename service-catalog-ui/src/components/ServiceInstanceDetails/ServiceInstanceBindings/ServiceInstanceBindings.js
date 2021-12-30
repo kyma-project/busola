@@ -1,9 +1,11 @@
 import React from 'react';
-import { GenericList, handleDelete } from 'react-shared';
-import CreateServiceBindingModal from './CreateServiceBindingModal/CreateServiceBindingModal';
+import LuigiClient from '@luigi-project/client';
+import CreateServiceBindingUsageModal from './CreateServiceBindingUsageForm/CreateServiceBindingUsageModal';
 import SecretDataModal from './SecretDataModal/SecretDataModal.component';
 import { Link } from 'fundamental-react';
 import {
+  GenericList,
+  handleDelete,
   StatusBadge,
   useGetList,
   useNotification,
@@ -13,6 +15,7 @@ import {
 import { useTranslation } from 'react-i18next';
 
 import { TextOverflowWrapper } from '../../ServiceInstanceList/ServiceInstanceTable/styled';
+import { CreateServiceBindingModal } from './CreateServiceBindingModal';
 
 const ServiceInstanceBindings = ({ serviceInstance, i18n }) => {
   const { t } = useTranslation();
@@ -110,8 +113,8 @@ const ServiceInstanceBindings = ({ serviceInstance, i18n }) => {
         },
       ];
 
-  const createServiceBindingModal = (
-    <CreateServiceBindingModal
+  const createServiceBindingUsageModal = (
+    <CreateServiceBindingUsageModal
       serviceInstance={serviceInstance}
       serviceBindings={bindingsRequest.data}
       i18n={i18n}
@@ -199,24 +202,83 @@ const ServiceInstanceBindings = ({ serviceInstance, i18n }) => {
   ];
 
   return (
-    <GenericList
-      key="binding-usages-list"
-      title="Bound Applications"
-      headerRenderer={bindingUsagesHeaderRenderer}
-      extraHeaderContent={createServiceBindingModal}
-      entries={serviceBindingsCombined}
-      rowRenderer={bindingUsagesRowRenderer}
-      notFoundMessage="No applications found"
-      actions={actions}
-      serverDataError={error}
-      serverDataLoading={loading}
-      textSearchProperties={[
-        'serviceBindingUsage.metadata.name',
-        'serviceBinding.metadata.name',
-        'serviceBindingUsage.spec.usedBy.name',
-      ]}
-      i18n={i18n}
-    />
+    <>
+      <GenericList
+        key="service-bindings-list"
+        title="Service Bindings"
+        headerRenderer={() => ['Name', 'Secret']}
+        extraHeaderContent={
+          <CreateServiceBindingModal serviceInstance={serviceInstance} />
+        }
+        entries={bindingsRequest.data || []}
+        rowRenderer={e => [
+          e.metadata.name,
+          <Link
+            className="fd-link"
+            onClick={() =>
+              LuigiClient.linkManager()
+                .fromContext('namespace')
+                .navigate(`/secrets/details/${e.spec.secretName}`)
+            }
+          >
+            {e.spec.secretName}
+          </Link>,
+        ]}
+        notFoundMessage="No Bindings found"
+        actions={
+          btpCatalogEnabled
+            ? []
+            : [
+                {
+                  name: t('common.buttons.delete'),
+                  icon: 'delete',
+                  handler: async serviceBinding => {
+                    const { name, namespace } = serviceBinding.metadata;
+                    return await handleDelete(
+                      serviceBinding.kind,
+                      null,
+                      name,
+                      notification,
+                      () =>
+                        sendDeleteRequest(
+                          `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${namespace}/servicebindings/${name}`,
+                        ),
+                      () => {
+                        bindingsRequest.silentRefetch();
+                        notification.notifySuccess({
+                          content: 'Service Binding deleted',
+                        });
+                      },
+                      t,
+                    );
+                  },
+                },
+              ]
+        }
+        serverDataError={bindingsRequest.error}
+        serverDataLoading={bindingsRequest.loading}
+        textSearchProperties={['spec.secretName']}
+        i18n={i18n}
+      />
+      <GenericList
+        key="binding-usages-list"
+        title="Bound Applications"
+        headerRenderer={bindingUsagesHeaderRenderer}
+        extraHeaderContent={createServiceBindingUsageModal}
+        entries={serviceBindingsCombined}
+        rowRenderer={bindingUsagesRowRenderer}
+        notFoundMessage="No applications found"
+        actions={actions}
+        serverDataError={error}
+        serverDataLoading={loading}
+        textSearchProperties={[
+          'serviceBindingUsage.metadata.name',
+          'serviceBinding.metadata.name',
+          'serviceBindingUsage.spec.usedBy.name',
+        ]}
+        i18n={i18n}
+      />
+    </>
   );
 };
 
