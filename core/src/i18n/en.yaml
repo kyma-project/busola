@@ -819,7 +819,7 @@ event-subscription:
   title: Event Subscriptions
   tooltips:
     application-name: Choose an Application from the cluster.
-    event-name: Provide a name for your Event.
+    event-name: Provide a name for your Event. The name must consist of at least two parts divided by a dot.
     event-type-advanced: Provide your customized Event type that will override the predefined one. You can add more Event types if needed.
     event-type-simple: Event type is defined based on the Application name, Event name, and Event version.
     event-version: Choose the Event version from the drop-down list or provide your own version.
