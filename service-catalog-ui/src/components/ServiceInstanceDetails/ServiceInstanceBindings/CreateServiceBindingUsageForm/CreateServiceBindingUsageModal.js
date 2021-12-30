@@ -8,7 +8,7 @@ import {
   useMicrofrontendContext,
 } from 'react-shared';
 
-import CreateServiceBindingForm from './CreateServiceBindingForm';
+import CreateServiceBindingForm from './CreateServiceBindingUsageForm';
 import { SERVICE_BINDINGS_PANEL } from '../constants';
 
 export default function CreateServiceBindingModal({
