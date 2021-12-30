@@ -788,45 +788,44 @@ domains:
     label: Include Domains
     placeholder: Domain that is allowed
 event-subscription:
-  conditions:
-    last-transition: Last Transition
-    reason: Reason
-    status: Status
-    title: Conditions
-    type: Type
   create:
     labels:
       application-name: Application name
-      calculate-event-type: Calculate Event type
-      calculate-from-cmp: Calculate from components
-      enter-event-type: Enter Event type
       event-name: Event name
       event-type: Event type
       event-version: Event version
-    notifications:
-      created: Subscription created
-      failed: Failed to create the Subscription
-      failed-delete: Failed to delete the Subscription
-      removed: Subscription removed
+    placeholders:
+      application-name: Choose an Application name
+      service-name: Choose a Service name
     title: Add Event Subscription
   description: <0>Event Subscription</0> is used to subscribe to events.
   errors:
-    invalid: The eventType field must have a proper value.
-    not-matching-search-query: Couldn't find Event Subscriptions matching this query.
-    server: Server error. Contact your cluster admin.
-    subscriptions-not-found: There are no Event Subscriptions yet.
-  filters:
-    event-source: Event Source
-    event-type: Event Type
-    property: Property
-    title: Filters
-    type: Type
-    value: Value
+    empty-event-types: You must provide at least one Event type.
+  headers:
+    conditions:
+      last-transition: Last Transition
+      reason: Reason
+      status: Status
+      title: Conditions
+      type: Type
+    filters:
+      event-source: Event Source
+      event-type: Event Type
+      property: Property
+      title: Filters
+      type: Type
+      value: Value
   name_singular: Event Subscription
   sink: Sink
   title: Event Subscriptions
   tooltips:
-    ready: Subscription is active.
+    application-name: Choose an Application from the cluster.
+    event-name: Provide a name for your Event. The name must consist of at least two parts divided by a dot.
+    event-type-advanced: Provide your customized Event type that will override the predefined one. You can add more Event types if needed.
+    event-type-simple: Event type is defined based on the Application name, Event name, and Event version.
+    event-version: Choose the Event version from the drop-down list or provide your own version.
+    ready: Subscription is active
+    service-name: Choose a Service from the Namespace.
 functions:
   buttons:
     connected-repositories: Connected Repositories
