@@ -33,18 +33,35 @@ context('In-cluster eventing', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('button', 'Add Event Subscription')
+      .contains('button', 'Create Event Subscription')
       .click();
 
     cy.getIframeBody()
-      .find(
-        '[placeholder="The Event Type value used to create the subscription"]',
-      )
-      .type('nonexistingapp.order.created.v1');
+      .find('[placeholder="Event Subscription Name"]:visible')
+      .clear()
+      .type(`${FUNCTION_NAME}-subscription`);
+
+    cy.getIframeBody()
+      .contains('Choose an Application name')
+      .click();
+
+    cy.getIframeBody()
+      .contains(`test-mock-app-${Cypress.env('NAMESPACE_NAME')}`)
+      .click();
+
+    cy.getIframeBody()
+      .find('[placeholder="Event name"]:visible')
+      .clear()
+      .type('order.created');
+
+    cy.getIframeBody()
+      .find('[placeholder="Event version"]:visible')
+      .clear()
+      .type('v1');
 
     cy.getIframeBody()
       .find('[role="dialog"]')
-      .contains('button', 'Add')
+      .contains('button', 'Create')
       .click();
   });
 
@@ -131,34 +148,37 @@ context('In-cluster eventing', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[role="presentation"],[class="view-lines"]')
-      .first()
-      .type(
-        '{selectall}{backspace}{selectall}{backspace}{selectall}{backspace}',
-      );
+      .find('[placeholder="Event Subscription Name"]:visible')
+      .clear()
+      .type(`${API_RULE_AND_FUNCTION_NAME}-subscription`);
 
     cy.getIframeBody()
-      .find('[role="presentation"],[class="view-lines"]')
-      .first()
-      .type(
-        '{selectall}{backspace}{selectall}{backspace}{selectall}{backspace}',
-      );
+      .contains('Choose a Service name')
+      .click();
 
     cy.getIframeBody()
-      .find('[role="presentation"],[class="view-lines"]')
-      .first()
-      .type(
-        '{selectall}{backspace}{selectall}{backspace}{selectall}{backspace}',
-      );
+      .contains(API_RULE_AND_FUNCTION_NAME)
+      .click();
 
-    cy.wrap(loadSubscription(Cypress.env('NAMESPACE_NAME'))).then(CONFIG => {
-      const SUBSCRIPTION = JSON.stringify(CONFIG);
-      cy.getIframeBody()
-        .find('[role="presentation"],[class="view-lines"]')
-        .first()
-        .click()
-        .type(SUBSCRIPTION, { parseSpecialCharSequences: false });
-    });
+    cy.getIframeBody()
+      .contains('Choose an Application name')
+      .click();
+
+    cy.getIframeBody()
+      .find('[role="option"]')
+      .contains(`test-mock-app-${Cypress.env('NAMESPACE_NAME')}`)
+      .filter(':visible', { log: false })
+      .click();
+
+    cy.getIframeBody()
+      .find('[placeholder="Event name"]:visible')
+      .clear()
+      .type('order.created');
+
+    cy.getIframeBody()
+      .find('[placeholder="Event version"]:visible')
+      .clear()
+      .type('v1');
 
     cy.getIframeBody()
       .find('[role="dialog"]')
@@ -172,7 +192,41 @@ context('In-cluster eventing', () => {
       .should('be.visible');
 
     cy.getIframeBody()
-      .contains('app.kubernetes.io/name=test')
+      .contains('Subscription active')
+      .should('be.visible');
+
+    cy.getIframeBody()
+      .contains(/ready/i)
+      .should('be.visible');
+  });
+
+  it('Edit Subscription', () => {
+    cy.getIframeBody()
+      .contains('Edit')
+      .click();
+
+    cy.getIframeBody()
+      .contains('Advanced')
+      .click();
+
+    cy.getIframeBody()
+      .find('[placeholder="Event type"]')
+      .clear()
+      .type(
+        `sap.kyma.custom.test-mock-app-${Cypress.env(
+          'NAMESPACE_NAME',
+        )}.order.canceled.v2`,
+      );
+
+    cy.getIframeBody()
+      .find('[role="dialog"]')
+      .contains('button', 'Update')
+      .click();
+  });
+
+  it('Checking updates', () => {
+    cy.getIframeBody()
+      .contains('in-cluster-eventing-publisher-subscription')
       .should('be.visible');
 
     cy.getIframeBody()
@@ -181,6 +235,10 @@ context('In-cluster eventing', () => {
 
     cy.getIframeBody()
       .contains(/ready/i)
+      .should('be.visible');
+
+    cy.getIframeBody()
+      .contains('order.canceled.v2')
       .should('be.visible');
   });
 

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
-import * as _ from 'lodash';
+import { cloneDeep } from 'lodash';
+import { useNotification } from 'react-shared';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import {
@@ -35,10 +36,11 @@ function ApiRulesCreate({
   // queries are moved up here so that the network calls are not doubled
   const servicesQuery = useServicesQuery(namespace);
   const gatewaysQuery = useGatewaysQuery(namespace);
+  const notification = useNotification();
 
   const [subdomain, setSubdomain] = useState('');
   const [apiRule, setApiRule] = useState(
-    _.cloneDeep(initialApiRule) || createApiRuleTemplate(namespace),
+    cloneDeep(initialApiRule) || createApiRuleTemplate(namespace),
   );
 
   // validation
@@ -86,6 +88,17 @@ function ApiRulesCreate({
   const afterCreatedFn = async defaultAfterCreatedFn => {
     if (!serviceName) {
       defaultAfterCreatedFn();
+    } else {
+      notification.notifySuccess({
+        content: t(
+          initialApiRule
+            ? 'common.create-form.messages.patch-success'
+            : 'common.create-form.messages.create-success',
+          {
+            resourceType: t(`api-rules.name_singular`),
+          },
+        ),
+      });
     }
   };
 
