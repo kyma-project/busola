@@ -42,6 +42,64 @@ export function EditorActions({
     editor.trigger('', 'actions.find');
   };
 
+  const getReadOnlyFieldsPosition = () => {
+    const READONLY_FIELDS = ['managedFields:', 'status:'];
+    let arrayOfPositions = [];
+    READONLY_FIELDS.forEach(fieldName => {
+      arrayOfPositions = arrayOfPositions.contains(
+        editor.getModel().findMatches(fieldName, true, false, true, null, true),
+      );
+    });
+    return arrayOfPositions;
+  };
+  const hideNonEditable = () => {
+    console.log(editor.getSupportedActions());
+    const matches = editor
+      .getModel()
+      .findMatches('managedFields:', true, false, true, null, true)
+      .concat(
+        ...editor
+          .getModel()
+          .findMatches('status:', true, false, true, null, true),
+      );
+    constreadOnlyFields = getReadOnlyFieldsPosition();
+    matches.forEach(match => {
+      setTimeout(() => {
+        console.log(
+          'startColumn',
+          match.range.startColumn,
+          'startLineNumber',
+          match.range.startLineNumber,
+          matches,
+        );
+        editor.setPosition({
+          column: match.range.startColumn,
+          lineNumber: match.range.startLineNumber,
+        });
+        editor.trigger('fold', 'editor.fold');
+      });
+    });
+    const matches2 = editor
+      .getModel()
+      .findMatches('status:', true, false, true, null, true);
+    matches2.forEach(match => {
+      setTimeout(() => {
+        console.log(
+          'startColumn',
+          match.range.startColumn,
+          'startLineNumber',
+          match.range.startLineNumber,
+          matches,
+        );
+        editor.setPosition({
+          column: match.range.startColumn,
+          lineNumber: match.range.startLineNumber,
+        });
+        editor.trigger('fold', 'editor.fold');
+      });
+    });
+  };
+
   const download = () => {
     const blob = new Blob([val], {
       type: 'application/yaml;charset=utf-8',
@@ -53,6 +111,12 @@ export function EditorActions({
 
   return (
     <section className="editor-actions fd-margin-bottom--sm">
+      <ButtonWithTooltip
+        tooltipContent={'Show managed fields'}
+        glyph="hide"
+        onClick={hideNonEditable}
+        disabled={!editor}
+      />
       <ButtonWithTooltip
         tooltipContent={t('common.tooltips.search')}
         glyph="filter"
