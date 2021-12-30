@@ -1,0 +1,27 @@
+.virual-service-route {
+  .match-operator {
+    cursor: help;
+  }
+
+  .header-operation {
+    font-style: italic;
+  }
+
+  .match-type {
+    font-style: italic;
+  }
+
+  .header-operation-title {
+    font-weight: bold;
+  }
+
+  .route-extras {
+    padding-top: 0;
+    padding-bottom: 0;
+
+    > dl:not(:empty) {
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
+  }
+}
