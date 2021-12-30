@@ -14,12 +14,7 @@ import {
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { ComboboxInput, MessageStrip } from 'fundamental-react';
 import { createEventSubscriptionTemplate } from './templates';
-import {
-  getServiceName,
-  validateEventSubscription,
-  getEventFilter,
-  spreadEventType,
-} from './helpers';
+import { getServiceName, getEventFilter, spreadEventType } from './helpers';
 
 const DEFAULT_EVENT_TYPE_PREFIX = 'sap.kyma.custom.';
 const versionOptions = ['v1', 'v2', 'v3', 'v4'];
@@ -67,15 +62,6 @@ const SubscriptionsCreate = ({
       setEventSubscription({ ...eventSubscription });
     }
   }, [serviceName]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
-    setCustomValid(
-      validateEventSubscription(
-        eventSubscription,
-        firstEventTypeValues.appName,
-      ),
-    );
-  }, [firstEventTypeValues.appName, eventSubscription, setCustomValid]);
 
   const handleEventTypeValuesChange = changes => {
     const newEventTypeValues = { ...firstEventTypeValues, ...changes };
@@ -162,6 +148,9 @@ const SubscriptionsCreate = ({
           getServiceName(jp.value(eventSubscription, '$.spec.sink')) ||
           ''
         }
+        validate={() =>
+          getServiceName(jp.value(eventSubscription, '$.spec.sink'))
+        }
         input={Inputs.Dropdown}
         placeholder={t('event-subscription.create.placeholders.service-name')}
         options={(services || []).map(i => ({
@@ -195,6 +184,14 @@ const SubscriptionsCreate = ({
         placeholder={t(
           'event-subscription.create.placeholders.application-name',
         )}
+        validate={value => {
+          const eventType = jp.value(
+            value,
+            '$.spec.filter.filters[0].eventType.value',
+          );
+          const { appName } = spreadEventType(eventType, eventTypePrefix);
+          return appName;
+        }}
         options={(applications || []).map(i => ({
           key: i.metadata.name,
           text: i.metadata.name,
@@ -254,7 +251,6 @@ const SubscriptionsCreate = ({
         defaultOpen
         tooltipContent={t('event-subscription.tooltips.event-type-advanced')}
         propertyPath="$.spec.filter.filters"
-        validate={val => !!val}
         title={t('event-subscription.create.labels.event-type')}
         toInternal={valueFromYaml =>
           valueFromYaml?.map(obj => obj.eventType?.value) || []
@@ -266,6 +262,16 @@ const SubscriptionsCreate = ({
         }
         customFormatFn={arr => arr.map(getEventFilter)}
         placeholder={t('event-subscription.create.labels.event-type')}
+        validate={value => {
+          console.log(value);
+          return value.every(e => {
+            if (e.eventType.value.split('.').filter(s => s).length < 7) {
+              return false;
+            } else {
+              return true;
+            }
+          });
+        }}
       />
       {(jp.value(eventSubscription, '$.spec.filter.filters') || []).length ===
       0 ? (

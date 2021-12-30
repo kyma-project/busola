@@ -1,19 +1,9 @@
-import * as jp from 'jsonpath';
-
 export const getServiceName = sink => {
   if (typeof sink !== 'string') return '';
 
   const startIndex = sink?.lastIndexOf('/') + 1;
   const nextDot = sink?.indexOf('.');
   return sink?.substring(startIndex, nextDot);
-};
-
-export const validateEventSubscription = (eventSubscription, appName) => {
-  const serviceName = getServiceName(
-    jp.value(eventSubscription, '$.spec.sink'),
-  );
-
-  return serviceName && appName;
 };
 
 export const getEventFilter = value => {
