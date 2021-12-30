@@ -9,6 +9,8 @@ import {
 import ApiRuleStatus from 'components/ApiRules/ApiRuleStatus/ApiRuleStatus';
 import AccessStrategies from 'components/ApiRules/AccessStrategies/AccessStrategies';
 
+import { ApiRuleServices } from './Services';
+
 export const ApiRulesDetails = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
 
@@ -39,7 +41,7 @@ export const ApiRulesDetails = ({ DefaultRenderer, ...otherParams }) => {
   return (
     <DefaultRenderer
       customColumns={customColumns}
-      customComponents={[ApiRulesAccessStrategies]}
+      customComponents={[ApiRulesAccessStrategies, ApiRuleServices]}
       {...otherParams}
     />
   );
