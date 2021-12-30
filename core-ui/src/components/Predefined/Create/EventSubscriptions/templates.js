@@ -1,4 +1,4 @@
-export function createEventSubscriptionTemplate(namespace) {
+export function createEventSubscriptionTemplate(namespace, eventTypePrefix) {
   return {
     apiVersion: 'eventing.kyma-project.io/v1alpha1',
     kind: 'Subscription',
@@ -8,6 +8,7 @@ export function createEventSubscriptionTemplate(namespace) {
       labels: {},
     },
     spec: {
+      sink: '',
       filter: {
         filters: [
           {
@@ -19,12 +20,11 @@ export function createEventSubscriptionTemplate(namespace) {
             eventType: {
               property: 'type',
               type: 'exact',
-              value: '',
+              value: eventTypePrefix,
             },
           },
         ],
       },
-      sink: '',
     },
   };
 }

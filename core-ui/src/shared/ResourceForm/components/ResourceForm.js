@@ -29,16 +29,18 @@ export function ResourceForm({
   afterCreatedFn,
   className,
   onlyYaml = false,
+  navigationResourceName,
 }) {
   const { i18n } = useTranslation();
-  const createResource = useCreateResource(
+  const createResource = useCreateResource({
     singularName,
     pluralKind,
     resource,
     initialResource,
     createUrl,
     afterCreatedFn,
-  );
+    navigationResourceName,
+  });
 
   const [mode, setMode] = React.useState(
     onlyYaml ? ModeSelector.MODE_YAML : ModeSelector.MODE_SIMPLE,

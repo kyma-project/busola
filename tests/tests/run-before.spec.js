@@ -55,4 +55,36 @@ context('Create Namespace', () => {
       .contains('istio-injection=disabled')
       .should('be.visible');
   });
+
+  it('Create application', () => {
+    cy.getLeftNav()
+      .contains('Back to Namespaces')
+      .click();
+
+    cy.getLeftNav()
+      .contains('Integration')
+      .click();
+
+    cy.getLeftNav()
+      .contains('Applications')
+      .click();
+
+    cy.getIframeBody()
+      .contains('Create Application')
+      .click();
+
+    cy.getIframeBody()
+      .find('[placeholder="Specify a name for your Application."]')
+      .clear()
+      .type(`test-mock-app-${Cypress.env('NAMESPACE_NAME')}`);
+
+    cy.getIframeBody()
+      .find('[role="dialog"]')
+      .contains('button', 'Create')
+      .click();
+
+    cy.getIframeBody()
+      .contains(`test-mock-app-${Cypress.env('NAMESPACE_NAME')}`)
+      .should('be.visible');
+  });
 });
