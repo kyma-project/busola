@@ -464,7 +464,8 @@ common:
     read-file: Read file content as a single value, with file name as a key.
     resource-ref-name: Unique name within a Namespace to refer to a {{resource}} resource.
     resource-ref-namespace: Namespace defines the space within which the {{resource}} name must be unique.
-    running-pods: '{{running}} out of {{expected}} Pods are running.'
+    running-pods-plural: '{{running}} Pods are running.'
+    running-pods-singular: 1 Pod is running.
     save: Save
     search: Search
     secret-ref-name: Unique name within a Namespace to refer to a Secret resource.

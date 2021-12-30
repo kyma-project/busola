@@ -8,10 +8,10 @@ import {
   useMicrofrontendContext,
 } from 'react-shared';
 
-import CreateServiceBindingForm from './CreateServiceBindingForm';
+import CreateServiceBindingUsageForm from './CreateServiceBindingUsageForm';
 import { SERVICE_BINDINGS_PANEL } from '../constants';
 
-export default function CreateServiceBindingModal({
+export default function CreateServiceBindingUsageModal({
   serviceInstance,
   serviceBindings,
   i18n,
@@ -60,7 +60,7 @@ export default function CreateServiceBindingModal({
 
   const renderForm = props => (
     <div className="create-service-binding-modal">
-      <CreateServiceBindingForm
+      <CreateServiceBindingUsageForm
         {...props}
         serviceInstance={serviceInstance}
         usageKinds={usageKinds}
