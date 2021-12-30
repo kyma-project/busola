@@ -6,43 +6,11 @@ import {
   EMPTY_TEXT_PLACEHOLDER,
   ModalWithForm,
 } from 'react-shared';
-import { ComponentForList } from 'shared/getComponents';
 import { Button } from 'fundamental-react';
-import { Categories } from 'shared/components/Categories/Categories';
 
 import { CRCreate } from './CRCreate';
-
-const CommonCategoriesList = resource => {
-  const { t } = useTranslation();
-  const resourceUrl = '/apis/apiextensions.k8s.io/v1/customresourcedefinitions';
-
-  const filterByCategories = crd => {
-    return resource.spec.names.categories?.some(
-      category =>
-        category !== 'all' &&
-        crd.metadata.name !== resource.metadata.name &&
-        crd.spec.scope === resource.spec.scope &&
-        crd.spec.names.categories?.includes(category),
-    );
-  };
-  return (
-    <ComponentForList
-      name="customResourceDefinitionsList"
-      key="common-categories-list"
-      params={{
-        hasDetailsView: true,
-        fixedPath: true,
-        resourceUrl,
-        resourceType: 'customresourcedefinitions',
-        isCompact: true,
-        showTitle: true,
-        filter: filterByCategories,
-        title: t('custom-resource-definitions.subtitle.common-crds'),
-        pagination: { itemsPerPage: 5 },
-      }}
-    />
-  );
-};
+import { RelatedCRDsList } from './RelatedCRDsList';
+import { Tokens } from 'shared/components/Tokens';
 
 export const CustomResourceDefinitionsDetails = ({
   DefaultRenderer,
@@ -57,7 +25,7 @@ export const CustomResourceDefinitionsDetails = ({
     },
     {
       header: t('custom-resource-definitions.headers.categories'),
-      value: ({ spec }) => <Categories categories={spec.names?.categories} />,
+      value: ({ spec }) => <Tokens tokens={spec.names?.categories} />,
     },
   ];
 
@@ -96,7 +64,7 @@ export const CustomResourceDefinitionsDetails = ({
       customComponents={[
         ResourceNames,
         CustomResourceDefinitionVersions,
-        CommonCategoriesList,
+        RelatedCRDsList,
       ]}
       resourceHeaderActions={[
         crd => {

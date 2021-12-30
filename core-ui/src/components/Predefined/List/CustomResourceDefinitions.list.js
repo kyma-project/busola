@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-shared';
 import { Trans } from 'react-i18next';
-import { Categories } from 'shared/components/Categories/Categories';
+import { Tokens } from 'shared/components/Tokens';
 
 export const CustomResourceDefinitionsList = ({
   DefaultRenderer,
@@ -26,7 +26,7 @@ export const CustomResourceDefinitionsList = ({
     },
     {
       header: t('custom-resource-definitions.headers.categories'),
-      value: crd => <Categories categories={crd.spec.names?.categories} />,
+      value: crd => <Tokens tokens={crd.spec.names?.categories} />,
     },
   ];
 

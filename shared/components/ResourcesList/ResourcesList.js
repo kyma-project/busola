@@ -373,7 +373,7 @@ function Resources({
         rowRenderer={rowRenderer}
         serverDataError={error}
         serverDataLoading={loading}
-        pagination={{ ...pagination, autoHide: true }}
+        pagination={{ autoHide: true, ...pagination }}
         extraHeaderContent={extraHeaderContent}
         testid={testid}
         currentlyEditedResourceUID={currentlyEditedResourceUID}
