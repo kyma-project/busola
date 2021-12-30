@@ -182,7 +182,7 @@ context('Test Protected Resources', () => {
       .click();
   });
 
-  it('Disallows connecting an Application on SKR', () => {
+  it('Disallows creating an Application on SKR', () => {
     cy.intercept(
       {
         method: 'GET',
