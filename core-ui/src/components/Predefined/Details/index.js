@@ -1,4 +1,4 @@
-export * from './ApiRules.details';
+export * from './ApiRule/ApiRules.details';
 export * from './Deployment/Deployment.details';
 export * from './Pod/Pod.details';
 export * from './ReplicaSet/Replicaset.details';
@@ -29,3 +29,4 @@ export * from './ServiceAccount/ServiceAccount.details';
 export * from './GitRepositories.details';
 export * from './EventSubscriptions/EventSubscriptions.details';
 export * from './DestinationRule/DestinationRule.details';
+export * from './VirtualServices/VirtualServices.details';

@@ -405,6 +405,7 @@ common:
     kyma: Kyma
     name: Name
     namespace: Namespace
+    'no': 'No'
     path: Path
     protocol: Protocol
     read-only: Read-only mode
@@ -414,6 +415,7 @@ common:
     secret: Secret
     service: Service
     version: Kyma Dashboard Version
+    'yes': 'Yes'
   lowercase:
     name: name
   messages:
@@ -1610,6 +1612,76 @@ stateful-sets:
 top-nav:
   profile:
     preferences: $t(preferences.title)
+virtualservices:
+  description: <0>Virtual Service</0> describes a configuration that affects traffic routing.
+  gateways: Gateways
+  headers:
+    add: add
+    remove: remove
+    request: Request
+    response: Response
+    set: set
+    title: Headers
+  hosts: Hosts
+  http-routes:
+    cors:
+      allow-credentials: Allow Credentials
+      allow-headers: Allow Headers
+      allow-methods: Allow Methods
+      allow-origins: Allow Origins
+      expose-headers: Expose Headers
+      max-age: Max Age
+      title: CORS Policy
+    delegate: Delegate
+    fault:
+      abort: Abort Fault Injection
+      delay: Delay Fault Injection
+    mirror: Mirror
+    redirect:
+      authority: Authority
+      derivePort: Derive Port
+      port: Port
+      redirectCode: Redirect Code
+      scheme: Scheme
+      title: Redirect
+      uri: URI
+    rewrite:
+      authority: Authority
+      title: Rewrite
+      uri: URI
+    route:
+      headers: Header manipulation
+    timeout: Timeout
+    title: HTTP Route
+  matches:
+    authority: Authority
+    destination-subnets: Destination Subnets
+    exact: is exactly
+    gateways: Gateways
+    header: Header {{field}}
+    ignore-case: (ignore case)
+    method: Method
+    port: Port
+    prefix: starts with
+    regex: matches
+    scheme: Scheme
+    sni-hosts: SNI Hosts
+    source-labels: Source Labels
+    source-namespace: Source Namespace
+    title: Matches
+    uri: URI
+    without-header: Without header {{field}}
+  name_singular: Virtual Service
+  route:
+    destination: Destination
+    weight: Weight
+  routes: Destinations
+  tcp-routes:
+    title: TCP Route
+  title: Virtual Services
+  tls-routes:
+    matches: Matches
+    title: TLS Route
 workloads:
   docker-image:
     tooltip: Enter a valid Docker image registry path.
