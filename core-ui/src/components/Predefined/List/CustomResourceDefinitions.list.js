@@ -19,7 +19,10 @@ export const CustomResourceDefinitionsList = ({
   const customColumns = [
     {
       header: t('custom-resource-definitions.headers.scope'),
-      value: crd => crd.spec.scope,
+      value: crd => ({
+        content: crd.spec.scope,
+        style: { wordBreak: 'keep-all' },
+      }),
     },
     {
       header: t('custom-resource-definitions.headers.categories'),

@@ -598,7 +598,7 @@ custom-resource-definitions:
     storage: Storage
   subtitle:
     additional-columns: Additional Printer Columns
-    common-crds: Common Custom Resource Definitions
+    common-crds: Related CRDs
     names: Names
     schema: Schema
     version: Version
