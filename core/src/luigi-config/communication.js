@@ -15,6 +15,21 @@ import { setTheme } from './utils/theme';
 import { setSSOAuthData } from './auth/sso';
 import { communicationEntry as pageSizeCommunicationEntry } from './settings/pagination';
 
+window.addEventListener('keydown', e => {
+  const { metaKey, key } = e;
+  Luigi.customMessages().sendToAll({
+    id: 'busola.main-frame-keypress',
+    metaKey,
+    key,
+  });
+});
+
+window.addEventListener('click', e => {
+  Luigi.customMessages().sendToAll({
+    id: 'busola.main-frame-click',
+  });
+});
+
 export const communication = {
   customMessagesListeners: {
     'busola.language': ({ language }) => {

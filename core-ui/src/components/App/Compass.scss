@@ -1,0 +1,30 @@
+.compass-ui {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+
+  display: grid;
+  place-items: center;
+
+  z-index: 1000000;
+}
+
+.compass-ui__wrapper {
+  width: 50vw;
+  height: 50vh;
+  background: linear-gradient(140deg, #eadedb 0%, #bc70a4 50%, #bfd641 75%);
+}
+
+.compass-ui__content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .contnt > :last-child {
+    margin-top: auto;
+  }
+  ń li {
+    display: block;
+  }
+}
