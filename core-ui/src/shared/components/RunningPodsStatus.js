@@ -6,7 +6,7 @@ export function RunningPodsStatus({ running, expected }) {
   const { t } = useTranslation();
   const tooltip =
     running === 1
-      ? t('common.tooltips.running-pods-singular', { running })
+      ? t('common.tooltips.running-pods-singular')
       : t('common.tooltips.running-pods-plural', { running });
   const statusType = running === expected ? 'positive' : 'negative';
 
