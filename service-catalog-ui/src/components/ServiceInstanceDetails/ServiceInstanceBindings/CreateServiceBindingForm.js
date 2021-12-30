@@ -1,4 +1,9 @@
-import { ComboboxInput, FormItem, FormLabel } from 'fundamental-react';
+import {
+  ComboboxInput,
+  FormItem,
+  FormLabel,
+  MessageStrip,
+} from 'fundamental-react';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { randomNameGenerator, K8sNameInput, useGetList } from 'react-shared';
@@ -63,6 +68,9 @@ export function CreateServiceBindingForm({
           />
         </ComboboxWrapper>
       </FormItem>
+      <MessageStrip className="fd-margin-top--tiny" type="information">
+        If Secret Name is not set a new Secret will be created.
+      </MessageStrip>
     </form>
   );
 }
