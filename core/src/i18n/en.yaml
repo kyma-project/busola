@@ -111,7 +111,7 @@ applications:
     binding-create-failed: Failed to create the Binding.
     binding-created: Binding created.
     binding-deleted: Binding deleted.
-    binding-not-found: No bindings.
+    binding-not-found: No Bindings.
     cannot-create: Cannot create the Application.
     connect-disabled: Connecting an Application is disabled for SKR runtime.
     copy-url: 'Copy the following URL and use it at the external system that you would like to connect to:'
