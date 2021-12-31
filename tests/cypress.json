@@ -51,7 +51,6 @@
     "certificates.spec.js",
     "test.settings.spec.js",
     "test-ingresses.spec.js",
-    "test-dashboard-version.spec.js",
     "run-after.spec.js"
   ]
 }
