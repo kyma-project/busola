@@ -5,8 +5,10 @@ import {
   TextFormItem,
   LabelSelectorInput,
   usePost,
+  Tooltip,
 } from 'react-shared';
 import { useTranslation } from 'react-i18next';
+import { useIsSKR } from 'components/Predefined/Details/Application/useIsSKR';
 
 export function createApplicationInput({ name, description, labels }) {
   return {
@@ -99,12 +101,26 @@ export function CreateApplicationForm({
 
 export default function CreateApplicationModal() {
   const { i18n, t } = useTranslation();
+  const isSKR = useIsSKR();
+
+  let modalOpeningComponent = (
+    <Button glyph="add" disabled={isSKR}>
+      {t('applications.buttons.create-app')}
+    </Button>
+  );
+
+  if (isSKR) {
+    modalOpeningComponent = (
+      <Tooltip delay={0} content={t('applications.messages.create-disabled')}>
+        {modalOpeningComponent}
+      </Tooltip>
+    );
+  }
+
   return (
     <ModalWithForm
       title={t('applications.subtitle.create-app')}
-      modalOpeningComponent={
-        <Button glyph="add">{t('applications.buttons.create-app')}</Button>
-      }
+      modalOpeningComponent={modalOpeningComponent}
       confirmText={t('common.buttons.create')}
       renderForm={props => <CreateApplicationForm {...props} />}
       i18n={i18n}
