@@ -116,126 +116,126 @@ export const CustomResourceDefinitionVersions = resource => {
     return JSON.stringify(schema, null, 2);
   };
 
+  const storageVersion = versions.find(v => v.storage);
+
   return (
-    <>
-      {versions.map(version => (
-        <LayoutPanel className="fd-margin--md">
+    <LayoutPanel className="fd-margin--md">
+      <LayoutPanel.Header>
+        <LayoutPanel.Head
+          title={`${t('custom-resource-definitions.subtitle.version')} ${
+            storageVersion.name
+          }`}
+        />
+        <StatusBadge
+          type={storageVersion.served ? 'positive' : 'informative'}
+          className="version-status"
+          resourceKind="custom-resource-definitions"
+          i18n={i18n}
+        >
+          {storageVersion.served
+            ? t('custom-resource-definitions.status.served')
+            : t('custom-resource-definitions.status.not-served')}
+        </StatusBadge>
+        {storageVersion.storage && (
+          <StatusBadge
+            type="positive"
+            className="version-status"
+            resourceKind="custom-resource-definitions"
+            i18n={i18n}
+          >
+            {t('custom-resource-definitions.status.storage')}
+          </StatusBadge>
+        )}
+      </LayoutPanel.Header>
+      <CustomResources
+        resource={resource}
+        version={storageVersion}
+        namespace={namespace}
+        i18n={i18n}
+      />
+      <AdditionalPrinterColumns
+        additionalPrinterColumns={
+          storageVersion?.additionalPrinterColumns || []
+        }
+      />
+      {storageVersion.schema && (
+        <LayoutPanel
+          key={`crd-schema-${storageVersion.name}`}
+          className="fd-margin--md"
+        >
           <LayoutPanel.Header>
             <LayoutPanel.Head
-              title={`${t('custom-resource-definitions.subtitle.version')} ${
-                version.name
-              }`}
+              title={t('custom-resource-definitions.subtitle.schema')}
             />
-            <StatusBadge
-              type={version.served ? 'positive' : 'informative'}
-              className="version-status"
-              resourceKind="custom-resource-definitions"
-              i18n={i18n}
-            >
-              {version.served
-                ? t('custom-resource-definitions.status.served')
-                : t('custom-resource-definitions.status.not-served')}
-            </StatusBadge>
-            {version.storage && (
-              <StatusBadge
-                type="positive"
-                className="version-status"
-                resourceKind="custom-resource-definitions"
-                i18n={i18n}
-              >
-                {t('custom-resource-definitions.status.storage')}
-              </StatusBadge>
-            )}
+            <LayoutPanel.Actions>
+              <ButtonSegmented>
+                <Button
+                  compact
+                  selected={schemaMode === 'viewer'}
+                  onClick={() => setSchemaMode('viewer')}
+                >
+                  Viewer
+                </Button>
+                <Button
+                  compact
+                  selected={schemaMode === 'json'}
+                  onClick={() => setSchemaMode('json')}
+                >
+                  JSON
+                </Button>
+                <Button
+                  compact
+                  selected={schemaMode === 'yaml'}
+                  onClick={() => setSchemaMode('yaml')}
+                >
+                  YAML
+                </Button>
+              </ButtonSegmented>
+            </LayoutPanel.Actions>
           </LayoutPanel.Header>
-          <CustomResources
-            resource={resource}
-            version={version}
-            namespace={namespace}
-            i18n={i18n}
-          />
-          <AdditionalPrinterColumns
-            additionalPrinterColumns={version?.additionalPrinterColumns || []}
-          />
-          {version.schema && (
-            <LayoutPanel
-              key={`crd-schema-${version.name}`}
-              className="fd-margin--md"
-            >
-              <LayoutPanel.Header>
-                <LayoutPanel.Head
-                  title={t('custom-resource-definitions.subtitle.schema')}
-                />
-                <LayoutPanel.Actions>
-                  <ButtonSegmented>
-                    <Button
-                      compact
-                      selected={schemaMode === 'viewer'}
-                      onClick={() => setSchemaMode('viewer')}
-                    >
-                      Viewer
-                    </Button>
-                    <Button
-                      compact
-                      selected={schemaMode === 'json'}
-                      onClick={() => setSchemaMode('json')}
-                    >
-                      JSON
-                    </Button>
-                    <Button
-                      compact
-                      selected={schemaMode === 'yaml'}
-                      onClick={() => setSchemaMode('yaml')}
-                    >
-                      YAML
-                    </Button>
-                  </ButtonSegmented>
-                </LayoutPanel.Actions>
-              </LayoutPanel.Header>
-              <LayoutPanel.Body>
-                {schemaMode === 'viewer' && (
-                  <SchemaViewer schema={version.schema} />
-                )}
-                {schemaMode === 'json' && (
-                  <MonacoEditor
-                    key={`crd-schema-editor-${version.name}`}
-                    theme={editorTheme}
-                    language="json"
-                    height="20em"
-                    value={prettifySchema(version.schema)}
-                    options={{
-                      readOnly: true,
-                      minimap: {
-                        enabled: false,
-                      },
-                      scrollbar: {
-                        alwaysConsumeMouseWheel: false,
-                      },
-                    }}
-                  />
-                )}
-                {schemaMode === 'yaml' && (
-                  <MonacoEditor
-                    key={`crd-schema-editor-${version.name}`}
-                    theme={editorTheme}
-                    language="yaml"
-                    height="20em"
-                    value={jsyaml.dump(version.schema, { noRefs: true })}
-                    options={{
-                      readOnly: true,
-                      minimap: {
-                        enabled: false,
-                      },
-                      scrollbar: {
-                        alwaysConsumeMouseWheel: false,
-                      },
-                    }}
-                  />
-                )}
-              </LayoutPanel.Body>
-            </LayoutPanel>
-          )}
+          <LayoutPanel.Body>
+            {schemaMode === 'viewer' && (
+              <SchemaViewer schema={storageVersion.schema} />
+            )}
+            {schemaMode === 'json' && (
+              <MonacoEditor
+                key={`crd-schema-editor-${storageVersion.name}`}
+                theme={editorTheme}
+                language="json"
+                height="20em"
+                value={prettifySchema(storageVersion.schema)}
+                options={{
+                  readOnly: true,
+                  minimap: {
+                    enabled: false,
+                  },
+                  scrollbar: {
+                    alwaysConsumeMouseWheel: false,
+                  },
+                }}
+              />
+            )}
+            {schemaMode === 'yaml' && (
+              <MonacoEditor
+                key={`crd-schema-editor-${storageVersion.name}`}
+                theme={editorTheme}
+                language="yaml"
+                height="20em"
+                value={jsyaml.dump(storageVersion.schema, { noRefs: true })}
+                options={{
+                  readOnly: true,
+                  minimap: {
+                    enabled: false,
+                  },
+                  scrollbar: {
+                    alwaysConsumeMouseWheel: false,
+                  },
+                }}
+              />
+            )}
+          </LayoutPanel.Body>
         </LayoutPanel>
-      ))}
-    </>
+      )}
+    </LayoutPanel>
   );
 };

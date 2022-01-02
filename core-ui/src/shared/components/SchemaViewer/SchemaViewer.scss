@@ -22,4 +22,9 @@
   .expander {
     cursor: pointer;
   }
+
+  .object-details .object-details {
+    border-left: 1px solid var(--sapList_BorderColor);
+    padding-left: 1rem;
+  }
 }

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { LayoutPanel, InfoLabel, Icon } from 'fundamental-react';
+import { InfoLabel, Icon } from 'fundamental-react';
 
 import { Constraints } from './Constraints';
-import { ObjectField } from './ObjectField';
+import { JSONSchema } from './ObjectField';
 
 export function ObjectProperty({
   name,
@@ -62,17 +62,15 @@ export function ObjectProperty({
             {t('schema.array-items')}
           </header>
           {!arrayCollapsed && (
-            <LayoutPanel>
-              <LayoutPanel.Body>
-                <Constraints for="array" def={def} />
-                <ul>
-                  <ObjectProperty
-                    name={t('schema.array-item', { name })}
-                    def={def.items}
-                  />
-                </ul>
-              </LayoutPanel.Body>
-            </LayoutPanel>
+            <section className="object-details">
+              <Constraints for="array" def={def} />
+              <ul>
+                <ObjectProperty
+                  name={t('schema.array-item', { name })}
+                  def={def.items}
+                />
+              </ul>
+            </section>
           )}
         </>
       )}
@@ -96,7 +94,7 @@ export function ObjectProperty({
           {!objectCollapsed && (
             <>
               <Constraints for="array" def={def} />
-              <ObjectField {...def} />
+              <JSONSchema {...def} />
             </>
           )}
         </>

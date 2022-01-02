@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ObjectField } from './ObjectField';
+import { JSONSchema } from './ObjectField';
 
 import './SchemaViewer.scss';
 
@@ -9,7 +9,7 @@ export function SchemaViewer({ schema }) {
 
   return (
     <div className="schema-viewer">
-      <ObjectField {...root} />
+      <JSONSchema {...root} />
     </div>
   );
 }
