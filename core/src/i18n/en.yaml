@@ -588,6 +588,7 @@ cron-jobs:
 custom-resource-definitions:
   description: <0>Custom Resource Definition</0> is an object used to define a custom resource that allows you to extend the Kubernetes API for use cases that are not directly covered by core Kubernetes.
   headers:
+    categories: Categories
     description: Description
     json-path: JSON Path
     kind: Kind
@@ -607,6 +608,7 @@ custom-resource-definitions:
   subtitle:
     additional-columns: Additional Printer Columns
     names: Names
+    related-crds: Related CRDs
     schema: Schema
     version: Version
   title: Custom Resource Definitions
