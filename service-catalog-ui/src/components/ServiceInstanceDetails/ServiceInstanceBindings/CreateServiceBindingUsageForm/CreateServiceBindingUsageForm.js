@@ -86,7 +86,7 @@ const ApplicationsDropdown = ({
   );
 };
 
-export default function CreateServiceBindingForm({
+export default function CreateServiceBindingUsageForm({
   serviceInstance,
   usageKinds = [],
   serviceBindings = [],
@@ -241,7 +241,7 @@ export default function CreateServiceBindingForm({
   );
 }
 
-CreateServiceBindingForm.propTypes = {
+CreateServiceBindingUsageForm.propTypes = {
   onChange: PropTypes.func,
   onCompleted: PropTypes.func,
   onError: PropTypes.func,
