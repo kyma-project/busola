@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Tooltip } from '../../components/Tooltip/Tooltip';
 import { Button } from 'fundamental-react';
 import copyToCliboard from 'copy-to-clipboard';
@@ -36,6 +36,7 @@ export function EditorActions({
   i18n,
   readOnly,
 }) {
+  const [visible, setVisible] = useState(true);
   const openSearch = () => {
     // focus is required for search control to appear
     editor.focus();
@@ -43,63 +44,42 @@ export function EditorActions({
   };
 
   const getReadOnlyFieldsPosition = () => {
+    // definition of read only fields
     const READONLY_FIELDS = ['managedFields:', 'status:'];
     let arrayOfPositions = [];
     READONLY_FIELDS.forEach(fieldName => {
-      arrayOfPositions = arrayOfPositions.contains(
+      arrayOfPositions = arrayOfPositions.concat(
         editor.getModel().findMatches(fieldName, true, false, true, null, true),
       );
     });
-    return arrayOfPositions;
+    return arrayOfPositions.sort(
+      (a, b) => b.range.startLineNumber - a.range.startLineNumber,
+    );
   };
-  const hideNonEditable = () => {
-    console.log(editor.getSupportedActions());
-    const matches = editor
-      .getModel()
-      .findMatches('managedFields:', true, false, true, null, true)
-      .concat(
-        ...editor
-          .getModel()
-          .findMatches('status:', true, false, true, null, true),
-      );
-    constreadOnlyFields = getReadOnlyFieldsPosition();
-    matches.forEach(match => {
+
+  const toggleReadOnlyLines = () => {
+    getReadOnlyFieldsPosition().forEach(match => {
       setTimeout(() => {
-        console.log(
-          'startColumn',
-          match.range.startColumn,
-          'startLineNumber',
-          match.range.startLineNumber,
-          matches,
-        );
         editor.setPosition({
           column: match.range.startColumn,
           lineNumber: match.range.startLineNumber,
         });
-        editor.trigger('fold', 'editor.fold');
-      });
-    });
-    const matches2 = editor
-      .getModel()
-      .findMatches('status:', true, false, true, null, true);
-    matches2.forEach(match => {
-      setTimeout(() => {
-        console.log(
-          'startColumn',
-          match.range.startColumn,
-          'startLineNumber',
-          match.range.startLineNumber,
-          matches,
-        );
-        editor.setPosition({
-          column: match.range.startColumn,
-          lineNumber: match.range.startLineNumber,
-        });
-        editor.trigger('fold', 'editor.fold');
+        visible
+          ? editor.trigger('fold', 'editor.fold')
+          : editor.trigger('unfold', 'editor.unfold');
       });
     });
   };
 
+  const hideReadOnlyLines = () => {
+    toggleReadOnlyLines();
+    setVisible(false);
+  };
+
+  const showReadOnlyLines = () => {
+    toggleReadOnlyLines();
+    setVisible(true);
+  };
   const download = () => {
     const blob = new Blob([val], {
       type: 'application/yaml;charset=utf-8',
@@ -112,9 +92,11 @@ export function EditorActions({
   return (
     <section className="editor-actions fd-margin-bottom--sm">
       <ButtonWithTooltip
-        tooltipContent={'Show managed fields'}
-        glyph="hide"
-        onClick={hideNonEditable}
+        tooltipContent={
+          visible ? t('common.tooltips.hide') : t('common.tooltips.show')
+        }
+        glyph={visible ? 'hide' : 'show'}
+        onClick={visible ? hideReadOnlyLines : showReadOnlyLines}
         disabled={!editor}
       />
       <ButtonWithTooltip
