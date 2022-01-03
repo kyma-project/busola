@@ -1,7 +1,5 @@
-import didYouMean from 'didyoumean';
-
 export function getSuggestion(phrase, itemList) {
-  const suggestion = didYouMean(phrase, itemList);
+  const suggestion = (phrase, itemList);
   if (suggestion !== phrase) {
     return suggestion;
   }

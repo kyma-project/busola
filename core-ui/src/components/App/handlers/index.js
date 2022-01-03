@@ -1,4 +1,11 @@
-import * as nonResourceHandler from './nonResourceHandler';
-import * as resourceHandler from './resourceHandler';
+import { nonResourceHandler } from './nonResourceHandler';
+import {
+  clusterwideResourceHandler,
+  namespacedResourceHandler,
+} from './resourceHandlers';
 
-export const handlers = [nonResourceHandler, resourceHandler];
+export const handlers = [
+  nonResourceHandler,
+  clusterwideResourceHandler,
+  namespacedResourceHandler,
+];

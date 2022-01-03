@@ -1,81 +1,81 @@
-import didYouMean from 'didyoumean';
+import { setCluster } from '../../cluster-management/cluster-management';
+import { getSuggestion } from './helpers';
 
-export function parseQuery({ search, activeClusterName }) {
-  if (search.split(/\s+/).length !== 1) {
-    return null;
-  }
+const createNonResourceOptions = ({ cluster }) => [
+  {
+    names: ['clusters', 'cluster'],
+    type: 'clusters',
+  },
+  {
+    names: ['options', 'prefs', 'preferences', 'settings'],
+    type: 'preferences',
+  },
+  {
+    names: ['h', 'help'],
+    type: 'show-help',
+  },
+  ...(cluster
+    ? [
+        {
+          names: ['overview', 'ov'],
+          type: 'overview',
+        },
+      ]
+    : []),
+];
 
-  const nonResourceOptions = [
-    {
-      names: ['clusters'],
-      type: 'clusters',
-    },
-    {
-      names: ['options', 'prefs', 'preferences', 'settings'],
-      type: 'preferences',
-    },
-    {
-      names: ['h', 'help'],
-      type: 'show-help',
-    },
-    ...(activeClusterName
-      ? [
+function resolveSearchResults(context) {
+  const options = createNonResourceOptions(context);
+  const option = options.find(o => o.names.includes(context.tokens[0]));
+  if (option) {
+    const { cluster, clusterNames } = context;
+    switch (option.type) {
+      case 'clusters':
+        return clusterNames.map(clusterName => ({
+          label: `Cluster ${clusterName}`,
+          onClick: () => setCluster(clusterName),
+        }));
+      case 'preferences':
+        return [
           {
-            names: ['overview'],
-            type: 'overview',
+            label: 'Preferences',
+            onClick: () => {
+              Luigi.navigation().openAsModal('/clusters/preferences', {
+                title: 'Preferences',
+                size: 'm',
+              });
+            },
           },
-        ]
-      : []),
-  ];
-
-  for (const option of nonResourceOptions) {
-    if (option.names.includes(search)) {
-      return {
-        query: { type: option.type },
-        suggestedSearch: null,
-      };
+        ];
+      case 'show-help':
+        return [{ label: 'Show help', onClick: () => alert('todo show help') }];
+      case 'overview':
+        if (cluster) {
+          return [
+            {
+              label: 'Cluster Overview',
+              onClick: () => {
+                Luigi.navigation().navigate(`/cluster/${cluster}/overview`);
+              },
+            },
+          ];
+        } else {
+          return null;
+        }
+      default:
+        return null;
     }
-  }
-
-  const suggestedSearch = didYouMean(
-    search,
-    nonResourceOptions.flatMap(o => o.names),
-  );
-  if (suggestedSearch) {
-    return {
-      query: null,
-      suggestedSearch,
-    };
-  } else {
-    return null;
   }
 }
 
-export function createResults({ query, clusters, activeClusterName }) {
-  switch (query.type) {
-    case 'clusters':
-      return Object.keys(clusters).map(clusterName => ({
-        title: `Cluster ${clusterName}`,
-        type: 'navigation',
-        url: `/cluster/${clusterName}`,
-      }));
-    case 'preferences':
-      return [{ title: 'Prefernces', type: 'open-preferences' }];
-    case 'show-help':
-      return [{ title: 'Show help', type: 'show-help' }];
-    case 'overview':
-      if (activeClusterName) {
-        return [
-          {
-            title: 'Cluster Overview',
-            type: 'navigation',
-            url: `/cluster/${activeClusterName}/overview`,
-          },
-        ];
-      } else {
-        return null;
-      }
-    default:
-      return null;
-  }
+export function nonResourceHandler(context) {
+  const options = createNonResourceOptions(context);
+  const searchResults = resolveSearchResults(context);
+  return {
+    searchResults,
+    suggestion: getSuggestion(
+      context.tokens[0],
+      options.flatMap(option => option.names),
+    ),
+  };
 }
