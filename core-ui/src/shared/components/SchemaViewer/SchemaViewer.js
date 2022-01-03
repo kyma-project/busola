@@ -9,7 +9,7 @@ export function SchemaViewer({ schema }) {
 
   return (
     <div className="schema-viewer">
-      <JSONSchema {...root} />
+      <JSONSchema root={true} {...root} />
     </div>
   );
 }

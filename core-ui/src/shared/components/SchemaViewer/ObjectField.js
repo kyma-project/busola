@@ -1,23 +1,62 @@
 import React from 'react';
 
-import { ObjectProperty } from './ObjectProperty';
+// import { ObjectProperty } from './ObjectProperty';
+import { Constraints } from './Constraints';
 
 export function JSONSchema({
+  root = false,
+  type,
+  name,
   description,
-  properties,
-  patternProperties,
-  additionalProperties,
-  required,
-  propertyNames,
+  ...def
+  // description,
+  // properties,
+  // patternProperties,
+  // additionalProperties,
+  // required,
+  // propertyNames,
 }) {
+  const types = Array.isArray(type) ? type : [type];
   return (
     <section className="object-details">
+      <div>
+        {name && (
+          <>
+            <span className="property-name">{name}</span>:{' '}
+          </>
+        )}
+        {types
+          .map(type => {
+            if (type !== 'array') {
+              return type;
+            } else if (Array.isArray(def.items.type)) {
+              return `(${def.items.type.join(',')})[]`;
+            } else {
+              return `${def.items.type}[]`;
+            }
+          })
+          .join(' | ')}{' '}
+        {/* TODO
+        {required?.includes(name) && (
+          <InfoLabel>{t('schema.required')}</InfoLabel>
+        )}{' '}
+        */}
+      </div>
       {description && <div className="object-description">{description}</div>}
+
+      <dl>
+        <Constraints type="generic" def={def} />
+        {types.map(type => (
+          <Constraints type={type} def={def} />
+        ))}
+      </dl>
+      {/*
       <ul>
         {Object.entries(properties).map(([name, def]) => (
           <ObjectProperty name={name} def={def} required={required} />
         ))}
       </ul>
+      */}
       {/*additionalProperties && <>
         <h4>{t('schema.additional-properties')}</h4>
         <ul>
