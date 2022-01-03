@@ -354,7 +354,7 @@ export async function createNavigationNodes(
   const { navigation = {}, hiddenNamespaces = [] } =
     activeCluster?.config || {};
 
-  const clusterChildren = async () => {
+  const createClusterNodes = async () => {
     const staticNodes = getStaticRootNodes(
       getChildrenNodesForNamespace,
       groupVersions,
@@ -375,6 +375,24 @@ export async function createNavigationNodes(
     return allNodes;
   };
 
+  const clusterNodes = await createClusterNodes();
+
+  const namespaceNodes = await clusterNodes
+    .find(n => n.resourceType === 'namespaces')
+    .children[0].children();
+
+  const simplifyNodes = nodes =>
+    nodes
+      .filter(n => n.resourceType)
+      .map(n => ({
+        resourceType: n.resourceType.toLowerCase(),
+        label: n.label,
+        viewUrl: n.viewUrl,
+        category:
+          typeof n.category === 'object' ? n.category.label : n.category,
+        pathSegment: n.pathSegment,
+      }));
+
   const nodes = [
     {
       pathSegment: 'cluster',
@@ -386,7 +404,7 @@ export async function createNavigationNodes(
         {
           navigationContext: 'cluster',
           pathSegment: activeClusterName,
-          children: clusterChildren,
+          children: clusterNodes,
         },
       ],
       context: {
@@ -408,6 +426,8 @@ export async function createNavigationNodes(
             AVAILABLE_PAGE_SIZES,
           },
         },
+        clusterNodes: simplifyNodes(clusterNodes),
+        namespaceNodes: simplifyNodes(namespaceNodes),
       },
     },
   ];

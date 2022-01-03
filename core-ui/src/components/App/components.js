@@ -1,63 +1,36 @@
-import React from 'react';
-import LuigiClient from '@luigi-project/client';
+import React, { useCallback } from 'react';
 import { Link } from 'fundamental-react';
-import { useMicrofrontendContext } from 'react-shared';
+import { useEventListener } from 'hooks/useEventListener';
 
-export function Result(props) {
-  const {
-    activeClusterName,
-    namespaceId: namespace,
-  } = useMicrofrontendContext();
-
-  const { type, title, isNamespaced, resourceType, url } = props;
-  switch (type) {
-    case 'open-preferences':
-      return (
-        <Link
-          className="fd-link"
-          onClick={() => {
-            LuigiClient.linkManager().openAsModal('preferences', {
-              title: 'Preferences',
-              size: 'm',
-            });
-          }}
-        >
-          Open Preferences
-        </Link>
-      );
-    case 'navigation':
-      return (
-        <Link
-          className="fd-link"
-          onClick={() => {
-            LuigiClient.linkManager().navigate(url);
-          }}
-        >
-          {title}
-        </Link>
-      );
+export function Result({ label, onClick, category }) {
+  if (onClick) {
+    return (
+      <Link className="fd-link" onClick={onClick}>
+        {category ? category + ' > ' : ''}
+        {label}
+      </Link>
+    );
   }
-
-  // const { name, url, isNamespaced } = props;
-  return <p>{JSON.stringify(props)}</p>;
-  // const navigate = () => {
-  //   const context = isNamespaced ? 'namespace' : 'cluster';
-  //   LuigiClient.linkManager()
-  //     .fromContext(context)
-  //     .navigate(url);
-  // };
-
-  // return (
-  //   <Link className="fd-link" onClick={navigate}>
-  //     {name}
-  //   </Link>
-  // );
+  return label;
 }
 
 export function SuggestedSearch({ search, suggestedSearch, setSearch }) {
-  if (!suggestedSearch || suggestedSearch === search) {
+  const isSuggestionValid = !!suggestedSearch && suggestedSearch !== search;
+
+  const onKeyDown = ({ key, shiftKey }) => {
+    if (key === 'Enter' && shiftKey && isSuggestionValid) {
+      setSearch(suggestedSearch);
+    }
+  };
+
+  useEventListener('keydown', useCallback(onKeyDown, [isSuggestionValid]), [
+    isSuggestionValid,
+  ]);
+
+  if (!isSuggestionValid) {
     return null;
   }
+
   //enter to choose
   return (
     <>

@@ -5,52 +5,38 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import LuigiClient from '@luigi-project/client';
 import { CompassUI } from './CompassUI';
 import './Compass.scss';
+import { withRouter } from 'react-router-dom';
+import { useEventListener } from '../../hooks/useEventListener';
+import { useCustomMessageListener } from '../../hooks/useCustomMessageListener';
 
 export const CompassContext = createContext();
 
-export const CompassProvider = ({ children }) => {
+export const CompassProvider = withRouter(({ children, history }) => {
   const [showDialog, setShowDialog] = useState(false);
+  const hide = () => setShowDialog(false);
 
   const onKeyPress = ({ key, metaKey }) => {
-    if (key === 'k' && metaKey) {
+    if (key.toLowerCase() === 'k' && metaKey) {
       setShowDialog(showDialog => !showDialog);
     } else if (key === 'Escape') {
-      setShowDialog(false);
+      hide();
     }
   };
 
-  useEffect(() => {
-    const keypressHandle = LuigiClient.addCustomMessageListener(
-      'busola.main-frame-keypress',
-      onKeyPress,
-    );
-    const clickHandle = LuigiClient.addCustomMessageListener(
-      'busola.main-frame-click',
-      () => setShowDialog(false),
-    );
-    return () => {
-      LuigiClient.removeCustomMessageListener(keypressHandle);
-      LuigiClient.removeCustomMessageListener(clickHandle);
-    };
-  }, []);
-
-  const keyDown = useCallback(onKeyPress, []);
-
-  useEffect(() => {
-    window.addEventListener('keydown', keyDown);
-    return () => window.removeEventListener('keydown', keyDown);
-  }, []);
+  useEventListener('keydown', useCallback(onKeyPress, []));
+  useCustomMessageListener('busola.main-frame-keypress', onKeyPress);
+  useCustomMessageListener('busola.main-frame-click', hide);
+  useEffect(() => history.listen(hide), []);
 
   return (
     <CompassContext.Provider value={null}>
-      {showDialog && <CompassUI hide={() => setShowDialog(false)} />}
+      {showDialog && <CompassUI hide={hide} />}
       {children}
     </CompassContext.Provider>
   );
-};
+});
 
 export function useCompass() {
   return useContext(CompassContext);

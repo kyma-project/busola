@@ -1,7 +1,8 @@
-import { setCluster } from '../../cluster-management/cluster-management';
+import LuigiClient from '@luigi-project/client';
+import { setCluster } from 'components/Clusters/shared';
 import { getSuggestion } from './helpers';
 
-const createNonResourceOptions = ({ cluster }) => [
+const createNonResourceOptions = ({ activeClusterName }) => [
   {
     names: ['clusters', 'cluster'],
     type: 'clusters',
@@ -14,7 +15,7 @@ const createNonResourceOptions = ({ cluster }) => [
     names: ['h', 'help'],
     type: 'show-help',
   },
-  ...(cluster
+  ...(activeClusterName
     ? [
         {
           names: ['overview', 'ov'],
@@ -28,7 +29,7 @@ function resolveSearchResults(context) {
   const options = createNonResourceOptions(context);
   const option = options.find(o => o.names.includes(context.tokens[0]));
   if (option) {
-    const { cluster, clusterNames } = context;
+    const { activeClusterName, clusterNames } = context;
     switch (option.type) {
       case 'clusters':
         return clusterNames.map(clusterName => ({
@@ -40,7 +41,7 @@ function resolveSearchResults(context) {
           {
             label: 'Preferences',
             onClick: () => {
-              Luigi.navigation().openAsModal('/clusters/preferences', {
+              LuigiClient.linkManager().openAsModal('/clusters/preferences', {
                 title: 'Preferences',
                 size: 'm',
               });
@@ -50,12 +51,14 @@ function resolveSearchResults(context) {
       case 'show-help':
         return [{ label: 'Show help', onClick: () => alert('todo show help') }];
       case 'overview':
-        if (cluster) {
+        if (activeClusterName) {
           return [
             {
               label: 'Cluster Overview',
               onClick: () => {
-                Luigi.navigation().navigate(`/cluster/${cluster}/overview`);
+                LuigiClient.linkManager()
+                  .fromContext('cluster')
+                  .navigate('/overview');
               },
             },
           ];
