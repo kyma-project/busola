@@ -19,6 +19,13 @@ import { getServiceName, getEventFilter, spreadEventType } from './helpers';
 const DEFAULT_EVENT_TYPE_PREFIX = 'sap.kyma.custom.';
 const versionOptions = ['v1', 'v2', 'v3', 'v4'];
 
+//checks if the eventName consist of at least two parts divided by a dot
+const eventNamePattern = '[A-Za-z0-9-]+\\.[A-Za-z0-9-\\.]+[A-Za-z0-9-]';
+
+//first three validate the prefix, 4th application name, 5th and 6th event name
+const eventTypePattern =
+  '[A-Za-z]+\\.[A-Za-z]+\\.[A-Za-z]+\\.[a-z0-9\\-]+\\.[A-Za-z0-9\\-]+\\.[A-Za-z0-9\\-]+\\.+[A-Za-z0-9\\-\\.]+[^\\.]';
+
 const SubscriptionsCreate = ({
   onChange,
   formElementRef,
@@ -32,7 +39,6 @@ const SubscriptionsCreate = ({
   const { data: configMap } = useGet(
     '/api/v1/namespaces/kyma-system/configmaps/eventing',
   );
-
   let eventTypePrefix =
     configMap?.data?.eventTypePrefix || DEFAULT_EVENT_TYPE_PREFIX;
   eventTypePrefix = eventTypePrefix.endsWith('.')
@@ -210,6 +216,7 @@ const SubscriptionsCreate = ({
         input={Inputs.Text}
         placeholder={t('event-subscription.create.labels.event-name')}
         tooltipContent={t('event-subscription.tooltips.event-name')}
+        pattern={eventNamePattern}
       />
 
       <ResourceForm.FormField
@@ -246,6 +253,9 @@ const SubscriptionsCreate = ({
       />
 
       <TextArrayInput
+        inputProps={{
+          pattern: eventTypePattern,
+        }}
         advanced
         required
         defaultOpen
@@ -263,7 +273,6 @@ const SubscriptionsCreate = ({
         customFormatFn={arr => arr.map(getEventFilter)}
         placeholder={t('event-subscription.create.labels.event-type')}
         validate={value => {
-          console.log(value);
           return value.every(e => {
             if (e.eventType.value.split('.').filter(s => s).length < 7) {
               return false;
