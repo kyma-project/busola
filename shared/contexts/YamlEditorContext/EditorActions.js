@@ -57,13 +57,14 @@ export function EditorActions({
     );
   };
 
-  const toggleReadOnlyLines = () => {
-    getReadOnlyFieldsPosition().forEach(match => {
+  const toggleReadOnlyLines = fieldsPosition => {
+    fieldsPosition.forEach(match => {
       setTimeout(() => {
         editor.setPosition({
           column: match.range.startColumn,
           lineNumber: match.range.startLineNumber,
         });
+
         visible
           ? editor.trigger('fold', 'editor.fold')
           : editor.trigger('unfold', 'editor.unfold');
@@ -72,14 +73,25 @@ export function EditorActions({
   };
 
   const hideReadOnlyLines = () => {
-    toggleReadOnlyLines();
+    const visibleRanges = editor.getVisibleRanges();
+    const visibleReadOnlyFields = getReadOnlyFieldsPosition().filter(match => {
+      return visibleRanges.some(
+        range =>
+          match.range.startLineNumber >= range.startLineNumber &&
+          match.range.startLineNumber < range.endLineNumber,
+      );
+    });
+
+    toggleReadOnlyLines(visibleReadOnlyFields);
     setVisible(false);
   };
 
   const showReadOnlyLines = () => {
-    toggleReadOnlyLines();
+    const readOnlyFields = getReadOnlyFieldsPosition();
+    toggleReadOnlyLines(readOnlyFields);
     setVisible(true);
   };
+
   const download = () => {
     const blob = new Blob([val], {
       type: 'application/yaml;charset=utf-8',
