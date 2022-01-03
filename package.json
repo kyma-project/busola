@@ -27,7 +27,7 @@
     "@sap-theming/theming-base-content": "^11.1.28",
     "@sentry/react": "^6.12.0",
     "@sentry/tracing": "^6.12.0",
-    "ajv": "^6.10.2",
+    "ajv": "^8.8.0",
     "classnames": "^2.2.6",
     "constate": "^1.2.0",
     "copy-to-clipboard": "^3.2.0",

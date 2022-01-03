@@ -18,7 +18,7 @@ function isJobValid(job) {
 
   const areContainersValid =
     !!containers.length &&
-    containers.every(c => c.command?.length > 0 || c.args?.length > 0);
+    containers.every(c => c?.command?.length > 0 || c?.args?.length > 0);
 
   return isNameValid && areContainersValid;
 }
@@ -52,6 +52,7 @@ function JobsCreate({
       formElementRef={formElementRef}
       presets={createJobPresets(namespace, t)}
       createUrl={resourceUrl}
+      onlyYaml
     >
       <K8sNameField
         propertyPath="$.metadata.name"
