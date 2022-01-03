@@ -9,6 +9,8 @@ import {
 import { Button } from 'fundamental-react';
 
 import { CRCreate } from './CRCreate';
+import { RelatedCRDsList } from './RelatedCRDsList';
+import { Tokens } from 'shared/components/Tokens';
 
 export const CustomResourceDefinitionsDetails = ({
   DefaultRenderer,
@@ -20,6 +22,10 @@ export const CustomResourceDefinitionsDetails = ({
     {
       header: t('custom-resource-definitions.headers.scope'),
       value: resource => resource.spec.scope,
+    },
+    {
+      header: t('custom-resource-definitions.headers.categories'),
+      value: ({ spec }) => <Tokens tokens={spec.names?.categories} />,
     },
   ];
 
@@ -55,7 +61,11 @@ export const CustomResourceDefinitionsDetails = ({
   return (
     <DefaultRenderer
       customColumns={customColumns}
-      customComponents={[ResourceNames, CustomResourceDefinitionVersions]}
+      customComponents={[
+        ResourceNames,
+        CustomResourceDefinitionVersions,
+        RelatedCRDsList,
+      ]}
       resourceHeaderActions={[
         crd => {
           return (

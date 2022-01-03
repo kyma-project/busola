@@ -12,10 +12,10 @@ export function EventSubscriptionConditions(eventSubscription) {
 
   const conditions = eventSubscription?.status?.conditions;
   const headerRenderer = _ => [
-    t('event-subscription.conditions.type'),
-    t('event-subscription.conditions.status'),
-    t('event-subscription.conditions.reason'),
-    t('event-subscription.conditions.last-transition'),
+    t('event-subscription.headers.conditions.type'),
+    t('event-subscription.headers.conditions.status'),
+    t('event-subscription.headers.conditions.reason'),
+    t('event-subscription.headers.conditions.last-transition'),
   ];
 
   const rowRenderer = condition => [
@@ -28,7 +28,7 @@ export function EventSubscriptionConditions(eventSubscription) {
   return (
     <GenericList
       key="event-subscription-conditions"
-      title={t('event-subscription.conditions.title')}
+      title={t('event-subscription.headers.conditions.title')}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       entries={conditions || []}

@@ -1,8 +1,33 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-shared';
+import { Link, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 import { Trans } from 'react-i18next';
 import { EventSubscriptionConditionStatus } from 'shared/components/EventSubscriptionConditionStatus';
+import './EventSubscriptions.scss';
+
+const EventTypes = ({ filters }) => {
+  return (
+    <div className="event-types-wrapper ">
+      {filters.length > 0 ? (
+        filters?.map(filter => (
+          <span
+            className="fd-token fd-token--read-only"
+            key={filter.eventType.value}
+          >
+            <span
+              className="fd-token__text fd-has-font-size-small"
+              key={filter.eventType.value}
+            >
+              {filter.eventType.value}
+            </span>
+          </span>
+        ))
+      ) : (
+        <span>{EMPTY_TEXT_PLACEHOLDER}</span>
+      )}
+    </div>
+  );
+};
 
 //the name of the function cannot have 'Event' prefix, becuase it breaks list's and button's titles
 export const SubscriptionsList = ({ DefaultRenderer, ...otherParams }) => {
@@ -15,6 +40,10 @@ export const SubscriptionsList = ({ DefaultRenderer, ...otherParams }) => {
 
         return <EventSubscriptionConditionStatus condition={lastCondition} />;
       },
+    },
+    {
+      header: 'Event types',
+      value: ({ spec }) => <EventTypes filters={spec.filter.filters} />,
     },
   ];
 
