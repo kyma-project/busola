@@ -11,6 +11,7 @@ import {
   KeyValueField,
 } from 'shared/ResourceForm/fields';
 
+import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { ComboboxInput, MessageStrip } from 'fundamental-react';
 import { createEventSubscriptionTemplate } from './templates';
@@ -20,11 +21,32 @@ const DEFAULT_EVENT_TYPE_PREFIX = 'sap.kyma.custom.';
 const versionOptions = ['v1', 'v2', 'v3', 'v4'];
 
 //checks if the eventName consist of at least two parts divided by a dot
-const eventNamePattern = '[A-Za-z0-9-]+\\.[A-Za-z0-9-\\.]+[A-Za-z0-9-]';
+const eventNamePattern = '[A-Za-z0-9-]+.[A-Za-z0-9-.]+[A-Za-z0-9-]';
 
 //first three validate the prefix, 4th application name, 5th and 6th event name
 const eventTypePattern =
   '[A-Za-z]+\\.[A-Za-z]+\\.[A-Za-z]+\\.[a-z0-9\\-]+\\.[A-Za-z0-9\\-]+\\.[A-Za-z0-9\\-]+\\.+[A-Za-z0-9\\-\\.]+[^\\.]';
+
+const isEventTypeValid = eventType => {
+  console.log(eventType);
+  if (eventType === null) return '';
+
+  const segments = eventType?.split('.');
+  console.log(segments);
+  if (segments?.length < 7) return 'is-invalid';
+
+  const prefixRegex = /[A-Za-z]+/;
+  const appNameRegex = /[a-z0-9\-]+/;
+  const nameAndVersionRegex = /[A-Za-z0-9\-]/;
+
+  return segments?.every((segment, index) => {
+    if (index < 3) return prefixRegex.test(segment);
+    else if (index === 3) return appNameRegex.test(segment);
+    else return nameAndVersionRegex.test(segment);
+  })
+    ? ''
+    : 'is-invalid';
+};
 
 const SubscriptionsCreate = ({
   onChange,
@@ -32,7 +54,7 @@ const SubscriptionsCreate = ({
   namespace,
   resource: initialEventSubscription,
   resourceUrl,
-  serviceName,
+  serviceName = '',
   setCustomValid,
 }) => {
   const { t } = useTranslation();
@@ -47,7 +69,7 @@ const SubscriptionsCreate = ({
 
   const [eventSubscription, setEventSubscription] = useState(
     cloneDeep(initialEventSubscription) ||
-      createEventSubscriptionTemplate(namespace, eventTypePrefix),
+      createEventSubscriptionTemplate(namespace, eventTypePrefix, serviceName),
   );
 
   const firstEventType = jp.value(
@@ -138,6 +160,16 @@ const SubscriptionsCreate = ({
         }}
         readOnly={!!initialEventSubscription}
       />
+      <ResourceForm.FormField
+        label="Sink"
+        messageStrip={
+          <MessageStrip type="info">
+            {jp.value(eventSubscription, '$.spec.sink')}
+          </MessageStrip>
+        }
+        tooltipContent={t('event-subscription.tooltips.event-type-simple')}
+      />
+
       <ResourceForm.FormField
         required
         label={t('services.name_singular')}
@@ -244,18 +276,18 @@ const SubscriptionsCreate = ({
       />
       <ResourceForm.FormField
         simple
-        required
         label={t('event-subscription.create.labels.event-type')}
-        propertyPath={'$.spec.filter.filters[0].eventType.value'}
-        input={Inputs.Text}
-        readOnly={true}
+        messageStrip={
+          <MessageStrip type="info">
+            {jp.value(
+              eventSubscription,
+              '$.spec.filter.filters[0].eventType.value',
+            )}
+          </MessageStrip>
+        }
         tooltipContent={t('event-subscription.tooltips.event-type-simple')}
       />
-
       <TextArrayInput
-        inputProps={{
-          pattern: eventTypePattern,
-        }}
         advanced
         required
         defaultOpen
@@ -281,6 +313,7 @@ const SubscriptionsCreate = ({
             }
           });
         }}
+        validateSingleValue={isEventTypeValid}
       />
       {(jp.value(eventSubscription, '$.spec.filter.filters') || []).length ===
       0 ? (

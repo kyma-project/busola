@@ -802,7 +802,7 @@ event-subscription:
       event-version: Event version
     placeholders:
       application-name: Choose an Application name
-      service-name: Choose a Service name
+      service-name: Choose a Service for the sink
     title: Add Event Subscription
   description: <0>Event Subscription</0> is used to subscribe to events.
   errors:
