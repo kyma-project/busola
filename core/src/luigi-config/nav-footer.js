@@ -6,7 +6,10 @@ export async function setNavFooterText() {
   const targetElement = document.querySelector('.lui-side-nav__footer--text');
 
   // we can't set footer if left nav is hidden
-  if (!targetElement) return;
+  if (!targetElement) {
+    console.error('NO TARGET ELEMENT');
+    return;
+  }
 
   const language = i18next.language;
   const version = await getBusolaVersion();
