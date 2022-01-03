@@ -6,6 +6,38 @@ import Ajv from 'ajv';
 import { useSingleGet } from 'react-shared';
 import pluralize from 'pluralize';
 
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import EditorWorker from 'worker-loader!monaco-editor/esm/vs/editor/editor.worker.js';
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import JSONWorker from 'worker-loader!monaco-editor/esm/vs/language/json/json.worker.js';
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import YamlWorker from 'worker-loader!monaco-yaml/lib/esm/yaml.worker.js';
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import MonacoYamlWorker from 'worker-loader!./monaco-yaml-worker';
+
+// initialize Monaco Yaml by switching web-workers
+window.MonacoEnvironment = {
+  getWorker(moduleId, label) {
+    switch (label) {
+      case 'editorWorkerService':
+        return new EditorWorker();
+      case 'yaml':
+        return new YamlWorker();
+      case 'json':
+        return new JSONWorker();
+      default:
+        throw new Error(`Unknown label ${label}`);
+    }
+  },
+};
+
+// initiate own web worker to prepare the templates
+if (typeof Worker !== 'undefined') {
+  window.schemasWorker = new MonacoYamlWorker();
+
+  window.schemasWorker.postMessage('initiate');
+}
+
 function createAjv(schema) {
   const ajv = new Ajv({
     formats: {
@@ -27,6 +59,7 @@ function createAjv(schema) {
       }
     }
   });
+
   return ajv;
 }
 
@@ -57,6 +90,9 @@ export function useEditorHelper(value) {
       const response = await fetch('/openapi/v2');
       const data = await response.json();
 
+      // console.log('kkii', window.schemasWorker);
+      // window.schemasWorker.postMessage(data);
+
       //translate openApi to JSON
       const resolved = await new Resolver().resolve(data);
       const schema = toJsonSchema(resolved);
@@ -73,6 +109,6 @@ export function useEditorHelper(value) {
     });
     // eslint-disable-next-line
   }, [setSchema]);
-  console.log(schema);
+
   return { schema };
 }
