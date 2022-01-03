@@ -41,6 +41,7 @@ export function createCustomResourceDefinitionsTemplate(namespace) {
         singular: '',
         kind: '',
         shortNames: [''],
+        categories: [''],
       },
     },
   };
