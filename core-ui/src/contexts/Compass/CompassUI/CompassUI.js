@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Spinner, useFetch, useMicrofrontendContext } from 'react-shared';
 import { SuggestedSearch, Result } from './components';
-import { search } from './search';
+import { search } from './handlers';
+import './CompassUI.scss';
 
 export function CompassUI({ hide }) {
   const {

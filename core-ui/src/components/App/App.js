@@ -18,8 +18,8 @@ import { NoPermissions } from 'components/NoPermissions/NoPermissions';
 import { AddCluster } from 'components/Clusters/views/AddCluster/AddCluster';
 import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
 import { NodeDetails } from 'components/Nodes/NodeDetails/NodeDetails';
-import { useSentry } from '../../hooks/useSentry';
-import { useCompass } from './CompassContext';
+import { useSentry } from 'hooks/useSentry';
+import { useCompass } from 'contexts/Compass/CompassContext';
 
 export default function App() {
   const { cluster, language } = useMicrofrontendContext();

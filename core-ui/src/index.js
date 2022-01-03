@@ -11,7 +11,7 @@ import './fiori-helpers.scss';
 import App from './components/App/App';
 // NOTE react-shared has to be imported after App for some unknown reason
 import { Microfrontend, Spinner } from 'react-shared';
-import { CompassProvider } from 'components/App/CompassContext';
+import { CompassProvider } from 'contexts/Compass/CompassContext';
 
 i18next
   .use(initReactI18next)

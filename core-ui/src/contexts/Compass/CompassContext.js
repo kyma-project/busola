@@ -5,11 +5,10 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import { CompassUI } from './CompassUI';
-import './Compass.scss';
+import { CompassUI } from './CompassUI/CompassUI';
 import { withRouter } from 'react-router-dom';
-import { useEventListener } from '../../hooks/useEventListener';
-import { useCustomMessageListener } from '../../hooks/useCustomMessageListener';
+import { useEventListener } from 'hooks/useEventListener';
+import { useCustomMessageListener } from 'hooks/useCustomMessageListener';
 
 export const CompassContext = createContext();
 
