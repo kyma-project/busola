@@ -1,15 +1,29 @@
 import i18next from 'i18next';
 import { getBusolaClusterParams } from './busola-cluster-params';
 
+function elementReady(selector) {
+  return new Promise(resolve => {
+    let el = document.querySelector(selector);
+    if (el) {
+      resolve(el);
+      return;
+    }
+    new MutationObserver((_, observer) => {
+      // Query for elements matching the specified selector
+      Array.from(document.querySelectorAll(selector)).forEach(element => {
+        resolve(element);
+        observer.disconnect();
+      });
+    }).observe(document.documentElement, {
+      childList: true,
+      subtree: true,
+    });
+  });
+}
+
 // setting sideNavFooterText of Luigi settings won't allow HTML
 export async function setNavFooterText() {
-  const targetElement = document.querySelector('.lui-side-nav__footer--text');
-
-  // we can't set footer if left nav is hidden
-  if (!targetElement) {
-    console.error('NO TARGET ELEMENT');
-    return;
-  }
+  const targetElement = await elementReady('.lui-side-nav__footer--text');
 
   const language = i18next.language;
   const version = await getBusolaVersion();
