@@ -2,6 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-shared';
 import { Trans } from 'react-i18next';
+import { Tokens } from 'shared/components/Tokens';
 
 export const CustomResourceDefinitionsList = ({
   DefaultRenderer,
@@ -18,7 +19,14 @@ export const CustomResourceDefinitionsList = ({
   const customColumns = [
     {
       header: t('custom-resource-definitions.headers.scope'),
-      value: crd => crd.spec.scope,
+      value: crd => ({
+        content: crd.spec.scope,
+        style: { wordBreak: 'keep-all' },
+      }),
+    },
+    {
+      header: t('custom-resource-definitions.headers.categories'),
+      value: crd => <Tokens tokens={crd.spec.names?.categories} />,
     },
   ];
 

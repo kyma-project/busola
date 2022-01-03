@@ -5,7 +5,7 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 
 const Tokens = ({ tokens }) => (
   <div>
-    {tokens.length
+    {tokens?.length
       ? tokens.map(scope => (
           <Token
             key={scope}
