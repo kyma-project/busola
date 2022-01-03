@@ -72,13 +72,12 @@ function resolveSearchResults(context) {
 }
 
 export function nonResourceHandler(context) {
-  const options = createNonResourceOptions(context);
   const searchResults = resolveSearchResults(context);
   return {
     searchResults,
     suggestion: getSuggestion(
       context.tokens[0],
-      options.flatMap(option => option.names),
+      createNonResourceOptions(context).flatMap(option => option.names),
     ),
   };
 }

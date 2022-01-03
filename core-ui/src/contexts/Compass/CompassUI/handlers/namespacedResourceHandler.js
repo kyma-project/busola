@@ -3,7 +3,7 @@ import pluralize from 'pluralize';
 import {
   getSuggestion,
   getApiPath,
-  toFullName,
+  toFullResourceType,
   formatTypeSingular,
   formatTypePlural,
 } from './helpers';
@@ -54,13 +54,14 @@ function makeListItem(item, matchedNode) {
   };
 }
 
-async function namespacedResourceHandler2({
+async function fetchResults({
   fetch,
   namespace = 'default',
   tokens,
   namespaceNodes,
 }) {
-  const resourceType = toFullName(tokens[0], namespacedResources);
+  const [type, name] = tokens;
+  const resourceType = toFullResourceType(type, namespacedResources);
 
   const matchedNode = namespaceNodes.find(n => n.resourceType === resourceType);
   const resourceApiPath = getApiPath(matchedNode?.viewUrl);
@@ -80,18 +81,14 @@ async function namespacedResourceHandler2({
       const items = (await response.json()).items.filter(
         item => item.metadata.namespace === namespace,
       );
-      if (tokens[1]) {
+      if (name) {
         const matchedByName = items.filter(item =>
-          item.metadata.name.includes(tokens[1]),
+          item.metadata.name.includes(name),
         );
-        if (matchedByName) {
-          return [
-            linkToList,
-            ...matchedByName.map(item => makeListItem(item, matchedNode)),
-          ];
-        }
-        //wtf naming
-        return [linkToList];
+        return [
+          linkToList,
+          ...matchedByName.map(item => makeListItem(item, matchedNode)),
+        ];
       } else {
         return [
           linkToList,
@@ -100,14 +97,13 @@ async function namespacedResourceHandler2({
       }
     } catch (e) {
       console.log(e);
-      console.log(matchedNode);
     }
   }
   return null;
 }
 
 export async function namespacedResourceHandler(context) {
-  const searchResults = await namespacedResourceHandler2(context);
+  const searchResults = await fetchResults(context);
   return {
     searchResults,
     suggestion: getSuggestion(

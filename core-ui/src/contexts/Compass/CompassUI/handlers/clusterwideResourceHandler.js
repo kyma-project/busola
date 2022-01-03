@@ -3,7 +3,7 @@ import pluralize from 'pluralize';
 import {
   getSuggestion,
   getApiPath,
-  toFullName,
+  toFullResourceType,
   formatTypeSingular,
   formatTypePlural,
 } from './helpers';
@@ -34,8 +34,9 @@ function makeListItem(item, matchedNode) {
   };
 }
 
-async function clusterwideResourceHandler2({ fetch, tokens, clusterNodes }) {
-  const resourceType = toFullName(tokens[0], clusterwideResources);
+async function fetchResults({ fetch, tokens, clusterNodes }) {
+  const [type, name] = tokens;
+  const resourceType = toFullResourceType(type, clusterwideResources);
 
   const matchedNode = clusterNodes.find(n => n.resourceType === resourceType);
   const resourceApiPath = getApiPath(matchedNode?.viewUrl);
@@ -54,18 +55,14 @@ async function clusterwideResourceHandler2({ fetch, tokens, clusterNodes }) {
       const response = await fetch(resourceApiPath + '/' + resourceType);
       const { items } = await response.json();
 
-      if (tokens[1]) {
+      if (name) {
         const matchedByName = items.filter(item =>
-          item.metadata.name.includes(tokens[1]),
+          item.metadata.name.includes(name),
         );
-        if (matchedByName) {
-          return [
-            linkToList,
-            ...matchedByName.map(item => makeListItem(item, matchedNode)),
-          ];
-        }
-        //wtf naming
-        return [linkToList];
+        return [
+          linkToList,
+          ...matchedByName.map(item => makeListItem(item, matchedNode)),
+        ];
       } else {
         return [
           linkToList,
@@ -80,7 +77,7 @@ async function clusterwideResourceHandler2({ fetch, tokens, clusterNodes }) {
 }
 
 export async function clusterwideResourceHandler(context) {
-  const searchResults = await clusterwideResourceHandler2(context);
+  const searchResults = await fetchResults(context);
   return {
     searchResults,
     suggestion: getSuggestion(

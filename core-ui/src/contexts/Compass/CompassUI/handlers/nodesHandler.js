@@ -16,7 +16,8 @@ function makeListItem(item) {
 }
 
 async function fetchNodes({ fetch, tokens }) {
-  if (!nodeResourceNames.includes(tokens[0])) {
+  const [type, name] = tokens;
+  if (!nodeResourceNames.includes(type)) {
     return null;
   }
 
@@ -24,9 +25,9 @@ async function fetchNodes({ fetch, tokens }) {
     const response = await fetch('/apis/metrics.k8s.io/v1beta1/nodes');
     const { items } = await response.json();
 
-    if (tokens[1]) {
+    if (name) {
       const matchedByName = items.filter(item =>
-        item.metadata.name.includes(tokens[1]),
+        item.metadata.name.includes(name),
       );
       if (matchedByName) {
         return matchedByName.map(item => makeListItem(item));
