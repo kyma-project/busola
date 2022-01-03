@@ -391,8 +391,10 @@ export async function createNavigationNodes(
       ],
       context: {
         authData,
+        activeClusterName,
         groups,
         features,
+        clusters: await getClusters(),
         hiddenNamespaces,
         cluster: activeCluster.currentContext.cluster,
         config: activeCluster.config,

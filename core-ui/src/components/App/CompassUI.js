@@ -1,36 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Spinner, useFetch, useMicrofrontendContext } from 'react-shared';
-import { getSuggestions, resources, Suggestion } from './CompassContext';
-import didYouMean from 'didyoumean';
-
-function DidYouMean({ search, setSearch }) {
-  const availableWords = resources.flatMap(res => [res.name, ...res.aliases]);
-  if (!search) return null;
-
-  const tokens = search.split(/\s+/);
-
-  const suggestedSearch = tokens
-    .map(token => didYouMean(token, availableWords) || token)
-    .join(' ');
-
-  if (suggestedSearch === search) {
-    return null;
-  }
-
-  return (
-    <>
-      Did you mean:
-      <button onClick={() => setSearch(suggestedSearch)}>
-        {suggestedSearch}
-      </button>
-    </>
-  );
-}
+import { parseQuery, createResults } from './todo';
+import { SuggestedSearch, Result } from './components';
 
 export function CompassUI({ hide }) {
-  const { namespaceId: namespace } = useMicrofrontendContext();
+  const {
+    namespaceId: namespace,
+    clusters,
+    activeClusterName,
+  } = useMicrofrontendContext();
   const [search, setSearch] = useState('');
-  const [suggestions, setSuggestions] = useState([]);
+  const [results, setResults] = useState([]);
+  const [suggestedSearch, setSuggestedSearch] = useState('');
   const [loading, setLoading] = useState(false);
   const fetch = useFetch();
 
@@ -43,13 +24,31 @@ export function CompassUI({ hide }) {
   useEffect(() => {
     async function doSearch() {
       setLoading(true);
-      setSuggestions(
-        await getSuggestions({
-          search,
-          namespace,
-          fetch: url => fetch({ relativeUrl: url }),
-        }),
+
+      const res = parseQuery({
+        search: search.trim().toLowerCase(),
+        namespace,
+        activeClusterName,
+      });
+      if (!res) {
+        setLoading(false);
+        setSuggestedSearch(null);
+        setResults(null);
+        return;
+      }
+      const { query, suggestedSearch } = res;
+      setSuggestedSearch(suggestedSearch);
+      setResults(
+        query &&
+          (await createResults({
+            query,
+            fetch: url => fetch({ relativeUrl: url }),
+            clusters,
+            activeClusterName,
+            namespace,
+          })),
       );
+
       setLoading(false);
     }
     if (search) {
@@ -68,16 +67,20 @@ export function CompassUI({ hide }) {
           />
           {loading && <Spinner />}
           <ul>
-            {!loading && suggestions.length
-              ? suggestions.map(s => (
+            {!loading && results?.length
+              ? results.map(s => (
                   <ul key={s.name} onClick={hide}>
-                    <Suggestion {...s} />
+                    <Result {...s} />
                   </ul>
                 ))
               : 'nope'}
           </ul>
           <div>
-            <DidYouMean search={search} setSearch={setSearch} />
+            <SuggestedSearch
+              search={search}
+              suggestedSearch={suggestedSearch}
+              setSearch={setSearch}
+            />
           </div>
         </div>
       </div>

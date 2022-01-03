@@ -1,13 +1,11 @@
 import { getAuthData } from '../auth/auth-storage';
 import { getClusters } from '../cluster-management/cluster-management';
+import { config } from '../config';
 import { failFastFetch } from '../navigation/queries';
 import { search } from './search';
 
 const TYPE_DELAY = 300; // ms
 let timeout;
-
-const fetch = path =>
-  failFastFetch(config.backendAddress + path, getAuthData());
 
 function getPathContext() {
   const matches = location.pathname.match(
@@ -21,12 +19,25 @@ function getPathContext() {
 
 window.addEventListener('keydown', ({ metaKey, key }) => {
   if (key === 'k' && metaKey) {
+    Luigi.globalSearch().setSearchString('');
     Luigi.globalSearch().openSearchField();
+
+    console.log('open, ', document.querySelector('.luigi-search'));
     setTimeout(() => {
       document.querySelector('.luigi-search').focus();
     }, 100);
   }
 });
+
+window.addEventListener('click', e => {
+  console.log('click', e.target);
+  Luigi.globalSearch().closeSearchField();
+});
+
+function closeGlobalSearch() {
+  Luigi.globalSearch().closeSearchField();
+  Luigi.globalSearch().closeSearchResult();
+}
 
 export const globalSearch = {
   searchProvider: {
@@ -38,15 +49,21 @@ export const globalSearch = {
       })
         .then(async () => {
           const context = {
-            fetch,
+            fetch: path =>
+              failFastFetch(config.backendAddress + path, getAuthData()),
             ...getPathContext(),
             clusterNames: Object.keys(await getClusters()),
           };
 
           const result = await search(searchString, context);
 
-          if (!result.searchResults.length) {
-            result.searchResults = [{ label: 'nope' }];
+          if (!result.searchResults?.length) {
+            result.searchResults = [
+              {
+                label: 'No results',
+                onClick: closeGlobalSearch,
+              },
+            ];
           }
 
           Luigi.globalSearch().closeSearchResult();
@@ -60,11 +77,7 @@ export const globalSearch = {
       Luigi.globalSearch().closeSearchResult();
       Luigi.globalSearch().clearSearchField();
     },
-    customSearchResultRenderer: (
-      { searchResults, suggestion },
-      slot,
-      { fireItemSelected },
-    ) => {
+    customSearchResultRenderer: ({ searchResults, suggestion }, slot) => {
       let div = document.createElement('div');
       div.setAttribute(
         'class',
@@ -73,12 +86,16 @@ export const globalSearch = {
       const nav = document.createElement('nav');
       nav.setAttribute('class', 'fd-menu');
       const ul = document.createElement('ul');
-      ul.setAttribute('class', 'fd-menu__list fd-menu__list--top');
+      ul.setAttribute('class', 'fd-menu__list');
+      ul.setAttribute('style', 'max-height: 30vh; overflow-y: scroll');
       searchResults.forEach(searchResult => {
         const li = document.createElement('li');
         li.setAttribute('class', 'fd-menu__item');
         const a = document.createElement('a');
-        a.addEventListener('click', () => fireItemSelected(searchResult));
+        a.addEventListener('click', () => {
+          searchResult.onClick();
+          closeGlobalSearch();
+        });
         a.setAttribute('class', 'fd-menu__link');
         const span = document.createElement('span');
         span.setAttribute('class', 'fd-menu__title');
@@ -88,26 +105,26 @@ export const globalSearch = {
         ul.appendChild(li);
       });
 
-      const li = document.createElement('li');
-      li.setAttribute('class', 'fd-menu__item');
-      const a = document.createElement('a');
-      a.addEventListener('click', () => fireItemSelected(suggestion));
-      a.setAttribute('class', 'fd-menu__link');
-      const span = document.createElement('span');
-      span.setAttribute('class', 'fd-menu__title');
-      span.innerHTML = 'suggestion';
-      a.appendChild(span);
-      li.appendChild(a);
+      if (suggestion) {
+        const li = document.createElement('li');
+        li.setAttribute('class', 'fd-menu__item');
+        const a = document.createElement('a');
+        a.addEventListener('click', () =>
+          Luigi.globalSearch().setSearchString(suggestion),
+        );
+        a.setAttribute('class', 'fd-menu__link');
+        const span = document.createElement('span');
+        span.setAttribute('class', 'fd-menu__title');
+        span.innerHTML = `Did you mean "${suggestion}"?`;
+        a.appendChild(span);
+        li.appendChild(a);
+        ul.appendChild(li);
+      }
+
       nav.appendChild(ul);
       div.appendChild(nav);
       slot.appendChild(div);
       console.log(ul.children);
-    },
-    onSearchResultItemSelected: searchResultItem => {
-      console.log('click', searchResultItem);
-      // Luigi.navigation()
-      //   .withParams(searchResultItem.pathObject.params)
-      //   .navigate(searchResultItem.pathObject.link);
     },
   },
 };

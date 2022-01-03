@@ -1,6 +1,7 @@
 import i18next from 'i18next';
 import i18nextBackend from 'i18next-http-backend';
 import yaml from 'js-yaml';
+import { globalSearch } from './global-search';
 
 import {
   saveCurrentLocation,
@@ -54,6 +55,7 @@ async function initializeBusola() {
     },
     settings: createSettings(activeCluster),
     lifecycleHooks: { luigiAfterInit },
+    globalSearch,
   });
 
   // make sure Luigi config is set - we can't use luigiAfterInit as it won't

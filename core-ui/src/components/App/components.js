@@ -9,7 +9,6 @@ export function Result(props) {
     namespaceId: namespace,
   } = useMicrofrontendContext();
 
-  console.log(props);
   const { type, title, isNamespaced, resourceType, url } = props;
   switch (type) {
     case 'open-preferences':

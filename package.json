@@ -32,6 +32,7 @@
     "constate": "^1.2.0",
     "copy-to-clipboard": "^3.2.0",
     "core-js": "^3.3.6",
+    "didyoumean": "^1.2.2",
     "file-saver": "^2.0.2",
     "fundamental-react": "^0.14.0",
     "fundamental-styles": "^0.19.0",

@@ -75,6 +75,7 @@ export function createResults({ query, clusters, activeClusterName }) {
       } else {
         return null;
       }
+    default:
+      return null;
   }
-  return null;
 }
