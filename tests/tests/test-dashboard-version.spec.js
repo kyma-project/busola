@@ -10,5 +10,9 @@ context('Test Kyma Dashboard Version link', () => {
       .find('[data-test-id="version-link"]', { timeout: 7000 })
       .should('have.attr', 'href')
       .and('include', 'github.com/kyma-project/busola');
+
+    cy.window().then(win => {
+      expect(win.console.error).to.have.callCount(0);
+    });
   });
 });
