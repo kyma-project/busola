@@ -28,6 +28,7 @@
     "test-cluster-role-bindings.spec.js",
     "test-jobs.spec.js",
     "test-replica-sets.spec.js",
+    "test-dashboard-version.spec.js",
     "test-destination-rules.spec.js",
     "test-virtual-services.spec.js",
     "test-dns-entries.spec.js",
