@@ -800,8 +800,12 @@ event-subscription:
       event-name: Event name
       event-type: Event type
       event-version: Event version
+      sink: Sink
     placeholders:
       application-name: Choose an Application name
+      event-name: Enter the Event name, for example, order.cancelled
+      event-type: Enter Event type, for example, sap.kyma.custom.test-app.order.cancelled.v1
+      event-version: Enter the Event version, for example, v1
       service-name: Choose a Service for the sink
     title: Add Event Subscription
   description: <0>Event Subscription</0> is used to subscribe to events.
@@ -825,13 +829,14 @@ event-subscription:
   sink: Sink
   title: Event Subscriptions
   tooltips:
-    application-name: Choose an Application from the cluster.
+    application-name: Choose your Application from the cluster.
     event-name: Provide a name for your Event. The name must consist of at least two parts divided by a dot.
-    event-type-advanced: Event type must consist of minimum seven elements separated by dots. You can add more Event types if needed.
+    event-type-advanced: Event type must consist of minimum seven elements separated by dots. Prefix should be sap.kyma.custom. You can add more Event types.
     event-type-simple: Event type is defined based on the Application name, Event name, and Event version.
     event-version: Choose the Event version from the drop-down list or provide your own version.
     ready: Subscription is active
-    service-name: Choose a Service from the Namespace.
+    service-name: Choose a Service that connects to the sink.
+    sink: Specifies the HTTP endpoint where matching events should be sent to.
 functions:
   buttons:
     connected-repositories: Connected Repositories
