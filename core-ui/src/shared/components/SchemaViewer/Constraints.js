@@ -36,7 +36,7 @@ const SchemaMap = ({ val, required }) => {
   console.log('SchemaMap', { val, required });
   return (
     <ul>
-      {Object.entries({ val }).map(([name, def]) => (
+      {Object.entries(val).map(([name, def]) => (
         <li>
           <JSONSchema key={name} name={name} {...def} />
         </li>
@@ -112,6 +112,9 @@ const KNOWN_CONSTRAINTS = {
 
 function Property({ label, val, handler }) {
   const [collapsed, setCollapsed] = useState(true);
+  const Handler = handler;
+
+  console.log('Property', { label, val, handler });
 
   return (
     <>
@@ -132,7 +135,7 @@ function Property({ label, val, handler }) {
           'full-width': handler.expandable,
         })}
       >
-        <handler val={val} />
+        <Handler val={val} />
       </dt>
     </>
   );

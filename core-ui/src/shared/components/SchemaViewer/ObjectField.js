@@ -17,6 +17,13 @@ export function JSONSchema({
   // propertyNames,
 }) {
   const types = Array.isArray(type) ? type : [type];
+  console.log('JSONSchema', {
+    root,
+    type,
+    name,
+    description,
+    types,
+  });
   return (
     <section className="object-details">
       <div>
@@ -47,7 +54,9 @@ export function JSONSchema({
       <dl>
         <Constraints type="generic" def={def} />
         {types.map(type => (
-          <Constraints type={type} def={def} />
+          <>
+            <Constraints type={type} def={def} />
+          </>
         ))}
       </dl>
       {/*
