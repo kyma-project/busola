@@ -27,17 +27,17 @@ context('In-cluster eventing', () => {
     );
   });
 
-  it('Create an Event Subscription', () => {
+  it('Create a Subscription', () => {
     cy.getIframeBody()
       .contains('a', 'Configuration')
       .click();
 
     cy.getIframeBody()
-      .contains('button', 'Create Event Subscription')
+      .contains('button', 'Create Subscription')
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Event Subscription Name"]:visible')
+      .find('[placeholder="Subscription Name"]:visible')
       .clear()
       .type(`${FUNCTION_NAME}-subscription`);
 
@@ -134,23 +134,23 @@ context('In-cluster eventing', () => {
     //   .should('be.visible');
   });
 
-  it('Navigate to Event Subscription', () => {
+  it('Navigate to Subscription', () => {
     cy.getLeftNav()
       .contains('Configuration')
       .click();
 
     cy.getLeftNav()
-      .contains('Event Subscriptions')
+      .contains('Subscriptions')
       .click();
   });
 
-  it('Create Event Subscription', () => {
+  it('Create Subscription', () => {
     cy.getIframeBody()
-      .contains('Create Event Subscription')
+      .contains('Create Subscription')
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Event Subscription Name"]:visible')
+      .find('[placeholder="Subscription Name"]:visible')
       .clear()
       .type(`${API_RULE_AND_FUNCTION_NAME}-subscription`);
 
@@ -248,7 +248,7 @@ context('In-cluster eventing', () => {
       .should('be.visible');
   });
 
-  it('Delete Event Subscription', () => {
+  it('Delete Subscription', () => {
     cy.getIframeBody()
       .contains('button', 'Delete')
       .click();
