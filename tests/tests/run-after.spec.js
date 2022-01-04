@@ -57,7 +57,9 @@ context('Clean up namespace', () => {
 
   it('Check if the application is deleted (step 2)', () => {
     cy.getIframeBody()
-      .contains(`test-mock-app-${Cypress.env('NAMESPACE_NAME')}`)
+      .contains(`test-mock-app-${Cypress.env('NAMESPACE_NAME')}`, {
+        timeout: 5000,
+      })
       .should('not.exist');
   });
 });

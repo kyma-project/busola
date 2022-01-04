@@ -50,12 +50,14 @@ context('In-cluster eventing', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Event name"]:visible')
+      .find(
+        '[placeholder="Enter the Event name, for example, order.cancelled"]:visible',
+      )
       .clear()
       .type('order.created');
 
     cy.getIframeBody()
-      .find('[placeholder="Event version"]:visible')
+      .find('[placeholder="Enter the Event version, for example, v1"]:visible')
       .clear()
       .type('v1');
 
@@ -153,7 +155,7 @@ context('In-cluster eventing', () => {
       .type(`${API_RULE_AND_FUNCTION_NAME}-subscription`);
 
     cy.getIframeBody()
-      .contains('Choose a Service name')
+      .contains('Choose a Service for the sink')
       .click();
 
     cy.getIframeBody()
@@ -171,12 +173,14 @@ context('In-cluster eventing', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Event name"]:visible')
+      .find(
+        '[placeholder="Enter the Event name, for example, order.cancelled"]:visible',
+      )
       .clear()
       .type('order.created');
 
     cy.getIframeBody()
-      .find('[placeholder="Event version"]:visible')
+      .find('[placeholder="Enter the Event version, for example, v1"]:visible')
       .clear()
       .type('v1');
 
@@ -210,7 +214,9 @@ context('In-cluster eventing', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Event type"]')
+      .find(
+        '[placeholder="Enter Event type, for example, sap.kyma.custom.test-app.order.cancelled.v1"]',
+      )
       .clear()
       .type(
         `sap.kyma.custom.test-mock-app-${Cypress.env(
