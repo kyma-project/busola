@@ -124,7 +124,6 @@ const SubscriptionsCreate = ({
     <ResourceForm
       pluralKind="subscription"
       singularName={t('subscription.name_singular')}
-      navigationResourceName="subscriptions"
       resource={subscription}
       setResource={setSubscription}
       onChange={onChange}
