@@ -3,7 +3,7 @@ import { Button, ButtonSegmented } from 'fundamental-react';
 import './ModeSelector.scss';
 import { useTranslation } from 'react-i18next';
 
-export function ModeSelector({ mode, setMode }) {
+export function ModeSelector({ mode, setMode, withoutYaml }) {
   const { t } = useTranslation();
 
   const modeButtons = [

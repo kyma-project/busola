@@ -4,9 +4,9 @@ import { useTranslation } from 'react-i18next';
 
 import CodeTab from './Tabs/Code/CodeTab';
 import ResourceManagement from './Tabs/ResourceManagement/ResourceManagement';
-import EventSubscriptionsWrapper from './Tabs/Configuration/EventSubscriptions/EventSubscriptionsWrapper';
 import ServiceBindingsWrapper from './Tabs/Configuration/ServiceBindings/ServiceBindingsWrapper';
 import { ApiRulesList } from 'components/ApiRules/ApiRulesList';
+import { EventSubscriptionsList } from 'shared/components/EventSubscriptionsList';
 
 export default function LambdaDetails({ lambda }) {
   const microfrontendContext = useMicrofrontendContext();
@@ -16,7 +16,7 @@ export default function LambdaDetails({ lambda }) {
   const ApiRules = features?.API_GATEWAY?.isEnabled ? ApiRulesList : () => null;
 
   const EventSubscriptions = features?.EVENTING?.isEnabled
-    ? EventSubscriptionsWrapper
+    ? EventSubscriptionsList
     : () => null;
 
   const catalogEnabled =
@@ -30,7 +30,7 @@ export default function LambdaDetails({ lambda }) {
     features?.EVENTING?.isEnabled ||
     catalogEnabled;
 
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   return (
     <>
@@ -53,10 +53,8 @@ export default function LambdaDetails({ lambda }) {
               namespace={lambda.metadata.namespace}
             />
             <EventSubscriptions
-              ownerName={lambda.metadata.name}
-              isActive={selectedTabIndex === 1}
-              lambda={lambda}
-              i18n={i18n}
+              serviceName={lambda.metadata.name}
+              namespace={lambda.metadata.namespace}
             />
             <ServiceBindings
               lambda={lambda}

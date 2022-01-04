@@ -19,13 +19,6 @@ export async function loadRandomCRD(crdPluralName, crdName) {
   return newCRD;
 }
 
-export async function loadSubscription(NAMESPACE) {
-  const SUB = await loadFile('test-eventsubscription.yaml');
-  const newSUB = { ...SUB };
-  newSUB.spec.sink = `http://in-cluster-eventing-publisher.${NAMESPACE}.svc.cluster.local`;
-  return newSUB;
-}
-
 export async function loadCRInstance(crdPluralName) {
   const CR = await loadFile('test-custom-resource-instance.yaml');
 

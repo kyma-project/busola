@@ -108,12 +108,16 @@ applications:
     namespace: Namespace
   messages:
     app-created: Application {{applicationName}} created.
+    binding-create-failed: Failed to create the Binding.
+    binding-created: Binding created.
     binding-deleted: Binding deleted.
-    binding-not-found: No bindings.
+    binding-not-found: No Bindings.
     cannot-create: Cannot create the Application.
+    connect-disabled: Connecting Applications is disabled for SAP Kyma Runtime.
     copy-url: 'Copy the following URL and use it at the external system that you would like to connect to:'
-    create-failed: Failed to create the Binding.
-    created: Binding created.
+    create-disabled: Creating Applications is disabled for SAP Kyma Runtime.
+    create-failed: Failed to create the Application.
+    created: Application created.
     dont-expose: This Application doesn't expose any Services or events.
     no-apis: There are no APIs.
     no-bound-service: No bound services found.
@@ -405,6 +409,7 @@ common:
     kyma: Kyma
     name: Name
     namespace: Namespace
+    'no': 'No'
     path: Path
     protocol: Protocol
     read-only: Read-only mode
@@ -414,6 +419,7 @@ common:
     secret: Secret
     service: Service
     version: Kyma Dashboard Version
+    'yes': 'Yes'
   lowercase:
     name: name
   messages:
@@ -458,7 +464,8 @@ common:
     read-file: Read file content as a single value, with file name as a key.
     resource-ref-name: Unique name within a Namespace to refer to a {{resource}} resource.
     resource-ref-namespace: Namespace defines the space within which the {{resource}} name must be unique.
-    running-pods: '{{running}} out of {{expected}} Pods are running.'
+    running-pods-plural: '{{running}} Pods are running.'
+    running-pods-singular: 1 Pod is running.
     save: Save
     search: Search
     secret-ref-name: Unique name within a Namespace to refer to a Secret resource.
@@ -579,6 +586,7 @@ cron-jobs:
 custom-resource-definitions:
   description: <0>Custom Resource Definition</0> is an object used to define a custom resource that allows you to extend the Kubernetes API for use cases that are not directly covered by core Kubernetes.
   headers:
+    categories: Categories
     description: Description
     json-path: JSON Path
     kind: Kind
@@ -598,6 +606,7 @@ custom-resource-definitions:
   subtitle:
     additional-columns: Additional Printer Columns
     names: Names
+    related-crds: Related CRDs
     schema: Schema
     version: Version
   title: Custom Resource Definitions
@@ -785,45 +794,44 @@ domains:
     label: Include Domains
     placeholder: Domain that is allowed
 event-subscription:
-  conditions:
-    last-transition: Last Transition
-    reason: Reason
-    status: Status
-    title: Conditions
-    type: Type
   create:
     labels:
       application-name: Application name
-      calculate-event-type: Calculate Event type
-      calculate-from-cmp: Calculate from components
-      enter-event-type: Enter Event type
       event-name: Event name
       event-type: Event type
       event-version: Event version
-    notifications:
-      created: Subscription created
-      failed: Failed to create the Subscription
-      failed-delete: Failed to delete the Subscription
-      removed: Subscription removed
+    placeholders:
+      application-name: Choose an Application name
+      service-name: Choose a Service name
     title: Add Event Subscription
   description: <0>Event Subscription</0> is used to subscribe to events.
   errors:
-    invalid: The eventType field must have a proper value.
-    not-matching-search-query: Couldn't find Event Subscriptions matching this query.
-    server: Server error. Contact your cluster admin.
-    subscriptions-not-found: There are no Event Subscriptions yet.
-  filters:
-    event-source: Event Source
-    event-type: Event Type
-    property: Property
-    title: Filters
-    type: Type
-    value: Value
+    empty-event-types: You must provide at least one Event type.
+  headers:
+    conditions:
+      last-transition: Last Transition
+      reason: Reason
+      status: Status
+      title: Conditions
+      type: Type
+    filters:
+      event-source: Event Source
+      event-type: Event Type
+      property: Property
+      title: Filters
+      type: Type
+      value: Value
   name_singular: Event Subscription
   sink: Sink
   title: Event Subscriptions
   tooltips:
-    ready: Subscription is active.
+    application-name: Choose an Application from the cluster.
+    event-name: Provide a name for your Event. The name must consist of at least two parts divided by a dot.
+    event-type-advanced: Provide your customized Event type that will override the predefined one. You can add more Event types if needed.
+    event-type-simple: Event type is defined based on the Application name, Event name, and Event version.
+    event-version: Choose the Event version from the drop-down list or provide your own version.
+    ready: Subscription is active
+    service-name: Choose a Service from the Namespace.
 functions:
   buttons:
     connected-repositories: Connected Repositories
@@ -1634,6 +1642,76 @@ stateful-sets:
 top-nav:
   profile:
     preferences: $t(preferences.title)
+virtualservices:
+  description: <0>Virtual Service</0> describes a configuration that affects traffic routing.
+  gateways: Gateways
+  headers:
+    add: add
+    remove: remove
+    request: Request
+    response: Response
+    set: set
+    title: Headers
+  hosts: Hosts
+  http-routes:
+    cors:
+      allow-credentials: Allow Credentials
+      allow-headers: Allow Headers
+      allow-methods: Allow Methods
+      allow-origins: Allow Origins
+      expose-headers: Expose Headers
+      max-age: Max Age
+      title: CORS Policy
+    delegate: Delegate
+    fault:
+      abort: Abort Fault Injection
+      delay: Delay Fault Injection
+    mirror: Mirror
+    redirect:
+      authority: Authority
+      derivePort: Derive Port
+      port: Port
+      redirectCode: Redirect Code
+      scheme: Scheme
+      title: Redirect
+      uri: URI
+    rewrite:
+      authority: Authority
+      title: Rewrite
+      uri: URI
+    route:
+      headers: Header manipulation
+    timeout: Timeout
+    title: HTTP Route
+  matches:
+    authority: Authority
+    destination-subnets: Destination Subnets
+    exact: is exactly
+    gateways: Gateways
+    header: Header {{field}}
+    ignore-case: (ignore case)
+    method: Method
+    port: Port
+    prefix: starts with
+    regex: matches
+    scheme: Scheme
+    sni-hosts: SNI Hosts
+    source-labels: Source Labels
+    source-namespace: Source Namespace
+    title: Matches
+    uri: URI
+    without-header: Without header {{field}}
+  name_singular: Virtual Service
+  route:
+    destination: Destination
+    weight: Weight
+  routes: Destinations
+  tcp-routes:
+    title: TCP Route
+  title: Virtual Services
+  tls-routes:
+    matches: Matches
+    title: TLS Route
 workloads:
   docker-image:
     tooltip: Enter a valid Docker image registry path.

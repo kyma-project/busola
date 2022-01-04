@@ -83,9 +83,10 @@ const AdditionalPrinterColumns = ({ additionalPrinterColumns }) => {
     t('custom-resource-definitions.headers.description'),
     t('custom-resource-definitions.headers.json-path'),
   ];
+
   const rowRenderer = entry => [
-    entry.name,
-    entry.type,
+    { content: entry.name, style: { wordBreak: 'keep-all' } },
+    { content: entry.type, style: { wordBreak: 'keep-all' } },
     entry.description || EMPTY_TEXT_PLACEHOLDER,
     entry.jsonPath,
   ];
