@@ -6,7 +6,7 @@ import CodeTab from './Tabs/Code/CodeTab';
 import ResourceManagement from './Tabs/ResourceManagement/ResourceManagement';
 import ServiceBindingsWrapper from './Tabs/Configuration/ServiceBindings/ServiceBindingsWrapper';
 import { ApiRulesList } from 'components/ApiRules/ApiRulesList';
-import { EventSubscriptionsList } from 'shared/components/EventSubscriptionsList';
+import { SubscriptionsList } from 'shared/components/EventSubscriptionsList';
 
 export default function LambdaDetails({ lambda }) {
   const microfrontendContext = useMicrofrontendContext();
@@ -15,8 +15,8 @@ export default function LambdaDetails({ lambda }) {
 
   const ApiRules = features?.API_GATEWAY?.isEnabled ? ApiRulesList : () => null;
 
-  const EventSubscriptions = features?.EVENTING?.isEnabled
-    ? EventSubscriptionsList
+  const Subscriptions = features?.EVENTING?.isEnabled
+    ? SubscriptionsList
     : () => null;
 
   const catalogEnabled =
@@ -52,7 +52,7 @@ export default function LambdaDetails({ lambda }) {
               serviceName={lambda.metadata.name}
               namespace={lambda.metadata.namespace}
             />
-            <EventSubscriptions
+            <Subscriptions
               serviceName={lambda.metadata.name}
               namespace={lambda.metadata.namespace}
             />

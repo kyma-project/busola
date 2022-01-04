@@ -29,7 +29,7 @@ const SubscriptionsCreate = ({
   onChange,
   formElementRef,
   namespace,
-  resource: initialEventSubscription,
+  resource: initialSubscription,
   resourceUrl,
   serviceName = '',
   setCustomValid,
@@ -37,7 +37,7 @@ const SubscriptionsCreate = ({
   const { t } = useTranslation();
 
   const [subscription, setSubscription] = useState(
-    cloneDeep(initialEventSubscription) ||
+    cloneDeep(initialSubscription) ||
       createEventSubscriptionTemplate(
         namespace,
         DEFAULT_EVENT_TYPE_PREFIX,
@@ -103,7 +103,7 @@ const SubscriptionsCreate = ({
       //when serviceName is given,display notification and don't redirect
       notification.notifySuccess({
         content: t(
-          initialEventSubscription
+          initialSubscription
             ? 'common.create-form.messages.patch-success'
             : 'common.create-form.messages.create-success',
           {
@@ -128,14 +128,14 @@ const SubscriptionsCreate = ({
 
   return (
     <ResourceForm
-      pluralKind="eventsubscription"
+      pluralKind="subscription"
       singularName={t('subscription.name_singular')}
-      navigationResourceName="eventsubscriptions"
+      navigationResourceName="subscriptions"
       resource={subscription}
       setResource={setSubscription}
       onChange={onChange}
       formElementRef={formElementRef}
-      initialResource={initialEventSubscription}
+      initialResource={initialSubscription}
       createUrl={resourceUrl}
       afterCreatedFn={afterCreatedFn}
       setCustomValid={setCustomValid}
@@ -147,7 +147,7 @@ const SubscriptionsCreate = ({
           jp.value(subscription, '$.metadata.name', name);
           setSubscription({ ...subscription });
         }}
-        readOnly={!!initialEventSubscription}
+        readOnly={!!initialSubscription}
       />
       <ResourceForm.FormField
         label={t('subscription.create.labels.sink')}

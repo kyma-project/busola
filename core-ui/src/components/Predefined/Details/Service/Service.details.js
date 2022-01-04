@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import './Service.details.scss';
 import { ApiRulesList } from 'components/ApiRules/ApiRulesList';
-import { EventSubscriptionsList } from 'shared/components/EventSubscriptionsList';
+import { SubscriptionsList } from 'shared/components/EventSubscriptionsList';
 
 export const ServicesDetails = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
@@ -14,7 +14,7 @@ export const ServicesDetails = ({ DefaultRenderer, ...otherParams }) => {
   const customComponents = [];
   if (features?.EVENTING?.isEnabled) {
     customComponents.push(service => (
-      <EventSubscriptionsList
+      <SubscriptionsList
         serviceName={service.metadata.name}
         namespace={service.metadata.namespace}
       />
