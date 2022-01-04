@@ -11,7 +11,6 @@ import {
   KeyValueField,
 } from 'shared/ResourceForm/fields';
 
-import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { ComboboxInput, MessageStrip } from 'fundamental-react';
 import { createEventSubscriptionTemplate } from './templates';
@@ -29,11 +28,11 @@ const eventTypePattern =
 
 const isEventTypeValid = eventType => {
   console.log(eventType);
-  if (eventType === null) return '';
+  if (eventType === null) return true;
 
   const segments = eventType?.split('.');
+  if (segments?.length < 7) return false;
   console.log(segments);
-  if (segments?.length < 7) return 'is-invalid';
 
   const prefixRegex = /[A-Za-z]+/;
   const appNameRegex = /[a-z0-9\-]+/;
@@ -43,9 +42,7 @@ const isEventTypeValid = eventType => {
     if (index < 3) return prefixRegex.test(segment);
     else if (index === 3) return appNameRegex.test(segment);
     else return nameAndVersionRegex.test(segment);
-  })
-    ? ''
-    : 'is-invalid';
+  });
 };
 
 const SubscriptionsCreate = ({
@@ -137,6 +134,19 @@ const SubscriptionsCreate = ({
     }
   };
 
+  const handleError = () => {
+    if (firstEventTypeValues.eventName === '') return null;
+    const segments = firstEventTypeValues?.eventName?.split('.');
+    if (segments.length < 2)
+      return new Error(
+        'You need to provide at least two words separated by a dot',
+      );
+    const nameRegex = /[A-Za-z0-9]+/;
+    return segments.every(segment => nameRegex.test(segment))
+      ? new Error('wrong format')
+      : null;
+  };
+
   return (
     <ResourceForm
       pluralKind="eventsubscription"
@@ -171,8 +181,7 @@ const SubscriptionsCreate = ({
       />
 
       <ResourceForm.FormField
-        required
-        label={t('services.name_singular')}
+        label=""
         setValue={serviceName => {
           jp.value(
             eventSubscription,
@@ -197,7 +206,6 @@ const SubscriptionsCreate = ({
         }))}
         error={servicesError}
         loading={servicesLoading}
-        tooltipContent={t('event-subscription.tooltips.service-name')}
       />
 
       <KeyValueField
@@ -249,6 +257,7 @@ const SubscriptionsCreate = ({
         placeholder={t('event-subscription.create.labels.event-name')}
         tooltipContent={t('event-subscription.tooltips.event-name')}
         pattern={eventNamePattern}
+        error={handleError()}
       />
 
       <ResourceForm.FormField
@@ -304,15 +313,15 @@ const SubscriptionsCreate = ({
         }
         customFormatFn={arr => arr.map(getEventFilter)}
         placeholder={t('event-subscription.create.labels.event-type')}
-        validate={value => {
-          return value.every(e => {
-            if (e.eventType.value.split('.').filter(s => s).length < 7) {
-              return false;
-            } else {
-              return true;
-            }
-          });
-        }}
+        // validate={value => {
+        //   return value.every(e => {
+        //     if (e.eventType.value.split('.').filter(s => s).length < 7) {
+        //       return false;
+        //     } else {
+        //       return true;
+        //     }
+        //   });
+        // }}
         validateSingleValue={isEventTypeValid}
       />
       {(jp.value(eventSubscription, '$.spec.filter.filters') || []).length ===
