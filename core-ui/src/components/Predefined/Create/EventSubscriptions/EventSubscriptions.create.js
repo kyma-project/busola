@@ -19,12 +19,6 @@ import { getServiceName, getEventFilter, spreadEventType } from './helpers';
 const DEFAULT_EVENT_TYPE_PREFIX = 'sap.kyma.custom.';
 const versionOptions = ['v1', 'v2', 'v3', 'v4'];
 
-//checks if the eventName consist of at least two parts divided by a dot
-const eventNamePattern = `[A-Za-z0-9\\-]+\\.[A-Za-z0-9\\-\\.]+[^(\\.\\s\\-)]`;
-
-//first three validate the prefix, 4th application name, 5th and 6th event name
-const eventTypePattern = `${DEFAULT_EVENT_TYPE_PREFIX}[a-z0-9\\-]+\\.[A-Za-z0-9\\-]+\\.[A-Za-z0-9\\-]+\\.+[A-Za-z0-9\\.\\-]+[^(\\.\\s\\-]`;
-
 const SubscriptionsCreate = ({
   onChange,
   formElementRef,
@@ -232,7 +226,6 @@ const SubscriptionsCreate = ({
         input={Inputs.Text}
         placeholder={t('subscription.create.placeholders.event-name')}
         tooltipContent={t('subscription.tooltips.event-name')}
-        pattern={eventNamePattern}
       />
 
       <ResourceForm.FormField
@@ -290,7 +283,6 @@ const SubscriptionsCreate = ({
             }
           });
         }}
-        inputProps={{ pattern: eventTypePattern }}
       />
       {(jp.value(subscription, '$.spec.filter.filters') || []).length === 0 ? (
         <MessageStrip

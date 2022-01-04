@@ -76,7 +76,6 @@ const SubscriptionsFilter = subscription => {
   );
 };
 
-//the name of the function cannot have 'Event' prefix, becuase it doesn't show custom details view
 export const SubscriptionsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
   const customColumns = [

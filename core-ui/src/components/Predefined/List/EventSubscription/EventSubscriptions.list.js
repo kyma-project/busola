@@ -29,7 +29,6 @@ const EventTypes = ({ filters }) => {
   );
 };
 
-//the name of the function cannot have 'Event' prefix, becuase it breaks list's and button's titles
 export const SubscriptionsList = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
   const customColumns = [
