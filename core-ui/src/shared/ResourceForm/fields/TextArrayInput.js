@@ -1,6 +1,5 @@
 import React from 'react';
 import { FormInput } from 'fundamental-react';
-import classNames from 'classnames';
 
 import { MultiInput } from './MultiInput';
 
@@ -14,7 +13,6 @@ export function TextArrayInput({
   toInternal = value => value || [],
   toExternal = value => value.filter(val => typeof val === 'string'),
   readOnly,
-  validateSingleValue,
   customFormatFn,
   ...props
 }) {
@@ -39,9 +37,6 @@ export function TextArrayInput({
           <FormInput
             placeholder={Math.abs(index) === 1 ? placeholder : ''}
             key={index}
-            className={classNames([
-              { 'is-invalid': !validateSingleValue(value) },
-            ])}
             compact
             value={value || ''}
             ref={ref}

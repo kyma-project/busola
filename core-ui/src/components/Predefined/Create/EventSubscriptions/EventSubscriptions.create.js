@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { cloneDeep } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
-import { useGet, useGetList, useNotification } from 'react-shared';
+import { useGetList, useNotification } from 'react-shared';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import {
@@ -20,30 +20,10 @@ const DEFAULT_EVENT_TYPE_PREFIX = 'sap.kyma.custom.';
 const versionOptions = ['v1', 'v2', 'v3', 'v4'];
 
 //checks if the eventName consist of at least two parts divided by a dot
-const eventNamePattern = '[A-Za-z0-9-]+.[A-Za-z0-9-.]+[A-Za-z0-9-]';
+const eventNamePattern = `[A-Za-z0-9-]+\\.[A-Za-z0-9-.]+[A-Za-z0-9-]+[^\\.]`;
 
 //first three validate the prefix, 4th application name, 5th and 6th event name
-const eventTypePattern =
-  '[A-Za-z]+\\.[A-Za-z]+\\.[A-Za-z]+\\.[a-z0-9\\-]+\\.[A-Za-z0-9\\-]+\\.[A-Za-z0-9\\-]+\\.+[A-Za-z0-9\\-\\.]+[^\\.]';
-
-const isEventTypeValid = eventType => {
-  console.log(eventType);
-  if (eventType === null) return true;
-
-  const segments = eventType?.split('.');
-  if (segments?.length < 7) return false;
-  console.log(segments);
-
-  const prefixRegex = /[A-Za-z]+/;
-  const appNameRegex = /[a-z0-9\-]+/;
-  const nameAndVersionRegex = /[A-Za-z0-9\-]/;
-
-  return segments?.every((segment, index) => {
-    if (index < 3) return prefixRegex.test(segment);
-    else if (index === 3) return appNameRegex.test(segment);
-    else return nameAndVersionRegex.test(segment);
-  });
-};
+const eventTypePattern = `${DEFAULT_EVENT_TYPE_PREFIX}[a-z0-9]+\\.[A-Za-z0-9]+\\.[A-Za-z0-9]+\\.+[A-Za-z0-9\\.]+[^(\\.\\s]`;
 
 const SubscriptionsCreate = ({
   onChange,
@@ -55,36 +35,36 @@ const SubscriptionsCreate = ({
   setCustomValid,
 }) => {
   const { t } = useTranslation();
-  const { data: configMap } = useGet(
-    '/api/v1/namespaces/kyma-system/configmaps/eventing',
-  );
-  let eventTypePrefix =
-    configMap?.data?.eventTypePrefix || DEFAULT_EVENT_TYPE_PREFIX;
-  eventTypePrefix = eventTypePrefix.endsWith('.')
-    ? eventTypePrefix
-    : eventTypePrefix + '.';
 
-  const [eventSubscription, setEventSubscription] = useState(
+  const [subscription, setSubscription] = useState(
     cloneDeep(initialEventSubscription) ||
-      createEventSubscriptionTemplate(namespace, eventTypePrefix, serviceName),
+      createEventSubscriptionTemplate(
+        namespace,
+        DEFAULT_EVENT_TYPE_PREFIX,
+        serviceName,
+      ),
   );
 
   const firstEventType = jp.value(
-    eventSubscription,
+    subscription,
     '$.spec.filter.filters[0].eventType.value',
   );
-  const firstEventTypeValues = spreadEventType(firstEventType, eventTypePrefix);
+
+  const firstEventTypeValues = spreadEventType(
+    firstEventType,
+    DEFAULT_EVENT_TYPE_PREFIX,
+  );
 
   const notification = useNotification();
 
   useEffect(() => {
     if (serviceName) {
       jp.value(
-        eventSubscription,
+        subscription,
         '$.spec.sink',
         `https://${serviceName}.${namespace}.svc.cluster.local`,
       );
-      setEventSubscription({ ...eventSubscription });
+      setSubscription({ ...subscription });
     }
   }, [serviceName]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -92,14 +72,14 @@ const SubscriptionsCreate = ({
     const newEventTypeValues = { ...firstEventTypeValues, ...changes };
 
     jp.value(
-      eventSubscription,
+      subscription,
       '$.spec.filter.filters[0].eventType.value',
-      `${eventTypePrefix}${newEventTypeValues.appName}.${newEventTypeValues.eventName}.${newEventTypeValues.version}`,
+      `${DEFAULT_EVENT_TYPE_PREFIX}${newEventTypeValues.appName}.${newEventTypeValues.eventName}.${newEventTypeValues.version}`,
     );
-    jp.value(eventSubscription, '$.spec.filter.filters', [
-      ...jp.value(eventSubscription, '$.spec.filter.filters'),
+    jp.value(subscription, '$.spec.filter.filters', [
+      ...jp.value(subscription, '$.spec.filter.filters'),
     ]);
-    setEventSubscription({ ...eventSubscription });
+    setSubscription({ ...subscription });
   };
 
   const {
@@ -134,26 +114,13 @@ const SubscriptionsCreate = ({
     }
   };
 
-  const handleError = () => {
-    if (firstEventTypeValues.eventName === '') return null;
-    const segments = firstEventTypeValues?.eventName?.split('.');
-    if (segments.length < 2)
-      return new Error(
-        'You need to provide at least two words separated by a dot',
-      );
-    const nameRegex = /[A-Za-z0-9]+/;
-    return segments.every(segment => nameRegex.test(segment))
-      ? new Error('wrong format')
-      : null;
-  };
-
   return (
     <ResourceForm
       pluralKind="eventsubscription"
       singularName={t('event-subscription.name_singular')}
       navigationResourceName="eventsubscriptions"
-      resource={eventSubscription}
-      setResource={setEventSubscription}
+      resource={subscription}
+      setResource={setSubscription}
       onChange={onChange}
       formElementRef={formElementRef}
       initialResource={initialEventSubscription}
@@ -165,8 +132,8 @@ const SubscriptionsCreate = ({
         propertyPath="$.metadata.name"
         kind={t('event-subscription.name_singular')}
         setValue={name => {
-          jp.value(eventSubscription, '$.metadata.name', name);
-          setEventSubscription({ ...eventSubscription });
+          jp.value(subscription, '$.metadata.name', name);
+          setSubscription({ ...subscription });
         }}
         readOnly={!!initialEventSubscription}
       />
@@ -174,7 +141,7 @@ const SubscriptionsCreate = ({
         label="Sink"
         messageStrip={
           <MessageStrip type="info">
-            {jp.value(eventSubscription, '$.spec.sink')}
+            {jp.value(subscription, '$.spec.sink')}
           </MessageStrip>
         }
         tooltipContent={t('event-subscription.tooltips.event-type-simple')}
@@ -184,20 +151,18 @@ const SubscriptionsCreate = ({
         label=""
         setValue={serviceName => {
           jp.value(
-            eventSubscription,
+            subscription,
             '$.spec.sink',
             `https://${serviceName}.${namespace}.svc.cluster.local`,
           );
-          setEventSubscription({ ...eventSubscription });
+          setSubscription({ ...subscription });
         }}
         value={
           serviceName ||
-          getServiceName(jp.value(eventSubscription, '$.spec.sink')) ||
+          getServiceName(jp.value(subscription, '$.spec.sink')) ||
           ''
         }
-        validate={() =>
-          getServiceName(jp.value(eventSubscription, '$.spec.sink'))
-        }
+        validate={() => getServiceName(jp.value(subscription, '$.spec.sink'))}
         input={Inputs.Dropdown}
         placeholder={t('event-subscription.create.placeholders.service-name')}
         options={(services || []).map(i => ({
@@ -235,7 +200,10 @@ const SubscriptionsCreate = ({
             value,
             '$.spec.filter.filters[0].eventType.value',
           );
-          const { appName } = spreadEventType(eventType, eventTypePrefix);
+          const { appName } = spreadEventType(
+            eventType,
+            DEFAULT_EVENT_TYPE_PREFIX,
+          );
           return appName;
         }}
         options={(applications || []).map(i => ({
@@ -257,7 +225,6 @@ const SubscriptionsCreate = ({
         placeholder={t('event-subscription.create.labels.event-name')}
         tooltipContent={t('event-subscription.tooltips.event-name')}
         pattern={eventNamePattern}
-        error={handleError()}
       />
 
       <ResourceForm.FormField
@@ -288,10 +255,7 @@ const SubscriptionsCreate = ({
         label={t('event-subscription.create.labels.event-type')}
         messageStrip={
           <MessageStrip type="info">
-            {jp.value(
-              eventSubscription,
-              '$.spec.filter.filters[0].eventType.value',
-            )}
+            {jp.value(subscription, '$.spec.filter.filters[0].eventType.value')}
           </MessageStrip>
         }
         tooltipContent={t('event-subscription.tooltips.event-type-simple')}
@@ -313,19 +277,18 @@ const SubscriptionsCreate = ({
         }
         customFormatFn={arr => arr.map(getEventFilter)}
         placeholder={t('event-subscription.create.labels.event-type')}
-        // validate={value => {
-        //   return value.every(e => {
-        //     if (e.eventType.value.split('.').filter(s => s).length < 7) {
-        //       return false;
-        //     } else {
-        //       return true;
-        //     }
-        //   });
-        // }}
-        validateSingleValue={isEventTypeValid}
+        validate={value => {
+          return value.every(e => {
+            if (e.eventType.value.split('.').filter(s => s).length < 7) {
+              return false;
+            } else {
+              return true;
+            }
+          });
+        }}
+        inputProps={{ pattern: eventTypePattern }}
       />
-      {(jp.value(eventSubscription, '$.spec.filter.filters') || []).length ===
-      0 ? (
+      {(jp.value(subscription, '$.spec.filter.filters') || []).length === 0 ? (
         <MessageStrip
           advanced
           type="warning"
