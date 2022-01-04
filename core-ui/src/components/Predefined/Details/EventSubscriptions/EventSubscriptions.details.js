@@ -6,7 +6,10 @@ import { EventSubscriptionConditionStatus } from 'shared/components/EventSubscri
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import './EventFilters.scss';
 import { Link } from 'fundamental-react';
-import { navigateToFixedPathResourceDetails } from 'react-shared';
+import {
+  navigateToFixedPathResourceDetails,
+  GoToDetailsLink,
+} from 'react-shared';
 import { EventSubscriptionConditions } from './EventSubscriptionConditions';
 
 const FilterOption = ({ filterOption, title }) => {
@@ -56,7 +59,7 @@ const EventFilters = ({ filter }) => {
 const EventSubscriptionsFilters = subscription => {
   const { t } = useTranslation();
   const filters = subscription?.spec?.filter?.filters || [];
-
+  console.log(subscription);
   return (
     <LayoutPanel
       className="fd-margin--md event-filters-panel"
@@ -89,24 +92,25 @@ export const SubscriptionsDetails = ({ DefaultRenderer, ...otherParams }) => {
       },
     },
     {
-      header: t('subscription.sink'),
+      header: t('common.headers.owner'),
       value: ({ spec }) => {
         const index = spec?.sink.lastIndexOf('/') + 1;
 
         const firstDot = spec?.sink.indexOf('.');
         const serviceName = spec?.sink.substring(index, firstDot);
-        return spec?.sink ? (
-          <Link
-            onClick={() =>
-              navigateToFixedPathResourceDetails('services', serviceName)
-            }
-          >
-            {spec?.sink}
-          </Link>
-        ) : (
-          <p>{EMPTY_TEXT_PLACEHOLDER}</p>
+        return (
+          <p>
+            {t('services.name_singular')}&nbsp;
+            <GoToDetailsLink resource="services" name={serviceName} />
+          </p>
         );
       },
+    },
+    {
+      header: t('subscription.sink'),
+      value: ({ spec }) => (
+        <p>{spec?.sink ? spec.sink : EMPTY_TEXT_PLACEHOLDER}</p>
+      ),
     },
   ];
 
