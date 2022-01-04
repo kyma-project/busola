@@ -122,7 +122,7 @@ const SubscriptionsCreate = ({
 
   return (
     <ResourceForm
-      pluralKind="subscription"
+      pluralKind="subscriptions"
       singularName={t('subscription.name_singular')}
       resource={subscription}
       setResource={setSubscription}
