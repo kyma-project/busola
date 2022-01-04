@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useTheme, useSingleGet } from 'react-shared';
+import { useTheme } from 'react-shared';
 import jsyaml from 'js-yaml';
 import { MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
@@ -16,10 +16,7 @@ export function Editor({
   readonly,
   language = 'yaml',
   editorDidMount,
-  ...props
 }) {
-  const defaultValue = `enum: `;
-
   const { t } = useTranslation();
   const [error, setError] = useState('');
   const [markers, setMarkers] = useState([]);
@@ -28,9 +25,9 @@ export function Editor({
   const divRef = useRef(null);
   const valueRef = useRef(jsyaml.dump(value, { noRefs: true }));
   const editorRef = useRef(null);
-
-  const { schema } = useEditorHelper(value);
-
+  const { setAutocompleteOptions } = useEditorHelper({
+    value,
+  });
   useEffect(() => {
     editor.onDidChangeMarkers(markers => {
       if (markers.length) {
@@ -40,8 +37,15 @@ export function Editor({
     });
   }, [setMarkers]);
 
+  //
+  //
+  //
+  //
+  //
+  //
+  //
   useEffect(() => {
-    const { modelUri } = setAutocompleteOptions('temp', schema);
+    const { modelUri } = setAutocompleteOptions();
     const model = editor.createModel(valueRef.current, language, modelUri);
     editorRef.current = editor.create(divRef.current, {
       model: model,
@@ -76,13 +80,12 @@ export function Editor({
     });
     //////clean up
     return () => {
-      console.log('111111111111111111111111111111111111111');
       editor.getModels().forEach(model => {
         model.dispose();
       });
       editorRef.current.dispose();
     };
-  }, [defaultValue, editorTheme, schema]);
+  }, [editorTheme, setAutocompleteOptions]);
 
   return (
     <div>
@@ -101,54 +104,4 @@ export function Editor({
       <div>{JSON.stringify(markers)}</div>
     </div>
   );
-}
-
-function setAutocompleteOptions(uriString, schema) {
-  const modelUri = Uri.parse(uriString);
-  // console.log(String(modelUri));
-
-  setDiagnosticsOptions({
-    enableSchemaRequest: true,
-    hover: true,
-    completion: true,
-    validate: true,
-    format: true,
-    isKubernetes: true,
-    schemas: [
-      {
-        uri: 'http://myserver/bar-schema.json',
-        fileMatch: [String(modelUri)],
-        schema,
-      },
-      // {
-      //   // Id of the first schema
-      //   uri: 'http://myserver/bar-schema.json',
-      //   // fileMatch: [String(modelUri)],
-      //   schema: {
-      //     type: 'object',
-      //     properties: {
-      //       q1: {
-      //         enum: ['x1', 'x2'],
-      //       },
-      //     },
-      //   },
-      // },
-      // {
-      //   // Id of the first schema
-      //   uri: 'http://myserver/bar-schema.json',
-      //   // fileMatch: [String(modelUri)],
-      //   schema: {
-      //     type: 'object',
-      //     properties: {
-      //       q1: {
-      //         enum: ['x1', 'x2'],
-      //       },
-      //     },
-      //   },
-      // },
-    ],
-  });
-  return {
-    modelUri,
-  };
 }

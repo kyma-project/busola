@@ -27,6 +27,7 @@ export function ResourceForm({
   afterCreatedFn,
   className,
   onlyYaml = false,
+  ...props
 }) {
   const createResource = useCreateResource(
     singularName,
@@ -37,6 +38,7 @@ export function ResourceForm({
     afterCreatedFn,
   );
 
+  // console.log('hehe', singularName, resource, props);
   const [mode, setMode] = React.useState(
     onlyYaml ? ModeSelector.MODE_YAML : ModeSelector.MODE_SIMPLE,
   );
@@ -67,7 +69,7 @@ export function ResourceForm({
     />
   );
 
-  let editor = <Editor value={resource} setValue={setResource} />;
+  let editor = <Editor value={resource} setValue={setResource} {...props} />;
   editor = renderEditor
     ? renderEditor({ defaultEditor: editor, Editor })
     : editor;

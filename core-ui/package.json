@@ -14,13 +14,14 @@
     "monaco-editor": "^0.23.0",
     "monaco-editor-webpack-plugin": "^3.1.0",
     "monaco-yaml": "^3.2.1",
+    "react-app-rewired": "^2.1.11",
     "react-hook-form": "^5.5.0",
     "use-debounce": "^3.4.1",
     "worker-loader": "^3.0.8",
     "yup": "^0.28.3"
   },
   "scripts": {
-    "start": "(cd ..; gulp copy-themes)& PORT=8889 ../node_modules/.bin/react-scripts start",
+    "start": "(cd ..; gulp copy-themes)& PORT=8889 react-app-rewired start",
     "start:kyma": "BROWSER=none npm run start",
     "build": "(cd ..; npm run copy-themes) && PUBLIC_URL=/core-ui INLINE_RUNTIME_CHUNK=false ../node_modules/.bin/react-scripts build",
     "test": "../node_modules/.bin/react-scripts test",
