@@ -53,9 +53,9 @@ const EventFilters = ({ filter }) => {
   );
 };
 
-const EventSubscriptionsFilters = eventSubscription => {
+const EventSubscriptionsFilters = subscription => {
   const { t } = useTranslation();
-  const filters = eventSubscription?.spec?.filter?.filters || [];
+  const filters = subscription?.spec?.filter?.filters || [];
 
   return (
     <LayoutPanel

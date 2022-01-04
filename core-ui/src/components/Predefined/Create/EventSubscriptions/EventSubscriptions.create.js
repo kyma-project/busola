@@ -20,10 +20,10 @@ const DEFAULT_EVENT_TYPE_PREFIX = 'sap.kyma.custom.';
 const versionOptions = ['v1', 'v2', 'v3', 'v4'];
 
 //checks if the eventName consist of at least two parts divided by a dot
-const eventNamePattern = `[A-Za-z0-9-]+\\.[A-Za-z0-9-.]+[A-Za-z0-9-]+[^\\.]`;
+const eventNamePattern = `[A-Za-z0-9\\-]+\\.[A-Za-z0-9\\-\\.]+[^(\\.\\s\\-)]`;
 
 //first three validate the prefix, 4th application name, 5th and 6th event name
-const eventTypePattern = `${DEFAULT_EVENT_TYPE_PREFIX}[a-z0-9]+\\.[A-Za-z0-9]+\\.[A-Za-z0-9]+\\.+[A-Za-z0-9\\.]+[^(\\.\\s]`;
+const eventTypePattern = `${DEFAULT_EVENT_TYPE_PREFIX}[a-z0-9\\-]+\\.[A-Za-z0-9\\-]+\\.[A-Za-z0-9\\-]+\\.+[A-Za-z0-9\\.\\-]+[^(\\.\\s\\-]`;
 
 const SubscriptionsCreate = ({
   onChange,
@@ -114,6 +114,18 @@ const SubscriptionsCreate = ({
     }
   };
 
+  const sinkMessageStrip = (
+    <MessageStrip type="info">
+      {jp.value(subscription, '$.spec.sink')}
+    </MessageStrip>
+  );
+
+  const eventTypeMessageStrip = (
+    <MessageStrip type="info">
+      {jp.value(subscription, '$.spec.filter.filters[0].eventType.value')}
+    </MessageStrip>
+  );
+
   return (
     <ResourceForm
       pluralKind="eventsubscription"
@@ -139,11 +151,7 @@ const SubscriptionsCreate = ({
       />
       <ResourceForm.FormField
         label="Sink"
-        messageStrip={
-          <MessageStrip type="info">
-            {jp.value(subscription, '$.spec.sink')}
-          </MessageStrip>
-        }
+        messageStrip={sinkMessageStrip}
         tooltipContent={t('event-subscription.tooltips.event-type-simple')}
       />
 
@@ -253,11 +261,7 @@ const SubscriptionsCreate = ({
       <ResourceForm.FormField
         simple
         label={t('event-subscription.create.labels.event-type')}
-        messageStrip={
-          <MessageStrip type="info">
-            {jp.value(subscription, '$.spec.filter.filters[0].eventType.value')}
-          </MessageStrip>
-        }
+        messageStrip={eventTypeMessageStrip}
         tooltipContent={t('event-subscription.tooltips.event-type-simple')}
       />
       <TextArrayInput
