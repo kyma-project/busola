@@ -964,7 +964,7 @@ export function getStaticChildrenNodesForNamespace(
       pathSegment: 'eventsubscriptions',
       resourceType: 'subscriptions',
       navigationContext: 'subscriptions',
-      label: i18next.t('event-subscription.title'),
+      label: i18next.t('subscription.title'),
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/Subscriptions?' +
