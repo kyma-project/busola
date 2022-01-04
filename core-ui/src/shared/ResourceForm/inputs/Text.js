@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormInput } from 'fundamental-react';
 
-export function Text({ value, setValue, ...props }) {
+export function Text({ value, setValue, error, ...props }) {
   return (
     <FormInput
       compact

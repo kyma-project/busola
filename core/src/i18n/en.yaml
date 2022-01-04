@@ -1583,6 +1583,7 @@ subscription:
       event-name: Event name
       event-type: Event type
       event-version: Event version
+      service-name: Service
       sink: Sink
     placeholders:
       application-name: Choose an Application name
