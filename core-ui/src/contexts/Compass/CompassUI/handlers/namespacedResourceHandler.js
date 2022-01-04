@@ -96,7 +96,7 @@ async function fetchResults({
         ];
       }
     } catch (e) {
-      console.log(e);
+      console.warn(e);
     }
   }
   return null;

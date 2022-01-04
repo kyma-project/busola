@@ -18,8 +18,7 @@ export function CompassUI({ hide }) {
   const [loading, setLoading] = useState(false);
   const fetch = useFetch();
   const inputRef = useRef();
-  const a = useRef(0);
-  // const abortController = useRef();
+  const lastSearchTime = useRef(0);
 
   const onBackgroundClick = e => {
     if (e.nativeEvent.srcElement.id === 'background') {
@@ -29,23 +28,13 @@ export function CompassUI({ hide }) {
 
   useEffect(() => {
     async function doSearch() {
-      if (loading) return;
       setLoading(true);
 
       const preprocessedSearch = searchString.trim().toLowerCase();
+      lastSearchTime.current = Date.now();
+
       const context = {
-        fetch: async url => {
-          // if (abortController.current) {
-          //   console.log('abort',searchString)
-          //   abortController.current.abort();
-          // }
-          // abortController.current = new AbortController();
-          // return await fetch({
-          //   relativeUrl: url,
-          //   abortController: abortController.current,
-          // });
-          return fetch({ relativeUrl: url });
-        },
+        fetch: url => fetch({ relativeUrl: url }),
         namespace,
         clusterNames: Object.keys(clusters),
         activeClusterName,
@@ -53,16 +42,22 @@ export function CompassUI({ hide }) {
         tokens: preprocessedSearch.split(/\s+/),
         clusterNodes,
         namespaceNodes,
+        searchStartTime: lastSearchTime.current,
       };
 
-      //todo too fast
-      const { searchResults, suggestion } = await search(context);
+      const { searchResults, suggestion, searchStartTime } = await search(
+        context,
+      );
 
-      setSuggestedSearch(suggestion);
-      setResults(searchResults);
+      // make sure older, slower searches don't override never that returned almost immiediately
+      if (lastSearchTime.current <= searchStartTime) {
+        setSuggestedSearch(suggestion);
+        setResults(searchResults);
+      }
 
       setLoading(false);
     }
+
     if (searchString) {
       doSearch();
     }

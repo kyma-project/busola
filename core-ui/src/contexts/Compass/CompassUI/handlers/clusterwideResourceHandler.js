@@ -70,7 +70,7 @@ async function fetchResults({ fetch, tokens, clusterNodes }) {
         ];
       }
     } catch (e) {
-      console.log(e);
+      console.warn(e);
     }
   }
   return null;

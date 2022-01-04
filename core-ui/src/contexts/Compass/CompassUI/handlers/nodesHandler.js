@@ -37,7 +37,7 @@ async function fetchNodes({ fetch, tokens }) {
       return items.map(item => makeListItem(item));
     }
   } catch (e) {
-    console.log(e);
+    console.warn(e);
     return null;
   }
 }
