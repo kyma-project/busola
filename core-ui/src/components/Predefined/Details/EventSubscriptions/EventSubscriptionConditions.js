@@ -6,11 +6,13 @@ import {
   ReadableCreationTimestamp,
   GenericList,
 } from 'react-shared';
+
 import { EventSubscriptionConditionStatus } from 'shared/components/EventSubscriptionConditionStatus';
-export function EventSubscriptionConditions(eventSubscription) {
+
+export function SubscriptionConditions(subscription) {
   const { t, i18n } = useTranslation();
 
-  const conditions = eventSubscription?.status?.conditions;
+  const conditions = subscription?.status?.conditions;
   const headerRenderer = _ => [
     t('subscription.headers.conditions.type'),
     t('subscription.headers.conditions.status'),

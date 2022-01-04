@@ -1,20 +1,17 @@
-import { LayoutPanel } from 'fundamental-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
-import { EventSubscriptionConditionStatus } from 'shared/components/EventSubscriptionConditionStatus';
+
+import { LayoutPanel } from 'fundamental-react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
+import { GoToDetailsLink, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+
+import { EventSubscriptionConditionStatus } from 'shared/components/EventSubscriptionConditionStatus';
+import { SubscriptionConditions } from './EventSubscriptionConditions';
+
 import './EventFilters.scss';
-import { Link } from 'fundamental-react';
-import {
-  navigateToFixedPathResourceDetails,
-  GoToDetailsLink,
-} from 'react-shared';
-import { EventSubscriptionConditions } from './EventSubscriptionConditions';
 
 const FilterOption = ({ filterOption, title }) => {
   const { t } = useTranslation();
-
   return (
     <div>
       <LayoutPanel.Header>
@@ -56,10 +53,9 @@ const EventFilters = ({ filter }) => {
   );
 };
 
-const EventSubscriptionsFilters = subscription => {
+const SubscriptionsFilter = subscription => {
   const { t } = useTranslation();
   const filters = subscription?.spec?.filter?.filters || [];
-  console.log(subscription);
   return (
     <LayoutPanel
       className="fd-margin--md event-filters-panel"
@@ -116,10 +112,7 @@ export const SubscriptionsDetails = ({ DefaultRenderer, ...otherParams }) => {
 
   return (
     <DefaultRenderer
-      customComponents={[
-        EventSubscriptionConditions,
-        EventSubscriptionsFilters,
-      ]}
+      customComponents={[SubscriptionConditions, SubscriptionsFilter]}
       customColumns={customColumns}
       resourceTitle={t('subscription.title')}
       singularName={t('subscription.name_singular')}
