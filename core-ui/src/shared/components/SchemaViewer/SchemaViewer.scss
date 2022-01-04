@@ -5,6 +5,7 @@
     grid-row-gap: 4px;
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
+    margin-left: 0.5rem;
 
     dd {
       grid-column: 1;
@@ -30,16 +31,16 @@
     font-weight: bold;
   }
 
+  ul {
+    border-left: 1px solid var(--sapList_BorderColor);
+    padding-left: 0.5rem;
+  }
+
   li {
-    margin-bottom: 0.5rem;
+    margin-bottom: 1rem;
   }
 
   .expander {
     cursor: pointer;
-  }
-
-  .object-details .object-details {
-    border-left: 1px solid var(--sapList_BorderColor);
-    padding-left: 1rem;
   }
 }
