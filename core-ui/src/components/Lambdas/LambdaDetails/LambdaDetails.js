@@ -6,7 +6,7 @@ import CodeTab from './Tabs/Code/CodeTab';
 import ResourceManagement from './Tabs/ResourceManagement/ResourceManagement';
 import ServiceBindingsWrapper from './Tabs/Configuration/ServiceBindings/ServiceBindingsWrapper';
 import { ApiRulesList } from 'components/ApiRules/ApiRulesList';
-import { SubscriptionsList } from 'shared/components/EventSubscriptionsList';
+import { SubscriptionsList } from 'shared/components/SubscriptionsList';
 
 export default function LambdaDetails({ lambda }) {
   const microfrontendContext = useMicrofrontendContext();

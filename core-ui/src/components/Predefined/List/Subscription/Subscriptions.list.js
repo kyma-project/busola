@@ -1,9 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+
 import { Trans } from 'react-i18next';
-import { EventSubscriptionConditionStatus } from 'shared/components/EventSubscriptionConditionStatus';
-import './EventSubscriptions.scss';
+import { Link, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+import { SubscriptionConditionStatus } from 'shared/components/SubscriptionConditionStatus';
+
+import './Subscriptions.scss';
 
 const EventTypes = ({ filters }) => {
   return (
@@ -37,7 +39,7 @@ export const SubscriptionsList = ({ DefaultRenderer, ...otherParams }) => {
       value: ({ status }) => {
         const lastCondition = status.conditions[status.conditions.length - 1];
 
-        return <EventSubscriptionConditionStatus condition={lastCondition} />;
+        return <SubscriptionConditionStatus condition={lastCondition} />;
       },
     },
     {

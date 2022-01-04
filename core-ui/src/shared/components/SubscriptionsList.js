@@ -19,8 +19,8 @@ export function SubscriptionsList({ serviceName, namespace }) {
     isCompact: true,
     showTitle: true,
     createFormProps: { serviceName },
-    filter: eventSubscription => {
-      return getServiceName(eventSubscription.spec.sink) === serviceName;
+    filter: subscription => {
+      return getServiceName(subscription.spec.sink) === serviceName;
     },
   };
 

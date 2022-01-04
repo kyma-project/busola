@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { StatusBadge } from 'react-shared';
 
-export const EventSubscriptionConditionStatus = ({ condition }) => {
+export const SubscriptionConditionStatus = ({ condition }) => {
   const { t, i18n } = useTranslation();
   const statusBadgeProperties =
     condition?.status === 'True'

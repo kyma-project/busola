@@ -5,8 +5,8 @@ import { LayoutPanel } from 'fundamental-react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { GoToDetailsLink, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 
-import { EventSubscriptionConditionStatus } from 'shared/components/EventSubscriptionConditionStatus';
-import { SubscriptionConditions } from './EventSubscriptionConditions';
+import { SubscriptionConditionStatus } from 'shared/components/SubscriptionConditionStatus';
+import { SubscriptionConditions } from './SubscriptionConditions';
 
 import './EventFilters.scss';
 
@@ -83,7 +83,7 @@ export const SubscriptionsDetails = ({ DefaultRenderer, ...otherParams }) => {
       header: t('subscription.headers.conditions.status'),
       value: ({ status }) => {
         const lastCondition = status?.conditions[status?.conditions.length - 1];
-        return <EventSubscriptionConditionStatus condition={lastCondition} />;
+        return <SubscriptionConditionStatus condition={lastCondition} />;
       },
     },
     {

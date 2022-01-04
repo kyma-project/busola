@@ -1,4 +1,4 @@
-export function createEventSubscriptionTemplate(
+export function createSubscriptionTemplate(
   namespace,
   eventTypePrefix,
   serviceName,

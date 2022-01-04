@@ -7,7 +7,7 @@ import {
   GenericList,
 } from 'react-shared';
 
-import { EventSubscriptionConditionStatus } from 'shared/components/EventSubscriptionConditionStatus';
+import { SubscriptionConditionStatus } from 'shared/components/SubscriptionConditionStatus';
 
 export function SubscriptionConditions(subscription) {
   const { t, i18n } = useTranslation();
@@ -21,7 +21,7 @@ export function SubscriptionConditions(subscription) {
   ];
 
   const rowRenderer = condition => [
-    <EventSubscriptionConditionStatus condition={condition} />,
+    <SubscriptionConditionStatus condition={condition} />,
     condition?.status || EMPTY_TEXT_PLACEHOLDER,
     condition?.reason || EMPTY_TEXT_PLACEHOLDER,
     <ReadableCreationTimestamp timestamp={condition?.lastTransitionTime} />,

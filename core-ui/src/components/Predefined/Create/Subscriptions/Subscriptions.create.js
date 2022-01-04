@@ -13,7 +13,7 @@ import {
 
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { ComboboxInput, MessageStrip } from 'fundamental-react';
-import { createEventSubscriptionTemplate } from './templates';
+import { createSubscriptionTemplate } from './templates';
 import { getServiceName, getEventFilter, spreadEventType } from './helpers';
 
 const DEFAULT_EVENT_TYPE_PREFIX = 'sap.kyma.custom.';
@@ -32,7 +32,7 @@ const SubscriptionsCreate = ({
 
   const [subscription, setSubscription] = useState(
     cloneDeep(initialSubscription) ||
-      createEventSubscriptionTemplate(
+      createSubscriptionTemplate(
         namespace,
         DEFAULT_EVENT_TYPE_PREFIX,
         serviceName,
