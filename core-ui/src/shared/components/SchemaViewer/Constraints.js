@@ -8,7 +8,7 @@ import { ObjectProperty } from './ObjectProperty';
 
 // const scalar = val => val;
 // const array = val => val.join(', ');
-const Simple = ({ val }) => {
+const Generic = ({ val }) => {
   const { t } = useTranslation();
 
   if (Array.isArray(val)) {
@@ -26,6 +26,8 @@ const Schema = ({ val }) => (
     <JSONSchema {...val} />
   </dt>
 );
+Schema.expandable = true;
+
 const SchemaArray = ({ val }) =>
   val.map(schema => (
     <dt>
@@ -61,8 +63,8 @@ const KNOWN_CONSTRAINTS = {
     type: null,
     description: null,
 
-    enum: Simple,
-    const: Simple,
+    enum: Generic,
+    const: Generic,
 
     allOf: SchemaArray,
     anyOf: SchemaArray,
@@ -78,36 +80,35 @@ const KNOWN_CONSTRAINTS = {
     unevaluatedProperties: Schema,
   },
   number: {
-    multipleOf: Simple,
-    maximum: Simple,
-    exclusiveMaximum: Simple,
-    minimum: Simple,
-    exclusiveMinimum: Simple,
+    multipleOf: Generic,
+    maximum: Generic,
+    exclusiveMaximum: Generic,
+    minimum: Generic,
+    exclusiveMinimum: Generic,
   },
   array: {
-    maxItems: Simple,
-    minItems: Simple,
-    uniqueItems: Simple,
-    maxContains: Simple,
-    minContains: Simple,
+    maxItems: Generic,
+    minItems: Generic,
+    uniqueItems: Generic,
+    maxContains: Generic,
+    minContains: Generic,
     items: Schema,
   },
   string: {
-    maxLength: Simple,
-    minLength: Simple,
-    pattern: Simple,
+    maxLength: Generic,
+    minLength: Generic,
+    pattern: Generic,
   },
   object: {
     // dependentRequired: bool,
-    dependentRequired: Simple,
-    maxProperties: Simple,
-    minProperties: Simple,
+    dependentRequired: Generic,
+    maxProperties: Generic,
+    minProperties: Generic,
     // required: array,
     required: null,
     properties: SchemaMap,
     additionalProperties: Schema,
   },
-  // ignore: ['properties', 'items'],
 };
 
 function Property({ label, val, handler }) {
@@ -130,13 +131,15 @@ function Property({ label, val, handler }) {
         )}{' '}
         {label}
       </dd>
-      <dt
-        className={classNames({
-          'full-width': handler.expandable,
-        })}
-      >
-        <Handler val={val} />
-      </dt>
+      {(!handler.expandable || !collapsed) && (
+        <dt
+          className={classNames({
+            'full-width': handler.expandable,
+          })}
+        >
+          <Handler val={val} />
+        </dt>
+      )}
     </>
   );
 }
@@ -158,9 +161,17 @@ export function Constraints({ type, def, withLabel = false }) {
     }
   };
   */
-  if (!KNOWN_CONSTRAINTS[type]) {
-    return <dt className="fullWidth">[[UNKNOWN TYPE]]</dt>;
+  if (!type) {
+    const allConstraints = Object.values(KNOWN_CONSTRAINTS)
+      .map(group => Object.keys(group))
+      .flat();
+    return Object.keys(def)
+      .filter(key => !allConstraints.includes(key))
+      .map(key => <Property label={key} handler={Generic} val={def[key]} />);
+  } else if (!KNOWN_CONSTRAINTS[type]) {
+    return '';
   }
+
   const entries = Object.entries(KNOWN_CONSTRAINTS[type] || {}) || [];
   console.log('constraints', entries);
   console.log(
@@ -180,7 +191,7 @@ export function Constraints({ type, def, withLabel = false }) {
         .filter(([key]) => Object.keys(def).includes(key))
         .map(([key, handler]) => (
           <Property
-            label={t(`schema.constraints.${key}`)}
+            label={t(`schema.fields.${key}`)}
             handler={handler}
             val={def[key]}
           />

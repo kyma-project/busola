@@ -49,7 +49,7 @@ export function JSONSchema({
         )}{' '}
         */}
       </div>
-      {description && <div className="object-description">{description}</div>}
+      {description && <div className="description">{description}</div>}
 
       <dl>
         <Constraints type="generic" def={def} />
@@ -58,6 +58,7 @@ export function JSONSchema({
             <Constraints type={type} def={def} />
           </>
         ))}
+        <Constraints def={def} />
       </dl>
       {/*
       <ul>

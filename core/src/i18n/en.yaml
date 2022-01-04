@@ -1507,13 +1507,13 @@ roles:
   title: Roles
 schema:
   array-item: ({{name}} item)
-  array-items: Array items
-  constraints:
+  fields:
     const: Const value
     dependentRequired: Dependent required
     enum: Allowed values
     exclusiveMaximum: Exclusive maximum value
     exclusiveMinimum: Exclusive minimum value
+    items: Array items
     maxContains: Maximum "contains" value
     maxItems: Maximum items count
     maxLength: Maximum length
@@ -1526,8 +1526,8 @@ schema:
     minimum: Minimum value
     multipleOf: Multiple of
     pattern: Match pattern
+    properties: Object properties
     uniqueItems: Unique items
-  object-properties: Object properties
   required: Required
 secrets:
   buttons:
