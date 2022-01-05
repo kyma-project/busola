@@ -242,7 +242,7 @@ const SubscriptionsCreate = ({
       />
       <ResourceForm.FormField
         simple
-        label={t('subscription.create.labels.event-type-plural')}
+        label={t('subscription.create.labels.event-type')}
         messageStrip={eventTypeMessageStrip}
         tooltipContent={t('subscription.tooltips.event-type-simple')}
       />
