@@ -1,8 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { Link } from 'fundamental-react';
-import './ResultsList.scss';
 import { useEventListener } from 'hooks/useEventListener';
 import { Result } from './Result';
+import { addHistoryEntry } from '../search-history';
+import './ResultsList.scss';
 
 function scrollInto(element) {
   element.scrollIntoView({
@@ -12,19 +13,21 @@ function scrollInto(element) {
   });
 }
 
-export function ResultsList({ results, hide, suggestion }) {
-  const [activeIndex, setActiveIndex] = useState(0);
+export function ResultsList({
+  results,
+  hide,
+  suggestion,
+  activeIndex,
+  setActiveIndex,
+  isHistoryMode,
+}) {
   const listRef = useRef();
-
-  useEffect(() => {
-    if (activeIndex > results?.length) {
-      setActiveIndex(0);
-    }
-  }, [results, activeIndex]);
 
   useEventListener(
     'keydown',
     ({ key }) => {
+      if (isHistoryMode) return;
+
       if (key === 'ArrowDown' && activeIndex < results?.length - 1) {
         setActiveIndex(activeIndex + 1);
         scrollInto(listRef.current.children[activeIndex + 1]);
@@ -32,10 +35,11 @@ export function ResultsList({ results, hide, suggestion }) {
         setActiveIndex(activeIndex - 1);
         scrollInto(listRef.current.children[activeIndex - 1]);
       } else if (key === 'Enter' && results?.[activeIndex]) {
+        addHistoryEntry(results[activeIndex].query);
         results[activeIndex].onClick();
       }
     },
-    [activeIndex, results],
+    [activeIndex, results, isHistoryMode],
   );
 
   return (
@@ -48,7 +52,11 @@ export function ResultsList({ results, hide, suggestion }) {
             activeIndex={activeIndex}
             index={i}
             setActiveIndex={setActiveIndex}
-            hide={hide}
+            onItemClick={() => {
+              addHistoryEntry(s.query);
+              s.onClick();
+              hide();
+            }}
           />
         ))
       ) : (

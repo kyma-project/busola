@@ -8,6 +8,7 @@ function makeListItem(item) {
   return {
     label: `Node ${name}`,
     category: 'Cluster Overview',
+    query: `node ${name}`,
     onClick: () =>
       LuigiClient.linkManager()
         .fromContext('cluster')

@@ -5,6 +5,7 @@ import { search } from './handlers';
 import './CompassUI.scss';
 import { FormInput, Token } from 'fundamental-react';
 import { ResultsList } from './ResultsList/ResultsList';
+import { addHistoryEntry, getHistoryEntries } from './search-history';
 
 export function CompassUI({ hide }) {
   const {
@@ -22,6 +23,11 @@ export function CompassUI({ hide }) {
   const inputRef = useRef();
   const lastSearchTime = useRef(0);
   const [namespaceContext, setNamespaceContext] = useState(namespace);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [originalQuery, setOriginalQuery] = useState('');
+  const [isHistoryMode, setHistoryMode] = useState(false);
+  const [historyIndex, setHistoryIndex] = useState(0);
+  const historyEntries = getHistoryEntries();
 
   const onBackgroundClick = e => {
     if (e.nativeEvent.srcElement.id === 'background') {
@@ -70,6 +76,7 @@ export function CompassUI({ hide }) {
     setNamespaceContext(namespace);
   }, [namespace]);
 
+  // console.log(isHistoryMode)
   return (
     <div id="background" className="compass-ui" onClick={onBackgroundClick}>
       <div className="compass-ui__wrapper" role="dialog">
@@ -86,8 +93,62 @@ export function CompassUI({ hide }) {
             </div>
           )}
           <FormInput
-            value={searchString}
+            value={!isHistoryMode ? searchString : ''}
+            placeholder={!isHistoryMode ? '' : searchString}
             onChange={e => setSearchString(e.target.value)}
+            onKeyDown={e => {
+              if (e.key === 'Enter') {
+                if (isHistoryMode) {
+                  addHistoryEntry(results[0].query);
+                  results[0].onClick();
+                }
+              } else if (e.key === 'Tab') {
+                if (isHistoryMode) {
+                  setSearchString(historyEntries[historyIndex]);
+                  setActiveIndex(0);
+                  setHistoryMode(() => false);
+                } else {
+                  if (results?.[activeIndex]) {
+                    setSearchString(results[activeIndex].query || '');
+                  } else if (suggestedSearch) {
+                    setSearchString(suggestedSearch);
+                  }
+                }
+                e.preventDefault();
+              } else if (e.key === 'ArrowUp') {
+                if (isHistoryMode) {
+                  const entry = historyEntries[historyIndex + 1];
+                  if (entry) {
+                    setHistoryIndex(historyIndex + 1);
+                    setSearchString(entry);
+                  }
+                } else {
+                  if (activeIndex === 0 && historyEntries.length) {
+                    setOriginalQuery(searchString);
+                    setSearchString(historyEntries[historyIndex]);
+                    setHistoryMode(true);
+                    setHistoryIndex(0);
+                  }
+                }
+                e.preventDefault();
+              } else if (e.key === 'ArrowDown') {
+                if (isHistoryMode) {
+                  if (historyIndex === 0) {
+                    setSearchString(originalQuery);
+                    setHistoryMode(false);
+                  } else {
+                    const entry = historyEntries[historyIndex - 1];
+                    if (entry) {
+                      setHistoryIndex(historyIndex - 1);
+                      setSearchString(entry);
+                    }
+                  }
+                }
+              } else {
+                setHistoryMode(false);
+                setActiveIndex(0);
+              }
+            }}
             autoFocus
             ref={inputRef}
             className="search-input"
@@ -97,6 +158,7 @@ export function CompassUI({ hide }) {
             <ResultsList
               results={results}
               hide={hide}
+              isHistoryMode={isHistoryMode}
               suggestion={
                 <SuggestedSearch
                   search={searchString}
@@ -107,6 +169,8 @@ export function CompassUI({ hide }) {
                   }}
                 />
               }
+              activeIndex={activeIndex}
+              setActiveIndex={setActiveIndex}
             />
           )}
         </div>

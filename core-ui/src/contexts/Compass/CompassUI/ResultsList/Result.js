@@ -8,7 +8,7 @@ export function Result({
   index,
   activeIndex,
   setActiveIndex,
-  hide,
+  onItemClick,
 }) {
   const resultRef = useRef();
 
@@ -29,10 +29,7 @@ export function Result({
     return (
       <li
         ref={resultRef}
-        onClick={() => {
-          onClick();
-          hide();
-        }}
+        onClick={onItemClick}
         className={index === activeIndex ? 'active' : ''}
       >
         <Link className="result">

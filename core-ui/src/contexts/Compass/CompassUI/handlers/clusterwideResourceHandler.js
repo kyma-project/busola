@@ -26,6 +26,7 @@ function makeListItem(item, matchedNode) {
 
   return {
     label: `${formatTypeSingular(matchedNode.viewUrl)} ${item.metadata.name}`,
+    query: `${matchedNode.resourceType} ${item.metadata.name}`,
     category: matchedNode.category,
     onClick: () =>
       LuigiClient.linkManager()
@@ -43,27 +44,24 @@ async function fetchResults({ fetch, tokens, clusterNodes }) {
 
   if (resourceApiPath) {
     try {
-      const linkToList = {
-        label: `List of ${formatTypePlural(matchedNode.viewUrl)}`,
-        category: matchedNode?.category,
-        onClick: () =>
-          LuigiClient.linkManager()
-            .fromContext('cluster')
-            .navigate(matchedNode.pathSegment),
-      };
-
       const response = await fetch(resourceApiPath + '/' + resourceType);
       const { items } = await response.json();
 
       if (name) {
-        const matchedByName = items.filter(item =>
-          item.metadata.name.includes(name),
-        );
-        return [
-          linkToList,
-          ...matchedByName.map(item => makeListItem(item, matchedNode)),
-        ];
+        return items
+          .filter(item => item.metadata.name.includes(name))
+          .map(item => makeListItem(item, matchedNode));
       } else {
+        const linkToList = {
+          label: `List of ${formatTypePlural(matchedNode.viewUrl)}`,
+          category: matchedNode?.category,
+          query: matchedNode?.resourceType,
+          onClick: () =>
+            LuigiClient.linkManager()
+              .fromContext('cluster')
+              .navigate(matchedNode.pathSegment),
+        };
+
         return [
           linkToList,
           ...items.map(item => makeListItem(item, matchedNode)),

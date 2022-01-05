@@ -34,12 +34,14 @@ function resolveSearchResults(context) {
       case 'clusters':
         return clusterNames.map(clusterName => ({
           label: `Cluster ${clusterName}`,
+          query: `cluster ${clusterName}`,
           onClick: () => setCluster(clusterName),
         }));
       case 'preferences':
         return [
           {
             label: 'Preferences',
+            query: 'preferences',
             onClick: () => {
               LuigiClient.linkManager().openAsModal('/clusters/preferences', {
                 title: 'Preferences',
@@ -49,12 +51,19 @@ function resolveSearchResults(context) {
           },
         ];
       case 'show-help':
-        return [{ label: 'Show help', onClick: () => alert('todo show help') }];
+        return [
+          {
+            label: 'Show help',
+            query: 'help',
+            onClick: () => alert('todo show help'),
+          },
+        ];
       case 'overview':
         if (activeClusterName) {
           return [
             {
               label: 'Cluster Overview',
+              query: 'overview',
               onClick: () => {
                 LuigiClient.linkManager()
                   .fromContext('cluster')
