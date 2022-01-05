@@ -155,7 +155,7 @@ const SubscriptionsCreate = ({
           jp.value(
             subscription,
             '$.spec.sink',
-            `https://${serviceName}.${namespace}.svc.cluster.local`,
+            `http://${serviceName}.${namespace}.svc.cluster.local`,
           );
           setSubscription({ ...subscription });
         }}
@@ -174,6 +174,7 @@ const SubscriptionsCreate = ({
         error={servicesError}
         loading={servicesLoading}
         tooltipContent={t('subscription.tooltips.service-name')}
+        disabled={!!serviceName}
       />
 
       <KeyValueField
