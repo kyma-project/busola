@@ -40,8 +40,8 @@ const namespacedResources = [
 ].map(aliases => [...aliases, pluralize(aliases[0], 1)]);
 
 function makeListItem(item, matchedNode) {
-  const namespacePart = `namespaces/${item.metadata.namespace}/`;
-  const detailsPart = `/details/${item.metadata.name}`;
+  const namespacePart = `namespaces/${item.metadata.namespace}`;
+  const detailsPart = `details/${item.metadata.name}`;
   const link = `${namespacePart}/${matchedNode.pathSegment}/${detailsPart}`;
 
   return {

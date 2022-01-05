@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Spinner, useFetch, useMicrofrontendContext } from 'react-shared';
-import { SuggestedSearch, Result } from './components';
+import { SuggestedSearch } from './components';
 import { search } from './handlers';
 import './CompassUI.scss';
+import { FormInput } from 'fundamental-react';
+import { ResultsList } from './ResultsList/ResultsList';
 
 export function CompassUI({ hide }) {
   const {
@@ -19,6 +21,7 @@ export function CompassUI({ hide }) {
   const fetch = useFetch();
   const inputRef = useRef();
   const lastSearchTime = useRef(0);
+  
 
   const onBackgroundClick = e => {
     if (e.nativeEvent.srcElement.id === 'background') {
@@ -67,22 +70,17 @@ export function CompassUI({ hide }) {
     <div id="background" className="compass-ui" onClick={onBackgroundClick}>
       <div className="compass-ui__wrapper" role="dialog">
         <div className="compass-ui__content">
-          <input
+          <FormInput
             value={searchString}
             onChange={e => setSearchString(e.target.value)}
             autoFocus
             ref={inputRef}
+            className="search-input"
           />
           {loading && <Spinner />}
-          <ul>
-            {!loading && results?.length
-              ? results.map(s => (
-                  <ul key={s.label} onClick={hide}>
-                    <Result {...s} />
-                  </ul>
-                ))
-              : 'No Results Found'}
-          </ul>
+          {!loading && searchString && (
+            <ResultsList results={results} hide={hide} />
+          )}
           <div>
             <SuggestedSearch
               search={searchString}

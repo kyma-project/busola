@@ -1,0 +1,28 @@
+.compass-ui__results {
+  max-height: 50vh;
+  overflow: scroll;
+
+  .result {
+    margin: 16px;
+  }
+
+  li {
+    cursor: pointer;
+  }
+
+  .fd-link:hover {
+    text-decoration: none;
+  }
+
+  .label {
+    font-size: 120%;
+  }
+
+  .description {
+    color: var(--sapContent_LabelColor);
+  }
+
+  .active {
+    background: #e5f0fa;
+  }
+}

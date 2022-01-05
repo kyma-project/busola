@@ -1,18 +1,5 @@
-import React, { useCallback } from 'react';
-import { Link } from 'fundamental-react';
+import React from 'react';
 import { useEventListener } from 'hooks/useEventListener';
-
-export function Result({ label, onClick, category }) {
-  if (onClick) {
-    return (
-      <Link className="fd-link" onClick={onClick}>
-        {category ? category + ' > ' : ''}
-        {label}
-      </Link>
-    );
-  }
-  return label;
-}
 
 export function SuggestedSearch({ search, suggestedSearch, setSearch }) {
   const isSuggestionValid = !!suggestedSearch && suggestedSearch !== search;
@@ -23,9 +10,7 @@ export function SuggestedSearch({ search, suggestedSearch, setSearch }) {
     }
   };
 
-  useEventListener('keydown', useCallback(onKeyDown, [isSuggestionValid]), [
-    isSuggestionValid,
-  ]);
+  useEventListener('keydown', onKeyDown, [isSuggestionValid]);
 
   if (!isSuggestionValid) {
     return null;

@@ -1,6 +1,5 @@
 import React, {
   createContext,
-  useCallback,
   useContext,
   useEffect,
   useState,
@@ -24,7 +23,7 @@ export const CompassProvider = withRouter(({ children, history }) => {
     }
   };
 
-  useEventListener('keydown', useCallback(onKeyPress, []));
+  useEventListener('keydown', onKeyPress);
   useCustomMessageListener('busola.main-frame-keypress', onKeyPress);
   useCustomMessageListener('busola.main-frame-click', hide);
   useEffect(() => history.listen(hide), []);
