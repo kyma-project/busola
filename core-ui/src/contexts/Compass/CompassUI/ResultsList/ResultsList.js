@@ -17,7 +17,7 @@ export function ResultsList({ results, hide, suggestion }) {
   const listRef = useRef();
 
   useEffect(() => {
-    if (results?.length > activeIndex) {
+    if (activeIndex > results?.length) {
       setActiveIndex(0);
     }
   }, [results, activeIndex]);
