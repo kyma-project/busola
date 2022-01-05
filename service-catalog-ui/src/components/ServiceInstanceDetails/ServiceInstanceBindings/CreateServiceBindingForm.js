@@ -32,7 +32,7 @@ export function CreateServiceBindingForm({
   };
 
   useEffect(() => {
-    // validateSecretName(secretName)
+    validateSecretName(secretName);
   }, [secretName, setCustomValid]);
 
   return (
