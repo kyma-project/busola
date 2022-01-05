@@ -153,7 +153,7 @@ export function createPresets(namespace, translate) {
 
 export function createServiceTemplate(namespace, name = '', port = {}) {
   return {
-    apiVersion: 'v1',
+    apiVersion: '/v1',
     kind: 'Service',
     metadata: {
       name,

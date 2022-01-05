@@ -52,7 +52,6 @@ self.onmessage = $event => {
   }
   if ($event.data[0] === 'getSchema') {
     const schema = JSONSchemas.getSchema($event.data[1])?.schema;
-    // console.log($event.data[1], schema ? 'exist' : 'no such scheme', schema);
     if (schema) {
       self.postMessage({ [$event.data[1]]: schema });
     }

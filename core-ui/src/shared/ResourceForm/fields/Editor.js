@@ -1,14 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useTheme } from 'react-shared';
 import jsyaml from 'js-yaml';
+import { editor } from 'monaco-editor';
 import { MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
+
+import { useEditorHelper } from './Editor/useEditorHelper';
+
 import './Editor.scss';
-
-import { setDiagnosticsOptions } from 'monaco-yaml';
-import { editor, Uri } from 'monaco-editor';
-
-import { useEditorHelper } from './useEditorHelper';
 
 export function Editor({
   value,
@@ -37,15 +36,11 @@ export function Editor({
     });
   }, [setMarkers]);
 
-  //
-  //
-  //
-  //
-  //
-  //
-  //
   useEffect(() => {
     const { modelUri } = setAutocompleteOptions();
+
+    const models = editor.getModel(modelUri);
+
     const model = editor.createModel(valueRef.current, language, modelUri);
     editorRef.current = editor.create(divRef.current, {
       model: model,
@@ -78,10 +73,9 @@ export function Editor({
         }
       }
     });
-    //////clean up
     return () => {
       editor.getModels().forEach(model => {
-        model.dispose();
+        if (model._associatedResource === modelUri) model.dispose();
       });
       editorRef.current.dispose();
     };

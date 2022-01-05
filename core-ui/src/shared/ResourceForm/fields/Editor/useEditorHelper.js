@@ -33,20 +33,22 @@ let schemasWorker = null;
 if (typeof Worker !== 'undefined') {
   schemasWorker = new MonacoYamlWorker();
 }
+// each hook instance has access to this variable (a sort of global state)
+const schemas = [];
 
 export function useEditorHelper({ value }) {
   const [schema, setSchema] = useState(null);
   const fetch = useSingleGet();
 
-  //this gets calculated only once, to fetch the json validation schema
+  // this gets calculated only once, to fetch the json validation schema
+  // it means each supported resource must have apiVersion and kind defined
   const [fileId] = useState(
     `${value.apiVersion || ''}/${pluralize(value.kind || '')}`,
   );
 
   useEffect(() => {
     schemasWorker.postMessage(['shouldInitialize']);
-
-    const listenerFunc = e => {
+    schemasWorker.onmessage = e => {
       if (e.data.isInitialized === false) {
         fetch('/openapi/v2')
           .then(res => res.json())
@@ -62,15 +64,24 @@ export function useEditorHelper({ value }) {
       }
     };
 
-    schemasWorker.addEventListener('message', listenerFunc);
-
     return () => {
-      return schemasWorker.removeEventListener('message', listenerFunc);
+      // TODO clear schema from the schames array
     };
   }, []);
 
   const setAutocompleteOptions = useCallback(() => {
     const modelUri = Uri.parse(fileId);
+
+    if (schema) {
+      if (schemas.every(el => el.fileMatch[0] !== String(modelUri))) {
+        schemas.push({
+          uri: 'https://kubernetes.io/docs',
+          fileMatch: [String(modelUri)],
+          schema: schema,
+        });
+      }
+    }
+
     setDiagnosticsOptions({
       enableSchemaRequest: true,
       hover: true,
@@ -78,17 +89,9 @@ export function useEditorHelper({ value }) {
       validate: true,
       format: true,
       isKubernetes: true,
-      schemas: [
-        {
-          uri: 'https://kubernetes.io/docs',
-          fileMatch: [String(modelUri)],
-          schema: schema || {
-            properties: {},
-            type: 'object',
-          },
-        },
-      ],
+      schemas: schemas,
     });
+
     return {
       modelUri,
     };
