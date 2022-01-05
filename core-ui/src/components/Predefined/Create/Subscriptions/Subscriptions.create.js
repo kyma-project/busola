@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { cloneDeep } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
@@ -50,17 +50,6 @@ const SubscriptionsCreate = ({
   );
 
   const notification = useNotification();
-
-  useEffect(() => {
-    if (serviceName) {
-      jp.value(
-        subscription,
-        '$.spec.sink',
-        `http://${serviceName}.${namespace}.svc.cluster.local`,
-      );
-      setSubscription({ ...subscription });
-    }
-  }, [serviceName]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleEventTypeValuesChange = changes => {
     const newEventTypeValues = { ...firstEventTypeValues, ...changes };
@@ -274,15 +263,6 @@ const SubscriptionsCreate = ({
         }
         customFormatFn={arr => arr.map(getEventFilter)}
         placeholder={t('subscription.create.placeholders.event-type')}
-        validate={value => {
-          return value.every(e => {
-            if (e.eventType.value.split('.').filter(s => s).length < 7) {
-              return false;
-            } else {
-              return true;
-            }
-          });
-        }}
       />
       {(jp.value(subscription, '$.spec.filter.filters') || []).length === 0 ? (
         <MessageStrip
