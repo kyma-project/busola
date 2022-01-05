@@ -67,7 +67,9 @@ export function useEditorHelper({ value }) {
     return () => {
       // TODO clear schema from the schames array
     };
-  }, []);
+    // disabling due to the changing identity of fetch
+    // eslint-disable-next-line
+  }, [fileId]);
 
   const setAutocompleteOptions = useCallback(() => {
     const modelUri = Uri.parse(fileId);

@@ -23,8 +23,8 @@
   "scripts": {
     "start": "(cd ..; gulp copy-themes)& PORT=8889 react-app-rewired start",
     "start:kyma": "BROWSER=none npm run start",
-    "build": "(cd ..; npm run copy-themes) && PUBLIC_URL=/core-ui INLINE_RUNTIME_CHUNK=false ../node_modules/.bin/react-scripts build",
-    "test": "../node_modules/.bin/react-scripts test",
+    "build": "(cd ..; npm run copy-themes) && PUBLIC_URL=/core-ui INLINE_RUNTIME_CHUNK=false react-app-rewired build",
+    "test": "react-app-rewired test",
     "eject": "../node_modules/.bin/react-scripts eject"
   },
   "browserslist": {

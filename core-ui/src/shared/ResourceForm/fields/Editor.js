@@ -40,8 +40,6 @@ export function Editor({
   useEffect(() => {
     const { modelUri } = setAutocompleteOptions();
 
-    const models = editor.getModel(modelUri);
-
     const model = editor.createModel(valueRef.current, language, modelUri);
     editorRef.current = editor.create(divRef.current, {
       model: model,
@@ -80,7 +78,7 @@ export function Editor({
       });
       editorRef.current.dispose();
     };
-  }, [editorTheme, setAutocompleteOptions]);
+  }, [editorTheme, setAutocompleteOptions, language, setValue, t]);
 
   return (
     <div>
