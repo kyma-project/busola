@@ -12,7 +12,7 @@ export function createSubscriptionTemplate(
       labels: {},
     },
     spec: {
-      sink: `https://${serviceName}.${namespace}.svc.cluster.local`,
+      sink: `http://${serviceName}.${namespace}.svc.cluster.local`,
       filter: {
         filters: [
           {
