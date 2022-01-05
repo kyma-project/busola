@@ -1,12 +1,7 @@
-import {
-  ComboboxInput,
-  FormItem,
-  FormLabel,
-  MessageStrip,
-} from 'fundamental-react';
+import { FormItem, MessageStrip } from 'fundamental-react';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { randomNameGenerator, K8sNameInput, useGetList } from 'react-shared';
+import { randomNameGenerator, K8sNameInput } from 'react-shared';
 import styled from 'styled-components';
 
 const ComboboxWrapper = styled.div`
@@ -23,18 +18,10 @@ export function CreateServiceBindingForm({
   onChange,
   formElementRef,
   handleFormSubmit,
-  namespace,
 }) {
   const { i18n } = useTranslation();
   const [name, setName] = useState(randomNameGenerator());
   const [secretName, setSecretName] = useState('');
-
-  const { data: secrets } = useGetList()(
-    `/api/v1/namespaces/${namespace}/secrets`,
-    {
-      pollingInterval: 7000,
-    },
-  );
 
   return (
     <form
@@ -52,23 +39,9 @@ export function CreateServiceBindingForm({
           value={name}
         />
       </FormItem>
-      <FormItem>
-        <FormLabel className="fd-margin-top--tiny">Secret Name</FormLabel>
-        <ComboboxWrapper>
-          <ComboboxInput
-            compact
-            placeholder="Secret Name"
-            options={(secrets || [])
-              .map(s => s.metadata.name)
-              .map(n => ({ key: n, text: n }))}
-            selectedKey={secretName}
-            typedValue={secretName}
-            onSelect={e => setSecretName(e.target.value)}
-          />
-        </ComboboxWrapper>
-      </FormItem>
+
       <MessageStrip className="fd-margin-top--tiny" type="information">
-        If Secret Name is not set a new Secret will be created.
+        The Secret will be created automatically.
       </MessageStrip>
     </form>
   );
