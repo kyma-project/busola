@@ -87,7 +87,11 @@ export function CreateServiceBindingModal({ serviceInstance }) {
       modalOpeningComponent={modalOpeningComponent}
       confirmText="Create"
       renderForm={props => (
-        <CreateServiceBindingForm {...props} handleFormSubmit={create} />
+        <CreateServiceBindingForm
+          {...props}
+          namespace={namespace}
+          handleFormSubmit={create}
+        />
       )}
     />
   );
