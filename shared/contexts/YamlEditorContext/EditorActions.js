@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Tooltip } from '../../components/Tooltip/Tooltip';
 import { Button } from 'fundamental-react';
 import copyToCliboard from 'copy-to-clipboard';
@@ -36,10 +36,60 @@ export function EditorActions({
   i18n,
   readOnly,
 }) {
+  const [visible, setVisible] = useState(true);
   const openSearch = () => {
     // focus is required for search control to appear
     editor.focus();
     editor.trigger('', 'actions.find');
+  };
+
+  const getReadOnlyFieldsPosition = () => {
+    // definition of read only fields
+    const READONLY_FIELDS = ['managedFields:', 'status:'];
+    let arrayOfPositions = [];
+    READONLY_FIELDS.forEach(fieldName => {
+      arrayOfPositions = arrayOfPositions.concat(
+        editor.getModel().findMatches(fieldName, true, false, true, null, true),
+      );
+    });
+    return arrayOfPositions.sort(
+      (a, b) => b.range.startLineNumber - a.range.startLineNumber,
+    );
+  };
+
+  const toggleReadOnlyLines = fieldsPosition => {
+    fieldsPosition.forEach(match => {
+      setTimeout(() => {
+        editor.setPosition({
+          column: match.range.startColumn,
+          lineNumber: match.range.startLineNumber,
+        });
+
+        visible
+          ? editor.trigger('fold', 'editor.fold')
+          : editor.trigger('unfold', 'editor.unfold');
+      });
+    });
+  };
+
+  const hideReadOnlyLines = () => {
+    const visibleRanges = editor.getVisibleRanges();
+    const visibleReadOnlyFields = getReadOnlyFieldsPosition().filter(match => {
+      return visibleRanges.some(
+        range =>
+          match.range.startLineNumber >= range.startLineNumber &&
+          match.range.startLineNumber < range.endLineNumber,
+      );
+    });
+
+    toggleReadOnlyLines(visibleReadOnlyFields);
+    setVisible(false);
+  };
+
+  const showReadOnlyLines = () => {
+    const readOnlyFields = getReadOnlyFieldsPosition();
+    toggleReadOnlyLines(readOnlyFields);
+    setVisible(true);
   };
 
   const download = () => {
@@ -53,6 +103,14 @@ export function EditorActions({
 
   return (
     <section className="editor-actions fd-margin-bottom--sm">
+      <ButtonWithTooltip
+        tooltipContent={
+          visible ? t('common.tooltips.hide') : t('common.tooltips.show')
+        }
+        glyph={visible ? 'hide' : 'show'}
+        onClick={visible ? hideReadOnlyLines : showReadOnlyLines}
+        disabled={!editor}
+      />
       <ButtonWithTooltip
         tooltipContent={t('common.tooltips.search')}
         glyph="filter"
