@@ -1,9 +1,4 @@
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { CompassUI } from './CompassUI/CompassUI';
 import { withRouter } from 'react-router-dom';
 import { useEventListener } from 'hooks/useEventListener';
@@ -26,7 +21,7 @@ export const CompassProvider = withRouter(({ children, history }) => {
   useEventListener('keydown', onKeyPress);
   useCustomMessageListener('busola.main-frame-keypress', onKeyPress);
   useCustomMessageListener('busola.main-frame-click', hide);
-  useEffect(() => history.listen(hide), []);
+  useEffect(() => history.listen(hide), [history]);
 
   return (
     <CompassContext.Provider value={null}>

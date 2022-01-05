@@ -19,8 +19,11 @@ export function SuggestedSearch({ search, suggestedSearch, setSearch }) {
   //enter to choose
   return (
     <>
-      Did you mean:
-      <button onClick={() => setSearch(suggestedSearch)}>
+      Did you mean:{' '}
+      <button
+        className="button-link"
+        onClick={() => setSearch(suggestedSearch)}
+      >
         {suggestedSearch}
       </button>
     </>

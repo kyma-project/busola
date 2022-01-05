@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'fundamental-react';
 import './ResultsList.scss';
 import { useEventListener } from 'hooks/useEventListener';
@@ -12,7 +12,7 @@ function scrollInto(element) {
   });
 }
 
-export function ResultsList({ results, hide }) {
+export function ResultsList({ results, hide, suggestion }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const listRef = useRef();
 
@@ -20,7 +20,7 @@ export function ResultsList({ results, hide }) {
     if (results?.length > activeIndex) {
       setActiveIndex(0);
     }
-  }, [results]);
+  }, [results, activeIndex]);
 
   useEventListener(
     'keydown',
@@ -54,6 +54,7 @@ export function ResultsList({ results, hide }) {
       ) : (
         <Link className="result disabled">
           <p className="label">No results found</p>
+          <p className="description">{suggestion}</p>
         </Link>
       )}
     </ul>

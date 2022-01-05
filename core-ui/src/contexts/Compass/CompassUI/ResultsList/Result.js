@@ -12,15 +12,17 @@ export function Result({
 }) {
   const resultRef = useRef();
 
-  const mouseOver = () => {
+  const mouseMove = () => {
     if (index !== activeIndex) {
       setActiveIndex(index);
     }
   };
 
   useEffect(() => {
-    resultRef.current.addEventListener('mousemove', mouseOver);
-    return () => resultRef.current.removeEventListener('mouseover', mouseOver);
+    const target = resultRef.current;
+    target.addEventListener('mousemove', mouseMove);
+    return () => target.removeEventListener('mousemove', mouseMove);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [index, activeIndex, setActiveIndex]);
 
   if (onClick) {

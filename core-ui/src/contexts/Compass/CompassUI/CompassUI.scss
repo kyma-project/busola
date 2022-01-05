@@ -31,5 +31,15 @@
 
     padding: 10px;
     border-radius: 10px;
+    box-shadow: 0 0.3125rem 1.25rem 0
+      var(--sapGroup_ContentBorderColor, #d9d9d9);
   }
+}
+
+.button-link {
+  border: none;
+  background: none;
+  text-decoration: underline;
+  color: var(--sapLinkColor);
+  cursor: pointer;
 }
