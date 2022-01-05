@@ -242,7 +242,7 @@ const SubscriptionsCreate = ({
       />
       <ResourceForm.FormField
         simple
-        label={t('subscription.create.labels.event-type')}
+        label={t('subscription.create.labels.event-type-plural')}
         messageStrip={eventTypeMessageStrip}
         tooltipContent={t('subscription.tooltips.event-type-simple')}
       />
@@ -252,7 +252,7 @@ const SubscriptionsCreate = ({
         defaultOpen
         tooltipContent={t('subscription.tooltips.event-type-advanced')}
         propertyPath="$.spec.filter.filters"
-        title={t('subscription.create.labels.event-type')}
+        title={t('subscription.create.labels.event-type-plural')}
         toInternal={valueFromYaml =>
           valueFromYaml?.map(obj => obj.eventType?.value) || []
         }

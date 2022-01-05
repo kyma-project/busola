@@ -1584,6 +1584,7 @@ subscription:
       application-name: Application name
       event-name: Event name
       event-type: Event type
+      event-type-plural: Event types
       event-version: Event version
       service-name: Service
       sink: Sink
