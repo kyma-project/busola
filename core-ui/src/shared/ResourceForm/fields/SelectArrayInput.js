@@ -28,7 +28,7 @@ export function SelectArrayInput({
       tooltipContent={tooltipContent}
       sectionTooltipContent={sectionTooltipContent}
       inputs={[
-        ({ value, setValue, ref, onBlur, focus, index }) => (
+        ({ value, setValue, ref, updateValue, focus, index }) => (
           <Inputs.Dropdown
             key={index}
             placeholder={placeholder}
@@ -38,7 +38,7 @@ export function SelectArrayInput({
             setValue={setValue}
             options={options}
             onKeyDown={focus}
-            onBlur={onBlur}
+            onBlur={updateValue}
             className="fd-margin-end--sm"
           />
         ),

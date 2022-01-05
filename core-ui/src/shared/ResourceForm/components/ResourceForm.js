@@ -1,12 +1,14 @@
 import React, { useRef, useEffect } from 'react';
 import classnames from 'classnames';
+import jsyaml from 'js-yaml';
+import { EditorActions } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 
 import { ModeSelector } from './ModeSelector';
-import { Editor } from '../fields/Editor';
-import { Presets } from './Presets';
-import { useCreateResource } from '../useCreateResource';
-
 import { ResourceFormWrapper } from './Wrapper';
+import { Presets } from './Presets';
+import { Editor } from '../fields/Editor';
+import { useCreateResource } from '../useCreateResource';
 
 import './ResourceForm.scss';
 
@@ -29,20 +31,20 @@ export function ResourceForm({
   onlyYaml = false,
   ...props
 }) {
-  const createResource = useCreateResource(
+  const { i18n } = useTranslation();
+  const createResource = useCreateResource({
     singularName,
     pluralKind,
     resource,
     initialResource,
     createUrl,
     afterCreatedFn,
-  );
+  });
 
-  // console.log('hehe', singularName, resource, props);
   const [mode, setMode] = React.useState(
     onlyYaml ? ModeSelector.MODE_YAML : ModeSelector.MODE_SIMPLE,
   );
-
+  const [actionsEditor, setActionsEditor] = React.useState(null);
   const validationRef = useRef(true);
 
   useEffect(() => {
@@ -50,7 +52,14 @@ export function ResourceForm({
       setCustomValid(validationRef.current);
     }
     validationRef.current = true;
-  }, [resource, children, setCustomValid]);
+
+    // close search
+    if (actionsEditor) {
+      actionsEditor.trigger('', 'closeFindWidget');
+    }
+  }, [resource, children, setCustomValid, actionsEditor]);
+
+  const convertedResource = jsyaml.dump(resource);
 
   const presetsSelector = presets?.length && (
     <Presets
@@ -69,7 +78,14 @@ export function ResourceForm({
     />
   );
 
-  let editor = <Editor value={resource} setValue={setResource} {...props} />;
+  let editor = (
+    <Editor
+      value={resource}
+      setValue={setResource}
+      editorDidMount={(_, e) => setActionsEditor(e)}
+      {...props}
+    />
+  );
   editor = renderEditor
     ? renderEditor({ defaultEditor: editor, Editor })
     : editor;
@@ -90,7 +106,18 @@ export function ResourceForm({
             </ResourceFormWrapper>
           </div>
         )}
-        {mode === ModeSelector.MODE_YAML && editor}
+        {mode === ModeSelector.MODE_YAML && (
+          <>
+            <EditorActions
+              val={convertedResource}
+              editor={actionsEditor}
+              title={`${resource?.metadata?.name || singularName}.yaml`}
+              saveHidden
+              i18n={i18n}
+            />
+            {editor}
+          </>
+        )}
         {/* always keep the advanced form to ensure validation */}
         <div
           className="advanced-form"

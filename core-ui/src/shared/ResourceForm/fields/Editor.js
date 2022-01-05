@@ -15,6 +15,7 @@ export function Editor({
   readonly,
   language = 'yaml',
   editorDidMount,
+  ...props
 }) {
   const { t } = useTranslation();
   const [error, setError] = useState('');

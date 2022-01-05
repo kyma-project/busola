@@ -134,7 +134,7 @@ context('Test Protected Resources', () => {
     cy.url().should('match', new RegExp(`\/deployments\/details\/${NAME}$`));
 
     cy.getIframeBody()
-      .contains('tr', NAME)
+      .contains('tr', NAME, { timeout: 5000 })
       .find('[aria-label="Delete"]')
       .should('be.disabled');
   });
@@ -180,5 +180,35 @@ context('Test Protected Resources', () => {
     cy.getIframeBody()
       .contains('button', 'Cancel')
       .click();
+  });
+
+  it('Disallows creating an Application on SKR', () => {
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/backend/api/v1/namespaces/kyma-system/configmaps/skr-configmap',
+      },
+      JSON.stringify({
+        kind: 'ConfigMap',
+        apiVersion: 'v1',
+        data: { 'is-managed-kyma-runtime': 'true' },
+      }),
+    );
+
+    cy.getLeftNav()
+      .contains('Back to Namespaces')
+      .click();
+
+    cy.getLeftNav()
+      .contains('Integration')
+      .click();
+
+    cy.getLeftNav()
+      .contains('Applications')
+      .click();
+
+    cy.getIframeBody()
+      .contains('Create Application')
+      .should('be.disabled');
   });
 });

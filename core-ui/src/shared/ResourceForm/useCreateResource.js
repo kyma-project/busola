@@ -4,14 +4,14 @@ import { useTranslation } from 'react-i18next';
 import { usePost, useUpdate, useMicrofrontendContext } from 'react-shared';
 import { createPatch } from 'rfc6902';
 
-export function useCreateResource(
+export function useCreateResource({
   singularName,
   pluralKind,
   resource,
   initialResource,
   createUrl,
   afterCreatedFn,
-) {
+}) {
   const { t } = useTranslation();
   const notification = useNotification();
   const { namespaceId } = useMicrofrontendContext();

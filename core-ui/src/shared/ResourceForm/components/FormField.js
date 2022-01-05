@@ -15,6 +15,7 @@ export function FormField({
   tooltipContent,
   isAdvanced,
   defaultValue,
+  messageStrip,
   ...props
 }) {
   return (
@@ -25,7 +26,7 @@ export function FormField({
         </Label>
       </div>
       <div className="fd-col fd-col-md--7">
-        {input({ required, disabled, ...props })}
+        {messageStrip ? messageStrip : input({ required, disabled, ...props })}
       </div>
     </div>
   );

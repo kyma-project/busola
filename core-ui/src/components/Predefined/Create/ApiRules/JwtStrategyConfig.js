@@ -49,7 +49,7 @@ export function JwtStrategyConfig(props) {
       toInternal={toInternal}
       toExternal={toExternal}
       inputs={[
-        ({ value, setValue, ref, onBlur, focus, index }) => (
+        ({ value, setValue, ref, updateValue, focus, index }) => (
           <FormInput
             key={index + '--jwksUri'}
             compact
@@ -58,11 +58,11 @@ export function JwtStrategyConfig(props) {
             ref={ref}
             onChange={e => setValue({ ...value, jwksUri: e.target.value })}
             onKeyDown={e => focus(e)}
-            onBlur={onBlur}
+            onBlur={updateValue}
             placeholder={t('api-rules.jwt.jwks-uri')}
           />
         ),
-        ({ value, setValue, ref, onBlur, focus, index }) => (
+        ({ value, setValue, ref, updateValue, focus, index }) => (
           <FormInput
             key={index + '--trustedIssuer'}
             compact
@@ -73,7 +73,7 @@ export function JwtStrategyConfig(props) {
               setValue({ ...value, trustedIssuer: e.target.value })
             }
             onKeyDown={e => focus(e)}
-            onBlur={onBlur}
+            onBlur={updateValue}
             placeholder={t('api-rules.jwt.trusted-issuer')}
           />
         ),

@@ -76,7 +76,7 @@ export function KeyValueField({
           .reduce((acc, entry) => ({ ...acc, [entry.key]: entry.val }), {})
       }
       inputs={[
-        ({ value, setValue, ref, onBlur, focus }) => (
+        ({ value, setValue, ref, updateValue, focus }) => (
           <FormInput
             compact
             disabled={lockedKeys.includes(value?.key)}
@@ -87,23 +87,25 @@ export function KeyValueField({
               setValue({ val: value?.val || '', key: e.target.value })
             }
             onKeyDown={e => focus(e, 1)}
-            onBlur={onBlur}
+            onBlur={updateValue}
             {...keyProps}
             placeholder={t('components.key-value-field.enter-key')}
           />
         ),
-        ({ focus, value, setValue, ...props }) =>
+        ({ focus, value, setValue, updateValue, ...props }) =>
           input({
             key: 'value',
             onKeyDown: e => focus(e),
             value: dataValue(value),
             placeholder: t('components.key-value-field.enter-value'),
             disabled: lockedValues.includes(value?.key),
-            setValue: val =>
+            setValue: val => {
               setValue({
                 ...value,
                 val: valuesEncoded || !encodable ? val : base64Encode(val),
-              }),
+              });
+              updateValue();
+            },
             validationState:
               value?.key && decodeErrors[value.key]
                 ? {

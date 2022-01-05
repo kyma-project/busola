@@ -26,4 +26,7 @@ export * from './StatefulSets/StatefulSets.create';
 export * from './DaemonSets/DaemonSets.create';
 export * from './Services/Services.create';
 export * from './Pods/Pods.create';
+export * from './Subscriptions/Subscriptions.create';
 export * from './DestinationRules/DestinationRules.create';
+export * from './Subscriptions/Subscriptions.create';
+export * from './VirtualServices/VirtualServices.create';

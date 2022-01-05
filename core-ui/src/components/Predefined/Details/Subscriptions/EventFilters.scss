@@ -1,0 +1,32 @@
+.event-filters-panel {
+  & > :first-child {
+    margin-bottom: 8px;
+  }
+
+  & > *:not(:first-child) {
+    margin-left: 32px !important;
+    margin-right: 32px !important;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-bottom: 8px !important;
+    column-gap: 20px;
+  }
+
+  & > :nth-child(2).no-entries-message {
+    width: 100%;
+    font-size: 18px;
+    padding: 20px 0;
+    margin: 0 auto;
+    text-align: center;
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+}
+.layout-panel-row {
+  margin: 0.5rem 0 !important;
+}
+
+.layout-panel-title {
+  margin-left: -22px !important;
+}
