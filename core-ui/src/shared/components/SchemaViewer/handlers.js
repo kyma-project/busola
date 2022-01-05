@@ -28,9 +28,8 @@ export const SchemaMap = ({ val, required }) => {
   return (
     <ul>
       {Object.entries(val).map(([name, def]) => (
-        <li>
+        <li key={name}>
           <JSONSchema
-            key={name}
             name={name}
             {...def}
             isRequired={required?.includes(name)}

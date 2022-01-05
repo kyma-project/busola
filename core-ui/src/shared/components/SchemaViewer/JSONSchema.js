@@ -32,7 +32,7 @@ export function JSONSchema({
                   return `${def.items.type}[]`;
                 }
               })
-              .map(type => <InfoLabel>{type}</InfoLabel>)}{' '}
+              .map(type => <InfoLabel key={type}>{type}</InfoLabel>)}{' '}
           {isRequired && (
             <ObjectStatus inverted status="critical">
               {t('schema.required')}
@@ -44,14 +44,6 @@ export function JSONSchema({
 
       <dl>
         <ObjectProperties def={def} expanded={root} />
-        {/*
-        {types.map(type => (
-          <>
-            <ObjectProperties type={type} def={def} expanded={root} />
-          </>
-        ))}
-        <ObjectProperties def={def} />
-        */}
       </dl>
     </section>
   );

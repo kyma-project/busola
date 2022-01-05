@@ -6,7 +6,6 @@ import { Icon } from 'fundamental-react';
 import { Generic, PROPERTIES } from './handlers';
 
 function ObjectProperty({
-  key,
   propKey,
   label,
   val,
@@ -16,8 +15,6 @@ function ObjectProperty({
 }) {
   const [collapsed, setCollapsed] = useState(!expanded);
   const Handler = handler;
-
-  console.log('ObjectProperty', propKey, { expanded });
 
   return (
     <>
