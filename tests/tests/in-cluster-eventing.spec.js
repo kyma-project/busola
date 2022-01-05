@@ -27,17 +27,17 @@ context('In-cluster eventing', () => {
     );
   });
 
-  it('Create an Event Subscription', () => {
+  it('Create a Subscription', () => {
     cy.getIframeBody()
       .contains('a', 'Configuration')
       .click();
 
     cy.getIframeBody()
-      .contains('button', 'Create Event Subscription')
+      .contains('button', 'Create Subscription')
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Event Subscription Name"]:visible')
+      .find('[placeholder="Subscription Name"]:visible')
       .clear()
       .type(`${FUNCTION_NAME}-subscription`);
 
@@ -50,12 +50,14 @@ context('In-cluster eventing', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Event name"]:visible')
+      .find(
+        '[placeholder="Enter the Event name, for example, order.cancelled"]:visible',
+      )
       .clear()
       .type('order.created');
 
     cy.getIframeBody()
-      .find('[placeholder="Event version"]:visible')
+      .find('[placeholder="Enter the Event version, for example, v1"]:visible')
       .clear()
       .type('v1');
 
@@ -132,28 +134,28 @@ context('In-cluster eventing', () => {
     //   .should('be.visible');
   });
 
-  it('Navigate to Event Subscription', () => {
+  it('Navigate to Subscription', () => {
     cy.getLeftNav()
       .contains('Configuration')
       .click();
 
     cy.getLeftNav()
-      .contains('Event Subscriptions')
+      .contains('Subscriptions')
       .click();
   });
 
-  it('Create Event Subscription', () => {
+  it('Create Subscription', () => {
     cy.getIframeBody()
-      .contains('Create Event Subscription')
+      .contains('Create Subscription')
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Event Subscription Name"]:visible')
+      .find('[placeholder="Subscription Name"]:visible')
       .clear()
       .type(`${API_RULE_AND_FUNCTION_NAME}-subscription`);
 
     cy.getIframeBody()
-      .contains('Choose a Service name')
+      .contains('Choose a Service for the sink')
       .click();
 
     cy.getIframeBody()
@@ -171,12 +173,14 @@ context('In-cluster eventing', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Event name"]:visible')
+      .find(
+        '[placeholder="Enter the Event name, for example, order.cancelled"]:visible',
+      )
       .clear()
       .type('order.created');
 
     cy.getIframeBody()
-      .find('[placeholder="Event version"]:visible')
+      .find('[placeholder="Enter the Event version, for example, v1"]:visible')
       .clear()
       .type('v1');
 
@@ -210,7 +214,9 @@ context('In-cluster eventing', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Event type"]')
+      .find(
+        '[placeholder="Enter Event type, for example, sap.kyma.custom.test-app.order.cancelled.v1"]',
+      )
       .clear()
       .type(
         `sap.kyma.custom.test-mock-app-${Cypress.env(
@@ -242,7 +248,7 @@ context('In-cluster eventing', () => {
       .should('be.visible');
   });
 
-  it('Delete Event Subscription', () => {
+  it('Delete Subscription', () => {
     cy.getIframeBody()
       .contains('button', 'Delete')
       .click();

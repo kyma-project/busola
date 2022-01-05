@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { cloneDeep } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
-import { useGet, useGetList, useNotification } from 'react-shared';
+import { useGetList, useNotification } from 'react-shared';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import {
@@ -13,7 +13,7 @@ import {
 
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { ComboboxInput, MessageStrip } from 'fundamental-react';
-import { createEventSubscriptionTemplate } from './templates';
+import { createSubscriptionTemplate } from './templates';
 import { getServiceName, getEventFilter, spreadEventType } from './helpers';
 
 const DEFAULT_EVENT_TYPE_PREFIX = 'sap.kyma.custom.';
@@ -23,58 +23,46 @@ const SubscriptionsCreate = ({
   onChange,
   formElementRef,
   namespace,
-  resource: initialEventSubscription,
+  resource: initialSubscription,
   resourceUrl,
-  serviceName,
+  serviceName = '',
   setCustomValid,
 }) => {
   const { t } = useTranslation();
-  const { data: configMap } = useGet(
-    '/api/v1/namespaces/kyma-system/configmaps/eventing',
-  );
 
-  let eventTypePrefix =
-    configMap?.data?.eventTypePrefix || DEFAULT_EVENT_TYPE_PREFIX;
-  eventTypePrefix = eventTypePrefix.endsWith('.')
-    ? eventTypePrefix
-    : eventTypePrefix + '.';
-
-  const [eventSubscription, setEventSubscription] = useState(
-    cloneDeep(initialEventSubscription) ||
-      createEventSubscriptionTemplate(namespace, eventTypePrefix),
+  const [subscription, setSubscription] = useState(
+    cloneDeep(initialSubscription) ||
+      createSubscriptionTemplate(
+        namespace,
+        DEFAULT_EVENT_TYPE_PREFIX,
+        serviceName,
+      ),
   );
 
   const firstEventType = jp.value(
-    eventSubscription,
+    subscription,
     '$.spec.filter.filters[0].eventType.value',
   );
-  const firstEventTypeValues = spreadEventType(firstEventType, eventTypePrefix);
+
+  const firstEventTypeValues = spreadEventType(
+    firstEventType,
+    DEFAULT_EVENT_TYPE_PREFIX,
+  );
 
   const notification = useNotification();
-
-  useEffect(() => {
-    if (serviceName) {
-      jp.value(
-        eventSubscription,
-        '$.spec.sink',
-        `https://${serviceName}.${namespace}.svc.cluster.local`,
-      );
-      setEventSubscription({ ...eventSubscription });
-    }
-  }, [serviceName]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleEventTypeValuesChange = changes => {
     const newEventTypeValues = { ...firstEventTypeValues, ...changes };
 
     jp.value(
-      eventSubscription,
+      subscription,
       '$.spec.filter.filters[0].eventType.value',
-      `${eventTypePrefix}${newEventTypeValues.appName}.${newEventTypeValues.eventName}.${newEventTypeValues.version}`,
+      `${DEFAULT_EVENT_TYPE_PREFIX}${newEventTypeValues.appName}.${newEventTypeValues.eventName}.${newEventTypeValues.version}`,
     );
-    jp.value(eventSubscription, '$.spec.filter.filters', [
-      ...jp.value(eventSubscription, '$.spec.filter.filters'),
+    jp.value(subscription, '$.spec.filter.filters', [
+      ...jp.value(subscription, '$.spec.filter.filters'),
     ]);
-    setEventSubscription({ ...eventSubscription });
+    setSubscription({ ...subscription });
   };
 
   const {
@@ -98,68 +86,84 @@ const SubscriptionsCreate = ({
       //when serviceName is given,display notification and don't redirect
       notification.notifySuccess({
         content: t(
-          initialEventSubscription
+          initialSubscription
             ? 'common.create-form.messages.patch-success'
             : 'common.create-form.messages.create-success',
           {
-            resourceType: t(`event-subscription.name_singular`),
+            resourceType: t(`subscription.name_singular`),
           },
         ),
       });
     }
   };
 
+  const sinkMessageStrip = (
+    <MessageStrip type="info">
+      {jp.value(subscription, '$.spec.sink')}
+    </MessageStrip>
+  );
+
+  const eventTypeMessageStrip = (
+    <MessageStrip type="info">
+      {jp.value(subscription, '$.spec.filter.filters[0].eventType.value')}
+    </MessageStrip>
+  );
+
   return (
     <ResourceForm
-      pluralKind="eventsubscription"
-      singularName={t('event-subscription.name_singular')}
-      navigationResourceName="eventsubscriptions"
-      resource={eventSubscription}
-      setResource={setEventSubscription}
+      pluralKind="subscriptions"
+      singularName={t('subscription.name_singular')}
+      resource={subscription}
+      setResource={setSubscription}
       onChange={onChange}
       formElementRef={formElementRef}
-      initialResource={initialEventSubscription}
+      initialResource={initialSubscription}
       createUrl={resourceUrl}
       afterCreatedFn={afterCreatedFn}
       setCustomValid={setCustomValid}
     >
       <K8sNameField
         propertyPath="$.metadata.name"
-        kind={t('event-subscription.name_singular')}
+        kind={t('subscription.name_singular')}
         setValue={name => {
-          jp.value(eventSubscription, '$.metadata.name', name);
-          setEventSubscription({ ...eventSubscription });
+          jp.value(subscription, '$.metadata.name', name);
+          setSubscription({ ...subscription });
         }}
-        readOnly={!!initialEventSubscription}
+        readOnly={!!initialSubscription}
       />
       <ResourceForm.FormField
+        label={t('subscription.create.labels.sink')}
+        messageStrip={sinkMessageStrip}
+        tooltipContent={t('subscription.tooltips.sink')}
+      />
+
+      <ResourceForm.FormField
         required
-        label={t('services.name_singular')}
+        label={t('subscription.create.labels.service-name')}
         setValue={serviceName => {
           jp.value(
-            eventSubscription,
+            subscription,
             '$.spec.sink',
-            `https://${serviceName}.${namespace}.svc.cluster.local`,
+            `http://${serviceName}.${namespace}.svc.cluster.local`,
           );
-          setEventSubscription({ ...eventSubscription });
+          setSubscription({ ...subscription });
         }}
         value={
           serviceName ||
-          getServiceName(jp.value(eventSubscription, '$.spec.sink')) ||
+          getServiceName(jp.value(subscription, '$.spec.sink')) ||
           ''
         }
-        validate={() =>
-          getServiceName(jp.value(eventSubscription, '$.spec.sink'))
-        }
+        validate={() => getServiceName(jp.value(subscription, '$.spec.sink'))}
         input={Inputs.Dropdown}
-        placeholder={t('event-subscription.create.placeholders.service-name')}
+        placeholder={t('subscription.create.placeholders.service-name')}
         options={(services || []).map(i => ({
           key: i.metadata.name,
           text: i.metadata.name,
         }))}
         error={servicesError}
         loading={servicesLoading}
-        tooltipContent={t('event-subscription.tooltips.service-name')}
+        tooltipContent={t('subscription.tooltips.service-name')}
+        disabled={!!serviceName}
       />
 
       <KeyValueField
@@ -177,19 +181,20 @@ const SubscriptionsCreate = ({
       <ResourceForm.FormField
         simple
         required
-        label={t('event-subscription.create.labels.application-name')}
+        label={t('subscription.create.labels.application-name')}
         setValue={appName => handleEventTypeValuesChange({ appName })}
         value={firstEventTypeValues.appName}
         input={Inputs.Dropdown}
-        placeholder={t(
-          'event-subscription.create.placeholders.application-name',
-        )}
+        placeholder={t('subscription.create.placeholders.application-name')}
         validate={value => {
           const eventType = jp.value(
             value,
             '$.spec.filter.filters[0].eventType.value',
           );
-          const { appName } = spreadEventType(eventType, eventTypePrefix);
+          const { appName } = spreadEventType(
+            eventType,
+            DEFAULT_EVENT_TYPE_PREFIX,
+          );
           return appName;
         }}
         options={(applications || []).map(i => ({
@@ -198,31 +203,31 @@ const SubscriptionsCreate = ({
         }))}
         error={applicationsError}
         loading={applicationsLoading}
-        tooltipContent={t('event-subscription.tooltips.application-name')}
+        tooltipContent={t('subscription.tooltips.application-name')}
       />
 
       <ResourceForm.FormField
         simple
         required
-        label={t('event-subscription.create.labels.event-name')}
+        label={t('subscription.create.labels.event-name')}
         setValue={eventName => handleEventTypeValuesChange({ eventName })}
         value={firstEventTypeValues.eventName}
         input={Inputs.Text}
-        placeholder={t('event-subscription.create.labels.event-name')}
-        tooltipContent={t('event-subscription.tooltips.event-name')}
+        placeholder={t('subscription.create.placeholders.event-name')}
+        tooltipContent={t('subscription.tooltips.event-name')}
       />
 
       <ResourceForm.FormField
         simple
         required
-        label={t('event-subscription.create.labels.event-version')}
-        tooltipContent={t('event-subscription.tooltips.event-version')}
+        label={t('subscription.create.labels.event-version')}
+        tooltipContent={t('subscription.tooltips.event-version')}
         value={firstEventTypeValues.version}
         input={({ value, setValue }) => (
           <ComboboxInput
             required
             compact
-            placeholder={t('event-subscription.create.labels.event-version')}
+            placeholder={t('subscription.create.placeholders.event-version')}
             options={versionOptions.map(version => ({
               key: version,
               text: version,
@@ -237,21 +242,17 @@ const SubscriptionsCreate = ({
       />
       <ResourceForm.FormField
         simple
-        required
-        label={t('event-subscription.create.labels.event-type')}
-        propertyPath={'$.spec.filter.filters[0].eventType.value'}
-        input={Inputs.Text}
-        readOnly={true}
-        tooltipContent={t('event-subscription.tooltips.event-type-simple')}
+        label={t('subscription.create.labels.event-type')}
+        messageStrip={eventTypeMessageStrip}
+        tooltipContent={t('subscription.tooltips.event-type-simple')}
       />
-
       <TextArrayInput
         advanced
         required
         defaultOpen
-        tooltipContent={t('event-subscription.tooltips.event-type-advanced')}
+        tooltipContent={t('subscription.tooltips.event-type-advanced')}
         propertyPath="$.spec.filter.filters"
-        title={t('event-subscription.create.labels.event-type')}
+        title={t('subscription.create.labels.event-type-plural')}
         toInternal={valueFromYaml =>
           valueFromYaml?.map(obj => obj.eventType?.value) || []
         }
@@ -261,26 +262,15 @@ const SubscriptionsCreate = ({
             .map(value => getEventFilter(value)) || []
         }
         customFormatFn={arr => arr.map(getEventFilter)}
-        placeholder={t('event-subscription.create.labels.event-type')}
-        validate={value => {
-          console.log(value);
-          return value.every(e => {
-            if (e.eventType.value.split('.').filter(s => s).length < 7) {
-              return false;
-            } else {
-              return true;
-            }
-          });
-        }}
+        placeholder={t('subscription.create.placeholders.event-type')}
       />
-      {(jp.value(eventSubscription, '$.spec.filter.filters') || []).length ===
-      0 ? (
+      {(jp.value(subscription, '$.spec.filter.filters') || []).length === 0 ? (
         <MessageStrip
           advanced
           type="warning"
           className="fd-margin-top--sm fd-margin-bottom--sm"
         >
-          {t('event-subscription.errors.empty-event-types')}
+          {t('subscription.errors.empty-event-types')}
         </MessageStrip>
       ) : null}
     </ResourceForm>

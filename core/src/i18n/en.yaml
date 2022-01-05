@@ -458,6 +458,7 @@ common:
     download: Download
     duplicate-key: Duplicate key
     error: Error
+    hide: Hide read-only fields
     k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' (e.g.: 'my-name1')."
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: key=value, must start and end with an alphanumeric character, can contain '-', '_' or '.'.
@@ -470,6 +471,7 @@ common:
     search: Search
     secret-ref-name: Unique name within a Namespace to refer to a Secret resource.
     secret-ref-namespace: Namespace defines the space within which the secret name must be unique.
+    show: Show read-only fields
     value: Value must start and end with an alphanumeric character, can contain '-', '_' or '.'.
   'yes': 'yes'
 components:
@@ -793,45 +795,6 @@ domains:
   include:
     label: Include Domains
     placeholder: Domain that is allowed
-event-subscription:
-  create:
-    labels:
-      application-name: Application name
-      event-name: Event name
-      event-type: Event type
-      event-version: Event version
-    placeholders:
-      application-name: Choose an Application name
-      service-name: Choose a Service name
-    title: Add Event Subscription
-  description: <0>Event Subscription</0> is used to subscribe to events.
-  errors:
-    empty-event-types: You must provide at least one Event type.
-  headers:
-    conditions:
-      last-transition: Last Transition
-      reason: Reason
-      status: Status
-      title: Conditions
-      type: Type
-    filters:
-      event-source: Event Source
-      event-type: Event Type
-      property: Property
-      title: Filters
-      type: Type
-      value: Value
-  name_singular: Event Subscription
-  sink: Sink
-  title: Event Subscriptions
-  tooltips:
-    application-name: Choose an Application from the cluster.
-    event-name: Provide a name for your Event. The name must consist of at least two parts divided by a dot.
-    event-type-advanced: Provide your customized Event type that will override the predefined one. You can add more Event types if needed.
-    event-type-simple: Event type is defined based on the Application name, Event name, and Event version.
-    event-version: Choose the Event version from the drop-down list or provide your own version.
-    ready: Subscription is active
-    service-name: Choose a Service from the Namespace.
 functions:
   buttons:
     connected-repositories: Connected Repositories
@@ -1615,6 +1578,52 @@ stateful-sets:
   name_singular: Stateful Set
   replicas: Replicas
   title: Stateful Sets
+subscription:
+  create:
+    labels:
+      application-name: Application name
+      event-name: Event name
+      event-type: Event type
+      event-type-plural: Event types
+      event-version: Event version
+      service-name: Service
+      sink: Sink
+    placeholders:
+      application-name: Choose an Application name
+      event-name: Enter the Event name, for example, order.cancelled
+      event-type: Enter Event type, for example, sap.kyma.custom.test-app.order.cancelled.v1
+      event-version: Enter the Event version, for example, v1
+      service-name: Choose a Service for the sink
+    title: Add Subscription
+  description: <0>Subscription</0> is used to subscribe to events.
+  errors:
+    empty-event-types: You must provide at least one Event type.
+  headers:
+    conditions:
+      last-transition: Last Transition
+      reason: Reason
+      status: Status
+      title: Conditions
+      type: Type
+    filters:
+      event-source: Event Source
+      event-type: Event Type
+      property: Property
+      title: Filters
+      type: Type
+      value: Value
+  name_singular: Subscription
+  sink: Sink
+  title: Subscriptions
+  tooltips:
+    application-name: Choose your Application from the cluster.
+    event-name: Provide a name for your Event. The name must consist of at least two parts divided by a dot.
+    event-type-advanced: Event type must consist of minimum seven elements separated by dots. Prefix should be sap.kyma.custom. You can add more Event types.
+    event-type-simple: Event type is defined based on the Application name, Event name, and Event version.
+    event-version: Choose the Event version from the drop-down list or provide your own version.
+    ready: Subscription is active
+    service-name: Choose a Service that connects to the sink.
+    sink: Specifies the HTTP endpoint where matching events should be sent to.
 top-nav:
   profile:
     preferences: $t(preferences.title)

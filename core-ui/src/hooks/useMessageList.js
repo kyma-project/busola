@@ -22,7 +22,7 @@ export const RESOURCE_PATH = {
   ServiceBroker: 'brokers',
   Certificate: 'certificates',
   Node: 'nodes',
-  Subscription: 'eventsubscriptions',
+  Subscription: 'subscriptions',
 };
 
 export const useMessageList = items => {

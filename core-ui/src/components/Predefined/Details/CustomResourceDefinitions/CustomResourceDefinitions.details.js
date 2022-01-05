@@ -49,6 +49,7 @@ export const CustomResourceDefinitionsDetails = ({
         title={t('custom-resource-definitions.subtitle.names')}
         entries={resource.spec.names ? [resource.spec.names] : []}
         headerRenderer={headerRenderer}
+        textSearchProperties={['spec.names.categories']}
         rowRenderer={rowRenderer}
         testid="crd-names"
         i18n={i18n}
