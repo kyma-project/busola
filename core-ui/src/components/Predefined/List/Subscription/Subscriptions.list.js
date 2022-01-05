@@ -1,9 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+
 import { Trans } from 'react-i18next';
-import { EventSubscriptionConditionStatus } from 'shared/components/EventSubscriptionConditionStatus';
-import './EventSubscriptions.scss';
+import { Link, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+import { SubscriptionConditionStatus } from 'shared/components/SubscriptionConditionStatus';
+
+import './Subscriptions.scss';
 
 const EventTypes = ({ filters }) => {
   return (
@@ -29,7 +31,6 @@ const EventTypes = ({ filters }) => {
   );
 };
 
-//the name of the function cannot have 'Event' prefix, becuase it breaks list's and button's titles
 export const SubscriptionsList = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
   const customColumns = [
@@ -38,7 +39,7 @@ export const SubscriptionsList = ({ DefaultRenderer, ...otherParams }) => {
       value: ({ status }) => {
         const lastCondition = status.conditions[status.conditions.length - 1];
 
-        return <EventSubscriptionConditionStatus condition={lastCondition} />;
+        return <SubscriptionConditionStatus condition={lastCondition} />;
       },
     },
     {
@@ -48,7 +49,7 @@ export const SubscriptionsList = ({ DefaultRenderer, ...otherParams }) => {
   ];
 
   const description = (
-    <Trans i18nKey="event-subscription.description">
+    <Trans i18nKey="subscription.description">
       <Link
         className="fd-link"
         url="https://kyma-project.io/docs/kyma/latest/05-technical-reference/00-custom-resources/evnt-01-subscription/#documentation-content"
@@ -58,7 +59,7 @@ export const SubscriptionsList = ({ DefaultRenderer, ...otherParams }) => {
 
   return (
     <DefaultRenderer
-      resourceName={t('event-subscription.title')}
+      resourceName={t('subscription.title')}
       customColumns={customColumns}
       description={description}
       {...otherParams}

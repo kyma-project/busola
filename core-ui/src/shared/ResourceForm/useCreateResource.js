@@ -11,7 +11,6 @@ export function useCreateResource({
   initialResource,
   createUrl,
   afterCreatedFn,
-  navigationResourceName,
 }) {
   const { t } = useTranslation();
   const notification = useNotification();
@@ -35,9 +34,7 @@ export function useCreateResource({
         LuigiClient.linkManager()
           .fromContext('namespace')
           .navigate(
-            `/${navigationResourceName || pluralKind.toLowerCase()}/details/${
-              resource.metadata.name
-            }`,
+            `/${pluralKind.toLowerCase()}/details/${resource.metadata.name}`,
           );
       } else {
         LuigiClient.linkManager().navigate(`details/${resource.metadata.name}`);

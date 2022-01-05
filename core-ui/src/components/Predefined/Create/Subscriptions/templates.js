@@ -1,4 +1,8 @@
-export function createEventSubscriptionTemplate(namespace, eventTypePrefix) {
+export function createSubscriptionTemplate(
+  namespace,
+  eventTypePrefix,
+  serviceName,
+) {
   return {
     apiVersion: 'eventing.kyma-project.io/v1alpha1',
     kind: 'Subscription',
@@ -8,7 +12,7 @@ export function createEventSubscriptionTemplate(namespace, eventTypePrefix) {
       labels: {},
     },
     spec: {
-      sink: '',
+      sink: `http://${serviceName}.${namespace}.svc.cluster.local`,
       filter: {
         filters: [
           {

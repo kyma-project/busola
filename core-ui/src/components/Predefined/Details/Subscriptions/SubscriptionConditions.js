@@ -6,20 +6,22 @@ import {
   ReadableCreationTimestamp,
   GenericList,
 } from 'react-shared';
-import { EventSubscriptionConditionStatus } from 'shared/components/EventSubscriptionConditionStatus';
-export function EventSubscriptionConditions(eventSubscription) {
+
+import { SubscriptionConditionStatus } from 'shared/components/SubscriptionConditionStatus';
+
+export function SubscriptionConditions(subscription) {
   const { t, i18n } = useTranslation();
 
-  const conditions = eventSubscription?.status?.conditions;
+  const conditions = subscription?.status?.conditions;
   const headerRenderer = _ => [
-    t('event-subscription.headers.conditions.type'),
-    t('event-subscription.headers.conditions.status'),
-    t('event-subscription.headers.conditions.reason'),
-    t('event-subscription.headers.conditions.last-transition'),
+    t('subscription.headers.conditions.type'),
+    t('subscription.headers.conditions.status'),
+    t('subscription.headers.conditions.reason'),
+    t('subscription.headers.conditions.last-transition'),
   ];
 
   const rowRenderer = condition => [
-    <EventSubscriptionConditionStatus condition={condition} />,
+    <SubscriptionConditionStatus condition={condition} />,
     condition?.status || EMPTY_TEXT_PLACEHOLDER,
     condition?.reason || EMPTY_TEXT_PLACEHOLDER,
     <ReadableCreationTimestamp timestamp={condition?.lastTransitionTime} />,
@@ -27,8 +29,8 @@ export function EventSubscriptionConditions(eventSubscription) {
 
   return (
     <GenericList
-      key="event-subscription-conditions"
-      title={t('event-subscription.headers.conditions.title')}
+      key="subscription-conditions"
+      title={t('subscription.headers.conditions.title')}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       entries={conditions || []}

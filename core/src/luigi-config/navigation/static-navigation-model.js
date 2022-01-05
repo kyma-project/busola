@@ -961,10 +961,10 @@ export function getStaticChildrenNodesForNamespace(
     },
     {
       category: i18next.t('configuration.title'),
-      pathSegment: 'eventsubscriptions',
+      pathSegment: 'subscriptions',
       resourceType: 'subscriptions',
       navigationContext: 'subscriptions',
-      label: i18next.t('event-subscription.title'),
+      label: i18next.t('subscription.title'),
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/Subscriptions?' +
