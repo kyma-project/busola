@@ -9,6 +9,10 @@
 
     dd {
       grid-column: 1;
+
+      &.expandable {
+        cursor: pointer;
+      }
     }
 
     dt {
@@ -37,10 +41,6 @@
   }
 
   li {
-    margin-bottom: 1rem;
-  }
-
-  .expander {
-    cursor: pointer;
+    margin-bottom: 0.5rem;
   }
 }

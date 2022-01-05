@@ -1,16 +1,13 @@
-import React, { useState } from 'react';
-import { MonacoEditor } from 'react-shared';
+import React from 'react';
 import LuigiClient from '@luigi-project/client';
-import { LayoutPanel, Button, ButtonSegmented } from 'fundamental-react';
+import { LayoutPanel } from 'fundamental-react';
 import * as jp from 'jsonpath';
-import jsyaml from 'js-yaml';
 
 import {
   GenericList,
   StatusBadge,
   prettifyNamePlural,
   EMPTY_TEXT_PLACEHOLDER,
-  useTheme,
 } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
@@ -106,16 +103,10 @@ const AdditionalPrinterColumns = ({ additionalPrinterColumns }) => {
 export const CustomResourceDefinitionVersions = resource => {
   const { t, i18n } = useTranslation();
 
-  const { editorTheme } = useTheme();
   const namespace = LuigiClient.getContext().namespaceId;
-
-  const [schemaMode, setSchemaMode] = useState('viewer');
 
   if (!resource) return null;
   const { versions } = resource.spec;
-  const prettifySchema = schema => {
-    return JSON.stringify(schema, null, 2);
-  };
 
   const storageVersion = versions.find(v => v.storage);
 
@@ -160,82 +151,10 @@ export const CustomResourceDefinitionVersions = resource => {
         }
       />
       {storageVersion.schema && (
-        <LayoutPanel
-          key={`crd-schema-${storageVersion.name}`}
-          className="fd-margin--md"
-        >
-          <LayoutPanel.Header>
-            <LayoutPanel.Head
-              title={t('custom-resource-definitions.subtitle.schema')}
-            />
-            <LayoutPanel.Actions>
-              <ButtonSegmented>
-                <Button
-                  compact
-                  selected={schemaMode === 'viewer'}
-                  onClick={() => setSchemaMode('viewer')}
-                >
-                  Viewer
-                </Button>
-                <Button
-                  compact
-                  selected={schemaMode === 'json'}
-                  onClick={() => setSchemaMode('json')}
-                >
-                  JSON
-                </Button>
-                <Button
-                  compact
-                  selected={schemaMode === 'yaml'}
-                  onClick={() => setSchemaMode('yaml')}
-                >
-                  YAML
-                </Button>
-              </ButtonSegmented>
-            </LayoutPanel.Actions>
-          </LayoutPanel.Header>
-          <LayoutPanel.Body>
-            {schemaMode === 'viewer' && (
-              <SchemaViewer schema={storageVersion.schema} />
-            )}
-            {schemaMode === 'json' && (
-              <MonacoEditor
-                key={`crd-schema-editor-${storageVersion.name}`}
-                theme={editorTheme}
-                language="json"
-                height="20em"
-                value={prettifySchema(storageVersion.schema)}
-                options={{
-                  readOnly: true,
-                  minimap: {
-                    enabled: false,
-                  },
-                  scrollbar: {
-                    alwaysConsumeMouseWheel: false,
-                  },
-                }}
-              />
-            )}
-            {schemaMode === 'yaml' && (
-              <MonacoEditor
-                key={`crd-schema-editor-${storageVersion.name}`}
-                theme={editorTheme}
-                language="yaml"
-                height="20em"
-                value={jsyaml.dump(storageVersion.schema, { noRefs: true })}
-                options={{
-                  readOnly: true,
-                  minimap: {
-                    enabled: false,
-                  },
-                  scrollbar: {
-                    alwaysConsumeMouseWheel: false,
-                  },
-                }}
-              />
-            )}
-          </LayoutPanel.Body>
-        </LayoutPanel>
+        <SchemaViewer
+          name={storageVersion.name}
+          schema={storageVersion.schema}
+        />
       )}
     </LayoutPanel>
   );
