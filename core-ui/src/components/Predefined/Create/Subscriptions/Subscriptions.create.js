@@ -56,7 +56,7 @@ const SubscriptionsCreate = ({
       jp.value(
         subscription,
         '$.spec.sink',
-        `https://${serviceName}.${namespace}.svc.cluster.local`,
+        `http://${serviceName}.${namespace}.svc.cluster.local`,
       );
       setSubscription({ ...subscription });
     }
