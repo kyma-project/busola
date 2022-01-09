@@ -2,12 +2,14 @@ import { nonResourceHandler } from './nonResourceHandler';
 import { clusterwideResourceHandler } from './clusterwideResourceHandler';
 import { namespacedResourceHandler } from './namespacedResourceHandler';
 import { nodesHandler } from './nodesHandler';
+import { logsHandler } from './logsHandler';
 
 const handlers = [
   nonResourceHandler,
   clusterwideResourceHandler,
   namespacedResourceHandler,
   nodesHandler,
+  logsHandler,
 ];
 
 export async function search(searchContext) {

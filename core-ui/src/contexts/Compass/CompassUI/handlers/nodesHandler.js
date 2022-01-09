@@ -9,7 +9,7 @@ function makeListItem(item) {
     label: `Node ${name}`,
     category: 'Cluster Overview',
     query: `node ${name}`,
-    onClick: () =>
+    onActivate: () =>
       LuigiClient.linkManager()
         .fromContext('cluster')
         .navigate('overview/nodes/' + name),

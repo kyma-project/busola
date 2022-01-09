@@ -1,13 +1,16 @@
 .compass-ui__results {
   max-height: 50vh;
-  overflow: scroll;
+  overflow: auto;
 
   .result {
-    margin: 16px;
-  }
-
-  li {
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
     cursor: pointer;
+
+    &--disabled {
+      cursor: default;
+    }
   }
 
   .fd-link:hover {
@@ -16,6 +19,10 @@
 
   .label {
     font-size: 120%;
+
+    &--non-interactable {
+      cursor: default;
+    }
   }
 
   .description {
@@ -23,6 +30,6 @@
   }
 
   .active {
-    background: #e5f0fa;
+    background: var(--sapList_SelectionBackgroundColor);
   }
 }

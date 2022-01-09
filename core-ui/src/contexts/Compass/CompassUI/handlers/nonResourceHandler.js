@@ -35,27 +35,29 @@ function resolveSearchResults(context) {
         return clusterNames.map(clusterName => ({
           label: `Cluster ${clusterName}`,
           query: `cluster ${clusterName}`,
-          onClick: () => setCluster(clusterName),
+          onActivate: () => setCluster(clusterName),
         }));
       case 'preferences':
         return [
           {
             label: 'Preferences',
             query: 'preferences',
-            onClick: () => {
+            onActivate: () => {
               LuigiClient.linkManager().openAsModal('/clusters/preferences', {
                 title: 'Preferences',
                 size: 'm',
               });
             },
+            customActionText: 'Open',
           },
         ];
       case 'show-help':
         return [
           {
-            label: 'Show help',
+            label: 'Help',
             query: 'help',
-            onClick: () => alert('todo show help'),
+            onActivate: () => alert('todo show help'),
+            customActionText: 'Show',
           },
         ];
       case 'overview':
@@ -64,7 +66,7 @@ function resolveSearchResults(context) {
             {
               label: 'Cluster Overview',
               query: 'overview',
-              onClick: () => {
+              onActivate: () => {
                 LuigiClient.linkManager()
                   .fromContext('cluster')
                   .navigate('/overview');

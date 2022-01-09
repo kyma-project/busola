@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { CompassUI } from './CompassUI/CompassUI';
+import { CompassUIBackground as CompassUI } from './CompassUI/CompassUI';
 import { withRouter } from 'react-router-dom';
 import { useEventListener } from 'hooks/useEventListener';
 import { useCustomMessageListener } from 'hooks/useCustomMessageListener';

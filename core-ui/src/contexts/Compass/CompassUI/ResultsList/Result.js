@@ -1,10 +1,10 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { Link } from 'fundamental-react';
 
 export function Result({
   label,
-  onClick,
   category,
+  customActionText,
   index,
   activeIndex,
   setActiveIndex,
@@ -12,32 +12,37 @@ export function Result({
 }) {
   const resultRef = useRef();
 
-  const mouseMove = () => {
+  const onMouseOver = useCallback(() => {
     if (index !== activeIndex) {
       setActiveIndex(index);
     }
-  };
+  }, [index, activeIndex, setActiveIndex]);
 
   useEffect(() => {
     const target = resultRef.current;
-    target.addEventListener('mousemove', mouseMove);
-    return () => target.removeEventListener('mousemove', mouseMove);
+    target.addEventListener('mousemove', onMouseOver);
+    return () => target.removeEventListener('mousemove', onMouseOver);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [index, activeIndex, setActiveIndex]);
 
-  if (onClick) {
-    return (
-      <li
-        ref={resultRef}
-        onClick={onItemClick}
-        className={index === activeIndex ? 'active' : ''}
-      >
-        <Link className="result">
+  const actionText =
+    typeof customActionText === 'string' ? customActionText : 'Follow';
+
+  return (
+    <li
+      ref={resultRef}
+      onClick={onItemClick ? onItemClick : alert}
+      className={index === activeIndex ? 'active' : ''}
+    >
+      <Link className="result">
+        <div>
           <p className="label">{label}</p>
           <p className="description">{category}</p>
-        </Link>
-      </li>
-    );
-  }
-  return label;
+        </div>
+        {activeIndex === index && (
+          <p className="fd-has-color-status-4 ">{actionText}</p>
+        )}
+      </Link>
+    </li>
+  );
 }

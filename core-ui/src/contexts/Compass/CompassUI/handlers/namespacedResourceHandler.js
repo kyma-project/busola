@@ -8,7 +8,7 @@ import {
   formatTypePlural,
 } from './helpers';
 
-const namespacedResources = [
+const namespacedResourceNames = [
   ['configmaps', 'cm'],
   ['pods', 'po'],
   ['secrets'],
@@ -48,7 +48,7 @@ function makeListItem(item, matchedNode) {
     label: `${formatTypeSingular(matchedNode.viewUrl)} ${item.metadata.name}`,
     query: `${matchedNode.resourceType} ${item.metadata.name}`,
     category: matchedNode.category,
-    onClick: () =>
+    onActivate: () =>
       LuigiClient.linkManager()
         .fromContext('cluster')
         .navigate(link),
@@ -62,17 +62,17 @@ async function fetchResults({
   namespaceNodes,
 }) {
   const [type, name] = tokens;
-  const resourceType = toFullResourceType(type, namespacedResources);
+  const resourceType = toFullResourceType(type, namespacedResourceNames);
 
   const matchedNode = namespaceNodes.find(n => n.resourceType === resourceType);
   const resourceApiPath = getApiPath(matchedNode?.viewUrl);
 
   if (resourceApiPath) {
     try {
-      const response = await fetch(resourceApiPath + '/' + resourceType);
-      const items = (await response.json()).items.filter(
-        item => item.metadata.namespace === namespace,
-      );
+      // todo dlaczego filtrujesz na froncie
+      const path = `${resourceApiPath}/namespaces/${namespace}/${resourceType}`;
+      const response = await fetch(path);
+      const { items } = await response.json();
       if (name) {
         return items
           .filter(item => item.metadata.name.includes(name))
@@ -82,7 +82,7 @@ async function fetchResults({
           label: `List of ${formatTypePlural(matchedNode.viewUrl)}`,
           category: matchedNode.category,
           query: matchedNode.resourceType,
-          onClick: () =>
+          onActivate: () =>
             LuigiClient.linkManager()
               .fromContext('cluster')
               .navigate(`namespaces/${namespace}/${matchedNode.pathSegment}`),
@@ -105,7 +105,7 @@ export async function namespacedResourceHandler(context) {
     searchResults,
     suggestion: getSuggestion(
       context.tokens[0],
-      namespacedResources.flatMap(r => r),
+      namespacedResourceNames.flatMap(r => r),
     ),
   };
 }

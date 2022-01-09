@@ -4,8 +4,10 @@ import { useEventListener } from 'hooks/useEventListener';
 export function SuggestedSearch({ search, suggestedSearch, setSearch }) {
   const isSuggestionValid = !!suggestedSearch && suggestedSearch !== search;
 
-  const onKeyDown = ({ key, shiftKey }) => {
-    if (key === 'Enter' && shiftKey && isSuggestionValid) {
+  const onKeyDown = ({ key }) => {
+    if (!isSuggestionValid) return;
+
+    if (key === 'Tab' || key === 'Enter') {
       setSearch(suggestedSearch);
     }
   };

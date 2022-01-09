@@ -8,7 +8,7 @@ import {
   formatTypePlural,
 } from './helpers';
 
-const clusterwideResources = [
+const clusterwideResourceNames = [
   ['clusterrolebindings', 'crb', 'crbs'],
   ['clusterroles'],
   ['applications', 'app', 'apps'],
@@ -28,16 +28,22 @@ function makeListItem(item, matchedNode) {
     label: `${formatTypeSingular(matchedNode.viewUrl)} ${item.metadata.name}`,
     query: `${matchedNode.resourceType} ${item.metadata.name}`,
     category: matchedNode.category,
-    onClick: () =>
+    onActivate: () =>
       LuigiClient.linkManager()
         .fromContext('cluster')
         .navigate(link),
   };
 }
 
-async function fetchResults({ fetch, tokens, clusterNodes }) {
+async function fetchResults({
+  fetch,
+  tokens,
+  clusterNodes,
+  hiddenNamespaces,
+  showHiddenNamespaces,
+}) {
   const [type, name] = tokens;
-  const resourceType = toFullResourceType(type, clusterwideResources);
+  const resourceType = toFullResourceType(type, clusterwideResourceNames);
 
   const matchedNode = clusterNodes.find(n => n.resourceType === resourceType);
   const resourceApiPath = getApiPath(matchedNode?.viewUrl);
@@ -45,7 +51,13 @@ async function fetchResults({ fetch, tokens, clusterNodes }) {
   if (resourceApiPath) {
     try {
       const response = await fetch(resourceApiPath + '/' + resourceType);
-      const { items } = await response.json();
+      let { items } = await response.json();
+
+      if (resourceType === 'namespaces' && !showHiddenNamespaces) {
+        items = items.filter(
+          ns => !hiddenNamespaces.includes(ns.metadata.name),
+        );
+      }
 
       if (name) {
         return items
@@ -56,7 +68,7 @@ async function fetchResults({ fetch, tokens, clusterNodes }) {
           label: `List of ${formatTypePlural(matchedNode.viewUrl)}`,
           category: matchedNode?.category,
           query: matchedNode?.resourceType,
-          onClick: () =>
+          onActivate: () =>
             LuigiClient.linkManager()
               .fromContext('cluster')
               .navigate(matchedNode.pathSegment),
@@ -80,7 +92,7 @@ export async function clusterwideResourceHandler(context) {
     searchResults,
     suggestion: getSuggestion(
       context.tokens[0],
-      clusterwideResources.flatMap(r => r),
+      clusterwideResourceNames.flatMap(r => r),
     ),
   };
 }

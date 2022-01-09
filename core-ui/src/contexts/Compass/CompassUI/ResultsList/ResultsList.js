@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Link } from 'fundamental-react';
 import { useEventListener } from 'hooks/useEventListener';
 import { Result } from './Result';
@@ -23,6 +23,12 @@ export function ResultsList({
 }) {
   const listRef = useRef();
 
+  useEffect(() => {
+    if (results?.length < activeIndex) {
+      setActiveIndex(0);
+    }
+  }, [results, activeIndex, setActiveIndex]);
+
   useEventListener(
     'keydown',
     ({ key }) => {
@@ -36,7 +42,7 @@ export function ResultsList({
         scrollInto(listRef.current.children[activeIndex - 1]);
       } else if (key === 'Enter' && results?.[activeIndex]) {
         addHistoryEntry(results[activeIndex].query);
-        results[activeIndex].onClick();
+        results[activeIndex].onActivate();
       }
     },
     [activeIndex, results, isHistoryMode],
@@ -45,23 +51,23 @@ export function ResultsList({
   return (
     <ul className="compass-ui__results" ref={listRef}>
       {results?.length ? (
-        results.map((s, i) => (
+        results.map((result, i) => (
           <Result
-            key={s.label}
-            {...s}
-            activeIndex={activeIndex}
+            key={result.label}
+            {...result}
             index={i}
+            activeIndex={activeIndex}
             setActiveIndex={setActiveIndex}
             onItemClick={() => {
-              addHistoryEntry(s.query);
-              s.onClick();
+              addHistoryEntry(result.query);
+              result.onActivate();
               hide();
             }}
           />
         ))
       ) : (
-        <Link className="result disabled">
-          <p className="label">No results found</p>
+        <Link className="result result--disabled">
+          <p className="label label--non-interactable">No results found</p>
           <p className="description">{suggestion}</p>
         </Link>
       )}

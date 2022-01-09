@@ -27,15 +27,21 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    background: white;
+    background: var(--sapBackgroundColor);
 
     padding: 10px;
     border-radius: 10px;
-    box-shadow: 0 0.3125rem 1.25rem 0
-      var(--sapGroup_ContentBorderColor, #d9d9d9);
+    box-shadow: 0 0.3125rem 1.25rem 0 var(--sapGroup_ContentBorderColor);
+  }
+
+  .compass-input {
+    border: none;
+    width: 100%;
+    height: 100%;
   }
 }
 
+// todo
 .button-link {
   border: none;
   background: none;
