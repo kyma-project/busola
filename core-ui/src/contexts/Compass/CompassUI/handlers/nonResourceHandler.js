@@ -56,7 +56,7 @@ function resolveSearchResults(context) {
           {
             label: 'Help',
             query: 'help',
-            onActivate: () => alert('todo show help'),
+            onActivate: () => alert('todo show help or just hotkeys'),
             customActionText: 'Show',
           },
         ];

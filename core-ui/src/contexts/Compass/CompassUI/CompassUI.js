@@ -45,12 +45,11 @@ function CompassUI({ hide }) {
       // choose current entry
       addHistoryEntry(results[0].query);
       results[0].onActivate();
-      // todo JUMP TO
     } else if (e.key === 'Tab') {
       // fill search with active history entry
       setSearchString(historyEntries[historyIndex]);
       setActiveIndex(0);
-      setHistoryMode(() => false); //todo?
+      setHistoryMode(false);
       e.preventDefault();
     } else if (e.key === 'ArrowUp') {
       // try going up in history

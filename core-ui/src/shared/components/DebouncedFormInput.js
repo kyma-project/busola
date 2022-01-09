@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { FormInput } from 'fundamental-react';
 
 export function DebouncedFormInput({
-  delay = 400,
+  delay = 300,
   value: externalValue,
   onChange: onDebouncedChange,
   ...props

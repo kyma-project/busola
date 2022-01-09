@@ -69,7 +69,6 @@ async function fetchResults({
 
   if (resourceApiPath) {
     try {
-      // todo dlaczego filtrujesz na froncie
       const path = `${resourceApiPath}/namespaces/${namespace}/${resourceType}`;
       const response = await fetch(path);
       const { items } = await response.json();
