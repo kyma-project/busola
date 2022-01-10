@@ -1,5 +1,4 @@
 import React from 'react';
-import { useEventListener } from 'hooks/useEventListener';
 import { Token } from 'fundamental-react';
 
 export function SuggestedSearch({ suggestedSearch, setSearch }) {
