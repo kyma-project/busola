@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useMicrofrontendContext } from 'react-shared';
-import { SuggestedSearch } from './components';
+import { NamespaceContextDisplay, SuggestedSearch } from './components';
 import './CompassUI.scss';
-import { Token } from 'fundamental-react';
 import { ResultsList } from './ResultsList/ResultsList';
 import { addHistoryEntry, getHistoryEntries } from './search-history';
 import { useSearchResults } from './useSearchResults';
@@ -105,17 +104,10 @@ function CompassUI({ hide }) {
   return (
     <div className="compass-ui__wrapper" role="dialog">
       <div className="compass-ui__content">
-        {namespaceContext && (
-          <div style={{ maxWidth: 'fit-content' }}>
-            <Token
-              buttonLabel=""
-              className="y-fd-token y-fd-token--no-button y-fd-token--gap fd-margin-end--tiny"
-              onClick={() => setNamespaceContext(null)}
-            >
-              {namespaceContext}
-            </Token>
-          </div>
-        )}
+        <NamespaceContextDisplay
+          namespaceContext={namespaceContext}
+          setNamespaceContext={setNamespaceContext}
+        />
         <DebouncedFormInput
           value={!isHistoryMode ? searchString : ''}
           placeholder={

@@ -62,7 +62,7 @@ function createResults(context) {
     return LOADING_INDICATOR;
   }
 
-  const [_type, name] = tokens;
+  const name = tokens[1];
   if (name) {
     const matchedByName = nodes.filter(item =>
       item.metadata.name.includes(name),

@@ -104,7 +104,7 @@ function createResults({
         .navigate(matchedNode.pathSegment),
   };
 
-  const resources = resourceCache[resourceType];
+  let resources = resourceCache[resourceType];
   if (typeof resources !== 'object') {
     return [linkToList, LOADING_INDICATOR];
   }

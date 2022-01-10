@@ -76,7 +76,7 @@ function createResults(context) {
     return LOADING_INDICATOR;
   }
 
-  const [_type, podName, containerName] = tokens;
+  const [_, podName, containerName] = tokens;
   if (podName) {
     const matchedByPodName = pods.filter(pod =>
       pod.metadata.name.includes(podName),

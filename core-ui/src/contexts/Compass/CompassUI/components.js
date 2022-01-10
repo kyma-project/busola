@@ -1,5 +1,6 @@
 import React from 'react';
 import { useEventListener } from 'hooks/useEventListener';
+import { Token } from 'fundamental-react';
 
 export function SuggestedSearch({ search, suggestedSearch, setSearch }) {
   const isSuggestionValid = !!suggestedSearch && suggestedSearch !== search;
@@ -28,5 +29,26 @@ export function SuggestedSearch({ search, suggestedSearch, setSearch }) {
         {suggestedSearch}
       </button>
     </>
+  );
+}
+
+export function NamespaceContextDisplay({
+  namespaceContext,
+  setNamespaceContext,
+}) {
+  if (!namespaceContext) {
+    return null;
+  }
+
+  return (
+    <div style={{ maxWidth: 'fit-content' }}>
+      <Token
+        buttonLabel=""
+        className="y-fd-token y-fd-token--no-button y-fd-token--gap fd-margin-end--tiny"
+        onClick={() => setNamespaceContext(null)}
+      >
+        {namespaceContext}
+      </Token>
+    </div>
   );
 }
