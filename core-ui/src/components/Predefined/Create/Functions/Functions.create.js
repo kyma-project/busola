@@ -95,18 +95,7 @@ export function FunctionsCreate({
       jp.value(func, '$.spec.baseDir', '/');
     }
     setFunc({ ...func });
-  }, [type]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
-    if (!type) {
-      jp.value(
-        func,
-        '$.spec.source',
-        CONFIG.defaultLambdaCodeAndDeps[runtime].code,
-      );
-      jp.value(func, '$.spec.deps', getDefaultDependencies(name, runtime));
-    }
-  }, [runtime]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [type, runtime]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (maxReplicas && maxReplicas < minReplicas) {
