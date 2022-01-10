@@ -10,6 +10,8 @@ export const Generic = ({ val }) => {
     return val.join(', ');
   } else if (typeof val === 'boolean') {
     return val ? t('common.yes') : t('common.no');
+  } else if (val === null) {
+    return '~';
   } else if (typeof val === 'object') {
     return JSON.stringify(val);
   } else {
