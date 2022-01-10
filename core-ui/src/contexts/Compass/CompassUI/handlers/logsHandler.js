@@ -76,6 +76,7 @@ function createResults(context) {
     return LOADING_INDICATOR;
   }
 
+  // eslint-disable-next-line no-unused-vars
   const [_, podName, containerName] = tokens;
   if (podName) {
     const matchedByPodName = pods.filter(pod =>
