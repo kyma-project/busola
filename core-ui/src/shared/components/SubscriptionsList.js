@@ -9,7 +9,7 @@ const getServiceName = sink => {
   return sink?.substring(startIndex, nextDot);
 };
 
-export function EventSubscriptionsList({ serviceName, namespace }) {
+export function SubscriptionsList({ serviceName, namespace }) {
   const params = {
     hasDetailsView: true,
     fixedPath: true,
@@ -19,8 +19,8 @@ export function EventSubscriptionsList({ serviceName, namespace }) {
     isCompact: true,
     showTitle: true,
     createFormProps: { serviceName },
-    filter: eventSubscription => {
-      return getServiceName(eventSubscription.spec.sink) === serviceName;
+    filter: subscription => {
+      return getServiceName(subscription.spec.sink) === serviceName;
     },
   };
 
@@ -28,7 +28,7 @@ export function EventSubscriptionsList({ serviceName, namespace }) {
     <ComponentForList
       name="subscriptionsList"
       params={params}
-      key="eventsubscriptions"
+      key="subscriptions"
       nameForCreate="SubscriptionsCreate"
     />
   );
