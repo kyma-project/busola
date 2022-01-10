@@ -11,7 +11,7 @@ import JSONWorker from 'worker-loader!monaco-editor/esm/vs/language/json/json.wo
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import YamlWorker from 'worker-loader!monaco-yaml/lib/esm/yaml.worker.js';
 // eslint-disable-next-line import/no-webpack-loader-syntax
-import MonacoYamlWorker from 'worker-loader!./monaco-yaml-worker.js';
+import MonacoYamlWorker from 'worker-loader!./monaco-yaml.worker.js';
 
 // initialize Monaco Yaml by switching web-workers
 window.MonacoEnvironment = {
