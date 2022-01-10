@@ -76,6 +76,7 @@ export function FunctionsCreate({
         '$.spec.source',
         CONFIG.defaultLambdaCodeAndDeps[runtime].code,
       );
+
       jp.value(func, '$.spec.deps', getDefaultDependencies(name, runtime));
       jp.value(func, '$.spec.reference', undefined);
       jp.value(func, '$.spec.baseDir', undefined);
