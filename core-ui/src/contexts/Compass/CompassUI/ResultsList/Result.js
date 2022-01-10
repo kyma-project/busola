@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useRef } from 'react';
-import { Link } from 'fundamental-react';
 
 export function Result({
   label,
@@ -34,15 +33,15 @@ export function Result({
       onClick={onItemClick ? onItemClick : alert}
       className={index === activeIndex ? 'active' : ''}
     >
-      <Link className="result">
+      <div className="result">
         <div>
-          <p className="label">{label}</p>
+          <p>{label}</p>
           <p className="description">{category}</p>
         </div>
         {activeIndex === index && (
           <p className="fd-has-color-status-4 ">{actionText}</p>
         )}
-      </Link>
+      </div>
     </li>
   );
 }

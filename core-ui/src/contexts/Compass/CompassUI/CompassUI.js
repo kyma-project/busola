@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Spinner, useMicrofrontendContext } from 'react-shared';
+import { useMicrofrontendContext } from 'react-shared';
 import { SuggestedSearch } from './components';
 import './CompassUI.scss';
 import { Token } from 'fundamental-react';
@@ -32,7 +32,7 @@ function CompassUI({ hide }) {
   const [isHistoryMode, setHistoryMode] = useState(false);
   const [historyIndex, setHistoryIndex] = useState(0);
 
-  const { results, suggestedSearch, loading } = useSearchResults({
+  const { results, suggestedSearch } = useSearchResults({
     searchString,
     namespaceContext,
   });
@@ -132,8 +132,7 @@ function CompassUI({ hide }) {
           autoFocus
           ref={inputRef}
         />
-        {loading && <Spinner />}
-        {!loading && searchString && (
+        {searchString && (
           <ResultsList
             results={results}
             hide={hide}

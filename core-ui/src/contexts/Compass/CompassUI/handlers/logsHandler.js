@@ -1,7 +1,23 @@
 import LuigiClient from '@luigi-project/client';
+import { LOADING_INDICATOR } from '../useSearchResults';
 import { getSuggestion } from './helpers';
 
 const logNames = ['logs', 'log', 'lg'];
+
+function getSuggestions({ tokens, resourceCache }) {
+  const [type, podName] = tokens;
+  const suggestedType = getSuggestion(type, logNames);
+  if (podName) {
+    const podNames = (resourceCache['pods'] || []).map(p => p.metadata.name);
+    const suggestedName = getSuggestion(podName, podNames) || podName;
+    const suggestion = `${suggestedType || type} ${suggestedName}`;
+    if (suggestion !== `${type} ${podName}`) {
+      return suggestion;
+    }
+  } else {
+    return suggestedType;
+  }
+}
 
 function makeListItem(pod, containerName) {
   const podName = pod.metadata.name;
@@ -29,38 +45,53 @@ function makeListItem(pod, containerName) {
   });
 }
 
-async function fetchLogs({ fetch, tokens, namespace }) {
-  const [type, podName, containerName] = tokens;
-  if (!logNames.includes(type)) {
-    return null;
+// todo wtf naming
+function isAboutLogs({ tokens }) {
+  return logNames.includes(tokens[0]);
+}
+
+async function fetchLogs(context) {
+  if (!isAboutLogs(context)) {
+    return;
   }
 
+  const { fetch, updateResourceCache, namespace } = context;
   try {
     const response = await fetch(`/api/v1/namespaces/${namespace}/pods`);
     const { items: pods } = await response.json();
-
-    if (podName) {
-      const matchedByPodName = pods.filter(pod =>
-        pod.metadata.name.includes(podName),
-      );
-      if (matchedByPodName) {
-        return matchedByPodName.flatMap(pod =>
-          makeListItem(pod, containerName),
-        );
-      }
-      return null;
-    } else {
-      return pods.flatMap(pod => makeListItem(pod, containerName));
-    }
+    updateResourceCache(`${namespace}/pods`, pods);
   } catch (e) {
-    console.warn(e);
-    return null;
+    console.log(e);
   }
 }
 
-export async function logsHandler(context) {
-  return {
-    searchResults: await fetchLogs(context),
-    suggestion: getSuggestion(context.tokens[0], logNames),
-  };
+function createResults(context) {
+  if (!isAboutLogs(context)) {
+    return;
+  }
+
+  const { resourceCache, tokens, namespace } = context;
+  const pods = resourceCache[`${namespace}/pods`];
+  if (typeof pods !== 'object') {
+    return LOADING_INDICATOR;
+  }
+
+  const [_type, podName, containerName] = tokens;
+  if (podName) {
+    const matchedByPodName = pods.filter(pod =>
+      pod.metadata.name.includes(podName),
+    );
+    if (matchedByPodName) {
+      return matchedByPodName.flatMap(pod => makeListItem(pod, containerName));
+    }
+    return null;
+  } else {
+    return pods.flatMap(pod => makeListItem(pod, containerName));
+  }
 }
+
+export const logsHandler = {
+  getSuggestions,
+  fetchResources: fetchLogs,
+  createResults,
+};

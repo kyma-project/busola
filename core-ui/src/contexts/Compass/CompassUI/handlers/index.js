@@ -1,29 +1,35 @@
 import { nonResourceHandler } from './nonResourceHandler';
-import { clusterwideResourceHandler } from './clusterwideResourceHandler';
+import { clusterResourceHandler } from './clusterResourceHandler';
 import { namespacedResourceHandler } from './namespacedResourceHandler';
 import { nodesHandler } from './nodesHandler';
 import { logsHandler } from './logsHandler';
 
 const handlers = [
   nonResourceHandler,
-  clusterwideResourceHandler,
+  clusterResourceHandler,
   namespacedResourceHandler,
   nodesHandler,
   logsHandler,
 ];
 
-export async function search(searchContext) {
-  const { searchStartTime, ...context } = searchContext;
-
-  for (const handler of handlers) {
-    const result = await handler(context);
-    if (result.searchResults?.length > 0 || result.suggestion !== null) {
-      return { ...result, searchStartTime };
-    }
+export function getSuggestions(context) {
+  if (!context.search) {
+    return [];
   }
-  return {
-    suggestion: null,
-    searchResults: [],
-    searchStartTime,
-  };
+  return handlers
+    .flatMap(handler => handler.getSuggestions(context))
+    .filter(Boolean);
+}
+
+export async function fetchResources(context) {
+  await Promise.all(handlers.map(handler => handler.fetchResources(context)));
+}
+
+export function createResults(context) {
+  if (!context.search) {
+    return [];
+  }
+  return handlers
+    .flatMap(handler => handler.createResults(context))
+    .filter(Boolean);
 }

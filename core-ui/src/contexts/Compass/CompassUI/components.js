@@ -7,7 +7,7 @@ export function SuggestedSearch({ search, suggestedSearch, setSearch }) {
   const onKeyDown = ({ key }) => {
     if (!isSuggestionValid) return;
 
-    if (key === 'Tab' || key === 'Enter') {
+    if (key === 'Tab') {
       setSearch(suggestedSearch);
     }
   };
@@ -18,7 +18,6 @@ export function SuggestedSearch({ search, suggestedSearch, setSearch }) {
     return null;
   }
 
-  //enter to choose
   return (
     <>
       Did you mean:{' '}

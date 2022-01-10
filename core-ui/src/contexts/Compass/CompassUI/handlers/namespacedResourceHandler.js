@@ -1,5 +1,6 @@
 import LuigiClient from '@luigi-project/client';
 import pluralize from 'pluralize';
+import { LOADING_INDICATOR } from '../useSearchResults';
 import {
   getSuggestion,
   getApiPath,
@@ -39,6 +40,27 @@ const namespacedResourceNames = [
   ['gitrepositories', 'repos', 'gitrepos'],
 ].map(aliases => [...aliases, pluralize(aliases[0], 1)]);
 
+function getSuggestions({ tokens, namespace, resourceCache }) {
+  const [type, name] = tokens;
+  const suggestedType = getSuggestion(
+    type,
+    namespacedResourceNames.flatMap(n => n),
+  );
+  if (name) {
+    const fullResourceType = toFullResourceType(type, namespacedResourceNames);
+    const resourceNames = (
+      resourceCache[`${namespace}/${fullResourceType}`] || []
+    ).map(n => n.metadata.name);
+    const suggestedName = getSuggestion(name, resourceNames) || name;
+    const suggestion = `${suggestedType || type} ${suggestedName}`;
+    if (suggestion !== `${type} ${name}`) {
+      return suggestion;
+    }
+  } else {
+    return suggestedType;
+  }
+}
+
 function makeListItem(item, matchedNode) {
   const namespacePart = `namespaces/${item.metadata.namespace}`;
   const detailsPart = `details/${item.metadata.name}`;
@@ -55,56 +77,68 @@ function makeListItem(item, matchedNode) {
   };
 }
 
-async function fetchResults({
-  fetch,
-  namespace = 'default',
-  tokens,
-  namespaceNodes,
-}) {
-  const [type, name] = tokens;
-  const resourceType = toFullResourceType(type, namespacedResourceNames);
+function getApiPathForQuery({ tokens, namespaceNodes }) {
+  const resourceType = toFullResourceType(tokens[0], namespacedResourceNames);
+  return getApiPath(resourceType, namespaceNodes);
+}
 
-  const matchedNode = namespaceNodes.find(n => n.resourceType === resourceType);
-  const resourceApiPath = getApiPath(matchedNode?.viewUrl);
-
-  if (resourceApiPath) {
-    try {
-      const path = `${resourceApiPath}/namespaces/${namespace}/${resourceType}`;
-      const response = await fetch(path);
-      const { items } = await response.json();
-      if (name) {
-        return items
-          .filter(item => item.metadata.name.includes(name))
-          .map(item => makeListItem(item, matchedNode));
-      } else {
-        const linkToList = {
-          label: `List of ${formatTypePlural(matchedNode.viewUrl)}`,
-          category: matchedNode.category,
-          query: matchedNode.resourceType,
-          onActivate: () =>
-            LuigiClient.linkManager()
-              .fromContext('cluster')
-              .navigate(`namespaces/${namespace}/${matchedNode.pathSegment}`),
-        };
-        return [
-          linkToList,
-          ...items.map(item => makeListItem(item, matchedNode)),
-        ];
-      }
-    } catch (e) {
-      console.warn(e);
-    }
+async function fetchNamespacedResource(context) {
+  const apiPath = getApiPathForQuery(context);
+  if (!apiPath) {
+    return;
   }
-  return null;
+
+  const { fetch, namespace, tokens, updateResourceCache } = context;
+  const resourceType = toFullResourceType(tokens[0], namespacedResourceNames);
+  try {
+    const path = `${apiPath}/namespaces/${namespace}/${resourceType}`;
+    const response = await fetch(path);
+    const { items } = await response.json();
+    updateResourceCache(`${namespace}/${resourceType}`, items);
+  } catch (e) {
+    console.log(e);
+  }
 }
 
-export async function namespacedResourceHandler(context) {
-  const searchResults = await fetchResults(context);
-  return {
-    searchResults,
-    suggestion: getSuggestion(
-      context.tokens[0],
-      namespacedResourceNames.flatMap(r => r),
-    ),
+function createResults({ tokens, namespace, resourceCache, namespaceNodes }) {
+  const [type, name] = tokens;
+
+  const resourceType = toFullResourceType(type, namespacedResourceNames);
+  const matchedNode = namespaceNodes.find(n => n.resourceType === resourceType);
+
+  if (!matchedNode) {
+    return;
+  }
+
+  const linkToList = {
+    label: `List of ${formatTypePlural(matchedNode.viewUrl)}`,
+    category: matchedNode.category,
+    query: matchedNode.resourceType,
+    onActivate: () =>
+      LuigiClient.linkManager()
+        .fromContext('cluster')
+        .navigate(`namespaces/${namespace}/${matchedNode.pathSegment}`),
   };
+
+  const resources = resourceCache[`${namespace}/${resourceType}`];
+  if (typeof resources !== 'object') {
+    return [linkToList, LOADING_INDICATOR];
+  }
+
+  if (name) {
+    return resources
+      .filter(item => item.metadata.name.includes(name))
+      .map(item => makeListItem(item, matchedNode));
+  } else {
+    return [
+      linkToList,
+      ...resources.map(item => makeListItem(item, matchedNode)),
+    ];
+  }
 }
+
+export const namespacedResourceHandler = {
+  getSuggestions,
+  fetchResources: fetchNamespacedResource,
+  createResults,
+};

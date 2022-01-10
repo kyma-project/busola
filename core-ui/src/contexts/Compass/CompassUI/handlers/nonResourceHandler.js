@@ -25,8 +25,9 @@ const createNonResourceOptions = ({ activeClusterName }) => [
     : []),
 ];
 
-function resolveSearchResults(context) {
+function createResults(context) {
   const options = createNonResourceOptions(context);
+
   const option = options.find(o => o.names.includes(context.tokens[0]));
   if (option) {
     const { activeClusterName, clusterNames } = context;
@@ -82,13 +83,12 @@ function resolveSearchResults(context) {
   }
 }
 
-export function nonResourceHandler(context) {
-  const searchResults = resolveSearchResults(context);
-  return {
-    searchResults,
-    suggestion: getSuggestion(
+export const nonResourceHandler = {
+  getSuggestions: context =>
+    getSuggestion(
       context.tokens[0],
       createNonResourceOptions(context).flatMap(option => option.names),
     ),
-  };
-}
+  fetchResources: () => {},
+  createResults,
+};

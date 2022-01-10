@@ -17,15 +17,12 @@
     text-decoration: none;
   }
 
-  .label {
-    font-size: 120%;
-
-    &--non-interactable {
-      cursor: default;
-    }
+  .label--non-interactable {
+    cursor: default;
   }
 
   .description {
+    font-size: 90%;
     color: var(--sapContent_LabelColor);
   }
 

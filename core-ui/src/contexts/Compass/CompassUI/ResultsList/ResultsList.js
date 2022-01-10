@@ -1,9 +1,10 @@
 import React, { useEffect, useRef } from 'react';
-import { Link } from 'fundamental-react';
 import { useEventListener } from 'hooks/useEventListener';
 import { Result } from './Result';
+import { Spinner } from 'react-shared';
 import { addHistoryEntry } from '../search-history';
 import './ResultsList.scss';
+import { LOADING_INDICATOR } from '../useSearchResults';
 
 function scrollInto(element) {
   element.scrollIntoView({
@@ -22,6 +23,9 @@ export function ResultsList({
   isHistoryMode,
 }) {
   const listRef = useRef();
+
+  const isLoading = results.includes(LOADING_INDICATOR);
+  results = results.filter(r => r !== LOADING_INDICATOR);
 
   useEffect(() => {
     if (results?.length < activeIndex) {
@@ -49,28 +53,31 @@ export function ResultsList({
   );
 
   return (
-    <ul className="compass-ui__results" ref={listRef}>
-      {results?.length ? (
-        results.map((result, i) => (
-          <Result
-            key={result.label}
-            {...result}
-            index={i}
-            activeIndex={activeIndex}
-            setActiveIndex={setActiveIndex}
-            onItemClick={() => {
-              addHistoryEntry(result.query);
-              result.onActivate();
-              hide();
-            }}
-          />
-        ))
-      ) : (
-        <Link className="result result--disabled">
-          <p className="label label--non-interactable">No results found</p>
-          <p className="description">{suggestion}</p>
-        </Link>
-      )}
-    </ul>
+    <>
+      <ul className="compass-ui__results" ref={listRef}>
+        {results?.length ? (
+          results.map((result, i) => (
+            <Result
+              key={result.label}
+              {...result}
+              index={i}
+              activeIndex={activeIndex}
+              setActiveIndex={setActiveIndex}
+              onItemClick={() => {
+                addHistoryEntry(result.query);
+                result.onActivate();
+                hide();
+              }}
+            />
+          ))
+        ) : (
+          <div className="result result--disabled">
+            <p className="label label--non-interactable">No results found</p>
+            <p className="description">{suggestion}</p>
+          </div>
+        )}
+      </ul>
+      {isLoading && <Spinner />}
+    </>
   );
 }

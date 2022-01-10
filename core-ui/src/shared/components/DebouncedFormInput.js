@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { FormInput } from 'fundamental-react';
 
-export function DebouncedFormInput({
-  delay = 300,
-  value: externalValue,
-  onChange: onDebouncedChange,
-  ...props
-}) {
+export const DebouncedFormInput = React.forwardRef((props, ref) => {
+  const {
+    delay = 300,
+    value: externalValue,
+    onChange: onDebouncedChange,
+    ...rest
+  } = props;
   const [value, setValue] = useState(externalValue);
   const timeout = useRef(0);
 
@@ -20,5 +21,5 @@ export function DebouncedFormInput({
     timeout.current = setTimeout(() => onDebouncedChange(v), delay);
   };
 
-  return <FormInput value={value} onChange={onChange} {...props} />;
-}
+  return <FormInput ref={ref} value={value} onChange={onChange} {...rest} />;
+});
