@@ -9,7 +9,7 @@ import {
   formatTypePlural,
 } from './helpers';
 
-const namespacedResourceNames = [
+const namespacedResourceTypes = [
   ['configmaps', 'cm'],
   ['pods', 'po'],
   ['secrets'],
@@ -40,34 +40,38 @@ const namespacedResourceNames = [
   ['gitrepositories', 'repos', 'gitrepos'],
 ].map(aliases => [...aliases, pluralize(aliases[0], 1)]);
 
-function getAutocompleteEntries({ tokens, resourceCache }) {
-  // const l = tokens.length;
-  // const tokenToAutocomplete = tokens[l - 1];
-  // switch (l) {
-  //   case 1: // type
-  //     if ('node'.startsWith(tokenToAutocomplete)) {
-  //       return 'node';
-  //     }
-  //     break;
-  //   case 2: //name
-  //     const nodeNames = (resourceCache['nodes'] || []).map(
-  //       n => n.metadata.name,
-  //     );
-  //     return nodeNames.filter(name => name.startsWith(tokenToAutocomplete));
-  //   default:
-  //     return [];
-  // }
-  return [];
+function getAutocompleteEntries({ tokens, namespace, resourceCache }) {
+  const type = tokens[0];
+  const tokenToAutocomplete = tokens[tokens.length - 1];
+  switch (tokens.length) {
+    case 1: // type
+      // take only first, plural form
+      const resourceTypes = namespacedResourceTypes.flatMap(t => t[0]);
+      return resourceTypes.filter(rN => rN.startsWith(type));
+    case 2: // name
+      const fullResourceType = toFullResourceType(
+        type,
+        namespacedResourceTypes,
+      );
+      const resourceNames = (
+        resourceCache[`${namespace}/${fullResourceType}`] || []
+      ).map(n => n.metadata.name);
+      return resourceNames
+        .filter(name => name.startsWith(tokenToAutocomplete))
+        .map(name => `${type} ${name} `);
+    default:
+      return [];
+  }
 }
 
 function getSuggestions({ tokens, namespace, resourceCache }) {
   const [type, name] = tokens;
   const suggestedType = getSuggestion(
     type,
-    namespacedResourceNames.flatMap(n => n),
+    namespacedResourceTypes.flatMap(n => n),
   );
   if (name) {
-    const fullResourceType = toFullResourceType(type, namespacedResourceNames);
+    const fullResourceType = toFullResourceType(type, namespacedResourceTypes);
     const resourceNames = (
       resourceCache[`${namespace}/${fullResourceType}`] || []
     ).map(n => n.metadata.name);
@@ -98,7 +102,7 @@ function makeListItem(item, matchedNode) {
 }
 
 function getApiPathForQuery({ tokens, namespaceNodes }) {
-  const resourceType = toFullResourceType(tokens[0], namespacedResourceNames);
+  const resourceType = toFullResourceType(tokens[0], namespacedResourceTypes);
   return getApiPath(resourceType, namespaceNodes);
 }
 
@@ -109,21 +113,21 @@ async function fetchNamespacedResource(context) {
   }
 
   const { fetch, namespace, tokens, updateResourceCache } = context;
-  const resourceType = toFullResourceType(tokens[0], namespacedResourceNames);
+  const resourceType = toFullResourceType(tokens[0], namespacedResourceTypes);
   try {
     const path = `${apiPath}/namespaces/${namespace}/${resourceType}`;
     const response = await fetch(path);
     const { items } = await response.json();
     updateResourceCache(`${namespace}/${resourceType}`, items);
   } catch (e) {
-    console.log(e);
+    console.warn(e);
   }
 }
 
 function createResults({ tokens, namespace, resourceCache, namespaceNodes }) {
   const [type, name] = tokens;
 
-  const resourceType = toFullResourceType(type, namespacedResourceNames);
+  const resourceType = toFullResourceType(type, namespacedResourceTypes);
   const matchedNode = namespaceNodes.find(n => n.resourceType === resourceType);
 
   if (!matchedNode) {

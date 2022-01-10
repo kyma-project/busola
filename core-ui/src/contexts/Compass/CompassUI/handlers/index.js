@@ -3,6 +3,7 @@ import { clusterResourceHandler } from './clusterResourceHandler';
 import { namespacedResourceHandler } from './namespacedResourceHandler';
 import { nodesHandler } from './nodesHandler';
 import { logsHandler } from './logsHandler';
+import { findCommonPrefix } from './helpers';
 
 const handlers = [
   nonResourceHandler,
@@ -23,11 +24,15 @@ export function getSuggestions(context) {
 
 export function getAutocompleteEntries(context) {
   if (!context.search) {
-    return [];
+    return null;
   }
-  return handlers
+
+  const allEntries = handlers
     .flatMap(handler => handler.getAutocompleteEntries(context))
     .filter(Boolean);
+
+  const prefix = findCommonPrefix(context.search, allEntries);
+  return prefix === context.search ? null : prefix;
 }
 
 export async function fetchResources(context) {

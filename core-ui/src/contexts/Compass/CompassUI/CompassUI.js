@@ -31,7 +31,7 @@ function CompassUI({ hide }) {
   const [isHistoryMode, setHistoryMode] = useState(false);
   const [historyIndex, setHistoryIndex] = useState(0);
 
-  const { results, suggestedSearch, autoCompleteEntries } = useSearchResults({
+  const { results, suggestedSearch, autocompletePhrase } = useSearchResults({
     search,
     namespaceContext,
   });
@@ -80,14 +80,13 @@ function CompassUI({ hide }) {
 
   const keyDownInDropdownMode = e => {
     if (e.key === 'Tab') {
-      // if (results?.[activeIndex]) {
-      //   // fill search with active result
-      //   setSearch(results[activeIndex].query || '');
-      // } else
-      if (autoCompleteEntries.length) {
-        setSearch(autoCompleteEntries[0]);
+      if (autocompletePhrase) {
+        setSearch(autocompletePhrase);
       } else if (suggestedSearch) {
         setSearch(suggestedSearch);
+      } else if (results?.[activeIndex]) {
+        // fill search with active result
+        setSearch(results[activeIndex].query || '');
       }
       e.preventDefault();
     } else if (e.key === 'ArrowUp') {

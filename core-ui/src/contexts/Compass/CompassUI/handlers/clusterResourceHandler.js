@@ -9,7 +9,7 @@ import {
   formatTypePlural,
 } from './helpers';
 
-const clusterResourceNames = [
+const clusterResourceTypes = [
   ['clusterrolebindings', 'crb', 'crbs'],
   ['clusterroles'],
   ['applications', 'app', 'apps'],
@@ -19,33 +19,34 @@ const clusterResourceNames = [
 ].map(aliases => [...aliases, pluralize(aliases[0], 1)]);
 
 function getAutocompleteEntries({ tokens, resourceCache }) {
-  // const l = tokens.length;
-  // const tokenToAutocomplete = tokens[l - 1];
-  // switch (l) {
-  //   case 1: // type
-  //     if ('node'.startsWith(tokenToAutocomplete)) {
-  //       return 'node';
-  //     }
-  //     break;
-  //   case 2: //name
-  //     const nodeNames = (resourceCache['nodes'] || []).map(
-  //       n => n.metadata.name,
-  //     );
-  //     return nodeNames.filter(name => name.startsWith(tokenToAutocomplete));
-  //   default:
-  //     return [];
-  // }
-  return [];
+  const type = tokens[0];
+  const tokenToAutocomplete = tokens[tokens.length - 1];
+  switch (tokens.length) {
+    case 1: // type
+      // take only first, plural form
+      const resourceTypes = clusterResourceTypes.flatMap(t => t[0]);
+      return resourceTypes.filter(rN => rN.startsWith(type));
+    case 2: // name
+      const fullResourceType = toFullResourceType(type, clusterResourceTypes);
+      const resourceNames = (resourceCache[fullResourceType] || []).map(
+        n => n.metadata.name,
+      );
+      return resourceNames
+        .filter(name => name.startsWith(tokenToAutocomplete))
+        .map(name => `${type} ${name} `);
+    default:
+      return [];
+  }
 }
 
 function getSuggestions({ tokens, resourceCache }) {
   const [type, name] = tokens;
   const suggestedType = getSuggestion(
     type,
-    clusterResourceNames.flatMap(n => n),
+    clusterResourceTypes.flatMap(n => n),
   );
   if (name) {
-    const fullResourceType = toFullResourceType(type, clusterResourceNames);
+    const fullResourceType = toFullResourceType(type, clusterResourceTypes);
     const resourceNames = (resourceCache[fullResourceType] || []).map(
       n => n.metadata.name,
     );
@@ -78,7 +79,7 @@ function makeListItem(item, matchedNode) {
 }
 
 function getApiPathForQuery({ tokens, clusterNodes }) {
-  const resourceType = toFullResourceType(tokens[0], clusterResourceNames);
+  const resourceType = toFullResourceType(tokens[0], clusterResourceTypes);
   return getApiPath(resourceType, clusterNodes);
 }
 async function fetchClusterResources(context) {
@@ -88,13 +89,13 @@ async function fetchClusterResources(context) {
   }
 
   const { fetch, tokens, updateResourceCache } = context;
-  const resourceType = toFullResourceType(tokens[0], clusterResourceNames);
+  const resourceType = toFullResourceType(tokens[0], clusterResourceTypes);
   try {
     const response = await fetch(apiPath + '/' + resourceType);
     const { items } = await response.json();
     updateResourceCache(resourceType, items);
   } catch (e) {
-    console.log(e);
+    console.warn(e);
   }
 }
 
@@ -107,7 +108,7 @@ function createResults({
 }) {
   const [type, name] = tokens;
 
-  const resourceType = toFullResourceType(type, clusterResourceNames);
+  const resourceType = toFullResourceType(type, clusterResourceTypes);
   const matchedNode = clusterNodes.find(n => n.resourceType === resourceType);
 
   if (!matchedNode) {

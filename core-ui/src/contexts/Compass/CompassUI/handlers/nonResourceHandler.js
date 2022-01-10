@@ -2,48 +2,45 @@ import LuigiClient from '@luigi-project/client';
 import { setCluster } from 'components/Clusters/shared';
 import { getSuggestion } from './helpers';
 
-function getAutocompleteEntries({ tokens, resourceCache }) {
-  // const l = tokens.length;
-  // const tokenToAutocomplete = tokens[l - 1];
-  // switch (l) {
-  //   case 1: // type
-  //     if ('node'.startsWith(tokenToAutocomplete)) {
-  //       return 'node';
-  //     }
-  //     break;
-  //   case 2: //name
-  //     const nodeNames = (resourceCache['nodes'] || []).map(
-  //       n => n.metadata.name,
-  //     );
-  //     return nodeNames.filter(name => name.startsWith(tokenToAutocomplete));
-  //   default:
-  //     return [];
-  // }
-  return [];
+function createNonResourceOptions({ activeClusterName }) {
+  return [
+    {
+      names: ['clusters', 'cluster'],
+      type: 'clusters',
+      autocompleteOptions: ['clusters'],
+    },
+    {
+      names: ['prefs', 'preferences'],
+      type: 'preferences',
+      autocompleteOptions: ['preferences'],
+    },
+    {
+      names: ['h', 'help'],
+      type: 'show-help',
+      autocompleteOptions: ['help'],
+    },
+    ...(activeClusterName
+      ? [
+          {
+            names: ['overview', 'ov'],
+            type: 'overview',
+            autocompleteOptions: ['overview'],
+          },
+        ]
+      : []),
+  ];
 }
 
-const createNonResourceOptions = ({ activeClusterName }) => [
-  {
-    names: ['clusters', 'cluster'],
-    type: 'clusters',
-  },
-  {
-    names: ['options', 'prefs', 'preferences', 'settings'],
-    type: 'preferences',
-  },
-  {
-    names: ['h', 'help'],
-    type: 'show-help',
-  },
-  ...(activeClusterName
-    ? [
-        {
-          names: ['overview', 'ov'],
-          type: 'overview',
-        },
-      ]
-    : []),
-];
+function getAutocompleteEntries(context) {
+  const { tokens } = context;
+  if (tokens.length > 1) return [];
+
+  const options = createNonResourceOptions(context).flatMap(
+    option => option.autocompleteOptions || option.names,
+  );
+
+  return options.filter(o => o.startsWith(tokens[0]));
+}
 
 function createResults(context) {
   const options = createNonResourceOptions(context);

@@ -2,24 +2,23 @@ import LuigiClient from '@luigi-project/client';
 import { LOADING_INDICATOR } from '../useSearchResults';
 import { getSuggestion } from './helpers';
 
-const nodeResourceNames = ['node', 'nodes', 'no'];
+const nodeResourceNames = ['nodes', 'node', 'no'];
 
 function getAutocompleteEntries({ tokens, resourceCache }) {
-  const l = tokens.length;
-  const tokenToAutocomplete = tokens[l - 1];
-  switch (l) {
+  const tokenToAutocomplete = tokens[tokens.length - 1];
+  switch (tokens.length) {
     case 1: // type
-      if ('node'.startsWith(tokenToAutocomplete)) {
-        return 'node';
+      if ('nodes'.startsWith(tokenToAutocomplete)) {
+        return 'nodes ';
       }
       break;
-    case 2: //name
+    case 2: // name
       const nodeNames = (resourceCache['nodes'] || []).map(
         n => n.metadata.name,
       );
       return nodeNames
         .filter(name => name.startsWith(tokenToAutocomplete))
-        .map(nodeName => `${tokens[0]} ${nodeName}`);
+        .map(nodeName => `${tokens[0]} ${nodeName} `);
     default:
       return [];
   }
@@ -68,7 +67,7 @@ async function fetchNodes(context) {
     const { items: nodes } = await response.json();
     updateResourceCache('nodes', nodes);
   } catch (e) {
-    console.log(e);
+    console.warn(e);
   }
 }
 

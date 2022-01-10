@@ -4,23 +4,31 @@ import { getSuggestion } from './helpers';
 
 const logNames = ['logs', 'log', 'lg'];
 
-function getAutocompleteEntries({ tokens, resourceCache }) {
-  // const l = tokens.length;
-  // const tokenToAutocomplete = tokens[l - 1];
-  // switch (l) {
-  //   case 1: // type
-  //     if ('node'.startsWith(tokenToAutocomplete)) {
-  //       return 'node';
-  //     }
-  //     break;
-  //   case 2: //name
-  //     const nodeNames = (resourceCache['nodes'] || []).map(
-  //       n => n.metadata.name,
-  //     );
-  //     return nodeNames.filter(name => name.startsWith(tokenToAutocomplete));
-  //   default:
-  //     return [];
-  // }
+function getAutocompleteEntries({ tokens, namespace, resourceCache }) {
+  const [type, name] = tokens;
+  const tokenToAutocomplete = tokens[tokens.length - 1];
+  const pods = resourceCache[`${namespace}/pods`] || [];
+  switch (tokens.length) {
+    case 1: // type
+      if ('pods'.startsWith(tokenToAutocomplete)) {
+        return 'pods ';
+      }
+      break;
+    case 2: // pod name
+      const podNames = pods.map(n => n.metadata.name);
+      return podNames
+        .filter(podName => podName.startsWith(tokenToAutocomplete))
+        .map(podName => `${type} ${podName} `);
+    case 3: // container name
+      const pod = pods.find(n => n.metadata.name === name);
+      if (!pod) return [];
+      return pod.spec.containers
+        .map(container => container.name)
+        .filter(containerName => containerName.startsWith(tokenToAutocomplete))
+        .map(containerName => `${type} ${name} ${containerName}`);
+    default:
+      return [];
+  }
   return [];
 }
 
@@ -81,7 +89,7 @@ async function fetchLogs(context) {
     const { items: pods } = await response.json();
     updateResourceCache(`${namespace}/pods`, pods);
   } catch (e) {
-    console.log(e);
+    console.warn(e);
   }
 }
 
