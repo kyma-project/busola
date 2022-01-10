@@ -41,7 +41,8 @@ export function FunctionsCreate({
   const runtime = jp.value(func, '$.spec.runtime');
   const minReplicas = jp.value(func, '$.spec.minReplicas');
   const maxReplicas = jp.value(func, '$.spec.maxReplicas');
-
+  const deps = jp.value(func, '$.spec.deps');
+  const source = jp.value(func, '$.spec.source');
   const runtimeOptions = Object.entries(functionAvailableLanguages).map(
     ([runtime, lang]) => ({
       key: runtime,
@@ -74,9 +75,13 @@ export function FunctionsCreate({
       jp.value(
         func,
         '$.spec.source',
-        CONFIG.defaultLambdaCodeAndDeps[runtime].code,
+        source || CONFIG.defaultLambdaCodeAndDeps[runtime].code,
       );
-      jp.value(func, '$.spec.deps', getDefaultDependencies(name, runtime));
+      jp.value(
+        func,
+        '$.spec.deps',
+        deps || getDefaultDependencies(name, runtime),
+      );
       jp.value(func, '$.spec.reference', undefined);
       jp.value(func, '$.spec.baseDir', undefined);
     } else if (type === 'git') {
