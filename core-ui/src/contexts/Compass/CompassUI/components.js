@@ -2,20 +2,8 @@ import React from 'react';
 import { useEventListener } from 'hooks/useEventListener';
 import { Token } from 'fundamental-react';
 
-export function SuggestedSearch({ search, suggestedSearch, setSearch }) {
-  const isSuggestionValid = !!suggestedSearch && suggestedSearch !== search;
-
-  const onKeyDown = ({ key }) => {
-    if (!isSuggestionValid) return;
-
-    if (key === 'Tab') {
-      setSearch(suggestedSearch);
-    }
-  };
-
-  useEventListener('keydown', onKeyDown, [isSuggestionValid]);
-
-  if (!isSuggestionValid) {
+export function SuggestedSearch({ suggestedSearch, setSearch }) {
+  if (!suggestedSearch) {
     return null;
   }
 

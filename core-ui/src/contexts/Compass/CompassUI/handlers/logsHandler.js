@@ -4,6 +4,26 @@ import { getSuggestion } from './helpers';
 
 const logNames = ['logs', 'log', 'lg'];
 
+function getAutocompleteEntries({ tokens, resourceCache }) {
+  // const l = tokens.length;
+  // const tokenToAutocomplete = tokens[l - 1];
+  // switch (l) {
+  //   case 1: // type
+  //     if ('node'.startsWith(tokenToAutocomplete)) {
+  //       return 'node';
+  //     }
+  //     break;
+  //   case 2: //name
+  //     const nodeNames = (resourceCache['nodes'] || []).map(
+  //       n => n.metadata.name,
+  //     );
+  //     return nodeNames.filter(name => name.startsWith(tokenToAutocomplete));
+  //   default:
+  //     return [];
+  // }
+  return [];
+}
+
 function getSuggestions({ tokens, resourceCache }) {
   const [type, podName] = tokens;
   const suggestedType = getSuggestion(type, logNames);
@@ -92,6 +112,7 @@ function createResults(context) {
 }
 
 export const logsHandler = {
+  getAutocompleteEntries,
   getSuggestions,
   fetchResources: fetchLogs,
   createResults,

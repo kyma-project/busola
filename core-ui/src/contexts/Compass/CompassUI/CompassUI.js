@@ -23,7 +23,7 @@ export function CompassUIBackground(props) {
 
 function CompassUI({ hide }) {
   const { namespaceId: namespace } = useMicrofrontendContext();
-  const [searchString, setSearchString] = useState('');
+  const [search, setSearch] = useState('');
   const [namespaceContext, setNamespaceContext] = useState(namespace);
   const inputRef = useRef();
   const [activeIndex, setActiveIndex] = useState(0);
@@ -31,8 +31,8 @@ function CompassUI({ hide }) {
   const [isHistoryMode, setHistoryMode] = useState(false);
   const [historyIndex, setHistoryIndex] = useState(0);
 
-  const { results, suggestedSearch } = useSearchResults({
-    searchString,
+  const { results, suggestedSearch, autoCompleteEntries } = useSearchResults({
+    search,
     namespaceContext,
   });
 
@@ -46,7 +46,7 @@ function CompassUI({ hide }) {
       results[0].onActivate();
     } else if (e.key === 'Tab') {
       // fill search with active history entry
-      setSearchString(historyEntries[historyIndex]);
+      setSearch(historyEntries[historyIndex]);
       setActiveIndex(0);
       setHistoryMode(false);
       e.preventDefault();
@@ -55,20 +55,20 @@ function CompassUI({ hide }) {
       const entry = historyEntries[historyIndex + 1];
       if (entry) {
         setHistoryIndex(historyIndex + 1);
-        setSearchString(entry);
+        setSearch(entry);
       }
       e.preventDefault();
     } else if (e.key === 'ArrowDown') {
       if (historyIndex === 0) {
         // deactivate history mode
-        setSearchString(originalQuery);
+        setSearch(originalQuery);
         setHistoryMode(false);
       } else {
         //try going down in history
         const entry = historyEntries[historyIndex - 1];
         if (entry) {
           setHistoryIndex(historyIndex - 1);
-          setSearchString(entry);
+          setSearch(entry);
         }
       }
     } else {
@@ -80,20 +80,22 @@ function CompassUI({ hide }) {
 
   const keyDownInDropdownMode = e => {
     if (e.key === 'Tab') {
-      if (results?.[activeIndex]) {
-        // fill search with active result
-        setSearchString(results[activeIndex].query || '');
+      // if (results?.[activeIndex]) {
+      //   // fill search with active result
+      //   setSearch(results[activeIndex].query || '');
+      // } else
+      if (autoCompleteEntries.length) {
+        setSearch(autoCompleteEntries[0]);
       } else if (suggestedSearch) {
-        // choose suggested search
-        setSearchString(suggestedSearch);
+        setSearch(suggestedSearch);
       }
       e.preventDefault();
     } else if (e.key === 'ArrowUp') {
       const historyEntries = getHistoryEntries();
       if (activeIndex === 0 && historyEntries.length) {
         // activate history mode
-        setOriginalQuery(searchString);
-        setSearchString(historyEntries[historyIndex]);
+        setOriginalQuery(search);
+        setSearch(historyEntries[historyIndex]);
         setHistoryMode(true);
         setHistoryIndex(0);
       }
@@ -109,11 +111,11 @@ function CompassUI({ hide }) {
           setNamespaceContext={setNamespaceContext}
         />
         <DebouncedFormInput
-          value={!isHistoryMode ? searchString : ''}
+          value={!isHistoryMode ? search : ''}
           placeholder={
-            !isHistoryMode ? 'Type to search, e.g. "ns default"' : searchString
+            !isHistoryMode ? 'Type to search, e.g. "ns default"' : search
           }
-          onChange={setSearchString}
+          onChange={setSearch}
           onKeyDown={e => {
             if (isHistoryMode) {
               keyDownInHistoryMode(e);
@@ -124,17 +126,16 @@ function CompassUI({ hide }) {
           autoFocus
           ref={inputRef}
         />
-        {searchString && (
+        {search && (
           <ResultsList
             results={results}
             hide={hide}
             isHistoryMode={isHistoryMode}
             suggestion={
               <SuggestedSearch
-                search={searchString}
                 suggestedSearch={suggestedSearch}
                 setSearch={search => {
-                  setSearchString(search);
+                  setSearch(search);
                   inputRef.current.focus();
                 }}
               />

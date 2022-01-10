@@ -21,8 +21,19 @@ export function getSuggestions(context) {
     .filter(Boolean);
 }
 
+export function getAutocompleteEntries(context) {
+  if (!context.search) {
+    return [];
+  }
+  return handlers
+    .flatMap(handler => handler.getAutocompleteEntries(context))
+    .filter(Boolean);
+}
+
 export async function fetchResources(context) {
-  await Promise.all(handlers.map(handler => handler.fetchResources(context)));
+  if (context.activeClusterName) {
+    await Promise.all(handlers.map(handler => handler.fetchResources(context)));
+  }
 }
 
 export function createResults(context) {

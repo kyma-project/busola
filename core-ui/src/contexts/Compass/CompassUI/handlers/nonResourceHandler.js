@@ -2,6 +2,26 @@ import LuigiClient from '@luigi-project/client';
 import { setCluster } from 'components/Clusters/shared';
 import { getSuggestion } from './helpers';
 
+function getAutocompleteEntries({ tokens, resourceCache }) {
+  // const l = tokens.length;
+  // const tokenToAutocomplete = tokens[l - 1];
+  // switch (l) {
+  //   case 1: // type
+  //     if ('node'.startsWith(tokenToAutocomplete)) {
+  //       return 'node';
+  //     }
+  //     break;
+  //   case 2: //name
+  //     const nodeNames = (resourceCache['nodes'] || []).map(
+  //       n => n.metadata.name,
+  //     );
+  //     return nodeNames.filter(name => name.startsWith(tokenToAutocomplete));
+  //   default:
+  //     return [];
+  // }
+  return [];
+}
+
 const createNonResourceOptions = ({ activeClusterName }) => [
   {
     names: ['clusters', 'cluster'],
@@ -84,6 +104,7 @@ function createResults(context) {
 }
 
 export const nonResourceHandler = {
+  getAutocompleteEntries,
   getSuggestions: context =>
     getSuggestion(
       context.tokens[0],

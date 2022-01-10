@@ -40,6 +40,26 @@ const namespacedResourceNames = [
   ['gitrepositories', 'repos', 'gitrepos'],
 ].map(aliases => [...aliases, pluralize(aliases[0], 1)]);
 
+function getAutocompleteEntries({ tokens, resourceCache }) {
+  // const l = tokens.length;
+  // const tokenToAutocomplete = tokens[l - 1];
+  // switch (l) {
+  //   case 1: // type
+  //     if ('node'.startsWith(tokenToAutocomplete)) {
+  //       return 'node';
+  //     }
+  //     break;
+  //   case 2: //name
+  //     const nodeNames = (resourceCache['nodes'] || []).map(
+  //       n => n.metadata.name,
+  //     );
+  //     return nodeNames.filter(name => name.startsWith(tokenToAutocomplete));
+  //   default:
+  //     return [];
+  // }
+  return [];
+}
+
 function getSuggestions({ tokens, namespace, resourceCache }) {
   const [type, name] = tokens;
   const suggestedType = getSuggestion(
@@ -138,6 +158,7 @@ function createResults({ tokens, namespace, resourceCache, namespaceNodes }) {
 }
 
 export const namespacedResourceHandler = {
+  getAutocompleteEntries,
   getSuggestions,
   fetchResources: fetchNamespacedResource,
   createResults,

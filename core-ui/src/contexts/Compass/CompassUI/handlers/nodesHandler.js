@@ -4,6 +4,27 @@ import { getSuggestion } from './helpers';
 
 const nodeResourceNames = ['node', 'nodes', 'no'];
 
+function getAutocompleteEntries({ tokens, resourceCache }) {
+  const l = tokens.length;
+  const tokenToAutocomplete = tokens[l - 1];
+  switch (l) {
+    case 1: // type
+      if ('node'.startsWith(tokenToAutocomplete)) {
+        return 'node';
+      }
+      break;
+    case 2: //name
+      const nodeNames = (resourceCache['nodes'] || []).map(
+        n => n.metadata.name,
+      );
+      return nodeNames
+        .filter(name => name.startsWith(tokenToAutocomplete))
+        .map(nodeName => `${tokens[0]} ${nodeName}`);
+    default:
+      return [];
+  }
+}
+
 function getSuggestions({ tokens, resourceCache }) {
   const [type, name] = tokens;
   const suggestedType = getSuggestion(type, nodeResourceNames);
@@ -77,6 +98,7 @@ function createResults(context) {
 }
 
 export const nodesHandler = {
+  getAutocompleteEntries,
   getSuggestions,
   fetchResources: fetchNodes,
   createResults,

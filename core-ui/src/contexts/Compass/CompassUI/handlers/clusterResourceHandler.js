@@ -18,6 +18,26 @@ const clusterResourceNames = [
   ['customresourcedefinitions', 'crd', 'crds'],
 ].map(aliases => [...aliases, pluralize(aliases[0], 1)]);
 
+function getAutocompleteEntries({ tokens, resourceCache }) {
+  // const l = tokens.length;
+  // const tokenToAutocomplete = tokens[l - 1];
+  // switch (l) {
+  //   case 1: // type
+  //     if ('node'.startsWith(tokenToAutocomplete)) {
+  //       return 'node';
+  //     }
+  //     break;
+  //   case 2: //name
+  //     const nodeNames = (resourceCache['nodes'] || []).map(
+  //       n => n.metadata.name,
+  //     );
+  //     return nodeNames.filter(name => name.startsWith(tokenToAutocomplete));
+  //   default:
+  //     return [];
+  // }
+  return [];
+}
+
 function getSuggestions({ tokens, resourceCache }) {
   const [type, name] = tokens;
   const suggestedType = getSuggestion(
@@ -127,6 +147,7 @@ function createResults({
 }
 
 export const clusterResourceHandler = {
+  getAutocompleteEntries,
   getSuggestions,
   fetchResources: fetchClusterResources,
   createResults,
