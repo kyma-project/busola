@@ -96,8 +96,8 @@ function createResults(context) {
     return LOADING_INDICATOR;
   }
 
-  // eslint-disable-next-line no-unused-vars
-  const [_, podName, containerName] = tokens;
+  const podName = tokens[1];
+  const containerName = tokens[2];
   if (podName) {
     const matchedByPodName = pods.filter(pod =>
       pod.metadata.name.includes(podName),
