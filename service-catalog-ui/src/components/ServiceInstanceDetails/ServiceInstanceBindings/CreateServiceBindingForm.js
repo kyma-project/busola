@@ -33,7 +33,7 @@ export function CreateServiceBindingForm({
 
   useEffect(() => {
     validateSecretName(secretName);
-  }, [secretName, setCustomValid]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [secretName]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <form
