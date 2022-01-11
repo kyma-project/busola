@@ -9,7 +9,7 @@ import { useResourceCache } from './useResourceCache';
 
 export const LOADING_INDICATOR = 'LOADING_INDICATOR';
 
-export function useSearchResults({ search, namespaceContext }) {
+export function useSearchResults({ query, namespaceContext }) {
   const {
     clusters,
     activeClusterName,
@@ -23,14 +23,14 @@ export function useSearchResults({ search, namespaceContext }) {
   const fetch = useFetch();
   const [resourceCache, updateResourceCache] = useResourceCache();
 
-  const preprocessedSearch = search.trim().toLowerCase();
+  const preprocessedQuery = query.trim().toLowerCase();
   const context = {
     fetch: url => fetch({ relativeUrl: url }),
     namespace: namespaceContext || 'default',
     clusterNames: Object.keys(clusters),
     activeClusterName,
-    search: preprocessedSearch,
-    tokens: preprocessedSearch.split(/\s+/).filter(Boolean),
+    query: preprocessedQuery,
+    tokens: preprocessedQuery.split(/\s+/).filter(Boolean),
     clusterNodes: clusterNodes || [],
     namespaceNodes: namespaceNodes || [],
     hiddenNamespaces,
@@ -40,14 +40,14 @@ export function useSearchResults({ search, namespaceContext }) {
   };
 
   useEffect(() => {
-    if (search) {
+    if (query) {
       handlers.fetchResources(context);
     }
-  }, [search, namespaceContext]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [query, namespaceContext]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
     results: handlers.createResults(context),
-    suggestedSearch: handlers.getSuggestions(context)[0],
+    suggestedQuery: handlers.getSuggestions(context)[0],
     autocompletePhrase: handlers.getAutocompleteEntries(context),
   };
 }

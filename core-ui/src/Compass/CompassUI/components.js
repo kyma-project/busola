@@ -1,19 +1,16 @@
 import React from 'react';
 import { Token } from 'fundamental-react';
 
-export function SuggestedSearch({ suggestedSearch, setSearch }) {
-  if (!suggestedSearch) {
+export function SuggestedSearch({ suggestedQuery, setQuery }) {
+  if (!suggestedQuery) {
     return null;
   }
 
   return (
     <>
       Did you mean:{' '}
-      <button
-        className="button-link"
-        onClick={() => setSearch(suggestedSearch)}
-      >
-        {suggestedSearch}
+      <button className="button-link" onClick={() => setQuery(suggestedQuery)}>
+        {suggestedQuery}
       </button>
     </>
   );

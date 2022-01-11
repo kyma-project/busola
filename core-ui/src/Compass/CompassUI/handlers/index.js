@@ -16,7 +16,7 @@ const handlers = [
 ];
 
 export function getSuggestions(context) {
-  if (!context.search) {
+  if (!context.query) {
     return [];
   }
   const suggestions = handlers
@@ -24,14 +24,14 @@ export function getSuggestions(context) {
     .filter(Boolean);
 
   // don't suggest anything if correct word is already here
-  if (suggestions.includes(context.search)) {
+  if (suggestions.includes(context.query)) {
     return [];
   }
   return suggestions;
 }
 
 export function getAutocompleteEntries(context) {
-  if (!context.search) {
+  if (!context.query) {
     return null;
   }
 
@@ -39,8 +39,8 @@ export function getAutocompleteEntries(context) {
     .flatMap(handler => handler.getAutocompleteEntries(context))
     .filter(Boolean);
 
-  const prefix = findCommonPrefix(context.search, allEntries);
-  return prefix === context.search ? null : prefix;
+  const prefix = findCommonPrefix(context.query, allEntries);
+  return prefix === context.query ? null : prefix;
 }
 
 export async function fetchResources(context) {
@@ -50,7 +50,7 @@ export async function fetchResources(context) {
 }
 
 export function createResults(context) {
-  if (!context.search) {
+  if (!context.query) {
     return [];
   }
   return handlers

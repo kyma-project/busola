@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useMicrofrontendContext } from 'react-shared';
 import { NamespaceContextDisplay, SuggestedSearch } from './components';
-import './CompassUI.scss';
 import { ResultsList } from './ResultsList/ResultsList';
 import { addHistoryEntry, getHistoryEntries } from './search-history';
 import { LOADING_INDICATOR, useSearchResults } from './useSearchResults';
-import { DebouncedFormInput } from '../../shared/components/DebouncedFormInput';
+import { DebouncedFormInput } from 'shared/components/DebouncedFormInput';
+import './CompassUI.scss';
 
 function CompassUIBackground({ hide, children }) {
   const onBackgroundClick = e => {
@@ -23,16 +23,19 @@ function CompassUIBackground({ hide, children }) {
 
 export function CompassUI({ hide }) {
   const { namespaceId: namespace } = useMicrofrontendContext();
-  const [search, setSearch] = useState('');
-  const [namespaceContext, setNamespaceContext] = useState(namespace);
-  const inputRef = useRef();
-  const [activeIndex, setActiveIndex] = useState(0);
+
+  const [query, setQuery] = useState('');
   const [originalQuery, setOriginalQuery] = useState('');
+  const [namespaceContext, setNamespaceContext] = useState(namespace);
+
+  const inputRef = useRef();
+
+  const [activeResultIndex, setActiveResultIndex] = useState(0);
   const [isHistoryMode, setHistoryMode] = useState(false);
   const [historyIndex, setHistoryIndex] = useState(0);
 
-  const { results, suggestedSearch, autocompletePhrase } = useSearchResults({
-    search,
+  const { results, suggestedQuery, autocompletePhrase } = useSearchResults({
+    query,
     namespaceContext,
   });
 
@@ -46,8 +49,8 @@ export function CompassUI({ hide }) {
       results[0].onActivate();
     } else if (e.key === 'Tab') {
       // fill search with active history entry
-      setSearch(historyEntries[historyIndex]);
-      setActiveIndex(0);
+      setQuery(historyEntries[historyIndex]);
+      setActiveResultIndex(0);
       setHistoryMode(false);
       e.preventDefault();
     } else if (e.key === 'ArrowUp') {
@@ -55,49 +58,49 @@ export function CompassUI({ hide }) {
       const entry = historyEntries[historyIndex + 1];
       if (entry) {
         setHistoryIndex(historyIndex + 1);
-        setSearch(entry);
+        setQuery(entry);
       }
       e.preventDefault();
     } else if (e.key === 'ArrowDown') {
       if (historyIndex === 0) {
         // deactivate history mode
-        setSearch(originalQuery);
+        setQuery(originalQuery);
         setHistoryMode(false);
       } else {
         //try going down in history
         const entry = historyEntries[historyIndex - 1];
         if (entry) {
           setHistoryIndex(historyIndex - 1);
-          setSearch(entry);
+          setQuery(entry);
         }
       }
     } else {
       // deactivate history mode, but keep the search
       setHistoryMode(false);
-      setActiveIndex(0);
+      setActiveResultIndex(0);
     }
   };
 
   const keyDownInDropdownMode = e => {
     if (e.key === 'Tab') {
       if (autocompletePhrase) {
-        setSearch(autocompletePhrase);
-      } else if (suggestedSearch) {
-        setSearch(suggestedSearch);
+        setQuery(autocompletePhrase);
+      } else if (suggestedQuery) {
+        setQuery(suggestedQuery);
       } else if (
-        results?.[activeIndex] &&
-        results[activeIndex] !== LOADING_INDICATOR
+        results?.[activeResultIndex] &&
+        results[activeResultIndex] !== LOADING_INDICATOR
       ) {
         // fill search with active result
-        setSearch(results[activeIndex].query || '');
+        setQuery(results[activeResultIndex].query || '');
       }
       e.preventDefault();
     } else if (e.key === 'ArrowUp') {
       const historyEntries = getHistoryEntries();
-      if (activeIndex === 0 && historyEntries.length) {
+      if (activeResultIndex === 0 && historyEntries.length) {
         // activate history mode
-        setOriginalQuery(search);
-        setSearch(historyEntries[historyIndex]);
+        setOriginalQuery(query);
+        setQuery(historyEntries[historyIndex]);
         setHistoryMode(true);
         setHistoryIndex(0);
       }
@@ -114,11 +117,11 @@ export function CompassUI({ hide }) {
             setNamespaceContext={setNamespaceContext}
           />
           <DebouncedFormInput
-            value={!isHistoryMode ? search : ''}
+            value={!isHistoryMode ? query : ''}
             placeholder={
-              !isHistoryMode ? 'Type to search, e.g. "ns default"' : search
+              !isHistoryMode ? 'Type to search, e.g. "ns default"' : query
             }
-            onChange={setSearch}
+            onChange={setQuery}
             onKeyDown={e => {
               if (isHistoryMode) {
                 keyDownInHistoryMode(e);
@@ -129,22 +132,22 @@ export function CompassUI({ hide }) {
             autoFocus
             ref={inputRef}
           />
-          {search && (
+          {query && (
             <ResultsList
               results={results}
               hide={hide}
               isHistoryMode={isHistoryMode}
               suggestion={
                 <SuggestedSearch
-                  suggestedSearch={suggestedSearch}
-                  setSearch={search => {
-                    setSearch(search);
+                  suggestedQuery={suggestedQuery}
+                  setQuery={query => {
+                    setQuery(query);
                     inputRef.current.focus();
                   }}
                 />
               }
-              activeIndex={activeIndex}
-              setActiveIndex={setActiveIndex}
+              activeIndex={activeResultIndex}
+              setActiveIndex={setActiveResultIndex}
             />
           )}
         </div>
