@@ -5,14 +5,12 @@ import {
   getSuggestion,
   getApiPath,
   toFullResourceType,
-  formatTypeSingular,
-  formatTypePlural,
   autocompleteForResources,
 } from './helpers';
 
 const clusterResourceTypes = [
   ['clusterrolebindings', 'crb', 'crbs'],
-  ['clusterroles'],
+  ['clusterroles', 'cr'],
   ['applications', 'app', 'apps'],
   ['clusteraddonsconfigurations', 'clusteraddon', 'clusteraddons'],
   ['namespaces', 'ns'],
@@ -41,13 +39,15 @@ function getSuggestions({ tokens, resourceCache }) {
       n => n.metadata.name,
     );
     const suggestedName = getSuggestion(name, resourceNames);
-    return `${suggestedType} ${suggestedName}`;
+    if (suggestedType && suggestedName) {
+      return `${suggestedType} ${suggestedName}`;
+    }
   } else {
     return suggestedType;
   }
 }
 
-function makeListItem(item, matchedNode) {
+function makeListItem(item, matchedNode, t) {
   const detailsLink =
     matchedNode.resourceType === 'namespaces'
       ? `/${item.metadata.name}/details`
@@ -55,7 +55,16 @@ function makeListItem(item, matchedNode) {
   const link = matchedNode.pathSegment + detailsLink;
 
   return {
-    label: `${formatTypeSingular(matchedNode.viewUrl)} ${item.metadata.name}`,
+    label: t('compass.results.resource-and-name', {
+      resourceType: pluralize(
+        t([
+          `${matchedNode.resourceType}.title`,
+          `compass.resource-names.${matchedNode.resourceType}`,
+        ]),
+        1,
+      ),
+      name: item.metadata.name,
+    }),
     query: `${matchedNode.resourceType} ${item.metadata.name}`,
     category: matchedNode.category,
     onActivate: () =>
@@ -92,6 +101,7 @@ function createResults({
   showHiddenNamespaces,
   hiddenNamespaces,
   clusterNodes,
+  t,
 }) {
   const [type, name] = tokens;
 
@@ -103,7 +113,12 @@ function createResults({
   }
 
   const linkToList = {
-    label: `List of ${formatTypePlural(matchedNode.viewUrl)}`,
+    label: t('compass.results.list-of', {
+      resourceType: t([
+        `${resourceType}.title`,
+        `compass.resource-names.${resourceType}`,
+      ]),
+    }),
     category: matchedNode?.category,
     query: matchedNode?.resourceType,
     onActivate: () =>
@@ -125,11 +140,11 @@ function createResults({
   if (name) {
     return resources
       .filter(item => item.metadata.name.includes(name))
-      .map(item => makeListItem(item, matchedNode));
+      .map(item => makeListItem(item, matchedNode, t));
   } else {
     return [
       linkToList,
-      ...resources.map(item => makeListItem(item, matchedNode)),
+      ...resources.map(item => makeListItem(item, matchedNode, t)),
     ];
   }
 }

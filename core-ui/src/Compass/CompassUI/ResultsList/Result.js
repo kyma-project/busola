@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export function Result({
   label,
@@ -10,6 +11,7 @@ export function Result({
   onItemClick,
 }) {
   const resultRef = useRef();
+  const { t } = useTranslation();
 
   const onMouseOver = useCallback(() => {
     if (index !== activeIndex) {
@@ -25,7 +27,9 @@ export function Result({
   }, [index, activeIndex, setActiveIndex]);
 
   const actionText =
-    typeof customActionText === 'string' ? customActionText : 'Follow';
+    typeof customActionText === 'string'
+      ? customActionText
+      : t('compass.item-actions.follow');
 
   return (
     <li

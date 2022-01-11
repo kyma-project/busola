@@ -32,11 +32,14 @@ function getSuggestions({ tokens, resourceCache }) {
   });
 }
 
-function makeListItem(item) {
+function makeListItem(item, t) {
   const name = item.metadata.name;
   return {
-    label: `Node ${name}`,
-    category: 'Cluster Overview',
+    label: t('compass.results.resource-and-name', {
+      resourceType: t('nodes.name_singular'),
+      name,
+    }),
+    category: t('clusters.overview.title-current-cluster'),
     query: `node ${name}`,
     onActivate: () =>
       LuigiClient.linkManager()
@@ -69,7 +72,7 @@ function createResults(context) {
     return;
   }
 
-  const { resourceCache, tokens } = context;
+  const { resourceCache, tokens, t } = context;
   const nodes = resourceCache['nodes'];
   if (typeof nodes !== 'object') {
     return LOADING_INDICATOR;
@@ -81,11 +84,11 @@ function createResults(context) {
       item.metadata.name.includes(name),
     );
     if (matchedByName) {
-      return matchedByName.map(item => makeListItem(item));
+      return matchedByName.map(item => makeListItem(item, t));
     }
     return null;
   } else {
-    return nodes.map(item => makeListItem(item));
+    return nodes.map(item => makeListItem(item, t));
   }
 }
 

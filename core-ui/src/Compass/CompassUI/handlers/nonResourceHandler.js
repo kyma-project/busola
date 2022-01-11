@@ -39,7 +39,7 @@ function createResults(context) {
 
   const option = options.find(o => o.names.includes(context.tokens[0]));
   if (option) {
-    const { activeClusterName, clusterNames } = context;
+    const { activeClusterName, clusterNames, t } = context;
     switch (option.type) {
       case 'clusters':
         return clusterNames.map(clusterName => ({
@@ -58,7 +58,7 @@ function createResults(context) {
                 size: 'm',
               });
             },
-            customActionText: 'Open',
+            customActionText: t('compass.item-actions.open'),
           },
         ];
       case 'overview':

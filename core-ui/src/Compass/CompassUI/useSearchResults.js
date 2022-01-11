@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   useFetch,
   useMicrofrontendContext,
@@ -21,10 +22,9 @@ export function useSearchResults({
     namespaceNodes,
     hiddenNamespaces,
   } = useMicrofrontendContext();
-
   const [showHiddenNamespaces] = useFeatureToggle('showHiddenNamespaces');
-
   const fetch = useFetch();
+  const { t } = useTranslation();
 
   const preprocessedQuery = query.trim().toLowerCase();
   const context = {
@@ -40,6 +40,7 @@ export function useSearchResults({
     showHiddenNamespaces,
     resourceCache,
     updateResourceCache,
+    t,
   };
 
   useEffect(() => {

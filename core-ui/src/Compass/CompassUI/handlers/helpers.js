@@ -1,5 +1,4 @@
 import didYouMean from 'didyoumean';
-import { prettifyNameSingular, prettifyNamePlural } from 'react-shared';
 
 export function getSuggestion(phrase, itemList) {
   return didYouMean(phrase, itemList);
@@ -13,20 +12,6 @@ export function getApiPath(resourceType, nodes) {
   } catch (e) {
     return null;
   }
-}
-
-export function formatTypePlural(viewUrl) {
-  return formatFromViewUrl(viewUrl, prettifyNamePlural);
-}
-
-export function formatTypeSingular(viewUrl) {
-  return formatFromViewUrl(viewUrl, prettifyNameSingular);
-}
-
-function formatFromViewUrl(viewUrl, formatter) {
-  const { pathname } = new URL(viewUrl);
-  const resourceType = pathname.substring(pathname.lastIndexOf('/') + 1);
-  return formatter(null, resourceType);
 }
 
 // assume first item is the full name
@@ -63,7 +48,9 @@ export function getSuggestionsForSingleResource({
   if (name) {
     const resourceNames = resources.map(n => n.metadata.name);
     const suggestedName = getSuggestion(name, resourceNames);
-    return `${suggestedType} ${suggestedName}`;
+    if (suggestedType && suggestedName) {
+      return `${suggestedType} ${suggestedName}`;
+    }
   } else {
     return suggestedType;
   }

@@ -5,6 +5,7 @@ import { Spinner } from 'react-shared';
 import { addHistoryEntry } from '../search-history';
 import './ResultsList.scss';
 import { LOADING_INDICATOR } from '../useSearchResults';
+import { useTranslation } from 'react-i18next';
 
 function scrollInto(element) {
   element.scrollIntoView({
@@ -23,12 +24,13 @@ export function ResultsList({
   isHistoryMode,
 }) {
   const listRef = useRef();
+  const { t } = useTranslation();
 
   const isLoading = results.includes(LOADING_INDICATOR);
   results = results.filter(r => r !== LOADING_INDICATOR);
 
   useEffect(() => {
-    if (results?.length < activeIndex) {
+    if (results?.length <= activeIndex) {
       setActiveIndex(0);
     }
   }, [results, activeIndex, setActiveIndex]);
@@ -71,7 +73,7 @@ export function ResultsList({
         ))
       ) : (
         <div className="result result--disabled">
-          <p className="label">No results found</p>
+          <p className="label">{t('compass.results.no-results-found')}</p>
           <p className="description">{suggestion}</p>
         </div>
       )}

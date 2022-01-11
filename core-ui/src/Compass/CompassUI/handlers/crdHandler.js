@@ -34,12 +34,18 @@ function getSuggestions({ tokens, resourceCache }) {
   });
 }
 
-function makeListItem(item, namespace) {
+function makeListItem(item, namespace, t) {
   const name = item.metadata.name;
   const isNamespaced = item.spec.scope === 'Namespaced';
+
   return {
-    label: `CRD ${name}`,
-    category: `${isNamespaced ? 'Namespaced CRDs' : 'Cluster CRDs'}`,
+    label: t('compass.results.resource-and-name', {
+      resourceType: t('compass.crds.name-short'),
+      name,
+    }),
+    category: `${
+      isNamespaced ? t('compass.crds.namespaced') : t('compass.crds.cluster')
+    }`,
     query: `crds ${name}`,
     onActivate: () =>
       LuigiClient.linkManager()
@@ -77,7 +83,7 @@ function createResults(context) {
     return;
   }
 
-  const { resourceCache, tokens, namespace } = context;
+  const { resourceCache, tokens, namespace, t } = context;
   const crds = resourceCache['customresourcedefinitions'];
   if (typeof crds !== 'object') {
     return LOADING_INDICATOR;
@@ -89,14 +95,18 @@ function createResults(context) {
       item.metadata.name.includes(name),
     );
     if (matchedByName) {
-      return matchedByName.map(item => makeListItem(item, namespace));
+      return matchedByName.map(item => makeListItem(item, namespace, t));
     }
     return null;
   } else {
+    const listLabel = t('compass.results.list-of', {
+      resourceType: t('compass.crds.name-short_plural'),
+    });
+
     const linksToLists = [
       {
-        label: 'List of CRDs',
-        category: 'Cluster CRDs',
+        label: listLabel,
+        category: t('compass.crds.cluster'),
         query: 'crds',
         onActivate: () =>
           LuigiClient.linkManager()
@@ -104,8 +114,8 @@ function createResults(context) {
             .navigate(`/customresourcedefinitions`),
       },
       {
-        label: 'List of CRDs',
-        category: 'Namespaced CRDs',
+        label: listLabel,
+        category: t('compass.crds.namespaced'),
         query: 'crds',
         onActivate: () =>
           LuigiClient.linkManager()
@@ -116,7 +126,7 @@ function createResults(context) {
 
     return [
       ...linksToLists,
-      ...crds.map(item => makeListItem(item, namespace)),
+      ...crds.map(item => makeListItem(item, namespace, t)),
     ];
   }
 }

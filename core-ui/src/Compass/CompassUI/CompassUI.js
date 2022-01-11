@@ -6,6 +6,7 @@ import { addHistoryEntry, getHistoryEntries } from './search-history';
 import { LOADING_INDICATOR, useSearchResults } from './useSearchResults';
 import './CompassUI.scss';
 import { FormInput } from 'fundamental-react';
+import { useTranslation } from 'react-i18next';
 
 function CompassUIBackground({ hide, children }) {
   const onBackgroundClick = e => {
@@ -23,6 +24,7 @@ function CompassUIBackground({ hide, children }) {
 
 export function CompassUI({ hide, resourceCache, updateResourceCache }) {
   const { namespaceId: namespace } = useMicrofrontendContext();
+  const { t } = useTranslation();
 
   const [query, setQuery] = useState('');
   const [originalQuery, setOriginalQuery] = useState('');
@@ -121,7 +123,7 @@ export function CompassUI({ hide, resourceCache, updateResourceCache }) {
           <FormInput
             value={!isHistoryMode ? query : ''}
             placeholder={
-              !isHistoryMode ? 'Type to search, e.g. "ns default"' : query
+              !isHistoryMode ? t('compass.search.placeholder') : query
             }
             onChange={e => setQuery(e.target.value)}
             onKeyDown={e => {

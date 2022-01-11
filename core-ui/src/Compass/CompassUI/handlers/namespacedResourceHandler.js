@@ -5,8 +5,6 @@ import {
   getSuggestion,
   getApiPath,
   toFullResourceType,
-  formatTypeSingular,
-  formatTypePlural,
   autocompleteForResources,
 } from './helpers';
 
@@ -66,19 +64,30 @@ function getSuggestions({ tokens, namespace, resourceCache }) {
       resourceCache[`${namespace}/${fullResourceType}`] || []
     ).map(n => n.metadata.name);
     const suggestedName = getSuggestion(name, resourceNames);
-    return `${suggestedType} ${suggestedName}`;
+    if (suggestedType && suggestedName) {
+      return `${suggestedType} ${suggestedName}`;
+    }
   } else {
     return suggestedType;
   }
 }
 
-function makeListItem(item, matchedNode) {
+function makeListItem(item, matchedNode, t) {
   const namespacePart = `namespaces/${item.metadata.namespace}`;
   const detailsPart = `details/${item.metadata.name}`;
   const link = `${namespacePart}/${matchedNode.pathSegment}/${detailsPart}`;
 
   return {
-    label: `${formatTypeSingular(matchedNode.viewUrl)} ${item.metadata.name}`,
+    label: t('compass.results.resource-and-name', {
+      resourceType: pluralize(
+        t([
+          `${matchedNode.resourceType}.title`,
+          `compass.resource-names.${matchedNode.resourceType}`,
+        ]),
+        1,
+      ),
+      name: item.metadata.name,
+    }),
     query: `${matchedNode.resourceType} ${item.metadata.name}`,
     category: matchedNode.category,
     onActivate: () =>
@@ -111,7 +120,13 @@ async function fetchNamespacedResource(context) {
   }
 }
 
-function createResults({ tokens, namespace, resourceCache, namespaceNodes }) {
+function createResults({
+  tokens,
+  namespace,
+  resourceCache,
+  namespaceNodes,
+  t,
+}) {
   const [type, name] = tokens;
 
   const resourceType = toFullResourceType(type, namespacedResourceTypes);
@@ -121,14 +136,13 @@ function createResults({ tokens, namespace, resourceCache, namespaceNodes }) {
     return;
   }
 
-  let ttt = formatTypePlural(matchedNode.viewUrl);
-  //todo
-  if (ttt === 'Custom Resource Definitions') {
-    ttt = 'namespaced Custom Resource Definitions';
-  }
-
   const linkToList = {
-    label: `List of ${ttt}`,
+    label: t('compass.results.list-of', {
+      resourceType: t([
+        `${resourceType}.title`,
+        `compass.resource-names.${resourceType}`,
+      ]),
+    }),
     category: matchedNode.category,
     query: matchedNode.resourceType,
     onActivate: () =>
@@ -145,11 +159,11 @@ function createResults({ tokens, namespace, resourceCache, namespaceNodes }) {
   if (name) {
     return resources
       .filter(item => item.metadata.name.includes(name))
-      .map(item => makeListItem(item, matchedNode));
+      .map(item => makeListItem(item, matchedNode, t));
   } else {
     return [
       linkToList,
-      ...resources.map(item => makeListItem(item, matchedNode)),
+      ...resources.map(item => makeListItem(item, matchedNode, t)),
     ];
   }
 }

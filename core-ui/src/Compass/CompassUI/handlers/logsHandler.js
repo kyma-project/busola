@@ -40,7 +40,7 @@ function getSuggestions({ tokens, resourceCache }) {
   });
 }
 
-function makeListItem(pod, containerName) {
+function makeListItem(pod, containerName, t) {
   const podName = pod.metadata.name;
   const namespacePart = `namespaces/${pod.metadata.namespace}`;
 
@@ -49,12 +49,14 @@ function makeListItem(pod, containerName) {
   );
 
   return containers.map(({ name: containerName }) => {
-    const label = `Logs for ${podName}/${containerName}`;
+    const label = t('compass.results.logs-for', {
+      target: `${podName}/${containerName}`,
+    });
     const query = `logs ${podName}${containerName ? ` ${containerName}` : ''}`;
 
     return {
       label,
-      category: 'Workloads',
+      category: t('workloads.title'),
       query,
       onActivate: () =>
         LuigiClient.linkManager()
@@ -91,7 +93,7 @@ function createResults(context) {
     return;
   }
 
-  const { resourceCache, tokens, namespace } = context;
+  const { resourceCache, tokens, namespace, t } = context;
   const pods = resourceCache[`${namespace}/pods`];
   if (typeof pods !== 'object') {
     return LOADING_INDICATOR;
@@ -104,11 +106,13 @@ function createResults(context) {
       pod.metadata.name.includes(podName),
     );
     if (matchedByPodName) {
-      return matchedByPodName.flatMap(pod => makeListItem(pod, containerName));
+      return matchedByPodName.flatMap(pod =>
+        makeListItem(pod, containerName, t),
+      );
     }
     return null;
   } else {
-    return pods.flatMap(pod => makeListItem(pod, containerName));
+    return pods.flatMap(pod => makeListItem(pod, containerName, t));
   }
 }
 
