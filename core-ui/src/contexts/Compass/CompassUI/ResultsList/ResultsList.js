@@ -53,31 +53,29 @@ export function ResultsList({
   );
 
   return (
-    <>
-      <ul className="compass-ui__results" ref={listRef}>
-        {results?.length ? (
-          results.map((result, i) => (
-            <Result
-              key={result.label}
-              {...result}
-              index={i}
-              activeIndex={activeIndex}
-              setActiveIndex={setActiveIndex}
-              onItemClick={() => {
-                addHistoryEntry(result.query);
-                result.onActivate();
-                hide();
-              }}
-            />
-          ))
-        ) : (
-          <div className="result result--disabled">
-            <p className="label label--non-interactable">No results found</p>
-            <p className="description">{suggestion}</p>
-          </div>
-        )}
-      </ul>
+    <ul className="compass-ui__results" ref={listRef}>
+      {results?.length ? (
+        results.map((result, i) => (
+          <Result
+            key={result.label + result.category}
+            {...result}
+            index={i}
+            activeIndex={activeIndex}
+            setActiveIndex={setActiveIndex}
+            onItemClick={() => {
+              addHistoryEntry(result.query);
+              result.onActivate();
+              hide();
+            }}
+          />
+        ))
+      ) : (
+        <div className="result result--disabled">
+          <p className="label label--non-interactable">No results found</p>
+          <p className="description">{suggestion}</p>
+        </div>
+      )}
       {isLoading && <Spinner />}
-    </>
+    </ul>
   );
 }

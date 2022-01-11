@@ -15,7 +15,6 @@ const clusterResourceTypes = [
   ['applications', 'app', 'apps'],
   ['clusteraddonsconfigurations', 'clusteraddon', 'clusteraddons'],
   ['namespaces', 'ns'],
-  ['customresourcedefinitions', 'crd', 'crds'],
 ].map(aliases => [...aliases, pluralize(aliases[0], 1)]);
 
 function getAutocompleteEntries({ tokens, resourceCache }) {

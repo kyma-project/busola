@@ -16,7 +16,6 @@ const namespacedResourceTypes = [
   ['serviceaccounts', 'sa'],
   ['services', 'svc'],
   ['addonsconfigurations', 'addons'],
-  ['customresourcedefinitions', 'crd', 'crds'],
   ['daemonsets', 'ds'],
   ['deployments', 'deploy'],
   ['replicasets', 'rs'],
@@ -134,8 +133,14 @@ function createResults({ tokens, namespace, resourceCache, namespaceNodes }) {
     return;
   }
 
+  let ttt = formatTypePlural(matchedNode.viewUrl);
+  //todo
+  if (ttt === 'Custom Resource Definitions') {
+    ttt = 'namespaced Custom Resource Definitions';
+  }
+
   const linkToList = {
-    label: `List of ${formatTypePlural(matchedNode.viewUrl)}`,
+    label: `List of ${ttt}`,
     category: matchedNode.category,
     query: matchedNode.resourceType,
     onActivate: () =>
