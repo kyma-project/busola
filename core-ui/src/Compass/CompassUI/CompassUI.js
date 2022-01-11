@@ -4,8 +4,8 @@ import { NamespaceContextDisplay, SuggestedQuery } from './components';
 import { ResultsList } from './ResultsList/ResultsList';
 import { addHistoryEntry, getHistoryEntries } from './search-history';
 import { LOADING_INDICATOR, useSearchResults } from './useSearchResults';
-import { DebouncedFormInput } from 'shared/components/DebouncedFormInput';
 import './CompassUI.scss';
+import { FormInput } from 'fundamental-react';
 
 function CompassUIBackground({ hide, children }) {
   const onBackgroundClick = e => {
@@ -118,12 +118,12 @@ export function CompassUI({ hide, resourceCache, updateResourceCache }) {
             namespaceContext={namespaceContext}
             setNamespaceContext={setNamespaceContext}
           />
-          <DebouncedFormInput
+          <FormInput
             value={!isHistoryMode ? query : ''}
             placeholder={
               !isHistoryMode ? 'Type to search, e.g. "ns default"' : query
             }
-            onChange={setQuery}
+            onChange={e => setQuery(e.target.value)}
             onKeyDown={e => {
               if (isHistoryMode) {
                 keyDownInHistoryMode(e);
