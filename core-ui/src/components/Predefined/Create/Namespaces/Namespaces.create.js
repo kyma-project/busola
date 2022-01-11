@@ -44,23 +44,23 @@ const NamespacesCreate = props => {
     initialNamespace?.metadata?.labels?.[ISTIO_INJECTION_LABEL],
   );
 
-  const createLimitResource = useCreateResource(
-    'LimitRange',
-    'LimitRanges',
-    limits,
-    null,
-    `/api/v1/namespaces/${namespace.metadata.name}/limitranges`,
-    () => {},
-  );
+  const createLimitResource = useCreateResource({
+    singularName: 'LimitRange',
+    pluralKind: 'LimitRanges',
+    resource: limits,
+    initialResource: null,
+    createUrl: `/api/v1/namespaces/${namespace.metadata?.name}/limitranges`,
+    afterCreatedFn: () => {},
+  });
 
-  const createMemoryResource = useCreateResource(
-    'ResourceQuota',
-    'ResourceQuotas',
-    memory,
-    null,
-    `/api/v1/namespaces/${namespace.metadata.name}/resourcequotas`,
-    () => {},
-  );
+  const createMemoryResource = useCreateResource({
+    singularName: 'ResourceQuota',
+    pluralKind: 'ResourceQuotas',
+    resource: memory,
+    initialResource: null,
+    createUrl: `/api/v1/namespaces/${namespace?.metadata?.name}/resourcequotas`,
+    afterCreatedFn: () => {},
+  });
 
   useEffect(() => {
     // toggles istio-injection label when 'Disable sidecar injection' is clicked
