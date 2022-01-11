@@ -11,7 +11,7 @@ export const CompassProvider = withRouter(({ children, history }) => {
   const [resourceCache, updateResourceCache] = useResourceCache();
 
   const onKeyPress = ({ key, metaKey }) => {
-    if (key.toLowerCase() === 'k' && metaKey) {
+    if (key.toLowerCase() === '/' && metaKey) {
       setShowDialog(showDialog => !showDialog);
     } else if (key === 'Escape') {
       hide();

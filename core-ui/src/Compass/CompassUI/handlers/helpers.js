@@ -20,7 +20,7 @@ export function toFullResourceType(resourceType, resources) {
 }
 
 export function findCommonPrefix(initialPrefix, words) {
-  if (!words || words?.length < 1) {
+  if (!words?.length) {
     return initialPrefix;
   }
 
