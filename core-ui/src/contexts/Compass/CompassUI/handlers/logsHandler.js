@@ -1,6 +1,6 @@
 import LuigiClient from '@luigi-project/client';
 import { LOADING_INDICATOR } from '../useSearchResults';
-import { getSuggestion } from './helpers';
+import { getSuggestionsForSingleResource } from './helpers';
 
 const logNames = ['logs', 'log', 'lg'];
 
@@ -33,18 +33,11 @@ function getAutocompleteEntries({ tokens, namespace, resourceCache }) {
 }
 
 function getSuggestions({ tokens, resourceCache }) {
-  const [type, podName] = tokens;
-  const suggestedType = getSuggestion(type, logNames);
-  if (podName) {
-    const podNames = (resourceCache['pods'] || []).map(p => p.metadata.name);
-    const suggestedName = getSuggestion(podName, podNames) || podName;
-    const suggestion = `${suggestedType || type} ${suggestedName}`;
-    if (suggestion !== `${type} ${podName}`) {
-      return suggestion;
-    }
-  } else {
-    return suggestedType;
-  }
+  return getSuggestionsForSingleResource({
+    tokens,
+    resources: resourceCache['pods'] || [],
+    resourceTypeNames: logNames,
+  });
 }
 
 function makeListItem(pod, containerName) {

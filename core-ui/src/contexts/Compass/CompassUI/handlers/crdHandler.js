@@ -1,8 +1,8 @@
 import LuigiClient from '@luigi-project/client';
 import { LOADING_INDICATOR } from '../useSearchResults';
-import { getSuggestion } from './helpers';
+import { getSuggestionsForSingleResource } from './helpers';
 
-const crdResourceNames = ['customresourcedefinitions', 'crd', 'crds'];
+const crdResourceTypes = ['customresourcedefinitions', 'crd', 'crds'];
 
 function getAutocompleteEntries({ tokens, resourceCache }) {
   const tokenToAutocomplete = tokens[tokens.length - 1];
@@ -27,20 +27,11 @@ function getAutocompleteEntries({ tokens, resourceCache }) {
 }
 
 function getSuggestions({ tokens, resourceCache }) {
-  const [type, name] = tokens;
-  const suggestedType = getSuggestion(type, crdResourceNames);
-  if (name) {
-    const crdNames = (resourceCache['customresourcedefinitions'] || []).map(
-      n => n.metadata.name,
-    );
-    const suggestedName = getSuggestion(name, crdNames) || name;
-    const suggestion = `${suggestedType || type} ${suggestedName}`;
-    if (suggestion !== `${type} ${name}`) {
-      return suggestion;
-    }
-  } else {
-    return suggestedType;
-  }
+  return getSuggestionsForSingleResource({
+    tokens,
+    resources: resourceCache['customresourcedefinitions'] || [],
+    resourceTypeNames: crdResourceTypes,
+  });
 }
 
 function makeListItem(item, namespace) {
@@ -61,7 +52,7 @@ function makeListItem(item, namespace) {
 }
 
 function isAboutCRDs({ tokens }) {
-  return crdResourceNames.includes(tokens[0]);
+  return crdResourceTypes.includes(tokens[0]);
 }
 
 async function fetchCRDs(context) {

@@ -1,8 +1,8 @@
 import LuigiClient from '@luigi-project/client';
 import { LOADING_INDICATOR } from '../useSearchResults';
-import { getSuggestion } from './helpers';
+import { getSuggestionsForSingleResource } from './helpers';
 
-const nodeResourceNames = ['nodes', 'node', 'no'];
+const nodeResourceTypes = ['nodes', 'node', 'no'];
 
 function getAutocompleteEntries({ tokens, resourceCache }) {
   const tokenToAutocomplete = tokens[tokens.length - 1];
@@ -25,18 +25,11 @@ function getAutocompleteEntries({ tokens, resourceCache }) {
 }
 
 function getSuggestions({ tokens, resourceCache }) {
-  const [type, name] = tokens;
-  const suggestedType = getSuggestion(type, nodeResourceNames);
-  if (name) {
-    const nodeNames = (resourceCache['nodes'] || []).map(n => n.metadata.name);
-    const suggestedName = getSuggestion(name, nodeNames) || name;
-    const suggestion = `${suggestedType || type} ${suggestedName}`;
-    if (suggestion !== `${type} ${name}`) {
-      return suggestion;
-    }
-  } else {
-    return suggestedType;
-  }
+  return getSuggestionsForSingleResource({
+    tokens,
+    resources: resourceCache['nodes'] || [],
+    resourceTypeNames: nodeResourceTypes,
+  });
 }
 
 function makeListItem(item) {
@@ -53,7 +46,7 @@ function makeListItem(item) {
 }
 
 function isAboutNodes({ tokens }) {
-  return nodeResourceNames.includes(tokens[0]);
+  return nodeResourceTypes.includes(tokens[0]);
 }
 
 async function fetchNodes(context) {

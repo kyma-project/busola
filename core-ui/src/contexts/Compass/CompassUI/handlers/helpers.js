@@ -56,3 +56,22 @@ export function findCommonPrefix(initialPrefix, words) {
 
   return biggestCommonPrefix;
 }
+
+export function getSuggestionsForSingleResource({
+  tokens,
+  resources,
+  resourceTypeNames,
+}) {
+  const [type, name] = tokens;
+  const suggestedType = getSuggestion(type, resourceTypeNames);
+  if (name) {
+    const resourceNames = resources.map(n => n.metadata.name);
+    const suggestedName = getSuggestion(name, resourceNames) || name;
+    const suggestion = `${suggestedType || type} ${suggestedName}`;
+    if (suggestion !== `${type} ${name}`) {
+      return suggestion;
+    }
+  } else {
+    return suggestedType;
+  }
+}
