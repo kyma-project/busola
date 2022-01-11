@@ -19,9 +19,15 @@ export function getSuggestions(context) {
   if (!context.search) {
     return [];
   }
-  return handlers
+  const suggestions = handlers
     .flatMap(handler => handler.getSuggestions(context))
     .filter(Boolean);
+
+  // don't suggest anything if correct word is already here
+  if (suggestions.includes(context.search)) {
+    return [];
+  }
+  return suggestions;
 }
 
 export function getAutocompleteEntries(context) {

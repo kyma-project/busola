@@ -74,11 +74,8 @@ function getSuggestions({ tokens, namespace, resourceCache }) {
     const resourceNames = (
       resourceCache[`${namespace}/${fullResourceType}`] || []
     ).map(n => n.metadata.name);
-    const suggestedName = getSuggestion(name, resourceNames) || name;
-    const suggestion = `${suggestedType || type} ${suggestedName}`;
-    if (suggestion !== `${type} ${name}`) {
-      return suggestion;
-    }
+    const suggestedName = getSuggestion(name, resourceNames);
+    return `${suggestedType} ${suggestedName}`;
   } else {
     return suggestedType;
   }

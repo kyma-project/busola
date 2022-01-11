@@ -2,11 +2,7 @@ import didYouMean from 'didyoumean';
 import { prettifyNameSingular, prettifyNamePlural } from 'react-shared';
 
 export function getSuggestion(phrase, itemList) {
-  const suggestion = didYouMean(phrase, itemList);
-  if (suggestion !== phrase) {
-    return suggestion;
-  }
-  return null;
+  return didYouMean(phrase, itemList);
 }
 
 export function getApiPath(resourceType, nodes) {
@@ -33,7 +29,7 @@ function formatFromViewUrl(viewUrl, formatter) {
   return formatter(null, resourceType);
 }
 
-// assume first item is full name
+// assume first item is the full name
 export function toFullResourceType(resourceType, resources) {
   return resources.find(r => r.includes(resourceType))?.[0] || resourceType;
 }
@@ -66,11 +62,8 @@ export function getSuggestionsForSingleResource({
   const suggestedType = getSuggestion(type, resourceTypeNames);
   if (name) {
     const resourceNames = resources.map(n => n.metadata.name);
-    const suggestedName = getSuggestion(name, resourceNames) || name;
-    const suggestion = `${suggestedType || type} ${suggestedName}`;
-    if (suggestion !== `${type} ${name}`) {
-      return suggestion;
-    }
+    const suggestedName = getSuggestion(name, resourceNames);
+    return `${suggestedType} ${suggestedName}`;
   } else {
     return suggestedType;
   }

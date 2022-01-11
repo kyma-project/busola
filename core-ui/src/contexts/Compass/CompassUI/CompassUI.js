@@ -4,7 +4,7 @@ import { NamespaceContextDisplay, SuggestedSearch } from './components';
 import './CompassUI.scss';
 import { ResultsList } from './ResultsList/ResultsList';
 import { addHistoryEntry, getHistoryEntries } from './search-history';
-import { useSearchResults } from './useSearchResults';
+import { LOADING_INDICATOR, useSearchResults } from './useSearchResults';
 import { DebouncedFormInput } from '../../../shared/components/DebouncedFormInput';
 
 export function CompassUIBackground(props) {
@@ -84,7 +84,10 @@ function CompassUI({ hide }) {
         setSearch(autocompletePhrase);
       } else if (suggestedSearch) {
         setSearch(suggestedSearch);
-      } else if (results?.[activeIndex]) {
+      } else if (
+        results?.[activeIndex] &&
+        results[activeIndex] !== LOADING_INDICATOR
+      ) {
         // fill search with active result
         setSearch(results[activeIndex].query || '');
       }
