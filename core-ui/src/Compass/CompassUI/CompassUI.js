@@ -5,7 +5,7 @@ import './CompassUI.scss';
 import { ResultsList } from './ResultsList/ResultsList';
 import { addHistoryEntry, getHistoryEntries } from './search-history';
 import { LOADING_INDICATOR, useSearchResults } from './useSearchResults';
-import { DebouncedFormInput } from '../../../shared/components/DebouncedFormInput';
+import { DebouncedFormInput } from '../../shared/components/DebouncedFormInput';
 
 function CompassUIBackground({ hide, children }) {
   const onBackgroundClick = e => {

@@ -4,8 +4,6 @@ import { withRouter } from 'react-router-dom';
 import { useEventListener } from 'hooks/useEventListener';
 import { useCustomMessageListener } from 'hooks/useCustomMessageListener';
 
-export const CompassContext = createContext();
-
 export const CompassProvider = withRouter(({ children, history }) => {
   const [showDialog, setShowDialog] = useState(false);
   const hide = () => setShowDialog(false);
@@ -21,16 +19,12 @@ export const CompassProvider = withRouter(({ children, history }) => {
   useEventListener('keydown', onKeyPress);
   useCustomMessageListener('busola.main-frame-keypress', onKeyPress);
   useCustomMessageListener('busola.main-frame-click', hide);
-  useEffect(() => history.listen(hide), [history]);
+  useEffect(() => history.listen(hide), [history]); // hide on nav path change
 
   return (
-    <CompassContext.Provider value={null}>
+    <>
       {showDialog && <CompassUI hide={hide} />}
       {children}
-    </CompassContext.Provider>
+    </>
   );
 });
-
-export function useCompass() {
-  return useContext(CompassContext);
-}
