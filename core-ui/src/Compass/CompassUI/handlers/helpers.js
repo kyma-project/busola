@@ -68,3 +68,20 @@ export function getSuggestionsForSingleResource({
     return suggestedType;
   }
 }
+
+export function autocompleteForResources({ tokens, resources, resourceTypes }) {
+  const type = tokens[0];
+  const tokenToAutocomplete = tokens[tokens.length - 1];
+  switch (tokens.length) {
+    case 1: // type
+      // take only first, plural form
+      return resourceTypes.flatMap(t => t[0]).filter(rT => rT.startsWith(type));
+    case 2: // name
+      const resourceNames = resources.map(n => n.metadata.name);
+      return resourceNames
+        .filter(name => name.startsWith(tokenToAutocomplete))
+        .map(name => `${type} ${name} `);
+    default:
+      return [];
+  }
+}

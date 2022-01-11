@@ -7,19 +7,16 @@ function createNonResourceOptions({ activeClusterName }) {
     {
       names: ['clusters', 'cluster'],
       type: 'clusters',
-      autocompleteOptions: ['clusters'],
     },
     {
-      names: ['prefs', 'preferences'],
+      names: ['preferences', 'prefs'],
       type: 'preferences',
-      autocompleteOptions: ['preferences'],
     },
     ...(activeClusterName
       ? [
           {
             names: ['overview', 'ov'],
             type: 'overview',
-            autocompleteOptions: ['overview'],
           },
         ]
       : []),
@@ -30,8 +27,8 @@ function getAutocompleteEntries(context) {
   const { tokens } = context;
   if (tokens.length > 1) return [];
 
-  const options = createNonResourceOptions(context).flatMap(
-    option => option.autocompleteOptions || option.names,
+  const options = createNonResourceOptions(context).map(
+    option => option.names[0],
   );
 
   return options.filter(o => o.startsWith(tokens[0]));

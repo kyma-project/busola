@@ -7,6 +7,7 @@ import {
   toFullResourceType,
   formatTypeSingular,
   formatTypePlural,
+  autocompleteForResources,
 } from './helpers';
 
 const namespacedResourceTypes = [
@@ -40,27 +41,17 @@ const namespacedResourceTypes = [
 ].map(aliases => [...aliases, pluralize(aliases[0], 1)]);
 
 function getAutocompleteEntries({ tokens, namespace, resourceCache }) {
-  const type = tokens[0];
-  const tokenToAutocomplete = tokens[tokens.length - 1];
-  switch (tokens.length) {
-    case 1: // type
-      // take only first, plural form
-      const resourceTypes = namespacedResourceTypes.flatMap(t => t[0]);
-      return resourceTypes.filter(rN => rN.startsWith(type));
-    case 2: // name
-      const fullResourceType = toFullResourceType(
-        type,
-        namespacedResourceTypes,
-      );
-      const resourceNames = (
-        resourceCache[`${namespace}/${fullResourceType}`] || []
-      ).map(n => n.metadata.name);
-      return resourceNames
-        .filter(name => name.startsWith(tokenToAutocomplete))
-        .map(name => `${type} ${name} `);
-    default:
-      return [];
-  }
+  const fullResourceType = toFullResourceType(
+    tokens[0],
+    namespacedResourceTypes,
+  );
+  const resources = resourceCache[`${namespace}/${fullResourceType}`] || [];
+
+  return autocompleteForResources({
+    tokens,
+    resources,
+    resourceTypes: namespacedResourceTypes,
+  });
 }
 
 function getSuggestions({ tokens, namespace, resourceCache }) {
