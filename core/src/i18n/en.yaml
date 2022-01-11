@@ -459,7 +459,7 @@ common:
     duplicate-key: Duplicate key
     error: Error
     hide: Hide read-only fields
-    k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' (e.g.: 'my-name1')."
+    k8s-name-input: 'Name must consist of lowercase alphanumeric characters, can contain ''-'' (e.g.: ''my-name1'').'
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: key=value, must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     read-file: Read file content as a single value, with file name as a key.
@@ -1190,7 +1190,7 @@ jobs:
     complete: Job completed.
     not-complete: Job in progress.
 kubeconfig-id:
-  error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})."
+  error: 'Couldn''t load kubeconfig ID; configuration not changed (Error: ${{error}}).'
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
 legal:
   copyright: Copyright
@@ -1471,18 +1471,18 @@ roles:
 schema:
   array-item: ({{name}} item)
   fields:
-    additionalProperties: Additional properties
+    additionalProperties: Additional Properties
     allOf: All of
     anyOf: Any of
     const: Const value
     dependentRequired: Dependent required
-    dependentSchemas: Dependent schemas
+    dependentSchemas: Dependent Schemas
     else: If condition does not match
     enum: Allowed values
     exclusiveMaximum: Exclusive maximum value
     exclusiveMinimum: Exclusive minimum value
     if: Condition
-    items: Array items
+    items: Array Items
     maxContains: Maximum "contains" value
     maxItems: Maximum items count
     maxLength: Maximum length
@@ -1497,11 +1497,11 @@ schema:
     not: Not
     oneOf: One of
     pattern: Match pattern
-    properties: Object properties
+    properties: Object Properties
     required: Required
     then: If condition matches
-    unevaluatedItems: Unevaluated items
-    unevaluatedProperties: Unevaluated properties
+    unevaluatedItems: Unevaluated Items
+    unevaluatedProperties: Unevaluated Properties
     uniqueItems: Unique items
   modes:
     json: JSON
