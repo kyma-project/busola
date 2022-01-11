@@ -17,8 +17,12 @@
     text-decoration: none;
   }
 
-  .label--non-interactable {
-    cursor: default;
+  .label {
+    color: var(--sapList_TextColor);
+
+    &--non-interactable {
+      cursor: default;
+    }
   }
 
   .description {

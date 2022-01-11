@@ -35,7 +35,7 @@ export function Result({
     >
       <div className="result">
         <div>
-          <p>{label}</p>
+          <p className="label">{label}</p>
           <p className="description">{category}</p>
         </div>
         {activeIndex === index && (
