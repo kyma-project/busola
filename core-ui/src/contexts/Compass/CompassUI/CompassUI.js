@@ -7,21 +7,21 @@ import { addHistoryEntry, getHistoryEntries } from './search-history';
 import { LOADING_INDICATOR, useSearchResults } from './useSearchResults';
 import { DebouncedFormInput } from '../../../shared/components/DebouncedFormInput';
 
-export function CompassUIBackground(props) {
+function CompassUIBackground({ hide, children }) {
   const onBackgroundClick = e => {
     if (e.nativeEvent.srcElement.id === 'background') {
-      props.hide();
+      hide();
     }
   };
 
   return (
     <div id="background" className="compass-ui" onClick={onBackgroundClick}>
-      <CompassUI {...props} />
+      {children}
     </div>
   );
 }
 
-function CompassUI({ hide }) {
+export function CompassUI({ hide }) {
   const { namespaceId: namespace } = useMicrofrontendContext();
   const [search, setSearch] = useState('');
   const [namespaceContext, setNamespaceContext] = useState(namespace);
@@ -106,47 +106,49 @@ function CompassUI({ hide }) {
   };
 
   return (
-    <div className="compass-ui__wrapper" role="dialog">
-      <div className="compass-ui__content">
-        <NamespaceContextDisplay
-          namespaceContext={namespaceContext}
-          setNamespaceContext={setNamespaceContext}
-        />
-        <DebouncedFormInput
-          value={!isHistoryMode ? search : ''}
-          placeholder={
-            !isHistoryMode ? 'Type to search, e.g. "ns default"' : search
-          }
-          onChange={setSearch}
-          onKeyDown={e => {
-            if (isHistoryMode) {
-              keyDownInHistoryMode(e);
-            } else {
-              keyDownInDropdownMode(e);
-            }
-          }}
-          autoFocus
-          ref={inputRef}
-        />
-        {search && (
-          <ResultsList
-            results={results}
-            hide={hide}
-            isHistoryMode={isHistoryMode}
-            suggestion={
-              <SuggestedSearch
-                suggestedSearch={suggestedSearch}
-                setSearch={search => {
-                  setSearch(search);
-                  inputRef.current.focus();
-                }}
-              />
-            }
-            activeIndex={activeIndex}
-            setActiveIndex={setActiveIndex}
+    <CompassUIBackground hide={hide}>
+      <div className="compass-ui__wrapper" role="dialog">
+        <div className="compass-ui__content">
+          <NamespaceContextDisplay
+            namespaceContext={namespaceContext}
+            setNamespaceContext={setNamespaceContext}
           />
-        )}
+          <DebouncedFormInput
+            value={!isHistoryMode ? search : ''}
+            placeholder={
+              !isHistoryMode ? 'Type to search, e.g. "ns default"' : search
+            }
+            onChange={setSearch}
+            onKeyDown={e => {
+              if (isHistoryMode) {
+                keyDownInHistoryMode(e);
+              } else {
+                keyDownInDropdownMode(e);
+              }
+            }}
+            autoFocus
+            ref={inputRef}
+          />
+          {search && (
+            <ResultsList
+              results={results}
+              hide={hide}
+              isHistoryMode={isHistoryMode}
+              suggestion={
+                <SuggestedSearch
+                  suggestedSearch={suggestedSearch}
+                  setSearch={search => {
+                    setSearch(search);
+                    inputRef.current.focus();
+                  }}
+                />
+              }
+              activeIndex={activeIndex}
+              setActiveIndex={setActiveIndex}
+            />
+          )}
+        </div>
       </div>
-    </div>
+    </CompassUIBackground>
   );
 }
