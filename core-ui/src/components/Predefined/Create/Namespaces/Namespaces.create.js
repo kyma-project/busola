@@ -35,10 +35,10 @@ const NamespacesCreate = props => {
   );
   // container limits
   const [withLimits, setWithLimits] = useState(false);
-  const [limits, setLimits] = useState(createLimitRangeTemplate());
+  const [limits, setLimits] = useState(createLimitRangeTemplate({}));
   // memory quotas
   const [withMemory, setWithMemory] = useState(false);
-  const [memory, setMemory] = useState(createResourceQuotaTemplate());
+  const [memory, setMemory] = useState(createResourceQuotaTemplate({}));
 
   const [isSidecar, setSidecar] = useState(
     initialNamespace?.metadata?.labels?.[ISTIO_INJECTION_LABEL],
