@@ -10,8 +10,11 @@ export const CompassProvider = withRouter(({ children, history }) => {
   const hide = () => setShowDialog(false);
   const [resourceCache, updateResourceCache] = useResourceCache();
 
-  const onKeyPress = ({ key, metaKey }) => {
-    if (key.toLowerCase() === '/' && metaKey) {
+  const onKeyPress = ({ key, metaKey, ctrlKey }) => {
+    const isMac = navigator.platform.toLowerCase().startsWith('mac');
+    const modifierKeyPressed = (isMac && metaKey) || (!isMac && ctrlKey);
+
+    if (key.toLowerCase() === '/' && modifierKeyPressed) {
       setShowDialog(showDialog => !showDialog);
     } else if (key === 'Escape') {
       hide();
