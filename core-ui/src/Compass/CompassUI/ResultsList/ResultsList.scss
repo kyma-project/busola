@@ -11,24 +11,16 @@
     &--disabled {
       cursor: default;
     }
-  }
 
-  .fd-link:hover {
-    text-decoration: none;
-  }
-
-  .label {
-    color: var(--sapList_TextColor);
-
-    &--non-interactable {
-      cursor: default;
+    .label {
+      color: var(--sapList_TextColor);
     }
-  }
 
-  .description {
-    margin-top: 2px;
-    font-size: 90%;
-    color: var(--sapContent_LabelColor);
+    .description {
+      margin-top: 2px;
+      font-size: 90%;
+      color: var(--sapContent_LabelColor);
+    }
   }
 
   .active {

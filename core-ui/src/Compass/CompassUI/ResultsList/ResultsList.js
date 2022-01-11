@@ -71,7 +71,7 @@ export function ResultsList({
         ))
       ) : (
         <div className="result result--disabled">
-          <p className="label label--non-interactable">No results found</p>
+          <p className="label">No results found</p>
           <p className="description">{suggestion}</p>
         </div>
       )}
