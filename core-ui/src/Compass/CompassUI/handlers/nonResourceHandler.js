@@ -14,11 +14,6 @@ function createNonResourceOptions({ activeClusterName }) {
       type: 'preferences',
       autocompleteOptions: ['preferences'],
     },
-    {
-      names: ['h', 'help'],
-      type: 'show-help',
-      autocompleteOptions: ['help'],
-    },
     ...(activeClusterName
       ? [
           {
@@ -67,15 +62,6 @@ function createResults(context) {
               });
             },
             customActionText: 'Open',
-          },
-        ];
-      case 'show-help':
-        return [
-          {
-            label: 'Help',
-            query: 'help',
-            onActivate: () => alert('todo show help or just hotkeys'),
-            customActionText: 'Show',
           },
         ];
       case 'overview':

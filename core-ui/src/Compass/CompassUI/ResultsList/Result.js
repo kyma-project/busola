@@ -30,7 +30,7 @@ export function Result({
   return (
     <li
       ref={resultRef}
-      onClick={onItemClick ? onItemClick : alert}
+      onClick={onItemClick}
       className={index === activeIndex ? 'active' : ''}
     >
       <div className="result">
