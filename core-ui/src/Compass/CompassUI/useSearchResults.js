@@ -5,11 +5,15 @@ import {
   useFeatureToggle,
 } from 'react-shared';
 import * as handlers from './handlers';
-import { useResourceCache } from './useResourceCache';
 
 export const LOADING_INDICATOR = 'LOADING_INDICATOR';
 
-export function useSearchResults({ query, namespaceContext }) {
+export function useSearchResults({
+  query,
+  namespaceContext,
+  resourceCache,
+  updateResourceCache,
+}) {
   const {
     clusters,
     activeClusterName,
@@ -21,7 +25,6 @@ export function useSearchResults({ query, namespaceContext }) {
   const [showHiddenNamespaces] = useFeatureToggle('showHiddenNamespaces');
 
   const fetch = useFetch();
-  const [resourceCache, updateResourceCache] = useResourceCache();
 
   const preprocessedQuery = query.trim().toLowerCase();
   const context = {

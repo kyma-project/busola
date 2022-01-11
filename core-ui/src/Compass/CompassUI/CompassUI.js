@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useMicrofrontendContext } from 'react-shared';
-import { NamespaceContextDisplay, SuggestedSearch } from './components';
+import { NamespaceContextDisplay, SuggestedQuery } from './components';
 import { ResultsList } from './ResultsList/ResultsList';
 import { addHistoryEntry, getHistoryEntries } from './search-history';
 import { LOADING_INDICATOR, useSearchResults } from './useSearchResults';
@@ -21,7 +21,7 @@ function CompassUIBackground({ hide, children }) {
   );
 }
 
-export function CompassUI({ hide }) {
+export function CompassUI({ hide, resourceCache, updateResourceCache }) {
   const { namespaceId: namespace } = useMicrofrontendContext();
 
   const [query, setQuery] = useState('');
@@ -37,6 +37,8 @@ export function CompassUI({ hide }) {
   const { results, suggestedQuery, autocompletePhrase } = useSearchResults({
     query,
     namespaceContext,
+    resourceCache,
+    updateResourceCache,
   });
 
   useEffect(() => setNamespaceContext(namespace), [namespace]);
@@ -138,7 +140,7 @@ export function CompassUI({ hide }) {
               hide={hide}
               isHistoryMode={isHistoryMode}
               suggestion={
-                <SuggestedSearch
+                <SuggestedQuery
                   suggestedQuery={suggestedQuery}
                   setQuery={query => {
                     setQuery(query);

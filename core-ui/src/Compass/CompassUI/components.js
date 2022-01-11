@@ -1,7 +1,7 @@
 import React from 'react';
 import { Token } from 'fundamental-react';
 
-export function SuggestedSearch({ suggestedQuery, setQuery }) {
+export function SuggestedQuery({ suggestedQuery, setQuery }) {
   if (!suggestedQuery) {
     return null;
   }
