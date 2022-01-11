@@ -1,8 +1,6 @@
 /// <reference types="cypress" />
-import config from '../config';
 import 'cypress-file-upload';
-import { loadSubscription } from '../support/loadFile';
-const NAMESPACE_NAME = config.namespace;
+import { loadKubeconfig } from '../support/loadKubeconfigFile';
 
 const random = Math.floor(Math.random() * 9999) + 1000;
 const FUNCTION_NAME = 'in-cluster-eventing-receiver';
@@ -111,7 +109,7 @@ context('In-cluster eventing', () => {
     );
   });
 
-  it('Open the receiver logs', () => {
+  it('Check logs after triggering publisher function', () => {
     cy.getLeftNav()
       .contains('Workloads')
       .click();
@@ -121,17 +119,30 @@ context('In-cluster eventing', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('a', FUNCTION_NAME)
+      .contains('a', API_RULE_AND_FUNCTION_NAME)
       .click();
 
     cy.getIframeBody()
-      .contains('View Logs')
-      .click();
-
-    // it just doesn't work in cypress
-    // cy.getIframeBody()
-    //   .contains('.logs', 'Event received')
-    //   .should('be.visible');
+      .contains(`${API_RULE_AND_FUNCTION_NAME}-`)
+      .then(element => {
+        const podName = element[0].textContent;
+        loadKubeconfig().then(kubeconfig => {
+          const requestUrl = `/api/v1/namespaces/${Cypress.env(
+            'NAMESPACE_NAME',
+          )}/pods/${podName}/log?container=function`;
+          cy.request({
+            method: 'GET',
+            url: kubeconfig.clusters[0].cluster.server + requestUrl,
+            timeout: 10000,
+            headers: {
+              authorization: 'Bearer ' + kubeconfig.users[0].user.token,
+            },
+          }).then(response => {
+            // response.body is automatically serialized into JSON
+            expect(response.body).to.match(/^Payload/);
+          });
+        });
+      });
   });
 
   it('Navigate to Subscription', () => {
