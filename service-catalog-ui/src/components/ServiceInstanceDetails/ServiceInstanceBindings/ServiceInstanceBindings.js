@@ -16,6 +16,7 @@ import { useTranslation } from 'react-i18next';
 
 import { TextOverflowWrapper } from '../../ServiceInstanceList/ServiceInstanceTable/styled';
 import { CreateServiceBindingModal } from './CreateServiceBindingModal';
+import { ServiceBindingStatus } from './ServiceBindingStatus';
 
 const ServiceInstanceBindings = ({ serviceInstance, i18n }) => {
   const { t } = useTranslation();
@@ -206,7 +207,7 @@ const ServiceInstanceBindings = ({ serviceInstance, i18n }) => {
       <GenericList
         key="service-bindings-list"
         title="Service Bindings"
-        headerRenderer={() => ['Name', 'Secret']}
+        headerRenderer={() => ['Name', 'Secret', 'Status']}
         extraHeaderContent={
           <CreateServiceBindingModal serviceInstance={serviceInstance} />
         }
@@ -223,6 +224,7 @@ const ServiceInstanceBindings = ({ serviceInstance, i18n }) => {
           >
             {e.spec.secretName}
           </Link>,
+          <ServiceBindingStatus status={e.status} />,
         ]}
         notFoundMessage="No Bindings found"
         actions={
