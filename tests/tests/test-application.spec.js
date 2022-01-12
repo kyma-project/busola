@@ -25,7 +25,6 @@ context('Test Application', () => {
       .contains('a', APPLICATION_NAME)
       .should('be.visible')
       .click();
-    cy.wait(2000);
   });
 
   it('Edit an application', () => {
