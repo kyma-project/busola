@@ -1618,6 +1618,8 @@ stateful-sets:
   name_singular: Stateful Set
   replicas: Replicas
   title: Stateful Sets
+storage-classes:
+  description: <0>Storage classes</0> provides a way for administrators to describe the "classes" of storage they offer.
 subscription:
   create:
     labels:
