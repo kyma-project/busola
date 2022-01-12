@@ -56,7 +56,7 @@ function makeListItem(pod, containerName, t) {
 
     return {
       label,
-      category: t('workloads.title'),
+      category: t('workloads.title') + ' > ' + t('pods.title'),
       query,
       onActivate: () =>
         LuigiClient.linkManager()

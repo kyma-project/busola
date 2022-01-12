@@ -49,25 +49,23 @@ function getSuggestions({ tokens, resourceCache }) {
 }
 
 function makeListItem(item, matchedNode, t) {
+  const name = item.metadata.name;
+  const { pathSegment, resourceType, category } = matchedNode;
+
   const detailsLink =
-    matchedNode.resourceType === 'namespaces'
-      ? `/${item.metadata.name}/details`
-      : `/details/${item.metadata.name}`;
-  const link = matchedNode.pathSegment + detailsLink;
+    resourceType === 'namespaces' ? `/${name}/details` : `/details/${name}`;
+  const link = pathSegment + detailsLink;
+
+  const resourceTypeText = t([
+    `${resourceType}.title`,
+    `compass.resource-names.${resourceType}`,
+  ]);
 
   return {
-    label: t('compass.results.resource-and-name', {
-      resourceType: pluralize(
-        t([
-          `${matchedNode.resourceType}.title`,
-          `compass.resource-names.${matchedNode.resourceType}`,
-        ]),
-        1,
-      ),
-      name: item.metadata.name,
-    }),
-    query: `${matchedNode.resourceType} ${item.metadata.name}`,
-    category: matchedNode.category,
+    label: name,
+    query: `${resourceType} ${name}`,
+    // namespaces have no category
+    category: category ? category + ' > ' + resourceTypeText : resourceTypeText,
     onActivate: () =>
       LuigiClient.linkManager()
         .fromContext('cluster')
@@ -113,15 +111,19 @@ function createResults({
     return;
   }
 
+  const resourceTypeText = t([
+    `${resourceType}.title`,
+    `compass.resource-names.${resourceType}`,
+  ]);
+
   const linkToList = {
     label: t('compass.results.list-of', {
-      resourceType: t([
-        `${resourceType}.title`,
-        `compass.resource-names.${resourceType}`,
-      ]),
+      resourceType: resourceTypeText,
     }),
-    category: matchedNode?.category,
-    query: matchedNode?.resourceType,
+    category: matchedNode.category
+      ? matchedNode.category + ' > ' + resourceTypeText
+      : resourceTypeText,
+    query: matchedNode.resourceType,
     onActivate: () =>
       LuigiClient.linkManager()
         .fromContext('cluster')

@@ -74,23 +74,22 @@ function getSuggestions({ tokens, namespace, resourceCache }) {
 }
 
 function makeListItem(item, matchedNode, t) {
+  const name = item.metadata.name;
+
   const namespacePart = `namespaces/${item.metadata.namespace}`;
-  const detailsPart = `details/${item.metadata.name}`;
+  const detailsPart = `details/${name}`;
   const link = `${namespacePart}/${matchedNode.pathSegment}/${detailsPart}`;
 
   return {
-    label: t('compass.results.resource-and-name', {
-      resourceType: pluralize(
-        t([
-          `${matchedNode.resourceType}.title`,
-          `compass.resource-names.${matchedNode.resourceType}`,
-        ]),
-        1,
-      ),
-      name: item.metadata.name,
-    }),
-    query: `${matchedNode.resourceType} ${item.metadata.name}`,
-    category: matchedNode.category,
+    label: name,
+    query: `${matchedNode.resourceType} ${name}`,
+    category:
+      matchedNode.category +
+      ' > ' +
+      t([
+        `${matchedNode.resourceType}.title`,
+        `compass.resource-names.${matchedNode.resourceType}`,
+      ]),
     onActivate: () =>
       LuigiClient.linkManager()
         .fromContext('cluster')
@@ -137,14 +136,16 @@ function createResults({
     return;
   }
 
+  const resourceTypeText = t([
+    `${resourceType}.title`,
+    `compass.resource-names.${resourceType}`,
+  ]);
+
   const linkToList = {
     label: t('compass.results.list-of', {
-      resourceType: t([
-        `${resourceType}.title`,
-        `compass.resource-names.${resourceType}`,
-      ]),
+      resourceType: resourceTypeText,
     }),
-    category: matchedNode.category,
+    category: matchedNode.category + ' > ' + resourceTypeText,
     query: matchedNode.resourceType,
     onActivate: () =>
       LuigiClient.linkManager()

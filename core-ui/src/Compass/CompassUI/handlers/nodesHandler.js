@@ -35,11 +35,9 @@ function getSuggestions({ tokens, resourceCache }) {
 function makeListItem(item, t) {
   const name = item.metadata.name;
   return {
-    label: t('compass.results.resource-and-name', {
-      resourceType: t('nodes.name_singular'),
-      name,
-    }),
-    category: t('clusters.overview.title-current-cluster'),
+    label: name,
+    category:
+      t('clusters.overview.title-current-cluster') + ' > ' + t('nodes.title'),
     query: `node ${name}`,
     onActivate: () =>
       LuigiClient.linkManager()

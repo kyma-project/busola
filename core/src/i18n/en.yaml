@@ -506,7 +506,6 @@ compass:
     list-of: List of {{resourceType}}
     logs-for: Logs for {{target}}
     no-results-found: No results found
-    resource-and-name: '{{resourceType}} {{name}}'
   search:
     placeholder: Type to search, e.g. "ns default"
     remove-ns-context: Remove Namespace context
@@ -1315,6 +1314,7 @@ node-details:
   warnings: Warnings
 nodes:
   name_singular: Node
+  title: Nodes
 oauth2-clients:
   auth-methods:
     client_secret_basic: Client Secret / Basic

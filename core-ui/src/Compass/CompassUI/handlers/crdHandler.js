@@ -39,13 +39,11 @@ function makeListItem(item, namespace, t) {
   const isNamespaced = item.spec.scope === 'Namespaced';
 
   return {
-    label: t('compass.results.resource-and-name', {
-      resourceType: t('compass.crds.name-short'),
-      name,
-    }),
-    category: `${
-      isNamespaced ? t('compass.crds.namespaced') : t('compass.crds.cluster')
-    }`,
+    label: name,
+    category:
+      t('configuration.title') +
+      ' > ' +
+      (isNamespaced ? t('compass.crds.namespaced') : t('compass.crds.cluster')),
     query: `crds ${name}`,
     onActivate: () =>
       LuigiClient.linkManager()
@@ -106,7 +104,7 @@ function createResults(context) {
     const linksToLists = [
       {
         label: listLabel,
-        category: t('compass.crds.cluster'),
+        category: t('configuration.title') + ' > ' + t('compass.crds.cluster'),
         query: 'crds',
         onActivate: () =>
           LuigiClient.linkManager()
@@ -115,7 +113,8 @@ function createResults(context) {
       },
       {
         label: listLabel,
-        category: t('compass.crds.namespaced'),
+        category:
+          t('configuration.title') + ' > ' + t('compass.crds.namespaced'),
         query: 'crds',
         onActivate: () =>
           LuigiClient.linkManager()

@@ -10,13 +10,17 @@ import { useTranslation } from 'react-i18next';
 
 function CompassUIBackground({ hide, children }) {
   const onBackgroundClick = e => {
-    if (e.nativeEvent.srcElement.id === 'background') {
+    if (e.nativeEvent.srcElement.id === 'compass-background') {
       hide();
     }
   };
 
   return (
-    <div id="background" className="compass-ui" onClick={onBackgroundClick}>
+    <div
+      id="compass-background"
+      className="compass-ui"
+      onClick={onBackgroundClick}
+    >
       {children}
     </div>
   );
