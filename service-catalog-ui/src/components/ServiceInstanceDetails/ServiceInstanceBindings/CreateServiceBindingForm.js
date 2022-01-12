@@ -1,33 +1,20 @@
-import {
-  ComboboxInput,
-  FormItem,
-  FormLabel,
-  MessageStrip,
-} from 'fundamental-react';
-import React, { useState } from 'react';
+import { FormItem, MessageStrip } from 'fundamental-react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { randomNameGenerator, K8sNameInput, useGetList } from 'react-shared';
-import styled from 'styled-components';
-
-const ComboboxWrapper = styled.div`
-  .fd-popover {
-    width: 100%;
-  }
-
-  input {
-    height: 2.5em;
-  }
-`;
 
 export function CreateServiceBindingForm({
   onChange,
   formElementRef,
   handleFormSubmit,
   namespace,
+  setCustomValid,
 }) {
   const { i18n } = useTranslation();
   const [name, setName] = useState(randomNameGenerator());
-  const [secretName, setSecretName] = useState('');
+
+  const [secretName, setSecretName] = useState(name);
+  const [secretExist, setSecretExist] = useState(false);
 
   const { data: secrets } = useGetList()(
     `/api/v1/namespaces/${namespace}/secrets`,
@@ -35,6 +22,18 @@ export function CreateServiceBindingForm({
       pollingInterval: 7000,
     },
   );
+
+  const validateSecretName = dd => {
+    const secretExist = (secrets || []).some(
+      secret => secret.metadata.name === dd,
+    );
+    setSecretExist(secretExist);
+    setCustomValid(!secretExist);
+  };
+
+  useEffect(() => {
+    validateSecretName(secretName);
+  }, [secretName, setCustomValid]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <form
@@ -52,24 +51,25 @@ export function CreateServiceBindingForm({
           value={name}
         />
       </FormItem>
+
       <FormItem>
-        <FormLabel className="fd-margin-top--tiny">Secret Name</FormLabel>
-        <ComboboxWrapper>
-          <ComboboxInput
-            compact
-            placeholder="Secret Name"
-            options={(secrets || [])
-              .map(s => s.metadata.name)
-              .map(n => ({ key: n, text: n }))}
-            selectedKey={secretName}
-            typedValue={secretName}
-            onSelect={e => setSecretName(e.target.value)}
-          />
-        </ComboboxWrapper>
+        <K8sNameInput
+          onChange={e => {
+            setSecretName(e.target.value);
+          }}
+          label="Secret Name"
+          kind="Secret"
+          i18n={i18n}
+          value={secretName}
+          required={false}
+        />
       </FormItem>
-      <MessageStrip className="fd-margin-top--tiny" type="information">
-        If Secret Name is not set a new Secret will be created.
-      </MessageStrip>
+
+      {secretExist && (
+        <MessageStrip className="fd-margin-top--tiny" type="error">
+          Secret with this name already exists.
+        </MessageStrip>
+      )}
     </form>
   );
 }

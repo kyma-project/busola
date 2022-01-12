@@ -1,5 +1,4 @@
 import React from 'react';
-import { MonacoEditor } from 'react-shared';
 import LuigiClient from '@luigi-project/client';
 import { LayoutPanel } from 'fundamental-react';
 import * as jp from 'jsonpath';
@@ -9,11 +8,11 @@ import {
   StatusBadge,
   prettifyNamePlural,
   EMPTY_TEXT_PLACEHOLDER,
-  useTheme,
 } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
 import { ComponentForList } from 'shared/getComponents';
+import { SchemaViewer } from 'shared/components/SchemaViewer/SchemaViewer';
 import './CustomResourceDefinitionVersions.scss';
 
 const CustomResources = ({ resource, namespace, version, i18n }) => {
@@ -104,14 +103,10 @@ const AdditionalPrinterColumns = ({ additionalPrinterColumns }) => {
 export const CustomResourceDefinitionVersions = resource => {
   const { t, i18n } = useTranslation();
 
-  const { editorTheme } = useTheme();
   const namespace = LuigiClient.getContext().namespaceId;
 
   if (!resource) return null;
   const { versions } = resource.spec;
-  const prettifySchema = schema => {
-    return JSON.stringify(schema, null, 2);
-  };
 
   const storageVersion = versions.find(v => v.storage);
 
@@ -156,34 +151,10 @@ export const CustomResourceDefinitionVersions = resource => {
         }
       />
       {storageVersion.schema && (
-        <LayoutPanel
-          key={`crd-schema-${storageVersion.name}`}
-          className="fd-margin--md"
-        >
-          <LayoutPanel.Header>
-            <LayoutPanel.Head
-              title={t('custom-resource-definitions.subtitle.schema')}
-            />
-          </LayoutPanel.Header>
-          <LayoutPanel.Body>
-            <MonacoEditor
-              key={`crd-schema-editor-${storageVersion.name}`}
-              theme={editorTheme}
-              language="json"
-              height="20em"
-              value={prettifySchema(storageVersion.schema)}
-              options={{
-                readOnly: true,
-                minimap: {
-                  enabled: false,
-                },
-                scrollbar: {
-                  alwaysConsumeMouseWheel: false,
-                },
-              }}
-            />
-          </LayoutPanel.Body>
-        </LayoutPanel>
+        <SchemaViewer
+          name={storageVersion.name}
+          schema={storageVersion.schema}
+        />
       )}
     </LayoutPanel>
   );
