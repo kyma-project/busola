@@ -130,8 +130,6 @@ applications:
   name_singular: Application
   placeholders:
     description: Specify a description for your Application.
-    name: Specify a name for your Application.
-    namespace: Choose Namespace.
   statuses:
     deployed: Deployed
     provisioning: Provisioning

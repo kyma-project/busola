@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import * as jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
 import { ResourceForm } from 'shared/ResourceForm';
@@ -49,6 +49,15 @@ function ApplicationsCreate({
         validate={value => !!value}
       />
 
+      <ResourceForm.FormField
+        advanced
+        propertyPath="$.spec.description"
+        label={t('applications.labels.description')}
+        placeholder={t('applications.placeholders.description')}
+        input={Inputs.Text}
+        aria-label="description"
+      />
+
       <KeyValueField
         advanced
         propertyPath="$.metadata.labels"
@@ -60,14 +69,6 @@ function ApplicationsCreate({
         advanced
         propertyPath="$.metadata.annotations"
         title={t('common.headers.annotations')}
-      />
-
-      <ResourceForm.FormField
-        advanced
-        propertyPath="$.spec.description"
-        label={t('applications.labels.description')}
-        input={Inputs.Text}
-        aria-label="description"
       />
     </ResourceForm>
   );
