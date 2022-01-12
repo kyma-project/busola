@@ -28,7 +28,6 @@ export * from './Services/Services.create';
 export * from './Pods/Pods.create';
 export * from './Subscriptions/Subscriptions.create';
 export * from './DestinationRules/DestinationRules.create';
-export * from './Subscriptions/Subscriptions.create';
 export * from './VirtualServices/VirtualServices.create';
 export * from './LimitRanges/LimitRanges.create';
 export * from './ResourceQuotas/ResourceQuotas.create';
