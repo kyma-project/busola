@@ -55,17 +55,8 @@ context('Create Namespace', () => {
 
     cy.getIframeBody()
       .find('[role=dialog]')
-      .find('label[class="fd-switch"]')
-      .click();
-
-    cy.getIframeBody()
-      .find('[role=dialog]')
       .contains('button', 'Update')
       .click();
-
-    cy.getIframeBody()
-      .contains('istio-injection=disabled')
-      .should('be.visible');
   });
 
   it('Create application', () => {
