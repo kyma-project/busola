@@ -40,11 +40,11 @@ i18next
 ReactDOM.render(
   <Microfrontend env={process.env}>
     <BrowserRouter basename={process.env.PUBLIC_URL}>
-      <CompassProvider>
-        <Suspense fallback={<Spinner />}>
+      <Suspense fallback={<Spinner />}>
+        <CompassProvider>
           <App />
-        </Suspense>
-      </CompassProvider>
+        </CompassProvider>
+      </Suspense>
     </BrowserRouter>
   </Microfrontend>,
   document.getElementById('root'),
