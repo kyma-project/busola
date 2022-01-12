@@ -12,6 +12,10 @@ function createNonResourceOptions({ activeClusterName }) {
       names: ['preferences', 'prefs'],
       type: 'preferences',
     },
+    {
+      names: ['help', '?'],
+      type: 'help',
+    },
     ...(activeClusterName
       ? [
           {
@@ -39,7 +43,7 @@ function createResults(context) {
 
   const option = options.find(o => o.names.includes(context.tokens[0]));
   if (option) {
-    const { activeClusterName, clusterNames, t } = context;
+    const { activeClusterName, clusterNames, showHelp, t } = context;
     switch (option.type) {
       case 'clusters':
         return clusterNames.map(clusterName => ({
@@ -47,6 +51,13 @@ function createResults(context) {
           query: `cluster ${clusterName}`,
           onActivate: () => setCluster(clusterName),
         }));
+      case 'help':
+        return {
+          label: t('compass.results.help'),
+          query: 'help',
+          onActivate: () => false,
+          customActionText: t('compass.item-actions.show-help'),
+        };
       case 'preferences':
         return [
           {

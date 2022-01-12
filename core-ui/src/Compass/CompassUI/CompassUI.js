@@ -46,6 +46,7 @@ export function CompassUI({ hide, resourceCache, updateResourceCache }) {
   const { results, suggestedQuery, autocompletePhrase } = useSearchResults({
     query,
     namespaceContext,
+    hideCompass: hide,
     resourceCache,
     updateResourceCache,
   });
@@ -58,7 +59,6 @@ export function CompassUI({ hide, resourceCache, updateResourceCache }) {
       // choose current entry
       addHistoryEntry(results[0].query);
       results[0].onActivate();
-      hide();
     } else if (e.key === 'Tab') {
       // fill search with active history entry
       setQuery(historyEntries[historyIndex]);
@@ -120,6 +120,8 @@ export function CompassUI({ hide, resourceCache, updateResourceCache }) {
     }
   };
 
+  const showHelp = query === '?' || query === 'help';
+
   return (
     <CompassUIBackground hide={hide}>
       <div className="compass-ui__wrapper" role="dialog">
@@ -146,10 +148,9 @@ export function CompassUI({ hide, resourceCache, updateResourceCache }) {
             type="search"
             ref={inputRef}
           />
-          {query && (
+          {!showHelp && query && (
             <ResultsList
               results={results}
-              hideCompass={hide}
               isHistoryMode={isHistoryMode}
               suggestion={
                 <SuggestedQuery
@@ -164,6 +165,7 @@ export function CompassUI({ hide, resourceCache, updateResourceCache }) {
               setActiveIndex={setActiveResultIndex}
             />
           )}
+          {showHelp && 'help'}
         </div>
       </div>
     </CompassUIBackground>

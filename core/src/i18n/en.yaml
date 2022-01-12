@@ -484,6 +484,7 @@ compass:
   item-actions:
     navigate: Navigate
     open: Open
+    show-help: Show help
   resource-names:
     addonsconfigurations: Addons
     apirules: API Rules
@@ -503,6 +504,7 @@ compass:
     subscriptions: Subscriptions
   results:
     did-you-mean: 'Did you mean: '
+    help: Help
     list-of: List of {{resourceType}}
     logs-for: Logs for {{target}}
     no-results-found: No results found

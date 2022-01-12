@@ -16,15 +16,20 @@ import { setSSOAuthData } from './auth/sso';
 import { communicationEntry as pageSizeCommunicationEntry } from './settings/pagination';
 
 window.addEventListener('keydown', e => {
-  e.preventDefault();
+  const { key, metaKey, ctrlKey } = e;
+  const isMac = navigator.platform.toLowerCase().startsWith('mac');
+  const modifierKeyPressed = (isMac && metaKey) || (!isMac && ctrlKey);
 
-  const { metaKey, ctrlKey, key } = e;
-  Luigi.customMessages().sendToAll({
-    id: 'busola.main-frame-keypress',
-    ctrlKey,
-    metaKey,
-    key,
-  });
+  if (key.toLowerCase() === 'k' && modifierKeyPressed) {
+    // [on Firefox] prevent opening the browser search bar via CMD/CTRL+K
+    e.preventDefault();
+    Luigi.customMessages().sendToAll({
+      id: 'busola.toggle-compass',
+      ctrlKey,
+      metaKey,
+      key,
+    });
+  }
 });
 
 window.addEventListener('click', e => {

@@ -12,6 +12,7 @@ export const LOADING_INDICATOR = 'LOADING_INDICATOR';
 export function useSearchResults({
   query,
   namespaceContext,
+  hideCompass,
   resourceCache,
   updateResourceCache,
 }) {
@@ -50,7 +51,15 @@ export function useSearchResults({
   }, [query, namespaceContext]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
-    results: handlers.createResults(context),
+    results: handlers.createResults(context).map(result => ({
+      ...result,
+      onActivate: () => {
+        // entry can explicitly prevent hiding of Compass UI by returning falseń
+        if (result.onActivate() !== false) {
+          hideCompass();
+        }
+      },
+    })),
     suggestedQuery: handlers.getSuggestions(context)[0],
     autocompletePhrase: handlers.getAutocompleteEntries(context),
   };
