@@ -1320,7 +1320,10 @@ oauth2-clients:
     secret-name: Secret name points to the Kubernetes Secret that contains the client's ID and password.
 observability:
   title: Observability
-persistent-volume-claim:
+persistent-volume-claims:
+  description: <0>Persistent Volue Claim</0> is used.. .
+  headers:
+    storage-class: Storage Class
   name_singular: Persistent Volume Claim
   title: Persistent Volume Claims
 pods:

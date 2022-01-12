@@ -18,7 +18,7 @@ function PersistentVolumeClaimsCreate({
   return (
     <ResourceForm
       pluralKind="persistentvolumeclaims"
-      singularName={t('persistent-volume-claim.name_singular')}
+      singularName={t('persistent-volume-claims.name_singular')}
       resource={persistentVolumeClaim}
       setResource={setPersistentVolumeClaim}
       onChange={onChange}

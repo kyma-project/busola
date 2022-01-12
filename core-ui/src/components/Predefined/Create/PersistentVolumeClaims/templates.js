@@ -15,11 +15,6 @@ export const createPersistentVolumeClaimsTemplate = namespace => {
         },
       },
       storageClassName: '',
-      volumeName: '',
-      selector: {
-        matchLabels: {},
-        matchExpressions: {},
-      },
     },
   };
 };
