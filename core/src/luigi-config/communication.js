@@ -16,6 +16,8 @@ import { setSSOAuthData } from './auth/sso';
 import { communicationEntry as pageSizeCommunicationEntry } from './settings/pagination';
 
 window.addEventListener('keydown', e => {
+  e.preventDefault();
+
   const { metaKey, ctrlKey, key } = e;
   Luigi.customMessages().sendToAll({
     id: 'busola.main-frame-keypress',

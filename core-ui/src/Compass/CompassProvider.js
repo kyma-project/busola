@@ -11,11 +11,18 @@ export const CompassProvider = withRouter(({ children, history }) => {
   const hide = () => setShowDialog(false);
   const [resourceCache, updateResourceCache] = useResourceCache();
 
-  const onKeyPress = ({ key, metaKey, ctrlKey }) => {
+  const onKeyPress = e => {
+    // may be undefined when event comes from core
+    // [on Firefox] prevent opening the browser search bar via CMD/CTRL+K
+    if (e.preventDefault) {
+      e.preventDefault();
+    }
+
+    const { key, metaKey, ctrlKey } = e;
     const isMac = navigator.platform.toLowerCase().startsWith('mac');
     const modifierKeyPressed = (isMac && metaKey) || (!isMac && ctrlKey);
 
-    if (key.toLowerCase() === '/' && modifierKeyPressed) {
+    if (key.toLowerCase() === 'k' && modifierKeyPressed) {
       setShowDialog(showDialog => !showDialog);
     } else if (key === 'Escape') {
       hide();
