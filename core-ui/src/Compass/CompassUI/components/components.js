@@ -45,30 +45,55 @@ export function NamespaceContextDisplay({
   );
 }
 
-export function CompassHelp({ helpEntries }) {
-  console.log(helpEntries);
+export function ShortHelpText({ showFullHelp }) {
+  const { t } = useTranslation();
+
   return (
-    <div style={{ opacity: '0.8', color: 'var(--sapNeutralColor)' }}>
-      <h1>Navigation</h1>
-      <table style={{ width: '100%' }}>
+    <p className="short-help help-text">
+      {t('compass.help.short-help')}
+      <button className="button-link" onClick={showFullHelp}>
+        {t('compass.item-actions.show-help')}
+      </button>
+    </p>
+  );
+}
+
+export function CompassHelp({ helpEntries }) {
+  const Key = ({ children }) => <pre className="key">{children}</pre>;
+
+  return (
+    <div className="help">
+      <div className="help-text">
+        Use <Key>↑</Key> and <Key>↓</Key>
+        to navigate between results, <Key>⏎</Key>to choose, <Key>Tab</Key> to
+        autocomplete.
+      </div>
+      <h1 className="help-header">Navigation</h1>
+      <table className="help-text">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          {helpEntries.others.map(([name, shortName, description]) => (
+            <tr key={name}>
+              <td>
+                {name}, {shortName || EMPTY_TEXT_PLACEHOLDER}
+              </td>
+              <td>{description}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <h1 className="help-header">Resource Aliases</h1>
+      <table className="help-text">
         <tbody>
           {helpEntries.navigation.map(([name, shortName]) => (
             <tr key={name}>
               <td>{name}</td>
               <td>{shortName || EMPTY_TEXT_PLACEHOLDER}</td>
-              <td></td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <h1>Other</h1>
-      <table style={{ width: '100%' }}>
-        <tbody>
-          {helpEntries.others.map(([name, shortName, description]) => (
-            <tr key={name}>
-              <td>{name}</td>
-              <td>{shortName || EMPTY_TEXT_PLACEHOLDER}</td>
-              <td>{description}</td>
             </tr>
           ))}
         </tbody>

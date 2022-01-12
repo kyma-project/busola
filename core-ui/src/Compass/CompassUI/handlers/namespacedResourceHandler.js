@@ -8,7 +8,7 @@ import {
   autocompleteForResources,
 } from './helpers';
 
-const namespacedResourceTypes = [
+const resourceTypes = [
   ['configmaps', 'cm'],
   ['pods', 'po'],
   ['secrets'],
@@ -35,20 +35,21 @@ const namespacedResourceTypes = [
   ['rolebindings', 'rb', 'rbs'],
   ['roles'],
   ['functions', 'fn'],
-  ['gitrepositories', 'repos', 'gitrepos'],
-].map(aliases => [...aliases, pluralize(aliases[0], 1)]);
+  ['gitrepositories', 'gitrepos', 'repos'],
+];
+const extendedResourceTypes = resourceTypes.map(aliases => [
+  ...aliases,
+  pluralize(aliases[0], 1),
+]);
 
 function getAutocompleteEntries({ tokens, namespace, resourceCache }) {
-  const fullResourceType = toFullResourceType(
-    tokens[0],
-    namespacedResourceTypes,
-  );
+  const fullResourceType = toFullResourceType(tokens[0], extendedResourceTypes);
   const resources = resourceCache[`${namespace}/${fullResourceType}`] || [];
 
   return autocompleteForResources({
     tokens,
     resources,
-    resourceTypes: namespacedResourceTypes,
+    resourceTypes: extendedResourceTypes,
   });
 }
 
@@ -56,12 +57,12 @@ function getSuggestions({ tokens, namespace, resourceCache }) {
   const [type, name] = tokens;
   const suggestedType = getSuggestion(
     type,
-    namespacedResourceTypes.flatMap(n => n),
+    extendedResourceTypes.flatMap(n => n),
   );
   if (name) {
     const fullResourceType = toFullResourceType(
       suggestedType || type,
-      namespacedResourceTypes,
+      extendedResourceTypes,
     );
     const resourceNames = (
       resourceCache[`${namespace}/${fullResourceType}`] || []
@@ -98,7 +99,7 @@ function makeListItem(item, matchedNode, t) {
 }
 
 function getApiPathForQuery({ tokens, namespaceNodes }) {
-  const resourceType = toFullResourceType(tokens[0], namespacedResourceTypes);
+  const resourceType = toFullResourceType(tokens[0], extendedResourceTypes);
   return getApiPath(resourceType, namespaceNodes);
 }
 
@@ -109,7 +110,7 @@ async function fetchNamespacedResource(context) {
   }
 
   const { fetch, namespace, tokens, updateResourceCache } = context;
-  const resourceType = toFullResourceType(tokens[0], namespacedResourceTypes);
+  const resourceType = toFullResourceType(tokens[0], extendedResourceTypes);
   try {
     const path = `${apiPath}/namespaces/${namespace}/${resourceType}`;
     const response = await fetch(path);
@@ -129,7 +130,7 @@ function createResults({
 }) {
   const [type, name] = tokens;
 
-  const resourceType = toFullResourceType(type, namespacedResourceTypes);
+  const resourceType = toFullResourceType(type, extendedResourceTypes);
   const matchedNode = namespaceNodes.find(n => n.resourceType === resourceType);
 
   if (!matchedNode) {
@@ -175,4 +176,12 @@ export const namespacedResourceHandler = {
   getSuggestions,
   fetchResources: fetchNamespacedResource,
   createResults,
+  getNavigationHelp: () =>
+    resourceTypes.map(types => {
+      if (types.length === 1) {
+        return [types[0]];
+      } else {
+        return [types[0], types[types.length - 1]];
+      }
+    }),
 };

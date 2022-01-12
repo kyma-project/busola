@@ -8,22 +8,26 @@ import {
   autocompleteForResources,
 } from './helpers';
 
-const clusterResourceTypes = [
-  ['clusterrolebindings', 'crb', 'crbs'],
+const resourceTypes = [
+  ['clusterrolebindings', 'crbs', 'crb'],
   ['clusterroles', 'cr'],
   ['applications', 'app', 'apps'],
   ['clusteraddonsconfigurations', 'clusteraddon', 'clusteraddons'],
   ['namespaces', 'ns'],
-].map(aliases => [...aliases, pluralize(aliases[0], 1)]);
+];
+const extendedResourceTypes = resourceTypes.map(aliases => [
+  ...aliases,
+  pluralize(aliases[0], 1),
+]);
 
 function getAutocompleteEntries({ tokens, resourceCache }) {
-  const fullResourceType = toFullResourceType(tokens[0], clusterResourceTypes);
+  const fullResourceType = toFullResourceType(tokens[0], extendedResourceTypes);
   const resources = resourceCache[fullResourceType] || [];
 
   return autocompleteForResources({
     tokens,
     resources,
-    resourceTypes: clusterResourceTypes,
+    resourceTypes: extendedResourceTypes,
   });
 }
 
@@ -31,12 +35,12 @@ function getSuggestions({ tokens, resourceCache }) {
   const [type, name] = tokens;
   const suggestedType = getSuggestion(
     type,
-    clusterResourceTypes.flatMap(n => n),
+    extendedResourceTypes.flatMap(n => n),
   );
   if (name) {
     const fullResourceType = toFullResourceType(
       suggestedType || type,
-      clusterResourceTypes,
+      extendedResourceTypes,
     );
     const resourceNames = (resourceCache[fullResourceType] || []).map(
       n => n.metadata.name,
@@ -74,7 +78,7 @@ function makeListItem(item, matchedNode, t) {
 }
 
 function getApiPathForQuery({ tokens, clusterNodes }) {
-  const resourceType = toFullResourceType(tokens[0], clusterResourceTypes);
+  const resourceType = toFullResourceType(tokens[0], extendedResourceTypes);
   return getApiPath(resourceType, clusterNodes);
 }
 async function fetchClusterResources(context) {
@@ -84,7 +88,7 @@ async function fetchClusterResources(context) {
   }
 
   const { fetch, tokens, updateResourceCache } = context;
-  const resourceType = toFullResourceType(tokens[0], clusterResourceTypes);
+  const resourceType = toFullResourceType(tokens[0], extendedResourceTypes);
   try {
     const response = await fetch(apiPath + '/' + resourceType);
     const { items } = await response.json();
@@ -104,7 +108,7 @@ function createResults({
 }) {
   const [type, name] = tokens;
 
-  const resourceType = toFullResourceType(type, clusterResourceTypes);
+  const resourceType = toFullResourceType(type, extendedResourceTypes);
   const matchedNode = clusterNodes.find(n => n.resourceType === resourceType);
 
   if (!matchedNode) {
@@ -157,4 +161,12 @@ export const clusterResourceHandler = {
   getSuggestions,
   fetchResources: fetchClusterResources,
   createResults,
+  getNavigationHelp: () =>
+    resourceTypes.map(types => {
+      if (types.length === 1) {
+        return [types[0]];
+      } else {
+        return [types[0], types[types.length - 1]];
+      }
+    }),
 };

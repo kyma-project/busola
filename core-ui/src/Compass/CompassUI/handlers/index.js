@@ -63,7 +63,7 @@ export function createResults(context) {
 }
 
 export function getHelpEntries(context) {
-  return {
+  const helpEntries = {
     navigation: handlers
       .map(handler => handler.getNavigationHelp?.(context))
       .filter(Boolean)
@@ -73,4 +73,8 @@ export function getHelpEntries(context) {
       .filter(Boolean)
       .flatMap(e => e),
   };
+
+  helpEntries.navigation.sort((a, b) => a[0].localeCompare(b[0]));
+  helpEntries.others.sort((a, b) => a[0].localeCompare(b[0]));
+  return helpEntries;
 }

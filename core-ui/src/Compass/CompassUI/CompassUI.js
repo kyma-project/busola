@@ -3,6 +3,7 @@ import { useMicrofrontendContext } from 'react-shared';
 import {
   CompassHelp,
   NamespaceContextDisplay,
+  ShortHelpText,
   SuggestedQuery,
 } from './components/components';
 import { ResultsList } from './ResultsList/ResultsList';
@@ -126,7 +127,7 @@ export function CompassUI({ hide, resourceCache, updateResourceCache }) {
     }
   };
 
-  const showHelp = false;
+  const showHelp = query === '?' || query === 'help';
 
   return (
     <CompassUIBackground hide={hide}>
@@ -138,9 +139,7 @@ export function CompassUI({ hide, resourceCache, updateResourceCache }) {
           />
           <FormInput
             value={!isHistoryMode ? query : ''}
-            placeholder={
-              !isHistoryMode ? t('compass.search.placeholder') : query
-            }
+            placeholder={!isHistoryMode ? '' : query}
             onChange={e => setQuery(e.target.value)}
             onKeyDown={e => {
               if (isHistoryMode) {
@@ -154,6 +153,14 @@ export function CompassUI({ hide, resourceCache, updateResourceCache }) {
             type="search"
             ref={inputRef}
           />
+          {!showHelp && !query && (
+            <ShortHelpText
+              showFullHelp={() => {
+                setQuery('help');
+                inputRef.current.focus();
+              }}
+            />
+          )}
           {!showHelp && query && (
             <ResultsList
               results={results}

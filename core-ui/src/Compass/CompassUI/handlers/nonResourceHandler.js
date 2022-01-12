@@ -5,7 +5,7 @@ import { getSuggestion } from './helpers';
 function createNonResourceOptions({ activeClusterName }) {
   return [
     {
-      names: ['clusters', 'cluster'],
+      names: ['clusters', 'cluster', 'cl'],
       type: 'clusters',
     },
     {
@@ -102,9 +102,10 @@ export const nonResourceHandler = {
       createNonResourceOptions(context).flatMap(option => option.names),
     ),
   createResults,
-  getNavigationHelp: () => [['preferences', 'prefs'], ['clusters']],
+  getNavigationHelp: () => [['clusters']],
   getOthersHelp: ({ t }) => [
-    ['clusters', 'cluster', t('compass.help.choose-cluster')],
+    ['clusters', 'cl', t('compass.help.choose-cluster')],
     ['overview', 'ov', t('clusters.overview.title-current-cluster')],
+    ['preferences', 'prefs', t('compass.help.open-preferences')],
   ],
 };
