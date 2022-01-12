@@ -14,6 +14,18 @@ context('Create Namespace', () => {
       .click();
 
     cy.getIframeBody()
+      .contains('Advanced')
+      .click();
+
+    cy.getIframeBody()
+      .contains('Create resource quota')
+      .click();
+
+    cy.getIframeBody()
+      .contains('Create limit range')
+      .click();
+
+    cy.getIframeBody()
       .find('[role=dialog]')
       .find("input[placeholder='Namespace Name']:visible")
       .type(Cypress.env('NAMESPACE_NAME'));

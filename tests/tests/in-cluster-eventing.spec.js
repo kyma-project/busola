@@ -1,8 +1,5 @@
 /// <reference types="cypress" />
-import config from '../config';
 import 'cypress-file-upload';
-import { loadSubscription } from '../support/loadFile';
-const NAMESPACE_NAME = config.namespace;
 
 const random = Math.floor(Math.random() * 9999) + 1000;
 const FUNCTION_NAME = 'in-cluster-eventing-receiver';
@@ -10,8 +7,6 @@ const FUNCTION_NAME = 'in-cluster-eventing-receiver';
 const API_RULE_AND_FUNCTION_NAME = 'in-cluster-eventing-publisher';
 const API_RULE_HOST = API_RULE_AND_FUNCTION_NAME + '-' + random;
 const API_RULE_HOST_EXPECTED_PREFIX = `https://${API_RULE_HOST}.`;
-
-const POD_NAME_REGEX = new RegExp(`${FUNCTION_NAME}-(?!.*build)`);
 
 context('In-cluster eventing', () => {
   before(() => {

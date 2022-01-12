@@ -53,6 +53,7 @@
     "certificates.spec.js",
     "test.settings.spec.js",
     "test-ingresses.spec.js",
+    "test-namespace-overview.spec.js",
     "run-after.spec.js"
   ]
 }
