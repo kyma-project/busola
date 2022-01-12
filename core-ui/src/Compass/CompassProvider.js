@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import LuigiClient from '@luigi-project/client';
 import { CompassUI } from './CompassUI/CompassUI';
 import { withRouter } from 'react-router-dom';
 import { useEventListener } from 'hooks/useEventListener';
@@ -20,6 +21,14 @@ export const CompassProvider = withRouter(({ children, history }) => {
       hide();
     }
   };
+
+  useEffect(() => {
+    if (showDialog) {
+      LuigiClient.uxManager().addBackdrop();
+    } else {
+      LuigiClient.uxManager().removeBackdrop();
+    }
+  }, [showDialog]);
 
   useEventListener('keydown', onKeyPress);
   useCustomMessageListener('busola.main-frame-keypress', onKeyPress);

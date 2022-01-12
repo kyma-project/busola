@@ -30,7 +30,7 @@ export function useSearchResults({
   const context = {
     fetch: url => fetch({ relativeUrl: url }),
     namespace: namespaceContext || 'default',
-    clusterNames: Object.keys(clusters),
+    clusterNames: Object.keys(clusters || {}),
     activeClusterName,
     query: preprocessedQuery,
     tokens: preprocessedQuery.split(/\s+/).filter(Boolean),
