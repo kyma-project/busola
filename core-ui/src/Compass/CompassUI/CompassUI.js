@@ -51,6 +51,7 @@ export function CompassUI({ hide, resourceCache, updateResourceCache }) {
       // choose current entry
       addHistoryEntry(results[0].query);
       results[0].onActivate();
+      hide();
     } else if (e.key === 'Tab') {
       // fill search with active history entry
       setQuery(historyEntries[historyIndex]);
@@ -139,7 +140,7 @@ export function CompassUI({ hide, resourceCache, updateResourceCache }) {
           {query && (
             <ResultsList
               results={results}
-              hide={hide}
+              hideCompass={hide}
               isHistoryMode={isHistoryMode}
               suggestion={
                 <SuggestedQuery

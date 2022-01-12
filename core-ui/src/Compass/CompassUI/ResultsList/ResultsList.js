@@ -17,7 +17,7 @@ function scrollInto(element) {
 
 export function ResultsList({
   results,
-  hide,
+  hideCompass,
   suggestion,
   activeIndex,
   setActiveIndex,
@@ -49,6 +49,7 @@ export function ResultsList({
       } else if (key === 'Enter' && results?.[activeIndex]) {
         addHistoryEntry(results[activeIndex].query);
         results[activeIndex].onActivate();
+        hideCompass();
       }
     },
     [activeIndex, results, isHistoryMode],
@@ -67,7 +68,7 @@ export function ResultsList({
             onItemClick={() => {
               addHistoryEntry(result.query);
               result.onActivate();
-              hide();
+              hideCompass();
             }}
           />
         ))
