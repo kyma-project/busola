@@ -117,8 +117,6 @@ context('In-cluster eventing', () => {
       .contains(`${API_RULE_AND_FUNCTION_NAME}-`)
       .then(element => {
         const podName = element[0].textContent;
-        console.log(podName);
-        console.log(element);
         loadKubeconfig().then(kubeconfig => {
           const requestUrl = `/api/v1/namespaces/${Cypress.env(
             'NAMESPACE_NAME',
@@ -151,8 +149,6 @@ context('In-cluster eventing', () => {
       .contains(`${FUNCTION_NAME}-`)
       .then(element => {
         const podName = element[0].textContent;
-        console.log(podName);
-        console.log(element);
         loadKubeconfig().then(kubeconfig => {
           const requestUrl = `/api/v1/namespaces/${Cypress.env(
             'NAMESPACE_NAME',
