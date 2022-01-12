@@ -1469,6 +1469,46 @@ roles:
     invalid: Rules cannot apply to both regular resources and non-resource URLs.
   name_singular: Role
   title: Roles
+schema:
+  array-item: ({{name}} item)
+  fields:
+    additionalProperties: Additional Properties
+    allOf: All of
+    anyOf: Any of
+    const: Const value
+    dependentRequired: Dependent required
+    dependentSchemas: Dependent Schemas
+    else: If condition does not match
+    enum: Allowed values
+    exclusiveMaximum: Exclusive maximum value
+    exclusiveMinimum: Exclusive minimum value
+    if: Condition
+    items: Array Items
+    maxContains: Maximum "contains" value
+    maxItems: Maximum items count
+    maxLength: Maximum length
+    maxProperties: Maximum properties count
+    maximum: Maximum value
+    minContains: Minimum "contains" value
+    minItems: Mimimum items count
+    minLength: Minumum length
+    minProperties: Minimum properties count
+    minimum: Minimum value
+    multipleOf: Multiple of
+    not: Not
+    oneOf: One of
+    pattern: Match pattern
+    properties: Object Properties
+    required: Required
+    then: If condition matches
+    unevaluatedItems: Unevaluated Items
+    unevaluatedProperties: Unevaluated Properties
+    uniqueItems: Unique items
+  modes:
+    json: JSON
+    viewer: Viewer
+    yaml: YAML
+  required: Required
 secrets:
   buttons:
     collapse: Collapse All
