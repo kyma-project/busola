@@ -435,6 +435,7 @@ common:
     annotations: Annotations
     created: Created
     description: Description
+    kind: Kind
     labels: Labels
     loading: Loading...
     logs: Logs
@@ -1101,6 +1102,32 @@ git-repositories:
     none: Authentication not required.
     secret: The name of the Secret with credentials used by the Function Controller to authenticate to the Git repository in order to fetch the Function's source code and dependencies.
     url: URL must be a valid Git repository address that starts with the "http(s)", "git", or "ssh" prefix.
+hpas:
+  and-x-more: and {{x}} more
+  api-version: Api version
+  as-request-percentage: as a percentage of request
+  container-resource: Container Resource
+  cpu-utilization: Target average CPU utilization
+  current-replicas: Current replicas
+  description: <0>Horizontal Pod Autoscaler</0> is the configuration for a horizontal pod autoscaler, which automatically manages the replica count of any resource implementing the scale subresource based on the metrics specified.
+  external: External
+  headers:
+    created: Created
+    max-pods: Max pods
+    metrics: Metrics
+    min-pods: Min pods
+    replicas: Replicas
+  metrics: Metrics
+  name_singular: Horizontal Pod Autoscaler
+  object: Object
+  'on': 'on'
+  on-pods: on Pods
+  pods: Pods
+  resource: Resource
+  resource-cpu-on-pods: Resource cpu on pods (current / target)
+  scale-target-ref: Scale target reference
+  spec: Specification
+  title: Horizontal Pod Autoscalers
 ingresses:
   description: <0>Ingress</0> describes the routing rules for traffic to services within a cluster. The routing is managed by the Ingress resource.
   labels:
