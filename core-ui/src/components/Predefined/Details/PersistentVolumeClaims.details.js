@@ -1,16 +1,16 @@
 import React from 'react';
-import { Link, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { PersistentVolumeClaimStatus } from 'shared/components/PersistentVolumeClaimStatus';
+import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 
-export const PersistentVolumeClaimsList = ({
+export const PersistentVolumeClaimsDetails = ({
   DefaultRenderer,
   ...otherParams
 }) => {
   const { t } = useTranslation();
   const customColumns = [
     {
-      header: t('common.headers.status'),
+      header: t('subscription.headers.conditions.status'),
       value: ({ status }) => (
         <PersistentVolumeClaimStatus phase={status.phase} />
       ),
@@ -27,19 +27,12 @@ export const PersistentVolumeClaimsList = ({
     },
   ];
 
-  const description = (
-    <Trans i18nKey="persistent-volume-claims.description">
-      <Link
-        className="fd-link"
-        url="https://kubernetes.io/docs/concepts/storage/persistent-volumes/"
-      />
-    </Trans>
-  );
-
   return (
     <DefaultRenderer
-      description={description}
+      customComponents={[]}
       customColumns={customColumns}
+      resourceTitle={t('subscription.title')}
+      singularName={t('subscription.name_singular')}
       {...otherParams}
     />
   );
