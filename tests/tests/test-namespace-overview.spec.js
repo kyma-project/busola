@@ -47,40 +47,45 @@ context(
 
     it('Delete all limits and quotas', () => {
       cy.getIframeBody()
-        .contains(LIMIT_NAME, { timeout: 7000 })
-        .parent()
-        .parent()
-        .within(() => {
-          cy.get('[aria-label="Delete"]').click();
-        });
+        .contains('.fd-table__row', LIMIT_NAME)
+        .find('button[data-testid="delete"]')
+        .click();
+
       cy.getIframeBody()
-        .contains(NEW_LIMIT_NAME, { timeout: 7000 })
-        .parent()
-        .parent()
-        .within(() => {
-          cy.get('[aria-label="Delete"]').click();
-        });
+        .find('[data-testid="delete-confirmation"]')
+        .click();
+
       cy.getIframeBody()
-        .contains(QUOTA_NAME, { timeout: 7000 })
-        .parent()
-        .parent()
-        .within(() => {
-          cy.get('[aria-label="Delete"]').click();
-        });
+        .contains('.fd-table__row', NEW_LIMIT_NAME)
+        .find('button[data-testid="delete"]')
+        .click();
+
+      cy.getIframeBody()
+        .find('[data-testid="delete-confirmation"]')
+        .click();
+
+      cy.getIframeBody()
+        .contains('.fd-table__row', QUOTA_NAME)
+        .find('button[data-testid="delete"]')
+        .click();
+
+      cy.getIframeBody()
+        .find('[data-testid="delete-confirmation"]')
+        .click();
     });
 
     it('Check if limit ranges and resource quota exist', () => {
       cy.getIframeBody()
-        .contains('b', LIMIT_NAME, { timeout: 7000 })
-        .should('not.be.visible');
+        .contains('b', LIMIT_NAME)
+        .should('not.exist');
 
       cy.getIframeBody()
-        .contains('b', NEW_LIMIT_NAME, { timeout: 7000 })
-        .should('not.be.visible');
+        .contains('b', NEW_LIMIT_NAME)
+        .should('not.exist');
 
       cy.getIframeBody()
-        .contains('b', QUOTA_NAME, { timeout: 7000 })
-        .should('not.be.visible');
+        .contains('b', QUOTA_NAME)
+        .should('not.exist');
     });
   },
 );
