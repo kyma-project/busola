@@ -94,6 +94,7 @@ export function HorizontalPodAutoscalersDetails({
         <LayoutPanel.Body>
           {metrics.map((m, id) => (
             <LayoutPanelRow
+              key={`${m.i18label}}-${m.name}`}
               name={
                 <>
                   {t(m.i18label)} {m.name}

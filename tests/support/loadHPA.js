@@ -10,9 +10,8 @@ export async function loadHPA() {
 
 export async function loadRandomHPA(namespaceName) {
   const HPA = await loadHPA();
-  const newHPA = { ...HPA };
 
-  newHPA.metadata.namespace = namespaceName;
+  HPA.metadata.namespace = namespaceName;
 
-  return newHPA;
+  return HPA;
 }

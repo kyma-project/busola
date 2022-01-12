@@ -42,26 +42,25 @@ export const currentMetricsParser = metrics => {
 
 export const metricsParser = metrics => {
   return metrics.map(m => {
-    const resType = m.type.charAt(0).toLowerCase() + m.type.slice(1);
+    const type = m.type.charAt(0).toLowerCase() + m.type.slice(1);
     let i18label = null;
     let name = null;
-    const value = metricsTargetParser(m[resType].target);
+    const value = metricsTargetParser(m[type].target);
 
     switch (m.type) {
       case 'ContainerResource':
         i18label = 'hpas.container-resource';
-        name = `${m[resType].name}/${m[resType].container}`;
+        name = `${m[type].name}/${m[type].container}`;
         break;
       case 'External':
         i18label = 'hpas.external';
-        name = m[resType].metric.selector || m[resType].metric.name;
+        name = m[type].metric.selector || m[type].metric.name;
         break;
       case 'Object':
         i18label = 'hpas.object';
         name = (
           <>
-            {m[resType].metric.selector || m[resType].metric.name}{' '}
-            {i18n.t('hpas.on')}{' '}
+            {m[type].metric.selector || m[type].metric.name} {i18n.t('hpas.on')}{' '}
             <Link
               className="fd-link"
               data-test-id="service-instance-name"
@@ -70,24 +69,24 @@ export const metricsParser = metrics => {
                   .fromContext('namespace')
                   .navigate(
                     `${pluralize(
-                      pluralize(m[resType].describedObject.kind).toLowerCase(),
-                    )}/details/${m[resType].describedObject.name}`,
+                      pluralize(m[type].describedObject.kind).toLowerCase(),
+                    )}/details/${m[type].describedObject.name}`,
                   )
               }
             >
-              {pluralize(m[resType].describedObject.kind).toLowerCase()}/
-              {m[resType].describedObject.name}
+              {pluralize(m[type].describedObject.kind).toLowerCase()}/
+              {m[type].describedObject.name}
             </Link>
           </>
         );
         break;
       case 'Pods':
         i18label = 'hpas.pods';
-        name = `${m[resType].metric.selector || m[resType].metric.name}`;
+        name = `${m[type].metric.selector || m[type].metric.name}`;
         break;
       case 'Resource':
         i18label = 'hpas.resource';
-        name = `${m[resType].name} ${i18n.t('hpas.on-pods')}`;
+        name = `${m[type].name} ${i18n.t('hpas.on-pods')}`;
         break;
       default:
         break;
