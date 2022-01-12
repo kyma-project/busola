@@ -1323,6 +1323,7 @@ observability:
 persistent-volume-claims:
   description: <0>Persistent Volue Claim</0> is used.. .
   headers:
+    capacity: Capacity
     storage-class: Storage Class
   name_singular: Persistent Volume Claim
   title: Persistent Volume Claims

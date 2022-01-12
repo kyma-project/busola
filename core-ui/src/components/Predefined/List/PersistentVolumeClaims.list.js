@@ -59,6 +59,10 @@ export const PersistentVolumeClaimsList = ({
         <p>{spec?.storageClassName || EMPTY_TEXT_PLACEHOLDER}</p>
       ),
     },
+    {
+      header: t('persistent-volume-claims.headers.capacity'), //capacity, storage or size
+      value: ({ spec }) => <p>{spec.resources.requests.storage}</p>,
+    },
   ];
 
   const description = (
