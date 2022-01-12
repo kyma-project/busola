@@ -74,8 +74,8 @@ context('Create Namespace', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Specify a name for your Application."]')
-      .clear()
+      .find('[role=dialog]')
+      .find("input[placeholder='Application Name']:visible")
       .type(`test-mock-app-${Cypress.env('NAMESPACE_NAME')}`);
 
     cy.getIframeBody()
