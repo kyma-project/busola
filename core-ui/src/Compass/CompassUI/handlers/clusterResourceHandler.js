@@ -34,14 +34,15 @@ function getSuggestions({ tokens, resourceCache }) {
     clusterResourceTypes.flatMap(n => n),
   );
   if (name) {
-    const fullResourceType = toFullResourceType(type, clusterResourceTypes);
+    const fullResourceType = toFullResourceType(
+      suggestedType || type,
+      clusterResourceTypes,
+    );
     const resourceNames = (resourceCache[fullResourceType] || []).map(
       n => n.metadata.name,
     );
     const suggestedName = getSuggestion(name, resourceNames);
-    if (suggestedType && suggestedName) {
-      return `${suggestedType} ${suggestedName}`;
-    }
+    return `${suggestedType || type} ${suggestedName || name}`;
   } else {
     return suggestedType;
   }

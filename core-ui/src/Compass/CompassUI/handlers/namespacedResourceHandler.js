@@ -59,14 +59,15 @@ function getSuggestions({ tokens, namespace, resourceCache }) {
     namespacedResourceTypes.flatMap(n => n),
   );
   if (name) {
-    const fullResourceType = toFullResourceType(type, namespacedResourceTypes);
+    const fullResourceType = toFullResourceType(
+      suggestedType || type,
+      namespacedResourceTypes,
+    );
     const resourceNames = (
       resourceCache[`${namespace}/${fullResourceType}`] || []
     ).map(n => n.metadata.name);
     const suggestedName = getSuggestion(name, resourceNames);
-    if (suggestedType && suggestedName) {
-      return `${suggestedType} ${suggestedName}`;
-    }
+    return `${suggestedType} ${suggestedName}`;
   } else {
     return suggestedType;
   }
