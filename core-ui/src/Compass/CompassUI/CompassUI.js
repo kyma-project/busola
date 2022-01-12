@@ -135,6 +135,8 @@ export function CompassUI({ hide, resourceCache, updateResourceCache }) {
               }
             }}
             autoFocus
+            className="search-input"
+            type="search"
             ref={inputRef}
           />
           {query && (
