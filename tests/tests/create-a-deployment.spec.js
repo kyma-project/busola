@@ -94,8 +94,8 @@ context('Create a Deployment', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('button', 'Create')
-      .click({ force: true });
+      .contains('button', /^Create$/)
+      .click();
   });
 
   it('Check if deployment, pod and service exist', () => {
