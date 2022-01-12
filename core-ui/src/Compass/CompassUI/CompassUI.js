@@ -33,7 +33,6 @@ function CompassUIBackground({ hide, children }) {
 
 export function CompassUI({ hide, resourceCache, updateResourceCache }) {
   const { namespaceId: namespace } = useMicrofrontendContext();
-  const { t } = useTranslation();
 
   const [query, setQuery] = useState('');
   const [originalQuery, setOriginalQuery] = useState('');
