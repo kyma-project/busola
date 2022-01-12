@@ -1,6 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useMicrofrontendContext } from 'react-shared';
-import { NamespaceContextDisplay, SuggestedQuery } from './components';
+import {
+  NamespaceContextDisplay,
+  SuggestedQuery,
+} from './components/components';
 import { ResultsList } from './ResultsList/ResultsList';
 import { addHistoryEntry, getHistoryEntries } from './search-history';
 import { LOADING_INDICATOR, useSearchResults } from './useSearchResults';
