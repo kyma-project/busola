@@ -2,7 +2,7 @@
 
 function openCompass() {
   cy.get('body').type(
-    `${Cypress.platform === 'darwin' ? '{cmd}/' : '{ctrl}/'}`,
+    `${Cypress.platform === 'darwin' ? '{cmd}k' : '{ctrl}k'}`,
   );
 }
 
@@ -32,7 +32,7 @@ context('Test Compass navigation', () => {
 
     // inner frame
     cy.getIframeBody().type(
-      `${Cypress.platform === 'darwin' ? '{cmd}/' : '{ctrl}/'}`,
+      `${Cypress.platform === 'darwin' ? '{cmd}k' : '{ctrl}k'}`,
     );
     expectOpened();
 
