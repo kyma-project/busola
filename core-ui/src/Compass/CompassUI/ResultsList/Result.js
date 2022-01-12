@@ -29,7 +29,7 @@ export function Result({
   const actionText =
     typeof customActionText === 'string'
       ? customActionText
-      : t('compass.item-actions.follow');
+      : t('compass.item-actions.navigate');
 
   return (
     <li

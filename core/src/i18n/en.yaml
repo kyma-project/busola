@@ -482,7 +482,7 @@ compass:
     name-short_plural: CRDs
     namespaced: Namespaced CRDs
   item-actions:
-    follow: Follow
+    navigate: Navigate
     open: Open
   resource-names:
     addonsconfigurations: Addons
