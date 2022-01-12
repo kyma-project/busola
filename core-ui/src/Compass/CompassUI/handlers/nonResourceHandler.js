@@ -43,7 +43,7 @@ function createResults(context) {
 
   const option = options.find(o => o.names.includes(context.tokens[0]));
   if (option) {
-    const { activeClusterName, clusterNames, showHelp, t } = context;
+    const { activeClusterName, clusterNames, t } = context;
     switch (option.type) {
       case 'clusters':
         return clusterNames.map(clusterName => ({
@@ -61,11 +61,11 @@ function createResults(context) {
       case 'preferences':
         return [
           {
-            label: 'Preferences',
+            label: t('preferences.title'),
             query: 'preferences',
             onActivate: () => {
               LuigiClient.linkManager().openAsModal('/clusters/preferences', {
-                title: 'Preferences',
+                title: t('preferences.title'),
                 size: 'm',
               });
             },
@@ -101,6 +101,10 @@ export const nonResourceHandler = {
       context.tokens[0],
       createNonResourceOptions(context).flatMap(option => option.names),
     ),
-  fetchResources: () => {},
   createResults,
+  getNavigationHelp: () => [['preferences', 'prefs'], ['clusters']],
+  getOthersHelp: ({ t }) => [
+    ['clusters', 'cluster', t('compass.help.choose-cluster')],
+    ['overview', 'ov', t('clusters.overview.title-current-cluster')],
+  ],
 };

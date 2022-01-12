@@ -62,5 +62,6 @@ export function useSearchResults({
     })),
     suggestedQuery: handlers.getSuggestions(context)[0],
     autocompletePhrase: handlers.getAutocompleteEntries(context),
+    helpEntries: handlers.getHelpEntries(context),
   };
 }

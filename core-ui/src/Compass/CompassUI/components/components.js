@@ -1,6 +1,7 @@
 import React from 'react';
 import { Token } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
+import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 import './components.scss';
 
 export function SuggestedQuery({ suggestedQuery, setQuery }) {
@@ -40,6 +41,38 @@ export function NamespaceContextDisplay({
       >
         {namespaceContext}
       </Token>
+    </div>
+  );
+}
+
+export function CompassHelp({ helpEntries }) {
+  console.log(helpEntries);
+  return (
+    <div style={{ opacity: '0.8', color: 'var(--sapNeutralColor)' }}>
+      <h1>Navigation</h1>
+      <table style={{ width: '100%' }}>
+        <tbody>
+          {helpEntries.navigation.map(([name, shortName]) => (
+            <tr key={name}>
+              <td>{name}</td>
+              <td>{shortName || EMPTY_TEXT_PLACEHOLDER}</td>
+              <td></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <h1>Other</h1>
+      <table style={{ width: '100%' }}>
+        <tbody>
+          {helpEntries.others.map(([name, shortName, description]) => (
+            <tr key={name}>
+              <td>{name}</td>
+              <td>{shortName || EMPTY_TEXT_PLACEHOLDER}</td>
+              <td>{description}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }

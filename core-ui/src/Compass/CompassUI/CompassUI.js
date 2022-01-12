@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useMicrofrontendContext } from 'react-shared';
 import {
+  CompassHelp,
   NamespaceContextDisplay,
   SuggestedQuery,
 } from './components/components';
@@ -43,7 +44,12 @@ export function CompassUI({ hide, resourceCache, updateResourceCache }) {
   const [isHistoryMode, setHistoryMode] = useState(false);
   const [historyIndex, setHistoryIndex] = useState(0);
 
-  const { results, suggestedQuery, autocompletePhrase } = useSearchResults({
+  const {
+    results,
+    suggestedQuery,
+    autocompletePhrase,
+    helpEntries,
+  } = useSearchResults({
     query,
     namespaceContext,
     hideCompass: hide,
@@ -120,7 +126,7 @@ export function CompassUI({ hide, resourceCache, updateResourceCache }) {
     }
   };
 
-  const showHelp = query === '?' || query === 'help';
+  const showHelp = false;
 
   return (
     <CompassUIBackground hide={hide}>
@@ -165,7 +171,7 @@ export function CompassUI({ hide, resourceCache, updateResourceCache }) {
               setActiveIndex={setActiveResultIndex}
             />
           )}
-          {showHelp && 'help'}
+          {showHelp && <CompassHelp helpEntries={helpEntries} />}
         </div>
       </div>
     </CompassUIBackground>

@@ -121,4 +121,5 @@ export const logsHandler = {
   getSuggestions,
   fetchResources: fetchLogs,
   createResults,
+  getNavigationHelp: () => [['logs', 'lg']],
 };

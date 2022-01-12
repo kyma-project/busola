@@ -481,6 +481,8 @@ compass:
     name-short: CRD
     name-short_plural: CRDs
     namespaced: Namespaced CRDs
+  help:
+    choose-cluster: Choose Cluster
   item-actions:
     navigate: Navigate
     open: Open

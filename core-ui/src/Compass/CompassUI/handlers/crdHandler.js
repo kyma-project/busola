@@ -135,4 +135,5 @@ export const crdHandler = {
   getSuggestions,
   fetchResources: fetchCRDs,
   createResults,
+  getNavigationHelp: () => [['customresourcedefinitions', 'crds']],
 };

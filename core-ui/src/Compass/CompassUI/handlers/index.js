@@ -45,7 +45,11 @@ export function getAutocompleteEntries(context) {
 
 export async function fetchResources(context) {
   if (context.activeClusterName) {
-    await Promise.all(handlers.map(handler => handler.fetchResources(context)));
+    await Promise.all(
+      handlers
+        .map(handler => handler.fetchResources?.(context))
+        .filter(Boolean),
+    );
   }
 }
 
@@ -56,4 +60,17 @@ export function createResults(context) {
   return handlers
     .flatMap(handler => handler.createResults(context))
     .filter(Boolean);
+}
+
+export function getHelpEntries(context) {
+  return {
+    navigation: handlers
+      .map(handler => handler.getNavigationHelp?.(context))
+      .filter(Boolean)
+      .flatMap(e => e),
+    others: handlers
+      .map(handler => handler.getOthersHelp?.(context))
+      .filter(Boolean)
+      .flatMap(e => e),
+  };
 }
