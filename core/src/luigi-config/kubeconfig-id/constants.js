@@ -25,6 +25,11 @@ export const DEFAULT_FEATURES = {
       },
     ]),
   ),
+  KUBECONFIG_ID: {
+    config: {
+      kubeconfigUrl: '/kubeconfig',
+    },
+  },
 };
 
 export const DEFAULT_HIDDEN_NAMESPACES = [
