@@ -2,6 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { PersistentVolumeClaimStatus } from 'shared/components/PersistentVolumeClaimStatus';
 import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+import { ResourcePods } from './ResourcePods';
 
 export const PersistentVolumeClaimsDetails = ({
   DefaultRenderer,
@@ -29,10 +30,9 @@ export const PersistentVolumeClaimsDetails = ({
 
   return (
     <DefaultRenderer
-      customComponents={[]}
+      customComponents={[ResourcePods]}
       customColumns={customColumns}
-      resourceTitle={t('subscription.title')}
-      singularName={t('subscription.name_singular')}
+      singularName={t('persistent-volume-claims.name_singular')}
       {...otherParams}
     />
   );

@@ -19,6 +19,7 @@ const createPhaseProperties = (phase, t) => {
         tooltipContent: t('persistent-volume-claim.tooltips.pending'),
       };
     default: {
+      return { type: 'info' };
     }
   }
 };
@@ -34,9 +35,6 @@ export const PersistentVolumeClaimStatus = ({ phase }) => {
       tooltipContent={phaseProperties?.tooltipContent}
       i18n={i18n}
       noTooltip={phase === 'Bound'}
-      style={{
-        wordBreak: 'keep-all',
-      }}
     >
       {phase}
     </StatusBadge>

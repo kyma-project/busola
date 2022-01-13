@@ -13,7 +13,6 @@ export const PersistentVolumeClaimsList = ({
       header: t('common.headers.status'),
       value: ({ status }) => ({
         content: <PersistentVolumeClaimStatus phase={status.phase} />,
-        style: { wordBreak: 'keep-all' },
       }),
     },
     {

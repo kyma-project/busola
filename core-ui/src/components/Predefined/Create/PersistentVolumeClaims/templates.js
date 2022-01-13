@@ -11,7 +11,7 @@ export const createPersistentVolumeClaimsTemplate = namespace => {
       volumeMode: 'Filesystem',
       resources: {
         requests: {
-          storage: '1Gi',
+          storage: '2Gi',
         },
       },
       storageClassName: '',
