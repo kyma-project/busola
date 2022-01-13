@@ -53,7 +53,7 @@ export const CompassProvider = withRouter(({ children, history }) => {
     }
   });
   useCustomMessageListener('busola.main-frame-click', hide);
-  useEffect(() => history.listen(hide), [history]); // hide on nav path change
+  useEffect(() => history.listen(hide), [history, hide]); // hide on nav path change
 
   return (
     <>
