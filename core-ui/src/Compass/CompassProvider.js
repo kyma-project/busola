@@ -7,9 +7,19 @@ import { useCustomMessageListener } from 'hooks/useCustomMessageListener';
 import { useResourceCache } from './CompassUI/useResourceCache';
 
 export const CompassProvider = withRouter(({ children, history }) => {
-  const [showDialog, setShowDialog] = useState(false);
+  const [showDialog, _setShowDialog] = useState(false);
   const hide = () => setShowDialog(false);
   const [resourceCache, updateResourceCache] = useResourceCache();
+
+  const setShowDialog = value => {
+    const modalPresent = document.querySelector(
+      '[data-focus-lock-disabled=false]',
+    );
+    // disable opening Compass if other modal is present
+    if (!modalPresent || !value) {
+      _setShowDialog(value);
+    }
+  };
 
   const onKeyPress = e => {
     const { key, metaKey, ctrlKey } = e;
@@ -37,6 +47,11 @@ export const CompassProvider = withRouter(({ children, history }) => {
   useCustomMessageListener('busola.toggle-compass', () =>
     setShowDialog(showDialog => !showDialog),
   );
+  useCustomMessageListener('busola.main-frame-keydown', ({ key }) => {
+    if (key === 'Escape') {
+      hide();
+    }
+  });
   useCustomMessageListener('busola.main-frame-click', hide);
   useEffect(() => history.listen(hide), [history]); // hide on nav path change
 

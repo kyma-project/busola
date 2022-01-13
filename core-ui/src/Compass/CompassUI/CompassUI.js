@@ -136,6 +136,7 @@ export function CompassUI({ hide, resourceCache, updateResourceCache }) {
             setNamespaceContext={setNamespaceContext}
           />
           <FormInput
+            aria-label="compass-search"
             value={!isHistoryMode ? query : ''}
             placeholder={!isHistoryMode ? '' : query}
             onChange={e => setQuery(e.target.value)}

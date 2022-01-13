@@ -11,7 +11,7 @@ function closeCompass() {
 }
 
 function getQueryInput() {
-  return cy.getIframeBody().find('[placeholder^="Type"]');
+  return cy.getIframeBody().find('[aria-label=compass-search]');
 }
 
 context('Test Compass navigation', () => {
@@ -42,7 +42,7 @@ context('Test Compass navigation', () => {
     // any frame, but click on background to close
     openCompass();
     cy.getIframeBody()
-      .find('#background')
+      .find('#compass-background')
       .click();
     expectClosed();
   });
@@ -62,7 +62,7 @@ context('Test Compass navigation', () => {
     getQueryInput().type('ns ' + Cypress.env('NAMESPACE_NAME'));
 
     cy.getIframeBody()
-      .contains('Namespace ' + Cypress.env('NAMESPACE_NAME'))
+      .contains(Cypress.env('NAMESPACE_NAME'))
       .click();
 
     cy.url().should(
@@ -80,8 +80,7 @@ context('Test Compass navigation', () => {
     getQueryInput().type('pods ');
 
     cy.getIframeBody()
-      .contains('Pod ')
-      .first()
+      .contains('in-cluster-eventing-publisher')
       .click();
 
     cy.url().should('match', new RegExp(`/pods/details/`));
@@ -103,7 +102,7 @@ context('Test Compass navigation', () => {
     getQueryInput().type('nodes ');
 
     cy.getIframeBody()
-      .contains('Node ')
+      .contains('Cluster Overview > Nodes')
       .first()
       .click();
 
@@ -138,12 +137,26 @@ context('Test Compass navigation', () => {
       .type('{downarrow}');
 
     getQueryInput().should('be.visible');
-    closeCompass();
+  });
+
+  it('Help', () => {
+    getQueryInput().type('?');
+
+    cy.getIframeBody()
+      .contains('to navigate between results')
+      .should('be.visible');
+
+    getQueryInput().clear();
+    getQueryInput().type('help');
+
+    cy.getIframeBody()
+      .contains('to navigate between results')
+      .should('be.visible');
+
+    getQueryInput().clear();
   });
 
   it('DidYouMean', () => {
-    openCompass();
-
     getQueryInput().type('podz');
 
     cy.getIframeBody()
@@ -173,5 +186,30 @@ context('Test Compass navigation', () => {
     getQueryInput().trigger('keydown', { key: 'Enter' });
 
     cy.getModalIframeBody().should('be.visible');
+  });
+
+  it('Disables Compass if a modal is present', () => {
+    openCompass();
+
+    cy.getModalIframeBody()
+      .find('[aria-label=compass-search]')
+      .should('not.exist');
+
+    // nav is broken again
+    cy.reload();
+    cy.getIframeBody().contains('Cluster Overview');
+
+    openCompass();
+
+    getQueryInput().type('deploy');
+    getQueryInput().trigger('keydown', { key: 'Enter' });
+
+    cy.getIframeBody()
+      .contains('Create Deployment')
+      .click();
+
+    openCompass();
+
+    getQueryInput().should('not.exist');
   });
 });
