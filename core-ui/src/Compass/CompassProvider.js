@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import LuigiClient from '@luigi-project/client';
 import { CompassUI } from './CompassUI/CompassUI';
-import { withRouter } from 'react-router-dom';
 import { useEventListener } from 'hooks/useEventListener';
 import { useCustomMessageListener } from 'hooks/useCustomMessageListener';
 import { useResourceCache } from './CompassUI/useResourceCache';
 
-export const CompassProvider = withRouter(({ children, history }) => {
+export const CompassProvider = ({ children }) => {
   const [showDialog, _setShowDialog] = useState(false);
   const hide = () => setShowDialog(false);
   const [resourceCache, updateResourceCache] = useResourceCache();
@@ -53,7 +52,6 @@ export const CompassProvider = withRouter(({ children, history }) => {
     }
   });
   useCustomMessageListener('busola.main-frame-click', hide);
-  useEffect(() => history.listen(hide), [history, hide]); // hide on nav path change
 
   return (
     <>
@@ -67,4 +65,4 @@ export const CompassProvider = withRouter(({ children, history }) => {
       {children}
     </>
   );
-});
+};
