@@ -1,0 +1,77 @@
+/// <reference types="cypress" />
+import 'cypress-file-upload';
+import { loadPV } from '../support/loadPV';
+
+const PV_NAME = 'test-pv';
+
+context('Test PV', () => {
+  before(() => {
+    cy.loginAndSelectCluster();
+  });
+
+  it('Navigate to PV', () => {
+    cy.getLeftNav()
+      .contains('Storage')
+      .click();
+    cy.getLeftNav()
+      .contains('Persistent Volumes')
+      .click();
+  });
+
+  it('Create PV', () => {
+    cy.getIframeBody()
+      .contains('Create Persistent Volume')
+      .click();
+
+    cy.wrap(loadPV()).then(PV_CONFIG => {
+      const PV = JSON.stringify(PV_CONFIG);
+      cy.getIframeBody()
+        .find('[role="presentation"],[class="view-lines"]')
+        .first()
+        .click()
+        .clearMonaco()
+        .type(PV, { parseSpecialCharSequences: false });
+    });
+
+    cy.getIframeBody()
+      .find('[role="dialog"]')
+      .contains('button', 'Create')
+      .click();
+
+    cy.getIframeBody()
+      .contains('h3', PV_NAME, { timeout: 5000 })
+      .should('be.visible');
+  });
+
+  it('Check PV details', () => {
+    cy.getIframeBody()
+      .find('[data-testid=persistent-volumes-ref]')
+      .contains('ReadWriteOnce')
+      .should('be.visible');
+  });
+
+  it('Check PV list', () => {
+    cy.getLeftNav()
+      .contains('Persistent Volumes')
+      .click();
+
+    cy.getIframeBody()
+      .contains(PV_NAME)
+      .should('be.visible');
+  });
+
+  it('Delete PV ', () => {
+    cy.getIframeBody()
+      .contains('.fd-table__row', PV_NAME)
+      .find('button[data-testid="delete"]')
+      .click();
+
+    cy.getIframeBody()
+      .contains('button', 'Delete')
+      .click();
+
+    cy.getIframeBody()
+      .contains('.fd-table__row', PV_NAME, { timeout: 5000 })
+      .should('not.exist');
+  });
+});

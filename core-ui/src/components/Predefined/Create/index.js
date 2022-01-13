@@ -32,3 +32,4 @@ export * from './DestinationRules/DestinationRules.create';
 export * from './VirtualServices/VirtualServices.create';
 export * from './LimitRanges/LimitRanges.create';
 export * from './ResourceQuotas/ResourceQuotas.create';
+export * from './PersistentVolumes/PersistentVolumes.create';

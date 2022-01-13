@@ -1395,6 +1395,23 @@ pods:
     terminating: Terminating the Pod.
 preferences:
   title: Preferences
+pv:
+  description: <0>Persistent Volumes (PVs)</0> are volume plugins like Volumes, but have a lifecycle independent of any individual Pod that uses the PV.
+  details: Details
+  headers:
+    access-modes: Access modes
+    capacity: Capacity
+    claim: Claim
+    finalizers: Finalizers
+    mount-options: Mount options
+    path: Path
+    reclaim-policy: Reclaim policy
+    server: Server
+    storage-class: Storage class
+    storage-class-name: Storage class name
+  name_singular: Persistent Volume
+  nfs: Network File System
+  title: Persistent Volumes
 replica-sets:
   cpu: CPU
   create-modal:
@@ -1617,6 +1634,8 @@ stateful-sets:
   name_singular: Stateful Set
   replicas: Replicas
   title: Stateful Sets
+storage:
+  title: Storage
 subscription:
   create:
     labels:
