@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 import { Trans, useTranslation } from 'react-i18next';
 import { PersistentVolumeClaimStatus } from 'shared/components/PersistentVolumeClaimStatus';
+import { Tokens } from 'shared/components/Tokens';
 
 export const PersistentVolumeClaimsList = ({
   DefaultRenderer,
@@ -11,9 +12,9 @@ export const PersistentVolumeClaimsList = ({
   const customColumns = [
     {
       header: t('common.headers.status'),
-      value: ({ status }) => ({
-        content: <PersistentVolumeClaimStatus phase={status.phase} />,
-      }),
+      value: ({ status }) => (
+        <PersistentVolumeClaimStatus phase={status.phase} />
+      ),
     },
     {
       header: t('persistent-volume-claims.headers.storage-class'),
@@ -23,11 +24,15 @@ export const PersistentVolumeClaimsList = ({
       }),
     },
     {
-      header: t('persistent-volume-claims.headers.capacity'), //capacity, storage or size
+      header: t('persistent-volume-claims.headers.capacity'),
       value: ({ spec }) => ({
         content: spec.resources.requests.storage,
         style: { wordBreak: 'keep-all' },
       }),
+    },
+    {
+      header: t('persistent-volume-claims.headers.access-modes'),
+      value: ({ spec }) => <Tokens tokens={spec.accessModes} />,
     },
   ];
 

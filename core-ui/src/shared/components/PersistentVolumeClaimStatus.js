@@ -19,9 +19,8 @@ const createPhaseProperties = (phase, t) => {
         type: 'warning',
         tooltipContent: t('persistent-volume-claims.tooltips.pending'),
       };
-    default: {
+    default:
       return { type: 'info' };
-    }
   }
 };
 

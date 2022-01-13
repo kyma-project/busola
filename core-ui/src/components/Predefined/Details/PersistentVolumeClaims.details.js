@@ -5,12 +5,30 @@ import { PersistentVolumeClaimStatus } from 'shared/components/PersistentVolumeC
 import {
   EMPTY_TEXT_PLACEHOLDER,
   GenericList,
-  Tokens,
   navigateToFixedPathResourceDetails,
 } from 'react-shared';
-import { ResourcePods } from './ResourcePods';
 import { LayoutPanel, Link } from 'fundamental-react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
+import { Tokens } from 'shared/components/Tokens';
+import { ComponentForList } from 'shared/getComponents';
+
+const PodsList = (resource, pod, xd) => {
+  console.log(resource);
+  console.log(pod);
+  console.log(xd);
+  const podListParams = {
+    hasDetailsView: true,
+    fixedPath: true,
+    resourceUrl: `/api/v1/namespaces/${resource.metadata.namespace}/pods`,
+    resourceType: 'pods',
+    namespace: resource.metadata.namespace,
+    isCompact: true,
+    showTitle: true,
+  };
+  return (
+    <ComponentForList name="podsList" params={podListParams} key="pvc-pods" />
+  );
+};
 
 const MatchExpressions = resource => {
   const { t, i18n } = useTranslation();
@@ -20,10 +38,11 @@ const MatchExpressions = resource => {
     t('persistent-volume-claims.headers.values'),
   ];
 
-  const { key, operator, values } = resource.spec?.selector
-    ?.matchExpressions || { key: '', operator: '', values: [] };
-  const rowRenderer = [key, operator, <Tokens tokens={values} />];
-  console.log(resource.spec?.selector?.matchExpressions);
+  const rowRenderer = ({ key = '', operator = '', values = [] }) => [
+    key,
+    operator,
+    <Tokens tokens={values} />,
+  ];
   return (
     <GenericList
       title={t('persistent-volume-claims.headers.selector')}
@@ -40,7 +59,6 @@ const MatchExpressions = resource => {
 const PVCConfiguration = resource => {
   const { t } = useTranslation();
 
-  const accessModes = resource.spec.accessModes.join(', ');
   return (
     <LayoutPanel className="fd-margin--md" key={'pvc-configuration'}>
       <LayoutPanel.Header>
@@ -53,7 +71,7 @@ const PVCConfiguration = resource => {
         />
         <LayoutPanelRow
           name={t('persistent-volume-claims.headers.access-modes')}
-          value={accessModes}
+          value={<Tokens tokens={resource.spec.accessModes} />}
         />
         <LayoutPanelRow
           name={t('persistent-volume-claims.headers.volume-name')}
@@ -98,14 +116,14 @@ export const PersistentVolumeClaimsDetails = ({
       ),
     },
     {
-      header: t('persistent-volume-claims.headers.capacity'), //capacity, storage or size
+      header: t('persistent-volume-claims.headers.capacity'),
       value: ({ spec }) => <p>{spec.resources.requests.storage}</p>,
     },
   ];
 
   return (
     <DefaultRenderer
-      customComponents={[ResourcePods, PVCConfiguration]}
+      customComponents={[PodsList, PVCConfiguration, MatchExpressions]}
       customColumns={customColumns}
       singularName={t('persistent-volume-claims.name_singular')}
       {...otherParams}

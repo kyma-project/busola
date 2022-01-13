@@ -2,11 +2,8 @@ import React from 'react';
 import { ComponentForList } from 'shared/getComponents';
 
 export function ResourcePods(resource, _, showNodeName) {
-  console.log(resource);
   if (!resource) return null;
-  const labelSelectors = Object.entries(
-    resource.spec?.selector?.matchLabels || resource?.metadata?.labels || {},
-  )
+  const labelSelectors = Object.entries(resource.spec?.selector?.matchLabels)
     .map(([key, value]) => `${key}=${value}`)
     .join(',');
 
