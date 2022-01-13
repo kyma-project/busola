@@ -39,7 +39,6 @@ export const PersistentVolumeClaimsList = ({
       />
     </Trans>
   );
-
   return (
     <DefaultRenderer
       description={description}

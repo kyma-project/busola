@@ -7,16 +7,17 @@ const createPhaseProperties = (phase, t) => {
     case 'Bound':
       return {
         type: 'success',
+        tooltipContent: t('persistent-volume-claims.tooltips.bound'),
       };
     case 'Lost':
       return {
         type: 'error',
-        tooltipContent: t('persistent-volume-claim.tooltips.lost'),
+        tooltipContent: t('persistent-volume-claims.tooltips.lost'),
       };
     case 'Pending':
       return {
         type: 'warning',
-        tooltipContent: t('persistent-volume-claim.tooltips.pending'),
+        tooltipContent: t('persistent-volume-claims.tooltips.pending'),
       };
     default: {
       return { type: 'info' };
@@ -34,7 +35,6 @@ export const PersistentVolumeClaimStatus = ({ phase }) => {
       type={phaseProperties.type}
       tooltipContent={phaseProperties?.tooltipContent}
       i18n={i18n}
-      noTooltip={phase === 'Bound'}
     >
       {phase}
     </StatusBadge>

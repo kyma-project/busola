@@ -1321,12 +1321,25 @@ oauth2-clients:
 observability:
   title: Observability
 persistent-volume-claims:
-  description: <0>Persistent Volue Claim</0> is used.. .
+  description: <0>Persistent Volue Claim</0> is a request for the Persistent Volume resources.
   headers:
+    access-modes: Access Modes
     capacity: Capacity
+    key: Key
+    match-expressions: Match expressions
+    match-labels: Match Labels
+    operator: Operator
+    selector: Selector
     storage-class: Storage Class
+    values: Values
+    volume-mode: Volume Mode
+    volume-name: Volume Name
   name_singular: Persistent Volume Claim
   title: Persistent Volume Claims
+  tooltips:
+    bound: Binding between Persistent Volume and Persistent Volume Claim established
+    lost: Lost binding between Persistent Volume and Persistent Volume Claim
+    pending: Checking if binding between Persistent Volume and Persistent Volume Claim is established
 pods:
   buttons:
     view-logs: View Logs
