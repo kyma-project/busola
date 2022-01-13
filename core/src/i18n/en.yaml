@@ -1617,16 +1617,22 @@ stateful-sets:
   name_singular: Stateful Set
   replicas: Replicas
   title: Stateful Sets
-subscription:
+subscriptions:
   create:
     labels:
+      add-filter: Add Filter
       application-name: Application name
       event-name: Event name
+      event-source: Event source
       event-type: Event type
       event-type-plural: Event types
       event-version: Event version
+      filter: Filter {{name}}
+      filters: Filters
       service-name: Service
       sink: Sink
+    messages:
+      one-filter-required: At least one filter is required.
     placeholders:
       application-name: Choose an Application name
       event-name: Enter the Event name, for example, order.cancelled

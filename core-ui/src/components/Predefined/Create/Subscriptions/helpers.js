@@ -1,3 +1,5 @@
+export const DEFAULT_EVENT_TYPE_PREFIX = 'sap.kyma.custom.';
+
 export const getServiceName = sink => {
   if (typeof sink !== 'string') return '';
 
