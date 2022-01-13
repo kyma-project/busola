@@ -69,7 +69,7 @@ const MemoryRequestsCircle = ({ resourceQuotas, isLoading }) => {
     (sum, quota) =>
       sum +
       getBytes(
-        quota.status?.hard?.['requests.memory'] || quota.status.hard.cpu,
+        quota.status?.hard?.['requests.memory'] || quota.status?.hard?.cpu,
       ),
     0,
   );
@@ -77,7 +77,7 @@ const MemoryRequestsCircle = ({ resourceQuotas, isLoading }) => {
     (sum, quota) =>
       sum +
       getBytes(
-        quota.status?.used?.['requests.memory'] || quota.status.used.cpu,
+        quota.status?.used?.['requests.memory'] || quota.status?.used?.cpu,
       ),
     0,
   );
