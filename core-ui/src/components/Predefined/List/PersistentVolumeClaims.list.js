@@ -11,19 +11,24 @@ export const PersistentVolumeClaimsList = ({
   const customColumns = [
     {
       header: t('common.headers.status'),
-      value: ({ status }) => (
-        <PersistentVolumeClaimStatus phase={status.phase} />
-      ),
+      value: ({ status }) => ({
+        content: <PersistentVolumeClaimStatus phase={status.phase} />,
+        style: { wordBreak: 'keep-all' },
+      }),
     },
     {
       header: t('persistent-volume-claims.headers.storage-class'),
-      value: ({ spec }) => (
-        <p>{spec?.storageClassName || EMPTY_TEXT_PLACEHOLDER}</p>
-      ),
+      value: ({ spec }) => ({
+        content: spec?.storageClassName || EMPTY_TEXT_PLACEHOLDER,
+        style: { wordBreak: 'keep-all' },
+      }),
     },
     {
       header: t('persistent-volume-claims.headers.capacity'), //capacity, storage or size
-      value: ({ spec }) => <p>{spec.resources.requests.storage}</p>,
+      value: ({ spec }) => ({
+        content: spec.resources.requests.storage,
+        style: { wordBreak: 'keep-all' },
+      }),
     },
   ];
 

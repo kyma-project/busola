@@ -647,6 +647,51 @@ export function getStaticChildrenNodesForNamespace(
       ],
     },
 
+    //STORAGE CATEGORY
+    {
+      category: {
+        label: i18next.t('storage.title'),
+        icon: 'shelf',
+        collapsible: true,
+      },
+      pathSegment: '_storage_category_placeholder_',
+      hideFromNav: true,
+    },
+    {
+      category: i18next.t('storage.title'),
+      resourceType: 'persistentvolumeclaims',
+      pathSegment: 'persistentvolumeclaims',
+      label: i18next.t('persistent-volume-claims.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/PersistentVolumeClaims?' +
+        toSearchParamsString({
+          resourceApiPath: '/api/v1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+
+      navigationContext: 'persistentvolumeclaims',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':persistentVolumeClaimName',
+              resourceType: 'persistentvolumeclaims',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/PersistentVolumeClaims/:persistentVolumeClaimName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/api/v1',
+                }),
+            },
+          ],
+        },
+      ],
+    },
+
     //SERVICE MANAGEMENT CATEGORY
     {
       category: {
@@ -1365,40 +1410,6 @@ export function getStaticChildrenNodesForNamespace(
               viewUrl:
                 config.coreUIModuleUrl +
                 '/namespaces/:namespaceId/ServiceAccounts/:serviceAccountName?' +
-                toSearchParamsString({
-                  resourceApiPath: '/api/v1',
-                }),
-            },
-          ],
-        },
-      ],
-    },
-    {
-      category: i18next.t('configuration.title'),
-      resourceType: 'persistentvolumeclaims',
-      pathSegment: 'persistentvolumeclaims',
-      label: i18next.t('persistent-volume-claim.title'),
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/PersistentVolumeClaims?' +
-        toSearchParamsString({
-          resourceApiPath: '/api/v1',
-          hasDetailsView: true,
-        }),
-      viewGroup: coreUIViewGroupName,
-      keepSelectedForChildren: true,
-
-      navigationContext: 'persistentvolumeclaims',
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':persistentVolumeClaimName',
-              resourceType: 'persistentvolumeclaims',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/PersistentVolumeClaims/:persistentVolumeClaimName?' +
                 toSearchParamsString({
                   resourceApiPath: '/api/v1',
                 }),
