@@ -6,31 +6,14 @@ import {
   EMPTY_TEXT_PLACEHOLDER,
   GenericList,
   navigateToFixedPathResourceDetails,
+  Labels,
 } from 'react-shared';
 import { LayoutPanel, Link } from 'fundamental-react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { Tokens } from 'shared/components/Tokens';
-import { ComponentForList } from 'shared/getComponents';
+import { RelatedPods } from './RelatedPods';
 
-const PodsList = (resource, pod, xd) => {
-  console.log(resource);
-  console.log(pod);
-  console.log(xd);
-  const podListParams = {
-    hasDetailsView: true,
-    fixedPath: true,
-    resourceUrl: `/api/v1/namespaces/${resource.metadata.namespace}/pods`,
-    resourceType: 'pods',
-    namespace: resource.metadata.namespace,
-    isCompact: true,
-    showTitle: true,
-  };
-  return (
-    <ComponentForList name="podsList" params={podListParams} key="pvc-pods" />
-  );
-};
-
-const MatchExpressions = resource => {
+const PVCSelectorSpecification = pvc => {
   const { t, i18n } = useTranslation();
   const headerRenderer = () => [
     t('persistent-volume-claims.headers.key'),
@@ -44,19 +27,35 @@ const MatchExpressions = resource => {
     <Tokens tokens={values} />,
   ];
   return (
-    <GenericList
-      title={t('persistent-volume-claims.headers.selector')}
-      entries={resource.spec?.selector?.matchExpressions || []}
-      headerRenderer={headerRenderer}
-      rowRenderer={rowRenderer}
-      testid="daemon-set-tolerations"
-      i18n={i18n}
-      showSearchField={false}
-    />
+    <>
+      <LayoutPanel className="fd-margin--md" key={'pvc-selector'}>
+        <LayoutPanel.Header>
+          <LayoutPanel.Head title="Selector" />
+        </LayoutPanel.Header>
+        <LayoutPanel.Body>
+          <LayoutPanelRow
+            name={t('persistent-volume-claims.headers.match-labels')}
+            value={
+              <Labels labels={pvc.spec?.selector?.matchLabels} /> ||
+              EMPTY_TEXT_PLACEHOLDER
+            }
+          />
+        </LayoutPanel.Body>
+      </LayoutPanel>
+      <GenericList
+        title={t('persistent-volume-claims.headers.match-expressions')}
+        entries={pvc.spec?.selector?.matchExpressions || []}
+        headerRenderer={headerRenderer}
+        rowRenderer={rowRenderer}
+        testid="daemon-set-tolerations"
+        i18n={i18n}
+        showSearchField={false}
+      />
+    </>
   );
 };
 
-const PVCConfiguration = resource => {
+export const PVCConfiguration = pvc => {
   const { t } = useTranslation();
 
   return (
@@ -67,25 +66,25 @@ const PVCConfiguration = resource => {
       <LayoutPanel.Body>
         <LayoutPanelRow
           name={t('persistent-volume-claims.headers.volume-mode')}
-          value={resource.spec.volumeMode}
+          value={pvc.spec.volumeMode}
         />
         <LayoutPanelRow
           name={t('persistent-volume-claims.headers.access-modes')}
-          value={<Tokens tokens={resource.spec.accessModes} />}
+          value={<Tokens tokens={pvc.spec.accessModes} />}
         />
         <LayoutPanelRow
           name={t('persistent-volume-claims.headers.volume-name')}
           value={
-            resource.spec?.volumeName ? (
+            pvc.spec?.volumeName ? (
               <Link
                 onClick={() =>
                   navigateToFixedPathResourceDetails(
                     'persistentvolumes',
-                    resource.spec?.volumeName,
+                    pvc.spec?.volumeName,
                   )
                 }
               >
-                {resource.spec?.volumeName}
+                {pvc.spec?.volumeName}
               </Link>
             ) : (
               <p>{EMPTY_TEXT_PLACEHOLDER}</p>
@@ -123,7 +122,11 @@ export const PersistentVolumeClaimsDetails = ({
 
   return (
     <DefaultRenderer
-      customComponents={[PodsList, PVCConfiguration, MatchExpressions]}
+      customComponents={[
+        PVCConfiguration,
+        RelatedPods,
+        PVCSelectorSpecification,
+      ]}
       customColumns={customColumns}
       singularName={t('persistent-volume-claims.name_singular')}
       {...otherParams}
