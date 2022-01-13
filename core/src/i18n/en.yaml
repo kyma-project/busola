@@ -127,10 +127,9 @@ applications:
     show-namespaces: Show Namespaces.
     some-apis: There are some APIs.
     some-events: There are some events.
+  name_singular: Application
   placeholders:
     description: Specify a description for your Application.
-    name: Specify a name for your Application.
-    namespace: Choose Namespace.
   statuses:
     deployed: Deployed
     provisioning: Provisioning
