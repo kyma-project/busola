@@ -92,13 +92,13 @@ const SubscriptionsCreate = ({
   };
 
   const sinkMessageStrip = (
-    <MessageStrip type="info">
+    <MessageStrip type="information">
       {jp.value(subscription, '$.spec.sink')}
     </MessageStrip>
   );
 
   const eventTypeMessageStrip = (
-    <MessageStrip type="info">
+    <MessageStrip type="information">
       {jp.value(subscription, '$.spec.filter.filters[0].eventType.value')}
     </MessageStrip>
   );
@@ -180,6 +180,10 @@ const SubscriptionsCreate = ({
         value={firstEventTypeValues.appName}
         input={({ value }) => (
           <ComboboxInput
+            id="application-name-combobox"
+            ariaLabel={t('common.messages.choose', {
+              value: t('subscriptions.create.labels.application-name'),
+            })}
             showAllEntries
             searchFullString
             selectionType="manual"
@@ -222,6 +226,10 @@ const SubscriptionsCreate = ({
         value={firstEventTypeValues.version}
         input={({ value }) => (
           <ComboboxInput
+            id="event-version-combobox"
+            ariaLabel={t('common.messages.choose', {
+              value: t('subscriptions.create.labels.event-version'),
+            })}
             showAllEntries
             searchFullString
             selectionType="manual"
