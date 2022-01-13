@@ -92,13 +92,11 @@ const SubscriptionsCreate = ({
   };
 
   const sinkMessageStrip = (
-    <MessageStrip type="information">
-      {jp.value(subscription, '$.spec.sink')}
-    </MessageStrip>
+    <MessageStrip>{jp.value(subscription, '$.spec.sink')}</MessageStrip>
   );
 
   const eventTypeMessageStrip = (
-    <MessageStrip type="information">
+    <MessageStrip>
       {jp.value(subscription, '$.spec.filter.filters[0].eventType.value')}
     </MessageStrip>
   );

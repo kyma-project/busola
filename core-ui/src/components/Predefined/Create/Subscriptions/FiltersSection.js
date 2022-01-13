@@ -17,6 +17,7 @@ function SingleFilterInputs({ filter, setFilter }) {
         label={t('subscriptions.create.labels.event-type')}
         input={Inputs.Text}
         placeholder={t('subscriptions.create.placeholders.event-type')}
+        tooltipContent={t('subscriptions.tooltips.event-type-advanced')}
       />
       <ResourceForm.FormField
         className="fd-margin-bottom--sm"
@@ -24,6 +25,7 @@ function SingleFilterInputs({ filter, setFilter }) {
         label={t('subscriptions.create.labels.event-source')}
         input={Inputs.Text}
         placeholder={t('subscriptions.create.placeholders.event-source')}
+        tooltipContent={t('subscriptions.tooltips.event-source')}
       />
     </ResourceForm.Wrapper>
   );

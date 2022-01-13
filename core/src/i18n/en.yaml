@@ -1663,10 +1663,11 @@ subscriptions:
   tooltips:
     application-name: Choose your Application from the cluster.
     event-name: Provide a name for your Event. The name must consist of at least two parts divided by a dot.
+    event-source: Event source is the origin from which the Event is published.
     event-type-advanced: Event type must consist of minimum seven elements separated by dots. Prefix should be sap.kyma.custom. You can add more Event types.
     event-type-simple: Event type is defined based on the Application name, Event name, and Event version.
     event-version: Choose the Event version from the drop-down list or provide your own version.
-    ready: Subscription is active
+    ready: Subscription is active.
     service-name: Choose a Service that connects to the sink.
     sink: Specifies the HTTP endpoint where matching events should be sent to.
 top-nav:
