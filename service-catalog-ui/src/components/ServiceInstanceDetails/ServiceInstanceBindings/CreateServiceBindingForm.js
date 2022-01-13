@@ -40,7 +40,10 @@ export function CreateServiceBindingForm({
       ref={formElementRef}
       style={{ width: '30em' }}
       onChange={onChange}
-      onSubmit={() => handleFormSubmit(name, secretName)}
+      onSubmit={e => {
+        e.preventDefault();
+        handleFormSubmit(name, secretName);
+      }}
       noValidate
     >
       <FormItem>
