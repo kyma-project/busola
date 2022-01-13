@@ -18,11 +18,8 @@ export const CompassProvider = withRouter(({ children, history }) => {
 
     if (key.toLowerCase() === 'k' && modifierKeyPressed) {
       setShowDialog(showDialog => !showDialog);
-      // may be undefined when event comes from core
       // [on Firefox] prevent opening the browser search bar via CMD/CTRL+K
-      if (e.preventDefault) {
-        e.preventDefault();
-      }
+      e.preventDefault();
     } else if (key === 'Escape') {
       hide();
     }
@@ -37,7 +34,9 @@ export const CompassProvider = withRouter(({ children, history }) => {
   }, [showDialog]);
 
   useEventListener('keydown', onKeyPress);
-  useCustomMessageListener('busola.main-frame-keypress', onKeyPress);
+  useCustomMessageListener('busola.toggle-compass', () =>
+    setShowDialog(showDialog => !showDialog),
+  );
   useCustomMessageListener('busola.main-frame-click', hide);
   useEffect(() => history.listen(hide), [history]); // hide on nav path change
 

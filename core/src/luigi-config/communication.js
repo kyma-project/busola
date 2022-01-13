@@ -23,12 +23,7 @@ window.addEventListener('keydown', e => {
   if (key.toLowerCase() === 'k' && modifierKeyPressed) {
     // [on Firefox] prevent opening the browser search bar via CMD/CTRL+K
     e.preventDefault();
-    Luigi.customMessages().sendToAll({
-      id: 'busola.toggle-compass',
-      ctrlKey,
-      metaKey,
-      key,
-    });
+    Luigi.customMessages().sendToAll({ id: 'busola.toggle-compass' });
   }
 });
 
