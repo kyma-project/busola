@@ -181,28 +181,31 @@ const SubscriptionsCreate = ({
         simple
         required
         label={t('subscriptions.create.labels.application-name')}
-        setValue={appName => handleEventTypeValuesChange({ appName })}
+        tooltipContent={t('subscriptions.tooltips.application-name')}
         value={firstEventTypeValues.appName}
-        input={Inputs.Dropdown}
-        placeholder={t('subscriptions.create.placeholders.application-name')}
-        validate={value => {
-          const eventType = jp.value(
-            value,
-            '$.spec.filter.filters[0].eventType.value',
-          );
-          const { appName } = spreadEventType(
-            eventType,
-            DEFAULT_EVENT_TYPE_PREFIX,
-          );
-          return appName;
-        }}
-        options={(applications || []).map(i => ({
-          key: i.metadata.name,
-          text: i.metadata.name,
-        }))}
+        input={({ value }) => (
+          <ComboboxInput
+            showAllEntries
+            searchFullString
+            selectionType="manual"
+            required
+            compact
+            placeholder={t(
+              'subscriptions.create.placeholders.application-name',
+            )}
+            options={(applications || []).map(i => ({
+              key: i.metadata.name,
+              text: i.metadata.name,
+            }))}
+            selectedKey={value}
+            typedValue={value}
+            onSelect={e => {
+              handleEventTypeValuesChange({ appName: e.target.value });
+            }}
+          />
+        )}
         error={applicationsError}
         loading={applicationsLoading}
-        tooltipContent={t('subscriptions.tooltips.application-name')}
       />
 
       <ResourceForm.FormField
@@ -222,8 +225,11 @@ const SubscriptionsCreate = ({
         label={t('subscriptions.create.labels.event-version')}
         tooltipContent={t('subscriptions.tooltips.event-version')}
         value={firstEventTypeValues.version}
-        input={({ value, setValue }) => (
+        input={({ value }) => (
           <ComboboxInput
+            showAllEntries
+            searchFullString
+            selectionType="manual"
             required
             compact
             placeholder={t('subscriptions.create.placeholders.event-version')}
