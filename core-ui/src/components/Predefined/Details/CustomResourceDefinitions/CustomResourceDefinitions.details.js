@@ -85,7 +85,8 @@ export const CustomResourceDefinitionsDetails = ({
                 customCloseAction={() => setShowEditDialog(false)}
               />
               <Button
-                option="default"
+                glyph="add"
+                option="transparent"
                 onClick={() => setShowEditDialog(true)}
                 className="fd-margin-end--tiny"
               >
