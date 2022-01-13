@@ -125,6 +125,10 @@ context('Test Compass navigation', () => {
   it('History', () => {
     openCompass();
 
+    getQueryInput().type('ov');
+    getQueryInput().trigger('keydown', { key: 'Enter' });
+
+    openCompass();
     // switch to history
     getQueryInput().type('{uparrow}');
 
