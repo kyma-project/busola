@@ -651,7 +651,7 @@ export function getStaticChildrenNodesForNamespace(
     {
       category: {
         label: i18next.t('storage.title'),
-        icon: 'shelf',
+        icon: 'sap-box',
         collapsible: true,
       },
       pathSegment: '_storage_category_placeholder_',
