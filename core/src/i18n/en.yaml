@@ -393,6 +393,7 @@ common:
   headers:
     annotations: Annotations
     created: Created
+    description: Description
     labels: Labels
     loading: Loading...
     logs: Logs
@@ -483,7 +484,10 @@ compass:
     namespaced: Namespaced CRDs
   help:
     choose-cluster: Choose Cluster
+    full: Use <0>↑</0> and <0>↓</0> to navigate between results, <0>⏎</0> to choose, <0>Tab</0> to autocomplete.
+    navigation: Navigation
     open-preferences: Open Preferences
+    resource-aliases: Resource Aliases
     short-help: Type to search, e.g. "ns default" or "pod nginx"
   item-actions:
     navigate: Navigate

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Token } from 'fundamental-react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 import './components.scss';
 
@@ -59,21 +59,21 @@ export function ShortHelpText({ showFullHelp }) {
 }
 
 export function CompassHelp({ helpEntries }) {
-  const Key = ({ children }) => <pre className="key">{children}</pre>;
+  const { t } = useTranslation();
 
   return (
     <div className="help">
       <div className="help-text">
-        Use <Key>↑</Key> and <Key>↓</Key>
-        to navigate between results, <Key>⏎</Key>to choose, <Key>Tab</Key> to
-        autocomplete.
+        <Trans i18nKey="compass.help.full">
+          <pre className="key"></pre>
+        </Trans>
       </div>
-      <h1 className="help-header">Navigation</h1>
+      <h1 className="help-header">{t('compass.help.navigation')}</h1>
       <table className="help-text">
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Description</th>
+            <th>{t('common.headers.name')}</th>
+            <th>{t('common.headers.description')}</th>
           </tr>
         </thead>
         <tbody>
@@ -87,7 +87,7 @@ export function CompassHelp({ helpEntries }) {
           ))}
         </tbody>
       </table>
-      <h1 className="help-header">Resource Aliases</h1>
+      <h1 className="help-header">{t('compass.help.resource-aliases')}</h1>
       <table className="help-text">
         <tbody>
           {helpEntries.navigation.map(([name, shortName]) => (
