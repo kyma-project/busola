@@ -1475,7 +1475,6 @@ export function getStaticRootNodes(
             {
               pathSegment: ':name',
               resourceType: 'applications',
-              navigationContext: 'application',
               viewUrl:
                 config.coreUIModuleUrl +
                 '/Applications/:name?' +
