@@ -28,14 +28,11 @@ const SubscriptionsCreate = ({
   setCustomValid,
 }) => {
   const { t } = useTranslation();
+  const notification = useNotification();
 
   const [subscription, setSubscription] = useState(
     cloneDeep(initialSubscription) ||
-      createSubscriptionTemplate(
-        namespace,
-        DEFAULT_EVENT_TYPE_PREFIX,
-        serviceName,
-      ),
+      createSubscriptionTemplate(namespace, serviceName),
   );
 
   const firstEventType = jp.value(
@@ -47,8 +44,6 @@ const SubscriptionsCreate = ({
     firstEventType,
     DEFAULT_EVENT_TYPE_PREFIX,
   );
-
-  const notification = useNotification();
 
   const handleEventTypeValuesChange = changes => {
     const newEventTypeValues = { ...firstEventTypeValues, ...changes };
