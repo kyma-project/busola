@@ -50,7 +50,7 @@ function isAboutNodes({ tokens }) {
   return nodeResourceTypes.includes(tokens[0]);
 }
 
-async function fetchNodes(context) {
+async function concernsNodes(context) {
   if (!isAboutNodes(context)) {
     return;
   }
@@ -93,7 +93,7 @@ function createResults(context) {
 export const nodesHandler = {
   getAutocompleteEntries,
   getSuggestions,
-  fetchResources: fetchNodes,
+  fetchResources: concernsNodes,
   createResults,
   getNavigationHelp: () => [['nodes', 'no']],
 };

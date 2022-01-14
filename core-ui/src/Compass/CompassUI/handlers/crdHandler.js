@@ -55,12 +55,12 @@ function makeListItem(item, namespace, t) {
   };
 }
 
-function isAboutCRDs({ tokens }) {
+function concertnsCRDs({ tokens }) {
   return crdResourceTypes.includes(tokens[0]);
 }
 
 async function fetchCRDs(context) {
-  if (!isAboutCRDs(context)) {
+  if (!concertnsCRDs(context)) {
     return;
   }
 
@@ -77,7 +77,7 @@ async function fetchCRDs(context) {
 }
 
 function createResults(context) {
-  if (!isAboutCRDs(context)) {
+  if (!concertnsCRDs(context)) {
     return;
   }
 

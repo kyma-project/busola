@@ -68,13 +68,12 @@ function makeListItem(pod, containerName, t) {
   });
 }
 
-// todo wtf naming
-function isAboutLogs({ tokens }) {
+function concernsLogs({ tokens }) {
   return logNames.includes(tokens[0]);
 }
 
 async function fetchLogs(context) {
-  if (!isAboutLogs(context)) {
+  if (!concernsLogs(context)) {
     return;
   }
 
@@ -89,7 +88,7 @@ async function fetchLogs(context) {
 }
 
 function createResults(context) {
-  if (!isAboutLogs(context)) {
+  if (!concernsLogs(context)) {
     return;
   }
 
