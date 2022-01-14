@@ -23,7 +23,11 @@ export const NamespacesDetails = ({ DefaultRenderer, ...otherParams }) => {
   };
 
   const LimitrangesList = (
-    <ComponentForList name="limitrangesList" params={limitRangesParams} />
+    <ComponentForList
+      name="LimitRangesList"
+      params={limitRangesParams}
+      nameForCreate="LimitRangesCreate"
+    />
   );
 
   const resourceQuotasParams = {
@@ -36,7 +40,11 @@ export const NamespacesDetails = ({ DefaultRenderer, ...otherParams }) => {
   };
 
   const ResourceQuotasList = (
-    <ComponentForList name="resourcequotaslist" params={resourceQuotasParams} />
+    <ComponentForList
+      name="ResourceQuotasList"
+      params={resourceQuotasParams}
+      nameForCreate="ResourceQuotasCreate"
+    />
   );
 
   const applicationMappingsParams = {

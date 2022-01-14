@@ -94,7 +94,7 @@ context('Create a Deployment', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('button', 'Create')
+      .contains('button', /^Create$/)
       .click();
   });
 
