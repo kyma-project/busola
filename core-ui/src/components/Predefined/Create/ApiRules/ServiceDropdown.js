@@ -33,7 +33,7 @@ export function ServiceDropdown({
   const dropdownOptions = (services || []).flatMap(svc => {
     const name = svc.metadata.name;
 
-    return svc.spec.ports.map(({ port }) => ({
+    return (svc.spec.ports || []).map(({ port }) => ({
       key: name + ' ' + port,
       text: `${name} (port: ${port})`,
       name,
