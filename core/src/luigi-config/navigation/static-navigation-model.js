@@ -1008,7 +1008,7 @@ export function getStaticChildrenNodesForNamespace(
       pathSegment: 'subscriptions',
       resourceType: 'subscriptions',
       navigationContext: 'subscriptions',
-      label: i18next.t('subscription.title'),
+      label: i18next.t('subscriptions.title'),
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/Subscriptions?' +
