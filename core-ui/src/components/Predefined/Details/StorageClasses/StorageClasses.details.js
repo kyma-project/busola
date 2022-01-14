@@ -14,22 +14,23 @@ export const StorageClassesDetails = ({ DefaultRenderer, ...otherParams }) => {
     console.log(storageclass);
     console.log(parameters);
     return (
-      <LayoutPanel
-        className="fd-margin--md event-filters-panel"
-        key={'storageclass-parameters'}
-      >
+      <LayoutPanel className="fd-margin--md" key={'storageclass-parameters'}>
         <LayoutPanel.Header>
           <LayoutPanel.Head title={t('storage-classes.headers.parameters')} />
         </LayoutPanel.Header>
-        {parameters.length > 0 ? (
-          parameters.map(parameter => {
-            console.log(parameter);
-          })
-        ) : (
-          <p className="no-entries-message">
-            {t('common.messages.no-entries-found')}
-          </p>
-        )}
+        <LayoutPanel.Body>
+          {Object.keys(parameters).length > 0 ? (
+            Object.entries(parameters).map(parameters => {
+              return (
+                <LayoutPanelRow name={parameters[0]} value={parameters[1]} />
+              );
+            })
+          ) : (
+            <p className="no-entries-message body-fallback">
+              {t('common.messages.no-entries-found')}
+            </p>
+          )}
+        </LayoutPanel.Body>
       </LayoutPanel>
     );
   };
