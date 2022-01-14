@@ -127,10 +127,9 @@ applications:
     show-namespaces: Show Namespaces.
     some-apis: There are some APIs.
     some-events: There are some events.
+  name_singular: Application
   placeholders:
     description: Specify a description for your Application.
-    name: Specify a name for your Application.
-    namespace: Choose Namespace.
   statuses:
     deployed: Deployed
     provisioning: Provisioning
@@ -1468,6 +1467,46 @@ roles:
     invalid: Rules cannot apply to both regular resources and non-resource URLs.
   name_singular: Role
   title: Roles
+schema:
+  array-item: ({{name}} item)
+  fields:
+    additionalProperties: Additional Properties
+    allOf: All of
+    anyOf: Any of
+    const: Const value
+    dependentRequired: Dependent required
+    dependentSchemas: Dependent Schemas
+    else: If condition does not match
+    enum: Allowed values
+    exclusiveMaximum: Exclusive maximum value
+    exclusiveMinimum: Exclusive minimum value
+    if: Condition
+    items: Array Items
+    maxContains: Maximum "contains" value
+    maxItems: Maximum items count
+    maxLength: Maximum length
+    maxProperties: Maximum properties count
+    maximum: Maximum value
+    minContains: Minimum "contains" value
+    minItems: Mimimum items count
+    minLength: Minumum length
+    minProperties: Minimum properties count
+    minimum: Minimum value
+    multipleOf: Multiple of
+    not: Not
+    oneOf: One of
+    pattern: Match pattern
+    properties: Object Properties
+    required: Required
+    then: If condition matches
+    unevaluatedItems: Unevaluated Items
+    unevaluatedProperties: Unevaluated Properties
+    uniqueItems: Unique items
+  modes:
+    json: JSON
+    viewer: Viewer
+    yaml: YAML
+  required: Required
 secrets:
   buttons:
     collapse: Collapse All
@@ -1578,26 +1617,33 @@ stateful-sets:
   name_singular: Stateful Set
   replicas: Replicas
   title: Stateful Sets
-subscription:
+subscriptions:
   create:
     labels:
+      add-filter: Add filter
       application-name: Application name
       event-name: Event name
+      event-source: Event source
       event-type: Event type
       event-type-plural: Event types
       event-version: Event version
+      filter: Filter {{name}}
+      filters: Filters
       service-name: Service
       sink: Sink
+    messages:
+      one-filter-required: At least one filter is required.
     placeholders:
       application-name: Choose an Application name
-      event-name: Enter the Event name, for example, order.cancelled
-      event-type: Enter Event type, for example, sap.kyma.custom.test-app.order.cancelled.v1
-      event-version: Enter the Event version, for example, v1
+      event-name: Enter the event name, for example, order.cancelled
+      event-source: Enter the event source
+      event-type: Enter the event type, for example, sap.kyma.custom.test-app.order.cancelled.v1
+      event-version: Enter the event version, for example, v1
       service-name: Choose a Service for the sink
     title: Add Subscription
   description: <0>Subscription</0> is used to subscribe to events.
   errors:
-    empty-event-types: You must provide at least one Event type.
+    empty-event-types: You must provide at least one event type.
   headers:
     conditions:
       last-transition: Last Transition
@@ -1617,11 +1663,12 @@ subscription:
   title: Subscriptions
   tooltips:
     application-name: Choose your Application from the cluster.
-    event-name: Provide a name for your Event. The name must consist of at least two parts divided by a dot.
-    event-type-advanced: Event type must consist of minimum seven elements separated by dots. Prefix should be sap.kyma.custom. You can add more Event types.
-    event-type-simple: Event type is defined based on the Application name, Event name, and Event version.
-    event-version: Choose the Event version from the drop-down list or provide your own version.
-    ready: Subscription is active
+    event-name: Provide a name for your event. The name must consist of at least two parts divided by a dot.
+    event-source: Event source is the origin from which the event is published.
+    event-type-advanced: Event type must consist of minimum seven elements separated by dots. Prefix should be sap.kyma.custom. You can add more event types.
+    event-type-simple: Event type is defined based on the Application name, event name, and event version.
+    event-version: Choose the event version from the drop-down list or provide your own version.
+    ready: Subscription is active.
     service-name: Choose a Service that connects to the sink.
     sink: Specifies the HTTP endpoint where matching events should be sent to.
 top-nav:

@@ -14,6 +14,18 @@ context('Create Namespace', () => {
       .click();
 
     cy.getIframeBody()
+      .contains('Advanced')
+      .click();
+
+    cy.getIframeBody()
+      .contains('Create resource quota')
+      .click();
+
+    cy.getIframeBody()
+      .contains('Create limit range')
+      .click();
+
+    cy.getIframeBody()
       .find('[role=dialog]')
       .find("input[placeholder='Namespace Name']:visible")
       .type(Cypress.env('NAMESPACE_NAME'));
@@ -43,17 +55,8 @@ context('Create Namespace', () => {
 
     cy.getIframeBody()
       .find('[role=dialog]')
-      .find('label[class="fd-switch"]')
-      .click();
-
-    cy.getIframeBody()
-      .find('[role=dialog]')
       .contains('button', 'Update')
       .click();
-
-    cy.getIframeBody()
-      .contains('istio-injection=disabled')
-      .should('be.visible');
   });
 
   it('Create application', () => {
@@ -74,8 +77,8 @@ context('Create Namespace', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Specify a name for your Application."]')
-      .clear()
+      .find('[role=dialog]')
+      .find("input[placeholder='Application Name']:visible")
       .type(`test-mock-app-${Cypress.env('NAMESPACE_NAME')}`);
 
     cy.getIframeBody()

@@ -8,11 +8,9 @@ import LuigiClient from '@luigi-project/client';
 import { useTranslation } from 'react-i18next';
 import { MemoryInput } from './MemoryQuotas';
 import { useCreateResource } from 'shared/ResourceForm/useCreateResource';
-import {
-  createNamespaceTemplate,
-  createLimitsTemplate,
-  createMemoryQuotasTemplate,
-} from './templates';
+import { createNamespaceTemplate } from './templates';
+import { createLimitRangeTemplate } from '../LimitRanges/templates';
+import { createResourceQuotaTemplate } from '../ResourceQuotas/templates';
 
 import './CreateNamespace.scss';
 import { LimitPresets, MemoryPresets } from './Presets';
@@ -37,32 +35,32 @@ const NamespacesCreate = props => {
   );
   // container limits
   const [withLimits, setWithLimits] = useState(false);
-  const [limits, setLimits] = useState(createLimitsTemplate());
+  const [limits, setLimits] = useState(createLimitRangeTemplate({}));
   // memory quotas
   const [withMemory, setWithMemory] = useState(false);
-  const [memory, setMemory] = useState(createMemoryQuotasTemplate());
+  const [memory, setMemory] = useState(createResourceQuotaTemplate({}));
 
   const [isSidecar, setSidecar] = useState(
     initialNamespace?.metadata?.labels?.[ISTIO_INJECTION_LABEL],
   );
 
-  const createLimitResource = useCreateResource(
-    'LimitRange',
-    'LimitRanges',
-    limits,
-    null,
-    `/api/v1/namespaces/${namespace.metadata.name}/limitranges`,
-    () => {},
-  );
+  const createLimitResource = useCreateResource({
+    singularName: 'LimitRange',
+    pluralKind: 'LimitRanges',
+    resource: limits,
+    initialResource: null,
+    createUrl: `/api/v1/namespaces/${namespace.metadata?.name}/limitranges`,
+    afterCreatedFn: () => {},
+  });
 
-  const createMemoryResource = useCreateResource(
-    'ResourceQuota',
-    'ResourceQuotas',
-    memory,
-    null,
-    `/api/v1/namespaces/${namespace.metadata.name}/resourcequotas`,
-    () => {},
-  );
+  const createMemoryResource = useCreateResource({
+    singularName: 'ResourceQuota',
+    pluralKind: 'ResourceQuotas',
+    resource: memory,
+    initialResource: null,
+    createUrl: `/api/v1/namespaces/${namespace?.metadata?.name}/resourcequotas`,
+    afterCreatedFn: () => {},
+  });
 
   useEffect(() => {
     // toggles istio-injection label when 'Disable sidecar injection' is clicked

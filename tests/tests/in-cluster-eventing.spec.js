@@ -1,8 +1,6 @@
 /// <reference types="cypress" />
-import config from '../config';
 import 'cypress-file-upload';
-import { loadSubscription } from '../support/loadFile';
-const NAMESPACE_NAME = config.namespace;
+import { loadKubeconfig } from '../support/loadKubeconfigFile';
 
 const random = Math.floor(Math.random() * 9999) + 1000;
 const FUNCTION_NAME = 'in-cluster-eventing-receiver';
@@ -10,8 +8,6 @@ const FUNCTION_NAME = 'in-cluster-eventing-receiver';
 const API_RULE_AND_FUNCTION_NAME = 'in-cluster-eventing-publisher';
 const API_RULE_HOST = API_RULE_AND_FUNCTION_NAME + '-' + random;
 const API_RULE_HOST_EXPECTED_PREFIX = `https://${API_RULE_HOST}.`;
-
-const POD_NAME_REGEX = new RegExp(`${FUNCTION_NAME}-(?!.*build)`);
 
 context('In-cluster eventing', () => {
   before(() => {
@@ -37,29 +33,20 @@ context('In-cluster eventing', () => {
       .click();
 
     cy.getIframeBody()
+      .contains('Advanced')
+      .click();
+
+    cy.getIframeBody()
       .find('[placeholder="Subscription Name"]:visible')
       .clear()
       .type(`${FUNCTION_NAME}-subscription`);
 
     cy.getIframeBody()
-      .contains('Choose an Application name')
-      .click();
-
-    cy.getIframeBody()
-      .contains(`test-mock-app-${Cypress.env('NAMESPACE_NAME')}`)
-      .click();
-
-    cy.getIframeBody()
       .find(
-        '[placeholder="Enter the Event name, for example, order.cancelled"]:visible',
+        '[placeholder="Enter the event type, for example, sap.kyma.custom.test-app.order.cancelled.v1"]',
       )
       .clear()
-      .type('order.created');
-
-    cy.getIframeBody()
-      .find('[placeholder="Enter the Event version, for example, v1"]:visible')
-      .clear()
-      .type('v1');
+      .type('sap.kyma.custom.nonexistingapp.order.created.v1');
 
     cy.getIframeBody()
       .find('[role="dialog"]')
@@ -111,7 +98,7 @@ context('In-cluster eventing', () => {
     );
   });
 
-  it('Open the receiver logs', () => {
+  it('Check logs after triggering publisher function', () => {
     cy.getLeftNav()
       .contains('Workloads')
       .click();
@@ -121,17 +108,62 @@ context('In-cluster eventing', () => {
       .click();
 
     cy.getIframeBody()
+      .contains('a', API_RULE_AND_FUNCTION_NAME)
+      .click();
+
+    cy.getIframeBody()
+      .contains(`${API_RULE_AND_FUNCTION_NAME}-`)
+      .then(element => {
+        const podName = element[0].textContent;
+        loadKubeconfig().then(kubeconfig => {
+          const requestUrl = `/api/v1/namespaces/${Cypress.env(
+            'NAMESPACE_NAME',
+          )}/pods/${podName}/log?container=function`;
+          cy.request({
+            method: 'GET',
+            url: kubeconfig.clusters[0].cluster.server + requestUrl,
+            timeout: 10000,
+            headers: {
+              authorization: 'Bearer ' + kubeconfig.users[0].user.token,
+            },
+          }).then(response => {
+            // response.body is automatically serialized into JSON
+            expect(response.body).to.match(/^Payload/);
+          });
+        });
+      });
+  });
+
+  it('Check logs for receiver function', () => {
+    cy.getLeftNav()
+      .contains('Functions')
+      .click();
+
+    cy.getIframeBody()
       .contains('a', FUNCTION_NAME)
       .click();
 
     cy.getIframeBody()
-      .contains('View Logs')
-      .click();
-
-    // it just doesn't work in cypress
-    // cy.getIframeBody()
-    //   .contains('.logs', 'Event received')
-    //   .should('be.visible');
+      .contains(`${FUNCTION_NAME}-`)
+      .then(element => {
+        const podName = element[0].textContent;
+        loadKubeconfig().then(kubeconfig => {
+          const requestUrl = `/api/v1/namespaces/${Cypress.env(
+            'NAMESPACE_NAME',
+          )}/pods/${podName}/log?container=function`;
+          cy.request({
+            method: 'GET',
+            url: kubeconfig.clusters[0].cluster.server + requestUrl,
+            timeout: 10000,
+            headers: {
+              authorization: 'Bearer ' + kubeconfig.users[0].user.token,
+            },
+          }).then(response => {
+            // response.body is automatically serialized into JSON
+            expect(response.body).to.match(/^Event received/);
+          });
+        });
+      });
   });
 
   it('Navigate to Subscription', () => {
@@ -163,26 +195,23 @@ context('In-cluster eventing', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('Choose an Application name')
-      .click();
-
-    cy.getIframeBody()
-      .find('[role="option"]')
-      .contains(`test-mock-app-${Cypress.env('NAMESPACE_NAME')}`)
-      .filter(':visible', { log: false })
+      .find('[placeholder="Choose an Application name"]:visible')
+      .clear()
+      .type(`test-mock-app-${Cypress.env('NAMESPACE_NAME')}`)
       .click();
 
     cy.getIframeBody()
       .find(
-        '[placeholder="Enter the Event name, for example, order.cancelled"]:visible',
+        '[placeholder="Enter the event name, for example, order.cancelled"]:visible',
       )
       .clear()
       .type('order.created');
 
     cy.getIframeBody()
-      .find('[placeholder="Enter the Event version, for example, v1"]:visible')
+      .find('[placeholder="Enter the event version, for example, v1"]:visible')
       .clear()
-      .type('v1');
+      .type('v1')
+      .click();
 
     cy.getIframeBody()
       .find('[role="dialog"]')
@@ -215,7 +244,7 @@ context('In-cluster eventing', () => {
 
     cy.getIframeBody()
       .find(
-        '[placeholder="Enter Event type, for example, sap.kyma.custom.test-app.order.cancelled.v1"]',
+        '[placeholder="Enter the event type, for example, sap.kyma.custom.test-app.order.cancelled.v1"]',
       )
       .clear()
       .type(
