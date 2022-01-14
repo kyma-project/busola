@@ -1,6 +1,7 @@
 export * from './Namespaces/Namespaces.create.js';
 export * from './AddonsConfigurations/AddonsConfigurations.create.js';
 export * from './ApiRules/ApiRules.create.js';
+export * from './Applications/Applications.create.js';
 export * from './RoleBindings/RoleBindings.create.js';
 export * from './OAuthClients/OAuthClients.create.js';
 export * from './ConfigMaps/ConfigMaps.create.js';
@@ -30,3 +31,5 @@ export * from './Subscriptions/Subscriptions.create';
 export * from './DestinationRules/DestinationRules.create';
 export * from './StorageClasses/StorageClasses.create';
 export * from './VirtualServices/VirtualServices.create';
+export * from './LimitRanges/LimitRanges.create';
+export * from './ResourceQuotas/ResourceQuotas.create';

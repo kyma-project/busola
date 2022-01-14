@@ -1,5 +1,4 @@
 import jsyaml from 'js-yaml';
-import { loadRandomDR } from '../support/loadDR';
 
 const SERVICE_NAME = `test-virtual-service-${Math.floor(Math.random() * 9999) +
   1000}`;

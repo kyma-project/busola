@@ -25,6 +25,7 @@ import {
   navigateToFixedPathResourceDetails,
   prettifyNameSingular,
   prettifyNamePlural,
+  Tooltip,
 } from '../..';
 import CustomPropTypes from '../../typechecking/CustomPropTypes';
 import { ModalWithForm } from '../ModalWithForm/ModalWithForm';
@@ -40,6 +41,10 @@ ResourcesList.propTypes = {
   customColumns: CustomPropTypes.customColumnsType,
   createResourceForm: PropTypes.func,
   customHeaderActions: PropTypes.node,
+  createActionLabel: PropTypes.string,
+  createActionTooltip: PropTypes.string,
+  showActionTooltip: PropTypes.bool,
+  disableCreateActionButton: PropTypes.bool,
   resourceUrl: PropTypes.string.isRequired,
   resourceType: PropTypes.string.isRequired,
   resourceName: PropTypes.string,
@@ -64,6 +69,9 @@ ResourcesList.defaultProps = {
   showTitle: false,
   listHeaderActions: null,
   readOnly: false,
+  createActionTooltip: null,
+  showActionTooltip: false,
+  disableCreateActionButton: false,
 };
 
 export function ResourcesList(props) {
@@ -95,6 +103,9 @@ function Resources({
   customColumns,
   createResourceForm: CreateResourceForm,
   createActionLabel,
+  createActionTooltip,
+  showActionTooltip,
+  disableCreateActionButton,
   hasDetailsView,
   fixedPath,
   title,
@@ -273,7 +284,7 @@ function Resources({
     protectedResourceWarning(entry),
   ];
 
-  const extraHeaderContent =
+  let extraHeaderContent =
     listHeaderActions ||
     (CreateResourceForm && (
       <Button
@@ -283,6 +294,7 @@ function Resources({
           setActiveResource(undefined);
           setShowEditDialog(true);
         }}
+        disabled={disableCreateActionButton}
       >
         {createActionLabel ||
           t('components.resources-list.create', {
@@ -290,6 +302,14 @@ function Resources({
           })}
       </Button>
     ));
+
+  if (showActionTooltip && createActionTooltip) {
+    extraHeaderContent = (
+      <Tooltip delay={0} content={createActionTooltip}>
+        {extraHeaderContent}
+      </Tooltip>
+    );
+  }
 
   return (
     <>
@@ -326,6 +346,7 @@ function Resources({
         })}
         actions={[
           <Button
+            data-testid="delete-confirmation"
             type="negative"
             compact
             onClick={() => performDelete(activeResource)}
