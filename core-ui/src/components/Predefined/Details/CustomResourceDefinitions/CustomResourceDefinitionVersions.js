@@ -46,7 +46,14 @@ const CustomResources = ({ resource, namespace, version, i18n }) => {
   const getJsonPath = (resource, jsonPath) => {
     const value =
       jp.value(resource, jsonPath.substring(1)) || EMPTY_TEXT_PLACEHOLDER;
-    return typeof value === 'boolean' ? value.toString() : value;
+
+    if (typeof value === 'boolean') {
+      return value.toString();
+    } else if (typeof value === 'object') {
+      return JSON.stringify(value);
+    } else {
+      return value;
+    }
   };
 
   const customColumns = version.additionalPrinterColumns?.map(column => ({
