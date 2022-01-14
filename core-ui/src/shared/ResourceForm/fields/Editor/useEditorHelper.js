@@ -12,7 +12,10 @@ import JSONWorker from 'worker-loader!monaco-editor/esm/vs/language/json/json.wo
 import YamlWorker from 'worker-loader!monaco-yaml/lib/esm/yaml.worker.js';
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import MonacoYamlWorker from 'worker-loader!./monaco-yaml.worker.js';
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import JakisWorker from 'worker-loader!./jakis.worker.js';
 
+console.log(MonacoYamlWorker, YamlWorker, JSONWorker);
 // initialize Monaco Yaml by switching web-workers
 window.MonacoEnvironment = {
   getWorker(moduleId, label) {
@@ -47,6 +50,11 @@ export function useEditorHelper({ value }) {
   );
 
   useEffect(() => {
+    const jakisWorker = new JakisWorker();
+    console.log(jakisWorker);
+    console.log(jakisWorker.postMessage);
+    jakisWorker.postMessage('co tam slychaac');
+
     schemasWorker.postMessage(['shouldInitialize']);
     schemasWorker.onmessage = e => {
       if (e.data.isInitialized === false) {
@@ -83,7 +91,7 @@ export function useEditorHelper({ value }) {
         });
       }
     }
-
+    console.log(schemas);
     setDiagnosticsOptions({
       enableSchemaRequest: true,
       hover: true,
