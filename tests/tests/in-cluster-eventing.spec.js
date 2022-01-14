@@ -195,14 +195,9 @@ context('In-cluster eventing', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('Choose an Application name')
-      .click();
-
-    cy.getIframeBody()
-      .find('[role="option"]')
-      .contains(`test-mock-app-${Cypress.env('NAMESPACE_NAME')}`)
-      .filter(':visible', { log: false })
-      .click();
+      .contains('[placeholder="Choose an Application name"]:visible')
+      .clear()
+      .type(`test-mock-app-${Cypress.env('NAMESPACE_NAME')}`);
 
     cy.getIframeBody()
       .find(
