@@ -5,7 +5,7 @@ import { LayoutPanel } from 'fundamental-react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { PersistentVolumesList } from 'shared/components/PersistentVolumesList';
 
-import { GoToDetailsLink, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 
 export const StorageClassesDetails = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
