@@ -3,16 +3,16 @@ import { useTranslation } from 'react-i18next';
 
 import { LayoutPanel } from 'fundamental-react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
+import { PersistentVolumesList } from 'shared/components/PersistentVolumesList';
+
 import { GoToDetailsLink, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 
 export const StorageClassesDetails = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
 
   const StorageClassParameters = storageclass => {
-    const { t } = useTranslation();
     const parameters = storageclass?.parameters || [];
-    console.log(storageclass);
-    console.log(parameters);
+
     return (
       <LayoutPanel className="fd-margin--md" key={'storageclass-parameters'}>
         <LayoutPanel.Header>
@@ -52,7 +52,7 @@ export const StorageClassesDetails = ({ DefaultRenderer, ...otherParams }) => {
 
   return (
     <DefaultRenderer
-      customComponents={[StorageClassParameters]}
+      customComponents={[StorageClassParameters, PersistentVolumesList]}
       customColumns={customColumns}
       singularName={t('storage-classes.name_singular')}
       {...otherParams}
