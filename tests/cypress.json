@@ -37,6 +37,7 @@
     "test-cron-jobs.spec.js",
     "test-git-repositories.spec.js",
     "test-gateways.spec.js",
+    "test-persistent-volume-claims.spec.js",
     "test-oauth2.spec.js",
     "test-dns-providers.spec.js",
     "test-statefulsets.spec.js",

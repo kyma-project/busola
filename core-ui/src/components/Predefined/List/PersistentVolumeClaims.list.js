@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+import { Link } from 'react-shared';
 import { Trans, useTranslation } from 'react-i18next';
 import { PersistentVolumeClaimStatus } from 'shared/components/PersistentVolumeClaimStatus';
 import { Tokens } from 'shared/components/Tokens';
@@ -15,13 +15,6 @@ export const PersistentVolumeClaimsList = ({
       value: ({ status }) => (
         <PersistentVolumeClaimStatus phase={status.phase} />
       ),
-    },
-    {
-      header: t('persistent-volume-claims.headers.storage-class'),
-      value: ({ spec }) => ({
-        content: spec?.storageClassName || EMPTY_TEXT_PLACEHOLDER,
-        style: { wordBreak: 'keep-all' },
-      }),
     },
     {
       header: t('persistent-volume-claims.headers.capacity'),
