@@ -49,7 +49,7 @@ export const SubscriptionsList = ({ DefaultRenderer, ...otherParams }) => {
   ];
 
   const description = (
-    <Trans i18nKey="subscription.description">
+    <Trans i18nKey="subscriptions.description">
       <Link
         className="fd-link"
         url="https://kyma-project.io/docs/kyma/latest/05-technical-reference/00-custom-resources/evnt-01-subscription/#documentation-content"
@@ -59,7 +59,7 @@ export const SubscriptionsList = ({ DefaultRenderer, ...otherParams }) => {
 
   return (
     <DefaultRenderer
-      resourceName={t('subscription.title')}
+      resourceName={t('subscriptions.title')}
       customColumns={customColumns}
       description={description}
       {...otherParams}
