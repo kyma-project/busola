@@ -458,7 +458,7 @@ common:
     duplicate-key: Duplicate key
     error: Error
     hide: Hide read-only fields
-    k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' (e.g.: 'my-name1')."
+    k8s-name-input: 'Name must consist of lowercase alphanumeric characters, can contain ''-'' (e.g.: ''my-name1'').'
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: key=value, must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     read-file: Read file content as a single value, with file name as a key.
@@ -1189,7 +1189,7 @@ jobs:
     complete: Job completed.
     not-complete: Job in progress.
 kubeconfig-id:
-  error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})."
+  error: 'Couldn''t load kubeconfig ID; configuration not changed (Error: ${{error}}).'
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
 legal:
   copyright: Copyright
@@ -1635,15 +1635,15 @@ subscriptions:
       one-filter-required: At least one filter is required.
     placeholders:
       application-name: Choose an Application name
-      event-name: Enter the Event name, for example, order.cancelled
-      event-source: Enter the Event source
-      event-type: Enter Event type, for example, sap.kyma.custom.test-app.order.cancelled.v1
-      event-version: Enter the Event version, for example, v1
+      event-name: Enter the event name, for example, order.cancelled
+      event-source: Enter the event source
+      event-type: Enter event type, for example, sap.kyma.custom.test-app.order.cancelled.v1
+      event-version: Enter the event version, for example, v1
       service-name: Choose a Service for the sink
     title: Add Subscription
   description: <0>Subscription</0> is used to subscribe to events.
   errors:
-    empty-event-types: You must provide at least one Event type.
+    empty-event-types: You must provide at least one event type.
   headers:
     conditions:
       last-transition: Last Transition
@@ -1663,11 +1663,11 @@ subscriptions:
   title: Subscriptions
   tooltips:
     application-name: Choose your Application from the cluster.
-    event-name: Provide a name for your Event. The name must consist of at least two parts divided by a dot.
-    event-source: Event source is the origin from which the Event is published.
-    event-type-advanced: Event type must consist of minimum seven elements separated by dots. Prefix should be sap.kyma.custom. You can add more Event types.
-    event-type-simple: Event type is defined based on the Application name, Event name, and Event version.
-    event-version: Choose the Event version from the drop-down list or provide your own version.
+    event-name: Provide a name for your event. The name must consist of at least two parts divided by a dot.
+    event-source: Event source is the origin from which the event is published.
+    event-type-advanced: Event type must consist of minimum seven elements separated by dots. Prefix should be sap.kyma.custom. You can add more event types.
+    event-type-simple: Event type is defined based on the Application name, event name, and event version.
+    event-version: Choose the event version from the drop-down list or provide your own version.
     ready: Subscription is active.
     service-name: Choose a Service that connects to the sink.
     sink: Specifies the HTTP endpoint where matching events should be sent to.
