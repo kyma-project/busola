@@ -49,7 +49,7 @@ function makeListItem(pod, containerName, t) {
   );
 
   return containers.map(({ name: containerName }) => {
-    const label = t('compass.results.logs-for', {
+    const label = t('command-palette.results.logs-for', {
       target: `${podName}/${containerName}`,
     });
     const query = `logs ${podName}${containerName ? ` ${containerName}` : ''}`;

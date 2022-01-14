@@ -13,7 +13,7 @@ export function SuggestedQuery({ suggestedQuery, setQuery }) {
 
   return (
     <>
-      {t('compass.results.did-you-mean')}
+      {t('command-palette.results.did-you-mean')}
       <button className="button-link" onClick={() => setQuery(suggestedQuery)}>
         {suggestedQuery}
       </button>
@@ -35,7 +35,7 @@ export function NamespaceContextDisplay({
     <div className="namespace-context">
       <span className="namespace-name">{t('namespaces.name_singular')}:</span>
       <Token
-        buttonLabel={t('compass.search.remove-ns-context')}
+        buttonLabel={t('command-palette.search.remove-ns-context')}
         className="y-fd-token y-fd-token--no-button y-fd-token--gap fd-margin-end--tiny fd-margin-begin--tiny"
         onClick={() => setNamespaceContext(null)}
       >
@@ -50,25 +50,25 @@ export function ShortHelpText({ showFullHelp }) {
 
   return (
     <p className="short-help help-text">
-      {t('compass.help.short-help')}
+      {t('command-palette.help.short-help')}
       <button className="button-link" onClick={showFullHelp}>
-        {t('compass.item-actions.show-help')}
+        {t('command-palette.item-actions.show-help')}
       </button>
     </p>
   );
 }
 
-export function CompassHelp({ helpEntries }) {
+export function CommandPalletteHelp({ helpEntries }) {
   const { t } = useTranslation();
 
   return (
     <div className="help">
       <div className="help-text">
-        <Trans i18nKey="compass.help.full">
+        <Trans i18nKey="command-palette.help.full">
           <pre className="key"></pre>
         </Trans>
       </div>
-      <h1 className="help-header">{t('compass.help.navigation')}</h1>
+      <h1 className="help-header">{t('command-palette.help.navigation')}</h1>
       <table className="help-text">
         <thead>
           <tr>
@@ -87,7 +87,9 @@ export function CompassHelp({ helpEntries }) {
           ))}
         </tbody>
       </table>
-      <h1 className="help-header">{t('compass.help.resource-aliases')}</h1>
+      <h1 className="help-header">
+        {t('command-palette.help.resource-aliases')}
+      </h1>
       <table className="help-text">
         <tbody>
           {helpEntries.navigation.map(([name, shortName]) => (

@@ -1,33 +1,33 @@
 /// <reference types="cypress" />
 
-function openCompass() {
+function openCommandPalette() {
   cy.get('body').type(
     `${Cypress.platform === 'darwin' ? '{cmd}k' : '{ctrl}k'}`,
   );
 }
 
-function closeCompass() {
+function closeCommandPalette() {
   cy.get('body').type('{esc}');
 }
 
 function getQueryInput() {
-  return cy.getIframeBody().find('[aria-label=compass-search]');
+  return cy.getIframeBody().find('[aria-label=command-palette-search]');
 }
 
-context('Test Compass navigation', () => {
+context('Test Command Palette navigation', () => {
   before(() => {
     cy.loginAndSelectCluster();
   });
 
-  it('Opening and closing Compass from both main frame and inner frame', () => {
+  it('Opening and closing Command Palette from both main frame and inner frame', () => {
     const expectOpened = () => getQueryInput().should('be.visible');
     const expectClosed = () => getQueryInput().should('not.exist');
 
     // main frame
-    openCompass();
+    openCommandPalette();
     expectOpened();
 
-    closeCompass();
+    closeCommandPalette();
     expectClosed();
 
     // inner frame
@@ -40,9 +40,9 @@ context('Test Compass navigation', () => {
     expectClosed();
 
     // any frame, but click on background to close
-    openCompass();
+    openCommandPalette();
     cy.getIframeBody()
-      .find('#compass-background')
+      .find('#command-palette-background')
       .click();
     expectClosed();
   });
@@ -53,7 +53,7 @@ context('Test Compass navigation', () => {
     cy.getIframeBody().contains('Cluster Overview');
 
     // navigate to namespace
-    openCompass();
+    openCommandPalette();
 
     cy.getIframeBody()
       .find('[aria-label="Remove Namespace context"]')
@@ -71,7 +71,7 @@ context('Test Compass navigation', () => {
     );
 
     // navigate to pod details
-    openCompass();
+    openCommandPalette();
 
     cy.getIframeBody()
       .find('[aria-label="Remove Namespace context"]')
@@ -86,7 +86,7 @@ context('Test Compass navigation', () => {
     cy.url().should('match', new RegExp(`/pods/details/`));
 
     // navigate to list of cluster role bindings
-    openCompass();
+    openCommandPalette();
 
     getQueryInput().type('crb');
 
@@ -97,7 +97,7 @@ context('Test Compass navigation', () => {
     cy.url().should('match', new RegExp(`/clusterrolebindings`));
 
     // navigate to nodes
-    openCompass();
+    openCommandPalette();
 
     getQueryInput().type('nodes ');
 
@@ -111,7 +111,7 @@ context('Test Compass navigation', () => {
       .should('be.visible');
 
     // navigate to cluster overview
-    openCompass();
+    openCommandPalette();
 
     getQueryInput().type('ov');
 
@@ -123,12 +123,12 @@ context('Test Compass navigation', () => {
   });
 
   it('History', () => {
-    openCompass();
+    openCommandPalette();
 
     getQueryInput().type('ov');
     getQueryInput().trigger('keydown', { key: 'Enter' });
 
-    openCompass();
+    openCommandPalette();
     // switch to history
     getQueryInput().type('{uparrow}');
 
@@ -176,11 +176,11 @@ context('Test Compass navigation', () => {
     cy.getIframeBody()
       .contains('List of Pods')
       .should('be.visible');
-    closeCompass();
+    closeCommandPalette();
   });
 
   it('Autocompletion', () => {
-    openCompass();
+    openCommandPalette();
 
     getQueryInput().type('pref');
 
@@ -192,18 +192,18 @@ context('Test Compass navigation', () => {
     cy.getModalIframeBody().should('be.visible');
   });
 
-  it('Disables Compass if a modal is present', () => {
-    openCompass();
+  it('Disables Command Palette if a modal is present', () => {
+    openCommandPalette();
 
     cy.getModalIframeBody()
-      .find('[aria-label=compass-search]')
+      .find('[aria-label=command-palette-search]')
       .should('not.exist');
 
     // nav is broken again
     cy.reload();
     cy.getIframeBody().contains('Cluster Overview');
 
-    openCompass();
+    openCommandPalette();
 
     getQueryInput().type('deploy');
     getQueryInput().trigger('keydown', { key: 'Enter' });
@@ -212,7 +212,7 @@ context('Test Compass navigation', () => {
       .contains('Create Deployment')
       .click();
 
-    openCompass();
+    openCommandPalette();
 
     getQueryInput().should('not.exist');
   });

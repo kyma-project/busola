@@ -15,7 +15,7 @@ import { setTheme } from './utils/theme';
 import { setSSOAuthData } from './auth/sso';
 import { communicationEntry as pageSizeCommunicationEntry } from './settings/pagination';
 
-addCompassHandler();
+addCommandPaletteHandler();
 
 window.addEventListener('click', () => {
   Luigi.customMessages().sendToAll({
@@ -144,7 +144,7 @@ const convertToObject = paramsString => {
   return result;
 };
 
-function addCompassHandler() {
+function addCommandPaletteHandler() {
   window.addEventListener('keydown', e => {
     const { key, metaKey, ctrlKey } = e;
     const isMac = navigator.platform.toLowerCase().startsWith('mac');
@@ -157,7 +157,7 @@ function addCompassHandler() {
     if (key.toLowerCase() === 'k' && modifierKeyPressed) {
       // [on Firefox] prevent opening the browser search bar via CMD/CTRL+K
       e.preventDefault();
-      Luigi.customMessages().sendToAll({ id: 'busola.toggle-compass' });
+      Luigi.customMessages().sendToAll({ id: 'busola.toggle-command-palette' });
     }
   });
 }

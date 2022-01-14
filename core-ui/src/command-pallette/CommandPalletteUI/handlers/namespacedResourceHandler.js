@@ -9,20 +9,42 @@ import {
 } from './helpers';
 
 const resourceTypes = [
-  ['clusterrolebindings', 'crbs', 'crb'],
-  ['clusterroles', 'cr'],
-  ['applications', 'app', 'apps'],
-  ['clusteraddonsconfigurations', 'clusteraddon', 'clusteraddons'],
-  ['namespaces', 'ns'],
+  ['configmaps', 'cm'],
+  ['pods', 'po'],
+  ['secrets'],
+  ['serviceaccounts', 'sa'],
+  ['services', 'svc'],
+  ['addonsconfigurations', 'addons'],
+  ['daemonsets', 'ds'],
+  ['deployments', 'deploy'],
+  ['replicasets', 'rs'],
+  ['statefulsets', 'sts'],
+  ['cronjobs', 'cj'],
+  ['jobs'],
+  ['certificates', 'cert', 'certs'],
+  ['issuers'],
+  ['dnsentries', 'dnse'],
+  ['dnsproviders', 'dnspr'],
+  ['subscriptions'],
+  ['ingresses', 'ing'],
+  ['apirules'],
+  ['oauth2clients'],
+  ['destinationrules', 'dr'],
+  ['gateways', 'gw'],
+  ['virtualservices', 'vs'],
+  ['rolebindings', 'rb', 'rbs'],
+  ['roles'],
+  ['functions', 'fn'],
+  ['gitrepositories', 'gitrepos', 'repos'],
 ];
 const extendedResourceTypes = resourceTypes.map(aliases => [
   ...aliases,
   pluralize(aliases[0], 1),
 ]);
 
-function getAutocompleteEntries({ tokens, resourceCache }) {
+function getAutocompleteEntries({ tokens, namespace, resourceCache }) {
   const fullResourceType = toFullResourceType(tokens[0], extendedResourceTypes);
-  const resources = resourceCache[fullResourceType] || [];
+  const resources = resourceCache[`${namespace}/${fullResourceType}`] || [];
 
   return autocompleteForResources({
     tokens,
@@ -31,7 +53,7 @@ function getAutocompleteEntries({ tokens, resourceCache }) {
   });
 }
 
-function getSuggestions({ tokens, resourceCache }) {
+function getSuggestions({ tokens, namespace, resourceCache }) {
   const [type, name] = tokens;
   const suggestedType = getSuggestion(
     type,
@@ -42,11 +64,11 @@ function getSuggestions({ tokens, resourceCache }) {
       suggestedType || type,
       extendedResourceTypes,
     );
-    const resourceNames = (resourceCache[fullResourceType] || []).map(
-      n => n.metadata.name,
-    );
+    const resourceNames = (
+      resourceCache[`${namespace}/${fullResourceType}`] || []
+    ).map(n => n.metadata.name);
     const suggestedName = getSuggestion(name, resourceNames);
-    return `${suggestedType || type} ${suggestedName || name}`;
+    return `${suggestedType} ${suggestedName}`;
   } else {
     return suggestedType;
   }
@@ -54,22 +76,21 @@ function getSuggestions({ tokens, resourceCache }) {
 
 function makeListItem(item, matchedNode, t) {
   const name = item.metadata.name;
-  const { pathSegment, resourceType, category } = matchedNode;
 
-  const detailsLink =
-    resourceType === 'namespaces' ? `/${name}/details` : `/details/${name}`;
-  const link = pathSegment + detailsLink;
-
-  const resourceTypeText = t([
-    `${resourceType}.title`,
-    `compass.resource-names.${resourceType}`,
-  ]);
+  const namespacePart = `namespaces/${item.metadata.namespace}`;
+  const detailsPart = `details/${name}`;
+  const link = `${namespacePart}/${matchedNode.pathSegment}/${detailsPart}`;
 
   return {
     label: name,
-    query: `${resourceType} ${name}`,
-    // namespaces have no category
-    category: category ? category + ' > ' + resourceTypeText : resourceTypeText,
+    query: `${matchedNode.resourceType} ${name}`,
+    category:
+      matchedNode.category +
+      ' > ' +
+      t([
+        `${matchedNode.resourceType}.title`,
+        `command-palette.resource-names.${matchedNode.resourceType}`,
+      ]),
     onActivate: () =>
       LuigiClient.linkManager()
         .fromContext('cluster')
@@ -77,22 +98,24 @@ function makeListItem(item, matchedNode, t) {
   };
 }
 
-function getApiPathForQuery({ tokens, clusterNodes }) {
+function getApiPathForQuery({ tokens, namespaceNodes }) {
   const resourceType = toFullResourceType(tokens[0], extendedResourceTypes);
-  return getApiPath(resourceType, clusterNodes);
+  return getApiPath(resourceType, namespaceNodes);
 }
-async function fetchClusterResources(context) {
+
+async function fetchNamespacedResource(context) {
   const apiPath = getApiPathForQuery(context);
   if (!apiPath) {
     return;
   }
 
-  const { fetch, tokens, updateResourceCache } = context;
+  const { fetch, namespace, tokens, updateResourceCache } = context;
   const resourceType = toFullResourceType(tokens[0], extendedResourceTypes);
   try {
-    const response = await fetch(apiPath + '/' + resourceType);
+    const path = `${apiPath}/namespaces/${namespace}/${resourceType}`;
+    const response = await fetch(path);
     const { items } = await response.json();
-    updateResourceCache(resourceType, items);
+    updateResourceCache(`${namespace}/${resourceType}`, items);
   } catch (e) {
     console.warn(e);
   }
@@ -100,16 +123,15 @@ async function fetchClusterResources(context) {
 
 function createResults({
   tokens,
+  namespace,
   resourceCache,
-  showHiddenNamespaces,
-  hiddenNamespaces,
-  clusterNodes,
+  namespaceNodes,
   t,
 }) {
   const [type, name] = tokens;
 
   const resourceType = toFullResourceType(type, extendedResourceTypes);
-  const matchedNode = clusterNodes.find(n => n.resourceType === resourceType);
+  const matchedNode = namespaceNodes.find(n => n.resourceType === resourceType);
 
   if (!matchedNode) {
     return;
@@ -117,31 +139,24 @@ function createResults({
 
   const resourceTypeText = t([
     `${resourceType}.title`,
-    `compass.resource-names.${resourceType}`,
+    `command-palette.resource-names.${resourceType}`,
   ]);
 
   const linkToList = {
-    label: t('compass.results.list-of', {
+    label: t('command-palette.results.list-of', {
       resourceType: resourceTypeText,
     }),
-    category: matchedNode.category
-      ? matchedNode.category + ' > ' + resourceTypeText
-      : resourceTypeText,
+    category: matchedNode.category + ' > ' + resourceTypeText,
     query: matchedNode.resourceType,
     onActivate: () =>
       LuigiClient.linkManager()
         .fromContext('cluster')
-        .navigate(matchedNode.pathSegment),
+        .navigate(`namespaces/${namespace}/${matchedNode.pathSegment}`),
   };
 
-  let resources = resourceCache[resourceType];
+  const resources = resourceCache[`${namespace}/${resourceType}`];
   if (typeof resources !== 'object') {
     return [linkToList, LOADING_INDICATOR];
-  }
-  if (resourceType === 'namespaces' && !showHiddenNamespaces) {
-    resources = resources.filter(
-      ns => !hiddenNamespaces.includes(ns.metadata.name),
-    );
   }
 
   if (name) {
@@ -156,10 +171,10 @@ function createResults({
   }
 }
 
-export const clusterResourceHandler = {
+export const namespacedResourceHandler = {
   getAutocompleteEntries,
   getSuggestions,
-  fetchResources: fetchClusterResources,
+  fetchResources: fetchNamespacedResource,
   createResults,
   getNavigationHelp: () =>
     resourceTypes.map(types => {

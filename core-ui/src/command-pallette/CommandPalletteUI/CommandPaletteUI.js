@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useMicrofrontendContext } from 'react-shared';
 import {
-  CompassHelp,
+  CommandPalletteHelp,
   NamespaceContextDisplay,
   ShortHelpText,
   SuggestedQuery,
@@ -9,20 +9,20 @@ import {
 import { ResultsList } from './ResultsList/ResultsList';
 import { addHistoryEntry, getHistoryEntries } from './search-history';
 import { LOADING_INDICATOR, useSearchResults } from './useSearchResults';
-import './CompassUI.scss';
+import './CommandPaletteUI.scss';
 import { FormInput } from 'fundamental-react';
 
-function CompassUIBackground({ hide, children }) {
+function Background({ hide, children }) {
   const onBackgroundClick = e => {
-    if (e.nativeEvent.srcElement.id === 'compass-background') {
+    if (e.nativeEvent.srcElement.id === 'command-palette-background') {
       hide();
     }
   };
 
   return (
     <div
-      id="compass-background"
-      className="compass-ui"
+      id="command-palette-background"
+      className="command-palette-ui"
       onClick={onBackgroundClick}
     >
       {children}
@@ -30,7 +30,7 @@ function CompassUIBackground({ hide, children }) {
   );
 }
 
-export function CompassUI({ hide, resourceCache, updateResourceCache }) {
+export function CommandPaletteUI({ hide, resourceCache, updateResourceCache }) {
   const { namespaceId: namespace } = useMicrofrontendContext();
 
   const [query, setQuery] = useState('');
@@ -51,7 +51,7 @@ export function CompassUI({ hide, resourceCache, updateResourceCache }) {
   } = useSearchResults({
     query,
     namespaceContext,
-    hideCompass: hide,
+    hideCommandPalette: hide,
     resourceCache,
     updateResourceCache,
   });
@@ -128,15 +128,15 @@ export function CompassUI({ hide, resourceCache, updateResourceCache }) {
   const showHelp = query === '?' || query === 'help';
 
   return (
-    <CompassUIBackground hide={hide}>
-      <div className="compass-ui__wrapper" role="dialog">
-        <div className="compass-ui__content">
+    <Background hide={hide}>
+      <div className="command-palette-ui__wrapper" role="dialog">
+        <div className="command-palette-ui__content">
           <NamespaceContextDisplay
             namespaceContext={namespaceContext}
             setNamespaceContext={setNamespaceContext}
           />
           <FormInput
-            aria-label="compass-search"
+            aria-label="command-palette-search"
             value={!isHistoryMode ? query : ''}
             placeholder={!isHistoryMode ? '' : query}
             onChange={e => setQuery(e.target.value)}
@@ -177,9 +177,9 @@ export function CompassUI({ hide, resourceCache, updateResourceCache }) {
               setActiveIndex={setActiveResultIndex}
             />
           )}
-          {showHelp && <CompassHelp helpEntries={helpEntries} />}
+          {showHelp && <CommandPalletteHelp helpEntries={helpEntries} />}
         </div>
       </div>
-    </CompassUIBackground>
+    </Background>
   );
 }

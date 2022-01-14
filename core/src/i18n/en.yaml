@@ -351,6 +351,49 @@ clusters:
       You can choose your privacy options in the last step.
     token-info: If you don't know how to get your token, ask your authentication provider.
     update: Provide Authentication
+command-palette:
+  crds:
+    cluster: Cluster CRDs
+    name-short: CRD
+    name-short_plural: CRDs
+    namespaced: Namespaced CRDs
+  help:
+    choose-cluster: Choose Cluster
+    full: Use <0>↑</0> and <0>↓</0> to navigate between results, <0>⏎</0> to choose, <0>Tab</0> to autocomplete.
+    navigation: Navigation
+    open-preferences: Open Preferences
+    resource-aliases: Resource Aliases
+    short-help: Type to search, e.g. "ns default" or "pod nginx"
+  item-actions:
+    navigate: Navigate
+    open: Open
+    show-help: Show available commands
+  resource-names:
+    addonsconfigurations: Addons
+    apirules: API Rules
+    cluster: Cluster {{name}}
+    clusteraddonsconfigurations: Cluster Addons
+    clusterrolebindings: Cluster Role Bindings
+    clusterroles: Cluster Roles
+    configmaps: Config Maps
+    cronjobs: Cron Jobs
+    daemonsets: Daemon Sets
+    destinationrules: Destination Rules
+    gitrepositories: Git Repositories
+    oauth2clients: OAuth2 Clients
+    replicasets: Replica Sets
+    rolebindings: Role Bindings
+    serviceaccounts: Service Accounts
+    statefulsets: Stateful Sets
+    subscriptions: Subscriptions
+  results:
+    did-you-mean: 'Did you mean: '
+    help: Help
+    list-of: List of {{resourceType}}
+    logs-for: Logs for {{target}}
+    no-results-found: No results found
+  search:
+    remove-ns-context: Remove Namespace context
 common:
   buttons:
     add: Add
@@ -474,49 +517,6 @@ common:
     show: Show read-only fields
     value: Value must start and end with an alphanumeric character, can contain '-', '_' or '.'.
   'yes': 'yes'
-compass:
-  crds:
-    cluster: Cluster CRDs
-    name-short: CRD
-    name-short_plural: CRDs
-    namespaced: Namespaced CRDs
-  help:
-    choose-cluster: Choose Cluster
-    full: Use <0>↑</0> and <0>↓</0> to navigate between results, <0>⏎</0> to choose, <0>Tab</0> to autocomplete.
-    navigation: Navigation
-    open-preferences: Open Preferences
-    resource-aliases: Resource Aliases
-    short-help: Type to search, e.g. "ns default" or "pod nginx"
-  item-actions:
-    navigate: Navigate
-    open: Open
-    show-help: Show available commands
-  resource-names:
-    addonsconfigurations: Addons
-    apirules: API Rules
-    cluster: Cluster {{name}}
-    clusteraddonsconfigurations: Cluster Addons
-    clusterrolebindings: Cluster Role Bindings
-    clusterroles: Cluster Roles
-    configmaps: Config Maps
-    cronjobs: Cron Jobs
-    daemonsets: Daemon Sets
-    destinationrules: Destination Rules
-    gitrepositories: Git Repositories
-    oauth2clients: OAuth2 Clients
-    replicasets: Replica Sets
-    rolebindings: Role Bindings
-    serviceaccounts: Service Accounts
-    statefulsets: Stateful Sets
-    subscriptions: Subscriptions
-  results:
-    did-you-mean: 'Did you mean: '
-    help: Help
-    list-of: List of {{resourceType}}
-    logs-for: Logs for {{target}}
-    no-results-found: No results found
-  search:
-    remove-ns-context: Remove Namespace context
 components:
   dropdown:
     empty-list: No resources available

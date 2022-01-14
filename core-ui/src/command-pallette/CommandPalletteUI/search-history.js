@@ -1,7 +1,7 @@
+const HISTORY_KEY = 'busola.command-palette-history';
+
 export function getHistoryEntries() {
-  return (
-    JSON.parse(localStorage.getItem('busola.compass-history') || '[]') || []
-  );
+  return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]') || [];
 }
 
 export function addHistoryEntry(query) {
@@ -13,8 +13,5 @@ export function addHistoryEntry(query) {
   if (entries.length >= 10) {
     entries.length = 9;
   }
-  localStorage.setItem(
-    'busola.compass-history',
-    JSON.stringify([query, ...entries]),
-  );
+  localStorage.setItem(HISTORY_KEY, JSON.stringify([query, ...entries]));
 }

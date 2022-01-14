@@ -43,7 +43,9 @@ function makeListItem(item, namespace, t) {
     category:
       t('configuration.title') +
       ' > ' +
-      (isNamespaced ? t('compass.crds.namespaced') : t('compass.crds.cluster')),
+      (isNamespaced
+        ? t('command-palette.crds.namespaced')
+        : t('command-palette.crds.cluster')),
     query: `crds ${name}`,
     onActivate: () =>
       LuigiClient.linkManager()
@@ -97,14 +99,15 @@ function createResults(context) {
     }
     return null;
   } else {
-    const listLabel = t('compass.results.list-of', {
-      resourceType: t('compass.crds.name-short_plural'),
+    const listLabel = t('command-palette.results.list-of', {
+      resourceType: t('command-palette.crds.name-short_plural'),
     });
 
     const linksToLists = [
       {
         label: listLabel,
-        category: t('configuration.title') + ' > ' + t('compass.crds.cluster'),
+        category:
+          t('configuration.title') + ' > ' + t('command-palette.crds.cluster'),
         query: 'crds',
         onActivate: () =>
           LuigiClient.linkManager()
@@ -114,7 +117,9 @@ function createResults(context) {
       {
         label: listLabel,
         category:
-          t('configuration.title') + ' > ' + t('compass.crds.namespaced'),
+          t('configuration.title') +
+          ' > ' +
+          t('command-palette.crds.namespaced'),
         query: 'crds',
         onActivate: () =>
           LuigiClient.linkManager()

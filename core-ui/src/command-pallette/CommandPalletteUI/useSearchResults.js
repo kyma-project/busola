@@ -12,7 +12,7 @@ export const LOADING_INDICATOR = 'LOADING_INDICATOR';
 export function useSearchResults({
   query,
   namespaceContext,
-  hideCompass,
+  hideCommandPalette,
   resourceCache,
   updateResourceCache,
 }) {
@@ -54,9 +54,9 @@ export function useSearchResults({
     results: handlers.createResults(context).map(result => ({
       ...result,
       onActivate: () => {
-        // entry can explicitly prevent hiding of Compass UI by returning falseń
+        // entry can explicitly prevent hiding of command palette by returning false
         if (result.onActivate() !== false) {
-          hideCompass();
+          hideCommandPalette();
         }
       },
     })),

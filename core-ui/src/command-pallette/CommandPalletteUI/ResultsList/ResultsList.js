@@ -54,7 +54,7 @@ export function ResultsList({
   );
 
   return (
-    <ul className="compass-ui__results" ref={listRef}>
+    <ul className="command-palette-ui__results" ref={listRef}>
       {results?.length ? (
         results.map((result, i) => (
           <Result
@@ -71,7 +71,9 @@ export function ResultsList({
         ))
       ) : (
         <div className="result result--disabled">
-          <p className="label">{t('compass.results.no-results-found')}</p>
+          <p className="label">
+            {t('command-palette.results.no-results-found')}
+          </p>
           <p className="description">{suggestion}</p>
         </div>
       )}

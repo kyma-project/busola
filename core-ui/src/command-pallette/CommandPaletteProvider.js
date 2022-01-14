@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import LuigiClient from '@luigi-project/client';
-import { CompassUI } from './CompassUI/CompassUI';
+import { CommandPaletteUI } from './CommandPalletteUI/CommandPaletteUI';
 import { useEventListener } from 'hooks/useEventListener';
 import { useCustomMessageListener } from 'hooks/useCustomMessageListener';
-import { useResourceCache } from './CompassUI/useResourceCache';
+import { useResourceCache } from './CommandPalletteUI/useResourceCache';
 
-export const CompassProvider = ({ children }) => {
+export const CommandPaletteProvider = ({ children }) => {
   const [showDialog, _setShowDialog] = useState(false);
   const hide = () => setShowDialog(false);
   const [resourceCache, updateResourceCache] = useResourceCache();
@@ -14,7 +14,7 @@ export const CompassProvider = ({ children }) => {
     const modalPresent = document.querySelector(
       '[data-focus-lock-disabled=false]',
     );
-    // disable opening Compass if other modal is present
+    // disable opening pallette if other modal is present
     if (!modalPresent || !value) {
       _setShowDialog(value);
     }
@@ -43,7 +43,7 @@ export const CompassProvider = ({ children }) => {
   }, [showDialog]);
 
   useEventListener('keydown', onKeyPress);
-  useCustomMessageListener('busola.toggle-compass', () =>
+  useCustomMessageListener('busola.toggle-command-palette', () =>
     setShowDialog(showDialog => !showDialog),
   );
   useCustomMessageListener('busola.main-frame-keydown', ({ key }) => {
@@ -56,7 +56,7 @@ export const CompassProvider = ({ children }) => {
   return (
     <>
       {showDialog && (
-        <CompassUI
+        <CommandPaletteUI
           hide={hide}
           resourceCache={resourceCache}
           updateResourceCache={updateResourceCache}

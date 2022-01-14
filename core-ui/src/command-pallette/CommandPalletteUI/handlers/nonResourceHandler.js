@@ -47,7 +47,7 @@ function createResults(context) {
     switch (option.type) {
       case 'clusters':
         return clusterNames.map(clusterName => ({
-          label: t('compass.resource-names.cluster', {
+          label: t('command-palette.resource-names.cluster', {
             name: clusterName,
           }),
           query: `cluster ${clusterName}`,
@@ -55,10 +55,10 @@ function createResults(context) {
         }));
       case 'help':
         return {
-          label: t('compass.results.help'),
+          label: t('command-palette.results.help'),
           query: 'help',
           onActivate: () => false,
-          customActionText: t('compass.item-actions.show-help'),
+          customActionText: t('command-palette.item-actions.show-help'),
         };
       case 'preferences':
         return [
@@ -71,7 +71,7 @@ function createResults(context) {
                 size: 'm',
               });
             },
-            customActionText: t('compass.item-actions.open'),
+            customActionText: t('command-palette.item-actions.open'),
           },
         ];
       case 'overview':
@@ -106,8 +106,8 @@ export const nonResourceHandler = {
   createResults,
   getNavigationHelp: () => [['clusters']],
   getOthersHelp: ({ t }) => [
-    ['clusters', 'cl', t('compass.help.choose-cluster')],
+    ['clusters', 'cl', t('command-palette.help.choose-cluster')],
     ['overview', 'ov', t('clusters.overview.title-current-cluster')],
-    ['preferences', 'prefs', t('compass.help.open-preferences')],
+    ['preferences', 'prefs', t('command-palette.help.open-preferences')],
   ],
 };
