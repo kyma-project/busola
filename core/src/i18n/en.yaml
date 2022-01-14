@@ -1620,7 +1620,7 @@ stateful-sets:
 subscriptions:
   create:
     labels:
-      add-filter: Add Filter
+      add-filter: Add filter
       application-name: Application name
       event-name: Event name
       event-source: Event source
