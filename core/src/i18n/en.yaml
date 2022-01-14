@@ -494,6 +494,7 @@ compass:
   resource-names:
     addonsconfigurations: Addons
     apirules: API Rules
+    cluster: Cluster {{name}}
     clusteraddonsconfigurations: Cluster Addons
     clusterrolebindings: Cluster Role Bindings
     clusterroles: Cluster Roles

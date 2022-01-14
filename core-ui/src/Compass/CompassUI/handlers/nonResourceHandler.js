@@ -47,7 +47,9 @@ function createResults(context) {
     switch (option.type) {
       case 'clusters':
         return clusterNames.map(clusterName => ({
-          label: `Cluster ${clusterName}`,
+          label: t('compass.resource-names.cluster', {
+            name: clusterName,
+          }),
           query: `cluster ${clusterName}`,
           onActivate: () => setCluster(clusterName),
         }));
@@ -76,7 +78,7 @@ function createResults(context) {
         if (activeClusterName) {
           return [
             {
-              label: 'Cluster Overview',
+              label: t('clusters.overview.title-current-cluster'),
               query: 'overview',
               onActivate: () => {
                 LuigiClient.linkManager()
