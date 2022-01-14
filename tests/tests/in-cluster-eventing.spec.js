@@ -43,7 +43,7 @@ context('In-cluster eventing', () => {
 
     cy.getIframeBody()
       .find(
-        '[placeholder="Enter event type, for example, sap.kyma.custom.test-app.order.cancelled.v1"]',
+        '[placeholder="Enter the event type, for example, sap.kyma.custom.test-app.order.cancelled.v1"]',
       )
       .clear()
       .type('sap.kyma.custom.nonexistingapp.order.created.v1');
