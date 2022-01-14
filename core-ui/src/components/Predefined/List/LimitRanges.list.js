@@ -9,17 +9,18 @@ export const LimitRangesList = ({ DefaultRenderer, ...otherParams }) => {
     {
       header: t('limit-ranges.headers.max'),
       value: limit =>
-        limit.spec.limits[0]?.max?.memory || EMPTY_TEXT_PLACEHOLDER,
+        limit.spec.limits?.[0]?.max?.memory || EMPTY_TEXT_PLACEHOLDER,
     },
     {
       header: t('limit-ranges.headers.default'),
       value: limit =>
-        limit.spec.limits[0]?.default?.memory || EMPTY_TEXT_PLACEHOLDER,
+        limit.spec.limits?.[0]?.default?.memory || EMPTY_TEXT_PLACEHOLDER,
     },
     {
       header: t('limit-ranges.headers.default-request'),
       value: limit =>
-        limit.spec.limits[0]?.defaultRequest?.memory || EMPTY_TEXT_PLACEHOLDER,
+        limit.spec.limits?.[0]?.defaultRequest?.memory ||
+        EMPTY_TEXT_PLACEHOLDER,
     },
   ];
 

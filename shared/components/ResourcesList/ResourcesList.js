@@ -346,6 +346,7 @@ function Resources({
         })}
         actions={[
           <Button
+            data-testid="delete-confirmation"
             type="negative"
             compact
             onClick={() => performDelete(activeResource)}

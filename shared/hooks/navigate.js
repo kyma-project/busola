@@ -55,8 +55,9 @@ function navigateToResourceList() {
 }
 
 function navigateToNamespaceList() {
-  LuigiClient.linkManager().navigate('/');
-  LuigiClient.sendCustomMessage({ id: 'busola.refreshNavigation' });
+  LuigiClient.linkManager()
+    .fromContext('namespaces')
+    .navigate('/');
 }
 
 export function navigateToList(resourceType) {

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Presets } from 'shared/ResourceForm/components/Presets';
-import { createLimitsTemplate, createMemoryQuotasTemplate } from './templates';
+import { createResourceQuotaTemplate } from '../ResourceQuotas/templates';
+import { createLimitRangeTemplate } from '../LimitRanges/templates';
 
 export const LimitPresets = ({
   presets,
@@ -15,10 +16,11 @@ export const LimitPresets = ({
         name: `${preset} (${Object.entries(values)
           .map(([t, v]) => `${t}: ${v}`)
           .join(', ')})`,
-        value: createLimitsTemplate({
+        value: createLimitRangeTemplate({
           max: values.max,
           defaultVal: values.default,
           defaultRequest: values.defaultRequest,
+          name: `${namespaceName}-limits`,
           namespaceName,
         }),
       };
@@ -47,9 +49,10 @@ export const MemoryPresets = ({
         name: `${preset} (${Object.entries(values)
           .map(([t, v]) => `${t}: ${v}`)
           .join(', ')})`,
-        value: createMemoryQuotasTemplate({
+        value: createResourceQuotaTemplate({
           limits: values.limits,
           requests: values.requests,
+          name: `${namespaceName}-quotas`,
           namespaceName,
         }),
       };
