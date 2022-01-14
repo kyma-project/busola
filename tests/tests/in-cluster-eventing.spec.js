@@ -195,9 +195,10 @@ context('In-cluster eventing', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('[placeholder="Choose an Application name"]:visible')
+      .find('[placeholder="Choose an Application name"]:visible')
       .clear()
-      .type(`test-mock-app-${Cypress.env('NAMESPACE_NAME')}`);
+      .type(`test-mock-app-${Cypress.env('NAMESPACE_NAME')}`)
+      .click();
 
     cy.getIframeBody()
       .find(
@@ -209,7 +210,8 @@ context('In-cluster eventing', () => {
     cy.getIframeBody()
       .find('[placeholder="Enter the Event version, for example, v1"]:visible')
       .clear()
-      .type('v1');
+      .type('v1')
+      .click();
 
     cy.getIframeBody()
       .find('[role="dialog"]')
