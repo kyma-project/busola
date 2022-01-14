@@ -16,6 +16,7 @@
   "experimentalInteractiveRunEvents": true,
   "testFiles": [
     "run-before.spec.js",
+    "test-namespace-overview.spec.js",
     "test-application.spec.js",
     "create-a-deployment.spec.js",
     "create-a-role.spec.js",

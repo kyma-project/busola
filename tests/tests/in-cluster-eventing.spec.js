@@ -9,8 +9,6 @@ const API_RULE_AND_FUNCTION_NAME = 'in-cluster-eventing-publisher';
 const API_RULE_HOST = API_RULE_AND_FUNCTION_NAME + '-' + random;
 const API_RULE_HOST_EXPECTED_PREFIX = `https://${API_RULE_HOST}.`;
 
-const POD_NAME_REGEX = new RegExp(`${FUNCTION_NAME}-(?!.*build)`);
-
 context('In-cluster eventing', () => {
   before(() => {
     cy.loginAndSelectCluster();
