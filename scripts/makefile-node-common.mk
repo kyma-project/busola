@@ -80,6 +80,7 @@ build:
 	npm run build
 
 test:
+	chmod -R 777 .
 	CI=true npm run test
 
 resolve:

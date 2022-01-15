@@ -73,7 +73,7 @@
     "yup": "^0.28.3"
   },
   "scripts": {
-    "start": "(cd ..; gulp copy-themes)& PORT=8889 f./scripts/start.js",
+    "start": "(cd ..; gulp copy-themes)& PORT=8889 ./scripts/start.js",
     "start:kyma": "BROWSER=none npm run start",
     "build": "(cd ..; npm run copy-themes) && PUBLIC_URL=/core-ui INLINE_RUNTIME_CHUNK=false ./scripts/build.js",
     "test": "./scripts/test.js"
