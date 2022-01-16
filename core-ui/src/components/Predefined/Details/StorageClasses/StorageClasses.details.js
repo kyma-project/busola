@@ -49,7 +49,7 @@ export const StorageClassesDetails = ({ DefaultRenderer, ...otherParams }) => {
     {
       header: t('storage-classes.headers.reclaim-policy'),
       value: ({ reclaimPolicy }) => (
-        <p>{reclaimPolicy ? reclaimPolicy : EMPTY_TEXT_PLACEHOLDER}</p>
+        <p>{reclaimPolicy || EMPTY_TEXT_PLACEHOLDER}</p>
       ),
     },
   ];
