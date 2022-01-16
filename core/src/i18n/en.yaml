@@ -384,6 +384,7 @@ common:
     title: Delete {{name}}.
   errors:
     error: Error
+    invalid: Invalid field data.
     no-permissions: You don't have enough permissions to view this content.
     no-permissions-header: Not enough permissions.
     no-permissions-message: Contact your administrator to grant you access.

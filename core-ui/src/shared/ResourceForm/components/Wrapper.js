@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect, createRef } from 'react';
 import * as jp from 'jsonpath';
+import { useTranslation } from 'react-i18next';
 
 export function ResourceFormWrapper({
   resource,
@@ -10,28 +11,67 @@ export function ResourceFormWrapper({
   validationRef,
   ...props
 }) {
+  const { t } = useTranslation();
+  const [inputRefs, setInputRefs] = useState([]);
+
   useEffect(() => {
-    if (validationRef) {
-      const valid = React.Children.toArray(children)
-        .filter(child => child?.props?.validate)
-        .every(child => {
-          if (child.props.propertyPath) {
-            const value = jp.value(resource, child.props.propertyPath);
-            return child.props.validate(value);
-          } else {
-            return child.props.validate(resource);
-          }
-        });
-      validationRef.current = validationRef.current && valid;
+    setInputRefs(
+      React.Children.map(
+        children,
+        (child, i) => inputRefs[i] || createRef(null),
+      ),
+    );
+  }, [children]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const isValid = child => {
+    if (!child.props.validate) {
+      return true;
+    } else if (child.props.propertyPath) {
+      const value = jp.value(resource, child.props.propertyPath);
+      return child.props.validate(value);
+    } else {
+      return child.props.validate(resource);
     }
-  }, [resource, children, validationRef]);
+  };
+
+  const errorMessage = child => {
+    if (!child.props.validateMessage) {
+      return t('common.error.generic');
+    } else if (typeof child.props.validateMessage !== 'function') {
+      return child.props.validateMessage;
+    } else if (child.props.propertyPath) {
+      const value = jp.value(resource, child.props.propertyPath);
+      return child.props.validateMessage(value);
+    } else {
+      return child.props.validateMessage(resource);
+    }
+  };
+
+  useEffect(() => {
+    React.Children.toArray(children).forEach((child, index) => {
+      const inputRef = inputRefs[index];
+      console.log('wrapper child', child.props.inputRef, child.props);
+      if (child.props.validate) {
+        const valid = isValid(child);
+        if (inputRef?.current) {
+          if (!valid) {
+            inputRef.current.setCustomValidity(errorMessage(child));
+          } else {
+            inputRef.current.setCustomValidity('');
+          }
+        } else if (validationRef) {
+          validationRef.current = validationRef.current && valid;
+        }
+      }
+    });
+  }, [resource, children]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!resource) {
     return children;
   }
 
   return (
-    React.Children.map(children, child => {
+    React.Children.map(children, (child, index) => {
       if (!child) {
         return null;
       } else if (child.type === React.Fragment) {
@@ -56,6 +96,7 @@ export function ResourceFormWrapper({
             setResource: child.props.setResource || setResource,
             validationRef,
             isAdvanced,
+            ref: inputRefs[index],
             ...props,
           });
         } else {
@@ -77,7 +118,12 @@ export function ResourceFormWrapper({
           ? value => child.props.setValue(value, valueSetter)
           : valueSetter;
 
-        return React.cloneElement(child, { isAdvanced, value, setValue });
+        return React.cloneElement(child, {
+          isAdvanced,
+          value,
+          setValue,
+          ref: inputRefs[index],
+        });
       }
     }) || null
   );

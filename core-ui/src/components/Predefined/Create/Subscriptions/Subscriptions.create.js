@@ -263,6 +263,11 @@ const SubscriptionsCreate = ({
         }
         customFormatFn={arr => arr.map(getEventFilter)}
         placeholder={t('subscription.create.placeholders.event-type')}
+        inputProps={{
+          validate: value => {
+            return value === 'foo';
+          },
+        }}
       />
       {(jp.value(subscription, '$.spec.filter.filters') || []).length === 0 ? (
         <MessageStrip

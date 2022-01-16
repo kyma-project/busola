@@ -68,8 +68,8 @@ export const ModalWithForm = ({
       }
 
       // current element validity
-      const isValidFormElement = e.target.checkValidity();
-      e.target.classList.toggle('is-invalid', !isValidFormElement);
+      // const isValidFormElement = e.target.checkValidity();
+      // e.target.classList.toggle('is-invalid', !isValidFormElement);
     }
   }
 
