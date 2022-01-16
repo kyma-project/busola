@@ -23,7 +23,10 @@ export const StorageClassesDetails = ({ DefaultRenderer, ...otherParams }) => {
           {Object.keys(parameters).length > 0 ? (
             Object.entries(parameters).map(parameters => {
               return (
-                <LayoutPanelRow name={parameters[0]} value={parameters[1]} />
+                <LayoutPanelRow
+                  name={parameters[0]}
+                  value={parameters[1] || EMPTY_TEXT_PLACEHOLDER}
+                />
               );
             })
           ) : (
@@ -40,7 +43,7 @@ export const StorageClassesDetails = ({ DefaultRenderer, ...otherParams }) => {
     {
       header: t('storage-classes.headers.provisioner'),
       value: ({ provisioner }) => (
-        <p>{provisioner ? provisioner : EMPTY_TEXT_PLACEHOLDER}</p>
+        <p>{provisioner || EMPTY_TEXT_PLACEHOLDER}</p>
       ),
     },
     {

@@ -7,7 +7,7 @@ export function PersistentVolumeClaimsList(storageclass) {
     // hasDetailsView: true,
     fixedPath: true,
     resourceUrl: `/api/v1/persistentvolumeclaims`,
-    resourceType: 'persistentvolumeclaims',
+    resourceType: 'PersistentVolumeClaims',
     isCompact: true,
     showTitle: true,
     filter: persistentvolumesclaim =>

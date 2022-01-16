@@ -7,7 +7,7 @@ export function PersistentVolumesList(storageclass) {
     // hasDetailsView: true,
     fixedPath: true,
     resourceUrl: `/api/v1/persistentvolumes`,
-    resourceType: 'persistentvolumes',
+    resourceType: 'PersistentVolumes',
     isCompact: true,
     showTitle: true,
     filter: persistentvolumes =>
