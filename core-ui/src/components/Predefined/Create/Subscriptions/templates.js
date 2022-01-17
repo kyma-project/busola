@@ -1,8 +1,6 @@
-export function createSubscriptionTemplate(
-  namespace,
-  eventTypePrefix,
-  serviceName,
-) {
+import { DEFAULT_EVENT_TYPE_PREFIX } from './helpers';
+
+export function createSubscriptionTemplate(namespace, serviceName) {
   return {
     apiVersion: 'eventing.kyma-project.io/v1alpha1',
     kind: 'Subscription',
@@ -14,21 +12,21 @@ export function createSubscriptionTemplate(
     spec: {
       sink: `http://${serviceName}.${namespace}.svc.cluster.local`,
       filter: {
-        filters: [
-          {
-            eventSource: {
-              property: 'source',
-              type: 'exact',
-              value: '',
-            },
-            eventType: {
-              property: 'type',
-              type: 'exact',
-              value: eventTypePrefix,
-            },
-          },
-        ],
+        filters: [createFilterTemplate()],
       },
     },
   };
 }
+
+export const createFilterTemplate = () => ({
+  eventSource: {
+    property: 'source',
+    type: 'exact',
+    value: '',
+  },
+  eventType: {
+    property: 'type',
+    type: 'exact',
+    value: DEFAULT_EVENT_TYPE_PREFIX,
+  },
+});
