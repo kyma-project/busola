@@ -34,32 +34,30 @@ export function TextArrayInput({
           index,
           internalValue,
           setMultiValue,
-        }) => {
-          return (
-            <Inputs.WrappedText
-              placeholder={Math.abs(index) === 1 ? placeholder : ''}
-              key={index}
-              compact
-              value={value}
-              inputRef={ref}
-              onChange={e => {
-                setValue(e.target.value);
-                updateValue();
-              }}
-              onKeyDown={e => focus(e)}
-              onBlur={() => {
-                const fieldValue = internalValue?.filter(val => !!val);
-                setMultiValue(
-                  typeof customFormatFn === 'function'
-                    ? customFormatFn(fieldValue)
-                    : fieldValue,
-                );
-              }}
-              readOnly={readOnly}
-              {...inputProps}
-            />
-          );
-        },
+        }) => (
+          <Inputs.WrappedText
+            placeholder={Math.abs(index) === 1 ? placeholder : ''}
+            key={index}
+            compact
+            value={value}
+            inputRef={ref}
+            onChange={e => {
+              setValue(e.target.value);
+              updateValue();
+            }}
+            onKeyDown={e => focus(e)}
+            onBlur={() => {
+              const fieldValue = internalValue?.filter(val => !!val);
+              setMultiValue(
+                typeof customFormatFn === 'function'
+                  ? customFormatFn(fieldValue)
+                  : fieldValue,
+              );
+            }}
+            readOnly={readOnly}
+            {...inputProps}
+          />
+        ),
       ]}
       {...props}
     />
