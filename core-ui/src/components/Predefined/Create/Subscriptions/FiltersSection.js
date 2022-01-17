@@ -87,11 +87,16 @@ function SingleFilterSection({ value: filters, setValue: setFilters }) {
   ));
 }
 
-export function FiltersSection({ resource, setResource, onChange, advanced }) {
+export function FiltersSection({
+  resource,
+  setResource,
+  onChange,
+  isAdvanced,
+}) {
   const { t } = useTranslation();
   return (
     <ResourceForm.Wrapper
-      isAdvanced={advanced}
+      isAdvanced={isAdvanced}
       resource={resource}
       setResource={setResource}
     >

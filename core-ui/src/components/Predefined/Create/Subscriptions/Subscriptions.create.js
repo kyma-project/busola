@@ -13,7 +13,6 @@ import {
   getServiceName,
   spreadEventType,
   DEFAULT_EVENT_TYPE_PREFIX,
-  getEventFilter,
 } from './helpers';
 import { FiltersSection } from './FiltersSection';
 
