@@ -1,7 +1,6 @@
 import React from 'react';
 import { FormInput } from 'fundamental-react';
 
-import * as Inputs from '../inputs';
 import { MultiInput } from './MultiInput';
 
 import './TextArrayInput.scss';

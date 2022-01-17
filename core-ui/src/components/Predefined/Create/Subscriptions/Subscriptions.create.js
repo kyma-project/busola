@@ -224,8 +224,6 @@ const SubscriptionsCreate = ({
         value={firstEventTypeValues.version}
         input={({ value }) => (
           <ComboboxInput
-            id="event-version-input"
-            ariaLabel="event-version"
             id="event-version-combobox"
             ariaLabel={t('common.messages.choose', {
               value: t('subscriptions.create.labels.event-version'),

@@ -6,9 +6,37 @@ import * as jp from 'jsonpath';
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { createFilterTemplate } from './templates';
+import { DEFAULT_EVENT_TYPE_PREFIX } from './helpers';
 
 function SingleFilterInputs({ filter, setFilter }) {
   const { t } = useTranslation();
+
+  const validateMessage = value => {
+    if (!value) {
+      return t('subscriptions.errors.event-type-required');
+    }
+
+    const natsFriendlyValue = value.replaceAll(/[^a-zA-Z0-9.]/g, '');
+    if (natsFriendlyValue !== value) {
+      return t('subscriptions.errors.event-type-allowed-charset');
+    }
+
+    value = natsFriendlyValue;
+
+    if (!value.startsWith(DEFAULT_EVENT_TYPE_PREFIX)) {
+      return t('subscriptions.errors.event-type-prefix');
+    }
+    value = value.replace(DEFAULT_EVENT_TYPE_PREFIX, '');
+
+    const tokens = value.split('.');
+    const hasEmptyTokens = tokens.some(t => !t);
+    const hasInvalidLength = tokens.filter(Boolean).length < 4;
+    if (hasEmptyTokens || hasInvalidLength) {
+      return t('subscriptions.errors.event-type-7-segments');
+    }
+
+    return null;
+  };
 
   return (
     <ResourceForm.Wrapper resource={filter} setResource={setFilter}>
@@ -19,9 +47,8 @@ function SingleFilterInputs({ filter, setFilter }) {
         input={Inputs.Text}
         placeholder={t('subscriptions.create.placeholders.event-type')}
         tooltipContent={t('subscriptions.tooltips.event-type-advanced')}
-        validate={v => {
-          console.log('eventType', v);
-        }}
+        validate={value => !validateMessage(value)}
+        validateMessage={validateMessage}
       />
       <ResourceForm.FormField
         className="fd-margin-bottom--sm"
