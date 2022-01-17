@@ -1617,6 +1617,16 @@ stateful-sets:
   name_singular: Stateful Set
   replicas: Replicas
   title: Stateful Sets
+storage:
+  title: Storage
+storage-classes:
+  description: <0>Storage classes</0> provides a way for administrators to describe the "classes" of storage they offer.
+  headers:
+    parameters: Parameters
+    provisioner: Provisioner
+    reclaim-policy: Reclaim policy
+  name_singular: Storage Class
+  title: Storage Classes
 subscriptions:
   create:
     labels:
