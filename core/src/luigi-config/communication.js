@@ -15,6 +15,21 @@ import { setTheme } from './utils/theme';
 import { setSSOAuthData } from './auth/sso';
 import { communicationEntry as pageSizeCommunicationEntry } from './settings/pagination';
 
+addCommandPaletteHandler();
+
+window.addEventListener('click', () => {
+  Luigi.customMessages().sendToAll({
+    id: 'busola.main-frame-click',
+  });
+});
+
+window.addEventListener('keydown', e => {
+  Luigi.customMessages().sendToAll({
+    id: 'busola.main-frame-keydown',
+    key: e.key,
+  });
+});
+
 export const communication = {
   customMessagesListeners: {
     'busola.language': ({ language }) => {
@@ -128,3 +143,21 @@ const convertToObject = paramsString => {
     });
   return result;
 };
+
+function addCommandPaletteHandler() {
+  window.addEventListener('keydown', e => {
+    const { key, metaKey, ctrlKey } = e;
+    const isMac = navigator.platform.toLowerCase().startsWith('mac');
+    const modifierKeyPressed = (isMac && metaKey) || (!isMac && ctrlKey);
+
+    const isMFModalPresent = !!document.querySelector('.lui-modal-mf');
+
+    if (isMFModalPresent) return;
+
+    if (key.toLowerCase() === 'k' && modifierKeyPressed) {
+      // [on Firefox] prevent opening the browser search bar via CMD/CTRL+K
+      e.preventDefault();
+      Luigi.customMessages().sendToAll({ id: 'busola.toggle-command-palette' });
+    }
+  });
+}

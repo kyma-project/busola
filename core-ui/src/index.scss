@@ -374,3 +374,11 @@ input[type='checkbox'] {
 .break-word {
   word-break: break-word;
 }
+
+.button-link {
+  border: none;
+  background: none;
+  text-decoration: underline;
+  color: var(--sapLinkColor);
+  cursor: pointer;
+}

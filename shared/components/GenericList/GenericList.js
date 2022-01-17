@@ -228,7 +228,12 @@ GenericList.propTypes = {
   notFoundMessage: PropTypes.string,
   noSearchResultMessage: PropTypes.string,
   serverErrorMessage: PropTypes.string,
-  textSearchProperties: PropTypes.arrayOf(PropTypes.string.isRequired),
+  textSearchProperties: PropTypes.arrayOf(
+    PropTypes.oneOfType([
+      PropTypes.string.isRequired,
+      PropTypes.func.isRequired,
+    ]),
+  ),
   showSearchSuggestion: PropTypes.bool,
   showSearchControl: PropTypes.bool,
   actionsStandaloneItems: PropTypes.number,
