@@ -1545,6 +1545,51 @@ export function getStaticRootNodes(
       ],
     },
 
+    //STORAGE CATEGORY
+    {
+      category: {
+        label: i18next.t('storage.title'),
+        icon: 'sap-box',
+        collapsible: true,
+      },
+      pathSegment: '_storage_category_placeholder_',
+      hideFromNav: true,
+    },
+    {
+      pathSegment: 'storageclasses',
+      resourceType: 'storageclasses',
+      navigationContext: 'storageclasses',
+      label: i18next.t('storage-classes.title'),
+      category: i18next.t('storage.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/StorageClasses?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/storage.k8s.io/v1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':storageClassName',
+              resourceType: 'storageclasses',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/StorageClasses/:storageClassName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/storage.k8s.io/v1',
+                }),
+              viewGroup: coreUIViewGroupName,
+            },
+          ],
+        },
+      ],
+    },
+
     //CONFIGURATION CATEGORY (CLUSTER)
     {
       category: {
