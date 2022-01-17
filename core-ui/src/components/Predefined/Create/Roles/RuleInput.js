@@ -64,9 +64,9 @@ export function RuleInput({
   // there's no endpoint for "all resources" - add just a '*' and specific resources
   // for already choosen apiGroups
   const availableResources = unique([
-    ...rule.apiGroups
-      .flatMap(apiGroup => resourcesCache[apiGroup] || [])
-      .map(r => r.name),
+    ...(rule.apiGroups
+      ?.flatMap(apiGroup => resourcesCache[apiGroup] || [])
+      .map(r => r.name) || []),
     '*',
   ]);
 
