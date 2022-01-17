@@ -13,7 +13,12 @@ SearchInput.propTypes = {
   entriesKind: PropTypes.string,
   entries: PropTypes.arrayOf(PropTypes.object.isRequired),
   handleQueryChange: PropTypes.func.isRequired,
-  suggestionProperties: PropTypes.arrayOf(PropTypes.string.isRequired),
+  suggestionProperties: PropTypes.arrayOf(
+    PropTypes.oneOfType([
+      PropTypes.string.isRequired,
+      PropTypes.func.isRequired,
+    ]),
+  ),
   showSuggestion: PropTypes.bool,
   showSearchControl: PropTypes.bool,
   disabled: PropTypes.bool,
