@@ -118,7 +118,7 @@ export function MultiInput({
       const isValid = child => child.props.validate(entry) ?? true;
       const errorMessage = child => {
         if (!child.props.validateMessage) {
-          return t('common.error.generic');
+          return t('common.errors.generic');
         } else if (typeof child.props.validateMessage !== 'function') {
           return child.props.validateMessage;
         } else {

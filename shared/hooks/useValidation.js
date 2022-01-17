@@ -6,7 +6,7 @@ export function useValidation({ inputRef, onChange }) {
 
   const ref = inputRef || internalRef;
 
-  let validationState;
+  let validationState = null;
   if (ref.current && !ref.current?.validity?.valid && touched) {
     validationState = {
       state: 'error',
@@ -23,10 +23,13 @@ export function useValidation({ inputRef, onChange }) {
       } else if (onChange) {
         onChange(e);
       }
+      const selectionStart = ref.current?.selectionStart;
+      const selectionEnd = ref.current?.selectionEnd;
       setTouched(true);
       setTimeout(() => {
         if (ref.current && document.activeElement !== ref.current) {
           ref.current.focus();
+          ref.current.setSelectionRange(selectionStart, selectionEnd);
         }
       });
     },

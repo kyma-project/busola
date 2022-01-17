@@ -59,18 +59,8 @@ export const ModalWithForm = ({
     setOpen(status);
   }
 
-  function handleFormChanged(e) {
+  function handleFormChanged() {
     setTimeout(() => revalidate());
-    if (!e) return;
-    if (e.target) {
-      if (e.target.getAttribute('data-ignore-visual-validation')) {
-        return;
-      }
-
-      // current element validity
-      // const isValidFormElement = e.target.checkValidity();
-      // e.target.classList.toggle('is-invalid', !isValidFormElement);
-    }
   }
 
   function handleFormError(title, message, isWarning) {

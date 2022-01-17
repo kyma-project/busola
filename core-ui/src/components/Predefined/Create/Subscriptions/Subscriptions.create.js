@@ -258,12 +258,6 @@ const SubscriptionsCreate = ({
         advanced
         resource={subscription}
         setResource={setSubscription}
-        inputProps={{
-          validate: value => {
-            console.log('filtersValue', value);
-            return value === 'foo';
-          },
-        }}
       />
       {(jp.value(subscription, '$.spec.filter.filters') || []).length === 0 ? (
         <MessageStrip
