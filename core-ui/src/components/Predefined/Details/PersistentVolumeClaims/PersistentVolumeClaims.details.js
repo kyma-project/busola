@@ -33,17 +33,11 @@ const PVCSelectorSpecification = pvc => {
       <LayoutPanel className="fd-margin--md" key={'pvc-selector'}>
         <LayoutPanel.Header>
           <LayoutPanel.Head
-            title={t('persistent-volume-claims.headers.selector')}
+            title={t('persistent-volume-claims.headers.match-labels')}
           />
         </LayoutPanel.Header>
         <LayoutPanel.Body>
-          <LayoutPanelRow
-            name={t('persistent-volume-claims.headers.match-labels')}
-            value={
-              <Labels labels={pvc.spec?.selector?.matchLabels} /> ||
-              EMPTY_TEXT_PLACEHOLDER
-            }
-          />
+          <Labels labels={pvc.spec?.selector?.matchLabels} />
         </LayoutPanel.Body>
       </LayoutPanel>
       <GenericList
