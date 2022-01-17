@@ -6,6 +6,7 @@ import {
   EMPTY_TEXT_PLACEHOLDER,
   GenericList,
   navigateToFixedPathResourceDetails,
+  navigateToClusterResourceDetails,
   Labels,
   useGetList,
 } from 'react-shared';
@@ -31,7 +32,9 @@ const PVCSelectorSpecification = pvc => {
     <>
       <LayoutPanel className="fd-margin--md" key={'pvc-selector'}>
         <LayoutPanel.Header>
-          <LayoutPanel.Head title="Selector" />
+          <LayoutPanel.Head
+            title={t('persistent.volume.claims.headers.selector')}
+          />
         </LayoutPanel.Header>
         <LayoutPanel.Body>
           <LayoutPanelRow
@@ -65,18 +68,20 @@ export const PVCConfiguration = pvc => {
   return (
     <LayoutPanel className="fd-margin--md" key={'pvc-configuration'}>
       <LayoutPanel.Header>
-        <LayoutPanel.Head title="Configuration" />
+        <LayoutPanel.Head
+          title={t('persistent.volume.claims.headers.configuration')}
+        />
       </LayoutPanel.Header>
       <LayoutPanel.Body>
         <LayoutPanelRow
-          key={pvc.spec.volumeMode}
+          key={pvc.spec?.volumeMode}
           name={t('persistent-volume-claims.headers.volume-mode')}
-          value={pvc.spec.volumeMode}
+          value={pvc.spec?.volumeMode}
         />
         <LayoutPanelRow
-          key={pvc.spec.accessModes}
+          key={pvc.spec?.accessModes}
           name={t('persistent-volume-claims.headers.access-modes')}
-          value={<Tokens tokens={pvc.spec.accessModes} />}
+          value={<Tokens tokens={pvc.spec?.accessModes} />}
         />
         <LayoutPanelRow
           key={pvc.spec?.volumeName}
@@ -85,7 +90,7 @@ export const PVCConfiguration = pvc => {
             pvc.spec?.volumeName ? (
               <Link
                 onClick={() =>
-                  navigateToFixedPathResourceDetails(
+                  navigateToClusterResourceDetails(
                     'persistentvolumes',
                     pvc.spec?.volumeName,
                   )
@@ -99,11 +104,11 @@ export const PVCConfiguration = pvc => {
           }
         />
         <LayoutPanelRow
-          key={pvc.spec.storageClassName}
+          key={pvc.spec?.storageClassName}
           name={t('persistent-volume-claims.headers.storage-class')}
           value={
             storageClasses?.find(
-              ({ metadata }) => metadata.name === pvc.spec.storageClassName,
+              ({ metadata }) => metadata.name === pvc.spec?.storageClassName,
             ) ? (
               <Link
                 onClick={() =>
@@ -113,12 +118,12 @@ export const PVCConfiguration = pvc => {
                   )
                 }
               >
-                {pvc.spec.storageClassName}
+                {pvc.spec?.storageClassName}
               </Link>
             ) : (
               <p>
-                {pvc.spec.storageClassName !== ''
-                  ? pvc.spec.storageClassName
+                {pvc.spec?.storageClassName !== ''
+                  ? pvc.spec?.storageClassName
                   : EMPTY_TEXT_PLACEHOLDER}
               </p>
             )
@@ -136,14 +141,15 @@ export const PersistentVolumeClaimsDetails = ({
   const { t } = useTranslation();
   const customColumns = [
     {
-      header: t('subscription.headers.conditions.status'),
-      value: ({ status }) => (
-        <PersistentVolumeClaimStatus phase={status.phase} />
-      ),
+      header: t('persistent-volume-claims.headers.conditions.status'),
+      value: ({ status }) =>
+        <PersistentVolumeClaimStatus phase={status.phase} /> || (
+          <p>{EMPTY_TEXT_PLACEHOLDER}</p>
+        ),
     },
     {
-      header: t('persistent-volume-claims.headers.capacity'),
-      value: ({ spec }) => <p>{spec.resources.requests.storage}</p>,
+      header: t('persistent-volume-claims.headers.storage'),
+      value: ({ spec }) => <p>{spec.resources?.requests?.storage}</p>,
     },
   ];
 

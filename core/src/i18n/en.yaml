@@ -1323,12 +1323,13 @@ persistent-volume-claims:
   description: <0>Persistent Volue Claim</0> is a request for the Persistent Volume resources.
   headers:
     access-modes: Access Modes
-    capacity: Capacity
+    configuration: Configuration
     key: Key
     match-expressions: Match expressions
     match-labels: Match Labels
     operator: Operator
     selector: Selector
+    storage: Storage
     storage-class: Storage Class
     values: Values
     volume-mode: Volume Mode

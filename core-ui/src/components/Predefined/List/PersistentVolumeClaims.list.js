@@ -17,7 +17,7 @@ export const PersistentVolumeClaimsList = ({
       ),
     },
     {
-      header: t('persistent-volume-claims.headers.capacity'),
+      header: t('persistent-volume-claims.headers.storage'),
       value: ({ spec }) => ({
         content: spec.resources.requests.storage,
         style: { wordBreak: 'keep-all' },
