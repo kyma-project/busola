@@ -33,7 +33,7 @@ const PVCSelectorSpecification = pvc => {
       <LayoutPanel className="fd-margin--md" key={'pvc-selector'}>
         <LayoutPanel.Header>
           <LayoutPanel.Head
-            title={t('persistent.volume.claims.headers.selector')}
+            title={t('persistent-volume-claims.headers.selector')}
           />
         </LayoutPanel.Header>
         <LayoutPanel.Body>
@@ -69,7 +69,7 @@ export const PVCConfiguration = pvc => {
     <LayoutPanel className="fd-margin--md" key={'pvc-configuration'}>
       <LayoutPanel.Header>
         <LayoutPanel.Head
-          title={t('persistent.volume.claims.headers.configuration')}
+          title={t('persistent-volume-claims.headers.configuration')}
         />
       </LayoutPanel.Header>
       <LayoutPanel.Body>
@@ -90,7 +90,7 @@ export const PVCConfiguration = pvc => {
             pvc.spec?.volumeName ? (
               <Link
                 onClick={() =>
-                  navigateToClusterResourceDetails(
+                  navigateToFixedPathResourceDetails(
                     'persistentvolumes',
                     pvc.spec?.volumeName,
                   )
@@ -112,7 +112,7 @@ export const PVCConfiguration = pvc => {
             ) ? (
               <Link
                 onClick={() =>
-                  navigateToFixedPathResourceDetails(
+                  navigateToClusterResourceDetails(
                     'storageclasses',
                     pvc.spec?.storageClassName,
                   )
