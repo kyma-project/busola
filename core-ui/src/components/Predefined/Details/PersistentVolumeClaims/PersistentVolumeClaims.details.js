@@ -135,11 +135,11 @@ export const PersistentVolumeClaimsDetails = ({
   const { t } = useTranslation();
   const customColumns = [
     {
-      header: t('persistent-volume-claims.headers.conditions.status'),
+      header: t('common.headers.status'),
       value: ({ status }) =>
-        <PersistentVolumeClaimStatus phase={status.phase} /> || (
-          <p>{EMPTY_TEXT_PLACEHOLDER}</p>
-        ),
+        <PersistentVolumeClaimStatus phase={status.phase} /> || {
+          EMPTY_TEXT_PLACEHOLDER,
+        },
     },
     {
       header: t('persistent-volume-claims.headers.storage'),
