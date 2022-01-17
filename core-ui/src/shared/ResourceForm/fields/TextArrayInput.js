@@ -8,7 +8,7 @@ import './TextArrayInput.scss';
 
 export function TextArrayInput({
   defaultOpen,
-  inputProps,
+  inputProps: _inputProps,
   sectionTooltipContent,
   placeholder,
   toInternal = value => value || [],
@@ -17,6 +17,7 @@ export function TextArrayInput({
   customFormatFn,
   ...props
 }) {
+  const { validate, ...inputProps } = _inputProps;
   return (
     <MultiInput
       defaultOpen={defaultOpen}
@@ -35,12 +36,12 @@ export function TextArrayInput({
           internalValue,
           setMultiValue,
         }) => (
-          <Inputs.WrappedText
+          <FormInput
             placeholder={Math.abs(index) === 1 ? placeholder : ''}
             key={index}
             compact
-            value={value}
-            inputRef={ref}
+            value={value || ''}
+            ref={ref}
             onChange={e => {
               setValue(e.target.value);
               updateValue();

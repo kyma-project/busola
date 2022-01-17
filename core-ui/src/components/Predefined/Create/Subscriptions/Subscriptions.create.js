@@ -98,13 +98,13 @@ const SubscriptionsCreate = ({
   };
 
   const sinkMessageStrip = (
-    <MessageStrip type="info">
+    <MessageStrip type="information">
       {jp.value(subscription, '$.spec.sink')}
     </MessageStrip>
   );
 
   const eventTypeMessageStrip = (
-    <MessageStrip type="info">
+    <MessageStrip type="information">
       {jp.value(subscription, '$.spec.filter.filters[0].eventType.value')}
     </MessageStrip>
   );
@@ -225,6 +225,8 @@ const SubscriptionsCreate = ({
         value={firstEventTypeValues.version}
         input={({ value, setValue }) => (
           <ComboboxInput
+            id="event-version-input"
+            ariaLabel="event-version"
             required
             compact
             placeholder={t('subscription.create.placeholders.event-version')}
