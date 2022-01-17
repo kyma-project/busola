@@ -11,6 +11,7 @@ import './fiori-helpers.scss';
 import App from './components/App/App';
 // NOTE react-shared has to be imported after App for some unknown reason
 import { Microfrontend, Spinner } from 'react-shared';
+import { CommandPaletteProvider } from 'command-pallette/CommandPaletteProvider';
 
 i18next
   .use(initReactI18next)
@@ -40,7 +41,9 @@ ReactDOM.render(
   <Microfrontend env={process.env}>
     <BrowserRouter basename={process.env.PUBLIC_URL}>
       <Suspense fallback={<Spinner />}>
-        <App />
+        <CommandPaletteProvider>
+          <App />
+        </CommandPaletteProvider>
       </Suspense>
     </BrowserRouter>
   </Microfrontend>,
