@@ -50,11 +50,11 @@ export default function CreateServiceBindingForm({
     }
     console.log(availableServiceInstances);
     const bindingsForThisInstance = serviceBindings.filter(b => {
-      return b?.spec.instanceRef.name === existingInstanceName;
+      return b?.spec?.instanceRef.name === existingInstanceName;
     });
 
-    setSecrets(bindingsForThisInstance.map(b => b?.spec.secretName));
-    setExistingSecretName(bindingsForThisInstance[0]?.spec.secretName);
+    setSecrets(bindingsForThisInstance.map(b => b?.spec?.secretName));
+    setExistingSecretName(bindingsForThisInstance[0]?.spec?.secretName);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [existingInstanceName, availableServiceInstances]);
 
