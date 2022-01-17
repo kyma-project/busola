@@ -17,7 +17,7 @@ export function PersistentVolumeClaimsList(storageclass) {
 
   return (
     <ComponentForList
-      name="persistenvolumeclaimsList"
+      name="persistenVolumeClaimsList"
       params={params}
       key="persistentvolumeclaims"
     />
