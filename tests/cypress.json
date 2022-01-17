@@ -28,6 +28,7 @@
     "smoke-tests.spec.js",
     "test-protected-resources.spec.js",
     "test-cluster-role-bindings.spec.js",
+    "test-storage-classes.spec.js",
     "test-jobs.spec.js",
     "test-replica-sets.spec.js",
     "test-dashboard-version.spec.js",
@@ -55,6 +56,7 @@
     "certificates.spec.js",
     "test.settings.spec.js",
     "test-ingresses.spec.js",
+    "test-command-palette.spec.js",
     "run-after.spec.js"
   ]
 }

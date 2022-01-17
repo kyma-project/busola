@@ -133,7 +133,11 @@ export function getActiveClusterName() {
 }
 
 export function saveActiveClusterName(clusterName) {
-  localStorage.setItem(CURRENT_CLUSTER_NAME_KEY, clusterName);
+  if (clusterName) {
+    localStorage.setItem(CURRENT_CLUSTER_NAME_KEY, clusterName);
+  } else {
+    localStorage.removeItem(CURRENT_CLUSTER_NAME_KEY);
+  }
 }
 
 // setup params:

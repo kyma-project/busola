@@ -1,0 +1,56 @@
+.namespace-context {
+  max-width: fit-content;
+
+  .namespace-name {
+    color: var(--sapNeutralColor);
+    font-size: var(--sapFontSize);
+  }
+}
+
+.help-text {
+  font-size: var(--sapFontSize);
+  color: var(--sapNeutralColor);
+}
+
+.help-header {
+  font-size: 1rem;
+  margin: 24px 10px 10px;
+  color: var(--sapNeutralColor);
+}
+
+.short-help {
+  display: flex;
+  justify-content: space-between;
+  margin: 6px 8px 2px;
+}
+
+.help {
+  max-height: 40vh;
+  overflow: auto;
+  margin: 8px;
+  margin-right: 0;
+
+  table {
+    width: 100%;
+
+    th {
+      text-align: left;
+      padding-bottom: 4px;
+    }
+
+    td {
+      padding-bottom: 4px;
+      padding-top: 4px;
+      border-top: 1px solid #d5d3d3;
+    }
+  }
+}
+
+.key {
+  display: inline;
+  background: #e1e1e1;
+  padding-right: 4px;
+  padding-left: 3px;
+  border-radius: 2px;
+  font-weight: bold;
+}
