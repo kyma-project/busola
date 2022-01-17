@@ -1,24 +1,23 @@
 import { useState, useRef } from 'react';
 
-export function useValidation({ ref, onChange }) {
+export function useValidation({ inputRef, onChange }) {
   const [touched, setTouched] = useState(false);
   const internalRef = useRef(null);
 
-  const inputRef = ref || internalRef;
+  const ref = inputRef || internalRef;
 
   let validationState;
-  if (!inputRef.current?.validity?.valid && touched) {
+  if (ref.current && !ref.current?.validity?.valid && touched) {
     validationState = {
       state: 'error',
-      text: inputRef.current?.validationMessage,
+      text: ref.current?.validationMessage,
     };
   }
 
   return {
     validationState,
-    inputRef,
+    ref,
     onChange: e => {
-      // console.log('onChange');
       if (Array.isArray(onChange)) {
         onChange.filter(oc => oc).forEach(oc => oc(e));
       } else if (onChange) {
@@ -26,9 +25,8 @@ export function useValidation({ ref, onChange }) {
       }
       setTouched(true);
       setTimeout(() => {
-        // console.log('not active?', document.activeElement !== inputRef.current);
-        if (document.activeElement !== inputRef.current) {
-          inputRef.current.focus();
+        if (ref.current && document.activeElement !== ref.current) {
+          ref.current.focus();
         }
       });
     },

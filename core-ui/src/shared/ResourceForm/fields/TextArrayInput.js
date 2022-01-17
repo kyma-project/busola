@@ -1,6 +1,7 @@
 import React from 'react';
 import { FormInput } from 'fundamental-react';
 
+import * as Inputs from '../inputs';
 import { MultiInput } from './MultiInput';
 
 import './TextArrayInput.scss';
@@ -33,30 +34,32 @@ export function TextArrayInput({
           index,
           internalValue,
           setMultiValue,
-        }) => (
-          <FormInput
-            placeholder={Math.abs(index) === 1 ? placeholder : ''}
-            key={index}
-            compact
-            value={value || ''}
-            ref={ref}
-            onChange={e => {
-              setValue(e.target.value);
-              updateValue();
-            }}
-            onKeyDown={e => focus(e)}
-            onBlur={() => {
-              const fieldValue = internalValue?.filter(val => !!val);
-              setMultiValue(
-                typeof customFormatFn === 'function'
-                  ? customFormatFn(fieldValue)
-                  : fieldValue,
-              );
-            }}
-            readOnly={readOnly}
-            {...inputProps}
-          />
-        ),
+        }) => {
+          return (
+            <Inputs.WrappedText
+              placeholder={Math.abs(index) === 1 ? placeholder : ''}
+              key={index}
+              compact
+              value={value}
+              inputRef={ref}
+              onChange={e => {
+                setValue(e.target.value);
+                updateValue();
+              }}
+              onKeyDown={e => focus(e)}
+              onBlur={() => {
+                const fieldValue = internalValue?.filter(val => !!val);
+                setMultiValue(
+                  typeof customFormatFn === 'function'
+                    ? customFormatFn(fieldValue)
+                    : fieldValue,
+                );
+              }}
+              readOnly={readOnly}
+              {...inputProps}
+            />
+          );
+        },
       ]}
       {...props}
     />

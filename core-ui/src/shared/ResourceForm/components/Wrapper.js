@@ -50,7 +50,6 @@ export function ResourceFormWrapper({
   useEffect(() => {
     React.Children.toArray(children).forEach((child, index) => {
       const inputRef = inputRefs[index];
-      console.log('wrapper child', child.props.inputRef, child.props);
       if (child.props.validate) {
         const valid = isValid(child);
         if (inputRef?.current) {
@@ -96,7 +95,7 @@ export function ResourceFormWrapper({
             setResource: child.props.setResource || setResource,
             validationRef,
             isAdvanced,
-            ref: inputRefs[index],
+            inputRef: inputRefs[index],
             ...props,
           });
         } else {
@@ -122,7 +121,7 @@ export function ResourceFormWrapper({
           isAdvanced,
           value,
           setValue,
-          ref: inputRefs[index],
+          inputRef: inputRefs[index],
         });
       }
     }) || null
