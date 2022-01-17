@@ -9,12 +9,14 @@ export const ResourceQuotasList = ({ DefaultRenderer, ...otherParams }) => {
     {
       header: t('resource-quotas.headers.limits'),
       value: quota =>
-        quota.spec.hard['limits.memory'] || EMPTY_TEXT_PLACEHOLDER,
+        (quota.spec?.hard && quota.spec?.hard['limits.memory']) ||
+        EMPTY_TEXT_PLACEHOLDER,
     },
     {
       header: t('resource-quotas.headers.requests'),
       value: quota =>
-        quota.spec.hard['requests.memory'] || EMPTY_TEXT_PLACEHOLDER,
+        (quota.spec?.hard && quota.spec?.hard['requests.memory']) ||
+        EMPTY_TEXT_PLACEHOLDER,
     },
   ];
 

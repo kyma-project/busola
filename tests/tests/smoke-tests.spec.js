@@ -17,14 +17,6 @@ context('Smoke Tests', () => {
       .should('be.visible');
 
     cy.getIframeBody()
-      .contains('Limit Ranges')
-      .should('be.visible');
-
-    cy.getIframeBody()
-      .contains('Resource Quotas')
-      .should('be.visible');
-
-    cy.getIframeBody()
       .contains('Messages')
       .should('be.visible');
   });

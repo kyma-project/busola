@@ -22,7 +22,7 @@ function BindingsList({ descriptionKey, DefaultRenderer, ...params }) {
   };
 
   const getSubject = subject => (
-    <div>
+    <div key={subject.kind + ' ' + subject.name}>
       {subject.name}{' '}
       <Tooltip delay={0} content={subject.kind}>
         ({subject.kind?.slice(0, 1)})
@@ -31,7 +31,7 @@ function BindingsList({ descriptionKey, DefaultRenderer, ...params }) {
   );
 
   const getSubjectWithLink = subject => (
-    <div>
+    <div key={subject.kind + ' ' + subject.name}>
       <Link
         className="fd-link"
         onClick={() =>

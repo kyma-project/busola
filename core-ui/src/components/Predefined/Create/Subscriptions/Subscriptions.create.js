@@ -2,21 +2,21 @@ import React, { useState } from 'react';
 import { cloneDeep } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
-import { useGetList, useNotification } from 'react-shared';
-
-import { ResourceForm } from 'shared/ResourceForm';
-import {
-  K8sNameField,
-  TextArrayInput,
-  KeyValueField,
-} from 'shared/ResourceForm/fields';
-
-import * as Inputs from 'shared/ResourceForm/inputs';
 import { ComboboxInput, MessageStrip } from 'fundamental-react';
-import { createSubscriptionTemplate } from './templates';
-import { getServiceName, getEventFilter, spreadEventType } from './helpers';
 
-const DEFAULT_EVENT_TYPE_PREFIX = 'sap.kyma.custom.';
+import { useGetList, useNotification } from 'react-shared';
+import { ResourceForm } from 'shared/ResourceForm';
+import { K8sNameField, KeyValueField } from 'shared/ResourceForm/fields';
+import * as Inputs from 'shared/ResourceForm/inputs';
+import { createSubscriptionTemplate } from './templates';
+import {
+  getServiceName,
+  spreadEventType,
+  DEFAULT_EVENT_TYPE_PREFIX,
+  getEventFilter,
+} from './helpers';
+import { FiltersSection } from './FiltersSection';
+
 const versionOptions = ['v1', 'v2', 'v3', 'v4'];
 
 const SubscriptionsCreate = ({
@@ -29,14 +29,11 @@ const SubscriptionsCreate = ({
   setCustomValid,
 }) => {
   const { t } = useTranslation();
+  const notification = useNotification();
 
   const [subscription, setSubscription] = useState(
     cloneDeep(initialSubscription) ||
-      createSubscriptionTemplate(
-        namespace,
-        DEFAULT_EVENT_TYPE_PREFIX,
-        serviceName,
-      ),
+      createSubscriptionTemplate(namespace, serviceName),
   );
 
   const firstEventType = jp.value(
@@ -48,8 +45,6 @@ const SubscriptionsCreate = ({
     firstEventType,
     DEFAULT_EVENT_TYPE_PREFIX,
   );
-
-  const notification = useNotification();
 
   const handleEventTypeValuesChange = changes => {
     const newEventTypeValues = { ...firstEventTypeValues, ...changes };
@@ -90,7 +85,7 @@ const SubscriptionsCreate = ({
             ? 'common.create-form.messages.patch-success'
             : 'common.create-form.messages.create-success',
           {
-            resourceType: t(`subscription.name_singular`),
+            resourceType: t(`subscriptions.name_singular`),
           },
         ),
       });
@@ -98,13 +93,11 @@ const SubscriptionsCreate = ({
   };
 
   const sinkMessageStrip = (
-    <MessageStrip type="information">
-      {jp.value(subscription, '$.spec.sink')}
-    </MessageStrip>
+    <MessageStrip>{jp.value(subscription, '$.spec.sink')}</MessageStrip>
   );
 
   const eventTypeMessageStrip = (
-    <MessageStrip type="information">
+    <MessageStrip>
       {jp.value(subscription, '$.spec.filter.filters[0].eventType.value')}
     </MessageStrip>
   );
@@ -112,7 +105,7 @@ const SubscriptionsCreate = ({
   return (
     <ResourceForm
       pluralKind="subscriptions"
-      singularName={t('subscription.name_singular')}
+      singularName={t('subscriptions.name_singular')}
       resource={subscription}
       setResource={setSubscription}
       onChange={onChange}
@@ -124,7 +117,7 @@ const SubscriptionsCreate = ({
     >
       <K8sNameField
         propertyPath="$.metadata.name"
-        kind={t('subscription.name_singular')}
+        kind={t('subscriptions.name_singular')}
         setValue={name => {
           jp.value(subscription, '$.metadata.name', name);
           setSubscription({ ...subscription });
@@ -132,14 +125,14 @@ const SubscriptionsCreate = ({
         readOnly={!!initialSubscription}
       />
       <ResourceForm.FormField
-        label={t('subscription.create.labels.sink')}
+        label={t('subscriptions.create.labels.sink')}
         messageStrip={sinkMessageStrip}
-        tooltipContent={t('subscription.tooltips.sink')}
+        tooltipContent={t('subscriptions.tooltips.sink')}
       />
 
       <ResourceForm.FormField
         required
-        label={t('subscription.create.labels.service-name')}
+        label={t('subscriptions.create.labels.service-name')}
         setValue={serviceName => {
           jp.value(
             subscription,
@@ -155,14 +148,14 @@ const SubscriptionsCreate = ({
         }
         validate={() => getServiceName(jp.value(subscription, '$.spec.sink'))}
         input={Inputs.Dropdown}
-        placeholder={t('subscription.create.placeholders.service-name')}
+        placeholder={t('subscriptions.create.placeholders.service-name')}
         options={(services || []).map(i => ({
           key: i.metadata.name,
           text: i.metadata.name,
         }))}
         error={servicesError}
         loading={servicesLoading}
-        tooltipContent={t('subscription.tooltips.service-name')}
+        tooltipContent={t('subscriptions.tooltips.service-name')}
         disabled={!!serviceName}
       />
 
@@ -181,55 +174,69 @@ const SubscriptionsCreate = ({
       <ResourceForm.FormField
         simple
         required
-        label={t('subscription.create.labels.application-name')}
-        setValue={appName => handleEventTypeValuesChange({ appName })}
+        label={t('subscriptions.create.labels.application-name')}
+        tooltipContent={t('subscriptions.tooltips.application-name')}
         value={firstEventTypeValues.appName}
-        input={Inputs.Dropdown}
-        placeholder={t('subscription.create.placeholders.application-name')}
-        validate={value => {
-          const eventType = jp.value(
-            value,
-            '$.spec.filter.filters[0].eventType.value',
-          );
-          const { appName } = spreadEventType(
-            eventType,
-            DEFAULT_EVENT_TYPE_PREFIX,
-          );
-          return appName;
-        }}
-        options={(applications || []).map(i => ({
-          key: i.metadata.name,
-          text: i.metadata.name,
-        }))}
+        input={({ value }) => (
+          <ComboboxInput
+            id="application-name-combobox"
+            ariaLabel={t('common.messages.choose', {
+              value: t('subscriptions.create.labels.application-name'),
+            })}
+            showAllEntries
+            searchFullString
+            selectionType="manual"
+            required
+            compact
+            placeholder={t(
+              'subscriptions.create.placeholders.application-name',
+            )}
+            options={(applications || []).map(i => ({
+              key: i.metadata.name,
+              text: i.metadata.name,
+            }))}
+            selectedKey={value}
+            typedValue={value}
+            onSelect={e => {
+              handleEventTypeValuesChange({ appName: e.target.value });
+            }}
+          />
+        )}
         error={applicationsError}
         loading={applicationsLoading}
-        tooltipContent={t('subscription.tooltips.application-name')}
       />
 
       <ResourceForm.FormField
         simple
         required
-        label={t('subscription.create.labels.event-name')}
+        label={t('subscriptions.create.labels.event-name')}
         setValue={eventName => handleEventTypeValuesChange({ eventName })}
         value={firstEventTypeValues.eventName}
         input={Inputs.Text}
-        placeholder={t('subscription.create.placeholders.event-name')}
-        tooltipContent={t('subscription.tooltips.event-name')}
+        placeholder={t('subscriptions.create.placeholders.event-name')}
+        tooltipContent={t('subscriptions.tooltips.event-name')}
       />
 
       <ResourceForm.FormField
         simple
         required
-        label={t('subscription.create.labels.event-version')}
-        tooltipContent={t('subscription.tooltips.event-version')}
+        label={t('subscriptions.create.labels.event-version')}
+        tooltipContent={t('subscriptions.tooltips.event-version')}
         value={firstEventTypeValues.version}
-        input={({ value, setValue }) => (
+        input={({ value }) => (
           <ComboboxInput
             id="event-version-input"
             ariaLabel="event-version"
+            id="event-version-combobox"
+            ariaLabel={t('common.messages.choose', {
+              value: t('subscriptions.create.labels.event-version'),
+            })}
+            showAllEntries
+            searchFullString
+            selectionType="manual"
             required
             compact
-            placeholder={t('subscription.create.placeholders.event-version')}
+            placeholder={t('subscriptions.create.placeholders.event-version')}
             options={versionOptions.map(version => ({
               key: version,
               text: version,
@@ -244,29 +251,17 @@ const SubscriptionsCreate = ({
       />
       <ResourceForm.FormField
         simple
-        label={t('subscription.create.labels.event-type')}
+        label={t('subscriptions.create.labels.event-type')}
         messageStrip={eventTypeMessageStrip}
-        tooltipContent={t('subscription.tooltips.event-type-simple')}
+        tooltipContent={t('subscriptions.tooltips.event-type-simple')}
       />
-      <TextArrayInput
+      <FiltersSection
         advanced
-        required
-        defaultOpen
-        tooltipContent={t('subscription.tooltips.event-type-advanced')}
-        propertyPath="$.spec.filter.filters"
-        title={t('subscription.create.labels.event-type-plural')}
-        toInternal={valueFromYaml =>
-          valueFromYaml?.map(obj => obj.eventType?.value) || []
-        }
-        toExternal={valueFromComponent =>
-          valueFromComponent
-            ?.filter(Boolean)
-            .map(value => getEventFilter(value)) || []
-        }
-        customFormatFn={arr => arr.map(getEventFilter)}
-        placeholder={t('subscription.create.placeholders.event-type')}
+        resource={subscription}
+        setResource={setSubscription}
         inputProps={{
           validate: value => {
+            console.log('filtersValue', value);
             return value === 'foo';
           },
         }}
@@ -277,7 +272,7 @@ const SubscriptionsCreate = ({
           type="warning"
           className="fd-margin-top--sm fd-margin-bottom--sm"
         >
-          {t('subscription.errors.empty-event-types')}
+          {t('subscriptions.errors.empty-event-types')}
         </MessageStrip>
       ) : null}
     </ResourceForm>
