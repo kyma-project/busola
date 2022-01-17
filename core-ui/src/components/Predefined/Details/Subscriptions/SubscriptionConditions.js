@@ -14,10 +14,10 @@ export function SubscriptionConditions(subscription) {
 
   const conditions = subscription?.status?.conditions;
   const headerRenderer = _ => [
-    t('subscription.headers.conditions.type'),
-    t('subscription.headers.conditions.status'),
-    t('subscription.headers.conditions.reason'),
-    t('subscription.headers.conditions.last-transition'),
+    t('subscriptions.headers.conditions.type'),
+    t('subscriptions.headers.conditions.status'),
+    t('subscriptions.headers.conditions.reason'),
+    t('subscriptions.headers.conditions.last-transition'),
   ];
 
   const rowRenderer = condition => [
@@ -30,7 +30,7 @@ export function SubscriptionConditions(subscription) {
   return (
     <GenericList
       key="subscription-conditions"
-      title={t('subscription.headers.conditions.title')}
+      title={t('subscriptions.headers.conditions.title')}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       entries={conditions || []}
