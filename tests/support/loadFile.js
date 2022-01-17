@@ -27,3 +27,11 @@ export async function loadCRInstance(crdPluralName) {
   newCR.apiVersion = `${crdPluralName}.example.com/v1`;
   return newCR;
 }
+
+export async function loadRandomSC(scName) {
+  const SC = await loadFile('test-storage-classes.yaml');
+
+  const newSC = { ...SC };
+  newSC.metadata.name = scName;
+  return newSC;
+}
