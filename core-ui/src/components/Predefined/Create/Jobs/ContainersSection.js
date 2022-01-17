@@ -38,7 +38,7 @@ export const ContainersSection = ({ readOnly, ...props }) => {
 
 export const ContainerSection = ({ readOnly, ...props }) => {
   const { t } = useTranslation();
-  const { value, setValue } = props;
+  const { value = [], setValue } = props;
 
   return value?.length ? (
     <SingleContainerInput simple readOnly={readOnly} {...props} />

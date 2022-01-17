@@ -964,7 +964,7 @@ export function getStaticChildrenNodesForNamespace(
       pathSegment: 'subscriptions',
       resourceType: 'subscriptions',
       navigationContext: 'subscriptions',
-      label: i18next.t('subscription.title'),
+      label: i18next.t('subscriptions.title'),
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/Subscriptions?' +
@@ -1537,6 +1537,51 @@ export function getStaticRootNodes(
                 '/ClusterAddonsConfigurations/:addonName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/addons.kyma-project.io/v1alpha1',
+                }),
+              viewGroup: coreUIViewGroupName,
+            },
+          ],
+        },
+      ],
+    },
+
+    //STORAGE CATEGORY
+    {
+      category: {
+        label: i18next.t('storage.title'),
+        icon: 'sap-box',
+        collapsible: true,
+      },
+      pathSegment: '_storage_category_placeholder_',
+      hideFromNav: true,
+    },
+    {
+      pathSegment: 'storageclasses',
+      resourceType: 'storageclasses',
+      navigationContext: 'storageclasses',
+      label: i18next.t('storage-classes.title'),
+      category: i18next.t('storage.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/StorageClasses?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/storage.k8s.io/v1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':storageClassName',
+              resourceType: 'storageclasses',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/StorageClasses/:storageClassName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/storage.k8s.io/v1',
                 }),
               viewGroup: coreUIViewGroupName,
             },

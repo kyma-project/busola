@@ -1,7 +1,7 @@
 import i18next from 'i18next';
-import { getBusolaClusterParams } from './busola-cluster-params';
-import { resolveFeatureAvailability } from './features';
-import { DEFAULT_FEATURES } from './kubeconfig-id/constants';
+import { getBusolaClusterParams } from '../busola-cluster-params';
+import { resolveFeatureAvailability } from '../features';
+import { DEFAULT_FEATURES } from './../constants';
 
 function join(path, fileName) {
   if (!path.endsWith('/')) {
@@ -14,7 +14,7 @@ async function importJsYaml() {
   return (await import('js-yaml')).default;
 }
 
-export async function getKubeconfigById(kubeconfigId) {
+export async function loadKubeconfigById(kubeconfigId) {
   if (!kubeconfigId) {
     return null;
   }

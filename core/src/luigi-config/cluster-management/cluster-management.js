@@ -3,10 +3,7 @@ import { reloadNavigation } from '../navigation/navigation-data-init';
 import { reloadAuth, hasNonOidcAuth } from '../auth/auth';
 import { saveLocation } from '../navigation/previous-location';
 import { parseOIDCParams } from '../auth/oidc-params';
-import {
-  DEFAULT_HIDDEN_NAMESPACES,
-  DEFAULT_FEATURES,
-} from '../kubeconfig-id/constants';
+import { DEFAULT_HIDDEN_NAMESPACES, DEFAULT_FEATURES } from '../constants';
 import { getBusolaClusterParams } from '../busola-cluster-params';
 import {
   getTargetClusterConfig,
@@ -136,11 +133,15 @@ export function getActiveClusterName() {
 }
 
 export function saveActiveClusterName(clusterName) {
-  localStorage.setItem(CURRENT_CLUSTER_NAME_KEY, clusterName);
+  if (clusterName) {
+    localStorage.setItem(CURRENT_CLUSTER_NAME_KEY, clusterName);
+  } else {
+    localStorage.removeItem(CURRENT_CLUSTER_NAME_KEY);
+  }
 }
 
 // setup params:
-// defaults < config from Busola cluster CM < (config from target cluster CM + init params)
+// defaults < config from Busola cluster CM < (config from target cluster CM)
 async function mergeParams(params) {
   const defaultConfig = {
     navigation: {

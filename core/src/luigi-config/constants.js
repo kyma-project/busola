@@ -25,26 +25,6 @@ export const DEFAULT_FEATURES = {
       },
     ]),
   ),
-  KUBECONFIG_ID: {
-    config: {
-      kubeconfigUrl: '/kubeconfig',
-    },
-  },
-  SSO_LOGIN: {
-    isEnabled: false,
-    config: {
-      issuerUrl: 'https://apskyxzcl.accounts400.ondemand.com',
-      scope: 'email',
-      clientId: 'd0316c58-b0fe-45cd-9960-0fea0708355a',
-    },
-  },
-  ADD_CLUSTER_DISABLED: {
-    isEnabled: false,
-    config: {
-      cockpitUrl: 'https://account.staging.hanavlab.ondemand.com/cockpit',
-    },
-  },
-  SHOW_KYMA_VERSION: { isEnabled: false },
 };
 
 export const DEFAULT_HIDDEN_NAMESPACES = [
