@@ -31,7 +31,7 @@ export default function CreateServiceBindingForm({
   const { i18n } = useTranslation();
 
   const [existingInstanceName, setExistingInstanceName] = useState(
-    availableServiceInstances[0].metadata.name,
+    availableServiceInstances[0]?.metadata.name,
   );
   const [existingSecretName, setExistingSecretName] = useState(null);
   const [envPrefix, setEnvPrefix] = useState('');
@@ -49,7 +49,7 @@ export default function CreateServiceBindingForm({
       return;
     }
     const bindingsForThisInstance = serviceBindings.filter(b => {
-      return b?.spec?.instanceRef.name === existingInstanceName;
+      return b?.spec?.instanceRef?.name === existingInstanceName;
     });
 
     setSecrets(bindingsForThisInstance.map(b => b?.spec?.secretName));
