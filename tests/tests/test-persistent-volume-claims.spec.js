@@ -106,4 +106,34 @@ context('Test Persistent Volume Claim', () => {
       .contains('.fd-table__row', PVC_NAME, { timeout: 5000 })
       .should('not.exist');
   });
+
+  it('Delete the connected Storage Class', () => {
+    cy.get('[data-testid=luigi-topnav-logo]').click();
+
+    cy.getLeftNav()
+      .contains('Storage')
+      .click();
+
+    cy.getLeftNav()
+      .contains('Storage Classes')
+      .click();
+
+    cy.getIframeBody()
+      .find('[role="search"] [aria-label="open-search"]')
+      .type(Cypress.env('STORAGE_CLASS_NAME'));
+
+    cy.getIframeBody()
+      .find('tbody tr [aria-label="Delete"]')
+      .click({ force: true });
+
+    cy.getIframeBody()
+      .contains('button', 'Delete')
+      .click();
+
+    cy.getIframeBody()
+      .contains(Cypress.env('STORAGE_CLASS_NAME'), {
+        timeout: 10000,
+      })
+      .should('not.exist');
+  });
 });
