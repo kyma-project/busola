@@ -67,6 +67,11 @@ data:
                   }
                 ]
               }
+            },
+            "KUBECONFIG_ID": {
+              "config": {
+                "kubeconfigUrl": "/kubeconfig"
+              }
             }
         }
       }
