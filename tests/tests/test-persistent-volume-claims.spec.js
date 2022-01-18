@@ -35,17 +35,22 @@ context('Test Persistent Volume Claim', () => {
       .contains('Create Persistent Volume Claim')
       .click();
 
-    cy.wrap(loadPVC(PVC_NAME, Cypress.env('NAMESPACE_NAME'), FILE_NAME)).then(
-      PVC_CONFIG => {
-        const PVC = JSON.stringify(PVC_CONFIG);
-        cy.getIframeBody()
-          .find('[role="presentation"],[class="view-lines"]')
-          .first()
-          .click()
-          .clearMonaco()
-          .type(PVC, { parseSpecialCharSequences: false });
-      },
-    );
+    cy.wrap(
+      loadPVC(
+        PVC_NAME,
+        Cypress.env('NAMESPACE_NAME'),
+        Cypress.env('STORAGE_CLASS_NAME'),
+        FILE_NAME,
+      ),
+    ).then(PVC_CONFIG => {
+      const PVC = JSON.stringify(PVC_CONFIG);
+      cy.getIframeBody()
+        .find('[role="presentation"],[class="view-lines"]')
+        .first()
+        .click()
+        .clearMonaco()
+        .type(PVC, { parseSpecialCharSequences: false });
+    });
 
     cy.getIframeBody()
       .find('[role="dialog"]')
@@ -68,6 +73,10 @@ context('Test Persistent Volume Claim', () => {
 
     cy.getIframeBody()
       .contains(VOLUME_MODE_VALUE)
+      .should('be.visible');
+
+    cy.getIframeBody()
+      .contains('a', Cypress.env('STORAGE_CLASS_NAME'), { timeout: 70000 })
       .should('be.visible');
   });
 

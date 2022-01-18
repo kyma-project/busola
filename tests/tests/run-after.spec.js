@@ -62,4 +62,36 @@ context('Clean up namespace', () => {
       })
       .should('not.exist');
   });
+
+  it('Navigate to Application', () => {
+    cy.getLeftNav()
+      .contains('Storage')
+      .click();
+
+    cy.getLeftNav()
+      .contains('Storage Classes')
+      .click();
+  });
+
+  it('Delete the Storage Class (step 1)', () => {
+    cy.getIframeBody()
+      .find('[role="search"] [aria-label="open-search"]')
+      .type(Cypress.env('STORAGE_CLASS_NAME'));
+
+    cy.getIframeBody()
+      .find('tbody tr [aria-label="Delete"]')
+      .click({ force: true });
+
+    cy.getIframeBody()
+      .contains('button', 'Delete')
+      .click();
+  });
+
+  it('Check if the Storage Class is deleted (step 2)', () => {
+    cy.getIframeBody()
+      .contains(Cypress.env('STORAGE_CLASS_NAME'), {
+        timeout: 10000,
+      })
+      .should('not.exist');
+  });
 });
