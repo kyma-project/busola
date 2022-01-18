@@ -435,7 +435,7 @@ export async function createNavigationNodes(
 }
 
 async function getNamespaces() {
-  const { hiddenNamespaces = [] } = (await getActiveCluster()).config;
+  const { hiddenNamespaces = [] } = (await getActiveCluster())?.config || {};
   try {
     let namespaces = await fetchNamespaces(getAuthData());
     if (!getFeatureToggle('showHiddenNamespaces')) {

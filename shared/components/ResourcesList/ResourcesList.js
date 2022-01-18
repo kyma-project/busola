@@ -193,7 +193,6 @@ function Resources({
           error: e.message,
         }),
       });
-      throw e;
     }
   };
 

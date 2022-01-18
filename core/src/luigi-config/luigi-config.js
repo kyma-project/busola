@@ -9,7 +9,7 @@ import {
 import { communication } from './communication';
 import { createSettings } from './settings';
 import { clusterLogin } from './auth/auth';
-import { saveQueryParamsIfPresent } from './kubeconfig-id/kubeconfig-id.js';
+import { handleKubeconfigIdIfPresent } from './kubeconfig-id';
 import {
   getActiveCluster,
   handleResetEndpoint,
@@ -79,7 +79,7 @@ async function initializeBusola() {
 
   await setActiveClusterIfPresentInUrl();
 
-  await saveQueryParamsIfPresent();
+  await handleKubeconfigIdIfPresent();
 
   readFeatureToggles([
     'dontConfirmDelete',
