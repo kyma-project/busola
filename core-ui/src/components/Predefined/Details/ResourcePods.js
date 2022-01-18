@@ -3,7 +3,7 @@ import { ComponentForList } from 'shared/getComponents';
 
 export function ResourcePods(resource, _, showNodeName) {
   if (!resource) return null;
-  const labelSelectors = Object.entries(resource.spec.selector.matchLabels)
+  const labelSelectors = Object.entries(resource.spec?.selector?.matchLabels)
     .map(([key, value]) => `${key}=${value}`)
     .join(',');
 

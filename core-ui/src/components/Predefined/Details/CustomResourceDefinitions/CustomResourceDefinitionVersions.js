@@ -37,10 +37,10 @@ const CustomResources = ({ resource, namespace, version, i18n }) => {
     ? `/apis/${group}/${version.name}/namespaces/${namespace}/${name}`
     : `/apis/${group}/${version.name}/${name}`;
 
-  const navigateFn = resourceName => {
+  const navigateFn = resource => {
     LuigiClient.linkManager()
       .fromClosestContext()
-      .navigate(`${version.name}/${resourceName}`);
+      .navigate(`${version.name}/${resource.metadata.name}`);
   };
 
   const getJsonPath = (resource, jsonPath) => {
