@@ -16,7 +16,7 @@ export function TextArrayInput({
   customFormatFn,
   ...props
 }) {
-  const { validate, ...inputProps } = _inputProps;
+  const { validate, ...inputProps } = _inputProps || {};
   return (
     <MultiInput
       defaultOpen={defaultOpen}
