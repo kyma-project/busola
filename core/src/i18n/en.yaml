@@ -1104,18 +1104,16 @@ git-repositories:
     url: URL must be a valid Git repository address that starts with the "http(s)", "git", or "ssh" prefix.
 hpas:
   and-x-more: and {{x}} more
-  api-version: Api version
-  as-request-percentage: as a percentage of request
   container-resource: Container Resource
   cpu-utilization: Target average CPU utilization
   current-replicas: Current replicas
-  description: <0>Horizontal Pod Autoscaler</0> is the configuration for a horizontal pod autoscaler, which automatically manages the replica count of any resource implementing the scale subresource based on the metrics specified.
+  description: <0>Horizontal Pod Autoscaler</0> automatically manages the replica count of any resource implementing the scale subresource based on the metrics specified.
   external: External
   headers:
     created: Created
-    max-pods: Max pods
+    max-pods: Max Pods
     metrics: Metrics
-    min-pods: Min pods
+    min-pods: Min Pods
     replicas: Replicas
   metrics: Metrics
   name_singular: Horizontal Pod Autoscaler
