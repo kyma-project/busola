@@ -14,8 +14,10 @@ export function ComboboxInput({
   typedValue,
   className,
   _ref,
+  onSelectionChange,
   ...props
 }) {
+  console.log(props);
   return (
     <div className={classnames('resource-form-combobox', className)}>
       <FundamentalComboboxInput
@@ -27,8 +29,10 @@ export function ComboboxInput({
         showAllEntries
         searchFullString
         selectionType="manual"
-        onSelectionChange={(_, selected) =>
-          setValue(selected.key !== -1 ? selected.key : selected.text)
+        onSelectionChange={
+          onSelectionChange ||
+          ((_, selected) =>
+            setValue(selected.key !== -1 ? selected.key : selected.text))
         }
         typedValue={value || typedValue}
         selectedKey={value || selectedKey}
