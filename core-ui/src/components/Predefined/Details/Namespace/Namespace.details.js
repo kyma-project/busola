@@ -65,6 +65,9 @@ export const NamespacesDetails = ({ DefaultRenderer, ...otherParams }) => {
 
   const eventsParams = {
     namespace: otherParams.resourceName,
+    resourceUrl: `/api/v1/namespaces/${otherParams.resourceName}/events`,
+    resourceType: 'Events',
+    isCompact: true,
   };
 
   const Events = <ComponentForList name="eventsList" params={eventsParams} />;

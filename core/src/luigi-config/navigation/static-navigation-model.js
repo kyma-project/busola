@@ -78,6 +78,41 @@ export function getStaticChildrenNodesForNamespace(
       viewGroup: coreUIViewGroupName,
     },
 
+    {
+      pathSegment: 'events',
+      resourceType: 'events',
+      label: i18next.t('events.title'),
+      icon: 'crossed-line-chart',
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/Events?' +
+        toSearchParamsString({
+          resourceApiPath: '/api/v1',
+          hasDetailsView: true,
+        }),
+      keepSelectedForChildren: true,
+      viewGroup: coreUIViewGroupName,
+      navigationContext: 'events',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':eventName',
+              resourceType: 'events',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/Events/:eventName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/api/v1',
+                }),
+              viewGroup: coreUIViewGroupName,
+            },
+          ],
+        },
+      ],
+      defaultChildNode: 'details',
+    },
     //WORKLOADS CATEGORY
     {
       category: {
@@ -1437,6 +1472,42 @@ export function getStaticRootNodes(
           defaultChildNode: 'details',
         },
       ],
+    },
+
+    {
+      pathSegment: 'events',
+      resourceType: 'events',
+      label: i18next.t('events.title'),
+      icon: 'crossed-line-chart',
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/Events?' +
+        toSearchParamsString({
+          resourceApiPath: '/api/v1',
+          hasDetailsView: true,
+        }),
+      keepSelectedForChildren: true,
+      viewGroup: coreUIViewGroupName,
+      navigationContext: 'events',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':eventName',
+              resourceType: 'events',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/Events/:eventName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/api/v1',
+                }),
+              viewGroup: coreUIViewGroupName,
+            },
+          ],
+        },
+      ],
+      defaultChildNode: 'details',
     },
 
     //INTEGRATION CATEGORY

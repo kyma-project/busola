@@ -19,10 +19,10 @@ export const RESOURCE_PATH = {
   DaemonSet: 'daemonsets',
   Deployment: 'deployments',
   Function: 'functions',
-  ServiceBroker: 'brokers',
   Certificate: 'certificates',
   Node: 'nodes',
   Subscription: 'subscriptions',
+  Event: 'events',
 };
 
 export const useMessageList = items => {
@@ -49,8 +49,11 @@ export const useMessageList = items => {
       .fromContext('cluster')
       .navigate(path);
   };
+
   const navigateToNodeDetails = nodeName => {
-    LuigiClient.linkManager().navigate(`nodes/${nodeName}`);
+    LuigiClient.linkManager()
+      .fromContext('cluster')
+      .navigate(`/overview/nodes/${nodeName}`);
   };
 
   const formatInvolvedObject = obj => {
@@ -97,6 +100,7 @@ export const useMessageList = items => {
     sortedItems,
     formatInvolvedObject,
     navigateToObjectDetails,
+    navigateToNodeDetails,
     messageSelector,
   };
 };

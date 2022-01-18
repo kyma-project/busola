@@ -838,6 +838,16 @@ domains:
   include:
     label: Include Domains
     placeholder: Domain that is allowed
+events:
+  description: <0>Event</0> is an object that is automatically generated in response to changes with other resources like nodes, pods, or containers.
+  headers:
+    count: Count
+    involved-object: Involved Object
+    last-seen: Last seen
+    message: Message
+    source: Source
+    type: Type
+  title: Events
 functions:
   buttons:
     connected-repositories: Connected Repositories
@@ -1271,13 +1281,6 @@ namespaces:
     memory-limits: Memory limits
     memory-quotas: Memory quotas
   description: <0>Namespace</0> helps to maintain and divide resources in a cluster.
-  events:
-    headers:
-      created: Created
-      message: Message
-      object: Object
-      object-type: Object Type
-    title: Warnings
   name_singular: Namespace
   overview:
     back: Back to Namespaces
