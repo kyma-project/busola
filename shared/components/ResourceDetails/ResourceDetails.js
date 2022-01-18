@@ -265,7 +265,7 @@ function Resource({
 
   async function handleResourceDelete() {
     return handleDelete(
-      resourceTitle || resourceType,
+      resourceType,
       null,
       resourceName,
       notification,
