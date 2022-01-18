@@ -214,6 +214,13 @@ const SubscriptionsCreate = ({
         input={Inputs.Text}
         placeholder={t('subscriptions.create.placeholders.event-name')}
         tooltipContent={t('subscriptions.tooltips.event-name')}
+        validate={() => {
+          const { eventName } = firstEventTypeValues;
+          return eventName
+            .split('.')
+            .filter(Boolean)
+            .every(e => e);
+        }}
       />
 
       <ResourceForm.FormField
