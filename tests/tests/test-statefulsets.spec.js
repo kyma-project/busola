@@ -42,6 +42,10 @@ context('Test StatefulSets', () => {
 
   it('Inspect details', () => {
     cy.getIframeBody()
+      .find('[role="search"] [aria-label="open-search"]')
+      .type(SET_NAME);
+
+    cy.getIframeBody()
       .contains(SET_NAME)
       .click();
 

@@ -17,7 +17,6 @@ export function ComboboxInput({
   onSelectionChange,
   ...props
 }) {
-  console.log(props);
   return (
     <div className={classnames('resource-form-combobox', className)}>
       <FundamentalComboboxInput

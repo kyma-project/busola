@@ -60,21 +60,15 @@ export function ComboboxArrayInput({
               setValue={setValue}
               options={options}
               onKeyDown={focus}
-              onSelectionChange={(_, selected, reason) => {
+              onSelectionChange={(_, selected) => {
                 if (!selected.text) {
                   setValue(null);
                   updateValue(null);
                 }
-                if (
-                  reason === 'preselection' ||
-                  reason === 'optionClick' ||
-                  reason === 'optionKeyDown'
-                ) {
-                  const selection =
-                    selected.key !== -1 ? selected.key : selected.text;
-                  setValue(selection);
-                  updateValue(selection);
-                }
+                const selection =
+                  selected.key !== -1 ? selected.key : selected.text;
+                setValue(selection);
+                updateValue(selection);
               }}
             />
           );
