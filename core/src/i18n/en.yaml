@@ -405,6 +405,7 @@ common:
     edit: Edit
     edit-yaml: Edit YAML
     ok: OK
+    restart: Restart
     save: Save
     update: Update
     view-yaml: View YAML
@@ -480,6 +481,8 @@ common:
     parse-error: Parse error, previous valid input will be used.
     resource-name-error: Requested resource with this name not found in the selected Namespace.
     resource-namespace-error: Requested Namespace not found.
+    restart-failure: Restarting failed.
+    restart-success: Workload restarted.
     type-to-select: Start typing to select {{value}} from the list.
     validation-error: Validation error.
   placeholders:

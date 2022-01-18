@@ -1,7 +1,8 @@
 import React from 'react';
-import { ControlledByKind, Link } from 'react-shared';
+import { ControlledByKind, Link, useProtectedResources } from 'react-shared';
 import { useTranslation, Trans } from 'react-i18next';
 import { DeploymentStatus } from '../Details/Deployment/DeploymentStatus';
+import { useRestartResource } from '../../../shared/hooks/useRestartResource';
 
 const getImages = deployment => {
   const images =
@@ -12,7 +13,9 @@ const getImages = deployment => {
 };
 
 export const DeploymentsList = ({ DefaultRenderer, ...otherParams }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const { isProtected } = useProtectedResources(i18n);
+  const restartResource = useRestartResource(otherParams.resourceUrl);
 
   const customColumns = [
     {
@@ -39,6 +42,14 @@ export const DeploymentsList = ({ DefaultRenderer, ...otherParams }) => {
     },
   ];
 
+  const customListActions = [
+    {
+      name: t('common.buttons.restart'),
+      disabledHandler: isProtected,
+      handler: restartResource,
+    },
+  ];
+
   const description = (
     <Trans i18nKey="deployments.description">
       <Link
@@ -52,6 +63,7 @@ export const DeploymentsList = ({ DefaultRenderer, ...otherParams }) => {
     <DefaultRenderer
       customColumns={customColumns}
       description={description}
+      customListActions={customListActions}
       {...otherParams}
     />
   );
