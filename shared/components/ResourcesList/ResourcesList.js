@@ -193,7 +193,6 @@ function Resources({
           error: e.message,
         }),
       });
-      throw e;
     }
   };
 
@@ -251,7 +250,7 @@ function Resources({
       <Link
         className="fd-link"
         onClick={_ => {
-          if (navigateFn) return navigateFn(entry.metadata.name);
+          if (navigateFn) return navigateFn(entry);
           if (fixedPath)
             return navigateToFixedPathResourceDetails(
               resourceType,
