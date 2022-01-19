@@ -12,9 +12,8 @@ import {
 } from 'react-shared';
 import { Icon, Link } from 'fundamental-react';
 import { useMessageList, EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
-import { clearEmptyPropertiesInObject } from 'commons/helpers';
 
-export const EventsList = ({ i18n, ...otherParams }) => {
+export const EventsList = ({ ...otherParams }) => {
   // TODO EVENTS DESCRIPTION
   const description = (
     <Trans i18nKey="events.description">
@@ -41,8 +40,8 @@ export const EventsList = ({ i18n, ...otherParams }) => {
   );
 };
 
-export const Events = ({ i18n, ...otherParams }) => {
-  const { t } = useTranslation();
+export const Events = ({ ...otherParams }) => {
+  const { t, i18n } = useTranslation();
   const { resourceUrl } = otherParams;
 
   const { loading = true, error, data: items } = useGetList(otherParams.filter)(
@@ -81,6 +80,7 @@ export const Events = ({ i18n, ...otherParams }) => {
     <p>
       <Link
         className="fd-link"
+        data-testid="details-link"
         onClick={() =>
           navigateToObjectDetails({
             namespace: entry.metadata.namespace,

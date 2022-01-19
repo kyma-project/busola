@@ -59,6 +59,7 @@
     "test.settings.spec.js",
     "test-ingresses.spec.js",
     "test-command-palette.spec.js",
+    "test-events.spec.js",
     "run-after.spec.js"
   ]
 }

@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import LuigiClient from '@luigi-project/client';
 import { Link } from 'fundamental-react';
-import {
-  Dropdown,
-  EMPTY_TEXT_PLACEHOLDER,
-  useMicrofrontendContext,
-} from 'react-shared';
+import { Dropdown, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
 export const EVENT_MESSAGE_TYPE = {
