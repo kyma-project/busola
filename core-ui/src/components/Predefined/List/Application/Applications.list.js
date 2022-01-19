@@ -1,13 +1,11 @@
 import React from 'react';
 import { ApplicationStatus } from '../../Details/Application/ApplicationStatus';
 import { useTranslation } from 'react-i18next';
-import { useIsSKR } from 'components/Predefined/Details/Application/useIsSKR';
 import { Link } from 'react-shared';
 import { Trans } from 'react-i18next';
 
 export const ApplicationsList = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
-  const isSKR = useIsSKR();
 
   const customColumns = [
     {
@@ -28,9 +26,6 @@ export const ApplicationsList = ({ DefaultRenderer, ...otherParams }) => {
     <DefaultRenderer
       customColumns={customColumns}
       description={description}
-      createActionTooltip={t('applications.messages.create-disabled')}
-      showActionTooltip={isSKR}
-      disableCreateActionButton={isSKR}
       {...otherParams}
     />
   );
