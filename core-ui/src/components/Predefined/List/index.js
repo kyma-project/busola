@@ -34,5 +34,6 @@ export * from './Roles.list';
 export * from './Subscription/Subscriptions.list';
 export * from './DestinationRules.list';
 export * from './VirtualServices.list';
+export * from './HPA.list';
 export * from './PersistentVolumeClaims.list';
 export * from './StorageClasses.list';
