@@ -216,10 +216,19 @@ const SubscriptionsCreate = ({
         tooltipContent={t('subscriptions.tooltips.event-name')}
         validate={() => {
           const { eventName } = firstEventTypeValues;
-          return eventName
-            .split('.')
-            .filter(Boolean)
-            .every(e => e);
+          const tokens = eventName.split('.');
+          return tokens.every(t => t) && tokens.filter(Boolean).length >= 2;
+        }}
+        validateMessage={() => {
+          const { eventName } = firstEventTypeValues;
+          if (!eventName) {
+            return t('subscriptions.errors.event-name-required');
+          }
+          const tokens = eventName.split('.');
+          if (tokens.filter(Boolean).length < 2 || !tokens.every(t => t)) {
+            return t('subscriptions.errors.event-name-segments');
+          }
+          return '';
         }}
       />
 
@@ -261,6 +270,7 @@ const SubscriptionsCreate = ({
       />
       <FiltersSection
         advanced
+        onChange={onChange}
         resource={subscription}
         setResource={setSubscription}
       />

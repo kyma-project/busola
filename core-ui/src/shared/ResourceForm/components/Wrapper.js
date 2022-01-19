@@ -63,7 +63,7 @@ export function ResourceFormWrapper({
         }
       }
     });
-  }, [resource, children]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [resource, children, inputRefs]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!resource) {
     return children;
