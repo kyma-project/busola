@@ -267,7 +267,7 @@ function Resource({
       throw e;
     }
   };
-  
+
   return (
     <>
       <PageHeader

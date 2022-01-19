@@ -57,7 +57,7 @@ context('Test Storage Classes', () => {
       .contains('Retain')
       .should('be.visible');
   });
-  
+
   it('Delete Storage Class', () => {
     cy.getIframeBody()
       .contains('button', 'Delete')
