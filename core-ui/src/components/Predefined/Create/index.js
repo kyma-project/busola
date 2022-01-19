@@ -34,3 +34,4 @@ export * from './VirtualServices/VirtualServices.create';
 export * from './PersistentVolumeClaims/PersistentVolumeClaims.create';
 export * from './LimitRanges/LimitRanges.create';
 export * from './ResourceQuotas/ResourceQuotas.create';
+export * from './HPAs/HPAs.create';

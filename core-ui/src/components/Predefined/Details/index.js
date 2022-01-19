@@ -30,5 +30,6 @@ export * from './GitRepositories.details';
 export * from './Subscriptions/Subscriptions.details';
 export * from './DestinationRule/DestinationRule.details';
 export * from './VirtualServices/VirtualServices.details';
+export * from './HPA/HPA.details';
 export * from './PersistentVolumeClaims/PersistentVolumeClaims.details';
 export * from './StorageClasses/StorageClasses.details';
