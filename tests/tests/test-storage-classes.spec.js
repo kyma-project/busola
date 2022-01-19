@@ -69,7 +69,9 @@ context('Test Storage Classes', () => {
       .contains('button', 'Delete')
       .click();
 
-    cy.get('[data-testid=luigi-modal-confirm]').click();
+    cy.getIframeBody()
+      .find('[data-testid="delete-confirmation"]')
+      .click();
 
     cy.getIframeBody()
       .contains(/deleted/)

@@ -69,6 +69,8 @@ context(
         .find('button[data-testid="delete"]')
         .click();
 
+      cy.wait(100);
+
       cy.getIframeBody()
         .find('[data-testid="delete-confirmation"]')
         .click();

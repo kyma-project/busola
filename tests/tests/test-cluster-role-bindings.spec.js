@@ -129,6 +129,8 @@ context('Test Cluster Role Bindings', () => {
       .contains('button', 'Delete')
       .click();
 
-    cy.get('[data-testid=luigi-modal-confirm]').click();
+    cy.getIframeBody()
+      .find('[data-testid="delete-confirmation"]')
+      .click();
   });
 });

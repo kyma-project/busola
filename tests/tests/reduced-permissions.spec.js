@@ -237,7 +237,7 @@ context('Reduced permissions', () => {
       .contains('Delete')
       .click();
 
-    cy.get('[data-testid="luigi-modal-confirm"]').click();
+    cy.get('[data-testid="delete-confirmation"]').click();
 
     cy.contains('Failed to delete the Namespace').should('be.visible');
 
