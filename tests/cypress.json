@@ -38,6 +38,7 @@
     "test-dns-entries.spec.js",
     "test-cron-jobs.spec.js",
     "test-git-repositories.spec.js",
+    "test-HPA.spec.js",
     "test-gateways.spec.js",
     "test-oauth2.spec.js",
     "test-dns-providers.spec.js",

@@ -524,6 +524,40 @@ export function getStaticChildrenNodesForNamespace(
         },
       ],
     },
+    {
+      category: i18next.t('discovery-and-network.title'),
+      pathSegment: 'hpas',
+      resourceType: 'hpas',
+      navigationContext: 'horizontalpodautoscalers',
+      label: i18next.t('hpas.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/horizontalPodAutoscalers?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/autoscaling/v2beta2',
+          hasDetailsView: true,
+        }),
+      keepSelectedForChildren: true,
+      viewGroup: coreUIViewGroupName,
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':horizontalPodAutoscalersName',
+              resourceType: 'hpas',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/horizontalPodAutoscalers/:horizontalPodAutoscalersName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/autoscaling/v2beta2',
+                }),
+              viewGroup: coreUIViewGroupName,
+            },
+          ],
+        },
+      ],
+    },
 
     // ISTIO
     {
