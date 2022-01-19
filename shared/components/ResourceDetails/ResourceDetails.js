@@ -142,7 +142,7 @@ function Resource({
   );
   const { isProtected, protectedResourceWarning } = useProtectedResources(i18n);
 
-  const [DeleteMessageBox, DeleteButton] = useDeleteResource({
+  const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
     i18n,
     resourceType,
     resourceUrl,
@@ -226,7 +226,14 @@ function Resource({
       {editAction()}
       {headerActions}
       {resourceHeaderActions.map(resourceAction => resourceAction(resource))}
-      <DeleteButton resource={resource} />
+      <Button
+        disabled={protectedResource}
+        onClick={() => handleResourceDelete(resource)}
+        option="transparent"
+        type="negative"
+      >
+        {t('common.buttons.delete')}
+      </Button>
     </>
   );
 

@@ -108,19 +108,19 @@ export function useDeleteResource({ i18n, resourceType, resourceUrl }) {
     </MessageBox>
   );
 
-  const DeleteButton = ({ resource }) => {
-    const protectedResource = isProtected(resource);
-    return (
-      <Button
-        disabled={protectedResource}
-        onClick={() => handleResourceDelete(resource)}
-        option="transparent"
-        type="negative"
-      >
-        {t('common.buttons.delete')}
-      </Button>
-    );
-  };
+  // const DeleteButton = ({ resource }) => {
+  //   const protectedResource = isProtected(resource);
+  //   return (
+  //     <Button
+  //       disabled={protectedResource}
+  //       onClick={() => handleResourceDelete(resource)}
+  //       option="transparent"
+  //       type="negative"
+  //     >
+  //       {t('common.buttons.delete')}
+  //     </Button>
+  //   );
+  // };
 
-  return [DeleteMessageBox, DeleteButton];
+  return [DeleteMessageBox, handleResourceDelete];
 }
