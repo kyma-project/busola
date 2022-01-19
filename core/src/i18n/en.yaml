@@ -1726,7 +1726,7 @@ subscriptions:
     event-name-required: Event name is required.
     event-name-segments: Event name must consist of at least 2 non-empty segments, separated by a dot.
     event-type-7-segments: Event type must consist of at least 7 non-empty segments, separated by a dot.
-    event-type-allowed-charset: Event type may contain only letters, digits and full stops.
+    event-type-allowed-charset: Event type may contain only letters, digits and dots.
     event-type-prefix: Event type must start with "{{prefix}}".
     event-type-required: Event type is required.
   headers:
