@@ -7,6 +7,7 @@ import pluralize from 'pluralize';
 import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 import { currentMetricsParser, metricsParser } from './helpers';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
+import { EventsList } from 'shared/components/EventsList';
 
 export function HorizontalPodAutoscalersDetails({
   DefaultRenderer,
@@ -104,12 +105,17 @@ export function HorizontalPodAutoscalersDetails({
       </LayoutPanel>
     );
   };
-
+  const filterByHost = e =>
+    e.involvedObject.name === otherParams.resourceName &&
+    e.involvedObject.kind === 'HorizontalPodAutoscaler';
+  const Events = () => (
+    <EventsList namespace={otherParams.namespace} filter={filterByHost} />
+  );
   return (
     <DefaultRenderer
       resourceName={t('hpas.name_singular')}
       customColumns={customColumns}
-      customComponents={[HPASpec, HPAMetrics]}
+      customComponents={[HPASpec, HPAMetrics, Events]}
       {...otherParams}
     />
   );

@@ -161,6 +161,7 @@ export const PersistentVolumeClaimsDetails = ({
         PVCConfiguration,
         RelatedPods,
         PVCSelectorSpecification,
+        Events,
       ]}
       customColumns={customColumns}
       singularName={t('persistent-volume-claims.name_singular')}
