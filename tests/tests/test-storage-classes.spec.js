@@ -57,18 +57,4 @@ context('Test Storage Classes', () => {
       .contains('Retain')
       .should('be.visible');
   });
-
-  it('Delete Storage Class', () => {
-    cy.getIframeBody()
-      .contains('button', 'Delete')
-      .click();
-
-    cy.getIframeBody()
-      .find('[data-testid="delete-confirmation"]')
-      .click();
-
-    cy.getIframeBody()
-      .contains(/deleted/)
-      .should('be.visible');
-  });
 });
