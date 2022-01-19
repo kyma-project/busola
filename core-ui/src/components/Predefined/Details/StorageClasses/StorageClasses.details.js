@@ -26,6 +26,7 @@ export const StorageClassesDetails = ({ DefaultRenderer, ...otherParams }) => {
                 <LayoutPanelRow
                   name={parameters[0]}
                   value={parameters[1] || EMPTY_TEXT_PLACEHOLDER}
+                  key={parameters[0]}
                 />
               );
             })

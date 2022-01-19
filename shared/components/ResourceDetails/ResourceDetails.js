@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import jsyaml from 'js-yaml';
 import { useTranslation } from 'react-i18next';
-import { Button, Checkbox, MessageBox, MessageStrip } from 'fundamental-react';
+import { Button } from 'fundamental-react';
 import { createPatch } from 'rfc6902';
-import LuigiClient from '@luigi-project/client';
 
 import {
   PageHeader,
@@ -15,7 +14,6 @@ import {
   useDelete,
   useYamlEditor,
   useNotification,
-  navigateToList,
   ReadableCreationTimestamp,
   ResourceNotFound,
   prettifyNamePlural,
@@ -27,7 +25,7 @@ import CustomPropTypes from '../../typechecking/CustomPropTypes';
 import {
   useWindowTitle,
   useProtectedResources,
-  useFeatureToggle,
+  useDeleteResource,
 } from '../../hooks';
 import { ModalWithForm } from '../ModalWithForm/ModalWithForm';
 
@@ -144,13 +142,11 @@ function Resource({
   );
   const { isProtected, protectedResourceWarning } = useProtectedResources(i18n);
 
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const [activeResource, setActiveResource] = useState(null);
-  const deleteResourceMutation = useDelete(resourceUrl);
-  const [dontConfirmDelete, setDontConfirmDelete] = useFeatureToggle(
-    'dontConfirmDelete',
-  );
-  const withoutQueryString = path => path.split('?')[0];
+  const [DeleteMessageBox, DeleteButton] = useDeleteResource({
+    i18n,
+    resourceType,
+    resourceUrl,
+  });
 
   const { setEditedYaml: setEditedSpec } = useYamlEditor();
   const notification = useNotification();
@@ -230,14 +226,7 @@ function Resource({
       {editAction()}
       {headerActions}
       {resourceHeaderActions.map(resourceAction => resourceAction(resource))}
-      <Button
-        disabled={protectedResource}
-        onClick={() => handleResourceDelete(resource)}
-        option="transparent"
-        type="negative"
-      >
-        {t('common.buttons.delete')}
-      </Button>
+      <DeleteButton resource={resource} />
     </>
   );
 
@@ -273,48 +262,6 @@ function Resource({
     }
   };
 
-  const performDelete = async resource => {
-    const url = withoutQueryString(resourceUrl);
-
-    LuigiClient.sendCustomMessage({
-      id: 'busola.dontConfirmDelete',
-      value: dontConfirmDelete,
-    });
-    try {
-      await deleteResourceMutation(url);
-      notification.notifySuccess({
-        content: t('components.resources-list.messages.delete.success', {
-          resourceType: prettifiedResourceName,
-        }),
-      });
-      navigateToList(resourceType);
-    } catch (e) {
-      console.error(e);
-      notification.notifyError({
-        content: t('components.resources-list.messages.delete.failure', {
-          resourceType: prettifiedResourceName,
-          error: e.message,
-        }),
-      });
-      throw e;
-    }
-  };
-
-  const closeDeleteDialog = () => {
-    LuigiClient.uxManager().removeBackdrop();
-    setShowDeleteDialog(false);
-  };
-
-  async function handleResourceDelete(resource) {
-    if (dontConfirmDelete) {
-      performDelete(resource);
-    } else {
-      LuigiClient.uxManager().addBackdrop();
-      setActiveResource(resource);
-      setShowDeleteDialog(true);
-    }
-  }
-
   return (
     <>
       <PageHeader
@@ -342,47 +289,8 @@ function Resource({
           </PageHeader.Column>
         ))}
       </PageHeader>
-      <MessageBox
-        type="warning"
-        title={t('common.delete-dialog.title', {
-          name: activeResource?.metadata.name,
-        })}
-        actions={[
-          <Button
-            data-testid="delete-confirmation"
-            type="negative"
-            compact
-            onClick={() => performDelete(activeResource)}
-          >
-            {t('common.buttons.delete')}
-          </Button>,
-          <Button onClick={() => setDontConfirmDelete(false)} compact>
-            {t('common.buttons.cancel')}
-          </Button>,
-        ]}
-        show={showDeleteDialog}
-        onClose={closeDeleteDialog}
-      >
-        <p>
-          {t('common.delete-dialog.message', {
-            type: prettifiedResourceName,
-            name: activeResource?.metadata.name,
-          })}
-        </p>
-        <div className="fd-margin-top--sm">
-          <Checkbox onChange={e => setDontConfirmDelete(e.target.checked)}>
-            {t('common.delete-dialog.delete-confirm')}
-          </Checkbox>
-        </div>
-        {dontConfirmDelete && (
-          <MessageStrip type="information" className="fd-margin-top--sm">
-            {t('common.delete-dialog.information')}
-          </MessageStrip>
-        )}
-      </MessageBox>
-
+      <DeleteMessageBox resource={resource} />
       {customComponents.map(component => component(resource, resourceUrl))}
-
       {children}
     </>
   );
