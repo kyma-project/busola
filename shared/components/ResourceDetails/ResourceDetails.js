@@ -145,7 +145,6 @@ function Resource({
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
     i18n,
     resourceType,
-    resourceUrl,
   });
 
   const { setEditedYaml: setEditedSpec } = useYamlEditor();
@@ -228,7 +227,7 @@ function Resource({
       {resourceHeaderActions.map(resourceAction => resourceAction(resource))}
       <Button
         disabled={protectedResource}
-        onClick={() => handleResourceDelete(resource)}
+        onClick={() => handleResourceDelete(resourceUrl)}
         option="transparent"
         type="negative"
       >
@@ -296,7 +295,7 @@ function Resource({
           </PageHeader.Column>
         ))}
       </PageHeader>
-      <DeleteMessageBox resource={resource} />
+      <DeleteMessageBox resource={resource} resourceUrl={resourceUrl} />
       {customComponents.map(component => component(resource, resourceUrl))}
       {children}
     </>

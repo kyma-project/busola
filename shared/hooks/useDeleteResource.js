@@ -9,24 +9,23 @@ import {
   navigateToList,
   prettifyNameSingular,
 } from '..';
-import { useProtectedResources, useFeatureToggle } from '.';
+import { useFeatureToggle } from '.';
 
-export function useDeleteResource({ i18n, resourceType, resourceUrl }) {
+export function useDeleteResource({ i18n, resourceType }) {
   const { t } = useTranslation(['translation'], { i18n });
 
-  const { isProtected, protectedResourceWarning } = useProtectedResources(i18n);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const deleteResourceMutation = useDelete(resourceUrl);
+  const deleteResourceMutation = useDelete();
   const [dontConfirmDelete, setDontConfirmDelete] = useFeatureToggle(
     'dontConfirmDelete',
   );
-  const withoutQueryString = path => path.split('?')[0];
 
   const notification = useNotification();
 
   const prettifiedResourceName = prettifyNameSingular(undefined, resourceType);
 
-  const performDelete = async () => {
+  const performDelete = async resourceUrl => {
+    const withoutQueryString = path => path.split('?')[0];
     const url = withoutQueryString(resourceUrl);
 
     LuigiClient.sendCustomMessage({
@@ -58,16 +57,16 @@ export function useDeleteResource({ i18n, resourceType, resourceUrl }) {
     setShowDeleteDialog(false);
   };
 
-  async function handleResourceDelete(resource) {
+  async function handleResourceDelete(resourceUrl) {
     if (dontConfirmDelete) {
-      performDelete(resource);
+      performDelete(resourceUrl);
     } else {
       LuigiClient.uxManager().addBackdrop();
       setShowDeleteDialog(true);
     }
   }
 
-  const DeleteMessageBox = ({ resource }) => (
+  const DeleteMessageBox = ({ resource, resourceUrl }) => (
     <MessageBox
       type="warning"
       title={t('common.delete-dialog.title', {
@@ -78,7 +77,7 @@ export function useDeleteResource({ i18n, resourceType, resourceUrl }) {
           data-testid="delete-confirmation"
           type="negative"
           compact
-          onClick={() => performDelete(resource)}
+          onClick={() => performDelete(resourceUrl)}
         >
           {t('common.buttons.delete')}
         </Button>,
@@ -107,20 +106,6 @@ export function useDeleteResource({ i18n, resourceType, resourceUrl }) {
       )}
     </MessageBox>
   );
-
-  // const DeleteButton = ({ resource }) => {
-  //   const protectedResource = isProtected(resource);
-  //   return (
-  //     <Button
-  //       disabled={protectedResource}
-  //       onClick={() => handleResourceDelete(resource)}
-  //       option="transparent"
-  //       type="negative"
-  //     >
-  //       {t('common.buttons.delete')}
-  //     </Button>
-  //   );
-  // };
 
   return [DeleteMessageBox, handleResourceDelete];
 }
