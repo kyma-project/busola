@@ -2,7 +2,9 @@
 import 'cypress-file-upload';
 import { loadPV } from '../support/loadPV';
 
-const PV_NAME = 'test-pv';
+const PV_NAME = `test-pv-${Math.random()
+  .toString()
+  .substr(2, 8)}`;
 
 context('Test PV', () => {
   before(() => {
@@ -23,7 +25,7 @@ context('Test PV', () => {
       .contains('Create Persistent Volume')
       .click();
 
-    cy.wrap(loadPV()).then(PV_CONFIG => {
+    cy.wrap(loadPV(PV_NAME)).then(PV_CONFIG => {
       const PV = JSON.stringify(PV_CONFIG);
       cy.getIframeBody()
         .find('[role="presentation"],[class="view-lines"]')
