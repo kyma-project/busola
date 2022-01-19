@@ -2,12 +2,6 @@
 import 'cypress-file-upload';
 import { loadRandomSC } from '../support/loadFile';
 
-const STORAGE_CLASS_NAME =
-  'test-' +
-  Math.random()
-    .toString()
-    .substr(2, 8);
-
 context('Test Storage Classes', () => {
   before(() => {
     cy.loginAndSelectCluster();
@@ -28,7 +22,7 @@ context('Test Storage Classes', () => {
       .contains('Create Storage Class')
       .click();
 
-    cy.wrap(loadRandomSC(STORAGE_CLASS_NAME)).then(SC_CONFIG => {
+    cy.wrap(loadRandomSC(Cypress.env('STORAGE_CLASS_NAME'))).then(SC_CONFIG => {
       const SC = JSON.stringify(SC_CONFIG);
 
       cy.getIframeBody()
@@ -48,7 +42,7 @@ context('Test Storage Classes', () => {
 
   it('Checking details', () => {
     cy.getIframeBody()
-      .contains(STORAGE_CLASS_NAME)
+      .contains(Cypress.env('STORAGE_CLASS_NAME'))
       .should('be.visible');
 
     cy.getIframeBody()
@@ -63,7 +57,7 @@ context('Test Storage Classes', () => {
       .contains('Retain')
       .should('be.visible');
   });
-
+  
   it('Delete Storage Class', () => {
     cy.getIframeBody()
       .contains('button', 'Delete')

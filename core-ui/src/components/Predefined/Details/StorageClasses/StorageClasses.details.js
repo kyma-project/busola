@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 
 import { LayoutPanel } from 'fundamental-react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
-import { PersistentVolumesList } from 'shared/components/PersistentVolumesList';
-import { PersistentVolumeClaimsList } from 'shared/components/PersistentVolumeClaimsList';
+import { PersistentVolumesList } from './PersistentVolumesList';
+import { PersistentVolumeClaimsList } from './PersistentVolumeClaimsList';
 
 import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 
