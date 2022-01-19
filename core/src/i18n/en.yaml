@@ -845,6 +845,7 @@ events:
     involved-object: Involved Object
     last-seen: Last seen
     message: Message
+    reason: Reason
     source: Source
     type: Type
   title: Events

@@ -134,11 +134,8 @@ function Resource({
   silentRefetch,
   updateResourceMutation,
   windowTitle,
-  resourceTitle,
 }) {
-  useWindowTitle(
-    windowTitle || resourceTitle || prettifyNamePlural(null, resourceType),
-  );
+  useWindowTitle(windowTitle || prettifyNamePlural(null, resourceType));
   const { isProtected, protectedResourceWarning } = useProtectedResources(i18n);
 
   const { t } = useTranslation(['translation'], { i18n });
@@ -149,7 +146,7 @@ function Resource({
 
   const breadcrumbItems = breadcrumbs || [
     {
-      name: resourceTitle || prettifyNamePlural(null, resourceType),
+      name: prettifyNamePlural(null, resourceType),
       path: '/',
       fromContext: resourceType.toLowerCase(),
     },

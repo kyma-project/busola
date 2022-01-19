@@ -10,8 +10,9 @@ import {
   PageHeader,
   prettifyNamePlural,
 } from 'react-shared';
-import { Link } from 'fundamental-react';
+import { Icon, Link } from 'fundamental-react';
 import { useMessageList, EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
+import { clearEmptyPropertiesInObject } from 'commons/helpers';
 
 export const EventsList = ({ i18n, ...otherParams }) => {
   // TODO EVENTS DESCRIPTION
@@ -42,8 +43,7 @@ export const EventsList = ({ i18n, ...otherParams }) => {
 
 export const Events = ({ i18n, ...otherParams }) => {
   const { t } = useTranslation();
-  const { namespace, resourceUrl } = otherParams;
-  console.log('Events', namespace, 'resourceUrl', resourceUrl);
+  const { resourceUrl } = otherParams;
 
   const { loading = true, error, data: items } = useGetList(otherParams.filter)(
     resourceUrl,
@@ -57,8 +57,8 @@ export const Events = ({ i18n, ...otherParams }) => {
     sortedItems,
     messageSelector,
     formatInvolvedObject,
+    formatSourceObject,
     navigateToObjectDetails,
-    navigateToNodeDetails,
   } = useMessageList(items);
 
   const entries =
@@ -76,18 +76,6 @@ export const Events = ({ i18n, ...otherParams }) => {
     t('events.headers.count'),
     t('events.headers.last-seen'),
   ];
-  const formatSourceObject = source => {
-    return source?.host ? (
-      <Link
-        className="fd-link"
-        onClick={() => navigateToNodeDetails(source.host)}
-      >
-        {source.host}
-      </Link>
-    ) : (
-      source?.component
-    );
-  };
 
   const rowRenderer = entry => [
     <p>
@@ -104,7 +92,19 @@ export const Events = ({ i18n, ...otherParams }) => {
         {entry.metadata.name}
       </Link>
     </p>,
-    <p>{entry.type}</p>,
+    <p>
+      {entry.type}{' '}
+      {entry.type === 'Warning' ? (
+        <Icon
+          ariaLabel="Warning"
+          glyph="message-warning"
+          size="s"
+          className="fd-has-color-status-2"
+        />
+      ) : (
+        ''
+      )}
+    </p>,
     <p>{entry.message}</p>,
     <p>{entry.metadata.namespace}</p>,
     formatInvolvedObject(entry.involvedObject),
@@ -135,6 +135,10 @@ export const Events = ({ i18n, ...otherParams }) => {
       serverErrorMessage={error?.message}
       serverDataLoading={loading}
       pagination={{ autoHide: true }}
+      notFoundMessage={t('components.generic-list.messages.not-found')}
+      noSearchResultMessage={t(
+        'components.generic-list.messages.no-search-results',
+      )}
       i18n={i18n}
     />
   );

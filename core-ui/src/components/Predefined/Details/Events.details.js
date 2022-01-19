@@ -1,0 +1,88 @@
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { formatInvolvedObject, formatSourceObject } from 'hooks/useMessageList';
+
+import { Icon, LayoutPanel } from 'fundamental-react';
+import { ReadableCreationTimestamp } from 'react-shared';
+import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
+
+const RowComponent = ({ name, value }) =>
+  value ? <LayoutPanelRow name={name} value={value} /> : null;
+
+const Message = event => {
+  const { t } = useTranslation();
+
+  return (
+    <LayoutPanel key="specification-panel" className="fd-margin--md">
+      <LayoutPanel.Header>
+        <LayoutPanel.Head title={t('events.headers.message')} />
+      </LayoutPanel.Header>
+      <LayoutPanel.Body>
+        {event.message && (
+          <RowComponent
+            name={t('events.headers.message')}
+            value={event.message}
+          />
+        )}
+        {event.reason && (
+          <RowComponent
+            name={t('events.headers.reason')}
+            value={event.reason}
+          />
+        )}
+      </LayoutPanel.Body>
+    </LayoutPanel>
+  );
+};
+
+export const EventsDetails = ({ DefaultRenderer, ...otherParams }) => {
+  const { t } = useTranslation();
+
+  const customColumns = [
+    {
+      header: t('events.headers.involved-object'),
+      value: event => formatInvolvedObject(event.involvedObject),
+    },
+    {
+      header: t('events.headers.source'),
+      value: event => formatSourceObject(event.source),
+    },
+    {
+      header: t('events.headers.type'),
+      value: event => (
+        <p>
+          {event.type}{' '}
+          {event.type === 'Warning' ? (
+            <Icon
+              ariaLabel="Warning"
+              glyph="message-warning"
+              size="s"
+              className="fd-has-color-status-2"
+            />
+          ) : (
+            ''
+          )}
+        </p>
+      ),
+    },
+    {
+      header: t('events.headers.count'),
+      value: event => <p>{event.count}</p>,
+    },
+    {
+      header: t('events.headers.last-seen'),
+      value: event => (
+        <ReadableCreationTimestamp timestamp={event.lastTimestamp} />
+      ),
+    },
+  ];
+
+  return (
+    <DefaultRenderer
+      customComponents={[Message]}
+      customColumns={customColumns}
+      {...otherParams}
+      readOnly={true}
+    ></DefaultRenderer>
+  );
+};

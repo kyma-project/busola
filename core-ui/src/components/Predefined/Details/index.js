@@ -18,6 +18,7 @@ export * from './CronJobs/CronJob.details';
 export * from './DaemonSet/DaemonSet.details';
 export * from './DNSEntries.details';
 export * from './DNSProviders.details';
+export * from './Events.details';
 export * from './StatefulSet/StatefulSets.details';
 export * from './Certificate/Certificate.details';
 export * from './Ingress/Ingress.details';

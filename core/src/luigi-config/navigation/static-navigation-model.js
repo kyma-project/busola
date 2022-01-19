@@ -82,7 +82,7 @@ export function getStaticChildrenNodesForNamespace(
       pathSegment: 'events',
       resourceType: 'events',
       label: i18next.t('events.title'),
-      icon: 'crossed-line-chart',
+      icon: 'message-warning',
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/Events?' +
@@ -1522,7 +1522,7 @@ export function getStaticRootNodes(
       pathSegment: 'events',
       resourceType: 'events',
       label: i18next.t('events.title'),
-      icon: 'crossed-line-chart',
+      icon: 'message-warning',
       viewUrl:
         config.coreUIModuleUrl +
         '/Events?' +

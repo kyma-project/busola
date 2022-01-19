@@ -1,6 +1,7 @@
 import React from 'react';
 import { useMicrofrontendContext } from 'react-shared';
 
+import { EventsList } from 'shared/components/EventsList';
 import { ComponentForList } from 'shared/getComponents';
 import DeployNewWorkload from './DeployNewWorkload';
 import { NamespaceStatus } from './NamespaceStatus';
@@ -63,14 +64,7 @@ export const NamespacesDetails = ({ DefaultRenderer, ...otherParams }) => {
     />
   ) : null;
 
-  const eventsParams = {
-    namespace: otherParams.resourceName,
-    resourceUrl: `/api/v1/namespaces/${otherParams.resourceName}/events`,
-    resourceType: 'Events',
-    isCompact: true,
-  };
-
-  const Events = <ComponentForList name="eventsList" params={eventsParams} />;
+  const Events = <EventsList namespace={otherParams.resourceName} />;
 
   const headerActions = (
     <DeployNewWorkload namespaceName={otherParams.resourceName} />

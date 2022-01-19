@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { PersistentVolumeClaimStatus } from 'shared/components/PersistentVolumeClaimStatus';
+import { EventsList } from 'shared/components/EventsList';
 
 import {
   EMPTY_TEXT_PLACEHOLDER,
@@ -146,6 +147,13 @@ export const PersistentVolumeClaimsDetails = ({
       value: ({ spec }) => <p>{spec.resources?.requests?.storage}</p>,
     },
   ];
+
+  const filterByHost = e =>
+    e.involvedObject.name === otherParams.resourceName &&
+    e.involvedObject.kind === 'PersistentVolumeClaim';
+  const Events = () => (
+    <EventsList namespace={otherParams.namespace} filter={filterByHost} />
+  );
 
   return (
     <DefaultRenderer

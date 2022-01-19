@@ -5,7 +5,7 @@ import { LayoutPanel, Link } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { useNodesQuery } from 'components/Nodes/nodeQueries';
 import { NodeResources } from 'components/Nodes/NodeResources/NodeResources';
-import { ComponentForList } from 'shared/getComponents';
+import { EventsList } from 'shared/components/EventsList';
 
 import './ClusterNodes.scss';
 
@@ -35,13 +35,7 @@ export function ClusterNodes() {
       currentPage * itemsPerPage,
     ) || [];
 
-  const eventsParams = {
-    resourceUrl: `/api/v1/events`,
-    resourceType: 'Events',
-    isCompact: true,
-  };
-
-  const Events = <ComponentForList name="eventsList" params={eventsParams} />;
+  const Events = <EventsList />;
 
   return (
     <>

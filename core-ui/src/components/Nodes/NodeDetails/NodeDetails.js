@@ -5,7 +5,7 @@ import { useNodeQuery } from '../nodeQueries';
 import { NodeDetailsHeader } from '../NodeDetailsHeader';
 import { MachineInfo } from '../MachineInfo/MachineInfo';
 import { NodeResources } from '../NodeResources/NodeResources';
-import { ComponentForList } from 'shared/getComponents';
+import { EventsList } from 'shared/components/EventsList';
 
 import './NodeDetails.scss';
 
@@ -14,15 +14,7 @@ export function NodeDetails({ nodeName }) {
   const { t } = useTranslation();
 
   const filterByHost = e => e.source.host === nodeName;
-
-  const eventsParams = {
-    resourceUrl: `/api/v1/events`,
-    resourceType: 'Events',
-    isCompact: true,
-    filter: filterByHost,
-  };
-
-  const Events = <ComponentForList name="eventsList" params={eventsParams} />;
+  const Events = <EventsList filter={filterByHost} />;
 
   return (
     <div className="node-details">
