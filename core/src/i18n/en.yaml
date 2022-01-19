@@ -115,7 +115,6 @@ applications:
     cannot-create: Cannot create the Application.
     connect-disabled: Connecting Applications is disabled for SAP Kyma Runtime.
     copy-url: 'Copy the following URL and use it at the external system that you would like to connect to:'
-    create-disabled: Creating Applications is disabled for SAP Kyma Runtime.
     create-failed: Failed to create the Application.
     created: Application created.
     dont-expose: This Application doesn't expose any Services or events.
@@ -436,6 +435,7 @@ common:
     annotations: Annotations
     created: Created
     description: Description
+    kind: Kind
     labels: Labels
     loading: Loading...
     logs: Logs
@@ -1104,6 +1104,30 @@ git-repositories:
     none: Authentication not required.
     secret: The name of the Secret with credentials used by the Function Controller to authenticate to the Git repository in order to fetch the Function's source code and dependencies.
     url: URL must be a valid Git repository address that starts with the "http(s)", "git", or "ssh" prefix.
+hpas:
+  and-x-more: and {{x}} more
+  container-resource: Container resource
+  cpu-utilization: Target average CPU utilization
+  current-replicas: Current replicas
+  description: <0>Horizontal Pod Autoscaler</0> automatically manages the number of Pod replicas to match the demand.
+  external: External
+  headers:
+    created: Created
+    max-pods: Max Pods
+    metrics: Metrics
+    min-pods: Min Pods
+    replicas: Replicas
+  metrics: Metrics
+  name_singular: Horizontal Pod Autoscaler
+  object: Object
+  'on': 'on'
+  on-pods: on Pods
+  pods: Pods
+  resource: Resource
+  resource-cpu-on-pods: Resource CPU on Pods (current / target)
+  scale-target-ref: Scale target reference
+  spec: Specification
+  title: Horizontal Pod Autoscalers
 ingresses:
   description: <0>Ingress</0> describes the routing rules for traffic to services within a cluster. The routing is managed by the Ingress resource.
   labels:
