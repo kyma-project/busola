@@ -31,13 +31,12 @@ export default function CreateServiceBindingForm({
   const { i18n } = useTranslation();
 
   const [existingInstanceName, setExistingInstanceName] = useState(
-    availableServiceInstances[0].metadata.name,
+    availableServiceInstances[0]?.metadata.name,
   );
   const [existingSecretName, setExistingSecretName] = useState(null);
   const [envPrefix, setEnvPrefix] = useState('');
   const [createCredentials, setCreateCredentials] = useState(true);
   const [secrets, setSecrets] = useState([]);
-
   useEffect(() => {
     setCustomValid(false);
   }, [setCustomValid]);
@@ -49,11 +48,12 @@ export default function CreateServiceBindingForm({
       setSecrets([]);
       return;
     }
-    const bindingsForThisInstance = serviceBindings.filter(
-      b => b.spec.instanceRef.name === existingInstanceName,
-    );
-    setSecrets(bindingsForThisInstance.map(b => b.spec.secretName));
-    setExistingSecretName(bindingsForThisInstance[0].spec.secretName);
+    const bindingsForThisInstance = serviceBindings.filter(b => {
+      return b?.spec?.instanceRef?.name === existingInstanceName;
+    });
+
+    setSecrets(bindingsForThisInstance.map(b => b?.spec?.secretName));
+    setExistingSecretName(bindingsForThisInstance[0]?.spec?.secretName);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [existingInstanceName, availableServiceInstances]);
 
@@ -111,7 +111,6 @@ export default function CreateServiceBindingForm({
       text: metadata.name,
     }),
   );
-
   const secretsOptions = secrets?.map(secret => ({
     key: secret,
     text: secret,
