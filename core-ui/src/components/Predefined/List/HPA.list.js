@@ -3,10 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 import { Trans } from 'react-i18next';
 import { Tokens } from 'shared/components/Tokens';
-import {
-  currentMetricsParser,
-  metricsParser,
-} from 'components/Predefined/Create/HPAs/helpers';
+import { currentMetricsParser, metricsParser } from '../Details/HPA/helpers';
 
 export const HorizontalPodAutoscalersList = ({
   DefaultRenderer,

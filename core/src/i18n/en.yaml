@@ -1103,7 +1103,7 @@ git-repositories:
     url: URL must be a valid Git repository address that starts with the "http(s)", "git", or "ssh" prefix.
 hpas:
   and-x-more: and {{x}} more
-  container-resource: Container Resource
+  container-resource: Container resource
   cpu-utilization: Target average CPU utilization
   current-replicas: Current replicas
   description: <0>Horizontal Pod Autoscaler</0> automatically manages the number of Pod replicas to match the demand.

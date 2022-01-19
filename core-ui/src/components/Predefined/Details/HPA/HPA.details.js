@@ -5,10 +5,7 @@ import { Tokens } from 'shared/components/Tokens';
 import LuigiClient from '@luigi-project/client';
 import pluralize from 'pluralize';
 import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
-import {
-  currentMetricsParser,
-  metricsParser,
-} from 'components/Predefined/Create/HPAs/helpers';
+import { currentMetricsParser, metricsParser } from './helpers';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 
 export function HorizontalPodAutoscalersDetails({
