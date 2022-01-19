@@ -5,9 +5,11 @@ import { Link } from 'react-shared';
 import { Trans } from 'react-i18next';
 
 import { DaemonSetStatus } from '../Details/DaemonSet/DaemonSetStatus';
+import { useRestartAction } from 'shared/hooks/useRestartResource';
 
 export const DaemonSetsList = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
+  const restartAction = useRestartAction(otherParams.resourceUrl);
 
   const customColumns = [
     {
@@ -45,6 +47,7 @@ export const DaemonSetsList = ({ DefaultRenderer, ...otherParams }) => {
       customColumns={customColumns}
       resourceName={t('daemon-sets.title')}
       description={description}
+      customListActions={[restartAction]}
       {...otherParams}
     />
   );

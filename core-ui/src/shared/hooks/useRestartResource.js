@@ -1,4 +1,8 @@
-import { useUpdate, useNotification } from 'react-shared';
+import {
+  useUpdate,
+  useNotification,
+  useProtectedResources,
+} from 'react-shared';
 import * as jp from 'jsonpath';
 import { createPatch } from 'rfc6902';
 import { cloneDeep } from 'lodash';
@@ -29,5 +33,19 @@ export function useRestartResource(baseUrl) {
         content: t('common.messages.error', { error: e.message }),
       });
     }
+  };
+}
+
+export function useRestartAction(baseUrl) {
+  const { t, i18n } = useTranslation();
+  const { isProtected } = useProtectedResources(i18n);
+  const restartResource = useRestartResource(baseUrl);
+
+  return {
+    name: t('common.buttons.restart'),
+    icon: 'refresh',
+    tooltip: t('common.buttons.restart'),
+    disabledHandler: isProtected,
+    handler: restartResource,
   };
 }
