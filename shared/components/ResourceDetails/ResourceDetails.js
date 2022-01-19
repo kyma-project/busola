@@ -145,6 +145,7 @@ function Resource({
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
     i18n,
     resourceType,
+    navigateToListAfterDelete: true,
   });
 
   const { setEditedYaml: setEditedSpec } = useYamlEditor();

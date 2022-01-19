@@ -11,7 +11,11 @@ import {
 } from '..';
 import { useFeatureToggle } from '.';
 
-export function useDeleteResource({ i18n, resourceType }) {
+export function useDeleteResource({
+  i18n,
+  resourceType,
+  navigateToListAfterDelete = false,
+}) {
   const { t } = useTranslation(['translation'], { i18n });
 
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -39,7 +43,7 @@ export function useDeleteResource({ i18n, resourceType }) {
           resourceType: prettifiedResourceName,
         }),
       });
-      navigateToList(resourceType);
+      if (navigateToListAfterDelete) navigateToList(resourceType);
     } catch (e) {
       console.error(e);
       notification.notifyError({
