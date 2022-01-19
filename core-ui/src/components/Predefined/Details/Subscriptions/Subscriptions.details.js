@@ -18,15 +18,15 @@ const FilterOption = ({ filterOption, title }) => {
         <LayoutPanel.Head title={title} className="layout-panel-title" />
       </LayoutPanel.Header>
       <LayoutPanelRow
-        name={t('subscription.headers.filters.property')}
+        name={t('subscriptions.headers.filters.property')}
         value={filterOption?.property || EMPTY_TEXT_PLACEHOLDER}
       />
       <LayoutPanelRow
-        name={t('subscription.headers.filters.type')}
+        name={t('subscriptions.headers.filters.type')}
         value={filterOption?.type || EMPTY_TEXT_PLACEHOLDER}
       />
       <LayoutPanelRow
-        name={t('subscription.headers.filters.value')}
+        name={t('subscriptions.headers.filters.value')}
         value={
           filterOption?.value === ''
             ? '"" (Handled by the NATS backend)' // If it's equal "", that means the NATS backend is chosen.
@@ -42,11 +42,11 @@ const EventFilters = ({ filter }) => {
   return (
     <div>
       <FilterOption
-        title={t('subscription.headers.filters.event-source')}
+        title={t('subscriptions.headers.filters.event-source')}
         filterOption={filter?.eventSource}
       />
       <FilterOption
-        title={t('subscription.headers.filters.event-type')}
+        title={t('subscriptions.headers.filters.event-type')}
         filterOption={filter?.eventType}
       />
     </div>
@@ -62,7 +62,7 @@ const SubscriptionsFilter = subscription => {
       key={'subscription-filters'}
     >
       <LayoutPanel.Header>
-        <LayoutPanel.Head title={t('subscription.headers.filters.title')} />
+        <LayoutPanel.Head title={t('subscriptions.headers.filters.title')} />
       </LayoutPanel.Header>
 
       {filters.length > 0 ? (
@@ -80,7 +80,7 @@ export const SubscriptionsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
   const customColumns = [
     {
-      header: t('subscription.headers.conditions.status'),
+      header: t('subscriptions.headers.conditions.status'),
       value: ({ status }) => {
         const lastCondition = status?.conditions[status?.conditions.length - 1];
         return <SubscriptionConditionStatus condition={lastCondition} />;
@@ -102,7 +102,7 @@ export const SubscriptionsDetails = ({ DefaultRenderer, ...otherParams }) => {
       },
     },
     {
-      header: t('subscription.sink'),
+      header: t('subscriptions.sink'),
       value: ({ spec }) => (
         <p>{spec?.sink ? spec.sink : EMPTY_TEXT_PLACEHOLDER}</p>
       ),
@@ -113,8 +113,8 @@ export const SubscriptionsDetails = ({ DefaultRenderer, ...otherParams }) => {
     <DefaultRenderer
       customComponents={[SubscriptionConditions, SubscriptionsFilter]}
       customColumns={customColumns}
-      resourceTitle={t('subscription.title')}
-      singularName={t('subscription.name_singular')}
+      resourceTitle={t('subscriptions.title')}
+      singularName={t('subscriptions.name_singular')}
       {...otherParams}
     />
   );

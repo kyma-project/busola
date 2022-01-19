@@ -646,7 +646,6 @@ export function getStaticChildrenNodesForNamespace(
         },
       ],
     },
-
     //SERVICE MANAGEMENT CATEGORY
     {
       category: {
@@ -845,6 +844,85 @@ export function getStaticChildrenNodesForNamespace(
       ],
     },
 
+    //STORAGE CATEGORY
+    {
+      category: {
+        label: i18next.t('storage.title'),
+        icon: 'sap-box',
+        collapsible: true,
+      },
+      pathSegment: '_storage_category_placeholder_',
+      hideFromNav: true,
+    },
+    {
+      pathSegment: 'storageclasses',
+      resourceType: 'storageclasses',
+      navigationContext: 'storageclasses',
+      label: i18next.t('storage-classes.title'),
+      category: i18next.t('storage.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/StorageClasses?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/storage.k8s.io/v1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':storageClassName',
+              resourceType: 'storageclasses',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/StorageClasses/:storageClassName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/storage.k8s.io/v1',
+                }),
+              viewGroup: coreUIViewGroupName,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: i18next.t('storage.title'),
+      resourceType: 'persistentvolumeclaims',
+      pathSegment: 'persistentvolumeclaims',
+      label: i18next.t('persistent-volume-claims.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/PersistentVolumeClaims?' +
+        toSearchParamsString({
+          resourceApiPath: '/api/v1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+
+      navigationContext: 'persistentvolumeclaims',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':persistentVolumeClaimName',
+              resourceType: 'persistentvolumeclaims',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/PersistentVolumeClaims/:persistentVolumeClaimName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/api/v1',
+                }),
+            },
+          ],
+        },
+      ],
+    },
+
     //CONFIGURATION CATEGORY (NAMESPACE)
     {
       category: {
@@ -964,7 +1042,7 @@ export function getStaticChildrenNodesForNamespace(
       pathSegment: 'subscriptions',
       resourceType: 'subscriptions',
       navigationContext: 'subscriptions',
-      label: i18next.t('subscription.title'),
+      label: i18next.t('subscriptions.title'),
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/Subscriptions?' +
@@ -1343,7 +1421,7 @@ export function getStaticChildrenNodesForNamespace(
       category: i18next.t('configuration.title'),
       resourceType: 'serviceaccounts',
       pathSegment: 'serviceaccounts',
-      label: 'Service Accounts',
+      label: i18next.t('service-accounts.title'),
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/ServiceAccounts?' +

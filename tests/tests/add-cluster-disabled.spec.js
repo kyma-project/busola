@@ -12,6 +12,11 @@ export function mockAddClusterDisabled() {
     config: {
       features: {
         ADD_CLUSTER_DISABLED: { isEnabled: true },
+        KUBECONFIG_ID: {
+          config: {
+            kubeconfigUrl: '/kubeconfig',
+          },
+        },
       },
     },
   });

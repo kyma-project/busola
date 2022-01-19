@@ -36,7 +36,11 @@ export const PersistentVolumesList = ({ DefaultRenderer, ...otherParams }) => {
     },
     {
       header: t('common.headers.status'),
-      value: pv => pv.status?.phase || EMPTY_TEXT_PLACEHOLDER,
+      value: pv => (
+        <span style={{ wordBreak: 'keep-all' }}>
+          {pv.status?.phase || EMPTY_TEXT_PLACEHOLDER}
+        </span>
+      ),
     },
   ];
 

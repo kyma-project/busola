@@ -3,11 +3,14 @@ const fs = require('fs');
 module.exports = (on, config) => {
   let namespaceName = process.env.NAMESPACE_NAME || null;
   // generate random namespace name if it wasn't provided as env
+  const random = Math.floor(Math.random() * 9999) + 1000;
+  const randomName = `a-busola-test-${random}`;
   if (!namespaceName) {
-    const random = Math.floor(Math.random() * 9999) + 1000;
-    namespaceName = `a-busola-test-${random}`;
+    namespaceName = randomName;
   }
+
   config.env.NAMESPACE_NAME = namespaceName;
+  config.env.STORAGE_CLASS_NAME = randomName;
 
   on('task', {
     removeFile(filePath) {
