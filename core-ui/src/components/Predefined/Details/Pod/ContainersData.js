@@ -69,18 +69,8 @@ export default function ContainersData({ type, containers }) {
     </>
   );
 
-  const Wrapper = ({ children }) => (
-    <div className="container-wrapper">{children}</div>
-  );
-
   if (!containers) {
-    return (
-      <Wrapper>
-        {t('pods.message.type-not-found', {
-          type: type,
-        })}
-      </Wrapper>
-    );
+    return null;
   }
 
   return (
