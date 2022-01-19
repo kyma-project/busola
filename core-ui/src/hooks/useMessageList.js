@@ -23,6 +23,7 @@ export const RESOURCE_PATH = {
   Node: 'nodes',
   Subscription: 'subscriptions',
   Event: 'events',
+  PersistentVolumeClaim: 'persistentvolumeclaims',
 };
 
 export const useMessageList = items => {

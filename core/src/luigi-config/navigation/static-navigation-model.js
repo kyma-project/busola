@@ -681,7 +681,6 @@ export function getStaticChildrenNodesForNamespace(
         },
       ],
     },
-
     //SERVICE MANAGEMENT CATEGORY
     {
       category: {
@@ -873,6 +872,51 @@ export function getStaticChildrenNodesForNamespace(
                 '/namespaces/:namespaceId/serviceBindings/:bindingName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/services.cloud.sap.com/v1alpha1',
+                }),
+            },
+          ],
+        },
+      ],
+    },
+
+    //STORAGE CATEGORY
+    {
+      category: {
+        label: i18next.t('storage.title'),
+        icon: 'sap-box',
+        collapsible: true,
+      },
+      pathSegment: '_storage_category_placeholder_',
+      hideFromNav: true,
+    },
+    {
+      category: i18next.t('storage.title'),
+      resourceType: 'persistentvolumeclaims',
+      pathSegment: 'persistentvolumeclaims',
+      label: i18next.t('persistent-volume-claims.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/PersistentVolumeClaims?' +
+        toSearchParamsString({
+          resourceApiPath: '/api/v1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+
+      navigationContext: 'persistentvolumeclaims',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':persistentVolumeClaimName',
+              resourceType: 'persistentvolumeclaims',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/PersistentVolumeClaims/:persistentVolumeClaimName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/api/v1',
                 }),
             },
           ],
@@ -1378,7 +1422,7 @@ export function getStaticChildrenNodesForNamespace(
       category: i18next.t('configuration.title'),
       resourceType: 'serviceaccounts',
       pathSegment: 'serviceaccounts',
-      label: 'Service Accounts',
+      label: i18next.t('service-accounts.title'),
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/ServiceAccounts?' +
