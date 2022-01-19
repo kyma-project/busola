@@ -56,6 +56,10 @@ context('Test PV', () => {
       .click();
 
     cy.getIframeBody()
+      .find('[role="search"] [aria-label="open-search"]')
+      .type(PV_NAME);
+
+    cy.getIframeBody()
       .contains(PV_NAME)
       .should('be.visible');
   });

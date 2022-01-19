@@ -35,4 +35,5 @@ export * from './Subscription/Subscriptions.list';
 export * from './DestinationRules.list';
 export * from './VirtualServices.list';
 export * from './PersistentVolumeClaims.list';
+export * from './PersistentVolumes.list';
 export * from './StorageClasses.list';

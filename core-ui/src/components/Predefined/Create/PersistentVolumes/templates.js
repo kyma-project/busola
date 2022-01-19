@@ -12,8 +12,8 @@ export function createPersistentVolumeTemplate() {
       volumeMode: 'Filesystem',
       accessModes: ['ReadWriteOnce'],
       nfs: {
-        path: '/tmp',
-        server: '172.17.0.2',
+        path: '',
+        server: '',
       },
     },
   };

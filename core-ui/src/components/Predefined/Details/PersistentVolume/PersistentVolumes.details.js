@@ -1,6 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { LayoutPanel } from 'fundamental-react';
+import { EMPTY_TEXT_PLACEHOLDER, StatusBadge } from 'react-shared';
+
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { Tokens } from 'shared/components/Tokens';
 
@@ -10,7 +12,9 @@ export function PersistentVolumesDetails({ DefaultRenderer, ...otherParams }) {
   const customColumns = [
     {
       header: t('common.headers.status'),
-      value: ({ status }) => status.phase,
+      value: ({ status }) => (
+        <StatusBadge autoResolveType>{status.phase}</StatusBadge>
+      ),
     },
   ];
 
@@ -55,9 +59,12 @@ export function PersistentVolumesDetails({ DefaultRenderer, ...otherParams }) {
         <LayoutPanel.Body>
           <LayoutPanelRow
             name={t('pv.headers.server')}
-            value={spec.nfs.server}
+            value={spec.nfs?.server || EMPTY_TEXT_PLACEHOLDER}
           />
-          <LayoutPanelRow name={t('pv.headers.path')} value={spec.nfs.path} />
+          <LayoutPanelRow
+            name={t('pv.headers.path')}
+            value={spec.nfs?.path || EMPTY_TEXT_PLACEHOLDER}
+          />
         </LayoutPanel.Body>
       </LayoutPanel>
     </div>
