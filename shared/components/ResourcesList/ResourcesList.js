@@ -1,13 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import jsyaml from 'js-yaml';
-import {
-  Link,
-  Button,
-  Checkbox,
-  MessageBox,
-  MessageStrip,
-} from 'fundamental-react';
+import { Link, Button } from 'fundamental-react';
 import { createPatch } from 'rfc6902';
 import LuigiClient from '@luigi-project/client';
 
@@ -33,6 +27,7 @@ import {
   useWindowTitle,
   useFeatureToggle,
   useProtectedResources,
+  useDeleteResource,
 } from '../../hooks';
 import { useTranslation } from 'react-i18next';
 
@@ -120,7 +115,11 @@ function Resources({
 
   const { isProtected, protectedResourceWarning } = useProtectedResources(i18n);
 
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
+    i18n,
+    resourceType,
+  });
+
   const [activeResource, setActiveResource] = useState(null);
   const [showEditDialog, setShowEditDialog] = useState(false);
   const {
@@ -171,46 +170,6 @@ function Resources({
     }
   };
 
-  const performDelete = async resource => {
-    const url = withoutQueryString(resourceUrl) + '/' + resource.metadata.name;
-
-    LuigiClient.sendCustomMessage({
-      id: 'busola.dontConfirmDelete',
-      value: dontConfirmDelete,
-    });
-    try {
-      await deleteResourceMutation(url);
-      notification.notifySuccess({
-        content: t('components.resources-list.messages.delete.success', {
-          resourceType: prettifiedResourceName,
-        }),
-      });
-    } catch (e) {
-      console.error(e);
-      notification.notifyError({
-        content: t('components.resources-list.messages.delete.failure', {
-          resourceType: prettifiedResourceName,
-          error: e.message,
-        }),
-      });
-    }
-  };
-
-  const closeDeleteDialog = () => {
-    LuigiClient.uxManager().removeBackdrop();
-    setShowDeleteDialog(false);
-  };
-
-  async function handleResourceDelete(resource) {
-    if (dontConfirmDelete) {
-      performDelete(resource);
-    } else {
-      LuigiClient.uxManager().addBackdrop();
-      setActiveResource(resource);
-      setShowDeleteDialog(true);
-    }
-  }
-
   const handleResourceEdit = resource => {
     setEditedSpec(
       resource,
@@ -232,7 +191,10 @@ function Resources({
           name: t('common.buttons.delete'),
           icon: 'delete',
           disabledHandler: isProtected,
-          handler: handleResourceDelete,
+          handler: resource => {
+            handleResourceDelete(`${resourceUrl}/${resource.metadata.name}`);
+            setActiveResource(resource);
+          },
         },
         ...customListActions,
       ];
@@ -318,44 +280,10 @@ function Resources({
         modalOpeningComponent={<></>}
         customCloseAction={() => setShowEditDialog(false)}
       />
-      <MessageBox
-        type="warning"
-        title={t('common.delete-dialog.title', {
-          name: activeResource?.metadata.name,
-        })}
-        actions={[
-          <Button
-            data-testid="delete-confirmation"
-            type="negative"
-            compact
-            onClick={() => performDelete(activeResource)}
-          >
-            {t('common.buttons.delete')}
-          </Button>,
-          <Button onClick={() => setDontConfirmDelete(false)} compact>
-            {t('common.buttons.cancel')}
-          </Button>,
-        ]}
-        show={showDeleteDialog}
-        onClose={closeDeleteDialog}
-      >
-        <p>
-          {t('common.delete-dialog.message', {
-            type: prettifiedResourceName,
-            name: activeResource?.metadata.name,
-          })}
-        </p>
-        <div className="fd-margin-top--sm">
-          <Checkbox onChange={e => setDontConfirmDelete(e.target.checked)}>
-            {t('common.delete-dialog.delete-confirm')}
-          </Checkbox>
-        </div>
-        {dontConfirmDelete && (
-          <MessageStrip type="information" className="fd-margin-top--sm">
-            {t('common.delete-dialog.information')}
-          </MessageStrip>
-        )}
-      </MessageBox>
+      <DeleteMessageBox
+        resource={activeResource}
+        resourceUrl={`${resourceUrl}/${activeResource?.metadata.name}`}
+      />
       <GenericList
         title={
           showTitle
