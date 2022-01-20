@@ -19,7 +19,7 @@ export const EventsList = ({ ...otherParams }) => {
     <Trans i18nKey="events.description">
       <DescriptionLink
         className="fd-link"
-        url="https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/"
+        url="https://kubernetes.io/docs/tasks/debug-application-cluster/debug-application-introspection/#example-debugging-pending-pods"
       />
     </Trans>
   );
