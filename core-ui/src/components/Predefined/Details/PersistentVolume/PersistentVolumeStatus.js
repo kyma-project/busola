@@ -8,7 +8,7 @@ export function PersistentVolumeStatus({ status }) {
   const badgeType = status => {
     switch (status) {
       case 'Bound':
-      case 'Active':
+      case 'Available':
         return 'success';
       case 'Released':
       case 'Pending':
