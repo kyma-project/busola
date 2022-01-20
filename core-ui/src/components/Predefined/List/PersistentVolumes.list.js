@@ -42,7 +42,7 @@ export const PersistentVolumesList = ({ DefaultRenderer, ...otherParams }) => {
       header: t('common.headers.status'),
       value: pv => (
         <span style={{ wordBreak: 'keep-all' }}>
-          <StatusBadge autoResolveType>
+          <StatusBadge autoResolveType noTooltip>
             {pv.status?.phase || EMPTY_TEXT_PLACEHOLDER}
           </StatusBadge>
         </span>

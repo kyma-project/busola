@@ -13,7 +13,9 @@ export function PersistentVolumesDetails({ DefaultRenderer, ...otherParams }) {
     {
       header: t('common.headers.status'),
       value: ({ status }) => (
-        <StatusBadge autoResolveType>{status.phase}</StatusBadge>
+        <StatusBadge autoResolveType noTooltip>
+          {status.phase}
+        </StatusBadge>
       ),
     },
   ];
