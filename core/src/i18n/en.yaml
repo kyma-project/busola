@@ -1501,7 +1501,7 @@ pv:
     reclaim-policy: Reclaim policy
     server: Server
     storage-class: Storage Class
-    storage-class-name: Storage class name
+    storage-class-name: Storage Class name
   name_singular: Persistent Volume
   nfs: Network File System
   title: Persistent Volumes
