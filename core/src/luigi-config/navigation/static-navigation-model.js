@@ -1667,6 +1667,39 @@ export function getStaticRootNodes(
         },
       ],
     },
+    {
+      category: i18next.t('storage.title'),
+      resourceType: 'persistentvolumes',
+      pathSegment: 'persistentvolumes',
+      label: i18next.t('pv.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/persistentVolumes?' +
+        toSearchParamsString({
+          resourceApiPath: '/api/v1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+      navigationContext: 'persistentvolumes',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':persistentVolumesName',
+              resourceType: 'persistentvolumes',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/persistentVolumes/:persistentVolumesName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/api/v1',
+                }),
+            },
+          ],
+        },
+      ],
+    },
 
     //CONFIGURATION CATEGORY (CLUSTER)
     {
