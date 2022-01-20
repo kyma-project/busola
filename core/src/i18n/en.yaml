@@ -1500,7 +1500,7 @@ pv:
     path: Path
     reclaim-policy: Reclaim policy
     server: Server
-    storage-class: Storage class
+    storage-class: Storage Class
     storage-class-name: Storage class name
   name_singular: Persistent Volume
   nfs: Network File System
