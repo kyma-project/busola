@@ -18,9 +18,12 @@ const resolveType = status => {
   switch (status.toUpperCase()) {
     case 'INITIAL':
     case 'PENDING':
+    case 'AVAILABLE':
+    case 'RELEASED':
       return 'informative';
 
     case 'READY':
+    case 'BOUND':
     case 'RUNNING':
     case 'SUCCESS':
     case 'SUCCEEDED':

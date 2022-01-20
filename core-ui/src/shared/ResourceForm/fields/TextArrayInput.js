@@ -7,7 +7,7 @@ import './TextArrayInput.scss';
 
 export function TextArrayInput({
   defaultOpen,
-  inputProps,
+  inputProps: _inputProps,
   sectionTooltipContent,
   placeholder,
   toInternal = value => value || [],
@@ -16,6 +16,7 @@ export function TextArrayInput({
   customFormatFn,
   ...props
 }) {
+  const { validate, ...inputProps } = _inputProps || {};
   return (
     <MultiInput
       defaultOpen={defaultOpen}

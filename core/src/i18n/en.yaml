@@ -427,6 +427,7 @@ common:
     title: Delete {{name}}.
   errors:
     error: Error
+    generic: Invalid field data.
     no-permissions: You don't have enough permissions to view this content.
     no-permissions-header: Not enough permissions.
     no-permissions-message: Contact your administrator to grant you access.
@@ -482,7 +483,7 @@ common:
     resource-name-error: Requested resource with this name not found in the selected Namespace.
     resource-namespace-error: Requested Namespace not found.
     restart-failure: Restarting failed.
-    restart-success: Workload restarted.
+    restart-success: Connected pods have been restarted.
     type-to-select: Start typing to select {{value}} from the list.
     validation-error: Validation error.
   placeholders:
@@ -1491,6 +1492,23 @@ pods:
     terminating: Terminating the Pod.
 preferences:
   title: Preferences
+pv:
+  description: <0>Persistent Volume (PV)</0> is used to manage storage in a cluster that an administrator has provisioned.
+  details: Details
+  headers:
+    access-modes: Access modes
+    capacity: Capacity
+    claim: Claim
+    finalizers: Finalizers
+    mount-options: Mount options
+    path: Path
+    reclaim-policy: Reclaim policy
+    server: Server
+    storage-class: Storage Class
+    storage-class-name: Storage Class name
+  name_singular: Persistent Volume
+  nfs: Network File System
+  title: Persistent Volumes
 replica-sets:
   cpu: CPU
   create-modal:
@@ -1750,6 +1768,12 @@ subscriptions:
   description: <0>Subscription</0> is used to subscribe to events.
   errors:
     empty-event-types: You must provide at least one event type.
+    event-name-required: Event name is required.
+    event-name-segments: Event name must consist of at least 2 non-empty segments, separated by a dot.
+    event-type-7-segments: Event type must consist of at least 7 non-empty segments, separated by a dot.
+    event-type-allowed-charset: Event type may contain only letters, digits and dots.
+    event-type-prefix: Event type must start with "{{prefix}}".
+    event-type-required: Event type is required.
   headers:
     conditions:
       last-transition: Last Transition
