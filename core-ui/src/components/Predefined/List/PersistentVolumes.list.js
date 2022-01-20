@@ -1,13 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Link as DescLink,
-  EMPTY_TEXT_PLACEHOLDER,
-  StatusBadge,
-} from 'react-shared';
+import { Link as DescLink, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 import { Link } from 'fundamental-react';
 import { Trans } from 'react-i18next';
 import { navigateToResource } from 'shared/helpers/universalLinks';
+import { PersistentVolumeStatus } from '../Details/PersistentVolume/PersistentVolumeStatus';
 
 export const PersistentVolumesList = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
@@ -42,9 +39,7 @@ export const PersistentVolumesList = ({ DefaultRenderer, ...otherParams }) => {
       header: t('common.headers.status'),
       value: pv => (
         <span style={{ wordBreak: 'keep-all' }}>
-          <StatusBadge autoResolveType noTooltip>
-            {pv.status?.phase || EMPTY_TEXT_PLACEHOLDER}
-          </StatusBadge>
+          <PersistentVolumeStatus status={pv.status} />
         </span>
       ),
     },

@@ -1,10 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { LayoutPanel } from 'fundamental-react';
-import { EMPTY_TEXT_PLACEHOLDER, StatusBadge } from 'react-shared';
+import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { Tokens } from 'shared/components/Tokens';
+import { PersistentVolumeStatus } from './PersistentVolumeStatus';
 
 export function PersistentVolumesDetails({ DefaultRenderer, ...otherParams }) {
   const { t } = useTranslation();
@@ -12,11 +13,7 @@ export function PersistentVolumesDetails({ DefaultRenderer, ...otherParams }) {
   const customColumns = [
     {
       header: t('common.headers.status'),
-      value: ({ status }) => (
-        <StatusBadge autoResolveType noTooltip>
-          {status.phase}
-        </StatusBadge>
-      ),
+      value: ({ status }) => <PersistentVolumeStatus status={status} />,
     },
   ];
 
