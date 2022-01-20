@@ -426,6 +426,7 @@ common:
     title: Delete {{name}}.
   errors:
     error: Error
+    generic: Invalid field data.
     no-permissions: You don't have enough permissions to view this content.
     no-permissions-header: Not enough permissions.
     no-permissions-message: Contact your administrator to grant you access.
@@ -1764,6 +1765,12 @@ subscriptions:
   description: <0>Subscription</0> is used to subscribe to events.
   errors:
     empty-event-types: You must provide at least one event type.
+    event-name-required: Event name is required.
+    event-name-segments: Event name must consist of at least 2 non-empty segments, separated by a dot.
+    event-type-7-segments: Event type must consist of at least 7 non-empty segments, separated by a dot.
+    event-type-allowed-charset: Event type may contain only letters, digits and dots.
+    event-type-prefix: Event type must start with "{{prefix}}".
+    event-type-required: Event type is required.
   headers:
     conditions:
       last-transition: Last Transition

@@ -2,9 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import CustomPropTypes from '../../typechecking/CustomPropTypes';
 import { Tooltip } from '../Tooltip/Tooltip';
-import { FormLabel } from 'fundamental-react';
+import { FormLabel, FormInput } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import classnames from 'classnames';
+import { useValidation } from '../../hooks';
 
 const pattern = '^[a-z0-9]([-a-z0-9]*[a-z0-9])?$';
 const regex = new RegExp(pattern);
@@ -24,9 +25,15 @@ export const K8sNameInput = ({
   defaultValue,
   i18n,
   value,
+  onChange,
+  inputRef,
   ...props
 }) => {
   const { t } = useTranslation(null, { i18n });
+  const validationProps = useValidation({
+    inputRef,
+    onChange,
+  });
 
   const { className, compact, ...inputProps } = props || {};
 
@@ -35,7 +42,7 @@ export const K8sNameInput = ({
   });
 
   const input = (
-    <input
+    <FormInput
       role="input"
       ref={_ref}
       type="text"
@@ -48,6 +55,7 @@ export const K8sNameInput = ({
       required={required}
       pattern={pattern}
       {...inputProps}
+      {...validationProps}
       className={inputClassName}
     />
   );

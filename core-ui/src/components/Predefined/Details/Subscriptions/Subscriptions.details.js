@@ -66,7 +66,7 @@ const SubscriptionsFilter = subscription => {
       </LayoutPanel.Header>
 
       {filters.length > 0 ? (
-        filters.map(filter => <EventFilters filter={filter} key={filter} />)
+        filters.map((filter, i) => <EventFilters filter={filter} key={i} />)
       ) : (
         <p className="no-entries-message">
           {t('common.messages.no-entries-found')}

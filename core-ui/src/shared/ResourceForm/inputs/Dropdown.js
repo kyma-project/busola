@@ -21,6 +21,13 @@ export function Dropdown({ value, setValue, error, loading, ...props }) {
     }
   };
 
+  const {
+    inputRef,
+    validate,
+    validationRef,
+    setResource,
+    ...dropdownProps
+  } = props;
   return (
     <BusolaDropown
       compact
@@ -29,7 +36,7 @@ export function Dropdown({ value, setValue, error, loading, ...props }) {
       onSelect={(_, selected) => setValue(selected.key, selected)}
       i18n={i18n}
       validationState={getValidationState()}
-      {...props}
+      {...dropdownProps}
     />
   );
 }
