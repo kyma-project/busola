@@ -64,6 +64,10 @@ context('Test PV', () => {
     cy.getIframeBody()
       .contains(PV_NAME)
       .should('be.visible');
+
+    cy.getIframeBody()
+      .contains('Events')
+      .should('be.visible');
   });
 
   it('Delete PV ', () => {
