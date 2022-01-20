@@ -6,6 +6,7 @@ import { NodeDetailsHeader } from '../NodeDetailsHeader';
 import { MachineInfo } from '../MachineInfo/MachineInfo';
 import { NodeResources } from '../NodeResources/NodeResources';
 import { EventsList } from 'shared/components/EventsList';
+import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 
 import './NodeDetails.scss';
 
@@ -14,7 +15,12 @@ export function NodeDetails({ nodeName }) {
   const { t } = useTranslation();
 
   const filterByHost = e => e.source.host === nodeName;
-  const Events = <EventsList filter={filterByHost} />;
+  const Events = (
+    <EventsList
+      filter={filterByHost}
+      defaultType={EVENT_MESSAGE_TYPE.WARNING}
+    />
+  );
 
   return (
     <div className="node-details">

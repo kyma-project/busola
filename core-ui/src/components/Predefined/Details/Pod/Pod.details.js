@@ -7,6 +7,7 @@ import LuigiClient from '@luigi-project/client';
 import { Link } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { EventsList } from 'shared/components/EventsList';
+import { filterByResource } from 'hooks/useMessageList';
 
 function toSnakeCase(inputString) {
   return inputString
@@ -31,11 +32,11 @@ function goToSecretDetails(resourceKind, name) {
 export const PodsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const { t, i18n } = useTranslation();
 
-  const filterByHost = e =>
-    e.involvedObject.name === otherParams.resourceName &&
-    e.involvedObject.kind === 'Pod';
   const Events = () => (
-    <EventsList namespace={otherParams.namespace} filter={filterByHost} />
+    <EventsList
+      namespace={otherParams.namespace}
+      filter={filterByResource('Pod', otherParams.resourceName)}
+    />
   );
 
   const customColumns = [

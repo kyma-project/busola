@@ -1,7 +1,7 @@
 import React from 'react';
 import { ComponentForList } from 'shared/getComponents';
 
-export function EventsList({ namespace = null, filter }) {
+export function EventsList({ namespace = null, filter, defaultType }) {
   const resourceUrl = namespace
     ? `/api/v1/namespaces/${namespace}/events`
     : '/api/v1/events';
@@ -11,6 +11,7 @@ export function EventsList({ namespace = null, filter }) {
     resourceUrl: resourceUrl,
     resourceType: 'Events',
     isCompact: true,
+    defaultType,
     filter,
   };
 

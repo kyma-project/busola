@@ -2,6 +2,7 @@ import React from 'react';
 import { useMicrofrontendContext } from 'react-shared';
 
 import { EventsList } from 'shared/components/EventsList';
+import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 import { ComponentForList } from 'shared/getComponents';
 import DeployNewWorkload from './DeployNewWorkload';
 import { NamespaceStatus } from './NamespaceStatus';
@@ -64,7 +65,12 @@ export const NamespacesDetails = ({ DefaultRenderer, ...otherParams }) => {
     />
   ) : null;
 
-  const Events = <EventsList namespace={otherParams.resourceName} />;
+  const Events = (
+    <EventsList
+      namespace={otherParams.resourceName}
+      defaultType={EVENT_MESSAGE_TYPE.WARNING}
+    />
+  );
 
   const headerActions = (
     <DeployNewWorkload namespaceName={otherParams.resourceName} />

@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useNodesQuery } from 'components/Nodes/nodeQueries';
 import { NodeResources } from 'components/Nodes/NodeResources/NodeResources';
 import { EventsList } from 'shared/components/EventsList';
+import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 
 import './ClusterNodes.scss';
 
@@ -35,7 +36,7 @@ export function ClusterNodes() {
       currentPage * itemsPerPage,
     ) || [];
 
-  const Events = <EventsList />;
+  const Events = <EventsList defaultType={EVENT_MESSAGE_TYPE.WARNING} />;
 
   return (
     <>

@@ -9,6 +9,7 @@ export const EVENT_MESSAGE_TYPE = {
   NORMAL: { key: 'Normal', text: 'information' },
   WARNING: { key: 'Warning', text: 'warnings' },
 };
+
 export const RESOURCE_PATH = {
   APIRule: 'apirules',
   Certificate: 'certificates',
@@ -37,6 +38,9 @@ export const RESOURCE_PATH = {
   Subscription: 'subscriptions',
   VirtualService: 'virtualservices',
 };
+export const filterByResource = (resourceKind, resourceName) => e =>
+  e.involvedObject?.name === resourceName &&
+  e.involvedObject?.kind === resourceKind;
 
 const navigateToObjectDetails = ({ namespace, name, kind }) => {
   const namespacePrefix = namespace ? `namespaces/${namespace}/` : '';
@@ -50,6 +54,12 @@ const navigateToNodeDetails = nodeName => {
   LuigiClient.linkManager()
     .fromContext('cluster')
     .navigate(`/overview/nodes/${nodeName}`);
+};
+
+export const navigateToNamespaceOverview = namespaceName => {
+  LuigiClient.linkManager()
+    .fromContext('cluster')
+    .navigate(`/namespaces/${namespaceName}/details`);
 };
 
 export const formatInvolvedObject = obj => {
@@ -85,18 +95,17 @@ export const formatSourceObject = obj => {
   );
 };
 
-export const useMessageList = items => {
-  const [displayType, setDisplayType] = useState(EVENT_MESSAGE_TYPE.ALL);
+export const useMessageList = (items, defaultType = EVENT_MESSAGE_TYPE.ALL) => {
+  const [displayType, setDisplayType] = useState(defaultType);
   const [sortedItems, setSortedItems] = useState([]);
   const { t } = useTranslation();
-
   useEffect(() => {
     //sorts the messages from the newest once data fetched
     if (items) {
       const sorted = items.sort((first, second) => {
-        const firstCreationTime = new Date(first.firstTimestamp).getTime();
-        const secondCreationTime = new Date(second.firstTimestamp).getTime();
-        return secondCreationTime - firstCreationTime;
+        const firstLastTime = new Date(first.lastTimestamp).getTime();
+        const secondLastTime = new Date(second.lastTimestamp).getTime();
+        return secondLastTime - firstLastTime;
       });
       setSortedItems([...sorted]);
     }

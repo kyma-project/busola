@@ -6,6 +6,7 @@ import { EMPTY_TEXT_PLACEHOLDER, StatusBadge } from 'react-shared';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { Tokens } from 'shared/components/Tokens';
 import { EventsList } from 'shared/components/EventsList';
+import { filterByResource } from 'hooks/useMessageList';
 
 export function PersistentVolumesDetails({ DefaultRenderer, ...otherParams }) {
   const { t } = useTranslation();
@@ -73,10 +74,11 @@ export function PersistentVolumesDetails({ DefaultRenderer, ...otherParams }) {
     </div>
   );
 
-  const filterByHost = e =>
-    e.involvedObject.name === otherParams.resourceName &&
-    e.involvedObject.kind === 'PersistentVolume';
-  const Events = () => <EventsList filter={filterByHost} />;
+  const Events = () => (
+    <EventsList
+      filter={filterByResource('PersistentVolume', otherParams.resourceName)}
+    />
+  );
 
   return (
     <DefaultRenderer

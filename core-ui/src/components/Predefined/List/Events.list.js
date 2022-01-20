@@ -9,12 +9,12 @@ import {
   Link as DescriptionLink,
   PageHeader,
   prettifyNamePlural,
+  Tooltip,
 } from 'react-shared';
 import { Icon, Link } from 'fundamental-react';
 import { useMessageList, EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 
 export const EventsList = ({ ...otherParams }) => {
-  // TODO EVENTS DESCRIPTION
   const description = (
     <Trans i18nKey="events.description">
       <DescriptionLink
@@ -43,7 +43,6 @@ export const EventsList = ({ ...otherParams }) => {
 export const Events = ({ ...otherParams }) => {
   const { t, i18n } = useTranslation();
   const { resourceUrl } = otherParams;
-
   const { loading = true, error, data: items } = useGetList(otherParams.filter)(
     resourceUrl,
     {
@@ -58,7 +57,7 @@ export const Events = ({ ...otherParams }) => {
     formatInvolvedObject,
     formatSourceObject,
     navigateToObjectDetails,
-  } = useMessageList(items);
+  } = useMessageList(items, otherParams.defaultType);
 
   const entries =
     displayType.key === EVENT_MESSAGE_TYPE.ALL.key
@@ -69,7 +68,6 @@ export const Events = ({ ...otherParams }) => {
     t('common.labels.name'),
     t('events.headers.type'),
     t('events.headers.message'),
-    t('common.labels.namespace'),
     t('events.headers.involved-object'),
     t('events.headers.source'),
     t('events.headers.count'),
@@ -93,20 +91,27 @@ export const Events = ({ ...otherParams }) => {
       </Link>
     </p>,
     <p>
-      {entry.type}{' '}
       {entry.type === 'Warning' ? (
-        <Icon
-          ariaLabel="Warning"
-          glyph="message-warning"
-          size="s"
-          className="fd-has-color-status-2"
-        />
+        <Tooltip content={entry.type}>
+          <Icon
+            ariaLabel="Warning"
+            glyph="message-warning"
+            size="s"
+            className="fd-has-color-status-2 cursor-pointer"
+          />
+        </Tooltip>
       ) : (
-        ''
+        <Tooltip content={entry.type}>
+          <Icon
+            ariaLabel="Normal"
+            glyph="message-information"
+            size="s"
+            className="cursor-pointer"
+          />
+        </Tooltip>
       )}
     </p>,
     <p>{entry.message}</p>,
-    <p>{entry.metadata.namespace}</p>,
     formatInvolvedObject(entry.involvedObject),
     formatSourceObject(entry.source),
     <p>{entry.count}</p>,

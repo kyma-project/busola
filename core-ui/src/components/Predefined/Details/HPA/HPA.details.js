@@ -8,6 +8,7 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 import { currentMetricsParser, metricsParser } from './helpers';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { EventsList } from 'shared/components/EventsList';
+import { filterByResource } from 'hooks/useMessageList';
 
 export function HorizontalPodAutoscalersDetails({
   DefaultRenderer,
@@ -105,11 +106,15 @@ export function HorizontalPodAutoscalersDetails({
       </LayoutPanel>
     );
   };
-  const filterByHost = e =>
-    e.involvedObject.name === otherParams.resourceName &&
-    e.involvedObject.kind === 'HorizontalPodAutoscaler';
+
   const Events = () => (
-    <EventsList namespace={otherParams.namespace} filter={filterByHost} />
+    <EventsList
+      namespace={otherParams.namespace}
+      filter={filterByResource(
+        'HorizontalPodAutoscaler',
+        otherParams.resourceName,
+      )}
+    />
   );
   return (
     <DefaultRenderer

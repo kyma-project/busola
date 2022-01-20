@@ -1,9 +1,13 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { formatInvolvedObject, formatSourceObject } from 'hooks/useMessageList';
+import {
+  formatInvolvedObject,
+  formatSourceObject,
+  navigateToNamespaceOverview,
+} from 'hooks/useMessageList';
 
-import { Icon, LayoutPanel } from 'fundamental-react';
-import { ReadableCreationTimestamp } from 'react-shared';
+import { Icon, LayoutPanel, Link } from 'fundamental-react';
+import { ReadableCreationTimestamp, Tooltip } from 'react-shared';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 
 const RowComponent = ({ name, value }) =>
@@ -48,19 +52,40 @@ export const EventsDetails = ({ DefaultRenderer, ...otherParams }) => {
       value: event => formatSourceObject(event.source),
     },
     {
+      header: t('common.labels.namespace'),
+      value: event => (
+        <Link
+          className="fd-link"
+          data-testid="details-link"
+          onClick={() => navigateToNamespaceOverview(event.metadata.namespace)}
+        >
+          {event.metadata.namespace}
+        </Link>
+      ),
+    },
+    {
       header: t('events.headers.type'),
       value: event => (
         <p>
           {event.type}{' '}
           {event.type === 'Warning' ? (
-            <Icon
-              ariaLabel="Warning"
-              glyph="message-warning"
-              size="s"
-              className="fd-has-color-status-2"
-            />
+            <Tooltip content={event.type}>
+              <Icon
+                ariaLabel="Warning"
+                glyph="message-warning"
+                size="s"
+                className="fd-has-color-status-2 cursor-pointer"
+              />
+            </Tooltip>
           ) : (
-            ''
+            <Tooltip content={event.type}>
+              <Icon
+                ariaLabel="Normal"
+                glyph="message-information"
+                size="s"
+                className="cursor-pointer"
+              />
+            </Tooltip>
           )}
         </p>
       ),
