@@ -46,6 +46,7 @@ context('Test StatefulSets', () => {
       .type(SET_NAME);
 
     cy.getIframeBody()
+      .find('table.fd-table')
       .contains(SET_NAME)
       .click();
 
