@@ -5,6 +5,7 @@ import { EMPTY_TEXT_PLACEHOLDER, StatusBadge } from 'react-shared';
 
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { Tokens } from 'shared/components/Tokens';
+import { EventsList } from 'shared/components/EventsList';
 
 export function PersistentVolumesDetails({ DefaultRenderer, ...otherParams }) {
   const { t } = useTranslation();
@@ -72,10 +73,15 @@ export function PersistentVolumesDetails({ DefaultRenderer, ...otherParams }) {
     </div>
   );
 
+  const filterByHost = e =>
+    e.involvedObject.name === otherParams.resourceName &&
+    e.involvedObject.kind === 'PersistentVolume';
+  const Events = () => <EventsList filter={filterByHost} />;
+
   return (
     <DefaultRenderer
       customColumns={customColumns}
-      customComponents={[PvDetails]}
+      customComponents={[PvDetails, Events]}
       {...otherParams}
     />
   );
