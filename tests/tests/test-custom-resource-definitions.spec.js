@@ -98,7 +98,6 @@ context('Test Create Resource Definitions', () => {
       cy.getIframeBody()
         .find('[aria-label="Create CronTab"]')
         .find('textarea[aria-roledescription="editor"]:visible')
-        .type('lets delete everrytning')
         .clearMonaco()
         .type(CR, {
           parseSpecialCharSequences: false,
