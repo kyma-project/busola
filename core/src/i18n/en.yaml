@@ -1492,6 +1492,23 @@ pods:
     terminating: Terminating the Pod.
 preferences:
   title: Preferences
+pv:
+  description: <0>Persistent Volume (PV)</0> is used to manage storage in a cluster that an administrator has provisioned.
+  details: Details
+  headers:
+    access-modes: Access modes
+    capacity: Capacity
+    claim: Claim
+    finalizers: Finalizers
+    mount-options: Mount options
+    path: Path
+    reclaim-policy: Reclaim policy
+    server: Server
+    storage-class: Storage Class
+    storage-class-name: Storage Class name
+  name_singular: Persistent Volume
+  nfs: Network File System
+  title: Persistent Volumes
 replica-sets:
   cpu: CPU
   create-modal:
