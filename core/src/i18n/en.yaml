@@ -1489,7 +1489,7 @@ pods:
 preferences:
   title: Preferences
 pv:
-  description: <0>Persistent Volumes (PVs)</0> are volume plugins like Volumes, but have a lifecycle independent of any individual Pod that uses the PV.
+  description: <0>Persistent Volume (PV)</0> is used to manage storage in a cluster that an administrator has provisioned.
   details: Details
   headers:
     access-modes: Access modes
