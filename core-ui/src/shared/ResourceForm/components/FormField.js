@@ -18,6 +18,7 @@ export function FormField({
   messageStrip,
   ...props
 }) {
+  const { validate, ...inputProps } = props;
   return (
     <div className={classnames('fd-row form-field', className)}>
       <div className="fd-col fd-col-md--4 form-field__label">
@@ -26,7 +27,9 @@ export function FormField({
         </Label>
       </div>
       <div className="fd-col fd-col-md--7">
-        {messageStrip ? messageStrip : input({ required, disabled, ...props })}
+        {messageStrip
+          ? messageStrip
+          : input({ required, disabled, ...inputProps })}
       </div>
     </div>
   );

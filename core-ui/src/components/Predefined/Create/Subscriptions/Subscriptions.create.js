@@ -8,7 +8,7 @@ import { useGetList, useNotification } from 'react-shared';
 import { ResourceForm } from 'shared/ResourceForm';
 import { K8sNameField, KeyValueField } from 'shared/ResourceForm/fields';
 import * as Inputs from 'shared/ResourceForm/inputs';
-import { createSubscriptionTemplate, createFilterTemplate } from './templates';
+import { createSubscriptionTemplate } from './templates';
 import {
   getServiceName,
   spreadEventType,
@@ -214,6 +214,22 @@ const SubscriptionsCreate = ({
         input={Inputs.Text}
         placeholder={t('subscriptions.create.placeholders.event-name')}
         tooltipContent={t('subscriptions.tooltips.event-name')}
+        validate={() => {
+          const { eventName } = firstEventTypeValues;
+          const tokens = eventName.split('.');
+          return tokens.every(t => t) && tokens.filter(Boolean).length >= 2;
+        }}
+        validateMessage={() => {
+          const { eventName } = firstEventTypeValues;
+          if (!eventName) {
+            return t('subscriptions.errors.event-name-required');
+          }
+          const tokens = eventName.split('.');
+          if (tokens.filter(Boolean).length < 2 || !tokens.every(t => t)) {
+            return t('subscriptions.errors.event-name-segments');
+          }
+          return '';
+        }}
       />
 
       <ResourceForm.FormField
@@ -254,11 +270,9 @@ const SubscriptionsCreate = ({
       />
       <FiltersSection
         advanced
+        onChange={onChange}
         resource={subscription}
         setResource={setSubscription}
-        onChange={onChange}
-        namespace={namespace}
-        createFilterTemplate={createFilterTemplate}
       />
       {(jp.value(subscription, '$.spec.filter.filters') || []).length === 0 ? (
         <MessageStrip
