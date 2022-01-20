@@ -5,7 +5,6 @@ import { PersistentVolumeClaimStatus } from 'shared/components/PersistentVolumeC
 import {
   EMPTY_TEXT_PLACEHOLDER,
   GenericList,
-  navigateToFixedPathResourceDetails,
   navigateToClusterResourceDetails,
   Labels,
   useGetList,
@@ -84,7 +83,7 @@ export const PVCConfiguration = pvc => {
             pvc.spec?.volumeName ? (
               <Link
                 onClick={() =>
-                  navigateToFixedPathResourceDetails(
+                  navigateToClusterResourceDetails(
                     'persistentvolumes',
                     pvc.spec?.volumeName,
                   )
