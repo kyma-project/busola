@@ -841,7 +841,7 @@ domains:
     label: Include Domains
     placeholder: Domain that is allowed
 events:
-  description: <0>Event</0> is an object that is automatically generated in response to changes with other resources like nodes, pods, or containers.
+  description: <0>Event</0> is an object that is automatically created in response to changes in the cluster resources like Nodes, Pods or containers.
   headers:
     count: Count
     involved-object: Involved Object
