@@ -36,7 +36,7 @@ context('Test Create Resource Definitions', () => {
 
       cy.getIframeBody()
         .find('textarea[aria-roledescription="editor"]')
-        .type(' ')
+        .type('to_be_deleted')
         .clearMonaco()
         .type(CRD, {
           parseSpecialCharSequences: false,
