@@ -28,7 +28,7 @@ Cypress.Commands.add('goToNamespaceDetails', () => {
 
 Cypress.Commands.add('clearMonaco', { prevSubject: true }, element => {
   cy.wrap(element).type(
-    `${Cypress.platform === 'darwin' ? '{cmd}a' : '{ctrl}a'} {backspace}`,
+    ` ${Cypress.platform === 'darwin' ? '{cmd}a' : '{ctrl}a'} {backspace}`,
   );
 });
 

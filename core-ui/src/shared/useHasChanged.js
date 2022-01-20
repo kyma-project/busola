@@ -7,7 +7,7 @@ export function useHasChanged(log = true) {
     variable => {
       const hasChanged = ref.current !== variable;
       if (log) {
-        console.log('has changed: ', hasChanged, variable, ref.current);
+        console.log('has changed: ', hasChanged);
       }
       ref.current = variable;
       return hasChanged;
