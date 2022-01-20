@@ -114,6 +114,7 @@ export function HorizontalPodAutoscalersDetails({
         'HorizontalPodAutoscaler',
         otherParams.resourceName,
       )}
+      hideInvolvedObjects={true}
     />
   );
   return (

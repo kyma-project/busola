@@ -60,6 +60,7 @@ export const StorageClassesDetails = ({ DefaultRenderer, ...otherParams }) => {
     <EventsList
       namespace={otherParams.namespace}
       filter={filterByResource('StorageClass', otherParams.resourceName)}
+      hideInvolvedObjects={true}
     />
   );
   return (

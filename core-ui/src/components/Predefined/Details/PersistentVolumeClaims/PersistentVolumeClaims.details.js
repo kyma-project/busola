@@ -156,6 +156,7 @@ export const PersistentVolumeClaimsDetails = ({
         'PersistentVolumeClaim',
         otherParams.resourceName,
       )}
+      hideInvolvedObjects={true}
     />
   );
 

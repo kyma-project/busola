@@ -77,6 +77,7 @@ export function PersistentVolumesDetails({ DefaultRenderer, ...otherParams }) {
   const Events = () => (
     <EventsList
       filter={filterByResource('PersistentVolume', otherParams.resourceName)}
+      hideInvolvedObjects={true}
     />
   );
 

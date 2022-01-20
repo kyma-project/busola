@@ -36,6 +36,7 @@ export const PodsDetails = ({ DefaultRenderer, ...otherParams }) => {
     <EventsList
       namespace={otherParams.namespace}
       filter={filterByResource('Pod', otherParams.resourceName)}
+      hideInvolvedObjects={true}
     />
   );
 

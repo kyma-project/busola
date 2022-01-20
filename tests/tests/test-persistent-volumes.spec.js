@@ -50,6 +50,10 @@ context('Test PV', () => {
       .find('[data-testid=persistent-volumes-ref]')
       .contains('ReadWriteOnce')
       .should('be.visible');
+
+    cy.getIframeBody()
+      .contains('Events')
+      .should('be.visible');
   });
 
   it('Check PV list', () => {
@@ -63,10 +67,6 @@ context('Test PV', () => {
 
     cy.getIframeBody()
       .contains(PV_NAME)
-      .should('be.visible');
-
-    cy.getIframeBody()
-      .contains('Events')
       .should('be.visible');
   });
 

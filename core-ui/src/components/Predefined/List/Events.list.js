@@ -42,7 +42,7 @@ export const EventsList = ({ ...otherParams }) => {
 
 export const Events = ({ ...otherParams }) => {
   const { t, i18n } = useTranslation();
-  const { resourceUrl } = otherParams;
+  const { defaultType, hideInvolvedObjects, resourceUrl } = otherParams;
   const { loading = true, error, data: items } = useGetList(otherParams.filter)(
     resourceUrl,
     {
@@ -57,18 +57,23 @@ export const Events = ({ ...otherParams }) => {
     formatInvolvedObject,
     formatSourceObject,
     navigateToObjectDetails,
-  } = useMessageList(items, otherParams.defaultType);
+  } = useMessageList(items, defaultType);
 
   const entries =
     displayType.key === EVENT_MESSAGE_TYPE.ALL.key
       ? sortedItems
       : sortedItems.filter(e => e.type === displayType.key);
 
+  const involvedObjectHeader = hideInvolvedObjects
+    ? []
+    : [t('events.headers.involved-object')];
+  const involvedObject = entry =>
+    hideInvolvedObjects ? [] : [formatInvolvedObject(entry.involvedObject)];
   const headerRenderer = () => [
     t('common.labels.name'),
     t('events.headers.type'),
     t('events.headers.message'),
-    t('events.headers.involved-object'),
+    ...involvedObjectHeader,
     t('events.headers.source'),
     t('events.headers.count'),
     t('events.headers.last-seen'),
@@ -97,7 +102,7 @@ export const Events = ({ ...otherParams }) => {
             ariaLabel="Warning"
             glyph="message-warning"
             size="s"
-            className="fd-has-color-status-2 cursor-pointer"
+            className="fd-has-color-status-2 has-tooltip"
           />
         </Tooltip>
       ) : (
@@ -106,13 +111,13 @@ export const Events = ({ ...otherParams }) => {
             ariaLabel="Normal"
             glyph="message-information"
             size="s"
-            className="cursor-pointer"
+            className="has-tooltip"
           />
         </Tooltip>
       )}
     </p>,
     <p>{entry.message}</p>,
-    formatInvolvedObject(entry.involvedObject),
+    ...involvedObject(entry),
     formatSourceObject(entry.source),
     <p>{entry.count}</p>,
     <ReadableCreationTimestamp timestamp={entry.lastTimestamp} />,

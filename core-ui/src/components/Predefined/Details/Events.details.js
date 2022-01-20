@@ -74,7 +74,7 @@ export const EventsDetails = ({ DefaultRenderer, ...otherParams }) => {
                 ariaLabel="Warning"
                 glyph="message-warning"
                 size="s"
-                className="fd-has-color-status-2 cursor-pointer"
+                className="fd-has-color-status-2 has-tooltip"
               />
             </Tooltip>
           ) : (
@@ -83,7 +83,7 @@ export const EventsDetails = ({ DefaultRenderer, ...otherParams }) => {
                 ariaLabel="Normal"
                 glyph="message-information"
                 size="s"
-                className="cursor-pointer"
+                className="has-tooltip"
               />
             </Tooltip>
           )}

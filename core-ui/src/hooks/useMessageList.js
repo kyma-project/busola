@@ -25,6 +25,7 @@ export const RESOURCE_PATH = {
   Gateway: 'gateways',
   HorizontalPodAutoscaler: 'hpas',
   Ingress: 'ingresses',
+  Issuer: 'issuers',
   Job: 'jobs',
   Node: 'nodes',
   PersistentVolume: 'persistentvolumes',
