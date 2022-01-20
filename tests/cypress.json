@@ -42,6 +42,7 @@
     "test-gateways.spec.js",
     "test-oauth2.spec.js",
     "test-dns-providers.spec.js",
+    "test-persistent-volumes.spec.js",
     "test-statefulsets.spec.js",
     "test-secrets.spec.js",
     "test-service-accounts.spec.js",
