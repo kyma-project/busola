@@ -3,7 +3,7 @@ import jsyaml from 'js-yaml';
 import { saveAs } from 'file-saver';
 import { useTranslation } from 'react-i18next';
 
-import { useShowNodeParamsError } from 'shared/useShowNodeParamsError';
+import { useShowNodeParamsError } from 'shared/hooks/useShowNodeParamsError';
 import { Link, Button, MessagePage } from 'fundamental-react';
 import {
   useMicrofrontendContext,

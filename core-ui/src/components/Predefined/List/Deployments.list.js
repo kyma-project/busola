@@ -2,6 +2,7 @@ import React from 'react';
 import { ControlledByKind, Link } from 'react-shared';
 import { useTranslation, Trans } from 'react-i18next';
 import { DeploymentStatus } from '../Details/Deployment/DeploymentStatus';
+import { useRestartAction } from 'shared/hooks/useRestartResource';
 
 const getImages = deployment => {
   const images =
@@ -13,6 +14,7 @@ const getImages = deployment => {
 
 export const DeploymentsList = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
+  const restartAction = useRestartAction(otherParams.resourceUrl);
 
   const customColumns = [
     {
@@ -52,6 +54,7 @@ export const DeploymentsList = ({ DefaultRenderer, ...otherParams }) => {
     <DefaultRenderer
       customColumns={customColumns}
       description={description}
+      customListActions={[restartAction]}
       {...otherParams}
     />
   );
