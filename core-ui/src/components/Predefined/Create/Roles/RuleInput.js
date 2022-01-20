@@ -82,7 +82,7 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
         options={apiGroupsInputOptions}
         emptyStringKey={EMPTY_STRING_KEY}
         defaultOpen
-        onBlur={() => fetchResources()}
+        onBlur={fetchResources}
       />
       <ComboboxArrayInput
         title={t('roles.headers.resources')}

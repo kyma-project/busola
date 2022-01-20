@@ -48,33 +48,31 @@ export function ComboboxArrayInput({
       tooltipContent={tooltipContent}
       sectionTooltipContent={sectionTooltipContent}
       inputs={[
-        ({ value, setValue, ref, updateValue, focus, index }) => {
-          return (
-            <Inputs.ComboboxInput
-              key={index}
-              placeholder={placeholder}
-              compact
-              _ref={ref}
-              selectedKey={value}
-              typedValue={value || ''}
-              selectionType="manual"
-              setValue={setValue}
-              options={options}
-              onKeyDown={focus}
-              onBlur={onBlur}
-              onSelectionChange={(_, selected) => {
-                if (!selected.text) {
-                  setValue(null);
-                  updateValue(null);
-                }
-                const selection =
-                  selected.key !== -1 ? selected.key : selected.text;
-                setValue(selection);
-                updateValue(selection);
-              }}
-            />
-          );
-        },
+        ({ value, setValue, ref, updateValue, focus, index }) => (
+          <Inputs.ComboboxInput
+            key={index}
+            placeholder={placeholder}
+            compact
+            _ref={ref}
+            selectedKey={value}
+            typedValue={value || ''}
+            selectionType="manual"
+            setValue={setValue}
+            options={options}
+            onKeyDown={focus}
+            onBlur={onBlur}
+            onSelectionChange={(_, selected) => {
+              if (!selected.text) {
+                setValue(null);
+                updateValue(null);
+              }
+              const selection =
+                selected.key !== -1 ? selected.key : selected.text;
+              setValue(selection);
+              updateValue(selection);
+            }}
+          />
+        ),
       ]}
       {...props}
     />

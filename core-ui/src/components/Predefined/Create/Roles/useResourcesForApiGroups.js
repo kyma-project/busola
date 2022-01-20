@@ -38,7 +38,7 @@ export function useResourcesForApiGroups(apiGroups = []) {
         void fetchApiGroup(groupVersion, apiGroup);
       }
     }
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [apiGroups]);
 
   return { cache, fetchResources };

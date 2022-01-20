@@ -36,9 +36,22 @@ export function MultiInput({
   const valueRef = useRef(null); // for deep comparison
   const [internalValue, setInternalValue] = useState([]);
   const [keys, setKeys] = useState(1);
-  const refs = Array(internalValue.length)
-    .fill()
-    .map(() => inputs.map(() => createRef()));
+  const [refs, setRefs] = useState([]);
+  // const refs = Array(internalValue.length)
+  // .fill()
+  // .map(() => inputs.map(() => createRef()));
+
+  useEffect(() => {
+    setRefs(
+      Array(internalValue.length)
+        .fill()
+        .map((val, index) =>
+          inputs.map(
+            (input, inputIndex) => refs[index]?.[inputIndex] || createRef(),
+          ),
+        ),
+    );
+  }, [internalValue, inputs]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (!internalValue.length || internalValue[internalValue.length - 1]) {
@@ -100,6 +113,57 @@ export function MultiInput({
     'fd-col-md--12': fullWidth,
   });
 
+  useEffect(() => {
+    internalValue.forEach((entry, index) => {
+      const isValid = child => child.props.validate(entry) ?? true;
+      const errorMessage = child => {
+        if (!child.props.validateMessage) {
+          return t('common.errors.generic');
+        } else if (typeof child.props.validateMessage !== 'function') {
+          return child.props.validateMessage;
+        } else {
+          return child.props.validateMessage(entry);
+        }
+      };
+
+      inputComponents[index].forEach((child, inputIndex) => {
+        const inputRef = refs[index]?.[inputIndex];
+
+        if (child?.props?.validate && inputRef?.current) {
+          const valid = isValid(child);
+          inputRef.current.setCustomValidity(valid ? '' : errorMessage(child));
+        }
+      });
+    });
+  }, [inputs, internalValue]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const inputComponents = internalValue.map((entry, index) =>
+    inputs.map((input, inputIndex) =>
+      input({
+        index: (index + 1) * keys,
+        value: entry,
+        setValue: entry => setEntry(entry, index),
+        ref: refs[index]?.[inputIndex],
+        updateValue: () => updateValue(internalValue),
+        internalValue,
+        setMultiValue: setValue,
+        focus: (e, target) => {
+          if (e.key === 'Enter') {
+            if (typeof target === 'undefined') {
+              focus(refs[index + 1]?.[0]);
+            } else {
+              focus(refs[index][target]);
+            }
+          } else if (e.key === 'ArrowDown') {
+            focus(refs[index + 1]?.[0]);
+          } else if (e.key === 'ArrowUp') {
+            focus(refs[index - 1]?.[0]);
+          }
+        },
+      }),
+    ),
+  );
+
   return (
     <ResourceForm.CollapsibleSection
       title={title}
@@ -123,29 +187,8 @@ export function MultiInput({
         <ul className={listClasses}>
           {internalValue.map((entry, index) => (
             <li key={index}>
-              {inputs.map((input, inputIndex) =>
-                input({
-                  index: (index + 1) * keys,
-                  value: entry,
-                  setValue: entry => setEntry(entry, index),
-                  ref: refs[index]?.[inputIndex],
-                  updateValue: () => updateValue(internalValue),
-                  internalValue,
-                  setMultiValue: setValue,
-                  focus: (e, target) => {
-                    if (e.key === 'Enter') {
-                      if (typeof target === 'undefined') {
-                        focus(refs[index + 1]?.[0]);
-                      } else {
-                        focus(refs[index][target]);
-                      }
-                    } else if (e.key === 'ArrowDown') {
-                      focus(refs[index + 1]?.[0]);
-                    } else if (e.key === 'ArrowUp') {
-                      focus(refs[index - 1]?.[0]);
-                    }
-                  },
-                }),
+              {inputs.map(
+                (input, inputIndex) => inputComponents[index][inputIndex],
               )}
               <Button
                 disabled={readOnly}
