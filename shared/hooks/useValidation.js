@@ -6,7 +6,7 @@ export function useValidation({ inputRef, onChange }) {
 
   const ref = inputRef || internalRef;
 
-  let validationState = null;
+  let validationState = {};
   if (ref.current && !ref.current?.validity?.valid && touched) {
     validationState = {
       state: 'error',
