@@ -12,7 +12,6 @@ import {
 import { createRuleTemplate, validateRole } from './helpers';
 import { RuleInput } from './RuleInput';
 import { RuleTitle } from './RuleTitle';
-import { useResourcesForApiGroups } from './useResourcesForApiGroups';
 
 export function GenericRoleCreate({
   onChange,
@@ -26,12 +25,6 @@ export function GenericRoleCreate({
 }) {
   const { t } = useTranslation();
   const [role, setRole] = useState(cloneDeep(initialRole) || createTemplate());
-
-  // dictionary of pairs (apiGroup: resources in that apiGroup)
-  const apiRules = role?.rules?.flatMap(r => r.apiGroups);
-  const resourcesCache = useResourcesForApiGroups(
-    apiRules ? [...new Set(apiRules)] : [],
-  );
 
   useEffect(() => {
     setCustomValid(validateRole(role));
@@ -83,7 +76,6 @@ export function GenericRoleCreate({
             rules={values}
             setRules={setValues}
             isAdvanced={isAdvanced}
-            resourcesCache={resourcesCache}
           />
         )}
         newResourceTemplateFn={createRuleTemplate}
