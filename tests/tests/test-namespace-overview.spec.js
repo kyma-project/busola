@@ -61,7 +61,7 @@ context(
         .click();
 
       cy.getIframeBody()
-        .find('[data-testid="delete-confirmation"]')
+        .find('[data-testid="delete-confirmation"]', { timeout: 5000 })
         .click();
 
       cy.getIframeBody()
@@ -70,7 +70,7 @@ context(
         .click();
 
       cy.getIframeBody()
-        .find('[data-testid="delete-confirmation"]')
+        .find('[data-testid="delete-confirmation"]', { timeout: 5000 })
         .click();
     });
 
