@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import jsyaml from 'js-yaml';
 import { Link, Button } from 'fundamental-react';
 import { createPatch } from 'rfc6902';
-import LuigiClient from '@luigi-project/client';
 
 import {
   YamlEditorProvider,
