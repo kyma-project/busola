@@ -78,6 +78,10 @@ context('Test Persistent Volume Claim', () => {
     cy.getIframeBody()
       .contains('a', Cypress.env('STORAGE_CLASS_NAME'), { timeout: 70000 })
       .should('be.visible');
+
+    cy.getIframeBody()
+      .contains('Events')
+      .should('be.visible');
   });
 
   it('Check the Persistent Volume Claims list', () => {

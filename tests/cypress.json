@@ -19,6 +19,7 @@
     "test-namespace-overview.spec.js",
     "test-application.spec.js",
     "create-a-deployment.spec.js",
+    "test-events.spec.js",
     "create-a-role.spec.js",
     "create-an-api-rule.spec.js",
     "download-a-kubeconfig.spec.js",

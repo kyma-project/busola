@@ -13,7 +13,7 @@ export const PersistentVolumesList = ({ DefaultRenderer, ...otherParams }) => {
     {
       header: t('pv.headers.storage-class'),
       value: pv =>
-        (
+        (pv.spec?.storageClassName && (
           <Link
             onClick={() =>
               navigateToResource({
@@ -24,7 +24,8 @@ export const PersistentVolumesList = ({ DefaultRenderer, ...otherParams }) => {
           >
             {pv.spec?.storageClassName}
           </Link>
-        ) || EMPTY_TEXT_PLACEHOLDER,
+        )) ||
+        EMPTY_TEXT_PLACEHOLDER,
     },
     {
       header: t('pv.headers.capacity'),

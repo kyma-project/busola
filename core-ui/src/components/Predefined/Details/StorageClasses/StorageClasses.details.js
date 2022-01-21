@@ -7,6 +7,8 @@ import { PersistentVolumesList } from './PersistentVolumesList';
 import { PersistentVolumeClaimsList } from './PersistentVolumeClaimsList';
 
 import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+import { EventsList } from 'shared/components/EventsList';
+import { filterByResource } from 'hooks/useMessageList';
 
 export const StorageClassesDetails = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
@@ -54,13 +56,20 @@ export const StorageClassesDetails = ({ DefaultRenderer, ...otherParams }) => {
       ),
     },
   ];
-
+  const Events = () => (
+    <EventsList
+      namespace={otherParams.namespace}
+      filter={filterByResource('StorageClass', otherParams.resourceName)}
+      hideInvolvedObjects={true}
+    />
+  );
   return (
     <DefaultRenderer
       customComponents={[
         StorageClassParameters,
         PersistentVolumesList,
         PersistentVolumeClaimsList,
+        Events,
       ]}
       customColumns={customColumns}
       singularName={t('storage-classes.name_singular')}
