@@ -59,7 +59,7 @@ context('Create a Replica Set', () => {
 
   it('Checks the details view', () => {
     cy.getIframeBody()
-      .contains(`${REPLICA_SET_NAME}-`)
+      .contains(`${REPLICA_SET_NAME}-`, { timeout: 5000 })
       .click();
 
     cy.getIframeBody().contains(`Name${REPLICA_SET_NAME}`);
