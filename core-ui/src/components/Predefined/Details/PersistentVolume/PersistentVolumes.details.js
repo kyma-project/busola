@@ -50,7 +50,7 @@ export function PersistentVolumesDetails({ DefaultRenderer, ...otherParams }) {
           <LayoutPanelRow
             name={t('pv.headers.storage-class-name')}
             value={
-              (
+              (spec?.storageClassName && (
                 <Link
                   onClick={() =>
                     navigateToResource({
@@ -61,7 +61,8 @@ export function PersistentVolumesDetails({ DefaultRenderer, ...otherParams }) {
                 >
                   {spec?.storageClassName}
                 </Link>
-              ) || EMPTY_TEXT_PLACEHOLDER
+              )) ||
+              EMPTY_TEXT_PLACEHOLDER
             }
           />
         </LayoutPanel.Body>
