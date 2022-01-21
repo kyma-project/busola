@@ -89,6 +89,11 @@
       display: inline-block !important; //override the default fd-modal opening component 'display: contents';
     }
   }
+
+  .list-actions .fd-popover__control > button {
+    margin-top: -4px;
+    margin-bottom: -4px;
+  }
 }
 
 .generic-list-search {

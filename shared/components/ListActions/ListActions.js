@@ -44,7 +44,7 @@ const StandaloneAction = ({ action, entry, compact }) => {
   );
 };
 
-const ListActions = ({ actions, entry, standaloneItems = 2, compact }) => {
+const ListActions = ({ actions, entry, standaloneItems = 3, compact }) => {
   if (!actions.length) {
     return null;
   }
