@@ -14,6 +14,7 @@ export function ComboboxInput({
   typedValue,
   className,
   _ref,
+  onSelectionChange,
   ...props
 }) {
   return (
@@ -27,8 +28,10 @@ export function ComboboxInput({
         showAllEntries
         searchFullString
         selectionType="manual"
-        onSelectionChange={(_, selected) =>
-          setValue(selected.key !== -1 ? selected.key : selected.text)
+        onSelectionChange={
+          onSelectionChange ||
+          ((_, selected) =>
+            setValue(selected.key !== -1 ? selected.key : selected.text))
         }
         typedValue={value || typedValue}
         selectedKey={value || selectedKey}

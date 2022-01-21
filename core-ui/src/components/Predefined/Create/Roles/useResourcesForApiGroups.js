@@ -1,12 +1,11 @@
-import { useState, useEffect, useRef } from 'react';
-import { useSingleGet } from 'react-shared';
-import { useMicrofrontendContext } from 'react-shared';
+import { useState, useCallback } from 'react';
+import { useSingleGet, useMicrofrontendContext } from 'react-shared';
+import { useComponentDidMount } from 'shared/useComponentDidMount';
 
 export function useResourcesForApiGroups(apiGroups = []) {
   const [cache, setCache] = useState({});
   const fetch = useSingleGet();
   const { groupVersions } = useMicrofrontendContext();
-  const previousApiGroupsList = useRef([]);
 
   const findMatchingGroupVersions = apiGroup => {
     // core api group
@@ -31,18 +30,18 @@ export function useResourcesForApiGroups(apiGroups = []) {
     }
   };
 
-  useEffect(() => {
-    if (previousApiGroupsList.current.length === apiGroups.length) return;
-    previousApiGroupsList.current = apiGroups;
+  const fetchResources = useCallback(() => {
     const cacheObject = apiGroups.reduce((a, v) => ({ ...a, [v]: [] }), {});
     setCache(cacheObject);
     for (const apiGroup of apiGroups) {
       for (const groupVersion of findMatchingGroupVersions(apiGroup)) {
-        fetchApiGroup(groupVersion, apiGroup);
+        void fetchApiGroup(groupVersion, apiGroup);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [apiGroups]);
 
-  return cache;
+  useComponentDidMount(fetchResources);
+
+  return { cache, fetchResources };
 }

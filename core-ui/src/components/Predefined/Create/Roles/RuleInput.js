@@ -4,6 +4,7 @@ import { useMicrofrontendContext } from 'react-shared';
 import { ResourceForm } from 'shared/ResourceForm';
 import { ComboboxArrayInput, TextArrayInput } from 'shared/ResourceForm/fields';
 import { InvalidRoleError } from './InvalidRoleError';
+import { useResourcesForApiGroups } from './useResourcesForApiGroups';
 
 function unique(arr) {
   return [...new Set(arr)];
@@ -43,16 +44,15 @@ const extractApiGroup = groupVersion => {
   return apiGroup;
 };
 
-export function RuleInput({
-  rule,
-  rules,
-  setRules,
-  isAdvanced,
-  resourcesCache,
-}) {
+export function RuleInput({ rule, rules, setRules, isAdvanced }) {
   const { namespaceId, groupVersions } = useMicrofrontendContext();
   const { t } = useTranslation();
 
+  // dictionary of pairs (apiGroup: resources in that apiGroup)
+  const apiRules = rule?.apiGroups?.flat();
+  const { cache: resourcesCache, fetchResources } = useResourcesForApiGroups(
+    apiRules ? [...new Set(apiRules)] : [],
+  );
   const EMPTY_STRING_KEY = 'core-api-group';
   // introduce special option for '' apiGroup - Combobox doesn't accept empty string key
   const apiGroupsInputOptions = unique(
@@ -82,6 +82,7 @@ export function RuleInput({
         options={apiGroupsInputOptions}
         emptyStringKey={EMPTY_STRING_KEY}
         defaultOpen
+        onBlur={fetchResources}
       />
       <ComboboxArrayInput
         title={t('roles.headers.resources')}
