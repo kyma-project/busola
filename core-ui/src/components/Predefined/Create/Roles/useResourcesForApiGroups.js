@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
-import { useSingleGet } from 'react-shared';
-import { useMicrofrontendContext } from 'react-shared';
+import { useSingleGet, useMicrofrontendContext } from 'react-shared';
+import { useComponentDidMount } from 'shared/useComponentDidMount';
 
 export function useResourcesForApiGroups(apiGroups = []) {
   const [cache, setCache] = useState({});
@@ -40,6 +40,8 @@ export function useResourcesForApiGroups(apiGroups = []) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [apiGroups]);
+
+  useComponentDidMount(fetchResources);
 
   return { cache, fetchResources };
 }
