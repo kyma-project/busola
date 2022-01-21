@@ -28,7 +28,7 @@ context('Test Events', () => {
       .find('a[data-testid="details-link"]')
       .filter(':visible', { log: false })
       .first()
-      .click();
+      .click({ force: true });
   });
 
   it('Check details', () => {
