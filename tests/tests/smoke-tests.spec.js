@@ -17,7 +17,7 @@ context('Smoke Tests', () => {
       .should('be.visible');
 
     cy.getIframeBody()
-      .contains('Messages')
+      .contains('Events')
       .should('be.visible');
   });
 
