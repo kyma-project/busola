@@ -51,12 +51,7 @@ export function ResourceForm({
       setCustomValid(validationRef.current);
     }
     validationRef.current = true;
-
-    // close search
-    if (actionsEditor) {
-      actionsEditor.trigger('', 'closeFindWidget');
-    }
-  }, [resource, children, setCustomValid, actionsEditor]);
+  }, [setCustomValid, resource, children]);
 
   const convertedResource = jsyaml.dump(resource);
 
@@ -81,7 +76,9 @@ export function ResourceForm({
     <Editor
       value={resource}
       setValue={setResource}
-      editorDidMount={(_, e) => setActionsEditor(e)}
+      editorDidMount={(_, e) => {
+        setActionsEditor(e);
+      }}
     />
   );
   editor = renderEditor

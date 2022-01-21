@@ -35,7 +35,7 @@ context('Test Create Resource Definitions', () => {
       const CRD = JSON.stringify(CRD_CONFIG);
 
       cy.getIframeBody()
-        .find('textarea[aria-roledescription="editor"]')
+        .find('div.view-lines')
         .clearMonaco()
         .type(CRD, {
           parseSpecialCharSequences: false,
@@ -97,7 +97,7 @@ context('Test Create Resource Definitions', () => {
 
       cy.getIframeBody()
         .find('[aria-label="Create CronTab"]')
-        .find('textarea[aria-roledescription="editor"]:visible')
+        .find('div.view-lines')
         .clearMonaco()
         .type(CR, {
           parseSpecialCharSequences: false,

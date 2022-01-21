@@ -27,6 +27,7 @@ const NamespacesCreate = props => {
     resourceUrl,
     onCompleted,
     onError,
+    setCustomValid,
   } = props;
   const { t } = useTranslation();
 
@@ -94,7 +95,7 @@ const NamespacesCreate = props => {
   }, [isSidecar, setSidecar, namespace]);
 
   useEffect(() => {
-    const name = namespace.metadata.name;
+    const name = namespace.metadata?.name;
 
     if (name) {
       jp.value(memory, '$.metadata.name', `${name}-quotas`);
@@ -108,11 +109,11 @@ const NamespacesCreate = props => {
       setLimits({ ...limits });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [namespace.metadata.name]);
+  }, [namespace.metadata?.name]);
 
   async function afterNamespaceCreated() {
     if (!initialNamespace) {
-      LuigiClient.linkManager().navigate(`${namespace.metadata.name}/details`);
+      LuigiClient.linkManager().navigate(`${namespace.metadata?.name}/details`);
     }
 
     const additionalRequests = [];
@@ -181,6 +182,7 @@ const NamespacesCreate = props => {
       createUrl={resourceUrl}
       initialResource={initialNamespace}
       afterCreatedFn={afterNamespaceCreated}
+      setCustomValid={setCustomValid}
     >
       <K8sNameField
         propertyPath="$.metadata.name"
@@ -235,7 +237,7 @@ const NamespacesCreate = props => {
                   setMemory(val);
                 }}
                 disabled={!withMemory}
-                namespaceName={namespace.metadata.name}
+                namespaceName={namespace.metadata?.name}
               />
             </div>
           )}
@@ -281,7 +283,7 @@ const NamespacesCreate = props => {
                   setLimits(val);
                 }}
                 disabled={!withLimits}
-                namespaceName={namespace.metadata.name}
+                namespaceName={namespace.metadata?.name}
               />
             </div>
           )}
