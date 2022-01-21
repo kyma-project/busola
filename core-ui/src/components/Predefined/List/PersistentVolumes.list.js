@@ -12,7 +12,19 @@ export const PersistentVolumesList = ({ DefaultRenderer, ...otherParams }) => {
   const customColumns = [
     {
       header: t('pv.headers.storage-class'),
-      value: pv => pv.spec?.storageClassName || EMPTY_TEXT_PLACEHOLDER,
+      value: pv =>
+        (
+          <Link
+            onClick={() =>
+              navigateToResource({
+                name: pv.spec?.storageClassName,
+                kind: 'StorageClass',
+              })
+            }
+          >
+            {pv.spec?.storageClassName}
+          </Link>
+        ) || EMPTY_TEXT_PLACEHOLDER,
     },
     {
       header: t('pv.headers.capacity'),
