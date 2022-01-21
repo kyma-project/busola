@@ -113,7 +113,7 @@ export function EditorActions({
       />
       <ButtonWithTooltip
         tooltipContent={t('common.tooltips.search')}
-        glyph="filter"
+        glyph="search"
         onClick={openSearch}
         disabled={!editor}
       />
