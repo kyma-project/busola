@@ -1,10 +1,12 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { LayoutPanel } from 'fundamental-react';
-import { EMPTY_TEXT_PLACEHOLDER, StatusBadge } from 'react-shared';
+import { Link, LayoutPanel } from 'fundamental-react';
+import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { Tokens } from 'shared/components/Tokens';
+import { navigateToResource } from 'shared/helpers/universalLinks';
+import { PersistentVolumeStatus } from './PersistentVolumeStatus';
 
 export function PersistentVolumesDetails({ DefaultRenderer, ...otherParams }) {
   const { t } = useTranslation();
@@ -12,11 +14,7 @@ export function PersistentVolumesDetails({ DefaultRenderer, ...otherParams }) {
   const customColumns = [
     {
       header: t('common.headers.status'),
-      value: ({ status }) => (
-        <StatusBadge autoResolveType noTooltip>
-          {status.phase}
-        </StatusBadge>
-      ),
+      value: ({ status }) => <PersistentVolumeStatus status={status} />,
     },
   ];
 
@@ -33,7 +31,7 @@ export function PersistentVolumesDetails({ DefaultRenderer, ...otherParams }) {
           />
           <LayoutPanelRow
             name={t('pv.headers.capacity')}
-            value={spec.capacity.storage}
+            value={spec.capacity?.storage}
           />
           <LayoutPanelRow
             name={t('pv.headers.mount-options')}
@@ -49,7 +47,20 @@ export function PersistentVolumesDetails({ DefaultRenderer, ...otherParams }) {
           />
           <LayoutPanelRow
             name={t('pv.headers.storage-class-name')}
-            value={spec.storageClassName}
+            value={
+              (
+                <Link
+                  onClick={() =>
+                    navigateToResource({
+                      name: spec?.storageClassName,
+                      kind: 'StorageClass',
+                    })
+                  }
+                >
+                  {spec?.storageClassName}
+                </Link>
+              ) || EMPTY_TEXT_PLACEHOLDER
+            }
           />
         </LayoutPanel.Body>
       </LayoutPanel>
