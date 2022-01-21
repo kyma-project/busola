@@ -5,7 +5,9 @@ import { LayoutPanel, Link } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { useNodesQuery } from 'components/Nodes/nodeQueries';
 import { NodeResources } from 'components/Nodes/NodeResources/NodeResources';
-import { ClusterNodeMessages } from './ClusterNodeMessages';
+import { EventsList } from 'shared/components/EventsList';
+import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
+
 import './ClusterNodes.scss';
 
 const NodeHeader = ({ nodeName }) => {
@@ -34,6 +36,8 @@ export function ClusterNodes() {
       currentPage * itemsPerPage,
     ) || [];
 
+  const Events = <EventsList defaultType={EVENT_MESSAGE_TYPE.WARNING} />;
+
   return (
     <>
       {loading && <Spinner compact={true} />}
@@ -59,7 +63,7 @@ export function ClusterNodes() {
           />
         </LayoutPanel.Footer>
       )}
-      <ClusterNodeMessages />
+      {Events}
     </>
   );
 }

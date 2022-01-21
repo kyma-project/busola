@@ -49,6 +49,10 @@ context('Test HPA', () => {
       .find('[data-testid=hpa-spec-ref]')
       .contains('apps/v1/deployments')
       .should('be.visible');
+
+    cy.getIframeBody()
+      .contains('Events')
+      .should('be.visible');
   });
 
   it('Check HPA list', () => {

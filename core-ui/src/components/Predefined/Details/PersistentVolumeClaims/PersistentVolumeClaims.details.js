@@ -1,6 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { PersistentVolumeClaimStatus } from 'shared/components/PersistentVolumeClaimStatus';
+import { EventsList } from 'shared/components/EventsList';
+import { filterByResource } from 'hooks/useMessageList';
 
 import {
   EMPTY_TEXT_PLACEHOLDER,
@@ -146,12 +148,24 @@ export const PersistentVolumeClaimsDetails = ({
     },
   ];
 
+  const Events = () => (
+    <EventsList
+      namespace={otherParams.namespace}
+      filter={filterByResource(
+        'PersistentVolumeClaim',
+        otherParams.resourceName,
+      )}
+      hideInvolvedObjects={true}
+    />
+  );
+
   return (
     <DefaultRenderer
       customComponents={[
         PVCConfiguration,
         RelatedPods,
         PVCSelectorSpecification,
+        Events,
       ]}
       customColumns={customColumns}
       singularName={t('persistent-volume-claims.name_singular')}
