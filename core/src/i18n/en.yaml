@@ -1512,7 +1512,19 @@ pv:
     storage-class-name: Storage Class name
   name_singular: Persistent Volume
   nfs: Network File System
+  statuses:
+    available: Available
+    bound: Bound
+    failed: Failed
+    pending: Pending
+    released: Released
   title: Persistent Volumes
+  tooltips:
+    available: Persistent Volume is not yet bound.
+    bound: Persistent Volume is bound.
+    failed: Recycle or deletion failed.
+    pending: Persistent Volume is not available.
+    released: Bound Persistent Volume Claim was deleted.
 replica-sets:
   cpu: CPU
   create-modal:
