@@ -16,13 +16,10 @@ context('Test Events', () => {
       .should('be.gte', 1);
 
     cy.getIframeBody()
-      .contains('.fd-table__cell', Cypress.env('NAMESPACE_NAME'))
-      .its('length')
-      .should('be.gte', 1);
-
-    cy.getIframeBody()
-      .find('[role="search"] [aria-label="open-search"]')
-      .type(`Pod`);
+      .find('[role="search"] [aria-label="search-input"]')
+      .type(Cypress.env('NAMESPACE_NAME'), {
+        force: true,
+      });
 
     cy.getIframeBody()
       .find('a[data-testid="details-link"]')
