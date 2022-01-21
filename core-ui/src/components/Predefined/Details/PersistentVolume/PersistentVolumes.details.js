@@ -5,6 +5,8 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { Tokens } from 'shared/components/Tokens';
+import { EventsList } from 'shared/components/EventsList';
+import { filterByResource } from 'hooks/useMessageList';
 import { navigateToResource } from 'shared/helpers/universalLinks';
 import { PersistentVolumeStatus } from './PersistentVolumeStatus';
 
@@ -48,7 +50,7 @@ export function PersistentVolumesDetails({ DefaultRenderer, ...otherParams }) {
           <LayoutPanelRow
             name={t('pv.headers.storage-class-name')}
             value={
-              (
+              (spec?.storageClassName && (
                 <Link
                   onClick={() =>
                     navigateToResource({
@@ -59,7 +61,8 @@ export function PersistentVolumesDetails({ DefaultRenderer, ...otherParams }) {
                 >
                   {spec?.storageClassName}
                 </Link>
-              ) || EMPTY_TEXT_PLACEHOLDER
+              )) ||
+              EMPTY_TEXT_PLACEHOLDER
             }
           />
         </LayoutPanel.Body>
@@ -83,10 +86,17 @@ export function PersistentVolumesDetails({ DefaultRenderer, ...otherParams }) {
     </div>
   );
 
+  const Events = () => (
+    <EventsList
+      filter={filterByResource('PersistentVolume', otherParams.resourceName)}
+      hideInvolvedObjects={true}
+    />
+  );
+
   return (
     <DefaultRenderer
       customColumns={customColumns}
-      customComponents={[PvDetails]}
+      customComponents={[PvDetails, Events]}
       {...otherParams}
     />
   );
