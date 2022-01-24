@@ -19,6 +19,7 @@
     "create-a-deployment.spec.js",
     "test-cluster-overview.spec.js",
     "smoke-tests.spec.js",
+    "kyma-version.spec.js",
     "login-kubeconfigID.spec.js",
     "run-after.spec.js"
   ]
