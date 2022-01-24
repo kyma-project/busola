@@ -1,9 +1,7 @@
 import {
   saveClusterParams,
   saveActiveClusterName,
-  getAfterLoginLocation,
 } from '../cluster-management/cluster-management';
-import { saveLocation } from '../navigation/previous-location';
 import * as constants from './../constants';
 import { loadKubeconfigById } from './loadKubeconfigById';
 import i18next from 'i18next';
@@ -52,12 +50,6 @@ export async function handleKubeconfigIdIfPresent() {
 
     const clusterName = params.currentContext.cluster.name;
     saveActiveClusterName(clusterName);
-
-    const targetLocation = getAfterLoginLocation(
-      clusterName,
-      params.kubeconfig,
-    );
-    saveLocation(targetLocation);
   } catch (e) {
     alert(i18next.t('kubeconfig-id.error', { error: e.message }));
     console.warn(e);

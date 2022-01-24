@@ -6,7 +6,7 @@ import { loadKubeconfig } from '../support/loadKubeconfigFile';
 const kubeconfigIdAddress = `${config.clusterAddress}/kubeconfig`;
 
 context('Login - kubeconfigID', () => {
-  it('Adds cluster by kubeconfigID', () => {
+  it('Adds cluster by kubeconfigID - no path, go to Cluster Overview', () => {
     cy.wrap(loadKubeconfig()).then(kubeconfig => {
       cy.intercept(
         {
@@ -15,8 +15,26 @@ context('Login - kubeconfigID', () => {
         },
         kubeconfig,
       );
-      cy.visit(`${config.clusterAddress}/clusters?kubeconfigID=tests`);
+      cy.visit(`${config.clusterAddress}/?kubeconfigID=tests`);
       cy.url().should('match', /overview$/);
+    });
+  });
+
+  it('Adds cluster by kubeconfigID - saves path', () => {
+    cy.wrap(loadKubeconfig()).then(kubeconfig => {
+      cy.intercept(
+        {
+          method: 'GET',
+          url: `${kubeconfigIdAddress}/*`,
+        },
+        kubeconfig,
+      );
+
+      const clusterName = kubeconfig['current-context'];
+      const path = `cluster/${clusterName}/namespaces/default/deployments`;
+
+      cy.visit(`${config.clusterAddress}/${path}/?kubeconfigID=tests`);
+      cy.url().should('match', /deployments\/$/);
     });
   });
 

@@ -4,22 +4,9 @@ export const saveLocation = location => {
   localStorage.setItem(PREVIOUS_LOCATION_KEY, location);
 };
 
-function hasQueryParams() {
-  const searchParams = [
-    ...(new URL(window.location).searchParams?.keys() || []),
-  ];
-  return searchParams.includes('init') || searchParams.includes('kubeconfigID');
-}
-
 export const saveCurrentLocation = () => {
-  if (
-    !window.location.hash &&
-    window.location.pathname !== '/' &&
-    !hasQueryParams()
-  ) {
-    const location = window.location.pathname;
-    const params = window.location.search;
-    saveLocation(location + params);
+  if (!window.location.hash && window.location.pathname !== '/') {
+    saveLocation(window.location.pathname);
   }
 };
 
