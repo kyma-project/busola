@@ -2,7 +2,11 @@ import config from '../config';
 
 Cypress.Commands.add(
   'loginAndSelectCluster',
-  (fileName = 'kubeconfig.yaml', expectedLocation = /overview$/) => {
+  ({
+    fileName = 'kubeconfig.yaml',
+    expectedLocation = /overview$/,
+    storage = null,
+  }) => {
     cy.visit(`${config.clusterAddress}/clusters`)
       .getIframeBody()
       .contains('Connect a cluster')
@@ -15,6 +19,12 @@ Cypress.Commands.add(
     cy.getIframeBody()
       .contains('Next')
       .click();
+
+    if (storage) {
+      cy.getIframeBody()
+        .contains(storage)
+        .click();
+    }
 
     cy.getIframeBody()
       .find('[role="dialog"]')

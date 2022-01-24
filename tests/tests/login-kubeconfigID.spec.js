@@ -17,6 +17,10 @@ context('Login - kubeconfigID', () => {
       );
       cy.visit(`${config.clusterAddress}/?kubeconfigID=tests`);
       cy.url().should('match', /overview$/);
+
+      cy.getIframeBody()
+        .contains('Session Storage')
+        .should('be.visible');
     });
   });
 
@@ -35,6 +39,35 @@ context('Login - kubeconfigID', () => {
 
       cy.visit(`${config.clusterAddress}/${path}/?kubeconfigID=tests`);
       cy.url().should('match', /deployments\/$/);
+    });
+  });
+
+  it.only('Does not change storage for already added cluster', () => {
+    cy.loginAndSelectCluster({ storage: 'Local storage' });
+
+    cy.getIframeBody()
+      .contains('Local Storage')
+      .should('be.visible');
+
+    cy.wrap(loadKubeconfig()).then(kubeconfig => {
+      cy.intercept(
+        {
+          method: 'GET',
+          url: `${kubeconfigIdAddress}/*`,
+        },
+        kubeconfig,
+      );
+
+      cy.visit(`${config.clusterAddress}/?kubeconfigID=tests`);
+      cy.url().should('match', /overview$/);
+
+      cy.getIframeBody()
+        .contains('Session Storage')
+        .should('not.exist');
+
+      cy.getIframeBody()
+        .contains('Local Storage')
+        .should('be.visible');
     });
   });
 

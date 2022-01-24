@@ -5,7 +5,11 @@ export const saveLocation = location => {
 };
 
 export const saveCurrentLocation = () => {
-  if (!window.location.hash && window.location.pathname !== '/') {
+  if (
+    !window.location.hash &&
+    window.location.pathname !== '/' &&
+    window.location.pathname !== '/clusters'
+  ) {
     saveLocation(window.location.pathname);
   }
 };
