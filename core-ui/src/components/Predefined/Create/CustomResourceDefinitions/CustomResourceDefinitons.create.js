@@ -18,7 +18,7 @@ function CustomResourceDefinitionsCreate({
   return (
     <ResourceForm
       pluralKind="customresourcedefinitions"
-      singularName={t('custom-resource-definition.name_singular')}
+      singularName={t('custom-resource-definitions.name_singular')}
       resource={customResourceDefinitions}
       setResource={setCustomResourceDefinitions}
       onChange={onChange}
