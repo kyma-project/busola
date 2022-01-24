@@ -42,7 +42,7 @@ context('Login - kubeconfigID', () => {
     });
   });
 
-  it.only('Does not change storage for already added cluster', () => {
+  it('Does not change storage for already added cluster', () => {
     cy.loginAndSelectCluster({ storage: 'Local storage' });
 
     cy.getIframeBody()
