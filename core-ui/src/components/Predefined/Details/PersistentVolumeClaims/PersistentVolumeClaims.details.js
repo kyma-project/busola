@@ -100,7 +100,7 @@ export const PVCConfiguration = pvc => {
         />
         <LayoutPanelRow
           key={pvc.spec?.storageClassName}
-          name={t('persistent-volume-claims.headers.storage-class')}
+          name={t('persistent-volume-claims.headers.storage-class-name')}
           value={
             storageClasses?.find(
               ({ metadata }) => metadata.name === pvc.spec?.storageClassName,

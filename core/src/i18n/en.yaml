@@ -1399,7 +1399,7 @@ oauth2-clients:
 observability:
   title: Observability
 persistent-volume-claims:
-  description: <0>Persistent Volue Claim</0> is a request for the Persistent Volume resources.
+  description: <0>Persistent Volume Claim (PVC)</0> is a request for the Persistent Volume resources.
   headers:
     access-modes: Access modes
     configuration: Configuration
@@ -1409,7 +1409,7 @@ persistent-volume-claims:
     operator: Operator
     selector: Selector
     storage: Storage
-    storage-class: Storage Class
+    storage-class-name: Storage Class name
     values: Values
     volume-mode: Volume mode
     volume-name: Volume name
@@ -1503,6 +1503,7 @@ pv:
     access-modes: Access modes
     capacity: Capacity
     claim: Claim
+    claim-name: Claim name
     finalizers: Finalizers
     mount-options: Mount options
     path: Path
