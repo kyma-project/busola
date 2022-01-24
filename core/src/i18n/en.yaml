@@ -1399,7 +1399,7 @@ oauth2-clients:
 observability:
   title: Observability
 persistent-volume-claims:
-  description: <0>Persistent Volue Claim (PVC)</0> is a request for the Persistent Volume resources.
+  description: <0>Persistent Volume Claim (PVC)</0> is a request for the Persistent Volume resources.
   headers:
     access-modes: Access modes
     configuration: Configuration
