@@ -65,14 +65,14 @@ export function useDeleteResource({
     setShowDeleteDialog(false);
   };
 
-  async function handleResourceDelete({ resource, resourceUrl, deleteFn }) {
+  const handleResourceDelete = ({ resource, resourceUrl, deleteFn }) => {
     if (dontConfirmDelete) {
       performDelete(resource, resourceUrl, deleteFn);
     } else {
       LuigiClient.uxManager().addBackdrop();
       setShowDeleteDialog(true);
     }
-  }
+  };
 
   const DeleteMessageBox = ({
     resource,
@@ -108,7 +108,10 @@ export function useDeleteResource({
         })}
       </p>
       <div className="fd-margin-top--sm">
-        <Checkbox onChange={e => setDontConfirmDelete(e.target.checked)}>
+        <Checkbox
+          checked={dontConfirmDelete}
+          onChange={() => setDontConfirmDelete(!dontConfirmDelete)}
+        >
           {t('common.delete-dialog.delete-confirm')}
         </Checkbox>
       </div>
