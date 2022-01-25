@@ -33,7 +33,7 @@ context('Connect cluster disabled', () => {
       .should('be.visible');
 
     cy.get('button')
-      .contains(/Connect a cluster/)
+      .contains(/Connect cluster/)
       .should('not.exist');
   });
 
@@ -56,7 +56,7 @@ context('Connect cluster disabled', () => {
       cy.get('[data-testid=clusters-overview]').click();
 
       cy.get('button')
-        .contains(/Connect a cluster/)
+        .contains(/Connect cluster/)
         .should('not.exist');
     });
   });
