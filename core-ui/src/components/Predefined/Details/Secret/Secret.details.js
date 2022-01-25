@@ -3,7 +3,7 @@ import { ControlledBy } from 'react-shared';
 import SecretData from 'shared/components/Secret/SecretData';
 import { useTranslation } from 'react-i18next';
 import { CertificateData } from './CertificateData';
-import { HelmReleaseData } from './HelmReleaseData';
+import { HelmReleaseData } from './helm/HelmReleaseData';
 
 export const SecretsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
