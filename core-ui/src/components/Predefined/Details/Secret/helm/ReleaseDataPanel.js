@@ -5,7 +5,7 @@ import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow'
 import { ReleaseStatus } from './ReleaseStatus';
 import { useTranslation } from 'react-i18next';
 
-export function ReleaseData({ release }) {
+export function ReleaseDataPanel({ release }) {
   const { t } = useTranslation();
 
   const { name, version, chart, info } = release;
