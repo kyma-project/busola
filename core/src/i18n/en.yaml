@@ -268,13 +268,13 @@ clusters:
   add:
     errors:
       failed-to-add-cluster: Failed to connect a cluster
-    title: Connect a cluster
+    title: Connect cluster
   buttons:
     apply-configuration: Apply configuration
     apply-kubeconfig: Apply kubeconfig
     next-step: Next step
-    previous-step: Previous Step
-    verify-and-add: Connect a cluster
+    previous-step: Previous step
+    verify-and-add: Connect cluster
   common:
     api-server-address: API server address
     download-kubeconfig: Download Kubeconfig
@@ -506,7 +506,7 @@ common:
     duplicate-key: Duplicate key
     error: Error
     hide: Hide read-only fields
-    k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' (e.g.: 'my-name1')."
+    k8s-name-input: 'Name must consist of lowercase alphanumeric characters, can contain ''-'' (e.g.: ''my-name1'').'
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: key=value, must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     read-file: Read file content as a single value, with file name as a key.
@@ -783,7 +783,7 @@ dnsentries:
     ttl: TTL
   labels:
     dns-name: DNS Name
-    target: Target
+    target: Targets
     targets: Targets
     text: Text
     ttl: TTL
@@ -1244,7 +1244,7 @@ jobs:
     containers-readonly-in-edit: After a Job is created, the containers are read-only.
     labels:
       args: Args
-      command: Command
+      command: Commands
       docker-image: Docker Image
       failed-jobs-history-limit: Failed Jobs History Limit
       image-pull-policy: Image Pull Policy
@@ -1273,7 +1273,7 @@ jobs:
     complete: Job completed.
     not-complete: Job in progress.
 kubeconfig-id:
-  error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})."
+  error: 'Couldn''t load kubeconfig ID; configuration not changed (Error: ${{error}}).'
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
 legal:
   copyright: Copyright
@@ -1378,7 +1378,7 @@ oauth2-clients:
     post-logout-redirect-uris: Post-Logout Redirect URIs
     redirect-uris: Redirect URIs
     response-types: Response Types
-    scope: Scope
+    scope: Scopes
     secret: Secret
     secret-name: Secret Name
     uris: URIs
@@ -1407,7 +1407,7 @@ persistent-volume-claims:
     match-expressions: Match expressions
     match-labels: Match labels
     operator: Operator
-    selector: Selector
+    selector: Selectors
     storage: Storage
     storage-class-name: Storage Class name
     values: Values
