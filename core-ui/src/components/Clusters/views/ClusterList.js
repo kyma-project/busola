@@ -27,8 +27,7 @@ export function ClusterList() {
 
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
     i18n,
-    resourceType: 'Clusters',
-    navigateToListAfterDelete: true,
+    resourceType: t('clusters.labels.name'),
   });
 
   const [chosenCluster, setChosenCluster] = useState(null);
@@ -162,12 +161,7 @@ export function ClusterList() {
           subtitle={subtitle}
           actions={
             canAddCluster && (
-              <Button
-                onClick={() => {
-                  setChosenCluster(null);
-                  setShowAdd(true);
-                }}
-              >
+              <Button onClick={() => setShowAdd(true)}>
                 {t('clusters.add.title')}
               </Button>
             )
