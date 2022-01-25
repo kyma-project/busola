@@ -3,6 +3,7 @@ import { ControlledBy } from 'react-shared';
 import SecretData from 'shared/components/Secret/SecretData';
 import { useTranslation } from 'react-i18next';
 import { CertificateData } from './CertificateData';
+import { HelmReleaseData } from './HelmReleaseData';
 
 export const SecretsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
@@ -25,7 +26,7 @@ export const SecretsDetails = ({ DefaultRenderer, ...otherParams }) => {
 
   return (
     <DefaultRenderer
-      customComponents={[Secret, CertificateData]}
+      customComponents={[Secret, CertificateData, HelmReleaseData]}
       customColumns={customColumns}
       {...otherParams}
     />
