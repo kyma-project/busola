@@ -1675,6 +1675,9 @@ secrets:
     last-deployed: Last Deployed
     release-config: Release config
     release-version: Version v{{version}}
+    statuses:
+      deployed: Deployed
+      superseded: Superseded
   labels:
     annotations: Annotations
     type: Secret Type
