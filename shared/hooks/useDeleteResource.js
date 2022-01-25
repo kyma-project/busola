@@ -28,8 +28,8 @@ export function useDeleteResource({
 
   const prettifiedResourceName = prettifyNameSingular(undefined, resourceType);
 
-  const performDelete = async resourceUrl => {
-    const withoutQueryString = path => path.split('?')[0];
+  const performDelete = async (resource, resourceUrl, deleteFn) => {
+    const withoutQueryString = path => path?.split('?')?.[0];
     const url = withoutQueryString(resourceUrl);
 
     LuigiClient.sendCustomMessage({
@@ -37,13 +37,17 @@ export function useDeleteResource({
       value: dontConfirmDelete,
     });
     try {
-      await deleteResourceMutation(url);
-      notification.notifySuccess({
-        content: t('components.resources-list.messages.delete.success', {
-          resourceType: prettifiedResourceName,
-        }),
-      });
-      if (navigateToListAfterDelete) navigateToList(resourceType);
+      if (deleteFn) {
+        deleteFn(resource, url);
+      } else {
+        await deleteResourceMutation(url);
+        notification.notifySuccess({
+          content: t('components.resources-list.messages.delete.success', {
+            resourceType: prettifiedResourceName,
+          }),
+        });
+        if (navigateToListAfterDelete) navigateToList(resourceType);
+      }
     } catch (e) {
       console.error(e);
       notification.notifyError({
@@ -61,27 +65,32 @@ export function useDeleteResource({
     setShowDeleteDialog(false);
   };
 
-  async function handleResourceDelete(resourceUrl) {
+  async function handleResourceDelete({ resource, resourceUrl, deleteFn }) {
     if (dontConfirmDelete) {
-      performDelete(resourceUrl);
+      performDelete(resource, resourceUrl, deleteFn);
     } else {
       LuigiClient.uxManager().addBackdrop();
       setShowDeleteDialog(true);
     }
   }
 
-  const DeleteMessageBox = ({ resource, resourceUrl }) => (
+  const DeleteMessageBox = ({
+    resource,
+    resourceName,
+    resourceUrl,
+    deleteFn,
+  }) => (
     <MessageBox
       type="warning"
       title={t('common.delete-dialog.title', {
-        name: resource?.metadata.name,
+        name: resourceName || resource?.metadata?.name,
       })}
       actions={[
         <Button
           data-testid="delete-confirmation"
           type="negative"
           compact
-          onClick={() => performDelete(resourceUrl)}
+          onClick={() => performDelete(resource, resourceUrl, deleteFn)}
         >
           {t('common.buttons.delete')}
         </Button>,
@@ -95,7 +104,7 @@ export function useDeleteResource({
       <p>
         {t('common.delete-dialog.message', {
           type: prettifiedResourceName,
-          name: resource?.metadata.name,
+          name: resourceName || resource?.metadata?.name,
         })}
       </p>
       <div className="fd-margin-top--sm">
