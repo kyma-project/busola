@@ -21,7 +21,11 @@ export function ChartContent({ chart }) {
       <ComboboxInput
         value={currentFile?.key}
         options={options}
-        onSelectionChange={(_, selected) => setCurrentFile(selected)}
+        onSelectionChange={(_, selected) => {
+          if (selected.key !== -1) {
+            setCurrentFile(selected);
+          }
+        }}
       />
     </div>
   );
