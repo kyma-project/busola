@@ -65,6 +65,25 @@ export function PersistentVolumesDetails({ DefaultRenderer, ...otherParams }) {
               EMPTY_TEXT_PLACEHOLDER
             }
           />
+          <LayoutPanelRow
+            name={t('pv.headers.claim-name')}
+            value={
+              (spec?.claimRef?.name && (
+                <Link
+                  onClick={() =>
+                    navigateToResource({
+                      name: spec?.claimRef?.name,
+                      kind: 'PersistentVolumeClaim',
+                      namespace: spec?.claimRef?.namespace,
+                    })
+                  }
+                >
+                  {spec?.claimRef?.name}
+                </Link>
+              )) ||
+              EMPTY_TEXT_PLACEHOLDER
+            }
+          />
         </LayoutPanel.Body>
       </LayoutPanel>
 

@@ -32,8 +32,8 @@ export function ApplicationServiceDetails({ applicationName, serviceName }) {
     },
     {
       name: applicationName,
-      path: '/',
-      fromContext: 'application',
+      path: `/details/${applicationName}`,
+      fromContext: 'applications',
     },
     { name: '' },
   ];
