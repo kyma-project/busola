@@ -287,6 +287,7 @@ clusters:
   labels:
     client-id: Client ID
     issuer-url: Issuer URL
+    name: Clusters
     scopes: Scopes
   list:
     no-clusters-found: No clusters found
