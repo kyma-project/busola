@@ -95,7 +95,7 @@ export const Events = ({ ...otherParams }) => {
         {entry.metadata.name}
       </Link>
     </p>,
-    <p>
+    <div>
       {entry.type === 'Warning' ? (
         <Tooltip content={entry.type}>
           <Icon
@@ -115,7 +115,7 @@ export const Events = ({ ...otherParams }) => {
           />
         </Tooltip>
       )}
-    </p>,
+    </div>,
     <p>{entry.message}</p>,
     ...involvedObject(entry),
     formatSourceObject(entry.source),
