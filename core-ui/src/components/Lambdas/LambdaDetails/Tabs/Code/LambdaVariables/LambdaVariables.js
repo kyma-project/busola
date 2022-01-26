@@ -306,7 +306,7 @@ export default function LambdaVariables({
       />
       <DeleteMessageBox
         resource={chosenVariable}
-        resourceName={chosenVariable?.id}
+        resourceName={chosenVariable?.name}
         deleteFn={v => onDeleteVariables(v)}
       />
     </div>
