@@ -2,7 +2,7 @@ import React from 'react';
 import { LayoutPanel } from 'fundamental-react';
 import { ReadableCreationTimestamp, StatusBadge } from 'react-shared';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
-import { ReleaseStatus } from './ReleaseStatus';
+import { HelmReleaseStatus } from 'components/HelmReleases/HelmReleaseStatus';
 import { useTranslation } from 'react-i18next';
 
 export function ReleaseDataPanel({ release }) {
@@ -20,7 +20,7 @@ export function ReleaseDataPanel({ release }) {
           </StatusBadge>
         </div>
         <div className="fd-margin-begin--tiny">
-          <ReleaseStatus release={release} />
+          <HelmReleaseStatus release={release} />
         </div>
       </LayoutPanel.Header>
       <LayoutPanel.Body>

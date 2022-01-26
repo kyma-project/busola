@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { StatusBadge } from 'react-shared';
 
-export function ReleaseStatus({ release }) {
+export function HelmReleaseStatus({ release }) {
   const { i18n } = useTranslation();
   const status = release.info.status;
 

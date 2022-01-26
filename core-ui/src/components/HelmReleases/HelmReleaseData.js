@@ -6,13 +6,10 @@ import { ChartContent } from './ChartContent';
 import { useTranslation } from 'react-i18next';
 import jsyaml from 'js-yaml';
 
-export function HelmReleaseData(secret) {
+export function HelmReleaseData(encodedRelease) {
   const { t } = useTranslation();
 
-  if (secret.type !== 'helm.sh/release.v1') {
-    return null;
-  }
-  const release = decodeHelmRelease(secret.data.release);
+  const release = decodeHelmRelease(encodedRelease);
 
   if (!release) {
     return null;

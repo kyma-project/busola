@@ -22,14 +22,7 @@ jest.mock('react-i18next', () => ({
 }));
 
 describe('HelmReleaseData', () => {
-  const PANEL_TITLE = 'secrets.helm.data-title';
-
-  it('Renders nothing for non Helm release secret', () => {
-    const secret = {};
-    const { queryByText } = render(<HelmReleaseData {...secret} />);
-
-    expect(queryByText(PANEL_TITLE)).not.toBeInTheDocument();
-  });
+  const PANEL_TITLE = 'releases.helm.data-title';
 
   it('Renders nothing for invalid release data', () => {
     // use original implementation
@@ -37,13 +30,13 @@ describe('HelmReleaseData', () => {
       originalDecodeHelmRelease.decodeHelmRelease,
     );
 
-    const secret = { type: 'helm.sh/release.v1', data: {} };
-    const { queryByText } = render(<HelmReleaseData {...secret} />);
+    const release = null;
+    const { queryByText } = render(<HelmReleaseData {...release} />);
 
     expect(queryByText(PANEL_TITLE)).not.toBeInTheDocument();
   });
 
-  it('Renders release data for valid Helm secret', () => {
+  it('Renders release data for valid Helm release', () => {
     const mockRelease = {
       config: {},
       chart: { metadata: {} },
@@ -54,11 +47,11 @@ describe('HelmReleaseData', () => {
     };
     mockDecodeHelmRelease.mockImplementationOnce(() => mockRelease);
 
-    const secret = { type: 'helm.sh/release.v1', data: {} };
-    const { queryByText } = render(<HelmReleaseData {...secret} />);
+    const release = {};
+    const { queryByText } = render(<HelmReleaseData {...release} />);
 
     expect(queryByText(PANEL_TITLE)).toBeInTheDocument();
-    expect(queryByText('secrets.helm.release-config')).toBeInTheDocument();
-    expect(queryByText('secrets.helm.chart-files')).toBeInTheDocument();
+    expect(queryByText('releases.helm.release-config')).toBeInTheDocument();
+    expect(queryByText('releases.helm.chart-files')).toBeInTheDocument();
   });
 });
