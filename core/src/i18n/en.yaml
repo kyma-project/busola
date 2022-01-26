@@ -1244,7 +1244,7 @@ jobs:
     containers-readonly-in-edit: After a Job is created, the containers are read-only.
     labels:
       args: Args
-      command: Commands
+      command: Command
       docker-image: Docker Image
       failed-jobs-history-limit: Failed Jobs History Limit
       image-pull-policy: Image Pull Policy
@@ -1378,7 +1378,7 @@ oauth2-clients:
     post-logout-redirect-uris: Post-Logout Redirect URIs
     redirect-uris: Redirect URIs
     response-types: Response Types
-    scope: Scopes
+    scope: Scope
     secret: Secret
     secret-name: Secret Name
     uris: URIs
@@ -1407,7 +1407,7 @@ persistent-volume-claims:
     match-expressions: Match expressions
     match-labels: Match labels
     operator: Operator
-    selector: Selectors
+    selector: Selector
     storage: Storage
     storage-class-name: Storage Class name
     values: Values
