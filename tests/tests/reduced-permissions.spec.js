@@ -298,7 +298,7 @@ context('Reduced permissions', () => {
     cy.get('[data-testid="app-switcher"]').click();
     cy.contains('Clusters Overview').click();
     // todo add delete confirmation on clusters list (#649)
-    deleteFromGenericList('sa-cluster', false);
+    deleteFromGenericList('sa-cluster', true);
 
     cy.getIframeBody()
       .contains(/No clusters found/)
