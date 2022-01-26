@@ -13,7 +13,9 @@ import { CreateServiceBindingForm } from './CreateServiceBindingForm';
 export function CreateServiceBindingModal({ serviceInstance }) {
   const postRequest = usePost();
   const { features } = useMicrofrontendContext();
-  const btpCatalogEnabled = features.BTP_CATALOG?.isEnabled;
+  const btpCatalogEnabled =
+    features.BTP_CATALOG?.isEnabled &&
+    features.SERVICE_CATALOG_READ_ONLY?.isReadOnly;
   const notification = useNotification();
 
   const { name: instanceRefName, namespace } = serviceInstance.metadata;

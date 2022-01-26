@@ -22,7 +22,9 @@ const ServiceInstanceBindings = ({ serviceInstance, i18n }) => {
   const { t } = useTranslation();
 
   const { features } = useMicrofrontendContext();
-  const btpCatalogEnabled = features.BTP_CATALOG?.isEnabled;
+  const btpCatalogEnabled =
+    features.BTP_CATALOG?.isEnabled &&
+    features.SERVICE_CATALOG_READ_ONLY?.isReadOnly;
   const filterBindingsForInstance = binding =>
     binding?.spec.instanceRef?.name === serviceInstance.metadata.name;
   const notification = useNotification();
