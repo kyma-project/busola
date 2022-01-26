@@ -20,7 +20,9 @@ const ServiceInstanceTable = ({
   i18n,
 }) => {
   const { features } = useMicrofrontendContext();
-  const btpCatalogEnabled = features.BTP_CATALOG?.isEnabled;
+  const btpCatalogEnabled =
+    features.BTP_CATALOG?.isEnabled &&
+    features.SERVICE_CATALOG_READ_ONLY?.isReadOnly;
   const notification = useNotification();
   const { t } = useTranslation();
 

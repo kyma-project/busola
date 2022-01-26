@@ -48,7 +48,7 @@ context('Connect cluster disabled', () => {
         },
         kubeconfig,
       );
-      cy.visit(`${config.clusterAddress}/clusters?kubeconfigID=tests`);
+      cy.visit(`${config.clusterAddress}?kubeconfigID=tests`);
       cy.url().should('match', /overview$/);
 
       //does not display "Connect cluster on overview

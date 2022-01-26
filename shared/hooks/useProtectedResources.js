@@ -58,7 +58,7 @@ export function useProtectedResources(i18n) {
         content={message}
         delay={0}
       >
-        <Icon className="fd-object-status--critical" glyph="message-warning" />
+        <Icon className="fd-object-status--critical" glyph="locked" />
       </Tooltip>
     );
   };
