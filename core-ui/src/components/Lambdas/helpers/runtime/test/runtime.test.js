@@ -10,7 +10,7 @@ describe('prettyRuntime', () => {
     ['python38', 'Python 3.8 - Deprecated'],
     ['python39', 'Python 3.9'],
     ['nodejs14', 'Node.js 14'],
-    ['nodejs12', 'Node.js 12'],
+    ['nodejs12', 'Node.js 12 - Deprecated'],
     [undefined, 'Unknown: undefined'],
     [null, 'Unknown: null'],
     ['custom-one', 'Unknown: custom-one'],
