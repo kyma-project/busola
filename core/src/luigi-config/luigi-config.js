@@ -79,6 +79,9 @@ async function initializeBusola() {
 
   await setActiveClusterIfPresentInUrl();
 
+  // save location, as we'll may be logged out in a moment
+  saveCurrentLocation();
+
   await handleKubeconfigIdIfPresent();
 
   readFeatureToggles([
@@ -86,9 +89,6 @@ async function initializeBusola() {
     'showHiddenNamespaces',
     'disableResourceProtection',
   ]);
-
-  // save location, as we'll may be logged out in a moment
-  saveCurrentLocation();
 
   await ssoLogin(luigiAfterInit);
 

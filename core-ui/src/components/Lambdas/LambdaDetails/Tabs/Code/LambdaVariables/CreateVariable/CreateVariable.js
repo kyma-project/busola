@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Menu, Popover } from 'fundamental-react';
+import LuigiClient from '@luigi-project/client';
 
 import { VARIABLE_TYPE } from 'components/Lambdas/helpers/lambdaVariables';
 import VariableModal from '../VariableForm/VariableModal';
@@ -52,6 +53,7 @@ export default function CreateVariable({
     resources: configmaps,
   };
   function openModalWithProps(props) {
+    LuigiClient.uxManager().addBackdrop();
     setCurrentModal(<VariableModal {...props} {...commonProps} i18n={i18n} />);
   }
 
