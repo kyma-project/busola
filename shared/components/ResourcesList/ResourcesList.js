@@ -191,7 +191,9 @@ function Resources({
           icon: 'delete',
           disabledHandler: isProtected,
           handler: resource => {
-            handleResourceDelete(`${resourceUrl}/${resource.metadata.name}`);
+            handleResourceDelete({
+              resourceUrl: `${resourceUrl}/${resource.metadata.name}`,
+            });
             setActiveResource(resource);
           },
         },

@@ -30,49 +30,52 @@ data:
           },
           "SSO_LOGIN": {
             "isEnabled": false,
-              "config": {
-                "issuerUrl": "https://apskyxzcl.accounts400.ondemand.com",
-                "scope": "email",
-                "clientId": "d0316c58-b0fe-45cd-9960-0fea0708355a"
-              }
-            },
-            "ADD_CLUSTER_DISABLED": {
-              "isEnabled": false,
-              "config": {
-                "cockpitUrl": "https://account.staging.hanavlab.ondemand.com/cockpit"
-              }
-            },
-            "SENTRY": {
-              "isEnabled": true,
-              "selectors": [],
-              "config": {
-                "dsn": ""
-              }
-            },
-            "OBSERVABILITY": {
-              "isEnabled": true,
-              "config": {
-                "links": [
-                  {
-                    "label": "Grafana",
-                    "path": "apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/monitoring-grafana"
-                  },
-                  {
-                    "label": "Kiali",
-                    "path": "apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/kiali"
-                  },
-                  {
-                    "label": "Jaeger",
-                    "path": "apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/tracing"
-                  }
-                ]
-              }
-            },
-            "KUBECONFIG_ID": {
-              "config": {
-                "kubeconfigUrl": "/kubeconfig"
-              }
+            "config": {
+              "issuerUrl": "https://apskyxzcl.accounts400.ondemand.com",
+              "scope": "email",
+              "clientId": "d0316c58-b0fe-45cd-9960-0fea0708355a"
             }
+          },
+          "ADD_CLUSTER_DISABLED": {
+            "isEnabled": false,
+            "config": {
+              "cockpitUrl": "https://account.staging.hanavlab.ondemand.com/cockpit"
+            }
+          },
+          "SERVICE_CATALOG_READ_ONLY": {
+            "isReadOnly": false
+          },
+          "SENTRY": {
+            "isEnabled": true,
+            "selectors": [],
+            "config": {
+              "dsn": ""
+            }
+          },
+          "OBSERVABILITY": {
+            "isEnabled": true,
+            "config": {
+              "links": [
+                {
+                  "label": "Grafana",
+                  "path": "apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/monitoring-grafana"
+                },
+                {
+                  "label": "Kiali",
+                  "path": "apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/kiali"
+                },
+                {
+                  "label": "Jaeger",
+                  "path": "apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/tracing"
+                }
+              ]
+            }
+          },
+          "KUBECONFIG_ID": {
+            "config": {
+              "kubeconfigUrl": "/kubeconfig"
+            }
+          }
         }
       }
     }
