@@ -9,10 +9,11 @@ export function setCluster(clusterName) {
   });
 }
 
-export function addCluster(params) {
+export function addCluster(params, switchCluster = true) {
   LuigiClient.sendCustomMessage({
     id: 'busola.addCluster',
     params,
+    switchCluster,
   });
 }
 

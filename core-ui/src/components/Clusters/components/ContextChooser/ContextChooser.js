@@ -10,12 +10,18 @@ export function ContextChooser(params) {
   const kubeconfig = params.resource;
   const { t } = useTranslation();
 
-  const contexts = Array.isArray(kubeconfig.contexts)
-    ? kubeconfig.contexts.map(({ name }) => ({
-        key: name,
-        text: name,
-      }))
-    : [];
+  if (!Array.isArray(kubeconfig.contexts)) {
+    return '';
+  }
+
+  const contexts = kubeconfig.contexts.map(({ name }) => ({
+    key: name,
+    text: name,
+  }));
+  contexts.push({
+    key: '-all-',
+    text: t('clusters.wizard.all-contexts'),
+  });
 
   return (
     <ResourceForm.Wrapper {...params}>
@@ -29,7 +35,7 @@ export function ContextChooser(params) {
             id="context-chooser"
             selectedKey={value}
             options={contexts}
-            onSelect={(_, { text }) => setValue(text)}
+            onSelect={(_, { key }) => setValue(key)}
           />
         )}
       />
