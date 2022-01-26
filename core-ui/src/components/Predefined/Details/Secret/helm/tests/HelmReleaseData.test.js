@@ -3,10 +3,12 @@ import { render } from '@testing-library/react';
 import { HelmReleaseData } from '../HelmReleaseData';
 
 const mockDecodeHelmRelease = jest.fn();
-jest.mock('../decodeHelmRelease', () => ({
+jest.mock('components/HelmReleases/decodeHelmRelease', () => ({
   decodeHelmRelease: release => mockDecodeHelmRelease(release),
 }));
-const originalDecodeHelmRelease = jest.requireActual('../decodeHelmRelease');
+const originalDecodeHelmRelease = jest.requireActual(
+  'components/HelmReleases/decodeHelmRelease',
+);
 
 jest.mock('react-shared', () => ({
   ...jest.requireActual('react-shared'),

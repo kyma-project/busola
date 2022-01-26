@@ -1677,6 +1677,7 @@ secrets:
     release-version: Version v{{version}}
     statuses:
       deployed: Deployed
+      pending-install: Pending Install
       superseded: Superseded
   labels:
     annotations: Annotations

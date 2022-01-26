@@ -1,5 +1,5 @@
 import React from 'react';
-import { decodeHelmRelease } from './decodeHelmRelease';
+import { decodeHelmRelease } from 'components/HelmReleases/decodeHelmRelease';
 import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
 import { ReleaseDataPanel } from './ReleaseDataPanel';
 import { ChartContent } from './ChartContent';
