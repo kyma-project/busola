@@ -1,4 +1,4 @@
-import pako from 'pako';
+import { inflate } from 'pako';
 
 export function decodeHelmRelease(encodedRelease) {
   try {
@@ -7,7 +7,7 @@ export function decodeHelmRelease(encodedRelease) {
 
     // ungzip
     const charArray = s.split('').map(c => c.charCodeAt(0));
-    const data = pako.inflate(new Uint8Array(charArray));
+    const data = inflate(new Uint8Array(charArray));
     const strRelease = String.fromCharCode.apply(null, new Uint16Array(data));
     return JSON.parse(strRelease);
   } catch (e) {
