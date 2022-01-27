@@ -1125,7 +1125,7 @@ helm-releases:
   data-title: Release {{name}}
   first-deployed: First Deployed
   last-deployed: Last Deployed
-  release-config: Release config
+  release-config: Release Config
   release-version: Version v{{version}}
   statuses:
     deployed: Deployed
