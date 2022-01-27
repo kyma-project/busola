@@ -1,0 +1,117 @@
+import LuigiClient from '@luigi-project/client';
+import { LOADING_INDICATOR } from '../useSearchResults';
+import { getSuggestionsForSingleResource } from './helpers';
+
+const helmReleaseResourceType = 'helmreleases';
+
+function getAutocompleteEntries({ tokens, namespace, resourceCache }) {
+  const tokenToAutocomplete = tokens[tokens.length - 1];
+  switch (tokens.length) {
+    case 1: // type
+      if (helmReleaseResourceType.startsWith(tokenToAutocomplete)) {
+        return helmReleaseResourceType;
+      }
+      break;
+    case 2: // name
+      const helmReleaseNames = (
+        resourceCache[`${namespace}/helmreleases`] || []
+      ).map(n => n.metadata.name);
+      return helmReleaseNames
+        .filter(name => name.startsWith(tokenToAutocomplete))
+        .map(name => `${tokens[0]} ${name} `);
+    default:
+      return [];
+  }
+}
+
+function getSuggestions({ tokens, namespace, resourceCache }) {
+  return getSuggestionsForSingleResource({
+    tokens,
+    resources: resourceCache[`${namespace}/helmreleases`] || [],
+    resourceTypeNames: [helmReleaseResourceType],
+  });
+}
+
+function makeListItem(item, namespace, t) {
+  const name = item.metadata.name;
+
+  return {
+    label: name,
+    category: t('configuration.title') + ' > ' + t('helm-releases.title'),
+    query: `helmreleases ${name}`,
+    onActivate: () =>
+      LuigiClient.linkManager()
+        .fromContext('cluster')
+        .navigate(`/namespaces/${namespace}/helm-releases/details/${name}`),
+  };
+}
+
+function concernsHelmReleases({ tokens }) {
+  return tokens[0] === helmReleaseResourceType;
+}
+
+async function fetchHelmReleases(context) {
+  if (!concernsHelmReleases(context)) {
+    return;
+  }
+
+  const { fetch, updateResourceCache, namespace } = context;
+  try {
+    const response = await fetch(`/api/v1/namespaces/${namespace}/secrets`);
+    const { items: releases } = await response.json();
+    alert('todo');
+    updateResourceCache(`${namespace}/helmreleases`, releases);
+  } catch (e) {
+    console.warn(e);
+  }
+}
+
+function createResults(context) {
+  if (!concernsHelmReleases(context)) {
+    return;
+  }
+
+  const { resourceCache, tokens, namespace, t } = context;
+  const helmReleases = resourceCache[`${namespace}/helmreleases`];
+  if (typeof helmReleases !== 'object') {
+    return LOADING_INDICATOR;
+  }
+
+  const name = tokens[1];
+  if (name) {
+    const matchedByName = helmReleases.filter(item =>
+      item.metadata.name.includes(name),
+    );
+    if (matchedByName) {
+      return matchedByName.map(item => makeListItem(item, namespace, t));
+    }
+    return null;
+  } else {
+    const listLabel = t('command-palette.results.list-of', {
+      resourceType: t('helm-releases.title'),
+    });
+
+    const linkToList = {
+      label: listLabel,
+      category: t('configuration.title') + ' > ' + t('helm-releases.title'),
+      query: 'helmReleases',
+      onActivate: () =>
+        LuigiClient.linkManager()
+          .fromContext('cluster')
+          .navigate(`/namespaces/${namespace}/helm-releases`),
+    };
+
+    return [
+      linkToList,
+      ...helmReleases.map(item => makeListItem(item, namespace, t)),
+    ];
+  }
+}
+
+export const helmReleaseHandler = {
+  getAutocompleteEntries,
+  getSuggestions,
+  fetchResources: fetchHelmReleases,
+  createResults,
+  getNavigationHelp: () => [['helmreleases']],
+};

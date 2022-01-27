@@ -113,7 +113,6 @@ async function fetchNamespacedResource(context) {
 
   const { fetch, namespace, tokens, updateResourceCache } = context;
   const resourceType = toFullResourceType(tokens[0], extendedResourceTypes);
-
   try {
     const path = `${apiPath}/namespaces/${namespace}/${resourceType}`;
     const response = await fetch(path);

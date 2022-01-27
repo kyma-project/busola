@@ -4,6 +4,7 @@ import { namespacedResourceHandler } from './namespacedResourceHandler';
 import { nodesHandler } from './nodesHandler';
 import { logsHandler } from './logsHandler';
 import { crdHandler } from './crdHandler';
+import { helmReleaseHandler } from './helmReleaseHandler';
 import { findCommonPrefix } from './helpers';
 
 const handlers = [
@@ -13,6 +14,7 @@ const handlers = [
   nodesHandler,
   logsHandler,
   crdHandler,
+  helmReleaseHandler,
 ];
 
 export function getSuggestions(context) {

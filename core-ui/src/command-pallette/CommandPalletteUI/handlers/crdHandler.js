@@ -71,8 +71,8 @@ async function fetchCRDs(context) {
     const response = await fetch(
       '/apis/apiextensions.k8s.io/v1/customresourcedefinitions',
     );
-    const { items: nodes } = await response.json();
-    updateResourceCache('customresourcedefinitions', nodes);
+    const { items: crds } = await response.json();
+    updateResourceCache('customresourcedefinitions', crds);
   } catch (e) {
     console.warn(e);
   }
