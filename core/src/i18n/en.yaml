@@ -281,7 +281,7 @@ clusters:
     download-kubeconfig: Download Kubeconfig
     kubeconfig-download-error: Failed to download the kubeconfig
     kubeconfig-not-present: Kubeconfig is missing on the Cluster
-  description-visibility: Description will be shown on the cluster list
+  description-visibility: Description is shown on the Clusters Overview list
   edit-cluster: Edit Cluster
   empty:
     go-to-btp-cockpit: To view your clusters, go to

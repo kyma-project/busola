@@ -13,6 +13,7 @@ import {
   ModalWithForm,
   Link as ExternalLink,
   useDeleteResource,
+  EMPTY_TEXT_PLACEHOLDER,
 } from 'react-shared';
 
 import { setCluster, deleteCluster } from './../shared';
@@ -99,7 +100,7 @@ export function ClusterList() {
     </>,
     entry.currentContext?.cluster?.cluster?.server,
     <ClusterStorageType clusterConfig={entry.config} />,
-    entry.config.description,
+    entry.config.description || EMPTY_TEXT_PLACEHOLDER,
   ];
 
   const actions = [
