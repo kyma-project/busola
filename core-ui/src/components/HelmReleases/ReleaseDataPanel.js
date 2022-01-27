@@ -13,10 +13,10 @@ export function ReleaseDataPanel({ release }) {
   return (
     <LayoutPanel className="fd-margin--md">
       <LayoutPanel.Header>
-        <LayoutPanel.Head title={t('secrets.helm.data-title', { name })} />
+        <LayoutPanel.Head title={t('helm-releases.data-title', { name })} />
         <div className="fd-margin-begin--sm">
           <StatusBadge noTooltip type="info">
-            {t('secrets.helm.release-version', { version })}
+            {t('helm-releases.release-version', { version })}
           </StatusBadge>
         </div>
         <div className="fd-margin-begin--tiny">
@@ -25,23 +25,23 @@ export function ReleaseDataPanel({ release }) {
       </LayoutPanel.Header>
       <LayoutPanel.Body>
         <LayoutPanelRow
-          name={t('secrets.helm.chart-version')}
+          name={t('helm-releases.chart-version')}
           value={chart.metadata.version}
         />
         <LayoutPanelRow
-          name={t('secrets.helm.chart-name')}
+          name={t('helm-releases.chart-name')}
           value={chart.metadata.name}
         />
         <LayoutPanelRow
-          name={t('secrets.helm.chart-description')}
+          name={t('helm-releases.chart-description')}
           value={chart.metadata.description}
         />
         <LayoutPanelRow
-          name={t('secrets.helm.first-deployed')}
+          name={t('helm-releases.first-deployed')}
           value={<ReadableCreationTimestamp timestamp={info.first_deployed} />}
         />
         <LayoutPanelRow
-          name={t('secrets.helm.last-deployed')}
+          name={t('helm-releases.last-deployed')}
           value={<ReadableCreationTimestamp timestamp={info.last_deployed} />}
         />
       </LayoutPanel.Body>

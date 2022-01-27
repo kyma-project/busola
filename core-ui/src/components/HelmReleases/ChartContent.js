@@ -32,7 +32,7 @@ export function ChartContent({ chart }) {
 
   return (
     <ReadonlyEditorPanel
-      title={t('secrets.helm.chart-files')}
+      title={t('helm-releases.chart-files')}
       value={atob(currentFile?.data || '')}
       actions={actions}
     />
