@@ -7,14 +7,17 @@ import { useTranslation } from 'react-i18next';
 import jsyaml from 'js-yaml';
 import { LayoutPanel } from 'fundamental-react';
 
-export function HelmReleaseData({ encodedRelease }) {
+export function HelmReleaseData({ encodedRelease, simpleHeader }) {
   const { t } = useTranslation();
 
   const release = decodeHelmRelease(encodedRelease);
 
   if (!release) {
     return (
-      <LayoutPanel className="fd-has-padding-regular fd-margin--md">
+      <LayoutPanel
+        key="helm-release-data"
+        className="fd-has-padding-regular fd-margin--md"
+      >
         {t('helm-releases.messages.cannot-decode')}
       </LayoutPanel>
     );
@@ -22,7 +25,7 @@ export function HelmReleaseData({ encodedRelease }) {
 
   return (
     <React.Fragment key="helm-release-data">
-      <ReleaseDataPanel release={release} />
+      <ReleaseDataPanel release={release} simpleHeader={simpleHeader} />
       <ReadonlyEditorPanel
         title={t('helm-releases.release-config')}
         value={jsyaml.dump(release.config)}

@@ -40,8 +40,7 @@ export function HelmReleasesList() {
   const rowRenderer = entry => [
     <Link
       onClick={() =>
-        entry.recentReleaseName &&
-        LuigiClient.linkManager().navigate('details/' + entry.recentReleaseName)
+        LuigiClient.linkManager().navigate('details/' + entry.releaseName)
       }
     >
       {entry.releaseName}

@@ -143,6 +143,8 @@ applications:
   title: Applications
   tooltips:
     provisioning: The Application is being provisioned asynchronously.
+apps:
+  title: Apps
 brokers:
   description: <0>Service Broker</0> provides a set of managed services that a third party offers and maintains.
   headers:
@@ -1134,7 +1136,6 @@ helm-releases:
   chart-files: Chart Files
   chart-name: Chart Name
   chart-version: Chart Version
-  data-title: Release {{name}}
   description: <0>Helm Releases</0> track the installed charts. For each installed chart, a new release is created.
   first-deployed: First Deployed
   headers:
@@ -1144,7 +1145,10 @@ helm-releases:
   last-deployed: Last Deployed
   messages:
     cannot-decode: Cannot decode given Helm Release.
+  other-releases: Other Releases
+  release: 'Release '
   release-config: Release Config
+  release-data: Release Data
   release-version: Version v{{version}}
   statuses:
     deployed: Deployed

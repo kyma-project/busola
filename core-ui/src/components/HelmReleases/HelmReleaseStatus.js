@@ -2,9 +2,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { StatusBadge } from 'react-shared';
 
-export function HelmReleaseStatus({ release }) {
+export function HelmReleaseStatus({ status }) {
   const { i18n } = useTranslation();
-  const status = release.info.status;
 
   const type = status === 'deployed' ? 'success' : 'info';
 

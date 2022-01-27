@@ -1,4 +1,5 @@
 import React from 'react';
+import LuigiClient from '@luigi-project/client';
 import { useTranslation } from 'react-i18next';
 import {
   PageHeader,
@@ -9,6 +10,9 @@ import {
   ResourceNotFound,
 } from 'react-shared';
 import { HelmReleaseData } from './HelmReleaseData';
+import { Link } from 'fundamental-react';
+import { HelmReleaseStatus } from './HelmReleaseStatus';
+import { Dupsko } from './Dupsko';
 
 export function HelmReleasesDetails({ releaseName }) {
   const { t, i18n } = useTranslation();
@@ -23,7 +27,11 @@ export function HelmReleasesDetails({ releaseName }) {
   );
 
   if (loading) return <Spinner />;
-  const releaseSecret = data?.find(r => r.metadata.name === releaseName);
+  const releaseSecret = data?.find(
+    r =>
+      r.metadata.labels.status !== 'superseded' &&
+      r.metadata.labels.name === releaseName,
+  );
 
   if (!releaseSecret) {
     return (
@@ -37,8 +45,41 @@ export function HelmReleasesDetails({ releaseName }) {
 
   return (
     <>
-      <PageHeader title={releaseName} breadcrumbItems={breadcrumbItems} />
-      <HelmReleaseData encodedRelease={releaseSecret.data.release} />
+      <PageHeader title={releaseName} breadcrumbItems={breadcrumbItems}>
+        {releaseSecret && (
+          <>
+            <PageHeader.Column title={t('secrets.name_singular')}>
+              <Link
+                className="fd-link"
+                onClick={() =>
+                  LuigiClient.linkManager()
+                    .fromContext('namespace')
+                    .navigate(`secrets/details/${releaseSecret.metadata.name}`)
+                }
+              >
+                {releaseSecret.metadata.name}
+              </Link>
+            </PageHeader.Column>
+            <PageHeader.Column title={t('common.headers.version')}>
+              {releaseSecret.metadata.labels.version}
+            </PageHeader.Column>
+            <PageHeader.Column title={t('common.headers.status')}>
+              <HelmReleaseStatus
+                status={releaseSecret.metadata.labels.status}
+              />
+            </PageHeader.Column>
+          </>
+        )}
+      </PageHeader>
+      <HelmReleaseData
+        encodedRelease={releaseSecret.data.release}
+        simpleHeader
+      />
+      <Dupsko
+        releaseName={releaseName}
+        releaseSecret={releaseSecret}
+        secrets={data}
+      />
     </>
   );
 }

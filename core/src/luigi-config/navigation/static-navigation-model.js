@@ -958,6 +958,40 @@ export function getStaticChildrenNodesForNamespace(
       ],
     },
 
+    //APPS CATEGORY
+    {
+      category: {
+        label: i18next.t('apps.title'),
+        icon: 'example',
+        collapsible: true,
+      },
+      hideFromNav: true,
+    },
+    {
+      category: i18next.t('apps.title'),
+      pathSegment: 'helm-releases',
+      label: i18next.t('helm-releases.title'),
+      keepSelectedForChildren: true,
+      viewUrl:
+        config.coreUIModuleUrl + '/namespaces/:namespaceId/helm-releases?',
+      viewGroup: coreUIViewGroupName,
+      navigationContext: 'helm-releases',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':releaseName',
+              resourceType: 'helm-releases',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/helm-releases/:releaseName',
+            },
+          ],
+        },
+      ],
+    },
+
     //CONFIGURATION CATEGORY (NAMESPACE)
     {
       category: {
@@ -1067,30 +1101,6 @@ export function getStaticChildrenNodesForNamespace(
                   resourceApiPath: '/api/v1',
                 }),
               viewGroup: coreUIViewGroupName,
-            },
-          ],
-        },
-      ],
-    },
-    {
-      category: i18next.t('configuration.title'),
-      pathSegment: 'helm-releases',
-      label: i18next.t('helm-releases.title'),
-      keepSelectedForChildren: true,
-      viewUrl:
-        config.coreUIModuleUrl + '/namespaces/:namespaceId/helm-releases?',
-      viewGroup: coreUIViewGroupName,
-      navigationContext: 'helm-releases',
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':releaseName',
-              resourceType: 'helm-releases',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/helm-releases/:releaseName',
             },
           ],
         },

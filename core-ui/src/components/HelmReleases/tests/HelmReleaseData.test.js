@@ -32,7 +32,7 @@ describe('HelmReleaseData', () => {
 
     const release = null;
     const { queryByText } = render(
-      <HelmReleaseData encodedRelease={release} />,
+      <HelmReleaseData encodedRelease={release} simpleHeader={false} />,
     );
 
     expect(queryByText(PANEL_TITLE)).not.toBeInTheDocument();
@@ -51,7 +51,7 @@ describe('HelmReleaseData', () => {
 
     const release = {};
     const { queryByText } = render(
-      <HelmReleaseData encodedRelease={release} />,
+      <HelmReleaseData encodedRelease={release} simpleHeader={false} />,
     );
 
     expect(queryByText(PANEL_TITLE)).toBeInTheDocument();
