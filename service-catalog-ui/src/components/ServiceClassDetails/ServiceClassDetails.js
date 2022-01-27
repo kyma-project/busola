@@ -27,7 +27,9 @@ export default function ServiceClassDetails({
       serviceClass.spec.externalMetadata.labels.provisionOnlyOnce,
     );
 
-  const btpCatalogEnabled = features.BTP_CATALOG?.isEnabled;
+  const btpCatalogEnabled =
+    features.BTP_CATALOG?.isEnabled &&
+    features.SERVICE_CATALOG_READ_ONLY?.isReadOnly;
 
   const tooltipContent = btpCatalogEnabled
     ? 'Service Catalog is in readonly mode.'

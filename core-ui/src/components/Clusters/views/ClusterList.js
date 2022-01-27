@@ -10,8 +10,9 @@ import {
   PageHeader,
   GenericList,
   useNotification,
-  Link as ExternalLink,
   ModalWithForm,
+  Link as ExternalLink,
+  useDeleteResource,
 } from 'react-shared';
 
 import { setCluster, deleteCluster } from './../shared';
@@ -19,21 +20,24 @@ import { AddClusterDialog } from '../components/AddClusterDialog';
 import { ClustersEdit } from './EditCluster/EditCluster';
 import { ClusterStorageType } from './ClusterStorageType';
 
+import './ClusterList.scss';
+
 export function ClusterList() {
   const { clusters, activeClusterName, features } = useMicrofrontendContext();
   const notification = useNotification();
   const { t, i18n } = useTranslation();
 
+  const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
+    i18n,
+    resourceType: t('clusters.labels.name'),
+  });
+
+  const [chosenCluster, setChosenCluster] = useState(null);
   const [showAdd, setShowAdd] = useState(false);
 
   const [showEdit, setShowEdit] = useState(false);
   const [editedCluster, setEditedCluster] = useState(null);
-  // const [activeCluster, setActiveCluster] = useState('');
-  // const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
-  //   i18n,
-  //   resourceType: t('clusters.kubeconfig'),
-  //   customDeleteFn: deleteCluster,
-  // });
+
   useShowNodeParamsError();
 
   if (!clusters) {
@@ -88,12 +92,12 @@ export function ClusterList() {
       <Link
         className="fd-link"
         style={styleActiveCluster(entry)}
-        onClick={() => setCluster(entry.currentContext.cluster.name)}
+        onClick={() => setCluster(entry.currentContext?.cluster?.name)}
       >
-        {entry.currentContext.cluster.name}
+        {entry.currentContext?.cluster?.name}
       </Link>
     </>,
-    entry.currentContext.cluster.cluster.server,
+    entry.currentContext?.cluster?.cluster?.server,
     <ClusterStorageType clusterConfig={entry.config} />,
     entry.config.description,
   ];
@@ -117,7 +121,13 @@ export function ClusterList() {
     {
       name: t('common.buttons.delete'),
       icon: 'delete',
-      handler: e => deleteCluster(e.currentContext.cluster.name),
+      handler: resource => {
+        setChosenCluster(resource);
+        handleResourceDelete({
+          deleteFn: () =>
+            deleteCluster(resource?.currentContext?.cluster?.name),
+        });
+      },
     },
   ];
 
@@ -210,6 +220,11 @@ export function ClusterList() {
         extraHeaderContent={extraHeaderContent}
         noSearchResultMessage={t('clusters.list.no-clusters-found')}
         i18n={i18n}
+      />
+      <DeleteMessageBox
+        resource={chosenCluster}
+        resourceName={chosenCluster?.currentContext?.cluster?.name}
+        deleteFn={e => deleteCluster(e.currentContext.cluster.name)}
       />
     </>
   );

@@ -268,15 +268,14 @@ clusters:
   add:
     errors:
       failed-to-add-cluster: Failed to connect a cluster
-    title: Connect a cluster
+    title: Connect cluster
   auth-type: Authentication type
   buttons:
     apply-configuration: Apply configuration
     apply-kubeconfig: Apply kubeconfig
     next-step: Next step
-    previous-step: Previous Step
-    verify-and-add: Connect a cluster
-  client-id: Client ID
+    previous-step: Previous step
+    verify-and-add: Connect cluster
   common:
     api-server-address: API server address
     download-kubeconfig: Download Kubeconfig
@@ -293,6 +292,7 @@ clusters:
   labels:
     client-id: Client ID
     issuer-url: Issuer URL
+    name: Clusters
     scopes: Scopes
   list:
     no-clusters-found: No clusters found
