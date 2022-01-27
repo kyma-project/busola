@@ -12,7 +12,9 @@ const resourceTypes = [
   ['clusterrolebindings', 'crbs', 'crb'],
   ['clusterroles', 'cr'],
   ['applications', 'app', 'apps'],
-  ['clusteraddonsconfigurations', 'clusteraddon', 'clusteraddons'],
+  ['storageclasses'],
+  ['persistentvolumes', 'pv'],
+  [('clusteraddonsconfigurations', 'clusteraddon', 'clusteraddons')],
   ['namespaces', 'ns'],
 ];
 const extendedResourceTypes = resourceTypes.map(aliases => [

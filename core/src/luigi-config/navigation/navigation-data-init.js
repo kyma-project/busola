@@ -391,6 +391,7 @@ export async function createNavigationNodes(
         category:
           typeof n.category === 'object' ? n.category.label : n.category,
         pathSegment: n.pathSegment,
+        navigationContext: n.navigationContext,
       }));
 
   const nodes = [

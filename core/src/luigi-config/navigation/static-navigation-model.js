@@ -1074,6 +1074,30 @@ export function getStaticChildrenNodesForNamespace(
     },
     {
       category: i18next.t('configuration.title'),
+      pathSegment: 'helm-releases',
+      label: i18next.t('helm-releases.title'),
+      keepSelectedForChildren: true,
+      viewUrl:
+        config.coreUIModuleUrl + '/namespaces/:namespaceId/helm-releases?',
+      viewGroup: coreUIViewGroupName,
+      navigationContext: 'helm-releases',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':releaseName',
+              resourceType: 'helm-releases',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/helm-releases/:releaseName',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: i18next.t('configuration.title'),
       pathSegment: 'subscriptions',
       resourceType: 'subscriptions',
       navigationContext: 'subscriptions',

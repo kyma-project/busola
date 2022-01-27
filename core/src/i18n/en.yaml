@@ -380,11 +380,15 @@ command-palette:
     daemonsets: Daemon Sets
     destinationrules: Destination Rules
     gitrepositories: Git Repositories
+    horizontalpodautoscalers: Horizontal Pod Autoscalers
     oauth2clients: OAuth2 Clients
+    persistentvolumeclaims: Persistent Volume Claims
+    persistentvolumes: Persistent Volumes
     replicasets: Replica Sets
     rolebindings: Role Bindings
     serviceaccounts: Service Accounts
     statefulsets: Stateful Sets
+    storageclasses: Storage Classes
     subscriptions: Subscriptions
   results:
     did-you-mean: 'Did you mean: '
@@ -1117,6 +1121,13 @@ git-repositories:
     none: Authentication not required.
     secret: The name of the Secret with credentials used by the Function Controller to authenticate to the Git repository in order to fetch the Function's source code and dependencies.
     url: URL must be a valid Git repository address that starts with the "http(s)", "git", or "ssh" prefix.
+helm-releases:
+  description: <0>Helm Releases</0> track the installed charts. For each installed chart, a new release is created.
+  headers:
+    chart: Chart
+    revision: Revision
+    version: Version
+  title: Helm Releases
 hpas:
   and-x-more: and {{x}} more
   container-resource: Container resource
