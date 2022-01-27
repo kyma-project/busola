@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Select } from 'fundamental-react';
+import { MessageStrip, Select } from 'fundamental-react';
 
 import { ResourceForm } from 'shared/ResourceForm';
 
@@ -39,6 +39,16 @@ export function ContextChooser(params) {
           />
         )}
       />
+      {kubeconfig['current-context'] === '-all-' && (
+        <MessageStrip
+          type="information"
+          className="fd-margin-top--sm fd-margin-bottom--sm"
+        >
+          {t('clusters.wizard.multi-context-info', {
+            context: kubeconfig.contexts[0]?.name,
+          })}
+        </MessageStrip>
+      )}
     </ResourceForm.Wrapper>
   );
 }

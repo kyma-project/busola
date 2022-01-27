@@ -47,7 +47,7 @@ export function ClusterList() {
         const blob = new Blob([kubeconfigYaml], {
           type: 'application/yaml;charset=utf-8',
         });
-        saveAs(blob, 'kubeconfig.yaml');
+        saveAs(blob, `kubeconfig--${entry.kubeconfig['current-context']}.yaml`);
       } catch (e) {
         console.error(e);
         notification.notifyError({

@@ -339,11 +339,12 @@ clusters:
       scopes: Scopes
       token: Token
       using-oidc: I'm using an OIDC provider instead
-    context: Current context
+    context: Context to connect
     editor-label: 'or paste your kubeconfig here:'
-    incomplete: We couldn't find enough authentication information in your kubeconfig. You can enter it manually.
+    incomplete: We couldn't find enough authentication information for {{context}} in your kubeconfig. You can enter it manually.
     intro: To connect a cluster, you have to provide the cluster configuration – called “kubeconfig” in the Kubernetes world.
     kubeconfig: Provide Kubeconfig
+    multi-context-info: All contexts will be connected. Please be aware that only {{context}} is validated. The remaining contexts are connected without validation.
     not-an-object: kubeconfig is not an object
     storage: Privacy Options
     storage-info: |
@@ -507,7 +508,7 @@ common:
     duplicate-key: Duplicate key
     error: Error
     hide: Hide read-only fields
-    k8s-name-input: 'Name must consist of lowercase alphanumeric characters, can contain ''-'' (e.g.: ''my-name1'').'
+    k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' (e.g.: 'my-name1')."
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: key=value, must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     read-file: Read file content as a single value, with file name as a key.
@@ -1274,7 +1275,7 @@ jobs:
     complete: Job completed.
     not-complete: Job in progress.
 kubeconfig-id:
-  error: 'Couldn''t load kubeconfig ID; configuration not changed (Error: ${{error}}).'
+  error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})."
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
 legal:
   copyright: Copyright
