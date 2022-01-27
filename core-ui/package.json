@@ -10,6 +10,7 @@
     "didyoumean": "^1.2.2",
     "dompurify": "^2.0.8",
     "markdown-it": "^10.0.0",
+    "pako": "^2.0.4",
     "react-hook-form": "^5.5.0",
     "use-debounce": "^3.4.1",
     "yup": "^0.28.3"

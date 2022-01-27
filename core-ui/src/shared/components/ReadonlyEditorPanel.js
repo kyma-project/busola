@@ -2,7 +2,7 @@ import React from 'react';
 import { MonacoEditor, useTheme } from 'react-shared';
 import { LayoutPanel } from 'fundamental-react';
 
-export function ReadonlyEditorPanel({ title, value, editorProps }) {
+export function ReadonlyEditorPanel({ title, value, editorProps, actions }) {
   const { editorTheme } = useTheme();
 
   const options = {
@@ -19,6 +19,7 @@ export function ReadonlyEditorPanel({ title, value, editorProps }) {
     <LayoutPanel className="fd-margin--md">
       <LayoutPanel.Header>
         <LayoutPanel.Head title={title} />
+        {actions && <LayoutPanel.Actions>{actions}</LayoutPanel.Actions>}
       </LayoutPanel.Header>
       <LayoutPanel.Body>
         <MonacoEditor
