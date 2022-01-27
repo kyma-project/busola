@@ -1124,6 +1124,20 @@ git-repositories:
     none: Authentication not required.
     secret: The name of the Secret with credentials used by the Function Controller to authenticate to the Git repository in order to fetch the Function's source code and dependencies.
     url: URL must be a valid Git repository address that starts with the "http(s)", "git", or "ssh" prefix.
+helm-releases:
+  chart-description: Chart Description
+  chart-files: Chart Files
+  chart-name: Chart Name
+  chart-version: Chart Version
+  data-title: Release {{name}}
+  first-deployed: First Deployed
+  last-deployed: Last Deployed
+  release-config: Release Config
+  release-version: Version v{{version}}
+  statuses:
+    deployed: Deployed
+    pending-install: Pending Install
+    superseded: Superseded
 hpas:
   and-x-more: and {{x}} more
   container-resource: Container resource
