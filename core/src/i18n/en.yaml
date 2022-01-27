@@ -281,13 +281,12 @@ clusters:
     download-kubeconfig: Download Kubeconfig
     kubeconfig-download-error: Failed to download the kubeconfig
     kubeconfig-not-present: Kubeconfig is missing on the Cluster
-  description-visibility: Description will be visible on the Cluster list
+  description-visibility: Description will be shown on the cluster list
   edit-cluster: Edit Cluster
   empty:
     go-to-btp-cockpit: To view your clusters, go to
     subtitle: Let's add one now!
     title: Looks like there aren't any clusters yet.
-  issuer-url: Issuer URL
   kubeconfig: kubeconfig
   labels:
     client-id: Client ID
@@ -312,7 +311,6 @@ clusters:
     title-current-cluster: Cluster Overview
     title-no-clusters-available: No clusters available
     version: Version
-  scopes: Scopes
   statuses:
     inmemory: In Memory
     localstorage: Local Storage

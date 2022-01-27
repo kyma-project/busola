@@ -84,7 +84,7 @@ function ClustersEdit(props) {
   const OIDCFields = (
     <>
       <ResourceForm.FormField
-        label={t('clusters.issuer-url')}
+        label={t('clusters.labels.issuer-url')}
         input={Inputs.Text}
         advanced
         required
@@ -95,7 +95,7 @@ function ClustersEdit(props) {
         }}
       />
       <ResourceForm.FormField
-        label={t('clusters.client-id')}
+        label={t('clusters.labels.client-id')}
         input={Inputs.Text}
         advanced
         required
@@ -106,7 +106,7 @@ function ClustersEdit(props) {
         }}
       />
       <ResourceForm.FormField
-        label={t('clusters.scopes')}
+        label={t('clusters.labels.scopes')}
         input={Inputs.Text}
         advanced
         required
