@@ -86,7 +86,6 @@ export function HelmReleasesList() {
         entries={entries}
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
-        noSearchResultMessage={'heh'}
         i18n={i18n}
         serverDataLoading={loading}
         serverDataError={error}
