@@ -269,6 +269,7 @@ clusters:
     errors:
       failed-to-add-cluster: Failed to connect a cluster
     title: Connect cluster
+  auth-type: Authentication type
   buttons:
     apply-configuration: Apply configuration
     apply-kubeconfig: Apply kubeconfig
@@ -280,10 +281,13 @@ clusters:
     download-kubeconfig: Download Kubeconfig
     kubeconfig-download-error: Failed to download the kubeconfig
     kubeconfig-not-present: Kubeconfig is missing on the Cluster
+  description-visibility: Description is shown on the Clusters Overview list
+  edit-cluster: Edit Cluster
   empty:
     go-to-btp-cockpit: To view your clusters, go to
     subtitle: Let's add one now!
     title: Looks like there aren't any clusters yet.
+  kubeconfig: kubeconfig
   labels:
     client-id: Client ID
     issuer-url: Issuer URL
@@ -298,6 +302,8 @@ clusters:
     missing-configuration-data: Configuration included properly. Fill the remaining required data.
     upload-paste-kubeconfig: Upload or paste your kubeconfig file.
     wrong-configuration: Cannot apply the configuration.
+  name_singular: Cluster
+  oidc: OIDC
   overview:
     messages:
       no-metrics: No metrics available for this node.
@@ -327,6 +333,7 @@ clusters:
       sessionStorage: Session storage
       unknown: Unknown
     title: Storage Type
+  token: Token
   tooltips:
     inmemory: Cluster data is cleared when you leave or refresh the page.
     localstorage: Cluster data is persisted between browser reloads.
@@ -784,7 +791,7 @@ dnsentries:
     ttl: TTL
   labels:
     dns-name: DNS Name
-    target: Targets
+    target: Target
     targets: Targets
     text: Text
     ttl: TTL

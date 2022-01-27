@@ -17,6 +17,7 @@
   "testFiles": [
     "run-before.spec.js",
     "test-namespace-overview.spec.js",
+    "edit-cluster.spec.js",
     "test-application.spec.js",
     "create-a-deployment.spec.js",
     "test-events.spec.js",
