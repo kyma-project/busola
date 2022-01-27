@@ -90,7 +90,7 @@ export const communication = {
     'busola.addCluster': async ({ params, switchCluster = true }) => {
       await saveClusterParams(params);
       if (switchCluster) {
-        setCluster(params.currentContext.cluster.name);
+        setCluster(params.kubeconfig['current-context']);
       }
     },
     'busola.deleteCluster': async ({ clusterName }) => {

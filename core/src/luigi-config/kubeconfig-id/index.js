@@ -50,7 +50,7 @@ export async function handleKubeconfigIdIfPresent() {
 
     await saveClusterParams(params);
 
-    const clusterName = params.currentContext.cluster.name;
+    const clusterName = params.kubeconfig['current-context'];
     saveActiveClusterName(clusterName);
 
     const targetLocation = getAfterLoginLocation(

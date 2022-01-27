@@ -90,7 +90,7 @@ export async function saveClusterParams(params) {
     });
   }
 
-  const clusterName = params.currentContext.cluster.name;
+  const clusterName = params.kubeconfig['current-context'];
   const clusters = await getClusters();
   clusters[clusterName] = params;
   await saveClusters(clusters);
