@@ -10,7 +10,7 @@ function HelmReleaseDataWrapper(secret) {
     return null;
   }
 
-  return HelmReleaseData(secret.data.release);
+  return <HelmReleaseData encodedRelease={secret.data.release} />;
 }
 
 export const SecretsDetails = ({ DefaultRenderer, ...otherParams }) => {

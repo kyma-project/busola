@@ -450,6 +450,7 @@ common:
     pods: Pods
     resources: Resources
     status: Status
+    version: Version
   labels:
     data: Data
     default-preset: Default
@@ -1134,6 +1135,8 @@ helm-releases:
     revision: Revision
     version: Version
   last-deployed: Last Deployed
+  messages:
+    cannot-decode: Cannot decode given Helm Release.
   release-config: Release Config
   release-version: Version v{{version}}
   statuses:

@@ -31,7 +31,9 @@ describe('HelmReleaseData', () => {
     );
 
     const release = null;
-    const { queryByText } = render(<HelmReleaseData {...release} />);
+    const { queryByText } = render(
+      <HelmReleaseData encodedRelease={release} />,
+    );
 
     expect(queryByText(PANEL_TITLE)).not.toBeInTheDocument();
   });
@@ -48,7 +50,9 @@ describe('HelmReleaseData', () => {
     mockDecodeHelmRelease.mockImplementationOnce(() => mockRelease);
 
     const release = {};
-    const { queryByText } = render(<HelmReleaseData {...release} />);
+    const { queryByText } = render(
+      <HelmReleaseData encodedRelease={release} />,
+    );
 
     expect(queryByText(PANEL_TITLE)).toBeInTheDocument();
     expect(queryByText('helm-releases.release-config')).toBeInTheDocument();

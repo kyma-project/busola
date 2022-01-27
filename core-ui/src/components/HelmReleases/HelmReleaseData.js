@@ -5,14 +5,19 @@ import { ReleaseDataPanel } from './ReleaseDataPanel';
 import { ChartContent } from './ChartContent';
 import { useTranslation } from 'react-i18next';
 import jsyaml from 'js-yaml';
+import { LayoutPanel } from 'fundamental-react';
 
-export function HelmReleaseData(encodedRelease) {
+export function HelmReleaseData({ encodedRelease }) {
   const { t } = useTranslation();
 
   const release = decodeHelmRelease(encodedRelease);
 
   if (!release) {
-    return null;
+    return (
+      <LayoutPanel className="fd-has-padding-regular fd-margin--md">
+        {t('helm-releases.messages.cannot-decode')}
+      </LayoutPanel>
+    );
   }
 
   return (

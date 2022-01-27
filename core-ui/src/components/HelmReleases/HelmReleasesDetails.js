@@ -1,24 +1,44 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { PageHeader, useMicrofrontendContext, useGetList } from 'react-shared';
+import {
+  PageHeader,
+  useMicrofrontendContext,
+  useGetList,
+  Spinner,
+  prettifyNameSingular,
+  ResourceNotFound,
+} from 'react-shared';
+import { HelmReleaseData } from './HelmReleaseData';
 
 export function HelmReleasesDetails({ releaseName }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { namespaceId: namespace } = useMicrofrontendContext();
+  const breadcrumbItems = [
+    { name: t('helm-releases.title'), path: '/' },
+    { name: '' },
+  ];
 
-  const { data, loading, error } = useGetList(
-    s => s.type === 'helm.sh/release.v1',
-  )(`/api/v1/namespaces/${namespace}/secrets`);
+  const { data, loading } = useGetList(s => s.type === 'helm.sh/release.v1')(
+    `/api/v1/namespaces/${namespace}/secrets`,
+  );
 
-  const release = data?.find(r => r.metadata.name === releaseName);
-  console.log(release);
+  if (loading) return <Spinner />;
+  const releaseSecret = data?.find(r => r.metadata.name === releaseName);
+
+  if (!releaseSecret) {
+    return (
+      <ResourceNotFound
+        resource={prettifyNameSingular(undefined, t('helm-releases.title'))}
+        breadcrumbs={breadcrumbItems}
+        i18n={i18n}
+      />
+    );
+  }
 
   return (
     <>
-      <PageHeader
-        title={releaseName}
-        breadcrumbItems={[{ name: 'Helm Releases', path: '/' }, { name: '' }]}
-      />
+      <PageHeader title={releaseName} breadcrumbItems={breadcrumbItems} />
+      <HelmReleaseData encodedRelease={releaseSecret.data.release} />
     </>
   );
 }
