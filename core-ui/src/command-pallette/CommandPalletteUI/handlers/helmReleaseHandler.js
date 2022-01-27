@@ -58,8 +58,12 @@ async function fetchHelmReleases(context) {
   const { fetch, updateResourceCache, namespace } = context;
   try {
     const response = await fetch(`/api/v1/namespaces/${namespace}/secrets`);
-    const { items: releases } = await response.json();
-    alert('todo');
+    const data = await response.json();
+    const releases = data.items.filter(
+      s =>
+        s.type === 'helm.sh/release.v1' &&
+        s.metadata?.labels?.status !== 'superseded',
+    );
     updateResourceCache(`${namespace}/helmreleases`, releases);
   } catch (e) {
     console.warn(e);
@@ -73,8 +77,21 @@ function createResults(context) {
 
   const { resourceCache, tokens, namespace, t } = context;
   const helmReleases = resourceCache[`${namespace}/helmreleases`];
+
+  const linkToList = {
+    label: t('command-palette.results.list-of', {
+      resourceType: t('helm-releases.title'),
+    }),
+    category: t('configuration.title') + ' > ' + t('helm-releases.title'),
+    query: 'helmReleases',
+    onActivate: () =>
+      LuigiClient.linkManager()
+        .fromContext('cluster')
+        .navigate(`/namespaces/${namespace}/helm-releases`),
+  };
+
   if (typeof helmReleases !== 'object') {
-    return LOADING_INDICATOR;
+    return [linkToList, { type: LOADING_INDICATOR }];
   }
 
   const name = tokens[1];
@@ -87,20 +104,6 @@ function createResults(context) {
     }
     return null;
   } else {
-    const listLabel = t('command-palette.results.list-of', {
-      resourceType: t('helm-releases.title'),
-    });
-
-    const linkToList = {
-      label: listLabel,
-      category: t('configuration.title') + ' > ' + t('helm-releases.title'),
-      query: 'helmReleases',
-      onActivate: () =>
-        LuigiClient.linkManager()
-          .fromContext('cluster')
-          .navigate(`/namespaces/${namespace}/helm-releases`),
-    };
-
     return [
       linkToList,
       ...helmReleases.map(item => makeListItem(item, namespace, t)),

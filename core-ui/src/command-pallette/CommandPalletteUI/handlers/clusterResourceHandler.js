@@ -138,7 +138,7 @@ function createResults({
 
   let resources = resourceCache[resourceType];
   if (typeof resources !== 'object') {
-    return [linkToList, LOADING_INDICATOR];
+    return [linkToList, { type: LOADING_INDICATOR }];
   }
   if (resourceType === 'namespaces' && !showHiddenNamespaces) {
     resources = resources.filter(

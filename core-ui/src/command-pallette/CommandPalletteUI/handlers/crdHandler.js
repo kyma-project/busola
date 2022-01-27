@@ -84,9 +84,36 @@ function createResults(context) {
   }
 
   const { resourceCache, tokens, namespace, t } = context;
+
+  const listLabel = t('command-palette.results.list-of', {
+    resourceType: t('command-palette.crds.name-short_plural'),
+  });
+  const linksToLists = [
+    {
+      label: listLabel,
+      category:
+        t('configuration.title') + ' > ' + t('command-palette.crds.cluster'),
+      query: 'crds',
+      onActivate: () =>
+        LuigiClient.linkManager()
+          .fromContext('cluster')
+          .navigate(`/customresourcedefinitions`),
+    },
+    {
+      label: listLabel,
+      category:
+        t('configuration.title') + ' > ' + t('command-palette.crds.namespaced'),
+      query: 'crds',
+      onActivate: () =>
+        LuigiClient.linkManager()
+          .fromContext('cluster')
+          .navigate(`namespaces/${namespace}/customresourcedefinitions`),
+    },
+  ];
+
   const crds = resourceCache['customresourcedefinitions'];
   if (typeof crds !== 'object') {
-    return LOADING_INDICATOR;
+    return [...linksToLists, { type: LOADING_INDICATOR }];
   }
 
   const name = tokens[1];
@@ -99,35 +126,6 @@ function createResults(context) {
     }
     return null;
   } else {
-    const listLabel = t('command-palette.results.list-of', {
-      resourceType: t('command-palette.crds.name-short_plural'),
-    });
-
-    const linksToLists = [
-      {
-        label: listLabel,
-        category:
-          t('configuration.title') + ' > ' + t('command-palette.crds.cluster'),
-        query: 'crds',
-        onActivate: () =>
-          LuigiClient.linkManager()
-            .fromContext('cluster')
-            .navigate(`/customresourcedefinitions`),
-      },
-      {
-        label: listLabel,
-        category:
-          t('configuration.title') +
-          ' > ' +
-          t('command-palette.crds.namespaced'),
-        query: 'crds',
-        onActivate: () =>
-          LuigiClient.linkManager()
-            .fromContext('cluster')
-            .navigate(`namespaces/${namespace}/customresourcedefinitions`),
-      },
-    ];
-
     return [
       ...linksToLists,
       ...crds.map(item => makeListItem(item, namespace, t)),

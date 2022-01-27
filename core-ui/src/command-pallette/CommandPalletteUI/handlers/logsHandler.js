@@ -95,7 +95,7 @@ function createResults(context) {
   const { resourceCache, tokens, namespace, t } = context;
   const pods = resourceCache[`${namespace}/pods`];
   if (typeof pods !== 'object') {
-    return LOADING_INDICATOR;
+    return [{ type: LOADING_INDICATOR }];
   }
 
   const podName = tokens[1];

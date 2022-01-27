@@ -161,7 +161,7 @@ function createResults({
 
   const resources = resourceCache[`${namespace}/${resourceType}`];
   if (typeof resources !== 'object') {
-    return [linkToList, LOADING_INDICATOR];
+    return [linkToList, { type: LOADING_INDICATOR }];
   }
 
   if (name) {
