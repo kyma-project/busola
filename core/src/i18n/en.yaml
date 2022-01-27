@@ -268,13 +268,13 @@ clusters:
   add:
     errors:
       failed-to-add-cluster: Failed to connect a cluster
-    title: Connect a cluster
+    title: Connect cluster
   buttons:
     apply-configuration: Apply configuration
     apply-kubeconfig: Apply kubeconfig
     next-step: Next step
-    previous-step: Previous Step
-    verify-and-add: Connect a cluster
+    previous-step: Previous step
+    verify-and-add: Connect cluster
   common:
     api-server-address: API server address
     download-kubeconfig: Download Kubeconfig
@@ -784,7 +784,7 @@ dnsentries:
     ttl: TTL
   labels:
     dns-name: DNS Name
-    target: Target
+    target: Targets
     targets: Targets
     text: Text
     ttl: TTL
