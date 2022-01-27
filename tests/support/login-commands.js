@@ -10,7 +10,7 @@ Cypress.Commands.add('loginAndSelectCluster', params => {
 
   cy.visit(`${config.clusterAddress}/clusters`)
     .getIframeBody()
-    .contains('Connect a cluster')
+    .contains('Connect cluster')
     .click();
 
   cy.getIframeBody()
@@ -29,7 +29,7 @@ Cypress.Commands.add('loginAndSelectCluster', params => {
 
   cy.getIframeBody()
     .find('[role="dialog"]')
-    .contains('button', 'Connect a cluster')
+    .contains('button', 'Connect cluster')
     .click();
 
   cy.url().should('match', expectedLocation);
