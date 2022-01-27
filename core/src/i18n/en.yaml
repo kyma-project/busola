@@ -268,13 +268,13 @@ clusters:
   add:
     errors:
       failed-to-add-cluster: Failed to connect a cluster
-    title: Connect a cluster
+    title: Connect cluster
   buttons:
     apply-configuration: Apply configuration
     apply-kubeconfig: Apply kubeconfig
     next-step: Next step
-    previous-step: Previous Step
-    verify-and-add: Connect a cluster
+    previous-step: Previous step
+    verify-and-add: Connect cluster
   common:
     api-server-address: API server address
     download-kubeconfig: Download Kubeconfig
@@ -788,7 +788,7 @@ dnsentries:
     ttl: TTL
   labels:
     dns-name: DNS Name
-    target: Target
+    target: Targets
     targets: Targets
     text: Text
     ttl: TTL
@@ -1122,11 +1122,24 @@ git-repositories:
     secret: The name of the Secret with credentials used by the Function Controller to authenticate to the Git repository in order to fetch the Function's source code and dependencies.
     url: URL must be a valid Git repository address that starts with the "http(s)", "git", or "ssh" prefix.
 helm-releases:
+  chart-description: Chart Description
+  chart-files: Chart Files
+  chart-name: Chart Name
+  chart-version: Chart Version
+  data-title: Release {{name}}
   description: <0>Helm Releases</0> track the installed charts. For each installed chart, a new release is created.
+  first-deployed: First Deployed
   headers:
     chart: Chart
     revision: Revision
     version: Version
+  last-deployed: Last Deployed
+  release-config: Release Config
+  release-version: Version v{{version}}
+  statuses:
+    deployed: Deployed
+    pending-install: Pending Install
+    superseded: Superseded
   title: Helm Releases
 hpas:
   and-x-more: and {{x}} more

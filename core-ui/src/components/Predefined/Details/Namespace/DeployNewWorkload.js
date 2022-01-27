@@ -49,18 +49,20 @@ export default function DeployNewWorkload({ namespaceName }) {
   );
 
   return (
-    <Popover
-      body={
-        <Menu>
-          <Menu.List>
-            {lambdaModal}
-            {deploymentModal}
-          </Menu.List>
-        </Menu>
-      }
-      control={control}
-      widthSizingType="matchTarget"
-      placement="bottom-end"
-    />
+    <div>
+      <Popover
+        body={
+          <Menu>
+            <Menu.List>
+              {lambdaModal}
+              {deploymentModal}
+            </Menu.List>
+          </Menu>
+        }
+        control={control}
+        widthSizingType="matchTarget"
+        placement="bottom-end"
+      />
+    </div>
   );
 }

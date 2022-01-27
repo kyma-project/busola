@@ -13,7 +13,7 @@ context('Other login options', () => {
       cy.visit(`${config.clusterAddress}/clusters`);
 
       cy.getIframeBody()
-        .contains('Connect a cluster')
+        .contains('Connect cluster')
         .click();
 
       cy.getIframeBody()
@@ -51,7 +51,7 @@ context('Other login options', () => {
 
       cy.getIframeBody()
         .find('[role="dialog"]')
-        .contains('button', 'Connect a cluster')
+        .contains('button', 'Connect cluster')
         .click();
 
       cy.url().should('match', /overview$/);
