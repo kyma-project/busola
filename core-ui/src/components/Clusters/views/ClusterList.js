@@ -76,7 +76,6 @@ export function ClusterList() {
     }
   };
 
-  // const entries = Object.values(clusters);
   const entries = Object.entries(clusters).map(([name, cluster]) => ({
     name,
     ...cluster,
