@@ -38,7 +38,13 @@ context('Multiple context kubeconfig', () => {
       cy.getIframeBody()
         .find('[role=option]')
         .within(() => {
-          cy.contains(kubeconfig.contexts[1].name).click();
+          cy.contains(kubeconfig.contexts[1].name);
+        });
+
+      cy.getIframeBody()
+        .find('[role=option]')
+        .within(() => {
+          cy.contains('All contexts').click();
         });
 
       cy.getIframeBody()
@@ -55,7 +61,38 @@ context('Multiple context kubeconfig', () => {
         .should('exist');
 
       cy.get('[data-testid=luigi-topnav-title]')
-        .contains(kubeconfig.contexts[1].context.cluster)
+        .contains(kubeconfig.contexts[0].name)
+        .should('exist');
+
+      cy.get('[data-testid="app-switcher"]').click();
+
+      cy.get('#appSwitcherPopover')
+        .contains(kubeconfig.contexts[1].name)
+        .click();
+
+      cy.url().should(
+        'match',
+        new RegExp(`${kubeconfig.contexts[1].name}/overview$`),
+      );
+
+      cy.get('[data-testid=luigi-topnav-title]')
+        .contains(kubeconfig.contexts[1].name)
+        .should('exist');
+
+      cy.get('[data-testid="app-switcher"]').click();
+
+      cy.get('#appSwitcherPopover')
+        .contains('Clusters Overview')
+        .click();
+
+      cy.url().should('match', new RegExp(`/clusters$`));
+
+      cy.getIframeBody()
+        .contains(kubeconfig.contexts[0].name)
+        .should('exist');
+
+      cy.getIframeBody()
+        .contains(kubeconfig.contexts[1].name)
         .should('exist');
     });
   });
