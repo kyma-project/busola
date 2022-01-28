@@ -1,28 +1,12 @@
 const fs = require('fs');
 
 module.exports = (on, config) => {
-  on('before:browser:launch', (browser, launchOptions) => {
-    if (
-      browser.name === 'chrome' ||
-      browser.name === 'chromium' ||
-      browser.name === 'canary'
-    ) {
-      launchOptions.args.push('--auto-open-devtools-for-tabs');
-    }
-
-    return launchOptions;
-  });
-
-  // on('before:browser:launch', (browser, launchOptions) => {
-  //   if (
-  //     browser.name === 'chrome' ||
-  //     browser.name === 'chromium' ||
-  //     browser.name === 'canary'
-  //   ) {
-  //     launchOptions.args.push('--another-arg');
-  //   }
-  //   return args;
-  // });
+  module.exports = (on, config) => {
+    /** the rest of your plugins... **/
+    require('cypress-log-to-output').install(on);
+    // or, if there is already a before:browser:launch handler, use .browserLaunchHandler inside of it
+    // @see https://github.com/flotwig/cypress-log-to-output/issues/5
+  };
   let namespaceName = process.env.NAMESPACE_NAME || null;
   // generate random namespace name if it wasn't provided as env
   const random = Math.floor(Math.random() * 9999) + 1000;

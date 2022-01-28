@@ -11,6 +11,7 @@
   },
   "devDependencies": {
     "cypress-file-upload": "^5.0.8",
+    "cypress-log-to-output": "^1.1.2",
     "js-yaml": "^4.1.0"
   },
   "optionalDependencies": {
