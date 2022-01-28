@@ -228,8 +228,8 @@ export function ClusterList() {
       />
       <DeleteMessageBox
         resource={chosenCluster}
-        resourceName={chosenCluster?.currentContext?.cluster?.name}
-        deleteFn={e => deleteCluster(e.currentContext.cluster.name)}
+        resourceName={chosenCluster?.kubeconfig['current-context']}
+        deleteFn={e => deleteCluster(e.kubeconfig['current-context'])}
       />
     </>
   );
