@@ -12,7 +12,7 @@ import {
 import { HelmReleaseData } from './HelmReleaseData';
 import { Link } from 'fundamental-react';
 import { HelmReleaseStatus } from './HelmReleaseStatus';
-import { Dupsko } from './Dupsko';
+import { OtherReleases } from './OtherReleases';
 
 export function HelmReleasesDetails({ releaseName }) {
   const { t, i18n } = useTranslation();
@@ -75,7 +75,7 @@ export function HelmReleasesDetails({ releaseName }) {
         encodedRelease={releaseSecret.data.release}
         simpleHeader
       />
-      <Dupsko
+      <OtherReleases
         releaseName={releaseName}
         releaseSecret={releaseSecret}
         secrets={data}

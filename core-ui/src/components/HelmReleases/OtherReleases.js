@@ -5,7 +5,7 @@ import { GenericList } from 'react-shared';
 import { Link } from 'fundamental-react';
 import { HelmReleaseStatus } from './HelmReleaseStatus';
 
-export function Dupsko({ releaseName, releaseSecret, secrets }) {
+export function OtherReleases({ releaseName, releaseSecret, secrets }) {
   const { t, i18n } = useTranslation();
   secrets = secrets.filter(
     s =>
