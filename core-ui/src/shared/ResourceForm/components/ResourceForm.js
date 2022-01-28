@@ -26,6 +26,7 @@ export function ResourceForm({
   createUrl,
   presets,
   onPresetSelected,
+  onSubmit,
   afterCreatedFn,
   className,
   onlyYaml = false,
@@ -89,7 +90,7 @@ export function ResourceForm({
     <section className={classnames('resource-form', className)}>
       {presetsSelector}
       {onlyYaml ? null : <ModeSelector mode={mode} setMode={setMode} />}
-      <form ref={formElementRef} onSubmit={createResource}>
+      <form ref={formElementRef} onSubmit={onSubmit || createResource}>
         {mode === ModeSelector.MODE_SIMPLE && (
           <div onChange={onChange} className="simple-form">
             <ResourceFormWrapper

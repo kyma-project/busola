@@ -222,10 +222,12 @@ context('Reduced permissions', () => {
       },
     );
 
-    cy.loginAndSelectCluster(
-      'sa-kubeconfig.yaml',
-      new RegExp(`/namespaces/${Cypress.env('NAMESPACE_NAME')}/details`),
-    );
+    cy.loginAndSelectCluster({
+      fileName: 'sa-kubeconfig.yaml',
+      expectedLocation: new RegExp(
+        `/namespaces/${Cypress.env('NAMESPACE_NAME')}/details`,
+      ),
+    });
   });
 
   it('Inspect reduced permissions view', () => {
@@ -297,8 +299,8 @@ context('Reduced permissions', () => {
     // remove cluster
     cy.get('[data-testid="app-switcher"]').click();
     cy.contains('Clusters Overview').click();
-    // todo add delete confirmation on clusters list (#649)
-    deleteFromGenericList('sa-cluster', false);
+
+    deleteFromGenericList('sa-cluster');
 
     cy.getIframeBody()
       .contains(/No clusters found/)

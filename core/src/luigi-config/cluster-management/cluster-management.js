@@ -92,7 +92,11 @@ export async function saveClusterParams(params) {
 
   const clusterName = params.kubeconfig['current-context'];
   const clusters = await getClusters();
-  clusters[clusterName] = params;
+  const prevConfig = clusters[clusterName]?.config || {};
+  clusters[clusterName] = {
+    ...params,
+    config: { ...prevConfig, ...params.config },
+  };
   await saveClusters(clusters);
 }
 

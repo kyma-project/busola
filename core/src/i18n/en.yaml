@@ -268,25 +268,30 @@ clusters:
   add:
     errors:
       failed-to-add-cluster: Failed to connect a cluster
-    title: Connect a cluster
+    title: Connect cluster
+  auth-type: Authentication type
   buttons:
     apply-configuration: Apply configuration
     apply-kubeconfig: Apply kubeconfig
     next-step: Next step
-    previous-step: Previous Step
-    verify-and-add: Connect a cluster
+    previous-step: Previous step
+    verify-and-add: Connect cluster
   common:
     api-server-address: API server address
     download-kubeconfig: Download Kubeconfig
     kubeconfig-download-error: Failed to download the kubeconfig
     kubeconfig-not-present: Kubeconfig is missing on the Cluster
+  description-visibility: Description is shown on the Clusters Overview list
+  edit-cluster: Edit Cluster
   empty:
     go-to-btp-cockpit: To view your clusters, go to
     subtitle: Let's add one now!
     title: Looks like there aren't any clusters yet.
+  kubeconfig: kubeconfig
   labels:
     client-id: Client ID
     issuer-url: Issuer URL
+    name: Clusters
     scopes: Scopes
   list:
     no-clusters-found: No clusters found
@@ -297,6 +302,8 @@ clusters:
     missing-configuration-data: Configuration included properly. Fill the remaining required data.
     upload-paste-kubeconfig: Upload or paste your kubeconfig file.
     wrong-configuration: Cannot apply the configuration.
+  name_singular: Cluster
+  oidc: OIDC
   overview:
     messages:
       no-metrics: No metrics available for this node.
@@ -326,6 +333,7 @@ clusters:
       sessionStorage: Session storage
       unknown: Unknown
     title: Storage Type
+  token: Token
   tooltips:
     inmemory: Cluster data is cleared when you leave or refresh the page.
     localstorage: Cluster data is persisted between browser reloads.
@@ -1118,6 +1126,20 @@ git-repositories:
     none: Authentication not required.
     secret: The name of the Secret with credentials used by the Function Controller to authenticate to the Git repository in order to fetch the Function's source code and dependencies.
     url: URL must be a valid Git repository address that starts with the "http(s)", "git", or "ssh" prefix.
+helm-releases:
+  chart-description: Chart Description
+  chart-files: Chart Files
+  chart-name: Chart Name
+  chart-version: Chart Version
+  data-title: Release {{name}}
+  first-deployed: First Deployed
+  last-deployed: Last Deployed
+  release-config: Release Config
+  release-version: Version v{{version}}
+  statuses:
+    deployed: Deployed
+    pending-install: Pending Install
+    superseded: Superseded
 hpas:
   and-x-more: and {{x}} more
   container-resource: Container resource

@@ -5,7 +5,7 @@ context('Invalid kubeconfig', () => {
   it('Use wrong kubeconfig - textfield', () => {
     cy.visit(`${config.clusterAddress}/clusters`)
       .getIframeBody()
-      .contains('Connect a cluster')
+      .contains('Connect cluster')
       .click();
 
     cy.getIframeBody()
@@ -27,7 +27,7 @@ context('Invalid kubeconfig', () => {
   it('Use wrong kubeconfig - from file', () => {
     cy.visit(`${config.clusterAddress}/clusters`)
       .getIframeBody()
-      .contains('Connect a cluster')
+      .contains('Connect cluster')
       .click();
 
     cy.getIframeBody()

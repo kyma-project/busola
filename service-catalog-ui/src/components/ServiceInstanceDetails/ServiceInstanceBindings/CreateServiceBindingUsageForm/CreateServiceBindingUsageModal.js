@@ -17,7 +17,9 @@ export default function CreateServiceBindingUsageModal({
   i18n,
 }) {
   const { features } = useMicrofrontendContext();
-  const btpCatalogEnabled = features.BTP_CATALOG?.isEnabled;
+  const btpCatalogEnabled =
+    features.BTP_CATALOG?.isEnabled &&
+    features.SERVICE_CATALOG_READ_ONLY?.isReadOnly;
   const [popupModalMessage, setPopupModalMessage] = useState(null);
   const { data: usageKinds } = useGetList()(
     '/apis/servicecatalog.kyma-project.io/v1alpha1/usagekinds',

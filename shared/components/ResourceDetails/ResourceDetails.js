@@ -228,7 +228,7 @@ function Resource({
       {resourceHeaderActions.map(resourceAction => resourceAction(resource))}
       <Button
         disabled={protectedResource}
-        onClick={() => handleResourceDelete(resourceUrl)}
+        onClick={() => handleResourceDelete({ resourceUrl })}
         option="transparent"
         type="negative"
       >

@@ -10,7 +10,7 @@ context('Multiple context kubeconfig', () => {
       cy.visit(`${config.clusterAddress}/clusters`);
 
       cy.getIframeBody()
-        .contains('Connect a cluster')
+        .contains('Connect cluster')
         .click();
 
       cy.getIframeBody()
@@ -53,7 +53,7 @@ context('Multiple context kubeconfig', () => {
 
       cy.getIframeBody()
         .find('[role="dialog"]')
-        .contains('button', 'Connect a cluster')
+        .contains('button', 'Connect cluster')
         .click();
 
       cy.getIframeBody()
