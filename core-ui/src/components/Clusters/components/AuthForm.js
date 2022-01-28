@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { MessageStrip, Switch } from 'fundamental-react';
 import * as jp from 'jsonpath';
 import { createLoginCommand, tryParseOIDCparams } from './oidc-params';
-import { Trans } from 'react-i18next';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
