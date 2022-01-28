@@ -27,7 +27,7 @@ export function HelmReleaseData({ encodedRelease, simpleHeader }) {
     <React.Fragment key="helm-release-data">
       <ReleaseDataPanel release={release} simpleHeader={simpleHeader} />
       <ReadonlyEditorPanel
-        title={t('helm-releases.release-config')}
+        title={t('helm-releases.release-data')}
         value={jsyaml.dump(release.config)}
       />
       <ChartContent chart={release.chart} />

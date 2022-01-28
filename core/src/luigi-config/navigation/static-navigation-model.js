@@ -962,7 +962,7 @@ export function getStaticChildrenNodesForNamespace(
     {
       category: {
         label: i18next.t('apps.title'),
-        icon: 'example',
+        icon: 'example', //grid
         collapsible: true,
       },
       hideFromNav: true,
