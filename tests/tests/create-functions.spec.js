@@ -5,7 +5,7 @@ const FUNCTION_NAME = 'test-function';
 const FUNCTION_RECEIVER_NAME = 'in-cluster-eventing-receiver';
 const API_RULE_AND_FUNCTION_NAME = 'in-cluster-eventing-publisher';
 
-context('API Rules in the Function details view', () => {
+context('Prepare funtions for testing', () => {
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();

@@ -51,7 +51,7 @@ context('In-cluster eventing', () => {
     cy.getIframeBody()
       .find('[placeholder="Subscription Name"]:visible')
       .clear()
-      .type(`${FUNCTION_NAME}-subscription`);
+      .type(`${FUNCTION_RECEIVER_NAME}-subscription`);
 
     cy.getIframeBody()
       .find(
@@ -67,10 +67,6 @@ context('In-cluster eventing', () => {
   });
 
   it('Go to details of the publisher Function', () => {
-    cy.getLeftNav()
-      .contains('Workloads')
-      .click();
-
     cy.getLeftNav()
       .contains('Functions')
       .click();
@@ -124,6 +120,10 @@ context('In-cluster eventing', () => {
 
   it('Check logs after triggering publisher function', () => {
     cy.getLeftNav()
+      .contains('Workloads')
+      .click();
+
+    cy.getLeftNav()
       .contains('Functions')
       .click();
 
@@ -160,11 +160,11 @@ context('In-cluster eventing', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('a', FUNCTION_NAME)
+      .contains('a', FUNCTION_RECEIVER_NAME)
       .click();
 
     cy.getIframeBody()
-      .contains(`${FUNCTION_NAME}-`)
+      .contains(`${FUNCTION_RECEIVER_NAME}-`)
       .then(element => {
         const podName = element[0].textContent;
         loadKubeconfig().then(kubeconfig => {
