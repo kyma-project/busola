@@ -9,6 +9,8 @@ const DR_NAME =
     .substr(2, 8);
 
 context('Test Destination Rules', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();

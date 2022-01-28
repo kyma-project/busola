@@ -4,6 +4,8 @@ const ORIGINAL_NAME = 'shoot--kyma-prow--nkyma';
 const TEMP_NAME = 'clustered';
 
 context('Edit cluster', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
   });

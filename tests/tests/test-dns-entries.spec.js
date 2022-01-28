@@ -10,6 +10,8 @@ const DNS_NAME = 'dns-name-' + random;
 const TTL = 200;
 
 context('Create a DNS Entry', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();

@@ -5,6 +5,8 @@ import { loadMultipleContextKubeconfig } from '../support/loadKubeconfigFile';
 import jsyaml from 'js-yaml';
 
 context('Multiple context kubeconfig', () => {
+  Cypress.skipAfterFail();
+
   it('User can choose different context with the multiple context kubeconfig', () => {
     cy.wrap(loadMultipleContextKubeconfig()).then(kubeconfig => {
       cy.visit(`${config.clusterAddress}/clusters`);

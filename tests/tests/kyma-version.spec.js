@@ -29,6 +29,8 @@ function mockKymaSystemForbidden() {
 }
 
 context('Kyma Version', () => {
+  Cypress.skipAfterFail();
+
   it('No Kyma Version when feature is disabled', () => {
     mockShowKymaVersion(false);
     cy.loginAndSelectCluster();

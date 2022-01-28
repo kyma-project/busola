@@ -2,6 +2,8 @@
 import config from '../config';
 
 context('Create Namespace', () => {
+  Cypress.skipAfterFail({ skipAllSuits: true });
+
   before(cy.loginAndSelectCluster);
 
   it('Create Namespace', () => {

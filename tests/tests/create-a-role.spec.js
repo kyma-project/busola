@@ -6,6 +6,8 @@ const API_GROUP = '(core)';
 const RESOURCE = 'namespaces';
 
 context('Create a Role', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();

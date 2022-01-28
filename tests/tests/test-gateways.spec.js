@@ -13,6 +13,8 @@ const TARGET_PORT = 8080;
 const KYMA_GATEWAY_CERTS = 'kyma-gateway-certs';
 
 context('Test Gateways', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();

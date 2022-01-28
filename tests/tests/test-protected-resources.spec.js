@@ -32,6 +32,8 @@ const configMap = JSON.stringify({
 });
 
 context('Test Protected Resources', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.intercept(
       {

@@ -7,6 +7,8 @@ const ANNOTATION_KEY = 'annotation';
 const ANNOTATION_VALUE = 'value';
 
 context('Add and remove a certificate', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();

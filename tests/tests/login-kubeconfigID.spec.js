@@ -6,6 +6,8 @@ import { loadKubeconfig } from '../support/loadKubeconfigFile';
 const kubeconfigIdAddress = `${config.clusterAddress}/kubeconfig`;
 
 context('Login - kubeconfigID', () => {
+  Cypress.skipAfterFail();
+
   it('Adds cluster by kubeconfigID - no path, go to Cluster Overview', () => {
     cy.wrap(loadKubeconfig()).then(kubeconfig => {
       cy.intercept(

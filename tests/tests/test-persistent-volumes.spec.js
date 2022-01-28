@@ -7,6 +7,8 @@ const PV_NAME = `test-pv-${Math.random()
   .substr(2, 8)}`;
 
 context('Test PV', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
   });

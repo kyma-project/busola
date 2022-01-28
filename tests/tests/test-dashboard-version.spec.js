@@ -1,6 +1,8 @@
 /// <reference types="cypress" />
 
 context('Test Kyma Dashboard Version link', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
   });

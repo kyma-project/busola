@@ -5,6 +5,8 @@ import { loadRandomHPA } from '../support/loadHPA';
 const HPA_NAME = 'test-hpa';
 
 context('Test HPA', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();

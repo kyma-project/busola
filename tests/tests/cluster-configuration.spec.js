@@ -32,6 +32,8 @@ const requestData = {
 };
 
 context('Cluster configuration', () => {
+  Cypress.skipAfterFail();
+
   it('Applies config from target cluster', () => {
     cy.intercept(requestData, configMock);
     cy.loginAndSelectCluster();

@@ -2,6 +2,8 @@
 import 'cypress-file-upload';
 
 context('Smoke Tests', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();

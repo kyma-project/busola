@@ -1,5 +1,38 @@
 import 'cypress-file-upload';
 
+Cypress.skipAfterFail = ({ skipAllSuits = false } = {}) => {
+  before(function() {
+    // stop all if an important test failed before
+    cy.task('dynamicSharedStore', { name: 'cancelTests' }).then(
+      hasImportantTestFallen => {
+        if (hasImportantTestFallen) {
+          Cypress.runner.stop();
+        }
+      },
+    );
+  });
+
+  afterEach(function() {
+    if (this.currentTest.state === 'failed') {
+      if (!Cypress.config('isInteractive')) {
+        // isInteractive is true for headed browsers (suite started with 'cypress open' command)
+        // and false for headless ('cypress run')
+        // This will skip remaining test in the current context when a test fails.
+        Cypress.runner.stop();
+      }
+
+      if (skipAllSuits) {
+        cy.task('dynamicSharedStore', {
+          name: 'cancelTests',
+          value: true,
+        }).then(() => {
+          cy.log('Skipping all remaining tests');
+        });
+      }
+    }
+  });
+};
+
 Cypress.Commands.add(
   'shouldHaveTrimmedText',
   { prevSubject: true },

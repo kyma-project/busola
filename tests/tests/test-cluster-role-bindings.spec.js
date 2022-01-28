@@ -5,6 +5,8 @@ const CRB_NAME = `test-crb-${random}`;
 const USER_NAME = 'test@kyma.eu';
 
 context('Test Cluster Role Bindings', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
   });
