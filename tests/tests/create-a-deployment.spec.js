@@ -105,12 +105,12 @@ context('Create a Deployment', () => {
     );
 
     cy.getIframeBody()
-      .contains('a', DEPLOYMENT_NAME, { timeout: 7000 })
+      .contains('a', DEPLOYMENT_NAME)
       .should('be.visible')
       .click();
 
     cy.getIframeBody()
-      .contains('h3', DEPLOYMENT_NAME, { timeout: 7000 })
+      .contains('h3', DEPLOYMENT_NAME)
       .should('be.visible');
 
     cy.getLeftNav()
@@ -122,7 +122,7 @@ context('Create a Deployment', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('a', DEPLOYMENT_NAME, { timeout: 7000 })
+      .contains('a', DEPLOYMENT_NAME)
       .should('be.visible');
   });
 
@@ -136,7 +136,7 @@ context('Create a Deployment', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('a', DEPLOYMENT_NAME, { timeout: 7000 })
+      .contains('a', DEPLOYMENT_NAME)
       .should('be.visible')
       .click();
 

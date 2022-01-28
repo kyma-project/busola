@@ -48,7 +48,7 @@ context('Test Ingresses', () => {
 
   it('Check Ingress details', () => {
     cy.getIframeBody()
-      .contains(NAME, { timeout: 5000 })
+      .contains(NAME)
       .should('be.visible');
 
     cy.getIframeBody()

@@ -58,7 +58,7 @@ context('Test Persistent Volume Claim', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('h3', PVC_NAME, { timeout: 5000 })
+      .contains('h3', PVC_NAME)
       .should('be.visible');
   });
 
@@ -76,7 +76,7 @@ context('Test Persistent Volume Claim', () => {
       .should('be.visible');
 
     cy.getIframeBody()
-      .contains('a', Cypress.env('STORAGE_CLASS_NAME'), { timeout: 70000 })
+      .contains('a', Cypress.env('STORAGE_CLASS_NAME'))
       .should('be.visible');
 
     cy.getIframeBody()
@@ -107,7 +107,7 @@ context('Test Persistent Volume Claim', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('.fd-table__row', PVC_NAME, { timeout: 5000 })
+      .contains('.fd-table__row', PVC_NAME)
       .should('not.exist');
   });
 

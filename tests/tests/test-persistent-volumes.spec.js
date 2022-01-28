@@ -41,7 +41,7 @@ context('Test PV', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('h3', PV_NAME, { timeout: 5000 })
+      .contains('h3', PV_NAME)
       .should('be.visible');
   });
 
@@ -81,7 +81,7 @@ context('Test PV', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('.fd-table__row', PV_NAME, { timeout: 5000 })
+      .contains('.fd-table__row', PV_NAME)
       .should('not.exist');
   });
 });

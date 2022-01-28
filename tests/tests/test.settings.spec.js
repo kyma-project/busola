@@ -52,7 +52,7 @@ context('Test app settings and preferences', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('h3', NAME, { timeout: 5000 })
+      .contains('h3', NAME)
       .should('be.visible');
 
     cy.getLeftNav()
