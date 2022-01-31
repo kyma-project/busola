@@ -1169,7 +1169,7 @@ helm-releases:
     superseded: Release is outdated and a newer one exists.
     uninstalled: Release has been uninstalled from the cluster.
     uninstalling: An uninstall operation is underway.
-    unknown: Release is in uncertain state.
+    unknown: The release is in an uncertain state.
 hpas:
   and-x-more: and {{x}} more
   container-resource: Container resource
