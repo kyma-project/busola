@@ -54,9 +54,7 @@ export function HelmReleasesList() {
     entry.recentRelease?.chart.metadata.name || t('common.statuses.unknown'),
     entry.revision,
     entry.recentRelease?.chart.metadata.version || t('common.statuses.unknown'),
-    <HelmReleaseStatus
-      status={entry.recentRelease?.chart.metadata.status || 'unknown'}
-    />,
+    <HelmReleaseStatus status={entry.status} />,
   ];
 
   const entries = Object.entries(
@@ -68,6 +66,7 @@ export function HelmReleasesList() {
       recentReleaseName: recentRelease?.metadata.name,
       recentRelease: decodeHelmRelease(recentRelease?.data.release),
       revision: releases.length,
+      status: recentRelease.metadata.labels.status || 'unknown',
     };
   });
 
