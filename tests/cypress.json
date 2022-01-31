@@ -27,7 +27,6 @@
     "in-cluster-eventing.spec.js",
     "test-cluster-overview.spec.js",
     "kyma-version.spec.js",
-    "smoke-tests.spec.js",
     "test-protected-resources.spec.js",
     "test-cluster-role-bindings.spec.js",
     "test-storage-classes.spec.js",
