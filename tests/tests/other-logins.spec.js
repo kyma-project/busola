@@ -36,9 +36,7 @@ context('Other login options', () => {
 
       cy.getIframeBody()
         .find('[role=alert]')
-        .contains(
-          "We couldn't find enough authentication information in your kubeconfig.",
-        )
+        .contains("We couldn't find enough authentication information")
         .should('be.visible');
 
       cy.getIframeBody()

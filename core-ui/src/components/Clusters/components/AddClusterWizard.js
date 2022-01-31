@@ -57,21 +57,56 @@ export function AddClusterWizard({
 
     const hasOneContext = kubeconfig?.contexts?.length === 1;
     const hasAuth = hasKubeconfigAuth(kubeconfig);
-
     setHasOneContext(hasOneContext);
     setHasAuth(hasAuth);
 
     setKubeconfig(kubeconfig);
   };
 
+  const addByContext = (kubeconfig, context, switchCluster = true) => {
+    const cluster = kubeconfig.clusters.find(
+      c => c.name === context.context.cluster,
+    );
+    const user = kubeconfig.users.find(u => u.name === context.context.user);
+    const newKubeconfig = {
+      ...kubeconfig,
+      'current-context': context.name,
+      contexts: [context],
+      clusters: [cluster],
+      users: [user],
+    };
+    addCluster(
+      {
+        kubeconfig: newKubeconfig,
+        contextName: context.name,
+        config: { ...(config || {}), storage },
+        currentContext: getContext(newKubeconfig, context.name),
+      },
+      switchCluster,
+    );
+  };
+
   const onComplete = () => {
     try {
       const contextName = kubeconfig['current-context'];
-      addCluster({
-        kubeconfig,
-        config: { ...(config || {}), storage },
-        currentContext: getContext(kubeconfig, contextName),
-      });
+      if (!kubeconfig.contexts?.length) {
+        addByContext(kubeconfig, {
+          name: kubeconfig.clusters[0].name,
+          context: {
+            cluster: kubeconfig.clusters[0].name,
+            user: kubeconfig.users[0].name,
+          },
+        });
+      } else if (contextName === '-all-') {
+        kubeconfig.contexts.forEach((context, index) => {
+          addByContext(kubeconfig, context, !index);
+        });
+      } else {
+        const context = kubeconfig.contexts.find(
+          context => context.name === contextName,
+        );
+        addByContext(kubeconfig, context);
+      }
     } catch (e) {
       notification.notifyError({
         title: t('clusters.messages.wrong-configuration'),

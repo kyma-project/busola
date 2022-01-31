@@ -342,17 +342,19 @@ clusters:
     sessionstorage: Cluster data is cleared when the page session ends.
     unknown: Unknown storage type
   wizard:
+    all-contexts: All contexts
     auth:
       client-id: Client ID
       issuer-url: Issuer URL
       scopes: Scopes
       token: Token
       using-oidc: I'm using an OIDC provider instead
-    context: Current context
+    context: Context to connect
     editor-label: 'or paste your kubeconfig here:'
-    incomplete: We couldn't find enough authentication information in your kubeconfig. You can enter it manually.
+    incomplete: We couldn't find enough authentication information for {{context}} in your kubeconfig. You can enter it manually.
     intro: To connect a cluster, you have to provide the cluster configuration – called “kubeconfig” in the Kubernetes world.
     kubeconfig: Provide Kubeconfig
+    multi-context-info: All contexts will be connected. Please be aware that only {{context}} is validated. The remaining contexts are connected without validation.
     not-an-object: kubeconfig is not an object
     storage: Privacy Options
     storage-info: |

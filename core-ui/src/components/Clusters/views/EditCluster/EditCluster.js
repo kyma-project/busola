@@ -26,11 +26,11 @@ function ClustersEdit(props) {
 
   const { kubeconfig, config } = resource;
 
-  const originalName = useRef(resource.currentContext?.cluster?.name || '');
+  const originalName = useRef(resource.kubeconfig['current-context'] || '');
 
   const onComplete = () => {
     try {
-      if (originalName.current !== resource.currentContext?.cluster?.name) {
+      if (originalName.current !== resource.kubeconfig['current-context']) {
         deleteCluster(originalName.current);
       }
       const contextName = kubeconfig['current-context'];
@@ -164,15 +164,10 @@ function ClustersEdit(props) {
         <K8sNameField
           kind={t('clusters.name_singular')}
           date-testid="cluster-name"
-          value={jp.value(resource, '$.currentContext.cluster.name')}
+          value={jp.value(resource, '$.kubeconfig["current-context"]')}
           setValue={name => {
-            jp.value(resource, '$.currentContext.cluster.name', name);
-            jp.value(
-              resource,
-              '$.kubeconfig.contexts[0].context.cluster',
-              name,
-            );
-            jp.value(resource, '$.kubeconfig.clusters[0].name', name);
+            jp.value(resource, '$.kubeconfig["current-context"]', name);
+            jp.value(resource, '$.kubeconfig.contexts[0].name', name);
 
             setResource({ ...resource });
           }}
