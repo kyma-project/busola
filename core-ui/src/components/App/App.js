@@ -79,13 +79,16 @@ export default function App() {
       <Route
         exact
         path="/namespaces/:namespaceId/helm-releases"
-        component={HelmReleasesList}
+        component={withTitle(t('helm-releases.title'), HelmReleasesList)}
       />
 
       <Route
         exact
         path="/namespaces/:namespaceId/helm-releases/:releaseName"
-        component={RoutedHelmReleaseDetails}
+        component={withTitle(
+          t('helm-releases.title'),
+          RoutedHelmReleaseDetails,
+        )}
       />
 
       <Route
