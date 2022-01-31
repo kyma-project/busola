@@ -16,7 +16,7 @@ context('Prepare funtions for testing', () => {
       .contains('Workloads')
       .click();
 
-    cy.createSimpleFunction(FUNCTION_NAME, true);
+    cy.createSimpleFunction(FUNCTION_NAME);
   });
 
   it('Create a receiver Function', () => {
