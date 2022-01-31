@@ -57,7 +57,7 @@ export function HelmReleasesDetails({ releaseName }) {
                 {releaseSecret.metadata.name}
               </Link>
             </PageHeader.Column>
-            <PageHeader.Column title={t('common.headers.version')}>
+            <PageHeader.Column title={t('helm-releases.headers.revision')}>
               {releaseSecret.metadata.labels.version}
             </PageHeader.Column>
             <PageHeader.Column title={t('common.headers.status')}>

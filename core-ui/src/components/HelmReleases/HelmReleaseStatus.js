@@ -5,10 +5,27 @@ import { StatusBadge } from 'react-shared';
 export function HelmReleaseStatus({ status }) {
   const { i18n } = useTranslation();
 
-  const type = status === 'deployed' ? 'success' : 'info';
+  const resolveType = status => {
+    switch (status) {
+      case 'deployed':
+        return 'positive';
+      case 'uninstalling':
+        return 'critical';
+      case 'failed':
+        return 'negative';
+      case 'unknown':
+        return undefined;
+      default:
+        return 'informative';
+    }
+  };
 
   return (
-    <StatusBadge resourceKind="helm-releases" i18n={i18n} type={type}>
+    <StatusBadge
+      resourceKind="helm-releases"
+      i18n={i18n}
+      type={resolveType(status)}
+    >
       {status}
     </StatusBadge>
   );

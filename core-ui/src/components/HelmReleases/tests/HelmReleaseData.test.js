@@ -22,7 +22,7 @@ jest.mock('react-i18next', () => ({
 }));
 
 describe('HelmReleaseData', () => {
-  const PANEL_TITLE = 'helm-releases.release';
+  const PANEL_TITLE = 'helm-releases.headers.release';
 
   it('Renders nothing for invalid release data', () => {
     // use original implementation
@@ -55,7 +55,11 @@ describe('HelmReleaseData', () => {
     );
 
     expect(queryByText(PANEL_TITLE)).toBeInTheDocument();
-    expect(queryByText('helm-releases.release-data')).toBeInTheDocument();
-    expect(queryByText('helm-releases.chart-files')).toBeInTheDocument();
+    expect(
+      queryByText('helm-releases.headers.release-data'),
+    ).toBeInTheDocument();
+    expect(
+      queryByText('helm-releases.headers.chart-files'),
+    ).toBeInTheDocument();
   });
 });

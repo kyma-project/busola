@@ -12,6 +12,7 @@ import {
 import { Link } from 'fundamental-react';
 import { decodeHelmRelease } from './decodeHelmRelease';
 import { findRecentRelease } from './findRecentRelease';
+import { HelmReleaseStatus } from './HelmReleaseStatus';
 
 const groupBy = (arr, fn) =>
   arr.reduce((acc, curr) => {
@@ -35,7 +36,8 @@ export function HelmReleasesList() {
     t('common.headers.labels'),
     t('helm-releases.headers.chart'),
     t('helm-releases.headers.revision'),
-    t('helm-releases.headers.version'),
+    t('helm-releases.headers.chart-version'),
+    t('common.headers.status'),
   ];
 
   const rowRenderer = entry => [
@@ -49,9 +51,12 @@ export function HelmReleasesList() {
     <div style={{ maxWidth: '36rem' }}>
       <Labels labels={entry.recentRelease?.labels || {}} shortenLongLabels />
     </div>,
-    entry.recentRelease?.chart.metadata.name || 'unknown',
+    entry.recentRelease?.chart.metadata.name || t('common.statuses.unknown'),
     entry.revision,
-    entry.recentRelease?.chart.metadata.version || 'unknown',
+    entry.recentRelease?.chart.metadata.version || t('common.statuses.unknown'),
+    <HelmReleaseStatus
+      status={entry.recentRelease?.chart.metadata.status || 'unknown'}
+    />,
   ];
 
   const entries = Object.entries(

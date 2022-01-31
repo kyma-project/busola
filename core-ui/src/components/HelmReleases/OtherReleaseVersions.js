@@ -37,7 +37,7 @@ export function OtherReleaseVersions({ releaseSecret, secrets }) {
 
   return (
     <GenericList
-      title={t('helm-releases.other-release-versions')}
+      title={t('helm-releases.headers.other-release-versions')}
       textSearchProperties={['metadata.name']}
       entries={secrets}
       headerRenderer={headerRenderer}

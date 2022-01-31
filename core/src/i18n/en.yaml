@@ -1132,24 +1132,23 @@ git-repositories:
     secret: The name of the Secret with credentials used by the Function Controller to authenticate to the Git repository in order to fetch the Function's source code and dependencies.
     url: URL must be a valid Git repository address that starts with the "http(s)", "git", or "ssh" prefix.
 helm-releases:
-  chart-description: Chart Description
-  chart-files: Chart Files
-  chart-name: Chart Name
-  chart-version: Chart Version
   description: <0>Helm Releases</0> track the installed charts. For each installed chart, a new release is created.
-  first-deployed: First Deployed
   headers:
     chart: Chart
+    chart-description: Chart Description
+    chart-files: Chart Files
+    chart-name: Chart Name
+    chart-version: Chart Version
+    first-deployed: First Deployed
+    last-deployed: Last Deployed
+    other-release-versions: Other Release Versions
+    release: 'Release '
+    release-config: Release Config
+    release-data: Release Data
+    release-version: Version v{{version}}
     revision: Revision
-    version: Version
-  last-deployed: Last Deployed
   messages:
     cannot-decode: Cannot decode given Helm Release.
-  other-release-versions: Other Release Versions
-  release: 'Release '
-  release-config: Release Config
-  release-data: Release Data
-  release-version: Version v{{version}}
   statuses:
     deployed: Deployed
     failed: Failed
