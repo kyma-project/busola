@@ -1148,7 +1148,7 @@ helm-releases:
     release-version: Version v{{version}}
     revision: Revision
   messages:
-    cannot-decode: Cannot decode given Helm Release.
+    cannot-decode: Cannot decode the given Helm Release.
   statuses:
     deployed: Deployed
     failed: Failed
