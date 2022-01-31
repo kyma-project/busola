@@ -8,6 +8,9 @@ module.exports = (on, config) => {
   if (!namespaceName) {
     namespaceName = randomName;
   }
+  const dynamicSharedStore = {
+    cancelTests: false,
+  };
 
   config.env.NAMESPACE_NAME = namespaceName;
   config.env.STORAGE_CLASS_NAME = randomName;
@@ -19,6 +22,15 @@ module.exports = (on, config) => {
     },
     listDownloads(downloadsDirectory) {
       return fs.readdirSync(downloadsDirectory);
+    },
+    // invoke setter cy.task('dynamicSharedStore', { name: 'cancelTests', value: true })
+    // invoke getter cy.task('dynamicSharedStore', { name: 'cancelTests' })
+    dynamicSharedStore(property) {
+      if (property.value !== undefined) {
+        dynamicSharedStore[property.name] = property.value;
+      } else {
+        return dynamicSharedStore[property.name];
+      }
     },
   });
   return config;

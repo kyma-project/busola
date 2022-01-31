@@ -5,6 +5,8 @@ const TEMP_NAME = 'clustered';
 let originalName;
 
 context('Edit cluster', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
   });

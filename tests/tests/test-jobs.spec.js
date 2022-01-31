@@ -24,6 +24,8 @@ function checkJobLogs({ showLogsSelector, expectedLogs }) {
 }
 
 context('Test Jobs', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
@@ -109,7 +111,7 @@ context('Test Jobs', () => {
 
     // created pod
     cy.getIframeBody()
-      .contains(new RegExp(JOB_NAME + '-'), { timeout: 5 * 1000 })
+      .contains(new RegExp(JOB_NAME + '-'))
       .click();
 
     // images for both containers

@@ -5,6 +5,8 @@ const path = require('path');
 const DOWNLOADS_FOLDER = Cypress.config('downloadsFolder');
 
 context('Download a Kubeconfig', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();

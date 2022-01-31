@@ -179,10 +179,10 @@ export const ContainersLogs = ({ params }) => {
         <PageHeader
           title={params.containerName}
           breadcrumbItems={breadcrumbs}
-        ></PageHeader>
+        />
       </div>
       <LayoutPanel className="fd-margin--md logs-panel">
-        <LayoutPanel.Header>
+        <LayoutPanel.Header className="logs-panel-header">
           <LayoutPanel.Head title="Logs" className="logs-title" />
           <LayoutPanel.Actions className="logs-actions">
             <FormLabel htmlFor="context-chooser">

@@ -3,6 +3,8 @@
 const SERVICE_NAME = 'test-sa-name';
 
 context('Test Service Accounts', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
@@ -63,7 +65,7 @@ context('Test Service Accounts', () => {
       .should('be.visible');
 
     cy.getIframeBody()
-      .contains(`${SERVICE_NAME}-token`, { timeout: 5000 })
+      .contains(`${SERVICE_NAME}-token`)
       .should('be.visible');
 
     cy.getIframeBody()

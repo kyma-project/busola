@@ -5,6 +5,8 @@ const NAMESPACE = 'kube-system';
 const DAEMONSET_NAME = 'apiserver-proxy';
 
 context('Test Daemon Sets', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
 
@@ -57,7 +59,7 @@ context('Test Daemon Sets', () => {
 
     // created pod
     cy.getIframeBody()
-      .contains(new RegExp(DAEMONSET_NAME + '-'), { timeout: 5 * 1000 })
+      .contains(new RegExp(DAEMONSET_NAME + '-'))
       .click();
 
     // images

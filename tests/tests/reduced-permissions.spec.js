@@ -17,6 +17,8 @@ const CRB_NAME = 'test-crb-' + id;
 context('Reduced permissions', () => {
   let tempKubeconfigPath;
 
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
   });

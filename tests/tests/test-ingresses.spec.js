@@ -9,6 +9,8 @@ const NAME =
     .substr(2, 8);
 
 context('Test Ingresses', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
@@ -48,7 +50,7 @@ context('Test Ingresses', () => {
 
   it('Check Ingress details', () => {
     cy.getIframeBody()
-      .contains(NAME, { timeout: 5000 })
+      .contains(NAME)
       .should('be.visible');
 
     cy.getIframeBody()

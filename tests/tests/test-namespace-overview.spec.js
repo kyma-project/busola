@@ -8,6 +8,8 @@ const NEW_LIMIT_NAME = `new-limit`;
 context(
   'Check the namespace overview for limit ranges and resourcequotas',
   () => {
+    Cypress.skipAfterFail();
+
     before(() => {
       cy.loginAndSelectCluster();
       cy.goToNamespaceDetails();
@@ -15,11 +17,11 @@ context(
 
     it('Check if limit range and resource quota exist', () => {
       cy.getIframeBody()
-        .contains('b', LIMIT_NAME, { timeout: 7000 })
+        .contains('b', LIMIT_NAME)
         .should('be.visible');
 
       cy.getIframeBody()
-        .contains('b', QUOTA_NAME, { timeout: 7000 })
+        .contains('b', QUOTA_NAME)
         .should('be.visible');
     });
 
@@ -41,7 +43,7 @@ context(
         .click();
 
       cy.getIframeBody()
-        .contains('b', NEW_LIMIT_NAME, { timeout: 7000 })
+        .contains('b', NEW_LIMIT_NAME)
         .should('be.visible');
     });
 
@@ -61,7 +63,7 @@ context(
         .click();
 
       cy.getIframeBody()
-        .find('[data-testid="delete-confirmation"]', { timeout: 5000 })
+        .find('[data-testid="delete-confirmation"]')
         .click();
 
       cy.getIframeBody()
@@ -70,7 +72,7 @@ context(
         .click();
 
       cy.getIframeBody()
-        .find('[data-testid="delete-confirmation"]', { timeout: 5000 })
+        .find('[data-testid="delete-confirmation"]')
         .click();
     });
 

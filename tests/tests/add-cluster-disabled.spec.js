@@ -24,6 +24,8 @@ export function mockAddClusterDisabled() {
 }
 
 context('Connect cluster disabled', () => {
+  Cypress.skipAfterFail();
+
   beforeEach(mockAddClusterDisabled);
 
   it('Does not display "Connect cluster" on landing page', () => {

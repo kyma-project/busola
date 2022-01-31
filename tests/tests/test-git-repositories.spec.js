@@ -8,6 +8,8 @@ const REPOSITORY_NAME =
     .substr(2, 8);
 
 context('Test Git Repositories', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();

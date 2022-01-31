@@ -8,6 +8,8 @@ const DOCKER_IMAGE_TAG = 'bitnami/nginx';
 const EDITED_REPLICAS_AMOUNT = 1;
 const EDITED_DOCKER_IMAGE_TAG = 'test-replica-set-image';
 context('Create a Replica Set', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
@@ -59,7 +61,7 @@ context('Create a Replica Set', () => {
 
   it('Checks the details view', () => {
     cy.getIframeBody()
-      .contains(`${REPLICA_SET_NAME}-`, { timeout: 10000 })
+      .contains(`${REPLICA_SET_NAME}-`)
       .click();
 
     cy.getIframeBody().contains(`Name${REPLICA_SET_NAME}`);

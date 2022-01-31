@@ -17,6 +17,8 @@ async function loadVirtualService() {
 }
 
 context('Test Virtual Services', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();

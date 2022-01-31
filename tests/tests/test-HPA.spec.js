@@ -5,6 +5,8 @@ import { loadRandomHPA } from '../support/loadHPA';
 const HPA_NAME = 'test-hpa';
 
 context('Test HPA', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
@@ -40,7 +42,7 @@ context('Test HPA', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('h3', HPA_NAME, { timeout: 5000 })
+      .contains('h3', HPA_NAME)
       .should('be.visible');
   });
 
@@ -76,7 +78,7 @@ context('Test HPA', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('.fd-table__row', HPA_NAME, { timeout: 5000 })
+      .contains('.fd-table__row', HPA_NAME)
       .should('not.exist');
   });
 });

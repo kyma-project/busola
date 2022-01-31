@@ -9,6 +9,8 @@ const DR_NAME =
     .substr(2, 8);
 
 context('Test Destination Rules', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
@@ -47,7 +49,7 @@ context('Test Destination Rules', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('h3', DR_NAME, { timeout: 5000 })
+      .contains('h3', DR_NAME)
       .should('be.visible');
   });
 
@@ -79,7 +81,7 @@ context('Test Destination Rules', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('.fd-table__row', DR_NAME, { timeout: 5000 })
+      .contains('.fd-table__row', DR_NAME)
       .should('not.exist');
   });
 });
