@@ -13,15 +13,7 @@ import { Link } from 'fundamental-react';
 import { decodeHelmRelease } from './decodeHelmRelease';
 import { findRecentRelease } from './findRecentRelease';
 import { HelmReleaseStatus } from './HelmReleaseStatus';
-
-const groupBy = (arr, fn) =>
-  arr.reduce((acc, curr) => {
-    if (!acc[fn(curr)]) {
-      acc[fn(curr)] = [];
-    }
-    acc[fn(curr)].push(curr);
-    return acc;
-  }, {});
+import { groupBy } from 'lodash';
 
 export function HelmReleasesList() {
   const { t, i18n } = useTranslation();

@@ -1,4 +1,6 @@
 import LuigiClient from '@luigi-project/client';
+import { findRecentRelease } from 'components/HelmReleases/findRecentRelease';
+import { groupBy } from 'lodash';
 import { LOADING_INDICATOR } from '../useSearchResults';
 import { getSuggestionsForSingleResource } from './helpers';
 
@@ -33,7 +35,7 @@ function getSuggestions({ tokens, namespace, resourceCache }) {
 }
 
 function makeListItem(item, namespace, t) {
-  const name = item.metadata.name;
+  const name = item.metadata.labels.name;
 
   return {
     label: name,
@@ -59,12 +61,13 @@ async function fetchHelmReleases(context) {
   try {
     const response = await fetch(`/api/v1/namespaces/${namespace}/secrets`);
     const data = await response.json();
-    const releases = data.items.filter(
-      s =>
-        s.type === 'helm.sh/release.v1' &&
-        s.metadata?.labels?.status !== 'superseded',
-    );
-    updateResourceCache(`${namespace}/helmreleases`, releases);
+    const allReleases = data.items.filter(s => s.type === 'helm.sh/release.v1');
+
+    const recentReleases = Object.values(
+      groupBy(allReleases, r => r.metadata.labels.name),
+    ).map(findRecentRelease);
+
+    updateResourceCache(`${namespace}/helmreleases`, recentReleases);
   } catch (e) {
     console.warn(e);
   }
