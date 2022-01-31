@@ -1166,7 +1166,7 @@ helm-releases:
     pending-install: An install operation is underway.
     pending-rollback: A rollback operation is underway.
     pending-upgrade: An upgrade operation is underway.
-    superseded: Release is outdated and a newer one exists.
+    superseded: The release is outdated and a newer one exists.
     uninstalled: The release has been uninstalled from the cluster.
     uninstalling: An uninstall operation is underway.
     unknown: The release is in an uncertain state.
