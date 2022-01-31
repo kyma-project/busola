@@ -10,6 +10,8 @@ const API_RULE_HOST = API_RULE_AND_FUNCTION_NAME + '-' + random;
 const API_RULE_HOST_EXPECTED_PREFIX = `https://${API_RULE_HOST}.`;
 
 context('In-cluster eventing', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();

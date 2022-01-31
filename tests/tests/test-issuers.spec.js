@@ -2,6 +2,8 @@ const ISSUER_NAME = `test-issuer-${Math.floor(Math.random() * 9999) + 1000}`;
 const SECRET_NAME = `issuer-secret-${Math.floor(Math.random() * 9999) + 1000}`;
 
 context('Test Issuers', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();

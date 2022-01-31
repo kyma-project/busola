@@ -3,6 +3,8 @@ import 'cypress-file-upload';
 import { loadRandomSC } from '../support/loadFile';
 
 context('Test Storage Classes', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
   });

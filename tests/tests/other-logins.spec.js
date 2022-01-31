@@ -5,6 +5,8 @@ import { loadKubeconfig } from '../support/loadKubeconfigFile';
 import jsyaml from 'js-yaml';
 
 context('Other login options', () => {
+  Cypress.skipAfterFail();
+
   it('Kubeconfig and token separately', () => {
     cy.wrap(loadKubeconfig()).then(kubeconfig => {
       const token = kubeconfig.users[0].user.token;

@@ -3,6 +3,8 @@
 const SERVICE_NAME = 'test-sa-name';
 
 context('Test Service Accounts', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();

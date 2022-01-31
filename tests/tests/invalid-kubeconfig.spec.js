@@ -2,6 +2,8 @@
 import config from '../config';
 
 context('Invalid kubeconfig', () => {
+  Cypress.skipAfterFail();
+
   it('Use wrong kubeconfig - textfield', () => {
     cy.visit(`${config.clusterAddress}/clusters`)
       .getIframeBody()

@@ -8,6 +8,8 @@ const API_RULE_PATH = '/test-path';
 const API_RULE_DEFAULT_PATH = '/.*';
 
 context('API Rules in the Function details view', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();

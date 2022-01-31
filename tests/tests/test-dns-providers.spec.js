@@ -9,6 +9,8 @@ const PROVIDER_INCLUDED_DOMAIN_2 = 'test2.kyma.local';
 const PROVIDER_EXCLUDED_DOMAIN = 'sth.kyma.local';
 
 context('Test DNS Providers', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();

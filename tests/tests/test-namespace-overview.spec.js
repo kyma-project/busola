@@ -8,6 +8,8 @@ const NEW_LIMIT_NAME = `new-limit`;
 context(
   'Check the namespace overview for limit ranges and resourcequotas',
   () => {
+    Cypress.skipAfterFail();
+
     before(() => {
       cy.loginAndSelectCluster();
       cy.goToNamespaceDetails();

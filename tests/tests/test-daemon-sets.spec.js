@@ -5,6 +5,8 @@ const NAMESPACE = 'kube-system';
 const DAEMONSET_NAME = 'apiserver-proxy';
 
 context('Test Daemon Sets', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
 
