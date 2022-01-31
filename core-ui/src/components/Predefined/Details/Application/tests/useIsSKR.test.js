@@ -3,36 +3,40 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import { useIsSKR } from '../useIsSKR';
 
-let mockUseGet;
+let mockUseSingleGet;
 jest.mock('react-shared', () => ({
-  useGet: () => mockUseGet,
+  useSingleGet: () => () => ({ json: () => Promise.resolve(mockUseSingleGet) }),
 }));
 
 function Testbed() {
   const isSkr = useIsSKR();
-
-  return isSkr ? 'SKR' : 'OS';
+  switch (isSkr) {
+    case true:
+      return 'SKR';
+    case false:
+      return 'OS';
+    default:
+      return 'FETCHING';
+  }
 }
 
 describe('useIsSKR', () => {
   it('Configmap not found', () => {
-    mockUseGet = { error: 'not found', data: null };
+    mockUseSingleGet = { error: 'not found', data: null };
     const { getByText } = render(<Testbed />);
 
-    expect(getByText('OS')).toBeInTheDocument();
+    expect(getByText('FETCHING')).toBeInTheDocument();
   });
 
-  it('Configmap found, value not set to true', () => {
-    mockUseGet = { data: { data: { 'is-managed-kyma-runtime': 'false' } } };
-    const { getByText } = render(<Testbed />);
-
-    expect(getByText('OS')).toBeInTheDocument();
+  it('Configmap found, value not set to true', async () => {
+    mockUseSingleGet = { data: { 'is-managed-kyma-runtime': 'false' } };
+    const { findByText } = render(<Testbed />);
+    expect(await findByText('OS')).toBeInTheDocument();
   });
 
-  it('Configmap found, value set to true', () => {
-    mockUseGet = { data: { data: { 'is-managed-kyma-runtime': 'true' } } };
-    const { getByText } = render(<Testbed />);
-
-    expect(getByText('SKR')).toBeInTheDocument();
+  it('Configmap found, value set to true', async () => {
+    mockUseSingleGet = { data: { 'is-managed-kyma-runtime': 'true' } };
+    const { findByText } = render(<Testbed />);
+    expect(await findByText('SKR')).toBeInTheDocument();
   });
 });
