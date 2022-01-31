@@ -28,7 +28,7 @@ export function HelmReleasesDetails({ releaseName }) {
   );
 
   if (loading) return <Spinner />;
-  const releaseSecret = data?.find(findRecentRelease);
+  const releaseSecret = findRecentRelease(data || []);
 
   if (!releaseSecret) {
     return (

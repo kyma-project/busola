@@ -1,4 +1,9 @@
-export function findRecentRelease(release) {
-  const status = release.metadata.labels.status;
-  return status === 'deployed' || status.startsWith('pending-');
+export function findRecentRelease(releases) {
+  const latestVersion = Math.max(
+    ...releases.map(r => parseInt(r.metadata.labels.version)),
+  );
+
+  return releases.find(
+    r => parseInt(r.metadata.labels.version) === latestVersion,
+  );
 }

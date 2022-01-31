@@ -60,13 +60,13 @@ export function HelmReleasesList() {
   const entries = Object.entries(
     groupBy(data || [], r => r.metadata.labels.name),
   ).map(([releaseName, releases]) => {
-    const recentRelease = releases.find(findRecentRelease);
+    const recentRelease = findRecentRelease(releases);
     return {
       releaseName,
       recentReleaseName: recentRelease?.metadata.name,
       recentRelease: decodeHelmRelease(recentRelease?.data.release),
       revision: releases.length,
-      status: recentRelease.metadata.labels.status || 'unknown',
+      status: recentRelease?.metadata.labels.status || 'unknown',
     };
   });
 
