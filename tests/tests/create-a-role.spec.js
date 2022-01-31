@@ -68,7 +68,7 @@ context('Create a Role', () => {
 
   it('Check the Role details', () => {
     cy.getIframeBody()
-      .contains('h3', ROLE_NAME, { timeout: 7000 })
+      .contains('h3', ROLE_NAME)
       .should('be.visible');
 
     cy.getIframeBody()
@@ -105,7 +105,7 @@ context('Create a Role', () => {
 
   it('Check the Role details after edit', () => {
     cy.getIframeBody()
-      .contains('h3', ROLE_NAME, { timeout: 7000 })
+      .contains('h3', ROLE_NAME)
       .should('be.visible');
 
     cy.getIframeBody()

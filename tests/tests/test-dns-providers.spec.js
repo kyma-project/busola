@@ -46,7 +46,7 @@ context('Test DNS Providers', () => {
 
     // secret
     cy.getIframeBody()
-      .find('[placeholder^="Select name"]', { timeout: 10000 })
+      .find('[placeholder^="Select name"]')
       .filter(':visible', { log: false })
       .type('default');
     cy.getIframeBody()
