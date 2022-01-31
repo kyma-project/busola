@@ -521,7 +521,7 @@ common:
     duplicate-key: Duplicate key
     error: Error
     hide: Hide read-only fields
-    k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' (e.g.: 'my-name1')."
+    k8s-name-input: 'Name must consist of lowercase alphanumeric characters, can contain ''-'' (e.g.: ''my-name1'').'
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: key=value, must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     read-file: Read file content as a single value, with file name as a key.
@@ -1167,8 +1167,8 @@ helm-releases:
     pending-rollback: A rollback operation is underway.
     pending-upgrade: An upgrade operation is underway.
     superseded: Release is outdated and a newer one exists.
-    uninstalled: An uninstall operation is underway.
-    uninstalling: Release has been uninstalled from the cluster.
+    uninstalled: Release has been uninstalled from the cluster.
+    uninstalling: An uninstall operation is underway.
     unknown: Release is in uncertain state.
 hpas:
   and-x-more: and {{x}} more
@@ -1327,7 +1327,7 @@ jobs:
     complete: Job completed.
     not-complete: Job in progress.
 kubeconfig-id:
-  error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})."
+  error: 'Couldn''t load kubeconfig ID; configuration not changed (Error: ${{error}}).'
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
 legal:
   copyright: Copyright
