@@ -48,7 +48,7 @@ export function ClusterList() {
   const canAddCluster = !features.ADD_CLUSTER_DISABLED?.isEnabled;
 
   const styleActiveCluster = entry => {
-    return entry.currentContext.cluster.name === activeClusterName
+    return entry.kubeconfig['current-context'] === activeClusterName
       ? { fontWeight: 'bolder' }
       : {};
   };
@@ -60,7 +60,7 @@ export function ClusterList() {
         const blob = new Blob([kubeconfigYaml], {
           type: 'application/yaml;charset=utf-8',
         });
-        saveAs(blob, 'kubeconfig.yaml');
+        saveAs(blob, `kubeconfig--${entry.kubeconfig['current-context']}.yaml`);
       } catch (e) {
         console.error(e);
         notification.notifyError({
@@ -76,7 +76,10 @@ export function ClusterList() {
     }
   };
 
-  const entries = Object.values(clusters);
+  const entries = Object.entries(clusters).map(([name, cluster]) => ({
+    name,
+    ...cluster,
+  }));
   const headerRenderer = () => [
     t('common.headers.name'),
     t('clusters.common.api-server-address'),
@@ -84,7 +87,7 @@ export function ClusterList() {
     t('common.headers.description'),
   ];
   const textSearchProperties = [
-    'currentContext.cluster.name',
+    'kubeconfig.current-context',
     'currentContext.cluster.cluster.server',
   ];
 
@@ -93,12 +96,12 @@ export function ClusterList() {
       <Link
         className="fd-link"
         style={styleActiveCluster(entry)}
-        onClick={() => setCluster(entry.currentContext?.cluster?.name)}
+        onClick={() => setCluster(entry.name)}
       >
-        {entry.currentContext?.cluster?.name}
+        {entry.name}
       </Link>
     </>,
-    entry.currentContext?.cluster?.cluster?.server,
+    entry.currentContext.cluster.cluster.server,
     <ClusterStorageType clusterConfig={entry.config} />,
     entry.config.description || EMPTY_TEXT_PLACEHOLDER,
   ];
@@ -125,8 +128,7 @@ export function ClusterList() {
       handler: resource => {
         setChosenCluster(resource);
         handleResourceDelete({
-          deleteFn: () =>
-            deleteCluster(resource?.currentContext?.cluster?.name),
+          deleteFn: () => deleteCluster(resource?.name),
         });
       },
     },
@@ -224,8 +226,8 @@ export function ClusterList() {
       />
       <DeleteMessageBox
         resource={chosenCluster}
-        resourceName={chosenCluster?.currentContext?.cluster?.name}
-        deleteFn={e => deleteCluster(e.currentContext.cluster.name)}
+        resourceName={chosenCluster?.kubeconfig['current-context']}
+        deleteFn={e => deleteCluster(e.name)}
       />
     </>
   );
