@@ -11,6 +11,7 @@ import {
 } from 'react-shared';
 import { Link } from 'fundamental-react';
 import { decodeHelmRelease } from './decodeHelmRelease';
+import { findRecentRelease } from './findRecentRelease';
 
 const groupBy = (arr, fn) =>
   arr.reduce((acc, curr) => {
@@ -56,9 +57,7 @@ export function HelmReleasesList() {
   const entries = Object.entries(
     groupBy(data || [], r => r.metadata.labels.name),
   ).map(([releaseName, releases]) => {
-    const recentRelease = releases.find(
-      r => r.metadata.labels.status !== 'superseded',
-    );
+    const recentRelease = releases.find(findRecentRelease);
     return {
       releaseName,
       recentReleaseName: recentRelease?.metadata.name,

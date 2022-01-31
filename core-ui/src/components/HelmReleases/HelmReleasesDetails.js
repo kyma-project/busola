@@ -12,7 +12,8 @@ import {
 import { HelmReleaseData } from './HelmReleaseData';
 import { Link } from 'fundamental-react';
 import { HelmReleaseStatus } from './HelmReleaseStatus';
-import { OtherReleases } from './OtherReleases';
+import { OtherReleaseVersions } from './OtherReleaseVersions';
+import { findRecentRelease } from './findRecentRelease';
 
 export function HelmReleasesDetails({ releaseName }) {
   const { t, i18n } = useTranslation();
@@ -23,15 +24,11 @@ export function HelmReleasesDetails({ releaseName }) {
   ];
 
   const { data, loading } = useGetList(s => s.type === 'helm.sh/release.v1')(
-    `/api/v1/namespaces/${namespace}/secrets`,
+    `/api/v1/namespaces/${namespace}/secrets?labelSelector=name==${releaseName}`,
   );
 
   if (loading) return <Spinner />;
-  const releaseSecret = data?.find(
-    r =>
-      r.metadata.labels.status !== 'superseded' &&
-      r.metadata.labels.name === releaseName,
-  );
+  const releaseSecret = data?.find(findRecentRelease);
 
   if (!releaseSecret) {
     return (
@@ -75,11 +72,7 @@ export function HelmReleasesDetails({ releaseName }) {
         encodedRelease={releaseSecret.data.release}
         simpleHeader
       />
-      <OtherReleases
-        releaseName={releaseName}
-        releaseSecret={releaseSecret}
-        secrets={data}
-      />
+      <OtherReleaseVersions releaseSecret={releaseSecret} secrets={data} />
     </>
   );
 }

@@ -5,12 +5,11 @@ import { GenericList } from 'react-shared';
 import { Link } from 'fundamental-react';
 import { HelmReleaseStatus } from './HelmReleaseStatus';
 
-export function OtherReleases({ releaseName, releaseSecret, secrets }) {
+export function OtherReleaseVersions({ releaseSecret, secrets }) {
   const { t, i18n } = useTranslation();
+
   secrets = secrets.filter(
-    s =>
-      s.metadata.labels.name === releaseName &&
-      s.metadata.name !== releaseSecret,
+    s => s.metadata.name !== releaseSecret.metadata.name,
   );
   secrets = secrets.sort(
     (a, b) => b.metadata.labels.version - a.metadata.labels.version,
@@ -38,13 +37,13 @@ export function OtherReleases({ releaseName, releaseSecret, secrets }) {
 
   return (
     <GenericList
-      title={t('helm-releases.other-releases')}
-      textSearchProperties={['recentRelease.chart.metadata.name']}
+      title={t('helm-releases.other-release-versions')}
+      textSearchProperties={['metadata.name']}
       entries={secrets}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       i18n={i18n}
-      pagination={{}}
+      pagination={{ autoHide: true }}
     />
   );
 }

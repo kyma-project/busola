@@ -965,7 +965,6 @@ export function getStaticChildrenNodesForNamespace(
         icon: 'example', //grid
         collapsible: true,
       },
-      hideFromNav: true,
     },
     {
       category: i18next.t('apps.title'),

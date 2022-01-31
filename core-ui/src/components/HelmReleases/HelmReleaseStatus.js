@@ -8,7 +8,7 @@ export function HelmReleaseStatus({ status }) {
   const type = status === 'deployed' ? 'success' : 'info';
 
   return (
-    <StatusBadge resourceKind="helm-releases" i18n={i18n} type={type} noTooltip>
+    <StatusBadge resourceKind="helm-releases" i18n={i18n} type={type}>
       {status}
     </StatusBadge>
   );

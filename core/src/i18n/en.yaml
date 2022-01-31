@@ -521,7 +521,7 @@ common:
     duplicate-key: Duplicate key
     error: Error
     hide: Hide read-only fields
-    k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' (e.g.: 'my-name1')."
+    k8s-name-input: 'Name must consist of lowercase alphanumeric characters, can contain ''-'' (e.g.: ''my-name1'').'
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: key=value, must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     read-file: Read file content as a single value, with file name as a key.
@@ -1145,16 +1145,32 @@ helm-releases:
   last-deployed: Last Deployed
   messages:
     cannot-decode: Cannot decode given Helm Release.
-  other-releases: Other Releases
+  other-release-versions: Other Release Versions
   release: 'Release '
   release-config: Release Config
   release-data: Release Data
   release-version: Version v{{version}}
   statuses:
     deployed: Deployed
+    failed: Failed
     pending-install: Pending Install
+    pending-rollback: Pending Rollback
+    pending-upgrade: Pending Upgrade
     superseded: Superseded
+    uninstalled: Uninstalled
+    uninstalling: Uninstalling
+    unknown: Unknown
   title: Helm Releases
+  tooltips:
+    deployed: Release has been pushed to the cluster.
+    failed: Release was not successfully deployed.
+    pending-install: An install operation is underway.
+    pending-rollback: A rollback operation is underway.
+    pending-upgrade: An upgrade operation is underway.
+    superseded: Release is outdated and a newer one exists.
+    uninstalled: A uninstall operation is underway.
+    uninstalling: Release has been uninstalled from the cluster.
+    unknown: Release is in uncertain state.
 hpas:
   and-x-more: and {{x}} more
   container-resource: Container resource
@@ -1312,7 +1328,7 @@ jobs:
     complete: Job completed.
     not-complete: Job in progress.
 kubeconfig-id:
-  error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})."
+  error: 'Couldn''t load kubeconfig ID; configuration not changed (Error: ${{error}}).'
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
 legal:
   copyright: Copyright
