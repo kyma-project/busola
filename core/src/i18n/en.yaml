@@ -1162,7 +1162,7 @@ helm-releases:
   title: Helm Releases
   tooltips:
     deployed: The release has been pushed to the cluster.
-    failed: Release was not successfully deployed.
+    failed: The release was not successfully deployed.
     pending-install: An install operation is underway.
     pending-rollback: A rollback operation is underway.
     pending-upgrade: An upgrade operation is underway.
