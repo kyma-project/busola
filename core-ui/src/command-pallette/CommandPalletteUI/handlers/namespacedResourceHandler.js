@@ -36,6 +36,8 @@ const resourceTypes = [
   ['roles'],
   ['functions', 'fn'],
   ['gitrepositories', 'gitrepos', 'repos'],
+  ['horizontalpodautoscalers', 'hpa'],
+  ['persistentvolumeclaims', 'pvc'],
 ];
 const extendedResourceTypes = resourceTypes.map(aliases => [
   ...aliases,
@@ -131,7 +133,10 @@ function createResults({
   const [type, name] = tokens;
 
   const resourceType = toFullResourceType(type, extendedResourceTypes);
-  const matchedNode = namespaceNodes.find(n => n.resourceType === resourceType);
+  const matchedNode = namespaceNodes.find(
+    n =>
+      n.resourceType === resourceType || n.navigationContext === resourceType,
+  );
 
   if (!matchedNode) {
     return;
@@ -156,7 +161,7 @@ function createResults({
 
   const resources = resourceCache[`${namespace}/${resourceType}`];
   if (typeof resources !== 'object') {
-    return [linkToList, LOADING_INDICATOR];
+    return [linkToList, { type: LOADING_INDICATOR }];
   }
 
   if (name) {

@@ -19,6 +19,8 @@ import { AddCluster } from 'components/Clusters/views/AddCluster/AddCluster';
 import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
 import { NodeDetails } from 'components/Nodes/NodeDetails/NodeDetails';
 import { useSentry } from '../../hooks/useSentry';
+import { HelmReleasesList } from 'components/HelmReleases/HelmReleasesList';
+import { HelmReleasesDetails } from 'components/HelmReleases/HelmReleasesDetails';
 
 export default function App() {
   const { cluster, language } = useMicrofrontendContext();
@@ -76,6 +78,18 @@ export default function App() {
 
       <Route
         exact
+        path="/namespaces/:namespaceId/helm-releases"
+        render={withTitle(t('helm-releases.title'), HelmReleasesList)}
+      />
+
+      <Route
+        exact
+        path="/namespaces/:namespaceId/helm-releases/:releaseName"
+        render={withTitle(t('helm-releases.title'), RoutedHelmReleaseDetails)}
+      />
+
+      <Route
+        exact
         path="/customresourcedefinitions/:customResourceDefinitionName/:resourceVersion/:resourceName"
         component={RoutedCustomResourceDetails}
       />
@@ -116,6 +130,10 @@ function RoutedApplicationServiceDetails({ match }) {
 
 function RoutedNodeDetails({ match }) {
   return <NodeDetails nodeName={match.params.nodeName} />;
+}
+
+function RoutedHelmReleaseDetails({ match }) {
+  return <HelmReleasesDetails releaseName={match.params.releaseName} />;
 }
 
 function RoutedContainerDetails({ match }) {
