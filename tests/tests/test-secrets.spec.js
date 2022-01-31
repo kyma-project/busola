@@ -11,6 +11,8 @@ const SECRET3_KEY = 'secret3-key';
 const SECRET3_VALUE = 'secret3-value';
 
 context('Test Secrets', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();

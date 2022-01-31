@@ -7,6 +7,8 @@ const USER_NAME = 'user@kyma.eu';
 const ROLE_NAME = 'view (CR)';
 
 context('Test configuration resources', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();

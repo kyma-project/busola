@@ -9,6 +9,8 @@ const NAME =
     .substr(2, 8);
 
 context('Test Ingresses', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();

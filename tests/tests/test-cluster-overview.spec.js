@@ -2,6 +2,8 @@
 import 'cypress-file-upload';
 
 context('Test Cluster Overview', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
   });

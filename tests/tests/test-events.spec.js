@@ -1,6 +1,8 @@
 /// <reference types="cypress" />
 
 context('Test Events', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
   });

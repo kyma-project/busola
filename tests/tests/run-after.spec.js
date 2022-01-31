@@ -3,6 +3,8 @@ import config from '../config';
 import 'cypress-file-upload';
 
 context('Clean up namespace', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
   });

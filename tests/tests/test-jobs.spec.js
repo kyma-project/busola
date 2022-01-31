@@ -24,6 +24,8 @@ function checkJobLogs({ showLogsSelector, expectedLogs }) {
 }
 
 context('Test Jobs', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();

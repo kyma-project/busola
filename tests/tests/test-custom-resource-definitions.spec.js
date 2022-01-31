@@ -11,6 +11,8 @@ const CRD_PLURAL_NAME =
 const CRD_NAME = CRD_PLURAL_NAME + `.${CRD_PLURAL_NAME}.example.com`;
 
 context('Test Create Resource Definitions', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();

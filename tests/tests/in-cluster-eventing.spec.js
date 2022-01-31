@@ -3,24 +3,38 @@ import 'cypress-file-upload';
 import { loadKubeconfig } from '../support/loadKubeconfigFile';
 
 const random = Math.floor(Math.random() * 9999) + 1000;
-const FUNCTION_NAME = 'in-cluster-eventing-receiver';
+const FUNCTION_RECEIVER_NAME = 'in-cluster-eventing-receiver';
 
 const API_RULE_AND_FUNCTION_NAME = 'in-cluster-eventing-publisher';
 const API_RULE_HOST = API_RULE_AND_FUNCTION_NAME + '-' + random;
 const API_RULE_HOST_EXPECTED_PREFIX = `https://${API_RULE_HOST}.`;
 
 context('In-cluster eventing', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
   });
 
-  it('Create a Receiver Function', () => {
-    cy.createFunction(
-      FUNCTION_NAME,
-      'fixtures/in-cluster-eventing-receiver.js',
-      'fixtures/in-cluster-eventing-receiver-dependencies.json',
-    );
+  it('Go to details of the receiver Function', () => {
+    cy.getLeftNav()
+      .contains('Workloads')
+      .click();
+
+    cy.getLeftNav()
+      .contains('Functions')
+      .click();
+
+    cy.getIframeBody()
+      .contains('a', FUNCTION_RECEIVER_NAME)
+      .filter(':visible', { log: false })
+      .first()
+      .click({ force: true });
+
+    cy.getIframeBody()
+      .find('[role="status"]', { timeout: 60 * 1000 })
+      .should('have.text', 'Running');
   });
 
   it('Create a Subscription', () => {
@@ -39,7 +53,7 @@ context('In-cluster eventing', () => {
     cy.getIframeBody()
       .find('[placeholder="Subscription Name"]:visible')
       .clear()
-      .type(`${FUNCTION_NAME}-subscription`);
+      .type(`${FUNCTION_RECEIVER_NAME}-subscription`);
 
     cy.getIframeBody()
       .find(
@@ -54,12 +68,20 @@ context('In-cluster eventing', () => {
       .click();
   });
 
-  it('Create a publisher Function', () => {
-    cy.createFunction(
-      API_RULE_AND_FUNCTION_NAME,
-      'fixtures/in-cluster-eventing-publisher.js',
-      'fixtures/in-cluster-eventing-publisher-dependencies.json',
-    );
+  it('Go to details of the publisher Function', () => {
+    cy.getLeftNav()
+      .contains('Functions')
+      .click();
+
+    cy.getIframeBody()
+      .contains('a', API_RULE_AND_FUNCTION_NAME)
+      .filter(':visible', { log: false })
+      .first()
+      .click({ force: true });
+
+    cy.getIframeBody()
+      .find('[role="status"]', { timeout: 60 * 1000 })
+      .should('have.text', 'Running');
   });
 
   it('Create an API Rule for the publisher Function', () => {
@@ -140,11 +162,11 @@ context('In-cluster eventing', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('a', FUNCTION_NAME)
+      .contains('a', FUNCTION_RECEIVER_NAME)
       .click();
 
     cy.getIframeBody()
-      .contains(`${FUNCTION_NAME}-`)
+      .contains(`${FUNCTION_RECEIVER_NAME}-`)
       .then(element => {
         const podName = element[0].textContent;
         loadKubeconfig().then(kubeconfig => {

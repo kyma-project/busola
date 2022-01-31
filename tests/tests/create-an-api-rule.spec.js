@@ -8,13 +8,31 @@ const API_RULE_PATH = '/test-path';
 const API_RULE_DEFAULT_PATH = '/.*';
 
 context('API Rules in the Function details view', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
   });
 
-  it('Create a simple Function', () => {
-    cy.createSimpleFunction(FUNCTION_NAME, true);
+  it('Go to details of the simple Function', () => {
+    cy.getLeftNav()
+      .contains('Workloads')
+      .click();
+
+    cy.getLeftNav()
+      .contains('Functions')
+      .click();
+
+    cy.getIframeBody()
+      .contains('a', FUNCTION_NAME)
+      .filter(':visible', { log: false })
+      .first()
+      .click({ force: true });
+
+    cy.getIframeBody()
+      .find('[role="status"]', { timeout: 60 * 1000 })
+      .should('have.text', 'Running');
   });
 
   it('Create an API Rule for the Function', () => {
