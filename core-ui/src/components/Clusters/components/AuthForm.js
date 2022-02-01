@@ -112,7 +112,12 @@ export function AuthForm({
         type="warning"
         className="fd-margin-top--sm fd-margin-bottom--sm"
       >
-        {t('clusters.wizard.incomplete')}
+        {t('clusters.wizard.incomplete', {
+          context:
+            resource['current-context'] === '-all-'
+              ? resource.contexts[0]?.name
+              : resource['current-context'],
+        })}
       </MessageStrip>
       {!useOidc && <TokenForm />}
       {!useOidc && (

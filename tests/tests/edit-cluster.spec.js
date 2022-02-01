@@ -1,7 +1,8 @@
 /// <reference types="cypress" />
 const DESC = 'beautiful, pretty cluster for all our test needs';
-const ORIGINAL_NAME = 'shoot--kyma-prow--nkyma';
 const TEMP_NAME = 'clustered';
+
+let originalName;
 
 context('Edit cluster', () => {
   Cypress.skipAfterFail();
@@ -11,9 +12,13 @@ context('Edit cluster', () => {
   });
 
   it('Changes cluster name and adds description', () => {
-    cy.contains(ORIGINAL_NAME).click();
+    cy.get('[data-testid=app-switcher]').click();
+    cy.get('[data-testid=clusters-overview]').click();
 
-    cy.contains('Clusters Overview').click();
+    cy.getIframeBody()
+      .find('.fd-table__body .fd-table__cell')
+      .eq(0)
+      .then(el => (originalName = el.text()));
 
     cy.getIframeBody()
       .find('button[data-testid="edit"]')
@@ -54,13 +59,13 @@ context('Edit cluster', () => {
       .find('input[date-testid="cluster-name"]')
       .first()
       .type(`{selectall}{backspace}`)
-      .type(ORIGINAL_NAME);
+      .type(originalName);
 
     cy.getIframeBody()
       .contains('button', 'Update')
       .click();
 
-    cy.contains(ORIGINAL_NAME)
+    cy.contains(originalName)
       .should('be.visible')
       .click();
   });

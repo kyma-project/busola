@@ -214,7 +214,7 @@ export async function createNavigation() {
 
     const groupVersions = await fetchBusolaInitData(authData);
 
-    const activeClusterName = activeCluster.currentContext.cluster.name;
+    const activeClusterName = activeCluster.kubeconfig['current-context'];
 
     const features = await getFeatures({
       authData,
@@ -349,7 +349,7 @@ export async function createNavigationNodes(
   }
 
   const activeClusterName = encodeURIComponent(
-    activeCluster.currentContext.cluster.name,
+    activeCluster.kubeconfig['current-context'],
   );
   const { navigation = {}, hiddenNamespaces = [] } =
     activeCluster?.config || {};
@@ -391,6 +391,7 @@ export async function createNavigationNodes(
         category:
           typeof n.category === 'object' ? n.category.label : n.category,
         pathSegment: n.pathSegment,
+        navigationContext: n.navigationContext,
       }));
 
   const nodes = [
