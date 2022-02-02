@@ -6,6 +6,7 @@ import { ChartContent } from './ChartContent';
 import { useTranslation } from 'react-i18next';
 import jsyaml from 'js-yaml';
 import { LayoutPanel } from 'fundamental-react';
+import { HLEM } from './HLEM/HLEM';
 
 export function HelmReleaseData({ encodedRelease, simpleHeader }) {
   const { t } = useTranslation();
@@ -31,6 +32,7 @@ export function HelmReleaseData({ encodedRelease, simpleHeader }) {
         value={jsyaml.dump(release.config)}
       />
       <ChartContent chart={release.chart} />
+      <HLEM release={release} />
     </React.Fragment>
   );
 }
