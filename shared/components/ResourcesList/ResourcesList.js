@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import jsyaml from 'js-yaml';
 import { Link, Button } from 'fundamental-react';
 import { createPatch } from 'rfc6902';
+import { cloneDeep } from 'lodash';
+
+import * as jp from 'jsonpath';
 
 import {
   YamlEditorProvider,
@@ -29,6 +32,21 @@ import {
   useDeleteResource,
 } from '../../hooks';
 import { useTranslation } from 'react-i18next';
+
+/* to allow cloning of a resource set the folowing on the resource create component:
+ *
+ * ResourceCreate.allowCreate = true;
+ *
+ * also to apply custom changes to the resource for cloning:
+ * remove specific elements:
+ * ConfigMapsCreate.sanitizeClone = [
+ *   '$.blahblah'
+ * ];
+ * ConfigMapsCreate.sanitizeClone = resource => {
+ *   // do something
+ *   return resource;
+ * }
+ */
 
 ResourcesList.propTypes = {
   customColumns: CustomPropTypes.customColumnsType,
@@ -178,9 +196,38 @@ function Resources({
     );
   };
 
+  const handleResourceClone = resource => {
+    let activeResource = cloneDeep(resource);
+    jp.value(activeResource, '$.metadata.name', '');
+    jp.remove(activeResource, '$.metadata.uid');
+    jp.remove(activeResource, '$.metadata.resourceVersion');
+    jp.remove(activeResource, '$.metadata.creationTimestamp');
+    jp.remove(activeResource, '$.metadata.managedFields');
+    jp.remove(activeResource, '$.metadata.ownerReferences');
+    jp.remove(activeResource, '$.status');
+
+    if (Array.isArray(CreateResourceForm.sanitizeClone)) {
+      CreateResourceForm.sanitizeClone.forEach(path =>
+        jp.remove(activeResource, path),
+      );
+    } else if (typeof CreateResourceForm.sanitizeClone === 'function') {
+      activeResource = CreateResourceForm.sanitizeClone(activeResource);
+    }
+
+    setActiveResource(activeResource);
+    setShowEditDialog(true);
+  };
+
   const actions = readOnly
     ? customListActions
     : [
+        CreateResourceForm?.allowClone
+          ? {
+              name: t('common.buttons.clone'),
+              icon: entry => 'duplicate',
+              handler: handleResourceClone,
+            }
+          : null,
         {
           name: t('common.buttons.edit'),
           icon: entry => (isProtected(entry) ? 'show-edit' : 'edit'),
@@ -198,7 +245,7 @@ function Resources({
           },
         },
         ...customListActions,
-      ];
+      ].filter(e => e);
 
   const headerRenderer = () => [
     t('common.headers.name'),
