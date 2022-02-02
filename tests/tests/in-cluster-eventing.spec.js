@@ -86,6 +86,10 @@ context('In-cluster eventing', () => {
 
   it('Create an API Rule for the publisher Function', () => {
     cy.createApiRule(API_RULE_AND_FUNCTION_NAME, API_RULE_HOST);
+
+    cy.getIframeBody()
+      .find('[role="status"]')
+      .should('have.text', 'OK');
   });
 
   let apiRuleHost;
