@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useTheme, TileButton } from 'react-shared';
 import { ThemePreview } from './ThemePreview/ThemePreview';
 
-const themes = ['light_dark', 'light', 'dark', 'hcw', 'hcb'];
+const themes = ['light_dark', 'light', 'dark', 'hcw', 'hcb', 'horizon'];
 
 export default function ThemeChooser() {
   const { t } = useTranslation();

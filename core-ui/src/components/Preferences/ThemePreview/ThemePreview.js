@@ -10,7 +10,7 @@ export function ThemePreview({ theme }) {
       </div>
     );
   }
-
+  console.log(theme);
   // those are copied from https://sap.live.dxp.k8s.ondemand.com/projects
   return (
     <div className="theme-wrapper">

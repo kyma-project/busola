@@ -1787,6 +1787,9 @@ settings:
       hcw:
         description: Optimized contrast and accessibility for dark environments
         title: High-Contrast White
+      horizon:
+        description: Early developer preview for the new "Horizon" theme in DXP - no productive usage
+        title: Horizon
       light:
         description: Use in default office environments
         title: Light

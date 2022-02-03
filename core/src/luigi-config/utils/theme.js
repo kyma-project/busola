@@ -12,7 +12,10 @@ export function setTheme(name) {
 
   const logo = document.querySelector('[data-testid="luigi-topnav-logo"]');
   if (logo !== null) {
-    logo.src = name === 'hcw' ? 'assets/logo-black.svg' : 'assets/logo.svg';
+    logo.src =
+      name === 'hcw' || name === 'horizon'
+        ? 'assets/logo-black.svg'
+        : 'assets/logo.svg';
   }
 }
 

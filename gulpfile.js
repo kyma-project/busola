@@ -117,6 +117,7 @@ const THEMES = [
   { path: 'sap_fiori_3_hcw/css_variables.css', name: 'hcw' },
   { path: 'sap_fiori_3_light_dark/css_variables.css', name: 'light_dark' },
   { path: 'sap_fiori_3/css_variables.css', name: 'default' },
+  { path: 'sap_horizon/css_variables.css', name: 'horizon' },
 ];
 gulp.task('copy-themes', function() {
   return Promise.all(
@@ -128,6 +129,7 @@ gulp.task('copy-themes', function() {
         )
         .pipe(rename(name + '.css'))
         .pipe(gulp.dest(`./core-ui/public/themes/@sap-theming`))
+        .pipe(gulp.dest(`./core/src/assets/libs/themes`))
         .pipe(gulp.dest(`./service-catalog-ui/public/themes/@sap-theming`)),
     ),
   );
