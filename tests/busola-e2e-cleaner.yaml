@@ -5,7 +5,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: default
-    namespace: default
+    namespace: kube-public
 roleRef:
   kind: ClusterRole
   name: cluster-admin
@@ -15,7 +15,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: busola-e2e-cleaner-cm
-  namespace: default
+  namespace: kube-public
 data:
   index.mjs: |-
     import fs from "fs";
@@ -147,7 +147,7 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: busola-e2e-cleaner-cj
-  namespace: default
+  namespace: kube-public
 spec:
   schedule: '0 */3 * * *'
   jobTemplate:
