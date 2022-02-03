@@ -132,11 +132,6 @@ data:
           );
           return Promise.allSettled(promises);
         })
-        .then((results) => {
-          if (results) {
-            console.log(results.map((r) => r.value.status));
-          }
-        })
         .catch(console.log);
     }
 
