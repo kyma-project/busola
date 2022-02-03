@@ -113,4 +113,31 @@
       fill: #8fb5ff;
     }
   }
+  &.theme--horizon {
+    .cls-1 {
+      fill: #f5f6f7;
+    }
+    .cls-2 {
+      fill: #ccc;
+    }
+    .cls-3,
+    .cls-7 {
+      fill: #fff;
+    }
+    .cls-4 {
+      fill: #d9d9d9;
+    }
+    .cls-5 {
+      fill: #0070f2;
+    }
+    .cls-6 {
+      fill: #556b82;
+    }
+    .cls-8 {
+      fill: #788fa6;
+    }
+    .cls-9 {
+      fill: #223548;
+    }
+  }
 }
