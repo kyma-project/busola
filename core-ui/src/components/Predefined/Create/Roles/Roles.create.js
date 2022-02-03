@@ -32,5 +32,6 @@ function ClusterRolesCreate(props) {
   );
 }
 ClusterRolesCreate.allowEdit = true;
+ClusterRolesCreate.allowClone = true;
 
 export { RolesCreate, ClusterRolesCreate };
