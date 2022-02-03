@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import jsyaml from 'js-yaml';
 import { Link, Button } from 'fundamental-react';
@@ -15,7 +15,6 @@ import {
   useNotification,
   useGetList,
   useUpdate,
-  useDelete,
   PageHeader,
   navigateToDetails,
   navigateToFixedPathResourceDetails,
@@ -27,7 +26,6 @@ import { ModalWithForm } from '../ModalWithForm/ModalWithForm';
 import { ReadableCreationTimestamp } from '../ReadableCreationTimestamp/ReadableCreationTimestamp';
 import {
   useWindowTitle,
-  useFeatureToggle,
   useProtectedResources,
   useDeleteResource,
 } from '../../hooks';
@@ -98,8 +96,6 @@ export function ResourcesList(props) {
   );
 }
 
-export const ResourcesListProps = ResourcesList.propTypes;
-
 function Resources({
   resourceUrl,
   resourceType,
@@ -146,14 +142,14 @@ function Resources({
   } = useYamlEditor();
   const notification = useNotification();
   const updateResourceMutation = useUpdate(resourceUrl);
-  const deleteResourceMutation = useDelete(resourceUrl);
+
   const { loading = true, error, data: resources, silentRefetch } = useGetList(
     filter,
   )(resourceUrl, { pollingInterval: 3000, skip: skipDataLoading });
-  React.useEffect(() => closeEditor(), [namespace]);
-  const [dontConfirmDelete, setDontConfirmDelete] = useFeatureToggle(
-    'dontConfirmDelete',
-  );
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => closeEditor(), [namespace]);
+
   const prettifiedResourceName = prettifyNameSingular(
     resourceName,
     resourceType,
