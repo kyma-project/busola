@@ -220,17 +220,20 @@ function Resources({
         CreateResourceForm?.allowClone
           ? {
               name: t('common.buttons.clone'),
+              tooltip: t('common.buttons.clone'),
               icon: entry => 'duplicate',
               handler: handleResourceClone,
             }
           : null,
         {
           name: t('common.buttons.edit'),
+          tooltip: t('common.buttons.edit'),
           icon: entry => (isProtected(entry) ? 'show-edit' : 'edit'),
           handler: handleResourceEdit,
         },
         {
           name: t('common.buttons.delete'),
+          tooltip: t('common.buttons.delete'),
           icon: 'delete',
           disabledHandler: isProtected,
           handler: resource => {
