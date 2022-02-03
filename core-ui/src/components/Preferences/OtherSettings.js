@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import LuigiClient from '@luigi-project/client';
 import { useMicrofrontendContext } from 'react-shared';
 import { useTranslation } from 'react-i18next';
@@ -8,6 +8,9 @@ export default function OtherSettings() {
   const { t } = useTranslation();
   const { settings } = useMicrofrontendContext();
   const { pageSize, AVAILABLE_PAGE_SIZES } = settings.pagination;
+
+  //workaround until Luigi fix
+  const [size, setSize] = useState(pageSize);
 
   const pageSizeOptions = AVAILABLE_PAGE_SIZES.map(s => ({
     key: s.toString(),
@@ -19,6 +22,7 @@ export default function OtherSettings() {
       id: 'busola.set-page-size',
       pageSize,
     });
+    setSize(pageSize);
   };
 
   return (
@@ -28,7 +32,7 @@ export default function OtherSettings() {
       </span>
       <Select
         options={pageSizeOptions}
-        selectedKey={pageSize.toString()}
+        selectedKey={size.toString()}
         onSelect={(_, { key }) => setPageSize(parseInt(key))}
       />
     </div>
