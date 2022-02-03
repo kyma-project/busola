@@ -2,6 +2,21 @@ import React, { useState } from 'react';
 import jsyaml from 'js-yaml';
 import { partition } from 'lodash';
 
+// function useWASMTemplater() {
+// const [isInitialized, setInitialized] = useState(false);
+//   const [decodeFn, setDecodeFn] = useState(() => () => {
+//     throw Error('WASM not initialized, use initializeWASM first.');
+//   });
+
+const initializeWASM = async () => {
+  if (isInitialized) return;
+  try {
+  }
+};
+
+//   return [decodeFn, isInitialized, initializeWASM];
+// }
+
 function getTemplateData(data) {
   return jsyaml.dump(
     atob(data)
