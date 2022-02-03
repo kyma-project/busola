@@ -23,6 +23,6 @@ export const communicationEntry = {
     config.navigation.nodes.forEach(node =>
       jp.value(node, '$.context.settings.pagination.pageSize', pageSize),
     );
-    Luigi.configChanged('navigation');
+    Luigi.configChanged('settings');
   },
 };
