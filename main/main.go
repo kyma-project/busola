@@ -12,18 +12,16 @@ import (
 )
 
 func render(this js.Value, args []js.Value) interface{} {
-	helmDto := js.Global().Get("helmDto")
-
 	t := []*chart.Template{}
-	templates := helmDto.Get("templates")
+	templates := args[0].Get("templates")
 	for i := 0; i < templates.Length(); i++ {
 		template := templates.Index(i)
 		name := template.Get("name").String()
 		data := template.Get("data").String()
 		t = append(t, &chart.Template{Name: name, Data: []byte(data)})
 	}
-	metadata := helmDto.Get("metadata").String()
-	values := helmDto.Get("values").String()
+	metadata := args[0].Get("metadata").String()
+	values := args[0].Get("values").String()
 
 	m := &chart.Metadata{}
 	err := yaml.Unmarshal([]byte(metadata), m)
@@ -47,17 +45,19 @@ func render(this js.Value, args []js.Value) interface{} {
 		KubeVersion: "1.14",
 	}
 
+	result := js.Global().Get("Object").New()
+
 	renderedTemplates, err := renderutil.Render(c, config, renderOpts)
 	if err != nil {
-		fmt.Printf("ERROR: %v\n", err)
+		// fmt.Printf("ERROR: %v\n", err)
+		result.Set("error", err.Error())
 	}
 
-	result := js.Global().Get("Object").New()
-	for name, template := range renderedTemplates {
-		result.Set(name, template)
+	for _, template := range renderedTemplates {
+		result.Set("result", template)
+		break
 	}
-	helmDto.Set("result", result)
-	return nil
+	return result
 }
 
 func registerCallbacks() {

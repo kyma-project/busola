@@ -1,5 +1,14 @@
 import React, { useState } from 'react';
 import jsyaml from 'js-yaml';
+import { partition } from 'lodash';
+
+function getTemplateData(data) {
+  return jsyaml.dump(
+    atob(data)
+      .replaceAll(new RegExp('{{ index \\(lookup.*?}}', 'g'))
+      .replaceAll('\r\n', '\n'),
+  );
+}
 
 export function HLEM({ release }) {
   const [loaded, setLoaded] = useState(false);
@@ -15,27 +24,33 @@ export function HLEM({ release }) {
   }
 
   function doRender() {
-    console.log(release.chart);
-    const templates = release.chart.templates.map(f => ({
-      name: f.name,
-      data: jsyaml.dump(atob(f.data).replaceAll('\r\n', '\n')),
-    }));
-    console.log(templates);
     const metadata = release.chart.metadata;
     const values = { ...release.chart.values, ...release.config };
+    const [helpers, templates] = partition(release.chart.templates, t =>
+      t.name.endsWith('.tpl'),
+    );
+    const decodedHelpers = helpers.map(h => ({
+      name: h.name,
+      data: getTemplateData(h.data),
+    }));
 
-    window.helmDto = {
-      templates,
-      metadata: jsyaml.dump(metadata),
-      values: jsyaml.dump(values),
-    };
+    for (const template of templates) {
+      const name = template.name;
+      const data = getTemplateData(template.data);
 
-    window.render();
+      const { result, error } = window.render({
+        templates: [{ name, data }, ...decodedHelpers],
+        metadata: jsyaml.dump(metadata),
+        values: jsyaml.dump(values),
+      });
 
-    Object.entries(window.helmDto.result).map(([k, v]) => {
-      console.log(k);
-      console.log(jsyaml.load(v.substring(1)));
-    });
+      console.log(name);
+      if (result) {
+        console.log(jsyaml.load(jsyaml.load(result.replace(/^\s+/, ''))));
+      } else {
+        console.log(error);
+      }
+    }
   }
 
   return (
