@@ -1,0 +1,177 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: busola-e2e-cleaner-rb
+subjects:
+  - kind: ServiceAccount
+    name: default
+    namespace: default
+roleRef:
+  kind: ClusterRole
+  name: cluster-admin
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: busola-e2e-cleaner-cm
+  namespace: default
+data:
+  index.mjs: |-
+    import fs from "fs";
+    import https from "https";
+
+    //https://ozzyczech.cz/js/fetch-in-pure-node-js/
+    const fetch = (params, postData) =>
+      new Promise((resolve, reject) => {
+        const req = https.request(params, (res) => {
+          // reject on bad status
+          if (res.statusCode < 200 || res.statusCode >= 300) {
+            return reject(new Error("statusCode=" + res.statusCode));
+          }
+
+          // read data
+          let body = [];
+          res.on("data", (chunk) => {
+            body.push(chunk);
+          });
+
+          res.on("end", () => {
+            try {
+              body = Buffer.concat(body).toString();
+            } catch (e) {
+              reject(e);
+            }
+
+            resolve(body); // submit data
+          });
+        });
+
+        req.on("error", (err) => {
+          reject(err);
+        });
+
+        if (postData) {
+          req.write(postData);
+        }
+
+        req.end(); // close request
+      });
+
+    process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
+
+    const { KUBERNETES_SERVICE_HOST: host, KUBERNETES_SERVICE_PORT: port } =
+      process.env;
+    const tokenPath = "/var/run/secrets/kubernetes.io/serviceaccount/token";
+    const token = fs.readFileSync(tokenPath);
+
+    const resources = [
+      {
+        path: "/api/v1/namespaces",
+        namePrefix: "a-busola-test-",
+      },
+      {
+        path: "/apis/applicationconnector.kyma-project.io/v1alpha1/applications",
+        namePrefix: "test-mock-app-a-busola-test-",
+      },
+      {
+        path: "/apis/storage.k8s.io/v1/storageclasses",
+        namePrefix: "a-busola-test-",
+      },
+      {
+        path: "/api/v1/persistentvolumes",
+        namePrefix: "test-pv-",
+      },
+      {
+        path: "/apis/rbac.authorization.k8s.io/v1/clusterroles",
+        namePrefix: "test-cr-",
+      },
+      {
+        path: "/apis/rbac.authorization.k8s.io/v1/clusterrolebindings",
+        namePrefix: "test-crb-",
+      },
+      {
+        path: "/apis/apiextensions.k8s.io/v1/customresourcedefinitions",
+        namePrefix: "test-",
+      },
+    ];
+
+    async function doDelete({ path, namePrefix }) {
+      return fetch({
+        headers: { Authorization: `Bearer ${token}` },
+        host,
+        port,
+        path: path,
+      })
+        .then((e) => Promise.resolve(JSON.parse(e)))
+        .then((data) => {
+          const resources = data.items
+            .filter((res) => res.metadata.name.startsWith(namePrefix))
+            .map(({ metadata }) => ({
+              name: metadata.name,
+              ageInMinutes:
+                (Date.now() - Date.parse(metadata.creationTimestamp)) / 1000 / 60,
+            }));
+
+          const resourcesToDelete = resources.filter(
+            ({ ageInMinutes }) => ageInMinutes > 60
+          );
+          if (!resourcesToDelete.length) {
+            console.log("nothing to delete");
+            return Promise.resolve();
+          }
+
+          const promises = resourcesToDelete.map((r) =>
+            fetch({
+              headers: { Authorization: `Bearer ${token}` },
+              host,
+              port,
+              path: path + "/" + r.name,
+              method: "DELETE",
+            })
+          );
+          return Promise.allSettled(promises);
+        })
+        .then((results) => {
+          if (results) {
+            console.log(results.map((r) => r.value.status));
+          }
+        })
+        .catch(console.log);
+    }
+
+    (async () => {
+      for (const resource of resources) {
+        console.log("deleting " + resource.path);
+        await doDelete(resource);
+      }
+    })();
+
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: busola-e2e-cleaner-cj
+  namespace: default
+spec:
+  schedule: '0 */3 * * *'
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: arnold
+              image: node:12
+              imagePullPolicy: Always
+              command:
+                - node
+                - /src/index.mjs
+              volumeMounts:
+                - name: code
+                  mountPath: /src
+          volumes:
+            - name: code
+              configMap:
+                name: busola-e2e-cleaner-cm
+          restartPolicy: OnFailure
+  concurrencyPolicy: Allow
