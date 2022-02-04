@@ -34,7 +34,7 @@
     "core-js": "^3.3.6",
     "file-saver": "^2.0.2",
     "fundamental-react": "^0.14.0",
-    "fundamental-styles": "^0.19.0",
+    "fundamental-styles": "^0.20.0",
     "gulp-rename": "^2.0.0",
     "i18next": "^20.3.4",
     "i18next-http-backend": "^1.2.8",
