@@ -14,14 +14,12 @@ Cypress.Commands.add('loginAndSelectCluster', function(params) {
   const { fileName, expectedLocation, storage } = { ...defaults, ...params };
 
   cy.wrap(loadKubeconfig()).then(kubeconfig => {
-    // conditionally log in to OIDC
     if (kubeconfig.users?.[0]?.user?.exec?.args) {
-      // obtaining OIDC URL
+      // conditionally logs in to OIDC
       const URLelement = kubeconfig.users[0].user.exec.args.find(el =>
         el.includes('oidc-issuer-url'),
       );
-      // if you experience an error with URL address during tests, please note kubeconfig should
-      // only specify scheme and domain, i.e, https://apskyxzcl.accounts400.ondemand.com
+      // kubeconfig should only specify a scheme and a domain without any paths, i.e, https://apskyxzcl.accounts400.ondemand.com
       const OICD_URL = /oidc-issuer-url=(?<url>(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,}))/.exec(
         URLelement,
       )?.groups?.url;
@@ -29,7 +27,7 @@ Cypress.Commands.add('loginAndSelectCluster', function(params) {
       // validating the input
       if (!(OICD_URL && USERNAME && PASSWORD)) {
         cy.log(
-          'Either OIDC url, username or password is missing. URL is obained from kubeconfig "--oidc-issuer-url". Credentials are provided through Cypress env.',
+          'Either OIDC url, username or password is missing. URL is obtained from kubeconfig "--oidc-issuer-url" field. Credentials are provided through Cypress env variables.',
         );
       }
       cy.wrap(OICD_URL && USERNAME && PASSWORD).should('be.ok');
@@ -56,7 +54,7 @@ Cypress.Commands.add('loginAndSelectCluster', function(params) {
             ?.auth || NO_VALUE;
 
         cy.log('Sending OIDC auth request');
-        // if a response has status different than 2xx or 3xx, test will fail
+        // if a response has status different from 2xx or 3xx, test will fail
         cy.request({
           log: true,
           url: `${OICD_URL}/saml2/idp/sso`,
