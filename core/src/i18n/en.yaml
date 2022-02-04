@@ -415,6 +415,7 @@ common:
     add: Add
     add-new: Add New
     cancel: Cancel
+    clone: Clone
     copy: Copy
     create: Create
     delete: Delete
