@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Tooltip } from '../../components/Tooltip/Tooltip';
 import { Button } from 'fundamental-react';
 import copyToCliboard from 'copy-to-clipboard';
 import { saveAs } from 'file-saver';
 import './EditorActions.scss';
 import { useTranslation } from 'react-i18next';
+
+const EDITOR_VISIBILITY = 'editor-visibility';
 
 const ButtonWithTooltip = ({
   tooltipContent,
@@ -36,7 +38,20 @@ export function EditorActions({
   i18n,
   readOnly,
 }) {
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(
+    localStorage.getItem(EDITOR_VISIBILITY) !== 'false',
+  );
+
+  useEffect(() => {
+    localStorage.setItem(EDITOR_VISIBILITY, visible);
+  }, [visible]);
+
+  useEffect(() => {
+    if (editor && !visible) {
+      hideReadOnlyLines();
+    }
+  }, [editor]);
+
   const openSearch = () => {
     // focus is required for search control to appear
     editor.focus();
@@ -57,7 +72,7 @@ export function EditorActions({
     );
   };
 
-  const toggleReadOnlyLines = fieldsPosition => {
+  const toggleReadOnlyLines = (fieldsPosition, hide) => {
     fieldsPosition.forEach(match => {
       setTimeout(() => {
         editor.setPosition({
@@ -65,7 +80,7 @@ export function EditorActions({
           lineNumber: match.range.startLineNumber,
         });
 
-        visible
+        hide
           ? editor.trigger('fold', 'editor.fold')
           : editor.trigger('unfold', 'editor.unfold');
       });
@@ -82,13 +97,13 @@ export function EditorActions({
       );
     });
 
-    toggleReadOnlyLines(visibleReadOnlyFields);
+    toggleReadOnlyLines(visibleReadOnlyFields, true);
     setVisible(false);
   };
 
   const showReadOnlyLines = () => {
     const readOnlyFields = getReadOnlyFieldsPosition();
-    toggleReadOnlyLines(readOnlyFields);
+    toggleReadOnlyLines(readOnlyFields, false);
     setVisible(true);
   };
 
