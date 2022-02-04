@@ -84,6 +84,11 @@ context('Test Issuers', () => {
   });
 
   it('Edit an issuer', () => {
+    //wait for the issuer to update to not have version conflicts
+    cy.getIframeBody()
+      .find('[role="status"]')
+      .should('not.have.text', 'Unknown');
+
     cy.getIframeBody()
       .contains('Edit')
       .click();

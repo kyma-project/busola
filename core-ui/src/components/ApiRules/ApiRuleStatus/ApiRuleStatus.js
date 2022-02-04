@@ -23,13 +23,9 @@ const resolveAPIRuleStatus = statusCode => {
 };
 
 export default function ApiRuleStatus({ apiRule }) {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
 
-  if (!apiRule.status?.APIRuleStatus) {
-    return null;
-  }
-
-  const { code, desc } = apiRule.status.APIRuleStatus;
+  const { code, desc } = apiRule?.status?.APIRuleStatus || {};
 
   return (
     <StatusBadge
@@ -38,7 +34,7 @@ export default function ApiRuleStatus({ apiRule }) {
       type={resolveAPIRuleStatus(code)}
       additionalContent={desc}
     >
-      {code}
+      {code || t('common.statuses.unknown')}
     </StatusBadge>
   );
 }

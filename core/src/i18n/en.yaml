@@ -83,6 +83,7 @@ api-rules:
   tooltips:
     ok: Resource created.
     skipped: Skipped creating the resource.
+    unknown: The API Rule is in an uncertain state.
 applications:
   aria:
     namespace: Choose Namespace
