@@ -12,7 +12,7 @@ function applyThemeToLinkNode(name, publicUrl) {
     addLinkNode();
     return applyThemeToLinkNode(name, publicUrl);
   }
-  link.href = `${publicUrl || ''}/themes/${name}.css`;
+  link.href = `${publicUrl || ''}/themes/@sap-theming/${name}.css`;
 }
 
 function addLinkNode() {
@@ -40,6 +40,7 @@ const getEditorTheme = theme => {
 export const ThemeProvider = ({ children, env }) => {
   const [theme, setTheme] = useState('default');
 
+  console.log(theme);
   useEffect(() => {
     if (typeof env.PUBLIC_URL === 'undefined') return;
     applyThemeToLinkNode(theme, env.PUBLIC_URL);

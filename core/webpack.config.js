@@ -47,6 +47,11 @@ module.exports = env => {
             '../node_modules/@sap-theming/theming-base-content/content/Base/baseLib/sap_fiori_3_light_dark/css_variables.css',
           to: 'libs/themes/light_dark.css',
         },
+        {
+          from:
+            '../node_modules/@sap-theming/theming-base-content/content/Base/baseLib/sap_horizon/css_variables.css',
+          to: 'libs/themes/horizon.css',
+        },
         { from: '../node_modules/monaco-editor/min/vs', to: 'libs/vs' },
       ]),
       new webpack.DefinePlugin({
