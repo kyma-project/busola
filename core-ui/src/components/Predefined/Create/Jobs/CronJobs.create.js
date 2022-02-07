@@ -9,7 +9,7 @@ import { createCronJobTemplate, createCronJobPresets } from './templates';
 import { CronJobSpecSection } from './SpecSection';
 import { isCronExpressionValid, ScheduleSection } from './ScheduleSection';
 import { ContainerSection, ContainersSection } from './ContainersSection';
-import * as _ from 'lodash';
+import { cloneDeep } from 'lodash';
 
 function isCronJobValid(cronJob) {
   const containers =
@@ -33,7 +33,7 @@ function CronJobsCreate({
   const { t } = useTranslation();
 
   const [cronJob, setCronJob] = useState(
-    _.cloneDeep(initialCronJob) || createCronJobTemplate(namespace),
+    cloneDeep(initialCronJob) || createCronJobTemplate(namespace),
   );
 
   useEffect(() => {
