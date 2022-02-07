@@ -13,7 +13,7 @@ import {
 import { createConfigMapTemplate, createPresets } from './helpers';
 import { cloneDeep } from 'lodash';
 
-function ConfigMapsCreate({
+export function ConfigMapsCreate({
   formElementRef,
   onChange,
   setCustomValid,
@@ -40,7 +40,7 @@ function ConfigMapsCreate({
       setCustomValid={setCustomValid}
     >
       <K8sNameField
-        readOnly={!!initialConfigMap}
+        readOnly={!!initialConfigMap?.metadata?.name}
         propertyPath="$.metadata.name"
         kind={t('config-maps.name_singular')}
         setValue={name => {
@@ -69,4 +69,4 @@ function ConfigMapsCreate({
   );
 }
 ConfigMapsCreate.allowEdit = true;
-export { ConfigMapsCreate };
+ConfigMapsCreate.allowClone = true;

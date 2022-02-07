@@ -18,6 +18,7 @@ function RolesCreate(props) {
   );
 }
 RolesCreate.allowEdit = true;
+RolesCreate.allowClone = true;
 
 function ClusterRolesCreate(props) {
   const { t } = useTranslation();
@@ -31,5 +32,6 @@ function ClusterRolesCreate(props) {
   );
 }
 ClusterRolesCreate.allowEdit = true;
+ClusterRolesCreate.allowClone = true;
 
 export { RolesCreate, ClusterRolesCreate };

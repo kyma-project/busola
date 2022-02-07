@@ -1,3 +1,4 @@
+/* eslint-disable import/first */
 export { GenericList } from './components/GenericList/GenericList';
 export { SearchInput } from './components/GenericList/SearchInput';
 export { Pagination } from './components/GenericList/Pagination/Pagination';
@@ -74,5 +75,7 @@ import { setupMonaco } from './utils/setupMonaco';
 export * from '@monaco-editor/react';
 import Editor from '@monaco-editor/react';
 export const MonacoEditor = Editor;
+
+import './extend-jsonpath';
 
 setupMonaco(monaco);
