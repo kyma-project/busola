@@ -6,7 +6,13 @@ import jsyaml from 'js-yaml';
 import { ControlledEditor, useTheme } from 'react-shared';
 
 import './KubeconfigUpload.scss';
-
+console.log({
+  MessageStrip,
+  useTranslation,
+  KubeconfigFileUpload,
+  ControlledEditor,
+  useTheme,
+});
 export function KubeconfigUpload({
   onKubeconfig,
   handleKubeconfigAdded,

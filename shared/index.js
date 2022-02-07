@@ -1,3 +1,6 @@
+import 'regenerator-runtime/runtime';
+import React from 'react';
+
 export { GenericList } from './components/GenericList/GenericList';
 export { SearchInput } from './components/GenericList/SearchInput';
 export { Pagination } from './components/GenericList/Pagination/Pagination';
@@ -76,3 +79,5 @@ import Editor from '@monaco-editor/react';
 export const MonacoEditor = Editor;
 
 setupMonaco(monaco);
+
+export const ControlledEditor = () => 'editor';

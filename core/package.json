@@ -18,14 +18,15 @@
   "dependencies": {
     "@luigi-project/core": "^1.20.1",
     "@luigi-project/plugin-auth-oidc": "1.8.1",
+    "@sentry/browser": "^6.17.4",
     "file-saver": "2.0.2"
   },
   "devDependencies": {
-    "copy-webpack-plugin": "^10.2.4",
     "babel-loader": "^8.2.3",
+    "copy-webpack-plugin": "^10.2.4",
+    "prettier": "^1.18.2",
     "sirv-cli": "^1.0.11",
-    "webpack": "^5.38.1",
-    "prettier": "^1.18.2"
+    "webpack": "^5.38.1"
   },
   "jest": {
     "testRegex": "(/__tests__/.*|(\\.|/)(test))\\.js$"
