@@ -45,11 +45,13 @@ context('Test Gateways', () => {
     cy.getIframeBody()
       .find('[placeholder="Enter Key"]')
       .filter(':visible', { log: false })
+      .filterWithNoValue()
       .type('selector-key');
 
     cy.getIframeBody()
       .find('[placeholder="Enter Value"]')
       .filter(':visible', { log: false })
+      .filterWithNoValue()
       .first()
       .type('selector-value');
 
@@ -81,6 +83,8 @@ context('Test Gateways', () => {
   it('Inspect details', () => {
     // name
     cy.getIframeBody().contains(GATEWAY_NAME);
+    // default selector
+    cy.getIframeBody().contains('istio=ingressgateway');
     // selector
     cy.getIframeBody().contains('selector-key=selector-value');
     // port (and server)
