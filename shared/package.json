@@ -29,8 +29,9 @@
     }
   },
   "dependencies": {
-    "react": "../node_modules/react",
     "@monaco-editor/react": "^4.3.1",
+    "buffer": "^6.0.3",
+    "react": "../node_modules/react",
     "react-tippy": "^1.4.0"
   }
 }
