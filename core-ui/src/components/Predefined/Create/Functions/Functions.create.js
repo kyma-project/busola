@@ -81,14 +81,16 @@ export function FunctionsCreate({
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    if (previousRuntime?.substring(0, 4) !== runtime?.substring(0, 4)) {
-      jp.value(
-        func,
-        '$.spec.source',
-        CONFIG.defaultLambdaCodeAndDeps[runtime].code,
-      );
+    if (!type) {
+      if (previousRuntime?.substring(0, 4) !== runtime?.substring(0, 4)) {
+        jp.value(
+          func,
+          '$.spec.source',
+          CONFIG.defaultLambdaCodeAndDeps[runtime].code,
+        );
 
-      jp.value(func, '$.spec.deps', getDefaultDependencies(name, runtime));
+        jp.value(func, '$.spec.deps', getDefaultDependencies(name, runtime));
+      }
     }
   }, [runtime]); // eslint-disable-line react-hooks/exhaustive-deps
 
