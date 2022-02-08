@@ -11,7 +11,6 @@ import {
   GenericList,
   useNotification,
   ModalWithForm,
-  Link as ExternalLink,
   useDeleteResource,
   EMPTY_TEXT_PLACEHOLDER,
 } from 'react-shared';
@@ -24,7 +23,7 @@ import { ClusterStorageType } from './ClusterStorageType';
 import './ClusterList.scss';
 
 export function ClusterList() {
-  const { clusters, activeClusterName, features } = useMicrofrontendContext();
+  const { clusters, activeClusterName } = useMicrofrontendContext();
   const notification = useNotification();
   const { t, i18n } = useTranslation();
 
