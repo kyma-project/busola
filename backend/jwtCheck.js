@@ -14,10 +14,16 @@ const jwtCheck = ({ issuer, jwksUri }) =>
   });
 
 export function setupJWTCheck(app) {
-  const jwtConfig = process.env.JWT_CHECK_CONFIG;
-  console.log(!!jwtConfig?.enabled);
+  if (!process.env.JWT_CHECK_CONFIG) {
+    return;
+  }
 
-  if (jwtConfig?.enabled) {
-    app.use(jwtCheck(jwtConfig));
+  try {
+    const jwtConfig = JSON.parse(process.env.JWT_CHECK_CONFIG);
+    if (jwtConfig?.enabled) {
+      app.use(jwtCheck(jwtConfig));
+    }
+  } catch (e) {
+    console.log(e);
   }
 }
