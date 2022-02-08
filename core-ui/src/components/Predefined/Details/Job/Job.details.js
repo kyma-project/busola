@@ -11,6 +11,9 @@ import { ResourcePods } from '../ResourcePods';
 import { JobCompletions } from './JobCompletions';
 import { JobConditions } from './JobConditions';
 
+import { EventsList } from 'shared/components/EventsList';
+import { filterByResource } from 'hooks/useMessageList';
+
 export function JobsDetails({ DefaultRenderer, ...otherParams }) {
   const { t } = useTranslation();
 
@@ -51,7 +54,15 @@ export function JobsDetails({ DefaultRenderer, ...otherParams }) {
     },
   ];
 
-  const customComponents = [JobConditions, ResourcePods];
+  const Events = () => (
+    <EventsList
+      namespace={otherParams.namespace}
+      filter={filterByResource('Job', otherParams.resourceName)}
+      hideInvolvedObjects={true}
+    />
+  );
+
+  const customComponents = [JobConditions, ResourcePods, Events];
 
   return (
     <DefaultRenderer
