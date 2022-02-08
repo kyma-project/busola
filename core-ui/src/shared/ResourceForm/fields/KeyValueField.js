@@ -117,19 +117,22 @@ export function KeyValueField({
                 : undefined,
             ...props,
           }),
-        ({ value, setValue }) =>
+        ({ value, setValue, updateValue }) =>
           readableFromFile ? (
             <Tooltip content={t('common.tooltips.read-file')}>
               <Button
                 compact
                 className="read-from-file"
                 onClick={() =>
-                  readFromFile().then(result =>
+                  readFromFile().then(result => {
                     setValue({
                       key: value?.key || result.name,
-                      val: base64Encode(result.content),
-                    }),
-                  )
+                      val: !encodable
+                        ? result.content
+                        : base64Encode(result.content),
+                    });
+                    updateValue();
+                  })
                 }
               >
                 {t('components.key-value-form.read-value')}
