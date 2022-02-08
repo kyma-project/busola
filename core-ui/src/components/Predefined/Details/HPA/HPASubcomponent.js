@@ -14,10 +14,9 @@ import { MetricsBrief } from '../HPA/helpers';
 export const HPASubcomponent = props => {
   const { t } = useTranslation();
   const { namespaceId } = useMicrofrontendContext();
-  const { data } = useGet(
+  const { data, error } = useGet(
     `/apis/autoscaling/v2beta2/namespaces/${namespaceId}/horizontalpodautoscalers`,
   );
-
   const [associatedHPA, setAssociatedHPA] = useState([]);
 
   const {
@@ -38,11 +37,13 @@ export const HPASubcomponent = props => {
     }
   }, [data, kind, name, setAssociatedHPA, props.kind, props.metadata.name]);
 
-  return associatedHPA.length === 0 ? null : (
+  return (
     <GenericList
       entries={associatedHPA}
       title={t('hpas.applicable-hpa')}
       textSearchProperties={['metadata.name']}
+      notFoundMessage={EMPTY_TEXT_PLACEHOLDER}
+      serverDataError={error}
       headerRenderer={() => [
         t('common.headers.name'),
         t('hpas.headers.metrics'),
