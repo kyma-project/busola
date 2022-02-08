@@ -4,6 +4,7 @@ import { ControlledBy } from 'react-shared';
 
 import { ResourcePods } from '../ResourcePods';
 import { StatefulSetPods } from './StatefulSetPods';
+import { HPASubcomponent } from '../HPA/HPASubcomponent';
 
 export function StatefulSetsDetails({ DefaultRenderer, ...otherParams }) {
   const { t } = useTranslation();
@@ -24,8 +25,8 @@ export function StatefulSetsDetails({ DefaultRenderer, ...otherParams }) {
   return (
     <DefaultRenderer
       customColumns={customColumns}
-      customComponents={[ResourcePods]}
+      customComponents={[ResourcePods, HPASubcomponent]}
       {...otherParams}
-    ></DefaultRenderer>
+    />
   );
 }
