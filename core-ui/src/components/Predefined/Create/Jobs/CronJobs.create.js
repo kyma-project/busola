@@ -15,9 +15,7 @@ function isCronJobValid(cronJob) {
   const containers =
     jp.value(cronJob, '$.spec.jobTemplate.spec.template.spec.containers') || [];
 
-  const areContainersValid =
-    !!containers.length &&
-    containers.every(c => c.command?.length > 0 || c.args?.length > 0);
+  const areContainersValid = !!containers.length;
 
   return areContainersValid && isCronExpressionValid(cronJob?.spec?.schedule);
 }
