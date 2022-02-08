@@ -19,7 +19,7 @@ Cypress.Commands.add('loginAndSelectCluster', function(params) {
       const URLelement = kubeconfig.users[0].user.exec.args.find(el =>
         el.includes('oidc-issuer-url'),
       );
-      // kubeconfig should only specify a scheme and a domain without any paths, i.e, https://apskyxzcl.accounts400.ondemand.com
+      // kubeconfig should only specify a scheme and a domain without the "/ui/protected/profilemanagement" part , i.e, https://apskyxzcl.accounts400.ondemand.com
       const OICD_URL = /oidc-issuer-url=(?<url>(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,}))/.exec(
         URLelement,
       )?.groups?.url;
@@ -27,7 +27,7 @@ Cypress.Commands.add('loginAndSelectCluster', function(params) {
       // validating the input
       if (!(OICD_URL && USERNAME && PASSWORD)) {
         cy.log(
-          'Either OIDC url, username or password is missing. URL is obtained from kubeconfig "--oidc-issuer-url" field. Credentials are provided through Cypress env variables.',
+          'Either OIDC url, username or password is missing. URL is obtained from kubeconfig\'s "--oidc-issuer-url" field. Credentials are provided through Cypress env variables.',
         );
       }
       cy.wrap(OICD_URL && USERNAME && PASSWORD).should('be.ok');
@@ -80,8 +80,8 @@ Cypress.Commands.add('loginAndSelectCluster', function(params) {
             tfaToken: '',
             css: '',
             passwordlessAuthnSelected: '',
-            j_username: Cypress.env('OIDC_USER'),
-            j_password: Cypress.env('OIDC_PASS'),
+            j_username: USERNAME,
+            j_password: PASSWORD,
           },
         }).then(res => {
           // assuming cookies are set only for successful login attempts
