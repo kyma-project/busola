@@ -16,9 +16,7 @@ function isJobValid(job) {
 
   const containers = jp.value(job, '$.spec.template.spec.containers') || [];
 
-  const areContainersValid =
-    !!containers.length &&
-    containers.every(c => c.command?.length > 0 || c.args?.length > 0);
+  const areContainersValid = !!containers.length;
 
   return isNameValid && areContainersValid;
 }
@@ -89,6 +87,7 @@ function JobsCreate({
         propertyPath="$.spec.template.spec.containers"
         readOnly={!!initialJob}
       />
+
       <MessageStrip type="information" className="fd-margin-top--sm">
         {t('jobs.create-modal.containers-readonly-in-edit')}
       </MessageStrip>
