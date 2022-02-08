@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useMicrofrontendContext } from 'react-shared';
+import { Button } from 'fundamental-react';
 
 import { EventsList } from 'shared/components/EventsList';
 import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
@@ -8,12 +9,15 @@ import DeployNewWorkload from './DeployNewWorkload';
 import { NamespaceStatus } from './NamespaceStatus';
 import { NamespaceWorkloads } from './NamespaceWorkloads/NamespaceWorkloads';
 import { ResourcesUsage } from './ResourcesUsage';
+import { YamlUploadDialog } from './YamlUpload/YamlUploadDialog';
 import './Namespace.details.scss';
 import { useTranslation } from 'react-i18next';
 
 export const NamespacesDetails = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
   const microfrontendContext = useMicrofrontendContext();
+  const [showAdd, setShowAdd] = useState(false);
+
   const { features } = microfrontendContext;
   const limitRangesParams = {
     hasDetailsView: false,
@@ -73,7 +77,17 @@ export const NamespacesDetails = ({ DefaultRenderer, ...otherParams }) => {
   );
 
   const headerActions = (
-    <DeployNewWorkload namespaceName={otherParams.resourceName} />
+    <>
+      <DeployNewWorkload namespaceName={otherParams.resourceName} />,
+      <Button
+        option="transparent"
+        glyph="add"
+        className="fd-margin-begin--sm"
+        onClick={() => setShowAdd(true)}
+      >
+        {t('clusters.add.title')}
+      </Button>
+    </>
   );
 
   const customColumns = [
@@ -92,6 +106,7 @@ export const NamespacesDetails = ({ DefaultRenderer, ...otherParams }) => {
       customColumns={customColumns}
       headerActions={headerActions}
     >
+      <YamlUploadDialog show={showAdd} onCancel={() => setShowAdd(false)} />
       <div className="panel-grid">
         <NamespaceWorkloads namespace={otherParams.resourceName} />
         <ResourcesUsage namespace={otherParams.resourceName} />
