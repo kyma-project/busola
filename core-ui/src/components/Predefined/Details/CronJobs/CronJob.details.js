@@ -7,6 +7,9 @@ import { useTranslation } from 'react-i18next';
 import { navigateToFixedPathResourceDetails } from 'react-shared';
 import { Link } from 'fundamental-react';
 
+import { EventsList } from 'shared/components/EventsList';
+import { filterByResource } from 'hooks/useMessageList';
+
 export const CronJobsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
   const customColumns = [
@@ -50,9 +53,17 @@ export const CronJobsDetails = ({ DefaultRenderer, ...otherParams }) => {
     },
   ];
 
+  const Events = () => (
+    <EventsList
+      namespace={otherParams.namespace}
+      filter={filterByResource('CronJob', otherParams.resourceName)}
+      hideInvolvedObjects={true}
+    />
+  );
+
   return (
     <DefaultRenderer
-      customComponents={[CronJobJobs]}
+      customComponents={[CronJobJobs, Events]}
       customColumns={customColumns}
       {...otherParams}
     />
