@@ -18,11 +18,6 @@ export function setupJWTCheck(app) {
   console.log(!!jwtConfig?.enabled);
 
   if (jwtConfig?.enabled) {
-    app.use(
-      jwtCheck({
-        issuer: 'https://apskyxzcl.accounts400.ondemand.com',
-        jwksUri: 'https://apskyxzcl.accounts400.ondemand.com/oauth2/certs',
-      }),
-    );
+    app.use(jwtCheck(jwtConfig));
   }
 }
