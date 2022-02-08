@@ -60,10 +60,21 @@ function ClustersEdit(props) {
     />
   );
 
-  //OIDC data
-  const [issuerUrl, setIssuerUrl] = useState('');
-  const [clientId, setClientId] = useState('');
-  const [scopes, setScopes] = useState('');
+  const findInitialValue = id => {
+    if (resource.kubeconfig?.users?.[0]?.user?.exec?.args) {
+      const elementWithId = resource.kubeconfig?.users?.[0]?.user?.exec?.args.find(
+        el => el.includes(id),
+      );
+      const regex = new RegExp(`${id}=(?<value>.*)`);
+      return regex.exec(elementWithId)?.groups?.value || '';
+    }
+    return '';
+  };
+  const [issuerUrl, setIssuerUrl] = useState(
+    findInitialValue('oidc-issuer-url'),
+  );
+  const [clientId, setClientId] = useState(findInitialValue('oidc-client-id'));
+  const [scopes, setScopes] = useState(findInitialValue('oidc-extra-scope'));
   const createOIDC = (type = '', val = '') => {
     const config = { issuerUrl, clientId, scopes, [type]: val };
     const exec = {
