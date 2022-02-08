@@ -48,7 +48,7 @@ export function EditorActions({
 
   useEffect(() => {
     if (editor && !visible) {
-      hideReadOnlyLines();
+      setTimeout(() => hideReadOnlyLines(), 500);
     }
   }, [editor]);
 
@@ -60,11 +60,11 @@ export function EditorActions({
 
   const getReadOnlyFieldsPosition = () => {
     // definition of read only fields
-    const READONLY_FIELDS = ['managedFields:', 'status:'];
+    const READONLY_FIELDS = ['^ *managedFields:$', '^status:$'];
     let arrayOfPositions = [];
     READONLY_FIELDS.forEach(fieldName => {
       arrayOfPositions = arrayOfPositions.concat(
-        editor.getModel().findMatches(fieldName, true, false, true, null, true),
+        editor.getModel().findMatches(fieldName, true, true, true, null, true),
       );
     });
     return arrayOfPositions.sort(
@@ -85,26 +85,17 @@ export function EditorActions({
           : editor.trigger('unfold', 'editor.unfold');
       });
     });
+    setVisible(!hide);
   };
 
   const hideReadOnlyLines = () => {
-    const visibleRanges = editor.getVisibleRanges();
-    const visibleReadOnlyFields = getReadOnlyFieldsPosition().filter(match => {
-      return visibleRanges.some(
-        range =>
-          match.range.startLineNumber >= range.startLineNumber &&
-          match.range.startLineNumber < range.endLineNumber,
-      );
-    });
-
-    toggleReadOnlyLines(visibleReadOnlyFields, true);
-    setVisible(false);
+    const readOnlyFields = getReadOnlyFieldsPosition();
+    toggleReadOnlyLines(readOnlyFields, true);
   };
 
   const showReadOnlyLines = () => {
     const readOnlyFields = getReadOnlyFieldsPosition();
     toggleReadOnlyLines(readOnlyFields, false);
-    setVisible(true);
   };
 
   const download = () => {
