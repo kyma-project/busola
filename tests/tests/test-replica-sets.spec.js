@@ -108,8 +108,6 @@ context('Create a Replica Set', () => {
       .find('[role="document"]')
       .contains('button', 'Update')
       .click();
-
-    cy.reload();
   });
 
   it('Checks the new Docker image', () => {
