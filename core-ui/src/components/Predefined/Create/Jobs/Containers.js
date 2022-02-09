@@ -49,7 +49,6 @@ export function SingleContainerForm({
         readOnly={readOnly}
       />
       <TextArrayInput
-        required
         propertyPath="$.command"
         title={t('jobs.create-modal.labels.command')}
         placeholder={t('jobs.create-modal.placeholders.command')}
@@ -57,7 +56,6 @@ export function SingleContainerForm({
         readOnly={readOnly}
       />
       <TextArrayInput
-        required
         advanced
         propertyPath="$.args"
         title={t('jobs.create-modal.labels.args')}

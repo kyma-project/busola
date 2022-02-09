@@ -9,15 +9,13 @@ import { createCronJobTemplate, createCronJobPresets } from './templates';
 import { CronJobSpecSection } from './SpecSection';
 import { isCronExpressionValid, ScheduleSection } from './ScheduleSection';
 import { ContainerSection, ContainersSection } from './ContainersSection';
-import * as _ from 'lodash';
+import { cloneDeep } from 'lodash';
 
 function isCronJobValid(cronJob) {
   const containers =
     jp.value(cronJob, '$.spec.jobTemplate.spec.template.spec.containers') || [];
 
-  const areContainersValid =
-    !!containers.length &&
-    containers.every(c => c.command?.length > 0 || c.args?.length > 0);
+  const areContainersValid = !!containers.length;
 
   return areContainersValid && isCronExpressionValid(cronJob?.spec?.schedule);
 }
@@ -33,7 +31,7 @@ function CronJobsCreate({
   const { t } = useTranslation();
 
   const [cronJob, setCronJob] = useState(
-    _.cloneDeep(initialCronJob) || createCronJobTemplate(namespace),
+    cloneDeep(initialCronJob) || createCronJobTemplate(namespace),
   );
 
   useEffect(() => {
