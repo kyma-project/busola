@@ -4,6 +4,7 @@ import { ControlledEditor } from '@monaco-editor/react';
 import { EditorActions } from './EditorActions';
 
 import { useTheme } from '../ThemeContext';
+import { ErrorBoundary } from '../../components/ErrorBoundary/ErrorBoundary';
 
 export function YamlContent({
   yaml,
@@ -38,21 +39,23 @@ export function YamlContent({
         readOnly={readOnly}
         i18n={i18n}
       />
-      <ControlledEditor
-        height="85vh"
-        language="yaml"
-        theme={editorTheme}
-        value={val}
-        onChange={(_, text) => setChangedYamlFn(text)}
-        editorDidMount={(_, editor) => setEditor(editor)}
-        options={{
-          minimap: { enabled: false },
-          readOnly,
-          scrollbar: {
-            alwaysConsumeMouseWheel: false,
-          },
-        }}
-      />
+      <ErrorBoundary i18n={i18n}>
+        <ControlledEditor
+          height="85vh"
+          language="yaml"
+          theme={editorTheme}
+          value={val}
+          onChange={(_, text) => setChangedYamlFn(text)}
+          editorDidMount={(_, editor) => setEditor(editor)}
+          options={{
+            minimap: { enabled: false },
+            readOnly,
+            scrollbar: {
+              alwaysConsumeMouseWheel: false,
+            },
+          }}
+        />
+      </ErrorBoundary>
     </>
   );
 }
