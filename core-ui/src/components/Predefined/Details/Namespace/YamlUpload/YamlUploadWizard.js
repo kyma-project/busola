@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 import { YamlUpload } from './YamlUpload';
 import { YamlValidate } from './YamlValidate';
+import { YamlSend } from './YamlSend';
 
 export function YamlUploadWizard({ yamlContent, setYamlContent, onCancel }) {
   const { t } = useTranslation();
@@ -54,27 +55,29 @@ export function YamlUploadWizard({ yamlContent, setYamlContent, onCancel }) {
         />
       </Wizard.Step>
 
-      {yamlContent && (
-        <Wizard.Step
-          title={t('Validate Yaml')}
-          indicator="2"
-          valid
-          previousLabel={t('clusters.buttons.previous-step')}
-          nextLabel={t('clusters.buttons.next-step')}
-        >
-          <YamlValidate
-            yamlContent={yamlContent}
-            setYamlContent={updateYamlContent}
-          />
-        </Wizard.Step>
-      )}
+      <Wizard.Step
+        title={t('Validate YAML')}
+        indicator="2"
+        valid
+        previousLabel={t('clusters.buttons.previous-step')}
+        nextLabel={t('clusters.buttons.next-step')}
+      >
+        <YamlValidate
+          yamlContent={yamlContent}
+          setYamlContent={updateYamlContent}
+        />
+      </Wizard.Step>
 
       <Wizard.Step
-        title={t('clusters.wizard.storage')}
-        indicator="2"
-        previousLabel={t('clusters.buttons.previous-step')}
+        title={'Upload YAML'}
+        indicator="3"
         nextLabel={t('clusters.buttons.verify-and-add')}
-      ></Wizard.Step>
+      >
+        <YamlSend
+          yamlContent={yamlContent}
+          setYamlContent={updateYamlContent}
+        />
+      </Wizard.Step>
     </Wizard>
   );
 }

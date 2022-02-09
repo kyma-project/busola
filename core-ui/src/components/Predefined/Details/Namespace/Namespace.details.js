@@ -78,14 +78,14 @@ export const NamespacesDetails = ({ DefaultRenderer, ...otherParams }) => {
 
   const headerActions = (
     <>
-      <DeployNewWorkload namespaceName={otherParams.resourceName} />,
+      <DeployNewWorkload namespaceName={otherParams.resourceName} />
       <Button
         option="transparent"
         glyph="add"
         className="fd-margin-begin--sm"
         onClick={() => setShowAdd(true)}
       >
-        {t('clusters.add.title')}
+        Upload YAML
       </Button>
     </>
   );
