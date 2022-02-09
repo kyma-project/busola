@@ -6,7 +6,7 @@ const PV_NAME = `test-pv-${Math.random()
   .toString()
   .substr(2, 8)}`;
 
-context('Test PV', () => {
+context('Test Persistent Volumes', () => {
   Cypress.skipAfterFail();
 
   before(() => {

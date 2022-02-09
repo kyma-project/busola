@@ -1,6 +1,6 @@
 const SET_NAME = 'alertmanager-monitoring-alertmanager';
 
-context('Test StatefulSets', () => {
+context('Test Stateful Sets', () => {
   Cypress.skipAfterFail();
 
   before(() => {

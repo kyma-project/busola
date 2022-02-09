@@ -1,5 +1,4 @@
 /// <reference types="cypress" />
-import config from '../config';
 import 'cypress-file-upload';
 
 context('Clean up namespace', () => {

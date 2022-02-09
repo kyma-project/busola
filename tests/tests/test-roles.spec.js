@@ -6,7 +6,7 @@ const CLONE_NAME = `${ROLE_NAME}-clone`;
 const API_GROUP = '(core)';
 const RESOURCE = 'namespaces';
 
-context('Create a Role', () => {
+context('Test Roles', () => {
   Cypress.skipAfterFail();
 
   before(() => {

@@ -4,7 +4,7 @@ const path = require('path');
 
 const DOWNLOADS_FOLDER = Cypress.config('downloadsFolder');
 
-context('Download a Kubeconfig', () => {
+context('Test Download a Kubeconfig', () => {
   Cypress.skipAfterFail();
 
   before(() => {

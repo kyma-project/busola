@@ -3,7 +3,7 @@ import 'cypress-file-upload';
 
 const CLIENT_NAME = 'test-oauth2-client';
 
-context('Test OAuth2 Client', () => {
+context('Test OAuth2 Clients', () => {
   Cypress.skipAfterFail();
 
   before(() => {

@@ -9,7 +9,7 @@ const API_RULE_AND_FUNCTION_NAME = 'in-cluster-eventing-publisher';
 const API_RULE_HOST = API_RULE_AND_FUNCTION_NAME + '-' + random;
 const API_RULE_HOST_EXPECTED_PREFIX = `https://${API_RULE_HOST}.`;
 
-context('In-cluster eventing', () => {
+context('Test in-cluster eventing', () => {
   Cypress.skipAfterFail();
 
   before(() => {
