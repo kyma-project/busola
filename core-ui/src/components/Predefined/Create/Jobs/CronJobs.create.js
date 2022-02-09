@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import * as jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
+import { Switch } from 'fundamental-react';
+import { useMicrofrontendContext } from 'react-shared';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { K8sNameField, KeyValueField } from 'shared/ResourceForm/fields';
@@ -10,6 +12,9 @@ import { CronJobSpecSection } from './SpecSection';
 import { isCronExpressionValid, ScheduleSection } from './ScheduleSection';
 import { ContainerSection, ContainersSection } from './ContainersSection';
 import { cloneDeep } from 'lodash';
+
+const SIDECAR_INJECTION_LABEL = 'sidecar.istio.io/inject';
+const SIDECAR_INJECTION_VALUE = 'false';
 
 function isCronJobValid(cronJob) {
   const containers =
@@ -29,15 +34,71 @@ function CronJobsCreate({
   resourceUrl,
 }) {
   const { t } = useTranslation();
+  const { features } = useMicrofrontendContext();
+  const istioEnabled = features.ISTIO?.isEnabled;
 
   const [cronJob, setCronJob] = useState(
     cloneDeep(initialCronJob) || createCronJobTemplate(namespace),
   );
-
+  const [isSidecar, setSidecar] = useState(
+    initialCronJob
+      ? initialCronJob?.spec.jobTemplate.spec.template.metadata.annotations?.[
+          SIDECAR_INJECTION_LABEL
+        ]
+      : istioEnabled,
+  );
   useEffect(() => {
     setCustomValid(isCronJobValid(cronJob));
   }, [cronJob, setCustomValid]);
 
+  useEffect(() => {
+    // toggles istio-injection label when 'Disable sidecar injection' is clicked
+    if (isSidecar) {
+      jp.value(
+        cronJob,
+        `$.spec.jobTemplate.spec.template.metadata.annotations["${SIDECAR_INJECTION_LABEL}"]`,
+        SIDECAR_INJECTION_VALUE,
+      );
+      setCronJob({ ...cronJob });
+    } else {
+      const jobTemplateAnnotations =
+        cronJob.spec.jobTemplate.spec.template.metadata.annotations || {};
+      delete jobTemplateAnnotations[SIDECAR_INJECTION_LABEL];
+      setCronJob({
+        ...cronJob,
+        spec: {
+          ...cronJob.spec,
+          jobTemplate: {
+            ...cronJob.spec.jobTemplate,
+            spec: {
+              ...cronJob.spec.jobTemplate.spec,
+              template: {
+                ...cronJob.spec.jobTemplate.spec.template,
+                metadata: {
+                  ...cronJob.spec.jobTemplate.spec.template.metadata,
+                  annotations: jobTemplateAnnotations,
+                },
+              },
+            },
+          },
+        },
+      });
+    }
+    // eslint-disable-next-line
+  }, [isSidecar]);
+
+  useEffect(() => {
+    // toggles 'Disable sidecar injection' when istio-injection label is deleted manually
+    if (
+      isSidecar &&
+      jp.value(
+        cronJob,
+        `$.spec.jobTemplate.spec.template.metadata.annotations["${SIDECAR_INJECTION_LABEL}"]`,
+      ) !== SIDECAR_INJECTION_VALUE
+    ) {
+      setSidecar(false);
+    }
+  }, [isSidecar, setSidecar, cronJob]);
   return (
     <ResourceForm
       pluralKind="cronjobs"
@@ -64,7 +125,18 @@ function CronJobsCreate({
         }}
         readOnly={!!initialCronJob}
       />
-
+      <ResourceForm.FormField
+        label={t('cron-jobs.create-modal.disable-sidecar')}
+        input={() => (
+          <Switch
+            compact
+            onChange={e => {
+              setSidecar(!isSidecar);
+            }}
+            checked={isSidecar}
+          />
+        )}
+      />
       <KeyValueField
         advanced
         propertyPath="$.metadata.labels"
@@ -75,6 +147,8 @@ function CronJobsCreate({
         advanced
         propertyPath="$.metadata.annotations"
         title={t('common.headers.annotations')}
+        lockedKeys={[SIDECAR_INJECTION_LABEL]}
+        lockedValues={[SIDECAR_INJECTION_LABEL]}
       />
 
       <CronJobSpecSection advanced propertyPath="$.spec" />

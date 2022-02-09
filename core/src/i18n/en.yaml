@@ -615,6 +615,7 @@ cron-jobs:
   create-modal:
     day-of-month: Day of Month
     day-of-week: Day of Week
+    disable-sidecar: Disable sidecar
     hour: Hour
     labels:
       concurrency-policy: Concurrency Policy
@@ -1300,6 +1301,7 @@ jobs:
     container: Container
     containers: Containers
     containers-readonly-in-edit: After a Job is created, the containers are read-only.
+    disable-sidecar: Disable sidecar
     labels:
       args: Args
       command: Command
