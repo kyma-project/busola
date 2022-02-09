@@ -1,9 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+import { Link } from 'react-shared';
 import { Trans } from 'react-i18next';
 import { Tokens } from 'shared/components/Tokens';
-import { currentMetricsParser, metricsParser } from '../Details/HPA/helpers';
+import { MetricsBrief } from '../Details/HPA/helpers';
 
 export const HorizontalPodAutoscalersList = ({
   DefaultRenderer,
@@ -13,21 +13,7 @@ export const HorizontalPodAutoscalersList = ({
   const customColumns = [
     {
       header: t('hpas.headers.metrics'),
-      value: ({ spec, status }) => {
-        const metrics = metricsParser(spec.metrics);
-        const current = currentMetricsParser(status.currentMetrics);
-
-        const remaining = metrics.length - 1;
-
-        return (
-          <>
-            {current[0] || EMPTY_TEXT_PLACEHOLDER} / {metrics[0].value}{' '}
-            {remaining > 0
-              ? t('hpas.and-x-more', { x: remaining.toString() })
-              : ''}
-          </>
-        );
-      },
+      value: resource => <MetricsBrief {...resource} />,
     },
     {
       header: t('hpas.headers.min-pods'),
