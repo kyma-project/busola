@@ -23,7 +23,7 @@ export function mockAddClusterDisabled() {
   cy.intercept(requestData, configMock);
 }
 
-context('Connect cluster disabled', () => {
+context('Test connect cluster disabled', () => {
   Cypress.skipAfterFail();
 
   beforeEach(mockAddClusterDisabled);

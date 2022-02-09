@@ -1,5 +1,4 @@
 /// <reference types="cypress" />
-import config from '../config';
 
 context('Create Namespace', () => {
   Cypress.skipAfterFail({ skipAllSuits: true });

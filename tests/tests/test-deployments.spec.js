@@ -4,7 +4,7 @@ import 'cypress-file-upload';
 const DOCKER_IMAGE = 'eu.gcr.io/kyma-project/pr/orders-service:PR-162';
 const DEPLOYMENT_NAME = 'orders-service';
 
-context('Create a Deployment', () => {
+context('Test Deployments', () => {
   Cypress.skipAfterFail();
 
   before(() => {

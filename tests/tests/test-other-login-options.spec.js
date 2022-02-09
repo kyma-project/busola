@@ -4,7 +4,7 @@ import config from '../config';
 import { loadKubeconfig } from '../support/loadKubeconfigFile';
 import jsyaml from 'js-yaml';
 
-context('Other login options', () => {
+context('Test other login options', () => {
   Cypress.skipAfterFail();
 
   it('Kubeconfig and token separately', () => {

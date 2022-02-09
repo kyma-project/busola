@@ -4,7 +4,7 @@ import config from '../config';
 import { loadMultipleContextKubeconfig } from '../support/loadKubeconfigFile';
 import jsyaml from 'js-yaml';
 
-context('Multiple context kubeconfig', () => {
+context('Test multiple context kubeconfig', () => {
   Cypress.skipAfterFail();
 
   it('User can choose different context with the multiple context kubeconfig', () => {

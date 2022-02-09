@@ -4,7 +4,7 @@ const TEMP_NAME = 'clustered';
 
 let originalName;
 
-context('Edit cluster', () => {
+context('Test edit cluster', () => {
   Cypress.skipAfterFail();
 
   before(() => {

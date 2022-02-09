@@ -9,7 +9,7 @@ const DNS_ENTRY_NAME = 'dns-entry-' + random;
 const DNS_NAME = 'dns-name-' + random;
 const TTL = 200;
 
-context('Create a DNS Entry', () => {
+context('Test DNS Entries', () => {
   Cypress.skipAfterFail();
 
   before(() => {

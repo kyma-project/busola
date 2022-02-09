@@ -2,7 +2,7 @@
 const APPLICATION_NAME = `test-mock-app-${Cypress.env('NAMESPACE_NAME')}`;
 const APPLICATION_DESCRIPTION = `test description`;
 
-context('Test Application', () => {
+context('Test Applications', () => {
   Cypress.skipAfterFail();
 
   before(() => {
