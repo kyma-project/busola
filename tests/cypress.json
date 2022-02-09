@@ -16,7 +16,7 @@
   "experimentalInteractiveRunEvents": true,
   "testFiles": [
     "run-before.spec.js",
-    "test-prepare-functions.spec.js",
+    "run-prepare-functions.spec.js",
     "test-namespace-overview.spec.js",
     "test-edit-cluster.spec.js",
     "test-applications.spec.js",
@@ -50,7 +50,7 @@
     "test-issuers.spec.js",
     "test-daemon-sets.spec.js",
     "test-custom-resource-definitions.spec.js",
-    "test-an-api-rules.spec.js",
+    "test-api-rules.spec.js",
     "test-in-cluster-eventing.spec.js",
     "test-reduced-permissions.spec.js",
     "test-invalid-kubeconfig.spec.js",
