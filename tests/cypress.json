@@ -58,7 +58,6 @@
     "test-multiple-context-kubeconfig.spec.js",
     "test-other-login-options.spec.js",
     "test-cluster-configuration.spec.js",
-    "test-connect-cluster-disabled.spec.js",
     "test-certificates.spec.js",
     "test-settings.spec.js",
     "test-ingresses.spec.js",
