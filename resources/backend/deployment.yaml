@@ -41,8 +41,13 @@ spec:
           env:
             - name: ADDRESS
               value: 0.0.0.0
-            - name: JWT_CHECK_CONFIG
-              value: >-
-                {"enabled":false,
-                "issuer":"",
-                "jwksUri":""}
+          volumeMounts:
+            - name: config
+              mountPath: /app/config
+      volumes:
+        - name: config
+          configMap:
+            name: busola-config
+            items:
+              - key: config
+                path: config.json

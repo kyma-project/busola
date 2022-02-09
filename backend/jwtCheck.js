@@ -1,3 +1,4 @@
+const fs = require('fs');
 const expressjwt = require('express-jwt');
 const jwks = require('jwks-rsa');
 
@@ -14,14 +15,16 @@ const jwtCheck = ({ issuer, jwksUri }) =>
   });
 
 export function setupJWTCheck(app) {
-  if (!process.env.JWT_CHECK_CONFIG) {
-    return;
-  }
-
+  console.log('start setup');
   try {
-    const jwtConfig = JSON.parse(process.env.JWT_CHECK_CONFIG);
-    if (jwtConfig?.enabled) {
-      app.use(jwtCheck(jwtConfig));
+    console.log('fse', fs.existsSync('./config/config.json'));
+    const a = JSON.parse(fs.readFileSync('./config/config.json'));
+    console.log(a);
+    const jwtConfig = a.config.features.JWT_CHECK_CONFIG;
+    console.log('config', jwtConfig);
+    if (jwtConfig.isEnabled) {
+      app.use(jwtCheck(jwtConfig.config));
+      console.log('done');
     }
   } catch (e) {
     console.log(e);
