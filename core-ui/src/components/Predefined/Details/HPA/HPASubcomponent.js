@@ -40,6 +40,7 @@ export const HPASubcomponent = props => {
   return (
     <GenericList
       entries={associatedHPA}
+      key="associated-hpa-list"
       title={t('hpas.applicable-hpa')}
       textSearchProperties={['metadata.name']}
       notFoundMessage={EMPTY_TEXT_PLACEHOLDER}
