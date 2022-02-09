@@ -38,24 +38,28 @@ function JobsCreate({
   const { t } = useTranslation();
   const { features } = useMicrofrontendContext();
   const istioEnabled = features.ISTIO?.isEnabled;
+  const defaultSidecarAnnotations = initialJob
+    ? initialJob?.spec.template.metadata.annotations
+    : istioEnabled
+    ? { [SIDECAR_INJECTION_LABEL]: SIDECAR_INJECTION_VALUE }
+    : {};
 
   const [job, setJob] = useState(
-    initialJob ? cloneDeep(initialJob) : createJobTemplate(namespace),
-  );
-  const [isSidecar, setSidecar] = useState(
     initialJob
-      ? initialJob?.spec.template.metadata.annotations?.[
-          SIDECAR_INJECTION_LABEL
-        ]
-      : istioEnabled,
+      ? cloneDeep(initialJob)
+      : createJobTemplate(namespace, defaultSidecarAnnotations),
   );
 
   useEffect(() => {
     setCustomValid(isJobValid(job));
   }, [job, setCustomValid]);
 
-  useEffect(() => {
-    // toggles istio-injection label when 'Disable sidecar injection' is clicked
+  const onSwitchChange = () => {
+    const isSidecar =
+      jp.value(
+        job,
+        `$.spec.template.metadata.annotations["${SIDECAR_INJECTION_LABEL}"]`,
+      ) !== SIDECAR_INJECTION_VALUE;
     if (isSidecar) {
       jp.value(
         job,
@@ -76,21 +80,7 @@ function JobsCreate({
 
       setJob({ ...job });
     }
-    // eslint-disable-next-line
-  }, [isSidecar]);
-
-  useEffect(() => {
-    // toggles 'Disable sidecar injection' when istio-injection label is deleted manually
-    if (
-      isSidecar &&
-      jp.value(
-        job,
-        `$.spec.template.metadata.annotations["${SIDECAR_INJECTION_LABEL}"]`,
-      ) !== SIDECAR_INJECTION_VALUE
-    ) {
-      setSidecar(false);
-    }
-  }, [isSidecar, setSidecar, job]);
+  };
 
   return (
     <ResourceForm
@@ -119,10 +109,13 @@ function JobsCreate({
         input={() => (
           <Switch
             compact
-            onChange={e => {
-              setSidecar(!isSidecar);
-            }}
-            checked={isSidecar}
+            onChange={onSwitchChange}
+            checked={
+              jp.value(
+                job,
+                `$.spec.template.metadata.annotations["${SIDECAR_INJECTION_LABEL}"]`,
+              ) === SIDECAR_INJECTION_VALUE
+            }
           />
         )}
       />

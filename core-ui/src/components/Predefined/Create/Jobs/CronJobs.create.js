@@ -36,23 +36,28 @@ function CronJobsCreate({
   const { t } = useTranslation();
   const { features } = useMicrofrontendContext();
   const istioEnabled = features.ISTIO?.isEnabled;
+  const defaultSidecarAnnotations = initialCronJob
+    ? initialCronJob?.spec.jobTemplate.spec.template.metadata.annotations
+    : istioEnabled
+    ? { [SIDECAR_INJECTION_LABEL]: SIDECAR_INJECTION_VALUE }
+    : {};
 
   const [cronJob, setCronJob] = useState(
-    cloneDeep(initialCronJob) || createCronJobTemplate(namespace),
+    cloneDeep(initialCronJob) ||
+      createCronJobTemplate(namespace, defaultSidecarAnnotations),
   );
-  const [isSidecar, setSidecar] = useState(
-    initialCronJob
-      ? initialCronJob?.spec.jobTemplate.spec.template.metadata.annotations?.[
-          SIDECAR_INJECTION_LABEL
-        ]
-      : istioEnabled,
-  );
+
   useEffect(() => {
     setCustomValid(isCronJobValid(cronJob));
   }, [cronJob, setCustomValid]);
 
-  useEffect(() => {
-    // toggles istio-injection label when 'Disable sidecar injection' is clicked
+  const onSwitchChange = () => {
+    const isSidecar =
+      jp.value(
+        cronJob,
+        `$.spec.jobTemplate.spec.template.metadata.annotations["${SIDECAR_INJECTION_LABEL}"]`,
+      ) !== SIDECAR_INJECTION_VALUE;
+
     if (isSidecar) {
       jp.value(
         cronJob,
@@ -72,21 +77,8 @@ function CronJobsCreate({
       );
       setCronJob({ ...cronJob });
     }
-    // eslint-disable-next-line
-  }, [isSidecar]);
+  };
 
-  useEffect(() => {
-    // toggles 'Disable sidecar injection' when istio-injection label is deleted manually
-    if (
-      isSidecar &&
-      jp.value(
-        cronJob,
-        `$.spec.jobTemplate.spec.template.metadata.annotations["${SIDECAR_INJECTION_LABEL}"]`,
-      ) !== SIDECAR_INJECTION_VALUE
-    ) {
-      setSidecar(false);
-    }
-  }, [isSidecar, setSidecar, cronJob]);
   return (
     <ResourceForm
       pluralKind="cronjobs"
@@ -118,10 +110,11 @@ function CronJobsCreate({
         input={() => (
           <Switch
             compact
-            onChange={e => {
-              setSidecar(!isSidecar);
-            }}
-            checked={isSidecar}
+            onChange={onSwitchChange}
+            checked={jp.value(
+              cronJob,
+              `$.spec.jobTemplate.spec.template.metadata.annotations["${SIDECAR_INJECTION_LABEL}"]`,
+            )}
           />
         )}
       />
