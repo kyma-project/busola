@@ -11,6 +11,7 @@ import { Button } from 'fundamental-react';
 import { CRCreate } from './CRCreate';
 import { RelatedCRDsList } from './RelatedCRDsList';
 import { Tokens } from 'shared/components/Tokens';
+import { EventsList } from 'shared/components/EventsList';
 
 export const CustomResourceDefinitionsDetails = ({
   DefaultRenderer,
@@ -57,6 +58,19 @@ export const CustomResourceDefinitionsDetails = ({
     );
   };
 
+  const Events = ({ spec }) => {
+    const eventFilter = kind => e => {
+      return kind === e.involvedObject?.kind;
+    };
+
+    return (
+      <EventsList
+        namespace={otherParams?.namespace}
+        filter={eventFilter(spec?.names?.kind)}
+      />
+    );
+  };
+
   const [showEditDialog, setShowEditDialog] = useState(false);
 
   return (
@@ -66,6 +80,7 @@ export const CustomResourceDefinitionsDetails = ({
         ResourceNames,
         CustomResourceDefinitionVersions,
         RelatedCRDsList,
+        Events,
       ]}
       resourceHeaderActions={[
         crd => {

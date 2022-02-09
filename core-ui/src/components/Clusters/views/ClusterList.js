@@ -11,7 +11,6 @@ import {
   GenericList,
   useNotification,
   ModalWithForm,
-  Link as ExternalLink,
   useDeleteResource,
   EMPTY_TEXT_PLACEHOLDER,
 } from 'react-shared';
@@ -24,7 +23,7 @@ import { ClusterStorageType } from './ClusterStorageType';
 import './ClusterList.scss';
 
 export function ClusterList() {
-  const { clusters, activeClusterName, features } = useMicrofrontendContext();
+  const { clusters, activeClusterName } = useMicrofrontendContext();
   const notification = useNotification();
   const { t, i18n } = useTranslation();
 
@@ -44,8 +43,6 @@ export function ClusterList() {
   if (!clusters) {
     return null;
   }
-
-  const canAddCluster = !features.ADD_CLUSTER_DISABLED?.isEnabled;
 
   const styleActiveCluster = entry => {
     return entry.kubeconfig['current-context'] === activeClusterName
@@ -134,7 +131,7 @@ export function ClusterList() {
     },
   ];
 
-  const extraHeaderContent = canAddCluster && (
+  const extraHeaderContent = (
     <Button
       option="transparent"
       glyph="add"
@@ -168,22 +165,7 @@ export function ClusterList() {
   );
 
   if (!entries.length) {
-    const btpCockpitUrl =
-      features.ADD_CLUSTER_DISABLED?.config?.cockpitUrl ||
-      'https://account.staging.hanavlab.ondemand.com/cockpit';
-
-    const subtitle = canAddCluster ? (
-      t('clusters.empty.subtitle')
-    ) : (
-      <span className="cluster-disabled-subtitle">
-        {t('clusters.empty.go-to-btp-cockpit')}{' '}
-        <ExternalLink
-          className="fd-link"
-          url={btpCockpitUrl}
-          text="BTP Cockpit"
-        />
-      </span>
-    );
+    const subtitle = t('clusters.empty.subtitle');
     return (
       <>
         {addDialog}
@@ -197,11 +179,9 @@ export function ClusterList() {
           title={t('clusters.empty.title')}
           subtitle={subtitle}
           actions={
-            canAddCluster && (
-              <Button onClick={() => setShowAdd(true)}>
-                {t('clusters.add.title')}
-              </Button>
-            )
+            <Button onClick={() => setShowAdd(true)}>
+              {t('clusters.add.title')}
+            </Button>
           }
         />
       </>

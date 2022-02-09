@@ -126,8 +126,8 @@ export function createCronJobPresets(namespace, translate) {
               },
             },
           },
+          concurrencyPolicy: 'Allow',
         },
-        concurrencyPolicy: 'Allow',
       },
     },
   ];
