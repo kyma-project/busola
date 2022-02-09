@@ -112,7 +112,7 @@ function CronJobsCreate({
         readOnly={!!initialCronJob}
       />
       <ResourceForm.FormField
-        label={t('cron-jobs.create-modal.disable-sidecar')}
+        label={t('jobs.create-modal.disable-sidecar')}
         input={() => (
           <Switch
             compact
