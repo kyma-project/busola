@@ -66,11 +66,14 @@ function JobsCreate({
     } else {
       const templateAnnotations =
         job.spec.template?.metadata?.annotations || {};
+      delete templateAnnotations[SIDECAR_INJECTION_LABEL];
+
       jp.value(
         job,
         '$.spec.template.metadata.annotations',
         templateAnnotations,
       );
+
       setJob({ ...job });
     }
     // eslint-disable-next-line

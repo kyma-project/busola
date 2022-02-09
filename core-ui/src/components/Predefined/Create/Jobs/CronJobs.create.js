@@ -63,6 +63,8 @@ function CronJobsCreate({
     } else {
       const jobTemplateAnnotations =
         cronJob.spec.jobTemplate?.spec?.template?.metadata?.annotations || {};
+      delete jobTemplateAnnotations[SIDECAR_INJECTION_LABEL];
+
       jp.value(
         cronJob,
         '$.spec.jobTemplate.spec.template.metadata.annotations',
