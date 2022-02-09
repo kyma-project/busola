@@ -1176,7 +1176,6 @@ helm-releases:
     unknown: The release is in an uncertain state.
 hpas:
   and-x-more: and {{x}} more
-  applicable-hpa: Applicable Horizontal Pod Autoscalers
   container-resource: Container resource
   cpu-utilization: Target average CPU utilization
   current-replicas: Current replicas
