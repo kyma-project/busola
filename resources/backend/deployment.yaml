@@ -41,3 +41,8 @@ spec:
           env:
             - name: ADDRESS
               value: 0.0.0.0
+            - name: JWT_CHECK_CONFIG
+              value: >-
+                {"enabled":false,
+                "issuer":"",
+                "jwksUri":""}
