@@ -64,21 +64,14 @@ function JobsCreate({
       );
       setJob({ ...job });
     } else {
-      const templateAnnotations = job.spec.template.metadata.annotations || {};
-      delete templateAnnotations[SIDECAR_INJECTION_LABEL];
-      setJob({
-        ...job,
-        spec: {
-          ...job.spec,
-          template: {
-            ...job.spec.template,
-            metadata: {
-              ...job.spec.template.metadata,
-              annotations: templateAnnotations,
-            },
-          },
-        },
-      });
+      const templateAnnotations =
+        job.spec.template?.metadata?.annotations || {};
+      jp.value(
+        job,
+        '$.spec.template.metadata.annotations',
+        templateAnnotations,
+      );
+      setJob({ ...job });
     }
     // eslint-disable-next-line
   }, [isSidecar]);

@@ -62,27 +62,13 @@ function CronJobsCreate({
       setCronJob({ ...cronJob });
     } else {
       const jobTemplateAnnotations =
-        cronJob.spec.jobTemplate.spec.template.metadata.annotations || {};
-      delete jobTemplateAnnotations[SIDECAR_INJECTION_LABEL];
-      setCronJob({
-        ...cronJob,
-        spec: {
-          ...cronJob.spec,
-          jobTemplate: {
-            ...cronJob.spec.jobTemplate,
-            spec: {
-              ...cronJob.spec.jobTemplate.spec,
-              template: {
-                ...cronJob.spec.jobTemplate.spec.template,
-                metadata: {
-                  ...cronJob.spec.jobTemplate.spec.template.metadata,
-                  annotations: jobTemplateAnnotations,
-                },
-              },
-            },
-          },
-        },
-      });
+        cronJob.spec.jobTemplate?.spec?.template?.metadata?.annotations || {};
+      jp.value(
+        cronJob,
+        '$.spec.jobTemplate.spec.template.metadata.annotations',
+        jobTemplateAnnotations,
+      );
+      setCronJob({ ...cronJob });
     }
     // eslint-disable-next-line
   }, [isSidecar]);
