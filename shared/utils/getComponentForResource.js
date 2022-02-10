@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { ErrorBoundary } from '../components/ErrorBoundary/ErrorBoundary';
+
 function findByName(object, propertyName) {
   return object[
     Object.keys(object).find(
@@ -31,11 +31,7 @@ export const ComponentFor = ({
 
   return (
     <Renderer
-      createResourceForm={props => (
-        <ErrorBoundary i18n={i18n}>
-          <CreateFormRenderer {...props} />
-        </ErrorBoundary>
-      )}
+      createResourceForm={CreateFormRenderer}
       DefaultRenderer={defaultRenderer}
       i18n={i18n}
       {...params}
