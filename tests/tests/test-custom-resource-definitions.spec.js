@@ -104,12 +104,12 @@ context('Test Custom Resource Definitions', () => {
       const CR = JSON.stringify(CR_CONFIG);
 
       cy.pasteToMonaco(CR);
-
-      cy.getIframeBody()
-        .find('[role="dialog"]')
-        .contains('button', 'Create')
-        .click();
     });
+
+    cy.getIframeBody()
+      .find('[role="dialog"]')
+      .contains('button', 'Create')
+      .click();
   });
 
   it('Delete Custom Resource Definition', () => {
