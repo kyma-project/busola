@@ -12,7 +12,7 @@ context('Test Applications', () => {
 
   it('Go to application details', () => {
     cy.getLeftNav()
-      .contains('Back to Namespaces')
+      .contains('Back to Cluster Overview')
       .click();
 
     cy.getLeftNav()

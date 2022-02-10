@@ -209,13 +209,23 @@ export async function createNavigation() {
       groupVersions,
     });
 
+    const namespacesPath = `/cluster/${encodeURIComponent(
+      activeClusterName,
+    )}/namespaces`; // absolute path
+
+    const namespaceOverview = {
+      position: 'top',
+      label: i18next.t('namespaces.namespaces-overview'),
+      link: namespacesPath,
+      icon: 'settings',
+    };
+
     const optionsForCurrentCluster = {
       contextSwitcher: {
         defaultLabel: 'Select Namespace ...',
-        parentNodePath: `/cluster/${encodeURIComponent(
-          activeClusterName,
-        )}/namespaces`, // absolute path
+        parentNodePath: namespacesPath,
         lazyloadOptions: true, // load options on click instead on page load
+        actions: [namespaceOverview],
         options: getNamespaces,
       },
       profile: {
