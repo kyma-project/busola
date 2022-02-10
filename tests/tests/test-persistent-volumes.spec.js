@@ -13,16 +13,9 @@ context('Test Persistent Volumes', () => {
     cy.loginAndSelectCluster();
   });
 
-  it('Navigate to PV', () => {
-    cy.getLeftNav()
-      .contains('Storage')
-      .click();
-    cy.getLeftNav()
-      .contains('Persistent Volumes')
-      .click();
-  });
-
   it('Create PV', () => {
+    cy.navigateTo('Storage', 'Persistent Volumes');
+
     cy.getIframeBody()
       .contains('Create Persistent Volume')
       .click();

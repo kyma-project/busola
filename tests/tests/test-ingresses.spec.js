@@ -16,17 +16,9 @@ context('Test Ingresses', () => {
     cy.goToNamespaceDetails();
   });
 
-  it('Navigate to Discovery and Network', () => {
-    cy.getLeftNav()
-      .contains('Discovery and Network')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Ingresses')
-      .click();
-  });
-
   it('Create an Ingress', () => {
+    cy.navigateTo('Discovery and Network', 'Ingress');
+
     cy.getIframeBody()
       .contains('Create Ingress')
       .click();

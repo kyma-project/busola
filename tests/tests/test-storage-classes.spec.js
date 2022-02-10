@@ -9,17 +9,9 @@ context('Test Storage Classes', () => {
     cy.loginAndSelectCluster();
   });
 
-  it('Navigate to Storage Classes', () => {
-    cy.getLeftNav()
-      .contains('Storage')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Storage Classes')
-      .click();
-  });
-
   it('Create Storage Class', () => {
+    cy.navigateTo('Storage', 'Storage Classes');
+
     cy.getIframeBody()
       .contains('Create Storage Class')
       .click();

@@ -18,17 +18,9 @@ context('Test Custom Resource Definitions', () => {
     cy.goToNamespaceDetails();
   });
 
-  it('Navigate to Create Custom Resource Definition', () => {
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Custom Resource Definitions')
-      .click();
-  });
-
   it('Create Custom Resource Definition', () => {
+    cy.navigateTo('Configuration', 'Custom Resource Definitions');
+
     cy.getIframeBody()
       .contains('Create Custom Resource Definition')
       .click();

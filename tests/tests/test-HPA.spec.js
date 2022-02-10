@@ -15,13 +15,8 @@ context('Test HPA', () => {
   });
 
   it('Creates auxiliary Deployment', () => {
-    cy.getLeftNav()
-      .contains('Workloads')
-      .click();
+    cy.navigateTo('Workloads', 'Deployments');
 
-    cy.getLeftNav()
-      .contains('Deployments')
-      .click();
     cy.getIframeBody()
       .contains('button', 'Create Deployment')
       .click();
@@ -46,16 +41,9 @@ context('Test HPA', () => {
       .should('be.visible');
   });
 
-  it('Navigate to HPA', () => {
-    cy.getLeftNav()
-      .contains('Discovery and Network')
-      .click();
-    cy.getLeftNav()
-      .contains('Horizontal Pod')
-      .click();
-  });
-
   it('Create HPA', () => {
+    cy.navigateTo('Discovery and Network', 'Horizontal Pod');
+
     cy.getIframeBody()
       .contains('Create Horizontal Pod Autoscaler')
       .click();
@@ -102,13 +90,8 @@ context('Test HPA', () => {
   });
 
   it('Check HPA subcomponent', () => {
-    cy.getLeftNav()
-      .contains('Workloads')
-      .click();
+    cy.navigateTo('Workloads', 'Deployments');
 
-    cy.getLeftNav()
-      .contains('Deployments')
-      .click();
     cy.getIframeBody()
       .contains(DEPLOYEMENT_NAME)
       .click();

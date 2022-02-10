@@ -15,13 +15,7 @@ context('Test Roles', () => {
   });
 
   it('Create a Role', () => {
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
-
-    cy.getLeftNav()
-      .find('[data-testid=roles_roles]')
-      .click();
+    cy.navigateTo('Configuration', 'Roles');
 
     cy.getIframeBody()
       .contains(ROLE_NAME)

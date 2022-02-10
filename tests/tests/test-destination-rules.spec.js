@@ -16,17 +16,9 @@ context('Test Destination Rules', () => {
     cy.goToNamespaceDetails();
   });
 
-  it('Navigate to Istio', () => {
-    cy.getLeftNav()
-      .contains('Istio')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Destination Rules')
-      .click();
-  });
-
   it('Create a Destination Rule', () => {
+    cy.navigateTo('Istio', 'Destination Rules');
+
     cy.getIframeBody()
       .contains('Create Destination Rule')
       .click();

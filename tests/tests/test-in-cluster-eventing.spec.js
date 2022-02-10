@@ -18,13 +18,7 @@ context('Test in-cluster eventing', () => {
   });
 
   it('Go to details of the receiver Function', () => {
-    cy.getLeftNav()
-      .contains('Workloads')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Functions')
-      .click();
+    cy.navigateTo('Workloads', 'Functions');
 
     cy.getIframeBody()
       .contains('a', FUNCTION_RECEIVER_NAME)
@@ -125,13 +119,7 @@ context('Test in-cluster eventing', () => {
   });
 
   it('Check logs after triggering publisher function', () => {
-    cy.getLeftNav()
-      .contains('Workloads')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Functions')
-      .click();
+    cy.navigateTo('Workloads', 'Functions');
 
     cy.getIframeBody()
       .contains('a', API_RULE_AND_FUNCTION_NAME)
@@ -192,17 +180,9 @@ context('Test in-cluster eventing', () => {
       });
   });
 
-  it('Navigate to Subscription', () => {
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Subscriptions')
-      .click();
-  });
-
   it('Create Subscription', () => {
+    cy.navigateTo('Configuration', 'Subscriptions');
+
     cy.getIframeBody()
       .contains('Create Subscription')
       .click();

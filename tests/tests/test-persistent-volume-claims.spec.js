@@ -22,17 +22,9 @@ context('Test Persistent Volume Claims', () => {
     cy.goToNamespaceDetails();
   });
 
-  it('Navigate to Persistent Volume Claims', () => {
-    cy.getLeftNav()
-      .contains('Storage')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Persistent Volume Claims')
-      .click();
-  });
-
   it('Create a Persistent Volume Claim', () => {
+    cy.navigateTo('Storage', 'Persistent Volume Claims');
+
     cy.getIframeBody()
       .contains('Create Persistent Volume Claim')
       .click();
@@ -116,13 +108,7 @@ context('Test Persistent Volume Claims', () => {
   it('Delete the connected Storage Class', () => {
     cy.get('[data-testid=luigi-topnav-logo]').click();
 
-    cy.getLeftNav()
-      .contains('Storage')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Storage Classes')
-      .click();
+    cy.navigateTo('Storage', 'Storage Classes');
 
     cy.getIframeBody()
       .find('[role="search"] [aria-label="open-search"]')

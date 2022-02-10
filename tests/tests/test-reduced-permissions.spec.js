@@ -94,13 +94,7 @@ context('Test reduced permissions', () => {
 
     cy.goToNamespaceDetails();
 
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Service Accounts')
-      .click();
+    cy.navigateTo('Configuration', 'Service Accounts');
 
     cy.getIframeBody()
       .contains('Create Service Account')
@@ -121,13 +115,7 @@ context('Test reduced permissions', () => {
       .contains('Back to Namespaces')
       .click();
 
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Cluster Role Bindings')
-      .click();
+    cy.navigateTo('Configuration', 'Cluster Role Bindings');
 
     cy.getIframeBody()
       .contains('Create Cluster Role Binding')
@@ -180,13 +168,7 @@ context('Test reduced permissions', () => {
       .click();
     cy.goToNamespaceDetails();
 
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Service Accounts')
-      .click();
+    cy.navigateTo('Configuration', 'Service Accounts');
 
     cy.getIframeBody()
       .contains(SA_NAME)
