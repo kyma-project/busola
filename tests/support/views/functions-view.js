@@ -51,7 +51,7 @@ Cypress.Commands.add(
       .click();
 
     cy.readFile(dependenciesPath).then(body => {
-      cy.pasteToMonaco(body);
+      cy.pasteToMonaco(JSON.stringify(body));
     });
 
     cy.getIframeBody()

@@ -1,11 +1,10 @@
-Cypress.Commands.add('findMonaco', { prevSubject: true }, element => {
+Cypress.Commands.add('findMonaco', { prevSubject: false }, () => {
   return cy
-    .wrap(element)
+    .getIframeBody()
     .find('textarea[aria-roledescription="editor"]:visible');
 });
 
-Cypress.Commands.add('pasteToMonaco', { prevSubject: true }, content => {
-  console.log(content);
+Cypress.Commands.add('pasteToMonaco', { prevSubject: false }, content => {
   cy.findMonaco()
     .clearInput()
     .paste({ pastePayload: content });
