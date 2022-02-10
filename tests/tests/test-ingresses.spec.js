@@ -2,12 +2,11 @@
 import 'cypress-file-upload';
 import { loadFile } from '../support/loadFile';
 
-const NAME =
-  'test-' +
-  Math.random()
-    .toString()
-    .substr(2, 8);
+const RANDOM_NUMBER = Math.random()
+  .toString()
+  .substr(2, 8);
 
+const NAME = 'test-' + RANDOM_NUMBER;
 async function loadIngress(name, namespace) {
   const Ingress = await loadFile('test-ingress.yaml');
   const newIngress = { ...Ingress };
