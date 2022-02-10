@@ -6,12 +6,12 @@ import jsyaml from 'js-yaml';
 
 import { YamlFileUploader } from './YamlFileUploader';
 
-export function YamlUpload({ yamlContent, setYamlContent }) {
+export function YamlUpload({ resourcesData, setResourcesData }) {
   const [error, setError] = React.useState('');
   const { editorTheme } = useTheme();
   const { t } = useTranslation();
 
-  const yamlContentString = yamlContent
+  const yamlContentString = resourcesData
     ?.map(y => jsyaml.dump(y, { noRefs: true }) || undefined)
     ?.join('---\n');
 
@@ -27,7 +27,7 @@ export function YamlUpload({ yamlContent, setYamlContent }) {
       } else if (files.some(file => !isK8sResource(file))) {
         setError('Not a k8s resource!');
       } else {
-        setYamlContent(files);
+        setResourcesData(files);
         setError(null);
       }
     } catch ({ message }) {

@@ -8,22 +8,30 @@ import { useUploadResources } from './useUploadResources';
 import './YamlUploadDialog.scss';
 
 export function YamlUploadDialog({ show, onCancel }) {
-  const [yamlContent, setYamlContent] = useState(undefined);
-  const { fetchResources } = useUploadResources(yamlContent);
+  const [resourcesData, setResourcesData] = useState(undefined);
+  const { fetchResources } = useUploadResources(
+    resourcesData,
+    setResourcesData,
+  );
 
   useEffect(() => {
     if (show) {
-      setYamlContent(undefined);
+      setResourcesData(undefined);
     }
   }, [show]);
 
   const updateYamlContent = yaml => {
     if (!yaml) {
-      setYamlContent(null);
+      setResourcesData(null);
       return;
     }
-    const yamlWithStatus = yaml.map(y => ({ value: y, status: '' }));
-    setYamlContent(yamlWithStatus);
+    const nonEmptyResources = yaml?.filter(resource => resource !== null);
+    const resourcesWithStatus = nonEmptyResources?.map(y => ({
+      value: y,
+      status: '',
+      message: '',
+    }));
+    setResourcesData(resourcesWithStatus);
   };
 
   return (
@@ -41,12 +49,12 @@ export function YamlUploadDialog({ show, onCancel }) {
     >
       <div className="yaml-modal-content">
         <YamlUpload
-          yamlContent={yamlContent?.value}
-          setYamlContent={updateYamlContent}
+          resourcesData={resourcesData?.value}
+          setResourcesData={updateYamlContent}
         />
         <YamlResourcesList
-          yamlContent={yamlContent}
-          setYamlContent={updateYamlContent}
+          resourcesData={resourcesData}
+          setResourcesData={updateYamlContent}
         />
       </div>
     </Dialog>

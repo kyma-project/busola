@@ -1,10 +1,9 @@
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
 import { useSingleGet, useMicrofrontendContext, usePost } from 'react-shared';
 import { useComponentDidMount } from 'shared/useComponentDidMount';
 import { getResourceKindUrl, getResourceUrl } from './helpers';
 
-export function useUploadResources(resources = []) {
-  const [list, setList] = useState([]);
+export function useUploadResources(resources = [], setResourcesData) {
   const fetch = useSingleGet();
   const post = usePost();
   const { namespaceId: namespace } = useMicrofrontendContext();
@@ -13,7 +12,15 @@ export function useUploadResources(resources = []) {
     resource => resource?.value !== null,
   );
 
-  const fetchApiGroup = async resource => {
+  const updateState = (resource, index, status, message = '') => {
+    resource.status = status;
+    resource.message = message;
+    const updatedList = [...resources];
+    updatedList[index] = resource;
+    setResourcesData(updatedList);
+  };
+
+  const fetchApiGroup = async (resource, index) => {
     const clusterWideResources = [
       '/apis/applicationconnector.kyma-project.io/v1alpha1/applications',
       '/apis/addons.kyma-project.io/v1alpha1/clusteraddonsconfigurations',
@@ -23,7 +30,7 @@ export function useUploadResources(resources = []) {
       '/apis/rbac.authorization.k8s.io/v1/clusterrolebindings',
       '/apis/apiextensions.k8s.io/v1/customresourcedefinitions',
     ];
-    const namespaceWideResources = [];
+    const namespaceWideResources = []; //todo
 
     const hasNamespace = r => r?.metadata?.namespace;
     const isKnownClusterWide = r =>
@@ -54,23 +61,21 @@ export function useUploadResources(resources = []) {
       }
       try {
         await post(url, resource.value);
-        resource.status = 'Created';
-        setList(list => [...list, resource]);
+        updateState(resource, index, 'Created');
       } catch (e) {
         console.warn(e);
-        resource.status = 'Error';
-        setList(list => [...list, resource]);
+        updateState(resource, index, 'Error', e.message);
       }
     } catch (e) {
       console.warn(e);
-      resource.status = 'Error';
-      setList(list => [...list, resource]);
+      updateState(resource, index, 'Error', e.message);
     }
   };
 
   const fetchResources = useCallback(() => {
-    for (const resource of filteredResources) {
-      void fetchApiGroup(resource);
+    for (const [index, resource] of filteredResources?.entries()) {
+      updateState(resource, index, 'Waiting');
+      void fetchApiGroup(resource, index);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -78,5 +83,5 @@ export function useUploadResources(resources = []) {
 
   useComponentDidMount(fetchResources);
 
-  return { list, fetchResources };
+  return { fetchResources };
 }
