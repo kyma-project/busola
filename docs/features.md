@@ -127,7 +127,7 @@ The document lists and describes all the feature flags that are available in Kym
   },
   ```
 
-- **JWT_CHECK_CONFIG** – is used to configure data necessary for the backend authentication, such as an issuer and JWKS (JSON Web Key Set) address.
+- **JWT_CHECK_CONFIG** – is used to configure data necessary for the backend authentication, such as an issuer and JWKS (JSON Web Key Set) address. When the feature is disabled no authentication occurs on backend side.
 
   ```bash
   "JWT_CHECK_CONFIG": {
