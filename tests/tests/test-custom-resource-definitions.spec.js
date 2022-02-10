@@ -109,14 +109,14 @@ context('Test Custom Resource Definitions', () => {
         .find('[role="dialog"]')
         .contains('button', 'Create')
         .click();
-
-      cy.getIframeBody()
-        .contains('h3', 'my-cron-tab')
-        .should('be.visible');
     });
   });
 
   it('Delete Custom Resource Definition', () => {
+    cy.getIframeBody()
+      .contains('h3', 'my-cron-tab')
+      .should('be.visible');
+
     cy.getIframeBody()
       .contains('a', CRD_NAME)
       .click();

@@ -7,6 +7,5 @@ Cypress.Commands.add('findMonaco', { prevSubject: false }, () => {
 Cypress.Commands.add('pasteToMonaco', { prevSubject: false }, content => {
   cy.findMonaco()
     .clearInput()
-    .paste({ pastePayload: content })
-    .then({ log: true });
+    .paste({ pastePayload: content });
 });
