@@ -129,8 +129,6 @@ function JobsCreate({
         advanced
         propertyPath="$.metadata.annotations"
         title={t('common.headers.annotations')}
-        lockedKeys={[SIDECAR_INJECTION_LABEL]}
-        lockedValues={[SIDECAR_INJECTION_LABEL]}
       />
 
       <JobSpecSection advanced propertyPath="$.spec" readOnly={!!initialJob} />
