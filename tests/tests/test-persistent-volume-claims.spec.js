@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
-import { loadPVC } from '../support/loadPVC';
+import { loadFile } from '../support/loadFile';
 
 const FILE_NAME = 'test-persistent-volume-claim.yaml';
 
@@ -13,6 +13,17 @@ const PVC_NAME =
 const CAPACITY_VALUE = '1Gi';
 const ACCESS_MODES_VALUE = 'ReadWriteOnce';
 const VOLUME_MODE_VALUE = 'Filesystem';
+
+async function loadPVC(name, namespace, storage, fileName) {
+  const resource = await loadFile(fileName);
+  const newResource = { ...resource };
+
+  newResource.metadata.name = name;
+  newResource.metadata.namespace = namespace;
+  newResource.spec.storageClassName = storage;
+
+  return newResource;
+}
 
 context('Test Persistent Volume Claims', () => {
   Cypress.skipAfterFail();

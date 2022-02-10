@@ -1,10 +1,18 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
-import { loadPV } from '../support/loadPV';
+import { loadFile } from '../support/loadFile';
 
 const PV_NAME = `test-pv-${Math.random()
   .toString()
   .substr(2, 8)}`;
+
+async function loadPV(pvName) {
+  const PV = await loadFile('test-persistent-volumes.yaml');
+
+  const newPV = { ...PV };
+  newPV.metadata.name = pvName;
+  return newPV;
+}
 
 context('Test Persistent Volumes', () => {
   Cypress.skipAfterFail();

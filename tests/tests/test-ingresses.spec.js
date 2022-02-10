@@ -1,12 +1,24 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
-import { loadRandomIngress } from '../support/loadIngress';
+import { loadFile } from '../support/loadFile';
 
 const NAME =
   'test-' +
   Math.random()
     .toString()
     .substr(2, 8);
+
+async function loadIngress(name, namespace) {
+  const Ingress = await loadFile('test-ingress.yaml');
+  const newIngress = { ...Ingress };
+  newIngress.metadata.name = name;
+  newIngress.metadata.namespace = namespace;
+  newIngress.spec.rules[0].host = `${RANDOM_NUMBER}${newIngress.spec.rules[0].host}`;
+  newIngress.spec.rules[0].http.paths[0].path = `${newIngress.spec.rules[0].http.paths[0].path}${RANDOM_NUMBER}`;
+  newIngress.spec.rules[0].http.paths[1].path = `${newIngress.spec.rules[0].http.paths[1].path}${RANDOM_NUMBER}`;
+
+  return newIngress;
+}
 
 context('Test Ingresses', () => {
   Cypress.skipAfterFail();
@@ -23,7 +35,7 @@ context('Test Ingresses', () => {
       .contains('Create Ingress')
       .click();
 
-    cy.wrap(loadRandomIngress(NAME, Cypress.env('NAMESPACE_NAME'))).then(
+    cy.wrap(loadIngress(NAME, Cypress.env('NAMESPACE_NAME'))).then(
       INGRESS_CONFIG => {
         const INGRESS = JSON.stringify(INGRESS_CONFIG);
         cy.getIframeBody()

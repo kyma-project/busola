@@ -1,10 +1,18 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
-import { loadRandomHPA } from '../support/loadHPA';
+import { loadFile } from '../support/loadFile';
 
 const HPA_NAME = 'test-hpa';
 const DOCKER_IMAGE = 'nginx';
 const DEPLOYEMENT_NAME = 'no-pod';
+
+async function loadHPA(namespaceName) {
+  const HPA = await loadFile('test-HPA.yaml');
+
+  HPA.metadata.namespace = namespaceName;
+
+  return HPA;
+}
 
 context('Test HPA', () => {
   Cypress.skipAfterFail();
@@ -48,7 +56,7 @@ context('Test HPA', () => {
       .contains('Create Horizontal Pod Autoscaler')
       .click();
 
-    cy.wrap(loadRandomHPA(Cypress.env('NAMESPACE_NAME'))).then(HPA_CONFIG => {
+    cy.wrap(loadHPA(Cypress.env('NAMESPACE_NAME'))).then(HPA_CONFIG => {
       const HPA = JSON.stringify(HPA_CONFIG);
       cy.getIframeBody()
         .find('[role="presentation"],[class="view-lines"]')

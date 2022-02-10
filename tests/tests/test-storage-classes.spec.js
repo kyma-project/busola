@@ -1,6 +1,14 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
-import { loadRandomSC } from '../support/loadFile';
+import { loadFile } from '../support/loadFile';
+
+async function loadSC(scName) {
+  const SC = await loadFile('test-storage-classes.yaml');
+
+  const newSC = { ...SC };
+  newSC.metadata.name = scName;
+  return newSC;
+}
 
 context('Test Storage Classes', () => {
   Cypress.skipAfterFail();
@@ -16,7 +24,7 @@ context('Test Storage Classes', () => {
       .contains('Create Storage Class')
       .click();
 
-    cy.wrap(loadRandomSC(Cypress.env('STORAGE_CLASS_NAME'))).then(SC_CONFIG => {
+    cy.wrap(loadSC(Cypress.env('STORAGE_CLASS_NAME'))).then(SC_CONFIG => {
       const SC = JSON.stringify(SC_CONFIG);
 
       cy.getIframeBody()

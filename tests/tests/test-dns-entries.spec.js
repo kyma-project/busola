@@ -18,7 +18,7 @@ context('Test DNS Entries', () => {
   });
 
   it('Create DNS Entry', () => {
-    cy.navigatetTo('Configuration', 'DNS Entries');
+    cy.navigateTo('Configuration', 'DNS Entries');
 
     cy.getIframeBody()
       .contains('Create DNS Entry')

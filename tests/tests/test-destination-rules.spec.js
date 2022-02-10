@@ -1,12 +1,22 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
-import { loadRandomDR } from '../support/loadDR';
+import { loadFile } from '../support/loadFile';
 
 const DR_NAME =
   'test-' +
   Math.random()
     .toString()
     .substr(2, 8);
+
+async function loadDR(drName, namespaceName) {
+  const DR = await loadFile('test-custom-destination-rule.yaml');
+  const newDR = { ...DR };
+
+  newDR.metadata.name = drName;
+  newDR.metadata.namespace = namespaceName;
+
+  return newDR;
+}
 
 context('Test Destination Rules', () => {
   Cypress.skipAfterFail();
@@ -23,17 +33,15 @@ context('Test Destination Rules', () => {
       .contains('Create Destination Rule')
       .click();
 
-    cy.wrap(loadRandomDR(DR_NAME, Cypress.env('NAMESPACE_NAME'))).then(
-      DR_CONFIG => {
-        const DR = JSON.stringify(DR_CONFIG);
-        cy.getIframeBody()
-          .find('[role="presentation"],[class="view-lines"]')
-          .first()
-          .click()
-          .clearMonaco()
-          .type(DR, { parseSpecialCharSequences: false });
-      },
-    );
+    cy.wrap(loadDR(DR_NAME, Cypress.env('NAMESPACE_NAME'))).then(DR_CONFIG => {
+      const DR = JSON.stringify(DR_CONFIG);
+      cy.getIframeBody()
+        .find('[role="presentation"],[class="view-lines"]')
+        .first()
+        .click()
+        .clearMonaco()
+        .type(DR, { parseSpecialCharSequences: false });
+    });
 
     cy.getIframeBody()
       .find('[role="dialog"]')

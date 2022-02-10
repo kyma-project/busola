@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
-import { loadRandomCRD, loadCRInstance } from '../support/loadFile';
+import { loadFile } from '../support/loadFile';
 
 const CRD_PLURAL_NAME =
   'test-' +
@@ -9,6 +9,26 @@ const CRD_PLURAL_NAME =
     .substr(2, 8);
 
 const CRD_NAME = CRD_PLURAL_NAME + `.${CRD_PLURAL_NAME}.example.com`;
+
+async function loadCRD(crdPluralName, crdName) {
+  const CRD = await loadFile('test-customresourcedefinisions.yaml');
+  const newCRD = { ...CRD };
+
+  newCRD.spec.group = `${crdPluralName}.example.com`;
+  newCRD.metadata.name = crdName;
+  newCRD.spec.names.plural = crdPluralName;
+
+  return newCRD;
+}
+
+export async function loadCRInstance(crdPluralName) {
+  const CR = await loadFile('test-custom-resource-instance.yaml');
+
+  const newCR = { ...CR };
+  newCR.metadata.namespace = Cypress.env('NAMESPACE_NAME');
+  newCR.apiVersion = `${crdPluralName}.example.com/v1`;
+  return newCR;
+}
 
 context('Test Custom Resource Definitions', () => {
   Cypress.skipAfterFail();
@@ -25,7 +45,7 @@ context('Test Custom Resource Definitions', () => {
       .contains('Create Custom Resource Definition')
       .click();
 
-    cy.wrap(loadRandomCRD(CRD_PLURAL_NAME, CRD_NAME)).then(CRD_CONFIG => {
+    cy.wrap(loadCRD(CRD_PLURAL_NAME, CRD_NAME)).then(CRD_CONFIG => {
       const CRD = JSON.stringify(CRD_CONFIG);
 
       cy.getIframeBody()
