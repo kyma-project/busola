@@ -284,12 +284,6 @@ context('Test in-cluster eventing', () => {
   });
 
   it('Delete Subscription', () => {
-    cy.getIframeBody()
-      .contains('button', 'Delete')
-      .click();
-
-    cy.getIframeBody()
-      .find('[data-testid="delete-confirmation"]')
-      .click();
+    cy.deleteInDetails();
   });
 });

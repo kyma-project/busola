@@ -113,12 +113,6 @@ context('Test Service Accounts', () => {
   });
 
   it('Delete Service Account', () => {
-    cy.getIframeBody()
-      .contains('button', 'Delete')
-      .click();
-
-    cy.getIframeBody()
-      .find('[data-testid="delete-confirmation"]')
-      .click();
+    cy.deleteInDetails();
   });
 });

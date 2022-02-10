@@ -107,3 +107,17 @@ function paste(subject, { pastePayload }) {
 Cypress.Commands.add('getLeftNav', () => {
   cy.get('nav[data-testid=semiCollapsibleLeftNav]');
 });
+
+Cypress.Commands.add('deleteInDetails', () => {
+  cy.getIframeBody()
+    .contains('button', 'Delete')
+    .click();
+
+  cy.getIframeBody()
+    .find('[data-testid="delete-confirmation"]')
+    .click();
+
+  cy.getIframeBody()
+    .contains(/deleted/)
+    .should('be.visible');
+});

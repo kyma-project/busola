@@ -219,13 +219,7 @@ context('Test reduced permissions', () => {
     cy.reload();
 
     // try to delete resource
-    cy.getIframeBody()
-      .contains('Delete')
-      .click();
-
-    cy.getIframeBody()
-      .find('[data-testid="delete-confirmation"]')
-      .click();
+    cy.deleteInDetails();
 
     cy.contains('Failed to delete the Namespace').should('be.visible');
 

@@ -134,16 +134,6 @@ context('Test Custom Resource Definitions', () => {
       .contains('a', CRD_NAME)
       .click();
 
-    cy.getIframeBody()
-      .contains('button', 'Delete')
-      .click();
-
-    cy.getIframeBody()
-      .find('[data-testid="delete-confirmation"]')
-      .click();
-
-    cy.getIframeBody()
-      .contains(/deleted/)
-      .should('be.visible');
+    cy.deleteInDetails();
   });
 });
