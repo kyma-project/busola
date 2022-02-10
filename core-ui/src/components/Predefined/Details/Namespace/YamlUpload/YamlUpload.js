@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { ControlledEditor, useTheme } from 'react-shared';
 import jsyaml from 'js-yaml';
 
-import { YamlFileUpload } from './YamlFileUpload';
+import { YamlFileUploader } from './YamlFileUploader';
 
 export function YamlUpload({ yamlContent, setYamlContent }) {
   const [error, setError] = React.useState('');
@@ -37,8 +37,8 @@ export function YamlUpload({ yamlContent, setYamlContent }) {
   };
 
   return (
-    <>
-      <YamlFileUpload onYamlContentAdded={updateYamlContent} />
+    <div className="yaml-modal-uploader">
+      <YamlFileUploader onYamlContentAdded={updateYamlContent} />
       <p className="editor-label fd-margin-bottom--sm fd-margin-top--sm">
         or paste it here:
       </p>
@@ -62,6 +62,6 @@ export function YamlUpload({ yamlContent, setYamlContent }) {
           {t('common.create-form.editor-error', { error })}
         </MessageStrip>
       )}
-    </>
+    </div>
   );
 }

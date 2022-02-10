@@ -2,7 +2,7 @@ import React from 'react';
 import { FileInput } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
-export function YamlFileUpload({ onYamlContentAdded }) {
+export function YamlFileUploader({ onYamlContentAdded }) {
   const { i18n } = useTranslation();
 
   const readFile = file => {
