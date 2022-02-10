@@ -127,6 +127,18 @@ The document lists and describes all the feature flags that are available in Kym
   },
   ```
 
+- **JWT_CHECK_CONFIG** – is used to configure data necessary for the backend authentication, such as an issuer and JWKS (JSON Web Key Set) address. When the feature is disabled no authentication occurs on backend side.
+
+  ```bash
+  "JWT_CHECK_CONFIG": {
+    "isEnabled": false,
+    "config": {
+      "issuer": "https://apskyxzcl.accounts400.ondemand.com",
+      "jwksUri": "https://apskyxzcl.accounts400.ondemand.com/oauth2/certs"
+    }
+  }
+  ```
+
 - **KUBECONFIG_ID** – is used to configure the URL to which Busola sends a request to download a kubeconfig file. If you add `?kubeconfigID={your ID}` to the Busola URL, Busola tries to download the kubeconfig from `{kubeconfigUrl}/{yourID}`. If the operation succeeds, Busola adds the kubeconfing file to the cluster.
   If you use a full address in the **kubeconfigUrl** field, Busola also reads it.
 
