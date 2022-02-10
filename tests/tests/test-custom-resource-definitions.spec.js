@@ -46,9 +46,11 @@ context('Test Custom Resource Definitions', () => {
       .click();
 
     cy.wrap(loadCRD(CRD_PLURAL_NAME, CRD_NAME)).then(CRD_CONFIG => {
+      cy.log(CRD_CONFIG);
       const CRD = JSON.stringify(CRD_CONFIG);
-
+      cy.log(CRD);
       cy.pasteToMonaco(CRD);
+      cy.wait(40000);
     });
 
     cy.getIframeBody()
