@@ -14,7 +14,7 @@ const SA_NAME = 'test-sa-' + id;
 const CR_NAME = 'test-cr-' + id;
 const CRB_NAME = 'test-crb-' + id;
 
-context('Reduced permissions', () => {
+context('Test reduced permissions', () => {
   let tempKubeconfigPath;
 
   Cypress.skipAfterFail();

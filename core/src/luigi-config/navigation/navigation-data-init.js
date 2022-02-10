@@ -105,18 +105,6 @@ async function createClusterManagementNodes(features) {
     },
   ];
 
-  if (!features.ADD_CLUSTER_DISABLED?.isEnabled) {
-    const addClusterNode = [
-      {
-        hideSideNav: true,
-        pathSegment: 'add',
-        navigationContext: 'clusters',
-        viewUrl: config.coreUIModuleUrl + '/clusters/add',
-      },
-    ];
-    childrenNodes.push(addClusterNode);
-  }
-
   const clusterManagementNode = {
     pathSegment: 'clusters',
     hideFromNav: true,

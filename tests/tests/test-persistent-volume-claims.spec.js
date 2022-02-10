@@ -14,7 +14,7 @@ const CAPACITY_VALUE = '1Gi';
 const ACCESS_MODES_VALUE = 'ReadWriteOnce';
 const VOLUME_MODE_VALUE = 'Filesystem';
 
-context('Test Persistent Volume Claim', () => {
+context('Test Persistent Volume Claims', () => {
   Cypress.skipAfterFail();
 
   before(() => {

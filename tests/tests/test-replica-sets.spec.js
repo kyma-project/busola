@@ -7,7 +7,7 @@ const DOCKER_IMAGE_TAG = 'bitnami/nginx';
 
 const EDITED_REPLICAS_AMOUNT = 1;
 const EDITED_DOCKER_IMAGE_TAG = 'test-replica-set-image';
-context('Create a Replica Set', () => {
+context('Test Replica Sets', () => {
   Cypress.skipAfterFail();
 
   before(() => {
@@ -108,8 +108,6 @@ context('Create a Replica Set', () => {
       .find('[role="document"]')
       .contains('button', 'Update')
       .click();
-
-    cy.reload();
   });
 
   it('Checks the new Docker image', () => {

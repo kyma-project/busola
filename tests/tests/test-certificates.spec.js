@@ -6,7 +6,7 @@ const CERT_COMMON_NAME = 'cypress-test-common-name';
 const ANNOTATION_KEY = 'annotation';
 const ANNOTATION_VALUE = 'value';
 
-context('Add and remove a certificate', () => {
+context('Test Certificates', () => {
   Cypress.skipAfterFail();
 
   before(() => {

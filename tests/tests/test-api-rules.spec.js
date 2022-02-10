@@ -7,7 +7,7 @@ const API_RULE_HOST = API_RULE_NAME + '-host';
 const API_RULE_PATH = '/test-path';
 const API_RULE_DEFAULT_PATH = '/.*';
 
-context('API Rules in the Function details view', () => {
+context('Test API Rules in the Function details view', () => {
   Cypress.skipAfterFail();
 
   before(() => {

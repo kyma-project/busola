@@ -3,7 +3,7 @@ import 'cypress-file-upload';
 
 const CRON_JOB_NAME = 'test-cron-job';
 
-context('Test Cron Job', () => {
+context('Test Cron Jobs', () => {
   Cypress.skipAfterFail();
 
   before(() => {

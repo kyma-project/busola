@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 import { MessageStrip } from 'fundamental-react';
@@ -20,6 +20,15 @@ import { useConfigData } from 'components/Lambdas/helpers/misc/useConfigData';
 
 import { createFunctionTemplate } from './helpers';
 
+function usePrevious(value) {
+  const ref = useRef('');
+  useEffect(() => {
+    ref.current = value;
+  }, [value]);
+
+  return ref.current;
+}
+
 export function FunctionsCreate({
   namespace,
   formElementRef,
@@ -38,11 +47,12 @@ export function FunctionsCreate({
 
   const name = jp.value(func, '$.metadata.name');
   const type = jp.value(func, '$.spec.type');
-  const runtime = jp.value(func, '$.spec.runtime');
   const minReplicas = jp.value(func, '$.spec.minReplicas');
   const maxReplicas = jp.value(func, '$.spec.maxReplicas');
-  const deps = jp.value(func, '$.spec.deps');
-  const source = jp.value(func, '$.spec.source');
+
+  const [runtime, setRuntime] = useState(jp.value(func, '$.spec.runtime'));
+  const previousRuntime = usePrevious(runtime);
+
   const runtimeOptions = Object.entries(functionAvailableLanguages).map(
     ([runtime, lang]) => ({
       key: runtime,
@@ -72,16 +82,20 @@ export function FunctionsCreate({
 
   useEffect(() => {
     if (!type) {
-      jp.value(
-        func,
-        '$.spec.source',
-        source || CONFIG.defaultLambdaCodeAndDeps[runtime].code,
-      );
-      jp.value(
-        func,
-        '$.spec.deps',
-        deps || getDefaultDependencies(name, runtime),
-      );
+      if (previousRuntime?.substring(0, 4) !== runtime?.substring(0, 4)) {
+        jp.value(
+          func,
+          '$.spec.source',
+          CONFIG.defaultLambdaCodeAndDeps[runtime].code,
+        );
+
+        jp.value(func, '$.spec.deps', getDefaultDependencies(name, runtime));
+      }
+    }
+  }, [runtime]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (!type) {
       jp.value(func, '$.spec.reference', undefined);
       jp.value(func, '$.spec.baseDir', undefined);
     } else if (type === 'git') {
@@ -95,7 +109,7 @@ export function FunctionsCreate({
       jp.value(func, '$.spec.baseDir', '/');
     }
     setFunc({ ...func });
-  }, [type, runtime]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [type]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (maxReplicas && maxReplicas < minReplicas) {
@@ -144,6 +158,10 @@ export function FunctionsCreate({
       <ResourceForm.FormField
         required
         propertyPath="$.spec.runtime"
+        setValue={value => {
+          setRuntime(value);
+          jp.value(func, '$.spec.runtime', value);
+        }}
         label={t('functions.headers.runtime')}
         input={Inputs.Dropdown}
         options={runtimeOptions}

@@ -31,7 +31,7 @@ const requestData = {
   url: '/backend/api/v1/namespaces/kube-public/configmaps/busola-config',
 };
 
-context('Cluster configuration', () => {
+context('Test Cluster configuration', () => {
   Cypress.skipAfterFail();
 
   it('Applies config from target cluster', () => {
