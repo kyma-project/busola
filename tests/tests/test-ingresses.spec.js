@@ -37,11 +37,7 @@ context('Test Ingresses', () => {
     cy.wrap(loadIngress(NAME, Cypress.env('NAMESPACE_NAME'))).then(
       INGRESS_CONFIG => {
         const INGRESS = JSON.stringify(INGRESS_CONFIG);
-        cy.getIframeBody()
-          .find('textarea[aria-roledescription="editor"]')
-          .filter(':visible')
-          .clearMonaco()
-          .type(INGRESS, { parseSpecialCharSequences: false });
+        cy.pasteToMonaco(INGRESS);
       },
     );
 

@@ -41,13 +41,13 @@ context('Test API Rules in the Function details view', () => {
     cy.getIframeBody().contains(`${FUNCTION_NAME} (port: 80)`);
 
     cy.getIframeBody()
-      .find('[placeholder="API Rule Name"]')
-      .filter(':visible', { log: false })
+      .find('[placeholder="API Rule Name"]:visible', { log: false })
       .type(API_RULE_NAME);
 
     cy.getIframeBody()
-      .find('[placeholder="Subdomain part of API Rule address."]')
-      .filter(':visible', { log: false })
+      .find('[placeholder="Subdomain part of API Rule address."]:visible', {
+        log: false,
+      })
       .type(API_RULE_HOST);
 
     cy.getIframeBody()
@@ -60,8 +60,7 @@ context('Test API Rules in the Function details view', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Required scope"]')
-      .filter(':visible', { log: false })
+      .find('[placeholder="Required scope"]:visible', { log: false })
       .type('read');
 
     cy.getIframeBody()
@@ -116,8 +115,7 @@ context('Test API Rules in the Function details view', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Enter the path."]')
-      .filter(':visible', { log: false })
+      .find('[placeholder="Enter the path."]:visible', { log: false })
       .type(API_RULE_PATH);
 
     cy.getIframeBody()
