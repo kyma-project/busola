@@ -1802,6 +1802,8 @@ settings:
     default-page-size: Default Page Size
     title: Other
   theme: Theme
+sidecars:
+  title: Sidecars
 stateful-sets:
   description: <0>Stateful Set</0> is used for the management of Pods' deployment and scaling.
   name_singular: Stateful Set

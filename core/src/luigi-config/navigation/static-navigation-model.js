@@ -715,6 +715,43 @@ export function getStaticChildrenNodesForNamespace(
         },
       ],
     },
+    {
+      category: i18next.t('istio.title'),
+      resourceType: 'sidecars',
+      pathSegment: 'sidecars',
+      label: i18next.t('sidecars.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/sidecars?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/networking.istio.io/v1beta1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+      context: {
+        requiredFeatures: [features.ISTIO],
+      },
+
+      navigationContext: 'sidecars',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':sidecarName',
+              resourceType: 'sidecars',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/sidecars/:sidecarName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/networking.istio.io/v1beta1',
+                }),
+            },
+          ],
+        },
+      ],
+    },
     //SERVICE MANAGEMENT CATEGORY
     {
       category: {
