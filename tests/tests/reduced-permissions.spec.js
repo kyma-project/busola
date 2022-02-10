@@ -180,13 +180,7 @@ context('Reduced permissions', () => {
       .click();
     cy.goToNamespaceDetails();
 
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Service Accounts')
-      .click();
+    cy.navigateTo('Configuration', 'Service Accounts');
 
     cy.getIframeBody()
       .contains(SA_NAME)

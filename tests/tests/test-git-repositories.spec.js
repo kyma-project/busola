@@ -15,17 +15,9 @@ context('Test Git Repositories', () => {
     cy.goToNamespaceDetails();
   });
 
-  it('Git Repositories node should be present', () => {
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Git Repositories')
-      .click();
-  });
-
   it('Create Repository', () => {
+    cy.navigateTo('Configuration', 'Git Repositories');
+
     cy.getIframeBody()
       .contains('Connect Repository')
       .click();

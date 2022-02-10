@@ -16,13 +16,7 @@ context('API Rules in the Function details view', () => {
   });
 
   it('Go to details of the simple Function', () => {
-    cy.getLeftNav()
-      .contains('Workloads')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Functions')
-      .click();
+    cy.navigateTo('Workloads', 'Functions');
 
     cy.getIframeBody()
       .contains('a', FUNCTION_NAME)

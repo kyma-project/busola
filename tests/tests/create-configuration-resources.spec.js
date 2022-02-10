@@ -15,13 +15,7 @@ context('Test configuration resources', () => {
   });
 
   it('Create a Config Map', () => {
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
-
-    cy.getLeftNav()
-      .find('[data-testid=config-maps_configmaps]')
-      .click();
+    cy.navidateTo('Configuration', 'Config Maps');
 
     cy.getIframeBody()
       .contains('Create Config Map')
@@ -123,13 +117,7 @@ context('Test configuration resources', () => {
   });
 
   it('Create a ClusterRoles list view', () => {
-    cy.getLeftNav()
-      .contains('Namespaces')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
+    cy.navigateTo('Namespaces', 'Configuration');
 
     cy.getLeftNav()
       .find('[data-testid=cluster-roles_clusterroles]')

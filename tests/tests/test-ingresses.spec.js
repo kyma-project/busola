@@ -16,17 +16,9 @@ context('Test Ingresses', () => {
     cy.goToNamespaceDetails();
   });
 
-  it('Navigate to Discovery and Network', () => {
-    cy.getLeftNav()
-      .contains('Discovery and Network')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Ingresses')
-      .click();
-  });
-
   it('Create an Ingress', () => {
+    cy.navigateTo('Discovery and Network', 'Ingress');
+
     cy.getIframeBody()
       .contains('Create Ingress')
       .click();
@@ -35,8 +27,7 @@ context('Test Ingresses', () => {
       INGRESS_CONFIG => {
         const INGRESS = JSON.stringify(INGRESS_CONFIG);
         cy.getIframeBody()
-          .find('textarea[aria-roledescription="editor"]')
-          .filter(':visible')
+          .find('textarea[aria-roledescription="editor"]:visible')
           .clearMonaco()
           .type(INGRESS, { parseSpecialCharSequences: false });
       },

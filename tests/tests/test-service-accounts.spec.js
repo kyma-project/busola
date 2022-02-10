@@ -10,17 +10,9 @@ context('Test Service Accounts', () => {
     cy.goToNamespaceDetails();
   });
 
-  it('Navigate to Service Accounts', () => {
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Service Accounts')
-      .click();
-  });
-
   it('Create a Client', () => {
+    cy.navigateTo('Configuration', 'Serice Accounts');
+
     cy.getIframeBody()
       .contains('Create Service Account')
       .click();

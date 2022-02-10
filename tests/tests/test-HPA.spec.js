@@ -12,16 +12,9 @@ context('Test HPA', () => {
     cy.goToNamespaceDetails();
   });
 
-  it('Navigate to HPA', () => {
-    cy.getLeftNav()
-      .contains('Discovery and Network')
-      .click();
-    cy.getLeftNav()
-      .contains('Horizontal Pod')
-      .click();
-  });
-
   it('Create HPA', () => {
+    cy.navigateTo('Discovery and Network', 'Horizontal Pod');
+
     cy.getIframeBody()
       .contains('Create Horizontal Pod Autoscaler')
       .click();

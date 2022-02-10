@@ -15,17 +15,9 @@ context('Create a Replica Set', () => {
     cy.goToNamespaceDetails();
   });
 
-  it('Navigates to Replica Sets', () => {
-    cy.getLeftNav()
-      .contains('Workloads')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Replica Sets')
-      .click();
-  });
-
   it('Creates a Replica Set', () => {
+    cy.navigateTo('Workloads', 'Replica Sets');
+
     cy.getIframeBody()
       .contains('Create Replica Set')
       .click();

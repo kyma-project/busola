@@ -17,17 +17,9 @@ context('Create a DNS Entry', () => {
     cy.goToNamespaceDetails();
   });
 
-  it('DNS Entries node should be present', () => {
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('DNS Entries')
-      .click();
-  });
-
   it('Create DNS Entry', () => {
+    cy.navigatetTo('Configuration', 'DNS Entries');
+
     cy.getIframeBody()
       .contains('Create DNS Entry')
       .click();
@@ -53,6 +45,7 @@ context('Create a DNS Entry', () => {
     cy.getIframeBody()
       .find('[aria-label^="Enter the A record"]:visible')
       .click();
+
     cy.getIframeBody()
       .contains('istio-ingressgateway')
       .click();

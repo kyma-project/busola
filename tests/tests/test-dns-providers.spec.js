@@ -16,21 +16,9 @@ context('Test DNS Providers', () => {
     cy.goToNamespaceDetails();
   });
 
-  it('DNS Providers node should be present', () => {
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('DNS Providers')
-      .click();
-
-    cy.getIframeBody()
-      .contains('h3', 'DNS Providers')
-      .should('be.visible');
-  });
-
   it('Create DNS Provider', () => {
+    cy.navigateTo('Configuration', 'DNS Providers');
+
     cy.getIframeBody()
       .contains('Create DNS Provider')
       .click();

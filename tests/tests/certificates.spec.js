@@ -15,13 +15,7 @@ context('Add and remove a certificate', () => {
   });
 
   it('Adds and displays a certificate', () => {
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Certificates')
-      .click();
+    cy.navigateTo('Configuration', 'Certificates');
 
     cy.url().should('match', /certificates$/);
 

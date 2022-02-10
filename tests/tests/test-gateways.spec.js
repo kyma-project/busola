@@ -20,17 +20,9 @@ context('Test Gateways', () => {
     cy.goToNamespaceDetails();
   });
 
-  it('Gateways node should be present', () => {
-    cy.getLeftNav()
-      .contains('Istio')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Gateways')
-      .click();
-  });
-
   it('Create Gateway', () => {
+    cy.navigateTo('Istio', 'Gateways');
+
     cy.getIframeBody()
       .contains('Create Gateway')
       .click();

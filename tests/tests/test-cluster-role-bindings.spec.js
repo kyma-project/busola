@@ -12,13 +12,7 @@ context('Test Cluster Role Bindings', () => {
   });
 
   it('Create a ClusterRoleBinding', () => {
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Cluster Role Bindings')
-      .click();
+    cy.navigateTo('Configuration', 'Cluster Role Bindings');
 
     cy.getIframeBody()
       .contains('Create Cluster Role Binding')

@@ -11,17 +11,9 @@ context('Test Cron Job', () => {
     cy.goToNamespaceDetails();
   });
 
-  it('Navigate to Cron Job', () => {
-    cy.getLeftNav()
-      .contains('Workloads')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Cron Jobs')
-      .click();
-  });
-
   it('Create Cron Job', () => {
+    cy.navigateTo('Workloads', 'Cron Jobs');
+
     cy.getIframeBody()
       .contains('Create Cron Job')
       .click();

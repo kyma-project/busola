@@ -24,28 +24,16 @@ context('Test Virtual Services', () => {
     cy.goToNamespaceDetails();
   });
 
-  it('Navigate to Virtual Services', () => {
-    cy.getLeftNav()
-      .contains('Istio')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Virtual Services')
-      .click();
-  });
-
   it('Create a Virtual Service', () => {
+    cy.navigateTo('Istio', 'Virtual Services');
+
     cy.getIframeBody()
       .contains('Create Virtual Service')
       .click();
 
     cy.wrap(loadVirtualService()).then(config => {
       const configString = JSON.stringify(config);
-      cy.getIframeBody()
-        .find('textarea[aria-roledescription="editor"]')
-        .first()
-        .type('{selectall}{backspace}{selectall}{backspace}')
-        .paste({ pastePayload: configString });
+      cy.getIframeBody().pasteToMonaco(configString);
     });
 
     cy.getIframeBody()
