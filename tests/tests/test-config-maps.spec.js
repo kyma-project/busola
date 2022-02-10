@@ -17,7 +17,7 @@ context('Test Config Maps', () => {
   });
 
   it('Create a Config Map', () => {
-    cy.navidateTo('Configuration', 'Config Maps');
+    cy.navigateTo('Configuration', 'Config Maps');
 
     cy.getIframeBody()
       .contains('Create Config Map')
