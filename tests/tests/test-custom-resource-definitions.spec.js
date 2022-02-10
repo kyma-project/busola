@@ -21,7 +21,7 @@ async function loadCRD(crdPluralName, crdName) {
   return newCRD;
 }
 
-export async function loadCRInstance(crdPluralName) {
+async function loadCRInstance(crdPluralName) {
   const CR = await loadFile('test-custom-resource-instance.yaml');
 
   const newCR = { ...CR };

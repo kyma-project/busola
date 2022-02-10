@@ -4,7 +4,7 @@ import config from '../config';
 import { loadFile } from '../support/loadFile';
 import jsyaml from 'js-yaml';
 
-export async function loadMultipleContextKubeconfig() {
+async function loadMultipleContextKubeconfig() {
   const kubeconfig = await loadFile('kubeconfig.yaml');
 
   const newCluster = { ...kubeconfig?.clusters[0] };
