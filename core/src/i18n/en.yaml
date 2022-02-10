@@ -1803,6 +1803,7 @@ settings:
     title: Other
   theme: Theme
 sidecars:
+  name_singular: Sidecar
   title: Sidecars
 stateful-sets:
   description: <0>Stateful Set</0> is used for the management of Pods' deployment and scaling.
