@@ -1300,6 +1300,7 @@ jobs:
     container: Container
     containers: Containers
     containers-readonly-in-edit: After a Job is created, the containers are read-only.
+    disable-sidecar: Disable sidecar
     labels:
       args: Args
       command: Command
