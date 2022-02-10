@@ -58,12 +58,7 @@ context('Test HPA', () => {
 
     cy.wrap(loadHPA(Cypress.env('NAMESPACE_NAME'))).then(HPA_CONFIG => {
       const HPA = JSON.stringify(HPA_CONFIG);
-      cy.getIframeBody()
-        .find('[role="presentation"],[class="view-lines"]')
-        .first()
-        .click()
-        .clearMonaco()
-        .type(HPA, { parseSpecialCharSequences: false });
+      cy.pasteToMonaco(HPA);
     });
 
     cy.getIframeBody()

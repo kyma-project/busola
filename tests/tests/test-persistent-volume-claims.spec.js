@@ -49,12 +49,7 @@ context('Test Persistent Volume Claims', () => {
       ),
     ).then(PVC_CONFIG => {
       const PVC = JSON.stringify(PVC_CONFIG);
-      cy.getIframeBody()
-        .find('[role="presentation"],[class="view-lines"]')
-        .first()
-        .click()
-        .clearMonaco()
-        .type(PVC, { parseSpecialCharSequences: false });
+      cy.pasteToMonaco(PVC);
     });
 
     cy.getIframeBody()

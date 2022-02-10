@@ -35,12 +35,7 @@ context('Test Destination Rules', () => {
 
     cy.wrap(loadDR(DR_NAME, Cypress.env('NAMESPACE_NAME'))).then(DR_CONFIG => {
       const DR = JSON.stringify(DR_CONFIG);
-      cy.getIframeBody()
-        .find('[role="presentation"],[class="view-lines"]')
-        .first()
-        .click()
-        .clearMonaco()
-        .type(DR, { parseSpecialCharSequences: false });
+      cy.pasteToMonaco(DR);
     });
 
     cy.getIframeBody()

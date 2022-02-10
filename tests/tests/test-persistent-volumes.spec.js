@@ -30,12 +30,7 @@ context('Test Persistent Volumes', () => {
 
     cy.wrap(loadPV(PV_NAME)).then(PV_CONFIG => {
       const PV = JSON.stringify(PV_CONFIG);
-      cy.getIframeBody()
-        .find('[role="presentation"],[class="view-lines"]')
-        .first()
-        .click()
-        .clearMonaco()
-        .type(PV, { parseSpecialCharSequences: false });
+      cy.pasteToMonaco(PV);
     });
 
     cy.getIframeBody()

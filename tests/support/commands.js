@@ -59,10 +59,12 @@ Cypress.Commands.add('goToNamespaceDetails', () => {
   return cy.end();
 });
 
-Cypress.Commands.add('clearMonaco', { prevSubject: true }, element => {
-  cy.wrap(element).type(
-    `${Cypress.platform === 'darwin' ? '{cmd}a' : '{ctrl}a'} {backspace}`,
-  );
+Cypress.Commands.add('clearInput', { prevSubject: true }, element => {
+  return cy
+    .wrap(element)
+    .type(
+      `${Cypress.platform === 'darwin' ? '{cmd}a' : '{ctrl}a'} {backspace}`,
+    );
 });
 
 /**

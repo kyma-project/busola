@@ -27,13 +27,7 @@ context('Test Storage Classes', () => {
     cy.wrap(loadSC(Cypress.env('STORAGE_CLASS_NAME'))).then(SC_CONFIG => {
       const SC = JSON.stringify(SC_CONFIG);
 
-      cy.getIframeBody()
-        .find('textarea[aria-roledescription="editor"]')
-        .clearMonaco()
-        .type(SC, {
-          parseSpecialCharSequences: false,
-          waitForAnimations: false,
-        });
+      cy.pasteToMonaco(SC);
     });
 
     cy.getIframeBody()

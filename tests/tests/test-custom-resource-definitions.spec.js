@@ -48,13 +48,7 @@ context('Test Custom Resource Definitions', () => {
     cy.wrap(loadCRD(CRD_PLURAL_NAME, CRD_NAME)).then(CRD_CONFIG => {
       const CRD = JSON.stringify(CRD_CONFIG);
 
-      cy.getIframeBody()
-        .find('div.view-lines')
-        .clearMonaco()
-        .type(CRD, {
-          parseSpecialCharSequences: false,
-          waitForAnimations: false,
-        });
+      cy.pasteToMonaco(CRD);
     });
 
     cy.getIframeBody()
@@ -109,14 +103,7 @@ context('Test Custom Resource Definitions', () => {
     cy.wrap(loadCRInstance(CRD_PLURAL_NAME)).then(CR_CONFIG => {
       const CR = JSON.stringify(CR_CONFIG);
 
-      cy.getIframeBody()
-        .find('[aria-label="Create CronTab"]')
-        .find('div.view-lines')
-        .clearMonaco()
-        .type(CR, {
-          parseSpecialCharSequences: false,
-          waitForAnimations: false,
-        });
+      cy.pasteToMonaco(CR);
 
       cy.getIframeBody()
         .find('[role="dialog"]')
