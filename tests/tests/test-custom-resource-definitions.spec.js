@@ -101,9 +101,11 @@ context('Test Custom Resource Definitions', () => {
       .click();
 
     cy.wrap(loadCRInstance(CRD_PLURAL_NAME)).then(CR_CONFIG => {
+      cy.log('CONFIG', CR_CONFIG);
       const CR = JSON.stringify(CR_CONFIG);
-
+      cy.log('CR', CR);
       cy.pasteToMonaco(CR);
+      cy.wait(40000);
     });
 
     cy.getIframeBody()
