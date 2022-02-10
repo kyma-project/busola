@@ -34,24 +34,22 @@ context('Test DNS Providers', () => {
 
     // secret
     cy.getIframeBody()
-      .find('[placeholder^="Select name"]')
-      .filter(':visible', { log: false })
+      .find('[placeholder^="Select name"]:visible', { log: false })
       .type('default');
+
     cy.getIframeBody()
       .contains(/default-token/)
       .click();
 
     // include domains
     cy.getIframeBody()
-      .find('[placeholder="Domain that is allowed"]')
-      .filter(':visible', { log: false })
+      .find('[placeholder="Domain that is allowed"]:visible', { log: false })
       .clear()
       .type(PROVIDER_INCLUDED_DOMAIN);
 
     // name
     cy.getIframeBody()
-      .find('[placeholder="DNS Provider Name"]')
-      .filter(':visible', { log: false })
+      .find('[placeholder="DNS Provider Name"]:visible', { log: false })
       .clear()
       .type(PROVIDER_NAME);
 
@@ -78,8 +76,7 @@ context('Test DNS Providers', () => {
 
     // name should be readonly
     cy.getIframeBody()
-      .find('[placeholder="DNS Provider Name"]')
-      .filter(':visible', { log: false })
+      .find('[placeholder="DNS Provider Name"]:visible', { log: false })
       .should('have.attr', 'readonly', 'readonly');
 
     cy.getIframeBody()

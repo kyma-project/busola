@@ -44,8 +44,7 @@ Cypress.Commands.add(
 
     cy.readFile(functionPath).then(body => {
       cy.getIframeBody()
-        .find('textarea[aria-roledescription="editor"]')
-        .filter(':visible')
+        .find('textarea[aria-roledescription="editor"]:visible')
         .clearMonaco()
         .paste({
           pastePayload: body,
@@ -58,8 +57,7 @@ Cypress.Commands.add(
 
     cy.readFile(dependenciesPath).then(body => {
       cy.getIframeBody()
-        .find('textarea[aria-roledescription="editor"]')
-        .filter(':visible')
+        .find('textarea[aria-roledescription="editor"]:visible')
         // cy.clear sometimes fails, removing only the first character - use this as a workaround
         .clearMonaco()
         .paste({

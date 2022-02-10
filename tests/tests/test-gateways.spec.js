@@ -29,40 +29,34 @@ context('Test Gateways', () => {
 
     // name
     cy.getIframeBody()
-      .find('[placeholder="Gateway Name"]')
-      .filter(':visible', { log: false })
+      .find('[placeholder="Gateway Name"]:visible', { log: false })
       .type(GATEWAY_NAME);
 
     // selector
     cy.getIframeBody()
-      .find('[placeholder="Enter Key"]')
-      .filter(':visible', { log: false })
+      .find('[placeholder="Enter Key"]:visible', { log: false })
       .filterWithNoValue()
       .type('selector-key');
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Value"]')
-      .filter(':visible', { log: false })
+      .find('[placeholder="Enter Value"]:visible', { log: false })
       .filterWithNoValue()
       .first()
       .type('selector-value');
 
     // server name
     cy.getIframeBody()
-      .find('[placeholder^="Enter the name"]')
-      .filter(':visible', { log: false })
+      .find('[placeholder^="Enter the name"]:visible', { log: false })
       .type(SERVER_NAME);
 
     // hosts
     cy.getIframeBody()
-      .find('[placeholder^="Enter the hosts"]')
-      .filter(':visible', { log: false })
+      .find('[placeholder^="Enter the hosts"]:visible', { log: false })
       .type('example.com{downarrow}*.example.com');
 
     // server target port
     cy.getIframeBody()
-      .find('[placeholder^="Enter the target port"]')
-      .filter(':visible', { log: false })
+      .find('[placeholder^="Enter the target port"]:visible', { log: false })
       .type(TARGET_PORT);
 
     // create
@@ -102,8 +96,7 @@ context('Test Gateways', () => {
 
     // name should be disabled for edit
     cy.getIframeBody()
-      .find('[placeholder="Gateway Name"]')
-      .filter(':visible', { log: false })
+      .find('[placeholder="Gateway Name"]:visible', { log: false })
       .should('have.attr', 'readonly');
 
     cy.getIframeBody()
@@ -122,8 +115,9 @@ context('Test Gateways', () => {
 
     // secret
     cy.getIframeBody()
-      .find('[placeholder^="Start typing to select Secret"]')
-      .filter(':visible', { log: false })
+      .find('[placeholder^="Start typing to select Secret"]:visible', {
+        log: false,
+      })
       .type(KYMA_GATEWAY_CERTS);
 
     cy.getIframeBody()
