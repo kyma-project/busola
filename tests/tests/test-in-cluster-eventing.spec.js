@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
-import { loadKubeconfig } from '../support/loadKubeconfigFile';
+import { loadFile } from '../support/loadFile';
 
 const random = Math.floor(Math.random() * 9999) + 1000;
 const FUNCTION_RECEIVER_NAME = 'in-cluster-eventing-receiver';
@@ -129,7 +129,7 @@ context('Test in-cluster eventing', () => {
       .contains(`${API_RULE_AND_FUNCTION_NAME}-`)
       .then(element => {
         const podName = element[0].textContent;
-        loadKubeconfig().then(kubeconfig => {
+        loadFile('kubeconfig.yaml').then(kubeconfig => {
           const requestUrl = `/api/v1/namespaces/${Cypress.env(
             'NAMESPACE_NAME',
           )}/pods/${podName}/log?container=function`;
@@ -161,7 +161,7 @@ context('Test in-cluster eventing', () => {
       .contains(`${FUNCTION_RECEIVER_NAME}-`)
       .then(element => {
         const podName = element[0].textContent;
-        loadKubeconfig().then(kubeconfig => {
+        loadFile('kubeconfig.yaml').then(kubeconfig => {
           const requestUrl = `/api/v1/namespaces/${Cypress.env(
             'NAMESPACE_NAME',
           )}/pods/${podName}/log?container=function`;

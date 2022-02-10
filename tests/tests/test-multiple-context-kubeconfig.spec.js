@@ -1,11 +1,11 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
 import config from '../config';
-import { loadKubeconfig } from '../support/loadKubeconfigFile';
+import { loadFile } from '../support/loadFile';
 import jsyaml from 'js-yaml';
 
 export async function loadMultipleContextKubeconfig() {
-  const kubeconfig = await loadKubeconfig();
+  const kubeconfig = await loadFile('kubeconfig.yaml');
 
   const newCluster = { ...kubeconfig?.clusters[0] };
   newCluster.name += '-new';

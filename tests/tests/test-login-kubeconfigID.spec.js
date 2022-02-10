@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
 import config from '../config';
-import { loadKubeconfig } from '../support/loadKubeconfigFile';
+import { loadFile } from '../support/loadFile';
 
 const kubeconfigIdAddress = `${config.clusterAddress}/kubeconfig`;
 
@@ -9,7 +9,7 @@ context('Test login - kubeconfigID', () => {
   Cypress.skipAfterFail();
 
   it('Adds cluster by kubeconfigID - no path, go to Cluster Overview', () => {
-    cy.wrap(loadKubeconfig()).then(kubeconfig => {
+    cy.wrap(loadFile('kubeconfig.yaml')).then(kubeconfig => {
       cy.intercept(
         {
           method: 'GET',
@@ -27,7 +27,7 @@ context('Test login - kubeconfigID', () => {
   });
 
   it('Adds cluster by kubeconfigID - saves path', () => {
-    cy.wrap(loadKubeconfig()).then(kubeconfig => {
+    cy.wrap(loadFile('kubeconfig.yaml')).then(kubeconfig => {
       cy.intercept(
         {
           method: 'GET',
@@ -51,7 +51,7 @@ context('Test login - kubeconfigID', () => {
       .contains('Local Storage')
       .should('be.visible');
 
-    cy.wrap(loadKubeconfig()).then(kubeconfig => {
+    cy.wrap(loadFile('kubeconfig.yaml')).then(kubeconfig => {
       cy.intercept(
         {
           method: 'GET',
