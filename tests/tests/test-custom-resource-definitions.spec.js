@@ -50,7 +50,7 @@ context('Test Custom Resource Definitions', () => {
       const CRD = JSON.stringify(CRD_CONFIG);
       cy.log(CRD);
       cy.pasteToMonaco(CRD);
-      cy.wait(40000);
+      cy.wait(4000);
     });
 
     cy.getIframeBody()
@@ -107,7 +107,7 @@ context('Test Custom Resource Definitions', () => {
       const CR = JSON.stringify(CR_CONFIG);
       cy.log('CR', CR);
       cy.pasteToMonaco(CR);
-      cy.wait(40000);
+      cy.wait(4000);
     });
 
     cy.getIframeBody()
