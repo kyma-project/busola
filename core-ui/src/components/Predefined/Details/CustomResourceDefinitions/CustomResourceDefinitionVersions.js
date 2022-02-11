@@ -21,8 +21,12 @@ const CustomResources = ({ resource, namespace, version, i18n }) => {
   const { t } = useTranslation();
   const { group, names } = resource.spec;
   const name = names.plural;
-  const cos = useMicrofrontendContext();
-  const { clusterNodes, namespaceNodes, namespaceId } = cos;
+  const {
+    clusterNodes,
+    namespaceNodes,
+    namespaceId,
+  } = useMicrofrontendContext();
+
   if (!version.served) {
     return (
       <GenericList
