@@ -273,6 +273,7 @@ context('Test reduced permissions', () => {
     cy.get('#appSwitcherPopover:visible')
       .find('[role="button"]')
       .first()
+      .next()
       .click();
 
     // wait until original cluster loads
