@@ -1,7 +1,6 @@
 import React from 'react';
 
 export function YamlResourcesList({ resourcesData }) {
-  console.log('YamlResourcesList resources: ', resourcesData);
   const filteredResources = resourcesData?.filter(
     resource => resource !== null,
   );
