@@ -23,20 +23,19 @@ const WorkloadSelector = sidecar => {
 };
 
 const IstioListeners = sidecar => {
-  // const { t } = useTranslation();
+  const { t } = useTranslation();
   return (
     <>
-      <ListenersView
-        listeners={sidecar.spec?.egress}
-        // type={t('sidecars.headers.egress-listeners')}
-        type="Egress listener"
-        key="Egress"
+      <ListenerView
+        listener={sidecar.spec?.egress}
+        type={t('sidecars.headers.egress-listeners')}
+        key="egress-listener"
+        isEgress
       />
-      <ListenersView
-        listeners={sidecar.spec?.ingress}
-        // type={t('sidecars.headers.ingress-listeners')}
-        type="Ingress listener"
-        key="Ingress"
+      <ListenerView
+        listener={sidecar.spec?.ingress}
+        type={t('sidecars.headers.ingress-listeners')}
+        key="ingress-listener"
       />
     </>
   );
@@ -45,7 +44,7 @@ const IstioListeners = sidecar => {
 const Hosts = ({ hosts }) => {
   return (
     <ul>
-      {hosts.map((host, i) => (
+      {hosts?.map((host, i) => (
         <li key={i}>{host}</li>
       ))}
     </ul>
@@ -56,14 +55,7 @@ const Port = ({ port }) => {
   const { t } = useTranslation();
 
   return (
-    // <LayoutPanel.Body
-    //   style={{
-    //     // 'margin-left': '20px',
-    //   }}
-    // >
     <div>
-      <br />
-
       <LayoutPanelRow
         name={t('sidecars.headers.port.number')}
         value={port.number}
@@ -81,59 +73,63 @@ const Port = ({ port }) => {
   );
 };
 
-const Listener = ({ listener, type }) => {
+const TrafficProperties = ({ properties, isEgress }) => {
   const { t } = useTranslation();
 
   return (
-    <LayoutPanel className="fd-margin--md" key={listener}>
+    <LayoutPanel className="fd-margin--md" key={properties}>
       <LayoutPanel.Body>
         <LayoutPanelRow
-          name={t('sidecars.headers.bind')}
-          value={listener?.bind || EMPTY_TEXT_PLACEHOLDER}
-          key={listener?.bind}
-        />
-        <LayoutPanelRow
-          name={t('sidecars.headers.capture-mode')}
-          value={listener?.captureMode || EMPTY_TEXT_PLACEHOLDER}
-          key={listener?.captureMode}
-        />
-        {type === 'Egress listener' ? (
-          <LayoutPanelRow
-            name={t('sidecars.headers.hosts')}
-            value={<Hosts hosts={listener?.hosts} />}
-            key={listener?.hosts}
-          />
-        ) : (
-          <LayoutPanelRow
-            name={t('sidecars.headers.default-endpoint')}
-            value={listener?.defaultEndpoint}
-            key={listener?.defaultEndpoint}
-          />
-        )}
-        <LayoutPanelRow
-          name="Port"
+          name={t('sidecars.headers.port.title')}
           value={
-            listener?.port ? (
-              <Port port={listener?.port} />
+            properties?.port ? (
+              <Port port={properties?.port} />
             ) : (
               EMPTY_TEXT_PLACEHOLDER
             )
           }
         />
+        <LayoutPanelRow
+          name={t('sidecars.headers.bind')}
+          value={properties?.bind || EMPTY_TEXT_PLACEHOLDER}
+          key={properties?.bind}
+        />
+        <LayoutPanelRow
+          name={t('sidecars.headers.capture-mode')}
+          value={properties?.captureMode || EMPTY_TEXT_PLACEHOLDER}
+          key={properties?.captureMode}
+        />
+        {isEgress ? (
+          <LayoutPanelRow
+            name={t('sidecars.headers.hosts')}
+            value={<Hosts hosts={properties.hosts} />}
+            key={properties.hosts}
+          />
+        ) : (
+          <LayoutPanelRow
+            name={t('sidecars.headers.default-endpoint')}
+            value={properties?.defaultEndpoint}
+            key={properties?.defaultEndpoint}
+          />
+        )}
       </LayoutPanel.Body>
     </LayoutPanel>
   );
 };
 
-const ListenersView = ({ listeners, type }) => {
+const ListenerView = ({ listener, type, isEgress }) => {
   return (
     <LayoutPanel className="fd-margin--md">
       <LayoutPanel.Header>
         <LayoutPanel.Head title={type} />
       </LayoutPanel.Header>
-      {listeners?.map((listener, i) => (
-        <Listener listener={listener} type={type} key={i} />
-      ))}
+      {listener?.map((properties, i) => (
+        <TrafficProperties
+          properties={properties}
+          key={i}
+          isEgress={isEgress}
+        />
+      )) || <LayoutPanel.Body>{EMPTY_TEXT_PLACEHOLDER}</LayoutPanel.Body>}
     </LayoutPanel>
   );
 };

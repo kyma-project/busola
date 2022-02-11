@@ -8,10 +8,6 @@ export function SidecarsList({ DefaultRenderer, ...otherParams }) {
 
   const customColumns = [
     {
-      header: t('sidecars.headers.hosts'),
-      value: sidecar => sidecar.spec?.egress?.at(0)?.hosts.join(', '),
-    },
-    {
       header: t('sidecars.headers.outbound-traffic-policy'),
       value: sidecar =>
         sidecar.spec?.outboundTrafficPolicy?.mode || EMPTY_TEXT_PLACEHOLDER,
