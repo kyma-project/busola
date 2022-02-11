@@ -49,6 +49,7 @@ context('Test Custom Resource Definitions', () => {
       cy.log(CRD_CONFIG);
       const CRD = JSON.stringify(CRD_CONFIG);
       cy.log(CRD);
+      cy.wait(1000);
       cy.pasteToMonaco(CRD);
       cy.wait(4000);
     });
@@ -106,6 +107,7 @@ context('Test Custom Resource Definitions', () => {
       cy.log('CONFIG', CR_CONFIG);
       const CR = JSON.stringify(CR_CONFIG);
       cy.log('CR', CR);
+      cy.wait(1000);
       cy.pasteToMonaco(CR);
       cy.wait(4000);
     });
