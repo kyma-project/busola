@@ -21,8 +21,8 @@ const CustomResources = ({ resource, namespace, version, i18n }) => {
   const { t } = useTranslation();
   const { group, names } = resource.spec;
   const name = names.plural;
-  const { namespaceNodes, namespaceId } = useMicrofrontendContext();
-
+  const cos = useMicrofrontendContext();
+  const { clusterNodes, namespaceNodes, namespaceId } = cos;
   if (!version.served) {
     return (
       <GenericList
@@ -42,14 +42,23 @@ const CustomResources = ({ resource, namespace, version, i18n }) => {
 
   const navigateFn = cr => {
     const crdNamePlural = resource.spec.names.plural;
-    const hasCustomPageInBusola = namespaceNodes.find(
+    const clusterNode = clusterNodes.find(
       res => res.resourceType === crdNamePlural,
     );
-    if (hasCustomPageInBusola) {
+    const namespaceNode = namespaceNodes.find(
+      res => res.resourceType === crdNamePlural,
+    );
+
+    if (clusterNode) {
+      navigateToResource({
+        name: cr.metadata.name,
+        kind: clusterNode.pathSegment,
+      });
+    } else if (namespaceNode) {
       navigateToResource({
         namespace: namespaceId,
         name: cr.metadata.name,
-        kind: crdNamePlural,
+        kind: namespaceNode.pathSegment,
       });
     } else {
       LuigiClient.linkManager()

@@ -1685,7 +1685,7 @@ export function getStaticRootNodes(
       ],
     },
     {
-      pathSegment: 'addons-config',
+      pathSegment: 'addons-configs',
       navigationContext: 'clusteraddonsconfigurations',
       resourceType: 'clusteraddonsconfigurations',
       label: i18next.t('cluster-addons.title'),
