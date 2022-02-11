@@ -60,10 +60,16 @@ export function createNamespacesList(rawNamespaceNames) {
       );
       namespaces.push({
         category: 'Namespaces',
+        customRendererCategory: 'namespace',
         label: namespaceName,
         pathValue: alternativeLocation || namespaceName + '/details',
       });
     });
+  namespaces.unshift({
+    customRendererCategory: 'overview',
+    label: 'Namespace Overview',
+    pathValue: '/',
+  });
   return namespaces;
 }
 

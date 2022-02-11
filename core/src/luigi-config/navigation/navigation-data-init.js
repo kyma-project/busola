@@ -209,23 +209,20 @@ export async function createNavigation() {
       groupVersions,
     });
 
-    const namespacesPath = `/cluster/${encodeURIComponent(
-      activeClusterName,
-    )}/namespaces`; // absolute path
-
-    const namespaceOverview = {
-      position: 'top',
-      label: i18next.t('namespaces.namespaces-overview'),
-      link: namespacesPath,
-      icon: 'settings',
-    };
-
     const optionsForCurrentCluster = {
       contextSwitcher: {
         defaultLabel: 'Select Namespace ...',
-        parentNodePath: namespacesPath,
+        parentNodePath: `/cluster/${encodeURIComponent(
+          activeClusterName,
+        )}/namespaces`, // absolute path,
         lazyloadOptions: true, // load options on click instead on page load
-        actions: [namespaceOverview],
+        customOptionsRenderer: (option, isSelected) => {
+          if (option.customRendererCategory === 'overview') {
+            return `<a class="fd-menu__link" style="border-bottom: 1px solid #eeeeef"><span class="fd-menu__addon-before"><i class="sap-icon--dimension" role="presentation"></i></span><span class="fd-menu__title">${option.label}</span></a>`;
+          }
+          let className = 'fd-menu__link' + (isSelected ? ' is-selected' : '');
+          return `<a class="${className} ">${option.label} test</a>`;
+        },
         options: getNamespaces,
       },
       profile: {
