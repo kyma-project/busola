@@ -1,5 +1,5 @@
 import React from 'react';
-import { ControlledBy, GenericList, useGet } from 'react-shared';
+import { ControlledBy, GenericList } from 'react-shared';
 
 import { PodStatus } from './PodStatus';
 import ContainersData from './ContainersData';
@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
 
-import { CpuStats } from './CpuStats';
+import { PodStatsGraph } from './PodStatsGraph';
 
 function toSnakeCase(inputString) {
   return inputString
@@ -32,11 +32,6 @@ function goToSecretDetails(resourceKind, name) {
     .navigate(`${preperedResourceKind}s/details/${name}`);
 }
 
-const endDate = new Date();
-const startDate = new Date();
-// startDate.setTime(startDate.getTime() - (60*60*1000));
-startDate.setTime(startDate.getTime() - 5 * 60 * 1000);
-
 export const PodsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const { t, i18n } = useTranslation();
 
@@ -47,12 +42,6 @@ export const PodsDetails = ({ DefaultRenderer, ...otherParams }) => {
       hideInvolvedObjects={true}
     />
   );
-
-  console.log('PodsDetails', otherParams);
-
-  // const startDate = new Date();
-  // startDate.setTime(startDate.getTime() - (60*60*1000));
-  // console.log(startDate.toISOString());
 
   const customColumns = [
     {
@@ -123,7 +112,7 @@ export const PodsDetails = ({ DefaultRenderer, ...otherParams }) => {
   return (
     <DefaultRenderer
       customComponents={[
-        CpuStats,
+        PodStatsGraph,
         VolumesList,
         Containers,
         InitContainers,
