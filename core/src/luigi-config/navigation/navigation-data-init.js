@@ -70,8 +70,8 @@ async function createAppSwitcher() {
 
   return {
     items:
-      [...clusterNodes, clusterOverviewNode].length > 1
-        ? [...clusterNodes, clusterOverviewNode]
+      [clusterOverviewNode, ...clusterNodes].length > 1
+        ? [clusterOverviewNode, ...clusterNodes]
         : [clusterOverviewNode, noClustersNode],
   };
 }
@@ -221,7 +221,7 @@ export async function createNavigation() {
             return `<a class="fd-menu__link" style="border-bottom: 1px solid #eeeeef"><span class="fd-menu__addon-before"><i class="sap-icon--dimension" role="presentation"></i></span><span class="fd-menu__title">${option.label}</span></a>`;
           }
           let className = 'fd-menu__link' + (isSelected ? ' is-selected' : '');
-          return `<a class="${className} ">${option.label} test</a>`;
+          return `<a class="${className} ">${option.label}</a>`;
         },
         options: getNamespaces,
       },
