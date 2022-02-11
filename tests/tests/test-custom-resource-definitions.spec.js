@@ -46,12 +46,14 @@ context('Test Custom Resource Definitions', () => {
       .click();
 
     cy.wrap(loadCRD(CRD_PLURAL_NAME, CRD_NAME)).then(CRD_CONFIG => {
-      cy.log(CRD_CONFIG);
       const CRD = JSON.stringify(CRD_CONFIG);
-      cy.log(CRD);
-      cy.wait(1000);
-      cy.pasteToMonaco(CRD);
-      cy.wait(4000);
+      cy.getIframeBody()
+        .find('div.view-lines')
+        .clearInput()
+        .type(CRD, {
+          parseSpecialCharSequences: false,
+          waitForAnimations: false,
+        });
     });
 
     cy.getIframeBody()
@@ -104,12 +106,15 @@ context('Test Custom Resource Definitions', () => {
       .click();
 
     cy.wrap(loadCRInstance(CRD_PLURAL_NAME)).then(CR_CONFIG => {
-      cy.log('CONFIG', CR_CONFIG);
       const CR = JSON.stringify(CR_CONFIG);
-      cy.log('CR', CR);
-      cy.wait(1000);
-      cy.pasteToMonaco(CR);
-      cy.wait(4000);
+      cy.getIframeBody()
+        .find('[aria-label="Create CronTab"]')
+        .find('div.view-lines')
+        .clearMonaco()
+        .type(CR, {
+          parseSpecialCharSequences: false,
+          waitForAnimations: false,
+        });
     });
 
     cy.getIframeBody()
