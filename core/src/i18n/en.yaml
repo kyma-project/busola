@@ -1803,6 +1803,21 @@ settings:
     title: Other
   theme: Theme
 sidecars:
+  description: <0>Sidecar</0> is used...
+  headers:
+    bind: Bind
+    capture-mode: Capture mode
+    default-endpoint: Default endpoint
+    egress-listeners: Egress Listener
+    hosts: Hosts
+    ingress-listeners: Ingress Listener
+    outbound-traffic-policy: Outbound Traffic Policy
+    port:
+      number: Number
+      protocol: Protocol
+      target-point: Target point
+      title: Port
+    workload-selector-labels: Workload Selector Labels
   name_singular: Sidecar
   title: Sidecars
 stateful-sets:
