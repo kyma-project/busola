@@ -110,7 +110,7 @@ context('Test Custom Resource Definitions', () => {
       cy.getIframeBody()
         .find('[aria-label="Create CronTab"]')
         .find('div.view-lines')
-        .clearMonaco()
+        .clearInput()
         .type(CR, {
           parseSpecialCharSequences: false,
           waitForAnimations: false,
