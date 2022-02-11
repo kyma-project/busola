@@ -19,7 +19,8 @@ class ErrorBoundaryComponent extends React.Component {
       return (
         <div role="alert">
           <p className="fd-margin-top-bottom--sm">
-            {this.props.t('err-boundary.restored-initial-form')}
+            {this.props.customMessage ||
+              this.props.t('err-boundary.restored-initial-form')}
           </p>
 
           <Button
