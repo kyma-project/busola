@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Dialog, Button } from 'fundamental-react';
+import { isEqual } from 'lodash';
 
 import { YamlUpload } from './YamlUpload';
 import { YamlResourcesList } from './YamlResourcesList';
@@ -9,6 +10,7 @@ import './YamlUploadDialog.scss';
 
 export function YamlUploadDialog({ show, onCancel }) {
   const [resourcesData, setResourcesData] = useState(undefined);
+  const oldYaml = useRef(undefined);
   const { fetchResources } = useUploadResources(
     resourcesData,
     setResourcesData,
@@ -21,6 +23,7 @@ export function YamlUploadDialog({ show, onCancel }) {
   }, [show]);
 
   const updateYamlContent = yaml => {
+    if (isEqual(yaml?.sort(), oldYaml?.current?.sort())) return;
     if (!yaml) {
       setResourcesData(null);
       return;
@@ -32,6 +35,7 @@ export function YamlUploadDialog({ show, onCancel }) {
       message: '',
     }));
     setResourcesData(resourcesWithStatus);
+    oldYaml.current = yaml;
   };
 
   return (
