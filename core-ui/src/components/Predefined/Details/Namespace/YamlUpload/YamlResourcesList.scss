@@ -1,0 +1,32 @@
+#upload-progress-bar-container {
+  height: 20px;
+  width: 100%;
+  background-color: var(--sapBaseColor);
+  border: solid 1px var(--sapTextColor);
+  border-radius: 50px;
+}
+
+#upload-progress-bar {
+  height: 100%;
+  background-color: var(--sapContent_ForegroundColor);
+  border-radius: inherit;
+  text-align: right;
+}
+
+#upload-progress-bar-label {
+  padding-right: 10px;
+  color: var(--sapTextColor);
+  font-weight: bold;
+}
+
+.status {
+  color: var(--sapNeutralColor);
+  padding-right: 5px;
+
+  &-message-success {
+    color: var(--sapPositiveColor);
+  }
+  &-error {
+    color: var(--sapNegativeColor);
+  }
+}

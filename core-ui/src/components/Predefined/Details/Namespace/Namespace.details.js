@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useMicrofrontendContext } from 'react-shared';
 import { Button } from 'fundamental-react';
+import { useTranslation } from 'react-i18next';
+import LuigiClient from '@luigi-project/client';
 
 import { EventsList } from 'shared/components/EventsList';
 import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
@@ -11,7 +13,6 @@ import { NamespaceWorkloads } from './NamespaceWorkloads/NamespaceWorkloads';
 import { ResourcesUsage } from './ResourcesUsage';
 import { YamlUploadDialog } from './YamlUpload/YamlUploadDialog';
 import './Namespace.details.scss';
-import { useTranslation } from 'react-i18next';
 
 export const NamespacesDetails = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
@@ -83,7 +84,10 @@ export const NamespacesDetails = ({ DefaultRenderer, ...otherParams }) => {
         option="transparent"
         glyph="add"
         className="fd-margin-begin--sm"
-        onClick={() => setShowAdd(true)}
+        onClick={() => {
+          setShowAdd(true);
+          LuigiClient.uxManager().addBackdrop();
+        }}
       >
         Upload YAML
       </Button>
@@ -106,7 +110,13 @@ export const NamespacesDetails = ({ DefaultRenderer, ...otherParams }) => {
       customColumns={customColumns}
       headerActions={headerActions}
     >
-      <YamlUploadDialog show={showAdd} onCancel={() => setShowAdd(false)} />
+      <YamlUploadDialog
+        show={showAdd}
+        onCancel={() => {
+          setShowAdd(false);
+          LuigiClient.uxManager().removeBackdrop();
+        }}
+      />
       <div className="panel-grid">
         <NamespaceWorkloads namespace={otherParams.resourceName} />
         <ResourcesUsage namespace={otherParams.resourceName} />
