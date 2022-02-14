@@ -1,10 +1,9 @@
 import React from 'react';
-import { Trans, useTranslation } from 'react-i18next';
-import { Link } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
-
-export const ServiceEntriesList = ({ DefaultRenderer, ...otherParams }) => {
+export function VirtualServicesDetails({ DefaultRenderer, ...otherParams }) {
   const { t } = useTranslation();
+
   const customColumns = [
     {
       header: t('service-entries.headers.resolution'),
@@ -16,20 +15,11 @@ export const ServiceEntriesList = ({ DefaultRenderer, ...otherParams }) => {
         serviceEntry.spec?.location || EMPTY_TEXT_PLACEHOLDER,
     },
   ];
-
-  const description = (
-    <Trans i18nKey="service-entries.description">
-      <Link
-        className="fd-link"
-        url="https://istio.io/latest/docs/reference/config/networking/service-entry/"
-      />
-    </Trans>
-  );
   return (
     <DefaultRenderer
-      description={description}
-      customColumns={customColumns}
+      customComponents={[]}
+      customColumns={[customColumns]}
       {...otherParams}
-    />
+    ></DefaultRenderer>
   );
-};
+}
