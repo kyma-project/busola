@@ -4,6 +4,7 @@ import { ResourceForm } from 'shared/ResourceForm';
 import { createAuthorizationPolicyTemplate } from './templates';
 
 const AuthorizationPoliciesCreate = ({
+  namespace,
   onChange,
   formElementRef,
   resourceUrl,
@@ -11,7 +12,7 @@ const AuthorizationPoliciesCreate = ({
 }) => {
   const { t } = useTranslation();
   const [authorizationPolicy, setAuthorizationPolicy] = useState(
-    createAuthorizationPolicyTemplate(),
+    createAuthorizationPolicyTemplate(namespace),
   );
 
   return (
