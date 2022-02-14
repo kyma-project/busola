@@ -41,8 +41,8 @@ export const Hosts = ({ hosts }) => {
 const Ports = serviceentry => {
   const { t, i18n } = useTranslation();
 
-  const headerRenderer = _ => ['Name', 'Number', 'Protocol', 'Target Point'];
   const ports = serviceentry.spec?.ports;
+  const headerRenderer = _ => ['Name', 'Number', 'Protocol', 'Target Point'];
 
   const rowRenderer = port => [
     port?.name,
@@ -58,6 +58,42 @@ const Ports = serviceentry => {
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       entries={ports || []}
+      i18n={i18n}
+    />
+  );
+};
+
+const Endpoints = serviceentry => {
+  const { t, i18n } = useTranslation();
+
+  const headerRenderer = _ => [
+    'Address',
+    'Ports',
+    'Labels',
+    'Network',
+    'Locality',
+    'Weight',
+    'Service Account',
+  ];
+  const endpoints = serviceentry.spec?.endpoints;
+
+  const rowRenderer = endpoint => [
+    endpoint?.address,
+    <Labels labels={endpoint.ports} />,
+    <Labels labels={endpoint.labels} />,
+    endpoint?.network || EMPTY_TEXT_PLACEHOLDER,
+    endpoint?.locality || EMPTY_TEXT_PLACEHOLDER,
+    endpoint?.weight || EMPTY_TEXT_PLACEHOLDER,
+    endpoint?.serviceAccount || EMPTY_TEXT_PLACEHOLDER,
+  ];
+
+  return (
+    <GenericList
+      key="serviceentries-endpoints"
+      title={'Endpoints'}
+      headerRenderer={headerRenderer}
+      rowRenderer={rowRenderer}
+      entries={endpoints || []}
       i18n={i18n}
     />
   );
@@ -135,7 +171,7 @@ export function ServiceEntriesDetails({ DefaultRenderer, ...otherParams }) {
 
   return (
     <DefaultRenderer
-      customComponents={[Configuration, Ports, WorkloadSelector]}
+      customComponents={[Configuration, Endpoints, Ports, WorkloadSelector]}
       customColumns={customColumns}
       {...otherParams}
     ></DefaultRenderer>
