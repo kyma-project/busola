@@ -1823,7 +1823,7 @@ export function getStaticRootNodes(
       label: i18next.t('service-entries.title'),
       viewUrl:
         config.coreUIModuleUrl +
-        '/serviceentries?' +
+        '/serviceEntries?' +
         toSearchParamsString({
           resourceApiPath: '/apis/networking.istio.io/v1beta1',
           hasDetailsView: true,

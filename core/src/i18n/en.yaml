@@ -1759,6 +1759,7 @@ service-accounts:
   service-account: Service Account
   title: Service Accounts
 service-entries:
+  name-singular: Service Entry
   title: Service Entries
 service-management:
   title: Service Management
