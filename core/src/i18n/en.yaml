@@ -1400,6 +1400,28 @@ namespaces:
     total-memory-limit: Define constraints that limit total memory consumption in your Namespace.
     usage-of-memory-limits: This Namespace uses {{valueText}} of {{maxText}} its memory limits.
     usage-of-memory-requests: This Namespace uses {{valueText}} of {{maxText}} its memory requests.
+network-policies:
+  description: <0>Network Policy</0> allows you to specify how a pod is allowed to communicate with various network entities.
+  headers:
+    cidr: CIDR
+    egress: Egress
+    end-port: End Port
+    exceptions: Exceptions
+    ingress: Ingress
+    ip-block: IP Block
+    key: Key
+    match-labels: Matched Labels
+    namespace-selector: Namespace Selector
+    operator: Operator
+    pod-selector: Pod Selector
+    policy-peer: Network Policy Peer
+    policy-port: Network Policy Port
+    policy-types: Policy Types
+    port: Port
+    protocol: Protocol
+    values: Values
+  name_singular: Network Policy
+  title: Network Policies
 no-permissions:
   title: No Permissions
 node-details:
