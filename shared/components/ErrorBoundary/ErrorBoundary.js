@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
+import * as Sentry from '@sentry/react';
 
 class ErrorBoundaryComponent extends React.Component {
   constructor(props) {
@@ -12,6 +13,10 @@ class ErrorBoundaryComponent extends React.Component {
   static getDerivedStateFromError(error) {
     // Update state so the next render will show the fallback UI.
     return { hasError: true, error };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    Sentry.captureException(error);
   }
 
   render() {
