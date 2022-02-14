@@ -38,6 +38,7 @@ const resourceTypes = [
   ['gitrepositories', 'gitrepos', 'repos'],
   ['horizontalpodautoscalers', 'hpa'],
   ['persistentvolumeclaims', 'pvc'],
+  ['serviceentries', 'se'],
 ];
 const extendedResourceTypes = resourceTypes.map(aliases => [
   ...aliases,

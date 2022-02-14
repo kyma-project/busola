@@ -8,12 +8,12 @@ function ServiceEntriesCreate({
   onChange,
   resourceUrl,
   setCustomValid,
+  namespace,
 }) {
   const { t } = useTranslation();
   const [serviceEntry, setServiceEntry] = useState(
-    createServiceEntryTemplate(),
+    createServiceEntryTemplate(namespace),
   );
-
   return (
     <ResourceForm
       pluralKind="serviceentries"

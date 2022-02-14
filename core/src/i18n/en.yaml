@@ -1763,7 +1763,7 @@ service-entries:
   headers:
     location: Location
     resolution: Resolution
-  name-singular: Service Entry
+  name_singular: Service Entry
   title: Service Entries
 service-management:
   title: Service Management
