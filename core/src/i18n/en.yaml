@@ -1759,6 +1759,10 @@ service-accounts:
   service-account: Service Account
   title: Service Accounts
 service-entries:
+  description: <0>Service Entry</0> is used...
+  headers:
+    location: Location
+    resolution: Resolution
   name-singular: Service Entry
   title: Service Entries
 service-management:
