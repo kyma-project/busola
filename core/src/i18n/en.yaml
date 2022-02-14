@@ -1806,8 +1806,8 @@ sidecars:
   description: <0>Sidecar</0> manages the incoming and outgoing communication in a workload it is attached to.
   headers:
     bind: Bind
-    capture-mode: Capture mode
-    default-endpoint: Default endpoint
+    capture-mode: Capture Mode
+    default-endpoint: Default Endpoint
     egress-listeners: Egress
     hosts: Hosts
     ingress-listeners: Ingress
@@ -1815,7 +1815,7 @@ sidecars:
     port:
       number: Number
       protocol: Protocol
-      target-point: Target point
+      target-point: Target Point
       title: Port
     workload-selector-labels: Workload Selector Labels
   name_singular: Sidecar
