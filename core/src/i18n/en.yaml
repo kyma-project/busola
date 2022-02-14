@@ -1808,9 +1808,9 @@ sidecars:
     bind: Bind
     capture-mode: Capture Mode
     default-endpoint: Default Endpoint
-    egress-listeners: Egress
+    egress: Egress
     hosts: Hosts
-    ingress-listeners: Ingress
+    ingress: Ingress
     outbound-traffic-policy: Outbound Traffic Policy
     port:
       number: Number

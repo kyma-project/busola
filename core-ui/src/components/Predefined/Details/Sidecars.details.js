@@ -28,13 +28,13 @@ const IstioListeners = sidecar => {
     <>
       <ListenerView
         listener={sidecar.spec?.egress}
-        type={t('sidecars.headers.egress-listeners')}
+        type={t('sidecars.headers.egress')}
         key="egress-listener"
         isEgress
       />
       <ListenerView
         listener={sidecar.spec?.ingress}
-        type={t('sidecars.headers.ingress-listeners')}
+        type={t('sidecars.headers.ingress')}
         key="ingress-listener"
       />
     </>
