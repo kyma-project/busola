@@ -1803,14 +1803,14 @@ settings:
     title: Other
   theme: Theme
 sidecars:
-  description: <0>Sidecar</0> is used...
+  description: <0>Sidecar</0> manages the incoming and outgoing communication in a workload it is attached to.
   headers:
     bind: Bind
     capture-mode: Capture mode
     default-endpoint: Default endpoint
-    egress-listeners: Egress Listener
+    egress-listeners: Egress
     hosts: Hosts
-    ingress-listeners: Ingress Listener
+    ingress-listeners: Ingress
     outbound-traffic-policy: Outbound Traffic Policy
     port:
       number: Number
