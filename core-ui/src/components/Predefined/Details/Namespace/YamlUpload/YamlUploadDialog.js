@@ -10,10 +10,11 @@ import './YamlUploadDialog.scss';
 
 export function YamlUploadDialog({ show, onCancel }) {
   const [resourcesData, setResourcesData] = useState(undefined);
+  const [resourcesWithStatuses, setResourcesWithStatuses] = useState(undefined);
   const oldYaml = useRef(undefined);
   const { fetchResources } = useUploadResources(
-    resourcesData,
-    setResourcesData,
+    resourcesWithStatuses,
+    setResourcesWithStatuses,
   );
 
   useEffect(() => {
@@ -24,17 +25,14 @@ export function YamlUploadDialog({ show, onCancel }) {
 
   const updateYamlContent = yaml => {
     if (isEqual(yaml?.sort(), oldYaml?.current?.sort())) return;
-    if (!yaml) {
-      setResourcesData(null);
-      return;
-    }
+    setResourcesData(yaml);
     const nonEmptyResources = yaml?.filter(resource => resource !== null);
     const resourcesWithStatus = nonEmptyResources?.map(y => ({
       value: y,
       status: '',
       message: '',
     }));
-    setResourcesData(resourcesWithStatus);
+    setResourcesWithStatuses(resourcesWithStatus);
     oldYaml.current = yaml;
   };
 
@@ -53,12 +51,12 @@ export function YamlUploadDialog({ show, onCancel }) {
     >
       <div className="yaml-modal-content">
         <YamlUpload
-          resourcesData={resourcesData?.value}
+          resourcesData={resourcesData}
           setResourcesData={updateYamlContent}
         />
         <YamlResourcesList
-          resourcesData={resourcesData}
-          setResourcesData={updateYamlContent}
+          resourcesData={resourcesWithStatuses}
+          setResourcesData={setResourcesWithStatuses}
         />
       </div>
     </Dialog>
