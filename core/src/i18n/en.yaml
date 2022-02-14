@@ -1761,8 +1761,14 @@ service-accounts:
 service-entries:
   description: <0>Service Entry</0> is used...
   headers:
+    addresses: Adresses
+    configuration: Configuration
+    export-to: Export to
+    hosts: Hosts
     location: Location
     resolution: Resolution
+    subject-alt-names: Subject Alt Names
+    workload-selector-labels: Workload Selector Labels
   name_singular: Service Entry
   title: Service Entries
 service-management:

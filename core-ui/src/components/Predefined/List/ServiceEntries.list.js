@@ -5,15 +5,15 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 
 export const ServiceEntriesList = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
+
   const customColumns = [
     {
       header: t('service-entries.headers.resolution'),
-      value: serviceEntry => serviceEntry.spec.resolution,
+      value: se => se.spec.resolution,
     },
     {
       header: t('service-entries.headers.location'),
-      value: serviceEntry =>
-        serviceEntry.spec?.location || EMPTY_TEXT_PLACEHOLDER,
+      value: se => se.spec?.location || EMPTY_TEXT_PLACEHOLDER,
     },
   ];
 
@@ -25,6 +25,7 @@ export const ServiceEntriesList = ({ DefaultRenderer, ...otherParams }) => {
       />
     </Trans>
   );
+
   return (
     <DefaultRenderer
       description={description}
