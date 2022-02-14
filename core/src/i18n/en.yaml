@@ -148,7 +148,7 @@ apps:
   title: Apps
 authorizationpolicies:
   description: <0>Istio Authorization Policy</0> enables access control on workloads in the mesh.
-  name-singular: Authorization Policy
+  name_singular: Authorization Policy
   title: Authorization Policies
 brokers:
   description: <0>Service Broker</0> provides a set of managed services that a third party offers and maintains.

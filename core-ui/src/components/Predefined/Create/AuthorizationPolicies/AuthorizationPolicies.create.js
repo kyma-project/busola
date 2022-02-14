@@ -17,7 +17,7 @@ const AuthorizationPoliciesCreate = ({
 
   return (
     <ResourceForm
-      pluralKind="authorizationpolicy"
+      pluralKind="authorizationpolicies"
       singularName={t('authorizationpolicies.name_singular')}
       resource={authorizationPolicy}
       setResource={setAuthorizationPolicy}
