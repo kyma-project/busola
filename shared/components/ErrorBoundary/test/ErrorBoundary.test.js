@@ -1,6 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import { ErrorBoundary } from '../ErrorBoundary';
+import { useTranslation } from 'react-i18next';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -17,17 +18,18 @@ const consoleErrorFn = jest
   .spyOn(console, 'error')
   .mockImplementation(() => jest.fn());
 
+const TestBed = ({ children }) => {
+  const { i18n } = useTranslation();
+  return <ErrorBoundary i18n={i18n}>{children}</ErrorBoundary>;
+};
+
 describe('Error Boundary', () => {
   afterAll(() => {
     consoleErrorFn.mockRestore();
   });
 
   it('Renders children', () => {
-    const { getByText } = render(
-      <ErrorBoundary>
-        <div>hello world</div>
-      </ErrorBoundary>,
-    );
+    const { getByText } = render(<TestBed>hello world</TestBed>);
 
     expect(getByText('hello world')).toBeInTheDocument();
   });
@@ -36,9 +38,9 @@ describe('Error Boundary', () => {
   };
   it('Renders error component', () => {
     const { getByText } = render(
-      <ErrorBoundary>
+      <TestBed>
         <Child />
-      </ErrorBoundary>,
+      </TestBed>,
     );
 
     expect(getByText('err-boundary.go-back')).toBeInTheDocument();

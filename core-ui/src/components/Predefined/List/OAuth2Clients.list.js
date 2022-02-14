@@ -6,6 +6,7 @@ import { Trans } from 'react-i18next';
 
 export const OAuth2ClientsList = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
+
   const customColumns = [
     {
       header: t('oauth2-clients.headers.secret'),
