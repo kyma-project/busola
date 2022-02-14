@@ -1806,6 +1806,53 @@ export function getStaticRootNodes(
       ],
     },
 
+    // ISTIO
+    {
+      category: {
+        label: i18next.t('istio.title'),
+        icon: 'overview-chart',
+        collapsible: true,
+      },
+      pathSegment: '_istio_category_placeholder_',
+      hideFromNav: true,
+    },
+    {
+      category: i18next.t('istio.title'),
+      resourceType: 'serviceentries',
+      pathSegment: 'serviceentries',
+      label: i18next.t('service-entries.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/serviceentries?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/networking.istio.io/v1beta1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+      context: {
+        requiredFeatures: [features.ISTIO],
+      },
+      navigationContext: 'serviceentries',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':serviceEntriesName',
+              resourceType: 'serviceentries',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/serviceEntries/:serviceEntryName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/networking.istio.io/v1beta1',
+                }),
+            },
+          ],
+        },
+      ],
+    },
+
     //CONFIGURATION CATEGORY (CLUSTER)
     {
       category: {

@@ -1758,6 +1758,8 @@ service-accounts:
   name_singular: Service Account
   service-account: Service Account
   title: Service Accounts
+service-entries:
+  title: Service Entries
 service-management:
   title: Service Management
 services:
