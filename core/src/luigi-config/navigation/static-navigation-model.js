@@ -743,7 +743,7 @@ export function getStaticChildrenNodesForNamespace(
               resourceType: 'authorizationpolicies',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/authorizationPolies/:authorizationpolicyName?' +
+                '/namespaces/:namespaceId/authorizationPolicies/:authorizationpolicyName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/security.istio.io/v1beta1',
                 }),
