@@ -57,13 +57,7 @@ context('Test Cluster configuration', () => {
   it('Test pagination', () => {
     cy.loginAndSelectCluster();
 
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Cluster Roles')
-      .click();
+    cy.navigateTo('Configuration', 'Cluster Roles');
 
     cy.getIframeBody()
       .find('[role=datarow]')

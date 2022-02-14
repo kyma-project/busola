@@ -8,13 +8,7 @@ context('Test Issuers', () => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
 
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Secrets')
-      .click();
+    cy.navigateTo('Configuration', 'Secrets');
 
     cy.getIframeBody()
       .contains('Create Secret')
