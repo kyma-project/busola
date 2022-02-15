@@ -11,17 +11,9 @@ context('Test OAuth2 Clients', () => {
     cy.goToNamespaceDetails();
   });
 
-  it('Navigate to OAuth2 Client', () => {
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('OAuth2 Clients')
-      .click();
-  });
-
   it('Create a Client', () => {
+    cy.navigateTo('Configuration', 'OAuth2 Clients');
+
     cy.getIframeBody()
       .contains('Create OAuth2 Client')
       .click();
