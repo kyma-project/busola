@@ -64,7 +64,7 @@ const When = ({ when }) => {
   const headerRenderer = () => [
     t('authorizationpolicies.headers.key'),
     t('authorizationpolicies.headers.values'),
-    t('authorizationpolicies.headers.notValues'),
+    t('authorizationpolicies.headers.not-values'),
   ];
 
   const rowRenderer = entry => [
@@ -98,7 +98,9 @@ export const Rules = policy => {
             <LayoutPanel>
               <LayoutPanel.Header>
                 <LayoutPanel.Head
-                  title={t('authorizationpolicies.headers.rule') + (index + 1)}
+                  title={t('authorizationpolicies.headers.rule', {
+                    ruleNumber: index + 1,
+                  })}
                 />
               </LayoutPanel.Header>
               <LayoutPanel.Body>
