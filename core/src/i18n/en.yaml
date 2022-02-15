@@ -148,6 +148,8 @@ apps:
   title: Apps
 authorizationpolicies:
   description: <0>Istio Authorization Policy</0> enables access control on workloads in the mesh.
+  headers:
+    action: Action
   name_singular: Authorization Policy
   title: Authorization Policies
 brokers:

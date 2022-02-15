@@ -1,9 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { LayoutPanel } from 'fundamental-react';
-import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
-
 import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 
 export const AuthorizationPoliciesDetails = ({
@@ -11,10 +8,18 @@ export const AuthorizationPoliciesDetails = ({
   ...otherParams
 }) => {
   const { t } = useTranslation();
+
+  const customColumns = [
+    {
+      header: t('authorizationpolicies.headers.action'),
+      value: ({ spec }) => <p>{spec.action || EMPTY_TEXT_PLACEHOLDER}</p>,
+    },
+  ];
+
   return (
     <DefaultRenderer
-      singularName={t('authorizationpolicies.name_singular')}
+      customColumns={customColumns}
       {...otherParams}
-    />
+    ></DefaultRenderer>
   );
 };
