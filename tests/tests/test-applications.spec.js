@@ -42,7 +42,7 @@ context('Test Applications', () => {
       .type('label-value');
 
     cy.getIframeBody()
-      .find('[placeholder="Specify a description for your Application."]')
+      .find('[placeholder="Specify a description for your Application"]')
       .type(APPLICATION_DESCRIPTION);
 
     cy.getIframeBody()

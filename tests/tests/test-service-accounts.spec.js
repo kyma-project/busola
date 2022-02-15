@@ -32,7 +32,7 @@ context('Test Service Accounts', () => {
 
     cy.getIframeBody()
       .find(
-        '[placeholder="Start typing to select Image Pull Secrets from the list."]',
+        '[placeholder="Start typing to select Image Pull Secrets from the list"]',
       )
       .clear()
       .type('default');
