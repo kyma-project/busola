@@ -846,6 +846,7 @@ export function getStaticChildrenNodesForNamespace(
       category: i18next.t('service-management.title'),
       pathSegment: 'serviceinstances',
       navigationContext: 'serviceinstances',
+      resourceType: 'serviceinstances',
       label: i18next.t('btp-instances.title'),
       viewUrl:
         config.coreUIModuleUrl +
@@ -881,6 +882,7 @@ export function getStaticChildrenNodesForNamespace(
       category: i18next.t('service-management.title'),
       pathSegment: 'servicebindings',
       navigationContext: 'servicebindings',
+      resourceType: 'servicebindings',
       label: i18next.t('btp-service-bindings.title'),
       viewUrl:
         config.coreUIModuleUrl +
@@ -1685,7 +1687,7 @@ export function getStaticRootNodes(
       ],
     },
     {
-      pathSegment: 'addons-config',
+      pathSegment: 'addons-configs',
       navigationContext: 'clusteraddonsconfigurations',
       resourceType: 'clusteraddonsconfigurations',
       label: i18next.t('cluster-addons.title'),

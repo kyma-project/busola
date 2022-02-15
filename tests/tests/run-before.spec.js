@@ -65,13 +65,7 @@ context('Create Namespace', () => {
       .contains('Back to Namespaces')
       .click();
 
-    cy.getLeftNav()
-      .contains('Integration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Applications')
-      .click();
+    cy.navigateTo('Integration', 'Applications');
 
     cy.getIframeBody()
       .contains('Create Application')

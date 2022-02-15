@@ -31,17 +31,9 @@ context('Test Jobs', () => {
     cy.goToNamespaceDetails();
   });
 
-  it('Jobs node should be present', () => {
-    cy.getLeftNav()
-      .contains('Workloads')
-      .click();
-
-    cy.getLeftNav()
-      .contains(/^Jobs/) // regex so Cypress doesn't confuse them with CronJobs
-      .click();
-  });
-
   it('Create Job', () => {
+    cy.navigateTo('Workloads', /^Jobs/);
+
     cy.getIframeBody()
       .contains('Create Job')
       .click();
