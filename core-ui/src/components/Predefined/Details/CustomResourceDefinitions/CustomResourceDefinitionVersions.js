@@ -8,17 +8,24 @@ import {
   StatusBadge,
   prettifyNamePlural,
   EMPTY_TEXT_PLACEHOLDER,
+  useMicrofrontendContext,
 } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
 import { ComponentForList } from 'shared/getComponents';
 import { SchemaViewer } from 'shared/components/SchemaViewer/SchemaViewer';
+import { navigateToResource } from 'shared/helpers/universalLinks';
 import './CustomResourceDefinitionVersions.scss';
 
 const CustomResources = ({ resource, namespace, version, i18n }) => {
   const { t } = useTranslation();
   const { group, names } = resource.spec;
   const name = names.plural;
+  const {
+    clusterNodes,
+    namespaceNodes,
+    namespaceId,
+  } = useMicrofrontendContext();
 
   if (!version.served) {
     return (
@@ -37,10 +44,31 @@ const CustomResources = ({ resource, namespace, version, i18n }) => {
     ? `/apis/${group}/${version.name}/namespaces/${namespace}/${name}`
     : `/apis/${group}/${version.name}/${name}`;
 
-  const navigateFn = resource => {
-    LuigiClient.linkManager()
-      .fromClosestContext()
-      .navigate(`${version.name}/${resource.metadata.name}`);
+  const navigateFn = cr => {
+    const crdNamePlural = resource.spec.names.plural;
+    const clusterNode = clusterNodes.find(
+      res => res.resourceType === crdNamePlural,
+    );
+    const namespaceNode = namespaceNodes.find(
+      res => res.resourceType === crdNamePlural,
+    );
+
+    if (clusterNode) {
+      navigateToResource({
+        name: cr.metadata.name,
+        kind: clusterNode.pathSegment,
+      });
+    } else if (namespaceNode) {
+      navigateToResource({
+        namespace: namespaceId,
+        name: cr.metadata.name,
+        kind: namespaceNode.pathSegment,
+      });
+    } else {
+      LuigiClient.linkManager()
+        .fromClosestContext()
+        .navigate(`${version.name}/${cr.metadata.name}`);
+    }
   };
 
   const getJsonPath = (resource, jsonPath) => {

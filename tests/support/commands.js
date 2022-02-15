@@ -59,10 +59,12 @@ Cypress.Commands.add('goToNamespaceDetails', () => {
   return cy.end();
 });
 
-Cypress.Commands.add('clearMonaco', { prevSubject: true }, element => {
-  cy.wrap(element).type(
-    `${Cypress.platform === 'darwin' ? '{cmd}a' : '{ctrl}a'} {backspace}`,
-  );
+Cypress.Commands.add('clearInput', { prevSubject: true }, element => {
+  return cy
+    .wrap(element)
+    .type(
+      `${Cypress.platform === 'darwin' ? '{cmd}a' : '{ctrl}a'} {backspace}`,
+    );
 });
 
 /**
@@ -106,4 +108,18 @@ function paste(subject, { pastePayload }) {
 
 Cypress.Commands.add('getLeftNav', () => {
   cy.get('nav[data-testid=semiCollapsibleLeftNav]');
+});
+
+Cypress.Commands.add('deleteInDetails', () => {
+  cy.getIframeBody()
+    .contains('button', 'Delete')
+    .click();
+
+  cy.getIframeBody()
+    .find('[data-testid="delete-confirmation"]')
+    .click();
+
+  cy.getIframeBody()
+    .contains(/deleted/)
+    .should('be.visible');
 });

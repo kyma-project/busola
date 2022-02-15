@@ -7,7 +7,6 @@ context('Test Applications', () => {
 
   before(() => {
     cy.loginAndSelectCluster();
-    cy.goToNamespaceDetails();
   });
 
   it('Go to application details', () => {
@@ -15,13 +14,7 @@ context('Test Applications', () => {
       .contains('Back to Cluster Overview')
       .click();
 
-    cy.getLeftNav()
-      .contains('Integration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Applications')
-      .click();
+    cy.navigateTo('Integration', 'Applications');
 
     cy.getIframeBody()
       .contains('a', APPLICATION_NAME)

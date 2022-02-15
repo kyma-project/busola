@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
-import { loadPVC } from '../support/loadPVC';
+import { loadFile } from '../support/loadFile';
 
 const FILE_NAME = 'test-persistent-volume-claim.yaml';
 
@@ -14,6 +14,17 @@ const CAPACITY_VALUE = '1Gi';
 const ACCESS_MODES_VALUE = 'ReadWriteOnce';
 const VOLUME_MODE_VALUE = 'Filesystem';
 
+async function loadPVC(name, namespace, storage, fileName) {
+  const resource = await loadFile(fileName);
+  const newResource = { ...resource };
+
+  newResource.metadata.name = name;
+  newResource.metadata.namespace = namespace;
+  newResource.spec.storageClassName = storage;
+
+  return newResource;
+}
+
 context('Test Persistent Volume Claims', () => {
   Cypress.skipAfterFail();
 
@@ -22,17 +33,9 @@ context('Test Persistent Volume Claims', () => {
     cy.goToNamespaceDetails();
   });
 
-  it('Navigate to Persistent Volume Claims', () => {
-    cy.getLeftNav()
-      .contains('Storage')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Persistent Volume Claims')
-      .click();
-  });
-
   it('Create a Persistent Volume Claim', () => {
+    cy.navigateTo('Storage', 'Persistent Volume Claims');
+
     cy.getIframeBody()
       .contains('Create Persistent Volume Claim')
       .click();
@@ -46,12 +49,7 @@ context('Test Persistent Volume Claims', () => {
       ),
     ).then(PVC_CONFIG => {
       const PVC = JSON.stringify(PVC_CONFIG);
-      cy.getIframeBody()
-        .find('[role="presentation"],[class="view-lines"]')
-        .first()
-        .click()
-        .clearMonaco()
-        .type(PVC, { parseSpecialCharSequences: false });
+      cy.pasteToMonaco(PVC);
     });
 
     cy.getIframeBody()
@@ -116,13 +114,7 @@ context('Test Persistent Volume Claims', () => {
   it('Delete the connected Storage Class', () => {
     cy.get('[data-testid=luigi-topnav-logo]').click();
 
-    cy.getLeftNav()
-      .contains('Storage')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Storage Classes')
-      .click();
+    cy.navigateTo('Storage', 'Storage Classes');
 
     cy.getIframeBody()
       .find('[role="search"] [aria-label="open-search"]')

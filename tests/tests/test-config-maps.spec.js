@@ -17,13 +17,7 @@ context('Test Config Maps', () => {
   });
 
   it('Create a Config Map', () => {
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Config Maps')
-      .click();
+    cy.navigateTo('Configuration', 'Config Maps');
 
     cy.getIframeBody()
       .contains('Create Config Map')
