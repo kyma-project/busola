@@ -118,8 +118,11 @@ context('Test app settings and preferences', () => {
             .click();
         }
       });
-
     cy.get('[aria-label="close"]').click();
+
+    cy.getLeftNav()
+      .contains('Back to Cluster Overview')
+      .click();
 
     cy.getLeftNav()
       .contains('Namespaces')
