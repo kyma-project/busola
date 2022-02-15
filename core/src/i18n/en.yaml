@@ -393,6 +393,7 @@ command-palette:
     destinationrules: Destination Rules
     gitrepositories: Git Repositories
     horizontalpodautoscalers: Horizontal Pod Autoscalers
+    networkpolicies: Network Policies
     oauth2clients: OAuth2 Clients
     persistentvolumeclaims: Persistent Volume Claims
     persistentvolumes: Persistent Volumes
@@ -1417,8 +1418,8 @@ network-policies:
     namespace-selector: Namespace Selector
     operator: Operator
     pod-selector: Pod Selector
-    policy-peer: Network Policy Peer
-    policy-port: Network Policy Port
+    policy-peer: Network Policy Peers
+    policy-port: Network Policy Ports
     policy-types: Policy Types
     port: Port
     protocol: Protocol

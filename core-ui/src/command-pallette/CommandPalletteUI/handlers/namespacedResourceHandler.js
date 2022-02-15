@@ -27,6 +27,7 @@ const resourceTypes = [
   ['dnsproviders', 'dnspr'],
   ['subscriptions'],
   ['ingresses', 'ing'],
+  ['networkpolicies', 'np'],
   ['apirules'],
   ['oauth2clients'],
   ['destinationrules', 'dr'],
