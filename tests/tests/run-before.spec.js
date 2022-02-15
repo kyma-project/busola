@@ -19,11 +19,11 @@ context('Create Namespace', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('Create resource quota')
+      .contains('Create Resource Quota')
       .click();
 
     cy.getIframeBody()
-      .contains('Create limit range')
+      .contains('Create Limit Range')
       .click();
 
     cy.getIframeBody()
