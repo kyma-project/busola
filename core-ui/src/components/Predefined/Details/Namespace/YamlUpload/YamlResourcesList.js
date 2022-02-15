@@ -12,10 +12,6 @@ export function YamlResourcesList({ resourcesData }) {
     return !filteredResources?.filter(r => r.status)?.length;
   };
 
-  const showResourcesUploaded = () => {
-    return !showResourcesToUpload();
-  };
-
   const getLabel = () => {
     return `${filteredResources?.filter(r => r.status && r.status !== 'Waiting')
       ?.length || 0}/${filteredResources?.length || 0}`;
@@ -47,44 +43,45 @@ export function YamlResourcesList({ resourcesData }) {
   if (!filteredResources) {
     return null;
   } else {
-    return (
-      <div className="yaml-modal-resources">
-        {showResourcesToUpload() && (
-          <div>
-            You will create {filteredResources.length || 0} resources:
-            {filteredResources?.map(r => (
-              <p key={`${r?.value?.kind}-${r?.value?.name}`}>
-                - {r?.value?.kind} {r?.value?.name}
-              </p>
-            ))}
-          </div>
-        )}
-        {showResourcesUploaded() && (
-          <div>
-            <div id="upload-progress-bar-container">
-              <div
-                id="upload-progress-bar"
-                style={{ width: `${getPercentage()}%` }}
-              >
-                <span id="upload-progress-bar-label">{getLabel()}</span>
-              </div>
+    if (showResourcesToUpload()) {
+      return (
+        <ul>
+          You will create {filteredResources.length || 0} resources:
+          {filteredResources?.map(r => (
+            <li key={`${r?.value?.kind}-${r?.value?.metadata?.name}`}>
+              - {r?.value?.kind} {r?.value?.metadata?.name}
+            </li>
+          ))}
+        </ul>
+      );
+    } else {
+      return (
+        <div>
+          <div id="upload-progress-bar-container">
+            <div
+              id="upload-progress-bar"
+              style={{ width: `${getPercentage()}%` }}
+            >
+              <span id="upload-progress-bar-label">{getLabel()}</span>
             </div>
+          </div>
+          <ul>
             {filteredResources.map(r => (
-              <React.Fragment key={`${r?.value?.kind}-${r?.value?.name}`}>
-                <p>
+              <li key={`${r?.value?.kind}-${r?.value?.name}`}>
+                <div>
                   <Icon
                     className={`status status-${getIcon(r?.status)}`}
                     glyph={getIcon(r?.status)}
                     ariaLabel="status"
                   />
                   {r?.value?.kind} {r?.value?.metadata?.name} - {r?.status}
-                </p>
+                </div>
                 <p>{r?.message}</p>
-              </React.Fragment>
+              </li>
             ))}
-          </div>
-        )}
-      </div>
-    );
+          </ul>
+        </div>
+      );
+    }
   }
 }

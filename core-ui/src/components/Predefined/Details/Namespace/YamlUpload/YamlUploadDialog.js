@@ -8,6 +8,10 @@ import { useUploadResources } from './useUploadResources';
 
 import './YamlUploadDialog.scss';
 
+function YamlUploadHelp() {
+  return "You can upload multiple resources, separated in YAML by '---'. If resource already exists, it will be updated, otherwise a new one will be created. In case the namespace is not given, the 'default' will be used.";
+}
+
 export function YamlUploadDialog({ show, onCancel }) {
   const [resourcesData, setResourcesData] = useState();
   const [resourcesWithStatuses, setResourcesWithStatuses] = useState();
@@ -48,12 +52,14 @@ export function YamlUploadDialog({ show, onCancel }) {
           Cancel
         </Button>,
       ]}
+      className="yaml-upload-modal"
     >
-      <div className="yaml-modal-content">
-        <YamlUpload
-          resourcesData={resourcesData}
-          setResourcesData={updateYamlContent}
-        />
+      <YamlUpload
+        resourcesData={resourcesData}
+        setResourcesData={updateYamlContent}
+      />
+      <div>
+        <YamlUploadHelp />
         <YamlResourcesList
           resourcesData={resourcesWithStatuses}
           setResourcesData={setResourcesWithStatuses}

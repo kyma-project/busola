@@ -38,7 +38,7 @@ export function YamlUpload({ resourcesData, setResourcesData }) {
   };
 
   return (
-    <div className="yaml-modal-uploader">
+    <div>
       <YamlFileUploader onYamlContentAdded={updateYamlContent} />
       <p className="editor-label fd-margin-bottom--sm fd-margin-top--sm">
         or paste it here:
