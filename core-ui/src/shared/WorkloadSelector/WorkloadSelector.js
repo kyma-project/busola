@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 
 import { Labels } from 'react-shared';
 import { LayoutPanel } from 'fundamental-react';
-import { ComponentForList } from 'shared/getComponents';
 import { isEqual } from 'lodash';
 import './WorkloadSelector.scss';
+import { RelatedPods } from '../RelatedPods';
 
 export const WorkloadSelector = resource => {
   const { t } = useTranslation();
@@ -25,17 +25,6 @@ export const WorkloadSelector = resource => {
     );
   };
 
-  const podListParams = {
-    hasDetailsView: true,
-    fixedPath: true,
-    resourceUrl: `/api/v1/namespaces/${resource.metadata?.namespace}/pods`,
-    resourceType: 'pods',
-    namespace: resource.metadata?.namespace,
-    isCompact: true,
-    showTitle: true,
-    filter: filterByWorkLoadSelectorLabels,
-  };
-
   return (
     <LayoutPanel className="fd-margin--md" key="workload-selector">
       <LayoutPanel.Header>
@@ -47,10 +36,9 @@ export const WorkloadSelector = resource => {
           <Labels labels={resource.spec?.workloadSelector?.labels} />
         ) : null}
       </LayoutPanel.Header>
-      <ComponentForList
-        name="podsList"
-        params={podListParams}
-        key="workload-selector"
+      <RelatedPods
+        resource={resource}
+        filter={filterByWorkLoadSelectorLabels}
       />
     </LayoutPanel>
   );
