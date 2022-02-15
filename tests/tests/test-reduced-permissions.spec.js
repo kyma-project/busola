@@ -14,7 +14,7 @@ const SA_NAME = 'test-sa-' + id;
 const CR_NAME = 'test-cr-' + id;
 const CRB_NAME = 'test-crb-' + id;
 
-context('Reduced permissions', () => {
+context('Test reduced permissions', () => {
   let tempKubeconfigPath;
 
   Cypress.skipAfterFail();
@@ -94,13 +94,7 @@ context('Reduced permissions', () => {
 
     cy.goToNamespaceDetails();
 
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Service Accounts')
-      .click();
+    cy.navigateTo('Configuration', 'Service Accounts');
 
     cy.getIframeBody()
       .contains('Create Service Account')
@@ -121,13 +115,7 @@ context('Reduced permissions', () => {
       .contains('Back to Namespaces')
       .click();
 
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Cluster Role Bindings')
-      .click();
+    cy.navigateTo('Configuration', 'Cluster Role Bindings');
 
     cy.getIframeBody()
       .contains('Create Cluster Role Binding')
@@ -180,13 +168,7 @@ context('Reduced permissions', () => {
       .click();
     cy.goToNamespaceDetails();
 
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Service Accounts')
-      .click();
+    cy.navigateTo('Configuration', 'Service Accounts');
 
     cy.getIframeBody()
       .contains(SA_NAME)
@@ -238,7 +220,7 @@ context('Reduced permissions', () => {
 
     // try to delete resource
     cy.getIframeBody()
-      .contains('Delete')
+      .contains('button', 'Delete')
       .click();
 
     cy.getIframeBody()

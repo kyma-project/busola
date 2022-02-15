@@ -4,6 +4,7 @@ import { Link } from 'fundamental-react';
 import LuigiClient from '@luigi-project/client';
 import pluralize from 'pluralize';
 import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 
 const metricsTargetParser = (mt, type) => {
   let value = null;
@@ -98,4 +99,19 @@ export const metricsParser = metrics => {
       value,
     };
   });
+};
+
+export const MetricsBrief = ({ spec, status }) => {
+  const { t } = useTranslation();
+  const metrics = metricsParser(spec.metrics);
+  const current = currentMetricsParser(status.currentMetrics);
+
+  const remaining = metrics.length - 1;
+
+  return (
+    <>
+      {current[0] || EMPTY_TEXT_PLACEHOLDER} / {metrics[0].value}{' '}
+      {remaining > 0 ? t('hpas.and-x-more', { x: remaining.toString() }) : ''}
+    </>
+  );
 };

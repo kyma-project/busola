@@ -1,5 +1,4 @@
 /// <reference types="cypress" />
-import config from '../config';
 import 'cypress-file-upload';
 
 context('Clean up namespace', () => {
@@ -33,17 +32,9 @@ context('Clean up namespace', () => {
       .should('have.text', 'Terminating');
   });
 
-  it('Navigate to Application', () => {
-    cy.getLeftNav()
-      .contains('Integration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Applications')
-      .click();
-  });
-
   it('Delete the application', () => {
+    cy.navigateTo('Integration', 'Applications');
+
     cy.getIframeBody()
       .find('[role="search"] [aria-label="open-search"]')
       .type(`test-mock-app-${Cypress.env('NAMESPACE_NAME')}`);

@@ -2,26 +2,15 @@
 const APPLICATION_NAME = `test-mock-app-${Cypress.env('NAMESPACE_NAME')}`;
 const APPLICATION_DESCRIPTION = `test description`;
 
-context('Test Application', () => {
+context('Test Applications', () => {
   Cypress.skipAfterFail();
 
   before(() => {
     cy.loginAndSelectCluster();
-    cy.goToNamespaceDetails();
   });
 
   it('Go to application details', () => {
-    cy.getLeftNav()
-      .contains('Back to Namespaces')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Integration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Applications')
-      .click();
+    cy.navigateTo('Integration', 'Applications');
 
     cy.getIframeBody()
       .contains('a', APPLICATION_NAME)

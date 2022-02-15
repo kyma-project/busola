@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Dialog } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
-
+import { ErrorBoundary } from 'react-shared';
 import { AddClusterWizard } from './AddClusterWizard';
-
 import './AddClusterDialog.scss';
 
-export function AddClusterDialog({ show, onCancel }) {
+function AddClusterDialogComponent({ show, onCancel }) {
   const [kubeconfig, setKubeconfig] = useState(undefined);
-  const { t } = useTranslation();
 
   useEffect(() => {
     if (show) {
@@ -17,17 +15,26 @@ export function AddClusterDialog({ show, onCancel }) {
   }, [show]);
 
   return (
+    <AddClusterWizard
+      kubeconfig={kubeconfig}
+      setKubeconfig={setKubeconfig}
+      onCancel={onCancel}
+    />
+  );
+}
+export function AddClusterDialog({ show, onCancel }) {
+  const { t, i18n } = useTranslation();
+
+  return (
     <Dialog
       show={show}
       className="add-cluster-dialog"
       title={t('clusters.add.title')}
       actions={[]}
     >
-      <AddClusterWizard
-        kubeconfig={kubeconfig}
-        setKubeconfig={setKubeconfig}
-        onCancel={onCancel}
-      />
+      <ErrorBoundary i18n={i18n}>
+        <AddClusterDialogComponent onCancel={onCancel} show={show} />
+      </ErrorBoundary>
     </Dialog>
   );
 }

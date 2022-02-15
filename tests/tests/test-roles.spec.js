@@ -6,7 +6,7 @@ const CLONE_NAME = `${ROLE_NAME}-clone`;
 const API_GROUP = '(core)';
 const RESOURCE = 'namespaces';
 
-context('Create a Role', () => {
+context('Test Roles', () => {
   Cypress.skipAfterFail();
 
   before(() => {
@@ -15,13 +15,7 @@ context('Create a Role', () => {
   });
 
   it('Create a Role', () => {
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
-
-    cy.getLeftNav()
-      .find('[data-testid=roles_roles]')
-      .click();
+    cy.navigateTo('Configuration', 'Roles');
 
     cy.getIframeBody()
       .contains(ROLE_NAME)
@@ -32,32 +26,39 @@ context('Create a Role', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Role Name"]')
-      .filter(':visible', { log: false })
+      .find('[placeholder="Role Name"]:visible', { log: false })
       .type(ROLE_NAME)
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Start typing to select API Groups from the list."]')
-      .filter(':visible', { log: false })
+      .find(
+        '[placeholder="Start typing to select API Groups from the list."]:visible',
+        { log: false },
+      )
       .type(API_GROUP)
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Start typing to select Resources from the list."]')
-      .filter(':visible', { log: false })
+      .find(
+        '[placeholder="Start typing to select Resources from the list."]:visible',
+        { log: false },
+      )
       .type(RESOURCE)
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Start typing to select Verbs from the list."]')
-      .filter(':visible', { log: false })
+      .find(
+        '[placeholder="Start typing to select Verbs from the list."]:visible',
+        { log: false },
+      )
       .type('get')
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Start typing to select Verbs from the list."]')
-      .filter(':visible', { log: false })
+      .find(
+        '[placeholder="Start typing to select Verbs from the list."]:visible',
+        { log: false },
+      )
       .eq(1)
       .type('impersonate')
       .click();
@@ -93,8 +94,10 @@ context('Create a Role', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Start typing to select Verbs from the list."]')
-      .filter(':visible', { log: false })
+      .find(
+        '[placeholder="Start typing to select Verbs from the list."]:visible',
+        { log: false },
+      )
       .eq(2)
       .type('watch')
       .click();
@@ -135,8 +138,7 @@ context('Create a Role', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Role Name"]')
-      .filter(':visible', { log: false })
+      .find('[placeholder="Role Name"]:visible', { log: false })
       .type(CLONE_NAME)
       .click();
 

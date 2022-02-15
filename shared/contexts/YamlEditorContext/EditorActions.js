@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Tooltip } from '../../components/Tooltip/Tooltip';
 import { Button } from 'fundamental-react';
 import copyToCliboard from 'copy-to-clipboard';
 import { saveAs } from 'file-saver';
 import './EditorActions.scss';
 import { useTranslation } from 'react-i18next';
+
+const EDITOR_VISIBILITY = 'editor-visibility';
 
 const ButtonWithTooltip = ({
   tooltipContent,
@@ -36,7 +38,20 @@ export function EditorActions({
   i18n,
   readOnly,
 }) {
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(
+    localStorage.getItem(EDITOR_VISIBILITY) !== 'false',
+  );
+
+  useEffect(() => {
+    localStorage.setItem(EDITOR_VISIBILITY, visible);
+  }, [visible]);
+
+  useEffect(() => {
+    if (editor && !visible) {
+      setTimeout(() => hideReadOnlyLines(), 500);
+    }
+  }, [editor]);
+
   const openSearch = () => {
     // focus is required for search control to appear
     editor.focus();
@@ -45,11 +60,11 @@ export function EditorActions({
 
   const getReadOnlyFieldsPosition = () => {
     // definition of read only fields
-    const READONLY_FIELDS = ['managedFields:', 'status:'];
+    const READONLY_FIELDS = ['^ *managedFields:$', '^status:$'];
     let arrayOfPositions = [];
     READONLY_FIELDS.forEach(fieldName => {
       arrayOfPositions = arrayOfPositions.concat(
-        editor.getModel().findMatches(fieldName, true, false, true, null, true),
+        editor.getModel().findMatches(fieldName, true, true, true, null, true),
       );
     });
     return arrayOfPositions.sort(
@@ -57,7 +72,7 @@ export function EditorActions({
     );
   };
 
-  const toggleReadOnlyLines = fieldsPosition => {
+  const toggleReadOnlyLines = (fieldsPosition, hide) => {
     fieldsPosition.forEach(match => {
       setTimeout(() => {
         editor.setPosition({
@@ -65,31 +80,22 @@ export function EditorActions({
           lineNumber: match.range.startLineNumber,
         });
 
-        visible
+        hide
           ? editor.trigger('fold', 'editor.fold')
           : editor.trigger('unfold', 'editor.unfold');
       });
     });
+    setVisible(!hide);
   };
 
   const hideReadOnlyLines = () => {
-    const visibleRanges = editor.getVisibleRanges();
-    const visibleReadOnlyFields = getReadOnlyFieldsPosition().filter(match => {
-      return visibleRanges.some(
-        range =>
-          match.range.startLineNumber >= range.startLineNumber &&
-          match.range.startLineNumber < range.endLineNumber,
-      );
-    });
-
-    toggleReadOnlyLines(visibleReadOnlyFields);
-    setVisible(false);
+    const readOnlyFields = getReadOnlyFieldsPosition();
+    toggleReadOnlyLines(readOnlyFields, true);
   };
 
   const showReadOnlyLines = () => {
     const readOnlyFields = getReadOnlyFieldsPosition();
-    toggleReadOnlyLines(readOnlyFields);
-    setVisible(true);
+    toggleReadOnlyLines(readOnlyFields, false);
   };
 
   const download = () => {

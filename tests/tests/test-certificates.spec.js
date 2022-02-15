@@ -6,7 +6,7 @@ const CERT_COMMON_NAME = 'cypress-test-common-name';
 const ANNOTATION_KEY = 'annotation';
 const ANNOTATION_VALUE = 'value';
 
-context('Add and remove a certificate', () => {
+context('Test Certificates', () => {
   Cypress.skipAfterFail();
 
   before(() => {
@@ -15,13 +15,7 @@ context('Add and remove a certificate', () => {
   });
 
   it('Adds and displays a certificate', () => {
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Certificates')
-      .click();
+    cy.navigateTo('Configuration', 'Certificates');
 
     cy.url().should('match', /certificates$/);
 

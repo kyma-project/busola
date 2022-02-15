@@ -1,14 +1,14 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
 import config from '../config';
-import { loadKubeconfig } from '../support/loadKubeconfigFile';
+import { loadFile } from '../support/loadFile';
 import jsyaml from 'js-yaml';
 
-context('Other login options', () => {
+context('Test other login options', () => {
   Cypress.skipAfterFail();
 
   it('Kubeconfig and token separately', () => {
-    cy.wrap(loadKubeconfig()).then(kubeconfig => {
+    cy.wrap(loadFile('kubeconfig.yaml')).then(kubeconfig => {
       const token = kubeconfig.users[0].user.token;
       kubeconfig.users[0].user.token = null;
 

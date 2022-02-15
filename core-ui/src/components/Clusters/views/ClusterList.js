@@ -4,27 +4,26 @@ import { saveAs } from 'file-saver';
 import { useTranslation } from 'react-i18next';
 import { useShowNodeParamsError } from 'shared/hooks/useShowNodeParamsError';
 import { Link, Button, MessagePage } from 'fundamental-react';
-import { cloneDeep } from 'lodash';
+
 import {
   useMicrofrontendContext,
   PageHeader,
   GenericList,
   useNotification,
   ModalWithForm,
-  Link as ExternalLink,
   useDeleteResource,
   EMPTY_TEXT_PLACEHOLDER,
 } from 'react-shared';
 
 import { setCluster, deleteCluster } from './../shared';
 import { AddClusterDialog } from '../components/AddClusterDialog';
-import { ClustersEdit } from './EditCluster/EditCluster';
+import { EditCluster } from './EditCluster/EditCluster';
 import { ClusterStorageType } from './ClusterStorageType';
 
 import './ClusterList.scss';
 
 export function ClusterList() {
-  const { clusters, activeClusterName, features } = useMicrofrontendContext();
+  const { clusters, activeClusterName } = useMicrofrontendContext();
   const notification = useNotification();
   const { t, i18n } = useTranslation();
 
@@ -44,8 +43,6 @@ export function ClusterList() {
   if (!clusters) {
     return null;
   }
-
-  const canAddCluster = !features.ADD_CLUSTER_DISABLED?.isEnabled;
 
   const styleActiveCluster = entry => {
     return entry.kubeconfig['current-context'] === activeClusterName
@@ -112,7 +109,7 @@ export function ClusterList() {
       icon: 'edit',
       tooltip: t('clusters.edit-cluster'),
       handler: cluster => {
-        setEditedCluster(cloneDeep(cluster));
+        setEditedCluster(cluster);
         setShowEdit(true);
       },
     },
@@ -134,7 +131,7 @@ export function ClusterList() {
     },
   ];
 
-  const extraHeaderContent = canAddCluster && (
+  const extraHeaderContent = (
     <Button
       option="transparent"
       glyph="add"
@@ -155,11 +152,7 @@ export function ClusterList() {
       title={t('clusters.edit-cluster')}
       id="edit-cluster"
       renderForm={props => (
-        <ClustersEdit
-          {...props}
-          resource={editedCluster}
-          setResource={setEditedCluster}
-        />
+        <EditCluster {...props} editedCluster={editedCluster} />
       )}
       modalOpeningComponent={<></>}
       customCloseAction={() => setShowEdit(false)}
@@ -168,22 +161,7 @@ export function ClusterList() {
   );
 
   if (!entries.length) {
-    const btpCockpitUrl =
-      features.ADD_CLUSTER_DISABLED?.config?.cockpitUrl ||
-      'https://account.staging.hanavlab.ondemand.com/cockpit';
-
-    const subtitle = canAddCluster ? (
-      t('clusters.empty.subtitle')
-    ) : (
-      <span className="cluster-disabled-subtitle">
-        {t('clusters.empty.go-to-btp-cockpit')}{' '}
-        <ExternalLink
-          className="fd-link"
-          url={btpCockpitUrl}
-          text="BTP Cockpit"
-        />
-      </span>
-    );
+    const subtitle = t('clusters.empty.subtitle');
     return (
       <>
         {addDialog}
@@ -197,11 +175,9 @@ export function ClusterList() {
           title={t('clusters.empty.title')}
           subtitle={subtitle}
           actions={
-            canAddCluster && (
-              <Button onClick={() => setShowAdd(true)}>
-                {t('clusters.add.title')}
-              </Button>
-            )
+            <Button onClick={() => setShowAdd(true)}>
+              {t('clusters.add.title')}
+            </Button>
           }
         />
       </>
