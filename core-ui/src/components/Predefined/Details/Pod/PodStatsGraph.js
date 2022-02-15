@@ -23,19 +23,21 @@ export function PodStatsGraph(resource) {
   const [timeSpan, setTimeSpan] = useState('1h');
   const [metric, setMetric] = useState('cpu');
 
+  // const { prometheusQuery, unit } = getMetric('pod', metric);
   const {
     data,
+    binary,
     unit,
     // error,
     loading,
-  } = usePrometheus({
-    // fields: ['cpu'],
-    // fields: ['memory'],
-    metric,
+  } = usePrometheus('pod', metric, {
     items: 60,
     timeSpan: timeSpans[timeSpan],
-    selector: `namespace="${resource.metadata.namespace}",pod="${resource.metadata.name}"`,
+    namespace: resource.metadata.namespace,
+    pod: resource.metadata.name,
   });
+
+  console.log('unit', unit);
 
   return (
     <LayoutPanel className="fd-margin--md container-panel">
@@ -48,7 +50,7 @@ export function PodStatsGraph(resource) {
               onSelect={(e, val) => setMetric(val.key)}
               options={[
                 { key: 'cpu', text: 'CPU' },
-                { key: 'cpu-percent', text: 'CPU %' },
+                // { key: 'cpu-percent', text: 'CPU %' },
                 { key: 'memory', text: 'Memory' },
                 // { key: 'memory%', text: 'Memory %' },
                 { key: 'network-down', text: 'Network Download' },
@@ -77,11 +79,12 @@ export function PodStatsGraph(resource) {
           className={metric}
           data={data}
           dataPoints={60}
+          binary={binary}
           unit={unit}
           renderer={barsRenderer}
           graphs={[{ renderer: barsRenderer }]}
         />
-        <BusyIndicator className="throbber" show={loading} size="s" />
+        <BusyIndicator className="throbber" show={loading} size />
       </LayoutPanel.Body>
     </LayoutPanel>
   );

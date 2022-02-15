@@ -1,34 +1,49 @@
 import { useEffect, useState } from 'react';
 import { useGet } from 'react-shared';
+import { getSIPrefix } from 'shared/helpers/siPrefixes';
 
-export function usePrometheus({ metric, items, timeSpan, selector }) {
+export function prometheusSelector(type, data) {
+  if (type === 'pod') {
+    return `namespace="${data.namespace}",pod="${data.pod}"`;
+  } else {
+    return '';
+  }
+}
+
+export function getMetric(type, metric, { step, ...data }) {
+  const selector = prometheusSelector(type, data);
+  const metrics = {
+    cpu: {
+      prometheusQuery: `sum(rate(container_cpu_usage_seconds_total{${selector}}[${step}s]))`,
+      unit: '',
+    },
+    memory: {
+      prometheusQuery: `sum(container_memory_working_set_bytes{${selector}})`,
+      binary: true,
+      unit: 'B',
+    },
+    'network-down': {
+      prometheusQuery: `sum(irate(container_network_receive_bytes_total{${selector}}[${step}s]))`,
+      // unit: (val) => `${val} B/s`,
+      binary: true,
+      unit: 'B/s',
+    },
+    'network-up': {
+      prometheusQuery: `sum(irate(container_network_transmit_bytes_total{${selector}}[${step}s]))`,
+      binary: true,
+      unit: 'B/s',
+    },
+  };
+  return metrics[metric];
+}
+
+export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [step, setStep] = useState(timeSpan / items);
 
-  const metrics = {
-    cpu: {
-      query: `node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{${selector}}`,
-      unit: '',
-    },
-    'cpu-percent': {
-      query: `sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{${selector}}) / sum(kube_pod_container_resource_limits_cpu_cores{${selector}}) * 100`,
-      unit: '%',
-    },
-    memory: {
-      query: `sum(container_memory_working_set_bytes{${selector}})`,
-      unit: 'B',
-    },
-    'network-down': {
-      query: `sum(irate(container_network_receive_bytes_total{${selector}}[${step}s]))`,
-      unit: 'B/s',
-    },
-    'network-up': {
-      query: `sum(irate(container_network_transmit_bytes_total{${selector}}[${step}s]))`,
-      unit: 'B/s',
-    },
-  };
-  const metricDef = metrics[metric];
+  const metric = getMetric(type, metricId, { step, ...props });
+  console.log('usePrometheus', metric);
 
   useEffect(() => {
     endDate.setTime(Date.now());
@@ -44,7 +59,7 @@ export function usePrometheus({ metric, items, timeSpan, selector }) {
       setStartDate(startDate);
     }, step * 1000);
     return () => clearInterval(loop);
-  }, [metric, timeSpan]);
+  }, [metricId, timeSpan]);
 
   // TODO multiple queries?
   const {
@@ -56,7 +71,7 @@ export function usePrometheus({ metric, items, timeSpan, selector }) {
       `start=${startDate.toISOString()}&` +
       `end=${endDate.toISOString()}&` +
       `step=${step}&` +
-      `query=${metricDef.query}`,
+      `query=${metric.prometheusQuery}`,
     { pollingInterval: 0 },
   );
 
@@ -69,6 +84,7 @@ export function usePrometheus({ metric, items, timeSpan, selector }) {
     error,
     loading,
     step,
-    unit: metricDef.unit,
+    binary: metric.binary,
+    unit: metric.unit,
   };
 }

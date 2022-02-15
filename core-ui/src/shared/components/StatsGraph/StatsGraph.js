@@ -1,10 +1,58 @@
 import React, { useState, useEffect, useRef } from 'react';
 
+import { getSIPrefix } from 'shared/helpers/siPrefixes';
+
 import './StatsGraph.scss';
 
 const STATS_RATIO = 1 / 3;
+const PADDING = 5;
 
-function getScaleMax(data) {
+function getGeometry(ctx, { scale, renderer, dataPoints }) {
+  const textHeight = parseInt(ctx.font);
+  const leftTextWidth = Math.max(
+    ...Object.entries(scale.labels).map(
+      ([, label]) => ctx.measureText(label).width,
+    ),
+  );
+  // TODO bottom scale
+  // const bottomTextWidth = Math.max(...Object.entries(scale.labels).map(([,label]) => ctx.measureText(label)));
+
+  const geo = {
+    scaleWidth: leftTextWidth + PADDING,
+    scaleHeight: 0, // TODO
+    // scaleHeight: textHeight + PADDING,
+    graphPaddingH: 0,
+    graphPaddingV: textHeight / 2,
+  };
+
+  const width = ctx.canvas.width - geo.scaleWidth;
+  const height = ctx.canvas.height - geo.scaleHeight;
+
+  if (renderer.adjustGeometry) {
+    renderer.adjustGeometry(ctx, geo, { width, height, dataPoints });
+  }
+
+  const graphWidth = width - geo.graphPaddingH * 2;
+  const graphHeight = height - geo.graphPaddingV * 2;
+
+  return {
+    ...geo,
+    scale: {
+      left: 0,
+      top: geo.graphPaddingV,
+      width: geo.scaleWidth,
+      height: graphHeight,
+    },
+    graph: {
+      left: geo.scaleWidth + geo.graphPaddingH,
+      top: geo.graphPaddingV,
+      width: graphWidth,
+      height: graphHeight,
+    },
+  };
+}
+
+function getScaleMax(data, binary = false) {
   if (!data.length) return { value: 1, precision: 0 };
 
   let maxData = +data?.reduce((acc, val) => Math.max(acc, val));
@@ -14,20 +62,63 @@ function getScaleMax(data) {
   }
 
   let precision = 0;
+  let binLevel = 0;
+
+  if (binary) {
+    while (maxData >= 1024) {
+      maxData /= 1024;
+      binLevel++;
+    }
+  } else {
+    while (maxData < 1) {
+      maxData *= 10;
+      precision--;
+    }
+  }
 
   while (maxData >= 10) {
     maxData /= 10;
     precision++;
   }
-  while (maxData < 1) {
-    maxData *= 10;
-    precision--;
-  }
+
   maxData = Math.ceil(maxData);
-  maxData *= Math.pow(10, precision);
+  maxData *= 10 ** precision;
+  maxData *= 1024 ** binLevel;
+
   return {
     value: maxData,
     precision,
+  };
+}
+
+function getScaleLabel(value, { unit, binary, fixed }) {
+  if (!unit) {
+    return value.toFixed(fixed);
+  } else if (typeof unit === 'function') {
+    return unit(value);
+  } else {
+    return getSIPrefix(value.toFixed(fixed), binary, { unit }).string;
+  }
+}
+
+function getScale({ data, unit, binary }) {
+  const scaleMax = getScaleMax(data, binary);
+
+  const min = 0;
+  const max = scaleMax.value;
+
+  let fixed = -scaleMax.precision;
+  if (fixed < 0) fixed = 0;
+
+  return {
+    min,
+    max,
+    labels: {
+      0: getScaleLabel(min, { unit, binary, fixed }),
+      '0.33': getScaleLabel(0.33 * max, { unit, binary, fixed }),
+      '0.66': getScaleLabel(0.66 * max, { unit, binary, fixed }),
+      1: getScaleLabel(max, { unit, binary, fixed }),
+    },
   };
 }
 
@@ -42,6 +133,7 @@ function getScaleMax(data) {
 // return scale;
 // }
 
+/*
 function lineRenderer(ctx, data, { width, height, dataPoints, color, scale }) {
   const sectionWidth = width / dataPoints;
   const offset = dataPoints - data.length;
@@ -62,38 +154,44 @@ function lineRenderer(ctx, data, { width, height, dataPoints, color, scale }) {
   });
   ctx.stroke();
 }
+*/
 
 export function barsRenderer(
   ctx,
   data,
-  { width, height, dataPoints, color, scale, hOffset },
+  { geometry, dataPoints, color, scale },
 ) {
-  width -= hOffset;
-  const sectionWidth = width / dataPoints;
+  const { sectionWidth, barWidth } = geometry;
 
-  const barWidth = sectionWidth / 2;
-
-  height -= barWidth;
   const vOffset = barWidth / 2;
-
-  const offset = dataPoints - data.length;
+  const dataOffset = dataPoints - data.length;
 
   ctx.fillStyle = color;
-  // TODO rounded rect
   data.forEach((value, index) => {
-    const left = hOffset + sectionWidth * (offset + index + 0.5);
-    const top = vOffset;
-    const bottom = top + height;
-    const mark = bottom - (value / scale.max) * height;
+    const left =
+      geometry.graph.left + sectionWidth * (dataOffset + index + 0.5);
+    const bottom = geometry.graph.top + geometry.graph.height;
+    const top = bottom - (value / scale.max) * geometry.graph.height;
 
     // ctx.fillRect(left - barWidth / 2, top, barWidth, height - top);
 
     ctx.beginPath();
-    ctx.ellipse(left, mark, barWidth / 2, barWidth / 2, 0, Math.PI, 0);
+    ctx.ellipse(left, top, barWidth / 2, barWidth / 2, 0, Math.PI, 0);
     ctx.ellipse(left, bottom, barWidth / 2, barWidth / 2, 0, 0, Math.PI);
     ctx.fill();
   });
 }
+barsRenderer.adjustGeometry = (
+  ctx,
+  geometry,
+  { width, height, dataPoints },
+) => {
+  geometry.sectionWidth = width / dataPoints;
+  geometry.barWidth = geometry.sectionWidth / 2;
+
+  const vSpacing = geometry.barWidth / 2;
+  geometry.graphPaddingV = Math.max(geometry.graphPaddingV, vSpacing);
+};
 
 export function multiBarRenderer(
   ctx,
@@ -101,17 +199,16 @@ export function multiBarRenderer(
   { width, height, dataPoints, color, scale, hOffset },
 ) {}
 
-export function StatsGraph({ data, dataPoints, graphs, unit, renderer }) {
-  // console.log('StatsGraph', data);
+export function StatsGraph({
+  data,
+  dataPoints,
+  graphs,
+  unit,
+  binary,
+  renderer,
+}) {
   if (!data) data = [];
-  // graphs = graphs.map(graph => ({ scale: 'left', min: 0, ...graph }));
 
-  const scaleMax = getScaleMax(data);
-
-  const scale = {
-    min: 0,
-    max: scaleMax.value,
-  };
   // TODO multiple scales
   // const scales = {
   // left: {
@@ -212,31 +309,62 @@ export function StatsGraph({ data, dataPoints, graphs, unit, renderer }) {
     // ctx.fillStyle = css.current?.getPropertyValue('background-color');
     // ctx.fillRect(0, 0, width, height);
 
+    /*
+    const scaleMax = getScaleMax(data, binary);
+
+    const scale = {
+      min: 0,
+      max: scaleMax.value,
+    };
+
     let fixed = -scaleMax.precision;
     if (fixed < 0) fixed = 0;
 
-    const minLabel = scale.min.toFixed(fixed) + unit;
-    const maxLabel = scale.max.toFixed(fixed) + unit;
+    let minLabel = typeof scale.min;
+    let maxLabel = typeof scale.max;
+    if (!unit) {
+      minLabel = scale.min.toFixed(fixed);
+      maxLabel = scale.max.toFixed(fixed);
+    } else if (typeof unit === 'function') {
+      minLabel = unit(scale.min);
+      maxLabel = unit(scale.max);
+    } else {
+      minLabel = getSIPrefix(scale.min.toFixed(fixed), binary, { unit }).string;
+      maxLabel = getSIPrefix(scale.max.toFixed(fixed), binary, { unit }).string;
+    }
+    */
 
-    const minTextMetrics = ctx.measureText(minLabel);
-    const maxTextMetrics = ctx.measureText(maxLabel);
+    const scale = getScale({ data, unit, binary });
 
-    const textWidth = Math.max(minTextMetrics.width, maxTextMetrics.width);
+    // const minTextMetrics = ctx.measureText(minLabel);
+    // const maxTextMetrics = ctx.measureText(maxLabel);
+
+    // const textWidth = Math.max(minTextMetrics.width, maxTextMetrics.width);
+    const textWidth = Math.max(
+      ...Object.entries(scale.labels).map(([, label]) =>
+        ctx.measureText(label),
+      ),
+    );
     const textHeight = parseInt(ctx.font);
 
+    console.log('scale', scale);
     // ctx.fillStyle = '#666';
     ctx.fillStyle = textColor;
-    ctx.fillText(minLabel, 0, height);
-    ctx.fillText(maxLabel, 0, textHeight);
+
+    const geometry = getGeometry(ctx, { scale, renderer, dataPoints });
+
+    Object.entries(scale.labels).forEach(([val, label]) =>
+      ctx.fillText(
+        label,
+        geometry.scale.left,
+        geometry.scale.top + geometry.scale.height * (1 - val) + textHeight / 2,
+      ),
+    );
 
     // graphs.forEach(({ renderer, scale, ...options }) => {
     renderer(ctx, data, {
-      // ...options,
-      width,
-      height,
+      geometry,
       scale,
-      // scale: scales[scale],
-      hOffset: textWidth + textHeight / 2,
       dataPoints,
       color: barColor || textColor,
     });
