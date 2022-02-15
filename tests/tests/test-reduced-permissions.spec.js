@@ -269,12 +269,13 @@ context('Test reduced permissions', () => {
   it('Cleanup', () => {
     cy.get('[data-testid="app-switcher"]').click();
 
-    // 2 results: original cluster and "Clusters Overview" node, take first
+    // 2 results: "Clusters Overview" node and original cluster, take second
     cy.get('#appSwitcherPopover:visible')
       .find('li')
       .eq(1)
       .find('[role="button"]')
       .click();
+    cy.wait(1000);
 
     // wait until original cluster loads
     cy.getIframeBody()
