@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useGet } from 'react-shared';
-import { getSIPrefix } from 'shared/helpers/siPrefixes';
 
 export function prometheusSelector(type, data) {
   if (type === 'pod') {
@@ -24,7 +23,6 @@ export function getMetric(type, metric, { step, ...data }) {
     },
     'network-down': {
       prometheusQuery: `sum(irate(container_network_receive_bytes_total{${selector}}[${step}s]))`,
-      // unit: (val) => `${val} B/s`,
       binary: true,
       unit: 'B/s',
     },
@@ -61,29 +59,9 @@ export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
   useEffect(() => {
     tick();
     const loop = setInterval(tick, step * 1000);
-
-    // const newEndDate = new Date();
-    // const newStartDate = new Date();
-
-    // newEndDate.setTime(Date.now());
-    // newStartDate.setTime(endDate.getTime() - (timeSpan - 1) * 1000);
-
-    // setEndDate(newEndDate);
-    // setStartDate(newStartDate);
-
-    // setStep(timeSpan / items);
-
-    // const loop = setInterval(() => {
-    // console.log('loop');
-    // endDate.setTime(Date.now());
-    // startDate.setTime(endDate.getTime() - (timeSpan - 1) * 1000);
-    // setEndDate(endDate);
-    // setStartDate(startDate);
-    // }, step * 1000);
     return () => clearInterval(loop);
   }, [metricId, timeSpan]);
 
-  // TODO multiple queries?
   const {
     data,
     error,

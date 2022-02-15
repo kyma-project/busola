@@ -119,7 +119,6 @@ function getScale({ data, unit, binary }) {
     max,
     labels: {
       0: getScaleLabel(min, { unit, binary, fixed }),
-      // '0.33': getScaleLabel(0.33 * max, { unit, binary, fixed }),
       '0.5': getScaleLabel(0.5 * max, { unit, binary, fixed }),
       1: getScaleLabel(max, { unit, binary, fixed }),
     },
@@ -148,29 +147,25 @@ function getTimeScale({ data, startDate, endDate }) {
   };
 }
 
-// function generateScale(side, defs, graphs, data) {
-// if (!graphs.any(graph => graph.scale === side )) return null;
-// let scale = defs[side] || { min: 0 };
-
-// if (!scale.max) {
-// graphs.filter(graph.scale === side).map(graph => graph.field);
-// }
-
-// return scale;
-// }
-
-/*
-function lineRenderer(ctx, data, { width, height, dataPoints, color, scale }) {
-  const sectionWidth = width / dataPoints;
-  const offset = dataPoints - data.length;
+export function lineRenderer(
+  ctx,
+  data,
+  { geometry, dataPoints, color, scale },
+) {
+  const sectionWidth = geometry.graph.width / dataPoints;
+  const dataOffset = dataPoints - data.length;
 
   ctx.strokeStyle = color;
   ctx.lineWidth = 5;
   ctx.lineJoin = 'round';
   ctx.beginPath();
   data.forEach((value, index) => {
-    const left = sectionWidth * (offset + index + 0.5);
-    const top = height - Math.max((value / scale.max) * height, 1);
+    const left =
+      geometry.graph.left + sectionWidth * (dataOffset + index + 0.5);
+    const top =
+      geometry.graph.top +
+      geometry.graph.height -
+      (value / scale.max) * geometry.graph.height;
 
     if (index === 0) {
       ctx.moveTo(left, top);
@@ -180,7 +175,6 @@ function lineRenderer(ctx, data, { width, height, dataPoints, color, scale }) {
   });
   ctx.stroke();
 }
-*/
 
 export function barsRenderer(
   ctx,
@@ -188,8 +182,6 @@ export function barsRenderer(
   { geometry, dataPoints, color, scale },
 ) {
   const { sectionWidth, barWidth } = geometry;
-
-  const vOffset = barWidth / 2;
   const dataOffset = dataPoints - data.length;
 
   ctx.fillStyle = color;
@@ -235,58 +227,12 @@ export function StatsGraph({
 }) {
   if (!data) data = [];
 
-  // TODO multiple scales
-  // const scales = {
-  // left: {
-  // min: 0,
-  // max: scaleMax.value,
-  // }
-  // }
-  // scales = {
-  // left: generateScale('left', scales, graphs, data),
-  // right: generateScale('right', scales, graphs, data),
-  // };
-
-  /*
-  if (!scales) {
-    scales = {};
-  }
-  if (!scales.left) {
-    scales.left = { min: 0 };
-  }
-  if (hasRightScale && !scales.right) {
-    scales.right = { min: 0 };
-  }
-
-  if (!scales.left.max) {
-    graphs.filter(graph => graph.scale);
-  }
-  */
-
-  // if (!scales) {
-  // // TODO
-  // scales = {
-  // left: {
-  // min: 0,
-  // max: 100,
-  // },
-  // }
-
   const [width, setWidth] = useState(300);
   const [height, setHeight] = useState(300 * STATS_RATIO);
   const [textColor, setTextColor] = useState('#000');
   const [barColor, setBarColor] = useState();
   const canvas = useRef();
   const css = useRef();
-
-  const watchCss = (css, value, setter) => {
-    const cssValue = css.current?.getPropertyValue(css);
-    console.log('css value?', css, value, cssValue);
-    if (value !== cssValue) {
-      console.log('css value changed', css, value, cssValue);
-      setter(cssValue);
-    }
-  };
 
   useEffect(() => {
     console.log('color effect', canvas.current);
@@ -333,7 +279,6 @@ export function StatsGraph({
     console.log(hScale);
     const geometry = getGeometry(ctx, { scale, hScale, renderer, dataPoints });
 
-    // const textHeight = parseInt(ctx.font);
     ctx.fillStyle = textColor;
     ctx.textBaseline = 'middle';
     ctx.textAlign = 'left';
@@ -367,7 +312,6 @@ export function StatsGraph({
     <canvas
       className="stats-graph"
       ref={canvas}
-      // style={{ width: '100%' }}
       width={width}
       height={height}
     />
