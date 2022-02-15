@@ -1763,12 +1763,22 @@ service-entries:
   headers:
     addresses: Adresses
     configuration: Configuration
+    endpoints:
+      address: Address
+      locality: Locality
+      network: Network
+      title: Endpoints
+      weight: Weight
     export-to: Export to
     hosts: Hosts
     location: Location
+    ports:
+      number: Number
+      protocol: Protocol
+      target-point: Target Point
+      title: Ports
     resolution: Resolution
     subject-alt-names: Subject Alt Names
-    workload-selector-labels: Workload Selector Labels
   name_singular: Service Entry
   title: Service Entries
 service-management:

@@ -4,23 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Labels, EMPTY_TEXT_PLACEHOLDER, GenericList } from 'react-shared';
 import { LayoutPanel } from 'fundamental-react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
-
-const WorkloadSelector = se => {
-  const { t } = useTranslation();
-
-  return (
-    <LayoutPanel className="fd-margin--md" key="workload-selector">
-      <LayoutPanel.Header>
-        <LayoutPanel.Head
-          title={t('service-entries.headers.workload-selector-labels')}
-        />
-      </LayoutPanel.Header>
-      <LayoutPanel.Body>
-        <Labels labels={se.spec?.workloadSelector?.labels} />
-      </LayoutPanel.Body>
-    </LayoutPanel>
-  );
-};
+import { WorkloadSelector } from 'shared/WorkloadSelector/WorkloadSelector';
 
 export const Hosts = ({ hosts }) => {
   return (
@@ -42,7 +26,12 @@ const Ports = serviceentry => {
   const { t, i18n } = useTranslation();
 
   const ports = serviceentry.spec?.ports;
-  const headerRenderer = _ => ['Name', 'Number', 'Protocol', 'Target Point'];
+  const headerRenderer = _ => [
+    t('common.headers.name'),
+    t('service-entries.headers.ports.number'),
+    t('service-entries.headers.ports.protocol'),
+    t('service-entries.headers.ports.target-point'),
+  ];
 
   const rowRenderer = port => [
     port?.name,
@@ -54,11 +43,12 @@ const Ports = serviceentry => {
   return (
     <GenericList
       key="serviceentries-ports"
-      title={t('service-entries.headers.ports')}
+      title={t('service-entries.headers.ports.title')}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       entries={ports || []}
       i18n={i18n}
+      showSearchField={false}
     />
   );
 };
@@ -67,13 +57,13 @@ const Endpoints = serviceentry => {
   const { t, i18n } = useTranslation();
 
   const headerRenderer = _ => [
-    'Address',
-    'Ports',
-    'Labels',
-    'Network',
-    'Locality',
-    'Weight',
-    'Service Account',
+    t('service-entries.headers.endpoints.address'),
+    t('service-entries.headers.ports.title'),
+    t('common.headers.labels'),
+    t('service-entries.headers.endpoints.network'),
+    t('service-entries.headers.endpoints.locality'),
+    t('service-entries.headers.endpoints.weight'),
+    t('service-accounts.name_singular'),
   ];
   const endpoints = serviceentry.spec?.endpoints;
 
@@ -89,35 +79,14 @@ const Endpoints = serviceentry => {
 
   return (
     <GenericList
-      key="serviceentries-endpoints"
-      title={'Endpoints'}
+      key="service-entries-endpoints"
+      title={t('service-entries.headers.endpoints.title')}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       entries={endpoints || []}
       i18n={i18n}
+      showSearchField={false}
     />
-  );
-};
-
-const Port = ({ port }) => {
-  const { t } = useTranslation();
-
-  return (
-    <div>
-      <LayoutPanelRow
-        name={t('sidecars.headers.port.number')}
-        value={port.number}
-      />
-      <LayoutPanelRow
-        name={t('sidecars.headers.port.protocol')}
-        value={port.protocol}
-      />
-      <LayoutPanelRow name={t('common.headers.name')} value={port.name} />
-      <LayoutPanelRow
-        name={t('sidecars.headers.port.target-point')}
-        value={port?.targetPoint || EMPTY_TEXT_PLACEHOLDER}
-      />
-    </div>
   );
 };
 
@@ -125,7 +94,7 @@ const Configuration = ({ spec }) => {
   const { t } = useTranslation();
 
   return (
-    <LayoutPanel className="fd-margin--md" key={'se-configuration'}>
+    <LayoutPanel className="fd-margin--md" key="se-configuration">
       <LayoutPanel.Header>
         <LayoutPanel.Head title={t('service-entries.headers.configuration')} />
       </LayoutPanel.Header>
@@ -174,6 +143,6 @@ export function ServiceEntriesDetails({ DefaultRenderer, ...otherParams }) {
       customComponents={[Configuration, Endpoints, Ports, WorkloadSelector]}
       customColumns={customColumns}
       {...otherParams}
-    ></DefaultRenderer>
+    />
   );
 }
