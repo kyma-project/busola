@@ -24,17 +24,9 @@ context('Test Virtual Services', () => {
     cy.goToNamespaceDetails();
   });
 
-  it('Navigate to Virtual Services', () => {
-    cy.getLeftNav()
-      .contains('Istio')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Virtual Services')
-      .click();
-  });
-
   it('Create a Virtual Service', () => {
+    cy.navigateTo('Istio', 'Virtual Services');
+
     cy.getIframeBody()
       .contains('Create Virtual Service')
       .click();

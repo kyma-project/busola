@@ -5,23 +5,22 @@ import { addCluster, getContext, deleteCluster } from '../../shared';
 import { ResourceForm } from 'shared/ResourceForm';
 import { K8sNameField } from 'shared/ResourceForm/fields';
 import { ChooseStorage } from 'components/Clusters/components/ChooseStorage';
-import { useNotification } from 'react-shared';
+import { useNotification, ErrorBoundary } from 'react-shared';
+import { cloneDeep } from 'lodash';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { AuthenticationTypeDropdown } from 'components/Clusters/views/EditCluster/AuthenticationDropdown';
 
-function ClustersEdit(props) {
-  const {
-    formElementRef,
-    onChange,
-    resourceUrl,
-    resource,
-    setResource,
-  } = props;
+function EditClusterComponent({
+  formElementRef,
+  onChange,
+  resourceUrl,
+  editedCluster,
+}) {
+  const [resource, setResource] = useState(cloneDeep(editedCluster));
 
   const [authenticationType, setAuthenticationType] = useState(
     resource.kubeconfig?.users?.[0]?.user?.exec ? 'oidc' : 'token',
   );
-
   const notification = useNotification();
 
   const { kubeconfig, config } = resource;
@@ -210,4 +209,11 @@ function ClustersEdit(props) {
   );
 }
 
-export { ClustersEdit };
+export function EditCluster(props) {
+  const { i18n } = useTranslation();
+  return (
+    <ErrorBoundary i18n={i18n}>
+      <EditClusterComponent {...props} />
+    </ErrorBoundary>
+  );
+}

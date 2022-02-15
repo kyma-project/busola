@@ -15,32 +15,22 @@ context('Test Git Repositories', () => {
     cy.goToNamespaceDetails();
   });
 
-  it('Git Repositories node should be present', () => {
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Git Repositories')
-      .click();
-  });
-
   it('Create Repository', () => {
+    cy.navigateTo('Configuration', 'Git Repositories');
+
     cy.getIframeBody()
       .contains('Connect Repository')
       .click();
 
     // name
     cy.getIframeBody()
-      .find('[placeholder="Git Repository Name"]')
-      .filter(':visible', { log: false })
+      .find('[placeholder="Git Repository Name"]:visible', { log: false })
       .clear()
       .type(REPOSITORY_NAME);
 
     // url
     cy.getIframeBody()
-      .find('[placeholder^="Enter the URL address"]')
-      .filter(':visible', { log: false })
+      .find('[placeholder^="Enter the URL address"]:visible', { log: false })
       .type('https://test-repo');
 
     // create
@@ -65,14 +55,12 @@ context('Test Git Repositories', () => {
 
     // name should be disabled for edit
     cy.getIframeBody()
-      .find('[placeholder="Git Repository Name"]')
-      .filter(':visible', { log: false })
+      .find('[placeholder="Git Repository Name"]:visible', { log: false })
       .should('have.attr', 'readonly');
 
     // edit url
     cy.getIframeBody()
-      .find('[placeholder^="Enter the URL address"]')
-      .filter(':visible', { log: false })
+      .find('[placeholder^="Enter the URL address"]:visible', { log: false })
       .type('-edited');
 
     // edit authorization (Public -> Basic)
@@ -87,8 +75,9 @@ context('Test Git Repositories', () => {
 
     // fill secret
     cy.getIframeBody()
-      .find('[placeholder^="Start typing to select Secret"]')
-      .filter(':visible', { log: false })
+      .find('[placeholder^="Start typing to select Secret"]:visible', {
+        log: false,
+      })
       .type('default');
     cy.getIframeBody()
       .contains(/default-token/)

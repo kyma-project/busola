@@ -24,8 +24,7 @@ context('Test Events', () => {
       });
 
     cy.getIframeBody()
-      .find('a[data-testid="details-link"]')
-      .filter(':visible', { log: false })
+      .find('a[data-testid="details-link"]:visible', { log: false })
       .first()
       .click({ force: true });
   });
