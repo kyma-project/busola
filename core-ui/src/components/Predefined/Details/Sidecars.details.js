@@ -1,26 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Labels, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 import { LayoutPanel } from 'fundamental-react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
-
-const WorkloadSelector = sidecar => {
-  const { t } = useTranslation();
-
-  return (
-    <LayoutPanel className="fd-margin--md" key="workload-selector">
-      <LayoutPanel.Header>
-        <LayoutPanel.Head
-          title={t('sidecars.headers.workload-selector-labels')}
-        />
-      </LayoutPanel.Header>
-      <LayoutPanel.Body>
-        <Labels labels={sidecar.spec?.workloadSelector?.labels} />
-      </LayoutPanel.Body>
-    </LayoutPanel>
-  );
-};
+import { WorkloadSelector } from 'shared/WorkloadSelector/WorkloadSelector';
 
 const IstioListeners = sidecar => {
   const { t } = useTranslation();

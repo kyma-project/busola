@@ -1817,7 +1817,7 @@ sidecars:
       protocol: Protocol
       target-point: Target Point
       title: Port
-    workload-selector-labels: Workload Selector Labels
+    workload-selector: Workload Selector
   name_singular: Sidecar
   title: Sidecars
 stateful-sets:
