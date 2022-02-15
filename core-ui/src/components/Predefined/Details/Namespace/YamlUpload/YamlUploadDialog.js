@@ -7,12 +7,10 @@ import { YamlResourcesList } from './YamlResourcesList';
 import { useUploadResources } from './useUploadResources';
 
 import './YamlUploadDialog.scss';
-
-function YamlUploadHelp() {
-  return "You can upload multiple resources, separated in YAML by '---'. If resource already exists, it will be updated, otherwise a new one will be created. In case the namespace is not given, the 'default' will be used.";
-}
+import { useTranslation } from 'react-i18next';
 
 export function YamlUploadDialog({ show, onCancel }) {
+  const { t } = useTranslation();
   const [resourcesData, setResourcesData] = useState();
   const [resourcesWithStatuses, setResourcesWithStatuses] = useState();
   const oldYaml = useRef();
@@ -23,7 +21,8 @@ export function YamlUploadDialog({ show, onCancel }) {
 
   useEffect(() => {
     if (show) {
-      setResourcesData(undefined);
+      setResourcesData(null);
+      setResourcesWithStatuses(null);
     }
   }, [show]);
 
@@ -31,8 +30,8 @@ export function YamlUploadDialog({ show, onCancel }) {
     if (isEqual(yaml?.sort(), oldYaml?.current?.sort())) return;
     setResourcesData(yaml);
     const nonEmptyResources = yaml?.filter(resource => resource !== null);
-    const resourcesWithStatus = nonEmptyResources?.map(y => ({
-      value: y,
+    const resourcesWithStatus = nonEmptyResources?.map(value => ({
+      value,
       status: '',
       message: '',
     }));
@@ -43,13 +42,17 @@ export function YamlUploadDialog({ show, onCancel }) {
   return (
     <Dialog
       show={show}
-      title={'Upload Yaml'}
+      title={t('upload-yaml.title')}
       actions={[
-        <Button onClick={fetchResources} option="emphasized">
-          Submit
+        <Button
+          onClick={fetchResources}
+          disabled={!resourcesWithStatuses?.length}
+          option="emphasized"
+        >
+          {t('common.buttons.submit')}
         </Button>,
         <Button onClick={onCancel} option="transparent">
-          Cancel
+          {t('common.buttons.cancel')}
         </Button>,
       ]}
       className="yaml-upload-modal"
@@ -59,7 +62,7 @@ export function YamlUploadDialog({ show, onCancel }) {
         setResourcesData={updateYamlContent}
       />
       <div className="fd-margin-begin--tiny">
-        <YamlUploadHelp />
+        {t('upload-yaml.info')}
         <YamlResourcesList
           resourcesData={resourcesWithStatuses}
           setResourcesData={setResourcesWithStatuses}

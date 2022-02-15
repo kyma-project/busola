@@ -1,9 +1,16 @@
 import React from 'react';
 import { Icon } from 'fundamental-react';
-
+import {
+  STATE_ERROR,
+  STATE_WAITING,
+  STATE_UPDATED,
+  STATE_CREATED,
+} from './useUploadResources';
+import { useTranslation } from 'react-i18next';
 import './YamlResourcesList.scss';
 
 export function YamlResourcesList({ resourcesData }) {
+  const { t } = useTranslation();
   const filteredResources = resourcesData?.filter(
     resource => resource !== null,
   );
@@ -13,13 +20,14 @@ export function YamlResourcesList({ resourcesData }) {
   };
 
   const getLabel = () => {
-    return `${filteredResources?.filter(r => r.status && r.status !== 'Waiting')
-      ?.length || 0}/${filteredResources?.length || 0}`;
+    return `${filteredResources?.filter(
+      r => r.status && r.status !== STATE_WAITING,
+    )?.length || 0}/${filteredResources?.length || 0}`;
   };
 
   const getPercentage = () => {
     return (
-      ((filteredResources?.filter(r => r.status && r.status !== 'Waiting')
+      ((filteredResources?.filter(r => r.status && r.status !== STATE_WAITING)
         ?.length || 0) /
         (filteredResources?.length || 0)) *
       100
@@ -28,16 +36,20 @@ export function YamlResourcesList({ resourcesData }) {
 
   const getIcon = status => {
     switch (status) {
-      case 'Waiting':
+      case STATE_WAITING:
         return 'pending';
-      case 'Updated':
-      case 'Created':
+      case STATE_UPDATED:
+      case STATE_CREATED:
         return 'message-success';
-      case 'Error':
+      case STATE_ERROR:
         return 'error';
       default:
         return 'question-mark';
     }
+  };
+
+  const getStatus = status => {
+    return t(`upload-yaml.statuses.${status.toLowerCase()}`);
   };
 
   if (!filteredResources) {
@@ -46,7 +58,14 @@ export function YamlResourcesList({ resourcesData }) {
     if (showResourcesToUpload()) {
       return (
         <ul className="fd-margin-top--md">
-          You will create {filteredResources.length || 0} resources:
+          {t(
+            filteredResources.length === 1
+              ? 'upload-yaml.you-will-create'
+              : 'upload-yaml.you-will-create_other',
+            {
+              count: filteredResources.length || 0,
+            },
+          )}
           {filteredResources?.map(r => (
             <li
               key={`${r?.value?.kind}-${r?.value?.metadata?.name}`}
@@ -76,7 +95,8 @@ export function YamlResourcesList({ resourcesData }) {
                   glyph={getIcon(r?.status)}
                   ariaLabel="status"
                 />
-                {r?.value?.kind} {r?.value?.metadata?.name} - {r?.status}
+                {r?.value?.kind} {r?.value?.metadata?.name} -{' '}
+                {getStatus(r?.status)}
                 <p>{r?.message}</p>
               </li>
             ))}

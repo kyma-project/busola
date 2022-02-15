@@ -13,6 +13,11 @@ import { getResourceKindUrl, getResourceUrl } from './helpers';
 
 const DEFAULT_NAMESPACE = 'default';
 
+export const STATE_ERROR = 'ERROR';
+export const STATE_WAITING = 'WAITING';
+export const STATE_UPDATED = 'UPDATED';
+export const STATE_CREATED = 'CREATED';
+
 export function useUploadResources(resources = [], setResourcesData) {
   const fetch = useSingleGet();
   const post = usePost();
@@ -75,7 +80,7 @@ export function useUploadResources(resources = [], setResourcesData) {
       //add a new resource
       if (!existingResource) {
         await post(url, resource.value);
-        updateState(index, 'Created');
+        updateState(index, STATE_CREATED);
       } else {
         //update a resource
         const newResource = {
@@ -84,17 +89,17 @@ export function useUploadResources(resources = [], setResourcesData) {
         };
         const diff = createPatch(existingResource, newResource);
         await patch(urlWithName, diff);
-        updateState(index, 'Updated');
+        updateState(index, STATE_UPDATED);
       }
     } catch (e) {
       console.warn(e);
-      updateState(index, 'Error', e.message);
+      updateState(index, STATE_ERROR, e.message);
     }
   };
 
   const fetchResources = useCallback(() => {
     for (const [index, resource] of filteredResources?.entries()) {
-      updateState(index, 'Waiting');
+      updateState(index, STATE_WAITING);
       fetchApiGroup(resource, index);
     }
 

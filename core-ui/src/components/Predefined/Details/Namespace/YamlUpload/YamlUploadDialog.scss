@@ -1,8 +1,5 @@
 .yaml-upload-modal .fd-dialog__body {
-  background: var(
-    --fdWizard_Content_Default_Background,
-    var(--sapBackgroundColor)
-  );
+  background: var(--sapBackgroundColor);
   width: 1000px;
   display: grid;
   grid-template-columns: 16fr 9fr;

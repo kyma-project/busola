@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { ControlledEditor, useTheme } from 'react-shared';
@@ -7,7 +7,7 @@ import jsyaml from 'js-yaml';
 import { YamlFileUploader } from './YamlFileUploader';
 
 export function YamlUpload({ resourcesData, setResourcesData }) {
-  const [error, setError] = React.useState('');
+  const [error, setError] = useState('');
   const { editorTheme } = useTheme();
   const { t } = useTranslation();
 
@@ -26,7 +26,7 @@ export function YamlUpload({ resourcesData, setResourcesData }) {
       if (files.some(file => typeof file !== 'object')) {
         setError(t('clusters.wizard.not-an-object'));
       } else if (files.some(file => !isK8sResource(file))) {
-        setError('Not a k8s resource!');
+        setError(t('upload-yaml.messages.not-a-k8s-resource'));
       } else {
         setResourcesData(files);
         setError(null);
@@ -41,7 +41,7 @@ export function YamlUpload({ resourcesData, setResourcesData }) {
     <div>
       <YamlFileUploader onYamlContentAdded={updateYamlContent} />
       <p className="editor-label fd-margin-bottom--sm fd-margin-top--sm">
-        or paste it here:
+        {t('upload-yaml.or-paste-here')}
       </p>
       <ControlledEditor
         height="400px"
@@ -52,11 +52,7 @@ export function YamlUpload({ resourcesData, setResourcesData }) {
           editor.onDidBlurEditorWidget(() => updateYamlContent(getValue()))
         }
         onChange={(_, value) => updateYamlContent(value)}
-        options={{
-          scrollbar: {
-            alwaysConsumeMouseWheel: false,
-          },
-        }}
+        options={{ scrollbar: { alwaysConsumeMouseWheel: false } }}
       />
       {error && (
         <MessageStrip type="error" className="fd-margin-top--sm">

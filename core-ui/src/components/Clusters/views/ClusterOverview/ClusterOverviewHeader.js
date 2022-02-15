@@ -40,7 +40,7 @@ export function ClusterOverviewHeader() {
         LuigiClient.uxManager().addBackdrop();
       }}
     >
-      Upload YAML
+      {t('upload-yaml.title')}
     </Button>
   );
 
