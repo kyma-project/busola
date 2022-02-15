@@ -68,6 +68,6 @@ describe('SecretData', () => {
 
   it('Renders empty secret', async () => {
     const { findByText } = render(<SecretData secret={empty_secret} />);
-    expect(await findByText('Empty secret')).toBeInTheDocument();
+    expect(await findByText('Empty Secret')).toBeInTheDocument();
   });
 });
