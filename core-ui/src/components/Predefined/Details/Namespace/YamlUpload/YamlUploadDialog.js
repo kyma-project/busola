@@ -9,10 +9,10 @@ import { useUploadResources } from './useUploadResources';
 import './YamlUploadDialog.scss';
 
 export function YamlUploadDialog({ show, onCancel }) {
-  const [resourcesData, setResourcesData] = useState(undefined);
-  const [resourcesWithStatuses, setResourcesWithStatuses] = useState(undefined);
-  const oldYaml = useRef(undefined);
-  const { fetchResources } = useUploadResources(
+  const [resourcesData, setResourcesData] = useState();
+  const [resourcesWithStatuses, setResourcesWithStatuses] = useState();
+  const oldYaml = useRef();
+  const fetchResources = useUploadResources(
     resourcesWithStatuses,
     setResourcesWithStatuses,
   );
@@ -44,7 +44,7 @@ export function YamlUploadDialog({ show, onCancel }) {
         <Button onClick={fetchResources} option="emphasized">
           Submit
         </Button>,
-        <Button onClick={() => onCancel()} option="transparent">
+        <Button onClick={onCancel} option="transparent">
           Cancel
         </Button>,
       ]}

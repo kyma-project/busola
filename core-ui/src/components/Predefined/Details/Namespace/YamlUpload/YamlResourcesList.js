@@ -43,44 +43,48 @@ export function YamlResourcesList({ resourcesData }) {
         return 'question-mark';
     }
   };
-  return (
-    <div className="yaml-modal-resources">
-      {showResourcesToUpload() && (
-        <div>
-          You will create {filteredResources?.length || 0} resources:
-          {filteredResources?.map(r => (
-            <p key={`${r?.value?.kind}-${r?.value?.name}`}>
-              - {r?.value?.kind} {r?.value?.name}
-            </p>
-          ))}
-        </div>
-      )}
-      {showResourcesUploaded() && (
-        <div>
-          <div id="upload-progress-bar-container">
-            <div
-              id="upload-progress-bar"
-              style={{ width: `${getPercentage()}%` }}
-            >
-              <span id="upload-progress-bar-label">{getLabel()}</span>
-            </div>
-          </div>
-          {filteredResources?.map(r => (
-            <>
+
+  if (!filteredResources) {
+    return null;
+  } else {
+    return (
+      <div className="yaml-modal-resources">
+        {showResourcesToUpload() && (
+          <div>
+            You will create {filteredResources.length || 0} resources:
+            {filteredResources?.map(r => (
               <p key={`${r?.value?.kind}-${r?.value?.name}`}>
-                <Icon
-                  className={`status status-${getIcon(r?.status)}`}
-                  glyph={getIcon(r?.status)}
-                />
-                {r?.value?.kind} {r?.value?.name} - {r?.status}
+                - {r?.value?.kind} {r?.value?.name}
               </p>
-              <p ey={`${r?.value?.kind}-${r?.value?.name}-message`}>
-                {r?.message}
-              </p>
-            </>
-          ))}
-        </div>
-      )}
-    </div>
-  );
+            ))}
+          </div>
+        )}
+        {showResourcesUploaded() && (
+          <div>
+            <div id="upload-progress-bar-container">
+              <div
+                id="upload-progress-bar"
+                style={{ width: `${getPercentage()}%` }}
+              >
+                <span id="upload-progress-bar-label">{getLabel()}</span>
+              </div>
+            </div>
+            {filteredResources.map(r => (
+              <React.Fragment key={`${r?.value?.kind}-${r?.value?.name}`}>
+                <p>
+                  <Icon
+                    className={`status status-${getIcon(r?.status)}`}
+                    glyph={getIcon(r?.status)}
+                    ariaLabel="status"
+                  />
+                  {r?.value?.kind} {r?.value?.metadata?.name} - {r?.status}
+                </p>
+                <p>{r?.message}</p>
+              </React.Fragment>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
 }

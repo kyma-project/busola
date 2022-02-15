@@ -1,3 +1,4 @@
+import pluralize from 'pluralize';
 import { useCallback } from 'react';
 import {
   useSingleGet,
@@ -14,101 +15,89 @@ export function useUploadResources(resources = [], setResourcesData) {
   const fetch = useSingleGet();
   const post = usePost();
   const patch = useUpdate();
-  const { namespaceId: namespace } = useMicrofrontendContext();
-
+  const {
+    namespaceId: namespace,
+    namespaceNodes,
+    clusterNodes,
+  } = useMicrofrontendContext();
   const filteredResources = resources?.filter(
     resource => resource?.value !== null,
   );
 
-  const updateState = (resource, index, status, message = '') => {
-    resource.status = status;
-    resource.message = message;
-    const updatedList = [...resources];
-    updatedList[index] = resource;
-    setResourcesData(updatedList);
+  const updateState = (index, status, message = '') => {
+    setResourcesData(data => {
+      data[index] = { ...data[index], status, message };
+      return [...data];
+    });
+  };
+
+  const getUrl = async resource => {
+    const resourceType = pluralize(resource.kind.toLowerCase());
+    const hasNamespace = !!resource?.metadata?.namespace;
+    const isKnownClusterWide = !!clusterNodes.find(
+      n => n.resourceType === resourceType,
+    );
+    const isKnownNamespaceWide = !!namespaceNodes.find(
+      n => n.resourceType === resourceType,
+    );
+
+    if (hasNamespace || isKnownClusterWide) {
+      return getResourceUrl(resource);
+    } else if (isKnownNamespaceWide) {
+      return getResourceUrl(resource, namespace);
+    } else {
+      const response = await fetch(getResourceKindUrl(resource));
+      const json = await response.json();
+      const apiGroupResources = json?.resources;
+      const apiGroup = apiGroupResources.find(
+        r => r?.kind === resource.value?.kind,
+      );
+      return apiGroup?.namespaced
+        ? getResourceUrl(resource, namespace)
+        : getResourceUrl(resource);
+    }
+  };
+
+  const fetchPossibleExistingResource = async url => {
+    try {
+      const response = await fetch(url);
+      return await response.json();
+    } catch (_) {
+      return null;
+    }
   };
 
   const fetchApiGroup = async (resource, index) => {
-    const clusterWideResources = [
-      '/apis/applicationconnector.kyma-project.io/v1alpha1/applications',
-      '/apis/addons.kyma-project.io/v1alpha1/clusteraddonsconfigurations',
-      '/apis/storage.k8s.io/v1/storageclasses',
-      '/api/v1/persistentvolumes',
-      '/apis/rbac.authorization.k8s.io/v1/clusterroles',
-      '/apis/rbac.authorization.k8s.io/v1/clusterrolebindings',
-      '/apis/apiextensions.k8s.io/v1/customresourcedefinitions',
-    ];
-    const namespaceWideResources = []; //todo
-
-    const hasNamespace = r => r?.metadata?.namespace;
-    const isKnownClusterWide = r =>
-      clusterWideResources.includes(getResourceUrl(r));
-    const isKnownNamespaceWide = r =>
-      namespaceWideResources.includes(getResourceUrl(r));
-
-    const kind = resource.value?.kind;
-    const kindUrl = getResourceKindUrl(resource.value);
     try {
-      let url;
-      let existingResource;
+      const url = await getUrl(resource.value);
+      const urlWithName = `${url}/${resource?.value?.metadata?.name}`;
 
-      //check if we need to add a namespace to the metadata
-      if (hasNamespace(resource.value)) {
-        url = getResourceUrl(resource.value);
-      } else if (isKnownClusterWide(resource.value)) {
-        url = getResourceUrl(resource.value);
-      } else if (isKnownNamespaceWide(resource.value)) {
-        url = getResourceUrl(resource.value, namespace);
+      const existingResource = await fetchPossibleExistingResource(urlWithName);
+
+      //add a new resource
+      if (!existingResource) {
+        await post(url, resource.value);
+        updateState(index, 'Created');
       } else {
-        //get the details of a resource kind to check if we need to add a namespace to the metadata
-        const response = await fetch(kindUrl);
-        const json = await response.json();
-        const apiGroupResources = json?.resources;
-        const apiGroup = apiGroupResources.find(r => r?.kind === kind);
-        const isNamespaceWide = apiGroup?.namespaced;
-        url = isNamespaceWide
-          ? getResourceUrl(resource.value, namespace)
-          : getResourceUrl(resource.value);
-      }
-      try {
-        //check if we need to POST of PATCH based on existance of a resource
-        const response = await fetch(
-          `${url}/${resource?.value?.metadata?.name}`,
-        );
-        const json = await response.json();
-        existingResource = json;
-      } catch (_) {
-      } finally {
-        try {
-          //add a new resource
-          if (!existingResource) {
-            await post(url, resource.value);
-            updateState(resource, index, 'Created');
-          } else {
-            //update a resource
-            const newResource = {
-              ...resource.value,
-              ...existingResource,
-            };
-            const diff = createPatch(existingResource, newResource);
-            await patch(`${url}/${resource?.value?.metadata?.name}`, diff);
-            updateState(resource, index, 'Updated');
-          }
-        } catch (e) {
-          console.warn(e);
-          updateState(resource, index, 'Error', e.message);
-        }
+        //update a resource
+        const newResource = {
+          ...resource.value,
+          ...existingResource,
+        };
+        const diff = createPatch(existingResource, newResource);
+        await patch(urlWithName, diff);
+        updateState(index, 'Updated');
       }
     } catch (e) {
       console.warn(e);
-      updateState(resource, index, 'Error', e.message);
+      updateState(index, 'Error', e.message);
     }
   };
 
   const fetchResources = useCallback(() => {
     for (const [index, resource] of filteredResources?.entries()) {
-      updateState(resource, index, 'Waiting');
-      void fetchApiGroup(resource, index);
+      updateState(index, 'Waiting');
+      fetchApiGroup(resource, index);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -116,5 +105,5 @@ export function useUploadResources(resources = [], setResourcesData) {
 
   useComponentDidMount(fetchResources);
 
-  return { fetchResources };
+  return fetchResources;
 }

@@ -19,6 +19,7 @@ export function YamlUpload({ resourcesData, setResourcesData }) {
     if (!resource) return true;
     return resource.apiVersion && resource.kind && resource.metadata;
   };
+
   const updateYamlContent = text => {
     try {
       const files = jsyaml.loadAll(text);

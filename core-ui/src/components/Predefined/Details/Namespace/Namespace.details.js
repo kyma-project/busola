@@ -81,9 +81,9 @@ export const NamespacesDetails = ({ DefaultRenderer, ...otherParams }) => {
     <>
       <DeployNewWorkload namespaceName={otherParams.resourceName} />
       <Button
-        option="transparent"
         glyph="add"
-        className="fd-margin-begin--sm"
+        option="transparent"
+        className="fd-margin-end--tiny"
         onClick={() => {
           setShowAdd(true);
           LuigiClient.uxManager().addBackdrop();
