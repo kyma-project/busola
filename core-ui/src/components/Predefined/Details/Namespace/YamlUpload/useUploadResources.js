@@ -11,15 +11,13 @@ import { createPatch } from 'rfc6902';
 import { useComponentDidMount } from 'shared/useComponentDidMount';
 import { getResourceKindUrl, getResourceUrl } from './helpers';
 
+const DEFAULT_NAMESPACE = 'default';
+
 export function useUploadResources(resources = [], setResourcesData) {
   const fetch = useSingleGet();
   const post = usePost();
   const patch = useUpdate();
-  const {
-    namespaceId: namespace,
-    namespaceNodes,
-    clusterNodes,
-  } = useMicrofrontendContext();
+  const { namespaceNodes, clusterNodes } = useMicrofrontendContext();
   const filteredResources = resources?.filter(
     resource => resource?.value !== null,
   );
@@ -44,7 +42,7 @@ export function useUploadResources(resources = [], setResourcesData) {
     if (hasNamespace || isKnownClusterWide) {
       return getResourceUrl(resource);
     } else if (isKnownNamespaceWide) {
-      return getResourceUrl(resource, namespace);
+      return getResourceUrl(resource, DEFAULT_NAMESPACE);
     } else {
       const response = await fetch(getResourceKindUrl(resource));
       const json = await response.json();
@@ -53,7 +51,7 @@ export function useUploadResources(resources = [], setResourcesData) {
         r => r?.kind === resource.value?.kind,
       );
       return apiGroup?.namespaced
-        ? getResourceUrl(resource, namespace)
+        ? getResourceUrl(resource, DEFAULT_NAMESPACE)
         : getResourceUrl(resource);
     }
   };

@@ -4,6 +4,7 @@
   background-color: var(--sapBaseColor);
   border: solid 1px var(--sapTextColor);
   border-radius: 50px;
+  position: relative;
 }
 
 #upload-progress-bar {
@@ -11,12 +12,17 @@
   background-color: var(--sapContent_ForegroundColor);
   border-radius: inherit;
   text-align: right;
+  position: absolute;
 }
 
 #upload-progress-bar-label {
+  width: 100%;
   padding-right: 10px;
   color: var(--sapTextColor);
   font-weight: bold;
+  position: absolute;
+  display: flex;
+  justify-content: center;
 }
 
 .status {

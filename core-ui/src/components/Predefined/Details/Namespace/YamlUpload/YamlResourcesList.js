@@ -45,37 +45,38 @@ export function YamlResourcesList({ resourcesData }) {
   } else {
     if (showResourcesToUpload()) {
       return (
-        <ul>
+        <ul className="fd-margin-top--md">
           You will create {filteredResources.length || 0} resources:
           {filteredResources?.map(r => (
-            <li key={`${r?.value?.kind}-${r?.value?.metadata?.name}`}>
-              - {r?.value?.kind} {r?.value?.metadata?.name}
+            <li
+              key={`${r?.value?.kind}-${r?.value?.metadata?.name}`}
+              className="fd-margin-begin--sm"
+              style={{ listStyle: 'disc' }}
+            >
+              {r?.value?.kind} {r?.value?.metadata?.name}
             </li>
           ))}
         </ul>
       );
     } else {
       return (
-        <div>
+        <div className="fd-margin-top--md">
           <div id="upload-progress-bar-container">
             <div
               id="upload-progress-bar"
               style={{ width: `${getPercentage()}%` }}
-            >
-              <span id="upload-progress-bar-label">{getLabel()}</span>
-            </div>
+            ></div>
+            <div id="upload-progress-bar-label">{getLabel()}</div>
           </div>
-          <ul>
+          <ul className="fd-margin-top--tiny">
             {filteredResources.map(r => (
               <li key={`${r?.value?.kind}-${r?.value?.name}`}>
-                <div>
-                  <Icon
-                    className={`status status-${getIcon(r?.status)}`}
-                    glyph={getIcon(r?.status)}
-                    ariaLabel="status"
-                  />
-                  {r?.value?.kind} {r?.value?.metadata?.name} - {r?.status}
-                </div>
+                <Icon
+                  className={`status status-${getIcon(r?.status)}`}
+                  glyph={getIcon(r?.status)}
+                  ariaLabel="status"
+                />
+                {r?.value?.kind} {r?.value?.metadata?.name} - {r?.status}
                 <p>{r?.message}</p>
               </li>
             ))}

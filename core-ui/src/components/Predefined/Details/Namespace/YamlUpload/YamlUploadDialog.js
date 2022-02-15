@@ -58,7 +58,7 @@ export function YamlUploadDialog({ show, onCancel }) {
         resourcesData={resourcesData}
         setResourcesData={updateYamlContent}
       />
-      <div>
+      <div className="fd-margin-begin--tiny">
         <YamlUploadHelp />
         <YamlResourcesList
           resourcesData={resourcesWithStatuses}
