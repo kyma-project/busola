@@ -28,7 +28,7 @@ context('Create Namespace', () => {
 
     cy.getIframeBody()
       .find('[role=dialog]')
-      .find("input[placeholder='Namespace Name']:visible")
+      .find("input[placeholder='Namespace name']:visible")
       .type(Cypress.env('NAMESPACE_NAME'));
 
     cy.getIframeBody()
