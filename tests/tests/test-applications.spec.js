@@ -10,10 +10,6 @@ context('Test Applications', () => {
   });
 
   it('Go to application details', () => {
-    cy.getLeftNav()
-      .contains('Back to Cluster Overview')
-      .click();
-
     cy.navigateTo('Integration', 'Applications');
 
     cy.getIframeBody()
