@@ -29,7 +29,7 @@ export const WorkloadSelector = resource => {
     <LayoutPanel className="fd-margin--md" key="workload-selector">
       <LayoutPanel.Header>
         <LayoutPanel.Head
-          title={t('sidecars.headers.workload-selector')}
+          title={t('workload-selector.title')}
           className="header"
         />
         {resource.spec?.workloadSelector?.labels ? (

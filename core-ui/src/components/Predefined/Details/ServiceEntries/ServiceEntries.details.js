@@ -1,10 +1,10 @@
+import { LayoutPanel } from 'fundamental-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
-import { Labels, EMPTY_TEXT_PLACEHOLDER, GenericList } from 'react-shared';
-import { LayoutPanel } from 'fundamental-react';
+import { EMPTY_TEXT_PLACEHOLDER, GenericList } from 'react-shared';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { WorkloadSelector } from 'shared/WorkloadSelector/WorkloadSelector';
+import { Endpoints } from './Endpoints';
 
 export const Hosts = ({ hosts }) => {
   return (
@@ -26,6 +26,7 @@ const Ports = serviceentry => {
   const { t, i18n } = useTranslation();
 
   const ports = serviceentry.spec?.ports;
+
   const headerRenderer = _ => [
     t('common.headers.name'),
     t('service-entries.headers.ports.number'),
@@ -47,43 +48,6 @@ const Ports = serviceentry => {
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       entries={ports || []}
-      i18n={i18n}
-      showSearchField={false}
-    />
-  );
-};
-
-const Endpoints = serviceentry => {
-  const { t, i18n } = useTranslation();
-
-  const headerRenderer = _ => [
-    t('service-entries.headers.endpoints.address'),
-    t('service-entries.headers.ports.title'),
-    t('common.headers.labels'),
-    t('service-entries.headers.endpoints.network'),
-    t('service-entries.headers.endpoints.locality'),
-    t('service-entries.headers.endpoints.weight'),
-    t('service-accounts.name_singular'),
-  ];
-  const endpoints = serviceentry.spec?.endpoints;
-
-  const rowRenderer = endpoint => [
-    endpoint?.address,
-    <Labels labels={endpoint.ports} />,
-    <Labels labels={endpoint.labels} />,
-    endpoint?.network || EMPTY_TEXT_PLACEHOLDER,
-    endpoint?.locality || EMPTY_TEXT_PLACEHOLDER,
-    endpoint?.weight || EMPTY_TEXT_PLACEHOLDER,
-    endpoint?.serviceAccount || EMPTY_TEXT_PLACEHOLDER,
-  ];
-
-  return (
-    <GenericList
-      key="service-entries-endpoints"
-      title={t('service-entries.headers.endpoints.title')}
-      headerRenderer={headerRenderer}
-      rowRenderer={rowRenderer}
-      entries={endpoints || []}
       i18n={i18n}
       showSearchField={false}
     />
@@ -124,6 +88,18 @@ const Configuration = ({ spec }) => {
   );
 };
 
+const Workloads = serviceentry => {
+  return (
+    <div>
+      {serviceentry.spec?.endpoints?.length > 0 ? (
+        <Endpoints serviceentry={serviceentry} />
+      ) : (
+        WorkloadSelector(serviceentry)
+      )}
+    </div>
+  );
+};
+
 export function ServiceEntriesDetails({ DefaultRenderer, ...otherParams }) {
   const { t } = useTranslation();
 
@@ -140,7 +116,7 @@ export function ServiceEntriesDetails({ DefaultRenderer, ...otherParams }) {
 
   return (
     <DefaultRenderer
-      customComponents={[Configuration, Endpoints, Ports, WorkloadSelector]}
+      customComponents={[Configuration, Ports, Workloads]}
       customColumns={customColumns}
       {...otherParams}
     />
