@@ -7,21 +7,22 @@ import './StatsGraph.scss';
 const STATS_RATIO = 1 / 3;
 const PADDING = 5;
 
-function getGeometry(ctx, { scale, renderer, dataPoints }) {
+function getGeometry(ctx, { scale, hScale, renderer, dataPoints }) {
   const textHeight = parseInt(ctx.font);
   const leftTextWidth = Math.max(
     ...Object.entries(scale.labels).map(
       ([, label]) => ctx.measureText(label).width,
     ),
   );
-  // TODO bottom scale
-  // const bottomTextWidth = Math.max(...Object.entries(scale.labels).map(([,label]) => ctx.measureText(label)));
+  const bottomTextWidth = Math.max(
+    ...Object.entries(hScale).map(([, label]) => ctx.measureText(label).width),
+  );
+  console.log('bottomTextWidth', bottomTextWidth);
 
   const geo = {
     scaleWidth: leftTextWidth + PADDING,
-    scaleHeight: 0, // TODO
-    // scaleHeight: textHeight + PADDING,
-    graphPaddingH: 0,
+    scaleHeight: textHeight + PADDING,
+    graphPaddingH: bottomTextWidth / 2,
     graphPaddingV: textHeight / 2,
   };
 
@@ -48,6 +49,9 @@ function getGeometry(ctx, { scale, renderer, dataPoints }) {
       top: geo.graphPaddingV,
       width: graphWidth,
       height: graphHeight,
+    },
+    hScale: {
+      top: graphHeight + 2 * geo.graphPaddingV + PADDING,
     },
   };
 }
@@ -115,10 +119,32 @@ function getScale({ data, unit, binary }) {
     max,
     labels: {
       0: getScaleLabel(min, { unit, binary, fixed }),
-      '0.33': getScaleLabel(0.33 * max, { unit, binary, fixed }),
-      '0.66': getScaleLabel(0.66 * max, { unit, binary, fixed }),
+      // '0.33': getScaleLabel(0.33 * max, { unit, binary, fixed }),
+      '0.5': getScaleLabel(0.5 * max, { unit, binary, fixed }),
       1: getScaleLabel(max, { unit, binary, fixed }),
     },
+  };
+}
+
+function getTimeScaleLabel(time) {
+  const date = new Date();
+  date.setTime(time);
+  return date.toLocaleTimeString('en-GB', {
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}
+
+function getTimeScale({ data, startDate, endDate }) {
+  const min = startDate.getTime();
+  const max = endDate.getTime();
+  const diff = max - min;
+  return {
+    0: getTimeScaleLabel(min),
+    '0.25': getTimeScaleLabel(min + 0.25 * diff),
+    '0.5': getTimeScaleLabel(min + 0.5 * diff),
+    '0.75': getTimeScaleLabel(min + 0.75 * diff),
+    1: getTimeScaleLabel(max),
   };
 }
 
@@ -173,8 +199,6 @@ export function barsRenderer(
     const bottom = geometry.graph.top + geometry.graph.height;
     const top = bottom - (value / scale.max) * geometry.graph.height;
 
-    // ctx.fillRect(left - barWidth / 2, top, barWidth, height - top);
-
     ctx.beginPath();
     ctx.ellipse(left, top, barWidth / 2, barWidth / 2, 0, Math.PI, 0);
     ctx.ellipse(left, bottom, barWidth / 2, barWidth / 2, 0, 0, Math.PI);
@@ -186,7 +210,7 @@ barsRenderer.adjustGeometry = (
   geometry,
   { width, height, dataPoints },
 ) => {
-  geometry.sectionWidth = width / dataPoints;
+  geometry.sectionWidth = (width - 2 * geometry.graphPaddingH) / dataPoints;
   geometry.barWidth = geometry.sectionWidth / 2;
 
   const vSpacing = geometry.barWidth / 2;
@@ -206,6 +230,8 @@ export function StatsGraph({
   unit,
   binary,
   renderer,
+  startDate,
+  endDate,
 }) {
   if (!data) data = [];
 
@@ -265,12 +291,7 @@ export function StatsGraph({
   useEffect(() => {
     console.log('color effect', canvas.current);
     css.current = getComputedStyle(canvas.current);
-    // const color = css.getPropertyValue('color');
-    // const bgColor = css.getPropertyValue('background-color');
-    // console.log('computed style', { color, bgColor });
     const cssObserver = setInterval(() => {
-      // watchCss('color', textColor, setTextColor);
-      // watchCss('--bar-color', barColor, setBarColor);
       const cssColor = css.current?.getPropertyValue('color');
       if (textColor !== cssColor) {
         console.log('text color changed', textColor, cssColor);
@@ -306,69 +327,40 @@ export function StatsGraph({
     const ctx = canvas.current?.getContext('2d');
 
     ctx.clearRect(0, 0, canvas.current?.width, canvas.current?.height);
-    // ctx.fillStyle = css.current?.getPropertyValue('background-color');
-    // ctx.fillRect(0, 0, width, height);
-
-    /*
-    const scaleMax = getScaleMax(data, binary);
-
-    const scale = {
-      min: 0,
-      max: scaleMax.value,
-    };
-
-    let fixed = -scaleMax.precision;
-    if (fixed < 0) fixed = 0;
-
-    let minLabel = typeof scale.min;
-    let maxLabel = typeof scale.max;
-    if (!unit) {
-      minLabel = scale.min.toFixed(fixed);
-      maxLabel = scale.max.toFixed(fixed);
-    } else if (typeof unit === 'function') {
-      minLabel = unit(scale.min);
-      maxLabel = unit(scale.max);
-    } else {
-      minLabel = getSIPrefix(scale.min.toFixed(fixed), binary, { unit }).string;
-      maxLabel = getSIPrefix(scale.max.toFixed(fixed), binary, { unit }).string;
-    }
-    */
 
     const scale = getScale({ data, unit, binary });
+    const hScale = getTimeScale({ startDate, endDate });
+    console.log(hScale);
+    const geometry = getGeometry(ctx, { scale, hScale, renderer, dataPoints });
 
-    // const minTextMetrics = ctx.measureText(minLabel);
-    // const maxTextMetrics = ctx.measureText(maxLabel);
-
-    // const textWidth = Math.max(minTextMetrics.width, maxTextMetrics.width);
-    const textWidth = Math.max(
-      ...Object.entries(scale.labels).map(([, label]) =>
-        ctx.measureText(label),
-      ),
-    );
-    const textHeight = parseInt(ctx.font);
-
-    console.log('scale', scale);
-    // ctx.fillStyle = '#666';
+    // const textHeight = parseInt(ctx.font);
     ctx.fillStyle = textColor;
-
-    const geometry = getGeometry(ctx, { scale, renderer, dataPoints });
-
+    ctx.textBaseline = 'middle';
+    ctx.textAlign = 'left';
     Object.entries(scale.labels).forEach(([val, label]) =>
       ctx.fillText(
         label,
         geometry.scale.left,
-        geometry.scale.top + geometry.scale.height * (1 - val) + textHeight / 2,
+        geometry.scale.top + geometry.scale.height * (1 - val),
       ),
     );
 
-    // graphs.forEach(({ renderer, scale, ...options }) => {
+    ctx.textBaseline = 'top';
+    ctx.textAlign = 'center';
+    Object.entries(hScale).forEach(([val, label]) =>
+      ctx.fillText(
+        label,
+        geometry.graph.left + geometry.graph.width * (1 - val),
+        geometry.hScale.top,
+      ),
+    );
+
     renderer(ctx, data, {
       geometry,
       scale,
       dataPoints,
       color: barColor || textColor,
     });
-    // });
   }, [textColor, barColor, canvas, data, width, height]);
 
   return (

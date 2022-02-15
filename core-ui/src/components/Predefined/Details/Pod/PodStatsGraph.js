@@ -15,7 +15,7 @@ import './PodStatsGraph.scss';
 export function PodStatsGraph(resource) {
   const timeSpans = {
     // '1m': 60,
-    '30m': 30 * 60,
+    // '30m': 30 * 60,
     '1h': 60 * 60,
     '3h': 3 * 60 * 60,
     '6h': 6 * 60 * 60,
@@ -30,6 +30,8 @@ export function PodStatsGraph(resource) {
     unit,
     // error,
     loading,
+    startDate,
+    endDate,
   } = usePrometheus('pod', metric, {
     items: 60,
     timeSpan: timeSpans[timeSpan],
@@ -81,8 +83,9 @@ export function PodStatsGraph(resource) {
           dataPoints={60}
           binary={binary}
           unit={unit}
+          startDate={startDate}
+          endDate={endDate}
           renderer={barsRenderer}
-          graphs={[{ renderer: barsRenderer }]}
         />
         <BusyIndicator className="throbber" show={loading} size />
       </LayoutPanel.Body>

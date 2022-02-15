@@ -45,19 +45,41 @@ export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
   const metric = getMetric(type, metricId, { step, ...props });
   console.log('usePrometheus', metric);
 
-  useEffect(() => {
-    endDate.setTime(Date.now());
-    startDate.setTime(endDate.getTime() - (timeSpan - 1) * 1000);
-    setEndDate(endDate);
-    setStartDate(startDate);
-    setStep(timeSpan / items);
+  const tick = () => {
+    const newEndDate = new Date();
+    const newStartDate = new Date();
 
-    const loop = setInterval(() => {
-      const now = new Date();
-      setEndDate(now);
-      startDate.setTime(now.getTime() - (timeSpan - 1) * 1000);
-      setStartDate(startDate);
-    }, step * 1000);
+    newEndDate.setTime(Date.now());
+    newStartDate.setTime(newEndDate.getTime() - (timeSpan - 1) * 1000);
+
+    setEndDate(newEndDate);
+    setStartDate(newStartDate);
+
+    setStep(timeSpan / items);
+  };
+
+  useEffect(() => {
+    tick();
+    const loop = setInterval(tick, step * 1000);
+
+    // const newEndDate = new Date();
+    // const newStartDate = new Date();
+
+    // newEndDate.setTime(Date.now());
+    // newStartDate.setTime(endDate.getTime() - (timeSpan - 1) * 1000);
+
+    // setEndDate(newEndDate);
+    // setStartDate(newStartDate);
+
+    // setStep(timeSpan / items);
+
+    // const loop = setInterval(() => {
+    // console.log('loop');
+    // endDate.setTime(Date.now());
+    // startDate.setTime(endDate.getTime() - (timeSpan - 1) * 1000);
+    // setEndDate(endDate);
+    // setStartDate(startDate);
+    // }, step * 1000);
     return () => clearInterval(loop);
   }, [metricId, timeSpan]);
 
@@ -86,5 +108,7 @@ export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
     step,
     binary: metric.binary,
     unit: metric.unit,
+    startDate,
+    endDate,
   };
 }
