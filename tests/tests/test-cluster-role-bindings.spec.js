@@ -23,13 +23,11 @@ context('Test Cluster Role Bindings', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Cluster Role Binding Name"]')
+      .find('[placeholder="Cluster Role Binding name"]')
       .type(CRB_NAME);
 
     cy.getIframeBody()
-      .find(
-        '[placeholder="Start typing to select Role Binding from the list."]',
-      )
+      .find('[placeholder="Start typing to select Role Binding from the list"]')
       .type('broker');
 
     cy.getIframeBody()
@@ -88,7 +86,7 @@ context('Test Cluster Role Bindings', () => {
       .should('be.visible');
 
     cy.getIframeBody()
-      .contains('Service Account Name')
+      .contains('Service Account name')
       .should('be.visible');
 
     cy.getIframeBody()

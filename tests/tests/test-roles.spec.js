@@ -26,7 +26,7 @@ context('Test Roles', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Role Name"]:visible', { log: false })
+      .find('[placeholder="Role name"]:visible', { log: false })
       .type(ROLE_NAME)
       .click();
 
@@ -138,7 +138,7 @@ context('Test Roles', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Role Name"]:visible', { log: false })
+      .find('[placeholder="Role name"]:visible', { log: false })
       .type(CLONE_NAME)
       .click();
 

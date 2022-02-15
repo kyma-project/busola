@@ -45,7 +45,7 @@ context('Test in-cluster eventing', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Subscription Name"]:visible')
+      .find('[placeholder="Subscription name"]:visible')
       .clear()
       .type(`${FUNCTION_RECEIVER_NAME}-subscription`);
 
@@ -188,7 +188,7 @@ context('Test in-cluster eventing', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Subscription Name"]:visible')
+      .find('[placeholder="Subscription name"]:visible')
       .clear()
       .type(`${API_RULE_AND_FUNCTION_NAME}-subscription`);
 

@@ -22,7 +22,7 @@ context('Test Service Accounts', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Service Account Name"]')
+      .find('[placeholder="Service Account name"]')
       .clear()
       .type(SERVICE_NAME);
 
@@ -84,7 +84,7 @@ context('Test Service Accounts', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Key"]')
+      .find('[placeholder="Enter key"]')
       .type('test.key');
 
     cy.getIframeBody()

@@ -54,7 +54,7 @@ context('Test Protected Resources', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Config Map Name"]:visible')
+      .find('[placeholder="Config Map name"]:visible')
       .type(NAME);
 
     cy.getIframeBody()
@@ -67,12 +67,12 @@ context('Test Protected Resources', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Key"]:visible')
+      .find('[placeholder="Enter key"]:visible')
       .eq(1)
       .type('protected');
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Value"]:visible')
+      .find('[placeholder="Enter value"]:visible')
       .eq(1)
       .type('true');
 
@@ -106,7 +106,7 @@ context('Test Protected Resources', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Deployment Name"]:visible')
+      .find('[placeholder="Deployment name"]:visible')
       .clear()
       .type(NAME);
 

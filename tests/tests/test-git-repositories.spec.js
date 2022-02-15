@@ -24,7 +24,7 @@ context('Test Git Repositories', () => {
 
     // name
     cy.getIframeBody()
-      .find('[placeholder="Git Repository Name"]:visible', { log: false })
+      .find('[placeholder="Git Repository name"]:visible', { log: false })
       .clear()
       .type(REPOSITORY_NAME);
 
@@ -55,7 +55,7 @@ context('Test Git Repositories', () => {
 
     // name should be disabled for edit
     cy.getIframeBody()
-      .find('[placeholder="Git Repository Name"]:visible', { log: false })
+      .find('[placeholder="Git Repository name"]:visible', { log: false })
       .should('have.attr', 'readonly');
 
     // edit url
@@ -96,12 +96,12 @@ context('Test Git Repositories', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Key"]')
+      .find('[placeholder="Enter key"]')
       .filterWithNoValue()
       .type('is-edited');
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Value"]')
+      .find('[placeholder="Enter value"]')
       .filterWithNoValue()
       .first()
       .type('yes');
