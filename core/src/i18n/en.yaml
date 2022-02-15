@@ -863,6 +863,9 @@ domains:
   include:
     label: Include Domains
     placeholder: Domain that is allowed
+err-boundary:
+  go-back: Go back
+  restored-initial-form: Something went wrong. We restored the initial form for you.
 events:
   description: <0>Event</0> is an object that is automatically created in response to changes in the cluster resources like Nodes, Pods or containers.
   headers:

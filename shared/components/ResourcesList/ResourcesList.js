@@ -4,7 +4,6 @@ import jsyaml from 'js-yaml';
 import { Link, Button } from 'fundamental-react';
 import { createPatch } from 'rfc6902';
 import { cloneDeep } from 'lodash';
-
 import * as jp from 'jsonpath';
 
 import {
@@ -20,6 +19,7 @@ import {
   navigateToFixedPathResourceDetails,
   prettifyNameSingular,
   prettifyNamePlural,
+  ErrorBoundary,
 } from '../..';
 import CustomPropTypes from '../../typechecking/CustomPropTypes';
 import { ModalWithForm } from '../ModalWithForm/ModalWithForm';
@@ -81,7 +81,6 @@ export function ResourcesList(props) {
   if (!props.resourceUrl) {
     return <></>; // wait for the context update
   }
-
   return (
     <YamlEditorProvider i18n={props.i18n}>
       {!props.isCompact && (
@@ -313,15 +312,17 @@ function Resources({
         id={`add-${resourceType}-modal`}
         className="modal-size--l create-resource-modal"
         renderForm={props => (
-          <CreateResourceForm
-            resource={activeResource}
-            resourceType={resourceType}
-            resourceUrl={resourceUrl}
-            namespace={namespace}
-            refetchList={silentRefetch}
-            {...props}
-            {...createFormProps}
-          />
+          <ErrorBoundary i18n={i18n}>
+            <CreateResourceForm
+              resource={activeResource}
+              resourceType={resourceType}
+              resourceUrl={resourceUrl}
+              namespace={namespace}
+              refetchList={silentRefetch}
+              {...props}
+              {...createFormProps}
+            />
+          </ErrorBoundary>
         )}
         i18n={i18n}
         modalOpeningComponent={<></>}
