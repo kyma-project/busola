@@ -92,7 +92,7 @@ context('Test Deployments', () => {
       .type('20');
 
     cy.getIframeBody()
-      .contains('Expose a separate Service')
+      .contains('Expose separate Service')
       .click();
 
     cy.getIframeBody()
