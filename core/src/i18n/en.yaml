@@ -1425,6 +1425,7 @@ network-policies:
     protocol: Protocol
     values: Values
   name_singular: Network Policy
+  present-but-empty: Present but empty selector selects all pods / namespaces.
   title: Network Policies
 no-permissions:
   title: No Permissions

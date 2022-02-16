@@ -7,13 +7,14 @@ import { useTranslation } from 'react-i18next';
 
 export const LabelSelector = ({ selector, title }) => {
   const { t, i18n } = useTranslation();
-  if (selector?.matchLabels)
+
+  if (!selector) {
+    return null;
+  }
+
+  if (selector.matchLabels)
     return (
-      <LayoutPanel
-        className="fd-margin--md"
-        key="policy-types"
-        data-testid="hpa-spec-ref"
-      >
+      <LayoutPanel className="fd-margin--md" key="policy-types">
         <LayoutPanel.Header>
           <LayoutPanel.Head
             title={title || t('network-policies.headers.pod-selector')}
@@ -36,7 +37,7 @@ export const LabelSelector = ({ selector, title }) => {
       </LayoutPanel>
     );
 
-  if (selector?.matchExpressions) {
+  if (selector.matchExpressions) {
     const headerRenderer = () => [
       t('network-policies.headers.key'),
       t('network-policies.headers.operator'),
@@ -61,5 +62,17 @@ export const LabelSelector = ({ selector, title }) => {
     );
   }
 
-  return null;
+  // selector defined but empty
+  return (
+    <LayoutPanel className="fd-margin--md" key="policy-types">
+      <LayoutPanel.Header>
+        <LayoutPanel.Head
+          title={title || t('network-policies.headers.pod-selector')}
+        />
+      </LayoutPanel.Header>
+      <LayoutPanel.Body>
+        {t('network-policies.present-but-empty')}
+      </LayoutPanel.Body>
+    </LayoutPanel>
+  );
 };

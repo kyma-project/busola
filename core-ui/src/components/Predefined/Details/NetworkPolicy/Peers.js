@@ -27,13 +27,7 @@ export const NetworkPolicyPeers = ({ peers, title }) => {
               />
               <LayoutPanelRow
                 name={t('network-policies.headers.exceptions')}
-                value={
-                  peer.ipBlock.except ? (
-                    <Tokens tokens={peer.ipBlock.except} />
-                  ) : (
-                    EMPTY_TEXT_PLACEHOLDER
-                  )
-                }
+                value={<Tokens tokens={peer.ipBlock?.except} />}
               />
             </LayoutPanel.Body>
           </LayoutPanel>
