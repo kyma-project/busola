@@ -13,6 +13,7 @@ import {
   useMicrofrontendContext,
   useDelete,
   PageHeader,
+  useWindowTitle,
 } from 'react-shared';
 import { InfoLabel, FormInput } from 'fundamental-react';
 
@@ -28,6 +29,7 @@ import {
   StatusesList,
   StatusWrapper,
 } from './styled';
+import { INSTANCES_TITLE } from 'shared/constants';
 
 const determineSelectedTab = () => {
   const selectedTabName = LuigiClient.getNodeParams().selectedTab;
@@ -71,6 +73,7 @@ export default function ServiceInstancesList() {
   const [searchQuery, setSearchQuery] = useState('');
   const { namespaceId } = useMicrofrontendContext();
   const sendDeleteRequest = useDelete();
+  useWindowTitle(INSTANCES_TITLE);
 
   const { loading, error, data: serviceInstances } = useGetList()(
     `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${namespaceId}/serviceinstances`,

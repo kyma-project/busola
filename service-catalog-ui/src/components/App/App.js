@@ -13,9 +13,10 @@ import {
   NotificationProvider,
   MainFrameRedirection,
   useMicrofrontendContext,
+  useWindowTitle,
 } from 'react-shared';
 
-import { CATALOG_TITLE, INSTANCES_TITLE } from '../../shared/constants';
+import { CATALOG_TITLE } from '../../shared/constants';
 
 const App = () => {
   const { language } = useMicrofrontendContext();
@@ -54,10 +55,14 @@ const App = () => {
 
 const RoutedServiceClassDetails = () => {
   const { name } = useParams();
+  useWindowTitle(CATALOG_TITLE);
   return <ServiceClassDetailsContainer name={name} />;
 };
+
 const RoutedClusterServiceClassDetails = () => {
   const { name } = useParams();
+  useWindowTitle(CATALOG_TITLE);
   return <ClusterServiceClassDetailsContainer name={name} />;
 };
+
 export default App;

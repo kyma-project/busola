@@ -165,7 +165,10 @@ export default function CreateInstanceForm({
   };
 
   async function handleFormSubmit(e) {
+    console.log('halo1');
     e.preventDefault();
+    console.log('halo2');
+
     const currentPlan =
       plans?.find(e => e.spec.externalID === formValues.plan.current) ||
       (plans?.length && plans[0]);

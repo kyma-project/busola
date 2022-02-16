@@ -12,6 +12,7 @@ import {
   useGetList,
   useMicrofrontendContext,
   PageHeader,
+  useWindowTitle,
 } from 'react-shared';
 import { InfoLabel, FormInput } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
@@ -29,6 +30,7 @@ import {
   StatusWrapper,
   StatusesList,
 } from './styled';
+import { CATALOG_TITLE } from 'shared/constants';
 
 const determineSelectedTab = () => {
   const selectedTabName = LuigiClient.getNodeParams().selectedTab;
@@ -73,6 +75,7 @@ export default function ServiceClassList() {
   const [searchQuery, setSearchQuery] = useState('');
   const { namespaceId } = useMicrofrontendContext();
   const { t } = useTranslation();
+  useWindowTitle(CATALOG_TITLE);
 
   const serviceClassesRequest = useGetList()(
     `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${namespaceId}/serviceclasses`,
