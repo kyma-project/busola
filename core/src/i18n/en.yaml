@@ -308,6 +308,7 @@ clusters:
   name_singular: Cluster
   oidc: OIDC
   overview:
+    back: Back to Cluster Overview
     messages:
       no-metrics: No metrics available for this node.
     title-all-clusters: Clusters Overview
@@ -1374,8 +1375,8 @@ namespaces:
     memory-quotas: Memory quotas
   description: <0>Namespace</0> helps to maintain and divide resources in a cluster.
   name_singular: Namespace
+  namespaces-overview: Namespaces Overview
   overview:
-    back: Back to Namespaces
     resources:
       error: Error while loading memory consumption data.
       limits: Memory limits
