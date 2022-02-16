@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import jsyaml from 'js-yaml';
 import { Link, Button } from 'fundamental-react';
 import { createPatch } from 'rfc6902';
+import { cloneDeep } from 'lodash';
+import * as jp from 'jsonpath';
 
 import {
   YamlEditorProvider,
@@ -12,23 +14,37 @@ import {
   useNotification,
   useGetList,
   useUpdate,
-  useDelete,
   PageHeader,
   navigateToDetails,
   navigateToFixedPathResourceDetails,
   prettifyNameSingular,
   prettifyNamePlural,
+  ErrorBoundary,
 } from '../..';
 import CustomPropTypes from '../../typechecking/CustomPropTypes';
 import { ModalWithForm } from '../ModalWithForm/ModalWithForm';
 import { ReadableCreationTimestamp } from '../ReadableCreationTimestamp/ReadableCreationTimestamp';
 import {
   useWindowTitle,
-  useFeatureToggle,
   useProtectedResources,
   useDeleteResource,
 } from '../../hooks';
 import { useTranslation } from 'react-i18next';
+
+/* to allow cloning of a resource set the folowing on the resource create component:
+ *
+ * ResourceCreate.allowCreate = true;
+ *
+ * also to apply custom changes to the resource for cloning:
+ * remove specific elements:
+ * ConfigMapsCreate.sanitizeClone = [
+ *   '$.blahblah'
+ * ];
+ * ConfigMapsCreate.sanitizeClone = resource => {
+ *   // do something
+ *   return resource;
+ * }
+ */
 
 ResourcesList.propTypes = {
   customColumns: CustomPropTypes.customColumnsType,
@@ -65,7 +81,6 @@ export function ResourcesList(props) {
   if (!props.resourceUrl) {
     return <></>; // wait for the context update
   }
-
   return (
     <YamlEditorProvider i18n={props.i18n}>
       {!props.isCompact && (
@@ -79,8 +94,6 @@ export function ResourcesList(props) {
     </YamlEditorProvider>
   );
 }
-
-export const ResourcesListProps = ResourcesList.propTypes;
 
 function Resources({
   resourceUrl,
@@ -128,14 +141,14 @@ function Resources({
   } = useYamlEditor();
   const notification = useNotification();
   const updateResourceMutation = useUpdate(resourceUrl);
-  const deleteResourceMutation = useDelete(resourceUrl);
+
   const { loading = true, error, data: resources, silentRefetch } = useGetList(
     filter,
   )(resourceUrl, { pollingInterval: 3000, skip: skipDataLoading });
-  React.useEffect(() => closeEditor(), [namespace]);
-  const [dontConfirmDelete, setDontConfirmDelete] = useFeatureToggle(
-    'dontConfirmDelete',
-  );
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => closeEditor(), [namespace]);
+
   const prettifiedResourceName = prettifyNameSingular(
     resourceName,
     resourceType,
@@ -178,16 +191,48 @@ function Resources({
     );
   };
 
+  const handleResourceClone = resource => {
+    let activeResource = cloneDeep(resource);
+    jp.value(activeResource, '$.metadata.name', '');
+    jp.remove(activeResource, '$.metadata.uid');
+    jp.remove(activeResource, '$.metadata.resourceVersion');
+    jp.remove(activeResource, '$.metadata.creationTimestamp');
+    jp.remove(activeResource, '$.metadata.managedFields');
+    jp.remove(activeResource, '$.metadata.ownerReferences');
+    jp.remove(activeResource, '$.status');
+
+    if (Array.isArray(CreateResourceForm.sanitizeClone)) {
+      CreateResourceForm.sanitizeClone.forEach(path =>
+        jp.remove(activeResource, path),
+      );
+    } else if (typeof CreateResourceForm.sanitizeClone === 'function') {
+      activeResource = CreateResourceForm.sanitizeClone(activeResource);
+    }
+
+    setActiveResource(activeResource);
+    setShowEditDialog(true);
+  };
+
   const actions = readOnly
     ? customListActions
     : [
+        CreateResourceForm?.allowClone
+          ? {
+              name: t('common.buttons.clone'),
+              tooltip: t('common.buttons.clone'),
+              icon: entry => 'duplicate',
+              handler: handleResourceClone,
+            }
+          : null,
         {
           name: t('common.buttons.edit'),
+          tooltip: t('common.buttons.edit'),
           icon: entry => (isProtected(entry) ? 'show-edit' : 'edit'),
           handler: handleResourceEdit,
         },
         {
           name: t('common.buttons.delete'),
+          tooltip: t('common.buttons.delete'),
           icon: 'delete',
           disabledHandler: isProtected,
           handler: resource => {
@@ -198,7 +243,7 @@ function Resources({
           },
         },
         ...customListActions,
-      ];
+      ].filter(e => e);
 
   const headerRenderer = () => [
     t('common.headers.name'),
@@ -267,15 +312,17 @@ function Resources({
         id={`add-${resourceType}-modal`}
         className="modal-size--l create-resource-modal"
         renderForm={props => (
-          <CreateResourceForm
-            resource={activeResource}
-            resourceType={resourceType}
-            resourceUrl={resourceUrl}
-            namespace={namespace}
-            refetchList={silentRefetch}
-            {...props}
-            {...createFormProps}
-          />
+          <ErrorBoundary i18n={i18n}>
+            <CreateResourceForm
+              resource={activeResource}
+              resourceType={resourceType}
+              resourceUrl={resourceUrl}
+              namespace={namespace}
+              refetchList={silentRefetch}
+              {...props}
+              {...createFormProps}
+            />
+          </ErrorBoundary>
         )}
         i18n={i18n}
         modalOpeningComponent={<></>}

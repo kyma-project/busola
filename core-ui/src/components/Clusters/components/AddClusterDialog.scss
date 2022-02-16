@@ -1,6 +1,12 @@
 .add-cluster-dialog {
   .fd-dialog__content {
     min-height: 90vh;
+    min-width: 90vw;
+  }
+
+  div[role='alert'] {
+    padding-left: 32px;
+    padding-right: 32px;
   }
 
   .fd-dialog__body {

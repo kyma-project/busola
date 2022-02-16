@@ -31,7 +31,7 @@ const requestData = {
   url: '/backend/api/v1/namespaces/kube-public/configmaps/busola-config',
 };
 
-context('Cluster configuration', () => {
+context('Test Cluster configuration', () => {
   Cypress.skipAfterFail();
 
   it('Applies config from target cluster', () => {
@@ -57,13 +57,7 @@ context('Cluster configuration', () => {
   it('Test pagination', () => {
     cy.loginAndSelectCluster();
 
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Cluster Roles')
-      .click();
+    cy.navigateTo('Configuration', 'Cluster Roles');
 
     cy.getIframeBody()
       .find('[role=datarow]')

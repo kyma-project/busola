@@ -16,19 +16,13 @@ spec:
     spec:
       containers:
         - name: busola
-          image: eu.gcr.io/kyma-project/busola-web:PR-897
+          image: eu.gcr.io/kyma-project/busola-web:PR-924
           imagePullPolicy: Always
           resources:
             requests:
               cpu: 100m
               memory: 21Mi
-          livenessProbe:
-            httpGet:
-              path: /healthz
-              port: 6080
-            initialDelaySeconds: 10
           ports:
-            - containerPort: 6080
             - containerPort: 8080
           volumeMounts:
             - name: config

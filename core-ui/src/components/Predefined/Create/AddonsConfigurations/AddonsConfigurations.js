@@ -67,16 +67,22 @@ export const AddonsConfigurations = ({
     };
 
     try {
+      console.log('1');
+      2();
+      console.log('2');
       await request(resourceUrl, resourceData);
       onCompleted(
         t('addons.messages.created', {
           name: name,
         }),
       );
+
       refetchList();
     } catch (e) {
+      console.log('3');
       onError(t('addons.errors.cannot-create'), `Error: ${e.message}`);
     }
+    console.log('4');
   };
 
   const UrlsAdded = () => {

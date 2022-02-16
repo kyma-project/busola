@@ -8,13 +8,7 @@ context('Test Issuers', () => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
 
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Secrets')
-      .click();
+    cy.navigateTo('Configuration', 'Secrets');
 
     cy.getIframeBody()
       .contains('Create Secret')
@@ -84,6 +78,11 @@ context('Test Issuers', () => {
   });
 
   it('Edit an issuer', () => {
+    //wait for the issuer to update to not have version conflicts
+    cy.getIframeBody()
+      .find('[role="status"]')
+      .should('not.have.text', 'Unknown');
+
     cy.getIframeBody()
       .contains('Edit')
       .click();

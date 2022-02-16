@@ -3,7 +3,7 @@ import 'cypress-file-upload';
 
 const CRON_JOB_NAME = 'test-cron-job';
 
-context('Test Cron Job', () => {
+context('Test Cron Jobs', () => {
   Cypress.skipAfterFail();
 
   before(() => {
@@ -11,17 +11,9 @@ context('Test Cron Job', () => {
     cy.goToNamespaceDetails();
   });
 
-  it('Navigate to Cron Job', () => {
-    cy.getLeftNav()
-      .contains('Workloads')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Cron Jobs')
-      .click();
-  });
-
   it('Create Cron Job', () => {
+    cy.navigateTo('Workloads', 'Cron Jobs');
+
     cy.getIframeBody()
       .contains('Create Cron Job')
       .click();

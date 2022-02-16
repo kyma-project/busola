@@ -11,8 +11,6 @@ import {
 } from '..';
 import { useFeatureToggle } from '.';
 
-console.log({ Button, Checkbox, MessageBox, MessageStrip });
-
 export function useDeleteResource({
   i18n,
   resourceType,

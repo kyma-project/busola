@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
-import { loadKubeconfig } from '../support/loadKubeconfigFile';
+import { loadFile } from '../support/loadFile';
 
 const random = Math.floor(Math.random() * 9999) + 1000;
 const FUNCTION_RECEIVER_NAME = 'in-cluster-eventing-receiver';
@@ -9,7 +9,7 @@ const API_RULE_AND_FUNCTION_NAME = 'in-cluster-eventing-publisher';
 const API_RULE_HOST = API_RULE_AND_FUNCTION_NAME + '-' + random;
 const API_RULE_HOST_EXPECTED_PREFIX = `https://${API_RULE_HOST}.`;
 
-context('In-cluster eventing', () => {
+context('Test in-cluster eventing', () => {
   Cypress.skipAfterFail();
 
   before(() => {
@@ -18,13 +18,7 @@ context('In-cluster eventing', () => {
   });
 
   it('Go to details of the receiver Function', () => {
-    cy.getLeftNav()
-      .contains('Workloads')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Functions')
-      .click();
+    cy.navigateTo('Workloads', 'Functions');
 
     cy.getIframeBody()
       .contains('a', FUNCTION_RECEIVER_NAME)
@@ -86,6 +80,10 @@ context('In-cluster eventing', () => {
 
   it('Create an API Rule for the publisher Function', () => {
     cy.createApiRule(API_RULE_AND_FUNCTION_NAME, API_RULE_HOST);
+
+    cy.getIframeBody()
+      .find('[role="status"]')
+      .should('have.text', 'OK');
   });
 
   let apiRuleHost;
@@ -121,13 +119,7 @@ context('In-cluster eventing', () => {
   });
 
   it('Check logs after triggering publisher function', () => {
-    cy.getLeftNav()
-      .contains('Workloads')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Functions')
-      .click();
+    cy.navigateTo('Workloads', 'Functions');
 
     cy.getIframeBody()
       .contains('a', API_RULE_AND_FUNCTION_NAME)
@@ -137,7 +129,7 @@ context('In-cluster eventing', () => {
       .contains(`${API_RULE_AND_FUNCTION_NAME}-`)
       .then(element => {
         const podName = element[0].textContent;
-        loadKubeconfig().then(kubeconfig => {
+        loadFile('kubeconfig.yaml').then(kubeconfig => {
           const requestUrl = `/api/v1/namespaces/${Cypress.env(
             'NAMESPACE_NAME',
           )}/pods/${podName}/log?container=function`;
@@ -169,7 +161,7 @@ context('In-cluster eventing', () => {
       .contains(`${FUNCTION_RECEIVER_NAME}-`)
       .then(element => {
         const podName = element[0].textContent;
-        loadKubeconfig().then(kubeconfig => {
+        loadFile('kubeconfig.yaml').then(kubeconfig => {
           const requestUrl = `/api/v1/namespaces/${Cypress.env(
             'NAMESPACE_NAME',
           )}/pods/${podName}/log?container=function`;
@@ -188,17 +180,9 @@ context('In-cluster eventing', () => {
       });
   });
 
-  it('Navigate to Subscription', () => {
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Subscriptions')
-      .click();
-  });
-
   it('Create Subscription', () => {
+    cy.navigateTo('Configuration', 'Subscriptions');
+
     cy.getIframeBody()
       .contains('Create Subscription')
       .click();
@@ -300,12 +284,6 @@ context('In-cluster eventing', () => {
   });
 
   it('Delete Subscription', () => {
-    cy.getIframeBody()
-      .contains('button', 'Delete')
-      .click();
-
-    cy.getIframeBody()
-      .find('[data-testid="delete-confirmation"]')
-      .click();
+    cy.deleteInDetails();
   });
 });

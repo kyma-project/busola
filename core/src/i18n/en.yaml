@@ -83,6 +83,7 @@ api-rules:
   tooltips:
     ok: Resource created.
     skipped: Skipped creating the resource.
+    unknown: The API Rule is in an uncertain state.
 applications:
   aria:
     namespace: Choose Namespace
@@ -307,6 +308,7 @@ clusters:
   name_singular: Cluster
   oidc: OIDC
   overview:
+    back: Back to Cluster Overview
     messages:
       no-metrics: No metrics available for this node.
     title-all-clusters: Clusters Overview
@@ -414,6 +416,7 @@ common:
     add: Add
     add-new: Add New
     cancel: Cancel
+    clone: Clone
     copy: Copy
     create: Create
     delete: Delete
@@ -860,6 +863,9 @@ domains:
   include:
     label: Include Domains
     placeholder: Domain that is allowed
+err-boundary:
+  go-back: Go back
+  restored-initial-form: Something went wrong. We restored the initial form for you.
 events:
   description: <0>Event</0> is an object that is automatically created in response to changes in the cluster resources like Nodes, Pods or containers.
   headers:
@@ -1298,6 +1304,7 @@ jobs:
     container: Container
     containers: Containers
     containers-readonly-in-edit: After a Job is created, the containers are read-only.
+    disable-sidecar: Disable sidecar
     labels:
       args: Args
       command: Command
@@ -1368,8 +1375,8 @@ namespaces:
     memory-quotas: Memory quotas
   description: <0>Namespace</0> helps to maintain and divide resources in a cluster.
   name_singular: Namespace
+  namespaces-overview: Namespaces Overview
   overview:
-    back: Back to Namespaces
     resources:
       error: Error while loading memory consumption data.
       limits: Memory limits

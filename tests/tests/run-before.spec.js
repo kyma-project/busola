@@ -1,5 +1,4 @@
 /// <reference types="cypress" />
-import config from '../config';
 
 context('Create Namespace', () => {
   Cypress.skipAfterFail({ skipAllSuits: true });
@@ -63,16 +62,10 @@ context('Create Namespace', () => {
 
   it('Create application', () => {
     cy.getLeftNav()
-      .contains('Back to Namespaces')
+      .contains('Back to Cluster Overview')
       .click();
 
-    cy.getLeftNav()
-      .contains('Integration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Applications')
-      .click();
+    cy.navigateTo('Integration', 'Applications');
 
     cy.getIframeBody()
       .contains('Create Application')

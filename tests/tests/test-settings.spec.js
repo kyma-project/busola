@@ -32,13 +32,7 @@ context('Test app settings and preferences', () => {
 
     cy.get('[aria-label="close"]').click();
 
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Config Maps')
-      .click();
+    cy.navigateTo('Configuration', 'Config Maps');
 
     cy.getIframeBody()
       .contains('Create Config Map')
@@ -124,8 +118,11 @@ context('Test app settings and preferences', () => {
             .click();
         }
       });
-
     cy.get('[aria-label="close"]').click();
+
+    cy.getLeftNav()
+      .contains('Back to Cluster Overview')
+      .click();
 
     cy.getLeftNav()
       .contains('Namespaces')

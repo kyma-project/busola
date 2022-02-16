@@ -70,8 +70,8 @@ async function createAppSwitcher() {
 
   return {
     items:
-      [...clusterNodes, clusterOverviewNode].length > 1
-        ? [...clusterNodes, clusterOverviewNode]
+      [clusterOverviewNode, ...clusterNodes].length > 1
+        ? [clusterOverviewNode, ...clusterNodes]
         : [clusterOverviewNode, noClustersNode],
   };
 }
@@ -104,18 +104,6 @@ async function createClusterManagementNodes(features) {
       openNodeInModal: { title: i18next.t('preferences.title'), size: 'm' },
     },
   ];
-
-  if (!features.ADD_CLUSTER_DISABLED?.isEnabled) {
-    const addClusterNode = [
-      {
-        hideSideNav: true,
-        pathSegment: 'add',
-        navigationContext: 'clusters',
-        viewUrl: config.coreUIModuleUrl + '/clusters/add',
-      },
-    ];
-    childrenNodes.push(addClusterNode);
-  }
 
   const clusterManagementNode = {
     pathSegment: 'clusters',
@@ -226,8 +214,15 @@ export async function createNavigation() {
         defaultLabel: 'Select Namespace ...',
         parentNodePath: `/cluster/${encodeURIComponent(
           activeClusterName,
-        )}/namespaces`, // absolute path
+        )}/namespaces`, // absolute path,
         lazyloadOptions: true, // load options on click instead on page load
+        customOptionsRenderer: (option, isSelected) => {
+          if (option.customRendererCategory === 'overview') {
+            return `<a class="fd-menu__link" style="border-bottom: 1px solid #eeeeef"><span class="fd-menu__addon-before"><i class="sap-icon--dimension" role="presentation"></i></span><span class="fd-menu__title">${option.label}</span></a>`;
+          }
+          let className = 'fd-menu__link' + (isSelected ? ' is-selected' : '');
+          return `<a class="${className} ">${option.label}</a>`;
+        },
         options: getNamespaces,
       },
       profile: {

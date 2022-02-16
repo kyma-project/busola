@@ -1,9 +1,22 @@
-import { useGet } from 'react-shared';
+import { useEffect, useState } from 'react';
+import { useSingleGet } from 'react-shared';
 
 export function useIsSKR() {
-  const { data: configmap } = useGet(
-    '/api/v1/namespaces/kyma-system/configmaps/skr-configmap',
-  );
+  const fetch = useSingleGet();
 
-  return configmap?.data?.['is-managed-kyma-runtime'] === 'true';
+  const [isSkr, setSkr] = useState(null);
+  useEffect(() => {
+    const checkIfSKR = async () => {
+      const response = await fetch(
+        '/api/v1/namespaces/kyma-system/configmaps/skr-configmap',
+      );
+      const data = await response.json();
+
+      setSkr(data.data?.['is-managed-kyma-runtime'] === 'true');
+    };
+    void checkIfSKR();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return isSkr;
 }

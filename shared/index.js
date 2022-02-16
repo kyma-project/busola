@@ -1,6 +1,6 @@
 import 'regenerator-runtime/runtime';
-import React from 'react';
 
+/* eslint-disable import/first */
 export { GenericList } from './components/GenericList/GenericList';
 export { SearchInput } from './components/GenericList/SearchInput';
 export { Pagination } from './components/GenericList/Pagination/Pagination';
@@ -48,6 +48,7 @@ export * from './components/KeyValueForm/KeyValueForm';
 export * from './components/MainFrameRedirection/MainFrameRedirection';
 export * from './components/TileButton/TileButton';
 export * from './components/VerticalTabs/VerticalTabs';
+export * from './components/ErrorBoundary/ErrorBoundary';
 
 export * from './forms';
 export * from './hooks';
@@ -71,13 +72,15 @@ export * from './components/ModalWithForm/ModalWithForm';
 import * as CustomPropTypes from './typechecking/CustomPropTypes';
 export { CustomPropTypes };
 
-import { monaco } from '@monaco-editor/react';
-import { setupMonaco } from './utils/setupMonaco';
+// import { monaco } from '@monaco-editor/react';
+// import { setupMonaco } from './utils/setupMonaco';
 
 export * from '@monaco-editor/react';
 import Editor from '@monaco-editor/react';
 export const MonacoEditor = Editor;
 
-setupMonaco(monaco);
+import './extend-jsonpath';
+
+// setupMonaco(monaco);
 
 export const ControlledEditor = () => 'editor';
