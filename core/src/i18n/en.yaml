@@ -1825,6 +1825,25 @@ settings:
     default-page-size: Default Page Size
     title: Other
   theme: Theme
+sidecars:
+  description: <0>Sidecar</0> manages the incoming and outgoing communication in a workload it is attached to.
+  headers:
+    bind: Bind
+    capture-mode: Capture Mode
+    default-endpoint: Default Endpoint
+    egress: Egress
+    hosts: Hosts
+    ingress: Ingress
+    outbound-traffic-policy: Outbound Traffic Policy
+    port:
+      number: Number
+      protocol: Protocol
+      target-point: Target Point
+      title: Port
+    workload-selector: Workload Selector
+    workload-selector-labels: Workload Selector Labels
+  name_singular: Sidecar
+  title: Sidecars
 stateful-sets:
   description: <0>Stateful Set</0> is used for the management of Pods' deployment and scaling.
   name_singular: Stateful Set
@@ -1973,6 +1992,8 @@ virtualservices:
   tls-routes:
     matches: Matches
     title: TLS Route
+workload-selector:
+  title: Workload Selector
 workloads:
   docker-image:
     tooltip: Enter a valid Docker image registry path.

@@ -39,3 +39,4 @@ export * from './PersistentVolumeClaims.list';
 export * from './PersistentVolumes.list';
 export * from './StorageClasses.list';
 export * from './AuthorizationPolicies.list';
+export * from './Sidecars.list';
