@@ -1,5 +1,9 @@
 .stats-graph {
+  position: relative;
   width: 100%;
   --bar-color: var(--sapNeutralColor);
+  --tooltip-color: var(--sapNeutralBackground);
   // --bar-color: #0F828F;
+  // --highlight-color: #0F828F;
+  // --highlight-color: #000;
 }

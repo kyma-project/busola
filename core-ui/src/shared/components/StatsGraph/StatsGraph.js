@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import classNames from 'classnames';
 
 import { getSIPrefix } from 'shared/helpers/siPrefixes';
 
@@ -7,17 +8,16 @@ import './StatsGraph.scss';
 const STATS_RATIO = 1 / 3;
 const PADDING = 5;
 
-function getGeometry(ctx, { scale, hScale, renderer, dataPoints }) {
-  const textHeight = parseInt(ctx.font);
+function getGeometry(ctx, { scale, hScale, dataPoints }) {
+  const textHeight = parseInt(ctx?.font);
   const leftTextWidth = Math.max(
     ...Object.entries(scale.labels).map(
-      ([, label]) => ctx.measureText(label).width,
+      ([, label]) => ctx?.measureText(label).width,
     ),
   );
   const bottomTextWidth = Math.max(
-    ...Object.entries(hScale).map(([, label]) => ctx.measureText(label).width),
+    ...Object.entries(hScale).map(([, label]) => ctx?.measureText(label).width),
   );
-  console.log('bottomTextWidth', bottomTextWidth);
 
   const geo = {
     scaleWidth: leftTextWidth + PADDING,
@@ -26,12 +26,14 @@ function getGeometry(ctx, { scale, hScale, renderer, dataPoints }) {
     graphPaddingV: textHeight / 2,
   };
 
-  const width = ctx.canvas.width - geo.scaleWidth;
-  const height = ctx.canvas.height - geo.scaleHeight;
+  const width = ctx?.canvas.width - geo.scaleWidth;
+  const height = ctx?.canvas.height - geo.scaleHeight;
 
-  if (renderer.adjustGeometry) {
-    renderer.adjustGeometry(ctx, geo, { width, height, dataPoints });
-  }
+  geo.sectionWidth = (width - 2 * geo.graphPaddingH) / dataPoints;
+  geo.barWidth = geo.sectionWidth / 2;
+
+  const vSpacing = geo.barWidth / 2;
+  geo.graphPaddingV = Math.max(geo.graphPaddingV, vSpacing);
 
   const graphWidth = width - geo.graphPaddingH * 2;
   const graphHeight = height - geo.graphPaddingV * 2;
@@ -147,81 +149,13 @@ function getTimeScale({ data, startDate, endDate }) {
   };
 }
 
-export function lineRenderer(
-  ctx,
-  data,
-  { geometry, dataPoints, color, scale },
-) {
-  const sectionWidth = geometry.graph.width / dataPoints;
-  const dataOffset = dataPoints - data.length;
-
-  ctx.strokeStyle = color;
-  ctx.lineWidth = 5;
-  ctx.lineJoin = 'round';
-  ctx.beginPath();
-  data.forEach((value, index) => {
-    const left =
-      geometry.graph.left + sectionWidth * (dataOffset + index + 0.5);
-    const top =
-      geometry.graph.top +
-      geometry.graph.height -
-      (value / scale.max) * geometry.graph.height;
-
-    if (index === 0) {
-      ctx.moveTo(left, top);
-    } else {
-      ctx.lineTo(left, top);
-    }
-  });
-  ctx.stroke();
-}
-
-export function barsRenderer(
-  ctx,
-  data,
-  { geometry, dataPoints, color, scale },
-) {
-  const { sectionWidth, barWidth } = geometry;
-  const dataOffset = dataPoints - data.length;
-
-  ctx.fillStyle = color;
-  data.forEach((value, index) => {
-    const left =
-      geometry.graph.left + sectionWidth * (dataOffset + index + 0.5);
-    const bottom = geometry.graph.top + geometry.graph.height;
-    const top = bottom - (value / scale.max) * geometry.graph.height;
-
-    ctx.beginPath();
-    ctx.ellipse(left, top, barWidth / 2, barWidth / 2, 0, Math.PI, 0);
-    ctx.ellipse(left, bottom, barWidth / 2, barWidth / 2, 0, 0, Math.PI);
-    ctx.fill();
-  });
-}
-barsRenderer.adjustGeometry = (
-  ctx,
-  geometry,
-  { width, height, dataPoints },
-) => {
-  geometry.sectionWidth = (width - 2 * geometry.graphPaddingH) / dataPoints;
-  geometry.barWidth = geometry.sectionWidth / 2;
-
-  const vSpacing = geometry.barWidth / 2;
-  geometry.graphPaddingV = Math.max(geometry.graphPaddingV, vSpacing);
-};
-
-export function multiBarRenderer(
-  ctx,
-  data,
-  { width, height, dataPoints, color, scale, hOffset },
-) {}
-
 export function StatsGraph({
+  className,
   data,
   dataPoints,
   graphs,
   unit,
   binary,
-  renderer,
   startDate,
   endDate,
 }) {
@@ -231,29 +165,34 @@ export function StatsGraph({
   const [height, setHeight] = useState(300 * STATS_RATIO);
   const [textColor, setTextColor] = useState('#000');
   const [barColor, setBarColor] = useState();
+  const [highlightColor, setHighlightColor] = useState();
+  const [tooltipColor, setTooltipColor] = useState();
+  const [activeBar, setActiveBar] = useState(null);
   const canvas = useRef();
   const css = useRef();
 
+  const ctx = canvas.current?.getContext('2d');
+  const scale = getScale({ data, unit, binary });
+  const hScale = getTimeScale({ startDate, endDate });
+  const geometry = getGeometry(ctx, { scale, hScale, dataPoints });
+
+  const watchCss = [
+    ['color', textColor, setTextColor],
+    ['--bar-color', barColor, setBarColor],
+    ['--highlight-color', highlightColor, setHighlightColor],
+    ['--tooltip-color', tooltipColor, setTooltipColor],
+  ];
   useEffect(() => {
-    console.log('color effect', canvas.current);
     css.current = getComputedStyle(canvas.current);
     const cssObserver = setInterval(() => {
-      const cssColor = css.current?.getPropertyValue('color');
-      if (textColor !== cssColor) {
-        console.log('text color changed', textColor, cssColor);
-        setTextColor(cssColor);
-      }
-      const cssBarColor = css.current?.getPropertyValue('--bar-color');
-      if (barColor !== cssBarColor) {
-        console.log('bar color changed', barColor, cssBarColor);
-        setBarColor(cssBarColor);
-      }
+      watchCss.forEach(([prop, value, setter]) => {
+        const cssValue = css.current?.getPropertyValue(prop);
+        if (value !== cssValue) setter(cssValue);
+      });
     }, 100);
 
-    return () => {
-      clearInterval(cssObserver);
-    };
-  }, [textColor, barColor]);
+    return () => clearInterval(cssObserver);
+  }, [textColor, barColor, highlightColor, tooltipColor]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (!canvas.current) return;
@@ -267,22 +206,15 @@ export function StatsGraph({
   }, [canvas]);
 
   useEffect(() => {
-    console.log('draw handler', css.current?.getPropertyValue('color'));
     if (!canvas.current && !data) return;
 
     const ctx = canvas.current?.getContext('2d');
-
     ctx.clearRect(0, 0, canvas.current?.width, canvas.current?.height);
-
-    const scale = getScale({ data, unit, binary });
-    const hScale = getTimeScale({ startDate, endDate });
-    console.log(hScale);
-    const geometry = getGeometry(ctx, { scale, hScale, renderer, dataPoints });
 
     ctx.fillStyle = textColor;
     ctx.textBaseline = 'middle';
     ctx.textAlign = 'left';
-    Object.entries(scale.labels).forEach(([val, label]) =>
+    Object.entries(scale?.labels || {}).forEach(([val, label]) =>
       ctx.fillText(
         label,
         geometry.scale.left,
@@ -300,20 +232,89 @@ export function StatsGraph({
       ),
     );
 
-    renderer(ctx, data, {
-      geometry,
-      scale,
-      dataPoints,
-      color: barColor || textColor,
+    const dataOffset = dataPoints - data.length;
+    const halfBar = geometry.barWidth / 2;
+
+    const dataWithGeometry = data.map((value, index) => {
+      const left =
+        geometry.graph.left +
+        geometry.sectionWidth * (dataOffset + index + 0.5);
+      const bottom = geometry.graph.top + geometry.graph.height;
+      const top = bottom - (value / scale.max) * geometry.graph.height;
+      return { value, left, bottom, top };
     });
-  }, [textColor, barColor, canvas, data, width, height]);
+
+    dataWithGeometry.forEach(({ value, left, bottom, top }, index) => {
+      if (activeBar !== null && index === activeBar + dataOffset) {
+        if (highlightColor) {
+          ctx.fillStyle = highlightColor;
+        } else {
+          ctx.fillStyle = barColor || textColor;
+          ctx.globalAlpha = 0.5;
+        }
+        ctx.beginPath();
+        ctx.ellipse(left, top, halfBar * 1.5, halfBar * 1.5, 0, Math.PI, 0);
+        ctx.ellipse(left, bottom, halfBar * 1.5, halfBar * 1.5, 0, 0, Math.PI);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      }
+
+      ctx.fillStyle = barColor || textColor;
+      ctx.beginPath();
+      ctx.ellipse(left, top, halfBar, halfBar, 0, Math.PI, 0);
+      ctx.ellipse(left, bottom, halfBar, halfBar, 0, 0, Math.PI);
+      ctx.fill();
+    });
+
+    dataWithGeometry.forEach(({ value, left, bottom, top }, index) => {
+      if (activeBar !== null && index === activeBar) {
+        const labelPadding = 2;
+        const labelDef = getSIPrefix(value, binary, { unit });
+        const labelWidth = ctx.measureText(labelDef.string).width;
+        const labelHeight = parseInt(ctx.font);
+
+        ctx.strokeStyle = textColor;
+        ctx.fillStyle = tooltipColor;
+        const rectCoords = [
+          left - labelWidth / 2 - labelPadding,
+          top - labelHeight - labelPadding,
+          labelWidth + labelPadding * 2,
+          labelHeight + labelPadding * 2,
+        ];
+        ctx.strokeRect(...rectCoords);
+        ctx.fillRect(...rectCoords);
+
+        ctx.fillStyle = textColor;
+        ctx.textBaseline = 'bottom';
+        ctx.textAlign = 'center';
+        ctx.fillText(labelDef.string, left, top);
+      }
+    });
+  }, [textColor, barColor, canvas, data, width, height, activeBar]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const mousemove = e => {
+    const rect = e.target.getBoundingClientRect();
+    const x = Math.round(e.clientX - rect.left);
+    const y = Math.round(e.clientY - rect.top);
+    const bar = Math.floor((x - geometry.graph.left) / geometry.sectionWidth);
+
+    if (y > geometry.graph.height + geometry.graph.top) {
+      setActiveBar(null);
+    } else if (bar >= 0 && bar <= dataPoints) {
+      setActiveBar(bar);
+    } else {
+      setActiveBar(null);
+    }
+  };
 
   return (
     <canvas
-      className="stats-graph"
+      className={classNames('stats-graph', className)}
       ref={canvas}
       width={width}
       height={height}
+      onMouseMove={mousemove}
+      onMouseOut={() => setActiveBar(null)}
     />
   );
 }

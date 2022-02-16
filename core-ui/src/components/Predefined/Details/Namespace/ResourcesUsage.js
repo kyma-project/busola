@@ -43,7 +43,7 @@ function unitToPascalCase(str) {
   return firstLetter.toUpperCase() + str.toLowerCase().slice(1);
 }
 
-function bytesToHumanReadable(bytesNumber) {
+export function bytesToHumanReadable(bytesNumber) {
   let output = bytesNumber;
   Object.entries(MEMORY_SUFFIX_POWER).forEach(([suffix, power]) => {
     const value = bytesNumber / power;

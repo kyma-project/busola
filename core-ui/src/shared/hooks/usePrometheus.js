@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react';
 import { useGet } from 'react-shared';
 
 export function prometheusSelector(type, data) {
-  if (type === 'pod') {
+  if (type === 'cluster') {
+    return `container_name!="POD"`;
+  } else if (type === 'pod') {
     return `namespace="${data.namespace}",pod="${data.pod}"`;
   } else {
     return '';
@@ -41,7 +43,6 @@ export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
   const [step, setStep] = useState(timeSpan / items);
 
   const metric = getMetric(type, metricId, { step, ...props });
-  console.log('usePrometheus', metric);
 
   const tick = () => {
     const newEndDate = new Date();
@@ -60,7 +61,7 @@ export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
     tick();
     const loop = setInterval(tick, step * 1000);
     return () => clearInterval(loop);
-  }, [metricId, timeSpan]);
+  }, [metricId, timeSpan]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const {
     data,
