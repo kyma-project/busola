@@ -257,11 +257,11 @@ context('Test reduced permissions', () => {
       .eq(1)
       .find('[role="button"]')
       .click();
-    cy.wait(1000);
+    // cy.wait(1000);
 
     // wait until original cluster loads
-    cy.getIframeBody()
-      .contains('Cluster Overview')
+    cy.getLeftNav()
+      .contains('Configuration')
       .should('exist');
 
     // yes, navigation is broken yet again
