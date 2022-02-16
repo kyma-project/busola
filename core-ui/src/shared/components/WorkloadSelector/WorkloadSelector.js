@@ -5,7 +5,7 @@ import { Labels } from 'react-shared';
 import { LayoutPanel } from 'fundamental-react';
 import { isEqual } from 'lodash';
 import './WorkloadSelector.scss';
-import { RelatedPods } from '../../RelatedPods';
+import { RelatedPods } from '../RelatedPods';
 
 export const WorkloadSelector = resource => {
   const { t } = useTranslation();

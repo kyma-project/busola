@@ -14,7 +14,7 @@ import {
 import { LayoutPanel, Link } from 'fundamental-react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { Tokens } from 'shared/components/Tokens';
-import { RelatedPods } from 'shared/RelatedPods';
+import { RelatedPods } from 'shared/components/RelatedPods';
 
 const PVCSelectorSpecification = pvc => {
   const { t, i18n } = useTranslation();
