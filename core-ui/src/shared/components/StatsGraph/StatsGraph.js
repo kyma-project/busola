@@ -227,7 +227,7 @@ export function StatsGraph({
     Object.entries(hScale).forEach(([val, label]) =>
       ctx.fillText(
         label,
-        geometry.graph.left + geometry.graph.width * (1 - val),
+        geometry.graph.left + geometry.graph.width * val,
         geometry.hScale.top,
       ),
     );
