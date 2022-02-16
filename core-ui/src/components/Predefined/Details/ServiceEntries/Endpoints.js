@@ -1,6 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { EMPTY_TEXT_PLACEHOLDER, GenericList, Labels } from 'react-shared';
+import { navigateToResource } from 'shared/helpers/universalLinks';
+import { Link } from 'fundamental-react';
 
 export const Endpoints = ({ serviceentry }) => {
   const { t, i18n } = useTranslation();
@@ -18,12 +20,26 @@ export const Endpoints = ({ serviceentry }) => {
 
   const rowRenderer = endpoint => [
     endpoint?.address,
-    <Labels labels={endpoint.ports} />,
-    <Labels labels={endpoint.labels} />,
+    <Labels labels={endpoint?.ports} />,
+    <Labels labels={endpoint?.labels} />,
     endpoint?.network || EMPTY_TEXT_PLACEHOLDER,
     endpoint?.locality || EMPTY_TEXT_PLACEHOLDER,
     endpoint?.weight || EMPTY_TEXT_PLACEHOLDER,
-    endpoint?.serviceAccount || EMPTY_TEXT_PLACEHOLDER,
+    endpoint?.serviceAccount ? (
+      <Link
+        onClick={() =>
+          navigateToResource({
+            namespace: serviceentry.metadata?.namespace,
+            name: endpoint?.serviceAccount || '',
+            kind: 'ServiceAccount',
+          })
+        }
+      >
+        {endpoint?.serviceAccount}
+      </Link>
+    ) : (
+      EMPTY_TEXT_PLACEHOLDER
+    ),
   ];
 
   return (

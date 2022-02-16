@@ -88,13 +88,16 @@ const Configuration = ({ spec }) => {
   );
 };
 
-const Workloads = serviceentry => {
+const Workloads = se => {
   return (
     <div>
-      {serviceentry.spec?.endpoints?.length > 0 ? (
-        <Endpoints serviceentry={serviceentry} />
+      {se.spec?.endpoints?.length > 0 ? (
+        <Endpoints serviceentry={se} />
       ) : (
-        WorkloadSelector(serviceentry)
+        <WorkloadSelector
+          resource={se}
+          labels={se.spec?.workloadSelector?.labels}
+        />
       )}
     </div>
   );
