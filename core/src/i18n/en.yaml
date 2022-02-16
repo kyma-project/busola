@@ -1972,6 +1972,8 @@ virtualservices:
   tls-routes:
     matches: Matches
     title: TLS Route
+workload-selector:
+  title: Workload Selector
 workloads:
   docker-image:
     tooltip: Enter a valid Docker image registry path.

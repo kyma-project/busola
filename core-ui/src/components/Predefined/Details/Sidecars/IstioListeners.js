@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 import { LayoutPanel } from 'fundamental-react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
-
+import './IstioListeners.scss';
 export const IstioListeners = sidecar => {
   const { t } = useTranslation();
   return (
@@ -45,43 +45,41 @@ const TrafficProperties = ({ properties, isEgress }) => {
   const { t } = useTranslation();
 
   return (
-    <LayoutPanel className="fd-margin--md" key={properties}>
-      <LayoutPanel.Body>
+    <LayoutPanel.Body className="wrapper">
+      <LayoutPanelRow
+        name={t('sidecars.headers.port.title')}
+        value={
+          properties?.port ? (
+            <Port port={properties?.port} />
+          ) : (
+            EMPTY_TEXT_PLACEHOLDER
+          )
+        }
+      />
+      <LayoutPanelRow
+        name={t('sidecars.headers.bind')}
+        value={properties?.bind || EMPTY_TEXT_PLACEHOLDER}
+        key={properties?.bind}
+      />
+      <LayoutPanelRow
+        name={t('sidecars.headers.capture-mode')}
+        value={properties?.captureMode || EMPTY_TEXT_PLACEHOLDER}
+        key={properties?.captureMode}
+      />
+      {isEgress ? (
         <LayoutPanelRow
-          name={t('sidecars.headers.port.title')}
-          value={
-            properties?.port ? (
-              <Port port={properties?.port} />
-            ) : (
-              EMPTY_TEXT_PLACEHOLDER
-            )
-          }
+          name={t('sidecars.headers.hosts')}
+          value={<Hosts hosts={properties.hosts} />}
+          key={properties.hosts}
         />
+      ) : (
         <LayoutPanelRow
-          name={t('sidecars.headers.bind')}
-          value={properties?.bind || EMPTY_TEXT_PLACEHOLDER}
-          key={properties?.bind}
+          name={t('sidecars.headers.default-endpoint')}
+          value={properties?.defaultEndpoint}
+          key={properties?.defaultEndpoint}
         />
-        <LayoutPanelRow
-          name={t('sidecars.headers.capture-mode')}
-          value={properties?.captureMode || EMPTY_TEXT_PLACEHOLDER}
-          key={properties?.captureMode}
-        />
-        {isEgress ? (
-          <LayoutPanelRow
-            name={t('sidecars.headers.hosts')}
-            value={<Hosts hosts={properties.hosts} />}
-            key={properties.hosts}
-          />
-        ) : (
-          <LayoutPanelRow
-            name={t('sidecars.headers.default-endpoint')}
-            value={properties?.defaultEndpoint}
-            key={properties?.defaultEndpoint}
-          />
-        )}
-      </LayoutPanel.Body>
-    </LayoutPanel>
+      )}
+    </LayoutPanel.Body>
   );
 };
 

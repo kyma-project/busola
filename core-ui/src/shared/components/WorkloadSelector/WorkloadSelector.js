@@ -26,7 +26,7 @@ export const WorkloadSelector = ({ resource, labels }) => {
     <LayoutPanel className="fd-margin--md" key="workload-selector">
       <LayoutPanel.Header>
         <LayoutPanel.Head
-          title={t('sidecars.headers.workload-selector')}
+          title={t('workload-selector.title')}
           className="header"
         />
         {labels ? <Labels labels={labels} /> : null}
