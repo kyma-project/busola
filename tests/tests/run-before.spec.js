@@ -62,7 +62,7 @@ context('Create Namespace', () => {
 
   it('Create application', () => {
     cy.getLeftNav()
-      .contains('Back to Namespaces')
+      .contains('Back to Cluster Overview')
       .click();
 
     cy.navigateTo('Integration', 'Applications');

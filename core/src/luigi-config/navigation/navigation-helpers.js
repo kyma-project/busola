@@ -1,3 +1,4 @@
+import i18next from 'i18next';
 export const hideDisabledNodes = (disabledNavNodes, nodes, inNamespace) => {
   if (disabledNavNodes?.length > 0) {
     nodes.forEach(node => {
@@ -60,10 +61,16 @@ export function createNamespacesList(rawNamespaceNames) {
       );
       namespaces.push({
         category: 'Namespaces',
+        customRendererCategory: 'namespace',
         label: namespaceName,
         pathValue: alternativeLocation || namespaceName + '/details',
       });
     });
+  namespaces.unshift({
+    customRendererCategory: 'overview',
+    label: i18next.t('namespaces.namespaces-overview'),
+    pathValue: '/',
+  });
   return namespaces;
 }
 
