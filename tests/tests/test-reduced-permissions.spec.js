@@ -257,7 +257,6 @@ context('Test reduced permissions', () => {
       .eq(1)
       .find('[role="button"]')
       .click();
-    // cy.wait(1000);
 
     // wait until original cluster loads
     cy.getLeftNav()
