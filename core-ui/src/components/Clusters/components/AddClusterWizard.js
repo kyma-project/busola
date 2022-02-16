@@ -40,7 +40,7 @@ export function AddClusterWizard({
   } = useCustomFormValidator();
 
   useEffect(() => {
-    if (kubeconfig) {
+    if (Array.isArray(kubeconfig?.contexts)) {
       if (getUser(kubeconfig)?.token) {
         setStorage('sessionStorage');
       } else {
