@@ -1818,6 +1818,7 @@ sidecars:
       target-point: Target Point
       title: Port
     workload-selector: Workload Selector
+    workload-selector-labels: Workload Selector Labels
   name_singular: Sidecar
   title: Sidecars
 stateful-sets:

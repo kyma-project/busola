@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 import { LayoutPanel } from 'fundamental-react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
-import { WorkloadSelector } from 'shared/WorkloadSelector/WorkloadSelector';
+import { WorkloadSelector } from 'shared/components/WorkloadSelector/WorkloadSelector';
 
 const IstioListeners = sidecar => {
   const { t } = useTranslation();
