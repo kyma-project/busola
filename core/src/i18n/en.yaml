@@ -308,6 +308,7 @@ clusters:
   name_singular: Cluster
   oidc: OIDC
   overview:
+    back: Back to Cluster Overview
     messages:
       no-metrics: No metrics available for this node.
     title-all-clusters: Clusters Overview
@@ -1374,8 +1375,8 @@ namespaces:
     memory-quotas: Memory quotas
   description: <0>Namespace</0> helps to maintain and divide resources in a cluster.
   name_singular: Namespace
+  namespaces-overview: Namespaces Overview
   overview:
-    back: Back to Namespaces
     resources:
       error: Error while loading memory consumption data.
       limits: Memory limits
@@ -1828,6 +1829,25 @@ settings:
     default-page-size: Default Page Size
     title: Other
   theme: Theme
+sidecars:
+  description: <0>Sidecar</0> manages the incoming and outgoing communication in a workload it is attached to.
+  headers:
+    bind: Bind
+    capture-mode: Capture Mode
+    default-endpoint: Default Endpoint
+    egress: Egress
+    hosts: Hosts
+    ingress: Ingress
+    outbound-traffic-policy: Outbound Traffic Policy
+    port:
+      number: Number
+      protocol: Protocol
+      target-point: Target Point
+      title: Port
+    workload-selector: Workload Selector
+    workload-selector-labels: Workload Selector Labels
+  name_singular: Sidecar
+  title: Sidecars
 stateful-sets:
   description: <0>Stateful Set</0> is used for the management of Pods' deployment and scaling.
   name_singular: Stateful Set

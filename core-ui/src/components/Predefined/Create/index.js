@@ -37,3 +37,4 @@ export * from './ResourceQuotas/ResourceQuotas.create';
 export * from './HPAs/HPAs.create';
 export * from './PersistentVolumes/PersistentVolumes.create';
 export * from './ServiceEntries/ServiceEntries.create';
+export * from './Sidecars/Sidecars.create';

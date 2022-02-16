@@ -58,8 +58,8 @@ export function getStaticChildrenNodesForNamespace(
   const encodedClusterName = encodeURIComponent(getActiveClusterName());
   const nodes = [
     {
-      link: `/cluster/${encodedClusterName}/namespaces`,
-      label: i18next.t('namespaces.overview.back'),
+      link: `/cluster/${encodedClusterName}/overview`,
+      label: i18next.t('clusters.overview.back'),
       icon: 'nav-back',
       hideFromNav: !hasPermissionsFor('', 'namespaces', permissionSet, [
         'list',
@@ -707,6 +707,43 @@ export function getStaticChildrenNodesForNamespace(
               viewUrl:
                 config.coreUIModuleUrl +
                 '/namespaces/:namespaceId/virtualServices/:virtualserviceName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/networking.istio.io/v1beta1',
+                }),
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: i18next.t('istio.title'),
+      resourceType: 'sidecars',
+      pathSegment: 'sidecars',
+      label: i18next.t('sidecars.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/sidecars?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/networking.istio.io/v1beta1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+      context: {
+        requiredFeatures: [features.ISTIO],
+      },
+
+      navigationContext: 'sidecars',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':sidecarName',
+              resourceType: 'sidecars',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/sidecars/:sidecarName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/networking.istio.io/v1beta1',
                 }),

@@ -39,6 +39,7 @@ const resourceTypes = [
   ['horizontalpodautoscalers', 'hpa'],
   ['persistentvolumeclaims', 'pvc'],
   ['serviceentries', 'se'],
+  ['sidecars'],
 ];
 const extendedResourceTypes = resourceTypes.map(aliases => [
   ...aliases,
