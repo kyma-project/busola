@@ -35,4 +35,4 @@ export * from './HPA/HPA.details';
 export * from './PersistentVolumeClaims/PersistentVolumeClaims.details';
 export * from './StorageClasses/StorageClasses.details';
 export * from './PersistentVolume/PersistentVolumes.details';
-export * from './Sidecars.details';
+export * from './Sidecars/Sidecars.details';
