@@ -58,8 +58,8 @@ export function getStaticChildrenNodesForNamespace(
   const encodedClusterName = encodeURIComponent(getActiveClusterName());
   const nodes = [
     {
-      link: `/cluster/${encodedClusterName}/namespaces`,
-      label: i18next.t('namespaces.overview.back'),
+      link: `/cluster/${encodedClusterName}/overview`,
+      label: i18next.t('clusters.overview.back'),
       icon: 'nav-back',
       hideFromNav: !hasPermissionsFor('', 'namespaces', permissionSet, [
         'list',
