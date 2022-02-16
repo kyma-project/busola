@@ -39,7 +39,7 @@ context('Test invalid kubeconfig', () => {
     cy.getIframeBody()
       .find('.fd-message-strip--error')
       .shouldHaveTrimmedText(
-        'Parse error: bad indentation of a mapping entry (2:2), previous valid input will be used.',
+        'Parse error: bad indentation of a mapping entry (2:2), previous valid input will be used',
       );
   });
 });

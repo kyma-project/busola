@@ -13,11 +13,11 @@ Cypress.Commands.add('createApiRule', (ApiRuleName, ApiRuleHost) => {
     .click();
 
   cy.getIframeBody()
-    .find('[placeholder="API Rule Name"]:visible', { log: false })
+    .find('[placeholder="API Rule name"]:visible', { log: false })
     .type(ApiRuleName);
 
   cy.getIframeBody()
-    .find('[placeholder="Subdomain part of API Rule address."]:visible', {
+    .find('[placeholder="Subdomain part of API Rule address"]:visible', {
       log: false,
     })
     .type(ApiRuleHost);
