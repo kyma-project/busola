@@ -7,18 +7,15 @@ import { isEqual } from 'lodash';
 import './WorkloadSelector.scss';
 import { RelatedPods } from '../RelatedPods';
 
-export const WorkloadSelector = resource => {
+export const WorkloadSelector = ({ resource, labels }) => {
   const { t } = useTranslation();
 
   const filterByWorkLoadSelectorLabels = pod => {
-    if (!resource.spec?.workloadSelector?.labels || !pod.metadata?.labels)
-      return false;
+    if (!labels || !pod.metadata?.labels) return false;
 
     const podLabels = Object.entries(pod.metadata?.labels);
 
-    const workloadSelectorLabels = Object.entries(
-      resource.spec?.workloadSelector?.labels,
-    );
+    const workloadSelectorLabels = Object.entries(labels);
 
     return podLabels.some(label =>
       workloadSelectorLabels.some(workload => isEqual(label, workload)),
@@ -32,9 +29,7 @@ export const WorkloadSelector = resource => {
           title={t('sidecars.headers.workload-selector')}
           className="header"
         />
-        {resource.spec?.workloadSelector?.labels ? (
-          <Labels labels={resource.spec?.workloadSelector?.labels} />
-        ) : null}
+        {labels ? <Labels labels={labels} /> : null}
       </LayoutPanel.Header>
       <RelatedPods
         resource={resource}

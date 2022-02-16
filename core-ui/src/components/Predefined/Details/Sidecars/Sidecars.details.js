@@ -15,9 +15,16 @@ export const SidecarsDetails = ({ DefaultRenderer, ...otherParams }) => {
     },
   ];
 
+  const WorkloadSelectorLabels = sidecar => (
+    <WorkloadSelector
+      resource={sidecar}
+      labels={sidecar.spec?.workloadSelector?.labels}
+    />
+  );
+
   return (
     <DefaultRenderer
-      customComponents={[IstioListeners, WorkloadSelector]}
+      customComponents={[IstioListeners, WorkloadSelectorLabels]}
       customColumns={customColumns}
       singularName={t('persistent-volume-claims.name_singular')}
       {...otherParams}
