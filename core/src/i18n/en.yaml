@@ -1332,7 +1332,7 @@ jobs:
     complete: Job completed
     not-complete: Job in progress
 kubeconfig-id:
-  error: 'Couldn''t load kubeconfig ID; configuration not changed (Error: ${{error}})'
+  error: 'Couldn''t load kubeconfig ID: configuration not changed (Error: ${{error}})'
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
 legal:
   copyright: Copyright
