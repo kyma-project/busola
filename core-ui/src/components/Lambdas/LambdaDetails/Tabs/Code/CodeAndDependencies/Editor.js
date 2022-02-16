@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { ControlledEditor, DiffEditor, useTheme } from 'react-shared';
+import { MonacoEditor, DiffEditor, useTheme } from 'react-shared';
 
 export default function Editor({
   id,
@@ -78,7 +78,7 @@ export default function Editor({
           theme={editorTheme}
           original={originalValue}
           modified={controlledValue}
-          editorDidMount={handleDiffEditorDidMount}
+          onMount={handleDiffEditorDidMount}
         />
       </div>
     );
@@ -86,10 +86,8 @@ export default function Editor({
 
   return (
     <div className="controlled-editor" ref={editorContainer}>
-      <ControlledEditor
-        editorDidMount={(_, editor) => {
-          monacoEditorInstance.current = editor;
-        }}
+      <MonacoEditor
+        onMount={editor => (monacoEditorInstance.current = editor)}
         id={id}
         height="30em"
         language={language}

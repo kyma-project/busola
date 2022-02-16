@@ -9,7 +9,7 @@ import {
   usePost,
   useNotification,
   randomNameGenerator,
-  ControlledEditor,
+  MonacoEditor,
   useTheme,
 } from 'react-shared';
 
@@ -282,7 +282,7 @@ export default function CreateInstanceForm({
             )}
           </div>
           {customParametersProvided && (
-            <ControlledEditor
+            <MonacoEditor
               aria-label="schema-editor"
               height="25em"
               language="JSON"

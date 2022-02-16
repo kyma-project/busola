@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import ControlledEditor from '@monaco-editor/react';
+import MonacoEditor from '@monaco-editor/react';
 import jsyaml from 'js-yaml';
 import { Icon } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
@@ -32,7 +32,7 @@ export const SideDrawer = ({
     children = (
       <>
         <h1 className="fd-has-type-4">YAML</h1>
-        <ControlledEditor
+        <MonacoEditor
           height="90vh"
           width="100%"
           language={'yaml'}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ControlledEditor, useTheme } from 'react-shared';
+import { MonacoEditor, useTheme } from 'react-shared';
 import jsyaml from 'js-yaml';
 import { MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
@@ -10,7 +10,7 @@ export function Editor({
   setValue,
   readonly,
   language = 'yaml',
-  editorDidMount,
+  onMount,
   ...props
 }) {
   const { t } = useTranslation();
@@ -66,13 +66,13 @@ export function Editor({
   };
   return (
     <div className="resource-form__editor">
-      <ControlledEditor
+      <MonacoEditor
         language={language}
         theme={editorTheme}
         value={parsedValue || prevValue.current}
         onChange={handleChange}
-        editorDidMount={(_, editor) => {
-          if (editorDidMount) editorDidMount(_, editor);
+        onMount={editor => {
+          if (onMount) onMount(editor);
           editor.onDidFocusEditorText(() => (isEditing.current = true));
           editor.onDidBlurEditorText(() => (isEditing.current = false));
         }}

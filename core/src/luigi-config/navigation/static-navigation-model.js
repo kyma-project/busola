@@ -67,7 +67,7 @@ export function getStaticChildrenNodesForNamespace(
     },
     {
       pathSegment: 'details',
-      label: i18next.t('namespaces.overview.title'),
+      label: i18next.t('clusters.overview.title'),
       viewUrl:
         config.coreUIModuleUrl +
         '/Namespaces/:namespaceId?' +

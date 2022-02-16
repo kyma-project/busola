@@ -72,8 +72,8 @@ export * from './components/ModalWithForm/ModalWithForm';
 import * as CustomPropTypes from './typechecking/CustomPropTypes';
 export { CustomPropTypes };
 
-// import { monaco } from '@monaco-editor/react';
-// import { setupMonaco } from './utils/setupMonaco';
+import { loader } from '@monaco-editor/react';
+import { setupMonaco } from './utils/setupMonaco';
 
 export * from '@monaco-editor/react';
 import Editor from '@monaco-editor/react';
@@ -81,6 +81,4 @@ export const MonacoEditor = Editor;
 
 import './extend-jsonpath';
 
-// setupMonaco(monaco);
-
-export const ControlledEditor = () => 'editor';
+setupMonaco(loader);

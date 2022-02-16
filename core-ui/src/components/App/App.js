@@ -3,7 +3,11 @@ import { Route, Routes, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import Preferences from 'components/Preferences/Preferences';
-import { useMicrofrontendContext, MainFrameRedirection } from 'react-shared';
+import {
+  useWindowTitle,
+  useMicrofrontendContext,
+  MainFrameRedirection,
+} from 'react-shared';
 import { ApplicationServiceDetails } from 'components/Predefined/Details/Application/ApplicationServicesDetails/ApplicationServicesDetails';
 import { ContainersLogs } from 'components/Predefined/Details/Pod/ContainersLogs';
 import { CustomResource } from 'components/Predefined/Details/CustomResourceDefinitions/CustomResources.details';
