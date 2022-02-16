@@ -23,7 +23,7 @@ Cypress.Commands.add('createApiRule', (ApiRuleName, ApiRuleHost) => {
     .type(ApiRuleHost);
 
   cy.getIframeBody()
-    .contains('Choose the service to expose.')
+    .contains('Choose the service to expose')
     .filter(':visible', { log: false })
     .click();
   cy.getIframeBody()

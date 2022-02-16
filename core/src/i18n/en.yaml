@@ -83,6 +83,7 @@ api-rules:
   tooltips:
     ok: Resource created
     skipped: Skipped creating the resource
+    unknown: The API Rule is in an uncertain state
 applications:
   aria:
     namespace: Choose Namespace
@@ -194,7 +195,7 @@ btp-service-bindings:
   placeholders:
     choose-secret: Choose Secret
     choose-secret-first: Choose the Secret first
-    choose-secret-key: Choose Secret Key
+    choose-secret-key: Choose Secret key
     empty-secret: This Secret has no data
     external-name: Defaults to the Service Binding name if empty
     secret: Credentials Secret name
@@ -414,6 +415,7 @@ common:
     add: Add
     add-new: Add New
     cancel: Cancel
+    clone: Clone
     copy: Copy
     create: Create
     delete: Delete
@@ -1301,6 +1303,7 @@ jobs:
     container: Container
     containers: Containers
     containers-readonly-in-edit: After a Job is created, the containers are read-only.
+    disable-sidecar: Disable sidecar
     labels:
       args: Args
       command: Command

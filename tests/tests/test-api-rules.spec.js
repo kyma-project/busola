@@ -115,7 +115,7 @@ context('Test API Rules in the Function details view', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Enter the path."]:visible', { log: false })
+      .find('[placeholder="Enter the path"]:visible', { log: false })
       .type(API_RULE_PATH);
 
     cy.getIframeBody()
