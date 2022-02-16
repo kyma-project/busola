@@ -1,12 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { LayoutPanel, Link } from 'fundamental-react';
-import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { WorkloadSelector } from 'shared/components/WorkloadSelector/WorkloadSelector';
 
-import { EMPTY_TEXT_PLACEHOLDER, Labels } from 'react-shared';
+import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 
-import { Selector } from './Selector';
 import { Rules } from './Rules';
 
 export const AuthorizationPoliciesDetails = ({
