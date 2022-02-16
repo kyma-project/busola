@@ -31,7 +31,7 @@ export const AuthorizationPoliciesDetails = ({
   const WorkloadSelectorLabels = policy => (
     <WorkloadSelector
       resource={policy}
-      labels={policy.spec.selector.matchLabels}
+      labels={policy.spec.selector?.matchLabels}
     />
   );
 
