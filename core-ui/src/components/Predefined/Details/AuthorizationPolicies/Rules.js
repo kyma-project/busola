@@ -87,6 +87,8 @@ const When = ({ when }) => {
 export const Rules = policy => {
   const { t } = useTranslation();
 
+  if (!policy.spec.rules) return null;
+
   return (
     <LayoutPanel className="fd-margin--md" key={'ap-rules'}>
       <LayoutPanel.Header>
