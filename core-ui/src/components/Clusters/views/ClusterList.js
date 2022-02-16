@@ -4,7 +4,7 @@ import { saveAs } from 'file-saver';
 import { useTranslation } from 'react-i18next';
 import { useShowNodeParamsError } from 'shared/hooks/useShowNodeParamsError';
 import { Link, Button, MessagePage } from 'fundamental-react';
-import { cloneDeep } from 'lodash';
+
 import {
   useMicrofrontendContext,
   PageHeader,
@@ -17,7 +17,7 @@ import {
 
 import { setCluster, deleteCluster } from './../shared';
 import { AddClusterDialog } from '../components/AddClusterDialog';
-import { ClustersEdit } from './EditCluster/EditCluster';
+import { EditCluster } from './EditCluster/EditCluster';
 import { ClusterStorageType } from './ClusterStorageType';
 
 import './ClusterList.scss';
@@ -109,7 +109,7 @@ export function ClusterList() {
       icon: 'edit',
       tooltip: t('clusters.edit-cluster'),
       handler: cluster => {
-        setEditedCluster(cloneDeep(cluster));
+        setEditedCluster(cluster);
         setShowEdit(true);
       },
     },
@@ -152,11 +152,7 @@ export function ClusterList() {
       title={t('clusters.edit-cluster')}
       id="edit-cluster"
       renderForm={props => (
-        <ClustersEdit
-          {...props}
-          resource={editedCluster}
-          setResource={setEditedCluster}
-        />
+        <EditCluster {...props} editedCluster={editedCluster} />
       )}
       modalOpeningComponent={<></>}
       customCloseAction={() => setShowEdit(false)}
