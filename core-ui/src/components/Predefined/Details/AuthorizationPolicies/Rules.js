@@ -1,10 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+
 import { LayoutPanel } from 'fundamental-react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
-
 import { GenericList } from 'react-shared';
 import { Tokens } from 'shared/components/Tokens';
+
 const From = ({ from }) => {
   const { t } = useTranslation();
   return (
@@ -15,16 +16,7 @@ const From = ({ from }) => {
       <LayoutPanel.Body>
         {from.map(cos => {
           return Object.entries(cos.source).map(([key, value]) => (
-            <LayoutPanel>
-              <LayoutPanel.Header>
-                <LayoutPanel.Head
-                  title={t('authorizationpolicies.headers.source')}
-                />
-              </LayoutPanel.Header>
-              <LayoutPanel.Body>
-                <LayoutPanelRow name={key} value={<Tokens tokens={value} />} />
-              </LayoutPanel.Body>
-            </LayoutPanel>
+            <Source name={key} value={value} key={key} />
           ));
         })}
       </LayoutPanel.Body>
@@ -32,8 +24,24 @@ const From = ({ from }) => {
   );
 };
 
+const Source = ({ name, value }) => {
+  const { t } = useTranslation();
+
+  return (
+    <LayoutPanel>
+      <LayoutPanel.Header>
+        <LayoutPanel.Head title={t('authorizationpolicies.headers.source')} />
+      </LayoutPanel.Header>
+      <LayoutPanel.Body>
+        <LayoutPanelRow name={name} value={<Tokens tokens={value} />} />
+      </LayoutPanel.Body>
+    </LayoutPanel>
+  );
+};
+
 const To = ({ to }) => {
   const { t } = useTranslation();
+
   return (
     <LayoutPanel>
       <LayoutPanel.Header>
@@ -42,22 +50,31 @@ const To = ({ to }) => {
       <LayoutPanel.Body>
         {to.map(cos => {
           return Object.entries(cos.operation).map(([key, value]) => (
-            <LayoutPanel>
-              <LayoutPanel.Header>
-                <LayoutPanel.Head
-                  title={t('authorizationpolicies.headers.operation')}
-                />
-              </LayoutPanel.Header>
-              <LayoutPanel.Body>
-                <LayoutPanelRow name={key} value={<Tokens tokens={value} />} />
-              </LayoutPanel.Body>
-            </LayoutPanel>
+            <Operation name={key} value={value} key={key} />
           ));
         })}
       </LayoutPanel.Body>
     </LayoutPanel>
   );
 };
+
+const Operation = ({ name, value }) => {
+  const { t } = useTranslation();
+
+  return (
+    <LayoutPanel>
+      <LayoutPanel.Header>
+        <LayoutPanel.Head
+          title={t('authorizationpolicies.headers.operation')}
+        />
+      </LayoutPanel.Header>
+      <LayoutPanel.Body>
+        <LayoutPanelRow name={name} value={<Tokens tokens={value} />} />
+      </LayoutPanel.Body>
+    </LayoutPanel>
+  );
+};
+
 const When = ({ when }) => {
   const { t, i18n } = useTranslation();
 
@@ -97,7 +114,7 @@ export const Rules = policy => {
       <LayoutPanel.Body>
         <div>
           {policy.spec.rules?.map((rule, index) => (
-            <LayoutPanel>
+            <LayoutPanel key={index}>
               <LayoutPanel.Header>
                 <LayoutPanel.Head
                   title={t('authorizationpolicies.headers.rule', {
