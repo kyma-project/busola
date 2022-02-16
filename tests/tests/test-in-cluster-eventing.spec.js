@@ -193,7 +193,7 @@ context('Test in-cluster eventing', () => {
       .type(`${API_RULE_AND_FUNCTION_NAME}-subscription`);
 
     cy.getIframeBody()
-      .contains('Choose a Service for the sink')
+      .contains('Choose Service for the sink')
       .click();
 
     cy.getIframeBody()
