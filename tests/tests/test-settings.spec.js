@@ -1,6 +1,8 @@
 const NAME = `config-map-${Math.floor(Math.random() * 9999) + 1000}`;
 
 context('Test app settings and preferences', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
@@ -30,13 +32,7 @@ context('Test app settings and preferences', () => {
 
     cy.get('[aria-label="close"]').click();
 
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Config Maps')
-      .click();
+    cy.navigateTo('Configuration', 'Config Maps');
 
     cy.getIframeBody()
       .contains('Create Config Map')
@@ -52,7 +48,7 @@ context('Test app settings and preferences', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('h3', NAME, { timeout: 5000 })
+      .contains('h3', NAME)
       .should('be.visible');
 
     cy.getLeftNav()

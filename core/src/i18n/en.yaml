@@ -83,6 +83,7 @@ api-rules:
   tooltips:
     ok: Resource created.
     skipped: Skipped creating the resource.
+    unknown: The API Rule is in an uncertain state.
 applications:
   aria:
     namespace: Choose Namespace
@@ -113,7 +114,7 @@ applications:
     binding-deleted: Binding deleted.
     binding-not-found: No Bindings.
     cannot-create: Cannot create the Application.
-    connect-disabled: Connecting Applications is disabled for SAP Kyma Runtime.
+    connect-disabled: Connecting Applications is disabled for SAP BTP, Kyma Runtime.
     copy-url: 'Copy the following URL and use it at the external system that you would like to connect to:'
     create-failed: Failed to create the Application.
     created: Application created.
@@ -143,6 +144,8 @@ applications:
   title: Applications
   tooltips:
     provisioning: The Application is being provisioned asynchronously.
+apps:
+  title: Apps
 brokers:
   description: <0>Service Broker</0> provides a set of managed services that a third party offers and maintains.
   headers:
@@ -340,17 +343,19 @@ clusters:
     sessionstorage: Cluster data is cleared when the page session ends.
     unknown: Unknown storage type
   wizard:
+    all-contexts: All contexts
     auth:
       client-id: Client ID
       issuer-url: Issuer URL
       scopes: Scopes
       token: Token
       using-oidc: I'm using an OIDC provider instead
-    context: Current context
+    context: Context to connect
     editor-label: 'or paste your kubeconfig here:'
-    incomplete: We couldn't find enough authentication information in your kubeconfig. You can enter it manually.
+    incomplete: We couldn't find enough authentication information for {{context}} in your kubeconfig. You can enter it manually.
     intro: To connect a cluster, you have to provide the cluster configuration – called “kubeconfig” in the Kubernetes world.
     kubeconfig: Provide Kubeconfig
+    multi-context-info: All contexts will be connected. Please be aware that only {{context}} is validated. The remaining contexts are connected without validation.
     not-an-object: kubeconfig is not an object
     storage: Privacy Options
     storage-info: |
@@ -387,11 +392,15 @@ command-palette:
     daemonsets: Daemon Sets
     destinationrules: Destination Rules
     gitrepositories: Git Repositories
+    horizontalpodautoscalers: Horizontal Pod Autoscalers
     oauth2clients: OAuth2 Clients
+    persistentvolumeclaims: Persistent Volume Claims
+    persistentvolumes: Persistent Volumes
     replicasets: Replica Sets
     rolebindings: Role Bindings
     serviceaccounts: Service Accounts
     statefulsets: Stateful Sets
+    storageclasses: Storage Classes
     subscriptions: Subscriptions
   results:
     did-you-mean: 'Did you mean: '
@@ -406,6 +415,7 @@ common:
     add: Add
     add-new: Add New
     cancel: Cancel
+    clone: Clone
     copy: Copy
     create: Create
     delete: Delete
@@ -453,6 +463,7 @@ common:
     pods: Pods
     resources: Resources
     status: Status
+    version: Version
   labels:
     data: Data
     default-preset: Default
@@ -851,6 +862,9 @@ domains:
   include:
     label: Include Domains
     placeholder: Domain that is allowed
+err-boundary:
+  go-back: Go back
+  restored-initial-form: Something went wrong. We restored the initial form for you.
 events:
   description: <0>Event</0> is an object that is automatically created in response to changes in the cluster resources like Nodes, Pods or containers.
   headers:
@@ -1125,19 +1139,44 @@ git-repositories:
     secret: The name of the Secret with credentials used by the Function Controller to authenticate to the Git repository in order to fetch the Function's source code and dependencies.
     url: URL must be a valid Git repository address that starts with the "http(s)", "git", or "ssh" prefix.
 helm-releases:
-  chart-description: Chart Description
-  chart-files: Chart Files
-  chart-name: Chart Name
-  chart-version: Chart Version
-  data-title: Release {{name}}
-  first-deployed: First Deployed
-  last-deployed: Last Deployed
-  release-config: Release Config
-  release-version: Version v{{version}}
+  description: <0>Helm Releases</0> track the installed charts. For each installed chart, a new release is created.
+  headers:
+    chart: Chart
+    chart-description: Chart Description
+    chart-files: Chart Files
+    chart-name: Chart Name
+    chart-version: Chart Version
+    first-deployed: First Deployed
+    last-deployed: Last Deployed
+    other-release-versions: Other Release Versions
+    release: 'Release '
+    release-config: Release Config
+    release-data: Release Data
+    release-version: Version v{{version}}
+    revision: Revision
+  messages:
+    cannot-decode: Cannot decode the given Helm Release.
   statuses:
     deployed: Deployed
+    failed: Failed
     pending-install: Pending Install
+    pending-rollback: Pending Rollback
+    pending-upgrade: Pending Upgrade
     superseded: Superseded
+    uninstalled: Uninstalled
+    uninstalling: Uninstalling
+    unknown: Unknown
+  title: Helm Releases
+  tooltips:
+    deployed: The release has been pushed to the cluster.
+    failed: The release was not successfully deployed.
+    pending-install: An install operation is underway.
+    pending-rollback: A rollback operation is underway.
+    pending-upgrade: An upgrade operation is underway.
+    superseded: The release is outdated and a newer one exists.
+    uninstalled: The release has been uninstalled from the cluster.
+    uninstalling: An uninstall operation is underway.
+    unknown: The release is in an uncertain state.
 hpas:
   and-x-more: and {{x}} more
   container-resource: Container resource
@@ -1264,6 +1303,7 @@ jobs:
     container: Container
     containers: Containers
     containers-readonly-in-edit: After a Job is created, the containers are read-only.
+    disable-sidecar: Disable sidecar
     labels:
       args: Args
       command: Command

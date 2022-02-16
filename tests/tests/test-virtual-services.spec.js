@@ -17,22 +17,16 @@ async function loadVirtualService() {
 }
 
 context('Test Virtual Services', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
   });
 
-  it('Navigate to Virtual Services', () => {
-    cy.getLeftNav()
-      .contains('Istio')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Virtual Services')
-      .click();
-  });
-
   it('Create a Virtual Service', () => {
+    cy.navigateTo('Istio', 'Virtual Services');
+
     cy.getIframeBody()
       .contains('Create Virtual Service')
       .click();

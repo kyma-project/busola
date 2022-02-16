@@ -4,27 +4,26 @@ import { saveAs } from 'file-saver';
 import { useTranslation } from 'react-i18next';
 import { useShowNodeParamsError } from 'shared/hooks/useShowNodeParamsError';
 import { Link, Button, MessagePage } from 'fundamental-react';
-import { cloneDeep } from 'lodash';
+
 import {
   useMicrofrontendContext,
   PageHeader,
   GenericList,
   useNotification,
   ModalWithForm,
-  Link as ExternalLink,
   useDeleteResource,
   EMPTY_TEXT_PLACEHOLDER,
 } from 'react-shared';
 
 import { setCluster, deleteCluster } from './../shared';
 import { AddClusterDialog } from '../components/AddClusterDialog';
-import { ClustersEdit } from './EditCluster/EditCluster';
+import { EditCluster } from './EditCluster/EditCluster';
 import { ClusterStorageType } from './ClusterStorageType';
 
 import './ClusterList.scss';
 
 export function ClusterList() {
-  const { clusters, activeClusterName, features } = useMicrofrontendContext();
+  const { clusters, activeClusterName } = useMicrofrontendContext();
   const notification = useNotification();
   const { t, i18n } = useTranslation();
 
@@ -45,10 +44,8 @@ export function ClusterList() {
     return null;
   }
 
-  const canAddCluster = !features.ADD_CLUSTER_DISABLED?.isEnabled;
-
   const styleActiveCluster = entry => {
-    return entry.currentContext.cluster.name === activeClusterName
+    return entry.kubeconfig['current-context'] === activeClusterName
       ? { fontWeight: 'bolder' }
       : {};
   };
@@ -60,7 +57,7 @@ export function ClusterList() {
         const blob = new Blob([kubeconfigYaml], {
           type: 'application/yaml;charset=utf-8',
         });
-        saveAs(blob, 'kubeconfig.yaml');
+        saveAs(blob, `kubeconfig--${entry.kubeconfig['current-context']}.yaml`);
       } catch (e) {
         console.error(e);
         notification.notifyError({
@@ -76,7 +73,10 @@ export function ClusterList() {
     }
   };
 
-  const entries = Object.values(clusters);
+  const entries = Object.entries(clusters).map(([name, cluster]) => ({
+    name,
+    ...cluster,
+  }));
   const headerRenderer = () => [
     t('common.headers.name'),
     t('clusters.common.api-server-address'),
@@ -84,7 +84,7 @@ export function ClusterList() {
     t('common.headers.description'),
   ];
   const textSearchProperties = [
-    'currentContext.cluster.name',
+    'kubeconfig.current-context',
     'currentContext.cluster.cluster.server',
   ];
 
@@ -93,12 +93,12 @@ export function ClusterList() {
       <Link
         className="fd-link"
         style={styleActiveCluster(entry)}
-        onClick={() => setCluster(entry.currentContext?.cluster?.name)}
+        onClick={() => setCluster(entry.name)}
       >
-        {entry.currentContext?.cluster?.name}
+        {entry.name}
       </Link>
     </>,
-    entry.currentContext?.cluster?.cluster?.server,
+    entry.currentContext.cluster.cluster.server,
     <ClusterStorageType clusterConfig={entry.config} />,
     entry.config.description || EMPTY_TEXT_PLACEHOLDER,
   ];
@@ -109,7 +109,7 @@ export function ClusterList() {
       icon: 'edit',
       tooltip: t('clusters.edit-cluster'),
       handler: cluster => {
-        setEditedCluster(cloneDeep(cluster));
+        setEditedCluster(cluster);
         setShowEdit(true);
       },
     },
@@ -125,14 +125,13 @@ export function ClusterList() {
       handler: resource => {
         setChosenCluster(resource);
         handleResourceDelete({
-          deleteFn: () =>
-            deleteCluster(resource?.currentContext?.cluster?.name),
+          deleteFn: () => deleteCluster(resource?.name),
         });
       },
     },
   ];
 
-  const extraHeaderContent = canAddCluster && (
+  const extraHeaderContent = (
     <Button
       option="transparent"
       glyph="add"
@@ -153,11 +152,7 @@ export function ClusterList() {
       title={t('clusters.edit-cluster')}
       id="edit-cluster"
       renderForm={props => (
-        <ClustersEdit
-          {...props}
-          resource={editedCluster}
-          setResource={setEditedCluster}
-        />
+        <EditCluster {...props} editedCluster={editedCluster} />
       )}
       modalOpeningComponent={<></>}
       customCloseAction={() => setShowEdit(false)}
@@ -166,22 +161,7 @@ export function ClusterList() {
   );
 
   if (!entries.length) {
-    const btpCockpitUrl =
-      features.ADD_CLUSTER_DISABLED?.config?.cockpitUrl ||
-      'https://account.staging.hanavlab.ondemand.com/cockpit';
-
-    const subtitle = canAddCluster ? (
-      t('clusters.empty.subtitle')
-    ) : (
-      <span className="cluster-disabled-subtitle">
-        {t('clusters.empty.go-to-btp-cockpit')}{' '}
-        <ExternalLink
-          className="fd-link"
-          url={btpCockpitUrl}
-          text="BTP Cockpit"
-        />
-      </span>
-    );
+    const subtitle = t('clusters.empty.subtitle');
     return (
       <>
         {addDialog}
@@ -195,11 +175,9 @@ export function ClusterList() {
           title={t('clusters.empty.title')}
           subtitle={subtitle}
           actions={
-            canAddCluster && (
-              <Button onClick={() => setShowAdd(true)}>
-                {t('clusters.add.title')}
-              </Button>
-            )
+            <Button onClick={() => setShowAdd(true)}>
+              {t('clusters.add.title')}
+            </Button>
           }
         />
       </>
@@ -224,8 +202,8 @@ export function ClusterList() {
       />
       <DeleteMessageBox
         resource={chosenCluster}
-        resourceName={chosenCluster?.currentContext?.cluster?.name}
-        deleteFn={e => deleteCluster(e.currentContext.cluster.name)}
+        resourceName={chosenCluster?.kubeconfig['current-context']}
+        deleteFn={e => deleteCluster(e.name)}
       />
     </>
   );

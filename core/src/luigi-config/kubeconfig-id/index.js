@@ -45,7 +45,7 @@ export async function handleKubeconfigIdIfPresent() {
       currentContext: getContext(kubeconfig),
     };
 
-    const clusterName = params.currentContext.cluster.name;
+    const clusterName = params.kubeconfig['current-context'];
 
     const existingClusterNames = Object.keys(clusterStorage.load());
     if (!existingClusterNames.includes(clusterName)) {

@@ -25,9 +25,8 @@ export function ResultsList({
   const listRef = useRef();
   const { t } = useTranslation();
 
-  const isLoading = results.includes(LOADING_INDICATOR);
-  results = results.filter(r => r !== LOADING_INDICATOR);
-
+  const isLoading = results.find(r => r.type === LOADING_INDICATOR);
+  results = results.filter(r => r.type !== LOADING_INDICATOR);
   useEffect(() => {
     if (results?.length <= activeIndex) {
       setActiveIndex(0);

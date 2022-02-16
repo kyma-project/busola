@@ -1,6 +1,8 @@
 const SET_NAME = 'alertmanager-monitoring-alertmanager';
 
-context('Test StatefulSets', () => {
+context('Test Stateful Sets', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
 
@@ -26,13 +28,7 @@ context('Test StatefulSets', () => {
       .contains('a', 'kyma-system')
       .click();
 
-    cy.getLeftNav()
-      .contains('Workloads')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Stateful Sets')
-      .click();
+    cy.navigateTo('Workloads', 'Stateful Sets');
   });
 
   it('Inspect list', () => {

@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
-import { loadPVC } from '../support/loadPVC';
+import { loadFile } from '../support/loadFile';
 
 const FILE_NAME = 'test-persistent-volume-claim.yaml';
 
@@ -14,23 +14,28 @@ const CAPACITY_VALUE = '1Gi';
 const ACCESS_MODES_VALUE = 'ReadWriteOnce';
 const VOLUME_MODE_VALUE = 'Filesystem';
 
-context('Test Persistent Volume Claim', () => {
+async function loadPVC(name, namespace, storage, fileName) {
+  const resource = await loadFile(fileName);
+  const newResource = { ...resource };
+
+  newResource.metadata.name = name;
+  newResource.metadata.namespace = namespace;
+  newResource.spec.storageClassName = storage;
+
+  return newResource;
+}
+
+context('Test Persistent Volume Claims', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
   });
 
-  it('Navigate to Persistent Volume Claims', () => {
-    cy.getLeftNav()
-      .contains('Storage')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Persistent Volume Claims')
-      .click();
-  });
-
   it('Create a Persistent Volume Claim', () => {
+    cy.navigateTo('Storage', 'Persistent Volume Claims');
+
     cy.getIframeBody()
       .contains('Create Persistent Volume Claim')
       .click();
@@ -44,12 +49,7 @@ context('Test Persistent Volume Claim', () => {
       ),
     ).then(PVC_CONFIG => {
       const PVC = JSON.stringify(PVC_CONFIG);
-      cy.getIframeBody()
-        .find('[role="presentation"],[class="view-lines"]')
-        .first()
-        .click()
-        .clearMonaco()
-        .type(PVC, { parseSpecialCharSequences: false });
+      cy.pasteToMonaco(PVC);
     });
 
     cy.getIframeBody()
@@ -58,7 +58,7 @@ context('Test Persistent Volume Claim', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('h3', PVC_NAME, { timeout: 5000 })
+      .contains('h3', PVC_NAME)
       .should('be.visible');
   });
 
@@ -76,7 +76,7 @@ context('Test Persistent Volume Claim', () => {
       .should('be.visible');
 
     cy.getIframeBody()
-      .contains('a', Cypress.env('STORAGE_CLASS_NAME'), { timeout: 70000 })
+      .contains('a', Cypress.env('STORAGE_CLASS_NAME'))
       .should('be.visible');
 
     cy.getIframeBody()
@@ -107,20 +107,14 @@ context('Test Persistent Volume Claim', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('.fd-table__row', PVC_NAME, { timeout: 5000 })
+      .contains('.fd-table__row', PVC_NAME)
       .should('not.exist');
   });
 
   it('Delete the connected Storage Class', () => {
     cy.get('[data-testid=luigi-topnav-logo]').click();
 
-    cy.getLeftNav()
-      .contains('Storage')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Storage Classes')
-      .click();
+    cy.navigateTo('Storage', 'Storage Classes');
 
     cy.getIframeBody()
       .find('[role="search"] [aria-label="open-search"]')

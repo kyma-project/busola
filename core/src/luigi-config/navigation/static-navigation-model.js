@@ -846,6 +846,7 @@ export function getStaticChildrenNodesForNamespace(
       category: i18next.t('service-management.title'),
       pathSegment: 'serviceinstances',
       navigationContext: 'serviceinstances',
+      resourceType: 'serviceinstances',
       label: i18next.t('btp-instances.title'),
       viewUrl:
         config.coreUIModuleUrl +
@@ -881,6 +882,7 @@ export function getStaticChildrenNodesForNamespace(
       category: i18next.t('service-management.title'),
       pathSegment: 'servicebindings',
       navigationContext: 'servicebindings',
+      resourceType: 'servicebindings',
       label: i18next.t('btp-service-bindings.title'),
       viewUrl:
         config.coreUIModuleUrl +
@@ -952,6 +954,39 @@ export function getStaticChildrenNodesForNamespace(
                 toSearchParamsString({
                   resourceApiPath: '/api/v1',
                 }),
+            },
+          ],
+        },
+      ],
+    },
+
+    //APPS CATEGORY
+    {
+      category: {
+        label: i18next.t('apps.title'),
+        icon: 'example', //grid
+        collapsible: true,
+      },
+    },
+    {
+      category: i18next.t('apps.title'),
+      pathSegment: 'helm-releases',
+      label: i18next.t('helm-releases.title'),
+      keepSelectedForChildren: true,
+      viewUrl:
+        config.coreUIModuleUrl + '/namespaces/:namespaceId/helm-releases?',
+      viewGroup: coreUIViewGroupName,
+      navigationContext: 'helm-releases',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':releaseName',
+              resourceType: 'helm-releases',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/helm-releases/:releaseName',
             },
           ],
         },
@@ -1652,7 +1687,7 @@ export function getStaticRootNodes(
       ],
     },
     {
-      pathSegment: 'addons-config',
+      pathSegment: 'addons-configs',
       navigationContext: 'clusteraddonsconfigurations',
       resourceType: 'clusteraddonsconfigurations',
       label: i18next.t('cluster-addons.title'),

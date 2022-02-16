@@ -9,8 +9,7 @@
             "de": "https://www.sap.com/corporate/de/legal/impressum.html"
           },
           "privacy": {
-            "default":
-              "https://help.sap.com/viewer/82bdf2271c6041f79387c122147cf774/Cloud/en-US"
+            "default": "https://help.sap.com/viewer/82bdf2271c6041f79387c122147cf774/Cloud/en-US"
           },
           "copyright": {
             "default": "https://www.sap.com/corporate/en/legal/copyright.html",
@@ -33,12 +32,6 @@
       "KUBECONFIG_ID": {
         "config": {
           "kubeconfigUrl": "/kubeconfig"
-        }
-      },
-      "ADD_CLUSTER_DISABLED": {
-        "isEnabled": false,
-        "config": {
-          "cockpitUrl": "https://account.staging.hanavlab.ondemand.com/cockpit"
         }
       },
       "SENTRY": {
@@ -65,6 +58,13 @@
               "path": "apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/tracing"
             }
           ]
+        }
+      },
+      "JWT_CHECK_CONFIG": {
+        "isEnabled": false,
+        "config": {
+          "issuer": "https://apskyxzcl.accounts400.ondemand.com",
+          "jwksUri": "https://apskyxzcl.accounts400.ondemand.com/oauth2/certs"
         }
       }
     }

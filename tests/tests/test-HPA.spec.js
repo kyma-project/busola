@@ -1,37 +1,64 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
-import { loadRandomHPA } from '../support/loadHPA';
+import { loadFile } from '../support/loadFile';
 
 const HPA_NAME = 'test-hpa';
+const DOCKER_IMAGE = 'nginx';
+const DEPLOYEMENT_NAME = 'no-pod';
+
+async function loadHPA(namespaceName) {
+  const HPA = await loadFile('test-HPA.yaml');
+
+  HPA.metadata.namespace = namespaceName;
+
+  return HPA;
+}
 
 context('Test HPA', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
   });
 
-  it('Navigate to HPA', () => {
-    cy.getLeftNav()
-      .contains('Discovery and Network')
+  it('Creates auxiliary Deployment', () => {
+    cy.navigateTo('Workloads', 'Deployments');
+
+    cy.getIframeBody()
+      .contains('button', 'Create Deployment')
       .click();
-    cy.getLeftNav()
-      .contains('Horizontal Pod')
+
+    cy.getIframeBody()
+      .find('.fd-dialog__content')
+      .find('[placeholder^="Deployment Name"]:visible')
+      .type(DEPLOYEMENT_NAME);
+
+    cy.getIframeBody()
+      .find('.fd-dialog__content')
+      .find('[placeholder^="Enter the Docker image"]:visible')
+      .type(DOCKER_IMAGE);
+
+    cy.getIframeBody()
+      .find('.fd-dialog__content')
+      .contains('button', 'Create')
       .click();
+
+    cy.getIframeBody()
+      .contains('h3', DEPLOYEMENT_NAME)
+      .should('be.visible');
   });
 
   it('Create HPA', () => {
+    cy.navigateTo('Discovery and Network', 'Horizontal Pod');
+
     cy.getIframeBody()
       .contains('Create Horizontal Pod Autoscaler')
       .click();
 
-    cy.wrap(loadRandomHPA(Cypress.env('NAMESPACE_NAME'))).then(HPA_CONFIG => {
+    cy.wrap(loadHPA(Cypress.env('NAMESPACE_NAME'))).then(HPA_CONFIG => {
       const HPA = JSON.stringify(HPA_CONFIG);
-      cy.getIframeBody()
-        .find('[role="presentation"],[class="view-lines"]')
-        .first()
-        .click()
-        .clearMonaco()
-        .type(HPA, { parseSpecialCharSequences: false });
+      cy.pasteToMonaco(HPA);
     });
 
     cy.getIframeBody()
@@ -40,7 +67,7 @@ context('Test HPA', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('h3', HPA_NAME, { timeout: 5000 })
+      .contains('h3', HPA_NAME)
       .should('be.visible');
   });
 
@@ -65,7 +92,26 @@ context('Test HPA', () => {
       .should('be.visible');
   });
 
+  it('Check HPA subcomponent', () => {
+    cy.navigateTo('Workloads', 'Deployments');
+
+    cy.getIframeBody()
+      .contains(DEPLOYEMENT_NAME)
+      .click();
+
+    cy.getIframeBody()
+      .contains(HPA_NAME)
+      .should('be.visible');
+  });
+
   it('Delete HPA ', () => {
+    cy.getLeftNav()
+      .contains('Discovery and Network')
+      .click();
+    cy.getLeftNav()
+      .contains('Horizontal Pod')
+      .click();
+
     cy.getIframeBody()
       .contains('.fd-table__row', HPA_NAME)
       .find('button[data-testid="delete"]')
@@ -76,7 +122,7 @@ context('Test HPA', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('.fd-table__row', HPA_NAME, { timeout: 5000 })
+      .contains('.fd-table__row', HPA_NAME)
       .should('not.exist');
   });
 });
