@@ -22,7 +22,7 @@ context('Test invalid kubeconfig', () => {
     cy.getIframeBody()
       .find('.fd-message-strip--error')
       .shouldHaveTrimmedText(
-        'Parse error: kubeconfig is not an object, previous valid input will be used.',
+        'Parse error: kubeconfig is not an object, previous valid input will be used',
       );
   });
 

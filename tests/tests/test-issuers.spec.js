@@ -40,7 +40,7 @@ context('Test Issuers', () => {
       .type(ISSUER_NAME);
 
     cy.getIframeBody()
-      .contains('Select issuer type')
+      .contains('Select Issuer type')
       .filter(':visible')
       .click();
 
