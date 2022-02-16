@@ -2,6 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { LayoutPanel, Link } from 'fundamental-react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
+import { WorkloadSelector } from 'shared/components/WorkloadSelector/WorkloadSelector';
 
 import { EMPTY_TEXT_PLACEHOLDER, Labels } from 'react-shared';
 
@@ -27,10 +28,17 @@ export const AuthorizationPoliciesDetails = ({
     },
   ];
 
+  const WorkloadSelectorLabels = policy => (
+    <WorkloadSelector
+      resource={policy}
+      labels={policy.spec.selector.matchLabels}
+    />
+  );
+
   return (
     <DefaultRenderer
       customColumns={customColumns}
-      customComponents={[Selector, Rules]}
+      customComponents={[WorkloadSelectorLabels, Rules]}
       {...otherParams}
     ></DefaultRenderer>
   );
