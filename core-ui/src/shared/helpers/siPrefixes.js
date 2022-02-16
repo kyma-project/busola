@@ -20,7 +20,11 @@ const SI_PREFIXES_BINARY = {
   Pi: 2 ** 50,
 };
 
-export function getSIPrefix(amount, binary = false, { unit = '' } = {}) {
+export function getSIPrefix(
+  amount,
+  binary = false,
+  { unit = '', withoutSpace = true } = {},
+) {
   const prefixMap = binary ? SI_PREFIXES_BINARY : SI_PREFIXES;
 
   let output = {
@@ -31,6 +35,7 @@ export function getSIPrefix(amount, binary = false, { unit = '' } = {}) {
   };
   Object.entries(prefixMap).forEach(([prefix, power]) => {
     const tmpValue = amount / power;
+    const infix = withoutSpace ? '' : ' ';
     if (tmpValue >= 1) {
       const value = Math.round((tmpValue + Number.EPSILON) * 100) / 100;
       output = {
@@ -38,7 +43,7 @@ export function getSIPrefix(amount, binary = false, { unit = '' } = {}) {
         rounded: value * power,
         prefix,
         unit: `${prefix}${unit}`,
-        string: `${value} ${prefix}${unit}`,
+        string: `${value}${infix}${prefix}${unit}`,
       };
     }
   });
