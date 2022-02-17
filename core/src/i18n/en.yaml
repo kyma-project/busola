@@ -2,7 +2,7 @@ addons:
   addons-status: Addons Status
   description: <0>Addons Configuration</0> defines Namespace-scoped addons that provide all information required to convert Helm charts into Service Classes in Service Catalog.
   errors:
-    cannot-create: Cannot create the Addons Configuration
+    cannot-create: Cannot create the Addons Configuration.
   headers:
     url: URL
   messages:
@@ -11,8 +11,8 @@ addons:
   singular_name: Addons Configuration
   title: Addons
   tooltips:
-    failed: One of the repositories failed
-    pending: Addon is being processed
+    failed: One of the repositories failed.
+    pending: Processing the addon
     ready: Addon configured
   urls: URLs
 api-rules:
@@ -31,11 +31,11 @@ api-rules:
       required-scope: Required Scope
       types: Types
     messages:
-      one-method: This access strategy requires at least one method
-      one-strategy-required: At least one strategy is required
+      one-method: This access strategy requires at least one method.
+      one-strategy-required: Provide at least one strategy.
     title: Access Strategies
     tooltips:
-      path: Path can contain alphanumeric characters and  '/', '.', '*', '?', '!', '-', '(', and ')'
+      path: Path can contain alphanumeric characters and  '/', '.', '*', '?', '!', '-', '(', and ')'.
   buttons:
     create: Create API Rule
     edit: Edit API Rule "{{apiRuleName}}"
@@ -62,10 +62,10 @@ api-rules:
     create-failed: Failed to create the API Rule
     created: API Rule created
     description: Expose Services outside the cluster with API Rules.
-    not-matching-results: Couldn't find API Rules matching this query
-    one-rule-required: At least one API Rule is required
+    not-matching-results: Couldn't find API Rules matching this query.
+    one-rule-required: Provide at least one API Rule.
     updated: API Rule updated
-    will-be-available-at: API Rule will be available at {{address}}
+    will-be-available-at: API Rule will be available at {{address}}.
   name_singular: API Rule
   oauth:
     required-scope: Required scope
@@ -75,7 +75,7 @@ api-rules:
   rule: Rule
   rules: Rules
   services:
-    error-load: Couldn't load service list
+    error-load: Couldn't load service list.
     loading: Loading services...
     ns-no-services: No Services in this Namespace
     placeholder: Choose the service to expose
@@ -83,7 +83,7 @@ api-rules:
   tooltips:
     ok: Resource created
     skipped: Skipped creating the resource
-    unknown: The API Rule is in an uncertain state
+    unknown: Unknown resource state
 applications:
   aria:
     namespace: Choose Namespace
@@ -114,13 +114,13 @@ applications:
     binding-deleted: Binding deleted
     binding-not-found: No Bindings
     cannot-create: Cannot create the Application
-    connect-disabled: Connecting Applications is disabled for SAP BTP, Kyma Runtime
+    connect-disabled: Connecting Applications is disabled for SAP BTP, Kyma Runtime.
     copy-url: 'Copy the following URL and use it at the external system that you would like to connect to:'
     create-failed: Failed to create the Application
     created: Application created
     dont-expose: This Application doesn't expose any Services or events.
     no-apis: There are no APIs.
-    no-bound-service: No bound services found
+    no-bound-service: No bound services
     no-events: There are no events.
     no-matches-text: No Namespaces to bind
     service-not-found: No services
@@ -289,7 +289,7 @@ clusters:
   empty:
     go-to-btp-cockpit: To view your clusters, go to
     subtitle: Let's add one now!
-    title: Looks like there aren't any clusters yet
+    title: There are no clusters yet
   kubeconfig: kubeconfig
   labels:
     client-id: Client ID
@@ -495,7 +495,7 @@ common:
     doesnt-exist: doesn't exist
     entry-not-found: Entry not found
     error: 'Error: {{error}}'
-    fill-required-data: Fill the remaining required data
+    fill-required-data: Fill the remaining required data.
     loading-name: Loading name...
     no-entries-found: No entries found
     no-instances-found: No matching {{value}} found
@@ -527,7 +527,7 @@ common:
     duplicate-key: Duplicate key
     error: Error
     hide: Hide Read-Only Fields
-    k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' (e.g.: 'my-name1')."
+    k8s-name-input: 'Name must consist of lowercase alphanumeric characters, can contain ''-'' (e.g.: ''my-name1'').'
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: key=value, must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     read-file: Read file content as a single value, with file name as a key.
@@ -651,8 +651,8 @@ cron-jobs:
   title: Cron Jobs
   tooltips:
     allow: Allow concurrent executions
-    forbid: No concurrent executions, skip the new run if the previous one hasn't finished yet
-    replace: No concurrent executions, replace the previous run with the new one
+    forbid: No concurrent executions. Skip the new run if the previous one hasn't finished yet.
+    replace: No concurrent executions. Replace the previous run with the new one.
 custom-resource-definitions:
   description: <0>Custom Resource Definition</0> is an object used to define a custom resource that allows you to extend the Kubernetes API for use cases that are not directly covered by core Kubernetes.
   headers:
@@ -668,7 +668,7 @@ custom-resource-definitions:
     type: Type
     value: Value
   messages:
-    no-entries: No entries found because the version is not served
+    no-entries: No entries found. The version is not served.
   name_singular: Custom Resource Definition
   status:
     not-served: Not Served
@@ -710,7 +710,7 @@ deployments:
       image: Image
       memory-limits: Memory Limits
       memory-requests: Memory Requests
-      one-container-required: At least one container is required
+      one-container-required: Provide at least one container.
       port: Port
       port-placeholder: Enter the port exposed by the Service
       runtime-profile: Runtime Profile
@@ -1337,7 +1337,7 @@ jobs:
     complete: Job completed
     not-complete: Job in progress
 kubeconfig-id:
-  error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})"
+  error: 'Couldn''t load kubeconfig ID; configuration not changed (Error: ${{error}})'
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
 legal:
   copyright: Copyright
@@ -1488,7 +1488,7 @@ observability:
 persistent-volume-claims:
   description: <0>Persistent Volume Claim (PVC)</0> is a request for the Persistent Volume resources.
   headers:
-    access-modes: Access Modes
+    access-modes: Access Mode
     configuration: Configuration
     key: Key
     match-expressions: Match Expressions
@@ -1496,10 +1496,10 @@ persistent-volume-claims:
     operator: Operator
     selector: Selector
     storage: Storage
-    storage-class-name: Storage Class name
+    storage-class-name: Storage Class Name
     values: Values
-    volume-mode: Volume mode
-    volume-name: Volume name
+    volume-mode: Volume Mode
+    volume-name: Volume Name
   name_singular: Persistent Volume Claim
   title: Persistent Volume Claims
   tooltips:
@@ -1587,17 +1587,17 @@ pv:
   description: <0>Persistent Volume (PV)</0> is used to manage storage in a cluster that an administrator has provisioned.
   details: Details
   headers:
-    access-modes: Access modes
+    access-modes: Access Mode
     capacity: Capacity
     claim: Claim
-    claim-name: Claim name
+    claim-name: Claim Name
     finalizers: Finalizers
-    mount-options: Mount options
+    mount-options: Mount Options
     path: Path
     reclaim-policy: Reclaim Policy
     server: Server
     storage-class: Storage Class
-    storage-class-name: Storage Class name
+    storage-class-name: Storage Class Name
   name_singular: Persistent Volume
   nfs: Network File System
   statuses:
@@ -1879,7 +1879,7 @@ subscriptions:
       service-name: Service
       sink: Sink
     messages:
-      one-filter-required: At least one filter is required
+      one-filter-required: Provide at least one filter.
     placeholders:
       application-name: Choose an Application name
       event-name: Enter the event name, for example, order.cancelled
