@@ -38,3 +38,4 @@ export * from './HPAs/HPAs.create';
 export * from './PersistentVolumes/PersistentVolumes.create';
 export * from './AuthorizationPolicies/AuthorizationPolicies.create';
 export * from './Sidecars/Sidecars.create';
+export * from './NetworkPolicies/NetworkPolicies.create';
