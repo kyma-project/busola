@@ -13,7 +13,6 @@ export const AuthorizationPoliciesList = ({
     if (policy.spec?.action) return policy.spec?.action;
     else return 'ALLOW';
   };
-
   const customColumns = [
     {
       header: t('authorization-policies.headers.action'),
