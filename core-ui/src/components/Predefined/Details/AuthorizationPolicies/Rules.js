@@ -15,8 +15,8 @@ const From = ({ from }) => {
         <LayoutPanel.Head title={t('authorization-policies.headers.from')} />
       </LayoutPanel.Header>
       <LayoutPanel.Body>
-        {from.map(cos => {
-          return Object.entries(cos.source).map(([key, value]) => (
+        {from.map(fromSource => {
+          return Object.entries(fromSource.source).map(([key, value]) => (
             <Source name={key} value={value} key={key} />
           ));
         })}
@@ -89,8 +89,8 @@ const To = ({ to }) => {
         <LayoutPanel.Head title={t('authorization-policies.headers.to')} />
       </LayoutPanel.Header>
       <LayoutPanel.Body>
-        {to.map(cos => {
-          return Object.entries(cos.operation).map(([key, value]) => (
+        {to.map(toOperator => {
+          return Object.entries(toOperator.operation).map(([key, value]) => (
             <Operation name={key} value={value} key={key} />
           ));
         })}
