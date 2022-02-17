@@ -19,7 +19,7 @@ export const ApiRuleServices = apiRule => {
         hasDetailsView: true,
         fixedPath: true,
         resourceUrl: url,
-        resourceType: 'virtualservices',
+        resourceType: 'VirtualServices',
         namespace,
         isCompact: true,
         showTitle: true,

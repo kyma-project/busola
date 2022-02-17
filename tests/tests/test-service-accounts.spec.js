@@ -22,7 +22,7 @@ context('Test Service Accounts', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Service Account Name"]')
+      .find('[placeholder="Service Account name"]')
       .clear()
       .type(SERVICE_NAME);
 
@@ -32,7 +32,7 @@ context('Test Service Accounts', () => {
 
     cy.getIframeBody()
       .find(
-        '[placeholder="Start typing to select Image Pull Secrets from the list."]',
+        '[placeholder="Start typing to select Image Pull Secrets from the list"]',
       )
       .clear()
       .type('default');
@@ -84,7 +84,7 @@ context('Test Service Accounts', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Key"]')
+      .find('[placeholder="Enter key"]')
       .type('test.key');
 
     cy.getIframeBody()

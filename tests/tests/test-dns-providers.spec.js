@@ -49,7 +49,7 @@ context('Test DNS Providers', () => {
 
     // name
     cy.getIframeBody()
-      .find('[placeholder="DNS Provider Name"]:visible', { log: false })
+      .find('[placeholder="DNS Provider name"]:visible', { log: false })
       .clear()
       .type(PROVIDER_NAME);
 
@@ -76,7 +76,7 @@ context('Test DNS Providers', () => {
 
     // name should be readonly
     cy.getIframeBody()
-      .find('[placeholder="DNS Provider Name"]:visible', { log: false })
+      .find('[placeholder="DNS Provider name"]:visible', { log: false })
       .should('have.attr', 'readonly', 'readonly');
 
     cy.getIframeBody()
@@ -91,13 +91,13 @@ context('Test DNS Providers', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Key"]')
+      .find('[placeholder="Enter key"]')
       .filterWithNoValue()
       .type('is-edited');
 
     cy.getIframeBody()
       .find('[role=dialog]')
-      .find('[placeholder="Enter Value"]')
+      .find('[placeholder="Enter value"]')
       .filterWithNoValue()
       .first()
       .type('yes');
