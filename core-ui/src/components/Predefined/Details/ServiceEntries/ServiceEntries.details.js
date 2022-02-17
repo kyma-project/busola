@@ -4,23 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { EMPTY_TEXT_PLACEHOLDER, GenericList } from 'react-shared';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { WorkloadSelector } from 'shared/components/WorkloadSelector/WorkloadSelector';
+import { Tokens } from 'shared/components/Tokens';
 import { Endpoints } from './Endpoints';
-
-export const Hosts = ({ hosts }) => {
-  return (
-    <>
-      {hosts ? (
-        <ul>
-          {hosts?.map((host, i) => (
-            <li key={i}>{host}</li>
-          ))}
-        </ul>
-      ) : (
-        EMPTY_TEXT_PLACEHOLDER
-      )}
-    </>
-  );
-};
 
 const Ports = serviceentry => {
   const { t, i18n } = useTranslation();
@@ -65,22 +50,28 @@ const Configuration = ({ spec }) => {
       <LayoutPanel.Body>
         <LayoutPanelRow
           name={t('service-entries.headers.hosts')}
-          value={<Hosts hosts={spec?.hosts} />}
+          value={<Tokens tokens={spec?.hosts} />}
           key={spec?.hosts}
         />
         <LayoutPanelRow
           name={t('service-entries.headers.addresses')}
-          value={<Hosts hosts={spec?.addresses} />}
+          value={<Tokens tokens={spec?.addresses} />}
           key={spec?.addresses}
         />
         <LayoutPanelRow
           name={t('service-entries.headers.export-to')}
-          value={<Hosts hosts={spec?.exportTo} />}
+          value={
+            spec.exportTo?.length > 0 ? (
+              <Tokens tokens={spec?.exportTo} />
+            ) : (
+              t('service-entries.headers.export-to-empty')
+            )
+          }
           key={spec?.exportTo}
         />
         <LayoutPanelRow
           name={t('service-entries.headers.subject-alt-names')}
-          value={<Hosts hosts={spec?.subjectAltNames} />}
+          value={<Tokens tokens={spec?.subjectAltNames} />}
           key={spec?.subjectAltNames}
         />
       </LayoutPanel.Body>

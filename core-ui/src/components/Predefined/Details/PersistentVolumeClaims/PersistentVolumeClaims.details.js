@@ -46,7 +46,6 @@ const PVCSelectorSpecification = pvc => {
         entries={pvc.spec?.selector?.matchExpressions || []}
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
-        testid="daemon-set-tolerations"
         i18n={i18n}
         showSearchField={false}
       />

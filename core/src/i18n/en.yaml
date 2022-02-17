@@ -1798,6 +1798,7 @@ service-entries:
       title: Endpoints
       weight: Weight
     export-to: Export to
+    export-to-empty: Exported to all Namespaces
     hosts: Hosts
     location: Location
     ports:
