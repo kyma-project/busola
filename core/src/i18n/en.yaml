@@ -1786,7 +1786,9 @@ service-accounts:
   name_singular: Service Account
   service-account: Service Account
   title: Service Accounts
-service-entries:
+service-management:
+  title: Service Management
+serviceentries:
   description: <0>Service Entry</0> allows for adding more entries to the internal service registry of Istio.
   headers:
     addresses: Adresses
@@ -1810,8 +1812,6 @@ service-entries:
     subject-alt-names: Subject Alt Names
   name_singular: Service Entry
   title: Service Entries
-service-management:
-  title: Service Management
 services:
   cluster-ip: Cluster IP
   description: <0>Service</0> enables access to an application running on a set of Pods.

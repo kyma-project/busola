@@ -789,7 +789,7 @@ export function getStaticChildrenNodesForNamespace(
       category: i18next.t('istio.title'),
       resourceType: 'serviceentries',
       pathSegment: 'serviceentries',
-      label: i18next.t('service-entries.title'),
+      label: i18next.t('serviceentries.title'),
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/serviceEntries?' +

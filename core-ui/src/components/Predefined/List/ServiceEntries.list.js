@@ -8,17 +8,17 @@ export const ServiceEntriesList = ({ DefaultRenderer, ...otherParams }) => {
 
   const customColumns = [
     {
-      header: t('service-entries.headers.resolution'),
+      header: t('serviceentries.headers.resolution'),
       value: se => se.spec.resolution,
     },
     {
-      header: t('service-entries.headers.location'),
+      header: t('serviceentries.headers.location'),
       value: se => se.spec?.location || EMPTY_TEXT_PLACEHOLDER,
     },
   ];
 
   const description = (
-    <Trans i18nKey="service-entries.description">
+    <Trans i18nKey="serviceentries.description">
       <Link
         className="fd-link"
         url="https://istio.io/latest/docs/reference/config/networking/service-entry/"
