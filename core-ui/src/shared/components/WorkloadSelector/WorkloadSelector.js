@@ -1,5 +1,4 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { Labels } from 'react-shared';
 import { LayoutPanel } from 'fundamental-react';
