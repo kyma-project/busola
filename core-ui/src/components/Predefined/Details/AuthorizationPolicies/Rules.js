@@ -1,10 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { LayoutPanel } from 'fundamental-react';
+import { Link, LayoutPanel } from 'fundamental-react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { GenericList } from 'react-shared';
 import { Tokens } from 'shared/components/Tokens';
+import { navigateToResource } from 'shared/helpers/universalLinks';
 
 const From = ({ from }) => {
   const { t } = useTranslation();
@@ -33,9 +34,49 @@ const Source = ({ name, value }) => {
         <LayoutPanel.Head title={t('authorization-policies.headers.source')} />
       </LayoutPanel.Header>
       <LayoutPanel.Body>
-        <LayoutPanelRow name={name} value={<Tokens tokens={value} />} />
+        <LayoutPanelRow
+          name={name}
+          value={
+            name !== 'principals' ? (
+              <Tokens tokens={value} />
+            ) : (
+              <Principals principals={value} />
+            )
+          }
+          key={name}
+        />
       </LayoutPanel.Body>
     </LayoutPanel>
+  );
+};
+
+const Principals = ({ principals }) => {
+  return (
+    <ul>
+      {principals.map(principal => {
+        const nsIndex = principal.lastIndexOf('ns/') + 3;
+        const saIndex = principal.lastIndexOf('/sa');
+        const namespace = principal.substring(nsIndex, saIndex);
+        const saName = principal.substr(saIndex + 4);
+
+        return (
+          <li key={saName}>
+            <Link
+              onClick={() =>
+                navigateToResource({
+                  namespace,
+                  name: saName,
+                  kind: 'ServiceAccount',
+                })
+              }
+              key={saName}
+            >
+              {principal}
+            </Link>
+          </li>
+        );
+      })}
+    </ul>
   );
 };
 
