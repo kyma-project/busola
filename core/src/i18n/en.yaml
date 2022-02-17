@@ -411,6 +411,7 @@ command-palette:
     destinationrules: Destination Rules
     gitrepositories: Git Repositories
     horizontalpodautoscalers: Horizontal Pod Autoscalers
+    networkpolicies: Network Policies
     oauth2clients: OAuth2 Clients
     persistentvolumeclaims: Persistent Volume Claims
     persistentvolumes: Persistent Volumes
@@ -1421,6 +1422,29 @@ namespaces:
     total-memory-limit: Define constraints that limit total memory consumption in your Namespace.
     usage-of-memory-limits: This Namespace uses {{valueText}} of {{maxText}} its memory limits.
     usage-of-memory-requests: This Namespace uses {{valueText}} of {{maxText}} its memory requests.
+network-policies:
+  description: <0>Network Policy</0> allows you to control how a Pod communicates with different network entities.
+  headers:
+    cidr: CIDR
+    egress: Egress
+    end-port: End Port
+    exceptions: Exceptions
+    ingress: Ingress
+    ip-block: IP Block
+    key: Key
+    match-labels: Matched Labels
+    namespace-selector: Namespace Selector
+    operator: Operator
+    pod-selector: Pod Selector
+    policy-peer: Network Policy Peers
+    policy-port: Network Policy Ports
+    policy-types: Policy Types
+    port: Port
+    protocol: Protocol
+    values: Values
+  name_singular: Network Policy
+  present-but-empty: Present but empty selector selects all pods / namespaces.
+  title: Network Policies
 no-permissions:
   title: No Permissions
 node-details:

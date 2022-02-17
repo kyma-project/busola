@@ -36,4 +36,5 @@ export * from './PersistentVolumeClaims/PersistentVolumeClaims.details';
 export * from './StorageClasses/StorageClasses.details';
 export * from './PersistentVolume/PersistentVolumes.details';
 export * from './AuthorizationPolicies/AuthorizationPolicies.details';
+export * from './NetworkPolicy/NetworkPolicy.details';
 export * from './Sidecars/Sidecars.details';
