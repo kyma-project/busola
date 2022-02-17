@@ -73,7 +73,6 @@ export const AddonsConfigurations = ({
           name: name,
         }),
       );
-
       refetchList();
     } catch (e) {
       onError(t('addons.errors.cannot-create'), `Error: ${e.message}`);

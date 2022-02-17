@@ -10,11 +10,7 @@
   },
   "author": "hasselhoff-team@kyma",
   "devDependencies": {
-    "@babel/core": "^7.17.0",
-    "@babel/plugin-proposal-class-properties": "^7.16.7",
-    "@babel/plugin-transform-runtime": "^7.17.0",
     "@babel/preset-env": "^7.16.11",
-    "jest": "26.6.0",
     "webpack": "^5.38.1"
   },
   "peerDependencies": {
