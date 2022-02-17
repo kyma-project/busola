@@ -33,7 +33,7 @@ const resourceTypes = [
   ['gateways', 'gw'],
   ['virtualservices', 'vs'],
   ['authorizationpolicies', 'ap'],
-  [('rolebindings', 'rb', 'rbs')],
+  ['rolebindings', 'rb', 'rbs'],
   ['roles'],
   ['functions', 'fn'],
   ['gitrepositories', 'gitrepos', 'repos'],

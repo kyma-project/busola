@@ -35,7 +35,7 @@ context('Test Authorization Policies', () => {
       .should('be.visible');
 
     cy.getIframeBody()
-      .contains('myapi')
+      .contains('app=myapi')
       .should('be.visible');
 
     cy.getIframeBody()
@@ -55,7 +55,19 @@ context('Test Authorization Policies', () => {
       .should('be.visible');
   });
 
-  it('Delete Authorization Policy', () => {
+  it('Inspect list and delete Authorization Policy', () => {
+    cy.getIframeBody()
+      .contains('Authorization Policies')
+      .click();
+
+    cy.getIframeBody()
+      .find('[role="search"] [aria-label="search-input"]')
+      .type('test-ap', { force: true });
+
+    cy.getIframeBody()
+      .contains('tbody tr td a', 'test-ap')
+      .click({ force: true });
+
     cy.deleteInDetails();
   });
 });

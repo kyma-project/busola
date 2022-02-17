@@ -756,7 +756,7 @@ export function getStaticChildrenNodesForNamespace(
       category: i18next.t('istio.title'),
       resourceType: 'authorizationpolicies',
       pathSegment: 'authorizationpolicies',
-      label: i18next.t('authorizationpolicies.title'),
+      label: i18next.t('authorization-policies.title'),
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/authorizationPolicies?' +

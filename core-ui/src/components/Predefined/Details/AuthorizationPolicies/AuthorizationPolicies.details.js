@@ -12,16 +12,24 @@ export const AuthorizationPoliciesDetails = ({
 }) => {
   const { t } = useTranslation();
 
+  const getAction = policy => {
+    if (policy.spec?.action) return policy.spec?.action;
+    else return 'ALLOW';
+  };
+
+  const getProvider = policy => {
+    if (policy.spec.provider?.name) return policy.spec.provider?.name;
+    else return EMPTY_TEXT_PLACEHOLDER;
+  };
+
   const customColumns = [
     {
-      header: t('authorizationpolicies.headers.action'),
-      value: ({ spec }) => <p>{spec.action || 'ALLOW'}</p>,
+      header: t('authorization-policies.headers.action'),
+      value: getAction,
     },
     {
-      header: t('authorizationpolicies.headers.provider'),
-      value: ({ spec }) => (
-        <p>{spec.provider?.name || EMPTY_TEXT_PLACEHOLDER}</p>
-      ),
+      header: t('authorization-policies.headers.provider'),
+      value: getProvider,
     },
   ];
 
@@ -35,7 +43,7 @@ export const AuthorizationPoliciesDetails = ({
   return (
     <DefaultRenderer
       customColumns={customColumns}
-      customComponents={[WorkloadSelectorLabels, Rules]}
+      customComponents={[Rules, WorkloadSelectorLabels]}
       {...otherParams}
     ></DefaultRenderer>
   );

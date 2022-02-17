@@ -11,7 +11,7 @@ const From = ({ from }) => {
   return (
     <LayoutPanel>
       <LayoutPanel.Header>
-        <LayoutPanel.Head title={t('authorizationpolicies.headers.from')} />
+        <LayoutPanel.Head title={t('authorization-policies.headers.from')} />
       </LayoutPanel.Header>
       <LayoutPanel.Body>
         {from.map(cos => {
@@ -30,7 +30,7 @@ const Source = ({ name, value }) => {
   return (
     <LayoutPanel>
       <LayoutPanel.Header>
-        <LayoutPanel.Head title={t('authorizationpolicies.headers.source')} />
+        <LayoutPanel.Head title={t('authorization-policies.headers.source')} />
       </LayoutPanel.Header>
       <LayoutPanel.Body>
         <LayoutPanelRow name={name} value={<Tokens tokens={value} />} />
@@ -45,7 +45,7 @@ const To = ({ to }) => {
   return (
     <LayoutPanel>
       <LayoutPanel.Header>
-        <LayoutPanel.Head title={t('authorizationpolicies.headers.to')} />
+        <LayoutPanel.Head title={t('authorization-policies.headers.to')} />
       </LayoutPanel.Header>
       <LayoutPanel.Body>
         {to.map(cos => {
@@ -65,7 +65,7 @@ const Operation = ({ name, value }) => {
     <LayoutPanel>
       <LayoutPanel.Header>
         <LayoutPanel.Head
-          title={t('authorizationpolicies.headers.operation')}
+          title={t('authorization-policies.headers.operation')}
         />
       </LayoutPanel.Header>
       <LayoutPanel.Body>
@@ -79,9 +79,9 @@ const When = ({ when }) => {
   const { t, i18n } = useTranslation();
 
   const headerRenderer = () => [
-    t('authorizationpolicies.headers.key'),
-    t('authorizationpolicies.headers.values'),
-    t('authorizationpolicies.headers.not-values'),
+    t('authorization-policies.headers.key'),
+    t('authorization-policies.headers.values'),
+    t('authorization-policies.headers.not-values'),
   ];
 
   const rowRenderer = entry => [
@@ -92,7 +92,7 @@ const When = ({ when }) => {
 
   return (
     <GenericList
-      title={t('authorizationpolicies.headers.when')}
+      title={t('authorization-policies.headers.when')}
       entries={when || []}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
@@ -109,7 +109,7 @@ export const Rules = policy => {
   return (
     <LayoutPanel className="fd-margin--md" key={'ap-rules'}>
       <LayoutPanel.Header>
-        <LayoutPanel.Head title={t('authorizationpolicies.headers.rules')} />
+        <LayoutPanel.Head title={t('authorization-policies.headers.rules')} />
       </LayoutPanel.Header>
       <LayoutPanel.Body>
         <div>
@@ -117,7 +117,7 @@ export const Rules = policy => {
             <LayoutPanel key={index}>
               <LayoutPanel.Header>
                 <LayoutPanel.Head
-                  title={t('authorizationpolicies.headers.rule', {
+                  title={t('authorization-policies.headers.rule', {
                     ruleNumber: index + 1,
                   })}
                 />

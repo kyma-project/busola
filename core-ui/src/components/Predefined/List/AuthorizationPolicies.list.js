@@ -16,13 +16,13 @@ export const AuthorizationPoliciesList = ({
 
   const customColumns = [
     {
-      header: t('authorizationpolicies.headers.action'),
+      header: t('authorization-policies.headers.action'),
       value: getAction,
     },
   ];
 
   const description = (
-    <Trans i18nKey="authorizationpolicies.description">
+    <Trans i18nKey="authorization-policies.description">
       <Link
         className="fd-link"
         url="https://istio.io/latest/docs/reference/config/security/authorization-policy/"
