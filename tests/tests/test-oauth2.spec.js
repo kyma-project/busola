@@ -23,7 +23,7 @@ context('Test OAuth2 Clients', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="OAuth2 Client Name"]')
+      .find('[placeholder="OAuth2 Client name"]')
       .clear()
       .type(CLIENT_NAME);
 
@@ -38,7 +38,11 @@ context('Test OAuth2 Clients', () => {
     cy.getIframeBody()
       .find('[placeholder="OAuth2 scope"]')
       .clear()
-      .type('openid{downarrow}');
+      .type('openid', {
+        //for unknown reason Cypress can lose 'e' when typing openid, therefore slowing down the typing
+        delay: 100,
+        waitForAnimations: true,
+      });
 
     cy.getIframeBody()
       .contains('label', 'Scope')
