@@ -12,24 +12,14 @@ export const AuthorizationPoliciesDetails = ({
 }) => {
   const { t } = useTranslation();
 
-  const getAction = policy => {
-    if (policy.spec?.action) return policy.spec?.action;
-    else return 'ALLOW';
-  };
-
-  const getProvider = policy => {
-    if (policy.spec.provider?.name) return policy.spec.provider?.name;
-    else return EMPTY_TEXT_PLACEHOLDER;
-  };
-
   const customColumns = [
     {
       header: t('authorization-policies.headers.action'),
-      value: getAction,
+      value: policy => policy.spec?.action || 'ALLOW',
     },
     {
       header: t('authorization-policies.headers.provider'),
-      value: getProvider,
+      value: policy => policy.spec?.provider?.name || EMPTY_TEXT_PLACEHOLDER,
     },
   ];
 

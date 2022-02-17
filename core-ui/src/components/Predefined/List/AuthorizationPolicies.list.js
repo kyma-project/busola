@@ -9,15 +9,10 @@ export const AuthorizationPoliciesList = ({
 }) => {
   const { t } = useTranslation();
 
-  const getAction = policy => {
-    if (policy.spec?.action) return policy.spec?.action;
-    else return 'ALLOW';
-  };
-
   const customColumns = [
     {
       header: t('authorization-policies.headers.action'),
-      value: getAction,
+      value: policy => policy.spec?.action || 'ALLOW',
     },
   ];
 
