@@ -27,6 +27,7 @@ const resourceTypes = [
   ['dnsproviders', 'dnspr'],
   ['subscriptions'],
   ['ingresses', 'ing'],
+  ['networkpolicies', 'np'],
   ['apirules'],
   ['oauth2clients'],
   ['destinationrules', 'dr'],
@@ -38,6 +39,7 @@ const resourceTypes = [
   ['gitrepositories', 'gitrepos', 'repos'],
   ['horizontalpodautoscalers', 'hpa'],
   ['persistentvolumeclaims', 'pvc'],
+  ['sidecars'],
 ];
 const extendedResourceTypes = resourceTypes.map(aliases => [
   ...aliases,

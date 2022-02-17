@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: test-np
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      aaa: bbbb
+      ccc: cccc
+      dd: ddd
+  ingress:
+    - ports:
+        - protocol: TCP
+          port: 7777
+        - protocol: UDP
+          port: 6666
+      from:
+        - ipBlock:
+            cidr: 192.168.1.1/24
+  policyTypes:
+    - Ingress
