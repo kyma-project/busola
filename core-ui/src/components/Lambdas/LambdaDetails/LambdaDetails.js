@@ -67,7 +67,7 @@ export default function LambdaDetails({ lambda }) {
           id="lambda-resources"
           title={t('functions.details.title.resources')}
         >
-          {/* <ResourceManagement lambda={lambda} /> */}
+          <ResourceManagement lambda={lambda} />
         </Tab>
       </Tabs>
     </>
