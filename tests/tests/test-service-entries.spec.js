@@ -75,7 +75,7 @@ context('Test Service Entries', () => {
       .contains(SE_NAME)
       .parent()
       .getIframeBody()
-      .contains('RESOLUTION');
+      .contains(RESOLUTION);
   });
 
   it('Delete a Service Entry', () => {
