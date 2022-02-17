@@ -593,7 +593,40 @@ export function getStaticChildrenNodesForNamespace(
         },
       ],
     },
-
+    {
+      category: i18next.t('discovery-and-network.title'),
+      pathSegment: 'networkpolicies',
+      resourceType: 'networkpolicies',
+      navigationContext: 'networkpolicies',
+      label: i18next.t('network-policies.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/networkPolicies?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/networking.k8s.io/v1',
+          hasDetailsView: true,
+        }),
+      keepSelectedForChildren: true,
+      viewGroup: coreUIViewGroupName,
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':networkPolicyName',
+              resourceType: 'networkpolicies',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/networkPolicies/:networkPolicyName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/networking.k8s.io/v1',
+                }),
+              viewGroup: coreUIViewGroupName,
+            },
+          ],
+        },
+      ],
+    },
     // ISTIO
     {
       category: {
