@@ -23,10 +23,10 @@
   },
   "devDependencies": {
     "babel-loader": "^8.2.3",
-    "copy-webpack-plugin": "^10.2.4",
+    "copy-webpack-plugin": "^5.0.0",
     "prettier": "^1.18.2",
     "sirv-cli": "^1.0.11",
-    "webpack": "^5.38.1"
+    "webpack": "^4.44.2"
   },
   "jest": {
     "testRegex": "(/__tests__/.*|(\\.|/)(test))\\.js$"

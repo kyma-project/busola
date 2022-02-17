@@ -6,13 +6,7 @@ import jsyaml from 'js-yaml';
 import { MonacoEditor, useTheme } from 'react-shared';
 
 import './KubeconfigUpload.scss';
-console.log({
-  MessageStrip,
-  useTranslation,
-  KubeconfigFileUpload,
-  MonacoEditor,
-  useTheme,
-});
+
 export function KubeconfigUpload({
   onKubeconfig,
   handleKubeconfigAdded,
