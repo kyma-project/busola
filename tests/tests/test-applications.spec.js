@@ -31,18 +31,18 @@ context('Test Applications', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Key"]')
+      .find('[placeholder="Enter key"]')
       .filterWithNoValue()
       .type('label-key');
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Value"]')
+      .find('[placeholder="Enter value"]')
       .filterWithNoValue()
       .first()
       .type('label-value');
 
     cy.getIframeBody()
-      .find('[placeholder="Specify a description for your Application."]')
+      .find('[placeholder="Specify a description for your Application"]')
       .type(APPLICATION_DESCRIPTION);
 
     cy.getIframeBody()

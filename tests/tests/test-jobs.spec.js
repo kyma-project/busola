@@ -40,13 +40,13 @@ context('Test Jobs', () => {
 
     // job name
     cy.getIframeBody()
-      .find('[placeholder="Job Name"]:visible')
+      .find('[placeholder="Job name"]:visible')
       .clear()
       .type(JOB_NAME);
 
     // job container name
     cy.getIframeBody()
-      .find('[placeholder="Container Name"]:visible')
+      .find('[placeholder="Container name"]:visible')
       .type(JOB_NAME);
 
     // job command
@@ -73,7 +73,7 @@ context('Test Jobs', () => {
 
     // job container name
     cy.getIframeBody()
-      .find('[placeholder="Container Name"]:visible')
+      .find('[placeholder="Container name"]:visible')
       .type(SECOND_CONTAINER_NAME);
 
     // job args
@@ -165,12 +165,12 @@ context('Test Jobs', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Key"]')
+      .find('[placeholder="Enter key"]')
       .filterWithNoValue()
       .type('a');
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Value"]')
+      .find('[placeholder="Enter value"]')
       .filterWithNoValue()
       .first()
       .type('b');

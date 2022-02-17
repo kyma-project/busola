@@ -120,7 +120,7 @@ context('Test Command Palette navigation', () => {
     getQueryInput().trigger('keydown', { key: 'Enter' });
 
     cy.getIframeBody()
-      .contains('API server address')
+      .contains('API Server Address')
       .should('be.visible');
   });
 

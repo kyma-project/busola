@@ -68,11 +68,11 @@ context('Test Certificates', () => {
       .click();
 
     cy.getIframeBody()
-      .find('input[placeholder^="Enter Key"]:visible')
+      .find('input[placeholder^="Enter key"]:visible')
       .type(ANNOTATION_KEY);
 
     cy.getIframeBody()
-      .find('input[placeholder^="Enter Value"]:visible')
+      .find('input[placeholder^="Enter value"]:visible')
       .first()
       .type(ANNOTATION_VALUE);
 

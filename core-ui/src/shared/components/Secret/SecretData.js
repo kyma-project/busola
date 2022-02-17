@@ -54,10 +54,10 @@ export default function SecretData({ secret }) {
     );
 
     if (!secret) {
-      return <SecretWrapper>Secret not found.</SecretWrapper>;
+      return <SecretWrapper>Secret not found</SecretWrapper>;
     }
     if (!secret.data) {
-      return <SecretWrapper>Empty secret.</SecretWrapper>;
+      return <SecretWrapper>Empty Secret</SecretWrapper>;
     }
 
     return (
