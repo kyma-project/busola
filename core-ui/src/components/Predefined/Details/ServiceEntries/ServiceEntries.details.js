@@ -14,9 +14,9 @@ const Ports = serviceentry => {
 
   const headerRenderer = _ => [
     t('common.headers.name'),
-    t('serviceentries.headers.ports.number'),
-    t('serviceentries.headers.ports.protocol'),
-    t('serviceentries.headers.ports.target-point'),
+    t('service-entries.headers.ports.number'),
+    t('service-entries.headers.ports.protocol'),
+    t('service-entries.headers.ports.target-point'),
   ];
 
   const rowRenderer = port => [
@@ -29,7 +29,7 @@ const Ports = serviceentry => {
   return (
     <GenericList
       key="serviceentries-ports"
-      title={t('serviceentries.headers.ports.title')}
+      title={t('service-entries.headers.ports.title')}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       entries={ports || []}
@@ -45,32 +45,32 @@ const Configuration = ({ spec }) => {
   return (
     <LayoutPanel className="fd-margin--md" key="se-configuration">
       <LayoutPanel.Header>
-        <LayoutPanel.Head title={t('serviceentries.headers.configuration')} />
+        <LayoutPanel.Head title={t('service-entries.headers.configuration')} />
       </LayoutPanel.Header>
       <LayoutPanel.Body>
         <LayoutPanelRow
-          name={t('serviceentries.headers.hosts')}
+          name={t('service-entries.headers.hosts')}
           value={<Tokens tokens={spec?.hosts} />}
           key={spec?.hosts}
         />
         <LayoutPanelRow
-          name={t('serviceentries.headers.addresses')}
+          name={t('service-entries.headers.addresses')}
           value={<Tokens tokens={spec?.addresses} />}
           key={spec?.addresses}
         />
         <LayoutPanelRow
-          name={t('serviceentries.headers.export-to')}
+          name={t('service-entries.headers.export-to')}
           value={
             spec.exportTo?.length > 0 ? (
               <Tokens tokens={spec?.exportTo} />
             ) : (
-              t('serviceentries.headers.export-to-empty')
+              t('service-entries.headers.export-to-empty')
             )
           }
           key={spec?.exportTo}
         />
         <LayoutPanelRow
-          name={t('serviceentries.headers.subject-alt-names')}
+          name={t('service-entries.headers.subject-alt-names')}
           value={<Tokens tokens={spec?.subjectAltNames} />}
           key={spec?.subjectAltNames}
         />
@@ -99,11 +99,11 @@ export function ServiceEntriesDetails({ DefaultRenderer, ...otherParams }) {
 
   const customColumns = [
     {
-      header: t('serviceentries.headers.resolution'),
+      header: t('service-entries.headers.resolution'),
       value: se => se.spec.resolution,
     },
     {
-      header: t('serviceentries.headers.location'),
+      header: t('service-entries.headers.location'),
       value: se => se.spec?.location || EMPTY_TEXT_PLACEHOLDER,
     },
   ];

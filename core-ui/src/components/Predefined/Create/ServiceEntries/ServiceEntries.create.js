@@ -17,7 +17,7 @@ function ServiceEntriesCreate({
   return (
     <ResourceForm
       pluralKind="serviceentries"
-      singularName={t('serviceentries.name_singular')}
+      singularName={t('service-entries.name_singular')}
       resource={serviceEntry}
       setResource={setServiceEntry}
       onChange={onChange}

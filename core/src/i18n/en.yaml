@@ -401,6 +401,7 @@ command-palette:
     replicasets: Replica Sets
     rolebindings: Role Bindings
     serviceaccounts: Service Accounts
+    serviceentries: Service Entries
     statefulsets: Stateful Sets
     storageclasses: Storage Classes
     subscriptions: Subscriptions
@@ -1786,9 +1787,7 @@ service-accounts:
   name_singular: Service Account
   service-account: Service Account
   title: Service Accounts
-service-management:
-  title: Service Management
-serviceentries:
+service-entries:
   description: <0>Service Entry</0> allows for adding more entries to the internal service registry of Istio.
   headers:
     addresses: Adresses
@@ -1812,6 +1811,8 @@ serviceentries:
     subject-alt-names: Subject Alt Names
   name_singular: Service Entry
   title: Service Entries
+service-management:
+  title: Service Management
 services:
   cluster-ip: Cluster IP
   description: <0>Service</0> enables access to an application running on a set of Pods.
