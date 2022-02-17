@@ -23,7 +23,7 @@ context('Test Cron Jobs', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Cron Job Name"]')
+      .find('[placeholder="Cron Job name"]')
       .type(CRON_JOB_NAME);
 
     cy.getIframeBody()
@@ -56,18 +56,18 @@ context('Test Cron Jobs', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Command to run in a container."]')
+      .find('[placeholder="Command to run in a container"]')
       .clear()
       .type('ls -la');
 
     cy.getIframeBody()
-      .find('[placeholder="Container Name"]')
+      .find('[placeholder="Container name"]')
       .clear()
       .type('test-container');
 
     cy.getIframeBody()
       .find(
-        '[placeholder="Enter the Docker image tag, for example, \'busybox\'."]',
+        '[placeholder="Enter the Docker image tag, for example, \'busybox\'"]',
       )
       .clear()
       .type('busybox');
@@ -129,18 +129,18 @@ context('Test Cron Jobs', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Command to run in a container."]')
+      .find('[placeholder="Command to run in a container"]')
       .clear()
       .type('ls');
 
     cy.getIframeBody()
-      .find('[placeholder="Container Name"]')
+      .find('[placeholder="Container name"]')
       .clear()
       .type('test-busybox');
 
     cy.getIframeBody()
       .find(
-        '[placeholder="Enter the Docker image tag, for example, \'busybox\'."]',
+        '[placeholder="Enter the Docker image tag, for example, \'busybox\'"]',
       )
       .clear()
       .type('busytest');

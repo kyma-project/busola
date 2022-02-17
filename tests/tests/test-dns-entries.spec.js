@@ -26,7 +26,7 @@ context('Test DNS Entries', () => {
 
     // name
     cy.getIframeBody()
-      .find('[placeholder="DNS Entry Name"]:visible')
+      .find('[placeholder="DNS Entry name"]:visible')
       .type(DNS_ENTRY_NAME);
 
     // ttl
@@ -37,7 +37,7 @@ context('Test DNS Entries', () => {
 
     // dns name
     cy.getIframeBody()
-      .find('[placeholder^="Select the DNS Name"]:visible')
+      .find('[placeholder^="Select the DNS name"]:visible')
       .type(DNS_NAME)
       .click();
 
@@ -75,7 +75,7 @@ context('Test DNS Entries', () => {
 
     // name should be disabled for edit
     cy.getIframeBody()
-      .find('[placeholder="DNS Entry Name"]:visible')
+      .find('[placeholder="DNS Entry name"]:visible')
       .should('have.attr', 'readonly');
 
     // change from A to CNAME

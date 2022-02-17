@@ -24,12 +24,12 @@ context('Test Config Maps', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Config Map Name"]:visible')
+      .find('[placeholder="Config Map name"]:visible')
       .type(CONFIG_MAP_NAME)
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Key"]:visible')
+      .find('[placeholder="Enter key"]:visible')
       .type(`${ENTRY_KEY}{enter}{backspace}${ENTRY_VALUE}`);
 
     cy.getIframeBody()
@@ -57,7 +57,7 @@ context('Test Config Maps', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Key"]:visible')
+      .find('[placeholder="Enter key"]:visible')
       .eq(1)
       .type(`${ENTRY_KEY2}{enter}{backspace}${ENTRY_VALUE2}`);
 
@@ -88,7 +88,7 @@ context('Test Config Maps', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Config Map Name"]:visible')
+      .find('[placeholder="Config Map name"]:visible')
       .type(CLONE_NAME)
       .click();
 
