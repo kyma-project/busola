@@ -87,7 +87,9 @@ export const metricsParser = metrics => {
         break;
       case 'Resource':
         i18label = 'hpas.resource';
-        name = `${m[type].name} ${i18n.t('hpas.on-pods')}`;
+        name = `${m[type].name === 'cpu' ? 'CPU' : m[type].name} ${i18n.t(
+          'hpas.on-pods',
+        )}`;
         break;
       default:
         break;

@@ -26,11 +26,11 @@ context('Test Secrets', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Secret Name"]:visible')
+      .find('[placeholder="Secret name"]:visible')
       .type(SECRET_NAME);
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Key"]:visible')
+      .find('[placeholder="Enter key"]:visible')
       .type(
         `${SECRET_KEY}{enter}{backspace}${SECRET_VALUE}{enter}${SECRET2_KEY}{enter}{backspace}${SECRET2_VALUE}`,
       );
@@ -80,12 +80,12 @@ context('Test Secrets', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Value"]:visible')
+      .find('[placeholder="Enter value"]:visible')
       .eq(0)
       .type(`{selectall}${SECRET_VALUE2}`);
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Key"]:visible')
+      .find('[placeholder="Enter key"]:visible')
       .eq(2)
       .type(`${SECRET3_KEY}{enter}{backspace}${SECRET3_VALUE}`);
 

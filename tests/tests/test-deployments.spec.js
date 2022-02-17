@@ -14,7 +14,7 @@ context('Test Deployments', () => {
 
   it('Create a Deployment', () => {
     cy.getIframeBody()
-      .contains('Deploy a new workload')
+      .contains('Deploy new workload')
       .click();
 
     cy.getIframeBody()
@@ -23,7 +23,7 @@ context('Test Deployments', () => {
       .click({ force: true });
 
     cy.getIframeBody()
-      .find('[placeholder="Deployment Name"]:visible')
+      .find('[placeholder="Deployment name"]:visible')
       .clear()
       .type(DEPLOYMENT_NAME);
 
@@ -36,23 +36,23 @@ context('Test Deployments', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Key"]')
+      .find('[placeholder="Enter key"]')
       .filterWithNoValue()
       .type('app');
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Value"]')
+      .find('[placeholder="Enter value"]')
       .filterWithNoValue()
       .first()
       .type(DEPLOYMENT_NAME);
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Key"]')
+      .find('[placeholder="Enter key"]')
       .filterWithNoValue()
       .type('example');
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Value"]')
+      .find('[placeholder="Enter value"]')
       .filterWithNoValue()
       .first()
       .type(DEPLOYMENT_NAME);
@@ -92,7 +92,7 @@ context('Test Deployments', () => {
       .type('20');
 
     cy.getIframeBody()
-      .contains('Expose a separate Service')
+      .contains('Expose separate Service')
       .click();
 
     cy.getIframeBody()
@@ -155,12 +155,12 @@ context('Test Deployments', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Key"]')
+      .find('[placeholder="Enter key"]')
       .filterWithNoValue()
       .type('label-key');
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Value"]')
+      .find('[placeholder="Enter value"]')
       .filterWithNoValue()
       .first()
       .type('label-value');
