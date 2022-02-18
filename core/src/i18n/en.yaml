@@ -147,7 +147,7 @@ applications:
 apps:
   title: Apps
 authorization-policies:
-  description: <0>Istio Authorization Policy</0> enables access control on workloads in the mesh.
+  description: <0>Istio Authorization Policy</0> allows for workload access management in the mesh.
   headers:
     action: Action
     from: From
