@@ -26,7 +26,6 @@
   "devDependencies": {
     "@babel/cli": "^7.12.1",
     "@babel/node": "^7.12.10",
-    "@babel/preset-env": "^7.12.10",
     "@babel/register": "^7.12.10",
     "babel-loader": "^8.2.2",
     "core-js": "^3.8.1",

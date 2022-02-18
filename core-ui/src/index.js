@@ -1,4 +1,3 @@
-import 'regenerator-runtime/runtime';
 import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import i18next from 'i18next';
