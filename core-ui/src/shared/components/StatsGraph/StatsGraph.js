@@ -245,7 +245,7 @@ export function StatsGraph({
     });
 
     dataWithGeometry.forEach(({ value, left, bottom, top }, index) => {
-      if (activeBar !== null && index === activeBar + dataOffset) {
+      if (activeBar !== null && index === activeBar - dataOffset) {
         if (highlightColor) {
           ctx.fillStyle = highlightColor;
         } else {
@@ -267,7 +267,7 @@ export function StatsGraph({
     });
 
     dataWithGeometry.forEach(({ value, left, bottom, top }, index) => {
-      if (activeBar !== null && index === activeBar) {
+      if (activeBar !== null && index === activeBar - dataOffset) {
         const labelPadding = 2;
         const labelDef = getSIPrefix(value, binary, { unit });
         const labelWidth = ctx.measureText(labelDef.string).width;
