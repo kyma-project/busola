@@ -217,8 +217,8 @@ export function StatsGraph({
     Object.entries(scale?.labels || {}).forEach(([val, label]) =>
       ctx.fillText(
         label,
-        geometry.scale.left,
-        geometry.scale.top + geometry.scale.height * (1 - val),
+        Math.round(geometry.scale.left),
+        Math.round(geometry.scale.top + geometry.scale.height * (1 - val)),
       ),
     );
 
@@ -227,8 +227,8 @@ export function StatsGraph({
     Object.entries(hScale).forEach(([val, label]) =>
       ctx.fillText(
         label,
-        geometry.graph.left + geometry.graph.width * val,
-        geometry.hScale.top,
+        Math.round(geometry.graph.left + geometry.graph.width * val),
+        Math.round(geometry.hScale.top),
       ),
     );
 
