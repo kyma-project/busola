@@ -42,7 +42,7 @@ context('Test reduced permissions', () => {
       .type(CR_NAME);
 
     cy.getIframeBody()
-      .find('[placeholder="Role Name"]:visible')
+      .find('[placeholder="Role name"]:visible')
       .type(CR_NAME);
 
     // api groups
@@ -101,7 +101,7 @@ context('Test reduced permissions', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Service Account Name"]:visible')
+      .find('[placeholder="Service Account name"]:visible')
       .type(SA_NAME);
 
     cy.getIframeBody()
@@ -112,7 +112,7 @@ context('Test reduced permissions', () => {
 
   it('Create a ClusterRoleBinding for SA and CR', () => {
     cy.getLeftNav()
-      .contains('Back to Namespaces')
+      .contains('Back to Cluster Overview')
       .click();
 
     cy.navigateTo('Configuration', 'Cluster Role Bindings');
@@ -131,13 +131,13 @@ context('Test reduced permissions', () => {
 
     // name
     cy.getIframeBody()
-      .find('[placeholder="Cluster Role Binding Name"]:visible')
+      .find('[placeholder="Cluster Role Binding name"]:visible')
       .type(CRB_NAME);
 
     // role
     cy.getIframeBody()
       .find(
-        '[placeholder="Start typing to select Role Binding from the list."]:visible',
+        '[placeholder="Start typing to select Role Binding from the list"]:visible',
       )
       .type(CR_NAME);
     cy.getIframeBody()
@@ -240,7 +240,7 @@ context('Test reduced permissions', () => {
       .should('be.visible');
 
     cy.getLeftNav()
-      .contains('Back to Namespaces')
+      .contains('Back to Cluster Overview')
       .click();
 
     cy.getLeftNav()
@@ -251,15 +251,16 @@ context('Test reduced permissions', () => {
   it('Cleanup', () => {
     cy.get('[data-testid="app-switcher"]').click();
 
-    // 2 results: original cluster and "Clusters Overview" node, take first
+    // 2 results: "Clusters Overview" node and original cluster, take second
     cy.get('#appSwitcherPopover:visible')
+      .find('li')
+      .eq(1)
       .find('[role="button"]')
-      .first()
       .click();
 
     // wait until original cluster loads
-    cy.getIframeBody()
-      .contains('Cluster Overview')
+    cy.getLeftNav()
+      .contains('Configuration')
       .should('exist');
 
     // yes, navigation is broken yet again

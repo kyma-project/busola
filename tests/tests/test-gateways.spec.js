@@ -29,17 +29,17 @@ context('Test Gateways', () => {
 
     // name
     cy.getIframeBody()
-      .find('[placeholder="Gateway Name"]:visible', { log: false })
+      .find('[placeholder="Gateway name"]:visible', { log: false })
       .type(GATEWAY_NAME);
 
     // selector
     cy.getIframeBody()
-      .find('[placeholder="Enter Key"]:visible', { log: false })
+      .find('[placeholder="Enter key"]:visible', { log: false })
       .filterWithNoValue()
       .type('selector-key');
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Value"]:visible', { log: false })
+      .find('[placeholder="Enter value"]:visible', { log: false })
       .filterWithNoValue()
       .first()
       .type('selector-value');
@@ -96,7 +96,7 @@ context('Test Gateways', () => {
 
     // name should be disabled for edit
     cy.getIframeBody()
-      .find('[placeholder="Gateway Name"]:visible', { log: false })
+      .find('[placeholder="Gateway name"]:visible', { log: false })
       .should('have.attr', 'readonly');
 
     cy.getIframeBody()
