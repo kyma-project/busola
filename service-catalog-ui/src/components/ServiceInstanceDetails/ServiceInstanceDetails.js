@@ -4,14 +4,12 @@ import {
   useGet,
   useMicrofrontendContext,
   ResourceNotFound,
-  useWindowTitle,
 } from 'react-shared';
 import ServiceInstanceHeader from './ServiceInstanceHeader/ServiceInstanceHeader';
 import ServiceInstanceBindings from './ServiceInstanceBindings/ServiceInstanceBindings';
 import { EmptyList } from './styled';
 import { SERVICE_BINDINGS_PANEL } from './ServiceInstanceBindings/constants';
 import { useTranslation } from 'react-i18next';
-import { INSTANCES_TITLE } from 'shared/constants';
 
 const ServiceInstanceBindingsWrapper = ({
   serviceInstance,
@@ -42,7 +40,6 @@ const ServiceInstanceBindingsWrapper = ({
 export default function ServiceInstanceDetails({ match }) {
   const { i18n } = useTranslation();
   const { namespaceId } = useMicrofrontendContext();
-  useWindowTitle(INSTANCES_TITLE);
   const { data: serviceInstance, loading = true, error } = useGet(
     `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${namespaceId}/serviceinstances/${match.params.name}`,
     {

@@ -13,7 +13,7 @@ import {
   NotificationProvider,
   MainFrameRedirection,
   useMicrofrontendContext,
-  useWindowTitle,
+  WithTitle,
 } from 'react-shared';
 
 import { CATALOG_TITLE } from '../../shared/constants';
@@ -27,25 +27,53 @@ const App = () => {
   return (
     <NotificationProvider>
       <Routes>
-        <Route exact path="/catalog" element={<ServiceClassList />} />
+        <Route
+          exact
+          path="/catalog"
+          element={
+            <WithTitle title={CATALOG_TITLE}>
+              <ServiceClassList />
+            </WithTitle>
+          }
+        />
 
         <Route
           exact
           path="/catalog/ServiceClass/:name"
-          element={<RoutedServiceClassDetails />}
+          element={
+            <WithTitle title={CATALOG_TITLE}>
+              <RoutedServiceClassDetails />
+            </WithTitle>
+          }
         />
 
         <Route
           exact
           path="/catalog/ClusterServiceClass/:name"
-          element={<RoutedClusterServiceClassDetails />}
+          element={
+            <WithTitle title={CATALOG_TITLE}>
+              <RoutedClusterServiceClassDetails />
+            </WithTitle>
+          }
         />
 
-        <Route exact path="/instances" element={<ServiceInstancesList />} />
+        <Route
+          exact
+          path="/instances"
+          element={
+            <WithTitle title={INSTANCES_TITLE}>
+              <ServiceInstancesList />
+            </WithTitle>
+          }
+        />
         <Route
           exact
           path="/instances/details/:name"
-          element={<ServiceInstancesDetails />}
+          element={
+            <WithTitle title={INSTANCES_TITLE}>
+              <ServiceInstancesDetails />
+            </WithTitle>
+          }
         />
         <Route exact path="" element={<MainFrameRedirection />} />
       </Routes>
@@ -55,13 +83,11 @@ const App = () => {
 
 const RoutedServiceClassDetails = () => {
   const { name } = useParams();
-  useWindowTitle(CATALOG_TITLE);
   return <ServiceClassDetailsContainer name={name} />;
 };
 
 const RoutedClusterServiceClassDetails = () => {
   const { name } = useParams();
-  useWindowTitle(CATALOG_TITLE);
   return <ClusterServiceClassDetailsContainer name={name} />;
 };
 

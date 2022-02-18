@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import Preferences from 'components/Preferences/Preferences';
 import {
-  useWindowTitle,
+  WithTitle,
   useMicrofrontendContext,
   MainFrameRedirection,
 } from 'react-shared';
@@ -34,60 +34,81 @@ export default function App() {
   return (
     // force rerender on cluster change
     <Routes key={cluster?.name}>
-      <Route path="/no-permissions" exact element={<NoPermissions />} />
-      <Route path="/overview" exact element={<ClusterOverview />} />
+      <Route
+        path="/no-permissions"
+        element={
+          <WithTitle title={t('no-permissions.title')}>
+            <NoPermissions />
+          </WithTitle>
+        }
+      />
+      <Route
+        path="/overview"
+        element={
+          <WithTitle title={t('clusters.overview.title-current-cluster')}>
+            <ClusterOverview />
+          </WithTitle>
+        }
+      />
       <Route path="/overview/nodes/:nodeName" element={<RoutedNodeDetails />} />
-      <Route path="/clusters" exact element={<ClusterList />} />
+      <Route
+        path="/clusters"
+        element={
+          <WithTitle title={t('clusters.overview.title-all-clusters')}>
+            <ClusterList />
+          </WithTitle>
+        }
+      />
       <Route path="/preferences" element={<Preferences />} />
 
       <Route
-        exact
         path="/applications/:name/:serviceName"
         element={<RoutedApplicationServiceDetails />}
       />
 
       <Route
-        exact
         path="/namespaces/:namespaceId/pods/:podName/containers/:containerName"
         element={<RoutedContainerDetails />}
       />
 
       <Route
-        exact
         path="/namespaces/:namespaceId/helm-releases"
-        element={<HelmReleasesList />}
+        element={
+          <WithTitle title={t('helm-releases.title')}>
+            <HelmReleasesList />
+          </WithTitle>
+        }
       />
 
       <Route
-        exact
         path="/namespaces/:namespaceId/helm-releases/:releaseName"
-        element={<RoutedHelmReleaseDetails />}
+        element={
+          <WithTitle title={t('helm-releases.title')}>
+            <RoutedHelmReleaseDetails />
+          </WithTitle>
+        }
       />
 
       <Route
-        exact
         path="/customresourcedefinitions/:customResourceDefinitionName/:resourceVersion/:resourceName"
         element={<RoutedCustomResourceDetails />}
       />
 
       <Route
-        exact
         path="/namespaces/:namespaceId/:resourceType/:resourceName"
         element={<RoutedResourceDetails />}
       />
       <Route
-        exact
         path="/namespaces/:namespaceId/:resourceType"
         element={<RoutedResourcesList />}
       />
       <Route
-        exact
         path="/:resourceType/:resourceName"
         element={<RoutedResourceDetails />}
       />
 
-      <Route exact path="/:resourceType" element={<RoutedResourcesList />} />
-      <Route exact path="" element={<MainFrameRedirection />} />
+      <Route path="/:resourceType" element={<RoutedResourcesList />} />
+      <Route path="" element={<MainFrameRedirection />} />
     </Routes>
   );
 }

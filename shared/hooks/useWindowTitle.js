@@ -10,3 +10,8 @@ export function setWindowTitle(title) {
 export function useWindowTitle(title) {
   useEffect(() => setWindowTitle(title), [title]);
 }
+
+export function WithTitle({ title, children }) {
+  useWindowTitle(title);
+  return children;
+}
