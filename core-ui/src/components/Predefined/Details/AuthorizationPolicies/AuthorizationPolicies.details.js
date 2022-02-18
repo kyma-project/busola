@@ -23,12 +23,17 @@ export const AuthorizationPoliciesDetails = ({
     },
   ];
 
-  const WorkloadSelectorLabels = policy => (
-    <WorkloadSelector
-      resource={policy}
-      labels={policy.spec.selector?.matchLabels}
-    />
-  );
+  const WorkloadSelectorLabels = policy => {
+    const { t } = useTranslation();
+
+    return (
+      <WorkloadSelector
+        resource={policy}
+        labels={policy.spec.selector?.matchLabels}
+        title={t('workload-selector.title')}
+      />
+    );
+  };
 
   return (
     <DefaultRenderer
