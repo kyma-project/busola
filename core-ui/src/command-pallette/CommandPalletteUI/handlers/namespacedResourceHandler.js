@@ -33,6 +33,7 @@ const resourceTypes = [
   ['destinationrules', 'dr'],
   ['gateways', 'gw'],
   ['virtualservices', 'vs'],
+  ['authorizationpolicies', 'ap'],
   ['rolebindings', 'rb', 'rbs'],
   ['roles'],
   ['functions', 'fn'],

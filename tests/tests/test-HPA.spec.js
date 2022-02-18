@@ -105,12 +105,7 @@ context('Test HPA', () => {
   });
 
   it('Delete HPA ', () => {
-    cy.getLeftNav()
-      .contains('Discovery and Network')
-      .click();
-    cy.getLeftNav()
-      .contains('Horizontal Pod')
-      .click();
+    cy.navigateTo('Discovery and Network', 'Horizontal Pod');
 
     cy.getIframeBody()
       .contains('.fd-table__row', HPA_NAME)
