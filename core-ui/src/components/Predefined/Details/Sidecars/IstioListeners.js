@@ -4,7 +4,10 @@ import { useTranslation } from 'react-i18next';
 import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 import { LayoutPanel } from 'fundamental-react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
+import { Tokens } from 'shared/components/Tokens';
+
 import './IstioListeners.scss';
+
 export const IstioListeners = sidecar => {
   const { t } = useTranslation();
   return (
@@ -69,7 +72,7 @@ const TrafficProperties = ({ properties, isEgress }) => {
       {isEgress ? (
         <LayoutPanelRow
           name={t('sidecars.headers.hosts')}
-          value={<Hosts hosts={properties.hosts} />}
+          value={<Tokens tokens={properties.hosts} />}
           key={properties.hosts}
         />
       ) : (
@@ -80,16 +83,6 @@ const TrafficProperties = ({ properties, isEgress }) => {
         />
       )}
     </LayoutPanel.Body>
-  );
-};
-
-const Hosts = ({ hosts }) => {
-  return (
-    <ul>
-      {hosts?.map((host, i) => (
-        <li key={i}>{host}</li>
-      ))}
-    </ul>
   );
 };
 
