@@ -60,7 +60,7 @@ export function YamlResourcesList({ resourcesData }) {
         <ul className="fd-margin-top--md">
           {t(
             filteredResources.length === 1
-              ? 'upload-yaml.you-will-create'
+              ? 'upload-yaml.you-will-create_one'
               : 'upload-yaml.you-will-create_other',
             {
               count: filteredResources.length || 0,
