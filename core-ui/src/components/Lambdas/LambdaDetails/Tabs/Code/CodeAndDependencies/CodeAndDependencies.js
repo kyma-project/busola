@@ -43,11 +43,9 @@ export default function CodeAndDependencies({ lambda }) {
     lambda.spec.deps,
   );
 
-  // const [debouncedCallback] = useDebouncedCallback(() => {
-  //   checkValidity();
-  // }, 150);
-
-  const debouncedCallback = console.log;
+  const debouncedCallback = useDebouncedCallback(() => {
+    checkValidity();
+  }, 150);
 
   useEffect(() => {
     checkValidity();

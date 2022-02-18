@@ -20,7 +20,7 @@ export default function CustomVariableInput({
 }) {
   const { t } = useTranslation();
   const [variable, setVariable] = useState(currentVariable);
-  const [debouncedCallback] = useDebouncedCallback(newVariable => {
+  const debouncedCallback = useDebouncedCallback(newVariable => {
     onUpdateVariable(newVariable);
   }, 200);
 

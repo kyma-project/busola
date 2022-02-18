@@ -32,7 +32,7 @@ export default function ResourceVariableInput({
 }) {
   const { t, i18n } = useTranslation();
   const [variable, setVariable] = useState(currentVariable);
-  const [debouncedCallback] = useDebouncedCallback(newVariable => {
+  const debouncedCallback = useDebouncedCallback(newVariable => {
     onUpdateVariable(newVariable);
   }, 200);
 
