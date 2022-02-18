@@ -32,6 +32,8 @@ const configMap = JSON.stringify({
 });
 
 context('Test Protected Resources', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.intercept(
       {
@@ -45,13 +47,7 @@ context('Test Protected Resources', () => {
   });
 
   it('Create a protected resource', () => {
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Config Maps')
-      .click();
+    cy.navigateTo('Configuration', 'Config Maps');
 
     cy.getIframeBody()
       .contains('Create Config Map')
@@ -103,13 +99,7 @@ context('Test Protected Resources', () => {
   });
 
   it('Create a protected Pod controlled by Deployment', () => {
-    cy.getLeftNav()
-      .contains('Workloads')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Deployments')
-      .click();
+    cy.navigateTo('Workloads', 'Deployments');
 
     cy.getIframeBody()
       .contains('Create Deployment')
@@ -134,7 +124,7 @@ context('Test Protected Resources', () => {
     cy.url().should('match', new RegExp(`\/deployments\/details\/${NAME}$`));
 
     cy.getIframeBody()
-      .contains('tr', NAME, { timeout: 5000 })
+      .contains('tr', NAME)
       .find('[aria-label="Delete"]')
       .should('be.disabled');
   });
@@ -160,13 +150,7 @@ context('Test Protected Resources', () => {
   });
 
   it("Don't protect a resource", () => {
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Config Maps')
-      .click();
+    cy.navigateTo('Configuration', 'Config Maps');
 
     cy.getIframeBody()
       .contains('tr', NAME)

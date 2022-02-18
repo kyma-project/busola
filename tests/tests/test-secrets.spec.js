@@ -11,19 +11,15 @@ const SECRET3_KEY = 'secret3-key';
 const SECRET3_VALUE = 'secret3-value';
 
 context('Test Secrets', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
   });
 
   it('Create a secret', () => {
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Secrets')
-      .click();
+    cy.navigateTo('Configuration', 'Secrets');
 
     cy.getIframeBody()
       .contains('Create Secret')
@@ -54,7 +50,7 @@ context('Test Secrets', () => {
     cy.url().should('match', new RegExp(`/secrets/details/${SECRET_NAME}$`));
   });
 
-  it('Inspect a secret', () => {
+  it('Checking a secret details', () => {
     cy.getIframeBody().contains(SECRET_NAME);
 
     cy.getIframeBody()
@@ -104,7 +100,7 @@ context('Test Secrets', () => {
       .click();
   });
 
-  it('Inspect an updated secret', () => {
+  it('Checking an updated secret', () => {
     cy.getIframeBody()
       .contains('.layout-panel-row', SECRET_KEY)
       .contains(btoa(SECRET_VALUE2));
@@ -118,7 +114,7 @@ context('Test Secrets', () => {
       .contains(btoa(SECRET3_VALUE));
   });
 
-  it('Inspect list', () => {
+  it('Check list', () => {
     cy.getIframeBody()
       .contains('a', 'Secrets')
       .click();

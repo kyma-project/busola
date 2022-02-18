@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
-import { loadRandomDR } from '../support/loadDR';
+import { loadFile } from '../support/loadFile';
 
 const DR_NAME =
   'test-' +
@@ -8,38 +8,35 @@ const DR_NAME =
     .toString()
     .substr(2, 8);
 
+async function loadDR(drName, namespaceName) {
+  const DR = await loadFile('test-custom-destination-rule.yaml');
+  const newDR = { ...DR };
+
+  newDR.metadata.name = drName;
+  newDR.metadata.namespace = namespaceName;
+
+  return newDR;
+}
+
 context('Test Destination Rules', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
   });
 
-  it('Navigate to Istio', () => {
-    cy.getLeftNav()
-      .contains('Istio')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Destination Rules')
-      .click();
-  });
-
   it('Create a Destination Rule', () => {
+    cy.navigateTo('Istio', 'Destination Rules');
+
     cy.getIframeBody()
       .contains('Create Destination Rule')
       .click();
 
-    cy.wrap(loadRandomDR(DR_NAME, Cypress.env('NAMESPACE_NAME'))).then(
-      DR_CONFIG => {
-        const DR = JSON.stringify(DR_CONFIG);
-        cy.getIframeBody()
-          .find('[role="presentation"],[class="view-lines"]')
-          .first()
-          .click()
-          .clearMonaco()
-          .type(DR, { parseSpecialCharSequences: false });
-      },
-    );
+    cy.wrap(loadDR(DR_NAME, Cypress.env('NAMESPACE_NAME'))).then(DR_CONFIG => {
+      const DR = JSON.stringify(DR_CONFIG);
+      cy.pasteToMonaco(DR);
+    });
 
     cy.getIframeBody()
       .find('[role="dialog"]')
@@ -47,7 +44,7 @@ context('Test Destination Rules', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('h3', DR_NAME, { timeout: 5000 })
+      .contains('h3', DR_NAME)
       .should('be.visible');
   });
 
@@ -79,7 +76,7 @@ context('Test Destination Rules', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('.fd-table__row', DR_NAME, { timeout: 5000 })
+      .contains('.fd-table__row', DR_NAME)
       .should('not.exist');
   });
 });

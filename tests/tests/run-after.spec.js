@@ -1,8 +1,9 @@
 /// <reference types="cypress" />
-import config from '../config';
 import 'cypress-file-upload';
 
 context('Clean up namespace', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
   });
@@ -31,17 +32,9 @@ context('Clean up namespace', () => {
       .should('have.text', 'Terminating');
   });
 
-  it('Navigate to Application', () => {
-    cy.getLeftNav()
-      .contains('Integration')
-      .click();
+  it('Delete the application', () => {
+    cy.navigateTo('Integration', 'Applications');
 
-    cy.getLeftNav()
-      .contains('Applications')
-      .click();
-  });
-
-  it('Delete the application (step 1)', () => {
     cy.getIframeBody()
       .find('[role="search"] [aria-label="open-search"]')
       .type(`test-mock-app-${Cypress.env('NAMESPACE_NAME')}`);
@@ -53,13 +46,5 @@ context('Clean up namespace', () => {
     cy.getIframeBody()
       .contains('button', 'Delete')
       .click();
-  });
-
-  it('Check if the application is deleted (step 2)', () => {
-    cy.getIframeBody()
-      .contains(`test-mock-app-${Cypress.env('NAMESPACE_NAME')}`, {
-        timeout: 20000,
-      })
-      .should('not.exist');
   });
 });

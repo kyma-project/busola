@@ -28,7 +28,9 @@ function mockKymaSystemForbidden() {
   cy.intercept(requestData, { statusCode: 403 });
 }
 
-context('Kyma Version', () => {
+context('Test Kyma version', () => {
+  Cypress.skipAfterFail();
+
   it('No Kyma Version when feature is disabled', () => {
     mockShowKymaVersion(false);
     cy.loginAndSelectCluster();

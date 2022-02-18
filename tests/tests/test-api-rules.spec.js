@@ -7,14 +7,26 @@ const API_RULE_HOST = API_RULE_NAME + '-host';
 const API_RULE_PATH = '/test-path';
 const API_RULE_DEFAULT_PATH = '/.*';
 
-context('API Rules in the Function details view', () => {
+context('Test API Rules in the Function details view', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
   });
 
-  it('Create a simple Function', () => {
-    cy.createSimpleFunction(FUNCTION_NAME, true);
+  it('Go to details of the simple Function', () => {
+    cy.navigateTo('Workloads', 'Functions');
+
+    cy.getIframeBody()
+      .contains('a', FUNCTION_NAME)
+      .filter(':visible', { log: false })
+      .first()
+      .click({ force: true });
+
+    cy.getIframeBody()
+      .find('[role="status"]', { timeout: 60 * 1000 })
+      .should('have.text', 'Running');
   });
 
   it('Create an API Rule for the Function', () => {
@@ -29,13 +41,13 @@ context('API Rules in the Function details view', () => {
     cy.getIframeBody().contains(`${FUNCTION_NAME} (port: 80)`);
 
     cy.getIframeBody()
-      .find('[placeholder="API Rule Name"]')
-      .filter(':visible', { log: false })
+      .find('[placeholder="API Rule Name"]:visible', { log: false })
       .type(API_RULE_NAME);
 
     cy.getIframeBody()
-      .find('[placeholder="Subdomain part of API Rule address."]')
-      .filter(':visible', { log: false })
+      .find('[placeholder="Subdomain part of API Rule address."]:visible', {
+        log: false,
+      })
       .type(API_RULE_HOST);
 
     cy.getIframeBody()
@@ -48,8 +60,7 @@ context('API Rules in the Function details view', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Required scope"]')
-      .filter(':visible', { log: false })
+      .find('[placeholder="Required scope"]:visible', { log: false })
       .type('read');
 
     cy.getIframeBody()
@@ -104,8 +115,7 @@ context('API Rules in the Function details view', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Enter the path."]')
-      .filter(':visible', { log: false })
+      .find('[placeholder="Enter the path."]:visible', { log: false })
       .type(API_RULE_PATH);
 
     cy.getIframeBody()

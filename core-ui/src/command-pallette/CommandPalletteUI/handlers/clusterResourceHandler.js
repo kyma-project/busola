@@ -12,6 +12,8 @@ const resourceTypes = [
   ['clusterrolebindings', 'crbs', 'crb'],
   ['clusterroles', 'cr'],
   ['applications', 'app', 'apps'],
+  ['storageclasses'],
+  ['persistentvolumes', 'pv'],
   ['clusteraddonsconfigurations', 'clusteraddon', 'clusteraddons'],
   ['namespaces', 'ns'],
 ];
@@ -68,7 +70,7 @@ function makeListItem(item, matchedNode, t) {
   return {
     label: name,
     query: `${resourceType} ${name}`,
-    // namespaces have no category
+    // some resources have no category
     category: category ? category + ' > ' + resourceTypeText : resourceTypeText,
     onActivate: () =>
       LuigiClient.linkManager()
@@ -89,6 +91,9 @@ async function fetchClusterResources(context) {
 
   const { fetch, tokens, updateResourceCache } = context;
   const resourceType = toFullResourceType(tokens[0], extendedResourceTypes);
+  if (!extendedResourceTypes.flatMap(t => t).includes(resourceType)) {
+    return;
+  }
   try {
     const response = await fetch(apiPath + '/' + resourceType);
     const { items } = await response.json();
@@ -136,7 +141,7 @@ function createResults({
 
   let resources = resourceCache[resourceType];
   if (typeof resources !== 'object') {
-    return [linkToList, LOADING_INDICATOR];
+    return [linkToList, { type: LOADING_INDICATOR }];
   }
   if (resourceType === 'namespaces' && !showHiddenNamespaces) {
     resources = resources.filter(

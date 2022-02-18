@@ -7,23 +7,17 @@ const DOCKER_IMAGE_TAG = 'bitnami/nginx';
 
 const EDITED_REPLICAS_AMOUNT = 1;
 const EDITED_DOCKER_IMAGE_TAG = 'test-replica-set-image';
-context('Create a Replica Set', () => {
+context('Test Replica Sets', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
   });
 
-  it('Navigates to Replica Sets', () => {
-    cy.getLeftNav()
-      .contains('Workloads')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Replica Sets')
-      .click();
-  });
-
   it('Creates a Replica Set', () => {
+    cy.navigateTo('Workloads', 'Replica Sets');
+
     cy.getIframeBody()
       .contains('Create Replica Set')
       .click();
@@ -59,7 +53,7 @@ context('Create a Replica Set', () => {
 
   it('Checks the details view', () => {
     cy.getIframeBody()
-      .contains(`${REPLICA_SET_NAME}-`, { timeout: 10000 })
+      .contains(`${REPLICA_SET_NAME}-`)
       .click();
 
     cy.getIframeBody().contains(`Name${REPLICA_SET_NAME}`);
@@ -106,8 +100,6 @@ context('Create a Replica Set', () => {
       .find('[role="document"]')
       .contains('button', 'Update')
       .click();
-
-    cy.reload();
   });
 
   it('Checks the new Docker image', () => {

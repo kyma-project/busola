@@ -4,10 +4,10 @@ import jsyaml from 'js-yaml';
 import { useTranslation } from 'react-i18next';
 import { Button } from 'fundamental-react';
 import { createPatch } from 'rfc6902';
-
 import {
   PageHeader,
   Labels,
+  ErrorBoundary,
   YamlEditorProvider,
   useGet,
   useUpdate,
@@ -174,7 +174,7 @@ function Resource({
           {t('common.buttons.view-yaml')}
         </Button>
       );
-    } else if (!CreateResourceForm || !CreateResourceForm.allowEdit) {
+    } else if (!CreateResourceForm || !CreateResourceForm?.allowEdit) {
       return (
         <Button
           className="fd-margin-end--tiny"
@@ -205,14 +205,16 @@ function Resource({
           id={`edit-${resourceType}-modal`}
           className="modal-size--l create-resource-modal"
           renderForm={props => (
-            <CreateResourceForm
-              resource={resource}
-              resourceType={resourceType}
-              resourceUrl={resourceUrl}
-              namespace={namespace}
-              refetchList={silentRefetch}
-              {...props}
-            />
+            <ErrorBoundary i18n={i18n}>
+              <CreateResourceForm
+                resource={resource}
+                resourceType={resourceType}
+                resourceUrl={resourceUrl}
+                namespace={namespace}
+                refetchList={silentRefetch}
+                {...props}
+              />
+            </ErrorBoundary>
           )}
           i18n={i18n}
         />

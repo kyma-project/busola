@@ -16,7 +16,7 @@
   },
   "private": true,
   "dependencies": {
-    "@luigi-project/core": "^1.19.0",
+    "@luigi-project/core": "^1.20.1",
     "@luigi-project/plugin-auth-oidc": "1.8.1",
     "file-saver": "2.0.2"
   },

@@ -15,6 +15,8 @@ function getQueryInput() {
 }
 
 context('Test Command Palette navigation', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
   });

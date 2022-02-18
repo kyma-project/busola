@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
-import { loadRandomCRD, loadCRInstance } from '../support/loadFile';
+import { loadFile } from '../support/loadFile';
 
 const CRD_PLURAL_NAME =
   'test-' +
@@ -10,33 +10,46 @@ const CRD_PLURAL_NAME =
 
 const CRD_NAME = CRD_PLURAL_NAME + `.${CRD_PLURAL_NAME}.example.com`;
 
-context('Test Create Resource Definitions', () => {
+async function loadCRD(crdPluralName, crdName) {
+  const CRD = await loadFile('test-customresourcedefinisions.yaml');
+  const newCRD = { ...CRD };
+
+  newCRD.spec.group = `${crdPluralName}.example.com`;
+  newCRD.metadata.name = crdName;
+  newCRD.spec.names.plural = crdPluralName;
+
+  return newCRD;
+}
+
+async function loadCRInstance(crdPluralName) {
+  const CR = await loadFile('test-custom-resource-instance.yaml');
+
+  const newCR = { ...CR };
+  newCR.metadata.namespace = Cypress.env('NAMESPACE_NAME');
+  newCR.apiVersion = `${crdPluralName}.example.com/v1`;
+  return newCR;
+}
+
+context('Test Custom Resource Definitions', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
   });
 
-  it('Navigate to Create Custom Resource Definition', () => {
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Custom Resource Definitions')
-      .click();
-  });
-
   it('Create Custom Resource Definition', () => {
+    cy.navigateTo('Configuration', 'Custom Resource Definitions');
+
     cy.getIframeBody()
       .contains('Create Custom Resource Definition')
       .click();
 
-    cy.wrap(loadRandomCRD(CRD_PLURAL_NAME, CRD_NAME)).then(CRD_CONFIG => {
+    cy.wrap(loadCRD(CRD_PLURAL_NAME, CRD_NAME)).then(CRD_CONFIG => {
       const CRD = JSON.stringify(CRD_CONFIG);
-
       cy.getIframeBody()
         .find('div.view-lines')
-        .clearMonaco()
+        .clearInput()
         .type(CRD, {
           parseSpecialCharSequences: false,
           waitForAnimations: false,
@@ -94,42 +107,31 @@ context('Test Create Resource Definitions', () => {
 
     cy.wrap(loadCRInstance(CRD_PLURAL_NAME)).then(CR_CONFIG => {
       const CR = JSON.stringify(CR_CONFIG);
-
       cy.getIframeBody()
         .find('[aria-label="Create CronTab"]')
         .find('div.view-lines')
-        .clearMonaco()
+        .clearInput()
         .type(CR, {
           parseSpecialCharSequences: false,
           waitForAnimations: false,
         });
-
-      cy.getIframeBody()
-        .find('[role="dialog"]')
-        .contains('button', 'Create')
-        .click();
-
-      cy.getIframeBody()
-        .contains('h3', 'my-cron-tab')
-        .should('be.visible');
     });
+
+    cy.getIframeBody()
+      .find('[role="dialog"]')
+      .contains('button', 'Create')
+      .click();
   });
 
   it('Delete Custom Resource Definition', () => {
     cy.getIframeBody()
+      .contains('h3', 'my-cron-tab')
+      .should('be.visible');
+
+    cy.getIframeBody()
       .contains('a', CRD_NAME)
       .click();
 
-    cy.getIframeBody()
-      .contains('button', 'Delete')
-      .click();
-
-    cy.getIframeBody()
-      .find('[data-testid="delete-confirmation"]')
-      .click();
-
-    cy.getIframeBody()
-      .contains(/deleted/)
-      .should('be.visible');
+    cy.deleteInDetails();
   });
 });

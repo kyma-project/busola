@@ -73,7 +73,7 @@ function createResults(context) {
   const { resourceCache, tokens, t } = context;
   const nodes = resourceCache['nodes'];
   if (typeof nodes !== 'object') {
-    return LOADING_INDICATOR;
+    return [{ type: LOADING_INDICATOR }];
   }
 
   const name = tokens[1];

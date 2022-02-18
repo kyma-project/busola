@@ -3,6 +3,7 @@ const cors = require('cors');
 const http = require('http');
 import { handleRequest, serveStaticApp, serveMonaco } from './common';
 //import { requestLogger } from './utils/other'; //uncomment this to log the outgoing traffic
+const { setupJWTCheck } = require('./jwtCheck');
 
 const app = express();
 app.disable('x-powered-by');
@@ -10,6 +11,7 @@ app.use(express.raw({ type: '*/*', limit: '100mb' }));
 if (process.env.NODE_ENV === 'development') {
   app.use(cors({ origin: '*' }));
 }
+setupJWTCheck(app);
 
 const server = http.createServer(app);
 // requestLogger(require("http")); //uncomment this to log the outgoing traffic

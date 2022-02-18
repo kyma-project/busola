@@ -9,23 +9,17 @@ const DNS_ENTRY_NAME = 'dns-entry-' + random;
 const DNS_NAME = 'dns-name-' + random;
 const TTL = 200;
 
-context('Create a DNS Entry', () => {
+context('Test DNS Entries', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
   });
 
-  it('DNS Entries node should be present', () => {
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('DNS Entries')
-      .click();
-  });
-
   it('Create DNS Entry', () => {
+    cy.navigateTo('Configuration', 'DNS Entries');
+
     cy.getIframeBody()
       .contains('Create DNS Entry')
       .click();
@@ -51,6 +45,7 @@ context('Create a DNS Entry', () => {
     cy.getIframeBody()
       .find('[aria-label^="Enter the A record"]:visible')
       .click();
+
     cy.getIframeBody()
       .contains('istio-ingressgateway')
       .click();
