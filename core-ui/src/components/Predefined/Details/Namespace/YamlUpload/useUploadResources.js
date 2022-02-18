@@ -1,3 +1,4 @@
+import { merge } from 'lodash';
 import pluralize from 'pluralize';
 import { useCallback } from 'react';
 import {
@@ -83,10 +84,7 @@ export function useUploadResources(resources = [], setResourcesData) {
         updateState(index, STATE_CREATED);
       } else {
         //update a resource
-        const newResource = {
-          ...resource.value,
-          ...existingResource,
-        };
+        const newResource = merge({}, existingResource, resource.value);
         const diff = createPatch(existingResource, newResource);
         await patch(urlWithName, diff);
         updateState(index, STATE_UPDATED);
