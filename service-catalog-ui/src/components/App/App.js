@@ -16,7 +16,7 @@ import {
   WithTitle,
 } from 'react-shared';
 
-import { CATALOG_TITLE } from '../../shared/constants';
+import { CATALOG_TITLE, INSTANCES_TITLE } from '../../shared/constants';
 
 const App = () => {
   const { language } = useMicrofrontendContext();

@@ -14,7 +14,7 @@ import './NodeDetails.scss';
 export function NodeDetails({ nodeName }) {
   const { data, error, loading } = useNodeQuery(nodeName);
   const { t } = useTranslation();
-  useWindowTitle(t('nodes.title_single', { nodeName }));
+  useWindowTitle(t('nodes.title_details', { nodeName }));
 
   const filterByHost = e => e.source.host === nodeName;
   const Events = (

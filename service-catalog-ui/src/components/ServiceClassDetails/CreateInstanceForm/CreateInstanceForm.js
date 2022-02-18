@@ -166,7 +166,6 @@ export default function CreateInstanceForm({
 
   async function handleFormSubmit(e) {
     e.preventDefault();
-
     const currentPlan =
       plans?.find(e => e.spec.externalID === formValues.plan.current) ||
       (plans?.length && plans[0]);
