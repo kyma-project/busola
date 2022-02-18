@@ -98,12 +98,12 @@ function getScaleMax(data, binary = false) {
 }
 
 function getScaleLabel(value, { unit, binary, fixed }) {
-  if (!unit) {
-    return value.toFixed(fixed);
+  if (typeof unit === 'string') {
+    return getSIPrefix(value, binary, { unit }).string;
   } else if (typeof unit === 'function') {
     return unit(value);
   } else {
-    return getSIPrefix(value.toFixed(fixed), binary, { unit }).string;
+    return value.toFixed(fixed);
   }
 }
 
@@ -269,17 +269,18 @@ export function StatsGraph({
     dataWithGeometry.forEach(({ value, left, bottom, top }, index) => {
       if (activeBar !== null && index === activeBar - dataOffset) {
         const labelPadding = 2;
-        const labelDef = getSIPrefix(value, binary, { unit });
-        const labelWidth = ctx.measureText(labelDef.string).width;
+        const labelContent = getSIPrefix(value, binary, { unit }).string;
+
+        const labelWidth = ctx.measureText(labelContent).width;
         const labelHeight = parseInt(ctx.font);
 
         ctx.strokeStyle = textColor;
         ctx.fillStyle = tooltipColor;
         const rectCoords = [
-          left - labelWidth / 2 - labelPadding,
-          top - labelHeight - labelPadding,
-          labelWidth + labelPadding * 2,
-          labelHeight + labelPadding * 2,
+          Math.round(left - labelWidth / 2 - labelPadding),
+          Math.round(top - labelHeight - labelPadding),
+          Math.round(labelWidth + labelPadding * 2),
+          Math.round(labelHeight + labelPadding * 2),
         ];
         ctx.strokeRect(...rectCoords);
         ctx.fillRect(...rectCoords);
@@ -287,7 +288,7 @@ export function StatsGraph({
         ctx.fillStyle = textColor;
         ctx.textBaseline = 'bottom';
         ctx.textAlign = 'center';
-        ctx.fillText(labelDef.string, left, top);
+        ctx.fillText(labelContent, Math.round(left), Math.round(top));
       }
     });
   }, [textColor, barColor, canvas, data, width, height, activeBar]); // eslint-disable-line react-hooks/exhaustive-deps

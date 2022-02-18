@@ -1124,6 +1124,11 @@ git-repositories:
     none: Authentication not required.
     secret: The name of the Secret with credentials used by the Function Controller to authenticate to the Git repository in order to fetch the Function's source code and dependencies.
     url: URL must be a valid Git repository address that starts with the "http(s)", "git", or "ssh" prefix.
+graphs:
+  cpu: CPU
+  memory: Memory
+  network-down: Network Download
+  network-up: Network Upload
 helm-releases:
   chart-description: Chart Description
   chart-files: Chart Files

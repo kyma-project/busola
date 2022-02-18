@@ -6,6 +6,7 @@ import {
   BusyIndicator,
 } from 'fundamental-react';
 import { Dropdown } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 
 import { usePrometheus } from 'shared/hooks/usePrometheus';
 import { StatsGraph } from 'shared/components/StatsGraph';
@@ -20,6 +21,7 @@ export function StatsPanel({ type, ...props }) {
   };
   const [timeSpan, setTimeSpan] = useState('1h');
   const [metric, setMetric] = useState('cpu');
+  const { t } = useTranslation();
 
   const { data, binary, unit, loading, startDate, endDate } = usePrometheus(
     type,
@@ -40,11 +42,11 @@ export function StatsPanel({ type, ...props }) {
               selectedKey={metric}
               onSelect={(e, val) => setMetric(val.key)}
               options={[
-                { key: 'cpu', text: 'CPU' },
-                { key: 'memory', text: 'Memory' },
-                { key: 'network-down', text: 'Network Download' },
-                { key: 'network-up', text: 'Network Upload' },
-              ]}
+                'cpu',
+                'memory',
+                'network-down',
+                'network-up',
+              ].map(option => ({ key: option, text: t(`graphs.${option}`) }))}
             />
           }
         />

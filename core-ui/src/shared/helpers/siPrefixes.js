@@ -23,22 +23,29 @@ const SI_PREFIXES_BINARY = {
 export function getSIPrefix(
   amount,
   binary = false,
-  { unit = '', withoutSpace = true } = {},
+  { unit = '', withoutSpace = true, fixed = 2 } = {},
 ) {
   const prefixMap = binary ? SI_PREFIXES_BINARY : SI_PREFIXES;
+  const infix = withoutSpace ? '' : ' ';
 
+  const coreValue = (
+    Math.round((+amount + Number.EPSILON) * 100) / 100
+  ).toFixed(fixed);
   let output = {
-    value: amount,
-    rounded: amount,
+    raw: amount,
+    value: coreValue,
+    rounded: coreValue,
     prefix: '',
-    string: `${amount}`,
+    string: `${coreValue}${infix}${unit}`,
   };
   Object.entries(prefixMap).forEach(([prefix, power]) => {
     const tmpValue = amount / power;
-    const infix = withoutSpace ? '' : ' ';
     if (tmpValue >= 1) {
-      const value = Math.round((tmpValue + Number.EPSILON) * 100) / 100;
+      const value = (
+        Math.round((tmpValue + Number.EPSILON) * 100) / 100
+      ).toFixed(fixed);
       output = {
+        raw: tmpValue,
         value,
         rounded: value * power,
         prefix,

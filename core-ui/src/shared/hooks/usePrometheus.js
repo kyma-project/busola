@@ -25,12 +25,10 @@ export function getMetric(type, metric, { step, ...data }) {
     },
     'network-down': {
       prometheusQuery: `sum(irate(container_network_receive_bytes_total{${selector}}[${step}s]))`,
-      binary: true,
       unit: 'B/s',
     },
     'network-up': {
       prometheusQuery: `sum(irate(container_network_transmit_bytes_total{${selector}}[${step}s]))`,
-      binary: true,
       unit: 'B/s',
     },
   };
