@@ -146,6 +146,23 @@ applications:
     provisioning: The Application is being provisioned asynchronously.
 apps:
   title: Apps
+authorization-policies:
+  description: <0>Istio Authorization Policy</0> allows for workload access management in the mesh.
+  headers:
+    action: Action
+    from: From
+    key: Key
+    not-values: Not Values
+    operation: Operation
+    provider: Provider
+    rule: Rule {{ruleNumber}}
+    rules: Rules
+    source: Source
+    to: To
+    values: Values
+    when: When
+  name_singular: Authorization Policy
+  title: Authorization Policies
 brokers:
   description: <0>Service Broker</0> provides a set of managed services that a third party offers and maintains.
   headers:
@@ -384,6 +401,7 @@ command-palette:
   resource-names:
     addonsconfigurations: Addons
     apirules: API Rules
+    authorizationpolicies: Authorization Policies
     cluster: Cluster {{name}}
     clusteraddonsconfigurations: Cluster Addons
     clusterrolebindings: Cluster Role Bindings
