@@ -84,6 +84,7 @@ const Workloads = se => {
         <WorkloadSelector
           resource={se}
           labels={se.spec?.workloadSelector?.labels}
+          title={t('workload-selector.title')}
         />
       )}
     </div>
