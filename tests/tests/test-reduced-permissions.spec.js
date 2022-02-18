@@ -42,7 +42,7 @@ context('Test reduced permissions', () => {
       .type(CR_NAME);
 
     cy.getIframeBody()
-      .find('[placeholder="Role Name"]:visible')
+      .find('[placeholder="Role name"]:visible')
       .type(CR_NAME);
 
     // api groups
@@ -101,7 +101,7 @@ context('Test reduced permissions', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Service Account Name"]:visible')
+      .find('[placeholder="Service Account name"]:visible')
       .type(SA_NAME);
 
     cy.getIframeBody()
@@ -131,13 +131,13 @@ context('Test reduced permissions', () => {
 
     // name
     cy.getIframeBody()
-      .find('[placeholder="Cluster Role Binding Name"]:visible')
+      .find('[placeholder="Cluster Role Binding name"]:visible')
       .type(CRB_NAME);
 
     // role
     cy.getIframeBody()
       .find(
-        '[placeholder="Start typing to select Role Binding from the list."]:visible',
+        '[placeholder="Start typing to select Role Binding from the list"]:visible',
       )
       .type(CR_NAME);
     cy.getIframeBody()

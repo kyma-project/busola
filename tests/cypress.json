@@ -35,6 +35,7 @@
     "test-dashboard-version.spec.js",
     "test-destination-rules.spec.js",
     "test-virtual-services.spec.js",
+    "test-authorization-policies.spec.js",
     "test-dns-entries.spec.js",
     "test-cron-jobs.spec.js",
     "test-git-repositories.spec.js",
@@ -45,6 +46,7 @@
     "test-persistent-volumes.spec.js",
     "test-stateful-sets.spec.js",
     "test-config-maps.spec.js",
+    "test-sidecars.spec.js",
     "test-secrets.spec.js",
     "test-service-accounts.spec.js",
     "test-issuers.spec.js",
@@ -61,6 +63,7 @@
     "test-certificates.spec.js",
     "test-settings.spec.js",
     "test-ingresses.spec.js",
+    "test-network-policies.spec.js",
     "test-command-palette.spec.js",
     "run-after.spec.js"
   ]

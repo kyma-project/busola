@@ -14,7 +14,7 @@ import {
 import { LayoutPanel, Link } from 'fundamental-react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { Tokens } from 'shared/components/Tokens';
-import { RelatedPods } from './RelatedPods';
+import { RelatedPods } from 'shared/components/RelatedPods';
 
 const PVCSelectorSpecification = pvc => {
   const { t, i18n } = useTranslation();
@@ -159,11 +159,21 @@ export const PersistentVolumeClaimsDetails = ({
     />
   );
 
+  const PVCPods = pvc => {
+    const filterByClaim = ({ spec }) =>
+      spec?.volumes?.find(
+        volume =>
+          volume?.persistentVolumeClaim?.claimName === pvc.metadata.name,
+      );
+
+    return <RelatedPods resource={pvc} filter={filterByClaim} />;
+  };
+
   return (
     <DefaultRenderer
       customComponents={[
         PVCConfiguration,
-        RelatedPods,
+        PVCPods,
         PVCSelectorSpecification,
         Events,
       ]}
