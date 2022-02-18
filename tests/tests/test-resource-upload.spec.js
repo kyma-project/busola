@@ -106,4 +106,27 @@ context('Test resource upload', () => {
       .contains('Deployment echo-server-upload-yaml - Error')
       .should('be.visible');
   });
+
+  it('Cleanup', () => {
+    // close
+    cy.getIframeBody().type('{esc}');
+
+    cy.getIframeBody()
+      .find('[role=dialog]')
+      .should('not.exist');
+
+    cy.navigateTo('Integration', 'Applications');
+
+    cy.getIframeBody()
+      .find('[role="search"] [aria-label="open-search"]')
+      .type(APPLICATION_NAME);
+
+    cy.getIframeBody()
+      .find('tbody tr [aria-label="Delete"]')
+      .click({ force: true });
+
+    cy.getIframeBody()
+      .contains('button', 'Delete')
+      .click();
+  });
 });
