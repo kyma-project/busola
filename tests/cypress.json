@@ -25,6 +25,8 @@
     "test-roles.spec.js",
     "test-download-a-kubeconfig.spec.js",
     "test-cluster-overview.spec.js",
+    "test-resource-upload.spec.js",
+    "kyma-version.spec.js",
     "test-kyma-version.spec.js",
     "test-protected-resources.spec.js",
     "test-cluster-role-bindings.spec.js",
