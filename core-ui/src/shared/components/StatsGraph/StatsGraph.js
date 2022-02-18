@@ -5,6 +5,7 @@ import { getSIPrefix } from 'shared/helpers/siPrefixes';
 
 import './StatsGraph.scss';
 
+const CANVAS_SCALE = 2;
 const STATS_RATIO = 1 / 3;
 const PADDING = 5;
 
@@ -167,6 +168,7 @@ export function StatsGraph({
   const [barColor, setBarColor] = useState();
   const [highlightColor, setHighlightColor] = useState();
   const [tooltipColor, setTooltipColor] = useState();
+  const [font, setFont] = useState();
   const [activeBar, setActiveBar] = useState(null);
   const canvas = useRef();
   const css = useRef();
@@ -181,6 +183,7 @@ export function StatsGraph({
     ['--bar-color', barColor, setBarColor],
     ['--highlight-color', highlightColor, setHighlightColor],
     ['--tooltip-color', tooltipColor, setTooltipColor],
+    ['font-size', font, setFont],
   ];
   useEffect(() => {
     css.current = getComputedStyle(canvas.current);
@@ -192,14 +195,14 @@ export function StatsGraph({
     }, 100);
 
     return () => clearInterval(cssObserver);
-  }, [textColor, barColor, highlightColor, tooltipColor]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [textColor, barColor, highlightColor, tooltipColor, font]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (!canvas.current) return;
 
     const resizeObserver = new ResizeObserver(([e]) => {
-      setWidth(e.contentRect.width);
-      setHeight(e.contentRect.height);
+      setWidth(e.contentRect.width * CANVAS_SCALE);
+      setHeight(e.contentRect.height * CANVAS_SCALE);
     });
 
     resizeObserver.observe(canvas.current);
@@ -210,6 +213,9 @@ export function StatsGraph({
 
     const ctx = canvas.current?.getContext('2d');
     ctx.clearRect(0, 0, canvas.current?.width, canvas.current?.height);
+
+    ctx.font = `${parseInt(font) * CANVAS_SCALE}px sans-serif`;
+    ctx.lineWidth = CANVAS_SCALE;
 
     ctx.fillStyle = textColor;
     ctx.textBaseline = 'middle';
@@ -295,8 +301,8 @@ export function StatsGraph({
 
   const mousemove = e => {
     const rect = e.target.getBoundingClientRect();
-    const x = Math.round(e.clientX - rect.left);
-    const y = Math.round(e.clientY - rect.top);
+    const x = Math.round(e.clientX - rect.left) * CANVAS_SCALE;
+    const y = Math.round(e.clientY - rect.top) * CANVAS_SCALE;
     const bar = Math.floor((x - geometry.graph.left) / geometry.sectionWidth);
 
     if (y > geometry.graph.height + geometry.graph.top) {
