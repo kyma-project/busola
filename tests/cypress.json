@@ -63,6 +63,7 @@
     "test-certificates.spec.js",
     "test-settings.spec.js",
     "test-ingresses.spec.js",
+    "test-service-entries.spec.js",
     "test-network-policies.spec.js",
     "test-command-palette.spec.js",
     "run-after.spec.js"
