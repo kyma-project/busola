@@ -40,7 +40,7 @@ export default function LambdaDetails({ lambda }) {
           id="lambda-code"
           title={t('functions.details.title.code')}
         >
-          {/* <CodeTab lambda={lambda} isActive={selectedTabIndex === 0} /> */}
+          <CodeTab lambda={lambda} isActive={selectedTabIndex === 0} />
         </Tab>
         {configTabShouldRender && (
           <Tab

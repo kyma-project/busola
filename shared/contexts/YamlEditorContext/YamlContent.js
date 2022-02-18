@@ -45,7 +45,7 @@ export function YamlContent({
           language="yaml"
           theme={editorTheme}
           value={val}
-          onChange={(_, text) => setChangedYamlFn(text)}
+          onChange={text => setChangedYamlFn(text)}
           onMount={editor => setEditor(editor)}
           options={{
             minimap: { enabled: false },

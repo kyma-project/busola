@@ -52,7 +52,7 @@ export default function Editor({
     } // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showDiff]);
 
-  function handleDiffEditorDidMount(_, __, editor) {
+  function handleDiffEditorDidMount(editor) {
     monacoEditorInstance.current = editor;
     const { modified } = editor.getModel();
 
@@ -62,7 +62,7 @@ export default function Editor({
     });
   }
 
-  function handleControlledChange(_, value) {
+  function handleControlledChange(value) {
     setValue(value);
     setControlledValue(value);
     debouncedCallback();

@@ -50,7 +50,7 @@ export function KubeconfigUpload({
             updateKubeconfig(editor.getValue()),
           )
         }
-        onChange={(_, value) => updateKubeconfig(value)}
+        onChange={value => updateKubeconfig(value)}
         options={{
           scrollbar: {
             alwaysConsumeMouseWheel: false,

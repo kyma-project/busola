@@ -34,7 +34,7 @@ export function Editor({
     }
   }, [value, language]);
 
-  const handleChange = (_, text) => {
+  const handleChange = text => {
     textResource.current = text;
     try {
       let parsed = {};

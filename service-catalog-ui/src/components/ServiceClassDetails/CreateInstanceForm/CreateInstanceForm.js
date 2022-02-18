@@ -152,7 +152,7 @@ export default function CreateInstanceForm({
     }
   }
 
-  const handleCustomParametersChange = (_, input) => {
+  const handleCustomParametersChange = input => {
     try {
       const parsedInput = JSON.parse(input);
       if (isNonNullObject(parsedInput)) {
@@ -165,9 +165,7 @@ export default function CreateInstanceForm({
   };
 
   async function handleFormSubmit(e) {
-    console.log('halo1');
     e.preventDefault();
-    console.log('halo2');
 
     const currentPlan =
       plans?.find(e => e.spec.externalID === formValues.plan.current) ||
