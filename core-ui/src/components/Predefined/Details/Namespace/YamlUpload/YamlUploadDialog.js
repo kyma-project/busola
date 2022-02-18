@@ -8,6 +8,7 @@ import { useUploadResources } from './useUploadResources';
 
 import './YamlUploadDialog.scss';
 import { useTranslation } from 'react-i18next';
+import { useEventListener } from 'hooks/useEventListener';
 
 export function YamlUploadDialog({ show, onCancel }) {
   const { t } = useTranslation();
@@ -18,6 +19,12 @@ export function YamlUploadDialog({ show, onCancel }) {
     resourcesWithStatuses,
     setResourcesWithStatuses,
   );
+
+  useEventListener('keydown', ({ key }) => {
+    if (key === 'Escape') {
+      onCancel();
+    }
+  });
 
   useEffect(() => {
     if (show) {
