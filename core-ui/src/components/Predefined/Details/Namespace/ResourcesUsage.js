@@ -1,8 +1,9 @@
 import React from 'react';
-
 import { LayoutPanel, Icon } from 'fundamental-react';
 import { useGetList, Spinner, CircleProgress } from 'react-shared';
 import { useTranslation } from 'react-i18next';
+
+import { getSIPrefix } from 'shared/helpers/siPrefixes';
 
 const MEMORY_SUFFIX_POWER = {
   // must be sorted from the smallest to the largest; it is case sensitive; more info: https://medium.com/swlh/understanding-kubernetes-resource-cpu-and-memory-units-30284b3cc866
@@ -38,22 +39,9 @@ function getBytes(memoryString) {
   return number * suffixPower;
 }
 
-function unitToPascalCase(str) {
-  const firstLetter = str[0];
-  return firstLetter.toUpperCase() + str.toLowerCase().slice(1);
-}
-
-function bytesToHumanReadable(bytesNumber) {
-  let output = bytesNumber;
-  Object.entries(MEMORY_SUFFIX_POWER).forEach(([suffix, power]) => {
-    const value = bytesNumber / power;
-    if (value >= 1)
-      output =
-        Math.round((value + Number.EPSILON) * 100) / 100 +
-        unitToPascalCase(suffix);
-  });
-
-  return output;
+export function bytesToHumanReadable(bytes) {
+  if (!bytes) return bytes;
+  return getSIPrefix(bytes, true, { withoutSpace: true }).string;
 }
 
 const MemoryRequestsCircle = ({ resourceQuotas, isLoading }) => {
