@@ -26,13 +26,13 @@ context('Test Roles', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Role Name"]:visible', { log: false })
+      .find('[placeholder="Role name"]:visible', { log: false })
       .type(ROLE_NAME)
       .click();
 
     cy.getIframeBody()
       .find(
-        '[placeholder="Start typing to select API Groups from the list."]:visible',
+        '[placeholder="Start typing to select API Groups from the list"]:visible',
         { log: false },
       )
       .type(API_GROUP)
@@ -40,7 +40,7 @@ context('Test Roles', () => {
 
     cy.getIframeBody()
       .find(
-        '[placeholder="Start typing to select Resources from the list."]:visible',
+        '[placeholder="Start typing to select Resources from the list"]:visible',
         { log: false },
       )
       .type(RESOURCE)
@@ -48,7 +48,7 @@ context('Test Roles', () => {
 
     cy.getIframeBody()
       .find(
-        '[placeholder="Start typing to select Verbs from the list."]:visible',
+        '[placeholder="Start typing to select Verbs from the list"]:visible',
         { log: false },
       )
       .type('get')
@@ -56,7 +56,7 @@ context('Test Roles', () => {
 
     cy.getIframeBody()
       .find(
-        '[placeholder="Start typing to select Verbs from the list."]:visible',
+        '[placeholder="Start typing to select Verbs from the list"]:visible',
         { log: false },
       )
       .eq(1)
@@ -95,7 +95,7 @@ context('Test Roles', () => {
 
     cy.getIframeBody()
       .find(
-        '[placeholder="Start typing to select Verbs from the list."]:visible',
+        '[placeholder="Start typing to select Verbs from the list"]:visible',
         { log: false },
       )
       .eq(2)
@@ -138,7 +138,7 @@ context('Test Roles', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Role Name"]:visible', { log: false })
+      .find('[placeholder="Role name"]:visible', { log: false })
       .type(CLONE_NAME)
       .click();
 

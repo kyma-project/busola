@@ -39,7 +39,7 @@ context('Test app settings and preferences', () => {
       .click();
 
     cy.getIframeBody()
-      .find('input[placeholder="Config Map Name"]:visible')
+      .find('input[placeholder="Config Map name"]:visible')
       .type(NAME);
 
     cy.getIframeBody()
@@ -118,8 +118,11 @@ context('Test app settings and preferences', () => {
             .click();
         }
       });
-
     cy.get('[aria-label="close"]').click();
+
+    cy.getLeftNav()
+      .contains('Back to Cluster Overview')
+      .click();
 
     cy.getLeftNav()
       .contains('Namespaces')

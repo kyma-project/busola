@@ -23,7 +23,7 @@ context('Test Cluster Overview', () => {
       .should('not.be.empty');
 
     cy.getIframeBody()
-      .contains('API server address')
+      .contains('API Server Address')
       .next('.content')
       .should('not.be.empty');
 

@@ -1,0 +1,14 @@
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: test-ap
+spec:
+  selector:
+    matchLabels:
+      app: myapi
+  action: AUDIT
+  rules:
+    - to:
+        - operation:
+            methods: ['GET']
+            paths: ['/user/profile/*']

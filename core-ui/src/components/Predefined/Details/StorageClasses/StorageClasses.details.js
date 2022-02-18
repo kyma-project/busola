@@ -56,6 +56,7 @@ export const StorageClassesDetails = ({ DefaultRenderer, ...otherParams }) => {
       ),
     },
   ];
+
   const Events = () => (
     <EventsList
       namespace={otherParams.namespace}
@@ -63,6 +64,7 @@ export const StorageClassesDetails = ({ DefaultRenderer, ...otherParams }) => {
       hideInvolvedObjects={true}
     />
   );
+
   return (
     <DefaultRenderer
       customComponents={[

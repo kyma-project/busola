@@ -27,7 +27,7 @@ context('Test Replica Sets', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Replica Set Name"]')
+      .find('[placeholder="Replica Set name"]')
       .clear()
       .type(REPLICA_SET_NAME);
 
@@ -39,7 +39,7 @@ context('Test Replica Sets', () => {
 
     cy.getIframeBody()
       .find(
-        '[placeholder="Enter the Docker image tag, for example, bitnami/nginx."]',
+        '[placeholder="Enter the Docker image tag, for example, bitnami/nginx"]',
       )
       .clear()
       .type(DOCKER_IMAGE_TAG)
@@ -84,7 +84,7 @@ context('Test Replica Sets', () => {
 
     cy.getIframeBody()
       .find(
-        '[placeholder="Enter the Docker image tag, for example, bitnami/nginx."]',
+        '[placeholder="Enter the Docker image tag, for example, bitnami/nginx"]',
       )
       .clear()
       .type(EDITED_DOCKER_IMAGE_TAG)

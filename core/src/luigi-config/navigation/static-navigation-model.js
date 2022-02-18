@@ -58,8 +58,8 @@ export function getStaticChildrenNodesForNamespace(
   const encodedClusterName = encodeURIComponent(getActiveClusterName());
   const nodes = [
     {
-      link: `/cluster/${encodedClusterName}/namespaces`,
-      label: i18next.t('namespaces.overview.back'),
+      link: `/cluster/${encodedClusterName}/overview`,
+      label: i18next.t('clusters.overview.back'),
       icon: 'nav-back',
       hideFromNav: !hasPermissionsFor('', 'namespaces', permissionSet, [
         'list',
@@ -593,7 +593,40 @@ export function getStaticChildrenNodesForNamespace(
         },
       ],
     },
-
+    {
+      category: i18next.t('discovery-and-network.title'),
+      pathSegment: 'networkpolicies',
+      resourceType: 'networkpolicies',
+      navigationContext: 'networkpolicies',
+      label: i18next.t('network-policies.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/networkPolicies?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/networking.k8s.io/v1',
+          hasDetailsView: true,
+        }),
+      keepSelectedForChildren: true,
+      viewGroup: coreUIViewGroupName,
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':networkPolicyName',
+              resourceType: 'networkpolicies',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/networkPolicies/:networkPolicyName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/networking.k8s.io/v1',
+                }),
+              viewGroup: coreUIViewGroupName,
+            },
+          ],
+        },
+      ],
+    },
     // ISTIO
     {
       category: {
@@ -715,6 +748,118 @@ export function getStaticChildrenNodesForNamespace(
         },
       ],
     },
+    {
+      category: i18next.t('istio.title'),
+      resourceType: 'sidecars',
+      pathSegment: 'sidecars',
+      label: i18next.t('sidecars.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/sidecars?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/networking.istio.io/v1beta1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+      context: {
+        requiredFeatures: [features.ISTIO],
+      },
+
+      navigationContext: 'sidecars',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':sidecarName',
+              resourceType: 'sidecars',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/sidecars/:sidecarName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/networking.istio.io/v1beta1',
+                }),
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: i18next.t('istio.title'),
+      resourceType: 'authorizationpolicies',
+      pathSegment: 'authorizationpolicies',
+      label: i18next.t('authorization-policies.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/authorizationPolicies?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/security.istio.io/v1beta1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+      context: {
+        requiredFeatures: [features.ISTIO],
+      },
+
+      navigationContext: 'authorizationpolicies',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':authorizationpolicyName',
+              resourceType: 'authorizationpolicies',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/authorizationPolicies/:authorizationpolicyName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/security.istio.io/v1beta1',
+                }),
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: i18next.t('istio.title'),
+      resourceType: 'serviceentries',
+      pathSegment: 'serviceentries',
+      label: i18next.t('service-entries.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/serviceEntries?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/networking.istio.io/v1beta1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+      context: {
+        requiredFeatures: [features.ISTIO],
+      },
+
+      navigationContext: 'serviceentries',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':serviceEntryName',
+              resourceType: 'serviceentries',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/serviceEntries/:serviceEntryName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/networking.istio.io/v1beta1',
+                }),
+            },
+          ],
+        },
+      ],
+    },
+
     //SERVICE MANAGEMENT CATEGORY
     {
       category: {
