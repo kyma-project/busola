@@ -14,6 +14,10 @@ export const ignoreConsoleErrors = patterns => {
     originalConsoleError(...data);
   };
 };
+// shutup popper error
+ignoreConsoleErrors([
+  'Element passed as the argument does not exist in the instance',
+]);
 
 var nodeCrypto = require('crypto');
 global.crypto = {
