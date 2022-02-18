@@ -785,7 +785,7 @@ export function getStaticChildrenNodesForNamespace(
         },
       ],
     },
-        {
+    {
       category: i18next.t('istio.title'),
       resourceType: 'authorizationpolicies',
       pathSegment: 'authorizationpolicies',
@@ -859,7 +859,7 @@ export function getStaticChildrenNodesForNamespace(
         },
       ],
     },
-    
+
     //SERVICE MANAGEMENT CATEGORY
     {
       category: {
