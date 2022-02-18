@@ -23,9 +23,6 @@
     "extends": "react-app"
   },
   "dependencies": {
-    "@babel/core": "^7.17.0",
-    "@babel/plugin-transform-runtime": "^7.17.0",
-    "@babel/preset-env": "^7.16.11",
     "@luigi-project/client": "^1.20.1",
     "@sap-theming/theming-base-content": "^11.1.28",
     "@sentry/react": "^6.17.9",
@@ -57,12 +54,7 @@
     "semver": "^7.3.5"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-class-properties": "^7.16.7",
-    "babel-core": "^6.26.3",
-    "babel-loader": "^8.2.3",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-stage-0": "^6.24.1",
+    "@babel/core": "^7.17.0",
     "cli-color": "^1.4.0",
     "concurrently": "^5.0.0",
     "enzyme": "^3.10.0",
