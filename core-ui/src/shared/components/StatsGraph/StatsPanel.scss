@@ -1,0 +1,27 @@
+.stats-panel {
+  .fd-layout-panel__body {
+    position: relative;
+  }
+
+  .throbber {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .stats-graph {
+    &.cpu {
+      --bar-color: var(--sapIndicationColor_7);
+    }
+    &.memory {
+      --bar-color: var(--sapIndicationColor_6);
+    }
+    &.network-up {
+      --bar-color: var(--sapIndicationColor_5);
+    }
+    &.network-down {
+      --bar-color: var(--sapIndicationColor_4);
+    }
+  }
+}
