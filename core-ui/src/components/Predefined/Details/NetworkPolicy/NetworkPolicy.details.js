@@ -16,10 +16,10 @@ export function NetworkPoliciesDetails({ DefaultRenderer, ...otherParams }) {
     },
   ];
 
-  const Ingresses = ({ policy }) => {
-    if (!policy.ingress?.length) return null;
+  const Ingresses = ({ spec }) => {
+    if (!spec.ingress?.length) return null;
 
-    return policy.ingress.map((ingress, idx) => (
+    return spec.ingress.map((ingress, idx) => (
       <LayoutPanel className="fd-margin--md" key={idx}>
         <LayoutPanel.Header>
           <LayoutPanel.Head
@@ -38,10 +38,10 @@ export function NetworkPoliciesDetails({ DefaultRenderer, ...otherParams }) {
     ));
   };
 
-  const Egresses = ({ policy }) => {
-    if (!policy.egress?.length) return null;
+  const Egresses = ({ spec }) => {
+    if (!spec.egress?.length) return null;
 
-    return policy.egress.map((egress, idx) => (
+    return spec.egress.map((egress, idx) => (
       <LayoutPanel className="fd-margin--md" key={idx}>
         <LayoutPanel.Header>
           <LayoutPanel.Head
