@@ -9,6 +9,8 @@ import { useTranslation } from 'react-i18next';
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
 
+import { PodStatsGraph } from './PodStatsGraph';
+
 function toSnakeCase(inputString) {
   return inputString
     .split('')
@@ -21,6 +23,7 @@ function toSnakeCase(inputString) {
     })
     .join('');
 }
+
 function goToSecretDetails(resourceKind, name) {
   const preperedResourceKind = toSnakeCase(resourceKind);
 
@@ -115,7 +118,13 @@ export const PodsDetails = ({ DefaultRenderer, ...otherParams }) => {
 
   return (
     <DefaultRenderer
-      customComponents={[VolumesList, Containers, InitContainers, Events]}
+      customComponents={[
+        PodStatsGraph,
+        VolumesList,
+        Containers,
+        InitContainers,
+        Events,
+      ]}
       customColumns={customColumns}
       {...otherParams}
     ></DefaultRenderer>
