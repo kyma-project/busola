@@ -51,12 +51,10 @@ const Configuration = ({ spec }) => {
         <LayoutPanelRow
           name={t('service-entries.headers.hosts')}
           value={<Tokens tokens={spec?.hosts} />}
-          key={spec?.hosts}
         />
         <LayoutPanelRow
           name={t('service-entries.headers.addresses')}
           value={<Tokens tokens={spec?.addresses} />}
-          key={spec?.addresses}
         />
         <LayoutPanelRow
           name={t('service-entries.headers.export-to')}
@@ -67,12 +65,10 @@ const Configuration = ({ spec }) => {
               t('service-entries.headers.export-to-empty')
             )
           }
-          key={spec?.exportTo}
         />
         <LayoutPanelRow
           name={t('service-entries.headers.subject-alt-names')}
           value={<Tokens tokens={spec?.subjectAltNames} />}
-          key={spec?.subjectAltNames}
         />
       </LayoutPanel.Body>
     </LayoutPanel>
@@ -81,7 +77,7 @@ const Configuration = ({ spec }) => {
 
 const Workloads = se => {
   return (
-    <div>
+    <div key="se-workloads">
       {se.spec?.endpoints?.length > 0 ? (
         <Endpoints serviceentry={se} />
       ) : (

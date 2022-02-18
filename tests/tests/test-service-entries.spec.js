@@ -59,11 +59,12 @@ context('Test Service Entries', () => {
   });
 
   it('Check the Service Entry details', () => {
-    cy.getIframeBody().contains(RESOLUTION);
-    cy.getIframeBody().contains(LOCATION);
-    cy.getIframeBody().contains(HOST);
-    cy.getIframeBody().contains(ADDRESS);
-    cy.getIframeBody().contains(WORKLOAD_SELECTOR_LABEL);
+    cy.getIframeBody()
+      .should('include.text', RESOLUTION)
+      .and('include.text', LOCATION)
+      .and('include.text', HOST)
+      .and('include.text', ADDRESS)
+      .and('include.text', WORKLOAD_SELECTOR_LABEL);
   });
 
   it('Check the Service Entries list', () => {
