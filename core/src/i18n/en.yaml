@@ -1947,7 +1947,7 @@ top-nav:
   profile:
     preferences: $t(preferences.title)
 upload-yaml:
-  info: You can upload multiple resources, separated in YAML by '---'. If resource already exists, it will be updated, otherwise a new one will be created. In case the namespace is not given, the 'default' will be used.
+  info: You can upload multiple resources, separated in YAML by '---'. If resource already exists, it will be updated, otherwise a new one will be created. In case the Namespace is not given, the 'default' one will be used.
   messages:
     not-a-k8s-resource: Not a k8s resource!
   or-paste-here: 'or paste it here:'
