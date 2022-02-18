@@ -1,8 +1,8 @@
 import Enzyme from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import 'jsdom-worker-fix';
 import { act } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
 import 'babel-polyfill';
 
 const originalConsoleError = console.error;
