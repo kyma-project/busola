@@ -15,15 +15,13 @@ export function DataField({ title, ...props }) {
       readableFromFile
       className="resource-form__data-field"
       title={title || t('common.labels.data')}
-      input={({ value, setValue, ...props }) => (
+      input={({ setValue, ...props }) => (
         <FormTextarea
           compact
-          key="value"
-          value={value}
           onChange={e => setValue(e.target.value)}
-          placeholder={t('components.key-value-field.enter-value')}
           className="value-textarea"
           {...props}
+          onKeyDown={() => {}} // overwrites default onKeyDown that switches focus when Enter is pressed
         />
       )}
       {...props}
