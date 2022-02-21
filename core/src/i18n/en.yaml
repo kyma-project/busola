@@ -157,6 +157,7 @@ authorization-policies:
     provider: Provider
     rule: Rule {{ruleNumber}}
     rules: Rules
+    selector: Selector
     source: Source
     to: To
     values: Values
