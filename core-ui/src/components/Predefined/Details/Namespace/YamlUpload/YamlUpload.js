@@ -23,7 +23,6 @@ export function YamlUpload({ resourcesData, setResourcesData }) {
   const updateYamlContent = text => {
     try {
       const files = jsyaml.loadAll(text);
-      console.log(text);
       if (files.some(file => typeof file !== 'object')) {
         setError(t('clusters.wizard.not-an-object'));
       } else if (files.some(file => !isK8sResource(file))) {
