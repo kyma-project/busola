@@ -2,9 +2,9 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Tokens } from 'shared/components/Tokens';
 import { LayoutPanel } from 'fundamental-react';
-import { LabelSelector } from './LabelSelector';
 import { NetworkPolicyPorts } from './Ports';
 import { NetworkPolicyPeers } from './Peers';
+import { WorkloadSelector } from 'shared/components/WorkloadSelector/WorkloadSelector';
 
 export function NetworkPoliciesDetails({ DefaultRenderer, ...otherParams }) {
   const { t } = useTranslation();
@@ -60,15 +60,19 @@ export function NetworkPoliciesDetails({ DefaultRenderer, ...otherParams }) {
     ));
   };
 
-  const customComponents = [
-    r => (
-      <div key="label-selector">
-        <LabelSelector selector={r.spec?.podSelector} />
-      </div>
-    ),
-    Ingresses,
-    Egresses,
-  ];
+  const PodSelector = policy => {
+    const { t } = useTranslation();
+
+    return (
+      <WorkloadSelector
+        resource={policy}
+        labels={policy.spec.podSelector?.matchLabels}
+        title={t('network-policies.headers.pod-selector')}
+      />
+    );
+  };
+
+  const customComponents = [Ingresses, Egresses, PodSelector];
 
   return (
     <DefaultRenderer
