@@ -76,8 +76,6 @@ const Configuration = ({ spec }) => {
 };
 
 const Workloads = se => {
-  const { t } = useTranslation();
-
   return (
     <div key="se-workloads">
       {se.spec?.endpoints?.length > 0 ? (
@@ -86,7 +84,6 @@ const Workloads = se => {
         <WorkloadSelector
           resource={se}
           labels={se.spec?.workloadSelector?.labels}
-          title={t('workload-selector.title')}
         />
       )}
     </div>

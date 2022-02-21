@@ -19,7 +19,6 @@ export const SidecarsDetails = ({ DefaultRenderer, ...otherParams }) => {
     <WorkloadSelector
       resource={sidecar}
       labels={sidecar.spec?.workloadSelector?.labels}
-      title={t('workload-selector.title')}
     />
   );
 

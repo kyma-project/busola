@@ -25,12 +25,11 @@ export const AuthorizationPoliciesDetails = ({
 
   const WorkloadSelectorLabels = policy => {
     const { t } = useTranslation();
-
     return (
       <WorkloadSelector
         resource={policy}
         labels={policy.spec.selector?.matchLabels}
-        title={t('workload-selector.title')}
+        title={t('authorization-policies.headers.selector')}
       />
     );
   };
