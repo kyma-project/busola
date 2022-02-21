@@ -78,11 +78,10 @@ export default function CreateInstanceForm({
 
     // eslint-disable-next-line
   }, []);
-
   plans.forEach(plan => {
     parseDefaultIntegerValues(plan);
   });
-  const plan = plans[0]?.metadata.name;
+  const plan = plans[0]?.spec.externalID;
   const [
     instanceCreateParameterSchema,
     setInstanceCreateParameterSchema,
@@ -130,7 +129,6 @@ export default function CreateInstanceForm({
       },
       spec: inputData,
     };
-
     try {
       await postRequest(
         `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${namespace}/serviceinstances`,
@@ -177,7 +175,6 @@ export default function CreateInstanceForm({
       servicePlanExternalName: currentPlan && currentPlan.spec.externalName,
       parameters: instanceCreateParameters,
     };
-
     const specCSC = {
       clusterServiceClassExternalName: item.spec.externalName,
       clusterServicePlanExternalName:
