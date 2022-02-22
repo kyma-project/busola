@@ -21,7 +21,7 @@ export const DeploymentsDetails = ({ DefaultRenderer, ...otherParams }) => {
     },
   ];
 
-  const WorkloadSelectorLabels = deployment => {
+  const SelectorLabels = deployment => {
     const { t } = useTranslation();
     return (
       <WorkloadSelector
@@ -34,7 +34,7 @@ export const DeploymentsDetails = ({ DefaultRenderer, ...otherParams }) => {
 
   return (
     <DefaultRenderer
-      customComponents={[WorkloadSelectorLabels, HPASubcomponent]}
+      customComponents={[HPASubcomponent, SelectorLabels]}
       customColumns={customColumns}
       {...otherParams}
     />
