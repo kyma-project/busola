@@ -18,7 +18,8 @@ try {
 const app = express();
 app.disable('x-powered-by');
 app.use(express.raw({ type: '*/*', limit: '100mb' }));
-if (gzipEnabled) app.use(compression());
+// if (gzipEnabled)
+app.use(compression());
 
 if (process.env.NODE_ENV === 'development') {
   app.use(cors({ origin: '*' }));
