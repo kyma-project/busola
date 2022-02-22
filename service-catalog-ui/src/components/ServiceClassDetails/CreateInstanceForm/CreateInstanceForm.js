@@ -9,7 +9,7 @@ import {
   usePost,
   useNotification,
   randomNameGenerator,
-  ControlledEditor,
+  MonacoEditor,
   useTheme,
 } from 'react-shared';
 
@@ -150,7 +150,7 @@ export default function CreateInstanceForm({
     }
   }
 
-  const handleCustomParametersChange = (_, input) => {
+  const handleCustomParametersChange = input => {
     try {
       const parsedInput = JSON.parse(input);
       if (isNonNullObject(parsedInput)) {
@@ -276,7 +276,7 @@ export default function CreateInstanceForm({
             )}
           </div>
           {customParametersProvided && (
-            <ControlledEditor
+            <MonacoEditor
               aria-label="schema-editor"
               height="25em"
               language="JSON"

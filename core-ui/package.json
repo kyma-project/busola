@@ -5,14 +5,18 @@
   "dependencies": {
     "@datasert/cronjs-parser": "^1.1.0",
     "@peculiar/x509": "^1.6.0",
+    "@sentry/react": "^6.17.4",
     "bytes-iec": "^3.1.0",
+    "core-js": "^3.21.1",
     "cronstrue": "^1.114.0",
     "didyoumean": "^1.2.2",
     "dompurify": "^2.0.8",
+    "lodash-es": "^4.17.21",
     "markdown-it": "^10.0.0",
     "pako": "^2.0.4",
-    "react-hook-form": "^5.5.0",
-    "use-debounce": "^3.4.1",
+    "react": "../node_modules/react",
+    "react-hook-form": "^6.0.0",
+    "use-debounce": "^7.0.1",
     "yup": "^0.28.3"
   },
   "scripts": {

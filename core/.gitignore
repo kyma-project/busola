@@ -35,6 +35,8 @@ testem.log
 
 # config
 /src/assets/*.bundle.js
+/src/assets/240.bundle.js.LICENSE.txt
+/src/assets/luigiConfig.bundle.js.LICENSE.txt
 
 # System Files
 .DS_Store

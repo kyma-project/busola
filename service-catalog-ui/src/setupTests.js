@@ -1,8 +1,8 @@
 //Do not move this file to another location. It will cause tests to stop working.
 
 import Enzyme from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
-import '@testing-library/jest-dom/extend-expect';
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
+import '@testing-library/jest-dom';
 
 const nodeCrypto = require('crypto');
 global.crypto = {

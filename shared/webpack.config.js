@@ -6,7 +6,6 @@ module.exports = function(env) {
     output: {
       path: path.resolve(__dirname, 'build'),
       filename: 'index.js',
-      library: '',
       libraryTarget: 'umd',
     },
     externals: {
@@ -34,7 +33,7 @@ module.exports = function(env) {
         },
         {
           test: /\.(png|woff|woff2|eot|ttf|svg)$/,
-          loader: 'url-loader?limit=100000',
+          use: [{ loader: 'url-loader', options: { limit: 100000 } }],
         },
       ],
     },
