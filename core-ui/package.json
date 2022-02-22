@@ -12,7 +12,7 @@
     "didyoumean": "^1.2.2",
     "dompurify": "^2.0.8",
     "lodash-es": "^4.17.21",
-    "markdown-it": "^10.0.0",
+    "markdown-it": "^12.3.2",
     "pako": "^2.0.4",
     "react": "../node_modules/react",
     "react-hook-form": "^6.0.0",
