@@ -7,12 +7,12 @@ import {
   EMPTY_TEXT_PLACEHOLDER,
 } from 'react-shared';
 
-import { ResourcePods } from '../ResourcePods';
 import { JobCompletions } from './JobCompletions';
 import { JobConditions } from './JobConditions';
 
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
+import { WorkloadSelector } from 'shared/components/WorkloadSelector/WorkloadSelector';
 
 export function JobsDetails({ DefaultRenderer, ...otherParams }) {
   const { t } = useTranslation();
@@ -62,7 +62,18 @@ export function JobsDetails({ DefaultRenderer, ...otherParams }) {
     />
   );
 
-  const customComponents = [JobConditions, ResourcePods, Events];
+  const SelectorLabels = job => {
+    const { t } = useTranslation();
+    return (
+      <WorkloadSelector
+        resource={job}
+        labels={job.spec.selector?.matchLabels}
+        title={t('selector.title')}
+      />
+    );
+  };
+
+  const customComponents = [JobConditions, Events, SelectorLabels];
 
   return (
     <DefaultRenderer

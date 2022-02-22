@@ -2,9 +2,9 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ControlledBy } from 'react-shared';
 
-import { ResourcePods } from '../ResourcePods.js';
 import { DeploymentStatus } from './DeploymentStatus';
 import { HPASubcomponent } from '../HPA/HPASubcomponent';
+import { WorkloadSelector } from 'shared/components/WorkloadSelector/WorkloadSelector.js';
 
 export const DeploymentsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
@@ -21,9 +21,20 @@ export const DeploymentsDetails = ({ DefaultRenderer, ...otherParams }) => {
     },
   ];
 
+  const WorkloadSelectorLabels = deployment => {
+    const { t } = useTranslation();
+    return (
+      <WorkloadSelector
+        resource={deployment}
+        labels={deployment.spec.selector?.matchLabels}
+        title={t('selector.title')}
+      />
+    );
+  };
+
   return (
     <DefaultRenderer
-      customComponents={[ResourcePods, HPASubcomponent]}
+      customComponents={[WorkloadSelectorLabels, HPASubcomponent]}
       customColumns={customColumns}
       {...otherParams}
     />

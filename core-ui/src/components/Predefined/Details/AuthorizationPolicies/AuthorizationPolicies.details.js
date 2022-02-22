@@ -29,7 +29,7 @@ export const AuthorizationPoliciesDetails = ({
       <WorkloadSelector
         resource={policy}
         labels={policy.spec.selector?.matchLabels}
-        title={t('authorization-policies.headers.selector')}
+        title={t('selector.title')}
       />
     );
   };

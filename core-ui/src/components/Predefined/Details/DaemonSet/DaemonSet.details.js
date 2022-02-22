@@ -6,7 +6,7 @@ import {
   GenericList,
   EMPTY_TEXT_PLACEHOLDER,
 } from 'react-shared';
-import { ResourcePods } from '../ResourcePods.js';
+import { WorkloadSelector } from 'shared/components/WorkloadSelector/WorkloadSelector';
 import { DaemonSetStatus } from './DaemonSetStatus';
 
 const Tolerations = resource => {
@@ -87,13 +87,20 @@ export const DaemonSetsDetails = ({ DefaultRenderer, ...otherParams }) => {
     },
   ];
 
+  const SelectorLabels = daemonSet => {
+    const { t } = useTranslation();
+    return (
+      <WorkloadSelector
+        resource={daemonSet}
+        labels={daemonSet.spec.selector?.matchLabels}
+        title={t('selector.title')}
+      />
+    );
+  };
+
   return (
     <DefaultRenderer
-      customComponents={[
-        Tolerations,
-        Images,
-        resource => ResourcePods(resource, null, true),
-      ]}
+      customComponents={[Tolerations, Images, SelectorLabels]}
       customColumns={customColumns}
       {...otherParams}
     ></DefaultRenderer>
