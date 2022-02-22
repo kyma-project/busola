@@ -82,7 +82,7 @@ export const ModalWithForm = ({
   function handleFormSubmit() {
     if (isValid) {
       formElementRef.current.dispatchEvent(
-        new Event('submit', { cancelable: true }),
+        new Event('submit', { bubbles: true, cancelable: true }),
       );
       setOpenStatus(false);
     }

@@ -31,9 +31,12 @@ context('Test Secrets', () => {
 
     cy.getIframeBody()
       .find('[placeholder="Enter key"]:visible')
-      .type(
-        `${SECRET_KEY}{enter}{backspace}${SECRET_VALUE}{enter}${SECRET2_KEY}{enter}{backspace}${SECRET2_VALUE}`,
-      );
+      .type(`${SECRET_KEY}{enter}{backspace}${SECRET_VALUE}`);
+
+    cy.getIframeBody()
+      .find('[placeholder="Enter key"]:visible')
+      .last()
+      .type(`${SECRET2_KEY}{enter}{backspace}${SECRET2_VALUE}`);
 
     cy.getIframeBody()
       .contains('Encode')

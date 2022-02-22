@@ -22,7 +22,6 @@ export function ServiceInstancesCreate({
   const [serviceInstance, setServiceInstance] = React.useState(
     createServiceInstanceTemplate(namespace),
   );
-
   return (
     <ResourceForm
       className="create-service-instance-form"

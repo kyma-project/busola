@@ -70,7 +70,7 @@ export function SearchInput({
 
   const openSearchList = () => {
     setSearchHidden(false);
-    setImmediate(() => {
+    setTimeout(() => {
       const inputField = searchInputRef.current;
       inputField.focus();
     });

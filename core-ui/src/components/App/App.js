@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import Preferences from 'components/Preferences/Preferences';
 import {
-  withTitle,
+  WithTitle,
   useMicrofrontendContext,
   MainFrameRedirection,
 } from 'react-shared';
@@ -15,7 +15,6 @@ import { ComponentForList, ComponentForDetails } from 'shared/getComponents';
 import { getResourceUrl } from 'shared/helpers';
 import { ClusterList } from 'components/Clusters/views/ClusterList';
 import { NoPermissions } from 'components/NoPermissions/NoPermissions';
-import { AddCluster } from 'components/Clusters/views/AddCluster/AddCluster';
 import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
 import { NodeDetails } from 'components/Nodes/NodeDetails/NodeDetails';
 import { useSentry } from '../../hooks/useSentry';
@@ -34,91 +33,90 @@ export default function App() {
 
   return (
     // force rerender on cluster change
-    <Switch key={cluster?.name}>
+    <Routes key={cluster?.name}>
       <Route
         path="/no-permissions"
-        exact
-        render={withTitle(t('no-permissions.title'), NoPermissions)}
+        element={
+          <WithTitle title={t('no-permissions.title')}>
+            <NoPermissions />
+          </WithTitle>
+        }
       />
       <Route
         path="/overview"
-        exact
-        render={withTitle(
-          t('clusters.overview.title-current-cluster'),
-          ClusterOverview,
-        )}
+        element={
+          <WithTitle title={t('clusters.overview.title-current-cluster')}>
+            <ClusterOverview />
+          </WithTitle>
+        }
       />
-      <Route path="/overview/nodes/:nodeName" component={RoutedNodeDetails} />
+      <Route path="/overview/nodes/:nodeName" element={<RoutedNodeDetails />} />
       <Route
         path="/clusters"
-        exact
-        render={withTitle(
-          t('clusters.overview.title-all-clusters'),
-          ClusterList,
-        )}
+        element={
+          <WithTitle title={t('clusters.overview.title-all-clusters')}>
+            <ClusterList />
+          </WithTitle>
+        }
       />
-      <Route
-        path="/clusters/add"
-        exact
-        render={withTitle(t('clusters.add.title'), AddCluster)}
-      />
-      <Route path="/preferences" render={Preferences} />
+      <Route path="/preferences" element={<Preferences />} />
 
       <Route
-        exact
         path="/applications/:name/:serviceName"
-        component={RoutedApplicationServiceDetails}
+        element={<RoutedApplicationServiceDetails />}
       />
 
       <Route
-        exact
         path="/namespaces/:namespaceId/pods/:podName/containers/:containerName"
-        component={RoutedContainerDetails}
+        element={<RoutedContainerDetails />}
       />
 
       <Route
-        exact
         path="/namespaces/:namespaceId/helm-releases"
-        render={withTitle(t('helm-releases.title'), HelmReleasesList)}
+        element={
+          <WithTitle title={t('helm-releases.title')}>
+            <HelmReleasesList />
+          </WithTitle>
+        }
       />
 
       <Route
-        exact
         path="/namespaces/:namespaceId/helm-releases/:releaseName"
-        render={withTitle(t('helm-releases.title'), RoutedHelmReleaseDetails)}
+        element={
+          <WithTitle title={t('helm-releases.title')}>
+            <RoutedHelmReleaseDetails />
+          </WithTitle>
+        }
       />
 
       <Route
-        exact
         path="/customresourcedefinitions/:customResourceDefinitionName/:resourceVersion/:resourceName"
-        component={RoutedCustomResourceDetails}
+        element={<RoutedCustomResourceDetails />}
       />
 
       <Route
-        exact
         path="/namespaces/:namespaceId/:resourceType/:resourceName"
-        component={RoutedResourceDetails}
+        element={<RoutedResourceDetails />}
       />
       <Route
-        exact
         path="/namespaces/:namespaceId/:resourceType"
-        component={RoutedResourcesList}
+        element={<RoutedResourcesList />}
       />
       <Route
-        exact
         path="/:resourceType/:resourceName"
-        component={RoutedResourceDetails}
+        element={<RoutedResourceDetails />}
       />
 
-      <Route exact path="/:resourceType" component={RoutedResourcesList} />
-      <Route exact path="" component={MainFrameRedirection} />
-    </Switch>
+      <Route path="/:resourceType" element={<RoutedResourcesList />} />
+      <Route path="" element={<MainFrameRedirection />} />
+    </Routes>
   );
 }
 
-function RoutedApplicationServiceDetails({ match }) {
-  const applicationName = decodeURIComponent(match.params.name);
-  const serviceName = decodeURIComponent(match.params.serviceName);
+function RoutedApplicationServiceDetails() {
+  const params = useParams();
+  const applicationName = decodeURIComponent(params.name);
+  const serviceName = decodeURIComponent(params.serviceName);
 
   return (
     <ApplicationServiceDetails
@@ -128,33 +126,39 @@ function RoutedApplicationServiceDetails({ match }) {
   );
 }
 
-function RoutedNodeDetails({ match }) {
-  return <NodeDetails nodeName={match.params.nodeName} />;
+function RoutedNodeDetails() {
+  const { nodeName } = useParams();
+  return <NodeDetails nodeName={nodeName} />;
 }
 
-function RoutedHelmReleaseDetails({ match }) {
-  return <HelmReleasesDetails releaseName={match.params.releaseName} />;
+function RoutedHelmReleaseDetails() {
+  const { releaseName } = useParams();
+  return <HelmReleasesDetails releaseName={releaseName} />;
 }
 
-function RoutedContainerDetails({ match }) {
-  const decodedPodName = decodeURIComponent(match.params.podName);
-  const decodedContainerName = decodeURIComponent(match.params.containerName);
+function RoutedContainerDetails() {
+  const params = useParams();
+  const decodedPodName = decodeURIComponent(params.podName);
+  const decodedContainerName = decodeURIComponent(params.containerName);
 
-  const params = {
-    podName: decodedPodName,
-    containerName: decodedContainerName,
-    namespace: match.params.namespaceId,
-  };
-
-  return <ContainersLogs params={params} />;
-}
-
-function RoutedCustomResourceDetails({ match }) {
-  const customResourceDefinitionName = decodeURIComponent(
-    match.params.customResourceDefinitionName,
+  return (
+    <ContainersLogs
+      params={{
+        podName: decodedPodName,
+        containerName: decodedContainerName,
+        namespace: params.namespaceId,
+      }}
+    />
   );
-  const resourceVersion = decodeURIComponent(match.params.resourceVersion);
-  const resourceName = decodeURIComponent(match.params.resourceName);
+}
+
+function RoutedCustomResourceDetails() {
+  const routerParams = useParams();
+  const customResourceDefinitionName = decodeURIComponent(
+    routerParams.customResourceDefinitionName,
+  );
+  const resourceVersion = decodeURIComponent(routerParams.resourceVersion);
+  const resourceName = decodeURIComponent(routerParams.resourceName);
 
   const params = {
     customResourceDefinitionName,
@@ -165,7 +169,8 @@ function RoutedCustomResourceDetails({ match }) {
   return <CustomResource params={params} />;
 }
 
-function RoutedResourcesList({ match }) {
+function RoutedResourcesList() {
+  const routerParams = useParams();
   const queryParams = new URLSearchParams(window.location.search);
 
   const resourceUrl = getResourceUrl();
@@ -174,8 +179,8 @@ function RoutedResourcesList({ match }) {
     hasDetailsView: queryParams.get('hasDetailsView') === 'true',
     readOnly: queryParams.get('readOnly') === 'true',
     resourceUrl,
-    resourceType: match.params.resourceType,
-    namespace: match.params.namespaceId,
+    resourceType: routerParams.resourceType,
+    namespace: routerParams.namespaceId,
   };
 
   const rendererName = params.resourceType + 'List';
@@ -190,19 +195,20 @@ function RoutedResourcesList({ match }) {
   );
 }
 
-function RoutedResourceDetails({ match }) {
+function RoutedResourceDetails() {
+  const { resourceName, resourceType, namespaceId } = useParams();
   const queryParams = new URLSearchParams(window.location.search);
 
   const resourceUrl = getResourceUrl();
 
   const decodedResourceUrl = decodeURIComponent(resourceUrl);
-  const decodedResourceName = decodeURIComponent(match.params.resourceName);
+  const decodedResourceName = decodeURIComponent(resourceName);
 
   const params = {
     resourceUrl: decodedResourceUrl,
-    resourceType: match.params.resourceType,
+    resourceType: resourceType,
     resourceName: decodedResourceName,
-    namespace: match.params.namespaceId,
+    namespace: namespaceId,
     readOnly: queryParams.get('readOnly') === 'true',
   };
 
