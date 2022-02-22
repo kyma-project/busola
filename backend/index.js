@@ -11,6 +11,7 @@ let gzipEnabled;
 try {
   gzipEnabled = JSON.parse(fs.readFileSync('./config/config.json'))?.config
     ?.features?.GZIP?.isEnabled;
+  console.log(`gzip is ${gzipEnabled ? 'enabled' : 'disabled'}`);
 } catch (e) {
   console.log('Error while reading the configuration file', e?.message || e);
 }
@@ -18,8 +19,7 @@ try {
 const app = express();
 app.disable('x-powered-by');
 app.use(express.raw({ type: '*/*', limit: '100mb' }));
-// if (gzipEnabled)
-app.use(compression());
+if (gzipEnabled) app.use(compression());
 
 if (process.env.NODE_ENV === 'development') {
   app.use(cors({ origin: '*' }));
