@@ -77,9 +77,7 @@ export function ResourceForm({
     <Editor
       value={resource}
       setValue={setResource}
-      editorDidMount={(_, e) => {
-        setActionsEditor(e);
-      }}
+      onMount={editor => setActionsEditor(editor)}
     />
   );
   editor = renderEditor

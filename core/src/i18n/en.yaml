@@ -1469,6 +1469,7 @@ node-details:
 nodes:
   name_singular: Node
   title: Nodes
+  title_details: Node {{nodeName}}
 oauth2-clients:
   auth-methods:
     client_secret_basic: Client Secret / Basic

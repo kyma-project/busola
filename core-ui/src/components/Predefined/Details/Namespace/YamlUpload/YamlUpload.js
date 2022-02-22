@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
-import { ControlledEditor, useTheme } from 'react-shared';
+import { MonacoEditor, useTheme } from 'react-shared';
 import jsyaml from 'js-yaml';
 
 import { YamlFileUploader } from './YamlFileUploader';
@@ -49,12 +49,12 @@ export function YamlUpload({
       <p className="editor-label fd-margin-bottom--sm fd-margin-top--sm">
         {t('upload-yaml.or-paste-here')}
       </p>
-      <ControlledEditor
+      <MonacoEditor
         height="400px"
         language="yaml"
         theme={editorTheme}
         value={yamlContentString}
-        onChange={(_, value) => updateYamlContent(value)}
+        onChange={updateYamlContent}
         options={{ scrollbar: { alwaysConsumeMouseWheel: false } }}
       />
       {error && (

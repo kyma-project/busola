@@ -1,3 +1,5 @@
+import 'regenerator-runtime/runtime';
+
 /* eslint-disable import/first */
 export { GenericList } from './components/GenericList/GenericList';
 export { SearchInput } from './components/GenericList/SearchInput';
@@ -70,7 +72,7 @@ export * from './components/ModalWithForm/ModalWithForm';
 import * as CustomPropTypes from './typechecking/CustomPropTypes';
 export { CustomPropTypes };
 
-import { monaco } from '@monaco-editor/react';
+import { loader } from '@monaco-editor/react';
 import { setupMonaco } from './utils/setupMonaco';
 
 export * from '@monaco-editor/react';
@@ -79,4 +81,4 @@ export const MonacoEditor = Editor;
 
 import './extend-jsonpath';
 
-setupMonaco(monaco);
+setupMonaco(loader);
