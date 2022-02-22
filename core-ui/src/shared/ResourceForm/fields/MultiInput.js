@@ -59,7 +59,7 @@ export function MultiInput({
     }
   }, [internalValue]);
 
-  const toInternalCallback = useCallback(toInternal, []);
+  const toInternalCallback = useCallback(toInternal, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     setInternalValue([...toInternalCallback(value), null]);

@@ -15,8 +15,8 @@ Busola project consists of the following UI projects:
 
 ## Prerequisites
 
-- [`npm`](https://www.npmjs.com/): >= 6.14.12
-- [`node`](https://nodejs.org/en/): >= 14.16.1
+- [`npm`](https://www.npmjs.com/): >= 8.1.2
+- [`node`](https://nodejs.org/en/): >= 16.13.2
 
 ## Installation
 
@@ -42,13 +42,13 @@ Learn about the [default configuration](#default-configuration) in Busola and [h
 
 Busola is delivered with the following default settings:
 
-| Parameter                  | Comment                                                                                                                                           | Default Value                                                                                                                                                                                                             |
-| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `hiddenNamespaces`         | A list of Namespace names that are considered system, and are hidden by default.                                                                  | default list: `compass-system`, `istio-system`, `kube-public`, `kube-system`, `kyma-backup`, `kyma-installer`, `kyma-integration`, `kyma-system`, `natss`, `kube-node-lease`, `kubernetes-dashboard`, `serverless-system` |
-| `features`                 | Switches a set of Busola features on and off. Use selectors to configure conditions for the features. To switch them off, set `isEnabled=false`.  | `isEnabled=true`                                                                                                                                                                                                          |
-| `navigation.disabledNodes` | Array of IDs of navigation nodes that are hidden from navigation. Format: `<category>.<nodeName>` or `<namespace>.<category>.<nodeName>`)         | empty                                                                                                                                                                                                                     |
-| `navigation.externalNodes` | A nested list of links to external websites. `category`, `icon`: a category name and optional icon / `children`: a list of pairs (label and link) | category: `Learn more` / children: `Kyma Documentation`, `Our Slack`, `Github`                                                                                                                                            |
-| `version`                  | Configuration version. Don’t edit this. Can be empty.                                                                                             | the most recent release                                                                                                                                                                                                   |
+| Parameter                  | Comment                                                                                                                                           | Default Value                                                                                                                                                                                     |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `hiddenNamespaces`         | A list of Namespace names that are considered system, and are hidden by default.                                                                  | default list: `compass-system`, `istio-system`, `kube-public`, `kube-system`, `kyma-backup`, `kyma-installer`, `kyma-integration`, `kyma-system`, `natss`, `kube-node-lease`, `serverless-system` |
+| `features`                 | Switches a set of Busola features on and off. Use selectors to configure conditions for the features. To switch them off, set `isEnabled=false`.  | `isEnabled=true`                                                                                                                                                                                  |
+| `navigation.disabledNodes` | Array of IDs of navigation nodes that are hidden from navigation. Format: `<category>.<nodeName>` or `<namespace>.<category>.<nodeName>`)         | empty                                                                                                                                                                                             |
+| `navigation.externalNodes` | A nested list of links to external websites. `category`, `icon`: a category name and optional icon / `children`: a list of pairs (label and link) | category: `Learn more` / children: `Kyma Documentation`, `Our Slack`, `Github`                                                                                                                    |
+| `version`                  | Configuration version. Don’t edit this. Can be empty.                                                                                             | the most recent release                                                                                                                                                                           |
 
 ### Configuration sources
 

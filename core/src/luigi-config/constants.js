@@ -40,6 +40,5 @@ export const DEFAULT_HIDDEN_NAMESPACES = [
   'kyma-system',
   'natss',
   'kube-node-lease',
-  'kubernetes-dashboard',
   'serverless-system',
 ];
