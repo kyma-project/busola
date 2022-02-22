@@ -3,7 +3,7 @@ import { MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { KubeconfigFileUpload } from './KubeconfigFileUpload';
 import jsyaml from 'js-yaml';
-import { ControlledEditor, useTheme } from 'react-shared';
+import { MonacoEditor, useTheme } from 'react-shared';
 
 import './KubeconfigUpload.scss';
 
@@ -40,15 +40,17 @@ export function KubeconfigUpload({
       <p className="editor-label fd-margin-bottom--sm fd-margin-top--sm">
         {t('clusters.wizard.editor-label')}
       </p>
-      <ControlledEditor
+      <MonacoEditor
         height="400px"
         language="yaml"
         theme={editorTheme}
         value={configString}
-        editorDidMount={(getValue, editor) =>
-          editor.onDidBlurEditorWidget(() => updateKubeconfig(getValue()))
+        onMount={editor =>
+          editor.onDidBlurEditorWidget(() =>
+            updateKubeconfig(editor.getValue()),
+          )
         }
-        onChange={(_, value) => updateKubeconfig(value)}
+        onChange={value => updateKubeconfig(value)}
         options={{
           scrollbar: {
             alwaysConsumeMouseWheel: false,

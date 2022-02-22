@@ -27,7 +27,7 @@ const SchemaData = ({
 
   const handleFormChange = ({ formData }) => {
     if (!initialFormData.current) {
-      setImmediate(() => {
+      setTimeout(() => {
         initialFormData.current = formData;
       });
     } else if (!validationVisible && initialFormData.current !== formData)
