@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Tooltip } from '../../components/Tooltip/Tooltip';
 import { Button } from 'fundamental-react';
 import copyToCliboard from 'copy-to-clipboard';
 import { saveAs } from 'file-saver';
 import './EditorActions.scss';
 import { useTranslation } from 'react-i18next';
+
+const EDITOR_VISIBILITY = 'editor-visibility';
 
 const ButtonWithTooltip = ({
   tooltipContent,
@@ -36,10 +38,64 @@ export function EditorActions({
   i18n,
   readOnly,
 }) {
+  const [visible, setVisible] = useState(
+    localStorage.getItem(EDITOR_VISIBILITY) !== 'false',
+  );
+
+  useEffect(() => {
+    localStorage.setItem(EDITOR_VISIBILITY, visible);
+  }, [visible]);
+
+  useEffect(() => {
+    if (editor && !visible) {
+      setTimeout(() => hideReadOnlyLines(), 500);
+    }
+  }, [editor]);
+
   const openSearch = () => {
     // focus is required for search control to appear
     editor.focus();
     editor.trigger('', 'actions.find');
+  };
+
+  const getReadOnlyFieldsPosition = () => {
+    // definition of read only fields
+    const READONLY_FIELDS = ['^ *managedFields:$', '^status:$'];
+    let arrayOfPositions = [];
+    READONLY_FIELDS.forEach(fieldName => {
+      arrayOfPositions = arrayOfPositions.concat(
+        editor.getModel().findMatches(fieldName, true, true, true, null, true),
+      );
+    });
+    return arrayOfPositions.sort(
+      (a, b) => b.range.startLineNumber - a.range.startLineNumber,
+    );
+  };
+
+  const toggleReadOnlyLines = (fieldsPosition, hide) => {
+    fieldsPosition.forEach(match => {
+      setTimeout(() => {
+        editor.setPosition({
+          column: match.range.startColumn,
+          lineNumber: match.range.startLineNumber,
+        });
+
+        hide
+          ? editor.trigger('fold', 'editor.fold')
+          : editor.trigger('unfold', 'editor.unfold');
+      });
+    });
+    setVisible(!hide);
+  };
+
+  const hideReadOnlyLines = () => {
+    const readOnlyFields = getReadOnlyFieldsPosition();
+    toggleReadOnlyLines(readOnlyFields, true);
+  };
+
+  const showReadOnlyLines = () => {
+    const readOnlyFields = getReadOnlyFieldsPosition();
+    toggleReadOnlyLines(readOnlyFields, false);
   };
 
   const download = () => {
@@ -54,8 +110,16 @@ export function EditorActions({
   return (
     <section className="editor-actions fd-margin-bottom--sm">
       <ButtonWithTooltip
+        tooltipContent={
+          visible ? t('common.tooltips.hide') : t('common.tooltips.show')
+        }
+        glyph={visible ? 'hide' : 'show'}
+        onClick={visible ? hideReadOnlyLines : showReadOnlyLines}
+        disabled={!editor}
+      />
+      <ButtonWithTooltip
         tooltipContent={t('common.tooltips.search')}
-        glyph="filter"
+        glyph="search"
         onClick={openSearch}
         disabled={!editor}
       />

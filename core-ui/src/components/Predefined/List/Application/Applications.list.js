@@ -1,5 +1,4 @@
 import React from 'react';
-import CreateApplicationModal from './CreateApplicationModal';
 import { ApplicationStatus } from '../../Details/Application/ApplicationStatus';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-shared';
@@ -27,7 +26,6 @@ export const ApplicationsList = ({ DefaultRenderer, ...otherParams }) => {
     <DefaultRenderer
       customColumns={customColumns}
       description={description}
-      customHeaderActions={<CreateApplicationModal />}
       {...otherParams}
     />
   );

@@ -4,6 +4,7 @@ import { ControlledBy } from 'react-shared';
 
 import { ResourcePods } from '../ResourcePods.js';
 import { DeploymentStatus } from './DeploymentStatus';
+import { HPASubcomponent } from '../HPA/HPASubcomponent';
 
 export const DeploymentsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
@@ -19,11 +20,12 @@ export const DeploymentsDetails = ({ DefaultRenderer, ...otherParams }) => {
       value: deployment => <DeploymentStatus deployment={deployment} />,
     },
   ];
+
   return (
     <DefaultRenderer
-      customComponents={[ResourcePods]}
+      customComponents={[ResourcePods, HPASubcomponent]}
       customColumns={customColumns}
       {...otherParams}
-    ></DefaultRenderer>
+    />
   );
 };

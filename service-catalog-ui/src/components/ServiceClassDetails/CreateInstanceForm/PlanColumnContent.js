@@ -15,7 +15,7 @@ export const PlanColumnContent = ({ onPlanChange, dropdownRef, allPlans }) => {
   const { i18n } = useTranslation();
 
   const options = allPlans.map(plan => ({
-    key: plan.metadata.name,
+    key: plan.spec.externalID,
     text: getResourceDisplayName(plan),
   }));
   const selectedPlan = dropdownRef?.current

@@ -3,6 +3,20 @@ import { ControlledBy } from 'react-shared';
 import SecretData from 'shared/components/Secret/SecretData';
 import { useTranslation } from 'react-i18next';
 import { CertificateData } from './CertificateData';
+import { HelmReleaseData } from 'components/HelmReleases/HelmReleaseData';
+
+function HelmReleaseDataWrapper(secret) {
+  if (secret.type !== 'helm.sh/release.v1') {
+    return null;
+  }
+
+  return (
+    <HelmReleaseData
+      key="helm-release-data"
+      encodedRelease={secret.data.release}
+    />
+  );
+}
 
 export const SecretsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
@@ -25,7 +39,7 @@ export const SecretsDetails = ({ DefaultRenderer, ...otherParams }) => {
 
   return (
     <DefaultRenderer
-      customComponents={[Secret, CertificateData]}
+      customComponents={[Secret, CertificateData, HelmReleaseDataWrapper]}
       customColumns={customColumns}
       {...otherParams}
     />

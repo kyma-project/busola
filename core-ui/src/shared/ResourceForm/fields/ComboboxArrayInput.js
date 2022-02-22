@@ -14,6 +14,7 @@ export function ComboboxArrayInput({
   sectionTooltipContent,
   options,
   emptyStringKey,
+  onBlur,
   ...props
 }) {
   const { t } = useTranslation();
@@ -59,7 +60,17 @@ export function ComboboxArrayInput({
             setValue={setValue}
             options={options}
             onKeyDown={focus}
-            onBlur={updateValue}
+            onBlur={onBlur}
+            onSelectionChange={(_, selected) => {
+              if (!selected.text) {
+                setValue(null);
+                updateValue(null);
+              }
+              const selection =
+                selected.key !== -1 ? selected.key : selected.text;
+              setValue(selection);
+              updateValue(selection);
+            }}
           />
         ),
       ]}

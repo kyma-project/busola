@@ -1,0 +1,167 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: ''
+  namespace: ''
+spec:
+  gateways:
+    - kyma-gateway-application-connector.kyma-system.svc.cluster.local
+  hosts:
+    - host1.example.com
+    - host2.example.com
+  http:
+    - match:
+        - uri:
+            regex: ^/uri-*regex?
+        - uri:
+            exact: exact-uri
+        - uri:
+            prefix: prefixed-uri
+          ignoreUriCase: true
+        - name: very complex rule with a name
+          scheme:
+            exact: abc
+          method:
+            exact: GET
+          authority:
+            prefix: a
+          headers:
+            header1:
+              exact: foo
+            header2:
+              exact: foo
+          port: 123
+          sourceLabels:
+            label1: value1
+            label2: value2
+            label3: value3
+          gateways:
+            - gateway1
+            - gateway2
+            - gateway3
+          queryParams:
+            foo:
+              exact: val
+            bar:
+              prefix: pre
+          withoutHeaders:
+            header3:
+              exact: foo
+          sourceNamespace: namespace
+      route:
+        - destination:
+            host: foobarbaz
+            port:
+              number: 8080
+          weight: 30
+        - destination:
+            host: second
+          weight: 70
+          headers:
+            request:
+              set:
+                route-header1: foo
+                route-header2: bar
+      timeout: 3s
+      fault:
+        delay:
+          fixedDelay: 5s
+          percentage:
+            value: 0.1
+        abort:
+          httpStatus: 400
+          percentage:
+            value: 0.1
+      mirror:
+        host: foobarbaz
+        port:
+          number: 8080
+      mirrorPercentage:
+        value: 0.8
+      corsPolicy:
+        allowOrigins:
+          - exact: foo
+          - prefix: bar
+        allowMethods:
+          - GET
+          - POST
+        exposeHeaders:
+          - header3
+        maxAge: 24h
+        allowCredentials: true
+      headers:
+        request:
+          set:
+            route-header1: foo
+            route-header2: bar
+          add:
+            route-header3: baz
+          remove:
+            - router-header4
+        response:
+          set:
+            route-header5: qux
+          add:
+            route-header6: foo
+          remove:
+            - route-header7
+    - name: second route
+      match:
+        - uri:
+            exact: /foo
+      redirect:
+        uri: /foo/bar
+        authority: auth.kyma-system.svc.cluster.local
+        port: 123
+        derivePort: FROM_REQUEST_PORT
+        scheme: https
+        redirectCode: 301
+    - name: third route
+      delegate:
+        name: vs-name
+        namespace: qqq
+      rewrite:
+        uri: /bar
+        authority: bah
+  tls:
+    - match:
+        - sniHosts:
+            - host1.example.com
+          destinationSubnets:
+            - 192.168.0.1
+            - 192.168.0.2
+          port: 123
+          sourceLabels:
+            label1: value1
+            label2: value2
+            label3: value3
+          gateways:
+            - gateway1
+            - gateway2
+          sourceNamespace: namespace
+        - sniHosts:
+            - host2.example.com
+      route:
+        - destination:
+            host: foobarbaz
+            port:
+              number: 8080
+  tcp:
+    - match:
+        - destinationSubnets:
+            - 192.168.0.1
+            - 192.168.0.2
+          port: 123
+          sourceLabels:
+            label1: value1
+            label2: value2
+            label3: value3
+          gateways:
+            - gateway1
+            - gateway2
+          sourceNamespace: namespace
+      route:
+        - destination:
+            host: foobarbaz
+            port:
+              number: 8080

@@ -18,7 +18,9 @@ export default function DeployNewWorkload({ namespaceName }) {
       confirmText={t('common.buttons.create')}
       className="add-deployment-modal modal-size--l"
       modalOpeningComponent={
-        <Menu.Item>{t('functions.create-view.title')}</Menu.Item>
+        <Menu.Item key="create-function">
+          {t('functions.create-view.title')}
+        </Menu.Item>
       }
       renderForm={props => (
         <FunctionsCreate {...props} namespace={namespaceName} />
@@ -33,7 +35,9 @@ export default function DeployNewWorkload({ namespaceName }) {
       confirmText={t('common.buttons.create')}
       className="add-deployment-modal modal-size--l"
       modalOpeningComponent={
-        <Menu.Item>{t('deployments.create-modal.title')}</Menu.Item>
+        <Menu.Item key="create-deployment">
+          {t('deployments.create-modal.title')}
+        </Menu.Item>
       }
       renderForm={props => (
         <DeploymentsCreate {...props} namespace={namespaceName} />
@@ -49,18 +53,20 @@ export default function DeployNewWorkload({ namespaceName }) {
   );
 
   return (
-    <Popover
-      body={
-        <Menu>
-          <Menu.List>
-            {lambdaModal}
-            {deploymentModal}
-          </Menu.List>
-        </Menu>
-      }
-      control={control}
-      widthSizingType="matchTarget"
-      placement="bottom-end"
-    />
+    <div>
+      <Popover
+        body={
+          <Menu>
+            <Menu.List>
+              {lambdaModal}
+              {deploymentModal}
+            </Menu.List>
+          </Menu>
+        }
+        control={control}
+        widthSizingType="matchTarget"
+        placement="bottom-end"
+      />
+    </div>
   );
 }

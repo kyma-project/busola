@@ -9,6 +9,9 @@ import {
 import { Button } from 'fundamental-react';
 
 import { CRCreate } from './CRCreate';
+import { RelatedCRDsList } from './RelatedCRDsList';
+import { Tokens } from 'shared/components/Tokens';
+import { EventsList } from 'shared/components/EventsList';
 
 export const CustomResourceDefinitionsDetails = ({
   DefaultRenderer,
@@ -20,6 +23,10 @@ export const CustomResourceDefinitionsDetails = ({
     {
       header: t('custom-resource-definitions.headers.scope'),
       value: resource => resource.spec.scope,
+    },
+    {
+      header: t('custom-resource-definitions.headers.categories'),
+      value: ({ spec }) => <Tokens tokens={spec.names?.categories} />,
     },
   ];
 
@@ -43,9 +50,23 @@ export const CustomResourceDefinitionsDetails = ({
         title={t('custom-resource-definitions.subtitle.names')}
         entries={resource.spec.names ? [resource.spec.names] : []}
         headerRenderer={headerRenderer}
+        textSearchProperties={['spec.names.categories']}
         rowRenderer={rowRenderer}
         testid="crd-names"
         i18n={i18n}
+      />
+    );
+  };
+
+  const Events = ({ spec }) => {
+    const eventFilter = kind => e => {
+      return kind === e.involvedObject?.kind;
+    };
+
+    return (
+      <EventsList
+        namespace={otherParams?.namespace}
+        filter={eventFilter(spec?.names?.kind)}
       />
     );
   };
@@ -55,7 +76,12 @@ export const CustomResourceDefinitionsDetails = ({
   return (
     <DefaultRenderer
       customColumns={customColumns}
-      customComponents={[ResourceNames, CustomResourceDefinitionVersions]}
+      customComponents={[
+        ResourceNames,
+        CustomResourceDefinitionVersions,
+        RelatedCRDsList,
+        Events,
+      ]}
       resourceHeaderActions={[
         crd => {
           return (
@@ -74,7 +100,8 @@ export const CustomResourceDefinitionsDetails = ({
                 customCloseAction={() => setShowEditDialog(false)}
               />
               <Button
-                option="default"
+                glyph="add"
+                option="transparent"
                 onClick={() => setShowEditDialog(true)}
                 className="fd-margin-end--tiny"
               >

@@ -4,24 +4,26 @@ import { useTranslation } from 'react-i18next';
 import { usePost, useUpdate, useMicrofrontendContext } from 'react-shared';
 import { createPatch } from 'rfc6902';
 
-export function useCreateResource(
+export function useCreateResource({
   singularName,
   pluralKind,
   resource,
   initialResource,
   createUrl,
   afterCreatedFn,
-) {
+}) {
   const { t } = useTranslation();
   const notification = useNotification();
   const { namespaceId } = useMicrofrontendContext();
   const postRequest = usePost();
   const patchRequest = useUpdate();
 
+  const isEdit = !!initialResource?.metadata?.name;
+
   const defaultAfterCreatedFn = () => {
     notification.notifySuccess({
       content: t(
-        initialResource
+        isEdit
           ? 'common.create-form.messages.patch-success'
           : 'common.create-form.messages.create-success',
         {
@@ -29,7 +31,7 @@ export function useCreateResource(
         },
       ),
     });
-    if (!initialResource) {
+    if (!isEdit) {
       if (namespaceId) {
         LuigiClient.linkManager()
           .fromContext('namespace')
@@ -48,7 +50,7 @@ export function useCreateResource(
     }
 
     try {
-      if (initialResource) {
+      if (isEdit) {
         const mergedResource = {
           ...initialResource,
           ...resource,
@@ -71,7 +73,7 @@ export function useCreateResource(
       console.error(e);
       notification.notifyError({
         content: t(
-          initialResource
+          isEdit
             ? 'common.create-form.messages.patch-failure'
             : 'common.create-form.messages.create-failure',
           {

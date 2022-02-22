@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ResourcePods } from '../ResourcePods';
 import { ReplicaSetStatus } from './ReplicaSetStatus';
+import { HPASubcomponent } from '../HPA/HPASubcomponent';
 
 export const ReplicasetsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
@@ -60,8 +61,8 @@ export const ReplicasetsDetails = ({ DefaultRenderer, ...otherParams }) => {
   return (
     <DefaultRenderer
       customColumns={customColumns}
-      customComponents={[ResourcePods]}
+      customComponents={[ResourcePods, HPASubcomponent]}
       {...otherParams}
-    ></DefaultRenderer>
+    />
   );
 };

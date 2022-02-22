@@ -2,6 +2,8 @@
 import 'cypress-file-upload';
 
 context('Test Cluster Overview', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
   });
@@ -21,7 +23,7 @@ context('Test Cluster Overview', () => {
       .should('not.be.empty');
 
     cy.getIframeBody()
-      .contains('API server address')
+      .contains('API Server Address')
       .next('.content')
       .should('not.be.empty');
 
@@ -31,7 +33,7 @@ context('Test Cluster Overview', () => {
       .should('be.gte', 1);
 
     cy.getIframeBody()
-      .contains('Messages')
+      .contains('Events')
       .should('be.visible');
   });
 
@@ -68,7 +70,7 @@ context('Test Cluster Overview', () => {
       .should('be.visible');
 
     cy.getIframeBody()
-      .contains('Messages')
+      .contains('Events')
       .should('be.visible');
   });
 });

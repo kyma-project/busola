@@ -32,6 +32,8 @@ const configMap = JSON.stringify({
 });
 
 context('Test Protected Resources', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.intercept(
       {
@@ -45,20 +47,14 @@ context('Test Protected Resources', () => {
   });
 
   it('Create a protected resource', () => {
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Config Maps')
-      .click();
+    cy.navigateTo('Configuration', 'Config Maps');
 
     cy.getIframeBody()
       .contains('Create Config Map')
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Config Map Name"]:visible')
+      .find('[placeholder="Config Map name"]:visible')
       .type(NAME);
 
     cy.getIframeBody()
@@ -71,12 +67,12 @@ context('Test Protected Resources', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Key"]:visible')
+      .find('[placeholder="Enter key"]:visible')
       .eq(1)
       .type('protected');
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Value"]:visible')
+      .find('[placeholder="Enter value"]:visible')
       .eq(1)
       .type('true');
 
@@ -103,20 +99,14 @@ context('Test Protected Resources', () => {
   });
 
   it('Create a protected Pod controlled by Deployment', () => {
-    cy.getLeftNav()
-      .contains('Workloads')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Deployments')
-      .click();
+    cy.navigateTo('Workloads', 'Deployments');
 
     cy.getIframeBody()
       .contains('Create Deployment')
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Deployment Name"]:visible')
+      .find('[placeholder="Deployment name"]:visible')
       .clear()
       .type(NAME);
 
@@ -134,7 +124,7 @@ context('Test Protected Resources', () => {
     cy.url().should('match', new RegExp(`\/deployments\/details\/${NAME}$`));
 
     cy.getIframeBody()
-      .contains('tr', NAME, { timeout: 5000 })
+      .contains('tr', NAME)
       .find('[aria-label="Delete"]')
       .should('be.disabled');
   });
@@ -160,13 +150,7 @@ context('Test Protected Resources', () => {
   });
 
   it("Don't protect a resource", () => {
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Config Maps')
-      .click();
+    cy.navigateTo('Configuration', 'Config Maps');
 
     cy.getIframeBody()
       .contains('tr', NAME)

@@ -1,6 +1,8 @@
 import React from 'react';
 import { useMicrofrontendContext } from 'react-shared';
 
+import { EventsList } from 'shared/components/EventsList';
+import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 import { ComponentForList } from 'shared/getComponents';
 import DeployNewWorkload from './DeployNewWorkload';
 import { NamespaceStatus } from './NamespaceStatus';
@@ -23,7 +25,11 @@ export const NamespacesDetails = ({ DefaultRenderer, ...otherParams }) => {
   };
 
   const LimitrangesList = (
-    <ComponentForList name="limitrangesList" params={limitRangesParams} />
+    <ComponentForList
+      name="LimitRangesList"
+      params={limitRangesParams}
+      nameForCreate="LimitRangesCreate"
+    />
   );
 
   const resourceQuotasParams = {
@@ -36,7 +42,11 @@ export const NamespacesDetails = ({ DefaultRenderer, ...otherParams }) => {
   };
 
   const ResourceQuotasList = (
-    <ComponentForList name="resourcequotaslist" params={resourceQuotasParams} />
+    <ComponentForList
+      name="ResourceQuotasList"
+      params={resourceQuotasParams}
+      nameForCreate="ResourceQuotasCreate"
+    />
   );
 
   const applicationMappingsParams = {
@@ -55,11 +65,12 @@ export const NamespacesDetails = ({ DefaultRenderer, ...otherParams }) => {
     />
   ) : null;
 
-  const eventsParams = {
-    namespace: otherParams.resourceName,
-  };
-
-  const Events = <ComponentForList name="eventsList" params={eventsParams} />;
+  const Events = (
+    <EventsList
+      namespace={otherParams.resourceName}
+      defaultType={EVENT_MESSAGE_TYPE.WARNING}
+    />
+  );
 
   const headerActions = (
     <DeployNewWorkload namespaceName={otherParams.resourceName} />

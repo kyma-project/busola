@@ -70,8 +70,8 @@ async function createAppSwitcher() {
 
   return {
     items:
-      [...clusterNodes, clusterOverviewNode].length > 1
-        ? [...clusterNodes, clusterOverviewNode]
+      [clusterOverviewNode, ...clusterNodes].length > 1
+        ? [clusterOverviewNode, ...clusterNodes]
         : [clusterOverviewNode, noClustersNode],
   };
 }
@@ -104,18 +104,6 @@ async function createClusterManagementNodes(features) {
       openNodeInModal: { title: i18next.t('preferences.title'), size: 'm' },
     },
   ];
-
-  if (!features.ADD_CLUSTER_DISABLED?.isEnabled) {
-    const addClusterNode = [
-      {
-        hideSideNav: true,
-        pathSegment: 'add',
-        navigationContext: 'clusters',
-        viewUrl: config.coreUIModuleUrl + '/clusters/add',
-      },
-    ];
-    childrenNodes.push(addClusterNode);
-  }
 
   const clusterManagementNode = {
     pathSegment: 'clusters',
@@ -214,7 +202,7 @@ export async function createNavigation() {
 
     const groupVersions = await fetchBusolaInitData(authData);
 
-    const activeClusterName = activeCluster.currentContext.cluster.name;
+    const activeClusterName = activeCluster.kubeconfig['current-context'];
 
     const features = await getFeatures({
       authData,
@@ -226,8 +214,15 @@ export async function createNavigation() {
         defaultLabel: 'Select Namespace ...',
         parentNodePath: `/cluster/${encodeURIComponent(
           activeClusterName,
-        )}/namespaces`, // absolute path
+        )}/namespaces`, // absolute path,
         lazyloadOptions: true, // load options on click instead on page load
+        customOptionsRenderer: (option, isSelected) => {
+          if (option.customRendererCategory === 'overview') {
+            return `<a class="fd-menu__link" style="border-bottom: 1px solid #eeeeef"><span class="fd-menu__addon-before"><i class="sap-icon--dimension" role="presentation"></i></span><span class="fd-menu__title">${option.label}</span></a>`;
+          }
+          let className = 'fd-menu__link' + (isSelected ? ' is-selected' : '');
+          return `<a class="${className} ">${option.label}</a>`;
+        },
         options: getNamespaces,
       },
       profile: {
@@ -349,12 +344,12 @@ export async function createNavigationNodes(
   }
 
   const activeClusterName = encodeURIComponent(
-    activeCluster.currentContext.cluster.name,
+    activeCluster.kubeconfig['current-context'],
   );
   const { navigation = {}, hiddenNamespaces = [] } =
     activeCluster?.config || {};
 
-  const clusterChildren = async () => {
+  const createClusterNodes = async () => {
     const staticNodes = getStaticRootNodes(
       getChildrenNodesForNamespace,
       groupVersions,
@@ -375,6 +370,25 @@ export async function createNavigationNodes(
     return allNodes;
   };
 
+  const clusterNodes = await createClusterNodes();
+
+  const namespaceNodes = await clusterNodes
+    .find(n => n.resourceType === 'namespaces')
+    .children[0].children();
+
+  const simplifyNodes = nodes =>
+    nodes
+      .filter(n => n.resourceType)
+      .map(n => ({
+        resourceType: n.resourceType.toLowerCase(),
+        label: n.label,
+        viewUrl: n.viewUrl,
+        category:
+          typeof n.category === 'object' ? n.category.label : n.category,
+        pathSegment: n.pathSegment,
+        navigationContext: n.navigationContext,
+      }));
+
   const nodes = [
     {
       pathSegment: 'cluster',
@@ -386,13 +400,15 @@ export async function createNavigationNodes(
         {
           navigationContext: 'cluster',
           pathSegment: activeClusterName,
-          children: clusterChildren,
+          children: clusterNodes,
         },
       ],
       context: {
         authData,
+        activeClusterName,
         groups,
         features,
+        clusters: await getClusters(),
         hiddenNamespaces,
         cluster: activeCluster.currentContext.cluster,
         config: activeCluster.config,
@@ -406,6 +422,8 @@ export async function createNavigationNodes(
             AVAILABLE_PAGE_SIZES,
           },
         },
+        clusterNodes: simplifyNodes(clusterNodes),
+        namespaceNodes: simplifyNodes(namespaceNodes),
       },
     },
   ];
@@ -413,7 +431,7 @@ export async function createNavigationNodes(
 }
 
 async function getNamespaces() {
-  const { hiddenNamespaces = [] } = (await getActiveCluster()).config;
+  const { hiddenNamespaces = [] } = (await getActiveCluster())?.config || {};
   try {
     let namespaces = await fetchNamespaces(getAuthData());
     if (!getFeatureToggle('showHiddenNamespaces')) {

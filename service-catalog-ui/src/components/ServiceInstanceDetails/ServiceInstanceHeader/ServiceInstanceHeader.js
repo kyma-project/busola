@@ -19,7 +19,9 @@ const ServiceInstanceHeader = ({ serviceInstance, servicePlan, i18n }) => {
   const notificationManager = useNotification();
   const { features } = useMicrofrontendContext();
 
-  const btpCatalogEnabled = features.BTP_CATALOG?.isEnabled;
+  const btpCatalogEnabled =
+    features.BTP_CATALOG?.isEnabled &&
+    features.SERVICE_CATALOG_READ_ONLY?.isReadOnly;
 
   const classRef =
     serviceInstance.spec.serviceClassRef?.name ||

@@ -9,7 +9,7 @@ import {
 import { communication } from './communication';
 import { createSettings } from './settings';
 import { clusterLogin } from './auth/auth';
-import { saveQueryParamsIfPresent } from './kubeconfig-id/kubeconfig-id.js';
+import { handleKubeconfigIdIfPresent } from './kubeconfig-id';
 import {
   getActiveCluster,
   handleResetEndpoint,
@@ -79,16 +79,16 @@ async function initializeBusola() {
 
   await setActiveClusterIfPresentInUrl();
 
-  await saveQueryParamsIfPresent();
+  // save location, as we'll may be logged out in a moment
+  saveCurrentLocation();
+
+  await handleKubeconfigIdIfPresent();
 
   readFeatureToggles([
     'dontConfirmDelete',
     'showHiddenNamespaces',
     'disableResourceProtection',
   ]);
-
-  // save location, as we'll may be logged out in a moment
-  saveCurrentLocation();
 
   await ssoLogin(luigiAfterInit);
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ControlledEditor, useTheme } from 'react-shared';
+import { MonacoEditor, useTheme } from 'react-shared';
 import jsyaml from 'js-yaml';
 import { MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
@@ -10,7 +10,7 @@ export function Editor({
   setValue,
   readonly,
   language = 'yaml',
-  editorDidMount,
+  onMount,
   ...props
 }) {
   const { t } = useTranslation();
@@ -21,17 +21,20 @@ export function Editor({
   const textResource = React.useRef(jsyaml.dump(value, { noRefs: true }));
   const isEditing = React.useRef(false);
 
-  React.useEffect(() => {
+  const prevValue = React.useRef(null);
+  const parsedValue = React.useMemo(() => {
     if (!isEditing.current) {
       if (language === 'yaml') {
-        textResource.current = jsyaml.dump(value, { noRefs: true });
+        prevValue.current = jsyaml.dump(value, { noRefs: true });
+        return jsyaml.dump(value, { noRefs: true });
       } else if (language === 'json') {
-        textResource.current = JSON.stringify(value);
+        prevValue.current = JSON.stringify(value);
+        return JSON.stringify(value);
       }
     }
   }, [value, language]);
 
-  const handleChange = (_, text) => {
+  const handleChange = text => {
     textResource.current = text;
     try {
       let parsed = {};
@@ -63,13 +66,13 @@ export function Editor({
   };
   return (
     <div className="resource-form__editor">
-      <ControlledEditor
+      <MonacoEditor
         language={language}
         theme={editorTheme}
-        value={textResource.current}
+        value={parsedValue || prevValue.current}
         onChange={handleChange}
-        editorDidMount={(_, editor) => {
-          if (editorDidMount) editorDidMount(_, editor);
+        onMount={editor => {
+          if (onMount) onMount(editor);
           editor.onDidFocusEditorText(() => (isEditing.current = true));
           editor.onDidBlurEditorText(() => (isEditing.current = false));
         }}

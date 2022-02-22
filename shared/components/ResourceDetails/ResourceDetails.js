@@ -1,20 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import jsyaml from 'js-yaml';
-import { Button } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
+import { Button } from 'fundamental-react';
 import { createPatch } from 'rfc6902';
-
 import {
   PageHeader,
   Labels,
+  ErrorBoundary,
   YamlEditorProvider,
   useGet,
   useUpdate,
   useDelete,
   useYamlEditor,
   useNotification,
-  navigateToList,
   ReadableCreationTimestamp,
   ResourceNotFound,
   prettifyNamePlural,
@@ -23,8 +22,11 @@ import {
   Spinner,
 } from '../..';
 import CustomPropTypes from '../../typechecking/CustomPropTypes';
-import { handleDelete } from '../GenericList/actionHandlers/simpleDelete';
-import { useWindowTitle, useProtectedResources } from '../../hooks';
+import {
+  useWindowTitle,
+  useProtectedResources,
+  useDeleteResource,
+} from '../../hooks';
 import { ModalWithForm } from '../ModalWithForm/ModalWithForm';
 
 ResourceDetails.propTypes = {
@@ -33,7 +35,7 @@ ResourceDetails.propTypes = {
   customComponents: PropTypes.arrayOf(PropTypes.func),
   resourceUrl: PropTypes.string.isRequired,
   resourceType: PropTypes.string.isRequired,
-  resourceName: PropTypes.string.isRequired,
+  resourceName: PropTypes.string,
   namespace: PropTypes.string,
   headerActions: PropTypes.node,
   resourceHeaderActions: PropTypes.arrayOf(PropTypes.func),
@@ -120,7 +122,6 @@ function Resource({
   createResourceForm: CreateResourceForm,
   customColumns,
   customComponents,
-  deleteResourceMutation,
   editActionLabel,
   headerActions,
   i18n,
@@ -128,7 +129,6 @@ function Resource({
   readOnly,
   resource,
   resourceHeaderActions,
-  resourceName,
   resourceType,
   resourceUrl,
   silentRefetch,
@@ -136,12 +136,18 @@ function Resource({
   windowTitle,
   resourceTitle,
 }) {
+  const { t } = useTranslation(['translation'], { i18n });
   useWindowTitle(
     windowTitle || resourceTitle || prettifyNamePlural(null, resourceType),
   );
   const { isProtected, protectedResourceWarning } = useProtectedResources(i18n);
 
-  const { t } = useTranslation(['translation'], { i18n });
+  const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
+    i18n,
+    resourceType,
+    navigateToListAfterDelete: true,
+  });
+
   const { setEditedYaml: setEditedSpec } = useYamlEditor();
   const notification = useNotification();
 
@@ -168,7 +174,7 @@ function Resource({
           {t('common.buttons.view-yaml')}
         </Button>
       );
-    } else if (!CreateResourceForm || !CreateResourceForm.allowEdit) {
+    } else if (!CreateResourceForm || !CreateResourceForm?.allowEdit) {
       return (
         <Button
           className="fd-margin-end--tiny"
@@ -199,14 +205,16 @@ function Resource({
           id={`edit-${resourceType}-modal`}
           className="modal-size--l create-resource-modal"
           renderForm={props => (
-            <CreateResourceForm
-              resource={resource}
-              resourceType={resourceType}
-              resourceUrl={resourceUrl}
-              namespace={namespace}
-              refetchList={silentRefetch}
-              {...props}
-            />
+            <ErrorBoundary i18n={i18n}>
+              <CreateResourceForm
+                resource={resource}
+                resourceType={resourceType}
+                resourceUrl={resourceUrl}
+                namespace={namespace}
+                refetchList={silentRefetch}
+                {...props}
+              />
+            </ErrorBoundary>
           )}
           i18n={i18n}
         />
@@ -222,7 +230,7 @@ function Resource({
       {resourceHeaderActions.map(resourceAction => resourceAction(resource))}
       <Button
         disabled={protectedResource}
-        onClick={handleResourceDelete}
+        onClick={() => handleResourceDelete({ resourceUrl })}
         option="transparent"
         type="negative"
       >
@@ -263,18 +271,6 @@ function Resource({
     }
   };
 
-  async function handleResourceDelete() {
-    return handleDelete(
-      resourceTitle || resourceType,
-      null,
-      resourceName,
-      notification,
-      () => deleteResourceMutation(resourceUrl),
-      () => navigateToList(resourceType),
-      t,
-    );
-  }
-
   return (
     <>
       <PageHeader
@@ -302,9 +298,8 @@ function Resource({
           </PageHeader.Column>
         ))}
       </PageHeader>
-
+      <DeleteMessageBox resource={resource} resourceUrl={resourceUrl} />
       {customComponents.map(component => component(resource, resourceUrl))}
-
       {children}
     </>
   );

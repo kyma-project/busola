@@ -6,6 +6,10 @@ import ContainersData from './ContainersData';
 import LuigiClient from '@luigi-project/client';
 import { Link } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
+import { EventsList } from 'shared/components/EventsList';
+import { filterByResource } from 'hooks/useMessageList';
+
+import { PodStatsGraph } from './PodStatsGraph';
 
 function toSnakeCase(inputString) {
   return inputString
@@ -19,6 +23,7 @@ function toSnakeCase(inputString) {
     })
     .join('');
 }
+
 function goToSecretDetails(resourceKind, name) {
   const preperedResourceKind = toSnakeCase(resourceKind);
 
@@ -29,6 +34,15 @@ function goToSecretDetails(resourceKind, name) {
 
 export const PodsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const { t, i18n } = useTranslation();
+
+  const Events = () => (
+    <EventsList
+      namespace={otherParams.namespace}
+      filter={filterByResource('Pod', otherParams.resourceName)}
+      hideInvolvedObjects={true}
+    />
+  );
+
   const customColumns = [
     {
       header: t('pods.headers.pod-ip'),
@@ -60,10 +74,17 @@ export const PodsDetails = ({ DefaultRenderer, ...otherParams }) => {
         <Link
           className="fd-link"
           onClick={() =>
-            goToSecretDetails(volumeType.toLowerCase(), volume[volumeType].name)
+            goToSecretDetails(
+              volumeType.toLowerCase(),
+              volume[volumeType].name ||
+                volume[volumeType].secretName ||
+                volume[volumeType].claimName,
+            )
           }
         >
-          {volume[volumeType].name}
+          {volume[volumeType].name ||
+            volume[volumeType].secretName ||
+            volume[volumeType].claimName}
         </Link>,
       ];
     };
@@ -97,7 +118,13 @@ export const PodsDetails = ({ DefaultRenderer, ...otherParams }) => {
 
   return (
     <DefaultRenderer
-      customComponents={[VolumesList, Containers, InitContainers]}
+      customComponents={[
+        PodStatsGraph,
+        VolumesList,
+        Containers,
+        InitContainers,
+        Events,
+      ]}
       customColumns={customColumns}
       {...otherParams}
     ></DefaultRenderer>

@@ -24,35 +24,29 @@ function checkJobLogs({ showLogsSelector, expectedLogs }) {
 }
 
 context('Test Jobs', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
   });
 
-  it('Jobs node should be present', () => {
-    cy.getLeftNav()
-      .contains('Workloads')
-      .click();
-
-    cy.getLeftNav()
-      .contains(/^Jobs/) // regex so Cypress doesn't confuse them with CronJobs
-      .click();
-  });
-
   it('Create Job', () => {
+    cy.navigateTo('Workloads', /^Jobs/);
+
     cy.getIframeBody()
       .contains('Create Job')
       .click();
 
     // job name
     cy.getIframeBody()
-      .find('[placeholder="Job Name"]:visible')
+      .find('[placeholder="Job name"]:visible')
       .clear()
       .type(JOB_NAME);
 
     // job container name
     cy.getIframeBody()
-      .find('[placeholder="Container Name"]:visible')
+      .find('[placeholder="Container name"]:visible')
       .type(JOB_NAME);
 
     // job command
@@ -79,7 +73,7 @@ context('Test Jobs', () => {
 
     // job container name
     cy.getIframeBody()
-      .find('[placeholder="Container Name"]:visible')
+      .find('[placeholder="Container name"]:visible')
       .type(SECOND_CONTAINER_NAME);
 
     // job args
@@ -109,7 +103,7 @@ context('Test Jobs', () => {
 
     // created pod
     cy.getIframeBody()
-      .contains(new RegExp(JOB_NAME + '-'), { timeout: 5 * 1000 })
+      .contains(new RegExp(JOB_NAME + '-'))
       .click();
 
     // images for both containers
@@ -171,12 +165,12 @@ context('Test Jobs', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Key"]')
+      .find('[placeholder="Enter key"]')
       .filterWithNoValue()
       .type('a');
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Value"]')
+      .find('[placeholder="Enter value"]')
       .filterWithNoValue()
       .first()
       .type('b');

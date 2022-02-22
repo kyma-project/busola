@@ -6,19 +6,6 @@ The document lists and describes all the feature flags that are available in Kym
 
 > **TIP:** The list is ordered alphabetically.
 
-- **ADD_CLUSTER_DISABLED** – is used to enable or disable adding a cluster. If the function is enabled, you can only add your cluster from the BTP cockpit using the **KUBECONFIG_ID** feature. The link to the cockpit is configured under **cockpitUrl**.
-
-  Default settings:
-
-  ```bash
-  "ADD_CLUSTER_DISABLED": {
-    "isEnabled": false,
-    "config": {
-      "cockpitUrl": "https://account.staging.hanavlab.ondemand.com/cockpit"
-    }
-  },
-  ```
-
 - **ADDONS** – is used to show or hide the **Addons** view and to define which APIs are required for the view to be shown properly.
   For the view to be shown, you must enable the feature. Moreover, all the APIs listed in the selectors array must be available in a cluster.
 
@@ -138,6 +125,18 @@ The document lists and describes all the feature flags that are available in Kym
       }
     ]
   },
+  ```
+
+- **JWT_CHECK_CONFIG** – is used to configure data necessary for the backend authentication, such as an issuer and JWKS (JSON Web Key Set) address. When the feature is disabled no authentication occurs on backend side.
+
+  ```bash
+  "JWT_CHECK_CONFIG": {
+    "isEnabled": false,
+    "config": {
+      "issuer": "https://apskyxzcl.accounts400.ondemand.com",
+      "jwksUri": "https://apskyxzcl.accounts400.ondemand.com/oauth2/certs"
+    }
+  }
   ```
 
 - **KUBECONFIG_ID** – is used to configure the URL to which Busola sends a request to download a kubeconfig file. If you add `?kubeconfigID={your ID}` to the Busola URL, Busola tries to download the kubeconfig from `{kubeconfigUrl}/{yourID}`. If the operation succeeds, Busola adds the kubeconfing file to the cluster.

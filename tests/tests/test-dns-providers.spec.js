@@ -9,26 +9,16 @@ const PROVIDER_INCLUDED_DOMAIN_2 = 'test2.kyma.local';
 const PROVIDER_EXCLUDED_DOMAIN = 'sth.kyma.local';
 
 context('Test DNS Providers', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
   });
 
-  it('DNS Providers node should be present', () => {
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('DNS Providers')
-      .click();
-
-    cy.getIframeBody()
-      .contains('h3', 'DNS Providers')
-      .should('be.visible');
-  });
-
   it('Create DNS Provider', () => {
+    cy.navigateTo('Configuration', 'DNS Providers');
+
     cy.getIframeBody()
       .contains('Create DNS Provider')
       .click();
@@ -44,24 +34,22 @@ context('Test DNS Providers', () => {
 
     // secret
     cy.getIframeBody()
-      .find('[placeholder^="Select name"]')
-      .filter(':visible', { log: false })
+      .find('[placeholder^="Select name"]:visible', { log: false })
       .type('default');
+
     cy.getIframeBody()
       .contains(/default-token/)
       .click();
 
     // include domains
     cy.getIframeBody()
-      .find('[placeholder="Domain that is allowed"]')
-      .filter(':visible', { log: false })
+      .find('[placeholder="Domain that is allowed"]:visible', { log: false })
       .clear()
       .type(PROVIDER_INCLUDED_DOMAIN);
 
     // name
     cy.getIframeBody()
-      .find('[placeholder="DNS Provider Name"]')
-      .filter(':visible', { log: false })
+      .find('[placeholder="DNS Provider name"]:visible', { log: false })
       .clear()
       .type(PROVIDER_NAME);
 
@@ -88,8 +76,7 @@ context('Test DNS Providers', () => {
 
     // name should be readonly
     cy.getIframeBody()
-      .find('[placeholder="DNS Provider Name"]')
-      .filter(':visible', { log: false })
+      .find('[placeholder="DNS Provider name"]:visible', { log: false })
       .should('have.attr', 'readonly', 'readonly');
 
     cy.getIframeBody()
@@ -104,13 +91,13 @@ context('Test DNS Providers', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Key"]')
+      .find('[placeholder="Enter key"]')
       .filterWithNoValue()
       .type('is-edited');
 
     cy.getIframeBody()
       .find('[role=dialog]')
-      .find('[placeholder="Enter Value"]')
+      .find('[placeholder="Enter value"]')
       .filterWithNoValue()
       .first()
       .type('yes');

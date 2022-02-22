@@ -1,7 +1,8 @@
 /// <reference types="cypress" />
-import config from '../config';
 
 context('Create Namespace', () => {
+  Cypress.skipAfterFail({ skipAllSuits: true });
+
   before(cy.loginAndSelectCluster);
 
   it('Create Namespace', () => {
@@ -14,8 +15,20 @@ context('Create Namespace', () => {
       .click();
 
     cy.getIframeBody()
+      .contains('Advanced')
+      .click();
+
+    cy.getIframeBody()
+      .contains('Create Resource Quota')
+      .click();
+
+    cy.getIframeBody()
+      .contains('Create Limit Range')
+      .click();
+
+    cy.getIframeBody()
       .find('[role=dialog]')
-      .find("input[placeholder='Namespace Name']:visible")
+      .find("input[placeholder='Namespace name']:visible")
       .type(Cypress.env('NAMESPACE_NAME'));
 
     cy.getIframeBody()
@@ -43,16 +56,33 @@ context('Create Namespace', () => {
 
     cy.getIframeBody()
       .find('[role=dialog]')
-      .find('label[class="fd-switch"]')
+      .contains('button', 'Update')
+      .click();
+  });
+
+  it('Create application', () => {
+    cy.getLeftNav()
+      .contains('Back to Cluster Overview')
+      .click();
+
+    cy.navigateTo('Integration', 'Applications');
+
+    cy.getIframeBody()
+      .contains('Create Application')
       .click();
 
     cy.getIframeBody()
       .find('[role=dialog]')
-      .contains('button', 'Update')
+      .find("input[placeholder='Application name']:visible")
+      .type(`test-mock-app-${Cypress.env('NAMESPACE_NAME')}`);
+
+    cy.getIframeBody()
+      .find('[role="dialog"]')
+      .contains('button', 'Create')
       .click();
 
     cy.getIframeBody()
-      .contains('istio-injection=disabled')
+      .contains(`test-mock-app-${Cypress.env('NAMESPACE_NAME')}`)
       .should('be.visible');
   });
 });

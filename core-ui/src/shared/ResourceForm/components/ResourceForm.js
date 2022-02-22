@@ -26,19 +26,20 @@ export function ResourceForm({
   createUrl,
   presets,
   onPresetSelected,
+  onSubmit,
   afterCreatedFn,
   className,
   onlyYaml = false,
 }) {
   const { i18n } = useTranslation();
-  const createResource = useCreateResource(
+  const createResource = useCreateResource({
     singularName,
     pluralKind,
     resource,
     initialResource,
     createUrl,
     afterCreatedFn,
-  );
+  });
 
   const [mode, setMode] = React.useState(
     onlyYaml ? ModeSelector.MODE_YAML : ModeSelector.MODE_SIMPLE,
@@ -51,12 +52,7 @@ export function ResourceForm({
       setCustomValid(validationRef.current);
     }
     validationRef.current = true;
-
-    // close search
-    if (actionsEditor) {
-      actionsEditor.trigger('', 'closeFindWidget');
-    }
-  }, [resource, children, setCustomValid, actionsEditor]);
+  }, [setCustomValid, resource, children]);
 
   const convertedResource = jsyaml.dump(resource);
 
@@ -81,7 +77,7 @@ export function ResourceForm({
     <Editor
       value={resource}
       setValue={setResource}
-      editorDidMount={(_, e) => setActionsEditor(e)}
+      onMount={editor => setActionsEditor(editor)}
     />
   );
   editor = renderEditor
@@ -92,7 +88,7 @@ export function ResourceForm({
     <section className={classnames('resource-form', className)}>
       {presetsSelector}
       {onlyYaml ? null : <ModeSelector mode={mode} setMode={setMode} />}
-      <form ref={formElementRef} onSubmit={createResource}>
+      <form ref={formElementRef} onSubmit={onSubmit || createResource}>
         {mode === ModeSelector.MODE_SIMPLE && (
           <div onChange={onChange} className="simple-form">
             <ResourceFormWrapper

@@ -8,37 +8,29 @@ const REPOSITORY_NAME =
     .substr(2, 8);
 
 context('Test Git Repositories', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
   });
 
-  it('Git Repositories node should be present', () => {
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Git Repositories')
-      .click();
-  });
-
   it('Create Repository', () => {
+    cy.navigateTo('Configuration', 'Git Repositories');
+
     cy.getIframeBody()
       .contains('Connect Repository')
       .click();
 
     // name
     cy.getIframeBody()
-      .find('[placeholder="Git Repository Name"]')
-      .filter(':visible', { log: false })
+      .find('[placeholder="Git Repository name"]:visible', { log: false })
       .clear()
       .type(REPOSITORY_NAME);
 
     // url
     cy.getIframeBody()
-      .find('[placeholder^="Enter the URL address"]')
-      .filter(':visible', { log: false })
+      .find('[placeholder^="Enter the URL address"]:visible', { log: false })
       .type('https://test-repo');
 
     // create
@@ -63,14 +55,12 @@ context('Test Git Repositories', () => {
 
     // name should be disabled for edit
     cy.getIframeBody()
-      .find('[placeholder="Git Repository Name"]')
-      .filter(':visible', { log: false })
+      .find('[placeholder="Git Repository name"]:visible', { log: false })
       .should('have.attr', 'readonly');
 
     // edit url
     cy.getIframeBody()
-      .find('[placeholder^="Enter the URL address"]')
-      .filter(':visible', { log: false })
+      .find('[placeholder^="Enter the URL address"]:visible', { log: false })
       .type('-edited');
 
     // edit authorization (Public -> Basic)
@@ -85,8 +75,9 @@ context('Test Git Repositories', () => {
 
     // fill secret
     cy.getIframeBody()
-      .find('[placeholder^="Start typing to select Secret"]')
-      .filter(':visible', { log: false })
+      .find('[placeholder^="Start typing to select Secret"]:visible', {
+        log: false,
+      })
       .type('default');
     cy.getIframeBody()
       .contains(/default-token/)
@@ -105,12 +96,12 @@ context('Test Git Repositories', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Key"]')
+      .find('[placeholder="Enter key"]')
       .filterWithNoValue()
       .type('is-edited');
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Value"]')
+      .find('[placeholder="Enter value"]')
       .filterWithNoValue()
       .first()
       .type('yes');

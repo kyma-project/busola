@@ -9,30 +9,24 @@ const DNS_ENTRY_NAME = 'dns-entry-' + random;
 const DNS_NAME = 'dns-name-' + random;
 const TTL = 200;
 
-context('Create a DNS Entry', () => {
+context('Test DNS Entries', () => {
+  Cypress.skipAfterFail();
+
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
   });
 
-  it('DNS Entries node should be present', () => {
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('DNS Entries')
-      .click();
-  });
-
   it('Create DNS Entry', () => {
+    cy.navigateTo('Configuration', 'DNS Entries');
+
     cy.getIframeBody()
       .contains('Create DNS Entry')
       .click();
 
     // name
     cy.getIframeBody()
-      .find('[placeholder="DNS Entry Name"]:visible')
+      .find('[placeholder="DNS Entry name"]:visible')
       .type(DNS_ENTRY_NAME);
 
     // ttl
@@ -43,7 +37,7 @@ context('Create a DNS Entry', () => {
 
     // dns name
     cy.getIframeBody()
-      .find('[placeholder^="Select the DNS Name"]:visible')
+      .find('[placeholder^="Select the DNS name"]:visible')
       .type(DNS_NAME)
       .click();
 
@@ -51,6 +45,7 @@ context('Create a DNS Entry', () => {
     cy.getIframeBody()
       .find('[aria-label^="Enter the A record"]:visible')
       .click();
+
     cy.getIframeBody()
       .contains('istio-ingressgateway')
       .click();
@@ -80,7 +75,7 @@ context('Create a DNS Entry', () => {
 
     // name should be disabled for edit
     cy.getIframeBody()
-      .find('[placeholder="DNS Entry Name"]:visible')
+      .find('[placeholder="DNS Entry name"]:visible')
       .should('have.attr', 'readonly');
 
     // change from A to CNAME

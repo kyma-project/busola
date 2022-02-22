@@ -1,17 +1,29 @@
 import React from 'react';
+import { useWindowTitle } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 import { Title } from 'fundamental-react';
-import { NodeMessages } from '../NodeMessages';
 import { useNodeQuery } from '../nodeQueries';
 import { NodeDetailsHeader } from '../NodeDetailsHeader';
 import { MachineInfo } from '../MachineInfo/MachineInfo';
 import { NodeResources } from '../NodeResources/NodeResources';
+import { EventsList } from 'shared/components/EventsList';
+import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 
 import './NodeDetails.scss';
 
 export function NodeDetails({ nodeName }) {
   const { data, error, loading } = useNodeQuery(nodeName);
   const { t } = useTranslation();
+  useWindowTitle(t('nodes.title_details', { nodeName }));
+
+  const filterByHost = e => e.source.host === nodeName;
+  const Events = (
+    <EventsList
+      filter={filterByHost}
+      defaultType={EVENT_MESSAGE_TYPE.WARNING}
+    />
+  );
+
   return (
     <div className="node-details">
       <NodeDetailsHeader
@@ -34,7 +46,7 @@ export function NodeDetails({ nodeName }) {
               capacity={data.node.status.capacity}
             />
           </div>
-          <NodeMessages nodeName={nodeName} />
+          {Events}
         </>
       )}
     </div>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import LuigiClient from '@luigi-project/client';
 import { Link } from 'fundamental-react';
-import { Dropdown } from 'react-shared';
+import { Dropdown, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
 export const EVENT_MESSAGE_TYPE = {
@@ -11,69 +11,106 @@ export const EVENT_MESSAGE_TYPE = {
 };
 
 export const RESOURCE_PATH = {
-  Pod: 'pods',
-  Job: 'jobs',
+  APIRule: 'apirules',
+  Certificate: 'certificates',
+  ConfigMap: 'configmaps',
   CronJob: 'cronjobs',
-  ReplicaSet: 'replicasets',
-  StatefulSet: 'statefulsets',
   DaemonSet: 'daemonsets',
   Deployment: 'deployments',
+  DestinationRule: 'destinationrules',
+  DNSEntry: 'dnsentries',
+  DNSProvider: 'dnsproviders',
+  Event: 'events',
   Function: 'functions',
-  ServiceBroker: 'brokers',
-  Certificate: 'certificates',
+  Gateway: 'gateways',
+  HorizontalPodAutoscaler: 'hpas',
+  Ingress: 'ingresses',
+  Issuer: 'issuers',
+  Job: 'jobs',
   Node: 'nodes',
-  Subscription: 'eventsubscriptions',
+  PersistentVolume: 'persistentvolumes',
+  PersistentVolumeClaim: 'persistentvolumeclaims',
+  Pod: 'pods',
+  ReplicaSet: 'replicasets',
+  Service: 'services',
+  ServiceAccount: 'serviceaccounts',
+  StatefulSet: 'statefulsets',
+  StorageClass: 'storageclasses',
+  Subscription: 'subscriptions',
+  VirtualService: 'virtualservices',
+};
+export const filterByResource = (resourceKind, resourceName) => e =>
+  e.involvedObject?.name === resourceName &&
+  e.involvedObject?.kind === resourceKind;
+
+const navigateToObjectDetails = ({ namespace, name, kind }) => {
+  const namespacePrefix = namespace ? `namespaces/${namespace}/` : '';
+  const path = `${namespacePrefix}${RESOURCE_PATH[kind]}/details/${name}`;
+  LuigiClient.linkManager()
+    .fromContext('cluster')
+    .navigate(path);
 };
 
-export const useMessageList = items => {
-  const [displayType, setDisplayType] = useState(EVENT_MESSAGE_TYPE.ALL);
+const navigateToNodeDetails = nodeName => {
+  LuigiClient.linkManager()
+    .fromContext('cluster')
+    .navigate(`/overview/nodes/${nodeName}`);
+};
+
+export const navigateToNamespaceOverview = namespaceName => {
+  LuigiClient.linkManager()
+    .fromContext('cluster')
+    .navigate(`/namespaces/${namespaceName}/details`);
+};
+
+export const formatInvolvedObject = obj => {
+  const namespacePrefix = obj.namespace ? `${obj.namespace}` : '';
+  const text = `${obj.kind} ${namespacePrefix}/${obj.name}`;
+  const isLink = !!RESOURCE_PATH[obj.kind];
+  return isLink ? (
+    <Link
+      className="fd-link"
+      onClick={() => {
+        if (obj.kind === 'Node') {
+          navigateToNodeDetails(obj.name);
+        } else {
+          navigateToObjectDetails(obj);
+        }
+      }}
+    >
+      {text}
+    </Link>
+  ) : (
+    text
+  );
+};
+
+export const formatSourceObject = obj => {
+  if (!obj) return EMPTY_TEXT_PLACEHOLDER;
+  return obj.host ? (
+    <Link className="fd-link" onClick={() => navigateToNodeDetails(obj.host)}>
+      {obj.host}
+    </Link>
+  ) : (
+    obj.component
+  );
+};
+
+export const useMessageList = (items, defaultType = EVENT_MESSAGE_TYPE.ALL) => {
+  const [displayType, setDisplayType] = useState(defaultType);
   const [sortedItems, setSortedItems] = useState([]);
   const { t } = useTranslation();
-
   useEffect(() => {
     //sorts the messages from the newest once data fetched
     if (items) {
       const sorted = items.sort((first, second) => {
-        const firstCreationTime = new Date(first.firstTimestamp).getTime();
-        const secondCreationTime = new Date(second.firstTimestamp).getTime();
-        return secondCreationTime - firstCreationTime;
+        const firstLastTime = new Date(first.lastTimestamp).getTime();
+        const secondLastTime = new Date(second.lastTimestamp).getTime();
+        return secondLastTime - firstLastTime;
       });
       setSortedItems([...sorted]);
     }
   }, [items, setSortedItems]);
-
-  const navigateToObjectDetails = ({ namespace, name, kind }) => {
-    const namespacePrefix = namespace ? `namespaces/${namespace}/` : '';
-    const path = `${namespacePrefix}${RESOURCE_PATH[kind]}/details/${name}`;
-    LuigiClient.linkManager()
-      .fromContext('cluster')
-      .navigate(path);
-  };
-  const navigateToNodeDetails = nodeName => {
-    LuigiClient.linkManager().navigate(`nodes/${nodeName}`);
-  };
-
-  const formatInvolvedObject = obj => {
-    const namespacePrefix = obj.namespace ? `${obj.namespace}` : '';
-    const text = `${obj.kind} ${namespacePrefix}/${obj.name}`;
-    const isLink = !!RESOURCE_PATH[obj.kind];
-    return isLink ? (
-      <Link
-        className="fd-link"
-        onClick={() => {
-          if (obj.kind === 'Node') {
-            navigateToNodeDetails(obj.name);
-          } else {
-            navigateToObjectDetails(obj);
-          }
-        }}
-      >
-        {text}
-      </Link>
-    ) : (
-      text
-    );
-  };
 
   const messageSelector = (
     <Dropdown
@@ -96,7 +133,9 @@ export const useMessageList = items => {
     setDisplayType,
     sortedItems,
     formatInvolvedObject,
+    formatSourceObject,
     navigateToObjectDetails,
+    navigateToNodeDetails,
     messageSelector,
   };
 };

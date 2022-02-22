@@ -58,8 +58,8 @@ export function getStaticChildrenNodesForNamespace(
   const encodedClusterName = encodeURIComponent(getActiveClusterName());
   const nodes = [
     {
-      link: `/cluster/${encodedClusterName}/namespaces`,
-      label: i18next.t('namespaces.overview.back'),
+      link: `/cluster/${encodedClusterName}/overview`,
+      label: i18next.t('clusters.overview.back'),
       icon: 'nav-back',
       hideFromNav: !hasPermissionsFor('', 'namespaces', permissionSet, [
         'list',
@@ -78,6 +78,41 @@ export function getStaticChildrenNodesForNamespace(
       viewGroup: coreUIViewGroupName,
     },
 
+    {
+      pathSegment: 'events',
+      resourceType: 'events',
+      label: i18next.t('events.title'),
+      icon: 'message-warning',
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/Events?' +
+        toSearchParamsString({
+          resourceApiPath: '/api/v1',
+          hasDetailsView: true,
+        }),
+      keepSelectedForChildren: true,
+      viewGroup: coreUIViewGroupName,
+      navigationContext: 'events',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':eventName',
+              resourceType: 'events',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/Events/:eventName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/api/v1',
+                }),
+              viewGroup: coreUIViewGroupName,
+            },
+          ],
+        },
+      ],
+      defaultChildNode: 'details',
+    },
     //WORKLOADS CATEGORY
     {
       category: {
@@ -524,7 +559,74 @@ export function getStaticChildrenNodesForNamespace(
         },
       ],
     },
-
+    {
+      category: i18next.t('discovery-and-network.title'),
+      pathSegment: 'hpas',
+      resourceType: 'hpas',
+      navigationContext: 'horizontalpodautoscalers',
+      label: i18next.t('hpas.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/horizontalPodAutoscalers?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/autoscaling/v2beta2',
+          hasDetailsView: true,
+        }),
+      keepSelectedForChildren: true,
+      viewGroup: coreUIViewGroupName,
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':horizontalPodAutoscalersName',
+              resourceType: 'hpas',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/horizontalPodAutoscalers/:horizontalPodAutoscalersName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/autoscaling/v2beta2',
+                }),
+              viewGroup: coreUIViewGroupName,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: i18next.t('discovery-and-network.title'),
+      pathSegment: 'networkpolicies',
+      resourceType: 'networkpolicies',
+      navigationContext: 'networkpolicies',
+      label: i18next.t('network-policies.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/networkPolicies?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/networking.k8s.io/v1',
+          hasDetailsView: true,
+        }),
+      keepSelectedForChildren: true,
+      viewGroup: coreUIViewGroupName,
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':networkPolicyName',
+              resourceType: 'networkpolicies',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/networkPolicies/:networkPolicyName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/networking.k8s.io/v1',
+                }),
+              viewGroup: coreUIViewGroupName,
+            },
+          ],
+        },
+      ],
+    },
     // ISTIO
     {
       category: {
@@ -601,6 +703,154 @@ export function getStaticChildrenNodesForNamespace(
               viewUrl:
                 config.coreUIModuleUrl +
                 '/namespaces/:namespaceId/destinationRules/:destinationRuleName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/networking.istio.io/v1beta1',
+                }),
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: i18next.t('istio.title'),
+      resourceType: 'virtualservices',
+      pathSegment: 'virtualservices',
+      label: i18next.t('virtualservices.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/virtualServices?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/networking.istio.io/v1beta1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+      context: {
+        requiredFeatures: [features.ISTIO],
+      },
+
+      navigationContext: 'virtualservices',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':virtualserviceName',
+              resourceType: 'virtualservices',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/virtualServices/:virtualserviceName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/networking.istio.io/v1beta1',
+                }),
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: i18next.t('istio.title'),
+      resourceType: 'sidecars',
+      pathSegment: 'sidecars',
+      label: i18next.t('sidecars.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/sidecars?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/networking.istio.io/v1beta1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+      context: {
+        requiredFeatures: [features.ISTIO],
+      },
+
+      navigationContext: 'sidecars',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':sidecarName',
+              resourceType: 'sidecars',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/sidecars/:sidecarName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/networking.istio.io/v1beta1',
+                }),
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: i18next.t('istio.title'),
+      resourceType: 'authorizationpolicies',
+      pathSegment: 'authorizationpolicies',
+      label: i18next.t('authorization-policies.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/authorizationPolicies?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/security.istio.io/v1beta1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+      context: {
+        requiredFeatures: [features.ISTIO],
+      },
+
+      navigationContext: 'authorizationpolicies',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':authorizationpolicyName',
+              resourceType: 'authorizationpolicies',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/authorizationPolicies/:authorizationpolicyName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/security.istio.io/v1beta1',
+                }),
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: i18next.t('istio.title'),
+      resourceType: 'serviceentries',
+      pathSegment: 'serviceentries',
+      label: i18next.t('service-entries.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/serviceEntries?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/networking.istio.io/v1beta1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+      context: {
+        requiredFeatures: [features.ISTIO],
+      },
+
+      navigationContext: 'serviceentries',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':serviceEntryName',
+              resourceType: 'serviceentries',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/serviceEntries/:serviceEntryName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/networking.istio.io/v1beta1',
                 }),
@@ -741,6 +991,7 @@ export function getStaticChildrenNodesForNamespace(
       category: i18next.t('service-management.title'),
       pathSegment: 'serviceinstances',
       navigationContext: 'serviceinstances',
+      resourceType: 'serviceinstances',
       label: i18next.t('btp-instances.title'),
       viewUrl:
         config.coreUIModuleUrl +
@@ -776,6 +1027,7 @@ export function getStaticChildrenNodesForNamespace(
       category: i18next.t('service-management.title'),
       pathSegment: 'servicebindings',
       navigationContext: 'servicebindings',
+      resourceType: 'servicebindings',
       label: i18next.t('btp-service-bindings.title'),
       viewUrl:
         config.coreUIModuleUrl +
@@ -802,6 +1054,84 @@ export function getStaticChildrenNodesForNamespace(
                 toSearchParamsString({
                   resourceApiPath: '/apis/services.cloud.sap.com/v1alpha1',
                 }),
+            },
+          ],
+        },
+      ],
+    },
+
+    //STORAGE CATEGORY
+    {
+      category: {
+        label: i18next.t('storage.title'),
+        icon: 'sap-box',
+        collapsible: true,
+      },
+      pathSegment: '_storage_category_placeholder_',
+      hideFromNav: true,
+    },
+    {
+      category: i18next.t('storage.title'),
+      resourceType: 'persistentvolumeclaims',
+      pathSegment: 'persistentvolumeclaims',
+      label: i18next.t('persistent-volume-claims.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/namespaces/:namespaceId/PersistentVolumeClaims?' +
+        toSearchParamsString({
+          resourceApiPath: '/api/v1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+
+      navigationContext: 'persistentvolumeclaims',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':persistentVolumeClaimName',
+              resourceType: 'persistentvolumeclaims',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/PersistentVolumeClaims/:persistentVolumeClaimName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/api/v1',
+                }),
+            },
+          ],
+        },
+      ],
+    },
+
+    //APPS CATEGORY
+    {
+      category: {
+        label: i18next.t('apps.title'),
+        icon: 'example', //grid
+        collapsible: true,
+      },
+    },
+    {
+      category: i18next.t('apps.title'),
+      pathSegment: 'helm-releases',
+      label: i18next.t('helm-releases.title'),
+      keepSelectedForChildren: true,
+      viewUrl:
+        config.coreUIModuleUrl + '/namespaces/:namespaceId/helm-releases?',
+      viewGroup: coreUIViewGroupName,
+      navigationContext: 'helm-releases',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':releaseName',
+              resourceType: 'helm-releases',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/helm-releases/:releaseName',
             },
           ],
         },
@@ -924,10 +1254,10 @@ export function getStaticChildrenNodesForNamespace(
     },
     {
       category: i18next.t('configuration.title'),
-      pathSegment: 'eventsubscriptions',
+      pathSegment: 'subscriptions',
       resourceType: 'subscriptions',
       navigationContext: 'subscriptions',
-      label: i18next.t('event-subscription.title'),
+      label: i18next.t('subscriptions.title'),
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/Subscriptions?' +
@@ -1306,7 +1636,7 @@ export function getStaticChildrenNodesForNamespace(
       category: i18next.t('configuration.title'),
       resourceType: 'serviceaccounts',
       pathSegment: 'serviceaccounts',
-      label: 'Service Accounts',
+      label: i18next.t('service-accounts.title'),
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/ServiceAccounts?' +
@@ -1402,6 +1732,42 @@ export function getStaticRootNodes(
       ],
     },
 
+    {
+      pathSegment: 'events',
+      resourceType: 'events',
+      label: i18next.t('events.title'),
+      icon: 'message-warning',
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/Events?' +
+        toSearchParamsString({
+          resourceApiPath: '/api/v1',
+          hasDetailsView: true,
+        }),
+      keepSelectedForChildren: true,
+      viewGroup: coreUIViewGroupName,
+      navigationContext: 'events',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':eventName',
+              resourceType: 'events',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/Events/:eventName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/api/v1',
+                }),
+              viewGroup: coreUIViewGroupName,
+            },
+          ],
+        },
+      ],
+      defaultChildNode: 'details',
+    },
+
     //INTEGRATION CATEGORY
     {
       category: {
@@ -1438,7 +1804,6 @@ export function getStaticRootNodes(
             {
               pathSegment: ':name',
               resourceType: 'applications',
-              navigationContext: 'application',
               viewUrl:
                 config.coreUIModuleUrl +
                 '/Applications/:name?' +
@@ -1467,7 +1832,7 @@ export function getStaticRootNodes(
       ],
     },
     {
-      pathSegment: 'addons-config',
+      pathSegment: 'addons-configs',
       navigationContext: 'clusteraddonsconfigurations',
       resourceType: 'clusteraddonsconfigurations',
       label: i18next.t('cluster-addons.title'),
@@ -1502,6 +1867,84 @@ export function getStaticRootNodes(
                   resourceApiPath: '/apis/addons.kyma-project.io/v1alpha1',
                 }),
               viewGroup: coreUIViewGroupName,
+            },
+          ],
+        },
+      ],
+    },
+
+    //STORAGE CATEGORY
+    {
+      category: {
+        label: i18next.t('storage.title'),
+        icon: 'sap-box',
+        collapsible: true,
+      },
+      pathSegment: '_storage_category_placeholder_',
+      hideFromNav: true,
+    },
+    {
+      pathSegment: 'storageclasses',
+      resourceType: 'storageclasses',
+      navigationContext: 'storageclasses',
+      label: i18next.t('storage-classes.title'),
+      category: i18next.t('storage.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/StorageClasses?' +
+        toSearchParamsString({
+          resourceApiPath: '/apis/storage.k8s.io/v1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':storageClassName',
+              resourceType: 'storageclasses',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/StorageClasses/:storageClassName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/apis/storage.k8s.io/v1',
+                }),
+              viewGroup: coreUIViewGroupName,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: i18next.t('storage.title'),
+      resourceType: 'persistentvolumes',
+      pathSegment: 'persistentvolumes',
+      label: i18next.t('pv.title'),
+      viewUrl:
+        config.coreUIModuleUrl +
+        '/persistentVolumes?' +
+        toSearchParamsString({
+          resourceApiPath: '/api/v1',
+          hasDetailsView: true,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+      navigationContext: 'persistentvolumes',
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':persistentVolumesName',
+              resourceType: 'persistentvolumes',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/persistentVolumes/:persistentVolumesName?' +
+                toSearchParamsString({
+                  resourceApiPath: '/api/v1',
+                }),
             },
           ],
         },
