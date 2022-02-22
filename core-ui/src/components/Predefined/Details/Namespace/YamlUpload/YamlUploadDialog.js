@@ -10,14 +10,23 @@ import './YamlUploadDialog.scss';
 import { useTranslation } from 'react-i18next';
 import { useEventListener } from 'hooks/useEventListener';
 
+export const OPERATION_STATE_INITIAL = 'INITIAL';
+export const OPERATION_STATE_WAITING = 'WAITING';
+export const OPERATION_STATE_SUCCEEDED = 'SUCCEEDED';
+export const OPERATION_STATE_SOME_FAILED = 'SOME_FAILED';
+
 export function YamlUploadDialog({ show, onCancel }) {
   const { t } = useTranslation();
   const [resourcesData, setResourcesData] = useState();
   const [resourcesWithStatuses, setResourcesWithStatuses] = useState();
   const oldYaml = useRef();
+  const [lastOperationState, setLastOperationState] = useState(
+    OPERATION_STATE_INITIAL,
+  );
   const fetchResources = useUploadResources(
     resourcesWithStatuses,
     setResourcesWithStatuses,
+    setLastOperationState,
   );
 
   useEventListener('keydown', ({ key }) => {
@@ -30,6 +39,7 @@ export function YamlUploadDialog({ show, onCancel }) {
     if (show) {
       setResourcesData(null);
       setResourcesWithStatuses(null);
+      setLastOperationState(OPERATION_STATE_INITIAL);
     }
   }, [show]);
 
@@ -45,35 +55,51 @@ export function YamlUploadDialog({ show, onCancel }) {
     setResourcesWithStatuses(resourcesWithStatus);
     oldYaml.current = yaml;
   };
+  console.log(lastOperationState);
+
+  const actions = [
+    lastOperationState === OPERATION_STATE_SUCCEEDED ? (
+      <Button onClick={onCancel} option="emphasized">
+        {t('common.buttons.close')}
+      </Button>
+    ) : (
+      <>
+        <Button
+          onClick={() => {
+            console.log('?');
+            fetchResources();
+          }}
+          disabled={!resourcesWithStatuses?.length}
+          option="emphasized"
+        >
+          {t('common.buttons.submit')}
+        </Button>
+        <Button onClick={onCancel} option="transparent">
+          {lastOperationState !== OPERATION_STATE_SOME_FAILED
+            ? t('common.buttons.cancel')
+            : t('common.buttons.close')}
+        </Button>
+      </>
+    ),
+  ];
 
   return (
     <Dialog
       show={show}
       title={t('upload-yaml.title')}
-      actions={[
-        <Button
-          onClick={fetchResources}
-          disabled={!resourcesWithStatuses?.length}
-          option="emphasized"
-        >
-          {t('common.buttons.submit')}
-        </Button>,
-        <Button onClick={onCancel} option="transparent">
-          {t('common.buttons.cancel')}
-        </Button>,
-      ]}
+      actions={actions}
       className="yaml-upload-modal"
     >
-      <YamlUpload
-        resourcesData={resourcesData}
-        setResourcesData={updateYamlContent}
-      />
-      <div className="fd-margin-begin--tiny">
-        {t('upload-yaml.info')}
-        <YamlResourcesList
-          resourcesData={resourcesWithStatuses}
-          setResourcesData={setResourcesWithStatuses}
+      <div className="yaml-upload-modal__layout">
+        <YamlUpload
+          resourcesData={resourcesData}
+          setResourcesData={updateYamlContent}
+          setLastOperationState={setLastOperationState}
         />
+        <div className="fd-margin-begin--tiny fd-margin-end--tiny">
+          {t('upload-yaml.info')}
+          <YamlResourcesList resourcesData={resourcesWithStatuses} />
+        </div>
       </div>
     </Dialog>
   );

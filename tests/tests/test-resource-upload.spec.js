@@ -58,6 +58,10 @@ context('Test resource upload', () => {
       .should('be.visible');
 
     cy.getIframeBody()
+      .contains('Close')
+      .should('be.visible');
+
+    cy.getIframeBody()
       .contains('Deployment echo-server-upload-yaml - Created')
       .should('be.visible');
 
