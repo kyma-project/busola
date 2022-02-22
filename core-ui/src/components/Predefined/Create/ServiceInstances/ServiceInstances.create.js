@@ -61,7 +61,6 @@ export function ServiceInstancesCreate({
         label={t('btp-instances.offering-name')}
         propertyPath="$.spec.serviceOfferingName"
         input={Inputs.Text}
-        placeholder={t('btp-instances.placeholders.offering-name')}
         tooltipContent={t('btp-instances.tooltips.offering-name')}
       />
       <ResourceForm.FormField

@@ -48,9 +48,6 @@ export const K8sNameInput = ({
       type="text"
       id={id}
       value={value || defaultValue || ''}
-      placeholder={t('components.k8s-name-input.placeholder', {
-        resourceType: kind,
-      })}
       aria-required={required ? 'true' : 'false'}
       required={required}
       pattern={pattern}

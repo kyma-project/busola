@@ -129,7 +129,7 @@ applications:
     some-events: There are some events
   name_singular: Application
   placeholders:
-    description: Specify a description for your Application
+    description: Provide a description for your Application
   statuses:
     deployed: Deployed
     provisioning: Provisioning
@@ -181,7 +181,6 @@ btp-instances:
   parameters: Instance Parameters
   placeholders:
     external-name: Defaults to the instance name if empty
-    offering-name: SAP BTP service offering name
     plan-name: The plan name to use for the Service Instance
   plan-name: Plan Name
   resource-type: Service Instance
@@ -216,7 +215,6 @@ btp-service-bindings:
     choose-secret-key: Choose Secret key
     empty-secret: This Secret has no data
     external-name: Defaults to the Service Binding name if empty
-    secret: Credentials Secret name
   resource-type: Service Binding
   secret: Secret
   statuses:
@@ -254,7 +252,6 @@ certificates:
     dns-names: Additional domain names, one per line
     encoded-csr: Base64-encoded Certificate Signing Request
     name: Certificate name
-    secret-name: Requested Secret name
   refs: References
   renew: Renew
   secret-name: Secret name
@@ -550,7 +547,7 @@ common:
     hide: Hide Read-Only Fields
     k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' (e.g.: 'my-name1')."
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
-    key-value: key=value, must start and end with an alphanumeric character, can contain '-', '_' or '.'.
+    key-value: key-value, must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     read-file: Read file content as a single value, with file name as a key.
     resource-ref-name: Unique name within a Namespace to refer to a {{resource}} resource.
     resource-ref-namespace: Namespace defines the space within which the {{resource}} name must be unique.
@@ -580,8 +577,6 @@ components:
     messages:
       no-search-results: Couldn't find resources matching this query.
       not-found: No entries found
-  k8s-name-input:
-    placeholder: '{{resourceType}} name'
   key-value-field:
     enter-key: Enter key
     enter-value: Enter value
@@ -592,7 +587,7 @@ components:
     value: Value
   label-selector-input:
     click-to-delete: Click to delete
-    enter-key-value: Enter {{type}} key=value
+    enter-key-value: Enter key-value labels
   modal:
     confirm-text: Confirm
     title: Modal
@@ -871,14 +866,14 @@ dnsproviders:
   name_singular: DNS Provider
   placeholders:
     default-ttl: Enter the default time to live
-    provider-type: Choose Provider Type
+    provider-type: Choose Provider type
   title: DNS Providers
   tooltips:
     excluded-domains: The selection of forbidden domains (by default, all zones and domains in those zones are served), $t(domains.example).
     included-domains: The selection of allowed domains (by default, all zones and domains in those zones are served), $t(domains.example).
     ready: The entry has been accepted and the DNS record created.
 domains:
-  example: for example, *.api.mydomain.com
+  example: For example, *.api.mydomain.com
   exclude:
     label: Exclude Domains
     placeholder: Domain that is forbidden
@@ -1077,12 +1072,9 @@ gateways:
       hosts: Hosts
       mode-tooltip: Indicates whether connections to the port are secured using TLS.
       placeholders:
-        hosts: Enter the hosts, $t(domains.example)
+        hosts: $t(domains.example)
         port:
-          name: Enter the name
-          number: Enter the port number
           protocol: Enter the protocol
-          target-port: Enter the target port
         tls:
           ca-certificates: Enter the CA certificates path
           mode: Select TLS Mode
@@ -1291,7 +1283,6 @@ issuers:
     email: Email address for user registration
     key-id: ID of the CA that the external account is bound to
     name: Issuer Name
-    requests-per-day: Daily Requests Quota
     server: ACME Server URL
     type: Select Issuer type
   private-key: Private key Secret
@@ -1497,8 +1488,6 @@ oauth2-clients:
     secret-name: Secret Name
     uris: URIs
   name_singular: OAuth2 Client
-  placeholders:
-    scope: OAuth2 scope
   response-types:
     code: Code
     id_token: ID Token
@@ -1651,7 +1640,7 @@ replica-sets:
       replicas: Replicas
     tooltips:
       min-ready-seconds: Minimum number of seconds for which a newly created Pod should be ready without any of its containers crashing in order to be considered available.
-      replicas: Replicas is the number of desired replicas.
+      replicas: Number of desired replicas.
   description: <0>Replica Set</0> maintains a number of replica Pods running at any given time.
   headers:
     images: Images
@@ -1692,10 +1681,6 @@ role-bindings:
   name_singular: Role Binding
   placeholders:
     api-group: API Group
-    group:
-      name: User group
-    user:
-      name: User name
   title: Role Bindings
 roles:
   description: <0>Role</0> is a set of permissions within a Namespace that can be assigned to a user.
@@ -1932,11 +1917,10 @@ subscriptions:
     messages:
       one-filter-required: Provide at least one filter.
     placeholders:
-      application-name: Choose an Application name
-      event-name: Enter the event name, for example, order.cancelled
-      event-source: Enter the event source
+      application-name: Choose Application name
+      event-name: For example, order.cancelled
       event-type: Enter the event type, for example, sap.kyma.custom.test-app.order.cancelled.v1
-      event-version: Enter the event version, for example, v1
+      event-version: For example, v1
       service-name: Choose Service for the sink
     title: Add Subscription
   description: <0>Subscription</0> is used to subscribe to events.

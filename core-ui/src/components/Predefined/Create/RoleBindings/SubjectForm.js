@@ -81,7 +81,6 @@ export function SingleSubjectForm({
           value={subject.name || []}
           setValue={setName}
           input={Inputs.Text}
-          placeholder={t('role-bindings.placeholders.user.name')}
         />
       )}
 
@@ -92,7 +91,6 @@ export function SingleSubjectForm({
           value={subject.name || []}
           setValue={setName}
           input={Inputs.Text}
-          placeholder={t('role-bindings.placeholders.group.name')}
         />
       )}
 

@@ -33,9 +33,6 @@ export const PortsForm = ({ server = {}, servers, setServers }) => {
         label={t('gateways.create-modal.advanced.port.number')}
         propertyPath="$.port.number"
         input={Inputs.Port}
-        placeholder={t(
-          'gateways.create-modal.advanced.placeholders.port.number',
-        )}
       />
       <ResourceForm.FormField
         required
@@ -62,16 +59,12 @@ export const PortsForm = ({ server = {}, servers, setServers }) => {
         label={t('gateways.create-modal.advanced.port.name')}
         propertyPath="$.port.name"
         input={Inputs.Text}
-        placeholder={t('gateways.create-modal.advanced.placeholders.port.name')}
       />
 
       <ResourceForm.FormField
         tooltipContent={t('gateways.create-modal.tooltips.target-port')}
         label={t('gateways.create-modal.advanced.port.target-port')}
         propertyPath="$.port.targetPort"
-        placeholder={t(
-          'gateways.create-modal.advanced.placeholders.port.target-port',
-        )}
         input={Inputs.Port}
       />
     </ResourceForm.CollapsibleSection>
