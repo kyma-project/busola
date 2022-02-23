@@ -23,7 +23,7 @@ export const AuthorizationPoliciesDetails = ({
     },
   ];
 
-  const Selector = policy => {
+  const MatchSelector = policy => {
     const { t } = useTranslation();
     return (
       <Selector
@@ -37,7 +37,7 @@ export const AuthorizationPoliciesDetails = ({
   return (
     <DefaultRenderer
       customColumns={customColumns}
-      customComponents={[Rules, Selector]}
+      customComponents={[Rules, MatchSelector]}
       {...otherParams}
     ></DefaultRenderer>
   );

@@ -62,9 +62,10 @@ export const ReplicasetsDetails = ({ DefaultRenderer, ...otherParams }) => {
     const { t } = useTranslation();
     return (
       <Selector
-        resource={replicaset}
-        labels={replicaset.spec.selector?.matchLabels}
-        expressions={replicaset.spec.selector?.matchExpressions}
+        namespace={replicaset.metadata.namespace}
+        labels={replicaset.spec?.selector?.matchLabels}
+        expressions={replicaset.spec?.selector?.matchExpressions}
+        selector={replicaset.spec?.selector}
         title={t('selector.title')}
       />
     );

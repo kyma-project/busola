@@ -26,9 +26,10 @@ export function StatefulSetsDetails({ DefaultRenderer, ...otherParams }) {
     const { t } = useTranslation();
     return (
       <Selector
-        resource={statefulset}
-        labels={statefulset.spec.selector?.matchLabels}
-        expressions={statefulset.spec.selector?.matchExpressions}
+        namespace={statefulset.metadata.namespace}
+        labels={statefulset.spec?.selector?.matchLabels}
+        selector={statefulset.spec?.selector}
+        expressions={statefulset.spec?.selector?.matchExpressions}
         title={t('selector.title')}
       />
     );

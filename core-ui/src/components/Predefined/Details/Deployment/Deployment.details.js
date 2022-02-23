@@ -25,10 +25,11 @@ export const DeploymentsDetails = ({ DefaultRenderer, ...otherParams }) => {
     const { t } = useTranslation();
     return (
       <Selector
-        resource={deployment}
+        namespace={deployment.metadata.namespace}
         labels={deployment.spec.selector?.matchLabels}
         expressions={deployment.spec.selector?.matchExpressions}
         title={t('selector.title')}
+        selector={deployment.spec?.selector}
       />
     );
   };

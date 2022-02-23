@@ -65,10 +65,11 @@ export function NetworkPoliciesDetails({ DefaultRenderer, ...otherParams }) {
 
     return (
       <Selector
-        resource={policy}
+        namespace={policy.metadata.namespace}
         labels={policy.spec.podSelector?.matchLabels}
         expressions={policy.spec.podSelector?.matchExpressions}
         title={t('network-policies.headers.pod-selector')}
+        selector={policy.spec.podSelector}
       />
     );
   };

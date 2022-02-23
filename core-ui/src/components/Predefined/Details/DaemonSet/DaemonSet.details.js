@@ -91,10 +91,11 @@ export const DaemonSetsDetails = ({ DefaultRenderer, ...otherParams }) => {
     const { t } = useTranslation();
     return (
       <Selector
-        resource={daemonSet}
-        labels={daemonSet.spec.selector?.matchLabels}
-        expressions={daemonSet.spec.selector?.matchExpressions}
+        namespace={daemonSet.metadata.namespace}
+        labels={daemonSet.spec?.selector?.matchLabels}
+        expressions={daemonSet.spec?.selector?.matchExpressions}
         title={t('selector.title')}
+        selector={daemonSet.spec?.selector}
       />
     );
   };

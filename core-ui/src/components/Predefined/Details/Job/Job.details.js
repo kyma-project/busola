@@ -66,10 +66,11 @@ export function JobsDetails({ DefaultRenderer, ...otherParams }) {
     const { t } = useTranslation();
     return (
       <Selector
-        resource={job}
+        namespace={job.metadata.namespace}
         labels={job.spec.selector?.matchLabels}
         expressions={job.spec.selector?.matchExpressions}
         title={t('selector.title')}
+        selector={job.spec?.selector}
       />
     );
   };

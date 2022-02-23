@@ -7,15 +7,33 @@ import './Selector.scss';
 import { RelatedPods } from '../RelatedPods';
 import { MatchExpressionsList } from '../MatchExpressionsList';
 
-export const Selector = ({ resource, labels, expressions, title }) => {
+const SelectorParameters = ({ expressions, labels, namespace }) => {
+  let labelSelector;
+  if (labels) {
+    labelSelector = Object.entries(labels)
+      .map(([key, value]) => `${key}=${value}`)
+      .join(',');
+  }
+
+  return expressions ? (
+    <MatchExpressionsList expressions={expressions} />
+  ) : (
+    <RelatedPods namespace={namespace} labelSelector={labelSelector} />
+  );
+};
+
+export const Selector = ({
+  namespace,
+  labels,
+  expressions,
+  title,
+  selector,
+}) => {
   const { t } = useTranslation();
+  if (!selector) return null;
 
-  if (!labels || !resource) return null;
-  const labelSelector = Object.entries(labels)
-    .map(([key, value]) => `${key}=${value}`)
-    .join(',');
+  const isSelectorEmpty = !labels && !expressions;
 
-  console.log(expressions);
   return (
     <LayoutPanel className="fd-margin--md" key="workload-selector">
       <LayoutPanel.Header>
@@ -25,10 +43,16 @@ export const Selector = ({ resource, labels, expressions, title }) => {
         />
         {labels ? <Labels labels={labels} /> : null}
       </LayoutPanel.Header>
-      {expressions ? (
-        <MatchExpressionsList expressions={expressions} />
+      {isSelectorEmpty ? (
+        <LayoutPanel.Body>
+          <p>Matches all Pods in the Namespace</p>
+        </LayoutPanel.Body>
       ) : (
-        <RelatedPods resource={resource} labelSelector={labelSelector} />
+        <SelectorParameters
+          expressions={expressions}
+          namespace={namespace}
+          labels={labels}
+        />
       )}
     </LayoutPanel>
   );
