@@ -3,7 +3,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { EMPTY_TEXT_PLACEHOLDER, GenericList } from 'react-shared';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
-import { WorkloadSelector } from 'shared/components/WorkloadSelector/WorkloadSelector';
+import { Selector } from 'shared/components/Selector/Selector';
 import { Tokens } from 'shared/components/Tokens';
 import { Endpoints } from './Endpoints';
 
@@ -76,14 +76,17 @@ const Configuration = ({ spec }) => {
 };
 
 const Workloads = se => {
+  const { t } = useTranslation();
+
   return (
     <div key="se-workloads">
       {se.spec?.endpoints?.length > 0 ? (
         <Endpoints serviceentry={se} />
       ) : (
-        <WorkloadSelector
+        <Selector
           resource={se}
           labels={se.spec?.workloadSelector?.labels}
+          title={t('workload-selector.title')}
         />
       )}
     </div>

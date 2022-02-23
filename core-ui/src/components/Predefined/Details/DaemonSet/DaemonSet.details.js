@@ -6,7 +6,7 @@ import {
   GenericList,
   EMPTY_TEXT_PLACEHOLDER,
 } from 'react-shared';
-import { WorkloadSelector } from 'shared/components/WorkloadSelector/WorkloadSelector';
+import { Selector } from 'shared/components/Selector/Selector';
 import { DaemonSetStatus } from './DaemonSetStatus';
 
 const Tolerations = resource => {
@@ -87,12 +87,13 @@ export const DaemonSetsDetails = ({ DefaultRenderer, ...otherParams }) => {
     },
   ];
 
-  const SelectorLabels = daemonSet => {
+  const MatchSelector = daemonSet => {
     const { t } = useTranslation();
     return (
-      <WorkloadSelector
+      <Selector
         resource={daemonSet}
         labels={daemonSet.spec.selector?.matchLabels}
+        expressions={daemonSet.spec.selector?.matchExpressions}
         title={t('selector.title')}
       />
     );
@@ -100,7 +101,7 @@ export const DaemonSetsDetails = ({ DefaultRenderer, ...otherParams }) => {
 
   return (
     <DefaultRenderer
-      customComponents={[Tolerations, Images, SelectorLabels]}
+      customComponents={[Tolerations, Images, MatchSelector]}
       customColumns={customColumns}
       {...otherParams}
     ></DefaultRenderer>

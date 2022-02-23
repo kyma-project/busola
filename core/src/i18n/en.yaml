@@ -1389,6 +1389,12 @@ machine-info:
   operating-system: Operating system
   pods-capacity: Pods capacity
   title: Machine info
+match-expressions:
+  headers:
+    key: Key
+    operator: Operator
+    values: Values
+  title: Match Expressions
 namespaces:
   create-modal:
     apply-limits: Apply Limits per Container

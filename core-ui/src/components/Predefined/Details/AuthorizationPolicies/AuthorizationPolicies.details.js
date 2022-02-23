@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { WorkloadSelector } from 'shared/components/WorkloadSelector/WorkloadSelector';
+import { Selector } from 'shared/components/Selector/Selector';
 
 import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 
@@ -23,10 +23,10 @@ export const AuthorizationPoliciesDetails = ({
     },
   ];
 
-  const WorkloadSelectorLabels = policy => {
+  const Selector = policy => {
     const { t } = useTranslation();
     return (
-      <WorkloadSelector
+      <Selector
         resource={policy}
         labels={policy.spec.selector?.matchLabels}
         title={t('selector.title')}
@@ -37,7 +37,7 @@ export const AuthorizationPoliciesDetails = ({
   return (
     <DefaultRenderer
       customColumns={customColumns}
-      customComponents={[Rules, WorkloadSelectorLabels]}
+      customComponents={[Rules, Selector]}
       {...otherParams}
     ></DefaultRenderer>
   );

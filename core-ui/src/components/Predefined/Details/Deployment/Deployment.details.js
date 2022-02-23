@@ -4,7 +4,7 @@ import { ControlledBy } from 'react-shared';
 
 import { DeploymentStatus } from './DeploymentStatus';
 import { HPASubcomponent } from '../HPA/HPASubcomponent';
-import { WorkloadSelector } from 'shared/components/WorkloadSelector/WorkloadSelector.js';
+import { Selector } from 'shared/components/Selector/Selector.js';
 
 export const DeploymentsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
@@ -21,12 +21,13 @@ export const DeploymentsDetails = ({ DefaultRenderer, ...otherParams }) => {
     },
   ];
 
-  const SelectorLabels = deployment => {
+  const MatchSelector = deployment => {
     const { t } = useTranslation();
     return (
-      <WorkloadSelector
+      <Selector
         resource={deployment}
         labels={deployment.spec.selector?.matchLabels}
+        expressions={deployment.spec.selector?.matchExpressions}
         title={t('selector.title')}
       />
     );
@@ -34,7 +35,7 @@ export const DeploymentsDetails = ({ DefaultRenderer, ...otherParams }) => {
 
   return (
     <DefaultRenderer
-      customComponents={[HPASubcomponent, SelectorLabels]}
+      customComponents={[HPASubcomponent, MatchSelector]}
       customColumns={customColumns}
       {...otherParams}
     />

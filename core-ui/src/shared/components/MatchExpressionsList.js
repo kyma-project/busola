@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { GenericList } from 'react-shared';
 import { Tokens } from 'shared/components/Tokens';
 
-export const MatchExpressionsList = ({ matchExpressions }) => {
+export const MatchExpressionsList = ({ expressions }) => {
   const { t, i18n } = useTranslation();
   const headerRenderer = () => [
     t('match-expressions.headers.key'),
@@ -21,7 +21,7 @@ export const MatchExpressionsList = ({ matchExpressions }) => {
   return (
     <GenericList
       title={t('match-expressions.title')}
-      entries={matchExpressions || []}
+      entries={expressions || []}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       i18n={i18n}

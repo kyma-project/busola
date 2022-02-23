@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
-import { WorkloadSelector } from 'shared/components/WorkloadSelector/WorkloadSelector';
+import { Selector } from 'shared/components/Selector/Selector';
 import { IstioListeners } from './IstioListeners';
 
 export const SidecarsDetails = ({ DefaultRenderer, ...otherParams }) => {
@@ -15,16 +15,17 @@ export const SidecarsDetails = ({ DefaultRenderer, ...otherParams }) => {
     },
   ];
 
-  const WorkloadSelectorLabels = sidecar => (
-    <WorkloadSelector
+  const WorkloadSelector = sidecar => (
+    <Selector
       resource={sidecar}
       labels={sidecar.spec?.workloadSelector?.labels}
+      title={t('workload-selector.title')}
     />
   );
 
   return (
     <DefaultRenderer
-      customComponents={[IstioListeners, WorkloadSelectorLabels]}
+      customComponents={[IstioListeners, WorkloadSelector]}
       customColumns={customColumns}
       singularName={t('persistent-volume-claims.name_singular')}
       {...otherParams}

@@ -4,7 +4,7 @@ import { ControlledBy } from 'react-shared';
 
 import { StatefulSetPods } from './StatefulSetPods';
 import { HPASubcomponent } from '../HPA/HPASubcomponent';
-import { WorkloadSelector } from 'shared/components/WorkloadSelector/WorkloadSelector';
+import { Selector } from 'shared/components/Selector/Selector';
 
 export function StatefulSetsDetails({ DefaultRenderer, ...otherParams }) {
   const { t } = useTranslation();
@@ -22,12 +22,13 @@ export function StatefulSetsDetails({ DefaultRenderer, ...otherParams }) {
     },
   ];
 
-  const SelectorLabels = statefulset => {
+  const MatchSelector = statefulset => {
     const { t } = useTranslation();
     return (
-      <WorkloadSelector
+      <Selector
         resource={statefulset}
         labels={statefulset.spec.selector?.matchLabels}
+        expressions={statefulset.spec.selector?.matchExpressions}
         title={t('selector.title')}
       />
     );
@@ -36,7 +37,7 @@ export function StatefulSetsDetails({ DefaultRenderer, ...otherParams }) {
   return (
     <DefaultRenderer
       customColumns={customColumns}
-      customComponents={[HPASubcomponent, SelectorLabels]}
+      customComponents={[HPASubcomponent, MatchSelector]}
       {...otherParams}
     />
   );

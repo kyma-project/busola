@@ -3,10 +3,11 @@ import { useTranslation } from 'react-i18next';
 
 import { Labels } from 'react-shared';
 import { LayoutPanel } from 'fundamental-react';
-import './WorkloadSelector.scss';
+import './Selector.scss';
 import { RelatedPods } from '../RelatedPods';
+import { MatchExpressionsList } from '../MatchExpressionsList';
 
-export const WorkloadSelector = ({ resource, labels, title }) => {
+export const Selector = ({ resource, labels, expressions, title }) => {
   const { t } = useTranslation();
 
   if (!labels || !resource) return null;
@@ -14,6 +15,7 @@ export const WorkloadSelector = ({ resource, labels, title }) => {
     .map(([key, value]) => `${key}=${value}`)
     .join(',');
 
+  console.log(expressions);
   return (
     <LayoutPanel className="fd-margin--md" key="workload-selector">
       <LayoutPanel.Header>
@@ -23,7 +25,11 @@ export const WorkloadSelector = ({ resource, labels, title }) => {
         />
         {labels ? <Labels labels={labels} /> : null}
       </LayoutPanel.Header>
-      <RelatedPods resource={resource} labelSelector={labelSelector} />
+      {expressions ? (
+        <MatchExpressionsList expressions={expressions} />
+      ) : (
+        <RelatedPods resource={resource} labelSelector={labelSelector} />
+      )}
     </LayoutPanel>
   );
 };

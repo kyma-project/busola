@@ -12,7 +12,7 @@ import { JobConditions } from './JobConditions';
 
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
-import { WorkloadSelector } from 'shared/components/WorkloadSelector/WorkloadSelector';
+import { Selector } from 'shared/components/Selector/Selector';
 
 export function JobsDetails({ DefaultRenderer, ...otherParams }) {
   const { t } = useTranslation();
@@ -62,18 +62,19 @@ export function JobsDetails({ DefaultRenderer, ...otherParams }) {
     />
   );
 
-  const SelectorLabels = job => {
+  const MatchSelector = job => {
     const { t } = useTranslation();
     return (
-      <WorkloadSelector
+      <Selector
         resource={job}
         labels={job.spec.selector?.matchLabels}
+        expressions={job.spec.selector?.matchExpressions}
         title={t('selector.title')}
       />
     );
   };
 
-  const customComponents = [JobConditions, Events, SelectorLabels];
+  const customComponents = [JobConditions, Events, MatchSelector];
 
   return (
     <DefaultRenderer

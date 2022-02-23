@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ReplicaSetStatus } from './ReplicaSetStatus';
 import { HPASubcomponent } from '../HPA/HPASubcomponent';
-import { WorkloadSelector } from 'shared/components/WorkloadSelector/WorkloadSelector';
+import { Selector } from 'shared/components/Selector/Selector';
 
 export const ReplicasetsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
@@ -58,12 +58,13 @@ export const ReplicasetsDetails = ({ DefaultRenderer, ...otherParams }) => {
     },
   ];
 
-  const SelectorLabels = replicaset => {
+  const MatchSelector = replicaset => {
     const { t } = useTranslation();
     return (
-      <WorkloadSelector
+      <Selector
         resource={replicaset}
         labels={replicaset.spec.selector?.matchLabels}
+        expressions={replicaset.spec.selector?.matchExpressions}
         title={t('selector.title')}
       />
     );
@@ -72,7 +73,7 @@ export const ReplicasetsDetails = ({ DefaultRenderer, ...otherParams }) => {
   return (
     <DefaultRenderer
       customColumns={customColumns}
-      customComponents={[HPASubcomponent, SelectorLabels]}
+      customComponents={[HPASubcomponent, MatchSelector]}
       {...otherParams}
     />
   );
