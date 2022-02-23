@@ -73,7 +73,7 @@ export function JobsDetails({ DefaultRenderer, ...otherParams }) {
     );
   };
 
-  const customComponents = [JobConditions, Events, SelectorLabels];
+  const customComponents = [JobConditions, SelectorLabels, Events];
 
   return (
     <DefaultRenderer
