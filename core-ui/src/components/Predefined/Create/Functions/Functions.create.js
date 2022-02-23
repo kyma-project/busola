@@ -142,6 +142,7 @@ export function FunctionsCreate({
         setValue={name => {
           jp.value(func, '$.metadata.name', name);
           jp.value(func, "$.metadata.labels['app.kubernetes.io/name']", name);
+          jp.value(func, '$.spec.deps', getDefaultDependencies(name, runtime));
           setFunc({ ...func });
         }}
       />
