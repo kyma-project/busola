@@ -141,7 +141,7 @@ The document lists and describes all the feature flags that are available in Kym
   }
   ```
 
-- **GZIP** – is used to configure whether the response from the backend server should be compressed or not.
+- **GZIP** – is used to indicate whether the response from the backend server should be compressed or not.
 
   Default settings:
 
