@@ -68,7 +68,7 @@
         }
       },
       "GZIP": {
-        "isEnabled": false
+        "isEnabled": true
       }
     }
   }

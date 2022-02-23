@@ -147,7 +147,7 @@ The document lists and describes all the feature flags that are available in Kym
 
   ```bash
   "GZIP": {
-    "isEnabled": false,
+    "isEnabled": true,
   }
   ```
 

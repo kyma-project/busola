@@ -78,7 +78,7 @@ data:
             }
           },
           "GZIP": {
-            "isEnabled": false
+            "isEnabled": true
           }
         }
       }
