@@ -7,7 +7,12 @@ import './Selector.scss';
 import { RelatedPods } from '../RelatedPods';
 import { MatchExpressionsList } from '../MatchExpressionsList';
 
-const SelectorParameters = ({ expressions, labels, namespace }) => {
+const SelectorParameters = ({
+  expressions,
+  labels,
+  namespace,
+  RelatedResources,
+}) => {
   let labelSelector;
   if (labels) {
     labelSelector = Object.entries(labels)
@@ -15,10 +20,16 @@ const SelectorParameters = ({ expressions, labels, namespace }) => {
       .join(',');
   }
 
+  const relatedResources = RelatedResources ? (
+    <RelatedResources labelSelector={labelSelector} />
+  ) : (
+    <RelatedPods namespace={namespace} labelSelector={labelSelector} />
+  );
+
   return expressions ? (
     <MatchExpressionsList expressions={expressions} />
   ) : (
-    <RelatedPods namespace={namespace} labelSelector={labelSelector} />
+    relatedResources
   );
 };
 
@@ -28,30 +39,41 @@ export const Selector = ({
   expressions,
   title,
   selector,
+  message,
+  RelatedResources,
+  isIstioSelector,
 }) => {
   const { t } = useTranslation();
-  if (!selector) return null;
 
-  const isSelectorEmpty = !labels && !expressions;
+  if (!isIstioSelector && !selector) {
+    // when k8s selector is null it matches all
+    // if it's null it doesn't
+    // istio selector works conversely
+    return null;
+  }
+
+  const isSelectorEmpty =
+    (!labels && !expressions) || (isIstioSelector && !selector);
 
   return (
     <LayoutPanel className="fd-margin--md" key="workload-selector">
       <LayoutPanel.Header>
         <LayoutPanel.Head
-          title={title || t('workload-selector.title')}
+          title={title || t('selector.title')}
           className="header"
         />
         {labels ? <Labels labels={labels} /> : null}
       </LayoutPanel.Header>
       {isSelectorEmpty ? (
         <LayoutPanel.Body>
-          <p>Matches all Pods in the Namespace</p>
+          <p>{message || t('selector.message.empty-selector')}</p>
         </LayoutPanel.Body>
       ) : (
         <SelectorParameters
           expressions={expressions}
           namespace={namespace}
           labels={labels}
+          RelatedResources={RelatedResources}
         />
       )}
     </LayoutPanel>
