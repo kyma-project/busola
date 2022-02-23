@@ -55,7 +55,6 @@ export function YamlUploadDialog({ show, onCancel }) {
     setResourcesWithStatuses(resourcesWithStatus);
     oldYaml.current = yaml;
   };
-  console.log(lastOperationState);
 
   const actions = [
     lastOperationState === OPERATION_STATE_SUCCEEDED ? (
@@ -65,10 +64,7 @@ export function YamlUploadDialog({ show, onCancel }) {
     ) : (
       <>
         <Button
-          onClick={() => {
-            console.log('?');
-            fetchResources();
-          }}
+          onClick={fetchResources}
           disabled={!resourcesWithStatuses?.length}
           option="emphasized"
         >
