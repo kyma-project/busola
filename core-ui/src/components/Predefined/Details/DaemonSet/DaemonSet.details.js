@@ -88,16 +88,12 @@ export const DaemonSetsDetails = ({ DefaultRenderer, ...otherParams }) => {
   ];
 
   const MatchSelector = daemonSet => {
-    const { t } = useTranslation();
-    return (
-      <Selector
-        namespace={daemonSet.metadata.namespace}
-        labels={daemonSet.spec?.selector?.matchLabels}
-        expressions={daemonSet.spec?.selector?.matchExpressions}
-        title={t('selector.title')}
-        selector={daemonSet.spec?.selector}
-      />
-    );
+    <Selector
+      namespace={daemonSet.metadata.namespace}
+      labels={daemonSet.spec?.selector?.matchLabels}
+      expressions={daemonSet.spec?.selector?.matchExpressions}
+      selector={daemonSet.spec?.selector}
+    />;
   };
 
   return (
@@ -105,6 +101,6 @@ export const DaemonSetsDetails = ({ DefaultRenderer, ...otherParams }) => {
       customComponents={[Tolerations, Images, MatchSelector]}
       customColumns={customColumns}
       {...otherParams}
-    ></DefaultRenderer>
+    />
   );
 };

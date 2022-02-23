@@ -23,16 +23,12 @@ export function StatefulSetsDetails({ DefaultRenderer, ...otherParams }) {
   ];
 
   const MatchSelector = statefulset => {
-    const { t } = useTranslation();
-    return (
-      <Selector
-        namespace={statefulset.metadata.namespace}
-        labels={statefulset.spec?.selector?.matchLabels}
-        selector={statefulset.spec?.selector}
-        expressions={statefulset.spec?.selector?.matchExpressions}
-        title={t('selector.title')}
-      />
-    );
+    <Selector
+      namespace={statefulset.metadata.namespace}
+      labels={statefulset.spec?.selector?.matchLabels}
+      selector={statefulset.spec?.selector}
+      expressions={statefulset.spec?.selector?.matchExpressions}
+    />;
   };
 
   return (

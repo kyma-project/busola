@@ -1522,16 +1522,13 @@ persistent-volume-claims:
   headers:
     access-modes: Access Mode
     configuration: Configuration
-    key: Key
-    match-expressions: Match Expressions
-    match-labels: Match Labels
-    operator: Operator
     selector: Selector
     storage: Storage
     storage-class-name: Storage Class Name
-    values: Values
     volume-mode: Volume Mode
     volume-name: Volume Name
+  message:
+    empty-selector: Matches all Volumes
   name_singular: Persistent Volume Claim
   title: Persistent Volume Claims
   tooltips:
@@ -1796,6 +1793,8 @@ secrets:
   type: Type
   updated: Secret updated
 selector:
+  message:
+    empty-selector: Matches all Pods in the Namespace
   title: Selector
 service-accounts:
   auto-mount-token:

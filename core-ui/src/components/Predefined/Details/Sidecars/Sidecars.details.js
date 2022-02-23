@@ -17,9 +17,11 @@ export const SidecarsDetails = ({ DefaultRenderer, ...otherParams }) => {
 
   const WorkloadSelector = sidecar => (
     <Selector
-      resource={sidecar}
+      selector={sidecar.spec?.workloadSelector}
       labels={sidecar.spec?.workloadSelector?.labels}
       title={t('workload-selector.title')}
+      namespace={sidecar.metadata.namespace}
+      isIstioSelector
     />
   );
 

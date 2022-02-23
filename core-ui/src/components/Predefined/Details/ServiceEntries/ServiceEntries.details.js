@@ -84,9 +84,11 @@ const Workloads = se => {
         <Endpoints serviceentry={se} />
       ) : (
         <Selector
-          resource={se}
+          namespace={se.metadata.namespace}
           labels={se.spec?.workloadSelector?.labels}
           title={t('workload-selector.title')}
+          selector={se.spec?.workloadSelector}
+          isIstioSelector
         />
       )}
     </div>

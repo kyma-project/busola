@@ -63,25 +63,21 @@ export function JobsDetails({ DefaultRenderer, ...otherParams }) {
   );
 
   const MatchSelector = job => {
-    const { t } = useTranslation();
-    return (
-      <Selector
-        namespace={job.metadata.namespace}
-        labels={job.spec.selector?.matchLabels}
-        expressions={job.spec.selector?.matchExpressions}
-        title={t('selector.title')}
-        selector={job.spec?.selector}
-      />
-    );
+    <Selector
+      namespace={job.metadata.namespace}
+      labels={job.spec?.selector?.matchLabels}
+      expressions={job.spec?.selector?.matchExpressions}
+      selector={job.spec?.selector}
+    />;
   };
 
-  const customComponents = [JobConditions, Events, MatchSelector];
+  const customComponents = [JobConditions, MatchSelector, Events];
 
   return (
     <DefaultRenderer
       customColumns={customColumns}
       customComponents={customComponents}
       {...otherParams}
-    ></DefaultRenderer>
+    />
   );
 }

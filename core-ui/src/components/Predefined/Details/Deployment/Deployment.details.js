@@ -22,16 +22,12 @@ export const DeploymentsDetails = ({ DefaultRenderer, ...otherParams }) => {
   ];
 
   const MatchSelector = deployment => {
-    const { t } = useTranslation();
-    return (
-      <Selector
-        namespace={deployment.metadata.namespace}
-        labels={deployment.spec.selector?.matchLabels}
-        expressions={deployment.spec.selector?.matchExpressions}
-        title={t('selector.title')}
-        selector={deployment.spec?.selector}
-      />
-    );
+    <Selector
+      namespace={deployment.metadata.namespace}
+      labels={deployment.spec?.selector?.matchLabels}
+      expressions={deployment?.spec.selector?.matchExpressions}
+      selector={deployment.spec?.selector}
+    />;
   };
 
   return (
