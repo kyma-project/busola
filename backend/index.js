@@ -11,7 +11,6 @@ let gzipEnabled;
 try {
   gzipEnabled = JSON.parse(fs.readFileSync('./config/config.json'))?.config
     ?.features?.GZIP?.isEnabled;
-  console.log(`gzip is ${gzipEnabled ? 'enabled' : 'disabled'}`);
 } catch (e) {
   console.log('Error while reading the configuration file', e?.message || e);
 }

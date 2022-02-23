@@ -129,6 +129,8 @@ The document lists and describes all the feature flags that are available in Kym
 
 - **JWT_CHECK_CONFIG** – is used to configure data necessary for the backend authentication, such as an issuer and JWKS (JSON Web Key Set) address. When the feature is disabled no authentication occurs on backend side.
 
+  Default settings:
+
   ```bash
   "JWT_CHECK_CONFIG": {
     "isEnabled": false,
@@ -136,6 +138,16 @@ The document lists and describes all the feature flags that are available in Kym
       "issuer": "https://apskyxzcl.accounts400.ondemand.com",
       "jwksUri": "https://apskyxzcl.accounts400.ondemand.com/oauth2/certs"
     }
+  }
+  ```
+
+- **GZIP** – is used to configure whether the response from the backend server should be compressed or not.
+
+  Default settings:
+
+  ```bash
+  "GZIP": {
+    "isEnabled": false,
   }
   ```
 
