@@ -11,6 +11,11 @@ import { createPatch } from 'rfc6902';
 
 import { useComponentDidMount } from 'shared/useComponentDidMount';
 import { getResourceKindUrl, getResourceUrl } from './helpers';
+import {
+  OPERATION_STATE_SOME_FAILED,
+  OPERATION_STATE_SUCCEEDED,
+  OPERATION_STATE_WAITING,
+} from './YamlUploadDialog';
 
 const DEFAULT_NAMESPACE = 'default';
 
@@ -19,7 +24,11 @@ export const STATE_WAITING = 'WAITING';
 export const STATE_UPDATED = 'UPDATED';
 export const STATE_CREATED = 'CREATED';
 
-export function useUploadResources(resources = [], setResourcesData) {
+export function useUploadResources(
+  resources = [],
+  setResourcesData,
+  setLastOperationState,
+) {
   const fetch = useSingleGet();
   const post = usePost();
   const patch = useUpdate();
@@ -82,23 +91,37 @@ export function useUploadResources(resources = [], setResourcesData) {
       if (!existingResource) {
         await post(url, resource.value);
         updateState(index, STATE_CREATED);
+        setLastOperationState(lastOperationState =>
+          lastOperationState === OPERATION_STATE_WAITING
+            ? OPERATION_STATE_SUCCEEDED
+            : lastOperationState,
+        );
       } else {
         //update a resource
         const newResource = merge({}, existingResource, resource.value);
         const diff = createPatch(existingResource, newResource);
         await patch(urlWithName, diff);
         updateState(index, STATE_UPDATED);
+        setLastOperationState(lastOperationState =>
+          lastOperationState === OPERATION_STATE_WAITING
+            ? OPERATION_STATE_SUCCEEDED
+            : lastOperationState,
+        );
       }
     } catch (e) {
       console.warn(e);
       updateState(index, STATE_ERROR, e.message);
+      setLastOperationState(() => OPERATION_STATE_SOME_FAILED);
     }
   };
 
   const fetchResources = useCallback(() => {
-    for (const [index, resource] of filteredResources?.entries()) {
-      updateState(index, STATE_WAITING);
-      fetchApiGroup(resource, index);
+    if (filteredResources?.length) {
+      setLastOperationState(OPERATION_STATE_WAITING);
+      for (const [index, resource] of filteredResources?.entries()) {
+        updateState(index, STATE_WAITING);
+        fetchApiGroup(resource, index);
+      }
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
