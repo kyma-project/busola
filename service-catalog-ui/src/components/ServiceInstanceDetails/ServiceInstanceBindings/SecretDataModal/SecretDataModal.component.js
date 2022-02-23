@@ -83,7 +83,7 @@ class SecretDataModal extends React.Component {
         modalOpeningComponent={modalOpeningComponent}
         actions={onClose => (
           <Button onClick={onClose} key="close">
-            {t('applications.buttons.close')}
+            {t('common.buttons.close')}
           </Button>
         )}
         i18n={i18n}
