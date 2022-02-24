@@ -201,7 +201,7 @@ context('Test in-cluster eventing', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Choose an Application name"]:visible')
+      .find('[placeholder="Choose Application name"]:visible')
       .clear()
       .type(`test-mock-app-${Cypress.env('NAMESPACE_NAME')}`)
       .click();

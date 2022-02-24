@@ -76,7 +76,7 @@ context('Test DNS Providers', () => {
 
     // name should be readonly
     cy.getIframeBody()
-      .find('[placeholder="DNS Provider name"]:visible', { log: false })
+      .find('[ariaLabel="DNS Provider name"]:visible', { log: false })
       .should('have.attr', 'readonly', 'readonly');
 
     cy.getIframeBody()

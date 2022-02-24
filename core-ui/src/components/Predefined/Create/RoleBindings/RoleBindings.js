@@ -90,6 +90,7 @@ export function RoleBindings({
         input={Inputs.Text}
         propertyPath="$.metadata.name"
         readOnly={!!initialRoleBinding}
+        ariaLabel={`${singularName} name`}
       />
       <KeyValueField
         advanced
