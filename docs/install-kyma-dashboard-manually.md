@@ -35,3 +35,14 @@ To run Kyma Dashboard manually on a cluster, you must install it together with I
 
 3. Wait a minute for the Dashboard to start.
 4. The Dashboard is available under your domain (for example, `https://busola.local.kyma.dev/`).
+
+## Enable SSL on the backend service
+
+Generate a CA Certificate and corresponding tls key & tls cert.  
+Then set the following environment variables:
+```bash
+BUSOLA_SSL_ENABLED=1
+BUSOLA_SSL_KEY_FILE=/path/to/tls.key
+BUSOLA_SSL_CRT_FILE=/path/to/tls.crt
+BUSOLA_SSL_CA_FILE=/path/to/ca.crt
+```
