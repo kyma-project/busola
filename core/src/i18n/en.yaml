@@ -89,7 +89,6 @@ applications:
     namespace: Choose Namespace
   bindings: Bindings
   buttons:
-    close: Close
     connect: Connect Application
     create: $t(applications.subtitle.create-binding)
     create-app: $t(applications.subtitle.create-app)
@@ -437,6 +436,7 @@ common:
     add-new: Add New
     cancel: Cancel
     clone: Clone
+    close: Close
     copy: Copy
     create: Create
     delete: Delete
