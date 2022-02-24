@@ -57,25 +57,29 @@ export function YamlResourcesList({ resourcesData }) {
   } else {
     if (showResourcesToUpload()) {
       return (
-        <ul className="fd-margin-top--md">
-          {t(
-            filteredResources.length === 1
-              ? 'upload-yaml.you-will-create_one'
-              : 'upload-yaml.you-will-create_other',
-            {
-              count: filteredResources.length || 0,
-            },
-          )}
-          {filteredResources?.map(r => (
-            <li
-              key={`${r?.value?.kind}-${r?.value?.metadata?.name}`}
-              className="fd-margin-begin--sm"
-              style={{ listStyle: 'disc' }}
-            >
-              {r?.value?.kind} {r?.value?.metadata?.name}
-            </li>
-          ))}
-        </ul>
+        <div>
+          <p className="fd-margin-top--md">
+            {t(
+              filteredResources.length === 1
+                ? 'upload-yaml.you-will-create_one'
+                : 'upload-yaml.you-will-create_other',
+              {
+                count: filteredResources.length || 0,
+              },
+            )}
+          </p>
+          <ul>
+            {filteredResources?.map(r => (
+              <li
+                key={`${r?.value?.kind}-${r?.value?.metadata?.name}`}
+                className="fd-margin-begin--sm"
+                style={{ listStyle: 'disc' }}
+              >
+                {r?.value?.kind} {r?.value?.metadata?.name}
+              </li>
+            ))}
+          </ul>
+        </div>
       );
     } else {
       return (
