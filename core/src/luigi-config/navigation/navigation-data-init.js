@@ -389,6 +389,13 @@ export async function createNavigationNodes(
         navigationContext: n.navigationContext,
       }));
 
+  const getNodeCategories = () => {
+    const nodes = [...namespaceNodes, ...clusterNodes];
+    return nodes
+      .filter(c => typeof c.category === 'object')
+      .map(node => node.category);
+  };
+
   const nodes = [
     {
       pathSegment: 'cluster',
@@ -424,6 +431,7 @@ export async function createNavigationNodes(
         },
         clusterNodes: simplifyNodes(clusterNodes),
         namespaceNodes: simplifyNodes(namespaceNodes),
+        nodeCategories: getNodeCategories(),
       },
     },
   ];

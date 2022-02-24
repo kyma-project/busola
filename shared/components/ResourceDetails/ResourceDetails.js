@@ -28,6 +28,7 @@ import {
   useDeleteResource,
 } from '../../hooks';
 import { ModalWithForm } from '../ModalWithForm/ModalWithForm';
+import { A } from './../../components/A';
 
 ResourceDetails.propTypes = {
   customColumns: CustomPropTypes.customColumnsType,
@@ -301,6 +302,7 @@ function Resource({
       <DeleteMessageBox resource={resource} resourceUrl={resourceUrl} />
       {customComponents.map(component => component(resource, resourceUrl))}
       {children}
+      <A resource={resource} />
     </>
   );
 }
