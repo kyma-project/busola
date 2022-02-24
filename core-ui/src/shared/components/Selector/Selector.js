@@ -45,7 +45,7 @@ export const Selector = ({
   isIstioSelector,
 }) => {
   const { t } = useTranslation();
-  // when k8s selector is null it matches all
+  // when k8s selector is empty it matches all
   // if it's null it doesn't
   // istio selector works conversely
 
