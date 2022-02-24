@@ -10,6 +10,8 @@ export const mapObjectValues = (fn, obj) =>
 
 export function createSecretTemplate(namespaceId) {
   return {
+    apiVersion: 'v1',
+    kind: 'Secret',
     type: 'Opaque',
     metadata: {
       name: '',

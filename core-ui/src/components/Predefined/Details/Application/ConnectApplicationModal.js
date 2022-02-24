@@ -81,7 +81,7 @@ export default function ConnectApplicationModal({ applicationName }) {
           {t('common.tooltips.copy-to-clipboard')}
         </Button>,
         <Button onClick={onClose} key="close">
-          {t('applications.buttons.close')}
+          {t('common.buttons.close')}
         </Button>,
       ]}
       title={t('applications.subtitle.connect-app')}
