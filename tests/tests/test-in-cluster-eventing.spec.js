@@ -212,7 +212,7 @@ context('Test in-cluster eventing', () => {
       .type('order.created');
 
     cy.getIframeBody()
-      .find('[placeholder="Enter the event version, for example, v1"]:visible')
+      .find('[placeholder="For example, v1"]:visible')
       .clear()
       .type('v1')
       .click();
