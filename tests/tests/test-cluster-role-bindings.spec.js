@@ -12,13 +12,7 @@ context('Test Cluster Role Bindings', () => {
   });
 
   it('Create a ClusterRoleBinding', () => {
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Cluster Role Bindings')
-      .click();
+    cy.navigateTo('Configuration', 'Cluster Role Bindings');
 
     cy.getIframeBody()
       .contains('Create Cluster Role Binding')
@@ -29,13 +23,11 @@ context('Test Cluster Role Bindings', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Cluster Role Binding Name"]')
+      .find('[placeholder="Cluster Role Binding name"]')
       .type(CRB_NAME);
 
     cy.getIframeBody()
-      .find(
-        '[placeholder="Start typing to select Role Binding from the list."]',
-      )
+      .find('[placeholder="Start typing to select Role Binding from the list"]')
       .type('broker');
 
     cy.getIframeBody()
@@ -127,12 +119,6 @@ context('Test Cluster Role Bindings', () => {
   });
 
   it('Delete Cluster Role Binding', () => {
-    cy.getIframeBody()
-      .contains('button', 'Delete')
-      .click();
-
-    cy.getIframeBody()
-      .find('[data-testid="delete-confirmation"]')
-      .click();
+    cy.deleteInDetails();
   });
 });

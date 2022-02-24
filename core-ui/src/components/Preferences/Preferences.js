@@ -80,4 +80,6 @@ function Preferences() {
 
 /* for some mysterious reason hooks fail in root component, so instead a
  * wrapper component has to be exported */
-export default () => <Preferences />;
+export default function Preferencs() {
+  return <Preferences />;
+}

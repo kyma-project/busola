@@ -21,7 +21,9 @@ export function createGatewayTemplate(namespace) {
       },
     },
     spec: {
-      selector: {},
+      selector: {
+        istio: 'ingressgateway',
+      },
       servers: [newServer()],
     },
   };

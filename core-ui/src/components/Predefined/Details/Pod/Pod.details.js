@@ -9,6 +9,8 @@ import { useTranslation } from 'react-i18next';
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
 
+import { PodStatsGraph } from './PodStatsGraph';
+
 function toSnakeCase(inputString) {
   return inputString
     .split('')
@@ -21,6 +23,7 @@ function toSnakeCase(inputString) {
     })
     .join('');
 }
+
 function goToSecretDetails(resourceKind, name) {
   const preperedResourceKind = toSnakeCase(resourceKind);
 
@@ -71,10 +74,17 @@ export const PodsDetails = ({ DefaultRenderer, ...otherParams }) => {
         <Link
           className="fd-link"
           onClick={() =>
-            goToSecretDetails(volumeType.toLowerCase(), volume[volumeType].name)
+            goToSecretDetails(
+              volumeType.toLowerCase(),
+              volume[volumeType].name ||
+                volume[volumeType].secretName ||
+                volume[volumeType].claimName,
+            )
           }
         >
-          {volume[volumeType].name}
+          {volume[volumeType].name ||
+            volume[volumeType].secretName ||
+            volume[volumeType].claimName}
         </Link>,
       ];
     };
@@ -108,7 +118,13 @@ export const PodsDetails = ({ DefaultRenderer, ...otherParams }) => {
 
   return (
     <DefaultRenderer
-      customComponents={[VolumesList, Containers, InitContainers, Events]}
+      customComponents={[
+        PodStatsGraph,
+        VolumesList,
+        Containers,
+        InitContainers,
+        Events,
+      ]}
       customColumns={customColumns}
       {...otherParams}
     ></DefaultRenderer>

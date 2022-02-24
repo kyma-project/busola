@@ -19,27 +19,24 @@ context('Test Secrets', () => {
   });
 
   it('Create a secret', () => {
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Secrets')
-      .click();
+    cy.navigateTo('Configuration', 'Secrets');
 
     cy.getIframeBody()
       .contains('Create Secret')
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Secret Name"]:visible')
+      .find('[placeholder="Secret name"]:visible')
       .type(SECRET_NAME);
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Key"]:visible')
-      .type(
-        `${SECRET_KEY}{enter}{backspace}${SECRET_VALUE}{enter}${SECRET2_KEY}{enter}{backspace}${SECRET2_VALUE}`,
-      );
+      .find('[placeholder="Enter key"]:visible')
+      .type(`${SECRET_KEY}{enter}{backspace}${SECRET_VALUE}`);
+
+    cy.getIframeBody()
+      .find('[placeholder="Enter key"]:visible')
+      .last()
+      .type(`${SECRET2_KEY}{enter}{backspace}${SECRET2_VALUE}`);
 
     cy.getIframeBody()
       .contains('Encode')
@@ -56,7 +53,7 @@ context('Test Secrets', () => {
     cy.url().should('match', new RegExp(`/secrets/details/${SECRET_NAME}$`));
   });
 
-  it('Inspect a secret', () => {
+  it('Checking a secret details', () => {
     cy.getIframeBody().contains(SECRET_NAME);
 
     cy.getIframeBody()
@@ -86,12 +83,12 @@ context('Test Secrets', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Value"]:visible')
+      .find('[placeholder="Enter value"]:visible')
       .eq(0)
       .type(`{selectall}${SECRET_VALUE2}`);
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Key"]:visible')
+      .find('[placeholder="Enter key"]:visible')
       .eq(2)
       .type(`${SECRET3_KEY}{enter}{backspace}${SECRET3_VALUE}`);
 
@@ -106,7 +103,7 @@ context('Test Secrets', () => {
       .click();
   });
 
-  it('Inspect an updated secret', () => {
+  it('Checking an updated secret', () => {
     cy.getIframeBody()
       .contains('.layout-panel-row', SECRET_KEY)
       .contains(btoa(SECRET_VALUE2));
@@ -120,7 +117,7 @@ context('Test Secrets', () => {
       .contains(btoa(SECRET3_VALUE));
   });
 
-  it('Inspect list', () => {
+  it('Check list', () => {
     cy.getIframeBody()
       .contains('a', 'Secrets')
       .click();

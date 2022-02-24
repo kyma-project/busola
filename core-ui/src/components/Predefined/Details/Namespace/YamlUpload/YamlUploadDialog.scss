@@ -1,0 +1,19 @@
+.yaml-upload-modal {
+  .fd-dialog__body {
+    background: var(--sapBackgroundColor);
+    overflow-x: auto;
+  }
+
+  ul {
+    // match Monaco height
+    max-height: 400px;
+    overflow: auto;
+  }
+
+  &__layout {
+    overflow: hidden;
+    width: 1000px;
+    display: grid;
+    grid-template-columns: 16fr 9fr;
+  }
+}

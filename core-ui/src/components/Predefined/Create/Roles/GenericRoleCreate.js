@@ -44,7 +44,7 @@ export function GenericRoleCreate({
     >
       <K8sNameField
         required
-        readOnly={!!initialRole}
+        readOnly={!!initialRole?.metadata?.name}
         propertyPath="$.metadata.name"
         kind={t('roles.name_singular')}
         setValue={name => {

@@ -3,10 +3,12 @@ import LuigiClient from '@luigi-project/client';
 import { Pagination, Spinner, ErrorPanel } from 'react-shared';
 import { LayoutPanel, Link } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
+
 import { useNodesQuery } from 'components/Nodes/nodeQueries';
 import { NodeResources } from 'components/Nodes/NodeResources/NodeResources';
 import { EventsList } from 'shared/components/EventsList';
 import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
+import { StatsPanel } from 'shared/components/StatsGraph/StatsPanel';
 
 import './ClusterNodes.scss';
 
@@ -63,6 +65,7 @@ export function ClusterNodes() {
           />
         </LayoutPanel.Footer>
       )}
+      <StatsPanel type="cluster" />
       {Events}
     </>
   );

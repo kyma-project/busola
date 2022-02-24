@@ -10,17 +10,9 @@ context('Test Service Accounts', () => {
     cy.goToNamespaceDetails();
   });
 
-  it('Navigate to Service Accounts', () => {
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Service Accounts')
-      .click();
-  });
-
   it('Create a Client', () => {
+    cy.navigateTo('Configuration', 'Service Accounts');
+
     cy.getIframeBody()
       .contains('Create Service Account')
       .click();
@@ -30,7 +22,7 @@ context('Test Service Accounts', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Service Account Name"]')
+      .find('[placeholder="Service Account name"]')
       .clear()
       .type(SERVICE_NAME);
 
@@ -40,7 +32,7 @@ context('Test Service Accounts', () => {
 
     cy.getIframeBody()
       .find(
-        '[placeholder="Start typing to select Image Pull Secrets from the list."]',
+        '[placeholder="Start typing to select Image Pull Secrets from the list"]',
       )
       .clear()
       .type('default');
@@ -92,7 +84,7 @@ context('Test Service Accounts', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Enter Key"]')
+      .find('[placeholder="Enter key"]')
       .type('test.key');
 
     cy.getIframeBody()
@@ -121,12 +113,6 @@ context('Test Service Accounts', () => {
   });
 
   it('Delete Service Account', () => {
-    cy.getIframeBody()
-      .contains('button', 'Delete')
-      .click();
-
-    cy.getIframeBody()
-      .find('[data-testid="delete-confirmation"]')
-      .click();
+    cy.deleteInDetails();
   });
 });

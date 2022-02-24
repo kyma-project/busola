@@ -1,4 +1,4 @@
-export function createJobTemplate(namespace) {
+export function createJobTemplate(namespace, templateAnnotations) {
   return {
     apiVersion: 'batch/v1',
     kind: 'Job',
@@ -8,6 +8,9 @@ export function createJobTemplate(namespace) {
     },
     spec: {
       template: {
+        metadata: {
+          annotations: templateAnnotations,
+        },
         spec: {
           containers: [createContainerTemplate()],
           restartPolicy: 'OnFailure',
@@ -17,7 +20,7 @@ export function createJobTemplate(namespace) {
   };
 }
 
-export function createCronJobTemplate(namespace) {
+export function createCronJobTemplate(namespace, templateAnnotations) {
   return {
     apiVersion: 'batch/v1beta1',
     kind: 'CronJob',
@@ -30,6 +33,9 @@ export function createCronJobTemplate(namespace) {
       jobTemplate: {
         spec: {
           template: {
+            metadata: {
+              annotations: templateAnnotations,
+            },
             spec: {
               containers: [createContainerTemplate()],
               restartPolicy: 'OnFailure',
@@ -126,8 +132,8 @@ export function createCronJobPresets(namespace, translate) {
               },
             },
           },
+          concurrencyPolicy: 'Allow',
         },
-        concurrencyPolicy: 'Allow',
       },
     },
   ];

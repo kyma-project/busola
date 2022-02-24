@@ -9,7 +9,7 @@ import {
   usePost,
   useNotification,
   randomNameGenerator,
-  ControlledEditor,
+  MonacoEditor,
   useTheme,
 } from 'react-shared';
 
@@ -78,11 +78,10 @@ export default function CreateInstanceForm({
 
     // eslint-disable-next-line
   }, []);
-
   plans.forEach(plan => {
     parseDefaultIntegerValues(plan);
   });
-  const plan = plans[0]?.metadata.name;
+  const plan = plans[0]?.spec.externalID;
   const [
     instanceCreateParameterSchema,
     setInstanceCreateParameterSchema,
@@ -130,7 +129,6 @@ export default function CreateInstanceForm({
       },
       spec: inputData,
     };
-
     try {
       await postRequest(
         `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${namespace}/serviceinstances`,
@@ -152,7 +150,7 @@ export default function CreateInstanceForm({
     }
   }
 
-  const handleCustomParametersChange = (_, input) => {
+  const handleCustomParametersChange = input => {
     try {
       const parsedInput = JSON.parse(input);
       if (isNonNullObject(parsedInput)) {
@@ -177,7 +175,6 @@ export default function CreateInstanceForm({
       servicePlanExternalName: currentPlan && currentPlan.spec.externalName,
       parameters: instanceCreateParameters,
     };
-
     const specCSC = {
       clusterServiceClassExternalName: item.spec.externalName,
       clusterServicePlanExternalName:
@@ -279,7 +276,7 @@ export default function CreateInstanceForm({
             )}
           </div>
           {customParametersProvided && (
-            <ControlledEditor
+            <MonacoEditor
               aria-label="schema-editor"
               height="25em"
               language="JSON"

@@ -1,5 +1,4 @@
 /// <reference types="cypress" />
-import config from '../config';
 
 context('Create Namespace', () => {
   Cypress.skipAfterFail({ skipAllSuits: true });
@@ -20,16 +19,16 @@ context('Create Namespace', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('Create resource quota')
+      .contains('Create Resource Quota')
       .click();
 
     cy.getIframeBody()
-      .contains('Create limit range')
+      .contains('Create Limit Range')
       .click();
 
     cy.getIframeBody()
       .find('[role=dialog]')
-      .find("input[placeholder='Namespace Name']:visible")
+      .find("input[placeholder='Namespace name']:visible")
       .type(Cypress.env('NAMESPACE_NAME'));
 
     cy.getIframeBody()
@@ -63,16 +62,10 @@ context('Create Namespace', () => {
 
   it('Create application', () => {
     cy.getLeftNav()
-      .contains('Back to Namespaces')
+      .contains('Back to Cluster Overview')
       .click();
 
-    cy.getLeftNav()
-      .contains('Integration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Applications')
-      .click();
+    cy.navigateTo('Integration', 'Applications');
 
     cy.getIframeBody()
       .contains('Create Application')
@@ -80,7 +73,7 @@ context('Create Namespace', () => {
 
     cy.getIframeBody()
       .find('[role=dialog]')
-      .find("input[placeholder='Application Name']:visible")
+      .find("input[placeholder='Application name']:visible")
       .type(`test-mock-app-${Cypress.env('NAMESPACE_NAME')}`);
 
     cy.getIframeBody()

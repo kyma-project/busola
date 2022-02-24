@@ -3,7 +3,7 @@ import 'cypress-file-upload';
 
 const CLIENT_NAME = 'test-oauth2-client';
 
-context('Test OAuth2 Client', () => {
+context('Test OAuth2 Clients', () => {
   Cypress.skipAfterFail();
 
   before(() => {
@@ -11,17 +11,9 @@ context('Test OAuth2 Client', () => {
     cy.goToNamespaceDetails();
   });
 
-  it('Navigate to OAuth2 Client', () => {
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('OAuth2 Clients')
-      .click();
-  });
-
   it('Create a Client', () => {
+    cy.navigateTo('Configuration', 'OAuth2 Clients');
+
     cy.getIframeBody()
       .contains('Create OAuth2 Client')
       .click();
@@ -31,7 +23,7 @@ context('Test OAuth2 Client', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="OAuth2 Client Name"]')
+      .find('[placeholder="OAuth2 Client name"]')
       .clear()
       .type(CLIENT_NAME);
 
@@ -46,7 +38,11 @@ context('Test OAuth2 Client', () => {
     cy.getIframeBody()
       .find('[placeholder="OAuth2 scope"]')
       .clear()
-      .type('openid{downarrow}');
+      .type('openid', {
+        //for unknown reason Cypress can lose 'e' when typing openid, therefore slowing down the typing
+        delay: 100,
+        waitForAnimations: true,
+      });
 
     cy.getIframeBody()
       .contains('label', 'Scope')

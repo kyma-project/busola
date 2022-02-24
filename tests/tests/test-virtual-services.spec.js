@@ -4,7 +4,6 @@ const SERVICE_NAME = `test-virtual-service-${Math.floor(Math.random() * 9999) +
   1000}`;
 
 async function loadVirtualService() {
-  // const content = await cy.fixture('test-custom-destination-rule.yaml');
   const content = await new Promise(resolve => {
     cy.fixture('test-virtual-service.yaml').then(content => resolve(content));
   });
@@ -24,17 +23,9 @@ context('Test Virtual Services', () => {
     cy.goToNamespaceDetails();
   });
 
-  it('Navigate to Virtual Services', () => {
-    cy.getLeftNav()
-      .contains('Istio')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Virtual Services')
-      .click();
-  });
-
   it('Create a Virtual Service', () => {
+    cy.navigateTo('Istio', 'Virtual Services');
+
     cy.getIframeBody()
       .contains('Create Virtual Service')
       .click();

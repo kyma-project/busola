@@ -36,12 +36,6 @@ data:
               "clientId": "d0316c58-b0fe-45cd-9960-0fea0708355a"
             }
           },
-          "ADD_CLUSTER_DISABLED": {
-            "isEnabled": false,
-            "config": {
-              "cockpitUrl": "https://account.staging.hanavlab.ondemand.com/cockpit"
-            }
-          },
           "SERVICE_CATALOG_READ_ONLY": {
             "isReadOnly": false
           },
@@ -75,6 +69,16 @@ data:
             "config": {
               "kubeconfigUrl": "/kubeconfig"
             }
+          },
+          "JWT_CHECK_CONFIG": {
+            "isEnabled": false,
+            "config": {
+              "issuer": "https://apskyxzcl.accounts400.ondemand.com",
+              "jwksUri": "https://apskyxzcl.accounts400.ondemand.com/oauth2/certs"
+            }
+          },
+          "GZIP": {
+            "isEnabled": true
           }
         }
       }

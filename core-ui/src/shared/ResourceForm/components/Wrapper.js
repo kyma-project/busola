@@ -50,7 +50,7 @@ export function ResourceFormWrapper({
   useEffect(() => {
     React.Children.toArray(children).forEach((child, index) => {
       const inputRef = inputRefs[index];
-      if (child.props.validate) {
+      if (child.props?.validate) {
         const valid = isValid(child);
         if (inputRef?.current) {
           if (!valid) {

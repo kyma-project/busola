@@ -15,17 +15,19 @@
   "license": "ISC",
   "dependencies": {
     "@babel/runtime": "^7.13.10",
+    "compression": "^1.7.4",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "express-jwt": "^6.1.0",
     "https": "^1.0.0",
+    "jwks-rsa": "^2.0.5",
     "pino-http": "^5.7.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.1",
-    "@babel/core": "^7.12.10",
     "@babel/node": "^7.12.10",
-    "@babel/preset-env": "^7.12.10",
+    "@babel/preset-env": "^7.16.11",
     "@babel/register": "^7.12.10",
     "babel-loader": "^8.2.2",
     "core-js": "^3.8.1",

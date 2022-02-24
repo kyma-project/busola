@@ -13,7 +13,7 @@ Cypress.Commands.add('createSimpleFunction', functionName => {
 
   cy.getIframeBody()
     .find('.advanced-form')
-    .find('[placeholder="Function Name"]')
+    .find('[placeholder="Function name"]')
     .clear()
     .type(functionName);
 
@@ -23,7 +23,7 @@ Cypress.Commands.add('createSimpleFunction', functionName => {
     .click();
 
   cy.getIframeBody()
-    .find('[placeholder="Enter Key"]')
+    .find('[placeholder="Enter key"]')
     .last()
     .type(`example{enter}${functionName}`);
 
@@ -43,13 +43,7 @@ Cypress.Commands.add(
     cy.createSimpleFunction(functionName);
 
     cy.readFile(functionPath).then(body => {
-      cy.getIframeBody()
-        .find('textarea[aria-roledescription="editor"]')
-        .filter(':visible')
-        .clearMonaco()
-        .paste({
-          pastePayload: body,
-        });
+      cy.pasteToMonaco(body);
     });
 
     cy.getIframeBody()
@@ -57,14 +51,7 @@ Cypress.Commands.add(
       .click();
 
     cy.readFile(dependenciesPath).then(body => {
-      cy.getIframeBody()
-        .find('textarea[aria-roledescription="editor"]')
-        .filter(':visible')
-        // cy.clear sometimes fails, removing only the first character - use this as a workaround
-        .clearMonaco()
-        .paste({
-          pastePayload: JSON.stringify(body),
-        });
+      cy.pasteToMonaco(JSON.stringify(body));
     });
 
     cy.getIframeBody()

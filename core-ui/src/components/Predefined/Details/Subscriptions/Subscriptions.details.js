@@ -8,6 +8,9 @@ import { GoToDetailsLink, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 import { SubscriptionConditionStatus } from 'shared/components/SubscriptionConditionStatus';
 import { SubscriptionConditions } from './SubscriptionConditions';
 
+import { EventsList } from 'shared/components/EventsList';
+import { filterByResource } from 'hooks/useMessageList';
+
 import './EventFilters.scss';
 
 const FilterOption = ({ filterOption, title }) => {
@@ -109,9 +112,17 @@ export const SubscriptionsDetails = ({ DefaultRenderer, ...otherParams }) => {
     },
   ];
 
+  const Events = () => (
+    <EventsList
+      namespace={otherParams.namespace}
+      filter={filterByResource('Subscription', otherParams.resourceName)}
+      hideInvolvedObjects={true}
+    />
+  );
+
   return (
     <DefaultRenderer
-      customComponents={[SubscriptionConditions, SubscriptionsFilter]}
+      customComponents={[SubscriptionConditions, SubscriptionsFilter, Events]}
       customColumns={customColumns}
       resourceTitle={t('subscriptions.title')}
       singularName={t('subscriptions.name_singular')}
