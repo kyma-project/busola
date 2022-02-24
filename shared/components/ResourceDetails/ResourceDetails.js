@@ -7,6 +7,7 @@ import { createPatch } from 'rfc6902';
 import {
   PageHeader,
   Labels,
+  LogsLink,
   ErrorBoundary,
   YamlEditorProvider,
   useGet,
@@ -27,6 +28,7 @@ import {
   useProtectedResources,
   useDeleteResource,
 } from '../../hooks';
+import { useConfig } from '../../contexts/ConfigContext';
 import { ModalWithForm } from '../ModalWithForm/ModalWithForm';
 
 ResourceDetails.propTypes = {
@@ -123,6 +125,7 @@ function Resource({
   customColumns,
   customComponents,
   editActionLabel,
+  grafanaQuery,
   headerActions,
   i18n,
   namespace,
@@ -136,6 +139,7 @@ function Resource({
   windowTitle,
   resourceTitle,
 }) {
+  const { fromConfig } = useConfig();
   const { t } = useTranslation(['translation'], { i18n });
   useWindowTitle(
     windowTitle || resourceTitle || prettifyNamePlural(null, resourceType),
@@ -163,6 +167,20 @@ function Resource({
   ];
 
   const protectedResource = isProtected(resource);
+
+  const grafanaLogsAction = () => {
+    if (grafanaQuery) {
+      return (
+        <LogsLink
+          className="fd-margin-end--tiny"
+          i18n={i18n}
+          query={grafanaQuery}
+        />
+      );
+    } else {
+      return null;
+    }
+  };
 
   const editAction = () => {
     if (protectedResource) {
@@ -225,6 +243,7 @@ function Resource({
   const actions = readOnly ? null : (
     <>
       {protectedResourceWarning(resource)}
+      {grafanaLogsAction()}
       {editAction()}
       {headerActions}
       {resourceHeaderActions.map(resourceAction => resourceAction(resource))}

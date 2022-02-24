@@ -37,6 +37,7 @@ export {
   ControlledBy,
   GoToDetailsLink,
 } from './components/ControlledBy/ControlledBy';
+export * from './components/LogsLink/LogsLink';
 export * from './components/SideDrawer/SideDrawer';
 export * from './components/ResourcesList/ResourcesList';
 export * from './components/ResourceDetails/ResourceDetails';

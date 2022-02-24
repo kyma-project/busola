@@ -126,6 +126,7 @@ export const PodsDetails = ({ DefaultRenderer, ...otherParams }) => {
         Events,
       ]}
       customColumns={customColumns}
+      grafanaQuery={`{pod="${otherParams.resourceName}"}`}
       {...otherParams}
     ></DefaultRenderer>
   );
