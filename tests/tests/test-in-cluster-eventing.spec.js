@@ -207,9 +207,7 @@ context('Test in-cluster eventing', () => {
       .click();
 
     cy.getIframeBody()
-      .find(
-        '[placeholder="Enter the event name, for example, order.cancelled"]:visible',
-      )
+      .find('[placeholder="For example, order.cancelled"]:visible')
       .clear()
       .type('order.created');
 

@@ -81,6 +81,7 @@ export function SingleSubjectForm({
           value={subject.name || []}
           setValue={setName}
           input={Inputs.Text}
+          ariaLabel="User name"
         />
       )}
 
@@ -91,6 +92,7 @@ export function SingleSubjectForm({
           value={subject.name || []}
           setValue={setName}
           input={Inputs.Text}
+          ariaLabel="User group"
         />
       )}
 

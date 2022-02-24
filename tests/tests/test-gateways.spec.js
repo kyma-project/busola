@@ -56,7 +56,7 @@ context('Test Gateways', () => {
 
     // server target port
     cy.getIframeBody()
-      .find('[placeholder^="Target port"]:visible', { log: false })
+      .find('[ariaLabel^="Target port"]:visible', { log: false })
       .type(TARGET_PORT);
 
     // create
