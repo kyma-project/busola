@@ -26,7 +26,7 @@ context('Test DNS Entries', () => {
 
     // name
     cy.getIframeBody()
-      .find('[placeholder="DNS Entry name"]:visible')
+      .find('[ariaLabel="DNS Entry name"]:visible')
       .type(DNS_ENTRY_NAME);
 
     // ttl

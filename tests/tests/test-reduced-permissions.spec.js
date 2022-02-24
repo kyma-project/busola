@@ -42,7 +42,7 @@ context('Test reduced permissions', () => {
       .type(CR_NAME);
 
     cy.getIframeBody()
-      .find('[placeholder="Role name"]:visible')
+      .find('[ariaLabel="Role name"]:visible')
       .type(CR_NAME);
 
     // api groups

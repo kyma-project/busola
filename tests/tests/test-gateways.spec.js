@@ -29,7 +29,7 @@ context('Test Gateways', () => {
 
     // name
     cy.getIframeBody()
-      .find('[placeholder="Gateway name"]:visible', { log: false })
+      .find('[ariaLabel="Gateway name"]:visible', { log: false })
       .type(GATEWAY_NAME);
 
     // selector
@@ -96,7 +96,7 @@ context('Test Gateways', () => {
 
     // name should be disabled for edit
     cy.getIframeBody()
-      .find('[placeholder="Gateway name"]:visible', { log: false })
+      .find('[ariaLabel="Gateway name"]:visible', { log: false })
       .should('have.attr', 'readonly');
 
     cy.getIframeBody()

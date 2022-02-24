@@ -23,7 +23,7 @@ context('Test Cron Jobs', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Cron Job name"]')
+      .find('[ariaLabel="Cron Job name"]')
       .type(CRON_JOB_NAME);
 
     cy.getIframeBody()

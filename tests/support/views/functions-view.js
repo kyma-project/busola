@@ -13,7 +13,7 @@ Cypress.Commands.add('createSimpleFunction', functionName => {
 
   cy.getIframeBody()
     .find('.advanced-form')
-    .find('[placeholder="Function name"]')
+    .find('[ariaLabel="Function name"]')
     .clear()
     .type(functionName);
 

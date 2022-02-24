@@ -26,7 +26,7 @@ context('Test Roles', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Role name"]:visible', { log: false })
+      .find('[ariaLabel="Role name"]:visible', { log: false })
       .type(ROLE_NAME)
       .click();
 

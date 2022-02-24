@@ -40,7 +40,7 @@ context('Test Jobs', () => {
 
     // job name
     cy.getIframeBody()
-      .find('[placeholder="Job name"]:visible')
+      .find('[ariaLabel="Job name"]:visible')
       .clear()
       .type(JOB_NAME);
 

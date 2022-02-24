@@ -23,7 +23,7 @@ context('Test OAuth2 Clients', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="OAuth2 Client name"]')
+      .find('[ariaLabel="OAuth2 Client name"]')
       .clear()
       .type(CLIENT_NAME);
 
