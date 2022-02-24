@@ -169,10 +169,8 @@ export function A({ resource }) {
 
 function AB({ resource }) {
   const ref = useRef();
-  const [a, done] = useRelatedResources(resource, ref);
-  console.log('ab', done);
-  console.log(ref);
-  return done && <ABC ref={ref} resource={resource} a={a} />;
+  const [a] = useRelatedResources(resource, ref);
+  return <ABC ref={ref} resource={resource} a={a} />;
 }
 
 const ABC = forwardRef(({ resource, a }, ref) => {
