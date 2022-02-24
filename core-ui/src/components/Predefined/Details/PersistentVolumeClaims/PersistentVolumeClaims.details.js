@@ -16,7 +16,7 @@ import { RelatedPods } from 'shared/components/RelatedPods';
 import { ComponentForList } from 'shared/getComponents';
 import { Selector } from 'shared/components/Selector/Selector';
 
-export const RelatedVolumes = ({ labelSelector }) => {
+const RelatedVolumes = ({ labelSelector }) => {
   const podListParams = {
     hasDetailsView: true,
     fixedPath: true,

@@ -27,9 +27,11 @@ export const AuthorizationPoliciesDetails = ({
     const { t } = useTranslation();
     return (
       <Selector
-        resource={policy}
-        labels={policy.spec.selector?.matchLabels}
+        namespace={policy.metadata.namespace}
+        labels={policy.spec?.selector?.matchLabels}
         title={t('selector.title')}
+        isIstioSelector
+        selector={policy.spec?.selector}
       />
     );
   };

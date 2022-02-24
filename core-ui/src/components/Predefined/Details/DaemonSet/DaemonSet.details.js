@@ -87,14 +87,14 @@ export const DaemonSetsDetails = ({ DefaultRenderer, ...otherParams }) => {
     },
   ];
 
-  const MatchSelector = daemonSet => {
+  const MatchSelector = daemonSet => (
     <Selector
       namespace={daemonSet.metadata.namespace}
       labels={daemonSet.spec?.selector?.matchLabels}
       expressions={daemonSet.spec?.selector?.matchExpressions}
       selector={daemonSet.spec?.selector}
-    />;
-  };
+    />
+  );
 
   return (
     <DefaultRenderer

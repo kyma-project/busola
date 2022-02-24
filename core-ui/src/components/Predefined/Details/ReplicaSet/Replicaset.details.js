@@ -58,14 +58,14 @@ export const ReplicasetsDetails = ({ DefaultRenderer, ...otherParams }) => {
     },
   ];
 
-  const MatchSelector = replicaset => {
+  const MatchSelector = replicaset => (
     <Selector
       namespace={replicaset.metadata.namespace}
       labels={replicaset.spec?.selector?.matchLabels}
       expressions={replicaset.spec?.selector?.matchExpressions}
       selector={replicaset.spec?.selector}
-    />;
-  };
+    />
+  );
 
   return (
     <DefaultRenderer

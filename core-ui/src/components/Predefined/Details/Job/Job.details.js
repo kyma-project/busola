@@ -62,15 +62,14 @@ export function JobsDetails({ DefaultRenderer, ...otherParams }) {
     />
   );
 
-  const MatchSelector = job => {
+  const MatchSelector = job => (
     <Selector
       namespace={job.metadata.namespace}
       labels={job.spec?.selector?.matchLabels}
       expressions={job.spec?.selector?.matchExpressions}
       selector={job.spec?.selector}
-    />;
-  };
-
+    />
+  );
   const customComponents = [JobConditions, MatchSelector, Events];
 
   return (

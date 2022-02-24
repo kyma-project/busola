@@ -6,8 +6,9 @@ import { LayoutPanel } from 'fundamental-react';
 import './Selector.scss';
 import { RelatedPods } from '../RelatedPods';
 import { MatchExpressionsList } from '../MatchExpressionsList';
+import { isEmpty } from 'lodash';
 
-const SelectorParameters = ({
+const SelectorDetails = ({
   expressions,
   labels,
   namespace,
@@ -44,16 +45,18 @@ export const Selector = ({
   isIstioSelector,
 }) => {
   const { t } = useTranslation();
+  // when k8s selector is null it matches all
+  // if it's null it doesn't
+  // istio selector works conversely
 
   if (!isIstioSelector && !selector) {
-    // when k8s selector is null it matches all
-    // if it's null it doesn't
-    // istio selector works conversely
     return null;
   }
 
-  const isSelectorEmpty =
-    (!labels && !expressions) || (isIstioSelector && !selector);
+  const isSelectorDefinedOrEmpty =
+    (!labels && !expressions) || (!selector && isIstioSelector);
+
+  const selectorLabels = !isEmpty(labels) ? labels : null;
 
   return (
     <LayoutPanel className="fd-margin--md" key="workload-selector">
@@ -62,17 +65,17 @@ export const Selector = ({
           title={title || t('selector.title')}
           className="header"
         />
-        {labels ? <Labels labels={labels} /> : null}
+        {selectorLabels ? <Labels labels={selectorLabels} /> : null}
       </LayoutPanel.Header>
-      {isSelectorEmpty ? (
+      {isSelectorDefinedOrEmpty ? (
         <LayoutPanel.Body>
           <p>{message || t('selector.message.empty-selector')}</p>
         </LayoutPanel.Body>
       ) : (
-        <SelectorParameters
+        <SelectorDetails
           expressions={expressions}
           namespace={namespace}
-          labels={labels}
+          labels={selectorLabels}
           RelatedResources={RelatedResources}
         />
       )}

@@ -22,15 +22,14 @@ export function StatefulSetsDetails({ DefaultRenderer, ...otherParams }) {
     },
   ];
 
-  const MatchSelector = statefulset => {
+  const MatchSelector = statefulset => (
     <Selector
       namespace={statefulset.metadata.namespace}
       labels={statefulset.spec?.selector?.matchLabels}
       selector={statefulset.spec?.selector}
       expressions={statefulset.spec?.selector?.matchExpressions}
-    />;
-  };
-
+    />
+  );
   return (
     <DefaultRenderer
       customColumns={customColumns}

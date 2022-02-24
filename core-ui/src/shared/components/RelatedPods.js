@@ -1,7 +1,7 @@
 import React from 'react';
 import { ComponentForList } from 'shared/getComponents';
 
-export const RelatedPods = ({ namespace, labelSelector }) => {
+export const RelatedPods = ({ namespace = '', labelSelector }) => {
   const podListParams = {
     hasDetailsView: true,
     fixedPath: true,

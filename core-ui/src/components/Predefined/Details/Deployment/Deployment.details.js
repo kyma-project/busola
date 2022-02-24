@@ -21,14 +21,14 @@ export const DeploymentsDetails = ({ DefaultRenderer, ...otherParams }) => {
     },
   ];
 
-  const MatchSelector = deployment => {
+  const MatchSelector = deployment => (
     <Selector
       namespace={deployment.metadata.namespace}
       labels={deployment.spec?.selector?.matchLabels}
       expressions={deployment?.spec.selector?.matchExpressions}
       selector={deployment.spec?.selector}
-    />;
-  };
+    />
+  );
 
   return (
     <DefaultRenderer
