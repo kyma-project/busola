@@ -25,7 +25,7 @@ context('Test DNS Providers', () => {
 
     // type
     cy.getIframeBody()
-      .contains('Choose Provider Type')
+      .contains('Choose Provider type')
       .filter(':visible', { log: false })
       .click();
     cy.getIframeBody()

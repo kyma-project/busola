@@ -101,7 +101,7 @@ context('Test reduced permissions', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Service Account name"]:visible')
+      .find('[ariaLabel="Service Account name"]:visible')
       .type(SA_NAME);
 
     cy.getIframeBody()

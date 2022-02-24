@@ -61,7 +61,7 @@ context('Test Cron Jobs', () => {
       .type('ls -la');
 
     cy.getIframeBody()
-      .find('[placeholder="Container name"]')
+      .find('[ariaLabel="Container name"]')
       .clear()
       .type('test-container');
 
@@ -134,7 +134,7 @@ context('Test Cron Jobs', () => {
       .type('ls');
 
     cy.getIframeBody()
-      .find('[placeholder="Container name"]')
+      .find('[ariaLabel="Container name"]')
       .clear()
       .type('test-busybox');
 

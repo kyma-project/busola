@@ -152,6 +152,7 @@ const OAuth2ClientsCreate = ({
           typeof value === 'string' ? value.split(' ') : value
         }
         customFormatFn={arr => arr.join(' ')}
+        ariaLabel="OAuth2 scope"
       />
       <TextArrayInput
         advanced

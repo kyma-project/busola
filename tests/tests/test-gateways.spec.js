@@ -46,17 +46,17 @@ context('Test Gateways', () => {
 
     // server name
     cy.getIframeBody()
-      .find('[placeholder^="Enter the name"]:visible', { log: false })
+      .find('[ariaLabel^="Port name"]:visible', { log: false })
       .type(SERVER_NAME);
 
     // hosts
     cy.getIframeBody()
-      .find('[placeholder^="Enter the hosts"]:visible', { log: false })
+      .find('[ariaLabel^="Host"]:visible', { log: false })
       .type('example.com{downarrow}*.example.com');
 
     // server target port
     cy.getIframeBody()
-      .find('[placeholder^="Enter the target port"]:visible', { log: false })
+      .find('[placeholder^="Target port"]:visible', { log: false })
       .type(TARGET_PORT);
 
     // create
