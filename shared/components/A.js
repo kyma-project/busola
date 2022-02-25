@@ -5,7 +5,8 @@ import React, {
   useImperativeHandle,
 } from 'react';
 import LuigiClient from '@luigi-project/client';
-import { relations, useRelatedResources } from './useRelatedResources';
+import { useRelatedResources } from './useRelatedResources';
+import { relations } from './relations';
 
 import ReactFlow, {
   removeElements,
