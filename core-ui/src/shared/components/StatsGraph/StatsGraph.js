@@ -6,7 +6,7 @@ import { getSIPrefix } from 'shared/helpers/siPrefixes';
 import './StatsGraph.scss';
 
 const CANVAS_SCALE = 2;
-const STATS_RATIO = 1 / 3;
+const STATS_RATIO = 1 / 6;
 const PADDING = 5;
 
 function getGeometry(ctx, { scale, hScale, dataPoints }) {
