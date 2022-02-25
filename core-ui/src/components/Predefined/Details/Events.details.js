@@ -106,6 +106,7 @@ export const EventsDetails = ({ DefaultRenderer, ...otherParams }) => {
     <DefaultRenderer
       customComponents={[Message]}
       customColumns={customColumns}
+      resourceGraphProps={{ enabled: false }}
       {...otherParams}
       readOnly={true}
     ></DefaultRenderer>

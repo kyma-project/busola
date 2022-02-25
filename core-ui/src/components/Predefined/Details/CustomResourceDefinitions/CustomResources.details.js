@@ -90,6 +90,7 @@ export function CustomResource({ params }) {
       breadcrumbs={breadcrumbs}
       customComponents={[AdditionalPrinterColumns]}
       i18n={i18n}
+      resourceGraphProps={{ enabled: false }}
     />
   );
 }

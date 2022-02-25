@@ -112,6 +112,7 @@ export const CustomResourceDefinitionsDetails = ({
         },
       ]}
       {...otherParams}
+      resourceGraphProps={{ enabled: false }}
     />
   );
 };

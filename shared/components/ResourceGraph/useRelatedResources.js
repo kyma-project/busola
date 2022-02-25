@@ -1,11 +1,11 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import pluralize from 'pluralize';
-import { useMicrofrontendContext, useSingleGet } from '../index';
+import { useMicrofrontendContext, useSingleGet } from '../../';
 import { getApiPath } from './helpers';
 import { relations } from './relations';
 
 // BFS
-async function cycle(store, context) {
+async function cycle(store, depth, context) {
   const { fetch, namespaceNodes, clusterNodes, namespace, ref } = context;
   const kindsToHandle = Object.keys(store.current);
 
@@ -43,19 +43,20 @@ async function cycle(store, context) {
           kind: resource.kind,
         }));
       } catch (e) {
-        console.log(e);
+        console.warn(e);
       }
     }),
   );
 
   ref.current?.redraw();
-  if (resourcesToFetch.length) {
-    cycle(store, context);
+  if (resourcesToFetch.length && depth - 1 > 0) {
+    cycle(store, depth - 1, context);
   }
 }
 
-export function useRelatedResources(resource, ref) {
+export function useRelatedResources(resource, depth, ref) {
   const { namespaceNodes, clusterNodes } = useMicrofrontendContext();
+  const [startedLoading, setStartedLoading] = useState(false);
   const fetch = useSingleGet();
 
   const kind = resource.kind;
@@ -65,7 +66,7 @@ export function useRelatedResources(resource, ref) {
   useEffect(() => {
     const loadRelatedResources = async () => {
       store.current = { [kind]: [resource] };
-      await cycle(store, {
+      await cycle(store, depth, {
         fetch,
         namespaceNodes,
         clusterNodes,
@@ -73,8 +74,12 @@ export function useRelatedResources(resource, ref) {
         ref,
       });
     };
-    loadRelatedResources();
-  }, [kind, name, namespace]);
 
-  return [store];
+    if (startedLoading) {
+      loadRelatedResources();
+    }
+  }, [kind, name, namespace, startedLoading]);
+
+  const startLoading = () => setStartedLoading(true);
+  return [store, startedLoading, startLoading];
 }

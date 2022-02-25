@@ -7,22 +7,6 @@ function selectorMatches(originalSelector, selector) {
   return true;
 }
 
-const relations2 = {
-  'Pod/Deployment': {
-    firstBySecond: (pods, deployment) => pods,
-    secondByFirst: (deployments, pod) => deployments,
-  },
-  'Service/Deployment': {
-    firstBySecond: (services, deployment) => services,
-    secondByFirst: (deployments, service) => deployments,
-  },
-  'Pod/Secret': {
-    firstBySecond: (pods, secret) => pods,
-    secondByFirst: (secrets, service) => secrets,
-  },
-};
-
-///features?.API_GATEWAY?.isEnabled
 export const relations = {
   Deployment: [
     {
@@ -37,7 +21,7 @@ export const relations = {
     },
     {
       kind: 'Service',
-      label: 'Exposed by',
+      labelKey: 'resource-graph.relations.exposed-by',
       selectBy: (deployment, services) =>
         services.filter(service =>
           selectorMatches(
@@ -94,7 +78,7 @@ export const relations = {
   Service: [
     {
       kind: 'Deployment',
-      label: 'Exposes',
+      labelKey: 'resource-graph.relations.exposes',
       selectBy: (service, deployments) =>
         deployments.filter(deployment =>
           selectorMatches(
@@ -105,7 +89,7 @@ export const relations = {
     },
     {
       kind: 'APIRule',
-      label: 'Exposed by',
+      labelKey: 'resource-graph.relations.exposed-by',
       selectBy: (service, apiRules) =>
         apiRules.filter(
           apiRule => apiRule.spec.service.name === service.metadata.name,
@@ -124,7 +108,7 @@ export const relations = {
   APIRule: [
     {
       kind: 'Service',
-      label: 'Exposes',
+      labelKey: 'resource-graph.relations.exposes',
       selectBy: (apiRule, services) =>
         services.filter(svc => apiRule.spec.service.name === svc.metadata.name),
     },
