@@ -5,7 +5,7 @@ import {
   ButtonSegmented,
   BusyIndicator,
 } from 'fundamental-react';
-import { Dropdown } from 'react-shared';
+import { Dropdown, getErrorMessage } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
 import { usePrometheus } from 'shared/hooks/usePrometheus';
@@ -23,16 +23,19 @@ export function StatsPanel({ type, ...props }) {
   const [metric, setMetric] = useState('cpu');
   const { t } = useTranslation();
 
-  const { data, binary, unit, loading, startDate, endDate } = usePrometheus(
-    type,
-    metric,
-    {
-      items: 60,
-      timeSpan: timeSpans[timeSpan],
-      ...props,
-    },
-  );
-
+  const {
+    data,
+    binary,
+    unit,
+    loading,
+    startDate,
+    endDate,
+    error,
+  } = usePrometheus(type, metric, {
+    items: 60,
+    timeSpan: timeSpans[timeSpan],
+    ...props,
+  });
   return (
     <LayoutPanel className="fd-margin--md stats-panel">
       <LayoutPanel.Header>
@@ -66,15 +69,21 @@ export function StatsPanel({ type, ...props }) {
         </LayoutPanel.Actions>
       </LayoutPanel.Header>
       <LayoutPanel.Body>
-        <StatsGraph
-          className={metric}
-          data={data}
-          dataPoints={60}
-          binary={binary}
-          unit={unit}
-          startDate={startDate}
-          endDate={endDate}
-        />
+        {!error ? (
+          <StatsGraph
+            className={metric}
+            data={data}
+            dataPoints={60}
+            binary={binary}
+            unit={unit}
+            startDate={startDate}
+            endDate={endDate}
+          />
+        ) : (
+          <p className="error-message">
+            {getErrorMessage(error, t('components.error-panel.error'))}
+          </p>
+        )}
         <BusyIndicator className="throbber" show={loading} />
       </LayoutPanel.Body>
     </LayoutPanel>
