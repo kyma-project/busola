@@ -62,7 +62,7 @@ function getGeometry(ctx, { scale, hScale, dataPoints }) {
 function getScaleMax(data, binary = false) {
   if (!data.length) return { value: 1, precision: 0 };
 
-  let maxData = +data?.reduce((acc, val) => Math.max(acc, val));
+  let maxData = +data?.flat().reduce((acc, val) => Math.max(acc, val));
 
   if (!maxData) {
     return { value: 1, precision: 0 };
@@ -137,7 +137,7 @@ function getTimeScaleLabel(time) {
   });
 }
 
-function getTimeScale({ data, startDate, endDate }) {
+function getTimeScale({ startDate, endDate }) {
   const min = startDate.getTime();
   const max = endDate.getTime();
   const diff = max - min;
@@ -245,12 +245,24 @@ export function StatsGraph({
       const left =
         geometry.graph.left +
         geometry.sectionWidth * (dataOffset + index + 0.5);
-      const bottom = geometry.graph.top + geometry.graph.height;
-      const top = bottom - (value / scale.max) * geometry.graph.height;
-      return { value, left, bottom, top };
+      if (Array.isArray(value)) {
+        const bottom = geometry.graph.top + geometry.graph.height;
+        const bars = value.reduce(
+          (acc, val) => [
+            acc[0] - (value / scale.max) * geometry.graph.height,
+            ...acc,
+          ],
+          [bottom],
+        );
+        return { value, left, bars };
+      } else {
+        const bottom = geometry.graph.top + geometry.graph.height;
+        const top = bottom - (value / scale.max) * geometry.graph.height;
+        return { value, left, bars: [top, bottom] };
+      }
     });
 
-    dataWithGeometry.forEach(({ value, left, bottom, top }, index) => {
+    dataWithGeometry.forEach(({ value, left, bars }, index) => {
       if (activeBar !== null && index === activeBar - dataOffset) {
         if (highlightColor) {
           ctx.fillStyle = highlightColor;
@@ -258,20 +270,36 @@ export function StatsGraph({
           ctx.fillStyle = barColor || textColor;
           ctx.globalAlpha = 0.5;
         }
-        ctx.beginPath();
-        ctx.ellipse(left, top, halfBar * 1.5, halfBar * 1.5, 0, Math.PI, 0);
-        ctx.ellipse(left, bottom, halfBar * 1.5, halfBar * 1.5, 0, 0, Math.PI);
-        ctx.fill();
+
+        bars.reduce((top, bottom) => {
+          ctx.beginPath();
+          ctx.ellipse(left, top, halfBar * 1.5, halfBar * 1.5, 0, Math.PI, 0);
+          ctx.ellipse(
+            left,
+            bottom,
+            halfBar * 1.5,
+            halfBar * 1.5,
+            0,
+            0,
+            Math.PI,
+          );
+          ctx.fill();
+          return bottom;
+        });
         ctx.globalAlpha = 1;
       }
 
       ctx.fillStyle = barColor || textColor;
-      ctx.beginPath();
-      ctx.ellipse(left, top, halfBar, halfBar, 0, Math.PI, 0);
-      ctx.ellipse(left, bottom, halfBar, halfBar, 0, 0, Math.PI);
-      ctx.fill();
+      bars.reduce((top, bottom) => {
+        ctx.beginPath();
+        ctx.ellipse(left, top, halfBar, halfBar, 0, Math.PI, 0);
+        ctx.ellipse(left, bottom, halfBar, halfBar, 0, 0, Math.PI);
+        ctx.fill();
+        return bottom;
+      });
     });
 
+    /*
     dataWithGeometry.forEach(({ value, left, bottom, top }, index) => {
       if (activeBar !== null && index === activeBar - dataOffset) {
         const labelPadding = 2;
@@ -297,6 +325,7 @@ export function StatsGraph({
         ctx.fillText(labelContent, Math.round(left), Math.round(top));
       }
     });
+    */
   }, [textColor, barColor, canvas, data, width, height, activeBar]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const mousemove = e => {
