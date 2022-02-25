@@ -1544,7 +1544,6 @@ export function getStaticChildrenNodesForNamespace(
                     {
                       pathSegment: ':resourceName',
                       resourceType: 'customresource',
-                      navigationContext: 'customresource',
                       viewUrl:
                         config.coreUIModuleUrl +
                         '/CustomResourceDefinitions/:CustomResourceDefinitionName/:resourceVersion/:resourceName',
@@ -2067,7 +2066,6 @@ export function getStaticRootNodes(
                     {
                       pathSegment: ':resourceName',
                       resourceType: 'customresource',
-                      navigationContext: 'customresource',
                       viewUrl:
                         config.coreUIModuleUrl +
                         '/CustomResourceDefinitions/:CustomResourceDefinitionName/:resourceVersion/:resourceName',
