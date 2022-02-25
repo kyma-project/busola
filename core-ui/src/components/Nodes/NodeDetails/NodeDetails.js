@@ -1,4 +1,5 @@
 import React from 'react';
+import { useWindowTitle } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 import { Title } from 'fundamental-react';
 import { useNodeQuery } from '../nodeQueries';
@@ -13,6 +14,7 @@ import './NodeDetails.scss';
 export function NodeDetails({ nodeName }) {
   const { data, error, loading } = useNodeQuery(nodeName);
   const { t } = useTranslation();
+  useWindowTitle(t('nodes.title_details', { nodeName }));
 
   const filterByHost = e => e.source.host === nodeName;
   const Events = (

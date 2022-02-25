@@ -60,12 +60,22 @@ function navigateToNamespaceList() {
     .navigate('/');
 }
 
+function navigateToCustomResourceDefinitionsList() {
+  LuigiClient.linkManager()
+    .fromContext('customresourcedefinitions')
+    .navigate('/');
+}
+
 export function navigateToList(resourceType) {
   switch (resourceType) {
     case 'Namespaces':
       navigateToNamespaceList();
       break;
+    case 'CustomResourceDefinitions':
+      navigateToCustomResourceDefinitionsList();
+      break;
     default:
       navigateToResourceList();
+      break;
   }
 }

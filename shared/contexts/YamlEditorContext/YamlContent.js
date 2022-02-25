@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import jsyaml from 'js-yaml';
-import { ControlledEditor } from '@monaco-editor/react';
+import MonacoEditor from '@monaco-editor/react';
 import { EditorActions } from './EditorActions';
 
 import { useTheme } from '../ThemeContext';
@@ -40,13 +40,13 @@ export function YamlContent({
         i18n={i18n}
       />
       <ErrorBoundary i18n={i18n}>
-        <ControlledEditor
+        <MonacoEditor
           height="85vh"
           language="yaml"
           theme={editorTheme}
           value={val}
-          onChange={(_, text) => setChangedYamlFn(text)}
-          editorDidMount={(_, editor) => setEditor(editor)}
+          onChange={text => setChangedYamlFn(text)}
+          onMount={editor => setEditor(editor)}
           options={{
             minimap: { enabled: false },
             readOnly,

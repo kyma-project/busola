@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes, useParams } from 'react-router-dom';
 
 import ServiceClassList from '../ServiceClassList/ServiceClassList';
 import {
@@ -11,9 +11,9 @@ import ServiceInstancesList from '../ServiceInstanceList/ServiceInstanceList';
 import ServiceInstancesDetails from '../ServiceInstanceDetails/ServiceInstanceDetails';
 import {
   NotificationProvider,
-  withTitle,
   MainFrameRedirection,
   useMicrofrontendContext,
+  WithTitle,
 } from 'react-shared';
 
 import { CATALOG_TITLE, INSTANCES_TITLE } from '../../shared/constants';
@@ -26,49 +26,69 @@ const App = () => {
   }, [language, i18n]);
   return (
     <NotificationProvider>
-      <Switch>
-        <Route path="/preload" component={() => null} />
-
+      <Routes>
         <Route
           exact
           path="/catalog"
-          render={withTitle(CATALOG_TITLE, ServiceClassList)}
+          element={
+            <WithTitle title={CATALOG_TITLE}>
+              <ServiceClassList />
+            </WithTitle>
+          }
         />
 
         <Route
           exact
           path="/catalog/ServiceClass/:name"
-          render={withTitle(CATALOG_TITLE, RoutedServiceClassDetails)}
+          element={
+            <WithTitle title={CATALOG_TITLE}>
+              <RoutedServiceClassDetails />
+            </WithTitle>
+          }
         />
 
         <Route
           exact
           path="/catalog/ClusterServiceClass/:name"
-          render={withTitle(CATALOG_TITLE, RoutedClusterServiceClassDetails)}
+          element={
+            <WithTitle title={CATALOG_TITLE}>
+              <RoutedClusterServiceClassDetails />
+            </WithTitle>
+          }
         />
 
         <Route
           exact
           path="/instances"
-          render={withTitle(INSTANCES_TITLE, ServiceInstancesList)}
+          element={
+            <WithTitle title={INSTANCES_TITLE}>
+              <ServiceInstancesList />
+            </WithTitle>
+          }
         />
         <Route
           exact
           path="/instances/details/:name"
-          render={withTitle(INSTANCES_TITLE, ServiceInstancesDetails)}
+          element={
+            <WithTitle title={INSTANCES_TITLE}>
+              <ServiceInstancesDetails />
+            </WithTitle>
+          }
         />
-        <Route exact path="" component={MainFrameRedirection} />
-      </Switch>
+        <Route exact path="" element={<MainFrameRedirection />} />
+      </Routes>
     </NotificationProvider>
   );
 };
 
-const RoutedServiceClassDetails = ({ match }) => (
-  <ServiceClassDetailsContainer name={match.params.name} />
-);
+const RoutedServiceClassDetails = () => {
+  const { name } = useParams();
+  return <ServiceClassDetailsContainer name={name} />;
+};
 
-const RoutedClusterServiceClassDetails = ({ match }) => (
-  <ClusterServiceClassDetailsContainer name={match.params.name} />
-);
+const RoutedClusterServiceClassDetails = () => {
+  const { name } = useParams();
+  return <ClusterServiceClassDetailsContainer name={name} />;
+};
 
 export default App;
