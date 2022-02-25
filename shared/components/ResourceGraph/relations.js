@@ -123,15 +123,6 @@ export const relations = {
           ),
         ),
     },
-    // {
-    //   kind: 'Secret',
-    //   selectBy: (functión, secrets) =>
-    //     secrets.filter(secret =>
-    //       functión.spec.env.find(
-    //         e => e.valueFrom?.secretKeyRef?.name === secret.metadata.name,
-    //       ),
-    //     ),
-    // },
   ],
   HorizontalPodAutoscaler: [
     {
@@ -145,15 +136,6 @@ export const relations = {
     },
   ],
   Secret: [
-    // {
-    //   kind: 'Function',
-    //   selectBy: (secret, functions) =>
-    //     functions.filter(f =>
-    //       f.spec.env.find(
-    //         e => e.valueFrom?.secretKeyRef?.name === secret.metadata.name,
-    //       ),
-    //     ),
-    // },
     {
       kind: 'Pod',
       selectBy: (secret, pods) =>
