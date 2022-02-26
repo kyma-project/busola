@@ -23,5 +23,8 @@
     &.network-down {
       --bar-color: var(--sapIndicationColor_4);
     }
+    &.network {
+      --bar-color: var(--sapIndicationColor_5) var(--sapIndicationColor_4);
+    }
   }
 }
