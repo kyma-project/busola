@@ -1,6 +1,7 @@
 import React from 'react';
 import { useMicrofrontendContext } from '../../contexts/MicrofrontendContext';
 import { useFetch } from './useFetch';
+import { getFullLine, applyUpdate } from './useWatchHelpers';
 
 // allow <n> consecutive requests to fail before displaying error
 const ERROR_TOLERANCY = 2;
@@ -100,7 +101,11 @@ const useGetHook = processDataFn =>
     };
   };
 
-export const useGetStream = path => {
+export const useGetStream = (
+  path,
+  options = { skip: false, restart: true },
+) => {
+  const { skip, restart } = options;
   const lastAuthData = React.useRef(null);
   const initialPath = React.useRef(true);
   const timeoutRef = React.useRef();
@@ -126,12 +131,14 @@ export const useGetStream = path => {
     if (!authData) return;
 
     try {
-      // browsers close the connection after a minute (only on a cluster!), erroring with:
-      // FF: TypeError: Error in body stream
-      // Chrome: TypeError: network error
-      // Safari: The operation couldn’t be completed. (kCFErrorDomainCFNetwork error 303.)
-      // reset the connection a little before
-      timeoutRef.current = setTimeout(refetchData, 55 * 1000);
+      if (restart) {
+        // sometimes server closes the connection after a minute (only on a cluster!), erroring with:
+        // FF: TypeError: Error in body stream
+        // Chrome: TypeError: network error
+        // Safari: The operation couldn’t be completed. (kCFErrorDomainCFNetwork error 303.)
+        // reset the connection a little before
+        timeoutRef.current = setTimeout(refetchData, 55 * 1000);
+      }
       const response = await fetch({
         relativeUrl: path,
         abortController: abortController.current,
@@ -139,31 +146,24 @@ export const useGetStream = path => {
       if (!authData) return;
       readerRef.current = response.body.getReader();
 
-      return new ReadableStream({
-        start(streamController) {
-          const push = async () => {
-            try {
-              const { done, value } = await readerRef.current.read();
-              // If there is no more data to read
-              if (done) {
-                streamController.close();
-                cancelReader();
-                return;
-              }
+      const push = async () => {
+        try {
+          const { done, value } = await readerRef.current.read();
+          // If there is no more data to read
+          if (done) {
+            cancelReader();
+            return;
+          }
 
-              // Get the data and send it to the browser via the controller
-              streamController.enqueue(value);
+          // Get the data and send it to the browser via the controller
+          processData(value);
 
-              processData(value);
-
-              return push();
-            } catch (e) {
-              processError(e);
-            }
-          };
-          push();
-        },
-      });
+          return push();
+        } catch (e) {
+          processError(e);
+        }
+      };
+      await push();
     } catch (e) {
       if (!e.toString().includes('abort')) processError(e);
     }
@@ -202,14 +202,17 @@ export const useGetStream = path => {
   };
 
   React.useEffect(() => {
+    if (skip) return;
     if (initialPath.current) {
       initialPath.current = false;
       return;
     }
+
     // without this logs are duplicated
     setData([]);
     refetchData();
-  }, [path]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [skip, path]);
 
   React.useEffect(_ => {
     cancelOldData();
@@ -219,6 +222,7 @@ export const useGetStream = path => {
   }, []);
 
   React.useEffect(() => {
+    if (skip) return;
     if (
       authData &&
       JSON.stringify(lastAuthData.current) != JSON.stringify(authData)
@@ -226,7 +230,8 @@ export const useGetStream = path => {
       lastAuthData.current = authData;
       refetchData();
     }
-  }, [authData]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [skip, authData]);
 
   return {
     data,
@@ -272,4 +277,60 @@ function handleSingleDataReceived(newData, oldData, setDataFn) {
 export const useSingleGet = () => {
   const fetch = useFetch();
   return url => fetch({ relativeUrl: url });
+};
+
+export const useWatchList = (path, filter) => {
+  // TODO check useGet: how it behaves on error, does it repeat the query
+  const { data: initialData, error: errorFetch, loading } = useGet(path);
+  const rv = initialData?.metadata?.resourceVersion;
+  const incompleteLine = React.useRef(null);
+
+  const { data: updates, error: errorWatch } = useGetStream(
+    `${path}${path.includes('?') ? '&' : '?'}watch=true&resourceVersion=${
+      rv ? rv : ''
+    }`,
+    {
+      skip: !rv,
+      restart: false,
+    },
+  );
+
+  const [list, setList] = React.useState();
+  React.useEffect(() => {
+    if (initialData) {
+      const items = filter
+        ? [...initialData.items].filter(filter)
+        : [...initialData.items];
+      setList([...items]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialData, setList]);
+
+  ///   // the good stuff
+  const [upIdx, setUpIdx] = React.useState(0);
+  const applyNextUpdate = () => {
+    if (updates.length > upIdx) {
+      if (incompleteLine.current)
+        console.warn('full ref: ', incompleteLine.current);
+
+      const completeLine = getFullLine(updates, upIdx, incompleteLine);
+      if (completeLine) {
+        applyUpdate(list, setList, completeLine);
+      } else {
+        //TODO verify if incomplete chunks are served correctly
+        console.warn(
+          'incomplete chunk received, waiting for a completion from the server',
+        );
+      }
+      setUpIdx(upIdx + 1);
+    }
+  };
+
+  React.useEffect(() => {
+    applyNextUpdate();
+    //upIdx dependency fires it "recursively" as it updates upIdx when needed
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [upIdx, updates.length]);
+
+  return { data: list, error: errorFetch || errorWatch, loading };
 };

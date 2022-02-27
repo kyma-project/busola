@@ -12,7 +12,7 @@ import {
   Labels,
   useYamlEditor,
   useNotification,
-  useGetList,
+  useWatchList,
   useUpdate,
   PageHeader,
   navigateToDetails,
@@ -142,9 +142,10 @@ function Resources({
   const notification = useNotification();
   const updateResourceMutation = useUpdate(resourceUrl);
 
-  const { loading = true, error, data: resources, silentRefetch } = useGetList(
+  const { loading = true, error, data: resources } = useWatchList(
+    resourceUrl,
     filter,
-  )(resourceUrl, { pollingInterval: 3000, skip: skipDataLoading });
+  );
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => closeEditor(), [namespace]);
@@ -164,7 +165,6 @@ function Resources({
       const url =
         withoutQueryString(resourceUrl) + '/' + resourceData.metadata.name;
       await updateResourceMutation(url, diff);
-      silentRefetch();
       notification.notifySuccess({
         content: t('components.resources-list.messages.update.success', {
           resourceType: prettifiedResourceName,
@@ -318,7 +318,6 @@ function Resources({
               resourceType={resourceType}
               resourceUrl={resourceUrl}
               namespace={namespace}
-              refetchList={silentRefetch}
               {...props}
               {...createFormProps}
             />
