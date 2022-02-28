@@ -544,9 +544,9 @@ common:
     duplicate-key: Duplicate key
     error: Error
     hide: Hide Read-Only Fields
-    k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' (e.g.: 'my-name1')."
+    k8s-name-input: 'Name must consist of lowercase alphanumeric characters, can contain ''-'' (e.g.: ''my-name1'').'
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
-    key-value: key-value, must start and end with an alphanumeric character, can contain '-', '_' or '.'.
+    key-value: Key and value must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     read-file: Read file content as a single value, with file name as a key.
     resource-ref-name: Unique name within a Namespace to refer to a {{resource}} resource.
     resource-ref-namespace: Namespace defines the space within which the {{resource}} name must be unique.
@@ -560,8 +560,6 @@ common:
     value: Value must start and end with an alphanumeric character, can contain '-', '_' or '.'.
   'yes': 'yes'
 components:
-  k8s-name-input:
-    aria-label: '{{resourceType}} name'
   dropdown:
     empty-list: No resources available
   error-panel:
@@ -578,6 +576,8 @@ components:
     messages:
       no-search-results: Couldn't find resources matching this query.
       not-found: No entries found
+  k8s-name-input:
+    aria-label: '{{resourceType}} name'
   key-value-field:
     enter-key: Enter key
     enter-value: Enter value
@@ -1358,7 +1358,7 @@ jobs:
     complete: Job completed
     not-complete: Job in progress
 kubeconfig-id:
-  error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})"
+  error: 'Couldn''t load kubeconfig ID; configuration not changed (Error: ${{error}})'
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
 legal:
   copyright: Copyright
