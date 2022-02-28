@@ -11,6 +11,7 @@
   }
 
   .stats-graph {
+    aspect-ratio: 6/1;
     &.cpu {
       --bar-color: var(--sapIndicationColor_7);
     }
