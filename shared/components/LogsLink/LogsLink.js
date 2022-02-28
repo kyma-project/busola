@@ -39,7 +39,7 @@ export const LogsLink = ({
   if (error) {
     return (
       <Tooltip
-        className={classNames('logs-link', className)}
+        className={classNames('logs-link', 'invalid', className)}
         content={t('grafana.not-exposed')}
         delay={0}
       >
@@ -52,7 +52,7 @@ export const LogsLink = ({
   if (!domain) {
     return (
       <Tooltip
-        className={classNames('logs-link', className)}
+        className={classNames('logs-link', 'invalid', className)}
         content={t('grafana.missing-domain')}
         delay={0}
       >
