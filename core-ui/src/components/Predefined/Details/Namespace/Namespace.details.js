@@ -91,7 +91,6 @@ export const NamespacesDetails = ({ DefaultRenderer, ...otherParams }) => {
       windowTitle={t('namespaces.overview.title')}
       customColumns={customColumns}
       headerActions={headerActions}
-      grafanaQuery={`{namespace="${otherParams.resourceName}"}`}
     >
       <div className="panel-grid">
         <NamespaceWorkloads namespace={otherParams.resourceName} />

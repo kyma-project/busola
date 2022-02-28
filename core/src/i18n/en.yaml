@@ -1165,6 +1165,7 @@ grafana:
   logs: Logs
   missing-domain: Grafana service does not have a host defined
   not-exposed: Grafana service is not exposed
+  open-in-grafana: Open in Grafana
   unavailable: No logs
 graphs:
   cpu: CPU

@@ -125,7 +125,6 @@ function Resource({
   customColumns,
   customComponents,
   editActionLabel,
-  grafanaQuery,
   headerActions,
   i18n,
   namespace,
@@ -167,20 +166,6 @@ function Resource({
   ];
 
   const protectedResource = isProtected(resource);
-
-  const grafanaLogsAction = () => {
-    if (grafanaQuery) {
-      return (
-        <LogsLink
-          className="fd-margin-end--tiny"
-          i18n={i18n}
-          query={grafanaQuery}
-        />
-      );
-    } else {
-      return null;
-    }
-  };
 
   const editAction = () => {
     if (protectedResource) {
@@ -243,7 +228,6 @@ function Resource({
   const actions = readOnly ? null : (
     <>
       {protectedResourceWarning(resource)}
-      {grafanaLogsAction()}
       {editAction()}
       {headerActions}
       {resourceHeaderActions.map(resourceAction => resourceAction(resource))}

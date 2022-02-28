@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { BusyIndicator, MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
-import { Link, useGet, Tooltip } from '../..';
+import { useMicrofrontendContext, Link, useGet, Tooltip } from '../..';
 import './LogsLink.scss';
 
 export const LogsLink = ({
@@ -14,11 +14,18 @@ export const LogsLink = ({
   to = 'now',
   dataSource = 'Loki',
   i18n,
+  children,
 }) => {
+  const { features } = useMicrofrontendContext();
   const { data, loading, error } = useGet(
     '/apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/monitoring-grafana',
   );
   const { t } = useTranslation(null, { i18n });
+
+  console.log(features);
+  if (!features.OBSERVABILITY?.isEnabled) {
+    return null;
+  }
 
   if (loading) {
     return (
@@ -65,7 +72,7 @@ export const LogsLink = ({
     <Link
       className={classNames('logs-link', 'fd-button', className)}
       url={grafanaLink}
-      text={t('grafana.logs')}
+      text={children || t('grafana.logs')}
       disabled
     />
   );
