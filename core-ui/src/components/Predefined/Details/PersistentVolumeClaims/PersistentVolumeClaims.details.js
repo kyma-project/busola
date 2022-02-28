@@ -6,52 +6,49 @@ import { filterByResource } from 'hooks/useMessageList';
 
 import {
   EMPTY_TEXT_PLACEHOLDER,
-  GenericList,
   navigateToClusterResourceDetails,
-  Labels,
   useGetList,
 } from 'react-shared';
 import { LayoutPanel, Link } from 'fundamental-react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { Tokens } from 'shared/components/Tokens';
 import { RelatedPods } from 'shared/components/RelatedPods';
+import { ComponentForList } from 'shared/getComponents';
+import { Selector } from 'shared/components/Selector/Selector';
 
-const PVCSelectorSpecification = pvc => {
-  const { t, i18n } = useTranslation();
-  const headerRenderer = () => [
-    t('persistent-volume-claims.headers.key'),
-    t('persistent-volume-claims.headers.operator'),
-    t('persistent-volume-claims.headers.values'),
-  ];
+const RelatedVolumes = ({ labelSelector }) => {
+  const podListParams = {
+    hasDetailsView: true,
+    fixedPath: true,
+    resourceUrl: `/api/v1/persistentvolumes?labelSelector=${labelSelector}`,
+    resourceType: 'persistentVolumes',
+    isCompact: true,
+    showTitle: true,
+  };
 
-  const rowRenderer = ({ key = '', operator = '', values = [] }) => [
-    key,
-    operator,
-    <Tokens tokens={values} />,
-  ];
   return (
-    <>
-      <LayoutPanel className="fd-margin--md" key={'pvc-selector'}>
-        <LayoutPanel.Header>
-          <LayoutPanel.Head
-            title={t('persistent-volume-claims.headers.match-labels')}
-          />
-        </LayoutPanel.Header>
-        <LayoutPanel.Body>
-          <Labels labels={pvc.spec?.selector?.matchLabels} />
-        </LayoutPanel.Body>
-      </LayoutPanel>
-      <GenericList
-        title={t('persistent-volume-claims.headers.match-expressions')}
-        entries={pvc.spec?.selector?.matchExpressions || []}
-        headerRenderer={headerRenderer}
-        rowRenderer={rowRenderer}
-        i18n={i18n}
-        showSearchField={false}
-      />
-    </>
+    <ComponentForList
+      name="persistentVolumesList"
+      params={podListParams}
+      key="pv-list"
+    />
   );
 };
+
+function PVCSelectorSpecification(pvc) {
+  const { t } = useTranslation();
+
+  return (
+    <Selector
+      namespace={pvc.metadata.namespace}
+      labels={pvc.spec.selector?.matchLabels}
+      expressions={pvc.spec.selector?.matchExpressions}
+      selector={pvc.spec?.selector}
+      message={t('persistent-volume-claims.message.empty-selector')}
+      RelatedResources={RelatedVolumes}
+    />
+  );
+}
 
 export const PVCConfiguration = pvc => {
   const { t } = useTranslation();
