@@ -36,7 +36,7 @@ context('Test OAuth2 Clients', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[ariaLabel="OAuth2 scope"]')
+      .find('[ariaLabel="OAuth2 Client scope"]')
       .first()
       .clear()
       .type('openid', {
