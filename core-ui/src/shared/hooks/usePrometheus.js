@@ -78,8 +78,6 @@ export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
     ([timestamp, value]) => value,
   );
 
-  const x = dataValues?.map(d => Number(d) / 6);
-
   return {
     data: dataValues,
     error,
