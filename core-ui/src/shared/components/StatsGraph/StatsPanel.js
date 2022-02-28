@@ -80,9 +80,9 @@ export function StatsPanel({ type, ...props }) {
             endDate={endDate}
           />
         ) : (
-          <p className="error-message">
-            {getErrorMessage(error, t('components.error-panel.error'))}
-          </p>
+          <div className="error-message">
+            <p>{getErrorMessage(error, t('components.error-panel.error'))}</p>
+          </div>
         )}
         <BusyIndicator className="throbber" show={loading} />
       </LayoutPanel.Body>

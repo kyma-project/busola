@@ -28,6 +28,13 @@
 }
 
 .error-message {
-  font-size: 18px;
+  display: flex;
+  aspect-ratio: 6/1;
+  flex-direction: column;
   text-align: center;
+  justify-content: center;
+
+  p {
+    font-size: 18px;
+  }
 }
