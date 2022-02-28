@@ -14,7 +14,7 @@ export const HostsForm = ({ server = {}, servers, setServers }) => {
     <TextArrayInput
       advanced
       required
-      ariaLabel="Host"
+      ariaLabel={t('gateways.aria-labels.host')}
       tooltipContent={t('gateways.create-modal.tooltips.hosts')}
       value={server.hosts || []}
       setValue={setValue}

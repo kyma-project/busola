@@ -59,7 +59,7 @@ export const PortsForm = ({ server = {}, servers, setServers }) => {
         label={t('gateways.create-modal.advanced.port.name')}
         propertyPath="$.port.name"
         input={Inputs.Text}
-        ariaLabel="Port name"
+        ariaLabel={t('gateways.aria-labels.port-name')}
       />
 
       <ResourceForm.FormField

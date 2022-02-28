@@ -98,7 +98,7 @@ context('Test Cluster Role Bindings', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[ariaLabel="User group"]')
+      .find('[ariaLabel="Group name"]')
       .clear()
       .type('test-group');
 

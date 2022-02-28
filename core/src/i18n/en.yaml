@@ -561,6 +561,8 @@ common:
     value: Value must start and end with an alphanumeric character, can contain '-', '_' or '.'.
   'yes': 'yes'
 components:
+  k8s-name-input:
+    aria-label: '{{resourceType}} name'
   dropdown:
     empty-list: No resources available
   error-panel:
@@ -1064,6 +1066,9 @@ functions:
       text: Warning
       variable-can-override-sbu: This variable can override or be overridden by a variable injected by one of the created Service Bindings.
 gateways:
+  aria-labels:
+    host: Host
+    port-name: Port name
   create-modal:
     advanced:
       add-server: Add server
@@ -1462,6 +1467,8 @@ nodes:
   title: Nodes
   title_details: Node {{nodeName}}
 oauth2-clients:
+  aria-labels:
+    scope: OAuth2 Client scope
   auth-methods:
     client_secret_basic: Client Secret / Basic
     client_secret_post: Client Secret / POST
@@ -1662,7 +1669,7 @@ role-bindings:
   create-modal:
     api-group: API Group
     at-least-one-subject-required: '{{resource}} must have at least one subject.'
-    group-name: Group Name
+    group-name: Group name
     kind: Kind
     role: Role
     subject: Subject

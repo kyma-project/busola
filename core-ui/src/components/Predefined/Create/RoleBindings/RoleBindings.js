@@ -90,7 +90,9 @@ export function RoleBindings({
         input={Inputs.Text}
         propertyPath="$.metadata.name"
         readOnly={!!initialRoleBinding}
-        ariaLabel={`${singularName} name`}
+        ariaLabel={t('components.k8s-name-input.aria-label', {
+          resourceType: singularName,
+        })}
       />
       <KeyValueField
         advanced

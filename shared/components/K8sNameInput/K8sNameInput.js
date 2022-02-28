@@ -49,7 +49,9 @@ export const K8sNameInput = ({
       id={id}
       value={value || defaultValue || ''}
       aria-required={required ? 'true' : 'false'}
-      ariaLabel={`${kind} name`}
+      ariaLabel={t('components.k8s-name-input.aria-label', {
+        resourceType: kind,
+      })}
       required={required}
       pattern={pattern}
       {...inputProps}
