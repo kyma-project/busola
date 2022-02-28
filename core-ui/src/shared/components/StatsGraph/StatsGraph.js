@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 
 import { getSIPrefix } from 'shared/helpers/siPrefixes';
@@ -62,11 +63,7 @@ function getGeometry(ctx, { scale, hScale, dataPoints }) {
 function getScaleMax(data, binary = false) {
   if (!data || !data.length) return { value: 1, precision: 0 };
 
-  let maxData = Math.max(
-    ...data.map(val =>
-      Array.isArray(val) ? val.reduce((a, b) => +a + +b) : +val,
-    ),
-  );
+  let maxData = Math.max(...data.map(val => val.reduce((a, b) => +a + +b)));
 
   if (!maxData) {
     return { value: 1, precision: 0 };
@@ -163,8 +160,13 @@ export function StatsGraph({
   binary,
   startDate,
   endDate,
+  labels,
+  displayTotal,
 }) {
   if (!data) data = [];
+  data = data.map(val => (Array.isArray(val) ? val : [val]));
+
+  const { t } = useTranslation();
 
   const [width, setWidth] = useState(300);
   const [height, setHeight] = useState(300 * STATS_RATIO);
@@ -309,32 +311,76 @@ export function StatsGraph({
       if (!Array.isArray(value)) {
         value = [value];
       }
-      const revValue = [...value];
-      revValue.reverse();
 
       if (activeBar !== null && index === activeBar - dataOffset) {
-        revValue.forEach((val, idx) => {
-          const labelPadding = 2;
-          const labelContent = getSIPrefix(val, binary, { unit }).string;
+        const labelPadding = 2;
+        let labelContent;
+        if (value.length === 1 && !labels?.[0]) {
+          labelContent = [getSIPrefix(value[0], binary, { unit }).string];
+        } else {
+          labelContent = value.map((val, idx) => {
+            const labelTitle = labels?.[idx] || idx + 1;
+            const labelValue = getSIPrefix(val, binary, { unit }).string;
+            return `${labelTitle}: ${labelValue}`;
+          });
+          if (displayTotal) {
+            const sum = value.reduce((a, b) => +a + +b);
+            const sumLabel = getSIPrefix(sum, binary, { unit }).string;
+            labelContent.push(`${t('graphs.total')}: ${sumLabel}`);
+          }
+        }
 
-          const labelWidth = ctx.measureText(labelContent).width;
-          const labelHeight = parseInt(ctx.font);
+        const labelWidth = Math.max(
+          ...labelContent.map(labelLine => ctx.measureText(labelLine).width),
+        );
+        const lineHeight = parseInt(ctx.font) * 1.2;
+        const labelHeight = lineHeight * labelContent.length;
 
-          ctx.strokeStyle = textColor;
-          ctx.fillStyle = tooltipColor;
-          const rectCoords = [
-            Math.round(left - labelWidth / 2 - labelPadding),
-            Math.round(bars[idx] - labelHeight - labelPadding),
-            Math.round(labelWidth + labelPadding * 2),
-            Math.round(labelHeight + labelPadding * 2),
-          ];
-          ctx.strokeRect(...rectCoords);
-          ctx.fillRect(...rectCoords);
+        const boxWidth = Math.round(labelWidth + labelPadding * 2);
+        const boxHeight = Math.round(labelHeight + labelPadding * 2);
 
-          ctx.fillStyle = textColor;
-          ctx.textBaseline = 'bottom';
-          ctx.textAlign = 'center';
-          ctx.fillText(labelContent, Math.round(left), Math.round(bars[idx]));
+        let top = bars[0];
+        let boxLeft = Math.round(left - boxWidth / 2);
+        let boxTop = Math.round(top - lineHeight - labelPadding);
+
+        if (boxTop < 0) {
+          const overflow = 2 - boxTop;
+          top += overflow;
+          boxTop += overflow;
+        }
+        if (boxLeft < geometry.graph.left) {
+          const overflow = geometry.graph.left + 2 - boxLeft;
+          left += overflow;
+          boxLeft += overflow;
+        }
+        if (boxLeft + boxWidth > width) {
+          const overflow = boxLeft + boxWidth - width + 2;
+          left -= overflow;
+          boxLeft -= overflow;
+        }
+        if (boxTop + boxHeight > geometry.graph.height) {
+          const overflow = boxTop + boxHeight - geometry.graph.height;
+          top -= overflow;
+          boxTop -= overflow;
+        }
+
+        const boxCoords = [boxLeft, boxTop, boxWidth, boxHeight];
+
+        ctx.strokeStyle = textColor;
+        ctx.strokeRect(...boxCoords);
+
+        ctx.fillStyle = tooltipColor;
+        ctx.fillRect(...boxCoords);
+
+        ctx.fillStyle = textColor;
+        ctx.textBaseline = 'bottom';
+        ctx.textAlign = 'center';
+        labelContent.forEach((labelLine, index) => {
+          ctx.fillText(
+            labelLine,
+            Math.round(left),
+            Math.round(top) + index * lineHeight,
+          );
         });
       }
     });

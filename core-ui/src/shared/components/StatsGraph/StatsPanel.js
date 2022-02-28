@@ -132,6 +132,7 @@ export function StatsPanel({ type, ...props }) {
             metric2={'network-down'}
             className={metric}
             timeSpan={timeSpans[timeSpan]}
+            labels={[t('graphs.network-up'), t('graphs.network-down')]}
           />
         )}
       </LayoutPanel.Body>
