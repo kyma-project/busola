@@ -4,6 +4,13 @@ import { useMicrofrontendContext, useSingleGet } from '../../';
 import { getApiPath } from './helpers';
 import { relations } from './relations';
 
+function getNamespacePart({ resourceToFetch, currentNamespace }) {
+  if (resourceToFetch.namespaced === false || !currentNamespace) {
+    return '';
+  }
+  return '/namespaces/' + currentNamespace;
+}
+
 // BFS
 async function cycle(store, depth, context) {
   const { fetch, namespaceNodes, clusterNodes, namespace, ref } = context;
@@ -13,14 +20,22 @@ async function cycle(store, depth, context) {
   for (const kind of kindsToHandle) {
     const rels = relations[kind];
 
-    for (const rel of rels) {
+    for (const rel of rels || []) {
       if (!store.current[rel.kind]) {
         const resourceType = pluralize(rel.kind.toLowerCase());
-        const apiPath = getApiPath(resourceType, namespaceNodes);
+        const apiPath = getApiPath(resourceType, [
+          ...namespaceNodes,
+          ...clusterNodes,
+        ]);
 
         if (apiPath) {
           if (!resourcesToFetch.find(r => r.kind === rel.kind)) {
-            resourcesToFetch.push({ kind: rel.kind, resourceType, apiPath });
+            resourcesToFetch.push({
+              kind: rel.kind,
+              namespaced: rel.namespaced,
+              resourceType,
+              apiPath,
+            });
           }
         }
       }
@@ -29,11 +44,14 @@ async function cycle(store, depth, context) {
 
   await Promise.all(
     resourcesToFetch.map(async resource => {
+      const namespacePart = getNamespacePart({
+        resourceToFetch: resource,
+        currentNamespace: namespace,
+      });
       try {
         const url =
           resource.apiPath +
-          '/namespaces/' +
-          namespace +
+          namespacePart +
           '/' +
           pluralize(resource.kind.toLowerCase());
 
@@ -78,7 +96,7 @@ export function useRelatedResources(resource, depth, ref) {
     if (startedLoading) {
       loadRelatedResources();
     }
-  }, [kind, name, namespace, startedLoading]);
+  }, [kind, name, namespace, startedLoading]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const startLoading = () => setStartedLoading(true);
   return [store, startedLoading, startLoading];

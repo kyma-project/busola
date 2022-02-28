@@ -1,0 +1,41 @@
+# [{
+#   "ClusterRole/ClusterRoleBinding": {
+#     "left": {
+#       "labelKey": "yadada"
+#     },
+#     "right": {
+#       "labelKey": "adaday"
+#     },
+#     "selector": {
+#       "type": "filter",
+#       "filter": {
+#         "$.roleRef.kind": "ClusterRole",
+#         "$.roleRef.name": "clusterRole.metadata.name"
+#       }
+#     }
+#   }
+# }
+
+# # clusterRole -> find attached CRB
+# # (clusterRole, crbs) => crbs.filter(jp(clusterRole, LEFT) == jp(crb, RIGHT))
+
+# # CRB -> find attached clusterRole
+# # (crb, clusterRoles) => clusterRoles.filter(jp(clusterRole, RIGHT) == jp(crb, LEFT))
+
+# {
+#   "APIRule/Gateway": {
+#     "left": {
+#       "labelKey": "yadada",
+#       "networkGraphSection": "APIRule",
+#       "statusPath": "$.spec.status"
+#     },
+#     "right": {
+#       "labelKey": "adaday",
+#       "namespaced": false,
+#       "networkGraphSection": "Gateway"
+#     },
+#     "selector": {
+#       "fn": "()"
+#     }
+#   }
+# }]

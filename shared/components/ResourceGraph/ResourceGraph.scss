@@ -3,7 +3,20 @@
   background: var(--sapNeutralBackground);
 }
 
-.resource-graph .fd-layout-panel__header {
-  display: flex;
-  justify-content: space-between;
+.resource-graph {
+  .fd-layout-panel__header {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .view-switcher {
+    width: 150px;
+    display: flex;
+  }
+
+  .view-switcher__tooltip {
+    display: flex !important;
+    justify-content: center;
+    flex-direction: column;
+  }
 }

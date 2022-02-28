@@ -4,6 +4,9 @@ import pluralize from 'pluralize';
 import { Icon, Link } from 'fundamental-react';
 import { relations } from './relations';
 
+export const GRAPH_TYPE_STRUCTURAL = 'STRUCTURAL';
+export const GRAPH_TYPE_NETWORK = 'NETWORK';
+
 function findIcon(resource, { nodeCategories, namespaceNodes }) {
   const resourceType = pluralize(resource.kind.toLowerCase());
 

@@ -8,6 +8,42 @@ function selectorMatches(originalSelector, selector) {
 }
 
 export const relations = {
+  ClusterRole: [
+    {
+      kind: 'ClusterRoleBinding',
+      namespaced: false,
+      selectBy: (clusterRole, crbs) =>
+        crbs.filter(
+          crb =>
+            crb.roleRef.kind === 'ClusterRole' &&
+            crb.roleRef.name === clusterRole.metadata.name,
+        ),
+    },
+  ],
+  ClusterRoleBinding: [
+    {
+      kind: 'ClusterRole',
+      namespaced: false,
+      selectBy: (crb, clusterRoles) =>
+        clusterRoles.filter(
+          clusterRole =>
+            crb.roleRef.kind === 'ClusterRole' &&
+            crb.roleRef.name === clusterRole.metadata.name,
+        ),
+    },
+    {
+      kind: 'ServiceAccount',
+      selectBy: (crb, serviceAccounts) =>
+        serviceAccounts.filter(sa =>
+          crb.subjects.find(
+            sub =>
+              sub.kind === 'ServiceAccount' &&
+              sub.name === sa.metadata.name &&
+              sub.namespace === sa.metadata.namespace,
+          ),
+        ),
+    },
+  ],
   Deployment: [
     {
       kind: 'Pod',
@@ -101,6 +137,21 @@ export const relations = {
         functions.filter(f =>
           service.metadata.ownerReferences?.some(
             oR => oR.kind === 'Function' && oR.name === f.metadata.name,
+          ),
+        ),
+    },
+  ],
+  ServiceAccount: [
+    {
+      kind: 'ClusterRoleBinding',
+      namespaced: false,
+      selectBy: (sa, crbs) =>
+        crbs.filter(crb =>
+          crb.subjects?.find(
+            sub =>
+              sub.kind === 'ServiceAccount' &&
+              sub.name === sa.metadata.name &&
+              sub.namespace === sa.metadata.namespace,
           ),
         ),
     },
