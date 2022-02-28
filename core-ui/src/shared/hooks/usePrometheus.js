@@ -3,9 +3,9 @@ import { useGet } from 'react-shared';
 
 export function prometheusSelector(type, data) {
   if (type === 'cluster') {
-    return `sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{cluster=""})`;
+    return `cluster="", container!=""`;
   } else if (type === 'pod') {
-    return `sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{cluster="", namespace="${data.namespace}", pod="${data.pod}"})`;
+    return `cluster="", container!="", namespace="${data.namespace}", pod="${data.pod}"`;
   } else {
     return '';
   }
@@ -15,11 +15,11 @@ export function getMetric(type, metric, { step, ...data }) {
   const selector = prometheusSelector(type, data);
   const metrics = {
     cpu: {
-      prometheusQuery: selector,
+      prometheusQuery: `sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{${selector}})`,
       unit: '',
     },
     memory: {
-      prometheusQuery: selector,
+      prometheusQuery: `sum(container_memory_rss{${selector}})`,
       binary: true,
       unit: 'B',
     },
@@ -77,6 +77,8 @@ export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
   let dataValues = data?.data.result[0]?.values.map(
     ([timestamp, value]) => value,
   );
+
+  const x = dataValues?.map(d => Number(d) / 6);
 
   return {
     data: dataValues,
