@@ -3,9 +3,9 @@ import { useGet } from 'react-shared';
 
 export function prometheusSelector(type, data) {
   if (type === 'cluster') {
-    return `container_name!="POD"`;
+    return `sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{cluster=""})`;
   } else if (type === 'pod') {
-    return `namespace="${data.namespace}",pod="${data.pod}"`;
+    return `sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{cluster="", namespace="${data.namespace}", pod="${data.pod}"})`;
   } else {
     return '';
   }
@@ -15,11 +15,11 @@ export function getMetric(type, metric, { step, ...data }) {
   const selector = prometheusSelector(type, data);
   const metrics = {
     cpu: {
-      prometheusQuery: `sum(rate(container_cpu_usage_seconds_total{${selector}}[${step}s]))`,
+      prometheusQuery: selector,
       unit: '',
     },
     memory: {
-      prometheusQuery: `sum(container_memory_working_set_bytes{${selector}})`,
+      prometheusQuery: selector,
       binary: true,
       unit: 'B',
     },
