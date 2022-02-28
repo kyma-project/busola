@@ -5,7 +5,6 @@ const fs = require('fs');
 const uuid = require('uuid').v4;
 import { handleDockerDesktopSubsitution } from './docker-desktop-substitution';
 import { filters } from './request-filters';
-import { pickBy } from 'lodash';
 
 const logger = require('pino-http')({
   autoLogging: process.env.NODE_ENV !== 'production', //to disable the automatic "request completed" and "request errored" logging.
@@ -96,14 +95,10 @@ export const handleRequest = async (req, res) => {
       return throwInternalServerError(
         'Response headers are potentially dangerous',
       );
-    res.writeHead(
-      k8sResponse.statusCode,
-      pickBy({
-        'Content-Type':
-          k8sResponse.headers['content-type'] || 'application/json',
-        'Content-Encoding': k8sResponse.headers['content-encoding'],
-      }),
-    );
+    res.writeHead(k8sResponse.statusCode, {
+      'Content-Type': k8sResponse.headers['content-type'] || 'application/json',
+      'Content-Encoding': k8sResponse.headers['content-encoding'] || '',
+    });
 
     k8sResponse.pipe(res);
   });
