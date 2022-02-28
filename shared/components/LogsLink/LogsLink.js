@@ -22,7 +22,6 @@ export const LogsLink = ({
   );
   const { t } = useTranslation(null, { i18n });
 
-  console.log(features);
   if (!features.OBSERVABILITY?.isEnabled) {
     return null;
   }

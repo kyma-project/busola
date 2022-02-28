@@ -1,5 +1,5 @@
 import React from 'react';
-import { ControlledBy, LogsLink, GenericList } from 'react-shared';
+import { ControlledBy, GenericList } from 'react-shared';
 
 import { PodStatus } from './PodStatus';
 import ContainersData from './ContainersData';
@@ -126,15 +126,6 @@ export const PodsDetails = ({ DefaultRenderer, ...otherParams }) => {
         Events,
       ]}
       customColumns={customColumns}
-      headerActions={[
-        <LogsLink
-          className="fd-margin-end--tiny"
-          i18n={i18n}
-          query={`{namespace="${otherParams.namespace}",pod="${otherParams.resourceName}"}`}
-        >
-          Logs
-        </LogsLink>,
-      ]}
       {...otherParams}
     ></DefaultRenderer>
   );
