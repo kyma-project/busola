@@ -1,6 +1,6 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
-import { Pagination, Spinner, ErrorPanel } from 'react-shared';
+import { Pagination, ErrorPanel } from 'react-shared';
 import { LayoutPanel, Link } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
@@ -9,6 +9,7 @@ import { NodeResources } from 'components/Nodes/NodeResources/NodeResources';
 import { EventsList } from 'shared/components/EventsList';
 import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 import { StatsPanel } from 'shared/components/StatsGraph/StatsPanel';
+import Skeleton from 'shared/components/Skeleton/Skeleton';
 
 import './ClusterNodes.scss';
 
@@ -42,7 +43,11 @@ export function ClusterNodes() {
 
   return (
     <>
-      {loading && <Spinner compact={true} />}
+      {loading && (
+        <div className="cluster-overview__nodes">
+          <Skeleton height="220px" />
+        </div>
+      )}
       {error && !nodes && (
         <ErrorPanel error={error} title="Metrics" i18n={i18n} />
       )}
