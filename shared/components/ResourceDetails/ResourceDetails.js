@@ -7,7 +7,6 @@ import { createPatch } from 'rfc6902';
 import {
   PageHeader,
   Labels,
-  LogsLink,
   ErrorBoundary,
   YamlEditorProvider,
   useGet,
@@ -28,7 +27,6 @@ import {
   useProtectedResources,
   useDeleteResource,
 } from '../../hooks';
-import { useConfig } from '../../contexts/ConfigContext';
 import { ModalWithForm } from '../ModalWithForm/ModalWithForm';
 
 ResourceDetails.propTypes = {
@@ -138,7 +136,6 @@ function Resource({
   windowTitle,
   resourceTitle,
 }) {
-  const { fromConfig } = useConfig();
   const { t } = useTranslation(['translation'], { i18n });
   useWindowTitle(
     windowTitle || resourceTitle || prettifyNamePlural(null, resourceType),
