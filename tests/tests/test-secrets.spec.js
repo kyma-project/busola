@@ -26,7 +26,7 @@ context('Test Secrets', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Secret name"]:visible')
+      .find('[ariaLabel="Secret name"]:visible')
       .type(SECRET_NAME);
 
     cy.getIframeBody()

@@ -23,7 +23,7 @@ context('Test Cluster Role Bindings', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Cluster Role Binding name"]')
+      .find('[ariaLabel="Cluster Role Binding name"]')
       .type(CRB_NAME);
 
     cy.getIframeBody()
@@ -35,7 +35,7 @@ context('Test Cluster Role Bindings', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="User name"]')
+      .find('[ariaLabel="User name"]')
       .clear()
       .type(USER_NAME);
 
@@ -98,7 +98,7 @@ context('Test Cluster Role Bindings', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="User group"]')
+      .find('[ariaLabel="Group name"]')
       .clear()
       .type('test-group');
 
