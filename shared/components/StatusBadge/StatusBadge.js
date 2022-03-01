@@ -103,14 +103,6 @@ export const StatusBadge = ({
     'tooltips',
   );
   const fallbackValue = value.toString();
-  const classes = classNames(
-    'status-badge',
-    {
-      'has-tooltip': !noTooltip,
-    },
-    className,
-  );
-
   const badgeContent = translate(
     i18n,
     [i18nFullVariableName, commonStatusVariableName],
@@ -122,8 +114,23 @@ export const StatusBadge = ({
     fallbackValue,
   );
 
-  if (content === badgeContent) {
-    content = additionalContent;
+  if (!additionalContent && content === badgeContent) noTooltip = true;
+
+  const classes = classNames(
+    'status-badge',
+    {
+      'has-tooltip': !noTooltip,
+    },
+    className,
+  );
+
+  if (additionalContent) {
+    if (badgeContent === content) content = additionalContent;
+    else {
+      // Remove the dot at the end of the sentence if we add a colon afterwards
+      if (content?.endsWith('.')) content = content?.slice(0, -1);
+      content = `${content}: ${additionalContent}`;
+    }
   }
 
   // tooltipContent is DEPRECATED. Use the TooltipBadge component if a Badge with a simple Tooltip is needed.
