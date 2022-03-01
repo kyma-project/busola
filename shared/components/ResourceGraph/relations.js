@@ -7,17 +7,82 @@ function selectorMatches(originalSelector, selector) {
   return true;
 }
 
+function matchClusterRoleAndClusterRoleBinding(cr, crb) {
+  return (
+    crb.roleRef.kind === 'ClusterRole' && crb.roleRef.name === cr.metadata.name
+  );
+}
+
+function matchClusterRoleBindingAndServiceAccount(crb, sa) {
+  return crb.subjects.find(
+    sub =>
+      sub.kind === 'ServiceAccount' &&
+      sub.name === sa.metadata.name &&
+      sub.namespace === sa.metadata.namespace,
+  );
+}
+
+function matchSecretAndServiceAccount(secret, sa) {
+  return (
+    sa.secrets.find(s => s.name === secret.metadata.name) ||
+    sa.imagePullSecrets.find(s => s.name === secret.metadata.name)
+  );
+}
+
+function matchPodAndConfigmap(pod, cm) {
+  return pod.spec.containers.some(container =>
+    container.env.find(
+      e => e.valueFrom?.configMapKeyRef?.name === cm.metadata.name,
+    ),
+  );
+}
+
+function matchPodAndSecret(pod, secret) {
+  return pod.spec.containers.some(container =>
+    container.env.find(
+      e => e.valueFrom?.secretKeyRef?.name === secret.metadata.name,
+    ),
+  );
+}
+
+function matchDeploymentAndHPA(deployment, hpa) {
+  return (
+    hpa.spec.scaleTargetRef.kind === 'Deployment' &&
+    hpa.spec.scaleTargetRef.name === deployment.metadata.name
+  );
+}
+
+function matchDeploymentAndService(deployment, service) {
+  return selectorMatches(
+    deployment.spec.selector.matchLabels,
+    service.spec.selector,
+  );
+}
+
+function matchAPIRuleAndService(apiRule, service) {
+  return apiRule.spec.service.name === service.metadata.name;
+}
+
+function matchServiceAndFunction(service, functión) {
+  return service.metadata.ownerReferences?.some(
+    oR => oR.kind === 'Function' && oR.name === functión.metadata.name,
+  );
+}
+
+function matchPodAndDeployment(pod, deployment) {
+  return selectorMatches(
+    deployment.spec.selector.matchLabels,
+    pod.metadata.labels,
+  );
+}
+
 export const relations = {
   ClusterRole: [
     {
       kind: 'ClusterRoleBinding',
       namespaced: false,
-      selectBy: (clusterRole, crbs) =>
-        crbs.filter(
-          crb =>
-            crb.roleRef.kind === 'ClusterRole' &&
-            crb.roleRef.name === clusterRole.metadata.name,
-        ),
+      selectBy: (cr, crbs) =>
+        crbs.filter(crb => matchClusterRoleAndClusterRoleBinding(cr, crb)),
     },
   ],
   ClusterRoleBinding: [
@@ -25,22 +90,15 @@ export const relations = {
       kind: 'ClusterRole',
       namespaced: false,
       selectBy: (crb, clusterRoles) =>
-        clusterRoles.filter(
-          clusterRole =>
-            crb.roleRef.kind === 'ClusterRole' &&
-            crb.roleRef.name === clusterRole.metadata.name,
+        clusterRoles.filter(cr =>
+          matchClusterRoleAndClusterRoleBinding(cr, crb),
         ),
     },
     {
       kind: 'ServiceAccount',
       selectBy: (crb, serviceAccounts) =>
         serviceAccounts.filter(sa =>
-          crb.subjects.find(
-            sub =>
-              sub.kind === 'ServiceAccount' &&
-              sub.name === sa.metadata.name &&
-              sub.namespace === sa.metadata.namespace,
-          ),
+          matchClusterRoleBindingAndServiceAccount(crb, sa),
         ),
     },
   ],
@@ -48,32 +106,20 @@ export const relations = {
     {
       kind: 'Pod',
       selectBy: (deployment, pods) =>
-        pods.filter(pod =>
-          selectorMatches(
-            deployment.spec.selector.matchLabels,
-            pod.metadata.labels,
-          ),
-        ),
+        pods.filter(pod => matchPodAndDeployment(pod, deployment)),
     },
     {
       kind: 'Service',
       labelKey: 'resource-graph.relations.exposed-by',
       selectBy: (deployment, services) =>
         services.filter(service =>
-          selectorMatches(
-            deployment.spec.selector.matchLabels,
-            service.spec.selector,
-          ),
+          matchDeploymentAndService(deployment, service),
         ),
     },
     {
       kind: 'HorizontalPodAutoscaler',
       selectBy: (deployment, hpas) =>
-        hpas.filter(
-          hpa =>
-            hpa.spec.scaleTargetRef.kind === 'Deployment' &&
-            hpa.spec.scaleTargetRef.name === deployment.metadata.name,
-        ),
+        hpas.filter(hpa => matchDeploymentAndHPA(deployment, hpa)),
     },
   ],
   Pod: [
@@ -81,34 +127,18 @@ export const relations = {
       kind: 'Deployment',
       selectBy: (pod, deployments) =>
         deployments.filter(deployment =>
-          selectorMatches(
-            deployment.spec.selector.matchLabels,
-            pod.metadata.labels,
-          ),
+          matchPodAndDeployment(pod, deployment),
         ),
     },
     {
       kind: 'Secret',
       selectBy: (pod, secrets) =>
-        secrets.filter(secret =>
-          pod.spec.containers.some(container =>
-            container.env.find(
-              e => e.valueFrom?.secretKeyRef?.name === secret.metadata.name,
-            ),
-          ),
-        ),
+        secrets.filter(secret => matchPodAndSecret(pod, secret)),
     },
     {
       kind: 'ConfigMap',
       selectBy: (pod, configMaps) =>
-        configMaps.filter(configMap =>
-          pod.spec.containers.some(container =>
-            container.env.find(
-              e =>
-                e.valueFrom?.configMapKeyRef?.name === configMap.metadata.name,
-            ),
-          ),
-        ),
+        configMaps.filter(cm => matchPodAndConfigmap(pod, cm)),
     },
   ],
   Service: [
@@ -117,28 +147,19 @@ export const relations = {
       labelKey: 'resource-graph.relations.exposes',
       selectBy: (service, deployments) =>
         deployments.filter(deployment =>
-          selectorMatches(
-            service.spec.selector,
-            deployment.spec.selector.matchLabels,
-          ),
+          matchDeploymentAndService(deployment, service),
         ),
     },
     {
       kind: 'APIRule',
       labelKey: 'resource-graph.relations.exposed-by',
       selectBy: (service, apiRules) =>
-        apiRules.filter(
-          apiRule => apiRule.spec.service.name === service.metadata.name,
-        ),
+        apiRules.filter(apiRule => matchAPIRuleAndService(apiRule, service)),
     },
     {
       kind: 'Function',
       selectBy: (service, functions) =>
-        functions.filter(f =>
-          service.metadata.ownerReferences?.some(
-            oR => oR.kind === 'Function' && oR.name === f.metadata.name,
-          ),
-        ),
+        functions.filter(f => matchServiceAndFunction(service, f)),
     },
   ],
   ServiceAccount: [
@@ -146,14 +167,12 @@ export const relations = {
       kind: 'ClusterRoleBinding',
       namespaced: false,
       selectBy: (sa, crbs) =>
-        crbs.filter(crb =>
-          crb.subjects?.find(
-            sub =>
-              sub.kind === 'ServiceAccount' &&
-              sub.name === sa.metadata.name &&
-              sub.namespace === sa.metadata.namespace,
-          ),
-        ),
+        crbs.filter(crb => matchClusterRoleBindingAndServiceAccount(crb, sa)),
+    },
+    {
+      kind: 'Secret',
+      selectBy: (sa, secrets) =>
+        secrets.filter(secret => matchSecretAndServiceAccount(secret, sa)),
     },
   ],
   APIRule: [
@@ -161,28 +180,22 @@ export const relations = {
       kind: 'Service',
       labelKey: 'resource-graph.relations.exposes',
       selectBy: (apiRule, services) =>
-        services.filter(svc => apiRule.spec.service.name === svc.metadata.name),
+        services.filter(service => matchAPIRuleAndService(apiRule, service)),
     },
   ],
   Function: [
     {
       kind: 'Service',
       selectBy: (functión, services) =>
-        services.filter(svc =>
-          svc.metadata.ownerReferences?.some(
-            oR => oR.kind === 'Function' && oR.name === functión.metadata.name,
-          ),
-        ),
+        services.filter(service => matchServiceAndFunction(functión, service)),
     },
   ],
   HorizontalPodAutoscaler: [
     {
       kind: 'Deployment',
       selectBy: (hpa, deployments) =>
-        deployments.filter(
-          deployment =>
-            hpa.spec.scaleTargetRef.kind === 'Deployment' &&
-            hpa.spec.scaleTargetRef.name === deployment.metadata.name,
+        deployments.filter(deployment =>
+          matchDeploymentAndHPA(hpa, deployment),
         ),
     },
   ],
@@ -190,27 +203,18 @@ export const relations = {
     {
       kind: 'Pod',
       selectBy: (secret, pods) =>
-        pods.filter(pod =>
-          pod.spec.containers.some(container =>
-            container.env.find(
-              e => e.valueFrom?.secretKeyRef?.name === secret.metadata.name,
-            ),
-          ),
-        ),
+        pods.filter(pod => matchPodAndSecret(pod, secret)),
+    },
+    {
+      kind: 'ServiceAccount',
+      selectBy: (secret, serviceAccounts) =>
+        serviceAccounts.filter(sa => matchSecretAndServiceAccount(secret, sa)),
     },
   ],
   ConfigMap: [
     {
       kind: 'Pod',
-      selectBy: (configMap, pods) =>
-        pods.filter(pod =>
-          pod.spec.containers.some(container =>
-            container.env.find(
-              e =>
-                e.valueFrom?.configMapKeyRef?.name === configMap.metadata.name,
-            ),
-          ),
-        ),
+      selectBy: (cm, pods) => pods.filter(pod => matchPodAndConfigmap(cm, pod)),
     },
   ],
 };

@@ -1,8 +1,3 @@
-.react-flow {
-  height: 500px !important;
-  background: var(--sapNeutralBackground);
-}
-
 .resource-graph {
   .fd-layout-panel__header {
     display: flex;
@@ -18,5 +13,34 @@
     display: flex !important;
     justify-content: center;
     flex-direction: column;
+  }
+}
+
+#graphviz0 {
+  display: flex;
+  justify-content: center;
+  background: var(--sapNeutralBackground);
+
+  .node > polygon {
+    fill: white;
+    cursor: pointer;
+  }
+
+  .node * {
+    cursor: pointer;
+  }
+
+  #graph0 > polygon {
+    fill: var(--sapNeutralBackground);
+  }
+}
+
+#graph-area {
+  position: relative;
+
+  .controls {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
   }
 }
