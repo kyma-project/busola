@@ -1,0 +1,26 @@
+todo
+
+
+
+HANDLE RESOURCES
+- ingress
+- network policy
+- destination rule
+- sidecar
+- auth policy
+- svc entry
+- pvc
+- volume
+- subscription
+- git repo
+- issuer
+- certifcate
+- storage class
+- stateful set
+- deamon set
+- cron job
+- job
+- pan & zoom
+
+CUSTOM RESOURCE HANDLER
+- helm release 

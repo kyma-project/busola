@@ -2,7 +2,7 @@ import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import pluralize from 'pluralize';
 import { Icon, Link } from 'fundamental-react';
-import { relations } from './relations';
+import { matchBy, relations } from './relations';
 
 export const GRAPH_TYPE_STRUCTURAL = 'STRUCTURAL';
 export const GRAPH_TYPE_NETWORK = 'NETWORK';
@@ -35,13 +35,14 @@ function makeNavigateFn(resource) {
       .navigate(path);
 }
 
-function makeNode({ resource, fromKind, isRoot, context }) {
+function makeNode({ resource, fromKind, isRoot, depth, context }) {
   const icon = findIcon(resource, context);
   const navigateFn = makeNavigateFn(resource, context);
   return {
     id: resource.metadata.uid,
     fromKind,
     resource,
+    depth,
     type: 'input',
     data: {
       label: (
@@ -68,7 +69,7 @@ function makeNode({ resource, fromKind, isRoot, context }) {
   };
 }
 
-function makeEdge({ fromId, toId, labelKey, context }) {
+export function makeEdge({ fromId, toId, labelKey, context }) {
   const { t } = context;
   return {
     id: `${fromId}-${toId}`,
@@ -79,11 +80,12 @@ function makeEdge({ fromId, toId, labelKey, context }) {
   };
 }
 
-export function buildGraph(initialResource, context) {
+export function buildGraph(initialResource, depth, context) {
   const { resources } = context;
   const rootNode = makeNode({
     resource: initialResource,
     isRoot: true,
+    depth,
     context,
   });
 
@@ -92,6 +94,8 @@ export function buildGraph(initialResource, context) {
 
   while (!!queue.length) {
     const node = queue.pop();
+    if (node.depth <= 0) continue;
+
     const kind = node.resource.kind;
     const mId = node.id;
 
@@ -103,11 +107,12 @@ export function buildGraph(initialResource, context) {
     for (const relation of relations[kind]) {
       let relatedResourcesOfType = null;
       try {
-        relatedResourcesOfType = relation.selectBy(
+        relatedResourcesOfType = matchBy(
           node.resource,
-          resources[relation.kind],
+          resources[relation.kind] || [],
         );
       } catch (e) {
+        console.warn(e);
         // ignore errors shown when resource is not loaded yet
         continue;
       }
@@ -120,13 +125,14 @@ export function buildGraph(initialResource, context) {
 
         // add not if not exists
         if (!graph.find(g => g.id === relatedNodeId)) {
-          const node = makeNode({
+          const newNode = makeNode({
             resource: relatedResource,
             context,
+            depth: node.depth - 1,
             fromKind: kind,
           });
-          graph.push(node);
-          queue.push(node);
+          graph.push(newNode);
+          queue.push(newNode);
         }
         // connect nodes if not connected
         if (

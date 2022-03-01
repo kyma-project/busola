@@ -1,10 +1,20 @@
 import React from 'react';
 import { Rules } from './Rules.js';
 
-export const RolesDetails = ({ DefaultRenderer, ...otherParams }) => {
-  return <DefaultRenderer {...otherParams} customComponents={[Rules]} />;
-};
+function GenericRoleDetails({ DefaultRenderer, ...otherParams }) {
+  return (
+    <DefaultRenderer
+      {...otherParams}
+      customComponents={[Rules]}
+      resourceGraphProps={{ depth: 2 }}
+    />
+  );
+}
 
-export const ClusterRolesDetails = ({ DefaultRenderer, ...otherParams }) => {
-  return <DefaultRenderer {...otherParams} customComponents={[Rules]} />;
-};
+export function RolesDetails(props) {
+  return <GenericRoleDetails {...props} />;
+}
+
+export function ClusterRolesDetails(props) {
+  return <GenericRoleDetails {...props} />;
+}
