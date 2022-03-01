@@ -17,7 +17,7 @@ export function NodeResources({ metrics, headerContent }) {
             <CircleProgress
               color="var(--sapIndicationColor_7)"
               value={cpu.usage}
-              max={cpu.allocatable}
+              max={cpu.capacity}
               title={t('machine-info.cpu-m')}
               reversed={true}
               tooltip={{
@@ -28,7 +28,7 @@ export function NodeResources({ metrics, headerContent }) {
             <CircleProgress
               color="var(--sapIndicationColor_6)"
               value={memory.usage}
-              max={memory.allocatable}
+              max={memory.capacity}
               title={t('machine-info.memory-gib')}
               reversed={true}
               tooltip={{

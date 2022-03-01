@@ -36,20 +36,18 @@ export function StatsPanel({ type, ...props }) {
   return (
     <LayoutPanel className="fd-margin--md stats-panel">
       <LayoutPanel.Header>
-        <LayoutPanel.Head
-          title={
-            <Dropdown
-              selectedKey={metric}
-              onSelect={(e, val) => setMetric(val.key)}
-              options={[
-                'cpu',
-                'memory',
-                'network-down',
-                'network-up',
-              ].map(option => ({ key: option, text: t(`graphs.${option}`) }))}
-            />
-          }
-        />
+        <LayoutPanel.Filters>
+          <Dropdown
+            selectedKey={metric}
+            onSelect={(e, val) => setMetric(val.key)}
+            options={[
+              'cpu',
+              'memory',
+              'network-down',
+              'network-up',
+            ].map(option => ({ key: option, text: t(`graphs.${option}`) }))}
+          />
+        </LayoutPanel.Filters>
         <LayoutPanel.Actions>
           <ButtonSegmented>
             {Object.keys(timeSpans).map(ts => (
