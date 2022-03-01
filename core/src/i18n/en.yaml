@@ -1160,6 +1160,12 @@ git-repositories:
     none: Authentication not required
     secret: The name of the Secret with credentials used by the Function Controller to authenticate to the Git repository in order to fetch the Function's source code and dependencies.
     url: URL must be a valid Git repository address that starts with the "http(s)", "git", or "ssh" prefix.
+grafana:
+  logs: Logs
+  missing-domain: Grafana service does not have a host defined
+  not-exposed: Grafana service is not exposed
+  open-in-grafana: Open in Grafana
+  unavailable: No Grafana link
 graphs:
   cpu: CPU
   memory: Memory
