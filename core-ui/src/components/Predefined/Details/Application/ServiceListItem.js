@@ -4,6 +4,7 @@ import { Tooltip } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
 export default function ServiceListItem({ service }) {
+  console.log('service', service);
   const { t } = useTranslation();
   const glyphType = toggle => (toggle ? 'accept' : 'decline');
 

@@ -66,7 +66,7 @@ async function cycle(store, depth, context) {
     }),
   );
 
-  ref.current?.redraw();
+  ref.current?.onRelatedResourcesRefresh();
   if (resourcesToFetch.length && depth - 1 > 0) {
     cycle(store, depth - 1, context);
   }

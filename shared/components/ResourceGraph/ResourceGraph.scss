@@ -21,12 +21,17 @@
   justify-content: center;
   background: var(--sapNeutralBackground);
 
-  .node > polygon {
-    fill: white;
+  .node > polygon,
+  .cluster > polygon {
+    fill: var(--sapGroup_ContentBackground);
+  }
+
+  .node:not(.root-node) > polygon,
+  .cluster > polygon {
     cursor: pointer;
   }
 
-  .node * {
+  .node:not(.root-node) * {
     cursor: pointer;
   }
 
@@ -39,8 +44,15 @@
   position: relative;
 
   .controls {
-    position: absolute;
-    right: 10px;
     bottom: 10px;
+    position: absolute;
+
+    &__right {
+      right: 10px;
+    }
+
+    &__left {
+      left: 10px;
+    }
   }
 }

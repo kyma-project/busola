@@ -11,7 +11,6 @@ export function ServiceHosts(service) {
 
   return (
     <GenericList
-      key="gateways"
       title={t('virtualservices.hosts')}
       showSearchField={false}
       headerRenderer={headerRenderer}

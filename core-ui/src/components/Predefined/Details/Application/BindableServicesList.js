@@ -15,15 +15,22 @@ export function BindableServicesList({
     services.length === 0 || services.length === availableServices.length,
   );
 
-  const [servicesList, setServicesList] = React.useState(
-    availableServices.map(s => ({
-      isChecked: !!services.find(svc => svc.id === s.id),
-      displayName: s.displayName,
-      id: s.id,
-      hasAPIs: !!s.entries.find(e => e.type === 'API'),
-      hasEvents: !!s.entries.find(e => e.type === 'Events'),
-    })),
-  );
+  const [servicesList, setServicesList] = React.useState([
+    {
+      isChecked: false,
+      displayName: 'fejkowy serwis',
+      id: 'a',
+      hasAPIs: true,
+      hasEvents: true,
+    },
+    {
+      isChecked: false,
+      displayName: 'fejkowy serwis bez danych',
+      id: 'ab',
+      hasAPIs: false,
+      hasEvents: false,
+    },
+  ]);
 
   React.useEffect(() => {
     if (allServices) {
