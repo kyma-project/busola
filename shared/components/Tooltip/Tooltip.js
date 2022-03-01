@@ -19,7 +19,7 @@ export const Tooltip = ({
       className={className}
       html={content}
       position={position}
-      trigger={'click'}
+      trigger={trigger}
       distance={0}
       delay={delay}
       {...tippyProps}
