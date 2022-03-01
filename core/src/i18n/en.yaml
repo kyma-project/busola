@@ -156,7 +156,6 @@ authorization-policies:
     provider: Provider
     rule: Rule {{ruleNumber}}
     rules: Rules
-    selector: Selector
     source: Source
     to: To
     values: Values
@@ -1161,6 +1160,12 @@ git-repositories:
     none: Authentication not required
     secret: The name of the Secret with credentials used by the Function Controller to authenticate to the Git repository in order to fetch the Function's source code and dependencies.
     url: URL must be a valid Git repository address that starts with the "http(s)", "git", or "ssh" prefix.
+grafana:
+  logs: Logs
+  missing-domain: Grafana service does not have a host defined
+  not-exposed: Grafana service is not exposed
+  open-in-grafana: Open in Grafana
+  unavailable: No Grafana link
 graphs:
   cpu: CPU
   memory: Memory
@@ -1390,6 +1395,12 @@ machine-info:
   operating-system: Operating system
   pods-capacity: Pods capacity
   title: Machine info
+match-expressions:
+  headers:
+    key: Key
+    operator: Operator
+    values: Values
+  title: Match Expressions
 namespaces:
   create-modal:
     apply-limits: Apply Limits per Container
@@ -1517,16 +1528,13 @@ persistent-volume-claims:
   headers:
     access-modes: Access Mode
     configuration: Configuration
-    key: Key
-    match-expressions: Match Expressions
-    match-labels: Match Labels
-    operator: Operator
     selector: Selector
     storage: Storage
     storage-class-name: Storage Class Name
-    values: Values
     volume-mode: Volume Mode
     volume-name: Volume Name
+  message:
+    empty-selector: Matches all Persistent Volumes
   name_singular: Persistent Volume Claim
   title: Persistent Volume Claims
   tooltips:
@@ -1790,6 +1798,10 @@ secrets:
   title-edit-secret: Edit Secret
   type: Type
   updated: Secret updated
+selector:
+  message:
+    empty-selector: Matches all Pods in the Namespace
+  title: Selector
 service-accounts:
   auto-mount-token:
     descriptions:
@@ -1896,7 +1908,6 @@ sidecars:
       protocol: Protocol
       target-point: Target Point
       title: Port
-    workload-selector: Workload Selector
     workload-selector-labels: Workload Selector Labels
   name_singular: Sidecar
   title: Sidecars
