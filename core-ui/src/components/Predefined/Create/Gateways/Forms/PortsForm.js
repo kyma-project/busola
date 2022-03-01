@@ -67,7 +67,7 @@ export const PortsForm = ({ server = {}, servers, setServers }) => {
         label={t('gateways.create-modal.advanced.port.target-port')}
         propertyPath="$.port.targetPort"
         input={Inputs.Port}
-        ariaLabel="Target port"
+        ariaLabel={t('gateways.create-modal.advanced.port.target-port')}
       />
     </ResourceForm.CollapsibleSection>
   );
