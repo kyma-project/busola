@@ -152,7 +152,7 @@ const OAuth2ClientsCreate = ({
           typeof value === 'string' ? value.split(' ') : value
         }
         customFormatFn={arr => arr.join(' ')}
-        placeholder={t('oauth2-clients.placeholders.scope')}
+        ariaLabel={t('oauth2-clients.aria-labels.scope')}
       />
       <TextArrayInput
         advanced

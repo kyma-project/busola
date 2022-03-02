@@ -40,13 +40,13 @@ context('Test Jobs', () => {
 
     // job name
     cy.getIframeBody()
-      .find('[placeholder="Job name"]:visible')
+      .find('[ariaLabel="Job name"]:visible')
       .clear()
       .type(JOB_NAME);
 
     // job container name
     cy.getIframeBody()
-      .find('[placeholder="Container name"]:visible')
+      .find('[ariaLabel="Container name"]:visible')
       .type(JOB_NAME);
 
     // job command
@@ -73,7 +73,7 @@ context('Test Jobs', () => {
 
     // job container name
     cy.getIframeBody()
-      .find('[placeholder="Container name"]:visible')
+      .find('[ariaLabel="Container name"]:visible')
       .type(SECOND_CONTAINER_NAME);
 
     // job args
