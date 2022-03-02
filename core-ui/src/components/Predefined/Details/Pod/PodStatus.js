@@ -31,13 +31,12 @@ const calculatePodState = pod => {
 const badgeType = status => {
   switch (status) {
     case 'Running':
-    case 'Completed':
+    case 'Succeeded':
       return 'success';
-    case 'Terminated':
-    case 'Terminating':
-    case 'PodInitializing':
-    case 'ContainerCreating':
+    case 'Pending':
       return 'info';
+    case 'Unknown':
+      return undefined;
     default:
       return 'error';
   }
@@ -45,15 +44,15 @@ const badgeType = status => {
 
 export function PodStatus({ pod }) {
   const { i18n } = useTranslation();
-  const podState = calculatePodState(pod);
+
   return (
     <StatusBadge
       i18n={i18n}
-      additionalContent={podState.message}
       resourceKind="pods"
-      type={badgeType(podState.status)}
+      type={badgeType(pod.status.phase)}
+      noTooltip
     >
-      {podState.status}
+      {pod.status.phase}
     </StatusBadge>
   );
 }
