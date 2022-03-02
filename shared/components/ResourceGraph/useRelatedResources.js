@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import pluralize from 'pluralize';
 import { useMicrofrontendContext, useSingleGet } from '../../';
 import { getApiPath } from './helpers';
-import { relations } from './relations/relations';
+import { match, relations } from './relations/relations';
 
 function getNamespacePart({ resourceToFetch, currentNamespace }) {
   if (resourceToFetch.namespaced === false || !currentNamespace) {
@@ -18,6 +18,11 @@ async function cycle(store, depth, context) {
 
   const resourcesToFetch = [];
   for (const kind of kindsToHandle) {
+    // skip fetching relations if there's no original resource
+    if (store.current[kind].length === 0) {
+      continue;
+    }
+
     for (const relation of relations[kind] || []) {
       const alreadyInStore = !!store.current[relation.kind];
       const alreadyToFetch = !!resourcesToFetch.find(
@@ -31,6 +36,7 @@ async function cycle(store, depth, context) {
 
         if (apiPath) {
           resourcesToFetch.push({
+            fromKind: kind,
             kind: relation.kind,
             namespaced: relation.namespaced,
             apiPath,
@@ -53,11 +59,19 @@ async function cycle(store, depth, context) {
         pluralize(resource.kind.toLowerCase());
 
       const response = await fetch(url);
-      store.current[resource.kind] = (await response.json()).items.map(
-        item => ({
-          ...item,
-          kind: resource.kind, // add kind, as it's not present on list call
-        }),
+
+      const allResourcesForKind = (await response.json()).items.map(item => ({
+        ...item,
+        kind: resource.kind, // add kind, as it's not present on list call
+      }));
+
+      const filterOnlyRelated = possiblyRelatedResource =>
+        store.current[resource.fromKind].some(oR =>
+          match(possiblyRelatedResource, oR),
+        );
+
+      store.current[resource.kind] = allResourcesForKind.filter(
+        filterOnlyRelated,
       );
     } catch (e) {
       console.warn(e);

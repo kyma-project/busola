@@ -33,6 +33,7 @@ export function ResourceGraph({
   const { nodeCategories, namespaceNodes } = useMicrofrontendContext();
 
   const onAllLoaded = useCallback(() => {
+    console.log('loaded');
     const initEventListeners = () => {
       const nodes = document.querySelectorAll('#graph-area title');
       // access fresh instance of elements, instead of resorting to using useImperativeHandle
@@ -63,10 +64,11 @@ export function ResourceGraph({
     };
 
     initEventListeners();
-    initPanZoom();
+    // initPanZoom();
   }, [elements, resource.metadata.uid]);
 
   const onRelatedResourcesRefresh = () => {
+    console.log('fresh');
     setElements(
       buildGraph(resource, depth, {
         resources: resourcesStore.current,

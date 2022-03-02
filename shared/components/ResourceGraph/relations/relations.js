@@ -1,6 +1,6 @@
 import * as matchers from './matchers';
 
-function match(resourceA, resourceB) {
+export function match(resourceA, resourceB) {
   const kindA = resourceA.kind;
   const kindB = resourceB.kind;
 
