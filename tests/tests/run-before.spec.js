@@ -28,7 +28,7 @@ context('Create Namespace', () => {
 
     cy.getIframeBody()
       .find('[role=dialog]')
-      .find("input[placeholder='Namespace name']:visible")
+      .find('input[ariaLabel="Namespace name"]:visible')
       .type(Cypress.env('NAMESPACE_NAME'));
 
     cy.getIframeBody()
@@ -73,7 +73,7 @@ context('Create Namespace', () => {
 
     cy.getIframeBody()
       .find('[role=dialog]')
-      .find("input[placeholder='Application name']:visible")
+      .find("input[ariaLabel='Application name']:visible")
       .type(`test-mock-app-${Cypress.env('NAMESPACE_NAME')}`);
 
     cy.getIframeBody()
