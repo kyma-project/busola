@@ -13,13 +13,13 @@ export const ApiRuleServices = apiRule => {
 
   return (
     <ComponentForList
-      name="serviceList"
+      name="virtualServicesList"
       key="api-rule-services"
       params={{
         hasDetailsView: true,
         fixedPath: true,
         resourceUrl: url,
-        resourceType: 'VirtualServices',
+        resourceType: 'virtualservices',
         namespace,
         isCompact: true,
         showTitle: true,
