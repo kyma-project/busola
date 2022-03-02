@@ -18,11 +18,8 @@
     &.memory {
       --bar-color: var(--sapIndicationColor_6);
     }
-    &.network-up {
-      --bar-color: var(--sapIndicationColor_5);
-    }
-    &.network-down {
-      --bar-color: var(--sapIndicationColor_4);
+    &.network {
+      --bar-color: var(--sapIndicationColor_5) var(--sapIndicationColor_4);
     }
   }
 }
