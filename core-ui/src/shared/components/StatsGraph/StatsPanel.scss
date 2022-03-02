@@ -11,6 +11,7 @@
   }
 
   .stats-graph {
+    aspect-ratio: 6/1;
     &.cpu {
       --bar-color: var(--sapIndicationColor_7);
     }
@@ -20,5 +21,17 @@
     &.network {
       --bar-color: var(--sapIndicationColor_5) var(--sapIndicationColor_4);
     }
+  }
+}
+
+.error-message {
+  display: flex;
+  aspect-ratio: 6/1;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+
+  p {
+    font-size: 18px;
   }
 }

@@ -41,7 +41,7 @@ context('Test API Rules in the Function details view', () => {
     cy.getIframeBody().contains(`${FUNCTION_NAME} (port: 80)`);
 
     cy.getIframeBody()
-      .find('[placeholder="API Rule name"]:visible', { log: false })
+      .find('[ariaLabel="API Rule name"]:visible', { log: false })
       .type(API_RULE_NAME);
 
     cy.getIframeBody()

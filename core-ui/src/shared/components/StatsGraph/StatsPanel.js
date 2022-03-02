@@ -6,7 +6,7 @@ import {
   ButtonSegmented,
   BusyIndicator,
 } from 'fundamental-react';
-import { Dropdown } from 'react-shared';
+import { Dropdown, getErrorMessage } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
 import { usePrometheus } from 'shared/hooks/usePrometheus';
@@ -17,9 +17,61 @@ import './StatsPanel.scss';
 const DATA_POINTS = 60;
 
 export function SingleGraph({ type, timeSpan, metric, ...props }) {
-  const { data, binary, unit, loading, startDate, endDate } = usePrometheus(
+  const { t } = useTranslation();
+  const {
+    data,
+    binary,
+    unit,
+    error,
+    loading,
+    startDate,
+    endDate,
+  } = usePrometheus(type, metric, {
+    items: DATA_POINTS,
+    timeSpan,
+    ...props,
+  });
+
+  return (
+    <>
+      {!error ? (
+        <StatsGraph
+          data={data}
+          binary={binary}
+          unit={unit}
+          startDate={startDate}
+          endDate={endDate}
+          dataPoints={DATA_POINTS}
+          {...props}
+        />
+      ) : (
+        <div className="error-message">
+          <p>{getErrorMessage(error, t('components.error-panel.error'))}</p>
+        </div>
+      )}
+      <BusyIndicator className="throbber" show={loading} />
+    </>
+  );
+}
+
+export function DualGraph({ type, timeSpan, metric1, metric2, ...props }) {
+  const { t } = useTranslation();
+  const {
+    data: data1,
+    binary,
+    unit,
+    error: error1,
+    loading: loading1,
+    startDate,
+    endDate,
+  } = usePrometheus(type, metric1, {
+    items: DATA_POINTS,
+    timeSpan,
+    ...props,
+  });
+  const { data: data2, error: error2, loading: loading2 } = usePrometheus(
     type,
-    metric,
+    metric2,
     {
       items: DATA_POINTS,
       timeSpan,
@@ -29,50 +81,26 @@ export function SingleGraph({ type, timeSpan, metric, ...props }) {
 
   return (
     <>
-      <StatsGraph
-        data={data}
-        binary={binary}
-        unit={unit}
-        startDate={startDate}
-        endDate={endDate}
-        dataPoints={DATA_POINTS}
-        {...props}
-      />
-      <BusyIndicator className="throbber" show={loading} />
-    </>
-  );
-}
-
-export function DualGraph({ type, timeSpan, metric1, metric2, ...props }) {
-  const {
-    data: data1,
-    binary,
-    unit,
-    loading: loading1,
-    startDate,
-    endDate,
-  } = usePrometheus(type, metric1, {
-    items: DATA_POINTS,
-    timeSpan,
-    ...props,
-  });
-  const { data: data2, loading: loading2 } = usePrometheus(type, metric2, {
-    items: DATA_POINTS,
-    timeSpan,
-    ...props,
-  });
-
-  return (
-    <>
-      <StatsGraph
-        data={zip(data1, data2)}
-        binary={binary}
-        unit={unit}
-        startDate={startDate}
-        endDate={endDate}
-        dataPoints={DATA_POINTS}
-        {...props}
-      />
+      {!error1 && !error2 ? (
+        <StatsGraph
+          data={zip(data1, data2)}
+          binary={binary}
+          unit={unit}
+          startDate={startDate}
+          endDate={endDate}
+          dataPoints={DATA_POINTS}
+          {...props}
+        />
+      ) : (
+        <div className="error-message">
+          {error1 && (
+            <p>{getErrorMessage(error1, t('components.error-panel.error'))}</p>
+          )}
+          {error2 && (
+            <p>{getErrorMessage(error2, t('components.error-panel.error'))}</p>
+          )}
+        </div>
+      )}
       <BusyIndicator className="throbber" show={loading1 || loading2} />
     </>
   );

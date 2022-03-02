@@ -34,7 +34,7 @@ export const PersistentVolumesList = ({ DefaultRenderer, ...otherParams }) => {
     {
       header: t('pv.headers.claim'),
       value: pv =>
-        (
+        pv.spec?.claimRef?.name ? (
           <Link
             onClick={() =>
               navigateToResource({
@@ -46,7 +46,9 @@ export const PersistentVolumesList = ({ DefaultRenderer, ...otherParams }) => {
           >
             {pv.spec?.claimRef?.name}
           </Link>
-        ) || EMPTY_TEXT_PLACEHOLDER,
+        ) : (
+          EMPTY_TEXT_PLACEHOLDER
+        ),
     },
     {
       header: t('common.headers.status'),

@@ -25,7 +25,7 @@ context('Test DNS Providers', () => {
 
     // type
     cy.getIframeBody()
-      .contains('Choose Provider Type')
+      .contains('Choose Provider type')
       .filter(':visible', { log: false })
       .click();
     cy.getIframeBody()
@@ -49,7 +49,7 @@ context('Test DNS Providers', () => {
 
     // name
     cy.getIframeBody()
-      .find('[placeholder="DNS Provider name"]:visible', { log: false })
+      .find('[ariaLabel="DNS Provider name"]:visible', { log: false })
       .clear()
       .type(PROVIDER_NAME);
 
@@ -76,7 +76,7 @@ context('Test DNS Providers', () => {
 
     // name should be readonly
     cy.getIframeBody()
-      .find('[placeholder="DNS Provider name"]:visible', { log: false })
+      .find('[ariaLabel="DNS Provider name"]:visible', { log: false })
       .should('have.attr', 'readonly', 'readonly');
 
     cy.getIframeBody()

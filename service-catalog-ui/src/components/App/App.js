@@ -8,7 +8,7 @@ import {
   ClusterServiceClassDetailsContainer,
 } from '../ServiceClassDetails/ServiceClassDetails.container';
 import ServiceInstancesList from '../ServiceInstanceList/ServiceInstanceList';
-import ServiceInstancesDetails from '../ServiceInstanceDetails/ServiceInstanceDetails';
+import ServiceInstanceDetails from '../ServiceInstanceDetails/ServiceInstanceDetails';
 import {
   NotificationProvider,
   MainFrameRedirection,
@@ -17,7 +17,6 @@ import {
 } from 'react-shared';
 
 import { CATALOG_TITLE, INSTANCES_TITLE } from '../../shared/constants';
-
 const App = () => {
   const { language } = useMicrofrontendContext();
   const { i18n } = useTranslation();
@@ -71,7 +70,7 @@ const App = () => {
           path="/instances/details/:name"
           element={
             <WithTitle title={INSTANCES_TITLE}>
-              <ServiceInstancesDetails />
+              <ServiceInstanceDetails />
             </WithTitle>
           }
         />
