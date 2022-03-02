@@ -117,28 +117,6 @@ export const TlsForm = ({ server = {}, servers, setServers, isAdvanced }) => {
         options={resourceOptions}
       />
       <ResourceForm.FormField
-        advanced
-        label={t('gateways.create-modal.advanced.tls.http-redirect')}
-        tooltipContent={t(
-          'gateways.create-modal.advanced.tls.http-redirect-description',
-        )}
-        input={() => (
-          <Switch
-            compact
-            onChange={() =>
-              setTlsValue(
-                server,
-                'httpsRedirect',
-                !server.tls?.httpsRedirect,
-                servers,
-                setServers,
-              )
-            }
-            checked={server.httpsRedirect}
-          />
-        )}
-      />
-      <ResourceForm.FormField
         tooltipContent={t('gateways.create-modal.tooltips.credential-name')}
         label={t('gateways.create-modal.advanced.tls.credentialName')}
         input={() => (
