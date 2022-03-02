@@ -31,7 +31,7 @@ context('Test HPA', () => {
 
     cy.getIframeBody()
       .find('.fd-dialog__content')
-      .find('[placeholder^="Deployment name"]:visible')
+      .find('[ariaLabel^="Deployment name"]:visible')
       .type(DEPLOYEMENT_NAME);
 
     cy.getIframeBody()

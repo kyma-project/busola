@@ -137,7 +137,6 @@ export const AddonsConfigurations = ({
             className="fd-input"
             type="url"
             id={`${resourceType}-url-input`}
-            placeholder="Enter URL"
             value={newUrl}
             onChange={handleUrlChanged}
           />

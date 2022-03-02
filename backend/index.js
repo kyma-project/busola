@@ -18,7 +18,19 @@ try {
 const app = express();
 app.disable('x-powered-by');
 app.use(express.raw({ type: '*/*', limit: '100mb' }));
-if (gzipEnabled) app.use(compression());
+if (gzipEnabled)
+  app.use(
+    compression({
+      filter: (req, res) => {
+        if (/\?.*follow=/.test(req.originalUrl)) {
+          // compression interferes with ReadableStreams. Small chunks are not transmitted for unknown reason
+          return false;
+        }
+        // fallback to standard filter function
+        return compression.filter(req, res);
+      },
+    }),
+  );
 
 if (process.env.NODE_ENV === 'development') {
   app.use(cors({ origin: '*' }));

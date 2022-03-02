@@ -105,7 +105,6 @@ export function ServiceBindingsCreate({
         propertyPath="$.spec.secretName"
         tooltipContent={t('btp-service-bindings.tooltips.secret')}
         input={Inputs.Text}
-        placeholder={t('btp-service-bindings.placeholders.secret')}
       />
       <ResourceForm.CollapsibleSection
         advanced
