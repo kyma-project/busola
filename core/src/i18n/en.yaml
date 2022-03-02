@@ -1166,8 +1166,10 @@ grafana:
 graphs:
   cpu: CPU
   memory: Memory
-  network-down: Network Download
-  network-up: Network Upload
+  network: Network
+  network-down: Download
+  network-up: Upload
+  total: Total
 helm-releases:
   description: <0>Helm Release</0> tracks the installed charts. For each installed chart, a new release is created.
   headers:
