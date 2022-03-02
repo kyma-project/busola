@@ -128,7 +128,7 @@ applications:
     some-events: There are some events
   name_singular: Application
   placeholders:
-    description: Specify a description for your Application
+    description: Provide a description for your Application
   statuses:
     deployed: Deployed
     provisioning: Provisioning
@@ -156,7 +156,6 @@ authorization-policies:
     provider: Provider
     rule: Rule {{ruleNumber}}
     rules: Rules
-    selector: Selector
     source: Source
     to: To
     values: Values
@@ -180,7 +179,6 @@ btp-instances:
   parameters: Instance Parameters
   placeholders:
     external-name: Defaults to the instance name if empty
-    offering-name: SAP BTP service offering name
     plan-name: The plan name to use for the Service Instance
   plan-name: Plan Name
   resource-type: Service Instance
@@ -215,7 +213,6 @@ btp-service-bindings:
     choose-secret-key: Choose Secret key
     empty-secret: This Secret has no data
     external-name: Defaults to the Service Binding name if empty
-    secret: Credentials Secret name
   resource-type: Service Binding
   secret: Secret
   statuses:
@@ -253,7 +250,6 @@ certificates:
     dns-names: Additional domain names, one per line
     encoded-csr: Base64-encoded Certificate Signing Request
     name: Certificate name
-    secret-name: Requested Secret name
   refs: References
   renew: Renew
   secret-name: Secret name
@@ -550,7 +546,7 @@ common:
     hide: Hide Read-Only Fields
     k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' (e.g.: 'my-name1')."
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
-    key-value: key=value, must start and end with an alphanumeric character, can contain '-', '_' or '.'.
+    key-value: Key and value must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     read-file: Read file content as a single value, with file name as a key.
     resource-ref-name: Unique name within a Namespace to refer to a {{resource}} resource.
     resource-ref-namespace: Namespace defines the space within which the {{resource}} name must be unique.
@@ -581,7 +577,7 @@ components:
       no-search-results: Couldn't find resources matching this query.
       not-found: No entries found
   k8s-name-input:
-    placeholder: '{{resourceType}} name'
+    aria-label: '{{resourceType}} name'
   key-value-field:
     enter-key: Enter key
     enter-value: Enter value
@@ -592,7 +588,7 @@ components:
     value: Value
   label-selector-input:
     click-to-delete: Click to delete
-    enter-key-value: Enter {{type}} key=value
+    enter-key-value: Enter key-value labels
   modal:
     confirm-text: Confirm
     title: Modal
@@ -871,14 +867,14 @@ dnsproviders:
   name_singular: DNS Provider
   placeholders:
     default-ttl: Enter the default time to live
-    provider-type: Choose Provider Type
+    provider-type: Choose Provider type
   title: DNS Providers
   tooltips:
     excluded-domains: The selection of forbidden domains (by default, all zones and domains in those zones are served), $t(domains.example).
     included-domains: The selection of allowed domains (by default, all zones and domains in those zones are served), $t(domains.example).
     ready: The entry has been accepted and the DNS record created.
 domains:
-  example: for example, *.api.mydomain.com
+  example: For example, *.api.mydomain.com
   exclude:
     label: Exclude Domains
     placeholder: Domain that is forbidden
@@ -1069,6 +1065,9 @@ functions:
       text: Warning
       variable-can-override-sbu: This variable can override or be overridden by a variable injected by one of the created Service Bindings.
 gateways:
+  aria-labels:
+    host: Host
+    port-name: Port name
   create-modal:
     advanced:
       add-server: Add server
@@ -1077,12 +1076,9 @@ gateways:
       hosts: Hosts
       mode-tooltip: Indicates whether connections to the port are secured using TLS.
       placeholders:
-        hosts: Enter the hosts, $t(domains.example)
+        hosts: $t(domains.example)
         port:
-          name: Enter the name
-          number: Enter the port number
           protocol: Enter the protocol
-          target-port: Enter the target port
         tls:
           ca-certificates: Enter the CA certificates path
           mode: Select TLS Mode
@@ -1161,6 +1157,12 @@ git-repositories:
     none: Authentication not required
     secret: The name of the Secret with credentials used by the Function Controller to authenticate to the Git repository in order to fetch the Function's source code and dependencies.
     url: URL must be a valid Git repository address that starts with the "http(s)", "git", or "ssh" prefix.
+grafana:
+  logs: Logs
+  missing-domain: Grafana service does not have a host defined
+  not-exposed: Grafana service is not exposed
+  open-in-grafana: Open in Grafana
+  unavailable: No Grafana link
 graphs:
   cpu: CPU
   memory: Memory
@@ -1291,7 +1293,6 @@ issuers:
     email: Email address for user registration
     key-id: ID of the CA that the external account is bound to
     name: Issuer Name
-    requests-per-day: Daily Requests Quota
     server: ACME Server URL
     type: Select Issuer type
   private-key: Private key Secret
@@ -1390,6 +1391,12 @@ machine-info:
   operating-system: Operating system
   pods-capacity: Pods capacity
   title: Machine info
+match-expressions:
+  headers:
+    key: Key
+    operator: Operator
+    values: Values
+  title: Match Expressions
 namespaces:
   create-modal:
     apply-limits: Apply Limits per Container
@@ -1471,6 +1478,8 @@ nodes:
   title: Nodes
   title_details: Node {{nodeName}}
 oauth2-clients:
+  aria-labels:
+    scope: OAuth2 Client scope
   auth-methods:
     client_secret_basic: Client Secret / Basic
     client_secret_post: Client Secret / POST
@@ -1497,8 +1506,6 @@ oauth2-clients:
     secret-name: Secret Name
     uris: URIs
   name_singular: OAuth2 Client
-  placeholders:
-    scope: OAuth2 scope
   response-types:
     code: Code
     id_token: ID Token
@@ -1517,16 +1524,13 @@ persistent-volume-claims:
   headers:
     access-modes: Access Mode
     configuration: Configuration
-    key: Key
-    match-expressions: Match Expressions
-    match-labels: Match Labels
-    operator: Operator
     selector: Selector
     storage: Storage
     storage-class-name: Storage Class Name
-    values: Values
     volume-mode: Volume Mode
     volume-name: Volume Name
+  message:
+    empty-selector: Matches all Persistent Volumes
   name_singular: Persistent Volume Claim
   title: Persistent Volume Claims
   tooltips:
@@ -1651,7 +1655,7 @@ replica-sets:
       replicas: Replicas
     tooltips:
       min-ready-seconds: Minimum number of seconds for which a newly created Pod should be ready without any of its containers crashing in order to be considered available.
-      replicas: Replicas is the number of desired replicas.
+      replicas: Number of desired replicas
   description: <0>Replica Set</0> maintains a number of replica Pods running at any given time.
   headers:
     images: Images
@@ -1673,7 +1677,7 @@ role-bindings:
   create-modal:
     api-group: API Group
     at-least-one-subject-required: '{{resource}} must have at least one subject.'
-    group-name: Group Name
+    group-name: Group name
     kind: Kind
     role: Role
     subject: Subject
@@ -1692,10 +1696,6 @@ role-bindings:
   name_singular: Role Binding
   placeholders:
     api-group: API Group
-    group:
-      name: User group
-    user:
-      name: User name
   title: Role Bindings
 roles:
   description: <0>Role</0> is a set of permissions within a Namespace that can be assigned to a user.
@@ -1790,6 +1790,10 @@ secrets:
   title-edit-secret: Edit Secret
   type: Type
   updated: Secret updated
+selector:
+  message:
+    empty-selector: Matches all Pods in the Namespace
+  title: Selector
 service-accounts:
   auto-mount-token:
     descriptions:
@@ -1896,7 +1900,6 @@ sidecars:
       protocol: Protocol
       target-point: Target Point
       title: Port
-    workload-selector: Workload Selector
     workload-selector-labels: Workload Selector Labels
   name_singular: Sidecar
   title: Sidecars
@@ -1932,11 +1935,10 @@ subscriptions:
     messages:
       one-filter-required: Provide at least one filter.
     placeholders:
-      application-name: Choose an Application name
-      event-name: Enter the event name, for example, order.cancelled
-      event-source: Enter the event source
+      application-name: Choose Application name
+      event-name: For example, order.cancelled
       event-type: Enter the event type, for example, sap.kyma.custom.test-app.order.cancelled.v1
-      event-version: Enter the event version, for example, v1
+      event-version: For example, v1
       service-name: Choose Service for the sink
     title: Add Subscription
   description: <0>Subscription</0> is used to subscribe to events.

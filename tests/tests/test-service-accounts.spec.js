@@ -22,7 +22,7 @@ context('Test Service Accounts', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Service Account name"]')
+      .find('[ariaLabel="Service Account name"]')
       .clear()
       .type(SERVICE_NAME);
 
