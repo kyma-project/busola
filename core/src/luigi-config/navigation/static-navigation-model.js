@@ -561,7 +561,7 @@ export function getStaticChildrenNodesForNamespace(
     },
     {
       category: i18next.t('discovery-and-network.title'),
-      pathSegment: 'hpas',
+      pathSegment: 'horizontalpodautoscalers',
       resourceType: 'hpas',
       navigationContext: 'horizontalpodautoscalers',
       label: i18next.t('hpas.title'),

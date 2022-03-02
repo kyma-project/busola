@@ -1,6 +1,24 @@
 import { randomNamesGenerator } from './randomNamesGenerator/randomNamesGenerator';
 import pluralize from 'pluralize';
 
+export function findCommonPrefix(initialPrefix, words) {
+  if (!words?.length) {
+    return initialPrefix;
+  }
+
+  words.sort();
+  const first = words[0];
+  const last = words[words.length - 1];
+  let biggestCommonPrefix = initialPrefix;
+  while (
+    first[biggestCommonPrefix.length] &&
+    first[biggestCommonPrefix.length] === last[biggestCommonPrefix.length]
+  ) {
+    biggestCommonPrefix += first[biggestCommonPrefix.length];
+  }
+
+  return biggestCommonPrefix;
+}
 export function formatMessage(message = '', variables = {}) {
   const serializedVariables = {};
   for (let [key, value] of Object.entries(variables)) {

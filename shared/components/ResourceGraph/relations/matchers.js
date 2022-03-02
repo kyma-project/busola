@@ -108,9 +108,9 @@ export function matchDeploymentAndReplicaSet(deployment, replicaSet) {
   });
 }
 
-export function matchPodAndDeployment(pod, deployment) {
+export function matchPodAndReplicaSet(pod, replicaSet) {
   return matchBySelector(
-    deployment.spec.selector.matchLabels,
+    replicaSet.spec.selector.matchLabels,
     pod.metadata.labels,
   );
 }

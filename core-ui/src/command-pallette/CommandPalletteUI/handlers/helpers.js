@@ -22,25 +22,6 @@ export function toFullResourceType(resourceType, resources) {
   return resources.find(r => r.includes(resourceType))?.[0] || resourceType;
 }
 
-export function findCommonPrefix(initialPrefix, words) {
-  if (!words?.length) {
-    return initialPrefix;
-  }
-
-  words.sort();
-  const first = words[0];
-  const last = words[words.length - 1];
-  let biggestCommonPrefix = initialPrefix;
-  while (
-    first[biggestCommonPrefix.length] &&
-    first[biggestCommonPrefix.length] === last[biggestCommonPrefix.length]
-  ) {
-    biggestCommonPrefix += first[biggestCommonPrefix.length];
-  }
-
-  return biggestCommonPrefix;
-}
-
 export function getSuggestionsForSingleResource({
   tokens,
   resources,

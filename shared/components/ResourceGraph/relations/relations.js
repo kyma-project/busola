@@ -78,9 +78,6 @@ export const relations = {
   ],
   Deployment: [
     {
-      kind: 'Pod',
-    },
-    {
       kind: 'Service',
       labelKey: 'resource-graph.relations.exposed-by',
     },
@@ -95,10 +92,13 @@ export const relations = {
     {
       kind: 'Deployment',
     },
+    {
+      kind: 'Pod',
+    },
   ],
   Pod: [
     {
-      kind: 'Deployment',
+      kind: 'ReplicaSet',
     },
     {
       kind: 'Secret',

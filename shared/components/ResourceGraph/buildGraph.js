@@ -2,7 +2,7 @@ import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import pluralize from 'pluralize';
 import { Icon, Link } from 'fundamental-react';
-import { matchBy, relations } from './relations';
+import { matchBy, relations } from './relations/relations';
 
 export const GRAPH_TYPE_STRUCTURAL = 'STRUCTURAL';
 export const GRAPH_TYPE_NETWORK = 'NETWORK';

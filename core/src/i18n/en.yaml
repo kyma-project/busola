@@ -1666,6 +1666,9 @@ replica-sets:
     error: At least one of the Pods has failed.
     running: All the Pods are running correctly.
 resource-graph:
+  controls:
+    center: Center
+    save-as: dot format
   graph-types:
     network: Network
     network-tooltip: Displays network flow.

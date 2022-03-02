@@ -1,19 +1,9 @@
-import React, { useState, useRef, useImperativeHandle, useEffect } from 'react';
-import LuigiClient from '@luigi-project/client';
-import pluralize from 'pluralize';
+import React, { useState, useRef, useCallback } from 'react';
 import { Graphviz } from 'graphviz-react';
-import { saveAs } from 'file-saver';
-// import svgPanZoom from 'svg-pan-zoom';
+import svgPanZoom from 'svg-pan-zoom';
 
-import {
-  LayoutPanel,
-  Button,
-  Select,
-  Icon,
-  ButtonSegmented,
-} from 'fundamental-react';
-
-import { Tooltip, useMicrofrontendContext } from '../..';
+import { LayoutPanel, Button, Select, Icon } from 'fundamental-react';
+import { navigateToResource, Tooltip, useMicrofrontendContext } from '../..';
 import { useRelatedResources } from './useRelatedResources';
 import {
   buildGraph,
@@ -21,28 +11,14 @@ import {
   GRAPH_TYPE_NETWORK,
 } from './buildGraph';
 import { useTranslation } from 'react-i18next';
-import './ResourceGraph.scss';
-import { networkFlow } from './relations';
+import { networkFlow } from './relations/relations';
 import { makeDot } from './makeDot';
+import './ResourceGraph.scss';
+import { PanZoomControls } from './components/PanZoomControls';
+import { SaveGraphControls } from './components/SaveGraphControls';
 
 export const isEdge = e => !!e.source && !!e.target;
 export const isNode = e => !isEdge(e);
-
-function makeNavigateFn(resource) {
-  const {
-    metadata: { name, namespace },
-    kind,
-  } = resource;
-
-  let path = `${pluralize(kind.toLowerCase())}/details/${name}`;
-  if (namespace) {
-    path = `namespaces/${namespace}/${path}`;
-  }
-  return () =>
-    LuigiClient.linkManager()
-      .fromContext('cluster')
-      .navigate(path);
-}
 
 export function ResourceGraph({
   resource,
@@ -52,73 +28,63 @@ export function ResourceGraph({
   const hasNetworkView = networkFlow.includes(resource.kind);
   const { t } = useTranslation(['translation'], { i18n });
   const [graphType, setGraphType] = useState(GRAPH_TYPE_STRUCTURAL);
-  const relatedResourceRef = useRef();
   const svgControlRef = useRef();
   const [elements, setElements] = useState([]);
-  const [resourcesStore, startedLoading, startLoading] = useRelatedResources(
-    resource,
-    depth,
-    relatedResourceRef,
-  );
-
   const { nodeCategories, namespaceNodes } = useMicrofrontendContext();
-  useImperativeHandle(relatedResourceRef, () => ({
-    onRelatedResourcesRefresh() {
-      setElements(
-        buildGraph(resource, depth, {
-          resources: resourcesStore.current,
-          nodeCategories,
-          namespaceNodes,
-          t,
-        }),
-      );
-    },
-  }));
 
-  useEffect(() => {
+  const onAllLoaded = useCallback(() => {
     const initEventListeners = () => {
-      const nodes = document.querySelectorAll('#graphviz0 title');
-      for (const element of elements.filter(isNode)) {
-        const node = [...nodes].find(
-          n => n.textContent === element.resource.metadata.uid,
-        )?.parentNode;
+      const nodes = document.querySelectorAll('#graph-area title');
+      // access fresh instance of elements, instead of resorting to using useImperativeHandle
+      setElements(elements => {
+        for (const element of elements.filter(isNode)) {
+          const node = [...nodes].find(
+            n => n.textContent === element.resource.metadata.uid,
+          )?.parentNode;
 
-        if (!node) {
-          console.log('nie ma', node, element.resource);
-          continue;
-        }
+          if (!node) continue;
 
-        if (element.resource.metadata.uid === resource.metadata.uid) {
-          node.classList.add('root-node');
-        } else {
-          node.onclick = makeNavigateFn(element.resource);
+          if (element.resource.metadata.uid === resource.metadata.uid) {
+            node.classList.add('root-node');
+          } else {
+            node.onclick = () => navigateToResource(element.resource);
+          }
         }
+        return elements;
+      });
+    };
+    const initPanZoom = () => {
+      // svgPanZoom has its own controls (.enableControlIcons(), but they don't match fiori style)
+      svgControlRef.current = svgPanZoom('#graph-area svg');
+      // zoom out for a single element
+      if (elements.length === 1) {
+        svgControlRef.current.zoom(0.5);
       }
     };
 
-    // const initSvgControl = () => {
-    //   // svgPanZoom has its own controls (.enableControlIcons(), but they don't match fiori style)
-    //   svgControlRef.current = svgPanZoom('#graphviz0 svg');
-    //   // zoom out for a single element
-    //   console.log('ok')
-    //   if (elements.length === 1) {
-    //     svgControlRef.current.zoom(0.5);
-    //   }
-    // };
+    initEventListeners();
+    initPanZoom();
+  }, [elements, resource.metadata.uid]);
 
-    if (document.querySelector('#graphviz0 svg')) {
-      initEventListeners();
-      // initSvgControl();
+  const onRelatedResourcesRefresh = () => {
+    setElements(
+      buildGraph(resource, depth, {
+        resources: resourcesStore.current,
+        nodeCategories,
+        namespaceNodes,
+        t,
+      }),
+    );
+  };
 
-      setTimeout(() => {
-        window.scroll(0, window.outerHeight);
-      });
-      // return () => {
-      //   console.log(svgControlRef.current);
-      //   return () => svgControlRef.current?.destroy();
-      // };
-    }
-  }, [elements, resource, graphType]);
+  const [resourcesStore, startedLoading, startLoading] = useRelatedResources(
+    resource,
+    depth,
+    {
+      onAllLoaded,
+      onRelatedResourcesRefresh,
+    },
+  );
 
   const viewSwitcher = hasNetworkView && (
     <div className="view-switcher">
@@ -178,43 +144,16 @@ export function ResourceGraph({
               engine: graphType === GRAPH_TYPE_STRUCTURAL ? 'dot' : 'fdp',
             }}
           />
-          <div className="controls controls__left">
-            <ButtonSegmented>
-              <Button
-                aria-label="zoom out"
-                glyph="zoom-out"
-                onClick={() => svgControlRef.current?.zoomOut()}
-              />
-              <Button onClick={() => svgControlRef.current?.fit()}>
-                Center
-              </Button>
-              <Button
-                aria-label="zoom in"
-                glyph="zoom-in"
-                onClick={() => svgControlRef.current?.zoomIn()}
-              />
-            </ButtonSegmented>
-          </div>
-          <Button
-            className="controls controls__right"
-            onClick={() => {
-              const dot = makeDot(elements, graphType);
-              const blob = new Blob([dot], {
-                type: '	text/vnd.graphviz',
-              });
-              const name = `${resource.kind} ${
+          <PanZoomControls panZoomRef={svgControlRef} i18n={i18n} />
+          <SaveGraphControls
+            getContent={() => makeDot(elements, graphType)}
+            getName={() =>
+              `${resource.kind} ${
                 resource.metadata.name
-              }-${graphType.toLowerCase()}.gv`;
-              saveAs(blob, name);
-            }}
-          >
-            <Icon
-              ariaLabel="download"
-              glyph="download"
-              className="fd-margin-end--tiny"
-            />
-            dot format
-          </Button>
+              }-${graphType.toLowerCase()}.gv`
+            }
+            i18n={i18n}
+          />
         </div>
       )}
     </LayoutPanel>

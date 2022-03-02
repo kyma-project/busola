@@ -16,10 +16,14 @@
   }
 }
 
-#graphviz0 {
+#graph-area {
   display: flex;
   justify-content: center;
   background: var(--sapNeutralBackground);
+
+  & > :first-child {
+    width: 100%;
+  }
 
   .node > polygon,
   .cluster > polygon {

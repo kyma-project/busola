@@ -1,0 +1,27 @@
+import React from 'react';
+import { saveAs } from 'file-saver';
+import { Button, Icon } from 'fundamental-react';
+import { useTranslation } from 'react-i18next';
+
+export function SaveGraphControls(props) {
+  const { getContent, getName, i18n } = props;
+  const { t } = useTranslation(['translation'], { i18n });
+  return (
+    <Button
+      className="controls controls__right"
+      onClick={() => {
+        const blob = new Blob([getContent()], {
+          type: '	text/vnd.graphviz',
+        });
+        saveAs(blob, getName());
+      }}
+    >
+      <Icon
+        ariaLabel="download"
+        glyph="download"
+        className="fd-margin-end--tiny"
+      />
+      {t('resource-graph.controls.save-as')}
+    </Button>
+  );
+}

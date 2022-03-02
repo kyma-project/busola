@@ -1,28 +1,11 @@
 import _ from 'lodash';
+import { findCommonPrefix } from '../..';
 import { GRAPH_TYPE_STRUCTURAL } from './buildGraph';
-import { networkFlow } from './relations';
+import { networkFlow } from './relations/relations';
 import { isNode, isEdge } from './ResourceGraph';
 
-export function findCommonPrefix(initialPrefix, words) {
-  if (!words?.length) {
-    return initialPrefix;
-  }
-
-  words.sort();
-  const first = words[0];
-  const last = words[words.length - 1];
-  let biggestCommonPrefix = initialPrefix;
-  while (
-    first[biggestCommonPrefix.length] &&
-    first[biggestCommonPrefix.length] === last[biggestCommonPrefix.length]
-  ) {
-    biggestCommonPrefix += first[biggestCommonPrefix.length];
-  }
-
-  return biggestCommonPrefix;
-}
 export function makeDigraph(nodes, edges) {
-  return `digraph {
+  return `digraph "Graph" {
       ranksep="2.0 equally";
       fontname="sans-serif";
   
@@ -31,12 +14,13 @@ export function makeDigraph(nodes, edges) {
         }`;
 }
 
-export function makeDot(elements, graphType) {
-  const wrap = str =>
-    _.chunk(str.split(''), 20)
-      .map(s => s.join(''))
-      .join('\n');
+function wrap(str) {
+  return _.chunk(str.split(''), 20)
+    .map(s => s.join(''))
+    .join('\n');
+}
 
+export function makeDot(elements, graphType) {
   const makeEdge = e => `"${e.source}" -> "${e.target}"`;
 
   if (graphType === GRAPH_TYPE_STRUCTURAL) {
@@ -80,7 +64,6 @@ export function makeDot(elements, graphType) {
           )}", pos="${x}, ${y * 2}!"][shape=box]`
         : makeSth(node, x, y);
 
-    // todo reduce
     let x = 0;
     const nodeLayers = networkFlow
       .map(networkFlowKind => {
@@ -122,10 +105,8 @@ export function makeDot(elements, graphType) {
               : nextNode.id;
 
           edges.push({
-            id: `${fromId}-${toId}`,
             source: fromId,
             target: toId,
-            type: 'step',
           });
         }
       }
