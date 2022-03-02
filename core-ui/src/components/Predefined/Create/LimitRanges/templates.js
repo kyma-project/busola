@@ -1,6 +1,7 @@
 export function createLimitRangeTemplate({
+  min = '32Mi',
   max = '1100Mi',
-  defaultVal = '511Mi',
+  defaultVal = '512Mi',
   defaultRequest = '32Mi',
   name = '',
   namespaceName = '',
@@ -18,6 +19,9 @@ export function createLimitRangeTemplate({
           type: 'Container',
           max: {
             memory: max,
+          },
+          min: {
+            memory: min,
           },
           default: {
             memory: defaultVal,

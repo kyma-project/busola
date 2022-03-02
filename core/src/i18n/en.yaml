@@ -1378,6 +1378,7 @@ limit-ranges:
     default: Default
     default-request: Default Request
     max: Max
+    min: Min
   title: Limit Ranges
 machine-info:
   architecture-cpus: Architecture and CPUs
