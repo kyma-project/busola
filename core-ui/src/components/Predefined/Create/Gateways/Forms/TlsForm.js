@@ -6,13 +6,51 @@ import {
   TLS_VERSIONS,
   validateTLS,
   isTLSProtocol,
+  isHTTPProtocol,
 } from './../helpers';
 import { ResourceForm } from 'shared/ResourceForm';
 import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSelect';
 import * as Inputs from 'shared/ResourceForm/inputs';
 
+const HttpTlsForm = ({ server, servers, setServers }) => {
+  const handleHttpsRedirect = () => {
+    if (!server?.tls) {
+      server['tls'] = {
+        httpsRedirect: true,
+      };
+    } else {
+      server.tls = undefined;
+    }
+  };
+
+  const { t } = useTranslation();
+  return (
+    <ResourceForm.CollapsibleSection
+      title={t('gateways.create-modal.advanced.tls.tls')}
+      resource={server}
+      defaultOpen={true}
+      setResource={() => setServers([...servers])}
+    >
+      <ResourceForm.FormField
+        label={t('gateways.create-modal.advanced.tls.https-redirect')}
+        tooltipContent={t(
+          'gateways.create-modal.advanced.tls.https-redirect-description',
+        )}
+        input={() => (
+          <Switch
+            compact
+            onChange={handleHttpsRedirect}
+            checked={server.tls?.httpsRedirect}
+          />
+        )}
+      />
+    </ResourceForm.CollapsibleSection>
+  );
+};
+
 const setTlsValue = (server, variableName, value, servers, setServers) => {
   server.tls[variableName] = value;
+
   setServers([...servers]);
 };
 
@@ -52,6 +90,13 @@ export const TlsForm = ({ server = {}, servers, setServers, isAdvanced }) => {
       {t('gateways.create-modal.advanced.tls.disabled-for-non-https')}
     </MessageStrip>
   );
+
+  const isHTTP = isHTTPProtocol(server?.port?.protocol);
+  if (isHTTP) {
+    return (
+      <HttpTlsForm server={server} servers={servers} setServers={setServers} />
+    );
+  }
 
   return (
     <ResourceForm.CollapsibleSection
