@@ -2,9 +2,9 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ControlledBy } from 'react-shared';
 
-import { ResourcePods } from '../ResourcePods.js';
 import { DeploymentStatus } from './DeploymentStatus';
 import { HPASubcomponent } from '../HPA/HPASubcomponent';
+import { Selector } from 'shared/components/Selector/Selector.js';
 
 export const DeploymentsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
@@ -21,9 +21,18 @@ export const DeploymentsDetails = ({ DefaultRenderer, ...otherParams }) => {
     },
   ];
 
+  const MatchSelector = deployment => (
+    <Selector
+      namespace={deployment.metadata.namespace}
+      labels={deployment.spec?.selector?.matchLabels}
+      expressions={deployment?.spec.selector?.matchExpressions}
+      selector={deployment.spec?.selector}
+    />
+  );
+
   return (
     <DefaultRenderer
-      customComponents={[ResourcePods, HPASubcomponent]}
+      customComponents={[HPASubcomponent, MatchSelector]}
       customColumns={customColumns}
       {...otherParams}
     />

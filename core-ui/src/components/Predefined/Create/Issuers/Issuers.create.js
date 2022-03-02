@@ -317,7 +317,6 @@ function IssuersCreate({
         key={t('issuers.requests-per-day')}
         propertyPath="$.spec.requestsPerDayQuota"
         tooltipContent={t('issuers.tooltips.requests')}
-        placeholder={t('issuers.placeholders.requests-per-day')}
         input={Inputs.Number}
         min={0}
       />

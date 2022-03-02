@@ -261,7 +261,6 @@ const CertificatesCreate = ({
           tooltipContent={t('certificates.tooltips.secret-name')}
           propertyPath="$.spec.secretName"
           input={Inputs.Text}
-          placeholder={t('certificates.placeholders.secret-name')}
         />
       )}
       {existingSecret && (
