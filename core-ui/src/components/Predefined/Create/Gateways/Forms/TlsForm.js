@@ -6,13 +6,51 @@ import {
   TLS_VERSIONS,
   validateTLS,
   isTLSProtocol,
+  isHTTPProtocol,
 } from './../helpers';
 import { ResourceForm } from 'shared/ResourceForm';
 import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSelect';
 import * as Inputs from 'shared/ResourceForm/inputs';
 
+const HttpTlsForm = ({ server, servers, setServers }) => {
+  const handleHttpsRedirect = () => {
+    if (!server?.tls) {
+      server['tls'] = {
+        httpsRedirect: true,
+      };
+    } else {
+      server.tls = undefined;
+    }
+  };
+
+  const { t } = useTranslation();
+  return (
+    <ResourceForm.CollapsibleSection
+      title={t('gateways.create-modal.advanced.tls.tls')}
+      resource={server}
+      defaultOpen={true}
+      setResource={() => setServers([...servers])}
+    >
+      <ResourceForm.FormField
+        label={t('gateways.create-modal.advanced.tls.https-redirect')}
+        tooltipContent={t(
+          'gateways.create-modal.advanced.tls.https-redirect-description',
+        )}
+        input={() => (
+          <Switch
+            compact
+            onChange={handleHttpsRedirect}
+            checked={server.tls?.httpsRedirect}
+          />
+        )}
+      />
+    </ResourceForm.CollapsibleSection>
+  );
+};
+
 const setTlsValue = (server, variableName, value, servers, setServers) => {
   server.tls[variableName] = value;
+
   setServers([...servers]);
 };
 
@@ -53,6 +91,13 @@ export const TlsForm = ({ server = {}, servers, setServers, isAdvanced }) => {
     </MessageStrip>
   );
 
+  const isHTTP = isHTTPProtocol(server?.port?.protocol);
+  if (isHTTP) {
+    return (
+      <HttpTlsForm server={server} servers={servers} setServers={setServers} />
+    );
+  }
+
   return (
     <ResourceForm.CollapsibleSection
       title={t('gateways.create-modal.advanced.tls.tls')}
@@ -70,28 +115,6 @@ export const TlsForm = ({ server = {}, servers, setServers, isAdvanced }) => {
         propertyPath="$.tls.mode"
         input={Inputs.Dropdown}
         options={resourceOptions}
-      />
-      <ResourceForm.FormField
-        advanced
-        label={t('gateways.create-modal.advanced.tls.http-redirect')}
-        tooltipContent={t(
-          'gateways.create-modal.advanced.tls.http-redirect-description',
-        )}
-        input={() => (
-          <Switch
-            compact
-            onChange={() =>
-              setTlsValue(
-                server,
-                'httpsRedirect',
-                !server.tls?.httpsRedirect,
-                servers,
-                setServers,
-              )
-            }
-            checked={server.httpsRedirect}
-          />
-        )}
       />
       <ResourceForm.FormField
         tooltipContent={t('gateways.create-modal.tooltips.credential-name')}

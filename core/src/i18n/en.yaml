@@ -1094,8 +1094,8 @@ gateways:
         ca-certificates: CA Certificate
         credentialName: Credential Name
         disabled-for-non-https: TLS settings are not available for a non-HTTPS protocol.
-        http-redirect: HTTP Redirect
-        http-redirect-description: Enable 301 redirect for all HTTP connections.
+        https-redirect: HTTPS Redirect
+        https-redirect-description: Enable 301 redirect for all HTTP connections.
         max-protocol-version: Max Protocol Version
         messages:
           invalid-tls-warning: TLS Server of mode SIMPLE or MUTUAL needs either credential name, or private key and server certificate pair.
