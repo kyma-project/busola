@@ -4,7 +4,7 @@ import jsyaml from 'js-yaml';
 import {
   chooseComboboxOption,
   deleteFromGenericList,
-} from '../support/helpers';
+} from '../../support/helpers';
 
 const id = Math.random()
   .toString()

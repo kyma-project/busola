@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
-import { loadFile } from '../support/loadFile';
+import { loadFile } from '../../support/loadFile';
 import jsyaml from 'js-yaml';
 
 const APPLICATION_NAME = `test-mock-app-${Cypress.env(
