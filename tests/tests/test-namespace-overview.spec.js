@@ -1,5 +1,6 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
+import { loadFile } from '../support/loadFile';
 
 const LIMIT_NAME = `${Cypress.env('NAMESPACE_NAME')}-limits`;
 const QUOTA_NAME = `${Cypress.env('NAMESPACE_NAME')}-quotas`;
@@ -42,13 +43,10 @@ context(
         .contains('Create Limit Range')
         .click();
 
-      cy.getIframeBody()
-        .find('[role="presentation"],[class="view-lines"]')
-        .first()
-        .click({ force: true })
-        .type(
-          `{uparrow}{uparrow}{uparrow}{uparrow}{uparrow}{uparrow}{uparrow}{uparrow}{uparrow}{uparrow}{leftarrow}{leftarrow}${NEW_LIMIT_NAME}`,
-        );
+      cy.wrap(loadFile('test-limit-ranges.yaml')).then(LR_CONFIG => {
+        const LR = JSON.stringify(LR_CONFIG);
+        cy.pasteToMonaco(LR);
+      });
 
       cy.getIframeBody()
         .contains('button', /^Create$/)
@@ -56,6 +54,24 @@ context(
 
       cy.getIframeBody()
         .contains('b', NEW_LIMIT_NAME)
+        .should('be.visible');
+    });
+
+    it('Check limit range', () => {
+      cy.getIframeBody()
+        .contains('1100Mi')
+        .should('be.visible');
+
+      cy.getIframeBody()
+        .contains('32Mi')
+        .should('be.visible');
+
+      cy.getIframeBody()
+        .contains('512Mi')
+        .should('be.visible');
+
+      cy.getIframeBody()
+        .contains('32Mi')
         .should('be.visible');
     });
 
