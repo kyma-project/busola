@@ -1,6 +1,6 @@
-import { wrap } from './helpers';
-import { match } from './relations/relations';
-import { findCommonPrefix } from './../..';
+import { wrap, makeNode, makeEdge, makeRank, makeCluster } from './helpers';
+import { match } from './../relations/relations';
+import { findCommonPrefix } from './../../..';
 
 // layers of network graph
 export const networkFlowKinds = [
@@ -25,36 +25,6 @@ export const networkFlowResources = [
 
 function isWorkloadLayer(layer) {
   return layer[0].kind === 'Pod';
-}
-
-// lhead overrides actual arrow end
-function makeEdge(id1, id2, { lhead } = {}) {
-  const lHeadStr = lhead ? `[lhead="${lhead}"]` : '';
-  const edge = `"${id1}" -> "${id2}"`;
-  return `${edge} ${lHeadStr}`;
-}
-
-function makeNode(resource) {
-  const { kind, metadata } = resource;
-  const { name, uid } = metadata;
-  return `"${uid}" [label="${kind} ${wrap(name)}"][shape=box]`;
-}
-
-// cluster is a subgraph - the id needs to be prefixed with 'cluster'
-function makeCluster(resource, content) {
-  const { uid, name } = resource.metadata;
-  return `subgraph "cluster_${uid}" { 
-  label="Deployment ${name}";
-    ${content}
-  }`;
-}
-
-// nodes in the same rank should be on the same y position
-// {rank=same; "id1"; "id2"...}
-function makeRank(resources) {
-  return `{rank=same; ${resources
-    .map(resource => `"${resource.metadata.uid}";`)
-    .join(' ')}}`;
 }
 
 // in case there are multiple pods, we don't show them all on network graph
@@ -171,7 +141,7 @@ export function buildNetworkGraph({ store }) {
   }
 
   return `digraph "Graph" {
-    compound="true;
+    compound="true";
     ranksep="1.0";
     fontname="sans-serif";
 

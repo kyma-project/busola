@@ -3,36 +3,28 @@ import { Graphviz } from 'graphviz-react';
 
 import { ErrorBoundary, navigateToResource } from '../..';
 import { useRelatedResources } from './useRelatedResources';
-import { buildStructuralGraph } from './buildStructuralGraph';
-import {
-  buildNetworkGraph,
-  networkFlowResources,
-} from './buildNetworkGraph.js';
+import { buildGraph } from './buildGraph';
 import { useTranslation } from 'react-i18next';
 import { LayoutPanel, Button } from 'fundamental-react';
-import { SaveGraphControls } from './components/SaveGraphControls';
+import { SaveGraphControls } from './SaveGraphControls';
 import './ResourceGraph.scss';
-
-export const isEdge = e => !!e.source && !!e.target;
-export const isNode = e => !isEdge(e);
 
 export function ResourceGraph({
   resource,
   i18n,
   depth = Number.POSITIVE_INFINITY,
 }) {
-  const isStructural = !networkFlowResources.includes(resource.kind);
   const { t } = useTranslation(['translation'], { i18n });
   const [dot, setDot] = useState('');
+  const [isReady, setReady] = useState(false);
 
   const onAllLoaded = () => {
     const data = {
       initialResource: resource,
       depth,
-      context: {},
       store: resourcesStore.current,
     };
-    setDot(isStructural ? buildStructuralGraph(data) : buildNetworkGraph(data));
+    setDot(buildGraph(data));
 
     const initEventListeners = () => {
       const nodes = document.querySelectorAll('#graph-area title');
@@ -59,25 +51,17 @@ export function ResourceGraph({
       initEventListeners();
       // wait until Graphviz renders the nodes
     }, 100);
+
+    setReady(true);
   };
 
   const onRelatedResourcesRefresh = () => {
-    // const data = {
-    //   initialResource: resource,
-    //   depth,
-    //   context: {},
-    //   store: resourcesStore.current,
-    // };
-    // setDot(isStructural ? buildStructuralGraph(data) : buildNetworkGraph(data));
-    // console.log('fresh but does nothing');
-    // setElements(
-    //   buildStructuralGraph(resource, depth, {
-    //     resources: resourcesStore.current,
-    //     nodeCategories,
-    //     namespaceNodes,
-    //     t,
-    //   }),
-    // );
+    const data = {
+      initialResource: resource,
+      depth,
+      store: resourcesStore.current,
+    };
+    setDot(buildGraph(data));
   };
 
   const [resourcesStore, startedLoading, startLoading] = useRelatedResources(
@@ -90,7 +74,13 @@ export function ResourceGraph({
   );
 
   const actions = !startedLoading && (
-    <Button option="emphasized" onClick={startLoading}>
+    <Button
+      option="emphasized"
+      onClick={() => {
+        startLoading();
+        setTimeout(() => window.scroll(0, document.body.scrollHeight), 500);
+      }}
+    >
       {t('common.buttons.load')}
     </Button>
   );
@@ -110,7 +100,7 @@ export function ResourceGraph({
               options={{
                 height: '500px',
                 width: '100%',
-                zoom: true,
+                zoom: isReady, // if always true, then the graph will jump on first pan or zoom
                 useWorker: false,
               }}
             />

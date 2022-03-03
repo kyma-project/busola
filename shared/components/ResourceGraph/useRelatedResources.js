@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import pluralize from 'pluralize';
-import { useMicrofrontendContext, useSingleGet } from '../../';
-import { getApiPath } from './helpers';
+import { useMicrofrontendContext, useSingleGet, getApiPath } from '../../';
 import { match, relations } from './relations/relations';
 
 function getNamespacePart({ resourceToFetch, currentNamespace }) {

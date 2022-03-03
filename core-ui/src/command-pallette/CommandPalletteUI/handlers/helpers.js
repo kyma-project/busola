@@ -4,19 +4,6 @@ export function getSuggestion(phrase, itemList) {
   return didYouMean(phrase, itemList);
 }
 
-export function getApiPath(resourceType, nodes) {
-  const matchedNode = nodes.find(
-    n =>
-      n.resourceType === resourceType || n.navigationContext === resourceType,
-  );
-  try {
-    const url = new URL(matchedNode?.viewUrl);
-    return url.searchParams.get('resourceApiPath');
-  } catch (e) {
-    return null;
-  }
-}
-
 // assume first item is the full name
 export function toFullResourceType(resourceType, resources) {
   return resources.find(r => r.includes(resourceType))?.[0] || resourceType;

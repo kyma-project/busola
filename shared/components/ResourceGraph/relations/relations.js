@@ -17,14 +17,10 @@ export function match(resourceA, resourceB) {
     try {
       return matcher(resourceA, resourceB);
     } catch (e) {
-      console.warn(matcher.name);
       console.warn(e);
-      return false;
     }
-  } else {
-    console.warn('No matcher found for ', kindA, '&', kindB);
-    return false;
   }
+  return false;
 }
 
 export function matchBy(singleResource, resources) {
