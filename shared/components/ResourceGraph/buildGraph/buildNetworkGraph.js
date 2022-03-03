@@ -70,12 +70,12 @@ export function buildNetworkGraph({ store }) {
       const podName = getCombinedPodName(store);
 
       const label = `Pod\n${wrap(podName)}`;
-      let pod = `"${podId}" [label="${label}"][shape=box]`;
+      let pod = `"${podId}" [id="${podId}" label="${label}"][shape=box]`;
       // assume only one deployment
       const deployment = store['Deployment']?.[0];
       // and one replicaSet
       const replicaSet = store['ReplicaSet']?.[0];
-      const hpas = store['HorizontalPodAutoscaler'];
+      const hpas = store['HorizontalPodAutoscaler'] || [];
       if (deployment) {
         pod = makeCluster(
           deployment,

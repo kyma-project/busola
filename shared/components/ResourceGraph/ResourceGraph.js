@@ -15,7 +15,7 @@ export function ResourceGraph({
   depth = Number.POSITIVE_INFINITY,
 }) {
   const { t } = useTranslation(['translation'], { i18n });
-  const [dot, setDot] = useState('');
+  const [dotSrc, setDotSrc] = useState('');
   const [isReady, setReady] = useState(false);
 
   const onAllLoaded = () => {
@@ -24,19 +24,23 @@ export function ResourceGraph({
       depth,
       store: resourcesStore.current,
     };
-    setDot(buildGraph(data));
+    setDotSrc(buildGraph(data));
 
     const initEventListeners = () => {
-      const nodes = document.querySelectorAll('#graph-area title');
       for (const resourcesOfKind of Object.keys(resourcesStore.current)) {
         for (const res of resourcesStore.current[resourcesOfKind]) {
-          const node = [...nodes].find(
-            n =>
-              n.textContent === res.metadata.uid ||
-              n.textContent === `cluster_${res.metadata.uid}`, // handle clusters
-          )?.parentNode;
+          const node = document.getElementById(res.metadata.uid);
 
-          if (!node) continue;
+          if (!node) {
+            console.log(
+              node,
+              'not found by',
+              res.metadata.uid,
+              res.kind,
+              res.metadata.name,
+            );
+            continue;
+          }
 
           if (res.metadata.uid === resource.metadata.uid) {
             node.classList.add('root-node');
@@ -61,7 +65,7 @@ export function ResourceGraph({
       depth,
       store: resourcesStore.current,
     };
-    setDot(buildGraph(data));
+    setDotSrc(buildGraph(data));
   };
 
   const [resourcesStore, startedLoading, startLoading] = useRelatedResources(
@@ -92,10 +96,10 @@ export function ResourceGraph({
         {actions}
       </LayoutPanel.Header>
       <ErrorBoundary i18n={i18n} customMessage={t('resource-graph.error')}>
-        {startedLoading && dot && (
+        {startedLoading && dotSrc && (
           <div id="graph-area">
             <Graphviz
-              dot={dot}
+              dot={dotSrc}
               // https://github.com/magjac/d3-graphviz#selection_graphviz
               options={{
                 height: '500px',
@@ -105,7 +109,7 @@ export function ResourceGraph({
               }}
             />
             <SaveGraphControls
-              content={dot}
+              content={dotSrc}
               // .gv extension is prefered instead of .dot
               name={`${resource.kind} ${resource.metadata.name}.gv`}
               i18n={i18n}

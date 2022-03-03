@@ -16,13 +16,15 @@ export function makeEdge(id1, id2, { lhead } = {}) {
 export function makeNode(resource) {
   const { kind, metadata } = resource;
   const { name, uid } = metadata;
-  return `"${uid}" [label="${kind}\n${wrap(name)}"][shape=box]`;
+  // first is for rendering engine, second goes into actual DOM element
+  return `"${uid}" [id="${uid}" label="${kind}\n${wrap(name)}"][shape=box]`;
 }
 
 // cluster is a subgraph - the id needs to be prefixed with 'cluster'
 export function makeCluster(resource, content) {
   const { uid, name } = resource.metadata;
-  return `subgraph "cluster_${uid}" { 
+  return `subgraph "cluster_${uid}" {
+    id="${uid}"
     label="Deployment ${name}";
       ${content}
     }`;

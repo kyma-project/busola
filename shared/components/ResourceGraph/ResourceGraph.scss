@@ -36,7 +36,8 @@
     cursor: pointer;
   }
 
-  .node:not(.root-node) * {
+  .node:not(.root-node),
+  .cluster:not(.root-node) * {
     cursor: pointer;
   }
 
