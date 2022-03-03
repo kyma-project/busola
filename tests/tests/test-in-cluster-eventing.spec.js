@@ -45,7 +45,7 @@ context('Test in-cluster eventing', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Subscription name"]:visible')
+      .find('[ariaLabel="Subscription name"]:visible')
       .clear()
       .type(`${FUNCTION_RECEIVER_NAME}-subscription`);
 
@@ -188,7 +188,7 @@ context('Test in-cluster eventing', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Subscription name"]:visible')
+      .find('[ariaLabel="Subscription name"]:visible')
       .clear()
       .type(`${API_RULE_AND_FUNCTION_NAME}-subscription`);
 
@@ -201,20 +201,18 @@ context('Test in-cluster eventing', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Choose an Application name"]:visible')
+      .find('[placeholder="Choose Application name"]:visible')
       .clear()
       .type(`test-mock-app-${Cypress.env('NAMESPACE_NAME')}`)
       .click();
 
     cy.getIframeBody()
-      .find(
-        '[placeholder="Enter the event name, for example, order.cancelled"]:visible',
-      )
+      .find('[placeholder="For example, order.cancelled"]:visible')
       .clear()
       .type('order.created');
 
     cy.getIframeBody()
-      .find('[placeholder="Enter the event version, for example, v1"]:visible')
+      .find('[placeholder="For example, v1"]:visible')
       .clear()
       .type('v1')
       .click();

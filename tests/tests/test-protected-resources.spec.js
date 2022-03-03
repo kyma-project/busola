@@ -54,7 +54,7 @@ context('Test Protected Resources', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Config Map name"]:visible')
+      .find('[ariaLabel="Config Map name"]:visible')
       .type(NAME);
 
     cy.getIframeBody()
@@ -106,7 +106,7 @@ context('Test Protected Resources', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Deployment name"]:visible')
+      .find('[ariaLabel="Deployment name"]:visible')
       .clear()
       .type(NAME);
 

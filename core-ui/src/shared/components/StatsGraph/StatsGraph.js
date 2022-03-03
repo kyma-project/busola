@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 
 import { getSIPrefix } from 'shared/helpers/siPrefixes';
@@ -6,7 +7,7 @@ import { getSIPrefix } from 'shared/helpers/siPrefixes';
 import './StatsGraph.scss';
 
 const CANVAS_SCALE = 2;
-const STATS_RATIO = 1 / 3;
+const STATS_RATIO = 1 / 6;
 const PADDING = 5;
 
 function getGeometry(ctx, { scale, hScale, dataPoints }) {
@@ -60,9 +61,9 @@ function getGeometry(ctx, { scale, hScale, dataPoints }) {
 }
 
 function getScaleMax(data, binary = false) {
-  if (!data.length) return { value: 1, precision: 0 };
+  if (!data || !data.length) return { value: 1, precision: 0 };
 
-  let maxData = +data?.reduce((acc, val) => Math.max(acc, val));
+  let maxData = Math.max(...data.map(val => val.reduce((a, b) => +a + +b)));
 
   if (!maxData) {
     return { value: 1, precision: 0 };
@@ -137,7 +138,7 @@ function getTimeScaleLabel(time) {
   });
 }
 
-function getTimeScale({ data, startDate, endDate }) {
+function getTimeScale({ startDate, endDate }) {
   const min = startDate.getTime();
   const max = endDate.getTime();
   const diff = max - min;
@@ -159,14 +160,21 @@ export function StatsGraph({
   binary,
   startDate,
   endDate,
+  labels,
+  displayTotal,
 }) {
   if (!data) data = [];
+  data = data.map(val => (Array.isArray(val) ? val : [val]));
+
+  const { t } = useTranslation();
 
   const [width, setWidth] = useState(300);
   const [height, setHeight] = useState(300 * STATS_RATIO);
   const [textColor, setTextColor] = useState('#000');
-  const [barColor, setBarColor] = useState();
-  const [highlightColor, setHighlightColor] = useState();
+  const [barColor, setBarColor] = useState('');
+  const barColors = barColor.trim().split(/ +/);
+  const [highlightColor, setHighlightColor] = useState('');
+  const highlightColors = highlightColor.trim().split(/ +/);
   const [tooltipColor, setTooltipColor] = useState();
   const [font, setFont] = useState();
   const [activeBar, setActiveBar] = useState(null);
@@ -245,56 +253,135 @@ export function StatsGraph({
       const left =
         geometry.graph.left +
         geometry.sectionWidth * (dataOffset + index + 0.5);
-      const bottom = geometry.graph.top + geometry.graph.height;
-      const top = bottom - (value / scale.max) * geometry.graph.height;
-      return { value, left, bottom, top };
+      if (Array.isArray(value)) {
+        const bottom = geometry.graph.top + geometry.graph.height;
+        const bars = value.reduce(
+          (acc, val) => [
+            acc[0] - (val / scale.max) * geometry.graph.height,
+            ...acc,
+          ],
+          [bottom],
+        );
+        return { value, left, bars };
+      } else {
+        const bottom = geometry.graph.top + geometry.graph.height;
+        const top = bottom - (value / scale.max) * geometry.graph.height;
+        return { value, left, bars: [top, bottom] };
+      }
     });
 
-    dataWithGeometry.forEach(({ value, left, bottom, top }, index) => {
+    dataWithGeometry.forEach(({ value, left, bars }, index) => {
       if (activeBar !== null && index === activeBar - dataOffset) {
-        if (highlightColor) {
-          ctx.fillStyle = highlightColor;
-        } else {
-          ctx.fillStyle = barColor || textColor;
-          ctx.globalAlpha = 0.5;
-        }
-        ctx.beginPath();
-        ctx.ellipse(left, top, halfBar * 1.5, halfBar * 1.5, 0, Math.PI, 0);
-        ctx.ellipse(left, bottom, halfBar * 1.5, halfBar * 1.5, 0, 0, Math.PI);
-        ctx.fill();
+        bars.reduce((top, bottom, idx) => {
+          if (highlightColor) {
+            ctx.fillStyle = highlightColors[idx - 1];
+          } else {
+            ctx.fillStyle = barColors[idx - 1] || textColor;
+            ctx.globalAlpha = 0.5;
+          }
+
+          ctx.beginPath();
+          ctx.ellipse(left, top, halfBar * 1.5, halfBar * 1.5, 0, Math.PI, 0);
+          ctx.ellipse(
+            left,
+            bottom,
+            halfBar * 1.5,
+            halfBar * 1.5,
+            0,
+            0,
+            Math.PI,
+          );
+          ctx.fill();
+          return bottom;
+        });
         ctx.globalAlpha = 1;
       }
 
-      ctx.fillStyle = barColor || textColor;
-      ctx.beginPath();
-      ctx.ellipse(left, top, halfBar, halfBar, 0, Math.PI, 0);
-      ctx.ellipse(left, bottom, halfBar, halfBar, 0, 0, Math.PI);
-      ctx.fill();
+      bars.reduce((top, bottom, idx) => {
+        ctx.fillStyle = barColors[idx - 1] || textColor;
+        ctx.beginPath();
+        ctx.ellipse(left, top, halfBar, halfBar, 0, Math.PI, 0);
+        ctx.ellipse(left, bottom, halfBar, halfBar, 0, 0, Math.PI);
+        ctx.fill();
+        return bottom;
+      });
     });
 
-    dataWithGeometry.forEach(({ value, left, bottom, top }, index) => {
+    dataWithGeometry.forEach(({ value, left, bars }, index) => {
+      if (!Array.isArray(value)) {
+        value = [value];
+      }
+
       if (activeBar !== null && index === activeBar - dataOffset) {
         const labelPadding = 2;
-        const labelContent = getSIPrefix(value, binary, { unit }).string;
+        let labelContent;
+        if (value.length === 1 && !labels?.[0]) {
+          labelContent = [getSIPrefix(value[0], binary, { unit }).string];
+        } else {
+          labelContent = value.map((val, idx) => {
+            const labelTitle = labels?.[idx] || idx + 1;
+            const labelValue = getSIPrefix(val, binary, { unit }).string;
+            return `${labelTitle}: ${labelValue}`;
+          });
+          if (displayTotal) {
+            const sum = value.reduce((a, b) => +a + +b);
+            const sumLabel = getSIPrefix(sum, binary, { unit }).string;
+            labelContent.push(`${t('graphs.total')}: ${sumLabel}`);
+          }
+        }
 
-        const labelWidth = ctx.measureText(labelContent).width;
-        const labelHeight = parseInt(ctx.font);
+        const labelWidth = Math.max(
+          ...labelContent.map(labelLine => ctx.measureText(labelLine).width),
+        );
+        const lineHeight = parseInt(ctx.font) * 1.2;
+        const labelHeight = lineHeight * labelContent.length;
+
+        const boxWidth = Math.round(labelWidth + labelPadding * 2);
+        const boxHeight = Math.round(labelHeight + labelPadding * 2);
+
+        let top = bars[0];
+        let boxLeft = Math.round(left - boxWidth / 2);
+        let boxTop = Math.round(top - lineHeight - labelPadding);
+
+        if (boxTop < 0) {
+          const overflow = 2 - boxTop;
+          top += overflow;
+          boxTop += overflow;
+        }
+        if (boxLeft < geometry.graph.left) {
+          const overflow = geometry.graph.left + 2 - boxLeft;
+          left += overflow;
+          boxLeft += overflow;
+        }
+        if (boxLeft + boxWidth > width) {
+          const overflow = boxLeft + boxWidth - width + 2;
+          left -= overflow;
+          boxLeft -= overflow;
+        }
+        if (boxTop + boxHeight > geometry.graph.height) {
+          const overflow = boxTop + boxHeight - geometry.graph.height;
+          top -= overflow;
+          boxTop -= overflow;
+        }
+
+        const boxCoords = [boxLeft, boxTop, boxWidth, boxHeight];
 
         ctx.strokeStyle = textColor;
+        ctx.strokeRect(...boxCoords);
+
         ctx.fillStyle = tooltipColor;
-        const rectCoords = [
-          Math.round(left - labelWidth / 2 - labelPadding),
-          Math.round(top - labelHeight - labelPadding),
-          Math.round(labelWidth + labelPadding * 2),
-          Math.round(labelHeight + labelPadding * 2),
-        ];
-        ctx.strokeRect(...rectCoords);
-        ctx.fillRect(...rectCoords);
+        ctx.fillRect(...boxCoords);
 
         ctx.fillStyle = textColor;
         ctx.textBaseline = 'bottom';
         ctx.textAlign = 'center';
-        ctx.fillText(labelContent, Math.round(left), Math.round(top));
+        labelContent.forEach((labelLine, index) => {
+          ctx.fillText(
+            labelLine,
+            Math.round(left),
+            Math.round(top) + index * lineHeight,
+          );
+        });
       }
     });
   }, [textColor, barColor, canvas, data, width, height, activeBar]); // eslint-disable-line react-hooks/exhaustive-deps

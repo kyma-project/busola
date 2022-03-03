@@ -83,7 +83,8 @@ const ServiceClassInfo = ({ serviceClass, labels, planSelector }) => {
         style={{ gridColumn: '1 / span 4' }}
         title={serviceClassTileTitles.description}
       >
-        {serviceClass.spec.description}
+        {serviceClass.spec.externalMetadata?.longDescription ||
+          serviceClass.spec.description}
       </PageHeader.Column>
 
       {tagsCombined && tagsCombined.length > 0 && (
