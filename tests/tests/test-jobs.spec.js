@@ -116,6 +116,7 @@ context('Test Jobs', () => {
     // status
     cy.getIframeBody()
       .find('[role="status"]', { timeout: 30 * 1000 })
+      .first()
       .should('have.text', 'Completed');
 
     // check logs
