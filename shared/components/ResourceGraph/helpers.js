@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 export function getApiPath(resourceType, nodes) {
   const matchedNode = nodes.find(
     n =>
@@ -9,4 +11,10 @@ export function getApiPath(resourceType, nodes) {
   } catch (e) {
     return null;
   }
+}
+
+export function wrap(str) {
+  return _.chunk(str.split(''), 15)
+    .map(s => s.join(''))
+    .join('\n');
 }

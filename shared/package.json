@@ -28,7 +28,6 @@
     "buffer": "^6.0.3",
     "graphviz-react": "^1.2.0",
     "react": "../node_modules/react",
-    "react-tippy": "^1.4.0",
-    "svg-pan-zoom": "^3.6.1"
+    "react-tippy": "^1.4.0"
   }
 }

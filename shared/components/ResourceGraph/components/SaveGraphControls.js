@@ -3,17 +3,16 @@ import { saveAs } from 'file-saver';
 import { Button, Icon } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
-export function SaveGraphControls(props) {
-  const { getContent, getName, i18n } = props;
+export function SaveGraphControls({ content, name, i18n }) {
   const { t } = useTranslation(['translation'], { i18n });
   return (
     <Button
       className="controls controls__right"
       onClick={() => {
-        const blob = new Blob([getContent()], {
+        const blob = new Blob([content], {
           type: '	text/vnd.graphviz',
         });
-        saveAs(blob, getName());
+        saveAs(blob, name);
       }}
     >
       <Icon
