@@ -100,7 +100,7 @@ context('Test Gateways', () => {
       .should('have.attr', 'readonly');
 
     cy.getIframeBody()
-      .contains('TLS settings are not available for a non-HTTPS protocol.')
+      .contains('HTTPS Redirect')
       .should('be.visible');
 
     // change server to HTTPS
