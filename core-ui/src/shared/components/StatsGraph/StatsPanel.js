@@ -151,6 +151,7 @@ export function StatsPanel({ type, ...props }) {
             metric={metric}
             className={metric}
             timeSpan={timeSpans[timeSpan]}
+            {...props}
           />
         )}
         {metric === 'network' && (
@@ -161,6 +162,7 @@ export function StatsPanel({ type, ...props }) {
             className={metric}
             timeSpan={timeSpans[timeSpan]}
             labels={[t('graphs.network-up'), t('graphs.network-down')]}
+            {...props}
           />
         )}
       </LayoutPanel.Body>
