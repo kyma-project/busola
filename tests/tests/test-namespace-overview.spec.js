@@ -69,10 +69,6 @@ context(
       cy.getIframeBody()
         .contains('512Mi')
         .should('be.visible');
-
-      cy.getIframeBody()
-        .contains('32Mi')
-        .should('be.visible');
     });
 
     it('Delete all limits and quotas', () => {
