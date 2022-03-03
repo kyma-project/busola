@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Graphviz } from 'graphviz-react';
 
-import { navigateToResource } from '../..';
+import { ErrorBoundary, navigateToResource } from '../..';
 import { useRelatedResources } from './useRelatedResources';
 import { buildStructuralGraph } from './buildStructuralGraph';
 import {
@@ -38,8 +38,11 @@ export function ResourceGraph({
       const nodes = document.querySelectorAll('#graph-area title');
       for (const resourcesOfKind of Object.keys(resourcesStore.current)) {
         for (const res of resourcesStore.current[resourcesOfKind]) {
-          const node = [...nodes].find(n => n.textContent === res.metadata.uid)
-            ?.parentNode;
+          const node = [...nodes].find(
+            n =>
+              n.textContent === res.metadata.uid ||
+              n.textContent === `cluster_${res.metadata.uid}`, // handle clusters
+          )?.parentNode;
 
           if (!node) continue;
 
@@ -54,6 +57,7 @@ export function ResourceGraph({
 
     setTimeout(() => {
       initEventListeners();
+      // wait until Graphviz renders the nodes
     }, 100);
   };
 
@@ -97,25 +101,28 @@ export function ResourceGraph({
         <LayoutPanel.Head title={t('resource-graph.title')} />
         {actions}
       </LayoutPanel.Header>
-      {startedLoading && dot && (
-        <div id="graph-area">
-          <Graphviz
-            dot={dot}
-            // https://github.com/magjac/d3-graphviz#selection_graphviz
-            options={{
-              height: '500px',
-              width: '100%',
-              zoom: true,
-              useWorker: false,
-            }}
-          />
-          <SaveGraphControls
-            content={dot}
-            name={`${resource.kind} ${resource.metadata.name}.gv`}
-            i18n={i18n}
-          />
-        </div>
-      )}
+      <ErrorBoundary i18n={i18n} customMessage={t('resource-graph.error')}>
+        {startedLoading && dot && (
+          <div id="graph-area">
+            <Graphviz
+              dot={dot}
+              // https://github.com/magjac/d3-graphviz#selection_graphviz
+              options={{
+                height: '500px',
+                width: '100%',
+                zoom: true,
+                useWorker: false,
+              }}
+            />
+            <SaveGraphControls
+              content={dot}
+              // .gv extension is prefered instead of .dot
+              name={`${resource.kind} ${resource.metadata.name}.gv`}
+              i18n={i18n}
+            />
+          </div>
+        )}
+      </ErrorBoundary>
     </LayoutPanel>
   );
 }

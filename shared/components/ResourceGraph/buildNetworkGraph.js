@@ -2,6 +2,7 @@ import { wrap } from './helpers';
 import { match } from './relations/relations';
 import { findCommonPrefix } from './../..';
 
+// layers of network graph
 export const networkFlowKinds = [
   ['VirtualService', 'Gateway'],
   ['APIRule', 'Function'],
@@ -11,6 +12,7 @@ export const networkFlowKinds = [
   'ServiceAccount',
 ];
 
+// resources that use network flow graph
 export const networkFlowResources = [
   'APIRule',
   'Deployment',
@@ -32,18 +34,56 @@ function makeEdge(id1, id2, { lhead } = {}) {
   return `${edge} ${lHeadStr}`;
 }
 
-export function buildNetworkGraph({ store }) {
-  const layers = networkFlowKinds
+function makeNode(resource) {
+  const { kind, metadata } = resource;
+  const { name, uid } = metadata;
+  return `"${uid}" [label="${kind} ${wrap(name)}"][shape=box]`;
+}
+
+// cluster is a subgraph - the id needs to be prefixed with 'cluster'
+function makeCluster(resource, content) {
+  const { uid, name } = resource.metadata;
+  return `subgraph "cluster_${uid}" { 
+  label="Deployment ${name}";
+    ${content}
+  }`;
+}
+
+// nodes in the same rank should be on the same y position
+// {rank=same; "id1"; "id2"...}
+function makeRank(resources) {
+  return `{rank=same; ${resources
+    .map(resource => `"${resource.metadata.uid}";`)
+    .join(' ')}}`;
+}
+
+// in case there are multiple pods, we don't show them all on network graph
+// just get the common part of name with '*' as suffix
+function getCombinedPodName(store) {
+  return store['Pod'].length > 1
+    ? findCommonPrefix(
+        '',
+        store['Pod'].map(pod => pod.metadata.name),
+      ) + '*'
+    : store['Pod'][0].metadata.name;
+}
+
+function getResourcesOnLayers(store) {
+  return networkFlowKinds
     .map(kind => {
-      if (typeof kind === 'string') {
-        // single kind
-        return store[kind];
-      } else {
+      if (Array.isArray(kind)) {
         // multiple kinds
         return kind.flatMap(k => store[k]).filter(Boolean);
+      } else {
+        // single kind
+        return store[kind];
       }
     })
     .filter(layer => layer?.length);
+}
+
+export function buildNetworkGraph({ store }) {
+  const layers = getResourcesOnLayers(store);
 
   const strLayers = [];
   const strEdges = [];
@@ -57,33 +97,27 @@ export function buildNetworkGraph({ store }) {
       const podId = multiplePods
         ? 'composite-pod'
         : store['Pod'][0].metadata.uid;
-      const podName = multiplePods
-        ? findCommonPrefix(
-            '',
-            store['Pod'].map(pod => pod.metadata.name),
-          )
-        : store['Pod'][0].metadata.name;
+      const podName = getCombinedPodName(store);
 
       const label = `Pod\n${wrap(podName)}`;
       let pod = `"${podId}" [label="${label}"][shape=box]`;
+      // assume only one deployment
       const deployment = store['Deployment']?.[0];
+      // and one replicaSet
       const replicaSet = store['ReplicaSet']?.[0];
-      const hpa = store['HorizontalPodAutoscaler']?.[0];
+      const hpas = store['HorizontalPodAutoscaler'];
       if (deployment) {
-        pod = `
-        subgraph "cluster_${deployment.metadata.uid}" { 
-          label="Deployment ${deployment.metadata.name}";
-         ${pod}
-
-         ${replicaSet ? `"ReplicaSet ${wrap(replicaSet.metadata.name)}"` : ''}
-         ${hpa ? `"HPA ${wrap(hpa.metadata.name)}"` : ''}
-        }`;
+        pod = makeCluster(
+          deployment,
+          `${pod}
+         ${replicaSet ? makeNode(replicaSet) : ''}
+         ${hpas.map(makeNode)}`,
+        );
       } else {
         // no wrapping deployment, at least add connection between Pod and RS
         if (!deployment && !!replicaSet) {
-          const { name, uid } = replicaSet.metadata;
-          strLayers.push(`"${uid}" [label="ReplicaSet ${name}"][shape=box]`);
-          strEdges.push(makeEdge(podId, uid));
+          strLayers.push(makeNode(replicaSet));
+          strEdges.push(makeEdge(podId, replicaSet.metadata.uid));
         }
       }
       strLayers.push(pod);
@@ -95,21 +129,8 @@ export function buildNetworkGraph({ store }) {
         });
       }
     } else {
-      const nodesForLayer = currentLayer
-        .map(resource => {
-          const id = resource.metadata.uid;
-          const label = `${resource.kind}\n${wrap(resource.metadata.name)}`;
-          return `"${id}" [label="${label}"][shape=box];`;
-        })
-        .join('\n');
-
-      // nodes in the same rank should be on the same y position
-      // {rank=same; "id1"; "id2"...}
-      const rank = `{rank=same; ${currentLayer
-        .map(resource => `"${resource.metadata.uid}";`)
-        .join(' ')}}`;
-
-      strLayers.push(`${nodesForLayer}\n${rank}`);
+      strLayers.push(currentLayer.map(makeNode).join('\n'));
+      strLayers.push(makeRank(currentLayer));
 
       if (!nextLayer) continue;
       // normal layers, connect matching resources
@@ -150,7 +171,7 @@ export function buildNetworkGraph({ store }) {
   }
 
   return `digraph "Graph" {
-    compound="true";
+    compound="true;
     ranksep="1.0";
     fontname="sans-serif";
 

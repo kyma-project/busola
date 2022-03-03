@@ -7,7 +7,7 @@ export function SaveGraphControls({ content, name, i18n }) {
   const { t } = useTranslation(['translation'], { i18n });
   return (
     <Button
-      className="controls controls__right"
+      className="controls"
       onClick={() => {
         const blob = new Blob([content], {
           type: '	text/vnd.graphviz',

@@ -15,7 +15,6 @@ export const ServicesDetails = ({ DefaultRenderer, ...otherParams }) => {
   if (features?.EVENTING?.isEnabled) {
     customComponents.push(service => (
       <SubscriptionsList
-        key="subscriptions"
         serviceName={service.metadata.name}
         namespace={service.metadata.namespace}
       />

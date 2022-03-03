@@ -1675,6 +1675,7 @@ resource-graph:
   controls:
     center: Center
     save-as: dot format
+  error: Something went wrong during rendering the graph.
   title: Resource Graph
 resource-quotas:
   headers:
