@@ -18,13 +18,17 @@ export function ResourceGraph({
   const [dotSrc, setDotSrc] = useState('');
   const [isReady, setReady] = useState(false);
 
-  const onAllLoaded = () => {
+  const redraw = () => {
     const data = {
       initialResource: resource,
       depth,
       store: resourcesStore.current,
     };
     setDotSrc(buildGraph(data));
+  };
+
+  const onAllLoaded = () => {
+    redraw();
 
     const initEventListeners = () => {
       for (const resourcesOfKind of Object.keys(resourcesStore.current)) {
@@ -50,21 +54,12 @@ export function ResourceGraph({
     setReady(true);
   };
 
-  const onRelatedResourcesRefresh = () => {
-    const data = {
-      initialResource: resource,
-      depth,
-      store: resourcesStore.current,
-    };
-    setDotSrc(buildGraph(data));
-  };
-
   const [resourcesStore, startedLoading, startLoading] = useRelatedResources(
     resource,
     depth,
     {
       onAllLoaded,
-      onRelatedResourcesRefresh,
+      onRelatedResourcesRefresh: redraw,
     },
   );
 
