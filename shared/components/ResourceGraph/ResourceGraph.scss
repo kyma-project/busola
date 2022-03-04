@@ -3,17 +3,6 @@
     display: flex;
     justify-content: space-between;
   }
-
-  .view-switcher {
-    width: 150px;
-    display: flex;
-  }
-
-  .view-switcher__tooltip {
-    display: flex !important;
-    justify-content: center;
-    flex-direction: column;
-  }
 }
 
 #graph-area {
@@ -21,6 +10,7 @@
   justify-content: center;
   background: var(--sapNeutralBackground);
   height: 500px;
+  position: relative;
 
   & > :first-child {
     width: 100%;
@@ -31,23 +21,16 @@
     fill: var(--sapGroup_ContentBackground);
   }
 
+  #graph0 > polygon {
+    fill: var(--sapNeutralBackground);
+  }
+
+  .node:not(.root-node),
+  .cluster:not(.root-node) *,
   .node:not(.root-node) > polygon,
   .cluster > polygon {
     cursor: pointer;
   }
-
-  .node:not(.root-node),
-  .cluster:not(.root-node) * {
-    cursor: pointer;
-  }
-
-  #graph0 > polygon {
-    fill: var(--sapNeutralBackground);
-  }
-}
-
-#graph-area {
-  position: relative;
 
   .controls {
     bottom: 10px;
