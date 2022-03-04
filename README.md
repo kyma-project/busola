@@ -56,15 +56,15 @@ Busola configuration is the product of gathering and merging the configurations 
 
 **Backend:**
 
-- Busola default cluster configuration, acquired from the file [defaultConfig.json](core/src/assets/defaultConfig.json), that is hard-linked in the backend repository.
+- Busola backend default cluster configuration, acquired from the file [defaultConfig.json](backend/settings/defaultConfig.json).
 - Busola cluster configuration, available on the Busola cluster in ConfigMap "busola/busola-config" under the key "config".
   This data is mounted to the Busola `web` and `backend` pods, and during the local development,
-  the [defaultConfig.json](core/src/assets/defaultConfig.json) file is used.
+  the [defaultConfig.json](backend/settings/defaultConfig.json) file is used.
 
 **Frontend:**
 
 - Built-in, hardcoded defaults.
-- Busola default cluster configuration, acquired from the file [defaultConfig.json](core/src/assets/defaultConfig.json).
+- Busola frontend default cluster configuration, acquired from the file [defaultConfig.json](core/src/assets/defaultConfig.json).
 - Busola cluster configuration, available on the Busola cluster in ConfigMap "busola/busola-config" under the key "config".
   This data is mounted to the Busola `web` and `backend` pods, and during the local development,
   the [defaultConfig.json](core/src/assets/defaultConfig.json) file is used.

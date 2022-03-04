@@ -13,10 +13,10 @@ export async function getBusolaClusterParams() {
         '/assets/config/config.json' + cacheBuster,
       );
 
-      const defultParams = await defaultConfigResponse.json();
+      const defaultParams = await defaultConfigResponse.json();
       const mapParams = await configMapResponse.json();
 
-      params = merge(defultParams, mapParams);
+      params = merge(defaultParams, mapParams);
     } catch (e) {
       console.warn('Cannot load cluster params: ', e);
       params = {};
