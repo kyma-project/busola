@@ -31,16 +31,7 @@ export function ResourceGraph({
         for (const res of resourcesStore.current[resourcesOfKind]) {
           const node = document.getElementById(res.metadata.uid);
 
-          if (!node) {
-            console.log(
-              node,
-              'not found by',
-              res.metadata.uid,
-              res.kind,
-              res.metadata.name,
-            );
-            continue;
-          }
+          if (!node) continue;
 
           if (res.metadata.uid === resource.metadata.uid) {
             node.classList.add('root-node');
