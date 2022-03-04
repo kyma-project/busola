@@ -119,18 +119,16 @@ export function StatsPanel({ type, ...props }) {
   return (
     <LayoutPanel className="fd-margin--md stats-panel">
       <LayoutPanel.Header>
-        <LayoutPanel.Head
-          title={
-            <Dropdown
-              selectedKey={metric}
-              onSelect={(e, val) => setMetric(val.key)}
-              options={['cpu', 'memory', 'network'].map(option => ({
-                key: option,
-                text: t(`graphs.${option}`),
-              }))}
-            />
-          }
-        />
+        <LayoutPanel.Filters>
+          <Dropdown
+            selectedKey={metric}
+            onSelect={(e, val) => setMetric(val.key)}
+            options={['cpu', 'memory', 'network'].map(option => ({
+              key: option,
+              text: t(`graphs.${option}`),
+            }))}
+          />
+        </LayoutPanel.Filters>
         <LayoutPanel.Actions>
           <ButtonSegmented>
             {Object.keys(timeSpans).map(ts => (
@@ -149,18 +147,22 @@ export function StatsPanel({ type, ...props }) {
       <LayoutPanel.Body>
         {metric !== 'network' && (
           <SingleGraph
+            type={type}
             metric={metric}
             className={metric}
             timeSpan={timeSpans[timeSpan]}
+            {...props}
           />
         )}
         {metric === 'network' && (
           <DualGraph
+            type={type}
             metric1={'network-up'}
             metric2={'network-down'}
             className={metric}
             timeSpan={timeSpans[timeSpan]}
             labels={[t('graphs.network-up'), t('graphs.network-down')]}
+            {...props}
           />
         )}
       </LayoutPanel.Body>
