@@ -145,7 +145,7 @@ The document lists and describes all the feature flags that are available in Kym
 
 - **GZIP** – is used to indicate whether the response from the backend server should be compressed or not.
 
-  Backend feature. Cannot be modified at the cluster's ConfigMap level.
+  Backend feature. Cannot be modified at the cluster's Config Map level.
 
   Default settings:
 
