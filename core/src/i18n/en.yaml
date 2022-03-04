@@ -544,7 +544,7 @@ common:
     duplicate-key: Duplicate key
     error: Error
     hide: Hide Read-Only Fields
-    k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' (e.g.: 'my-name1')."
+    k8s-name-input: 'Name must consist of lowercase alphanumeric characters, can contain ''-'' (e.g.: ''my-name1'').'
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: Key and value must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     read-file: Read file content as a single value, with file name as a key.
@@ -655,8 +655,8 @@ containers:
   tooltips:
     completed: Container completed
     containercreating: Creating container
-    containersnotinitialized: Containers not initialized
-    containersnotready: Containers not ready
+    containersnotinitialized: Container not initialized
+    containersnotready: Container not ready
     crashloopbackoff: Container is in a crashing loop
     createcontainerconfigerror: Create container configuration error
     createcontainererror: Create container error
@@ -1414,7 +1414,7 @@ jobs:
     complete: Job completed
     not-complete: Job in progress
 kubeconfig-id:
-  error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})"
+  error: 'Couldn''t load kubeconfig ID; configuration not changed (Error: ${{error}})'
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
 legal:
   copyright: Copyright
