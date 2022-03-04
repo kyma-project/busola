@@ -96,7 +96,7 @@ export function ResourceGraph({
             />
             <SaveGraphControls
               content={dotSrc}
-              // .gv extension is prefered instead of .dot
+              // .gv extension is preferred instead of .dot
               name={`${resource.kind} ${resource.metadata.name}.gv`}
               i18n={i18n}
             />
