@@ -30,7 +30,7 @@ export function buildStructuralGraph({ initialResource, depth, store }) {
           continue;
         }
 
-        // add not if not exists
+        // add node if not exists
         if (
           !nodes.find(
             g => g.resource.metadata.uid === relatedResource.metadata.uid,
