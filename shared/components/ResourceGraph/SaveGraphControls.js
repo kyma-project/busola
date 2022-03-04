@@ -10,7 +10,7 @@ export function SaveGraphControls({ content, name, i18n }) {
       className="controls"
       onClick={() => {
         const blob = new Blob([content], {
-          type: '	text/vnd.graphviz',
+          type: 'text/vnd.graphviz',
         });
         saveAs(blob, name);
       }}
