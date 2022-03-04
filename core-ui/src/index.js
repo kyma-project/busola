@@ -9,6 +9,7 @@ import yaml from 'js-yaml';
 import './index.scss';
 import './fiori-helpers.scss';
 import App from './components/App/App';
+import ServiceCatalogUI from './service-catalog-ui/components/App/App';
 
 // NOTE react-shared has to be imported after App for some unknown reason
 import { Microfrontend, Spinner } from 'react-shared';
@@ -44,6 +45,7 @@ ReactDOM.render(
       <Suspense fallback={<Spinner />}>
         <CommandPaletteProvider>
           <App />
+          <ServiceCatalogUI />
         </CommandPaletteProvider>
       </Suspense>
     </BrowserRouter>

@@ -15,6 +15,7 @@
     "pako": "^2.0.4",
     "react": "../node_modules/react",
     "react-hook-form": "^6.0.0",
+    "styled-components": "^5.3.3",
     "use-debounce": "^7.0.1",
     "yup": "^0.28.3"
   },
@@ -46,6 +47,8 @@
     ]
   },
   "devDependencies": {
-    "babel-polyfill": "^6.26.0"
+    "babel-polyfill": "^6.26.0",
+    "react-app-rewired": "^2.2.1",
+    "react-jsonschema-form": "1.7.0"
   }
 }
