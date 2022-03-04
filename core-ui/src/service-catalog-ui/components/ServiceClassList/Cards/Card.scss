@@ -1,0 +1,39 @@
+.card,
+.card.fd-tile {
+  width: 100%;
+  height: auto;
+  max-width: none;
+  max-height: none;
+  display: grid;
+  grid-template-rows: auto auto max-content;
+  grid-gap: 1.2rem;
+
+  &__header {
+    width: 100%;
+    display: grid;
+    grid-template-columns: max-content auto max-content;
+    grid-gap: 0.5rem;
+
+    .title {
+      white-space: normal;
+    }
+
+    .icon {
+      $verticalOffset: -4px;
+      background-color: var(--sapNeutralBackground);
+      color: var(--sapTextColor);
+      margin-left: 10px;
+      text-align: center;
+      width: 28px;
+      border-radius: 4px;
+      height: 28px;
+      padding: 0;
+      padding-top: -$verticalOffset;
+      transform: translateY($verticalOffset);
+    }
+  }
+
+  &__description {
+    color: var(--sapTextColor);
+  }
+}
