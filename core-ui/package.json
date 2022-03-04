@@ -20,10 +20,10 @@
     "yup": "^0.28.3"
   },
   "scripts": {
-    "start": "(cd ..; gulp copy-themes)& PORT=8889 ../node_modules/.bin/react-scripts start",
+    "start": "(cd ..; gulp copy-themes)& PORT=8889 ../node_modules/.bin/react-app-rewired start",
     "start:kyma": "BROWSER=none npm run start",
-    "build": "(cd ..; npm run copy-themes) && PUBLIC_URL=/core-ui INLINE_RUNTIME_CHUNK=false ../node_modules/.bin/react-scripts build",
-    "test": "../node_modules/.bin/react-scripts test",
+    "build": "(cd ..; npm run copy-themes) && PUBLIC_URL=/core-ui INLINE_RUNTIME_CHUNK=false ../node_modules/.bin/react-app-rewired build",
+    "test": "../node_modules/.bin/react-app-rewired test",
     "eject": "../node_modules/.bin/react-scripts eject"
   },
   "browserslist": {
@@ -48,7 +48,6 @@
   },
   "devDependencies": {
     "babel-polyfill": "^6.26.0",
-    "react-app-rewired": "^2.2.1",
     "react-jsonschema-form": "1.7.0"
   }
 }

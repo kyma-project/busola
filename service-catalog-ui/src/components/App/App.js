@@ -18,6 +18,7 @@ import {
 
 import { CATALOG_TITLE, INSTANCES_TITLE } from '../../shared/constants';
 const App = () => {
+  console.log('OLD service catalog ');
   const { language } = useMicrofrontendContext();
   const { i18n } = useTranslation();
   useEffect(() => {

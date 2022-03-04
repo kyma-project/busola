@@ -7,7 +7,6 @@ import { BrowserRouter } from 'react-router-dom';
 import yaml from 'js-yaml';
 
 import './index.scss';
-import './fiori-helpers.scss';
 
 import App from 'components/App/App';
 // NOTE react-shared has to be imported after App for some unknown reason

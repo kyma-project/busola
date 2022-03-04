@@ -1,13 +1,13 @@
 import React, { Fragment } from 'react';
-import Grid from 'styled-components-grid';
+// import Grid from 'styled-components-grid';
 import { Modal } from 'react-shared';
 import {
   List,
-  Item,
+  // Item,
   Bold,
   Text,
-  SecretKey,
-  CenterVertically,
+  // SecretKey,
+  // CenterVertically,
   Button,
 } from './styled';
 import { useTranslation } from 'react-i18next';
@@ -32,21 +32,25 @@ class SecretDataModal extends React.Component {
   };
 
   populateItems = (data, encoded) => {
+    //TODO fix the grid, plugin is not compativble wiht react
     return Object.entries(data).map(([key, value]) => (
-      <Grid key={key}>
-        <Grid.Unit size={0.45}>
-          <Item>
-            <SecretKey>{key}</SecretKey>
-          </Item>
-        </Grid.Unit>
-        <Grid.Unit size={0.55}>
-          <CenterVertically>
-            <Item data-e2e-id={`secret-${encoded ? 'encoded' : 'decoded'}`}>
-              {encoded ? this.randomizeAsterisks(data[key]) : atob(value)}
-            </Item>
-          </CenterVertically>
-        </Grid.Unit>
-      </Grid>
+      <>
+        {/*<Grid key={key}>*/}
+        {/*  <Grid.Unit size={0.45}>*/}
+        {/*    <Item>*/}
+        {/*      <SecretKey>{key}</SecretKey>*/}
+        {/*    </Item>*/}
+        {/*  </Grid.Unit>*/}
+        {/*  <Grid.Unit size={0.55}>*/}
+        {/*    <CenterVertically>*/}
+        {/*      <Item data-e2e-id={`secret-${encoded ? 'encoded' : 'decoded'}`}>*/}
+        {/*        {encoded ? this.randomizeAsterisks(data[key]) : atob(value)}*/}
+        {/*      </Item>*/}
+        {/*    </CenterVertically>*/}
+        {/*  </Grid.Unit>*/}
+        {/*</Grid>*/}
+        grid here
+      </>
     ));
   };
 
