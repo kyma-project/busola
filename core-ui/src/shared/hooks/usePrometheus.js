@@ -1,34 +1,75 @@
 import { useEffect, useState } from 'react';
 import { useGet } from 'react-shared';
 
-export function prometheusSelector(type, data) {
+const getPrometheusSelector = data => {
+  return `cluster="", container!="", namespace="${data.namespace}", pod="${data.pod}"`;
+};
+
+const getPrometheusCPUQuery = (type, data, step) => {
   if (type === 'cluster') {
-    return `container_name!="POD"`;
+    return `count(node_cpu_seconds_total{mode="idle"}) - sum(rate(node_cpu_seconds_total{mode="idle"}[${step}s]))`;
   } else if (type === 'pod') {
-    return `namespace="${data.namespace}",pod="${data.pod}"`;
+    return `sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{${getPrometheusSelector(
+      data,
+    )}})`;
   } else {
     return '';
   }
-}
+};
+
+const getPrometheusMemoryQuery = (type, data) => {
+  if (type === 'cluster') {
+    return `sum(node_memory_MemTotal_bytes - node_memory_MemFree_bytes)`;
+  } else if (type === 'pod') {
+    return `sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{${getPrometheusSelector(
+      data,
+    )}})`;
+  } else {
+    return '';
+  }
+};
+
+const getPrometheusNetworkReceivedQuery = (type, data, step) => {
+  if (type === 'cluster') {
+    return `sum(rate(node_network_receive_bytes_total{device!="lo"}[${step}s]))`;
+  } else if (type === 'pod') {
+    return `sum(irate(container_network_receive_bytes_total{${getPrometheusSelector(
+      data,
+    )}}[${step}s]))`;
+  } else {
+    return '';
+  }
+};
+
+const getPrometheusNetworkTransmittedQuery = (type, data, step) => {
+  if (type === 'cluster') {
+    return `sum(rate(node_network_transmit_bytes_total{device!="lo"}[${step}s]))`;
+  } else if (type === 'pod') {
+    return `sum(irate(container_network_receive_bytes_total{${getPrometheusSelector(
+      data,
+    )}}[${step}s]))`;
+  } else {
+    return '';
+  }
+};
 
 export function getMetric(type, metric, { step, ...data }) {
-  const selector = prometheusSelector(type, data);
   const metrics = {
     cpu: {
-      prometheusQuery: `sum(rate(container_cpu_usage_seconds_total{${selector}}[${step}s]))`,
+      prometheusQuery: getPrometheusCPUQuery(type, data, step),
       unit: '',
     },
     memory: {
-      prometheusQuery: `sum(container_memory_working_set_bytes{${selector}})`,
+      prometheusQuery: getPrometheusMemoryQuery(type, data),
       binary: true,
       unit: 'B',
     },
     'network-down': {
-      prometheusQuery: `sum(irate(container_network_receive_bytes_total{${selector}}[${step}s]))`,
+      prometheusQuery: getPrometheusNetworkReceivedQuery(type, data, step),
       unit: 'B/s',
     },
     'network-up': {
-      prometheusQuery: `sum(irate(container_network_transmit_bytes_total{${selector}}[${step}s]))`,
+      prometheusQuery: getPrometheusNetworkTransmittedQuery(type, data, step),
       unit: 'B/s',
     },
   };

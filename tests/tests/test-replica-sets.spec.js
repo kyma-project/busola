@@ -56,7 +56,9 @@ context('Test Replica Sets', () => {
       .contains(`${REPLICA_SET_NAME}-`)
       .click();
 
-    cy.getIframeBody().contains(`Name${REPLICA_SET_NAME}`);
+    cy.getIframeBody().contains(REPLICA_SET_NAME);
+
+    cy.getIframeBody().contains('Always');
 
     cy.getIframeBody().contains(`Image${DOCKER_IMAGE_TAG}`);
   });
