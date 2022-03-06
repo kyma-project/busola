@@ -25,6 +25,7 @@ function getNamespacePart({
       'not found.',
     );
   }
+
   if (resourceToFetch.clusterwide || !currentNamespace || clusterNode) {
     return '';
   }
@@ -62,7 +63,7 @@ async function cycle(store, depth, context) {
             fromKind: kind,
             resourceType,
             kind: relation.kind,
-            namespaced: relation.namespaced,
+            clusterwide: relation.clusterwide,
             apiPath,
           });
         }
@@ -141,5 +142,6 @@ export function useRelatedResources(resource, depth, events) {
   }, [kind, name, namespace, startedLoading]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const startLoading = () => setStartedLoading(true);
+  console.log(store);
   return [store, startedLoading, startLoading];
 }
