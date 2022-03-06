@@ -3,8 +3,29 @@ import pluralize from 'pluralize';
 import { useMicrofrontendContext, useSingleGet, getApiPath } from '../../';
 import { match, relations } from './relations/relations';
 
-function getNamespacePart({ resourceToFetch, currentNamespace }) {
-  if (resourceToFetch.namespaced === false || !currentNamespace) {
+function getNamespacePart({
+  resourceToFetch,
+  currentNamespace,
+  namespaceNodes,
+  clusterNodes,
+}) {
+  const findByResourceType = resourceType => node =>
+    node.resourceType === resourceType || node.pathSegment === resourceType;
+
+  const namespacedNode = namespaceNodes.find(
+    findByResourceType(resourceToFetch.resourceType),
+  );
+  const clusterNode = clusterNodes.find(
+    findByResourceType(resourceToFetch.resourceType),
+  );
+  if (!namespacedNode && !clusterNode) {
+    console.warn(
+      'getNamespacePart:',
+      resourceToFetch.resourceType,
+      'not found.',
+    );
+  }
+  if (resourceToFetch.clusterwide || !currentNamespace || clusterNode) {
     return '';
   }
   return '/namespaces/' + currentNamespace;
@@ -12,7 +33,7 @@ function getNamespacePart({ resourceToFetch, currentNamespace }) {
 
 // BFS
 async function cycle(store, depth, context) {
-  const { fetch, navigationNodes, namespace, events } = context;
+  const { fetch, namespaceNodes, clusterNodes, namespace, events } = context;
   const kindsToHandle = Object.keys(store.current);
 
   const resourcesToFetch = [];
@@ -31,11 +52,15 @@ async function cycle(store, depth, context) {
       if (!alreadyInStore && !alreadyToFetch) {
         // resource does not exist in store
         const resourceType = pluralize(relation.kind.toLowerCase());
-        const apiPath = getApiPath(resourceType, navigationNodes);
+        const apiPath = getApiPath(resourceType, [
+          ...namespaceNodes,
+          ...clusterNodes,
+        ]);
 
         if (apiPath) {
           resourcesToFetch.push({
             fromKind: kind,
+            resourceType,
             kind: relation.kind,
             namespaced: relation.namespaced,
             apiPath,
@@ -49,6 +74,8 @@ async function cycle(store, depth, context) {
     const namespacePart = getNamespacePart({
       resourceToFetch: resource,
       currentNamespace: namespace,
+      namespaceNodes,
+      clusterNodes,
     });
     try {
       const url =
@@ -101,7 +128,8 @@ export function useRelatedResources(resource, depth, events) {
       store.current = { [kind]: [resource] };
       await cycle(store, depth, {
         fetch,
-        navigationNodes: [...namespaceNodes, ...clusterNodes],
+        namespaceNodes,
+        clusterNodes,
         namespace,
         events,
       });

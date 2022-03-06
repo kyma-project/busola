@@ -36,7 +36,6 @@ export const relations = {
   ClusterRole: [
     {
       kind: 'ClusterRoleBinding',
-      namespaced: false,
     },
     {
       kind: 'RoleBinding',
@@ -45,7 +44,6 @@ export const relations = {
   ClusterRoleBinding: [
     {
       kind: 'ClusterRole',
-      namespaced: false,
     },
     {
       kind: 'ServiceAccount',
@@ -54,14 +52,13 @@ export const relations = {
   RoleBinding: [
     {
       kind: 'ClusterRole',
-      namespaced: false,
+      clusterwide: true,
     },
     {
       kind: 'Role',
     },
     {
       kind: 'ServiceAccount',
-      namespaced: false,
     },
   ],
   Deployment: [
@@ -108,11 +105,10 @@ export const relations = {
   ServiceAccount: [
     {
       kind: 'ClusterRoleBinding',
-      namespaced: false,
     },
     {
       kind: 'RoleBinding',
-      namespaced: false,
+      clusterwide: true,
     },
     {
       kind: 'Secret',
@@ -127,13 +123,13 @@ export const relations = {
     },
     {
       kind: 'Gateway',
-      namespaced: false,
+      clusterwide: true,
     },
   ],
   Gateway: [
     {
       kind: 'APIRule',
-      namespaced: false,
+      clusterwide: true,
     },
   ],
   Function: [
