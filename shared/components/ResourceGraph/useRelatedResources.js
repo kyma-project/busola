@@ -115,7 +115,7 @@ async function cycle(store, depth, context) {
   }
 }
 
-export function useRelatedResources(resource, depth, events) {
+export function useRelatedResources({ resource, depth, events }) {
   const { namespaceNodes, clusterNodes } = useMicrofrontendContext();
   const [startedLoading, setStartedLoading] = useState(false);
   const fetch = useSingleGet();

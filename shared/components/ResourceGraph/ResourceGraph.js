@@ -28,8 +28,6 @@ export function ResourceGraph({
   };
 
   const onAllLoaded = () => {
-    redraw();
-
     const initEventListeners = () => {
       for (const resourcesOfKind of Object.keys(resourcesStore.current)) {
         for (const res of resourcesStore.current[resourcesOfKind]) {
@@ -54,14 +52,14 @@ export function ResourceGraph({
     setReady(true);
   };
 
-  const [resourcesStore, startedLoading, startLoading] = useRelatedResources(
+  const [resourcesStore, startedLoading, startLoading] = useRelatedResources({
     resource,
     depth,
-    {
-      onAllLoaded,
+    events: {
       onRelatedResourcesRefresh: redraw,
+      onAllLoaded,
     },
-  );
+  });
 
   const actions = !startedLoading && (
     <Button
