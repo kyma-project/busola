@@ -142,5 +142,6 @@ export function useRelatedResources(resource, depth, events) {
   }, [kind, name, namespace, startedLoading]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const startLoading = () => setStartedLoading(true);
+  console.log(store);
   return [store, startedLoading, startLoading];
 }
