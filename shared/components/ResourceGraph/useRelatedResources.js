@@ -25,6 +25,7 @@ function getNamespacePart({
       'not found.',
     );
   }
+
   if (resourceToFetch.clusterwide || !currentNamespace || clusterNode) {
     return '';
   }
@@ -62,7 +63,7 @@ async function cycle(store, depth, context) {
             fromKind: kind,
             resourceType,
             kind: relation.kind,
-            namespaced: relation.namespaced,
+            clusterwide: relation.clusterwide,
             apiPath,
           });
         }
