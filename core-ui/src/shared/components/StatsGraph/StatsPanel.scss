@@ -1,4 +1,9 @@
 .stats-panel {
+  .fd-layout-panel__filters {
+    border: 0;
+    padding: 0;
+  }
+
   .fd-layout-panel__body {
     position: relative;
   }

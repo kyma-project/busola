@@ -628,6 +628,54 @@ config-maps:
   title: Config Maps
 configuration:
   title: Configuration
+containers:
+  statuses:
+    completed: Completed
+    containercreating: Pending
+    containersnotinitialized: Pending
+    containersnotready: Pending
+    crashloopbackoff: Error
+    createcontainerconfigerror: Error
+    createcontainererror: Error
+    dockerdaemonnotready: Pending
+    errimageneverpull: Error
+    errimagepull: Error
+    evicted: Evicted
+    imageinspecterror: Error
+    imagepullbackoff: Error
+    invalidimagename: Error
+    networkpluginnotready: Error
+    podinitializing: Initializing
+    poststarthookerror: Error
+    registryunavailable: Error
+    runcontainererror: Error
+    running: Running
+    terminated: Terminated
+    terminating: Terminating
+  tooltips:
+    completed: Container completed
+    containercreating: Creating container
+    containersnotinitialized: Container not initialized
+    containersnotready: Container not ready
+    crashloopbackoff: Container is in a crashing loop
+    createcontainerconfigerror: Create container configuration error
+    createcontainererror: Create container error
+    dockerdaemonnotready: Docker daemon not ready
+    errimageneverpull: Image has never been pulled
+    errimagepull: Image pull error
+    error: Container failed to start
+    imageinspecterror: Image inspect error
+    imagepullbackoff: Could not pull a container image
+    invalidimagename: Invalid image name
+    networkpluginnotready: Network plugin not ready
+    no-restarts: Container has not restarted
+    podinitializing: Initializing the Pod
+    poststarthookerror: Post-start hook error
+    registryunavailable: Registry unavailable
+    runcontainererror: Run container error
+    running: Container running correctly
+    terminated: Container terminated
+    terminating: Terminating the Container
 cron-jobs:
   concurrency-policy:
     title: Concurrency Policy
@@ -1378,6 +1426,8 @@ limit-ranges:
     default: Default
     default-request: Default Request
     max: Max
+    min: Min
+  name_singular: Limit Range
   title: Limit Ranges
 machine-info:
   architecture-cpus: Architecture and CPUs
