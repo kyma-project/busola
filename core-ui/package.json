@@ -16,6 +16,7 @@
     "react": "../node_modules/react",
     "react-hook-form": "^6.0.0",
     "styled-components": "^5.3.3",
+    "styled-components-grid": "^2.2.2",
     "use-debounce": "^7.0.1",
     "yup": "^0.28.3"
   },

@@ -23,14 +23,15 @@ import ServiceInstanceDetails from '../../components/ServiceInstanceDetails/Serv
 const App = ({ id }) => {
   const isCatalog = id === 'catalog';
   const isInstances = id === 'instances';
-  const { language } = useMicrofrontendContext();
+
+  const { language, cluster } = useMicrofrontendContext();
   const { i18n } = useTranslation();
   useEffect(() => {
     i18n.changeLanguage(language);
   }, [language, i18n]);
   return (
     <NotificationProvider>
-      <Routes>
+      <Routes key={cluster?.name}>
         <Route
           exact
           index={isCatalog}
