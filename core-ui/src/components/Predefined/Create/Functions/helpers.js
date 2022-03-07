@@ -12,6 +12,7 @@ export function createFunctionTemplate(namespace) {
         'app.kubernetes.io/name': name,
       },
     },
+    //
     spec: {
       runtime: 'nodejs14',
       type: '',
