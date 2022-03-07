@@ -10,9 +10,9 @@
     "react-jsonschema-form": "1.7.0"
   },
   "scripts": {
-    "start": "(cd ..; gulp copy-themes) && BROWSER=none PORT=8000  ../node_modules/.bin/react-scripts start",
+    "start": "(cd ..; gulp copy-themes) && BROWSER=none PORT=8000 GENERATE_SOURCEMAP=false ../node_modules/.bin/react-scripts start",
     "start:kyma": "npm run start",
-    "build": "(cd ..; npm run copy-themes) && PUBLIC_URL=/service-catalog INLINE_RUNTIME_CHUNK=false ../node_modules/.bin/react-scripts build",
+    "build": "(cd ..; npm run copy-themes) && PUBLIC_URL=/service-catalog INLINE_RUNTIME_CHUNK=false GENERATE_SOURCEMAP=false ../node_modules/.bin/react-scripts build",
     "test": "echo We have no tests at this moment"
   },
   "eslintConfig": {
