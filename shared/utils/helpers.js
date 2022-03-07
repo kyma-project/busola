@@ -32,6 +32,7 @@ export function findCommonPrefix(initialPrefix, words) {
 
   return biggestCommonPrefix;
 }
+
 export function formatMessage(message = '', variables = {}) {
   const serializedVariables = {};
   for (let [key, value] of Object.entries(variables)) {
